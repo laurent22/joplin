@@ -13,3 +13,11 @@ services:
             - POSTGRES_PASSWORD=joplin
             - POSTGRES_USER=joplin
             - POSTGRES_DB=joplin
+        
+        # Use this to specify additional Postgres
+        # config parameters:
+        #
+        # command:
+        #     - "postgres"
+        #     - "-c"
+        #     - "log_min_duration_statement=0"

@@ -796,7 +796,7 @@ describe('shares.folder', function() {
 	test('should check permissions - cannot share if share feature not enabled', async function() {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 		const { session: session2 } = await createUserAndSession(2);
-		await models().user().save({ id: user1.id, can_share: 0 });
+		await models().user().save({ id: user1.id, can_share_folder: 0 });
 
 		await expectHttpError(async () =>
 			shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F1', [
@@ -812,7 +812,7 @@ describe('shares.folder', function() {
 	test('should check permissions - cannot share if share feature not enabled for recipient', async function() {
 		const { session: session1 } = await createUserAndSession(1);
 		const { user: user2, session: session2 } = await createUserAndSession(2);
-		await models().user().save({ id: user2.id, can_share: 0 });
+		await models().user().save({ id: user2.id, can_share_folder: 0 });
 
 		await expectHttpError(async () =>
 			shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F1', [
@@ -823,6 +823,22 @@ describe('shares.folder', function() {
 			]),
 		ErrorForbidden.httpCode
 		);
+	});
+
+	test('should check permissions - by default sharing by note is always possible', async function() {
+		const { session: session1 } = await createUserAndSession(1);
+
+		const noteItem = await createNote(session1.id, {
+			title: 'Testing title',
+			body: 'Testing body',
+		});
+
+		const share = await postApi<Share>(session1.id, 'shares', {
+			type: ShareType.Note,
+			note_id: noteItem.jop_id,
+		});
+
+		expect(share).toBeTruthy();
 	});
 
 });

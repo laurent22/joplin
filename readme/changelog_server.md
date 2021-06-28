@@ -1,6 +1,55 @@
 # Joplin Server Changelog
 
-## [server-v2.0.7](https://github.com/laurent22/joplin/releases/tag/server-v2.0.7) (Pre-release) - 2021-06-11T15:34:30Z
+## [server-v2.1.6-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.1.6-beta) (Pre-release) - 2021-06-24T10:01:46Z
+
+- Fixed: Fixed accessing main website (Regression) (f868797)
+
+## [server-v2.1.5-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.1.5-beta) (Pre-release) - 2021-06-24T08:26:38Z
+
+- New: Add support for X-API-MIN-VERSION header (51f3c00)
+
+## [server-v2.1.4-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.1.4-beta) (Pre-release) - 2021-06-24T07:26:03Z
+
+- Improved: Split permission to share note or folder (0c12c7f)
+- Fixed: Fixed handling of max item size for encrypted items (112157e)
+- Fixed: Fixed transaction locking issue when a sub-transaction fails (12aae48)
+
+## [server-v2.1.3-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.1.3-beta) (Pre-release) - 2021-06-19T14:15:06Z
+
+- New: Add support for uploading multiple items in one request (3b9c02e)
+
+## [server-v2.1.1](https://github.com/laurent22/joplin/releases/tag/server-v2.1.1) - 2021-06-17T17:27:29Z
+
+- New: Added account info to dashboard and title to pages (7f0b3fd)
+- New: Added way to batch requests (currently disabled) (c682c88)
+- New: Added way to debug slow queries (e853244)
+- Improved: Hide Reset Password button when creating new users (ac03c08)
+- Improved: Sort users by name, then email (65c3d01)
+
+## [server-v2.0.14](https://github.com/laurent22/joplin/releases/tag/server-v2.0.14) - 2021-06-17T08:52:26Z
+
+- Improved: Allow sending reset password email from admin UI (479237d)
+- Improved: Tokens would expire too soon (6ae0e84)
+
+## [server-v2.0.13](https://github.com/laurent22/joplin/releases/tag/server-v2.0.13) - 2021-06-16T14:28:20Z
+
+- Improved: Allow creating a new user with no password, which must be set via email confirmation (1896549)
+- Improved: Allow creating a user with a specific account type from admin UI (ecd1602)
+- Fixed: Fixed error message when item is over the limit (ea65313)
+- Fixed: Fixed issue with user not being able to modify own profile (3c18190)
+
+## [server-v2.0.12](https://github.com/laurent22/joplin/releases/tag/server-v2.0.12) - 2021-06-15T16:24:42Z
+
+- Fixed: Fixed handling of user content URL (31121c8)
+
+## [server-v2.0.11](https://github.com/laurent22/joplin/releases/tag/server-v2.0.11) - 2021-06-15T11:41:41Z
+
+- New: Add navbar on login and sign up page (7a3a208)
+- New: Added option to enable or disable stack traces (5614eb9)
+- Improved: Handle custom user content URLs (a36b13d)
+- Fixed: Fixed error when creating user (594084e)
+
+## [server-v2.0.9-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.0.9-beta) (Pre-release) - 2021-06-11T16:49:05Z
 
 - New: Add navbar on login and sign up page (7a3a208)
 - New: Added option to enable or disable stack traces (5614eb9)

@@ -1,3 +1,4 @@
+import { MultiPutItem } from './file-api';
 import JoplinError from './JoplinError';
 import JoplinServerApi from './JoplinServerApi';
 import { trimSlashes } from './path-utils';
@@ -31,6 +32,14 @@ export default class FileApiDriverJoplinServer {
 		return this.api_;
 	}
 
+	public get supportsMultiPut() {
+		return true;
+	}
+
+	public get supportsAccurateTimestamp() {
+		return true;
+	}
+
 	public requestRepeatCount() {
 		return 3;
 	}
@@ -39,7 +48,8 @@ export default class FileApiDriverJoplinServer {
 		const output = {
 			path: rootPath ? path.substr(rootPath.length + 1) : path,
 			updated_time: md.updated_time,
-			isDir: false, // !!md.is_directory,
+			jop_updated_time: md.jop_updated_time,
+			isDir: false,
 			isDeleted: isDeleted,
 		};
 
@@ -172,6 +182,10 @@ export default class FileApiDriverJoplinServer {
 			}
 			throw error;
 		}
+	}
+
+	public async multiPut(items: MultiPutItem[], options: any = null) {
+		return this.api().exec('PUT', 'api/batch_items', null, { items: items }, null, options);
 	}
 
 	public async delete(path: string) {

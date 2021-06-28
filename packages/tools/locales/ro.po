@@ -28,7 +28,7 @@ msgstr ""
 #: packages/app-mobile/components/ModalDialog.js:67
 #: packages/app-mobile/components/CameraView.js:160
 #: packages/app-mobile/components/side-menu-content.js:150
-#: packages/app-mobile/components/screens/config.js:163
+#: packages/app-mobile/components/screens/ConfigScreen.js:152
 msgid "OK"
 msgstr "OK"
 
@@ -128,12 +128,6 @@ msgstr ""
 #: packages/app-desktop/checkForUpdates.js:189
 msgid "Full changelog"
 msgstr ""
-
-#: packages/app-desktop/gui/NoteRevisionViewer.min.js:75
-#: packages/lib/services/RevisionService.js:242
-#, javascript-format
-msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
-msgstr "Nota \"%s\" a fost restabilită cu succes în agenda \"%s\"."
 
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:100
 msgid "This note has no history"
@@ -429,7 +423,7 @@ msgid "to-do"
 msgstr "to-do"
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.js:79
-#: packages/server/dist/models/UserModel.js:134
+#: packages/server/dist/models/UserModel.js:175
 msgid "note"
 msgstr "notiță"
 
@@ -600,7 +594,7 @@ msgid "URL"
 msgstr "URL"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:34
-#: packages/lib/models/Setting.js:1635
+#: packages/lib/models/Setting.js:1665
 msgid "Note History"
 msgstr "Istoric notiță"
 
@@ -626,7 +620,7 @@ msgstr "Eroare"
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:110
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:443
 #: packages/app-mobile/components/screens/encryption-config.js:280
-#: packages/lib/models/Setting.js:833 packages/app-cli/app/command-e2ee.js:110
+#: packages/lib/models/Setting.js:839 packages/app-cli/app/command-e2ee.js:118
 msgid "Disabled"
 msgstr "Dezactivat"
 
@@ -908,7 +902,7 @@ msgstr "Doar o singură notiță se poate imprima."
 
 #: packages/app-desktop/gui/DropboxLoginScreen.js:29
 #: packages/app-mobile/components/screens/dropbox-login.js:58
-#: packages/app-cli/app/command-sync.js:90
+#: packages/app-cli/app/command-sync.js:91
 msgid ""
 "To allow Joplin to synchronise with Dropbox, please follow the steps below:"
 msgstr ""
@@ -917,7 +911,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/DropboxLoginScreen.js:30
 #: packages/app-mobile/components/screens/dropbox-login.js:59
-#: packages/app-cli/app/command-sync.js:91
+#: packages/app-cli/app/command-sync.js:92
 msgid "Step 1: Open this URL in your browser to authorise the application:"
 msgstr ""
 "Pasul 1: Deschideți adresa URL în navigatorul dumneavoastră web pentru a "
@@ -925,7 +919,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/DropboxLoginScreen.js:32
 #: packages/app-mobile/components/screens/dropbox-login.js:65
-#: packages/app-cli/app/command-sync.js:93
+#: packages/app-cli/app/command-sync.js:94
 msgid "Step 2: Enter the code provided by Dropbox:"
 msgstr "Pasul 2: Introduceți codul oferit de Dropbox:"
 
@@ -1141,7 +1135,7 @@ msgid "Joplin Forum"
 msgstr "Joplin Forum"
 
 #: packages/app-desktop/gui/MenuBar.js:661
-#: packages/app-mobile/components/screens/config.js:510
+#: packages/app-mobile/components/screens/ConfigScreen.js:423
 msgid "Make a donation"
 msgstr "Faceți o donație"
 
@@ -1249,8 +1243,8 @@ msgid "Delete these %d notes?"
 msgstr "Ștergeți aceste %d notițe?"
 
 #: packages/app-desktop/gui/OneDriveLoginScreen.js:46
-#: packages/app-cli/app/command-sync.js:81
-#: packages/app-cli/app/command-sync.js:95
+#: packages/app-cli/app/command-sync.js:82
+#: packages/app-cli/app/command-sync.js:96
 msgid ""
 "Authentication was not completed (did not receive an authentication token)."
 msgstr ""
@@ -1409,7 +1403,7 @@ msgstr "Criptarea este:"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:443
 #: packages/app-mobile/components/screens/encryption-config.js:280
-#: packages/app-cli/app/command-e2ee.js:110
+#: packages/app-cli/app/command-e2ee.js:118
 msgid "Enabled"
 msgstr "Activat"
 
@@ -1432,7 +1426,7 @@ msgstr ""
 "actuale?"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:193
-#: packages/app-mobile/components/screens/config.js:322
+#: packages/app-mobile/components/screens/ConfigScreen.js:276
 msgid "Check synchronisation configuration"
 msgstr "Verificați configurația de sincronizare"
 
@@ -1471,7 +1465,7 @@ msgid "Restart now"
 msgstr "Obține acum:"
 
 #: packages/app-desktop/gui/ConfigScreen/Sidebar.js:89
-#: packages/lib/models/Setting.js:1631
+#: packages/lib/models/Setting.js:1661
 msgid "Plugins"
 msgstr "Plugin"
 
@@ -1587,14 +1581,14 @@ msgid "Lines"
 msgstr "Linii"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.js:98
-#: packages/lib/models/Setting.js:533 packages/lib/models/Setting.js:534
-#: packages/lib/models/Setting.js:535
+#: packages/lib/models/Setting.js:539 packages/lib/models/Setting.js:540
+#: packages/lib/models/Setting.js:541
 msgid "Editor"
 msgstr "Editor"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.js:99
-#: packages/lib/models/Setting.js:533 packages/lib/models/Setting.js:534
-#: packages/lib/models/Setting.js:536
+#: packages/lib/models/Setting.js:539 packages/lib/models/Setting.js:540
+#: packages/lib/models/Setting.js:542
 msgid "Viewer"
 msgstr "Vizualizator"
 
@@ -1623,7 +1617,7 @@ msgid "View"
 msgstr "Vizualizați"
 
 #: packages/app-desktop/gui/NoteList/NoteList.js:163
-#: packages/lib/models/Setting.js:549
+#: packages/lib/models/Setting.js:555
 msgid "Sort notes by"
 msgstr "Sortați notițele după"
 
@@ -1672,7 +1666,7 @@ msgid "Action"
 msgstr "Acțiune"
 
 #: packages/app-desktop/gui/ResourceScreen.js:43 packages/lib/path-utils.js:83
-#: packages/lib/path-utils.js:118 packages/lib/models/BaseItem.js:718
+#: packages/lib/path-utils.js:118 packages/lib/models/BaseItem.js:720
 msgid "Untitled"
 msgstr "Fără denumire"
 
@@ -1895,6 +1889,7 @@ msgid "New Notebook"
 msgstr "Adăugați un nou caiet de notițe"
 
 #: packages/app-mobile/components/side-menu-content.js:316
+#: packages/app-mobile/components/screens/ConfigScreen.js:441
 msgid "Configuration"
 msgstr "Configurare"
 
@@ -1960,6 +1955,123 @@ msgstr "Etichete noi:"
 msgid "Type new tags or select from list"
 msgstr ""
 
+#: packages/app-mobile/components/screens/ConfigScreen.js:61
+msgid "Warning"
+msgstr "Avertizare"
+
+#: packages/app-mobile/components/screens/ConfigScreen.js:61
+#: packages/app-mobile/components/screens/ConfigScreen.js:151
+msgid ""
+"In order to use file system synchronisation your permission to write to "
+"external storage is required."
+msgstr ""
+"Pentru a utiliza sincronizarea sistemului de fișiere este necesară "
+"permisiunea dumneavoastră de a scrie pe un spațiu de stocare extern."
+
+#: packages/app-mobile/components/screens/ConfigScreen.js:150
+#, fuzzy
+msgid "Information"
+msgstr "Configurare"
+
+#: packages/app-mobile/components/screens/ConfigScreen.js:283
+#: packages/app-mobile/components/screens/encryption-config.js:264
+msgid "Encryption Config"
+msgstr ""
+
+#: packages/app-mobile/components/screens/ConfigScreen.js:389
+#, fuzzy
+msgid "Tools"
+msgstr "Unelte"
+
+#: packages/app-mobile/components/screens/ConfigScreen.js:390
+#, fuzzy
+msgid "Sync Status"
+msgstr "Status"
+
+#: packages/app-mobile/components/screens/ConfigScreen.js:391
+msgid "Log"
+msgstr "Log"
+
+#: packages/app-mobile/components/screens/ConfigScreen.js:393
+msgid "Creating report..."
+msgstr "Se creează raport..."
+
+#: packages/app-mobile/components/screens/ConfigScreen.js:393
+msgid "Export Debug Report"
+msgstr ""
+
+#: packages/app-mobile/components/screens/ConfigScreen.js:395
+msgid "Fixing search index..."
+msgstr ""
+
+#: packages/app-mobile/components/screens/ConfigScreen.js:395
+msgid "Fix search index"
+msgstr ""
+
+#: packages/app-mobile/components/screens/ConfigScreen.js:395
+msgid ""
+"Use this to rebuild the search index if there is a problem with search. It "
+"may take a long time depending on the number of notes."
+msgstr ""
+
+#: packages/app-mobile/components/screens/ConfigScreen.js:397
+msgid "Exporting profile..."
+msgstr "Se exportă profilul..."
+
+#: packages/app-mobile/components/screens/ConfigScreen.js:397
+msgid "Export profile"
+msgstr "Exportați profilul"
+
+#: packages/app-mobile/components/screens/ConfigScreen.js:397
+msgid "For debugging purpose only: export your profile to an external SD card."
+msgstr ""
+
+#: packages/app-mobile/components/screens/ConfigScreen.js:406
+msgid "Feature flags"
+msgstr ""
+
+#: packages/app-mobile/components/screens/ConfigScreen.js:408
+msgid "More information"
+msgstr "Informații suplimentare"
+
+#: packages/app-mobile/components/screens/ConfigScreen.js:414
+msgid ""
+"To work correctly, the app needs the following permissions. Please enable "
+"them in your phone settings, in Apps > Joplin > Permissions"
+msgstr ""
+
+#: packages/app-mobile/components/screens/ConfigScreen.js:415
+msgid ""
+"- Storage: to allow attaching files to notes and to enable filesystem "
+"synchronisation."
+msgstr ""
+
+#: packages/app-mobile/components/screens/ConfigScreen.js:416
+msgid "- Camera: to allow taking a picture and attaching it to a note."
+msgstr ""
+
+#: packages/app-mobile/components/screens/ConfigScreen.js:417
+msgid "- Location: to allow attaching geo-location information to a note."
+msgstr ""
+
+#: packages/app-mobile/components/screens/ConfigScreen.js:428
+msgid "Joplin website"
+msgstr "Website Joplin"
+
+#: packages/app-mobile/components/screens/ConfigScreen.js:433
+msgid "Privacy Policy"
+msgstr ""
+
+#: packages/app-mobile/components/screens/ConfigScreen.js:437
+#, javascript-format
+msgid "Database v%s"
+msgstr "Baza de date v%s"
+
+#: packages/app-mobile/components/screens/ConfigScreen.js:439
+#, fuzzy, javascript-format
+msgid "FTS enabled: %d"
+msgstr "De șters: %d"
+
 #: packages/app-mobile/components/screens/dropbox-login.js:55
 msgid "Login with Dropbox"
 msgstr "Autentificați-vă cu Dropbox"
@@ -1993,12 +2105,12 @@ msgid "Confirm password cannot be empty"
 msgstr "Parola confirmată nu poate fi un câmp gol"
 
 #: packages/app-mobile/components/screens/encryption-config.js:140
-#: packages/app-cli/app/command-e2ee.js:85
+#: packages/app-cli/app/command-e2ee.js:91
 msgid "Passwords do not match!"
 msgstr "Parolele nu se potrivesc!"
 
 #: packages/app-mobile/components/screens/encryption-config.js:163
-#: packages/app-cli/app/command-e2ee.js:79
+#: packages/app-cli/app/command-e2ee.js:85
 msgid "Confirm password:"
 msgstr "Confirmare parolă:"
 
@@ -2006,114 +2118,11 @@ msgstr "Confirmare parolă:"
 msgid "Enable"
 msgstr "Activați"
 
-#: packages/app-mobile/components/screens/encryption-config.js:264
-#: packages/app-mobile/components/screens/config.js:331
-msgid "Encryption Config"
-msgstr ""
-
 #: packages/app-mobile/components/screens/encryption-config.js:280
-#: packages/app-cli/app/command-e2ee.js:110
+#: packages/app-cli/app/command-e2ee.js:118
 #, javascript-format
 msgid "Encryption is: %s"
 msgstr "Criptarea este: %s"
-
-#: packages/app-mobile/components/screens/config.js:57
-msgid "Warning"
-msgstr "Avertizare"
-
-#: packages/app-mobile/components/screens/config.js:57
-#: packages/app-mobile/components/screens/config.js:162
-msgid ""
-"In order to use file system synchronisation your permission to write to "
-"external storage is required."
-msgstr ""
-"Pentru a utiliza sincronizarea sistemului de fișiere este necesară "
-"permisiunea dumneavoastră de a scrie pe un spațiu de stocare extern."
-
-#: packages/app-mobile/components/screens/config.js:161
-#, fuzzy
-msgid "Information"
-msgstr "Configurare"
-
-#: packages/app-mobile/components/screens/config.js:451
-#, fuzzy
-msgid "Tools"
-msgstr "Unelte"
-
-#: packages/app-mobile/components/screens/config.js:453
-#, fuzzy
-msgid "Sync Status"
-msgstr "Status"
-
-#: packages/app-mobile/components/screens/config.js:454
-msgid "Log"
-msgstr "Log"
-
-#: packages/app-mobile/components/screens/config.js:456
-msgid "Creating report..."
-msgstr "Se creează raport..."
-
-#: packages/app-mobile/components/screens/config.js:456
-msgid "Export Debug Report"
-msgstr ""
-
-#: packages/app-mobile/components/screens/config.js:458
-msgid "Fixing search index..."
-msgstr ""
-
-#: packages/app-mobile/components/screens/config.js:458
-msgid "Fix search index"
-msgstr ""
-
-#: packages/app-mobile/components/screens/config.js:458
-msgid ""
-"Use this to rebuild the search index if there is a problem with search. It "
-"may take a long time depending on the number of notes."
-msgstr ""
-
-#: packages/app-mobile/components/screens/config.js:461
-msgid "Exporting profile..."
-msgstr "Se exportă profilul..."
-
-#: packages/app-mobile/components/screens/config.js:461
-msgid "Export profile"
-msgstr "Exportați profilul"
-
-#: packages/app-mobile/components/screens/config.js:461
-msgid "For debugging purpose only: export your profile to an external SD card."
-msgstr ""
-
-#: packages/app-mobile/components/screens/config.js:476
-msgid "More information"
-msgstr "Informații suplimentare"
-
-#: packages/app-mobile/components/screens/config.js:486
-msgid ""
-"To work correctly, the app needs the following permissions. Please enable "
-"them in your phone settings, in Apps > Joplin > Permissions"
-msgstr ""
-
-#: packages/app-mobile/components/screens/config.js:489
-msgid ""
-"- Storage: to allow attaching files to notes and to enable filesystem "
-"synchronisation."
-msgstr ""
-
-#: packages/app-mobile/components/screens/config.js:492
-msgid "- Camera: to allow taking a picture and attaching it to a note."
-msgstr ""
-
-#: packages/app-mobile/components/screens/config.js:495
-msgid "- Location: to allow attaching geo-location information to a note."
-msgstr ""
-
-#: packages/app-mobile/components/screens/config.js:524
-msgid "Joplin website"
-msgstr "Website Joplin"
-
-#: packages/app-mobile/components/screens/config.js:538
-msgid "Privacy Policy"
-msgstr ""
 
 #: packages/app-mobile/components/screens/Note.js:98
 msgid "This note has been modified:"
@@ -2242,12 +2251,12 @@ msgid ""
 "now](%s)"
 msgstr ""
 
-#: packages/server/dist/models/UserModel.js:134
+#: packages/server/dist/models/UserModel.js:175
 #, fuzzy
 msgid "attachment"
 msgstr "Atașați fișier"
 
-#: packages/server/dist/models/UserModel.js:134
+#: packages/server/dist/models/UserModel.js:175
 #, javascript-format
 msgid ""
 "Cannot save %s \"%s\" because it is larger than than the allowed limit (%s)"
@@ -2313,29 +2322,29 @@ msgstr "data actualizării"
 msgid "Conflicts"
 msgstr "Conflicte"
 
-#: packages/lib/models/Folder.js:506
+#: packages/lib/models/Folder.js:535
 msgid "Cannot move notebook to this location"
 msgstr "Nu se poate muta caietul de notițe în această locație"
 
-#: packages/lib/models/Folder.js:558
+#: packages/lib/models/Folder.js:587
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr "Agendele nu pot fi denumite \"%s\", care au un titlu rezervat."
 
-#: packages/lib/models/Setting.js:103
+#: packages/lib/models/Setting.js:109
 msgid "yes"
 msgstr "da"
 
-#: packages/lib/models/Setting.js:103 packages/lib/models/Setting.js:104
+#: packages/lib/models/Setting.js:109 packages/lib/models/Setting.js:110
 #, javascript-format
 msgid "(wysiwyg: %s)"
 msgstr ""
 
-#: packages/lib/models/Setting.js:104
+#: packages/lib/models/Setting.js:110
 msgid "no"
 msgstr "nu"
 
-#: packages/lib/models/Setting.js:106
+#: packages/lib/models/Setting.js:112
 #, javascript-format
 msgid ""
 "Attention: If you change this location, make sure you copy all your content "
@@ -2346,122 +2355,122 @@ msgstr ""
 "conținutul pe ea înainte de sincronizare, altfel toate fișierele vor fi "
 "eliminate! Consultați FAQ pentru mai multe detalii: %s"
 
-#: packages/lib/models/Setting.js:112
+#: packages/lib/models/Setting.js:118
 msgid "Light"
 msgstr "Light"
 
-#: packages/lib/models/Setting.js:113
+#: packages/lib/models/Setting.js:119
 msgid "Dark"
 msgstr "Dark"
 
-#: packages/lib/models/Setting.js:114
+#: packages/lib/models/Setting.js:120
 msgid "Dracula"
 msgstr "Dracula"
 
-#: packages/lib/models/Setting.js:115
+#: packages/lib/models/Setting.js:121
 msgid "Solarised Light"
 msgstr "Solarised Light"
 
-#: packages/lib/models/Setting.js:116
+#: packages/lib/models/Setting.js:122
 msgid "Solarised Dark"
 msgstr "Solarised Dark"
 
-#: packages/lib/models/Setting.js:117
+#: packages/lib/models/Setting.js:123
 msgid "Nord"
 msgstr "Nord"
 
-#: packages/lib/models/Setting.js:118
+#: packages/lib/models/Setting.js:124
 msgid "Aritim Dark"
 msgstr "Aritim Dark"
 
-#: packages/lib/models/Setting.js:119
+#: packages/lib/models/Setting.js:125
 msgid "OLED Dark"
 msgstr "OLED Dark"
 
-#: packages/lib/models/Setting.js:141
+#: packages/lib/models/Setting.js:147
 msgid "Synchronisation target"
 msgstr ""
 
-#: packages/lib/models/Setting.js:143
+#: packages/lib/models/Setting.js:149
 msgid ""
 "The target to synchronise to. Each sync target may have additional "
 "parameters which are named as `sync.NUM.NAME` (all documented below)."
 msgstr ""
 
-#: packages/lib/models/Setting.js:176
+#: packages/lib/models/Setting.js:182
 msgid "Directory to synchronise with (absolute path)"
 msgstr ""
 
-#: packages/lib/models/Setting.js:188
+#: packages/lib/models/Setting.js:194
 msgid "Nextcloud WebDAV URL"
 msgstr "URL NextCloud WebDAV"
 
-#: packages/lib/models/Setting.js:200
+#: packages/lib/models/Setting.js:206
 msgid "Nextcloud username"
 msgstr "Nume utilizator Nextcloud"
 
-#: packages/lib/models/Setting.js:211
+#: packages/lib/models/Setting.js:217
 msgid "Nextcloud password"
 msgstr "Parolă Nextcloud"
 
-#: packages/lib/models/Setting.js:222
+#: packages/lib/models/Setting.js:228
 msgid "WebDAV URL"
 msgstr "URL-ul WebDAV"
 
-#: packages/lib/models/Setting.js:234
+#: packages/lib/models/Setting.js:240
 msgid "WebDAV username"
 msgstr "Nume utilizator WebDAV"
 
-#: packages/lib/models/Setting.js:245
+#: packages/lib/models/Setting.js:251
 msgid "WebDAV password"
 msgstr "Parolă WebDAV"
 
-#: packages/lib/models/Setting.js:264
+#: packages/lib/models/Setting.js:270
 msgid "AWS S3 bucket"
 msgstr "AWS S3 bucket"
 
-#: packages/lib/models/Setting.js:276
+#: packages/lib/models/Setting.js:282
 #, fuzzy
 msgid "AWS S3 URL"
 msgstr "AWS S3"
 
-#: packages/lib/models/Setting.js:287
+#: packages/lib/models/Setting.js:293
 msgid "AWS key"
 msgstr "AWS key"
 
-#: packages/lib/models/Setting.js:298
+#: packages/lib/models/Setting.js:304
 msgid "AWS secret"
 msgstr "AWS secret"
 
-#: packages/lib/models/Setting.js:309
+#: packages/lib/models/Setting.js:315
 msgid "Joplin Server URL"
 msgstr ""
 
-#: packages/lib/models/Setting.js:327
+#: packages/lib/models/Setting.js:333
 #, fuzzy
 msgid "Joplin Server email"
 msgstr "Website Joplin"
 
-#: packages/lib/models/Setting.js:338
+#: packages/lib/models/Setting.js:344
 #, fuzzy
 msgid "Joplin Server password"
 msgstr "Introduceți parola master:"
 
-#: packages/lib/models/Setting.js:365
+#: packages/lib/models/Setting.js:371
 #, fuzzy
 msgid "Joplin Cloud email"
 msgstr "Website Joplin"
 
-#: packages/lib/models/Setting.js:376
+#: packages/lib/models/Setting.js:382
 #, fuzzy
 msgid "Joplin Cloud password"
 msgstr "Introduceți parola master:"
 
-#: packages/lib/models/Setting.js:388
+#: packages/lib/models/Setting.js:394
 msgid "Attachment download behaviour"
 msgstr ""
 
-#: packages/lib/models/Setting.js:389
+#: packages/lib/models/Setting.js:395
 msgid ""
 "In \"Manual\" mode, attachments are downloaded only when you click on them. "
 "In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
@@ -2472,365 +2481,365 @@ msgstr ""
 "nota. În modul „Mereu”, toate atașamentele sunt descărcate indiferent dacă "
 "deschideți nota sau nu."
 
-#: packages/lib/models/Setting.js:392
+#: packages/lib/models/Setting.js:398
 msgid "Always"
 msgstr "Mereu"
 
-#: packages/lib/models/Setting.js:393
+#: packages/lib/models/Setting.js:399
 msgid "Manual"
 msgstr "Manual"
 
-#: packages/lib/models/Setting.js:394
+#: packages/lib/models/Setting.js:400
 msgid "Auto"
 msgstr "Auto"
 
-#: packages/lib/models/Setting.js:414
+#: packages/lib/models/Setting.js:420
 msgid "Max concurrent connections"
 msgstr "Conexiuni maxime simultane"
 
-#: packages/lib/models/Setting.js:427
+#: packages/lib/models/Setting.js:433
 msgid "Language"
 msgstr "Limbă"
 
-#: packages/lib/models/Setting.js:438
+#: packages/lib/models/Setting.js:444
 msgid "Date format"
 msgstr "Format dată"
 
-#: packages/lib/models/Setting.js:459
+#: packages/lib/models/Setting.js:465
 msgid "Time format"
 msgstr "Format timp"
 
-#: packages/lib/models/Setting.js:478
+#: packages/lib/models/Setting.js:484
 msgid "Theme"
 msgstr "Temă"
 
-#: packages/lib/models/Setting.js:489
+#: packages/lib/models/Setting.js:495
 msgid "Automatically switch theme to match system theme"
 msgstr "Comutați automat tema pentru a se potrivi cu tema sistemului"
 
-#: packages/lib/models/Setting.js:501
+#: packages/lib/models/Setting.js:507
 msgid "Preferred light theme"
 msgstr "Tema light preferată"
 
-#: packages/lib/models/Setting.js:515
+#: packages/lib/models/Setting.js:521
 msgid "Preferred dark theme"
 msgstr "Tema dark preferată"
 
-#: packages/lib/models/Setting.js:525
+#: packages/lib/models/Setting.js:531
 msgid "Show note counts"
 msgstr "Afișează numărul de notițe"
 
-#: packages/lib/models/Setting.js:533 packages/lib/models/Setting.js:535
-#: packages/lib/models/Setting.js:536
+#: packages/lib/models/Setting.js:539 packages/lib/models/Setting.js:541
+#: packages/lib/models/Setting.js:542
 msgid "Split View"
 msgstr "Divizare vizualizare"
 
-#: packages/lib/models/Setting.js:533
+#: packages/lib/models/Setting.js:539
 #, fuzzy, javascript-format
 msgid "%s / %s / %s"
 msgstr "%s = %s (%s)"
 
-#: packages/lib/models/Setting.js:534 packages/lib/models/Setting.js:535
-#: packages/lib/models/Setting.js:536
+#: packages/lib/models/Setting.js:540 packages/lib/models/Setting.js:541
+#: packages/lib/models/Setting.js:542
 #, javascript-format
 msgid "%s / %s"
 msgstr "%s / %s"
 
-#: packages/lib/models/Setting.js:540
+#: packages/lib/models/Setting.js:546
 msgid "Uncompleted to-dos on top"
 msgstr ""
 
-#: packages/lib/models/Setting.js:541
+#: packages/lib/models/Setting.js:547
 msgid "Show completed to-dos"
 msgstr "Arătați sarcinile terminate"
 
-#: packages/lib/models/Setting.js:567
+#: packages/lib/models/Setting.js:573
 msgid "Auto-pair braces, parenthesis, quotations, etc."
 msgstr ""
 
-#: packages/lib/models/Setting.js:570 packages/lib/models/Setting.js:589
+#: packages/lib/models/Setting.js:576 packages/lib/models/Setting.js:595
 msgid "Reverse sort order"
 msgstr "Inversați ordinea sortării"
 
-#: packages/lib/models/Setting.js:577
+#: packages/lib/models/Setting.js:583
 #, fuzzy
 msgid "Sort notebooks by"
 msgstr "Sortați notițele după"
 
-#: packages/lib/models/Setting.js:590
+#: packages/lib/models/Setting.js:596
 msgid "Save geo-location with notes"
 msgstr "Salvați geo-locația în  notițe"
 
-#: packages/lib/models/Setting.js:612
+#: packages/lib/models/Setting.js:618
 msgid "When creating a new to-do:"
 msgstr "Când este creată o nouă sarcină:"
 
-#: packages/lib/models/Setting.js:615 packages/lib/models/Setting.js:631
+#: packages/lib/models/Setting.js:621 packages/lib/models/Setting.js:637
 msgid "Focus title"
 msgstr ""
 
-#: packages/lib/models/Setting.js:616 packages/lib/models/Setting.js:632
+#: packages/lib/models/Setting.js:622 packages/lib/models/Setting.js:638
 msgid "Focus body"
 msgstr ""
 
-#: packages/lib/models/Setting.js:628
+#: packages/lib/models/Setting.js:634
 msgid "When creating a new note:"
 msgstr "Când este creată o nouă notiță:"
 
-#: packages/lib/models/Setting.js:661
+#: packages/lib/models/Setting.js:667
 msgid "Enable soft breaks"
 msgstr ""
 
-#: packages/lib/models/Setting.js:662
+#: packages/lib/models/Setting.js:668
 msgid "Enable typographer support"
 msgstr ""
 
-#: packages/lib/models/Setting.js:663
+#: packages/lib/models/Setting.js:669
 #, fuzzy
 msgid "Enable Linkify"
 msgstr "Activați criptarea"
 
-#: packages/lib/models/Setting.js:664
+#: packages/lib/models/Setting.js:670
 #, fuzzy
 msgid "Enable math expressions"
 msgstr "Activați criptarea"
 
-#: packages/lib/models/Setting.js:665
+#: packages/lib/models/Setting.js:671
 msgid "Enable Fountain syntax support"
 msgstr ""
 
-#: packages/lib/models/Setting.js:666
+#: packages/lib/models/Setting.js:672
 msgid "Enable Mermaid diagrams support"
 msgstr ""
 
-#: packages/lib/models/Setting.js:667
+#: packages/lib/models/Setting.js:673
 msgid "Enable audio player"
 msgstr ""
 
-#: packages/lib/models/Setting.js:668
+#: packages/lib/models/Setting.js:674
 msgid "Enable video player"
 msgstr ""
 
-#: packages/lib/models/Setting.js:669
+#: packages/lib/models/Setting.js:675
 msgid "Enable PDF viewer"
 msgstr ""
 
-#: packages/lib/models/Setting.js:670
+#: packages/lib/models/Setting.js:676
 msgid "Enable ==mark== syntax"
 msgstr ""
 
-#: packages/lib/models/Setting.js:671
+#: packages/lib/models/Setting.js:677
 msgid "Enable footnotes"
 msgstr ""
 
-#: packages/lib/models/Setting.js:672
+#: packages/lib/models/Setting.js:678
 msgid "Enable table of contents extension"
 msgstr ""
 
-#: packages/lib/models/Setting.js:673
+#: packages/lib/models/Setting.js:679
 msgid "Enable ~sub~ syntax"
 msgstr ""
 
-#: packages/lib/models/Setting.js:674
+#: packages/lib/models/Setting.js:680
 msgid "Enable ^sup^ syntax"
 msgstr ""
 
-#: packages/lib/models/Setting.js:675
+#: packages/lib/models/Setting.js:681
 msgid "Enable deflist syntax"
 msgstr ""
 
-#: packages/lib/models/Setting.js:676
+#: packages/lib/models/Setting.js:682
 msgid "Enable abbreviation syntax"
 msgstr ""
 
-#: packages/lib/models/Setting.js:677
+#: packages/lib/models/Setting.js:683
 msgid "Enable markdown emoji"
 msgstr ""
 
-#: packages/lib/models/Setting.js:678
+#: packages/lib/models/Setting.js:684
 msgid "Enable ++insert++ syntax"
 msgstr ""
 
-#: packages/lib/models/Setting.js:679
+#: packages/lib/models/Setting.js:685
 msgid "Enable multimarkdown table extension"
 msgstr ""
 
-#: packages/lib/models/Setting.js:690
+#: packages/lib/models/Setting.js:696
 msgid "Show tray icon"
 msgstr "Afișați iconița coșul de gunoi"
 
-#: packages/lib/models/Setting.js:692
+#: packages/lib/models/Setting.js:698
 msgid "Note: Does not work in all desktop environments."
 msgstr ""
 
-#: packages/lib/models/Setting.js:692
+#: packages/lib/models/Setting.js:698
 msgid ""
 "This will allow Joplin to run in the background. It is recommended to enable "
 "this setting so that your notes are constantly being synchronised, thus "
 "reducing the number of conflicts."
 msgstr ""
 
-#: packages/lib/models/Setting.js:696
+#: packages/lib/models/Setting.js:702
 msgid "Start application minimised in the tray icon"
 msgstr ""
 
-#: packages/lib/models/Setting.js:716
+#: packages/lib/models/Setting.js:722
 #, fuzzy
 msgid "Editor font size"
 msgstr "Editează notiță."
 
-#: packages/lib/models/Setting.js:723
+#: packages/lib/models/Setting.js:729
 #, fuzzy
 msgid "Editor font"
 msgstr "Editează notiță."
 
-#: packages/lib/models/Setting.js:730 packages/lib/models/Setting.js:737
-#: packages/lib/models/Setting.js:883
+#: packages/lib/models/Setting.js:736 packages/lib/models/Setting.js:743
+#: packages/lib/models/Setting.js:889
 #, fuzzy
 msgid "Default"
 msgstr "Modul implicit: %s"
 
-#: packages/lib/models/Setting.js:748
+#: packages/lib/models/Setting.js:754
 msgid "Editor font family"
 msgstr ""
 
-#: packages/lib/models/Setting.js:749
+#: packages/lib/models/Setting.js:755
 msgid ""
 "Used for most text in the markdown editor. If not found, a generic "
 "proportional (variable width) font is used."
 msgstr ""
 
-#: packages/lib/models/Setting.js:758
+#: packages/lib/models/Setting.js:764
 msgid "Editor monospace font family"
 msgstr ""
 
-#: packages/lib/models/Setting.js:759
+#: packages/lib/models/Setting.js:765
 msgid ""
 "Used where a fixed width font is needed to lay out text legibly (e.g. "
 "tables, checkboxes, code). If not found, a generic monospace (fixed width) "
 "font is used."
 msgstr ""
 
-#: packages/lib/models/Setting.js:780
+#: packages/lib/models/Setting.js:786
 msgid "Custom stylesheet for rendered Markdown"
 msgstr ""
 
-#: packages/lib/models/Setting.js:796
+#: packages/lib/models/Setting.js:802
 msgid "Custom stylesheet for Joplin-wide app styles"
 msgstr ""
 
-#: packages/lib/models/Setting.js:806
+#: packages/lib/models/Setting.js:812
 msgid "Re-upload local data to sync target"
 msgstr ""
 
-#: packages/lib/models/Setting.js:816
+#: packages/lib/models/Setting.js:822
 msgid "Delete local data and re-download from sync target"
 msgstr ""
 
-#: packages/lib/models/Setting.js:821
+#: packages/lib/models/Setting.js:827
 msgid "Automatically update the application"
 msgstr "Actualizați automat aplicația"
 
-#: packages/lib/models/Setting.js:822
+#: packages/lib/models/Setting.js:828
 msgid "Get pre-releases when checking for updates"
 msgstr ""
 
-#: packages/lib/models/Setting.js:822
+#: packages/lib/models/Setting.js:828
 #, javascript-format
 msgid "See the pre-release page for more details: %s"
 msgstr ""
 
-#: packages/lib/models/Setting.js:830
+#: packages/lib/models/Setting.js:836
 msgid "Synchronisation interval"
 msgstr "Intervalul de sincronizare"
 
-#: packages/lib/models/Setting.js:834 packages/lib/models/Setting.js:835
-#: packages/lib/models/Setting.js:836
+#: packages/lib/models/Setting.js:840 packages/lib/models/Setting.js:841
+#: packages/lib/models/Setting.js:842
 #, javascript-format
 msgid "%d minutes"
 msgstr "%d minute"
 
-#: packages/lib/models/Setting.js:837
+#: packages/lib/models/Setting.js:843
 #, javascript-format
 msgid "%d hour"
 msgstr "%d oră"
 
-#: packages/lib/models/Setting.js:838 packages/lib/models/Setting.js:839
+#: packages/lib/models/Setting.js:844 packages/lib/models/Setting.js:845
 #, javascript-format
 msgid "%d hours"
 msgstr "%d ore"
 
-#: packages/lib/models/Setting.js:849
+#: packages/lib/models/Setting.js:855
 msgid "Synchronise only over WiFi connection"
 msgstr ""
 
-#: packages/lib/models/Setting.js:856
+#: packages/lib/models/Setting.js:862
 msgid "Text editor command"
 msgstr "Comandă editor de text"
 
-#: packages/lib/models/Setting.js:856
+#: packages/lib/models/Setting.js:862
 msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
 msgstr ""
 
-#: packages/lib/models/Setting.js:857
+#: packages/lib/models/Setting.js:863
 msgid "Page size for PDF export"
 msgstr ""
 
-#: packages/lib/models/Setting.js:859
+#: packages/lib/models/Setting.js:865
 msgid "A4"
 msgstr "A4"
 
-#: packages/lib/models/Setting.js:860
+#: packages/lib/models/Setting.js:866
 msgid "Letter"
 msgstr "Letter"
 
-#: packages/lib/models/Setting.js:861
+#: packages/lib/models/Setting.js:867
 msgid "A3"
 msgstr "A3"
 
-#: packages/lib/models/Setting.js:862
+#: packages/lib/models/Setting.js:868
 msgid "A5"
 msgstr "A5"
 
-#: packages/lib/models/Setting.js:863
+#: packages/lib/models/Setting.js:869
 msgid "Tabloid"
 msgstr "Tabloid"
 
-#: packages/lib/models/Setting.js:864
+#: packages/lib/models/Setting.js:870
 msgid "Legal"
 msgstr "Legal"
 
-#: packages/lib/models/Setting.js:867
+#: packages/lib/models/Setting.js:873
 msgid "Page orientation for PDF export"
 msgstr "Page orientation for PDF export"
 
-#: packages/lib/models/Setting.js:869
+#: packages/lib/models/Setting.js:875
 msgid "Portrait"
 msgstr "Portrait"
 
-#: packages/lib/models/Setting.js:870
+#: packages/lib/models/Setting.js:876
 msgid "Landscape"
 msgstr "Landscape"
 
-#: packages/lib/models/Setting.js:880
+#: packages/lib/models/Setting.js:886
 msgid "Keyboard Mode"
 msgstr "Keyboard Mode"
 
-#: packages/lib/models/Setting.js:884
+#: packages/lib/models/Setting.js:890
 msgid "Emacs"
 msgstr "Emacs"
 
-#: packages/lib/models/Setting.js:885
+#: packages/lib/models/Setting.js:891
 msgid "Vim"
 msgstr "Vim"
 
-#: packages/lib/models/Setting.js:908
+#: packages/lib/models/Setting.js:914
 msgid "Custom TLS certificates"
 msgstr "Certificate TLS cusomizate"
 
-#: packages/lib/models/Setting.js:909
+#: packages/lib/models/Setting.js:915
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
 "or path to individual cert files. For example: /my/cert_dir, /other/custom."
@@ -2838,50 +2847,50 @@ msgid ""
 "changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
 
-#: packages/lib/models/Setting.js:923
+#: packages/lib/models/Setting.js:928
 msgid "Ignore TLS certificate errors"
 msgstr "Ignoră erorile de certificat TLS"
 
-#: packages/lib/models/Setting.js:932
+#: packages/lib/models/Setting.js:937
 msgid "Fail-safe"
 msgstr ""
 
-#: packages/lib/models/Setting.js:933
+#: packages/lib/models/Setting.js:938
 msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
 msgstr ""
 
-#: packages/lib/models/Setting.js:937
+#: packages/lib/models/Setting.js:942
 msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
 msgstr ""
 
-#: packages/lib/models/Setting.js:942
+#: packages/lib/models/Setting.js:947
 #, fuzzy
 msgid "Enable note history"
 msgstr "Activați criptarea"
 
-#: packages/lib/models/Setting.js:952
+#: packages/lib/models/Setting.js:957
 msgid "days"
 msgstr "zile"
 
-#: packages/lib/models/Setting.js:952
+#: packages/lib/models/Setting.js:957
 #, javascript-format
 msgid "%d days"
 msgstr "%d zile"
 
-#: packages/lib/models/Setting.js:954
+#: packages/lib/models/Setting.js:959
 msgid "Keep note history for"
 msgstr "Păstrați istoricul notițelor pentru"
 
-#: packages/lib/models/Setting.js:981
+#: packages/lib/models/Setting.js:986
 msgid "Notebook list growth factor"
 msgstr ""
 
-#: packages/lib/models/Setting.js:982 packages/lib/models/Setting.js:995
-#: packages/lib/models/Setting.js:1008
+#: packages/lib/models/Setting.js:987 packages/lib/models/Setting.js:1000
+#: packages/lib/models/Setting.js:1013
 msgid ""
 "The factor property sets how the item will grow or shrink to fit the "
 "available space in its container with respect to the other items. Thus an "
@@ -2889,61 +2898,61 @@ msgid ""
 "factor of 1.Restart app to see changes."
 msgstr ""
 
-#: packages/lib/models/Setting.js:994
+#: packages/lib/models/Setting.js:999
 msgid "Note list growth factor"
 msgstr ""
 
-#: packages/lib/models/Setting.js:1007
+#: packages/lib/models/Setting.js:1012
 msgid "Note area growth factor"
 msgstr ""
 
-#: packages/lib/models/Setting.js:1222
+#: packages/lib/models/Setting.js:1252
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr ""
 
-#: packages/lib/models/Setting.js:1621
+#: packages/lib/models/Setting.js:1651
 msgid "General"
 msgstr "General"
 
-#: packages/lib/models/Setting.js:1623
+#: packages/lib/models/Setting.js:1653
 #, fuzzy
 msgid "Synchronisation"
 msgstr "Statusul sincronizării"
 
-#: packages/lib/models/Setting.js:1625
+#: packages/lib/models/Setting.js:1655
 msgid "Appearance"
 msgstr "Aspect"
 
-#: packages/lib/models/Setting.js:1627
+#: packages/lib/models/Setting.js:1657
 #, fuzzy
 msgid "Note"
 msgstr "Caiete de notițe"
 
-#: packages/lib/models/Setting.js:1629
+#: packages/lib/models/Setting.js:1659
 #: packages/lib/services/interop/InteropService.js:49
 #: packages/lib/services/interop/InteropService.js:59
 msgid "Markdown"
 msgstr "Markdown"
 
-#: packages/lib/models/Setting.js:1633
+#: packages/lib/models/Setting.js:1663
 msgid "Application"
 msgstr "Aplicație"
 
-#: packages/lib/models/Setting.js:1637
+#: packages/lib/models/Setting.js:1667
 msgid "Encryption"
 msgstr "Criptare"
 
-#: packages/lib/models/Setting.js:1639
+#: packages/lib/models/Setting.js:1669
 msgid "Web Clipper"
 msgstr "Web Clipper"
 
-#: packages/lib/models/Setting.js:1641
+#: packages/lib/models/Setting.js:1671
 #, fuzzy
 msgid "Keyboard Shortcuts"
 msgstr "Keyboard Mode"
 
-#: packages/lib/models/Setting.js:1648
+#: packages/lib/models/Setting.js:1678
 msgid ""
 "These plugins enhance the Markdown renderer with additional features. Please "
 "note that, while these features might be useful, they are not standard "
@@ -2954,33 +2963,33 @@ msgid ""
 "the WYSIWYG editor."
 msgstr ""
 
-#: packages/lib/models/Setting.js:1650
+#: packages/lib/models/Setting.js:1680
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr ""
 
-#: packages/lib/models/Resource.js:352
+#: packages/lib/models/Resource.js:353
 msgid "Not downloaded"
 msgstr ""
 
-#: packages/lib/models/Resource.js:354
+#: packages/lib/models/Resource.js:355
 msgid "Downloading"
 msgstr ""
 
-#: packages/lib/models/Resource.js:356
+#: packages/lib/models/Resource.js:357
 msgid "Downloaded"
 msgstr ""
 
-#: packages/lib/models/Resource.js:358
+#: packages/lib/models/Resource.js:359
 msgid "Error"
 msgstr "Eroare"
 
-#: packages/lib/models/Resource.js:403
+#: packages/lib/models/Resource.js:404
 #, fuzzy, javascript-format
 msgid "Attachment conflict: \"%s\""
 msgstr "Atașați fișier"
 
-#: packages/lib/models/Resource.js:404
+#: packages/lib/models/Resource.js:405
 #, javascript-format
 msgid ""
 "There was a [conflict](%s) on the attachment below.\n"
@@ -3015,11 +3024,11 @@ msgstr "Nu se poate copia notița în caietul de notițe \"%s\""
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "Nu se poate muta notița în caietul de notițe \"%s\""
 
-#: packages/lib/models/BaseItem.js:717
+#: packages/lib/models/BaseItem.js:719
 msgid "Encrypted"
 msgstr "Criptat"
 
-#: packages/lib/models/BaseItem.js:778
+#: packages/lib/models/BaseItem.js:780
 msgid "Encrypted items cannot be modified"
 msgstr "Itemii criptați nu pot fi editați"
 
@@ -3117,69 +3126,69 @@ msgid ""
 "synchronisation again may fix the problem."
 msgstr ""
 
-#: packages/lib/Synchronizer.js:138
+#: packages/lib/Synchronizer.js:140
 #, javascript-format
 msgid "Created local items: %d."
 msgstr "Creare itemi locali: %d."
 
-#: packages/lib/Synchronizer.js:140
+#: packages/lib/Synchronizer.js:142
 #, javascript-format
 msgid "Updated local items: %d."
 msgstr "Itemi locali actualizați: %d."
 
-#: packages/lib/Synchronizer.js:142
+#: packages/lib/Synchronizer.js:144
 #, javascript-format
 msgid "Created remote items: %d."
 msgstr ""
 
-#: packages/lib/Synchronizer.js:144
+#: packages/lib/Synchronizer.js:146
 #, javascript-format
 msgid "Updated remote items: %d."
 msgstr ""
 
-#: packages/lib/Synchronizer.js:146
+#: packages/lib/Synchronizer.js:148
 #, javascript-format
 msgid "Deleted local items: %d."
 msgstr "Itemi locali șterși: %d."
 
-#: packages/lib/Synchronizer.js:148
+#: packages/lib/Synchronizer.js:150
 #, javascript-format
 msgid "Deleted remote items: %d."
 msgstr ""
 
-#: packages/lib/Synchronizer.js:150
+#: packages/lib/Synchronizer.js:152
 #, javascript-format
 msgid "Fetched items: %d/%d."
 msgstr ""
 
-#: packages/lib/Synchronizer.js:152
+#: packages/lib/Synchronizer.js:154
 msgid "Cancelling..."
 msgstr "Se amână..."
 
-#: packages/lib/Synchronizer.js:154
-#, javascript-format
-msgid "Completed: %s"
+#: packages/lib/Synchronizer.js:156
+#, fuzzy, javascript-format
+msgid "Completed: %s (%s)"
 msgstr "Completat: %s"
 
-#: packages/lib/Synchronizer.js:156
+#: packages/lib/Synchronizer.js:158
 #, javascript-format
 msgid "Last error: %s"
 msgstr "Ultima eroare: %s"
 
-#: packages/lib/Synchronizer.js:263
+#: packages/lib/Synchronizer.js:272
 msgid "Idle"
 msgstr ""
 
-#: packages/lib/Synchronizer.js:265
+#: packages/lib/Synchronizer.js:274
 msgid "In progress"
 msgstr "În progres"
 
-#: packages/lib/Synchronizer.js:862
+#: packages/lib/Synchronizer.js:923
 msgid ""
 "Unknown item type downloaded - please upgrade Joplin to the latest version"
 msgstr ""
 
-#: packages/lib/JoplinServerApi.js:80
+#: packages/lib/JoplinServerApi.js:73
 #, javascript-format
 msgid ""
 "Could not connect to Joplin Server. Please check the Synchronisation options "
@@ -3234,9 +3243,14 @@ msgstr "Versiunea profil: %s"
 msgid "Keychain Supported: %s"
 msgstr ""
 
-#: packages/lib/services/RevisionService.js:218
+#: packages/lib/services/RevisionService.js:214
 msgid "Restored Notes"
 msgstr ""
+
+#: packages/lib/services/RevisionService.js:238
+#, javascript-format
+msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
+msgstr "Nota \"%s\" a fost restabilită cu succes în agenda \"%s\"."
 
 #: packages/lib/services/interop/InteropService_Exporter_Jex.js:43
 msgid "There is no data to export."
@@ -3626,13 +3640,13 @@ msgstr ""
 "\", „status\", „decrypt-file\" și „target-status\"."
 
 #: packages/app-cli/app/command-e2ee.js:36
-#: packages/app-cli/app/command-e2ee.js:74
+#: packages/app-cli/app/command-e2ee.js:75
 msgid "Enter master password:"
 msgstr "Introduceți parola master:"
 
 #: packages/app-cli/app/command-e2ee.js:38
-#: packages/app-cli/app/command-e2ee.js:76
-#: packages/app-cli/app/command-e2ee.js:81
+#: packages/app-cli/app/command-e2ee.js:77
+#: packages/app-cli/app/command-e2ee.js:87
 msgid "Operation cancelled"
 msgstr "Operațiunea a fost amânată"
 
@@ -3714,17 +3728,17 @@ msgstr ""
 msgid "Upgrade the sync target to the latest version."
 msgstr ""
 
-#: packages/app-cli/app/command-sync.js:105
+#: packages/app-cli/app/command-sync.js:106
 #, javascript-format
 msgid "Not authentified with %s. Please provide any missing credentials."
 msgstr ""
 "Nu este autentificat cu% s. Vă rugăm să furnizați toate credențialele omise."
 
-#: packages/app-cli/app/command-sync.js:128
+#: packages/app-cli/app/command-sync.js:132
 msgid "Synchronisation is already in progress."
 msgstr "Sincronizarea este deja în progres."
 
-#: packages/app-cli/app/command-sync.js:133
+#: packages/app-cli/app/command-sync.js:137
 #, javascript-format
 msgid ""
 "Lock file is already being hold. If you know that no synchronisation is "
@@ -3735,29 +3749,29 @@ msgstr ""
 "sincronizare, puteți șterge fișierul de blocare la „% s\" și puteți relua "
 "operația."
 
-#: packages/app-cli/app/command-sync.js:175
+#: packages/app-cli/app/command-sync.js:180
 #, javascript-format
 msgid "Synchronisation target: %s (%s)"
 msgstr "Țintă de sincronizare:% s (% s)"
 
-#: packages/app-cli/app/command-sync.js:177
+#: packages/app-cli/app/command-sync.js:182
 msgid "Cannot initialise synchroniser."
 msgstr "Nu se poate inițializa sincronizatorul."
 
-#: packages/app-cli/app/command-sync.js:207
+#: packages/app-cli/app/command-sync.js:212
 msgid "Starting synchronisation..."
 msgstr "Se începe sincronizarea..."
 
-#: packages/app-cli/app/command-sync.js:230
+#: packages/app-cli/app/command-sync.js:235
 msgid "Downloading resources..."
 msgstr "Se descarcă resursele..."
 
-#: packages/app-cli/app/command-sync.js:242
+#: packages/app-cli/app/command-sync.js:247
 #, javascript-format
 msgid "Sync target must be upgraded! Run `%s` to proceed."
 msgstr ""
 
-#: packages/app-cli/app/command-sync.js:260
+#: packages/app-cli/app/command-sync.js:265
 msgid "Cancelling... Please wait."
 msgstr "Se anulează... Vă rugăm să așteptați."
 
@@ -4241,14 +4255,6 @@ msgstr "Notița nu este o sarcină: \"%s\""
 
 #~ msgid "Errors only"
 #~ msgstr "Doar erori"
-
-#, javascript-format
-#~ msgid "Database v%s"
-#~ msgstr "Baza de date v%s"
-
-#, fuzzy, javascript-format
-#~ msgid "FTS enabled: %d"
-#~ msgstr "De șters: %d"
 
 #~ msgid "Exit"
 #~ msgstr "Ieșiți"

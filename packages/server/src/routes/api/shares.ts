@@ -105,14 +105,14 @@ router.get('api/shares/:id', async (path: SubPath, ctx: AppContext) => {
 router.get('api/shares', async (_path: SubPath, ctx: AppContext) => {
 	ownerRequired(ctx);
 
-	const items = ctx.models.share().toApiOutput(await ctx.models.share().sharesByUser(ctx.owner.id)) as Share[];
+	const shares = ctx.models.share().toApiOutput(await ctx.models.share().sharesByUser(ctx.owner.id)) as Share[];
 	// Fake paginated results so that it can be added later on, if needed.
 	return {
-		items: items.map(i => {
+		items: shares.map(share => {
 			return {
-				...i,
+				...share,
 				user: {
-					id: i.owner_id,
+					id: share.owner_id,
 				},
 			};
 		}),

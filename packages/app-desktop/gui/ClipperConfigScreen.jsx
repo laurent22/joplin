@@ -3,7 +3,7 @@ const { connect } = require('react-redux');
 const bridge = require('electron').remote.require('./bridge').default;
 const { themeStyle } = require('@joplin/lib/theme');
 const { _ } = require('@joplin/lib/locale');
-const ClipperServer = require('@joplin/lib/ClipperServer');
+const ClipperServer = require('@joplin/lib/ClipperServer').default;
 const Setting = require('@joplin/lib/models/Setting').default;
 const { clipboard } = require('electron');
 const ExtensionBadge = require('./ExtensionBadge.min');
@@ -44,7 +44,7 @@ class ClipperConfigScreenComponent extends React.Component {
 		if (confirm(_('Are you sure you want to renew the authorisation token?'))) {
 			void EncryptionService.instance()
 				.generateApiToken()
-				.then((token: string) => {
+				.then((token) => {
 					Setting.setValue('api.token', token);
 				});
 		}

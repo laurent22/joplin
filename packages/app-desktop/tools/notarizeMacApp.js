@@ -20,13 +20,18 @@ function execCommand(command) {
 	});
 }
 
+function isDesktopAppTag(tagName) {
+	if (!tagName) return false;
+	return tagName[0] === 'v';
+}
+
 module.exports = async function(params) {
 	if (process.platform !== 'darwin') return;
 
 	console.info('Checking if notarization should be done...');
 
-	if (!process.env.IS_CONTINUOUS_INTEGRATION || !process.env.GIT_TAG_NAME) {
-		console.info(`Either not running in CI or not processing a tag - skipping notarization. process.env.IS_CONTINUOUS_INTEGRATION = ${process.env.IS_CONTINUOUS_INTEGRATION}; process.env.GIT_TAG_NAME = ${process.env.GIT_TAG_NAME}`);
+	if (!process.env.IS_CONTINUOUS_INTEGRATION || !isDesktopAppTag(process.env.GIT_TAG_NAME)) {
+		console.info(`Either not running in CI or not processing a desktop app tag - skipping notarization. process.env.IS_CONTINUOUS_INTEGRATION = ${process.env.IS_CONTINUOUS_INTEGRATION}; process.env.GIT_TAG_NAME = ${process.env.GIT_TAG_NAME}`);
 		return;
 	}
 
@@ -51,26 +56,31 @@ module.exports = async function(params) {
 		console.log('.');
 	}, 60000);
 
-	await electron_notarize.notarize({
-		appBundleId: appId,
-		appPath: appPath,
+	try {
+		await electron_notarize.notarize({
+			appBundleId: appId,
+			appPath: appPath,
 
-		// Apple Developer email address
-		appleId: process.env.APPLE_ID,
+			// Apple Developer email address
+			appleId: process.env.APPLE_ID,
 
-		// App-specific password: https://support.apple.com/en-us/HT204397
-		appleIdPassword: process.env.APPLE_ID_PASSWORD,
+			// App-specific password: https://support.apple.com/en-us/HT204397
+			appleIdPassword: process.env.APPLE_ID_PASSWORD,
 
-		// When Apple ID is attached to multiple providers (eg if the
-		// account has been used to build multiple apps for different
-		// companies), in that case the provider "Team Short Name" (also
-		// known as "ProviderShortname") must be provided.
-		//
-		// Use this to get it:
-		//
-		// xcrun altool --list-providers -u APPLE_ID -p APPLE_ID_PASSWORD
-		ascProvider: process.env.APPLE_ASC_PROVIDER,
-	});
+			// When Apple ID is attached to multiple providers (eg if the
+			// account has been used to build multiple apps for different
+			// companies), in that case the provider "Team Short Name" (also
+			// known as "ProviderShortname") must be provided.
+			//
+			// Use this to get it:
+			//
+			// xcrun altool --list-providers -u APPLE_ID -p APPLE_ID_PASSWORD
+			ascProvider: process.env.APPLE_ASC_PROVIDER,
+		});
+	} catch (error) {
+		console.error(error);
+		process.exit(1);
+	}
 
 	clearInterval(waitingIntervalId);
 

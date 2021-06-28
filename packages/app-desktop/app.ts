@@ -35,7 +35,7 @@ import Tag from '@joplin/lib/models/Tag';
 import { reg } from '@joplin/lib/registry';
 const packageInfo = require('./packageInfo.js');
 import DecryptionWorker from '@joplin/lib/services/DecryptionWorker';
-const ClipperServer = require('@joplin/lib/ClipperServer');
+import ClipperServer from '@joplin/lib/ClipperServer';
 const { webFrame } = require('electron');
 const Menu = bridge().Menu;
 const PluginManager = require('@joplin/lib/services/PluginManager');
@@ -48,6 +48,7 @@ const CssUtils = require('@joplin/lib/CssUtils');
 const commands = [
 	require('./gui/MainScreen/commands/editAlarm'),
 	require('./gui/MainScreen/commands/exportPdf'),
+	require('./gui/MainScreen/commands/gotoAnything'),
 	require('./gui/MainScreen/commands/hideModalMessage'),
 	require('./gui/MainScreen/commands/moveToFolder'),
 	require('./gui/MainScreen/commands/newFolder'),
@@ -59,7 +60,6 @@ const commands = [
 	require('./gui/MainScreen/commands/openTag'),
 	require('./gui/MainScreen/commands/print'),
 	require('./gui/MainScreen/commands/renameFolder'),
-	require('./gui/MainScreen/commands/showShareFolderDialog'),
 	require('./gui/MainScreen/commands/renameTag'),
 	require('./gui/MainScreen/commands/search'),
 	require('./gui/MainScreen/commands/selectTemplate'),
@@ -67,6 +67,8 @@ const commands = [
 	require('./gui/MainScreen/commands/showModalMessage'),
 	require('./gui/MainScreen/commands/showNoteContentProperties'),
 	require('./gui/MainScreen/commands/showNoteProperties'),
+	require('./gui/MainScreen/commands/showPrompt'),
+	require('./gui/MainScreen/commands/showShareFolderDialog'),
 	require('./gui/MainScreen/commands/showShareNoteDialog'),
 	require('./gui/MainScreen/commands/showSpellCheckerMenu'),
 	require('./gui/MainScreen/commands/toggleEditors'),
@@ -74,7 +76,6 @@ const commands = [
 	require('./gui/MainScreen/commands/toggleNoteList'),
 	require('./gui/MainScreen/commands/toggleSideBar'),
 	require('./gui/MainScreen/commands/toggleVisiblePanes'),
-	require('./gui/MainScreen/commands/showPrompt'),
 	require('./gui/NoteEditor/commands/focusElementNoteBody'),
 	require('./gui/NoteEditor/commands/focusElementNoteTitle'),
 	require('./gui/NoteEditor/commands/showLocalSearch'),
@@ -757,7 +758,7 @@ class Application extends BaseApplication {
 		ClipperServer.instance().setDispatch(this.store().dispatch);
 
 		if (Setting.value('clipperServer.autoStart')) {
-			ClipperServer.instance().start();
+			void ClipperServer.instance().start();
 		}
 
 		ExternalEditWatcher.instance().setLogger(reg.logger());

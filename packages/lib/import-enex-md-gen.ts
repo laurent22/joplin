@@ -503,30 +503,14 @@ function isCodeBlock(context: any, nodeName: string, attributes: any) {
 	if (nodeName === 'code') return true;
 
 	if (attributes && attributes.style) {
-		const enCodeBlock = cssValue(context, attributes.style, '-en-codeblock');
+		// Yes, this property sometimes appears as -en-codeblock, sometimes as
+		// --en-codeblock. Would be too easy to import ENEX data otherwise.
+		// https://github.com/laurent22/joplin/issues/4965
+		const enCodeBlock = cssValue(context, attributes.style, '-en-codeblock') || cssValue(context, attributes.style, '--en-codeblock');
 		if (enCodeBlock && enCodeBlock.toLowerCase() === 'true') return true;
 	}
 	return false;
 }
-
-// function removeSectionParent(section:Section | string) {
-// 	if (typeof section === 'string') return section;
-
-// 	section = { ...section };
-// 	delete section.parent;
-
-// 	section.lines = section.lines.slice();
-
-// 	for (let i = 0; i < section.lines.length; i++) {
-// 		section.lines[i] = removeSectionParent(section.lines[i]);
-// 	}
-
-// 	return section;
-// }
-
-// function printSection(section:Section) {
-// 	console.info(JSON.stringify(removeSectionParent(section), null, 4));
-// }
 
 function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<EnexXmlToMdArrayResult> {
 	const remainingResources = resources.slice();

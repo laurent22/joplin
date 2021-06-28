@@ -5,39 +5,71 @@ import { ErrorUnprocessableEntity, ErrorForbidden, ErrorPayloadTooLarge, ErrorNo
 import { ModelType } from '@joplin/lib/BaseModel';
 import { _ } from '@joplin/lib/locale';
 import { formatBytes, MB } from '../utils/bytes';
+import { itemIsEncrypted } from '../utils/joplinUtils';
 
 export enum AccountType {
 	Default = 0,
-	Free = 1,
+	Basic = 1,
 	Pro = 2,
 }
 
 interface AccountTypeProperties {
 	account_type: number;
-	can_share: number;
+	can_share_folder: number;
 	max_item_size: number;
+}
+
+interface AccountTypeSelectOptions {
+	value: number;
+	label: string;
 }
 
 export function accountTypeProperties(accountType: AccountType): AccountTypeProperties {
 	const types: AccountTypeProperties[] = [
 		{
 			account_type: AccountType.Default,
-			can_share: 1,
+			can_share_folder: 1,
 			max_item_size: 0,
 		},
 		{
-			account_type: AccountType.Free,
-			can_share: 0,
+			account_type: AccountType.Basic,
+			can_share_folder: 0,
 			max_item_size: 10 * MB,
 		},
 		{
 			account_type: AccountType.Pro,
-			can_share: 1,
+			can_share_folder: 1,
 			max_item_size: 200 * MB,
 		},
 	];
 
-	return types.find(a => a.account_type === accountType);
+	const type = types.find(a => a.account_type === accountType);
+	if (!type) throw new Error(`Invalid account type: ${accountType}`);
+	return type;
+}
+
+export function accountTypeOptions(): AccountTypeSelectOptions[] {
+	return [
+		{
+			value: AccountType.Default,
+			label: accountTypeToString(AccountType.Default),
+		},
+		{
+			value: AccountType.Basic,
+			label: accountTypeToString(AccountType.Basic),
+		},
+		{
+			value: AccountType.Pro,
+			label: accountTypeToString(AccountType.Pro),
+		},
+	];
+}
+
+export function accountTypeToString(accountType: AccountType): string {
+	if (accountType === AccountType.Default) return 'Default';
+	if (accountType === AccountType.Basic) return 'Basic';
+	if (accountType === AccountType.Pro) return 'Pro';
+	throw new Error(`Invalid type: ${accountType}`);
 }
 
 export default class UserModel extends BaseModel<User> {
@@ -67,7 +99,9 @@ export default class UserModel extends BaseModel<User> {
 		if ('is_admin' in object) user.is_admin = object.is_admin;
 		if ('full_name' in object) user.full_name = object.full_name;
 		if ('max_item_size' in object) user.max_item_size = object.max_item_size;
-		if ('can_share' in object) user.can_share = object.can_share;
+		if ('can_share_folder' in object) user.can_share_folder = object.can_share_folder;
+		if ('account_type' in object) user.account_type = object.account_type;
+		if ('must_set_password' in object) user.must_set_password = object.must_set_password;
 
 		return user;
 	}
@@ -94,7 +128,10 @@ export default class UserModel extends BaseModel<User> {
 			if (!user.is_admin && resource.id !== user.id) throw new ErrorForbidden('non-admin user cannot modify another user');
 			if (!user.is_admin && 'is_admin' in resource) throw new ErrorForbidden('non-admin user cannot make themselves an admin');
 			if (user.is_admin && user.id === resource.id && 'is_admin' in resource && !resource.is_admin) throw new ErrorForbidden('admin user cannot make themselves a non-admin');
-			if (!user.is_admin && resource.max_item_size !== previousResource.max_item_size) throw new ErrorForbidden('non-admin user cannot change max_item_size');
+			if ('max_item_size' in resource && !user.is_admin && resource.max_item_size !== previousResource.max_item_size) throw new ErrorForbidden('non-admin user cannot change max_item_size');
+			if ('can_share_folder' in resource && !user.is_admin && resource.can_share_folder !== previousResource.can_share_folder) throw new ErrorForbidden('non-admin user cannot change can_share_folder');
+			if ('account_type' in resource && !user.is_admin && resource.account_type !== previousResource.account_type) throw new ErrorForbidden('non-admin user cannot change account_type');
+			if ('must_set_password' in resource && !user.is_admin && resource.must_set_password !== previousResource.must_set_password) throw new ErrorForbidden('non-admin user cannot change must_set_password');
 		}
 
 		if (action === AclAction.Delete) {
@@ -108,17 +145,18 @@ export default class UserModel extends BaseModel<User> {
 	}
 
 	public async checkMaxItemSizeLimit(user: User, buffer: Buffer, item: Item, joplinItem: any) {
-		const itemTitle = joplinItem ? joplinItem.title || '' : '';
-		const isNote = joplinItem && joplinItem.type_ === ModelType.Note;
-
 		// If the item is encrypted, we apply a multipler because encrypted
 		// items can be much larger (seems to be up to twice the size but for
 		// safety let's go with 2.2).
-		const maxSize = user.max_item_size * (item.jop_encryption_applied ? 2.2 : 1);
+
+		const maxSize = user.max_item_size * (itemIsEncrypted(item) ? 2.2 : 1);
 		if (maxSize && buffer.byteLength > maxSize) {
+			const itemTitle = joplinItem ? joplinItem.title || '' : '';
+			const isNote = joplinItem && joplinItem.type_ === ModelType.Note;
+
 			throw new ErrorPayloadTooLarge(_('Cannot save %s "%s" because it is larger than than the allowed limit (%s)',
 				isNote ? _('note') : _('attachment'),
-				itemTitle ? itemTitle : name,
+				itemTitle ? itemTitle : item.name,
 				formatBytes(user.max_item_size)
 			));
 		}
@@ -147,7 +185,7 @@ export default class UserModel extends BaseModel<User> {
 
 		if (options.isNew) {
 			if (!user.email) throw new ErrorUnprocessableEntity('email must be set');
-			if (!user.password) throw new ErrorUnprocessableEntity('password must be set');
+			if (!user.password && !user.must_set_password) throw new ErrorUnprocessableEntity('password must be set');
 		} else {
 			if ('email' in user && !user.email) throw new ErrorUnprocessableEntity('email must be set');
 			if ('password' in user && !user.password) throw new ErrorUnprocessableEntity('password must be set');
@@ -196,6 +234,20 @@ export default class UserModel extends BaseModel<User> {
 		await this.save({ id: user.id, email_confirmed: 1 });
 	}
 
+	public async sendAccountConfirmationEmail(user: User) {
+		const validationToken = await this.models().token().generate(user.id);
+		const confirmUrl = encodeURI(this.confirmUrl(user.id, validationToken));
+
+		await this.models().email().push({
+			sender_id: EmailSender.NoReply,
+			recipient_id: user.id,
+			recipient_email: user.email,
+			recipient_name: user.full_name || '',
+			subject: `Please setup your ${this.appName} account`,
+			body: `Your new ${this.appName} account is almost ready to use!\n\nPlease click on the following link to finish setting up your account:\n\n[Complete your account](${confirmUrl})`,
+		});
+	}
+
 	// Note that when the "password" property is provided, it is going to be
 	// hashed automatically. It means that it is not safe to do:
 	//
@@ -214,17 +266,7 @@ export default class UserModel extends BaseModel<User> {
 			const savedUser = await super.save(user, options);
 
 			if (isNew) {
-				const validationToken = await this.models().token().generate(savedUser.id);
-				const confirmUrl = encodeURI(this.confirmUrl(savedUser.id, validationToken));
-
-				await this.models().email().push({
-					sender_id: EmailSender.NoReply,
-					recipient_id: savedUser.id,
-					recipient_email: savedUser.email,
-					recipient_name: savedUser.full_name || '',
-					subject: `Please setup your ${this.appName} account`,
-					body: `Your new ${this.appName} account has been created!\n\nPlease click on the following link to complete the creation of your account:\n\n[Complete your account](${confirmUrl})`,
-				});
+				await this.sendAccountConfirmationEmail(savedUser);
 			}
 
 			UserModel.eventEmitter.emit('created');

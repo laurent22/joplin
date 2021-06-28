@@ -12,6 +12,7 @@ const theme: Theme = {
 	color: '#dddddd',
 	colorError: 'red',
 	colorWarn: '#9A5B00',
+	colorWarnUrl: '#ffff82',
 	colorFaded: '#999999', // For less important text
 	colorBright: '#ffffff', // For important text
 	dividerColor: '#555555',

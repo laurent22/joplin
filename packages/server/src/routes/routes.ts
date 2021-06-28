@@ -1,7 +1,9 @@
 import { Routers } from '../utils/routeUtils';
 
+import apiBatch from './api/batch';
 import apiDebug from './api/debug';
 import apiEvents from './api/events';
+import apiBatchItems from './api/batch_items';
 import apiItems from './api/items';
 import apiPing from './api/ping';
 import apiSessions from './api/sessions';
@@ -25,6 +27,8 @@ import indexPrivacy from './index/privacy';
 import defaultRoute from './default';
 
 const routes: Routers = {
+	'api/batch': apiBatch,
+	'api/batch_items': apiBatchItems,
 	'api/debug': apiDebug,
 	'api/events': apiEvents,
 	'api/items': apiItems,

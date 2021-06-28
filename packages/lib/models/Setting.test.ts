@@ -30,6 +30,24 @@ describe('models_Setting', function() {
 		expect('username' in output).toBe(false);
 	}));
 
+	it('should not fail when trying to load a key that no longer exist from the setting file', (async () => {
+		// To handle the case where a setting value exists in the database but
+		// the metadata has been removed in a new Joplin version.
+		// https://github.com/laurent22/joplin/issues/5086
+
+		Setting.setValue('sync.target', 9); // Saved to file
+		await Setting.saveAll();
+
+		const settingValues = await Setting.fileHandler.load();
+		settingValues['itsgone'] = 'myvalue';
+		await Setting.fileHandler.save(settingValues);
+
+		await Setting.reset();
+
+		await expectNotThrow(async () => Setting.load());
+		await expectThrow(async () => Setting.value('itsgone'));
+	}));
+
 	it('should allow registering new settings dynamically', (async () => {
 		await expectThrow(async () => Setting.setValue('myCustom', '123'));
 

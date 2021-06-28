@@ -56,7 +56,7 @@ router.get('changes', async (_path: SubPath, ctx: AppContext) => {
 		}),
 	};
 
-	const view: View = defaultView('changes');
+	const view: View = defaultView('changes', 'Log');
 	view.content.changeTable = makeTableView(table),
 	view.cssFiles = ['index/changes'];
 	return view;

@@ -33,6 +33,7 @@ class Command extends BaseCommand {
 		return [
 			['--target <target>', _('Sync to provided target (defaults to sync.target config value)')],
 			['--upgrade', _('Upgrade the sync target to the latest version.')],
+			['--use-lock <value>', 'Disable local locks that prevent multiple clients from synchronizing at the same time (Default = 1)'],
 		];
 	}
 
@@ -124,17 +125,21 @@ class Command extends BaseCommand {
 		const lockFilePath = `${require('os').tmpdir()}/synclock_${md5(escape(Setting.value('profileDir')))}`; // https://github.com/pvorb/node-md5/issues/41
 		if (!(await fs.pathExists(lockFilePath))) await fs.writeFile(lockFilePath, 'synclock');
 
-		try {
-			if (await Command.isLocked(lockFilePath)) throw new Error(_('Synchronisation is already in progress.'));
+		const useLock = args.options.useLock !== 0;
 
-			this.releaseLockFn_ = await Command.lockFile(lockFilePath);
-		} catch (error) {
-			if (error.code == 'ELOCKED') {
-				const msg = _('Lock file is already being hold. If you know that no synchronisation is taking place, you may delete the lock file at "%s" and resume the operation.', error.file);
-				this.stdout(msg);
-				return;
+		if (useLock) {
+			try {
+				if (await Command.isLocked(lockFilePath)) throw new Error(_('Synchronisation is already in progress.'));
+
+				this.releaseLockFn_ = await Command.lockFile(lockFilePath);
+			} catch (error) {
+				if (error.code == 'ELOCKED') {
+					const msg = _('Lock file is already being hold. If you know that no synchronisation is taking place, you may delete the lock file at "%s" and resume the operation.', error.file);
+					this.stdout(msg);
+					return;
+				}
+				throw error;
 			}
-			throw error;
 		}
 
 		const cleanUp = () => {

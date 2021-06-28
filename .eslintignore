@@ -224,6 +224,9 @@ packages/app-desktop/gui/MainScreen/commands/editAlarm.js.map
 packages/app-desktop/gui/MainScreen/commands/exportPdf.d.ts
 packages/app-desktop/gui/MainScreen/commands/exportPdf.js
 packages/app-desktop/gui/MainScreen/commands/exportPdf.js.map
+packages/app-desktop/gui/MainScreen/commands/gotoAnything.d.ts
+packages/app-desktop/gui/MainScreen/commands/gotoAnything.js
+packages/app-desktop/gui/MainScreen/commands/gotoAnything.js.map
 packages/app-desktop/gui/MainScreen/commands/hideModalMessage.d.ts
 packages/app-desktop/gui/MainScreen/commands/hideModalMessage.js
 packages/app-desktop/gui/MainScreen/commands/hideModalMessage.js.map
@@ -701,6 +704,9 @@ packages/app-mobile/components/NoteBodyViewer/hooks/useSource.js.map
 packages/app-mobile/components/SelectDateTimeDialog.d.ts
 packages/app-mobile/components/SelectDateTimeDialog.js
 packages/app-mobile/components/SelectDateTimeDialog.js.map
+packages/app-mobile/components/screens/ConfigScreen.d.ts
+packages/app-mobile/components/screens/ConfigScreen.js
+packages/app-mobile/components/screens/ConfigScreen.js.map
 packages/app-mobile/components/screens/Note.d.ts
 packages/app-mobile/components/screens/Note.js
 packages/app-mobile/components/screens/Note.js.map
@@ -806,6 +812,9 @@ packages/lib/BaseModel.js.map
 packages/lib/BaseSyncTarget.d.ts
 packages/lib/BaseSyncTarget.js
 packages/lib/BaseSyncTarget.js.map
+packages/lib/ClipperServer.d.ts
+packages/lib/ClipperServer.js
+packages/lib/ClipperServer.js.map
 packages/lib/HtmlToMd.d.ts
 packages/lib/HtmlToMd.js
 packages/lib/HtmlToMd.js.map
@@ -842,6 +851,9 @@ packages/lib/SyncTargetOneDrive.js.map
 packages/lib/Synchronizer.d.ts
 packages/lib/Synchronizer.js
 packages/lib/Synchronizer.js.map
+packages/lib/TaskQueue.d.ts
+packages/lib/TaskQueue.js
+packages/lib/TaskQueue.js.map
 packages/lib/commands/historyBackward.d.ts
 packages/lib/commands/historyBackward.js
 packages/lib/commands/historyBackward.js.map
@@ -869,6 +881,9 @@ packages/lib/eventManager.js.map
 packages/lib/file-api-driver-joplinServer.d.ts
 packages/lib/file-api-driver-joplinServer.js
 packages/lib/file-api-driver-joplinServer.js.map
+packages/lib/file-api-driver-memory.d.ts
+packages/lib/file-api-driver-memory.js
+packages/lib/file-api-driver-memory.js.map
 packages/lib/file-api-driver.test.d.ts
 packages/lib/file-api-driver.test.js
 packages/lib/file-api-driver.test.js.map
@@ -959,6 +974,9 @@ packages/lib/models/ResourceLocalState.js.map
 packages/lib/models/Revision.d.ts
 packages/lib/models/Revision.js
 packages/lib/models/Revision.js.map
+packages/lib/models/Revision.test.d.ts
+packages/lib/models/Revision.test.js
+packages/lib/models/Revision.test.js.map
 packages/lib/models/Search.d.ts
 packages/lib/models/Search.js
 packages/lib/models/Search.js.map
@@ -980,6 +998,9 @@ packages/lib/models/dateTimeFormats.test.js.map
 packages/lib/models/settings/FileHandler.d.ts
 packages/lib/models/settings/FileHandler.js
 packages/lib/models/settings/FileHandler.js.map
+packages/lib/models/utils/itemCanBeEncrypted.d.ts
+packages/lib/models/utils/itemCanBeEncrypted.js
+packages/lib/models/utils/itemCanBeEncrypted.js.map
 packages/lib/models/utils/paginatedFeed.d.ts
 packages/lib/models/utils/paginatedFeed.js
 packages/lib/models/utils/paginatedFeed.js.map
@@ -1076,6 +1097,9 @@ packages/lib/services/ResourceService.test.js.map
 packages/lib/services/RevisionService.d.ts
 packages/lib/services/RevisionService.js
 packages/lib/services/RevisionService.js.map
+packages/lib/services/RevisionService.test.d.ts
+packages/lib/services/RevisionService.test.js
+packages/lib/services/RevisionService.test.js.map
 packages/lib/services/SettingUtils.d.ts
 packages/lib/services/SettingUtils.js
 packages/lib/services/SettingUtils.js.map
@@ -1169,6 +1193,9 @@ packages/lib/services/interop/InteropService_Importer_Raw.js.map
 packages/lib/services/interop/types.d.ts
 packages/lib/services/interop/types.js
 packages/lib/services/interop/types.js.map
+packages/lib/services/joplinServer/personalizedUserContentBaseUrl.d.ts
+packages/lib/services/joplinServer/personalizedUserContentBaseUrl.js
+packages/lib/services/joplinServer/personalizedUserContentBaseUrl.js.map
 packages/lib/services/keychain/KeychainService.d.ts
 packages/lib/services/keychain/KeychainService.js
 packages/lib/services/keychain/KeychainService.js.map
@@ -1217,6 +1244,9 @@ packages/lib/services/plugins/api/Global.js.map
 packages/lib/services/plugins/api/Joplin.d.ts
 packages/lib/services/plugins/api/Joplin.js
 packages/lib/services/plugins/api/Joplin.js.map
+packages/lib/services/plugins/api/JoplinClipboard.d.ts
+packages/lib/services/plugins/api/JoplinClipboard.js
+packages/lib/services/plugins/api/JoplinClipboard.js.map
 packages/lib/services/plugins/api/JoplinCommands.d.ts
 packages/lib/services/plugins/api/JoplinCommands.js
 packages/lib/services/plugins/api/JoplinCommands.js.map
@@ -1307,6 +1337,9 @@ packages/lib/services/rest/ApiResponse.js.map
 packages/lib/services/rest/actionApi.desktop.d.ts
 packages/lib/services/rest/actionApi.desktop.js
 packages/lib/services/rest/actionApi.desktop.js.map
+packages/lib/services/rest/routes/auth.d.ts
+packages/lib/services/rest/routes/auth.js
+packages/lib/services/rest/routes/auth.js.map
 packages/lib/services/rest/routes/folders.d.ts
 packages/lib/services/rest/routes/folders.js
 packages/lib/services/rest/routes/folders.js.map
@@ -1367,6 +1400,9 @@ packages/lib/services/searchengine/SearchEngineUtils.test.js.map
 packages/lib/services/searchengine/filterParser.d.ts
 packages/lib/services/searchengine/filterParser.js
 packages/lib/services/searchengine/filterParser.js.map
+packages/lib/services/searchengine/filterParser.test.d.ts
+packages/lib/services/searchengine/filterParser.test.js
+packages/lib/services/searchengine/filterParser.test.js.map
 packages/lib/services/searchengine/queryBuilder.d.ts
 packages/lib/services/searchengine/queryBuilder.js
 packages/lib/services/searchengine/queryBuilder.js.map
@@ -1382,6 +1418,12 @@ packages/lib/services/spellChecker/SpellCheckerService.js.map
 packages/lib/services/spellChecker/SpellCheckerServiceDriverBase.d.ts
 packages/lib/services/spellChecker/SpellCheckerServiceDriverBase.js
 packages/lib/services/spellChecker/SpellCheckerServiceDriverBase.js.map
+packages/lib/services/synchronizer/ItemUploader.d.ts
+packages/lib/services/synchronizer/ItemUploader.js
+packages/lib/services/synchronizer/ItemUploader.js.map
+packages/lib/services/synchronizer/ItemUploader.test.d.ts
+packages/lib/services/synchronizer/ItemUploader.test.js
+packages/lib/services/synchronizer/ItemUploader.test.js.map
 packages/lib/services/synchronizer/LockHandler.d.ts
 packages/lib/services/synchronizer/LockHandler.js
 packages/lib/services/synchronizer/LockHandler.js.map

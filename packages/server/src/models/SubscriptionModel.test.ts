@@ -29,7 +29,7 @@ describe('SubscriptionModel', function() {
 
 		expect(user.account_type).toBe(AccountType.Pro);
 		expect(user.email).toBe('toto@example.com');
-		expect(user.can_share).toBe(1);
+		expect(user.can_share_folder).toBe(1);
 		expect(user.max_item_size).toBe(200 * MB);
 
 		expect(sub.stripe_subscription_id).toBe('STRIPE_SUB_ID');

@@ -4,6 +4,7 @@ const { rtrimSlashes } = require('./path-utils.js');
 import JoplinError from './JoplinError';
 import { Env } from './models/Setting';
 import Logger from './Logger';
+import personalizedUserContentBaseUrl from './services/joplinServer/personalizedUserContentBaseUrl';
 const { stringify } = require('query-string');
 
 const logger = Logger.create('JoplinServerApi');
@@ -56,14 +57,8 @@ export default class JoplinServerApi {
 		return rtrimSlashes(this.options_.baseUrl());
 	}
 
-	public userContentBaseUrl(userId: string) {
-		if (this.options_.userContentBaseUrl()) {
-			if (!userId) throw new Error('User ID must be specified');
-			const url = new URL(this.options_.userContentBaseUrl());
-			return `${url.protocol}//${userId.substr(0, 10).toLowerCase()}.${url.host}`;
-		} else {
-			return this.baseUrl();
-		}
+	public personalizedUserContentBaseUrl(userId: string) {
+		return personalizedUserContentBaseUrl(userId, this.baseUrl(), this.options_.userContentBaseUrl());
 	}
 
 	private async session() {
@@ -96,19 +91,38 @@ export default class JoplinServerApi {
 		return _('Could not connect to Joplin Server. Please check the Synchronisation options in the config screen. Full error was:\n\n%s', msg);
 	}
 
+	private hidePasswords(o: any): any {
+		if (typeof o === 'string') {
+			try {
+				const output = JSON.parse(o);
+				if (!output) return o;
+				if (output.password) output.password = '******';
+				return JSON.stringify(output);
+			} catch (error) {
+				return o;
+			}
+		} else {
+			const output = { ...o };
+			if (output.password) output.password = '******';
+			if (output['X-API-AUTH']) output['X-API-AUTH'] = '******';
+			return output;
+		}
+	}
+
 	private requestToCurl_(url: string, options: any) {
 		const output = [];
 		output.push('curl');
 		output.push('-v');
 		if (options.method) output.push(`-X ${options.method}`);
 		if (options.headers) {
+			const headers = this.hidePasswords(options.headers);
 			for (const n in options.headers) {
 				if (!options.headers.hasOwnProperty(n)) continue;
-				output.push(`${'-H ' + '"'}${n}: ${options.headers[n]}"`);
+				output.push(`${'-H ' + '"'}${n}: ${headers[n]}"`);
 			}
 		}
 		if (options.body) {
-			const serialized = typeof options.body !== 'string' ? JSON.stringify(options.body) : options.body;
+			const serialized = typeof options.body !== 'string' ? JSON.stringify(this.hidePasswords(options.body)) : this.hidePasswords(options.body);
 			output.push(`${'--data ' + '\''}${serialized}'`);
 		}
 		output.push(`'${url}'`);
@@ -128,6 +142,7 @@ export default class JoplinServerApi {
 		}
 
 		if (sessionId) headers['X-API-AUTH'] = sessionId;
+		headers['X-API-MIN-VERSION'] = '2.1.4';
 
 		const fetchOptions: any = {};
 		fetchOptions.headers = headers;

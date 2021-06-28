@@ -12,6 +12,18 @@ const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
 // Converts "root:/myfile.txt:" to "myfile.txt"
 const extractNameRegex = /^root:\/(.*):$/;
 
+export interface SaveFromRawContentItem {
+	name: string;
+	body: Buffer;
+}
+
+export interface SaveFromRawContentResultItem {
+	item: Item;
+	error: any;
+}
+
+export type SaveFromRawContentResult = Record<string, SaveFromRawContentResultItem>;
+
 export interface PaginatedItems extends PaginatedResults {
 	items: Item[];
 }
@@ -215,54 +227,6 @@ export default class ItemModel extends BaseModel<Item> {
 		return output;
 	}
 
-	// private async folderChildrenItems(userId: Uuid, folderId: string): Promise<Item[]> {
-	// 	let output: Item[] = [];
-
-	// 	const rows: Item[] = await this
-	// 		.db('user_items')
-	// 		.leftJoin('items', 'items.id', 'user_items.item_id')
-	// 		.select('items.id', 'items.jop_id', 'items.jop_type')
-	// 		.where('items.jop_parent_id', '=', folderId)
-	// 		.where('user_items.user_id', '=', userId);
-
-	// 	for (const row of rows) {
-	// 		output.push(row);
-
-	// 		if (row.jop_type === ModelType.Folder) {
-	// 			const children = await this.folderChildrenItems(userId, row.jop_id);
-	// 			output = output.concat(children);
-	// 		}
-	// 	}
-
-	// 	return output;
-	// }
-
-	// public async shareJoplinFolderAndContent(shareId: Uuid, fromUserId: Uuid, toUserId: Uuid, folderId: string) {
-	// 	const folderItem = await this.loadByJopId(fromUserId, folderId, { fields: ['id'] });
-	// 	if (!folderItem) throw new ErrorNotFound(`Could not find folder "${folderId}" for share "${shareId}"`);
-
-	// 	const items = [folderItem].concat(await this.folderChildrenItems(fromUserId, folderId));
-
-	// 	const alreadySharedItemIds: string[] = await this
-	// 		.db('user_items')
-	// 		.pluck('item_id')
-	// 		.whereIn('item_id', items.map(i => i.id))
-	// 		.where('user_id', '=', toUserId)
-	// 		// .where('share_id', '!=', '');
-
-	// 	await this.withTransaction(async () => {
-	// 		for (const item of items) {
-	// 			if (alreadySharedItemIds.includes(item.id)) continue;
-	// 			await this.models().userItem().add(toUserId, item.id, shareId);
-
-	// 			if (item.jop_type === ModelType.Note) {
-	// 				const resourceIds = await this.models().itemResource().byItemId(item.id);
-	// 				await this.models().share().updateResourceShareStatus(true, shareId, fromUserId, toUserId, resourceIds);
-	// 			}
-	// 		}
-	// 	});
-	// }
-
 	public itemToJoplinItem(itemRow: Item): any {
 		if (itemRow.jop_type <= 0) throw new Error(`Not a Joplin item: ${itemRow.id}`);
 		if (!itemRow.content) throw new Error('Item content is missing');
@@ -273,6 +237,7 @@ export default class ItemModel extends BaseModel<Item> {
 		item.share_id = itemRow.jop_share_id;
 		item.type_ = itemRow.jop_type;
 		item.encryption_applied = itemRow.jop_encryption_applied;
+		item.updated_time = itemRow.jop_updated_time;
 
 		return item;
 	}
@@ -282,60 +247,124 @@ export default class ItemModel extends BaseModel<Item> {
 		return this.itemToJoplinItem(raw);
 	}
 
-	public async saveFromRawContent(user: User, name: string, buffer: Buffer, options: ItemSaveOption = null): Promise<Item> {
+	public async saveFromRawContent(user: User, rawContentItems: SaveFromRawContentItem[], options: ItemSaveOption = null): Promise<SaveFromRawContentResult> {
 		options = options || {};
 
-		const existingItem = await this.loadByName(user.id, name);
+		// In this function, first we process the input items, which may be
+		// serialized Joplin items or actual buffers (for resources) and convert
+		// them to database items. Once it's done those db items are saved in
+		// batch at the end.
 
-		const isJoplinItem = isJoplinItemName(name);
-		let isNote = false;
-
-		const item: Item = {
-			name,
-		};
-
-		let joplinItem: any = null;
-
-		let resourceIds: string[] = [];
-
-		if (isJoplinItem) {
-			joplinItem = await unserializeJoplinItem(buffer.toString());
-			isNote = joplinItem.type_ === ModelType.Note;
-			resourceIds = isNote ? linkedResourceIds(joplinItem.body) : [];
-
-			item.jop_id = joplinItem.id;
-			item.jop_parent_id = joplinItem.parent_id || '';
-			item.jop_type = joplinItem.type_;
-			item.jop_encryption_applied = joplinItem.encryption_applied || 0;
-			item.jop_share_id = joplinItem.share_id || '';
-
-			delete joplinItem.id;
-			delete joplinItem.parent_id;
-			delete joplinItem.share_id;
-			delete joplinItem.type_;
-			delete joplinItem.encryption_applied;
-
-			item.content = Buffer.from(JSON.stringify(joplinItem));
-		} else {
-			item.content = buffer;
+		interface ItemToProcess {
+			item: Item;
+			error: Error;
+			resourceIds?: string[];
+			isNote?: boolean;
+			joplinItem?: any;
 		}
 
-		if (existingItem) item.id = existingItem.id;
+		const existingItems = await this.loadByNames(user.id, rawContentItems.map(i => i.name));
+		const itemsToProcess: Record<string, ItemToProcess> = {};
 
-		if (options.shareId) item.jop_share_id = options.shareId;
+		for (const rawItem of rawContentItems) {
+			try {
+				const isJoplinItem = isJoplinItemName(rawItem.name);
+				let isNote = false;
 
-		await this.models().user().checkMaxItemSizeLimit(user, buffer, item, joplinItem);
+				const item: Item = {
+					name: rawItem.name,
+				};
 
-		return this.withTransaction<Item>(async () => {
-			const savedItem = await this.saveForUser(user.id, item);
+				let joplinItem: any = null;
 
-			if (isNote) {
-				await this.models().itemResource().deleteByItemId(savedItem.id);
-				await this.models().itemResource().addResourceIds(savedItem.id, resourceIds);
+				let resourceIds: string[] = [];
+
+				if (isJoplinItem) {
+					joplinItem = await unserializeJoplinItem(rawItem.body.toString());
+					isNote = joplinItem.type_ === ModelType.Note;
+					resourceIds = isNote ? linkedResourceIds(joplinItem.body) : [];
+
+					item.jop_id = joplinItem.id;
+					item.jop_parent_id = joplinItem.parent_id || '';
+					item.jop_type = joplinItem.type_;
+					item.jop_encryption_applied = joplinItem.encryption_applied || 0;
+					item.jop_share_id = joplinItem.share_id || '';
+					item.jop_updated_time = joplinItem.updated_time;
+
+					const joplinItemToSave = { ...joplinItem };
+
+					delete joplinItemToSave.id;
+					delete joplinItemToSave.parent_id;
+					delete joplinItemToSave.share_id;
+					delete joplinItemToSave.type_;
+					delete joplinItemToSave.encryption_applied;
+					delete joplinItemToSave.updated_time;
+
+					item.content = Buffer.from(JSON.stringify(joplinItemToSave));
+				} else {
+					item.content = rawItem.body;
+				}
+
+				const existingItem = existingItems.find(i => i.name === rawItem.name);
+				if (existingItem) item.id = existingItem.id;
+
+				if (options.shareId) item.jop_share_id = options.shareId;
+
+				await this.models().user().checkMaxItemSizeLimit(user, rawItem.body, item, joplinItem);
+
+				itemsToProcess[rawItem.name] = {
+					item: item,
+					error: null,
+					resourceIds,
+					isNote,
+					joplinItem,
+				};
+			} catch (error) {
+				itemsToProcess[rawItem.name] = {
+					item: null,
+					error: error,
+				};
 			}
+		}
 
-			return savedItem;
-		});
+		const output: SaveFromRawContentResult = {};
+
+		await this.withTransaction(async () => {
+			for (const name of Object.keys(itemsToProcess)) {
+				const o = itemsToProcess[name];
+
+				if (o.error) {
+					output[name] = {
+						item: null,
+						error: o.error,
+					};
+					continue;
+				}
+
+				const itemToSave = o.item;
+
+				try {
+					const savedItem = await this.saveForUser(user.id, itemToSave);
+
+					if (o.isNote) {
+						await this.models().itemResource().deleteByItemId(savedItem.id);
+						await this.models().itemResource().addResourceIds(savedItem.id, o.resourceIds);
+					}
+
+					output[name] = {
+						item: savedItem,
+						error: null,
+					};
+				} catch (error) {
+					output[name] = {
+						item: null,
+						error: error,
+					};
+				}
+			}
+		}, 'ItemModel::saveFromRawContent');
+
+		return output;
 	}
 
 	protected async validate(item: Item, options: ValidateOptions = {}): Promise<Item> {
@@ -559,7 +588,7 @@ export default class ItemModel extends BaseModel<Item> {
 			}
 
 			return item;
-		});
+		}, 'ItemModel::saveForUser');
 	}
 
 	public async save(_item: Item, _options: SaveOptions = {}): Promise<Item> {

@@ -71,20 +71,28 @@ class Command extends BaseCommand {
 		};
 
 		if (args.command === 'enable') {
-			const password = options.password ? options.password.toString() : await this.prompt(_('Enter master password:'), { type: 'string', secure: true });
+			const argPassword = options.password ? options.password.toString() : '';
+			const password = argPassword ? argPassword : await this.prompt(_('Enter master password:'), { type: 'string', secure: true });
 			if (!password) {
 				this.stdout(_('Operation cancelled'));
 				return;
 			}
-			const password2 = await this.prompt(_('Confirm password:'), { type: 'string', secure: true });
-			if (!password2) {
-				this.stdout(_('Operation cancelled'));
-				return;
+
+			// If the password was passed via command line, we don't ask for
+			// confirmation. This is to allow setting up E2EE entirely from the
+			// command line.
+			if (!argPassword) {
+				const password2 = await this.prompt(_('Confirm password:'), { type: 'string', secure: true });
+				if (!password2) {
+					this.stdout(_('Operation cancelled'));
+					return;
+				}
+				if (password !== password2) {
+					this.stdout(_('Passwords do not match!'));
+					return;
+				}
 			}
-			if (password !== password2) {
-				this.stdout(_('Passwords do not match!'));
-				return;
-			}
+
 			await EncryptionService.instance().generateMasterKeyAndEnableEncryption(password);
 			return;
 		}

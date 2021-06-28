@@ -15,7 +15,10 @@ export default class ShareModel extends BaseModel<Share> {
 
 	public async checkIfAllowed(user: User, action: AclAction, resource: Share = null): Promise<void> {
 		if (action === AclAction.Create) {
-			if (!user.can_share) throw new ErrorForbidden('The sharing feature is not enabled for this account');
+			if (resource.type === ShareType.Folder && !user.can_share_folder) throw new ErrorForbidden('The sharing feature is not enabled for this account');
+
+			// Note that currently all users can always share notes by URL so
+			// there's no check on the permission
 
 			if (!await this.models().item().userHasItem(user.id, resource.item_id)) throw new ErrorForbidden('cannot share an item not owned by the user');
 
@@ -35,7 +38,7 @@ export default class ShareModel extends BaseModel<Share> {
 	}
 
 	public checkShareUrl(share: Share, shareUrl: string) {
-		if (this.baseUrl === this.userContentUrl) return; // OK
+		if (this.baseUrl === this.userContentBaseUrl) return; // OK
 
 		const userId = userIdFromUserContentUrl(shareUrl);
 		const shareUserId = share.owner_id.toLowerCase();
@@ -93,8 +96,8 @@ export default class ShareModel extends BaseModel<Share> {
 		return !!r;
 	}
 
-	public shareUrl(id: Uuid, query: any = null): string {
-		return setQueryParameters(`${this.userContentUrl}/shares/${id}`, query);
+	public shareUrl(shareOwnerId: Uuid, id: Uuid, query: any = null): string {
+		return setQueryParameters(`${this.personalizedUserContentBaseUrl(shareOwnerId)}/shares/${id}`, query);
 	}
 
 	public async byItemId(itemId: Uuid): Promise<Share | null> {

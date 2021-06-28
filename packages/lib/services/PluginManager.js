@@ -96,7 +96,7 @@ class PluginManager {
 					});
 				};
 
-				item.accelerator = menuItems[i].accelerator();
+				if (menuItems[i].accelerator) item.accelerator = menuItems[i].accelerator();
 
 				menuItems[i] = item;
 			}
