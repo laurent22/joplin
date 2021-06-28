@@ -48,27 +48,27 @@ POSTGRES_HOST=localhost
 
 *Make sure that the provided database and user exist as the server will not create them.*
 
-#### TLS Options
-In some cases you will need to supply a CA cert to allow connections to be made to a PostgreSQL server. You can do this by mounting the cert into your container and setting `POSTGRES_SSL_CA_FILEPATH` to the path of the CA cert on the container.
+#### SSL/TSL Options
+In some cases you will need to supply a CA cert to allow connections to be made to a PostgreSQL server. You can do this by mounting the cert into your container and setting `POSTGRES_SSL_CA_FILE` to the path of the CA cert on the container.
 ```conf
-POSTGRES_SSL_CA_FILEPATH=/home/data/ca.crt
+POSTGRES_SSL_CA_FILE=/home/data/ca.crt
 ```
 
-If you just wish to ignore an invalid SSL certificate you can do this by setting the `POSTGRES_REJECT_UNAUTHORIZED` variable to 0.
+If you just wish to ignore an invalid TLS/SSL certificate you can do this by setting the `POSTGRES_REJECT_UNAUTHORIZED` variable to 0.
 ```conf
 POSTGRES_REJECT_UNAUTHORIZED=0
 ```
 *Please note that values other than 0 or 1 will be treated as invalid and will be ignored. So in practice the only value this variable can take to alter how the container will run is 0 as the default function of the node-postgres library is to reject unauthorized certificates.*
 
-When the server requires client certificate authentication, mount the cert and key files to the container and set the `POSTGRES_SSL_CERT_FILEPATH` and `POSTGRES_SSL_CERT_KEY_FILEPATH`.     
+When the server requires client certificate authentication, mount the cert and key files to the container and set the `POSTGRES_SSL_CERT_FILE` and `POSTGRES_SSL_CERT_KEY_FILE`.     
 ```conf
-POSTGRES_SSL_CERT_FILEPATH=/home/data/postgresql.crt
-POSTGRES_SSL_CERT_KEY_FILEPATH=/home/data/postgresql.key
+POSTGRES_SSL_CERT_FILE=/home/data/postgresql.crt
+POSTGRES_SSL_CERT_KEY_FILE=/home/data/postgresql.key
 ```
 
-For more information on defining TLS parameters on your connection please refer to https://node-postgres.com/features/ssl and https://node-postgres.com/features/ssl.
+For more information on defining TLS/SSL parameters on your connection please refer to https://node-postgres.com/features/ssl and https://node-postgres.com/features/ssl.
 
-*Please note: it is intentional for this README to use TLS and not SSL even though the underlying library's may refer to security connecting to a PostgreSQL server using SSL, this is because SSL 2.0 and 3.0 was deprecated in 2011 and 2015, respectively. https://en.wikipedia.org/wiki/Transport_Layer_Security*
+*Please note: it is intentional for this README to use both TLS and SSL even though the underlying library's may refer to security connecting to a PostgreSQL server using SSL; this is because SSL 2.0 and 3.0 was deprecated in 2011 and 2015, respectively. However, SSL still holds the correct meaning and is more widely understood. For more information why please see https://expeditedsecurity.com/blog/ssl-or-tls/*
 
 ### Using docker-compose
 

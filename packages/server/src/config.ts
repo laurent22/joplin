@@ -21,10 +21,10 @@ export interface EnvVariables {
 	POSTGRES_HOST?: string;
 	POSTGRES_PORT?: string;
 	POSTGRES_CONNECTION_STRING?: string;
-	POSTGRES_REJECT_UNAUTHORIZED?: string;
-	POSTGRES_SSL_CA_FILEPATH?: string;
-	POSTGRES_SSL_CERT_FILEPATH?: string;
-	POSTGRES_SSL_CERT_KEY_FILEPATH?: string;
+	POSTGRES_SSL_REJECT_UNAUTHORIZED?: string;
+	POSTGRES_SSL_CA_FILE?: string;
+	POSTGRES_SSL_CERT_FILE?: string;
+	POSTGRES_SSL_CERT_KEY_FILE?: string;
 
 	MAILER_ENABLED?: string;
 	MAILER_HOST?: string;
@@ -70,10 +70,10 @@ function databaseHostFromEnv(runningInDocker: boolean, env: EnvVariables): strin
 	return null;
 }
 
-function databaseConfigFromEnv(runningInDocker: boolean, env: EnvVariables): DatabaseConfig {
+async function databaseConfigFromEnv(runningInDocker: boolean, env: EnvVariables): Promise<DatabaseConfig> {
 	if (env.DB_CLIENT === 'pg') {
-		let databaseConfig: DatabaseConfig = {
-			client: DatabaseConfigClient.PostgreSQL
+		const databaseConfig: DatabaseConfig = {
+			client: DatabaseConfigClient.PostgreSQL,
 		};
 
 		if (env.POSTGRES_CONNECTION_STRING) {
@@ -86,19 +86,20 @@ function databaseConfigFromEnv(runningInDocker: boolean, env: EnvVariables): Dat
 			databaseConfig.host = databaseHostFromEnv(runningInDocker, env) || 'localhost';
 		}
 
-		if(env.POSTGRES_REJECT_UNAUTHORIZED)
-			databaseConfig.rejectUnauthorized = Number(env.POSTGRES_REJECT_UNAUTHORIZED) === 1;
+		if (env.POSTGRES_SSL_REJECT_UNAUTHORIZED) {
+			const rejectUnauthorized = Number(env.POSTGRES_SSL_REJECT_UNAUTHORIZED);
+			if (rejectUnauthorized === 0 || rejectUnauthorized === 1) { databaseConfig.sslRejectUnauthorized = rejectUnauthorized === 1; }
+		}
 
-		if(env.POSTGRES_SSL_CA_FILEPATH)
-			databaseConfig.sslCaFilePath = env.POSTGRES_SSL_CA_FILEPATH;
+		if (env.POSTGRES_SSL_CA_FILE) { databaseConfig.sslCa = env.POSTGRES_SSL_CERT_FILE ? await readFile(env.POSTGRES_SSL_CA_FILE, 'utf8') : null; }
 
-		if(env.POSTGRES_SSL_CERT_FILEPATH && env.POSTGRES_SSL_CERT_KEY_FILEPATH) {
-			databaseConfig.sslCertFilePath = env.POSTGRES_SSL_CERT_FILEPATH;
-			databaseConfig.sslCertKeyFilePath = env.POSTGRES_SSL_CERT_KEY_FILEPATH;
+		if (env.POSTGRES_SSL_CERT_FILE && env.POSTGRES_SSL_CERT_KEY_FILE) {
+			databaseConfig.sslCert = await readFile(env.POSTGRES_SSL_CERT_FILE, 'utf8');
+			databaseConfig.sslCertKey = await readFile(env.POSTGRES_SSL_CERT_KEY_FILE, 'utf8');
 		}
 
 		return {
-			...databaseConfig
+			...databaseConfig,
 		};
 	}
 
