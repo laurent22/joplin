@@ -85,7 +85,13 @@ class Bridge {
 			type: 'ENV_SET',
 			env: this.env(),
 		});
+	}
 
+	token() {
+		return this.token_;
+	}
+
+	async onReactAppStarts() {
 		await this.findClipperServerPort();
 
 		if (this.clipperServerPortStatus_ !== 'found') {
@@ -94,13 +100,7 @@ class Bridge {
 		}
 
 		await this.restoreState();
-	}
 
-	token() {
-		return this.token_;
-	}
-
-	async onReactAppStarts() {
 		await this.checkAuth();
 		if (!this.token_) return; // Didn't get a token
 
@@ -138,29 +138,59 @@ class Bridge {
 
 		this.dispatch({ type: 'AUTH_STATE_SET', value: 'waiting' });
 
-		const response = await this.clipperApiExec('POST', 'auth');
-		const authToken = response.auth_token;
+		// Note that Firefox and Chrome works differently for this:
+		//
+		// - In Chrome, the popup stays open, even when the user leaves the
+		//   browser to grant permission in the application.
+		//
+		// - In Firefox, as soon as the browser loses focus, the popup closes.
+		//
+		//   It means we can't rely on local state to get this working - instead
+		//   we request the auth token, and cache it to local storage (along
+		//   with a timestamp). Then next time the user opens the popup (after
+		//   it was automatically closed by Firefox), that cached auth token is
+		//   re-used and the auth process continues.
+		//
+		// https://github.com/laurent22/joplin/issues/5125#issuecomment-869547421
+
+		const existingAuthInfo = await this.storageGet(['authToken', 'authTokenTimestamp']);
+
+		let authToken = null;
+		if (existingAuthInfo.authToken && Date.now() - existingAuthInfo.authTokenTimestamp < 5 * 60 * 1000) {
+			console.info('checkAuth: we already have an auth token - reusing it');
+			authToken = existingAuthInfo.authToken;
+		} else {
+			console.info('checkAuth: we do not have an auth token - requesting it...');
+			const response = await this.clipperApiExec('POST', 'auth');
+			authToken = response.auth_token;
+
+			await this.storageSet({ authToken: authToken, authTokenTimestamp: Date.now() });
+		}
 
 		console.info('checkAuth: we do not have a token - requesting one using auth_token: ', authToken);
 
-		while (true) {
-			const response = await this.clipperApiExec('GET', 'auth/check', { auth_token: authToken });
+		try {
+			while (true) {
+				const response = await this.clipperApiExec('GET', 'auth/check', { auth_token: authToken });
 
-			if (response.status === 'rejected') {
-				console.info('checkAuth: Auth request was not accepted', response);
-				this.dispatch({ type: 'AUTH_STATE_SET', value: 'rejected' });
-				break;
-			} else if (response.status === 'accepted') {
-				console.info('checkAuth: Auth request was accepted', response);
-				this.dispatch({ type: 'AUTH_STATE_SET', value: 'accepted' });
-				this.token_ = response.token;
-				await this.storageSet({ token: this.token_ });
-				break;
-			} else if (response.status === 'waiting') {
-				await msleep(1000);
-			} else {
-				throw new Error(`Unknown auth/check status: ${response.status}`);
+				if (response.status === 'rejected') {
+					console.info('checkAuth: Auth request was not accepted', response);
+					this.dispatch({ type: 'AUTH_STATE_SET', value: 'rejected' });
+					break;
+				} else if (response.status === 'accepted') {
+					console.info('checkAuth: Auth request was accepted', response);
+					this.dispatch({ type: 'AUTH_STATE_SET', value: 'accepted' });
+					this.token_ = response.token;
+					await this.storageSet({ token: this.token_ });
+					break;
+				} else if (response.status === 'waiting') {
+					await msleep(1000);
+				} else {
+					throw new Error(`Unknown auth/check status: ${response.status}`);
+				}
 			}
+		} finally {
+			await this.storageSet({ authToken: '', authTokenTimestamp: 0 });
 		}
 	}
 
