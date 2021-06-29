@@ -4,13 +4,15 @@ import { RouteType } from '../../utils/types';
 import { AppContext, HttpMethod } from '../../utils/types';
 import { bodyFields, formParse } from '../../utils/requestUtils';
 import { ErrorForbidden, ErrorUnprocessableEntity } from '../../utils/errors';
-import { User } from '../../db';
+import { User, Uuid } from '../../db';
 import config from '../../config';
 import { View } from '../../services/MustacheService';
 import defaultView from '../../utils/defaultView';
 import { AclAction } from '../../models/BaseModel';
 import { NotificationKey } from '../../models/NotificationModel';
 import { formatBytes } from '../../utils/bytes';
+import { accountTypeOptions, accountTypeProperties } from '../../models/UserModel';
+import uuidgen from '../../utils/uuidgen';
 
 interface CheckPasswordInput {
 	password: string;
@@ -29,25 +31,39 @@ export function checkPassword(fields: CheckPasswordInput, required: boolean): st
 }
 
 function makeUser(isNew: boolean, fields: any): User {
-	const user: User = {};
+	let user: User = {};
 
 	if ('email' in fields) user.email = fields.email;
 	if ('full_name' in fields) user.full_name = fields.full_name;
 	if ('is_admin' in fields) user.is_admin = fields.is_admin;
 	if ('max_item_size' in fields) user.max_item_size = fields.max_item_size || 0;
-	user.can_share = fields.can_share ? 1 : 0;
+	if ('can_share_folder' in fields) user.can_share_folder = fields.can_share_folder ? 1 : 0;
+
+	if ('account_type' in fields) {
+		user.account_type = Number(fields.account_type);
+		user = {
+			...user,
+			...accountTypeProperties(user.account_type),
+		};
+	}
 
 	const password = checkPassword(fields, false);
 	if (password) user.password = password;
 
 	if (!isNew) user.id = fields.id;
 
+	if (isNew) {
+		user.must_set_password = user.password ? 0 : 1;
+		user.password = user.password ? user.password : uuidgen();
+	}
+
 	return user;
 }
 
 function defaultUser(): User {
 	return {
-		can_share: 1,
+		can_share_folder: 1,
+		max_item_size: 0,
 	};
 }
 
@@ -67,7 +83,14 @@ router.get('users', async (_path: SubPath, ctx: AppContext) => {
 
 	const users = await userModel.all();
 
-	const view: View = defaultView('users');
+	users.sort((u1: User, u2: User) => {
+		if (u1.full_name && u2.full_name) return u1.full_name.toLowerCase() < u2.full_name.toLowerCase() ? -1 : +1;
+		if (u1.full_name && !u2.full_name) return +1;
+		if (!u1.full_name && u2.full_name) return -1;
+		return u1.email.toLowerCase() < u2.email.toLowerCase() ? -1 : +1;
+	});
+
+	const view: View = defaultView('users', 'Users');
 	view.content.users = users.map(user => {
 		return {
 			...user,
@@ -99,13 +122,22 @@ router.get('users/:id', async (path: SubPath, ctx: AppContext, user: User = null
 		postUrl = `${config().baseUrl}/users/${user.id}`;
 	}
 
-	const view: View = defaultView('user');
+	const view: View = defaultView('user', 'Profile');
 	view.content.user = user;
 	view.content.isNew = isNew;
 	view.content.buttonTitle = isNew ? 'Create user' : 'Update profile';
 	view.content.error = error;
 	view.content.postUrl = postUrl;
 	view.content.showDeleteButton = !isNew && !!owner.is_admin && owner.id !== user.id;
+	view.content.showResetPasswordButton = !isNew && owner.is_admin;
+
+	if (config().accountTypesEnabled) {
+		view.content.showAccountTypes = true;
+		view.content.accountTypes = accountTypeOptions().map((o: any) => {
+			o.selected = user.account_type === o.value;
+			return o;
+		});
+	}
 
 	return view;
 });
@@ -121,7 +153,7 @@ router.get('users/:id/confirm', async (path: SubPath, ctx: AppContext, error: Er
 
 	if (user.must_set_password) {
 		const view: View = {
-			...defaultView('users/confirm'),
+			...defaultView('users/confirm', 'Confirmation'),
 			content: {
 				user,
 				error,
@@ -176,13 +208,20 @@ router.post('users/:id/confirm', async (path: SubPath, ctx: AppContext) => {
 
 router.alias(HttpMethod.POST, 'users/:id', 'users');
 
+interface FormFields {
+	id: Uuid;
+	post_button: string;
+	delete_button: string;
+	send_reset_password_email: string;
+}
+
 router.post('users', async (path: SubPath, ctx: AppContext) => {
 	let user: User = {};
 	const userId = userIsMe(path) ? ctx.owner.id : path.id;
 
 	try {
 		const body = await formParse(ctx.req);
-		const fields = body.fields;
+		const fields = body.fields as FormFields;
 		const isNew = userIsNew(path);
 		if (userIsMe(path)) fields.id = userId;
 		user = makeUser(isNew, fields);
@@ -202,6 +241,10 @@ router.post('users', async (path: SubPath, ctx: AppContext) => {
 			const user = await userModel.load(path.id);
 			await userModel.checkIfAllowed(ctx.owner, AclAction.Delete, user);
 			await userModel.delete(path.id);
+		} else if (fields.send_reset_password_email) {
+			const user = await userModel.load(path.id);
+			await userModel.save({ id: user.id, must_set_password: 1 });
+			await userModel.sendAccountConfirmationEmail(user);
 		} else {
 			throw new Error('Invalid form button');
 		}

@@ -38,10 +38,10 @@ export default class SearchEngineUtils {
 			isTodoAutoAdded = true;
 		}
 
-		let isTodoCompletedAutoAdded = false;
+		let todoCompletedAutoAdded = false;
 		if (fields.indexOf('todo_completed') < 0) {
 			fields.push('todo_completed');
-			isTodoCompletedAutoAdded = true;
+			todoCompletedAutoAdded = true;
 		}
 
 		const previewOptions = Object.assign({}, {
@@ -66,20 +66,14 @@ export default class SearchEngineUtils {
 			const idx = noteIds.indexOf(filteredNotes[i].id);
 			sortedNotes[idx] = filteredNotes[i];
 			if (idWasAutoAdded) delete sortedNotes[idx].id;
-			if (isTodoCompletedAutoAdded) delete sortedNotes[idx].is_todo;
-			if (isTodoAutoAdded) delete sortedNotes[idx].todo_completed;
+			if (todoCompletedAutoAdded) delete sortedNotes[idx].todo_completed;
+			if (isTodoAutoAdded) delete sortedNotes[idx].is_todo;
 		}
 
-		// Note that when the search engine index is somehow corrupted, it might contain
-		// references to notes that don't exist. Not clear how it can happen, but anyway
-		// handle it here by checking if `user_updated_time` IS NOT NULL. Was causing this
-		// issue: https://discourse.joplinapp.org/t/how-to-recover-corrupted-database/9367
-		if (noteIds.length !== notes.length) {
-			// remove null objects
-			return sortedNotes.filter(n => n);
-		} else {
-			return sortedNotes;
-		}
-
+		// Note that when the search engine index is somehow corrupted, it might
+		// contain references to notes that don't exist. Not clear how it can
+		// happen, but anyway handle it here. Was causing this issue:
+		// https://discourse.joplinapp.org/t/how-to-recover-corrupted-database/9367
+		return sortedNotes.filter(n => n);
 	}
 }

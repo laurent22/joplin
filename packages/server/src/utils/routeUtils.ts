@@ -158,8 +158,12 @@ export function isValidOrigin(requestOrigin: string, endPointBaseUrl: string, ro
 	const host2 = (new URL(endPointBaseUrl)).host;
 
 	if (routeType === RouteType.UserContent) {
+		// At this point we only check if eg usercontent.com has been accessed
+		// with origin usercontent.com, or something.usercontent.com. We don't
+		// check that the user ID is valid or is event present. This will be
+		// done by the /share end point, which will also check that the share
+		// owner ID matches the origin URL.
 		if (host1 === host2) return true;
-
 		const hostNoPrefix = host1.split('.').slice(1).join('.');
 		return hostNoPrefix === host2;
 	} else {
@@ -182,7 +186,7 @@ export async function execRequest(routes: Routers, ctx: AppContext) {
 	if (!match) throw new ErrorNotFound();
 
 	const endPoint = match.route.findEndPoint(ctx.request.method as HttpMethod, match.subPath.schema);
-	if (ctx.URL && !isValidOrigin(ctx.URL.origin, baseUrl(endPoint.type), endPoint.type)) throw new ErrorNotFound('Invalid origin', 'invalidOrigin');
+	if (ctx.URL && !isValidOrigin(ctx.URL.origin, baseUrl(endPoint.type), endPoint.type)) throw new ErrorNotFound(`Invalid origin: ${ctx.URL.origin}`, 'invalidOrigin');
 
 	// This is a generic catch-all for all private end points - if we
 	// couldn't get a valid session, we exit now. Individual end points

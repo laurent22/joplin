@@ -25,7 +25,8 @@
 				6,
 				7,
 				8,
-				9
+				9,
+				10
 			]
 		},
 		"sync.upgradeState": {
@@ -99,14 +100,40 @@
 		"sync.9.path": {
 			"type": "string",
 			"default": "",
-			"description": "Joplin Cloud URL. Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: https://joplinapp.org/faq/"
+			"description": "Joplin Server URL. Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: https://joplinapp.org/faq/"
+		},
+		"sync.9.userContentPath": {
+			"type": "string",
+			"default": "",
+			"$comment": "private"
 		},
 		"sync.9.username": {
 			"type": "string",
 			"default": "",
-			"description": "Joplin Cloud email"
+			"description": "Joplin Server email"
 		},
 		"sync.9.password": {
+			"type": "string",
+			"default": "",
+			"description": "Joplin Server password",
+			"$comment": "private"
+		},
+		"sync.10.path": {
+			"type": "string",
+			"default": "https://api.joplincloud.com",
+			"$comment": "private"
+		},
+		"sync.10.userContentPath": {
+			"type": "string",
+			"default": "https://joplinusercontent.com",
+			"$comment": "private"
+		},
+		"sync.10.username": {
+			"type": "string",
+			"default": "",
+			"description": "Joplin Cloud email"
+		},
+		"sync.10.password": {
 			"type": "string",
 			"default": "",
 			"description": "Joplin Cloud password",
@@ -143,6 +170,11 @@
 			"$comment": "private"
 		},
 		"sync.9.auth": {
+			"type": "string",
+			"default": "",
+			"$comment": "private"
+		},
+		"sync.10.auth": {
 			"type": "string",
 			"default": "",
 			"$comment": "private"
@@ -188,6 +220,11 @@
 			"$comment": "private"
 		},
 		"sync.9.context": {
+			"type": "string",
+			"default": "",
+			"$comment": "private"
+		},
+		"sync.10.context": {
 			"type": "string",
 			"default": "",
 			"$comment": "private"

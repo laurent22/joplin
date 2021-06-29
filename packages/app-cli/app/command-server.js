@@ -17,7 +17,7 @@ class Command extends BaseCommand {
 	async action(args) {
 		const command = args.command;
 
-		const ClipperServer = require('@joplin/lib/ClipperServer');
+		const ClipperServer = require('@joplin/lib/ClipperServer').default;
 		ClipperServer.instance().initialize();
 		const stdoutFn = (...s) => this.stdout(s.join(' '));
 		const clipperLogger = new Logger();

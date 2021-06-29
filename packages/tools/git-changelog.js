@@ -351,6 +351,7 @@ async function main() {
 
 	let publishFormat = 'full';
 	if (['android', 'ios'].indexOf(platform) >= 0) publishFormat = 'simple';
+	if (argv.publishFormat) publishFormat = argv.publishFormat;
 	let changelog = createChangeLog(filteredLogs, { publishFormat: publishFormat });
 
 	const changelogFixes = [];

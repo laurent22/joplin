@@ -1,9 +1,12 @@
 {
   "name": "@joplin/server",
-  "version": "2.0.6",
+  "version": "2.1.6",
   "private": true,
   "scripts": {
     "start-dev": "nodemon --config nodemon.json --ext ts,js,mustache,css,tsx dist/app.js --env dev",
+    "devCreateDb": "node dist/app.js --env dev --create-db",
+    "devDropTables": "node dist/app.js --env dev --drop-tables",
+    "devDropDb": "node dist/app.js --env dev --drop-db",
     "start": "node dist/app.js",
     "generateTypes": "rm -f db-buildTypes.sqlite && npm run start -- --migrate-db --env buildTypes && node dist/tools/generateTypes.js && mv db-buildTypes.sqlite schema.sqlite",
     "tsc": "tsc --project tsconfig.json",
@@ -21,6 +24,7 @@
     "bcryptjs": "^2.4.3",
     "bulma": "^0.9.1",
     "bulma-prefers-dark": "^0.1.0-beta.0",
+    "compare-versions": "^3.6.0",
     "dayjs": "^1.9.8",
     "formidable": "^1.2.2",
     "fs-extra": "^8.1.0",

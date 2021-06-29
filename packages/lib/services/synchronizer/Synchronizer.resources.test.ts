@@ -10,6 +10,7 @@ import Note from '../../models/Note';
 import Resource from '../../models/Resource';
 import ResourceFetcher from '../../services/ResourceFetcher';
 import BaseItem from '../../models/BaseItem';
+import { ModelType } from '../../BaseModel';
 
 let insideBeforeEach = false;
 
@@ -333,6 +334,13 @@ describe('Synchronizer.resources', function() {
 		await Resource.setLocalState(resource.id, { fetch_status: Resource.FETCH_STATUS_DONE });
 		await synchronizerStart();
 
+		// At first, the resource is marked as cannot sync, so even after
+		// synchronisation, nothing should happen.
+		expect((await remoteResources()).length).toBe(0);
+
+		// The user can retry the item, in which case sync should happen.
+		await BaseItem.saveSyncEnabled(ModelType.Resource, resource.id);
+		await synchronizerStart();
 		expect((await remoteResources()).length).toBe(1);
 	}));
 

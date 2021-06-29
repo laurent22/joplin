@@ -68,10 +68,21 @@ export default class TransactionHandler {
 		}
 	}
 
+	// Only the function that started the transaction can rollback it. In
+	// practice it works as expected even for nested transactions: If any of the
+	// sub-function throws an error, it will propagate to the parent function,
+	// which will rollback the connection.
+	//
+	// If a sub-function throws an error, but it's catched by the parent, we
+	// also don't want the transaction to be rollbacked, because the errors are
+	// essentially managed by the parent function. This is for example how
+	// ItemModel::saveFromRawContent works because it catches any error and
+	// saves them to an array, to be returned to the caller. So we don't want
+	// any error to rollback everything.
 	public async rollback(txIndex: number): Promise<void> {
 		this.log(`Rollback transaction: ${txIndex}`);
-		this.finishTransaction(txIndex);
-		if (this.activeTransaction_) {
+		const isLastTransaction = this.finishTransaction(txIndex);
+		if (isLastTransaction) {
 			this.log(`Transaction is active - doing rollback: ${txIndex}`);
 			await this.activeTransaction_.rollback();
 			this.activeTransaction_ = null;

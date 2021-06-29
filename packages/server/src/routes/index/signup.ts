@@ -12,7 +12,7 @@ import { AccountType, accountTypeProperties } from '../../models/UserModel';
 import { ErrorForbidden } from '../../utils/errors';
 
 function makeView(error: Error = null): View {
-	const view = defaultView('signup');
+	const view = defaultView('signup', 'Sign Up');
 	view.content = {
 		error,
 		postUrl: makeUrl(UrlType.Signup),
@@ -44,7 +44,7 @@ router.post('signup', async (_path: SubPath, ctx: AppContext) => {
 		const password = checkPassword(formUser, true);
 
 		const user = await ctx.models.user().save({
-			...accountTypeProperties(AccountType.Free),
+			...accountTypeProperties(AccountType.Basic),
 			email: formUser.email,
 			full_name: formUser.full_name,
 			password,

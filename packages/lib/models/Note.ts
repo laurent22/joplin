@@ -127,7 +127,7 @@ export default class Note extends BaseItem {
 
 	static async linkedItemIdsByType(type: ModelType, body: string) {
 		const items = await this.linkedItems(body);
-		const output = [];
+		const output: string[] = [];
 
 		for (let i = 0; i < items.length; i++) {
 			const item = items[i];
@@ -458,7 +458,7 @@ export default class Note extends BaseItem {
 		return this.modelSelectAll('SELECT * FROM notes WHERE is_conflict = 0');
 	}
 
-	static async updateGeolocation(noteId: string) {
+	public static async updateGeolocation(noteId: string): Promise<void> {
 		if (!Setting.value('trackLocation')) return;
 		if (!Note.updateGeolocationEnabled_) return;
 
@@ -503,7 +503,7 @@ export default class Note extends BaseItem {
 		note.longitude = geoData.coords.longitude;
 		note.latitude = geoData.coords.latitude;
 		note.altitude = geoData.coords.altitude;
-		return Note.save(note, { ignoreProvisionalFlag: true });
+		await Note.save(note, { ignoreProvisionalFlag: true });
 	}
 
 	static filter(note: NoteEntity) {
@@ -523,6 +523,7 @@ export default class Note extends BaseItem {
 			changes: {
 				parent_id: folderId,
 				is_conflict: 0, // Also reset the conflict flag in case we're moving the note out of the conflict folder
+				conflict_original_id: '', // Reset parent id as well.
 			},
 		});
 	}
@@ -537,6 +538,7 @@ export default class Note extends BaseItem {
 			id: noteId,
 			parent_id: folderId,
 			is_conflict: 0,
+			conflict_original_id: '',
 			updated_time: time.unixMs(),
 		};
 
@@ -631,7 +633,7 @@ export default class Note extends BaseItem {
 		return n.updated_time < date;
 	}
 
-	static async save(o: NoteEntity, options: any = null) {
+	public static async save(o: NoteEntity, options: any = null): Promise<NoteEntity> {
 		const isNew = this.isNew(o, options);
 
 		// If true, this is a provisional note - it will be saved permanently
@@ -911,4 +913,12 @@ export default class Note extends BaseItem {
 		return new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' });
 	}
 
+
+	static async createConflictNote(sourceNote: NoteEntity, changeSource: number): Promise<NoteEntity> {
+		const conflictNote = Object.assign({}, sourceNote);
+		delete conflictNote.id;
+		conflictNote.is_conflict = 1;
+		conflictNote.conflict_original_id = sourceNote.id;
+		return await Note.save(conflictNote, { autoTimestamp: false, changeSource: changeSource });
+	}
 }

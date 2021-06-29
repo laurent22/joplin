@@ -1,1 +1,17 @@
-Welcome {{global.owner.email}}
+	<h1 class="title">Welcome to {{global.appName}}</h1>
+	<p class="subtitle">Logged in as <strong>{{global.userDisplayName}}</strong></p>
+
+	<table class="table is-hoverable">
+		<tbody>
+			{{#userProps}}
+				<tr>
+					<td>
+						<strong>{{label}}</strong>
+					</td>
+					<td>
+						{{value}}
+					</td>
+				</tr>
+			{{/userProps}}
+		</tbody>
+	</table>

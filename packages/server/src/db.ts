@@ -94,7 +94,27 @@ export async function waitForConnection(dbConfig: DatabaseConfig): Promise<Conne
 }
 
 export async function connectDb(dbConfig: DatabaseConfig): Promise<DbConnection> {
-	return knex(makeKnexConfig(dbConfig));
+	const connection = knex(makeKnexConfig(dbConfig));
+
+	const debugSlowQueries = false;
+
+	if (debugSlowQueries) {
+		const startTimes: Record<string, number> = {};
+
+		const slowQueryDuration = 10;
+
+		connection.on('query', (data) => {
+			startTimes[data.__knexQueryUid] = Date.now();
+		});
+
+		connection.on('query-response', (_response, data) => {
+			const duration = Date.now() - startTimes[data.__knexQueryUid];
+			if (duration < slowQueryDuration) return;
+			console.info(`SQL: ${data.sql} (${duration}ms)`);
+		});
+	}
+
+	return connection;
 }
 
 export async function disconnectDb(db: DbConnection) {
@@ -277,11 +297,12 @@ export interface User extends WithDates, WithUuid {
 	full_name?: string;
 	is_admin?: number;
 	max_item_size?: number;
-	can_share?: number;
+	can_share_folder?: number;
 	email_confirmed?: number;
 	must_set_password?: number;
 	account_type?: number;
 	can_upload?: number;
+	can_share_note?: number;
 }
 
 export interface Session extends WithDates, WithUuid {
@@ -336,6 +357,7 @@ export interface Item extends WithDates, WithUuid {
 	jop_share_id?: Uuid;
 	jop_type?: number;
 	jop_encryption_applied?: number;
+	jop_updated_time?: number;
 }
 
 export interface UserItem extends WithDates {
@@ -415,11 +437,12 @@ export const databaseSchema: DatabaseTables = {
 		updated_time: { type: 'string' },
 		created_time: { type: 'string' },
 		max_item_size: { type: 'number' },
-		can_share: { type: 'number' },
+		can_share_folder: { type: 'number' },
 		email_confirmed: { type: 'number' },
 		must_set_password: { type: 'number' },
 		account_type: { type: 'number' },
 		can_upload: { type: 'number' },
+		can_share_note: { type: 'number' },
 	},
 	sessions: {
 		id: { type: 'string' },
@@ -483,6 +506,7 @@ export const databaseSchema: DatabaseTables = {
 		jop_share_id: { type: 'string' },
 		jop_type: { type: 'number' },
 		jop_encryption_applied: { type: 'number' },
+		jop_updated_time: { type: 'string' },
 	},
 	user_items: {
 		id: { type: 'number' },

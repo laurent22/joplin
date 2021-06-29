@@ -1,18 +1,31 @@
+import Setting from './models/Setting';
+import Logger from './Logger';
+import Api, { RequestFile } from './services/rest/Api';
+import ApiResponse from './services/rest/ApiResponse';
 const urlParser = require('url');
-const Setting = require('./models/Setting').default;
-const Logger = require('./Logger').default;
 const { randomClipperPort, startPort } = require('./randomClipperPort');
 const enableServerDestroy = require('server-destroy');
-const Api = require('./services/rest/Api').default;
-const ApiResponse = require('./services/rest/ApiResponse').default;
 const multiparty = require('multiparty');
 
-class ClipperServer {
+export enum StartState {
+	Idle = 'idle',
+	Starting = 'starting',
+	Started = 'started',
+}
+
+export default class ClipperServer {
+
+	private logger_: Logger;
+	private startState_: StartState = StartState.Idle;
+	private server_: any = null;
+	private port_: number = null;
+	private api_: Api = null;
+	private dispatch_: Function;
+
+	private static instance_: ClipperServer = null;
+
 	constructor() {
 		this.logger_ = new Logger();
-		this.startState_ = 'idle';
-		this.server_ = null;
-		this.port_ = null;
 	}
 
 	static instance() {
@@ -21,13 +34,17 @@ class ClipperServer {
 		return this.instance_;
 	}
 
-	initialize(actionApi = null) {
-		this.api_ = new Api(() => {
-			return Setting.value('api.token');
-		}, actionApi);
+	public get api(): Api {
+		return this.api_;
 	}
 
-	setLogger(l) {
+	initialize(actionApi: any = null) {
+		this.api_ = new Api(() => {
+			return Setting.value('api.token');
+		}, (action: any) => { this.dispatch(action); }, actionApi);
+	}
+
+	setLogger(l: Logger) {
 		this.logger_ = l;
 	}
 
@@ -35,16 +52,16 @@ class ClipperServer {
 		return this.logger_;
 	}
 
-	setDispatch(d) {
+	setDispatch(d: Function) {
 		this.dispatch_ = d;
 	}
 
-	dispatch(action) {
+	dispatch(action: any) {
 		if (!this.dispatch_) throw new Error('dispatch not set!');
 		this.dispatch_(action);
 	}
 
-	setStartState(v) {
+	setStartState(v: StartState) {
 		if (this.startState_ === v) return;
 		this.startState_ = v;
 		this.dispatch({
@@ -53,7 +70,7 @@ class ClipperServer {
 		});
 	}
 
-	setPort(v) {
+	setPort(v: number) {
 		if (this.port_ === v) return;
 		this.port_ = v;
 		this.dispatch({
@@ -85,7 +102,7 @@ class ClipperServer {
 	async start() {
 		this.setPort(null);
 
-		this.setStartState('starting');
+		this.setStartState(StartState.Starting);
 
 		const settingPort = Setting.value('api.port');
 
@@ -93,15 +110,15 @@ class ClipperServer {
 			const p = settingPort ? settingPort : await this.findAvailablePort();
 			this.setPort(p);
 		} catch (error) {
-			this.setStartState('idle');
+			this.setStartState(StartState.Idle);
 			this.logger().error(error);
 			return;
 		}
 
 		this.server_ = require('http').createServer();
 
-		this.server_.on('request', async (request, response) => {
-			const writeCorsHeaders = (code, contentType = 'application/json', additionalHeaders = null) => {
+		this.server_.on('request', async (request: any, response: any) => {
+			const writeCorsHeaders = (code: any, contentType = 'application/json', additionalHeaders: any = null) => {
 				const headers = Object.assign(
 					{},
 					{
@@ -115,19 +132,19 @@ class ClipperServer {
 				response.writeHead(code, headers);
 			};
 
-			const writeResponseJson = (code, object) => {
+			const writeResponseJson = (code: any, object: any) => {
 				writeCorsHeaders(code);
 				response.write(JSON.stringify(object));
 				response.end();
 			};
 
-			const writeResponseText = (code, text) => {
+			const writeResponseText = (code: any, text: any) => {
 				writeCorsHeaders(code, 'text/plain');
 				response.write(text);
 				response.end();
 			};
 
-			const writeResponseInstance = (code, instance) => {
+			const writeResponseInstance = (code: any, instance: any) => {
 				if (instance.type === 'attachment') {
 					const filename = instance.attachmentFilename ? instance.attachmentFilename : 'file';
 					writeCorsHeaders(code, instance.contentType ? instance.contentType : 'application/octet-stream', {
@@ -140,7 +157,7 @@ class ClipperServer {
 				}
 			};
 
-			const writeResponse = (code, response) => {
+			const writeResponse = (code: any, response: any) => {
 				if (response instanceof ApiResponse) {
 					writeResponseInstance(code, response);
 				} else if (typeof response === 'string') {
@@ -156,7 +173,7 @@ class ClipperServer {
 
 			const url = urlParser.parse(request.url, true);
 
-			const execRequest = async (request, body = '', files = []) => {
+			const execRequest = async (request: any, body = '', files: RequestFile[] = []) => {
 				try {
 					const response = await this.api_.route(request.method, url.pathname, url.query, body, files);
 					writeResponse(200, response);
@@ -181,27 +198,27 @@ class ClipperServer {
 				if (contentType.indexOf('multipart/form-data') === 0) {
 					const form = new multiparty.Form();
 
-					form.parse(request, function(error, fields, files) {
+					form.parse(request, function(error: any, fields: any, files: any) {
 						if (error) {
 							writeResponse(error.httpCode ? error.httpCode : 500, error.message);
 							return;
 						} else {
-							execRequest(request, fields && fields.props && fields.props.length ? fields.props[0] : '', files && files.data ? files.data : []);
+							void execRequest(request, fields && fields.props && fields.props.length ? fields.props[0] : '', files && files.data ? files.data : []);
 						}
 					});
 				} else {
 					if (request.method === 'POST' || request.method === 'PUT') {
 						let body = '';
 
-						request.on('data', data => {
+						request.on('data', (data: any) => {
 							body += data;
 						});
 
 						request.on('end', async () => {
-							execRequest(request, body);
+							void execRequest(request, body);
 						});
 					} else {
-						execRequest(request);
+						void execRequest(request);
 					}
 				}
 			}
@@ -213,7 +230,7 @@ class ClipperServer {
 
 		this.server_.listen(this.port_, '127.0.0.1');
 
-		this.setStartState('started');
+		this.setStartState(StartState.Started);
 
 		// We return an empty promise that never resolves so that it's possible to `await` the server indefinitely.
 		// This is used only in command-server.js
@@ -223,9 +240,7 @@ class ClipperServer {
 	async stop() {
 		this.server_.destroy();
 		this.server_ = null;
-		this.setStartState('idle');
+		this.setStartState(StartState.Idle);
 		this.setPort(null);
 	}
 }
-
-module.exports = ClipperServer;

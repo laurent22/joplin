@@ -8,7 +8,7 @@ import defaultView from '../../utils/defaultView';
 import { View } from '../../services/MustacheService';
 
 function makeView(error: any = null): View {
-	const view = defaultView('login');
+	const view = defaultView('login', 'Login');
 	view.content = {
 		error,
 		signupUrl: config().signupEnabled ? makeUrl(UrlType.Signup) : '',

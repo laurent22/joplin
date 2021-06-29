@@ -23,7 +23,7 @@ async function setupServices(env: Env, models: Models, config: Config): Promise<
 	return output;
 }
 
-export default async function(appContext: AppContext, env: Env, dbConnection: DbConnection, appLogger: ()=> LoggerWrapper) {
+export default async function(appContext: AppContext, env: Env, dbConnection: DbConnection, appLogger: ()=> LoggerWrapper): Promise<AppContext> {
 	appContext.env = env;
 	appContext.db = dbConnection;
 	appContext.models = newModelFactory(appContext.db, config());
@@ -32,4 +32,6 @@ export default async function(appContext: AppContext, env: Env, dbConnection: Db
 	appContext.routes = { ...routes };
 
 	if (env === Env.Prod) delete appContext.routes['api/debug'];
+
+	return appContext;
 }

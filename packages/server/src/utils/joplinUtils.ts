@@ -18,6 +18,7 @@ import { formatDateTime } from './time';
 import { ErrorNotFound } from './errors';
 import { MarkupToHtml } from '@joplin/renderer';
 import { OptionsResourceModel } from '@joplin/renderer/MarkupToHtml';
+import { isValidHeaderIdentifier } from '@joplin/lib/services/EncryptionService';
 const { DatabaseDriverNode } = require('@joplin/lib/database-driver-node.js');
 import { themeStyle } from '@joplin/lib/theme';
 import Setting from '@joplin/lib/models/Setting';
@@ -177,7 +178,7 @@ async function renderNote(share: Share, note: NoteEntity, resourceInfos: Resourc
 			if (item.type_ === ModelType.Note) {
 				return '#';
 			} else if (item.type_ === ModelType.Resource) {
-				return `${models_.share().shareUrl(share.id)}?resource_id=${item.id}&t=${item.updated_time}`;
+				return `${models_.share().shareUrl(share.owner_id, share.id)}?resource_id=${item.id}&t=${item.updated_time}`;
 			} else {
 				throw new Error(`Unsupported item type: ${item.type_}`);
 			}
@@ -196,6 +197,7 @@ async function renderNote(share: Share, note: NoteEntity, resourceInfos: Resourc
 		cssFiles: ['items/note'],
 		jsFiles: ['items/note'],
 		name: 'note',
+		title: 'Note',
 		path: 'index/items/note',
 		content: {
 			note: {
@@ -218,6 +220,13 @@ async function renderNote(share: Share, note: NoteEntity, resourceInfos: Resourc
 		mime: 'text/html',
 		size: bodyHtml.length,
 	};
+}
+
+export function itemIsEncrypted(item: Item): boolean {
+	if ('jop_encryption_applied' in item) return !!item.jop_encryption_applied;
+	if (!('content' in item)) throw new Error('Cannot check encryption - item is missing both "content" and "jop_encryption_applied" property');
+	const header = item.content.toString('utf8', 0, 5);
+	return isValidHeaderIdentifier(header);
 }
 
 export async function renderItem(userId: Uuid, item: Item, share: Share, query: Record<string, any>): Promise<FileViewerResponse> {

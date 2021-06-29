@@ -4,7 +4,7 @@ import ButtonBar from './ButtonBar';
 import Button, { ButtonLevel } from '../Button/Button';
 import { _ } from '@joplin/lib/locale';
 import bridge from '../../services/bridge';
-import Setting, { SyncStartupOperation } from '@joplin/lib/models/Setting';
+import Setting, { AppType, SyncStartupOperation } from '@joplin/lib/models/Setting';
 import control_PluginsStates from './controls/plugins/PluginsStates';
 
 const { connect } = require('react-redux');
@@ -360,7 +360,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 		const md = Setting.settingMetadata(key);
 
-		const descriptionText = Setting.keyDescription(key, 'desktop');
+		const descriptionText = Setting.keyDescription(key, AppType.Desktop);
 		const descriptionComp = this.renderDescription(this.props.themeId, descriptionText);
 
 		if (settingKeyToControl[key]) {

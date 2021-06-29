@@ -177,24 +177,24 @@ export async function koaAppContext(options: AppContextTestOptions = null): Prom
 
 	// Set type to "any" because the Koa context has many properties and we
 	// don't need to mock all of them.
-	const appContext: any = {};
-
-	await setupAppContext(appContext, Env.Dev, db_, () => appLogger);
-
-	appContext.env = Env.Dev;
-	appContext.db = db_;
-	appContext.models = models();
-	appContext.appLogger = () => appLogger;
-	appContext.path = req.url;
-	appContext.owner = owner;
-	appContext.cookies = new FakeCookies();
-	appContext.request = new FakeRequest(req);
-	appContext.response = new FakeResponse();
-	appContext.headers = { ...reqOptions.headers };
-	appContext.req = req;
-	appContext.query = req.query;
-	appContext.method = req.method;
-	appContext.redirect = () => {};
+	const appContext: any = {
+		...await setupAppContext({} as any, Env.Dev, db_, () => appLogger),
+		env: Env.Dev,
+		db: db_,
+		models: models(),
+		appLogger: () => appLogger,
+		path: req.url,
+		owner: owner,
+		cookies: new FakeCookies(),
+		request: new FakeRequest(req),
+		response: new FakeResponse(),
+		headers: { ...reqOptions.headers },
+		req: req,
+		query: req.query,
+		method: req.method,
+		redirect: () => {},
+		URL: { origin: config().baseUrl },
+	};
 
 	if (options.sessionId) {
 		appContext.cookies.set('sessionId', options.sessionId);
@@ -275,19 +275,20 @@ export async function createItemTree(userId: Uuid, parentFolderId: string, tree:
 	}
 }
 
-export async function createItemTree2(userId: Uuid, parentFolderId: string, tree: any[]): Promise<void> {
-	const itemModel = models().item();
-	const user = await models().user().load(userId);
+// export async function createItemTree2(userId: Uuid, parentFolderId: string, tree: any[]): Promise<void> {
+// 	const itemModel = models().item();
+// 	const user = await models().user().load(userId);
 
-	for (const jopItem of tree) {
-		const isFolder = !!jopItem.children;
-		const serializedBody = isFolder ?
-			makeFolderSerializedBody({ ...jopItem, parent_id: parentFolderId }) :
-			makeNoteSerializedBody({ ...jopItem, parent_id: parentFolderId });
-		const newItem = await itemModel.saveFromRawContent(user, `${jopItem.id}.md`, Buffer.from(serializedBody));
-		if (isFolder && jopItem.children.length) await createItemTree2(userId, newItem.jop_id, jopItem.children);
-	}
-}
+// 	for (const jopItem of tree) {
+// 		const isFolder = !!jopItem.children;
+// 		const serializedBody = isFolder ?
+// 			makeFolderSerializedBody({ ...jopItem, parent_id: parentFolderId }) :
+// 			makeNoteSerializedBody({ ...jopItem, parent_id: parentFolderId });
+// 		const result = await itemModel.saveFromRawContent(user, [{ name: `${jopItem.id}.md`, body: Buffer.from(serializedBody) }]);
+// 		const newItem = result[`${jopItem.id}.md`].item;
+// 		if (isFolder && jopItem.children.length) await createItemTree2(userId, newItem.jop_id, jopItem.children);
+// 	}
+// }
 
 export async function createItemTree3(userId: Uuid, parentFolderId: string, shareId: Uuid, tree: any[]): Promise<void> {
 	const itemModel = models().item();
@@ -298,7 +299,8 @@ export async function createItemTree3(userId: Uuid, parentFolderId: string, shar
 		const serializedBody = isFolder ?
 			makeFolderSerializedBody({ ...jopItem, parent_id: parentFolderId, share_id: shareId }) :
 			makeNoteSerializedBody({ ...jopItem, parent_id: parentFolderId, share_id: shareId });
-		const newItem = await itemModel.saveFromRawContent(user, `${jopItem.id}.md`, Buffer.from(serializedBody));
+		const result = await itemModel.saveFromRawContent(user, [{ name: `${jopItem.id}.md`, body: Buffer.from(serializedBody) }]);
+		const newItem = result[`${jopItem.id}.md`].item;
 		if (isFolder && jopItem.children.length) await createItemTree3(userId, newItem.jop_id, shareId, jopItem.children);
 	}
 }
@@ -477,6 +479,7 @@ encryption_applied: 0
 markup_language: 1
 is_shared: 1
 share_id: ${note.share_id || ''}
+conflict_original_id: 
 type_: 1`;
 }
 

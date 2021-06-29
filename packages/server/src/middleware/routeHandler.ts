@@ -49,6 +49,7 @@ export default async function(ctx: AppContext) {
 					stack: config().showErrorStackTraces ? error.stack : '',
 					owner: ctx.owner,
 				},
+				title: 'Error',
 			};
 			ctx.response.body = await ctx.services.mustache.renderView(view);
 		} else { // JSON

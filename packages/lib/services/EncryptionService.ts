@@ -12,6 +12,12 @@ function hexPad(s: string, length: number) {
 	return padLeft(s, length, '0');
 }
 
+export function isValidHeaderIdentifier(id: string, ignoreTooLongLength = false) {
+	if (!id) return false;
+	if (!ignoreTooLongLength && id.length !== 5) return false;
+	return /JED\d\d/.test(id);
+}
+
 export default class EncryptionService {
 
 	public static instance_: EncryptionService = null;
@@ -657,7 +663,7 @@ export default class EncryptionService {
 
 	async decodeHeaderSource_(source: any) {
 		const identifier = await source.read(5);
-		if (!this.isValidHeaderIdentifier(identifier)) throw new JoplinError(`Invalid encryption identifier. Data is not actually encrypted? ID was: ${identifier}`, 'invalidIdentifier');
+		if (!isValidHeaderIdentifier(identifier)) throw new JoplinError(`Invalid encryption identifier. Data is not actually encrypted? ID was: ${identifier}`, 'invalidIdentifier');
 		const mdSizeHex = await source.read(6);
 		const mdSize = parseInt(mdSizeHex, 16);
 		if (isNaN(mdSize) || !mdSize) throw new Error(`Invalid header metadata size: ${mdSizeHex}`);
@@ -697,12 +703,6 @@ export default class EncryptionService {
 		return output;
 	}
 
-	isValidHeaderIdentifier(id: string, ignoreTooLongLength = false) {
-		if (!id) return false;
-		if (!ignoreTooLongLength && id.length !== 5) return false;
-		return /JED\d\d/.test(id);
-	}
-
 	isValidEncryptionMethod(method: number) {
 		return [EncryptionService.METHOD_SJCL, EncryptionService.METHOD_SJCL_1A, EncryptionService.METHOD_SJCL_2, EncryptionService.METHOD_SJCL_3, EncryptionService.METHOD_SJCL_4].indexOf(method) >= 0;
 	}
@@ -711,13 +711,13 @@ export default class EncryptionService {
 		if (!item) throw new Error('No item');
 		const ItemClass = BaseItem.itemClass(item);
 		if (!ItemClass.encryptionSupported()) return false;
-		return item.encryption_applied && this.isValidHeaderIdentifier(item.encryption_cipher_text, true);
+		return item.encryption_applied && isValidHeaderIdentifier(item.encryption_cipher_text, true);
 	}
 
 	async fileIsEncrypted(path: string) {
 		const handle = await this.fsDriver().open(path, 'r');
 		const headerIdentifier = await this.fsDriver().readFileChunk(handle, 5, 'ascii');
 		await this.fsDriver().close(handle);
-		return this.isValidHeaderIdentifier(headerIdentifier);
+		return isValidHeaderIdentifier(headerIdentifier);
 	}
 }

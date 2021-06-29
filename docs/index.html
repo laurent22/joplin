@@ -424,19 +424,19 @@ https://github.com/laurent22/joplin/blob/dev/README.md
 <tbody>
 <tr>
 <td>Windows (32 and 64-bit)</td>
-<td><a href='https://github.com/laurent22/joplin/releases/download/v1.8.5/Joplin-Setup-1.8.5.exe'><img alt='Get it on Windows' width="134px" src='https://joplinapp.org/images/BadgeWindows.png'/></a></td>
+<td><a href='https://github.com/laurent22/joplin/releases/download/v2.0.11/Joplin-Setup-2.0.11.exe'><img alt='Get it on Windows' width="134px" src='https://joplinapp.org/images/BadgeWindows.png'/></a></td>
 </tr>
 <tr>
 <td>macOS</td>
-<td><a href='https://github.com/laurent22/joplin/releases/download/v1.8.5/Joplin-1.8.5.dmg'><img alt='Get it on macOS' width="134px" src='https://joplinapp.org/images/BadgeMacOS.png'/></a></td>
+<td><a href='https://github.com/laurent22/joplin/releases/download/v2.0.11/Joplin-2.0.11.dmg'><img alt='Get it on macOS' width="134px" src='https://joplinapp.org/images/BadgeMacOS.png'/></a></td>
 </tr>
 <tr>
 <td>Linux</td>
-<td><a href='https://github.com/laurent22/joplin/releases/download/v1.8.5/Joplin-1.8.5.AppImage'><img alt='Get it on Linux' width="134px" src='https://joplinapp.org/images/BadgeLinux.png'/></a></td>
+<td><a href='https://github.com/laurent22/joplin/releases/download/v2.0.11/Joplin-2.0.11.AppImage'><img alt='Get it on Linux' width="134px" src='https://joplinapp.org/images/BadgeLinux.png'/></a></td>
 </tr>
 </tbody>
 </table>
-<p><strong>On Windows</strong>, you may also use the <a href='https://github.com/laurent22/joplin/releases/download/v1.8.5/JoplinPortable.exe'>Portable version</a>. The <a href="https://en.wikipedia.org/wiki/Portable_application">portable application</a> allows installing the software on a portable device such as a USB key. Simply copy the file JoplinPortable.exe in any directory on that USB key ; the application will then create a directory called &quot;JoplinProfile&quot; next to the executable file.</p>
+<p><strong>On Windows</strong>, you may also use the <a href='https://github.com/laurent22/joplin/releases/download/v2.0.11/JoplinPortable.exe'>Portable version</a>. The <a href="https://en.wikipedia.org/wiki/Portable_application">portable application</a> allows installing the software on a portable device such as a USB key. Simply copy the file JoplinPortable.exe in any directory on that USB key ; the application will then create a directory called &quot;JoplinProfile&quot; next to the executable file.</p>
 <p><strong>On Linux</strong>, the recommended way is to use the following installation script as it will handle the desktop icon too:</p>
 <pre><code style="word-break: break-all">wget -O - https://raw.githubusercontent.com/laurent22/joplin/dev/Joplin_install_and_update.sh | bash</code></pre>
 <h2>Mobile applications<a name="mobile-applications" href="#mobile-applications" class="heading-anchor">🔗</a></h2>
@@ -452,7 +452,7 @@ https://github.com/laurent22/joplin/blob/dev/README.md
 <tr>
 <td>Android</td>
 <td><a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="40px" src='https://joplinapp.org/images/BadgeAndroid.png'/></a></td>
-<td>or download the APK file: <a href="https://github.com/laurent22/joplin-android/releases/download/android-v1.7.5/joplin-v1.7.5.apk">64-bit</a> <a href="https://github.com/laurent22/joplin-android/releases/download/android-v1.7.5/joplin-v1.7.5-32bit.apk">32-bit</a></td>
+<td>or download the APK file: <a href="https://github.com/laurent22/joplin-android/releases/download/android-v2.0.4/joplin-v2.0.4.apk">64-bit</a> <a href="https://github.com/laurent22/joplin-android/releases/download/android-v2.0.4/joplin-v2.0.4-32bit.apk">32-bit</a></td>
 </tr>
 <tr>
 <td>iOS</td>
@@ -774,6 +774,13 @@ Details:
 <p>For more information see <a href="https://joplinapp.org/plugins/">Plugins</a></p>
 <h1>Searching<a name="searching" href="#searching" class="heading-anchor">🔗</a></h1>
 <p>Joplin implements the SQLite Full Text Search (FTS4) extension. It means the content of all the notes is indexed in real time and search queries return results very fast. Both <a href="https://www.sqlite.org/fts3.html#simple_fts_queries">Simple FTS Queries</a> and <a href="https://www.sqlite.org/fts3.html#full_text_index_queries">Full-Text Index Queries</a> are supported. See below for the list of supported queries:</p>
+<p>One caveat of SQLite FTS is that it does not support languages which do not use Latin word boundaries (spaces, tabs, punctuation). To solve this issue, Joplin has a custom search mode, that does not use FTS, but still has all of its features (multi term search, filters, etc.). One of its drawbacks is that it can get slow on larger note collections. Also, the sorting of the results will be less accurate, as the ranking algorithm (BM25) is, for now, only implemented for FTS. Finally, in this mode there are no restrictions on using the <code>*</code> wildcard (<code>swim*</code>, <code>*swim</code> and <code>ast*rix</code> all work). This search mode is currently enabled if one of the following languages are detected:</p>
+<ul>
+<li>Chinese</li>
+<li>Japanese</li>
+<li>Korean</li>
+<li>Thai</li>
+</ul>
 <h2>Supported queries<a name="supported-queries" href="#supported-queries" class="heading-anchor">🔗</a></h2>
 <table>
 <thead>
@@ -1032,21 +1039,21 @@ Eg. <code>:search -- &quot;-tag:tag1&quot;</code>.</p>
 <td>Croatian (Hrvatska)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/hr_HR.po">hr_HR</a></td>
 <td><a href="mailto:mail@milotype.de">Milo Ivir</a></td>
-<td>96%</td>
+<td>100%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/cz.png" width="16px"/></td>
 <td>Czech (Česká republika)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/cs_CZ.po">cs_CZ</a></td>
-<td><a href="mailto:lukas@aiya.cz">Lukas Helebrandt</a></td>
-<td>85%</td>
+<td><a href="mailto:michal@stanke.cz">Michal Stanke</a></td>
+<td>100%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/dk.png" width="16px"/></td>
 <td>Dansk (Danmark)</td>
 <td><a href="https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/da_DK.po">da_DK</a></td>
 <td>Mustafa Al-Dailemi (<a href="mailto:dailemi@hotmail.com">dailemi@hotmail.com</a>)Language-Team:</td>
-<td>95%</td>
+<td>99%</td>
 </tr>
 <tr>
 <td><img src="https://joplinapp.org/images/flags/country-4x3/de.png" width="16px"/></td>

@@ -5,7 +5,7 @@ import BaseModel from './BaseModel';
 
 export default class TokenModel extends BaseModel<Token> {
 
-	private tokenTtl_: number = 7 * 24 * 60 * 1000;
+	private tokenTtl_: number = 7 * 24 * 60 * 60 * 1000;
 
 	public get tableName(): string {
 		return 'tokens';

@@ -85,12 +85,25 @@ describe('index_users', function() {
 		expect(!!newUser.is_admin).toBe(false);
 		expect(!!newUser.email).toBe(true);
 		expect(newUser.max_item_size).toBe(0);
+		expect(newUser.must_set_password).toBe(0);
 
 		const userModel = models().user();
 		const userFromModel: User = await userModel.load(newUser.id);
 
 		expect(!!userFromModel.password).toBe(true);
 		expect(userFromModel.password === '123456').toBe(false); // Password has been hashed
+	});
+
+	test('should ask user to set password if not set on creation', async function() {
+		const { session } = await createUserAndSession(1, true);
+
+		await postUser(session.id, 'test@example.com', '', {
+			max_item_size: '',
+		});
+		const newUser = await models().user().loadByEmail('test@example.com');
+
+		expect(newUser.must_set_password).toBe(1);
+		expect(!!newUser.password).toBe(true);
 	});
 
 	test('new user should be able to login', async function() {
@@ -123,7 +136,7 @@ describe('index_users', function() {
 	});
 
 	test('should change user properties', async function() {
-		const { user, session } = await createUserAndSession(1, true);
+		const { user, session } = await createUserAndSession(1, false);
 
 		const userModel = models().user();
 
@@ -298,7 +311,11 @@ describe('index_users', function() {
 		await expectHttpError(async () => execRequest(adminSession.id, 'POST', `users/${admin.id}`, { delete_button: true }), ErrorForbidden.httpCode);
 
 		// non-admin cannot change max_item_size
-		await expectHttpError(async () => patchUser(session1.id, { id: admin.id, max_item_size: 1000 }), ErrorForbidden.httpCode);
+		await expectHttpError(async () => patchUser(session1.id, { id: user1.id, max_item_size: 1000 }), ErrorForbidden.httpCode);
+
+		// non-admin cannot change can_share_folder
+		await models().user().save({ id: user1.id, can_share_folder: 0 });
+		await expectHttpError(async () => patchUser(session1.id, { id: user1.id, can_share_folder: 1 }), ErrorForbidden.httpCode);
 	});
 
 

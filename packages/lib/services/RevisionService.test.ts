@@ -1,13 +1,11 @@
-/* eslint-disable no-unused-vars, @typescript-eslint/no-unused-vars, prefer-const */
-
-const time = require('../time').default;
-const { revisionService, setupDatabaseAndSynchronizer, switchClient } = require('../testing/test-utils.js');
-const Setting = require('../models/Setting').default;
-const Note = require('../models/Note').default;
-const ItemChange = require('../models/ItemChange').default;
-const Revision = require('../models/Revision').default;
-const BaseModel = require('../BaseModel').default;
-const RevisionService = require('../services/RevisionService').default;
+import time from '../time';
+import { revisionService, setupDatabaseAndSynchronizer, switchClient } from '../testing/test-utils';
+import Setting from '../models/Setting';
+import Note from '../models/Note';
+import ItemChange from '../models/ItemChange';
+import Revision from '../models/Revision';
+import BaseModel from '../BaseModel';
+import RevisionService from '../services/RevisionService';
 
 describe('services_Revision', function() {
 
@@ -25,7 +23,7 @@ describe('services_Revision', function() {
 		await service.collectRevisions();
 		await Note.save({ id: n1_v1.id, title: 'hello', author: 'testing' });
 		await service.collectRevisions();
-		const n1_v2 = await Note.save({ id: n1_v1.id, title: 'hello welcome', author: '' });
+		await Note.save({ id: n1_v1.id, title: 'hello welcome', author: '' });
 		await service.collectRevisions();
 
 		const revisions = await Revision.allByType(BaseModel.TYPE_NOTE, n1_v1.id);
@@ -49,6 +47,46 @@ describe('services_Revision', function() {
 		expect(revisions2.length).toBe(0);
 	}));
 
+	// ----------------------------------------------------------------------
+	// This is to verify that the revision service continues processing
+	// revisions even when it fails on one note. However, now that the
+	// diff-match-patch bug is fixed, it's not possible to create notes that
+	// would make the process fail. Keeping the test anyway in case such case
+	// comes up again.
+	// ----------------------------------------------------------------------
+
+	// it('should handle corrupted strings', (async () => {
+	// 	const service = new RevisionService();
+
+	// 	// Silence the logger because the revision service is going to print
+	// 	// errors.
+	// 	// Logger.globalLogger.enabled = false;
+
+	// 	const n1 = await Note.save({ body: '' });
+	// 	await service.collectRevisions();
+	// 	await Note.save({ id: n1.id, body: naughtyStrings[152] }); // REV 1
+	// 	await service.collectRevisions();
+	// 	await Note.save({ id: n1.id, body: naughtyStrings[153] }); // FAIL (Should have been REV 2)
+	// 	await service.collectRevisions();
+
+	// 	// Because it fails, only one revision was generated. The second was skipped.
+	// 	expect((await Revision.all()).length).toBe(1);
+
+	// 	// From this point, note 1 will always fail because of a
+	// 	// diff-match-patch bug:
+	// 	// https://github.com/JackuB/diff-match-patch/issues/22
+	// 	// It will throw "URI malformed". But it shouldn't prevent other notes
+	// 	// from getting revisions.
+
+	// 	const n2 = await Note.save({ body: '' });
+	// 	await service.collectRevisions();
+	// 	await Note.save({ id: n2.id, body: 'valid' }); // REV 2
+	// 	await service.collectRevisions();
+	// 	expect((await Revision.all()).length).toBe(2);
+
+	// 	Logger.globalLogger.enabled = true;
+	// }));
+
 	it('should delete old revisions (1 note, 2 rev)', (async () => {
 		const service = new RevisionService();
 
@@ -59,7 +97,7 @@ describe('services_Revision', function() {
 		const time_v1 = Date.now();
 		await time.msleep(100);
 
-		const n1_v2 = await Note.save({ id: n1_v1.id, title: 'hello welcome' });
+		await Note.save({ id: n1_v1.id, title: 'hello welcome' });
 		await service.collectRevisions();
 		expect((await Revision.allByType(BaseModel.TYPE_NOTE, n1_v1.id)).length).toBe(2);
 
@@ -81,12 +119,12 @@ describe('services_Revision', function() {
 		const time_v1 = Date.now();
 		await time.msleep(100);
 
-		const n1_v2 = await Note.save({ id: n1_v1.id, title: 'one two' });
+		await Note.save({ id: n1_v1.id, title: 'one two' });
 		await service.collectRevisions();
 		const time_v2 = Date.now();
 		await time.msleep(100);
 
-		const n1_v3 = await Note.save({ id: n1_v1.id, title: 'one two three' });
+		await Note.save({ id: n1_v1.id, title: 'one two three' });
 		await service.collectRevisions();
 
 		{
@@ -124,8 +162,8 @@ describe('services_Revision', function() {
 		const time_n2_v1 = Date.now();
 		await time.msleep(100);
 
-		const n1_v2 = await Note.save({ id: n1_v1.id, title: 'note 1 (v2)' });
-		const n2_v2 = await Note.save({ id: n2_v1.id, title: 'note 2 (v2)' });
+		await Note.save({ id: n1_v1.id, title: 'note 1 (v2)' });
+		await Note.save({ id: n2_v1.id, title: 'note 2 (v2)' });
 		await service.collectRevisions();
 
 		expect((await Revision.all()).length).toBe(4);
@@ -167,9 +205,9 @@ describe('services_Revision', function() {
 		const noteId = n1_v1.id;
 		const rev1 = await service.createNoteRevision_(n1_v1);
 		const n1_v2 = await Note.save({ id: noteId, title: 'hello Paul' });
-		const rev2 = await service.createNoteRevision_(n1_v2, rev1.id);
+		await service.createNoteRevision_(n1_v2, rev1.id);
 		const n1_v3 = await Note.save({ id: noteId, title: 'hello John' });
-		const rev3 = await service.createNoteRevision_(n1_v3, rev1.id);
+		await service.createNoteRevision_(n1_v3, rev1.id);
 
 		const revisions = await Revision.allByType(BaseModel.TYPE_NOTE, noteId);
 		expect(revisions.length).toBe(3);
@@ -311,7 +349,7 @@ describe('services_Revision', function() {
 		const n1_v1 = await Note.save({ id: n1_v0.id, title: 'hello' });
 		await revisionService().collectRevisions(); // REV 1
 		await time.sleep(0.1);
-		const n1_v2 = await Note.save({ id: n1_v1.id, title: 'hello welcome' });
+		await Note.save({ id: n1_v1.id, title: 'hello welcome' });
 		await revisionService().collectRevisions(); // REV 2
 		await time.sleep(0.1);
 
@@ -340,7 +378,7 @@ describe('services_Revision', function() {
 		const timeRev1 = Date.now();
 		await time.msleep(100);
 
-		const n1_v2 = await Note.save({ id: n1_v1.id, title: 'hello welcome' });
+		await Note.save({ id: n1_v1.id, title: 'hello welcome' });
 		await revisionService().collectRevisions(); // REV 2
 
 		expect((await Revision.all()).length).toBe(2);
@@ -364,7 +402,7 @@ describe('services_Revision', function() {
 		const timeRev1 = Date.now();
 		await time.msleep(100);
 
-		const n1_v2 = await Note.save({ id: n1_v1.id, title: 'hello welcome' });
+		await Note.save({ id: n1_v1.id, title: 'hello welcome' });
 		await revisionService().collectRevisions(); // REV 2
 
 		expect((await Revision.all()).length).toBe(2);
@@ -385,11 +423,11 @@ describe('services_Revision', function() {
 
 	it('should not create a revision if the note has not changed', (async () => {
 		const n1_v0 = await Note.save({ title: '' });
-		const n1_v1 = await Note.save({ id: n1_v0.id, title: 'hello' });
+		await Note.save({ id: n1_v0.id, title: 'hello' });
 		await revisionService().collectRevisions(); // REV 1
 		expect((await Revision.all()).length).toBe(1);
 
-		const n1_v2 = await Note.save({ id: n1_v0.id, title: 'hello' });
+		await Note.save({ id: n1_v0.id, title: 'hello' });
 		await revisionService().collectRevisions(); // Note has not changed (except its timestamp) so don't create a revision
 		expect((await Revision.all()).length).toBe(1);
 	}));
@@ -399,12 +437,12 @@ describe('services_Revision', function() {
 		// places so make sure it is saved correctly with the revision
 
 		const n1_v0 = await Note.save({ title: '' });
-		const n1_v1 = await Note.save({ id: n1_v0.id, title: 'hello' });
+		await Note.save({ id: n1_v0.id, title: 'hello' });
 		await revisionService().collectRevisions(); // REV 1
 		expect((await Revision.all()).length).toBe(1);
 
 		const userUpdatedTime = Date.now() - 1000 * 60 * 60;
-		const n1_v2 = await Note.save({ id: n1_v0.id, title: 'hello', updated_time: Date.now(), user_updated_time: userUpdatedTime }, { autoTimestamp: false });
+		await Note.save({ id: n1_v0.id, title: 'hello', updated_time: Date.now(), user_updated_time: userUpdatedTime }, { autoTimestamp: false });
 		await revisionService().collectRevisions(); // Only the user timestamp has changed, but that needs to be saved
 
 		const revisions = await Revision.all();
@@ -416,20 +454,20 @@ describe('services_Revision', function() {
 
 	it('should not create a revision if there is already a recent one', (async () => {
 		const n1_v0 = await Note.save({ title: '' });
-		const n1_v1 = await Note.save({ id: n1_v0.id, title: 'hello' });
+		await Note.save({ id: n1_v0.id, title: 'hello' });
 		await revisionService().collectRevisions(); // REV 1
 		const timeRev1 = Date.now();
 		await time.sleep(2);
 
 		const timeRev2 = Date.now();
-		const n1_v2 = await Note.save({ id: n1_v0.id, title: 'hello 2' });
+		await Note.save({ id: n1_v0.id, title: 'hello 2' });
 		await revisionService().collectRevisions(); // REV 2
 		expect((await Revision.all()).length).toBe(2);
 
 		const interval = Date.now() - timeRev1 + 1;
 		Setting.setValue('revisionService.intervalBetweenRevisions', interval);
 
-		const n1_v3 = await Note.save({ id: n1_v0.id, title: 'hello 3' });
+		await Note.save({ id: n1_v0.id, title: 'hello 3' });
 		await revisionService().collectRevisions(); // No rev because time since last rev is less than the required 'interval between revisions'
 		expect(Date.now() - interval < timeRev2).toBe(true); // check the computer is not too slow for this test
 		expect((await Revision.all()).length).toBe(2);

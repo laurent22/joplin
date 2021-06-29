@@ -17,7 +17,7 @@ import FileApiDriverJoplinServer from '../file-api-driver-joplinServer';
 import OneDriveApi from '../onedrive-api';
 import SyncTargetOneDrive from '../SyncTargetOneDrive';
 import JoplinDatabase from '../JoplinDatabase';
-const fs = require('fs-extra');
+import * as fs from 'fs-extra';
 const { DatabaseDriverNode } = require('../database-driver-node.js');
 import Folder from '../models/Folder';
 import Note from '../models/Note';
@@ -29,7 +29,7 @@ import Revision from '../models/Revision';
 import MasterKey from '../models/MasterKey';
 import BaseItem from '../models/BaseItem';
 const { FileApi } = require('../file-api.js');
-const { FileApiDriverMemory } = require('../file-api-driver-memory.js');
+const FileApiDriverMemory = require('../file-api-driver-memory').default;
 const { FileApiDriverLocal } = require('../file-api-driver-local.js');
 const { FileApiDriverWebDav } = require('../file-api-driver-webdav.js');
 const { FileApiDriverDropbox } = require('../file-api-driver-dropbox.js');
@@ -101,8 +101,8 @@ const supportDir = `${oldTestDir}/support`;
 const dataDir = `${oldTestDir}/test data/${suiteName_}`;
 const profileDir = `${dataDir}/profile`;
 
-fs.mkdirpSync(logDir, 0o755);
-fs.mkdirpSync(baseTempDir, 0o755);
+fs.mkdirpSync(logDir);
+fs.mkdirpSync(baseTempDir);
 fs.mkdirpSync(dataDir);
 fs.mkdirpSync(profileDir);
 
@@ -392,10 +392,10 @@ async function setupDatabaseAndSynchronizer(id: number, options: any = null) {
 	DecryptionWorker.instance_ = null;
 
 	await fs.remove(resourceDir(id));
-	await fs.mkdirp(resourceDir(id), 0o755);
+	await fs.mkdirp(resourceDir(id));
 
 	await fs.remove(pluginDir(id));
-	await fs.mkdirp(pluginDir(id), 0o755);
+	await fs.mkdirp(pluginDir(id));
 
 	if (!synchronizers_[id]) {
 		const SyncTargetClass = SyncTargetRegistry.classById(syncTargetId_);
@@ -512,7 +512,7 @@ async function initFileApi() {
 	let fileApi = null;
 	if (syncTargetId_ == SyncTargetRegistry.nameToId('filesystem')) {
 		fs.removeSync(syncDir);
-		fs.mkdirpSync(syncDir, 0o755);
+		fs.mkdirpSync(syncDir);
 		fileApi = new FileApi(syncDir, new FileApiDriverLocal());
 	} else if (syncTargetId_ == SyncTargetRegistry.nameToId('memory')) {
 		fileApi = new FileApi('/root', new FileApiDriverMemory());
@@ -786,6 +786,21 @@ async function waitForFolderCount(count: number) {
 		if (Date.now() - startTime > timeout) throw new Error('Timeout waiting for folders to be created');
 		await msleep(10);
 	}
+}
+
+let naughtyStrings_: string[] = null;
+export async function naughtyStrings() {
+	if (naughtyStrings_) return naughtyStrings_;
+	const t = await fs.readFile(`${supportDir}/big-list-of-naughty-strings.txt`, 'utf8');
+	const lines = t.split('\n');
+	naughtyStrings_ = [];
+	for (const line of lines) {
+		const trimmed = line.trim();
+		if (!trimmed) continue;
+		if (trimmed.indexOf('#') === 0) continue;
+		naughtyStrings_.push(line);
+	}
+	return naughtyStrings_;
 }
 
 // TODO: Update for Jest

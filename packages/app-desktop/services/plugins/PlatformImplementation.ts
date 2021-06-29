@@ -1,4 +1,5 @@
 import bridge from '../bridge';
+const { clipboard, nativeImage } = require('electron');
 
 interface JoplinViewsDialogs {
 	showMessageBox(message: string): Promise<number>;
@@ -16,6 +17,9 @@ interface Components {
 	[key: string]: any;
 }
 
+// PlatformImplementation provides access to platform specific dependencies,
+// such as the clipboard, message dialog, etc. It allows having the same plugin
+// API for all platforms, but with different implementations.
 export default class PlatformImplementation {
 
 	private static instance_: PlatformImplementation;
@@ -25,6 +29,14 @@ export default class PlatformImplementation {
 	public static instance(): PlatformImplementation {
 		if (!this.instance_) this.instance_ = new PlatformImplementation();
 		return this.instance_;
+	}
+
+	public get clipboard() {
+		return clipboard;
+	}
+
+	public get nativeImage() {
+		return nativeImage;
 	}
 
 	constructor() {

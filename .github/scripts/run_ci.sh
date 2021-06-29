@@ -60,6 +60,8 @@ npm install
 # =============================================================================
 
 if [ "$IS_PULL_REQUEST" == "1" ] || [ "$IS_DEV_BRANCH" = "1" ]; then
+	echo "Step: Running tests..."
+
 	npm run test-ci
 	testResult=$?
 	if [ $testResult -ne 0 ]; then
@@ -72,7 +74,9 @@ fi
 # release randomly fail.
 # =============================================================================
 
-if [ "$IS_PULL_REQUEST" != "1" ]; then
+if [ "$IS_PULL_REQUEST" == "1" ]; then
+	echo "Step: Running linter..."
+
 	npm run linter-ci ./
 	testResult=$?
 	if [ $testResult -ne 0 ]; then
@@ -88,6 +92,8 @@ fi
 
 if [ "$IS_PULL_REQUEST" == "1" ]; then
 	if [ "$IS_LINUX" == "1" ]; then
+		echo "Step: Validating translations..."
+
 		node packages/tools/validate-translation.js
 		testResult=$?
 		if [ $testResult -ne 0 ]; then
@@ -105,6 +111,7 @@ fi
 
 if [ "$IS_PULL_REQUEST" == "1" ]; then
 	if [ "$IS_MACOS" == "1" ]; then
+		echo "Step: Not building Electron app"
 		exit 0
 	fi
 fi
@@ -122,7 +129,13 @@ fi
 cd "$ROOT_DIR/packages/app-desktop"
 
 if [[ $GIT_TAG_NAME = v* ]]; then
+	echo "Step: Building and publishing desktop application..."
 	USE_HARD_LINKS=false npm run dist
+elif [[ $GIT_TAG_NAME = server-v* ]] && [[ $IS_LINUX = 1 ]]; then
+	echo "Step: Building Docker Image..."
+	cd "$ROOT_DIR"
+	npm run buildServerDocker -- --tag-name $GIT_TAG_NAME
 else
+	echo "Step: Building but *not* publishing desktop application..."
 	USE_HARD_LINKS=false npm run dist -- --publish=never
 fi
