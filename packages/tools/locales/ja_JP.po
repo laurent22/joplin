@@ -15,6 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.4.2\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
@@ -124,7 +126,7 @@ msgstr "ダウンロード"
 
 #: packages/app-desktop/checkForUpdates.js:189
 msgid "Skip this version"
-msgstr ""
+msgstr "このバージョンをスキップ"
 
 #: packages/app-desktop/checkForUpdates.js:189
 msgid "Full changelog"
@@ -757,15 +759,15 @@ msgstr "詳細情報"
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:477
 #, javascript-format
 msgid "%s (%s) would like to share a notebook with you."
-msgstr ""
+msgstr "%s (%s) があなたとノートブックを共有したがっています。"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:479
 msgid "Accept"
-msgstr ""
+msgstr "承諾"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:481
 msgid "Reject"
-msgstr ""
+msgstr "拒否"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:485
 msgid "Some items cannot be synchronised."
@@ -850,9 +852,8 @@ msgid "Toggle editors"
 msgstr "エディターの切り替え"
 
 #: packages/app-desktop/gui/MainScreen/commands/showShareFolderDialog.js:16
-#, fuzzy
 msgid "Share notebook..."
-msgstr "ノートを共有..."
+msgstr "ノートブックを共有..."
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleLayoutMoveMode.js:16
 msgid "Change application layout"
@@ -1107,9 +1108,8 @@ msgid "&Go"
 msgstr "移動(&G)"
 
 #: packages/app-desktop/gui/MenuBar.js:631
-#, fuzzy
 msgid "Note&book"
-msgstr "ノートブック"
+msgstr "ノートブック(&B)"
 
 #: packages/app-desktop/gui/MenuBar.js:637
 msgid "&Note"
@@ -1503,13 +1503,12 @@ msgid "You do not have any installed plugin."
 msgstr "インストールされているプラグインはありません。"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:232
-#, fuzzy
 msgid "Could not connect to plugin repository"
-msgstr "プラグインをインストールできませんでした: %s"
+msgstr "プラグインレポジトリに接続できませんでした"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:234
 msgid "Try again"
-msgstr ""
+msgstr "再試行"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:242
 msgid "Plugin tools"
@@ -1694,9 +1693,8 @@ msgid "Warning: not all resources shown for performance reasons (limit: %s)."
 msgstr "注意: 性能上の理由により、リソースは最大 %s 件までしか表示されません。"
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:141
-#, fuzzy
 msgid "Unshare note"
-msgstr "共有"
+msgstr "ノートの共有を解除"
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:168
 msgid "Synchronising..."
@@ -1728,19 +1726,20 @@ msgid_plural "Copy Shareable Links"
 msgstr[0] "共有可能なリンクをコピー"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:138
-#, fuzzy
 msgid "Unshare"
-msgstr "共有"
+msgstr "共有を解除"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:180
 msgid ""
 "Delete this invitation? The recipient will no longer have access to this "
 "shared notebook."
 msgstr ""
+"この招待を削除しますか? 削除後は招待の受信者がこの共有ノートブックにアクセス"
+"できなくなります。"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:194
 msgid "Add recipient:"
-msgstr ""
+msgstr "受信者を追加:"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:197
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:28
@@ -1750,40 +1749,39 @@ msgstr "共有"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:206
 msgid "Recipient has not yet accepted the invitation"
-msgstr ""
+msgstr "受信者がまだこの招待を承諾していません"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:207
 msgid "Recipient has rejected the invitation"
-msgstr ""
+msgstr "受信者がこの招待を拒否しました"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:208
 msgid "Recipient has accepted the invitation"
-msgstr ""
+msgstr "受信者がこの招待を承諾しました"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:218
 msgid "Recipients:"
-msgstr ""
+msgstr "受信者:"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:230
-#, fuzzy
 msgid "Synchronizing..."
 msgstr "同期中..."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:231
-#, fuzzy
 msgid "Sharing notebook..."
-msgstr "ノートを共有..."
+msgstr "ノートブックを共有中..."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:241
 msgid ""
 "Unshare this notebook? The recipients will no longer have access to its "
 "content."
 msgstr ""
+"このノートブックの共有を解除しますか? 解除後は招待の受信者がノートブックにア"
+"クセスできなくなります。"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:251
-#, fuzzy
 msgid "Share Notebook"
-msgstr "ノートを共有"
+msgstr "ノートブックを共有"
 
 #: packages/app-desktop/commands/toggleSafeMode.js:18
 msgid "Toggle safe mode"
@@ -2009,7 +2007,7 @@ msgstr "デバッグ専用: プロファイルを外部SDカードにエクス�
 
 #: packages/app-mobile/components/screens/ConfigScreen.js:406
 msgid "Feature flags"
-msgstr ""
+msgstr "フィーチャーフラグ"
 
 #: packages/app-mobile/components/screens/ConfigScreen.js:408
 msgid "More information"
@@ -2238,7 +2236,6 @@ msgstr ""
 "(%s)"
 
 #: packages/server/dist/models/UserModel.js:175
-#, fuzzy
 msgid "attachment"
 msgstr "添付ファイル"
 
@@ -2246,7 +2243,7 @@ msgstr "添付ファイル"
 #, javascript-format
 msgid ""
 "Cannot save %s \"%s\" because it is larger than than the allowed limit (%s)"
-msgstr ""
+msgstr "%s \"%s\" を保存できません。サイズが上限 (%s) を超えるためです"
 
 #: packages/lib/onedrive-api-node-utils.js:46
 #, javascript-format
@@ -2285,7 +2282,7 @@ msgstr "Dropbox"
 
 #: packages/lib/SyncTargetJoplinServer.js:57
 msgid "Joplin Server"
-msgstr "Joplinサーバー"
+msgstr "Joplin Server"
 
 #: packages/lib/shim-init-node.js:212
 #, javascript-format
@@ -2429,26 +2426,23 @@ msgstr "AWS シークレットアクセスキー"
 
 #: packages/lib/models/Setting.js:315
 msgid "Joplin Server URL"
-msgstr "JoplinサーバーURL"
+msgstr "Joplin Server URL"
 
 #: packages/lib/models/Setting.js:333
-#, fuzzy
 msgid "Joplin Server email"
-msgstr "Joplinサーバー"
+msgstr "Joplin Serverメールアドレス"
 
 #: packages/lib/models/Setting.js:344
 msgid "Joplin Server password"
-msgstr "Joplinサーバーパスワード"
+msgstr "Joplin Serverパスワード"
 
 #: packages/lib/models/Setting.js:371
-#, fuzzy
 msgid "Joplin Cloud email"
-msgstr "Joplinサーバー"
+msgstr "Joplin Cloudメールアドレス"
 
 #: packages/lib/models/Setting.js:382
-#, fuzzy
 msgid "Joplin Cloud password"
-msgstr "Joplinサーバーパスワード"
+msgstr "Joplin Cloudパスワード"
 
 #: packages/lib/models/Setting.js:394
 msgid "Attachment download behaviour"
@@ -3034,9 +3028,8 @@ msgid "Encrypted items cannot be modified"
 msgstr "暗号化したアイテムは修正できません"
 
 #: packages/lib/SyncTargetJoplinCloud.js:28
-#, fuzzy
 msgid "Joplin Cloud"
-msgstr "Joplinフォーラム"
+msgstr "Joplin Cloud"
 
 #: packages/lib/BaseApplication.js:152 packages/lib/BaseApplication.js:164
 #: packages/lib/BaseApplication.js:196
@@ -3167,9 +3160,9 @@ msgid "Cancelling..."
 msgstr "中止中..."
 
 #: packages/lib/Synchronizer.js:156
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Completed: %s (%s)"
-msgstr "完了: %s"
+msgstr "完了: %s (%s)"
 
 #: packages/lib/Synchronizer.js:158
 #, javascript-format
@@ -3199,7 +3192,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Joplinサーバーに接続できませんでした。同期設定を確認してください。発生したエ"
+"Joplin Serverに接続できませんでした。同期設定を確認してください。発生したエ"
 "ラーの内容は次のとおりです:\n"
 "\n"
 "%s"
