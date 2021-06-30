@@ -734,6 +734,10 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 						});
 					}
 
+					editor.addShortcut('Meta+Shift+7', '', () => editor.execCommand('InsertOrderedList'));
+					editor.addShortcut('Meta+Shift+8', '', () => editor.execCommand('InsertUnorderedList'));
+					editor.addShortcut('Meta+Shift+9', '', () => editor.execCommand('InsertJoplinChecklist'));
+
 					// setupContextMenu(editor);
 
 					// TODO: remove event on unmount?
