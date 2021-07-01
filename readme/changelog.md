@@ -1,9 +1,40 @@
 # Joplin changelog
 
+## [v2.1.7](https://github.com/laurent22/joplin/releases/tag/v2.1.7) - 2021-06-26T19:48:55Z
+
+If you use the Web Clipper do not upgrade to this version yet as it is not compatible with the old clipper. A new version of the clipper has been published to the stores but it may take a few days before it is released.
+
+- New: Add support for Joplin Server X-API-MIN-VERSION header (51f3c00)
+- Improved: Activate Joplin Server optimisations (3d03321)
+- Fixed: Fixed search when the index contains non-existing notes (5ecac21)
+- Fixed: Notes would appear to be in the wrong notebook after having been shared (9693187)
+
+## [v2.1.5](https://github.com/laurent22/joplin/releases/tag/v2.1.5) (Pre-release) - 2021-06-23T15:08:52Z
+
+- New: Plugins: Add support for read and writing text, HTML and images from/to clipboard (50ecdc2)
+- Improved: Web Clipper now must request authorisation before accessing the application data (67d9977)
+- Improved: Also allow disabling TLS errors for Joplin Cloud to go around error UNABLE_TO_GET_ISSUER_CERT_LOCALLY (118a2f9)
+- Improved: Apply monospace font to code dialog in Rich Text editor ([#4905](https://github.com/laurent22/joplin/issues/4905))
+- Fixed: Handle special type of code block when importing ENEX files ([#4965](https://github.com/laurent22/joplin/issues/4965))
+- Fixed: Fixed error that could prevent a revision from being created, and that would prevent the revision service from processing the rest of the notes ([#5051](https://github.com/laurent22/joplin/issues/5051))
+- Fixed: Fixed issue when trying to sync an item associated with a share that no longer exists (5bb68ba)
+- Fixed: Fixed note history line count information (Regression) (caabdbd)
+- Fixed: Fixed readability of links in notification banners ([#4983](https://github.com/laurent22/joplin/issues/4983))
+
+## [v2.1.3](https://github.com/laurent22/joplin/releases/tag/v2.1.3) (Pre-release) - 2021-06-19T16:32:51Z
+
+- Improved: Optimise first synchronisation, when items have never been synced before (15ce5cd)
+- Improved: Allow uploading items in batch when synchronising with Joplin Server (0222c0f)
+- Improved: Improved first sync speed when synchronising with Joplin Server (4dc1210)
+- Improved: Mask auth token and password in log (0d33955)
+- Improved: Added feature flags to disable Joplin Server sync optimisations by default, so that it still work with server 2.0 (326fef4)
+- Improved: Update Mermaid: 8.8.4 -&gt; 8.10.2 ([#5092](https://github.com/laurent22/joplin/issues/5092) by Helmut K. C. Tessarek)
+- Fixed: Plugins: Fixed saving secure settings to the keychain, and added way to store plugin settings to settings.json (ab9bbcb)
+
 ## [v2.0.11](https://github.com/laurent22/joplin/releases/tag/v2.0.11) - 2021-06-16T17:55:49Z
 
 - Improved: Prevent sync process from being stuck when the download state of a resource is invalid (5c6fd93)
-- Fixed: Prevent app from crashing when loading a setting value that has been removed ([#5086](https://github.com/laurent22/joplin/issues/5086))
+- Fixed: Prevent app from crashing when loading a setting value that has been removed ([[#5086](https://github.com/laurent22/joplin/issues/5086)](https://github.com/laurent22/joplin/issues/5086))
 
 ## [v2.0.10](https://github.com/laurent22/joplin/releases/tag/v2.0.10) - 2021-06-16T07:58:29Z
 
