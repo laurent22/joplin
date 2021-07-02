@@ -1,4 +1,4 @@
-import { setupDatabaseAndSynchronizer, switchClient, createFolderTree, supportDir } from '../testing/test-utils';
+import { setupDatabaseAndSynchronizer, switchClient, createFolderTree, supportDir, msleep } from '../testing/test-utils';
 import Folder from '../models/Folder';
 import { allNotesFolders } from '../testing/test-utils-synchronizer';
 import Note from '../models/Note';
@@ -385,6 +385,28 @@ describe('models_Folder.sharing', function() {
 		expect((await Note.loadByTitle('note 1')).share_id).toBe('');
 		expect((await Folder.loadByTitle('folder 1')).share_id).toBe('');
 		expect((await Resource.load(resourceId1)).share_id).toBe('');
+
+		{
+			// If we run it again, it should not update the notes since the share_id
+			// has already been cleared.
+			const resource1 = await Resource.load(resourceId1);
+			const resource2 = await Resource.load(resourceId2);
+			const note1 = await Note.loadByTitle('note 1');
+			const note2 = await Note.loadByTitle('note 2');
+			const folder1 = await Folder.loadByTitle('folder 1');
+			const folder2 = await Folder.loadByTitle('folder 2');
+
+			await msleep(1);
+
+			await Folder.updateNoLongerSharedItems(['1']);
+
+			expect((await Resource.load(resourceId1)).updated_time).toBe(resource1.updated_time);
+			expect((await Resource.load(resourceId2)).updated_time).toBe(resource2.updated_time);
+			expect((await Note.loadByTitle('note 1')).updated_time).toBe(note1.updated_time);
+			expect((await Note.loadByTitle('note 2')).updated_time).toBe(note2.updated_time);
+			expect((await Folder.loadByTitle('folder 1')).updated_time).toBe(folder1.updated_time);
+			expect((await Folder.loadByTitle('folder 2')).updated_time).toBe(folder2.updated_time);
+		}
 	});
 
 });
