@@ -320,12 +320,12 @@ export default class Folder extends BaseItem {
 		// if they've been moved out of a shared folder.
 		// await this.unshareItems(ModelType.Folder, sharedFolderIds);
 
-		const sql = ['SELECT id FROM folders WHERE share_id != ""'];
+		const sql = ['SELECT id, parent_id FROM folders WHERE share_id != ""'];
 		if (sharedFolderIds.length) {
 			sql.push(` AND id NOT IN ("${sharedFolderIds.join('","')}")`);
 		}
 
-		const foldersToUnshare = await this.db().selectAll(sql.join(' '));
+		const foldersToUnshare: FolderEntity[] = await this.db().selectAll(sql.join(' '));
 
 		report.unshareUpdateCount += foldersToUnshare.length;
 
@@ -334,6 +334,7 @@ export default class Folder extends BaseItem {
 				id: item.id,
 				share_id: '',
 				updated_time: Date.now(),
+				parent_id: item.parent_id,
 			}, { autoTimestamp: false });
 		}
 
@@ -407,12 +408,16 @@ export default class Folder extends BaseItem {
 
 		for (const tableName of ['folders', 'notes', 'resources']) {
 			const ItemClass = tableNameToClasses[tableName];
+			const hasParentId = tableName !== 'resources';
+
+			const fields = ['id'];
+			if (hasParentId) fields.push('parent_id');
 
 			const query = activeShareIds.length ? `
-				SELECT id FROM ${tableName}
+				SELECT ${this.db().escapeFields(fields)} FROM ${tableName}
 				WHERE share_id != "" AND share_id NOT IN ("${activeShareIds.join('","')}")
 			` : `
-				SELECT id FROM ${tableName}
+				SELECT ${this.db().escapeFields(fields)} FROM ${tableName}
 				WHERE share_id != ''
 			`;
 
@@ -421,11 +426,15 @@ export default class Folder extends BaseItem {
 			report[tableName] = rows.length;
 
 			for (const row of rows) {
-				await ItemClass.save({
+				const toSave: any = {
 					id: row.id,
 					share_id: '',
 					updated_time: Date.now(),
-				}, { autoTimestamp: false });
+				};
+
+				if (hasParentId) toSave.parent_id = row.parent_id;
+
+				await ItemClass.save(toSave, { autoTimestamp: false });
 			}
 		}
 

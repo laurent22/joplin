@@ -356,6 +356,8 @@ describe('models_Folder.sharing', function() {
 
 		const resourceService = new ResourceService();
 
+		const folder1: FolderEntity = await Folder.loadByTitle('folder 1');
+		const folder2: FolderEntity = await Folder.loadByTitle('folder 2');
 		let note1: NoteEntity = await Note.loadByTitle('note 1');
 		let note2: NoteEntity = await Note.loadByTitle('note 2');
 		note1 = await shim.attachFileToNote(note1, testImagePath);
@@ -368,6 +370,13 @@ describe('models_Folder.sharing', function() {
 		await Folder.updateAllShareIds();
 
 		await Folder.updateNoLongerSharedItems(['1']);
+
+		// Since `updateNoLongerSharedItems` sets the parent_id too,
+		// double-check that it's not actually modified.
+		expect((await Note.loadByTitle('note 1')).parent_id).toBe(folder1.id);
+		expect((await Note.loadByTitle('note 2')).parent_id).toBe(folder2.id);
+		expect((await Folder.loadByTitle('folder 1')).parent_id).toBe(folder1.parent_id);
+		expect((await Folder.loadByTitle('folder 2')).parent_id).toBe(folder2.parent_id);
 
 		// At this point, all items associated with share 2 should have their
 		// share_id cleared, because the share no longer exists. We also
