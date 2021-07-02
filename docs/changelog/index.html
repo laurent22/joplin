@@ -405,10 +405,40 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog.md
 <p><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=E8JMYD2LQ8MMA&amp;lc=GB&amp;item_name=Joplin+Development&amp;currency_code=EUR&amp;bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted"><img src="https://joplinapp.org/images/badges/Donate-PayPal-green.svg" alt="Donate using PayPal"></a> <a href="https://github.com/sponsors/laurent22/"><img src="https://joplinapp.org/images/badges/GitHub-Badge.svg" alt="Sponsor on GitHub"></a> <a href="https://www.patreon.com/joplin"><img src="https://joplinapp.org/images/badges/Patreon-Badge.svg" alt="Become a patron"></a> <a href="https://joplinapp.org/donate/#donations"><img src="https://joplinapp.org/images/badges/Donate-IBAN.svg" alt="Donate using IBAN"></a></p>
 <hr>
 <h1>Joplin changelog<a name="joplin-changelog" href="#joplin-changelog" class="heading-anchor">🔗</a></h1>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/v2.1.7">v2.1.7</a> - 2021-06-26T19:48:55Z<a name="v2-1-7-https-github-com-laurent22-joplin-releases-tag-v2-1-7-2021-06-26t19-48-55z" href="#v2-1-7-https-github-com-laurent22-joplin-releases-tag-v2-1-7-2021-06-26t19-48-55z" class="heading-anchor">🔗</a></h2>
+<p>If you use the Web Clipper do not upgrade to this version yet as it is not compatible with the old clipper. A new version of the clipper has been published to the stores but it may take a few days before it is released.</p>
+<ul>
+<li>New: Add support for Joplin Server X-API-MIN-VERSION header (51f3c00)</li>
+<li>Improved: Activate Joplin Server optimisations (3d03321)</li>
+<li>Fixed: Fixed search when the index contains non-existing notes (5ecac21)</li>
+<li>Fixed: Notes would appear to be in the wrong notebook after having been shared (9693187)</li>
+</ul>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/v2.1.5">v2.1.5</a> (Pre-release) - 2021-06-23T15:08:52Z<a name="v2-1-5-https-github-com-laurent22-joplin-releases-tag-v2-1-5-pre-release-2021-06-23t15-08-52z" href="#v2-1-5-https-github-com-laurent22-joplin-releases-tag-v2-1-5-pre-release-2021-06-23t15-08-52z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>New: Plugins: Add support for read and writing text, HTML and images from/to clipboard (50ecdc2)</li>
+<li>Improved: Web Clipper now must request authorisation before accessing the application data (67d9977)</li>
+<li>Improved: Also allow disabling TLS errors for Joplin Cloud to go around error UNABLE_TO_GET_ISSUER_CERT_LOCALLY (118a2f9)</li>
+<li>Improved: Apply monospace font to code dialog in Rich Text editor (<a href="https://github.com/laurent22/joplin/issues/4905">#4905</a>)</li>
+<li>Fixed: Handle special type of code block when importing ENEX files (<a href="https://github.com/laurent22/joplin/issues/4965">#4965</a>)</li>
+<li>Fixed: Fixed error that could prevent a revision from being created, and that would prevent the revision service from processing the rest of the notes (<a href="https://github.com/laurent22/joplin/issues/5051">#5051</a>)</li>
+<li>Fixed: Fixed issue when trying to sync an item associated with a share that no longer exists (5bb68ba)</li>
+<li>Fixed: Fixed note history line count information (Regression) (caabdbd)</li>
+<li>Fixed: Fixed readability of links in notification banners (<a href="https://github.com/laurent22/joplin/issues/4983">#4983</a>)</li>
+</ul>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/v2.1.3">v2.1.3</a> (Pre-release) - 2021-06-19T16:32:51Z<a name="v2-1-3-https-github-com-laurent22-joplin-releases-tag-v2-1-3-pre-release-2021-06-19t16-32-51z" href="#v2-1-3-https-github-com-laurent22-joplin-releases-tag-v2-1-3-pre-release-2021-06-19t16-32-51z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>Improved: Optimise first synchronisation, when items have never been synced before (15ce5cd)</li>
+<li>Improved: Allow uploading items in batch when synchronising with Joplin Server (0222c0f)</li>
+<li>Improved: Improved first sync speed when synchronising with Joplin Server (4dc1210)</li>
+<li>Improved: Mask auth token and password in log (0d33955)</li>
+<li>Improved: Added feature flags to disable Joplin Server sync optimisations by default, so that it still work with server 2.0 (326fef4)</li>
+<li>Improved: Update Mermaid: 8.8.4 -&gt; 8.10.2 (<a href="https://github.com/laurent22/joplin/issues/5092">#5092</a> by Helmut K. C. Tessarek)</li>
+<li>Fixed: Plugins: Fixed saving secure settings to the keychain, and added way to store plugin settings to settings.json (ab9bbcb)</li>
+</ul>
 <h2><a href="https://github.com/laurent22/joplin/releases/tag/v2.0.11">v2.0.11</a> - 2021-06-16T17:55:49Z<a name="v2-0-11-https-github-com-laurent22-joplin-releases-tag-v2-0-11-2021-06-16t17-55-49z" href="#v2-0-11-https-github-com-laurent22-joplin-releases-tag-v2-0-11-2021-06-16t17-55-49z" class="heading-anchor">🔗</a></h2>
 <ul>
 <li>Improved: Prevent sync process from being stuck when the download state of a resource is invalid (5c6fd93)</li>
-<li>Fixed: Prevent app from crashing when loading a setting value that has been removed (<a href="https://github.com/laurent22/joplin/issues/5086">#5086</a>)</li>
+<li>Fixed: Prevent app from crashing when loading a setting value that has been removed ([<a href="https://github.com/laurent22/joplin/issues/5086">#5086</a>](<a href="https://github.com/laurent22/joplin/issues/5086">https://github.com/laurent22/joplin/issues/5086</a>))</li>
 </ul>
 <h2><a href="https://github.com/laurent22/joplin/releases/tag/v2.0.10">v2.0.10</a> - 2021-06-16T07:58:29Z<a name="v2-0-10-https-github-com-laurent22-joplin-releases-tag-v2-0-10-2021-06-16t07-58-29z" href="#v2-0-10-https-github-com-laurent22-joplin-releases-tag-v2-0-10-2021-06-16t07-58-29z" class="heading-anchor">🔗</a></h2>
 <ul>

@@ -405,6 +405,35 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog_cli.md
 <p><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=E8JMYD2LQ8MMA&amp;lc=GB&amp;item_name=Joplin+Development&amp;currency_code=EUR&amp;bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted"><img src="https://joplinapp.org/images/badges/Donate-PayPal-green.svg" alt="Donate using PayPal"></a> <a href="https://github.com/sponsors/laurent22/"><img src="https://joplinapp.org/images/badges/GitHub-Badge.svg" alt="Sponsor on GitHub"></a> <a href="https://www.patreon.com/joplin"><img src="https://joplinapp.org/images/badges/Patreon-Badge.svg" alt="Become a patron"></a> <a href="https://joplinapp.org/donate/#donations"><img src="https://joplinapp.org/images/badges/Donate-IBAN.svg" alt="Donate using IBAN"></a></p>
 <hr>
 <h1>Joplin terminal app changelog<a name="joplin-terminal-app-changelog" href="#joplin-terminal-app-changelog" class="heading-anchor">🔗</a></h1>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/cli-v2.1.2">cli-v2.1.2</a> - 2021-06-27T15:51:36Z<a name="cli-v2-1-2-https-github-com-laurent22-joplin-releases-tag-cli-v2-1-2-2021-06-27t15-51-36z" href="#cli-v2-1-2-https-github-com-laurent22-joplin-releases-tag-cli-v2-1-2-2021-06-27t15-51-36z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>New: Add support for X-API-MIN-VERSION header (51f3c00)</li>
+<li>New: Added flag to disable local lock when synchronising (7aff6d2)</li>
+<li>Improved: Allow uploading items in batch when synchronising with Joplin Server (0222c0f)</li>
+<li>Improved: Also allow disabling TLS errors for Joplin Cloud to go around error UNABLE_TO_GET_ISSUER_CERT_LOCALLY (118a2f9)</li>
+<li>Improved: Improved first sync speed when synchronising with Joplin Server (4dc1210)</li>
+<li>Improved: Mask auth token and password in log (0d33955)</li>
+<li>Improved: Optimise first synchronisation, when items have never been synced before (15ce5cd)</li>
+<li>Improved: Update Mermaid: 8.8.4 -&gt; 8.10.2 (#5092 by Helmut K. C. Tessarek)</li>
+<li>Fixed: Fixed error that could prevent a revision from being created, and that would prevent the revision service from processing the rest of the notes (#5051)</li>
+<li>Fixed: Fixed issue when trying to sync an item associated with a share that no longer exists (5bb68ba)</li>
+<li>Fixed: Fixed search when the index contains non-existing notes (5ecac21)</li>
+<li>Fixed: Handle special type of code block when importing ENEX files (#4965)</li>
+</ul>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/cli-v2.0.1">cli-v2.0.1</a> - 2021-06-16T19:06:28Z<a name="cli-v2-0-1-https-github-com-laurent22-joplin-releases-tag-cli-v2-0-1-2021-06-16t19-06-28z" href="#cli-v2-0-1-https-github-com-laurent22-joplin-releases-tag-cli-v2-0-1-2021-06-16t19-06-28z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>New: Add new date format YYMMDD (#4954 by Helmut K. C. Tessarek)</li>
+<li>New: Add support for sharing notebooks with Joplin Server (#4772)</li>
+<li>Improved: Allow setting up E2EE without having to confirm the password (c5b0529)</li>
+<li>Improved: Conflict notes will now populate a new field with the ID of the conflict note. (#5049 by <a href="https://github.com/Ahmad45123">@Ahmad45123</a>)</li>
+<li>Improved: Import SVG as images when importing ENEX files (#4968)</li>
+<li>Improved: Improve search with Asian scripts (#5018) (#4613 by <a href="https://github.com/mablin7">@mablin7</a>)</li>
+<li>Improved: Prevent sync process from being stuck when the download state of a resource is invalid (5c6fd93)</li>
+<li>Fixed: Fixed possible crash when trying to delete corrupted revision in revision service (#4845)</li>
+<li>Fixed: Fixed user content URLs when sharing note via Joplin Server (2cf7067)</li>
+<li>Fixed: Improved importing Evernote notes that contain codeblocks (#4965)</li>
+<li>Fixed: Items are filtered in the API search (#5017) (#5007 by <a href="https://github.com/JackGruber">@JackGruber</a>)</li>
+</ul>
 <h2><a href="https://github.com/laurent22/joplin/releases/tag/cli-v1.8.1">cli-v1.8.1</a> - 2021-05-10T09:38:05Z<a name="cli-v1-8-1-https-github-com-laurent22-joplin-releases-tag-cli-v1-8-1-2021-05-10t09-38-05z" href="#cli-v1-8-1-https-github-com-laurent22-joplin-releases-tag-cli-v1-8-1-2021-05-10t09-38-05z" class="heading-anchor">🔗</a></h2>
 <ul>
 <li>New: Add &quot;id&quot; and &quot;due&quot; search filters (#4898 by <a href="https://github.com/JackGruber">@JackGruber</a>)</li>

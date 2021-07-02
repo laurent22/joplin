@@ -422,6 +422,7 @@ for (let portToTest = 41184; portToTest &lt;= 41194; portToTest++) {
 <pre><code>curl http://localhost:41184/notes?token=ABCD123ABCD123ABCD123ABCD123ABCD123
 </code></pre>
 <p>In the documentation below, the token will not be specified every time however you will need to include it.</p>
+<p>If needed you may also <a href="https://joplinapp.org/spec/clipper_auth/">request the token programmatically</a></p>
 <h1>Using the API<a name="using-the-api" href="#using-the-api" class="heading-anchor">🔗</a></h1>
 <p>All the calls, unless noted otherwise, receives and send <strong>JSON data</strong>. For example to create a new note:</p>
 <pre><code>curl --data '{ &quot;title&quot;: &quot;My note&quot;, &quot;body&quot;: &quot;Some note in **Markdown**&quot;}' http://localhost:41184/notes
