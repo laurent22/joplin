@@ -78,8 +78,8 @@ function userIsMe(path: SubPath): boolean {
 const router = new Router(RouteType.Web);
 
 router.get('users', async (_path: SubPath, ctx: AppContext) => {
-	const userModel = ctx.models.user();
-	await userModel.checkIfAllowed(ctx.owner, AclAction.List);
+	const userModel = ctx.joplin.models.user();
+	await userModel.checkIfAllowed(ctx.joplin.owner, AclAction.List);
 
 	const users = await userModel.all();
 
@@ -101,16 +101,16 @@ router.get('users', async (_path: SubPath, ctx: AppContext) => {
 });
 
 router.get('users/:id', async (path: SubPath, ctx: AppContext, user: User = null, error: any = null) => {
-	const owner = ctx.owner;
+	const owner = ctx.joplin.owner;
 	const isMe = userIsMe(path);
 	const isNew = userIsNew(path);
-	const userModel = ctx.models.user();
+	const userModel = ctx.joplin.models.user();
 	const userId = userIsMe(path) ? owner.id : path.id;
 
 	user = !isNew ? user || await userModel.load(userId) : null;
 	if (isNew && !user) user = defaultUser();
 
-	await userModel.checkIfAllowed(ctx.owner, AclAction.Read, user);
+	await userModel.checkIfAllowed(ctx.joplin.owner, AclAction.Read, user);
 
 	let postUrl = '';
 
@@ -147,9 +147,9 @@ router.publicSchemas.push('users/:id/confirm');
 router.get('users/:id/confirm', async (path: SubPath, ctx: AppContext, error: Error = null) => {
 	const userId = path.id;
 	const token = ctx.query.token;
-	if (token) await ctx.models.user().confirmEmail(userId, token);
+	if (token) await ctx.joplin.models.user().confirmEmail(userId, token);
 
-	const user = await ctx.models.user().load(userId);
+	const user = await ctx.joplin.models.user().load(userId);
 
 	if (user.must_set_password) {
 		const view: View = {
@@ -158,17 +158,17 @@ router.get('users/:id/confirm', async (path: SubPath, ctx: AppContext, error: Er
 				user,
 				error,
 				token,
-				postUrl: ctx.models.user().confirmUrl(userId, token),
+				postUrl: ctx.joplin.models.user().confirmUrl(userId, token),
 			},
 			navbar: false,
 		};
 
 		return view;
 	} else {
-		await ctx.models.token().deleteByValue(userId, token);
-		await ctx.models.notification().add(userId, NotificationKey.EmailConfirmed);
+		await ctx.joplin.models.token().deleteByValue(userId, token);
+		await ctx.joplin.models.notification().add(userId, NotificationKey.EmailConfirmed);
 
-		if (ctx.owner) {
+		if (ctx.joplin.owner) {
 			return redirect(ctx, `${config().baseUrl}/home`);
 		} else {
 			return redirect(ctx, `${config().baseUrl}/login`);
@@ -187,17 +187,17 @@ router.post('users/:id/confirm', async (path: SubPath, ctx: AppContext) => {
 
 	try {
 		const fields = await bodyFields<SetPasswordFormData>(ctx.req);
-		await ctx.models.token().checkToken(userId, fields.token);
+		await ctx.joplin.models.token().checkToken(userId, fields.token);
 
 		const password = checkPassword(fields, true);
 
-		await ctx.models.user().save({ id: userId, password, must_set_password: 0 });
-		await ctx.models.token().deleteByValue(userId, fields.token);
+		await ctx.joplin.models.user().save({ id: userId, password, must_set_password: 0 });
+		await ctx.joplin.models.token().deleteByValue(userId, fields.token);
 
-		const session = await ctx.models.session().createUserSession(userId);
+		const session = await ctx.joplin.models.session().createUserSession(userId);
 		ctx.cookies.set('sessionId', session.id);
 
-		await ctx.models.notification().add(userId, NotificationKey.PasswordSet);
+		await ctx.joplin.models.notification().add(userId, NotificationKey.PasswordSet);
 
 		return redirect(ctx, `${config().baseUrl}/home`);
 	} catch (error) {
@@ -217,7 +217,7 @@ interface FormFields {
 
 router.post('users', async (path: SubPath, ctx: AppContext) => {
 	let user: User = {};
-	const userId = userIsMe(path) ? ctx.owner.id : path.id;
+	const userId = userIsMe(path) ? ctx.joplin.owner.id : path.id;
 
 	try {
 		const body = await formParse(ctx.req);
@@ -226,11 +226,11 @@ router.post('users', async (path: SubPath, ctx: AppContext) => {
 		if (userIsMe(path)) fields.id = userId;
 		user = makeUser(isNew, fields);
 
-		const userModel = ctx.models.user();
+		const userModel = ctx.joplin.models.user();
 
 		if (fields.post_button) {
 			const userToSave: User = userModel.fromApiInput(user);
-			await userModel.checkIfAllowed(ctx.owner, isNew ? AclAction.Create : AclAction.Update, userToSave);
+			await userModel.checkIfAllowed(ctx.joplin.owner, isNew ? AclAction.Create : AclAction.Update, userToSave);
 
 			if (isNew) {
 				await userModel.save(userToSave);
@@ -239,7 +239,7 @@ router.post('users', async (path: SubPath, ctx: AppContext) => {
 			}
 		} else if (fields.delete_button) {
 			const user = await userModel.load(path.id);
-			await userModel.checkIfAllowed(ctx.owner, AclAction.Delete, user);
+			await userModel.checkIfAllowed(ctx.joplin.owner, AclAction.Delete, user);
 			await userModel.delete(path.id);
 		} else if (fields.send_reset_password_email) {
 			const user = await userModel.load(path.id);

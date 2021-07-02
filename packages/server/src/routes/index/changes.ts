@@ -14,11 +14,11 @@ const router = new Router(RouteType.Web);
 
 router.get('changes', async (_path: SubPath, ctx: AppContext) => {
 	const pagination = makeTablePagination(ctx.query, 'updated_time', PaginationOrderDir.DESC);
-	const paginatedChanges = await ctx.models.change().allByUser(ctx.owner.id, pagination);
-	const items = await ctx.models.item().loadByIds(paginatedChanges.items.map(i => i.item_id), { fields: ['id'] });
+	const paginatedChanges = await ctx.joplin.models.change().allByUser(ctx.joplin.owner.id, pagination);
+	const items = await ctx.joplin.models.item().loadByIds(paginatedChanges.items.map(i => i.item_id), { fields: ['id'] });
 
 	const table: Table = {
-		baseUrl: ctx.models.change().changeUrl(),
+		baseUrl: ctx.joplin.models.change().changeUrl(),
 		requestQuery: ctx.query,
 		pageCount: paginatedChanges.page_count,
 		pagination,
@@ -42,7 +42,7 @@ router.get('changes', async (_path: SubPath, ctx: AppContext) => {
 				{
 					value: change.item_name,
 					stretch: true,
-					url: showItemUrls(config()) ? (items.find(i => i.id === change.item_id) ? ctx.models.item().itemContentUrl(change.item_id) : '') : null,
+					url: showItemUrls(config()) ? (items.find(i => i.id === change.item_id) ? ctx.joplin.models.item().itemContentUrl(change.item_id) : '') : null,
 				},
 				{
 					value: changeTypeToString(change.type),

@@ -16,12 +16,12 @@ const router = new Router(RouteType.Web);
 
 router.get('items', async (_path: SubPath, ctx: AppContext) => {
 	const pagination = makeTablePagination(ctx.query, 'name', PaginationOrderDir.ASC);
-	const paginatedItems = await ctx.models.item().children(ctx.owner.id, '', pagination, { fields: ['id', 'name', 'updated_time', 'mime_type', 'content_size'] });
+	const paginatedItems = await ctx.joplin.models.item().children(ctx.joplin.owner.id, '', pagination, { fields: ['id', 'name', 'updated_time', 'mime_type', 'content_size'] });
 
 	const table: Table = {
-		baseUrl: ctx.models.item().itemUrl(),
+		baseUrl: ctx.joplin.models.item().itemUrl(),
 		requestQuery: ctx.query,
-		pageCount: Math.ceil((await ctx.models.item().childrenCount(ctx.owner.id, '')) / pagination.limit),
+		pageCount: Math.ceil((await ctx.joplin.models.item().childrenCount(ctx.joplin.owner.id, '')) / pagination.limit),
 		pagination,
 		headers: [
 			{
@@ -72,7 +72,7 @@ router.get('items', async (_path: SubPath, ctx: AppContext) => {
 });
 
 router.get('items/:id/content', async (path: SubPath, ctx: AppContext) => {
-	const itemModel = ctx.models.item();
+	const itemModel = ctx.joplin.models.item();
 	const item = await itemModel.loadWithContent(path.id);
 	if (!item) throw new ErrorNotFound();
 	return respondWithItemContent(ctx.response, item, item.content);
@@ -83,13 +83,13 @@ router.post('items', async (_path: SubPath, ctx: AppContext) => {
 	const fields = body.fields;
 
 	if (fields.delete_all_button) {
-		const itemModel = ctx.models.item();
-		await itemModel.deleteAll(ctx.owner.id);
+		const itemModel = ctx.joplin.models.item();
+		await itemModel.deleteAll(ctx.joplin.owner.id);
 	} else {
 		throw new Error('Invalid form button');
 	}
 
-	return redirect(ctx, await ctx.models.item().itemUrl());
+	return redirect(ctx, await ctx.joplin.models.item().itemUrl());
 });
 
 export default router;

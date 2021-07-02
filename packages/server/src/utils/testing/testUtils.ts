@@ -175,16 +175,20 @@ export async function koaAppContext(options: AppContextTestOptions = null): Prom
 
 	const appLogger = Logger.create('AppTest');
 
+	const baseAppContext = await setupAppContext({} as any, Env.Dev, db_, () => appLogger);
+
 	// Set type to "any" because the Koa context has many properties and we
 	// don't need to mock all of them.
 	const appContext: any = {
-		...await setupAppContext({} as any, Env.Dev, db_, () => appLogger),
-		env: Env.Dev,
-		db: db_,
-		models: models(),
-		appLogger: () => appLogger,
+		baseAppContext,
+		joplin: {
+			...baseAppContext.joplin,
+			env: Env.Dev,
+			db: db_,
+			models: models(),
+			owner: owner,
+		},
 		path: req.url,
-		owner: owner,
 		cookies: new FakeCookies(),
 		request: new FakeRequest(req),
 		response: new FakeResponse(),

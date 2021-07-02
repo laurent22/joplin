@@ -43,7 +43,7 @@ export async function bodyFields<T>(req: any/* , filter:string[] = null*/): Prom
 }
 
 export function ownerRequired(ctx: AppContext) {
-	if (!ctx.owner) throw new ErrorForbidden();
+	if (!ctx.joplin.owner) throw new ErrorForbidden();
 }
 
 export function headerSessionId(headers: any): string {

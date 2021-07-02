@@ -191,7 +191,7 @@ export async function execRequest(routes: Routers, ctx: AppContext) {
 	// This is a generic catch-all for all private end points - if we
 	// couldn't get a valid session, we exit now. Individual end points
 	// might have additional permission checks depending on the action.
-	if (!match.route.isPublic(match.subPath.schema) && !ctx.owner) throw new ErrorForbidden();
+	if (!match.route.isPublic(match.subPath.schema) && !ctx.joplin.owner) throw new ErrorForbidden();
 
 	return endPoint.handler(match.subPath, ctx);
 }

@@ -43,17 +43,17 @@ router.post('signup', async (_path: SubPath, ctx: AppContext) => {
 		const formUser = await bodyFields<FormUser>(ctx.req);
 		const password = checkPassword(formUser, true);
 
-		const user = await ctx.models.user().save({
+		const user = await ctx.joplin.models.user().save({
 			...accountTypeProperties(AccountType.Basic),
 			email: formUser.email,
 			full_name: formUser.full_name,
 			password,
 		});
 
-		const session = await ctx.models.session().createUserSession(user.id);
+		const session = await ctx.joplin.models.session().createUserSession(user.id);
 		ctx.cookies.set('sessionId', session.id);
 
-		await ctx.models.notification().add(user.id, NotificationKey.ConfirmEmail);
+		await ctx.joplin.models.notification().add(user.id, NotificationKey.ConfirmEmail);
 
 		return redirect(ctx, `${config().baseUrl}/home`);
 	} catch (error) {

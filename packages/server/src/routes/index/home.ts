@@ -15,7 +15,7 @@ router.get('home', async (_path: SubPath, ctx: AppContext) => {
 	contextSessionId(ctx);
 
 	if (ctx.method === 'GET') {
-		const accountProps = accountTypeProperties(ctx.owner.account_type);
+		const accountProps = accountTypeProperties(ctx.joplin.owner.account_type);
 
 		const view = defaultView('home', 'Home');
 		view.content = {
@@ -26,7 +26,7 @@ router.get('home', async (_path: SubPath, ctx: AppContext) => {
 				},
 				{
 					label: 'Is Admin',
-					value: yesOrNo(ctx.owner.is_admin),
+					value: yesOrNo(ctx.joplin.owner.is_admin),
 				},
 				{
 					label: 'Max Item Size',

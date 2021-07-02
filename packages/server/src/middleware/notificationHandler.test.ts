@@ -26,15 +26,15 @@ describe('notificationHandler', function() {
 		});
 
 		{
-			const context = await koaAppContext({ sessionId: session.id });
-			await notificationHandler(context, koaNext);
+			const ctx = await koaAppContext({ sessionId: session.id });
+			await notificationHandler(ctx, koaNext);
 
 			const notifications: Notification[] = await models().notification().all();
 			expect(notifications.length).toBe(1);
 			expect(notifications[0].key).toBe('change_admin_password');
 			expect(notifications[0].read).toBe(0);
 
-			expect(context.notifications.length).toBe(1);
+			expect(ctx.joplin.notifications.length).toBe(1);
 		}
 
 		{
@@ -43,15 +43,15 @@ describe('notificationHandler', function() {
 				password: 'changed!',
 			});
 
-			const context = await koaAppContext({ sessionId: session.id });
-			await notificationHandler(context, koaNext);
+			const ctx = await koaAppContext({ sessionId: session.id });
+			await notificationHandler(ctx, koaNext);
 
 			const notifications: Notification[] = await models().notification().all();
 			expect(notifications.length).toBe(1);
 			expect(notifications[0].key).toBe('change_admin_password');
 			expect(notifications[0].read).toBe(1);
 
-			expect(context.notifications.length).toBe(0);
+			expect(ctx.joplin.notifications.length).toBe(0);
 		}
 	});
 

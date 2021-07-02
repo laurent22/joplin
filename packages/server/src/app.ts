@@ -202,16 +202,16 @@ async function main() {
 		delete connectionCheckLogInfo.connection;
 
 		appLogger().info('Connection check:', connectionCheckLogInfo);
-		const appContext = app.context as AppContext;
+		const ctx = app.context as AppContext;
 
-		await setupAppContext(appContext, env, connectionCheck.connection, appLogger);
-		await initializeJoplinUtils(config(), appContext.models, appContext.services.mustache);
+		await setupAppContext(ctx, env, connectionCheck.connection, appLogger);
+		await initializeJoplinUtils(config(), ctx.models, ctx.joplin.services.mustache);
 
 		appLogger().info('Migrating database...');
-		await migrateDb(appContext.db);
+		await migrateDb(ctx.db);
 
 		appLogger().info('Starting services...');
-		await startServices(appContext);
+		await startServices(ctx);
 
 		appLogger().info(`Call this for testing: \`curl ${config().apiBaseUrl}/api/ping\``);
 

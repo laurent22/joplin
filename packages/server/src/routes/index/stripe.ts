@@ -137,7 +137,7 @@ const postHandlers: Record<string, StripeRouteHandler> = {
 				const stripeUserId = checkoutSession.customer as string;
 				const stripeSubscriptionId = checkoutSession.subscription as string;
 
-				await ctx.models.subscription().saveUserAndSubscription(
+				await ctx.joplin.models.subscription().saveUserAndSubscription(
 					checkoutSession.customer_details.email || checkoutSession.customer_email,
 					AccountType.Pro,
 					stripeUserId,
@@ -158,7 +158,7 @@ const postHandlers: Record<string, StripeRouteHandler> = {
 				// saved in checkout.session.completed.
 
 				const invoice = event.data.object as Stripe.Invoice;
-				await ctx.models.subscription().handlePayment(invoice.subscription as string, true);
+				await ctx.joplin.models.subscription().handlePayment(invoice.subscription as string, true);
 			},
 
 			'invoice.payment_failed': async () => {
@@ -170,7 +170,7 @@ const postHandlers: Record<string, StripeRouteHandler> = {
 
 				const invoice = event.data.object as Stripe.Invoice;
 				const subId = invoice.subscription as string;
-				await ctx.models.subscription().handlePayment(subId, false);
+				await ctx.joplin.models.subscription().handlePayment(subId, false);
 			},
 
 		};
@@ -202,9 +202,9 @@ const getHandlers: Record<string, StripeRouteHandler> = {
 	},
 
 	portal: async (stripe: Stripe, _path: SubPath, ctx: AppContext) => {
-		if (!ctx.owner) throw new ErrorForbidden('Please login to access the subscription portal');
+		if (!ctx.joplin.owner) throw new ErrorForbidden('Please login to access the subscription portal');
 
-		const sub = await ctx.models.subscription().byUserId(ctx.owner.id);
+		const sub = await ctx.joplin.models.subscription().byUserId(ctx.joplin.owner.id);
 		if (!sub) throw new ErrorNotFound('Could not find subscription');
 
 		const billingPortalSession = await stripe.billingPortal.sessions.create({ customer: sub.stripe_user_id as string });

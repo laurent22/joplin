@@ -24,14 +24,19 @@ async function setupServices(env: Env, models: Models, config: Config): Promise<
 }
 
 export default async function(appContext: AppContext, env: Env, dbConnection: DbConnection, appLogger: ()=> LoggerWrapper): Promise<AppContext> {
-	appContext.env = env;
-	appContext.db = dbConnection;
-	appContext.models = newModelFactory(appContext.db, config());
-	appContext.services = await setupServices(env, appContext.models, config());
-	appContext.appLogger = appLogger;
-	appContext.routes = { ...routes };
+	const models = newModelFactory(dbConnection, config());
 
-	if (env === Env.Prod) delete appContext.routes['api/debug'];
+	appContext.joplin = {
+		...appContext.joplin,
+		env: env,
+		db: dbConnection,
+		models: models,
+		services: await setupServices(env, models, config()),
+		appLogger: appLogger,
+		routes: { ...routes },
+	};
+
+	if (env === Env.Prod) delete appContext.joplin.routes['api/debug'];
 
 	return appContext;
 }
