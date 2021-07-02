@@ -37,14 +37,39 @@ export function setLocalSyncTargetInfo(info: SyncTargetInfo) {
 	Setting.setValue('sync.info', serializeSyncTargetInfo(info));
 }
 
-export function localSyncTargetInfo(mustExist: boolean = false): SyncTargetInfo | null {
-	const info = Setting.value('sync.info');
-	if (mustExist && !info) throw new Error('Sync info is not set');
+export function localSyncTargetInfo(settingInfo: string = null): SyncTargetInfo | null {
+	const info = settingInfo || Setting.value('sync.info');
 	return info ? unserializeSyncTargetInfo(info) : defaultSyncTargetInfo();
 }
 
-function validateInfo(info: SyncTargetInfo) {
-	if (!info.version) throw new Error('Missing "version" field in info.json');
+// function latestMasterKey(info:SyncTargetInfo):MasterKeyEntity {
+// 	if (!('masterKeys' in info)) return null;
+// 	if (!Object.keys(info.masterKeys).length) return null;
+
+// 	let output:MasterKeyEntity = null;
+// 	for (let [_id, mk] of Object.entries(info.masterKeys)) {
+// 		if (!output || mk.updated_time > output.updated_time) {
+// 			output = mk;
+// 		}
+// 	}
+// 	return output;
+// }
+
+function validateInfo(info: SyncTargetInfo): SyncTargetInfo {
+	if (!('version' in info)) throw new Error(`Missing "version" field in info.json: ${JSON.stringify(info)}`);
+
+	// if ('masterKeys' in info && Object.keys(info.masterKeys).length && !info.activeMasterKeyId) {
+	// 	throw new Error('Master keys are
+	// }
+
+	// info = { ...info };
+
+	// if ('masterKeys' in info && Object.keys(info.masterKeys).length && !info.activeMasterKeyId) {
+	// 	const latestMk = latestMasterKey(info);
+	// 	info.activeMasterKeyId = latestMk.id;
+	// }
+
+	return info;
 }
 
 export function syncTargetInfoEquals(info1: SyncTargetInfo, info2: SyncTargetInfo): boolean {
@@ -66,7 +91,18 @@ export function syncTargetInfoEquals(info1: SyncTargetInfo, info2: SyncTargetInf
 	return true;
 }
 
+// Merges info2 into info1.
 export function mergeSyncTargetInfos(info1: SyncTargetInfo, info2: SyncTargetInfo): SyncTargetInfo {
+	info1 = {
+		...defaultSyncTargetInfo(),
+		...info1,
+	};
+
+	info2 = {
+		...defaultSyncTargetInfo(),
+		...info2,
+	};
+
 	const baseInfo = info1.updatedTime > info2.updatedTime ? info1 : info2;
 
 	const newInfo: SyncTargetInfo = { ...baseInfo };
@@ -105,7 +141,7 @@ export async function remoteSyncTargetInfo(api: FileApi): Promise<SyncTargetInfo
 
 	if (syncTargetInfoText) {
 		output = unserializeSyncTargetInfo(syncTargetInfoText);
-		validateInfo(output);
+		output = validateInfo(output);
 	} else {
 		const oldVersion = await api.get('.sync/version.txt');
 		if (oldVersion) output = { ...defaultFields, version: 1 };
@@ -132,8 +168,9 @@ export function activeMasterKey(info: SyncTargetInfo): MasterKeyEntity {
 	return info.masterKeys[info.activeMasterKeyId];
 }
 
-export function activeMasterKeyId() {
-	return localSyncTargetInfo().activeMasterKeyId;
+export function activeMasterKeyId(info: SyncTargetInfo = null) {
+	info = info || localSyncTargetInfo();
+	return info.activeMasterKeyId;
 }
 
 export function setActiveMasterKeyId(id: string) {
@@ -148,7 +185,7 @@ export function setActiveMasterKeyId(id: string) {
 }
 
 export function setEncryptionEnabled(enable: boolean = true, activeMasterKeyId: string = null) {
-	const info = localSyncTargetInfo(false);
+	const info = localSyncTargetInfo();
 	if (info.e2ee === enable) return;
 
 	const newInfo = {
@@ -162,13 +199,13 @@ export function setEncryptionEnabled(enable: boolean = true, activeMasterKeyId: 
 	setLocalSyncTargetInfo(newInfo);
 }
 
-export function encryptionEnabled() {
-	const info = localSyncTargetInfo(false);
+export function encryptionEnabled(info: SyncTargetInfo = null) {
+	info = info || localSyncTargetInfo();
 	return info.e2ee;
 }
 
-export function encryptionDisabled() {
-	return !encryptionEnabled();
+export function encryptionDisabled(info: SyncTargetInfo = null) {
+	return !encryptionEnabled(info);
 }
 
 export function masterKeyById(id: string): MasterKeyEntity {
@@ -200,7 +237,8 @@ export function saveMasterKey(mk: MasterKeyEntity): MasterKeyEntity {
 	return newMasterKey;
 }
 
-export function masterKeyAll(): MasterKeyEntity[] {
-	const masterKeys = localSyncTargetInfo().masterKeys;
+export function masterKeyAll(info: SyncTargetInfo = null): MasterKeyEntity[] {
+	info = info || localSyncTargetInfo();
+	const masterKeys = info.masterKeys;
 	return Object.keys(masterKeys).map(id => masterKeys[id]);
 }

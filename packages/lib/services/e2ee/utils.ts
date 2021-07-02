@@ -8,10 +8,17 @@ import { localSyncTargetInfo, setEncryptionEnabled } from '../synchronizer/syncT
 
 const logger = Logger.create('e2ee/utils');
 
-export async function setupAndEnableEncryption(masterKey: MasterKeyEntity, password: string = null) {
-	setEncryptionEnabled(true, masterKey.id);
+export async function setupAndEnableEncryption(masterKey: MasterKeyEntity = null, password: string = null) {
+	if (!masterKey) {
+		// May happen for example if there are master keys in info.json but none
+		// of them is set as active. But in fact, unless there is a bug in the
+		// application, this shouldn't happen.
+		logger.warn('Setting up E2EE without a master key - user will need to either generate one or select one of the existing ones as active');
+	}
 
-	if (password) {
+	setEncryptionEnabled(true, masterKey ? masterKey.id : null);
+
+	if (masterKey && password) {
 		const passwordCache = Setting.value('encryption.passwordCache');
 		passwordCache[masterKey.id] = password;
 		Setting.setValue('encryption.passwordCache', passwordCache);

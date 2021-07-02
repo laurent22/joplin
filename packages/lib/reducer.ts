@@ -54,7 +54,7 @@ export interface State {
 	notesParentType: string;
 	folders: any[];
 	tags: any[];
-	masterKeys: any[];
+	// masterKeys: any[];
 	notLoadedMasterKeys: any[];
 	searches: any[];
 	highlightedWords: string[];
@@ -104,7 +104,6 @@ export const defaultState: State = {
 	notesParentType: null,
 	folders: [],
 	tags: [],
-	masterKeys: [],
 	notLoadedMasterKeys: [],
 	searches: [],
 	highlightedWords: [],
@@ -975,7 +974,7 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 			break;
 
 		case 'FOLDER_UPDATE_ONE':
-		case 'MASTERKEY_UPDATE_ONE':
+		// case 'MASTERKEY_UPDATE_ONE':
 			updateOneItem(draft, action);
 			break;
 
@@ -983,9 +982,9 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 			handleItemDelete(draft, action);
 			break;
 
-		case 'MASTERKEY_UPDATE_ALL':
-			draft.masterKeys = action.items;
-			break;
+			// case 'MASTERKEY_UPDATE_ALL':
+			// 	draft.masterKeys = action.items;
+			// 	break;
 
 		case 'MASTERKEY_SET_NOT_LOADED':
 			draft.notLoadedMasterKeys = action.ids;

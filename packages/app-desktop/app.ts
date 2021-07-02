@@ -28,7 +28,6 @@ import iterateItems from './gui/ResizableLayout/utils/iterateItems';
 import validateLayout from './gui/ResizableLayout/utils/validateLayout';
 
 const { FoldersScreenUtils } = require('@joplin/lib/folders-screen-utils.js');
-import MasterKey from '@joplin/lib/models/MasterKey';
 import Folder from '@joplin/lib/models/Folder';
 const fs = require('fs-extra');
 import Tag from '@joplin/lib/models/Tag';
@@ -670,12 +669,12 @@ class Application extends BaseApplication {
 			items: tags,
 		});
 
-		const masterKeys = await MasterKey.all();
+		// const masterKeys = await MasterKey.all();
 
-		this.dispatch({
-			type: 'MASTERKEY_UPDATE_ALL',
-			items: masterKeys,
-		});
+		// this.dispatch({
+		// 	type: 'MASTERKEY_UPDATE_ALL',
+		// 	items: masterKeys,
+		// });
 
 		this.store().dispatch({
 			type: 'FOLDER_SELECT',

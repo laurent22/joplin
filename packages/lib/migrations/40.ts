@@ -19,7 +19,7 @@ const script: MigrationScript = {
 			e2ee: Setting.valueNoThrow('encryption.enabled', false),
 			masterKeys: masterKeyMap,
 			activeMasterKeyId: Setting.valueNoThrow('encryption.activeMasterKeyId', ''),
-			updatedTime: Date.now(),
+			updatedTime: 0,
 		};
 
 		Setting.setValue('sync.info', JSON.stringify(syncInfo));

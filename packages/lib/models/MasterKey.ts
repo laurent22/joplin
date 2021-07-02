@@ -29,6 +29,10 @@ export default class MasterKey extends BaseItem {
 		return masterKeyById(id);
 	}
 
+	public static async allIds(): Promise<string[]> {
+		return masterKeyAll().map(k => k.id);
+	}
+
 	public static async all(): Promise<MasterKeyEntity[]> {
 		return masterKeyAll();
 	}
@@ -36,10 +40,10 @@ export default class MasterKey extends BaseItem {
 	public static async save(o: MasterKeyEntity): Promise<MasterKeyEntity> {
 		const newMasterKey = saveMasterKey(o);
 
-		this.dispatch({
-			type: 'MASTERKEY_UPDATE_ONE',
-			item: newMasterKey,
-		});
+		// this.dispatch({
+		// 	type: 'MASTERKEY_UPDATE_ONE',
+		// 	item: newMasterKey,
+		// });
 
 		return newMasterKey;
 	}

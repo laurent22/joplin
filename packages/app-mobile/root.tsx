@@ -556,12 +556,12 @@ async function initialize(dispatch: Function) {
 			items: tags,
 		});
 
-		const masterKeys = await MasterKey.all();
+		// const masterKeys = await MasterKey.all();
 
-		dispatch({
-			type: 'MASTERKEY_UPDATE_ALL',
-			items: masterKeys,
-		});
+		// dispatch({
+		// 	type: 'MASTERKEY_UPDATE_ALL',
+		// 	items: masterKeys,
+		// });
 
 		const folderId = Setting.value('activeFolderId');
 		let folder = await Folder.load(folderId);

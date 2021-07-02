@@ -10,7 +10,8 @@ import dialogs from './dialogs';
 import { _ } from '@joplin/lib/locale';
 import bridge from '../services/bridge';
 import { MasterKeyEntity } from '@joplin/lib/services/database/types';
-import { activeMasterKeyId, encryptionEnabled } from '@joplin/lib/services/synchronizer/syncTargetInfoUtils';
+import { activeMasterKeyId, encryptionEnabled, localSyncTargetInfo, masterKeyAll } from '@joplin/lib/services/synchronizer/syncTargetInfoUtils';
+import { AppState } from '../app';
 const shared = require('@joplin/lib/components/shared/encryption-config-shared.js');
 
 interface Props {
@@ -295,13 +296,15 @@ class EncryptionConfigScreenComponent extends React.Component<Props, any> {
 	}
 }
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: AppState) => {
+	const syncTargetInfo = localSyncTargetInfo(state.settings['sync.info']);
+
 	return {
 		themeId: state.settings.theme,
-		masterKeys: state.masterKeys,
+		masterKeys: masterKeyAll(syncTargetInfo),
 		passwords: state.settings['encryption.passwordCache'],
-		encryptionEnabled: encryptionEnabled(),
-		activeMasterKeyId: activeMasterKeyId(),
+		encryptionEnabled: encryptionEnabled(syncTargetInfo),
+		activeMasterKeyId: activeMasterKeyId(syncTargetInfo),
 		shouldReencrypt: state.settings['encryption.shouldReencrypt'] >= Setting.SHOULD_REENCRYPT_YES,
 		notLoadedMasterKeys: state.notLoadedMasterKeys,
 	};

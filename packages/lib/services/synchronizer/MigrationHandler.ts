@@ -60,7 +60,7 @@ export default class MigrationHandler extends BaseService {
 	public async upgrade(targetVersion: number = 0) {
 		const supportedSyncTargetVersion = Setting.value('syncVersion');
 
-		const info = mergeSyncTargetInfos(localSyncTargetInfo(false), await remoteSyncTargetInfo(this.api_));
+		const info = mergeSyncTargetInfos(localSyncTargetInfo(), await remoteSyncTargetInfo(this.api_));
 
 		if (info.version > supportedSyncTargetVersion) {
 			throw new JoplinError(sprintf('Sync version of the target (%d) is greater than the version supported by the client (%d). Please upgrade your client.', info.version, supportedSyncTargetVersion), 'outdatedClient');
