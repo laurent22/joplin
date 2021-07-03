@@ -1,5 +1,9 @@
 # Joplin Server Changelog
 
+## [server-v2.2.5-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.2.5-beta) (Pre-release) - 2021-07-03T21:40:37Z
+
+- Improved: Make app context immutable and derive the per-request context properties from it (e210926)
+
 ## [server-v2.2.4-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.2.4-beta) (Pre-release) - 2021-07-03T21:10:29Z
 
 - Fixed: Fixed issue with user sessions being mixed up (238cc86)
