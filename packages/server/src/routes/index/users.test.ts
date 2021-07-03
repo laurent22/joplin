@@ -127,6 +127,17 @@ describe('index/users', function() {
 		expect(loggedInUser.email).toBe('test@example.com');
 	});
 
+	test('should format the email when saving it', async function() {
+		const email = 'ILikeUppercaseAndSpaces@Example.COM   ';
+
+		const { session } = await createUserAndSession(1, true);
+
+		await postUser(session.id, email, '123456');
+		const loggedInUser = await models().user().login(email, '123456');
+		expect(!!loggedInUser).toBe(true);
+		expect(loggedInUser.email).toBe('ilikeuppercaseandspaces@example.com');
+	});
+
 	test('should not create anything if user creation fail', async function() {
 		const { session } = await createUserAndSession(1, true);
 
@@ -324,6 +335,7 @@ describe('index/users', function() {
 
 		// non-admin cannot change max_item_size
 		await expectHttpError(async () => patchUser(session1.id, { id: user1.id, max_item_size: 1000 }), ErrorForbidden.httpCode);
+		await expectHttpError(async () => patchUser(session1.id, { id: user1.id, max_total_item_size: 1000 }), ErrorForbidden.httpCode);
 
 		// non-admin cannot change can_share_folder
 		await models().user().save({ id: user1.id, can_share_folder: 0 });

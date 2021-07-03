@@ -84,7 +84,7 @@ export default class UserModel extends BaseModel<User> {
 	}
 
 	public async loadByEmail(email: string): Promise<User> {
-		const user: User = { email: email };
+		const user: User = this.formatValues({ email: email });
 		return this.db<User>(this.tableName).where(user).first();
 	}
 
@@ -251,6 +251,12 @@ export default class UserModel extends BaseModel<User> {
 		});
 	}
 
+	private formatValues(user: User): User {
+		const output: User = { ...user };
+		if ('email' in output) output.email = user.email.trim().toLowerCase();
+		return output;
+	}
+
 	// Note that when the "password" property is provided, it is going to be
 	// hashed automatically. It means that it is not safe to do:
 	//
@@ -259,7 +265,7 @@ export default class UserModel extends BaseModel<User> {
 	//
 	// Because the password would be hashed twice.
 	public async save(object: User, options: SaveOptions = {}): Promise<User> {
-		const user = { ...object };
+		const user = this.formatValues(object);
 
 		if (user.password) user.password = auth.hashPassword(user.password);
 
