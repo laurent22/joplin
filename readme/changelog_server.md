@@ -1,5 +1,14 @@
 # Joplin Server Changelog
 
+## [server-v2.2.1-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.2.1-beta) (Pre-release) - 2021-07-03T15:41:32Z
+
+- New: Add support for account max total size (b507fbf)
+- Improved: Display max size info in dashboard (3d18514)
+- Improved: Hide "Is Admin" from dashboard (7447793)
+- Improved: Moved Joplin-specific context properties under its own namespace (bfa7ea7)
+- Improved: Normalize email addresses before saving them (427218b)
+- Improved: Remove dangerous "Delete all" button for now (125af75)
+
 ## [server-v2.1.6-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.1.6-beta) (Pre-release) - 2021-06-24T10:01:46Z
 
 - Fixed: Fixed accessing main website (Regression) (f868797)
