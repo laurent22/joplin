@@ -1,8 +1,7 @@
-import { SubPath, redirect, respondWithItemContent } from '../../utils/routeUtils';
+import { SubPath, respondWithItemContent } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
-import { formParse } from '../../utils/requestUtils';
 import { ErrorNotFound } from '../../utils/errors';
 import config, { showItemUrls } from '../../config';
 import { formatDateTime } from '../../utils/time';
@@ -77,19 +76,5 @@ router.get('items/:id/content', async (path: SubPath, ctx: AppContext) => {
 	if (!item) throw new ErrorNotFound();
 	return respondWithItemContent(ctx.response, item, item.content);
 }, RouteType.UserContent);
-
-router.post('items', async (_path: SubPath, ctx: AppContext) => {
-	const body = await formParse(ctx.req);
-	const fields = body.fields;
-
-	if (fields.delete_all_button) {
-		const itemModel = ctx.joplin.models.item();
-		await itemModel.deleteAll(ctx.joplin.owner.id);
-	} else {
-		throw new Error('Invalid form button');
-	}
-
-	return redirect(ctx, await ctx.joplin.models.item().itemUrl());
-});
 
 export default router;
