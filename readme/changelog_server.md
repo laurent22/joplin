@@ -1,5 +1,10 @@
 # Joplin Server Changelog
 
+## [server-v2.2.2-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.2.2-beta) (Pre-release) - 2021-07-03T18:28:35Z
+
+- Improved: Improved logging and reliability of cron tasks (d99c34f)
+- Improved: Only emit "created" event when new user is saved (8883df2)
+
 ## [server-v2.2.1-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.2.1-beta) (Pre-release) - 2021-07-03T15:41:32Z
 
 - New: Add support for account max total size (b507fbf)
