@@ -27,7 +27,9 @@ export default async function(appContext: AppContext, env: Env, dbConnection: Db
 	const models = newModelFactory(dbConnection, config());
 
 	appContext.joplin = {
-		...appContext.joplin,
+		owner: null,
+		account: null,
+		notifications: [],
 		env: env,
 		db: dbConnection,
 		models: models,
