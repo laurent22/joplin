@@ -26,19 +26,19 @@ async function setupServices(env: Env, models: Models, config: Config): Promise<
 export default async function(appContext: AppContext, env: Env, dbConnection: DbConnection, appLogger: ()=> LoggerWrapper): Promise<AppContext> {
 	const models = newModelFactory(dbConnection, config());
 
-	appContext.joplin = {
-		owner: null,
-		account: null,
-		notifications: [],
+	// The joplinBase object is immutable because it is shared by all requests.
+	// Then a "joplin" context property is created from it per request, which
+	// contains request-specific properties such as the owner or notifications.
+	appContext.joplinBase = Object.freeze({
 		env: env,
 		db: dbConnection,
 		models: models,
 		services: await setupServices(env, models, config()),
 		appLogger: appLogger,
 		routes: { ...routes },
-	};
+	});
 
-	if (env === Env.Prod) delete appContext.joplin.routes['api/debug'];
+	if (env === Env.Prod) delete appContext.joplinBase.routes['api/debug'];
 
 	return appContext;
 }

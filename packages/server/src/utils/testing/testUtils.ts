@@ -182,7 +182,7 @@ export async function koaAppContext(options: AppContextTestOptions = null): Prom
 	const appContext: any = {
 		baseAppContext,
 		joplin: {
-			...baseAppContext.joplin,
+			...baseAppContext.joplinBase,
 			env: Env.Dev,
 			db: db_,
 			models: models(),
