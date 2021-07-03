@@ -52,6 +52,7 @@ const propertyTypes: Record<string, string> = {
 	'users.can_share_note': 'number | null',
 	'users.max_total_item_size': 'number | null',
 	'users.max_item_size': 'number | null',
+	'users.total_item_size': 'number',
 };
 
 function insertContentIntoFile(filePath: string, markerOpen: string, markerClose: string, contentToInsert: string): void {

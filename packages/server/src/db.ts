@@ -581,7 +581,7 @@ export const databaseSchema: DatabaseTables = {
 		can_share_folder: { type: 'number' },
 		can_share_note: { type: 'number' },
 		max_total_item_size: { type: 'string' },
-		total_item_size: { type: 'number' },
+		total_item_size: { type: 'string' },
 	},
 };
 // AUTO-GENERATED-TYPES
