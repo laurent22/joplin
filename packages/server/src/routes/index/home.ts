@@ -22,22 +22,27 @@ router.get('home', async (_path: SubPath, ctx: AppContext) => {
 				{
 					label: 'Account Type',
 					value: accountTypeToString(accountProps.account_type),
+					show: true,
 				},
 				{
 					label: 'Is Admin',
 					value: yesOrNo(ctx.joplin.owner.is_admin),
+					show: !!ctx.joplin.owner.is_admin,
 				},
 				{
 					label: 'Max Item Size',
 					value: formatMaxItemSize(ctx.joplin.owner),
+					show: true,
 				},
 				{
 					label: 'Can Share Note',
 					value: yesOrNo(true),
+					show: true,
 				},
 				{
 					label: 'Can Share Notebook',
 					value: yesOrNo(accountProps.can_share_folder),
+					show: true,
 				},
 			],
 		};
