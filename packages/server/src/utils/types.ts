@@ -2,6 +2,7 @@ import { LoggerWrapper } from '@joplin/lib/Logger';
 import * as Koa from 'koa';
 import { DbConnection, User, Uuid } from '../db';
 import { Models } from '../models/factory';
+import { Account } from '../models/UserModel';
 import { Services } from '../services/types';
 import { Routers } from './routeUtils';
 
@@ -25,6 +26,7 @@ interface AppContextJoplin {
 	appLogger(): LoggerWrapper;
 	notifications: NotificationView[];
 	owner: User;
+	account: Account;
 	routes: Routers;
 	services: Services;
 }

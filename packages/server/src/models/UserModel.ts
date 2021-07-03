@@ -4,8 +4,9 @@ import * as auth from '../utils/auth';
 import { ErrorUnprocessableEntity, ErrorForbidden, ErrorPayloadTooLarge, ErrorNotFound } from '../utils/errors';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { _ } from '@joplin/lib/locale';
-import { formatBytes, MB } from '../utils/bytes';
+import { formatBytes, GB, MB } from '../utils/bytes';
 import { itemIsEncrypted } from '../utils/joplinUtils';
+import { getMaxItemSize, getMaxTotalItemSize } from './utils/user';
 
 export enum AccountType {
 	Default = 0,
@@ -13,10 +14,11 @@ export enum AccountType {
 	Pro = 2,
 }
 
-interface AccountTypeProperties {
+export interface Account {
 	account_type: number;
 	can_share_folder: number;
 	max_item_size: number;
+	max_total_item_size: number;
 }
 
 interface AccountTypeSelectOptions {
@@ -24,22 +26,25 @@ interface AccountTypeSelectOptions {
 	label: string;
 }
 
-export function accountTypeProperties(accountType: AccountType): AccountTypeProperties {
-	const types: AccountTypeProperties[] = [
+export function accountByType(accountType: AccountType): Account {
+	const types: Account[] = [
 		{
 			account_type: AccountType.Default,
 			can_share_folder: 1,
 			max_item_size: 0,
+			max_total_item_size: 0,
 		},
 		{
 			account_type: AccountType.Basic,
 			can_share_folder: 0,
 			max_item_size: 10 * MB,
+			max_total_item_size: 1 * GB,
 		},
 		{
 			account_type: AccountType.Pro,
 			can_share_folder: 1,
 			max_item_size: 200 * MB,
+			max_total_item_size: 10 * GB,
 		},
 	];
 
@@ -99,6 +104,7 @@ export default class UserModel extends BaseModel<User> {
 		if ('is_admin' in object) user.is_admin = object.is_admin;
 		if ('full_name' in object) user.full_name = object.full_name;
 		if ('max_item_size' in object) user.max_item_size = object.max_item_size;
+		if ('max_total_item_size' in object) user.max_total_item_size = object.max_total_item_size;
 		if ('can_share_folder' in object) user.can_share_folder = object.can_share_folder;
 		if ('account_type' in object) user.account_type = object.account_type;
 		if ('must_set_password' in object) user.must_set_password = object.must_set_password;
@@ -128,7 +134,10 @@ export default class UserModel extends BaseModel<User> {
 			if (!user.is_admin && resource.id !== user.id) throw new ErrorForbidden('non-admin user cannot modify another user');
 			if (!user.is_admin && 'is_admin' in resource) throw new ErrorForbidden('non-admin user cannot make themselves an admin');
 			if (user.is_admin && user.id === resource.id && 'is_admin' in resource && !resource.is_admin) throw new ErrorForbidden('admin user cannot make themselves a non-admin');
+
+			// TODO: Maybe define a whitelist of properties that can be changed
 			if ('max_item_size' in resource && !user.is_admin && resource.max_item_size !== previousResource.max_item_size) throw new ErrorForbidden('non-admin user cannot change max_item_size');
+			if ('max_total_item_size' in resource && !user.is_admin && resource.max_total_item_size !== previousResource.max_total_item_size) throw new ErrorForbidden('non-admin user cannot change max_total_item_size');
 			if ('can_share_folder' in resource && !user.is_admin && resource.can_share_folder !== previousResource.can_share_folder) throw new ErrorForbidden('non-admin user cannot change can_share_folder');
 			if ('account_type' in resource && !user.is_admin && resource.account_type !== previousResource.account_type) throw new ErrorForbidden('non-admin user cannot change account_type');
 			if ('must_set_password' in resource && !user.is_admin && resource.must_set_password !== previousResource.must_set_password) throw new ErrorForbidden('non-admin user cannot change must_set_password');
@@ -149,36 +158,30 @@ export default class UserModel extends BaseModel<User> {
 		// items can be much larger (seems to be up to twice the size but for
 		// safety let's go with 2.2).
 
-		const maxSize = user.max_item_size * (itemIsEncrypted(item) ? 2.2 : 1);
-		if (maxSize && buffer.byteLength > maxSize) {
-			const itemTitle = joplinItem ? joplinItem.title || '' : '';
-			const isNote = joplinItem && joplinItem.type_ === ModelType.Note;
+		const itemSize = buffer.byteLength;
+		const itemTitle = joplinItem ? joplinItem.title || '' : '';
+		const isNote = joplinItem && joplinItem.type_ === ModelType.Note;
 
+		const maxItemSize = getMaxItemSize(user);
+		const maxSize = maxItemSize * (itemIsEncrypted(item) ? 2.2 : 1);
+		if (maxSize && itemSize > maxSize) {
 			throw new ErrorPayloadTooLarge(_('Cannot save %s "%s" because it is larger than than the allowed limit (%s)',
 				isNote ? _('note') : _('attachment'),
 				itemTitle ? itemTitle : item.name,
-				formatBytes(user.max_item_size)
+				formatBytes(maxItemSize)
+			));
+		}
+
+		// Also apply a multiplier to take into account E2EE overhead
+		const maxTotalItemSize = getMaxTotalItemSize(user) * 1.5;
+		if (maxTotalItemSize && user.total_item_size + itemSize >= maxTotalItemSize) {
+			throw new ErrorPayloadTooLarge(_('Cannot save %s "%s" because it would go over the total allowed size (%s) for this account',
+				isNote ? _('note') : _('attachment'),
+				itemTitle ? itemTitle : item.name,
+				formatBytes(maxTotalItemSize)
 			));
 		}
 	}
-
-	// public async checkCanShare(share:Share) {
-
-	// 	// const itemTitle = joplinItem ? joplinItem.title || '' : '';
-	// 	// const isNote = joplinItem && joplinItem.type_ === ModelType.Note;
-
-	// 	// // If the item is encrypted, we apply a multipler because encrypted
-	// 	// // items can be much larger (seems to be up to twice the size but for
-	// 	// // safety let's go with 2.2).
-	// 	// const maxSize = user.max_item_size * (item.jop_encryption_applied ? 2.2 : 1);
-	// 	// if (maxSize && buffer.byteLength > maxSize) {
-	// 	// 	throw new ErrorPayloadTooLarge(_('Cannot save %s "%s" because it is larger than than the allowed limit (%s)',
-	// 	// 		isNote ? _('note') : _('attachment'),
-	// 	// 		itemTitle ? itemTitle : name,
-	// 	// 		prettyBytes(user.max_item_size)
-	// 	// 	));
-	// 	// }
-	// }
 
 	protected async validate(object: User, options: ValidateOptions = {}): Promise<User> {
 		const user: User = await super.validate(object, options);

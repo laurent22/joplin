@@ -8,7 +8,7 @@ import defaultView from '../../utils/defaultView';
 import { View } from '../../services/MustacheService';
 import { checkPassword } from './users';
 import { NotificationKey } from '../../models/NotificationModel';
-import { AccountType, accountTypeProperties } from '../../models/UserModel';
+import { AccountType } from '../../models/UserModel';
 import { ErrorForbidden } from '../../utils/errors';
 
 function makeView(error: Error = null): View {
@@ -44,7 +44,7 @@ router.post('signup', async (_path: SubPath, ctx: AppContext) => {
 		const password = checkPassword(formUser, true);
 
 		const user = await ctx.joplin.models.user().save({
-			...accountTypeProperties(AccountType.Basic),
+			account_type: AccountType.Basic,
 			email: formUser.email,
 			full_name: formUser.full_name,
 			password,

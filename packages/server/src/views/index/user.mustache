@@ -14,6 +14,7 @@
 			<input class="input" type="email" name="email" value="{{user.email}}"/>
 		</div>
 	</div>
+
 	{{#global.owner.is_admin}}
 		{{#showAccountTypes}}
 			<div class="field">
@@ -25,23 +26,36 @@
 						{{/accountTypes}}
 					</select>
 				</div>
-				<p class="help">If the account type is anything other than Default, the account-specific properties will be applied.</p>
+				<p class="help">If the below properties are left to their default (empty) values, the account-specific properties will apply.</p>
 			</div>
 		{{/showAccountTypes}}
 
 		<div class="field">
 			<label class="label">Max item size</label>
 			<div class="control">
-				<input class="input" type="number" name="max_item_size" value="{{user.max_item_size}}"/>
+				<input class="input" type="number" placeholder="Default" name="max_item_size" value="{{user.max_item_size}}"/>
 			</div>
 		</div>
 
 		<div class="field">
-			<label class="checkbox">
-				<input type="checkbox" name="can_share_folder" {{#user.can_share_folder}}checked{{/user.can_share_folder}} value="1"> Can share notebook
-			</label>
+			<label class="label">Max total size</label>
+			<div class="control">
+				<input class="input" type="number" placeholder="Default" name="max_total_item_size" value="{{user.max_total_item_size}}"/>
+			</div>
+		</div>
+
+		<div class="field">
+			<label class="label">Can share notebook</label>
+			<div class="select">
+				<select name="can_share_folder">
+					{{#canShareFolderOptions}}
+						<option value="{{value}}" {{#selected}}selected{{/selected}}>{{label}}</option>
+					{{/canShareFolderOptions}}
+				</select>
+			</div>
 		</div>
 	{{/global.owner.is_admin}}
+
 	<div class="field">
 		<label class="label">Password</label>
 		<div class="control">

@@ -10,9 +10,11 @@ import { View } from '../../services/MustacheService';
 import defaultView from '../../utils/defaultView';
 import { AclAction } from '../../models/BaseModel';
 import { NotificationKey } from '../../models/NotificationModel';
-import { formatBytes } from '../../utils/bytes';
-import { accountTypeOptions, accountTypeProperties } from '../../models/UserModel';
+import { accountTypeOptions, accountTypeToString } from '../../models/UserModel';
 import uuidgen from '../../utils/uuidgen';
+import { formatMaxItemSize, formatMaxTotalSize, formatTotalSize, yesOrNo } from '../../utils/strings';
+import { getCanShareFolder, getMaxTotalItemSize } from '../../models/utils/user';
+import { yesNoDefaultOptions } from '../../utils/views/select';
 
 interface CheckPasswordInput {
 	password: string;
@@ -30,22 +32,30 @@ export function checkPassword(fields: CheckPasswordInput, required: boolean): st
 	return '';
 }
 
+function boolOrDefaultToValue(fields: any, fieldName: string): number | null {
+	if (fields[fieldName] === '') return null;
+	const output = Number(fields[fieldName]);
+	if (isNaN(output) || (output !== 0 && output !== 1)) throw new Error(`Invalid value for ${fieldName}`);
+	return output;
+}
+
+function intOrDefaultToValue(fields: any, fieldName: string): number | null {
+	if (fields[fieldName] === '') return null;
+	const output = Number(fields[fieldName]);
+	if (isNaN(output)) throw new Error(`Invalid value for ${fieldName}`);
+	return output;
+}
+
 function makeUser(isNew: boolean, fields: any): User {
-	let user: User = {};
+	const user: User = {};
 
 	if ('email' in fields) user.email = fields.email;
 	if ('full_name' in fields) user.full_name = fields.full_name;
 	if ('is_admin' in fields) user.is_admin = fields.is_admin;
-	if ('max_item_size' in fields) user.max_item_size = fields.max_item_size || 0;
-	if ('can_share_folder' in fields) user.can_share_folder = fields.can_share_folder ? 1 : 0;
-
-	if ('account_type' in fields) {
-		user.account_type = Number(fields.account_type);
-		user = {
-			...user,
-			...accountTypeProperties(user.account_type),
-		};
-	}
+	if ('max_item_size' in fields) user.max_item_size = intOrDefaultToValue(fields, 'max_item_size');
+	if ('max_total_item_size' in fields) user.max_total_item_size = intOrDefaultToValue(fields, 'max_total_item_size');
+	if ('can_share_folder' in fields) user.can_share_folder = boolOrDefaultToValue(fields, 'can_share_folder');
+	if ('account_type' in fields) user.account_type = Number(fields.account_type);
 
 	const password = checkPassword(fields, false);
 	if (password) user.password = password;
@@ -61,10 +71,7 @@ function makeUser(isNew: boolean, fields: any): User {
 }
 
 function defaultUser(): User {
-	return {
-		can_share_folder: 1,
-		max_item_size: 0,
-	};
+	return {};
 }
 
 function userIsNew(path: SubPath): boolean {
@@ -76,6 +83,19 @@ function userIsMe(path: SubPath): boolean {
 }
 
 const router = new Router(RouteType.Web);
+
+function totalSizePercent(user: User): number {
+	const maxTotalSize = getMaxTotalItemSize(user);
+	if (!maxTotalSize) return 0;
+	return user.total_item_size / maxTotalSize;
+}
+
+function totalSizeClass(user: User) {
+	const d = totalSizePercent(user);
+	if (d >= 1) return 'is-danger';
+	if (d >= .7) return 'is-warning';
+	return '';
+}
 
 router.get('users', async (_path: SubPath, ctx: AppContext) => {
 	const userModel = ctx.joplin.models.user();
@@ -94,7 +114,13 @@ router.get('users', async (_path: SubPath, ctx: AppContext) => {
 	view.content.users = users.map(user => {
 		return {
 			...user,
-			formattedItemMaxSize: user.max_item_size ? formatBytes(user.max_item_size) : '∞',
+			formattedItemMaxSize: formatMaxItemSize(user),
+			formattedTotalSize: formatTotalSize(user),
+			formattedMaxTotalSize: formatMaxTotalSize(user),
+			formattedTotalSizePercent: `${Math.round(totalSizePercent(user) * 100)}%`,
+			totalSizeClass: totalSizeClass(user),
+			formattedAccountType: accountTypeToString(user.account_type),
+			formattedCanShareFolder: yesOrNo(getCanShareFolder(user)),
 		};
 	});
 	return view;
@@ -130,6 +156,8 @@ router.get('users/:id', async (path: SubPath, ctx: AppContext, user: User = null
 	view.content.postUrl = postUrl;
 	view.content.showDeleteButton = !isNew && !!owner.is_admin && owner.id !== user.id;
 	view.content.showResetPasswordButton = !isNew && owner.is_admin;
+
+	view.content.canShareFolderOptions = yesNoDefaultOptions(user, 'can_share_folder');
 
 	if (config().accountTypesEnabled) {
 		view.content.showAccountTypes = true;

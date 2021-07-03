@@ -5,9 +5,8 @@ import { AppContext } from '../../utils/types';
 import { contextSessionId } from '../../utils/requestUtils';
 import { ErrorMethodNotAllowed } from '../../utils/errors';
 import defaultView from '../../utils/defaultView';
-import { accountTypeProperties, accountTypeToString } from '../../models/UserModel';
-import { formatBytes } from '../../utils/bytes';
-import { yesOrNo } from '../../utils/strings';
+import { accountByType, accountTypeToString } from '../../models/UserModel';
+import { formatMaxItemSize, yesOrNo } from '../../utils/strings';
 
 const router: Router = new Router(RouteType.Web);
 
@@ -15,7 +14,7 @@ router.get('home', async (_path: SubPath, ctx: AppContext) => {
 	contextSessionId(ctx);
 
 	if (ctx.method === 'GET') {
-		const accountProps = accountTypeProperties(ctx.joplin.owner.account_type);
+		const accountProps = accountByType(ctx.joplin.owner.account_type);
 
 		const view = defaultView('home', 'Home');
 		view.content = {
@@ -30,7 +29,7 @@ router.get('home', async (_path: SubPath, ctx: AppContext) => {
 				},
 				{
 					label: 'Max Item Size',
-					value: accountProps.max_item_size ? formatBytes(accountProps.max_item_size) : '∞',
+					value: formatMaxItemSize(ctx.joplin.owner),
 				},
 				{
 					label: 'Can Share Note',

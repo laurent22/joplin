@@ -208,7 +208,7 @@ async function main() {
 		await initializeJoplinUtils(config(), ctx.models, ctx.joplin.services.mustache);
 
 		appLogger().info('Migrating database...');
-		await migrateDb(ctx.db);
+		await migrateDb(ctx.joplin.db);
 
 		appLogger().info('Starting services...');
 		await startServices(ctx);

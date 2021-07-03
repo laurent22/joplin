@@ -1,4 +1,4 @@
-import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, createItem, createItemTree, createResource, createNote, createFolder } from '../utils/testing/testUtils';
+import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, createItem, createItemTree, createResource, createNote, createFolder, createItemTree3 } from '../utils/testing/testUtils';
 import { shareFolderWithUser } from '../utils/testing/shareApiUtils';
 import { resourceBlobPath } from '../utils/joplinUtils';
 
@@ -140,6 +140,101 @@ describe('ItemModel', function() {
 		});
 
 		expect(await models().item().childrenCount(user1.id)).toBe(2);
+	});
+
+	test('should calculate the total size', async function() {
+		const { user: user1 } = await createUserAndSession(1);
+		const { user: user2 } = await createUserAndSession(2);
+		const { user: user3 } = await createUserAndSession(3);
+
+		await createItemTree3(user1.id, '', '', [
+			{
+				id: '000000000000000000000000000000F1',
+				children: [
+					{
+						id: '00000000000000000000000000000001',
+					},
+				],
+			},
+		]);
+
+		await createItemTree3(user2.id, '', '', [
+			{
+				id: '000000000000000000000000000000F2',
+				children: [
+					{
+						id: '00000000000000000000000000000002',
+					},
+					{
+						id: '00000000000000000000000000000003',
+					},
+				],
+			},
+		]);
+
+		const folder1 = await models().item().loadByJopId(user1.id, '000000000000000000000000000000F1');
+		const folder2 = await models().item().loadByJopId(user2.id, '000000000000000000000000000000F2');
+		const note1 = await models().item().loadByJopId(user1.id, '00000000000000000000000000000001');
+		const note2 = await models().item().loadByJopId(user2.id, '00000000000000000000000000000002');
+		const note3 = await models().item().loadByJopId(user2.id, '00000000000000000000000000000003');
+
+		const totalSize1 = await models().item().calculateUserTotalSize(user1.id);
+		const totalSize2 = await models().item().calculateUserTotalSize(user2.id);
+		const totalSize3 = await models().item().calculateUserTotalSize(user3.id);
+
+		const expected1 = folder1.content_size + note1.content_size;
+		const expected2 = folder2.content_size + note2.content_size + note3.content_size;
+		const expected3 = 0;
+
+		expect(totalSize1).toBe(expected1);
+		expect(totalSize2).toBe(expected2);
+		expect(totalSize3).toBe(expected3);
+
+		await models().item().updateTotalSizes();
+		expect((await models().user().load(user1.id)).total_item_size).toBe(totalSize1);
+		expect((await models().user().load(user2.id)).total_item_size).toBe(totalSize2);
+		expect((await models().user().load(user3.id)).total_item_size).toBe(totalSize3);
+	});
+
+	test('should include shared items in total size calculation', async function() {
+		const { user: user1, session: session1 } = await createUserAndSession(1);
+		const { user: user2, session: session2 } = await createUserAndSession(2);
+		const { user: user3 } = await createUserAndSession(3);
+
+		await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F1', [
+			{
+				id: '000000000000000000000000000000F1',
+				children: [
+					{
+						id: '00000000000000000000000000000001',
+					},
+				],
+			},
+			{
+				id: '000000000000000000000000000000F2',
+			},
+		]);
+
+		const folder1 = await models().item().loadByJopId(user1.id, '000000000000000000000000000000F1');
+		const folder2 = await models().item().loadByJopId(user1.id, '000000000000000000000000000000F2');
+		const note1 = await models().item().loadByJopId(user1.id, '00000000000000000000000000000001');
+
+		const totalSize1 = await models().item().calculateUserTotalSize(user1.id);
+		const totalSize2 = await models().item().calculateUserTotalSize(user2.id);
+		const totalSize3 = await models().item().calculateUserTotalSize(user3.id);
+
+		const expected1 = folder1.content_size + folder2.content_size + note1.content_size;
+		const expected2 = folder1.content_size + note1.content_size;
+		const expected3 = 0;
+
+		expect(totalSize1).toBe(expected1);
+		expect(totalSize2).toBe(expected2);
+		expect(totalSize3).toBe(expected3);
+
+		await models().item().updateTotalSizes();
+		expect((await models().user().load(user1.id)).total_item_size).toBe(expected1);
+		expect((await models().user().load(user2.id)).total_item_size).toBe(expected2);
+		expect((await models().user().load(user3.id)).total_item_size).toBe(expected3);
 	});
 
 });
