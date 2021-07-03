@@ -1,5 +1,9 @@
 # Joplin Server Changelog
 
+## [server-v2.2.4-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.2.4-beta) (Pre-release) - 2021-07-03T21:10:29Z
+
+- Fixed: Fixed issue with user sessions being mixed up (238cc86)
+
 ## [server-v2.2.3-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.2.3-beta) (Pre-release) - 2021-07-03T19:38:36Z
 
 - Fixed: Fixed size of a database field (264f36f)
