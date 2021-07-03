@@ -4,21 +4,26 @@ const cron = require('node-cron');
 
 const logger = Logger.create('cron');
 
+async function runCronTask(name: string, callback: Function) {
+	const startTime = Date.now();
+	logger.info(`Running task "${name}"`);
+	try {
+		await callback();
+	} catch (error) {
+		logger.error(`On task "${name}"`, error);
+	}
+	logger.info(`Completed task "${name}" in ${Date.now() - startTime}ms`);
+}
+
 export default class CronService extends BaseService {
 
 	public async runInBackground() {
 		cron.schedule('0 */6 * * *', async () => {
-			const startTime = Date.now();
-			logger.info('Deleting expired tokens...');
-			await this.models.token().deleteExpiredTokens();
-			logger.info(`Expired tokens deleted in ${Date.now() - startTime}ms`);
+			await runCronTask('deleteExpiredTokens', async () => this.models.token().deleteExpiredTokens());
 		});
 
 		cron.schedule('0 * * * *', async () => {
-			const startTime = Date.now();
-			logger.info('Updating total sizes...');
-			await this.models.item().updateTotalSizes();
-			logger.info(`Total sizes updated in ${Date.now() - startTime}ms`);
+			await runCronTask('updateTotalSizes', async () => this.models.item().updateTotalSizes());
 		});
 	}
 
