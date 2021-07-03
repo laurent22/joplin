@@ -1,5 +1,9 @@
 # Joplin Server Changelog
 
+## [server-v2.2.3-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.2.3-beta) (Pre-release) - 2021-07-03T19:38:36Z
+
+- Fixed: Fixed size of a database field (264f36f)
+
 ## [server-v2.2.2-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.2.2-beta) (Pre-release) - 2021-07-03T18:28:35Z
 
 - Improved: Improved logging and reliability of cron tasks (d99c34f)
