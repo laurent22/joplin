@@ -1,5 +1,5 @@
 import { User } from '../db';
-import { getMaxItemSize, getMaxTotalItemSize } from '../models/utils/user';
+import { getMaxItemSize, getMaxTotalItemSize, totalSizePercent } from '../models/utils/user';
 import { formatBytes } from './bytes';
 
 export function yesOrNo(value: any): string {
@@ -18,6 +18,10 @@ export function formatMaxItemSize(user: User): string {
 export function formatMaxTotalSize(user: User): string {
 	const size = getMaxTotalItemSize(user);
 	return size ? formatBytes(size) : '∞';
+}
+
+export function formatTotalSizePercent(user: User): string {
+	return `${Math.round(totalSizePercent(user) * 100)}%`;
 }
 
 export function formatTotalSize(user: User): string {

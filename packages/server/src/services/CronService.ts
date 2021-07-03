@@ -7,8 +7,6 @@ const logger = Logger.create('cron');
 export default class CronService extends BaseService {
 
 	public async runInBackground() {
-		await this.models.item().updateTotalSizes();
-
 		cron.schedule('0 */6 * * *', async () => {
 			const startTime = Date.now();
 			logger.info('Deleting expired tokens...');

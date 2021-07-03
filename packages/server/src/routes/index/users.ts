@@ -12,8 +12,8 @@ import { AclAction } from '../../models/BaseModel';
 import { NotificationKey } from '../../models/NotificationModel';
 import { accountTypeOptions, accountTypeToString } from '../../models/UserModel';
 import uuidgen from '../../utils/uuidgen';
-import { formatMaxItemSize, formatMaxTotalSize, formatTotalSize, yesOrNo } from '../../utils/strings';
-import { getCanShareFolder, getMaxTotalItemSize } from '../../models/utils/user';
+import { formatMaxItemSize, formatMaxTotalSize, formatTotalSize, formatTotalSizePercent, yesOrNo } from '../../utils/strings';
+import { getCanShareFolder, totalSizeClass } from '../../models/utils/user';
 import { yesNoDefaultOptions } from '../../utils/views/select';
 
 interface CheckPasswordInput {
@@ -84,19 +84,6 @@ function userIsMe(path: SubPath): boolean {
 
 const router = new Router(RouteType.Web);
 
-function totalSizePercent(user: User): number {
-	const maxTotalSize = getMaxTotalItemSize(user);
-	if (!maxTotalSize) return 0;
-	return user.total_item_size / maxTotalSize;
-}
-
-function totalSizeClass(user: User) {
-	const d = totalSizePercent(user);
-	if (d >= 1) return 'is-danger';
-	if (d >= .7) return 'is-warning';
-	return '';
-}
-
 router.get('users', async (_path: SubPath, ctx: AppContext) => {
 	const userModel = ctx.joplin.models.user();
 	await userModel.checkIfAllowed(ctx.joplin.owner, AclAction.List);
@@ -117,7 +104,7 @@ router.get('users', async (_path: SubPath, ctx: AppContext) => {
 			formattedItemMaxSize: formatMaxItemSize(user),
 			formattedTotalSize: formatTotalSize(user),
 			formattedMaxTotalSize: formatMaxTotalSize(user),
-			formattedTotalSizePercent: `${Math.round(totalSizePercent(user) * 100)}%`,
+			formattedTotalSizePercent: formatTotalSizePercent(user),
 			totalSizeClass: totalSizeClass(user),
 			formattedAccountType: accountTypeToString(user.account_type),
 			formattedCanShareFolder: yesOrNo(getCanShareFolder(user)),

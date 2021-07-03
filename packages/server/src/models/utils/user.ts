@@ -18,3 +18,16 @@ export function getMaxTotalItemSize(user: User): number {
 	const account = accountByType(user.account_type);
 	return user.max_total_item_size !== null ? user.max_total_item_size : account.max_total_item_size;
 }
+
+export function totalSizePercent(user: User): number {
+	const maxTotalSize = getMaxTotalItemSize(user);
+	if (!maxTotalSize) return 0;
+	return user.total_item_size / maxTotalSize;
+}
+
+export function totalSizeClass(user: User) {
+	const d = totalSizePercent(user);
+	if (d >= 1) return 'is-danger';
+	if (d >= .7) return 'is-warning';
+	return '';
+}
