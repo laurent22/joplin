@@ -8,6 +8,8 @@ const path = require('path');
 interface TemplateParams {
 	baseUrl?: string;
 	imageBaseUrl?: string;
+	cssBaseUrl?: string;
+	jsBaseUrl?: string;
 	tocHtml?: string;
 	sourceMarkdownFile?: string;
 	title?: string;
@@ -18,7 +20,7 @@ interface TemplateParams {
 
 const rootDir = dirname(dirname(__dirname));
 const websiteAssetDir = `${rootDir}/Assets/WebsiteAssets`;
-const mainTemplateHtml = fs.readFileSync(`${websiteAssetDir}/templates/main.mustache`, 'utf8');
+const mainTemplateHtml = fs.readFileSync(`${websiteAssetDir}/templates/main-new.mustache`, 'utf8');
 
 function markdownToHtml(md: string, templateParams: TemplateParams): string {
 	const markdownIt = new MarkdownIt({
@@ -26,6 +28,49 @@ function markdownToHtml(md: string, templateParams: TemplateParams): string {
 		linkify: true,
 		html: true,
 	});
+
+	markdownIt.core.ruler.push('tableClass', (state: any) => {
+		const tokens = state.tokens;
+		for (let i = 0; i < tokens.length; i++) {
+			const token = tokens[i];
+
+			if (token.type === 'table_open') {
+				token.attrs = [
+					['class', 'table'],
+				];
+			}
+
+			// if (token.type === 'heading_open') {
+			// 	insideHeading = true;
+			// 	continue;
+			// }
+
+			// if (token.type === 'heading_close') {
+			// 	insideHeading = false;
+			// 	continue;
+			// }
+
+			// if (insideHeading && token.type === 'inline') {
+			// 	const anchorName = headingTextToAnchorName(token.content, doneNames);
+			// 	doneNames.push(anchorName);
+			// 	const anchorTokens = createAnchorTokens(anchorName);
+			// 	// token.children = anchorTokens.concat(token.children);
+			// 	token.children = token.children.concat(anchorTokens);
+			// }
+		}
+
+	});
+
+	// console.info('iiiiiiiiiiiiiiiiii');
+
+	// markdownIt.renderer.rules.image = function (tokens:any[], idx:number, options:any, env:any, self:any) {
+	// 	const defaultRender = markdownIt.renderer.rules.image;
+	// 	const token = tokens[idx];
+
+	// 	console.info('AAAAAAAAAAA', tokens);
+
+	// 	return defaultRender(tokens, idx, options, env, self);
+	// }
 
 	markdownIt.core.ruler.push('checkbox', (state: any) => {
 		const tokens = state.tokens;
@@ -163,8 +208,10 @@ function renderMdToHtml(md: string, targetPath: string, templateParams: Template
 	// Remove the header because it's going to be added back as HTML
 	md = md.replace(/# Joplin\n/, '');
 
-	templateParams.baseUrl = 'https://joplinapp.org';
+	templateParams.baseUrl = '';// 'https://joplinapp.org';
 	templateParams.imageBaseUrl = `${templateParams.baseUrl}/images`;
+	templateParams.cssBaseUrl = `${templateParams.baseUrl}/css`;
+	templateParams.jsBaseUrl = `${templateParams.baseUrl}/js`;
 	templateParams.tocHtml = tocHtml();
 	templateParams.yyyy = (new Date()).getFullYear().toString();
 
