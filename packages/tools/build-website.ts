@@ -200,7 +200,7 @@ function tocHtml() {
 	md = md.replace(/# Table of contents/, '');
 	md = replaceGitHubByJoplinAppLinks(md);
 	tocHtml_ = markdownIt.render(md);
-	tocHtml_ = `<div id="toc">${tocHtml_}</div>`;
+	tocHtml_ = `<div>${tocHtml_}</div>`;
 	return tocHtml_;
 }
 

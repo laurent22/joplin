@@ -646,20 +646,3 @@ Thank you to everyone who've contributed to Joplin's source code!
 | <img width="50" src="https://avatars.githubusercontent.com/u/37692927?v=4"/></br>[zaoyifan](https://github.com/zaoyifan) | <img width="50" src="https://avatars.githubusercontent.com/u/10813608?v=4"/></br>[zawnk](https://github.com/zawnk) | <img width="50" src="https://avatars.githubusercontent.com/u/55245068?v=4"/></br>[zen-quo](https://github.com/zen-quo) | <img width="50" src="https://avatars.githubusercontent.com/u/23507174?v=4"/></br>[zozolina123](https://github.com/zozolina123) | <img width="50" src="https://avatars.githubusercontent.com/u/25315?v=4"/></br>[xcession](https://github.com/xcession) |
 | <img width="50" src="https://avatars.githubusercontent.com/u/34542665?v=4"/></br>[paventyang](https://github.com/paventyang) | <img width="50" src="https://avatars.githubusercontent.com/u/608014?v=4"/></br>[jackytsu](https://github.com/jackytsu) | <img width="50" src="https://avatars.githubusercontent.com/u/1308646?v=4"/></br>[zhangmx](https://github.com/zhangmx) |  |  |
 <!-- CONTRIBUTORS-TABLE-AUTO-GENERATED -->
-
-# Known bugs
-
-- Resources larger than 10 MB are not currently supported on mobile as they can crash the application.
-- Non-alphabetical characters such as Chinese or Arabic might create glitches in the terminal on Windows. This is a limitation of the current Windows console.
-
-# License
-
-MIT License
-
-Copyright (c) 2016-2021 Laurent Cozic
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
