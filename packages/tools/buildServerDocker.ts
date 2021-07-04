@@ -1,4 +1,5 @@
 import { execCommand2, rootDir } from './tool-utils';
+import * as moment from 'moment';
 
 function getVersionFromTag(tagName: string, isPreRelease: boolean): string {
 	if (tagName.indexOf('server-') !== 0) throw new Error(`Invalid tag: ${tagName}`);
@@ -18,6 +19,8 @@ async function main() {
 	const tagName = argv.tagName;
 	const isPreRelease = getIsPreRelease(tagName);
 	const imageVersion = getVersionFromTag(tagName, isPreRelease);
+	const buildDate = moment(new Date().getTime()).format('YYY-MM-DDTHH:mm:ssZ');
+	const revision = await execCommand2('git rev-parse --short HEAD');
 
 	process.chdir(rootDir);
 	console.info(`Running from: ${process.cwd()}`);
@@ -26,7 +29,7 @@ async function main() {
 	console.info('imageVersion:', imageVersion);
 	console.info('isPreRelease:', isPreRelease);
 
-	await execCommand2(`docker build -t "joplin/server:${imageVersion}" -f Dockerfile.server .`);
+	await execCommand2(`docker build -t "joplin/server:${imageVersion}" --build-arg BUILD_DATE="${buildDate}" --build-arg REVISION="${revision}" --build-arg VERSION="${imageVersion}" -f Dockerfile.server .`);
 	await execCommand2(`docker push joplin/server:${imageVersion}`);
 
 	if (!isPreRelease) {
