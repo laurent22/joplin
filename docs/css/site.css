@@ -1,3 +1,8 @@
+html {
+	/* https://css-tricks.com/fixed-headers-on-page-links-and-overlapping-content-oh-my/ */
+	scroll-padding-top: 110px;
+}
+
 * {
 	outline: none;
 	font-family: "Montserrat", sans-serif;
