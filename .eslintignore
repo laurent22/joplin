@@ -1646,6 +1646,9 @@ packages/renderer/pathUtils.js.map
 packages/renderer/utils.d.ts
 packages/renderer/utils.js
 packages/renderer/utils.js.map
+packages/tools/build-website.d.ts
+packages/tools/build-website.js
+packages/tools/build-website.js.map
 packages/tools/buildServerDocker.d.ts
 packages/tools/buildServerDocker.js
 packages/tools/buildServerDocker.js.map
