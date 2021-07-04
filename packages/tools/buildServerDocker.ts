@@ -19,7 +19,7 @@ async function main() {
 	const tagName = argv.tagName;
 	const isPreRelease = getIsPreRelease(tagName);
 	const imageVersion = getVersionFromTag(tagName, isPreRelease);
-	const buildDate = moment(new Date().getTime()).format('YYY-MM-DDTHH:mm:ssZ');
+	const buildDate = moment(new Date().getTime()).format('YYYY-MM-DDTHH:mm:ssZ');
 	const revision = await execCommand2('git rev-parse --short HEAD');
 	const buildArgs = `--build-arg BUILD_DATE="${buildDate}" --build-arg REVISION="${revision}" --build-arg VERSION="${imageVersion}"`;
 
