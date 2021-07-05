@@ -1,9 +1,18 @@
 import * as fs from 'fs-extra';
+import { filename } from '@joplin/lib/path-utils';
+import * as Mustache from 'mustache';
 const dirname = require('path').dirname;
-const Mustache = require('mustache');
 const glob = require('glob');
 const MarkdownIt = require('markdown-it');
 const path = require('path');
+
+interface PressCarouselItem {
+	active: string;
+	body: string;
+	author: string;
+	source: string;
+	imageName: string;
+}
 
 interface TemplateParams {
 	baseUrl?: string;
@@ -16,11 +25,28 @@ interface TemplateParams {
 	donateLinksMd?: string;
 	pageTitle?: string;
 	yyyy? : string;
+	templateHtml?: string;
+	partials?: Record<string, string>;
+	pressCarouselItems?: PressCarouselItem[];
+	forumUrl?: string;
 }
 
 const rootDir = dirname(dirname(__dirname));
 const websiteAssetDir = `${rootDir}/Assets/WebsiteAssets`;
 const mainTemplateHtml = fs.readFileSync(`${websiteAssetDir}/templates/main-new.mustache`, 'utf8');
+const frontTemplateHtml = fs.readFileSync(`${websiteAssetDir}/templates/front.mustache`, 'utf8');
+const partialDir = `${websiteAssetDir}/templates/partials`;
+
+async function loadMustachePartials(partialDir: string) {
+	const output: Record<string, string> = {};
+	const files = await fs.readdir(partialDir);
+	for (const f of files) {
+		const name = filename(f);
+		const templateContent = await fs.readFile(`${partialDir}/${f}`, 'utf8');
+		output[name] = templateContent;
+	}
+	return output;
+}
 
 function markdownToHtml(md: string, templateParams: TemplateParams): string {
 	const markdownIt = new MarkdownIt({
@@ -39,38 +65,8 @@ function markdownToHtml(md: string, templateParams: TemplateParams): string {
 					['class', 'table'],
 				];
 			}
-
-			// if (token.type === 'heading_open') {
-			// 	insideHeading = true;
-			// 	continue;
-			// }
-
-			// if (token.type === 'heading_close') {
-			// 	insideHeading = false;
-			// 	continue;
-			// }
-
-			// if (insideHeading && token.type === 'inline') {
-			// 	const anchorName = headingTextToAnchorName(token.content, doneNames);
-			// 	doneNames.push(anchorName);
-			// 	const anchorTokens = createAnchorTokens(anchorName);
-			// 	// token.children = anchorTokens.concat(token.children);
-			// 	token.children = token.children.concat(anchorTokens);
-			// }
 		}
-
 	});
-
-	// console.info('iiiiiiiiiiiiiiiiii');
-
-	// markdownIt.renderer.rules.image = function (tokens:any[], idx:number, options:any, env:any, self:any) {
-	// 	const defaultRender = markdownIt.renderer.rules.image;
-	// 	const token = tokens[idx];
-
-	// 	console.info('AAAAAAAAAAA', tokens);
-
-	// 	return defaultRender(tokens, idx, options, env, self);
-	// }
 
 	markdownIt.core.ruler.push('checkbox', (state: any) => {
 		const tokens = state.tokens;
@@ -161,10 +157,10 @@ function markdownToHtml(md: string, templateParams: TemplateParams): string {
 		}
 	});
 
-	return Mustache.render(mainTemplateHtml, {
+	return Mustache.render(templateParams.templateHtml, {
 		...templateParams,
 		contentHtml: markdownIt.render(md),
-	});
+	}, templateParams.partials);
 }
 
 let tocMd_: string = null;
@@ -208,12 +204,19 @@ function renderMdToHtml(md: string, targetPath: string, templateParams: Template
 	// Remove the header because it's going to be added back as HTML
 	md = md.replace(/# Joplin\n/, '');
 
-	templateParams.baseUrl = '';// 'https://joplinapp.org';
-	templateParams.imageBaseUrl = `${templateParams.baseUrl}/images`;
-	templateParams.cssBaseUrl = `${templateParams.baseUrl}/css`;
-	templateParams.jsBaseUrl = `${templateParams.baseUrl}/js`;
-	templateParams.tocHtml = tocHtml();
-	templateParams.yyyy = (new Date()).getFullYear().toString();
+	const baseUrl = '';
+
+	templateParams = {
+		...templateParams,
+		baseUrl: baseUrl, // 'https://joplinapp.org',
+		imageBaseUrl: `${baseUrl}/images`,
+		cssBaseUrl: `${baseUrl}/css`,
+		jsBaseUrl: `${baseUrl}/js`,
+		tocHtml: tocHtml(),
+		yyyy: (new Date()).getFullYear().toString(),
+		templateHtml: templateParams.templateHtml ? templateParams.templateHtml : mainTemplateHtml,
+		forumUrl: 'https://discourse.joplinapp.org/',
+	};
 
 	const title = [];
 
@@ -227,7 +230,7 @@ function renderMdToHtml(md: string, targetPath: string, templateParams: Template
 	md = replaceGitHubByJoplinAppLinks(md);
 
 	if (templateParams.donateLinksMd) {
-		md = `${templateParams.donateLinksMd}\n\n* * *\n\n${md}`;
+		md = `${templateParams.donateLinksMd}\n\n${md}`;
 	}
 
 	templateParams.pageTitle = title.join(' | ');
@@ -270,7 +273,37 @@ async function main() {
 	await fs.remove(`${rootDir}/docs`);
 	await fs.copy(websiteAssetDir, `${rootDir}/docs`);
 
-	renderMdToHtml(makeHomePageMd(), `${rootDir}/docs/index.html`, { sourceMarkdownFile: 'README.md' });
+	const partials = await loadMustachePartials(partialDir);
+
+	renderMdToHtml(makeHomePageMd(), `${rootDir}/docs/help/index.html`, { sourceMarkdownFile: 'README.md', partials });
+
+	renderMdToHtml('', `${rootDir}/docs/index.html`, {
+		templateHtml: frontTemplateHtml,
+		partials,
+		pressCarouselItems: [
+			{
+				active: 'active',
+				body: 'It lets you create multiple types of notes, reminders, and alarms, all of which can be synced. The app also includes a web clipper too, but in our opinion, Joplin’s best feature is the built-in end-to-end encryption for keeping your notes private.',
+				author: 'Brendan Hesse',
+				source: 'Life Hacker, "The Best Note-Taking Apps"',
+				imageName: 'in-the-press-life-hacker.png',
+			},
+			{
+				active: '',
+				body: 'Joplin is single handedly the best pick for an open-source note-taking app, making it an Editors\' Choice winner for that category. Unlike some open-source tools, which are incredibly difficult to use, Joplin is surprisingly user friendly, even in setting up storage and syncing.',
+				author: 'Jill Duffy',
+				source: 'PCMag, "The Best Open-Source Note-Taking App"',
+				imageName: 'in-the-press-life-pcmag.png',
+			},
+			{
+				active: '',
+				body: 'Joplin is an excellent open source note taking application with plenty of features. You can take notes, make to-do list and sync your notes across devices by linking it with cloud services. The synchronization is protected with end to end encryption.',
+				author: 'Abhishek Prakash',
+				source: 'It\'s FOSS, "Joplin: Open source note organizer"',
+				imageName: 'in-the-press-its-foss.png',
+			},
+		],
+	});
 
 	const mdFiles = glob.sync(`${rootDir}/readme/**/*.md`, {
 		ignore: [
@@ -286,14 +319,14 @@ async function main() {
 		const targetFilePath = `${mdFile.replace(/\.md/, '').replace(/readme\//, 'docs/')}/index.html`;
 		sources.push([mdFile, targetFilePath, {
 			title: title,
-			donateLinksMd: donateLinksMd,
+			donateLinksMd: mdFile === 'readme/donate.md' ? '' : donateLinksMd,
 		}]);
 	}
 
 	for (const source of sources) {
 		source[2].sourceMarkdownFile = source[0];
 		source[2].sourceMarkdownName = path.basename(source[0], path.extname(source[0]));
-		renderFileToHtml(`${rootDir}/${source[0]}`, `${rootDir}/${source[1]}`, source[2]);
+		renderFileToHtml(`${rootDir}/${source[0]}`, `${rootDir}/${source[1]}`, { ...source[2], partials });
 	}
 }
 

@@ -24,6 +24,11 @@ a {
 	padding-bottom: 225px;
 }
 
+.press-carousel .photo {
+	width: 123px;
+	height: 136px;
+}
+
 .fw400 {
 	font-weight: 400;
 }
@@ -94,6 +99,10 @@ a {
 	font-size: 16px !important;
 }
 
+.donate-button i {
+	font-size: 0.8em;
+}
+
 a.heading-anchor {
 	display: inline-block;
 	opacity: 0;
@@ -145,15 +154,27 @@ h2 {
 	margin-bottom: 0.6em;
 	margin-top: 1.1em;
 	border-bottom: 1px solid #ddd;
-	line-height: 2em;
+	line-height: 1.3em;
 	/* line-height: 57.6px;
 	font-weight: 600;
 	margin-bottom: 20px; */
 }
 
+.front-page h1 {
+	font-size: 3em;
+}
+
+.front-page h2 {
+	font-size: 2.5em;
+	border-bottom: none;
+}
+
+.front-page p {
+	font-size: 1.3em;
+}
+
 p,
 .button-link {
-	/* font-size: 22px; */
 	line-height: 30.8px;
 	font-weight: 400;
 	text-decoration: none;
@@ -161,13 +182,14 @@ p,
 }
 
 .button-link {
+	font-size: 18px;
 	text-align: center;
-	min-width: 300px;
+	/* min-width: 300px; */
 	display: inline-block;
 	font-weight: 500;
 	border: solid 1px #fff;
 	border-radius: 40px;
-	padding: 20px 30px;
+	padding: 8px 20px;
 	color: #fff;
 }
 
@@ -247,11 +269,11 @@ p,
 	text-decoration: underline;
 }
 
-#nav-section .button-link {
+/* #nav-section .button-link {
 	padding: 15px;
 	min-width: 200px;
 	text-decoration: none;
-}
+} */
 
 #nav-section {
 	box-shadow: 0 3px 11px 0 rgba(0,0,0,0.1);
@@ -274,7 +296,7 @@ p,
 	background-repeat: no-repeat, no-repeat;
 	background-position: left, right bottom;
 	background-size: contain;
-	padding-top: 150px;
+	padding-top: 100px;
 }
 
 #top-section .frame-bg {
@@ -292,7 +314,7 @@ p,
 
 #top-section-img {
 	margin-bottom: -280px;
-	margin-top: 70px;
+	margin-top: 40px;
 }
 
 .main-content {
@@ -372,12 +394,13 @@ p,
 }
 
 #in-the-press-section .carousel-item {
-	min-height: 500px;
+	min-height: 550px;
 }
 
 #in-the-press-section .carousel-caption {
 	left: 0;
 	right: 0;
+	top: 0;
 }
 
 #in-the-press-section .carousel-indicators [data-bs-target] {
@@ -561,6 +584,23 @@ footer .right-links a {
 		text-decoration: none;
 	}
 
+	.front-page h1 {
+		font-size: 2.7em;
+	}
+	
+	.front-page h2 {
+		font-size: 2.3em;
+		border-bottom: none;
+	}
+	
+	.front-page p {
+		font-size: 1.1em;
+	}
+
+	.front-page .button-link {
+		font-size: 1.1em;
+	}
+
 	/* h1 {
 		font-size: 44px;
 	}
@@ -691,7 +731,7 @@ footer .right-links a {
 	}
 
 	#in-the-press-section .carousel-item {
-		min-height: 600px;
+		min-height: 550px;
 	}
 }
 
@@ -700,6 +740,23 @@ footer .right-links a {
 		position: relative;
 		min-height: 100vh;
 		padding-bottom: 415px;
+	}
+
+	.front-page h1 {
+		font-size: 2.5em;
+	}
+	
+	.front-page h2 {
+		font-size: 2.1em;
+		border-bottom: none;
+	}
+	
+	.front-page p {
+		font-size: 1em;
+	}
+
+	.front-page .button-link {
+		font-size: 1em;
 	}
 
 	/* h1 {
@@ -865,7 +922,7 @@ footer .right-links a {
 	}
 
 	#in-the-press-section .carousel-item {
-		min-height: 480px;
+		min-height: 550px;
 	}
 
 	footer {
