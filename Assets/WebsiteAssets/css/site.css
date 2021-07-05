@@ -365,8 +365,8 @@ p,
 
 /* customise-it-section  */
 #customise-it-section {
-	padding-top: 120px;
-	padding-bottom: 150px;
+	padding-top: 100px;
+	padding-bottom: 0px;
 	background-image: url("../images/customise-it-bg.png");
 	background-position: 100% 80%;
 	background-repeat: no-repeat;
@@ -385,8 +385,8 @@ p,
 
 /* in-the-press-section  */
 #in-the-press-section {
-	padding-top: 180px;
-	padding-bottom: 100px;
+	padding-top: 0;
+	padding-bottom: 50px;
 	background-image: url("../images/in-the-web-bg.png");
 	background-position: center;
 	background-repeat: no-repeat;
@@ -633,9 +633,9 @@ footer .right-links a {
 
 	#work-together-section,
 	#save-web-section,
-	#customise-it-section,
+	/* #customise-it-section, */
 	#your-data-section,
-	#in-the-press-section,
+	/* #in-the-press-section, */
 	#your-note-section {
 		padding-top: 50px;
 		padding-bottom: 50px;
@@ -731,7 +731,7 @@ footer .right-links a {
 	}
 
 	#in-the-press-section .carousel-item {
-		min-height: 550px;
+		min-height: 650px;
 	}
 }
 
@@ -739,7 +739,7 @@ footer .right-links a {
 	#main-container {
 		position: relative;
 		min-height: 100vh;
-		padding-bottom: 415px;
+		padding-bottom: 290px;
 	}
 
 	.front-page h1 {
@@ -776,14 +776,14 @@ footer .right-links a {
 		margin-left: 0px;
 	}
 
-	.button-link {
+	/* .button-link {
 		display: block;
 		min-width: inherit;
 		width: 100%;
 		max-width: 400px;
 		margin: auto;
 		padding: 12px 20px;
-	}
+	} */
 
 	.img-fluid {
 		margin: auto;
@@ -884,7 +884,7 @@ footer .right-links a {
 
 	#top-section,
 	.page-container {
-		padding-top: 120px;
+		padding-top: 80px;
 	}
 
 	#top-section-img {
@@ -893,7 +893,7 @@ footer .right-links a {
 	}
 
 	#work-together-section {
-		padding-top: 100px;
+		padding-top: 10px;
 		padding-bottom: 0px;
 	}
 
@@ -903,18 +903,22 @@ footer .right-links a {
 	#save-web-section,
 	#customise-it-section,
 	#your-data-section {
-		padding-top: 30px;
+		padding-top: 10px;
 		padding-bottom: 50px;
 		background-image: inherit;
 	}
 
 	#your-note-section .button-link {
-		margin-bottom: 0px;
+		/* margin-bottom: 0px; */
 	}
 
 	#in-the-press-section {
-		padding-top: 30px;
+		padding-top: 0px;
 		padding-bottom: 50px;
+	}
+
+	#in-the-press-section h2 {
+		padding-bottom: 20px;
 	}
 
 	#in-the-press-section .carousel {
@@ -922,7 +926,7 @@ footer .right-links a {
 	}
 
 	#in-the-press-section .carousel-item {
-		min-height: 550px;
+		min-height: 600px;
 	}
 
 	footer {
