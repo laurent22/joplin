@@ -432,6 +432,10 @@ p,
 	display: none;
 }
 
+.page-download {
+	text-align: center;
+}
+
 @media (min-width: 767px) {
 	.content-wrapper{
 		display: flex;

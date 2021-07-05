@@ -1,6 +1,7 @@
 import * as fs from 'fs-extra';
 import { filename } from '@joplin/lib/path-utils';
 import * as Mustache from 'mustache';
+import { insertContentIntoFile } from './tool-utils';
 const dirname = require('path').dirname;
 const glob = require('glob');
 const MarkdownIt = require('markdown-it');
@@ -29,6 +30,7 @@ interface TemplateParams {
 	partials?: Record<string, string>;
 	pressCarouselItems?: PressCarouselItem[];
 	forumUrl?: string;
+	showToc?: boolean;
 }
 
 const rootDir = dirname(dirname(__dirname));
@@ -181,7 +183,7 @@ async function getDonateLinks() {
 
 	if (!matches) throw new Error('Cannot fetch donate links');
 
-	return matches[1].trim();
+	return `<div class="donate-links">\n\n${matches[1].trim()}\n\n</div>`;
 }
 
 function replaceGitHubByJoplinAppLinks(md: string) {
@@ -207,7 +209,6 @@ function renderMdToHtml(md: string, targetPath: string, templateParams: Template
 	const baseUrl = '';
 
 	templateParams = {
-		...templateParams,
 		baseUrl: baseUrl, // 'https://joplinapp.org',
 		imageBaseUrl: `${baseUrl}/images`,
 		cssBaseUrl: `${baseUrl}/css`,
@@ -216,6 +217,8 @@ function renderMdToHtml(md: string, targetPath: string, templateParams: Template
 		yyyy: (new Date()).getFullYear().toString(),
 		templateHtml: templateParams.templateHtml ? templateParams.templateHtml : mainTemplateHtml,
 		forumUrl: 'https://discourse.joplinapp.org/',
+		showToc: true,
+		...templateParams,
 	};
 
 	const title = [];
@@ -269,13 +272,61 @@ function makeHomePageMd() {
 	return md;
 }
 
+async function createDownloadButtonsHtml(readmeMd: string): Promise<Record<string, string>> {
+	const output: Record<string, string> = {};
+	output['windows'] = readmeMd.match(/(<a href=.*?Joplin-Setup-.*?<\/a>)/)[0];
+	output['macOs'] = readmeMd.match(/(<a href=.*?Joplin-.*\.dmg.*?<\/a>)/)[0];
+	output['linux'] = readmeMd.match(/(<a href=.*?Joplin-.*\.AppImage.*?<\/a>)/)[0];
+	output['android'] = readmeMd.match(/(<a href='https:\/\/play.google.com\/store\/apps\/details\?id=net\.cozic\.joplin.*?<\/a>)/)[0];
+	output['ios'] = readmeMd.match(/(<a href='https:\/\/itunes\.apple\.com\/us\/app\/joplin\/id1315599797.*?<\/a>)/)[0];
+
+	for (const [k, v] of Object.entries(output)) {
+		if (!v) throw new Error(`Could not get download element for: ${k}`);
+	}
+
+	return output;
+
+	// <a href='https://github.com/laurent22/joplin/releases/download/v2.1.8/Joplin-Setup-2.1.8.exe'><img alt='Get it on Windows' width="134px" src='https://joplinapp.org/images/BadgeWindows.png'/></a>
+	// <a href='https://github.com/laurent22/joplin/releases/download/v2.1.8/Joplin-2.1.8.dmg'><img alt='Get it on macOS' width="134px" src='https://joplinapp.org/images/BadgeMacOS.png'/></a>
+	// <a href='https://github.com/laurent22/joplin/releases/download/v2.1.8/Joplin-2.1.8.AppImage'><img alt='Get it on Linux' width="134px" src='https://joplinapp.org/images/BadgeLinux.png'/></a>
+
+	// <a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="40px" src='https://joplinapp.org/images/BadgeAndroid.png'/></a>
+	// <a href='https://itunes.apple.com/us/app/joplin/id1315599797'><img alt='Get it on the App Store' height="40px" src='https://joplinapp.org/images/BadgeIOS.png'/></a>
+}
+
+async function updateDownloadPage(downloadButtonsHtml: Record<string, string>) {
+	// const html:string[] = [];
+	// for (const [_k, v] of Object.entries(downloadButtonsHtml)) {
+	// 	html.push(v);
+	// }
+
+	const desktopButtonsHtml = [
+		downloadButtonsHtml['windows'],
+		downloadButtonsHtml['macOs'],
+		downloadButtonsHtml['linux'],
+	];
+
+	const mobileButtonsHtml = [
+		downloadButtonsHtml['android'],
+		downloadButtonsHtml['ios'],
+	];
+
+	await insertContentIntoFile(`${rootDir}/readme/download.md`, '<!-- DESKTOP-DOWNLOAD-LINKS -->', '<!-- DESKTOP-DOWNLOAD-LINKS -->', desktopButtonsHtml.join(' '));
+	await insertContentIntoFile(`${rootDir}/readme/download.md`, '<!-- MOBILE-DOWNLOAD-LINKS -->', '<!-- MOBILE-DOWNLOAD-LINKS -->', mobileButtonsHtml.join(' '));
+}
+
 async function main() {
 	await fs.remove(`${rootDir}/docs`);
 	await fs.copy(websiteAssetDir, `${rootDir}/docs`);
 
 	const partials = await loadMustachePartials(partialDir);
 
-	renderMdToHtml(makeHomePageMd(), `${rootDir}/docs/help/index.html`, { sourceMarkdownFile: 'README.md', partials });
+	const readmeMd = makeHomePageMd();
+
+	const downloadButtonsHtml = await createDownloadButtonsHtml(readmeMd);
+	await updateDownloadPage(downloadButtonsHtml);
+
+	renderMdToHtml(readmeMd, `${rootDir}/docs/help/index.html`, { sourceMarkdownFile: 'README.md', partials });
 
 	renderMdToHtml('', `${rootDir}/docs/index.html`, {
 		templateHtml: frontTemplateHtml,
@@ -320,6 +371,7 @@ async function main() {
 		sources.push([mdFile, targetFilePath, {
 			title: title,
 			donateLinksMd: mdFile === 'readme/donate.md' ? '' : donateLinksMd,
+			showToc: mdFile !== 'readme/download.md',
 		}]);
 	}
 
