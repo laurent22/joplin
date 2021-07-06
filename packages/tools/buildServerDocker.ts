@@ -20,7 +20,12 @@ async function main() {
 	const isPreRelease = getIsPreRelease(tagName);
 	const imageVersion = getVersionFromTag(tagName, isPreRelease);
 	const buildDate = moment(new Date().getTime()).format('YYYY-MM-DDTHH:mm:ssZ');
-	const revision = await execCommand2('git rev-parse --short HEAD');
+	let revision = '';
+	try {
+		revision = await execCommand2('git rev-parse --short HEAD', { showOutput: false });
+	} catch (error) {
+		console.info('not a git repository');
+	}
 	const buildArgs = `--build-arg BUILD_DATE="${buildDate}" --build-arg REVISION="${revision}" --build-arg VERSION="${imageVersion}"`;
 
 	process.chdir(rootDir);
