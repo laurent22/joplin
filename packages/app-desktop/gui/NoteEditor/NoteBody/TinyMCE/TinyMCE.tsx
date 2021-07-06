@@ -1133,16 +1133,15 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		}
 
 		function onKeyDown(event: any) {
-			// It seems "paste as text" is handled automatically by
-			// on Windows so the code below so we need to run the below
-			// code only on macOS (and maybe Linux). If we were to run
-			// this on Windows we would have this double-paste issue:
+			// It seems "paste as text" is handled automatically on Windows and Linux,
+			// so we need to run the below code only on macOS. If we were to run this
+			// on Windows/Linux, we would have this double-paste issue:
 			// https://github.com/laurent22/joplin/issues/4243
 
 			// Handle "paste as text". Note that when pressing CtrlOrCmd+Shift+V it's going
 			// to trigger the "keydown" event but not the "paste" event, so it's ok to process
 			// it here and we don't need to do anything special in onPaste
-			if (!shim.isWindows()) {
+			if (!shim.isWindows() && !shim.isLinux()) {
 				if ((event.metaKey || event.ctrlKey) && event.shiftKey && event.code === 'KeyV') {
 					pasteAsPlainText();
 				}
