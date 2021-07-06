@@ -743,6 +743,11 @@ footer .right-links a {
 	}
 }
 
+/*****************************************************************
+ NARROW VIEW
+ - Top right menu is displayed
+ - Sections are columns with text, then button, then image
+*****************************************************************/
 @media (max-width: 767px) {
 	#main-container {
 		position: relative;
@@ -948,6 +953,10 @@ footer .right-links a {
 		margin-top: -20px;
 	}
 }
+
+/*****************************************************************
+ MOBILE VIEW
+*****************************************************************/
 
 @media (max-width: 400px) {
 	#top-section {
