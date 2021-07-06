@@ -2,7 +2,7 @@
 
 Joplin is a free, open source note taking and to-do application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be copied, tagged and modified with your own text editor.
 
-Notes exported from Evernote via .enex files [can be imported](https://joplinapp.org/#importing) into Joplin, including the formatted content (which is converted to Markdown), resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.). Plain Markdown files can also be imported.
+Notes exported from Evernote via .enex files [can be imported](https://joplinapp.org/help/#importing) into Joplin, including the formatted content (which is converted to Markdown), resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.). Plain Markdown files can also be imported.
 
 The notes can be [synchronised](#synchronisation) with various targets including the file system (for example with a network directory), Nextcloud, Dropbox, OneDrive or WebDAV. When synchronising the notes, notebooks, tags and other metadata are saved to plain text files which can be easily inspected, backed up and moved around.
 
@@ -347,7 +347,7 @@ The following commands are available in [command-line mode](#command-line-mode):
 
 	    locale                         Language.
 	                                   Please see localisation section on
-	                                   https://joplinapp.org/#localisation
+	                                   https://joplinapp.org/help/#localisation
 	                                   for info on translation completion progress
 	                                   Type: Enum.
 	                                   Possible values: ar (Arabic), eu (Basque),
