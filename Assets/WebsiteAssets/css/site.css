@@ -566,6 +566,8 @@ footer .right-links a {
 }
 
 /* responsive */
+
+/*
 @media (min-width: 1200px) and (max-width: 1799px) {
 	#nav-section a {
 		margin-left: 80px;
@@ -609,20 +611,6 @@ footer .right-links a {
 		font-size: 1.1em;
 	}
 
-	/* h1 {
-		font-size: 44px;
-	}
-
-	h2 {
-		font-size: 30px;
-		line-height: 40px;
-	} */
-
-	/* p,
-	.button-link {
-		font-size: 16px;
-	} */
-
 	.button-link {
 		min-width: 200px;
 		padding: 15px 22px;
@@ -641,9 +629,7 @@ footer .right-links a {
 
 	#work-together-section,
 	#save-web-section,
-	/* #customise-it-section, */
 	#your-data-section,
-	/* #in-the-press-section, */
 	#your-note-section {
 		padding-top: 50px;
 		padding-bottom: 50px;
@@ -693,12 +679,6 @@ footer .right-links a {
 	.price-container p.price {
 		margin-top: 0px;
 	}
-
-	/* #top-section-img,
-	#multimedia-notes-section-img,
-	#save-web-img {
-		max-width: none;
-	}*/
 }
 
 @media (min-width: 992px) and (max-width: 1200px) {
@@ -742,11 +722,12 @@ footer .right-links a {
 		min-height: 650px;
 	}
 }
+*/
 
 /*****************************************************************
  NARROW VIEW
  - Top right menu is displayed
- - Sections are columns with text, then button, then image
+ - Sections are changed: columns with text, then button, then image
 *****************************************************************/
 @media (max-width: 767px) {
 	#main-container {
