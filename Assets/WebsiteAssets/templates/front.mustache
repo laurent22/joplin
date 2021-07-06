@@ -47,7 +47,7 @@
 							<a href="{{forumUrl}}" class="fw500">Forum</a>
 
 							<a class="button-link btn-blue donate-button" href="{{baseUrl}}/donate">
-								<i class="far fa-heart"></i>&nbsp;Donate</a
+								<i class="fas fa-heart heart-full"></i><i class="far fa-heart heart-line"></i>&nbsp;Support</a
 							>
 						</div>
 						<div class="col-9 text-right d-block d-md-none">
@@ -71,28 +71,31 @@
 								</div>
 								<br />
 								<div class="text-center">
-									<img src="{{imageBaseUrl}}/logo-text-blue.svg" alt="" />
+									<a href="{{baseUrl}}"><img src="{{imageBaseUrl}}/logo-text-blue.svg" alt="" /></a>
 									<br />
 									<br />
-									<a href="#" class="fw500 mobile-menu-link">Contacts</a>
-									<a href="#" class="fw500 mobile-menu-link">Forum</a>
-									<a href="#" class="fw500 mobile-menu-link">Help</a>
+									<!-- <a href="#" class="fw500 mobile-menu-link">Contacts</a> -->
+									<a href="{{forumUrl}}" class="fw500 mobile-menu-link">Forum</a>
+									<a href="{{baseUrl}}/help/" class="fw500 mobile-menu-link">Help</a>
 								</div>
 								<br />
 								<br />
 								<br />
 								<br />
-								<a class="button-link btn-blue" href="{{baseUrl}}/download/">
+								<a class="button-link btn-blue donate-button" href="{{baseUrl}}/donate">
+									<i class="far fa-heart"></i>&nbsp;Support</a
+								>
+								<!-- <a class="button-link btn-blue" href="{{baseUrl}}/download/">
 									<img src="{{imageBaseUrl}}/download-icon.svg" alt="" />
 									Download</a
-								>
+								>-->
 								<br />
 								<p class="light-blue mobile-menu-link-bottom text-center">
-									Joplin© 2021, All rights reserved
+									Copyright (C) 2016-{{yyyy}} Laurent Cozic, all rights reserved
 									<br />
-									<a href="#" class="fw500">Terms & Conditions</a>
+									{{! <a href="#" class="fw500">Terms & Conditions</a> }}
 									<br />
-									<a href="#" class="fw500">Privacy Policy</a>
+									<a href="{{baseUrl}}/privacy/" class="fw500">Privacy Policy</a>
 								</p>
 							</div>
 						</div>
@@ -462,5 +465,6 @@
 			as="script"
 		></script>
 		<script src="{{jsBaseUrl}}/script.js"></script>
+		{{> analytics}}
 	</body>
 </html>

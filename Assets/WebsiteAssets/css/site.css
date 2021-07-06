@@ -107,6 +107,18 @@ a {
 	font-size: 0.8em;
 }
 
+.donate-button .heart-full {
+	display: none;
+}
+
+.donate-button:hover .heart-full {
+	display: inline;
+}
+
+.donate-button:hover .heart-line {
+	display: none;
+}
+
 a.heading-anchor {
 	display: inline-block;
 	opacity: 0;
@@ -251,6 +263,7 @@ p,
 	width: 100%;
 	z-index: 9;
 }
+
 #nav-section a {
 	display: inline-block;
 	margin-left: 50px;
@@ -259,7 +272,7 @@ p,
 
 #nav-section a:hover,
 #nav-section a:focus {
-	color: #fff;
+	/* color: #fff; */
 	text-decoration: underline;
 }
 
@@ -776,7 +789,7 @@ footer .right-links a {
 	#main-container {
 		position: relative;
 		min-height: 100vh;
-		padding-bottom: 290px;
+		padding-bottom: 260px;
 	}
 
 	.front-page h1 {
@@ -841,13 +854,17 @@ footer .right-links a {
 		box-shadow: -3px 0px 11px 0 rgba(0,0,0,0.1);
 	}
 
+	#menu-mobile a {
+		margin-left: 0;
+	}
+
 	#toc-mobile {
 		overflow-y: scroll;
 		text-align: left;
 	}
 
 	#toc-mobile ul li a {
-		margin-left: 5px;
+		/* margin-left: 5px; */
 	}
 
 	#toc-mobile ul {
@@ -857,7 +874,7 @@ footer .right-links a {
 
 	#toc-mobile ul > li > p {
 		font-weight: bold;
-		text-align: center;
+		/* text-align: center; */
 		margin-top: 1em;
 	}
 
