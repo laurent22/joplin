@@ -1,6 +1,8 @@
 # Support Joplin development
 
-Donations to Joplin support the development of the project. Developing quality applications mostly takes time, but there are also some expenses, such as digital certificates to sign the applications, app store fees, hosting, etc. Most of all, your donation will make it possible to keep up the current development standards.
+Donations support the developer of Joplin. Developing quality applications mostly takes time, but there are also expenses, such as digital certificates to sign the applications, app store fees, hosting, as well as the hardware to develop and test a cross-plaform app.
+
+Most of all, your donation will make it possible to keep up the current development standards, and will bring new features and improvements to the app.
 
 ## Donations
 

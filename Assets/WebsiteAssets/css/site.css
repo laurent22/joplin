@@ -29,6 +29,10 @@ a {
 	height: 136px;
 }
 
+.press-carousel a {
+	color: inherit;
+}
+
 .fw400 {
 	font-weight: 400;
 }

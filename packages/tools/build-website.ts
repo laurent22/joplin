@@ -13,6 +13,7 @@ interface PressCarouselItem {
 	author: string;
 	source: string;
 	imageName: string;
+	url: string;
 }
 
 interface TemplateParams {
@@ -338,6 +339,7 @@ async function main() {
 				author: 'Brendan Hesse',
 				source: 'Life Hacker, "The Best Note-Taking Apps"',
 				imageName: 'in-the-press-life-hacker.png',
+				url: 'https://lifehacker.com/the-best-note-taking-apps-1837842880',
 			},
 			{
 				active: '',
@@ -345,6 +347,7 @@ async function main() {
 				author: 'Jill Duffy',
 				source: 'PCMag, "The Best Open-Source Note-Taking App"',
 				imageName: 'in-the-press-life-pcmag.png',
+				url: 'https://www.pcmag.com/reviews/joplin',
 			},
 			{
 				active: '',
@@ -352,6 +355,7 @@ async function main() {
 				author: 'Abhishek Prakash',
 				source: 'It\'s FOSS, "Joplin: Open source note organizer"',
 				imageName: 'in-the-press-its-foss.png',
+				url: 'https://itsfoss.com/joplin/',
 			},
 		],
 	});

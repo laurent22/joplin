@@ -6,7 +6,19 @@ function getOs() {
 	return null;
 }
 
+function setupMobileMenu() {
+	$("#open-menu-mobile").click(function () {
+		$("#menu-mobile").animate({ "margin-right": "0px" }, 300);
+	});
+
+	$("#close-menu-mobile").click(function () {
+		$("#menu-mobile").animate({ "margin-right": "-300px" }, 300);
+	});
+}
+
 function setupDownloadPage() {
+	if (!$('.page-download').length) return;
+
 	const downloadLinks = {};
 
 	$('.page-download .get-it-desktop a').each(function() {
@@ -33,13 +45,6 @@ function setupDownloadPage() {
 }
 
 $(function () {
-	$("#open-menu-mobile").click(function () {
-		$("#menu-mobile").animate({ "margin-right": "0px" }, 300);
-	});
-
-	$("#close-menu-mobile").click(function () {
-		$("#menu-mobile").animate({ "margin-right": "-300px" }, 300);
-	});
-
+	setupMobileMenu();
 	setupDownloadPage();
 });
