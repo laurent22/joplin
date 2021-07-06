@@ -16,6 +16,11 @@ interface PressCarouselItem {
 	url: string;
 }
 
+interface PressCarousel {
+	id: string;
+	items: PressCarouselItem[];
+}
+
 interface TemplateParams {
 	baseUrl?: string;
 	imageBaseUrl?: string;
@@ -29,9 +34,11 @@ interface TemplateParams {
 	yyyy? : string;
 	templateHtml?: string;
 	partials?: Record<string, string>;
-	pressCarouselItems?: PressCarouselItem[];
+	// pressCarouselItems?: PressCarouselItem[];
 	forumUrl?: string;
 	showToc?: boolean;
+	pressCarouselRegular?: PressCarousel;
+	pressCarouselMobile?: PressCarousel;
 }
 
 const rootDir = dirname(dirname(__dirname));
@@ -296,11 +303,6 @@ async function createDownloadButtonsHtml(readmeMd: string): Promise<Record<strin
 }
 
 async function updateDownloadPage(downloadButtonsHtml: Record<string, string>) {
-	// const html:string[] = [];
-	// for (const [_k, v] of Object.entries(downloadButtonsHtml)) {
-	// 	html.push(v);
-	// }
-
 	const desktopButtonsHtml = [
 		downloadButtonsHtml['windows'],
 		downloadButtonsHtml['macOs'],
@@ -314,6 +316,35 @@ async function updateDownloadPage(downloadButtonsHtml: Record<string, string>) {
 
 	await insertContentIntoFile(`${rootDir}/readme/download.md`, '<!-- DESKTOP-DOWNLOAD-LINKS -->', '<!-- DESKTOP-DOWNLOAD-LINKS -->', desktopButtonsHtml.join(' '));
 	await insertContentIntoFile(`${rootDir}/readme/download.md`, '<!-- MOBILE-DOWNLOAD-LINKS -->', '<!-- MOBILE-DOWNLOAD-LINKS -->', mobileButtonsHtml.join(' '));
+}
+
+function pressCarouselItems() {
+	return [
+		{
+			active: 'active',
+			body: 'It lets you create multiple types of notes, reminders, and alarms, all of which can be synced. The app also includes a web clipper too, but in our opinion, Joplin’s best feature is the built-in end-to-end encryption for keeping your notes private.',
+			author: 'Brendan Hesse',
+			source: 'Life Hacker, "The Best Note-Taking Apps"',
+			imageName: 'in-the-press-life-hacker.png',
+			url: 'https://lifehacker.com/the-best-note-taking-apps-1837842880',
+		},
+		{
+			active: '',
+			body: 'Joplin is single handedly the best pick for an open-source note-taking app, making it an Editors\' Choice winner for that category. Unlike some open-source tools, which are incredibly difficult to use, Joplin is surprisingly user friendly, even in setting up storage and syncing.',
+			author: 'Jill Duffy',
+			source: 'PCMag, "The Best Open-Source Note-Taking App"',
+			imageName: 'in-the-press-life-pcmag.png',
+			url: 'https://www.pcmag.com/reviews/joplin',
+		},
+		{
+			active: '',
+			body: 'Joplin is an excellent open source note taking application with plenty of features. You can take notes, make to-do list and sync your notes across devices by linking it with cloud services. The synchronization is protected with end to end encryption.',
+			author: 'Abhishek Prakash',
+			source: 'It\'s FOSS, "Joplin: Open source note organizer"',
+			imageName: 'in-the-press-its-foss.png',
+			url: 'https://itsfoss.com/joplin/',
+		},
+	];
 }
 
 async function main() {
@@ -332,32 +363,14 @@ async function main() {
 	renderMdToHtml('', `${rootDir}/docs/index.html`, {
 		templateHtml: frontTemplateHtml,
 		partials,
-		pressCarouselItems: [
-			{
-				active: 'active',
-				body: 'It lets you create multiple types of notes, reminders, and alarms, all of which can be synced. The app also includes a web clipper too, but in our opinion, Joplin’s best feature is the built-in end-to-end encryption for keeping your notes private.',
-				author: 'Brendan Hesse',
-				source: 'Life Hacker, "The Best Note-Taking Apps"',
-				imageName: 'in-the-press-life-hacker.png',
-				url: 'https://lifehacker.com/the-best-note-taking-apps-1837842880',
-			},
-			{
-				active: '',
-				body: 'Joplin is single handedly the best pick for an open-source note-taking app, making it an Editors\' Choice winner for that category. Unlike some open-source tools, which are incredibly difficult to use, Joplin is surprisingly user friendly, even in setting up storage and syncing.',
-				author: 'Jill Duffy',
-				source: 'PCMag, "The Best Open-Source Note-Taking App"',
-				imageName: 'in-the-press-life-pcmag.png',
-				url: 'https://www.pcmag.com/reviews/joplin',
-			},
-			{
-				active: '',
-				body: 'Joplin is an excellent open source note taking application with plenty of features. You can take notes, make to-do list and sync your notes across devices by linking it with cloud services. The synchronization is protected with end to end encryption.',
-				author: 'Abhishek Prakash',
-				source: 'It\'s FOSS, "Joplin: Open source note organizer"',
-				imageName: 'in-the-press-its-foss.png',
-				url: 'https://itsfoss.com/joplin/',
-			},
-		],
+		pressCarouselRegular: {
+			id: 'carouselRegular',
+			items: pressCarouselItems(),
+		},
+		pressCarouselMobile: {
+			id: 'carouselMobile',
+			items: pressCarouselItems(),
+		},
 	});
 
 	const mdFiles = glob.sync(`${rootDir}/readme/**/*.md`, {

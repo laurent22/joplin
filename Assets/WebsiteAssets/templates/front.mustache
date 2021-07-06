@@ -322,15 +322,17 @@
 						</div>
 						<div class="d-none d-md-block col-6">
 							<div
-								id="carouselExampleDark"
+								id="{{pressCarouselRegular.id}}"
 								class="carousel slide d-none d-md-block"
 								data-bs-ride="carousel"
 							>
-								{{> pressCarouselButtons}}
+								{{#pressCarouselRegular}}
+									{{> pressCarouselButtons}}
+								{{/pressCarouselRegular}}
 								<div class="carousel-inner">
-									{{#pressCarouselItems}}
+									{{#pressCarouselRegular.items}}
 										{{> pressCarouselItem}}
-									{{/pressCarouselItems}}
+									{{/pressCarouselRegular.items}}
 								</div>
 							</div>
 						</div>
@@ -348,15 +350,17 @@
 					<div class="row d-block d-md-none">
 						<div class="col-12">
 							<div
-								id="carouselExampleDark"
+								id="{{pressCarouselMobile.id}}"
 								class="carousel slide"
 								data-bs-ride="carousel"
 							>
-								{{> pressCarouselButtons}}
+								{{#pressCarouselMobile}}
+									{{> pressCarouselButtons}}
+								{{/pressCarouselMobile}}
 								<div class="carousel-inner">
-									{{#pressCarouselItems}}
+									{{#pressCarouselMobile.items}}
 										{{> pressCarouselItem}}
-									{{/pressCarouselItems}}
+									{{/pressCarouselMobile.items}}
 								</div>
 							</div>
 						</div>

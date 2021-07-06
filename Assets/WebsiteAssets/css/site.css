@@ -725,6 +725,49 @@ footer .right-links a {
 */
 
 /*****************************************************************
+ IN THE PRESS
+ The "In the press" section height needs to be adjusted as the
+ window is changed so that the content is fully visible.
+*****************************************************************/
+
+@media (max-width: 1200px) {
+	#in-the-press-section .carousel-item {
+		min-height: 670px;
+	}
+}
+
+@media (max-width: 767px) {
+	#in-the-press-section {
+		padding-top: 0px;
+		padding-bottom: 50px;
+	}
+
+	#in-the-press-section h2 {
+		padding-bottom: 20px;
+	}
+
+	#in-the-press-section .carousel {
+		margin-top: -50px;
+	}
+
+	#in-the-press-section .carousel-item {
+		min-height: 500px;
+	}
+}
+
+@media (max-width: 500px) {
+	#in-the-press-section .carousel-item {
+		min-height: 700px;
+	}
+}
+
+@media (max-width: 300px) {
+	#in-the-press-section .carousel-item {
+		min-height: 800px;
+	}
+}
+
+/*****************************************************************
  NARROW VIEW
  - Top right menu is displayed
  - Sections are changed: columns with text, then button, then image
@@ -753,31 +796,9 @@ footer .right-links a {
 		font-size: 1em;
 	}
 
-	/* h1 {
-		font-size: 34px;
-		line-height: 37.4px;
-	}
-	h2 {
-		font-size: 28px;
-		line-height: 33.6px;
-	} */
-	/* p {
-		font-size: 16px;
-		line-height: 25.6px;
-	} */
-
 	.ml-mobile-0 {
 		margin-left: 0px;
 	}
-
-	/* .button-link {
-		display: block;
-		min-width: inherit;
-		width: 100%;
-		max-width: 400px;
-		margin: auto;
-		padding: 12px 20px;
-	} */
 
 	.img-fluid {
 		margin: auto;
@@ -902,38 +923,17 @@ footer .right-links a {
 		background-image: inherit;
 	}
 
-	#your-note-section .button-link {
-		/* margin-bottom: 0px; */
-	}
-
-	#in-the-press-section {
-		padding-top: 0px;
-		padding-bottom: 50px;
-	}
-
-	#in-the-press-section h2 {
-		padding-bottom: 20px;
-	}
-
-	#in-the-press-section .carousel {
-		margin-top: -50px;
-	}
-
-	#in-the-press-section .carousel-item {
-		min-height: 600px;
-	}
-
 	footer {
 		padding-top: 30px;
 		padding-bottom: 30px;
 	}
 }
 
-@media (max-width: 576px) {
+/* @media (max-width: 576px) {
 	#in-the-press-section .carousel {
 		margin-top: -20px;
 	}
-}
+} */
 
 /*****************************************************************
  MOBILE VIEW
