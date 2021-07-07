@@ -266,14 +266,24 @@ p,
 
 #nav-section a {
 	display: inline-block;
-	margin-left: 50px;
+	margin-left: 30px;
 	text-decoration: none;
 }
 
 #nav-section a:hover,
 #nav-section a:focus {
-	/* color: #fff; */
+	color: #fff;
 	text-decoration: underline;
+}
+
+#menu-mobile a:hover, #menu-mobile a:focus {
+	color: #0557ba;
+}
+
+#menu-mobile .plans-button {
+	color: #0557ba;
+	border-color: #0557ba;
+	margin-bottom: 10px;
 }
 
 #nav-section.white-bg a {
@@ -351,6 +361,11 @@ p,
 	background-position: left, right bottom;
 	background-size: contain;
 	padding-top: 100px;
+}
+
+#top-section .download-button {
+	margin-right: 10px;
+	margin-bottom: 10px;
 }
 
 #top-section .frame-bg {
@@ -814,6 +829,12 @@ footer .right-links a {
 @media (max-width: 300px) {
 	#in-the-press-section .carousel-item {
 		min-height: 800px;
+	}
+}
+
+@media (max-width: 991px) {
+	#nav-section a {
+		margin-left: 10px;
 	}
 }
 

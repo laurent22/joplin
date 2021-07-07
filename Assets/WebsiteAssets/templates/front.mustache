@@ -46,9 +46,8 @@
 
 							<a href="{{forumUrl}}" class="fw500">Forum</a>
 
-							<a class="button-link btn-blue donate-button" href="{{baseUrl}}/donate">
-								<i class="fas fa-heart heart-full"></i><i class="far fa-heart heart-line"></i>&nbsp;Support</a
-							>
+							{{> joplinCloudButton}}
+							{{> supportButton}}
 						</div>
 						<div class="col-9 text-right d-block d-md-none">
 							<span class="pointer"
@@ -82,13 +81,9 @@
 								<br />
 								<br />
 								<br />
-								<a class="button-link btn-blue donate-button" href="{{baseUrl}}/donate">
-									<i class="far fa-heart"></i>&nbsp;Support</a
-								>
-								<!-- <a class="button-link btn-blue" href="{{baseUrl}}/download/">
-									<img src="{{imageBaseUrl}}/download-icon.svg" alt="" />
-									Download</a
-								>-->
+								{{> joplinCloudButton}}
+								{{> supportButton}}
+								
 								<br />
 								<p class="light-blue mobile-menu-link-bottom text-center">
 									Copyright (C) 2016-{{yyyy}} Laurent Cozic
@@ -118,13 +113,10 @@
 							<br />
 							<br />
 							<p class="text-center">
-								<a href="{{baseUrl}}/download/" class="button-link btn-blue">Download the app</a>
-								<!--
-								&nbsp; &nbsp;
-								<a href="#" class="button-link btn-trans"
+								<a href="{{baseUrl}}/download/" class="button-link btn-blue download-button">Download the app</a>
+								<a href="{{baseUrl}}/plans/" class="button-link btn-trans plans-button"
 									>Sign up with Joplin Cloud</a
 								>
-								-->
 							</p>
 							<img
 								src="{{imageBaseUrl}}/home-top-img.png"
@@ -183,7 +175,7 @@
 								</p>
 								<br />
 								<p>
-									<a href="https://discourse.joplinapp.org/t/introducing-joplin-cloud-beta-program/18014" class="button-link btn-blue">Try it now</a>
+									<a href="{{baseUrl}}/plans/" class="button-link btn-blue">Try it now</a>
 								</p>
 								<br class="d-block d-md-none" />
 								<br class="d-block d-md-none" />
