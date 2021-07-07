@@ -694,6 +694,24 @@ class Application extends BaseApplication {
 			value: Setting.value('flagOpenDevTools'),
 		});
 
+		const templatesDir = `${Setting.value('profileDir')}/templates`;
+		if (await shim.fsDriver().exists(templatesDir)) {
+			try {
+				const files = await shim.fsDriver().readDirStats(templatesDir);
+				for (const file of files) {
+					if (file.path.endsWith('.md')) {
+						// There is atleast one template.
+						this.store().dispatch({
+							type: 'CONTAINS_LEGACY_TEMPLATES',
+						});
+						break;
+					}
+				}
+			} catch (error) {
+				reg.logger().error(`Failed to read templates directory: ${error}`);
+			}
+		}
+
 		// Note: Auto-update currently doesn't work in Linux: it downloads the update
 		// but then doesn't install it on exit.
 		if (shim.isWindows() || shim.isMac()) {

@@ -64,6 +64,7 @@ interface Props {
 	showMissingMasterKeyMessage: boolean;
 	showNeedUpgradingMasterKeyMessage: boolean;
 	showShouldReencryptMessage: boolean;
+	showInstallTemplatesPlugin: boolean;
 	focusedField: string;
 	themeId: number;
 	settingEditorCodeView: boolean;
@@ -551,6 +552,16 @@ class MainScreenComponent extends React.Component<Props, State> {
 			});
 		};
 
+		const onPluginScreen = () => {
+			this.props.dispatch({
+				type: 'NAV_GO',
+				routeName: 'Config',
+				props: {
+					defaultSection: 'plugins',
+				},
+			});
+		};
+
 		const onRestartAndUpgrade = async () => {
 			Setting.setValue('sync.upgradeState', Setting.SYNC_UPGRADE_STATE_MUST_DO);
 			await Setting.saveAll();
@@ -639,6 +650,12 @@ class MainScreenComponent extends React.Component<Props, State> {
 				_('Set the password'),
 				onViewEncryptionConfigScreen
 			);
+		} else if (this.props.showInstallTemplatesPlugin) {
+			msg = this.renderNotificationMessage(
+				_('Templates feature is now moved to a plugin called "Templates".'),
+				_('Install Plugin'),
+				onPluginScreen
+			);
 		}
 
 		return (
@@ -650,7 +667,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 
 	messageBoxVisible(props: Props = null) {
 		if (!props) props = this.props;
-		return props.hasDisabledSyncItems || props.showMissingMasterKeyMessage || props.showNeedUpgradingMasterKeyMessage || props.showShouldReencryptMessage || props.hasDisabledEncryptionItems || this.props.shouldUpgradeSyncTarget || props.isSafeMode || this.showShareInvitationNotification(props) || this.props.needApiAuth;
+		return props.hasDisabledSyncItems || props.showMissingMasterKeyMessage || props.showNeedUpgradingMasterKeyMessage || props.showShouldReencryptMessage || props.hasDisabledEncryptionItems || this.props.shouldUpgradeSyncTarget || props.isSafeMode || this.showShareInvitationNotification(props) || this.props.needApiAuth || this.props.showInstallTemplatesPlugin;
 	}
 
 	registerCommands() {
@@ -876,6 +893,7 @@ const mapStateToProps = (state: AppState) => {
 		shareInvitations: state.shareService.shareInvitations,
 		isSafeMode: state.settings.isSafeMode,
 		needApiAuth: state.needApiAuth,
+		showInstallTemplatesPlugin: state.has_legacy_templates && !state.pluginService.plugins['joplin.plugin.templates'],
 	};
 };
 
