@@ -91,7 +91,7 @@
 								>-->
 								<br />
 								<p class="light-blue mobile-menu-link-bottom text-center">
-									Copyright (C) 2016-{{yyyy}} Laurent Cozic, all rights reserved
+									Copyright (C) 2016-{{yyyy}} Laurent Cozic
 									<br />
 									{{! <a href="#" class="fw500">Terms & Conditions</a> }}
 									<br />
@@ -376,8 +376,7 @@
 					<div class="row">
 						<div class="col-12">
 							<h2 class="text-center">
-								<span class="frame-bg frame-bg-blue-lg">Your notes,</span>
-								everywhere.
+								<span class="frame-bg frame-bg-blue-lg">Your notes,</span> everywhere you are.
 							</h2>
 							<p class="text-center" id="your-note-text">
 								Access your notes from your computer, phone or tablet. All your
@@ -388,6 +387,39 @@
 							<p class="text-center">
 								<a href="{{baseUrl}}/download/" class="button-link btn-blue">Download it now</a>
 							</p>
+							<br />
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div id="sponsors-section" class="gray-bg">
+				<div class="container">
+					<div class="row">
+						<div class="col-12">
+							<h2 class="text-center">
+								Our <span class="frame-bg frame-bg-blue-lg">sponsors</span>
+							</h2>
+							<p class="text-center" id="your-note-text">
+								Thank you for your support!
+							</p>
+							<br />
+
+							<div class="text-center sponsors-org">
+								{{#sponsors.orgs}}
+									<a class="sponsor-org-item" href="{{url}}"><img title="{{title}}" src="{{imageBaseUrl}}/sponsors/{{imageName}}"></a>
+								{{/sponsors.orgs}}
+							</div>
+
+							<div class="text-center sponsors-github">
+								{{#sponsors.github}}
+									<div class="sponsor-github-item">
+										<a href="https://github.com/{{name}}" title="{{name}}">
+											<img width="50" src="https://avatars2.githubusercontent.com/u/{{id}}?s=96&amp;v=4">
+										</a>
+									</div>
+								{{/sponsors.github}}
+							</div>
 							<br />
 						</div>
 					</div>
@@ -441,7 +473,7 @@
 								/>
 							</a>
 							<br class="d-block d-md-none" />
-							<p class="text-center-sm">Copyright (C) 2016-{{yyyy}} Laurent Cozic, all rights reserved</p>
+							<p class="text-center-sm">Copyright (C) 2016-{{yyyy}} Laurent Cozic</p>
 						</div>
 						<div class="col-12 col-md-6">
 							<p class="text-right text-center-sm right-links">

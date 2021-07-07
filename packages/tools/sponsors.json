@@ -76,5 +76,22 @@
 			"name": "konishi-t",
 			"id": "24908652"
 		}
+	],
+	"orgs": [
+		{
+			"url": "https://seirei.ne.jp",
+			"title": "Serei Network",
+			"imageName": "SeireiNetwork.png"
+		},
+		{
+			"url": "https://usrigging.com/",
+			"title": "U.S. Ringing Supply",
+			"imageName": "RingingSupply.svg"
+		},
+		{
+			"url": "https://tranio.com/italy/",
+			"title": "Tranio",
+			"imageName": "Tranio.png"
+		}
 	]
 }

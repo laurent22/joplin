@@ -305,6 +305,43 @@ p,
 	align-items: center;
 }
 
+#sponsors-section .sponsor-github-item {
+	display: inline-flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+#sponsors-section .sponsors-github,
+#sponsors-section .sponsors-org {
+	margin-left: auto;
+	margin-right: auto;
+	max-width: 900px;
+	padding-bottom: 50px;
+}
+
+#sponsors-section .sponsors-org {
+	display: flex;
+	justify-content: center;
+	flex-flow: wrap;
+}
+
+#sponsors-section .sponsors-org .sponsor-org-item {
+	display: inline-flex;
+	align-items: center;
+	margin-left: 15px;
+	margin-bottom: 10px;
+}
+
+#sponsors-section .sponsors-org .sponsor-org-item img {
+	max-width: 256px;
+	max-height: 80px;
+}
+
+#sponsors-section .sponsors-github .sponsor-github-item {
+	margin-left: 10px;
+	margin-bottom: 10px;
+}
+
 /* top-section  */
 
 #top-section {

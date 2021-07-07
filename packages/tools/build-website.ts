@@ -7,6 +7,22 @@ const glob = require('glob');
 const MarkdownIt = require('markdown-it');
 const path = require('path');
 
+interface GithubSponsor {
+	name: string;
+	id: string;
+}
+
+interface OrgSponsor {
+	url: string;
+	title: string;
+	imageName: string;
+}
+
+interface Sponsors {
+	github: GithubSponsor[];
+	orgs: OrgSponsor[];
+}
+
 interface PressCarouselItem {
 	active: string;
 	body: string;
@@ -39,6 +55,7 @@ interface TemplateParams {
 	showToc?: boolean;
 	pressCarouselRegular?: PressCarousel;
 	pressCarouselMobile?: PressCarousel;
+	sponsors: Sponsors;
 }
 
 const rootDir = dirname(dirname(__dirname));
@@ -347,10 +364,16 @@ function pressCarouselItems() {
 	];
 }
 
+async function loadSponsors(): Promise<Sponsors> {
+	const sponsorsPath = `${rootDir}/packages/tools/sponsors.json`;
+	return JSON.parse(await fs.readFile(sponsorsPath, 'utf8'));
+}
+
 async function main() {
 	await fs.remove(`${rootDir}/docs`);
 	await fs.copy(websiteAssetDir, `${rootDir}/docs`);
 
+	const sponsors = await loadSponsors();
 	const partials = await loadMustachePartials(partialDir);
 
 	const readmeMd = makeHomePageMd();
@@ -358,7 +381,7 @@ async function main() {
 	const downloadButtonsHtml = await createDownloadButtonsHtml(readmeMd);
 	await updateDownloadPage(downloadButtonsHtml);
 
-	renderMdToHtml(readmeMd, `${rootDir}/docs/help/index.html`, { sourceMarkdownFile: 'README.md', partials });
+	renderMdToHtml(readmeMd, `${rootDir}/docs/help/index.html`, { sourceMarkdownFile: 'README.md', partials, sponsors });
 
 	renderMdToHtml('', `${rootDir}/docs/index.html`, {
 		templateHtml: frontTemplateHtml,
@@ -371,6 +394,7 @@ async function main() {
 			id: 'carouselMobile',
 			items: pressCarouselItems(),
 		},
+		sponsors,
 	});
 
 	const mdFiles = glob.sync(`${rootDir}/readme/**/*.md`, {
