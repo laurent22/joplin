@@ -28,6 +28,12 @@
 	</head>
 	<body class="front-page">
 		<div class="container-fluid" id="main-container">
+
+			{{#navbar}}
+				{{> navbar}}
+			{{/navbar}}
+			
+			<!--
 			<div class="blue-bg" id="nav-section">
 				<div class="container">
 					<div class="row">
@@ -73,7 +79,6 @@
 									<a href="{{baseUrl}}"><img src="{{imageBaseUrl}}/logo-text-blue.svg" alt="" /></a>
 									<br />
 									<br />
-									<!-- <a href="#" class="fw500 mobile-menu-link">Contacts</a> -->
 									<a href="{{forumUrl}}" class="fw500 mobile-menu-link">Forum</a>
 									<a href="{{baseUrl}}/help/" class="fw500 mobile-menu-link">Help</a>
 								</div>
@@ -88,7 +93,6 @@
 								<p class="light-blue mobile-menu-link-bottom text-center">
 									Copyright (C) 2016-{{yyyy}} Laurent Cozic
 									<br />
-									{{! <a href="#" class="fw500">Terms & Conditions</a> }}
 									<br />
 									<a href="{{baseUrl}}/privacy/" class="fw500">Privacy Policy</a>
 								</p>
@@ -97,6 +101,7 @@
 					</div>
 				</div>
 			</div>
+			-->
 
 			<div class="blue-bg" id="top-section">
 				<div class="container">

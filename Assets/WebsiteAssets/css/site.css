@@ -280,10 +280,11 @@ p,
 	color: #0557ba;
 }
 
+.navbar-main .plans-button,
 #menu-mobile .plans-button {
 	color: #0557ba;
 	border-color: #0557ba;
-	margin-bottom: 10px;
+	/* margin-bottom: 10px; */
 }
 
 #nav-section.white-bg a {
@@ -721,26 +722,6 @@ footer .right-links a {
 }
 */
 
-.plans-page {
-	background-image: url("../images/price-bg-left.png"),
-		url("../images/price-bg-right.png");
-	background-repeat: no-repeat, no-repeat;
-	background-position: left, right;
-	background-size: contain;
-}
-
-.plans-page .page-container {
-	padding-top: 30px;
-}
-
-.plans-page h1 {
-	font-size: 2.2em;
-}
-
-.plans-page .title-box p {
-	margin-bottom: 0;
-}
-
 /*****************************************************************
  IN THE PRESS
  The "In the press" section height needs to be adjusted as the
@@ -877,6 +858,19 @@ footer .right-links a {
 		text-align: left;
 	}
 
+	#menu-mobile .menu-mobile-buttons {
+		display: flex;
+		justify-content: center;
+	}
+
+	#menu-mobile .menu-mobile-top {
+		margin-bottom: 1em;
+	}
+
+	#menu-mobile .menu-mobile-buttons .donate-button {
+		margin-left: .5em;
+	}
+
 	#toc-mobile ul li a {
 		/* margin-left: 5px; */
 	}
@@ -964,6 +958,26 @@ footer .right-links a {
  PLANS PAGE
 *****************************************************************/
 
+/* .plans-page {
+	background-image: url("../images/price-bg-left.png"),
+		url("../images/price-bg-right.png");
+	background-repeat: no-repeat, no-repeat;
+	background-position: left, right;
+	background-size: contain;
+} */
+
+.plans-page .page-container {
+	padding-top: 30px;
+}
+
+.plans-page h1 {
+	font-size: 2.2em;
+}
+
+.plans-page .title-box p {
+	margin-bottom: 0;
+}
+
 .page-container {
 	padding-top: 100px;
 	padding-bottom: 50px;
@@ -983,14 +997,6 @@ footer .right-links a {
 .price-container p {
 	font-size: 16px;
 }
-/* 
-.price-container p.plan-type {
-	font-size: 20px;
-} */
-
-/* .price-container .plan-type img {
-	width: 65px;
-} */
 
 .price-container p.price {
 	font-size: 25px;
@@ -1011,6 +1017,10 @@ footer .right-links a {
 	margin-top: 40px;
 	padding-top: 50px;
 	color: white;
+}
+
+.price-container .subscribe-wrapper {
+	margin-top: 2em;
 }
 
 .price-row {
@@ -1045,6 +1055,16 @@ footer .right-links a {
 
 .price-container-blue p {
 	color: #fff;
+}
+
+.price-container .feature {
+	font-size: 0.9em;
+	margin-right: .5em;
+	color: #4F9CF9;
+}
+
+.price-container .feature-off {
+	opacity: 0.4;
 }
 
 @media (max-width: 1400px) {

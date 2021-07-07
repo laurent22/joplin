@@ -6,39 +6,20 @@
 			</div>
 
 			<div class="plan-price">
-				{{price}}<span class="per-month">&nbsp;/month</span>
+				{{price}}<sub class="per-month">&nbsp;/month</sub>
 			</div>
-
-
-			<!--
-			<div class="col-6 plan-type-wrapper">
-				<p class="plan-type fw500">
-					<img src="{{imageBaseUrl}}/{{iconName}}.png"/>&nbsp;{{title}}
-				</p>
-			</div>
-
-			<div class="col-6">
-				<p class="text-right price fw700">
-					<br />
-					{{price}}<span class="per-month">&nbsp;/month</span>
-				</p>
-			</div>
-
-			-->
-
-
 		</div>
 
 		{{#featuresOn}}
-			<p><img src="{{imageBaseUrl}}/check-icon.png" alt="" />&nbsp;{{.}}</p>
+			<p><i class="fas fa-check feature feature-on"></i>{{.}}</p>
 		{{/featuresOn}}
 
 		{{#featuresOff}}
-			<p class="unchecked-text"><img src="{{imageBaseUrl}}/uncheck-icon.png" alt="" />&nbsp;{{.}}</p>
+			<p class="unchecked-text"><i class="fas fa-times feature feature-off"></i>{{.}}</p>
 		{{/featuresOff}}
 		
-		<p class="text-center">
-			<a href="#" class="button-link btn-white">Subscribe</a>
+		<p class="text-center subscribe-wrapper">
+			<a href="#" class="button-link btn-white">Get started</a>
 		</p>
 	</div>
 </div>

@@ -41,6 +41,11 @@ https://github.com/laurent22/joplin/blob/dev/{{{sourceMarkdownFile}}}
 	</head>
 	<body>
 		<div class="container-fluid generic-template {{pageName}}-page" id="main-container">
+
+			{{#navbar}}
+				{{> navbar}}
+			{{/navbar}}
+			<!--
 			<div class="with-profile white-bg" id="nav-section">
 				<div class="container">
 					<div class="row">
@@ -55,27 +60,10 @@ https://github.com/laurent22/joplin/blob/dev/{{{sourceMarkdownFile}}}
 							</a>
 						</div>
 						<div class="col-9 text-right d-none d-md-block">
-							<!-- <a href="#" class="fw500">Help</a> -->
-
 							<a href="https://joplinapp.org/gsoc2021/index/" class="fw500">GSoC 2021</a>
 							<a href="{{forumUrl}}" class="fw500">Forum</a>
-
-							<!--
-							<a href="#" class="fw500">Joplin Cloud</a>
-
-							<a class="button-link btn-blue ml-20" href="#">
-								<img src="{{imageBaseUrl}}/download-icon.svg" alt="" />&nbsp;
-								Download</a
-							>
-							-->
 						</div>
 						<div class="col-9 text-right d-block d-md-none">
-							<!--
-							<span class="pointer"
-								><img src="{{imageBaseUrl}}/profile-black-icon.png" alt=""
-							/></span>
-							&nbsp;&nbsp;
-							-->
 							<span class="pointer"
 								><img
 									src="{{imageBaseUrl}}/mobile-menu-black-open-icon.png"
@@ -95,40 +83,13 @@ https://github.com/laurent22/joplin/blob/dev/{{{sourceMarkdownFile}}}
 									/>
 								</div>
 
-								<!--
-								<div class="text-center">
-									<img src="{{imageBaseUrl}}/logo-text-blue.svg" alt="" />
-									<a href="#" class="fw500 mobile-menu-link">Contacts</a>
-									<a href="{{forumUrl}}" class="fw500 mobile-menu-link">Forum</a>
-									<a href="#" class="fw500 mobile-menu-link">Help</a>
-								</div>
-								-->
-
 								<div id="toc-mobile">{{{tocHtml}}}</div>
-
-								<!--
-								<br />
-								<br />
-								<br />
-								<br />
-								<a class="button-link btn-blue" href="#">
-									<img src="{{imageBaseUrl}}/download-icon.svg" alt="" />
-									Download</a
-								>
-								<br />
-								<p class="light-blue mobile-menu-link-bottom text-center">
-									Joplin© 2021
-									<br />
-									<a href="#" class="fw500">Terms & Conditions</a>
-									<br />
-									<a href="#" class="fw500">Privacy Policy</a>
-								</p>
-								-->
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
+			-->
 
 			<div class="page-container page-{{sourceMarkdownName}}">
 				<div class="container">
