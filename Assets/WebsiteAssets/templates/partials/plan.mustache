@@ -1,0 +1,44 @@
+<div class="col-12 col-lg-4">
+	<div class="price-container {{#featured}}price-container-blue{{/featured}}">
+		<div class="price-row">
+			<div class="plan-type">
+				<img src="{{imageBaseUrl}}/{{iconName}}.png"/>&nbsp;{{title}}
+			</div>
+
+			<div class="plan-price">
+				{{price}}<span class="per-month">&nbsp;/month</span>
+			</div>
+
+
+			<!--
+			<div class="col-6 plan-type-wrapper">
+				<p class="plan-type fw500">
+					<img src="{{imageBaseUrl}}/{{iconName}}.png"/>&nbsp;{{title}}
+				</p>
+			</div>
+
+			<div class="col-6">
+				<p class="text-right price fw700">
+					<br />
+					{{price}}<span class="per-month">&nbsp;/month</span>
+				</p>
+			</div>
+
+			-->
+
+
+		</div>
+
+		{{#featuresOn}}
+			<p><img src="{{imageBaseUrl}}/check-icon.png" alt="" />&nbsp;{{.}}</p>
+		{{/featuresOn}}
+
+		{{#featuresOff}}
+			<p class="unchecked-text"><img src="{{imageBaseUrl}}/uncheck-icon.png" alt="" />&nbsp;{{.}}</p>
+		{{/featuresOff}}
+		
+		<p class="text-center">
+			<a href="#" class="button-link btn-white">Subscribe</a>
+		</p>
+	</div>
+</div>

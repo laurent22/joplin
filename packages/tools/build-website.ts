@@ -39,6 +39,7 @@ interface PressCarousel {
 
 interface TemplateParams {
 	baseUrl?: string;
+	pageName?: string;
 	imageBaseUrl?: string;
 	cssBaseUrl?: string;
 	jsBaseUrl?: string;
@@ -50,18 +51,33 @@ interface TemplateParams {
 	yyyy? : string;
 	templateHtml?: string;
 	partials?: Record<string, string>;
-	// pressCarouselItems?: PressCarouselItem[];
 	forumUrl?: string;
 	showToc?: boolean;
 	pressCarouselRegular?: PressCarousel;
 	pressCarouselMobile?: PressCarousel;
-	sponsors: Sponsors;
+	sponsors?: Sponsors;
+	showImproveThisDoc?: boolean;
+	contentHtml?: string;
+}
+
+interface Plan {
+	title: string;
+	price: string;
+	featured: boolean;
+	iconName: string;
+	featuresOn: string[];
+	featuresOff: string[];
+}
+
+interface PlanPageParams extends TemplateParams {
+	plans: Record<string, Plan>;
 }
 
 const rootDir = dirname(dirname(__dirname));
 const websiteAssetDir = `${rootDir}/Assets/WebsiteAssets`;
 const mainTemplateHtml = fs.readFileSync(`${websiteAssetDir}/templates/main-new.mustache`, 'utf8');
 const frontTemplateHtml = fs.readFileSync(`${websiteAssetDir}/templates/front.mustache`, 'utf8');
+const plansTemplateHtml = fs.readFileSync(`${websiteAssetDir}/templates/plans.mustache`, 'utf8');
 const partialDir = `${websiteAssetDir}/templates/partials`;
 
 async function loadMustachePartials(partialDir: string) {
@@ -74,6 +90,14 @@ async function loadMustachePartials(partialDir: string) {
 	}
 	return output;
 }
+
+function renderMustache(contentHtml: string, templateParams: TemplateParams) {
+	return Mustache.render(templateParams.templateHtml, {
+		...templateParams,
+		contentHtml,
+	}, templateParams.partials);
+}
+
 
 function markdownToHtml(md: string, templateParams: TemplateParams): string {
 	const markdownIt = new MarkdownIt({
@@ -184,10 +208,7 @@ function markdownToHtml(md: string, templateParams: TemplateParams): string {
 		}
 	});
 
-	return Mustache.render(templateParams.templateHtml, {
-		...templateParams,
-		contentHtml: markdownIt.render(md),
-	}, templateParams.partials);
+	return renderMustache(markdownIt.render(md), templateParams);
 }
 
 let tocMd_: string = null;
@@ -227,22 +248,29 @@ function tocHtml() {
 	return tocHtml_;
 }
 
-function renderMdToHtml(md: string, targetPath: string, templateParams: TemplateParams) {
-	// Remove the header because it's going to be added back as HTML
-	md = md.replace(/# Joplin\n/, '');
-
+function defaultTemplateParams(): TemplateParams {
 	const baseUrl = '';
 
-	templateParams = {
-		baseUrl: baseUrl, // 'https://joplinapp.org',
+	return {
+		baseUrl: baseUrl,
 		imageBaseUrl: `${baseUrl}/images`,
 		cssBaseUrl: `${baseUrl}/css`,
 		jsBaseUrl: `${baseUrl}/js`,
 		tocHtml: tocHtml(),
 		yyyy: (new Date()).getFullYear().toString(),
-		templateHtml: templateParams.templateHtml ? templateParams.templateHtml : mainTemplateHtml,
+		templateHtml: mainTemplateHtml,
 		forumUrl: 'https://discourse.joplinapp.org/',
 		showToc: true,
+		showImproveThisDoc: true,
+	};
+}
+
+function renderPageToHtml(md: string, targetPath: string, templateParams: TemplateParams) {
+	// Remove the header because it's going to be added back as HTML
+	md = md.replace(/# Joplin\n/, '');
+
+	templateParams = {
+		...defaultTemplateParams(),
 		...templateParams,
 	};
 
@@ -262,7 +290,7 @@ function renderMdToHtml(md: string, targetPath: string, templateParams: Template
 	}
 
 	templateParams.pageTitle = title.join(' | ');
-	const html = markdownToHtml(md, templateParams);
+	const html = templateParams.contentHtml ? renderMustache(templateParams.contentHtml, templateParams) : markdownToHtml(md, templateParams);
 
 	const folderPath = dirname(targetPath);
 	fs.mkdirpSync(folderPath);
@@ -283,7 +311,7 @@ async function readmeFileTitle(sourcePath: string) {
 
 function renderFileToHtml(sourcePath: string, targetPath: string, templateParams: TemplateParams) {
 	const md = fs.readFileSync(sourcePath, 'utf8');
-	return renderMdToHtml(md, targetPath, templateParams);
+	return renderPageToHtml(md, targetPath, templateParams);
 }
 
 function makeHomePageMd() {
@@ -364,6 +392,75 @@ function pressCarouselItems() {
 	];
 }
 
+function getPlans(): Record<string, Plan> {
+	const features = {
+		publishNote: 'Publish a note to the internet',
+		sync: 'Sync as many devices as you want',
+		clipper: 'Web Clipper',
+		collaborate: 'Share and collaborate on a notebook',
+		multiUsers: 'Up to 10 users',
+		prioritySupport: 'Priority support',
+	};
+
+	return {
+		basic: {
+			title: 'Basic',
+			price: '1.99€',
+			featured: false,
+			iconName: 'basic-icon',
+			featuresOn: [
+				'Max 10 MB per note or attachment',
+				features.publishNote,
+				features.sync,
+				features.clipper,
+				'1 GB storage space',
+			],
+			featuresOff: [
+				features.collaborate,
+				features.multiUsers,
+				features.prioritySupport,
+			],
+		},
+
+		pro: {
+			title: 'Pro',
+			price: '5.99€',
+			featured: true,
+			iconName: 'pro-icon',
+			featuresOn: [
+				'Max 200 MB per note or attachment',
+				features.publishNote,
+				features.sync,
+				features.clipper,
+				'10 GB storage space',
+				features.collaborate,
+			],
+			featuresOff: [
+				features.multiUsers,
+				features.prioritySupport,
+			],
+		},
+
+		business: {
+			title: 'Business',
+			price: '49.99€',
+			featured: false,
+			iconName: 'business-icon',
+			featuresOn: [
+				'Max 200 MB per note or attachment',
+				features.publishNote,
+				features.sync,
+				features.clipper,
+				'10 GB storage space',
+				features.collaborate,
+				features.multiUsers,
+				features.prioritySupport,
+			],
+			featuresOff: [],
+		},
+	};
+}
+
 async function loadSponsors(): Promise<Sponsors> {
 	const sponsorsPath = `${rootDir}/packages/tools/sponsors.json`;
 	return JSON.parse(await fs.readFile(sponsorsPath, 'utf8'));
@@ -381,9 +478,17 @@ async function main() {
 	const downloadButtonsHtml = await createDownloadButtonsHtml(readmeMd);
 	await updateDownloadPage(downloadButtonsHtml);
 
-	renderMdToHtml(readmeMd, `${rootDir}/docs/help/index.html`, { sourceMarkdownFile: 'README.md', partials, sponsors });
+	// =============================================================
+	// HELP PAGE
+	// =============================================================
 
-	renderMdToHtml('', `${rootDir}/docs/index.html`, {
+	renderPageToHtml(readmeMd, `${rootDir}/docs/help/index.html`, { sourceMarkdownFile: 'README.md', partials, sponsors });
+
+	// =============================================================
+	// FRONT PAGE
+	// =============================================================
+
+	renderPageToHtml('', `${rootDir}/docs/index.html`, {
 		templateHtml: frontTemplateHtml,
 		partials,
 		pressCarouselRegular: {
@@ -397,12 +502,36 @@ async function main() {
 		sponsors,
 	});
 
-	const mdFiles = glob.sync(`${rootDir}/readme/**/*.md`, {
-		ignore: [
-			// '**/node_modules/**',
-		],
-	}).map((f: string) => f.substr(rootDir.length + 1));
+	// =============================================================
+	// PLANS PAGE
+	// =============================================================
 
+	const planPageParams: PlanPageParams = {
+		...defaultTemplateParams(),
+		partials,
+		templateHtml: plansTemplateHtml,
+		plans: getPlans(),
+	};
+
+	console.info('PPPPPPPPP', getPlans());
+
+	const planPageContentHtml = renderMustache('', planPageParams);
+
+	renderPageToHtml('', `${rootDir}/docs/plans/index.html`, {
+		...defaultTemplateParams(),
+		pageName: 'plans',
+		partials,
+		showToc: false,
+		showImproveThisDoc: false,
+		contentHtml: planPageContentHtml,
+	});
+
+	// =============================================================
+	// All other pages are generated dynamically from the
+	// Markdown files under /readme
+	// =============================================================
+
+	const mdFiles = glob.sync(`${rootDir}/readme/**/*.md`).map((f: string) => f.substr(rootDir.length + 1));
 	const sources = [];
 	const donateLinksMd = await getDonateLinks();
 
@@ -419,7 +548,11 @@ async function main() {
 	for (const source of sources) {
 		source[2].sourceMarkdownFile = source[0];
 		source[2].sourceMarkdownName = path.basename(source[0], path.extname(source[0]));
-		renderFileToHtml(`${rootDir}/${source[0]}`, `${rootDir}/${source[1]}`, { ...source[2], partials });
+		renderFileToHtml(`${rootDir}/${source[0]}`, `${rootDir}/${source[1]}`, {
+			...source[2],
+			templateHtml: mainTemplateHtml,
+			partials,
+		});
 	}
 }
 

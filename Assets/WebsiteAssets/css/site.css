@@ -540,60 +540,6 @@ p,
 	margin-bottom: 10px;
 }
 
-/* price page */
-.page-container {
-	padding-top: 100px;
-	padding-bottom: 50px;
-}
-
-.price-container {
-	border: 1px solid #4f9cf9;
-	box-sizing: border-box;
-	border-radius: 20px;
-	padding: 30px 20px;
-	padding-bottom: 30px;
-	margin-bottom: 50px;
-	margin-top: 60px;
-	min-height: 645px;
-}
-
-.price-container p {
-	font-size: 16px;
-}
-
-.price-container p.plan-type {
-	font-size: 22px;
-}
-
-.price-container .plan-type img {
-	width: 65px;
-}
-
-.price-container p.price {
-	font-size: 30px;
-	margin-top: -10px;
-}
-
-.price-container p.unchecked-text {
-	color: #9db8d9;
-}
-
-.price-container p {
-	font-size: 16px;
-}
-
-.price-container-blue {
-	background: linear-gradient(251.85deg, #0b4f99 -11.85%, #002d61 104.73%);
-	box-shadow: 0px 4px 16px rgba(105, 132, 172, 0.13);
-	margin-top: 30px;
-	min-height: 710px;
-	padding-top: 60px;
-}
-
-.price-container-blue p {
-	color: #fff;
-}
-
 /* footer section  */
 footer {
 	padding-top: 50px;
@@ -723,26 +669,12 @@ footer .right-links a {
 }
 
 @media (min-width: 1700px) {
-	#price-section {
+	#plans-section {
 		background-image: url("../images/price-bg-left.png"),
 			url("../images/price-bg-right.png");
 		background-repeat: no-repeat, no-repeat;
 		background-position: left, right;
 		background-size: contain;
-	}
-}
-
-@media (min-width: 1400px) {
-	.container {
-		max-width: 1250px;
-	}
-
-	.price-container .plan-type img {
-		width: 85px;
-	}
-
-	.price-container p.price {
-		margin-top: 0px;
 	}
 }
 
@@ -788,6 +720,26 @@ footer .right-links a {
 	}
 }
 */
+
+.plans-page {
+	background-image: url("../images/price-bg-left.png"),
+		url("../images/price-bg-right.png");
+	background-repeat: no-repeat, no-repeat;
+	background-position: left, right;
+	background-size: contain;
+}
+
+.plans-page .page-container {
+	padding-top: 30px;
+}
+
+.plans-page h1 {
+	font-size: 2.2em;
+}
+
+.plans-page .title-box p {
+	margin-bottom: 0;
+}
 
 /*****************************************************************
  IN THE PRESS
@@ -835,6 +787,10 @@ footer .right-links a {
 @media (max-width: 991px) {
 	#nav-section a {
 		margin-left: 10px;
+	}
+
+	.plans-page {
+		background:none;
 	}
 }
 
@@ -1004,11 +960,120 @@ footer .right-links a {
 	}
 }
 
-/* @media (max-width: 576px) {
-	#in-the-press-section .carousel {
-		margin-top: -20px;
-	}
+/*****************************************************************
+ PLANS PAGE
+*****************************************************************/
+
+.page-container {
+	padding-top: 100px;
+	padding-bottom: 50px;
+}
+
+.price-container {
+	border: 1px solid #4f9cf9;
+	background-color: rgba(255,255,255,0.9);
+	box-sizing: border-box;
+	border-radius: 20px;
+	padding: 30px 20px;
+	padding-bottom: 30px;
+	margin-bottom: 50px;
+	margin-top: 60px;
+}
+
+.price-container p {
+	font-size: 16px;
+}
+/* 
+.price-container p.plan-type {
+	font-size: 20px;
 } */
+
+/* .price-container .plan-type img {
+	width: 65px;
+} */
+
+.price-container p.price {
+	font-size: 25px;
+	margin-top: -10px;
+}
+
+.price-container p.unchecked-text {
+	color: #9db8d9;
+}
+
+.price-container p {
+	font-size: 16px;
+}
+
+.price-container-blue {
+	background: linear-gradient(251.85deg, #0b4f99 -11.85%, #002d61 104.73%);
+	box-shadow: 0px 4px 16px rgba(105, 132, 172, 0.13);
+	margin-top: 40px;
+	padding-top: 50px;
+	color: white;
+}
+
+.price-row {
+	display: flex;
+	flex-direction: row;
+	margin-bottom: 1em;
+}
+
+.price-row .plan-type {
+	display: flex;
+	align-items: center;
+	font-size: 20px;
+}
+
+.price-row .plan-type img {
+	width: 65px;
+}
+
+.price-row .plan-price {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	flex: 1;
+	font-size: 25px;
+	font-weight: bold;
+}
+
+.price-row .plan-price .per-month {
+	font-size: .5em;
+	font-weight: normal;
+}
+
+.price-container-blue p {
+	color: #fff;
+}
+
+@media (max-width: 1400px) {
+	.price-row .plan-type {
+		font-size: 16px;
+	}
+	
+	.price-row .plan-type img {
+		width: 40px;
+	}
+	
+	.price-row .plan-price {
+		font-size: 20px;
+	}
+}
+
+@media (max-width: 1000px) {
+	.price-row .plan-type {
+		font-size: 20px;
+	}
+	
+	.price-row .plan-type img {
+		width: 65px;
+	}
+	
+	.price-row .plan-price {
+		font-size: 25px;
+	}
+}
 
 /*****************************************************************
  MOBILE VIEW

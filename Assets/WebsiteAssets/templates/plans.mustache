@@ -1,0 +1,29 @@
+<div id="plans-section" class="page-container">
+	<div class="container">
+		<div class="row">
+			<div class="col-12 title-box">
+				<h1 class="text-center">
+					Joplin Cloud <span class="frame-bg frame-bg-yellow">plans</span>
+				</h1>
+				<p class="text-center">
+					Joplin offers several plans with different options based on your
+					needs
+				</p>
+			</div>
+		</div>
+
+		<div class="row">
+			{{#plans.basic}}
+				{{> plan}}
+			{{/plans.basic}}
+
+			{{#plans.pro}}
+				{{> plan}}
+			{{/plans.pro}}
+
+			{{#plans.business}}
+				{{> plan}}
+			{{/plans.business}}
+		</div>
+	</div>
+</div>

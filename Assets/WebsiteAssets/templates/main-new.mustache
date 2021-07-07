@@ -40,7 +40,7 @@ https://github.com/laurent22/joplin/blob/dev/{{{sourceMarkdownFile}}}
 		<title>{{pageTitle}}</title>
 	</head>
 	<body>
-		<div class="container-fluid generic-template" id="main-container">
+		<div class="container-fluid generic-template {{pageName}}-page" id="main-container">
 			<div class="with-profile white-bg" id="nav-section">
 				<div class="container">
 					<div class="row">
@@ -149,11 +149,13 @@ https://github.com/laurent22/joplin/blob/dev/{{{sourceMarkdownFile}}}
 
 						<div class="main-content">
 							{{{contentHtml}}}
-							<div class="bottom-links">
-								<a href="https://github.com/laurent22/joplin/blob/dev/{{{sourceMarkdownFile}}}">
-									<i class="fab fa-github"></i> Improve this doc
-								</a>
-							</div>
+							{{#showImproveThisDoc}}
+								<div class="bottom-links">
+									<a href="https://github.com/laurent22/joplin/blob/dev/{{{sourceMarkdownFile}}}">
+										<i class="fab fa-github"></i> Improve this doc
+									</a>
+								</div>
+							{{/showImproveThisDoc}}
 						</div>
 					</div>
 				</div>
