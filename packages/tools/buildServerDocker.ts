@@ -24,7 +24,7 @@ async function main() {
 	try {
 		revision = await execCommand2('git rev-parse --short HEAD', { showOutput: false });
 	} catch (error) {
-		console.info('not a git repository');
+		console.info('Could not get git commit: metadata revision field will be empty');
 	}
 	const buildArgs = `--build-arg BUILD_DATE="${buildDate}" --build-arg REVISION="${revision}" --build-arg VERSION="${imageVersion}"`;
 
