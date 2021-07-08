@@ -78,7 +78,7 @@ export interface State {
 	hasDisabledSyncItems: boolean;
 	hasDisabledEncryptionItems: boolean;
 	customCss: string;
-	has_legacy_templates: boolean;
+	hasLegacyTemplates: boolean;
 	collapsedFolderIds: string[];
 	clipperServer: StateClipperServer;
 	decryptionWorker: StateDecryptionWorker;
@@ -132,7 +132,7 @@ export const defaultState: State = {
 	hasDisabledSyncItems: false,
 	hasDisabledEncryptionItems: false,
 	customCss: '',
-	has_legacy_templates: false,
+	hasLegacyTemplates: false,
 	collapsedFolderIds: [],
 	clipperServer: {
 		startState: 'idle',
@@ -1017,7 +1017,7 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 			break;
 
 		case 'CONTAINS_LEGACY_TEMPLATES':
-			draft.has_legacy_templates = true;
+			draft.hasLegacyTemplates = true;
 			break;
 
 		case 'SYNC_STARTED':

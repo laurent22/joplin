@@ -552,7 +552,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 			});
 		};
 
-		const onPluginScreen = () => {
+		const onViewPluginScreen = () => {
 			this.props.dispatch({
 				type: 'NAV_GO',
 				routeName: 'Config',
@@ -652,9 +652,9 @@ class MainScreenComponent extends React.Component<Props, State> {
 			);
 		} else if (this.props.showInstallTemplatesPlugin) {
 			msg = this.renderNotificationMessage(
-				_('Templates feature is now moved to a plugin called "Templates".'),
-				_('Install Plugin'),
-				onPluginScreen
+				'The template feature has been moved to a plugin called "Templates".',
+				'Install plugin',
+				onViewPluginScreen
 			);
 		}
 
@@ -893,7 +893,7 @@ const mapStateToProps = (state: AppState) => {
 		shareInvitations: state.shareService.shareInvitations,
 		isSafeMode: state.settings.isSafeMode,
 		needApiAuth: state.needApiAuth,
-		showInstallTemplatesPlugin: state.has_legacy_templates && !state.pluginService.plugins['joplin.plugin.templates'],
+		showInstallTemplatesPlugin: state.hasLegacyTemplates && !state.pluginService.plugins['joplin.plugin.templates'],
 	};
 };
 
