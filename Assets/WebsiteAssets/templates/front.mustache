@@ -26,87 +26,21 @@
 		<link rel="stylesheet" href="{{cssBaseUrl}}/site.css" as="style" />
 		<title>Joplin</title>
 	</head>
-	<body class="front-page">
+	<body class="front-page website-env-{{env}}">
 		<div class="container-fluid" id="main-container">
 
 			{{#navbar}}
 				{{> navbar}}
 			{{/navbar}}
-			
-			<!--
-			<div class="blue-bg" id="nav-section">
-				<div class="container">
-					<div class="row">
-						<div class="col-3">
-							<a href="{{baseUrl}}">
-								<img
-									src="{{imageBaseUrl}}/logo-text.svg"
-									alt=""
-									id="top-logo"
-									width="180"
-								/>
-							</a>
-						</div>
-						<div class="col-9 text-right d-none d-md-block">
-							<a href="{{baseUrl}}/help/" class="fw500">Help</a>
-
-							<a href="{{forumUrl}}" class="fw500">Forum</a>
-
-							{{> joplinCloudButton}}
-							{{> supportButton}}
-						</div>
-						<div class="col-9 text-right d-block d-md-none">
-							<span class="pointer"
-								><img
-									src="{{imageBaseUrl}}/mobile-menu-open-icon.png"
-									id="open-menu-mobile"
-									alt=""
-							/></span>
-							&nbsp;&nbsp;
-
-							<div id="menu-mobile">
-								<br />
-								<div class="text-right">
-									<img
-										src="{{imageBaseUrl}}/close-icon.png"
-										alt=""
-										class="pointer"
-										id="close-menu-mobile"
-									/>
-								</div>
-								<br />
-								<div class="text-center">
-									<a href="{{baseUrl}}"><img src="{{imageBaseUrl}}/logo-text-blue.svg" alt="" /></a>
-									<br />
-									<br />
-									<a href="{{forumUrl}}" class="fw500 mobile-menu-link">Forum</a>
-									<a href="{{baseUrl}}/help/" class="fw500 mobile-menu-link">Help</a>
-								</div>
-								<br />
-								<br />
-								<br />
-								<br />
-								{{> joplinCloudButton}}
-								{{> supportButton}}
-								
-								<br />
-								<p class="light-blue mobile-menu-link-bottom text-center">
-									Copyright (C) 2016-{{yyyy}} Laurent Cozic
-									<br />
-									<br />
-									<a href="{{baseUrl}}/privacy/" class="fw500">Privacy Policy</a>
-								</p>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			-->
 
 			<div class="blue-bg" id="top-section">
 				<div class="container">
 					<div class="row">
 						<div class="col-12">
+							<div class="alert alert-danger alert-env-dev" role="alert">
+								Running in {{env}} mode!
+							</div>
+
 							<h1 class="text-center">
 								Your <span class="frame-bg frame-bg-blue">notes</span>, anywhere
 								you are

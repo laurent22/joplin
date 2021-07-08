@@ -1,4 +1,4 @@
-<div id="plans-section" class="page-container env-{{env}}">
+<div id="plans-section" class="env-{{env}}">
 	<div class="container">
 		<div class="row">
 			<div class="col-12 title-box">
@@ -11,11 +11,7 @@
 				</p>
 			</div>
 		</div>
-
-		<div class="alert alert-danger alert-env-mode" role="alert">
-			Running in environment: {{env}}
-		</div>
-
+		
 		<div class="row">
 			{{#plans.basic}}
 				{{> plan}}

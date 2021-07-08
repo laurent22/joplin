@@ -450,6 +450,10 @@ p,
 	margin-top: 50px;
 }
 
+.website-env-prod .alert-env-dev {
+	display: none;
+}
+
 /* your-data-section  */
 #your-data-section {
 	padding-top: 180px;
@@ -969,12 +973,13 @@ footer .right-links a {
 	display: none;
 }
 
-.plans-page .page-container {
+/* .plans-page .page-container {
 	padding-top: 30px;
-}
+} */
 
 .plans-page h1 {
 	font-size: 2.2em;
+	margin-top:0;
 }
 
 .plans-page .title-box p {

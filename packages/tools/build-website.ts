@@ -7,6 +7,13 @@ const glob = require('glob');
 const MarkdownIt = require('markdown-it');
 const path = require('path');
 
+enum Env {
+	Dev = 'dev',
+	Prod = 'prod',
+}
+
+const env = Env.Prod;
+
 interface GithubSponsor {
 	name: string;
 	id: string;
@@ -42,6 +49,7 @@ interface NavBar {
 }
 
 interface TemplateParams {
+	env?: Env;
 	baseUrl?: string;
 	pageName?: string;
 	imageBaseUrl?: string;
@@ -79,15 +87,9 @@ interface Plan {
 }
 
 interface PlanPageParams extends TemplateParams {
-	env: Env;
 	plans: Record<string, Plan>;
 	faqHtml: string;
 	stripeConfig: StripePublicConfig;
-}
-
-enum Env {
-	Dev = 'dev',
-	Prod = 'prod',
 }
 
 interface StripePublicConfig {
@@ -105,20 +107,6 @@ const plansTemplateHtml = fs.readFileSync(`${websiteAssetDir}/templates/plans.mu
 const stripeConfigs: Record<Env, StripePublicConfig> = JSON.parse(fs.readFileSync(`${rootDir}/packages/server/stripeConfig.json`, 'utf8'));
 const partialDir = `${websiteAssetDir}/templates/partials`;
 
-// const configs: Record<string, Config> = {
-// 	dev: {
-// 		env: Env.Dev,
-// 		stripePublishableKey: 'pk_test_51IvkOPLx4fybOTqJetV23Y5S9YHU9KoOtE6Ftur0waWoWahkHdENjDKSVcl7v3y8Y0Euv7Uwd7O7W4UFasRwd0wE00MPcprz9Q',
-// 		joplinCloudBaseUrl: 'https://test.joplincloud.com',//'http://joplincloud.local:22300',
-// 	},
-// 	prod: {
-// 		env: Env.Prod,
-// 		stripePublishableKey: 'SETME',
-// 		joplinCloudBaseUrl: 'https://joplincloud.com',
-// 	},
-// };
-
-const env = Env.Dev;
 const stripeConfig = stripeConfigs[env];
 
 async function loadMustachePartials(partialDir: string) {
@@ -296,6 +284,7 @@ function defaultTemplateParams(): TemplateParams {
 	const baseUrl = '';
 
 	return {
+		env,
 		baseUrl: baseUrl,
 		imageBaseUrl: `${baseUrl}/images`,
 		cssBaseUrl: `${baseUrl}/css`,
@@ -585,7 +574,6 @@ async function main() {
 
 	const planPageParams: PlanPageParams = {
 		...defaultTemplateParams(),
-		env,
 		partials,
 		templateHtml: plansTemplateHtml,
 		plans: getPlans(),

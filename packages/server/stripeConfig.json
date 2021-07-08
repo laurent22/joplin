@@ -5,7 +5,7 @@
 		"proPriceId": "price_1JAx1eLx4fybOTqJ5VhkxaKC",
 		"webhookBaseUrl": "http://joplincloud.local:22300"
 	},
-	"pro": {
+	"prod": {
 		"publishableKey": "",
 		"basicPriceId": "",
 		"proPriceId": "",

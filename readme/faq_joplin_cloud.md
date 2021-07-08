@@ -1,12 +1,12 @@
 # FAQ
 
-## Do I need Joplin Cloud?
+## What is Joplin Cloud?
 
-Joplin supports various ways to synchronise data, some of which are free, so Joplin Cloud is not a requirement to use the applications.
+Joplin supports various ways to synchronise data with cloud file hosting services. It does that in a generic way, which allows it to support many providers. However there are limits to what can be done in such a generic way - for example, certain performance optimisations are not possible, and more advanced features such as the ability to publish notes or share notebooks cannot be implemented.
 
-Joplin Cloud is a solution developed specifically for Joplin and as such offers various improvements, such as improved synchronisation performances, and additional features such as sharing notes or notebooks.
+This is where Joplin Cloud comes in. It is a solution developed specifically for Joplin and as such offers various improvements, such as improved synchronisation performances, support for publishing notes, and sharing and collaborating on notebooks.
 
-Moreover, by getting a subscription you are supporting the development of the project. Such support helps in the long term to provide bug and security fixes and add new features.
+Moreover, by getting a subscription you are supporting the development of the project as a whole, including the open source applications. Such support helps in the long term to provide bug and security fixes and add new features, and provide support.
 
 ## What if I exceed the storage space?
 
