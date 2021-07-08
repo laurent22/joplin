@@ -969,13 +969,15 @@ footer .right-links a {
 	background-size: contain;
 } */
 
-#plans-section.env-prod .alert-env-mode {
+/* #plans-section.env-prod .alert-env-mode {
 	display: none;
-}
-
-/* .plans-page .page-container {
-	padding-top: 30px;
 } */
+
+#plans-section .sub-title {
+	max-width: 800px;
+	margin-left: auto;
+	margin-right: auto;
+}
 
 .plans-page h1 {
 	font-size: 2.2em;
