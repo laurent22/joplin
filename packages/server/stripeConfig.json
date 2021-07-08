@@ -1,0 +1,14 @@
+{
+	"dev": {
+		"publishableKey": "pk_test_51IvkOPLx4fybOTqJetV23Y5S9YHU9KoOtE6Ftur0waWoWahkHdENjDKSVcl7v3y8Y0Euv7Uwd7O7W4UFasRwd0wE00MPcprz9Q",
+		"basicPriceId": "price_1JAx31Lx4fybOTqJRcGdsSfg",
+		"proPriceId": "price_1JAx1eLx4fybOTqJ5VhkxaKC",
+		"webhookBaseUrl": "http://joplincloud.local:22300"
+	},
+	"pro": {
+		"publishableKey": "",
+		"basicPriceId": "",
+		"proPriceId": "",
+		"webhookBaseUrl": "https://joplincloud.com"
+	}
+}

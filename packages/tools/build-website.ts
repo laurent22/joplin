@@ -79,9 +79,10 @@ interface Plan {
 }
 
 interface PlanPageParams extends TemplateParams {
+	env: Env;
 	plans: Record<string, Plan>;
 	faqHtml: string;
-	config: Config;
+	stripeConfig: StripePublicConfig;
 }
 
 enum Env {
@@ -89,10 +90,11 @@ enum Env {
 	Prod = 'prod',
 }
 
-interface Config {
-	env: Env;
-	stripePublishableKey: string;
-	joplinCloudBaseUrl: string;
+interface StripePublicConfig {
+	publishableKey: string;
+	basicPriceId: string;
+	proPriceId: string;
+	webhookBaseUrl: string;
 }
 
 const rootDir = dirname(dirname(__dirname));
@@ -100,23 +102,24 @@ const websiteAssetDir = `${rootDir}/Assets/WebsiteAssets`;
 const mainTemplateHtml = fs.readFileSync(`${websiteAssetDir}/templates/main-new.mustache`, 'utf8');
 const frontTemplateHtml = fs.readFileSync(`${websiteAssetDir}/templates/front.mustache`, 'utf8');
 const plansTemplateHtml = fs.readFileSync(`${websiteAssetDir}/templates/plans.mustache`, 'utf8');
+const stripeConfigs: Record<Env, StripePublicConfig> = JSON.parse(fs.readFileSync(`${rootDir}/packages/server/stripeConfig.json`, 'utf8'));
 const partialDir = `${websiteAssetDir}/templates/partials`;
 
-const configs: Record<string, Config> = {
-	dev: {
-		env: Env.Dev,
-		stripePublishableKey: 'pk_test_51IvkOPLx4fybOTqJetV23Y5S9YHU9KoOtE6Ftur0waWoWahkHdENjDKSVcl7v3y8Y0Euv7Uwd7O7W4UFasRwd0wE00MPcprz9Q',
-		joplinCloudBaseUrl: 'http://joplincloud.local:22300',
-	},
-	prod: {
-		env: Env.Prod,
-		stripePublishableKey: 'SETME',
-		joplinCloudBaseUrl: 'https://joplincloud.com',
-	},
-};
+// const configs: Record<string, Config> = {
+// 	dev: {
+// 		env: Env.Dev,
+// 		stripePublishableKey: 'pk_test_51IvkOPLx4fybOTqJetV23Y5S9YHU9KoOtE6Ftur0waWoWahkHdENjDKSVcl7v3y8Y0Euv7Uwd7O7W4UFasRwd0wE00MPcprz9Q',
+// 		joplinCloudBaseUrl: 'https://test.joplincloud.com',//'http://joplincloud.local:22300',
+// 	},
+// 	prod: {
+// 		env: Env.Prod,
+// 		stripePublishableKey: 'SETME',
+// 		joplinCloudBaseUrl: 'https://joplincloud.com',
+// 	},
+// };
 
 const env = Env.Dev;
-const config = configs[env];
+const stripeConfig = stripeConfigs[env];
 
 async function loadMustachePartials(partialDir: string) {
 	const output: Record<string, string> = {};
@@ -463,7 +466,7 @@ function getPlans(): Record<string, Plan> {
 			name: 'basic',
 			title: 'Basic',
 			price: '1.99€',
-			stripePriceId: 'price_1JAx31Lx4fybOTqJRcGdsSfg',
+			stripePriceId: stripeConfig.basicPriceId,
 			featured: false,
 			iconName: 'basic-icon',
 			featuresOn: [
@@ -486,7 +489,7 @@ function getPlans(): Record<string, Plan> {
 			name: 'pro',
 			title: 'Pro',
 			price: '5.99€',
-			stripePriceId: 'price_1JAx1eLx4fybOTqJ5VhkxaKC',
+			stripePriceId: stripeConfig.proPriceId,
 			featured: true,
 			iconName: 'pro-icon',
 			featuresOn: [
@@ -582,11 +585,12 @@ async function main() {
 
 	const planPageParams: PlanPageParams = {
 		...defaultTemplateParams(),
+		env,
 		partials,
 		templateHtml: plansTemplateHtml,
 		plans: getPlans(),
 		faqHtml: planPageFaqHtml,
-		config,
+		stripeConfig,
 	};
 
 	const planPageContentHtml = renderMustache('', planPageParams);
@@ -598,6 +602,7 @@ async function main() {
 		showToc: false,
 		showImproveThisDoc: false,
 		contentHtml: planPageContentHtml,
+		title: 'Joplin Cloud Plans',
 	});
 
 	// =============================================================

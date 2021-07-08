@@ -1,4 +1,4 @@
-<div id="plans-section" class="page-container env-{{config.env}}">
+<div id="plans-section" class="page-container env-{{env}}">
 	<div class="container">
 		<div class="row">
 			<div class="col-12 title-box">
@@ -13,7 +13,7 @@
 		</div>
 
 		<div class="alert alert-danger alert-env-mode" role="alert">
-			Running in environment: {{config.env}}
+			Running in environment: {{env}}
 		</div>
 
 		<div class="row">
@@ -38,12 +38,12 @@
 	<script src="https://js.stripe.com/v3/"></script>
 
 	<script>
-	var stripe = Stripe('{{{config.stripePublishableKey}}}');
+	var stripe = Stripe('{{{stripeConfig.publishableKey}}}');
 
 	var createCheckoutSession = function(priceId) {
 		console.info('Creating Stripe session for price:', priceId);
 
-		return fetch("{{{config.joplinCloudBaseUrl}}}/stripe/createCheckoutSession", {
+		return fetch("{{{stripeConfig.webhookBaseUrl}}}/stripe/createCheckoutSession", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json"
