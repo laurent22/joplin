@@ -37,6 +37,10 @@ interface PressCarousel {
 	items: PressCarouselItem[];
 }
 
+interface NavBar {
+	isFrontPage: boolean;
+}
+
 interface TemplateParams {
 	baseUrl?: string;
 	pageName?: string;
@@ -58,19 +62,37 @@ interface TemplateParams {
 	sponsors?: Sponsors;
 	showImproveThisDoc?: boolean;
 	contentHtml?: string;
+	navbar?: NavBar;
 }
 
 interface Plan {
+	name: string;
 	title: string;
 	price: string;
+	stripePriceId: string;
 	featured: boolean;
 	iconName: string;
 	featuresOn: string[];
 	featuresOff: string[];
+	cfaLabel: string;
+	cfaUrl: string;
 }
 
 interface PlanPageParams extends TemplateParams {
 	plans: Record<string, Plan>;
+	faqHtml: string;
+	config: Config;
+}
+
+enum Env {
+	Dev = 'dev',
+	Prod = 'prod',
+}
+
+interface Config {
+	env: Env;
+	stripePublishableKey: string;
+	joplinCloudBaseUrl: string;
 }
 
 const rootDir = dirname(dirname(__dirname));
@@ -79,6 +101,22 @@ const mainTemplateHtml = fs.readFileSync(`${websiteAssetDir}/templates/main-new.
 const frontTemplateHtml = fs.readFileSync(`${websiteAssetDir}/templates/front.mustache`, 'utf8');
 const plansTemplateHtml = fs.readFileSync(`${websiteAssetDir}/templates/plans.mustache`, 'utf8');
 const partialDir = `${websiteAssetDir}/templates/partials`;
+
+const configs: Record<string, Config> = {
+	dev: {
+		env: Env.Dev,
+		stripePublishableKey: 'pk_test_51IvkOPLx4fybOTqJetV23Y5S9YHU9KoOtE6Ftur0waWoWahkHdENjDKSVcl7v3y8Y0Euv7Uwd7O7W4UFasRwd0wE00MPcprz9Q',
+		joplinCloudBaseUrl: 'http://joplincloud.local:22300',
+	},
+	prod: {
+		env: Env.Prod,
+		stripePublishableKey: 'SETME',
+		joplinCloudBaseUrl: 'https://joplincloud.com',
+	},
+};
+
+const env = Env.Dev;
+const config = configs[env];
 
 async function loadMustachePartials(partialDir: string) {
 	const output: Record<string, string> = {};
@@ -98,13 +136,16 @@ function renderMustache(contentHtml: string, templateParams: TemplateParams) {
 	}, templateParams.partials);
 }
 
-
-function markdownToHtml(md: string, templateParams: TemplateParams): string {
-	const markdownIt = new MarkdownIt({
+function getMarkdownIt() {
+	return new MarkdownIt({
 		breaks: true,
 		linkify: true,
 		html: true,
 	});
+}
+
+function markdownToPageHtml(md: string, templateParams: TemplateParams): string {
+	const markdownIt = getMarkdownIt();
 
 	markdownIt.core.ruler.push('tableClass', (state: any) => {
 		const tokens = state.tokens;
@@ -262,6 +303,9 @@ function defaultTemplateParams(): TemplateParams {
 		forumUrl: 'https://discourse.joplinapp.org/',
 		showToc: true,
 		showImproveThisDoc: true,
+		navbar: {
+			isFrontPage: false,
+		},
 	};
 }
 
@@ -290,7 +334,7 @@ function renderPageToHtml(md: string, targetPath: string, templateParams: Templa
 	}
 
 	templateParams.pageTitle = title.join(' | ');
-	const html = templateParams.contentHtml ? renderMustache(templateParams.contentHtml, templateParams) : markdownToHtml(md, templateParams);
+	const html = templateParams.contentHtml ? renderMustache(templateParams.contentHtml, templateParams) : markdownToPageHtml(md, templateParams);
 
 	const folderPath = dirname(targetPath);
 	fs.mkdirpSync(folderPath);
@@ -392,6 +436,18 @@ function pressCarouselItems() {
 	];
 }
 
+const businessAccountEmailBody = `Hello,
+
+This is an automatically generated email. The Business feature is coming soon, but in the meantime we can offer a business discount if you would like to get multiple users.
+
+If so please let us know the following details and we will get back to you as soon as possible:
+
+- Name: 
+
+- Email: 
+
+- Number of users you need: `;
+
 function getPlans(): Record<string, Plan> {
 	const features = {
 		publishNote: 'Publish a note to the internet',
@@ -404,8 +460,10 @@ function getPlans(): Record<string, Plan> {
 
 	return {
 		basic: {
+			name: 'basic',
 			title: 'Basic',
 			price: '1.99€',
+			stripePriceId: 'price_1JAx31Lx4fybOTqJRcGdsSfg',
 			featured: false,
 			iconName: 'basic-icon',
 			featuresOn: [
@@ -420,11 +478,15 @@ function getPlans(): Record<string, Plan> {
 				features.multiUsers,
 				features.prioritySupport,
 			],
+			cfaLabel: 'Try it now',
+			cfaUrl: '',
 		},
 
 		pro: {
+			name: 'pro',
 			title: 'Pro',
 			price: '5.99€',
+			stripePriceId: 'price_1JAx1eLx4fybOTqJ5VhkxaKC',
 			featured: true,
 			iconName: 'pro-icon',
 			featuresOn: [
@@ -439,11 +501,15 @@ function getPlans(): Record<string, Plan> {
 				features.multiUsers,
 				features.prioritySupport,
 			],
+			cfaLabel: 'Try it now',
+			cfaUrl: '',
 		},
 
 		business: {
+			name: 'business',
 			title: 'Business',
 			price: '49.99€',
+			stripePriceId: '',
 			featured: false,
 			iconName: 'business-icon',
 			featuresOn: [
@@ -457,6 +523,8 @@ function getPlans(): Record<string, Plan> {
 				features.prioritySupport,
 			],
 			featuresOff: [],
+			cfaLabel: 'Contact us',
+			cfaUrl: `mailto:business@joplincloud.com?subject=${encodeURIComponent('Joplin Cloud Business Account Order')}&body=${encodeURIComponent(businessAccountEmailBody)}`,
 		},
 	};
 }
@@ -500,20 +568,26 @@ async function main() {
 			items: pressCarouselItems(),
 		},
 		sponsors,
+		navbar: {
+			isFrontPage: true,
+		},
 	});
 
 	// =============================================================
 	// PLANS PAGE
 	// =============================================================
 
+	const planPageFaqMd = await fs.readFile(`${rootDir}/readme/faq_joplin_cloud.md`, 'utf8');
+	const planPageFaqHtml = getMarkdownIt().render(planPageFaqMd, {});
+
 	const planPageParams: PlanPageParams = {
 		...defaultTemplateParams(),
 		partials,
 		templateHtml: plansTemplateHtml,
 		plans: getPlans(),
+		faqHtml: planPageFaqHtml,
+		config,
 	};
-
-	console.info('PPPPPPPPP', getPlans());
 
 	const planPageContentHtml = renderMustache('', planPageParams);
 

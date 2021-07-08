@@ -19,7 +19,34 @@
 		{{/featuresOff}}
 		
 		<p class="text-center subscribe-wrapper">
-			<a href="#" class="button-link btn-white">Get started</a>
+			<a id="subscribeButton-{{name}}" href="{{cfaUrl}}" class="button-link btn-white">{{cfaLabel}}</a>
 		</p>
 	</div>
+
+	{{#stripePriceId}}
+		<script>
+			(function() {
+				function handleResult() {
+					console.info('Redirected to checkout');
+				}
+
+				document
+					.getElementById('subscribeButton-{{{name}}}')
+					.addEventListener("click", function(evt) {
+						evt.preventDefault();
+						const priceId = '{{{stripePriceId}}}';
+
+						// You'll have to define PRICE_ID as a price ID before this code block
+						createCheckoutSession(priceId).then(function(data) {
+							// Call Stripe.js method to redirect to the new Checkout page
+							stripe
+								.redirectToCheckout({
+									sessionId: data.sessionId
+								})
+								.then(handleResult);
+						});
+					});
+			})();
+		</script>
+	{{/stripePriceId}}
 </div>

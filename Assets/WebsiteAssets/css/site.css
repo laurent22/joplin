@@ -108,15 +108,18 @@ a {
 }
 
 .donate-button .heart-full {
-	display: none;
+	position: absolute;
+	opacity: 0;
 }
 
 .donate-button:hover .heart-full {
-	display: inline;
+	position: static;
+	opacity: 1;
 }
 
 .donate-button:hover .heart-line {
-	display: none;
+	position: absolute;
+	opacity: 0;
 }
 
 a.heading-anchor {
@@ -871,10 +874,6 @@ footer .right-links a {
 		margin-left: .5em;
 	}
 
-	#toc-mobile ul li a {
-		/* margin-left: 5px; */
-	}
-
 	#toc-mobile ul {
 		list-style-type: none;
 		padding-left: 0;
@@ -965,6 +964,10 @@ footer .right-links a {
 	background-position: left, right;
 	background-size: contain;
 } */
+
+#plans-section.env-prod .alert-env-mode {
+	display: none;
+}
 
 .plans-page .page-container {
 	padding-top: 30px;
