@@ -6,9 +6,9 @@
 		"webhookBaseUrl": "http://joplincloud.local:22300"
 	},
 	"prod": {
-		"publishableKey": "",
-		"basicPriceId": "",
-		"proPriceId": "",
+		"publishableKey": "pk_live_51IvkOPLx4fybOTqJow8RFsWs0eDznPeBlXMw6s8SIDQeCM8bAFNYlBdDsyonAwRcJgBCoSlvFzAbhJgLFxzzTu4r0006aw846C",
+		"basicPriceId": "price_1JAzWBLx4fybOTqJw64zxJRJ",
+		"proPriceId": "price_1JB1OVLx4fybOTqJOvp3NGM6",
 		"webhookBaseUrl": "https://joplincloud.com"
 	}
 }
