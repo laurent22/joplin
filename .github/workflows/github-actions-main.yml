@@ -64,7 +64,7 @@ jobs:
           "${GITHUB_WORKSPACE}/.github/scripts/run_ci.sh"
 
       - name: Build and publish Windows app
-        if: runner.os == 'Windows' && startsWith(github.ref, 'refs/tags/v')
+        if: runner.os == 'Windows'
         env:
           CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
           CSC_LINK: ${{ secrets.CSC_LINK }}
