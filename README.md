@@ -12,7 +12,7 @@ The notes can be [synchronised](#synchronisation) with various cloud services in
 
 The application is available for Windows, Linux, macOS, Android and iOS (the terminal app also works on FreeBSD). A [Web Clipper](https://github.com/laurent22/joplin/blob/dev/readme/clipper.md), to save web pages and screenshots from your browser, is also available for [Firefox](https://addons.mozilla.org/firefox/addon/joplin-web-clipper/) and [Chrome](https://chrome.google.com/webstore/detail/joplin-web-clipper/alofnhikmmkdbbbgpnglcpdollgjjfek?hl=en-GB).
 
-<div class="top-screenshot"><img src="https://joplinapp.org/images/AllClients.jpg" style="max-width: 100%; max-height: 35em;"></div>
+<div class="top-screenshot"><img src="https://joplinapp.org/images/home-top-img.png" style="max-width: 100%; max-height: 35em;"></div>
 
 # Installation
 
