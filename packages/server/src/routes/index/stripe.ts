@@ -91,7 +91,7 @@ const postHandlers: Record<string, StripeRouteHandler> = {
 
 	// How to test the complete workflow locally:
 	//
-	// - In build-website.ts, set the env to "dev", then build the website - `npm run watch-website`
+	// - In website/build.ts, set the env to "dev", then build the website - `npm run watch-website`
 	// - Start the Stripe CLI tool: `stripe listen --forward-to http://joplincloud.local:22300/stripe/webhook`
 	// - Copy the webhook secret, and paste it in joplin-credentials/server.env (under STRIPE_WEBHOOK_SECRET)
 	// - Start the local Joplin Server, `npm run start-dev`, running under http://joplincloud.local:22300

@@ -1,7 +1,7 @@
 import * as fs from 'fs-extra';
 import { filename } from '@joplin/lib/path-utils';
 import * as Mustache from 'mustache';
-import { insertContentIntoFile } from './tool-utils';
+import { insertContentIntoFile, rootDir } from '../tool-utils';
 const dirname = require('path').dirname;
 const glob = require('glob');
 const MarkdownIt = require('markdown-it');
@@ -99,7 +99,6 @@ interface StripePublicConfig {
 	webhookBaseUrl: string;
 }
 
-const rootDir = dirname(dirname(__dirname));
 const websiteAssetDir = `${rootDir}/Assets/WebsiteAssets`;
 const mainTemplateHtml = fs.readFileSync(`${websiteAssetDir}/templates/main-new.mustache`, 'utf8');
 const frontTemplateHtml = fs.readFileSync(`${websiteAssetDir}/templates/front.mustache`, 'utf8');
