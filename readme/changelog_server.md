@@ -1,5 +1,11 @@
 # Joplin Server Changelog
 
+## [server-v2.2.6-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.2.6-beta) (Pre-release) - 2021-07-09T15:57:47Z
+
+- New: Add Docker image labels (#5158 by [@JackGruber](https://github.com/JackGruber))
+- Fixed: Fixed change processing logic (5a27d4d)
+- Fixed: Fixed styling of shared note (6c1a6b0)
+
 ## [server-v2.2.5-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.2.5-beta) (Pre-release) - 2021-07-03T21:40:37Z
 
 - Improved: Make app context immutable and derive the per-request context properties from it (e210926)
