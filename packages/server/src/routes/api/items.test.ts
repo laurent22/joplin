@@ -327,6 +327,44 @@ describe('api_items', function() {
 		}
 	});
 
+	test('should check permissions - uploaded item should not make the account go over the allowed max limit', async function() {
+		const { user: user1, session: session1 } = await createUserAndSession(1);
+
+		{
+			await models().user().save({ id: user1.id, max_total_item_size: 4 });
+
+			await expectHttpError(
+				async () => createNote(session1.id, {
+					id: '00000000000000000000000000000001',
+					body: '12345',
+				}),
+				ErrorPayloadTooLarge.httpCode
+			);
+		}
+
+		{
+			await models().user().save({ id: user1.id, max_total_item_size: 1000 });
+
+			await expectNoHttpError(
+				async () => createNote(session1.id, {
+					id: '00000000000000000000000000000002',
+					body: '12345',
+				})
+			);
+		}
+
+		{
+			await models().user().save({ id: user1.id, max_total_item_size: 0 });
+
+			await expectNoHttpError(
+				async () => createNote(session1.id, {
+					id: '00000000000000000000000000000003',
+					body: '12345',
+				})
+			);
+		}
+	});
+
 	test('should check permissions - should not allow uploading items if disabled', async function() {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 

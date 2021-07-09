@@ -435,7 +435,7 @@ export type Path = string[];
 // Content Script types
 // =================================================================
 
-export type PostMessageHandler = (id: string, message: any)=> Promise<any>;
+export type PostMessageHandler = (message: any)=> Promise<any>;
 
 /**
  * When a content script is initialised, it receives a `context` object.

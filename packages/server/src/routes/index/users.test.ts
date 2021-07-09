@@ -58,7 +58,7 @@ export async function getUserHtml(sessionId: string, userId: string): Promise<st
 	return context.response.body;
 }
 
-describe('index_users', function() {
+describe('index/users', function() {
 
 	beforeAll(async () => {
 		await beforeAllDb('index_users');
@@ -84,7 +84,7 @@ describe('index_users', function() {
 		expect(!!newUser.id).toBe(true);
 		expect(!!newUser.is_admin).toBe(false);
 		expect(!!newUser.email).toBe(true);
-		expect(newUser.max_item_size).toBe(0);
+		expect(newUser.max_item_size).toBe(null);
 		expect(newUser.must_set_password).toBe(0);
 
 		const userModel = models().user();
@@ -92,6 +92,18 @@ describe('index_users', function() {
 
 		expect(!!userFromModel.password).toBe(true);
 		expect(userFromModel.password === '123456').toBe(false); // Password has been hashed
+	});
+
+	test('should create a user with null properties if they are not explicitly set', async function() {
+		const { session } = await createUserAndSession(1, true);
+
+		await postUser(session.id, 'test@example.com', '123456');
+		const newUser = await models().user().loadByEmail('test@example.com');
+
+		expect(newUser.max_item_size).toBe(null);
+		expect(newUser.can_share_folder).toBe(null);
+		expect(newUser.can_share_note).toBe(null);
+		expect(newUser.max_total_item_size).toBe(null);
 	});
 
 	test('should ask user to set password if not set on creation', async function() {
@@ -113,6 +125,17 @@ describe('index_users', function() {
 		const loggedInUser = await models().user().login('test@example.com', '123456');
 		expect(!!loggedInUser).toBe(true);
 		expect(loggedInUser.email).toBe('test@example.com');
+	});
+
+	test('should format the email when saving it', async function() {
+		const email = 'ILikeUppercaseAndSpaces@Example.COM   ';
+
+		const { session } = await createUserAndSession(1, true);
+
+		await postUser(session.id, email, '123456');
+		const loggedInUser = await models().user().login(email, '123456');
+		expect(!!loggedInUser).toBe(true);
+		expect(loggedInUser.email).toBe('ilikeuppercaseandspaces@example.com');
 	});
 
 	test('should not create anything if user creation fail', async function() {
@@ -312,6 +335,7 @@ describe('index_users', function() {
 
 		// non-admin cannot change max_item_size
 		await expectHttpError(async () => patchUser(session1.id, { id: user1.id, max_item_size: 1000 }), ErrorForbidden.httpCode);
+		await expectHttpError(async () => patchUser(session1.id, { id: user1.id, max_total_item_size: 1000 }), ErrorForbidden.httpCode);
 
 		// non-admin cannot change can_share_folder
 		await models().user().save({ id: user1.id, can_share_folder: 0 });

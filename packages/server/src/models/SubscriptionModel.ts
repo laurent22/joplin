@@ -2,7 +2,7 @@ import { EmailSender, Subscription, Uuid } from '../db';
 import { ErrorNotFound } from '../utils/errors';
 import uuidgen from '../utils/uuidgen';
 import BaseModel from './BaseModel';
-import { AccountType, accountTypeProperties } from './UserModel';
+import { AccountType } from './UserModel';
 
 export default class SubscriptionModel extends BaseModel<Subscription> {
 
@@ -51,7 +51,7 @@ export default class SubscriptionModel extends BaseModel<Subscription> {
 	public async saveUserAndSubscription(email: string, accountType: AccountType, stripeUserId: string, stripeSubscriptionId: string) {
 		return this.withTransaction(async () => {
 			const user = await this.models().user().save({
-				...accountTypeProperties(accountType),
+				account_type: accountType,
 				email,
 				email_confirmed: 1,
 				password: uuidgen(),

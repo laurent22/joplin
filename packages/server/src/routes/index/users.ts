@@ -10,9 +10,11 @@ import { View } from '../../services/MustacheService';
 import defaultView from '../../utils/defaultView';
 import { AclAction } from '../../models/BaseModel';
 import { NotificationKey } from '../../models/NotificationModel';
-import { formatBytes } from '../../utils/bytes';
-import { accountTypeOptions, accountTypeProperties } from '../../models/UserModel';
+import { accountTypeOptions, accountTypeToString } from '../../models/UserModel';
 import uuidgen from '../../utils/uuidgen';
+import { formatMaxItemSize, formatMaxTotalSize, formatTotalSize, formatTotalSizePercent, yesOrNo } from '../../utils/strings';
+import { getCanShareFolder, totalSizeClass } from '../../models/utils/user';
+import { yesNoDefaultOptions } from '../../utils/views/select';
 
 interface CheckPasswordInput {
 	password: string;
@@ -30,22 +32,30 @@ export function checkPassword(fields: CheckPasswordInput, required: boolean): st
 	return '';
 }
 
+function boolOrDefaultToValue(fields: any, fieldName: string): number | null {
+	if (fields[fieldName] === '') return null;
+	const output = Number(fields[fieldName]);
+	if (isNaN(output) || (output !== 0 && output !== 1)) throw new Error(`Invalid value for ${fieldName}`);
+	return output;
+}
+
+function intOrDefaultToValue(fields: any, fieldName: string): number | null {
+	if (fields[fieldName] === '') return null;
+	const output = Number(fields[fieldName]);
+	if (isNaN(output)) throw new Error(`Invalid value for ${fieldName}`);
+	return output;
+}
+
 function makeUser(isNew: boolean, fields: any): User {
-	let user: User = {};
+	const user: User = {};
 
 	if ('email' in fields) user.email = fields.email;
 	if ('full_name' in fields) user.full_name = fields.full_name;
 	if ('is_admin' in fields) user.is_admin = fields.is_admin;
-	if ('max_item_size' in fields) user.max_item_size = fields.max_item_size || 0;
-	if ('can_share_folder' in fields) user.can_share_folder = fields.can_share_folder ? 1 : 0;
-
-	if ('account_type' in fields) {
-		user.account_type = Number(fields.account_type);
-		user = {
-			...user,
-			...accountTypeProperties(user.account_type),
-		};
-	}
+	if ('max_item_size' in fields) user.max_item_size = intOrDefaultToValue(fields, 'max_item_size');
+	if ('max_total_item_size' in fields) user.max_total_item_size = intOrDefaultToValue(fields, 'max_total_item_size');
+	if ('can_share_folder' in fields) user.can_share_folder = boolOrDefaultToValue(fields, 'can_share_folder');
+	if ('account_type' in fields) user.account_type = Number(fields.account_type);
 
 	const password = checkPassword(fields, false);
 	if (password) user.password = password;
@@ -61,10 +71,7 @@ function makeUser(isNew: boolean, fields: any): User {
 }
 
 function defaultUser(): User {
-	return {
-		can_share_folder: 1,
-		max_item_size: 0,
-	};
+	return {};
 }
 
 function userIsNew(path: SubPath): boolean {
@@ -78,8 +85,8 @@ function userIsMe(path: SubPath): boolean {
 const router = new Router(RouteType.Web);
 
 router.get('users', async (_path: SubPath, ctx: AppContext) => {
-	const userModel = ctx.models.user();
-	await userModel.checkIfAllowed(ctx.owner, AclAction.List);
+	const userModel = ctx.joplin.models.user();
+	await userModel.checkIfAllowed(ctx.joplin.owner, AclAction.List);
 
 	const users = await userModel.all();
 
@@ -94,23 +101,29 @@ router.get('users', async (_path: SubPath, ctx: AppContext) => {
 	view.content.users = users.map(user => {
 		return {
 			...user,
-			formattedItemMaxSize: user.max_item_size ? formatBytes(user.max_item_size) : '∞',
+			formattedItemMaxSize: formatMaxItemSize(user),
+			formattedTotalSize: formatTotalSize(user),
+			formattedMaxTotalSize: formatMaxTotalSize(user),
+			formattedTotalSizePercent: formatTotalSizePercent(user),
+			totalSizeClass: totalSizeClass(user),
+			formattedAccountType: accountTypeToString(user.account_type),
+			formattedCanShareFolder: yesOrNo(getCanShareFolder(user)),
 		};
 	});
 	return view;
 });
 
 router.get('users/:id', async (path: SubPath, ctx: AppContext, user: User = null, error: any = null) => {
-	const owner = ctx.owner;
+	const owner = ctx.joplin.owner;
 	const isMe = userIsMe(path);
 	const isNew = userIsNew(path);
-	const userModel = ctx.models.user();
+	const userModel = ctx.joplin.models.user();
 	const userId = userIsMe(path) ? owner.id : path.id;
 
 	user = !isNew ? user || await userModel.load(userId) : null;
 	if (isNew && !user) user = defaultUser();
 
-	await userModel.checkIfAllowed(ctx.owner, AclAction.Read, user);
+	await userModel.checkIfAllowed(ctx.joplin.owner, AclAction.Read, user);
 
 	let postUrl = '';
 
@@ -131,6 +144,8 @@ router.get('users/:id', async (path: SubPath, ctx: AppContext, user: User = null
 	view.content.showDeleteButton = !isNew && !!owner.is_admin && owner.id !== user.id;
 	view.content.showResetPasswordButton = !isNew && owner.is_admin;
 
+	view.content.canShareFolderOptions = yesNoDefaultOptions(user, 'can_share_folder');
+
 	if (config().accountTypesEnabled) {
 		view.content.showAccountTypes = true;
 		view.content.accountTypes = accountTypeOptions().map((o: any) => {
@@ -147,9 +162,9 @@ router.publicSchemas.push('users/:id/confirm');
 router.get('users/:id/confirm', async (path: SubPath, ctx: AppContext, error: Error = null) => {
 	const userId = path.id;
 	const token = ctx.query.token;
-	if (token) await ctx.models.user().confirmEmail(userId, token);
+	if (token) await ctx.joplin.models.user().confirmEmail(userId, token);
 
-	const user = await ctx.models.user().load(userId);
+	const user = await ctx.joplin.models.user().load(userId);
 
 	if (user.must_set_password) {
 		const view: View = {
@@ -158,17 +173,17 @@ router.get('users/:id/confirm', async (path: SubPath, ctx: AppContext, error: Er
 				user,
 				error,
 				token,
-				postUrl: ctx.models.user().confirmUrl(userId, token),
+				postUrl: ctx.joplin.models.user().confirmUrl(userId, token),
 			},
 			navbar: false,
 		};
 
 		return view;
 	} else {
-		await ctx.models.token().deleteByValue(userId, token);
-		await ctx.models.notification().add(userId, NotificationKey.EmailConfirmed);
+		await ctx.joplin.models.token().deleteByValue(userId, token);
+		await ctx.joplin.models.notification().add(userId, NotificationKey.EmailConfirmed);
 
-		if (ctx.owner) {
+		if (ctx.joplin.owner) {
 			return redirect(ctx, `${config().baseUrl}/home`);
 		} else {
 			return redirect(ctx, `${config().baseUrl}/login`);
@@ -187,17 +202,17 @@ router.post('users/:id/confirm', async (path: SubPath, ctx: AppContext) => {
 
 	try {
 		const fields = await bodyFields<SetPasswordFormData>(ctx.req);
-		await ctx.models.token().checkToken(userId, fields.token);
+		await ctx.joplin.models.token().checkToken(userId, fields.token);
 
 		const password = checkPassword(fields, true);
 
-		await ctx.models.user().save({ id: userId, password, must_set_password: 0 });
-		await ctx.models.token().deleteByValue(userId, fields.token);
+		await ctx.joplin.models.user().save({ id: userId, password, must_set_password: 0 });
+		await ctx.joplin.models.token().deleteByValue(userId, fields.token);
 
-		const session = await ctx.models.session().createUserSession(userId);
+		const session = await ctx.joplin.models.session().createUserSession(userId);
 		ctx.cookies.set('sessionId', session.id);
 
-		await ctx.models.notification().add(userId, NotificationKey.PasswordSet);
+		await ctx.joplin.models.notification().add(userId, NotificationKey.PasswordSet);
 
 		return redirect(ctx, `${config().baseUrl}/home`);
 	} catch (error) {
@@ -217,7 +232,7 @@ interface FormFields {
 
 router.post('users', async (path: SubPath, ctx: AppContext) => {
 	let user: User = {};
-	const userId = userIsMe(path) ? ctx.owner.id : path.id;
+	const userId = userIsMe(path) ? ctx.joplin.owner.id : path.id;
 
 	try {
 		const body = await formParse(ctx.req);
@@ -226,11 +241,11 @@ router.post('users', async (path: SubPath, ctx: AppContext) => {
 		if (userIsMe(path)) fields.id = userId;
 		user = makeUser(isNew, fields);
 
-		const userModel = ctx.models.user();
+		const userModel = ctx.joplin.models.user();
 
 		if (fields.post_button) {
 			const userToSave: User = userModel.fromApiInput(user);
-			await userModel.checkIfAllowed(ctx.owner, isNew ? AclAction.Create : AclAction.Update, userToSave);
+			await userModel.checkIfAllowed(ctx.joplin.owner, isNew ? AclAction.Create : AclAction.Update, userToSave);
 
 			if (isNew) {
 				await userModel.save(userToSave);
@@ -239,7 +254,7 @@ router.post('users', async (path: SubPath, ctx: AppContext) => {
 			}
 		} else if (fields.delete_button) {
 			const user = await userModel.load(path.id);
-			await userModel.checkIfAllowed(ctx.owner, AclAction.Delete, user);
+			await userModel.checkIfAllowed(ctx.joplin.owner, AclAction.Delete, user);
 			await userModel.delete(path.id);
 		} else if (fields.send_reset_password_email) {
 			const user = await userModel.load(path.id);

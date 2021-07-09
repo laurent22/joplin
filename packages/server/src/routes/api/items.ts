@@ -17,7 +17,7 @@ const router = new Router(RouteType.Api);
 const batchMaxSize = 1 * MB;
 
 export async function putItemContents(path: SubPath, ctx: AppContext, isBatch: boolean) {
-	if (!ctx.owner.can_upload) throw new ErrorForbidden('Uploading content is disabled');
+	if (!ctx.joplin.owner.can_upload) throw new ErrorForbidden('Uploading content is disabled');
 
 	const parsedBody = await formParse(ctx.req);
 	const bodyFields = parsedBody.fields;
@@ -49,12 +49,12 @@ export async function putItemContents(path: SubPath, ctx: AppContext, isBatch: b
 			// query parameter.
 			if (ctx.query['share_id']) {
 				saveOptions.shareId = ctx.query['share_id'];
-				await ctx.models.item().checkIfAllowed(ctx.owner, AclAction.Create, { jop_share_id: saveOptions.shareId });
+				await ctx.joplin.models.item().checkIfAllowed(ctx.joplin.owner, AclAction.Create, { jop_share_id: saveOptions.shareId });
 			}
 
 			items = [
 				{
-					name: ctx.models.item().pathToName(path.id),
+					name: ctx.joplin.models.item().pathToName(path.id),
 					body: buffer,
 				},
 			];
@@ -63,9 +63,9 @@ export async function putItemContents(path: SubPath, ctx: AppContext, isBatch: b
 		}
 	}
 
-	const output = await ctx.models.item().saveFromRawContent(ctx.owner, items, saveOptions);
+	const output = await ctx.joplin.models.item().saveFromRawContent(ctx.joplin.owner, items, saveOptions);
 	for (const [name] of Object.entries(output)) {
-		if (output[name].item) output[name].item = ctx.models.item().toApiOutput(output[name].item) as Item;
+		if (output[name].item) output[name].item = ctx.joplin.models.item().toApiOutput(output[name].item) as Item;
 	}
 	return output;
 }
@@ -89,8 +89,8 @@ async function itemFromPath(userId: Uuid, itemModel: ItemModel, path: SubPath, m
 }
 
 router.get('api/items/:id', async (path: SubPath, ctx: AppContext) => {
-	const itemModel = ctx.models.item();
-	const item = await itemFromPath(ctx.owner.id, itemModel, path);
+	const itemModel = ctx.joplin.models.item();
+	const item = await itemFromPath(ctx.joplin.owner.id, itemModel, path);
 	return itemModel.toApiOutput(item);
 });
 
@@ -99,12 +99,12 @@ router.del('api/items/:id', async (path: SubPath, ctx: AppContext) => {
 		if (path.id === 'root' || path.id === 'root:/:') {
 			// We use this for testing only and for safety reasons it's probably
 			// best to disable it on production.
-			if (ctx.env !== 'dev') throw new ErrorMethodNotAllowed('Deleting the root is not allowed');
-			await ctx.models.item().deleteAll(ctx.owner.id);
+			if (ctx.joplin.env !== 'dev') throw new ErrorMethodNotAllowed('Deleting the root is not allowed');
+			await ctx.joplin.models.item().deleteAll(ctx.joplin.owner.id);
 		} else {
-			const item = await itemFromPath(ctx.owner.id, ctx.models.item(), path);
-			await ctx.models.item().checkIfAllowed(ctx.owner, AclAction.Delete, item);
-			await ctx.models.item().deleteForUser(ctx.owner.id, item);
+			const item = await itemFromPath(ctx.joplin.owner.id, ctx.joplin.models.item(), path);
+			await ctx.joplin.models.item().checkIfAllowed(ctx.joplin.owner, AclAction.Delete, item);
+			await ctx.joplin.models.item().deleteForUser(ctx.joplin.owner.id, item);
 		}
 	} catch (error) {
 		if (error instanceof ErrorNotFound) {
@@ -116,8 +116,8 @@ router.del('api/items/:id', async (path: SubPath, ctx: AppContext) => {
 });
 
 router.get('api/items/:id/content', async (path: SubPath, ctx: AppContext) => {
-	const itemModel = ctx.models.item();
-	const item = await itemFromPath(ctx.owner.id, itemModel, path);
+	const itemModel = ctx.joplin.models.item();
+	const item = await itemFromPath(ctx.joplin.owner.id, itemModel, path);
 	const serializedContent = await itemModel.serializedContent(item.id);
 	return respondWithItemContent(ctx.response, item, serializedContent);
 });
@@ -130,14 +130,14 @@ router.put('api/items/:id/content', async (path: SubPath, ctx: AppContext) => {
 });
 
 router.get('api/items/:id/delta', async (_path: SubPath, ctx: AppContext) => {
-	const changeModel = ctx.models.change();
-	return changeModel.delta(ctx.owner.id, requestDeltaPagination(ctx.query));
+	const changeModel = ctx.joplin.models.change();
+	return changeModel.delta(ctx.joplin.owner.id, requestDeltaPagination(ctx.query));
 });
 
 router.get('api/items/:id/children', async (path: SubPath, ctx: AppContext) => {
-	const itemModel = ctx.models.item();
+	const itemModel = ctx.joplin.models.item();
 	const parentName = itemModel.pathToName(path.id);
-	const result = await itemModel.children(ctx.owner.id, parentName, requestPagination(ctx.query));
+	const result = await itemModel.children(ctx.joplin.owner.id, parentName, requestPagination(ctx.query));
 	return result;
 });
 

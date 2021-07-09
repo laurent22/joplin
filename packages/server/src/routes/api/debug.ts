@@ -20,7 +20,7 @@ router.post('api/debug', async (_path: SubPath, ctx: AppContext) => {
 	console.info(`Action: ${query.action}`);
 
 	if (query.action === 'createTestUsers') {
-		await createTestUsers(ctx.db, config());
+		await createTestUsers(ctx.joplin.db, config());
 	}
 });
 

@@ -5,9 +5,9 @@ import { AppContext } from '../../utils/types';
 import { contextSessionId } from '../../utils/requestUtils';
 import { ErrorMethodNotAllowed } from '../../utils/errors';
 import defaultView from '../../utils/defaultView';
-import { accountTypeProperties, accountTypeToString } from '../../models/UserModel';
-import { formatBytes } from '../../utils/bytes';
-import { yesOrNo } from '../../utils/strings';
+import { accountTypeToString } from '../../models/UserModel';
+import { formatMaxItemSize, formatMaxTotalSize, formatTotalSize, formatTotalSizePercent, yesOrNo } from '../../utils/strings';
+import { getCanShareFolder, totalSizeClass } from '../../models/utils/user';
 
 const router: Router = new Router(RouteType.Web);
 
@@ -15,30 +15,46 @@ router.get('home', async (_path: SubPath, ctx: AppContext) => {
 	contextSessionId(ctx);
 
 	if (ctx.method === 'GET') {
-		const accountProps = accountTypeProperties(ctx.owner.account_type);
+		const user = ctx.joplin.owner;
 
 		const view = defaultView('home', 'Home');
 		view.content = {
 			userProps: [
 				{
 					label: 'Account Type',
-					value: accountTypeToString(accountProps.account_type),
+					value: accountTypeToString(user.account_type),
+					show: true,
 				},
 				{
 					label: 'Is Admin',
-					value: yesOrNo(ctx.owner.is_admin),
+					value: yesOrNo(user.is_admin),
+					show: !!user.is_admin,
 				},
 				{
 					label: 'Max Item Size',
-					value: accountProps.max_item_size ? formatBytes(accountProps.max_item_size) : '∞',
+					value: formatMaxItemSize(user),
+					show: true,
+				},
+				{
+					label: 'Total Size',
+					classes: [totalSizeClass(user)],
+					value: `${formatTotalSize(user)} (${formatTotalSizePercent(user)})`,
+					show: true,
+				},
+				{
+					label: 'Max Total Size',
+					value: formatMaxTotalSize(user),
+					show: true,
 				},
 				{
 					label: 'Can Share Note',
 					value: yesOrNo(true),
+					show: true,
 				},
 				{
 					label: 'Can Share Notebook',
-					value: yesOrNo(accountProps.can_share_folder),
+					value: yesOrNo(getCanShareFolder(user)),
+					show: true,
 				},
 			],
 		};

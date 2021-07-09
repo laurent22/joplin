@@ -48,6 +48,11 @@ const propertyTypes: Record<string, string> = {
 	'emails.sent_time': 'number',
 	'subscriptions.last_payment_time': 'number',
 	'subscriptions.last_payment_failed_time': 'number',
+	'users.can_share_folder': 'number | null',
+	'users.can_share_note': 'number | null',
+	'users.max_total_item_size': 'number | null',
+	'users.max_item_size': 'number | null',
+	'users.total_item_size': 'number',
 };
 
 function insertContentIntoFile(filePath: string, markerOpen: string, markerClose: string, contentToInsert: string): void {

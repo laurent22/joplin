@@ -1,8 +1,11 @@
 # Joplin changelog
 
-## [v2.1.7](https://github.com/laurent22/joplin/releases/tag/v2.1.7) - 2021-06-26T19:48:55Z
+## [v2.1.8](https://github.com/laurent22/joplin/releases/tag/v2.1.8) - 2021-07-03T08:25:16Z
 
-If you use the Web Clipper do not upgrade to this version yet as it is not compatible with the old clipper. A new version of the clipper has been published to the stores but it may take a few days before it is released.
+- Fixes [#5133](https://github.com/laurent22/joplin/issues/5133): Items keep being uploaded to Joplin Server after a note has been shared.
+- Fixed issue where untitled notes where created after a note had been shared and synced
+
+## [v2.1.7](https://github.com/laurent22/joplin/releases/tag/v2.1.7) - 2021-06-26T19:48:55Z
 
 - New: Add support for Joplin Server X-API-MIN-VERSION header (51f3c00)
 - Improved: Activate Joplin Server optimisations (3d03321)

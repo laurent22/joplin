@@ -53,7 +53,7 @@ router.public = true;
 router.get('', async (path: SubPath, ctx: AppContext) => {
 	// Redirect to either /login or /home when trying to access the root
 	if (!path.id && !path.link) {
-		if (ctx.owner) {
+		if (ctx.joplin.owner) {
 			return redirect(ctx, 'home');
 		} else {
 			return redirect(ctx, 'login');

@@ -1,9 +1,16 @@
+<div class="block">
+	<a class="button is-primary" href="{{{global.baseUrl}}}/users/new">Add user</a>
+</div>
+
 <table class="table">
 	<thead>
 		<tr>
 			<th>Full name</th>
 			<th>Email</th>
+			<th>Account</th>
 			<th>Max Item Size</th>
+			<th>Total Size</th>
+			<th>Max Total Size</th>
 			<th>Can share</th>
 			<th>Is admin?</th>
 			<th>Actions</th>
@@ -14,8 +21,11 @@
 			<tr>
 				<td>{{full_name}}</td>
 				<td>{{email}}</td>
+				<td>{{formattedAccountType}}</td>
 				<td>{{formattedItemMaxSize}}</td>
-				<td>{{can_share_folder}}</td>
+				<td class="{{totalSizeClass}}">{{formattedTotalSize}} ({{formattedTotalSizePercent}})</td>
+				<td>{{formattedMaxTotalSize}}</td>
+				<td>{{formattedCanShareFolder}}</td>
 				<td>{{is_admin}}</td>
 				<td><a href="{{{global.baseUrl}}}/users/{{id}}" class="button is-primary is-small">Edit</a></td>
 			</tr>
