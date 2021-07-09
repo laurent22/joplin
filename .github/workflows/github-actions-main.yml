@@ -5,7 +5,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-latest, ubuntu-latest]
+        os: [macos-latest, ubuntu-latest, windows-2016]
     steps:
 
       # Silence apt-get update errors (for example when a module doesn't
@@ -50,7 +50,8 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Run script...
+      - name: Run CI script (Linux and macOS)
+        if: runner.os == 'Linux' || runner.os == 'macOs'
         env:
           APPLE_ASC_PROVIDER: ${{ secrets.APPLE_ASC_PROVIDER }}
           APPLE_ID: ${{ secrets.APPLE_ID }}
@@ -61,3 +62,15 @@ jobs:
           IS_CONTINUOUS_INTEGRATION: 1
         run: |
           "${GITHUB_WORKSPACE}/.github/scripts/run_ci.sh"
+
+      - name: Build and publish Windows app
+        if: runner.os == 'Windows' && startsWith(github.ref, 'refs/tags/v')
+        env:
+          CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
+          CSC_LINK: ${{ secrets.CSC_LINK }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          IS_CONTINUOUS_INTEGRATION: 1
+        run: |
+          npm install
+          cd packages/app-desktop
+          npm run dist -- --publish=never
