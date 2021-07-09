@@ -430,7 +430,7 @@ function pressCarouselItems() {
 
 const businessAccountEmailBody = `Hello,
 
-This is an automatically generated email. The Business feature is coming soon, but in the meantime we can offer a business discount if you would like to get multiple users.
+This is an automatically generated email. The Business feature is coming soon, and in the meantime we offer a business discount if you would like to register multiple users.
 
 If so please let us know the following details and we will get back to you as soon as possible:
 

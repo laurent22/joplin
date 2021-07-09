@@ -23,30 +23,30 @@
 		</p>
 	</div>
 
-	{{#stripePriceId}}
-		<script>
-			(function() {
+	<script>
+		(function() {
+			const stripePriceId = '{{{stripePriceId}}}';
+			const planName = '{{{name}}}';
+			const buttonId = 'subscribeButton-' + planName;
+			const buttonElement = document.getElementById(buttonId);
+
+			if (stripePriceId) {
 				function handleResult() {
 					console.info('Redirected to checkout');
 				}
 
-				document
-					.getElementById('subscribeButton-{{{name}}}')
-					.addEventListener("click", function(evt) {
-						evt.preventDefault();
-						const priceId = '{{{stripePriceId}}}';
+				buttonElement.addEventListener("click", function(evt) {
+					evt.preventDefault();
+					const priceId = '{{{stripePriceId}}}';
 
-						// You'll have to define PRICE_ID as a price ID before this code block
-						createCheckoutSession(priceId).then(function(data) {
-							// Call Stripe.js method to redirect to the new Checkout page
-							stripe
-								.redirectToCheckout({
-									sessionId: data.sessionId
-								})
-								.then(handleResult);
-						});
+					createCheckoutSession(priceId).then(function(data) {
+						stripe.redirectToCheckout({
+							sessionId: data.sessionId
+						})
+						.then(handleResult);
 					});
-			})();
-		</script>
-	{{/stripePriceId}}
+				});
+			}
+		})();
+	</script>
 </div>
