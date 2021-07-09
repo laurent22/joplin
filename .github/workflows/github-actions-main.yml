@@ -50,7 +50,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Run CI script (Linux and macOS)
+      - name: Run tests, build and publish Linux and macOS apps
         if: runner.os == 'Linux' || runner.os == 'macOs'
         env:
           APPLE_ASC_PROVIDER: ${{ secrets.APPLE_ASC_PROVIDER }}
@@ -64,7 +64,7 @@ jobs:
           "${GITHUB_WORKSPACE}/.github/scripts/run_ci.sh"
 
       - name: Build and publish Windows app
-        if: runner.os == 'Windows'
+        if: runner.os == 'Windows' && startsWith(github.ref, 'refs/tags/v')
         env:
           CSC_KEY_PASSWORD: ${{ secrets.WINDOWS_CSC_KEY_PASSWORD }}
           CSC_LINK: ${{ secrets.WINDOWS_CSC_LINK }}
@@ -73,4 +73,4 @@ jobs:
         run: |
           npm install
           cd packages/app-desktop
-          npm run dist -- --publish=never
+          npm run dist
