@@ -232,32 +232,38 @@ export default class ShareModel extends BaseModel<Share> {
 		while (true) {
 			const latestProcessedChange = await this.models().keyValue().value<string>('ShareService::latestProcessedChange');
 
-			const changes = await this.models().change().allFromId(latestProcessedChange || '');
-			if (!changes.length) break;
+			const paginatedChanges = await this.models().change().allFromId(latestProcessedChange || '');
+			const changes = paginatedChanges.items;
 
-			const items = await this.models().item().loadByIds(changes.map(c => c.item_id));
-			const shareIds = unique(items.filter(i => !!i.jop_share_id).map(i => i.jop_share_id));
-			const shares = await this.models().share().loadByIds(shareIds);
+			if (!changes.length) {
+				await this.models().keyValue().setValue('ShareService::latestProcessedChange', paginatedChanges.cursor);
+			} else {
+				const items = await this.models().item().loadByIds(changes.map(c => c.item_id));
+				const shareIds = unique(items.filter(i => !!i.jop_share_id).map(i => i.jop_share_id));
+				const shares = await this.models().share().loadByIds(shareIds);
 
-			await this.withTransaction(async () => {
-				for (const change of changes) {
-					const item = items.find(i => i.id === change.item_id);
+				await this.withTransaction(async () => {
+					for (const change of changes) {
+						const item = items.find(i => i.id === change.item_id);
 
-					if (change.type === ChangeType.Create) {
-						await handleCreated(change, item, shares.find(s => s.id === item.jop_share_id));
+						if (change.type === ChangeType.Create) {
+							await handleCreated(change, item, shares.find(s => s.id === item.jop_share_id));
+						}
+
+						if (change.type === ChangeType.Update) {
+							await handleUpdated(change, item, shares.find(s => s.id === item.jop_share_id));
+						}
+
+						// We don't need to handle ChangeType.Delete because when an
+						// item is deleted, all its associated userItems are deleted
+						// too.
 					}
 
-					if (change.type === ChangeType.Update) {
-						await handleUpdated(change, item, shares.find(s => s.id === item.jop_share_id));
-					}
+					await this.models().keyValue().setValue('ShareService::latestProcessedChange', paginatedChanges.cursor);
+				}, 'ShareService::updateSharedItems3');
+			}
 
-					// We don't need to handle ChangeType.Delete because when an
-					// item is deleted, all its associated userItems are deleted
-					// too.
-				}
-
-				await this.models().keyValue().setValue('ShareService::latestProcessedChange', changes[changes.length - 1].id);
-			});
+			if (!paginatedChanges.has_more) break;
 		}
 	}
 
