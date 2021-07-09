@@ -535,7 +535,7 @@ class Application extends BaseApplication {
 		return cssString;
 	}
 
-	async checkForLegacyTemplates() {
+	private async checkForLegacyTemplates() {
 		const templatesDir = `${Setting.value('profileDir')}/templates`;
 		if (await shim.fsDriver().exists(templatesDir)) {
 			try {
