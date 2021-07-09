@@ -535,6 +535,26 @@ class Application extends BaseApplication {
 		return cssString;
 	}
 
+	private async checkForLegacyTemplates() {
+		const templatesDir = `${Setting.value('profileDir')}/templates`;
+		if (await shim.fsDriver().exists(templatesDir)) {
+			try {
+				const files = await shim.fsDriver().readDirStats(templatesDir);
+				for (const file of files) {
+					if (file.path.endsWith('.md')) {
+						// There is atleast one template.
+						this.store().dispatch({
+							type: 'CONTAINS_LEGACY_TEMPLATES',
+						});
+						break;
+					}
+				}
+			} catch (error) {
+				reg.logger().error(`Failed to read templates directory: ${error}`);
+			}
+		}
+	}
+
 	private async initPluginService() {
 		const service = PluginService.instance();
 
@@ -693,6 +713,8 @@ class Application extends BaseApplication {
 			type: 'NOTE_DEVTOOLS_SET',
 			value: Setting.value('flagOpenDevTools'),
 		});
+
+		await this.checkForLegacyTemplates();
 
 		// Note: Auto-update currently doesn't work in Linux: it downloads the update
 		// but then doesn't install it on exit.
