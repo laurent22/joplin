@@ -12,9 +12,9 @@ install:
   - ps: Install-Product node 10 x64
 
 build_script:
-  - npm install
+  # - npm install
   - ps: cd packages/app-desktop
-  - npm run dist
+  # - npm run dist
 
 test: off
 
