@@ -61,6 +61,7 @@ export interface TemplateParams {
 	contentHtml?: string;
 	navbar?: NavBar;
 	showJoplinCloudLinks?: boolean;
+	buildTime?: number;
 }
 
 export interface Plan {

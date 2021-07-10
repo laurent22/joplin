@@ -10,7 +10,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="theme-color" content="#000000" />
 		<meta name="description" content="Jopli website" />
-		<link rel="stylesheet" href="{{cssBaseUrl}}/fontawesome-all.min.css">
+		<link rel="stylesheet" href="{{cssBaseUrl}}/fontawesome-all.min.css?t={{buildTime}}">
 		<link
 			rel="stylesheet"
 			href="{{cssBaseUrl}}/bootstrap5.0.2.min.css"
@@ -23,7 +23,7 @@
 			media="all"
 			onload="this.media='all'; this.onload = null"
 		/>
-		<link rel="stylesheet" href="{{cssBaseUrl}}/site.css" as="style" />
+		<link rel="stylesheet" href="{{cssBaseUrl}}/site.css?t={{buildTime}}" as="style" />
 		<title>Joplin</title>
 	</head>
 	<body class="front-page website-env-{{env}}">
@@ -403,7 +403,7 @@
 			rel="preload"
 			as="script"
 		></script>
-		<script src="{{jsBaseUrl}}/script.js"></script>
+		<script src="{{jsBaseUrl}}/script.js?t={{buildTime}}"></script>
 		{{> analytics}}
 	</body>
 </html>

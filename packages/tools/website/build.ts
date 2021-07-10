@@ -9,6 +9,7 @@ const glob = require('glob');
 const path = require('path');
 
 const env = Env.Prod;
+const buildTime = Date.now();
 
 const websiteAssetDir = `${rootDir}/Assets/WebsiteAssets`;
 const mainTemplateHtml = fs.readFileSync(`${websiteAssetDir}/templates/main-new.mustache`, 'utf8');
@@ -77,6 +78,7 @@ function defaultTemplateParams(): TemplateParams {
 		navbar: {
 			isFrontPage: false,
 		},
+		buildTime,
 	};
 }
 
