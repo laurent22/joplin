@@ -457,9 +457,6 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 
 			div.CodeMirror span.cm-comment {
 				color: ${theme.codeColor};
-				background-color: ${theme.codeBackgroundColor};
-				padding-right: .2em;
-				padding-left: .2em;
 			}
 
 			.CodeMirror .cm-strong {
