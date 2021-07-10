@@ -1,7 +1,7 @@
 import { ChangeType, Share, ShareType, ShareUser, ShareUserStatus } from '../../db';
 import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, createNote, createFolder, updateItem, createItemTree, makeNoteSerializedBody, updateNote, expectHttpError, createResource } from '../../utils/testing/testUtils';
 import { postApi, patchApi, getApi, deleteApi } from '../../utils/testing/apiUtils';
-import { PaginatedChanges } from '../../models/ChangeModel';
+import { PaginatedDeltaChanges } from '../../models/ChangeModel';
 import { shareFolderWithUser } from '../../utils/testing/shareApiUtils';
 import { msleep } from '../../utils/time';
 import { ErrorForbidden } from '../../utils/errors';
@@ -477,11 +477,11 @@ describe('shares.folder', function() {
 		{
 			const names = ['000000000000000000000000000000F1.md', '00000000000000000000000000000001.md'].sort();
 
-			const page1 = await getApi<PaginatedChanges>(session1.id, 'items/root/delta');
+			const page1 = await getApi<PaginatedDeltaChanges>(session1.id, 'items/root/delta');
 			expect(page1.items.map(i => i.item_name).sort()).toEqual(names);
 			cursor1 = page1.cursor;
 
-			const page2 = await getApi<PaginatedChanges>(session2.id, 'items/root/delta');
+			const page2 = await getApi<PaginatedDeltaChanges>(session2.id, 'items/root/delta');
 			expect(page2.items.map(i => i.item_name).sort()).toEqual(names);
 			cursor2 = page2.cursor;
 		}
@@ -499,13 +499,13 @@ describe('shares.folder', function() {
 		}));
 
 		{
-			const page1 = await getApi<PaginatedChanges>(session1.id, 'items/root/delta', { query: { cursor: cursor1 } });
+			const page1 = await getApi<PaginatedDeltaChanges>(session1.id, 'items/root/delta', { query: { cursor: cursor1 } });
 			expect(page1.items.length).toBe(1);
 			expect(page1.items[0].item_name).toBe('00000000000000000000000000000001.md');
 			expect(page1.items[0].type).toBe(ChangeType.Update);
 			cursor1 = page1.cursor;
 
-			const page2 = await getApi<PaginatedChanges>(session2.id, 'items/root/delta', { query: { cursor: cursor2 } });
+			const page2 = await getApi<PaginatedDeltaChanges>(session2.id, 'items/root/delta', { query: { cursor: cursor2 } });
 			expect(page2.items.length).toBe(1);
 			expect(page2.items[0].item_name).toBe('00000000000000000000000000000001.md');
 			expect(page2.items[0].type).toBe(ChangeType.Update);
@@ -524,13 +524,13 @@ describe('shares.folder', function() {
 		}));
 
 		{
-			const page1 = await getApi<PaginatedChanges>(session1.id, 'items/root/delta', { query: { cursor: cursor1 } });
+			const page1 = await getApi<PaginatedDeltaChanges>(session1.id, 'items/root/delta', { query: { cursor: cursor1 } });
 			expect(page1.items.length).toBe(1);
 			expect(page1.items[0].item_name).toBe('00000000000000000000000000000001.md');
 			expect(page1.items[0].type).toBe(ChangeType.Update);
 			cursor1 = page1.cursor;
 
-			const page2 = await getApi<PaginatedChanges>(session2.id, 'items/root/delta', { query: { cursor: cursor2 } });
+			const page2 = await getApi<PaginatedDeltaChanges>(session2.id, 'items/root/delta', { query: { cursor: cursor2 } });
 			expect(page2.items.length).toBe(1);
 			expect(page2.items[0].item_name).toBe('00000000000000000000000000000001.md');
 			expect(page2.items[0].type).toBe(ChangeType.Update);
