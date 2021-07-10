@@ -25,7 +25,7 @@ Finally, when submitting a pull request, don't forget to [test your code](#autom
 
 # Contributing to Joplin's translation
 
-Joplin is available in multiple languages thanks to the help of its users. You can help translate Joplin to your language or keep it up to date. Please read the documentation about [Localisation](https://joplinapp.org/#localisation).
+Joplin is available in multiple languages thanks to the help of its users. You can help translate Joplin to your language or keep it up to date. Please read the documentation about [Localisation](https://joplinapp.org/help/#localisation).
 
 # Contributing to Joplin's code
 
