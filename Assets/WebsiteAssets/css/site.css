@@ -505,6 +505,7 @@ p,
 	margin-bottom: 10px;
 }
 #toc {
+	padding-top: 40px;
 	padding-bottom: 1em;
 	display: none;
 }
@@ -989,8 +990,12 @@ footer .right-links a {
 }
 
 .page-container {
-	padding-top: 100px;
+	padding-top: 90px;
 	padding-bottom: 50px;
+}
+
+.donate-links {
+	margin-top: 30px;
 }
 
 .price-container {
