@@ -459,11 +459,11 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				color: ${theme.codeColor};
 			}
 
-			.CodeMirror .cm-strong {
+			div.CodeMirror span.cm-strong {
 				color: ${theme.colorBright};
 			}
 
-			.CodeMirror .cm-hr {
+			div.CodeMirror span.cm-hr {
 				color: ${theme.dividerColor};
 			}
 
