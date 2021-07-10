@@ -60,6 +60,7 @@ export interface TemplateParams {
 	showImproveThisDoc?: boolean;
 	contentHtml?: string;
 	navbar?: NavBar;
+	showJoplinCloudLinks?: boolean;
 }
 
 export interface Plan {

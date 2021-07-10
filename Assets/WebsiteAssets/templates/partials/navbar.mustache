@@ -14,7 +14,9 @@
 			<div class="col-9 text-right d-none d-md-block">
 				<a href="{{baseUrl}}/help/" class="fw500">Help</a>
 				<a href="{{forumUrl}}" class="fw500">Forum</a>
-				{{> joplinCloudButton}}
+				{{#showJoplinCloudLinks}}
+					{{> joplinCloudButton}}
+				{{/showJoplinCloudLinks}}
 				{{> supportButton}}
 			</div>
 			<div class="col-9 text-right d-block d-md-none">
@@ -38,13 +40,14 @@
 						</div>
 
 						<div class="text-center menu-mobile-top">
-							<!-- <a href="{{baseUrl}}"><img src="{{imageBaseUrl}}/logo-text-blue.svg"/></a> -->
 							<a href="{{forumUrl}}" class="fw500 mobile-menu-link">Forum</a>
 							<a href="{{baseUrl}}/help/" class="fw500 mobile-menu-link">Help</a>
 						</div>
 
 						<div class="menu-mobile-buttons">
-							{{> joplinCloudButton}}
+							{{#showJoplinCloudLinks}}
+								{{> joplinCloudButton}}
+							{{/showJoplinCloudLinks}}
 							{{> supportButton}}
 						</div>
 					</div>
@@ -53,7 +56,8 @@
 					
 					<div>
 						<p class="light-blue mobile-menu-link-bottom text-center">
-							Copyright (C) 2016-{{yyyy}} Laurent Cozic
+							Copyright (C) 2016-{{yyyy}} Laurent&nbsp;Cozic
+							<br/>
 							<a href="{{baseUrl}}/privacy/" class="fw500">Privacy Policy</a>
 						</p>
 					</div>

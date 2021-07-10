@@ -51,7 +51,9 @@
 							<br />
 							<p class="text-center">
 								<a href="{{baseUrl}}/download/" class="button-link btn-blue download-button">Download the app</a>
-								<a href="{{baseUrl}}/plans/" class="button-link btn-trans plans-button">Sign up with Joplin Cloud</a>
+								{{#showJoplinCloudLinks}}
+									<a href="{{baseUrl}}/plans/" class="button-link btn-trans plans-button">Sign up with Joplin Cloud</a>
+								{{/showJoplinCloudLinks}}
 							</p>
 							<img
 								src="{{imageBaseUrl}}/home-top-img.png"
@@ -97,6 +99,7 @@
 				</div>
 			</div>
 
+			{{#showJoplinCloudLinks}}
 			<div id="work-together-section" class="gray-bg">
 				<div class="container">
 					<div class="row">
@@ -126,6 +129,7 @@
 					</div>
 				</div>
 			</div>
+			{{/showJoplinCloudLinks}}
 
 			<div id="save-web-section" class="blue-bg">
 				<div class="container">
@@ -359,30 +363,6 @@
 						<div class="col-3 d-none d-md-block">
 							<img src="{{imageBaseUrl}}/logo-text.svg" alt="" width="150" />
 						</div>
-
-						<!--
-						<div class="col-12 col-md-6">
-							<p class="text-center">
-								<a href="#">Help</a>
-								&nbsp;&nbsp;&nbsp;
-								<a href="#">Forum</a>
-								&nbsp;&nbsp;&nbsp;
-								<a href="#">Contacts</a>
-							</p>
-						</div>
-						-->
-						
-						<!--
-						<div class="col-12 col-md-3">
-							<br class="d-block d-md-none" />
-							<div class="text-right">
-								<a href="#" class="button-link btn-blue"
-									><img src="{{imageBaseUrl}}/download-icon.svg" alt="" />&nbsp;
-									Download</a
-								>
-							</div>
-						</div>
-						-->
 					</div>
 					<div class="row">
 						<div class="col-12">

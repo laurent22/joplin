@@ -438,8 +438,8 @@ p,
 
 /* customise-it-section  */
 #customise-it-section {
-	padding-top: 100px;
-	padding-bottom: 0px;
+	padding-top: 40px;
+	padding-bottom: 60px;
 	background-image: url("../images/customise-it-bg.png");
 	background-position: 100% 80%;
 	background-repeat: no-repeat;
@@ -456,8 +456,8 @@ p,
 
 /* your-data-section  */
 #your-data-section {
-	padding-top: 180px;
-	padding-bottom: 100px;
+	padding-top: 80px;
+	padding-bottom: 80px;
 }
 
 /* in-the-press-section  */
@@ -911,7 +911,7 @@ footer .right-links a {
 	}
 
 	#menu-mobile .button-link {
-		padding: 10px;
+		padding: 10px 15px;
 		font-size: 16px;
 		margin-left: 0px;
 	}
