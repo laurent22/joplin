@@ -11,7 +11,9 @@ The notes in this notebook give an overview of what Joplin can do and how to use
 Joplin has three main columns:
 
 - **Sidebar** contains the list of your notebooks and tags, as well as the synchronisation status.
+
 - **Note List** contains the current list of notes - either the notes in the currently selected notebook, the notes in the currently selected tag, or search results.
+
 - **Note Editor** is the place where you write your notes. There is a **Rich Text editor** and a **Markdown editor** - click on the **Toggle editor** button in the top right hand corner to switch between both! You may also use an [external editor](https://joplinapp.org/help/#external-text-editor) to edit notes. For example you can use Typora as an external editor and it will display the note as well as any embedded images.
 
 ## Writing notes in Markdown
