@@ -16,7 +16,7 @@ If so please let us know the following details and we will get back to you as so
 
 export function getPlans(stripeConfig: StripePublicConfig): Record<string, Plan> {
 	const features = {
-		publishNote: 'Publish a note to the internet',
+		publishNote: 'Publish notes to the internet',
 		sync: 'Sync as many devices as you want',
 		clipper: 'Web Clipper',
 		collaborate: 'Share and collaborate on a notebook',

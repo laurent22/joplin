@@ -31,7 +31,7 @@ export default class SubscriptionModel extends BaseModel<Subscription> {
 
 			await this.models().email().push({
 				subject: `${this.appName} subscription payment failed`,
-				body: `Your invoice payment has failed. Please follow this URL to update your payment details: \n\n[Manage your subscription](${this.baseUrl}/portal)`,
+				body: `Hello,\n\nWe were not able to process your last payment. Please follow this URL to update your payment details: \n\n[Manage your subscription](${this.baseUrl}/portal)\n\nPlease answer this email if you have any question.\n\nThank you,\n\nJoplin Cloud Team`,
 				recipient_email: user.email,
 				sender_id: EmailSender.Support,
 			});

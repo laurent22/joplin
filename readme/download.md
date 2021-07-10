@@ -1,8 +1,11 @@
 # Download Joplin
 
+<div class="intro">
 Thank you for downloading the Joplin desktop app!
 
 If you download didn't start, <a href="#" class="download-click-here">click here</a>.
+
+</div>
 
 <div class="get-it-desktop">
 
