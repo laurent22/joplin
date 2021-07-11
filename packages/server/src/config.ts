@@ -40,6 +40,9 @@ export interface EnvVariables {
 	ACCOUNT_TYPES_ENABLED?: string;
 
 	ERROR_STACK_TRACES?: string;
+
+	SUPPORT_EMAIL?: string;
+	BUSINESS_EMAIL?: string;
 }
 
 let runningInDocker_: boolean = false;
@@ -135,6 +138,7 @@ export async function initConfig(envType: Env, env: EnvVariables, overrides: any
 	const viewDir = `${rootDir}/src/views`;
 	const appPort = env.APP_PORT ? Number(env.APP_PORT) : 22300;
 	const baseUrl = baseUrlFromEnv(env, appPort);
+	const supportEmail = env.SUPPORT_EMAIL || 'admin@localhost';
 
 	config_ = {
 		appVersion: packageJson.version,
@@ -156,6 +160,8 @@ export async function initConfig(envType: Env, env: EnvVariables, overrides: any
 		signupEnabled: env.SIGNUP_ENABLED === '1',
 		termsEnabled: env.TERMS_ENABLED === '1',
 		accountTypesEnabled: env.ACCOUNT_TYPES_ENABLED === '1',
+		supportEmail,
+		businessEmail: env.BUSINESS_EMAIL || supportEmail,
 		...overrides,
 	};
 }

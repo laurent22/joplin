@@ -11,8 +11,9 @@
 	<div class="field">
 		<label class="label">Email</label>
 		<div class="control">
-			<input class="input" type="email" name="email" value="{{user.email}}"/>
+			<input class="input" type="email" name="email" value="{{user.email}}" disabled/>
 		</div>
+		<p class="help">For security reasons the email cannot currently be changed. To request a change please contact {{global.supportEmail}}</p>
 	</div>
 
 	{{#global.owner.is_admin}}

@@ -132,15 +132,18 @@ export default class UserModel extends BaseModel<User> {
 			const previousResource = await this.load(resource.id);
 
 			if (!user.is_admin && resource.id !== user.id) throw new ErrorForbidden('non-admin user cannot modify another user');
-			if (!user.is_admin && 'is_admin' in resource) throw new ErrorForbidden('non-admin user cannot make themselves an admin');
 			if (user.is_admin && user.id === resource.id && 'is_admin' in resource && !resource.is_admin) throw new ErrorForbidden('admin user cannot make themselves a non-admin');
 
-			// TODO: Maybe define a whitelist of properties that can be changed
-			if ('max_item_size' in resource && !user.is_admin && resource.max_item_size !== previousResource.max_item_size) throw new ErrorForbidden('non-admin user cannot change max_item_size');
-			if ('max_total_item_size' in resource && !user.is_admin && resource.max_total_item_size !== previousResource.max_total_item_size) throw new ErrorForbidden('non-admin user cannot change max_total_item_size');
-			if ('can_share_folder' in resource && !user.is_admin && resource.can_share_folder !== previousResource.can_share_folder) throw new ErrorForbidden('non-admin user cannot change can_share_folder');
-			if ('account_type' in resource && !user.is_admin && resource.account_type !== previousResource.account_type) throw new ErrorForbidden('non-admin user cannot change account_type');
-			if ('must_set_password' in resource && !user.is_admin && resource.must_set_password !== previousResource.must_set_password) throw new ErrorForbidden('non-admin user cannot change must_set_password');
+			const canBeChangedByNonAdmin = [
+				'full_name',
+				'password',
+			];
+
+			for (const key of Object.keys(resource)) {
+				if (!user.is_admin && !canBeChangedByNonAdmin.includes(key) && (resource as any)[key] !== (previousResource as any)[key]) {
+					throw new ErrorForbidden(`non-admin user cannot change "${key}"`);
+				}
+			}
 		}
 
 		if (action === AclAction.Delete) {

@@ -163,9 +163,9 @@ describe('index/users', function() {
 
 		const userModel = models().user();
 
-		await patchUser(session.id, { id: user.id, email: 'test2@example.com' });
+		await patchUser(session.id, { id: user.id, full_name: 'new name' });
 		const modUser: User = await userModel.load(user.id);
-		expect(modUser.email).toBe('test2@example.com');
+		expect(modUser.full_name).toBe('new name');
 	});
 
 	test('should change the password', async function() {
@@ -340,6 +340,9 @@ describe('index/users', function() {
 		// non-admin cannot change can_share_folder
 		await models().user().save({ id: user1.id, can_share_folder: 0 });
 		await expectHttpError(async () => patchUser(session1.id, { id: user1.id, can_share_folder: 1 }), ErrorForbidden.httpCode);
+
+		// non-admin cannot change non-whitelisted properties
+		await expectHttpError(async () => patchUser(session1.id, { id: user1.id, email: 'candothat@example.com' }), ErrorForbidden.httpCode);
 	});
 
 

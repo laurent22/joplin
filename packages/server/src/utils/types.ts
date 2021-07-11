@@ -109,6 +109,8 @@ export interface Config {
 	database: DatabaseConfig;
 	mailer: MailerConfig;
 	stripe: StripeConfig;
+	supportEmail: string;
+	businessEmail: string;
 }
 
 export enum HttpMethod {

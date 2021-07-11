@@ -36,6 +36,7 @@ interface GlobalParams {
 	privacyUrl?: string;
 	showErrorStackTraces?: boolean;
 	userDisplayName?: string;
+	supportEmail?: string;
 }
 
 export function isView(o: any): boolean {
