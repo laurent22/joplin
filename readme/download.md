@@ -1,8 +1,7 @@
 # Downloading Joplin...
 
 <div class="intro">
-Your download of **[Joplin for Mac]** is in progress. If your download didn't start, <a href="#" class="download-click-here">click here</a>.
-
+Your download of <span class="downloaded-filename">Joplin</span> is in progress. If your download didn't start, <a href="#" class="download-click-here">click here</a>.
 </div>
 
 <div class="get-it-desktop">
