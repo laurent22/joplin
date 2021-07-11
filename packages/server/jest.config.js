@@ -10,7 +10,7 @@ module.exports = {
 
 	testEnvironment: 'node',
 
-	slowTestThreshold: 30,
+	slowTestThreshold: 40,
 
 	setupFilesAfterEnv: [`${__dirname}/jest.setup.js`],
 };
