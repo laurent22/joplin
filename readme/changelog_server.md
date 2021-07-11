@@ -1,5 +1,12 @@
 # Joplin Server Changelog
 
+## [server-v2.2.7-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.2.7-beta) (Pre-release) - 2021-07-11T17:31:42Z
+
+- New: Added support for resetting user password (62b6198)
+- Improved: Check password complexity (240cb35)
+- Improved: Disallow changing email address until a secure solution to change it is implemented (f8d2c26)
+- Fixed: Fixed mail queue as some emails were not being processed (89f4ca1)
+
 ## [server-v2.2.6-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.2.6-beta) (Pre-release) - 2021-07-09T15:57:47Z
 
 - New: Add Docker image labels (#5158 by [@JackGruber](https://github.com/JackGruber))
