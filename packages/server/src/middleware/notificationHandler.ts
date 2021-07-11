@@ -6,6 +6,7 @@ import Logger from '@joplin/lib/Logger';
 import * as MarkdownIt from 'markdown-it';
 import config from '../config';
 import { NotificationKey } from '../models/NotificationModel';
+import { profileUrl } from '../utils/urlUtils';
 
 const logger = Logger.create('notificationHandler');
 
@@ -20,7 +21,7 @@ async function handleChangeAdminPasswordNotification(ctx: AppContext) {
 			ctx.joplin.owner.id,
 			NotificationKey.ChangeAdminPassword,
 			NotificationLevel.Important,
-			_('The default admin password is insecure and has not been changed! [Change it now](%s)', ctx.joplin.models.user().profileUrl())
+			_('The default admin password is insecure and has not been changed! [Change it now](%s)', profileUrl())
 		);
 	} else {
 		await notificationModel.markAsRead(ctx.joplin.owner.id, NotificationKey.ChangeAdminPassword);

@@ -8,6 +8,8 @@ import { formatBytes, GB, MB } from '../utils/bytes';
 import { itemIsEncrypted } from '../utils/joplinUtils';
 import { getMaxItemSize, getMaxTotalItemSize } from './utils/user';
 import * as zxcvbn from 'zxcvbn';
+import { confirmUrl, resetPasswordUrl } from '../utils/urlUtils';
+import { checkRepeatPassword, CheckRepeatPasswordInput } from '../routes/index/users';
 
 export enum AccountType {
 	Default = 0,
@@ -226,14 +228,6 @@ export default class UserModel extends BaseModel<User> {
 		return !!s[0].length && !!s[1].length;
 	}
 
-	public profileUrl(): string {
-		return `${this.baseUrl}/users/me`;
-	}
-
-	public confirmUrl(userId: Uuid, validationToken: string): string {
-		return `${this.baseUrl}/users/${userId}/confirm?token=${validationToken}`;
-	}
-
 	public async delete(id: string): Promise<void> {
 		const shares = await this.models().share().sharesByUser(id);
 
@@ -256,7 +250,7 @@ export default class UserModel extends BaseModel<User> {
 
 	public async sendAccountConfirmationEmail(user: User) {
 		const validationToken = await this.models().token().generate(user.id);
-		const confirmUrl = encodeURI(this.confirmUrl(user.id, validationToken));
+		const url = encodeURI(confirmUrl(user.id, validationToken));
 
 		await this.models().email().push({
 			sender_id: EmailSender.NoReply,
@@ -264,8 +258,32 @@ export default class UserModel extends BaseModel<User> {
 			recipient_email: user.email,
 			recipient_name: user.full_name || '',
 			subject: `Please setup your ${this.appName} account`,
-			body: `Your new ${this.appName} account is almost ready to use!\n\nPlease click on the following link to finish setting up your account:\n\n[Complete your account](${confirmUrl})`,
+			body: `Your new ${this.appName} account is almost ready to use!\n\nPlease click on the following link to finish setting up your account:\n\n[Complete your account](${url})`,
 		});
+	}
+
+	public async sendResetPasswordEmail(email: string) {
+		const user = await this.loadByEmail(email);
+		if (!user) throw new ErrorNotFound(`No such user: ${email}`);
+
+		const validationToken = await this.models().token().generate(user.id);
+		const url = resetPasswordUrl(validationToken);
+
+		await this.models().email().push({
+			sender_id: EmailSender.NoReply,
+			recipient_id: user.id,
+			recipient_email: user.email,
+			recipient_name: user.full_name || '',
+			subject: `Reset your ${this.appName} password`,
+			body: `Somebody asked to reset your password on ${this.appName}\n\nIf it was not you, you can safely ignore this email.\n\nClick the following link to choose a new password:\n\n${url}`,
+		});
+	}
+
+	public async resetPassword(token: string, fields: CheckRepeatPasswordInput) {
+		checkRepeatPassword(fields, true);
+		const user = await this.models().token().userFromToken(token);
+		await this.models().user().save({ id: user.id, password: fields.password });
+		await this.models().token().deleteByValue(user.id, token);
 	}
 
 	private formatValues(user: User): User {

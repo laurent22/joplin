@@ -30,4 +30,8 @@ export default class EmailModel extends BaseModel<Email> {
 		return this.db(this.tableName).where('sent_time', '=', 0);
 	}
 
+	public async deleteAll() {
+		await this.db(this.tableName).delete();
+	}
+
 }
