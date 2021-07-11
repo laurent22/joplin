@@ -30,3 +30,7 @@ export function profileUrl(): string {
 export function confirmUrl(userId: Uuid, validationToken: string): string {
 	return `${config().baseUrl}/users/${userId}/confirm?token=${validationToken}`;
 }
+
+export function stripePortalUrl(): string {
+	return `${config().baseUrl}/stripe/portal`;
+}

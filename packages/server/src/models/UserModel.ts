@@ -10,6 +10,8 @@ import { getMaxItemSize, getMaxTotalItemSize } from './utils/user';
 import * as zxcvbn from 'zxcvbn';
 import { confirmUrl, resetPasswordUrl } from '../utils/urlUtils';
 import { checkRepeatPassword, CheckRepeatPasswordInput } from '../routes/index/users';
+import accountConfirmationTemplate from '../views/emails/accountConfirmationTemplate';
+import resetPasswordTemplate from '../views/emails/resetPasswordTemplate';
 
 export enum AccountType {
 	Default = 0,
@@ -253,12 +255,11 @@ export default class UserModel extends BaseModel<User> {
 		const url = encodeURI(confirmUrl(user.id, validationToken));
 
 		await this.models().email().push({
+			...accountConfirmationTemplate({ url }),
 			sender_id: EmailSender.NoReply,
 			recipient_id: user.id,
 			recipient_email: user.email,
 			recipient_name: user.full_name || '',
-			subject: `Please setup your ${this.appName} account`,
-			body: `Your new ${this.appName} account is almost ready to use!\n\nPlease click on the following link to finish setting up your account:\n\n[Complete your account](${url})`,
 		});
 	}
 
@@ -270,12 +271,11 @@ export default class UserModel extends BaseModel<User> {
 		const url = resetPasswordUrl(validationToken);
 
 		await this.models().email().push({
+			...resetPasswordTemplate({ url }),
 			sender_id: EmailSender.NoReply,
 			recipient_id: user.id,
 			recipient_email: user.email,
 			recipient_name: user.full_name || '',
-			subject: `Reset your ${this.appName} password`,
-			body: `Somebody asked to reset your password on ${this.appName}\n\nIf it was not you, you can safely ignore this email.\n\nClick the following link to choose a new password:\n\n${url}`,
 		});
 	}
 
