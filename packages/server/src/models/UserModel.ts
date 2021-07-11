@@ -7,6 +7,7 @@ import { _ } from '@joplin/lib/locale';
 import { formatBytes, GB, MB } from '../utils/bytes';
 import { itemIsEncrypted } from '../utils/joplinUtils';
 import { getMaxItemSize, getMaxTotalItemSize } from './utils/user';
+import * as zxcvbn from 'zxcvbn';
 
 export enum AccountType {
 	Default = 0,
@@ -186,9 +187,22 @@ export default class UserModel extends BaseModel<User> {
 		}
 	}
 
+	private validatePassword(password: string) {
+		const result = zxcvbn(password);
+		if (result.score < 3) {
+			let msg: string[] = [result.feedback.warning];
+			if (result.feedback.suggestions) {
+				msg = msg.concat(result.feedback.suggestions);
+			}
+			throw new ErrorUnprocessableEntity(msg.join(' '));
+		}
+	}
+
 	protected async validate(object: User, options: ValidateOptions = {}): Promise<User> {
 		const user: User = await super.validate(object, options);
 
+		// Note that we don't validate the password here because it's already
+		// been hashed by then.
 		if (options.isNew) {
 			if (!user.email) throw new ErrorUnprocessableEntity('email must be set');
 			if (!user.password && !user.must_set_password) throw new ErrorUnprocessableEntity('password must be set');
@@ -270,7 +284,10 @@ export default class UserModel extends BaseModel<User> {
 	public async save(object: User, options: SaveOptions = {}): Promise<User> {
 		const user = this.formatValues(object);
 
-		if (user.password) user.password = auth.hashPassword(user.password);
+		if (user.password) {
+			if (!options.skipValidation) this.validatePassword(user.password);
+			user.password = auth.hashPassword(user.password);
+		}
 
 		const isNew = await this.isNew(object, options);
 

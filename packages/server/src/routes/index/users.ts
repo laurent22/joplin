@@ -143,8 +143,9 @@ router.get('users/:id', async (path: SubPath, ctx: AppContext, user: User = null
 	view.content.postUrl = postUrl;
 	view.content.showDeleteButton = !isNew && !!owner.is_admin && owner.id !== user.id;
 	view.content.showResetPasswordButton = !isNew && owner.is_admin;
-
+	view.content.canSetEmail = isNew || owner.is_admin;
 	view.content.canShareFolderOptions = yesNoDefaultOptions(user, 'can_share_folder');
+	view.jsFiles.push('zxcvbn');
 
 	if (config().accountTypesEnabled) {
 		view.content.showAccountTypes = true;
@@ -177,6 +178,8 @@ router.get('users/:id/confirm', async (path: SubPath, ctx: AppContext, error: Er
 			},
 			navbar: false,
 		};
+
+		view.jsFiles.push('zxcvbn');
 
 		return view;
 	} else {
