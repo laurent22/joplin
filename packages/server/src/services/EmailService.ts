@@ -1,11 +1,11 @@
 import Logger from '@joplin/lib/Logger';
-import UserModel from '../models/UserModel';
 import BaseService from './BaseService';
 import Mail = require('nodemailer/lib/mailer');
 import { createTransport } from 'nodemailer';
 import { Email, EmailSender } from '../db';
 import { errorToString } from '../utils/errors';
 import MarkdownIt = require('markdown-it');
+import EmailModel from '../models/EmailModel';
 
 const logger = Logger.create('EmailService');
 
@@ -128,8 +128,8 @@ export default class EmailService extends BaseService {
 			return;
 		}
 
-		UserModel.eventEmitter.on('created', () => {
-			logger.info('User was created - scheduling maintenance');
+		EmailModel.eventEmitter.on('queued', () => {
+			logger.info('Email was queued - scheduling maintenance');
 			void this.scheduleMaintenance();
 		});
 

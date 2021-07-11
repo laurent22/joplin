@@ -22,8 +22,9 @@ export default class EmailModel extends BaseModel<Email> {
 	}
 
 	public async push(email: EmailToSend) {
-		EmailModel.eventEmitter.emit('saved');
-		return super.save({ ...email });
+		const output = await super.save({ ...email });
+		EmailModel.eventEmitter.emit('queued');
+		return output;
 	}
 
 	public async needToBeSent(): Promise<Email[]> {
