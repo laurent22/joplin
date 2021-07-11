@@ -64,8 +64,14 @@ function setupDownloadPage() {
 	} else {
 		const os = getOs();
 		if (!os || !downloadLinks[os]) {
+			// If we don't know, display the section to manually download the app
 			$('.page-download .get-it-desktop').show();
+		} else if (os === 'linux') {
+			// If it's Linux, the user should probably install it using the
+			// install script so we redirect to the install section
+			window.location = 'https://joplinapp.org/help/#desktop-applications';
 		} else {
+			// Otherwise, start the download
 			window.location = downloadLinks[os];
 		}
 	}
