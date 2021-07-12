@@ -103,21 +103,21 @@ a {
 	font-size: 16px !important;
 }
 
-.donate-button i {
+.sponsor-button i {
 	font-size: 0.8em;
 }
 
-.donate-button .heart-full {
+.sponsor-button .heart-full {
 	position: absolute;
 	opacity: 0;
 }
 
-.donate-button:hover .heart-full {
+.sponsor-button:hover .heart-full {
 	position: static;
 	opacity: 1;
 }
 
-.donate-button:hover .heart-line {
+.sponsor-button:hover .heart-line {
 	position: absolute;
 	opacity: 0;
 }
@@ -295,12 +295,6 @@ p,
 	text-decoration: underline;
 }
 
-/* #nav-section .button-link {
-	padding: 15px;
-	min-width: 200px;
-	text-decoration: none;
-} */
-
 #nav-section {
 	box-shadow: 0 3px 11px 0 rgba(0,0,0,0.1);
 }
@@ -399,6 +393,11 @@ p,
 	background-size: contain;
 }
 
+#multimedia-notes-section .frame-bg {
+	background-size: 100% 50%;
+	padding-bottom: 15px;
+}
+
 #multimedia-title {
 	margin-top: 100px;
 }
@@ -425,6 +424,11 @@ p,
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-position: left bottom;
+}
+
+#save-web-section .frame-bg {
+	background-size: 100% 50%;
+	padding-bottom: 12px;
 }
 
 #save-web-title {
@@ -584,151 +588,6 @@ footer .right-links a {
 	margin-left: 15px;
 }
 
-/* responsive */
-
-/*
-@media (min-width: 1200px) and (max-width: 1799px) {
-	#nav-section a {
-		margin-left: 80px;
-	}
-
-	#your-note-section {
-		background-size: contain;
-		background-position: bottom;
-	}
-}
-
-@media (min-width: 768px) and (max-width: 1199px) {
-	#nav-section a {
-		margin-left: 30px;
-	}
-
-	#nav-section.with-profile a {
-		margin-left: 20px;
-	}
-
-	#nav-section .button-link {
-		padding: 8px;
-		min-width: 160px;
-		text-decoration: none;
-	}
-
-	.front-page h1 {
-		font-size: 2.7em;
-	}
-	
-	.front-page h2 {
-		font-size: 2.3em;
-		border-bottom: none;
-	}
-	
-	.front-page p {
-		font-size: 1.1em;
-	}
-
-	.front-page .button-link {
-		font-size: 1.1em;
-	}
-
-	.button-link {
-		min-width: 200px;
-		padding: 15px 22px;
-	}
-
-	#top-section,
-	#save-web-section,
-	#your-note-section {
-		background-image: inherit;
-	}
-
-	#top-section-img {
-		margin-bottom: -154px;
-		margin-top: 30px;
-	}
-
-	#work-together-section,
-	#save-web-section,
-	#your-data-section,
-	#your-note-section {
-		padding-top: 50px;
-		padding-bottom: 50px;
-	}
-
-	#your-note-section {
-		padding-bottom: 20px;
-	}
-
-	#save-web-title,
-	#customise-it-title {
-		margin-top: 0px;
-	}
-
-	#multimedia-notes-section {
-		padding-top: 200px;
-	}
-	#multimedia-title {
-		margin-top: 20px;
-	}
-
-	footer .button-link {
-		padding: 10px 15px;
-		font-size: 16px;
-	}
-}
-
-@media (min-width: 1700px) {
-	#plans-section {
-		background-image: url("../images/price-bg-left.png"),
-			url("../images/price-bg-right.png");
-		background-repeat: no-repeat, no-repeat;
-		background-position: left, right;
-		background-size: contain;
-	}
-}
-
-@media (min-width: 992px) and (max-width: 1200px) {
-	.price-container-blue {
-		min-height: 785px;
-	}
-
-	.price-container .plan-type img {
-		width: 55px;
-	}
-
-	.price-container p.plan-type {
-		font-size: 18px;
-	}
-	.price-container p.price {
-		font-size: 20px;
-		margin-top: -20px;
-	}
-}
-
-@media (max-width: 991px) {
-	.frame-bg {
-		padding-bottom: 8px;
-	}
-
-	#work-together-section {
-		padding-bottom: 0px;
-	}
-	.price-container {
-		max-width: 400px;
-		margin: auto;
-		margin-bottom: 20px;
-		margin-top: 20px;
-		min-height: inherit;
-	}
-	.price-container-blue {
-		padding: 30px 20px;
-	}
-
-	#in-the-press-section .carousel-item {
-		min-height: 650px;
-	}
-}
-*/
-
 /*****************************************************************
  IN THE PRESS
  The "In the press" section height needs to be adjusted as the
@@ -874,7 +733,7 @@ footer .right-links a {
 		margin-bottom: 1em;
 	}
 
-	#menu-mobile .menu-mobile-buttons .donate-button {
+	#menu-mobile .menu-mobile-buttons .sponsor-button {
 		margin-left: .5em;
 	}
 
@@ -961,18 +820,6 @@ footer .right-links a {
  PLANS PAGE
 *****************************************************************/
 
-/* .plans-page {
-	background-image: url("../images/price-bg-left.png"),
-		url("../images/price-bg-right.png");
-	background-repeat: no-repeat, no-repeat;
-	background-position: left, right;
-	background-size: contain;
-} */
-
-/* #plans-section.env-prod .alert-env-mode {
-	display: none;
-} */
-
 #plans-section .sub-title {
 	max-width: 800px;
 	margin-left: auto;
@@ -981,7 +828,7 @@ footer .right-links a {
 
 .plans-page h1 {
 	font-size: 2.2em;
-	margin-top:0;
+	/* margin-top:0; */
 }
 
 .plans-page .title-box p {
