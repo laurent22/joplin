@@ -509,6 +509,10 @@ p,
 	text-align: center;
 }
 
+.page-download .downloaded-filename {
+	font-weight: bold;
+}
+
 @media (min-width: 767px) {
 	.content-wrapper{
 		display: flex;

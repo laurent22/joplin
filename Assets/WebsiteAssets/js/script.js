@@ -6,6 +6,12 @@ function getOs() {
 	return null;
 }
 
+function getFilename(path) {
+	if (!path) return '';
+	const s = path.split('/');
+	return s.pop();
+}
+
 function getMobileOs() {
 	var userAgent = navigator.userAgent || navigator.vendor || window.opera;
 
@@ -72,7 +78,9 @@ function setupDownloadPage() {
 			window.location = 'https://joplinapp.org/help/#desktop-applications';
 		} else {
 			// Otherwise, start the download
-			window.location = downloadLinks[os];
+			const downloadLink = downloadLinks[os];
+			$('.downloaded-filename').text(getFilename(downloadLink));
+			window.location = downloadLink;
 		}
 	}
 }
