@@ -18,6 +18,7 @@ async function copyJs(name, filePath) {
 async function main() {
 	await fs.mkdirp(outputDir);
 	await copyJs('webviewLib', `${rnDir}/node_modules/@joplin/lib/renderers/webviewLib.js`);
+	await copyJs('CodeMirror.bundle', `${rnDir}/components/NoteEditor/CodeMirror.bundle.js`);
 }
 
 module.exports = main;

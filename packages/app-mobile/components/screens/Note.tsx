@@ -5,6 +5,7 @@ import Setting from '@joplin/lib/models/Setting';
 import shim from '@joplin/lib/shim';
 import NoteBodyViewer from '../NoteBodyViewer/NoteBodyViewer';
 import checkPermissions from '../../utils/checkPermissions';
+import NoteEditor from '../NoteEditor/NoteEditor';
 
 const FileViewer = require('react-native-file-viewer').default;
 const React = require('react');
@@ -1066,25 +1067,29 @@ class NoteScreenComponent extends BaseScreenComponent {
 			//     abcd|
 			//     abcde|
 			//     abcde|f
-			bodyComponent = (
-				<TextInput
-					autoCapitalize="sentences"
-					style={this.styles().bodyTextInput}
-					ref="noteBodyTextField"
-					multiline={true}
-					value={note.body}
-					onChangeText={(text: string) => this.body_changeText(text)}
-					onSelectionChange={this.body_selectionChange}
-					blurOnSubmit={false}
-					selectionColor={theme.textSelectionColor}
-					keyboardAppearance={theme.keyboardAppearance}
-					placeholder={_('Add body')}
-					placeholderTextColor={theme.colorFaded}
-					// need some extra padding for iOS so that the keyboard won't cover last line of the note
-					// see https://github.com/laurent22/joplin/issues/3607
-					paddingBottom={ Platform.OS === 'ios' ? 40 : 0}
-				/>
-			);
+			// bodyComponent = (
+			// 	<TextInput
+			// 		autoCapitalize="sentences"
+			// 		style={this.styles().bodyTextInput}
+			// 		ref="noteBodyTextField"
+			// 		multiline={true}
+			// 		value={note.body}
+			// 		onChangeText={(text: string) => this.body_changeText(text)}
+			// 		onSelectionChange={this.body_selectionChange}
+			// 		blurOnSubmit={false}
+			// 		selectionColor={theme.textSelectionColor}
+			// 		keyboardAppearance={theme.keyboardAppearance}
+			// 		placeholder={_('Add body')}
+			// 		placeholderTextColor={theme.colorFaded}
+			// 		// need some extra padding for iOS so that the keyboard won't cover last line of the note
+			// 		// see https://github.com/laurent22/joplin/issues/3607
+			// 		paddingBottom={ Platform.OS === 'ios' ? 40 : 0}
+			// 	/>
+			// );
+
+			bodyComponent = <NoteEditor
+
+			/>;
 		}
 
 		const renderActionButton = () => {
