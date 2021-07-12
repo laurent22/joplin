@@ -1,11 +1,10 @@
 import AsyncActionQueue from '@joplin/lib/AsyncActionQueue';
-import UndoRedoService from '@joplin/lib/services/UndoRedoService';
 import uuid from '@joplin/lib/uuid';
 import Setting from '@joplin/lib/models/Setting';
 import shim from '@joplin/lib/shim';
 import NoteBodyViewer from '../NoteBodyViewer/NoteBodyViewer';
 import checkPermissions from '../../utils/checkPermissions';
-import NoteEditor from '../NoteEditor/NoteEditor';
+import NoteEditor, { ChangeEvent, UndoRedoDepthChangeEvent } from '../NoteEditor/NoteEditor';
 
 const FileViewer = require('react-native-file-viewer').default;
 const React = require('react');
@@ -43,6 +42,7 @@ const ImagePicker = require('react-native-image-picker').default;
 import SelectDateTimeDialog from '../SelectDateTimeDialog';
 import ShareExtension from '../../utils/ShareExtension.js';
 import CameraView from '../CameraView';
+import { NoteEntity } from '@joplin/lib/services/database/types';
 const urlUtils = require('@joplin/lib/urlUtils');
 
 const emptyArray: any[] = [];
@@ -96,6 +96,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		this.styles_ = {};
 
+		this.editorRef = React.createRef();
+
 		const saveDialog = async () => {
 			if (this.isModified()) {
 				const buttonId = await dialogs.pop(this, _('This note has been modified:'), [{ text: _('Save changes'), id: 'save' }, { text: _('Discard changes'), id: 'discard' }, { text: _('Cancel'), id: 'cancel' }]);
@@ -130,8 +132,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 					note: Object.assign({}, this.state.lastSavedNote),
 					mode: 'view',
 				});
-
-				await this.undoRedoService_.reset();
 
 				return true;
 			}
@@ -225,40 +225,33 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.todoCheckbox_change = this.todoCheckbox_change.bind(this);
 		this.titleTextInput_contentSizeChange = this.titleTextInput_contentSizeChange.bind(this);
 		this.title_changeText = this.title_changeText.bind(this);
-		this.undoRedoService_stackChange = this.undoRedoService_stackChange.bind(this);
 		this.screenHeader_undoButtonPress = this.screenHeader_undoButtonPress.bind(this);
 		this.screenHeader_redoButtonPress = this.screenHeader_redoButtonPress.bind(this);
 		this.body_selectionChange = this.body_selectionChange.bind(this);
 		this.onBodyViewerLoadEnd = this.onBodyViewerLoadEnd.bind(this);
 		this.onBodyViewerCheckboxChange = this.onBodyViewerCheckboxChange.bind(this);
+		this.onBodyChange = this.onBodyChange.bind(this);
+		this.onUndoRedoDepthChange = this.onUndoRedoDepthChange.bind(this);
 	}
 
-	undoRedoService_stackChange() {
+	private onBodyChange(event: ChangeEvent) {
+		shared.noteComponent_change(this, 'body', event.value);
+		this.scheduleSave();
+	}
+
+	private onUndoRedoDepthChange(event: UndoRedoDepthChangeEvent) {
 		this.setState({ undoRedoButtonState: {
-			canUndo: this.undoRedoService_.canUndo,
-			canRedo: this.undoRedoService_.canRedo,
+			canUndo: !!event.undoDepth,
+			canRedo: !!event.redoDepth,
 		} });
 	}
 
-	async undoRedo(type: string) {
-		const undoState = await this.undoRedoService_[type](this.undoState());
-		if (!undoState) return;
-
-		this.setState((state: any) => {
-			const newNote = Object.assign({}, state.note);
-			newNote.body = undoState.body;
-			return {
-				note: newNote,
-			};
-		});
-	}
-
 	screenHeader_undoButtonPress() {
-		void this.undoRedo('undo');
+		this.editorRef.current.undo();
 	}
 
 	screenHeader_redoButtonPress() {
-		void this.undoRedo('redo');
+		this.editorRef.current.redo();
 	}
 
 	styles() {
@@ -356,12 +349,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 		return shared.isModified(this);
 	}
 
-	undoState(noteBody: string = null) {
-		return {
-			body: noteBody === null ? this.state.note.body : noteBody,
-		};
-	}
-
 	async requestGeoLocationPermissions() {
 		if (!Setting.value('trackLocation')) return;
 
@@ -387,9 +374,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 		shared.installResourceHandling(this.refreshResource);
 
 		await shared.initState(this);
-
-		this.undoRedoService_ = new UndoRedoService();
-		this.undoRedoService_.on('stackChange', this.undoRedoService_stackChange);
 
 		if (this.state.note && this.state.note.body && Setting.value('sync.resourceDownloadMode') === 'auto') {
 			const resourceIds = await Note.linkedResourceIds(this.state.note.body);
@@ -431,10 +415,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}
 
 		this.saveActionQueue(this.state.note.id).processAllNow();
-
-		// It cannot theoretically be undefined, since componentDidMount should always be called before
-		// componentWillUnmount, but with React Native the impossible often becomes possible.
-		if (this.undoRedoService_) this.undoRedoService_.off('stackChange', this.undoRedoService_stackChange);
 	}
 
 	title_changeText(text: string) {
@@ -444,11 +424,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	body_changeText(text: string) {
-		if (!this.undoRedoService_.canUndo) {
-			this.undoRedoService_.push(this.undoState());
-		} else {
-			this.undoRedoService_.schedulePush(this.undoState());
-		}
 		shared.noteComponent_change(this, 'body', text);
 		this.scheduleSave();
 	}
@@ -1018,7 +993,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}
 
 		const theme = themeStyle(this.props.themeId);
-		const note = this.state.note;
+		const note: NoteEntity = this.state.note;
 		const isTodo = !!Number(note.is_todo);
 
 		if (this.state.showCamera) {
@@ -1088,7 +1063,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 			// );
 
 			bodyComponent = <NoteEditor
-
+				ref={this.editorRef}
+				initialText={note.body}
+				onChange={this.onBodyChange}
+				onUndoRedoDepthChange={this.onUndoRedoDepthChange}
+				style={this.styles().bodyTextInput}
 			/>;
 		}
 
