@@ -687,6 +687,12 @@ packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js.ma
 packages/app-mobile/components/NoteBodyViewer/hooks/useSource.d.ts
 packages/app-mobile/components/NoteBodyViewer/hooks/useSource.js
 packages/app-mobile/components/NoteBodyViewer/hooks/useSource.js.map
+packages/app-mobile/components/NoteEditor/CodeMirror.d.ts
+packages/app-mobile/components/NoteEditor/CodeMirror.js
+packages/app-mobile/components/NoteEditor/CodeMirror.js.map
+packages/app-mobile/components/NoteEditor/NoteEditor.d.ts
+packages/app-mobile/components/NoteEditor/NoteEditor.js
+packages/app-mobile/components/NoteEditor/NoteEditor.js.map
 packages/app-mobile/components/SelectDateTimeDialog.d.ts
 packages/app-mobile/components/SelectDateTimeDialog.js
 packages/app-mobile/components/SelectDateTimeDialog.js.map

@@ -10,11 +10,14 @@
     "tsc": "node node_modules/typescript/bin/tsc --project tsconfig.json",
     "watch": "node node_modules/typescript/bin/tsc --watch --project tsconfig.json",
     "clean": "node tools/clean.js",
+    "buildInjectedJs": "gulp buildInjectedJs",
+    "watchInjectedJs": "nodemon --verbose --watch components/NoteEditor/CodeMirror.ts --exec \"npm run buildInjectedJs\"",
     "postinstall": "jetify && npm run build"
   },
   "dependencies": {
-    "@joplin/lib": "^1.0.9",
-    "@joplin/renderer": "^1.0.17",
+    "@joplin/lib": "^2.2.0",
+    "@joplin/renderer": "^2.2.0",
+    "@joplin/tools": "^2.2.0",
     "@react-native-community/clipboard": "^1.5.0",
     "@react-native-community/datetimepicker": "^3.0.3",
     "@react-native-community/geolocation": "^2.0.2",
@@ -62,7 +65,14 @@
   "devDependencies": {
     "@babel/core": "^7.11.6",
     "@babel/runtime": "^7.11.2",
+    "@codemirror/highlight": "^0.18.4",
+    "@codemirror/history": "^0.18.1",
+    "@codemirror/lang-markdown": "^0.18.4",
+    "@codemirror/state": "^0.18.7",
+    "@codemirror/view": "^0.18.19",
     "@joplin/tools": "^1.0.9",
+    "@rollup/plugin-node-resolve": "^13.0.0",
+    "@rollup/plugin-typescript": "^8.2.1",
     "@types/node": "^14.14.6",
     "@types/react": "^16.9.55",
     "@types/react-native": "^0.64.4",
@@ -71,6 +81,9 @@
     "gulp": "^4.0.2",
     "jetifier": "^1.6.5",
     "metro-react-native-babel-preset": "^0.63.0",
-    "typescript": "^4.0.5"
+    "nodemon": "^2.0.12",
+    "rollup": "^2.53.1",
+    "typescript": "^4.0.5",
+    "uglify-js": "^3.13.10"
   }
 }
