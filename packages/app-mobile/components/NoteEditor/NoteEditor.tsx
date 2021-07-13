@@ -152,7 +152,7 @@ function NoteEditor(props: Props, ref: any) {
 	// - `setSupportMultipleWindows` must be `true` for security reasons:
 	//   https://github.com/react-native-webview/react-native-webview/releases/tag/v11.0.0
 	return <WebView
-		style={{ ...props.style, borderColor: 'red', borderWidth: 1, borderStyle: 'solid' }}
+		style={props.style}
 		ref={webviewRef}
 		useWebKit={true}
 		source={source}

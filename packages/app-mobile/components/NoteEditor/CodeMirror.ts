@@ -1,5 +1,14 @@
 /* eslint-disable import/prefer-default-export */
 
+// This contains the CodeMirror instance, which needs to be built into a bundle
+// using `npm run buildInjectedJs`. This bundle is then loaded from
+// NoteEditor.tsx into the webview.
+//
+// In general, since this file is harder to debug due to the intermediate built
+// step, it's better to keep it as light as possible - it shoud just be a light
+// wrapper to access CodeMirror functionalities. Anything else should be done
+// from NoteEditor.tsx.
+
 import { EditorState } from '@codemirror/state';
 import { EditorView, drawSelection, highlightSpecialChars, ViewUpdate } from '@codemirror/view';
 import { markdown } from '@codemirror/lang-markdown';

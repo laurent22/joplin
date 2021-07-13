@@ -879,6 +879,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 			output.push({
 				title: _('Attach...'),
 				onPress: async () => {
+					if (this.state.mode === 'edit' && this.useEditorBeta()) {
+						alert('Attaching files from the beta editor is not yet supported. You may do so from the viewer mode instead.');
+						return;
+					}
+
 					const buttons = [];
 
 					// On iOS, it will show "local files", which means certain files saved from the browser
