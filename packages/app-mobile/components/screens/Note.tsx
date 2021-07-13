@@ -2,6 +2,7 @@ import AsyncActionQueue from '@joplin/lib/AsyncActionQueue';
 import uuid from '@joplin/lib/uuid';
 import Setting from '@joplin/lib/models/Setting';
 import shim from '@joplin/lib/shim';
+import UndoRedoService from '@joplin/lib/services/UndoRedoService';
 import NoteBodyViewer from '../NoteBodyViewer/NoteBodyViewer';
 import checkPermissions from '../../utils/checkPermissions';
 import NoteEditor, { ChangeEvent, UndoRedoDepthChangeEvent } from '../NoteEditor/NoteEditor';
@@ -133,6 +134,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 					mode: 'view',
 				});
 
+				await this.undoRedoService_.reset();
+
 				return true;
 			}
 
@@ -225,6 +228,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.todoCheckbox_change = this.todoCheckbox_change.bind(this);
 		this.titleTextInput_contentSizeChange = this.titleTextInput_contentSizeChange.bind(this);
 		this.title_changeText = this.title_changeText.bind(this);
+		this.undoRedoService_stackChange = this.undoRedoService_stackChange.bind(this);
 		this.screenHeader_undoButtonPress = this.screenHeader_undoButtonPress.bind(this);
 		this.screenHeader_redoButtonPress = this.screenHeader_redoButtonPress.bind(this);
 		this.body_selectionChange = this.body_selectionChange.bind(this);
@@ -234,24 +238,66 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.onUndoRedoDepthChange = this.onUndoRedoDepthChange.bind(this);
 	}
 
+	private useEditorBeta(): boolean {
+		return this.props.useEditorBeta;
+	}
+
 	private onBodyChange(event: ChangeEvent) {
 		shared.noteComponent_change(this, 'body', event.value);
 		this.scheduleSave();
 	}
 
 	private onUndoRedoDepthChange(event: UndoRedoDepthChangeEvent) {
-		this.setState({ undoRedoButtonState: {
-			canUndo: !!event.undoDepth,
-			canRedo: !!event.redoDepth,
-		} });
+		if (this.useEditorBeta()) {
+			this.setState({ undoRedoButtonState: {
+				canUndo: !!event.undoDepth,
+				canRedo: !!event.redoDepth,
+			} });
+		}
+	}
+
+	private undoRedoService_stackChange() {
+		if (!this.useEditorBeta()) {
+			this.setState({ undoRedoButtonState: {
+				canUndo: this.undoRedoService_.canUndo,
+				canRedo: this.undoRedoService_.canRedo,
+			} });
+		}
+	}
+
+	private async undoRedo(type: string) {
+		const undoState = await this.undoRedoService_[type](this.undoState());
+		if (!undoState) return;
+
+		this.setState((state: any) => {
+			const newNote = Object.assign({}, state.note);
+			newNote.body = undoState.body;
+			return {
+				note: newNote,
+			};
+		});
 	}
 
 	screenHeader_undoButtonPress() {
-		this.editorRef.current.undo();
+		if (this.useEditorBeta()) {
+			this.editorRef.current.undo();
+		} else {
+			void this.undoRedo('undo');
+		}
 	}
 
 	screenHeader_redoButtonPress() {
-		this.editorRef.current.redo();
+		if (this.useEditorBeta()) {
+			this.editorRef.current.redo();
+		} else {
+			void this.undoRedo('redo');
+		}
+	}
+
+	undoState(noteBody: string = null) {
+		return {
+			body: noteBody === null ? this.state.note.body : noteBody,
+		};
 	}
 
 	styles() {
@@ -375,6 +421,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		await shared.initState(this);
 
+		this.undoRedoService_ = new UndoRedoService();
+		this.undoRedoService_.on('stackChange', this.undoRedoService_stackChange);
+
 		if (this.state.note && this.state.note.body && Setting.value('sync.resourceDownloadMode') === 'auto') {
 			const resourceIds = await Note.linkedResourceIds(this.state.note.body);
 			await ResourceFetcher.instance().markForDownload(resourceIds);
@@ -415,6 +464,10 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}
 
 		this.saveActionQueue(this.state.note.id).processAllNow();
+
+		// It cannot theoretically be undefined, since componentDidMount should always be called before
+		// componentWillUnmount, but with React Native the impossible often becomes possible.
+		if (this.undoRedoService_) this.undoRedoService_.off('stackChange', this.undoRedoService_stackChange);
 	}
 
 	title_changeText(text: string) {
@@ -424,6 +477,12 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	body_changeText(text: string) {
+		if (!this.undoRedoService_.canUndo) {
+			this.undoRedoService_.push(this.undoState());
+		} else {
+			this.undoRedoService_.schedulePush(this.undoState());
+		}
+
 		shared.noteComponent_change(this, 'body', text);
 		this.scheduleSave();
 	}
@@ -1042,33 +1101,36 @@ class NoteScreenComponent extends BaseScreenComponent {
 			//     abcd|
 			//     abcde|
 			//     abcde|f
-			// bodyComponent = (
-			// 	<TextInput
-			// 		autoCapitalize="sentences"
-			// 		style={this.styles().bodyTextInput}
-			// 		ref="noteBodyTextField"
-			// 		multiline={true}
-			// 		value={note.body}
-			// 		onChangeText={(text: string) => this.body_changeText(text)}
-			// 		onSelectionChange={this.body_selectionChange}
-			// 		blurOnSubmit={false}
-			// 		selectionColor={theme.textSelectionColor}
-			// 		keyboardAppearance={theme.keyboardAppearance}
-			// 		placeholder={_('Add body')}
-			// 		placeholderTextColor={theme.colorFaded}
-			// 		// need some extra padding for iOS so that the keyboard won't cover last line of the note
-			// 		// see https://github.com/laurent22/joplin/issues/3607
-			// 		paddingBottom={ Platform.OS === 'ios' ? 40 : 0}
-			// 	/>
-			// );
 
-			bodyComponent = <NoteEditor
-				ref={this.editorRef}
-				initialText={note.body}
-				onChange={this.onBodyChange}
-				onUndoRedoDepthChange={this.onUndoRedoDepthChange}
-				style={this.styles().bodyTextInput}
-			/>;
+			if (!this.useEditorBeta()) {
+				bodyComponent = (
+					<TextInput
+						autoCapitalize="sentences"
+						style={this.styles().bodyTextInput}
+						ref="noteBodyTextField"
+						multiline={true}
+						value={note.body}
+						onChangeText={(text: string) => this.body_changeText(text)}
+						onSelectionChange={this.body_selectionChange}
+						blurOnSubmit={false}
+						selectionColor={theme.textSelectionColor}
+						keyboardAppearance={theme.keyboardAppearance}
+						placeholder={_('Add body')}
+						placeholderTextColor={theme.colorFaded}
+						// need some extra padding for iOS so that the keyboard won't cover last line of the note
+						// see https://github.com/laurent22/joplin/issues/3607
+						paddingBottom={ Platform.OS === 'ios' ? 40 : 0}
+					/>
+				);
+			} else {
+				bodyComponent = <NoteEditor
+					ref={this.editorRef}
+					initialText={note.body}
+					onChange={this.onBodyChange}
+					onUndoRedoDepthChange={this.onUndoRedoDepthChange}
+					style={this.styles().bodyTextInput}
+				/>;
+			}
 		}
 
 		const renderActionButton = () => {
@@ -1171,6 +1233,7 @@ const NoteScreen = connect((state: any) => {
 		showSideMenu: state.showSideMenu,
 		provisionalNoteIds: state.provisionalNoteIds,
 		highlightedWords: state.highlightedWords,
+		useEditorBeta: state.settings['editor.beta'],
 	};
 })(NoteScreenComponent);
 

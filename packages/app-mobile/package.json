@@ -10,7 +10,7 @@
     "tsc": "node node_modules/typescript/bin/tsc --project tsconfig.json",
     "watch": "node node_modules/typescript/bin/tsc --watch --project tsconfig.json",
     "clean": "node tools/clean.js",
-    "buildCodeMirror": "rollup components/NoteEditor/CodeMirror.ts -f iife -o components/NoteEditor/CodeMirror.bundle.js -p @rollup/plugin-node-resolve -p @rollup/plugin-typescript -p rollup-plugin-uglify && gulp buildReactNativeInjectedJs",
+    "buildCodeMirror": "rollup components/NoteEditor/CodeMirror.ts --name codeMirrorBundle -f iife -o components/NoteEditor/CodeMirror.bundle.js -p @rollup/plugin-node-resolve -p @rollup/plugin-typescript && uglifyjs --compress -o components/NoteEditor/CodeMirror.bundle.min.js -- components/NoteEditor/CodeMirror.bundle.js && gulp buildReactNativeInjectedJs",
     "postinstall": "jetify && npm run build"
   },
   "dependencies": {
@@ -80,7 +80,7 @@
     "jetifier": "^1.6.5",
     "metro-react-native-babel-preset": "^0.63.0",
     "rollup": "^2.53.1",
-    "rollup-plugin-uglify": "^6.0.4",
-    "typescript": "^4.0.5"
+    "typescript": "^4.0.5",
+    "uglify-js": "^3.13.10"
   }
 }

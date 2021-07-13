@@ -71,8 +71,8 @@ function NoteEditor(props: Props, ref: any) {
 		let cm = null;
 
 		try {
-			const bundle = ${shim.injectedJs('codemirrorBundle')};
-			cm = bundle.initCodeMirror(document.getElementById('editor'), ${JSON.stringify(props.initialText)});
+			${shim.injectedJs('codeMirrorBundle')};
+			cm = codeMirrorBundle.initCodeMirror(document.getElementById('editor'), ${JSON.stringify(props.initialText)});
 		} catch (e) {
 			window.ReactNativeWebView.postMessage("error:" + e.message + ": " + JSON.stringify(e))
 		} finally {
