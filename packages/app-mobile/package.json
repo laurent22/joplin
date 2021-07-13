@@ -10,7 +10,7 @@
     "tsc": "node node_modules/typescript/bin/tsc --project tsconfig.json",
     "watch": "node node_modules/typescript/bin/tsc --watch --project tsconfig.json",
     "clean": "node tools/clean.js",
-    "buildCodeMirror": "rollup components/NoteEditor/CodeMirror.ts -f iife -o components/NoteEditor/CodeMirror.bundle.js -p @rollup/plugin-node-resolve -p @rollup/plugin-typescript && gulp buildReactNativeInjectedJs",
+    "buildCodeMirror": "rollup components/NoteEditor/CodeMirror.ts -f iife -o components/NoteEditor/CodeMirror.bundle.js -p @rollup/plugin-node-resolve -p @rollup/plugin-typescript -p rollup-plugin-uglify && gulp buildReactNativeInjectedJs",
     "postinstall": "jetify && npm run build"
   },
   "dependencies": {
@@ -63,11 +63,11 @@
   "devDependencies": {
     "@babel/core": "^7.11.6",
     "@babel/runtime": "^7.11.2",
-    "@codemirror/history": "^0.18.1",
-    "@codemirror/view": "^0.18.19",
-    "@codemirror/state": "^0.18.7",
-    "@codemirror/lang-markdown": "^0.18.4",
     "@codemirror/highlight": "^0.18.4",
+    "@codemirror/history": "^0.18.1",
+    "@codemirror/lang-markdown": "^0.18.4",
+    "@codemirror/state": "^0.18.7",
+    "@codemirror/view": "^0.18.19",
     "@joplin/tools": "^1.0.9",
     "@rollup/plugin-node-resolve": "^13.0.0",
     "@rollup/plugin-typescript": "^8.2.1",
@@ -80,6 +80,7 @@
     "jetifier": "^1.6.5",
     "metro-react-native-babel-preset": "^0.63.0",
     "rollup": "^2.53.1",
+    "rollup-plugin-uglify": "^6.0.4",
     "typescript": "^4.0.5"
   }
 }
