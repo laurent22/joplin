@@ -1130,6 +1130,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 			} else {
 				bodyComponent = <NoteEditor
 					ref={this.editorRef}
+					themeId={this.props.themeId}
 					initialText={note.body}
 					onChange={this.onBodyChange}
 					onUndoRedoDepthChange={this.onUndoRedoDepthChange}

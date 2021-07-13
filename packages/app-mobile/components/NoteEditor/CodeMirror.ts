@@ -9,10 +9,10 @@
 // wrapper to access CodeMirror functionalities. Anything else should be done
 // from NoteEditor.tsx.
 
-import { EditorState } from '@codemirror/state';
+import { EditorState, Extension } from '@codemirror/state';
 import { EditorView, drawSelection, highlightSpecialChars, ViewUpdate } from '@codemirror/view';
 import { markdown } from '@codemirror/lang-markdown';
-import { defaultHighlightStyle } from '@codemirror/highlight';
+import { defaultHighlightStyle, HighlightStyle, tags } from '@codemirror/highlight';
 import { undo, redo, history, undoDepth, redoDepth } from '@codemirror/history';
 
 interface CodeMirrorResult {
@@ -32,7 +32,77 @@ function logMessage(...msg: any[]) {
 	postMessage('onLog', { value: msg });
 }
 
-export function initCodeMirror(parentElement: any, initialText: string): CodeMirrorResult {
+const createTheme = (theme: any): Extension => {
+	const baseTheme = EditorView.baseTheme({
+		'&': {
+			color: theme.color,
+			backgroundColor: theme.backgroundColor,
+			fontFamily: theme.fontFamily,
+			fontSize: `${theme.fontSize}px`,
+		},
+	});
+
+	const appearanceTheme = EditorView.theme({}, { dark: theme.appearance === 'dark' });
+
+	const baseHeadingStyle = {
+		fontWeight: 'bold',
+		fontFamily: theme.fontFamily,
+	};
+
+	const syntaxHighlighting = HighlightStyle.define([
+		{
+			tag: tags.strong,
+			fontWeight: 'bold',
+		},
+		{
+			tag: tags.emphasis,
+			fontStyle: 'italic',
+		},
+		{
+			...baseHeadingStyle,
+			tag: tags.heading1,
+			fontSize: '1.6em',
+			borderBottom: `1px solid ${theme.dividerColor}`,
+		},
+		{
+			...baseHeadingStyle,
+			tag: tags.heading2,
+			fontSize: '1.4em',
+		},
+		{
+			...baseHeadingStyle,
+			tag: tags.heading3,
+			fontSize: '1.3em',
+		},
+		{
+			...baseHeadingStyle,
+			tag: tags.heading4,
+			fontSize: '1.2em',
+		},
+		{
+			...baseHeadingStyle,
+			tag: tags.heading5,
+			fontSize: '1.1em',
+		},
+		{
+			...baseHeadingStyle,
+			tag: tags.heading6,
+			fontSize: '1.0em',
+		},
+		{
+			tag: tags.list,
+			fontFamily: theme.fontFamily,
+		},
+	]);
+
+	return [
+		baseTheme,
+		appearanceTheme,
+		syntaxHighlighting,
+	];
+};
+
+export function initCodeMirror(parentElement: any, initialText: string, theme: any): CodeMirrorResult {
 	logMessage('Initializing CodeMirror...');
 
 	let schedulePostUndoRedoDepthChangeId_: any = 0;
@@ -58,6 +128,7 @@ export function initCodeMirror(parentElement: any, initialText: string): CodeMir
 		state: EditorState.create({
 			extensions: [
 				markdown(),
+				createTheme(theme),
 				history(),
 				drawSelection(),
 				highlightSpecialChars(),

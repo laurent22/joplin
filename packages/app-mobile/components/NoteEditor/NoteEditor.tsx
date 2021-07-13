@@ -1,8 +1,10 @@
 import Setting from '@joplin/lib/models/Setting';
 import shim from '@joplin/lib/shim';
+import { themeStyle } from '@joplin/lib/theme';
 const React = require('react');
 const { forwardRef, useImperativeHandle, useEffect, useState, useCallback, useRef } = require('react');
 const { WebView } = require('react-native-webview');
+const { editorFont } = require('../global-style');
 
 export interface ChangeEvent {
 	value: string;
@@ -17,13 +19,157 @@ type ChangeEventHandler = (event: ChangeEvent)=> void;
 type UndoRedoDepthChangeHandler = (event: UndoRedoDepthChangeEvent)=> void;
 
 interface Props {
+	themeId: number;
 	initialText: string;
 	style: any;
 	onChange: ChangeEventHandler;
 	onUndoRedoDepthChange: UndoRedoDepthChangeHandler;
 }
 
-function useHtml(): string {
+function fontFamilyFromSettings() {
+	const f = editorFont(Setting.value('style.editor.fontFamily'));
+	return [f, 'sans-serif'].join(', ');
+}
+
+// function useCss(themeId:number):string {
+// 	const [css, setCss] = useState('');
+
+// 	// useEffect(() => {
+// 	// 	const theme = themeStyle(themeId);
+
+// 	// 	// Selection in dark mode is hard to see so make it brighter.
+// 	// 	// https://discourse.joplinapp.org/t/dragging-in-dark-theme/12433/4?u=laurent
+// 	// 	const selectionColorCss = theme.appearance === ThemeAppearance.Dark ?
+// 	// 		`.CodeMirror-selected {
+// 	// 			background: #6b6b6b !important;
+// 	// 		}` : '';
+// 	// 	const monospaceFonts = [];
+// 	// 	// if (Setting.value('style.editor.monospaceFontFamily')) monospaceFonts.push(`"${Setting.value('style.editor.monospaceFontFamily')}"`);
+// 	// 	monospaceFonts.push('monospace');
+
+// 	// 	const fontSize = 15;
+// 	// 	const fontFamily = fontFamilyFromSettings();
+
+// 	// 	// BUG: caret-color seems to be ignored for some reason
+// 	// 	const caretColor = theme.appearance === ThemeAppearance.Dark ? "white" : 'black';
+
+// 	// 	setCss(`
+// 	// 		/* These must be important to prevent the codemirror defaults from taking over*/
+// 	// 		.CodeMirror {
+// 	// 			font-family: ${fontFamily};
+// 	// 			font-size: ${fontSize}px;
+// 	// 			height: 100% !important;
+// 	// 			width: 100% !important;
+// 	// 			color: ${theme.color};
+// 	// 			background-color: ${theme.backgroundColor};
+// 	// 			position: absolute !important;
+// 	// 			-webkit-box-shadow: none !important; // Some themes add a box shadow for some reason
+// 	// 		}
+
+// 	// 		.CodeMirror-lines {
+// 	// 			/* This is used to enable the scroll-past end behaviour. The same height should */
+// 	// 			/* be applied to the viewer. */
+// 	// 			padding-bottom: 400px !important;
+// 	// 		}
+
+// 	// 		/* Left padding is applied at the editor component level, so we should remove it from the lines */
+// 	// 		.CodeMirror pre.CodeMirror-line,
+// 	// 		.CodeMirror pre.CodeMirror-line-like {
+// 	// 			padding-left: 0;
+// 	// 		}
+
+// 	// 		.CodeMirror-sizer {
+// 	// 			/* Add a fixed right padding to account for the appearance (and disappearance) */
+// 	// 			/* of the sidebar */
+// 	// 			padding-right: 10px !important;
+// 	// 		}
+
+// 	// 		/* This enforces monospace for certain elements (code, tables, etc.) */
+// 	// 		.cm-jn-monospace {
+// 	// 			font-family: ${monospaceFonts.join(', ')} !important;
+// 	// 		}
+
+// 	// 		.cm-header-1 {
+// 	// 			font-size: 1.5em;
+// 	// 		}
+
+// 	// 		.cm-header-2 {
+// 	// 			font-size: 1.3em;
+// 	// 		}
+
+// 	// 		.cm-header-3 {
+// 	// 			font-size: 1.1em;
+// 	// 		}
+
+// 	// 		.cm-header-4, .cm-header-5, .cm-header-6 {
+// 	// 			font-size: 1em;
+// 	// 		}
+
+// 	// 		.cm-header-1, .cm-header-2, .cm-header-3, .cm-header-4, .cm-header-5, .cm-header-6 {
+// 	// 			line-height: 1.5em;
+// 	// 		}
+
+// 	// 		.cm-search-marker {
+// 	// 			background: ${theme.searchMarkerBackgroundColor};
+// 	// 			color: ${theme.searchMarkerColor} !important;
+// 	// 		}
+
+// 	// 		.cm-search-marker-selected {
+// 	// 			background: ${theme.selectedColor2};
+// 	// 			color: ${theme.color2} !important;
+// 	// 		}
+
+// 	// 		.cm-search-marker-scrollbar {
+// 	// 			background: ${theme.searchMarkerBackgroundColor};
+// 	// 			-moz-box-sizing: border-box;
+// 	// 			box-sizing: border-box;
+// 	// 			opacity: .5;
+// 	// 		}
+
+// 	// 		/* We need to use important to override theme specific values */
+// 	// 		.cm-error {
+// 	// 			color: inherit !important;
+// 	// 			background-color: inherit !important;
+// 	// 			border-bottom: 1px dotted #dc322f;
+// 	// 		}
+
+// 	// 		/* The default dark theme colors don't have enough contrast with the background */
+// 	// 		.cm-s-nord span.cm-comment {
+// 	// 			color: #9aa4b6 !important;
+// 	// 		}
+
+// 	// 		.cm-s-dracula span.cm-comment {
+// 	// 			color: #a1abc9 !important;
+// 	// 		}
+
+// 	// 		.cm-s-monokai span.cm-comment {
+// 	// 			color: #908b74 !important;
+// 	// 		}
+
+// 	// 		.cm-s-material-darker span.cm-comment {
+// 	// 			color: #878787 !important;
+// 	// 		}
+
+// 	// 		.cm-s-solarized.cm-s-dark span.cm-comment {
+// 	// 			color: #8ba1a7 !important;
+// 	// 		}
+
+// 	// 		/* MOBILE SPECIFIC */
+
+// 	// 		.CodeMirror .cm-scroller,
+// 	// 		.CodeMirror .cm-line {
+// 	// 			font-family: ${fontFamily};
+// 	// 			caret-color: ${caretColor};
+// 	// 		}
+
+// 	// 		${selectionColorCss}
+// 	// 	`);
+// 	// }, [themeId]);
+
+// 	return css;
+// }
+
+function useHtml(css: string): string {
 	const [html, setHtml] = useState('');
 
 	useEffect(() => {
@@ -38,17 +184,27 @@ function useHtml(): string {
 							.cm-editor {
 								height: 100%;
 							}
+
+							${css}
 						</style>
 					</head>
 					<body style="margin:0; height:100vh; width:100vh; width:100vw; min-width:100vw;">
-						<div id="editor" style="height:100%;"></div>
+						<div class="CodeMirror" style="height:100%;"></div>
 					</body>
 				</html>
 			`
 		);
-	}, []);
+	}, [css]);
 
 	return html;
+}
+
+function editorTheme(themeId: number) {
+	return {
+		...themeStyle(themeId),
+		fontSize: 15,
+		fontFamily: fontFamilyFromSettings(),
+	};
 }
 
 function NoteEditor(props: Props, ref: any) {
@@ -67,12 +223,19 @@ function NoteEditor(props: Props, ref: any) {
 			postMessage('onLog', { value: msg });
 		}
 
-		// let bundle = null;
+		// This variable is not used within this script
+		// but is called using "injectJavaScript" from
+		// the wrapper component.
 		let cm = null;
 
 		try {
 			${shim.injectedJs('codeMirrorBundle')};
-			cm = codeMirrorBundle.initCodeMirror(document.getElementById('editor'), ${JSON.stringify(props.initialText)});
+
+			const parentElement = document.getElementsByClassName('CodeMirror')[0];
+			const theme = ${JSON.stringify(editorTheme(props.themeId))};
+			const initialText = ${JSON.stringify(props.initialText)};
+
+			cm = codeMirrorBundle.initCodeMirror(parentElement, initialText, theme);
 		} catch (e) {
 			window.ReactNativeWebView.postMessage("error:" + e.message + ": " + JSON.stringify(e))
 		} finally {
@@ -80,7 +243,8 @@ function NoteEditor(props: Props, ref: any) {
 		}
 	`;
 
-	const html = useHtml();
+	// const css = useCss(props.themeId);
+	const html = useHtml('');
 
 	useImperativeHandle(ref, () => {
 		return {
