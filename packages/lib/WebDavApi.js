@@ -121,13 +121,13 @@ class WebDavApi {
 			attrValueProcessors: [attrValueProcessor],
 		};
 
-		return new Promise((resolve) => {
+		return new Promise((resolve, reject) => {
 			parseXmlString(xml, options, (error, result) => {
 				if (error) {
-					resolve(null); // Error handled by caller which will display the XML text (or plain text) if null is returned from this function
-					return;
+					reject(error);
+				} else {
+					resolve(result);
 				}
-				resolve(result);
 			});
 		});
 	}
