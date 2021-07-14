@@ -718,7 +718,7 @@ msgid ""
 "temporarily disabled."
 msgstr ""
 "Sicherer Modus aktiv. Notizdarstellung und alle Plugins werden vorübergehend "
-"deaktiviert"
+"deaktiviert."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:447
 msgid "Disable safe mode and restart"
@@ -1771,7 +1771,9 @@ msgstr "Nicht mehr teilen"
 msgid ""
 "Delete this invitation? The recipient will no longer have access to this "
 "shared notebook."
-msgstr "Einladung löschen? Der Empfänger "
+msgstr ""
+"Einladung löschen? Der Empfänger hat dann keinen Zugriff mehr auf dieses "
+"freigegebene Notizbuch."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:194
 msgid "Add recipient:"
@@ -2760,7 +2762,7 @@ msgid ""
 msgstr ""
 "Verwendete Schriftart mit fester Breite, um Text lesbar zu machen (z.B. in "
 "Tabellen, Kontrollkästchen, Code). Falls nicht vorhanden wird eine Monotype-"
-"Scrhiftart (mit fester Breite) verwendet. "
+"Scrhiftart (mit fester Breite) verwendet."
 
 #: packages/lib/models/Setting.js:786
 msgid "Custom stylesheet for rendered Markdown"
