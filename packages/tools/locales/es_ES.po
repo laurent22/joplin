@@ -20,9 +20,11 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.0\n"
+"X-Generator: Poedit 2.4.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
@@ -337,7 +339,7 @@ msgstr "Casillas"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:17
 msgid "Highlight"
-msgstr "Destacar"
+msgstr "Resaltado"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:22
 msgid "Strikethrough"
@@ -377,7 +379,7 @@ msgstr "Código Integrado"
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:654
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:83
 msgid "Insert Date Time"
-msgstr "Introducir fecha"
+msgstr "Insertar Fecha y Hora"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1103
 msgid "Drop notes or files here"
@@ -520,7 +522,7 @@ msgstr "Borrar línea"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:92
 msgid "Duplicate line"
-msgstr "Duplicar linea"
+msgstr "Duplicar línea"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:96
 msgid "Undo"
@@ -713,8 +715,8 @@ msgid ""
 "Safe mode is currently active. Note rendering and all plugins are "
 "temporarily disabled."
 msgstr ""
-"El modo seguro está activo actualmente. La representación de notas y todos "
-"los complementos están temporalmente deshabilitados."
+"El modo seguro está actualmente activo. El renderizado de notas y todos los "
+"plugins están temporalmente deshabilitados."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:447
 msgid "Disable safe mode and restart"
@@ -764,7 +766,7 @@ msgstr "Más información"
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:477
 #, javascript-format
 msgid "%s (%s) would like to share a notebook with you."
-msgstr "%s (%s) le gustaría compartir una libreta contigo."
+msgstr "A %s (%s) le gustaría compartir una libreta contigo."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:479
 msgid "Accept"
@@ -1516,11 +1518,11 @@ msgstr "No tiene ningún plugin instalado."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:232
 msgid "Could not connect to plugin repository"
-msgstr "No se pudo conectar con el repositorio del plugin: %s"
+msgstr "No se pudo conectar con el repositorio de plugins"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:234
 msgid "Try again"
-msgstr "Intenta nuevamente"
+msgstr "Vuelva a intentarlo"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:242
 msgid "Plugin tools"
@@ -1787,7 +1789,7 @@ msgstr "Sincronizando..."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:231
 msgid "Sharing notebook..."
-msgstr "Compartir libreta..."
+msgstr "Compartiendo libreta..."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:241
 msgid ""
@@ -1896,7 +1898,7 @@ msgstr "Configuración"
 
 #: packages/app-mobile/components/side-menu-content.js:351
 msgid "Mobile data - auto-sync disabled"
-msgstr "Datos móviles: sincronización automática deshabilitada"
+msgstr "Datos móviles - sincronización automática deshabilitada"
 
 #: packages/app-mobile/components/note-list.js:97
 msgid "You currently have no notebooks."
@@ -2026,7 +2028,7 @@ msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen.js:406
 msgid "Feature flags"
-msgstr ""
+msgstr "Feature flags"
 
 #: packages/app-mobile/components/screens/ConfigScreen.js:408
 msgid "More information"
@@ -2460,7 +2462,7 @@ msgstr "URL del Servidor de Joplin"
 
 #: packages/lib/models/Setting.js:333
 msgid "Joplin Server email"
-msgstr "Email del servidor Joplin"
+msgstr "Email del Servidor de Joplin"
 
 #: packages/lib/models/Setting.js:344
 msgid "Joplin Server password"
@@ -2468,11 +2470,11 @@ msgstr "Contraseña del Servidor de Joplin"
 
 #: packages/lib/models/Setting.js:371
 msgid "Joplin Cloud email"
-msgstr "Email del servidor Joplin"
+msgstr "Email de Joplin Cloud"
 
 #: packages/lib/models/Setting.js:382
 msgid "Joplin Cloud password"
-msgstr "Contraseña del servidor Joplin"
+msgstr "Contraseña de Joplin Cloud"
 
 #: packages/lib/models/Setting.js:394
 msgid "Attachment download behaviour"
@@ -2727,7 +2729,7 @@ msgid ""
 "tables, checkboxes, code). If not found, a generic monospace (fixed width) "
 "font is used."
 msgstr ""
-"Se utiliza cuando se necesita una fuente de ancho fijo para presentar el "
+"Se utiliza donde se necesita una fuente de ancho fijo para presentar el "
 "texto de manera legible (por ejemplo, tablas, casillas de verificación, "
 "código). Si no se encuentra, se utiliza una fuente genérica monoespaciada "
 "(ancho fijo)."
@@ -2742,12 +2744,12 @@ msgstr "Hoja de estilos para personalizar todo Joplin"
 
 #: packages/lib/models/Setting.js:812
 msgid "Re-upload local data to sync target"
-msgstr "Vuelva a cargar datos locales para sincronizar el destino"
+msgstr "Volver a cargar datos locales al objetivo de sincronización"
 
 #: packages/lib/models/Setting.js:822
 msgid "Delete local data and re-download from sync target"
 msgstr ""
-"Elimine los datos locales y vuelva a descargarlos desde el destino de "
+"Eliminar datos locales y volver a descargarlos desde el objetivo de "
 "sincronización"
 
 #: packages/lib/models/Setting.js:827
@@ -3072,7 +3074,7 @@ msgstr "Los elementos cifrados no pueden ser modificados"
 
 #: packages/lib/SyncTargetJoplinCloud.js:28
 msgid "Joplin Cloud"
-msgstr "Nube de Joplin"
+msgstr "Joplin Cloud"
 
 #: packages/lib/BaseApplication.js:152 packages/lib/BaseApplication.js:164
 #: packages/lib/BaseApplication.js:196
@@ -3205,9 +3207,9 @@ msgid "Cancelling..."
 msgstr "Cancelando..."
 
 #: packages/lib/Synchronizer.js:156
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Completed: %s (%s)"
-msgstr "Completado: %s"
+msgstr "Completado: %s (%s)"
 
 #: packages/lib/Synchronizer.js:158
 #, javascript-format
