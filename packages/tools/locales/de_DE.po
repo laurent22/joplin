@@ -130,7 +130,7 @@ msgstr "Überspringe diese Version"
 
 #: packages/app-desktop/checkForUpdates.js:189
 msgid "Full changelog"
-msgstr "Kompletter Changelog"
+msgstr "Komplettes Änderungsprotokoll"
 
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:100
 msgid "This note has no history"
