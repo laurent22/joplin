@@ -63,7 +63,7 @@ msgid ""
 msgstr ""
 "Sovellus suljetaan nyt. Käynnistä se uudelleen prosessin loppuun saamiseksi."
 
-#: packages/app-desktop/plugins/GotoAnything.js:446
+#: packages/app-desktop/plugins/GotoAnything.js:455
 msgid ""
 "Type a note title or part of its content to jump to it. Or type # followed "
 "by a tag name, or @ followed by a notebook name. Or type : to search for "
@@ -73,12 +73,12 @@ msgstr ""
 "kirjoittaa # ja sen jälkeen tunnisteen nimen tai @ ja sen jälkeen "
 "muistikirjan nimen. Voit myös etsiä komentoja kirjoittamalla : ."
 
-#: packages/app-desktop/plugins/GotoAnything.js:471
+#: packages/app-desktop/plugins/GotoAnything.js:480
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:20
 msgid "Goto Anything..."
 msgstr "Siirry mihin tahansa..."
 
-#: packages/app-desktop/plugins/GotoAnything.js:478
+#: packages/app-desktop/plugins/GotoAnything.js:487
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:28
 msgid "Command palette"
 msgstr "Komentovalikoima"
@@ -292,11 +292,11 @@ msgstr "Lisää hyperlinkki"
 msgid "List item"
 msgstr "Luettelon kohde"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:513
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:545
 msgid "Layout"
 msgstr "Ulkoasu"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:513
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:545
 #, javascript-format
 msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
@@ -305,20 +305,20 @@ msgstr ""
 "Tällä muistiinpanolla ei ole sisältöä. Napsauta \"%s\" vaihtaaksesi editoria "
 "ja muokataksesi muistiinpanoa."
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:622
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:654
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:128
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:18
 msgid "Cut"
 msgstr "Leikkaa"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:629
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:661
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:136
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:13
 #: packages/app-desktop/gui/MenuBar.js:377
 msgid "Copy"
 msgstr "Kopioi"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:636
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:668
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:143
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:23
 msgid "Paste"
@@ -348,39 +348,39 @@ msgstr ""
 msgid "Subscript"
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:564
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:574
 #: packages/app-mobile/components/screens/Note.js:1016
 msgid "Edit"
 msgstr "Muokkaa"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:620
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:630
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:53
 #: packages/app-mobile/components/screens/Note.js:771
 msgid "Attach file"
 msgstr "Liitä tiedosto"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:630
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:640
 msgid "Code Block"
 msgstr "Koodilohko"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:639
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:649
 msgid "Inline Code"
 msgstr "Inline-koodi"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:654
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:664
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:83
 msgid "Insert Date Time"
 msgstr "Lisää Päivämäärä Aika"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1103
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1115
 msgid "Drop notes or files here"
 msgstr "Pudota muistiinpanot tai tiedostot tähän"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1103
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1115
 msgid "Code View"
 msgstr "Koodinäkymä"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1103
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1115
 #, javascript-format
 msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
@@ -423,7 +423,8 @@ msgid "to-do"
 msgstr "tehtävä"
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.js:79
-#: packages/server/dist/models/UserModel.js:175
+#: packages/server/dist/models/UserModel.js:186
+#: packages/server/dist/models/UserModel.js:191
 msgid "note"
 msgstr "merkintä"
 
@@ -593,7 +594,7 @@ msgid "URL"
 msgstr "URL"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:34
-#: packages/lib/models/Setting.js:1665
+#: packages/lib/models/Setting.js:1666
 msgid "Note History"
 msgstr "Muistiinpano historia"
 
@@ -644,7 +645,7 @@ msgid "Keyboard Shortcut"
 msgstr "Pikanäppäin"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:14
-#: packages/app-desktop/gui/MenuBar.js:213 packages/app-desktop/app.js:371
+#: packages/app-desktop/gui/MenuBar.js:213 packages/app-desktop/app.js:372
 msgid "Quit"
 msgstr "Lopeta"
 
@@ -703,17 +704,31 @@ msgstr ""
 msgid "Save"
 msgstr "Tallenna"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:445
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:463
+msgid "The Web Clipper needs your authorisation to access your data."
+msgstr ""
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:463
+#, fuzzy
+msgid "Grant authorisation"
+msgstr "Valtuutuksen tunnus:"
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:463
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:483
+msgid "Reject"
+msgstr ""
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:466
 msgid ""
 "Safe mode is currently active. Note rendering and all plugins are "
 "temporarily disabled."
 msgstr ""
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:447
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:466
 msgid "Disable safe mode and restart"
 msgstr ""
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:451
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:469
 msgid ""
 "The sync target needs to be upgraded before Joplin can sync. The operation "
 "may take a few minutes to complete and the app needs to be restarted. To "
@@ -723,61 +738,57 @@ msgstr ""
 "Toiminnon suorittamiseen voi mennä muutama minuutti, ja sovellus on "
 "käynnistettävä uudelleen. Jatka napsauttamalla linkkiä."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:453
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:469
 msgid "Restart and upgrade"
 msgstr "Käynnistä uudelleen ja päivitä"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:457
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:472
 msgid "Some items cannot be decrypted."
 msgstr "Joidenkin kohteiden salausta ei voida purkaa."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:459
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:465
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:487
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:472
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:475
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:486
 msgid "View them now"
 msgstr "Näytä ne nyt"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:463
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:475
 msgid "One of your master keys use an obsolete encryption method."
 msgstr "Yksi pääavaimista käyttää vanhentunutta salaustapaa."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:469
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:478
 msgid ""
 "The default encryption method has been changed, you should re-encrypt your "
 "data."
 msgstr ""
 "Oletussalausmenetelmää on muutettu, sinun on salattava tiedot uudelleen."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:471
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:478
 msgid "More info"
 msgstr "Lisätietoja"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:477
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:483
 #, javascript-format
 msgid "%s (%s) would like to share a notebook with you."
 msgstr ""
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:479
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:483
 msgid "Accept"
 msgstr ""
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:481
-msgid "Reject"
-msgstr ""
-
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:485
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:486
 msgid "Some items cannot be synchronised."
 msgstr "Joitakin kohteita ei voida synkronoida."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:491
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:489
 msgid "One or more master keys need a password."
 msgstr "Vähintään yksi pääavain tarvitsee salasanan."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:493
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:489
 msgid "Set the password"
 msgstr "Aseta salasana"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:616
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:612
 msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
 msgstr "Siirrä asettelukohteita nuolilla. Paina \"Esc\" poistuaksesi."
 
@@ -1045,7 +1056,7 @@ msgstr "Muistiinpanon liitteet..."
 
 #: packages/app-desktop/gui/MenuBar.js:388
 #: packages/app-desktop/gui/MenuBar.js:466
-#: packages/app-desktop/gui/MenuBar.js:766
+#: packages/app-desktop/gui/MenuBar.js:768
 msgid "&File"
 msgstr "&Tiedosto"
 
@@ -1079,7 +1090,7 @@ msgid "Hide %s"
 msgstr "Piilota %s"
 
 #: packages/app-desktop/gui/MenuBar.js:512
-#: packages/app-desktop/gui/MenuBar.js:770
+#: packages/app-desktop/gui/MenuBar.js:772
 msgid "&Edit"
 msgstr "&Muokkaa"
 
@@ -1126,7 +1137,7 @@ msgid "Joplin Forum"
 msgstr "Joplin Foorumi"
 
 #: packages/app-desktop/gui/MenuBar.js:661
-#: packages/app-mobile/components/screens/ConfigScreen.js:423
+#: packages/app-mobile/components/screens/ConfigScreen.js:425
 msgid "Make a donation"
 msgstr "Tee lahjoitus"
 
@@ -1477,7 +1488,7 @@ msgid "Restart now"
 msgstr "Käynnistä uudelleen nyt"
 
 #: packages/app-desktop/gui/ConfigScreen/Sidebar.js:89
-#: packages/lib/models/Setting.js:1661
+#: packages/lib/models/Setting.js:1662
 msgid "Plugins"
 msgstr "Laajennukset"
 
@@ -1827,7 +1838,7 @@ msgstr "Virhe avattaessa muistiinpanoa editorissa: %s"
 msgid "Open profile directory"
 msgstr "Avaa profiilihakemisto"
 
-#: packages/app-desktop/app.js:369
+#: packages/app-desktop/app.js:370
 #, javascript-format
 msgid "Open %s"
 msgstr "Avaa %s"
@@ -1882,7 +1893,7 @@ msgid "New Notebook"
 msgstr "Uusi muistikirja"
 
 #: packages/app-mobile/components/side-menu-content.js:316
-#: packages/app-mobile/components/screens/ConfigScreen.js:441
+#: packages/app-mobile/components/screens/ConfigScreen.js:443
 msgid "Configuration"
 msgstr "Konfigurointi"
 
@@ -1969,35 +1980,35 @@ msgstr "Tiedot"
 msgid "Encryption Config"
 msgstr "Salauksen määritys"
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:389
+#: packages/app-mobile/components/screens/ConfigScreen.js:388
 msgid "Tools"
 msgstr "Työkalut"
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:390
+#: packages/app-mobile/components/screens/ConfigScreen.js:389
 msgid "Sync Status"
 msgstr "Synkronoinnin tila"
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:391
+#: packages/app-mobile/components/screens/ConfigScreen.js:390
 msgid "Log"
 msgstr "Loki"
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:393
+#: packages/app-mobile/components/screens/ConfigScreen.js:392
 msgid "Creating report..."
 msgstr "Luodaan raporttia..."
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:393
+#: packages/app-mobile/components/screens/ConfigScreen.js:392
 msgid "Export Debug Report"
 msgstr "Vie virheenkorjausraportti"
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:395
+#: packages/app-mobile/components/screens/ConfigScreen.js:394
 msgid "Fixing search index..."
 msgstr "Korjataan hakuindeksiä..."
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:395
+#: packages/app-mobile/components/screens/ConfigScreen.js:394
 msgid "Fix search index"
 msgstr "Hakuindeksin korjaaminen"
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:395
+#: packages/app-mobile/components/screens/ConfigScreen.js:394
 msgid ""
 "Use this to rebuild the search index if there is a problem with search. It "
 "may take a long time depending on the number of notes."
@@ -2005,27 +2016,27 @@ msgstr ""
 "Tämän avulla voit muodostaa hakuindeksin uudelleen, jos haussa on ongelma. "
 "Se voi kestää kauan muistiinpanojen määrästä riippuen."
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:397
+#: packages/app-mobile/components/screens/ConfigScreen.js:396
 msgid "Exporting profile..."
 msgstr "Viedään profiili..."
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:397
+#: packages/app-mobile/components/screens/ConfigScreen.js:396
 msgid "Export profile"
 msgstr "Vie profiili"
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:397
+#: packages/app-mobile/components/screens/ConfigScreen.js:396
 msgid "For debugging purpose only: export your profile to an external SD card."
 msgstr "Vain virheenkorjausta varten: vie profiilisi ulkoiselle SD-kortille."
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:406
+#: packages/app-mobile/components/screens/ConfigScreen.js:407
 msgid "Feature flags"
 msgstr ""
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:408
+#: packages/app-mobile/components/screens/ConfigScreen.js:410
 msgid "More information"
 msgstr "Lisätietoja"
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:414
+#: packages/app-mobile/components/screens/ConfigScreen.js:416
 msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
 "them in your phone settings, in Apps > Joplin > Permissions"
@@ -2034,7 +2045,7 @@ msgstr ""
 "käyttöön puhelimesi asetuksissa, valitsemalla Sovellukset> Joplin> "
 "Käyttöoikeudet"
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:415
+#: packages/app-mobile/components/screens/ConfigScreen.js:417
 msgid ""
 "- Storage: to allow attaching files to notes and to enable filesystem "
 "synchronisation."
@@ -2042,28 +2053,28 @@ msgstr ""
 "- Tallennustila: sallia tiedostojen liittäminen muistiinpanoihin ja ottaa "
 "tiedostojärjestelmän synkronointi käyttöön."
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:416
+#: packages/app-mobile/components/screens/ConfigScreen.js:418
 msgid "- Camera: to allow taking a picture and attaching it to a note."
 msgstr "- Kamera: sallii kuvan ottamisen ja liittämisen muistiinpanoon."
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:417
+#: packages/app-mobile/components/screens/ConfigScreen.js:419
 msgid "- Location: to allow attaching geo-location information to a note."
 msgstr "- Sijainti: sallii paikkatietojen liittämisen muistiinpanoon."
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:428
+#: packages/app-mobile/components/screens/ConfigScreen.js:430
 msgid "Joplin website"
 msgstr "Joplin verkkosivusto"
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:433
+#: packages/app-mobile/components/screens/ConfigScreen.js:435
 msgid "Privacy Policy"
 msgstr "Tietosuojakäytäntö"
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:437
+#: packages/app-mobile/components/screens/ConfigScreen.js:439
 #, javascript-format
 msgid "Database v%s"
 msgstr "Tietokanta v%s"
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:439
+#: packages/app-mobile/components/screens/ConfigScreen.js:441
 #, javascript-format
 msgid "FTS enabled: %d"
 msgstr "Koko tekstin haku (FTS) Käytössä: %d"
@@ -2250,15 +2261,23 @@ msgstr ""
 "Järjestelmänvalvojan oletussalasana on epävarma, eikä sitä ole muutettu "
 "[Vaihda se nyt] (%s)"
 
-#: packages/server/dist/models/UserModel.js:175
+#: packages/server/dist/models/UserModel.js:186
+#: packages/server/dist/models/UserModel.js:191
 #, fuzzy
 msgid "attachment"
 msgstr "Liitteet"
 
-#: packages/server/dist/models/UserModel.js:175
+#: packages/server/dist/models/UserModel.js:186
 #, javascript-format
 msgid ""
 "Cannot save %s \"%s\" because it is larger than than the allowed limit (%s)"
+msgstr ""
+
+#: packages/server/dist/models/UserModel.js:191
+#, javascript-format
+msgid ""
+"Cannot save %s \"%s\" because it would go over the total allowed size (%s) "
+"for this account"
 msgstr ""
 
 #: packages/lib/onedrive-api-node-utils.js:46
@@ -2307,23 +2326,23 @@ msgstr "Joplin Palvelin"
 msgid "Cannot access %s"
 msgstr "Ei voi käyttää %s"
 
-#: packages/lib/models/Folder.js:36 packages/lib/models/Note.js:36
+#: packages/lib/models/Folder.js:38 packages/lib/models/Note.js:36
 msgid "title"
 msgstr "otsikko"
 
-#: packages/lib/models/Folder.js:37 packages/lib/models/Note.js:37
+#: packages/lib/models/Folder.js:39 packages/lib/models/Note.js:37
 msgid "updated date"
 msgstr "päivitetty päivämäärä"
 
-#: packages/lib/models/Folder.js:101
+#: packages/lib/models/Folder.js:103
 msgid "Conflicts"
 msgstr "Ristiriitoja"
 
-#: packages/lib/models/Folder.js:535
+#: packages/lib/models/Folder.js:558
 msgid "Cannot move notebook to this location"
 msgstr "Muistikirjaa ei voi siirtää tähän sijaintiin"
 
-#: packages/lib/models/Folder.js:587
+#: packages/lib/models/Folder.js:610
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr "Muistikirjoja ei voi nimetä \"%s\", joka on varattu otsikko."
@@ -2833,11 +2852,11 @@ msgstr "Emacs"
 msgid "Vim"
 msgstr "Vim"
 
-#: packages/lib/models/Setting.js:914
+#: packages/lib/models/Setting.js:918
 msgid "Custom TLS certificates"
 msgstr "Mukautetut TLS-varmenteet"
 
-#: packages/lib/models/Setting.js:915
+#: packages/lib/models/Setting.js:919
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
 "or path to individual cert files. For example: /my/cert_dir, /other/custom."
@@ -2850,15 +2869,15 @@ msgstr ""
 "sinun on tallennettava muutokset ennen kuin napsautat \"Tarkista "
 "synkronointiasetukset\"."
 
-#: packages/lib/models/Setting.js:928
+#: packages/lib/models/Setting.js:941
 msgid "Ignore TLS certificate errors"
 msgstr "Ohita TLS-varmenteen virheet"
 
-#: packages/lib/models/Setting.js:937
+#: packages/lib/models/Setting.js:950
 msgid "Fail-safe"
 msgstr "Vikaturvallinen"
 
-#: packages/lib/models/Setting.js:938
+#: packages/lib/models/Setting.js:951
 msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
@@ -2866,7 +2885,7 @@ msgstr ""
 "Vikasietoinen: Älä pyyhi paikallisia tietoja, kun synkronointikohde on tyhjä "
 "(usein virheellisen määritysvirheen tai virheen seurauksena)"
 
-#: packages/lib/models/Setting.js:942
+#: packages/lib/models/Setting.js:955
 msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
@@ -2874,29 +2893,29 @@ msgstr ""
 "Määritä portti, jota API-palvelimen on käytettävä. Jos sitä ei ole "
 "määritetty, käytetään oletusarvoa."
 
-#: packages/lib/models/Setting.js:947
+#: packages/lib/models/Setting.js:960
 msgid "Enable note history"
 msgstr "Muistiinpanohistorian ottaminen käyttöön"
 
-#: packages/lib/models/Setting.js:957
+#: packages/lib/models/Setting.js:970
 msgid "days"
 msgstr "päivää"
 
-#: packages/lib/models/Setting.js:957
+#: packages/lib/models/Setting.js:970
 #, javascript-format
 msgid "%d days"
 msgstr "%d päivää"
 
-#: packages/lib/models/Setting.js:959
+#: packages/lib/models/Setting.js:972
 msgid "Keep note history for"
 msgstr "Säilytä muistiinpanohistoria"
 
-#: packages/lib/models/Setting.js:986
+#: packages/lib/models/Setting.js:999
 msgid "Notebook list growth factor"
 msgstr "Muistikirjaluettelon kasvutekijä"
 
-#: packages/lib/models/Setting.js:987 packages/lib/models/Setting.js:1000
-#: packages/lib/models/Setting.js:1013
+#: packages/lib/models/Setting.js:1000 packages/lib/models/Setting.js:1013
+#: packages/lib/models/Setting.js:1026
 msgid ""
 "The factor property sets how the item will grow or shrink to fit the "
 "available space in its container with respect to the other items. Thus an "
@@ -2908,58 +2927,58 @@ msgstr ""
 "kohde, jonka kerroin on 2, vie kaksi kertaa enemmän tilaa kuin kohde, jonka "
 "kerroin on 1.Restart-sovellus muutosten näkemistä varten."
 
-#: packages/lib/models/Setting.js:999
+#: packages/lib/models/Setting.js:1012
 msgid "Note list growth factor"
 msgstr "Huomautus luettelon kasvutekijä"
 
-#: packages/lib/models/Setting.js:1012
+#: packages/lib/models/Setting.js:1025
 msgid "Note area growth factor"
 msgstr "Huomautus alueen kasvutekijä"
 
-#: packages/lib/models/Setting.js:1252
+#: packages/lib/models/Setting.js:1253
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Virheellinen asetusarvo: \"%s\". Mahdolliset arvot ovat: %s."
 
-#: packages/lib/models/Setting.js:1651
+#: packages/lib/models/Setting.js:1652
 msgid "General"
 msgstr "Yleiset"
 
-#: packages/lib/models/Setting.js:1653
+#: packages/lib/models/Setting.js:1654
 msgid "Synchronisation"
 msgstr "Synkronointi"
 
-#: packages/lib/models/Setting.js:1655
+#: packages/lib/models/Setting.js:1656
 msgid "Appearance"
 msgstr "Ulkonäkö"
 
-#: packages/lib/models/Setting.js:1657
+#: packages/lib/models/Setting.js:1658
 msgid "Note"
 msgstr "Huomautus"
 
-#: packages/lib/models/Setting.js:1659
+#: packages/lib/models/Setting.js:1660
 #: packages/lib/services/interop/InteropService.js:49
 #: packages/lib/services/interop/InteropService.js:59
 msgid "Markdown"
 msgstr "Markdown"
 
-#: packages/lib/models/Setting.js:1663
+#: packages/lib/models/Setting.js:1664
 msgid "Application"
 msgstr "Sovellus"
 
-#: packages/lib/models/Setting.js:1667
+#: packages/lib/models/Setting.js:1668
 msgid "Encryption"
 msgstr "Salaus"
 
-#: packages/lib/models/Setting.js:1669
+#: packages/lib/models/Setting.js:1670
 msgid "Web Clipper"
 msgstr "Web Clipper"
 
-#: packages/lib/models/Setting.js:1671
+#: packages/lib/models/Setting.js:1672
 msgid "Keyboard Shortcuts"
 msgstr "Pikanäppäimet"
 
-#: packages/lib/models/Setting.js:1678
+#: packages/lib/models/Setting.js:1679
 msgid ""
 "These plugins enhance the Markdown renderer with additional features. Please "
 "note that, while these features might be useful, they are not standard "
@@ -2977,7 +2996,7 @@ msgstr ""
 "laajennuksen muotoilun. Alla on ilmoitettu, mitkä laajennukset ovat "
 "yhteensopivia tai eivät ole yhteensopivia WYSIWYG editorin kanssa."
 
-#: packages/lib/models/Setting.js:1680
+#: packages/lib/models/Setting.js:1681
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr "Muistiinpanot ja asetukset tallennetaan: %s"
