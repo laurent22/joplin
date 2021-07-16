@@ -52,11 +52,13 @@
 						</div>
 					</div>
 
-					<div id="toc-mobile">{{{tocHtml}}}</div>
+					{{#showToc}}
+						<div id="toc-mobile">{{{tocHtml}}}</div>
+					{{/showToc}}
 					
 					<div>
 						<p class="light-blue mobile-menu-link-bottom text-center">
-							Copyright (C) 2016-{{yyyy}} Laurent&nbsp;Cozic
+							Copyright &copy; 2016-{{yyyy}} Laurent&nbsp;Cozic
 							<br/>
 							<a href="{{baseUrl}}/privacy/" class="fw500">Privacy Policy</a>
 						</p>

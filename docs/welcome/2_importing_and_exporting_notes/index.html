@@ -28,7 +28,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/welcome/2_importing_and_expo
 			href="&#x2F;css/bootstrap5.0.2.min.css"
 			as="style"
 		/>
-		<link rel="stylesheet" href="&#x2F;css/fontawesome-all.min.css?t=1626024662523">
+		<link rel="stylesheet" href="&#x2F;css/fontawesome-all.min.css?t=1626452079487">
 		<link
 			href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
 			rel="stylesheet"
@@ -36,7 +36,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/welcome/2_importing_and_expo
 			media="all"
 			onload="this.media='all'; this.onload = null"
 		/>
-		<link rel="stylesheet" href="&#x2F;css/site.css?t=1626024662523" as="style" />
+		<link rel="stylesheet" href="&#x2F;css/site.css?t=1626452079487" as="style" />
 		<title>Importing and exporting notes | Joplin</title>
 	</head>
 	<body class="website-env-prod">
@@ -58,8 +58,8 @@ https://github.com/laurent22/joplin/blob/dev/readme/welcome/2_importing_and_expo
 			<div class="col-9 text-right d-none d-md-block">
 				<a href="/help/" class="fw500">Help</a>
 				<a href="https:&#x2F;&#x2F;discourse.joplinapp.org&#x2F;" class="fw500">Forum</a>
-<a class="button-link btn-blue donate-button" href="/donate">
-	<i class="fas fa-heart heart-full"></i><i class="far fa-heart heart-line"></i>&nbsp;Support
+<a class="button-link btn-blue sponsor-button" href="/donate">
+	<i class="fas fa-heart heart-full"></i><i class="far fa-heart heart-line"></i>&nbsp;Support us
 </a>			</div>
 			<div class="col-9 text-right d-block d-md-none">
 				<span class="pointer"
@@ -87,12 +87,12 @@ https://github.com/laurent22/joplin/blob/dev/readme/welcome/2_importing_and_expo
 						</div>
 
 						<div class="menu-mobile-buttons">
-<a class="button-link btn-blue donate-button" href="/donate">
-	<i class="fas fa-heart heart-full"></i><i class="far fa-heart heart-line"></i>&nbsp;Support
+<a class="button-link btn-blue sponsor-button" href="/donate">
+	<i class="fas fa-heart heart-full"></i><i class="far fa-heart heart-line"></i>&nbsp;Support us
 </a>						</div>
 					</div>
 
-					<div id="toc-mobile"><div><ul>
+						<div id="toc-mobile"><div><ul>
 <li>
 <p>Applications</p>
 <ul>
@@ -169,7 +169,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/welcome/2_importing_and_expo
 					
 					<div>
 						<p class="light-blue mobile-menu-link-bottom text-center">
-							Copyright (C) 2016-2021 Laurent&nbsp;Cozic
+							Copyright &copy; 2016-2021 Laurent&nbsp;Cozic
 							<br/>
 							<a href="/privacy/" class="fw500">Privacy Policy</a>
 						</p>
@@ -304,7 +304,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/welcome/2_importing_and_expo
 								alt=""
 							/>
 							<br class="d-block d-md-none" />
-							<p class="text-center-sm">Copyright (C) 2016-2021 Laurent Cozic</p>
+							<p class="text-center-sm">Copyright &copy; 2016-2021 Laurent Cozic</p>
 						</div>
 						<div class="col-12 col-md-6 right-links">
 							<p class="text-right text-center-sm">
@@ -322,14 +322,16 @@ https://github.com/laurent22/joplin/blob/dev/readme/welcome/2_importing_and_expo
 			rel="preload"
 			as="script"
 		></script>
-		<script src="&#x2F;js/script.js?t=1626024662523"></script>
+		<script src="&#x2F;js/script.js?t=1626452079487"></script>
 
 <script>
-	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-	ga('create', 'UA-103586105-1', 'auto');
-	ga('send', 'pageview');
+	if (window.location.hostname !== 'localhost') {
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+		ga('create', 'UA-103586105-1', 'auto');
+		ga('send', 'pageview');
+	}
 </script>	</body>
 </html>

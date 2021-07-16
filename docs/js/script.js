@@ -6,6 +6,12 @@ function getOs() {
 	return null;
 }
 
+function getFilename(path) {
+	if (!path) return '';
+	const s = path.split('/');
+	return s.pop();
+}
+
 function getMobileOs() {
 	var userAgent = navigator.userAgent || navigator.vendor || window.opera;
 
@@ -64,9 +70,17 @@ function setupDownloadPage() {
 	} else {
 		const os = getOs();
 		if (!os || !downloadLinks[os]) {
+			// If we don't know, display the section to manually download the app
 			$('.page-download .get-it-desktop').show();
+		} else if (os === 'linux') {
+			// If it's Linux, the user should probably install it using the
+			// install script so we redirect to the install section
+			window.location = 'https://joplinapp.org/help/#desktop-applications';
 		} else {
-			window.location = downloadLinks[os];
+			// Otherwise, start the download
+			const downloadLink = downloadLinks[os];
+			$('.downloaded-filename').text(getFilename(downloadLink));
+			window.location = downloadLink;
 		}
 	}
 }
