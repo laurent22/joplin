@@ -4,8 +4,8 @@
 // is then loaded by eg. the Mermaid plugin, and finally injected in the WebView.
 
 const fs = require('fs-extra');
-const exec = require('child_process').exec;
 const path = require('path');
+const execa = require('execa');
 
 const rootDir = path.dirname(path.dirname(path.dirname(__dirname)));
 const mobileDir = `${rootDir}/packages/app-mobile`;
@@ -13,18 +13,33 @@ const outputDir = `${mobileDir}/lib/rnInjectedJs`;
 const codeMirrorBundleFile = `${mobileDir}/components/NoteEditor/CodeMirror.bundle.min.js`;
 
 async function copyJs(name, filePath) {
-	const js = await fs.readFile(filePath, 'utf-8');
-	const json = `module.exports = ${JSON.stringify(js)};`;
 	const outputPath = `${outputDir}/${name}.js`;
 	console.info(`Creating: ${outputPath}`);
+	const js = await fs.readFile(filePath, 'utf-8');
+	const json = `module.exports = ${JSON.stringify(js)};`;
 	await fs.writeFile(outputPath, json);
 }
 
 async function buildCodeMirrorBundle() {
+	console.info('Building CodeMirror bundle...');
+
 	const sourceFile = `${mobileDir}/components/NoteEditor/CodeMirror.ts`;
 	const fullBundleFile = `${mobileDir}/components/NoteEditor/CodeMirror.bundle.js`;
-	await exec(`./node_modules/rollup/dist/bin/rollup "${sourceFile}" --name codeMirrorBundle -f iife -o "${fullBundleFile}" -p @rollup/plugin-node-resolve -p @rollup/plugin-typescript`, { stdio: 'pipe' });
-	await exec(`./node_modules/uglify-js/bin/uglifyjs --compress -o "${codeMirrorBundleFile}" -- "${fullBundleFile}"`, { stdio: 'pipe' });
+
+	await execa('./node_modules/rollup/dist/bin/rollup', [
+		sourceFile,
+		'--name', 'codeMirrorBundle',
+		'-f', 'iife',
+		'-o', fullBundleFile,
+		'-p', '@rollup/plugin-node-resolve',
+		'-p', '@rollup/plugin-typescript',
+	]);
+
+	await execa('./node_modules/uglify-js/bin/uglifyjs', [
+		'--compress',
+		'-o', codeMirrorBundleFile,
+		fullBundleFile,
+	]);
 }
 
 async function main() {
