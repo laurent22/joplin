@@ -396,7 +396,9 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				color: inherit !important;
 				background-color: inherit !important;
 				position: absolute !important;
-				-webkit-box-shadow: none !important; // Some themes add a box shadow for some reason
+				/* Some themes add a box shadow for some reason */
+				-webkit-box-shadow: none !important;
+				line-height: ${theme.lineHeight} !important;
 			}
 
 			.CodeMirror-lines {
@@ -442,6 +444,11 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				color: ${theme.color};
 			}
 
+			.CodeMirror .cm-quote {
+				color: ${theme.color};
+				opacity: ${theme.blockQuoteOpacity};
+			}
+
 			div.CodeMirror span.cm-link-text {
 				color: ${theme.urlColor};
 			}
@@ -451,7 +458,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				opacity: 0.5;
 			}
 
-			.CodeMirror .cm-variable-2 {
+			.CodeMirror .cm-variable-2, .CodeMirror .cm-variable-3, .CodeMirror .cm-keyword {
 				color: ${theme.color};
 			}
 
