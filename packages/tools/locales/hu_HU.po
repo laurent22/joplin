@@ -1490,7 +1490,7 @@ msgstr "Újraindítás most"
 #: packages/app-desktop/gui/ConfigScreen/Sidebar.js:89
 #: packages/lib/models/Setting.js:1662
 msgid "Plugins"
-msgstr "Bővítméníek"
+msgstr "Bővítmények"
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.js:27
 msgid "Apply"
