@@ -28,7 +28,7 @@ router.post('login', async (_path: SubPath, ctx: AppContext) => {
 	try {
 		const body = await formParse(ctx.req);
 
-		const session = await ctx.models.session().authenticate(body.fields.email, body.fields.password);
+		const session = await ctx.joplin.models.session().authenticate(body.fields.email, body.fields.password);
 		ctx.cookies.set('sessionId', session.id);
 		return redirect(ctx, `${config().baseUrl}/home`);
 	} catch (error) {

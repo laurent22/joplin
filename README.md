@@ -12,7 +12,7 @@ The notes can be [synchronised](#synchronisation) with various cloud services in
 
 The application is available for Windows, Linux, macOS, Android and iOS (the terminal app also works on FreeBSD). A [Web Clipper](https://github.com/laurent22/joplin/blob/dev/readme/clipper.md), to save web pages and screenshots from your browser, is also available for [Firefox](https://addons.mozilla.org/firefox/addon/joplin-web-clipper/) and [Chrome](https://chrome.google.com/webstore/detail/joplin-web-clipper/alofnhikmmkdbbbgpnglcpdollgjjfek?hl=en-GB).
 
-<div class="top-screenshot"><img src="https://joplinapp.org/images/AllClients.jpg" style="max-width: 100%; max-height: 35em;"></div>
+<div class="top-screenshot"><img src="https://joplinapp.org/images/home-top-img.png" style="max-width: 100%; max-height: 35em;"></div>
 
 # Installation
 
@@ -22,11 +22,11 @@ Three types of applications are available: for the **desktop** (Windows, macOS a
 
 Operating System | Download
 ---|---
-Windows (32 and 64-bit) | <a href='https://github.com/laurent22/joplin/releases/download/v2.0.11/Joplin-Setup-2.0.11.exe'><img alt='Get it on Windows' width="134px" src='https://joplinapp.org/images/BadgeWindows.png'/></a>
-macOS | <a href='https://github.com/laurent22/joplin/releases/download/v2.0.11/Joplin-2.0.11.dmg'><img alt='Get it on macOS' width="134px" src='https://joplinapp.org/images/BadgeMacOS.png'/></a>
-Linux | <a href='https://github.com/laurent22/joplin/releases/download/v2.0.11/Joplin-2.0.11.AppImage'><img alt='Get it on Linux' width="134px" src='https://joplinapp.org/images/BadgeLinux.png'/></a>
+Windows (32 and 64-bit) | <a href='https://github.com/laurent22/joplin/releases/download/v2.1.8/Joplin-Setup-2.1.8.exe'><img alt='Get it on Windows' width="134px" src='https://joplinapp.org/images/BadgeWindows.png'/></a>
+macOS | <a href='https://github.com/laurent22/joplin/releases/download/v2.1.8/Joplin-2.1.8.dmg'><img alt='Get it on macOS' width="134px" src='https://joplinapp.org/images/BadgeMacOS.png'/></a>
+Linux | <a href='https://github.com/laurent22/joplin/releases/download/v2.1.8/Joplin-2.1.8.AppImage'><img alt='Get it on Linux' width="134px" src='https://joplinapp.org/images/BadgeLinux.png'/></a>
 
-**On Windows**, you may also use the <a href='https://github.com/laurent22/joplin/releases/download/v2.0.11/JoplinPortable.exe'>Portable version</a>. The [portable application](https://en.wikipedia.org/wiki/Portable_application) allows installing the software on a portable device such as a USB key. Simply copy the file JoplinPortable.exe in any directory on that USB key ; the application will then create a directory called "JoplinProfile" next to the executable file.
+**On Windows**, you may also use the <a href='https://github.com/laurent22/joplin/releases/download/v2.1.8/JoplinPortable.exe'>Portable version</a>. The [portable application](https://en.wikipedia.org/wiki/Portable_application) allows installing the software on a portable device such as a USB key. Simply copy the file JoplinPortable.exe in any directory on that USB key ; the application will then create a directory called "JoplinProfile" next to the executable file.
 
 **On Linux**, the recommended way is to use the following installation script as it will handle the desktop icon too:
 
@@ -36,7 +36,7 @@ Linux | <a href='https://github.com/laurent22/joplin/releases/download/v2.0.11/J
 
 Operating System | Download | Alt. Download
 ---|---|---
-Android | <a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="40px" src='https://joplinapp.org/images/BadgeAndroid.png'/></a> | or download the APK file: [64-bit](https://github.com/laurent22/joplin-android/releases/download/android-v2.1.3/joplin-v2.1.3.apk) [32-bit](https://github.com/laurent22/joplin-android/releases/download/android-v2.1.3/joplin-v2.1.3-32bit.apk)
+Android | <a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="40px" src='https://joplinapp.org/images/BadgeAndroid.png'/></a> | or download the APK file: [64-bit](https://github.com/laurent22/joplin-android/releases/download/android-v2.1.4/joplin-v2.1.4.apk) [32-bit](https://github.com/laurent22/joplin-android/releases/download/android-v2.1.4/joplin-v2.1.4-32bit.apk)
 iOS | <a href='https://itunes.apple.com/us/app/joplin/id1315599797'><img alt='Get it on the App Store' height="40px" src='https://joplinapp.org/images/BadgeIOS.png'/></a> | -
 
 ## Terminal application
@@ -64,7 +64,7 @@ The Web Clipper is a browser extension that allows you to save web pages and scr
 
 # Sponsors
 
-<a href="https://seirei.ne.jp"><img title="Serei Network" width="256" src="https://joplinapp.org/images/sponsors/SeireiNetwork.png"/></a> <a href="https://usrigging.com/"><img title="U.S. Ringing Supply" width="256" src="https://joplinapp.org/images/sponsors/RingingSupply.svg"/></a> <a href=" https://tranio.com/italy/"><img title="Tranio" width="256" src="https://joplinapp.org/images/sponsors/Tranio.png"/></a>
+<a href="https://seirei.ne.jp"><img title="Serei Network" width="256" src="https://joplinapp.org/images/sponsors/SeireiNetwork.png"/></a> <a href="https://usrigging.com/"><img title="U.S. Ringing Supply" width="256" src="https://joplinapp.org/images/sponsors/RingingSupply.svg"/></a> <a href="https://tranio.com/italy/"><img title="Tranio" width="256" src="https://joplinapp.org/images/sponsors/Tranio.png"/></a>
 
 * * *
 
@@ -75,7 +75,7 @@ The Web Clipper is a browser extension that allows you to save web pages and scr
 | <img width="50" src="https://avatars2.githubusercontent.com/u/4862947?s=96&v=4"/></br>[chrootlogin](https://github.com/chrootlogin) | <img width="50" src="https://avatars2.githubusercontent.com/u/1307332?s=96&v=4"/></br>[dbrandonjohnson](https://github.com/dbrandonjohnson) | <img width="50" src="https://avatars2.githubusercontent.com/u/1439535?s=96&v=4"/></br>[fbloise](https://github.com/fbloise) | <img width="50" src="https://avatars2.githubusercontent.com/u/38898566?s=96&v=4"/></br>[h4sh5](https://github.com/h4sh5) |
 | <img width="50" src="https://avatars2.githubusercontent.com/u/37297218?s=96&v=4"/></br>[Jesssullivan](https://github.com/Jesssullivan) | <img width="50" src="https://avatars2.githubusercontent.com/u/1248504?s=96&v=4"/></br>[joesfer](https://github.com/joesfer) | <img width="50" src="https://avatars2.githubusercontent.com/u/24908652?s=96&v=4"/></br>[konishi-t](https://github.com/konishi-t) | <img width="50" src="https://avatars2.githubusercontent.com/u/1788010?s=96&v=4"/></br>[maxtruxa](https://github.com/maxtruxa) |
 | <img width="50" src="https://avatars2.githubusercontent.com/u/29300939?s=96&v=4"/></br>[mcejp](https://github.com/mcejp) | <img width="50" src="https://avatars2.githubusercontent.com/u/1168659?s=96&v=4"/></br>[nicholashead](https://github.com/nicholashead) | <img width="50" src="https://avatars2.githubusercontent.com/u/5782817?s=96&v=4"/></br>[piccobit](https://github.com/piccobit) | <img width="50" src="https://avatars2.githubusercontent.com/u/47742?s=96&v=4"/></br>[ravenscroftj](https://github.com/ravenscroftj) |
-| <img width="50" src="https://avatars2.githubusercontent.com/u/73081837?s=96&v=4"/></br>[thismarty](https://github.com/thismarty) | <img width="50" src="https://avatars2.githubusercontent.com/u/15859362?s=96&v=4"/></br>[thomasbroussard](https://github.com/thomasbroussard) | <img width="50" src="https://avatars2.githubusercontent.com/u/53228972?s=96&v=4"/></br>[wasteisobscene](https://github.com/wasteisobscene) |       |
+| <img width="50" src="https://avatars2.githubusercontent.com/u/73081837?s=96&v=4"/></br>[thismarty](https://github.com/thismarty) | <img width="50" src="https://avatars2.githubusercontent.com/u/15859362?s=96&v=4"/></br>[thomasbroussard](https://github.com/thomasbroussard) |       |       |
 <!-- SPONSORS -->
 
 <!-- TOC -->
@@ -210,7 +210,7 @@ Joplin is also capable of exporting to a number of other formats including HTML 
 
 # Synchronisation
 
-One of the goals of Joplin was to avoid being tied to any particular company or service, whether it is Evernote, Google or Microsoft. As such the synchronisation is designed without any hard dependency to any particular service. Most of the synchronisation process is done at an abstract level and access to external services, such as Nextcloud or Dropbox, is done via lightweight drivers. It is easy to support new services by creating simple drivers that provide a filesystem-like interface, i.e. the ability to read, write, delete and list items. It is also simple to switch from one service to another or to even sync to multiple services at once. Each note, notebook, tags, as well as the relation between items is transmitted as plain text files during synchronisation, which means the data can also be moved to a different application, can be easily backed up, inspected, etc.
+One of the goals of Joplin is to avoid being tied to any particular company or service, whether it is Evernote, Google or Microsoft. As such the synchronisation is designed without any hard dependency to any particular service. Most of the synchronisation process is done at an abstract level and access to external services, such as Nextcloud or Dropbox, is done via lightweight drivers. It is easy to support new services by creating simple drivers that provide a filesystem-like interface, i.e. the ability to read, write, delete and list items. It is also simple to switch from one service to another or to even sync to multiple services at once. Each note, notebook, tags, as well as the relation between items is transmitted as plain text files during synchronisation, which means the data can also be moved to a different application, can be easily backed up, inspected, etc.
 
 Currently, synchronisation is possible with Nextcloud, WebDAV, Dropbox, OneDrive or the local filesystem. To enable synchronisation please follow the instructions below. After that, the application will synchronise in the background whenever it is running, or you can click on "Synchronise" to start a synchronisation manually. Joplin will background sync automatically after any content change is made on the local application.
 
@@ -646,20 +646,3 @@ Thank you to everyone who've contributed to Joplin's source code!
 | <img width="50" src="https://avatars.githubusercontent.com/u/37692927?v=4"/></br>[zaoyifan](https://github.com/zaoyifan) | <img width="50" src="https://avatars.githubusercontent.com/u/10813608?v=4"/></br>[zawnk](https://github.com/zawnk) | <img width="50" src="https://avatars.githubusercontent.com/u/55245068?v=4"/></br>[zen-quo](https://github.com/zen-quo) | <img width="50" src="https://avatars.githubusercontent.com/u/23507174?v=4"/></br>[zozolina123](https://github.com/zozolina123) | <img width="50" src="https://avatars.githubusercontent.com/u/25315?v=4"/></br>[xcession](https://github.com/xcession) |
 | <img width="50" src="https://avatars.githubusercontent.com/u/34542665?v=4"/></br>[paventyang](https://github.com/paventyang) | <img width="50" src="https://avatars.githubusercontent.com/u/608014?v=4"/></br>[jackytsu](https://github.com/jackytsu) | <img width="50" src="https://avatars.githubusercontent.com/u/1308646?v=4"/></br>[zhangmx](https://github.com/zhangmx) |  |  |
 <!-- CONTRIBUTORS-TABLE-AUTO-GENERATED -->
-
-# Known bugs
-
-- Resources larger than 10 MB are not currently supported on mobile as they can crash the application.
-- Non-alphabetical characters such as Chinese or Arabic might create glitches in the terminal on Windows. This is a limitation of the current Windows console.
-
-# License
-
-MIT License
-
-Copyright (c) 2016-2021 Laurent Cozic
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

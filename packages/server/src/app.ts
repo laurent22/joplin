@@ -106,6 +106,10 @@ async function main() {
 		'https://joplinapp.org',
 	];
 
+	if (env === Env.Dev) {
+		corsAllowedDomains.push('http://localhost:8080');
+	}
+
 	function acceptOrigin(origin: string): boolean {
 		const hostname = (new URL(origin)).hostname;
 		const userContentDomain = envVariables.USER_CONTENT_BASE_URL ? (new URL(envVariables.USER_CONTENT_BASE_URL)).hostname : '';
@@ -113,9 +117,12 @@ async function main() {
 		if (hostname === userContentDomain) return true;
 
 		const hostnameNoSub = hostname.split('.').slice(1).join('.');
+
+		// console.info('CORS check for origin', origin, 'Allowed domains', corsAllowedDomains);
+
 		if (hostnameNoSub === userContentDomain) return true;
 
-		if (corsAllowedDomains.indexOf(origin) === 0) return true;
+		if (corsAllowedDomains.includes(origin)) return true;
 
 		return false;
 	}
@@ -132,6 +139,17 @@ async function main() {
 		}
 	});
 
+	// Creates the request-specific "joplin" context property.
+	app.use(async (ctx: AppContext, next: KoaNext) => {
+		ctx.joplin = {
+			...ctx.joplinBase,
+			owner: null,
+			notifications: [],
+		};
+
+		return next();
+	});
+
 	app.use(cors({
 		// https://github.com/koajs/cors/issues/52#issuecomment-413887382
 		origin: (ctx: AppContext) => {
@@ -145,6 +163,7 @@ async function main() {
 			}
 		},
 	}));
+
 	app.use(apiVersionHandler);
 	app.use(ownerHandler);
 	app.use(notificationHandler);
@@ -202,16 +221,16 @@ async function main() {
 		delete connectionCheckLogInfo.connection;
 
 		appLogger().info('Connection check:', connectionCheckLogInfo);
-		const appContext = app.context as AppContext;
+		const ctx = app.context as AppContext;
 
-		await setupAppContext(appContext, env, connectionCheck.connection, appLogger);
-		await initializeJoplinUtils(config(), appContext.models, appContext.services.mustache);
+		await setupAppContext(ctx, env, connectionCheck.connection, appLogger);
+		await initializeJoplinUtils(config(), ctx.joplinBase.models, ctx.joplinBase.services.mustache);
 
 		appLogger().info('Migrating database...');
-		await migrateDb(appContext.db);
+		await migrateDb(ctx.joplinBase.db);
 
 		appLogger().info('Starting services...');
-		await startServices(appContext);
+		await startServices(ctx.joplinBase.services);
 
 		appLogger().info(`Call this for testing: \`curl ${config().apiBaseUrl}/api/ping\``);
 

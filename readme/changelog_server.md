@@ -1,5 +1,44 @@
 # Joplin Server Changelog
 
+## [server-v2.2.7-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.2.7-beta) (Pre-release) - 2021-07-11T17:31:42Z
+
+- New: Added support for resetting user password (62b6198)
+- Improved: Check password complexity (240cb35)
+- Improved: Disallow changing email address until a secure solution to change it is implemented (f8d2c26)
+- Fixed: Fixed mail queue as some emails were not being processed (89f4ca1)
+
+## [server-v2.2.6-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.2.6-beta) (Pre-release) - 2021-07-09T15:57:47Z
+
+- New: Add Docker image labels (#5158 by [@JackGruber](https://github.com/JackGruber))
+- Fixed: Fixed change processing logic (5a27d4d)
+- Fixed: Fixed styling of shared note (6c1a6b0)
+
+## [server-v2.2.5-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.2.5-beta) (Pre-release) - 2021-07-03T21:40:37Z
+
+- Improved: Make app context immutable and derive the per-request context properties from it (e210926)
+
+## [server-v2.2.4-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.2.4-beta) (Pre-release) - 2021-07-03T21:10:29Z
+
+- Fixed: Fixed issue with user sessions being mixed up (238cc86)
+
+## [server-v2.2.3-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.2.3-beta) (Pre-release) - 2021-07-03T19:38:36Z
+
+- Fixed: Fixed size of a database field (264f36f)
+
+## [server-v2.2.2-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.2.2-beta) (Pre-release) - 2021-07-03T18:28:35Z
+
+- Improved: Improved logging and reliability of cron tasks (d99c34f)
+- Improved: Only emit "created" event when new user is saved (8883df2)
+
+## [server-v2.2.1-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.2.1-beta) (Pre-release) - 2021-07-03T15:41:32Z
+
+- New: Add support for account max total size (b507fbf)
+- Improved: Display max size info in dashboard (3d18514)
+- Improved: Hide "Is Admin" from dashboard (7447793)
+- Improved: Moved Joplin-specific context properties under its own namespace (bfa7ea7)
+- Improved: Normalize email addresses before saving them (427218b)
+- Improved: Remove dangerous "Delete all" button for now (125af75)
+
 ## [server-v2.1.6-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.1.6-beta) (Pre-release) - 2021-06-24T10:01:46Z
 
 - Fixed: Fixed accessing main website (Regression) (f868797)

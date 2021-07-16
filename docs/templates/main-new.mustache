@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!--
+
+!!! WARNING !!!
+
+This file was auto-generated from {{{sourceMarkdownFile}}} and any manual change
+made to it will be overwritten. To make a change to this file please modify
+the source Markdown file:
+
+https://github.com/laurent22/joplin/blob/dev/{{{sourceMarkdownFile}}}
+
+-->
+
+	<head>
+		<meta
+			charset="utf-8"
+			http-equiv="X-UA-Compatible"
+			content="IE=edge,chrome=1"
+		/>
+		<link rel="icon" href="{{imageBaseUrl}}/favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="theme-color" content="#000000" />
+		<meta name="description" content="Joplin website" />
+		<link
+			rel="stylesheet"
+			href="{{cssBaseUrl}}/bootstrap5.0.2.min.css"
+			as="style"
+		/>
+		<link rel="stylesheet" href="{{cssBaseUrl}}/fontawesome-all.min.css?t={{buildTime}}">
+		<link
+			href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+			as="style"
+			media="all"
+			onload="this.media='all'; this.onload = null"
+		/>
+		<link rel="stylesheet" href="{{cssBaseUrl}}/site.css?t={{buildTime}}" as="style" />
+		<title>{{pageTitle}}</title>
+	</head>
+	<body class="website-env-{{env}}">
+		<div class="container-fluid generic-template {{pageName}}-page" id="main-container">
+
+			{{#navbar}}
+				{{> navbar}}
+			{{/navbar}}
+
+			<div class="page-container page-{{sourceMarkdownName}}">
+				<div class="container">
+					<div class="row content-wrapper">
+						{{#showToc}}<div id="toc">{{{tocHtml}}}</div>{{/showToc}}
+
+						<div class="main-content">
+							<div class="alert alert-danger alert-env-dev" role="alert">
+								Running in {{env}} mode!
+							</div>
+							{{{contentHtml}}}
+							{{#showImproveThisDoc}}
+								<div class="bottom-links">
+									<a href="https://github.com/laurent22/joplin/blob/dev/{{{sourceMarkdownFile}}}">
+										<i class="fab fa-github"></i> Improve this doc
+									</a>
+								</div>
+							{{/showImproveThisDoc}}
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<footer class="darkblue-bg">
+				<div class="container">
+					<div class="row">
+						<div class="col-3 d-none d-md-block">
+							<img src="{{imageBaseUrl}}/logo-text.svg" alt="" width="150" />
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-12">
+							<hr />
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-12 col-md-6">
+							<img
+								src="{{imageBaseUrl}}/logo-text.svg"
+								width="120"
+								class="img-center d-block d-md-none"
+								alt=""
+							/>
+							<br class="d-block d-md-none" />
+							<p class="text-center-sm">Copyright (C) 2016-{{yyyy}} Laurent Cozic</p>
+						</div>
+						<div class="col-12 col-md-6 right-links">
+							<p class="text-right text-center-sm">
+								<a href="https://github.com/laurent22/joplin/" class="github-link"><i class="fab fa-github"></i> GitHub Repository</a>
+								<a href="{{baseUrl}}/privacy/">Privacy Policy</a>
+							</p>
+						</div>
+					</div>
+				</div>
+			</footer>
+		</div>
+
+		<script
+			src="{{jsBaseUrl}}/jquery-3.6.0.min.js"
+			rel="preload"
+			as="script"
+		></script>
+		<script src="{{jsBaseUrl}}/script.js?t={{buildTime}}"></script>
+
+		{{> analytics}}
+	</body>
+</html>

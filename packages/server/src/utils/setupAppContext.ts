@@ -24,14 +24,23 @@ async function setupServices(env: Env, models: Models, config: Config): Promise<
 }
 
 export default async function(appContext: AppContext, env: Env, dbConnection: DbConnection, appLogger: ()=> LoggerWrapper): Promise<AppContext> {
-	appContext.env = env;
-	appContext.db = dbConnection;
-	appContext.models = newModelFactory(appContext.db, config());
-	appContext.services = await setupServices(env, appContext.models, config());
-	appContext.appLogger = appLogger;
-	appContext.routes = { ...routes };
+	const models = newModelFactory(dbConnection, config());
 
-	if (env === Env.Prod) delete appContext.routes['api/debug'];
+	// The joplinBase object is immutable because it is shared by all requests.
+	// Then a "joplin" context property is created from it per request, which
+	// contains request-specific properties such as the owner or notifications.
+	// See here for the reason:
+	// https://github.com/koajs/koa/issues/1554
+	appContext.joplinBase = Object.freeze({
+		env: env,
+		db: dbConnection,
+		models: models,
+		services: await setupServices(env, models, config()),
+		appLogger: appLogger,
+		routes: { ...routes },
+	});
+
+	if (env === Env.Prod) delete appContext.joplinBase.routes['api/debug'];
 
 	return appContext;
 }

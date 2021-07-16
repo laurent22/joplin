@@ -84,7 +84,7 @@ More info: [Mobile - Add share menu #876](https://github.com/laurent22/joplin/is
 
 ## 5. Web client for Nextcloud
 
-There is the community's wish to have the notes integrated Nextcloud, so that Notes can be sought by Nextcloud itself. Although this idea focuses on Nextcloud it shall allow to extend it to other collaboration applications going beyond the current scope of  [Synchronisation](https://joplinapp.org/#synchronisation). There is already the [web application](https://github.com/foxmask/joplin-web) what may used as a starting point, but it is also fine to start from scratch.
+There is the community's wish to have the notes integrated Nextcloud, so that Notes can be sought by Nextcloud itself. Although this idea focuses on Nextcloud it shall allow to extend it to other collaboration applications going beyond the current scope of  [Synchronisation](https://joplinapp.org/help/#synchronisation). There is already the [web application](https://github.com/foxmask/joplin-web) what may used as a starting point, but it is also fine to start from scratch.
 
 Feature parity with the desktop client is not needed and would be out of scope. These are the features that would be needed to create a minimal web client:
 

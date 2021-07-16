@@ -4,8 +4,11 @@ import { NotificationKey } from '../../models/NotificationModel';
 import { ErrorForbidden } from '../../utils/errors';
 import { execRequest, execRequestC } from '../../utils/testing/apiUtils';
 import { beforeAllDb, afterAllTests, beforeEachDb, koaAppContext, createUserAndSession, models, parseHtml, checkContextError, expectHttpError } from '../../utils/testing/testUtils';
+import uuidgen from '../../utils/uuidgen';
 
-export async function postUser(sessionId: string, email: string, password: string, props: any = null): Promise<User> {
+export async function postUser(sessionId: string, email: string, password: string = null, props: any = null): Promise<User> {
+	password = password === null ? uuidgen() : password;
+
 	const context = await koaAppContext({
 		sessionId: sessionId,
 		request: {
@@ -58,7 +61,7 @@ export async function getUserHtml(sessionId: string, userId: string): Promise<st
 	return context.response.body;
 }
 
-describe('index_users', function() {
+describe('index/users', function() {
 
 	beforeAll(async () => {
 		await beforeAllDb('index_users');
@@ -75,7 +78,8 @@ describe('index_users', function() {
 	test('should create a new user', async function() {
 		const { session } = await createUserAndSession(1, true);
 
-		await postUser(session.id, 'test@example.com', '123456', {
+		const password = uuidgen();
+		await postUser(session.id, 'test@example.com', password, {
 			max_item_size: '',
 		});
 		const newUser = await models().user().loadByEmail('test@example.com');
@@ -84,14 +88,26 @@ describe('index_users', function() {
 		expect(!!newUser.id).toBe(true);
 		expect(!!newUser.is_admin).toBe(false);
 		expect(!!newUser.email).toBe(true);
-		expect(newUser.max_item_size).toBe(0);
+		expect(newUser.max_item_size).toBe(null);
 		expect(newUser.must_set_password).toBe(0);
 
 		const userModel = models().user();
 		const userFromModel: User = await userModel.load(newUser.id);
 
 		expect(!!userFromModel.password).toBe(true);
-		expect(userFromModel.password === '123456').toBe(false); // Password has been hashed
+		expect(userFromModel.password === password).toBe(false); // Password has been hashed
+	});
+
+	test('should create a user with null properties if they are not explicitly set', async function() {
+		const { session } = await createUserAndSession(1, true);
+
+		await postUser(session.id, 'test@example.com');
+		const newUser = await models().user().loadByEmail('test@example.com');
+
+		expect(newUser.max_item_size).toBe(null);
+		expect(newUser.can_share_folder).toBe(null);
+		expect(newUser.can_share_note).toBe(null);
+		expect(newUser.max_total_item_size).toBe(null);
 	});
 
 	test('should ask user to set password if not set on creation', async function() {
@@ -109,10 +125,23 @@ describe('index_users', function() {
 	test('new user should be able to login', async function() {
 		const { session } = await createUserAndSession(1, true);
 
-		await postUser(session.id, 'test@example.com', '123456');
-		const loggedInUser = await models().user().login('test@example.com', '123456');
+		const password = uuidgen();
+		await postUser(session.id, 'test@example.com', password);
+		const loggedInUser = await models().user().login('test@example.com', password);
 		expect(!!loggedInUser).toBe(true);
 		expect(loggedInUser.email).toBe('test@example.com');
+	});
+
+	test('should format the email when saving it', async function() {
+		const email = 'ILikeUppercaseAndSpaces@Example.COM   ';
+
+		const { session } = await createUserAndSession(1, true);
+
+		const password = uuidgen();
+		await postUser(session.id, email, password);
+		const loggedInUser = await models().user().login(email, password);
+		expect(!!loggedInUser).toBe(true);
+		expect(loggedInUser.email).toBe('ilikeuppercaseandspaces@example.com');
 	});
 
 	test('should not create anything if user creation fail', async function() {
@@ -120,13 +149,14 @@ describe('index_users', function() {
 
 		const userModel = models().user();
 
-		await postUser(session.id, 'test@example.com', '123456');
+		const password = uuidgen();
+		await postUser(session.id, 'test@example.com', password);
 
 		const beforeUserCount = (await userModel.all()).length;
 		expect(beforeUserCount).toBe(2);
 
 		try {
-			await postUser(session.id, 'test@example.com', '123456');
+			await postUser(session.id, 'test@example.com', password);
 		} catch {
 			// Ignore
 		}
@@ -140,9 +170,9 @@ describe('index_users', function() {
 
 		const userModel = models().user();
 
-		await patchUser(session.id, { id: user.id, email: 'test2@example.com' });
+		await patchUser(session.id, { id: user.id, full_name: 'new name' });
 		const modUser: User = await userModel.load(user.id);
-		expect(modUser.email).toBe('test2@example.com');
+		expect(modUser.full_name).toBe('new name');
 	});
 
 	test('should change the password', async function() {
@@ -150,8 +180,9 @@ describe('index_users', function() {
 
 		const userModel = models().user();
 
-		await patchUser(session.id, { id: user.id, password: 'abcdefgh', password2: 'abcdefgh' });
-		const modUser = await userModel.login('user1@localhost', 'abcdefgh');
+		const password = uuidgen();
+		await patchUser(session.id, { id: user.id, password: password, password2: password });
+		const modUser = await userModel.login('user1@localhost', password);
 		expect(!!modUser).toBe(true);
 		expect(modUser.id).toBe(user.id);
 	});
@@ -180,7 +211,7 @@ describe('index_users', function() {
 			email: 'user1@localhost',
 			must_set_password: 1,
 			email_confirmed: 0,
-			password: '123456',
+			password: uuidgen(),
 		});
 
 		const { user: user2 } = await createUserAndSession(2);
@@ -204,9 +235,10 @@ describe('index_users', function() {
 
 		// Check that we can't set the password without the token
 		{
+			const newPassword = uuidgen();
 			const context = await execRequestC('', 'POST', path, {
-				password: 'newpassword',
-				password2: 'newpassword',
+				password: newPassword,
+				password2: newPassword,
 			});
 			const sessionId = context.cookies.get('sessionId');
 			expect(sessionId).toBeFalsy();
@@ -214,19 +246,22 @@ describe('index_users', function() {
 
 		// Check that we can't set the password with someone else's token
 		{
+			const newPassword = uuidgen();
 			const token2 = (await models().token().allByUserId(user2.id))[0].value;
 			const context = await execRequestC('', 'POST', path, {
-				password: 'newpassword',
-				password2: 'newpassword',
+				password: newPassword,
+				password2: newPassword,
 				token: token2,
 			});
 			const sessionId = context.cookies.get('sessionId');
 			expect(sessionId).toBeFalsy();
 		}
 
+		const newPassword = uuidgen();
+
 		const context = await execRequestC('', 'POST', path, {
-			password: 'newpassword',
-			password2: 'newpassword',
+			password: newPassword,
+			password2: newPassword,
 			token: token,
 		});
 
@@ -236,7 +271,7 @@ describe('index_users', function() {
 		expect(session.user_id).toBe(user1.id);
 
 		// Check that the password has been set
-		const loggedInUser = await models().user().login(user1.email, 'newpassword');
+		const loggedInUser = await models().user().login(user1.email, newPassword);
 		expect(loggedInUser.id).toBe(user1.id);
 
 		// Check that the email has been verified
@@ -255,7 +290,7 @@ describe('index_users', function() {
 			email: 'user1@localhost',
 			must_set_password: 0,
 			email_confirmed: 0,
-			password: '123456',
+			password: uuidgen(),
 		});
 
 		const email = (await models().email().all()).find(e => e.recipient_id === user1.id);
@@ -293,7 +328,7 @@ describe('index_users', function() {
 		await expectHttpError(async () => execRequest(session1.id, 'GET', `users/${admin.id}`), ErrorForbidden.httpCode);
 
 		// non-admin user cannot create a new user
-		await expectHttpError(async () => postUser(session1.id, 'cantdothat@example.com', '123456'), ErrorForbidden.httpCode);
+		await expectHttpError(async () => postUser(session1.id, 'cantdothat@example.com'), ErrorForbidden.httpCode);
 
 		// non-admin user cannot update another user
 		await expectHttpError(async () => patchUser(session1.id, { id: admin.id, email: 'cantdothateither@example.com' }), ErrorForbidden.httpCode);
@@ -312,10 +347,14 @@ describe('index_users', function() {
 
 		// non-admin cannot change max_item_size
 		await expectHttpError(async () => patchUser(session1.id, { id: user1.id, max_item_size: 1000 }), ErrorForbidden.httpCode);
+		await expectHttpError(async () => patchUser(session1.id, { id: user1.id, max_total_item_size: 1000 }), ErrorForbidden.httpCode);
 
 		// non-admin cannot change can_share_folder
 		await models().user().save({ id: user1.id, can_share_folder: 0 });
 		await expectHttpError(async () => patchUser(session1.id, { id: user1.id, can_share_folder: 1 }), ErrorForbidden.httpCode);
+
+		// non-admin cannot change non-whitelisted properties
+		await expectHttpError(async () => patchUser(session1.id, { id: user1.id, email: 'candothat@example.com' }), ErrorForbidden.httpCode);
 	});
 
 

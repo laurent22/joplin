@@ -68,12 +68,14 @@
 						<section class="tsd-index-section ">
 							<h3>Enumerations</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-enum"><a href="enums/apptype.html" class="tsd-kind-icon">App<wbr>Type</a></li>
 								<li class="tsd-kind-enum"><a href="enums/contentscripttype.html" class="tsd-kind-icon">Content<wbr>Script<wbr>Type</a></li>
 								<li class="tsd-kind-enum"><a href="enums/filesystemitem.html" class="tsd-kind-icon">File<wbr>System<wbr>Item</a></li>
 								<li class="tsd-kind-enum"><a href="enums/importmoduleoutputformat.html" class="tsd-kind-icon">Import<wbr>Module<wbr>Output<wbr>Format</a></li>
 								<li class="tsd-kind-enum"><a href="enums/itemchangeeventtype.html" class="tsd-kind-icon">Item<wbr>Change<wbr>Event<wbr>Type</a></li>
 								<li class="tsd-kind-enum"><a href="enums/menuitemlocation.html" class="tsd-kind-icon">Menu<wbr>Item<wbr>Location</a></li>
 								<li class="tsd-kind-enum"><a href="enums/settingitemtype.html" class="tsd-kind-icon">Setting<wbr>Item<wbr>Type</a></li>
+								<li class="tsd-kind-enum"><a href="enums/settingstorage.html" class="tsd-kind-icon">Setting<wbr>Storage</a></li>
 								<li class="tsd-kind-enum"><a href="enums/toolbarbuttonlocation.html" class="tsd-kind-icon">Toolbar<wbr>Button<wbr>Location</a></li>
 							</ul>
 						</section>
@@ -81,6 +83,7 @@
 							<h3>Classes</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-class"><a href="classes/joplin.html" class="tsd-kind-icon">Joplin</a></li>
+								<li class="tsd-kind-class"><a href="classes/joplinclipboard.html" class="tsd-kind-icon">Joplin<wbr>Clipboard</a></li>
 								<li class="tsd-kind-class"><a href="classes/joplincommands.html" class="tsd-kind-icon">Joplin<wbr>Commands</a></li>
 								<li class="tsd-kind-class"><a href="classes/joplincontentscripts.html" class="tsd-kind-icon">Joplin<wbr>Content<wbr>Scripts</a></li>
 								<li class="tsd-kind-class"><a href="classes/joplindata.html" class="tsd-kind-icon">Joplin<wbr>Data</a></li>
@@ -240,7 +243,7 @@
 				<section class="tsd-panel tsd-member tsd-kind-type-alias">
 					<a name="postmessagehandler" class="tsd-anchor"></a>
 					<h3>Post<wbr>Message<wbr>Handler</h3>
-					<div class="tsd-signature tsd-kind-icon">Post<wbr>Message<wbr>Handler<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<div class="tsd-signature tsd-kind-icon">Post<wbr>Message<wbr>Handler<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 					</aside>
 					<div class="tsd-type-declaration">
@@ -248,15 +251,12 @@
 						<ul class="tsd-parameters">
 							<li class="tsd-parameter-signature">
 								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias">
-									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
 								</ul>
 								<ul class="tsd-descriptions">
 									<li class="tsd-description">
 										<h4 class="tsd-parameters-title">Parameters</h4>
 										<ul class="tsd-parameters">
-											<li>
-												<h5>id: <span class="tsd-signature-type">string</span></h5>
-											</li>
 											<li>
 												<h5>message: <span class="tsd-signature-type">any</span></h5>
 											</li>
@@ -363,6 +363,9 @@
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-enum">
+						<a href="enums/apptype.html" class="tsd-kind-icon">AppType</a>
+					</li>
+					<li class=" tsd-kind-enum">
 						<a href="enums/contentscripttype.html" class="tsd-kind-icon">ContentScriptType</a>
 					</li>
 					<li class=" tsd-kind-enum">
@@ -381,10 +384,16 @@
 						<a href="enums/settingitemtype.html" class="tsd-kind-icon">SettingItemType</a>
 					</li>
 					<li class=" tsd-kind-enum">
+						<a href="enums/settingstorage.html" class="tsd-kind-icon">SettingStorage</a>
+					</li>
+					<li class=" tsd-kind-enum">
 						<a href="enums/toolbarbuttonlocation.html" class="tsd-kind-icon">ToolbarButtonLocation</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/joplin.html" class="tsd-kind-icon">joplin</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="classes/joplinclipboard.html" class="tsd-kind-icon">joplin.clipboard</a>
 					</li>
 					<li class=" tsd-kind-class">
 						<a href="classes/joplincommands.html" class="tsd-kind-icon">joplin.commands</a>

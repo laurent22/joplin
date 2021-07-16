@@ -1,4 +1,4 @@
-import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, expectThrow, createFolder } from '../utils/testing/testUtils';
+import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, expectThrow, createFolder, createItemTree3 } from '../utils/testing/testUtils';
 import { ChangeType, Item, Uuid } from '../db';
 import { msleep } from '../utils/time';
 import { ChangePagination } from './ChangeModel';
@@ -128,6 +128,40 @@ describe('ChangeModel', function() {
 		await msleep(1); await itemModel.saveForUser(user.id, { id: item1.id, name: `test_mod${i++}` }); // UPDATE 1
 
 		await expectThrow(async () => changeModel.delta(user.id, { limit: 1, cursor: 'invalid' }), 'resyncRequired');
+	});
+
+	test('should tell that there are more changes even when current page is empty', async function() {
+		const { user: user1 } = await createUserAndSession(1);
+
+		const changeCount = 10;
+
+		const itemsToCreate: any[] = [];
+		for (let i = 0; i < changeCount / 2; i++) {
+			itemsToCreate.push({
+				id: (`${i}`).padStart(32, '0'),
+				children: [],
+			});
+		}
+
+		await createItemTree3(user1.id, '', '', itemsToCreate);
+		await models().item().deleteAll(user1.id);
+
+		expect((await models().change().all()).length).toBe(changeCount);
+
+		// Since all items have been deleted, the first change page is empty.
+		// However the "hasMore" property should be true to tell caller that
+		// they should fetch more changes.
+		const allFromIds1 = await models().change().allFromId('', changeCount / 2);
+		expect(allFromIds1.items.length).toBe(0);
+		expect(allFromIds1.has_more).toBe(true);
+
+		const allFromIds2 = await models().change().allFromId(allFromIds1.cursor, changeCount / 2);
+		expect(allFromIds2.items.length).toBe(5);
+		expect(allFromIds2.has_more).toBe(true);
+
+		const allFromIds3 = await models().change().allFromId(allFromIds2.cursor, changeCount / 2);
+		expect(allFromIds3.items.length).toBe(0);
+		expect(allFromIds3.has_more).toBe(false);
 	});
 
 });

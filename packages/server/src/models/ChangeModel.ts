@@ -9,8 +9,12 @@ export interface DeltaChange extends Change {
 	jop_updated_time?: number;
 }
 
-export interface PaginatedChanges extends PaginatedResults {
+export interface PaginatedDeltaChanges extends PaginatedResults {
 	items: DeltaChange[];
+}
+
+export interface PaginatedChanges extends PaginatedResults {
+	items: Change[];
 }
 
 export interface ChangePagination {
@@ -55,15 +59,21 @@ export default class ChangeModel extends BaseModel<Change> {
 		return `${this.baseUrl}/changes`;
 	}
 
-	public async allFromId(id: string): Promise<Change[]> {
+	public async allFromId(id: string, limit: number = 1000): Promise<PaginatedChanges> {
 		const startChange: Change = id ? await this.load(id) : null;
 		const query = this.db(this.tableName).select(...this.defaultFields);
 		if (startChange) void query.where('counter', '>', startChange.counter);
-		void query.limit(1000);
-		let results = await query;
+		void query.limit(limit);
+		let results: Change[] = await query;
+		const hasMore = !!results.length;
+		const cursor = results.length ? results[results.length - 1].id : id;
 		results = await this.removeDeletedItems(results);
 		results = await this.compressChanges(results);
-		return results;
+		return {
+			items: results,
+			has_more: hasMore,
+			cursor,
+		};
 	}
 
 	private changesForUserQuery(userId: Uuid, count: boolean): Knex.QueryBuilder {
@@ -103,7 +113,7 @@ export default class ChangeModel extends BaseModel<Change> {
 		return query;
 	}
 
-	public async allByUser(userId: Uuid, pagination: Pagination = null): Promise<PaginatedChanges> {
+	public async allByUser(userId: Uuid, pagination: Pagination = null): Promise<PaginatedDeltaChanges> {
 		pagination = {
 			page: 1,
 			limit: 100,
@@ -132,7 +142,7 @@ export default class ChangeModel extends BaseModel<Change> {
 		};
 	}
 
-	public async delta(userId: Uuid, pagination: ChangePagination = null): Promise<PaginatedChanges> {
+	public async delta(userId: Uuid, pagination: ChangePagination = null): Promise<PaginatedDeltaChanges> {
 		pagination = {
 			...defaultDeltaPagination(),
 			...pagination,

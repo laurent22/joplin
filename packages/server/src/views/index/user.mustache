@@ -11,9 +11,13 @@
 	<div class="field">
 		<label class="label">Email</label>
 		<div class="control">
-			<input class="input" type="email" name="email" value="{{user.email}}"/>
+			<input class="input" type="email" name="email" value="{{user.email}}" {{^canSetEmail}}disabled{{/canSetEmail}}/>
 		</div>
+		{{^canSetEmail}}
+			<p class="help">For security reasons the email cannot currently be changed. To request a change please contact {{global.supportEmail}}</p>
+		{{/canSetEmail}}	
 	</div>
+
 	{{#global.owner.is_admin}}
 		{{#showAccountTypes}}
 			<div class="field">
@@ -25,28 +29,42 @@
 						{{/accountTypes}}
 					</select>
 				</div>
-				<p class="help">If the account type is anything other than Default, the account-specific properties will be applied.</p>
+				<p class="help">If the below properties are left to their default (empty) values, the account-specific properties will apply.</p>
 			</div>
 		{{/showAccountTypes}}
 
 		<div class="field">
 			<label class="label">Max item size</label>
 			<div class="control">
-				<input class="input" type="number" name="max_item_size" value="{{user.max_item_size}}"/>
+				<input class="input" type="number" placeholder="Default" name="max_item_size" value="{{user.max_item_size}}"/>
 			</div>
 		</div>
 
 		<div class="field">
-			<label class="checkbox">
-				<input type="checkbox" name="can_share_folder" {{#user.can_share_folder}}checked{{/user.can_share_folder}} value="1"> Can share notebook
-			</label>
+			<label class="label">Max total size</label>
+			<div class="control">
+				<input class="input" type="number" placeholder="Default" name="max_total_item_size" value="{{user.max_total_item_size}}"/>
+			</div>
+		</div>
+
+		<div class="field">
+			<label class="label">Can share notebook</label>
+			<div class="select">
+				<select name="can_share_folder">
+					{{#canShareFolderOptions}}
+						<option value="{{value}}" {{#selected}}selected{{/selected}}>{{label}}</option>
+					{{/canShareFolderOptions}}
+				</select>
+			</div>
 		</div>
 	{{/global.owner.is_admin}}
+
 	<div class="field">
 		<label class="label">Password</label>
 		<div class="control">
-			<input class="input" type="password" name="password" autocomplete="new-password"/>
+			<input id="password" class="input" type="password" name="password" autocomplete="new-password"/>
 		</div>
+		<p id="password_strength" class="help"></p>
 	</div>
 	<div class="field">
 		<label class="label">Repeat password</label>
@@ -69,12 +87,14 @@
 </form>
 
 <script>
-	onDocumentReady(function() {
+	$(() => {
 		document.getElementById("user_form").addEventListener('submit', function(event) {
 			if (event.submitter.getAttribute('name') === 'delete_button') {
 				const ok = confirm('Delete this user?');
 				if (!ok) event.preventDefault();
 			}
 		});
+
+		setupPasswordStrengthHandler();
 	});
 </script>

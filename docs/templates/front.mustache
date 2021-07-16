@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta
+			charset="utf-8"
+			http-equiv="X-UA-Compatible"
+			content="IE=edge,chrome=1"
+		/>
+		<link rel="icon" href="{{imageBaseUrl}}/favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="theme-color" content="#000000" />
+		<meta name="description" content="Jopli website" />
+		<link rel="stylesheet" href="{{cssBaseUrl}}/fontawesome-all.min.css?t={{buildTime}}">
+		<link
+			rel="stylesheet"
+			href="{{cssBaseUrl}}/bootstrap5.0.2.min.css"
+			as="style"
+		/>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+			as="style"
+			media="all"
+			onload="this.media='all'; this.onload = null"
+		/>
+		<link rel="stylesheet" href="{{cssBaseUrl}}/site.css?t={{buildTime}}" as="style" />
+		<title>Joplin</title>
+	</head>
+	<body class="front-page website-env-{{env}}">
+		<div class="container-fluid" id="main-container">
+
+			{{#navbar}}
+				{{> navbar}}
+			{{/navbar}}
+
+			<div class="blue-bg" id="top-section">
+				<div class="container">
+					<div class="row">
+						<div class="col-12">
+							<div class="alert alert-danger alert-env-dev" role="alert">
+								Running in {{env}} mode!
+							</div>
+
+							<h1 class="text-center">
+								Free your <span class="frame-bg frame-bg-blue">notes</span>
+							</h1>
+							<p class="text-center" id="top-section-text">
+								Joplin is an open source note-taking app. Capture your thoughts and securely access them from any device.
+							</p>
+							<br />
+							<br />
+							<p class="text-center">
+								<a href="{{baseUrl}}/download/" class="button-link btn-blue download-button">Download the app</a>
+								{{#showJoplinCloudLinks}}
+									<a href="{{baseUrl}}/plans/" class="button-link btn-trans plans-button">Sign up with Joplin Cloud</a>
+								{{/showJoplinCloudLinks}}
+							</p>
+							<img
+								src="{{imageBaseUrl}}/home-top-img.png"
+								alt=""
+								class="img-fluid img-center"
+								id="top-section-img"
+							/>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div id="multimedia-notes-section">
+				<div class="container">
+					<div class="row">
+						<div class="col-12 col-md-5 col-xxl-6">
+							<div class="ml-30 ml-mobile-0">
+								<h2 id="multimedia-title">
+									Multimedia <span class="frame-bg frame-bg-yellow">notes</span>
+								</h2>
+								<p id="multimedia-text">
+									Images, videos, PDFs and audio files are supported. Create
+									math expressions and diagrams directly from the app. Take
+									photos with the mobile app and save them to a note.
+								</p>
+								<br />
+								<p>
+									<a href="{{baseUrl}}/download/" class="button-link btn-blue">Download the app</a>
+								</p>
+							</div>
+						</div>
+						<div class="col-12 col-md-7 col-xxl-6">
+							<br class="d-block d-lg-none" />
+							<br class="d-block d-lg-none" />
+							<img
+								src="{{imageBaseUrl}}/multimedia-notes-img.png"
+								alt=""
+								class="img-fluid"
+								id="multimedia-notes-section-img"
+							/>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			{{#showJoplinCloudLinks}}
+			<div id="work-together-section" class="gray-bg">
+				<div class="container">
+					<div class="row">
+						<div class="col-6 d-none d-md-block"></div>
+						<div class="col-12 col-md-6">
+							<div class="ml-30 ml-mobile-0">
+								<h2>Work together</h2>
+								<p>
+									With Joplin Cloud, share your notes with your friends, family
+									or colleagues and collaborate on them.
+								</p>
+								<br />
+								<p>
+									<a href="{{baseUrl}}/plans/" class="button-link btn-blue">Try it now</a>
+								</p>
+								<br class="d-block d-md-none" />
+								<br class="d-block d-md-none" />
+								<div class="text-center">
+									<img
+										src="{{imageBaseUrl}}/work-together-img.png"
+										alt=""
+										class="img-fluid d-block-inline d-md-none"
+									/>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			{{/showJoplinCloudLinks}}
+
+			<div id="save-web-section" class="blue-bg">
+				<div class="container">
+					<div class="row">
+						<div class="col-12 col-md-6">
+							<div class="ml-30 ml-mobile-0">
+								<h2 id="save-web-title">
+									Save web pages <br /><span class="frame-bg frame-bg-blue"
+										>as notes</span
+									>
+								</h2>
+								<p>
+									Use the web clipper extension, available on Chrome and
+									Firefox, to save web pages or take screenshots as notes.
+								</p>
+								<br />
+								<p>
+									<a href="{{baseUrl}}/clipper/" class="button-link btn-blue">Get the clipper</a>
+								</p>
+							</div>
+						</div>
+						<div class="col-12 col-md-6">
+							<br class="d-block d-md-none" />
+							<br class="d-block d-md-none" />
+							<img
+								src="{{imageBaseUrl}}/save-web-img.png"
+								alt=""
+								class="img-fluid"
+								id="save-web-img"
+							/>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div id="customise-it-section">
+				<div class="container">
+					<div class="row">
+						<div class="d-none d-md-block col-md-6">
+							<img
+								src="{{imageBaseUrl}}/customise-it-img.png"
+								alt=""
+								class="img-fluid"
+							/>
+						</div>
+						<div class="col-12 col-md-6">
+							<div class="ml-30 ml-mobile-0">
+								<h2 id="customise-it-title">
+									<span class="frame-bg frame-bg-yellow-lg">Customise</span> it
+									<br />
+									to your needs
+								</h2>
+								<p>
+									Customise the app with plugins, custom themes and multiple
+									text editors (Rich Text or Markdown). Or create your own
+									scripts and plugins using the Extension API.
+								</p>
+								<br />
+								<p>
+									<a href="{{baseUrl}}/help/#plugins" class="button-link btn-blue">Find out more</a>
+								</p>
+
+								<br class="d-block d-lg-none" />
+								<br class="d-block d-lg-none" />
+								<img
+									src="{{imageBaseUrl}}/customise-it-img.png"
+									alt=""
+									class="img-fluid d-block d-md-none"
+								/>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div id="your-note-section" class="blue-bg">
+				<div class="container">
+					<div class="row">
+						<div class="col-12">
+							<h2 class="text-center">
+								<span class="frame-bg frame-bg-blue-lg">Your notes,</span> everywhere you are.
+							</h2>
+							<p class="text-center" id="your-note-text">
+								Access your notes from your computer, phone or tablet by synchronising with various services, including Joplin Cloud, Dropbox and OneDrive. The app is available on Windows, macOS, Linux, Android and iOS. A terminal app is also available!
+							</p>
+							<br />
+							<br />
+							<p class="text-center">
+								<a href="{{baseUrl}}/download/" class="button-link btn-blue">Download it now</a>
+							</p>
+							<br />
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div id="your-data-section" class="gray-bg">
+				<div class="container">
+					<div class="row">
+						<div class="col-12 col-md-6">
+							<br class="d-block d-md-none" />
+							<div class="ml-30 ml-mobile-0">
+								<h2>100% your data</h2>
+								<p>
+									The app is open source and your notes are saved to an open
+									format, so you'll always have access to them. Uses End-To-End Encryption (E2EE) to secure your notes and ensure no-one but
+									yourself can access them.
+								</p>
+								<br />
+								<p>
+									<a href="{{baseUrl}}/e2ee/" class="button-link btn-blue">More about E2EE</a>
+								</p>
+							</div>
+						</div>
+						<div class="col-12 col-md-6">
+							<br class="d-block d-md-none" />
+							<br class="d-block d-md-none" />
+							<br class="d-block d-md-none" />
+							<img
+								src="{{imageBaseUrl}}/your-data-img.png"
+								alt=""
+								class="img-fluid"
+							/>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div id="in-the-press-section">
+				<div class="container">
+					<div class="row">
+						<div class="col-12">
+							<br />
+							<h2 class="text-center">
+								In the <span class="frame-bg frame-bg-yellow">Press</span>
+							</h2>
+							<br />
+						</div>
+						<div class="d-none d-md-block col-3">
+							<img
+								src="{{imageBaseUrl}}/in-the-press-img-left.png"
+								alt=""
+								class="img-fluid d-none d-md-block"
+							/>
+						</div>
+						<div class="d-none d-md-block col-6">
+							<div
+								id="{{pressCarouselRegular.id}}"
+								class="carousel slide d-none d-md-block"
+								data-bs-ride="carousel"
+							>
+								{{#pressCarouselRegular}}
+									{{> pressCarouselButtons}}
+								{{/pressCarouselRegular}}
+								<div class="carousel-inner">
+									{{#pressCarouselRegular.items}}
+										{{> pressCarouselItem}}
+									{{/pressCarouselRegular.items}}
+								</div>
+							</div>
+						</div>
+						<div class="d-none d-md-block col-3">
+							<div class="text-right">
+								<br />
+								<img
+									src="{{imageBaseUrl}}/in-the-press-img-right.png"
+									alt=""
+									class="img-fluid d-none d-md-inline-block"
+								/>
+							</div>
+						</div>
+					</div>
+					<div class="row d-block d-md-none">
+						<div class="col-12">
+							<div
+								id="{{pressCarouselMobile.id}}"
+								class="carousel slide"
+								data-bs-ride="carousel"
+							>
+								{{#pressCarouselMobile}}
+									{{> pressCarouselButtons}}
+								{{/pressCarouselMobile}}
+								<div class="carousel-inner">
+									{{#pressCarouselMobile.items}}
+										{{> pressCarouselItem}}
+									{{/pressCarouselMobile.items}}
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div id="sponsors-section" class="gray-bg">
+				<div class="container">
+					<div class="row">
+						<div class="col-12">
+							<h2 class="text-center">
+								Our <span class="frame-bg frame-bg-blue-lg">sponsors</span>
+							</h2>
+							<p class="text-center" id="your-note-text">
+								Thank you for your support!
+							</p>
+							<br />
+
+							<div class="text-center sponsors-org">
+								{{#sponsors.orgs}}
+									<a class="sponsor-org-item" href="{{url}}"><img title="{{title}}" src="{{imageBaseUrl}}/sponsors/{{imageName}}"></a>
+								{{/sponsors.orgs}}
+							</div>
+
+							<div class="text-center sponsors-github">
+								{{#sponsors.github}}
+									<div class="sponsor-github-item">
+										<a href="https://github.com/{{name}}" title="{{name}}">
+											<img width="50" src="https://avatars2.githubusercontent.com/u/{{id}}?s=96&amp;v=4">
+										</a>
+									</div>
+								{{/sponsors.github}}
+							</div>
+							<br />
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<footer class="darkblue-bg">
+				<div class="container">
+					<div class="row">
+						<div class="col-3 d-none d-md-block">
+							<img src="{{imageBaseUrl}}/logo-text.svg" alt="" width="150" />
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-12">
+							<hr />
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-12 col-md-6">
+							<a href="{{baseUrl}}">
+								<img
+									src="{{imageBaseUrl}}/logo-text.svg"
+									width="120"
+									class="img-center d-block d-md-none"
+									alt=""
+								/>
+							</a>
+							<br class="d-block d-md-none" />
+							<p class="text-center-sm">Copyright (C) 2016-{{yyyy}} Laurent Cozic</p>
+						</div>
+						<div class="col-12 col-md-6">
+							<p class="text-right text-center-sm right-links">
+								<a href="https://github.com/laurent22/joplin/" class="github-link"><i class="fab fa-github"></i> GitHub Repository</a>
+								<a href="{{baseUrl}}/privacy/">Privacy Policy</a>
+							</p>
+						</div>
+					</div>
+				</div>
+			</footer>
+		</div>
+
+		<script
+			src="{{jsBaseUrl}}/bootstrap5.0.2.min.js"
+			rel="preload"
+			as="script"
+		></script>
+		<script
+			src="{{jsBaseUrl}}/jquery-3.6.0.min.js"
+			rel="preload"
+			as="script"
+		></script>
+		<script src="{{jsBaseUrl}}/script.js?t={{buildTime}}"></script>
+		{{> analytics}}
+	</body>
+</html>

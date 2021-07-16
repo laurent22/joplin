@@ -1,8 +1,9 @@
 import { EmailSender, Subscription, Uuid } from '../db';
 import { ErrorNotFound } from '../utils/errors';
 import uuidgen from '../utils/uuidgen';
+import paymentFailedTemplate from '../views/emails/paymentFailedTemplate';
 import BaseModel from './BaseModel';
-import { AccountType, accountTypeProperties } from './UserModel';
+import { AccountType } from './UserModel';
 
 export default class SubscriptionModel extends BaseModel<Subscription> {
 
@@ -27,12 +28,13 @@ export default class SubscriptionModel extends BaseModel<Subscription> {
 		} else {
 			toSave.last_payment_failed_time = now;
 
-			const user = await this.models().user().load(sub.user_id, { fields: ['email'] });
+			const user = await this.models().user().load(sub.user_id, { fields: ['email', 'id', 'full_name'] });
 
 			await this.models().email().push({
-				subject: `${this.appName} subscription payment failed`,
-				body: `Your invoice payment has failed. Please follow this URL to update your payment details: \n\n[Manage your subscription](${this.baseUrl}/portal)`,
+				...paymentFailedTemplate(),
 				recipient_email: user.email,
+				recipient_id: user.id,
+				recipient_name: user.full_name || '',
 				sender_id: EmailSender.Support,
 			});
 		}
@@ -51,7 +53,7 @@ export default class SubscriptionModel extends BaseModel<Subscription> {
 	public async saveUserAndSubscription(email: string, accountType: AccountType, stripeUserId: string, stripeSubscriptionId: string) {
 		return this.withTransaction(async () => {
 			const user = await this.models().user().save({
-				...accountTypeProperties(accountType),
+				account_type: accountType,
 				email,
 				email_confirmed: 1,
 				password: uuidgen(),

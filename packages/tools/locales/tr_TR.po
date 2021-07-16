@@ -14,7 +14,9 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.4.2\n"
+"X-Generator: Poedit 3.0\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
@@ -123,11 +125,11 @@ msgstr "İndirme"
 
 #: packages/app-desktop/checkForUpdates.js:189
 msgid "Skip this version"
-msgstr ""
+msgstr "Bu sürümü pas geç"
 
 #: packages/app-desktop/checkForUpdates.js:189
 msgid "Full changelog"
-msgstr ""
+msgstr "Tüm sürüm geçmişi"
 
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:100
 msgid "This note has no history"
@@ -267,12 +269,10 @@ msgid "Retry"
 msgstr "Yeniden dene"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.js:137
-#, fuzzy
 msgid "Advanced tools"
-msgstr "Gelişmiş seçenekler"
+msgstr "Gelişmiş araçlar"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.js:139
-#, fuzzy
 msgid "Export debug report"
 msgstr "Hata Ayıklama Raporunu Dışa Aktar"
 
@@ -332,23 +332,23 @@ msgstr "Onay Kutusu listesi"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:17
 msgid "Highlight"
-msgstr ""
+msgstr "Vurgula"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:22
 msgid "Strikethrough"
-msgstr ""
+msgstr "Ortadan çizgili"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:27
 msgid "Insert"
-msgstr ""
+msgstr "Gir"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:33
 msgid "Superscript"
-msgstr ""
+msgstr "Üst Simge"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:39
 msgid "Subscript"
-msgstr ""
+msgstr "Alt Simge"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:564
 #: packages/app-mobile/components/screens/Note.js:1016
@@ -514,9 +514,8 @@ msgid "Delete line"
 msgstr "Satırı sil"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:92
-#, fuzzy
 msgid "Duplicate line"
-msgstr "Çoğalt"
+msgstr "Satırı Kopyala"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:96
 msgid "Undo"
@@ -710,10 +709,12 @@ msgid ""
 "Safe mode is currently active. Note rendering and all plugins are "
 "temporarily disabled."
 msgstr ""
+"Güvenli mod şu an aktif. Not görselleştirme ve tüm ekelntiler geçici olarak "
+"devre dışı."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:447
 msgid "Disable safe mode and restart"
-msgstr ""
+msgstr "Güvenli modu kapatıp yeniden başlat"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:451
 msgid ""
@@ -760,15 +761,15 @@ msgstr "Daha fazla bilgi"
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:477
 #, javascript-format
 msgid "%s (%s) would like to share a notebook with you."
-msgstr ""
+msgstr "%s (%s) sizinle bir not defteri paylaşmak istiyor."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:479
 msgid "Accept"
-msgstr ""
+msgstr "Kabul Et"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:481
 msgid "Reject"
-msgstr ""
+msgstr "Reddet"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:485
 msgid "Some items cannot be synchronised."
@@ -854,9 +855,8 @@ msgid "Toggle editors"
 msgstr "Editörleri aç / kapat"
 
 #: packages/app-desktop/gui/MainScreen/commands/showShareFolderDialog.js:16
-#, fuzzy
 msgid "Share notebook..."
-msgstr "Notu paylaş..."
+msgstr "No deferini paylaş..."
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleLayoutMoveMode.js:16
 msgid "Change application layout"
@@ -935,7 +935,7 @@ msgstr "Anahtar panoya kopyalandı!"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:44
 msgid "Are you sure you want to renew the authorisation token?"
-msgstr ""
+msgstr "Kimlik doğrulama jetonunu yenilemek istediğinizden emin misiniz?"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:84
 msgid "The web clipper service is enabled and set to auto-start."
@@ -1020,7 +1020,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:222
 msgid "Renew token"
-msgstr ""
+msgstr "Jetonu yenile"
 
 #: packages/app-desktop/gui/MenuBar.js:167
 #, javascript-format
@@ -1114,9 +1114,8 @@ msgid "&Go"
 msgstr "&Git"
 
 #: packages/app-desktop/gui/MenuBar.js:631
-#, fuzzy
 msgid "Note&book"
-msgstr "Not defterleri"
+msgstr "Not&defteri"
 
 #: packages/app-desktop/gui/MenuBar.js:637
 msgid "&Note"
@@ -1514,13 +1513,12 @@ msgid "You do not have any installed plugin."
 msgstr "Herhangi bir yüklü eklentiniz bulunmamakta."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:232
-#, fuzzy
 msgid "Could not connect to plugin repository"
-msgstr "Eklenti yüklenemedi: %s"
+msgstr "Eklenti sunucusuna bağlanılamadı"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:234
 msgid "Try again"
-msgstr ""
+msgstr "Yeniden dene"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:242
 msgid "Plugin tools"
@@ -1708,9 +1706,8 @@ msgid "Warning: not all resources shown for performance reasons (limit: %s)."
 msgstr "Uyarı: performans sebebi ile tüm kaynaklar görüntülenmedi (limit: %s)."
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:141
-#, fuzzy
 msgid "Unshare note"
-msgstr "Paylaş"
+msgstr "Notu paylaşmayı bırak"
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:168
 msgid "Synchronising..."
@@ -1744,19 +1741,18 @@ msgstr[0] "Paylaşılabilir Bağlantıyı Kopyala"
 msgstr[1] "Paylaşılabilir Bağlantıları Kopyala"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:138
-#, fuzzy
 msgid "Unshare"
-msgstr "Paylaş"
+msgstr "Paylaşmayı bırak"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:180
 msgid ""
 "Delete this invitation? The recipient will no longer have access to this "
 "shared notebook."
-msgstr ""
+msgstr "Bu davetiye kaldırılsın mi? Alıcı paylaşılan nota artık erişemeyecek."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:194
 msgid "Add recipient:"
-msgstr ""
+msgstr "Alıcı ekle:"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:197
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:28
@@ -1766,45 +1762,41 @@ msgstr "Paylaş"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:206
 msgid "Recipient has not yet accepted the invitation"
-msgstr ""
+msgstr "Alıcı henüz davetiyeyi Kabul etmedi"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:207
 msgid "Recipient has rejected the invitation"
-msgstr ""
+msgstr "Alıcı davetiyeyi reddetti"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:208
 msgid "Recipient has accepted the invitation"
-msgstr ""
+msgstr "Alıcı davetiyeyi Kabul etti"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:218
 msgid "Recipients:"
-msgstr ""
+msgstr "Alıcılar:"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:230
-#, fuzzy
 msgid "Synchronizing..."
 msgstr "Senkronize Ediliyor..."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:231
-#, fuzzy
 msgid "Sharing notebook..."
-msgstr "Notu paylaş..."
+msgstr "Not paylaşılıyor..."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:241
 msgid ""
 "Unshare this notebook? The recipients will no longer have access to its "
 "content."
-msgstr ""
+msgstr "Not paylaşımı kaldırılsın mı? Alıcı artık not içeriğine erişemeyecek."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:251
-#, fuzzy
 msgid "Share Notebook"
-msgstr "Notları Paylaş"
+msgstr "Not Defterini Paylaş"
 
 #: packages/app-desktop/commands/toggleSafeMode.js:18
-#, fuzzy
 msgid "Toggle safe mode"
-msgstr "Kenar çubuğunu aç / kapat"
+msgstr "Güvenli modu aç / kapat"
 
 #: packages/app-desktop/commands/toggleExternalEditing.js:18
 msgid "Toggle external editing"
@@ -1897,7 +1889,7 @@ msgstr "Yapılandırma"
 
 #: packages/app-mobile/components/side-menu-content.js:351
 msgid "Mobile data - auto-sync disabled"
-msgstr ""
+msgstr "Mobil veri - otomatik senkronizasyon devre dışı"
 
 #: packages/app-mobile/components/note-list.js:97
 msgid "You currently have no notebooks."
@@ -2027,7 +2019,7 @@ msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen.js:406
 msgid "Feature flags"
-msgstr ""
+msgstr "Özellik bilgileri"
 
 #: packages/app-mobile/components/screens/ConfigScreen.js:408
 msgid "More information"
@@ -2259,15 +2251,14 @@ msgstr ""
 "güncelle](%s)"
 
 #: packages/server/dist/models/UserModel.js:175
-#, fuzzy
 msgid "attachment"
-msgstr "Ek Dosyalar"
+msgstr "ek dosya"
 
 #: packages/server/dist/models/UserModel.js:175
 #, javascript-format
 msgid ""
 "Cannot save %s \"%s\" because it is larger than than the allowed limit (%s)"
-msgstr ""
+msgstr "%s \"%s\" kaydedilemedi, çünkü izin verilen limitten (%s) daha büyük"
 
 #: packages/lib/onedrive-api-node-utils.js:46
 #, javascript-format
@@ -2454,23 +2445,20 @@ msgid "Joplin Server URL"
 msgstr "Joplin Sunucusu URL"
 
 #: packages/lib/models/Setting.js:333
-#, fuzzy
 msgid "Joplin Server email"
-msgstr "Joplin Sunucusu"
+msgstr "Joplin Sunucusu e-posta adresi"
 
 #: packages/lib/models/Setting.js:344
 msgid "Joplin Server password"
 msgstr "Joplin Sunucusu ğarola"
 
 #: packages/lib/models/Setting.js:371
-#, fuzzy
 msgid "Joplin Cloud email"
-msgstr "Joplin Sunucusu"
+msgstr "Joplin Cloud e-posta"
 
 #: packages/lib/models/Setting.js:382
-#, fuzzy
 msgid "Joplin Cloud password"
-msgstr "Joplin Sunucusu ğarola"
+msgstr "Joplin Sunucusu parola"
 
 #: packages/lib/models/Setting.js:394
 msgid "Attachment download behaviour"
@@ -2710,11 +2698,13 @@ msgid ""
 "Used for most text in the markdown editor. If not found, a generic "
 "proportional (variable width) font is used."
 msgstr ""
+"Markdown metin düzenleyicilerde pek çok metinde kullanılır. Bu değer "
+"bulunamazsa, genişliği karakterlerce değişebilen jenerik bir font "
+"kullanılacak."
 
 #: packages/lib/models/Setting.js:764
-#, fuzzy
 msgid "Editor monospace font family"
-msgstr "Editör yazı tipi"
+msgstr "Metin düzenleyici monospace (sabit genişlikteki) yazı tipi"
 
 #: packages/lib/models/Setting.js:765
 msgid ""
@@ -2722,6 +2712,9 @@ msgid ""
 "tables, checkboxes, code). If not found, a generic monospace (fixed width) "
 "font is used."
 msgstr ""
+"Sabit bir metin uzunluğu gerektiren yerlerde (örn: tablolar, doğrulama "
+"kutucukları, kod vs.) kullanılır. Eğer bulunamazsa jenerik ve monospace olan "
+"bir font kullanılacak."
 
 #: packages/lib/models/Setting.js:786
 msgid "Custom stylesheet for rendered Markdown"
@@ -2733,11 +2726,11 @@ msgstr "Joplin-geneli uygulama stili için özel stil sayfası"
 
 #: packages/lib/models/Setting.js:812
 msgid "Re-upload local data to sync target"
-msgstr ""
+msgstr "Yerel veriyi senkronizasyon sunucusuna yeniden yükle"
 
 #: packages/lib/models/Setting.js:822
 msgid "Delete local data and re-download from sync target"
-msgstr ""
+msgstr "Yerel veriyi silip senkronizasyon sunucusundan yeniden indir"
 
 #: packages/lib/models/Setting.js:827
 msgid "Automatically update the application"
@@ -2774,7 +2767,7 @@ msgstr "%d saat"
 
 #: packages/lib/models/Setting.js:855
 msgid "Synchronise only over WiFi connection"
-msgstr ""
+msgstr "Sadece WiFi bağlantısı varken senkronize et"
 
 #: packages/lib/models/Setting.js:862
 msgid "Text editor command"
@@ -3057,9 +3050,8 @@ msgid "Encrypted items cannot be modified"
 msgstr "Şifrelenmiş öğeler değiştirilemez"
 
 #: packages/lib/SyncTargetJoplinCloud.js:28
-#, fuzzy
 msgid "Joplin Cloud"
-msgstr "Joplin Forum"
+msgstr "Joplin Cloud"
 
 #: packages/lib/BaseApplication.js:152 packages/lib/BaseApplication.js:164
 #: packages/lib/BaseApplication.js:196
@@ -3189,9 +3181,9 @@ msgid "Cancelling..."
 msgstr "İptal ediliyor..."
 
 #: packages/lib/Synchronizer.js:156
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Completed: %s (%s)"
-msgstr "Tamamlanan: %s"
+msgstr "Tamamlandı: %s (%s)"
 
 #: packages/lib/Synchronizer.js:158
 #, javascript-format
@@ -3214,15 +3206,15 @@ msgstr ""
 "güncelleyin"
 
 #: packages/lib/JoplinServerApi.js:73
-#, fuzzy, javascript-format
+#, javascript-format
 msgid ""
 "Could not connect to Joplin Server. Please check the Synchronisation options "
 "in the config screen. Full error was:\n"
 "\n"
 "%s"
 msgstr ""
-"Joplin Nextcloud uygulamasına bağlanılamadı. Lütfen senkronizasyon "
-"yapılandırması ekranını kontrol edin. Hatanın tamamı:\n"
+"Joplin Sunucusuna bağlanılamadı. Lütfen senkronizasyon yapılandırması "
+"ekranını kontrol edin. Hatanın tamamı:\n"
 "\n"
 "%s"
 
@@ -3900,6 +3892,8 @@ msgid ""
 "Runs the commands contained in the text file. There should be one command "
 "per line."
 msgstr ""
+"Metin dosyasındaki komutları çalıştırır. Her bir komut ayrı satırda "
+"olmalıdır."
 
 #: packages/app-cli/app/command-version.js:11
 msgid "Displays version information"
@@ -4026,7 +4020,7 @@ msgstr "E"
 
 #: packages/app-cli/app/cli-utils.js:161 packages/app-cli/app/app.js:138
 msgid "n"
-msgstr "e"
+msgstr "h"
 
 #: packages/app-cli/app/base-command.js:15
 msgid "Cannot change encrypted item"

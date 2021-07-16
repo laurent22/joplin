@@ -1,0 +1,14 @@
+{
+	"dev": {
+		"publishableKey": "pk_test_51IvkOPLx4fybOTqJetV23Y5S9YHU9KoOtE6Ftur0waWoWahkHdENjDKSVcl7v3y8Y0Euv7Uwd7O7W4UFasRwd0wE00MPcprz9Q",
+		"basicPriceId": "price_1JAx31Lx4fybOTqJRcGdsSfg",
+		"proPriceId": "price_1JAx1eLx4fybOTqJ5VhkxaKC",
+		"webhookBaseUrl": "http://joplincloud.local:22300"
+	},
+	"prod": {
+		"publishableKey": "pk_live_51IvkOPLx4fybOTqJow8RFsWs0eDznPeBlXMw6s8SIDQeCM8bAFNYlBdDsyonAwRcJgBCoSlvFzAbhJgLFxzzTu4r0006aw846C",
+		"basicPriceId": "price_1JAzWBLx4fybOTqJw64zxJRJ",
+		"proPriceId": "price_1JB1OVLx4fybOTqJOvp3NGM6",
+		"webhookBaseUrl": "https://joplincloud.com"
+	}
+}

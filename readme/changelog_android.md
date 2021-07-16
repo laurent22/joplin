@@ -1,5 +1,10 @@
 # Joplin Android app changelog
 
+## [android-v2.1.4](https://github.com/laurent22/joplin/releases/tag/android-v2.1.4) - 2021-07-03T08:31:36Z
+
+- Fixed: Fixes #5133: Items keep being uploaded to Joplin Server after a note has been shared.
+- Fixed: Fixed issue where untitled notes where created after a note had been shared and synced
+
 ## [android-v2.1.3](https://github.com/laurent22/joplin/releases/tag/android-v2.1.3) - 2021-06-27T13:34:12Z
 
 - New: Add support for X-API-MIN-VERSION header (51f3c00)
