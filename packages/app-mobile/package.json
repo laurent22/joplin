@@ -17,7 +17,6 @@
   "dependencies": {
     "@joplin/lib": "^2.2.0",
     "@joplin/renderer": "^2.2.0",
-    "@joplin/tools": "^2.2.0",
     "@react-native-community/clipboard": "^1.5.0",
     "@react-native-community/datetimepicker": "^3.0.3",
     "@react-native-community/geolocation": "^2.0.2",
