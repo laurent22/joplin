@@ -44,7 +44,7 @@
     "updateIgnored": "gulp updateIgnoredTypeScriptBuild",
     "updatePluginTypes": "./packages/generator-joplin/updateTypes.sh",
     "watch": "lerna run watch --stream --parallel",
-    "watch-website": "nodemon --verbose --watch Assets/WebsiteAssets --watch packages/tools/website/build.js --ext md,ts,js,mustache,css,tsx,gif,png,svg --exec \"node packages/tools/website/build.js && http-server docs -a localhost\"",
+    "watchWebsite": "nodemon --verbose --watch Assets/WebsiteAssets --watch packages/tools/website/build.js --ext md,ts,js,mustache,css,tsx,gif,png,svg --exec \"node packages/tools/website/build.js && http-server docs -a localhost\"",
     "i": "lerna add --no-bootstrap --scope"
   },
   "husky": {
