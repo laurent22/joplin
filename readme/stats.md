@@ -2,9 +2,9 @@
 
 | Name  | Value |
 | ----- | ----- |
-| Total Windows downloads | 1,527,398 |
-| Total macOs downloads | 594,393 |
-| Total Linux downloads | 505,568 |
+| Total Windows downloads | 1,527,447 |
+| Total macOs downloads | 594,414 |
+| Total Linux downloads | 505,584 |
 | Windows % | 58%   |
 | macOS % | 23%   |
 | Linux % | 19%   |
@@ -17,8 +17,8 @@
 
 | Version | Date  | Windows | macOS | Linux | Total |
 | ----- | ----- | ----- | ----- | ----- | ----- |
-| [v2.2.1](https://github.com/laurent22/joplin/releases/tag/v2.2.1) (p) | 2021-07-09T17:38:25Z | 1,373 | 305   | 270   | 1,948 |
-| [v2.1.8](https://github.com/laurent22/joplin/releases/tag/v2.1.8) | 2021-07-03T08:25:16Z | 25,539 | 10,852 | 10,942 | 47,333 |
+| [v2.2.1](https://github.com/laurent22/joplin/releases/tag/v2.2.1) (p) | 2021-07-09T17:38:25Z | 1,397 | 305   | 270   | 1,972 |
+| [v2.1.8](https://github.com/laurent22/joplin/releases/tag/v2.1.8) | 2021-07-03T08:25:16Z | 25,564 | 10,873 | 10,958 | 47,395 |
 | [v2.1.7](https://github.com/laurent22/joplin/releases/tag/v2.1.7) | 2021-06-26T19:48:55Z | 13,223 | 6,350 | 3,569 | 23,142 |
 | [v2.1.5](https://github.com/laurent22/joplin/releases/tag/v2.1.5) (p) | 2021-06-23T15:08:52Z | 916   | 215   | 161   | 1,292 |
 | [v2.1.3](https://github.com/laurent22/joplin/releases/tag/v2.1.3) (p) | 2021-06-19T16:32:51Z | 1,068 | 278   | 182   | 1,528 |
