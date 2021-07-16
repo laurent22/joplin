@@ -222,6 +222,7 @@ async function main() {
 		navbar: {
 			isFrontPage: true,
 		},
+		showToc: false,
 	});
 
 	// =============================================================

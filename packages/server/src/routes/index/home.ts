@@ -47,7 +47,7 @@ router.get('home', async (_path: SubPath, ctx: AppContext) => {
 					show: true,
 				},
 				{
-					label: 'Can Share Note',
+					label: 'Can Publish Note',
 					value: yesOrNo(true),
 					show: true,
 				},

@@ -62,3 +62,5 @@ buck-out/
 lib/csstojs/
 lib/rnInjectedJs/
 dist/
+components/NoteEditor/CodeMirror.bundle.js
+components/NoteEditor/CodeMirror.bundle.min.js

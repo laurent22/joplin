@@ -53,6 +53,7 @@ packages/app-mobile/locales
 packages/app-mobile/node_modules
 packages/app-mobile/pluginAssets/
 packages/app-mobile/lib/rnInjectedJs/
+packages/app-mobile/components/NoteEditor/CodeMirror.bundle.js
 packages/lib/assets/
 packages/lib/rnInjectedJs/
 packages/lib/vendor/
@@ -701,6 +702,12 @@ packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js.ma
 packages/app-mobile/components/NoteBodyViewer/hooks/useSource.d.ts
 packages/app-mobile/components/NoteBodyViewer/hooks/useSource.js
 packages/app-mobile/components/NoteBodyViewer/hooks/useSource.js.map
+packages/app-mobile/components/NoteEditor/CodeMirror.d.ts
+packages/app-mobile/components/NoteEditor/CodeMirror.js
+packages/app-mobile/components/NoteEditor/CodeMirror.js.map
+packages/app-mobile/components/NoteEditor/NoteEditor.d.ts
+packages/app-mobile/components/NoteEditor/NoteEditor.js
+packages/app-mobile/components/NoteEditor/NoteEditor.js.map
 packages/app-mobile/components/SelectDateTimeDialog.d.ts
 packages/app-mobile/components/SelectDateTimeDialog.js
 packages/app-mobile/components/SelectDateTimeDialog.js.map

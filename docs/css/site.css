@@ -164,9 +164,6 @@ h1 {
 	font-size: 2em;
 	margin-bottom: 0.7em;
 	margin-top: 1.2em;
-	/* line-height: 70.4px;
-	font-weight: 700;
-	margin-bottom: 20px; */
 }
 h2 {
 	font-size: 1.5em;
@@ -174,9 +171,7 @@ h2 {
 	margin-top: 1.1em;
 	border-bottom: 1px solid #ddd;
 	line-height: 1.3em;
-	/* line-height: 57.6px;
-	font-weight: 600;
-	margin-bottom: 20px; */
+	padding-bottom: 0.5em;
 }
 
 .front-page h1 {

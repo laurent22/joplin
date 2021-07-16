@@ -6,6 +6,27 @@ function getOs() {
 	return null;
 }
 
+function getMobileOs() {
+	var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+	// Windows Phone must come first because its UA also contains "Android"
+	if (/windows phone/i.test(userAgent)) {
+		return "windowsPhone";
+	}
+
+	if (/android/i.test(userAgent)) {
+		return "android";
+	}
+
+	// iOS detection from: http://stackoverflow.com/a/9039885/177710
+	if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+		return "ios";
+	}
+
+	return "";
+}
+
+
 function setupMobileMenu() {
 	$("#open-menu-mobile").click(function () {
 		$("#menu-mobile").animate({ "margin-right": "0px" }, 300);
@@ -36,11 +57,17 @@ function setupDownloadPage() {
 		$('.page-download .get-it-desktop').show(500);
 	});
 
-	const os = getOs();
-	if (!os || !downloadLinks[os]) {
-		$('.page-download .get-it-desktop').show();
+	const mobileOs = getMobileOs();
+
+	if (mobileOs) {
+		$('.page-download .intro').hide();
 	} else {
-		window.location = downloadLinks[os];
+		const os = getOs();
+		if (!os || !downloadLinks[os]) {
+			$('.page-download .get-it-desktop').show();
+		} else {
+			window.location = downloadLinks[os];
+		}
 	}
 }
 

@@ -5,6 +5,7 @@ import { getCanShareFolder, getMaxItemSize } from '../../models/utils/user';
 import { MB } from '../../utils/bytes';
 import { execRequestC } from '../../utils/testing/apiUtils';
 import { beforeAllDb, afterAllTests, beforeEachDb, models } from '../../utils/testing/testUtils';
+import uuidgen from '../../utils/uuidgen';
 import { FormUser } from './signup';
 
 describe('index_signup', function() {
@@ -22,11 +23,12 @@ describe('index_signup', function() {
 	});
 
 	test('should create a new account', async function() {
+		const password = uuidgen();
 		const formUser: FormUser = {
 			full_name: 'Toto',
 			email: 'toto@example.com',
-			password: 'testing',
-			password2: 'testing',
+			password: password,
+			password2: password,
 		};
 
 		// First confirm that it doesn't work if sign up is disabled
