@@ -7,14 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator:  Szőke Sándor <mail@szokesandor.hu>\n"
+"Last-Translator: Magyari Balázs <balmag@gmail.com>\n"
 "Language-Team: \n"
 "Language: hu_HU\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Poedit 3.0\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
@@ -60,7 +62,7 @@ msgstr "Mégse"
 #: packages/app-desktop/bridge.js:184
 msgid ""
 "The app is now going to close. Please relaunch it to complete the process."
-msgstr "Az alkalmazás bezárul. kérem indítsa újra a folyamat befejezéséhez."
+msgstr "Az alkalmazás bezárul. Kérem indítsa újra a folyamat befejezéséhez."
 
 #: packages/app-desktop/plugins/GotoAnything.js:446
 msgid ""
@@ -121,11 +123,11 @@ msgstr "Letöltés"
 
 #: packages/app-desktop/checkForUpdates.js:189
 msgid "Skip this version"
-msgstr ""
+msgstr "Verzió figyelmen kívül hagyása"
 
 #: packages/app-desktop/checkForUpdates.js:189
 msgid "Full changelog"
-msgstr ""
+msgstr "Teljes változásnapló"
 
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:100
 msgid "This note has no history"
@@ -234,9 +236,9 @@ msgstr "Elemek titkosítása: %d/%d"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:507
 #: packages/app-mobile/components/side-menu-content.js:330
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Fetching resources: %d/%d"
-msgstr "Fetched erőforrások: %d/%d."
+msgstr "Erőforrások lekérése: %d/%d"
 
 #: packages/app-desktop/gui/Sidebar/commands/focusElementSideBar.js:17
 msgid "Sidebar"
@@ -265,12 +267,10 @@ msgid "Retry"
 msgstr "Ismét"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.js:137
-#, fuzzy
 msgid "Advanced tools"
 msgstr "Haladó beállítások"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.js:139
-#, fuzzy
 msgid "Export debug report"
 msgstr "Debug jelentés exportálása"
 
@@ -330,23 +330,23 @@ msgstr "Jelölőnégyzet lista"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:17
 msgid "Highlight"
-msgstr ""
+msgstr "Kiemelés"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:22
 msgid "Strikethrough"
-msgstr ""
+msgstr "Áthúzás"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:27
 msgid "Insert"
-msgstr ""
+msgstr "Beillesztés"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:33
 msgid "Superscript"
-msgstr ""
+msgstr "Felső index"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:39
 msgid "Subscript"
-msgstr ""
+msgstr "Alsó index"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:564
 #: packages/app-mobile/components/screens/Note.js:1016
@@ -387,7 +387,7 @@ msgid ""
 "switch to %s to edit the note."
 msgstr ""
 "Kérem várjon minden csatolmány letöltésére és dekódolására. Átválthat %s-re "
-"a jegyzet szerkesztéséhez. "
+"a jegyzet szerkesztéséhez."
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:59
 msgid "There was an error downloading this attachment:"
@@ -463,7 +463,7 @@ msgid ""
 msgstr "A csatolmányok figyelése megszűnik, ha átvált egy másik jegyzetre."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:392
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "In: %s"
 msgstr "In: %s"
 
@@ -512,7 +512,6 @@ msgid "Delete line"
 msgstr "Sor törlése"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:92
-#, fuzzy
 msgid "Duplicate line"
 msgstr "Duplikált"
 
@@ -711,7 +710,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:447
 msgid "Disable safe mode and restart"
-msgstr ""
+msgstr "Biztonsági mód kikapcsolása és újraindítás"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:451
 msgid ""
@@ -756,19 +755,19 @@ msgstr "Több info"
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:477
 #, javascript-format
 msgid "%s (%s) would like to share a notebook with you."
-msgstr ""
+msgstr "%s (%s) szeretne egy jegyzetfüzetet megosztani veled."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:479
 msgid "Accept"
-msgstr ""
+msgstr "Elfogad"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:481
 msgid "Reject"
-msgstr ""
+msgstr "Elutasít"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:485
 msgid "Some items cannot be synchronised."
-msgstr "Néhány elemet nem lehet szinkronizálnii."
+msgstr "Néhány elemet nem lehet szinkronizálni."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:491
 msgid "One or more master keys need a password."
@@ -782,7 +781,7 @@ msgstr "Jelszó beállítása"
 msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
 msgstr ""
 "Használja a nyilakat az elrendezés elemek mozgatásához. Majd nyomja le az "
-"\"Escape\"-et a kilépéshez. "
+"\"Escape\"-et a kilépéshez."
 
 #: packages/app-desktop/gui/MainScreen/commands/showNoteContentProperties.js:18
 msgid "Statistics..."
@@ -905,8 +904,8 @@ msgstr "Csak egy jegyzet nyomtatható ki egyidőben."
 msgid ""
 "To allow Joplin to synchronise with Dropbox, please follow the steps below:"
 msgstr ""
-"Hogy a Joplin tudjon szinkronizálni Dropbox-al, kérem kövesse a következő "
-"lépéseket."
+"Ahhoz hogy a Joplin szinkronizálni tudjon Dropbox-al, kérem kövesse a "
+"következő lépéseket:"
 
 #: packages/app-desktop/gui/DropboxLoginScreen.js:30
 #: packages/app-mobile/components/screens/dropbox-login.js:59
@@ -1857,7 +1856,7 @@ msgstr "Engedély a kamera használatához"
 
 #: packages/app-mobile/components/CameraView.js:159
 msgid "Your permission to use your camera is required."
-msgstr "A kamera használati engedélyre szükség van. "
+msgstr "A kamera használatához engedélyre van szükség."
 
 #: packages/app-mobile/components/screen-header.js:185
 msgid "Delete these notes?"
@@ -2246,11 +2245,11 @@ msgstr "Minden potenciális port használva van - kérem jelentse a hibát itt: 
 #: packages/lib/onedrive-api-node-utils.js:86
 msgid ""
 "The application has been authorised - you may now close this browser tab."
-msgstr "Az alkalmazás hitelesítve - már becsukhatja a böngésző ablakot. "
+msgstr "Az alkalmazás hitelesítve - már becsukhatja a böngésző ablakot."
 
 #: packages/lib/onedrive-api-node-utils.js:88
 msgid "The application has been successfully authorised."
-msgstr "Az alkalmazás sikeresen hitelesítve!"
+msgstr "Az alkalmazás sikeresen hitelesítve."
 
 #: packages/lib/onedrive-api-node-utils.js:116
 msgid ""
@@ -2284,7 +2283,7 @@ msgstr "cím"
 
 #: packages/lib/models/Folder.js:37 packages/lib/models/Note.js:37
 msgid "updated date"
-msgstr "Frissítési dátum"
+msgstr "frissítési dátum"
 
 #: packages/lib/models/Folder.js:101
 msgid "Conflicts"
@@ -2965,7 +2964,7 @@ msgstr ""
 #: packages/lib/models/Tag.js:223
 #, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
-msgstr ""
+msgstr "A \"%s\" címke már létezik. Válasszon egy másik nevet."
 
 #: packages/lib/models/Note.js:38
 msgid "created date"
@@ -4010,7 +4009,7 @@ msgstr "Több mint egy elem egyezik ezzel \"%s\". Kérem szűkítse a lekérdez�
 
 #: packages/app-cli/app/app.js:93
 msgid "No notebook selected."
-msgstr "Nincs kiválasztva jegyzetfüzet!"
+msgstr "Nincs kiválasztva jegyzetfüzet."
 
 #: packages/app-cli/app/app.js:99
 msgid "No notebook has been specified."
