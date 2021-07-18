@@ -785,10 +785,10 @@ class Setting extends BaseModel {
 				value: false,
 				type: SettingItemType.Bool,
 				section: 'note',
-				public: false, // mobilePlatform === 'ios',
+				public: true,
 				appTypes: [AppType.Mobile],
 				label: () => 'Opt-in to the editor beta',
-				description: () => 'This beta adds list continuation, Markdown preview, and Markdown shortcuts. If you find bugs, please report them in the Discourse forum.',
+				description: () => 'This beta adds list continuation and syntax highlighting. If you find bugs, please report them in the Discourse forum.',
 			},
 
 			newTodoFocus: {
@@ -915,7 +915,7 @@ class Setting extends BaseModel {
 			// Deprecated in favour of windowContentZoomFactor
 			'style.zoom': { value: 100, type: SettingItemType.Int, public: false, storage: SettingStorage.File, appTypes: [AppType.Desktop], section: 'appearance', label: () => '', minimum: 50, maximum: 500, step: 10 },
 
-			'style.editor.fontSize': { value: 13, type: SettingItemType.Int, public: true, storage: SettingStorage.File, appTypes: [AppType.Desktop], section: 'appearance', label: () => _('Editor font size'), minimum: 4, maximum: 50, step: 1 },
+			'style.editor.fontSize': { value: 15, type: SettingItemType.Int, public: true, storage: SettingStorage.File, appTypes: [AppType.Desktop], section: 'appearance', label: () => _('Editor font size'), minimum: 4, maximum: 50, step: 1 },
 			'style.editor.fontFamily':
 				(mobilePlatform) ?
 					({

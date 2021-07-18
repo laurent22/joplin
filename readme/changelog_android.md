@@ -1,5 +1,12 @@
 # Joplin Android app changelog
 
+## [android-v2.2.1](https://github.com/laurent22/joplin/releases/tag/android-v2.2.1) (Pre-release) - 2021-07-13T17:37:38Z
+
+- New: Added improved editor (beta)
+- Improved: Disable backup to Google Drive (#5114 by Roman Musin)
+- Improved: Interpret only valid search filters (#5103) (#3871 by [@JackGruber](https://github.com/JackGruber))
+- Improved: Removed old editor code (e01a175)
+
 ## [android-v2.1.4](https://github.com/laurent22/joplin/releases/tag/android-v2.1.4) - 2021-07-03T08:31:36Z
 
 - Fixed: Fixes #5133: Items keep being uploaded to Joplin Server after a note has been shared.

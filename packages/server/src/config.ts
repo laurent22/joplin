@@ -138,7 +138,7 @@ export async function initConfig(envType: Env, env: EnvVariables, overrides: any
 	const viewDir = `${rootDir}/src/views`;
 	const appPort = env.APP_PORT ? Number(env.APP_PORT) : 22300;
 	const baseUrl = baseUrlFromEnv(env, appPort);
-	const supportEmail = env.SUPPORT_EMAIL || 'admin@localhost';
+	const supportEmail = env.SUPPORT_EMAIL || 'SUPPORT_EMAIL'; // Defaults to "SUPPORT_EMAIL" so that server admin knows they have to set it.
 
 	config_ = {
 		appVersion: packageJson.version,

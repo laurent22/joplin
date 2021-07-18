@@ -43,7 +43,7 @@ do
 		echo "config sync.target 10" >> "$CMD_FILE" 
 		# echo "config sync.10.path http://api.joplincloud.local:22300" >> "$CMD_FILE" 
 		echo "config sync.10.username $USER_EMAIL" >> "$CMD_FILE" 
-		echo "config sync.10.password 123456" >> "$CMD_FILE" 
+		echo "config sync.10.password hunter1hunter2hunter3" >> "$CMD_FILE" 
 	
 	elif [[ $CMD == "e2ee" ]]; then
 	

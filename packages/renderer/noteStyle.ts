@@ -205,7 +205,7 @@ export default function(theme: any) {
 			border-left: 4px solid ${theme.codeBorderColor};
 			padding-left: 1.2em;
 			margin-left: 0;
-			opacity: .7;
+			opacity: ${theme.blockQuoteOpacity};
 		}
 
 		.jop-tinymce table,

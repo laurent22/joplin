@@ -270,6 +270,7 @@ router.post('users', async (path: SubPath, ctx: AppContext) => {
 
 		return redirect(ctx, `${config().baseUrl}/users${userIsMe(path) ? '/me' : ''}`);
 	} catch (error) {
+		error.message = `Error: Your changes were not saved: ${error.message}`;
 		if (error instanceof ErrorForbidden) throw error;
 		const endPoint = router.findEndPoint(HttpMethod.GET, 'users/:id');
 		return endPoint.handler(path, ctx, user, error);

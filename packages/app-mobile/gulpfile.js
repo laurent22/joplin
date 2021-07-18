@@ -5,8 +5,8 @@ const tasks = {
 	encodeAssets: {
 		fn: require('./tools/encodeAssets'),
 	},
-	buildReactNativeInjectedJs: {
-		fn: require('./tools/buildReactNativeInjectedJs'),
+	buildInjectedJs: {
+		fn: require('./tools/buildInjectedJs'),
 	},
 	podInstall: {
 		fn: require('./tools/podInstall'),
@@ -16,7 +16,7 @@ const tasks = {
 utils.registerGulpTasks(gulp, tasks);
 
 gulp.task('build', gulp.series(
-	'buildReactNativeInjectedJs',
+	'buildInjectedJs',
 	'encodeAssets',
 	'podInstall'
 ));

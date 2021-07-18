@@ -62,7 +62,7 @@ msgid ""
 "The app is now going to close. Please relaunch it to complete the process."
 msgstr "Az alkalmazás bezárul. kérem indítsa újra a folyamat befejezéséhez."
 
-#: packages/app-desktop/plugins/GotoAnything.js:446
+#: packages/app-desktop/plugins/GotoAnything.js:455
 msgid ""
 "Type a note title or part of its content to jump to it. Or type # followed "
 "by a tag name, or @ followed by a notebook name. Or type : to search for "
@@ -72,12 +72,12 @@ msgstr ""
 "szeretne. Esetleg írja be a #-et a tag nevével, vagy @ a jegyzetfüzet "
 "nevével. Beírhatja :-ot parancsok kereséséhez."
 
-#: packages/app-desktop/plugins/GotoAnything.js:471
+#: packages/app-desktop/plugins/GotoAnything.js:480
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:20
 msgid "Goto Anything..."
 msgstr "Ugrás bárhova..."
 
-#: packages/app-desktop/plugins/GotoAnything.js:478
+#: packages/app-desktop/plugins/GotoAnything.js:487
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:28
 msgid "Command palette"
 msgstr "Parancs paletta"
@@ -292,11 +292,11 @@ msgstr "Hiperhivatkozás beszúrása"
 msgid "List item"
 msgstr "Felsorolás elem"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:513
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:545
 msgid "Layout"
 msgstr "Elrendezés"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:513
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:545
 #, javascript-format
 msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
@@ -305,20 +305,20 @@ msgstr ""
 "Ez a jegyzet üres. Kattintson a \"%s\"-on váltani a szerkesztőt és "
 "szerkeszteni a jegyzetet."
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:622
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:654
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:128
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:18
 msgid "Cut"
 msgstr "Kivágás"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:629
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:661
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:136
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:13
 #: packages/app-desktop/gui/MenuBar.js:377
 msgid "Copy"
 msgstr "Másolás"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:636
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:668
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:143
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:23
 msgid "Paste"
@@ -348,39 +348,39 @@ msgstr ""
 msgid "Subscript"
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:564
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:574
 #: packages/app-mobile/components/screens/Note.js:1016
 msgid "Edit"
 msgstr "Szerkesztés"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:620
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:630
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:53
 #: packages/app-mobile/components/screens/Note.js:771
 msgid "Attach file"
 msgstr "Fájl csatolása"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:630
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:640
 msgid "Code Block"
 msgstr "Code Blokk"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:639
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:649
 msgid "Inline Code"
 msgstr "Beágyazott kód"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:654
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:664
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:83
 msgid "Insert Date Time"
 msgstr "Dátum-idő beszúrása"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1103
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1115
 msgid "Drop notes or files here"
 msgstr "Dobja ide a jegyzeteket vagy fájlokat"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1103
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1115
 msgid "Code View"
 msgstr "Kód nézet"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1103
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1115
 #, javascript-format
 msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
@@ -423,7 +423,8 @@ msgid "to-do"
 msgstr "to-do"
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.js:79
-#: packages/server/dist/models/UserModel.js:175
+#: packages/server/dist/models/UserModel.js:186
+#: packages/server/dist/models/UserModel.js:191
 msgid "note"
 msgstr "megjegyzés"
 
@@ -593,7 +594,7 @@ msgid "URL"
 msgstr "URL"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:34
-#: packages/lib/models/Setting.js:1665
+#: packages/lib/models/Setting.js:1666
 msgid "Note History"
 msgstr "Jegyzet előélete"
 
@@ -644,7 +645,7 @@ msgid "Keyboard Shortcut"
 msgstr "Gyorsbillentyű"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:14
-#: packages/app-desktop/gui/MenuBar.js:213 packages/app-desktop/app.js:371
+#: packages/app-desktop/gui/MenuBar.js:213 packages/app-desktop/app.js:372
 msgid "Quit"
 msgstr "Kilépés"
 
@@ -703,17 +704,31 @@ msgstr ""
 msgid "Save"
 msgstr "Mentés"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:445
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:463
+msgid "The Web Clipper needs your authorisation to access your data."
+msgstr ""
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:463
+#, fuzzy
+msgid "Grant authorisation"
+msgstr "Hitelesítő token:"
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:463
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:483
+msgid "Reject"
+msgstr ""
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:466
 msgid ""
 "Safe mode is currently active. Note rendering and all plugins are "
 "temporarily disabled."
 msgstr ""
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:447
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:466
 msgid "Disable safe mode and restart"
 msgstr ""
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:451
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:469
 msgid ""
 "The sync target needs to be upgraded before Joplin can sync. The operation "
 "may take a few minutes to complete and the app needs to be restarted. To "
@@ -723,25 +738,25 @@ msgstr ""
 "művelet, igénybe vehet pár percet és az alkalmazást újra kell indítani. A "
 "folytatáshoz kattintson a lenti linkre."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:453
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:469
 msgid "Restart and upgrade"
 msgstr "Újraindítás és frissítés"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:457
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:472
 msgid "Some items cannot be decrypted."
 msgstr "Néhány elemet nem lehet visszafejteni."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:459
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:465
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:487
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:472
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:475
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:486
 msgid "View them now"
 msgstr "Mutasd ezeket most"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:463
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:475
 msgid "One of your master keys use an obsolete encryption method."
 msgstr "Az egyik mester kulcsa egy elavult titkosítási módot használ."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:469
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:478
 msgid ""
 "The default encryption method has been changed, you should re-encrypt your "
 "data."
@@ -749,36 +764,32 @@ msgstr ""
 "Az alapértelmezett titkosítási mód megváltozott, újra kell titkosítani az "
 "adatokat."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:471
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:478
 msgid "More info"
 msgstr "Több info"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:477
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:483
 #, javascript-format
 msgid "%s (%s) would like to share a notebook with you."
 msgstr ""
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:479
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:483
 msgid "Accept"
 msgstr ""
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:481
-msgid "Reject"
-msgstr ""
-
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:485
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:486
 msgid "Some items cannot be synchronised."
 msgstr "Néhány elemet nem lehet szinkronizálnii."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:491
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:489
 msgid "One or more master keys need a password."
 msgstr "Egy vagy több mester kulcs igényel jelszót."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:493
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:489
 msgid "Set the password"
 msgstr "Jelszó beállítása"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:616
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:612
 msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
 msgstr ""
 "Használja a nyilakat az elrendezés elemek mozgatásához. Majd nyomja le az "
@@ -1050,7 +1061,7 @@ msgstr "Jegyzet csatolmányok..."
 
 #: packages/app-desktop/gui/MenuBar.js:388
 #: packages/app-desktop/gui/MenuBar.js:466
-#: packages/app-desktop/gui/MenuBar.js:766
+#: packages/app-desktop/gui/MenuBar.js:768
 msgid "&File"
 msgstr "&Fájl"
 
@@ -1084,7 +1095,7 @@ msgid "Hide %s"
 msgstr "%s elrejtése"
 
 #: packages/app-desktop/gui/MenuBar.js:512
-#: packages/app-desktop/gui/MenuBar.js:770
+#: packages/app-desktop/gui/MenuBar.js:772
 msgid "&Edit"
 msgstr "Sz&erkesztés"
 
@@ -1131,7 +1142,7 @@ msgid "Joplin Forum"
 msgstr "Joplin Forum"
 
 #: packages/app-desktop/gui/MenuBar.js:661
-#: packages/app-mobile/components/screens/ConfigScreen.js:423
+#: packages/app-mobile/components/screens/ConfigScreen.js:425
 msgid "Make a donation"
 msgstr "Adakozzon"
 
@@ -1477,9 +1488,9 @@ msgid "Restart now"
 msgstr "Újraindítás most"
 
 #: packages/app-desktop/gui/ConfigScreen/Sidebar.js:89
-#: packages/lib/models/Setting.js:1661
+#: packages/lib/models/Setting.js:1662
 msgid "Plugins"
-msgstr "Bővítméníek"
+msgstr "Bővítmények"
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.js:27
 msgid "Apply"
@@ -1822,7 +1833,7 @@ msgstr "Hiba szerkesztőben a jegyzet megnyitáskor: %s"
 msgid "Open profile directory"
 msgstr "Adatmappa megnyitása"
 
-#: packages/app-desktop/app.js:369
+#: packages/app-desktop/app.js:370
 #, javascript-format
 msgid "Open %s"
 msgstr "Megnyitás %s"
@@ -1877,7 +1888,7 @@ msgid "New Notebook"
 msgstr "Új Jegyzetfüzet"
 
 #: packages/app-mobile/components/side-menu-content.js:316
-#: packages/app-mobile/components/screens/ConfigScreen.js:441
+#: packages/app-mobile/components/screens/ConfigScreen.js:443
 msgid "Configuration"
 msgstr "Beállítások"
 
@@ -1960,67 +1971,67 @@ msgstr "Információ"
 msgid "Encryption Config"
 msgstr "Titkosítás beállítás"
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:389
+#: packages/app-mobile/components/screens/ConfigScreen.js:388
 msgid "Tools"
 msgstr "Eszközök"
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:390
+#: packages/app-mobile/components/screens/ConfigScreen.js:389
 msgid "Sync Status"
 msgstr "Szinkronizációs státusz"
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:391
+#: packages/app-mobile/components/screens/ConfigScreen.js:390
 msgid "Log"
 msgstr "Napló"
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:393
+#: packages/app-mobile/components/screens/ConfigScreen.js:392
 msgid "Creating report..."
 msgstr "Jelentés készítése..."
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:393
+#: packages/app-mobile/components/screens/ConfigScreen.js:392
 msgid "Export Debug Report"
 msgstr "Debug jelentés exportálása"
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:395
+#: packages/app-mobile/components/screens/ConfigScreen.js:394
 msgid "Fixing search index..."
 msgstr "Keresési index javítása..."
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:395
+#: packages/app-mobile/components/screens/ConfigScreen.js:394
 msgid "Fix search index"
 msgstr "Keresési index javítása"
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:395
+#: packages/app-mobile/components/screens/ConfigScreen.js:394
 msgid ""
 "Use this to rebuild the search index if there is a problem with search. It "
 "may take a long time depending on the number of notes."
 msgstr ""
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:397
+#: packages/app-mobile/components/screens/ConfigScreen.js:396
 msgid "Exporting profile..."
 msgstr "Profil exportálása..."
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:397
+#: packages/app-mobile/components/screens/ConfigScreen.js:396
 msgid "Export profile"
 msgstr "Profil exportálása"
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:397
+#: packages/app-mobile/components/screens/ConfigScreen.js:396
 msgid "For debugging purpose only: export your profile to an external SD card."
 msgstr ""
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:406
+#: packages/app-mobile/components/screens/ConfigScreen.js:407
 msgid "Feature flags"
 msgstr ""
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:408
+#: packages/app-mobile/components/screens/ConfigScreen.js:410
 msgid "More information"
 msgstr "Több információ"
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:414
+#: packages/app-mobile/components/screens/ConfigScreen.js:416
 msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
 "them in your phone settings, in Apps > Joplin > Permissions"
 msgstr ""
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:415
+#: packages/app-mobile/components/screens/ConfigScreen.js:417
 msgid ""
 "- Storage: to allow attaching files to notes and to enable filesystem "
 "synchronisation."
@@ -2028,28 +2039,28 @@ msgstr ""
 "- Tároló: engedélyezi a fájlok csatolását a jegyzetekhez és engedélyezi a "
 "fájlrendszer szinkronizációt."
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:416
+#: packages/app-mobile/components/screens/ConfigScreen.js:418
 msgid "- Camera: to allow taking a picture and attaching it to a note."
 msgstr "- Kamera: engedélyezze kép készítéséhez és csatolja azt a jegyzethez."
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:417
+#: packages/app-mobile/components/screens/ConfigScreen.js:419
 msgid "- Location: to allow attaching geo-location information to a note."
 msgstr "- Hely: engedélyezze, a geo-location hozzáadását a jegyzethez."
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:428
+#: packages/app-mobile/components/screens/ConfigScreen.js:430
 msgid "Joplin website"
 msgstr "Joplin weboldal"
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:433
+#: packages/app-mobile/components/screens/ConfigScreen.js:435
 msgid "Privacy Policy"
 msgstr "Adatvédelmi Irányelvek"
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:437
+#: packages/app-mobile/components/screens/ConfigScreen.js:439
 #, javascript-format
 msgid "Database v%s"
 msgstr ""
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:439
+#: packages/app-mobile/components/screens/ConfigScreen.js:441
 #, fuzzy, javascript-format
 msgid "FTS enabled: %d"
 msgstr "Törölni: %d"
@@ -2227,15 +2238,23 @@ msgid ""
 "now](%s)"
 msgstr ""
 
-#: packages/server/dist/models/UserModel.js:175
+#: packages/server/dist/models/UserModel.js:186
+#: packages/server/dist/models/UserModel.js:191
 #, fuzzy
 msgid "attachment"
 msgstr "Csatolmányok"
 
-#: packages/server/dist/models/UserModel.js:175
+#: packages/server/dist/models/UserModel.js:186
 #, javascript-format
 msgid ""
 "Cannot save %s \"%s\" because it is larger than than the allowed limit (%s)"
+msgstr ""
+
+#: packages/server/dist/models/UserModel.js:191
+#, javascript-format
+msgid ""
+"Cannot save %s \"%s\" because it would go over the total allowed size (%s) "
+"for this account"
 msgstr ""
 
 #: packages/lib/onedrive-api-node-utils.js:46
@@ -2278,23 +2297,23 @@ msgstr "Joplin Szerver"
 msgid "Cannot access %s"
 msgstr "Hozzáférés sikertelen %s"
 
-#: packages/lib/models/Folder.js:36 packages/lib/models/Note.js:36
+#: packages/lib/models/Folder.js:38 packages/lib/models/Note.js:36
 msgid "title"
 msgstr "cím"
 
-#: packages/lib/models/Folder.js:37 packages/lib/models/Note.js:37
+#: packages/lib/models/Folder.js:39 packages/lib/models/Note.js:37
 msgid "updated date"
 msgstr "Frissítési dátum"
 
-#: packages/lib/models/Folder.js:101
+#: packages/lib/models/Folder.js:103
 msgid "Conflicts"
 msgstr "Ütközés"
 
-#: packages/lib/models/Folder.js:535
+#: packages/lib/models/Folder.js:558
 msgid "Cannot move notebook to this location"
 msgstr "Jegyzetfüzet nem mozgatható ide"
 
-#: packages/lib/models/Folder.js:587
+#: packages/lib/models/Folder.js:610
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr "Jegyzetfüzet nem nevezhető \"%s\"-nak, az egy fenntartott cím."
@@ -2792,11 +2811,11 @@ msgstr "Emacs"
 msgid "Vim"
 msgstr "Vim"
 
-#: packages/lib/models/Setting.js:914
+#: packages/lib/models/Setting.js:918
 msgid "Custom TLS certificates"
 msgstr "Egyedi TLS bizonyítvány"
 
-#: packages/lib/models/Setting.js:915
+#: packages/lib/models/Setting.js:919
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
 "or path to individual cert files. For example: /my/cert_dir, /other/custom."
@@ -2811,15 +2830,15 @@ msgstr ""
 "Note that if you make changes to the TLS settings, you must save your "
 "changes before clicking on \"Check synchronisation configuration\"."
 
-#: packages/lib/models/Setting.js:928
+#: packages/lib/models/Setting.js:941
 msgid "Ignore TLS certificate errors"
 msgstr "TLS bizonyítvány hibák figyelmen kívül hagyása"
 
-#: packages/lib/models/Setting.js:937
+#: packages/lib/models/Setting.js:950
 msgid "Fail-safe"
 msgstr "Hibatűrő"
 
-#: packages/lib/models/Setting.js:938
+#: packages/lib/models/Setting.js:951
 msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
@@ -2827,35 +2846,35 @@ msgstr ""
 "Hibatűrő: Ne törölje a helyi adatot, ha a távoli adat üres (gyakran rossz "
 "beállítás vagy hiba eredménye)"
 
-#: packages/lib/models/Setting.js:942
+#: packages/lib/models/Setting.js:955
 msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
 msgstr ""
 
-#: packages/lib/models/Setting.js:947
+#: packages/lib/models/Setting.js:960
 msgid "Enable note history"
 msgstr "Jegyzet előélet engedélyezése"
 
-#: packages/lib/models/Setting.js:957
+#: packages/lib/models/Setting.js:970
 msgid "days"
 msgstr "napok"
 
-#: packages/lib/models/Setting.js:957
+#: packages/lib/models/Setting.js:970
 #, javascript-format
 msgid "%d days"
 msgstr "%d nap"
 
-#: packages/lib/models/Setting.js:959
+#: packages/lib/models/Setting.js:972
 msgid "Keep note history for"
 msgstr "Jegyzet előélet megtartása"
 
-#: packages/lib/models/Setting.js:986
+#: packages/lib/models/Setting.js:999
 msgid "Notebook list growth factor"
 msgstr "Jegyzetfüzet lista növekedési faktor"
 
-#: packages/lib/models/Setting.js:987 packages/lib/models/Setting.js:1000
-#: packages/lib/models/Setting.js:1013
+#: packages/lib/models/Setting.js:1000 packages/lib/models/Setting.js:1013
+#: packages/lib/models/Setting.js:1026
 msgid ""
 "The factor property sets how the item will grow or shrink to fit the "
 "available space in its container with respect to the other items. Thus an "
@@ -2863,58 +2882,58 @@ msgid ""
 "factor of 1.Restart app to see changes."
 msgstr ""
 
-#: packages/lib/models/Setting.js:999
+#: packages/lib/models/Setting.js:1012
 msgid "Note list growth factor"
 msgstr "Jegyzet lista növekedési faktor"
 
-#: packages/lib/models/Setting.js:1012
+#: packages/lib/models/Setting.js:1025
 msgid "Note area growth factor"
 msgstr "Jegyzet terület növekedési faktor"
 
-#: packages/lib/models/Setting.js:1252
+#: packages/lib/models/Setting.js:1253
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Érvénytelen opció érték: \"%s\". Lehetséges értékek: %s."
 
-#: packages/lib/models/Setting.js:1651
+#: packages/lib/models/Setting.js:1652
 msgid "General"
 msgstr "Általános"
 
-#: packages/lib/models/Setting.js:1653
+#: packages/lib/models/Setting.js:1654
 msgid "Synchronisation"
 msgstr "Szinkronizáció"
 
-#: packages/lib/models/Setting.js:1655
+#: packages/lib/models/Setting.js:1656
 msgid "Appearance"
 msgstr "Megjelenés"
 
-#: packages/lib/models/Setting.js:1657
+#: packages/lib/models/Setting.js:1658
 msgid "Note"
 msgstr "Megjegyzés"
 
-#: packages/lib/models/Setting.js:1659
+#: packages/lib/models/Setting.js:1660
 #: packages/lib/services/interop/InteropService.js:49
 #: packages/lib/services/interop/InteropService.js:59
 msgid "Markdown"
 msgstr "Markdown"
 
-#: packages/lib/models/Setting.js:1663
+#: packages/lib/models/Setting.js:1664
 msgid "Application"
 msgstr "Alkalmazás"
 
-#: packages/lib/models/Setting.js:1667
+#: packages/lib/models/Setting.js:1668
 msgid "Encryption"
 msgstr "Titkosítás"
 
-#: packages/lib/models/Setting.js:1669
+#: packages/lib/models/Setting.js:1670
 msgid "Web Clipper"
 msgstr "Web Vágó"
 
-#: packages/lib/models/Setting.js:1671
+#: packages/lib/models/Setting.js:1672
 msgid "Keyboard Shortcuts"
 msgstr "Gyorsbillentyűk"
 
-#: packages/lib/models/Setting.js:1678
+#: packages/lib/models/Setting.js:1679
 msgid ""
 "These plugins enhance the Markdown renderer with additional features. Please "
 "note that, while these features might be useful, they are not standard "
@@ -2925,7 +2944,7 @@ msgid ""
 "the WYSIWYG editor."
 msgstr ""
 
-#: packages/lib/models/Setting.js:1680
+#: packages/lib/models/Setting.js:1681
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr "Jegyzetek és beállítások tárolása itt: %s"

@@ -542,7 +542,7 @@ export default class Synchronizer {
 
 						this.logSyncOperation(action, local, remote, reason);
 
-						if (local.type_ == BaseModel.TYPE_RESOURCE && (action == 'createRemote' || action === 'updateRemote' || (action == 'itemConflict' && remote))) {
+						if (local.type_ == BaseModel.TYPE_RESOURCE && (action == 'createRemote' || action === 'updateRemote')) {
 							const localState = await Resource.localState(local.id);
 							if (localState.fetch_status !== Resource.FETCH_STATUS_DONE) {
 								// This condition normally shouldn't happen
