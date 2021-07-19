@@ -74,7 +74,7 @@ function defaultTemplateParams(): TemplateParams {
 		forumUrl: 'https://discourse.joplinapp.org/',
 		showToc: true,
 		showImproveThisDoc: true,
-		showJoplinCloudLinks: false,
+		showJoplinCloudLinks: true,
 		navbar: {
 			isFrontPage: false,
 		},
