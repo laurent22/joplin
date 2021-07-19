@@ -1,5 +1,18 @@
 # Joplin changelog
 
+## [v2.2.2](https://github.com/laurent22/joplin/releases/tag/v2.2.2) (Pre-release) - 2021-07-19T10:28:35Z
+
+Attention: The default font size has been changed in the Markdown editor. You can change it back in Config > Appearance > Editor font size.
+
+- Improved: Ensure that timestamps are not changed when sharing or unsharing a note (cafaa9c)
+- Improved: Make Markdown editor styling closer to view styling ([#5174](https://github.com/laurent22/joplin/issues/5174))
+- Improved: Make sure clipper authorisation notification is displayed, even when in config screen (b2de27b)
+
+## [v2.1.9](https://github.com/laurent22/joplin/releases/tag/v2.1.9) - 2021-07-19T10:28:43Z
+
+- Improved: Ensure that timestamps are not changed when sharing or unsharing a note (cafaa9c)
+- Improved: Make sure clipper authorisation notification is displayed, even when in config screen (b2de27b)
+
 ## [v2.2.1](https://github.com/laurent22/joplin/releases/tag/v2.2.1) (Pre-release) - 2021-07-09T17:38:25Z
 
 - New: Add keyboard shortcuts for inserting lists in Rich Text editor ([#5137](https://github.com/laurent22/joplin/issues/5137) by Philipp Keck)
