@@ -379,6 +379,10 @@ p,
 	margin-top: 40px;
 }
 
+#top-section-img img {
+	width: 100%;
+}
+
 .main-content {
 	flex: 1;
 }
