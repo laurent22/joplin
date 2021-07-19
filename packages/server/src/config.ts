@@ -1,5 +1,5 @@
 import { rtrimSlashes } from '@joplin/lib/path-utils';
-import { Config, DatabaseConfig, DatabaseConfigClient, Env, MailerConfig, RouteType, StripeConfig } from './utils/types';
+import { Config, DatabaseConfig, DatabaseConfigClient, Env, MailerConfig, RouteType, StripeConfig, StripePublicConfig } from './utils/types';
 import * as pathUtils from 'path';
 import { readFile } from 'fs-extra';
 
@@ -33,7 +33,6 @@ export interface EnvVariables {
 	SQLITE_DATABASE?: string;
 
 	STRIPE_SECRET_KEY?: string;
-	STRIPE_PUBLISHABLE_KEY?: string;
 	STRIPE_WEBHOOK_SECRET?: string;
 
 	SIGNUP_ENABLED?: string;
@@ -41,6 +40,9 @@ export interface EnvVariables {
 	ACCOUNT_TYPES_ENABLED?: string;
 
 	ERROR_STACK_TRACES?: string;
+
+	SUPPORT_EMAIL?: string;
+	BUSINESS_EMAIL?: string;
 }
 
 let runningInDocker_: boolean = false;
@@ -96,10 +98,10 @@ function mailerConfigFromEnv(env: EnvVariables): MailerConfig {
 	};
 }
 
-function stripeConfigFromEnv(env: EnvVariables): StripeConfig {
+function stripeConfigFromEnv(publicConfig: StripePublicConfig, env: EnvVariables): StripeConfig {
 	return {
+		...publicConfig,
 		secretKey: env.STRIPE_SECRET_KEY || '',
-		publishableKey: env.STRIPE_PUBLISHABLE_KEY || '',
 		webhookSecret: env.STRIPE_WEBHOOK_SECRET || '',
 	};
 }
@@ -129,10 +131,14 @@ export async function initConfig(envType: Env, env: EnvVariables, overrides: any
 	const rootDir = pathUtils.dirname(__dirname);
 
 	const packageJson = await readPackageJson(`${rootDir}/package.json`);
+	const stripePublicConfigs = JSON.parse(await readFile(`${rootDir}/stripeConfig.json`, 'utf8'));
+	const stripePublicConfig = stripePublicConfigs[envType];
+	if (!stripePublicConfig) throw new Error('Could not load Stripe config');
 
 	const viewDir = `${rootDir}/src/views`;
 	const appPort = env.APP_PORT ? Number(env.APP_PORT) : 22300;
 	const baseUrl = baseUrlFromEnv(env, appPort);
+	const supportEmail = env.SUPPORT_EMAIL || 'SUPPORT_EMAIL'; // Defaults to "SUPPORT_EMAIL" so that server admin knows they have to set it.
 
 	config_ = {
 		appVersion: packageJson.version,
@@ -145,7 +151,7 @@ export async function initConfig(envType: Env, env: EnvVariables, overrides: any
 		logDir: `${rootDir}/logs`,
 		database: databaseConfigFromEnv(runningInDocker_, env),
 		mailer: mailerConfigFromEnv(env),
-		stripe: stripeConfigFromEnv(env),
+		stripe: stripeConfigFromEnv(stripePublicConfig, env),
 		port: appPort,
 		baseUrl,
 		showErrorStackTraces: (env.ERROR_STACK_TRACES === undefined && envType === Env.Dev) || env.ERROR_STACK_TRACES === '1',
@@ -154,6 +160,8 @@ export async function initConfig(envType: Env, env: EnvVariables, overrides: any
 		signupEnabled: env.SIGNUP_ENABLED === '1',
 		termsEnabled: env.TERMS_ENABLED === '1',
 		accountTypesEnabled: env.ACCOUNT_TYPES_ENABLED === '1',
+		supportEmail,
+		businessEmail: env.BUSINESS_EMAIL || supportEmail,
 		...overrides,
 	};
 }

@@ -106,6 +106,10 @@ async function main() {
 		'https://joplinapp.org',
 	];
 
+	if (env === Env.Dev) {
+		corsAllowedDomains.push('http://localhost:8080');
+	}
+
 	function acceptOrigin(origin: string): boolean {
 		const hostname = (new URL(origin)).hostname;
 		const userContentDomain = envVariables.USER_CONTENT_BASE_URL ? (new URL(envVariables.USER_CONTENT_BASE_URL)).hostname : '';
@@ -113,9 +117,12 @@ async function main() {
 		if (hostname === userContentDomain) return true;
 
 		const hostnameNoSub = hostname.split('.').slice(1).join('.');
+
+		// console.info('CORS check for origin', origin, 'Allowed domains', corsAllowedDomains);
+
 		if (hostnameNoSub === userContentDomain) return true;
 
-		if (corsAllowedDomains.indexOf(origin) === 0) return true;
+		if (corsAllowedDomains.includes(origin)) return true;
 
 		return false;
 	}

@@ -1,5 +1,5 @@
-import { Token, Uuid } from '../db';
-import { ErrorForbidden } from '../utils/errors';
+import { Token, User, Uuid } from '../db';
+import { ErrorForbidden, ErrorNotFound } from '../utils/errors';
 import uuidgen from '../utils/uuidgen';
 import BaseModel from './BaseModel';
 
@@ -35,6 +35,22 @@ export default class TokenModel extends BaseModel<Token> {
 			.where('user_id', '=', userId)
 			.where('value', '=', tokenValue)
 			.first();
+	}
+
+	private async byToken(tokenValue: string): Promise<Token> {
+		return this
+			.db(this.tableName)
+			.select(['user_id', 'value'])
+			.where('value', '=', tokenValue)
+			.first();
+	}
+
+	public async userFromToken(tokenValue: string): Promise<User> {
+		const token = await this.byToken(tokenValue);
+		if (!token) throw new ErrorNotFound(`No such token: ${tokenValue}`);
+		const user = this.models().user().load(token.user_id);
+		if (!user) throw new ErrorNotFound('No user associated with this token');
+		return user;
 	}
 
 	public async isValid(userId: string, tokenValue: string): Promise<boolean> {

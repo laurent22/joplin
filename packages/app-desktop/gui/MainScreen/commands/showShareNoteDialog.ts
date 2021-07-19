@@ -3,7 +3,7 @@ import { _ } from '@joplin/lib/locale';
 
 export const declaration: CommandDeclaration = {
 	name: 'showShareNoteDialog',
-	label: () => _('Share note...'),
+	label: () => _('Publish note...'),
 };
 
 export const runtime = (comp: any): CommandRuntime => {

@@ -17,7 +17,7 @@
     "buildSettingJsonSchema": "npm start --prefix=packages/app-cli -- settingschema ../../docs/schema/settings.json",
     "buildTranslations": "npm run tsc && node packages/tools/build-translation.js",
     "buildTranslationsNoTsc": "node packages/tools/build-translation.js",
-    "buildWebsite": "npm run buildApiDoc && node ./packages/tools/build-website.js && npm run buildPluginDoc && npm run buildSettingJsonSchema",
+    "buildWebsite": "npm run buildApiDoc && node ./packages/tools/website/build.js && npm run buildPluginDoc && npm run buildSettingJsonSchema",
     "circularDependencyCheck": "madge --warning --circular --extensions js ./",
     "clean": "lerna clean -y && lerna run clean",
     "dependencyTree": "madge",
@@ -44,6 +44,7 @@
     "updateIgnored": "gulp updateIgnoredTypeScriptBuild",
     "updatePluginTypes": "./packages/generator-joplin/updateTypes.sh",
     "watch": "lerna run watch --stream --parallel",
+    "watchWebsite": "nodemon --verbose --watch Assets/WebsiteAssets --watch packages/tools/website/build.js --ext md,ts,js,mustache,css,tsx,gif,png,svg --exec \"node packages/tools/website/build.js && http-server docs -a localhost\"",
     "i": "lerna add --no-bootstrap --scope"
   },
   "husky": {
@@ -68,5 +69,9 @@
     "madge": "^4.0.2",
     "typedoc": "^0.17.8",
     "typescript": "^4.0.5"
+  },
+  "dependencies": {
+    "http-server": "^0.12.3",
+    "nodemon": "^2.0.9"
   }
 }

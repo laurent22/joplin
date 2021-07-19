@@ -11,8 +11,11 @@
 	<div class="field">
 		<label class="label">Email</label>
 		<div class="control">
-			<input class="input" type="email" name="email" value="{{user.email}}"/>
+			<input class="input" type="email" name="email" value="{{user.email}}" {{^canSetEmail}}disabled{{/canSetEmail}}/>
 		</div>
+		{{^canSetEmail}}
+			<p class="help">For security reasons the email cannot currently be changed. To request a change please contact {{global.supportEmail}}</p>
+		{{/canSetEmail}}	
 	</div>
 
 	{{#global.owner.is_admin}}
@@ -59,8 +62,9 @@
 	<div class="field">
 		<label class="label">Password</label>
 		<div class="control">
-			<input class="input" type="password" name="password" autocomplete="new-password"/>
+			<input id="password" class="input" type="password" name="password" autocomplete="new-password"/>
 		</div>
+		<p id="password_strength" class="help"></p>
 	</div>
 	<div class="field">
 		<label class="label">Repeat password</label>
@@ -83,12 +87,14 @@
 </form>
 
 <script>
-	onDocumentReady(function() {
+	$(() => {
 		document.getElementById("user_form").addEventListener('submit', function(event) {
 			if (event.submitter.getAttribute('name') === 'delete_button') {
 				const ok = confirm('Delete this user?');
 				if (!ok) event.preventDefault();
 			}
 		});
+
+		setupPasswordStrengthHandler();
 	});
 </script>

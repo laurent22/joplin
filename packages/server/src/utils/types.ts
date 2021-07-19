@@ -75,9 +75,15 @@ export interface MailerConfig {
 	noReplyEmail: string;
 }
 
-export interface StripeConfig {
-	secretKey: string;
+export interface StripePublicConfig {
 	publishableKey: string;
+	basicPriceId: string;
+	proPriceId: string;
+	webhookBaseUrl: string;
+}
+
+export interface StripeConfig extends StripePublicConfig {
+	secretKey: string;
 	webhookSecret: string;
 }
 
@@ -103,6 +109,8 @@ export interface Config {
 	database: DatabaseConfig;
 	mailer: MailerConfig;
 	stripe: StripeConfig;
+	supportEmail: string;
+	businessEmail: string;
 }
 
 export enum HttpMethod {

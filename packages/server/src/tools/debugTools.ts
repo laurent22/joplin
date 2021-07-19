@@ -21,7 +21,7 @@ export async function createTestUsers(db: DbConnection, config: Config) {
 	for (let userNum = 1; userNum <= 2; userNum++) {
 		await models.user().save({
 			email: `user${userNum}@example.com`,
-			password: '123456',
+			password: 'hunter1hunter2hunter3',
 			full_name: `User ${userNum}`,
 		});
 	}

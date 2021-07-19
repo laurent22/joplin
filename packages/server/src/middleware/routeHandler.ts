@@ -18,6 +18,7 @@ export default async function(ctx: AppContext) {
 				notifications: ctx.joplin.notifications || [],
 				hasNotifications: !!ctx.joplin.notifications && !!ctx.joplin.notifications.length,
 				owner: ctx.joplin.owner,
+				supportEmail: config().supportEmail,
 			});
 		} else {
 			ctx.response.status = 200;

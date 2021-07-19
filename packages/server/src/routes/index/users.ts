@@ -15,13 +15,14 @@ import uuidgen from '../../utils/uuidgen';
 import { formatMaxItemSize, formatMaxTotalSize, formatTotalSize, formatTotalSizePercent, yesOrNo } from '../../utils/strings';
 import { getCanShareFolder, totalSizeClass } from '../../models/utils/user';
 import { yesNoDefaultOptions } from '../../utils/views/select';
+import { confirmUrl } from '../../utils/urlUtils';
 
-interface CheckPasswordInput {
+export interface CheckRepeatPasswordInput {
 	password: string;
 	password2: string;
 }
 
-export function checkPassword(fields: CheckPasswordInput, required: boolean): string {
+export function checkRepeatPassword(fields: CheckRepeatPasswordInput, required: boolean): string {
 	if (fields.password) {
 		if (fields.password !== fields.password2) throw new ErrorUnprocessableEntity('Passwords do not match');
 		return fields.password;
@@ -57,7 +58,7 @@ function makeUser(isNew: boolean, fields: any): User {
 	if ('can_share_folder' in fields) user.can_share_folder = boolOrDefaultToValue(fields, 'can_share_folder');
 	if ('account_type' in fields) user.account_type = Number(fields.account_type);
 
-	const password = checkPassword(fields, false);
+	const password = checkRepeatPassword(fields, false);
 	if (password) user.password = password;
 
 	if (!isNew) user.id = fields.id;
@@ -143,8 +144,9 @@ router.get('users/:id', async (path: SubPath, ctx: AppContext, user: User = null
 	view.content.postUrl = postUrl;
 	view.content.showDeleteButton = !isNew && !!owner.is_admin && owner.id !== user.id;
 	view.content.showResetPasswordButton = !isNew && owner.is_admin;
-
+	view.content.canSetEmail = isNew || owner.is_admin;
 	view.content.canShareFolderOptions = yesNoDefaultOptions(user, 'can_share_folder');
+	view.jsFiles.push('zxcvbn');
 
 	if (config().accountTypesEnabled) {
 		view.content.showAccountTypes = true;
@@ -173,10 +175,12 @@ router.get('users/:id/confirm', async (path: SubPath, ctx: AppContext, error: Er
 				user,
 				error,
 				token,
-				postUrl: ctx.joplin.models.user().confirmUrl(userId, token),
+				postUrl: confirmUrl(userId, token),
 			},
 			navbar: false,
 		};
+
+		view.jsFiles.push('zxcvbn');
 
 		return view;
 	} else {
@@ -204,7 +208,7 @@ router.post('users/:id/confirm', async (path: SubPath, ctx: AppContext) => {
 		const fields = await bodyFields<SetPasswordFormData>(ctx.req);
 		await ctx.joplin.models.token().checkToken(userId, fields.token);
 
-		const password = checkPassword(fields, true);
+		const password = checkRepeatPassword(fields, true);
 
 		await ctx.joplin.models.user().save({ id: userId, password, must_set_password: 0 });
 		await ctx.joplin.models.token().deleteByValue(userId, fields.token);
@@ -266,6 +270,7 @@ router.post('users', async (path: SubPath, ctx: AppContext) => {
 
 		return redirect(ctx, `${config().baseUrl}/users${userIsMe(path) ? '/me' : ''}`);
 	} catch (error) {
+		error.message = `Error: Your changes were not saved: ${error.message}`;
 		if (error instanceof ErrorForbidden) throw error;
 		const endPoint = router.findEndPoint(HttpMethod.GET, 'users/:id');
 		return endPoint.handler(path, ctx, user, error);

@@ -3,6 +3,8 @@ import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
 import MarkdownIt = require('markdown-it');
+import config from '../../config';
+import markdownUtils from '@joplin/lib/markdownUtils';
 
 const router: Router = new Router(RouteType.Web);
 router.public = true;
@@ -13,7 +15,7 @@ router.get('privacy', async (_path: SubPath, _ctx: AppContext) => {
 
 ## Who are we?
 
-The Joplin Cloud web service is owned by Cozid Ltd, registered in England and Wales.
+The Joplin Cloud web service is owned by Cozic Ltd, registered in England and Wales.
 
 ## What information do we collect?
 
@@ -55,7 +57,7 @@ We keep your data for as long as you use the service. If you would like to stop 
 
 ## How to contact us?
 
-Please contact us at [team@joplincloud.com](mailto:team@joplincloud.com) for any question.`);
+Please contact us at [${markdownUtils.escapeTitleText(config().supportEmail)}](mailto:${markdownUtils.escapeLinkUrl(config().supportEmail)}) for any question.`);
 });
 
 export default router;

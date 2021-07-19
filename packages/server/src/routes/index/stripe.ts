@@ -41,6 +41,12 @@ interface CreateCheckoutSessionFields {
 	priceId: string;
 }
 
+function priceIdToAccountType(priceId: string): AccountType {
+	if (stripeConfig().basicPriceId === priceId) return AccountType.Basic;
+	if (stripeConfig().proPriceId === priceId) return AccountType.Pro;
+	throw new Error(`Unknown price ID: ${priceId}`);
+}
+
 type StripeRouteHandler = (stripe: Stripe, path: SubPath, ctx: AppContext)=> Promise<any>;
 
 const postHandlers: Record<string, StripeRouteHandler> = {
@@ -61,6 +67,9 @@ const postHandlers: Record<string, StripeRouteHandler> = {
 					quantity: 1,
 				},
 			],
+			subscription_data: {
+				trial_period_days: 14,
+			},
 			// {CHECKOUT_SESSION_ID} is a string literal; do not change it!
 			// the actual Session ID is returned in the query parameter when your customer
 			// is redirected to the success page.
@@ -68,10 +77,31 @@ const postHandlers: Record<string, StripeRouteHandler> = {
 			cancel_url: `${globalConfig().baseUrl}/stripe/cancel`,
 		});
 
+		logger.info('Created checkout session', session.id);
+
+		// Somehow Stripe doesn't send back the price ID to the hook when the
+		// subscription is created, so we keep a map of sessions to price IDs so that we
+		// can create the right account, either Basic or Pro.
+		await ctx.joplin.models.keyValue().setValue(`stripeSessionToPriceId::${session.id}`, priceId);
+
 		return {
 			sessionId: session.id,
 		};
 	},
+
+	// How to test the complete workflow locally:
+	//
+	// - In website/build.ts, set the env to "dev", then build the website - `npm run watch-website`
+	// - Start the Stripe CLI tool: `stripe listen --forward-to http://joplincloud.local:22300/stripe/webhook`
+	// - Copy the webhook secret, and paste it in joplin-credentials/server.env (under STRIPE_WEBHOOK_SECRET)
+	// - Start the local Joplin Server, `npm run start-dev`, running under http://joplincloud.local:22300
+	// - Start the workflow from http://localhost:8080/plans/
+	// - The local website often is not configured to send email, but you can see them in the database, in the "emails" table.
+	//
+	// Stripe config:
+	//
+	// - The public config is under packages/server/stripeConfig.json
+	// - The private config is in the server .env file
 
 	webhook: async (stripe: Stripe, _path: SubPath, ctx: AppContext) => {
 		const event = await stripeEvent(stripe, ctx.req);
@@ -130,6 +160,24 @@ const postHandlers: Record<string, StripeRouteHandler> = {
 				// }
 
 				const checkoutSession: Stripe.Checkout.Session = event.data.object as Stripe.Checkout.Session;
+				const userEmail = checkoutSession.customer_details.email || checkoutSession.customer_email;
+
+				logger.info('Checkout session completed:', checkoutSession.id);
+				logger.info('User email:', userEmail);
+
+				let accountType = AccountType.Basic;
+				try {
+					const priceId: string = await ctx.joplin.models.keyValue().value(`stripeSessionToPriceId::${checkoutSession.id}`);
+					accountType = priceIdToAccountType(priceId);
+					logger.info('Price ID:', priceId);
+				} catch (error) {
+					// We don't want this part to fail since the user has
+					// already paid at that point, so we just default to Basic
+					// in that case. Normally it shoud not happen anyway.
+					logger.error('Could not determine account type from price ID - defaulting to "Basic"', error);
+				}
+
+				logger.info('Account type:', accountType);
 
 				// The Stripe TypeScript object defines "customer" and
 				// "subscription" as various types but they are actually
@@ -138,8 +186,8 @@ const postHandlers: Record<string, StripeRouteHandler> = {
 				const stripeSubscriptionId = checkoutSession.subscription as string;
 
 				await ctx.joplin.models.subscription().saveUserAndSubscription(
-					checkoutSession.customer_details.email || checkoutSession.customer_email,
-					AccountType.Pro,
+					userEmail,
+					accountType,
 					stripeUserId,
 					stripeSubscriptionId
 				);
@@ -189,7 +237,7 @@ const getHandlers: Record<string, StripeRouteHandler> = {
 
 	success: async (_stripe: Stripe, _path: SubPath, _ctx: AppContext) => {
 		return `
-			<p>Thank you for signing up for ${globalConfig().appName} Pro! You should receive an email shortly with instructions on how to connect to your account.</p>
+			<p>Thank you for signing up for ${globalConfig().appName}! You should receive an email shortly with instructions on how to connect to your account.</p>
 			<p><a href="https://joplinapp.org">Go back to JoplinApp.org</a></p>
 		`;
 	},

@@ -14,7 +14,8 @@ https://github.com/laurent22/joplin/blob/dev/readme/stats.md
 -->
 
 	<head>
-		<meta
+<!-- Donate button A/B testing -->
+<script async src="https://www.googleoptimize.com/optimize.js?id=OPT-PW3ZPK3"></script>		<meta
 			charset="utf-8"
 			http-equiv="X-UA-Compatible"
 			content="IE=edge,chrome=1"
@@ -28,7 +29,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/stats.md
 			href="&#x2F;css/bootstrap5.0.2.min.css"
 			as="style"
 		/>
-		<link rel="stylesheet" href="&#x2F;css/fontawesome-all.min.css">
+		<link rel="stylesheet" href="&#x2F;css/fontawesome-all.min.css?t=1626455245563">
 		<link
 			href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
 			rel="stylesheet"
@@ -36,266 +37,234 @@ https://github.com/laurent22/joplin/blob/dev/readme/stats.md
 			media="all"
 			onload="this.media='all'; this.onload = null"
 		/>
-		<link rel="stylesheet" href="&#x2F;css/site.css" as="style" />
+		<link rel="stylesheet" href="&#x2F;css/site.css?t=1626455245563" as="style" />
 		<title>Joplin statistics | Joplin</title>
 	</head>
-	<body>
-		<div class="container-fluid" id="main-container">
-			<div class="with-profile white-bg" id="nav-section">
-				<div class="container">
-					<div class="row">
-						<div class="col-3">
-							<a href="https://joplinapp.org">
-								<img
-									src="&#x2F;images/logo-text-blue.svg"
-									alt=""
-									id="top-logo"
-									width="180"
-								>
-							</a>
+	<body class="website-env-prod">
+		<div class="container-fluid generic-template -page" id="main-container">
+
+<div class=" navbar-main white-bg" id="nav-section">
+	<div class="container">
+		<div class="row">
+			<div class="col-3">
+				<a href="/">
+					<img
+						src="&#x2F;images/logo-text-blue.svg"
+						alt=""
+						id="top-logo"
+						width="180"
+					/>
+				</a>
+			</div>
+			<div class="col-9 text-right d-none d-md-block">
+				<a href="/help/" class="fw500">Help</a>
+				<a href="https:&#x2F;&#x2F;discourse.joplinapp.org&#x2F;" class="fw500">Forum</a>
+<a class="button-link btn-blue sponsor-button" href="/donate">
+	<i class="fas fa-heart heart-full"></i><i class="far fa-heart heart-line"></i>&nbsp;Support us
+</a>			</div>
+			<div class="col-9 text-right d-block d-md-none">
+				<span class="pointer"
+					><img
+						src="&#x2F;images/mobile-menu-black-open-icon.png"
+						id="open-menu-mobile"
+						alt=""
+				/></span>
+				&nbsp;&nbsp;
+
+				<div id="menu-mobile">
+					<div>
+						<div class="text-right">
+							<img
+								src="&#x2F;images/close-icon.png"
+								alt=""
+								class="pointer"
+								id="close-menu-mobile"
+							/>
 						</div>
-						<div class="col-9 text-right d-none d-md-block">
-							<!-- <a href="#" class="fw500">Help</a> -->
 
-							<a href="https://joplinapp.org/gsoc2021/index/" class="fw500">GSoC 2021</a>
-							<a href="https://discourse.joplinapp.org/" class="fw500">Forum</a>
-
-							<!--
-							<a href="#" class="fw500">Joplin Cloud</a>
-
-							<a class="button-link btn-blue ml-20" href="#">
-								<img src="&#x2F;images/download-icon.svg" alt="" />&nbsp;
-								Download</a
-							>
-							-->
+						<div class="text-center menu-mobile-top">
+							<a href="https:&#x2F;&#x2F;discourse.joplinapp.org&#x2F;" class="fw500 mobile-menu-link">Forum</a>
+							<a href="/help/" class="fw500 mobile-menu-link">Help</a>
 						</div>
-						<div class="col-9 text-right d-block d-md-none">
-							<!--
-							<span class="pointer"
-								><img src="&#x2F;images/profile-black-icon.png" alt=""
-							/></span>
-							&nbsp;&nbsp;
-							-->
-							<span class="pointer"
-								><img
-									src="&#x2F;images/mobile-menu-black-open-icon.png"
-									id="open-menu-mobile"
-									alt=""
-							/></span>
-							&nbsp;&nbsp;
 
-							<div id="menu-mobile">
+						<div class="menu-mobile-buttons">
+<a class="button-link btn-blue sponsor-button" href="/donate">
+	<i class="fas fa-heart heart-full"></i><i class="far fa-heart heart-line"></i>&nbsp;Support us
+</a>						</div>
+					</div>
 
-								<div class="text-right">
-									<img
-										src="&#x2F;images/close-icon.png"
-										alt=""
-										class="pointer"
-										id="close-menu-mobile"
-									/>
-								</div>
-
-								<!--
-								<div class="text-center">
-									<img src="&#x2F;images/logo-text-blue.svg" alt="" />
-									<a href="#" class="fw500 mobile-menu-link">Contacts</a>
-									<a href="https://discourse.joplinapp.org/" class="fw500 mobile-menu-link">Forum</a>
-									<a href="#" class="fw500 mobile-menu-link">Help</a>
-								</div>
-								-->
-
-								<div id="toc-mobile"><div><ul>
+						<div id="toc-mobile"><div><ul>
 <li>
 <p>Applications</p>
 <ul>
-<li><a href="https://joplinapp.org/desktop/">Desktop application</a></li>
-<li><a href="https://joplinapp.org/mobile/">Mobile applications</a></li>
-<li><a href="https://joplinapp.org/terminal/">Terminal application</a></li>
-<li><a href="https://joplinapp.org/clipper/">Web Clipper</a></li>
+<li><a href="/desktop/">Desktop application</a></li>
+<li><a href="/mobile/">Mobile applications</a></li>
+<li><a href="/terminal/">Terminal application</a></li>
+<li><a href="/clipper/">Web Clipper</a></li>
 </ul>
 </li>
 <li>
 <p>Support</p>
 <ul>
 <li><a href="https://discourse.joplinapp.org">Joplin Forum</a></li>
-<li><a href="https://joplinapp.org/markdown/">Markdown Guide</a></li>
-<li><a href="https://joplinapp.org/e2ee/">How to enable end-to-end encryption</a></li>
-<li><a href="https://joplinapp.org/conflict/">What is a conflict?</a></li>
-<li><a href="https://joplinapp.org/debugging/">How to enable debug mode</a></li>
-<li><a href="https://joplinapp.org/rich_text_editor/">About the Rich Text editor limitations</a></li>
-<li><a href="https://joplinapp.org/faq/">FAQ</a></li>
+<li><a href="/markdown/">Markdown Guide</a></li>
+<li><a href="/e2ee/">How to enable end-to-end encryption</a></li>
+<li><a href="/conflict/">What is a conflict?</a></li>
+<li><a href="/debugging/">How to enable debug mode</a></li>
+<li><a href="/rich_text_editor/">About the Rich Text editor limitations</a></li>
+<li><a href="/faq/">FAQ</a></li>
 </ul>
 </li>
 <li>
 <p>Joplin API - Get Started</p>
 <ul>
-<li><a href="https://joplinapp.org/api/overview/">Joplin API Overview</a></li>
-<li><a href="https://joplinapp.org/api/get_started/plugins/">Plugin development</a></li>
-<li><a href="https://joplinapp.org/api/tutorials/toc_plugin/">Plugin tutorial</a></li>
+<li><a href="/api/overview/">Joplin API Overview</a></li>
+<li><a href="/api/get_started/plugins/">Plugin development</a></li>
+<li><a href="/api/tutorials/toc_plugin/">Plugin tutorial</a></li>
 </ul>
 </li>
 <li>
 <p>Joplin API - References</p>
 <ul>
 <li><a href="https://joplinapp.org/api/references/plugin_api/classes/joplin.html">Plugin API</a></li>
-<li><a href="https://joplinapp.org/api/references/rest_api/">Data API</a></li>
-<li><a href="https://joplinapp.org/api/references/plugin_manifest/">Plugin manifest</a></li>
-<li><a href="https://joplinapp.org/api/references/plugin_loading_rules/">Plugin loading rules</a></li>
-<li><a href="https://joplinapp.org/api/references/plugin_theming/">Plugin theming</a></li>
+<li><a href="/api/references/rest_api/">Data API</a></li>
+<li><a href="/api/references/plugin_manifest/">Plugin manifest</a></li>
+<li><a href="/api/references/plugin_loading_rules/">Plugin loading rules</a></li>
+<li><a href="/api/references/plugin_theming/">Plugin theming</a></li>
 </ul>
 </li>
 <li>
 <p>Development</p>
 <ul>
 <li><a href="https://github.com/laurent22/joplin/blob/dev/BUILD.md">How to build the apps</a></li>
-<li><a href="https://joplinapp.org/spec/e2ee/">End-to-end encryption spec</a></li>
-<li><a href="https://joplinapp.org/spec/history/">Note History spec</a></li>
-<li><a href="https://joplinapp.org/spec/sync_lock/">Sync Lock spec</a></li>
-<li><a href="https://joplinapp.org/spec/plugins/">Plugin Architecture spec</a></li>
-<li><a href="https://joplinapp.org/spec/search_sorting/">Search Sorting spec</a></li>
-<li><a href="https://joplinapp.org/spec/server_file_url_format/">Server: File URL Format</a></li>
-<li><a href="https://joplinapp.org/spec/server_delta_sync/">Server: Delta Sync</a></li>
-<li><a href="https://joplinapp.org/spec/server_sharing/">Server: Sharing</a></li>
+<li><a href="/spec/e2ee/">End-to-end encryption spec</a></li>
+<li><a href="/spec/history/">Note History spec</a></li>
+<li><a href="/spec/sync_lock/">Sync Lock spec</a></li>
+<li><a href="/spec/plugins/">Plugin Architecture spec</a></li>
+<li><a href="/spec/search_sorting/">Search Sorting spec</a></li>
+<li><a href="/spec/server_file_url_format/">Server: File URL Format</a></li>
+<li><a href="/spec/server_delta_sync/">Server: Delta Sync</a></li>
+<li><a href="/spec/server_sharing/">Server: Sharing</a></li>
 </ul>
 </li>
 <li>
 <p>Google Summer of Code 2021</p>
 <ul>
-<li><a href="https://joplinapp.org/gsoc2021/index/">Google Summer of Code 2021</a></li>
-<li><a href="https://joplinapp.org/gsoc2021/pull_request_guidelines/">How to submit a GSoC pull request</a></li>
-<li><a href="https://joplinapp.org/gsoc2021/ideas/">Project Ideas</a></li>
+<li><a href="/gsoc2021/index/">Google Summer of Code 2021</a></li>
+<li><a href="/gsoc2021/pull_request_guidelines/">How to submit a GSoC pull request</a></li>
+<li><a href="/gsoc2021/ideas/">Project Ideas</a></li>
 </ul>
 </li>
 <li>
 <p>About</p>
 <ul>
-<li><a href="https://joplinapp.org/changelog/">Changelog (Desktop App)</a></li>
-<li><a href="https://joplinapp.org/changelog_cli/">Changelog (CLI App)</a></li>
-<li><a href="https://joplinapp.org/changelog_server/">Changelog (Server)</a></li>
-<li><a href="https://joplinapp.org/stats/">Stats</a></li>
-<li><a href="https://joplinapp.org/donate/">Donate</a></li>
+<li><a href="/changelog/">Changelog (Desktop App)</a></li>
+<li><a href="/changelog_cli/">Changelog (CLI App)</a></li>
+<li><a href="/changelog_server/">Changelog (Server)</a></li>
+<li><a href="/stats/">Stats</a></li>
+<li><a href="/donate/">Donate</a></li>
 </ul>
 </li>
 </ul>
 </div></div>
-
-								<!--
-								<br />
-								<br />
-								<br />
-								<br />
-								<a class="button-link btn-blue" href="#">
-									<img src="&#x2F;images/download-icon.svg" alt="" />
-									Download</a
-								>
-								<br />
-								<p class="light-blue mobile-menu-link-bottom text-center">
-									Joplin© 2021, All rights reserved
-									<br />
-									<a href="#" class="fw500">Terms & Conditions</a>
-									<br />
-									<a href="#" class="fw500">Privacy Policy</a>
-								</p>
-								-->
-							</div>
-						</div>
+					
+					<div>
+						<p class="light-blue mobile-menu-link-bottom text-center">
+							Copyright &copy; 2016-2021 Laurent&nbsp;Cozic
+							<br/>
+							<a href="/privacy/" class="fw500">Privacy Policy</a>
+						</p>
 					</div>
 				</div>
 			</div>
-
+		</div>
+	</div>
+</div>
 			<div class="page-container page-stats">
 				<div class="container">
-					<!--
-					<div class="row">
-						<div class="col-12">
-							<h1 class="text-center">
-								Page <span class="frame-bg frame-bg-yellow">title</span>
-							</h1>
-							<p class="text-center">Hello word</p>
-						</div>
-					</div>
-					-->
-
-					<br />
 					<div class="row content-wrapper">
 						<div id="toc"><div><ul>
 <li>
 <p>Applications</p>
 <ul>
-<li><a href="https://joplinapp.org/desktop/">Desktop application</a></li>
-<li><a href="https://joplinapp.org/mobile/">Mobile applications</a></li>
-<li><a href="https://joplinapp.org/terminal/">Terminal application</a></li>
-<li><a href="https://joplinapp.org/clipper/">Web Clipper</a></li>
+<li><a href="/desktop/">Desktop application</a></li>
+<li><a href="/mobile/">Mobile applications</a></li>
+<li><a href="/terminal/">Terminal application</a></li>
+<li><a href="/clipper/">Web Clipper</a></li>
 </ul>
 </li>
 <li>
 <p>Support</p>
 <ul>
 <li><a href="https://discourse.joplinapp.org">Joplin Forum</a></li>
-<li><a href="https://joplinapp.org/markdown/">Markdown Guide</a></li>
-<li><a href="https://joplinapp.org/e2ee/">How to enable end-to-end encryption</a></li>
-<li><a href="https://joplinapp.org/conflict/">What is a conflict?</a></li>
-<li><a href="https://joplinapp.org/debugging/">How to enable debug mode</a></li>
-<li><a href="https://joplinapp.org/rich_text_editor/">About the Rich Text editor limitations</a></li>
-<li><a href="https://joplinapp.org/faq/">FAQ</a></li>
+<li><a href="/markdown/">Markdown Guide</a></li>
+<li><a href="/e2ee/">How to enable end-to-end encryption</a></li>
+<li><a href="/conflict/">What is a conflict?</a></li>
+<li><a href="/debugging/">How to enable debug mode</a></li>
+<li><a href="/rich_text_editor/">About the Rich Text editor limitations</a></li>
+<li><a href="/faq/">FAQ</a></li>
 </ul>
 </li>
 <li>
 <p>Joplin API - Get Started</p>
 <ul>
-<li><a href="https://joplinapp.org/api/overview/">Joplin API Overview</a></li>
-<li><a href="https://joplinapp.org/api/get_started/plugins/">Plugin development</a></li>
-<li><a href="https://joplinapp.org/api/tutorials/toc_plugin/">Plugin tutorial</a></li>
+<li><a href="/api/overview/">Joplin API Overview</a></li>
+<li><a href="/api/get_started/plugins/">Plugin development</a></li>
+<li><a href="/api/tutorials/toc_plugin/">Plugin tutorial</a></li>
 </ul>
 </li>
 <li>
 <p>Joplin API - References</p>
 <ul>
 <li><a href="https://joplinapp.org/api/references/plugin_api/classes/joplin.html">Plugin API</a></li>
-<li><a href="https://joplinapp.org/api/references/rest_api/">Data API</a></li>
-<li><a href="https://joplinapp.org/api/references/plugin_manifest/">Plugin manifest</a></li>
-<li><a href="https://joplinapp.org/api/references/plugin_loading_rules/">Plugin loading rules</a></li>
-<li><a href="https://joplinapp.org/api/references/plugin_theming/">Plugin theming</a></li>
+<li><a href="/api/references/rest_api/">Data API</a></li>
+<li><a href="/api/references/plugin_manifest/">Plugin manifest</a></li>
+<li><a href="/api/references/plugin_loading_rules/">Plugin loading rules</a></li>
+<li><a href="/api/references/plugin_theming/">Plugin theming</a></li>
 </ul>
 </li>
 <li>
 <p>Development</p>
 <ul>
 <li><a href="https://github.com/laurent22/joplin/blob/dev/BUILD.md">How to build the apps</a></li>
-<li><a href="https://joplinapp.org/spec/e2ee/">End-to-end encryption spec</a></li>
-<li><a href="https://joplinapp.org/spec/history/">Note History spec</a></li>
-<li><a href="https://joplinapp.org/spec/sync_lock/">Sync Lock spec</a></li>
-<li><a href="https://joplinapp.org/spec/plugins/">Plugin Architecture spec</a></li>
-<li><a href="https://joplinapp.org/spec/search_sorting/">Search Sorting spec</a></li>
-<li><a href="https://joplinapp.org/spec/server_file_url_format/">Server: File URL Format</a></li>
-<li><a href="https://joplinapp.org/spec/server_delta_sync/">Server: Delta Sync</a></li>
-<li><a href="https://joplinapp.org/spec/server_sharing/">Server: Sharing</a></li>
+<li><a href="/spec/e2ee/">End-to-end encryption spec</a></li>
+<li><a href="/spec/history/">Note History spec</a></li>
+<li><a href="/spec/sync_lock/">Sync Lock spec</a></li>
+<li><a href="/spec/plugins/">Plugin Architecture spec</a></li>
+<li><a href="/spec/search_sorting/">Search Sorting spec</a></li>
+<li><a href="/spec/server_file_url_format/">Server: File URL Format</a></li>
+<li><a href="/spec/server_delta_sync/">Server: Delta Sync</a></li>
+<li><a href="/spec/server_sharing/">Server: Sharing</a></li>
 </ul>
 </li>
 <li>
 <p>Google Summer of Code 2021</p>
 <ul>
-<li><a href="https://joplinapp.org/gsoc2021/index/">Google Summer of Code 2021</a></li>
-<li><a href="https://joplinapp.org/gsoc2021/pull_request_guidelines/">How to submit a GSoC pull request</a></li>
-<li><a href="https://joplinapp.org/gsoc2021/ideas/">Project Ideas</a></li>
+<li><a href="/gsoc2021/index/">Google Summer of Code 2021</a></li>
+<li><a href="/gsoc2021/pull_request_guidelines/">How to submit a GSoC pull request</a></li>
+<li><a href="/gsoc2021/ideas/">Project Ideas</a></li>
 </ul>
 </li>
 <li>
 <p>About</p>
 <ul>
-<li><a href="https://joplinapp.org/changelog/">Changelog (Desktop App)</a></li>
-<li><a href="https://joplinapp.org/changelog_cli/">Changelog (CLI App)</a></li>
-<li><a href="https://joplinapp.org/changelog_server/">Changelog (Server)</a></li>
-<li><a href="https://joplinapp.org/stats/">Stats</a></li>
-<li><a href="https://joplinapp.org/donate/">Donate</a></li>
+<li><a href="/changelog/">Changelog (Desktop App)</a></li>
+<li><a href="/changelog_cli/">Changelog (CLI App)</a></li>
+<li><a href="/changelog_server/">Changelog (Server)</a></li>
+<li><a href="/stats/">Stats</a></li>
+<li><a href="/donate/">Donate</a></li>
 </ul>
 </li>
 </ul>
 </div></div>
 
 						<div class="main-content">
-							<p><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=E8JMYD2LQ8MMA&amp;lc=GB&amp;item_name=Joplin+Development&amp;currency_code=EUR&amp;bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted"><img src="https://joplinapp.org/images/badges/Donate-PayPal-green.svg" alt="Donate using PayPal"></a> <a href="https://github.com/sponsors/laurent22/"><img src="https://joplinapp.org/images/badges/GitHub-Badge.svg" alt="Sponsor on GitHub"></a> <a href="https://www.patreon.com/joplin"><img src="https://joplinapp.org/images/badges/Patreon-Badge.svg" alt="Become a patron"></a> <a href="https://joplinapp.org/donate/#donations"><img src="https://joplinapp.org/images/badges/Donate-IBAN.svg" alt="Donate using IBAN"></a></p>
-<hr>
+							<div class="alert alert-danger alert-env-dev" role="alert">
+								Running in prod mode!
+							</div>
+							<div class="donate-links">
+<p><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=E8JMYD2LQ8MMA&amp;lc=GB&amp;item_name=Joplin+Development&amp;currency_code=EUR&amp;bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted"><img src="https://joplinapp.org/images/badges/Donate-PayPal-green.svg" alt="Donate using PayPal"></a> <a href="https://github.com/sponsors/laurent22/"><img src="https://joplinapp.org/images/badges/GitHub-Badge.svg" alt="Sponsor on GitHub"></a> <a href="https://www.patreon.com/joplin"><img src="https://joplinapp.org/images/badges/Patreon-Badge.svg" alt="Become a patron"></a> <a href="https://joplinapp.org/donate/#donations"><img src="https://joplinapp.org/images/badges/Donate-IBAN.svg" alt="Donate using IBAN"></a></p>
+</div>
 <h1>Joplin statistics<a name="joplin-statistics" href="#joplin-statistics" class="heading-anchor">🔗</a></h1>
 <table class="table">
 <thead>
@@ -307,15 +276,15 @@ https://github.com/laurent22/joplin/blob/dev/readme/stats.md
 <tbody>
 <tr>
 <td>Total Windows downloads</td>
-<td>1,502,694</td>
+<td>1,527,447</td>
 </tr>
 <tr>
 <td>Total macOs downloads</td>
-<td>584,828</td>
+<td>594,414</td>
 </tr>
 <tr>
 <td>Total Linux downloads</td>
-<td>495,460</td>
+<td>505,584</td>
 </tr>
 <tr>
 <td>Windows %</td>
@@ -345,1012 +314,1020 @@ https://github.com/laurent22/joplin/blob/dev/readme/stats.md
 </thead>
 <tbody>
 <tr>
+<td><a href="https://github.com/laurent22/joplin/releases/tag/v2.2.1">v2.2.1</a> (p)</td>
+<td>2021-07-09T17:38:25Z</td>
+<td>1,397</td>
+<td>305</td>
+<td>270</td>
+<td>1,972</td>
+</tr>
+<tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v2.1.8">v2.1.8</a></td>
 <td>2021-07-03T08:25:16Z</td>
-<td>4,574</td>
-<td>2,148</td>
-<td>1,217</td>
-<td>7,939</td>
+<td>25,564</td>
+<td>10,873</td>
+<td>10,958</td>
+<td>47,395</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v2.1.7">v2.1.7</a></td>
 <td>2021-06-26T19:48:55Z</td>
-<td>13,119</td>
-<td>6,301</td>
-<td>3,552</td>
-<td>22,972</td>
+<td>13,223</td>
+<td>6,350</td>
+<td>3,569</td>
+<td>23,142</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v2.1.5">v2.1.5</a> (p)</td>
 <td>2021-06-23T15:08:52Z</td>
-<td>884</td>
-<td>213</td>
-<td>159</td>
-<td>1,256</td>
+<td>916</td>
+<td>215</td>
+<td>161</td>
+<td>1,292</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v2.1.3">v2.1.3</a> (p)</td>
 <td>2021-06-19T16:32:51Z</td>
-<td>1,040</td>
-<td>275</td>
-<td>179</td>
-<td>1,494</td>
+<td>1,068</td>
+<td>278</td>
+<td>182</td>
+<td>1,528</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v2.0.11">v2.0.11</a></td>
 <td>2021-06-16T17:55:49Z</td>
-<td>22,270</td>
-<td>9,175</td>
-<td>9,694</td>
-<td>41,139</td>
+<td>22,335</td>
+<td>9,184</td>
+<td>9,713</td>
+<td>41,232</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v2.0.10">v2.0.10</a></td>
 <td>2021-06-16T07:58:29Z</td>
-<td>1,922</td>
-<td>896</td>
-<td>333</td>
-<td>3,151</td>
+<td>1,942</td>
+<td>899</td>
+<td>334</td>
+<td>3,175</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v2.0.9">v2.0.9</a> (p)</td>
 <td>2021-06-12T09:30:30Z</td>
-<td>993</td>
-<td>273</td>
-<td>854</td>
-<td>2,120</td>
+<td>1,011</td>
+<td>275</td>
+<td>855</td>
+<td>2,141</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v2.0.8">v2.0.8</a> (p)</td>
 <td>2021-06-10T16:15:08Z</td>
-<td>645</td>
-<td>207</td>
-<td>543</td>
-<td>1,395</td>
+<td>661</td>
+<td>211</td>
+<td>546</td>
+<td>1,418</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v2.0.4">v2.0.4</a> (p)</td>
 <td>2021-06-02T12:54:17Z</td>
-<td>1,289</td>
-<td>376</td>
-<td>356</td>
-<td>2,021</td>
+<td>1,306</td>
+<td>378</td>
+<td>358</td>
+<td>2,042</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v2.0.2">v2.0.2</a> (p)</td>
 <td>2021-05-21T18:07:48Z</td>
-<td>2,124</td>
-<td>473</td>
+<td>2,152</td>
+<td>475</td>
 <td>1,643</td>
-<td>4,240</td>
+<td>4,270</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v2.0.1">v2.0.1</a> (p)</td>
 <td>2021-05-15T13:22:58Z</td>
-<td>792</td>
-<td>248</td>
-<td>998</td>
-<td>2,038</td>
+<td>808</td>
+<td>249</td>
+<td>999</td>
+<td>2,056</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.8.5">v1.8.5</a></td>
 <td>2021-05-10T11:58:14Z</td>
-<td>36,901</td>
-<td>16,177</td>
-<td>19,312</td>
-<td>72,390</td>
+<td>36,947</td>
+<td>16,186</td>
+<td>19,320</td>
+<td>72,453</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.8.4">v1.8.4</a> (p)</td>
 <td>2021-05-09T18:05:05Z</td>
-<td>698</td>
-<td>122</td>
+<td>713</td>
+<td>123</td>
 <td>435</td>
-<td>1,255</td>
+<td>1,271</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.8.3">v1.8.3</a> (p)</td>
 <td>2021-05-04T10:38:16Z</td>
-<td>1,367</td>
-<td>295</td>
-<td>914</td>
-<td>2,576</td>
+<td>1,394</td>
+<td>296</td>
+<td>916</td>
+<td>2,606</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.8.2">v1.8.2</a> (p)</td>
 <td>2021-04-25T10:50:51Z</td>
-<td>1,544</td>
-<td>422</td>
+<td>1,582</td>
+<td>423</td>
 <td>1,264</td>
-<td>3,230</td>
+<td>3,269</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.8.1">v1.8.1</a> (p)</td>
 <td>2021-03-29T10:46:41Z</td>
-<td>3,072</td>
-<td>807</td>
+<td>3,086</td>
+<td>808</td>
 <td>2,423</td>
-<td>6,302</td>
+<td>6,317</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.7.11">v1.7.11</a></td>
 <td>2021-02-03T12:50:01Z</td>
-<td>114,201</td>
-<td>42,595</td>
-<td>64,116</td>
-<td>220,912</td>
+<td>114,301</td>
+<td>42,609</td>
+<td>64,127</td>
+<td>221,037</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.7.10">v1.7.10</a></td>
 <td>2021-01-30T13:25:29Z</td>
-<td>13,845</td>
-<td>4,834</td>
-<td>4,433</td>
-<td>23,112</td>
+<td>13,855</td>
+<td>4,835</td>
+<td>4,434</td>
+<td>23,124</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.7.9">v1.7.9</a> (p)</td>
 <td>2021-01-28T09:50:21Z</td>
-<td>481</td>
-<td>124</td>
 <td>484</td>
-<td>1,089</td>
+<td>125</td>
+<td>484</td>
+<td>1,093</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.7.6">v1.7.6</a> (p)</td>
 <td>2021-01-27T10:36:05Z</td>
-<td>284</td>
-<td>83</td>
+<td>288</td>
+<td>84</td>
 <td>278</td>
-<td>645</td>
+<td>650</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.7.5">v1.7.5</a> (p)</td>
 <td>2021-01-26T09:53:05Z</td>
-<td>364</td>
-<td>196</td>
+<td>366</td>
+<td>198</td>
 <td>445</td>
-<td>1,005</td>
+<td>1,009</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.7.4">v1.7.4</a> (p)</td>
 <td>2021-01-22T17:58:38Z</td>
-<td>673</td>
-<td>196</td>
+<td>675</td>
+<td>197</td>
 <td>614</td>
-<td>1,483</td>
+<td>1,486</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.6.8">v1.6.8</a></td>
 <td>2021-01-20T18:11:34Z</td>
-<td>18,270</td>
-<td>7,671</td>
+<td>18,330</td>
+<td>7,672</td>
 <td>7,582</td>
-<td>33,523</td>
+<td>33,584</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.7.3">v1.7.3</a> (p)</td>
 <td>2021-01-20T11:23:50Z</td>
-<td>334</td>
-<td>69</td>
+<td>336</td>
+<td>70</td>
 <td>437</td>
-<td>840</td>
+<td>843</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.6.7">v1.6.7</a></td>
 <td>2021-01-11T23:20:33Z</td>
-<td>10,498</td>
-<td>4,619</td>
+<td>10,539</td>
+<td>4,621</td>
 <td>4,534</td>
-<td>19,651</td>
+<td>19,694</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.6.6">v1.6.6</a></td>
 <td>2021-01-09T16:15:31Z</td>
-<td>12,367</td>
-<td>3,407</td>
-<td>4,778</td>
-<td>20,552</td>
+<td>12,383</td>
+<td>3,408</td>
+<td>4,779</td>
+<td>20,570</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.6.5">v1.6.5</a> (p)</td>
 <td>2021-01-09T01:24:32Z</td>
-<td>644</td>
-<td>58</td>
+<td>672</td>
+<td>60</td>
 <td>301</td>
-<td>1,003</td>
+<td>1,033</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.6.4">v1.6.4</a> (p)</td>
 <td>2021-01-07T19:11:32Z</td>
-<td>381</td>
-<td>73</td>
+<td>383</td>
+<td>75</td>
 <td>198</td>
-<td>652</td>
+<td>656</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.6.2">v1.6.2</a> (p)</td>
 <td>2021-01-04T22:34:55Z</td>
-<td>665</td>
-<td>222</td>
+<td>667</td>
+<td>225</td>
 <td>585</td>
-<td>1,472</td>
+<td>1,477</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.5.14">v1.5.14</a></td>
 <td>2020-12-30T01:48:46Z</td>
-<td>10,969</td>
-<td>5,194</td>
+<td>11,012</td>
+<td>5,195</td>
 <td>5,513</td>
-<td>21,676</td>
+<td>21,720</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.6.1">v1.6.1</a> (p)</td>
 <td>2020-12-29T19:37:45Z</td>
-<td>162</td>
-<td>33</td>
+<td>164</td>
+<td>34</td>
 <td>157</td>
-<td>352</td>
+<td>355</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.5.13">v1.5.13</a></td>
 <td>2020-12-29T18:29:15Z</td>
-<td>609</td>
-<td>213</td>
+<td>611</td>
+<td>214</td>
 <td>191</td>
-<td>1,013</td>
+<td>1,016</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.5.12">v1.5.12</a></td>
 <td>2020-12-28T15:14:08Z</td>
-<td>2,389</td>
-<td>1,763</td>
+<td>2,391</td>
+<td>1,765</td>
 <td>912</td>
-<td>5,064</td>
+<td>5,068</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.5.11">v1.5.11</a></td>
 <td>2020-12-27T19:54:07Z</td>
-<td>14,030</td>
-<td>4,607</td>
+<td>14,048</td>
+<td>4,615</td>
 <td>4,257</td>
-<td>22,894</td>
+<td>22,920</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.5.10">v1.5.10</a> (p)</td>
 <td>2020-12-26T12:35:36Z</td>
-<td>288</td>
-<td>103</td>
+<td>290</td>
+<td>104</td>
 <td>256</td>
-<td>647</td>
+<td>650</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.5.9">v1.5.9</a> (p)</td>
 <td>2020-12-23T18:01:08Z</td>
-<td>321</td>
-<td>368</td>
+<td>323</td>
+<td>369</td>
 <td>400</td>
-<td>1,089</td>
+<td>1,092</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.5.8">v1.5.8</a> (p)</td>
 <td>2020-12-20T09:45:19Z</td>
-<td>559</td>
-<td>159</td>
+<td>561</td>
+<td>160</td>
 <td>632</td>
-<td>1,350</td>
+<td>1,353</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.5.7">v1.5.7</a> (p)</td>
 <td>2020-12-10T12:58:33Z</td>
-<td>880</td>
-<td>249</td>
+<td>882</td>
+<td>250</td>
 <td>983</td>
-<td>2,112</td>
+<td>2,115</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.5.4">v1.5.4</a> (p)</td>
 <td>2020-12-05T12:07:49Z</td>
-<td>686</td>
-<td>162</td>
+<td>688</td>
+<td>163</td>
 <td>624</td>
-<td>1,472</td>
+<td>1,475</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.4.19">v1.4.19</a></td>
 <td>2020-12-01T11:11:16Z</td>
-<td>25,618</td>
-<td>13,380</td>
-<td>11,622</td>
-<td>50,620</td>
+<td>25,666</td>
+<td>13,384</td>
+<td>11,626</td>
+<td>50,676</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.4.18">v1.4.18</a></td>
 <td>2020-11-28T12:21:41Z</td>
-<td>11,103</td>
-<td>3,872</td>
-<td>3,085</td>
-<td>18,060</td>
+<td>11,119</td>
+<td>3,873</td>
+<td>3,088</td>
+<td>18,080</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.4.16">v1.4.16</a></td>
 <td>2020-11-27T19:40:16Z</td>
-<td>1,463</td>
-<td>823</td>
+<td>1,465</td>
+<td>824</td>
 <td>585</td>
-<td>2,871</td>
+<td>2,874</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.4.15">v1.4.15</a></td>
 <td>2020-11-27T13:25:43Z</td>
-<td>878</td>
-<td>483</td>
+<td>881</td>
+<td>484</td>
 <td>263</td>
-<td>1,624</td>
+<td>1,628</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.4.12">v1.4.12</a></td>
 <td>2020-11-23T18:58:07Z</td>
-<td>3,000</td>
-<td>1,317</td>
-<td>1,290</td>
-<td>5,607</td>
+<td>3,002</td>
+<td>1,319</td>
+<td>1,291</td>
+<td>5,612</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.4.11">v1.4.11</a> (p)</td>
 <td>2020-11-19T23:06:51Z</td>
-<td>1,044</td>
-<td>148</td>
+<td>1,084</td>
+<td>152</td>
 <td>575</td>
-<td>1,767</td>
+<td>1,811</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.4.10">v1.4.10</a> (p)</td>
 <td>2020-11-14T09:53:15Z</td>
-<td>614</td>
-<td>187</td>
+<td>616</td>
+<td>191</td>
 <td>677</td>
-<td>1,478</td>
+<td>1,484</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.4.9">v1.4.9</a> (p)</td>
 <td>2020-11-11T14:23:17Z</td>
-<td>517</td>
-<td>134</td>
+<td>554</td>
+<td>137</td>
 <td>394</td>
-<td>1,045</td>
+<td>1,085</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.4.7">v1.4.7</a> (p)</td>
 <td>2020-11-07T18:23:29Z</td>
-<td>511</td>
-<td>167</td>
+<td>514</td>
+<td>169</td>
 <td>507</td>
-<td>1,185</td>
+<td>1,190</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.3.18">v1.3.18</a></td>
 <td>2020-11-06T12:07:02Z</td>
-<td>30,816</td>
-<td>11,320</td>
+<td>30,891</td>
+<td>11,322</td>
 <td>10,498</td>
-<td>52,634</td>
+<td>52,711</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.3.17">v1.3.17</a> (p)</td>
 <td>2020-11-06T11:35:15Z</td>
-<td>44</td>
-<td>17</td>
+<td>46</td>
+<td>19</td>
 <td>16</td>
-<td>77</td>
+<td>81</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.4.6">v1.4.6</a> (p)</td>
 <td>2020-11-05T22:44:12Z</td>
-<td>356</td>
-<td>87</td>
+<td>387</td>
+<td>89</td>
 <td>46</td>
-<td>489</td>
+<td>522</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.3.15">v1.3.15</a></td>
 <td>2020-11-04T12:22:50Z</td>
-<td>2,239</td>
-<td>1,291</td>
+<td>2,277</td>
+<td>1,294</td>
 <td>837</td>
-<td>4,367</td>
+<td>4,408</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.3.11">v1.3.11</a> (p)</td>
 <td>2020-10-31T13:22:20Z</td>
-<td>693</td>
-<td>179</td>
+<td>695</td>
+<td>182</td>
 <td>473</td>
-<td>1,345</td>
+<td>1,350</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.3.10">v1.3.10</a> (p)</td>
 <td>2020-10-29T13:27:14Z</td>
-<td>369</td>
-<td>108</td>
+<td>372</td>
+<td>110</td>
 <td>308</td>
-<td>785</td>
+<td>790</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.3.9">v1.3.9</a> (p)</td>
 <td>2020-10-23T16:04:26Z</td>
-<td>830</td>
-<td>234</td>
+<td>834</td>
+<td>236</td>
 <td>625</td>
-<td>1,689</td>
+<td>1,695</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.3.8">v1.3.8</a> (p)</td>
 <td>2020-10-21T18:46:29Z</td>
-<td>510</td>
-<td>105</td>
+<td>512</td>
+<td>109</td>
 <td>322</td>
-<td>937</td>
+<td>943</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.3.7">v1.3.7</a> (p)</td>
 <td>2020-10-20T11:35:55Z</td>
-<td>291</td>
-<td>77</td>
+<td>293</td>
+<td>79</td>
 <td>335</td>
-<td>703</td>
+<td>707</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.3.5">v1.3.5</a> (p)</td>
 <td>2020-10-17T14:26:35Z</td>
-<td>464</td>
-<td>127</td>
+<td>466</td>
+<td>129</td>
 <td>398</td>
-<td>989</td>
+<td>993</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.3.3">v1.3.3</a> (p)</td>
 <td>2020-10-17T10:56:57Z</td>
-<td>113</td>
-<td>39</td>
+<td>116</td>
+<td>43</td>
 <td>26</td>
-<td>178</td>
+<td>185</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.3.2">v1.3.2</a> (p)</td>
 <td>2020-10-11T20:39:49Z</td>
-<td>659</td>
-<td>174</td>
+<td>663</td>
+<td>176</td>
 <td>557</td>
-<td>1,390</td>
+<td>1,396</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.3.1">v1.3.1</a> (p)</td>
 <td>2020-10-11T15:10:18Z</td>
-<td>77</td>
-<td>46</td>
+<td>79</td>
+<td>48</td>
 <td>36</td>
-<td>159</td>
+<td>163</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.2.6">v1.2.6</a></td>
 <td>2020-10-09T13:56:59Z</td>
-<td>44,359</td>
-<td>17,716</td>
+<td>44,440</td>
+<td>17,720</td>
 <td>14,027</td>
-<td>76,102</td>
+<td>76,187</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.2.4">v1.2.4</a> (p)</td>
 <td>2020-09-30T07:34:29Z</td>
-<td>808</td>
-<td>240</td>
+<td>810</td>
+<td>242</td>
 <td>791</td>
-<td>1,839</td>
+<td>1,843</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.2.3">v1.2.3</a> (p)</td>
 <td>2020-09-29T15:13:02Z</td>
-<td>212</td>
-<td>61</td>
+<td>214</td>
+<td>63</td>
 <td>72</td>
-<td>345</td>
+<td>349</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.2.2">v1.2.2</a> (p)</td>
 <td>2020-09-22T20:31:55Z</td>
-<td>794</td>
-<td>199</td>
+<td>825</td>
+<td>202</td>
 <td>631</td>
-<td>1,624</td>
+<td>1,658</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.1.4">v1.1.4</a></td>
 <td>2020-09-21T11:20:09Z</td>
-<td>27,657</td>
-<td>13,490</td>
-<td>7,740</td>
-<td>48,887</td>
+<td>27,692</td>
+<td>13,492</td>
+<td>7,741</td>
+<td>48,925</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.1.3">v1.1.3</a> (p)</td>
 <td>2020-09-17T10:30:37Z</td>
-<td>557</td>
-<td>147</td>
+<td>560</td>
+<td>149</td>
 <td>457</td>
-<td>1,161</td>
+<td>1,166</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.1.2">v1.1.2</a> (p)</td>
 <td>2020-09-15T12:58:38Z</td>
-<td>372</td>
-<td>112</td>
+<td>375</td>
+<td>115</td>
 <td>244</td>
-<td>728</td>
+<td>734</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.1.1">v1.1.1</a> (p)</td>
 <td>2020-09-11T23:32:47Z</td>
-<td>521</td>
-<td>195</td>
+<td>523</td>
+<td>197</td>
 <td>342</td>
-<td>1,058</td>
+<td>1,062</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.245">v1.0.245</a></td>
 <td>2020-09-09T12:56:10Z</td>
-<td>21,251</td>
-<td>9,999</td>
+<td>21,300</td>
+<td>10,002</td>
 <td>5,634</td>
-<td>36,884</td>
+<td>36,936</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.242">v1.0.242</a></td>
 <td>2020-09-04T22:00:34Z</td>
-<td>12,479</td>
-<td>6,418</td>
+<td>12,513</td>
+<td>6,420</td>
 <td>3,015</td>
-<td>21,912</td>
+<td>21,948</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.241">v1.0.241</a></td>
 <td>2020-09-04T18:06:00Z</td>
-<td>23,759</td>
-<td>5,757</td>
-<td>4,996</td>
-<td>34,512</td>
+<td>23,787</td>
+<td>5,762</td>
+<td>4,998</td>
+<td>34,547</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.239">v1.0.239</a> (p)</td>
 <td>2020-09-01T21:56:36Z</td>
-<td>617</td>
-<td>226</td>
+<td>651</td>
+<td>228</td>
 <td>400</td>
-<td>1,243</td>
+<td>1,279</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.237">v1.0.237</a> (p)</td>
 <td>2020-08-29T15:38:04Z</td>
-<td>588</td>
-<td>923</td>
+<td>591</td>
+<td>925</td>
 <td>338</td>
-<td>1,849</td>
+<td>1,854</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.236">v1.0.236</a> (p)</td>
 <td>2020-08-28T09:16:54Z</td>
-<td>315</td>
-<td>110</td>
+<td>317</td>
+<td>113</td>
 <td>104</td>
-<td>529</td>
+<td>534</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.235">v1.0.235</a> (p)</td>
 <td>2020-08-18T22:08:01Z</td>
-<td>1,689</td>
-<td>489</td>
+<td>1,724</td>
+<td>491</td>
 <td>920</td>
-<td>3,098</td>
+<td>3,135</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.234">v1.0.234</a> (p)</td>
 <td>2020-08-17T23:13:02Z</td>
-<td>538</td>
-<td>125</td>
+<td>540</td>
+<td>127</td>
 <td>100</td>
-<td>763</td>
+<td>767</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.233">v1.0.233</a></td>
 <td>2020-08-01T14:51:15Z</td>
-<td>43,300</td>
-<td>18,189</td>
+<td>43,401</td>
+<td>18,191</td>
 <td>12,358</td>
-<td>73,847</td>
+<td>73,950</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.232">v1.0.232</a> (p)</td>
 <td>2020-07-28T22:34:40Z</td>
-<td>653</td>
-<td>222</td>
+<td>655</td>
+<td>225</td>
 <td>178</td>
-<td>1,053</td>
+<td>1,058</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.227">v1.0.227</a></td>
 <td>2020-07-07T20:44:54Z</td>
-<td>40,494</td>
-<td>15,275</td>
+<td>40,552</td>
+<td>15,277</td>
 <td>9,630</td>
-<td>65,399</td>
+<td>65,459</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.226">v1.0.226</a> (p)</td>
 <td>2020-07-04T10:21:26Z</td>
-<td>4,905</td>
-<td>2,252</td>
+<td>4,908</td>
+<td>2,255</td>
 <td>688</td>
-<td>7,845</td>
+<td>7,851</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.224">v1.0.224</a></td>
 <td>2020-06-20T22:26:08Z</td>
-<td>24,788</td>
-<td>11,005</td>
+<td>24,790</td>
+<td>11,007</td>
 <td>6,006</td>
-<td>41,799</td>
+<td>41,803</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.223">v1.0.223</a> (p)</td>
 <td>2020-06-20T11:51:27Z</td>
-<td>186</td>
-<td>112</td>
+<td>190</td>
+<td>114</td>
 <td>78</td>
-<td>376</td>
+<td>382</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.221">v1.0.221</a> (p)</td>
 <td>2020-06-20T01:44:20Z</td>
-<td>856</td>
-<td>205</td>
+<td>858</td>
+<td>208</td>
 <td>210</td>
-<td>1,271</td>
+<td>1,276</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.220">v1.0.220</a></td>
 <td>2020-06-13T18:26:22Z</td>
-<td>31,808</td>
-<td>9,916</td>
+<td>31,861</td>
+<td>9,921</td>
 <td>6,411</td>
-<td>48,135</td>
+<td>48,193</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.218">v1.0.218</a></td>
 <td>2020-06-07T10:43:34Z</td>
-<td>14,536</td>
-<td>6,968</td>
-<td>2,954</td>
-<td>24,458</td>
+<td>14,538</td>
+<td>6,971</td>
+<td>2,955</td>
+<td>24,464</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.217">v1.0.217</a> (p)</td>
 <td>2020-06-06T15:17:27Z</td>
-<td>226</td>
-<td>93</td>
+<td>228</td>
+<td>95</td>
 <td>54</td>
-<td>373</td>
+<td>377</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.216">v1.0.216</a></td>
 <td>2020-05-24T14:21:01Z</td>
-<td>37,405</td>
-<td>14,276</td>
+<td>37,456</td>
+<td>14,278</td>
 <td>10,180</td>
-<td>61,861</td>
+<td>61,914</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.214">v1.0.214</a> (p)</td>
 <td>2020-05-21T17:15:15Z</td>
-<td>6,550</td>
-<td>3,468</td>
+<td>6,553</td>
+<td>3,470</td>
 <td>762</td>
-<td>10,780</td>
+<td>10,785</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.212">v1.0.212</a> (p)</td>
 <td>2020-05-21T07:48:39Z</td>
-<td>212</td>
-<td>67</td>
+<td>214</td>
+<td>70</td>
 <td>47</td>
-<td>326</td>
+<td>331</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.211">v1.0.211</a> (p)</td>
 <td>2020-05-20T08:59:16Z</td>
-<td>300</td>
-<td>132</td>
+<td>303</td>
+<td>134</td>
 <td>87</td>
-<td>519</td>
+<td>524</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.209">v1.0.209</a> (p)</td>
 <td>2020-05-17T18:32:51Z</td>
-<td>1,393</td>
-<td>851</td>
+<td>1,395</td>
+<td>854</td>
 <td>147</td>
-<td>2,391</td>
+<td>2,396</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.207">v1.0.207</a> (p)</td>
 <td>2020-05-10T16:37:35Z</td>
-<td>1,188</td>
-<td>263</td>
+<td>1,192</td>
+<td>266</td>
 <td>1,016</td>
-<td>2,467</td>
+<td>2,474</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.201">v1.0.201</a></td>
 <td>2020-04-15T22:55:13Z</td>
-<td>53,442</td>
-<td>20,043</td>
+<td>53,523</td>
+<td>20,045</td>
 <td>18,180</td>
-<td>91,665</td>
+<td>91,748</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.200">v1.0.200</a></td>
 <td>2020-04-12T12:17:46Z</td>
-<td>9,552</td>
-<td>4,892</td>
+<td>9,554</td>
+<td>4,894</td>
 <td>1,903</td>
-<td>16,347</td>
+<td>16,351</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.199">v1.0.199</a></td>
 <td>2020-04-10T18:41:58Z</td>
-<td>19,366</td>
-<td>5,884</td>
-<td>3,788</td>
-<td>29,038</td>
+<td>19,396</td>
+<td>5,887</td>
+<td>3,789</td>
+<td>29,072</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.197">v1.0.197</a></td>
 <td>2020-03-30T17:21:22Z</td>
-<td>22,305</td>
-<td>9,545</td>
-<td>5,746</td>
-<td>37,596</td>
+<td>22,320</td>
+<td>9,548</td>
+<td>5,754</td>
+<td>37,622</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.195">v1.0.195</a></td>
 <td>2020-03-22T19:56:12Z</td>
-<td>18,916</td>
-<td>7,949</td>
+<td>18,940</td>
+<td>7,951</td>
 <td>4,506</td>
-<td>31,371</td>
+<td>31,397</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.194">v1.0.194</a> (p)</td>
 <td>2020-03-14T00:00:32Z</td>
-<td>1,285</td>
-<td>1,377</td>
+<td>1,287</td>
+<td>1,386</td>
 <td>513</td>
-<td>3,175</td>
+<td>3,186</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.193">v1.0.193</a></td>
 <td>2020-03-08T08:58:53Z</td>
-<td>28,644</td>
-<td>10,907</td>
+<td>28,648</td>
+<td>10,909</td>
 <td>7,395</td>
-<td>46,946</td>
+<td>46,952</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.192">v1.0.192</a> (p)</td>
 <td>2020-03-06T23:27:52Z</td>
-<td>473</td>
-<td>122</td>
+<td>477</td>
+<td>124</td>
 <td>89</td>
-<td>684</td>
+<td>690</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.190">v1.0.190</a> (p)</td>
 <td>2020-03-06T01:22:22Z</td>
-<td>374</td>
-<td>90</td>
+<td>378</td>
+<td>93</td>
 <td>85</td>
-<td>549</td>
+<td>556</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.189">v1.0.189</a> (p)</td>
 <td>2020-03-04T17:27:15Z</td>
-<td>343</td>
-<td>96</td>
+<td>347</td>
+<td>98</td>
 <td>90</td>
-<td>529</td>
+<td>535</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.187">v1.0.187</a> (p)</td>
 <td>2020-03-01T12:31:06Z</td>
-<td>920</td>
-<td>230</td>
+<td>922</td>
+<td>232</td>
 <td>263</td>
-<td>1,413</td>
+<td>1,417</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.179">v1.0.179</a></td>
 <td>2020-01-24T22:42:41Z</td>
-<td>71,092</td>
-<td>28,559</td>
-<td>22,537</td>
-<td>122,188</td>
+<td>71,149</td>
+<td>28,566</td>
+<td>22,538</td>
+<td>122,253</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.178">v1.0.178</a></td>
 <td>2020-01-20T19:06:45Z</td>
-<td>17,557</td>
-<td>5,962</td>
+<td>17,577</td>
+<td>5,964</td>
 <td>2,585</td>
-<td>26,104</td>
+<td>26,126</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.177">v1.0.177</a> (p)</td>
 <td>2019-12-30T14:40:40Z</td>
-<td>1,944</td>
-<td>438</td>
-<td>682</td>
-<td>3,064</td>
+<td>1,947</td>
+<td>440</td>
+<td>683</td>
+<td>3,070</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.176">v1.0.176</a> (p)</td>
 <td>2019-12-14T10:36:44Z</td>
-<td>3,124</td>
-<td>2,534</td>
+<td>3,126</td>
+<td>2,536</td>
 <td>467</td>
-<td>6,125</td>
+<td>6,129</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.175">v1.0.175</a></td>
 <td>2019-12-08T11:48:47Z</td>
-<td>72,559</td>
-<td>16,908</td>
-<td>16,509</td>
-<td>105,976</td>
+<td>72,575</td>
+<td>16,910</td>
+<td>16,510</td>
+<td>105,995</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.174">v1.0.174</a></td>
 <td>2019-11-12T18:20:58Z</td>
-<td>30,414</td>
-<td>11,725</td>
+<td>30,440</td>
+<td>11,728</td>
 <td>8,221</td>
-<td>50,360</td>
+<td>50,389</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.173">v1.0.173</a></td>
 <td>2019-11-11T08:33:35Z</td>
-<td>5,077</td>
-<td>2,079</td>
+<td>5,082</td>
+<td>2,081</td>
 <td>746</td>
-<td>7,902</td>
+<td>7,909</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.170">v1.0.170</a></td>
 <td>2019-10-13T22:13:04Z</td>
-<td>27,454</td>
-<td>8,754</td>
-<td>7,675</td>
-<td>43,883</td>
+<td>27,501</td>
+<td>8,756</td>
+<td>7,676</td>
+<td>43,933</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.169">v1.0.169</a></td>
 <td>2019-09-27T18:35:13Z</td>
-<td>17,117</td>
-<td>5,921</td>
+<td>17,135</td>
+<td>5,923</td>
 <td>3,754</td>
-<td>26,792</td>
+<td>26,812</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.168">v1.0.168</a></td>
 <td>2019-09-25T21:21:38Z</td>
-<td>5,332</td>
-<td>2,273</td>
+<td>5,334</td>
+<td>2,275</td>
 <td>717</td>
-<td>8,322</td>
+<td>8,326</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.167">v1.0.167</a></td>
 <td>2019-09-10T08:48:37Z</td>
-<td>16,793</td>
-<td>5,704</td>
+<td>16,795</td>
+<td>5,706</td>
 <td>3,703</td>
-<td>26,200</td>
+<td>26,204</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.166">v1.0.166</a></td>
 <td>2019-09-09T17:35:54Z</td>
-<td>1,956</td>
-<td>560</td>
+<td>1,959</td>
+<td>563</td>
 <td>236</td>
-<td>2,752</td>
+<td>2,758</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.165">v1.0.165</a></td>
 <td>2019-08-14T21:46:29Z</td>
-<td>18,912</td>
-<td>6,972</td>
+<td>18,925</td>
+<td>6,975</td>
 <td>5,462</td>
-<td>31,346</td>
+<td>31,362</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.161">v1.0.161</a></td>
 <td>2019-07-13T18:30:00Z</td>
-<td>19,287</td>
-<td>6,352</td>
+<td>19,292</td>
+<td>6,354</td>
 <td>4,136</td>
-<td>29,775</td>
+<td>29,782</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.160">v1.0.160</a></td>
 <td>2019-06-15T00:21:40Z</td>
-<td>30,545</td>
-<td>7,746</td>
+<td>30,551</td>
+<td>7,748</td>
 <td>8,101</td>
-<td>46,392</td>
+<td>46,400</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.159">v1.0.159</a></td>
 <td>2019-06-08T00:00:19Z</td>
-<td>5,194</td>
-<td>2,178</td>
+<td>5,196</td>
+<td>2,180</td>
 <td>1,114</td>
-<td>8,486</td>
+<td>8,490</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.158">v1.0.158</a></td>
 <td>2019-05-27T19:01:18Z</td>
-<td>9,815</td>
-<td>3,538</td>
+<td>9,817</td>
+<td>3,540</td>
 <td>1,936</td>
-<td>15,289</td>
+<td>15,293</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.157">v1.0.157</a></td>
 <td>2019-05-26T17:55:53Z</td>
-<td>2,179</td>
-<td>844</td>
+<td>2,181</td>
+<td>846</td>
 <td>291</td>
-<td>3,314</td>
+<td>3,318</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.153">v1.0.153</a> (p)</td>
 <td>2019-05-15T06:27:29Z</td>
-<td>850</td>
-<td>102</td>
+<td>852</td>
+<td>104</td>
 <td>106</td>
-<td>1,058</td>
+<td>1,062</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.152">v1.0.152</a></td>
 <td>2019-05-13T09:08:07Z</td>
-<td>13,873</td>
-<td>4,427</td>
+<td>13,876</td>
+<td>4,429</td>
 <td>4,061</td>
-<td>22,361</td>
+<td>22,366</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.151">v1.0.151</a></td>
 <td>2019-05-12T15:14:32Z</td>
-<td>1,954</td>
-<td>533</td>
+<td>1,956</td>
+<td>535</td>
 <td>957</td>
-<td>3,444</td>
+<td>3,448</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.150">v1.0.150</a></td>
 <td>2019-05-12T11:27:48Z</td>
-<td>423</td>
-<td>136</td>
+<td>425</td>
+<td>138</td>
 <td>68</td>
-<td>627</td>
+<td>631</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.148">v1.0.148</a> (p)</td>
@@ -1363,258 +1340,258 @@ https://github.com/laurent22/joplin/blob/dev/readme/stats.md
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.145">v1.0.145</a></td>
 <td>2019-05-03T09:16:53Z</td>
-<td>7,008</td>
-<td>2,861</td>
+<td>7,010</td>
+<td>2,863</td>
 <td>1,437</td>
-<td>11,306</td>
+<td>11,310</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.143">v1.0.143</a></td>
 <td>2019-04-22T10:51:38Z</td>
-<td>11,918</td>
-<td>3,550</td>
+<td>11,920</td>
+<td>3,552</td>
 <td>2,779</td>
-<td>18,247</td>
+<td>18,251</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.142">v1.0.142</a></td>
 <td>2019-04-02T16:44:51Z</td>
-<td>14,665</td>
-<td>4,565</td>
+<td>14,675</td>
+<td>4,567</td>
 <td>4,727</td>
-<td>23,957</td>
+<td>23,969</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.140">v1.0.140</a></td>
 <td>2019-03-10T20:59:58Z</td>
-<td>13,629</td>
-<td>4,171</td>
-<td>3,230</td>
-<td>21,030</td>
+<td>13,631</td>
+<td>4,173</td>
+<td>3,241</td>
+<td>21,045</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.139">v1.0.139</a> (p)</td>
 <td>2019-03-09T10:06:48Z</td>
-<td>123</td>
-<td>63</td>
+<td>126</td>
+<td>65</td>
 <td>46</td>
-<td>232</td>
+<td>237</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.138">v1.0.138</a> (p)</td>
 <td>2019-03-03T17:23:00Z</td>
-<td>150</td>
-<td>87</td>
+<td>154</td>
+<td>91</td>
 <td>84</td>
-<td>321</td>
+<td>329</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.137">v1.0.137</a> (p)</td>
 <td>2019-03-03T01:12:51Z</td>
-<td>591</td>
-<td>58</td>
+<td>593</td>
+<td>60</td>
 <td>83</td>
-<td>732</td>
+<td>736</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.135">v1.0.135</a></td>
 <td>2019-02-27T23:36:57Z</td>
-<td>12,525</td>
-<td>3,958</td>
+<td>12,530</td>
+<td>3,960</td>
 <td>4,077</td>
-<td>20,560</td>
+<td>20,567</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.134">v1.0.134</a></td>
 <td>2019-02-27T10:21:44Z</td>
-<td>1,468</td>
-<td>568</td>
+<td>1,470</td>
+<td>570</td>
 <td>219</td>
-<td>2,255</td>
+<td>2,259</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.132">v1.0.132</a></td>
 <td>2019-02-26T23:02:05Z</td>
-<td>1,088</td>
-<td>452</td>
+<td>1,090</td>
+<td>454</td>
 <td>95</td>
-<td>1,635</td>
+<td>1,639</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.127">v1.0.127</a></td>
 <td>2019-02-14T23:12:48Z</td>
-<td>9,791</td>
-<td>3,172</td>
+<td>9,795</td>
+<td>3,174</td>
 <td>2,929</td>
-<td>15,892</td>
+<td>15,898</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.126">v1.0.126</a> (p)</td>
 <td>2019-02-09T19:46:16Z</td>
-<td>932</td>
-<td>73</td>
+<td>936</td>
+<td>76</td>
 <td>117</td>
-<td>1,122</td>
+<td>1,129</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.125">v1.0.125</a></td>
 <td>2019-01-26T18:14:33Z</td>
-<td>10,251</td>
-<td>3,559</td>
+<td>10,260</td>
+<td>3,561</td>
 <td>1,703</td>
-<td>15,513</td>
+<td>15,524</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.120">v1.0.120</a></td>
 <td>2019-01-10T21:42:53Z</td>
-<td>15,605</td>
-<td>5,202</td>
+<td>15,607</td>
+<td>5,205</td>
 <td>6,517</td>
-<td>27,324</td>
+<td>27,329</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.119">v1.0.119</a></td>
 <td>2018-12-18T12:40:22Z</td>
-<td>8,906</td>
-<td>3,262</td>
+<td>8,908</td>
+<td>3,264</td>
 <td>2,014</td>
-<td>14,182</td>
+<td>14,186</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.118">v1.0.118</a></td>
 <td>2019-01-11T08:34:13Z</td>
-<td>718</td>
-<td>248</td>
+<td>720</td>
+<td>250</td>
 <td>89</td>
-<td>1,055</td>
+<td>1,059</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.117">v1.0.117</a></td>
 <td>2018-11-24T12:05:24Z</td>
-<td>16,259</td>
-<td>4,896</td>
+<td>16,261</td>
+<td>4,899</td>
 <td>6,381</td>
-<td>27,536</td>
+<td>27,541</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.116">v1.0.116</a></td>
 <td>2018-11-20T19:09:24Z</td>
-<td>3,474</td>
-<td>1,122</td>
+<td>3,476</td>
+<td>1,125</td>
 <td>714</td>
-<td>5,310</td>
+<td>5,315</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.115">v1.0.115</a></td>
 <td>2018-11-16T16:52:02Z</td>
-<td>3,658</td>
-<td>1,303</td>
+<td>3,660</td>
+<td>1,305</td>
 <td>799</td>
-<td>5,760</td>
+<td>5,764</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.114">v1.0.114</a></td>
 <td>2018-10-24T20:14:10Z</td>
-<td>11,397</td>
-<td>3,500</td>
+<td>11,399</td>
+<td>3,502</td>
 <td>3,830</td>
-<td>18,727</td>
+<td>18,731</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.111">v1.0.111</a></td>
 <td>2018-09-30T20:15:09Z</td>
-<td>12,045</td>
-<td>3,310</td>
+<td>12,049</td>
+<td>3,312</td>
 <td>3,669</td>
-<td>19,024</td>
+<td>19,030</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.110">v1.0.110</a></td>
 <td>2018-09-29T12:29:21Z</td>
-<td>962</td>
-<td>409</td>
+<td>964</td>
+<td>411</td>
 <td>118</td>
-<td>1,489</td>
+<td>1,493</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.109">v1.0.109</a></td>
 <td>2018-09-27T18:01:41Z</td>
-<td>2,102</td>
-<td>706</td>
+<td>2,105</td>
+<td>707</td>
 <td>328</td>
-<td>3,136</td>
+<td>3,140</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.108">v1.0.108</a> (p)</td>
 <td>2018-09-29T18:49:29Z</td>
-<td>31</td>
-<td>22</td>
+<td>33</td>
+<td>24</td>
 <td>14</td>
-<td>67</td>
+<td>71</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.107">v1.0.107</a></td>
 <td>2018-09-16T19:51:07Z</td>
-<td>7,151</td>
-<td>2,137</td>
+<td>7,153</td>
+<td>2,139</td>
 <td>1,708</td>
-<td>10,996</td>
+<td>11,000</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.106">v1.0.106</a></td>
 <td>2018-09-08T15:23:40Z</td>
-<td>4,559</td>
-<td>1,458</td>
+<td>4,561</td>
+<td>1,460</td>
 <td>318</td>
-<td>6,335</td>
+<td>6,339</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.105">v1.0.105</a></td>
 <td>2018-09-05T11:29:36Z</td>
-<td>4,657</td>
-<td>1,590</td>
+<td>4,659</td>
+<td>1,592</td>
 <td>1,455</td>
-<td>7,702</td>
+<td>7,706</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.104">v1.0.104</a></td>
 <td>2018-06-28T20:25:36Z</td>
-<td>15,057</td>
+<td>15,058</td>
 <td>4,702</td>
 <td>7,350</td>
-<td>27,109</td>
+<td>27,110</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.103">v1.0.103</a></td>
 <td>2018-06-21T19:38:13Z</td>
-<td>2,054</td>
-<td>888</td>
+<td>2,057</td>
+<td>890</td>
 <td>680</td>
-<td>3,622</td>
+<td>3,627</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.101">v1.0.101</a></td>
 <td>2018-06-17T18:35:11Z</td>
-<td>1,311</td>
-<td>608</td>
+<td>1,313</td>
+<td>610</td>
 <td>409</td>
-<td>2,328</td>
+<td>2,332</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.100">v1.0.100</a></td>
 <td>2018-06-14T17:41:43Z</td>
-<td>882</td>
-<td>435</td>
+<td>884</td>
+<td>437</td>
 <td>246</td>
-<td>1,563</td>
+<td>1,567</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.99">v1.0.99</a></td>
 <td>2018-06-10T13:18:23Z</td>
-<td>1,256</td>
-<td>598</td>
+<td>1,258</td>
+<td>600</td>
 <td>380</td>
-<td>2,234</td>
+<td>2,238</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.97">v1.0.97</a></td>
@@ -1627,395 +1604,395 @@ https://github.com/laurent22/joplin/blob/dev/readme/stats.md
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.96">v1.0.96</a></td>
 <td>2018-05-26T16:36:39Z</td>
-<td>2,721</td>
-<td>1,225</td>
+<td>2,723</td>
+<td>1,227</td>
 <td>1,700</td>
-<td>5,646</td>
+<td>5,650</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.95">v1.0.95</a></td>
 <td>2018-05-25T13:04:30Z</td>
-<td>420</td>
-<td>220</td>
+<td>422</td>
+<td>222</td>
 <td>120</td>
-<td>760</td>
+<td>764</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.94">v1.0.94</a></td>
 <td>2018-05-21T20:52:59Z</td>
-<td>1,134</td>
-<td>586</td>
+<td>1,136</td>
+<td>588</td>
 <td>397</td>
-<td>2,117</td>
+<td>2,121</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.93">v1.0.93</a></td>
 <td>2018-05-14T11:36:01Z</td>
-<td>1,791</td>
-<td>1,163</td>
+<td>1,793</td>
+<td>1,167</td>
 <td>759</td>
-<td>3,713</td>
+<td>3,719</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.91">v1.0.91</a></td>
 <td>2018-05-10T14:48:04Z</td>
-<td>828</td>
-<td>552</td>
+<td>829</td>
+<td>555</td>
 <td>307</td>
-<td>1,687</td>
+<td>1,691</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.89">v1.0.89</a></td>
 <td>2018-05-09T13:05:05Z</td>
-<td>495</td>
-<td>232</td>
+<td>498</td>
+<td>234</td>
 <td>111</td>
-<td>838</td>
+<td>843</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.85">v1.0.85</a></td>
 <td>2018-05-01T21:08:24Z</td>
-<td>1,654</td>
-<td>951</td>
+<td>1,655</td>
+<td>954</td>
 <td>633</td>
-<td>3,238</td>
+<td>3,242</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.83">v1.0.83</a></td>
 <td>2018-04-04T19:43:58Z</td>
-<td>4,902</td>
-<td>2,532</td>
+<td>4,905</td>
+<td>2,534</td>
 <td>2,658</td>
-<td>10,092</td>
+<td>10,097</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.82">v1.0.82</a></td>
 <td>2018-03-31T19:16:31Z</td>
-<td>694</td>
-<td>406</td>
+<td>695</td>
+<td>409</td>
 <td>122</td>
-<td>1,222</td>
+<td>1,226</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.81">v1.0.81</a></td>
 <td>2018-03-28T08:13:58Z</td>
-<td>1,001</td>
-<td>597</td>
+<td>1,002</td>
+<td>600</td>
 <td>783</td>
-<td>2,381</td>
+<td>2,385</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.79">v1.0.79</a></td>
 <td>2018-03-23T18:00:11Z</td>
-<td>932</td>
-<td>539</td>
+<td>933</td>
+<td>542</td>
 <td>381</td>
-<td>1,852</td>
+<td>1,856</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.78">v1.0.78</a></td>
 <td>2018-03-17T15:27:18Z</td>
-<td>1,313</td>
-<td>870</td>
+<td>1,314</td>
+<td>888</td>
 <td>872</td>
-<td>3,055</td>
+<td>3,074</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.77">v1.0.77</a></td>
 <td>2018-03-16T15:12:35Z</td>
-<td>179</td>
-<td>105</td>
+<td>180</td>
+<td>107</td>
 <td>46</td>
-<td>330</td>
+<td>333</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.72">v1.0.72</a></td>
 <td>2018-03-14T09:44:35Z</td>
-<td>407</td>
-<td>258</td>
+<td>408</td>
+<td>260</td>
 <td>57</td>
-<td>722</td>
+<td>725</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.70">v1.0.70</a></td>
 <td>2018-02-28T20:04:30Z</td>
-<td>1,855</td>
-<td>1,052</td>
+<td>1,857</td>
+<td>1,054</td>
 <td>1,255</td>
-<td>4,162</td>
+<td>4,166</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.67">v1.0.67</a></td>
 <td>2018-02-19T22:51:08Z</td>
-<td>1,816</td>
-<td>605</td>
+<td>1,817</td>
+<td>607</td>
 <td>0</td>
-<td>2,421</td>
+<td>2,424</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.66">v1.0.66</a></td>
 <td>2018-02-18T23:09:09Z</td>
-<td>329</td>
-<td>136</td>
+<td>330</td>
+<td>138</td>
 <td>86</td>
-<td>551</td>
+<td>554</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.65">v1.0.65</a></td>
 <td>2018-02-17T20:02:25Z</td>
-<td>195</td>
-<td>129</td>
+<td>196</td>
+<td>132</td>
 <td>134</td>
-<td>458</td>
+<td>462</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.64">v1.0.64</a></td>
 <td>2018-02-16T00:58:20Z</td>
-<td>1,086</td>
-<td>545</td>
+<td>1,087</td>
+<td>547</td>
 <td>1,124</td>
-<td>2,755</td>
+<td>2,758</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.63">v1.0.63</a></td>
 <td>2018-02-14T19:40:36Z</td>
-<td>302</td>
-<td>161</td>
+<td>304</td>
+<td>164</td>
 <td>94</td>
-<td>557</td>
+<td>562</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v1.0.62">v1.0.62</a></td>
 <td>2018-02-12T20:19:58Z</td>
-<td>561</td>
-<td>300</td>
+<td>562</td>
+<td>303</td>
 <td>369</td>
-<td>1,230</td>
+<td>1,234</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v0.10.61">v0.10.61</a></td>
 <td>2018-02-08T18:27:39Z</td>
-<td>973</td>
-<td>633</td>
+<td>974</td>
+<td>635</td>
 <td>964</td>
-<td>2,570</td>
+<td>2,573</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v0.10.60">v0.10.60</a></td>
 <td>2018-02-06T13:09:56Z</td>
-<td>723</td>
-<td>522</td>
+<td>724</td>
+<td>524</td>
 <td>553</td>
-<td>1,798</td>
+<td>1,801</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v0.10.54">v0.10.54</a></td>
 <td>2018-01-31T20:21:30Z</td>
-<td>1,821</td>
-<td>1,460</td>
+<td>1,822</td>
+<td>1,463</td>
 <td>324</td>
-<td>3,605</td>
+<td>3,609</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v0.10.52">v0.10.52</a></td>
 <td>2018-01-31T19:25:18Z</td>
-<td>48</td>
-<td>634</td>
+<td>49</td>
+<td>637</td>
 <td>16</td>
-<td>698</td>
+<td>702</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v0.10.51">v0.10.51</a></td>
 <td>2018-01-28T18:47:02Z</td>
-<td>1,329</td>
-<td>1,600</td>
+<td>1,330</td>
+<td>1,602</td>
 <td>328</td>
-<td>3,257</td>
+<td>3,260</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v0.10.48">v0.10.48</a></td>
 <td>2018-01-23T11:19:51Z</td>
-<td>1,966</td>
-<td>1,752</td>
+<td>1,967</td>
+<td>1,755</td>
 <td>32</td>
-<td>3,750</td>
+<td>3,754</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v0.10.47">v0.10.47</a></td>
 <td>2018-01-16T17:27:17Z</td>
-<td>1,231</td>
-<td>1,270</td>
+<td>1,232</td>
+<td>1,272</td>
 <td>68</td>
-<td>2,569</td>
+<td>2,572</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v0.10.43">v0.10.43</a></td>
 <td>2018-01-08T10:12:10Z</td>
-<td>3,442</td>
-<td>2,357</td>
+<td>3,444</td>
+<td>2,359</td>
 <td>1,209</td>
-<td>7,008</td>
+<td>7,012</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v0.10.41">v0.10.41</a></td>
 <td>2018-01-05T20:38:12Z</td>
-<td>1,038</td>
-<td>1,549</td>
+<td>1,039</td>
+<td>1,552</td>
 <td>243</td>
-<td>2,830</td>
+<td>2,834</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v0.10.40">v0.10.40</a></td>
 <td>2018-01-02T23:16:57Z</td>
-<td>1,596</td>
-<td>1,790</td>
+<td>1,597</td>
+<td>1,792</td>
 <td>339</td>
-<td>3,725</td>
+<td>3,728</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v0.10.39">v0.10.39</a></td>
 <td>2017-12-11T21:19:44Z</td>
-<td>5,825</td>
-<td>4,294</td>
+<td>5,827</td>
+<td>4,296</td>
 <td>3,195</td>
-<td>13,314</td>
+<td>13,318</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v0.10.38">v0.10.38</a></td>
 <td>2017-12-08T10:12:06Z</td>
-<td>1,050</td>
-<td>1,231</td>
+<td>1,051</td>
+<td>1,233</td>
 <td>307</td>
-<td>2,588</td>
+<td>2,591</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v0.10.37">v0.10.37</a></td>
 <td>2017-12-07T19:38:05Z</td>
-<td>266</td>
-<td>845</td>
+<td>267</td>
+<td>847</td>
 <td>82</td>
-<td>1,193</td>
+<td>1,196</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v0.10.36">v0.10.36</a></td>
 <td>2017-12-05T09:34:40Z</td>
-<td>1,016</td>
-<td>1,356</td>
+<td>1,017</td>
+<td>1,359</td>
 <td>439</td>
-<td>2,811</td>
+<td>2,815</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v0.10.35">v0.10.35</a></td>
 <td>2017-12-02T15:56:08Z</td>
-<td>1,578</td>
-<td>1,548</td>
+<td>1,580</td>
+<td>1,550</td>
 <td>745</td>
-<td>3,871</td>
+<td>3,875</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v0.10.34">v0.10.34</a></td>
 <td>2017-12-02T14:50:28Z</td>
-<td>91</td>
-<td>670</td>
+<td>92</td>
+<td>672</td>
 <td>60</td>
-<td>821</td>
+<td>824</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v0.10.33">v0.10.33</a></td>
 <td>2017-12-02T13:20:39Z</td>
-<td>62</td>
-<td>659</td>
+<td>63</td>
+<td>661</td>
 <td>22</td>
-<td>743</td>
+<td>746</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v0.10.31">v0.10.31</a></td>
 <td>2017-12-01T09:56:44Z</td>
-<td>893</td>
-<td>1,451</td>
+<td>894</td>
+<td>1,453</td>
 <td>407</td>
-<td>2,751</td>
+<td>2,754</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v0.10.30">v0.10.30</a></td>
 <td>2017-11-30T20:28:16Z</td>
-<td>724</td>
-<td>1,369</td>
+<td>725</td>
+<td>1,371</td>
 <td>420</td>
-<td>2,513</td>
+<td>2,516</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v0.10.28">v0.10.28</a></td>
 <td>2017-11-30T01:07:46Z</td>
-<td>1,342</td>
-<td>1,701</td>
+<td>1,345</td>
+<td>1,703</td>
 <td>874</td>
-<td>3,917</td>
+<td>3,922</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v0.10.26">v0.10.26</a></td>
 <td>2017-11-29T16:02:17Z</td>
-<td>188</td>
-<td>701</td>
+<td>190</td>
+<td>703</td>
 <td>261</td>
-<td>1,150</td>
+<td>1,154</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v0.10.25">v0.10.25</a></td>
 <td>2017-11-24T14:27:49Z</td>
-<td>150</td>
-<td>696</td>
-<td>6,467</td>
-<td>7,313</td>
+<td>151</td>
+<td>698</td>
+<td>6,471</td>
+<td>7,320</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v0.10.23">v0.10.23</a></td>
 <td>2017-11-21T19:38:41Z</td>
-<td>134</td>
-<td>647</td>
+<td>135</td>
+<td>650</td>
 <td>28</td>
-<td>809</td>
+<td>813</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v0.10.22">v0.10.22</a></td>
 <td>2017-11-20T21:45:57Z</td>
-<td>86</td>
-<td>645</td>
+<td>87</td>
+<td>647</td>
 <td>19</td>
-<td>750</td>
+<td>753</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v0.10.21">v0.10.21</a></td>
 <td>2017-11-18T00:53:15Z</td>
-<td>53</td>
-<td>638</td>
+<td>55</td>
+<td>640</td>
 <td>13</td>
-<td>704</td>
+<td>708</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v0.10.20">v0.10.20</a></td>
 <td>2017-11-17T17:18:25Z</td>
-<td>34</td>
-<td>649</td>
+<td>35</td>
+<td>651</td>
 <td>22</td>
-<td>705</td>
+<td>708</td>
 </tr>
 <tr>
 <td><a href="https://github.com/laurent22/joplin/releases/tag/v0.10.19">v0.10.19</a></td>
 <td>2017-11-20T18:59:48Z</td>
-<td>19</td>
-<td>645</td>
-<td>13</td>
-<td>677</td>
+<td>21</td>
+<td>647</td>
+<td>14</td>
+<td>682</td>
 </tr>
 </tbody>
 </table>
 
-							<div class="bottom-links">
-								<a href="https://github.com/laurent22/joplin/blob/dev/readme/stats.md">
-									<i class="fab fa-github"></i> Improve this doc
-								</a>
-							</div>
+								<div class="bottom-links">
+									<a href="https://github.com/laurent22/joplin/blob/dev/readme/stats.md">
+										<i class="fab fa-github"></i> Improve this doc
+									</a>
+								</div>
 						</div>
 					</div>
 				</div>
@@ -2027,26 +2004,6 @@ https://github.com/laurent22/joplin/blob/dev/readme/stats.md
 						<div class="col-3 d-none d-md-block">
 							<img src="&#x2F;images/logo-text.svg" alt="" width="150" />
 						</div>
-						<!--
-						<div class="col-12 col-md-6">
-							<p class="text-center">
-								<a href="#">Help</a>
-								&nbsp;&nbsp;&nbsp;
-								<a href="https://discourse.joplinapp.org/">Forum</a>
-								&nbsp;&nbsp;&nbsp;
-								<a href="#">Contacts</a>
-							</p>
-						</div>
-						<div class="col-12 col-md-3">
-							<br class="d-block d-md-none" />
-							<div class="text-right">
-								<a href="#" class="button-link btn-blue"
-									><img src="&#x2F;images/download-icon.svg" alt="" />&nbsp;
-									Download</a
-								>
-							</div>
-						</div>
-						-->
 					</div>
 					<div class="row">
 						<div class="col-12">
@@ -2062,16 +2019,10 @@ https://github.com/laurent22/joplin/blob/dev/readme/stats.md
 								alt=""
 							/>
 							<br class="d-block d-md-none" />
-							<p class="text-center-sm">Copyright (C) 2016-2021 Laurent Cozic, all rights reserved</p>
+							<p class="text-center-sm">Copyright &copy; 2016-2021 Laurent Cozic</p>
 						</div>
 						<div class="col-12 col-md-6 right-links">
 							<p class="text-right text-center-sm">
-								<!--
-								<a href="#">Terms & Conditions</a>
-								<span class="d-none d-md-inline">&nbsp;&nbsp;&nbsp;</span>
-								<br class="d-block d-md-none" />
-								<br class="d-block d-md-none" />
-								-->
 								<a href="https://github.com/laurent22/joplin/" class="github-link"><i class="fab fa-github"></i> GitHub Repository</a>
 								<a href="/privacy/">Privacy Policy</a>
 							</p>
@@ -2086,29 +2037,16 @@ https://github.com/laurent22/joplin/blob/dev/readme/stats.md
 			rel="preload"
 			as="script"
 		></script>
-		<script src="&#x2F;js/script.js"></script>
+		<script src="&#x2F;js/script.js?t=1626455245563"></script>
 
-		<script>
-			function stickyHeader() { 
-				return; // Disabled
-
-				if ($(window).scrollTop() > 179) {
-					$('.nav').addClass('sticky'); 
-				} else {
-					$('.nav').removeClass('sticky');
-				}
-			}
-
-			$(window).scroll(function() {
-				stickyHeader();
-			});
-
-			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-			(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-			})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-			ga('create', 'UA-103586105-1', 'auto');
-			ga('send', 'pageview');
-		</script>
-	</body>
+<script>
+	if (window.location.hostname !== 'localhost') {
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+		ga('create', 'UA-103586105-1', 'auto');
+		ga('send', 'pageview');
+	}
+</script>	</body>
 </html>

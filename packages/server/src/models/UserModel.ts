@@ -7,6 +7,11 @@ import { _ } from '@joplin/lib/locale';
 import { formatBytes, GB, MB } from '../utils/bytes';
 import { itemIsEncrypted } from '../utils/joplinUtils';
 import { getMaxItemSize, getMaxTotalItemSize } from './utils/user';
+import * as zxcvbn from 'zxcvbn';
+import { confirmUrl, resetPasswordUrl } from '../utils/urlUtils';
+import { checkRepeatPassword, CheckRepeatPasswordInput } from '../routes/index/users';
+import accountConfirmationTemplate from '../views/emails/accountConfirmationTemplate';
+import resetPasswordTemplate from '../views/emails/resetPasswordTemplate';
 
 export enum AccountType {
 	Default = 0,
@@ -132,15 +137,18 @@ export default class UserModel extends BaseModel<User> {
 			const previousResource = await this.load(resource.id);
 
 			if (!user.is_admin && resource.id !== user.id) throw new ErrorForbidden('non-admin user cannot modify another user');
-			if (!user.is_admin && 'is_admin' in resource) throw new ErrorForbidden('non-admin user cannot make themselves an admin');
 			if (user.is_admin && user.id === resource.id && 'is_admin' in resource && !resource.is_admin) throw new ErrorForbidden('admin user cannot make themselves a non-admin');
 
-			// TODO: Maybe define a whitelist of properties that can be changed
-			if ('max_item_size' in resource && !user.is_admin && resource.max_item_size !== previousResource.max_item_size) throw new ErrorForbidden('non-admin user cannot change max_item_size');
-			if ('max_total_item_size' in resource && !user.is_admin && resource.max_total_item_size !== previousResource.max_total_item_size) throw new ErrorForbidden('non-admin user cannot change max_total_item_size');
-			if ('can_share_folder' in resource && !user.is_admin && resource.can_share_folder !== previousResource.can_share_folder) throw new ErrorForbidden('non-admin user cannot change can_share_folder');
-			if ('account_type' in resource && !user.is_admin && resource.account_type !== previousResource.account_type) throw new ErrorForbidden('non-admin user cannot change account_type');
-			if ('must_set_password' in resource && !user.is_admin && resource.must_set_password !== previousResource.must_set_password) throw new ErrorForbidden('non-admin user cannot change must_set_password');
+			const canBeChangedByNonAdmin = [
+				'full_name',
+				'password',
+			];
+
+			for (const key of Object.keys(resource)) {
+				if (!user.is_admin && !canBeChangedByNonAdmin.includes(key) && (resource as any)[key] !== (previousResource as any)[key]) {
+					throw new ErrorForbidden(`non-admin user cannot change "${key}"`);
+				}
+			}
 		}
 
 		if (action === AclAction.Delete) {
@@ -183,9 +191,22 @@ export default class UserModel extends BaseModel<User> {
 		}
 	}
 
+	private validatePassword(password: string) {
+		const result = zxcvbn(password);
+		if (result.score < 3) {
+			let msg: string[] = [result.feedback.warning];
+			if (result.feedback.suggestions) {
+				msg = msg.concat(result.feedback.suggestions);
+			}
+			throw new ErrorUnprocessableEntity(msg.join(' '));
+		}
+	}
+
 	protected async validate(object: User, options: ValidateOptions = {}): Promise<User> {
 		const user: User = await super.validate(object, options);
 
+		// Note that we don't validate the password here because it's already
+		// been hashed by then.
 		if (options.isNew) {
 			if (!user.email) throw new ErrorUnprocessableEntity('email must be set');
 			if (!user.password && !user.must_set_password) throw new ErrorUnprocessableEntity('password must be set');
@@ -207,14 +228,6 @@ export default class UserModel extends BaseModel<User> {
 		const s = email.split('@');
 		if (s.length !== 2) return false;
 		return !!s[0].length && !!s[1].length;
-	}
-
-	public profileUrl(): string {
-		return `${this.baseUrl}/users/me`;
-	}
-
-	public confirmUrl(userId: Uuid, validationToken: string): string {
-		return `${this.baseUrl}/users/${userId}/confirm?token=${validationToken}`;
 	}
 
 	public async delete(id: string): Promise<void> {
@@ -239,16 +252,38 @@ export default class UserModel extends BaseModel<User> {
 
 	public async sendAccountConfirmationEmail(user: User) {
 		const validationToken = await this.models().token().generate(user.id);
-		const confirmUrl = encodeURI(this.confirmUrl(user.id, validationToken));
+		const url = encodeURI(confirmUrl(user.id, validationToken));
 
 		await this.models().email().push({
+			...accountConfirmationTemplate({ url }),
 			sender_id: EmailSender.NoReply,
 			recipient_id: user.id,
 			recipient_email: user.email,
 			recipient_name: user.full_name || '',
-			subject: `Please setup your ${this.appName} account`,
-			body: `Your new ${this.appName} account is almost ready to use!\n\nPlease click on the following link to finish setting up your account:\n\n[Complete your account](${confirmUrl})`,
 		});
+	}
+
+	public async sendResetPasswordEmail(email: string) {
+		const user = await this.loadByEmail(email);
+		if (!user) throw new ErrorNotFound(`No such user: ${email}`);
+
+		const validationToken = await this.models().token().generate(user.id);
+		const url = resetPasswordUrl(validationToken);
+
+		await this.models().email().push({
+			...resetPasswordTemplate({ url }),
+			sender_id: EmailSender.NoReply,
+			recipient_id: user.id,
+			recipient_email: user.email,
+			recipient_name: user.full_name || '',
+		});
+	}
+
+	public async resetPassword(token: string, fields: CheckRepeatPasswordInput) {
+		checkRepeatPassword(fields, true);
+		const user = await this.models().token().userFromToken(token);
+		await this.models().user().save({ id: user.id, password: fields.password });
+		await this.models().token().deleteByValue(user.id, token);
 	}
 
 	private formatValues(user: User): User {
@@ -267,7 +302,10 @@ export default class UserModel extends BaseModel<User> {
 	public async save(object: User, options: SaveOptions = {}): Promise<User> {
 		const user = this.formatValues(object);
 
-		if (user.password) user.password = auth.hashPassword(user.password);
+		if (user.password) {
+			if (!options.skipValidation) this.validatePassword(user.password);
+			user.password = auth.hashPassword(user.password);
+		}
 
 		const isNew = await this.isNew(object, options);
 
