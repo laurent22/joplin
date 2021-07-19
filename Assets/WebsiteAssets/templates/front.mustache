@@ -56,17 +56,19 @@
 									<a href="{{baseUrl}}/plans/" class="button-link btn-trans plans-button">Sign up with Joplin Cloud</a>
 								{{/showJoplinCloudLinks}}
 							</p>
-							<img
-								srcset="
-									{{imageBaseUrl}}/home-top-img.png 2388w,
-									{{imageBaseUrl}}/home-top-img-2x.png 4820w
-								"
 
-								src="{{imageBaseUrl}}/home-top-img.png"
-								alt=""
-								class="img-fluid img-center"
-								id="top-section-img"
-							/>
+							<picture class="img-fluid img-center" id="top-section-img">
+								<source type="image/webp" srcset="
+									{{imageBaseUrl}}/home-top-img-4x.webp 4820w,
+									{{imageBaseUrl}}/home-top-img-2x.webp 2388w,
+									{{imageBaseUrl}}/home-top-img.webp 1205w
+								">
+								<source type="image/png" srcset="
+									{{imageBaseUrl}}/home-top-img-2x.png 2388w,
+									{{imageBaseUrl}}/home-top-img.png 1205w
+								">
+								<img id="top-section-img-img" src="{{imageBaseUrl}}/home-top-img-2x.png">
+							</picture>
 						</div>
 					</div>
 				</div>
