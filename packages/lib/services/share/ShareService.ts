@@ -20,8 +20,9 @@ export default class ShareService {
 		return this.instance_;
 	}
 
-	public initialize(store: Store<any>) {
+	public initialize(store: Store<any>, api: JoplinServerApi = null) {
 		this.store_ = store;
+		this.api_ = api;
 	}
 
 	public get enabled(): boolean {
@@ -120,7 +121,14 @@ export default class ShareService {
 
 		const share = await this.api().exec('POST', 'api/shares', {}, { note_id: noteId });
 
-		await Note.save({ id: note.id, is_shared: 1 });
+		await Note.save({
+			id: note.id,
+			parent_id: note.parent_id,
+			is_shared: 1,
+			updated_time: Date.now(),
+		}, {
+			autoTimestamp: false,
+		});
 
 		return share;
 	}
@@ -140,7 +148,14 @@ export default class ShareService {
 
 		await Promise.all(promises);
 
-		await Note.save({ id: note.id, is_shared: 0 });
+		await Note.save({
+			id: note.id,
+			parent_id: note.parent_id,
+			is_shared: 0,
+			updated_time: Date.now(),
+		}, {
+			autoTimestamp: false,
+		});
 	}
 
 	public shareUrl(userId: string, share: StateShare): string {

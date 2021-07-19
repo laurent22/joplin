@@ -1401,6 +1401,9 @@ packages/lib/services/searchengine/queryBuilder.js.map
 packages/lib/services/share/ShareService.d.ts
 packages/lib/services/share/ShareService.js
 packages/lib/services/share/ShareService.js.map
+packages/lib/services/share/ShareService.test.d.ts
+packages/lib/services/share/ShareService.test.js
+packages/lib/services/share/ShareService.test.js.map
 packages/lib/services/share/reducer.d.ts
 packages/lib/services/share/reducer.js
 packages/lib/services/share/reducer.js.map

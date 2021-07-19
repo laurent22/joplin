@@ -132,6 +132,8 @@ export default class Api {
 	}
 
 	public acceptAuthToken(accept: boolean) {
+		if (!this.authToken_) throw new Error('Auth token is not set');
+
 		this.authToken_.status = accept ? AuthTokenStatus.Accepted : AuthTokenStatus.Rejected;
 
 		this.dispatch_({
