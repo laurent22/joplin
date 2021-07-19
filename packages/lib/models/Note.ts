@@ -6,6 +6,7 @@ import shim from '../shim';
 import time from '../time';
 import markdownUtils from '../markdownUtils';
 import { NoteEntity } from '../services/database/types';
+import Tag from './Tag';
 
 const { sprintf } = require('sprintf-js');
 import Resource from './Resource';
@@ -110,7 +111,7 @@ export default class Note extends BaseItem {
 		return BaseModel.TYPE_NOTE;
 	}
 
-	static linkedItemIds(body: string): string[] {
+	public static linkedItemIds(body: string): string[] {
 		if (!body || body.length <= 32) return [];
 
 		const links = urlUtils.extractResourceUrls(body);
@@ -126,7 +127,7 @@ export default class Note extends BaseItem {
 
 	static async linkedItemIdsByType(type: ModelType, body: string) {
 		const items = await this.linkedItems(body);
-		const output = [];
+		const output: string[] = [];
 
 		for (let i = 0; i < items.length; i++) {
 			const item = items[i];
@@ -207,9 +208,9 @@ export default class Note extends BaseItem {
 		for (const basePath of pathsToTry) {
 			const reStrings = [
 				// Handles file://path/to/abcdefg.jpg?t=12345678
-				`${pregQuote(`${basePath}/`)}[a-zA-Z0-9.]+\\?t=[0-9]+`,
+				`${pregQuote(`${basePath}/`)}[a-zA-Z0-9]{32}\\.[a-zA-Z0-9]+\\?t=[0-9]+`,
 				// Handles file://path/to/abcdefg.jpg
-				`${pregQuote(`${basePath}/`)}[a-zA-Z0-9.]+`,
+				`${pregQuote(`${basePath}/`)}[a-zA-Z0-9]{32}\\.[a-zA-Z0-9]+`,
 			];
 			for (const reString of reStrings) {
 				const re = new RegExp(reString, 'gi');
@@ -306,7 +307,7 @@ export default class Note extends BaseItem {
 			includeTimestamps: true,
 		}, options);
 
-		const output = ['id', 'title', 'is_todo', 'todo_completed', 'todo_due', 'parent_id', 'encryption_applied', 'order', 'markup_language', 'is_conflict'];
+		const output = ['id', 'title', 'is_todo', 'todo_completed', 'todo_due', 'parent_id', 'encryption_applied', 'order', 'markup_language', 'is_conflict', 'is_shared'];
 
 		if (options.includeTimestamps) {
 			output.push('updated_time');
@@ -457,7 +458,7 @@ export default class Note extends BaseItem {
 		return this.modelSelectAll('SELECT * FROM notes WHERE is_conflict = 0');
 	}
 
-	static async updateGeolocation(noteId: string) {
+	public static async updateGeolocation(noteId: string): Promise<void> {
 		if (!Setting.value('trackLocation')) return;
 		if (!Note.updateGeolocationEnabled_) return;
 
@@ -502,7 +503,7 @@ export default class Note extends BaseItem {
 		note.longitude = geoData.coords.longitude;
 		note.latitude = geoData.coords.latitude;
 		note.altitude = geoData.coords.altitude;
-		return Note.save(note);
+		await Note.save(note, { ignoreProvisionalFlag: true });
 	}
 
 	static filter(note: NoteEntity) {
@@ -522,6 +523,7 @@ export default class Note extends BaseItem {
 			changes: {
 				parent_id: folderId,
 				is_conflict: 0, // Also reset the conflict flag in case we're moving the note out of the conflict folder
+				conflict_original_id: '', // Reset parent id as well.
 			},
 		});
 	}
@@ -536,6 +538,7 @@ export default class Note extends BaseItem {
 			id: noteId,
 			parent_id: folderId,
 			is_conflict: 0,
+			conflict_original_id: '',
 			updated_time: time.unixMs(),
 		};
 
@@ -615,7 +618,13 @@ export default class Note extends BaseItem {
 			newNote.title = title;
 		}
 
-		return this.save(newNote);
+		const newNoteSaved = await this.save(newNote);
+		const originalTags = await Tag.tagsByNoteId(noteId);
+		for (const tagToAdd of originalTags) {
+			await Tag.addNote(tagToAdd.id, newNoteSaved.id);
+		}
+
+		return this.save(newNoteSaved);
 	}
 
 	static async noteIsOlderThan(noteId: string, date: number) {
@@ -624,9 +633,18 @@ export default class Note extends BaseItem {
 		return n.updated_time < date;
 	}
 
-	static async save(o: NoteEntity, options: any = null) {
+	public static async save(o: NoteEntity, options: any = null): Promise<NoteEntity> {
 		const isNew = this.isNew(o, options);
+
+		// If true, this is a provisional note - it will be saved permanently
+		// only if the user makes changes to it.
 		const isProvisional = options && !!options.provisional;
+
+		// If true, saving the note will not change the provisional flag of the
+		// note. This is used for background processing that it not initiated by
+		// the user. For example when setting the geolocation of a note.
+		const ignoreProvisionalFlag = options && !!options.ignoreProvisionalFlag;
+
 		const dispatchUpdateAction = options ? options.dispatchUpdateAction !== false : true;
 		if (isNew && !o.source) o.source = Setting.value('appName');
 		if (isNew && !o.source_application) o.source_application = Setting.value('appId');
@@ -672,6 +690,7 @@ export default class Note extends BaseItem {
 				type: 'NOTE_UPDATE_ONE',
 				note: note,
 				provisional: isProvisional,
+				ignoreProvisionalFlag: ignoreProvisionalFlag,
 				changedFields: changedFields,
 			});
 		}
@@ -894,4 +913,12 @@ export default class Note extends BaseItem {
 		return new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' });
 	}
 
+
+	static async createConflictNote(sourceNote: NoteEntity, changeSource: number): Promise<NoteEntity> {
+		const conflictNote = Object.assign({}, sourceNote);
+		delete conflictNote.id;
+		conflictNote.is_conflict = 1;
+		conflictNote.conflict_original_id = sourceNote.id;
+		return await Note.save(conflictNote, { autoTimestamp: false, changeSource: changeSource });
+	}
 }

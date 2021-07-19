@@ -8,6 +8,7 @@ import JoplinViews from './JoplinViews';
 import JoplinInterop from './JoplinInterop';
 import JoplinSettings from './JoplinSettings';
 import JoplinContentScripts from './JoplinContentScripts';
+import JoplinClipboard from './JoplinClipboard';
 
 /**
  * This is the main entry point to the Joplin API. You can access various services using the provided accessors.
@@ -35,6 +36,7 @@ export default class Joplin {
 	private interop_: JoplinInterop = null;
 	private settings_: JoplinSettings = null;
 	private contentScripts_: JoplinContentScripts = null;
+	private clipboard_: JoplinClipboard = null;
 
 	constructor(implementation: any, plugin: Plugin, store: any) {
 		this.data_ = new JoplinData();
@@ -42,14 +44,19 @@ export default class Joplin {
 		this.workspace_ = new JoplinWorkspace(store);
 		this.filters_ = new JoplinFilters();
 		this.commands_ = new JoplinCommands();
-		this.views_ = new JoplinViews(implementation.views, plugin, store);
+		this.views_ = new JoplinViews(implementation.joplin.views, plugin, store);
 		this.interop_ = new JoplinInterop();
 		this.settings_ = new JoplinSettings(plugin);
 		this.contentScripts_ = new JoplinContentScripts(plugin);
+		this.clipboard_ = new JoplinClipboard(implementation.clipboard, implementation.nativeImage);
 	}
 
 	get data(): JoplinData {
 		return this.data_;
+	}
+
+	get clipboard(): JoplinClipboard {
+		return this.clipboard_;
 	}
 
 	get plugins(): JoplinPlugins {

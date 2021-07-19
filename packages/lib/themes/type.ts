@@ -14,6 +14,7 @@ export interface Theme {
 	color: string; // For regular text
 	colorError: string;
 	colorWarn: string;
+	colorWarnUrl: string; // For URL displayed over a warningBackgroundColor
 	colorFaded: string; // For less important text
 	colorBright: string; // For important text
 	dividerColor: string;
@@ -26,6 +27,7 @@ export interface Theme {
 	color2: string;
 	selectedColor2: string;
 	colorError2: string;
+	colorWarn2: string;
 
 	// Color scheme "3" is used for the config screens for example/
 	// It's dark text over gray background.
@@ -49,6 +51,8 @@ export interface Theme {
 	codeBackgroundColor: string;
 	codeBorderColor: string;
 	codeColor: string;
+
+	blockQuoteOpacity: number;
 
 	codeMirrorTheme: string;
 	codeThemeCss: string;

@@ -17,6 +17,7 @@ import SpellCheckerService from '@joplin/lib/services/spellChecker/SpellCheckerS
 import menuCommandNames from './menuCommandNames';
 import stateToWhenClauseContext from '../services/commands/stateToWhenClauseContext';
 import bridge from '../services/bridge';
+import checkForUpdates from '../checkForUpdates';
 
 const { connect } = require('react-redux');
 import { reg } from '@joplin/lib/registry';
@@ -89,6 +90,7 @@ interface Props {
 	['spellChecker.enabled']: boolean;
 	['spellChecker.language']: string;
 	plugins: PluginStates;
+	customCss: string;
 }
 
 const commandNames: string[] = menuCommandNames();
@@ -312,7 +314,10 @@ function useMenu(props: Props) {
 								await InteropServiceHelper.export(
 									(action: any) => props.dispatch(action),
 									module,
-									{ plugins: props.plugins }
+									{
+										plugins: props.plugins,
+										customCss: props.customCss,
+									}
 								);
 							},
 						});
@@ -430,7 +435,7 @@ function useMenu(props: Props) {
 			toolsItems.push(SpellCheckerService.instance().spellCheckerConfigMenuItem(props['spellChecker.language'], props['spellChecker.enabled']));
 
 			function _checkForUpdates() {
-				bridge().checkForUpdates(false, bridge().window(), `${Setting.value('profileDir')}/log-autoupdater.txt`, { includePreReleases: Setting.value('autoUpdate.includePreReleases') });
+				void checkForUpdates(false, bridge().window(), { includePreReleases: Setting.value('autoUpdate.includePreReleases') });
 			}
 
 			function _showAbout() {
@@ -521,6 +526,14 @@ function useMenu(props: Props) {
 					click: () => { bridge().electronApp().hide(); },
 				} : noItem,
 
+				shim.isMac() ? {
+					role: 'hideothers',
+				} : noItem,
+
+				shim.isMac() ? {
+					role: 'unhide',
+				} : noItem,
+
 				{
 					type: 'separator',
 				},
@@ -596,6 +609,7 @@ function useMenu(props: Props) {
 						menuItemDic.attachFile,
 						separator(),
 						menuItemDic['editor.deleteLine'],
+						menuItemDic['editor.duplicateLine'],
 						menuItemDic['editor.toggleComment'],
 						menuItemDic['editor.sortSelectedLines'],
 						menuItemDic['editor.indentLess'],
@@ -693,11 +707,18 @@ function useMenu(props: Props) {
 						},
 					],
 				},
+				folder: {
+					label: _('Note&book'),
+					submenu: [
+						menuItemDic.showShareFolderDialog,
+					],
+				},
 				note: {
 					label: _('&Note'),
 					submenu: [
 						menuItemDic.toggleExternalEditing,
 						menuItemDic.setTags,
+						menuItemDic.showShareNoteDialog,
 						separator(),
 						menuItemDic.showNoteContentProperties,
 					],
@@ -737,6 +758,7 @@ function useMenu(props: Props) {
 						},
 					},
 
+					menuItemDic.toggleSafeMode,
 					menuItemDic.openProfileDirectory,
 					menuItemDic.copyDevCommand,
 
@@ -780,6 +802,7 @@ function useMenu(props: Props) {
 				// This is for GotoAnything only - should be refactored since this plugin manager is not used otherwise
 				const pluginMenuItems = PluginManager.instance().menuItems();
 				for (const item of pluginMenuItems) {
+					if (!item.parent) continue;
 					const itemParent = rootMenus[item.parent] ? rootMenus[item.parent] : 'tools';
 					itemParent.submenu.push(separator());
 					itemParent.submenu.push(item);
@@ -815,6 +838,7 @@ function useMenu(props: Props) {
 				rootMenus.edit,
 				rootMenus.view,
 				rootMenus.go,
+				rootMenus.folder,
 				rootMenus.note,
 				rootMenus.tools,
 				rootMenus.help,
@@ -849,7 +873,7 @@ function useMenu(props: Props) {
 			clearTimeout(timeoutId);
 			timeoutId = null;
 		};
-	}, [props.routeName, props.pluginMenuItems, props.pluginMenus, keymapLastChangeTime, modulesLastChangeTime, props['spellChecker.language'], props['spellChecker.enabled'], props.plugins]);
+	}, [props.routeName, props.pluginMenuItems, props.pluginMenus, keymapLastChangeTime, modulesLastChangeTime, props['spellChecker.language'], props['spellChecker.enabled'], props.plugins, props.customCss]);
 
 	useMenuStates(menu, props);
 
@@ -906,6 +930,7 @@ const mapStateToProps = (state: AppState) => {
 		['spellChecker.language']: state.settings['spellChecker.language'],
 		['spellChecker.enabled']: state.settings['spellChecker.enabled'],
 		plugins: state.pluginService.plugins,
+		customCss: state.customCss,
 	};
 };
 

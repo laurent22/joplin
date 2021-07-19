@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyledRoot, StyledAddButton, StyledHeader, StyledHeaderIcon, StyledAllNotesIcon, StyledHeaderLabel, StyledListItem, StyledListItemAnchor, StyledExpandLink, StyledNoteCount, StyledSyncReportText, StyledSyncReport, StyledSynchronizeButton } from './styles';
+import { StyledRoot, StyledAddButton, StyledShareIcon, StyledHeader, StyledHeaderIcon, StyledAllNotesIcon, StyledHeaderLabel, StyledListItem, StyledListItemAnchor, StyledExpandLink, StyledNoteCount, StyledSyncReportText, StyledSyncReport, StyledSynchronizeButton } from './styles';
 import { ButtonLevel } from '../Button/Button';
 import CommandService from '@joplin/lib/services/CommandService';
 import InteropService from '@joplin/lib/services/interop/InteropService';
@@ -12,19 +12,24 @@ import { PluginStates, utils as pluginUtils } from '@joplin/lib/services/plugins
 import { MenuItemLocation } from '@joplin/lib/services/plugins/api/types';
 import { AppState } from '../../app';
 import { ModelType } from '@joplin/lib/BaseModel';
-
-const { connect } = require('react-redux');
-const shared = require('@joplin/lib/components/shared/side-menu-shared.js');
 import BaseModel from '@joplin/lib/BaseModel';
 import Folder from '@joplin/lib/models/Folder';
 import Note from '@joplin/lib/models/Note';
 import Tag from '@joplin/lib/models/Tag';
+import Logger from '@joplin/lib/Logger';
+import { FolderEntity } from '@joplin/lib/services/database/types';
+import stateToWhenClauseContext from '../../services/commands/stateToWhenClauseContext';
+import { store } from '@joplin/lib/reducer';
+const { connect } = require('react-redux');
+const shared = require('@joplin/lib/components/shared/side-menu-shared.js');
 const { themeStyle } = require('@joplin/lib/theme');
 const bridge = require('electron').remote.require('./bridge').default;
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
 const { substrWithEllipsis } = require('@joplin/lib/string-utils');
 const { ALL_NOTES_FILTER_ID } = require('@joplin/lib/reserved-ids');
+
+const logger = Logger.create('Sidebar');
 
 interface Props {
 	themeId: number;
@@ -70,12 +75,14 @@ function ExpandLink(props: any) {
 }
 
 function FolderItem(props: any) {
-	const { hasChildren, isExpanded, depth, selected, folderId, folderTitle, anchorRef, noteCount, onFolderDragStart_, onFolderDragOver_, onFolderDrop_, itemContextMenu, folderItem_click, onFolderToggleClick_ } = props;
+	const { hasChildren, isExpanded, parentId, depth, selected, folderId, folderTitle, anchorRef, noteCount, onFolderDragStart_, onFolderDragOver_, onFolderDrop_, itemContextMenu, folderItem_click, onFolderToggleClick_, shareId } = props;
 
-	const noteCountComp = noteCount ? <StyledNoteCount>{noteCount}</StyledNoteCount> : null;
+	const noteCountComp = noteCount ? <StyledNoteCount className="note-count-label">{noteCount}</StyledNoteCount> : null;
+
+	const shareIcon = shareId && !parentId ? <StyledShareIcon className="fas fa-share-alt"></StyledShareIcon> : null;
 
 	return (
-		<StyledListItem depth={depth} selected={selected} className={`list-item-container list-item-depth-${depth}`} onDragStart={onFolderDragStart_} onDragOver={onFolderDragOver_} onDrop={onFolderDrop_} draggable={true} data-folder-id={folderId}>
+		<StyledListItem depth={depth} selected={selected} className={`list-item-container list-item-depth-${depth} ${selected ? 'selected' : ''}`} onDragStart={onFolderDragStart_} onDragOver={onFolderDragOver_} onDrop={onFolderDrop_} draggable={true} data-folder-id={folderId}>
 			<ExpandLink themeId={props.themeId} hasChildren={hasChildren} folderId={folderId} onClick={onFolderToggleClick_} isExpanded={isExpanded}/>
 			<StyledListItemAnchor
 				ref={anchorRef}
@@ -83,6 +90,7 @@ function FolderItem(props: any) {
 				isConflictFolder={folderId === Folder.conflictFolderId()}
 				href="#"
 				selected={selected}
+				shareId={shareId}
 				data-id={folderId}
 				data-type={BaseModel.TYPE_FOLDER}
 				onContextMenu={itemContextMenu}
@@ -92,7 +100,8 @@ function FolderItem(props: any) {
 				}}
 				onDoubleClick={onFolderToggleClick_}
 			>
-				{folderTitle} {noteCountComp}
+				<span className="title">{folderTitle}</span>
+				{shareIcon} {noteCountComp}
 			</StyledListItemAnchor>
 		</StyledListItem>
 	);
@@ -158,22 +167,27 @@ class SidebarComponent extends React.Component<Props, State> {
 		// to put the dropped folder at the root. But for notes, folderId needs to always be defined
 		// since there's no such thing as a root note.
 
-		if (dt.types.indexOf('text/x-jop-note-ids') >= 0) {
-			event.preventDefault();
+		try {
+			if (dt.types.indexOf('text/x-jop-note-ids') >= 0) {
+				event.preventDefault();
 
-			if (!folderId) return;
+				if (!folderId) return;
 
-			const noteIds = JSON.parse(dt.getData('text/x-jop-note-ids'));
-			for (let i = 0; i < noteIds.length; i++) {
-				await Note.moveToFolder(noteIds[i], folderId);
+				const noteIds = JSON.parse(dt.getData('text/x-jop-note-ids'));
+				for (let i = 0; i < noteIds.length; i++) {
+					await Note.moveToFolder(noteIds[i], folderId);
+				}
+			} else if (dt.types.indexOf('text/x-jop-folder-ids') >= 0) {
+				event.preventDefault();
+
+				const folderIds = JSON.parse(dt.getData('text/x-jop-folder-ids'));
+				for (let i = 0; i < folderIds.length; i++) {
+					await Folder.moveToFolder(folderIds[i], folderId);
+				}
 			}
-		} else if (dt.types.indexOf('text/x-jop-folder-ids') >= 0) {
-			event.preventDefault();
-
-			const folderIds = JSON.parse(dt.getData('text/x-jop-folder-ids'));
-			for (let i = 0; i < folderIds.length; i++) {
-				await Folder.moveToFolder(folderIds[i], folderId);
-			}
+		} catch (error) {
+			logger.error(error);
+			alert(error.message);
 		}
 	}
 
@@ -222,12 +236,14 @@ class SidebarComponent extends React.Component<Props, State> {
 		const itemType = Number(event.currentTarget.getAttribute('data-type'));
 		if (!itemId || !itemType) throw new Error('No data on element');
 
+		const state: AppState = store().getState();
+
 		let deleteMessage = '';
-		let buttonLabel = _('Remove');
+		let deleteButtonLabel = _('Remove');
 		if (itemType === BaseModel.TYPE_FOLDER) {
 			const folder = await Folder.load(itemId);
 			deleteMessage = _('Delete notebook "%s"?\n\nAll notes and sub-notebooks within this notebook will also be deleted.', substrWithEllipsis(folder.title, 0, 32));
-			buttonLabel = _('Delete');
+			deleteButtonLabel = _('Delete');
 		} else if (itemType === BaseModel.TYPE_TAG) {
 			const tag = await Tag.load(itemId);
 			deleteMessage = _('Remove tag "%s" from all notes?', substrWithEllipsis(tag.title, 0, 32));
@@ -250,10 +266,10 @@ class SidebarComponent extends React.Component<Props, State> {
 
 		menu.append(
 			new MenuItem({
-				label: buttonLabel,
+				label: deleteButtonLabel,
 				click: async () => {
 					const ok = bridge().showConfirmMessageBox(deleteMessage, {
-						buttons: [buttonLabel, _('Cancel')],
+						buttons: [deleteButtonLabel, _('Cancel')],
 						defaultId: 1,
 					});
 					if (!ok) return;
@@ -292,6 +308,14 @@ class SidebarComponent extends React.Component<Props, State> {
 						},
 					})
 				);
+			}
+
+			// We don't display the "Share notebook" menu item for sub-notebooks
+			// that are within a shared notebook. If user wants to do this,
+			// they'd have to move the notebook out of the shared notebook
+			// first.
+			if (CommandService.instance().isEnabled('showShareFolderDialog', stateToWhenClauseContext(state, { commandFolderId: itemId }))) {
+				menu.append(new MenuItem(menuUtils.commandToStatefulMenuItem('showShareFolderDialog', itemId)));
 			}
 
 			menu.append(
@@ -359,7 +383,7 @@ class SidebarComponent extends React.Component<Props, State> {
 	}
 
 	renderNoteCount(count: number) {
-		return count ? <StyledNoteCount>{count}</StyledNoteCount> : null;
+		return count ? <StyledNoteCount className="note-count-label">{count}</StyledNoteCount> : null;
 	}
 
 	renderExpandIcon(isExpanded: boolean, isVisible: boolean = true) {
@@ -371,7 +395,7 @@ class SidebarComponent extends React.Component<Props, State> {
 
 	renderAllNotesItem(selected: boolean) {
 		return (
-			<StyledListItem key="allNotesHeader" selected={selected} className={'list-item-container list-item-depth-0'} isSpecialItem={true}>
+			<StyledListItem key="allNotesHeader" selected={selected} className={'list-item-container list-item-depth-0 all-notes'} isSpecialItem={true}>
 				<StyledExpandLink>{this.renderExpandIcon(false, false)}</StyledExpandLink>
 				<StyledAllNotesIcon className="icon-notes"/>
 				<StyledListItemAnchor
@@ -387,10 +411,10 @@ class SidebarComponent extends React.Component<Props, State> {
 		);
 	}
 
-	renderFolderItem(folder: any, selected: boolean, hasChildren: boolean, depth: number) {
+	renderFolderItem(folder: FolderEntity, selected: boolean, hasChildren: boolean, depth: number) {
 		const anchorRef = this.anchorItemRef('folder', folder.id);
 		const isExpanded = this.props.collapsedFolderIds.indexOf(folder.id) < 0;
-		let noteCount = folder.note_count;
+		let noteCount = (folder as any).note_count;
 
 		// Thunderbird count: Subtract children note_count from parent folder if it expanded.
 		if (isExpanded) {
@@ -418,15 +442,26 @@ class SidebarComponent extends React.Component<Props, State> {
 			itemContextMenu={this.itemContextMenu}
 			folderItem_click={this.folderItem_click}
 			onFolderToggleClick_={this.onFolderToggleClick_}
+			shareId={folder.share_id}
+			parentId={folder.parent_id}
 		/>;
 	}
 
 	renderTag(tag: any, selected: boolean) {
 		const anchorRef = this.anchorItemRef('tag', tag.id);
-		const noteCount = Setting.value('showNoteCounts') ? this.renderNoteCount(tag.note_count) : '';
+		let noteCount = null;
+		if (Setting.value('showNoteCounts')) {
+			if (Setting.value('showCompletedTodos')) noteCount = this.renderNoteCount(tag.note_count);
+			else noteCount = this.renderNoteCount(tag.note_count - tag.todo_completed_count);
+		}
 
 		return (
-			<StyledListItem selected={selected} className={'list-item-container'} key={tag.id} onDrop={this.onTagDrop_} data-tag-id={tag.id}>
+			<StyledListItem selected={selected}
+				className={`list-item-container ${selected ? 'selected' : ''}`}
+				key={tag.id}
+				onDrop={this.onTagDrop_}
+				data-tag-id={tag.id}
+			>
 				<StyledExpandLink>{this.renderExpandIcon(false, false)}</StyledExpandLink>
 				<StyledListItemAnchor
 					ref={anchorRef}
@@ -440,7 +475,8 @@ class SidebarComponent extends React.Component<Props, State> {
 						this.tagItem_click(tag);
 					}}
 				>
-					{Tag.displayTitle(tag)} {noteCount}
+					<span className="tag-label">{Tag.displayTitle(tag)}</span>
+					{noteCount}
 				</StyledListItemAnchor>
 			</StyledListItem>
 		);
@@ -632,7 +668,11 @@ class SidebarComponent extends React.Component<Props, State> {
 			const folderItems = [this.renderAllNotesItem(allNotesSelected)].concat(result.items);
 			this.folderItemsOrder_ = result.order;
 			items.push(
-				<div className="folders" key="folder_items" style={{ display: this.state.folderHeaderIsExpanded ? 'block' : 'none', paddingBottom: 10 }}>
+				<div
+					className={`folders ${this.state.folderHeaderIsExpanded ? 'expanded' : ''}`}
+					key="folder_items"
+					style={{ display: this.state.folderHeaderIsExpanded ? 'block' : 'none', paddingBottom: 10 }}
+				>
 					{folderItems}
 				</div>
 			);

@@ -1,6 +1,5 @@
 import shim from '../shim';
 import { _, supportedLocalesToLanguages, defaultLocale } from '../locale';
-import { ltrimSlashes } from '../path-utils';
 import eventManager from '../eventManager';
 import BaseModel from '../BaseModel';
 import Database from '../database';
@@ -43,7 +42,7 @@ export interface SettingItem {
 	label?(): string;
 	description?: Function;
 	options?(): any;
-	appTypes?: string[];
+	appTypes?: AppType[];
 	show?(settings: any): boolean;
 	filter?(value: any): any;
 	secure?: boolean;
@@ -80,6 +79,43 @@ export interface SettingSection {
 	description?: string;
 	name?: string;
 	source?: SettingSectionSource;
+}
+
+export enum SyncStartupOperation {
+	None = 0,
+	ClearLocalSyncState = 1,
+	ClearLocalData = 2,
+}
+
+export enum Env {
+	Undefined = 'SET_ME',
+	Dev = 'dev',
+	Prod = 'prod',
+}
+
+export enum AppType {
+	Desktop = 'desktop',
+	Mobile = 'mobile',
+	Cli = 'cli',
+}
+
+export interface Constants {
+	env: Env;
+	isDemo: boolean;
+	appName: string;
+	appId: string;
+	appType: AppType;
+	resourceDirName: string;
+	resourceDir: string;
+	profileDir: string;
+	templateDir: string;
+	tempDir: string;
+	pluginDataDir: string;
+	cacheDir: string;
+	pluginDir: string;
+	flagOpenDevTools: boolean;
+	syncVersion: number;
+	startupDevPlugins: string[];
 }
 
 interface SettingSections {
@@ -125,6 +161,7 @@ class Setting extends BaseModel {
 	public static DATE_FORMAT_5 = 'YYYY-MM-DD';
 	public static DATE_FORMAT_6 = 'DD.MM.YYYY';
 	public static DATE_FORMAT_7 = 'YYYY.MM.DD';
+	public static DATE_FORMAT_8 = 'YYMMDD';
 
 	public static TIME_FORMAT_1 = 'HH:mm';
 	public static TIME_FORMAT_2 = 'h:mm A';
@@ -144,12 +181,12 @@ class Setting extends BaseModel {
 
 	// Contains constants that are set by the application and
 	// cannot be modified by the user:
-	public static constants_: any = {
-		env: 'SET_ME',
+	public static constants_: Constants = {
+		env: Env.Undefined,
 		isDemo: false,
 		appName: 'joplin',
 		appId: 'SET_ME', // Each app should set this identifier
-		appType: 'SET_ME', // 'cli' or 'mobile'
+		appType: 'SET_ME' as any, // 'cli' or 'mobile'
 		resourceDirName: '',
 		resourceDir: '',
 		profileDir: '',
@@ -201,7 +238,7 @@ class Setting extends BaseModel {
 		return `${this.value('profileDir')}/settings.json`;
 	}
 
-	private static get fileHandler(): FileHandler {
+	public static get fileHandler(): FileHandler {
 		if (!this.fileHandler_) {
 			this.fileHandler_ = new FileHandler(this.settingFilePath);
 		}
@@ -259,7 +296,7 @@ class Setting extends BaseModel {
 				value: true,
 				type: SettingItemType.Bool,
 				public: false,
-				appTypes: ['desktop'],
+				appTypes: [AppType.Desktop],
 				storage: SettingStorage.File,
 			},
 			'sync.target': {
@@ -269,7 +306,7 @@ class Setting extends BaseModel {
 				public: true,
 				section: 'sync',
 				label: () => _('Synchronisation target'),
-				description: (appType: string) => {
+				description: (appType: AppType) => {
 					return appType !== 'cli' ? null : _('The target to synchronise to. Each sync target may have additional parameters which are named as `sync.NUM.NAME` (all documented below).');
 				},
 				options: () => {
@@ -280,6 +317,12 @@ class Setting extends BaseModel {
 
 			'sync.upgradeState': {
 				value: Setting.SYNC_UPGRADE_STATE_IDLE,
+				type: SettingItemType.Int,
+				public: false,
+			},
+
+			'sync.startupOperation': {
+				value: SyncStartupOperation.None,
 				type: SettingItemType.Int,
 				public: false,
 			},
@@ -439,19 +482,11 @@ class Setting extends BaseModel {
 				description: () => emptyDirWarning,
 				storage: SettingStorage.File,
 			},
-			'sync.9.directory': {
-				value: 'Apps/Joplin',
+			'sync.9.userContentPath': {
+				value: '',
 				type: SettingItemType.String,
-				section: 'sync',
-				show: (settings: any) => {
-					return settings['sync.target'] == SyncTargetRegistry.nameToId('joplinServer');
-				},
-				filter: value => {
-					return value ? ltrimSlashes(rtrimSlashes(value)) : '';
-				},
-				public: true,
-				label: () => _('Joplin Server Directory'),
-				storage: SettingStorage.File,
+				public: false,
+				storage: SettingStorage.Database,
 			},
 			'sync.9.username': {
 				value: '',
@@ -461,7 +496,7 @@ class Setting extends BaseModel {
 					return settings['sync.target'] == SyncTargetRegistry.nameToId('joplinServer');
 				},
 				public: true,
-				label: () => _('Joplin Server username'),
+				label: () => _('Joplin Server email'),
 				storage: SettingStorage.File,
 			},
 			'sync.9.password': {
@@ -476,6 +511,45 @@ class Setting extends BaseModel {
 				secure: true,
 			},
 
+			// Although sync.10.path is essentially a constant, we still define
+			// it here so that both Joplin Server and Joplin Cloud can be
+			// handled in the same consistent way. Also having it a setting
+			// means it can be set to something else for development.
+			'sync.10.path': {
+				value: 'https://api.joplincloud.com',
+				type: SettingItemType.String,
+				public: false,
+				storage: SettingStorage.Database,
+			},
+			'sync.10.userContentPath': {
+				value: 'https://joplinusercontent.com',
+				type: SettingItemType.String,
+				public: false,
+				storage: SettingStorage.Database,
+			},
+			'sync.10.username': {
+				value: '',
+				type: SettingItemType.String,
+				section: 'sync',
+				show: (settings: any) => {
+					return settings['sync.target'] == SyncTargetRegistry.nameToId('joplinCloud');
+				},
+				public: true,
+				label: () => _('Joplin Cloud email'),
+				storage: SettingStorage.File,
+			},
+			'sync.10.password': {
+				value: '',
+				type: SettingItemType.String,
+				section: 'sync',
+				show: (settings: any) => {
+					return settings['sync.target'] == SyncTargetRegistry.nameToId('joplinCloud');
+				},
+				public: true,
+				label: () => _('Joplin Cloud password'),
+				secure: true,
+			},
+
 			'sync.5.syncTargets': { value: {}, type: SettingItemType.Object, public: false },
 
 			'sync.resourceDownloadMode': {
@@ -485,7 +559,7 @@ class Setting extends BaseModel {
 				public: true,
 				advanced: true,
 				isEnum: true,
-				appTypes: ['mobile', 'desktop'],
+				appTypes: [AppType.Mobile, AppType.Desktop],
 				label: () => _('Attachment download behaviour'),
 				description: () => _('In "Manual" mode, attachments are downloaded only when you click on them. In "Auto", they are downloaded when you open the note. In "Always", all the attachments are downloaded whether you open the note or not.'),
 				options: () => {
@@ -502,6 +576,7 @@ class Setting extends BaseModel {
 			'sync.4.auth': { value: '', type: SettingItemType.String, public: false },
 			'sync.7.auth': { value: '', type: SettingItemType.String, public: false },
 			'sync.9.auth': { value: '', type: SettingItemType.String, public: false },
+			'sync.10.auth': { value: '', type: SettingItemType.String, public: false },
 			'sync.1.context': { value: '', type: SettingItemType.String, public: false },
 			'sync.2.context': { value: '', type: SettingItemType.String, public: false },
 			'sync.3.context': { value: '', type: SettingItemType.String, public: false },
@@ -511,6 +586,7 @@ class Setting extends BaseModel {
 			'sync.7.context': { value: '', type: SettingItemType.String, public: false },
 			'sync.8.context': { value: '', type: SettingItemType.String, public: false },
 			'sync.9.context': { value: '', type: SettingItemType.String, public: false },
+			'sync.10.context': { value: '', type: SettingItemType.String, public: false },
 
 			'sync.maxConcurrentConnections': { value: 5, type: SettingItemType.Int, storage: SettingStorage.File, public: true, advanced: true, section: 'sync', label: () => _('Max concurrent connections'), minimum: 1, maximum: 20, step: 1 },
 
@@ -550,6 +626,7 @@ class Setting extends BaseModel {
 					options[Setting.DATE_FORMAT_5] = time.formatMsToLocal(now, Setting.DATE_FORMAT_5);
 					options[Setting.DATE_FORMAT_6] = time.formatMsToLocal(now, Setting.DATE_FORMAT_6);
 					options[Setting.DATE_FORMAT_7] = time.formatMsToLocal(now, Setting.DATE_FORMAT_7);
+					options[Setting.DATE_FORMAT_8] = time.formatMsToLocal(now, Setting.DATE_FORMAT_8);
 					return options;
 				},
 				storage: SettingStorage.File,
@@ -574,7 +651,7 @@ class Setting extends BaseModel {
 				value: Setting.THEME_LIGHT,
 				type: SettingItemType.Int,
 				public: true,
-				appTypes: ['mobile', 'desktop'],
+				appTypes: [AppType.Mobile, AppType.Desktop],
 				show: (settings) => {
 					return !settings['themeAutoDetect'];
 				},
@@ -589,7 +666,7 @@ class Setting extends BaseModel {
 				value: false,
 				type: SettingItemType.Bool,
 				section: 'appearance',
-				appTypes: ['desktop'],
+				appTypes: [AppType.Desktop],
 				public: true,
 				label: () => _('Automatically switch theme to match system theme'),
 				storage: SettingStorage.File,
@@ -602,7 +679,7 @@ class Setting extends BaseModel {
 				show: (settings) => {
 					return settings['themeAutoDetect'];
 				},
-				appTypes: ['desktop'],
+				appTypes: [AppType.Desktop],
 				isEnum: true,
 				label: () => _('Preferred light theme'),
 				section: 'appearance',
@@ -617,7 +694,7 @@ class Setting extends BaseModel {
 				show: (settings) => {
 					return settings['themeAutoDetect'];
 				},
-				appTypes: ['desktop'],
+				appTypes: [AppType.Desktop],
 				isEnum: true,
 				label: () => _('Preferred dark theme'),
 				section: 'appearance',
@@ -631,13 +708,13 @@ class Setting extends BaseModel {
 				public: false,
 			},
 
-			showNoteCounts: { value: true, type: SettingItemType.Bool, storage: SettingStorage.File, public: false, advanced: true, appTypes: ['desktop'], label: () => _('Show note counts') },
+			showNoteCounts: { value: true, type: SettingItemType.Bool, storage: SettingStorage.File, public: false, advanced: true, appTypes: [AppType.Desktop], label: () => _('Show note counts') },
 
 			layoutButtonSequence: {
 				value: Setting.LAYOUT_ALL,
 				type: SettingItemType.Int,
 				public: false,
-				appTypes: ['desktop'],
+				appTypes: [AppType.Desktop],
 				isEnum: true,
 				options: () => ({
 					[Setting.LAYOUT_ALL]: _('%s / %s / %s', _('Editor'), _('Viewer'), _('Split View')),
@@ -647,15 +724,15 @@ class Setting extends BaseModel {
 				}),
 				storage: SettingStorage.File,
 			},
-			uncompletedTodosOnTop: { value: true, type: SettingItemType.Bool, storage: SettingStorage.File, section: 'note', public: true, appTypes: ['cli'], label: () => _('Uncompleted to-dos on top') },
-			showCompletedTodos: { value: true, type: SettingItemType.Bool, storage: SettingStorage.File, section: 'note', public: true, appTypes: ['cli'], label: () => _('Show completed to-dos') },
+			uncompletedTodosOnTop: { value: true, type: SettingItemType.Bool, storage: SettingStorage.File, section: 'note', public: true, appTypes: [AppType.Cli], label: () => _('Uncompleted to-dos on top') },
+			showCompletedTodos: { value: true, type: SettingItemType.Bool, storage: SettingStorage.File, section: 'note', public: true, appTypes: [AppType.Cli], label: () => _('Show completed to-dos') },
 			'notes.sortOrder.field': {
 				value: 'user_updated_time',
 				type: SettingItemType.String,
 				section: 'note',
 				isEnum: true,
 				public: true,
-				appTypes: ['cli'],
+				appTypes: [AppType.Cli],
 				label: () => _('Sort notes by'),
 				options: () => {
 					const Note = require('./Note').default;
@@ -673,17 +750,17 @@ class Setting extends BaseModel {
 				type: SettingItemType.Bool,
 				public: true,
 				section: 'note',
-				appTypes: ['desktop'],
+				appTypes: [AppType.Desktop],
 				label: () => _('Auto-pair braces, parenthesis, quotations, etc.'),
 				storage: SettingStorage.File,
 			},
-			'notes.sortOrder.reverse': { value: true, type: SettingItemType.Bool, storage: SettingStorage.File, section: 'note', public: true, label: () => _('Reverse sort order'), appTypes: ['cli'] },
+			'notes.sortOrder.reverse': { value: true, type: SettingItemType.Bool, storage: SettingStorage.File, section: 'note', public: true, label: () => _('Reverse sort order'), appTypes: [AppType.Cli] },
 			'folders.sortOrder.field': {
 				value: 'title',
 				type: SettingItemType.String,
 				isEnum: true,
 				public: true,
-				appTypes: ['cli'],
+				appTypes: [AppType.Cli],
 				label: () => _('Sort notebooks by'),
 				options: () => {
 					const Folder = require('./Folder').default;
@@ -696,7 +773,7 @@ class Setting extends BaseModel {
 				},
 				storage: SettingStorage.File,
 			},
-			'folders.sortOrder.reverse': { value: false, type: SettingItemType.Bool, storage: SettingStorage.File, public: true, label: () => _('Reverse sort order'), appTypes: ['cli'] },
+			'folders.sortOrder.reverse': { value: false, type: SettingItemType.Bool, storage: SettingStorage.File, public: true, label: () => _('Reverse sort order'), appTypes: [AppType.Cli] },
 			trackLocation: { value: true, type: SettingItemType.Bool, section: 'note', storage: SettingStorage.File, public: true, label: () => _('Save geo-location with notes') },
 
 			// 2020-10-29: For now disable the beta editor due to
@@ -708,10 +785,10 @@ class Setting extends BaseModel {
 				value: false,
 				type: SettingItemType.Bool,
 				section: 'note',
-				public: false, // mobilePlatform === 'ios',
-				appTypes: ['mobile'],
+				public: true,
+				appTypes: [AppType.Mobile],
 				label: () => 'Opt-in to the editor beta',
-				description: () => 'This beta adds list continuation, Markdown preview, and Markdown shortcuts. If you find bugs, please report them in the Discourse forum.',
+				description: () => 'This beta adds list continuation and syntax highlighting. If you find bugs, please report them in the Discourse forum.',
 			},
 
 			newTodoFocus: {
@@ -720,7 +797,7 @@ class Setting extends BaseModel {
 				section: 'note',
 				isEnum: true,
 				public: true,
-				appTypes: ['desktop'],
+				appTypes: [AppType.Desktop],
 				label: () => _('When creating a new to-do:'),
 				options: () => {
 					return {
@@ -736,7 +813,7 @@ class Setting extends BaseModel {
 				section: 'note',
 				isEnum: true,
 				public: true,
-				appTypes: ['desktop'],
+				appTypes: [AppType.Desktop],
 				label: () => _('When creating a new note:'),
 				options: () => {
 					return {
@@ -752,7 +829,7 @@ class Setting extends BaseModel {
 				type: SettingItemType.Object,
 				section: 'plugins',
 				public: true,
-				appTypes: ['desktop'],
+				appTypes: [AppType.Desktop],
 				needRestart: true,
 				autoSave: true,
 			},
@@ -763,38 +840,38 @@ class Setting extends BaseModel {
 				section: 'plugins',
 				public: true,
 				advanced: true,
-				appTypes: ['desktop'],
+				appTypes: [AppType.Desktop],
 				label: () => 'Development plugins',
 				description: () => 'You may add multiple plugin paths, each separated by a comma. You will need to restart the application for the changes to take effect.',
 				storage: SettingStorage.File,
 			},
 
 			// Deprecated - use markdown.plugin.*
-			'markdown.softbreaks': { storage: SettingStorage.File, value: false, type: SettingItemType.Bool, public: false, appTypes: ['mobile', 'desktop'] },
-			'markdown.typographer': { storage: SettingStorage.File, value: false, type: SettingItemType.Bool, public: false, appTypes: ['mobile', 'desktop'] },
+			'markdown.softbreaks': { storage: SettingStorage.File, value: false, type: SettingItemType.Bool, public: false, appTypes: [AppType.Mobile, AppType.Desktop] },
+			'markdown.typographer': { storage: SettingStorage.File, value: false, type: SettingItemType.Bool, public: false, appTypes: [AppType.Mobile, AppType.Desktop] },
 			// Deprecated
 
-			'markdown.plugin.softbreaks': { storage: SettingStorage.File, value: false, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable soft breaks')}${wysiwygYes}` },
-			'markdown.plugin.typographer': { storage: SettingStorage.File, value: false, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable typographer support')}${wysiwygYes}` },
-			'markdown.plugin.linkify': { storage: SettingStorage.File, value: true, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable Linkify')}${wysiwygYes}` },
+			'markdown.plugin.softbreaks': { storage: SettingStorage.File, value: false, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: [AppType.Mobile, AppType.Desktop], label: () => `${_('Enable soft breaks')}${wysiwygYes}` },
+			'markdown.plugin.typographer': { storage: SettingStorage.File, value: false, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: [AppType.Mobile, AppType.Desktop], label: () => `${_('Enable typographer support')}${wysiwygYes}` },
+			'markdown.plugin.linkify': { storage: SettingStorage.File, value: true, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: [AppType.Mobile, AppType.Desktop], label: () => `${_('Enable Linkify')}${wysiwygYes}` },
 
-			'markdown.plugin.katex': { storage: SettingStorage.File, value: true, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable math expressions')}${wysiwygYes}` },
-			'markdown.plugin.fountain': { storage: SettingStorage.File, value: false, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable Fountain syntax support')}${wysiwygYes}` },
-			'markdown.plugin.mermaid': { storage: SettingStorage.File, value: true, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable Mermaid diagrams support')}${wysiwygYes}` },
+			'markdown.plugin.katex': { storage: SettingStorage.File, value: true, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: [AppType.Mobile, AppType.Desktop], label: () => `${_('Enable math expressions')}${wysiwygYes}` },
+			'markdown.plugin.fountain': { storage: SettingStorage.File, value: false, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: [AppType.Mobile, AppType.Desktop], label: () => `${_('Enable Fountain syntax support')}${wysiwygYes}` },
+			'markdown.plugin.mermaid': { storage: SettingStorage.File, value: true, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: [AppType.Mobile, AppType.Desktop], label: () => `${_('Enable Mermaid diagrams support')}${wysiwygYes}` },
 
-			'markdown.plugin.audioPlayer': { storage: SettingStorage.File, value: true, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable audio player')}${wysiwygNo}` },
-			'markdown.plugin.videoPlayer': { storage: SettingStorage.File, value: true, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable video player')}${wysiwygNo}` },
-			'markdown.plugin.pdfViewer': { storage: SettingStorage.File, value: !mobilePlatform, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: ['desktop'], label: () => `${_('Enable PDF viewer')}${wysiwygNo}` },
-			'markdown.plugin.mark': { storage: SettingStorage.File, value: true, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable ==mark== syntax')}${wysiwygNo}` },
-			'markdown.plugin.footnote': { storage: SettingStorage.File, value: true, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable footnotes')}${wysiwygNo}` },
-			'markdown.plugin.toc': { storage: SettingStorage.File, value: true, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable table of contents extension')}${wysiwygNo}` },
-			'markdown.plugin.sub': { storage: SettingStorage.File, value: false, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable ~sub~ syntax')}${wysiwygNo}` },
-			'markdown.plugin.sup': { storage: SettingStorage.File, value: false, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable ^sup^ syntax')}${wysiwygNo}` },
-			'markdown.plugin.deflist': { storage: SettingStorage.File, value: false, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable deflist syntax')}${wysiwygNo}` },
-			'markdown.plugin.abbr': { storage: SettingStorage.File, value: false, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable abbreviation syntax')}${wysiwygNo}` },
-			'markdown.plugin.emoji': { storage: SettingStorage.File, value: false, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable markdown emoji')}${wysiwygNo}` },
-			'markdown.plugin.insert': { storage: SettingStorage.File, value: false, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable ++insert++ syntax')}${wysiwygNo}` },
-			'markdown.plugin.multitable': { storage: SettingStorage.File, value: false, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: ['mobile', 'desktop'], label: () => `${_('Enable multimarkdown table extension')}${wysiwygNo}` },
+			'markdown.plugin.audioPlayer': { storage: SettingStorage.File, value: true, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: [AppType.Mobile, AppType.Desktop], label: () => `${_('Enable audio player')}${wysiwygNo}` },
+			'markdown.plugin.videoPlayer': { storage: SettingStorage.File, value: true, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: [AppType.Mobile, AppType.Desktop], label: () => `${_('Enable video player')}${wysiwygNo}` },
+			'markdown.plugin.pdfViewer': { storage: SettingStorage.File, value: !mobilePlatform, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: [AppType.Desktop], label: () => `${_('Enable PDF viewer')}${wysiwygNo}` },
+			'markdown.plugin.mark': { storage: SettingStorage.File, value: true, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: [AppType.Mobile, AppType.Desktop], label: () => `${_('Enable ==mark== syntax')}${wysiwygYes}` },
+			'markdown.plugin.footnote': { storage: SettingStorage.File, value: true, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: [AppType.Mobile, AppType.Desktop], label: () => `${_('Enable footnotes')}${wysiwygNo}` },
+			'markdown.plugin.toc': { storage: SettingStorage.File, value: true, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: [AppType.Mobile, AppType.Desktop], label: () => `${_('Enable table of contents extension')}${wysiwygNo}` },
+			'markdown.plugin.sub': { storage: SettingStorage.File, value: false, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: [AppType.Mobile, AppType.Desktop], label: () => `${_('Enable ~sub~ syntax')}${wysiwygYes}` },
+			'markdown.plugin.sup': { storage: SettingStorage.File, value: false, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: [AppType.Mobile, AppType.Desktop], label: () => `${_('Enable ^sup^ syntax')}${wysiwygYes}` },
+			'markdown.plugin.deflist': { storage: SettingStorage.File, value: false, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: [AppType.Mobile, AppType.Desktop], label: () => `${_('Enable deflist syntax')}${wysiwygNo}` },
+			'markdown.plugin.abbr': { storage: SettingStorage.File, value: false, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: [AppType.Mobile, AppType.Desktop], label: () => `${_('Enable abbreviation syntax')}${wysiwygNo}` },
+			'markdown.plugin.emoji': { storage: SettingStorage.File, value: false, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: [AppType.Mobile, AppType.Desktop], label: () => `${_('Enable markdown emoji')}${wysiwygNo}` },
+			'markdown.plugin.insert': { storage: SettingStorage.File, value: false, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: [AppType.Mobile, AppType.Desktop], label: () => `${_('Enable ++insert++ syntax')}${wysiwygYes}` },
+			'markdown.plugin.multitable': { storage: SettingStorage.File, value: false, type: SettingItemType.Bool, section: 'markdownPlugins', public: true, appTypes: [AppType.Mobile, AppType.Desktop], label: () => `${_('Enable multimarkdown table extension')}${wysiwygNo}` },
 
 			// Tray icon (called AppIndicator) doesn't work in Ubuntu
 			// http://www.webupd8.org/2017/04/fix-appindicator-not-working-for.html
@@ -805,7 +882,7 @@ class Setting extends BaseModel {
 				type: SettingItemType.Bool,
 				section: 'application',
 				public: true,
-				appTypes: ['desktop'],
+				appTypes: [AppType.Desktop],
 				label: () => _('Show tray icon'),
 				description: () => {
 					return platform === 'linux' ? _('Note: Does not work in all desktop environments.') : _('This will allow Joplin to run in the background. It is recommended to enable this setting so that your notes are constantly being synchronised, thus reducing the number of conflicts.');
@@ -813,7 +890,7 @@ class Setting extends BaseModel {
 				storage: SettingStorage.File,
 			},
 
-			startMinimized: { value: false, type: SettingItemType.Bool, storage: SettingStorage.File, section: 'application', public: true, appTypes: ['desktop'], label: () => _('Start application minimised in the tray icon') },
+			startMinimized: { value: false, type: SettingItemType.Bool, storage: SettingStorage.File, section: 'application', public: true, appTypes: [AppType.Desktop], label: () => _('Start application minimised in the tray icon') },
 
 			collapsedFolderIds: { value: [], type: SettingItemType.Array, public: false },
 
@@ -829,10 +906,16 @@ class Setting extends BaseModel {
 				public: false,
 			},
 
-			// Deprecated in favour of windowContentZoomFactor
-			'style.zoom': { value: 100, type: SettingItemType.Int, public: false, storage: SettingStorage.File, appTypes: ['desktop'], section: 'appearance', label: () => '', minimum: 50, maximum: 500, step: 10 },
+			'sync.userId': {
+				value: '',
+				type: SettingItemType.String,
+				public: false,
+			},
 
-			'style.editor.fontSize': { value: 13, type: SettingItemType.Int, public: true, storage: SettingStorage.File, appTypes: ['desktop'], section: 'appearance', label: () => _('Editor font size'), minimum: 4, maximum: 50, step: 1 },
+			// Deprecated in favour of windowContentZoomFactor
+			'style.zoom': { value: 100, type: SettingItemType.Int, public: false, storage: SettingStorage.File, appTypes: [AppType.Desktop], section: 'appearance', label: () => '', minimum: 50, maximum: 500, step: 10 },
+
+			'style.editor.fontSize': { value: 15, type: SettingItemType.Int, public: true, storage: SettingStorage.File, appTypes: [AppType.Desktop], section: 'appearance', label: () => _('Editor font size'), minimum: 4, maximum: 50, step: 1 },
 			'style.editor.fontFamily':
 				(mobilePlatform) ?
 					({
@@ -841,7 +924,7 @@ class Setting extends BaseModel {
 						isEnum: true,
 						public: true,
 						label: () => _('Editor font'),
-						appTypes: ['mobile'],
+						appTypes: [AppType.Mobile],
 						section: 'appearance',
 						options: () => {
 							// IMPORTANT: The font mapping must match the one in global-styles.js::editorFont()
@@ -863,16 +946,26 @@ class Setting extends BaseModel {
 						value: '',
 						type: SettingItemType.String,
 						public: true,
-						appTypes: ['desktop'],
+						appTypes: [AppType.Desktop],
 						section: 'appearance',
 						label: () => _('Editor font family'),
 						description: () =>
-							_('This should be a *monospace* font or some elements will render incorrectly. If the font ' +
-						'is incorrect or empty, it will default to a generic monospace font.'),
+							_('Used for most text in the markdown editor. If not found, a generic proportional (variable width) font is used.'),
 						storage: SettingStorage.File,
 					},
+			'style.editor.monospaceFontFamily': {
+				value: '',
+				type: SettingItemType.String,
+				public: true,
+				appTypes: [AppType.Desktop],
+				section: 'appearance',
+				label: () => _('Editor monospace font family'),
+				description: () =>
+					_('Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.'),
+				storage: SettingStorage.File,
+			},
 
-			'ui.layout': { value: {}, type: SettingItemType.Object, storage: SettingStorage.File, public: false, appTypes: ['desktop'] },
+			'ui.layout': { value: {}, type: SettingItemType.Object, storage: SettingStorage.File, public: false, appTypes: [AppType.Desktop] },
 
 			// TODO: Is there a better way to do this? The goal here is to simply have
 			// a way to display a link to the customizable stylesheets, not for it to
@@ -891,7 +984,7 @@ class Setting extends BaseModel {
 				},
 				type: SettingItemType.Button,
 				public: true,
-				appTypes: ['desktop'],
+				appTypes: [AppType.Desktop],
 				label: () => _('Custom stylesheet for rendered Markdown'),
 				section: 'appearance',
 				advanced: true,
@@ -908,15 +1001,38 @@ class Setting extends BaseModel {
 				},
 				type: SettingItemType.Button,
 				public: true,
-				appTypes: ['desktop'],
+				appTypes: [AppType.Desktop],
 				label: () => _('Custom stylesheet for Joplin-wide app styles'),
 				section: 'appearance',
 				advanced: true,
 				description: () => 'CSS file support is provided for your convenience, but they are advanced settings, and styles you define may break from one version to the next. If you want to use them, please know that it might require regular development work from you to keep them working. The Joplin team cannot make a commitment to keep the application HTML structure stable.',
 			},
 
-			autoUpdateEnabled: { value: false, type: SettingItemType.Bool, storage: SettingStorage.File, section: 'application', public: platform !== 'linux', appTypes: ['desktop'], label: () => _('Automatically update the application') },
-			'autoUpdate.includePreReleases': { value: false, type: SettingItemType.Bool, section: 'application', storage: SettingStorage.File, public: true, appTypes: ['desktop'], label: () => _('Get pre-releases when checking for updates'), description: () => _('See the pre-release page for more details: %s', 'https://joplinapp.org/prereleases') },
+			'sync.clearLocalSyncStateButton': {
+				value: null,
+				type: SettingItemType.Button,
+				public: true,
+				appTypes: [AppType.Desktop],
+				label: () => _('Re-upload local data to sync target'),
+				section: 'sync',
+				advanced: true,
+				description: () => 'If the data on the sync target is incorrect or empty, you can use this button to force a re-upload of your data to the sync target. Application will have to be restarted',
+			},
+
+			'sync.clearLocalDataButton': {
+				value: null,
+				type: SettingItemType.Button,
+				public: true,
+				appTypes: [AppType.Desktop],
+				label: () => _('Delete local data and re-download from sync target'),
+				section: 'sync',
+				advanced: true,
+				description: () => 'If the data on the sync target is correct but your local data is not, you can use this button to clear your local data and force re-downloading everything from the sync target. As your local data will be deleted first, it is recommended to export your data as JEX first. Application will have to be restarted',
+			},
+
+
+			autoUpdateEnabled: { value: true, type: SettingItemType.Bool, storage: SettingStorage.File, section: 'application', public: platform !== 'linux', appTypes: [AppType.Desktop], label: () => _('Automatically update the application') },
+			'autoUpdate.includePreReleases': { value: false, type: SettingItemType.Bool, section: 'application', storage: SettingStorage.File, public: true, appTypes: [AppType.Desktop], label: () => _('Get pre-releases when checking for updates'), description: () => _('See the pre-release page for more details: %s', 'https://joplinapp.org/prereleases') },
 			'clipperServer.autoStart': { value: false, type: SettingItemType.Bool, storage: SettingStorage.File, public: false },
 			'sync.interval': {
 				value: 300,
@@ -938,11 +1054,20 @@ class Setting extends BaseModel {
 				},
 				storage: SettingStorage.File,
 			},
-			noteVisiblePanes: { value: ['editor', 'viewer'], type: SettingItemType.Array, storage: SettingStorage.File, public: false, appTypes: ['desktop'] },
-			tagHeaderIsExpanded: { value: true, type: SettingItemType.Bool, public: false, appTypes: ['desktop'] },
-			folderHeaderIsExpanded: { value: true, type: SettingItemType.Bool, public: false, appTypes: ['desktop'] },
-			editor: { value: '', type: SettingItemType.String, subType: 'file_path_and_args', storage: SettingStorage.File, public: true, appTypes: ['cli', 'desktop'], label: () => _('Text editor command'), description: () => _('The editor command (may include arguments) that will be used to open a note. If none is provided it will try to auto-detect the default editor.') },
-			'export.pdfPageSize': { value: 'A4', type: SettingItemType.String, advanced: true, storage: SettingStorage.File, isEnum: true, public: true, appTypes: ['desktop'], label: () => _('Page size for PDF export'), options: () => {
+			'sync.mobileWifiOnly': {
+				value: false,
+				type: SettingItemType.Bool,
+				section: 'sync',
+				public: true,
+				label: () => _('Synchronise only over WiFi connection'),
+				storage: SettingStorage.File,
+				appTypes: [AppType.Mobile],
+			},
+			noteVisiblePanes: { value: ['editor', 'viewer'], type: SettingItemType.Array, storage: SettingStorage.File, public: false, appTypes: [AppType.Desktop] },
+			tagHeaderIsExpanded: { value: true, type: SettingItemType.Bool, public: false, appTypes: [AppType.Desktop] },
+			folderHeaderIsExpanded: { value: true, type: SettingItemType.Bool, public: false, appTypes: [AppType.Desktop] },
+			editor: { value: '', type: SettingItemType.String, subType: 'file_path_and_args', storage: SettingStorage.File, public: true, appTypes: [AppType.Cli, AppType.Desktop], label: () => _('Text editor command'), description: () => _('The editor command (may include arguments) that will be used to open a note. If none is provided it will try to auto-detect the default editor.') },
+			'export.pdfPageSize': { value: 'A4', type: SettingItemType.String, advanced: true, storage: SettingStorage.File, isEnum: true, public: true, appTypes: [AppType.Desktop], label: () => _('Page size for PDF export'), options: () => {
 				return {
 					'A4': _('A4'),
 					'Letter': _('Letter'),
@@ -952,7 +1077,7 @@ class Setting extends BaseModel {
 					'Legal': _('Legal'),
 				};
 			} },
-			'export.pdfPageOrientation': { value: 'portrait', type: SettingItemType.String, storage: SettingStorage.File, advanced: true, isEnum: true, public: true, appTypes: ['desktop'], label: () => _('Page orientation for PDF export'), options: () => {
+			'export.pdfPageOrientation': { value: 'portrait', type: SettingItemType.String, storage: SettingStorage.File, advanced: true, isEnum: true, public: true, appTypes: [AppType.Desktop], label: () => _('Page orientation for PDF export'), options: () => {
 				return {
 					'portrait': _('Portrait'),
 					'landscape': _('Landscape'),
@@ -963,7 +1088,7 @@ class Setting extends BaseModel {
 				value: '',
 				type: SettingItemType.String,
 				public: true,
-				appTypes: ['desktop'],
+				appTypes: [AppType.Desktop],
 				isEnum: true,
 				advanced: true,
 				label: () => _('Keyboard Mode'),
@@ -981,7 +1106,7 @@ class Setting extends BaseModel {
 				value: false,
 				type: SettingItemType.Bool,
 				public: true,
-				appTypes: ['desktop'],
+				appTypes: [AppType.Desktop],
 				label: () => 'Enable spell checking in Markdown editor? (WARNING BETA feature)',
 				description: () => 'Spell checker in the Markdown editor was previously unstable (cursor location was not stable, sometimes edits would not be saved or reflected in the viewer, etc.) however it appears to be more reliable now. If you notice any issue, please report it on GitHub or the Joplin Forum (Help -> Joplin Forum)',
 			},
@@ -992,10 +1117,14 @@ class Setting extends BaseModel {
 				section: 'sync',
 				advanced: true,
 				show: (settings: any) => {
-					return [SyncTargetRegistry.nameToId('nextcloud'), SyncTargetRegistry.nameToId('webdav'), SyncTargetRegistry.nameToId('joplinServer')].indexOf(settings['sync.target']) >= 0;
+					return [
+						SyncTargetRegistry.nameToId('nextcloud'),
+						SyncTargetRegistry.nameToId('webdav'),
+						SyncTargetRegistry.nameToId('joplinServer'),
+					].indexOf(settings['sync.target']) >= 0;
 				},
 				public: true,
-				appTypes: ['desktop', 'cli'],
+				appTypes: [AppType.Desktop, AppType.Cli],
 				label: () => _('Custom TLS certificates'),
 				description: () => _('Comma-separated list of paths to directories to load the certificates from, or path to individual cert files. For example: /my/cert_dir, /other/custom.pem. Note that if you make changes to the TLS settings, you must save your changes before clicking on "Check synchronisation configuration".'),
 				storage: SettingStorage.File,
@@ -1006,10 +1135,19 @@ class Setting extends BaseModel {
 				advanced: true,
 				section: 'sync',
 				show: (settings: any) => {
-					return [SyncTargetRegistry.nameToId('nextcloud'), SyncTargetRegistry.nameToId('webdav'), SyncTargetRegistry.nameToId('joplinServer')].indexOf(settings['sync.target']) >= 0;
+					return (shim.isNode() || shim.mobilePlatform() === 'android') &&
+						[
+							SyncTargetRegistry.nameToId('nextcloud'),
+							SyncTargetRegistry.nameToId('webdav'),
+							SyncTargetRegistry.nameToId('joplinServer'),
+							// Needs to be enabled for Joplin Cloud too because
+							// some companies filter all traffic and swap TLS
+							// certificates, which result in error
+							// UNABLE_TO_GET_ISSUER_CERT_LOCALLY
+							SyncTargetRegistry.nameToId('joplinCloud'),
+						].indexOf(settings['sync.target']) >= 0;
 				},
 				public: true,
-				appTypes: ['desktop', 'cli'],
 				label: () => _('Ignore TLS certificate errors'),
 				storage: SettingStorage.File,
 			},
@@ -1026,7 +1164,7 @@ class Setting extends BaseModel {
 			},
 
 			'api.token': { value: null, type: SettingItemType.String, public: false, storage: SettingStorage.File },
-			'api.port': { value: null, type: SettingItemType.Int, storage: SettingStorage.File, public: true, appTypes: ['cli'], description: () => _('Specify the port that should be used by the API server. If not set, a default will be used.') },
+			'api.port': { value: null, type: SettingItemType.Int, storage: SettingStorage.File, public: true, appTypes: [AppType.Cli], description: () => _('Specify the port that should be used by the API server. If not set, a default will be used.') },
 
 			'resourceService.lastProcessedChangeId': { value: 0, type: SettingItemType.Int, public: false },
 			'searchEngine.lastProcessedChangeId': { value: 0, type: SettingItemType.Int, public: false },
@@ -1055,8 +1193,8 @@ class Setting extends BaseModel {
 			'welcome.wasBuilt': { value: false, type: SettingItemType.Bool, public: false },
 			'welcome.enabled': { value: true, type: SettingItemType.Bool, public: false },
 
-			'camera.type': { value: 0, type: SettingItemType.Int, public: false, appTypes: ['mobile'] },
-			'camera.ratio': { value: '4:3', type: SettingItemType.String, public: false, appTypes: ['mobile'] },
+			'camera.type': { value: 0, type: SettingItemType.Int, public: false, appTypes: [AppType.Mobile] },
+			'camera.ratio': { value: '4:3', type: SettingItemType.String, public: false, appTypes: [AppType.Mobile] },
 
 			'spellChecker.enabled': { value: true, type: SettingItemType.Bool, storage: SettingStorage.File, public: false },
 			'spellChecker.language': { value: '', type: SettingItemType.String, storage: SettingStorage.File, public: false },
@@ -1065,7 +1203,7 @@ class Setting extends BaseModel {
 				value: 100,
 				type: SettingItemType.Int,
 				public: false,
-				appTypes: ['desktop'],
+				appTypes: [AppType.Desktop],
 				minimum: 30,
 				maximum: 300,
 				step: 10,
@@ -1077,7 +1215,7 @@ class Setting extends BaseModel {
 				type: SettingItemType.Int,
 				section: 'appearance',
 				public: true,
-				appTypes: ['cli'],
+				appTypes: [AppType.Cli],
 				label: () => _('Notebook list growth factor'),
 				description: () =>
 					_('The factor property sets how the item will grow or shrink ' +
@@ -1091,7 +1229,7 @@ class Setting extends BaseModel {
 				type: SettingItemType.Int,
 				section: 'appearance',
 				public: true,
-				appTypes: ['cli'],
+				appTypes: [AppType.Cli],
 				label: () => _('Note list growth factor'),
 				description: () =>
 					_('The factor property sets how the item will grow or shrink ' +
@@ -1105,7 +1243,7 @@ class Setting extends BaseModel {
 				type: SettingItemType.Int,
 				section: 'appearance',
 				public: true,
-				appTypes: ['cli'],
+				appTypes: [AppType.Cli],
 				label: () => _('Note area growth factor'),
 				description: () =>
 					_('The factor property sets how the item will grow or shrink ' +
@@ -1114,11 +1252,39 @@ class Setting extends BaseModel {
 				'Restart app to see changes.'),
 				storage: SettingStorage.File,
 			},
+
+			isSafeMode: {
+				value: false,
+				type: SettingItemType.Bool,
+				public: false,
+				appTypes: [AppType.Desktop],
+				storage: SettingStorage.Database,
+			},
+
+			// 'featureFlag.syncAccurateTimestamps': {
+			// 	value: false,
+			// 	type: SettingItemType.Bool,
+			// 	public: false,
+			// 	storage: SettingStorage.File,
+			// },
+
+			// 'featureFlag.syncMultiPut': {
+			// 	value: false,
+			// 	type: SettingItemType.Bool,
+			// 	public: false,
+			// 	storage: SettingStorage.File,
+			// },
+
 		};
 
 		this.metadata_ = Object.assign(this.metadata_, this.customMetadata_);
 
 		return this.metadata_;
+	}
+
+	public static featureFlagKeys(appType: AppType): string[] {
+		const keys = this.keys(false, appType);
+		return keys.filter(k => k.indexOf('featureFlag.') === 0);
 	}
 
 	private static validateKey(key: string) {
@@ -1128,6 +1294,8 @@ class Setting extends BaseModel {
 	}
 
 	static async registerSetting(key: string, metadataItem: SettingItem) {
+		if (metadataItem.isEnum && !metadataItem.options) throw new Error('The `options` property is required for enum types');
+
 		this.validateKey(key);
 
 		this.customMetadata_[key] = metadataItem;
@@ -1164,11 +1332,17 @@ class Setting extends BaseModel {
 		return output;
 	}
 
-	static keyExists(key: string) {
+	// Resets the key to its default value.
+	public static resetKey(key: string) {
+		const md = this.settingMetadata(key);
+		this.setValue(key, md.value);
+	}
+
+	public static keyExists(key: string) {
 		return key in this.metadata();
 	}
 
-	static keyDescription(key: string, appType: string = null) {
+	static keyDescription(key: string, appType: AppType = null) {
 		const md = this.settingMetadata(key);
 		if (!md.description) return null;
 		return md.description(appType);
@@ -1178,7 +1352,7 @@ class Setting extends BaseModel {
 		return this.metadata()[key] && this.metadata()[key].secure === true;
 	}
 
-	static keys(publicOnly: boolean = false, appType: string = null, options: KeysOptions = null) {
+	static keys(publicOnly: boolean = false, appType: AppType = null, options: KeysOptions = null) {
 		options = Object.assign({}, {
 			secureOnly: false,
 		}, options);
@@ -1212,10 +1386,18 @@ class Setting extends BaseModel {
 	}
 
 	// Low-level method to load a setting directly from the database. Should not be used in most cases.
-	public static async loadOne(key: string) {
+	public static async loadOne(key: string): Promise<CacheItem> {
 		if (this.keyStorage(key) === SettingStorage.File) {
 			const fromFile = await this.fileHandler.load();
-			return fromFile[key];
+			return {
+				key,
+				value: fromFile[key],
+			};
+		} else if (this.settingMetadata(key).secure) {
+			return {
+				key,
+				value: await this.keychainService().password(`setting.${key}`),
+			};
 		} else {
 			return this.modelSelectOne('SELECT * FROM settings WHERE key = ?', [key]);
 		}
@@ -1269,7 +1451,7 @@ class Setting extends BaseModel {
 				for (const k of Object.keys(fromFile)) {
 					itemsFromFile.push({
 						key: k,
-						value: this.filterValue(k, this.formatValue(k, fromFile[k])),
+						value: fromFile[k],
 					});
 				}
 			}
@@ -1310,10 +1492,10 @@ class Setting extends BaseModel {
 
 	static setConstant(key: string, value: any) {
 		if (!(key in this.constants_)) throw new Error(`Unknown constant key: ${key}`);
-		this.constants_[key] = value;
+		(this.constants_ as any)[key] = value;
 	}
 
-	static setValue(key: string, value: any) {
+	public static setValue(key: string, value: any) {
 		if (!this.cache_) throw new Error('Settings have not been initialized!');
 
 		value = this.formatValue(key, value);
@@ -1473,7 +1655,7 @@ class Setting extends BaseModel {
 		}
 
 		if (key in this.constants_) {
-			const v = this.constants_[key];
+			const v = (this.constants_ as any)[key];
 			const output = typeof v === 'function' ? v() : v;
 			if (output == 'SET_ME') throw new Error(`SET_ME constant has not been set: ${key}`);
 			return output;
@@ -1555,7 +1737,7 @@ class Setting extends BaseModel {
 		return output;
 	}
 
-	static async saveAll() {
+	public static async saveAll() {
 		if (Setting.autoSaveEnabled && !this.saveTimeoutId_) return Promise.resolve();
 
 		this.logger().debug('Saving settings...');
@@ -1668,7 +1850,7 @@ class Setting extends BaseModel {
 		this.saveTimeoutId_ = null;
 	}
 
-	static publicSettings(appType: string) {
+	static publicSettings(appType: AppType) {
 		if (!appType) throw new Error('appType is required');
 
 		const metadata = this.metadata();

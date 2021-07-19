@@ -58,12 +58,12 @@ async function updatePluginGeneratorTemplateVersion(manifestPath, majorMinorVers
 	await fs.writeFile(manifestPath, JSON.stringify(manifest, null, '\t'));
 }
 
-// Need this hack to transform 1.x.x into 10.x.x due to some mistake
+// Need this hack to transform x.y.z into 1x.y.z due to some mistake
 // on one of the release and the App Store won't allow decreasing
 // the major version number.
 function iosVersionHack(majorMinorVersion) {
 	const p = majorMinorVersion.split('.');
-	p[0] = `${p[0]}0`;
+	p[0] = `1${p[0]}`;
 	return p.join('.');
 }
 
@@ -88,6 +88,8 @@ async function main() {
 	await updateCodeProjVersion(`${rootDir}/packages/app-mobile/ios/Joplin.xcodeproj/project.pbxproj`, iosVersionHack(majorMinorVersion));
 	await updateClipperManifestVersion(`${rootDir}/packages/app-clipper/manifest.json`, majorMinorVersion);
 	await updatePluginGeneratorTemplateVersion(`${rootDir}/packages/generator-joplin/generators/app/templates/src/manifest.json`, majorMinorVersion);
+
+	console.info('Version numbers have been updated. Consider running `npm i` to update the lock files');
 }
 
 main().catch((error) => {

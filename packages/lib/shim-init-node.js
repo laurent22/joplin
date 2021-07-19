@@ -62,7 +62,7 @@ const gunzipFile = function(source, destination) {
 	});
 };
 
-function shimInit(sharp = null, keytar = null, React = null) {
+function shimInit(sharp = null, keytar = null, React = null, appVersion = null) {
 	keytar = (shim.isWindows() || shim.isMac()) && !shim.isPortable() ? keytar : null;
 
 	shim.fsDriver = () => {
@@ -481,19 +481,18 @@ function shimInit(sharp = null, keytar = null, React = null) {
 	shim.httpAgent_ = null;
 
 	shim.httpAgent = url => {
-		if (shim.isLinux() && !shim.httpAgent) {
+		if (!shim.httpAgent_) {
 			const AgentSettings = {
 				keepAlive: true,
 				maxSockets: 1,
 				keepAliveMsecs: 5000,
 			};
-			if (url.startsWith('https')) {
-				shim.httpAgent_ = new https.Agent(AgentSettings);
-			} else {
-				shim.httpAgent_ = new http.Agent(AgentSettings);
-			}
+			shim.httpAgent_ = {
+				http: new http.Agent(AgentSettings),
+				https: new https.Agent(AgentSettings),
+			};
 		}
-		return shim.httpAgent_;
+		return url.startsWith('https') ? shim.httpAgent_.https : shim.httpAgent_.http;
 	};
 
 	shim.openOrCreateFile = (filepath, defaultContents) => {
@@ -513,12 +512,10 @@ function shimInit(sharp = null, keytar = null, React = null) {
 	shim.waitForFrame = () => {};
 
 	shim.appVersion = () => {
-		if (shim.isElectron()) {
-			const p = require('../packageInfo.js');
-			return p.version;
-		}
-		const p = require('../package.json');
-		return p.version;
+		if (appVersion) return appVersion();
+		// Should not happen but don't throw an error because version number is
+		// used in error messages.
+		return 'unknown-version!';
 	};
 
 	shim.pathRelativeToCwd = (path) => {

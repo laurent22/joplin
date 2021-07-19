@@ -43,7 +43,8 @@ function createChangeLog(releases) {
 	for (let i = 0; i < releases.length; i++) {
 		const r = releases[i];
 		const s = [];
-		s.push(`## ${r.tag_name} - ${r.published_at}`);
+		const preReleaseString = r.prerelease ? ' (Pre-release)' : '';
+		s.push(`## ${r.tag_name}${preReleaseString} - ${r.published_at}`);
 		s.push('');
 		const body = r.body.replace(/#(\d+)/g, '[#$1](https://github.com/laurent22/joplin/issues/$1)');
 		s.push(body);
@@ -67,13 +68,14 @@ async function main() {
 			const release = releases[i];
 			if (!release.tag_name.match(/^v\d+\.\d+\.\d+$/)) continue;
 			if (release.draft) continue;
-			if (release.prerelease) continue;
+			// if (release.prerelease) continue;
 
 			let row = {};
 			row = Object.assign(row, downloadCounts(release));
 			row.tag_name = `[${release.tag_name}](https://github.com/laurent22/joplin/releases/tag/${release.tag_name})`;
 			row.published_at = release.published_at;
 			row.body = release.body;
+			row.prerelease = release.prerelease;
 
 			totals.windows_count += row.windows_count;
 			totals.mac_count += row.mac_count;
@@ -117,6 +119,7 @@ async function main() {
 	];
 
 	for (let i = 0; i < rows.length; i++) {
+		rows[i].tag_name = rows[i].prerelease ? `${rows[i].tag_name} (p)` : rows[i].tag_name;
 		rows[i].mac_count = formatter.format(rows[i].mac_count);
 		rows[i].windows_count = formatter.format(rows[i].windows_count);
 		rows[i].linux_count = formatter.format(rows[i].linux_count);
@@ -131,6 +134,10 @@ async function main() {
 		{ name: 'name', label: 'Name' },
 		{ name: 'value', label: 'Value' },
 	], totalsMd));
+
+	statsMd.push('');
+	statsMd.push('(p) Indicates pre-releases');
+	statsMd.push('');
 
 	statsMd.push(markdownUtils.createMarkdownTable([
 		{ name: 'tag_name', label: 'Version' },

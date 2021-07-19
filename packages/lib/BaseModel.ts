@@ -3,7 +3,7 @@ import paginationToSql from './models/utils/paginationToSql';
 import Database from './database';
 import uuid from './uuid';
 import time from './time';
-import JoplinDatabase from './JoplinDatabase';
+import JoplinDatabase, { TableField } from './JoplinDatabase';
 const Mutex = require('async-mutex').Mutex;
 
 // New code should make use of this enum
@@ -193,7 +193,7 @@ class BaseModel {
 		throw new Error(`Unknown field: ${name}`);
 	}
 
-	static fields() {
+	static fields(): TableField[] {
 		return this.db().tableFields(this.tableName());
 	}
 

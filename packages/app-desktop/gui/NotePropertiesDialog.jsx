@@ -2,12 +2,13 @@ const React = require('react');
 const { _ } = require('@joplin/lib/locale');
 const { themeStyle } = require('@joplin/lib/theme');
 const time = require('@joplin/lib/time').default;
-const DialogButtonRow = require('./DialogButtonRow.min');
+const DialogButtonRow = require('./DialogButtonRow').default;
 const Datetime = require('react-datetime');
 const Note = require('@joplin/lib/models/Note').default;
 const formatcoords = require('formatcoords');
 const bridge = require('electron').remote.require('./bridge').default;
 const shim = require('@joplin/lib/shim').default;
+const { clipboard } = require('electron');
 
 class NotePropertiesDialog extends React.Component {
 	constructor() {
@@ -317,6 +318,12 @@ class NotePropertiesDialog extends React.Component {
 					this.editPropertyButtonClick(key, value);
 				};
 				editCompIcon = 'fa-edit';
+			}
+
+			// Add the copy icon and the 'copy on click' event
+			if (key === 'id') {
+				editCompIcon = 'fa-copy';
+				editCompHandler = () => clipboard.writeText(value);
 			}
 		}
 

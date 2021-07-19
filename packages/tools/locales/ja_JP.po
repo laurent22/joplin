@@ -18,30 +18,31 @@ msgstr ""
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
-#: packages/app-desktop/checkForUpdates.js:139
 #: packages/app-desktop/gui/DialogButtonRow.min.js:30
-#: packages/app-desktop/gui/MenuBar.js:317
+#: packages/app-desktop/gui/MenuBar.js:377
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.js:22
 #: packages/app-desktop/gui/PromptDialog.min.js:235
+#: packages/app-desktop/gui/DialogButtonRow.js:35
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:20
 #: packages/app-mobile/components/ModalDialog.js:67
 #: packages/app-mobile/components/CameraView.js:160
 #: packages/app-mobile/components/side-menu-content.js:150
-#: packages/app-mobile/components/screens/config.js:148
+#: packages/app-mobile/components/screens/ConfigScreen.js:152
 msgid "OK"
 msgstr "OK"
 
 #: packages/app-desktop/bridge.js:110 packages/app-desktop/bridge.js:126
-#: packages/app-desktop/checkForUpdates.js:154
+#: packages/app-desktop/checkForUpdates.js:189
 #: packages/app-desktop/gui/DialogButtonRow.min.js:38
-#: packages/app-desktop/gui/Sidebar/Sidebar.js:201
-#: packages/app-desktop/gui/Sidebar/Sidebar.js:430
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:214
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:455
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:52
 #: packages/app-desktop/gui/utils/NoteListUtils.js:169
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:533
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:521
 #: packages/app-desktop/gui/PromptDialog.min.js:242
-#: packages/app-desktop/gui/NoteList/NoteList.js:163
+#: packages/app-desktop/gui/NoteList/NoteList.js:164
 #: packages/app-desktop/gui/ResourceScreen.js:96
+#: packages/app-desktop/gui/DialogButtonRow.js:38
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:21
 #: packages/app-mobile/components/ModalDialog.js:70
 #: packages/app-mobile/components/SelectDateTimeDialog.js:82
@@ -56,14 +57,14 @@ msgstr "OK"
 msgid "Cancel"
 msgstr "キャンセル"
 
-#: packages/app-desktop/bridge.js:188
+#: packages/app-desktop/bridge.js:184
 msgid ""
 "The app is now going to close. Please relaunch it to complete the process."
 msgstr ""
 "まもなくアプリケーションは終了します。もう一度起動して処理を完了させてくださ"
 "い。"
 
-#: packages/app-desktop/plugins/GotoAnything.js:431
+#: packages/app-desktop/plugins/GotoAnything.js:455
 msgid ""
 "Type a note title or part of its content to jump to it. Or type # followed "
 "by a tag name, or @ followed by a notebook name. Or type : to search for "
@@ -73,12 +74,12 @@ msgstr ""
 "タグ名」で該当タグ付きノートの一覧に、「@ノートブック名」で該当ノートブックに"
 "移動できます。あるいは「:」でコマンドを検索して実行できます。"
 
-#: packages/app-desktop/plugins/GotoAnything.js:456
+#: packages/app-desktop/plugins/GotoAnything.js:480
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:20
 msgid "Goto Anything..."
 msgstr "Goto Anything..."
 
-#: packages/app-desktop/plugins/GotoAnything.js:463
+#: packages/app-desktop/plugins/GotoAnything.js:487
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:28
 msgid "Command palette"
 msgstr "コマンドパレット"
@@ -89,53 +90,52 @@ msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
 msgstr ""
 "\"%s\" を \"%s\" フォーマットにエクスポート中。しばらくお待ちください..."
 
-#: packages/app-desktop/InteropServiceHelper.js:174
+#: packages/app-desktop/InteropServiceHelper.js:175
 #, javascript-format
 msgid "Could not export notes: %s"
 msgstr "ノートをエクスポートできませんでした: %s"
 
-#: packages/app-desktop/checkForUpdates.js:138
+#: packages/app-desktop/checkForUpdates.js:171
 msgid "Current version is up-to-date."
 msgstr "現在のバージョンは最新版です。"
 
-#: packages/app-desktop/checkForUpdates.js:148
+#: packages/app-desktop/checkForUpdates.js:184
 #, javascript-format
 msgid "%s (pre-release)"
 msgstr "%s (プレリリース)"
 
-#: packages/app-desktop/checkForUpdates.js:152
+#: packages/app-desktop/checkForUpdates.js:187
 msgid "An update is available, do you want to download it now?"
 msgstr "アップデートがあります。すぐにダウンロードしますか？"
 
-#: packages/app-desktop/checkForUpdates.js:153
+#: packages/app-desktop/checkForUpdates.js:188
 #, javascript-format
 msgid "Your version: %s"
 msgstr "あなたのバージョン: %s"
 
-#: packages/app-desktop/checkForUpdates.js:153
+#: packages/app-desktop/checkForUpdates.js:188
 #, javascript-format
 msgid "New version: %s"
 msgstr "新バージョン: %s"
 
-#: packages/app-desktop/checkForUpdates.js:154
+#: packages/app-desktop/checkForUpdates.js:189
 msgid "Download"
 msgstr "ダウンロード"
 
-#: packages/app-desktop/checkForUpdates.js:154
-msgid "Full Release Notes"
-msgstr "リリースノート（完全版）"
+#: packages/app-desktop/checkForUpdates.js:189
+msgid "Skip this version"
+msgstr "このバージョンをスキップ"
 
-#: packages/app-desktop/gui/NoteRevisionViewer.min.js:75
-#, javascript-format
-msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
-msgstr "ノート \"%s\" のノートブック \"%s\"への復元は成功しました。"
+#: packages/app-desktop/checkForUpdates.js:189
+msgid "Full changelog"
+msgstr "全変更点一覧"
 
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:100
 msgid "This note has no history"
 msgstr "このノートに履歴はありません"
 
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:142
-#: packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.js:122
+#: packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.js:92
 #, javascript-format
 msgid "Unsupported link or message: %s"
 msgstr "次のリンクまたはメッセージはサポートしていません: %s"
@@ -155,17 +155,17 @@ msgstr ""
 "ブックにコピーされます。現在のバージョンのノートの置換や変更は行われません。"
 
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:187
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:533
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:521
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.js:30
 #: packages/lib/commands/historyBackward.js:17
 msgid "Back"
 msgstr "戻る"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.js:176
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:189
 msgid "Remove"
 msgstr "削除"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.js:179
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:192
 #: packages/app-mobile/components/side-menu-content.js:148
 #, javascript-format
 msgid ""
@@ -177,10 +177,10 @@ msgstr ""
 "\n"
 "このノートブックにあるノートとサブノートはすべて消えてしまいます。"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.js:180
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:193
 #: packages/app-desktop/gui/utils/NoteListUtils.js:140
 #: packages/app-desktop/gui/utils/NoteListUtils.js:169
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:122
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:125
 #: packages/app-desktop/gui/ResourceScreen.js:47
 #: packages/app-desktop/gui/ResourceScreen.js:96
 #: packages/app-mobile/components/side-menu-content.js:146
@@ -188,39 +188,39 @@ msgstr ""
 msgid "Delete"
 msgstr "削除"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.js:184
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:197
 #, javascript-format
 msgid "Remove tag \"%s\" from all notes?"
 msgstr "すべてのノートからタグ \"%s\" を削除しますか？"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.js:187
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:200
 msgid "Remove this search from the sidebar?"
 msgstr "サイドバーからこの検索を削除しますか？"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.js:238
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:258
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:122
 #: packages/app-desktop/gui/utils/NoteListUtils.js:136
 msgid "Export"
 msgstr "エクスポート"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.js:301
-#: packages/app-mobile/components/side-menu-content.js:360
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:321
+#: packages/app-mobile/components/side-menu-content.js:368
 #: packages/app-mobile/components/screens/notes.js:188
 msgid "All notes"
 msgstr "すべてのノート"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.js:430
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:455
 #: packages/app-mobile/components/side-menu-content.js:338
 #: packages/lib/commands/synchronize.js:18
 msgid "Synchronise"
 msgstr "同期"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.js:455
-#: packages/app-mobile/components/side-menu-content.js:364
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:480
+#: packages/app-mobile/components/side-menu-content.js:372
 msgid "Notebooks"
 msgstr "ノートブック"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.js:467
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:492
 #: packages/app-desktop/gui/MainScreen/commands/setTags.js:17
 #: packages/app-mobile/components/side-menu-content.js:314
 #: packages/app-mobile/components/screens/tags.js:101
@@ -228,13 +228,13 @@ msgstr "ノートブック"
 msgid "Tags"
 msgstr "タグ"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.js:478
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:503
 #: packages/app-mobile/components/side-menu-content.js:325
 #, javascript-format
 msgid "Decrypting items: %d/%d"
 msgstr "復号中のアイテム: %d/%d"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.js:482
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:507
 #: packages/app-mobile/components/side-menu-content.js:330
 #, javascript-format
 msgid "Fetching resources: %d/%d"
@@ -247,48 +247,56 @@ msgstr "サイドバー"
 #: packages/app-desktop/gui/Sidebar/commands/focusElementSideBar.js:18
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteTitle.js:17
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteBody.js:17
-#: packages/app-desktop/gui/MenuBar.js:558
+#: packages/app-desktop/gui/MenuBar.js:625
 #: packages/app-desktop/gui/NoteList/commands/focusElementNoteList.js:18
 msgid "Focus"
 msgstr "フォーカス"
 
-#: packages/app-desktop/gui/StatusScreen/StatusScreen.js:26
+#: packages/app-desktop/gui/StatusScreen/StatusScreen.js:31
 msgid "Please select where the sync status should be exported to"
 msgstr "同期状況の出力先を選択してください"
 
-#: packages/app-desktop/gui/StatusScreen/StatusScreen.js:61
+#: packages/app-desktop/gui/StatusScreen/StatusScreen.js:66
 #: packages/app-mobile/components/screens/status.js:112
 msgid "Retry All"
 msgstr "すべて再試行"
 
-#: packages/app-desktop/gui/StatusScreen/StatusScreen.js:78
+#: packages/app-desktop/gui/StatusScreen/StatusScreen.js:86
 #: packages/app-mobile/components/screens/status.js:118
 msgid "Retry"
 msgstr "再実行"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:178
+#: packages/app-desktop/gui/StatusScreen/StatusScreen.js:137
+msgid "Advanced tools"
+msgstr "高度なツール"
+
+#: packages/app-desktop/gui/StatusScreen/StatusScreen.js:139
+msgid "Export debug report"
+msgstr "デバッグレポートの出力"
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:183
 msgid "strong text"
 msgstr "文字を太字に"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:179
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:184
 msgid "emphasised text"
 msgstr "強調したいテキスト"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:181
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:186
 msgid "Insert Hyperlink"
 msgstr "ハイパーリンクの挿入"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:215
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:217
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:218
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:220
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:222
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:223
 msgid "List item"
 msgstr "リストアイテム"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:496
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:545
 msgid "Layout"
 msgstr "レイアウト"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:496
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:545
 #, javascript-format
 msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
@@ -297,21 +305,21 @@ msgstr ""
 "このノートには中身がありません。 \"%s\" をクリックしてエディターを表示し、"
 "ノートを編集してください。"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:605
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:97
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:654
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:128
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:18
 msgid "Cut"
 msgstr "切り取り"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:612
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:105
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:661
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:136
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:13
-#: packages/app-desktop/gui/MenuBar.js:317
+#: packages/app-desktop/gui/MenuBar.js:377
 msgid "Copy"
 msgstr "コピー"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:619
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:112
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:668
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:143
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:23
 msgid "Paste"
 msgstr "貼り付け"
@@ -320,40 +328,59 @@ msgstr "貼り付け"
 msgid "Checkbox list"
 msgstr "チェックボックスリスト"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:530
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:452
-#: packages/app-mobile/components/screens/Note.js:1013
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:17
+msgid "Highlight"
+msgstr "ハイライト"
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:22
+msgid "Strikethrough"
+msgstr "取消線"
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:27
+msgid "Insert"
+msgstr "挿入線"
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:33
+msgid "Superscript"
+msgstr "上付き文字"
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:39
+msgid "Subscript"
+msgstr "下付き文字"
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:574
+#: packages/app-mobile/components/screens/Note.js:1016
 msgid "Edit"
 msgstr "編集"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:586
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:630
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:53
 #: packages/app-mobile/components/screens/Note.js:771
 msgid "Attach file"
 msgstr "ファイルを添付する"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:595
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:640
 msgid "Code Block"
 msgstr "コードブロック"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:604
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:649
 msgid "Inline Code"
 msgstr "インラインコード"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:619
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:664
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:83
 msgid "Insert Date Time"
 msgstr "日付の入力"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1013
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1115
 msgid "Drop notes or files here"
 msgstr "ノートやファイルをここにドロップします"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1013
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1115
 msgid "Code View"
 msgstr "コードビュー"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1013
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1115
 #, javascript-format
 msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
@@ -362,32 +389,32 @@ msgstr ""
 "すべての添付ファイルのダウンロードと復号が終わるまでお待ちください。%sに切り"
 "替えてノートを編集することはできます。"
 
-#: packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.js:74
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:59
 msgid "There was an error downloading this attachment:"
 msgstr "この添付ファイルをダウンロードするときにエラーが発生しました:"
 
-#: packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.js:77
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:62
 #: packages/lib/services/ResourceEditWatcher/index.js:196
 msgid "This attachment is not downloaded or not decrypted yet"
 msgstr "この添付ファイルはダウンロードされていないか、まだ復号されていません"
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:55
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:92
 msgid "Open..."
 msgstr "開く..."
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:68
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:99
 msgid "Save as..."
 msgstr "名前を付けて保存..."
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:81
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:112
 msgid "Reveal file in folder"
 msgstr "ファイルのあるフォルダーを開く"
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:89
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:120
 msgid "Copy path to clipboard"
 msgstr "クリップボードにパスを保存"
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:120
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:155
 msgid "Copy Link Address"
 msgstr "リンクアドレスをコピー"
 
@@ -396,6 +423,8 @@ msgid "to-do"
 msgstr "to-do"
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.js:79
+#: packages/server/dist/models/UserModel.js:186
+#: packages/server/dist/models/UserModel.js:191
 msgid "note"
 msgstr "ノート"
 
@@ -404,11 +433,11 @@ msgstr "ノート"
 msgid "Creating new %s..."
 msgstr "新しい %s を作成中..."
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:284
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:285
 msgid "Click to add tags..."
 msgstr "クリックしてタグを追加..."
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:337
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:338
 msgid ""
 "This Rich Text editor has a number of limitations and it is recommended to "
 "be aware of them before using it."
@@ -416,25 +445,25 @@ msgstr ""
 "リッチテキストエディターには多くの制限がありますので、それらをご承知の上でご"
 "使用ください。"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:341
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:342
 msgid "Read more about it"
 msgstr "もっと知りたい"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:346
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:347
 msgid "Dismiss"
 msgstr "閉じる"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:382
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:383
 msgid "The following attachments are being watched for changes:"
 msgstr "下記の添付ファイルが変更されたかどうかを監視中です:"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:385
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:386
 msgid ""
 "The attachments will no longer be watched when you switch to a different "
 "note."
 msgstr "添付ファイルの監視は他のノートに移動すると終了します。"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:391
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:392
 #, javascript-format
 msgid "In: %s"
 msgstr "内: %s"
@@ -484,34 +513,38 @@ msgid "Delete line"
 msgstr "行を削除"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:92
+msgid "Duplicate line"
+msgstr "行を複製"
+
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:96
 msgid "Undo"
 msgstr "元に戻す"
 
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:96
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:100
 msgid "Redo"
 msgstr "やり直す"
 
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:100
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:104
 msgid "Indent less"
 msgstr "インデントを減らす"
 
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:104
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:108
 msgid "Indent more"
 msgstr "インデントを増やす"
 
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:108
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:112
 msgid "Toggle comment"
 msgstr "コメントの切り替え"
 
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:112
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:116
 msgid "Sort selected lines"
 msgstr "選択行の並び替え"
 
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:116
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:120
 msgid "Swap line up"
 msgstr "前の行と入れ替え"
 
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:120
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:124
 msgid "Swap line down"
 msgstr "次の行と入れ替え"
 
@@ -527,7 +560,7 @@ msgstr "現在のノートを検索"
 msgid "Note body"
 msgstr "ノートの本文"
 
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:27
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:28
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:164
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:309
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:390
@@ -535,50 +568,50 @@ msgstr "ノートの本文"
 msgid "ID"
 msgstr "ID"
 
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:28
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:29
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:319
 msgid "Created"
 msgstr "作成日時"
 
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:29
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:30
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:324
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:141
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:143
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:144
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:146
 msgid "Updated"
 msgstr "アップデート日時"
 
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:30
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:31
 msgid "Completed"
 msgstr "完了"
 
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:31
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:32
 msgid "Location"
 msgstr "場所"
 
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:32
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:33
 msgid "URL"
 msgstr "URL"
 
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:33
-#: packages/lib/models/Setting.js:1433
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:34
+#: packages/lib/models/Setting.js:1666
 msgid "Note History"
 msgstr "ノートの履歴"
 
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:34
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:35
 msgid "Markup"
 msgstr "マークアップ"
 
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:306
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:307
 msgid "Previous versions of this note"
 msgstr "このノートの以前のバージョン"
 
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:383
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:390
 #: packages/app-desktop/gui/MainScreen/commands/showNoteProperties.js:18
 msgid "Note properties"
 msgstr "ノートのプロパティ"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:63
-#: packages/lib/services/KeymapService.js:176
+#: packages/lib/services/KeymapService.js:178
 #, javascript-format
 msgid "Error: %s"
 msgstr "エラー: %s"
@@ -586,19 +619,19 @@ msgstr "エラー: %s"
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:110
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:443
 #: packages/app-mobile/components/screens/encryption-config.js:280
-#: packages/lib/models/Setting.js:704 packages/app-cli/app/command-e2ee.js:110
+#: packages/lib/models/Setting.js:839 packages/app-cli/app/command-e2ee.js:118
 msgid "Disabled"
 msgstr "無効"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:120
-#: packages/app-desktop/gui/NoteSearchBar.min.js:167
+#: packages/app-desktop/gui/NoteSearchBar.min.js:168
 #: packages/app-desktop/gui/lib/SearchInput/SearchInput.js:38
 msgid "Search..."
 msgstr "検索..."
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:121
-#: packages/app-desktop/gui/MenuBar.js:373
-#: packages/app-desktop/gui/MenuBar.js:420 packages/app-desktop/gui/Root.js:99
+#: packages/app-desktop/gui/MenuBar.js:433
+#: packages/app-desktop/gui/MenuBar.js:486 packages/app-desktop/gui/Root.js:99
 msgid "Import"
 msgstr "インポート"
 
@@ -611,22 +644,22 @@ msgid "Keyboard Shortcut"
 msgstr "ショートカットキー"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:14
-#: packages/app-desktop/gui/MenuBar.js:156 packages/app-desktop/app.js:358
+#: packages/app-desktop/gui/MenuBar.js:213 packages/app-desktop/app.js:372
 msgid "Quit"
 msgstr "終了"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:16
-#: packages/app-desktop/gui/MenuBar.js:260
+#: packages/app-desktop/gui/MenuBar.js:320
 msgid "Insert template"
 msgstr "テンプレートを挿入"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:18
-#: packages/app-desktop/gui/MenuBar.js:519
+#: packages/app-desktop/gui/MenuBar.js:586
 msgid "Actual Size"
 msgstr "100%%表示"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:22
-#: packages/app-desktop/gui/MenuBar.js:580
+#: packages/app-desktop/gui/MenuBar.js:654
 msgid "Website and documentation"
 msgstr "Webサイトとドキュメント"
 
@@ -635,7 +668,7 @@ msgid "Hide Joplin"
 msgstr "Joplinを隠す"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:26
-#: packages/app-desktop/gui/MenuBar.js:408
+#: packages/app-desktop/gui/MenuBar.js:474
 msgid "Close Window"
 msgstr "ウィンドウを閉じる"
 
@@ -644,7 +677,7 @@ msgid "Preferences"
 msgstr "環境設定"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:30
-#: packages/app-desktop/gui/MenuBar.js:284 packages/app-desktop/gui/Root.js:100
+#: packages/app-desktop/gui/MenuBar.js:344 packages/app-desktop/gui/Root.js:100
 msgid "Options"
 msgstr "オプション"
 
@@ -670,7 +703,33 @@ msgstr ""
 msgid "Save"
 msgstr "保存"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:405
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:463
+msgid "The Web Clipper needs your authorisation to access your data."
+msgstr ""
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:463
+#, fuzzy
+msgid "Grant authorisation"
+msgstr "認証トークン:"
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:463
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:483
+msgid "Reject"
+msgstr "拒否"
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:466
+msgid ""
+"Safe mode is currently active. Note rendering and all plugins are "
+"temporarily disabled."
+msgstr ""
+"セーフモードで実行中。ノートのレンダリングとすべてのプラグインを一時的に無効"
+"化しています。"
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:466
+msgid "Disable safe mode and restart"
+msgstr "セーフモードを終了して再起動"
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:469
 msgid ""
 "The sync target needs to be upgraded before Joplin can sync. The operation "
 "may take a few minutes to complete and the app needs to be restarted. To "
@@ -680,37 +739,25 @@ msgstr ""
 "かかるかもしれません。またアプリケーションの再起動が必要です。アップグレード"
 "するにはリンクをクリックしてください。"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:407
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:469
 msgid "Restart and upgrade"
 msgstr "再起動してアップグレード"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:411
-msgid "Some items cannot be synchronised."
-msgstr "いくつかの項目は同期されませんでした。"
-
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:413
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:419
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:431
-msgid "View them now"
-msgstr "今すぐ表示"
-
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:417
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:472
 msgid "Some items cannot be decrypted."
 msgstr "いくつかの項目は復号されませんでした。"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:423
-msgid "One or more master keys need a password."
-msgstr "パスワード入力の必要なマスターキーがあります。"
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:472
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:475
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:486
+msgid "View them now"
+msgstr "今すぐ表示"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:425
-msgid "Set the password"
-msgstr "パスワードの設定"
-
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:429
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:475
 msgid "One of your master keys use an obsolete encryption method."
 msgstr "古い暗号化方式を使っているマスターキーがあります。"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:435
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:478
 msgid ""
 "The default encryption method has been changed, you should re-encrypt your "
 "data."
@@ -718,11 +765,32 @@ msgstr ""
 "デフォルトの暗号化方式が変更されています。既存データを暗号化しなおすことをお"
 "すすめします。"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:437
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:478
 msgid "More info"
 msgstr "詳細情報"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:558
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:483
+#, javascript-format
+msgid "%s (%s) would like to share a notebook with you."
+msgstr "%s (%s) があなたとノートブックを共有したがっています。"
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:483
+msgid "Accept"
+msgstr "承諾"
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:486
+msgid "Some items cannot be synchronised."
+msgstr "いくつかの項目は同期されませんでした。"
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:489
+msgid "One or more master keys need a password."
+msgstr "パスワード入力の必要なマスターキーがあります。"
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:489
+msgid "Set the password"
+msgstr "パスワードの設定"
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:612
 msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
 msgstr ""
 "矢印を使ってレイアウトアイテムを移動してください。\"Esc\" で終了します。"
@@ -792,6 +860,10 @@ msgstr "エディターレイアウトの表示切り替え"
 msgid "Toggle editors"
 msgstr "エディターの切り替え"
 
+#: packages/app-desktop/gui/MainScreen/commands/showShareFolderDialog.js:16
+msgid "Share notebook..."
+msgstr "ノートブックを共有..."
+
 #: packages/app-desktop/gui/MainScreen/commands/toggleLayoutMoveMode.js:16
 msgid "Change application layout"
 msgstr "画面レイアウトをカスタマイズ"
@@ -839,20 +911,20 @@ msgstr "一度に印刷できるノートは1つだけです。"
 
 #: packages/app-desktop/gui/DropboxLoginScreen.js:29
 #: packages/app-mobile/components/screens/dropbox-login.js:58
-#: packages/app-cli/app/command-sync.js:90
+#: packages/app-cli/app/command-sync.js:91
 msgid ""
 "To allow Joplin to synchronise with Dropbox, please follow the steps below:"
 msgstr "DropboxでJoplinを同期する場合は、次のステップを実行してください:"
 
 #: packages/app-desktop/gui/DropboxLoginScreen.js:30
 #: packages/app-mobile/components/screens/dropbox-login.js:59
-#: packages/app-cli/app/command-sync.js:91
+#: packages/app-cli/app/command-sync.js:92
 msgid "Step 1: Open this URL in your browser to authorise the application:"
 msgstr "ステップ1: アプリケーションを認証するためにこのURLをブラウザーで開く:"
 
 #: packages/app-desktop/gui/DropboxLoginScreen.js:32
 #: packages/app-mobile/components/screens/dropbox-login.js:65
-#: packages/app-cli/app/command-sync.js:93
+#: packages/app-cli/app/command-sync.js:94
 msgid "Step 2: Enter the code provided by Dropbox:"
 msgstr "ステップ2: Dropboxによって提供されたコードを入力する:"
 
@@ -861,37 +933,41 @@ msgstr "ステップ2: Dropboxによって提供されたコードを入力す�
 msgid "Submit"
 msgstr "入力"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:39
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:40
 msgid "Token has been copied to the clipboard!"
 msgstr "トークンをクリップボードにコピーしました！"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:71
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:44
+msgid "Are you sure you want to renew the authorisation token?"
+msgstr "認証トークンを更新してもよろしいですか?"
+
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:84
 msgid "The web clipper service is enabled and set to auto-start."
 msgstr "Webクリッパーサービスは有効で、自動起動します。"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:78
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:91
 #, javascript-format
 msgid "Status: Started on port %d"
 msgstr "状態: ポート %d で起動中"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:84
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:97
 #, javascript-format
 msgid "Status: %s"
 msgstr "状態: %s"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:90
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:103
 msgid "Disable Web Clipper Service"
 msgstr "Webクリッパーサービスを無効にする"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:96
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:109
 msgid "The web clipper service is not enabled."
 msgstr "Webクリッパーサービスは有効になっていません。"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:101
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:114
 msgid "Enable Web Clipper Service"
 msgstr "Webクリッパーサービスを有効にする"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:124
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:137
 msgid ""
 "Joplin Web Clipper allows saving web pages and screenshots from your browser "
 "to Joplin."
@@ -899,15 +975,15 @@ msgstr ""
 "Joplin WebクリッパーはブラウザーからWebページとスクリーンショットをJoplinへ保"
 "存します。"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:129
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:142
 msgid "In order to use the web clipper, you need to do the following:"
 msgstr "Webクリッパーを使用するためには、次のことを行う必要があります:"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:137
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:150
 msgid "Step 1: Enable the clipper service"
 msgstr "ステップ1: クリッパーサービスを有効にする"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:142
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:155
 msgid ""
 "This service allows the browser extension to communicate with Joplin. When "
 "enabling it your firewall may ask you to give permission to Joplin to listen "
@@ -917,27 +993,27 @@ msgstr ""
 "ビスを有効化する際には、Joplinが特定のポートで接続を待ち受けることについて、"
 "お使いのファイアーウォールから許可を求められる場合があります。"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:156
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:169
 msgid "Step 2: Install the extension"
 msgstr "ステップ2: 拡張機能のインストール"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:161
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:174
 msgid "Download and install the relevant extension for your browser:"
 msgstr "ご使用のブラウザーに対応する拡張機能をインストールします:"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:176
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:189
 msgid "Advanced options"
 msgstr "詳細な設定"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:181
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:194
 msgid "Authorisation token:"
 msgstr "認証トークン:"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:191
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:208
 msgid "Copy token"
 msgstr "トークンのコピー"
 
-#: packages/app-desktop/gui/ClipperConfigScreen.min.js:197
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:214
 msgid ""
 "This authorisation token is only needed to allow third-party applications to "
 "access Joplin."
@@ -945,119 +1021,127 @@ msgstr ""
 "この認証トークンはサードパーティのアプリケーションにJoplinへのアクセスを許可"
 "するときにだけ使用します。"
 
-#: packages/app-desktop/gui/MenuBar.js:114
+#: packages/app-desktop/gui/ClipperConfigScreen.min.js:222
+msgid "Renew token"
+msgstr "トークンを更新する"
+
+#: packages/app-desktop/gui/MenuBar.js:167
 #, javascript-format
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr ""
 "\"%s\" を \"%s\" フォーマットとしてインポート中。しばらくお待ちください..."
 
-#: packages/app-desktop/gui/MenuBar.js:231 packages/app-desktop/gui/Root.js:102
+#: packages/app-desktop/gui/MenuBar.js:291 packages/app-desktop/gui/Root.js:102
 msgid "Synchronisation Status"
 msgstr "同期状況"
 
-#: packages/app-desktop/gui/MenuBar.js:250
+#: packages/app-desktop/gui/MenuBar.js:310
 msgid "Create note from template"
 msgstr "テンプレートからノートを作成"
 
-#: packages/app-desktop/gui/MenuBar.js:255
+#: packages/app-desktop/gui/MenuBar.js:315
 msgid "Create to-do from template"
 msgstr "テンプレートからto-doを作成"
 
-#: packages/app-desktop/gui/MenuBar.js:266
+#: packages/app-desktop/gui/MenuBar.js:326
 msgid "Open template directory"
 msgstr "テンプレートディレクトリを開く"
 
-#: packages/app-desktop/gui/MenuBar.js:271
+#: packages/app-desktop/gui/MenuBar.js:331
 msgid "Refresh templates"
 msgstr "テンプレートの更新"
 
-#: packages/app-desktop/gui/MenuBar.js:297
+#: packages/app-desktop/gui/MenuBar.js:357
 msgid "Note attachments..."
 msgstr "添付ファイル一覧..."
 
-#: packages/app-desktop/gui/MenuBar.js:328
-#: packages/app-desktop/gui/MenuBar.js:400
-#: packages/app-desktop/gui/MenuBar.js:690
+#: packages/app-desktop/gui/MenuBar.js:388
+#: packages/app-desktop/gui/MenuBar.js:466
+#: packages/app-desktop/gui/MenuBar.js:768
 msgid "&File"
 msgstr "ファイル(&F)"
 
-#: packages/app-desktop/gui/MenuBar.js:334
-#: packages/app-desktop/gui/MenuBar.js:612
+#: packages/app-desktop/gui/MenuBar.js:394
+#: packages/app-desktop/gui/MenuBar.js:687
 msgid "About Joplin"
 msgstr "Joplinについて"
 
-#: packages/app-desktop/gui/MenuBar.js:341
+#: packages/app-desktop/gui/MenuBar.js:401
 msgid "Preferences..."
 msgstr "環境設定..."
 
-#: packages/app-desktop/gui/MenuBar.js:351
-#: packages/app-desktop/gui/MenuBar.js:590
+#: packages/app-desktop/gui/MenuBar.js:411
+#: packages/app-desktop/gui/MenuBar.js:664
 msgid "Check for updates..."
 msgstr "アップデートのチェック..."
 
-#: packages/app-desktop/gui/MenuBar.js:366
-#: packages/app-desktop/gui/MenuBar.js:415
+#: packages/app-desktop/gui/MenuBar.js:426
+#: packages/app-desktop/gui/MenuBar.js:481
 msgid "Templates"
 msgstr "テンプレート"
 
-#: packages/app-desktop/gui/MenuBar.js:377
-#: packages/app-desktop/gui/MenuBar.js:423
+#: packages/app-desktop/gui/MenuBar.js:437
+#: packages/app-desktop/gui/MenuBar.js:489
 msgid "Export all"
 msgstr "すべてをエクスポート"
 
-#: packages/app-desktop/gui/MenuBar.js:389
+#: packages/app-desktop/gui/MenuBar.js:449
 #, javascript-format
 msgid "Hide %s"
 msgstr "%s を隠す"
 
-#: packages/app-desktop/gui/MenuBar.js:446
-#: packages/app-desktop/gui/MenuBar.js:694
+#: packages/app-desktop/gui/MenuBar.js:512
+#: packages/app-desktop/gui/MenuBar.js:772
 msgid "&Edit"
 msgstr "編集(&E)"
 
-#: packages/app-desktop/gui/MenuBar.js:477
+#: packages/app-desktop/gui/MenuBar.js:544
 msgid "&View"
 msgstr "表示(&V)"
 
-#: packages/app-desktop/gui/MenuBar.js:485
+#: packages/app-desktop/gui/MenuBar.js:552
 msgid "Layout button sequence"
 msgstr "レイアウトボタンによる切り替え順"
 
-#: packages/app-desktop/gui/MenuBar.js:530
-#: packages/app-desktop/gui/MenuBar.js:536
+#: packages/app-desktop/gui/MenuBar.js:597
+#: packages/app-desktop/gui/MenuBar.js:603
 msgid "Zoom In"
 msgstr "ズームイン"
 
-#: packages/app-desktop/gui/MenuBar.js:543
+#: packages/app-desktop/gui/MenuBar.js:610
 msgid "Zoom Out"
 msgstr "ズームアウト"
 
-#: packages/app-desktop/gui/MenuBar.js:552
+#: packages/app-desktop/gui/MenuBar.js:619
 msgid "&Go"
 msgstr "移動(&G)"
 
-#: packages/app-desktop/gui/MenuBar.js:564
+#: packages/app-desktop/gui/MenuBar.js:631
+msgid "Note&book"
+msgstr "ノートブック(&B)"
+
+#: packages/app-desktop/gui/MenuBar.js:637
 msgid "&Note"
 msgstr "ノート(&N)"
 
-#: packages/app-desktop/gui/MenuBar.js:573
+#: packages/app-desktop/gui/MenuBar.js:647
 msgid "&Tools"
 msgstr "ツール(&T)"
 
-#: packages/app-desktop/gui/MenuBar.js:577
+#: packages/app-desktop/gui/MenuBar.js:651
 msgid "&Help"
 msgstr "ヘルプ(&H)"
 
-#: packages/app-desktop/gui/MenuBar.js:584
+#: packages/app-desktop/gui/MenuBar.js:658
 msgid "Joplin Forum"
 msgstr "Joplinフォーラム"
 
-#: packages/app-desktop/gui/MenuBar.js:587
-#: packages/app-mobile/components/screens/config.js:495
+#: packages/app-desktop/gui/MenuBar.js:661
+#: packages/app-mobile/components/screens/ConfigScreen.js:425
 msgid "Make a donation"
 msgstr "寄付する"
 
-#: packages/app-desktop/gui/MenuBar.js:599
+#: packages/app-desktop/gui/MenuBar.js:673
 msgid "Toggle development tools"
 msgstr "開発者ツールのオンオフを切り替える"
 
@@ -1123,28 +1207,28 @@ msgstr "タグ付き: %d."
 msgid "The notes have been imported: %s"
 msgstr "ノートはインポートされました：%s"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:44
+#: packages/app-desktop/gui/utils/NoteListUtils.js:43
 msgid "Duplicate"
 msgstr "複製"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:49
+#: packages/app-desktop/gui/utils/NoteListUtils.js:48
 #, javascript-format
 msgid "%s - Copy"
 msgstr "%s - コピー"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:60
+#: packages/app-desktop/gui/utils/NoteListUtils.js:59
 msgid "Switch between note and to-do type"
 msgstr "ノートとToDoを切り替え"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:88
+#: packages/app-desktop/gui/utils/NoteListUtils.js:87
 msgid "Switch to note type"
 msgstr "ノートに切り替え"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:94
+#: packages/app-desktop/gui/utils/NoteListUtils.js:93
 msgid "Switch to to-do type"
 msgstr "ToDoに切り替え"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:101
+#: packages/app-desktop/gui/utils/NoteListUtils.js:100
 #: packages/app-mobile/components/screens/Note.js:817
 msgid "Copy Markdown link"
 msgstr "Markdownのリンクをコピー"
@@ -1160,8 +1244,8 @@ msgid "Delete these %d notes?"
 msgstr "ノート \"%d\" を削除しますか？"
 
 #: packages/app-desktop/gui/OneDriveLoginScreen.js:46
-#: packages/app-cli/app/command-sync.js:81
-#: packages/app-cli/app/command-sync.js:95
+#: packages/app-cli/app/command-sync.js:82
+#: packages/app-cli/app/command-sync.js:96
 msgid ""
 "Authentication was not completed (did not receive an authentication token)."
 msgstr "認証は完了していません(認証トークンが得られませんでした)"
@@ -1343,7 +1427,7 @@ msgstr "暗号化の状態:"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:443
 #: packages/app-mobile/components/screens/encryption-config.js:280
-#: packages/app-cli/app/command-e2ee.js:110
+#: packages/app-cli/app/command-e2ee.js:118
 msgid "Enabled"
 msgstr "有効"
 
@@ -1359,50 +1443,50 @@ msgstr "Dropboxログイン"
 msgid "Note attachments"
 msgstr "添付ファイル一覧"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:105
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:127
 msgid "This will open a new screen. Save your current changes?"
 msgstr "新しい画面を開きます。変更を保存しますか?"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:171
-#: packages/app-mobile/components/screens/config.js:307
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:193
+#: packages/app-mobile/components/screens/ConfigScreen.js:276
 msgid "Check synchronisation configuration"
 msgstr "同期の設定を確認する"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:217
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:203
 msgid "Show Advanced Settings"
 msgstr "詳細設定を表示"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:406
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:392
 msgid "Path:"
 msgstr "パス:"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:411
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:397
 msgid "Browse..."
 msgstr "参照..."
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:413
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:399
 msgid "Arguments:"
 msgstr "引数:"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:461
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:447
 msgid "The application must be restarted for these changes to take effect."
 msgstr "変更を反映するにはアプリケーションを再起動する必要があります。"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:473
-#: packages/app-desktop/gui/NoteList/NoteList.js:163
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:459
+#: packages/app-desktop/gui/NoteList/NoteList.js:164
 msgid "Do it now"
 msgstr "今すぐ実行"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:473
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:459
 msgid "Later"
 msgstr "あとで"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:526
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:512
 msgid "Restart now"
 msgstr "今すぐ再起動"
 
-#: packages/app-desktop/gui/ConfigScreen/Sidebar.js:83
-#: packages/lib/models/Setting.js:1429
+#: packages/app-desktop/gui/ConfigScreen/Sidebar.js:89
+#: packages/lib/models/Setting.js:1662
 msgid "Plugins"
 msgstr "プラグイン"
 
@@ -1410,28 +1494,36 @@ msgstr "プラグイン"
 msgid "Apply"
 msgstr "適用"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:113
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:138
 #, javascript-format
 msgid "Delete plugin \"%s\"?"
 msgstr "プラグイン \"%s\" を削除しますか？"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:155
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:180
 msgid "Browse all plugins"
 msgstr "プラグイン一覧を参照"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:159
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:184
 msgid "Install from file"
 msgstr "ファイルからインストール"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:193
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:218
 msgid "You do not have any installed plugin."
 msgstr "インストールされているプラグインはありません。"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:208
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:232
+msgid "Could not connect to plugin repository"
+msgstr "プラグインレポジトリに接続できませんでした"
+
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:234
+msgid "Try again"
+msgstr "再試行"
+
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:242
 msgid "Plugin tools"
 msgstr "プラグインツール"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:209
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:243
 msgid "Manage your plugins"
 msgstr "プラグインを管理"
 
@@ -1440,39 +1532,44 @@ msgid "No results"
 msgstr "該当なし"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js:80
+#: packages/app-desktop/gui/ResourceScreen.js:142
+msgid "Please wait..."
+msgstr "お待ちください..."
+
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js:80
 msgid "Search for plugins..."
 msgstr "プラグインを検索..."
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:127
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:130
 msgid "Install"
 msgstr "インストール"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:129
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:132
 msgid "Installing..."
 msgstr "インストール中..."
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:131
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:134
 msgid "Installed"
 msgstr "インストール済み"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:137
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:140
 msgid "Update"
 msgstr "アップデート"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:139
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:142
 msgid "Updating..."
 msgstr "アップデート中..."
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:151
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:154
 msgid "Please upgrade Joplin to use this plugin"
 msgstr "このプラグインを使うにはJoplinをアップグレードしてください"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:165
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:168
 #, javascript-format
 msgid "(%s)"
 msgstr "(%s)"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/useOnInstallHandler.js:49
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/useOnInstallHandler.js:53
 #, javascript-format
 msgid "Could not install plugin: %s"
 msgstr "プラグインをインストールできませんでした: %s"
@@ -1498,14 +1595,14 @@ msgid "Lines"
 msgstr "行数"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.js:98
-#: packages/lib/models/Setting.js:448 packages/lib/models/Setting.js:449
-#: packages/lib/models/Setting.js:450
+#: packages/lib/models/Setting.js:539 packages/lib/models/Setting.js:540
+#: packages/lib/models/Setting.js:541
 msgid "Editor"
 msgstr "エディター"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.js:99
-#: packages/lib/models/Setting.js:448 packages/lib/models/Setting.js:449
-#: packages/lib/models/Setting.js:451
+#: packages/lib/models/Setting.js:539 packages/lib/models/Setting.js:540
+#: packages/lib/models/Setting.js:542
 msgid "Viewer"
 msgstr "ビューアー"
 
@@ -1519,25 +1616,26 @@ msgid "Statistics"
 msgstr "統計"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.js:113
-#: packages/app-desktop/gui/ShareNoteDialog.js:186
+#: packages/app-desktop/gui/ShareNoteDialog.js:189
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:257
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:24
 msgid "Close"
 msgstr "閉じる"
 
-#: packages/app-desktop/gui/NoteList/NoteList.js:162
+#: packages/app-desktop/gui/NoteList/NoteList.js:163
 msgid "Custom order"
 msgstr "任意順"
 
-#: packages/app-desktop/gui/NoteList/NoteList.js:162
+#: packages/app-desktop/gui/NoteList/NoteList.js:163
 msgid "View"
 msgstr "表示"
 
-#: packages/app-desktop/gui/NoteList/NoteList.js:162
-#: packages/lib/models/Setting.js:463
+#: packages/app-desktop/gui/NoteList/NoteList.js:163
+#: packages/lib/models/Setting.js:555
 msgid "Sort notes by"
 msgstr "ノートのソート方法"
 
-#: packages/app-desktop/gui/NoteList/NoteList.js:162
+#: packages/app-desktop/gui/NoteList/NoteList.js:163
 #, javascript-format
 msgid ""
 "To manually sort the notes, the sort order must be changed to \"%s\" in the "
@@ -1546,11 +1644,11 @@ msgstr ""
 "ドラッグ＆ドロップでノートを任意の順に並び替えるには、ソート順を \"%s\" に切"
 "り替えてください (メニューバーの \"%s\" > \"%s\" から選択)。"
 
-#: packages/app-desktop/gui/NoteList/NoteList.js:414
+#: packages/app-desktop/gui/NoteList/NoteList.js:415
 msgid "No notes in here. Create one by clicking on \"New note\"."
 msgstr "ノートがありません。新しいノートを作成して下さい。"
 
-#: packages/app-desktop/gui/NoteList/NoteList.js:414
+#: packages/app-desktop/gui/NoteList/NoteList.js:415
 msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
 msgstr "ノートブックがありません。新しいノートブックを作成してください。"
@@ -1576,7 +1674,7 @@ msgid "Action"
 msgstr "操作"
 
 #: packages/app-desktop/gui/ResourceScreen.js:43 packages/lib/path-utils.js:83
-#: packages/lib/path-utils.js:118 packages/lib/models/BaseItem.js:708
+#: packages/lib/path-utils.js:118 packages/lib/models/BaseItem.js:720
 msgid "Untitled"
 msgstr "名称未設定"
 
@@ -1594,10 +1692,6 @@ msgstr ""
 "ここではノートに添付されているファイルの一覧を見ることができます。添付ファイ"
 "ルの削除も可能ですが、削除後の復元はできませんのでご注意ください。"
 
-#: packages/app-desktop/gui/ResourceScreen.js:142
-msgid "Please wait..."
-msgstr "お待ちください..."
-
 #: packages/app-desktop/gui/ResourceScreen.js:144
 msgid "No resources!"
 msgstr "リソースがありません!"
@@ -1607,34 +1701,100 @@ msgstr "リソースがありません!"
 msgid "Warning: not all resources shown for performance reasons (limit: %s)."
 msgstr "注意: 性能上の理由により、リソースは最大 %s 件までしか表示されません。"
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:159
+#: packages/app-desktop/gui/ShareNoteDialog.js:141
+msgid "Unshare note"
+msgstr "ノートの共有を解除"
+
+#: packages/app-desktop/gui/ShareNoteDialog.js:168
 msgid "Synchronising..."
 msgstr "同期中..."
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:161
+#: packages/app-desktop/gui/ShareNoteDialog.js:170
 msgid "Generating link..."
 msgid_plural "Generating links..."
 msgstr[0] "リンクを生成中..."
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:163
+#: packages/app-desktop/gui/ShareNoteDialog.js:172
 msgid "Link has been copied to clipboard!"
 msgid_plural "Links have been copied to clipboard!"
 msgstr[0] "リンクをクリップボードにコピーしました！"
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:170
+#: packages/app-desktop/gui/ShareNoteDialog.js:179
 msgid ""
 "Note: When a note is shared, it will no longer be encrypted on the server."
 msgstr ""
 "注意: ノートを共有すると、該当ノートはサーバー上で暗号化されなくなります。"
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:180
+#: packages/app-desktop/gui/ShareNoteDialog.js:184
 msgid "Share Notes"
 msgstr "ノートを共有"
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:182
+#: packages/app-desktop/gui/ShareNoteDialog.js:186
 msgid "Copy Shareable Link"
 msgid_plural "Copy Shareable Links"
 msgstr[0] "共有可能なリンクをコピー"
+
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:138
+msgid "Unshare"
+msgstr "共有を解除"
+
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:180
+msgid ""
+"Delete this invitation? The recipient will no longer have access to this "
+"shared notebook."
+msgstr ""
+"この招待を削除しますか? 削除後は招待の受信者がこの共有ノートブックにアクセス"
+"できなくなります。"
+
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:194
+msgid "Add recipient:"
+msgstr "受信者を追加:"
+
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:197
+#: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:28
+#: packages/app-mobile/components/screens/Note.js:796
+msgid "Share"
+msgstr "共有"
+
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:206
+msgid "Recipient has not yet accepted the invitation"
+msgstr "受信者がまだこの招待を承諾していません"
+
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:207
+msgid "Recipient has rejected the invitation"
+msgstr "受信者がこの招待を拒否しました"
+
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:208
+msgid "Recipient has accepted the invitation"
+msgstr "受信者がこの招待を承諾しました"
+
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:218
+msgid "Recipients:"
+msgstr "受信者:"
+
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:230
+msgid "Synchronizing..."
+msgstr "同期中..."
+
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:231
+msgid "Sharing notebook..."
+msgstr "ノートブックを共有中..."
+
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:241
+msgid ""
+"Unshare this notebook? The recipients will no longer have access to its "
+"content."
+msgstr ""
+"このノートブックの共有を解除しますか? 解除後は招待の受信者がノートブックにア"
+"クセスできなくなります。"
+
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:251
+msgid "Share Notebook"
+msgstr "ノートブックを共有"
+
+#: packages/app-desktop/commands/toggleSafeMode.js:18
+msgid "Toggle safe mode"
+msgstr "セーフモードのオンオフを切り替える"
 
 #: packages/app-desktop/commands/toggleExternalEditing.js:18
 msgid "Toggle external editing"
@@ -1667,20 +1827,20 @@ msgstr "次のエディターで開く際にエラー: %s"
 msgid "Open profile directory"
 msgstr "プロファイルディレクトリを開く"
 
-#: packages/app-desktop/app.js:356
+#: packages/app-desktop/app.js:370
 #, javascript-format
 msgid "Open %s"
 msgstr "%s を開く"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:22
 #: packages/app-mobile/components/screens/Note.js:504
-#: packages/lib/shim-init-node.js:148 packages/lib/versionInfo.js:25
+#: packages/lib/shim-init-node.js:148 packages/lib/versionInfo.js:27
 msgid "Yes"
 msgstr "Yes"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:23
 #: packages/app-mobile/components/screens/Note.js:505
-#: packages/lib/shim-init-node.js:148 packages/lib/versionInfo.js:25
+#: packages/lib/shim-init-node.js:148 packages/lib/versionInfo.js:27
 msgid "No"
 msgstr "No"
 
@@ -1692,14 +1852,9 @@ msgstr "アラームをクリア"
 msgid "Save alarm"
 msgstr "アラームの保存"
 
-#: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:28
+#: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:27
 msgid "Open"
 msgstr "開く"
-
-#: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:29
-#: packages/app-mobile/components/screens/Note.js:796
-msgid "Share"
-msgstr "共有"
 
 #: packages/app-mobile/components/CameraView.js:158
 msgid "Permission to use camera"
@@ -1727,8 +1882,13 @@ msgid "New Notebook"
 msgstr "新しいノートブック"
 
 #: packages/app-mobile/components/side-menu-content.js:316
+#: packages/app-mobile/components/screens/ConfigScreen.js:443
 msgid "Configuration"
 msgstr "設定"
+
+#: packages/app-mobile/components/side-menu-content.js:351
+msgid "Mobile data - auto-sync disabled"
+msgstr "モバイルデータ通信 - 自動同期無効"
 
 #: packages/app-mobile/components/note-list.js:97
 msgid "You currently have no notebooks."
@@ -1785,6 +1945,125 @@ msgstr "新しいタグ:"
 msgid "Type new tags or select from list"
 msgstr "新しいタグを入力するか、リストから選択してください"
 
+#: packages/app-mobile/components/screens/ConfigScreen.js:61
+msgid "Warning"
+msgstr "警告"
+
+#: packages/app-mobile/components/screens/ConfigScreen.js:61
+#: packages/app-mobile/components/screens/ConfigScreen.js:151
+msgid ""
+"In order to use file system synchronisation your permission to write to "
+"external storage is required."
+msgstr ""
+"ファイルシステムの同期を使うには、外部ストレージへの書き込み権限が必要です。"
+
+#: packages/app-mobile/components/screens/ConfigScreen.js:150
+msgid "Information"
+msgstr "情報"
+
+#: packages/app-mobile/components/screens/ConfigScreen.js:283
+#: packages/app-mobile/components/screens/encryption-config.js:264
+msgid "Encryption Config"
+msgstr "暗号化の設定"
+
+#: packages/app-mobile/components/screens/ConfigScreen.js:388
+msgid "Tools"
+msgstr "ツール"
+
+#: packages/app-mobile/components/screens/ConfigScreen.js:389
+msgid "Sync Status"
+msgstr "同期の状態"
+
+#: packages/app-mobile/components/screens/ConfigScreen.js:390
+msgid "Log"
+msgstr "ログ"
+
+#: packages/app-mobile/components/screens/ConfigScreen.js:392
+msgid "Creating report..."
+msgstr "レポート を作成中..."
+
+#: packages/app-mobile/components/screens/ConfigScreen.js:392
+msgid "Export Debug Report"
+msgstr "デバッグレポートの出力"
+
+#: packages/app-mobile/components/screens/ConfigScreen.js:394
+msgid "Fixing search index..."
+msgstr "検索インデックスの修正中..."
+
+#: packages/app-mobile/components/screens/ConfigScreen.js:394
+msgid "Fix search index"
+msgstr "検索インデックスの修正"
+
+#: packages/app-mobile/components/screens/ConfigScreen.js:394
+msgid ""
+"Use this to rebuild the search index if there is a problem with search. It "
+"may take a long time depending on the number of notes."
+msgstr ""
+"検索に問題がある場合は、これを利用して検索インデックスの再構築を行います。"
+"ノートの数に依存して、時間がかかる場合があります。"
+
+#: packages/app-mobile/components/screens/ConfigScreen.js:396
+msgid "Exporting profile..."
+msgstr "プロファイルのエクスポート中..."
+
+#: packages/app-mobile/components/screens/ConfigScreen.js:396
+msgid "Export profile"
+msgstr "プロファイルをエクスポート"
+
+#: packages/app-mobile/components/screens/ConfigScreen.js:396
+msgid "For debugging purpose only: export your profile to an external SD card."
+msgstr "デバッグ専用: プロファイルを外部SDカードにエクスポートします。"
+
+#: packages/app-mobile/components/screens/ConfigScreen.js:407
+msgid "Feature flags"
+msgstr "フィーチャーフラグ"
+
+#: packages/app-mobile/components/screens/ConfigScreen.js:410
+msgid "More information"
+msgstr "詳細情報"
+
+#: packages/app-mobile/components/screens/ConfigScreen.js:416
+msgid ""
+"To work correctly, the app needs the following permissions. Please enable "
+"them in your phone settings, in Apps > Joplin > Permissions"
+msgstr ""
+"正しく動作するには、次の権限が必要です。スマートフォンのアプリ情報 > Joplin "
+"> 権限 で有効にしてください"
+
+#: packages/app-mobile/components/screens/ConfigScreen.js:417
+msgid ""
+"- Storage: to allow attaching files to notes and to enable filesystem "
+"synchronisation."
+msgstr ""
+"- ストレージ: ノートにファイルを添付するのとファイルシステムの同期に必要で"
+"す。"
+
+#: packages/app-mobile/components/screens/ConfigScreen.js:418
+msgid "- Camera: to allow taking a picture and attaching it to a note."
+msgstr "- カメラ: 撮った写真をノートに添付するのに必要です。"
+
+#: packages/app-mobile/components/screens/ConfigScreen.js:419
+msgid "- Location: to allow attaching geo-location information to a note."
+msgstr "- 位置情報: ノートに位置情報を添付するのに必要です。"
+
+#: packages/app-mobile/components/screens/ConfigScreen.js:430
+msgid "Joplin website"
+msgstr "JoplinのWebサイト"
+
+#: packages/app-mobile/components/screens/ConfigScreen.js:435
+msgid "Privacy Policy"
+msgstr "プライバシーポリシー"
+
+#: packages/app-mobile/components/screens/ConfigScreen.js:439
+#, javascript-format
+msgid "Database v%s"
+msgstr "データベース v%s"
+
+#: packages/app-mobile/components/screens/ConfigScreen.js:441
+#, javascript-format
+msgid "FTS enabled: %d"
+msgstr "FTS有効:  %d"
+
 #: packages/app-mobile/components/screens/dropbox-login.js:55
 msgid "Login with Dropbox"
 msgstr "Dropboxでログイン"
@@ -1818,12 +2097,12 @@ msgid "Confirm password cannot be empty"
 msgstr "パスワード(確認用)は空にできません"
 
 #: packages/app-mobile/components/screens/encryption-config.js:140
-#: packages/app-cli/app/command-e2ee.js:85
+#: packages/app-cli/app/command-e2ee.js:91
 msgid "Passwords do not match!"
 msgstr "パスワードが一致しません!"
 
 #: packages/app-mobile/components/screens/encryption-config.js:163
-#: packages/app-cli/app/command-e2ee.js:79
+#: packages/app-cli/app/command-e2ee.js:85
 msgid "Confirm password:"
 msgstr "パスワード(確認用):"
 
@@ -1831,116 +2110,11 @@ msgstr "パスワード(確認用):"
 msgid "Enable"
 msgstr "有効"
 
-#: packages/app-mobile/components/screens/encryption-config.js:264
-#: packages/app-mobile/components/screens/config.js:316
-msgid "Encryption Config"
-msgstr "暗号化の設定"
-
 #: packages/app-mobile/components/screens/encryption-config.js:280
-#: packages/app-cli/app/command-e2ee.js:110
+#: packages/app-cli/app/command-e2ee.js:118
 #, javascript-format
 msgid "Encryption is: %s"
 msgstr "暗号化: %s"
-
-#: packages/app-mobile/components/screens/config.js:50
-msgid "Warning"
-msgstr "警告"
-
-#: packages/app-mobile/components/screens/config.js:50
-#: packages/app-mobile/components/screens/config.js:147
-msgid ""
-"In order to use file system synchronisation your permission to write to "
-"external storage is required."
-msgstr ""
-"ファイルシステムの同期を使うには、外部ストレージへの書き込み権限が必要です。"
-
-#: packages/app-mobile/components/screens/config.js:146
-msgid "Information"
-msgstr "情報"
-
-#: packages/app-mobile/components/screens/config.js:436
-msgid "Tools"
-msgstr "ツール"
-
-#: packages/app-mobile/components/screens/config.js:438
-msgid "Sync Status"
-msgstr "同期の状態"
-
-#: packages/app-mobile/components/screens/config.js:439
-msgid "Log"
-msgstr "ログ"
-
-#: packages/app-mobile/components/screens/config.js:441
-msgid "Creating report..."
-msgstr "レポート を作成中..."
-
-#: packages/app-mobile/components/screens/config.js:441
-msgid "Export Debug Report"
-msgstr "デバッグレポートの出力"
-
-#: packages/app-mobile/components/screens/config.js:443
-msgid "Fixing search index..."
-msgstr "検索インデックスの修正中..."
-
-#: packages/app-mobile/components/screens/config.js:443
-msgid "Fix search index"
-msgstr "検索インデックスの修正"
-
-#: packages/app-mobile/components/screens/config.js:443
-msgid ""
-"Use this to rebuild the search index if there is a problem with search. It "
-"may take a long time depending on the number of notes."
-msgstr ""
-"検索に問題がある場合は、これを利用して検索インデックスの再構築を行います。"
-"ノートの数に依存して、時間がかかる場合があります。"
-
-#: packages/app-mobile/components/screens/config.js:446
-msgid "Exporting profile..."
-msgstr "プロファイルのエクスポート中..."
-
-#: packages/app-mobile/components/screens/config.js:446
-msgid "Export profile"
-msgstr "プロファイルをエクスポート"
-
-#: packages/app-mobile/components/screens/config.js:446
-msgid "For debugging purpose only: export your profile to an external SD card."
-msgstr "デバッグ専用: プロファイルを外部SDカードにエクスポートします。"
-
-#: packages/app-mobile/components/screens/config.js:461
-msgid "More information"
-msgstr "詳細情報"
-
-#: packages/app-mobile/components/screens/config.js:471
-msgid ""
-"To work correctly, the app needs the following permissions. Please enable "
-"them in your phone settings, in Apps > Joplin > Permissions"
-msgstr ""
-"正しく動作するには、次の権限が必要です。スマートフォンのアプリ情報 > Joplin "
-"> 権限 で有効にしてください"
-
-#: packages/app-mobile/components/screens/config.js:474
-msgid ""
-"- Storage: to allow attaching files to notes and to enable filesystem "
-"synchronisation."
-msgstr ""
-"- ストレージ: ノートにファイルを添付するのとファイルシステムの同期に必要で"
-"す。"
-
-#: packages/app-mobile/components/screens/config.js:477
-msgid "- Camera: to allow taking a picture and attaching it to a note."
-msgstr "- カメラ: 撮った写真をノートに添付するのに必要です。"
-
-#: packages/app-mobile/components/screens/config.js:480
-msgid "- Location: to allow attaching geo-location information to a note."
-msgstr "- 位置情報: ノートに位置情報を添付するのに必要です。"
-
-#: packages/app-mobile/components/screens/config.js:509
-msgid "Joplin website"
-msgstr "JoplinのWebサイト"
-
-#: packages/app-mobile/components/screens/config.js:523
-msgid "Privacy Policy"
-msgstr "プライバシーポリシー"
 
 #: packages/app-mobile/components/screens/Note.js:98
 msgid "This note has been modified:"
@@ -2053,7 +2227,7 @@ msgstr "プロパティ"
 msgid "Add body"
 msgstr "本文を追加"
 
-#: packages/app-mobile/components/screens/Note.js:1034
+#: packages/app-mobile/components/screens/Note.js:1037
 msgid "Add title"
 msgstr "題名を追加"
 
@@ -2061,7 +2235,7 @@ msgstr "題名を追加"
 msgid "Search"
 msgstr "検索"
 
-#: packages/server/dist/middleware/notificationHandler.js:26
+#: packages/server/dist/middleware/notificationHandler.js:27
 #, javascript-format
 msgid ""
 "The default admin password is insecure and has not been changed! [Change it "
@@ -2069,6 +2243,24 @@ msgid ""
 msgstr ""
 "デフォルトの管理者パスワードが変更されておらず危険な状態です! [今すぐ変更]"
 "(%s)"
+
+#: packages/server/dist/models/UserModel.js:186
+#: packages/server/dist/models/UserModel.js:191
+msgid "attachment"
+msgstr "添付ファイル"
+
+#: packages/server/dist/models/UserModel.js:186
+#, javascript-format
+msgid ""
+"Cannot save %s \"%s\" because it is larger than than the allowed limit (%s)"
+msgstr "%s \"%s\" を保存できません。サイズが上限 (%s) を超えるためです"
+
+#: packages/server/dist/models/UserModel.js:191
+#, fuzzy, javascript-format
+msgid ""
+"Cannot save %s \"%s\" because it would go over the total allowed size (%s) "
+"for this account"
+msgstr "%s \"%s\" を保存できません。サイズが上限 (%s) を超えるためです"
 
 #: packages/lib/onedrive-api-node-utils.js:46
 #, javascript-format
@@ -2105,52 +2297,52 @@ msgstr "AWS S3"
 msgid "Dropbox"
 msgstr "Dropbox"
 
-#: packages/lib/SyncTargetJoplinServer.js:30
+#: packages/lib/SyncTargetJoplinServer.js:57
 msgid "Joplin Server"
-msgstr "Joplinサーバー"
+msgstr "Joplin Server"
 
 #: packages/lib/shim-init-node.js:212
 #, javascript-format
 msgid "Cannot access %s"
 msgstr "%sにアクセスできません"
 
-#: packages/lib/models/Folder.js:34 packages/lib/models/Note.js:35
+#: packages/lib/models/Folder.js:38 packages/lib/models/Note.js:36
 msgid "title"
 msgstr "題名"
 
-#: packages/lib/models/Folder.js:35 packages/lib/models/Note.js:36
+#: packages/lib/models/Folder.js:39 packages/lib/models/Note.js:37
 msgid "updated date"
 msgstr "アップデート日"
 
-#: packages/lib/models/Folder.js:102
+#: packages/lib/models/Folder.js:103
 msgid "Conflicts"
 msgstr "衝突"
 
-#: packages/lib/models/Folder.js:393
+#: packages/lib/models/Folder.js:558
 msgid "Cannot move notebook to this location"
 msgstr "ノートをノートブック \"%s\" に移動できません"
 
-#: packages/lib/models/Folder.js:445
+#: packages/lib/models/Folder.js:610
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr ""
 "\"%s\" というノートブックの名称はシステムで使用するために予約済みです。名称の"
 "変更はできません。"
 
-#: packages/lib/models/Setting.js:76
+#: packages/lib/models/Setting.js:109
 msgid "yes"
 msgstr "はい"
 
-#: packages/lib/models/Setting.js:76 packages/lib/models/Setting.js:77
+#: packages/lib/models/Setting.js:109 packages/lib/models/Setting.js:110
 #, javascript-format
 msgid "(wysiwyg: %s)"
 msgstr "(WYSIWYG対応: %s)"
 
-#: packages/lib/models/Setting.js:77
+#: packages/lib/models/Setting.js:110
 msgid "no"
 msgstr "いいえ"
 
-#: packages/lib/models/Setting.js:79
+#: packages/lib/models/Setting.js:112
 #, javascript-format
 msgid ""
 "Attention: If you change this location, make sure you copy all your content "
@@ -2161,43 +2353,43 @@ msgstr ""
 "ておきましょう。そうしないとすべてのファイルが削除されていまいます！ 詳しくは"
 "次のFAQをご覧ください: %s"
 
-#: packages/lib/models/Setting.js:85
+#: packages/lib/models/Setting.js:118
 msgid "Light"
 msgstr "明るい"
 
-#: packages/lib/models/Setting.js:86
+#: packages/lib/models/Setting.js:119
 msgid "Dark"
 msgstr "暗い"
 
-#: packages/lib/models/Setting.js:87
+#: packages/lib/models/Setting.js:120
 msgid "Dracula"
 msgstr "Dracula"
 
-#: packages/lib/models/Setting.js:88
+#: packages/lib/models/Setting.js:121
 msgid "Solarised Light"
 msgstr "Solarised (明)"
 
-#: packages/lib/models/Setting.js:89
+#: packages/lib/models/Setting.js:122
 msgid "Solarised Dark"
 msgstr "Solarised (暗)"
 
-#: packages/lib/models/Setting.js:90
+#: packages/lib/models/Setting.js:123
 msgid "Nord"
 msgstr "Nord"
 
-#: packages/lib/models/Setting.js:91
+#: packages/lib/models/Setting.js:124
 msgid "Aritim Dark"
 msgstr "Aritim Dark"
 
-#: packages/lib/models/Setting.js:92
+#: packages/lib/models/Setting.js:125
 msgid "OLED Dark"
 msgstr "ダークモード"
 
-#: packages/lib/models/Setting.js:113
+#: packages/lib/models/Setting.js:147
 msgid "Synchronisation target"
 msgstr "同期先"
 
-#: packages/lib/models/Setting.js:115
+#: packages/lib/models/Setting.js:149
 msgid ""
 "The target to synchronise to. Each sync target may have additional "
 "parameters which are named as `sync.NUM.NAME` (all documented below)."
@@ -2205,71 +2397,75 @@ msgstr ""
 "同期する先です。いずれの同期先も `sync.NUM.NAME` のように追加のパラメーターを"
 "持つことができるでしょう（すべてのドキュメントは下にあります）。"
 
-#: packages/lib/models/Setting.js:142
+#: packages/lib/models/Setting.js:182
 msgid "Directory to synchronise with (absolute path)"
 msgstr "同期先のディレクトリ(絶対パス)"
 
-#: packages/lib/models/Setting.js:153
+#: packages/lib/models/Setting.js:194
 msgid "Nextcloud WebDAV URL"
 msgstr "Nextcloud WebDAV URL"
 
-#: packages/lib/models/Setting.js:164
+#: packages/lib/models/Setting.js:206
 msgid "Nextcloud username"
 msgstr "Nextcloud ユーザー名"
 
-#: packages/lib/models/Setting.js:174
+#: packages/lib/models/Setting.js:217
 msgid "Nextcloud password"
 msgstr "Nextcloud パスワード"
 
-#: packages/lib/models/Setting.js:185
+#: packages/lib/models/Setting.js:228
 msgid "WebDAV URL"
 msgstr "WebDAV URL"
 
-#: packages/lib/models/Setting.js:196
+#: packages/lib/models/Setting.js:240
 msgid "WebDAV username"
 msgstr "WebDAV ユーザー名"
 
-#: packages/lib/models/Setting.js:206
+#: packages/lib/models/Setting.js:251
 msgid "WebDAV password"
 msgstr "WevDAV パスワード"
 
-#: packages/lib/models/Setting.js:225
+#: packages/lib/models/Setting.js:270
 msgid "AWS S3 bucket"
 msgstr "AWS S3 バケット"
 
-#: packages/lib/models/Setting.js:236
+#: packages/lib/models/Setting.js:282
 msgid "AWS S3 URL"
 msgstr "AWS S3 URL"
 
-#: packages/lib/models/Setting.js:247
+#: packages/lib/models/Setting.js:293
 msgid "AWS key"
 msgstr "AWS アクセスキーID"
 
-#: packages/lib/models/Setting.js:257
+#: packages/lib/models/Setting.js:304
 msgid "AWS secret"
 msgstr "AWS シークレットアクセスキー"
 
-#: packages/lib/models/Setting.js:268
+#: packages/lib/models/Setting.js:315
 msgid "Joplin Server URL"
-msgstr "JoplinサーバーURL"
+msgstr "Joplin Server URL"
 
-#: packages/lib/models/Setting.js:282
-msgid "Joplin Server Directory"
-msgstr "Joplinサーバーディレクトリ"
+#: packages/lib/models/Setting.js:333
+msgid "Joplin Server email"
+msgstr "Joplin Serverメールアドレス"
 
-#: packages/lib/models/Setting.js:292
-msgid "Joplin Server username"
-msgstr "Joplinサーバーユーザー名"
-
-#: packages/lib/models/Setting.js:302
+#: packages/lib/models/Setting.js:344
 msgid "Joplin Server password"
-msgstr "Joplinサーバーパスワード"
+msgstr "Joplin Serverパスワード"
 
-#: packages/lib/models/Setting.js:314
+#: packages/lib/models/Setting.js:371
+msgid "Joplin Cloud email"
+msgstr "Joplin Cloudメールアドレス"
+
+#: packages/lib/models/Setting.js:382
+msgid "Joplin Cloud password"
+msgstr "Joplin Cloudパスワード"
+
+#: packages/lib/models/Setting.js:394
 msgid "Attachment download behaviour"
 msgstr "添付ファイルのダウンロードの動作"
 
-#: packages/lib/models/Setting.js:315
+#: packages/lib/models/Setting.js:395
 msgid ""
 "In \"Manual\" mode, attachments are downloaded only when you click on them. "
 "In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
@@ -2279,195 +2475,195 @@ msgstr ""
 "動\"はノートを開いたときにダウンロードをします。\"いつも\"はノートを開いてい"
 "るか閉じているかにかかわらずダウンロードをします。"
 
-#: packages/lib/models/Setting.js:318
+#: packages/lib/models/Setting.js:398
 msgid "Always"
 msgstr "いつも"
 
-#: packages/lib/models/Setting.js:319
+#: packages/lib/models/Setting.js:399
 msgid "Manual"
 msgstr "手動"
 
-#: packages/lib/models/Setting.js:320
+#: packages/lib/models/Setting.js:400
 msgid "Auto"
 msgstr "自動"
 
-#: packages/lib/models/Setting.js:337
+#: packages/lib/models/Setting.js:420
 msgid "Max concurrent connections"
 msgstr "最大同時接続数"
 
-#: packages/lib/models/Setting.js:350
+#: packages/lib/models/Setting.js:433
 msgid "Language"
 msgstr "言語"
 
-#: packages/lib/models/Setting.js:360
+#: packages/lib/models/Setting.js:444
 msgid "Date format"
 msgstr "日付の形式"
 
-#: packages/lib/models/Setting.js:379
+#: packages/lib/models/Setting.js:465
 msgid "Time format"
 msgstr "時刻の形式"
 
-#: packages/lib/models/Setting.js:397
+#: packages/lib/models/Setting.js:484
 msgid "Theme"
 msgstr "テーマ"
 
-#: packages/lib/models/Setting.js:407
+#: packages/lib/models/Setting.js:495
 msgid "Automatically switch theme to match system theme"
 msgstr "システムのテーマにあわせて自動設定"
 
-#: packages/lib/models/Setting.js:418
+#: packages/lib/models/Setting.js:507
 msgid "Preferred light theme"
 msgstr "優先ライトテーマ"
 
-#: packages/lib/models/Setting.js:431
+#: packages/lib/models/Setting.js:521
 msgid "Preferred dark theme"
 msgstr "優先ダークテーマ"
 
-#: packages/lib/models/Setting.js:440
+#: packages/lib/models/Setting.js:531
 msgid "Show note counts"
 msgstr "ノートの数を表示"
 
-#: packages/lib/models/Setting.js:448 packages/lib/models/Setting.js:450
-#: packages/lib/models/Setting.js:451
+#: packages/lib/models/Setting.js:539 packages/lib/models/Setting.js:541
+#: packages/lib/models/Setting.js:542
 msgid "Split View"
 msgstr "分割ビュー"
 
-#: packages/lib/models/Setting.js:448
+#: packages/lib/models/Setting.js:539
 #, javascript-format
 msgid "%s / %s / %s"
 msgstr "%s / %s / %s"
 
-#: packages/lib/models/Setting.js:449 packages/lib/models/Setting.js:450
-#: packages/lib/models/Setting.js:451
+#: packages/lib/models/Setting.js:540 packages/lib/models/Setting.js:541
+#: packages/lib/models/Setting.js:542
 #, javascript-format
 msgid "%s / %s"
 msgstr "%s / %s"
 
-#: packages/lib/models/Setting.js:454
+#: packages/lib/models/Setting.js:546
 msgid "Uncompleted to-dos on top"
 msgstr "未完のToDoをリストの上部に表示"
 
-#: packages/lib/models/Setting.js:455
+#: packages/lib/models/Setting.js:547
 msgid "Show completed to-dos"
 msgstr "完了したToDoを表示"
 
-#: packages/lib/models/Setting.js:480
+#: packages/lib/models/Setting.js:573
 msgid "Auto-pair braces, parenthesis, quotations, etc."
 msgstr "始めの括弧や引用符入力時に終わりの括弧や引用符を自動入力する。"
 
-#: packages/lib/models/Setting.js:482 packages/lib/models/Setting.js:500
+#: packages/lib/models/Setting.js:576 packages/lib/models/Setting.js:595
 msgid "Reverse sort order"
 msgstr "逆順に並び替え"
 
-#: packages/lib/models/Setting.js:489
+#: packages/lib/models/Setting.js:583
 msgid "Sort notebooks by"
 msgstr "ノートブックのソート方法"
 
-#: packages/lib/models/Setting.js:501
+#: packages/lib/models/Setting.js:596
 msgid "Save geo-location with notes"
 msgstr "ノートに位置情報を保存"
 
-#: packages/lib/models/Setting.js:523
+#: packages/lib/models/Setting.js:618
 msgid "When creating a new to-do:"
 msgstr "新しいToDoを作成した場合:"
 
-#: packages/lib/models/Setting.js:526 packages/lib/models/Setting.js:541
+#: packages/lib/models/Setting.js:621 packages/lib/models/Setting.js:637
 msgid "Focus title"
 msgstr "題名にフォーカス"
 
-#: packages/lib/models/Setting.js:527 packages/lib/models/Setting.js:542
+#: packages/lib/models/Setting.js:622 packages/lib/models/Setting.js:638
 msgid "Focus body"
 msgstr "本文にフォーカス"
 
-#: packages/lib/models/Setting.js:538
+#: packages/lib/models/Setting.js:634
 msgid "When creating a new note:"
 msgstr "新しいノートを作成した際:"
 
-#: packages/lib/models/Setting.js:569
+#: packages/lib/models/Setting.js:667
 msgid "Enable soft breaks"
 msgstr "ソフトブレークを有効にする"
 
-#: packages/lib/models/Setting.js:570
+#: packages/lib/models/Setting.js:668
 msgid "Enable typographer support"
 msgstr "Typographer（記号文字）を有効にする"
 
-#: packages/lib/models/Setting.js:571
+#: packages/lib/models/Setting.js:669
 msgid "Enable Linkify"
 msgstr "Linkifyを有効にする"
 
-#: packages/lib/models/Setting.js:572
+#: packages/lib/models/Setting.js:670
 msgid "Enable math expressions"
 msgstr "数式表現を有効にする"
 
-#: packages/lib/models/Setting.js:573
+#: packages/lib/models/Setting.js:671
 msgid "Enable Fountain syntax support"
 msgstr "Fountain構文を有効にする"
 
-#: packages/lib/models/Setting.js:574
+#: packages/lib/models/Setting.js:672
 msgid "Enable Mermaid diagrams support"
 msgstr "Mermaid（作図機能）を有効にする"
 
-#: packages/lib/models/Setting.js:575
+#: packages/lib/models/Setting.js:673
 msgid "Enable audio player"
 msgstr "オーディオプレーヤーを有効にする"
 
-#: packages/lib/models/Setting.js:576
+#: packages/lib/models/Setting.js:674
 msgid "Enable video player"
 msgstr "動画プレーヤーを有効にする"
 
-#: packages/lib/models/Setting.js:577
+#: packages/lib/models/Setting.js:675
 msgid "Enable PDF viewer"
 msgstr "PDFビューアーを有効にする"
 
-#: packages/lib/models/Setting.js:578
+#: packages/lib/models/Setting.js:676
 msgid "Enable ==mark== syntax"
 msgstr "==ハイライト==構文を有効にする"
 
-#: packages/lib/models/Setting.js:579
+#: packages/lib/models/Setting.js:677
 msgid "Enable footnotes"
 msgstr "脚注を有効にする"
 
-#: packages/lib/models/Setting.js:580
+#: packages/lib/models/Setting.js:678
 msgid "Enable table of contents extension"
 msgstr "目次拡張を有効にする"
 
-#: packages/lib/models/Setting.js:581
+#: packages/lib/models/Setting.js:679
 msgid "Enable ~sub~ syntax"
 msgstr "~下付きテキスト~構文を有効にする"
 
-#: packages/lib/models/Setting.js:582
+#: packages/lib/models/Setting.js:680
 msgid "Enable ^sup^ syntax"
 msgstr "^上付きテキスト^構文を有効にする"
 
-#: packages/lib/models/Setting.js:583
+#: packages/lib/models/Setting.js:681
 msgid "Enable deflist syntax"
 msgstr "定義リスト構文を有効にする"
 
-#: packages/lib/models/Setting.js:584
+#: packages/lib/models/Setting.js:682
 msgid "Enable abbreviation syntax"
 msgstr "略語構文を有効にする"
 
-#: packages/lib/models/Setting.js:585
+#: packages/lib/models/Setting.js:683
 msgid "Enable markdown emoji"
 msgstr "マークダウン絵文字を有効にする"
 
-#: packages/lib/models/Setting.js:586
+#: packages/lib/models/Setting.js:684
 msgid "Enable ++insert++ syntax"
 msgstr "++追加++構文を有効にする"
 
-#: packages/lib/models/Setting.js:587
+#: packages/lib/models/Setting.js:685
 msgid "Enable multimarkdown table extension"
 msgstr "MultiMarkdownのテーブル拡張を有効にする"
 
-#: packages/lib/models/Setting.js:598
+#: packages/lib/models/Setting.js:696
 msgid "Show tray icon"
 msgstr "トレイアイコンの表示"
 
-#: packages/lib/models/Setting.js:600
+#: packages/lib/models/Setting.js:698
 msgid "Note: Does not work in all desktop environments."
 msgstr "注意: すべてのデスクトップ環境で動作するわけではありません。"
 
-#: packages/lib/models/Setting.js:600
+#: packages/lib/models/Setting.js:698
 msgid ""
 "This will allow Joplin to run in the background. It is recommended to enable "
 "this setting so that your notes are constantly being synchronised, thus "
@@ -2476,83 +2672,106 @@ msgstr ""
 "有効にすると、Joplinがバックグラウンドで動作するようになります。ノートを定期"
 "的に同期し、衝突を減らすために強くおすすめする設定です。"
 
-#: packages/lib/models/Setting.js:603
+#: packages/lib/models/Setting.js:702
 msgid "Start application minimised in the tray icon"
 msgstr "アプリケーションをトレイアイコンで最小化して起動"
 
-#: packages/lib/models/Setting.js:618
+#: packages/lib/models/Setting.js:722
 msgid "Editor font size"
 msgstr "エディターのフォントサイズ"
 
-#: packages/lib/models/Setting.js:625
+#: packages/lib/models/Setting.js:729
 msgid "Editor font"
 msgstr "エディターのフォント"
 
-#: packages/lib/models/Setting.js:632 packages/lib/models/Setting.js:639
-#: packages/lib/models/Setting.js:744
+#: packages/lib/models/Setting.js:736 packages/lib/models/Setting.js:743
+#: packages/lib/models/Setting.js:889
 msgid "Default"
 msgstr "標準"
 
-#: packages/lib/models/Setting.js:649
+#: packages/lib/models/Setting.js:754
 msgid "Editor font family"
 msgstr "エディターのフォントファミリー"
 
-#: packages/lib/models/Setting.js:650
+#: packages/lib/models/Setting.js:755
 msgid ""
-"This should be a *monospace* font or some elements will render incorrectly. "
-"If the font is incorrect or empty, it will default to a generic monospace "
-"font."
+"Used for most text in the markdown editor. If not found, a generic "
+"proportional (variable width) font is used."
 msgstr ""
-"ここは *monospace* (等幅)フォントを指定しないと内容によっては正しく表示されな"
-"い場合があります。指定したフォントが誤っているか空の場合は、一般的な等幅フォ"
-"ントが使用されます。"
+"Markdownエディター上の大部分のテキストに使用。指定フォントが見つからない場合"
+"は一般的なプロポーショナル（可変幅）フォントを使用します。"
 
-#: packages/lib/models/Setting.js:671
+#: packages/lib/models/Setting.js:764
+msgid "Editor monospace font family"
+msgstr "エディターの等幅フォントファミリー"
+
+#: packages/lib/models/Setting.js:765
+msgid ""
+"Used where a fixed width font is needed to lay out text legibly (e.g. "
+"tables, checkboxes, code). If not found, a generic monospace (fixed width) "
+"font is used."
+msgstr ""
+"表、チェックボックス、コードなど、等幅フォントのほうが読みやすい場所に使用。"
+"指定フォントが見つからない場合は一般的な等幅フォントを使用します。"
+
+#: packages/lib/models/Setting.js:786
 msgid "Custom stylesheet for rendered Markdown"
 msgstr "カスタムスタイルシート (Markdownビューアー)"
 
-#: packages/lib/models/Setting.js:687
+#: packages/lib/models/Setting.js:802
 msgid "Custom stylesheet for Joplin-wide app styles"
 msgstr "カスタムスタイルシート (アプリ全般の外観調整用)"
 
-#: packages/lib/models/Setting.js:692
+#: packages/lib/models/Setting.js:812
+msgid "Re-upload local data to sync target"
+msgstr "ローカルデータを同期先に再アップロードする"
+
+#: packages/lib/models/Setting.js:822
+msgid "Delete local data and re-download from sync target"
+msgstr "ローカルデータを削除して同期先から再ダウンロードする"
+
+#: packages/lib/models/Setting.js:827
 msgid "Automatically update the application"
 msgstr "アプリケーションを自動的にアップデート"
 
-#: packages/lib/models/Setting.js:693
+#: packages/lib/models/Setting.js:828
 msgid "Get pre-releases when checking for updates"
 msgstr "更新をチェックする時、開発版を取得する"
 
-#: packages/lib/models/Setting.js:693
+#: packages/lib/models/Setting.js:828
 #, javascript-format
 msgid "See the pre-release page for more details: %s"
 msgstr "詳細についてはプレリリースページを参照してください: %s"
 
-#: packages/lib/models/Setting.js:701
+#: packages/lib/models/Setting.js:836
 msgid "Synchronisation interval"
 msgstr "同期間隔"
 
-#: packages/lib/models/Setting.js:705 packages/lib/models/Setting.js:706
-#: packages/lib/models/Setting.js:707
+#: packages/lib/models/Setting.js:840 packages/lib/models/Setting.js:841
+#: packages/lib/models/Setting.js:842
 #, javascript-format
 msgid "%d minutes"
 msgstr "%d 分"
 
-#: packages/lib/models/Setting.js:708
+#: packages/lib/models/Setting.js:843
 #, javascript-format
 msgid "%d hour"
 msgstr "%d 時間"
 
-#: packages/lib/models/Setting.js:709 packages/lib/models/Setting.js:710
+#: packages/lib/models/Setting.js:844 packages/lib/models/Setting.js:845
 #, javascript-format
 msgid "%d hours"
 msgstr "%d 時間"
 
-#: packages/lib/models/Setting.js:717
+#: packages/lib/models/Setting.js:855
+msgid "Synchronise only over WiFi connection"
+msgstr "WiFi経由でのみ同期する"
+
+#: packages/lib/models/Setting.js:862
 msgid "Text editor command"
 msgstr "テキストエディターのコマンド"
 
-#: packages/lib/models/Setting.js:717
+#: packages/lib/models/Setting.js:862
 msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
@@ -2560,63 +2779,63 @@ msgstr ""
 "このエディターコマンド（と引数）はノートを開く際に使用されます。空欄の場合は"
 "既定のエディターを自動的に検出します。"
 
-#: packages/lib/models/Setting.js:718
+#: packages/lib/models/Setting.js:863
 msgid "Page size for PDF export"
 msgstr "エクスポートするPDFのページサイズ"
 
-#: packages/lib/models/Setting.js:720
+#: packages/lib/models/Setting.js:865
 msgid "A4"
 msgstr "A4"
 
-#: packages/lib/models/Setting.js:721
+#: packages/lib/models/Setting.js:866
 msgid "Letter"
 msgstr "Letter"
 
-#: packages/lib/models/Setting.js:722
+#: packages/lib/models/Setting.js:867
 msgid "A3"
 msgstr "A3"
 
-#: packages/lib/models/Setting.js:723
+#: packages/lib/models/Setting.js:868
 msgid "A5"
 msgstr "A5"
 
-#: packages/lib/models/Setting.js:724
+#: packages/lib/models/Setting.js:869
 msgid "Tabloid"
 msgstr "Tabloid"
 
-#: packages/lib/models/Setting.js:725
+#: packages/lib/models/Setting.js:870
 msgid "Legal"
 msgstr "Legal"
 
-#: packages/lib/models/Setting.js:728
+#: packages/lib/models/Setting.js:873
 msgid "Page orientation for PDF export"
 msgstr "PDFページの向き"
 
-#: packages/lib/models/Setting.js:730
+#: packages/lib/models/Setting.js:875
 msgid "Portrait"
 msgstr "縦"
 
-#: packages/lib/models/Setting.js:731
+#: packages/lib/models/Setting.js:876
 msgid "Landscape"
 msgstr "横"
 
-#: packages/lib/models/Setting.js:741
+#: packages/lib/models/Setting.js:886
 msgid "Keyboard Mode"
 msgstr "キーバインド"
 
-#: packages/lib/models/Setting.js:745
+#: packages/lib/models/Setting.js:890
 msgid "Emacs"
 msgstr "Emacs"
 
-#: packages/lib/models/Setting.js:746
+#: packages/lib/models/Setting.js:891
 msgid "Vim"
 msgstr "Vim"
 
-#: packages/lib/models/Setting.js:768
+#: packages/lib/models/Setting.js:918
 msgid "Custom TLS certificates"
 msgstr "TLS証明書のカスタマイズ"
 
-#: packages/lib/models/Setting.js:769
+#: packages/lib/models/Setting.js:919
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
 "or path to individual cert files. For example: /my/cert_dir, /other/custom."
@@ -2628,15 +2847,15 @@ msgstr ""
 "注意点として、TLSの設定を変更する場合は\"同期の設定を確認\"をクリックする前に"
 "保存する必要があります。"
 
-#: packages/lib/models/Setting.js:781
+#: packages/lib/models/Setting.js:941
 msgid "Ignore TLS certificate errors"
 msgstr "TLS証明書のエラーを無視"
 
-#: packages/lib/models/Setting.js:789
+#: packages/lib/models/Setting.js:950
 msgid "Fail-safe"
 msgstr "フェイルセーフ"
 
-#: packages/lib/models/Setting.js:790
+#: packages/lib/models/Setting.js:951
 msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
@@ -2644,7 +2863,7 @@ msgstr ""
 "フェイルセーフ: 同期先が空の場合、設定ミスやバグによる可能性を考慮して、ロー"
 "カルデータを消去しないようにする"
 
-#: packages/lib/models/Setting.js:793
+#: packages/lib/models/Setting.js:955
 msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
@@ -2652,29 +2871,29 @@ msgstr ""
 "APIサーバーが使用するポートを指定してください。未設定時はデフォルトのポートが"
 "使用されます。"
 
-#: packages/lib/models/Setting.js:798
+#: packages/lib/models/Setting.js:960
 msgid "Enable note history"
 msgstr "ノートの履歴を有効にする"
 
-#: packages/lib/models/Setting.js:808
+#: packages/lib/models/Setting.js:970
 msgid "days"
 msgstr "日"
 
-#: packages/lib/models/Setting.js:808
+#: packages/lib/models/Setting.js:970
 #, javascript-format
 msgid "%d days"
 msgstr "%d 日"
 
-#: packages/lib/models/Setting.js:810
+#: packages/lib/models/Setting.js:972
 msgid "Keep note history for"
 msgstr "ノート履歴の保存期間"
 
-#: packages/lib/models/Setting.js:835
+#: packages/lib/models/Setting.js:999
 msgid "Notebook list growth factor"
 msgstr "ノートブック一覧のストレッチ係数"
 
-#: packages/lib/models/Setting.js:836 packages/lib/models/Setting.js:848
-#: packages/lib/models/Setting.js:860
+#: packages/lib/models/Setting.js:1000 packages/lib/models/Setting.js:1013
+#: packages/lib/models/Setting.js:1026
 msgid ""
 "The factor property sets how the item will grow or shrink to fit the "
 "available space in its container with respect to the other items. Thus an "
@@ -2685,58 +2904,58 @@ msgstr ""
 "えば、係数が2の表示項目は、係数が1の項目の2倍の大きさで表示されます。係数の変"
 "更はアプリケーションの再起動後に反映されます。"
 
-#: packages/lib/models/Setting.js:847
+#: packages/lib/models/Setting.js:1012
 msgid "Note list growth factor"
 msgstr "ノート一覧のストレッチ係数"
 
-#: packages/lib/models/Setting.js:859
+#: packages/lib/models/Setting.js:1025
 msgid "Note area growth factor"
 msgstr "ノートエリアのストレッチ係数"
 
-#: packages/lib/models/Setting.js:1031
+#: packages/lib/models/Setting.js:1253
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "無効な設定値: \"%s\"。有効な値は: %sです。"
 
-#: packages/lib/models/Setting.js:1419
+#: packages/lib/models/Setting.js:1652
 msgid "General"
 msgstr "全般"
 
-#: packages/lib/models/Setting.js:1421
+#: packages/lib/models/Setting.js:1654
 msgid "Synchronisation"
 msgstr "同期"
 
-#: packages/lib/models/Setting.js:1423
+#: packages/lib/models/Setting.js:1656
 msgid "Appearance"
 msgstr "スタイル"
 
-#: packages/lib/models/Setting.js:1425
+#: packages/lib/models/Setting.js:1658
 msgid "Note"
 msgstr "ノート"
 
-#: packages/lib/models/Setting.js:1427
+#: packages/lib/models/Setting.js:1660
 #: packages/lib/services/interop/InteropService.js:49
 #: packages/lib/services/interop/InteropService.js:59
 msgid "Markdown"
 msgstr "Markdown"
 
-#: packages/lib/models/Setting.js:1431
+#: packages/lib/models/Setting.js:1664
 msgid "Application"
 msgstr "アプリケーション"
 
-#: packages/lib/models/Setting.js:1435
+#: packages/lib/models/Setting.js:1668
 msgid "Encryption"
 msgstr "暗号化"
 
-#: packages/lib/models/Setting.js:1437
+#: packages/lib/models/Setting.js:1670
 msgid "Web Clipper"
 msgstr "Webクリッパー"
 
-#: packages/lib/models/Setting.js:1439
+#: packages/lib/models/Setting.js:1672
 msgid "Keyboard Shortcuts"
 msgstr "キーボードショートカット"
 
-#: packages/lib/models/Setting.js:1446
+#: packages/lib/models/Setting.js:1679
 msgid ""
 "These plugins enhance the Markdown renderer with additional features. Please "
 "note that, while these features might be useful, they are not standard "
@@ -2753,33 +2972,33 @@ msgstr ""
 "失われてしまいます。どのプラグインがWYSIWYGに対応しているかは下記の一覧でご確"
 "認ください。"
 
-#: packages/lib/models/Setting.js:1448
+#: packages/lib/models/Setting.js:1681
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr "ノートと設定は次の場所に保存されます: %s"
 
-#: packages/lib/models/Resource.js:352
+#: packages/lib/models/Resource.js:353
 msgid "Not downloaded"
 msgstr "未ダウンロード"
 
-#: packages/lib/models/Resource.js:354
+#: packages/lib/models/Resource.js:355
 msgid "Downloading"
 msgstr "ダウンロード中"
 
-#: packages/lib/models/Resource.js:356
+#: packages/lib/models/Resource.js:357
 msgid "Downloaded"
 msgstr "ダウンロード済み"
 
-#: packages/lib/models/Resource.js:358
+#: packages/lib/models/Resource.js:359
 msgid "Error"
 msgstr "エラー"
 
-#: packages/lib/models/Resource.js:403
+#: packages/lib/models/Resource.js:404
 #, javascript-format
 msgid "Attachment conflict: \"%s\""
 msgstr "添付ファイルの衝突: \"%s\""
 
-#: packages/lib/models/Resource.js:404
+#: packages/lib/models/Resource.js:405
 #, javascript-format
 msgid ""
 "There was a [conflict](%s) on the attachment below.\n"
@@ -2795,43 +3014,47 @@ msgstr ""
 msgid "The tag \"%s\" already exists. Please choose a different name."
 msgstr "タグ \"%s\" はすでにあります。ほかの名前を選択してください。"
 
-#: packages/lib/models/Note.js:37
+#: packages/lib/models/Note.js:38
 msgid "created date"
 msgstr "作成日"
 
-#: packages/lib/models/Note.js:38
+#: packages/lib/models/Note.js:39
 msgid "custom order"
 msgstr "任意順"
 
-#: packages/lib/models/Note.js:116
+#: packages/lib/models/Note.js:117
 msgid "This note does not have geolocation information."
 msgstr "このノートには位置情報がありません。"
 
-#: packages/lib/models/Note.js:524
+#: packages/lib/models/Note.js:525
 #, javascript-format
 msgid "Cannot copy note to \"%s\" notebook"
 msgstr "ノートをノートブック \"%s\" にコピーできません"
 
-#: packages/lib/models/Note.js:536
+#: packages/lib/models/Note.js:538
 #, javascript-format
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "ノートをノートブック \"%s\" に移動できません"
 
-#: packages/lib/models/BaseItem.js:707
+#: packages/lib/models/BaseItem.js:719
 msgid "Encrypted"
 msgstr "暗号化済"
 
-#: packages/lib/models/BaseItem.js:768
+#: packages/lib/models/BaseItem.js:780
 msgid "Encrypted items cannot be modified"
 msgstr "暗号化したアイテムは修正できません"
 
-#: packages/lib/BaseApplication.js:149 packages/lib/BaseApplication.js:161
-#: packages/lib/BaseApplication.js:193
+#: packages/lib/SyncTargetJoplinCloud.js:28
+msgid "Joplin Cloud"
+msgstr "Joplin Cloud"
+
+#: packages/lib/BaseApplication.js:152 packages/lib/BaseApplication.js:164
+#: packages/lib/BaseApplication.js:196
 #, javascript-format
 msgid "Usage: %s"
 msgstr "使用方法: %s"
 
-#: packages/lib/BaseApplication.js:228
+#: packages/lib/BaseApplication.js:231
 #, javascript-format
 msgid "Unknown flag: %s"
 msgstr "不明なフラグ: %s"
@@ -2840,15 +3063,15 @@ msgstr "不明なフラグ: %s"
 msgid "OneDrive"
 msgstr "OneDrive"
 
-#: packages/lib/components/shared/config-shared.js:45
+#: packages/lib/components/shared/config-shared.js:50
 msgid "Checking... Please wait."
 msgstr "確認中...お待ちください。"
 
-#: packages/lib/components/shared/config-shared.js:47
+#: packages/lib/components/shared/config-shared.js:52
 msgid "Success! Synchronisation configuration appears to be correct."
 msgstr "成功です！ 同期の設定は正しいようです。"
 
-#: packages/lib/components/shared/config-shared.js:49
+#: packages/lib/components/shared/config-shared.js:54
 msgid ""
 "Error. Please check that URL, username, password, etc. are correct and that "
 "the sync target is accessible. The reported error was:"
@@ -2914,80 +3137,80 @@ msgstr ""
 "トークンの更新ができませんでした。認証データがありません。同期を再度行うこと"
 "で解決することがあります。"
 
-#: packages/lib/Synchronizer.js:119
+#: packages/lib/Synchronizer.js:140
 #, javascript-format
 msgid "Created local items: %d."
 msgstr "ローカルアイテムの作成: %d."
 
-#: packages/lib/Synchronizer.js:121
+#: packages/lib/Synchronizer.js:142
 #, javascript-format
 msgid "Updated local items: %d."
 msgstr "ローカルアイテムの更新: %d."
 
-#: packages/lib/Synchronizer.js:123
+#: packages/lib/Synchronizer.js:144
 #, javascript-format
 msgid "Created remote items: %d."
 msgstr "リモートアイテムの作成: %d."
 
-#: packages/lib/Synchronizer.js:125
+#: packages/lib/Synchronizer.js:146
 #, javascript-format
 msgid "Updated remote items: %d."
 msgstr "リモートアイテムの更新: %d."
 
-#: packages/lib/Synchronizer.js:127
+#: packages/lib/Synchronizer.js:148
 #, javascript-format
 msgid "Deleted local items: %d."
 msgstr "ローカルアイテムの削除: %d."
 
-#: packages/lib/Synchronizer.js:129
+#: packages/lib/Synchronizer.js:150
 #, javascript-format
 msgid "Deleted remote items: %d."
 msgstr "リモートアイテムの削除: %d."
 
-#: packages/lib/Synchronizer.js:131
+#: packages/lib/Synchronizer.js:152
 #, javascript-format
 msgid "Fetched items: %d/%d."
 msgstr "取得したアイテム: %d/%d."
 
-#: packages/lib/Synchronizer.js:133
+#: packages/lib/Synchronizer.js:154
 msgid "Cancelling..."
 msgstr "中止中..."
 
-#: packages/lib/Synchronizer.js:135
+#: packages/lib/Synchronizer.js:156
 #, javascript-format
-msgid "Completed: %s"
-msgstr "完了: %s"
+msgid "Completed: %s (%s)"
+msgstr "完了: %s (%s)"
 
-#: packages/lib/Synchronizer.js:137
+#: packages/lib/Synchronizer.js:158
 #, javascript-format
 msgid "Last error: %s"
 msgstr "最新のエラー: %s"
 
-#: packages/lib/Synchronizer.js:244
+#: packages/lib/Synchronizer.js:272
 msgid "Idle"
 msgstr "待機中"
 
-#: packages/lib/Synchronizer.js:246
+#: packages/lib/Synchronizer.js:274
 msgid "In progress"
 msgstr "実行中"
 
-#: packages/lib/Synchronizer.js:844
+#: packages/lib/Synchronizer.js:923
 msgid ""
 "Unknown item type downloaded - please upgrade Joplin to the latest version"
 msgstr ""
 "不明なアイテムタイプをダウンロードしました - 最新のJoplinにアップデートしてく"
 "ださい"
 
-#: packages/lib/JoplinServerApi.js:63
-#, fuzzy, javascript-format
+#: packages/lib/JoplinServerApi.js:73
+#, javascript-format
 msgid ""
 "Could not connect to Joplin Server. Please check the Synchronisation options "
 "in the config screen. Full error was:\n"
 "\n"
 "%s"
 msgstr ""
-"Joplin Nextcloudアプリに接続できませんでした。同期設定を確認してください。発"
-"生したエラーの内容は次のとおりです:\n"
+"Joplin Serverに接続できませんでした。同期設定を確認してください。発生したエ"
+"ラーの内容は次のとおりです:\n"
 "\n"
 "%s"
 
@@ -3012,34 +3235,39 @@ msgstr "進む"
 msgid "Revision: %s (%s)"
 msgstr "リビジョン: %s (%s)"
 
-#: packages/lib/versionInfo.js:20
+#: packages/lib/versionInfo.js:22
 #, javascript-format
 msgid "%s %s (%s, %s)"
 msgstr "%s %s (%s, %s)"
 
-#: packages/lib/versionInfo.js:22
+#: packages/lib/versionInfo.js:24
 #, javascript-format
 msgid "Client ID: %s"
 msgstr "クライアントID: %s"
 
-#: packages/lib/versionInfo.js:23
+#: packages/lib/versionInfo.js:25
 #, javascript-format
 msgid "Sync Version: %s"
 msgstr "同期バージョン: %s"
 
-#: packages/lib/versionInfo.js:24
+#: packages/lib/versionInfo.js:26
 #, javascript-format
 msgid "Profile Version: %s"
 msgstr "プロファイルバージョン: %s"
 
-#: packages/lib/versionInfo.js:25
+#: packages/lib/versionInfo.js:27
 #, javascript-format
 msgid "Keychain Supported: %s"
 msgstr "キーチェーンのサポート: %s"
 
-#: packages/lib/services/RevisionService.js:217
+#: packages/lib/services/RevisionService.js:214
 msgid "Restored Notes"
 msgstr "復元されたノート"
+
+#: packages/lib/services/RevisionService.js:238
+#, javascript-format
+msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
+msgstr "ノート \"%s\" のノートブック \"%s\"への復元は成功しました。"
 
 #: packages/lib/services/interop/InteropService_Exporter_Jex.js:43
 msgid "There is no data to export."
@@ -3127,27 +3355,27 @@ msgstr "\"%s\"は見つかりませんでした。"
 msgid "Please specify import format for %s"
 msgstr "%s 用のインポートフォーマットを指定してくださあい"
 
-#: packages/lib/services/KeymapService.js:273
+#: packages/lib/services/KeymapService.js:275
 msgid "command"
 msgstr "コマンド"
 
-#: packages/lib/services/KeymapService.js:273
-#: packages/lib/services/KeymapService.js:278
+#: packages/lib/services/KeymapService.js:275
+#: packages/lib/services/KeymapService.js:280
 #, javascript-format
 msgid "\"%s\" is missing the required \"%s\" property."
 msgstr "\"%s\" は必須の \"%s\" プロパティを持っていません。"
 
-#: packages/lib/services/KeymapService.js:278
-#: packages/lib/services/KeymapService.js:285
+#: packages/lib/services/KeymapService.js:280
+#: packages/lib/services/KeymapService.js:287
 msgid "accelerator"
 msgstr "ショートカットキー"
 
-#: packages/lib/services/KeymapService.js:285
+#: packages/lib/services/KeymapService.js:287
 #, javascript-format
 msgid "Invalid %s: %s."
 msgstr "無効な %s: %s。"
 
-#: packages/lib/services/KeymapService.js:303
+#: packages/lib/services/KeymapService.js:305
 #, javascript-format
 msgid ""
 "Accelerator \"%s\" is used for \"%s\" and \"%s\" commands. This may lead to "
@@ -3156,16 +3384,16 @@ msgstr ""
 "ショートカットキー \"%s\" は \"%s\" コマンドと \"%s\" コマンドで使われていま"
 "す。これにより予想外の動作が起こる可能性があります。"
 
-#: packages/lib/services/KeymapService.js:328
+#: packages/lib/services/KeymapService.js:330
 #, javascript-format
 msgid "Accelerator \"%s\" is not valid."
 msgstr "ショートカットキー \"%s\" は無効です。"
 
-#: packages/lib/services/ReportService.js:123
+#: packages/lib/services/ReportService.js:152
 msgid "Items that cannot be synchronised"
 msgstr "同期ができなかったアイテム"
 
-#: packages/lib/services/ReportService.js:124
+#: packages/lib/services/ReportService.js:153
 msgid ""
 "These items will remain on the device but will not be uploaded to the sync "
 "target. In order to find these items, either search for the title or the ID "
@@ -3175,21 +3403,21 @@ msgstr ""
 "のようなアイテムを探すには、題名またはID(上記の括弧内に表示されている)で検索"
 "してください。"
 
-#: packages/lib/services/ReportService.js:129
+#: packages/lib/services/ReportService.js:159
 #, javascript-format
 msgid "%s (%s) could not be uploaded: %s"
 msgstr "%s (%s)はアップロードできませんでした：%s"
 
-#: packages/lib/services/ReportService.js:132
+#: packages/lib/services/ReportService.js:162
 #, javascript-format
 msgid "Item \"%s\" could not be downloaded: %s"
 msgstr "アイテム \"%s\" はダウンロードできませんでした：%s"
 
-#: packages/lib/services/ReportService.js:139
+#: packages/lib/services/ReportService.js:179
 msgid "Items that cannot be decrypted"
 msgstr "復号ができなかったアイテム"
 
-#: packages/lib/services/ReportService.js:140
+#: packages/lib/services/ReportService.js:180
 msgid ""
 "Joplin failed to decrypt these items multiple times, possibly because they "
 "are corrupted or too large. These items will remain on the device but Joplin "
@@ -3199,83 +3427,83 @@ msgstr ""
 "回失敗しました。これらのアイテムはデバイス上に残りますが、Joplinはこれらの復"
 "号化は行いません。"
 
-#: packages/lib/services/ReportService.js:145
+#: packages/lib/services/ReportService.js:185
 #: packages/app-cli/app/cli-utils.js:140
 #, javascript-format
 msgid "%s: %s"
 msgstr "%s: %s"
 
-#: packages/lib/services/ReportService.js:171
+#: packages/lib/services/ReportService.js:198
 msgid "Attachments"
 msgstr "添付ファイル"
 
-#: packages/lib/services/ReportService.js:178
+#: packages/lib/services/ReportService.js:205
 msgid "Downloaded and decrypted"
 msgstr "ダウンロード済み（復号済み）"
 
-#: packages/lib/services/ReportService.js:178
-#: packages/lib/services/ReportService.js:179
-#: packages/lib/services/ReportService.js:180
-#: packages/lib/services/ReportService.js:184
+#: packages/lib/services/ReportService.js:205
+#: packages/lib/services/ReportService.js:206
+#: packages/lib/services/ReportService.js:207
+#: packages/lib/services/ReportService.js:211
 #, javascript-format
 msgid "%s: %d"
 msgstr "%s: %d"
 
-#: packages/lib/services/ReportService.js:179
+#: packages/lib/services/ReportService.js:206
 msgid "Downloaded and encrypted"
 msgstr "ダウンロード済み（未復号）"
 
-#: packages/lib/services/ReportService.js:180
+#: packages/lib/services/ReportService.js:207
 msgid "Created locally"
 msgstr "ローカルに作成"
 
-#: packages/lib/services/ReportService.js:191
+#: packages/lib/services/ReportService.js:218
 msgid "Attachments that could not be downloaded"
 msgstr "ダウンロードできなかった添付ファイル"
 
-#: packages/lib/services/ReportService.js:195
+#: packages/lib/services/ReportService.js:222
 #, javascript-format
 msgid "%s (%s): %s"
 msgstr "%s (%s): %s"
 
-#: packages/lib/services/ReportService.js:206
+#: packages/lib/services/ReportService.js:233
 msgid "Sync status (synced items / total items)"
 msgstr "同期状況 (同期済/総数)"
 
-#: packages/lib/services/ReportService.js:210
+#: packages/lib/services/ReportService.js:237
 #, javascript-format
 msgid "%s: %d/%d"
 msgstr "%s: %d/%d"
 
-#: packages/lib/services/ReportService.js:212
+#: packages/lib/services/ReportService.js:239
 #, javascript-format
 msgid "Total: %d/%d"
 msgstr "総数: %d/%d"
 
-#: packages/lib/services/ReportService.js:214
+#: packages/lib/services/ReportService.js:241
 #, javascript-format
 msgid "Conflicted: %d"
 msgstr "衝突: %d"
 
-#: packages/lib/services/ReportService.js:215
+#: packages/lib/services/ReportService.js:242
 #, javascript-format
 msgid "To delete: %d"
 msgstr "削除予定: %d"
 
-#: packages/lib/services/ReportService.js:217
+#: packages/lib/services/ReportService.js:244
 msgid "Folders"
 msgstr "フォルダー"
 
-#: packages/lib/services/ReportService.js:223
+#: packages/lib/services/ReportService.js:250
 #, javascript-format
 msgid "%s: %d notes"
 msgstr "%s: %d ノート"
 
-#: packages/lib/services/ReportService.js:228
+#: packages/lib/services/ReportService.js:255
 msgid "Coming alarms"
 msgstr "直近のアラーム"
 
-#: packages/lib/services/ReportService.js:232
+#: packages/lib/services/ReportService.js:259
 #, javascript-format
 msgid "On %s: %s"
 msgstr "日時 %s: %s"
@@ -3328,10 +3556,10 @@ msgstr "逆順に並び替えます。"
 msgid ""
 "Displays only the items of the specific type(s). Can be `n` for notes, `t` "
 "for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
-"to-dos, while `-ttd` would display notes and to-dos."
+"to-dos, while `-tnt` would display notes and to-dos."
 msgstr ""
 "選択した種類の項目のみ表示します。`n`でノートを、`t`でToDoを、`nt`でその両方"
-"を指定できます。 (例： `-tt` ではToDoのみを表示し、`-ttd`ではノートとToDoを表"
+"を指定できます。 (例： `-tt` ではToDoのみを表示し、`-tnt`ではノートとToDoを表"
 "示します。)"
 
 #: packages/app-cli/app/command-ls.js:31
@@ -3428,13 +3656,13 @@ msgstr ""
 "`disable`, `decrypt`, `status`, `target-status` があります。"
 
 #: packages/app-cli/app/command-e2ee.js:36
-#: packages/app-cli/app/command-e2ee.js:74
+#: packages/app-cli/app/command-e2ee.js:75
 msgid "Enter master password:"
 msgstr "マスターパスワードを入力してください:"
 
 #: packages/app-cli/app/command-e2ee.js:38
-#: packages/app-cli/app/command-e2ee.js:76
-#: packages/app-cli/app/command-e2ee.js:81
+#: packages/app-cli/app/command-e2ee.js:77
+#: packages/app-cli/app/command-e2ee.js:87
 msgid "Operation cancelled"
 msgstr "操作をキャンセルしました"
 
@@ -3513,16 +3741,16 @@ msgstr "指定のターゲットと同期します。(標準： sync.targetの�
 msgid "Upgrade the sync target to the latest version."
 msgstr "同期先を最新バージョンにアップグレード。"
 
-#: packages/app-cli/app/command-sync.js:105
+#: packages/app-cli/app/command-sync.js:106
 #, javascript-format
 msgid "Not authentified with %s. Please provide any missing credentials."
 msgstr "%s では認証できません。他の資格証明書を使用してください。"
 
-#: packages/app-cli/app/command-sync.js:128
+#: packages/app-cli/app/command-sync.js:132
 msgid "Synchronisation is already in progress."
 msgstr "同期はすでに実行中です。"
 
-#: packages/app-cli/app/command-sync.js:133
+#: packages/app-cli/app/command-sync.js:137
 #, javascript-format
 msgid ""
 "Lock file is already being hold. If you know that no synchronisation is "
@@ -3532,30 +3760,30 @@ msgstr ""
 "ロックファイルがすでに保持されています。同期作業が行われていない場合は、\"%s"
 "\"にあるロックファイルを削除して、作業を再度行ってください。"
 
-#: packages/app-cli/app/command-sync.js:175
+#: packages/app-cli/app/command-sync.js:180
 #, javascript-format
 msgid "Synchronisation target: %s (%s)"
 msgstr "同期先: %s (%s)"
 
-#: packages/app-cli/app/command-sync.js:177
+#: packages/app-cli/app/command-sync.js:182
 msgid "Cannot initialise synchroniser."
 msgstr "同期プロセスを初期化できませんでした。"
 
-#: packages/app-cli/app/command-sync.js:207
+#: packages/app-cli/app/command-sync.js:212
 msgid "Starting synchronisation..."
 msgstr "同期を開始中..."
 
-#: packages/app-cli/app/command-sync.js:230
+#: packages/app-cli/app/command-sync.js:235
 msgid "Downloading resources..."
 msgstr "リソースをダウンロード中..."
 
-#: packages/app-cli/app/command-sync.js:242
+#: packages/app-cli/app/command-sync.js:247
 #, javascript-format
 msgid "Sync target must be upgraded! Run `%s` to proceed."
 msgstr ""
 "同期先のアップグレードが必要です。続行するには `%s` を実行してください。"
 
-#: packages/app-cli/app/command-sync.js:260
+#: packages/app-cli/app/command-sync.js:265
 msgid "Cancelling... Please wait."
 msgstr "中止中...お待ちください。"
 
@@ -3646,6 +3874,14 @@ msgstr "%d 個のノートが一致しました。削除しますか？"
 msgid "Attaches the given file to the note."
 msgstr "選択したファイルをノートに添付します。"
 
+#: packages/app-cli/app/command-batch.js:10
+msgid ""
+"Runs the commands contained in the text file. There should be one command "
+"per line."
+msgstr ""
+"テキストファイルに含まれるコマンドを実行します。テキストファイルには1行1コマ"
+"ンドで記述する必要があります。"
+
 #: packages/app-cli/app/command-version.js:11
 msgid "Displays version information"
 msgstr "バージョン情報の表示"
@@ -3684,11 +3920,11 @@ msgstr "選択されたノートブックのみを出力する。"
 msgid "Creates a new note."
 msgstr "あたらしいノートを作成します。"
 
-#: packages/app-cli/app/main.js:87
+#: packages/app-cli/app/main.js:92
 msgid "Type `joplin help` for usage information."
 msgstr "`joplin help`を実行して使い方を表示します。"
 
-#: packages/app-cli/app/main.js:89
+#: packages/app-cli/app/main.js:94
 msgid "Fatal error:"
 msgstr "致命的なエラー:"
 
@@ -3763,11 +3999,11 @@ msgstr "選択： "
 msgid "Invalid answer: %s"
 msgstr "無効な入力：%s"
 
-#: packages/app-cli/app/cli-utils.js:161 packages/app-cli/app/app.js:137
+#: packages/app-cli/app/cli-utils.js:161 packages/app-cli/app/app.js:138
 msgid "Y"
 msgstr "Y"
 
-#: packages/app-cli/app/cli-utils.js:161 packages/app-cli/app/app.js:137
+#: packages/app-cli/app/cli-utils.js:161 packages/app-cli/app/app.js:138
 msgid "n"
 msgstr "n"
 
@@ -3855,38 +4091,38 @@ msgstr ""
 msgid "Exits the application."
 msgstr "アプリケーションの終了。"
 
-#: packages/app-cli/app/app.js:62
+#: packages/app-cli/app/app.js:63
 #, javascript-format
 msgid "More than one item match \"%s\". Please narrow down your query."
 msgstr ""
 "一つ以上のアイテムが\"%s\"に一致しました。クエリを絞るようにしてください。"
 
-#: packages/app-cli/app/app.js:92
+#: packages/app-cli/app/app.js:93
 msgid "No notebook selected."
 msgstr "ノートブックが選択されていません。"
 
-#: packages/app-cli/app/app.js:98
+#: packages/app-cli/app/app.js:99
 msgid "No notebook has been specified."
 msgstr "ノートブックが選択されていません。"
 
-#: packages/app-cli/app/app.js:137
+#: packages/app-cli/app/app.js:138
 msgid "N"
 msgstr "N"
 
-#: packages/app-cli/app/app.js:137
+#: packages/app-cli/app/app.js:138
 msgid "y"
 msgstr "y"
 
-#: packages/app-cli/app/app.js:170
+#: packages/app-cli/app/app.js:171
 msgid "Cancelling background synchronisation... Please wait."
 msgstr "バックグラウンド同期を中止中… しばらくお待ちください。"
 
-#: packages/app-cli/app/app.js:255
+#: packages/app-cli/app/app.js:256
 #, javascript-format
 msgid "No such command: %s"
 msgstr "コマンドが違います：%s"
 
-#: packages/app-cli/app/app.js:303
+#: packages/app-cli/app/app.js:304
 #, javascript-format
 msgid "The command \"%s\" is only available in GUI mode"
 msgstr "コマンド \"%s\"は、GUIのみで有効です"
@@ -3927,6 +4163,39 @@ msgstr "ToDoを完了としてマークします。"
 #, javascript-format
 msgid "Note is not a to-do: \"%s\""
 msgstr "ノートはToDoリストではありません：\"%s\""
+
+#~ msgid "Joplin Server Directory"
+#~ msgstr "Joplinサーバーディレクトリ"
+
+#~ msgid "Joplin Server username"
+#~ msgstr "Joplinサーバーユーザー名"
+
+#, fuzzy
+#~ msgid "marked text"
+#~ msgstr "文字の強調"
+
+#, fuzzy
+#~ msgid "Mark"
+#~ msgstr "マークアップ"
+
+#~ msgid "Full Release Notes"
+#~ msgstr "リリースノート（完全版）"
+
+#~ msgid ""
+#~ "If the font is incorrect or empty, it will default to a generic monospace "
+#~ "font."
+#~ msgstr ""
+#~ "指定したフォントが誤っているか空の場合は、一般的な等幅フォントが使用されま"
+#~ "す。"
+
+#~ msgid ""
+#~ "This should be a *monospace* font or some elements will render "
+#~ "incorrectly. If the font is incorrect or empty, it will default to a "
+#~ "generic monospace font."
+#~ msgstr ""
+#~ "ここは *monospace* (等幅)フォントを指定しないと内容によっては正しく表示さ"
+#~ "れない場合があります。指定したフォントが誤っているか空の場合は、一般的な等"
+#~ "幅フォントが使用されます。"
 
 #~ msgid "Unknown"
 #~ msgstr "不明"
@@ -4013,14 +4282,6 @@ msgstr "ノートはToDoリストではありません：\"%s\""
 
 #~ msgid "Errors only"
 #~ msgstr "エラーのみ"
-
-#, javascript-format
-#~ msgid "Database v%s"
-#~ msgstr "データベース v%s"
-
-#, javascript-format
-#~ msgid "FTS enabled: %d"
-#~ msgstr "FTS有効:  %d"
 
 #~ msgid "Exit"
 #~ msgstr "終了"
@@ -4121,10 +4382,6 @@ msgstr "ノートはToDoリストではありません：\"%s\""
 
 #~ msgid "Resources"
 #~ msgstr "リソース一覧"
-
-#, fuzzy
-#~ msgid "marked text"
-#~ msgstr "文字の強調"
 
 #~ msgid "Global zoom percentage"
 #~ msgstr "全体ズームの割合"

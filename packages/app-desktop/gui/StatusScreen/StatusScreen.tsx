@@ -5,16 +5,22 @@ import { _ } from '@joplin/lib/locale';
 
 const { connect } = require('react-redux');
 import Setting from '@joplin/lib/models/Setting';
-const bridge = require('electron').remote.require('./bridge').default;
 const { themeStyle } = require('@joplin/lib/theme');
 import ReportService from '@joplin/lib/services/ReportService';
+import Button, { ButtonLevel } from '../Button/Button';
+import bridge from '../../services/bridge';
 const fs = require('fs-extra');
+import styled from 'styled-components';
 
 interface Props {
 	themeId: string;
 	style: any;
 	dispatch: Function;
 }
+
+const StyledAdvancedToolItem = styled.div`
+	margin-bottom: 1em;
+`;
 
 async function exportDebugReportClick() {
 	const filename = `syncReport-${new Date().getTime()}.csv`;
@@ -81,12 +87,15 @@ function StatusScreen(props: Props) {
 
 		itemsHtml.push(renderSectionTitleHtml(section.title, section.title));
 
+		let currentListKey = '';
+		let listItems: any[] = [];
 		for (const n in section.body) {
 			if (!section.body.hasOwnProperty(n)) continue;
 			const item = section.body[n];
 			let text = '';
 
 			let retryLink = null;
+			let itemType = null;
 			if (typeof item === 'object') {
 				if (item.canRetry) {
 					const onClick = async () => {
@@ -101,22 +110,47 @@ function StatusScreen(props: Props) {
 					);
 				}
 				text = item.text;
+				itemType = item.type;
 			} else {
 				text = item;
 			}
 
+			if (itemType === 'openList') {
+				currentListKey = item.key;
+				continue;
+			}
+
+			if (itemType === 'closeList') {
+				itemsHtml.push(<ul key={currentListKey}>{listItems}</ul>);
+				currentListKey = '';
+				listItems = [];
+				continue;
+			}
+
 			if (!text) text = '\xa0';
 
-			itemsHtml.push(
-				<div style={theme.textStyle} key={`item_${n}`}>
-					<span>{text}</span>
-					{retryLink}
-				</div>
-			);
+			if (currentListKey) {
+				listItems.push(
+					<li style={theme.textStyle} key={`item_${n}`}>
+						<span>{text}</span>
+						{retryLink}
+					</li>
+				);
+			} else {
+				itemsHtml.push(
+					<div style={theme.textStyle} key={`item_${n}`}>
+						<span>{text}</span>
+						{retryLink}
+					</div>
+				);
+			}
 		}
 
 		if (section.canRetryAll) {
-			itemsHtml.push(renderSectionRetryAllHtml(section.title, section.retryAllHandler));
+			itemsHtml.push(renderSectionRetryAllHtml(section.title, async () => {
+				await section.retryAllHandler();
+				void resfreshScreen();
+			}));
 		}
 
 		return <div key={key}>{itemsHtml}</div>;
@@ -134,14 +168,25 @@ function StatusScreen(props: Props) {
 		return <div>{sectionsHtml}</div>;
 	}
 
+	function renderTools() {
+		return (
+			<div>
+				<h2 key="section_tools" style={theme.h2Style}>
+					{_('Advanced tools')}
+				</h2>
+				<StyledAdvancedToolItem>
+					<Button level={ButtonLevel.Primary} title={_('Export debug report')} onClick={() => exportDebugReportClick()}/>
+				</StyledAdvancedToolItem>
+			</div>
+		);
+	}
+
 	const body = renderBodyHtml(report);
 
 	return (
 		<div style={style}>
 			<div style={containerStyle}>
-				<a style={theme.textStyle} onClick={() => exportDebugReportClick()} href="#">
-					Export debug report
-				</a>
+				{renderTools()}
 				{body}
 			</div>
 			<ButtonBar

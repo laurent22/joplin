@@ -1,0 +1,54 @@
+<div id="plans-section" class="env-{{env}}">
+	<div class="container">
+		<div class="row">
+			<div class="col-12 title-box">
+				<h1 class="text-center">
+					Joplin Cloud <span class="frame-bg frame-bg-yellow">plans</span>
+				</h1>
+				<p class="text-center sub-title">
+					Joplin Cloud allows you to synchronise your notes across devices. It also lets you publish notes, and collaborate on notebooks with your friends, family or colleagues.
+				</p>
+			</div>
+		</div>
+		
+		<div class="row">
+			{{#plans.basic}}
+				{{> plan}}
+			{{/plans.basic}}
+
+			{{#plans.pro}}
+				{{> plan}}
+			{{/plans.pro}}
+
+			{{#plans.business}}
+				{{> plan}}
+			{{/plans.business}}
+		</div>
+
+		<div class="row">
+			{{{faqHtml}}}
+		</div>
+	</div>
+
+	<script src="https://js.stripe.com/v3/"></script>
+
+	<script>
+	var stripe = Stripe('{{{stripeConfig.publishableKey}}}');
+
+	var createCheckoutSession = function(priceId) {
+		console.info('Creating Stripe session for price:', priceId);
+
+		return fetch("{{{stripeConfig.webhookBaseUrl}}}/stripe/createCheckoutSession", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify({
+				priceId: priceId
+			})
+		}).then(function(result) {
+			return result.json();
+		});
+	};
+	</script>
+</div>

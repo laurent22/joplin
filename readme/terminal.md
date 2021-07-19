@@ -2,7 +2,7 @@
 
 Joplin is a free, open source note taking and to-do application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be copied, tagged and modified with your own text editor.
 
-Notes exported from Evernote via .enex files [can be imported](https://joplinapp.org/#importing) into Joplin, including the formatted content (which is converted to Markdown), resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.). Plain Markdown files can also be imported.
+Notes exported from Evernote via .enex files [can be imported](https://joplinapp.org/help/#importing) into Joplin, including the formatted content (which is converted to Markdown), resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.). Plain Markdown files can also be imported.
 
 The notes can be [synchronised](#synchronisation) with various targets including the file system (for example with a network directory), Nextcloud, Dropbox, OneDrive or WebDAV. When synchronising the notes, notebooks, tags and other metadata are saved to plain text files which can be easily inspected, backed up and moved around.
 
@@ -12,7 +12,7 @@ The notes can be [synchronised](#synchronisation) with various targets including
 
 Operating system | Method
 -----------------|----------------
-macOS, Linux, or Windows (via [WSL](https://docs.microsoft.com/en-us/windows/wsl/faq)) | **Important:** First, [install Node 10+](https://nodejs.org/en/download/package-manager/).<br/><br/>`NPM_CONFIG_PREFIX=~/.joplin-bin npm install -g joplin`<br/>`sudo ln -s ~/.joplin-bin/bin/joplin /usr/bin/joplin`<br><br>By default, the application binary will be installed under `~/.joplin-bin`. You may change this directory if needed. Alternatively, if your npm permissions are setup as described [here](https://docs.npmjs.com/getting-started/fixing-npm-permissions#option-2-change-npms-default-directory-to-another-directory) (Option 2) then simply running `npm -g install joplin` would work.
+macOS, Linux, or Windows (via [WSL](https://docs.microsoft.com/en-us/windows/wsl/faq)) | **Important:** First, [install Node 12+](https://nodejs.org/en/download/package-manager/).<br/><br/>`NPM_CONFIG_PREFIX=~/.joplin-bin npm install -g joplin`<br/>`sudo ln -s ~/.joplin-bin/bin/joplin /usr/bin/joplin`<br><br>By default, the application binary will be installed under `~/.joplin-bin`. You may change this directory if needed. Alternatively, if your npm permissions are setup as described [here](https://docs.npmjs.com/getting-started/fixing-npm-permissions#option-2-change-npms-default-directory-to-another-directory) (Option 2) then simply running `npm -g install joplin` would work.
 
 To start it, type `joplin`.
 
@@ -347,7 +347,7 @@ The following commands are available in [command-line mode](#command-line-mode):
 
 	    locale                         Language.
 	                                   Please see localisation section on
-	                                   https://joplinapp.org/#localisation
+	                                   https://joplinapp.org/help/#localisation
 	                                   for info on translation completion progress
 	                                   Type: Enum.
 	                                   Possible values: ar (Arabic), eu (Basque),
@@ -364,7 +364,7 @@ The following commands are available in [command-line mode](#command-line-mode):
 	                                   fa (Persian), pl_PL (Polski),
 	                                   pt_PT (Português),
 	                                   pt_BR (Português (Brasil)), ro (Română),
-	                                   sl_SI (Slovenian), sv (Svenska),  
+	                                   sl_SI (Slovenian), sv (Svenska),
 	                                   th_TH (Thai), vi (Tiếng Việt),
 	                                   tr_TR (Türkçe), el_GR (Ελληνικά),
 	                                   ru_RU (Русский), sr_RS (српски језик),
@@ -378,7 +378,8 @@ The following commands are available in [command-line mode](#command-line-mode):
 	                                   DD/MM/YY (30/01/17), MM/DD/YYYY
 	                                   (01/30/2017), MM/DD/YY (01/30/17),
 	                                   YYYY-MM-DD (2017-01-30), DD.MM.YYYY
-	                                   (30.01.2017), YYYY.MM.DD (2017.01.30).
+	                                   (30.01.2017), YYYY.MM.DD (2017.01.30),
+	                                   YYMMDD (170130).
 	                                   Default: "DD/MM/YYYY"
 
 	    timeFormat                     Time format.

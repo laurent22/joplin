@@ -256,7 +256,7 @@ class EncryptionConfigScreenComponent extends React.Component {
 			<div>
 				<div style={containerStyle}>
 					{
-						<div style={{ backgroundColor: theme.warningBackgroundColor, paddingLeft: 10, paddingRight: 10, paddingTop: 2, paddingBottom: 2 }}>
+						<div className="alert alert-warning" style={{ backgroundColor: theme.warningBackgroundColor, paddingLeft: 10, paddingRight: 10, paddingTop: 2, paddingBottom: 2 }}>
 							<p style={theme.textStyle}>
 								<span>{_('For more information about End-To-End Encryption (E2EE) and advice on how to enable it please check the documentation:')}</span>{' '}
 								<a

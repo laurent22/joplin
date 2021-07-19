@@ -1,5 +1,5 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 
 <!--
 
@@ -13,398 +13,258 @@ https://github.com/laurent22/joplin/blob/dev/readme/gsoc2021/index.md
 
 -->
 
-<head>
-	<title>Google Summer of Code 2021 | Joplin</title>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="https://joplinapp.org/css/bootstrap.min.css">
-	<link rel="shortcut icon" type="image/x-icon" href="https://joplinapp.org/favicon.ico">
-	<!-- <link rel="stylesheet" href="https://joplinapp.org/css/fontawesome-all.min.css">  -->
-	<link rel="stylesheet" href="https://joplinapp.org/css/fork-awesome.min.css"> 
-	<script src="https://joplinapp.org/js/jquery-3.2.1.slim.min.js"></script>
-	<style>
-	body {
-		background-color: #F1F1F1;
-		color: #333333;
-	}
+	<head>
+<!-- Donate button A/B testing -->
+<script async src="https://www.googleoptimize.com/optimize.js?id=OPT-PW3ZPK3"></script>		<meta
+			charset="utf-8"
+			http-equiv="X-UA-Compatible"
+			content="IE=edge,chrome=1"
+		/>
+		<link rel="icon" href="&#x2F;images/favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="theme-color" content="#000000" />
+		<meta name="description" content="Joplin website" />
+		<link
+			rel="stylesheet"
+			href="&#x2F;css/bootstrap5.0.2.min.css"
+			as="style"
+		/>
+		<link rel="stylesheet" href="&#x2F;css/fontawesome-all.min.css?t=1626455245563">
+		<link
+			href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+			as="style"
+			media="all"
+			onload="this.media='all'; this.onload = null"
+		/>
+		<link rel="stylesheet" href="&#x2F;css/site.css?t=1626455245563" as="style" />
+		<title>Google Summer of Code 2021 | Joplin</title>
+	</head>
+	<body class="website-env-prod">
+		<div class="container-fluid generic-template -page" id="main-container">
 
-	.root {
-		overflow: hidden;
-	}
+<div class=" navbar-main white-bg" id="nav-section">
+	<div class="container">
+		<div class="row">
+			<div class="col-3">
+				<a href="/">
+					<img
+						src="&#x2F;images/logo-text-blue.svg"
+						alt=""
+						id="top-logo"
+						width="180"
+					/>
+				</a>
+			</div>
+			<div class="col-9 text-right d-none d-md-block">
+				<a href="/help/" class="fw500">Help</a>
+				<a href="https:&#x2F;&#x2F;discourse.joplinapp.org&#x2F;" class="fw500">Forum</a>
+<a class="button-link btn-blue sponsor-button" href="/donate">
+	<i class="fas fa-heart heart-full"></i><i class="far fa-heart heart-line"></i>&nbsp;Support us
+</a>			</div>
+			<div class="col-9 text-right d-block d-md-none">
+				<span class="pointer"
+					><img
+						src="&#x2F;images/mobile-menu-black-open-icon.png"
+						id="open-menu-mobile"
+						alt=""
+				/></span>
+				&nbsp;&nbsp;
 
-	a[href^="mailto:"] {
-		word-break: break-all;
-	}
+				<div id="menu-mobile">
+					<div>
+						<div class="text-right">
+							<img
+								src="&#x2F;images/close-icon.png"
+								alt=""
+								class="pointer"
+								id="close-menu-mobile"
+							/>
+						</div>
 
-	table {
-		margin-bottom: 1em;
-	}
-	td, th {
-		padding: .8em;
-		border: 1px solid #ccc;
-	}
+						<div class="text-center menu-mobile-top">
+							<a href="https:&#x2F;&#x2F;discourse.joplinapp.org&#x2F;" class="fw500 mobile-menu-link">Forum</a>
+							<a href="/help/" class="fw500 mobile-menu-link">Help</a>
+						</div>
 
-	.page-markdown table pre,
-	.page-markdown table blockquote {
-		margin-bottom: 0;
-	}
+						<div class="menu-mobile-buttons">
+<a class="button-link btn-blue sponsor-button" href="/donate">
+	<i class="fas fa-heart heart-full"></i><i class="far fa-heart heart-line"></i>&nbsp;Support us
+</a>						</div>
+					</div>
 
-	.page-markdown table pre,
-	.page-markdown table blockquote {
-		margin-bottom: 0;
-	}
-
-	.page-markdown table pre {
-		background-color: rgba(0,0,0,0);
-		border: none;
-		margin: 0;
-		padding: 0;
-	}
-
-	h1, h2 {
-		border-bottom: 1px solid #eaecef;
-		padding-bottom: 0.3em;
-		font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-		font-weight: 600;
-		font-size: 2em;
-		margin-bottom: 16px;
-	}
-	h2 {
-		font-size: 1.6em;
-	}
-	h3 {
-		font-size: 1.3em;
-	}
-	code {
-		color: black;
-		background-color: #eee;
-		border: 1px solid #ccc;
-		font-size: .85em;
-	/*	word-break: break-all; */
-	}
-	pre code {
-		border: none;
-	}
-	pre {
-		font-size: .85em;
-	}
-	blockquote {
-		font-size: 1em;
-		color: #555;
-	};
-	#toc ul {
-		margin-bottom: 10px;
-	}
-	#toc > ul > li {
-		margin-bottom: 10px;
-	}
-	#toc {
-		padding-bottom: 1em;
-	}
-	.title {
-		display: flex;
-		align-items: center;
-	}
-	.title-icon {
-		display: flex;
-		height: 1em;
-	}
-	.title-text {
-		display: flex;
-		font-weight: normal;
-		margin-bottom: .2em;
-		margin-left: .5em;
-	}
-	.sub-title {
-		font-weight: normal;
-	}
-	.container {
-		background-color: white;
-		padding: 0;
-		box-shadow: 0 10px 20px #888888;
-	}
-	table.screenshots {
-		margin-top: 2em;
-		margin-bottom: 2em;
-	}
-	table.screenshots th {
-		height: 3em;
-		text-align: center;
-	}
-	table.screenshots th, 
-	table.screenshots td {
-		border: 1px solid #C2C2C2;
-	}
-	img[align="left"] {
-		margin-right: 10px;
-		margin-bottom: 10px;
-	}
-	.mobile-screenshot {
-		height: 40em;
-		padding: 1em;
-	}
-	.cli-screenshot-wrapper {
-		background-color: black;
-		vertical-align: top;
-		padding: 1em 2em 1em 1em;
-	}
-	.cli-screenshot {
-		font-family: "Monaco", "Inconsolata", "CONSOLAS", "Deja Vu Sans Mono", "Droid Sans Mono", "Andale Mono", monospace;
-		background-color: black;
-		color: white;
-		border: none;
-	}
-	.cli-screenshot .prompt {
-		color: #48C2F0;
-	}
-	.top-screenshot {
-		margin-top: 2em;
-		text-align: center;
-	}
-	.header {
-		position: relative;
-		padding-left: 2em;
-		padding-right: 2em;
-		padding-top: 1em;
-		padding-bottom: 1em;
-		color: white;
-		background-color: #2B2B3D;
-	}
-	.header a h1 {
-		color: white;
-	}
-	.header a:hover {
-		text-decoration: none;
-	}
-	.content {
-		padding-left: 2em;
-		padding-right: 2em;
-		padding-bottom: 2em;
-		padding-top: 2em;
-	}
-	.forkme {
-		position: absolute;
-		right: 0;
-		top:0;
-	}
-	.nav-wrapper {
-		position: relative;
-		width: inherit;
-	}
-	.nav {
-		background-color: black;
-		display: flex;
-		flex-direction: row;
-		align-items: center;
-	}
-	.nav.sticky {
-		position:fixed;
-		top: 0;
-		width: inherit;
-		box-shadow: 0 0 10px #000000;
-	}
-	.nav a {
-		color: white;
-		display: inline-block;
-		padding: .6em .9em .6em .9em;
-	}
-	.nav ul {
-		padding-left: 2em;
-		margin-bottom: 0;
-		display: table-cell;
-		display: flex;
-		width: 100%;
-		/* For GSoC: */
-		min-width: 470px;
-	}
-	.nav ul li {
-		display: inline-block;
-		padding: 0;
-	}
-	.nav li.selected {
-		background-color: #222;
-		font-weight: bold;
-	}
-	.nav-right {
-		display: flex;
-		text-align: right;
-		vertical-align: middle;
-		line-height: 0;
-		margin-right: 10px;
-	}
-	.nav-right .share-btn {
-		display: none;
-	}
-	.nav-right .small-share-btn {
-		display: none;
-	}
-	.footer {
-		padding: 2em;
-		border-top: 1px solid #d4d4d4;
-		margin-top: 2em;
-		color: gray;
-		font-size: .9em;
-	}
-	a.heading-anchor {
-		display: inline-block;
-		opacity: 0;
-		width: 1.3em;
-		font-size: 0.7em;
-		margin-left: 0.4em;
-		line-height: 1em;
-		text-decoration: none;
-		transition: opacity 0.3s;
-	}
-	a.heading-anchor:hover,
-	h1:hover a.heading-anchor,
-	h2:hover a.heading-anchor,
-	h3:hover a.heading-anchor,
-	h4:hover a.heading-anchor,
-	h5:hover a.heading-anchor,
-	h6:hover a.heading-anchor {
-		opacity: 1;
-	}
-
-	@media (min-width: 992px) {
-		.content{
-			display: flex;
-		}
-
-		#toc{
-			display: block!important;
-			align-self: flex-start;
-			width: 300px;
-			position: sticky; top: 20px; left: 0;            
-		}
-
-		.main{
-			width: calc(100% - 300px);
-		}
-	}
-
-	.bottom-links {
-		display: flex;
-		justify-content: center;
-		border-top: 1px solid #d4d4d4;
-		margin-top: 30px;
-		padding-top: 25px;
-	}
-
-	@media all and (min-width: 400px) {
-		.nav-right .share-btn {
-			display: inline-block;
-		}
-		.nav-right .small-share-btn {
-			display: none;
-		}
-	}
-</style>
-</head>
-
-<body>
-
-<div class="container root page-index">
-
-<div class="header">
-	<a class="forkme" href="https://github.com/laurent22/joplin"><img src="https://joplinapp.org/images/ForkMe.png"/></a>
-	<a href="https://joplinapp.org"><h1 class="title"><img class="title-icon" src="https://joplinapp.org/images/Icon512.png"><span class="title-text">Joplin</span></h1></a>
-	<p class="sub-title">An open source note taking and to-do application with synchronisation capabilities</p>
-</div>
-
-<div class="nav-wrapper">
-	<div class="nav">
-		<ul>
-			<li class=""><a href="https:&#x2F;&#x2F;joplinapp.org/" title="Home"><i class="fa fa-home"></i></a></li>
-			<li><a href="https://discourse.joplinapp.org" title="Forum">Forum</a></li>
-			<li><a class="help" href="#" title="Menu">Menu</a></li>
-			<li><a class="gsoc" href="https://joplinapp.org/gsoc2021/index/" title="Google Summer of Code 2021">GSoC 2021</a></li>
-		</ul>
-		<div class="nav-right">
-			<!--
-				<iframe class="share-btn" src="https://www.facebook.com/plugins/share_button.php?href=http%3A%2F%2Fjoplinapp.org&layout=button&size=small&mobile_iframe=true&width=60&height=20&appId" width="60" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
-				<iframe class="share-btn" src="https://platform.twitter.com/widgets/tweet_button.html?url=http%3A%2F%2Fjoplinapp.org" width="62" height="20" title="Tweet" style="border: 0; overflow: hidden;"></iframe>
-			-->
-			<iframe class="share-btn share-btn-github" src="https://ghbtns.com/github-btn.html?user=laurent22&repo=joplin&type=star&count=true" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
-		</div>
-	</div>
-</div>
-
-<div class="content">
-	<div id="toc"><ul>
+						<div id="toc-mobile"><div><ul>
 <li>
 <p>Applications</p>
 <ul>
-<li><a href="https://joplinapp.org/desktop/">Desktop application</a></li>
-<li><a href="https://joplinapp.org/mobile/">Mobile applications</a></li>
-<li><a href="https://joplinapp.org/terminal/">Terminal application</a></li>
-<li><a href="https://joplinapp.org/clipper/">Web Clipper</a></li>
+<li><a href="/desktop/">Desktop application</a></li>
+<li><a href="/mobile/">Mobile applications</a></li>
+<li><a href="/terminal/">Terminal application</a></li>
+<li><a href="/clipper/">Web Clipper</a></li>
 </ul>
 </li>
 <li>
 <p>Support</p>
 <ul>
 <li><a href="https://discourse.joplinapp.org">Joplin Forum</a></li>
-<li><a href="https://joplinapp.org/markdown/">Markdown Guide</a></li>
-<li><a href="https://joplinapp.org/e2ee/">How to enable end-to-end encryption</a></li>
-<li><a href="https://joplinapp.org/conflict/">What is a conflict?</a></li>
-<li><a href="https://joplinapp.org/debugging/">How to enable debug mode</a></li>
-<li><a href="https://joplinapp.org/rich_text_editor/">About the Rich Text editor limitations</a></li>
-<li><a href="https://joplinapp.org/faq/">FAQ</a></li>
+<li><a href="/markdown/">Markdown Guide</a></li>
+<li><a href="/e2ee/">How to enable end-to-end encryption</a></li>
+<li><a href="/conflict/">What is a conflict?</a></li>
+<li><a href="/debugging/">How to enable debug mode</a></li>
+<li><a href="/rich_text_editor/">About the Rich Text editor limitations</a></li>
+<li><a href="/faq/">FAQ</a></li>
 </ul>
 </li>
 <li>
 <p>Joplin API - Get Started</p>
 <ul>
-<li><a href="https://joplinapp.org/api/overview/">Joplin API Overview</a></li>
-<li><a href="https://joplinapp.org/api/get_started/plugins/">Plugin development</a></li>
-<li><a href="https://joplinapp.org/api/tutorials/toc_plugin/">Plugin tutorial</a></li>
+<li><a href="/api/overview/">Joplin API Overview</a></li>
+<li><a href="/api/get_started/plugins/">Plugin development</a></li>
+<li><a href="/api/tutorials/toc_plugin/">Plugin tutorial</a></li>
 </ul>
 </li>
 <li>
 <p>Joplin API - References</p>
 <ul>
 <li><a href="https://joplinapp.org/api/references/plugin_api/classes/joplin.html">Plugin API</a></li>
-<li><a href="https://joplinapp.org/api/references/rest_api/">Data API</a></li>
-<li><a href="https://joplinapp.org/api/references/plugin_manifest/">Plugin manifest</a></li>
-<li><a href="https://joplinapp.org/api/references/plugin_loading_rules/">Plugin loading rules</a></li>
+<li><a href="/api/references/rest_api/">Data API</a></li>
+<li><a href="/api/references/plugin_manifest/">Plugin manifest</a></li>
+<li><a href="/api/references/plugin_loading_rules/">Plugin loading rules</a></li>
+<li><a href="/api/references/plugin_theming/">Plugin theming</a></li>
 </ul>
 </li>
 <li>
 <p>Development</p>
 <ul>
 <li><a href="https://github.com/laurent22/joplin/blob/dev/BUILD.md">How to build the apps</a></li>
-<li><a href="https://joplinapp.org/spec/e2ee/">End-to-end encryption spec</a></li>
-<li><a href="https://joplinapp.org/spec/history/">Note History spec</a></li>
-<li><a href="https://joplinapp.org/spec/sync_lock/">Sync Lock spec</a></li>
-<li><a href="https://joplinapp.org/spec/plugins/">Plugin Architecture spec</a></li>
-<li><a href="https://joplinapp.org/spec/search_sorting/">Search Sorting spec</a></li>
-<li><a href="https://joplinapp.org/spec/server_file_url_format/">Server: File URL Format</a></li>
-<li><a href="https://joplinapp.org/spec/server_delta_sync/">Server: Delta Sync</a></li>
-<li><a href="https://joplinapp.org/spec/server_sharing/">Server: Sharing</a></li>
+<li><a href="/spec/e2ee/">End-to-end encryption spec</a></li>
+<li><a href="/spec/history/">Note History spec</a></li>
+<li><a href="/spec/sync_lock/">Sync Lock spec</a></li>
+<li><a href="/spec/plugins/">Plugin Architecture spec</a></li>
+<li><a href="/spec/search_sorting/">Search Sorting spec</a></li>
+<li><a href="/spec/server_file_url_format/">Server: File URL Format</a></li>
+<li><a href="/spec/server_delta_sync/">Server: Delta Sync</a></li>
+<li><a href="/spec/server_sharing/">Server: Sharing</a></li>
 </ul>
 </li>
 <li>
-<p>Google Summer of Code 2020</p>
+<p>Google Summer of Code 2021</p>
 <ul>
-<li><a href="https://joplinapp.org/gsoc2020/index/">Google Summer of Code 2020</a></li>
-<li><a href="https://joplinapp.org/gsoc2020/ideas/">Project Ideas</a></li>
+<li><a href="/gsoc2021/index/">Google Summer of Code 2021</a></li>
+<li><a href="/gsoc2021/pull_request_guidelines/">How to submit a GSoC pull request</a></li>
+<li><a href="/gsoc2021/ideas/">Project Ideas</a></li>
 </ul>
 </li>
 <li>
 <p>About</p>
 <ul>
-<li><a href="https://joplinapp.org/changelog/">Changelog (Desktop App)</a></li>
-<li><a href="https://joplinapp.org/changelog_cli/">Changelog (CLI App)</a></li>
-<li><a href="https://joplinapp.org/changelog_server/">Changelog (Server)</a></li>
-<li><a href="https://joplinapp.org/stats/">Stats</a></li>
-<li><a href="https://joplinapp.org/donate/">Donate</a></li>
+<li><a href="/changelog/">Changelog (Desktop App)</a></li>
+<li><a href="/changelog_cli/">Changelog (CLI App)</a></li>
+<li><a href="/changelog_server/">Changelog (Server)</a></li>
+<li><a href="/stats/">Stats</a></li>
+<li><a href="/donate/">Donate</a></li>
 </ul>
 </li>
 </ul>
+</div></div>
+					
+					<div>
+						<p class="light-blue mobile-menu-link-bottom text-center">
+							Copyright &copy; 2016-2021 Laurent&nbsp;Cozic
+							<br/>
+							<a href="/privacy/" class="fw500">Privacy Policy</a>
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
+			<div class="page-container page-index">
+				<div class="container">
+					<div class="row content-wrapper">
+						<div id="toc"><div><ul>
+<li>
+<p>Applications</p>
+<ul>
+<li><a href="/desktop/">Desktop application</a></li>
+<li><a href="/mobile/">Mobile applications</a></li>
+<li><a href="/terminal/">Terminal application</a></li>
+<li><a href="/clipper/">Web Clipper</a></li>
+</ul>
+</li>
+<li>
+<p>Support</p>
+<ul>
+<li><a href="https://discourse.joplinapp.org">Joplin Forum</a></li>
+<li><a href="/markdown/">Markdown Guide</a></li>
+<li><a href="/e2ee/">How to enable end-to-end encryption</a></li>
+<li><a href="/conflict/">What is a conflict?</a></li>
+<li><a href="/debugging/">How to enable debug mode</a></li>
+<li><a href="/rich_text_editor/">About the Rich Text editor limitations</a></li>
+<li><a href="/faq/">FAQ</a></li>
+</ul>
+</li>
+<li>
+<p>Joplin API - Get Started</p>
+<ul>
+<li><a href="/api/overview/">Joplin API Overview</a></li>
+<li><a href="/api/get_started/plugins/">Plugin development</a></li>
+<li><a href="/api/tutorials/toc_plugin/">Plugin tutorial</a></li>
+</ul>
+</li>
+<li>
+<p>Joplin API - References</p>
+<ul>
+<li><a href="https://joplinapp.org/api/references/plugin_api/classes/joplin.html">Plugin API</a></li>
+<li><a href="/api/references/rest_api/">Data API</a></li>
+<li><a href="/api/references/plugin_manifest/">Plugin manifest</a></li>
+<li><a href="/api/references/plugin_loading_rules/">Plugin loading rules</a></li>
+<li><a href="/api/references/plugin_theming/">Plugin theming</a></li>
+</ul>
+</li>
+<li>
+<p>Development</p>
+<ul>
+<li><a href="https://github.com/laurent22/joplin/blob/dev/BUILD.md">How to build the apps</a></li>
+<li><a href="/spec/e2ee/">End-to-end encryption spec</a></li>
+<li><a href="/spec/history/">Note History spec</a></li>
+<li><a href="/spec/sync_lock/">Sync Lock spec</a></li>
+<li><a href="/spec/plugins/">Plugin Architecture spec</a></li>
+<li><a href="/spec/search_sorting/">Search Sorting spec</a></li>
+<li><a href="/spec/server_file_url_format/">Server: File URL Format</a></li>
+<li><a href="/spec/server_delta_sync/">Server: Delta Sync</a></li>
+<li><a href="/spec/server_sharing/">Server: Sharing</a></li>
+</ul>
+</li>
+<li>
+<p>Google Summer of Code 2021</p>
+<ul>
+<li><a href="/gsoc2021/index/">Google Summer of Code 2021</a></li>
+<li><a href="/gsoc2021/pull_request_guidelines/">How to submit a GSoC pull request</a></li>
+<li><a href="/gsoc2021/ideas/">Project Ideas</a></li>
+</ul>
+</li>
+<li>
+<p>About</p>
+<ul>
+<li><a href="/changelog/">Changelog (Desktop App)</a></li>
+<li><a href="/changelog_cli/">Changelog (CLI App)</a></li>
+<li><a href="/changelog_server/">Changelog (Server)</a></li>
+<li><a href="/stats/">Stats</a></li>
+<li><a href="/donate/">Donate</a></li>
+</ul>
+</li>
+</ul>
+</div></div>
 
-	<div class="main">
+						<div class="main-content">
+							<div class="alert alert-danger alert-env-dev" role="alert">
+								Running in prod mode!
+							</div>
+							<div class="donate-links">
+<p><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=E8JMYD2LQ8MMA&amp;lc=GB&amp;item_name=Joplin+Development&amp;currency_code=EUR&amp;bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted"><img src="https://joplinapp.org/images/badges/Donate-PayPal-green.svg" alt="Donate using PayPal"></a> <a href="https://github.com/sponsors/laurent22/"><img src="https://joplinapp.org/images/badges/GitHub-Badge.svg" alt="Sponsor on GitHub"></a> <a href="https://www.patreon.com/joplin"><img src="https://joplinapp.org/images/badges/Patreon-Badge.svg" alt="Become a patron"></a> <a href="https://joplinapp.org/donate/#donations"><img src="https://joplinapp.org/images/badges/Donate-IBAN.svg" alt="Donate using IBAN"></a></p>
+</div>
 <h1>Google Summer of Code 2021<a name="google-summer-of-code-2021" href="#google-summer-of-code-2021" class="heading-anchor">🔗</a></h1>
 <p>Joplin has a young but well proven history. It all started by single idea but is rising more and more commitment as well as demands.</p>
 <p>Joplin is about to make another big step to answers these demands by applying at Google Summer of Code. All students and Joplin users and developers are welcome to participate in the hopefully second year Summer of Code program with Joplin. This year the main themes will be:</p>
@@ -413,30 +273,49 @@ https://github.com/laurent22/joplin/blob/dev/readme/gsoc2021/index.md
 <li><strong>External desktop applications</strong> - build external Joplin applications by retrieving, creating or modifying notes via the Data API.</li>
 <li><strong>External server applications</strong> - leverage the Joplin Server API to provide online features to Joplin users.</li>
 </ul>
-<p>Mentors, administrators and students: read <a href="https://developers.google.com/open-source/gsoc">Summer of Code</a> occasionally. Also read the <a href="https://developers.google.com/open-source/gsoc/faq">Summer of Code FAQ</a>.<br>
-<strong>Most IMPORTANT, read this page carefully, line by line. We don't want to quote pharagraphs from this page answering question in the forum.<br>
-Moreover, watch/subscribe the topic <a href="https://discourse.joplinapp.org/t/gsoc-2021-live-blog/6219">GSoC 2021 live blog</a> as this page here contains rather static content whereas the mentioned topic is updated much more frequently.</strong></p>
+<p>Mentors, administrators and students: read <a href="https://developers.google.com/open-source/gsoc">Summer of Code</a> occasionally. Also read the <a href="https://developers.google.com/open-source/gsoc/faq">Summer of Code FAQ</a>.</p>
+<p><strong>Please read this page carefully as most likely it will have all the answers to the questions you might have, such as how to build the app, how to contribute and what are the rules for submitting a pull request.</strong></p>
 <p>All participants will need a Google account in order to join the program. So, save time and create one now. In addition, all participants need to join the  <a href="https://discourse.joplinapp.org">Joplin Forum</a>.</p>
-<h2>Programming Language<a name="programming-language" href="#programming-language" class="heading-anchor">🔗</a></h2>
-<p>All applications share the same back-end written in JavaScript (Node.js), with Redux for state management. The back-end runs locally.</p>
-<p>The desktop GUI, as listed on the <a href="https://joplinapp.org/#installation">Joplin's website</a> is done using Electron.</p>
-<p>More details can be found on:</p>
+<h2>How to contribute<a name="how-to-contribute" href="#how-to-contribute" class="heading-anchor">🔗</a></h2>
+<p>We suggest you read carefully these important documents and bookmark the links as you will need to refer to them throughout GSoC:</p>
 <ul>
-<li><a href="https://joplinapp.org/gsoc2021/pull_request_guidelines/">How to submit a pull request for GSoC 2021</a></li>
+<li><a href="https://joplinapp.org/gsoc2021/pull_request_guidelines/">How to submit a pull request for GSoC</a></li>
+<li><a href="https://github.com/laurent22/joplin/blob/dev/BUILD.md">How to build the apps</a></li>
 <li><a href="https://github.com/laurent22/joplin/blob/dev/CONTRIBUTING.md">How to contribute</a></li>
-<li><a href="https://github.com/laurent22/joplin/blob/dev/BUILD.md">How to build</a></li>
 </ul>
+<h2>Programming Language<a name="programming-language" href="#programming-language" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>Any new application or plugin should be done using TypeScript.</li>
+<li>For web publishing, please use WebPack.</li>
+<li>For UI, we use React/Redux. Make sure you use React Hooks when creating new components.</li>
+<li>For styling, we use styled-components</li>
+</ul>
+<p>In general, all applications share the same back-end written in TypeScript or JavaScript (Node.js), with Redux for state management. The back-end runs locally.</p>
+<p>The desktop GUI, as listed on the <a href="https://joplinapp.org/help/#installation">Joplin's website</a> is done using Electron and React.</p>
+<p>The mobile app is done using React Native.</p>
 <p>Submissions and ideas for projects in any other language should specifically mention the choice.</p>
 <h2>Instructions for students<a name="instructions-for-students" href="#instructions-for-students" class="heading-anchor">🔗</a></h2>
-<p>Students wishing to participate in Summer of Code must realize, that this is a important professional opportunity. You will be required to produce applicable and readable code for Joplin in 3 months. Your mentors, will dedicate a portion of their time to mentoring you. Therefore, we seek candidates who are committed to helping Joplin and its community long-term and are willing to both do quality work, and be proactive in communicating with your mentor(s).</p>
+<p>Students wishing to participate in Summer of Code must realize, that this is an important professional opportunity. You will be required to produce applicable and readable code for Joplin in 3 months. Your mentors, will dedicate a portion of their time to mentoring you. Therefore, we seek candidates who are committed to helping Joplin and its community long-term and are willing to both do quality work, and be proactive in communicating with your mentor(s).</p>
 <p>You don't have to be a proven developer - in fact, this whole program is meant to facilitate joining Joplin and other Open Source communities. However, experience in coding and/or experience with the above mentioned programming languages and the applications is welcome.</p>
-<p>In general it can be said, that question shall be asked early and clearly, given everyone the possibility to understand why you want to have this question answered and how it helps to achieve the project's goal.</p>
-<p>Before you can be accepted as a student we expect you to fix some bugs or implement a small plugin or external application and link that work on your proposal. You may browse the <a href="https://github.com/laurent22/joplin/issues?q=is:open+is:issue+label:bug">GitHub Issues</a> to find some simple bugs to fix. Before submitting a pull request, please make sure you read the <a href="https://joplinapp.org/gsoc2021/pull_request_guidelines/">pull request guidelines for GSoC 2021</a>.</p>
-<p>You should start learning the components that you plan on working on before the start date. Support can be found in the forum and on our dedicated discourse channel.</p>
-<p>Do not worry, the timeline from Google reserves a lot of time for bonding periods so use that time wisely. Good communication is key. To allow us to respond quickly tag your questions with <code>#gsoc-2021</code>.</p>
-<p>You should plan to communicate with your team several times per week, and formally report progress and plans weekly. You are free to chose the format, it can be an sophisticated online document or simple continuous blog on GitHub.</p>
-<p>Moreover, we require that you come to clear agreement on how to commit, test and build.</p>
+<p>You should start learning the components that you plan on working on before the start date. Support can be found in the forum and on our dedicated discourse channel. You should plan to communicate with your team several times per week, and formally report progress and plans weekly. You are free to choose the format, it can be a sophisticated online document or simple continuous blog on GitHub.</p>
 <p>Students who neglect active communication will be failed!</p>
+<h2>How to create your first pull request<a name="how-to-create-your-first-pull-request" href="#how-to-create-your-first-pull-request" class="heading-anchor">🔗</a></h2>
+<p>Before you can be accepted as a student we expect you to write some code and link that work on your proposal. As a first pull request, we suggest one of the following:</p>
+<ul>
+<li>
+<p>Fix a <a href="https://github.com/laurent22/joplin/issues?utf8=%E2%9C%93&amp;q=is:open+is:issue+label:bug+label:high">high priority</a> or <a href="https://github.com/laurent22/joplin/issues?utf8=%E2%9C%93&amp;q=is:open+is:issue+label:bug+label:medium">medium priority</a> bug. This is something we highly value and is a good way to get a deep understanding of certain parts of the codebase.</p>
+</li>
+<li>
+<p>Implement a small plugin or external application, to get yourself familiar with the Joplin API.</p>
+</li>
+<li>
+<p>Alternatively you may browse the <a href="https://github.com/laurent22/joplin/issues">GitHub Issues</a> to find something that can be worked on. Note that this is a difficult way to get a pull request in, so make sure the issue you choose has a very clear technical spec. If we need to discuss how it should work or what it should do in the pull request, it means there was no consensus for this feature, and we are likely to close the pull request.</p>
+</li>
+<li>
+<p>Please <strong>do not submit a pull request just to fix some typo</strong>.</p>
+</li>
+</ul>
+<p>Before submitting a pull request, please make sure you read the <a href="https://joplinapp.org/gsoc2021/pull_request_guidelines/">pull request guidelines for GSoC 2021</a>.</p>
 <h2>General instructions<a name="general-instructions" href="#general-instructions" class="heading-anchor">🔗</a></h2>
 <p>First of all, please read the above referenced resources and the <a href="https://developers.google.com/open-source/gsoc/faq">GSoC FAQ</a>. Pay special attention to the <strong>Eligibility</strong> section of the FAQ.</p>
 <h2>Recommended steps<a name="recommended-steps" href="#recommended-steps" class="heading-anchor">🔗</a></h2>
@@ -446,7 +325,7 @@ Moreover, watch/subscribe the topic <a href="https://discourse.joplinapp.org/t/g
 <li>Take a look at the <a href="https://joplinapp.org/gsoc2021/ideas/">list of ideas</a>. You can have you own idea added by posting it in the <a href="https://discourse.joplinapp.org/c/features">Features category</a></li>
 <li>Come up with project that you're interested in and discuss it in <a href="https://discourse.joplinapp.org/c/features">Features category</a></li>
 <li>Write a first draft and get someone to review it</li>
-<li>Remember: you must link to work such as commits in your proposal. A private place will be created wihtinn the forum for that purposes.</li>
+<li>Remember: you must link to work such as commits in your proposal. A private place will be created within the forum for that purposes.</li>
 <li>Read <a href="http://teom.org/blog/kde/how-to-write-a-kick-ass-proposal-for-google-summer-of-code/">How to write a kickass proposal for GSoC</a></li>
 <li>Submit proposal using <a href="https://summerofcode.withgoogle.com/">Google's web interface</a> ahead of the deadline</li>
 <li>Submit proof of enrolment well ahead of the deadline</li>
@@ -500,7 +379,7 @@ There could be exceptional reason to accept proposal what cannot be finished ove
 <p>Your idea proposal should be a brief description of what the project is, what the desired goals would be, what the student should know and an email address for contact. Students are not required to follow your idea to the letter, so regard your proposal as inspiration for the students.</p>
 <h3>Mentoring<a name="mentoring" href="#mentoring" class="heading-anchor">🔗</a></h3>
 <p>Anyone developer can be a mentor if you meet the GSoC eligibility requirements. We will potentially assign a student to you who has never worked on such a large project and will need some help. Make sure you're up for the task. Mentoring takes time, and lots and lots of communication.</p>
-<p>Before subscribing yourself as a mentor, please make sure that  the <a href="https://discourse.joplinapp.org/g/staff">staff</a> is aware of that. Ask them to send the Summer of Code  Administrators an email confirming your involvement in the team. This is just a formality to make sure you are a real person we can trust; the administrators cannot know all active developers by their Google account ID. Then drop us an message in the forum.</p>
+<p>Before subscribing yourself as a mentor, please make sure that  the <a href="https://discourse.joplinapp.org/g/staff">staff</a> is aware of that. Ask them to send the Summer of Code  Administrators an email confirming your involvement in the team. This is just a formality to make sure you are a real person we can trust; the administrators cannot know all active developers by their Google account ID. Then drop us a message in the forum.</p>
 <p>Prospective mentors should read the <a href="http://www.booki.cc/gsoc-mentoring">mentoring guide</a>. Also, Federico Mena-Quintero has written some helpful information based on his experiences in previous years. <a href="https://people.gnome.org/~federico/docs/summer-of-code-mentoring-howto/index.html">His HOWTO</a> has some useful suggestions for anyone planning to mentor this year.</p>
 <p>You will subscribe to the relevant tags in the forum to discuss ideas. You will need to read the proposals as they come in, and vote on the proposals. Daily communication is required with your student during the Community Bonding period, and multiple times per week during the coding period.</p>
 <p>Finally, know that we will never assign you to a project you do not want to work on. We will not assign you more projects than you can/want to take on either. And you will have a backup mentor, just in case something unforeseen takes place.</p>
@@ -508,45 +387,65 @@ There could be exceptional reason to accept proposal what cannot be finished ove
 <p>Please see below for a list of project ideas:</p>
 <p><a href="https://joplinapp.org/gsoc2021/ideas/">https://joplinapp.org/gsoc2021/ideas/</a></p>
 
-		<div class="bottom-links">
-			<a href="https://github.com/laurent22/joplin/blob/dev/readme/gsoc2021/index.md">
-				<i class="fa fa-github"></i> Improve this doc
-			</a>
+								<div class="bottom-links">
+									<a href="https://github.com/laurent22/joplin/blob/dev/readme/gsoc2021/index.md">
+										<i class="fab fa-github"></i> Improve this doc
+									</a>
+								</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<footer class="darkblue-bg">
+				<div class="container">
+					<div class="row">
+						<div class="col-3 d-none d-md-block">
+							<img src="&#x2F;images/logo-text.svg" alt="" width="150" />
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-12">
+							<hr />
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-12 col-md-6">
+							<img
+								src="&#x2F;images/logo-text.svg"
+								width="120"
+								class="img-center d-block d-md-none"
+								alt=""
+							/>
+							<br class="d-block d-md-none" />
+							<p class="text-center-sm">Copyright &copy; 2016-2021 Laurent Cozic</p>
+						</div>
+						<div class="col-12 col-md-6 right-links">
+							<p class="text-right text-center-sm">
+								<a href="https://github.com/laurent22/joplin/" class="github-link"><i class="fab fa-github"></i> GitHub Repository</a>
+								<a href="/privacy/">Privacy Policy</a>
+							</p>
+						</div>
+					</div>
+				</div>
+			</footer>
 		</div>
+
+		<script
+			src="&#x2F;js/jquery-3.6.0.min.js"
+			rel="preload"
+			as="script"
+		></script>
+		<script src="&#x2F;js/script.js?t=1626455245563"></script>
+
 <script>
-	function stickyHeader() { 
-		return; // Disabled
-
-		if ($(window).scrollTop() > 179) {
-			$('.nav').addClass('sticky'); 
-		} else {
-			$('.nav').removeClass('sticky');
-		}
+	if (window.location.hostname !== 'localhost') {
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+		ga('create', 'UA-103586105-1', 'auto');
+		ga('send', 'pageview');
 	}
-
-	$('#toc').hide();
-
-	$('.help').click(function(event) {
-		event.preventDefault();
-		$('#toc').show();
-	});
-
-	$(window).scroll(function() {
-		stickyHeader();
-	});
-
-	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-	ga('create', 'UA-103586105-1', 'auto');
-	ga('send', 'pageview');
-</script>
-
-</div></div>
-
-<div class="footer">
-Copyright (C) 2016-2021 Laurent Cozic
-</div>
-</body>
+</script>	</body>
 </html>

@@ -166,6 +166,7 @@ export default class InteropServiceHelper {
 		exportOptions.format = module.format;
 		// exportOptions.modulePath = module.path;
 		if (options.plugins) exportOptions.plugins = options.plugins;
+		exportOptions.customCss = options.customCss;
 		exportOptions.target = module.target;
 		exportOptions.includeConflicts = !!options.includeConflicts;
 		if (options.sourceFolderIds) exportOptions.sourceFolderIds = options.sourceFolderIds;

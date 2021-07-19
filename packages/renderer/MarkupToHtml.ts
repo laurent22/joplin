@@ -24,7 +24,19 @@ export interface RenderResultPluginAsset {
 export interface RenderResult {
 	html: string;
 	pluginAssets: RenderResultPluginAsset[];
-	cssStrings: string[];
+	cssStrings?: string[];
+}
+
+export interface OptionsResourceModel {
+	isResourceUrl: (url: string)=> boolean;
+}
+
+export interface Options {
+	isSafeMode?: boolean;
+	ResourceModel?: OptionsResourceModel;
+	customCss?: string;
+	extraRendererRules?: any[];
+	resourceBaseUrl?: string;
 }
 
 export default class MarkupToHtml {
@@ -33,18 +45,20 @@ export default class MarkupToHtml {
 	static MARKUP_LANGUAGE_HTML: number = MarkupLanguage.Html;
 
 	private renderers_: any = {};
-	private options_: any;
+	private options_: Options;
 	private rawMarkdownIt_: any;
 
-	constructor(options: any) {
-		this.options_ = Object.assign({}, {
+	public constructor(options: Options) {
+		this.options_ = {
 			ResourceModel: {
 				isResourceUrl: () => false,
 			},
-		}, options);
+			isSafeMode: false,
+			...options,
+		};
 	}
 
-	renderer(markupLanguage: MarkupLanguage) {
+	private renderer(markupLanguage: MarkupLanguage) {
 		if (this.renderers_[markupLanguage]) return this.renderers_[markupLanguage];
 
 		let RendererClass = null;
@@ -57,11 +71,11 @@ export default class MarkupToHtml {
 			throw new Error(`Invalid markup language: ${markupLanguage}`);
 		}
 
-		this.renderers_[markupLanguage] = new RendererClass(this.options_);
+		this.renderers_[markupLanguage] = new RendererClass(this.options_ as any);
 		return this.renderers_[markupLanguage];
 	}
 
-	stripMarkup(markupLanguage: MarkupLanguage, markup: string, options: any = null) {
+	public stripMarkup(markupLanguage: MarkupLanguage, markup: string, options: any = null) {
 		if (!markup) return '';
 
 		options = Object.assign({}, {
@@ -89,16 +103,23 @@ export default class MarkupToHtml {
 		return output;
 	}
 
-	clearCache(markupLanguage: MarkupLanguage) {
+	public clearCache(markupLanguage: MarkupLanguage) {
 		const r = this.renderer(markupLanguage);
 		if (r.clearCache) r.clearCache();
 	}
 
-	async render(markupLanguage: MarkupLanguage, markup: string, theme: any, options: any): Promise<RenderResult> {
+	public async render(markupLanguage: MarkupLanguage, markup: string, theme: any, options: any): Promise<RenderResult> {
+		if (this.options_.isSafeMode) {
+			return {
+				html: `<pre>${markup}</pre>`,
+				cssStrings: [],
+				pluginAssets: [],
+			};
+		}
 		return this.renderer(markupLanguage).render(markup, theme, options);
 	}
 
-	async allAssets(markupLanguage: MarkupLanguage, theme: any) {
+	public async allAssets(markupLanguage: MarkupLanguage, theme: any) {
 		return this.renderer(markupLanguage).allAssets(theme);
 	}
 }

@@ -1,4 +1,4 @@
-import { connectDb, disconnectDb, migrateDb, sqliteFilePath } from '../db';
+import { connectDb, disconnectDb, migrateDb } from '../db';
 import * as fs from 'fs-extra';
 import { DatabaseConfig } from '../utils/types';
 
@@ -31,9 +31,9 @@ export async function createDb(config: DatabaseConfig, options: CreateDbOptions 
 			await dropDb(config, { ignoreIfNotExists: true });
 		}
 
-		await execCommand(cmd.join(' '));
+		await execCommand(cmd.join(' '), { env: { PGPASSWORD: config.password } });
 	} else if (config.client === 'sqlite3') {
-		const filePath = sqliteFilePath(config.name);
+		const filePath = config.name;
 
 		if (await fs.pathExists(filePath)) {
 			if (options.dropIfExists) {
@@ -44,9 +44,14 @@ export async function createDb(config: DatabaseConfig, options: CreateDbOptions 
 		}
 	}
 
-	const db = await connectDb(config);
-	await migrateDb(db);
-	await disconnectDb(db);
+	try {
+		const db = await connectDb(config);
+		await migrateDb(db);
+		await disconnectDb(db);
+	} catch (error) {
+		error.message += `: ${config.name}`;
+		throw error;
+	}
 }
 
 export async function dropDb(config: DatabaseConfig, options: DropDbOptions = null) {
@@ -65,12 +70,12 @@ export async function dropDb(config: DatabaseConfig, options: DropDbOptions = nu
 		];
 
 		try {
-			await execCommand(cmd.join(' '));
+			await execCommand(cmd.join(' '), { env: { PGPASSWORD: config.password } });
 		} catch (error) {
 			if (options.ignoreIfNotExists && error.message.includes('does not exist')) return;
 			throw error;
 		}
 	} else if (config.client === 'sqlite3') {
-		await fs.remove(sqliteFilePath(config.name));
+		await fs.remove(config.name);
 	}
 }

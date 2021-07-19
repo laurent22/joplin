@@ -59,7 +59,12 @@ try {
 	keytar = null;
 }
 
-shimInit(sharp, keytar);
+function appVersion() {
+	const p = require('./package.json');
+	return p.version;
+}
+
+shimInit(sharp, keytar, null, appVersion);
 
 const application = app();
 

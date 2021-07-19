@@ -14,6 +14,7 @@ const Resource = require('@joplin/lib/models/Resource').default;
 
 const injectedJs = {
 	webviewLib: require('@joplin/lib/rnInjectedJs/webviewLib'),
+	codeMirrorBundle: require('../lib/rnInjectedJs/CodeMirror.bundle'),
 };
 
 function shimInit() {
@@ -88,6 +89,7 @@ function shimInit() {
 		const doFetchBlob = () => {
 			return RNFetchBlob.config({
 				path: localFilePath,
+				trusty: options.ignoreTlsErrors,
 			}).fetch(method, url, headers);
 		};
 
@@ -123,7 +125,9 @@ function shimInit() {
 		const method = options.method ? options.method : 'POST';
 
 		try {
-			const response = await RNFetchBlob.fetch(method, url, headers, RNFetchBlob.wrap(options.path));
+			const response = await RNFetchBlob.config({
+				trusty: options.ignoreTlsErrors,
+			}).fetch(method, url, headers, RNFetchBlob.wrap(options.path));
 
 			// Returns an object that's roughtly compatible with a standard Response object
 			return {

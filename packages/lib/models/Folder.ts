@@ -2,11 +2,15 @@ import { FolderEntity } from '../services/database/types';
 import BaseModel from '../BaseModel';
 import time from '../time';
 import { _ } from '../locale';
-
 import Note from './Note';
 import Database from '../database';
 import BaseItem from './BaseItem';
+import Resource from './Resource';
+import { isRootSharedFolder } from '../services/share/reducer';
+import Logger from '../Logger';
 const { substrWithEllipsis } = require('../string-utils.js');
+
+const logger = Logger.create('models/Folder');
 
 interface FolderEntityWithChildren extends FolderEntity {
 	children?: FolderEntity[];
@@ -75,8 +79,10 @@ export default class Folder extends BaseItem {
 	}
 
 	static async delete(folderId: string, options: any = null) {
-		if (!options) options = {};
-		if (!('deleteChildren' in options)) options.deleteChildren = true;
+		options = {
+			deleteChildren: true,
+			...options,
+		};
 
 		const folder = await Folder.load(folderId);
 		if (!folder) return; // noop
@@ -256,6 +262,185 @@ export default class Folder extends BaseItem {
 		}
 	}
 
+	public static async allChildrenFolders(folderId: string): Promise<FolderEntity[]> {
+		const sql = `
+			WITH RECURSIVE
+				folders_cte(id, parent_id, share_id) AS (
+					SELECT id, parent_id, share_id
+						FROM folders
+						WHERE parent_id = ?
+					UNION ALL
+						SELECT folders.id, folders.parent_id, folders.share_id
+							FROM folders
+							INNER JOIN folders_cte AS folders_cte ON (folders.parent_id = folders_cte.id)
+				)
+				SELECT id, parent_id, share_id FROM folders_cte;
+		`;
+
+		return this.db().selectAll(sql, [folderId]);
+	}
+
+	private static async rootSharedFolders(): Promise<FolderEntity[]> {
+		return this.db().selectAll('SELECT id, share_id FROM folders WHERE parent_id = "" AND share_id != ""');
+	}
+
+	public static async updateFolderShareIds(): Promise<void> {
+		// Get all the sub-folders of the shared folders, and set the share_id
+		// property.
+		const rootFolders = await this.rootSharedFolders();
+
+		let sharedFolderIds: string[] = [];
+
+		const report = {
+			shareUpdateCount: 0,
+			unshareUpdateCount: 0,
+		};
+
+		for (const rootFolder of rootFolders) {
+			const children = await this.allChildrenFolders(rootFolder.id);
+
+			report.shareUpdateCount += children.length;
+
+			for (const child of children) {
+				if (child.share_id !== rootFolder.share_id) {
+					await this.save({
+						id: child.id,
+						share_id: rootFolder.share_id,
+						updated_time: Date.now(),
+					}, { autoTimestamp: false });
+				}
+			}
+
+			sharedFolderIds.push(rootFolder.id);
+			sharedFolderIds = sharedFolderIds.concat(children.map(c => c.id));
+		}
+
+		// Now that we've set the share ID on all the sub-folders of the shared
+		// folders, those that remain should not be shared anymore. For example,
+		// if they've been moved out of a shared folder.
+		// await this.unshareItems(ModelType.Folder, sharedFolderIds);
+
+		const sql = ['SELECT id, parent_id FROM folders WHERE share_id != ""'];
+		if (sharedFolderIds.length) {
+			sql.push(` AND id NOT IN ("${sharedFolderIds.join('","')}")`);
+		}
+
+		const foldersToUnshare: FolderEntity[] = await this.db().selectAll(sql.join(' '));
+
+		report.unshareUpdateCount += foldersToUnshare.length;
+
+		for (const item of foldersToUnshare) {
+			await this.save({
+				id: item.id,
+				share_id: '',
+				updated_time: Date.now(),
+				parent_id: item.parent_id,
+			}, { autoTimestamp: false });
+		}
+
+		logger.debug('updateFolderShareIds:', report);
+	}
+
+	public static async updateNoteShareIds() {
+		// Find all the notes where the share_id is not the same as the
+		// parent share_id because we only need to update those.
+		const rows = await this.db().selectAll(`
+			SELECT notes.id, folders.share_id, notes.parent_id
+			FROM notes
+			LEFT JOIN folders ON notes.parent_id = folders.id
+			WHERE notes.share_id != folders.share_id
+		`);
+
+		logger.debug('updateNoteShareIds: notes to update:', rows.length);
+
+		for (const row of rows) {
+			await Note.save({
+				id: row.id,
+				share_id: row.share_id || '',
+				parent_id: row.parent_id,
+				updated_time: Date.now(),
+			}, { autoTimestamp: false });
+		}
+	}
+
+	public static async updateResourceShareIds() {
+		// Find all resources where share_id is different from parent note
+		// share_id. Then update share_id on all these resources. Essentially it
+		// makes it match the resource share_id to the note share_id. At the
+		// same time we also process the is_shared property.
+		const rows = await this.db().selectAll(`
+			SELECT r.id, n.share_id, n.is_shared
+			FROM note_resources nr
+			LEFT JOIN resources r ON nr.resource_id = r.id
+			LEFT JOIN notes n ON nr.note_id = n.id
+			WHERE n.share_id != r.share_id
+			OR n.is_shared != r.is_shared
+		`);
+
+		logger.debug('updateResourceShareIds: resources to update:', rows.length);
+
+		for (const row of rows) {
+			await Resource.save({
+				id: row.id,
+				share_id: row.share_id || '',
+				is_shared: row.is_shared,
+				updated_time: Date.now(),
+			}, { autoTimestamp: false });
+		}
+	}
+
+	public static async updateAllShareIds() {
+		await this.updateFolderShareIds();
+		await this.updateNoteShareIds();
+		await this.updateResourceShareIds();
+	}
+
+	// Clear the "share_id" property for the items that are associated with a
+	// share that no longer exists.
+	public static async updateNoLongerSharedItems(activeShareIds: string[]) {
+		const tableNameToClasses: Record<string, any> = {
+			'folders': Folder,
+			'notes': Note,
+			'resources': Resource,
+		};
+
+		const report: any = {};
+
+		for (const tableName of ['folders', 'notes', 'resources']) {
+			const ItemClass = tableNameToClasses[tableName];
+			const hasParentId = tableName !== 'resources';
+
+			const fields = ['id'];
+			if (hasParentId) fields.push('parent_id');
+
+			const query = activeShareIds.length ? `
+				SELECT ${this.db().escapeFields(fields)} FROM ${tableName}
+				WHERE share_id != "" AND share_id NOT IN ("${activeShareIds.join('","')}")
+			` : `
+				SELECT ${this.db().escapeFields(fields)} FROM ${tableName}
+				WHERE share_id != ''
+			`;
+
+			const rows = await this.db().selectAll(query);
+
+			report[tableName] = rows.length;
+
+			for (const row of rows) {
+				const toSave: any = {
+					id: row.id,
+					share_id: '',
+					updated_time: Date.now(),
+				};
+
+				if (hasParentId) toSave.parent_id = row.parent_id;
+
+				await ItemClass.save(toSave, { autoTimestamp: false });
+			}
+		}
+
+		logger.debug('updateNoLongerSharedItems:', report);
+	}
+
 	static async allAsTree(folders: FolderEntity[] = null, options: any = null) {
 		const all = folders ? folders : await this.all(options);
 
@@ -391,6 +576,9 @@ export default class Folder extends BaseItem {
 
 	static async canNestUnder(folderId: string, targetFolderId: string) {
 		if (folderId === targetFolderId) return false;
+
+		const folder = await Folder.load(folderId);
+		if (isRootSharedFolder(folder)) return false;
 
 		const conflictFolderId = Folder.conflictFolderId();
 		if (folderId == conflictFolderId || targetFolderId == conflictFolderId) return false;

@@ -15,12 +15,16 @@ class SyncTargetRegistry {
 		};
 	}
 
+	static allIds() {
+		return Object.keys(this.reg_);
+	}
+
 	static nameToId(name) {
 		for (const n in this.reg_) {
 			if (!this.reg_.hasOwnProperty(n)) continue;
 			if (this.reg_[n].name === name) return this.reg_[n].id;
 		}
-		throw new Error(`Name not found: ${name}`);
+		throw new Error(`Name not found: ${name}. Was the sync target registered?`);
 	}
 
 	static idToMetadata(id) {

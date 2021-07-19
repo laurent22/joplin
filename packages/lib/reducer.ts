@@ -1,8 +1,10 @@
 import produce, { Draft } from 'immer';
 import pluginServiceReducer, { stateRootKey as pluginServiceStateRootKey, defaultState as pluginServiceDefaultState, State as PluginServiceState } from './services/plugins/reducer';
+import shareServiceReducer, { stateRootKey as shareServiceStateRootKey, defaultState as shareServiceDefaultState, State as ShareServiceState } from './services/share/reducer';
 import Note from './models/Note';
 import Folder from './models/Folder';
 import BaseModel from './BaseModel';
+import { Store } from 'redux';
 const ArrayUtils = require('./ArrayUtils.js');
 const { ALL_NOTES_FILTER_ID } = require('./reserved-ids');
 const { createSelectorCreator, defaultMemoize } = require('reselect');
@@ -14,6 +16,12 @@ additionalReducers.push({
 	stateRootKey: pluginServiceStateRootKey,
 	defaultState: pluginServiceDefaultState,
 	reducer: pluginServiceReducer,
+});
+
+additionalReducers.push({
+	stateRootKey: shareServiceStateRootKey,
+	defaultState: shareServiceDefaultState,
+	reducer: shareServiceReducer,
 });
 
 interface StateLastSelectedNotesIds {
@@ -83,9 +91,11 @@ export interface State {
 	editorNoteStatuses: any;
 	isInsertingNotes: boolean;
 	hasEncryptedItems: boolean;
+	needApiAuth: boolean;
 
 	// Extra reducer keys go here:
 	pluginService: PluginServiceState;
+	shareService: ShareServiceState;
 }
 
 export const defaultState: State = {
@@ -151,12 +161,24 @@ export const defaultState: State = {
 	editorNoteStatuses: {},
 	isInsertingNotes: false,
 	hasEncryptedItems: false,
+	needApiAuth: false,
 
 	pluginService: pluginServiceDefaultState,
+	shareService: shareServiceDefaultState,
 };
 
 for (const additionalReducer of additionalReducers) {
 	(defaultState as any)[additionalReducer.stateRootKey] = additionalReducer.defaultState;
+}
+
+let store_: Store<any> = null;
+
+export function setStore(v: Store<any>) {
+	store_ = v;
+}
+
+export function store(): Store<any> {
+	return store_;
 }
 
 export const MAX_HISTORY = 200;
@@ -732,9 +754,15 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 
 		case 'FOLDER_AND_NOTE_SELECT':
 			{
-				changeSelectedFolder(draft, action);
 				const noteSelectAction = Object.assign({}, action, { type: 'NOTE_SELECT' });
-				changeSelectedNotes(draft, noteSelectAction);
+
+				if (draft.notesParentType === 'SmartFilter' && draft.selectedSmartFilterId === ALL_NOTES_FILTER_ID) {
+					// we don't want to change folder when 'All Notes' filter is on
+					changeSelectedNotes(draft, noteSelectAction);
+				} else {
+					changeSelectedFolder(draft, action);
+					changeSelectedNotes(draft, noteSelectAction);
+				}
 			}
 			break;
 
@@ -833,21 +861,22 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 					draft.selectedNoteIds = newIndex >= 0 ? [newNotes[newIndex].id] : [];
 				}
 
-				let newProvisionalNoteIds = draft.provisionalNoteIds;
+				if (!action.ignoreProvisionalFlag) {
+					let newProvisionalNoteIds = draft.provisionalNoteIds;
 
-				if (action.provisional) {
-					newProvisionalNoteIds = newProvisionalNoteIds.slice();
-					newProvisionalNoteIds.push(modNote.id);
-				} else {
-					const idx = newProvisionalNoteIds.indexOf(modNote.id);
-					if (idx >= 0) {
+					if (action.provisional) {
 						newProvisionalNoteIds = newProvisionalNoteIds.slice();
-						newProvisionalNoteIds.splice(idx, 1);
-
+						newProvisionalNoteIds.push(modNote.id);
+					} else {
+						const idx = newProvisionalNoteIds.indexOf(modNote.id);
+						if (idx >= 0) {
+							newProvisionalNoteIds = newProvisionalNoteIds.slice();
+							newProvisionalNoteIds.splice(idx, 1);
+						}
 					}
-				}
 
-				draft.provisionalNoteIds = newProvisionalNoteIds;
+					draft.provisionalNoteIds = newProvisionalNoteIds;
+				}
 			}
 			break;
 
@@ -1110,6 +1139,11 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 				draft.pluginsLegacy = newPluginsLegacy;
 			}
 			break;
+
+		case 'API_NEED_AUTH_SET':
+			draft.needApiAuth = action.value;
+			break;
+
 		}
 	} catch (error) {
 		error.message = `In reducer: ${error.message} Action: ${JSON.stringify(action)}`;

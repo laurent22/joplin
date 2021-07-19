@@ -3,6 +3,10 @@ import { execCommand2, rootDir, gitPullTry } from './tool-utils';
 
 const mobileDir = `${rootDir}/packages/app-mobile`;
 
+// Note that it will update all the MARKETING_VERSION and
+// CURRENT_PROJECT_VERSION fields, including for extensions (such as the
+// ShareExtension), which is normally what we want.
+// https://github.com/laurent22/joplin/pull/4963
 async function updateCodeProjVersions(filePath: string) {
 	const originalContent = await fs.readFile(filePath, 'utf8');
 	let newContent = originalContent;

@@ -4,7 +4,7 @@
 const fetch = require('node-fetch');
 const fs = require('fs-extra');
 const { patreonOauthToken } = require('./tool-utils');
-const HtmlToMd = require('@joplin/lib/HtmlToMd');
+const HtmlToMd = require('@joplin/lib/HtmlToMd').default;
 const { dirname, filename, basename } = require('@joplin/lib/path-utils');
 const markdownUtils = require('@joplin/lib/markdownUtils').default;
 const mimeUtils = require('@joplin/lib/mime-utils.js').mime;

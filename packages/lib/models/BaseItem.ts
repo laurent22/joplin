@@ -1,13 +1,14 @@
 import { ModelType } from '../BaseModel';
-import { NoteEntity } from '../services/database/types';
+import { BaseItemEntity, NoteEntity } from '../services/database/types';
 import Setting from './Setting';
 import BaseModel from '../BaseModel';
 import time from '../time';
 import markdownUtils from '../markdownUtils';
 import { _ } from '../locale';
-
 import Database from '../database';
 import ItemChange from './ItemChange';
+import ShareService from '../services/share/ShareService';
+import itemCanBeEncrypted from './utils/itemCanBeEncrypted';
 const JoplinError = require('../JoplinError.js');
 const { sprintf } = require('sprintf-js');
 const moment = require('moment');
@@ -17,10 +18,25 @@ export interface ItemsThatNeedDecryptionResult {
 	items: any[];
 }
 
+export interface ItemThatNeedSync {
+	id: string;
+	sync_time: number;
+	type_: ModelType;
+	updated_time: number;
+	encryption_applied: number;
+}
+
+export interface ItemsThatNeedSyncResult {
+	hasMore: boolean;
+	items: ItemThatNeedSync[];
+	neverSyncedItemIds: string[];
+}
+
 export default class BaseItem extends BaseModel {
 
 	public static encryptionService_: any = null;
 	public static revisionService_: any = null;
+	public static shareService_: ShareService = null;
 
 	// Also update:
 	// - itemsThatNeedSync()
@@ -382,14 +398,19 @@ export default class BaseItem extends BaseModel {
 		return this.revisionService_;
 	}
 
-	static async serializeForSync(item: any) {
+	protected static shareService() {
+		if (!this.shareService_) throw new Error('BaseItem.shareService_ is not set!!');
+		return this.shareService_;
+	}
+
+	public static async serializeForSync(item: BaseItemEntity): Promise<string> {
 		const ItemClass = this.itemClass(item);
 		const shownKeys = ItemClass.fieldNames();
 		shownKeys.push('type_');
 
 		const serialized = await ItemClass.serialize(item, shownKeys);
 
-		if (!Setting.value('encryption.enabled') || !ItemClass.encryptionSupported() || item.is_shared) {
+		if (!Setting.value('encryption.enabled') || !ItemClass.encryptionSupported() || !itemCanBeEncrypted(item)) {
 			// Normally not possible since itemsThatNeedSync should only return decrypted items
 			if (item.encryption_applied) throw new JoplinError('Item is encrypted but encryption is currently disabled', 'cannotSyncEncrypted');
 			return serialized;
@@ -415,13 +436,13 @@ export default class BaseItem extends BaseModel {
 
 		// List of keys that won't be encrypted - mostly foreign keys required to link items
 		// with each others and timestamp required for synchronisation.
-		const keepKeys = ['id', 'note_id', 'tag_id', 'parent_id', 'updated_time', 'type_'];
+		const keepKeys = ['id', 'note_id', 'tag_id', 'parent_id', 'share_id', 'updated_time', 'type_'];
 		const reducedItem: any = {};
 
 		for (let i = 0; i < keepKeys.length; i++) {
 			const n = keepKeys[i];
 			if (!item.hasOwnProperty(n)) continue;
-			reducedItem[n] = item[n];
+			reducedItem[n] = (item as any)[n];
 		}
 
 		reducedItem.encryption_applied = 1;
@@ -576,7 +597,7 @@ export default class BaseItem extends BaseModel {
 		throw new Error('Unreachable');
 	}
 
-	static async itemsThatNeedSync(syncTarget: number, limit = 100) {
+	public static async itemsThatNeedSync(syncTarget: number, limit = 100): Promise<ItemsThatNeedSyncResult> {
 		const classNames = this.syncItemClassNames();
 
 		for (let i = 0; i < classNames.length; i++) {
@@ -653,12 +674,13 @@ export default class BaseItem extends BaseModel {
 				changedItems = await ItemClass.modelSelectAll(sql);
 			}
 
+			const neverSyncedItemIds = neverSyncedItem.map((it: any) => it.id);
 			const items = neverSyncedItem.concat(changedItems);
 
 			if (i >= classNames.length - 1) {
-				return { hasMore: items.length >= limit, items: items };
+				return { hasMore: items.length >= limit, items: items, neverSyncedItemIds };
 			} else {
-				if (items.length) return { hasMore: true, items: items };
+				if (items.length) return { hasMore: true, items: items, neverSyncedItemIds };
 			}
 		}
 
@@ -681,7 +703,7 @@ export default class BaseItem extends BaseModel {
 		return output;
 	}
 
-	static syncItemTypes() {
+	public static syncItemTypes(): ModelType[] {
 		return BaseItem.syncItemDefinitions_.map((def: any) => {
 			return def.type;
 		});
@@ -741,6 +763,10 @@ export default class BaseItem extends BaseModel {
 		return this.db().transactionExecBatch(queries);
 	}
 
+	public static async saveSyncEnabled(itemType: ModelType, itemId: string) {
+		await this.db().exec('DELETE FROM sync_items WHERE item_type = ? AND item_id = ?', [itemType, itemId]);
+	}
+
 	// When an item is deleted, its associated sync_items data is not immediately deleted for
 	// performance reason. So this function is used to look for these remaining sync_items and
 	// delete them.
@@ -792,7 +818,7 @@ export default class BaseItem extends BaseModel {
 		}
 	}
 
-	static async updateShareStatus(item: any, isShared: boolean) {
+	static async updateShareStatus(item: BaseItemEntity, isShared: boolean) {
 		if (!item.id || !item.type_) throw new Error('Item must have an ID and a type');
 		if (!!item.is_shared === !!isShared) return false;
 		const ItemClass = this.getClassByItemType(item.type_);

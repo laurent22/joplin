@@ -5,16 +5,20 @@ import Note from '@joplin/lib/models/Note';
 import checkPermissions from './checkPermissions.js';
 const { ToastAndroid } = require('react-native');
 const { PermissionsAndroid } = require('react-native');
+const { Platform } = require('react-native');
 
 export default async (sharedData: SharedData, folderId: string, dispatch: Function) => {
 
 	if (!!sharedData.resources && sharedData.resources.length > 0) {
-		const response = await checkPermissions(PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE);
+		// No need to check permissions for iOS, the files are already in the shared container
+		if (Platform.OS === 'android') {
+			const response = await checkPermissions(PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE);
 
-		if (response !== PermissionsAndroid.RESULTS.GRANTED) {
-			ToastAndroid.show('Cannot receive shared data - permission denied', ToastAndroid.SHORT);
-			ShareExtension.close();
-			return;
+			if (response !== PermissionsAndroid.RESULTS.GRANTED) {
+				ToastAndroid.show('Cannot receive shared data - permission denied', ToastAndroid.SHORT);
+				ShareExtension.close();
+				return;
+			}
 		}
 	}
 

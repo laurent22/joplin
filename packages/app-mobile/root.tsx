@@ -2,7 +2,7 @@ const React = require('react');
 import shim from '@joplin/lib/shim';
 shim.setReact(React);
 
-import setUpQuickActions from './setUpQuickActions';
+import setupQuickActions from './setupQuickActions';
 import PluginAssetsLoader from './PluginAssetsLoader';
 import AlarmService from '@joplin/lib/services/AlarmService';
 import Alarm from '@joplin/lib/models/Alarm';
@@ -25,23 +25,26 @@ import { loadKeychainServiceAndSettings } from '@joplin/lib/services/SettingUtil
 import KeychainServiceDriverMobile from '@joplin/lib/services/keychain/KeychainServiceDriver.mobile';
 import { setLocale, closestSupportedLocale, defaultLocale } from '@joplin/lib/locale';
 import SyncTargetJoplinServer from '@joplin/lib/SyncTargetJoplinServer';
+import SyncTargetJoplinCloud from '@joplin/lib/SyncTargetJoplinCloud';
 import SyncTargetOneDrive from '@joplin/lib/SyncTargetOneDrive';
 
-const { AppState, Keyboard, NativeModules, BackHandler, Animated, View, StatusBar } = require('react-native');
+const VersionInfo = require('react-native-version-info').default;
+const { AppState, Keyboard, NativeModules, BackHandler, Animated, View, StatusBar, Linking, Platform } = require('react-native');
 
+import NetInfo from '@react-native-community/netinfo';
 const DropdownAlert = require('react-native-dropdownalert').default;
 const AlarmServiceDriver = require('./services/AlarmServiceDriver').default;
 const SafeAreaView = require('./components/SafeAreaView');
 const { connect, Provider } = require('react-redux');
 const { BackButtonService } = require('./services/back-button.js');
 import NavService from '@joplin/lib/services/NavService';
-const { createStore, applyMiddleware } = require('redux');
+import { createStore, applyMiddleware } from 'redux';
 const reduxSharedMiddleware = require('@joplin/lib/components/shared/reduxSharedMiddleware');
 const { shimInit } = require('./utils/shim-init-react.js');
 const { AppNav } = require('./components/app-nav.js');
 import Note from '@joplin/lib/models/Note';
 import Folder from '@joplin/lib/models/Folder';
-const BaseSyncTarget = require('@joplin/lib/BaseSyncTarget.js');
+import BaseSyncTarget from '@joplin/lib/BaseSyncTarget';
 const { FoldersScreenUtils } = require('@joplin/lib/folders-screen-utils.js');
 import Resource from '@joplin/lib/models/Resource';
 import Tag from '@joplin/lib/models/Tag';
@@ -54,7 +57,7 @@ import JoplinDatabase from '@joplin/lib/JoplinDatabase';
 import Database from '@joplin/lib/database';
 const { NotesScreen } = require('./components/screens/notes.js');
 const { TagsScreen } = require('./components/screens/tags.js');
-const { ConfigScreen } = require('./components/screens/config.js');
+import ConfigScreen from './components/screens/ConfigScreen';
 const { FolderScreen } = require('./components/screens/folder.js');
 const { LogScreen } = require('./components/screens/log.js');
 const { StatusScreen } = require('./components/screens/status.js');
@@ -89,11 +92,16 @@ SyncTargetRegistry.addClass(SyncTargetDropbox);
 SyncTargetRegistry.addClass(SyncTargetFilesystem);
 SyncTargetRegistry.addClass(SyncTargetAmazonS3);
 SyncTargetRegistry.addClass(SyncTargetJoplinServer);
+SyncTargetRegistry.addClass(SyncTargetJoplinCloud);
 
 import FsDriverRN from './utils/fs-driver-rn';
 import DecryptionWorker from '@joplin/lib/services/DecryptionWorker';
 import EncryptionService from '@joplin/lib/services/EncryptionService';
 import MigrationService from '@joplin/lib/services/MigrationService';
+import { clearSharedFilesCache } from './utils/ShareUtils';
+import setIgnoreTlsErrors from './utils/TlsUtils';
+import ShareService from '@joplin/lib/services/share/ShareService';
+import setupNotifications from './utils/setupNotifications';
 
 let storeDispatch = function(_action: any) {};
 
@@ -118,7 +126,7 @@ const generalMiddleware = (store: any) => (next: any) => async (action: any) => 
 	if (action.type == 'NAV_GO') Keyboard.dismiss();
 
 	if (['NOTE_UPDATE_ONE', 'NOTE_DELETE', 'FOLDER_UPDATE_ONE', 'FOLDER_DELETE'].indexOf(action.type) >= 0) {
-		if (!await reg.syncTarget().syncStarted()) void reg.scheduleSync(5 * 1000, { syncSteps: ['update_remote', 'delete_remote'] });
+		if (!await reg.syncTarget().syncStarted()) void reg.scheduleSync(5 * 1000, { syncSteps: ['update_remote', 'delete_remote'] }, true);
 		SearchEngine.instance().scheduleSyncTables();
 	}
 
@@ -151,7 +159,7 @@ const generalMiddleware = (store: any) => (next: any) => async (action: any) => 
 
 		// Schedule a sync operation so that items that need to be encrypted
 		// are sent to sync target.
-		void reg.scheduleSync();
+		void reg.scheduleSync(null, null, true);
 	}
 
 	if (action.type == 'NAV_GO' && action.routeName == 'Notes') {
@@ -194,6 +202,7 @@ const appDefaultState = Object.assign({}, defaultState, {
 	route: DEFAULT_ROUTE,
 	noteSelectionEnabled: false,
 	noteSideMenuOptions: null,
+	isOnMobileData: false,
 });
 
 const appReducer = (state = appDefaultState, action: any) => {
@@ -359,6 +368,12 @@ const appReducer = (state = appDefaultState, action: any) => {
 			newState.noteSideMenuOptions = action.options;
 			break;
 
+		case 'MOBILE_DATA_WARNING_UPDATE':
+
+			newState = Object.assign({}, state);
+			newState.isOnMobileData = action.isOnMobileData;
+			break;
+
 		}
 	} catch (error) {
 		error.message = `In reducer: ${error.message} Action: ${JSON.stringify(action)}`;
@@ -412,7 +427,7 @@ async function initialize(dispatch: Function) {
 	// require('@joplin/lib/ntpDate').setLogger(reg.logger());
 
 	reg.logger().info('====================================');
-	reg.logger().info(`Starting application ${Setting.value('appId')} (${Setting.value('env')})`);
+	reg.logger().info(`Starting application ${Setting.value('appId')} v${VersionInfo.appVersion} (${Setting.value('env')})`);
 
 	const dbLogger = new Logger();
 	dbLogger.addTarget(TargetType.Database, { database: logDatabase, source: 'm' });
@@ -500,6 +515,13 @@ async function initialize(dispatch: Function) {
 
 		setLocale(Setting.value('locale'));
 
+		if (Platform.OS === 'android') {
+			const ignoreTlsErrors = Setting.value('net.ignoreTlsErrors');
+			if (ignoreTlsErrors) {
+				await setIgnoreTlsErrors(ignoreTlsErrors);
+			}
+		}
+
 		// ----------------------------------------------------------------
 		// E2EE SETUP
 		// ----------------------------------------------------------------
@@ -508,6 +530,7 @@ async function initialize(dispatch: Function) {
 		EncryptionService.instance().setLogger(mainLogger);
 		// eslint-disable-next-line require-atomic-updates
 		BaseItem.encryptionService_ = EncryptionService.instance();
+		BaseItem.shareService_ = ShareService.instance();
 		DecryptionWorker.instance().dispatch = dispatch;
 		DecryptionWorker.instance().setLogger(mainLogger);
 		DecryptionWorker.instance().setKvStore(KvStore.instance());
@@ -518,6 +541,8 @@ async function initialize(dispatch: Function) {
 		// ----------------------------------------------------------------
 		// / E2EE SETUP
 		// ----------------------------------------------------------------
+
+		await ShareService.instance().initialize(store);
 
 		reg.logger().info('Loading folders...');
 
@@ -557,7 +582,7 @@ async function initialize(dispatch: Function) {
 			});
 		}
 
-		setUpQuickActions(dispatch, folderId);
+		await clearSharedFilesCache();
 	} catch (error) {
 		alert(`Initialization error: ${error.message}`);
 		reg.logger().error('Initialization error:', error);
@@ -585,7 +610,9 @@ async function initialize(dispatch: Function) {
 
 	// When the app starts we want the full sync to
 	// start almost immediately to get the latest data.
-	void reg.scheduleSync(1000).then(() => {
+	// doWifiConnectionCheck set to true so initial sync
+	// doesn't happen on mobile data
+	void reg.scheduleSync(1000, null, true).then(() => {
 		// Wait for the first sync before updating the notifications, since synchronisation
 		// might change the notifications.
 		void AlarmService.updateAllNotifications();
@@ -620,6 +647,12 @@ class AppComponent extends React.Component {
 		this.onAppStateChange_ = () => {
 			PoorManIntervals.update();
 		};
+
+		this.handleOpenURL_ = (event: any) => {
+			if (event.url == ShareExtension.shareURL) {
+				void this.handleShareData();
+			}
+		};
 	}
 
 	// 2020-10-08: It seems the initialisation code is quite fragile in general and should be kept simple.
@@ -648,6 +681,22 @@ class AppComponent extends React.Component {
 				state: 'initializing',
 			});
 
+			try {
+				// This will be called right after adding the event listener
+				// so there's no need to check netinfo on startup
+				this.unsubscribeNetInfoHandler_ = NetInfo.addEventListener(({ type, details }) => {
+					const isMobile = details.isConnectionExpensive || type === 'cellular';
+					reg.setIsOnMobileData(isMobile);
+					this.props.dispatch({
+						type: 'MOBILE_DATA_WARNING_UPDATE',
+						isOnMobileData: isMobile,
+					});
+				});
+			} catch (error) {
+				reg.logger().warn('Something went wrong while checking network info');
+				reg.logger().info(error);
+			}
+
 			await initialize(this.props.dispatch);
 
 			this.props.dispatch({
@@ -655,6 +704,8 @@ class AppComponent extends React.Component {
 				state: 'ready',
 			});
 		}
+
+		Linking.addEventListener('url', this.handleOpenURL_);
 
 		BackButtonService.initialize(this.backButtonHandler_);
 
@@ -666,19 +717,17 @@ class AppComponent extends React.Component {
 
 		AppState.addEventListener('change', this.onAppStateChange_);
 
-		const sharedData = await ShareExtension.data();
-		if (sharedData) {
-			reg.logger().info('Received shared data');
-			if (this.props.selectedFolderId) {
-				await handleShared(sharedData, this.props.selectedFolderId, this.props.dispatch);
-			} else {
-				reg.logger().info('Cannot handle share - default folder id is not set');
-			}
-		}
+		await this.handleShareData();
+
+		setupQuickActions(this.props.dispatch, this.props.selectedFolderId);
+
+		await setupNotifications(this.props.dispatch);
 	}
 
 	componentWillUnmount() {
 		AppState.removeEventListener('change', this.onAppStateChange_);
+		Linking.removeEventListener('url', this.handleOpenURL_);
+		if (this.unsubscribeNetInfoHandler_) this.unsubscribeNetInfoHandler_();
 	}
 
 	componentDidUpdate(prevProps: any) {
@@ -709,6 +758,18 @@ class AppComponent extends React.Component {
 		BackHandler.exitApp();
 
 		return false;
+	}
+
+	async handleShareData() {
+		const sharedData = await ShareExtension.data();
+		if (sharedData) {
+			reg.logger().info('Received shared data');
+			if (this.props.selectedFolderId) {
+				await handleShared(sharedData, this.props.selectedFolderId, this.props.dispatch);
+			} else {
+				reg.logger().info('Cannot handle share - default folder id is not set');
+			}
+		}
 	}
 
 	UNSAFE_componentWillReceiveProps(newProps: any) {

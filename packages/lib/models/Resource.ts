@@ -11,7 +11,8 @@ const pathUtils = require('../path-utils');
 const { mime } = require('../mime-utils.js');
 const { filename, safeFilename } = require('../path-utils');
 const { FsDriverDummy } = require('../fs-driver-dummy.js');
-const JoplinError = require('../JoplinError');
+import JoplinError from '../JoplinError';
+import itemCanBeEncrypted from './utils/itemCanBeEncrypted';
 
 export default class Resource extends BaseItem {
 
@@ -48,7 +49,7 @@ export default class Resource extends BaseItem {
 	}
 
 	public static sharedResourceIds(): Promise<string[]> {
-		return this.db().selectAllFields('SELECT id FROM resources WHERE is_shared = 1', {}, 'id');
+		return this.db().selectAllFields('SELECT id FROM resources WHERE is_shared = 1', [], 'id');
 	}
 
 	static errorFetchStatuses() {
@@ -192,10 +193,10 @@ export default class Resource extends BaseItem {
 	// as it should be uploaded to the sync target. Note that this may be different from what is stored
 	// in the database. In particular, the flag encryption_blob_encrypted might be 1 on the sync target
 	// if the resource is encrypted, but will be 0 locally because the device has the decrypted resource.
-	static async fullPathForSyncUpload(resource: ResourceEntity) {
+	public static async fullPathForSyncUpload(resource: ResourceEntity) {
 		const plainTextPath = this.fullPath(resource);
 
-		if (!Setting.value('encryption.enabled')) {
+		if (!Setting.value('encryption.enabled') || !itemCanBeEncrypted(resource as any)) {
 			// Normally not possible since itemsThatNeedSync should only return decrypted items
 			if (resource.encryption_blob_encrypted) throw new Error('Trying to access encrypted resource but encryption is currently disabled');
 			return { path: plainTextPath, resource: resource };

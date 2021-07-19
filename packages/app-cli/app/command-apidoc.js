@@ -82,6 +82,8 @@ class Command extends BaseCommand {
 		lines.push('');
 		lines.push('In the documentation below, the token will not be specified every time however you will need to include it.');
 		lines.push('');
+		lines.push('If needed you may also [request the token programmatically](https://github.com/laurent22/joplin/blob/dev/readme/spec/clipper_auth.md)');
+		lines.push('');
 
 		lines.push('# Using the API');
 		lines.push('');
@@ -114,6 +116,7 @@ class Command extends BaseCommand {
 		lines.push('\tcurl http://localhost:41184/tags?fields=id');
 		lines.push('');
 		lines.push('By default API results will contain the following fields: **id**, **parent_id**, **title**');
+		lines.push('');
 
 		lines.push('# Pagination');
 		lines.push('');
@@ -177,7 +180,7 @@ async function fetchAllNotes() {
 
 		lines.push('# Searching');
 		lines.push('');
-		lines.push('Call **GET /search?query=YOUR_QUERY** to search for notes. This end-point supports the `field` parameter which is recommended to use so that you only get the data that you need. The query syntax is as described in the main documentation: https://joplinapp.org/#searching');
+		lines.push('Call **GET /search?query=YOUR_QUERY** to search for notes. This end-point supports the `field` parameter which is recommended to use so that you only get the data that you need. The query syntax is as described in the main documentation: https://joplinapp.org/help/#searching');
 		lines.push('');
 		lines.push('To retrieve non-notes items, such as notebooks or tags, add a `type` parameter and set it to the required [item type name](#item-type-id). In that case, full text search will not be used - instead it will be a simple case-insensitive search. You can also use `*` as a wildcard. This is convenient for example to retrieve notebooks or tags by title.');
 		lines.push('');

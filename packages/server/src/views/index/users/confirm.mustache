@@ -1,0 +1,40 @@
+<section class="section">
+	<div class="container">
+		<h1 class="title">Welcome to Joplin!</h1>
+		<h2 class="subtitle">Please enter your password to start using your account.</h2>
+
+		<form action="{{postUrl}}" method="POST">
+				<input class="input" type="hidden" name="token" value="{{token}}"/>
+
+			<div class="field">
+				<label class="label">Email</label>
+				<div class="control">
+					<input class="input" type="email" disabled value="{{user.email}}"/>
+				</div>
+			</div>
+			<div class="field">
+				<label class="label">Password</label>
+				<div class="control">
+					<input id="password" class="input" type="password" name="password"/>
+					<p id="password_strength" class="help"></p>
+				</div>
+			</div>
+			<div class="field">
+				<label class="label">Repeat password</label>
+				<div class="control">
+					<input class="input" type="password" name="password2"/>
+				</div>
+			</div>
+			{{> errorBanner}}
+			<div class="control">
+				<button class="button is-primary">Save password</button>
+			</div>
+		</form>
+	</div>
+</section>
+
+<script>
+$(() => {
+	setupPasswordStrengthHandler();
+});
+</script>

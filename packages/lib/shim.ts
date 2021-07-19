@@ -1,4 +1,4 @@
-import { ResourceEntity } from './services/database/types';
+import { NoteEntity, ResourceEntity } from './services/database/types';
 
 let isTestingEnv_ = false;
 
@@ -169,7 +169,7 @@ const shim = {
 		}
 	},
 
-	fetch: (_url: string, _options: any): any => {
+	fetch: (_url: string, _options: any = null): any => {
 		throw new Error('Not implemented');
 	},
 
@@ -211,7 +211,7 @@ const shim = {
 
 	detectAndSetLocale: null as Function,
 
-	attachFileToNote: async (_note: any, _filePath: string) => {
+	attachFileToNote: async (_note: any, _filePath: string): Promise<NoteEntity> => {
 		throw new Error('Not implemented');
 	},
 

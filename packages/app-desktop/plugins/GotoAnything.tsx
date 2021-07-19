@@ -17,6 +17,7 @@ const HelpButton = require('../gui/HelpButton.min');
 const { surroundKeywords, nextWhitespaceIndex, removeDiacritics } = require('@joplin/lib/string-utils.js');
 const { mergeOverlappingIntervals } = require('@joplin/lib/ArrayUtils.js');
 import markupLanguageUtils from '../utils/markupLanguageUtils';
+import focusEditorIfEditorCommand from '@joplin/lib/services/commands/focusEditorIfEditorCommand';
 
 const PLUGIN_NAME = 'gotoAnything';
 
@@ -46,6 +47,12 @@ interface State {
 	listType: number;
 	showHelp: boolean;
 	resultsInBody: boolean;
+	commandArgs: string[];
+}
+
+interface CommandQuery {
+	name: string;
+	args: string[];
 }
 
 class GotoAnything {
@@ -67,19 +74,19 @@ class GotoAnything {
 
 class Dialog extends React.PureComponent<Props, State> {
 
-	private fuzzy_: boolean;
 	private styles_: any;
 	private inputRef: any;
 	private itemListRef: any;
 	private listUpdateIID_: any;
 	private markupToHtml_: any;
+	private userCallback_: any = null;
 
 	constructor(props: Props) {
 		super(props);
 
-		this.fuzzy_ = false;
-
 		const startString = props?.userData?.startString ? props?.userData?.startString : '';
+
+		this.userCallback_ = props?.userData?.callback;
 
 		this.state = {
 			query: startString,
@@ -89,6 +96,7 @@ class Dialog extends React.PureComponent<Props, State> {
 			listType: BaseModel.TYPE_NOTE,
 			showHelp: false,
 			resultsInBody: false,
+			commandArgs: [],
 		};
 
 		this.styles_ = {};
@@ -242,14 +250,23 @@ class Dialog extends React.PureComponent<Props, State> {
 	}
 
 	async keywords(searchQuery: string) {
-		const parsedQuery = await SearchEngine.instance().parseQuery(searchQuery, this.fuzzy_);
+		const parsedQuery = await SearchEngine.instance().parseQuery(searchQuery);
 		return SearchEngine.instance().allParsedQueryTerms(parsedQuery);
 	}
 
 	markupToHtml() {
 		if (this.markupToHtml_) return this.markupToHtml_;
-		this.markupToHtml_ = markupLanguageUtils.newMarkupToHtml({});
+		this.markupToHtml_ = markupLanguageUtils.newMarkupToHtml();
 		return this.markupToHtml_;
+	}
+
+	private parseCommandQuery(query: string): CommandQuery {
+		const fullQuery = query;
+		const splitted = fullQuery.split(/\s+/);
+		return {
+			name: splitted.length ? splitted[0] : '',
+			args: splitted.slice(1),
+		};
 	}
 
 	async updateList() {
@@ -262,13 +279,16 @@ class Dialog extends React.PureComponent<Props, State> {
 			let listType = null;
 			let searchQuery = '';
 			let keywords = null;
+			let commandArgs: string[] = [];
 
 			if (this.state.query.indexOf(':') === 0) { // COMMANDS
-				const query = this.state.query.substr(1);
-				listType = BaseModel.TYPE_COMMAND;
-				keywords = [query];
+				const commandQuery = this.parseCommandQuery(this.state.query.substr(1));
 
-				const commandResults = CommandService.instance().searchCommands(query, true);
+				listType = BaseModel.TYPE_COMMAND;
+				keywords = [commandQuery.name];
+				commandArgs = commandQuery.args;
+
+				const commandResults = CommandService.instance().searchCommands(commandQuery.name, true);
 
 				results = commandResults.map((result: CommandSearchResult) => {
 					return {
@@ -296,7 +316,7 @@ class Dialog extends React.PureComponent<Props, State> {
 			} else { // Note TITLE or BODY
 				listType = BaseModel.TYPE_NOTE;
 				searchQuery = this.makeSearchQuery(this.state.query);
-				results = await SearchEngine.instance().search(searchQuery, { fuzzy: this.fuzzy_ });
+				results = await SearchEngine.instance().search(searchQuery);
 
 				resultsInBody = !!results.find((row: any) => row.fields.includes('body'));
 
@@ -369,6 +389,7 @@ class Dialog extends React.PureComponent<Props, State> {
 				keywords: keywords ? keywords : await this.keywords(searchQuery),
 				selectedItemId: results.length === 0 ? null : results[0].id,
 				resultsInBody: resultsInBody,
+				commandArgs: commandArgs,
 			});
 		}
 	}
@@ -380,8 +401,17 @@ class Dialog extends React.PureComponent<Props, State> {
 			open: false,
 		});
 
+		if (this.userCallback_) {
+			this.userCallback_.resolve({
+				type: this.state.listType,
+				item: { ...item },
+			});
+			return;
+		}
+
 		if (item.type === BaseModel.TYPE_COMMAND) {
-			void CommandService.instance().execute(item.id);
+			void CommandService.instance().execute(item.id, ...item.commandArgs);
+			void focusEditorIfEditorCommand(item.id, CommandService.instance());
 			return;
 		}
 
@@ -427,13 +457,15 @@ class Dialog extends React.PureComponent<Props, State> {
 			id: itemId,
 			parent_id: parentId,
 			type: itemType,
+			commandArgs: this.state.commandArgs,
 		});
 	}
 
 	renderItem(item: SearchResult) {
 		const theme = themeStyle(this.props.themeId);
 		const style = this.style();
-		const rowStyle = item.id === this.state.selectedItemId ? style.rowSelected : style.row;
+		const isSelected = item.id === this.state.selectedItemId;
+		const rowStyle = isSelected ? style.rowSelected : style.row;
 		const titleHtml = item.fragments
 			? `<span style="font-weight: bold; color: ${theme.colorBright};">${item.title}</span>`
 			: surroundKeywords(this.state.keywords, item.title, `<span style="font-weight: bold; color: ${theme.colorBright};">`, '</span>', { escapeHtml: true });
@@ -445,7 +477,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		const fragmentComp = !fragmentsHtml ? null : <div style={style.rowFragments} dangerouslySetInnerHTML={{ __html: (fragmentsHtml) }}></div>;
 
 		return (
-			<div key={item.id} style={rowStyle} onClick={this.listItem_onClick} data-id={item.id} data-parent-id={item.parent_id} data-type={item.type}>
+			<div key={item.id} className={isSelected ? 'selected' : null} style={rowStyle} onClick={this.listItem_onClick} data-id={item.id} data-parent-id={item.parent_id} data-type={item.type}>
 				<div style={style.rowTitle} dangerouslySetInnerHTML={{ __html: titleHtml }}></div>
 				{fragmentComp}
 				{pathComp}
@@ -466,7 +498,7 @@ class Dialog extends React.PureComponent<Props, State> {
 	selectedItem() {
 		const index = this.selectedItemIndex();
 		if (index < 0) return null;
-		return this.state.results[index];
+		return { ...this.state.results[index], commandArgs: this.state.commandArgs };
 	}
 
 	input_onKeyDown(event: any) {
@@ -522,15 +554,15 @@ class Dialog extends React.PureComponent<Props, State> {
 	render() {
 		const theme = themeStyle(this.props.themeId);
 		const style = this.style();
-		const helpComp = !this.state.showHelp ? null : <div style={style.help}>{_('Type a note title or part of its content to jump to it. Or type # followed by a tag name, or @ followed by a notebook name. Or type : to search for commands.')}</div>;
+		const helpComp = !this.state.showHelp ? null : <div className="help-text" style={style.help}>{_('Type a note title or part of its content to jump to it. Or type # followed by a tag name, or @ followed by a notebook name. Or type : to search for commands.')}</div>;
 
 		return (
-			<div onClick={this.modalLayer_onClick} style={theme.dialogModalLayer}>
-				<div style={style.dialogBox}>
+			<div className="modal-layer" onClick={this.modalLayer_onClick} style={theme.dialogModalLayer}>
+				<div className="modal-dialog" style={style.dialogBox}>
 					{helpComp}
 					<div style={style.inputHelpWrapper}>
-						<input autoFocus type="text" style={style.input} ref={this.inputRef} value={this.state.query} onChange={this.input_onChange} onKeyDown={this.input_onKeyDown}/>
-						<HelpButton onClick={this.helpButton_onClick}/>
+						<input autoFocus type="text" style={style.input} ref={this.inputRef} value={this.state.query} onChange={this.input_onChange} onKeyDown={this.input_onKeyDown} />
+						<HelpButton onClick={this.helpButton_onClick} />
 					</div>
 					{this.renderList()}
 				</div>
@@ -571,6 +603,9 @@ GotoAnything.manifest = {
 			userData: {
 				startString: ':',
 			},
+		},
+		{
+			id: 'controlledApi',
 		},
 	],
 

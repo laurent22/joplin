@@ -141,7 +141,11 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 						reg.logger().warn('CodeMirror: unsupported drop item: ', cmd);
 					}
 				} else if (cmd.name === 'editor.focus') {
-					editorRef.current.focus();
+					if (props.visiblePanes.indexOf('editor') >= 0) {
+						editorRef.current.focus();
+					} else {
+						webviewRef.current.wrappedInstance.focus();
+					}
 				} else {
 					commandProcessed = false;
 				}
@@ -220,10 +224,12 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 						textHeading: () => addListItem('## ', ''),
 						textHorizontalRule: () => addListItem('* * *'),
 						'editor.execCommand': (value: CommandValue) => {
-							if (editorRef.current[value.name]) {
-								if (!('args' in value)) value.args = [];
+							if (!('args' in value)) value.args = [];
 
+							if (editorRef.current[value.name]) {
 								editorRef.current[value.name](...value.args);
+							} else if (editorRef.current.commandExists(value.name)) {
+								editorRef.current.execCommand(value.name);
 							} else {
 								reg.logger().warn('CodeMirror execCommand: unsupported command: ', value.name);
 							}
@@ -242,7 +248,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				return commandOutput;
 			},
 		};
-	}, [props.content, addListItem, wrapSelectionWithStrings, setEditorPercentScroll, setViewerPercentScroll, resetScroll, renderedBody]);
+	}, [props.content, props.visiblePanes, addListItem, wrapSelectionWithStrings, setEditorPercentScroll, setViewerPercentScroll, resetScroll, renderedBody]);
 
 	const onEditorPaste = useCallback(async (event: any = null) => {
 		const resourceMds = await handlePasteEvent(event);
@@ -373,6 +379,9 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 			`.CodeMirror-selected {
 				background: #6b6b6b !important;
 			}` : '';
+		const monospaceFonts = [];
+		if (Setting.value('style.editor.monospaceFontFamily')) monospaceFonts.push(`"${Setting.value('style.editor.monospaceFontFamily')}"`);
+		monospaceFonts.push('monospace');
 
 		const element = document.createElement('style');
 		element.setAttribute('id', 'codemirrorStyle');
@@ -387,7 +396,9 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				color: inherit !important;
 				background-color: inherit !important;
 				position: absolute !important;
-				-webkit-box-shadow: none !important; // Some themes add a box shadow for some reason
+				/* Some themes add a box shadow for some reason */
+				-webkit-box-shadow: none !important;
+				line-height: ${theme.lineHeight} !important;
 			}
 
 			.CodeMirror-lines {
@@ -408,20 +419,59 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				padding-right: 10px !important;
 			}
 
-			.cm-header-1 {
+			/* This enforces monospace for certain elements (code, tables, etc.) */
+			.cm-jn-monospace {
+				font-family: ${monospaceFonts.join(', ')} !important;
+			}
+
+			.CodeMirror .cm-header-1 {
 				font-size: 1.5em;
+				color: ${theme.color};
 			}
 
-			.cm-header-2 {
+			.CodeMirror .cm-header-2 {
 				font-size: 1.3em;
+				color: ${theme.color};
 			}
 
-			.cm-header-3 {
+			.CodeMirror .cm-header-3 {
 				font-size: 1.1em;
+				color: ${theme.color};
 			}
 
-			.cm-header-4, .cm-header-5, .cm-header-6 {
+			.CodeMirror .cm-header-4, .CodeMirror .cm-header-5, .CodeMirror .cm-header-6 {
 				font-size: 1em;
+				color: ${theme.color};
+			}
+
+			.CodeMirror .cm-quote {
+				color: ${theme.color};
+				opacity: ${theme.blockQuoteOpacity};
+			}
+
+			div.CodeMirror span.cm-link-text {
+				color: ${theme.urlColor};
+			}
+
+			div.CodeMirror span.cm-url {
+				color: ${theme.urlColor};
+				opacity: 0.5;
+			}
+
+			.CodeMirror .cm-variable-2, .CodeMirror .cm-variable-3, .CodeMirror .cm-keyword {
+				color: ${theme.color};
+			}
+
+			div.CodeMirror span.cm-comment {
+				color: ${theme.codeColor};
+			}
+
+			div.CodeMirror span.cm-strong {
+				color: ${theme.colorBright};
+			}
+
+			div.CodeMirror span.cm-hr {
+				color: ${theme.dividerColor};
 			}
 
 			.cm-header-1, .cm-header-2, .cm-header-3, .cm-header-4, .cm-header-5, .cm-header-6 {
@@ -453,6 +503,8 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 			}
 
 			/* The default dark theme colors don't have enough contrast with the background */
+
+			/*
 			.cm-s-nord span.cm-comment {
 				color: #9aa4b6 !important;
 			}
@@ -472,6 +524,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 			.cm-s-solarized.cm-s-dark span.cm-comment {
 				color: #8ba1a7 !important;
 			}
+			*/
 
 			${selectionColorCss}
 		`));

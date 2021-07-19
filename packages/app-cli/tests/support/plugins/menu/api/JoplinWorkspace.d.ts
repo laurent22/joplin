@@ -35,7 +35,7 @@ export default class JoplinWorkspace {
      */
     onNoteContentChange(callback: Function): Promise<void>;
     /**
-     * Called when the content of a note changes.
+     * Called when the content of the current note changes.
      */
     onNoteChange(handler: ItemChangeHandler): Promise<Disposable>;
     /**

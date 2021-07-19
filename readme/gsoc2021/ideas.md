@@ -1,6 +1,6 @@
 # GSoC 2021 Ideas
 
-2021 is Joplin second round at Google Summer of Code. Detailed information on how to get involved and apply are given in the [general Summer of Code introduction](https://joplinapp.org/gsoc2021/index/) 
+2021 is Joplin second round at Google Summer of Code. Detailed information on how to get involved and apply are given in the [general Summer of Code introduction](https://joplinapp.org/gsoc2021/index/)
 
 **These are all proposals! We are open to new ideas you might have!!** Do you have an awesome idea you want to work on with Joplin but that is not among the ideas below? That's cool. We love that! But please do us a favour: Get in touch with a mentor early on and make sure your project is realistic and within the scope of Joplin. Just make sure your idea is within this year's theme:
 
@@ -26,7 +26,7 @@ Difficulty Level: High
 
 Skills Required: JavaScript, Image processing
 
-Potential Mentor(s): [CalebJohn](https://github.com/CalebJohn/), [laurent22](https://github.com/laurent22/)
+Potential Mentor(s): [CalebJohn](https://github.com/CalebJohn/), [laurent22](https://github.com/laurent22/), [roman_r_m](https://discourse.joplinapp.org/u/roman_r_m)
 
 ## 2. Template plugin
 
@@ -38,7 +38,7 @@ Difficulty Level: Medium
 
 Skills Required: JavaScript
 
-Potential Mentor(s):
+Potential Mentor(s): [CalebJohn](https://github.com/CalebJohn/), [tessus](https://github.com/tessus/)
 
 ## 3. BibTex plugin
 
@@ -50,11 +50,11 @@ Difficulty Level: Medium
 
 Skills Required: JavaScript, understanding of BibTex format
 
-Potential Mentor(s):
+Potential Mentor(s): [CalebJohn](https://github.com/CalebJohn/), [roman_r_m](https://discourse.joplinapp.org/u/roman_r_m), [laurent22](https://github.com/laurent22/)
 
 ## 4. Real-time collaboration on a note
 
-Create a web applications that allows two or more users to collaborate in real time on the same note. Use the Joplin Server API to save and load the note.
+Create a web application that allows two or more users to collaborate in real time on the same note. Use the Joplin Server API to save and load the note.
 
 Expected Outcome: A web application that allows users to collaborate on a note
 
@@ -62,11 +62,11 @@ Difficulty Level: High
 
 Skills Required: JavaScript, Text editor, Web development
 
-Potential Mentor(s):
+Potential Mentor(s): [PackElend](https://discourse.joplinapp.org/u/PackElend), [roman_r_m](https://discourse.joplinapp.org/u/roman_r_m)
 
 ## 5. Paste special
 
-A plugin that will allow pasting special text into Joplin and have it converted to Markdown. For example, paste an Excel or CSV table, and have it converted to a Markdown table. Paste some HTML or PDF text and again have it converted to formatted Markdown. This could be one plugin, or a collection of plugins, one for eadch "paste special" operation.
+A plugin that will allow pasting special text into Joplin and have it converted to Markdown. For example, paste an Excel or CSV table, and have it converted to a Markdown table. Paste some HTML or PDF text and again have it converted to formatted Markdown. This could be one plugin, or a collection of plugins, one for each "paste special" operation.
 
 Expected Outcome: One or more plugins that allow pasting special text.
 
@@ -74,7 +74,7 @@ Difficulty Level: Normal
 
 Skills Required: JavaScript, Markdown, HTML, and knowledge of various text file formats (PDF, RTF, HTML, etc.)
 
-Potential Mentor(s):
+Potential Mentor(s): [CalebJohn](https://github.com/CalebJohn/), [tessus](https://github.com/tessus/), [roman_r_m](https://discourse.joplinapp.org/u/roman_r_m)
 
 ## 6. Plugin system on mobile
 
@@ -86,7 +86,7 @@ Difficulty Level: High
 
 Skills Required: JavaScript, React Native
 
-Potential Mentor(s):
+Potential Mentor(s): [PackElend](https://discourse.joplinapp.org/u/PackElend), [roman_r_m](https://discourse.joplinapp.org/u/roman_r_m), [laurent22](https://github.com/laurent22/)
 
 ## 7. Conflict resolution editor plugin
 
@@ -98,7 +98,7 @@ Difficulty Level: High
 
 Skills Required: JavaScript, Markdown, Understanding of diff and merging conflicts
 
-Potential Mentor(s): Tessus
+Potential Mentor(s): [tessus](https://github.com/tessus/), [PackElend](https://discourse.joplinapp.org/u/PackElend), [CalebJohn](https://github.com/CalebJohn/)
 
 ## 8. Kanban plugin
 
@@ -110,4 +110,10 @@ Difficulty Level: High
 
 Skills Required: JavaScript
 
-Potential Mentor(s):
+Potential Mentor(s): [CalebJohn](https://github.com/CalebJohn/), [laurent22](https://github.com/laurent22/)
+
+# More info
+
+- Make sure you read the [Joplin Google Summer of Code Introduction](https://joplinapp.org/gsoc2021/index/)
+- To build the application, please read [BUILD.md](https://github.com/laurent22/joplin/blob/dev/BUILD.md)
+- And before creating a pull request, please read the [pull request guidelines](https://joplinapp.org/gsoc2021/pull_request_guidelines/)

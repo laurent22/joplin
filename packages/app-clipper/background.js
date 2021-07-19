@@ -106,7 +106,7 @@ browser_.runtime.onMessage.addListener(async (command) => {
 		newArea.height *= ratio;
 		content.crop_rect = newArea;
 
-		fetch(`${command.api_base_url}/notes`, {
+		fetch(`${command.api_base_url}/notes?token=${encodeURIComponent(command.token)}`, {
 			method: 'POST',
 			headers: {
 				'Accept': 'application/json',

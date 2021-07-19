@@ -126,8 +126,8 @@ fi
 #-----------------------------------------------------
 print 'Downloading Joplin...'
 TEMP_DIR=$(mktemp -d)
-wget -qnv --show-progress -O ${TEMP_DIR}/Joplin.AppImage https://github.com/laurent22/joplin/releases/download/v${RELEASE_VERSION}/Joplin-${RELEASE_VERSION}.AppImage
-wget -qnv --show-progress -O ${TEMP_DIR}/joplin.png https://joplinapp.org/images/Icon512.png
+wget -O ${TEMP_DIR}/Joplin.AppImage https://github.com/laurent22/joplin/releases/download/v${RELEASE_VERSION}/Joplin-${RELEASE_VERSION}.AppImage
+wget -O ${TEMP_DIR}/joplin.png https://joplinapp.org/images/Icon512.png
 
 #-----------------------------------------------------
 print 'Installing Joplin...'
@@ -160,8 +160,21 @@ else
 fi
 DESKTOP=${DESKTOP,,}  # convert to lower case
 
+# Detect distribution environment
+DISTVER=$(lsb_release -is) && DISTVER=$DISTVER$(lsb_release -rs)
+DISTCODENAME=$(lsb_release -cs)
 #-----------------------------------------------------
 echo 'Create Desktop icon...'
+# Check for "The SUID sandbox helper binary was found, but is not configured correctly" problem.
+# It is present in Debian 10 Buster. A (temporary) patch will be applied at .desktop file
+# Linux Mint 4 Debbie is based on Debian 10 and requires the same param handling.
+if [ "$DISTVER" = "Debian10" ] || [ "$DISTVER" = "Linuxmint4" ] && [ "$DISTCODENAME" = "debbie" ]
+then
+  SANDBOXPARAM=" --no-sandbox"
+else
+  SANDBOXPARAM=""
+fi
+
 # Initially only desktop environments that were confirmed to use desktop files stored in
 # `.local/share/desktop` had a desktop file created.
 # However some environments don't return a desktop BUT still support these desktop files
@@ -177,7 +190,7 @@ then
 
     # On some systems this directory doesn't exist by default
     mkdir -p ~/.local/share/applications
-    echo -e "[Desktop Entry]\nEncoding=UTF-8\nName=Joplin\nComment=Joplin for Desktop\nExec=${HOME}/.joplin/Joplin.AppImage\nIcon=joplin\nStartupWMClass=Joplin\nType=Application\nCategories=Office;" >> ~/.local/share/applications/appimagekit-joplin.desktop
+    echo -e "[Desktop Entry]\nEncoding=UTF-8\nName=Joplin\nComment=Joplin for Desktop\nExec=${HOME}/.joplin/Joplin.AppImage${SANDBOXPARAM}\nIcon=joplin\nStartupWMClass=Joplin\nType=Application\nCategories=Office;" >> ~/.local/share/applications/appimagekit-joplin.desktop
     # Update application icons
     [[ `command -v update-desktop-database` ]] && update-desktop-database ~/.local/share/applications && update-desktop-database ~/.local/share/icons
     print "${COLOR_GREEN}OK${COLOR_RESET}"

@@ -14,7 +14,7 @@ To install a plugin press the Install Plugin button within the `Plugins` page of
 
 Within the Joplin Plugins page you have the option to turn individual plugins on or off using the toggle control. After changing the state of a plugin Joplin must be restarted, you may need to check Joplin is not minimising to the system tray/notification area rather than fully closing.
 
-As the plugins integrate into the application itself, each plugin may have its own configuration options within Joplin and may be exectuted in a number of different ways. Ensure that you read the author's documentation fully to understand how each plugin is designed to be configured and used.
+As the plugins integrate into the application itself, each plugin may have its own configuration options within Joplin and may be executed in a number of different ways. Ensure that you read the author's documentation fully to understand how each plugin is designed to be configured and used.
 
 ## Uninstalling plugins
 

@@ -54,6 +54,52 @@ rules.heading = {
   }
 }
 
+// ==============================
+// Joplin format support
+// ==============================
+
+rules.highlight = {
+  filter: 'mark',
+
+  replacement: function (content, node, options) {
+    return '==' + content + '=='
+  }
+}
+
+// Unlike strikethrough and mark formatting, insert, sup and sub aren't
+// widespread enough to automatically convert them to Markdown, but keep them as
+// HTML anyway. Another issue is that we use "~" for subscript but that's
+// actually the syntax for strikethrough on GitHub, so it's best to keep it as
+// HTML to avoid any ambiguity.
+
+rules.insert = {
+  filter: 'ins',
+
+  replacement: function (content, node, options) {
+    return '<ins>' + content + '</ins>'
+  }
+}
+
+rules.superscript = {
+  filter: 'sup',
+
+  replacement: function (content, node, options) {
+    return '<sup>' + content + '</sup>'
+  }
+}
+
+rules.subscript = {
+  filter: 'sub',
+
+  replacement: function (content, node, options) {
+    return '<sub>' + content + '</sub>'
+  }
+}
+
+// ==============================
+// END Joplin format support
+// ==============================
+
 rules.blockquote = {
   filter: 'blockquote',
 
@@ -562,6 +608,7 @@ function joplinEditableBlockInfo(node) {
   if (!node.classList.contains('joplin-editable')) return null;
 
   let sourceNode = null;
+  let isInline = false;
   for (const childNode of node.childNodes) {
     if (childNode.classList.contains('joplin-source')) {
       sourceNode = childNode;
@@ -570,11 +617,13 @@ function joplinEditableBlockInfo(node) {
   }
 
   if (!sourceNode) return null;
+  if (!node.isBlock) isInline = true;
 
   return {
     openCharacters: sourceNode.getAttribute('data-joplin-source-open'),
     closeCharacters: sourceNode.getAttribute('data-joplin-source-close'),
     content: sourceNode.textContent,
+    isInline
   };
 }
 
@@ -591,7 +640,8 @@ rules.joplinSourceBlock = {
     const info = joplinEditableBlockInfo(node);
     if (!info) return;
 
-    return '\n\n' + info.openCharacters + info.content + info.closeCharacters + '\n\n';
+    const surroundingCharacter = info.isInline? '' : '\n\n';
+    return surroundingCharacter + info.openCharacters + info.content + info.closeCharacters + surroundingCharacter;
   }
 }
 
