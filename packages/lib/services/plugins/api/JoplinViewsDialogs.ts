@@ -98,4 +98,15 @@ export default class JoplinViewsDialogs {
 		return this.controller(handle).open();
 	}
 
+	async useCustomSizing(handle: ViewHandle, status: boolean) {
+		return this.controller(handle).useCustomSizing = status;
+	}
+
+	async setCustomWidth(handle: ViewHandle, value: string) {
+		return this.controller(handle).customWidth = value;
+	}
+
+	async setCustomHeight(handle: ViewHandle, value: string) {
+		return this.controller(handle).customHeight = value;
+	}
 }
