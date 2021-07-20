@@ -3,6 +3,7 @@ const { basename } = require('./path-utils');
 const shim = require('./shim').default;
 const JoplinError = require('./JoplinError').default;
 const { Buffer } = require('buffer');
+const { Readable } = require('stream').Readable;
 const { GetObjectCommand, ListObjectsV2Command, HeadObjectCommand, PutObjectCommand, DeleteObjectCommand, DeleteObjectsCommand } = require("@aws-sdk/client-s3");
 
 const S3_MAX_DELETES = 1000;
@@ -27,8 +28,18 @@ class FileApiDriverAmazonS3 {
 	}
 
 	hasErrorCode_(error, errorCode) {
-		if (!error || typeof error.code !== 'string') return false;
-		return error.code.indexOf(errorCode) >= 0;
+		if (!error || typeof error.name !== 'string') return false;
+		return error.name.indexOf(errorCode) >= 0;
+	}
+
+
+	streamToString_(stream){
+		return new Promise((resolve, reject) => {
+			const chunks = [];
+			stream.on("data", (chunk) => chunks.push(chunk));
+			stream.on("error", reject);
+			stream.on("end", () => resolve(Buffer.concat(chunks).toString("utf8")));
+		});
 	}
 
 	// Need to make a custom promise, built-in promise is broken: https://github.com/aws/aws-sdk-js/issues/1436
@@ -226,7 +237,7 @@ class FileApiDriverAmazonS3 {
 		try {
 			let output = null;
 			const response = await this.s3GetObject(remotePath);
-                       output = await new Response(response.Body, {}).text();
+			output = await this.streamToString_(response.Body);
 
 			if (options.target === 'file') {
 				const filePath = options.path;
