@@ -58,6 +58,9 @@ export default class WebviewController extends ViewController {
 				scripts: [],
 				opened: false,
 				buttons: null,
+				useCustomSizing: false,
+				customWidth: null,
+				customHeight: null,
 			},
 		});
 	}
@@ -139,6 +142,10 @@ export default class WebviewController extends ViewController {
 	// ---------------------------------------------
 
 	public async open(): Promise<DialogResult> {
+		if (this.storeView.useCustomSizing === true && (this.storeView.customWidth === null || this.storeView.customHeight === null)) {
+			throw new Error('Cannot use custom sizing when either customWidth or customHeight is null.');
+		}
+
 		this.store.dispatch({
 			type: 'VISIBLE_DIALOGS_ADD',
 			name: this.handle,
@@ -173,4 +180,38 @@ export default class WebviewController extends ViewController {
 		this.setStoreProp('buttons', buttons);
 	}
 
+	public get useCustomSizing(): boolean {
+		return this.storeView.useCustomSizing;
+	}
+
+	/**
+	 * Toggle on whether to use the custom width/height or the automatic width/height.
+	 */
+	public set useCustomSizing(useCustomSizing: boolean) {
+		this.setStoreProp('useCustomSizing', useCustomSizing);
+	}
+
+	public get customWidth(): string {
+		return this.storeView.customWidth;
+	}
+
+	/**
+	 * Set the custom width of the dialog.
+	 * @param customWidth - The width along with the unit. For example `100px` or `100vw`.
+	 */
+	public set customWidth(customWidth: string) {
+		this.setStoreProp('customWidth', customWidth);
+	}
+
+	public get customHeight(): string {
+		return this.storeView.customHeight;
+	}
+
+	/**
+	 * Set the custom height of the dialog.
+	 * @param customHeight - The height along with the unit. For example `100px` or `100vw`.
+	 */
+	public set customHeight(customHeight: string) {
+		this.setStoreProp('customHeight', customHeight);
+	}
 }
