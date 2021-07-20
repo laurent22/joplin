@@ -184,9 +184,6 @@ export default class WebviewController extends ViewController {
 		return this.storeView.useCustomSizing;
 	}
 
-	/**
-	 * Toggle on whether to use the custom width/height or the automatic width/height.
-	 */
 	public set useCustomSizing(useCustomSizing: boolean) {
 		this.setStoreProp('useCustomSizing', useCustomSizing);
 	}
@@ -195,10 +192,6 @@ export default class WebviewController extends ViewController {
 		return this.storeView.customWidth;
 	}
 
-	/**
-	 * Set the custom width of the dialog.
-	 * @param customWidth - The width along with the unit. For example `100px` or `100vw`.
-	 */
 	public set customWidth(customWidth: string) {
 		this.setStoreProp('customWidth', customWidth);
 	}
@@ -207,10 +200,6 @@ export default class WebviewController extends ViewController {
 		return this.storeView.customHeight;
 	}
 
-	/**
-	 * Set the custom height of the dialog.
-	 * @param customHeight - The height along with the unit. For example `100px` or `100vw`.
-	 */
 	public set customHeight(customHeight: string) {
 		this.setStoreProp('customHeight', customHeight);
 	}
