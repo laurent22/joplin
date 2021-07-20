@@ -32,6 +32,7 @@ interface ParserStateTag {
 	name: string;
 	visible: boolean;
 	isCodeBlock: boolean;
+	isHighlight: boolean;
 }
 
 interface ParserStateList {
@@ -512,6 +513,17 @@ function isCodeBlock(context: any, nodeName: string, attributes: any) {
 	return false;
 }
 
+function isHighlight(context: any, _nodeName: string, attributes: any) {
+	if (attributes && attributes.style) {
+		// Evernote uses various inconsistent CSS prefixes: so far I've found
+		// "--en", "-en", "-evernote", so I'm guessing "--evernote" probably
+		// exists too.
+		const enHighlight = cssValue(context, attributes.style, '-evernote-highlight') || cssValue(context, attributes.style, '--evernote-highlight');
+		if (enHighlight && enHighlight.toLowerCase() === 'true') return true;
+	}
+	return false;
+}
+
 function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<EnexXmlToMdArrayResult> {
 	const remainingResources = resources.slice();
 
@@ -588,6 +600,7 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<Ene
 				name: n,
 				visible: isVisible,
 				isCodeBlock: isCodeBlock(this, n, nodeAttributes),
+				isHighlight: isHighlight(this, n, nodeAttributes),
 			};
 
 			state.tags.push(tagInfo);
@@ -667,7 +680,6 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<Ene
 			} else if (n == 'caption') {
 				if (section.type != 'table') {
 					displaySaxWarning(this, 'Found a <caption> tag outside of a <table>');
-					// return;
 				}
 
 				const newSection: Section = {
@@ -687,13 +699,6 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<Ene
 				section.lines.push(newSection);
 				section = newSection;
 			} else if (tagInfo.isCodeBlock) {
-				// state.inPre = false;
-
-				// const previousIsPre = state.tags.length ? state.tags[state.tags.length - 1].name === 'pre' : false;
-				// if (previousIsPre) {
-				// 	section.lines.pop();
-				// }
-
 				state.inCode.push(true);
 				state.currentCode = '';
 
@@ -727,6 +732,8 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<Ene
 					section.lines.push(`${indent + container.counter}. `);
 					container.counter++;
 				}
+			} else if (tagInfo.isHighlight) {
+				section.lines.push('==');
 			} else if (isStrongTag(n)) {
 				section.lines.push('**');
 			} else if (isStrikeTag(n)) {
@@ -889,6 +896,8 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<Ene
 				// End of note
 			} else if (!poppedTag.visible) {
 				if (section && section.parent) section = section.parent;
+			} else if (poppedTag.isHighlight) {
+				section.lines.push('==');
 			} else if (poppedTag.isCodeBlock) {
 				state.inCode.pop();
 
