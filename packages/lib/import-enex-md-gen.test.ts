@@ -13,7 +13,7 @@ import Resource from './models/Resource';
 
 const enexSampleBaseDir = `${supportDir}/../enex_to_md`;
 
-describe('EnexToMd', function() {
+describe('import-enex-md-gen', function() {
 
 	beforeEach(async (done) => {
 		await setupDatabaseAndSynchronizer(1);
@@ -31,7 +31,7 @@ describe('EnexToMd', function() {
 			const htmlPath = `${enexSampleBaseDir}/${htmlFilename}`;
 			const mdPath = `${enexSampleBaseDir}/${filename(htmlFilename)}.md`;
 
-			// if (htmlFilename !== 'multiline_inner_text.html') continue;
+			// if (htmlFilename !== 'highlight.html') continue;
 
 			const html = await shim.fsDriver().readFile(htmlPath);
 			let expectedMd = await shim.fsDriver().readFile(mdPath);
