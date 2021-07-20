@@ -98,14 +98,25 @@ export default class JoplinViewsDialogs {
 		return this.controller(handle).open();
 	}
 
+	/**
+	 * Toggle on whether to use the custom width/height or the automatic width/height.
+	 */
 	async useCustomSizing(handle: ViewHandle, status: boolean) {
 		return this.controller(handle).useCustomSizing = status;
 	}
 
+	/**
+	 * Set the custom width of the dialog.
+	 * @param value - The width along with the unit. For example `100px` or `100vw`.
+	 */
 	async setCustomWidth(handle: ViewHandle, value: string) {
 		return this.controller(handle).customWidth = value;
 	}
 
+	/**
+	 * Set the custom height of the dialog.
+	 * @param value - The height along with the unit. For example `100px` or `100vw`.
+	 */
 	async setCustomHeight(handle: ViewHandle, value: string) {
 		return this.controller(handle).customHeight = value;
 	}
