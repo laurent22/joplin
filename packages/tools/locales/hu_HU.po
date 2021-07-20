@@ -7,14 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator:  Szőke Sándor <mail@szokesandor.hu>\n"
+"Last-Translator: Magyari Balázs <balmag@gmail.com>\n"
 "Language-Team: \n"
 "Language: hu_HU\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Poedit 3.0\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
@@ -234,9 +236,9 @@ msgstr "Elemek titkosítása: %d/%d"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:507
 #: packages/app-mobile/components/side-menu-content.js:330
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Fetching resources: %d/%d"
-msgstr "Fetched erőforrások: %d/%d."
+msgstr "Erőforrások lekérése: %d/%d."
 
 #: packages/app-desktop/gui/Sidebar/commands/focusElementSideBar.js:17
 msgid "Sidebar"
@@ -265,12 +267,10 @@ msgid "Retry"
 msgstr "Ismét"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.js:137
-#, fuzzy
 msgid "Advanced tools"
 msgstr "Haladó beállítások"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.js:139
-#, fuzzy
 msgid "Export debug report"
 msgstr "Debug jelentés exportálása"
 
@@ -387,7 +387,7 @@ msgid ""
 "switch to %s to edit the note."
 msgstr ""
 "Kérem várjon minden csatolmány letöltésére és dekódolására. Átválthat %s-re "
-"a jegyzet szerkesztéséhez. "
+"a jegyzet szerkesztéséhez."
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:59
 msgid "There was an error downloading this attachment:"
@@ -793,7 +793,7 @@ msgstr "Jelszó beállítása"
 msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
 msgstr ""
 "Használja a nyilakat az elrendezés elemek mozgatásához. Majd nyomja le az "
-"\"Escape\"-et a kilépéshez. "
+"\"Escape\"-et a kilépéshez."
 
 #: packages/app-desktop/gui/MainScreen/commands/showNoteContentProperties.js:18
 msgid "Statistics..."
@@ -917,7 +917,7 @@ msgid ""
 "To allow Joplin to synchronise with Dropbox, please follow the steps below:"
 msgstr ""
 "Hogy a Joplin tudjon szinkronizálni Dropbox-al, kérem kövesse a következő "
-"lépéseket."
+"lépéseket:"
 
 #: packages/app-desktop/gui/DropboxLoginScreen.js:30
 #: packages/app-mobile/components/screens/dropbox-login.js:59
@@ -1868,7 +1868,7 @@ msgstr "Engedély a kamera használatához"
 
 #: packages/app-mobile/components/CameraView.js:159
 msgid "Your permission to use your camera is required."
-msgstr "A kamera használati engedélyre szükség van. "
+msgstr "A kamera használatához engedélyre van szükség."
 
 #: packages/app-mobile/components/screen-header.js:185
 msgid "Delete these notes?"
@@ -2265,11 +2265,11 @@ msgstr "Minden potenciális port használva van - kérem jelentse a hibát itt: 
 #: packages/lib/onedrive-api-node-utils.js:86
 msgid ""
 "The application has been authorised - you may now close this browser tab."
-msgstr "Az alkalmazás hitelesítve - már becsukhatja a böngésző ablakot. "
+msgstr "Az alkalmazás hitelesítve - már becsukhatja a böngésző ablakot."
 
 #: packages/lib/onedrive-api-node-utils.js:88
 msgid "The application has been successfully authorised."
-msgstr "Az alkalmazás sikeresen hitelesítve!"
+msgstr "Az alkalmazás sikeresen hitelesítve."
 
 #: packages/lib/onedrive-api-node-utils.js:116
 msgid ""
@@ -2303,7 +2303,7 @@ msgstr "cím"
 
 #: packages/lib/models/Folder.js:39 packages/lib/models/Note.js:37
 msgid "updated date"
-msgstr "Frissítési dátum"
+msgstr "frissítési dátum"
 
 #: packages/lib/models/Folder.js:103
 msgid "Conflicts"
@@ -4029,7 +4029,7 @@ msgstr "Több mint egy elem egyezik ezzel \"%s\". Kérem szűkítse a lekérdez�
 
 #: packages/app-cli/app/app.js:93
 msgid "No notebook selected."
-msgstr "Nincs kiválasztva jegyzetfüzet!"
+msgstr "Nincs kiválasztva jegyzetfüzet."
 
 #: packages/app-cli/app/app.js:99
 msgid "No notebook has been specified."
