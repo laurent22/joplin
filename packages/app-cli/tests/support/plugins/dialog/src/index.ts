@@ -55,9 +55,7 @@ joplin.plugins.register({
 		</p>
 		`);
 		let tmpDlg: any = dialogs; // Temporary cast to use new properties.
-		await tmpDlg.useCustomSizing(handle4, true);
-		await tmpDlg.setCustomWidth(handle4, '60vw');
-		await tmpDlg.setCustomHeight(handle4, '40vh');
+		await tmpDlg.fitToContent(handle4, false);
 		await dialogs.open(handle4);
 
 	},

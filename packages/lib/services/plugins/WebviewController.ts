@@ -58,9 +58,7 @@ export default class WebviewController extends ViewController {
 				scripts: [],
 				opened: false,
 				buttons: null,
-				useCustomSizing: false,
-				customWidth: null,
-				customHeight: null,
+				fitToContent: true,
 			},
 		});
 	}
@@ -142,10 +140,6 @@ export default class WebviewController extends ViewController {
 	// ---------------------------------------------
 
 	public async open(): Promise<DialogResult> {
-		if (this.storeView.useCustomSizing === true && (this.storeView.customWidth === null || this.storeView.customHeight === null)) {
-			throw new Error('Cannot use custom sizing when either customWidth or customHeight is null.');
-		}
-
 		this.store.dispatch({
 			type: 'VISIBLE_DIALOGS_ADD',
 			name: this.handle,
@@ -180,27 +174,11 @@ export default class WebviewController extends ViewController {
 		this.setStoreProp('buttons', buttons);
 	}
 
-	public get useCustomSizing(): boolean {
-		return this.storeView.useCustomSizing;
+	public get fitToContent(): boolean {
+		return this.storeView.fitToContent;
 	}
 
-	public set useCustomSizing(useCustomSizing: boolean) {
-		this.setStoreProp('useCustomSizing', useCustomSizing);
-	}
-
-	public get customWidth(): string {
-		return this.storeView.customWidth;
-	}
-
-	public set customWidth(customWidth: string) {
-		this.setStoreProp('customWidth', customWidth);
-	}
-
-	public get customHeight(): string {
-		return this.storeView.customHeight;
-	}
-
-	public set customHeight(customHeight: string) {
-		this.setStoreProp('customHeight', customHeight);
+	public set fitToContent(fitToContent: boolean) {
+		this.setStoreProp('fitToContent', fitToContent);
 	}
 }
