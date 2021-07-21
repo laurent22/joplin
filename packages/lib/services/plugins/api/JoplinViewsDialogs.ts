@@ -103,7 +103,7 @@ export default class JoplinViewsDialogs {
 	 * When set to false, the dialog is set to 90vw and 80vh
 	 * @default true
 	 */
-	async fitToContent(handle: ViewHandle, status: boolean) {
+	async setFitToContent(handle: ViewHandle, status: boolean) {
 		return this.controller(handle).fitToContent = status;
 	}
 }
