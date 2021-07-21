@@ -21,8 +21,6 @@ export interface Props {
 	minWidth?: number;
 	minHeight?: number;
 	fitToContent?: boolean;
-	customWidth?: string;
-	customHeight?: string;
 	borderBottom?: boolean;
 	theme?: any;
 	onSubmit?: Function;
@@ -33,8 +31,8 @@ export interface Props {
 const StyledFrame = styled.iframe`
 	padding: 0;
 	margin: 0;
-	width: ${(props: any) => props.fitToContent ? `${props.width}px` : props.customWidth};
-	height: ${(props: any) => props.fitToContent ? `${props.height}px` : props.customHeight};
+	width: ${(props: any) => props.fitToContent ? `${props.width}px` : '90vw'};
+	height: ${(props: any) => props.fitToContent ? `${props.height}px` : '80vh'};
 	border: none;
 	border-bottom: ${(props: Props) => props.borderBottom ? `1px solid ${props.theme.dividerColor}` : 'none'};
 `;
@@ -145,8 +143,6 @@ function UserWebview(props: Props, ref: any) {
 		width={contentSize.width}
 		height={contentSize.height}
 		fitToContent={props.fitToContent}
-		customWidth={props.customWidth}
-		customHeight={props.customHeight}
 		ref={viewRef}
 		src="services/plugins/UserWebviewIndex.html"
 		borderBottom={props.borderBottom}

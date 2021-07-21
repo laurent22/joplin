@@ -99,25 +99,11 @@ export default class JoplinViewsDialogs {
 	}
 
 	/**
-	 * Toggle on whether to use the custom width/height or the automatic width/height.
+	 * Toggle on whether to fit the dialog size to the content or not.
+	 * When set to false, the dialog is set to 90vw and 80vh
+	 * @default true
 	 */
-	async useCustomSizing(handle: ViewHandle, status: boolean) {
-		return this.controller(handle).useCustomSizing = status;
-	}
-
-	/**
-	 * Set the custom width of the dialog.
-	 * @param value - The width along with the unit. For example `100px` or `100vw`.
-	 */
-	async setCustomWidth(handle: ViewHandle, value: string) {
-		return this.controller(handle).customWidth = value;
-	}
-
-	/**
-	 * Set the custom height of the dialog.
-	 * @param value - The height along with the unit. For example `100px` or `100vw`.
-	 */
-	async setCustomHeight(handle: ViewHandle, value: string) {
-		return this.controller(handle).customHeight = value;
+	async fitToContent(handle: ViewHandle, status: boolean) {
+		return this.controller(handle).fitToContent = status;
 	}
 }
