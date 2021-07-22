@@ -31,8 +31,8 @@ export interface Props {
 const StyledFrame = styled.iframe`
 	padding: 0;
 	margin: 0;
-	width: ${(props: any) => props.fitToContent ? `${props.width}px` : '100%'};
-	height: ${(props: any) => props.fitToContent ? `${props.height}px` : '100%'};
+	width: ${(props: any) => props.fitToContent ? `${props.width}px` : '90vw'};
+	height: ${(props: any) => props.fitToContent ? `${props.height}px` : '80vh'};
 	border: none;
 	border-bottom: ${(props: Props) => props.borderBottom ? `1px solid ${props.theme.dividerColor}` : 'none'};
 `;
