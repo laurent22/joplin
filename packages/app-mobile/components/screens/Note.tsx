@@ -10,6 +10,7 @@ import NoteEditor, { ChangeEvent, UndoRedoDepthChangeEvent } from '../NoteEditor
 const FileViewer = require('react-native-file-viewer').default;
 const React = require('react');
 const { Platform, Keyboard, View, TextInput, StyleSheet, Linking, Image, Share, PermissionsAndroid } = require('react-native');
+const NoLagTextInput = require('react-native-no-lag-text-input');
 const { connect } = require('react-redux');
 // const { MarkdownEditor } = require('@joplin/lib/../MarkdownEditor/index.js');
 const RNFS = require('react-native-fs');
@@ -1109,7 +1110,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 			if (!this.useEditorBeta()) {
 				bodyComponent = (
-					<TextInput
+					<NoLagTextInput
 						autoCapitalize="sentences"
 						style={this.styles().bodyTextInput}
 						ref="noteBodyTextField"
