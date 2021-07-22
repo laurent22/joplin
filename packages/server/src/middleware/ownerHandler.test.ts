@@ -1,4 +1,5 @@
-import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, koaAppContext, koaNext } from '../utils/testing/testUtils';
+import { ErrorForbidden } from '../utils/errors';
+import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, koaAppContext, koaNext, models, expectHttpError } from '../utils/testing/testUtils';
 import ownerHandler from './ownerHandler';
 
 describe('ownerHandler', function() {
@@ -42,6 +43,20 @@ describe('ownerHandler', function() {
 		await ownerHandler(context, koaNext);
 
 		expect(!!context.joplin.owner).toBe(false);
+	});
+
+	test('should not login if the user has been disabled', async function() {
+		const { user, session } = await createUserAndSession(1);
+
+		await models().user().save({ id: user.id, enabled: 0 });
+
+		const context = await koaAppContext({
+			sessionId: session.id,
+		});
+
+		context.joplin.owner = null;
+
+		await expectHttpError(async () => ownerHandler(context, koaNext), ErrorForbidden.httpCode);
 	});
 
 });

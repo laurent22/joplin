@@ -16,6 +16,7 @@ import { formatMaxItemSize, formatMaxTotalSize, formatTotalSize, formatTotalSize
 import { getCanShareFolder, totalSizeClass } from '../../models/utils/user';
 import { yesNoDefaultOptions } from '../../utils/views/select';
 import { confirmUrl } from '../../utils/urlUtils';
+import { cancelSubscription } from '../../utils/stripe';
 
 export interface CheckRepeatPasswordInput {
 	password: string;
@@ -136,14 +137,18 @@ router.get('users/:id', async (path: SubPath, ctx: AppContext, user: User = null
 		postUrl = `${config().baseUrl}/users/${user.id}`;
 	}
 
+	const subscription = !isNew ? await ctx.joplin.models.subscription().byUserId(userId) : null;
+
 	const view: View = defaultView('user', 'Profile');
 	view.content.user = user;
 	view.content.isNew = isNew;
 	view.content.buttonTitle = isNew ? 'Create user' : 'Update profile';
 	view.content.error = error;
 	view.content.postUrl = postUrl;
-	view.content.showDeleteButton = !isNew && !!owner.is_admin && owner.id !== user.id;
-	view.content.showResetPasswordButton = !isNew && owner.is_admin;
+	view.content.showDisableButton = !isNew && !!owner.is_admin && owner.id !== user.id && user.enabled;
+	view.content.showCancelSubscription = !isNew && !!owner.is_admin && owner.id !== user.id && subscription;
+	view.content.showRestoreButton = !isNew && !!owner.is_admin && !user.enabled;
+	view.content.showResetPasswordButton = !isNew && owner.is_admin && user.enabled;
 	view.content.canSetEmail = isNew || owner.is_admin;
 	view.content.canShareFolderOptions = yesNoDefaultOptions(user, 'can_share_folder');
 	view.jsFiles.push('zxcvbn');
@@ -230,7 +235,9 @@ router.alias(HttpMethod.POST, 'users/:id', 'users');
 interface FormFields {
 	id: Uuid;
 	post_button: string;
-	delete_button: string;
+	disable_button: string;
+	restore_button: string;
+	cancel_subscription_button: string;
 	send_reset_password_email: string;
 }
 
@@ -256,16 +263,22 @@ router.post('users', async (path: SubPath, ctx: AppContext) => {
 			} else {
 				await userModel.save(userToSave, { isNew: false });
 			}
-		} else if (fields.delete_button) {
-			const user = await userModel.load(path.id);
-			await userModel.checkIfAllowed(ctx.joplin.owner, AclAction.Delete, user);
-			await userModel.delete(path.id);
-		} else if (fields.send_reset_password_email) {
-			const user = await userModel.load(path.id);
-			await userModel.save({ id: user.id, must_set_password: 1 });
-			await userModel.sendAccountConfirmationEmail(user);
 		} else {
-			throw new Error('Invalid form button');
+			if (ctx.joplin.owner.is_admin) {
+				if (fields.disable_button || fields.restore_button) {
+					const user = await userModel.load(path.id);
+					await userModel.checkIfAllowed(ctx.joplin.owner, AclAction.Delete, user);
+					await userModel.enable(path.id, !!fields.restore_button);
+				} else if (fields.send_reset_password_email) {
+					const user = await userModel.load(path.id);
+					await userModel.save({ id: user.id, must_set_password: 1 });
+					await userModel.sendAccountConfirmationEmail(user);
+				} else if (fields.cancel_subscription_button) {
+					await cancelSubscription(ctx.joplin.models, userId);
+				} else {
+					throw new Error('Invalid form button');
+				}
+			}
 		}
 
 		return redirect(ctx, `${config().baseUrl}/users${userIsMe(path) ? '/me' : ''}`);

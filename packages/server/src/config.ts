@@ -132,7 +132,7 @@ export async function initConfig(envType: Env, env: EnvVariables, overrides: any
 
 	const packageJson = await readPackageJson(`${rootDir}/package.json`);
 	const stripePublicConfigs = JSON.parse(await readFile(`${rootDir}/stripeConfig.json`, 'utf8'));
-	const stripePublicConfig = stripePublicConfigs[envType];
+	const stripePublicConfig = stripePublicConfigs[envType === Env.BuildTypes ? Env.Dev : envType];
 	if (!stripePublicConfig) throw new Error('Could not load Stripe config');
 
 	const viewDir = `${rootDir}/src/views`;

@@ -1,6 +1,6 @@
 import { SubPath } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
-import { RouteType, StripeConfig } from '../../utils/types';
+import { RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
 import { bodyFields } from '../../utils/requestUtils';
 import globalConfig from '../../config';
@@ -9,21 +9,13 @@ import { Stripe } from 'stripe';
 import Logger from '@joplin/lib/Logger';
 import getRawBody = require('raw-body');
 import { AccountType } from '../../models/UserModel';
-const stripeLib = require('stripe');
+import { initStripe, stripeConfig } from '../../utils/stripe';
 
 const logger = Logger.create('/stripe');
 
 const router: Router = new Router(RouteType.Web);
 
 router.public = true;
-
-function stripeConfig(): StripeConfig {
-	return globalConfig().stripe;
-}
-
-function initStripe(): Stripe {
-	return stripeLib(stripeConfig().secretKey);
-}
 
 async function stripeEvent(stripe: Stripe, req: any): Promise<Stripe.Event> {
 	if (!stripeConfig().webhookSecret) throw new Error('webhookSecret is required');
@@ -89,7 +81,7 @@ const postHandlers: Record<string, StripeRouteHandler> = {
 		};
 	},
 
-	// How to test the complete workflow locally:
+	// # How to test the complete workflow locally
 	//
 	// - In website/build.ts, set the env to "dev", then build the website - `npm run watch-website`
 	// - Start the Stripe CLI tool: `stripe listen --forward-to http://joplincloud.local:22300/stripe/webhook`
@@ -98,7 +90,11 @@ const postHandlers: Record<string, StripeRouteHandler> = {
 	// - Start the workflow from http://localhost:8080/plans/
 	// - The local website often is not configured to send email, but you can see them in the database, in the "emails" table.
 	//
-	// Stripe config:
+	// # Simplified workflow
+	//
+	// To test without running the main website, use http://joplincloud.local:22300/stripe/checkoutTest
+	//
+	// # Stripe config
 	//
 	// - The public config is under packages/server/stripeConfig.json
 	// - The private config is in the server .env file
@@ -221,11 +217,26 @@ const postHandlers: Record<string, StripeRouteHandler> = {
 				await ctx.joplin.models.subscription().handlePayment(subId, false);
 			},
 
+			'customer.subscription.deleted': async () => {
+				// The subscription has been cancelled, either by us or directly
+				// by the user. In that case, we disable the user.
+
+				const stripeSub = event.data.object as Stripe.Subscription;
+				const sub = await ctx.joplin.models.subscription().byStripeSubscriptionId(stripeSub.id);
+				if (!sub) throw new Error(`No subscription with ID: ${stripeSub.id}`);
+				await ctx.joplin.models.user().enable(sub.user_id, false);
+				await ctx.joplin.models.subscription().toggleSoftDelete(sub.id, true);
+			},
+
 		};
 
 		if (hooks[event.type]) {
 			logger.info(`Got Stripe event: ${event.type} [Handled]`);
-			await hooks[event.type]();
+			try {
+				await hooks[event.type]();
+			} catch (error) {
+				logger.error(`Error processing event ${event.type}:`, event, error);
+			}
 		} else {
 			logger.info(`Got Stripe event: ${event.type} [Unhandled]`);
 		}
@@ -295,7 +306,7 @@ const getHandlers: Record<string, StripeRouteHandler> = {
 			<body>
 				<button id="checkout">Subscribe</button>
 				<script>
-					var PRICE_ID = 'price_1IvlmiLx4fybOTqJMKNZhLh2';
+					var PRICE_ID = ${JSON.stringify(stripeConfig().basicPriceId)};
 
 					function handleResult() {
 						console.info('Redirected to checkout');

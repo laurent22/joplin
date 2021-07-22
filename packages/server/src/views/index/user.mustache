@@ -80,17 +80,33 @@
 		{{#showResetPasswordButton}}
 			<input type="submit" name="send_reset_password_email" class="button is-warning" value="Send reset password email" />
 		{{/showResetPasswordButton}}
-		{{#showDeleteButton}}
-			<input type="submit" name="delete_button" class="button is-danger" value="Delete" />
-		{{/showDeleteButton}}
+		{{#showDisableButton}}
+			<input type="submit" name="disable_button" class="button is-danger" value="Disable" />
+		{{/showDisableButton}}
+		{{#showCancelSubscription}}
+			<input type="submit" name="cancel_subscription_button" class="button is-danger" value="Cancel subscription" />
+		{{/showCancelSubscription}}
+		{{#showRestoreButton}}
+			<input type="submit" name="restore_button" class="button is-danger" value="Restore" />
+		{{/showRestoreButton}}
 	</div>
 </form>
 
 <script>
 	$(() => {
 		document.getElementById("user_form").addEventListener('submit', function(event) {
-			if (event.submitter.getAttribute('name') === 'delete_button') {
-				const ok = confirm('Delete this user?');
+			if (event.submitter.getAttribute('name') === 'disable_button') {
+				const ok = confirm('Disable this account?');
+				if (!ok) event.preventDefault();
+			}
+
+			if (event.submitter.getAttribute('name') === 'restore_button') {
+				const ok = confirm('Restore this account?');
+				if (!ok) event.preventDefault();
+			}
+
+			if (event.submitter.getAttribute('name') === 'cancel_subscription_button') {
+				const ok = confirm('Cancel this subscription?');
 				if (!ok) event.preventDefault();
 			}
 		});

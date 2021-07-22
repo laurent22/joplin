@@ -43,11 +43,11 @@ export default class SubscriptionModel extends BaseModel<Subscription> {
 	}
 
 	public async byStripeSubscriptionId(id: string): Promise<Subscription> {
-		return this.db(this.tableName).select(this.defaultFields).where('stripe_subscription_id', '=', id).first();
+		return this.db(this.tableName).select(this.defaultFields).where('stripe_subscription_id', '=', id).where('is_deleted', '=', 0).first();
 	}
 
 	public async byUserId(userId: Uuid): Promise<Subscription> {
-		return this.db(this.tableName).select(this.defaultFields).where('user_id', '=', userId).first();
+		return this.db(this.tableName).select(this.defaultFields).where('user_id', '=', userId).where('is_deleted', '=', 0).first();
 	}
 
 	public async saveUserAndSubscription(email: string, accountType: AccountType, stripeUserId: string, stripeSubscriptionId: string) {
@@ -69,6 +69,12 @@ export default class SubscriptionModel extends BaseModel<Subscription> {
 
 			return { user, subscription };
 		});
+	}
+
+	public async toggleSoftDelete(id: number, isDeleted: boolean) {
+		const sub = await this.load(`${id}`);
+		if (!sub) throw new Error(`No such subscription: ${id}`);
+		await this.save({ id, is_deleted: isDeleted ? 1 : 0 });
 	}
 
 }

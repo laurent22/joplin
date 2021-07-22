@@ -13,6 +13,7 @@
 			<th>Max Total Size</th>
 			<th>Can share</th>
 			<th>Is admin?</th>
+			<th>Enabled?</th>
 			<th>Actions</th>
 		</tr>
 	</thead>
@@ -27,6 +28,7 @@
 				<td>{{formattedMaxTotalSize}}</td>
 				<td>{{formattedCanShareFolder}}</td>
 				<td>{{is_admin}}</td>
+				<td>{{enabled}}</td>
 				<td><a href="{{{global.baseUrl}}}/users/{{id}}" class="button is-primary is-small">Edit</a></td>
 			</tr>
 		{{/users}}

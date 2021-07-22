@@ -96,6 +96,7 @@ export default class UserModel extends BaseModel<User> {
 	public async login(email: string, password: string): Promise<User> {
 		const user = await this.loadByEmail(email);
 		if (!user) return null;
+		if (!user.enabled) throw new ErrorForbidden('This account is disabled. Please contact support if you need to re-activate it.');
 		if (!auth.checkPassword(password, user.password)) return null;
 		return user;
 	}
@@ -228,6 +229,16 @@ export default class UserModel extends BaseModel<User> {
 		const s = email.split('@');
 		if (s.length !== 2) return false;
 		return !!s[0].length && !!s[1].length;
+	}
+
+	public async enable(id: Uuid, enabled: boolean) {
+		const user = await this.load(id);
+		if (!user) throw new ErrorNotFound(`No such user: ${id}`);
+		await this.save({ id, enabled: enabled ? 1 : 0 });
+	}
+
+	public async disable(id: Uuid) {
+		await this.enable(id, false);
 	}
 
 	public async delete(id: string): Promise<void> {
