@@ -41,7 +41,12 @@ function priceIdToAccountType(priceId: string): AccountType {
 
 type StripeRouteHandler = (stripe: Stripe, path: SubPath, ctx: AppContext)=> Promise<any>;
 
-const postHandlers: Record<string, StripeRouteHandler> = {
+interface PostHandlers {
+	createCheckoutSession: Function;
+	webhook: Function;
+}
+
+export const postHandlers: PostHandlers = {
 
 	createCheckoutSession: async (stripe: Stripe, __path: SubPath, ctx: AppContext) => {
 		const fields = await bodyFields<CreateCheckoutSessionFields>(ctx.req);
@@ -99,8 +104,18 @@ const postHandlers: Record<string, StripeRouteHandler> = {
 	// - The public config is under packages/server/stripeConfig.json
 	// - The private config is in the server .env file
 
-	webhook: async (stripe: Stripe, _path: SubPath, ctx: AppContext) => {
-		const event = await stripeEvent(stripe, ctx.req);
+	webhook: async (stripe: Stripe, _path: SubPath, ctx: AppContext, event: Stripe.Event = null, logErrors: boolean = true) => {
+		event = event ? event : await stripeEvent(stripe, ctx.req);
+
+		// Webhook endpoints might occasionally receive the same event more than
+		// once.
+		// https://stripe.com/docs/webhooks/best-practices#duplicate-events
+		const eventDoneKey = `stripeEventDone::${event.id}`;
+		if (await ctx.joplin.models.keyValue().value<number>(eventDoneKey)) {
+			logger.info(`Skipping event that has already been done: ${event.id}`);
+			return;
+		}
+		await ctx.joplin.models.keyValue().setValue(eventDoneKey, 1);
 
 		const hooks: any = {
 
@@ -235,7 +250,11 @@ const postHandlers: Record<string, StripeRouteHandler> = {
 			try {
 				await hooks[event.type]();
 			} catch (error) {
-				logger.error(`Error processing event ${event.type}:`, event, error);
+				if (logErrors) {
+					logger.error(`Error processing event ${event.type}:`, event, error);
+				} else {
+					throw error;
+				}
 			}
 		} else {
 			logger.info(`Got Stripe event: ${event.type} [Unhandled]`);
@@ -336,8 +355,8 @@ const getHandlers: Record<string, StripeRouteHandler> = {
 };
 
 router.post('stripe/:id', async (path: SubPath, ctx: AppContext) => {
-	if (!postHandlers[path.id]) throw new ErrorNotFound(`No such action: ${path.id}`);
-	return postHandlers[path.id](initStripe(), path, ctx);
+	if (!(postHandlers as any)[path.id]) throw new ErrorNotFound(`No such action: ${path.id}`);
+	return (postHandlers as any)[path.id](initStripe(), path, ctx);
 });
 
 router.get('stripe/:id', async (path: SubPath, ctx: AppContext) => {
