@@ -7,8 +7,6 @@
   "version": "1.0.32",
   "author": "Dom Christie",
   "main": "lib/turndown-plugin-gfm.cjs.js",
-  "module": "lib/turndown-plugin-gfm.es.js",
-  "jsnext:main": "lib/turndown-plugin-gfm.es.js",
   "devDependencies": {
     "browserify": "^14.5.0",
     "rollup": "^0.50.0",
