@@ -1,6 +1,6 @@
-const fs = require('fs-extra');
+import * as fs from 'fs-extra';
 
-const loadCustomCss = async filePath => {
+export const loadCustomCss = async (filePath: string) => {
 	let cssString = '';
 	if (await fs.pathExists(filePath)) {
 		try {
@@ -16,12 +16,11 @@ const loadCustomCss = async filePath => {
 	return cssString;
 };
 
-const injectCustomStyles = async cssFilePath => {
+export const injectCustomStyles = async (elementId: string, cssFilePath: string) => {
 	const css = await loadCustomCss(cssFilePath);
 	const styleTag = document.createElement('style');
-	styleTag.type = 'text/css';
+	styleTag.setAttribute('id', elementId);
+	styleTag.setAttribute('type', 'text/css');
 	styleTag.appendChild(document.createTextNode(css));
 	document.head.appendChild(styleTag);
 };
-
-module.exports = { loadCustomCss, injectCustomStyles };

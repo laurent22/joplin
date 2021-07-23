@@ -42,7 +42,7 @@ const PluginManager = require('@joplin/lib/services/PluginManager');
 import RevisionService from '@joplin/lib/services/RevisionService';
 import MigrationService from '@joplin/lib/services/MigrationService';
 const TemplateUtils = require('@joplin/lib/TemplateUtils');
-const CssUtils = require('@joplin/lib/CssUtils');
+import { loadCustomCss, injectCustomStyles } from '@joplin/lib/CssUtils';
 // import  populateDatabase from '@joplin/lib/services/debug/populateDatabase';
 
 const commands = [
@@ -612,7 +612,7 @@ class Application extends BaseApplication {
 
 		// Loads app-wide styles. (Markdown preview-specific styles loaded in app.js)
 		const filename = Setting.custom_css_files.JOPLIN_APP;
-		await CssUtils.injectCustomStyles(`${dir}/${filename}`);
+		await injectCustomStyles('appStyles', `${dir}/${filename}`);
 
 		AlarmService.setDriver(new AlarmServiceDriverNode({ appName: packageInfo.build.appId }));
 		AlarmService.setLogger(reg.logger());
@@ -688,9 +688,9 @@ class Application extends BaseApplication {
 		});
 
 		// Loads custom Markdown preview styles
-		const cssString = await CssUtils.loadCustomCss(`${Setting.value('profileDir')}/userstyle.css`);
+		const cssString = await loadCustomCss(`${Setting.value('profileDir')}/userstyle.css`);
 		this.store().dispatch({
-			type: 'LOAD_CUSTOM_CSS',
+			type: 'CUSTOM_CSS_APPEND',
 			css: cssString,
 		});
 
