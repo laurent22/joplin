@@ -1,6 +1,47 @@
-/* eslint-disable import/prefer-default-export */
+export interface Plan {
+	name: string;
+	title: string;
+	price: string;
+	stripePriceId: string;
+	featured: boolean;
+	iconName: string;
+	featuresOn: string[];
+	featuresOff: string[];
+	cfaLabel: string;
+	cfaUrl: string;
+}
 
-import { Plan, StripePublicConfig } from './types';
+export interface StripePublicConfig {
+	publishableKey: string;
+	basicPriceId: string;
+	proPriceId: string;
+	webhookBaseUrl: string;
+}
+
+export interface PlanFeature {
+	label: string;
+	enabled: boolean;
+}
+
+export function getFeatureList(plan: Plan): PlanFeature[] {
+	const output: PlanFeature[] = [];
+
+	for (const f of plan.featuresOn) {
+		output.push({
+			label: f,
+			enabled: true,
+		});
+	}
+
+	for (const f of plan.featuresOff) {
+		output.push({
+			label: f,
+			enabled: false,
+		});
+	}
+
+	return output;
+}
 
 const businessAccountEmailBody = `Hello,
 

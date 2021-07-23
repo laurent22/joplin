@@ -5,7 +5,7 @@ import { AppContext } from '../../utils/types';
 import { contextSessionId } from '../../utils/requestUtils';
 import { ErrorMethodNotAllowed } from '../../utils/errors';
 import defaultView from '../../utils/defaultView';
-import { accountTypeToString } from '../../models/UserModel';
+import { AccountType, accountTypeToString } from '../../models/UserModel';
 import { formatMaxItemSize, formatMaxTotalSize, formatTotalSize, formatTotalSizePercent, yesOrNo } from '../../utils/strings';
 import { getCanShareFolder, totalSizeClass } from '../../models/utils/user';
 
@@ -16,6 +16,7 @@ router.get('home', async (_path: SubPath, ctx: AppContext) => {
 
 	if (ctx.method === 'GET') {
 		const user = ctx.joplin.owner;
+		const subscription = await ctx.joplin.models.subscription().byUserId(user.id);
 
 		const view = defaultView('home', 'Home');
 		view.content = {
@@ -57,7 +58,10 @@ router.get('home', async (_path: SubPath, ctx: AppContext) => {
 					show: true,
 				},
 			],
+			showUpgradeProButton: subscription && user.account_type === AccountType.Basic,
 		};
+
+		view.cssFiles = ['index/home'];
 
 		return view;
 	}
