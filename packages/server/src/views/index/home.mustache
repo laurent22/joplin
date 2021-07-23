@@ -1,19 +1,25 @@
-	<h1 class="title">Welcome to {{global.appName}}</h1>
-	<p class="subtitle">Logged in as <strong>{{global.userDisplayName}}</strong></p>
+<h1 class="title">Welcome to {{global.appName}}</h1>
+<p class="subtitle">Logged in as <strong>{{global.userDisplayName}}</strong></p>
 
-	<table class="table is-hoverable">
-		<tbody>
-			{{#userProps}}
-				{{#show}}
-					<tr>
-						<td class="{{#classes}}{{.}}{{/classes}}">
-							<strong>{{label}}</strong>
-						</td>
-						<td class="{{#classes}}{{.}}{{/classes}}">
-							{{value}}
-						</td>
-					</tr>
-				{{/show}}
-			{{/userProps}}
-		</tbody>
-	</table>
+<table class="table is-hoverable user-props-table">
+	<tbody>
+		{{#userProps}}
+			{{#show}}
+				<tr>
+					<td class="{{#classes}}{{.}}{{/classes}} prop-name">
+						<strong>{{label}}</strong>
+					</td>
+					<td class="{{#classes}}{{.}}{{/classes}} prop-value">
+						{{value}}
+					</td>
+				</tr>
+			{{/show}}
+		{{/userProps}}
+	</tbody>
+</table>
+
+{{#showUpgradeProButton}}
+<p class="block">
+	<a href="{{baseUrl}}/upgrade" class="upgrade-button">Upgrade to a Pro account</a> to benefit from collaborate on notebooks, to increase the max note size, or the max total size.
+</p>
+{{/showUpgradeProButton}}
