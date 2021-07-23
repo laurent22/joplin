@@ -75,7 +75,8 @@
 		<p class="help">When creating a new user, if no password is specified the user will have to set it by following the link in their email.</p>
 		{{/global.owner.is_admin}}
 	</div>	
-	<div class="control">
+
+	<div class="control block">
 		<input type="submit" name="post_button" class="button is-primary" value="{{buttonTitle}}" />
 		{{#showResetPasswordButton}}
 			<input type="submit" name="send_reset_password_email" class="button is-warning" value="Send reset password email" />
@@ -83,13 +84,24 @@
 		{{#showDisableButton}}
 			<input type="submit" name="disable_button" class="button is-danger" value="Disable" />
 		{{/showDisableButton}}
-		{{#showCancelSubscription}}
-			<input type="submit" name="cancel_subscription_button" class="button is-danger" value="Cancel subscription" />
-		{{/showCancelSubscription}}
 		{{#showRestoreButton}}
 			<input type="submit" name="restore_button" class="button is-danger" value="Restore" />
 		{{/showRestoreButton}}
 	</div>
+
+	{{#subscription}}
+		<div class="control block">
+			{{#showUpdateSubscriptionBasic}}
+				<input type="submit" name="update_subscription_basic_button" class="button is-warning" value="Downgrade to Basic" />
+			{{/showUpdateSubscriptionBasic}}
+			{{#showUpdateSubscriptionPro}}
+				<input type="submit" name="update_subscription_pro_button" class="button is-warning" value="Upgrade to Pro" />
+			{{/showUpdateSubscriptionPro}}
+			{{#showCancelSubscription}}
+				<input type="submit" name="cancel_subscription_button" class="button is-danger" value="Cancel subscription" />
+			{{/showCancelSubscription}}
+		</div>
+	{{/subscription}}
 </form>
 
 <script>
@@ -107,6 +119,16 @@
 
 			if (event.submitter.getAttribute('name') === 'cancel_subscription_button') {
 				const ok = confirm('Cancel this subscription?');
+				if (!ok) event.preventDefault();
+			}
+
+			if (event.submitter.getAttribute('name') === 'update_subscription_basic_button') {
+				const ok = confirm('Downgrade to Basic subscription?');
+				if (!ok) event.preventDefault();
+			}
+
+			if (event.submitter.getAttribute('name') === 'update_subscription_pro_button') {
+				const ok = confirm('Upgrade to Pro subscription?');
 				if (!ok) event.preventDefault();
 			}
 		});

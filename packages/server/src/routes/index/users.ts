@@ -10,13 +10,13 @@ import { View } from '../../services/MustacheService';
 import defaultView from '../../utils/defaultView';
 import { AclAction } from '../../models/BaseModel';
 import { NotificationKey } from '../../models/NotificationModel';
-import { accountTypeOptions, accountTypeToString } from '../../models/UserModel';
+import { AccountType, accountTypeOptions, accountTypeToString } from '../../models/UserModel';
 import uuidgen from '../../utils/uuidgen';
 import { formatMaxItemSize, formatMaxTotalSize, formatTotalSize, formatTotalSizePercent, yesOrNo } from '../../utils/strings';
 import { getCanShareFolder, totalSizeClass } from '../../models/utils/user';
 import { yesNoDefaultOptions } from '../../utils/views/select';
 import { confirmUrl } from '../../utils/urlUtils';
-import { cancelSubscription } from '../../utils/stripe';
+import { cancelSubscription, updateSubscriptionType } from '../../utils/stripe';
 
 export interface CheckRepeatPasswordInput {
 	password: string;
@@ -146,7 +146,14 @@ router.get('users/:id', async (path: SubPath, ctx: AppContext, user: User = null
 	view.content.error = error;
 	view.content.postUrl = postUrl;
 	view.content.showDisableButton = !isNew && !!owner.is_admin && owner.id !== user.id && user.enabled;
-	view.content.showCancelSubscription = !isNew && !!owner.is_admin && owner.id !== user.id && subscription;
+
+	if (subscription) {
+		view.content.subscription = subscription;
+		view.content.showCancelSubscription = !isNew && !!owner.is_admin && owner.id !== user.id;
+		view.content.showUpdateSubscriptionBasic = !isNew && !!owner.is_admin && user.account_type !== AccountType.Basic;
+		view.content.showUpdateSubscriptionPro = !isNew && !!owner.is_admin && user.account_type !== AccountType.Pro;
+	}
+
 	view.content.showRestoreButton = !isNew && !!owner.is_admin && !user.enabled;
 	view.content.showResetPasswordButton = !isNew && owner.is_admin && user.enabled;
 	view.content.canSetEmail = isNew || owner.is_admin;
@@ -239,6 +246,8 @@ interface FormFields {
 	restore_button: string;
 	cancel_subscription_button: string;
 	send_reset_password_email: string;
+	update_subscription_basic_button: string;
+	update_subscription_pro_button: string;
 }
 
 router.post('users', async (path: SubPath, ctx: AppContext) => {
@@ -275,6 +284,10 @@ router.post('users', async (path: SubPath, ctx: AppContext) => {
 					await userModel.sendAccountConfirmationEmail(user);
 				} else if (fields.cancel_subscription_button) {
 					await cancelSubscription(ctx.joplin.models, userId);
+				} else if (fields.update_subscription_basic_button) {
+					await updateSubscriptionType(ctx.joplin.models, userId, AccountType.Basic);
+				} else if (fields.update_subscription_pro_button) {
+					await updateSubscriptionType(ctx.joplin.models, userId, AccountType.Pro);
 				} else {
 					throw new Error('Invalid form button');
 				}

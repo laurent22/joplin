@@ -9,7 +9,8 @@ import { Stripe } from 'stripe';
 import Logger from '@joplin/lib/Logger';
 import getRawBody = require('raw-body');
 import { AccountType } from '../../models/UserModel';
-import { initStripe, stripeConfig } from '../../utils/stripe';
+import { initStripe, priceIdToAccountType, stripeConfig } from '../../utils/stripe';
+import { Subscription } from '../../db';
 
 const logger = Logger.create('/stripe');
 
@@ -33,17 +34,23 @@ interface CreateCheckoutSessionFields {
 	priceId: string;
 }
 
-function priceIdToAccountType(priceId: string): AccountType {
-	if (stripeConfig().basicPriceId === priceId) return AccountType.Basic;
-	if (stripeConfig().proPriceId === priceId) return AccountType.Pro;
-	throw new Error(`Unknown price ID: ${priceId}`);
-}
-
 type StripeRouteHandler = (stripe: Stripe, path: SubPath, ctx: AppContext)=> Promise<any>;
 
 interface PostHandlers {
 	createCheckoutSession: Function;
 	webhook: Function;
+}
+
+interface SubscriptionInfo {
+	sub: Subscription;
+	stripeSub: Stripe.Subscription;
+}
+
+async function getSubscriptionInfo(event: Stripe.Event, ctx: AppContext): Promise<SubscriptionInfo> {
+	const stripeSub = event.data.object as Stripe.Subscription;
+	const sub = await ctx.joplin.models.subscription().byStripeSubscriptionId(stripeSub.id);
+	if (!sub) throw new Error(`No subscription with ID: ${stripeSub.id}`);
+	return { sub, stripeSub };
 }
 
 export const postHandlers: PostHandlers = {
@@ -236,11 +243,22 @@ export const postHandlers: PostHandlers = {
 				// The subscription has been cancelled, either by us or directly
 				// by the user. In that case, we disable the user.
 
-				const stripeSub = event.data.object as Stripe.Subscription;
-				const sub = await ctx.joplin.models.subscription().byStripeSubscriptionId(stripeSub.id);
-				if (!sub) throw new Error(`No subscription with ID: ${stripeSub.id}`);
+				const { sub } = await getSubscriptionInfo(event, ctx);
 				await ctx.joplin.models.user().enable(sub.user_id, false);
 				await ctx.joplin.models.subscription().toggleSoftDelete(sub.id, true);
+			},
+
+			'customer.subscription.updated': async () => {
+				// The subscription has been updated - we apply the changes from
+				// Stripe to the local account.
+
+				const { sub, stripeSub } = await getSubscriptionInfo(event, ctx);
+				const newAccountType = priceIdToAccountType(stripeSub.items.data[0].price.id);
+				const user = await ctx.joplin.models.user().load(sub.user_id, { fields: ['id'] });
+				if (!user) throw new Error(`No such user: ${user.id}`);
+
+				logger.info(`Updating subscription of user ${user.id} to ${newAccountType}`);
+				await ctx.joplin.models.user().save({ id: user.id, account_type: newAccountType });
 			},
 
 		};
