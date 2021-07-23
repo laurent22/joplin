@@ -1,8 +1,9 @@
 import { Share, ShareType } from '../../db';
 import routeHandler from '../../middleware/routeHandler';
+import { ErrorForbidden } from '../../utils/errors';
 import { postApi } from '../../utils/testing/apiUtils';
 import { testImageBuffer } from '../../utils/testing/fileApiUtils';
-import { beforeAllDb, afterAllTests, parseHtml, beforeEachDb, createUserAndSession, koaAppContext, checkContextError, expectNotThrow, createNote, createItem } from '../../utils/testing/testUtils';
+import { beforeAllDb, afterAllTests, parseHtml, beforeEachDb, createUserAndSession, koaAppContext, checkContextError, expectNotThrow, createNote, createItem, models, expectHttpError } from '../../utils/testing/testUtils';
 
 const resourceSize = 2720;
 
@@ -157,6 +158,25 @@ describe('shares.link', function() {
 
 			await expectNotThrow(async () => getShareContent(share.id));
 		}
+	});
+
+
+	test('should throw an error if owner of share is disabled', async function() {
+		const { user, session } = await createUserAndSession();
+
+		const noteItem = await createNote(session.id, {
+			id: '00000000000000000000000000000001',
+			body: 'testing',
+		});
+
+		const share = await postApi<Share>(session.id, 'shares', {
+			type: ShareType.Note,
+			note_id: noteItem.jop_id,
+		});
+
+		await models().user().disable(user.id);
+
+		await expectHttpError(async () => getShareContent(share.id), ErrorForbidden.httpCode);
 	});
 
 });

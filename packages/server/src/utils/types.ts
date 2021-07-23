@@ -37,14 +37,14 @@ export interface AppContext extends Koa.Context {
 	// All the properties under `joplin` were previously at the root, so to make
 	// sure they are no longer used anywhere we set them to "never", as that
 	// would trigger the TypeScript compiler. Later on, all this can be removed.
-	env: never;
-	db: never;
-	models: never;
-	appLogger: never;
-	notifications: never;
-	owner: never;
-	routes: never;
-	services: never;
+	// env: never;
+	// db: never;
+	// models: never;
+	// appLogger: never;
+	// notifications: never;
+	// owner: never;
+	// routes: never;
+	// services: never;
 }
 
 export enum DatabaseConfigClient {

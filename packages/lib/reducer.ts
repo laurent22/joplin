@@ -1116,8 +1116,8 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 			}
 			break;
 
-		case 'LOAD_CUSTOM_CSS':
-			draft.customCss = action.css;
+		case 'CUSTOM_CSS_APPEND':
+			draft.customCss += action.css;
 			break;
 
 		case 'TEMPLATE_UPDATE_ALL':

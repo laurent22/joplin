@@ -9,6 +9,7 @@ import JoplinInterop from './JoplinInterop';
 import JoplinSettings from './JoplinSettings';
 import JoplinContentScripts from './JoplinContentScripts';
 import JoplinClipboard from './JoplinClipboard';
+import JoplinWindow from './JoplinWindow';
 
 /**
  * This is the main entry point to the Joplin API. You can access various services using the provided accessors.
@@ -37,8 +38,9 @@ export default class Joplin {
 	private settings_: JoplinSettings = null;
 	private contentScripts_: JoplinContentScripts = null;
 	private clipboard_: JoplinClipboard = null;
+	private window_: JoplinWindow = null;
 
-	constructor(implementation: any, plugin: Plugin, store: any) {
+	public constructor(implementation: any, plugin: Plugin, store: any) {
 		this.data_ = new JoplinData();
 		this.plugins_ = new JoplinPlugins(plugin);
 		this.workspace_ = new JoplinWorkspace(store);
@@ -49,25 +51,30 @@ export default class Joplin {
 		this.settings_ = new JoplinSettings(plugin);
 		this.contentScripts_ = new JoplinContentScripts(plugin);
 		this.clipboard_ = new JoplinClipboard(implementation.clipboard, implementation.nativeImage);
+		this.window_ = new JoplinWindow(implementation.window, plugin, store);
 	}
 
-	get data(): JoplinData {
+	public get data(): JoplinData {
 		return this.data_;
 	}
 
-	get clipboard(): JoplinClipboard {
+	public get clipboard(): JoplinClipboard {
 		return this.clipboard_;
 	}
 
-	get plugins(): JoplinPlugins {
+	public get window(): JoplinWindow {
+		return this.window_;
+	}
+
+	public get plugins(): JoplinPlugins {
 		return this.plugins_;
 	}
 
-	get workspace(): JoplinWorkspace {
+	public get workspace(): JoplinWorkspace {
 		return this.workspace_;
 	}
 
-	get contentScripts(): JoplinContentScripts {
+	public get contentScripts(): JoplinContentScripts {
 		return this.contentScripts_;
 	}
 
@@ -77,23 +84,23 @@ export default class Joplin {
 	 * Not sure if it's the best way to hook into the app
 	 * so for now disable filters.
 	 */
-	get filters(): JoplinFilters {
+	public get filters(): JoplinFilters {
 		return this.filters_;
 	}
 
-	get commands(): JoplinCommands {
+	public get commands(): JoplinCommands {
 		return this.commands_;
 	}
 
-	get views(): JoplinViews {
+	public get views(): JoplinViews {
 		return this.views_;
 	}
 
-	get interop(): JoplinInterop {
+	public get interop(): JoplinInterop {
 		return this.interop_;
 	}
 
-	get settings(): JoplinSettings {
+	public get settings(): JoplinSettings {
 		return this.settings_;
 	}
 

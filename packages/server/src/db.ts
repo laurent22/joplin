@@ -411,6 +411,7 @@ export interface Subscription {
 	last_payment_failed_time?: number;
 	updated_time?: string;
 	created_time?: string;
+	is_deleted?: number;
 }
 
 export interface User extends WithDates, WithUuid {
@@ -427,6 +428,7 @@ export interface User extends WithDates, WithUuid {
 	can_share_note?: number | null;
 	max_total_item_size?: number | null;
 	total_item_size?: number;
+	enabled?: number;
 }
 
 export const databaseSchema: DatabaseTables = {
@@ -564,6 +566,7 @@ export const databaseSchema: DatabaseTables = {
 		last_payment_failed_time: { type: 'string' },
 		updated_time: { type: 'string' },
 		created_time: { type: 'string' },
+		is_deleted: { type: 'number' },
 	},
 	users: {
 		id: { type: 'string' },
@@ -582,6 +585,7 @@ export const databaseSchema: DatabaseTables = {
 		can_share_note: { type: 'number' },
 		max_total_item_size: { type: 'string' },
 		total_item_size: { type: 'string' },
+		enabled: { type: 'number' },
 	},
 };
 // AUTO-GENERATED-TYPES
