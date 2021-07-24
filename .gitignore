@@ -807,6 +807,9 @@ packages/lib/BaseSyncTarget.js.map
 packages/lib/ClipperServer.d.ts
 packages/lib/ClipperServer.js
 packages/lib/ClipperServer.js.map
+packages/lib/CssUtils.d.ts
+packages/lib/CssUtils.js
+packages/lib/CssUtils.js.map
 packages/lib/HtmlToMd.d.ts
 packages/lib/HtmlToMd.js
 packages/lib/HtmlToMd.js.map
@@ -1278,6 +1281,9 @@ packages/lib/services/plugins/api/JoplinViewsPanels.js.map
 packages/lib/services/plugins/api/JoplinViewsToolbarButtons.d.ts
 packages/lib/services/plugins/api/JoplinViewsToolbarButtons.js
 packages/lib/services/plugins/api/JoplinViewsToolbarButtons.js.map
+packages/lib/services/plugins/api/JoplinWindow.d.ts
+packages/lib/services/plugins/api/JoplinWindow.js
+packages/lib/services/plugins/api/JoplinWindow.js.map
 packages/lib/services/plugins/api/JoplinWorkspace.d.ts
 packages/lib/services/plugins/api/JoplinWorkspace.js
 packages/lib/services/plugins/api/JoplinWorkspace.js.map
@@ -1518,6 +1524,9 @@ packages/lib/time.js.map
 packages/lib/utils/credentialFiles.d.ts
 packages/lib/utils/credentialFiles.js
 packages/lib/utils/credentialFiles.js.map
+packages/lib/utils/joplinCloud.d.ts
+packages/lib/utils/joplinCloud.js
+packages/lib/utils/joplinCloud.js.map
 packages/lib/uuid.d.ts
 packages/lib/uuid.js
 packages/lib/uuid.js.map
@@ -1647,6 +1656,9 @@ packages/tools/buildServerDocker.js.map
 packages/tools/generate-database-types.d.ts
 packages/tools/generate-database-types.js
 packages/tools/generate-database-types.js.map
+packages/tools/generate-images.d.ts
+packages/tools/generate-images.js
+packages/tools/generate-images.js.map
 packages/tools/lerna-add.d.ts
 packages/tools/lerna-add.js
 packages/tools/lerna-add.js.map
@@ -1674,9 +1686,6 @@ packages/tools/update-readme-sponsors.js.map
 packages/tools/website/build.d.ts
 packages/tools/website/build.js
 packages/tools/website/build.js.map
-packages/tools/website/utils/plans.d.ts
-packages/tools/website/utils/plans.js
-packages/tools/website/utils/plans.js.map
 packages/tools/website/utils/pressCarousel.d.ts
 packages/tools/website/utils/pressCarousel.js
 packages/tools/website/utils/pressCarousel.js.map

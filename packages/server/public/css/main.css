@@ -57,3 +57,6 @@ ul li {
 	list-style-type: disc;
 }
 
+.readable-block {
+	max-width: 740px;
+}

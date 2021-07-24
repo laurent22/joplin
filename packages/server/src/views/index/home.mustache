@@ -1,19 +1,31 @@
-	<h1 class="title">Welcome to {{global.appName}}</h1>
-	<p class="subtitle">Logged in as <strong>{{global.userDisplayName}}</strong></p>
+<h2 class="title">Welcome to {{global.appName}}</h2>
+<div class="block readable-block">
+	<p class="block">To start using {{global.appName}}, make sure to <a href="https://joplinapp.org/download">download one of the Joplin applications</a>, either for desktop or for your mobile phone.</p>
+	<p class="block">Once the app is installed, open the <strong>configuration</strong> screen, then the <strong>Synchronisation</strong> section. In this screen, select "<strong>{{global.appName}}</strong>" as a synchronisation target and enter your username and password<p>
+	<p class="block">Once it is setup {{global.appName}} allows you to synchronise your devices, to publish notes, or to collaborate on notebooks with other {{global.appName}} users.</p>
+</div>
 
-	<table class="table is-hoverable">
-		<tbody>
-			{{#userProps}}
-				{{#show}}
-					<tr>
-						<td class="{{#classes}}{{.}}{{/classes}}">
-							<strong>{{label}}</strong>
-						</td>
-						<td class="{{#classes}}{{.}}{{/classes}}">
-							{{value}}
-						</td>
-					</tr>
-				{{/show}}
-			{{/userProps}}
-		</tbody>
-	</table>
+<h2 class="title">Your account</h2>
+
+<table class="table is-hoverable user-props-table">
+	<tbody>
+		{{#userProps}}
+			{{#show}}
+				<tr>
+					<td class="{{#classes}}{{.}}{{/classes}} prop-name">
+						<strong>{{label}}</strong>
+					</td>
+					<td class="{{#classes}}{{.}}{{/classes}} prop-value">
+						{{value}}
+					</td>
+				</tr>
+			{{/show}}
+		{{/userProps}}
+	</tbody>
+</table>
+
+{{#showUpgradeProButton}}
+<p class="block">
+	<a href="{{baseUrl}}/upgrade" class="upgrade-button">Upgrade to a Pro account</a> to benefit from collaborate on notebooks, to increase the max note size, or the max total size.
+</p>
+{{/showUpgradeProButton}}

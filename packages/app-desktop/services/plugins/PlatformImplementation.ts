@@ -1,4 +1,6 @@
 import bridge from '../bridge';
+import { Implementation as WindowImplementation } from '@joplin/lib/services/plugins/api/JoplinWindow';
+import { injectCustomStyles } from '@joplin/lib/CssUtils';
 const { clipboard, nativeImage } = require('electron');
 
 interface JoplinViewsDialogs {
@@ -39,7 +41,13 @@ export default class PlatformImplementation {
 		return nativeImage;
 	}
 
-	constructor() {
+	public get window(): WindowImplementation {
+		return {
+			injectCustomStyles: injectCustomStyles,
+		};
+	}
+
+	public constructor() {
 		this.components_ = {};
 
 		this.joplin_ = {
@@ -53,11 +61,11 @@ export default class PlatformImplementation {
 		};
 	}
 
-	registerComponent(name: string, component: any) {
+	public registerComponent(name: string, component: any) {
 		this.components_[name] = component;
 	}
 
-	unregisterComponent(name: string) {
+	public unregisterComponent(name: string) {
 		delete this.components_[name];
 	}
 
