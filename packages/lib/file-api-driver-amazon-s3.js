@@ -3,7 +3,6 @@ const { basename } = require('./path-utils');
 const shim = require('./shim').default;
 const JoplinError = require('./JoplinError').default;
 const { Buffer } = require('buffer');
-//const Response = require('node-fetch').Response;
 const { GetObjectCommand, ListObjectsV2Command, HeadObjectCommand, PutObjectCommand, DeleteObjectCommand, DeleteObjectsCommand } = require("@aws-sdk/client-s3");
 
 const S3_MAX_DELETES = 1000;
@@ -227,7 +226,10 @@ class FileApiDriverAmazonS3 {
 		try {
 			let output = null;
 			const response = await this.s3GetObject(remotePath);
-			const streamed_response = new Response(response.Body)
+			// Be aware the shim will expose a slightly different
+			// response object depending on the env (node/react-native).
+			// See shim-init-node.js/shim-init-react.js.
+			const streamed_response = new shim.Response(response.Body);
 			output = await streamed_response.text();
 
 			if (options.target === 'file') {

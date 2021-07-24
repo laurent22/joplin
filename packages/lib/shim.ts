@@ -229,6 +229,8 @@ const shim = {
 
 	Buffer: null as any,
 
+	Response: null as any,
+
 	openUrl: () => {
 		throw new Error('Not implemented');
 	},

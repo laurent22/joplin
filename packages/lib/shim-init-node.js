@@ -16,6 +16,7 @@ const https = require('https');
 const toRelative = require('relative');
 const timers = require('timers');
 const zlib = require('zlib');
+const Response = require('node-fetch').Response;
 
 function fileExists(filePath) {
 	try {
@@ -70,6 +71,7 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 	};
 	shim.FileApiDriverLocal = FileApiDriverLocal;
 	shim.Geolocation = GeolocationNode;
+	shim.Response = Response;
 	shim.FormData = require('form-data');
 	shim.sjclModule = require('./vendor/sjcl.js');
 

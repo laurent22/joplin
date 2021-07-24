@@ -19,6 +19,7 @@ const injectedJs = {
 
 function shimInit() {
 	shim.Geolocation = GeolocationReact;
+	shim.Response = Response;
 	shim.sjclModule = require('@joplin/lib/vendor/sjcl-rn.js');
 
 	shim.fsDriver = () => {
