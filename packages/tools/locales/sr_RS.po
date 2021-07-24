@@ -4189,9 +4189,9 @@ msgid ""
 "associated with [note]. The command `tag list` can be used to list all the tags "
 "(use -l for long option)."
 msgstr ""
-"<tag-command> може бити \"додај\", \"уклони\", \"листа\" или \"ознаке\" за "
-"додељивање или уклањање [tag] из [note], или да излистате белешке повезане са "
-"ознаком [tag]. Команда `tag list` може се користити да излиста све ознаке "
+"<tag-command> може бити \"add\", \"remove\", \"list\" или \"notetags\" за "
+"додељивање или уклањање [ознаке] из [белешке], или да излистате белешке повезане "
+"са [ознаком]. Команда `tag list` може се користити да излиста све ознаке "
 "(користите -l за дугачки избор)."
 
 #: packages/app-cli/app/command-tag.js:90
