@@ -10,6 +10,7 @@ import { bodyFields } from '../../utils/requestUtils';
 import { NotificationKey } from '../../models/NotificationModel';
 import { AccountType } from '../../models/UserModel';
 import { ErrorBadRequest } from '../../utils/errors';
+import { createCsrfTag } from '../../utils/csrf';
 
 interface FormFields {
 	upgrade_button: string;
@@ -21,7 +22,7 @@ function upgradeUrl() {
 	return `${config().baseUrl}/upgrade`;
 }
 
-router.get('upgrade', async (_path: SubPath, _ctx: AppContext) => {
+router.get('upgrade', async (_path: SubPath, ctx: AppContext) => {
 	interface PlanRow {
 		basicLabel: string;
 		proLabel: string;
@@ -51,6 +52,7 @@ router.get('upgrade', async (_path: SubPath, _ctx: AppContext) => {
 		basicPrice: plans.basic.price,
 		proPrice: plans.pro.price,
 		postUrl: upgradeUrl(),
+		csrfTag: await createCsrfTag(ctx),
 	};
 	view.cssFiles = ['index/upgrade'];
 	return view;

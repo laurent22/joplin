@@ -17,6 +17,7 @@ import { getCanShareFolder, totalSizeClass } from '../../models/utils/user';
 import { yesNoDefaultOptions } from '../../utils/views/select';
 import { confirmUrl } from '../../utils/urlUtils';
 import { cancelSubscription, updateSubscriptionType } from '../../utils/stripe';
+import { createCsrfTag } from '../../utils/csrf';
 
 export interface CheckRepeatPasswordInput {
 	password: string;
@@ -146,6 +147,7 @@ router.get('users/:id', async (path: SubPath, ctx: AppContext, user: User = null
 	view.content.error = error;
 	view.content.postUrl = postUrl;
 	view.content.showDisableButton = !isNew && !!owner.is_admin && owner.id !== user.id && user.enabled;
+	view.content.csrfTag = await createCsrfTag(ctx);
 
 	if (subscription) {
 		view.content.subscription = subscription;

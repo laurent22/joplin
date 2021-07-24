@@ -135,7 +135,19 @@ async function main() {
 			await next();
 		} catch (error) {
 			ctx.status = error.httpCode || 500;
-			ctx.body = JSON.stringify({ error: error.message });
+
+			// Since this is a low level error, rendering a view might fail too,
+			// so catch this and default to rendering JSON.
+			try {
+				ctx.body = await ctx.joplin.services.mustache.renderView({
+					name: 'error',
+					title: 'Error',
+					path: 'index/error',
+					content: { error },
+				});
+			} catch (anotherError) {
+				ctx.body = { error: anotherError.message };
+			}
 		}
 	});
 

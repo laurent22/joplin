@@ -22,6 +22,8 @@ export async function formParse(req: any): Promise<FormParseResult> {
 		return output;
 	}
 
+	if (req.__parsed) return req.__parsed;
+
 	// Note that for Formidable to work, the content-type must be set in the
 	// headers
 	return new Promise((resolve: Function, reject: Function) => {
@@ -32,7 +34,13 @@ export async function formParse(req: any): Promise<FormParseResult> {
 				return;
 			}
 
-			resolve({ fields, files });
+			// Formidable seems to be doing some black magic and once a request
+			// has been parsed it cannot be parsed again. Doing so will do
+			// nothing, the code will just end there, or maybe wait
+			// indefinitely. So we cache the result on success and return it if
+			// some code somewhere tries again to parse the form.
+			req.__parsed = { fields, files };
+			resolve(req.__parsed);
 		});
 	});
 }

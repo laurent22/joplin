@@ -4,6 +4,7 @@
 
 	<div class="block">
 		{{> errorBanner}}
+		{{{csrfTag}}}
 		<input type="hidden" name="id" value="{{user.id}}"/>
 		<input type="hidden" name="is_new" value="{{isNew}}"/>
 		<div class="field">
@@ -94,11 +95,11 @@
 		</div>
 	</div>
 
-	<h1 class="title">Your subscription</h1>
+	{{#subscription}}
+		<h1 class="title">Your subscription</h1>
 
-	<div class="block">
-		{{#global.owner.is_admin}}
-			{{#subscription}}
+		<div class="block">
+			{{#global.owner.is_admin}}
 				<div class="control block">
 					<p class="block">Stripe Subscription ID: <a href="https://dashboard.stripe.com/subscriptions/{{subscription.stripe_subscription_id}}">{{subscription.stripe_subscription_id}}</a></p>
 					{{#showUpdateSubscriptionBasic}}
@@ -111,11 +112,9 @@
 						<input type="submit" name="cancel_subscription_button" class="button is-danger" value="Cancel subscription" />
 					{{/showCancelSubscription}}
 				</div>
-			{{/subscription}}
-		{{/global.owner.is_admin}}
+			{{/global.owner.is_admin}}
 
-		{{^global.owner.is_admin}}
-			{{#subscription}}
+			{{^global.owner.is_admin}}
 				<div class="control block">
 					{{#showUpdateSubscriptionPro}}
 						<a href="{{{global.baseUrl}}}/upgrade" class="button is-warning block">Upgrade to Pro</a>
@@ -125,9 +124,9 @@
 						<input type="submit" id="user_cancel_subscription_button" name="user_cancel_subscription_button" class="button is-danger" value="Cancel subscription" />
 					{{/showCancelSubscription}}
 				</div>
-			{{/subscription}}
-		{{/global.owner.is_admin}}
-	</div>
+			{{/global.owner.is_admin}}
+		</div>
+	{{/subscription}}
 
 </form>
 
