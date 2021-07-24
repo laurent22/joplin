@@ -34,3 +34,11 @@ export function confirmUrl(userId: Uuid, validationToken: string): string {
 export function stripePortalUrl(): string {
 	return `${config().baseUrl}/stripe/portal`;
 }
+
+export function homeUrl(): string {
+	return `${config().baseUrl}/home`;
+}
+
+export function loginUrl(): string {
+	return `${config().baseUrl}/login`;
+}

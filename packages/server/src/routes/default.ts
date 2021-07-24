@@ -6,6 +6,7 @@ import { pathExists } from 'fs-extra';
 import * as fs from 'fs-extra';
 import { AppContext, RouteType } from '../utils/types';
 import { localFileFromUrl } from '../utils/joplinUtils';
+import { homeUrl, loginUrl } from '../utils/urlUtils';
 const { mime } = require('@joplin/lib/mime-utils.js');
 
 const publicDir = `${dirname(dirname(__dirname))}/public`;
@@ -58,9 +59,9 @@ router.get('', async (path: SubPath, ctx: AppContext) => {
 	// Redirect to either /login or /home when trying to access the root
 	if (!path.id && !path.link) {
 		if (ctx.joplin.owner) {
-			return redirect(ctx, 'home');
+			return redirect(ctx, homeUrl());
 		} else {
-			return redirect(ctx, 'login');
+			return redirect(ctx, loginUrl());
 		}
 	}
 
