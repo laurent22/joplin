@@ -132,13 +132,13 @@ export async function initConfig(envType: Env, env: EnvVariables, overrides: any
 
 	const packageJson = await readPackageJson(`${rootDir}/package.json`);
 	const stripePublicConfigs = JSON.parse(await readFile(`${rootDir}/stripeConfig.json`, 'utf8'));
-	const stripePublicConfig = stripePublicConfigs[envType];
+	const stripePublicConfig = stripePublicConfigs[envType === Env.BuildTypes ? Env.Dev : envType];
 	if (!stripePublicConfig) throw new Error('Could not load Stripe config');
 
 	const viewDir = `${rootDir}/src/views`;
 	const appPort = env.APP_PORT ? Number(env.APP_PORT) : 22300;
 	const baseUrl = baseUrlFromEnv(env, appPort);
-	const supportEmail = env.SUPPORT_EMAIL || 'admin@localhost';
+	const supportEmail = env.SUPPORT_EMAIL || 'SUPPORT_EMAIL'; // Defaults to "SUPPORT_EMAIL" so that server admin knows they have to set it.
 
 	config_ = {
 		appVersion: packageJson.version,

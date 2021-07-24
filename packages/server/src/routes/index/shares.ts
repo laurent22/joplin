@@ -2,7 +2,7 @@ import { SubPath, ResponseType, Response } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
-import { ErrorNotFound } from '../../utils/errors';
+import { ErrorForbidden, ErrorNotFound } from '../../utils/errors';
 import { Item, Share } from '../../db';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { FileViewerResponse, renderItem as renderJoplinItem } from '../../utils/joplinUtils';
@@ -28,6 +28,9 @@ router.get('shares/:id', async (path: SubPath, ctx: AppContext) => {
 
 	const share = await shareModel.load(path.id);
 	if (!share) throw new ErrorNotFound();
+
+	const user = await ctx.joplin.models.user().load(share.owner_id);
+	if (!user.enabled) throw new ErrorForbidden('This account has been disabled');
 
 	const itemModel = ctx.joplin.models.item();
 

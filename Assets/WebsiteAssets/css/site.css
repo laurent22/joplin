@@ -147,14 +147,6 @@ h6:hover a.heading-anchor {
 	padding-right: 0px;
 }
 
-.img-fluid {
-	image-rendering: -moz-crisp-edges; /* Firefox */
-	image-rendering: -o-crisp-edges; /* Opera */
-	image-rendering: -webkit-optimize-contrast; /* Webkit (non-standard naming) */
-	image-rendering: crisp-edges;
-	-ms-interpolation-mode: nearest-neighbor; /* IE (non-standard property) */
-}
-
 img[align="left"] {
 	margin-right: 10px;
 	margin-bottom: 10px;
@@ -377,6 +369,10 @@ p,
 #top-section-img {
 	margin-bottom: -280px;
 	margin-top: 40px;
+}
+
+#top-section-img img {
+	width: 100%;
 }
 
 .main-content {

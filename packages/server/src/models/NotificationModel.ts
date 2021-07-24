@@ -8,6 +8,7 @@ export enum NotificationKey {
 	EmailConfirmed = 'emailConfirmed',
 	ChangeAdminPassword = 'change_admin_password',
 	UsingSqliteInProd = 'using_sqlite_in_prod',
+	UpgradedToPro = 'upgraded_to_pro',
 }
 
 interface NotificationType {
@@ -46,6 +47,10 @@ export default class NotificationModel extends BaseModel<Notification> {
 			[NotificationKey.UsingSqliteInProd]: {
 				level: NotificationLevel.Important,
 				message: 'The server is currently using SQLite3 as a database. It is not recommended in production as it is slow and can cause locking issues. Please see the README for information on how to change it.',
+			},
+			[NotificationKey.UpgradedToPro]: {
+				level: NotificationLevel.Normal,
+				message: 'Thank you! Your account has been successfully upgraded to Pro.',
 			},
 		};
 

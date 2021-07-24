@@ -19,7 +19,7 @@ export default async function(request: Request, id: string = null, _link: string
 	if (request.method === 'GET') {
 		if (id === 'check') {
 			if ('auth_token' in request.query) {
-				if (request.query.auth_token === context.authToken.value) {
+				if (context.authToken && request.query.auth_token === context.authToken.value) {
 					const output: any = {
 						status: context.authToken.status,
 					};

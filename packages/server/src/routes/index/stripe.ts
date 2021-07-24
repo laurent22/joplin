@@ -1,6 +1,6 @@
 import { SubPath } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
-import { RouteType, StripeConfig } from '../../utils/types';
+import { RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
 import { bodyFields } from '../../utils/requestUtils';
 import globalConfig from '../../config';
@@ -9,21 +9,14 @@ import { Stripe } from 'stripe';
 import Logger from '@joplin/lib/Logger';
 import getRawBody = require('raw-body');
 import { AccountType } from '../../models/UserModel';
-const stripeLib = require('stripe');
+import { initStripe, priceIdToAccountType, stripeConfig } from '../../utils/stripe';
+import { Subscription } from '../../db';
 
 const logger = Logger.create('/stripe');
 
 const router: Router = new Router(RouteType.Web);
 
 router.public = true;
-
-function stripeConfig(): StripeConfig {
-	return globalConfig().stripe;
-}
-
-function initStripe(): Stripe {
-	return stripeLib(stripeConfig().secretKey);
-}
 
 async function stripeEvent(stripe: Stripe, req: any): Promise<Stripe.Event> {
 	if (!stripeConfig().webhookSecret) throw new Error('webhookSecret is required');
@@ -41,15 +34,26 @@ interface CreateCheckoutSessionFields {
 	priceId: string;
 }
 
-function priceIdToAccountType(priceId: string): AccountType {
-	if (stripeConfig().basicPriceId === priceId) return AccountType.Basic;
-	if (stripeConfig().proPriceId === priceId) return AccountType.Pro;
-	throw new Error(`Unknown price ID: ${priceId}`);
-}
-
 type StripeRouteHandler = (stripe: Stripe, path: SubPath, ctx: AppContext)=> Promise<any>;
 
-const postHandlers: Record<string, StripeRouteHandler> = {
+interface PostHandlers {
+	createCheckoutSession: Function;
+	webhook: Function;
+}
+
+interface SubscriptionInfo {
+	sub: Subscription;
+	stripeSub: Stripe.Subscription;
+}
+
+async function getSubscriptionInfo(event: Stripe.Event, ctx: AppContext): Promise<SubscriptionInfo> {
+	const stripeSub = event.data.object as Stripe.Subscription;
+	const sub = await ctx.joplin.models.subscription().byStripeSubscriptionId(stripeSub.id);
+	if (!sub) throw new Error(`No subscription with ID: ${stripeSub.id}`);
+	return { sub, stripeSub };
+}
+
+export const postHandlers: PostHandlers = {
 
 	createCheckoutSession: async (stripe: Stripe, __path: SubPath, ctx: AppContext) => {
 		const fields = await bodyFields<CreateCheckoutSessionFields>(ctx.req);
@@ -89,7 +93,7 @@ const postHandlers: Record<string, StripeRouteHandler> = {
 		};
 	},
 
-	// How to test the complete workflow locally:
+	// # How to test the complete workflow locally
 	//
 	// - In website/build.ts, set the env to "dev", then build the website - `npm run watch-website`
 	// - Start the Stripe CLI tool: `stripe listen --forward-to http://joplincloud.local:22300/stripe/webhook`
@@ -98,13 +102,27 @@ const postHandlers: Record<string, StripeRouteHandler> = {
 	// - Start the workflow from http://localhost:8080/plans/
 	// - The local website often is not configured to send email, but you can see them in the database, in the "emails" table.
 	//
-	// Stripe config:
+	// # Simplified workflow
+	//
+	// To test without running the main website, use http://joplincloud.local:22300/stripe/checkoutTest
+	//
+	// # Stripe config
 	//
 	// - The public config is under packages/server/stripeConfig.json
 	// - The private config is in the server .env file
 
-	webhook: async (stripe: Stripe, _path: SubPath, ctx: AppContext) => {
-		const event = await stripeEvent(stripe, ctx.req);
+	webhook: async (stripe: Stripe, _path: SubPath, ctx: AppContext, event: Stripe.Event = null, logErrors: boolean = true) => {
+		event = event ? event : await stripeEvent(stripe, ctx.req);
+
+		// Webhook endpoints might occasionally receive the same event more than
+		// once.
+		// https://stripe.com/docs/webhooks/best-practices#duplicate-events
+		const eventDoneKey = `stripeEventDone::${event.id}`;
+		if (await ctx.joplin.models.keyValue().value<number>(eventDoneKey)) {
+			logger.info(`Skipping event that has already been done: ${event.id}`);
+			return;
+		}
+		await ctx.joplin.models.keyValue().setValue(eventDoneKey, 1);
 
 		const hooks: any = {
 
@@ -221,11 +239,41 @@ const postHandlers: Record<string, StripeRouteHandler> = {
 				await ctx.joplin.models.subscription().handlePayment(subId, false);
 			},
 
+			'customer.subscription.deleted': async () => {
+				// The subscription has been cancelled, either by us or directly
+				// by the user. In that case, we disable the user.
+
+				const { sub } = await getSubscriptionInfo(event, ctx);
+				await ctx.joplin.models.user().enable(sub.user_id, false);
+				await ctx.joplin.models.subscription().toggleSoftDelete(sub.id, true);
+			},
+
+			'customer.subscription.updated': async () => {
+				// The subscription has been updated - we apply the changes from
+				// Stripe to the local account.
+
+				const { sub, stripeSub } = await getSubscriptionInfo(event, ctx);
+				const newAccountType = priceIdToAccountType(stripeSub.items.data[0].price.id);
+				const user = await ctx.joplin.models.user().load(sub.user_id, { fields: ['id'] });
+				if (!user) throw new Error(`No such user: ${user.id}`);
+
+				logger.info(`Updating subscription of user ${user.id} to ${newAccountType}`);
+				await ctx.joplin.models.user().save({ id: user.id, account_type: newAccountType });
+			},
+
 		};
 
 		if (hooks[event.type]) {
 			logger.info(`Got Stripe event: ${event.type} [Handled]`);
-			await hooks[event.type]();
+			try {
+				await hooks[event.type]();
+			} catch (error) {
+				if (logErrors) {
+					logger.error(`Error processing event ${event.type}:`, event, error);
+				} else {
+					throw error;
+				}
+			}
 		} else {
 			logger.info(`Got Stripe event: ${event.type} [Unhandled]`);
 		}
@@ -295,7 +343,7 @@ const getHandlers: Record<string, StripeRouteHandler> = {
 			<body>
 				<button id="checkout">Subscribe</button>
 				<script>
-					var PRICE_ID = 'price_1IvlmiLx4fybOTqJMKNZhLh2';
+					var PRICE_ID = ${JSON.stringify(stripeConfig().basicPriceId)};
 
 					function handleResult() {
 						console.info('Redirected to checkout');
@@ -325,8 +373,8 @@ const getHandlers: Record<string, StripeRouteHandler> = {
 };
 
 router.post('stripe/:id', async (path: SubPath, ctx: AppContext) => {
-	if (!postHandlers[path.id]) throw new ErrorNotFound(`No such action: ${path.id}`);
-	return postHandlers[path.id](initStripe(), path, ctx);
+	if (!(postHandlers as any)[path.id]) throw new ErrorNotFound(`No such action: ${path.id}`);
+	return (postHandlers as any)[path.id](initStripe(), path, ctx);
 });
 
 router.get('stripe/:id', async (path: SubPath, ctx: AppContext) => {

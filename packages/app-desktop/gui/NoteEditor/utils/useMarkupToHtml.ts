@@ -26,7 +26,7 @@ export default function useMarkupToHtml(deps: HookDependencies) {
 			resourceBaseUrl: `file://${Setting.value('resourceDir')}/`,
 			customCss: customCss || '',
 		});
-	}, [plugins]);
+	}, [plugins, customCss]);
 
 	return useCallback(async (markupLanguage: number, md: string, options: MarkupToHtmlOptions = null): Promise<any> => {
 		options = {

@@ -1,9 +1,9 @@
 import * as fs from 'fs-extra';
 import { insertContentIntoFile, rootDir } from '../tool-utils';
-import { getPlans } from './utils/plans';
 import { pressCarouselItems } from './utils/pressCarousel';
 import { getMarkdownIt, loadMustachePartials, markdownToPageHtml, renderMustache } from './utils/render';
-import { Env, PlanPageParams, Sponsors, StripePublicConfig, TemplateParams } from './utils/types';
+import { Env, PlanPageParams, Sponsors, TemplateParams } from './utils/types';
+import { getPlans, StripePublicConfig } from '@joplin/lib/utils/joplinCloud';
 const dirname = require('path').dirname;
 const glob = require('glob');
 const path = require('path');
@@ -74,7 +74,7 @@ function defaultTemplateParams(): TemplateParams {
 		forumUrl: 'https://discourse.joplinapp.org/',
 		showToc: true,
 		showImproveThisDoc: true,
-		showJoplinCloudLinks: false,
+		showJoplinCloudLinks: true,
 		navbar: {
 			isFrontPage: false,
 		},

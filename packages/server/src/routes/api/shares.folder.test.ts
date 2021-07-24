@@ -841,4 +841,20 @@ describe('shares.folder', function() {
 		expect(share).toBeTruthy();
 	});
 
+	test('should check permissions - cannot share with a disabled account', async function() {
+		const { session: session1 } = await createUserAndSession(1);
+		const { user: user2, session: session2 } = await createUserAndSession(2);
+		await models().user().disable(user2.id);
+
+		await expectHttpError(async () =>
+			shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F1', [
+				{
+					id: '000000000000000000000000000000F1',
+					children: [],
+				},
+			]),
+		ErrorForbidden.httpCode
+		);
+	});
+
 });

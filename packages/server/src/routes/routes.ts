@@ -24,6 +24,7 @@ import indexUsers from './index/users';
 import indexStripe from './index/stripe';
 import indexTerms from './index/terms';
 import indexPrivacy from './index/privacy';
+import indexUpgrade from './index/upgrade';
 
 import defaultRoute from './default';
 
@@ -52,6 +53,7 @@ const routes: Routers = {
 	'stripe': indexStripe,
 	'terms': indexTerms,
 	'privacy': indexPrivacy,
+	'upgrade': indexUpgrade,
 
 	'': defaultRoute,
 };

@@ -1,3 +1,5 @@
+import { Plan, StripePublicConfig } from '@joplin/lib/utils/joplinCloud';
+
 export enum Env {
 	Dev = 'dev',
 	Prod = 'prod',
@@ -64,28 +66,8 @@ export interface TemplateParams {
 	buildTime?: number;
 }
 
-export interface Plan {
-	name: string;
-	title: string;
-	price: string;
-	stripePriceId: string;
-	featured: boolean;
-	iconName: string;
-	featuresOn: string[];
-	featuresOff: string[];
-	cfaLabel: string;
-	cfaUrl: string;
-}
-
 export interface PlanPageParams extends TemplateParams {
 	plans: Record<string, Plan>;
 	faqHtml: string;
 	stripeConfig: StripePublicConfig;
-}
-
-export interface StripePublicConfig {
-	publishableKey: string;
-	basicPriceId: string;
-	proPriceId: string;
-	webhookBaseUrl: string;
 }

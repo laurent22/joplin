@@ -4,8 +4,6 @@
   "version": "4.0.50",
   "author": "Dom Christie",
   "main": "lib/turndown.cjs.js",
-  "module": "lib/turndown.es.js",
-  "jsnext:main": "lib/turndown.es.js",
   "publishConfig": {
     "access": "public"
   },
