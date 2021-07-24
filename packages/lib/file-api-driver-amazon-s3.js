@@ -357,7 +357,7 @@ class FileApiDriverAmazonS3 {
 	async clearRoot() {
 		const listRecursive = async (cursor) => {
 			return new Promise((resolve, reject) => {
-				return this.api().send(new listObjectsV2Command({
+				return this.api().send(new ListObjectsV2Command({
 					Bucket: this.s3_bucket_,
 					ContinuationToken: cursor,
 				}), (err, response) => {
@@ -368,6 +368,9 @@ class FileApiDriverAmazonS3 {
 		};
 
 		let response = await listRecursive();
+		 // In aws-sdk-js-v3 if there are no contents it no longer returns
+               // an empty array. This creates an Empty array to pass onward.
+               if(response.Contents === undefined) response.Contents = [];
 		let keys = response.Contents.map((content) => content.Key);
 
 		while (response.IsTruncated) {
