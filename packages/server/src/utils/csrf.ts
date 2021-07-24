@@ -1,3 +1,5 @@
+import { User } from '../db';
+import { Models } from '../models/factory';
 import { ErrorForbidden } from './errors';
 import { escapeHtml } from './htmlUtils';
 import { bodyFields, isApiRequest } from './requestUtils';
@@ -26,12 +28,16 @@ export async function csrfCheck(ctx: AppContext, isPublicRoute: boolean) {
 	await ctx.joplin.models.token().deleteByValue(userId, fields._csrf);
 }
 
-export async function createCsrfToken(ctx: AppContext) {
-	if (!ctx.joplin.owner) throw new Error('Cannot create CSRF token without a user');
-	return ctx.joplin.models.token().generate(ctx.joplin.owner.id);
+export async function createCsrfToken(models: Models, user: User) {
+	if (!user) throw new Error('Cannot create CSRF token without a user');
+	return models.token().generate(user.id);
+}
+
+export async function createCsrfTokenFromContext(ctx: AppContext) {
+	return createCsrfToken(ctx.joplin.models, ctx.joplin.owner);
 }
 
 export async function createCsrfTag(ctx: AppContext) {
-	const token = await createCsrfToken(ctx);
+	const token = await createCsrfTokenFromContext(ctx);
 	return `<input type="hidden" name="_csrf" value="${escapeHtml(token)}"/>`;
 }
