@@ -1,5 +1,19 @@
 # Joplin Server Changelog
 
+## [server-v2.2.8-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.2.8-beta) (Pre-release) - 2021-07-24T16:55:58Z
+
+- New: Added form tokens to prevent CSRF attacks (19b45de)
+- Improved: Allow admin to change Stripe subscription (75a421e)
+- Improved: Allow enabling or disabling a user. Handle cancelling subscription. (27c3cbd)
+- Improved: Allow user to upgrade account (e83ab93)
+- Improved: Allow users to cancel Stripe subscription (b7e9848)
+- Improved: Clarify error message when user info cannot be saved (4567b78)
+- Improved: Explain how to use Joplin Server with a Joplin app (3f993af)
+- Improved: Handle Stripe webhook receiving multiple times the same event (252d069)
+- Improved: Make sure email URLs are displayed as clickable links (7245aea)
+- Improved: Moved email templates to separate files (6a93cb2)
+- Improved: Set default of env SUPPORT_EMAIL to "SUPPORT_EMAIL" to make it clear it needs to be set (92520e5)
+
 ## [server-v2.2.7-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.2.7-beta) (Pre-release) - 2021-07-11T17:31:42Z
 
 - New: Added support for resetting user password (62b6198)
