@@ -2,7 +2,7 @@ import { SubPath, redirect } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
 import { AppContext, HttpMethod } from '../../utils/types';
-import { bodyFields, formParse } from '../../utils/requestUtils';
+import { bodyFields, contextSessionId, formParse } from '../../utils/requestUtils';
 import { ErrorForbidden, ErrorUnprocessableEntity } from '../../utils/errors';
 import { User, Uuid } from '../../db';
 import config from '../../config';
@@ -149,9 +149,9 @@ router.get('users/:id', async (path: SubPath, ctx: AppContext, user: User = null
 
 	if (subscription) {
 		view.content.subscription = subscription;
-		view.content.showCancelSubscription = !isNew && !!owner.is_admin && owner.id !== user.id;
+		view.content.showCancelSubscription = !isNew;
 		view.content.showUpdateSubscriptionBasic = !isNew && !!owner.is_admin && user.account_type !== AccountType.Basic;
-		view.content.showUpdateSubscriptionPro = !isNew && !!owner.is_admin && user.account_type !== AccountType.Pro;
+		view.content.showUpdateSubscriptionPro = !isNew && user.account_type !== AccountType.Pro;
 	}
 
 	view.content.showRestoreButton = !isNew && !!owner.is_admin && !user.enabled;
@@ -159,6 +159,7 @@ router.get('users/:id', async (path: SubPath, ctx: AppContext, user: User = null
 	view.content.canSetEmail = isNew || owner.is_admin;
 	view.content.canShareFolderOptions = yesNoDefaultOptions(user, 'can_share_folder');
 	view.jsFiles.push('zxcvbn');
+	view.cssFiles.push('index/user');
 
 	if (config().accountTypesEnabled) {
 		view.content.showAccountTypes = true;
@@ -248,6 +249,7 @@ interface FormFields {
 	send_reset_password_email: string;
 	update_subscription_basic_button: string;
 	update_subscription_pro_button: string;
+	user_cancel_subscription_button: string;
 }
 
 router.post('users', async (path: SubPath, ctx: AppContext) => {
@@ -271,6 +273,13 @@ router.post('users', async (path: SubPath, ctx: AppContext) => {
 				await userModel.save(userToSave);
 			} else {
 				await userModel.save(userToSave, { isNew: false });
+			}
+		} else if (fields.user_cancel_subscription_button) {
+			await cancelSubscription(ctx.joplin.models, userId);
+			const sessionId = contextSessionId(ctx, false);
+			if (sessionId) {
+				await ctx.joplin.models.session().logout(sessionId);
+				return redirect(ctx, config().baseUrl);
 			}
 		} else {
 			if (ctx.joplin.owner.is_admin) {

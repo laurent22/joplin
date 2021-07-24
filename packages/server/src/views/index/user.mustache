@@ -1,111 +1,147 @@
-{{> errorBanner}}
-<form id="user_form" action="{{{postUrl}}}" method="POST">
-	<input type="hidden" name="id" value="{{user.id}}"/>
-	<input type="hidden" name="is_new" value="{{isNew}}"/>
-	<div class="field">
-		<label class="label">Full name</label>
-		<div class="control">
-			<input class="input" type="text" name="full_name" value="{{user.full_name}}"/>
-		</div>
-	</div>
-	<div class="field">
-		<label class="label">Email</label>
-		<div class="control">
-			<input class="input" type="email" name="email" value="{{user.email}}" {{^canSetEmail}}disabled{{/canSetEmail}}/>
-		</div>
-		{{^canSetEmail}}
-			<p class="help">For security reasons the email cannot currently be changed. To request a change please contact {{global.supportEmail}}</p>
-		{{/canSetEmail}}	
-	</div>
+<h1 class="title">Your profile</h1>
 
-	{{#global.owner.is_admin}}
-		{{#showAccountTypes}}
+<form id="user_form" action="{{{postUrl}}}" method="POST">
+
+	<div class="block">
+		{{> errorBanner}}
+		<input type="hidden" name="id" value="{{user.id}}"/>
+		<input type="hidden" name="is_new" value="{{isNew}}"/>
+		<div class="field">
+			<label class="label">Full name</label>
+			<div class="control">
+				<input class="input" type="text" name="full_name" value="{{user.full_name}}"/>
+			</div>
+		</div>
+		<div class="field">
+			<label class="label">Email</label>
+			<div class="control">
+				<input class="input" type="email" name="email" value="{{user.email}}" {{^canSetEmail}}disabled{{/canSetEmail}}/>
+			</div>
+			{{^canSetEmail}}
+				<p class="help">For security reasons the email cannot currently be changed. To request a change please contact {{global.supportEmail}}</p>
+			{{/canSetEmail}}	
+		</div>
+
+		{{#global.owner.is_admin}}
+			{{#showAccountTypes}}
+				<div class="field">
+					<label class="label">Account type</label>
+					<div class="select">
+						<select name="account_type">
+							{{#accountTypes}}
+								<option value="{{value}}" {{#selected}}selected{{/selected}}>{{label}}</option>
+							{{/accountTypes}}
+						</select>
+					</div>
+					<p class="help">If the below properties are left to their default (empty) values, the account-specific properties will apply.</p>
+				</div>
+			{{/showAccountTypes}}
+
 			<div class="field">
-				<label class="label">Account type</label>
+				<label class="label">Max item size</label>
+				<div class="control">
+					<input class="input" type="number" placeholder="Default" name="max_item_size" value="{{user.max_item_size}}"/>
+				</div>
+			</div>
+
+			<div class="field">
+				<label class="label">Max total size</label>
+				<div class="control">
+					<input class="input" type="number" placeholder="Default" name="max_total_item_size" value="{{user.max_total_item_size}}"/>
+				</div>
+			</div>
+
+			<div class="field">
+				<label class="label">Can share notebook</label>
 				<div class="select">
-					<select name="account_type">
-						{{#accountTypes}}
+					<select name="can_share_folder">
+						{{#canShareFolderOptions}}
 							<option value="{{value}}" {{#selected}}selected{{/selected}}>{{label}}</option>
-						{{/accountTypes}}
+						{{/canShareFolderOptions}}
 					</select>
 				</div>
-				<p class="help">If the below properties are left to their default (empty) values, the account-specific properties will apply.</p>
 			</div>
-		{{/showAccountTypes}}
-
-		<div class="field">
-			<label class="label">Max item size</label>
-			<div class="control">
-				<input class="input" type="number" placeholder="Default" name="max_item_size" value="{{user.max_item_size}}"/>
-			</div>
-		</div>
-
-		<div class="field">
-			<label class="label">Max total size</label>
-			<div class="control">
-				<input class="input" type="number" placeholder="Default" name="max_total_item_size" value="{{user.max_total_item_size}}"/>
-			</div>
-		</div>
-
-		<div class="field">
-			<label class="label">Can share notebook</label>
-			<div class="select">
-				<select name="can_share_folder">
-					{{#canShareFolderOptions}}
-						<option value="{{value}}" {{#selected}}selected{{/selected}}>{{label}}</option>
-					{{/canShareFolderOptions}}
-				</select>
-			</div>
-		</div>
-	{{/global.owner.is_admin}}
-
-	<div class="field">
-		<label class="label">Password</label>
-		<div class="control">
-			<input id="password" class="input" type="password" name="password" autocomplete="new-password"/>
-		</div>
-		<p id="password_strength" class="help"></p>
-	</div>
-	<div class="field">
-		<label class="label">Repeat password</label>
-		<div class="control">
-			<input class="input" type="password" name="password2" autocomplete="new-password"/>
-		</div>
-		{{#global.owner.is_admin}}
-		<p class="help">When creating a new user, if no password is specified the user will have to set it by following the link in their email.</p>
 		{{/global.owner.is_admin}}
-	</div>	
 
-	<div class="control block">
-		<input type="submit" name="post_button" class="button is-primary" value="{{buttonTitle}}" />
-		{{#showResetPasswordButton}}
-			<input type="submit" name="send_reset_password_email" class="button is-warning" value="Send reset password email" />
-		{{/showResetPasswordButton}}
-		{{#showDisableButton}}
-			<input type="submit" name="disable_button" class="button is-danger" value="Disable" />
-		{{/showDisableButton}}
-		{{#showRestoreButton}}
-			<input type="submit" name="restore_button" class="button is-danger" value="Restore" />
-		{{/showRestoreButton}}
+		<div class="field">
+			<label class="label">Password</label>
+			<div class="control">
+				<input id="password" class="input" type="password" name="password" autocomplete="new-password"/>
+			</div>
+			<p id="password_strength" class="help"></p>
+		</div>
+		<div class="field">
+			<label class="label">Repeat password</label>
+			<div class="control">
+				<input class="input" type="password" name="password2" autocomplete="new-password"/>
+			</div>
+			{{#global.owner.is_admin}}
+			<p class="help">When creating a new user, if no password is specified the user will have to set it by following the link in their email.</p>
+			{{/global.owner.is_admin}}
+		</div>	
+
+		<div class="control block">
+			<input type="submit" name="post_button" class="button is-primary" value="{{buttonTitle}}" />
+			{{#showResetPasswordButton}}
+				<input type="submit" name="send_reset_password_email" class="button is-warning" value="Send reset password email" />
+			{{/showResetPasswordButton}}
+			{{#showDisableButton}}
+				<input type="submit" name="disable_button" class="button is-danger" value="Disable" />
+			{{/showDisableButton}}
+			{{#showRestoreButton}}
+				<input type="submit" name="restore_button" class="button is-danger" value="Restore" />
+			{{/showRestoreButton}}
+		</div>
 	</div>
 
-	{{#subscription}}
-		<div class="control block">
-			{{#showUpdateSubscriptionBasic}}
-				<input type="submit" name="update_subscription_basic_button" class="button is-warning" value="Downgrade to Basic" />
-			{{/showUpdateSubscriptionBasic}}
-			{{#showUpdateSubscriptionPro}}
-				<input type="submit" name="update_subscription_pro_button" class="button is-warning" value="Upgrade to Pro" />
-			{{/showUpdateSubscriptionPro}}
-			{{#showCancelSubscription}}
-				<input type="submit" name="cancel_subscription_button" class="button is-danger" value="Cancel subscription" />
-			{{/showCancelSubscription}}
-		</div>
-	{{/subscription}}
+	<h1 class="title">Your subscription</h1>
+
+	<div class="block">
+		{{#global.owner.is_admin}}
+			{{#subscription}}
+				<div class="control block">
+					<p class="block">Stripe Subscription ID: <a href="https://dashboard.stripe.com/subscriptions/{{subscription.stripe_subscription_id}}">{{subscription.stripe_subscription_id}}</a></p>
+					{{#showUpdateSubscriptionBasic}}
+						<input type="submit" name="update_subscription_basic_button" class="button is-warning" value="Downgrade to Basic" />
+					{{/showUpdateSubscriptionBasic}}
+					{{#showUpdateSubscriptionPro}}
+						<input type="submit" name="update_subscription_pro_button" class="button is-warning" value="Upgrade to Pro" />
+					{{/showUpdateSubscriptionPro}}
+					{{#showCancelSubscription}}
+						<input type="submit" name="cancel_subscription_button" class="button is-danger" value="Cancel subscription" />
+					{{/showCancelSubscription}}
+				</div>
+			{{/subscription}}
+		{{/global.owner.is_admin}}
+
+		{{^global.owner.is_admin}}
+			{{#subscription}}
+				<div class="control block">
+					{{#showUpdateSubscriptionPro}}
+						<a href="{{{global.baseUrl}}}/upgrade" class="button is-warning block">Upgrade to Pro</a>
+					{{/showUpdateSubscriptionPro}}
+					{{#showCancelSubscription}}
+						<p id="user_cancel_subscription_link" class="block"><a href="#">Cancel subscription</a></p>
+						<input type="submit" id="user_cancel_subscription_button" name="user_cancel_subscription_button" class="button is-danger" value="Cancel subscription" />
+					{{/showCancelSubscription}}
+				</div>
+			{{/subscription}}
+		{{/global.owner.is_admin}}
+	</div>
+
 </form>
 
 <script>
 	$(() => {
+		if ($('#user_cancel_subscription_link').length) {
+			$('#user_cancel_subscription_button').hide();
+			$('#user_cancel_subscription_link').show();
+			$('#user_cancel_subscription_link').click((event) => {
+				event.preventDefault();
+				$('#user_cancel_subscription_button').click();
+			});
+		}
+
 		document.getElementById("user_form").addEventListener('submit', function(event) {
 			if (event.submitter.getAttribute('name') === 'disable_button') {
 				const ok = confirm('Disable this account?');
@@ -120,6 +156,16 @@
 			if (event.submitter.getAttribute('name') === 'cancel_subscription_button') {
 				const ok = confirm('Cancel this subscription?');
 				if (!ok) event.preventDefault();
+			}
+
+			if (event.submitter.getAttribute('name') === 'user_cancel_subscription_button') {
+				const answer = prompt('After cancelling your subscription, your account will be deleted and you will no longer be able to use it for synchronisation. This cannot be undone. If you would like to proceed please type "confirm" in the box below.');
+				if (answer !== 'confirm') {
+					event.preventDefault();
+					alert('The subscription was not cancelled.');
+				} else {
+					alert('Thank you. Your subscription is now going to be cancelled and you will be logged out.');
+				}
 			}
 
 			if (event.submitter.getAttribute('name') === 'update_subscription_basic_button') {
