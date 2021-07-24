@@ -3418,7 +3418,7 @@ msgstr "Молимо вас наведите увозни формат за %s"
 
 #: packages/lib/services/KeymapService.js:275
 msgid "command"
-msgstr ""
+msgstr "команда"
 
 #: packages/lib/services/KeymapService.js:275
 #: packages/lib/services/KeymapService.js:280
@@ -3489,7 +3489,7 @@ msgstr ""
 #: packages/lib/services/ReportService.js:185 packages/app-cli/app/cli-utils.js:140
 #, javascript-format
 msgid "%s: %s"
-msgstr ""
+msgstr "%s: %s"
 
 #: packages/lib/services/ReportService.js:198
 #, fuzzy
@@ -3768,12 +3768,12 @@ msgstr "Такође приказује неподешене или скриве
 #: packages/app-cli/app/command-config.js:79
 #, javascript-format
 msgid "%s = %s (%s)"
-msgstr ""
+msgstr "%s = %s (%s)"
 
 #: packages/app-cli/app/command-config.js:81
 #, javascript-format
 msgid "%s = %s"
-msgstr ""
+msgstr "%s = %s"
 
 #: packages/app-cli/app/command-use.js:12
 msgid ""
@@ -3937,7 +3937,7 @@ msgstr "Приказује информације о верзији"
 #: packages/app-cli/app/command-version.js:16
 #, javascript-format
 msgid "%s %s (%s)"
-msgstr ""
+msgstr "%s %s (%s)"
 
 #: packages/app-cli/app/command-undone.js:12
 msgid "Marks a to-do as non-completed."
@@ -4049,11 +4049,11 @@ msgstr "Невалидан одговор %s"
 
 #: packages/app-cli/app/cli-utils.js:161 packages/app-cli/app/app.js:138
 msgid "Y"
-msgstr ""
+msgstr "Y"
 
 #: packages/app-cli/app/cli-utils.js:161 packages/app-cli/app/app.js:138
 msgid "n"
-msgstr ""
+msgstr "n"
 
 #: packages/app-cli/app/base-command.js:15
 msgid "Cannot change encrypted item"
@@ -4154,11 +4154,11 @@ msgstr "Ниједна бележница није наведена."
 
 #: packages/app-cli/app/app.js:138
 msgid "N"
-msgstr ""
+msgstr "N"
 
 #: packages/app-cli/app/app.js:138
 msgid "y"
-msgstr ""
+msgstr "y"
 
 #: packages/app-cli/app/app.js:171
 msgid "Cancelling background synchronisation... Please wait."
@@ -4190,8 +4190,8 @@ msgid ""
 "(use -l for long option)."
 msgstr ""
 "<tag-command> може бити \"додај\", \"уклони\", \"листа\" или \"ознаке\" за "
-"додељивање или уклањање [ознаке]  из [белешке], или да излистате белешке повезане "
-"са ознаком [tag]. Команда `tag list` може се користити да излиста све ознаке "
+"додељивање или уклањање [tag] из [note], или да излистате белешке повезане са "
+"ознаком [tag]. Команда `tag list` може се користити да излиста све ознаке "
 "(користите -l за дугачки избор)."
 
 #: packages/app-cli/app/command-tag.js:90
