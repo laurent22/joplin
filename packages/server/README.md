@@ -21,8 +21,8 @@ This will start the server, which will listen on port **22300** on **localhost**
 
 The following tags are available:
 
-- `latest` are always the most recent released version
-- `beta` are always the most recent beta released version
+- `latest` is always the most recent released version
+- `beta` is always the most recent beta released version
 - Major versions, such as `2`, `2-beta`
 - Specific minor versions, such as `2.1`, `2.2`, `2.3-beta`
 - Specific patch versions, such as `2.0.4`, `2.2.8-beta`
