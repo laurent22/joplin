@@ -22,7 +22,6 @@ const DialogRoot = styled.div`
 	min-height: fit-content;
 	display: flex;
 	flex-direction: column;
-	width: 50%;
 `;
 
 interface Props {

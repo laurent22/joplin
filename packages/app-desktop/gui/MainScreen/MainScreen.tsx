@@ -35,7 +35,6 @@ import { ShareInvitation } from '@joplin/lib/services/share/reducer';
 import ShareService from '@joplin/lib/services/share/ShareService';
 import { reg } from '@joplin/lib/registry';
 import removeKeylessItems from '../ResizableLayout/utils/removeKeylessItems';
-import ClipperServer from '@joplin/lib/ClipperServer';
 
 const { connect } = require('react-redux');
 const { PromptDialog } = require('../PromptDialog.min.js');
@@ -71,7 +70,6 @@ interface Props {
 	startupPluginsLoaded: boolean;
 	shareInvitations: ShareInvitation[];
 	isSafeMode: boolean;
-	needApiAuth: boolean;
 }
 
 interface ShareFolderDialogOptions {
@@ -571,24 +569,12 @@ class MainScreenComponent extends React.Component<Props, State> {
 			void reg.scheduleSync(1000);
 		};
 
-		const onApiGrantAuthorization = (accept: boolean) => {
-			ClipperServer.instance().api.acceptAuthToken(accept);
-		};
-
 		let msg = null;
 
 		// When adding something here, don't forget to update the condition in
 		// this.messageBoxVisible()
 
-		if (this.props.needApiAuth) {
-			msg = this.renderNotificationMessage(
-				_('The Web Clipper needs your authorisation to access your data.'),
-				_('Grant authorisation'),
-				() => onApiGrantAuthorization(true),
-				_('Reject'),
-				() => onApiGrantAuthorization(false)
-			);
-		} else if (this.props.isSafeMode) {
+		if (this.props.isSafeMode) {
 			msg = this.renderNotificationMessage(
 				_('Safe mode is currently active. Note rendering and all plugins are temporarily disabled.'),
 				_('Disable safe mode and restart'),
@@ -652,7 +638,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 
 	messageBoxVisible(props: Props = null) {
 		if (!props) props = this.props;
-		return props.hasDisabledSyncItems || props.showMissingMasterKeyMessage || props.showNeedUpgradingMasterKeyMessage || props.showShouldReencryptMessage || props.hasDisabledEncryptionItems || this.props.shouldUpgradeSyncTarget || props.isSafeMode || this.showShareInvitationNotification(props) || this.props.needApiAuth;
+		return props.hasDisabledSyncItems || props.showMissingMasterKeyMessage || props.showNeedUpgradingMasterKeyMessage || props.showShouldReencryptMessage || props.hasDisabledEncryptionItems || this.props.shouldUpgradeSyncTarget || props.isSafeMode || this.showShareInvitationNotification(props);
 	}
 
 	registerCommands() {
@@ -879,7 +865,6 @@ const mapStateToProps = (state: AppState) => {
 		startupPluginsLoaded: state.startupPluginsLoaded,
 		shareInvitations: state.shareService.shareInvitations,
 		isSafeMode: state.settings.isSafeMode,
-		needApiAuth: state.needApiAuth,
 	};
 };
 

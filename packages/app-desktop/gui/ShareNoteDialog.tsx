@@ -27,6 +27,9 @@ interface Props {
 function styles_(props: Props) {
 	return buildStyle('ShareNoteDialog', props.themeId, (theme: any) => {
 		return {
+			root: {
+				minWidth: 500,
+			},
 			noteList: {
 				marginBottom: 10,
 			},
@@ -213,7 +216,7 @@ export function ShareNoteDialog(props: Props) {
 
 	function renderContent() {
 		return (
-			<div>
+			<div style={styles.root}>
 				<DialogTitle title={_('Publish Notes')}/>
 				{renderNoteList(notes)}
 				<button disabled={['creating', 'synchronizing'].indexOf(sharesState) >= 0} style={styles.copyShareLinkButton} onClick={shareLinkButton_click}>{_n('Copy Shareable Link', 'Copy Shareable Links', noteCount)}</button>

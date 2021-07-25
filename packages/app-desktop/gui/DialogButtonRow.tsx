@@ -1,4 +1,5 @@
 const React = require('react');
+import { useMemo } from 'react';
 const { _ } = require('@joplin/lib/locale');
 const { themeStyle } = require('@joplin/lib/theme');
 
@@ -11,9 +12,11 @@ export interface ClickEvent {
 	buttonName: string;
 }
 
+export type ClickEventHandler = (event: ClickEvent)=> void;
+
 interface Props {
 	themeId: number;
-	onClick?: (event: ClickEvent)=> void;
+	onClick?: ClickEventHandler;
 	okButtonShow?: boolean;
 	cancelButtonShow?: boolean;
 	cancelButtonLabel?: string;
@@ -23,6 +26,13 @@ interface Props {
 
 export default function DialogButtonRow(props: Props) {
 	const theme = themeStyle(props.themeId);
+
+	const buttonStyle = useMemo(() => {
+		return {
+			...theme.buttonStyle,
+			marginLeft: 10,
+		};
+	}, [theme.buttonStyle]);
 
 	const okButton_click = () => {
 		if (props.onClick) props.onClick({ buttonName: 'ok' });
@@ -49,7 +59,7 @@ export default function DialogButtonRow(props: Props) {
 	if (props.customButtons) {
 		for (const b of props.customButtons) {
 			buttonComps.push(
-				<button key={b.name} style={theme.buttonStyle} onClick={() => customButton_click({ buttonName: b.name })} onKeyDown={onKeyDown}>
+				<button key={b.name} style={buttonStyle} onClick={() => customButton_click({ buttonName: b.name })} onKeyDown={onKeyDown}>
 					{b.label}
 				</button>
 			);
@@ -58,7 +68,7 @@ export default function DialogButtonRow(props: Props) {
 
 	if (props.okButtonShow !== false) {
 		buttonComps.push(
-			<button key="ok" style={theme.buttonStyle} onClick={okButton_click} ref={props.okButtonRef} onKeyDown={onKeyDown}>
+			<button key="ok" style={buttonStyle} onClick={okButton_click} ref={props.okButtonRef} onKeyDown={onKeyDown}>
 				{_('OK')}
 			</button>
 		);
@@ -66,7 +76,7 @@ export default function DialogButtonRow(props: Props) {
 
 	if (props.cancelButtonShow !== false) {
 		buttonComps.push(
-			<button key="cancel" style={Object.assign({}, theme.buttonStyle, { marginLeft: 10 })} onClick={cancelButton_click}>
+			<button key="cancel" style={Object.assign({}, buttonStyle)} onClick={cancelButton_click}>
 				{props.cancelButtonLabel ? props.cancelButtonLabel : _('Cancel')}
 			</button>
 		);

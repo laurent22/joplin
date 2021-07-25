@@ -40,17 +40,6 @@ class ClipperConfigScreenComponent extends React.Component {
 		alert(_('Token has been copied to the clipboard!'));
 	}
 
-	componentDidUpdate(prevProps) {
-		if (prevProps.needApiAuth !== this.props.needApiAuth && this.props.needApiAuth) {
-			// Ideally when API auth is needed, we should display the
-			// notification in this screen, however it's not setup for it yet.
-			// So instead, we just go back to the main screen where the
-			// notification will be displayed.
-			// https://discourse.joplinapp.org/t/web-clipper-2-1-3-not-working/18582/27
-			this.props.dispatch({ type: 'NAV_BACK' });
-		}
-	}
-
 	renewToken_click() {
 		if (confirm(_('Are you sure you want to renew the authorisation token?'))) {
 			void EncryptionService.instance()
@@ -182,7 +171,6 @@ const mapStateToProps = state => {
 		clipperServer: state.clipperServer,
 		clipperServerAutoStart: state.settings['clipperServer.autoStart'],
 		apiToken: state.settings['api.token'],
-		needApiAuth: state.needApiAuth,
 	};
 };
 
