@@ -138,12 +138,13 @@ export async function initConfig(envType: Env, env: EnvVariables, overrides: any
 	const viewDir = `${rootDir}/src/views`;
 	const appPort = env.APP_PORT ? Number(env.APP_PORT) : 22300;
 	const baseUrl = baseUrlFromEnv(env, appPort);
+	const apiBaseUrl = env.API_BASE_URL ? env.API_BASE_URL : baseUrl;
 	const supportEmail = env.SUPPORT_EMAIL || 'SUPPORT_EMAIL'; // Defaults to "SUPPORT_EMAIL" so that server admin knows they have to set it.
 
 	config_ = {
 		appVersion: packageJson.version,
 		appName: env.APP_NAME || 'Joplin Server',
-		isJoplinCloud: env.API_BASE_URL.includes('.joplincloud.com'),
+		isJoplinCloud: apiBaseUrl.includes('.joplincloud.com'),
 		env: envType,
 		rootDir: rootDir,
 		viewDir: viewDir,
@@ -156,7 +157,7 @@ export async function initConfig(envType: Env, env: EnvVariables, overrides: any
 		port: appPort,
 		baseUrl,
 		showErrorStackTraces: (env.ERROR_STACK_TRACES === undefined && envType === Env.Dev) || env.ERROR_STACK_TRACES === '1',
-		apiBaseUrl: env.API_BASE_URL ? env.API_BASE_URL : baseUrl,
+		apiBaseUrl,
 		userContentBaseUrl: env.USER_CONTENT_BASE_URL ? env.USER_CONTENT_BASE_URL : baseUrl,
 		signupEnabled: env.SIGNUP_ENABLED === '1',
 		termsEnabled: env.TERMS_ENABLED === '1',
