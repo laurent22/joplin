@@ -401,9 +401,8 @@ msgstr "Дошло је до грешке приликом преузимања 
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:62
 #: packages/lib/services/ResourceEditWatcher/index.js:196
-#, fuzzy
 msgid "This attachment is not downloaded or not decrypted yet"
-msgstr "Овај прилог још увек није преузет или дешифрован."
+msgstr "Овај прилог још увек није преузет или дешифрован"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:92
 msgid "Open..."
@@ -441,9 +440,8 @@ msgid "Creating new %s..."
 msgstr "Креирам нову %s..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:285
-#, fuzzy
 msgid "Click to add tags..."
-msgstr "Провери да ли су доступна ажурирања."
+msgstr "Кликни да додаш ознаку..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:338
 msgid ""
@@ -514,14 +512,12 @@ msgid "Horizontal Rule"
 msgstr "Хоризонтална линија"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:88
-#, fuzzy
 msgid "Delete line"
-msgstr "Обриши ред?"
+msgstr "Обриши ред"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:92
-#, fuzzy
 msgid "Duplicate line"
-msgstr "Дуплирај"
+msgstr "Дуплирај линију"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:96
 msgid "Undo"
@@ -685,9 +681,8 @@ msgid "Close Window"
 msgstr "Затвори прозор"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:30
-#, fuzzy
 msgid "Preferences"
-msgstr "Поставке."
+msgstr "Поставке"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:30
 #: packages/app-desktop/gui/MenuBar.js:344 packages/app-desktop/gui/Root.js:100
@@ -695,9 +690,8 @@ msgid "Options"
 msgstr "Опције"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:37
-#, fuzzy
 msgid "Invalid"
-msgstr "Неважећи одговор %s"
+msgstr "Неважећи"
 
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:49
 msgid "Press the shortcut"
@@ -722,9 +716,8 @@ msgid "The Web Clipper needs your authorisation to access your data."
 msgstr ""
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:463
-#, fuzzy
 msgid "Grant authorisation"
-msgstr "Токен за ауторизацију:"
+msgstr "Токен за ауторизацију"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:463
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:483
@@ -862,14 +855,12 @@ msgid "New note"
 msgstr "Нова белешка"
 
 #: packages/app-desktop/gui/MainScreen/commands/moveToFolder.js:18
-#, fuzzy
 msgid "Move to notebook"
-msgstr "Премести у бележницу..."
+msgstr "Премести у бележницу;"
 
 #: packages/app-desktop/gui/MainScreen/commands/moveToFolder.js:38
-#, fuzzy
 msgid "Move to notebook:"
-msgstr "Премести у бележницу..."
+msgstr "Премести у бележницу;"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleVisiblePanes.js:16
 msgid "Toggle editor layout"
@@ -1160,9 +1151,8 @@ msgid "&Help"
 msgstr "&Помоћ"
 
 #: packages/app-desktop/gui/MenuBar.js:658
-#, fuzzy
 msgid "Joplin Forum"
-msgstr "Џоплин форум"
+msgstr "Џоплин Форум"
 
 #: packages/app-desktop/gui/MenuBar.js:661
 #: packages/app-mobile/components/screens/ConfigScreen.js:425
@@ -1650,7 +1640,7 @@ msgstr "&Приказ"
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.js:105
 #, javascript-format
 msgid "Read time: %s min"
-msgstr "Време читања: %s мин."
+msgstr "Време читања: %s мин"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.js:108
 #, fuzzy
@@ -1913,9 +1903,8 @@ msgid "Save alarm"
 msgstr "Сачувај аларм"
 
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:27
-#, fuzzy
 msgid "Open"
-msgstr "Отвори..."
+msgstr "Отвори"
 
 #: packages/app-mobile/components/CameraView.js:158
 msgid "Permission to use camera"
@@ -2035,9 +2024,8 @@ msgid "Encryption Config"
 msgstr "Поставке шифровања"
 
 #: packages/app-mobile/components/screens/ConfigScreen.js:388
-#, fuzzy
 msgid "Tools"
-msgstr "&Алати"
+msgstr "Алати"
 
 #: packages/app-mobile/components/screens/ConfigScreen.js:389
 #, fuzzy
@@ -2261,9 +2249,9 @@ msgid "Unsupported image type: %s"
 msgstr "Неподржан тип слике: %s"
 
 #: packages/app-mobile/components/screens/Note.js:725
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Updated: %s"
-msgstr "Ажурирано: %d."
+msgstr "Ажурирано: %s"
 
 #: packages/app-mobile/components/screens/Note.js:728
 msgid "View on map"
@@ -2309,9 +2297,8 @@ msgid "Add body"
 msgstr "Додај тело"
 
 #: packages/app-mobile/components/screens/Note.js:1037
-#, fuzzy
 msgid "Add title"
-msgstr "Додај назив"
+msgstr "Додај наслов"
 
 #: packages/app-mobile/components/screens/search.js:160
 msgid "Search"
@@ -2327,9 +2314,8 @@ msgstr ""
 
 #: packages/server/dist/models/UserModel.js:186
 #: packages/server/dist/models/UserModel.js:191
-#, fuzzy
 msgid "attachment"
-msgstr "Приложи фајл"
+msgstr "приложи фајл"
 
 #: packages/server/dist/models/UserModel.js:186
 #, javascript-format
@@ -2343,7 +2329,7 @@ msgid ""
 "this account"
 msgstr ""
 "Није могуће сачувати %s \"%s\" зато што је веће од укупне дозвољене величине (%s) "
-"за овај налог."
+"за овај налог"
 
 #: packages/lib/onedrive-api-node-utils.js:46
 #, javascript-format
@@ -2382,9 +2368,8 @@ msgid "Dropbox"
 msgstr "\"Dropbox\""
 
 #: packages/lib/SyncTargetJoplinServer.js:57
-#, fuzzy
 msgid "Joplin Server"
-msgstr "Џоплин сервер"
+msgstr "Џоплин Сервер"
 
 #: packages/lib/shim-init-node.js:212
 #, javascript-format
@@ -2413,9 +2398,8 @@ msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr "Бележнице не могу бити именоване \"%s\",јер је то име резервисано."
 
 #: packages/lib/models/Setting.js:109
-#, fuzzy
 msgid "yes"
-msgstr "Да"
+msgstr "да"
 
 #: packages/lib/models/Setting.js:109 packages/lib/models/Setting.js:110
 #, javascript-format
@@ -2534,24 +2518,20 @@ msgid "Joplin Server URL"
 msgstr "Џоплин Сервер УРЛ"
 
 #: packages/lib/models/Setting.js:333
-#, fuzzy
 msgid "Joplin Server email"
-msgstr "Џоплин сервер"
+msgstr "Џоплин Сервер емаил"
 
 #: packages/lib/models/Setting.js:344
-#, fuzzy
 msgid "Joplin Server password"
-msgstr "Џоплин Сервер лозинка:"
+msgstr "Џоплин Сервер лозинка"
 
 #: packages/lib/models/Setting.js:371
-#, fuzzy
 msgid "Joplin Cloud email"
-msgstr "Џоплин сервер"
+msgstr "Џоплин у облаку емаил"
 
 #: packages/lib/models/Setting.js:382
-#, fuzzy
 msgid "Joplin Cloud password"
-msgstr "Џоплин Сервер лозинка:"
+msgstr "Џоплин з облаку лозинка"
 
 #: packages/lib/models/Setting.js:394
 msgid "Attachment download behaviour"
@@ -3056,9 +3036,8 @@ msgid "Web Clipper"
 msgstr "Опције веб клипера"
 
 #: packages/lib/models/Setting.js:1672
-#, fuzzy
 msgid "Keyboard Shortcuts"
-msgstr "Режим тастатуре"
+msgstr "Пречице на тастатури"
 
 #: packages/lib/models/Setting.js:1679
 msgid ""
@@ -3089,22 +3068,24 @@ msgid "Downloaded"
 msgstr "Преузето"
 
 #: packages/lib/models/Resource.js:359
-#, fuzzy
 msgid "Error"
-msgstr "Gрешкa"
+msgstr "Грешка"
 
 #: packages/lib/models/Resource.js:404
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Attachment conflict: \"%s\""
-msgstr "Сукоб прилога: \"%s\""
+msgstr "Конфликт прилога: \"%s\""
 
 #: packages/lib/models/Resource.js:405
-#, fuzzy, javascript-format
+#, javascript-format
 msgid ""
 "There was a [conflict](%s) on the attachment below.\n"
 "\n"
 "%s"
-msgstr "Дошло је до грешке приликом преузимања овог прилога"
+msgstr ""
+"Дошло је до [неусаглашености](%s) на прилогу испод.\n"
+"\n"
+"%s"
 
 #: packages/lib/models/Tag.js:223
 #, javascript-format
@@ -3142,9 +3123,8 @@ msgid "Encrypted items cannot be modified"
 msgstr "Шифроване ставке се не могу мењати"
 
 #: packages/lib/SyncTargetJoplinCloud.js:28
-#, fuzzy
 msgid "Joplin Cloud"
-msgstr "Џоплин форум"
+msgstr "Џоплин у облаку"
 
 #: packages/lib/BaseApplication.js:152 packages/lib/BaseApplication.js:164
 #: packages/lib/BaseApplication.js:196
@@ -3271,9 +3251,9 @@ msgid "Cancelling..."
 msgstr "Отказивање..."
 
 #: packages/lib/Synchronizer.js:156
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Completed: %s (%s)"
-msgstr "Завршено: %s"
+msgstr "Завршено: %s (%s)"
 
 #: packages/lib/Synchronizer.js:158
 #, javascript-format
@@ -3320,14 +3300,14 @@ msgid "Forward"
 msgstr "Напред"
 
 #: packages/lib/versionInfo.js:10
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Revision: %s (%s)"
-msgstr "Ревизија: %s"
+msgstr "Ревизија: %s (%s)"
 
 #: packages/lib/versionInfo.js:22
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "%s %s (%s, %s)"
-msgstr "У %s: %s"
+msgstr "%s %s (%s, %s)"
 
 #: packages/lib/versionInfo.js:24
 #, fuzzy, javascript-format
@@ -3385,34 +3365,30 @@ msgid "Joplin Export Directory"
 msgstr "Џоплин директоријум за извоз"
 
 #: packages/lib/services/interop/InteropService.js:51
-#, fuzzy
 msgid "Evernote Export File (as Markdown)"
-msgstr "Еверноут фајл за извоз"
+msgstr "Еверноут фајл за извоз (као Маркдаун)"
 
 #: packages/lib/services/interop/InteropService.js:52
-#, fuzzy
 msgid "Evernote Export File (as HTML)"
-msgstr "Еверноут фајл за извоз"
+msgstr "Еверноут фајл за извоз (као HTML)"
 
 #: packages/lib/services/interop/InteropService.js:60
-#, fuzzy
 msgid "HTML File"
-msgstr "Фајл"
+msgstr "HTML Фајл"
 
 #: packages/lib/services/interop/InteropService.js:61
-#, fuzzy
 msgid "HTML Directory"
-msgstr "Директоријум"
+msgstr "HTML Директоријум"
 
 #: packages/lib/services/interop/InteropService.js:127
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Cannot load \"%s\" module for format \"%s\" and output \"%s\""
-msgstr "Не могу да учитам \"%s\" модул за формат \"%s\""
+msgstr "Не могу да учитам \"%s\" модул за формат \"%s\" и излазну вредност \"%s\""
 
 #: packages/lib/services/interop/InteropService.js:150
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Cannot load \"%s\" module for format \"%s\" and target \"%s\""
-msgstr "Не могу да учитам \"%s\" модул за формат \"%s\""
+msgstr "Не могу да учитам \"%s\" модул за формат \"%s\" и циљ \"%s\""
 
 #: packages/lib/services/interop/InteropService.js:194
 #: packages/lib/services/interop/InteropService.js:206
@@ -3442,7 +3418,7 @@ msgstr "Молимо вас наведите увозни формат за %s"
 
 #: packages/lib/services/KeymapService.js:275
 msgid "command"
-msgstr ""
+msgstr "команда"
 
 #: packages/lib/services/KeymapService.js:275
 #: packages/lib/services/KeymapService.js:280
@@ -3456,9 +3432,9 @@ msgid "accelerator"
 msgstr ""
 
 #: packages/lib/services/KeymapService.js:287
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Invalid %s: %s."
-msgstr "Невалидан одговор %s"
+msgstr "Неважећи %s: %s."
 
 #: packages/lib/services/KeymapService.js:305
 #, javascript-format
@@ -3513,7 +3489,7 @@ msgstr ""
 #: packages/lib/services/ReportService.js:185 packages/app-cli/app/cli-utils.js:140
 #, javascript-format
 msgid "%s: %s"
-msgstr ""
+msgstr "%s: %s"
 
 #: packages/lib/services/ReportService.js:198
 #, fuzzy
@@ -3528,37 +3504,35 @@ msgstr "Преузето и дешифровано"
 #: packages/lib/services/ReportService.js:206
 #: packages/lib/services/ReportService.js:207
 #: packages/lib/services/ReportService.js:211
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "%s: %d"
-msgstr "Укупно: %d/%d"
+msgstr "%s: %d"
 
 #: packages/lib/services/ReportService.js:206
 msgid "Downloaded and encrypted"
 msgstr "Преузето и шифровано"
 
 #: packages/lib/services/ReportService.js:207
-#, fuzzy
 msgid "Created locally"
-msgstr "Направљено локалних ставки: %d."
+msgstr "Креирано локално"
 
 #: packages/lib/services/ReportService.js:218
-#, fuzzy
 msgid "Attachments that could not be downloaded"
-msgstr "Ставка \"%s\" не може бити преузета: %s"
+msgstr "Прилози који нису могли да се преузму"
 
 #: packages/lib/services/ReportService.js:222
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "%s (%s): %s"
-msgstr "У %s: %s"
+msgstr "%s (%s): %s"
 
 #: packages/lib/services/ReportService.js:233
 msgid "Sync status (synced items / total items)"
 msgstr "Статус синхронизације (синхронизоване ставке / укупно ставки)"
 
 #: packages/lib/services/ReportService.js:237
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "%s: %d/%d"
-msgstr "Укупно: %d/%d"
+msgstr "%s: %d/%d"
 
 #: packages/lib/services/ReportService.js:239
 #, javascript-format
@@ -3606,9 +3580,8 @@ msgid "Use spell checker"
 msgstr ""
 
 #: packages/lib/services/spellChecker/SpellCheckerService.js:173
-#, fuzzy
 msgid "Change language"
-msgstr "Језик"
+msgstr "Промени језик"
 
 #: packages/app-cli/app/command-cp.js:13
 msgid ""
@@ -3678,9 +3651,9 @@ msgid "Do not ask for confirmation."
 msgstr "Не питај за потврду."
 
 #: packages/app-cli/app/command-import.js:27
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Output format: %s"
-msgstr "Избворни формат: %s"
+msgstr "Излазни формат: %s"
 
 #: packages/app-cli/app/command-import.js:65
 msgid "Importing notes..."
@@ -3757,9 +3730,9 @@ msgstr ""
 "зависности од количине садржаја која се декриптује."
 
 #: packages/app-cli/app/command-e2ee.js:55
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Decrypted items: %d"
-msgstr "Дешифроване ставке: %s / %s"
+msgstr "Дешифроване ставке: %d"
 
 #: packages/app-cli/app/command-e2ee.js:56
 #, javascript-format
@@ -3795,12 +3768,12 @@ msgstr "Такође приказује неподешене или скриве
 #: packages/app-cli/app/command-config.js:79
 #, javascript-format
 msgid "%s = %s (%s)"
-msgstr ""
+msgstr "%s = %s (%s)"
 
 #: packages/app-cli/app/command-config.js:81
 #, javascript-format
 msgid "%s = %s"
-msgstr ""
+msgstr "%s = %s"
 
 #: packages/app-cli/app/command-use.js:12
 msgid ""
@@ -3846,9 +3819,8 @@ msgid "Synchronisation target: %s (%s)"
 msgstr "Одредиште за синхронизацију: %s (%s)"
 
 #: packages/app-cli/app/command-sync.js:182
-#, fuzzy
 msgid "Cannot initialise synchroniser."
-msgstr "Не могу да покренем синхронизатора."
+msgstr "Не могу да покренем синхронизатор."
 
 #: packages/app-cli/app/command-sync.js:212
 msgid "Starting synchronisation..."
@@ -3965,7 +3937,7 @@ msgstr "Приказује информације о верзији"
 #: packages/app-cli/app/command-version.js:16
 #, javascript-format
 msgid "%s %s (%s)"
-msgstr ""
+msgstr "%s %s (%s)"
 
 #: packages/app-cli/app/command-undone.js:12
 msgid "Marks a to-do as non-completed."
@@ -4038,9 +4010,8 @@ msgstr ""
 "позадини и биће ускоро доступне."
 
 #: packages/app-cli/app/gui/NoteWidget.js:50
-#, fuzzy
 msgid "You may also type `status` for more information."
-msgstr "Не питај за потврду."
+msgstr "Можете и да укуцате `статус` за више информација."
 
 #: packages/app-cli/app/gui/FolderListWidget.js:31
 msgid "Search:"
@@ -4078,11 +4049,11 @@ msgstr "Невалидан одговор %s"
 
 #: packages/app-cli/app/cli-utils.js:161 packages/app-cli/app/app.js:138
 msgid "Y"
-msgstr ""
+msgstr "Y"
 
 #: packages/app-cli/app/cli-utils.js:161 packages/app-cli/app/app.js:138
 msgid "n"
-msgstr ""
+msgstr "n"
 
 #: packages/app-cli/app/base-command.js:15
 msgid "Cannot change encrypted item"
@@ -4183,11 +4154,11 @@ msgstr "Ниједна бележница није наведена."
 
 #: packages/app-cli/app/app.js:138
 msgid "N"
-msgstr ""
+msgstr "N"
 
 #: packages/app-cli/app/app.js:138
 msgid "y"
-msgstr ""
+msgstr "y"
 
 #: packages/app-cli/app/app.js:171
 msgid "Cancelling background synchronisation... Please wait."
@@ -4212,17 +4183,16 @@ msgid "To retry decryption of these items. Run `e2ee decrypt --retry-failed-item
 msgstr ""
 
 #: packages/app-cli/app/command-tag.js:14
-#, fuzzy
 msgid ""
 "<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to assign or "
 "remove [tag] from [note], to list notes associated with [tag], or to list tags "
 "associated with [note]. The command `tag list` can be used to list all the tags "
 "(use -l for long option)."
 msgstr ""
-"<tag-command> може бити \"додај\", \"уклони\" или \"листа\" за додељивање или "
-"уклањање [ознаке]  из [белешке], или да излистате белешке повезане са ознаком "
-"[tag]. Команда `tag list` може се користити да излиста све ознаке (користите -l "
-"за дугачки избор)."
+"<tag-command> може бити \"add\", \"remove\", \"list\" или \"notetags\" за "
+"додељивање или уклањање [ознаке] из [белешке], или да излистате белешке повезане "
+"са [ознаком]. Команда `tag list` може се користити да излиста све ознаке "
+"(користите -l за дугачки избор)."
 
 #: packages/app-cli/app/command-tag.js:90
 #, javascript-format

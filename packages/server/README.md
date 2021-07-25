@@ -17,6 +17,16 @@ docker run --env-file .env -p 22300:22300 joplin/server:latest
 
 This will start the server, which will listen on port **22300** on **localhost**. By default it will use SQLite, which allows you to test the app without setting up a database. To run it for production though, you'll want to connect the container to a database, as described below.
 
+## Supported docker tags
+
+The following tags are available:
+
+- `latest` is always the most recent released version
+- `beta` is always the most recent beta released version
+- Major versions, such as `2`, `2-beta`
+- Specific minor versions, such as `2.1`, `2.2`, `2.3-beta`
+- Specific patch versions, such as `2.0.4`, `2.2.8-beta`
+
 ## Setup the database
 
 You can setup the container to either use an existing PostgreSQL server, or connect it to a new one using docker-compose

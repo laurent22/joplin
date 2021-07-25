@@ -14,8 +14,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.2\n"
+"X-Generator: Poedit 3.0\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
@@ -61,7 +63,8 @@ msgstr "Cancelar"
 #: packages/app-desktop/bridge.js:184
 msgid ""
 "The app is now going to close. Please relaunch it to complete the process."
-msgstr "O app irá fechar agora. Por favor, reabra-o para completar o processo."
+msgstr ""
+"O app irá fechar agora. Por favor, reinicie-o para completar o processo."
 
 #: packages/app-desktop/plugins/GotoAnything.js:455
 msgid ""
@@ -70,8 +73,8 @@ msgid ""
 "commands."
 msgstr ""
 "Digite um título de nota ou parte de seu conteúdo para ir direto para ela. "
-"Ou digite # seguido de um nome de etiqueta, ou @ seguido de um nome de "
-"caderno. Ou digite : para procurar comandos."
+"Ou digite # seguido de um nome de tag, ou @ seguido de um nome de caderno. "
+"Ou digite : para procurar comandos."
 
 #: packages/app-desktop/plugins/GotoAnything.js:480
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:20
@@ -118,15 +121,15 @@ msgstr "Nova versão: %s"
 
 #: packages/app-desktop/checkForUpdates.js:189
 msgid "Download"
-msgstr "Baixar"
+msgstr "Download"
 
 #: packages/app-desktop/checkForUpdates.js:189
 msgid "Skip this version"
-msgstr ""
+msgstr "Pule esta versão"
 
 #: packages/app-desktop/checkForUpdates.js:189
 msgid "Full changelog"
-msgstr ""
+msgstr "Changelog completo"
 
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:100
 msgid "This note has no history"
@@ -149,8 +152,8 @@ msgid ""
 "Click \"%s\" to restore the note. It will be copied in the notebook named "
 "\"%s\". The current version of the note will not be replaced or modified."
 msgstr ""
-"Pressione \"%s\" para restaurar a nota. Ela será copiada no caderno com "
-"nomes \"%s\". A versão atual da nota não será substituída ou modificada."
+"Pressione \"%s\" para restaurar a nota. Ela será copiada no caderno com nome "
+"\"%s\". A versão atual da nota não será substituída ou modificada."
 
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:187
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:521
@@ -230,7 +233,7 @@ msgstr "Tags"
 #: packages/app-mobile/components/side-menu-content.js:325
 #, javascript-format
 msgid "Decrypting items: %d/%d"
-msgstr "Decriptando itens: %d/%d"
+msgstr "Descriptografando itens: %d/%d"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:507
 #: packages/app-mobile/components/side-menu-content.js:330
@@ -240,7 +243,7 @@ msgstr "Buscando recursos: %d/%d"
 
 #: packages/app-desktop/gui/Sidebar/commands/focusElementSideBar.js:17
 msgid "Sidebar"
-msgstr "Barra Lateral"
+msgstr "Barra lateral"
 
 #: packages/app-desktop/gui/Sidebar/commands/focusElementSideBar.js:18
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteTitle.js:17
@@ -267,14 +270,12 @@ msgid "Retry"
 msgstr "Tentar novamente"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.js:137
-#, fuzzy
 msgid "Advanced tools"
-msgstr "Mostrar opções avançadas"
+msgstr "Ferramentas avançadas"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.js:139
-#, fuzzy
 msgid "Export debug report"
-msgstr "Exportar Relatório de Debug"
+msgstr "Exportar relatório de depuração"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:183
 msgid "strong text"
@@ -328,27 +329,27 @@ msgstr "Colar"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/plugins/lists.js:2151
 msgid "Checkbox list"
-msgstr "Lista de Opções"
+msgstr "Lista de opções"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:17
 msgid "Highlight"
-msgstr ""
+msgstr "Realçar"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:22
 msgid "Strikethrough"
-msgstr ""
+msgstr "Tachado"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:27
 msgid "Insert"
-msgstr ""
+msgstr "Inserir"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:33
 msgid "Superscript"
-msgstr ""
+msgstr "Sobrescrito"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:39
 msgid "Subscript"
-msgstr ""
+msgstr "Subscrito"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:574
 #: packages/app-mobile/components/screens/Note.js:1016
@@ -388,8 +389,8 @@ msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
 "switch to %s to edit the note."
 msgstr ""
-"Por favor, aguarde que todos os anexos sejam baixados e decriptados. Você "
-"também pode mudar para %s para editar a nota."
+"Por favor, aguarde que todos os anexos sejam baixados e descriptografados. "
+"Você também pode mudar para %s para editar a nota."
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:59
 msgid "There was an error downloading this attachment:"
@@ -398,7 +399,7 @@ msgstr "Houve um erro ao baixar este anexo:"
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:62
 #: packages/lib/services/ResourceEditWatcher/index.js:196
 msgid "This attachment is not downloaded or not decrypted yet"
-msgstr "O anexo ainda não foi baixado ou decriptado"
+msgstr "O anexo ainda não foi baixado ou descriptografado"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:92
 msgid "Open..."
@@ -516,9 +517,8 @@ msgid "Delete line"
 msgstr "Excluir linha"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:92
-#, fuzzy
 msgid "Duplicate line"
-msgstr "Duplicar"
+msgstr "Duplicar linha"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:96
 msgid "Undo"
@@ -529,10 +529,12 @@ msgid "Redo"
 msgstr "Refazer"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:104
+#, fuzzy
 msgid "Indent less"
 msgstr "Indentar menos"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:108
+#, fuzzy
 msgid "Indent more"
 msgstr "Indentar mais"
 
@@ -554,7 +556,7 @@ msgstr "Trocar a linha abaixo"
 
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteTitle.js:16
 msgid "Note title"
-msgstr "Título da Nota"
+msgstr "Título da nota"
 
 #: packages/app-desktop/gui/NoteEditor/commands/showLocalSearch.js:16
 msgid "Search in current note"
@@ -562,7 +564,7 @@ msgstr "Pesquisar na nota atual"
 
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteBody.js:16
 msgid "Note body"
-msgstr "Corpo da Nota"
+msgstr "Corpo da nota"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:28
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:164
@@ -710,27 +712,29 @@ msgstr "Salvar"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:463
 msgid "The Web Clipper needs your authorisation to access your data."
-msgstr ""
+msgstr "O Web Clipper precisa de autorização para acessar seus dados."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:463
-#, fuzzy
 msgid "Grant authorisation"
-msgstr "Token de autorização:"
+msgstr "Conceder autorização"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:463
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:483
+#, fuzzy
 msgid "Reject"
-msgstr ""
+msgstr "Rejeitar"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:466
 msgid ""
 "Safe mode is currently active. Note rendering and all plugins are "
 "temporarily disabled."
 msgstr ""
+"Modo seguro está ativo. Renderização de notas e todos os puglins estão "
+"temporariamente desativados."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:466
 msgid "Disable safe mode and restart"
-msgstr ""
+msgstr "Desativar modo seguro e reiniciar"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:469
 msgid ""
@@ -748,7 +752,7 @@ msgstr "Reiniciar e fazer upgrade"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:472
 msgid "Some items cannot be decrypted."
-msgstr "Alguns itens não podem ser decriptados."
+msgstr "Alguns itens não podem ser descriptografados."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:472
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:475
@@ -758,14 +762,14 @@ msgstr "Visualizar agora"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:475
 msgid "One of your master keys use an obsolete encryption method."
-msgstr "Uma ou mais chaves mestras usam um método de encriptação obsoleto."
+msgstr "Uma ou mais chaves-mestras usam um método de criptografia obsoleto."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:478
 msgid ""
 "The default encryption method has been changed, you should re-encrypt your "
 "data."
 msgstr ""
-"O método padrão de encriptação foi alterado. Você deve re-encriptar seus "
+"O método padrão de criptografia foi alterado. Você deve recriptografar seus "
 "dados."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:478
@@ -775,11 +779,11 @@ msgstr "Mais informações"
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:483
 #, javascript-format
 msgid "%s (%s) would like to share a notebook with you."
-msgstr ""
+msgstr "%s (%s) gostaria de compartilhar um caderno com você."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:483
 msgid "Accept"
-msgstr ""
+msgstr "Aceitar"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:486
 msgid "Some items cannot be synchronised."
@@ -864,9 +868,8 @@ msgid "Toggle editors"
 msgstr "Alternar editores"
 
 #: packages/app-desktop/gui/MainScreen/commands/showShareFolderDialog.js:16
-#, fuzzy
 msgid "Share notebook..."
-msgstr "Compartilhar nota..."
+msgstr "Compartilhar caderno..."
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleLayoutMoveMode.js:16
 msgid "Change application layout"
@@ -945,12 +948,12 @@ msgstr "Token foi copiado para a área de transferência!"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:44
 msgid "Are you sure you want to renew the authorisation token?"
-msgstr ""
+msgstr "Você tem certeza que deseja renovar o token de autorização?"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:84
 msgid "The web clipper service is enabled and set to auto-start."
 msgstr ""
-"O serviço de web clipper está habilitado e configurado para auto-start."
+"O serviço de web clipper está habilitado e configurado para auto-iniciar."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:91
 #, javascript-format
@@ -1030,7 +1033,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:222
 msgid "Renew token"
-msgstr ""
+msgstr "Renovar token"
 
 #: packages/app-desktop/gui/MenuBar.js:167
 #, javascript-format
@@ -1123,9 +1126,8 @@ msgid "&Go"
 msgstr "&Ir"
 
 #: packages/app-desktop/gui/MenuBar.js:631
-#, fuzzy
 msgid "Note&book"
-msgstr "Cadernos"
+msgstr "Nota&Caderno"
 
 #: packages/app-desktop/gui/MenuBar.js:637
 msgid "&Note"
@@ -1224,15 +1226,15 @@ msgstr "%s - Copiar"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.js:59
 msgid "Switch between note and to-do type"
-msgstr "Alternar entre os tipos Nota e Tarefa"
+msgstr "Alternar entre os tipos nota e tarefa"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.js:87
 msgid "Switch to note type"
-msgstr "Alternar para o tipo Nota"
+msgstr "Alternar para o tipo nota"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.js:93
 msgid "Switch to to-do type"
-msgstr "Alternar para o tipo Tarefa"
+msgstr "Alternar para o tipo tarefa"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.js:100
 #: packages/app-mobile/components/screens/Note.js:817
@@ -1259,7 +1261,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:145
 msgid "Master keys that need upgrading"
-msgstr "Chaves mestras que necessitam de atualização"
+msgstr "Chaves-mestras que necessitam de atualização"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:150
 msgid ""
@@ -1267,10 +1269,10 @@ msgid ""
 "recommended to upgrade them. The upgraded master key will still be able to "
 "decrypt and encrypt your data as usual."
 msgstr ""
-"As seguintes chaves mestras utilizam um algoritmo de encriptação "
+"As seguintes chaves-mestras utilizam um algoritmo de criptografia "
 "desatualizado e é recomendável que você as atualize. A chave-mestra "
-"atualizada ainda será capaz de decriptar e encriptar normalmente os seus "
-"dados."
+"atualizada ainda será capaz de descriptografar e criptografar normalmente os "
+"seus dados."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:169
 msgid "Upgrade"
@@ -1278,14 +1280,14 @@ msgstr "Upgrade"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:182
 msgid "Re-encrypt data"
-msgstr "Re-encriptar dados"
+msgstr "Recriptografar dados"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:184
 msgid ""
 "The default encryption method has been changed to a more secure one and it "
 "is recommended that you apply it to your data."
 msgstr ""
-"O método padrão de encriptação foi substituído por um mais seguro e é "
+"O método padrão de criptografia foi substituído por um mais seguro e é "
 "recomendável que você o aplique em seus dados."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:184
@@ -1293,9 +1295,9 @@ msgid ""
 "You may use the tool below to re-encrypt your data, for example if you know "
 "that some of your notes are encrypted with an obsolete encryption method."
 msgstr ""
-"Você pode utilizar a ferramenta abaixo para re-encriptar seus dados, por "
-"exemplo, se você sabe que suas notas foram encriptadas utilizando um método "
-"de encriptação obsoleto."
+"Você pode utilizar a ferramenta abaixo para recriptografar seus dados, por "
+"exemplo, se você sabe que suas notas foram criptografadas utilizando um "
+"método de criptografia obsoleto."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:186
 #, javascript-format
@@ -1314,23 +1316,23 @@ msgid ""
 "\n"
 "Important: you only need to run this ONCE on one device."
 msgstr ""
-"Para fazer isso, seu conjunto de dados inteiro terá que ser encriptado e "
-"sincronizado, então é melhor deixar rodando isso à noite.\n"
+"Para fazer isso, seu conjunto de dados inteiro terá que ser criptografado e "
+"sincronizado, então é melhor deixá-lo executando à noite.\n"
 "\n"
 "Para começar, por favor siga estas instruções:\n"
 "\n"
 "1. Sincronize todos os seus dispositivos.\n"
 "2. Clique \"%s\".\n"
-"3. Deixe rodar até o fim. Enquanto estiver rodando, evite mudar qualquer "
-"nota em outros dispositivos, para evitar conflitos.\n"
+"3. Deixe executar até completar. Enquanto estiver executando, evite mudar "
+"qualquer nota em outros dispositivos, para evitar conflitos.\n"
 "4. Uma vez que a sincronia tenha sido feita, sincronize todos os outros "
-"dispositivos, e deixe rodar até o fim.\n"
+"dispositivos, e deixe-o executar até o fim.\n"
 "\n"
-"Importante: você só precisa rodar isso UMA VEZ, em um dispositivo."
+"Importante: você só precisa executar isto UMA VEZ, em um dispositivo."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:198
 msgid "Re-encryption"
-msgstr "Re-encriptação"
+msgstr "Recriptografar"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:213
 msgid "Ignore"
@@ -1343,8 +1345,8 @@ msgid ""
 "re-synchronised and sent unencrypted to the sync target. Do you wish to "
 "continue?"
 msgstr ""
-"Desabilitar a encriptação significa que *todas* as suas notas e anexos serão "
-"re-sincronizados e enviados sem encriptação. Você quer continuar?"
+"Desabilitar a criptografia significa que *todas* as suas notas e anexos "
+"serão ressincronizados e enviados sem criptografia. Você quer continuar?"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:246
 #: packages/app-mobile/components/screens/encryption-config.js:150
@@ -1354,24 +1356,24 @@ msgid ""
 "password as, for security purposes, this will be the *only* way to decrypt "
 "the data! To enable encryption, please enter your password below."
 msgstr ""
-"Habilitar a encriptação significa que *todas* as suas notas e anexos serão "
-"re-sincronizados e re-enviados com encriptação. Não perca sua senha, pois, "
-"por medidas de segurança, esse será o *único* modo de decriptar seus dados! "
-"Para habilitar a encriptação, por favor entre sua senha abaixo."
+"Habilitar a criptografia significa que *todas* as suas notas e anexos serão "
+"ressincronizados e reenviados com encriptação. Não perca sua senha, pois, "
+"por medidas de segurança, esse será o *único* modo de descriptografar seus "
+"dados! Para habilitar a criptografia, por favor insira sua senha abaixo."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:275
 #: packages/app-mobile/components/screens/encryption-config.js:258
 msgid "Disable encryption"
-msgstr "Desabilitar encriptação"
+msgstr "Desabilitar criptografia"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:275
 #: packages/app-mobile/components/screens/encryption-config.js:258
 msgid "Enable encryption"
-msgstr "Habilitar encriptação"
+msgstr "Habilitar criptografia"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:290
 msgid "Master Keys"
-msgstr "Chaves Mestras"
+msgstr "Chaves-Mestras"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:304
 msgid "Active"
@@ -1395,15 +1397,15 @@ msgid ""
 "as \"active\"). Any of the keys might be used for decryption, depending on "
 "how the notes or notebooks were originally encrypted."
 msgstr ""
-"Nota: Apenas uma chave mestra será usada para encriptação (a que estiver "
+"Nota: Apenas uma chave-mestra será usada para criptografia (a que estiver "
 "marcada como \"ativa\"). Qualquer uma das chaves pode ser usada para "
-"decriptação, dependendo de como as notas ou os cadernos foram encriptados "
-"originalmente."
+"descriptografar, dependendo de como as notas ou os cadernos foram "
+"criptografados originalmente."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:371
 #: packages/app-mobile/components/screens/encryption-config.js:248
 msgid "Missing Master Keys"
-msgstr "Chaves Mestras Faltando"
+msgstr "Chaves-Mestras Faltando"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:376
 #: packages/app-mobile/components/screens/encryption-config.js:249
@@ -1412,7 +1414,7 @@ msgid ""
 "however the application does not currently have access to them. It is likely "
 "they will eventually be downloaded via synchronisation."
 msgstr ""
-"As chaves mestras com essas IDs são usadas para encriptar alguns de seus "
+"As chaves-mestras com essas IDs são usadas para criptografar alguns de seus "
 "itens, contudo a aplicação atualmente não tem acesso à elas. Provavelmente, "
 "elas serão baixadas via sincronização."
 
@@ -1422,8 +1424,8 @@ msgid ""
 "For more information about End-To-End Encryption (E2EE) and advice on how to "
 "enable it please check the documentation:"
 msgstr ""
-"Para mais informações sobre Encriptação ponto-a-ponto (E2EE) e recomendações "
-"sobre como habilitar, favor verificar a documentação:"
+"Para mais informações sobre Criptografia de ponta-a-ponta (E2EE) e "
+"recomendações sobre como habilitar, favor verificar a documentação:"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:433
 #: packages/app-mobile/components/screens/encryption-config.js:279
@@ -1433,7 +1435,7 @@ msgstr "Status"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:438
 msgid "Encryption is:"
-msgstr "Encriptação está:"
+msgstr "Criptografia está:"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:443
 #: packages/app-mobile/components/screens/encryption-config.js:280
@@ -1484,6 +1486,7 @@ msgstr "A aplicação deve ser reiniciada para essas alterações tomarem efeito
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:459
 #: packages/app-desktop/gui/NoteList/NoteList.js:164
+#, fuzzy
 msgid "Do it now"
 msgstr "Faça agora"
 
@@ -1522,13 +1525,12 @@ msgid "You do not have any installed plugin."
 msgstr "Você não tem nenhum plugin instalado."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:232
-#, fuzzy
 msgid "Could not connect to plugin repository"
-msgstr "Não foi possível instalar o plugin: %s"
+msgstr "Não foi possível conectar-se ao repositório do plugin"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:234
 msgid "Try again"
-msgstr ""
+msgstr "Tente novamente"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:242
 msgid "Plugin tools"
@@ -1657,16 +1659,16 @@ msgstr ""
 
 #: packages/app-desktop/gui/NoteList/NoteList.js:415
 msgid "No notes in here. Create one by clicking on \"New note\"."
-msgstr "Não há notas aqui. Crie uma, clicando em \"Nova nota\"."
+msgstr "Não há notas aqui. Crie uma clicando em \"Nova nota\"."
 
 #: packages/app-desktop/gui/NoteList/NoteList.js:415
 msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
-msgstr "Atualmente, não há cadernos. Crie um, clicando em \"Novo caderno\"."
+msgstr "Atualmente, não há cadernos. Crie um clicando em \"Novo caderno\"."
 
 #: packages/app-desktop/gui/NoteList/commands/focusElementNoteList.js:17
 msgid "Note list"
-msgstr "Lista de Notas"
+msgstr "Lista de notas"
 
 #: packages/app-desktop/gui/NoteListControls/commands/focusSearch.js:16
 msgid "Search in all the notes"
@@ -1700,7 +1702,7 @@ msgid ""
 "notes. Please be careful when deleting one of them as they cannot be "
 "restored afterwards."
 msgstr ""
-"Essa é uma ferramenta avançada para exibir os anexos vinculados à sua nota. "
+"Esta é uma ferramenta avançada para exibir os anexos vinculados à sua nota. "
 "Por favor tenha cuidado ao apagá-los pois não poderão ser recuperados depois."
 
 #: packages/app-desktop/gui/ResourceScreen.js:144
@@ -1715,9 +1717,8 @@ msgstr ""
 "(limite: %s)."
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:141
-#, fuzzy
 msgid "Unshare note"
-msgstr "Compartilhar"
+msgstr "Descompartilhar nota"
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:168
 msgid "Synchronising..."
@@ -1739,7 +1740,7 @@ msgstr[1] "Links foram copiados para a área de transferência!"
 msgid ""
 "Note: When a note is shared, it will no longer be encrypted on the server."
 msgstr ""
-"Nota: Quando uma nota é compartilhada, não é mais encriptada no servidor."
+"Nota: Quando uma nota é compartilhada, não é mais criptografada no servidor."
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:184
 msgid "Share Notes"
@@ -1752,19 +1753,20 @@ msgstr[0] "Copiar Link Compartilhável"
 msgstr[1] "Copiar Links Compartilháveis"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:138
-#, fuzzy
 msgid "Unshare"
-msgstr "Compartilhar"
+msgstr "Descompartilhar"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:180
 msgid ""
 "Delete this invitation? The recipient will no longer have access to this "
 "shared notebook."
 msgstr ""
+"Deletar este convite? O destinatário não terá mais acesso a este caderno "
+"compartilhado."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:194
 msgid "Add recipient:"
-msgstr ""
+msgstr "Adicionar destinatário:"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:197
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:28
@@ -1774,45 +1776,43 @@ msgstr "Compartilhar"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:206
 msgid "Recipient has not yet accepted the invitation"
-msgstr ""
+msgstr "Destinatário ainda não aceitou o convite"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:207
 msgid "Recipient has rejected the invitation"
-msgstr ""
+msgstr "Destinatário rejeitou o convite"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:208
 msgid "Recipient has accepted the invitation"
-msgstr ""
+msgstr "Destinatário aceitou o convite"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:218
 msgid "Recipients:"
-msgstr ""
+msgstr "Destinatários:"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:230
-#, fuzzy
 msgid "Synchronizing..."
 msgstr "Sincronizando..."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:231
-#, fuzzy
 msgid "Sharing notebook..."
-msgstr "Compartilhar nota..."
+msgstr "Compartilhar caderno..."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:241
 msgid ""
 "Unshare this notebook? The recipients will no longer have access to its "
 "content."
 msgstr ""
+"Descompartilhar este caderno? Os destinatários não terão mais acesso ao seu "
+"conteúdo."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:251
-#, fuzzy
 msgid "Share Notebook"
-msgstr "Compartilhar Notas"
+msgstr "Compartilhar Caderno"
 
 #: packages/app-desktop/commands/toggleSafeMode.js:18
-#, fuzzy
 msgid "Toggle safe mode"
-msgstr "Alternar barra lateral"
+msgstr "Alternar modo seguro"
 
 #: packages/app-desktop/commands/toggleExternalEditing.js:18
 msgid "Toggle external editing"
@@ -1893,7 +1893,7 @@ msgstr "Caderno: %s"
 
 #: packages/app-mobile/components/side-menu-content.js:132
 msgid "Encrypted notebooks cannot be renamed"
-msgstr "Cadernos encriptados não podem ser renomeados"
+msgstr "Cadernos criptografados não podem ser renomeados"
 
 #: packages/app-mobile/components/side-menu-content.js:312
 msgid "New Notebook"
@@ -1906,7 +1906,7 @@ msgstr "Configuração"
 
 #: packages/app-mobile/components/side-menu-content.js:351
 msgid "Mobile data - auto-sync disabled"
-msgstr ""
+msgstr "Dados móveis - sincronização automática desativada"
 
 #: packages/app-mobile/components/note-list.js:97
 msgid "You currently have no notebooks."
@@ -1983,7 +1983,7 @@ msgstr "Informação"
 #: packages/app-mobile/components/screens/ConfigScreen.js:283
 #: packages/app-mobile/components/screens/encryption-config.js:264
 msgid "Encryption Config"
-msgstr "Configuração de Encriptação"
+msgstr "Configuração de Criptografia"
 
 #: packages/app-mobile/components/screens/ConfigScreen.js:388
 msgid "Tools"
@@ -2035,8 +2035,9 @@ msgstr ""
 "Somente para fins de debugging: exporte seu perfil para um cartão SD externo."
 
 #: packages/app-mobile/components/screens/ConfigScreen.js:407
+#, fuzzy
 msgid "Feature flags"
-msgstr ""
+msgstr "Apresenta flags"
 
 #: packages/app-mobile/components/screens/ConfigScreen.js:410
 msgid "More information"
@@ -2136,7 +2137,7 @@ msgstr "Habilitar"
 #: packages/app-cli/app/command-e2ee.js:118
 #, javascript-format
 msgid "Encryption is: %s"
-msgstr "Encriptação está: %s"
+msgstr "Criptografia está: %s"
 
 #: packages/app-mobile/components/screens/Note.js:98
 msgid "This note has been modified:"
@@ -2157,7 +2158,7 @@ msgstr "Nenhum item com ID %s"
 
 #: packages/app-mobile/components/screens/Note.js:168
 msgid "This attachment is not downloaded or not decrypted yet."
-msgstr "O anexo ainda não foi baixado ou decriptado."
+msgstr "O anexo ainda não foi baixado ou descriptografado."
 
 #: packages/app-mobile/components/screens/Note.js:173
 #, javascript-format
@@ -2269,15 +2270,14 @@ msgstr ""
 
 #: packages/server/dist/models/UserModel.js:186
 #: packages/server/dist/models/UserModel.js:191
-#, fuzzy
 msgid "attachment"
-msgstr "Anexos"
+msgstr "anexo"
 
 #: packages/server/dist/models/UserModel.js:186
 #, javascript-format
 msgid ""
 "Cannot save %s \"%s\" because it is larger than than the allowed limit (%s)"
-msgstr ""
+msgstr "Não pôde salvar %s \"%s\" porque é maior que o limite permitido (%s)"
 
 #: packages/server/dist/models/UserModel.js:191
 #, javascript-format
@@ -2285,6 +2285,8 @@ msgid ""
 "Cannot save %s \"%s\" because it would go over the total allowed size (%s) "
 "for this account"
 msgstr ""
+"Não pôde salvar %s \"%s\" porque ultrapassaria o tamanho total permitido "
+"(%s) para esta conta"
 
 #: packages/lib/onedrive-api-node-utils.js:46
 #, javascript-format
@@ -2473,23 +2475,20 @@ msgid "Joplin Server URL"
 msgstr "URL do Servidor Joplin"
 
 #: packages/lib/models/Setting.js:333
-#, fuzzy
 msgid "Joplin Server email"
-msgstr "Servidor Joplin"
+msgstr "E-mail do Servidor Joplin"
 
 #: packages/lib/models/Setting.js:344
 msgid "Joplin Server password"
 msgstr "Senha do Servidor Joplin"
 
 #: packages/lib/models/Setting.js:371
-#, fuzzy
 msgid "Joplin Cloud email"
-msgstr "Servidor Joplin"
+msgstr "Nuvem Servidor Joplin"
 
 #: packages/lib/models/Setting.js:382
-#, fuzzy
 msgid "Joplin Cloud password"
-msgstr "Senha do Servidor Joplin"
+msgstr "Senha da Nuvem do Servidor Joplin"
 
 #: packages/lib/models/Setting.js:394
 msgid "Attachment download behaviour"
@@ -2501,8 +2500,8 @@ msgid ""
 "In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
 "the attachments are downloaded whether you open the note or not."
 msgstr ""
-"No modo \"Manual\", os anexos são baixados apenas quando você clica neles. "
-"Em \"Automático\", eles são baixados quando você abre a nota. Em \"Sempre\", "
+"No modo \"Manual\", os anexos são baixados apenas quando você os clica. Em "
+"\"Automático\", eles são baixados quando você abre a nota. Em \"Sempre\", "
 "todos os anexos são baixados independentemente de você abrir a nota ou não."
 
 #: packages/lib/models/Setting.js:398
@@ -2729,11 +2728,12 @@ msgid ""
 "Used for most text in the markdown editor. If not found, a generic "
 "proportional (variable width) font is used."
 msgstr ""
+"Usado para a maioria dos textos no editor de markdown. Se não for "
+"encontrada, uma fonte genérica proporcional (largura variável) é usada."
 
 #: packages/lib/models/Setting.js:764
-#, fuzzy
 msgid "Editor monospace font family"
-msgstr "Família de fontes do editor"
+msgstr "Família de fontes monoespaçadas do editor"
 
 #: packages/lib/models/Setting.js:765
 msgid ""
@@ -2741,6 +2741,9 @@ msgid ""
 "tables, checkboxes, code). If not found, a generic monospace (fixed width) "
 "font is used."
 msgstr ""
+"Usado onde uma fonte de largura fixa é necessária para dispor o texto de "
+"forma legível (e.g. tabelas, caixas de seleção, código). Se não for "
+"encontrada, uma fonte monoespaçada genérica (largura fixa) é usada."
 
 #: packages/lib/models/Setting.js:786
 msgid "Custom stylesheet for rendered Markdown"
@@ -2752,11 +2755,11 @@ msgstr "Folha de estilos customizada para estilos do app Joplin"
 
 #: packages/lib/models/Setting.js:812
 msgid "Re-upload local data to sync target"
-msgstr ""
+msgstr "Reenviar os dados locais para sincronizar o alvo"
 
 #: packages/lib/models/Setting.js:822
 msgid "Delete local data and re-download from sync target"
-msgstr ""
+msgstr "Deletar dados locais e reenviar do alvo de sincronização"
 
 #: packages/lib/models/Setting.js:827
 msgid "Automatically update the application"
@@ -2793,7 +2796,7 @@ msgstr "%d horas"
 
 #: packages/lib/models/Setting.js:855
 msgid "Synchronise only over WiFi connection"
-msgstr ""
+msgstr "Sincronizar somente com conexão Wi-fi"
 
 #: packages/lib/models/Setting.js:862
 msgid "Text editor command"
@@ -2890,9 +2893,8 @@ msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
 msgstr ""
-"À prova de falhas: não limpe os dados locais quando o destino da "
-"sincronização estiver vazio (geralmente o resultado de uma configuração "
-"incorreta ou bug)"
+"À prova de falhas: não limpe os dados locais quando o alvo da sincronização "
+"estiver vazio (geralmente o resultado de uma configuração incorreta ou bug)"
 
 #: packages/lib/models/Setting.js:955
 msgid ""
@@ -3071,16 +3073,15 @@ msgstr "Não é possível mover a nota para o caderno \"%s\""
 
 #: packages/lib/models/BaseItem.js:719
 msgid "Encrypted"
-msgstr "Encriptado"
+msgstr "Criptografado"
 
 #: packages/lib/models/BaseItem.js:780
 msgid "Encrypted items cannot be modified"
 msgstr "Itens encriptados não podem ser modificados"
 
 #: packages/lib/SyncTargetJoplinCloud.js:28
-#, fuzzy
 msgid "Joplin Cloud"
-msgstr "Fórum Joplin"
+msgstr "Nuvem Joplin"
 
 #: packages/lib/BaseApplication.js:152 packages/lib/BaseApplication.js:164
 #: packages/lib/BaseApplication.js:196
@@ -3089,7 +3090,7 @@ msgid "Usage: %s"
 msgstr "Uso: %s"
 
 #: packages/lib/BaseApplication.js:231
-#, javascript-format
+#, fuzzy, javascript-format
 msgid "Unknown flag: %s"
 msgstr "Flag desconhecido: %s"
 
@@ -3111,8 +3112,8 @@ msgid ""
 "the sync target is accessible. The reported error was:"
 msgstr ""
 "Erro. Verifique se a URL, nome de usuário, senha, etc., estão corretos e "
-"tenha certeza que o destino da sincronização está acessível. O erro "
-"reportado foi:"
+"tenha certeza que o alvo da sincronização está acessível. O erro reportado "
+"foi:"
 
 #: packages/lib/components/shared/dropbox-login-shared.js:39
 msgid "The application has been authorised!"
@@ -3137,11 +3138,11 @@ msgstr ""
 msgid ""
 "Please confirm that you would like to re-encrypt your complete database."
 msgstr ""
-"Por favor, confirme que gostaria de re-encriptar a base de dados completa."
+"Por favor, confirme que gostaria de recriptografar a base de dados completa."
 
 #: packages/lib/components/shared/encryption-config-shared.js:39
 msgid "Your data is going to be re-encrypted and synced again."
-msgstr "Seus dados serão re-encriptados e sincronizados novamente."
+msgstr "Seus dados serão recriptografados e sincronizados novamente."
 
 #: packages/lib/components/shared/encryption-config-shared.js:49
 msgid ""
@@ -3163,7 +3164,7 @@ msgstr "Não foi possível atualizar a chave mestra: %s"
 #: packages/lib/components/shared/encryption-config-shared.js:116
 #, javascript-format
 msgid "Decrypted items: %s / %s"
-msgstr "Itens decriptados: %s / %s"
+msgstr "Itens descriptografados: %s / %s"
 
 #: packages/lib/onedrive-api.js:392
 msgid ""
@@ -3213,9 +3214,9 @@ msgid "Cancelling..."
 msgstr "Cancelando..."
 
 #: packages/lib/Synchronizer.js:156
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Completed: %s (%s)"
-msgstr "Completado: %s"
+msgstr "Completado: %s (%s)"
 
 #: packages/lib/Synchronizer.js:158
 #, javascript-format
@@ -3454,7 +3455,7 @@ msgstr "O item \"%s\" não pôde ser baixado: %s"
 
 #: packages/lib/services/ReportService.js:179
 msgid "Items that cannot be decrypted"
-msgstr "Os itens não podem ser decriptados"
+msgstr "Os itens não podem ser descriptografados"
 
 #: packages/lib/services/ReportService.js:180
 msgid ""
@@ -3462,9 +3463,10 @@ msgid ""
 "are corrupted or too large. These items will remain on the device but Joplin "
 "will no longer attempt to decrypt them."
 msgstr ""
-"O Joplin falhou ao tentar decriptar esses múltiplos items, possivelmente "
-"porque eles estão corrompidos ou são grandes demais. Esses itens "
-"permanecerão no dispositivo, porém o Joplin não vai mais tentar decriptá-los."
+"O Joplin falhou ao tentar descriptografados estes múltiplos itens, "
+"possivelmente porque eles estão corrompidos ou são grandes demais. Esses "
+"itens permanecerão no dispositivo, porém o Joplin não vai mais tentar "
+"descriptografá-los."
 
 #: packages/lib/services/ReportService.js:185
 #: packages/app-cli/app/cli-utils.js:140
@@ -3478,7 +3480,7 @@ msgstr "Anexos"
 
 #: packages/lib/services/ReportService.js:205
 msgid "Downloaded and decrypted"
-msgstr "Baixado e decriptado"
+msgstr "Baixado e descriptografado"
 
 #: packages/lib/services/ReportService.js:205
 #: packages/lib/services/ReportService.js:206
@@ -3490,7 +3492,7 @@ msgstr "%s: %d"
 
 #: packages/lib/services/ReportService.js:206
 msgid "Downloaded and encrypted"
-msgstr "Baixado e encriptado"
+msgstr "Baixado e criptografado"
 
 #: packages/lib/services/ReportService.js:207
 msgid "Created locally"
@@ -3712,13 +3714,13 @@ msgid ""
 "Starting decryption... Please wait as it may take several minutes depending "
 "on how much there is to decrypt."
 msgstr ""
-"Iniciando decriptação... Por favor aguarde, pois isso pode demorar vários "
-"minutos, dependendo de quanto há para decriptar."
+"Iniciando descriptografação... Por favor aguarde, pois isso pode demorar "
+"vários minutos, dependendo de quanto há para descriptografar."
 
 #: packages/app-cli/app/command-e2ee.js:55
 #, javascript-format
 msgid "Decrypted items: %d"
-msgstr "Itens decriptados: %d"
+msgstr "Itens descriptografados: %d"
 
 #: packages/app-cli/app/command-e2ee.js:56
 #, javascript-format
@@ -3727,7 +3729,7 @@ msgstr "Items ignorados: %d (use --retry-failed-items para tentar novamente)"
 
 #: packages/app-cli/app/command-e2ee.js:70
 msgid "Completed decryption."
-msgstr "Decriptação completada."
+msgstr "Descriptografação completada."
 
 #: packages/app-cli/app/command-mkbook.js:12
 msgid "Creates a new notebook."
@@ -3923,6 +3925,8 @@ msgid ""
 "Runs the commands contained in the text file. There should be one command "
 "per line."
 msgstr ""
+"Executa os comandos contidos no arquivo de texto. Deve haver um comando por "
+"linha."
 
 #: packages/app-cli/app/command-version.js:11
 msgid "Displays version information"
@@ -3999,10 +4003,10 @@ msgid ""
 "supplied the password, the encrypted items are being decrypted in the "
 "background and will be available soon."
 msgstr ""
-"Um ou mais itens estão criptografados, e você pode precisar de informar uma "
+"Um ou mais itens estão criptografados, e você pode precisar fornecer uma "
 "senha mestra. Para fazer isso, por favor digite `e2ee decrypt`. Se você já "
-"forneceu a senha, os itens criptografados estão sendo decriptados em "
-"background e logo estarão disponíveis."
+"forneceu a senha, os itens criptografados estão sendo descriptografados em "
+"segundo plano e logo estarão disponíveis."
 
 #: packages/app-cli/app/gui/NoteWidget.js:50
 msgid "You may also type `status` for more information."
@@ -4053,7 +4057,7 @@ msgstr "n"
 
 #: packages/app-cli/app/base-command.js:15
 msgid "Cannot change encrypted item"
-msgstr "Não é possível mudar um item encriptado"
+msgstr "Não é possível mudar um item criptografado"
 
 #: packages/app-cli/app/command-help.js:13
 msgid "Displays usage information."
@@ -4180,8 +4184,8 @@ msgstr "Exibe sumário sobre as notas e cadernos."
 msgid ""
 "To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`"
 msgstr ""
-"Para tentar novamente decriptar estes itens, execute `e2ee decrypt --retry-"
-"failed-items`"
+"Para tentar novamente descriptografar estes itens, execute `e2ee decrypt --"
+"retry-failed-items`"
 
 #: packages/app-cli/app/command-tag.js:14
 msgid ""
