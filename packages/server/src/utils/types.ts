@@ -111,6 +111,7 @@ export interface Config {
 	stripe: StripeConfig;
 	supportEmail: string;
 	businessEmail: string;
+	isJoplinCloud: boolean;
 }
 
 export enum HttpMethod {

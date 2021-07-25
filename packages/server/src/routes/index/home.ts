@@ -8,8 +8,18 @@ import defaultView from '../../utils/defaultView';
 import { AccountType, accountTypeToString } from '../../models/UserModel';
 import { formatMaxItemSize, formatMaxTotalSize, formatTotalSize, formatTotalSizePercent, yesOrNo } from '../../utils/strings';
 import { getCanShareFolder, totalSizeClass } from '../../models/utils/user';
+import config from '../../config';
+import { escapeHtml } from '../../utils/htmlUtils';
 
 const router: Router = new Router(RouteType.Web);
+
+function setupMessageHtml() {
+	if (config().isJoplinCloud) {
+		return `In this screen, select "<strong>${escapeHtml(config().appName)}</strong>" as a synchronisation target and enter your username and password`;
+	} else {
+		return `In this screen, select "<strong>Joplin Server</strong>" as a synchronisation target, then enter the URL <strong>${config().apiBaseUrl}</strong> and your username and password`;
+	}
+}
 
 router.get('home', async (_path: SubPath, ctx: AppContext) => {
 	contextSessionId(ctx);
@@ -59,6 +69,7 @@ router.get('home', async (_path: SubPath, ctx: AppContext) => {
 				},
 			],
 			showUpgradeProButton: subscription && user.account_type === AccountType.Basic,
+			setupMessageHtml: setupMessageHtml(),
 		};
 
 		view.cssFiles = ['index/home'];
