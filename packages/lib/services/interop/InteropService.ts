@@ -4,11 +4,12 @@ import InteropService_Exporter_Custom from './InteropService_Exporter_Custom';
 import shim from '../../shim';
 import { _ } from '../../locale';
 import BaseItem from '../../models/BaseItem';
-import BaseModel from '../../BaseModel';
+import BaseModel, { ModelType } from '../../BaseModel';
 import Resource from '../../models/Resource';
 import Folder from '../../models/Folder';
 import NoteTag from '../../models/NoteTag';
 import Note from '../../models/Note';
+import { NoteEntity } from '../database/types';
 const ArrayUtils = require('../../ArrayUtils');
 const { sprintf } = require('sprintf-js');
 const { fileExtension } = require('../../path-utils');
@@ -271,7 +272,7 @@ export default class InteropService {
 		return null;
 	}
 
-	async import(options: ImportOptions): Promise<ImportExportResult> {
+	public async import(options: ImportOptions): Promise<ImportExportResult> {
 		if (!(await shim.fsDriver().exists(options.path))) throw new Error(_('Cannot find "%s".', options.path));
 
 		options = {
@@ -297,16 +298,6 @@ export default class InteropService {
 
 		let result: ImportExportResult = { warnings: [] };
 
-		// let importer = null;
-		//
-		// Not certain the "modulePath" property still has any use at this point. Modules should be looked up
-		// based on their format and outputFormat.
-		// if (options.modulePath) {
-		// 	importer = this.newModuleFromPath_(ModuleType.Importer, options);
-		// } else {
-		//	importer = this.newModuleByFormat_(ModuleType.Importer, options.format, options.outputFormat);
-		// }
-
 		const importer = this.newModuleByFormat_(ModuleType.Importer, options.format, options.outputFormat);
 
 		await importer.init(options.path, options);
@@ -315,7 +306,18 @@ export default class InteropService {
 		return result;
 	}
 
-	async export(options: ExportOptions): Promise<ImportExportResult> {
+	private normalizeItemForExport(itemType: ModelType, item: any): any {
+		if (itemType === ModelType.Note) {
+			const output: NoteEntity = { ...item };
+			output.is_shared = 0;
+			output.share_id = '';
+			return output;
+		} else {
+			return item;
+		}
+	}
+
+	public async export(options: ExportOptions): Promise<ImportExportResult> {
 		options = {
 			format: 'jex',
 			...options,
@@ -411,7 +413,7 @@ export default class InteropService {
 
 				const ItemClass = BaseItem.getClassByItemType(itemType);
 				const itemOrId = itemsToExport[i].itemOrId;
-				const item = typeof itemOrId === 'object' ? itemOrId : await ItemClass.load(itemOrId);
+				const item = this.normalizeItemForExport(itemType, typeof itemOrId === 'object' ? itemOrId : await ItemClass.load(itemOrId));
 
 				if (!item) {
 					if (itemType === BaseModel.TYPE_RESOURCE) {
