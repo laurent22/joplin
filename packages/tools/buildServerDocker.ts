@@ -27,7 +27,7 @@ async function main() {
 		console.info('Could not get git commit: metadata revision field will be empty');
 	}
 	const buildArgs = `--build-arg BUILD_DATE="${buildDate}" --build-arg REVISION="${revision}" --build-arg VERSION="${imageVersion}"`;
-	const dockerTags = [];
+	const dockerTags: string[] = [];
 	const versionPart = imageVersion.split('.');
 	dockerTags.push(isPreRelease ? 'beta' : 'latest');
 	dockerTags.push(versionPart[0] + (isPreRelease ? '-beta' : ''));
