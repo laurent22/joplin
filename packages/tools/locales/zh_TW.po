@@ -22,7 +22,7 @@ msgstr ""
 #: packages/app-desktop/gui/MenuBar.js:377
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.js:22
 #: packages/app-desktop/gui/PromptDialog.min.js:235
-#: packages/app-desktop/gui/DialogButtonRow.js:35
+#: packages/app-desktop/gui/DialogButtonRow.js:39
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:20
 #: packages/app-mobile/components/ModalDialog.js:67
 #: packages/app-mobile/components/CameraView.js:160
@@ -42,7 +42,7 @@ msgstr "確定"
 #: packages/app-desktop/gui/PromptDialog.min.js:242
 #: packages/app-desktop/gui/NoteList/NoteList.js:164
 #: packages/app-desktop/gui/ResourceScreen.js:96
-#: packages/app-desktop/gui/DialogButtonRow.js:38
+#: packages/app-desktop/gui/DialogButtonRow.js:42
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:21
 #: packages/app-mobile/components/ModalDialog.js:70
 #: packages/app-mobile/components/SelectDateTimeDialog.js:82
@@ -51,8 +51,8 @@ msgstr "確定"
 #: packages/app-mobile/components/side-menu-content.js:165
 #: packages/app-mobile/components/side-menu-content.js:338
 #: packages/app-mobile/components/screens/encryption-config.js:185
-#: packages/app-mobile/components/screens/Note.js:98
-#: packages/app-mobile/components/screens/Note.js:506
+#: packages/app-mobile/components/screens/Note.js:100
+#: packages/app-mobile/components/screens/Note.js:532
 #: packages/lib/shim-init-node.js:148
 msgid "Cancel"
 msgstr "取消"
@@ -180,7 +180,7 @@ msgstr ""
 #: packages/app-desktop/gui/ResourceScreen.js:47
 #: packages/app-desktop/gui/ResourceScreen.js:96
 #: packages/app-mobile/components/side-menu-content.js:146
-#: packages/app-mobile/components/screens/Note.js:830
+#: packages/app-mobile/components/screens/Note.js:860
 msgid "Delete"
 msgstr "刪除"
 
@@ -220,7 +220,7 @@ msgstr "記事本"
 #: packages/app-desktop/gui/MainScreen/commands/setTags.js:17
 #: packages/app-mobile/components/side-menu-content.js:314
 #: packages/app-mobile/components/screens/tags.js:101
-#: packages/app-mobile/components/screens/Note.js:803
+#: packages/app-mobile/components/screens/Note.js:833
 msgid "Tags"
 msgstr "標籤"
 
@@ -288,31 +288,31 @@ msgstr "插入超連結"
 msgid "List item"
 msgstr "清單項目"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:545
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:552
 msgid "Layout"
 msgstr "頁面佈局"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:545
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:552
 #, javascript-format
 msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
 "note."
 msgstr "此記事沒有內容。點擊「%s」切換到編輯模式並編輯記事。"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:654
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:661
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:128
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:18
 msgid "Cut"
 msgstr "剪下"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:661
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:668
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:136
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:13
 #: packages/app-desktop/gui/MenuBar.js:377
 msgid "Copy"
 msgstr "複製"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:668
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:675
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:143
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:23
 msgid "Paste"
@@ -343,13 +343,13 @@ msgid "Subscript"
 msgstr "下標"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:574
-#: packages/app-mobile/components/screens/Note.js:1016
+#: packages/app-mobile/components/screens/Note.js:998
 msgid "Edit"
 msgstr "編輯"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:630
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:53
-#: packages/app-mobile/components/screens/Note.js:771
+#: packages/app-mobile/components/screens/Note.js:801
 msgid "Attach file"
 msgstr "附加檔案"
 
@@ -415,8 +415,8 @@ msgid "to-do"
 msgstr "待辦事項"
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.js:79
-#: packages/server/dist/models/UserModel.js:186
-#: packages/server/dist/models/UserModel.js:191
+#: packages/server/dist/models/UserModel.js:189
+#: packages/server/dist/models/UserModel.js:194
 msgid "note"
 msgstr "記事"
 
@@ -621,7 +621,7 @@ msgstr "搜尋..."
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:121
 #: packages/app-desktop/gui/MenuBar.js:433
-#: packages/app-desktop/gui/MenuBar.js:486 packages/app-desktop/gui/Root.js:99
+#: packages/app-desktop/gui/MenuBar.js:486 packages/app-desktop/gui/Root.js:138
 msgid "Import"
 msgstr "匯入"
 
@@ -667,7 +667,7 @@ msgid "Preferences"
 msgstr "偏好設定"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:30
-#: packages/app-desktop/gui/MenuBar.js:344 packages/app-desktop/gui/Root.js:100
+#: packages/app-desktop/gui/MenuBar.js:344 packages/app-desktop/gui/Root.js:139
 msgid "Options"
 msgstr "選項"
 
@@ -691,31 +691,17 @@ msgstr "按下快速鍵後按下 ENTER，或點擊 BACKSPACE 清除快速鍵。"
 msgid "Save"
 msgstr "儲存"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:463
-msgid "The Web Clipper needs your authorisation to access your data."
-msgstr ""
-
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:463
-#, fuzzy
-msgid "Grant authorisation"
-msgstr "授權 Token："
-
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:463
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:483
-msgid "Reject"
-msgstr "拒絕"
-
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:466
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:459
 msgid ""
 "Safe mode is currently active. Note rendering and all plugins are "
 "temporarily disabled."
 msgstr "安全模式啟用中，將暫時停用格式編排及所有延伸模組。"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:466
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:459
 msgid "Disable safe mode and restart"
 msgstr "停用安全模式並重新啟動"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:469
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:462
 msgid ""
 "The sync target needs to be upgraded before Joplin can sync. The operation "
 "may take a few minutes to complete and the app needs to be restarted. To "
@@ -724,56 +710,61 @@ msgstr ""
 "在 Joplin 同步前需先升級同步目標。更新時間大約耗時數分鐘，且程式也需要重新啟"
 "動。如願繼續，請點擊連結。"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:469
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:462
 msgid "Restart and upgrade"
 msgstr "重新啟動並升級"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:472
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:465
 msgid "Some items cannot be decrypted."
 msgstr "有些項目無法解密。"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:472
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:475
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:486
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:465
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:468
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:479
 msgid "View them now"
 msgstr "立即檢視"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:475
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:468
 msgid "One of your master keys use an obsolete encryption method."
 msgstr "您其中一組主密鑰使用了過時的加密方法。"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:478
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:471
 msgid ""
 "The default encryption method has been changed, you should re-encrypt your "
 "data."
 msgstr "預設的加密方法已更改，您應該重新加密資料。"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:478
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:471
 msgid "More info"
 msgstr "更多資訊"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:483
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:476
 #, javascript-format
 msgid "%s (%s) would like to share a notebook with you."
 msgstr "%s（%s）想與您分享記事本。"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:483
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:476
 msgid "Accept"
 msgstr "接受"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:486
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:476
+#: packages/app-desktop/gui/Root.js:113
+msgid "Reject"
+msgstr "拒絕"
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:479
 msgid "Some items cannot be synchronised."
 msgstr "有些項目無法同步。"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:489
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:482
 msgid "One or more master keys need a password."
 msgstr "一個或多個主密鑰需要密碼。"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:489
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:482
 msgid "Set the password"
 msgstr "設置密碼"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:612
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:605
 msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
 msgstr "使用方向鍵移動佈局項，點擊「Esc」退出。"
 
@@ -807,7 +798,7 @@ msgstr "顯示 / 隱藏側邊欄"
 
 #: packages/app-desktop/gui/MainScreen/commands/editAlarm.js:20
 #: packages/app-mobile/components/SelectDateTimeDialog.js:84
-#: packages/app-mobile/components/screens/Note.js:789
+#: packages/app-mobile/components/screens/Note.js:819
 msgid "Set alarm"
 msgstr "設定提醒"
 
@@ -868,7 +859,8 @@ msgid "Spell checker"
 msgstr "拼字檢查"
 
 #: packages/app-desktop/gui/MainScreen/commands/showShareNoteDialog.js:16
-msgid "Share note..."
+#, fuzzy
+msgid "Publish note..."
 msgstr "分享記事..."
 
 #: packages/app-desktop/gui/MainScreen/commands/newSubFolder.js:17
@@ -1007,7 +999,7 @@ msgstr "換一組 token"
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr "從「%s」匯入（格式為 %s），請稍候..."
 
-#: packages/app-desktop/gui/MenuBar.js:291 packages/app-desktop/gui/Root.js:102
+#: packages/app-desktop/gui/MenuBar.js:291 packages/app-desktop/gui/Root.js:141
 msgid "Synchronisation Status"
 msgstr "同步狀態"
 
@@ -1204,7 +1196,7 @@ msgid "Switch to to-do type"
 msgstr "切換為待辦事項"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.js:100
-#: packages/app-mobile/components/screens/Note.js:817
+#: packages/app-mobile/components/screens/Note.js:847
 msgid "Copy Markdown link"
 msgstr "複製 Markdown 連結"
 
@@ -1396,15 +1388,29 @@ msgstr "加密："
 msgid "Enabled"
 msgstr "已啟用"
 
-#: packages/app-desktop/gui/Root.js:97
+#: packages/app-desktop/gui/Root.js:98
+#, fuzzy
+msgid "Confirmation"
+msgstr "設置"
+
+#: packages/app-desktop/gui/Root.js:111
+msgid "The Web Clipper needs your authorisation to access your data."
+msgstr ""
+
+#: packages/app-desktop/gui/Root.js:112
+#, fuzzy
+msgid "Grant authorisation"
+msgstr "授權 Token："
+
+#: packages/app-desktop/gui/Root.js:136
 msgid "OneDrive Login"
 msgstr "OneDrive 登入"
 
-#: packages/app-desktop/gui/Root.js:98
+#: packages/app-desktop/gui/Root.js:137
 msgid "Dropbox Login"
 msgstr "Dropbox 登入"
 
-#: packages/app-desktop/gui/Root.js:101
+#: packages/app-desktop/gui/Root.js:140
 msgid "Note attachments"
 msgstr "記事附件"
 
@@ -1581,8 +1587,8 @@ msgid "Statistics"
 msgstr "統計"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.js:113
-#: packages/app-desktop/gui/ShareNoteDialog.js:189
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:257
+#: packages/app-desktop/gui/ShareNoteDialog.js:192
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:260
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:24
 msgid "Close"
 msgstr "關閉"
@@ -1662,90 +1668,90 @@ msgstr "沒有任何附件！"
 msgid "Warning: not all resources shown for performance reasons (limit: %s)."
 msgstr "警告：為確保效能，將不會顯示所有資源（限制：%s）。"
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:141
+#: packages/app-desktop/gui/ShareNoteDialog.js:144
 #, fuzzy
-msgid "Unshare note"
+msgid "Unpublish note"
 msgstr "停止分享"
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:168
+#: packages/app-desktop/gui/ShareNoteDialog.js:171
 msgid "Synchronising..."
 msgstr "同步中..."
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:170
+#: packages/app-desktop/gui/ShareNoteDialog.js:173
 msgid "Generating link..."
 msgid_plural "Generating links..."
 msgstr[0] "建立連結..."
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:172
+#: packages/app-desktop/gui/ShareNoteDialog.js:175
 msgid "Link has been copied to clipboard!"
 msgid_plural "Links have been copied to clipboard!"
 msgstr[0] "連結已複製到剪貼簿！"
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:179
+#: packages/app-desktop/gui/ShareNoteDialog.js:182
 msgid ""
 "Note: When a note is shared, it will no longer be encrypted on the server."
 msgstr "注意：分享記事後，該記事將不會在伺服器上加密。"
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:184
-msgid "Share Notes"
-msgstr "分享記事"
+#: packages/app-desktop/gui/ShareNoteDialog.js:187
+msgid "Publish Notes"
+msgstr ""
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:186
+#: packages/app-desktop/gui/ShareNoteDialog.js:189
 msgid "Copy Shareable Link"
 msgid_plural "Copy Shareable Links"
 msgstr[0] "複製分享連結"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:138
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:141
 msgid "Unshare"
 msgstr "停止分享"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:180
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:183
 msgid ""
 "Delete this invitation? The recipient will no longer have access to this "
 "shared notebook."
 msgstr "刪除邀請後，共享對象將無法再存取這份共享記事本。確定要刪除這份邀請嗎？"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:194
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:197
 msgid "Add recipient:"
 msgstr "新增共享對象："
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:197
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:200
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:28
-#: packages/app-mobile/components/screens/Note.js:796
+#: packages/app-mobile/components/screens/Note.js:826
 msgid "Share"
 msgstr "分享"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:206
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:209
 msgid "Recipient has not yet accepted the invitation"
 msgstr "共享對象尚未接受邀請"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:207
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:210
 msgid "Recipient has rejected the invitation"
 msgstr "共享對象已拒絕邀請"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:208
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:211
 msgid "Recipient has accepted the invitation"
 msgstr "共享對象已接受邀請"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:218
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:221
 msgid "Recipients:"
 msgstr "共享對象："
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:230
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:233
 msgid "Synchronizing..."
 msgstr "同步中..."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:231
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:234
 msgid "Sharing notebook..."
 msgstr "分享記事本..."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:241
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:244
 msgid ""
 "Unshare this notebook? The recipients will no longer have access to its "
 "content."
 msgstr "停止共享後，共享對象將無法再存取這份共享記事本。確定要停止共享嗎？"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:251
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:254
 msgid "Share Notebook"
 msgstr "分享記事本"
 
@@ -1789,16 +1795,30 @@ msgid "Open %s"
 msgstr "開啟 %s"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:22
-#: packages/app-mobile/components/screens/Note.js:504
+#: packages/app-mobile/components/screens/Note.js:530
 #: packages/lib/shim-init-node.js:148 packages/lib/versionInfo.js:27
 msgid "Yes"
 msgstr "是"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:23
-#: packages/app-mobile/components/screens/Note.js:505
+#: packages/app-mobile/components/screens/Note.js:531
 #: packages/lib/shim-init-node.js:148 packages/lib/versionInfo.js:27
 msgid "No"
 msgstr "否"
+
+#: packages/app-mobile/components/NoteEditor/CodeMirror.bundle.min.js:1
+msgid "Xx!^&q!^!_"
+msgstr ""
+
+#: packages/app-mobile/components/NoteEditor/CodeMirror.bundle.min.js:1
+msgid ""
+",tokenizers:[template,noSemicolon,incdecToken,0,1,2,3,4,5],topRules:"
+"{Document:[0,6]},nested:[["
+msgstr ""
+
+#: packages/app-mobile/components/NoteEditor/CodeMirror.bundle.min.js:1
+msgid "&R!"
+msgstr ""
 
 #: packages/app-mobile/components/SelectDateTimeDialog.js:78
 msgid "Clear alarm"
@@ -2028,7 +2048,7 @@ msgid "Master Key %s"
 msgstr "密鑰 %s"
 
 #: packages/app-mobile/components/screens/encryption-config.js:120
-#: packages/app-mobile/components/screens/Note.js:724
+#: packages/app-mobile/components/screens/Note.js:750
 #, javascript-format
 msgid "Created: %s"
 msgstr "已建立: %s"
@@ -2066,38 +2086,38 @@ msgstr "啟用"
 msgid "Encryption is: %s"
 msgstr "加密: %s"
 
-#: packages/app-mobile/components/screens/Note.js:98
+#: packages/app-mobile/components/screens/Note.js:100
 msgid "This note has been modified:"
 msgstr "此記事已被修改："
 
-#: packages/app-mobile/components/screens/Note.js:98
+#: packages/app-mobile/components/screens/Note.js:100
 msgid "Save changes"
 msgstr "儲存變更"
 
-#: packages/app-mobile/components/screens/Note.js:98
+#: packages/app-mobile/components/screens/Note.js:100
 msgid "Discard changes"
 msgstr "放棄變更"
 
-#: packages/app-mobile/components/screens/Note.js:150
+#: packages/app-mobile/components/screens/Note.js:152
 #, javascript-format
 msgid "No item with ID %s"
 msgstr "沒有 ID 為 %s 的項目"
 
-#: packages/app-mobile/components/screens/Note.js:168
+#: packages/app-mobile/components/screens/Note.js:170
 msgid "This attachment is not downloaded or not decrypted yet."
 msgstr "此附件尚未下載或解密完成。"
 
-#: packages/app-mobile/components/screens/Note.js:173
+#: packages/app-mobile/components/screens/Note.js:175
 #, javascript-format
 msgid "The Joplin mobile app does not currently support this type of link: %s"
 msgstr "Joplin 行動 App 暫不支援此類型的鏈結：%s"
 
-#: packages/app-mobile/components/screens/Note.js:178
+#: packages/app-mobile/components/screens/Note.js:180
 #, javascript-format
 msgid "Links with protocol \"%s\" are not supported"
 msgstr "不支援「%s」協定的鏈結"
 
-#: packages/app-mobile/components/screens/Note.js:342
+#: packages/app-mobile/components/screens/Note.js:368
 msgid ""
 "In order to associate a geo-location with the note, the app needs your "
 "permission to access your location.\n"
@@ -2108,16 +2128,16 @@ msgstr ""
 "\n"
 "您隨時可以到設定畫面關閉此選項。"
 
-#: packages/app-mobile/components/screens/Note.js:343
+#: packages/app-mobile/components/screens/Note.js:369
 msgid "Permission needed"
 msgstr "需要權限"
 
-#: packages/app-mobile/components/screens/Note.js:449
+#: packages/app-mobile/components/screens/Note.js:475
 #: packages/app-cli/app/command-rmnote.js:27
 msgid "Delete note?"
 msgstr "刪除記事？"
 
-#: packages/app-mobile/components/screens/Note.js:503
+#: packages/app-mobile/components/screens/Note.js:529
 #: packages/lib/shim-init-node.js:147
 #, javascript-format
 msgid ""
@@ -2126,57 +2146,57 @@ msgid ""
 msgstr ""
 "您將附加大型圖片 (%dx%d pixels)，附加之前是否要把尺寸縮小為 %d pixels？"
 
-#: packages/app-mobile/components/screens/Note.js:585
+#: packages/app-mobile/components/screens/Note.js:611
 #, javascript-format
 msgid "Unsupported image type: %s"
 msgstr "不支援的圖像類型：%s"
 
-#: packages/app-mobile/components/screens/Note.js:725
+#: packages/app-mobile/components/screens/Note.js:751
 #, javascript-format
 msgid "Updated: %s"
 msgstr "已更新：%s"
 
-#: packages/app-mobile/components/screens/Note.js:728
+#: packages/app-mobile/components/screens/Note.js:754
 msgid "View on map"
 msgstr "在地圖上顯示"
 
-#: packages/app-mobile/components/screens/Note.js:735
+#: packages/app-mobile/components/screens/Note.js:761
 msgid "Go to source URL"
 msgstr "前往來源網址"
 
-#: packages/app-mobile/components/screens/Note.js:764
+#: packages/app-mobile/components/screens/Note.js:790
 msgid "Attach..."
 msgstr "附加..."
 
-#: packages/app-mobile/components/screens/Note.js:775
+#: packages/app-mobile/components/screens/Note.js:805
 msgid "Attach photo"
 msgstr "附加相片"
 
-#: packages/app-mobile/components/screens/Note.js:776
+#: packages/app-mobile/components/screens/Note.js:806
 msgid "Take photo"
 msgstr "拍攝相片"
 
-#: packages/app-mobile/components/screens/Note.js:777
+#: packages/app-mobile/components/screens/Note.js:807
 msgid "Choose an option"
 msgstr "選擇一個選項"
 
-#: packages/app-mobile/components/screens/Note.js:810
+#: packages/app-mobile/components/screens/Note.js:840
 msgid "Convert to note"
 msgstr "轉換為記事"
 
-#: packages/app-mobile/components/screens/Note.js:810
+#: packages/app-mobile/components/screens/Note.js:840
 msgid "Convert to todo"
 msgstr "轉換為待辦事項"
 
-#: packages/app-mobile/components/screens/Note.js:824
+#: packages/app-mobile/components/screens/Note.js:854
 msgid "Properties"
 msgstr "屬性"
 
-#: packages/app-mobile/components/screens/Note.js:1008
+#: packages/app-mobile/components/screens/Note.js:986
 msgid "Add body"
 msgstr "新增內文"
 
-#: packages/app-mobile/components/screens/Note.js:1037
+#: packages/app-mobile/components/screens/Note.js:1019
 msgid "Add title"
 msgstr "新增標題"
 
@@ -2184,26 +2204,26 @@ msgstr "新增標題"
 msgid "Search"
 msgstr "搜尋"
 
-#: packages/server/dist/middleware/notificationHandler.js:27
+#: packages/server/dist/middleware/notificationHandler.js:28
 #, javascript-format
 msgid ""
 "The default admin password is insecure and has not been changed! [Change it "
 "now](%s)"
 msgstr "預設的管理員密碼不安全並且尚未更改！[現在更改](%s)"
 
-#: packages/server/dist/models/UserModel.js:186
-#: packages/server/dist/models/UserModel.js:191
+#: packages/server/dist/models/UserModel.js:189
+#: packages/server/dist/models/UserModel.js:194
 #, fuzzy
 msgid "attachment"
 msgstr "附加檔案"
 
-#: packages/server/dist/models/UserModel.js:186
+#: packages/server/dist/models/UserModel.js:189
 #, javascript-format
 msgid ""
 "Cannot save %s \"%s\" because it is larger than than the allowed limit (%s)"
 msgstr ""
 
-#: packages/server/dist/models/UserModel.js:191
+#: packages/server/dist/models/UserModel.js:194
 #, javascript-format
 msgid ""
 "Cannot save %s \"%s\" because it would go over the total allowed size (%s) "
@@ -4063,6 +4083,9 @@ msgstr "標記待辦事項為完成。"
 #, javascript-format
 msgid "Note is not a to-do: \"%s\""
 msgstr "記事不等於待辨事項：\"%s\""
+
+#~ msgid "Share Notes"
+#~ msgstr "分享記事"
 
 #~ msgid "Joplin Server Directory"
 #~ msgstr "Joplin 主機目錄"

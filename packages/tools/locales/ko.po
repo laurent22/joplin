@@ -24,7 +24,7 @@ msgstr ""
 #: packages/app-desktop/gui/MenuBar.js:377
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.js:22
 #: packages/app-desktop/gui/PromptDialog.min.js:235
-#: packages/app-desktop/gui/DialogButtonRow.js:35
+#: packages/app-desktop/gui/DialogButtonRow.js:39
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:20
 #: packages/app-mobile/components/ModalDialog.js:67
 #: packages/app-mobile/components/CameraView.js:160
@@ -44,7 +44,7 @@ msgstr "확인"
 #: packages/app-desktop/gui/PromptDialog.min.js:242
 #: packages/app-desktop/gui/NoteList/NoteList.js:164
 #: packages/app-desktop/gui/ResourceScreen.js:96
-#: packages/app-desktop/gui/DialogButtonRow.js:38
+#: packages/app-desktop/gui/DialogButtonRow.js:42
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:21
 #: packages/app-mobile/components/ModalDialog.js:70
 #: packages/app-mobile/components/SelectDateTimeDialog.js:82
@@ -53,8 +53,8 @@ msgstr "확인"
 #: packages/app-mobile/components/side-menu-content.js:165
 #: packages/app-mobile/components/side-menu-content.js:338
 #: packages/app-mobile/components/screens/encryption-config.js:185
-#: packages/app-mobile/components/screens/Note.js:98
-#: packages/app-mobile/components/screens/Note.js:506
+#: packages/app-mobile/components/screens/Note.js:100
+#: packages/app-mobile/components/screens/Note.js:532
 #: packages/lib/shim-init-node.js:148
 msgid "Cancel"
 msgstr "취소"
@@ -183,7 +183,7 @@ msgstr ""
 #: packages/app-desktop/gui/ResourceScreen.js:47
 #: packages/app-desktop/gui/ResourceScreen.js:96
 #: packages/app-mobile/components/side-menu-content.js:146
-#: packages/app-mobile/components/screens/Note.js:830
+#: packages/app-mobile/components/screens/Note.js:860
 msgid "Delete"
 msgstr "삭제"
 
@@ -223,7 +223,7 @@ msgstr "노트북"
 #: packages/app-desktop/gui/MainScreen/commands/setTags.js:17
 #: packages/app-mobile/components/side-menu-content.js:314
 #: packages/app-mobile/components/screens/tags.js:101
-#: packages/app-mobile/components/screens/Note.js:803
+#: packages/app-mobile/components/screens/Note.js:833
 msgid "Tags"
 msgstr "태그"
 
@@ -291,11 +291,11 @@ msgstr "하이퍼링크 삽입"
 msgid "List item"
 msgstr "목록 추가"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:545
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:552
 msgid "Layout"
 msgstr "배치"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:545
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:552
 #, javascript-format
 msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
@@ -304,20 +304,20 @@ msgstr ""
 "비어있는 노트입니다. \"%s\" 항목을 선택해서 편집기를 전환하고 노트를 편집하세"
 "요."
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:654
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:661
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:128
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:18
 msgid "Cut"
 msgstr "잘라내기"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:661
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:668
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:136
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:13
 #: packages/app-desktop/gui/MenuBar.js:377
 msgid "Copy"
 msgstr "복사"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:668
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:675
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:143
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:23
 msgid "Paste"
@@ -348,13 +348,13 @@ msgid "Subscript"
 msgstr "아랫 첨자"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:574
-#: packages/app-mobile/components/screens/Note.js:1016
+#: packages/app-mobile/components/screens/Note.js:998
 msgid "Edit"
 msgstr "편집"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:630
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:53
-#: packages/app-mobile/components/screens/Note.js:771
+#: packages/app-mobile/components/screens/Note.js:801
 msgid "Attach file"
 msgstr "파일 첨부"
 
@@ -422,8 +422,8 @@ msgid "to-do"
 msgstr "할 일"
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.js:79
-#: packages/server/dist/models/UserModel.js:186
-#: packages/server/dist/models/UserModel.js:191
+#: packages/server/dist/models/UserModel.js:189
+#: packages/server/dist/models/UserModel.js:194
 msgid "note"
 msgstr "노트"
 
@@ -630,7 +630,7 @@ msgstr "찾기..."
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:121
 #: packages/app-desktop/gui/MenuBar.js:433
-#: packages/app-desktop/gui/MenuBar.js:486 packages/app-desktop/gui/Root.js:99
+#: packages/app-desktop/gui/MenuBar.js:486 packages/app-desktop/gui/Root.js:138
 msgid "Import"
 msgstr "가져오기"
 
@@ -676,7 +676,7 @@ msgid "Preferences"
 msgstr "설정"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:30
-#: packages/app-desktop/gui/MenuBar.js:344 packages/app-desktop/gui/Root.js:100
+#: packages/app-desktop/gui/MenuBar.js:344 packages/app-desktop/gui/Root.js:139
 msgid "Options"
 msgstr "옵션"
 
@@ -702,21 +702,7 @@ msgstr ""
 msgid "Save"
 msgstr "저장"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:463
-msgid "The Web Clipper needs your authorisation to access your data."
-msgstr ""
-
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:463
-#, fuzzy
-msgid "Grant authorisation"
-msgstr "인증 토큰:"
-
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:463
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:483
-msgid "Reject"
-msgstr "거절"
-
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:466
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:459
 msgid ""
 "Safe mode is currently active. Note rendering and all plugins are "
 "temporarily disabled."
@@ -724,11 +710,11 @@ msgstr ""
 "안전 모드가 현재 활성화되어 있습니다. 노트 렌더링과 더불어 모든 플러그인이 일"
 "시적으로 비활성화됩니다."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:466
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:459
 msgid "Disable safe mode and restart"
 msgstr "안전 모드를 끄고 다시 시작"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:469
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:462
 msgid ""
 "The sync target needs to be upgraded before Joplin can sync. The operation "
 "may take a few minutes to complete and the app needs to be restarted. To "
@@ -738,56 +724,61 @@ msgstr ""
 "완료되기 위해서 몇 분 정도 걸릴 수 있으며, 앱을 다시 시작해야 합니다. 계속하"
 "려면 링크를 눌러주세요."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:469
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:462
 msgid "Restart and upgrade"
 msgstr "재시작 및 업그레이드"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:472
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:465
 msgid "Some items cannot be decrypted."
 msgstr "일부 항목들은 암호화할 수 없습니다."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:472
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:475
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:486
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:465
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:468
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:479
 msgid "View them now"
 msgstr "지금 나타내기"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:475
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:468
 msgid "One of your master keys use an obsolete encryption method."
 msgstr "마스터 키 중 하나가 오래된 암호화 방식을 사용합니다."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:478
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:471
 msgid ""
 "The default encryption method has been changed, you should re-encrypt your "
 "data."
 msgstr "기본 암호 방법이 변경되었습니다. 데이터를 다시 암호화해야 합니다."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:478
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:471
 msgid "More info"
 msgstr "더 많은 정보"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:483
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:476
 #, javascript-format
 msgid "%s (%s) would like to share a notebook with you."
 msgstr "%s (%s) 님이 당신과 노트북을 공유하길 원합니다."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:483
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:476
 msgid "Accept"
 msgstr "확인"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:486
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:476
+#: packages/app-desktop/gui/Root.js:113
+msgid "Reject"
+msgstr "거절"
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:479
 msgid "Some items cannot be synchronised."
 msgstr "일부 항목들은 동기화할 수 없습니다."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:489
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:482
 msgid "One or more master keys need a password."
 msgstr "하나 혹은 그 이상의 마스터 키 비밀번호가 필요합니다."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:489
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:482
 msgid "Set the password"
 msgstr "암호 설정"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:612
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:605
 msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
 msgstr ""
 "레이아웃 항목을 옮기려면 화살표를 사용하세요. \"ESC\"키를 눌러 종료합니다."
@@ -822,7 +813,7 @@ msgstr "사이드바 표시 전환"
 
 #: packages/app-desktop/gui/MainScreen/commands/editAlarm.js:20
 #: packages/app-mobile/components/SelectDateTimeDialog.js:84
-#: packages/app-mobile/components/screens/Note.js:789
+#: packages/app-mobile/components/screens/Note.js:819
 msgid "Set alarm"
 msgstr "알람 설정"
 
@@ -883,7 +874,8 @@ msgid "Spell checker"
 msgstr "맞춤법 검사기"
 
 #: packages/app-desktop/gui/MainScreen/commands/showShareNoteDialog.js:16
-msgid "Share note..."
+#, fuzzy
+msgid "Publish note..."
 msgstr "노트 공유..."
 
 #: packages/app-desktop/gui/MainScreen/commands/newSubFolder.js:17
@@ -1025,7 +1017,7 @@ msgstr "인증 토큰 새로 고침"
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr "\"%s\"에서 \"%s\" 포맷으로 가져오는 중입니다. 잠시만 기다려주세요..."
 
-#: packages/app-desktop/gui/MenuBar.js:291 packages/app-desktop/gui/Root.js:102
+#: packages/app-desktop/gui/MenuBar.js:291 packages/app-desktop/gui/Root.js:141
 msgid "Synchronisation Status"
 msgstr "동기화 상태"
 
@@ -1221,7 +1213,7 @@ msgid "Switch to to-do type"
 msgstr "'할 일' 형식으로 전환합니다"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.js:100
-#: packages/app-mobile/components/screens/Note.js:817
+#: packages/app-mobile/components/screens/Note.js:847
 msgid "Copy Markdown link"
 msgstr "마크다운 링크 복사"
 
@@ -1419,15 +1411,29 @@ msgstr "암호화는 다음과 같습니다:"
 msgid "Enabled"
 msgstr "사용함"
 
-#: packages/app-desktop/gui/Root.js:97
+#: packages/app-desktop/gui/Root.js:98
+#, fuzzy
+msgid "Confirmation"
+msgstr "설정"
+
+#: packages/app-desktop/gui/Root.js:111
+msgid "The Web Clipper needs your authorisation to access your data."
+msgstr ""
+
+#: packages/app-desktop/gui/Root.js:112
+#, fuzzy
+msgid "Grant authorisation"
+msgstr "인증 토큰:"
+
+#: packages/app-desktop/gui/Root.js:136
 msgid "OneDrive Login"
 msgstr "OneDrive 로그인"
 
-#: packages/app-desktop/gui/Root.js:98
+#: packages/app-desktop/gui/Root.js:137
 msgid "Dropbox Login"
 msgstr "Dropbox 로그인"
 
-#: packages/app-desktop/gui/Root.js:101
+#: packages/app-desktop/gui/Root.js:140
 msgid "Note attachments"
 msgstr "노트 첨부"
 
@@ -1605,8 +1611,8 @@ msgid "Statistics"
 msgstr "통계"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.js:113
-#: packages/app-desktop/gui/ShareNoteDialog.js:189
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:257
+#: packages/app-desktop/gui/ShareNoteDialog.js:192
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:260
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:24
 msgid "Close"
 msgstr "닫기"
@@ -1690,44 +1696,44 @@ msgstr "없는 리소스입니다!"
 msgid "Warning: not all resources shown for performance reasons (limit: %s)."
 msgstr "경고: 성능상의 문제로 모든 리소스를 표시하지 않습니다 (제한: %s)."
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:141
+#: packages/app-desktop/gui/ShareNoteDialog.js:144
 #, fuzzy
-msgid "Unshare note"
+msgid "Unpublish note"
 msgstr "공유하지 않기"
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:168
+#: packages/app-desktop/gui/ShareNoteDialog.js:171
 msgid "Synchronising..."
 msgstr "동기화 중..."
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:170
+#: packages/app-desktop/gui/ShareNoteDialog.js:173
 msgid "Generating link..."
 msgid_plural "Generating links..."
 msgstr[0] "링크를 만드는 중..."
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:172
+#: packages/app-desktop/gui/ShareNoteDialog.js:175
 msgid "Link has been copied to clipboard!"
 msgid_plural "Links have been copied to clipboard!"
 msgstr[0] "링크가 클립보드로 복사되었습니다!"
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:179
+#: packages/app-desktop/gui/ShareNoteDialog.js:182
 msgid ""
 "Note: When a note is shared, it will no longer be encrypted on the server."
 msgstr "참고: 공유된 노트는 서버에서 암호화될 수 없습니다."
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:184
-msgid "Share Notes"
-msgstr "공유된 노트들"
+#: packages/app-desktop/gui/ShareNoteDialog.js:187
+msgid "Publish Notes"
+msgstr ""
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:186
+#: packages/app-desktop/gui/ShareNoteDialog.js:189
 msgid "Copy Shareable Link"
 msgid_plural "Copy Shareable Links"
 msgstr[0] "공유 링크 복사"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:138
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:141
 msgid "Unshare"
 msgstr "공유하지 않기"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:180
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:183
 msgid ""
 "Delete this invitation? The recipient will no longer have access to this "
 "shared notebook."
@@ -1735,41 +1741,41 @@ msgstr ""
 "초대하신 분을 제거하시겠습니까? 제거하게 된다면 더 이상 공유 노트북에 접근할"
 "수 없게 됩니다."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:194
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:197
 msgid "Add recipient:"
 msgstr "받는 사람 추가:"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:197
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:200
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:28
-#: packages/app-mobile/components/screens/Note.js:796
+#: packages/app-mobile/components/screens/Note.js:826
 msgid "Share"
 msgstr "공유"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:206
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:209
 msgid "Recipient has not yet accepted the invitation"
 msgstr "공유 수신자가 아직 초대를 수락하지 않았습니다"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:207
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:210
 msgid "Recipient has rejected the invitation"
 msgstr "공유 수신자가 초대를 거부했습니다"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:208
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:211
 msgid "Recipient has accepted the invitation"
 msgstr "공유 수신자가 초대를 승락하였습니다"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:218
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:221
 msgid "Recipients:"
 msgstr "공유 수신자:"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:230
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:233
 msgid "Synchronizing..."
 msgstr "동기화 중..."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:231
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:234
 msgid "Sharing notebook..."
 msgstr "노트북을 공유하는 중..."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:241
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:244
 msgid ""
 "Unshare this notebook? The recipients will no longer have access to its "
 "content."
@@ -1777,7 +1783,7 @@ msgstr ""
 "현재 노트북을 공유하지 많으시겠습니까? 공유자는 더 이상 해당 노트북에 접근이 "
 "불가능합니다."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:251
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:254
 msgid "Share Notebook"
 msgstr "노트북 공유"
 
@@ -1821,16 +1827,30 @@ msgid "Open %s"
 msgstr "%s 열기"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:22
-#: packages/app-mobile/components/screens/Note.js:504
+#: packages/app-mobile/components/screens/Note.js:530
 #: packages/lib/shim-init-node.js:148 packages/lib/versionInfo.js:27
 msgid "Yes"
 msgstr "예"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:23
-#: packages/app-mobile/components/screens/Note.js:505
+#: packages/app-mobile/components/screens/Note.js:531
 #: packages/lib/shim-init-node.js:148 packages/lib/versionInfo.js:27
 msgid "No"
 msgstr "아니오"
+
+#: packages/app-mobile/components/NoteEditor/CodeMirror.bundle.min.js:1
+msgid "Xx!^&q!^!_"
+msgstr ""
+
+#: packages/app-mobile/components/NoteEditor/CodeMirror.bundle.min.js:1
+msgid ""
+",tokenizers:[template,noSemicolon,incdecToken,0,1,2,3,4,5],topRules:"
+"{Document:[0,6]},nested:[["
+msgstr ""
+
+#: packages/app-mobile/components/NoteEditor/CodeMirror.bundle.min.js:1
+msgid "&R!"
+msgstr ""
 
 #: packages/app-mobile/components/SelectDateTimeDialog.js:78
 msgid "Clear alarm"
@@ -2065,7 +2085,7 @@ msgid "Master Key %s"
 msgstr "마스터 키 %s"
 
 #: packages/app-mobile/components/screens/encryption-config.js:120
-#: packages/app-mobile/components/screens/Note.js:724
+#: packages/app-mobile/components/screens/Note.js:750
 #, javascript-format
 msgid "Created: %s"
 msgstr "생성됨: %s"
@@ -2103,38 +2123,38 @@ msgstr "활성화"
 msgid "Encryption is: %s"
 msgstr "암호화: %s"
 
-#: packages/app-mobile/components/screens/Note.js:98
+#: packages/app-mobile/components/screens/Note.js:100
 msgid "This note has been modified:"
 msgstr "노트가 변경되었습니다:"
 
-#: packages/app-mobile/components/screens/Note.js:98
+#: packages/app-mobile/components/screens/Note.js:100
 msgid "Save changes"
 msgstr "변경 사항 저장"
 
-#: packages/app-mobile/components/screens/Note.js:98
+#: packages/app-mobile/components/screens/Note.js:100
 msgid "Discard changes"
 msgstr "변경 사항 버리기"
 
-#: packages/app-mobile/components/screens/Note.js:150
+#: packages/app-mobile/components/screens/Note.js:152
 #, javascript-format
 msgid "No item with ID %s"
 msgstr "식별자 %s에 해당하는 항목이 없습니다"
 
-#: packages/app-mobile/components/screens/Note.js:168
+#: packages/app-mobile/components/screens/Note.js:170
 msgid "This attachment is not downloaded or not decrypted yet."
 msgstr "이 첨부는 아직 다운로드 또는 복호화되지 않았습니다."
 
-#: packages/app-mobile/components/screens/Note.js:173
+#: packages/app-mobile/components/screens/Note.js:175
 #, javascript-format
 msgid "The Joplin mobile app does not currently support this type of link: %s"
 msgstr "Joplin 모바일 앱에서는 현재 해당 형식의 링크를 지원하지 않습니다: %s"
 
-#: packages/app-mobile/components/screens/Note.js:178
+#: packages/app-mobile/components/screens/Note.js:180
 #, javascript-format
 msgid "Links with protocol \"%s\" are not supported"
 msgstr "링크를 위한 프로토콜 “%s”는 지원하지 않습니다"
 
-#: packages/app-mobile/components/screens/Note.js:342
+#: packages/app-mobile/components/screens/Note.js:368
 msgid ""
 "In order to associate a geo-location with the note, the app needs your "
 "permission to access your location.\n"
@@ -2146,16 +2166,16 @@ msgstr ""
 "\n"
 "설정 화면에서 언제든지 이 설정을 끌 수 있습니다."
 
-#: packages/app-mobile/components/screens/Note.js:343
+#: packages/app-mobile/components/screens/Note.js:369
 msgid "Permission needed"
 msgstr "권한 요구"
 
-#: packages/app-mobile/components/screens/Note.js:449
+#: packages/app-mobile/components/screens/Note.js:475
 #: packages/app-cli/app/command-rmnote.js:27
 msgid "Delete note?"
 msgstr "이 노트를 삭제할까요?"
 
-#: packages/app-mobile/components/screens/Note.js:503
+#: packages/app-mobile/components/screens/Note.js:529
 #: packages/lib/shim-init-node.js:147
 #, javascript-format
 msgid ""
@@ -2165,57 +2185,57 @@ msgstr ""
 "크기가 큰 이미지(%dx%d 픽셀)를 첨부하려고 합니다. 첨부하기 전에 크기를 %d 픽"
 "셀로 줄이시겠습니까?"
 
-#: packages/app-mobile/components/screens/Note.js:585
+#: packages/app-mobile/components/screens/Note.js:611
 #, javascript-format
 msgid "Unsupported image type: %s"
 msgstr "지원하지 않는 이미지 형식: %s"
 
-#: packages/app-mobile/components/screens/Note.js:725
+#: packages/app-mobile/components/screens/Note.js:751
 #, javascript-format
 msgid "Updated: %s"
 msgstr "업데이트됨: %s"
 
-#: packages/app-mobile/components/screens/Note.js:728
+#: packages/app-mobile/components/screens/Note.js:754
 msgid "View on map"
 msgstr "지도에 표시"
 
-#: packages/app-mobile/components/screens/Note.js:735
+#: packages/app-mobile/components/screens/Note.js:761
 msgid "Go to source URL"
 msgstr "소스 URL로 이동"
 
-#: packages/app-mobile/components/screens/Note.js:764
+#: packages/app-mobile/components/screens/Note.js:790
 msgid "Attach..."
 msgstr "첨부..."
 
-#: packages/app-mobile/components/screens/Note.js:775
+#: packages/app-mobile/components/screens/Note.js:805
 msgid "Attach photo"
 msgstr "사진 첨부"
 
-#: packages/app-mobile/components/screens/Note.js:776
+#: packages/app-mobile/components/screens/Note.js:806
 msgid "Take photo"
 msgstr "사진 찍기"
 
-#: packages/app-mobile/components/screens/Note.js:777
+#: packages/app-mobile/components/screens/Note.js:807
 msgid "Choose an option"
 msgstr "옵션 선택"
 
-#: packages/app-mobile/components/screens/Note.js:810
+#: packages/app-mobile/components/screens/Note.js:840
 msgid "Convert to note"
 msgstr "노트로 변환"
 
-#: packages/app-mobile/components/screens/Note.js:810
+#: packages/app-mobile/components/screens/Note.js:840
 msgid "Convert to todo"
 msgstr "'할 일'로 변환"
 
-#: packages/app-mobile/components/screens/Note.js:824
+#: packages/app-mobile/components/screens/Note.js:854
 msgid "Properties"
 msgstr "속성"
 
-#: packages/app-mobile/components/screens/Note.js:1008
+#: packages/app-mobile/components/screens/Note.js:986
 msgid "Add body"
 msgstr "내용 추가"
 
-#: packages/app-mobile/components/screens/Note.js:1037
+#: packages/app-mobile/components/screens/Note.js:1019
 msgid "Add title"
 msgstr "제목 추가"
 
@@ -2223,7 +2243,7 @@ msgstr "제목 추가"
 msgid "Search"
 msgstr "검색"
 
-#: packages/server/dist/middleware/notificationHandler.js:27
+#: packages/server/dist/middleware/notificationHandler.js:28
 #, javascript-format
 msgid ""
 "The default admin password is insecure and has not been changed! [Change it "
@@ -2232,19 +2252,19 @@ msgstr ""
 "기본 관리자 암호가 변경되지 않았으며, 이는 보안상 안전하지 않습니다! [지금 바"
 "꾸기](%s)"
 
-#: packages/server/dist/models/UserModel.js:186
-#: packages/server/dist/models/UserModel.js:191
+#: packages/server/dist/models/UserModel.js:189
+#: packages/server/dist/models/UserModel.js:194
 #, fuzzy
 msgid "attachment"
 msgstr "첨부"
 
-#: packages/server/dist/models/UserModel.js:186
+#: packages/server/dist/models/UserModel.js:189
 #, javascript-format
 msgid ""
 "Cannot save %s \"%s\" because it is larger than than the allowed limit (%s)"
 msgstr ""
 
-#: packages/server/dist/models/UserModel.js:191
+#: packages/server/dist/models/UserModel.js:194
 #, javascript-format
 msgid ""
 "Cannot save %s \"%s\" because it would go over the total allowed size (%s) "
@@ -4143,6 +4163,9 @@ msgstr "'할 일' 항목을 완료로 표시합니다."
 #, javascript-format
 msgid "Note is not a to-do: \"%s\""
 msgstr "노트는 '할 일' 항목이 아닙니다: \"%s\""
+
+#~ msgid "Share Notes"
+#~ msgstr "공유된 노트들"
 
 #~ msgid "Joplin Server Directory"
 #~ msgstr "Joplin 서버 디렉터리"

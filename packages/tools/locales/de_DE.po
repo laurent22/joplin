@@ -22,7 +22,7 @@ msgstr ""
 #: packages/app-desktop/gui/MenuBar.js:377
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.js:22
 #: packages/app-desktop/gui/PromptDialog.min.js:235
-#: packages/app-desktop/gui/DialogButtonRow.js:35
+#: packages/app-desktop/gui/DialogButtonRow.js:39
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:20
 #: packages/app-mobile/components/ModalDialog.js:67
 #: packages/app-mobile/components/CameraView.js:160
@@ -42,7 +42,7 @@ msgstr "OK"
 #: packages/app-desktop/gui/PromptDialog.min.js:242
 #: packages/app-desktop/gui/NoteList/NoteList.js:164
 #: packages/app-desktop/gui/ResourceScreen.js:96
-#: packages/app-desktop/gui/DialogButtonRow.js:38
+#: packages/app-desktop/gui/DialogButtonRow.js:42
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:21
 #: packages/app-mobile/components/ModalDialog.js:70
 #: packages/app-mobile/components/SelectDateTimeDialog.js:82
@@ -51,8 +51,8 @@ msgstr "OK"
 #: packages/app-mobile/components/side-menu-content.js:165
 #: packages/app-mobile/components/side-menu-content.js:338
 #: packages/app-mobile/components/screens/encryption-config.js:185
-#: packages/app-mobile/components/screens/Note.js:98
-#: packages/app-mobile/components/screens/Note.js:506
+#: packages/app-mobile/components/screens/Note.js:100
+#: packages/app-mobile/components/screens/Note.js:532
 #: packages/lib/shim-init-node.js:148
 msgid "Cancel"
 msgstr "Abbrechen"
@@ -186,7 +186,7 @@ msgstr ""
 #: packages/app-desktop/gui/ResourceScreen.js:47
 #: packages/app-desktop/gui/ResourceScreen.js:96
 #: packages/app-mobile/components/side-menu-content.js:146
-#: packages/app-mobile/components/screens/Note.js:830
+#: packages/app-mobile/components/screens/Note.js:860
 msgid "Delete"
 msgstr "Löschen"
 
@@ -226,7 +226,7 @@ msgstr "Notizbücher"
 #: packages/app-desktop/gui/MainScreen/commands/setTags.js:17
 #: packages/app-mobile/components/side-menu-content.js:314
 #: packages/app-mobile/components/screens/tags.js:101
-#: packages/app-mobile/components/screens/Note.js:803
+#: packages/app-mobile/components/screens/Note.js:833
 msgid "Tags"
 msgstr "Schlagwörter"
 
@@ -295,11 +295,11 @@ msgstr "Weblink einfügen"
 msgid "List item"
 msgstr "Listeneintrag"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:545
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:552
 msgid "Layout"
 msgstr "Layout"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:545
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:552
 #, javascript-format
 msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
@@ -308,20 +308,20 @@ msgstr ""
 "Diese Notiz hat keinen Inhalt. Klicke auf „%s“, um den Editor zu aktivieren "
 "und die Notiz zu bearbeiten."
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:654
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:661
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:128
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:18
 msgid "Cut"
 msgstr "Ausschneiden"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:661
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:668
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:136
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:13
 #: packages/app-desktop/gui/MenuBar.js:377
 msgid "Copy"
 msgstr "Kopieren"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:668
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:675
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:143
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:23
 msgid "Paste"
@@ -352,13 +352,13 @@ msgid "Subscript"
 msgstr "Tiefgestellt"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:574
-#: packages/app-mobile/components/screens/Note.js:1016
+#: packages/app-mobile/components/screens/Note.js:998
 msgid "Edit"
 msgstr "Bearbeiten"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:630
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:53
-#: packages/app-mobile/components/screens/Note.js:771
+#: packages/app-mobile/components/screens/Note.js:801
 msgid "Attach file"
 msgstr "Datei anhängen"
 
@@ -427,8 +427,8 @@ msgid "to-do"
 msgstr "Aufgabe"
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.js:79
-#: packages/server/dist/models/UserModel.js:186
-#: packages/server/dist/models/UserModel.js:191
+#: packages/server/dist/models/UserModel.js:189
+#: packages/server/dist/models/UserModel.js:194
 msgid "note"
 msgstr "Notiz"
 
@@ -639,7 +639,7 @@ msgstr "Suchen ..."
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:121
 #: packages/app-desktop/gui/MenuBar.js:433
-#: packages/app-desktop/gui/MenuBar.js:486 packages/app-desktop/gui/Root.js:99
+#: packages/app-desktop/gui/MenuBar.js:486 packages/app-desktop/gui/Root.js:138
 msgid "Import"
 msgstr "Importieren"
 
@@ -685,7 +685,7 @@ msgid "Preferences"
 msgstr "Einstellungen"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:30
-#: packages/app-desktop/gui/MenuBar.js:344 packages/app-desktop/gui/Root.js:100
+#: packages/app-desktop/gui/MenuBar.js:344 packages/app-desktop/gui/Root.js:139
 msgid "Options"
 msgstr "Optionen"
 
@@ -711,21 +711,7 @@ msgstr ""
 msgid "Save"
 msgstr "Speichern"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:463
-msgid "The Web Clipper needs your authorisation to access your data."
-msgstr ""
-
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:463
-#, fuzzy
-msgid "Grant authorisation"
-msgstr "Berechtigungstoken:"
-
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:463
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:483
-msgid "Reject"
-msgstr "Ablehnen"
-
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:466
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:459
 msgid ""
 "Safe mode is currently active. Note rendering and all plugins are "
 "temporarily disabled."
@@ -733,11 +719,11 @@ msgstr ""
 "Sicherer Modus aktiv. Notizdarstellung und alle Plugins werden vorübergehend "
 "deaktiviert."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:466
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:459
 msgid "Disable safe mode and restart"
 msgstr "Sicheren Modus beenden und neu starten"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:469
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:462
 msgid ""
 "The sync target needs to be upgraded before Joplin can sync. The operation "
 "may take a few minutes to complete and the app needs to be restarted. To "
@@ -747,26 +733,26 @@ msgstr ""
 "synchronisiert werden kann. Der Vorgang kann einige Minuten dauern, und die "
 "App muss neu gestartet werden. Um fortzufahren, klicke bitte auf den Link."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:469
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:462
 msgid "Restart and upgrade"
 msgstr "Neustarten und aktualisieren"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:472
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:465
 msgid "Some items cannot be decrypted."
 msgstr "Einige Elemente können nicht entschlüsselt werden."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:472
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:475
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:486
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:465
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:468
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:479
 msgid "View them now"
 msgstr "Zeige sie jetzt an"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:475
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:468
 msgid "One of your master keys use an obsolete encryption method."
 msgstr ""
 "Einer deiner Hauptschlüssel verwendet eine veraltete Verschlüsselungsmethode."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:478
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:471
 msgid ""
 "The default encryption method has been changed, you should re-encrypt your "
 "data."
@@ -774,32 +760,37 @@ msgstr ""
 "Die Standardverschlüsselungsmethode wurde geändert. Du solltest deine Daten "
 "erneut verschlüsseln."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:478
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:471
 msgid "More info"
 msgstr "Weitere Information"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:483
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:476
 #, javascript-format
 msgid "%s (%s) would like to share a notebook with you."
 msgstr "%s (%s) möchte ein Notizbuch mit dir teilen."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:483
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:476
 msgid "Accept"
 msgstr "Akzeptieren"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:486
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:476
+#: packages/app-desktop/gui/Root.js:113
+msgid "Reject"
+msgstr "Ablehnen"
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:479
 msgid "Some items cannot be synchronised."
 msgstr "Einige Elemente können nicht synchronisiert werden."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:489
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:482
 msgid "One or more master keys need a password."
 msgstr "Mindestens ein Hauptschlüssel benötigt ein Passwort."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:489
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:482
 msgid "Set the password"
 msgstr "Gib das Passwort ein"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:612
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:605
 msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
 msgstr ""
 "Verwenden Sie die Pfeile, um die Layoutelemente zu verschieben. Drücken Sie "
@@ -835,7 +826,7 @@ msgstr "Seitenleiste ein-/ausschalten"
 
 #: packages/app-desktop/gui/MainScreen/commands/editAlarm.js:20
 #: packages/app-mobile/components/SelectDateTimeDialog.js:84
-#: packages/app-mobile/components/screens/Note.js:789
+#: packages/app-mobile/components/screens/Note.js:819
 msgid "Set alarm"
 msgstr "Alarm erstellen"
 
@@ -896,7 +887,8 @@ msgid "Spell checker"
 msgstr "Rechtschreibprüfung"
 
 #: packages/app-desktop/gui/MainScreen/commands/showShareNoteDialog.js:16
-msgid "Share note..."
+#, fuzzy
+msgid "Publish note..."
 msgstr "Notiz teilen ..."
 
 #: packages/app-desktop/gui/MainScreen/commands/newSubFolder.js:17
@@ -1045,7 +1037,7 @@ msgstr "Token erneuern"
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr "Aus „%s“ im Format „%s“ wird importiert. Bitte warten ..."
 
-#: packages/app-desktop/gui/MenuBar.js:291 packages/app-desktop/gui/Root.js:102
+#: packages/app-desktop/gui/MenuBar.js:291 packages/app-desktop/gui/Root.js:141
 msgid "Synchronisation Status"
 msgstr "Synchronisations-Status"
 
@@ -1243,7 +1235,7 @@ msgid "Switch to to-do type"
 msgstr "Zu Aufgaben-Typ wechseln"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.js:100
-#: packages/app-mobile/components/screens/Note.js:817
+#: packages/app-mobile/components/screens/Note.js:847
 msgid "Copy Markdown link"
 msgstr "Markdown-Link kopieren"
 
@@ -1455,15 +1447,29 @@ msgstr "Die Verschlüsselung ist:"
 msgid "Enabled"
 msgstr "Aktiviert"
 
-#: packages/app-desktop/gui/Root.js:97
+#: packages/app-desktop/gui/Root.js:98
+#, fuzzy
+msgid "Confirmation"
+msgstr "Konfiguration"
+
+#: packages/app-desktop/gui/Root.js:111
+msgid "The Web Clipper needs your authorisation to access your data."
+msgstr ""
+
+#: packages/app-desktop/gui/Root.js:112
+#, fuzzy
+msgid "Grant authorisation"
+msgstr "Berechtigungstoken:"
+
+#: packages/app-desktop/gui/Root.js:136
 msgid "OneDrive Login"
 msgstr "OneDrive-Anmeldung"
 
-#: packages/app-desktop/gui/Root.js:98
+#: packages/app-desktop/gui/Root.js:137
 msgid "Dropbox Login"
 msgstr "Dropbox-Anmeldung"
 
-#: packages/app-desktop/gui/Root.js:101
+#: packages/app-desktop/gui/Root.js:140
 msgid "Note attachments"
 msgstr "Anhänge"
 
@@ -1644,8 +1650,8 @@ msgid "Statistics"
 msgstr "Statistik"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.js:113
-#: packages/app-desktop/gui/ShareNoteDialog.js:189
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:257
+#: packages/app-desktop/gui/ShareNoteDialog.js:192
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:260
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:24
 msgid "Close"
 msgstr "Schließen"
@@ -1735,48 +1741,49 @@ msgstr ""
 "Warnung: Aus Leistungsgründen werden nicht alle Anhänge angezeigt "
 "(Obergrenze: %s)."
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:141
-msgid "Unshare note"
+#: packages/app-desktop/gui/ShareNoteDialog.js:144
+#, fuzzy
+msgid "Unpublish note"
 msgstr "Notiz nicht mehr teilen"
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:168
+#: packages/app-desktop/gui/ShareNoteDialog.js:171
 msgid "Synchronising..."
 msgstr "Wird synchronisiert ..."
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:170
+#: packages/app-desktop/gui/ShareNoteDialog.js:173
 msgid "Generating link..."
 msgid_plural "Generating links..."
 msgstr[0] "Link wird erzeugt ..."
 msgstr[1] "Links werden erzeugt ..."
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:172
+#: packages/app-desktop/gui/ShareNoteDialog.js:175
 msgid "Link has been copied to clipboard!"
 msgid_plural "Links have been copied to clipboard!"
 msgstr[0] "Der Link wurde in die Zwischenablage kopiert!"
 msgstr[1] "Die Links wurden in die Zwischenablage kopiert!"
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:179
+#: packages/app-desktop/gui/ShareNoteDialog.js:182
 msgid ""
 "Note: When a note is shared, it will no longer be encrypted on the server."
 msgstr ""
 "Achtung: Wenn eine Notiz geteilt wird, wird sie auf dem Server nicht mehr "
 "verschlüsselt sein."
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:184
-msgid "Share Notes"
-msgstr "Notizen teilen"
+#: packages/app-desktop/gui/ShareNoteDialog.js:187
+msgid "Publish Notes"
+msgstr ""
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:186
+#: packages/app-desktop/gui/ShareNoteDialog.js:189
 msgid "Copy Shareable Link"
 msgid_plural "Copy Shareable Links"
 msgstr[0] "Teilbaren Link kopieren"
 msgstr[1] "Teilbare Links kopieren"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:138
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:141
 msgid "Unshare"
 msgstr "Nicht mehr teilen"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:180
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:183
 msgid ""
 "Delete this invitation? The recipient will no longer have access to this "
 "shared notebook."
@@ -1784,41 +1791,41 @@ msgstr ""
 "Einladung löschen? Der Empfänger hat dann keinen Zugriff mehr auf dieses "
 "freigegebene Notizbuch."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:194
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:197
 msgid "Add recipient:"
 msgstr "Füge Empfänger hinzu:"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:197
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:200
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:28
-#: packages/app-mobile/components/screens/Note.js:796
+#: packages/app-mobile/components/screens/Note.js:826
 msgid "Share"
 msgstr "Teilen"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:206
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:209
 msgid "Recipient has not yet accepted the invitation"
 msgstr "Empfänger hat die Einladung noch nicht akzeptiert"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:207
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:210
 msgid "Recipient has rejected the invitation"
 msgstr "Empfänger hat die Einladung abgewiesen"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:208
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:211
 msgid "Recipient has accepted the invitation"
 msgstr "Empfänger hat die Einladung akzeptiert"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:218
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:221
 msgid "Recipients:"
 msgstr "Empfänger:"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:230
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:233
 msgid "Synchronizing..."
 msgstr "Wird synchronisiert ..."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:231
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:234
 msgid "Sharing notebook..."
 msgstr "Notizbuch wird geteilt ..."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:241
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:244
 msgid ""
 "Unshare this notebook? The recipients will no longer have access to its "
 "content."
@@ -1826,7 +1833,7 @@ msgstr ""
 "Teilen des Notizbuch beenden? Der Empfänger wird keinen Zugriff mehr auf den "
 "Inhalt haben."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:251
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:254
 msgid "Share Notebook"
 msgstr "Notizbuch teilen"
 
@@ -1870,16 +1877,30 @@ msgid "Open %s"
 msgstr "Öffne %s"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:22
-#: packages/app-mobile/components/screens/Note.js:504
+#: packages/app-mobile/components/screens/Note.js:530
 #: packages/lib/shim-init-node.js:148 packages/lib/versionInfo.js:27
 msgid "Yes"
 msgstr "Ja"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:23
-#: packages/app-mobile/components/screens/Note.js:505
+#: packages/app-mobile/components/screens/Note.js:531
 #: packages/lib/shim-init-node.js:148 packages/lib/versionInfo.js:27
 msgid "No"
 msgstr "Nein"
+
+#: packages/app-mobile/components/NoteEditor/CodeMirror.bundle.min.js:1
+msgid "Xx!^&q!^!_"
+msgstr ""
+
+#: packages/app-mobile/components/NoteEditor/CodeMirror.bundle.min.js:1
+msgid ""
+",tokenizers:[template,noSemicolon,incdecToken,0,1,2,3,4,5],topRules:"
+"{Document:[0,6]},nested:[["
+msgstr ""
+
+#: packages/app-mobile/components/NoteEditor/CodeMirror.bundle.min.js:1
+msgid "&R!"
+msgstr ""
 
 #: packages/app-mobile/components/SelectDateTimeDialog.js:78
 msgid "Clear alarm"
@@ -2121,7 +2142,7 @@ msgid "Master Key %s"
 msgstr "Hauptschlüssel %s"
 
 #: packages/app-mobile/components/screens/encryption-config.js:120
-#: packages/app-mobile/components/screens/Note.js:724
+#: packages/app-mobile/components/screens/Note.js:750
 #, javascript-format
 msgid "Created: %s"
 msgstr "Erstellt: %s"
@@ -2159,39 +2180,39 @@ msgstr "Aktivieren"
 msgid "Encryption is: %s"
 msgstr "Verschlüsselung ist: %s"
 
-#: packages/app-mobile/components/screens/Note.js:98
+#: packages/app-mobile/components/screens/Note.js:100
 msgid "This note has been modified:"
 msgstr "Diese Notiz wurde verändert:"
 
-#: packages/app-mobile/components/screens/Note.js:98
+#: packages/app-mobile/components/screens/Note.js:100
 msgid "Save changes"
 msgstr "Änderungen speichern"
 
-#: packages/app-mobile/components/screens/Note.js:98
+#: packages/app-mobile/components/screens/Note.js:100
 msgid "Discard changes"
 msgstr "Änderungen verwerfen"
 
-#: packages/app-mobile/components/screens/Note.js:150
+#: packages/app-mobile/components/screens/Note.js:152
 #, javascript-format
 msgid "No item with ID %s"
 msgstr "Kein Element mit ID %s"
 
-#: packages/app-mobile/components/screens/Note.js:168
+#: packages/app-mobile/components/screens/Note.js:170
 msgid "This attachment is not downloaded or not decrypted yet."
 msgstr ""
 "Dieser Anhang wurde nicht heruntergeladen oder noch nicht entschlüsselt."
 
-#: packages/app-mobile/components/screens/Note.js:173
+#: packages/app-mobile/components/screens/Note.js:175
 #, javascript-format
 msgid "The Joplin mobile app does not currently support this type of link: %s"
 msgstr "Die Joplin Handy-App unterstützt derzeit diese Art von Link nicht: %s"
 
-#: packages/app-mobile/components/screens/Note.js:178
+#: packages/app-mobile/components/screens/Note.js:180
 #, javascript-format
 msgid "Links with protocol \"%s\" are not supported"
 msgstr "Links mit dem Protokoll „%s“ werden nicht unterstützt"
 
-#: packages/app-mobile/components/screens/Note.js:342
+#: packages/app-mobile/components/screens/Note.js:368
 msgid ""
 "In order to associate a geo-location with the note, the app needs your "
 "permission to access your location.\n"
@@ -2203,16 +2224,16 @@ msgstr ""
 "\n"
 "Diese Option kann jederzeit im Konfigurationsbildschirm deaktiviert werden."
 
-#: packages/app-mobile/components/screens/Note.js:343
+#: packages/app-mobile/components/screens/Note.js:369
 msgid "Permission needed"
 msgstr "Berechtigung benötigt"
 
-#: packages/app-mobile/components/screens/Note.js:449
+#: packages/app-mobile/components/screens/Note.js:475
 #: packages/app-cli/app/command-rmnote.js:27
 msgid "Delete note?"
 msgstr "Notiz löschen?"
 
-#: packages/app-mobile/components/screens/Note.js:503
+#: packages/app-mobile/components/screens/Note.js:529
 #: packages/lib/shim-init-node.js:147
 #, javascript-format
 msgid ""
@@ -2222,57 +2243,57 @@ msgstr ""
 "Sie sind dabei, ein großes Bild (%dx%d Pixel) anzuhängen. Möchten Sie es vor "
 "dem Anhängen auf %d Pixel verkleinern?"
 
-#: packages/app-mobile/components/screens/Note.js:585
+#: packages/app-mobile/components/screens/Note.js:611
 #, javascript-format
 msgid "Unsupported image type: %s"
 msgstr "Nicht unterstütztes Fotoformat: %s"
 
-#: packages/app-mobile/components/screens/Note.js:725
+#: packages/app-mobile/components/screens/Note.js:751
 #, javascript-format
 msgid "Updated: %s"
 msgstr "Aktualisiert: %s"
 
-#: packages/app-mobile/components/screens/Note.js:728
+#: packages/app-mobile/components/screens/Note.js:754
 msgid "View on map"
 msgstr "Auf der Karte anzeigen"
 
-#: packages/app-mobile/components/screens/Note.js:735
+#: packages/app-mobile/components/screens/Note.js:761
 msgid "Go to source URL"
 msgstr "Zur Quell-URL gehen"
 
-#: packages/app-mobile/components/screens/Note.js:764
+#: packages/app-mobile/components/screens/Note.js:790
 msgid "Attach..."
 msgstr "Anhängen ..."
 
-#: packages/app-mobile/components/screens/Note.js:775
+#: packages/app-mobile/components/screens/Note.js:805
 msgid "Attach photo"
 msgstr "Foto anhängen"
 
-#: packages/app-mobile/components/screens/Note.js:776
+#: packages/app-mobile/components/screens/Note.js:806
 msgid "Take photo"
 msgstr "Foto aufnehmen"
 
-#: packages/app-mobile/components/screens/Note.js:777
+#: packages/app-mobile/components/screens/Note.js:807
 msgid "Choose an option"
 msgstr "Wähle eine Option"
 
-#: packages/app-mobile/components/screens/Note.js:810
+#: packages/app-mobile/components/screens/Note.js:840
 msgid "Convert to note"
 msgstr "In eine Notiz umwandeln"
 
-#: packages/app-mobile/components/screens/Note.js:810
+#: packages/app-mobile/components/screens/Note.js:840
 msgid "Convert to todo"
 msgstr "In eine Aufgabe umwandeln"
 
-#: packages/app-mobile/components/screens/Note.js:824
+#: packages/app-mobile/components/screens/Note.js:854
 msgid "Properties"
 msgstr "Eigenschaften"
 
-#: packages/app-mobile/components/screens/Note.js:1008
+#: packages/app-mobile/components/screens/Note.js:986
 msgid "Add body"
 msgstr "Text hinzufügen"
 
-#: packages/app-mobile/components/screens/Note.js:1037
+#: packages/app-mobile/components/screens/Note.js:1019
 msgid "Add title"
 msgstr "Titel hinzufügen"
 
@@ -2280,7 +2301,7 @@ msgstr "Titel hinzufügen"
 msgid "Search"
 msgstr "Suchen"
 
-#: packages/server/dist/middleware/notificationHandler.js:27
+#: packages/server/dist/middleware/notificationHandler.js:28
 #, javascript-format
 msgid ""
 "The default admin password is insecure and has not been changed! [Change it "
@@ -2289,19 +2310,19 @@ msgstr ""
 "Das Standard-Administratorpasswort ist unsicher und wurde nicht geändert! "
 "[Jetzt ändern](%s)"
 
-#: packages/server/dist/models/UserModel.js:186
-#: packages/server/dist/models/UserModel.js:191
+#: packages/server/dist/models/UserModel.js:189
+#: packages/server/dist/models/UserModel.js:194
 msgid "attachment"
 msgstr "Anhang"
 
-#: packages/server/dist/models/UserModel.js:186
+#: packages/server/dist/models/UserModel.js:189
 #, javascript-format
 msgid ""
 "Cannot save %s \"%s\" because it is larger than than the allowed limit (%s)"
 msgstr ""
 "Kann %s \"%s\" nicht speichern, da es größer ist als das erlaubte Limit (%s)"
 
-#: packages/server/dist/models/UserModel.js:191
+#: packages/server/dist/models/UserModel.js:194
 #, fuzzy, javascript-format
 msgid ""
 "Cannot save %s \"%s\" because it would go over the total allowed size (%s) "
@@ -4274,6 +4295,9 @@ msgstr "Markiert eine Aufgabe als erledigt."
 #, javascript-format
 msgid "Note is not a to-do: \"%s\""
 msgstr "Notiz ist keine Aufgabe: „%s“"
+
+#~ msgid "Share Notes"
+#~ msgstr "Notizen teilen"
 
 #~ msgid "Joplin Server Directory"
 #~ msgstr "Joplin-Server-Verzeichnis"

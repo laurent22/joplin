@@ -17,8 +17,6 @@ msgstr ""
 "X-Generator: Poedit 3.0\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 
 #: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
@@ -26,7 +24,7 @@ msgstr ""
 #: packages/app-desktop/gui/MenuBar.js:377
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.js:22
 #: packages/app-desktop/gui/PromptDialog.min.js:235
-#: packages/app-desktop/gui/DialogButtonRow.js:35
+#: packages/app-desktop/gui/DialogButtonRow.js:39
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:20
 #: packages/app-mobile/components/ModalDialog.js:67
 #: packages/app-mobile/components/CameraView.js:160
@@ -46,7 +44,7 @@ msgstr "U redu"
 #: packages/app-desktop/gui/PromptDialog.min.js:242
 #: packages/app-desktop/gui/NoteList/NoteList.js:164
 #: packages/app-desktop/gui/ResourceScreen.js:96
-#: packages/app-desktop/gui/DialogButtonRow.js:38
+#: packages/app-desktop/gui/DialogButtonRow.js:42
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:21
 #: packages/app-mobile/components/ModalDialog.js:70
 #: packages/app-mobile/components/SelectDateTimeDialog.js:82
@@ -55,8 +53,8 @@ msgstr "U redu"
 #: packages/app-mobile/components/side-menu-content.js:165
 #: packages/app-mobile/components/side-menu-content.js:338
 #: packages/app-mobile/components/screens/encryption-config.js:185
-#: packages/app-mobile/components/screens/Note.js:98
-#: packages/app-mobile/components/screens/Note.js:506
+#: packages/app-mobile/components/screens/Note.js:100
+#: packages/app-mobile/components/screens/Note.js:532
 #: packages/lib/shim-init-node.js:148
 msgid "Cancel"
 msgstr "Odustani"
@@ -186,7 +184,7 @@ msgstr ""
 #: packages/app-desktop/gui/ResourceScreen.js:47
 #: packages/app-desktop/gui/ResourceScreen.js:96
 #: packages/app-mobile/components/side-menu-content.js:146
-#: packages/app-mobile/components/screens/Note.js:830
+#: packages/app-mobile/components/screens/Note.js:860
 msgid "Delete"
 msgstr "Izbriši"
 
@@ -226,7 +224,7 @@ msgstr "Bilježnice"
 #: packages/app-desktop/gui/MainScreen/commands/setTags.js:17
 #: packages/app-mobile/components/side-menu-content.js:314
 #: packages/app-mobile/components/screens/tags.js:101
-#: packages/app-mobile/components/screens/Note.js:803
+#: packages/app-mobile/components/screens/Note.js:833
 msgid "Tags"
 msgstr "Oznake"
 
@@ -294,11 +292,11 @@ msgstr "Umetni poveznicu"
 msgid "List item"
 msgstr "Element popisa"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:545
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:552
 msgid "Layout"
 msgstr "Raspored"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:545
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:552
 #, javascript-format
 msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
@@ -307,20 +305,20 @@ msgstr ""
 "Ova bilješka nema sadržaj. Pritisni „%s” za prebacivanje na uređivač i uredi "
 "bilješku."
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:654
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:661
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:128
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:18
 msgid "Cut"
 msgstr "Izreži"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:661
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:668
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:136
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:13
 #: packages/app-desktop/gui/MenuBar.js:377
 msgid "Copy"
 msgstr "Kopiraj"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:668
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:675
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:143
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:23
 msgid "Paste"
@@ -351,13 +349,13 @@ msgid "Subscript"
 msgstr "Indeks"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:574
-#: packages/app-mobile/components/screens/Note.js:1016
+#: packages/app-mobile/components/screens/Note.js:998
 msgid "Edit"
 msgstr "Uredi"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:630
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:53
-#: packages/app-mobile/components/screens/Note.js:771
+#: packages/app-mobile/components/screens/Note.js:801
 msgid "Attach file"
 msgstr "Priloži datoteku"
 
@@ -425,8 +423,8 @@ msgid "to-do"
 msgstr "zadatak"
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.js:79
-#: packages/server/dist/models/UserModel.js:186
-#: packages/server/dist/models/UserModel.js:191
+#: packages/server/dist/models/UserModel.js:189
+#: packages/server/dist/models/UserModel.js:194
 msgid "note"
 msgstr "bilješka"
 
@@ -633,7 +631,7 @@ msgstr "Traži …"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:121
 #: packages/app-desktop/gui/MenuBar.js:433
-#: packages/app-desktop/gui/MenuBar.js:486 packages/app-desktop/gui/Root.js:99
+#: packages/app-desktop/gui/MenuBar.js:486 packages/app-desktop/gui/Root.js:138
 msgid "Import"
 msgstr "Uvezi"
 
@@ -679,7 +677,7 @@ msgid "Preferences"
 msgstr "Postavke"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:30
-#: packages/app-desktop/gui/MenuBar.js:344 packages/app-desktop/gui/Root.js:100
+#: packages/app-desktop/gui/MenuBar.js:344 packages/app-desktop/gui/Root.js:139
 msgid "Options"
 msgstr "Opcije"
 
@@ -705,20 +703,7 @@ msgstr ""
 msgid "Save"
 msgstr "Spremi"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:463
-msgid "The Web Clipper needs your authorisation to access your data."
-msgstr "Web Clipper treba tvoju autorizaciju za pristup podacima."
-
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:463
-msgid "Grant authorisation"
-msgstr "Odobri autorizaciju"
-
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:463
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:483
-msgid "Reject"
-msgstr "Odbij"
-
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:466
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:459
 msgid ""
 "Safe mode is currently active. Note rendering and all plugins are "
 "temporarily disabled."
@@ -726,11 +711,11 @@ msgstr ""
 "Trenutačno je aktivan siguran način. Prikaz bilježaka i svi dodaci "
 "privremeno su deaktivirani."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:466
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:459
 msgid "Disable safe mode and restart"
 msgstr "Deaktiviraj sigurni modus i pokreni program ponovo"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:469
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:462
 msgid ""
 "The sync target needs to be upgraded before Joplin can sync. The operation "
 "may take a few minutes to complete and the app needs to be restarted. To "
@@ -740,25 +725,25 @@ msgstr ""
 "sinkronizacije. Postupak može potrajati nekoliko minuta, a nakon toga se "
 "program mora ponovo pokrenuti. Za nastavak pritisni poveznicu."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:469
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:462
 msgid "Restart and upgrade"
 msgstr "Pokreni ponovo i nadogradi"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:472
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:465
 msgid "Some items cannot be decrypted."
 msgstr "Neki se elementi ne mogu dešifrirati."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:472
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:475
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:486
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:465
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:468
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:479
 msgid "View them now"
 msgstr "Pogledaj ih sada"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:475
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:468
 msgid "One of your master keys use an obsolete encryption method."
 msgstr "Jedan od tvojih glavnih ključeva koristi zastarjelu metodu šifriranja."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:478
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:471
 msgid ""
 "The default encryption method has been changed, you should re-encrypt your "
 "data."
@@ -766,32 +751,37 @@ msgstr ""
 "Standardna metoda šifriranja je promijenjena. Preporučujemo da ponovo "
 "šifriraš tvoje podatke."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:478
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:471
 msgid "More info"
 msgstr "Daljnje informacije"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:483
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:476
 #, javascript-format
 msgid "%s (%s) would like to share a notebook with you."
 msgstr "%s (%s) želi s tobom dijeliti bilježnicu."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:483
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:476
 msgid "Accept"
 msgstr "Prihvati"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:486
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:476
+#: packages/app-desktop/gui/Root.js:113
+msgid "Reject"
+msgstr "Odbij"
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:479
 msgid "Some items cannot be synchronised."
 msgstr "Neki se elementi ne mogu sinkronizirati."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:489
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:482
 msgid "One or more master keys need a password."
 msgstr "Jedan ili više javnih ključeva trebaju lozinku."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:489
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:482
 msgid "Set the password"
 msgstr "Postavi lozinku"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:612
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:605
 msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
 msgstr "Promijeni raspored pomoću strelica. Zatvori pomoću tipke „Escape”."
 
@@ -825,7 +815,7 @@ msgstr "Uključi/Isključi bočnu traku"
 
 #: packages/app-desktop/gui/MainScreen/commands/editAlarm.js:20
 #: packages/app-mobile/components/SelectDateTimeDialog.js:84
-#: packages/app-mobile/components/screens/Note.js:789
+#: packages/app-mobile/components/screens/Note.js:819
 msgid "Set alarm"
 msgstr "Postavi upozorenje"
 
@@ -886,7 +876,8 @@ msgid "Spell checker"
 msgstr "Provjera pravopisa"
 
 #: packages/app-desktop/gui/MainScreen/commands/showShareNoteDialog.js:16
-msgid "Share note..."
+#, fuzzy
+msgid "Publish note..."
 msgstr "Dijeli bilješku …"
 
 #: packages/app-desktop/gui/MainScreen/commands/newSubFolder.js:17
@@ -1031,7 +1022,7 @@ msgstr "Obnovi ključ"
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr "Uvoz iz „%s” kao „%s” format. Pričekaj …"
 
-#: packages/app-desktop/gui/MenuBar.js:291 packages/app-desktop/gui/Root.js:102
+#: packages/app-desktop/gui/MenuBar.js:291 packages/app-desktop/gui/Root.js:141
 msgid "Synchronisation Status"
 msgstr "Stanje sinkronizacije"
 
@@ -1227,7 +1218,7 @@ msgid "Switch to to-do type"
 msgstr "Promijeni u zadatak"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.js:100
-#: packages/app-mobile/components/screens/Note.js:817
+#: packages/app-mobile/components/screens/Note.js:847
 msgid "Copy Markdown link"
 msgstr "Kopiraj Markdown poveznicu"
 
@@ -1431,15 +1422,28 @@ msgstr "Šifriranje je:"
 msgid "Enabled"
 msgstr "Aktivirano"
 
-#: packages/app-desktop/gui/Root.js:97
+#: packages/app-desktop/gui/Root.js:98
+#, fuzzy
+msgid "Confirmation"
+msgstr "Konfiguracija"
+
+#: packages/app-desktop/gui/Root.js:111
+msgid "The Web Clipper needs your authorisation to access your data."
+msgstr "Web Clipper treba tvoju autorizaciju za pristup podacima."
+
+#: packages/app-desktop/gui/Root.js:112
+msgid "Grant authorisation"
+msgstr "Odobri autorizaciju"
+
+#: packages/app-desktop/gui/Root.js:136
 msgid "OneDrive Login"
 msgstr "OneDrive prijava"
 
-#: packages/app-desktop/gui/Root.js:98
+#: packages/app-desktop/gui/Root.js:137
 msgid "Dropbox Login"
 msgstr "Dropbox prijava"
 
-#: packages/app-desktop/gui/Root.js:101
+#: packages/app-desktop/gui/Root.js:140
 msgid "Note attachments"
 msgstr "Privici bilješke"
 
@@ -1617,8 +1621,8 @@ msgid "Statistics"
 msgstr "Statistika"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.js:113
-#: packages/app-desktop/gui/ShareNoteDialog.js:189
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:257
+#: packages/app-desktop/gui/ShareNoteDialog.js:192
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:260
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:24
 msgid "Close"
 msgstr "Zatvori"
@@ -1704,50 +1708,51 @@ msgid "Warning: not all resources shown for performance reasons (limit: %s)."
 msgstr ""
 "Upozorenje: za brže izvođenje, ne prikazuju se svi resursi (ograničenje: %s)."
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:141
-msgid "Unshare note"
+#: packages/app-desktop/gui/ShareNoteDialog.js:144
+#, fuzzy
+msgid "Unpublish note"
 msgstr "Prestani dijeliti bilješku"
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:168
+#: packages/app-desktop/gui/ShareNoteDialog.js:171
 msgid "Synchronising..."
 msgstr "Sinkroniziranje …"
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:170
+#: packages/app-desktop/gui/ShareNoteDialog.js:173
 msgid "Generating link..."
 msgid_plural "Generating links..."
 msgstr[0] "Generiranje poveznice …"
 msgstr[1] "Generiranje poveznica …"
 msgstr[2] "Generiranje poveznica …"
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:172
+#: packages/app-desktop/gui/ShareNoteDialog.js:175
 msgid "Link has been copied to clipboard!"
 msgid_plural "Links have been copied to clipboard!"
 msgstr[0] "Poveznica je kopirana u međuspremnik!"
 msgstr[1] "Poveznice su kopirane u međuspremnik!"
 msgstr[2] "Poveznice su kopirane u međuspremnik!"
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:179
+#: packages/app-desktop/gui/ShareNoteDialog.js:182
 msgid ""
 "Note: When a note is shared, it will no longer be encrypted on the server."
 msgstr ""
 "Napomena: Kad se bilješka dijeli, više neće biti šifrirana na poslužitelju."
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:184
-msgid "Share Notes"
-msgstr "Dijeli bilješke"
+#: packages/app-desktop/gui/ShareNoteDialog.js:187
+msgid "Publish Notes"
+msgstr ""
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:186
+#: packages/app-desktop/gui/ShareNoteDialog.js:189
 msgid "Copy Shareable Link"
 msgid_plural "Copy Shareable Links"
 msgstr[0] "Kopiraj poveznicu za dijeljenje"
 msgstr[1] "Kopiraj poveznice za dijeljenje"
 msgstr[2] "Kopiraj poveznice za dijeljenje"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:138
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:141
 msgid "Unshare"
 msgstr "Prestani dijeliti"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:180
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:183
 msgid ""
 "Delete this invitation? The recipient will no longer have access to this "
 "shared notebook."
@@ -1755,41 +1760,41 @@ msgstr ""
 "Izbrisati ovu pozivnicu? Primalac više neće imati pristup ovoj dijeljenoj "
 "bilježnici."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:194
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:197
 msgid "Add recipient:"
 msgstr "Dodaj primaoca:"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:197
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:200
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:28
-#: packages/app-mobile/components/screens/Note.js:796
+#: packages/app-mobile/components/screens/Note.js:826
 msgid "Share"
 msgstr "Dijeli"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:206
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:209
 msgid "Recipient has not yet accepted the invitation"
 msgstr "Primalac još nije prihvatio pozivnicu"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:207
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:210
 msgid "Recipient has rejected the invitation"
 msgstr "Primalac je odbio pozivnicu"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:208
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:211
 msgid "Recipient has accepted the invitation"
 msgstr "Primalac je prihvatio pozivnicu"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:218
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:221
 msgid "Recipients:"
 msgstr "Primaoci:"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:230
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:233
 msgid "Synchronizing..."
 msgstr "Sinkroniziranje …"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:231
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:234
 msgid "Sharing notebook..."
 msgstr "Dijeljenje bilježnice …"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:241
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:244
 msgid ""
 "Unshare this notebook? The recipients will no longer have access to its "
 "content."
@@ -1797,7 +1802,7 @@ msgstr ""
 "Prestati dijeliti ovu bilježnicu? Primalac više neće imati pristup sadržaju "
 "bilježnice."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:251
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:254
 msgid "Share Notebook"
 msgstr "Dijeli bilježnicu"
 
@@ -1841,16 +1846,30 @@ msgid "Open %s"
 msgstr "Otvori %s"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:22
-#: packages/app-mobile/components/screens/Note.js:504
+#: packages/app-mobile/components/screens/Note.js:530
 #: packages/lib/shim-init-node.js:148 packages/lib/versionInfo.js:27
 msgid "Yes"
 msgstr "Da"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:23
-#: packages/app-mobile/components/screens/Note.js:505
+#: packages/app-mobile/components/screens/Note.js:531
 #: packages/lib/shim-init-node.js:148 packages/lib/versionInfo.js:27
 msgid "No"
 msgstr "Ne"
+
+#: packages/app-mobile/components/NoteEditor/CodeMirror.bundle.min.js:1
+msgid "Xx!^&q!^!_"
+msgstr ""
+
+#: packages/app-mobile/components/NoteEditor/CodeMirror.bundle.min.js:1
+msgid ""
+",tokenizers:[template,noSemicolon,incdecToken,0,1,2,3,4,5],topRules:"
+"{Document:[0,6]},nested:[["
+msgstr ""
+
+#: packages/app-mobile/components/NoteEditor/CodeMirror.bundle.min.js:1
+msgid "&R!"
+msgstr ""
 
 #: packages/app-mobile/components/SelectDateTimeDialog.js:78
 msgid "Clear alarm"
@@ -2087,7 +2106,7 @@ msgid "Master Key %s"
 msgstr "Glavni ključ %s"
 
 #: packages/app-mobile/components/screens/encryption-config.js:120
-#: packages/app-mobile/components/screens/Note.js:724
+#: packages/app-mobile/components/screens/Note.js:750
 #, javascript-format
 msgid "Created: %s"
 msgstr "Stvoreno: %s"
@@ -2125,40 +2144,40 @@ msgstr "Aktiviraj"
 msgid "Encryption is: %s"
 msgstr "Šifriranje je: %s"
 
-#: packages/app-mobile/components/screens/Note.js:98
+#: packages/app-mobile/components/screens/Note.js:100
 msgid "This note has been modified:"
 msgstr "Bilješka je promijenjena:"
 
-#: packages/app-mobile/components/screens/Note.js:98
+#: packages/app-mobile/components/screens/Note.js:100
 msgid "Save changes"
 msgstr "Spremi promjene"
 
-#: packages/app-mobile/components/screens/Note.js:98
+#: packages/app-mobile/components/screens/Note.js:100
 msgid "Discard changes"
 msgstr "Odbaci promjene"
 
-#: packages/app-mobile/components/screens/Note.js:150
+#: packages/app-mobile/components/screens/Note.js:152
 #, javascript-format
 msgid "No item with ID %s"
 msgstr "Nema elementa s ID oznakom %s"
 
-#: packages/app-mobile/components/screens/Note.js:168
+#: packages/app-mobile/components/screens/Note.js:170
 msgid "This attachment is not downloaded or not decrypted yet."
 msgstr "Ovaj privitak još nije preuzet ili dešifriran."
 
-#: packages/app-mobile/components/screens/Note.js:173
+#: packages/app-mobile/components/screens/Note.js:175
 #, javascript-format
 msgid "The Joplin mobile app does not currently support this type of link: %s"
 msgstr ""
 "Joplin program za mobilne uređaje trenutačno ne podržava ovu vrstu "
 "poveznice: %s"
 
-#: packages/app-mobile/components/screens/Note.js:178
+#: packages/app-mobile/components/screens/Note.js:180
 #, javascript-format
 msgid "Links with protocol \"%s\" are not supported"
 msgstr "Poveznice s protokolom „%s” se ne podržavaju"
 
-#: packages/app-mobile/components/screens/Note.js:342
+#: packages/app-mobile/components/screens/Note.js:368
 msgid ""
 "In order to associate a geo-location with the note, the app needs your "
 "permission to access your location.\n"
@@ -2170,16 +2189,16 @@ msgstr ""
 "\n"
 "Ovu opciju možeš isključiti bilo kada u prozoru konfiguracije."
 
-#: packages/app-mobile/components/screens/Note.js:343
+#: packages/app-mobile/components/screens/Note.js:369
 msgid "Permission needed"
 msgstr "Potrebna je dozvola"
 
-#: packages/app-mobile/components/screens/Note.js:449
+#: packages/app-mobile/components/screens/Note.js:475
 #: packages/app-cli/app/command-rmnote.js:27
 msgid "Delete note?"
 msgstr "Izbrisati bilješku?"
 
-#: packages/app-mobile/components/screens/Note.js:503
+#: packages/app-mobile/components/screens/Note.js:529
 #: packages/lib/shim-init-node.js:147
 #, javascript-format
 msgid ""
@@ -2189,57 +2208,57 @@ msgstr ""
 "Priložit ćeš veliku sliku (%d × %d piksela). Želiš li je smanjiti na %d "
 "piksela?"
 
-#: packages/app-mobile/components/screens/Note.js:585
+#: packages/app-mobile/components/screens/Note.js:611
 #, javascript-format
 msgid "Unsupported image type: %s"
 msgstr "Nepodržana vrsta slike: %s"
 
-#: packages/app-mobile/components/screens/Note.js:725
+#: packages/app-mobile/components/screens/Note.js:751
 #, javascript-format
 msgid "Updated: %s"
 msgstr "Aktualizirano: %s"
 
-#: packages/app-mobile/components/screens/Note.js:728
+#: packages/app-mobile/components/screens/Note.js:754
 msgid "View on map"
 msgstr "Pogledaj na karti"
 
-#: packages/app-mobile/components/screens/Note.js:735
+#: packages/app-mobile/components/screens/Note.js:761
 msgid "Go to source URL"
 msgstr "Idi na URL izvora"
 
-#: packages/app-mobile/components/screens/Note.js:764
+#: packages/app-mobile/components/screens/Note.js:790
 msgid "Attach..."
 msgstr "Priloži …"
 
-#: packages/app-mobile/components/screens/Note.js:775
+#: packages/app-mobile/components/screens/Note.js:805
 msgid "Attach photo"
 msgstr "Priloži sliku"
 
-#: packages/app-mobile/components/screens/Note.js:776
+#: packages/app-mobile/components/screens/Note.js:806
 msgid "Take photo"
 msgstr "Snimi sliku"
 
-#: packages/app-mobile/components/screens/Note.js:777
+#: packages/app-mobile/components/screens/Note.js:807
 msgid "Choose an option"
 msgstr "Odaberi jednu opciju"
 
-#: packages/app-mobile/components/screens/Note.js:810
+#: packages/app-mobile/components/screens/Note.js:840
 msgid "Convert to note"
 msgstr "Pretvori u bilješku"
 
-#: packages/app-mobile/components/screens/Note.js:810
+#: packages/app-mobile/components/screens/Note.js:840
 msgid "Convert to todo"
 msgstr "Pretvori u zadatak"
 
-#: packages/app-mobile/components/screens/Note.js:824
+#: packages/app-mobile/components/screens/Note.js:854
 msgid "Properties"
 msgstr "Svojstva"
 
-#: packages/app-mobile/components/screens/Note.js:1008
+#: packages/app-mobile/components/screens/Note.js:986
 msgid "Add body"
 msgstr "Dodaj sadržaj"
 
-#: packages/app-mobile/components/screens/Note.js:1037
+#: packages/app-mobile/components/screens/Note.js:1019
 msgid "Add title"
 msgstr "Dodaj naslov"
 
@@ -2247,7 +2266,7 @@ msgstr "Dodaj naslov"
 msgid "Search"
 msgstr "Traži"
 
-#: packages/server/dist/middleware/notificationHandler.js:27
+#: packages/server/dist/middleware/notificationHandler.js:28
 #, javascript-format
 msgid ""
 "The default admin password is insecure and has not been changed! [Change it "
@@ -2256,18 +2275,18 @@ msgstr ""
 "Standardna administratorska lozinka nije sigurna i nije promijenjena! "
 "[Promijeni je sada](%s)"
 
-#: packages/server/dist/models/UserModel.js:186
-#: packages/server/dist/models/UserModel.js:191
+#: packages/server/dist/models/UserModel.js:189
+#: packages/server/dist/models/UserModel.js:194
 msgid "attachment"
 msgstr "privitak"
 
-#: packages/server/dist/models/UserModel.js:186
+#: packages/server/dist/models/UserModel.js:189
 #, javascript-format
 msgid ""
 "Cannot save %s \"%s\" because it is larger than than the allowed limit (%s)"
 msgstr "Nije moguće spremiti %s \"%s\" jer je veći od dozvoljene granice (%s)"
 
-#: packages/server/dist/models/UserModel.js:191
+#: packages/server/dist/models/UserModel.js:194
 #, javascript-format
 msgid ""
 "Cannot save %s \"%s\" because it would go over the total allowed size (%s) "
@@ -4192,6 +4211,9 @@ msgstr "Označava zadatak završenim."
 #, javascript-format
 msgid "Note is not a to-do: \"%s\""
 msgstr "Bilješka nije zadatak: \"%s\""
+
+#~ msgid "Share Notes"
+#~ msgstr "Dijeli bilješke"
 
 #~ msgid "Joplin Server Directory"
 #~ msgstr "Joplin poslužitelj mapa"
