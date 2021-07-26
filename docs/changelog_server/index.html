@@ -29,7 +29,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog_server.md
 			href="&#x2F;css/bootstrap5.0.2.min.css"
 			as="style"
 		/>
-		<link rel="stylesheet" href="&#x2F;css/fontawesome-all.min.css?t=1627121689688">
+		<link rel="stylesheet" href="&#x2F;css/fontawesome-all.min.css?t=1627320132533">
 		<link
 			href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
 			rel="stylesheet"
@@ -37,7 +37,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog_server.md
 			media="all"
 			onload="this.media='all'; this.onload = null"
 		/>
-		<link rel="stylesheet" href="&#x2F;css/site.css?t=1627121689688" as="style" />
+		<link rel="stylesheet" href="&#x2F;css/site.css?t=1627320132533" as="style" />
 		<title>Joplin Server Changelog | Joplin</title>
 	</head>
 	<body class="website-env-prod">
@@ -266,6 +266,20 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog_server.md
 <p><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=E8JMYD2LQ8MMA&amp;lc=GB&amp;item_name=Joplin+Development&amp;currency_code=EUR&amp;bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted"><img src="https://joplinapp.org/images/badges/Donate-PayPal-green.svg" alt="Donate using PayPal"></a> <a href="https://github.com/sponsors/laurent22/"><img src="https://joplinapp.org/images/badges/GitHub-Badge.svg" alt="Sponsor on GitHub"></a> <a href="https://www.patreon.com/joplin"><img src="https://joplinapp.org/images/badges/Patreon-Badge.svg" alt="Become a patron"></a> <a href="https://joplinapp.org/donate/#donations"><img src="https://joplinapp.org/images/badges/Donate-IBAN.svg" alt="Donate using IBAN"></a></p>
 </div>
 <h1>Joplin Server Changelog<a name="joplin-server-changelog" href="#joplin-server-changelog" class="heading-anchor">🔗</a></h1>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.2.8-beta">server-v2.2.8-beta</a> (Pre-release) - 2021-07-24T16:55:58Z<a name="server-v2-2-8-beta-https-github-com-laurent22-joplin-releases-tag-server-v2-2-8-beta-pre-release-2021-07-24t16-55-58z" href="#server-v2-2-8-beta-https-github-com-laurent22-joplin-releases-tag-server-v2-2-8-beta-pre-release-2021-07-24t16-55-58z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>New: Added form tokens to prevent CSRF attacks (19b45de)</li>
+<li>Improved: Allow admin to change Stripe subscription (75a421e)</li>
+<li>Improved: Allow enabling or disabling a user. Handle cancelling subscription. (27c3cbd)</li>
+<li>Improved: Allow user to upgrade account (e83ab93)</li>
+<li>Improved: Allow users to cancel Stripe subscription (b7e9848)</li>
+<li>Improved: Clarify error message when user info cannot be saved (4567b78)</li>
+<li>Improved: Explain how to use Joplin Server with a Joplin app (3f993af)</li>
+<li>Improved: Handle Stripe webhook receiving multiple times the same event (252d069)</li>
+<li>Improved: Make sure email URLs are displayed as clickable links (7245aea)</li>
+<li>Improved: Moved email templates to separate files (6a93cb2)</li>
+<li>Improved: Set default of env SUPPORT_EMAIL to &quot;SUPPORT_EMAIL&quot; to make it clear it needs to be set (92520e5)</li>
+</ul>
 <h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.2.7-beta">server-v2.2.7-beta</a> (Pre-release) - 2021-07-11T17:31:42Z<a name="server-v2-2-7-beta-https-github-com-laurent22-joplin-releases-tag-server-v2-2-7-beta-pre-release-2021-07-11t17-31-42z" href="#server-v2-2-7-beta-https-github-com-laurent22-joplin-releases-tag-server-v2-2-7-beta-pre-release-2021-07-11t17-31-42z" class="heading-anchor">🔗</a></h2>
 <ul>
 <li>New: Added support for resetting user password (62b6198)</li>
@@ -469,7 +483,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog_server.md
 			rel="preload"
 			as="script"
 		></script>
-		<script src="&#x2F;js/script.js?t=1627121689688"></script>
+		<script src="&#x2F;js/script.js?t=1627320132533"></script>
 
 <script>
 	if (window.location.hostname !== 'localhost') {
