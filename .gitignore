@@ -852,6 +852,9 @@ packages/lib/Synchronizer.js.map
 packages/lib/TaskQueue.d.ts
 packages/lib/TaskQueue.js
 packages/lib/TaskQueue.js.map
+packages/lib/array.d.ts
+packages/lib/array.js
+packages/lib/array.js.map
 packages/lib/commands/historyBackward.d.ts
 packages/lib/commands/historyBackward.js
 packages/lib/commands/historyBackward.js.map

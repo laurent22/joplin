@@ -2,8 +2,9 @@ import * as fs from 'fs-extra';
 import { insertContentIntoFile, rootDir } from '../tool-utils';
 import { pressCarouselItems } from './utils/pressCarousel';
 import { getMarkdownIt, loadMustachePartials, markdownToPageHtml, renderMustache } from './utils/render';
-import { Env, PlanPageParams, Sponsors, TemplateParams } from './utils/types';
+import { Env, OrgSponsor, PlanPageParams, Sponsors, TemplateParams } from './utils/types';
 import { getPlans, StripePublicConfig } from '@joplin/lib/utils/joplinCloud';
+import { shuffle } from '@joplin/lib/array';
 const dirname = require('path').dirname;
 const glob = require('glob');
 const path = require('path');
@@ -42,7 +43,6 @@ async function getDonateLinks() {
 }
 
 function replaceGitHubByWebsiteLinks(md: string) {
-	// let output = md.replace(/https:\/\/github.com\/laurent22\/joplin\/blob\/master\/readme\/(.*?)\/index\.md(#[^\s)]+|)/g, 'https://joplinapp.org/$1');
 	return md
 		.replace(/https:\/\/github.com\/laurent22\/joplin\/blob\/dev\/readme\/(.*?)\.md(#[^\s)]+|)/g, '/$1/$2')
 		.replace(/https:\/\/github.com\/laurent22\/joplin\/blob\/dev\/README\.md(#[^\s)]+|)/g, '/help/$1');
@@ -182,7 +182,13 @@ async function updateDownloadPage(downloadButtonsHtml: Record<string, string>) {
 
 async function loadSponsors(): Promise<Sponsors> {
 	const sponsorsPath = `${rootDir}/packages/tools/sponsors.json`;
-	return JSON.parse(await fs.readFile(sponsorsPath, 'utf8'));
+	const output: Sponsors = JSON.parse(await fs.readFile(sponsorsPath, 'utf8'));
+	output.orgs = shuffle<OrgSponsor>(output.orgs.map(o => {
+		if (o.urlWebsite) o.url = o.urlWebsite;
+		return o;
+	}));
+
+	return output;
 }
 
 async function main() {
