@@ -357,6 +357,9 @@ packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js.map
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/styles/index.d.ts
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/styles/index.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/styles/index.js.map
+packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/openEditDialog.d.ts
+packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/openEditDialog.js
+packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/openEditDialog.js.map
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.d.ts
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js.map
