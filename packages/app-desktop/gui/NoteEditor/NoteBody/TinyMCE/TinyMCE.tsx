@@ -16,11 +16,11 @@ import { copyHtmlToClipboard } from '../../utils/clipboardUtils';
 import shim from '@joplin/lib/shim';
 
 const { MarkupToHtml } = require('@joplin/renderer');
-const taboverride = require('taboverride');
 import { reg } from '@joplin/lib/registry';
 import BaseItem from '@joplin/lib/models/BaseItem';
 import setupToolbarButtons from './utils/setupToolbarButtons';
 import { plainTextToHtml } from '@joplin/lib/htmlUtils';
+import openEditDialog from './utils/openEditDialog';
 const { themeStyle } = require('@joplin/lib/theme');
 const { clipboard } = require('electron');
 const supportedLocales = require('./supportedLocales');
@@ -37,33 +37,6 @@ function markupRenderOptions(override: any = null) {
 		},
 		replaceResourceInternalToExternalLinks: true,
 		...override,
-	};
-}
-
-function findBlockSource(node: any) {
-	const sources = node.getElementsByClassName('joplin-source');
-	if (!sources.length) throw new Error('No source for node');
-	const source = sources[0];
-
-	return {
-		openCharacters: source.getAttribute('data-joplin-source-open'),
-		closeCharacters: source.getAttribute('data-joplin-source-close'),
-		content: source.textContent,
-		node: source,
-		language: source.getAttribute('data-joplin-language') || '',
-	};
-}
-
-function newBlockSource(language: string = '', content: string = ''): any {
-	const fence = language === 'katex' ? '$$' : '```';
-	const fenceLanguage = language === 'katex' ? '' : language;
-
-	return {
-		openCharacters: `\n${fence}${fenceLanguage}\n`,
-		closeCharacters: `\n${fence}\n`,
-		content: content,
-		node: null,
-		language: language,
 	};
 }
 
@@ -95,40 +68,10 @@ function findEditableContainer(node: any): any {
 	return null;
 }
 
-function editableInnerHtml(html: string): string {
-	const temp = document.createElement('div');
-	temp.innerHTML = html;
-	const editable = temp.getElementsByClassName('joplin-editable');
-	if (!editable.length) throw new Error(`Invalid joplin-editable: ${html}`);
-	return editable[0].innerHTML;
-}
-
-function dialogTextArea_keyDown(event: any) {
-	if (event.key === 'Tab') {
-		window.requestAnimationFrame(() => event.target.focus());
-	}
-}
-
 let markupToHtml_ = new MarkupToHtml();
 function stripMarkup(markupLanguage: number, markup: string, options: any = null) {
 	if (!markupToHtml_) markupToHtml_ = new MarkupToHtml();
 	return	markupToHtml_.stripMarkup(markupLanguage, markup, options);
-}
-
-// Allows pressing tab in a textarea to input an actual tab (instead of changing focus)
-// taboverride will take care of actually inserting the tab character, while the keydown
-// event listener will override the default behaviour, which is to focus the next field.
-function enableTextAreaTab(enable: boolean) {
-	const textAreas = document.getElementsByClassName('tox-textarea');
-	for (const textArea of textAreas) {
-		taboverride.set(textArea, enable);
-
-		if (enable) {
-			textArea.addEventListener('keydown', dialogTextArea_keyDown);
-		} else {
-			textArea.removeEventListener('keydown', dialogTextArea_keyDown);
-		}
-	}
 }
 
 interface TinyMceCommand {
@@ -618,70 +561,6 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 					joplinSup: { inline: 'sup', remove: 'all' },
 				},
 				setup: (editor: any) => {
-
-					function openEditDialog(editable: any) {
-						const source = editable ? findBlockSource(editable) : newBlockSource();
-
-						editor.windowManager.open({
-							title: _('Edit'),
-							size: 'large',
-							initialData: {
-								codeTextArea: source.content,
-								languageInput: source.language,
-							},
-							onSubmit: async (dialogApi: any) => {
-								const newSource = newBlockSource(dialogApi.getData().languageInput, dialogApi.getData().codeTextArea);
-								const md = `${newSource.openCharacters}${newSource.content.trim()}${newSource.closeCharacters}`;
-								const result = await markupToHtml.current(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, md, { bodyOnly: true });
-
-								// markupToHtml will return the complete editable HTML, but we only
-								// want to update the inner HTML, so as not to break additional props that
-								// are added by TinyMCE on the main node.
-
-								if (editable) {
-									editable.innerHTML = editableInnerHtml(result.html);
-								} else {
-									editor.insertContent(result.html);
-								}
-
-								dialogApi.close();
-								editor.fire('joplinChange');
-								dispatchDidUpdate(editor);
-							},
-							onClose: () => {
-								enableTextAreaTab(false);
-							},
-							body: {
-								type: 'panel',
-								items: [
-									{
-										type: 'input',
-										name: 'languageInput',
-										label: 'Language',
-										// Katex is a special case with special opening/closing tags
-										// and we don't currently handle switching the language in this case.
-										disabled: source.language === 'katex',
-									},
-									{
-										type: 'textarea',
-										name: 'codeTextArea',
-										value: source.content,
-									},
-								],
-							},
-							buttons: [
-								{
-									type: 'submit',
-									text: 'OK',
-								},
-							],
-						});
-
-						window.requestAnimationFrame(() => {
-							enableTextAreaTab(true);
-						});
-					}
-
 					editor.ui.registry.addButton('joplinAttach', {
 						tooltip: _('Attach file'),
 						icon: 'paperclip',
@@ -696,7 +575,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 						tooltip: _('Code Block'),
 						icon: 'code-sample',
 						onAction: async function() {
-							openEditDialog(null);
+							openEditDialog(editor, markupToHtml, dispatchDidUpdate, null);
 						},
 					});
 
@@ -738,12 +617,10 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 					editor.addShortcut('Meta+Shift+8', '', () => editor.execCommand('InsertUnorderedList'));
 					editor.addShortcut('Meta+Shift+9', '', () => editor.execCommand('InsertJoplinChecklist'));
 
-					// setupContextMenu(editor);
-
 					// TODO: remove event on unmount?
 					editor.on('DblClick', (event: any) => {
 						const editable = findEditableContainer(event.target);
-						if (editable) openEditDialog(editable);
+						if (editable) openEditDialog(editor, markupToHtml, dispatchDidUpdate, editable);
 					});
 
 					// This is triggered when an external file is dropped on the editor

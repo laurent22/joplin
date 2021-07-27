@@ -5,13 +5,14 @@ export enum Env {
 	Prod = 'prod',
 }
 
-interface GithubSponsor {
+export interface GithubSponsor {
 	name: string;
 	id: string;
 }
 
-interface OrgSponsor {
+export interface OrgSponsor {
 	url: string;
+	urlWebsite?: string;
 	title: string;
 	imageName: string;
 }
