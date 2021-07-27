@@ -6,6 +6,7 @@ import { _ } from './locale';
 const { stringify } = require('query-string');
 const urlUtils = require('./urlUtils.js');
 const Buffer = require('buffer').Buffer;
+const { version } = require('./packageInfo.js');
 
 const logger = Logger.create('OneDriveApi');
 
@@ -265,11 +266,12 @@ export default class OneDriveApi {
 
 		for (let i = 0; i < 5; i++) {
 			options.headers['Authorization'] = `bearer ${this.token()}`;
+			options.headers['User-Agent'] = `ISV|Joplin|Joplin/${version}`;
 
-			const handleRequestRepeat = async (error: any) => {
+			const handleRequestRepeat = async (error: any, sleep_seconds: number = (i + 1) * 5) => {
 				logger.info(`Got error below - retrying (${i})...`);
 				logger.info(error);
-				await time.sleep((i + 1) * 5);
+				await time.sleep(sleep_seconds);
 			};
 
 			let response = null;
@@ -338,6 +340,15 @@ export default class OneDriveApi {
 					// Request: PATCH https://graph.microsoft.com/v1.0/drive/root:/Apps/JoplinDev/f56c5601fee94b8085524513bf3e352f.md null "{\"fileSystemInfo\":{\"lastModifiedDateTime\":\"....\"}}" {"headers":{"Content-Type":"application/json","Authorization":"bearer ...
 
 					await handleRequestRepeat(error);
+					continue;
+				} else if (error?.code === 'activityLimitReached' && response?.headers?._headers['retry-after'][0]) {
+					// Wait for OneDrive throttling
+					// Relavent Microsoft Docs: https://docs.microsoft.com/en-us/sharepoint/dev/general-development/how-to-avoid-getting-throttled-or-blocked-in-sharepoint-online#best-practices-to-handle-throttling
+					// Decrement retry count as multiple sync threads will cause repeated throttling errors - this will wait until throttling is resolved to continue, preventing a hard stop on the sync
+					i--;
+					const sleep_seconds = response.headers._headers['retry-after'][0];
+					logger.info(`OneDrive Throttle, sync thread sleeping for ${sleep_seconds} seconds...`);
+					await handleRequestRepeat(error, parseInt(sleep_seconds));
 					continue;
 				} else if (error.code == 'itemNotFound' && method == 'DELETE') {
 					// Deleting a non-existing item is ok - noop
