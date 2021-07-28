@@ -119,8 +119,8 @@ async function createPotFile(potFilePath) {
 	let files = (await execCommand(findCommand)).split('\n');
 
 	files = files.filter(f => {
-		if (f.endsWith('.min.js')) return false;
-		if (f.endsWith('.bundle.js')) return false;
+		if (f.endsWith('CodeMirror.bundle.min.js')) return false;
+		if (f.endsWith('CodeMirror.bundle.js')) return false;
 		if (f.endsWith('.test.js')) return false;
 		if (f.endsWith('.eslintrc.js')) return false;
 		if (f.endsWith('jest.config.js')) return false;
