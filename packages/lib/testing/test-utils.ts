@@ -138,7 +138,7 @@ function setSyncTargetName(name: string) {
 setSyncTargetName('memory');
 // setSyncTargetName('nextcloud');
 // setSyncTargetName('dropbox');
-setSyncTargetName('onedrive');
+// setSyncTargetName('onedrive');
 // setSyncTargetName('amazon_s3');
 // setSyncTargetName('joplinServer');
 
