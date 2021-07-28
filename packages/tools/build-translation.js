@@ -83,8 +83,8 @@ async function createPotFile(potFilePath) {
 		'./.github/*',
 		'./**/node_modules/*',
 		'./Assets/*',
-		'./docs/*',
 		'./Assets/TinyMCE/*',
+		'./docs/*',
 		'./node_modules/*',
 		'./packages/app-cli/build/*',
 		'./packages/app-cli/locales-build/*',
@@ -92,7 +92,6 @@ async function createPotFile(potFilePath) {
 		'./packages/app-cli/tests-build/*',
 		'./packages/app-cli/tests/*',
 		'./packages/app-clipper/*',
-		'./packages/fork-*/*',
 		'./packages/app-desktop/dist/*',
 		'./packages/app-desktop/gui/note-viewer/pluginAssets/*',
 		'./packages/app-desktop/gui/style/*',
@@ -103,8 +102,13 @@ async function createPotFile(potFilePath) {
 		'./packages/app-mobile/ios/*',
 		'./packages/app-mobile/pluginAssets/*',
 		'./packages/app-mobile/tools/*',
+		'./packages/fork-*/*',
+		'./packages/lib/rnInjectedJs/*',
+		'./packages/lib/vendor/*',
 		'./packages/renderer/assets/*',
 		'./packages/tools/*',
+		'./packages/turndown-plugin-gfm/*',
+		'./packages/turndown/*',
 		'./patches/*',
 		'./readme/*',
 	];
@@ -112,7 +116,23 @@ async function createPotFile(potFilePath) {
 	const findCommand = `find . -iname '*.js' -not -path '${excludedDirs.join('\' -not -path \'')}'`;
 
 	process.chdir(rootDir);
-	const files = (await execCommand(findCommand)).split('\n');
+	let files = (await execCommand(findCommand)).split('\n');
+
+	files = files.filter(f => {
+		if (f.endsWith('.min.js')) return false;
+		if (f.endsWith('.bundle.js')) return false;
+		if (f.endsWith('.test.js')) return false;
+		if (f.endsWith('.eslintrc.js')) return false;
+		if (f.endsWith('jest.config.js')) return false;
+		if (f.endsWith('jest.setup.js')) return false;
+		return true;
+	});
+
+	files.sort();
+
+	// Use this to get the list of files that are going to be processed. Useful
+	// to debug issues with files that shouldn't be in the list.
+	// console.info(files.join('\n'));
 
 	const baseArgs = [];
 	baseArgs.push('--from-code=utf-8');
@@ -121,7 +141,6 @@ async function createPotFile(potFilePath) {
 	baseArgs.push('--copyright-holder="Laurent Cozic"');
 	baseArgs.push('--package-name=Joplin');
 	baseArgs.push('--package-version=1.0.0');
-	// baseArgs.push('--no-location');
 	baseArgs.push('--keyword=_n:1,2');
 
 	let args = baseArgs.slice();
