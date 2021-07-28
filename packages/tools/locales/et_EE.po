@@ -16,72 +16,812 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 2.3\n"
 
-#: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
-#: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
-#: packages/app-desktop/gui/DialogButtonRow.min.js:30
-#: packages/app-desktop/gui/MenuBar.js:377
-#: packages/app-desktop/gui/ConfigScreen/ButtonBar.js:22
-#: packages/app-desktop/gui/PromptDialog.min.js:235
-#: packages/app-desktop/gui/DialogButtonRow.js:39
-#: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:20
-#: packages/app-mobile/components/ModalDialog.js:67
-#: packages/app-mobile/components/CameraView.js:160
-#: packages/app-mobile/components/side-menu-content.js:150
-#: packages/app-mobile/components/screens/ConfigScreen.js:152
-msgid "OK"
-msgstr "OK"
+#: packages/app-cli/app/app-gui.js:452
+msgid "To delete a tag, untag the associated notes."
+msgstr "Sildi kustutamiseks eemaldage märkmed seotud silt."
 
-#: packages/app-desktop/bridge.js:110 packages/app-desktop/bridge.js:126
-#: packages/app-desktop/checkForUpdates.js:189
-#: packages/app-desktop/gui/DialogButtonRow.min.js:38
-#: packages/app-desktop/gui/Sidebar/Sidebar.js:214
-#: packages/app-desktop/gui/Sidebar/Sidebar.js:455
-#: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:52
-#: packages/app-desktop/gui/utils/NoteListUtils.js:169
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:521
-#: packages/app-desktop/gui/PromptDialog.min.js:242
-#: packages/app-desktop/gui/NoteList/NoteList.js:164
-#: packages/app-desktop/gui/ResourceScreen.js:96
-#: packages/app-desktop/gui/DialogButtonRow.js:42
-#: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:21
-#: packages/app-mobile/components/ModalDialog.js:70
-#: packages/app-mobile/components/SelectDateTimeDialog.js:82
-#: packages/app-mobile/components/CameraView.js:161
-#: packages/app-mobile/components/side-menu-content.js:156
-#: packages/app-mobile/components/side-menu-content.js:165
-#: packages/app-mobile/components/side-menu-content.js:338
-#: packages/app-mobile/components/screens/encryption-config.js:185
-#: packages/app-mobile/components/screens/Note.js:100
-#: packages/app-mobile/components/screens/Note.js:532
-#: packages/lib/shim-init-node.js:148
-msgid "Cancel"
-msgstr "Tühista"
+#: packages/app-cli/app/app-gui.js:462
+msgid "Please select the note or notebook to be deleted first."
+msgstr "Valige esmalt kustutatav märkus või märkmik."
 
-#: packages/app-desktop/bridge.js:184
+#: packages/app-cli/app/app-gui.js:750
+msgid "Press Ctrl+D or type \"exit\" to exit the application"
+msgstr "Rakendusest väljumiseks vajutage Ctrl+D või kirjutage \"exit\""
+
+#: packages/app-cli/app/app.js:63
+#, javascript-format
+msgid "More than one item match \"%s\". Please narrow down your query."
+msgstr ""
+"\"%s\" vastab rohkem kui ühele üksusele. Palun kitsendage oma päringut."
+
+#: packages/app-cli/app/app.js:93
+msgid "No notebook selected."
+msgstr "Ühtegi märkmikku pole valitud."
+
+#: packages/app-cli/app/app.js:99
+msgid "No notebook has been specified."
+msgstr "Ühtegi märkmikku pole määratud."
+
+#: packages/app-cli/app/app.js:138 packages/app-cli/app/cli-utils.js:161
+msgid "Y"
+msgstr "Y"
+
+#: packages/app-cli/app/app.js:138 packages/app-cli/app/cli-utils.js:161
+msgid "n"
+msgstr "n"
+
+#: packages/app-cli/app/app.js:138
+msgid "N"
+msgstr "N"
+
+#: packages/app-cli/app/app.js:138
+msgid "y"
+msgstr "y"
+
+#: packages/app-cli/app/app.js:171
+msgid "Cancelling background synchronisation... Please wait."
+msgstr "Tausta sünkroniseerimise tühistamine... Oota."
+
+#: packages/app-cli/app/app.js:256
+#, javascript-format
+msgid "No such command: %s"
+msgstr "Sellist käsku pole: %s"
+
+#: packages/app-cli/app/app.js:304
+#, javascript-format
+msgid "The command \"%s\" is only available in GUI mode"
+msgstr "Käsk %s on saadaval ainult graafilises kasutajaliideses"
+
+#: packages/app-cli/app/base-command.js:15
+msgid "Cannot change encrypted item"
+msgstr "Krüpteeritud üksust ei saa muuta"
+
+#: packages/app-cli/app/cli-utils.js:109
+#, javascript-format
+msgid "Missing required argument: %s"
+msgstr "Puuduv nõutav argument: %s"
+
+#: packages/app-cli/app/cli-utils.js:140
+#: packages/lib/services/ReportService.js:185
+#, javascript-format
+msgid "%s: %s"
+msgstr "%s: %s"
+
+#: packages/app-cli/app/cli-utils.js:144
+msgid "Your choice: "
+msgstr "Sinu valik: "
+
+#: packages/app-cli/app/cli-utils.js:151
+#, javascript-format
+msgid "Invalid answer: %s"
+msgstr "Sobimatu vastus: %s"
+
+#: packages/app-cli/app/command-attach.js:13
+msgid "Attaches the given file to the note."
+msgstr "Manustab antud faili märkmele."
+
+#: packages/app-cli/app/command-attach.js:21
+#: packages/app-cli/app/command-cat.js:25 packages/app-cli/app/command-cp.js:24
+#: packages/app-cli/app/command-cp.js:27
+#: packages/app-cli/app/command-done.js:20
+#: packages/app-cli/app/command-export.js:36
+#: packages/app-cli/app/command-export.js:40
+#: packages/app-cli/app/command-geoloc.js:20
+#: packages/app-cli/app/command-help.js:66
+#: packages/app-cli/app/command-import.js:34
+#: packages/app-cli/app/command-mv.js:22 packages/app-cli/app/command-mv.js:25
+#: packages/app-cli/app/command-ren.js:23
+#: packages/app-cli/app/command-rmbook.js:25
+#: packages/app-cli/app/command-rmnote.js:25
+#: packages/app-cli/app/command-search.js:27
+#: packages/app-cli/app/command-set.js:32
+#: packages/app-cli/app/command-tag.js:33
+#: packages/app-cli/app/command-tag.js:36
+#: packages/app-cli/app/command-tag.js:42
+#: packages/app-cli/app/command-tag.js:43
+#: packages/app-cli/app/command-tag.js:81
+#: packages/app-cli/app/command-tag.js:87
+#: packages/app-cli/app/command-todo.js:21
+#: packages/app-cli/app/command-use.js:21
+#: packages/lib/services/interop/InteropService.js:194
+#: packages/lib/services/interop/InteropService.js:206
+#, javascript-format
+msgid "Cannot find \"%s\"."
+msgstr "Ei leia \" %s\"."
+
+#: packages/app-cli/app/command-batch.js:10
 msgid ""
-"The app is now going to close. Please relaunch it to complete the process."
+"Runs the commands contained in the text file. There should be one command "
+"per line."
 msgstr ""
 
-#: packages/app-desktop/plugins/GotoAnything.js:455
+#: packages/app-cli/app/command-cat.js:14
+msgid "Displays the given note."
+msgstr "Kuvab antud märkme."
+
+#: packages/app-cli/app/command-cat.js:18
+msgid "Displays the complete information about note."
+msgstr "Kuvatakse märkme kohta täielik teave."
+
+#: packages/app-cli/app/command-config.js:13
+msgid ""
+"Gets or sets a config value. If [value] is not provided, it will show the "
+"value of [name]. If neither [name] nor [value] is provided, it will list the "
+"current configuration."
+msgstr ""
+"Saab või seab seadistusväärtuse. Kui väärtust [value] ei ole esitatud, "
+"näitab see [name] väärtust. Kui ei ole esitatud [name] ega [value], "
+"loetatakse praegune konfiguratsioon."
+
+#: packages/app-cli/app/command-config.js:18
+msgid "Also displays unset and hidden config variables."
+msgstr "Kuvab ka seatud ja peidetud konfiguratsioonimuutujad."
+
+#: packages/app-cli/app/command-config.js:79
+#, javascript-format
+msgid "%s = %s (%s)"
+msgstr "%s = %s ( %s)"
+
+#: packages/app-cli/app/command-config.js:81
+#, javascript-format
+msgid "%s = %s"
+msgstr "%s = %s"
+
+#: packages/app-cli/app/command-cp.js:13
+msgid ""
+"Duplicates the notes matching <note> to [notebook]. If no notebook is "
+"specified the note is duplicated in the current notebook."
+msgstr ""
+"Kopeerib märkmed, mis vastavad märkusele <note> ja [notebook]. Kui ühtegi "
+"märkmikku pole täpsustatud, dubleeritakse see praeguses märkmikus."
+
+#: packages/app-cli/app/command-done.js:14
+msgid "Marks a to-do as done."
+msgstr "Märgib, et ülesannete loetelu on tehtud ."
+
+#: packages/app-cli/app/command-done.js:21
+#, javascript-format
+msgid "Note is not a to-do: \"%s\""
+msgstr "Märkus ei ole ülesannete loetelu: %s"
+
+#: packages/app-cli/app/command-e2ee.js:18
+msgid ""
+"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
+"`status`, `decrypt-file` and `target-status`."
+msgstr ""
+"Haldab E2EE konfigureerimist. Käsud on `enable`, `disable`, `decrypt`, "
+"`status`, `decrypt-file` and `target-status`."
+
+#: packages/app-cli/app/command-e2ee.js:36
+#: packages/app-cli/app/command-e2ee.js:75
+msgid "Enter master password:"
+msgstr "Sisestage põhiparool:"
+
+#: packages/app-cli/app/command-e2ee.js:38
+#: packages/app-cli/app/command-e2ee.js:77
+#: packages/app-cli/app/command-e2ee.js:87
+msgid "Operation cancelled"
+msgstr "Toiming tühistati"
+
+#: packages/app-cli/app/command-e2ee.js:47
+msgid ""
+"Starting decryption... Please wait as it may take several minutes depending "
+"on how much there is to decrypt."
+msgstr ""
+"Dekrüpteerimise käivitamine... Palun oodake. See võib võtta mitu minutit "
+"sõltuvalt sellest, kui palju on dekrüpteerida."
+
+#: packages/app-cli/app/command-e2ee.js:55
+#, fuzzy, javascript-format
+msgid "Decrypted items: %d"
+msgstr "Dekrüpteeritud üksused: %s / %s"
+
+#: packages/app-cli/app/command-e2ee.js:56
+#, javascript-format
+msgid "Skipped items: %d (use --retry-failed-items to retry decrypting them)"
+msgstr ""
+
+#: packages/app-cli/app/command-e2ee.js:70
+msgid "Completed decryption."
+msgstr "Dekrüpteerimine on lõpetatud."
+
+#: packages/app-cli/app/command-e2ee.js:85
+#: packages/app-mobile/components/screens/encryption-config.js:163
+msgid "Confirm password:"
+msgstr "Kinnitage parool:"
+
+#: packages/app-cli/app/command-e2ee.js:91
+#: packages/app-mobile/components/screens/encryption-config.js:140
+msgid "Passwords do not match!"
+msgstr "Paroolid ei kattu!"
+
+#: packages/app-cli/app/command-e2ee.js:118
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:443
+#: packages/app-mobile/components/screens/encryption-config.js:280
+msgid "Enabled"
+msgstr "Lubatud"
+
+#: packages/app-cli/app/command-e2ee.js:118
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:443
+#: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:110
+#: packages/app-mobile/components/screens/encryption-config.js:280
+#: packages/lib/models/Setting.js:839
+msgid "Disabled"
+msgstr "Keelatud"
+
+#: packages/app-cli/app/command-e2ee.js:118
+#: packages/app-mobile/components/screens/encryption-config.js:280
+#, javascript-format
+msgid "Encryption is: %s"
+msgstr "Krüpteerimine on: %s"
+
+#: packages/app-cli/app/command-edit.js:17
+msgid "Edit note."
+msgstr "Redigeeri märkust."
+
+#: packages/app-cli/app/command-edit.js:30
+msgid ""
+"No text editor is defined. Please set it using `config editor <editor-path>`"
+msgstr ""
+"Tekstiredaktorit pole määratletud. Seadistage see kasutades "
+"konfiguratsiooniredaktorit <editor-path>"
+
+#: packages/app-cli/app/command-edit.js:40
+msgid "No active notebook."
+msgstr "Aktiivset märkmikku pole."
+
+#: packages/app-cli/app/command-edit.js:46
+#, javascript-format
+msgid "Note does not exist: \"%s\". Create it?"
+msgstr "Märget pole olemas: \"%s\". Kas luua?"
+
+#: packages/app-cli/app/command-edit.js:75
+msgid "Starting to edit note. Close the editor to get back to the prompt."
+msgstr ""
+
+#: packages/app-cli/app/command-edit.js:82
+#: packages/app-desktop/commands/startExternalEditing.js:32
+#, javascript-format
+msgid "Error opening note in editor: %s"
+msgstr "Tõrge märkme avamisel redaktoris: %s"
+
+#: packages/app-cli/app/command-edit.js:97
+#, fuzzy
+msgid "Note has been saved."
+msgstr "Ühtegi märkmikku pole määratud."
+
+#: packages/app-cli/app/command-exit.js:11
+msgid "Exits the application."
+msgstr "Väljub rakendusest."
+
+#: packages/app-cli/app/command-export.js:13
+msgid ""
+"Exports Joplin data to the given path. By default, it will export the "
+"complete database including notebooks, notes, tags and resources."
+msgstr ""
+"Ekspordib Joplini andmed antud teele. Vaikimisi ekspordime täieliku "
+"andmebaasi, sealhulgas märkmikud, märkmed, sildid ja ressursid."
+
+#: packages/app-cli/app/command-export.js:23
+#, javascript-format
+msgid "Destination format: %s"
+msgstr "Sihtkoha Formaat: %s"
+
+#: packages/app-cli/app/command-export.js:23
+msgid "Exports only the given note."
+msgstr "Ekspordib ainult antud märkuse."
+
+#: packages/app-cli/app/command-export.js:23
+msgid "Exports only the given notebook."
+msgstr "Ekspordib ainult antud märkmiku."
+
+#: packages/app-cli/app/command-geoloc.js:13
+msgid "Displays a geolocation URL for the note."
+msgstr "Kuvatakse märkme geograafilise asukoha URL."
+
+#: packages/app-cli/app/command-help.js:13
+msgid "Displays usage information."
+msgstr "Kuvab kasutusteabe."
+
+#: packages/app-cli/app/command-help.js:36
+#, javascript-format
+msgid "For information on how to customise the shortcuts please visit %s"
+msgstr "Teavet selle kohta, kuidas kohandada otseteed Palun külastage %s"
+
+#: packages/app-cli/app/command-help.js:44
+msgid "Shortcuts are not available in CLI mode."
+msgstr "Otseteed pole CLI režiimis saadaval."
+
+#: packages/app-cli/app/command-help.js:71
+msgid ""
+"Type `help [command]` for more information about a command; or type `help "
+"all` for the complete usage information."
+msgstr ""
+"Käsu kohta lisateabe saamiseks tippige käsk `help [command]`; või tippige "
+"täieliku kasutamise teabe saamiseks `help all`."
+
+#: packages/app-cli/app/command-help.js:73
+msgid "The possible commands are:"
+msgstr "Võimalikud käsud on:"
+
+#: packages/app-cli/app/command-help.js:77
+msgid ""
+"In any command, a note or notebook can be referred to by title or ID, or "
+"using the shortcuts `$n` or `$b` for, respectively, the currently selected "
+"note or notebook. `$c` can be used to refer to the currently selected item."
+msgstr ""
+"Mis tahes käsu, Märkus või märkmiku saab viidatud pealkirja või ID või "
+"kasutades otseteed `$n` või `$b` vastavalt praegu valitud Märkus või "
+"märkmiku. `$c` saab kasutada praegu valitud üksusele viitamiseks."
+
+#: packages/app-cli/app/command-help.js:79
+msgid "To move from one pane to another, press Tab or Shift+Tab."
+msgstr "Ühest paanist teise liikumiseks vajutage Tab või Shift + Tab."
+
+#: packages/app-cli/app/command-help.js:80
+msgid ""
+"Use the arrows and page up/down to scroll the lists and text areas "
+"(including this console)."
+msgstr ""
+"Loendite ja tekstialade (sh selle konsooli) kerimiseks kasutage nooli ja "
+"lehe üles/alla klahve."
+
+#: packages/app-cli/app/command-help.js:81
+msgid "To maximise/minimise the console, press \"tc\"."
+msgstr "Konsooli maksimeerimiseks/minimeerimiseks vajutage \"tc\"."
+
+#: packages/app-cli/app/command-help.js:82
+msgid "To enter command line mode, press \":\""
+msgstr "Käsurea režiimi sisestamiseks vajutage \":\""
+
+#: packages/app-cli/app/command-help.js:83
+msgid "To exit command line mode, press ESCAPE"
+msgstr "Käsurea režiimist väljumiseks vajutage ESCAPE"
+
+#: packages/app-cli/app/command-help.js:84
+msgid ""
+"For the list of keyboard shortcuts and config options, type `help keymap`"
+msgstr ""
+"73/5000\n"
+"Klaviatuuri otseteede ja konfiguratsioonivõimaluste loendi jaoks tippige "
+"\"help keymap\""
+
+#: packages/app-cli/app/command-import.js:14
+msgid "Imports data into Joplin."
+msgstr "Impordib andmed Joplini."
+
+#: packages/app-cli/app/command-import.js:25
+#, javascript-format
+msgid "Source format: %s"
+msgstr "Allika Formaat: %s"
+
+#: packages/app-cli/app/command-import.js:26
+msgid "Do not ask for confirmation."
+msgstr "Ära küsi kinnitust."
+
+#: packages/app-cli/app/command-import.js:27
+#, fuzzy, javascript-format
+msgid "Output format: %s"
+msgstr "Allika Formaat: %s"
+
+#: packages/app-cli/app/command-import.js:47
+#: packages/app-desktop/gui/ImportScreen.min.js:68
+#, javascript-format
+msgid "Found: %d."
+msgstr "Leitud: %d."
+
+#: packages/app-cli/app/command-import.js:48
+#: packages/app-desktop/gui/ImportScreen.min.js:69
+#, javascript-format
+msgid "Created: %d."
+msgstr "Loodud: %d."
+
+#: packages/app-cli/app/command-import.js:49
+#: packages/app-desktop/gui/ImportScreen.min.js:70
+#, javascript-format
+msgid "Updated: %d."
+msgstr "Värskendatud: %d."
+
+#: packages/app-cli/app/command-import.js:50
+#: packages/app-desktop/gui/ImportScreen.min.js:71
+#, javascript-format
+msgid "Skipped: %d."
+msgstr "Vahele jäetud: %d."
+
+#: packages/app-cli/app/command-import.js:51
+#: packages/app-desktop/gui/ImportScreen.min.js:72
+#, javascript-format
+msgid "Resources: %d."
+msgstr "Ressursid: %d."
+
+#: packages/app-cli/app/command-import.js:52
+#: packages/app-desktop/gui/ImportScreen.min.js:73
+#, javascript-format
+msgid "Tagged: %d."
+msgstr "Sildistatud: %d."
+
+#: packages/app-cli/app/command-import.js:65
+msgid "Importing notes..."
+msgstr "Märkmete importimine..."
+
+#: packages/app-cli/app/command-import.js:70
+#: packages/app-desktop/gui/ImportScreen.min.js:88
+#, javascript-format
+msgid "The notes have been imported: %s"
+msgstr "Märkmed on imporditud: %s"
+
+#: packages/app-cli/app/command-ls.js:18
+msgid ""
+"Displays the notes in the current notebook. Use `ls /` to display the list "
+"of notebooks."
+msgstr ""
+"Kuvab märkmed praeguses märkmikus. Kasutage märkmike loendi kuvamiseks ' "
+"ls /'."
+
+#: packages/app-cli/app/command-ls.js:27
+msgid "Displays only the first top <num> notes."
+msgstr "Kuvab ainult esimesed <num> märkmed."
+
+#: packages/app-cli/app/command-ls.js:28
+msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
+msgstr "Sordib üksuse järgi <field> (nt pealkiri, uuendatud_aeg, loodud_aeg)."
+
+#: packages/app-cli/app/command-ls.js:29
+msgid "Reverses the sorting order."
+msgstr "Pöörab sorteerimis järjestuse ümber."
+
+#: packages/app-cli/app/command-ls.js:30
+msgid ""
+"Displays only the items of the specific type(s). Can be `n` for notes, `t` "
+"for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
+"to-dos, while `-tnt` would display notes and to-dos."
+msgstr ""
+"Kuvab ainult konkreetset tüüpi tüübid. Võib olla `n` märkmete jaoks, `t` "
+"ülesannete jaoks või `nt` märkmete ja ülesannete jaoks (nt `-tt` kuvaks "
+"ainult ülesandeid, `-tnt` aga märkmeid ja ülesanded."
+
+#: packages/app-cli/app/command-ls.js:31
+msgid "Either \"text\" or \"json\""
+msgstr "Kas \"tekst\" või \"JSON\""
+
+#: packages/app-cli/app/command-ls.js:32 packages/app-cli/app/command-tag.js:18
+msgid ""
+"Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, "
+"TODO_CHECKED (for to-dos), TITLE"
+msgstr ""
+"Kasutage pikka nimekirja vormingut. ID, NOTE_COUNT (for notebook), DATE, "
+"TODO_CHECKED (for to-dos), TITLE"
+
+#: packages/app-cli/app/command-ls.js:63
+msgid "Please select a notebook first."
+msgstr "Palun valige esmalt märkmik."
+
+#: packages/app-cli/app/command-mkbook.js:12
+msgid "Creates a new notebook."
+msgstr "Loob uue märkmiku."
+
+#: packages/app-cli/app/command-mknote.js:12
+msgid "Creates a new note."
+msgstr "Loob uue märkme."
+
+#: packages/app-cli/app/command-mknote.js:16
+#: packages/app-cli/app/command-mktodo.js:16
+msgid "Notes can only be created within a notebook."
+msgstr "Märkmeid saab luua ainult märkmiku sees."
+
+#: packages/app-cli/app/command-mktodo.js:12
+msgid "Creates a new to-do."
+msgstr "Loob uue tee."
+
+#: packages/app-cli/app/command-mv.js:14
+#, fuzzy
+msgid "Moves the notes matching <note> to [notebook]."
+msgstr "Teisaldab märkmete vastendamise <note> [notebook]."
+
+#: packages/app-cli/app/command-ren.js:14
+msgid "Renames the given <item> (note or notebook) to <name>."
+msgstr "Nimetab antud <item> (Märkus või märkmik) <name>."
+
+#: packages/app-cli/app/command-rmbook.js:13
+msgid "Deletes the given notebook."
+msgstr "Kustutab antud märkmiku."
+
+#: packages/app-cli/app/command-rmbook.js:17
+#, fuzzy
+msgid "Deletes the notebook without asking for confirmation."
+msgstr "Kustutab märkmiku ilma kinnitust küsimata."
+
+#: packages/app-cli/app/command-rmbook.js:26
+#: packages/app-mobile/components/screens/notes.js:154
 #, fuzzy
 msgid ""
-"Type a note title or part of its content to jump to it. Or type # followed "
-"by a tag name, or @ followed by a notebook name. Or type : to search for "
-"commands."
+"Delete notebook? All notes and sub-notebooks within this notebook will also "
+"be deleted."
 msgstr ""
-"Tippige sellele hüppamiseks märkme tiitel. Või tippige #, millele järgneb "
-"sildi nimi või @, millele järgneb märkmiku nimi."
+"Kas soovite märkmiku kustutada? Kustutatakse ka kõik selle märkmiku märkmed "
+"ja alammärkmikud."
 
-#: packages/app-desktop/plugins/GotoAnything.js:480
-#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:20
+#: packages/app-cli/app/command-rmnote.js:13
+msgid "Deletes the notes matching <note-pattern>."
+msgstr "Kustutab märkmete vastendamise <note-pattern>."
+
+#: packages/app-cli/app/command-rmnote.js:17
+msgid "Deletes the notes without asking for confirmation."
+msgstr "Kustutab märkmed ilma kinnitust küsimata."
+
+#: packages/app-cli/app/command-rmnote.js:27
+#, javascript-format
+msgid "%d notes match this pattern. Delete them?"
+msgstr "%d märkmed vastavad sellele mustrile. Kas soovite need kustutada?"
+
+#: packages/app-cli/app/command-rmnote.js:27
+#: packages/app-mobile/components/screens/Note.js:475
+msgid "Delete note?"
+msgstr "Kas soovite märkme kustutada?"
+
+#: packages/app-cli/app/command-search.js:13
+msgid "Searches for the given <pattern> in all the notes."
+msgstr "Otsib <pattern> kõiki märkmeid."
+
+#: packages/app-cli/app/command-server.js:14
+#, fuzzy, javascript-format
+msgid ""
+"Start, stop or check the API server. To specify on which port it should run, "
+"set the api.port config variable. Commands are (%s)."
+msgstr ""
+"Käivitage, peatage või kontrollige API server. Määrata, millist porti peaks "
+"käivitama, seadke API. Port config muutuja. Käsud on ( %s)."
+
+#: packages/app-cli/app/command-server.js:38
+#, javascript-format
+msgid "Server is already running on port %d"
+msgstr "Server töötab juba pordis %d"
+
+#: packages/app-cli/app/command-server.js:44
+#, javascript-format
+msgid "Server is running on port %d"
+msgstr "Serveris töötab port %d"
+
+#: packages/app-cli/app/command-server.js:44
+#: packages/app-cli/app/command-server.js:47
+msgid "Server is not running."
+msgstr "Server ei tööta."
+
+#: packages/app-cli/app/command-set.js:22
+#, fuzzy, javascript-format
+msgid ""
+"Sets the property <name> of the given <note> to the given [value]. Possible "
+"properties are:\n"
+"\n"
+"%s"
+msgstr ""
+"Seab antud atribuudi väärtuseks antud <name> <note> [value]. Võimalikud "
+"omadused on järgmised:\n"
+"\n"
+" %s"
+
+#: packages/app-cli/app/command-status.js:13
 #, fuzzy
-msgid "Goto Anything..."
-msgstr "Ükskõik mida..."
+msgid "Displays summary about the notes and notebooks."
+msgstr "Kuvab kokkuvõtte märkmete ja märkmike kohta."
 
-#: packages/app-desktop/plugins/GotoAnything.js:487
-#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:28
-msgid "Command palette"
+#: packages/app-cli/app/command-status.js:44
+msgid ""
+"To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`"
 msgstr ""
+
+#: packages/app-cli/app/command-sync.js:29
+#, fuzzy
+msgid "Synchronises with remote storage."
+msgstr "Sünkrooniseerib kaugsalvestusruumi."
+
+#: packages/app-cli/app/command-sync.js:34
+#, fuzzy
+msgid "Sync to provided target (defaults to sync.target config value)"
+msgstr "Sync esitatud Target (vaikimisi sünkroonimine. Target config väärtus)"
+
+#: packages/app-cli/app/command-sync.js:35
+msgid "Upgrade the sync target to the latest version."
+msgstr ""
+
+#: packages/app-cli/app/command-sync.js:82
+#: packages/app-cli/app/command-sync.js:96
+#: packages/app-desktop/gui/OneDriveLoginScreen.js:46
+#, fuzzy
+msgid ""
+"Authentication was not completed (did not receive an authentication token)."
+msgstr "Autentimine on lõpule viidud (ei saanud autentimise luba)."
+
+#: packages/app-cli/app/command-sync.js:91
+#: packages/app-desktop/gui/DropboxLoginScreen.js:29
+#: packages/app-mobile/components/screens/dropbox-login.js:58
+#, fuzzy
+msgid ""
+"To allow Joplin to synchronise with Dropbox, please follow the steps below:"
+msgstr "Et lubada Joplin sünkroniseerida Dropbox, järgige alltoodud juhiseid:"
+
+#: packages/app-cli/app/command-sync.js:92
+#: packages/app-desktop/gui/DropboxLoginScreen.js:30
+#: packages/app-mobile/components/screens/dropbox-login.js:59
+#, fuzzy
+msgid "Step 1: Open this URL in your browser to authorise the application:"
+msgstr "1. samm : avage see URL brauseris, et lubada rakendust:"
+
+#: packages/app-cli/app/command-sync.js:94
+#: packages/app-desktop/gui/DropboxLoginScreen.js:32
+#: packages/app-mobile/components/screens/dropbox-login.js:65
+#, fuzzy
+msgid "Step 2: Enter the code provided by Dropbox:"
+msgstr "2. samm: sisestage kood, mis on esitatud Dropbox:"
+
+#: packages/app-cli/app/command-sync.js:106
+#, fuzzy, javascript-format
+msgid "Not authentified with %s. Please provide any missing credentials."
+msgstr "Pole %s-ga seostatud. Palun esitage puuduv mandaat."
+
+#: packages/app-cli/app/command-sync.js:132
+msgid "Synchronisation is already in progress."
+msgstr "Sünkroniseerimine on juba teoksil."
+
+#: packages/app-cli/app/command-sync.js:137
+#, fuzzy, javascript-format
+msgid ""
+"Lock file is already being hold. If you know that no synchronisation is "
+"taking place, you may delete the lock file at \"%s\" and resume the "
+"operation."
+msgstr ""
+"Lukusta fail on juba kinni. Kui teate, et sünkroonimis ei toimu, võite luku "
+"faili kustutada kohas %s ja jätkata toimingut."
+
+#: packages/app-cli/app/command-sync.js:180
+#, fuzzy, javascript-format
+msgid "Synchronisation target: %s (%s)"
+msgstr "Sünkroonimise sihtkoht: %s ( %s)"
+
+#: packages/app-cli/app/command-sync.js:182
+#, fuzzy
+msgid "Cannot initialise synchroniser."
+msgstr "Sünkroonijat ei saa lähtestada."
+
+#: packages/app-cli/app/command-sync.js:212
+msgid "Starting synchronisation..."
+msgstr "Sünkroonimise käivitamine..."
+
+#: packages/app-cli/app/command-sync.js:235
+msgid "Downloading resources..."
+msgstr "Ressursside allalaadimine..."
+
+#: packages/app-cli/app/command-sync.js:247
+#, javascript-format
+msgid "Sync target must be upgraded! Run `%s` to proceed."
+msgstr ""
+
+#: packages/app-cli/app/command-sync.js:265
+msgid "Cancelling... Please wait."
+msgstr "Tühistamine... Oota."
+
+#: packages/app-cli/app/command-tag.js:14
+#, fuzzy
+msgid ""
+"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to "
+"assign or remove [tag] from [note], to list notes associated with [tag], or "
+"to list tags associated with [note]. The command `tag list` can be used to "
+"list all the tags (use -l for long option)."
+msgstr ""
+"<tag-command>võib olla \"add\", \"remove\", \"list\" või \"notetags\", et "
+"määrata või eemaldada [tag], [note], loetleda märkmed, mis on seotud [tag], "
+"või loetleda silte seostatud [note]. Käsu `tag list` saab kasutada loetleda "
+"kõik sildid (kasuta -l laiendatud valiku jaoks)."
+
+#: packages/app-cli/app/command-tag.js:90
+#, javascript-format
+msgid "Invalid command: \"%s\""
+msgstr "Sobimatu käsk: %s"
+
+#: packages/app-cli/app/command-todo.js:14
+#, fuzzy
+msgid ""
+"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to "
+"toggle the given to-do between completed and uncompleted state (If the "
+"target is a regular note it will be converted to a to-do). Use \"clear\" to "
+"convert the to-do back to a regular note."
+msgstr ""
+"<todo-command>võib kas olla \"toggle\" või \"clear\". Kasutage \"toggle\" "
+"antud to-do ümberlülitamiseks lõpetatud ja lõpetamata oleku vahel (kui "
+"sihtmärk on regulaarne märge, teisendatakse see tellimuseks). Kasutage "
+"\"clear\" teisendada to-do tagasi tavalise Märkus."
+
+#: packages/app-cli/app/command-undone.js:12
+#, fuzzy
+msgid "Marks a to-do as non-completed."
+msgstr "Märgib, et see ei ole lõpetatud."
+
+#: packages/app-cli/app/command-use.js:12
+#, fuzzy
+msgid ""
+"Switches to [notebook] - all further operations will happen within this "
+"notebook."
+msgstr ""
+"Aktiveerib [notebook]-kõik edasised toimingud toimuvad selle märkmiku sees."
+
+#: packages/app-cli/app/command-version.js:11
+msgid "Displays version information"
+msgstr "Kuvab versiooniteabe"
+
+#: packages/app-cli/app/command-version.js:16
+#, javascript-format
+msgid "%s %s (%s)"
+msgstr "%s %s (%s)"
+
+#: packages/app-cli/app/gui/FolderListWidget.js:31
+msgid "Search:"
+msgstr "Otsi:"
+
+#: packages/app-cli/app/gui/NoteWidget.js:36
+#, fuzzy
+msgid ""
+"Welcome to Joplin!\n"
+"\n"
+"Type `:help shortcuts` for the list of keyboard shortcuts, or just `:help` "
+"for usage information.\n"
+"\n"
+"For example, to create a notebook press `mb`; to create a note press `mn`."
+msgstr ""
+"Tere tulemast Joplini!\n"
+"\n"
+"Kirjuta `:help shortcuts` klaviatuuri otseteede loendi või lihtsalt `:help` "
+"kasutusteabe jaoks.\n"
+"\n"
+"Näiteks märkmiku loomiseks vajutage `mb`; , et luua märkme Press `mn`."
+
+#: packages/app-cli/app/gui/NoteWidget.js:48
+#, fuzzy
+msgid ""
+"One or more items are currently encrypted and you may need to supply a "
+"master password. To do so please type `e2ee decrypt`. If you have already "
+"supplied the password, the encrypted items are being decrypted in the "
+"background and will be available soon."
+msgstr ""
+"Üks või mitu üksust on praegu krüptitud ja peate võib-olla esitama "
+"Põhiparooli. Selleks sisestage \"e2ee Decrypt\". Kui olete juba parooli "
+"sisestanud, krüptitakse krüptitud üksused taustal ja need on peagi saadaval."
+
+#: packages/app-cli/app/gui/NoteWidget.js:50
+#, fuzzy
+msgid "You may also type `status` for more information."
+msgstr "Ära küsi kinnitust."
+
+#: packages/app-cli/app/help-utils.js:56
+#, fuzzy
+msgid "Enum"
+msgstr "Enum"
+
+#: packages/app-cli/app/help-utils.js:56
+#, javascript-format
+msgid "Type: %s."
+msgstr "Tüüp: %s."
+
+#: packages/app-cli/app/help-utils.js:57
+#, javascript-format
+msgid "Possible values: %s."
+msgstr "Võimalikud väärtused: %s."
+
+#: packages/app-cli/app/help-utils.js:71
+#, javascript-format
+msgid "Default: %s"
+msgstr "Default: %s"
+
+#: packages/app-cli/app/help-utils.js:77
+msgid "Possible keys/values:"
+msgstr "Võimalikud klahvid/väärtused:"
+
+#: packages/app-cli/app/main.js:92
+msgid "Type `joplin help` for usage information."
+msgstr "Sisestage `joplin help` kasutusteabe jaoks ."
+
+#: packages/app-cli/app/main.js:94
+msgid "Fatal error:"
+msgstr "Parandamatu tõrge:"
 
 #: packages/app-desktop/InteropServiceHelper.js:154
 #, javascript-format
@@ -91,6 +831,63 @@ msgstr ""
 #: packages/app-desktop/InteropServiceHelper.js:175
 #, javascript-format
 msgid "Could not export notes: %s"
+msgstr ""
+
+#: packages/app-desktop/app.js:370
+#, javascript-format
+msgid "Open %s"
+msgstr "Ava %s"
+
+#: packages/app-desktop/app.js:372
+#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:14
+#: packages/app-desktop/gui/MenuBar.js:213
+msgid "Quit"
+msgstr "Lõpeta"
+
+#: packages/app-desktop/bridge.js:106 packages/app-desktop/bridge.js:110
+#: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
+#: packages/app-desktop/gui/ConfigScreen/ButtonBar.js:22
+#: packages/app-desktop/gui/DialogButtonRow.js:39
+#: packages/app-desktop/gui/DialogButtonRow.min.js:30
+#: packages/app-desktop/gui/MenuBar.js:377
+#: packages/app-desktop/gui/PromptDialog.min.js:235
+#: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:20
+#: packages/app-mobile/components/CameraView.js:160
+#: packages/app-mobile/components/ModalDialog.js:67
+#: packages/app-mobile/components/screens/ConfigScreen.js:152
+#: packages/app-mobile/components/side-menu-content.js:150
+msgid "OK"
+msgstr "OK"
+
+#: packages/app-desktop/bridge.js:110 packages/app-desktop/bridge.js:126
+#: packages/app-desktop/checkForUpdates.js:189
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:521
+#: packages/app-desktop/gui/DialogButtonRow.js:42
+#: packages/app-desktop/gui/DialogButtonRow.min.js:38
+#: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:52
+#: packages/app-desktop/gui/NoteList/NoteList.js:164
+#: packages/app-desktop/gui/PromptDialog.min.js:242
+#: packages/app-desktop/gui/ResourceScreen.js:96
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:214
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:455
+#: packages/app-desktop/gui/utils/NoteListUtils.js:169
+#: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:21
+#: packages/app-mobile/components/CameraView.js:161
+#: packages/app-mobile/components/ModalDialog.js:70
+#: packages/app-mobile/components/SelectDateTimeDialog.js:82
+#: packages/app-mobile/components/screens/Note.js:100
+#: packages/app-mobile/components/screens/Note.js:532
+#: packages/app-mobile/components/screens/encryption-config.js:185
+#: packages/app-mobile/components/side-menu-content.js:156
+#: packages/app-mobile/components/side-menu-content.js:165
+#: packages/app-mobile/components/side-menu-content.js:338
+#: packages/lib/shim-init-node.js:148
+msgid "Cancel"
+msgstr "Tühista"
+
+#: packages/app-desktop/bridge.js:184
+msgid ""
+"The app is now going to close. Please relaunch it to complete the process."
 msgstr ""
 
 #: packages/app-desktop/checkForUpdates.js:171
@@ -129,818 +926,37 @@ msgstr ""
 msgid "Full changelog"
 msgstr ""
 
-#: packages/app-desktop/gui/NoteRevisionViewer.min.js:100
-msgid "This note has no history"
-msgstr "Sellel märkel pole ajalugu"
-
-#: packages/app-desktop/gui/NoteRevisionViewer.min.js:142
-#: packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.js:92
-#, javascript-format
-msgid "Unsupported link or message: %s"
-msgstr "Toetuseta link või sõnum: %s"
-
-#: packages/app-desktop/gui/NoteRevisionViewer.min.js:177
-#: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:51
-msgid "Restore"
-msgstr "Taasta"
-
-#: packages/app-desktop/gui/NoteRevisionViewer.min.js:178
-#, fuzzy, javascript-format
-msgid ""
-"Click \"%s\" to restore the note. It will be copied in the notebook named "
-"\"%s\". The current version of the note will not be replaced or modified."
-msgstr ""
-"Märkme taastamiseks klõpsake nuppu \"%s\". See kopeeritakse märkmikku nimega "
-"\"%s\". Märkme praegust versiooni ei asendata ega muudeta."
-
-#: packages/app-desktop/gui/NoteRevisionViewer.min.js:187
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:521
-#: packages/app-desktop/gui/ConfigScreen/ButtonBar.js:30
-#: packages/lib/commands/historyBackward.js:17
-msgid "Back"
-msgstr "Tagasi"
-
-#: packages/app-desktop/gui/Sidebar/Sidebar.js:189
-msgid "Remove"
-msgstr "Eemalda"
-
-#: packages/app-desktop/gui/Sidebar/Sidebar.js:192
-#: packages/app-mobile/components/side-menu-content.js:148
-#, javascript-format
-msgid ""
-"Delete notebook \"%s\"?\n"
-"\n"
-"All notes and sub-notebooks within this notebook will also be deleted."
-msgstr ""
-"Kas soovite märkmiku \"%s\"?\n"
-"\n"
-"Kustutatakse ka kõik selle märkmiku märkmed ja alammärkmikud."
-
-#: packages/app-desktop/gui/Sidebar/Sidebar.js:193
-#: packages/app-desktop/gui/utils/NoteListUtils.js:140
-#: packages/app-desktop/gui/utils/NoteListUtils.js:169
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:125
-#: packages/app-desktop/gui/ResourceScreen.js:47
-#: packages/app-desktop/gui/ResourceScreen.js:96
-#: packages/app-mobile/components/side-menu-content.js:146
-#: packages/app-mobile/components/screens/Note.js:860
-msgid "Delete"
-msgstr "Kustuta"
-
-#: packages/app-desktop/gui/Sidebar/Sidebar.js:197
-#, javascript-format
-msgid "Remove tag \"%s\" from all notes?"
-msgstr "Kas eemaldada silt \"%s\" kõigist märkmetest?"
-
-#: packages/app-desktop/gui/Sidebar/Sidebar.js:200
-msgid "Remove this search from the sidebar?"
-msgstr "Kas soovite selle otsingu külgribalt eemaldada?"
-
-#: packages/app-desktop/gui/Sidebar/Sidebar.js:258
-#: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:122
-#: packages/app-desktop/gui/utils/NoteListUtils.js:136
-msgid "Export"
-msgstr "Eksport"
-
-#: packages/app-desktop/gui/Sidebar/Sidebar.js:321
-#: packages/app-mobile/components/side-menu-content.js:368
-#: packages/app-mobile/components/screens/notes.js:188
-msgid "All notes"
-msgstr "Kõik märkmed"
-
-#: packages/app-desktop/gui/Sidebar/Sidebar.js:455
-#: packages/app-mobile/components/side-menu-content.js:338
-#: packages/lib/commands/synchronize.js:18
-msgid "Synchronise"
-msgstr "Sünkroniseeri"
-
-#: packages/app-desktop/gui/Sidebar/Sidebar.js:480
-#: packages/app-mobile/components/side-menu-content.js:372
-msgid "Notebooks"
-msgstr "Sülearvutid"
-
-#: packages/app-desktop/gui/Sidebar/Sidebar.js:492
-#: packages/app-desktop/gui/MainScreen/commands/setTags.js:17
-#: packages/app-mobile/components/side-menu-content.js:314
-#: packages/app-mobile/components/screens/tags.js:101
-#: packages/app-mobile/components/screens/Note.js:833
-msgid "Tags"
-msgstr "Sildid"
-
-#: packages/app-desktop/gui/Sidebar/Sidebar.js:503
-#: packages/app-mobile/components/side-menu-content.js:325
-#, javascript-format
-msgid "Decrypting items: %d/%d"
-msgstr "Üksuste dekrüpteerimine: %d/%d"
-
-#: packages/app-desktop/gui/Sidebar/Sidebar.js:507
-#: packages/app-mobile/components/side-menu-content.js:330
-#, javascript-format
-msgid "Fetching resources: %d/%d"
-msgstr "Ressursside toomine: %d/%d"
-
-#: packages/app-desktop/gui/Sidebar/commands/focusElementSideBar.js:17
-msgid "Sidebar"
-msgstr ""
-
-#: packages/app-desktop/gui/Sidebar/commands/focusElementSideBar.js:18
-#: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteTitle.js:17
-#: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteBody.js:17
-#: packages/app-desktop/gui/MenuBar.js:625
-#: packages/app-desktop/gui/NoteList/commands/focusElementNoteList.js:18
-msgid "Focus"
-msgstr "Fookus"
-
-#: packages/app-desktop/gui/StatusScreen/StatusScreen.js:31
-msgid "Please select where the sync status should be exported to"
-msgstr "Palun valige, kus sünkroonimise olekut tuleks eksportida"
-
-#: packages/app-desktop/gui/StatusScreen/StatusScreen.js:66
-#: packages/app-mobile/components/screens/status.js:112
+#: packages/app-desktop/commands/copyDevCommand.js:18
 #, fuzzy
-msgid "Retry All"
-msgstr "Uuesti"
-
-#: packages/app-desktop/gui/StatusScreen/StatusScreen.js:86
-#: packages/app-mobile/components/screens/status.js:118
-msgid "Retry"
-msgstr "Uuesti"
-
-#: packages/app-desktop/gui/StatusScreen/StatusScreen.js:137
-#, fuzzy
-msgid "Advanced tools"
-msgstr "Täpsemad suvandid"
-
-#: packages/app-desktop/gui/StatusScreen/StatusScreen.js:139
-#, fuzzy
-msgid "Export debug report"
-msgstr "Ekspordi Silumisaruanne"
-
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:183
-#, fuzzy
-msgid "strong text"
-msgstr "tugev tekst"
-
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:184
-#, fuzzy
-msgid "emphasised text"
-msgstr "toonitud tekst"
-
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:186
-msgid "Insert Hyperlink"
-msgstr "Lisa hüperlink"
-
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:220
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:222
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:223
-#, fuzzy
-msgid "List item"
-msgstr "Loendiüksus"
-
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:552
-msgid "Layout"
-msgstr "Paigutus"
-
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:552
-#, javascript-format
-msgid ""
-"This note has no content. Click on \"%s\" to toggle the editor and edit the "
-"note."
-msgstr ""
-"Sellel märkel pole sisu. Klõpsake \" %s\" redaktori vahetamiseks ja märkme "
-"redigeerimiseks."
-
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:661
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:128
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:18
-msgid "Cut"
-msgstr "Lõika"
-
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:668
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:136
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:13
-#: packages/app-desktop/gui/MenuBar.js:377
-msgid "Copy"
-msgstr "Kopeeri"
-
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:675
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:143
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:23
-msgid "Paste"
-msgstr "Kleebi"
-
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/plugins/lists.js:2151
-#, fuzzy
-msgid "Checkbox list"
-msgstr "Märkekast"
-
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:17
-msgid "Highlight"
-msgstr ""
-
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:22
-msgid "Strikethrough"
-msgstr ""
-
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:27
-msgid "Insert"
-msgstr ""
-
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:33
-msgid "Superscript"
-msgstr ""
-
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:39
-msgid "Subscript"
-msgstr ""
-
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:574
-#: packages/app-mobile/components/screens/Note.js:998
-msgid "Edit"
-msgstr "Muuda"
-
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:630
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:53
-#: packages/app-mobile/components/screens/Note.js:801
-msgid "Attach file"
-msgstr "Manusta fail"
-
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:640
-msgid "Code Block"
-msgstr ""
-
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:649
-msgid "Inline Code"
-msgstr ""
-
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:664
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:83
-msgid "Insert Date Time"
-msgstr "Lisa kuupäev kellaaeg"
-
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1115
-msgid "Drop notes or files here"
-msgstr ""
-
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1115
-#, fuzzy
-msgid "Code View"
-msgstr "Kood"
-
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1115
-#, javascript-format
-msgid ""
-"Please wait for all attachments to be downloaded and decrypted. You may also "
-"switch to %s to edit the note."
-msgstr ""
-
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:59
-msgid "There was an error downloading this attachment:"
-msgstr "Selle manuse allalaadimisel ilmnes tõrge:"
-
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:62
-#: packages/lib/services/ResourceEditWatcher/index.js:196
-msgid "This attachment is not downloaded or not decrypted yet"
-msgstr "Seda manust ei laadita alla või pole veel dekrüpteeritud"
-
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:92
-msgid "Open..."
-msgstr "Avatud..."
-
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:99
-msgid "Save as..."
-msgstr "Salvesta kui..."
-
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:112
-msgid "Reveal file in folder"
-msgstr ""
-
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:120
-msgid "Copy path to clipboard"
+msgid "Copy dev mode command to clipboard"
 msgstr "Kopeeri tee lõikelauale"
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:155
-msgid "Copy Link Address"
-msgstr "Kopeeri lingi aadress"
-
-#: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.js:79
-msgid "to-do"
-msgstr "ülesande nimekiri"
-
-#: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.js:79
-#: packages/server/dist/models/UserModel.js:189
-#: packages/server/dist/models/UserModel.js:194
-msgid "note"
-msgstr "paberraha"
-
-#: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.js:79
-#, javascript-format
-msgid "Creating new %s..."
-msgstr "Uue %s loomine..."
-
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:285
+#: packages/app-desktop/commands/openProfileDirectory.js:18
 #, fuzzy
-msgid "Click to add tags..."
-msgstr "Otsi värskendusi..."
+msgid "Open profile directory"
+msgstr "Joplin Export kataloog"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:338
-msgid ""
-"This Rich Text editor has a number of limitations and it is recommended to "
-"be aware of them before using it."
-msgstr ""
+#: packages/app-desktop/commands/startExternalEditing.js:20
+msgid "Edit in external editor"
+msgstr "Redigeeri välisredaktoris"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:342
-msgid "Read more about it"
-msgstr ""
+#: packages/app-desktop/commands/stopExternalEditing.js:18
+msgid "Stop external editing"
+msgstr "Peata väline redigeerimine"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:347
-msgid "Dismiss"
-msgstr ""
-
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:383
-msgid "The following attachments are being watched for changes:"
-msgstr ""
-
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:386
-msgid ""
-"The attachments will no longer be watched when you switch to a different "
-"note."
-msgstr ""
-
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:392
-#, javascript-format
-msgid "In: %s"
-msgstr "Asukoht: %s"
-
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:28
-msgid "Select all"
-msgstr "Vali kõik"
-
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:33
-msgid "Bold"
-msgstr "Paks"
-
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:38
-msgid "Italic"
-msgstr "Kald"
-
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:43
-msgid "Hyperlink"
-msgstr "Hüperlink"
-
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:48
-msgid "Code"
-msgstr "Kood"
-
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:58
-msgid "Numbered List"
-msgstr "Nummerdatud loend"
-
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:63
-msgid "Bulleted List"
-msgstr "Täpp-loend"
-
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:68
-msgid "Checkbox"
-msgstr "Märkekast"
-
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:73
-msgid "Heading"
-msgstr "Pealkiri"
-
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:78
+#: packages/app-desktop/commands/toggleExternalEditing.js:18
 #, fuzzy
-msgid "Horizontal Rule"
-msgstr "Horisontaalne reegel"
+msgid "Toggle external editing"
+msgstr "Peata väline redigeerimine"
 
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:88
+#: packages/app-desktop/commands/toggleExternalEditing.js:37
+msgid "Stop"
+msgstr ""
+
+#: packages/app-desktop/commands/toggleSafeMode.js:18
 #, fuzzy
-msgid "Delete line"
-msgstr "Kas soovite märkme kustutada?"
-
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:92
-#, fuzzy
-msgid "Duplicate line"
-msgstr "Paljunda"
-
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:96
-msgid "Undo"
-msgstr ""
-
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:100
-msgid "Redo"
-msgstr ""
-
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:104
-msgid "Indent less"
-msgstr ""
-
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:108
-msgid "Indent more"
-msgstr ""
-
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:112
-#, fuzzy
-msgid "Toggle comment"
-msgstr "Lülita märkuseloend sisse/välja"
-
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:116
-msgid "Sort selected lines"
-msgstr ""
-
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:120
-msgid "Swap line up"
-msgstr ""
-
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:124
-msgid "Swap line down"
-msgstr ""
-
-#: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteTitle.js:16
-#, fuzzy
-msgid "Note title"
-msgstr "Märkmiku tiitel:"
-
-#: packages/app-desktop/gui/NoteEditor/commands/showLocalSearch.js:16
-msgid "Search in current note"
-msgstr "Otsi praeguses märkuses"
-
-#: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteBody.js:16
-#, fuzzy
-msgid "Note body"
-msgstr "Märkmete ajalugu"
-
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:28
-#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:164
-#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:309
-#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:390
-#: packages/app-desktop/gui/ResourceScreen.js:39
-msgid "ID"
-msgstr "ID"
-
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:29
-#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:319
-msgid "Created"
-msgstr "Loodud"
-
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:30
-#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:324
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:144
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:146
-msgid "Updated"
-msgstr "Uuendatud"
-
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:31
-msgid "Completed"
-msgstr "Lõpetatud"
-
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:32
-msgid "Location"
-msgstr "Asukoht"
-
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:33
-msgid "URL"
-msgstr "URL"
-
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:34
-#: packages/lib/models/Setting.js:1666
-msgid "Note History"
-msgstr "Märkmete ajalugu"
-
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:35
-#, fuzzy
-msgid "Markup"
-msgstr "Märgistus"
-
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:307
-msgid "Previous versions of this note"
-msgstr "Selle märkme eelmised versioonid"
-
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:390
-#: packages/app-desktop/gui/MainScreen/commands/showNoteProperties.js:18
-msgid "Note properties"
-msgstr "Märkme atribuudid"
-
-#: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:63
-#: packages/lib/services/KeymapService.js:178
-#, fuzzy, javascript-format
-msgid "Error: %s"
-msgstr "Viga"
-
-#: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:110
-#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:443
-#: packages/app-mobile/components/screens/encryption-config.js:280
-#: packages/lib/models/Setting.js:839 packages/app-cli/app/command-e2ee.js:118
-msgid "Disabled"
-msgstr "Keelatud"
-
-#: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:120
-#: packages/app-desktop/gui/NoteSearchBar.min.js:168
-#: packages/app-desktop/gui/lib/SearchInput/SearchInput.js:38
-msgid "Search..."
-msgstr "Otsi..."
-
-#: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:121
-#: packages/app-desktop/gui/MenuBar.js:433
-#: packages/app-desktop/gui/MenuBar.js:486 packages/app-desktop/gui/Root.js:138
-msgid "Import"
-msgstr "Impordi"
-
-#: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:126
-msgid "Command"
-msgstr ""
-
-#: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:127
-#, fuzzy
-msgid "Keyboard Shortcut"
-msgstr "Klaviatuuri režiim"
-
-#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:14
-#: packages/app-desktop/gui/MenuBar.js:213 packages/app-desktop/app.js:372
-msgid "Quit"
-msgstr "Lõpeta"
-
-#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:16
-#: packages/app-desktop/gui/MenuBar.js:320
-#, fuzzy
-msgid "Insert template"
-msgstr "Lisa kuupäev kellaaeg"
-
-#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:18
-#: packages/app-desktop/gui/MenuBar.js:586
-msgid "Actual Size"
-msgstr ""
-
-#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:22
-#: packages/app-desktop/gui/MenuBar.js:654
-msgid "Website and documentation"
-msgstr "Veebileht ja dokumentatsioon"
-
-#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:24
-#, fuzzy
-msgid "Hide Joplin"
-msgstr "Teave kasutaja Joplin kohta"
-
-#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:26
-#: packages/app-desktop/gui/MenuBar.js:474
-msgid "Close Window"
-msgstr "Sule aken"
-
-#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:30
-#, fuzzy
-msgid "Preferences"
-msgstr "Eelistused..."
-
-#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:30
-#: packages/app-desktop/gui/MenuBar.js:344 packages/app-desktop/gui/Root.js:139
-msgid "Options"
-msgstr "Valikud"
-
-#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:37
-#, fuzzy
-msgid "Invalid"
-msgstr "Sobimatu vastus: %s"
-
-#: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:49
-msgid "Press the shortcut"
-msgstr ""
-
-#: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:49
-msgid ""
-"Press the shortcut and then press ENTER. Or, press BACKSPACE to clear the "
-"shortcut."
-msgstr ""
-
-#: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:50
-#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:96
-#: packages/app-mobile/components/screens/encryption-config.js:125
-msgid "Save"
-msgstr "Salvesta"
-
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:459
-msgid ""
-"Safe mode is currently active. Note rendering and all plugins are "
-"temporarily disabled."
-msgstr ""
-
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:459
-msgid "Disable safe mode and restart"
-msgstr ""
-
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:462
-msgid ""
-"The sync target needs to be upgraded before Joplin can sync. The operation "
-"may take a few minutes to complete and the app needs to be restarted. To "
-"proceed please click on the link."
-msgstr ""
-
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:462
-msgid "Restart and upgrade"
-msgstr ""
-
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:465
-#, fuzzy
-msgid "Some items cannot be decrypted."
-msgstr "Mõnda üksust ei saa sünkroonida."
-
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:465
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:468
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:479
-msgid "View them now"
-msgstr "Vaata neid nüüd"
-
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:468
-#, fuzzy
-msgid "One of your master keys use an obsolete encryption method."
-msgstr "Üks või mitu Põhivõtit vajavad parooli."
-
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:471
-msgid ""
-"The default encryption method has been changed, you should re-encrypt your "
-"data."
-msgstr ""
-
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:471
-#, fuzzy
-msgid "More info"
-msgstr "Lisainformatsioon"
-
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:476
-#, javascript-format
-msgid "%s (%s) would like to share a notebook with you."
-msgstr ""
-
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:476
-msgid "Accept"
-msgstr ""
-
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:476
-#: packages/app-desktop/gui/Root.js:113
-msgid "Reject"
-msgstr ""
-
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:479
-msgid "Some items cannot be synchronised."
-msgstr "Mõnda üksust ei saa sünkroonida."
-
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:482
-msgid "One or more master keys need a password."
-msgstr "Üks või mitu Põhivõtit vajavad parooli."
-
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:482
-msgid "Set the password"
-msgstr "Parooli seadmine"
-
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:605
-msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
-msgstr ""
-
-#: packages/app-desktop/gui/MainScreen/commands/showNoteContentProperties.js:18
-msgid "Statistics..."
-msgstr ""
-
-#: packages/app-desktop/gui/MainScreen/commands/renameFolder.js:18
-#: packages/app-desktop/gui/MainScreen/commands/renameTag.js:18
-#: packages/app-mobile/components/side-menu-content.js:129
-msgid "Rename"
-msgstr "Nimeta ümber"
-
-#: packages/app-desktop/gui/MainScreen/commands/renameFolder.js:28
-msgid "Rename notebook:"
-msgstr "Märkmiku ümbernimetamine:"
-
-#: packages/app-desktop/gui/MainScreen/commands/newTodo.js:17
-#: packages/app-mobile/components/action-button.js:77
-#: packages/app-mobile/setUpQuickActions.js:15
-#, fuzzy
-msgid "New to-do"
-msgstr "Uus to-do"
-
-#: packages/app-desktop/gui/MainScreen/commands/toggleNoteList.js:18
-msgid "Toggle note list"
-msgstr "Lülita märkuseloend sisse/välja"
-
-#: packages/app-desktop/gui/MainScreen/commands/toggleSideBar.js:18
-msgid "Toggle sidebar"
+msgid "Toggle safe mode"
 msgstr "Lülita külgriba sisse/välja"
-
-#: packages/app-desktop/gui/MainScreen/commands/editAlarm.js:20
-#: packages/app-mobile/components/SelectDateTimeDialog.js:84
-#: packages/app-mobile/components/screens/Note.js:819
-msgid "Set alarm"
-msgstr "Alarmi seadmine"
-
-#: packages/app-desktop/gui/MainScreen/commands/editAlarm.js:33
-msgid "Set alarm:"
-msgstr "Alarmi seadmine:"
-
-#: packages/app-desktop/gui/MainScreen/commands/exportPdf.js:20
-#: packages/app-desktop/gui/MainScreen/commands/exportPdf.js:32
-msgid "PDF File"
-msgstr "PDF-fail"
-
-#: packages/app-desktop/gui/MainScreen/commands/newNote.js:20
-#: packages/app-mobile/components/action-button.js:86
-#: packages/app-mobile/setUpQuickActions.js:14
-msgid "New note"
-msgstr "Uus Märkus"
-
-#: packages/app-desktop/gui/MainScreen/commands/moveToFolder.js:18
-#, fuzzy
-msgid "Move to notebook"
-msgstr "Teisalda märkmikku..."
-
-#: packages/app-desktop/gui/MainScreen/commands/moveToFolder.js:38
-#, fuzzy
-msgid "Move to notebook:"
-msgstr "Teisalda märkmikku..."
-
-#: packages/app-desktop/gui/MainScreen/commands/toggleVisiblePanes.js:16
-msgid "Toggle editor layout"
-msgstr "Lülita redaktori paigutus sisse/välja"
-
-#: packages/app-desktop/gui/MainScreen/commands/toggleEditors.js:18
-#, fuzzy
-msgid "Toggle editors"
-msgstr "Lülita redaktori paigutus sisse/välja"
-
-#: packages/app-desktop/gui/MainScreen/commands/showShareFolderDialog.js:16
-#, fuzzy
-msgid "Share notebook..."
-msgstr "Jaga märkust..."
-
-#: packages/app-desktop/gui/MainScreen/commands/toggleLayoutMoveMode.js:16
-msgid "Change application layout"
-msgstr ""
-
-#: packages/app-desktop/gui/MainScreen/commands/renameTag.js:30
-msgid "Rename tag:"
-msgstr "Nimeta silt ümber:"
-
-#: packages/app-desktop/gui/MainScreen/commands/newFolder.js:18
-msgid "New notebook"
-msgstr "Uus märkmik"
-
-#: packages/app-desktop/gui/MainScreen/commands/newFolder.js:26
-msgid "Notebook title:"
-msgstr "Märkmiku tiitel:"
-
-#: packages/app-desktop/gui/MainScreen/commands/showSpellCheckerMenu.js:19
-#: packages/lib/services/spellChecker/SpellCheckerService.js:180
-msgid "Spell checker"
-msgstr ""
-
-#: packages/app-desktop/gui/MainScreen/commands/showShareNoteDialog.js:16
-#, fuzzy
-msgid "Publish note..."
-msgstr "Jaga märkust..."
-
-#: packages/app-desktop/gui/MainScreen/commands/newSubFolder.js:17
-msgid "New sub-notebook"
-msgstr "Uus alammärkmik"
-
-#: packages/app-desktop/gui/MainScreen/commands/selectTemplate.js:24
-msgid "Template file:"
-msgstr "Mallifail:"
-
-#: packages/app-desktop/gui/MainScreen/commands/setTags.js:45
-msgid "Add or remove tags:"
-msgstr "Siltide lisamine või eemaldamine:"
-
-#: packages/app-desktop/gui/MainScreen/commands/print.js:17
-msgid "Print"
-msgstr ""
-
-#: packages/app-desktop/gui/MainScreen/commands/print.js:26
-msgid "Only one note can be printed at a time."
-msgstr ""
-
-#: packages/app-desktop/gui/DropboxLoginScreen.js:29
-#: packages/app-mobile/components/screens/dropbox-login.js:58
-#: packages/app-cli/app/command-sync.js:91
-#, fuzzy
-msgid ""
-"To allow Joplin to synchronise with Dropbox, please follow the steps below:"
-msgstr "Et lubada Joplin sünkroniseerida Dropbox, järgige alltoodud juhiseid:"
-
-#: packages/app-desktop/gui/DropboxLoginScreen.js:30
-#: packages/app-mobile/components/screens/dropbox-login.js:59
-#: packages/app-cli/app/command-sync.js:92
-#, fuzzy
-msgid "Step 1: Open this URL in your browser to authorise the application:"
-msgstr "1. samm : avage see URL brauseris, et lubada rakendust:"
-
-#: packages/app-desktop/gui/DropboxLoginScreen.js:32
-#: packages/app-mobile/components/screens/dropbox-login.js:65
-#: packages/app-cli/app/command-sync.js:94
-#, fuzzy
-msgid "Step 2: Enter the code provided by Dropbox:"
-msgstr "2. samm: sisestage kood, mis on esitatud Dropbox:"
-
-#: packages/app-desktop/gui/DropboxLoginScreen.js:35
-#: packages/app-mobile/components/screens/dropbox-login.js:68
-msgid "Submit"
-msgstr "Saada"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:40
 msgid "Token has been copied to the clipboard!"
@@ -1033,237 +1049,180 @@ msgstr ""
 msgid "Renew token"
 msgstr ""
 
-#: packages/app-desktop/gui/MenuBar.js:167
-#, javascript-format
-msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
+#: packages/app-desktop/gui/ConfigScreen/ButtonBar.js:27
+msgid "Apply"
+msgstr "Rakenda"
+
+#: packages/app-desktop/gui/ConfigScreen/ButtonBar.js:30
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:521
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:187
+#: packages/lib/commands/historyBackward.js:17
+msgid "Back"
+msgstr "Tagasi"
+
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:127
+msgid "This will open a new screen. Save your current changes?"
+msgstr "See avab uue ekraani. Kas salvestada praegused muudatused?"
+
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:193
+#: packages/app-mobile/components/screens/ConfigScreen.js:276
+msgid "Check synchronisation configuration"
+msgstr "Kontrolli sünkroniseerimise konfiguratsiooni"
+
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:203
+msgid "Show Advanced Settings"
+msgstr "Kuva täpsemad sätted"
+
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:392
+msgid "Path:"
 msgstr ""
 
-#: packages/app-desktop/gui/MenuBar.js:291 packages/app-desktop/gui/Root.js:141
-msgid "Synchronisation Status"
-msgstr "Sünkroonimise olek"
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:397
+msgid "Browse..."
+msgstr "Sirvi..."
 
-#: packages/app-desktop/gui/MenuBar.js:310
-msgid "Create note from template"
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:399
+msgid "Arguments:"
 msgstr ""
 
-#: packages/app-desktop/gui/MenuBar.js:315
-msgid "Create to-do from template"
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:447
+msgid "The application must be restarted for these changes to take effect."
 msgstr ""
 
-#: packages/app-desktop/gui/MenuBar.js:326
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:459
+#: packages/app-desktop/gui/NoteList/NoteList.js:164
 #, fuzzy
-msgid "Open template directory"
-msgstr "Joplin Export kataloog"
-
-#: packages/app-desktop/gui/MenuBar.js:331
-#, fuzzy
-msgid "Refresh templates"
-msgstr "Mallid"
-
-#: packages/app-desktop/gui/MenuBar.js:357
-#, fuzzy
-msgid "Note attachments..."
-msgstr "Manused"
-
-#: packages/app-desktop/gui/MenuBar.js:388
-#: packages/app-desktop/gui/MenuBar.js:466
-#: packages/app-desktop/gui/MenuBar.js:768
-msgid "&File"
-msgstr "&Fail"
-
-#: packages/app-desktop/gui/MenuBar.js:394
-#: packages/app-desktop/gui/MenuBar.js:687
-msgid "About Joplin"
-msgstr "Teave kasutaja Joplin kohta"
-
-#: packages/app-desktop/gui/MenuBar.js:401
-msgid "Preferences..."
-msgstr "Eelistused..."
-
-#: packages/app-desktop/gui/MenuBar.js:411
-#: packages/app-desktop/gui/MenuBar.js:664
-msgid "Check for updates..."
-msgstr "Otsi värskendusi..."
-
-#: packages/app-desktop/gui/MenuBar.js:426
-#: packages/app-desktop/gui/MenuBar.js:481
-msgid "Templates"
-msgstr "Mallid"
-
-#: packages/app-desktop/gui/MenuBar.js:437
-#: packages/app-desktop/gui/MenuBar.js:489
-#, fuzzy
-msgid "Export all"
-msgstr "Eksport"
-
-#: packages/app-desktop/gui/MenuBar.js:449
-#, javascript-format
-msgid "Hide %s"
-msgstr "Peida %s"
-
-#: packages/app-desktop/gui/MenuBar.js:512
-#: packages/app-desktop/gui/MenuBar.js:772
-msgid "&Edit"
-msgstr "&Redigeeri"
-
-#: packages/app-desktop/gui/MenuBar.js:544
-msgid "&View"
-msgstr "&Vaade"
-
-#: packages/app-desktop/gui/MenuBar.js:552
-#, fuzzy
-msgid "Layout button sequence"
-msgstr "Paigutuse nupujada"
-
-#: packages/app-desktop/gui/MenuBar.js:597
-#: packages/app-desktop/gui/MenuBar.js:603
-msgid "Zoom In"
-msgstr ""
-
-#: packages/app-desktop/gui/MenuBar.js:610
-msgid "Zoom Out"
-msgstr ""
-
-#: packages/app-desktop/gui/MenuBar.js:619
-msgid "&Go"
-msgstr ""
-
-#: packages/app-desktop/gui/MenuBar.js:631
-#, fuzzy
-msgid "Note&book"
-msgstr "Sülearvutid"
-
-#: packages/app-desktop/gui/MenuBar.js:637
-#, fuzzy
-msgid "&Note"
-msgstr "Märge"
-
-#: packages/app-desktop/gui/MenuBar.js:647
-msgid "&Tools"
-msgstr "&Tööriistad"
-
-#: packages/app-desktop/gui/MenuBar.js:651
-msgid "&Help"
-msgstr "&Spikker"
-
-#: packages/app-desktop/gui/MenuBar.js:658
-msgid "Joplin Forum"
-msgstr "Joplini Foorum"
-
-#: packages/app-desktop/gui/MenuBar.js:661
-#: packages/app-mobile/components/screens/ConfigScreen.js:425
-msgid "Make a donation"
-msgstr "Annetuse tegemine"
-
-#: packages/app-desktop/gui/MenuBar.js:673
-msgid "Toggle development tools"
-msgstr "Lülita arendus tööriistad"
-
-#: packages/app-desktop/gui/ExtensionBadge.min.js:10
-msgid "Firefox Extension"
-msgstr "Firefoxi laiendus"
-
-#: packages/app-desktop/gui/ExtensionBadge.min.js:17
-msgid "Chrome Web Store"
-msgstr "Chrome ' i veebipood"
-
-#: packages/app-desktop/gui/ExtensionBadge.min.js:44
-msgid "Get it now:"
+msgid "Do it now"
 msgstr "Võta nüüd:"
 
-#: packages/app-desktop/gui/ImportScreen.min.js:61
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:459
+msgid "Later"
+msgstr ""
+
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:512
+#, fuzzy
+msgid "Restart now"
+msgstr "Võta nüüd:"
+
+#: packages/app-desktop/gui/ConfigScreen/Sidebar.js:89
+#: packages/lib/models/Setting.js:1662
+msgid "Plugins"
+msgstr "Pluginad"
+
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:125
+#: packages/app-desktop/gui/ResourceScreen.js:47
+#: packages/app-desktop/gui/ResourceScreen.js:96
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:193
+#: packages/app-desktop/gui/utils/NoteListUtils.js:140
+#: packages/app-desktop/gui/utils/NoteListUtils.js:169
+#: packages/app-mobile/components/screens/Note.js:860
+#: packages/app-mobile/components/side-menu-content.js:146
+msgid "Delete"
+msgstr "Kustuta"
+
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:130
+msgid "Install"
+msgstr ""
+
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:132
+#, fuzzy
+msgid "Installing..."
+msgstr "Tühistamine..."
+
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:134
+msgid "Installed"
+msgstr ""
+
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:140
+#, fuzzy
+msgid "Update"
+msgstr "Uuendatud"
+
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:142
+#, fuzzy
+msgid "Updating..."
+msgstr "Vaadates..."
+
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:144
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:146
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:324
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:30
+msgid "Updated"
+msgstr "Uuendatud"
+
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:154
+msgid "Please upgrade Joplin to use this plugin"
+msgstr ""
+
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:168
+#, javascript-format
+msgid "(%s)"
+msgstr ""
+
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:138
 #, fuzzy, javascript-format
-msgid ""
-"New notebook \"%s\" will be created and file \"%s\" will be imported into it"
-msgstr "Luuakse uus märkmik \"%s\" ja fail \"%s\" imporditakse sellesse"
-
-#: packages/app-desktop/gui/ImportScreen.min.js:68
-#: packages/app-cli/app/command-import.js:47
-#, javascript-format
-msgid "Found: %d."
-msgstr "Leitud: %d."
-
-#: packages/app-desktop/gui/ImportScreen.min.js:69
-#: packages/app-cli/app/command-import.js:48
-#, javascript-format
-msgid "Created: %d."
-msgstr "Loodud: %d."
-
-#: packages/app-desktop/gui/ImportScreen.min.js:70
-#: packages/app-cli/app/command-import.js:49
-#, javascript-format
-msgid "Updated: %d."
-msgstr "Värskendatud: %d."
-
-#: packages/app-desktop/gui/ImportScreen.min.js:71
-#: packages/app-cli/app/command-import.js:50
-#, javascript-format
-msgid "Skipped: %d."
-msgstr "Vahele jäetud: %d."
-
-#: packages/app-desktop/gui/ImportScreen.min.js:72
-#: packages/app-cli/app/command-import.js:51
-#, javascript-format
-msgid "Resources: %d."
-msgstr "Ressursid: %d."
-
-#: packages/app-desktop/gui/ImportScreen.min.js:73
-#: packages/app-cli/app/command-import.js:52
-#, javascript-format
-msgid "Tagged: %d."
-msgstr "Sildistatud: %d."
-
-#: packages/app-desktop/gui/ImportScreen.min.js:88
-#: packages/app-cli/app/command-import.js:70
-#, javascript-format
-msgid "The notes have been imported: %s"
-msgstr "Märkmed on imporditud: %s"
-
-#: packages/app-desktop/gui/utils/NoteListUtils.js:43
-msgid "Duplicate"
-msgstr "Paljunda"
-
-#: packages/app-desktop/gui/utils/NoteListUtils.js:48
-#, javascript-format
-msgid "%s - Copy"
-msgstr "%s - Kopeeri"
-
-#: packages/app-desktop/gui/utils/NoteListUtils.js:59
-#, fuzzy
-msgid "Switch between note and to-do type"
-msgstr "Märkme ja to-do tüübi vaheldumisi aktiveerimine"
-
-#: packages/app-desktop/gui/utils/NoteListUtils.js:87
-msgid "Switch to note type"
-msgstr "Märkme tüübi aktiveerimine"
-
-#: packages/app-desktop/gui/utils/NoteListUtils.js:93
-#, fuzzy
-msgid "Switch to to-do type"
-msgstr "Lülita to-do-tüüpi"
-
-#: packages/app-desktop/gui/utils/NoteListUtils.js:100
-#: packages/app-mobile/components/screens/Note.js:847
-msgid "Copy Markdown link"
-msgstr "Kopeeri Markdown link"
-
-#: packages/app-desktop/gui/utils/NoteListUtils.js:163
-#, javascript-format
-msgid "Delete note \"%s\"?"
+msgid "Delete plugin \"%s\"?"
 msgstr "Kas kustutada märge \"%s\"?"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:166
-#, javascript-format
-msgid "Delete these %d notes?"
-msgstr "Kas kustutada %d märkmed?"
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:180
+msgid "Browse all plugins"
+msgstr ""
 
-#: packages/app-desktop/gui/OneDriveLoginScreen.js:46
-#: packages/app-cli/app/command-sync.js:82
-#: packages/app-cli/app/command-sync.js:96
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:184
+msgid "Install from file"
+msgstr ""
+
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:218
+msgid "You do not have any installed plugin."
+msgstr ""
+
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:232
+msgid "Could not connect to plugin repository"
+msgstr ""
+
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:234
+msgid "Try again"
+msgstr ""
+
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:242
 #, fuzzy
-msgid ""
-"Authentication was not completed (did not receive an authentication token)."
-msgstr "Autentimine on lõpule viidud (ei saanud autentimise luba)."
+msgid "Plugin tools"
+msgstr "Pluginad"
+
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:243
+msgid "Manage your plugins"
+msgstr ""
+
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js:68
+msgid "No results"
+msgstr ""
+
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js:80
+#: packages/app-desktop/gui/ResourceScreen.js:142
+#, fuzzy
+msgid "Please wait..."
+msgstr "Kontroll... Oota."
+
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js:80
+#, fuzzy
+msgid "Search for plugins..."
+msgstr "Otsi..."
+
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/useOnInstallHandler.js:53
+#, javascript-format
+msgid "Could not install plugin: %s"
+msgstr ""
+
+#: packages/app-desktop/gui/DropboxLoginScreen.js:35
+#: packages/app-mobile/components/screens/dropbox-login.js:68
+msgid "Submit"
+msgstr "Saada"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:96
+#: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:50
+#: packages/app-mobile/components/screens/encryption-config.js:125
+msgid "Save"
+msgstr "Salvesta"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:145
 msgid "Master keys that need upgrading"
@@ -1275,6 +1234,14 @@ msgid ""
 "recommended to upgrade them. The upgraded master key will still be able to "
 "decrypt and encrypt your data as usual."
 msgstr ""
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:164
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:309
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:390
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:28
+#: packages/app-desktop/gui/ResourceScreen.js:39
+msgid "ID"
+msgstr "ID"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:169
 msgid "Upgrade"
@@ -1372,6 +1339,11 @@ msgstr "Aktiivne"
 msgid "Source"
 msgstr "Allikas"
 
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:319
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:29
+msgid "Created"
+msgstr "Loodud"
+
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:329
 msgid "Password"
 msgstr "Parool"
@@ -1428,181 +1400,475 @@ msgstr "Staatus"
 msgid "Encryption is:"
 msgstr "Krüpteerimine on:"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:443
-#: packages/app-mobile/components/screens/encryption-config.js:280
-#: packages/app-cli/app/command-e2ee.js:118
-msgid "Enabled"
-msgstr "Lubatud"
+#: packages/app-desktop/gui/ExtensionBadge.min.js:10
+msgid "Firefox Extension"
+msgstr "Firefoxi laiendus"
 
-#: packages/app-desktop/gui/Root.js:98
-#, fuzzy
-msgid "Confirmation"
-msgstr "Seadistamine"
+#: packages/app-desktop/gui/ExtensionBadge.min.js:17
+msgid "Chrome Web Store"
+msgstr "Chrome ' i veebipood"
 
-#: packages/app-desktop/gui/Root.js:111
-msgid "The Web Clipper needs your authorisation to access your data."
-msgstr ""
-
-#: packages/app-desktop/gui/Root.js:112
-#, fuzzy
-msgid "Grant authorisation"
-msgstr "Autoriseerimis token:"
-
-#: packages/app-desktop/gui/Root.js:136
-msgid "OneDrive Login"
-msgstr "OneDrive-i sisselogimine"
-
-#: packages/app-desktop/gui/Root.js:137
-msgid "Dropbox Login"
-msgstr "Dropbox-i sisselogimine"
-
-#: packages/app-desktop/gui/Root.js:140
-#, fuzzy
-msgid "Note attachments"
-msgstr "Manused"
-
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:127
-msgid "This will open a new screen. Save your current changes?"
-msgstr "See avab uue ekraani. Kas salvestada praegused muudatused?"
-
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:193
-#: packages/app-mobile/components/screens/ConfigScreen.js:276
-msgid "Check synchronisation configuration"
-msgstr "Kontrolli sünkroniseerimise konfiguratsiooni"
-
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:203
-msgid "Show Advanced Settings"
-msgstr "Kuva täpsemad sätted"
-
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:392
-msgid "Path:"
-msgstr ""
-
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:397
-msgid "Browse..."
-msgstr "Sirvi..."
-
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:399
-msgid "Arguments:"
-msgstr ""
-
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:447
-msgid "The application must be restarted for these changes to take effect."
-msgstr ""
-
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:459
-#: packages/app-desktop/gui/NoteList/NoteList.js:164
-#, fuzzy
-msgid "Do it now"
+#: packages/app-desktop/gui/ExtensionBadge.min.js:44
+msgid "Get it now:"
 msgstr "Võta nüüd:"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:459
-msgid "Later"
-msgstr ""
-
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:512
-#, fuzzy
-msgid "Restart now"
-msgstr "Võta nüüd:"
-
-#: packages/app-desktop/gui/ConfigScreen/Sidebar.js:89
-#: packages/lib/models/Setting.js:1662
-msgid "Plugins"
-msgstr "Pluginad"
-
-#: packages/app-desktop/gui/ConfigScreen/ButtonBar.js:27
-msgid "Apply"
-msgstr "Rakenda"
-
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:138
+#: packages/app-desktop/gui/ImportScreen.min.js:61
 #, fuzzy, javascript-format
-msgid "Delete plugin \"%s\"?"
-msgstr "Kas kustutada märge \"%s\"?"
+msgid ""
+"New notebook \"%s\" will be created and file \"%s\" will be imported into it"
+msgstr "Luuakse uus märkmik \"%s\" ja fail \"%s\" imporditakse sellesse"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:180
-msgid "Browse all plugins"
-msgstr ""
+#: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:63
+#: packages/lib/services/KeymapService.js:178
+#, fuzzy, javascript-format
+msgid "Error: %s"
+msgstr "Viga"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:184
-msgid "Install from file"
-msgstr ""
-
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:218
-msgid "You do not have any installed plugin."
-msgstr ""
-
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:232
-msgid "Could not connect to plugin repository"
-msgstr ""
-
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:234
-msgid "Try again"
-msgstr ""
-
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:242
-#, fuzzy
-msgid "Plugin tools"
-msgstr "Pluginad"
-
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:243
-msgid "Manage your plugins"
-msgstr ""
-
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js:68
-msgid "No results"
-msgstr ""
-
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js:80
-#: packages/app-desktop/gui/ResourceScreen.js:142
-#, fuzzy
-msgid "Please wait..."
-msgstr "Kontroll... Oota."
-
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js:80
-#, fuzzy
-msgid "Search for plugins..."
+#: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:120
+#: packages/app-desktop/gui/NoteSearchBar.min.js:168
+#: packages/app-desktop/gui/lib/SearchInput/SearchInput.js:38
+msgid "Search..."
 msgstr "Otsi..."
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:130
-msgid "Install"
+#: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:121
+#: packages/app-desktop/gui/MenuBar.js:433
+#: packages/app-desktop/gui/MenuBar.js:486 packages/app-desktop/gui/Root.js:138
+msgid "Import"
+msgstr "Impordi"
+
+#: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:122
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:258
+#: packages/app-desktop/gui/utils/NoteListUtils.js:136
+msgid "Export"
+msgstr "Eksport"
+
+#: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:126
+msgid "Command"
 msgstr ""
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:132
+#: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:127
 #, fuzzy
-msgid "Installing..."
-msgstr "Tühistamine..."
+msgid "Keyboard Shortcut"
+msgstr "Klaviatuuri režiim"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:134
-msgid "Installed"
+#: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:49
+msgid "Press the shortcut"
 msgstr ""
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:140
-#, fuzzy
-msgid "Update"
-msgstr "Uuendatud"
-
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:142
-#, fuzzy
-msgid "Updating..."
-msgstr "Vaadates..."
-
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:154
-msgid "Please upgrade Joplin to use this plugin"
+#: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:49
+msgid ""
+"Press the shortcut and then press ENTER. Or, press BACKSPACE to clear the "
+"shortcut."
 msgstr ""
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:168
+#: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:51
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:177
+msgid "Restore"
+msgstr "Taasta"
+
+#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:16
+#: packages/app-desktop/gui/MenuBar.js:320
+#, fuzzy
+msgid "Insert template"
+msgstr "Lisa kuupäev kellaaeg"
+
+#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:18
+#: packages/app-desktop/gui/MenuBar.js:586
+msgid "Actual Size"
+msgstr ""
+
+#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:20
+#: packages/app-desktop/plugins/GotoAnything.js:480
+#, fuzzy
+msgid "Goto Anything..."
+msgstr "Ükskõik mida..."
+
+#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:22
+#: packages/app-desktop/gui/MenuBar.js:654
+msgid "Website and documentation"
+msgstr "Veebileht ja dokumentatsioon"
+
+#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:24
+#, fuzzy
+msgid "Hide Joplin"
+msgstr "Teave kasutaja Joplin kohta"
+
+#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:26
+#: packages/app-desktop/gui/MenuBar.js:474
+msgid "Close Window"
+msgstr "Sule aken"
+
+#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:28
+#: packages/app-desktop/plugins/GotoAnything.js:487
+msgid "Command palette"
+msgstr ""
+
+#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:30
+#, fuzzy
+msgid "Preferences"
+msgstr "Eelistused..."
+
+#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:30
+#: packages/app-desktop/gui/MenuBar.js:344 packages/app-desktop/gui/Root.js:139
+msgid "Options"
+msgstr "Valikud"
+
+#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:37
+#, fuzzy
+msgid "Invalid"
+msgstr "Sobimatu vastus: %s"
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:459
+msgid ""
+"Safe mode is currently active. Note rendering and all plugins are "
+"temporarily disabled."
+msgstr ""
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:459
+msgid "Disable safe mode and restart"
+msgstr ""
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:462
+msgid ""
+"The sync target needs to be upgraded before Joplin can sync. The operation "
+"may take a few minutes to complete and the app needs to be restarted. To "
+"proceed please click on the link."
+msgstr ""
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:462
+msgid "Restart and upgrade"
+msgstr ""
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:465
+#, fuzzy
+msgid "Some items cannot be decrypted."
+msgstr "Mõnda üksust ei saa sünkroonida."
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:465
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:468
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:479
+msgid "View them now"
+msgstr "Vaata neid nüüd"
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:468
+#, fuzzy
+msgid "One of your master keys use an obsolete encryption method."
+msgstr "Üks või mitu Põhivõtit vajavad parooli."
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:471
+msgid ""
+"The default encryption method has been changed, you should re-encrypt your "
+"data."
+msgstr ""
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:471
+#, fuzzy
+msgid "More info"
+msgstr "Lisainformatsioon"
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:476
 #, javascript-format
-msgid "(%s)"
+msgid "%s (%s) would like to share a notebook with you."
 msgstr ""
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/useOnInstallHandler.js:53
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:476
+msgid "Accept"
+msgstr ""
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:476
+#: packages/app-desktop/gui/Root.js:113
+msgid "Reject"
+msgstr ""
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:479
+msgid "Some items cannot be synchronised."
+msgstr "Mõnda üksust ei saa sünkroonida."
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:482
+msgid "One or more master keys need a password."
+msgstr "Üks või mitu Põhivõtit vajavad parooli."
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:482
+msgid "Set the password"
+msgstr "Parooli seadmine"
+
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:605
+msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
+msgstr ""
+
+#: packages/app-desktop/gui/MainScreen/commands/editAlarm.js:20
+#: packages/app-mobile/components/SelectDateTimeDialog.js:84
+#: packages/app-mobile/components/screens/Note.js:819
+msgid "Set alarm"
+msgstr "Alarmi seadmine"
+
+#: packages/app-desktop/gui/MainScreen/commands/editAlarm.js:33
+msgid "Set alarm:"
+msgstr "Alarmi seadmine:"
+
+#: packages/app-desktop/gui/MainScreen/commands/exportPdf.js:20
+#: packages/app-desktop/gui/MainScreen/commands/exportPdf.js:32
+msgid "PDF File"
+msgstr "PDF-fail"
+
+#: packages/app-desktop/gui/MainScreen/commands/moveToFolder.js:18
+#, fuzzy
+msgid "Move to notebook"
+msgstr "Teisalda märkmikku..."
+
+#: packages/app-desktop/gui/MainScreen/commands/moveToFolder.js:38
+#, fuzzy
+msgid "Move to notebook:"
+msgstr "Teisalda märkmikku..."
+
+#: packages/app-desktop/gui/MainScreen/commands/newFolder.js:18
+msgid "New notebook"
+msgstr "Uus märkmik"
+
+#: packages/app-desktop/gui/MainScreen/commands/newFolder.js:26
+msgid "Notebook title:"
+msgstr "Märkmiku tiitel:"
+
+#: packages/app-desktop/gui/MainScreen/commands/newNote.js:20
+#: packages/app-mobile/components/action-button.js:86
+#: packages/app-mobile/setupQuickActions.js:14
+msgid "New note"
+msgstr "Uus Märkus"
+
+#: packages/app-desktop/gui/MainScreen/commands/newSubFolder.js:17
+msgid "New sub-notebook"
+msgstr "Uus alammärkmik"
+
+#: packages/app-desktop/gui/MainScreen/commands/newTodo.js:17
+#: packages/app-mobile/components/action-button.js:77
+#: packages/app-mobile/setupQuickActions.js:15
+#, fuzzy
+msgid "New to-do"
+msgstr "Uus to-do"
+
+#: packages/app-desktop/gui/MainScreen/commands/print.js:17
+msgid "Print"
+msgstr ""
+
+#: packages/app-desktop/gui/MainScreen/commands/print.js:26
+msgid "Only one note can be printed at a time."
+msgstr ""
+
+#: packages/app-desktop/gui/MainScreen/commands/renameFolder.js:18
+#: packages/app-desktop/gui/MainScreen/commands/renameTag.js:18
+#: packages/app-mobile/components/side-menu-content.js:129
+msgid "Rename"
+msgstr "Nimeta ümber"
+
+#: packages/app-desktop/gui/MainScreen/commands/renameFolder.js:28
+msgid "Rename notebook:"
+msgstr "Märkmiku ümbernimetamine:"
+
+#: packages/app-desktop/gui/MainScreen/commands/renameTag.js:30
+msgid "Rename tag:"
+msgstr "Nimeta silt ümber:"
+
+#: packages/app-desktop/gui/MainScreen/commands/selectTemplate.js:24
+msgid "Template file:"
+msgstr "Mallifail:"
+
+#: packages/app-desktop/gui/MainScreen/commands/setTags.js:17
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:492
+#: packages/app-mobile/components/screens/Note.js:833
+#: packages/app-mobile/components/screens/tags.js:101
+#: packages/app-mobile/components/side-menu-content.js:314
+msgid "Tags"
+msgstr "Sildid"
+
+#: packages/app-desktop/gui/MainScreen/commands/setTags.js:45
+msgid "Add or remove tags:"
+msgstr "Siltide lisamine või eemaldamine:"
+
+#: packages/app-desktop/gui/MainScreen/commands/showNoteContentProperties.js:18
+msgid "Statistics..."
+msgstr ""
+
+#: packages/app-desktop/gui/MainScreen/commands/showNoteProperties.js:18
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:390
+msgid "Note properties"
+msgstr "Märkme atribuudid"
+
+#: packages/app-desktop/gui/MainScreen/commands/showShareFolderDialog.js:16
+#, fuzzy
+msgid "Share notebook..."
+msgstr "Jaga märkust..."
+
+#: packages/app-desktop/gui/MainScreen/commands/showShareNoteDialog.js:16
+#, fuzzy
+msgid "Publish note..."
+msgstr "Jaga märkust..."
+
+#: packages/app-desktop/gui/MainScreen/commands/showSpellCheckerMenu.js:19
+#: packages/lib/services/spellChecker/SpellCheckerService.js:180
+msgid "Spell checker"
+msgstr ""
+
+#: packages/app-desktop/gui/MainScreen/commands/toggleEditors.js:18
+#, fuzzy
+msgid "Toggle editors"
+msgstr "Lülita redaktori paigutus sisse/välja"
+
+#: packages/app-desktop/gui/MainScreen/commands/toggleLayoutMoveMode.js:16
+msgid "Change application layout"
+msgstr ""
+
+#: packages/app-desktop/gui/MainScreen/commands/toggleNoteList.js:18
+msgid "Toggle note list"
+msgstr "Lülita märkuseloend sisse/välja"
+
+#: packages/app-desktop/gui/MainScreen/commands/toggleSideBar.js:18
+msgid "Toggle sidebar"
+msgstr "Lülita külgriba sisse/välja"
+
+#: packages/app-desktop/gui/MainScreen/commands/toggleVisiblePanes.js:16
+msgid "Toggle editor layout"
+msgstr "Lülita redaktori paigutus sisse/välja"
+
+#: packages/app-desktop/gui/MenuBar.js:167
 #, javascript-format
-msgid "Could not install plugin: %s"
+msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr ""
 
-#: packages/app-desktop/gui/PromptDialog.min.js:249
-msgid "Clear"
-msgstr "Tühjenda"
+#: packages/app-desktop/gui/MenuBar.js:291 packages/app-desktop/gui/Root.js:141
+msgid "Synchronisation Status"
+msgstr "Sünkroonimise olek"
+
+#: packages/app-desktop/gui/MenuBar.js:310
+msgid "Create note from template"
+msgstr ""
+
+#: packages/app-desktop/gui/MenuBar.js:315
+msgid "Create to-do from template"
+msgstr ""
+
+#: packages/app-desktop/gui/MenuBar.js:326
+#, fuzzy
+msgid "Open template directory"
+msgstr "Joplin Export kataloog"
+
+#: packages/app-desktop/gui/MenuBar.js:331
+#, fuzzy
+msgid "Refresh templates"
+msgstr "Mallid"
+
+#: packages/app-desktop/gui/MenuBar.js:357
+#, fuzzy
+msgid "Note attachments..."
+msgstr "Manused"
+
+#: packages/app-desktop/gui/MenuBar.js:377
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:668
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:13
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:136
+msgid "Copy"
+msgstr "Kopeeri"
+
+#: packages/app-desktop/gui/MenuBar.js:388
+#: packages/app-desktop/gui/MenuBar.js:466
+#: packages/app-desktop/gui/MenuBar.js:768
+msgid "&File"
+msgstr "&Fail"
+
+#: packages/app-desktop/gui/MenuBar.js:394
+#: packages/app-desktop/gui/MenuBar.js:687
+msgid "About Joplin"
+msgstr "Teave kasutaja Joplin kohta"
+
+#: packages/app-desktop/gui/MenuBar.js:401
+msgid "Preferences..."
+msgstr "Eelistused..."
+
+#: packages/app-desktop/gui/MenuBar.js:411
+#: packages/app-desktop/gui/MenuBar.js:664
+msgid "Check for updates..."
+msgstr "Otsi värskendusi..."
+
+#: packages/app-desktop/gui/MenuBar.js:426
+#: packages/app-desktop/gui/MenuBar.js:481
+msgid "Templates"
+msgstr "Mallid"
+
+#: packages/app-desktop/gui/MenuBar.js:437
+#: packages/app-desktop/gui/MenuBar.js:489
+#, fuzzy
+msgid "Export all"
+msgstr "Eksport"
+
+#: packages/app-desktop/gui/MenuBar.js:449
+#, javascript-format
+msgid "Hide %s"
+msgstr "Peida %s"
+
+#: packages/app-desktop/gui/MenuBar.js:512
+#: packages/app-desktop/gui/MenuBar.js:772
+msgid "&Edit"
+msgstr "&Redigeeri"
+
+#: packages/app-desktop/gui/MenuBar.js:544
+msgid "&View"
+msgstr "&Vaade"
+
+#: packages/app-desktop/gui/MenuBar.js:552
+#, fuzzy
+msgid "Layout button sequence"
+msgstr "Paigutuse nupujada"
+
+#: packages/app-desktop/gui/MenuBar.js:597
+#: packages/app-desktop/gui/MenuBar.js:603
+msgid "Zoom In"
+msgstr ""
+
+#: packages/app-desktop/gui/MenuBar.js:610
+msgid "Zoom Out"
+msgstr ""
+
+#: packages/app-desktop/gui/MenuBar.js:619
+msgid "&Go"
+msgstr ""
+
+#: packages/app-desktop/gui/MenuBar.js:625
+#: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteBody.js:17
+#: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteTitle.js:17
+#: packages/app-desktop/gui/NoteList/commands/focusElementNoteList.js:18
+#: packages/app-desktop/gui/Sidebar/commands/focusElementSideBar.js:18
+msgid "Focus"
+msgstr "Fookus"
+
+#: packages/app-desktop/gui/MenuBar.js:631
+#, fuzzy
+msgid "Note&book"
+msgstr "Sülearvutid"
+
+#: packages/app-desktop/gui/MenuBar.js:637
+#, fuzzy
+msgid "&Note"
+msgstr "Märge"
+
+#: packages/app-desktop/gui/MenuBar.js:647
+msgid "&Tools"
+msgstr "&Tööriistad"
+
+#: packages/app-desktop/gui/MenuBar.js:651
+msgid "&Help"
+msgstr "&Spikker"
+
+#: packages/app-desktop/gui/MenuBar.js:658
+msgid "Joplin Forum"
+msgstr "Joplini Foorum"
+
+#: packages/app-desktop/gui/MenuBar.js:661
+#: packages/app-mobile/components/screens/ConfigScreen.js:425
+msgid "Make a donation"
+msgstr "Annetuse tegemine"
+
+#: packages/app-desktop/gui/MenuBar.js:673
+msgid "Toggle development tools"
+msgstr "Lülita arendus tööriistad"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.js:76
 msgid "Words"
@@ -1644,11 +1910,304 @@ msgid "Statistics"
 msgstr "Staatus"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.js:113
-#: packages/app-desktop/gui/ShareNoteDialog.js:192
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:260
+#: packages/app-desktop/gui/ShareNoteDialog.js:192
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:24
 msgid "Close"
 msgstr "Sulge"
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:183
+#, fuzzy
+msgid "strong text"
+msgstr "tugev tekst"
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:184
+#, fuzzy
+msgid "emphasised text"
+msgstr "toonitud tekst"
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:186
+msgid "Insert Hyperlink"
+msgstr "Lisa hüperlink"
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:220
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:222
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:223
+#, fuzzy
+msgid "List item"
+msgstr "Loendiüksus"
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:552
+msgid "Layout"
+msgstr "Paigutus"
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:552
+#, javascript-format
+msgid ""
+"This note has no content. Click on \"%s\" to toggle the editor and edit the "
+"note."
+msgstr ""
+"Sellel märkel pole sisu. Klõpsake \" %s\" redaktori vahetamiseks ja märkme "
+"redigeerimiseks."
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:661
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:18
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:128
+msgid "Cut"
+msgstr "Lõika"
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:675
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:23
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:143
+msgid "Paste"
+msgstr "Kleebi"
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:520
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:53
+#: packages/app-mobile/components/screens/Note.js:801
+msgid "Attach file"
+msgstr "Manusta fail"
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:530
+msgid "Code Block"
+msgstr ""
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:539
+msgid "Inline Code"
+msgstr ""
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:554
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:83
+msgid "Insert Date Time"
+msgstr "Lisa kuupäev kellaaeg"
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1004
+msgid "Drop notes or files here"
+msgstr ""
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1004
+#, fuzzy
+msgid "Code View"
+msgstr "Kood"
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1004
+#, javascript-format
+msgid ""
+"Please wait for all attachments to be downloaded and decrypted. You may also "
+"switch to %s to edit the note."
+msgstr ""
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/plugins/lists.js:2151
+#, fuzzy
+msgid "Checkbox list"
+msgstr "Märkekast"
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/openEditDialog.js:78
+#: packages/app-mobile/components/screens/Note.js:998
+msgid "Edit"
+msgstr "Muuda"
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:17
+msgid "Highlight"
+msgstr ""
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:22
+msgid "Strikethrough"
+msgstr ""
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:27
+msgid "Insert"
+msgstr ""
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:33
+msgid "Superscript"
+msgstr ""
+
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:39
+msgid "Subscript"
+msgstr ""
+
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:285
+#, fuzzy
+msgid "Click to add tags..."
+msgstr "Otsi värskendusi..."
+
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:338
+msgid ""
+"This Rich Text editor has a number of limitations and it is recommended to "
+"be aware of them before using it."
+msgstr ""
+
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:342
+msgid "Read more about it"
+msgstr ""
+
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:347
+msgid "Dismiss"
+msgstr ""
+
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:383
+msgid "The following attachments are being watched for changes:"
+msgstr ""
+
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:386
+msgid ""
+"The attachments will no longer be watched when you switch to a different "
+"note."
+msgstr ""
+
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:392
+#, javascript-format
+msgid "In: %s"
+msgstr "Asukoht: %s"
+
+#: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.js:79
+msgid "to-do"
+msgstr "ülesande nimekiri"
+
+#: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.js:79
+#: packages/server/dist/models/UserModel.js:189
+#: packages/server/dist/models/UserModel.js:194
+msgid "note"
+msgstr "paberraha"
+
+#: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.js:79
+#, javascript-format
+msgid "Creating new %s..."
+msgstr "Uue %s loomine..."
+
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:28
+msgid "Select all"
+msgstr "Vali kõik"
+
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:33
+msgid "Bold"
+msgstr "Paks"
+
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:38
+msgid "Italic"
+msgstr "Kald"
+
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:43
+msgid "Hyperlink"
+msgstr "Hüperlink"
+
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:48
+msgid "Code"
+msgstr "Kood"
+
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:58
+msgid "Numbered List"
+msgstr "Nummerdatud loend"
+
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:63
+msgid "Bulleted List"
+msgstr "Täpp-loend"
+
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:68
+msgid "Checkbox"
+msgstr "Märkekast"
+
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:73
+msgid "Heading"
+msgstr "Pealkiri"
+
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:78
+#, fuzzy
+msgid "Horizontal Rule"
+msgstr "Horisontaalne reegel"
+
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:88
+#, fuzzy
+msgid "Delete line"
+msgstr "Kas soovite märkme kustutada?"
+
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:92
+#, fuzzy
+msgid "Duplicate line"
+msgstr "Paljunda"
+
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:96
+msgid "Undo"
+msgstr ""
+
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:100
+msgid "Redo"
+msgstr ""
+
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:104
+msgid "Indent less"
+msgstr ""
+
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:108
+msgid "Indent more"
+msgstr ""
+
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:112
+#, fuzzy
+msgid "Toggle comment"
+msgstr "Lülita märkuseloend sisse/välja"
+
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:116
+msgid "Sort selected lines"
+msgstr ""
+
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:120
+msgid "Swap line up"
+msgstr ""
+
+#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:124
+msgid "Swap line down"
+msgstr ""
+
+#: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteBody.js:16
+#, fuzzy
+msgid "Note body"
+msgstr "Märkmete ajalugu"
+
+#: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteTitle.js:16
+#, fuzzy
+msgid "Note title"
+msgstr "Märkmiku tiitel:"
+
+#: packages/app-desktop/gui/NoteEditor/commands/showLocalSearch.js:16
+msgid "Search in current note"
+msgstr "Otsi praeguses märkuses"
+
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:59
+msgid "There was an error downloading this attachment:"
+msgstr "Selle manuse allalaadimisel ilmnes tõrge:"
+
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:62
+#: packages/lib/services/ResourceEditWatcher/index.js:196
+msgid "This attachment is not downloaded or not decrypted yet"
+msgstr "Seda manust ei laadita alla või pole veel dekrüpteeritud"
+
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:92
+msgid "Open..."
+msgstr "Avatud..."
+
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:99
+msgid "Save as..."
+msgstr "Salvesta kui..."
+
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:112
+msgid "Reveal file in folder"
+msgstr ""
+
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:120
+msgid "Copy path to clipboard"
+msgstr "Kopeeri tee lõikelauale"
+
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:155
+msgid "Copy Link Address"
+msgstr "Kopeeri lingi aadress"
+
+#: packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.js:92
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:142
+#, javascript-format
+msgid "Unsupported link or message: %s"
+msgstr "Toetuseta link või sõnum: %s"
 
 #: packages/app-desktop/gui/NoteList/NoteList.js:163
 msgid "Custom order"
@@ -1689,6 +2248,49 @@ msgstr "Märkmete ajalugu"
 msgid "Search in all the notes"
 msgstr "Otsi kõigist märkmetest"
 
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:31
+msgid "Completed"
+msgstr "Lõpetatud"
+
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:32
+msgid "Location"
+msgstr "Asukoht"
+
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:33
+msgid "URL"
+msgstr "URL"
+
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:34
+#: packages/lib/models/Setting.js:1666
+msgid "Note History"
+msgstr "Märkmete ajalugu"
+
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:35
+#, fuzzy
+msgid "Markup"
+msgstr "Märgistus"
+
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:307
+msgid "Previous versions of this note"
+msgstr "Selle märkme eelmised versioonid"
+
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:100
+msgid "This note has no history"
+msgstr "Sellel märkel pole ajalugu"
+
+#: packages/app-desktop/gui/NoteRevisionViewer.min.js:178
+#, fuzzy, javascript-format
+msgid ""
+"Click \"%s\" to restore the note. It will be copied in the notebook named "
+"\"%s\". The current version of the note will not be replaced or modified."
+msgstr ""
+"Märkme taastamiseks klõpsake nuppu \"%s\". See kopeeritakse märkmikku nimega "
+"\"%s\". Märkme praegust versiooni ei asendata ega muudeta."
+
+#: packages/app-desktop/gui/PromptDialog.min.js:249
+msgid "Clear"
+msgstr "Tühjenda"
+
 #: packages/app-desktop/gui/ResourceScreen.js:32
 #, fuzzy
 msgid "Title"
@@ -1703,8 +2305,9 @@ msgstr ""
 msgid "Action"
 msgstr "Asukoht"
 
-#: packages/app-desktop/gui/ResourceScreen.js:43 packages/lib/path-utils.js:83
-#: packages/lib/path-utils.js:118 packages/lib/models/BaseItem.js:720
+#: packages/app-desktop/gui/ResourceScreen.js:43
+#: packages/lib/models/BaseItem.js:720 packages/lib/path-utils.js:83
+#: packages/lib/path-utils.js:118
 msgid "Untitled"
 msgstr "Pealkirjata"
 
@@ -1729,43 +2332,32 @@ msgstr ""
 msgid "Warning: not all resources shown for performance reasons (limit: %s)."
 msgstr ""
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:144
+#: packages/app-desktop/gui/Root.js:98
 #, fuzzy
-msgid "Unpublish note"
-msgstr "Jaga"
+msgid "Confirmation"
+msgstr "Seadistamine"
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:171
-msgid "Synchronising..."
-msgstr "Sünkroonimine..."
-
-#: packages/app-desktop/gui/ShareNoteDialog.js:173
-msgid "Generating link..."
-msgid_plural "Generating links..."
-msgstr[0] "Lingi loomine..."
-msgstr[1] "Linkide loomine..."
-
-#: packages/app-desktop/gui/ShareNoteDialog.js:175
-msgid "Link has been copied to clipboard!"
-msgid_plural "Links have been copied to clipboard!"
-msgstr[0] "Link on kopeeritud lõikelauale!"
-msgstr[1] "Lingid on kopeeritud lõikelauale!"
-
-#: packages/app-desktop/gui/ShareNoteDialog.js:182
-#, fuzzy
-msgid ""
-"Note: When a note is shared, it will no longer be encrypted on the server."
-msgstr ""
-"Märkused: kui Märkus on ühiskasutuses, ei ole see enam serveris krüptitud."
-
-#: packages/app-desktop/gui/ShareNoteDialog.js:187
-msgid "Publish Notes"
+#: packages/app-desktop/gui/Root.js:111
+msgid "The Web Clipper needs your authorisation to access your data."
 msgstr ""
 
-#: packages/app-desktop/gui/ShareNoteDialog.js:189
-msgid "Copy Shareable Link"
-msgid_plural "Copy Shareable Links"
-msgstr[0] "Kopeeri jagatav link"
-msgstr[1] "Kopeeri jagatavad lingid"
+#: packages/app-desktop/gui/Root.js:112
+#, fuzzy
+msgid "Grant authorisation"
+msgstr "Autoriseerimis token:"
+
+#: packages/app-desktop/gui/Root.js:136
+msgid "OneDrive Login"
+msgstr "OneDrive-i sisselogimine"
+
+#: packages/app-desktop/gui/Root.js:137
+msgid "Dropbox Login"
+msgstr "Dropbox-i sisselogimine"
+
+#: packages/app-desktop/gui/Root.js:140
+#, fuzzy
+msgid "Note attachments"
+msgstr "Manused"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:141
 #, fuzzy
@@ -1825,48 +2417,174 @@ msgstr ""
 msgid "Share Notebook"
 msgstr "Märkmete ühiskasutus"
 
-#: packages/app-desktop/commands/toggleSafeMode.js:18
+#: packages/app-desktop/gui/ShareNoteDialog.js:144
 #, fuzzy
-msgid "Toggle safe mode"
-msgstr "Lülita külgriba sisse/välja"
+msgid "Unpublish note"
+msgstr "Jaga"
 
-#: packages/app-desktop/commands/toggleExternalEditing.js:18
+#: packages/app-desktop/gui/ShareNoteDialog.js:171
+msgid "Synchronising..."
+msgstr "Sünkroonimine..."
+
+#: packages/app-desktop/gui/ShareNoteDialog.js:173
+msgid "Generating link..."
+msgid_plural "Generating links..."
+msgstr[0] "Lingi loomine..."
+msgstr[1] "Linkide loomine..."
+
+#: packages/app-desktop/gui/ShareNoteDialog.js:175
+msgid "Link has been copied to clipboard!"
+msgid_plural "Links have been copied to clipboard!"
+msgstr[0] "Link on kopeeritud lõikelauale!"
+msgstr[1] "Lingid on kopeeritud lõikelauale!"
+
+#: packages/app-desktop/gui/ShareNoteDialog.js:182
 #, fuzzy
-msgid "Toggle external editing"
-msgstr "Peata väline redigeerimine"
+msgid ""
+"Note: When a note is shared, it will no longer be encrypted on the server."
+msgstr ""
+"Märkused: kui Märkus on ühiskasutuses, ei ole see enam serveris krüptitud."
 
-#: packages/app-desktop/commands/toggleExternalEditing.js:37
-msgid "Stop"
+#: packages/app-desktop/gui/ShareNoteDialog.js:187
+msgid "Publish Notes"
 msgstr ""
 
-#: packages/app-desktop/commands/copyDevCommand.js:18
-#, fuzzy
-msgid "Copy dev mode command to clipboard"
-msgstr "Kopeeri tee lõikelauale"
+#: packages/app-desktop/gui/ShareNoteDialog.js:189
+msgid "Copy Shareable Link"
+msgid_plural "Copy Shareable Links"
+msgstr[0] "Kopeeri jagatav link"
+msgstr[1] "Kopeeri jagatavad lingid"
 
-#: packages/app-desktop/commands/stopExternalEditing.js:18
-msgid "Stop external editing"
-msgstr "Peata väline redigeerimine"
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:189
+msgid "Remove"
+msgstr "Eemalda"
 
-#: packages/app-desktop/commands/startExternalEditing.js:20
-msgid "Edit in external editor"
-msgstr "Redigeeri välisredaktoris"
-
-#: packages/app-desktop/commands/startExternalEditing.js:32
-#: packages/app-cli/app/command-edit.js:82
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:192
+#: packages/app-mobile/components/side-menu-content.js:148
 #, javascript-format
-msgid "Error opening note in editor: %s"
-msgstr "Tõrge märkme avamisel redaktoris: %s"
+msgid ""
+"Delete notebook \"%s\"?\n"
+"\n"
+"All notes and sub-notebooks within this notebook will also be deleted."
+msgstr ""
+"Kas soovite märkmiku \"%s\"?\n"
+"\n"
+"Kustutatakse ka kõik selle märkmiku märkmed ja alammärkmikud."
 
-#: packages/app-desktop/commands/openProfileDirectory.js:18
-#, fuzzy
-msgid "Open profile directory"
-msgstr "Joplin Export kataloog"
-
-#: packages/app-desktop/app.js:370
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:197
 #, javascript-format
-msgid "Open %s"
-msgstr "Ava %s"
+msgid "Remove tag \"%s\" from all notes?"
+msgstr "Kas eemaldada silt \"%s\" kõigist märkmetest?"
+
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:200
+msgid "Remove this search from the sidebar?"
+msgstr "Kas soovite selle otsingu külgribalt eemaldada?"
+
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:321
+#: packages/app-mobile/components/screens/notes.js:188
+#: packages/app-mobile/components/side-menu-content.js:368
+msgid "All notes"
+msgstr "Kõik märkmed"
+
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:455
+#: packages/app-mobile/components/side-menu-content.js:338
+#: packages/lib/commands/synchronize.js:18
+msgid "Synchronise"
+msgstr "Sünkroniseeri"
+
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:480
+#: packages/app-mobile/components/side-menu-content.js:372
+msgid "Notebooks"
+msgstr "Sülearvutid"
+
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:503
+#: packages/app-mobile/components/side-menu-content.js:325
+#, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "Üksuste dekrüpteerimine: %d/%d"
+
+#: packages/app-desktop/gui/Sidebar/Sidebar.js:507
+#: packages/app-mobile/components/side-menu-content.js:330
+#, javascript-format
+msgid "Fetching resources: %d/%d"
+msgstr "Ressursside toomine: %d/%d"
+
+#: packages/app-desktop/gui/Sidebar/commands/focusElementSideBar.js:17
+msgid "Sidebar"
+msgstr ""
+
+#: packages/app-desktop/gui/StatusScreen/StatusScreen.js:31
+msgid "Please select where the sync status should be exported to"
+msgstr "Palun valige, kus sünkroonimise olekut tuleks eksportida"
+
+#: packages/app-desktop/gui/StatusScreen/StatusScreen.js:66
+#: packages/app-mobile/components/screens/status.js:112
+#, fuzzy
+msgid "Retry All"
+msgstr "Uuesti"
+
+#: packages/app-desktop/gui/StatusScreen/StatusScreen.js:86
+#: packages/app-mobile/components/screens/status.js:118
+msgid "Retry"
+msgstr "Uuesti"
+
+#: packages/app-desktop/gui/StatusScreen/StatusScreen.js:137
+#, fuzzy
+msgid "Advanced tools"
+msgstr "Täpsemad suvandid"
+
+#: packages/app-desktop/gui/StatusScreen/StatusScreen.js:139
+#, fuzzy
+msgid "Export debug report"
+msgstr "Ekspordi Silumisaruanne"
+
+#: packages/app-desktop/gui/utils/NoteListUtils.js:43
+msgid "Duplicate"
+msgstr "Paljunda"
+
+#: packages/app-desktop/gui/utils/NoteListUtils.js:48
+#, javascript-format
+msgid "%s - Copy"
+msgstr "%s - Kopeeri"
+
+#: packages/app-desktop/gui/utils/NoteListUtils.js:59
+#, fuzzy
+msgid "Switch between note and to-do type"
+msgstr "Märkme ja to-do tüübi vaheldumisi aktiveerimine"
+
+#: packages/app-desktop/gui/utils/NoteListUtils.js:87
+msgid "Switch to note type"
+msgstr "Märkme tüübi aktiveerimine"
+
+#: packages/app-desktop/gui/utils/NoteListUtils.js:93
+#, fuzzy
+msgid "Switch to to-do type"
+msgstr "Lülita to-do-tüüpi"
+
+#: packages/app-desktop/gui/utils/NoteListUtils.js:100
+#: packages/app-mobile/components/screens/Note.js:847
+msgid "Copy Markdown link"
+msgstr "Kopeeri Markdown link"
+
+#: packages/app-desktop/gui/utils/NoteListUtils.js:163
+#, javascript-format
+msgid "Delete note \"%s\"?"
+msgstr "Kas kustutada märge \"%s\"?"
+
+#: packages/app-desktop/gui/utils/NoteListUtils.js:166
+#, javascript-format
+msgid "Delete these %d notes?"
+msgstr "Kas kustutada %d märkmed?"
+
+#: packages/app-desktop/plugins/GotoAnything.js:455
+#, fuzzy
+msgid ""
+"Type a note title or part of its content to jump to it. Or type # followed "
+"by a tag name, or @ followed by a notebook name. Or type : to search for "
+"commands."
+msgstr ""
+"Tippige sellele hüppamiseks märkme tiitel. Või tippige #, millele järgneb "
+"sildi nimi või @, millele järgneb märkmiku nimi."
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:22
 #: packages/app-mobile/components/screens/Note.js:530
@@ -1880,19 +2598,18 @@ msgstr "Jah"
 msgid "No"
 msgstr "Ei"
 
-#: packages/app-mobile/components/NoteEditor/CodeMirror.bundle.min.js:1
-msgid "Xx!^&q!^!_"
-msgstr ""
+#: packages/app-mobile/components/CameraView.js:158
+msgid "Permission to use camera"
+msgstr "Kaamera kasutamise õigus"
 
-#: packages/app-mobile/components/NoteEditor/CodeMirror.bundle.min.js:1
-msgid ""
-",tokenizers:[template,noSemicolon,incdecToken,0,1,2,3,4,5],topRules:"
-"{Document:[0,6]},nested:[["
-msgstr ""
+#: packages/app-mobile/components/CameraView.js:159
+msgid "Your permission to use your camera is required."
+msgstr "Teie luba kaamera kasutamiseks on vajalik."
 
-#: packages/app-mobile/components/NoteEditor/CodeMirror.bundle.min.js:1
-msgid "&R!"
-msgstr ""
+#: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:27
+#, fuzzy
+msgid "Open"
+msgstr "Avatud..."
 
 #: packages/app-mobile/components/SelectDateTimeDialog.js:78
 msgid "Clear alarm"
@@ -1902,45 +2619,6 @@ msgstr "Tühjenda alarm"
 #, fuzzy
 msgid "Save alarm"
 msgstr "Häire salvestamine"
-
-#: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:27
-#, fuzzy
-msgid "Open"
-msgstr "Avatud..."
-
-#: packages/app-mobile/components/CameraView.js:158
-msgid "Permission to use camera"
-msgstr "Kaamera kasutamise õigus"
-
-#: packages/app-mobile/components/CameraView.js:159
-msgid "Your permission to use your camera is required."
-msgstr "Teie luba kaamera kasutamiseks on vajalik."
-
-#: packages/app-mobile/components/screen-header.js:185
-msgid "Delete these notes?"
-msgstr "Kas soovite need märkmed kustutada?"
-
-#: packages/app-mobile/components/side-menu-content.js:126
-#, javascript-format
-msgid "Notebook: %s"
-msgstr "Märkmik: %s"
-
-#: packages/app-mobile/components/side-menu-content.js:132
-msgid "Encrypted notebooks cannot be renamed"
-msgstr "Krüptitud märkmikke ei saa ümber nimetada"
-
-#: packages/app-mobile/components/side-menu-content.js:312
-msgid "New Notebook"
-msgstr "Uus märkmik"
-
-#: packages/app-mobile/components/side-menu-content.js:316
-#: packages/app-mobile/components/screens/ConfigScreen.js:443
-msgid "Configuration"
-msgstr "Seadistamine"
-
-#: packages/app-mobile/components/side-menu-content.js:351
-msgid "Mobile data - auto-sync disabled"
-msgstr ""
 
 #: packages/app-mobile/components/note-list.js:97
 msgid "You currently have no notebooks."
@@ -1954,49 +2632,9 @@ msgstr "Märkmiku loomine"
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr "Praegu pole märkmeid. Looge üks, klõpsates nupul (+)."
 
-#: packages/app-mobile/components/screens/folder.js:87
-#, javascript-format
-msgid "The notebook could not be saved: %s"
-msgstr "Märkmikku ei saanud salvestada: %s"
-
-#: packages/app-mobile/components/screens/folder.js:109
-msgid "Edit notebook"
-msgstr "Märkmiku redigeerimine"
-
-#: packages/app-mobile/components/screens/folder.js:110
-msgid "Enter notebook title"
-msgstr "Sisestage märkmiku tiitel"
-
-#: packages/app-mobile/components/screens/onedrive-login.js:110
-msgid "Login with OneDrive"
-msgstr "Logi sisse OneDrive ' iga"
-
-#: packages/app-mobile/components/screens/onedrive-login.js:121
-#: packages/app-mobile/components/screens/status.js:144
-msgid "Refresh"
-msgstr "Värskenda"
-
-#: packages/app-mobile/components/screens/UpgradeSyncTargetScreen.js:42
-msgid "Sync Target Upgrade"
-msgstr ""
-
-#: packages/app-mobile/components/screens/notes.js:154
-#: packages/app-cli/app/command-rmbook.js:26
-#, fuzzy
-msgid ""
-"Delete notebook? All notes and sub-notebooks within this notebook will also "
-"be deleted."
-msgstr ""
-"Kas soovite märkmiku kustutada? Kustutatakse ka kõik selle märkmiku märkmed "
-"ja alammärkmikud."
-
-#: packages/app-mobile/components/screens/NoteTagsDialog.js:163
-msgid "New tags:"
-msgstr "Uued sildid:"
-
-#: packages/app-mobile/components/screens/NoteTagsDialog.js:178
-msgid "Type new tags or select from list"
-msgstr "Tippige uued sildid või valige loendist"
+#: packages/app-mobile/components/screen-header.js:185
+msgid "Delete these notes?"
+msgstr "Kas soovite need märkmed kustutada?"
 
 #: packages/app-mobile/components/screens/ConfigScreen.js:61
 msgid "Warning"
@@ -2125,57 +2763,10 @@ msgstr "Andmebaas v%s"
 msgid "FTS enabled: %d"
 msgstr "FTS lubatud: %d"
 
-#: packages/app-mobile/components/screens/dropbox-login.js:55
-msgid "Login with Dropbox"
-msgstr "Logi sisse Dropbox"
-
-#: packages/app-mobile/components/screens/dropbox-login.js:66
-msgid "Enter code here"
-msgstr "Sisestage kood siia"
-
-#: packages/app-mobile/components/screens/encryption-config.js:119
-#, javascript-format
-msgid "Master Key %s"
-msgstr "Põhivõti %s"
-
-#: packages/app-mobile/components/screens/encryption-config.js:120
-#: packages/app-mobile/components/screens/Note.js:750
-#, javascript-format
-msgid "Created: %s"
-msgstr "Loodud: %s"
-
-#: packages/app-mobile/components/screens/encryption-config.js:122
-#: packages/app-mobile/components/screens/encryption-config.js:151
-msgid "Password:"
-msgstr "Parool:"
-
-#: packages/app-mobile/components/screens/encryption-config.js:137
-msgid "Password cannot be empty"
-msgstr "Parool ei tohi olla tühi"
-
-#: packages/app-mobile/components/screens/encryption-config.js:139
-msgid "Confirm password cannot be empty"
-msgstr "Parooli kinnitamine ei tohi olla tühi"
-
-#: packages/app-mobile/components/screens/encryption-config.js:140
-#: packages/app-cli/app/command-e2ee.js:91
-msgid "Passwords do not match!"
-msgstr "Paroolid ei kattu!"
-
-#: packages/app-mobile/components/screens/encryption-config.js:163
-#: packages/app-cli/app/command-e2ee.js:85
-msgid "Confirm password:"
-msgstr "Kinnitage parool:"
-
-#: packages/app-mobile/components/screens/encryption-config.js:177
-msgid "Enable"
-msgstr "Luba"
-
-#: packages/app-mobile/components/screens/encryption-config.js:280
-#: packages/app-cli/app/command-e2ee.js:118
-#, javascript-format
-msgid "Encryption is: %s"
-msgstr "Krüpteerimine on: %s"
+#: packages/app-mobile/components/screens/ConfigScreen.js:443
+#: packages/app-mobile/components/side-menu-content.js:316
+msgid "Configuration"
+msgstr "Seadistamine"
 
 #: packages/app-mobile/components/screens/Note.js:100
 msgid "This note has been modified:"
@@ -2221,11 +2812,6 @@ msgstr ""
 msgid "Permission needed"
 msgstr "Kaamera kasutamise õigus"
 
-#: packages/app-mobile/components/screens/Note.js:475
-#: packages/app-cli/app/command-rmnote.js:27
-msgid "Delete note?"
-msgstr "Kas soovite märkme kustutada?"
-
 #: packages/app-mobile/components/screens/Note.js:529
 #: packages/lib/shim-init-node.js:147
 #, javascript-format
@@ -2238,6 +2824,12 @@ msgstr ""
 #, javascript-format
 msgid "Unsupported image type: %s"
 msgstr "Toetuseta pilditüüp: %s"
+
+#: packages/app-mobile/components/screens/Note.js:750
+#: packages/app-mobile/components/screens/encryption-config.js:120
+#, javascript-format
+msgid "Created: %s"
+msgstr "Loodud: %s"
 
 #: packages/app-mobile/components/screens/Note.js:751
 #, javascript-format
@@ -2289,65 +2881,114 @@ msgstr "Lisa keha"
 msgid "Add title"
 msgstr "Pealkirja lisamine"
 
+#: packages/app-mobile/components/screens/NoteTagsDialog.js:163
+msgid "New tags:"
+msgstr "Uued sildid:"
+
+#: packages/app-mobile/components/screens/NoteTagsDialog.js:178
+msgid "Type new tags or select from list"
+msgstr "Tippige uued sildid või valige loendist"
+
+#: packages/app-mobile/components/screens/UpgradeSyncTargetScreen.js:42
+msgid "Sync Target Upgrade"
+msgstr ""
+
+#: packages/app-mobile/components/screens/dropbox-login.js:55
+msgid "Login with Dropbox"
+msgstr "Logi sisse Dropbox"
+
+#: packages/app-mobile/components/screens/dropbox-login.js:66
+msgid "Enter code here"
+msgstr "Sisestage kood siia"
+
+#: packages/app-mobile/components/screens/encryption-config.js:119
+#, javascript-format
+msgid "Master Key %s"
+msgstr "Põhivõti %s"
+
+#: packages/app-mobile/components/screens/encryption-config.js:122
+#: packages/app-mobile/components/screens/encryption-config.js:151
+msgid "Password:"
+msgstr "Parool:"
+
+#: packages/app-mobile/components/screens/encryption-config.js:137
+msgid "Password cannot be empty"
+msgstr "Parool ei tohi olla tühi"
+
+#: packages/app-mobile/components/screens/encryption-config.js:139
+msgid "Confirm password cannot be empty"
+msgstr "Parooli kinnitamine ei tohi olla tühi"
+
+#: packages/app-mobile/components/screens/encryption-config.js:177
+msgid "Enable"
+msgstr "Luba"
+
+#: packages/app-mobile/components/screens/folder.js:87
+#, javascript-format
+msgid "The notebook could not be saved: %s"
+msgstr "Märkmikku ei saanud salvestada: %s"
+
+#: packages/app-mobile/components/screens/folder.js:109
+msgid "Edit notebook"
+msgstr "Märkmiku redigeerimine"
+
+#: packages/app-mobile/components/screens/folder.js:110
+msgid "Enter notebook title"
+msgstr "Sisestage märkmiku tiitel"
+
+#: packages/app-mobile/components/screens/onedrive-login.js:110
+msgid "Login with OneDrive"
+msgstr "Logi sisse OneDrive ' iga"
+
+#: packages/app-mobile/components/screens/onedrive-login.js:121
+#: packages/app-mobile/components/screens/status.js:144
+msgid "Refresh"
+msgstr "Värskenda"
+
 #: packages/app-mobile/components/screens/search.js:160
 msgid "Search"
 msgstr "Otsi"
 
-#: packages/server/dist/middleware/notificationHandler.js:28
+#: packages/app-mobile/components/side-menu-content.js:126
 #, javascript-format
-msgid ""
-"The default admin password is insecure and has not been changed! [Change it "
-"now](%s)"
+msgid "Notebook: %s"
+msgstr "Märkmik: %s"
+
+#: packages/app-mobile/components/side-menu-content.js:132
+msgid "Encrypted notebooks cannot be renamed"
+msgstr "Krüptitud märkmikke ei saa ümber nimetada"
+
+#: packages/app-mobile/components/side-menu-content.js:312
+msgid "New Notebook"
+msgstr "Uus märkmik"
+
+#: packages/app-mobile/components/side-menu-content.js:351
+msgid "Mobile data - auto-sync disabled"
 msgstr ""
 
-#: packages/server/dist/models/UserModel.js:189
-#: packages/server/dist/models/UserModel.js:194
-#, fuzzy
-msgid "attachment"
-msgstr "Manused"
-
-#: packages/server/dist/models/UserModel.js:189
+#: packages/lib/BaseApplication.js:152 packages/lib/BaseApplication.js:164
+#: packages/lib/BaseApplication.js:196
 #, javascript-format
-msgid ""
-"Cannot save %s \"%s\" because it is larger than than the allowed limit (%s)"
-msgstr ""
+msgid "Usage: %s"
+msgstr "Kasutus: %s"
 
-#: packages/server/dist/models/UserModel.js:194
+#: packages/lib/BaseApplication.js:231
 #, javascript-format
+msgid "Unknown flag: %s"
+msgstr "Tundmatu lipp: %s"
+
+#: packages/lib/JoplinServerApi.js:73
+#, fuzzy, javascript-format
 msgid ""
-"Cannot save %s \"%s\" because it would go over the total allowed size (%s) "
-"for this account"
+"Could not connect to Joplin Server. Please check the Synchronisation options "
+"in the config screen. Full error was:\n"
+"\n"
+"%s"
 msgstr ""
-
-#: packages/lib/onedrive-api-node-utils.js:46
-#, javascript-format
-msgid "All potential ports are in use - please report the issue at %s"
-msgstr ""
-
-#: packages/lib/onedrive-api-node-utils.js:86
-#, fuzzy
-msgid ""
-"The application has been authorised - you may now close this browser tab."
-msgstr "Taotlus on lubatud-võite nüüd sulgeda selle brauseri vahekaart."
-
-#: packages/lib/onedrive-api-node-utils.js:88
-#, fuzzy
-msgid "The application has been successfully authorised."
-msgstr "Taotlus on edukalt lubatud."
-
-#: packages/lib/onedrive-api-node-utils.js:116
-#, fuzzy
-msgid ""
-"Please open the following URL in your browser to authenticate the "
-"application. The application will create a directory in \"Apps/Joplin\" and "
-"will only read and write files in this directory. It will have no access to "
-"any files outside this directory nor to any other personal data. No data "
-"will be shared with any third party."
-msgstr ""
-"Rakenduse autentimiseks avage brauseris järgmine URL. Rakendus loob "
-"kataloogi \"Apps/Joplin\" ja ainult lugeda ja kirjutada faile selles "
-"kataloogis. See ei ole juurdepääsu tahes faile väljaspool seda kataloogi ega "
-"muid isikuandmeid. Andmeid ei jagata ühelegi kolmandale osapoolele."
+"Joplin Nextcloud'i rakendusega ei saanud ühendust. Kontrollige "
+"konfiguratsiooni ekraanil Sünkrooniseerimise config. Täielik viga oli:\n"
+"\n"
+"%s"
 
 #: packages/lib/SyncTargetAmazonS3.js:28
 msgid "AWS S3"
@@ -2357,15 +2998,170 @@ msgstr ""
 msgid "Dropbox"
 msgstr "Dropbox"
 
+#: packages/lib/SyncTargetFilesystem.js:18
+msgid "File system"
+msgstr "Failisüsteem"
+
+#: packages/lib/SyncTargetJoplinCloud.js:28
+#, fuzzy
+msgid "Joplin Cloud"
+msgstr "Joplini Foorum"
+
 #: packages/lib/SyncTargetJoplinServer.js:57
 #, fuzzy
 msgid "Joplin Server"
 msgstr "Joplini veebisait"
 
-#: packages/lib/shim-init-node.js:212
+#: packages/lib/SyncTargetNextcloud.js:25
+msgid "Nextcloud"
+msgstr "Nextcloud"
+
+#: packages/lib/SyncTargetOneDrive.js:32
+msgid "OneDrive"
+msgstr "OneDrive"
+
+#: packages/lib/SyncTargetWebDAV.js:23
+msgid "WebDAV"
+msgstr "WebDAV"
+
+#: packages/lib/Synchronizer.js:140
+#, javascript-format
+msgid "Created local items: %d."
+msgstr "Loodud kohalikud üksused: %d."
+
+#: packages/lib/Synchronizer.js:142
 #, fuzzy, javascript-format
-msgid "Cannot access %s"
-msgstr "%s ei pääse juurde"
+msgid "Updated local items: %d."
+msgstr "Värskendatud kohalikud üksused: %d."
+
+#: packages/lib/Synchronizer.js:144
+#, javascript-format
+msgid "Created remote items: %d."
+msgstr "Loodud kaugüksused: %d."
+
+#: packages/lib/Synchronizer.js:146
+#, javascript-format
+msgid "Updated remote items: %d."
+msgstr "Värskendatud kaugüksused: %d."
+
+#: packages/lib/Synchronizer.js:148
+#, javascript-format
+msgid "Deleted local items: %d."
+msgstr "Kustutatud kohalikud üksused: %d."
+
+#: packages/lib/Synchronizer.js:150
+#, javascript-format
+msgid "Deleted remote items: %d."
+msgstr "Kustutatud kaugüksused: %d."
+
+#: packages/lib/Synchronizer.js:152
+#, javascript-format
+msgid "Fetched items: %d/%d."
+msgstr "Tõmmatud üksused: %d/%d."
+
+#: packages/lib/Synchronizer.js:154
+msgid "Cancelling..."
+msgstr "Tühistamine..."
+
+#: packages/lib/Synchronizer.js:156
+#, fuzzy, javascript-format
+msgid "Completed: %s (%s)"
+msgstr "Lõpule viidud: %s"
+
+#: packages/lib/Synchronizer.js:158
+#, javascript-format
+msgid "Last error: %s"
+msgstr "Viimane tõrge: %s"
+
+#: packages/lib/Synchronizer.js:272
+msgid "Idle"
+msgstr "Jõude"
+
+#: packages/lib/Synchronizer.js:274
+msgid "In progress"
+msgstr "Töötlemisel"
+
+#: packages/lib/Synchronizer.js:923
+msgid ""
+"Unknown item type downloaded - please upgrade Joplin to the latest version"
+msgstr ""
+
+#: packages/lib/commands/historyForward.js:17
+msgid "Forward"
+msgstr ""
+
+#: packages/lib/components/shared/config-shared.js:50
+msgid "Checking... Please wait."
+msgstr "Kontroll... Oota."
+
+#: packages/lib/components/shared/config-shared.js:52
+msgid "Success! Synchronisation configuration appears to be correct."
+msgstr "Edu! Sünkroonimise konfiguratsioon näib olevat õige."
+
+#: packages/lib/components/shared/config-shared.js:54
+#, fuzzy
+msgid ""
+"Error. Please check that URL, username, password, etc. are correct and that "
+"the sync target is accessible. The reported error was:"
+msgstr ""
+"Viga. Palun kontrollige, kas URL, kasutajanimi, parool jne on õiged ja et "
+"Sünkroonimise sihtkoht on juurdepääsetav. Teatatud viga oli:"
+
+#: packages/lib/components/shared/dropbox-login-shared.js:39
+msgid "The application has been authorised!"
+msgstr "Taotlus on heaks kiidetud!"
+
+#: packages/lib/components/shared/dropbox-login-shared.js:43
+#, javascript-format
+msgid ""
+"Could not authorise application:\n"
+"\n"
+"%s\n"
+"\n"
+"Please try again."
+msgstr ""
+"Taotlust ei saanud lubada:\n"
+"\n"
+"%s\n"
+"\n"
+"Palun proovige uuesti."
+
+#: packages/lib/components/shared/encryption-config-shared.js:33
+msgid ""
+"Please confirm that you would like to re-encrypt your complete database."
+msgstr ""
+
+#: packages/lib/components/shared/encryption-config-shared.js:39
+msgid "Your data is going to be re-encrypted and synced again."
+msgstr ""
+
+#: packages/lib/components/shared/encryption-config-shared.js:49
+msgid ""
+"Please enter your password in the master key list below before upgrading the "
+"key."
+msgstr ""
+
+#: packages/lib/components/shared/encryption-config-shared.js:58
+msgid "The master key has been upgraded successfully!"
+msgstr ""
+
+#: packages/lib/components/shared/encryption-config-shared.js:60
+#, javascript-format
+msgid "Could not upgrade master key: %s"
+msgstr ""
+
+#: packages/lib/components/shared/encryption-config-shared.js:116
+#, javascript-format
+msgid "Decrypted items: %s / %s"
+msgstr "Dekrüpteeritud üksused: %s / %s"
+
+#: packages/lib/models/BaseItem.js:719
+msgid "Encrypted"
+msgstr "Krüpteeritud"
+
+#: packages/lib/models/BaseItem.js:780
+msgid "Encrypted items cannot be modified"
+msgstr "Krüpteeritud üksusi ei saa muuta"
 
 #: packages/lib/models/Folder.js:38 packages/lib/models/Note.js:36
 msgid "title"
@@ -2387,6 +3183,58 @@ msgstr "Märkmiku ei saa sellesse asukohta teisaldada"
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr "Märkmikke ei saa nimega \"%s\", mis on reserveeritud tiitel."
+
+#: packages/lib/models/Note.js:38
+msgid "created date"
+msgstr "loodud kuupäev"
+
+#: packages/lib/models/Note.js:39
+msgid "custom order"
+msgstr ""
+
+#: packages/lib/models/Note.js:117
+#, fuzzy
+msgid "This note does not have geolocation information."
+msgstr "Sellel märkil pole geoasukohateavet."
+
+#: packages/lib/models/Note.js:525
+#, fuzzy, javascript-format
+msgid "Cannot copy note to \"%s\" notebook"
+msgstr "Märget \"%s\" märkmikku ei saa kopeerida"
+
+#: packages/lib/models/Note.js:538
+#, fuzzy, javascript-format
+msgid "Cannot move note to \"%s\" notebook"
+msgstr "Märget \"%s\" märkmikku ei saa teisaldada"
+
+#: packages/lib/models/Resource.js:353
+msgid "Not downloaded"
+msgstr "Ei laaditud alla"
+
+#: packages/lib/models/Resource.js:355
+msgid "Downloading"
+msgstr "Allalaadimine"
+
+#: packages/lib/models/Resource.js:357
+msgid "Downloaded"
+msgstr "Allalaetud"
+
+#: packages/lib/models/Resource.js:359
+msgid "Error"
+msgstr "Viga"
+
+#: packages/lib/models/Resource.js:404
+#, fuzzy, javascript-format
+msgid "Attachment conflict: \"%s\""
+msgstr "Manused"
+
+#: packages/lib/models/Resource.js:405
+#, fuzzy, javascript-format
+msgid ""
+"There was a [conflict](%s) on the attachment below.\n"
+"\n"
+"%s"
+msgstr "Selle manuse allalaadimisel ilmnes tõrge:"
 
 #: packages/lib/models/Setting.js:109
 #, fuzzy
@@ -3072,155 +3920,40 @@ msgstr ""
 msgid "Notes and settings are stored in: %s"
 msgstr "Märkmed ja sätted talletatakse: %s"
 
-#: packages/lib/models/Resource.js:353
-msgid "Not downloaded"
-msgstr "Ei laaditud alla"
-
-#: packages/lib/models/Resource.js:355
-msgid "Downloading"
-msgstr "Allalaadimine"
-
-#: packages/lib/models/Resource.js:357
-msgid "Downloaded"
-msgstr "Allalaetud"
-
-#: packages/lib/models/Resource.js:359
-msgid "Error"
-msgstr "Viga"
-
-#: packages/lib/models/Resource.js:404
-#, fuzzy, javascript-format
-msgid "Attachment conflict: \"%s\""
-msgstr "Manused"
-
-#: packages/lib/models/Resource.js:405
-#, fuzzy, javascript-format
-msgid ""
-"There was a [conflict](%s) on the attachment below.\n"
-"\n"
-"%s"
-msgstr "Selle manuse allalaadimisel ilmnes tõrge:"
-
 #: packages/lib/models/Tag.js:223
 #, fuzzy, javascript-format
 msgid "The tag \"%s\" already exists. Please choose a different name."
 msgstr "Silt %s on juba olemas. Palun valige mõni muu nimi."
 
-#: packages/lib/models/Note.js:38
-msgid "created date"
-msgstr "loodud kuupäev"
-
-#: packages/lib/models/Note.js:39
-msgid "custom order"
+#: packages/lib/onedrive-api-node-utils.js:46
+#, javascript-format
+msgid "All potential ports are in use - please report the issue at %s"
 msgstr ""
 
-#: packages/lib/models/Note.js:117
-#, fuzzy
-msgid "This note does not have geolocation information."
-msgstr "Sellel märkil pole geoasukohateavet."
-
-#: packages/lib/models/Note.js:525
-#, fuzzy, javascript-format
-msgid "Cannot copy note to \"%s\" notebook"
-msgstr "Märget \"%s\" märkmikku ei saa kopeerida"
-
-#: packages/lib/models/Note.js:538
-#, fuzzy, javascript-format
-msgid "Cannot move note to \"%s\" notebook"
-msgstr "Märget \"%s\" märkmikku ei saa teisaldada"
-
-#: packages/lib/models/BaseItem.js:719
-msgid "Encrypted"
-msgstr "Krüpteeritud"
-
-#: packages/lib/models/BaseItem.js:780
-msgid "Encrypted items cannot be modified"
-msgstr "Krüpteeritud üksusi ei saa muuta"
-
-#: packages/lib/SyncTargetJoplinCloud.js:28
-#, fuzzy
-msgid "Joplin Cloud"
-msgstr "Joplini Foorum"
-
-#: packages/lib/BaseApplication.js:152 packages/lib/BaseApplication.js:164
-#: packages/lib/BaseApplication.js:196
-#, javascript-format
-msgid "Usage: %s"
-msgstr "Kasutus: %s"
-
-#: packages/lib/BaseApplication.js:231
-#, javascript-format
-msgid "Unknown flag: %s"
-msgstr "Tundmatu lipp: %s"
-
-#: packages/lib/SyncTargetOneDrive.js:32
-msgid "OneDrive"
-msgstr "OneDrive"
-
-#: packages/lib/components/shared/config-shared.js:50
-msgid "Checking... Please wait."
-msgstr "Kontroll... Oota."
-
-#: packages/lib/components/shared/config-shared.js:52
-msgid "Success! Synchronisation configuration appears to be correct."
-msgstr "Edu! Sünkroonimise konfiguratsioon näib olevat õige."
-
-#: packages/lib/components/shared/config-shared.js:54
+#: packages/lib/onedrive-api-node-utils.js:86
 #, fuzzy
 msgid ""
-"Error. Please check that URL, username, password, etc. are correct and that "
-"the sync target is accessible. The reported error was:"
-msgstr ""
-"Viga. Palun kontrollige, kas URL, kasutajanimi, parool jne on õiged ja et "
-"Sünkroonimise sihtkoht on juurdepääsetav. Teatatud viga oli:"
+"The application has been authorised - you may now close this browser tab."
+msgstr "Taotlus on lubatud-võite nüüd sulgeda selle brauseri vahekaart."
 
-#: packages/lib/components/shared/dropbox-login-shared.js:39
-msgid "The application has been authorised!"
-msgstr "Taotlus on heaks kiidetud!"
+#: packages/lib/onedrive-api-node-utils.js:88
+#, fuzzy
+msgid "The application has been successfully authorised."
+msgstr "Taotlus on edukalt lubatud."
 
-#: packages/lib/components/shared/dropbox-login-shared.js:43
-#, javascript-format
+#: packages/lib/onedrive-api-node-utils.js:116
+#, fuzzy
 msgid ""
-"Could not authorise application:\n"
-"\n"
-"%s\n"
-"\n"
-"Please try again."
+"Please open the following URL in your browser to authenticate the "
+"application. The application will create a directory in \"Apps/Joplin\" and "
+"will only read and write files in this directory. It will have no access to "
+"any files outside this directory nor to any other personal data. No data "
+"will be shared with any third party."
 msgstr ""
-"Taotlust ei saanud lubada:\n"
-"\n"
-"%s\n"
-"\n"
-"Palun proovige uuesti."
-
-#: packages/lib/components/shared/encryption-config-shared.js:33
-msgid ""
-"Please confirm that you would like to re-encrypt your complete database."
-msgstr ""
-
-#: packages/lib/components/shared/encryption-config-shared.js:39
-msgid "Your data is going to be re-encrypted and synced again."
-msgstr ""
-
-#: packages/lib/components/shared/encryption-config-shared.js:49
-msgid ""
-"Please enter your password in the master key list below before upgrading the "
-"key."
-msgstr ""
-
-#: packages/lib/components/shared/encryption-config-shared.js:58
-msgid "The master key has been upgraded successfully!"
-msgstr ""
-
-#: packages/lib/components/shared/encryption-config-shared.js:60
-#, javascript-format
-msgid "Could not upgrade master key: %s"
-msgstr ""
-
-#: packages/lib/components/shared/encryption-config-shared.js:116
-#, javascript-format
-msgid "Decrypted items: %s / %s"
-msgstr "Dekrüpteeritud üksused: %s / %s"
+"Rakenduse autentimiseks avage brauseris järgmine URL. Rakendus loob "
+"kataloogi \"Apps/Joplin\" ja ainult lugeda ja kirjutada faile selles "
+"kataloogis. See ei ole juurdepääsu tahes faile väljaspool seda kataloogi ega "
+"muid isikuandmeid. Andmeid ei jagata ühelegi kolmandale osapoolele."
 
 #: packages/lib/onedrive-api.js:392
 #, fuzzy
@@ -3230,227 +3963,6 @@ msgid ""
 msgstr ""
 "Luba ei saa värskendada: autentimisandmed on puudu. Sünkroonimise "
 "käivitamine võib probleemi lahendada."
-
-#: packages/lib/Synchronizer.js:140
-#, javascript-format
-msgid "Created local items: %d."
-msgstr "Loodud kohalikud üksused: %d."
-
-#: packages/lib/Synchronizer.js:142
-#, fuzzy, javascript-format
-msgid "Updated local items: %d."
-msgstr "Värskendatud kohalikud üksused: %d."
-
-#: packages/lib/Synchronizer.js:144
-#, javascript-format
-msgid "Created remote items: %d."
-msgstr "Loodud kaugüksused: %d."
-
-#: packages/lib/Synchronizer.js:146
-#, javascript-format
-msgid "Updated remote items: %d."
-msgstr "Värskendatud kaugüksused: %d."
-
-#: packages/lib/Synchronizer.js:148
-#, javascript-format
-msgid "Deleted local items: %d."
-msgstr "Kustutatud kohalikud üksused: %d."
-
-#: packages/lib/Synchronizer.js:150
-#, javascript-format
-msgid "Deleted remote items: %d."
-msgstr "Kustutatud kaugüksused: %d."
-
-#: packages/lib/Synchronizer.js:152
-#, javascript-format
-msgid "Fetched items: %d/%d."
-msgstr "Tõmmatud üksused: %d/%d."
-
-#: packages/lib/Synchronizer.js:154
-msgid "Cancelling..."
-msgstr "Tühistamine..."
-
-#: packages/lib/Synchronizer.js:156
-#, fuzzy, javascript-format
-msgid "Completed: %s (%s)"
-msgstr "Lõpule viidud: %s"
-
-#: packages/lib/Synchronizer.js:158
-#, javascript-format
-msgid "Last error: %s"
-msgstr "Viimane tõrge: %s"
-
-#: packages/lib/Synchronizer.js:272
-msgid "Idle"
-msgstr "Jõude"
-
-#: packages/lib/Synchronizer.js:274
-msgid "In progress"
-msgstr "Töötlemisel"
-
-#: packages/lib/Synchronizer.js:923
-msgid ""
-"Unknown item type downloaded - please upgrade Joplin to the latest version"
-msgstr ""
-
-#: packages/lib/JoplinServerApi.js:73
-#, fuzzy, javascript-format
-msgid ""
-"Could not connect to Joplin Server. Please check the Synchronisation options "
-"in the config screen. Full error was:\n"
-"\n"
-"%s"
-msgstr ""
-"Joplin Nextcloud'i rakendusega ei saanud ühendust. Kontrollige "
-"konfiguratsiooni ekraanil Sünkrooniseerimise config. Täielik viga oli:\n"
-"\n"
-"%s"
-
-#: packages/lib/SyncTargetNextcloud.js:25
-msgid "Nextcloud"
-msgstr "Nextcloud"
-
-#: packages/lib/SyncTargetWebDAV.js:23
-msgid "WebDAV"
-msgstr "WebDAV"
-
-#: packages/lib/SyncTargetFilesystem.js:18
-msgid "File system"
-msgstr "Failisüsteem"
-
-#: packages/lib/commands/historyForward.js:17
-msgid "Forward"
-msgstr ""
-
-#: packages/lib/versionInfo.js:10
-#, fuzzy, javascript-format
-msgid "Revision: %s (%s)"
-msgstr "%s %s (%s)"
-
-#: packages/lib/versionInfo.js:22
-#, fuzzy, javascript-format
-msgid "%s %s (%s, %s)"
-msgstr "%s %s (%s)"
-
-#: packages/lib/versionInfo.js:24
-#, fuzzy, javascript-format
-msgid "Client ID: %s"
-msgstr "Lõpule viidud: %s"
-
-#: packages/lib/versionInfo.js:25
-#, fuzzy, javascript-format
-msgid "Sync Version: %s"
-msgstr "Uus versioon: %s"
-
-#: packages/lib/versionInfo.js:26
-#, fuzzy, javascript-format
-msgid "Profile Version: %s"
-msgstr "Uus versioon: %s"
-
-#: packages/lib/versionInfo.js:27
-#, javascript-format
-msgid "Keychain Supported: %s"
-msgstr ""
-
-#: packages/lib/services/RevisionService.js:214
-msgid "Restored Notes"
-msgstr "Taastatud märkmed"
-
-#: packages/lib/services/RevisionService.js:238
-#, javascript-format
-msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
-msgstr "Märkus \"%s\" on märkmikku \"%s\" edukalt taastatud."
-
-#: packages/lib/services/interop/InteropService_Exporter_Jex.js:43
-msgid "There is no data to export."
-msgstr "Eksportivaid andmeid pole."
-
-#: packages/lib/services/interop/types.js:23
-msgid "File"
-msgstr "Fail"
-
-#: packages/lib/services/interop/types.js:23
-msgid "Directory"
-msgstr "Kataloogid"
-
-#: packages/lib/services/interop/InteropService_Importer_Md.js:41
-#, fuzzy
-msgid "Please specify the notebook where the notes should be imported to."
-msgstr "Palun täpsustage märkmik, kuhu märkmed tuleks importida."
-
-#: packages/lib/services/interop/InteropService.js:48
-#: packages/lib/services/interop/InteropService.js:57
-#, fuzzy
-msgid "Joplin Export File"
-msgstr "Joplin Export faili"
-
-#: packages/lib/services/interop/InteropService.js:50
-#: packages/lib/services/interop/InteropService.js:58
-#, fuzzy
-msgid "Joplin Export Directory"
-msgstr "Joplin Export kataloog"
-
-#: packages/lib/services/interop/InteropService.js:51
-#, fuzzy
-msgid "Evernote Export File (as Markdown)"
-msgstr "Evernote Export faili (nagu Markdown)"
-
-#: packages/lib/services/interop/InteropService.js:52
-#, fuzzy
-msgid "Evernote Export File (as HTML)"
-msgstr "Evernote Export faili (HTML)"
-
-#: packages/lib/services/interop/InteropService.js:60
-msgid "HTML File"
-msgstr "HTML-fail"
-
-#: packages/lib/services/interop/InteropService.js:61
-msgid "HTML Directory"
-msgstr "HTML-kataloog"
-
-#: packages/lib/services/interop/InteropService.js:127
-#, fuzzy, javascript-format
-msgid "Cannot load \"%s\" module for format \"%s\" and output \"%s\""
-msgstr "\"%s\" moodulit ei saa laadida vormingus \"%s\""
-
-#: packages/lib/services/interop/InteropService.js:150
-#, fuzzy, javascript-format
-msgid "Cannot load \"%s\" module for format \"%s\" and target \"%s\""
-msgstr "\"%s\" moodulit ei saa laadida vormingus \"%s\""
-
-#: packages/lib/services/interop/InteropService.js:194
-#: packages/lib/services/interop/InteropService.js:206
-#: packages/app-cli/app/command-cp.js:24 packages/app-cli/app/command-cp.js:27
-#: packages/app-cli/app/command-import.js:34
-#: packages/app-cli/app/command-mv.js:22 packages/app-cli/app/command-mv.js:25
-#: packages/app-cli/app/command-use.js:21
-#: packages/app-cli/app/command-ren.js:23
-#: packages/app-cli/app/command-rmbook.js:25
-#: packages/app-cli/app/command-cat.js:25
-#: packages/app-cli/app/command-rmnote.js:25
-#: packages/app-cli/app/command-attach.js:21
-#: packages/app-cli/app/command-export.js:36
-#: packages/app-cli/app/command-export.js:40
-#: packages/app-cli/app/command-geoloc.js:20
-#: packages/app-cli/app/command-search.js:27
-#: packages/app-cli/app/command-set.js:32
-#: packages/app-cli/app/command-help.js:66
-#: packages/app-cli/app/command-todo.js:21
-#: packages/app-cli/app/command-tag.js:33
-#: packages/app-cli/app/command-tag.js:36
-#: packages/app-cli/app/command-tag.js:42
-#: packages/app-cli/app/command-tag.js:43
-#: packages/app-cli/app/command-tag.js:81
-#: packages/app-cli/app/command-tag.js:87
-#: packages/app-cli/app/command-done.js:20
-#, javascript-format
-msgid "Cannot find \"%s\"."
-msgstr "Ei leia \" %s\"."
-
-#: packages/lib/services/interop/InteropService.js:199
-#, fuzzy, javascript-format
-msgid "Please specify import format for %s"
-msgstr "Määrake %s importimise vorming"
 
 #: packages/lib/services/KeymapService.js:275
 msgid "command"
@@ -3523,12 +4035,6 @@ msgstr ""
 "Joplin ei saanud neid üksusi mitu korda dekrüptida, võimalik, et need on "
 "rikutud või liiga suured. Need üksused jäävad seadmesse, kuid Joplin ei püüa "
 "enam neid dekrüptida."
-
-#: packages/lib/services/ReportService.js:185
-#: packages/app-cli/app/cli-utils.js:140
-#, javascript-format
-msgid "%s: %s"
-msgstr "%s: %s"
 
 #: packages/lib/services/ReportService.js:198
 msgid "Attachments"
@@ -3607,6 +4113,77 @@ msgstr "Tulehäired"
 msgid "On %s: %s"
 msgstr "%s: %s"
 
+#: packages/lib/services/RevisionService.js:214
+msgid "Restored Notes"
+msgstr "Taastatud märkmed"
+
+#: packages/lib/services/RevisionService.js:238
+#, javascript-format
+msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
+msgstr "Märkus \"%s\" on märkmikku \"%s\" edukalt taastatud."
+
+#: packages/lib/services/interop/InteropService.js:48
+#: packages/lib/services/interop/InteropService.js:57
+#, fuzzy
+msgid "Joplin Export File"
+msgstr "Joplin Export faili"
+
+#: packages/lib/services/interop/InteropService.js:50
+#: packages/lib/services/interop/InteropService.js:58
+#, fuzzy
+msgid "Joplin Export Directory"
+msgstr "Joplin Export kataloog"
+
+#: packages/lib/services/interop/InteropService.js:51
+#, fuzzy
+msgid "Evernote Export File (as Markdown)"
+msgstr "Evernote Export faili (nagu Markdown)"
+
+#: packages/lib/services/interop/InteropService.js:52
+#, fuzzy
+msgid "Evernote Export File (as HTML)"
+msgstr "Evernote Export faili (HTML)"
+
+#: packages/lib/services/interop/InteropService.js:60
+msgid "HTML File"
+msgstr "HTML-fail"
+
+#: packages/lib/services/interop/InteropService.js:61
+msgid "HTML Directory"
+msgstr "HTML-kataloog"
+
+#: packages/lib/services/interop/InteropService.js:127
+#, fuzzy, javascript-format
+msgid "Cannot load \"%s\" module for format \"%s\" and output \"%s\""
+msgstr "\"%s\" moodulit ei saa laadida vormingus \"%s\""
+
+#: packages/lib/services/interop/InteropService.js:150
+#, fuzzy, javascript-format
+msgid "Cannot load \"%s\" module for format \"%s\" and target \"%s\""
+msgstr "\"%s\" moodulit ei saa laadida vormingus \"%s\""
+
+#: packages/lib/services/interop/InteropService.js:199
+#, fuzzy, javascript-format
+msgid "Please specify import format for %s"
+msgstr "Määrake %s importimise vorming"
+
+#: packages/lib/services/interop/InteropService_Exporter_Jex.js:43
+msgid "There is no data to export."
+msgstr "Eksportivaid andmeid pole."
+
+#: packages/lib/services/interop/InteropService_Importer_Md.js:41
+#, fuzzy
+msgid "Please specify the notebook where the notes should be imported to."
+msgstr "Palun täpsustage märkmik, kuhu märkmed tuleks importida."
+
+#: packages/lib/services/interop/types.js:23
+msgid "File"
+msgstr "Fail"
+
+#: packages/lib/services/interop/types.js:23
+msgid "Directory"
+msgstr "Kataloogid"
+
 #: packages/lib/services/spellChecker/SpellCheckerService.js:107
 msgid "No suggestions"
 msgstr ""
@@ -3624,654 +4201,66 @@ msgstr ""
 msgid "Change language"
 msgstr "Keel"
 
-#: packages/app-cli/app/command-cp.js:13
-msgid ""
-"Duplicates the notes matching <note> to [notebook]. If no notebook is "
-"specified the note is duplicated in the current notebook."
-msgstr ""
-"Kopeerib märkmed, mis vastavad märkusele <note> ja [notebook]. Kui ühtegi "
-"märkmikku pole täpsustatud, dubleeritakse see praeguses märkmikus."
-
-#: packages/app-cli/app/command-ls.js:18
-msgid ""
-"Displays the notes in the current notebook. Use `ls /` to display the list "
-"of notebooks."
-msgstr ""
-"Kuvab märkmed praeguses märkmikus. Kasutage märkmike loendi kuvamiseks ' "
-"ls /'."
-
-#: packages/app-cli/app/command-ls.js:27
-msgid "Displays only the first top <num> notes."
-msgstr "Kuvab ainult esimesed <num> märkmed."
-
-#: packages/app-cli/app/command-ls.js:28
-msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
-msgstr "Sordib üksuse järgi <field> (nt pealkiri, uuendatud_aeg, loodud_aeg)."
-
-#: packages/app-cli/app/command-ls.js:29
-msgid "Reverses the sorting order."
-msgstr "Pöörab sorteerimis järjestuse ümber."
-
-#: packages/app-cli/app/command-ls.js:30
-msgid ""
-"Displays only the items of the specific type(s). Can be `n` for notes, `t` "
-"for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
-"to-dos, while `-tnt` would display notes and to-dos."
-msgstr ""
-"Kuvab ainult konkreetset tüüpi tüübid. Võib olla `n` märkmete jaoks, `t` "
-"ülesannete jaoks või `nt` märkmete ja ülesannete jaoks (nt `-tt` kuvaks "
-"ainult ülesandeid, `-tnt` aga märkmeid ja ülesanded."
-
-#: packages/app-cli/app/command-ls.js:31
-msgid "Either \"text\" or \"json\""
-msgstr "Kas \"tekst\" või \"JSON\""
-
-#: packages/app-cli/app/command-ls.js:32 packages/app-cli/app/command-tag.js:18
-msgid ""
-"Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, "
-"TODO_CHECKED (for to-dos), TITLE"
-msgstr ""
-"Kasutage pikka nimekirja vormingut. ID, NOTE_COUNT (for notebook), DATE, "
-"TODO_CHECKED (for to-dos), TITLE"
-
-#: packages/app-cli/app/command-ls.js:63
-msgid "Please select a notebook first."
-msgstr "Palun valige esmalt märkmik."
-
-#: packages/app-cli/app/command-import.js:14
-msgid "Imports data into Joplin."
-msgstr "Impordib andmed Joplini."
-
-#: packages/app-cli/app/command-import.js:25
-#, javascript-format
-msgid "Source format: %s"
-msgstr "Allika Formaat: %s"
-
-#: packages/app-cli/app/command-import.js:26
-msgid "Do not ask for confirmation."
-msgstr "Ära küsi kinnitust."
-
-#: packages/app-cli/app/command-import.js:27
+#: packages/lib/shim-init-node.js:212
 #, fuzzy, javascript-format
-msgid "Output format: %s"
-msgstr "Allika Formaat: %s"
+msgid "Cannot access %s"
+msgstr "%s ei pääse juurde"
 
-#: packages/app-cli/app/command-import.js:65
-msgid "Importing notes..."
-msgstr "Märkmete importimine..."
-
-#: packages/app-cli/app/help-utils.js:56
-#, fuzzy
-msgid "Enum"
-msgstr "Enum"
-
-#: packages/app-cli/app/help-utils.js:56
-#, javascript-format
-msgid "Type: %s."
-msgstr "Tüüp: %s."
-
-#: packages/app-cli/app/help-utils.js:57
-#, javascript-format
-msgid "Possible values: %s."
-msgstr "Võimalikud väärtused: %s."
-
-#: packages/app-cli/app/help-utils.js:71
-#, javascript-format
-msgid "Default: %s"
-msgstr "Default: %s"
-
-#: packages/app-cli/app/help-utils.js:77
-msgid "Possible keys/values:"
-msgstr "Võimalikud klahvid/väärtused:"
-
-#: packages/app-cli/app/command-server.js:14
+#: packages/lib/versionInfo.js:10
 #, fuzzy, javascript-format
-msgid ""
-"Start, stop or check the API server. To specify on which port it should run, "
-"set the api.port config variable. Commands are (%s)."
-msgstr ""
-"Käivitage, peatage või kontrollige API server. Määrata, millist porti peaks "
-"käivitama, seadke API. Port config muutuja. Käsud on ( %s)."
-
-#: packages/app-cli/app/command-server.js:38
-#, javascript-format
-msgid "Server is already running on port %d"
-msgstr "Server töötab juba pordis %d"
-
-#: packages/app-cli/app/command-server.js:44
-#, javascript-format
-msgid "Server is running on port %d"
-msgstr "Serveris töötab port %d"
-
-#: packages/app-cli/app/command-server.js:44
-#: packages/app-cli/app/command-server.js:47
-msgid "Server is not running."
-msgstr "Server ei tööta."
-
-#: packages/app-cli/app/command-e2ee.js:18
-msgid ""
-"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
-"`status`, `decrypt-file` and `target-status`."
-msgstr ""
-"Haldab E2EE konfigureerimist. Käsud on `enable`, `disable`, `decrypt`, "
-"`status`, `decrypt-file` and `target-status`."
-
-#: packages/app-cli/app/command-e2ee.js:36
-#: packages/app-cli/app/command-e2ee.js:75
-msgid "Enter master password:"
-msgstr "Sisestage põhiparool:"
-
-#: packages/app-cli/app/command-e2ee.js:38
-#: packages/app-cli/app/command-e2ee.js:77
-#: packages/app-cli/app/command-e2ee.js:87
-msgid "Operation cancelled"
-msgstr "Toiming tühistati"
-
-#: packages/app-cli/app/command-e2ee.js:47
-msgid ""
-"Starting decryption... Please wait as it may take several minutes depending "
-"on how much there is to decrypt."
-msgstr ""
-"Dekrüpteerimise käivitamine... Palun oodake. See võib võtta mitu minutit "
-"sõltuvalt sellest, kui palju on dekrüpteerida."
-
-#: packages/app-cli/app/command-e2ee.js:55
-#, fuzzy, javascript-format
-msgid "Decrypted items: %d"
-msgstr "Dekrüpteeritud üksused: %s / %s"
-
-#: packages/app-cli/app/command-e2ee.js:56
-#, javascript-format
-msgid "Skipped items: %d (use --retry-failed-items to retry decrypting them)"
-msgstr ""
-
-#: packages/app-cli/app/command-e2ee.js:70
-msgid "Completed decryption."
-msgstr "Dekrüpteerimine on lõpetatud."
-
-#: packages/app-cli/app/command-mkbook.js:12
-msgid "Creates a new notebook."
-msgstr "Loob uue märkmiku."
-
-#: packages/app-cli/app/command-mv.js:14
-#, fuzzy
-msgid "Moves the notes matching <note> to [notebook]."
-msgstr "Teisaldab märkmete vastendamise <note> [notebook]."
-
-#: packages/app-cli/app/command-config.js:13
-msgid ""
-"Gets or sets a config value. If [value] is not provided, it will show the "
-"value of [name]. If neither [name] nor [value] is provided, it will list the "
-"current configuration."
-msgstr ""
-"Saab või seab seadistusväärtuse. Kui väärtust [value] ei ole esitatud, "
-"näitab see [name] väärtust. Kui ei ole esitatud [name] ega [value], "
-"loetatakse praegune konfiguratsioon."
-
-#: packages/app-cli/app/command-config.js:18
-msgid "Also displays unset and hidden config variables."
-msgstr "Kuvab ka seatud ja peidetud konfiguratsioonimuutujad."
-
-#: packages/app-cli/app/command-config.js:79
-#, javascript-format
-msgid "%s = %s (%s)"
-msgstr "%s = %s ( %s)"
-
-#: packages/app-cli/app/command-config.js:81
-#, javascript-format
-msgid "%s = %s"
-msgstr "%s = %s"
-
-#: packages/app-cli/app/command-use.js:12
-#, fuzzy
-msgid ""
-"Switches to [notebook] - all further operations will happen within this "
-"notebook."
-msgstr ""
-"Aktiveerib [notebook]-kõik edasised toimingud toimuvad selle märkmiku sees."
-
-#: packages/app-cli/app/command-sync.js:29
-#, fuzzy
-msgid "Synchronises with remote storage."
-msgstr "Sünkrooniseerib kaugsalvestusruumi."
-
-#: packages/app-cli/app/command-sync.js:34
-#, fuzzy
-msgid "Sync to provided target (defaults to sync.target config value)"
-msgstr "Sync esitatud Target (vaikimisi sünkroonimine. Target config väärtus)"
-
-#: packages/app-cli/app/command-sync.js:35
-msgid "Upgrade the sync target to the latest version."
-msgstr ""
-
-#: packages/app-cli/app/command-sync.js:106
-#, fuzzy, javascript-format
-msgid "Not authentified with %s. Please provide any missing credentials."
-msgstr "Pole %s-ga seostatud. Palun esitage puuduv mandaat."
-
-#: packages/app-cli/app/command-sync.js:132
-msgid "Synchronisation is already in progress."
-msgstr "Sünkroniseerimine on juba teoksil."
-
-#: packages/app-cli/app/command-sync.js:137
-#, fuzzy, javascript-format
-msgid ""
-"Lock file is already being hold. If you know that no synchronisation is "
-"taking place, you may delete the lock file at \"%s\" and resume the "
-"operation."
-msgstr ""
-"Lukusta fail on juba kinni. Kui teate, et sünkroonimis ei toimu, võite luku "
-"faili kustutada kohas %s ja jätkata toimingut."
-
-#: packages/app-cli/app/command-sync.js:180
-#, fuzzy, javascript-format
-msgid "Synchronisation target: %s (%s)"
-msgstr "Sünkroonimise sihtkoht: %s ( %s)"
-
-#: packages/app-cli/app/command-sync.js:182
-#, fuzzy
-msgid "Cannot initialise synchroniser."
-msgstr "Sünkroonijat ei saa lähtestada."
-
-#: packages/app-cli/app/command-sync.js:212
-msgid "Starting synchronisation..."
-msgstr "Sünkroonimise käivitamine..."
-
-#: packages/app-cli/app/command-sync.js:235
-msgid "Downloading resources..."
-msgstr "Ressursside allalaadimine..."
-
-#: packages/app-cli/app/command-sync.js:247
-#, javascript-format
-msgid "Sync target must be upgraded! Run `%s` to proceed."
-msgstr ""
-
-#: packages/app-cli/app/command-sync.js:265
-msgid "Cancelling... Please wait."
-msgstr "Tühistamine... Oota."
-
-#: packages/app-cli/app/command-ren.js:14
-msgid "Renames the given <item> (note or notebook) to <name>."
-msgstr "Nimetab antud <item> (Märkus või märkmik) <name>."
-
-#: packages/app-cli/app/command-rmbook.js:13
-msgid "Deletes the given notebook."
-msgstr "Kustutab antud märkmiku."
-
-#: packages/app-cli/app/command-rmbook.js:17
-#, fuzzy
-msgid "Deletes the notebook without asking for confirmation."
-msgstr "Kustutab märkmiku ilma kinnitust küsimata."
-
-#: packages/app-cli/app/command-mktodo.js:12
-msgid "Creates a new to-do."
-msgstr "Loob uue tee."
-
-#: packages/app-cli/app/command-mktodo.js:16
-#: packages/app-cli/app/command-mknote.js:16
-msgid "Notes can only be created within a notebook."
-msgstr "Märkmeid saab luua ainult märkmiku sees."
-
-#: packages/app-cli/app/command-cat.js:14
-msgid "Displays the given note."
-msgstr "Kuvab antud märkme."
-
-#: packages/app-cli/app/command-cat.js:18
-msgid "Displays the complete information about note."
-msgstr "Kuvatakse märkme kohta täielik teave."
-
-#: packages/app-cli/app/command-edit.js:17
-msgid "Edit note."
-msgstr "Redigeeri märkust."
-
-#: packages/app-cli/app/command-edit.js:30
-msgid ""
-"No text editor is defined. Please set it using `config editor <editor-path>`"
-msgstr ""
-"Tekstiredaktorit pole määratletud. Seadistage see kasutades "
-"konfiguratsiooniredaktorit <editor-path>"
-
-#: packages/app-cli/app/command-edit.js:40
-msgid "No active notebook."
-msgstr "Aktiivset märkmikku pole."
-
-#: packages/app-cli/app/command-edit.js:46
-#, javascript-format
-msgid "Note does not exist: \"%s\". Create it?"
-msgstr "Märget pole olemas: \"%s\". Kas luua?"
-
-#: packages/app-cli/app/command-edit.js:75
-msgid "Starting to edit note. Close the editor to get back to the prompt."
-msgstr ""
-
-#: packages/app-cli/app/command-edit.js:97
-#, fuzzy
-msgid "Note has been saved."
-msgstr "Ühtegi märkmikku pole määratud."
-
-#: packages/app-cli/app/app-gui.js:452
-msgid "To delete a tag, untag the associated notes."
-msgstr "Sildi kustutamiseks eemaldage märkmed seotud silt."
-
-#: packages/app-cli/app/app-gui.js:462
-msgid "Please select the note or notebook to be deleted first."
-msgstr "Valige esmalt kustutatav märkus või märkmik."
-
-#: packages/app-cli/app/app-gui.js:750
-msgid "Press Ctrl+D or type \"exit\" to exit the application"
-msgstr "Rakendusest väljumiseks vajutage Ctrl+D või kirjutage \"exit\""
-
-#: packages/app-cli/app/command-rmnote.js:13
-msgid "Deletes the notes matching <note-pattern>."
-msgstr "Kustutab märkmete vastendamise <note-pattern>."
-
-#: packages/app-cli/app/command-rmnote.js:17
-msgid "Deletes the notes without asking for confirmation."
-msgstr "Kustutab märkmed ilma kinnitust küsimata."
-
-#: packages/app-cli/app/command-rmnote.js:27
-#, javascript-format
-msgid "%d notes match this pattern. Delete them?"
-msgstr "%d märkmed vastavad sellele mustrile. Kas soovite need kustutada?"
-
-#: packages/app-cli/app/command-attach.js:13
-msgid "Attaches the given file to the note."
-msgstr "Manustab antud faili märkmele."
-
-#: packages/app-cli/app/command-batch.js:10
-msgid ""
-"Runs the commands contained in the text file. There should be one command "
-"per line."
-msgstr ""
-
-#: packages/app-cli/app/command-version.js:11
-msgid "Displays version information"
-msgstr "Kuvab versiooniteabe"
-
-#: packages/app-cli/app/command-version.js:16
-#, javascript-format
-msgid "%s %s (%s)"
+msgid "Revision: %s (%s)"
 msgstr "%s %s (%s)"
 
-#: packages/app-cli/app/command-undone.js:12
-#, fuzzy
-msgid "Marks a to-do as non-completed."
-msgstr "Märgib, et see ei ole lõpetatud."
-
-#: packages/app-cli/app/command-export.js:13
-msgid ""
-"Exports Joplin data to the given path. By default, it will export the "
-"complete database including notebooks, notes, tags and resources."
-msgstr ""
-"Ekspordib Joplini andmed antud teele. Vaikimisi ekspordime täieliku "
-"andmebaasi, sealhulgas märkmikud, märkmed, sildid ja ressursid."
-
-#: packages/app-cli/app/command-export.js:23
-#, javascript-format
-msgid "Destination format: %s"
-msgstr "Sihtkoha Formaat: %s"
-
-#: packages/app-cli/app/command-export.js:23
-msgid "Exports only the given note."
-msgstr "Ekspordib ainult antud märkuse."
-
-#: packages/app-cli/app/command-export.js:23
-msgid "Exports only the given notebook."
-msgstr "Ekspordib ainult antud märkmiku."
-
-#: packages/app-cli/app/command-mknote.js:12
-msgid "Creates a new note."
-msgstr "Loob uue märkme."
-
-#: packages/app-cli/app/main.js:92
-msgid "Type `joplin help` for usage information."
-msgstr "Sisestage `joplin help` kasutusteabe jaoks ."
-
-#: packages/app-cli/app/main.js:94
-msgid "Fatal error:"
-msgstr "Parandamatu tõrge:"
-
-#: packages/app-cli/app/command-geoloc.js:13
-msgid "Displays a geolocation URL for the note."
-msgstr "Kuvatakse märkme geograafilise asukoha URL."
-
-#: packages/app-cli/app/gui/NoteWidget.js:36
-#, fuzzy
-msgid ""
-"Welcome to Joplin!\n"
-"\n"
-"Type `:help shortcuts` for the list of keyboard shortcuts, or just `:help` "
-"for usage information.\n"
-"\n"
-"For example, to create a notebook press `mb`; to create a note press `mn`."
-msgstr ""
-"Tere tulemast Joplini!\n"
-"\n"
-"Kirjuta `:help shortcuts` klaviatuuri otseteede loendi või lihtsalt `:help` "
-"kasutusteabe jaoks.\n"
-"\n"
-"Näiteks märkmiku loomiseks vajutage `mb`; , et luua märkme Press `mn`."
-
-#: packages/app-cli/app/gui/NoteWidget.js:48
-#, fuzzy
-msgid ""
-"One or more items are currently encrypted and you may need to supply a "
-"master password. To do so please type `e2ee decrypt`. If you have already "
-"supplied the password, the encrypted items are being decrypted in the "
-"background and will be available soon."
-msgstr ""
-"Üks või mitu üksust on praegu krüptitud ja peate võib-olla esitama "
-"Põhiparooli. Selleks sisestage \"e2ee Decrypt\". Kui olete juba parooli "
-"sisestanud, krüptitakse krüptitud üksused taustal ja need on peagi saadaval."
-
-#: packages/app-cli/app/gui/NoteWidget.js:50
-#, fuzzy
-msgid "You may also type `status` for more information."
-msgstr "Ära küsi kinnitust."
-
-#: packages/app-cli/app/gui/FolderListWidget.js:31
-msgid "Search:"
-msgstr "Otsi:"
-
-#: packages/app-cli/app/command-search.js:13
-msgid "Searches for the given <pattern> in all the notes."
-msgstr "Otsib <pattern> kõiki märkmeid."
-
-#: packages/app-cli/app/command-set.js:22
+#: packages/lib/versionInfo.js:22
 #, fuzzy, javascript-format
-msgid ""
-"Sets the property <name> of the given <note> to the given [value]. Possible "
-"properties are:\n"
-"\n"
-"%s"
-msgstr ""
-"Seab antud atribuudi väärtuseks antud <name> <note> [value]. Võimalikud "
-"omadused on järgmised:\n"
-"\n"
-" %s"
+msgid "%s %s (%s, %s)"
+msgstr "%s %s (%s)"
 
-#: packages/app-cli/app/cli-utils.js:109
+#: packages/lib/versionInfo.js:24
+#, fuzzy, javascript-format
+msgid "Client ID: %s"
+msgstr "Lõpule viidud: %s"
+
+#: packages/lib/versionInfo.js:25
+#, fuzzy, javascript-format
+msgid "Sync Version: %s"
+msgstr "Uus versioon: %s"
+
+#: packages/lib/versionInfo.js:26
+#, fuzzy, javascript-format
+msgid "Profile Version: %s"
+msgstr "Uus versioon: %s"
+
+#: packages/lib/versionInfo.js:27
 #, javascript-format
-msgid "Missing required argument: %s"
-msgstr "Puuduv nõutav argument: %s"
+msgid "Keychain Supported: %s"
+msgstr ""
 
-#: packages/app-cli/app/cli-utils.js:144
-msgid "Your choice: "
-msgstr "Sinu valik: "
-
-#: packages/app-cli/app/cli-utils.js:151
+#: packages/server/dist/middleware/notificationHandler.js:28
 #, javascript-format
-msgid "Invalid answer: %s"
-msgstr "Sobimatu vastus: %s"
-
-#: packages/app-cli/app/cli-utils.js:161 packages/app-cli/app/app.js:138
-msgid "Y"
-msgstr "Y"
-
-#: packages/app-cli/app/cli-utils.js:161 packages/app-cli/app/app.js:138
-msgid "n"
-msgstr "n"
-
-#: packages/app-cli/app/base-command.js:15
-msgid "Cannot change encrypted item"
-msgstr "Krüpteeritud üksust ei saa muuta"
-
-#: packages/app-cli/app/command-help.js:13
-msgid "Displays usage information."
-msgstr "Kuvab kasutusteabe."
-
-#: packages/app-cli/app/command-help.js:36
-#, javascript-format
-msgid "For information on how to customise the shortcuts please visit %s"
-msgstr "Teavet selle kohta, kuidas kohandada otseteed Palun külastage %s"
-
-#: packages/app-cli/app/command-help.js:44
-msgid "Shortcuts are not available in CLI mode."
-msgstr "Otseteed pole CLI režiimis saadaval."
-
-#: packages/app-cli/app/command-help.js:71
 msgid ""
-"Type `help [command]` for more information about a command; or type `help "
-"all` for the complete usage information."
+"The default admin password is insecure and has not been changed! [Change it "
+"now](%s)"
 msgstr ""
-"Käsu kohta lisateabe saamiseks tippige käsk `help [command]`; või tippige "
-"täieliku kasutamise teabe saamiseks `help all`."
 
-#: packages/app-cli/app/command-help.js:73
-msgid "The possible commands are:"
-msgstr "Võimalikud käsud on:"
-
-#: packages/app-cli/app/command-help.js:77
-msgid ""
-"In any command, a note or notebook can be referred to by title or ID, or "
-"using the shortcuts `$n` or `$b` for, respectively, the currently selected "
-"note or notebook. `$c` can be used to refer to the currently selected item."
-msgstr ""
-"Mis tahes käsu, Märkus või märkmiku saab viidatud pealkirja või ID või "
-"kasutades otseteed `$n` või `$b` vastavalt praegu valitud Märkus või "
-"märkmiku. `$c` saab kasutada praegu valitud üksusele viitamiseks."
-
-#: packages/app-cli/app/command-help.js:79
-msgid "To move from one pane to another, press Tab or Shift+Tab."
-msgstr "Ühest paanist teise liikumiseks vajutage Tab või Shift + Tab."
-
-#: packages/app-cli/app/command-help.js:80
-msgid ""
-"Use the arrows and page up/down to scroll the lists and text areas "
-"(including this console)."
-msgstr ""
-"Loendite ja tekstialade (sh selle konsooli) kerimiseks kasutage nooli ja "
-"lehe üles/alla klahve."
-
-#: packages/app-cli/app/command-help.js:81
-msgid "To maximise/minimise the console, press \"tc\"."
-msgstr "Konsooli maksimeerimiseks/minimeerimiseks vajutage \"tc\"."
-
-#: packages/app-cli/app/command-help.js:82
-msgid "To enter command line mode, press \":\""
-msgstr "Käsurea režiimi sisestamiseks vajutage \":\""
-
-#: packages/app-cli/app/command-help.js:83
-msgid "To exit command line mode, press ESCAPE"
-msgstr "Käsurea režiimist väljumiseks vajutage ESCAPE"
-
-#: packages/app-cli/app/command-help.js:84
-msgid ""
-"For the list of keyboard shortcuts and config options, type `help keymap`"
-msgstr ""
-"73/5000\n"
-"Klaviatuuri otseteede ja konfiguratsioonivõimaluste loendi jaoks tippige "
-"\"help keymap\""
-
-#: packages/app-cli/app/command-todo.js:14
+#: packages/server/dist/models/UserModel.js:189
+#: packages/server/dist/models/UserModel.js:194
 #, fuzzy
+msgid "attachment"
+msgstr "Manused"
+
+#: packages/server/dist/models/UserModel.js:189
+#, javascript-format
 msgid ""
-"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to "
-"toggle the given to-do between completed and uncompleted state (If the "
-"target is a regular note it will be converted to a to-do). Use \"clear\" to "
-"convert the to-do back to a regular note."
+"Cannot save %s \"%s\" because it is larger than than the allowed limit (%s)"
 msgstr ""
-"<todo-command>võib kas olla \"toggle\" või \"clear\". Kasutage \"toggle\" "
-"antud to-do ümberlülitamiseks lõpetatud ja lõpetamata oleku vahel (kui "
-"sihtmärk on regulaarne märge, teisendatakse see tellimuseks). Kasutage "
-"\"clear\" teisendada to-do tagasi tavalise Märkus."
 
-#: packages/app-cli/app/command-exit.js:11
-msgid "Exits the application."
-msgstr "Väljub rakendusest."
-
-#: packages/app-cli/app/app.js:63
+#: packages/server/dist/models/UserModel.js:194
 #, javascript-format
-msgid "More than one item match \"%s\". Please narrow down your query."
-msgstr ""
-"\"%s\" vastab rohkem kui ühele üksusele. Palun kitsendage oma päringut."
-
-#: packages/app-cli/app/app.js:93
-msgid "No notebook selected."
-msgstr "Ühtegi märkmikku pole valitud."
-
-#: packages/app-cli/app/app.js:99
-msgid "No notebook has been specified."
-msgstr "Ühtegi märkmikku pole määratud."
-
-#: packages/app-cli/app/app.js:138
-msgid "N"
-msgstr "N"
-
-#: packages/app-cli/app/app.js:138
-msgid "y"
-msgstr "y"
-
-#: packages/app-cli/app/app.js:171
-msgid "Cancelling background synchronisation... Please wait."
-msgstr "Tausta sünkroniseerimise tühistamine... Oota."
-
-#: packages/app-cli/app/app.js:256
-#, javascript-format
-msgid "No such command: %s"
-msgstr "Sellist käsku pole: %s"
-
-#: packages/app-cli/app/app.js:304
-#, javascript-format
-msgid "The command \"%s\" is only available in GUI mode"
-msgstr "Käsk %s on saadaval ainult graafilises kasutajaliideses"
-
-#: packages/app-cli/app/command-status.js:13
-#, fuzzy
-msgid "Displays summary about the notes and notebooks."
-msgstr "Kuvab kokkuvõtte märkmete ja märkmike kohta."
-
-#: packages/app-cli/app/command-status.js:44
 msgid ""
-"To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`"
+"Cannot save %s \"%s\" because it would go over the total allowed size (%s) "
+"for this account"
 msgstr ""
-
-#: packages/app-cli/app/command-tag.js:14
-#, fuzzy
-msgid ""
-"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to "
-"assign or remove [tag] from [note], to list notes associated with [tag], or "
-"to list tags associated with [note]. The command `tag list` can be used to "
-"list all the tags (use -l for long option)."
-msgstr ""
-"<tag-command>võib olla \"add\", \"remove\", \"list\" või \"notetags\", et "
-"määrata või eemaldada [tag], [note], loetleda märkmed, mis on seotud [tag], "
-"või loetleda silte seostatud [note]. Käsu `tag list` saab kasutada loetleda "
-"kõik sildid (kasuta -l laiendatud valiku jaoks)."
-
-#: packages/app-cli/app/command-tag.js:90
-#, javascript-format
-msgid "Invalid command: \"%s\""
-msgstr "Sobimatu käsk: %s"
-
-#: packages/app-cli/app/command-done.js:14
-msgid "Marks a to-do as done."
-msgstr "Märgib, et ülesannete loetelu on tehtud ."
-
-#: packages/app-cli/app/command-done.js:21
-#, javascript-format
-msgid "Note is not a to-do: \"%s\""
-msgstr "Märkus ei ole ülesannete loetelu: %s"
 
 #~ msgid "Share Notes"
 #~ msgstr "Märkmete ühiskasutus"
