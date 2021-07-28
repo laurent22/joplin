@@ -6,7 +6,6 @@ import { _ } from './locale';
 const { stringify } = require('query-string');
 const urlUtils = require('./urlUtils.js');
 const Buffer = require('buffer').Buffer;
-const { version } = require('./packageInfo.js');
 
 const logger = Logger.create('OneDriveApi');
 
@@ -266,12 +265,13 @@ export default class OneDriveApi {
 
 		for (let i = 0; i < 5; i++) {
 			options.headers['Authorization'] = `bearer ${this.token()}`;
-			options.headers['User-Agent'] = `ISV|Joplin|Joplin/${version}`;
+			options.headers['User-Agent'] = `ISV|Joplin|Joplin/${shim.appVersion()}`;
 
-			const handleRequestRepeat = async (error: any, sleep_seconds: number = (i + 1) * 5) => {
+			const handleRequestRepeat = async (error: any, sleepSeconds: number = null) => {
+				sleepSeconds ??= (i + 1) * 5;
 				logger.info(`Got error below - retrying (${i})...`);
 				logger.info(error);
-				await time.sleep(sleep_seconds);
+				await time.sleep(sleepSeconds);
 			};
 
 			let response = null;
@@ -341,14 +341,14 @@ export default class OneDriveApi {
 
 					await handleRequestRepeat(error);
 					continue;
-				} else if (error?.code === 'activityLimitReached' && response?.headers?._headers['retry-after'][0]) {
+				} else if (error?.code === 'activityLimitReached' && response?.headers?._headers['retry-after'][0] && !isNaN(Number(response?.headers?._headers['retry-after'][0]))) {
 					// Wait for OneDrive throttling
 					// Relavent Microsoft Docs: https://docs.microsoft.com/en-us/sharepoint/dev/general-development/how-to-avoid-getting-throttled-or-blocked-in-sharepoint-online#best-practices-to-handle-throttling
 					// Decrement retry count as multiple sync threads will cause repeated throttling errors - this will wait until throttling is resolved to continue, preventing a hard stop on the sync
 					i--;
-					const sleep_seconds = response.headers._headers['retry-after'][0];
-					logger.info(`OneDrive Throttle, sync thread sleeping for ${sleep_seconds} seconds...`);
-					await handleRequestRepeat(error, parseInt(sleep_seconds));
+					const sleepSeconds = response.headers._headers['retry-after'][0];
+					logger.info(`OneDrive Throttle, sync thread sleeping for ${sleepSeconds} seconds...`);
+					await handleRequestRepeat(error, Number(sleepSeconds));
 					continue;
 				} else if (error.code == 'itemNotFound' && method == 'DELETE') {
 					// Deleting a non-existing item is ok - noop
