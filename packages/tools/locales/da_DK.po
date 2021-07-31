@@ -15,6 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.4.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-cli/app/app-gui.js:452
 msgid "To delete a tag, untag the associated notes."
@@ -22,7 +24,7 @@ msgstr "For at slette en etikette, fjern etikette fra de tilhørende noter."
 
 #: packages/app-cli/app/app-gui.js:462
 msgid "Please select the note or notebook to be deleted first."
-msgstr "Vælg først en note eller en notesbog der skal slettes."
+msgstr "Vælg først noten eller notesbogen der skal slettes."
 
 #: packages/app-cli/app/app-gui.js:750
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
@@ -59,7 +61,7 @@ msgstr "j"
 
 #: packages/app-cli/app/app.js:171
 msgid "Cancelling background synchronisation... Please wait."
-msgstr "Annullerer baggrunds synkronisering...  Vent venligst."
+msgstr "Annullerer baggrunds synkronisering... Vent venligst."
 
 #: packages/app-cli/app/app.js:256
 #, javascript-format
@@ -141,7 +143,7 @@ msgstr "Viser valgt note."
 
 #: packages/app-cli/app/command-cat.js:18
 msgid "Displays the complete information about note."
-msgstr "Viser komplet note information."
+msgstr "Viser komplet information om note."
 
 #: packages/app-cli/app/command-config.js:13
 msgid ""
@@ -149,7 +151,7 @@ msgid ""
 "value of [name]. If neither [name] nor [value] is provided, it will list the "
 "current configuration."
 msgstr ""
-"Henter eller tilføjer konfigurations værdi. Hvis [value] er tilføjet, vises "
+"Henter eller tilføjer konfigurationsværdi. Hvis [value] er tilføjet, vises "
 "værdien af [name]. Hvis hverken [name] eller [value] er tilføjet, vises "
 "aktuel konfiguration."
 
@@ -231,12 +233,12 @@ msgstr "Dekryptering færdig."
 #: packages/app-cli/app/command-e2ee.js:85
 #: packages/app-mobile/components/screens/encryption-config.js:163
 msgid "Confirm password:"
-msgstr "Bekræft kodeord:"
+msgstr "Bekræft adgangskode:"
 
 #: packages/app-cli/app/command-e2ee.js:91
 #: packages/app-mobile/components/screens/encryption-config.js:140
 msgid "Passwords do not match!"
-msgstr "Kodeord stemmer ikke overens!"
+msgstr "Adgangskoder stemmer ikke overens!"
 
 #: packages/app-cli/app/command-e2ee.js:118
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:443
@@ -276,13 +278,13 @@ msgstr "Ingen aktiv notesbog."
 #: packages/app-cli/app/command-edit.js:46
 #, javascript-format
 msgid "Note does not exist: \"%s\". Create it?"
-msgstr "Note eksisterer ikke: \"%s\".  Skal den oprettes?"
+msgstr "Note eksisterer ikke: \"%s\". Skal den oprettes?"
 
 #: packages/app-cli/app/command-edit.js:75
 msgid "Starting to edit note. Close the editor to get back to the prompt."
 msgstr ""
-"Noteredigering startet. Luk redigering for at komme tilbage til kommando "
-"prompten."
+"Noteredigering startet. Luk redigering for at komme tilbage til "
+"kommandoprompten."
 
 #: packages/app-cli/app/command-edit.js:82
 #: packages/app-desktop/commands/startExternalEditing.js:32
@@ -296,36 +298,36 @@ msgstr "Note gemt."
 
 #: packages/app-cli/app/command-exit.js:11
 msgid "Exits the application."
-msgstr "Forlad/luk program."
+msgstr "Lukker programmet."
 
 #: packages/app-cli/app/command-export.js:13
 msgid ""
 "Exports Joplin data to the given path. By default, it will export the "
 "complete database including notebooks, notes, tags and resources."
 msgstr ""
-"Eksporterer Joplin data til valgt sti. Standard er eksport af hele databasen "
-"inkl. notesbøger, noter, etiketter og ressourcer."
+"Eksporterer Joplin data til den valgte sti. Standard er eksport af hele "
+"databasen inkl. notesbøger, noter, etiketter og ressourcer."
 
 #: packages/app-cli/app/command-export.js:23
 #, javascript-format
 msgid "Destination format: %s"
-msgstr "Destinations format: %s"
+msgstr "Destinationsformat: %s"
 
 #: packages/app-cli/app/command-export.js:23
 msgid "Exports only the given note."
-msgstr "Eksporter kun valgt note."
+msgstr "Eksporterer kun valgt note."
 
 #: packages/app-cli/app/command-export.js:23
 msgid "Exports only the given notebook."
-msgstr "Eksporter kun valgt notesbog."
+msgstr "Eksporterer kun valgt notesbog."
 
 #: packages/app-cli/app/command-geoloc.js:13
 msgid "Displays a geolocation URL for the note."
-msgstr "Vis geolokations URL for noten."
+msgstr "Vis geolokations-URL for noten."
 
 #: packages/app-cli/app/command-help.js:13
 msgid "Displays usage information."
-msgstr "Viser årsags information."
+msgstr "Viser brugsinformation."
 
 #: packages/app-cli/app/command-help.js:36
 #, javascript-format
@@ -334,15 +336,15 @@ msgstr "For info om tilpasning af links, besøg %s"
 
 #: packages/app-cli/app/command-help.js:44
 msgid "Shortcuts are not available in CLI mode."
-msgstr "Links er ikke til rådighed i GUI tilstand."
+msgstr "Links er ikke til rådighed i CLI-tilstand."
 
 #: packages/app-cli/app/command-help.js:71
 msgid ""
 "Type `help [command]` for more information about a command; or type `help "
 "all` for the complete usage information."
 msgstr ""
-"Tast `help[kommando]` for mere info om en kommando; eller tast `help all` "
-"for fuld hjælpe liste ."
+"Tast `help [kommando]` for mere info om en kommando; eller tast `help all` "
+"for fuld brugsinformation."
 
 #: packages/app-cli/app/command-help.js:73
 msgid "The possible commands are:"
@@ -386,7 +388,7 @@ msgstr "For at forlade kommandolinje tilstand, tryk Esc"
 msgid ""
 "For the list of keyboard shortcuts and config options, type `help keymap`"
 msgstr ""
-"For at få vist listen af tastatur genveje og konfigurations muligheder, test "
+"For at få vist listen af tastatur genveje og konfigurationsmuligheder, test "
 "`help keymap`"
 
 #: packages/app-cli/app/command-import.js:14
@@ -613,7 +615,7 @@ msgstr ""
 
 #: packages/app-cli/app/command-sync.js:29
 msgid "Synchronises with remote storage."
-msgstr "Synkroniserer med fjern-lager."
+msgstr "Synkroniserer med fjernlager."
 
 #: packages/app-cli/app/command-sync.js:34
 msgid "Sync to provided target (defaults to sync.target config value)"
@@ -654,7 +656,9 @@ msgstr "Trin 2: Indtast koden, som oplyses af Dropbox:"
 #: packages/app-cli/app/command-sync.js:106
 #, javascript-format
 msgid "Not authentified with %s. Please provide any missing credentials."
-msgstr "Ikke godkendt med %s. Indtast venligst manglende krediteringer."
+msgstr ""
+"Ikke godkendt med %s. Angiv venligst eventuelle manglende "
+"legitimationsoplysninger."
 
 #: packages/app-cli/app/command-sync.js:132
 msgid "Synchronisation is already in progress."
@@ -673,7 +677,7 @@ msgstr ""
 #: packages/app-cli/app/command-sync.js:180
 #, javascript-format
 msgid "Synchronisation target: %s (%s)"
-msgstr "Synkroniserings mål: %s (%s)"
+msgstr "Synkroniseringsmål: %s (%s)"
 
 #: packages/app-cli/app/command-sync.js:182
 msgid "Cannot initialise synchroniser."
@@ -694,7 +698,7 @@ msgstr "Synk-mål skal opgraderes! Kør `%s` for at fortsætte."
 
 #: packages/app-cli/app/command-sync.js:265
 msgid "Cancelling... Please wait."
-msgstr "Annullerer...  Vent venligst."
+msgstr "Annullerer... Vent venligst."
 
 #: packages/app-cli/app/command-tag.js:14
 msgid ""
@@ -727,7 +731,7 @@ msgstr ""
 
 #: packages/app-cli/app/command-undone.js:12
 msgid "Marks a to-do as non-completed."
-msgstr "Markerer en opgave som ikke udført."
+msgstr "Markerer en opgave som ikke-udført."
 
 #: packages/app-cli/app/command-use.js:12
 msgid ""
@@ -738,7 +742,7 @@ msgstr ""
 
 #: packages/app-cli/app/command-version.js:11
 msgid "Displays version information"
-msgstr "Viser versions info"
+msgstr "Viser versionsinfo"
 
 #: packages/app-cli/app/command-version.js:16
 #, javascript-format
@@ -760,7 +764,7 @@ msgid ""
 msgstr ""
 "Velkommen til Joplin!\n"
 "\n"
-"Tast  `:help shortcuts` for listen over tastaturgenveje, eller bare  `:help` "
+"Tast `:help shortcuts` for listen over tastaturgenveje, eller bare `:help` "
 "for alm. hjælp.\n"
 "\n"
 "For eksempel, for at oprette en notesbog; tryk `mb` eller tryk `mn` for at "
@@ -773,7 +777,7 @@ msgid ""
 "supplied the password, the encrypted items are being decrypted in the "
 "background and will be available soon."
 msgstr ""
-"Et eller flere emner er krypteret og du skal evt. angive et hoved-kodeord. "
+"Et eller flere emner er krypteret og du skal evt. angive et hovedkodeord. "
 "For at gøre det; tast è2ee decrypt`. Har du allerede indtastet password, "
 "bliver emnerne i øjeblikket dekrypteret i bagrunden og vil snart være klar."
 
@@ -1686,9 +1690,8 @@ msgid "Share notebook..."
 msgstr "Del notesbog..."
 
 #: packages/app-desktop/gui/MainScreen/commands/showShareNoteDialog.js:16
-#, fuzzy
 msgid "Publish note..."
-msgstr "Del note..."
+msgstr "Publicer note..."
 
 #: packages/app-desktop/gui/MainScreen/commands/showSpellCheckerMenu.js:19
 #: packages/lib/services/spellChecker/SpellCheckerService.js:180
@@ -1822,9 +1825,8 @@ msgid "Focus"
 msgstr "Fokuser"
 
 #: packages/app-desktop/gui/MenuBar.js:631
-#, fuzzy
 msgid "Note&book"
-msgstr "Notesbøger"
+msgstr "Note&bog"
 
 #: packages/app-desktop/gui/MenuBar.js:637
 msgid "&Note"
@@ -2310,18 +2312,17 @@ msgstr ""
 "(Begrænsning: %s)."
 
 #: packages/app-desktop/gui/Root.js:98
-#, fuzzy
 msgid "Confirmation"
-msgstr "Indstillinger"
+msgstr "Bekræftelse"
 
 #: packages/app-desktop/gui/Root.js:111
 msgid "The Web Clipper needs your authorisation to access your data."
 msgstr ""
+"Web Clipper har brug for din tilladelse til at få adgang til dine data."
 
 #: packages/app-desktop/gui/Root.js:112
-#, fuzzy
 msgid "Grant authorisation"
-msgstr "Autoriseringstoken:"
+msgstr "Giv tilladelse"
 
 #: packages/app-desktop/gui/Root.js:136
 msgid "OneDrive Login"
@@ -2394,9 +2395,8 @@ msgid "Share Notebook"
 msgstr "Del notesbog"
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:144
-#, fuzzy
 msgid "Unpublish note"
-msgstr "Del ikke længere note"
+msgstr "Afpublicer note"
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:171
 msgid "Synchronising..."
@@ -2423,7 +2423,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:187
 msgid "Publish Notes"
-msgstr ""
+msgstr "Publicer noter"
 
 # bare tjek om det er rigtigt
 #: packages/app-desktop/gui/ShareNoteDialog.js:189
@@ -2505,9 +2505,8 @@ msgid "Retry"
 msgstr "Prøv igen"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.js:137
-#, fuzzy
 msgid "Advanced tools"
-msgstr "Avancerede indstillinger"
+msgstr "Avancerede værktøjer"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.js:139
 msgid "Export debug report"
@@ -2679,7 +2678,7 @@ msgstr "Kun til fejlsøgning: Eksporter din profil til et eksternt SD-kort."
 
 #: packages/app-mobile/components/screens/ConfigScreen.js:407
 msgid "Feature flags"
-msgstr ""
+msgstr "Feature-markeringer"
 
 #: packages/app-mobile/components/screens/ConfigScreen.js:410
 msgid "More information"
@@ -3037,9 +3036,9 @@ msgid "Cancelling..."
 msgstr "Annullerer..."
 
 #: packages/lib/Synchronizer.js:156
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Completed: %s (%s)"
-msgstr "Fuldført: %s"
+msgstr "Fuldført: %s (%s)"
 
 #: packages/lib/Synchronizer.js:158
 #, javascript-format
@@ -3604,9 +3603,8 @@ msgid "Custom stylesheet for rendered Markdown"
 msgstr "Brugerdefineret stylesheet til fortolket Markdown"
 
 #: packages/lib/models/Setting.js:802
-#, fuzzy
 msgid "Custom stylesheet for Joplin-wide app styles"
-msgstr "Brugerdefineret stylesheet til Joplin app-stil"
+msgstr "Brugerdefineret stylesheet til Joplin app-stilarter"
 
 #: packages/lib/models/Setting.js:812
 msgid "Re-upload local data to sync target"
@@ -4191,11 +4189,13 @@ msgid ""
 msgstr "Kan ikke gemme %s \"%s\" da den er større end den tilladte grænse (%s)"
 
 #: packages/server/dist/models/UserModel.js:194
-#, fuzzy, javascript-format
+#, javascript-format
 msgid ""
 "Cannot save %s \"%s\" because it would go over the total allowed size (%s) "
 "for this account"
-msgstr "Kan ikke gemme %s \"%s\" da den er større end den tilladte grænse (%s)"
+msgstr ""
+"Kan ikke gemme %s \"%s\" da den vil overskride den tilladte størrelse (%s) "
+"for denne konto"
 
 #~ msgid "Share Notes"
 #~ msgstr "Del noter"
