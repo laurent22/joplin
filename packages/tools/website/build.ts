@@ -9,7 +9,7 @@ const dirname = require('path').dirname;
 const glob = require('glob');
 const path = require('path');
 
-const env = Env.Dev;
+const env = Env.Prod;
 const buildTime = Date.now();
 
 const websiteAssetDir = `${rootDir}/Assets/WebsiteAssets`;
