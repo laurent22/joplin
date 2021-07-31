@@ -29,7 +29,7 @@ https://github.com/laurent22/joplin/blob/dev/
 			href="&#x2F;css/bootstrap5.0.2.min.css"
 			as="style"
 		/>
-		<link rel="stylesheet" href="&#x2F;css/fontawesome-all.min.css?t=1627320132533">
+		<link rel="stylesheet" href="&#x2F;css/fontawesome-all.min.css?t=1627739025669">
 		<link
 			href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
 			rel="stylesheet"
@@ -37,10 +37,16 @@ https://github.com/laurent22/joplin/blob/dev/
 			media="all"
 			onload="this.media='all'; this.onload = null"
 		/>
-		<link rel="stylesheet" href="&#x2F;css/site.css?t=1627320132533" as="style" />
+		<link rel="stylesheet" href="&#x2F;css/site.css?t=1627739025669" as="style" />
 		<title>Joplin Cloud Plans | Joplin</title>
+
+		<script
+			src="&#x2F;js/jquery-3.6.0.min.js"
+			rel="preload"
+			as="script"
+		></script>
 	</head>
-	<body class="website-env-prod">
+	<body class="website-env-dev">
 		<div class="container-fluid generic-template plans-page" id="main-container">
 
 <div class=" navbar-main white-bg" id="nav-section">
@@ -113,9 +119,9 @@ https://github.com/laurent22/joplin/blob/dev/
 
 						<div class="main-content">
 							<div class="alert alert-danger alert-env-dev" role="alert">
-								Running in prod mode!
+								Running in dev mode!
 							</div>
-							<div id="plans-section" class="env-prod">
+							<div id="plans-section" class="env-dev">
 	<div class="container">
 		<div class="row">
 			<div class="col-12 title-box">
@@ -127,17 +133,43 @@ https://github.com/laurent22/joplin/blob/dev/
 				</p>
 			</div>
 		</div>
+
+		<div style="display: flex; justify-content: center; margin-top: 1.2em">	
+			<div class="form-check form-check-inline">
+				<input id="pay-monthly-radio" class="form-check-input" type="radio" name="pay-radio" checked value="monthly">
+				<label style="font-weight: bold" class="form-check-label" for="pay-monthly-radio">
+					Pay Monthly
+				</label>
+			</div>
+
+			<div class="form-check form-check-inline">
+				<input id="pay-yearly-radio" class="form-check-input" type="radio" name="pay-radio" value="yearly">
+				<label style="font-weight: bold" class="form-check-label" for="pay-yearly-radio">
+					Pay Yearly
+				</label>
+			</div>	
+		</div>
 		
-		<div class="row">
-<div class="col-12 col-lg-4">
+		<div class="row plan-group plan-prices-monthly">
+<div class="col-12 col-lg-4 account-type-1">
 	<div class="price-container ">
 		<div class="price-row">
 			<div class="plan-type">
 				<img src="&#x2F;images/basic-icon.png"/>&nbsp;Basic
 			</div>
 
-			<div class="plan-price">
+			<div class="plan-price plan-price-monthly">
 				1.99€<sub class="per-month">&nbsp;/month</sub>
+			</div>
+
+			<div class="plan-price plan-price-yearly">
+				1.49€<sub class="per-month">&nbsp;/month</sub>
+			</div>
+		</div>
+
+		<div class="plan-price-yearly-per-year">
+			<div>
+				(17.88€<sub class="per-year">&nbsp;/year</sub>)
 			</div>
 		</div>
 
@@ -158,19 +190,28 @@ https://github.com/laurent22/joplin/blob/dev/
 
 	<script>
 		(function() {
-			const stripePriceId = 'price_1JAzWBLx4fybOTqJw64zxJRJ';
+			const stripePricesIds = {
+				monthly: 'price_1JAx31Lx4fybOTqJRcGdsSfg',
+				yearly: 'price_1JIb4fLx4fybOTqJHnOUPVdf',
+			};
 			const planName = 'basic';
 			const buttonId = 'subscribeButton-' + planName;
 			const buttonElement = document.getElementById(buttonId);
 
-			if (stripePriceId) {
+			if (stripePricesIds.monthly) {
 				function handleResult() {
 					console.info('Redirected to checkout');
 				}
 
 				buttonElement.addEventListener("click", function(evt) {
 					evt.preventDefault();
-					const priceId = 'price_1JAzWBLx4fybOTqJw64zxJRJ';
+
+					const priceId = stripePricesIds[subscriptionPeriod];
+
+					if (!priceId) {
+						console.error('Invalid period: ' + subscriptionPeriod);
+						return;
+					}
 
 					createCheckoutSession(priceId).then(function(data) {
 						stripe.redirectToCheckout({
@@ -183,15 +224,25 @@ https://github.com/laurent22/joplin/blob/dev/
 		})();
 	</script>
 </div>
-<div class="col-12 col-lg-4">
+<div class="col-12 col-lg-4 account-type-2">
 	<div class="price-container price-container-blue">
 		<div class="price-row">
 			<div class="plan-type">
 				<img src="&#x2F;images/pro-icon.png"/>&nbsp;Pro
 			</div>
 
-			<div class="plan-price">
+			<div class="plan-price plan-price-monthly">
 				5.99€<sub class="per-month">&nbsp;/month</sub>
+			</div>
+
+			<div class="plan-price plan-price-yearly">
+				4.79€<sub class="per-month">&nbsp;/month</sub>
+			</div>
+		</div>
+
+		<div class="plan-price-yearly-per-year">
+			<div>
+				(57.48€<sub class="per-year">&nbsp;/year</sub>)
 			</div>
 		</div>
 
@@ -212,19 +263,28 @@ https://github.com/laurent22/joplin/blob/dev/
 
 	<script>
 		(function() {
-			const stripePriceId = 'price_1JB1OVLx4fybOTqJOvp3NGM6';
+			const stripePricesIds = {
+				monthly: 'price_1JAx1eLx4fybOTqJ5VhkxaKC',
+				yearly: 'price_1JJFp7Lx4fybOTqJ0f4w2UvY',
+			};
 			const planName = 'pro';
 			const buttonId = 'subscribeButton-' + planName;
 			const buttonElement = document.getElementById(buttonId);
 
-			if (stripePriceId) {
+			if (stripePricesIds.monthly) {
 				function handleResult() {
 					console.info('Redirected to checkout');
 				}
 
 				buttonElement.addEventListener("click", function(evt) {
 					evt.preventDefault();
-					const priceId = 'price_1JB1OVLx4fybOTqJOvp3NGM6';
+
+					const priceId = stripePricesIds[subscriptionPeriod];
+
+					if (!priceId) {
+						console.error('Invalid period: ' + subscriptionPeriod);
+						return;
+					}
 
 					createCheckoutSession(priceId).then(function(data) {
 						stripe.redirectToCheckout({
@@ -237,15 +297,25 @@ https://github.com/laurent22/joplin/blob/dev/
 		})();
 	</script>
 </div>
-<div class="col-12 col-lg-4">
+<div class="col-12 col-lg-4 account-type-3">
 	<div class="price-container ">
 		<div class="price-row">
 			<div class="plan-type">
 				<img src="&#x2F;images/business-icon.png"/>&nbsp;Business
 			</div>
 
-			<div class="plan-price">
+			<div class="plan-price plan-price-monthly">
 				49.99€<sub class="per-month">&nbsp;/month</sub>
+			</div>
+
+			<div class="plan-price plan-price-yearly">
+				39.99€<sub class="per-month">&nbsp;/month</sub>
+			</div>
+		</div>
+
+		<div class="plan-price-yearly-per-year">
+			<div>
+				(479.88€<sub class="per-year">&nbsp;/year</sub>)
 			</div>
 		</div>
 
@@ -266,19 +336,28 @@ https://github.com/laurent22/joplin/blob/dev/
 
 	<script>
 		(function() {
-			const stripePriceId = '';
+			const stripePricesIds = {
+				monthly: '',
+				yearly: '',
+			};
 			const planName = 'business';
 			const buttonId = 'subscribeButton-' + planName;
 			const buttonElement = document.getElementById(buttonId);
 
-			if (stripePriceId) {
+			if (stripePricesIds.monthly) {
 				function handleResult() {
 					console.info('Redirected to checkout');
 				}
 
 				buttonElement.addEventListener("click", function(evt) {
 					evt.preventDefault();
-					const priceId = '';
+
+					const priceId = stripePricesIds[subscriptionPeriod];
+
+					if (!priceId) {
+						console.error('Invalid period: ' + subscriptionPeriod);
+						return;
+					}
 
 					createCheckoutSession(priceId).then(function(data) {
 						stripe.redirectToCheckout({
@@ -309,23 +388,34 @@ https://github.com/laurent22/joplin/blob/dev/
 	<script src="https://js.stripe.com/v3/"></script>
 
 	<script>
-	var stripe = Stripe('pk_live_51IvkOPLx4fybOTqJow8RFsWs0eDznPeBlXMw6s8SIDQeCM8bAFNYlBdDsyonAwRcJgBCoSlvFzAbhJgLFxzzTu4r0006aw846C');
+		let subscriptionPeriod = 'monthly';
+		var stripe = Stripe('pk_test_51IvkOPLx4fybOTqJetV23Y5S9YHU9KoOtE6Ftur0waWoWahkHdENjDKSVcl7v3y8Y0Euv7Uwd7O7W4UFasRwd0wE00MPcprz9Q');
 
-	var createCheckoutSession = function(priceId) {
-		console.info('Creating Stripe session for price:', priceId);
+		var createCheckoutSession = function(priceId) {
+			console.info('Creating Stripe session for price:', priceId);
 
-		return fetch("https://joplincloud.com/stripe/createCheckoutSession", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json"
-			},
-			body: JSON.stringify({
-				priceId: priceId
+			return fetch("http://joplincloud.local:22300/stripe/createCheckoutSession", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json"
+				},
+				body: JSON.stringify({
+					priceId: priceId
+				})
+			}).then(function(result) {
+				return result.json();
+			});
+		};
+
+		$(() => {
+			$("input[name='pay-radio']").change(function() {
+				const period = $("input[type='radio'][name='pay-radio']:checked").val();
+				subscriptionPeriod = period;
+			
+				$('.plan-group').removeClass(period === 'monthly' ? 'plan-prices-yearly' : 'plan-prices-monthly');
+				$('.plan-group').addClass('plan-prices-' + period);
 			})
-		}).then(function(result) {
-			return result.json();
 		});
-	};
 	</script>
 </div>
 
@@ -368,12 +458,7 @@ https://github.com/laurent22/joplin/blob/dev/
 			</footer>
 		</div>
 
-		<script
-			src="&#x2F;js/jquery-3.6.0.min.js"
-			rel="preload"
-			as="script"
-		></script>
-		<script src="&#x2F;js/script.js?t=1627320132533"></script>
+		<script src="&#x2F;js/script.js?t=1627739025669"></script>
 
 <script>
 	if (window.location.hostname !== 'localhost') {

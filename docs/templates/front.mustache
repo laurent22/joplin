@@ -24,6 +24,11 @@
 			media="all"
 			onload="this.media='all'; this.onload = null"
 		/>
+		<script
+			src="{{jsBaseUrl}}/jquery-3.6.0.min.js"
+			rel="preload"
+			as="script"
+		></script>
 		<link rel="stylesheet" href="{{cssBaseUrl}}/site.css?t={{buildTime}}" as="style" />
 		<title>Joplin</title>
 	</head>
@@ -400,11 +405,6 @@
 
 		<script
 			src="{{jsBaseUrl}}/bootstrap5.0.2.min.js"
-			rel="preload"
-			as="script"
-		></script>
-		<script
-			src="{{jsBaseUrl}}/jquery-3.6.0.min.js"
 			rel="preload"
 			as="script"
 		></script>
