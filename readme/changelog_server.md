@@ -1,5 +1,13 @@
 # Joplin Server Changelog
 
+## [server-v2.2.9-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.2.9-beta) (Pre-release) - 2021-07-31T13:52:53Z
+
+- New: Add Docker major, minor and beta version tags (#5237 by [@JackGruber](https://github.com/JackGruber))
+- New: Add support for Stripe yearly subscriptions (f2547fe)
+- Improved: Improve installation instructions (53b4d7a)
+- Fixed: Fixed certain URLs (282f782)
+- Fixed: Published notes that contain non-alphabetical characters could end up being truncated (#5229)
+
 ## [server-v2.2.8-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.2.8-beta) (Pre-release) - 2021-07-24T16:55:58Z
 
 - New: Added form tokens to prevent CSRF attacks (19b45de)
