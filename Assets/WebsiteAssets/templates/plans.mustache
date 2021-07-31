@@ -53,7 +53,10 @@
 		var stripe = Stripe('{{{stripeConfig.publishableKey}}}');
 
 		var createCheckoutSession = function(priceId) {
-			console.info('Creating Stripe session for price:', priceId);
+			const urlQuery = new URLSearchParams(location.search);
+			const coupon = urlQuery.get('coupon') || '';
+
+			console.info('Creating Stripe session for price:', priceId, 'Coupon:', coupon);
 
 			return fetch("{{{stripeConfig.webhookBaseUrl}}}/stripe/createCheckoutSession", {
 				method: "POST",
@@ -61,10 +64,16 @@
 					"Content-Type": "application/json"
 				},
 				body: JSON.stringify({
-					priceId: priceId
+					priceId: priceId,
+					coupon: coupon,
 				})
-			}).then(function(result) {
-				return result.json();
+			}).then(async function(result) {
+				if (!result.ok) {
+					console.error('Could not create Stripe checkout session', await result.text());
+					alert('The checkout session could not be created. Please contact support@joplincloud.com for support.');
+				} else {
+					return result.json();
+				}
 			});
 		};
 

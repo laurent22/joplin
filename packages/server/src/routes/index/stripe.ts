@@ -33,6 +33,7 @@ async function stripeEvent(stripe: Stripe, req: any): Promise<Stripe.Event> {
 
 interface CreateCheckoutSessionFields {
 	priceId: string;
+	coupon: string;
 }
 
 type StripeRouteHandler = (stripe: Stripe, path: SubPath, ctx: AppContext)=> Promise<any>;
@@ -60,9 +61,7 @@ export const postHandlers: PostHandlers = {
 		const fields = await bodyFields<CreateCheckoutSessionFields>(ctx.req);
 		const priceId = fields.priceId;
 
-		// See https://stripe.com/docs/api/checkout/sessions/create
-		// for additional parameters to pass.
-		const session = await stripe.checkout.sessions.create({
+		const checkoutSession: Stripe.Checkout.SessionCreateParams = {
 			mode: 'subscription',
 			payment_method_types: ['card'],
 			line_items: [
@@ -80,7 +79,19 @@ export const postHandlers: PostHandlers = {
 			// is redirected to the success page.
 			success_url: `${globalConfig().baseUrl}/stripe/success?session_id={CHECKOUT_SESSION_ID}`,
 			cancel_url: `${globalConfig().baseUrl}/stripe/cancel`,
-		});
+		};
+
+		if (fields.coupon) {
+			checkoutSession.discounts = [
+				{
+					coupon: fields.coupon.trim(),
+				},
+			];
+		}
+
+		// See https://stripe.com/docs/api/checkout/sessions/create
+		// for additional parameters to pass.
+		const session = await stripe.checkout.sessions.create(checkoutSession);
 
 		logger.info('Created checkout session', session.id);
 
