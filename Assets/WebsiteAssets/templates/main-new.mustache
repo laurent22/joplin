@@ -39,6 +39,12 @@ https://github.com/laurent22/joplin/blob/dev/{{{sourceMarkdownFile}}}
 		/>
 		<link rel="stylesheet" href="{{cssBaseUrl}}/site.css?t={{buildTime}}" as="style" />
 		<title>{{pageTitle}}</title>
+
+		<script
+			src="{{jsBaseUrl}}/jquery-3.6.0.min.js"
+			rel="preload"
+			as="script"
+		></script>
 	</head>
 	<body class="website-env-{{env}}">
 		<div class="container-fluid generic-template {{pageName}}-page" id="main-container">
@@ -103,11 +109,6 @@ https://github.com/laurent22/joplin/blob/dev/{{{sourceMarkdownFile}}}
 			</footer>
 		</div>
 
-		<script
-			src="{{jsBaseUrl}}/jquery-3.6.0.min.js"
-			rel="preload"
-			as="script"
-		></script>
 		<script src="{{jsBaseUrl}}/script.js?t={{buildTime}}"></script>
 
 		{{> analytics}}

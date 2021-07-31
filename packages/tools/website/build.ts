@@ -3,23 +3,21 @@ import { insertContentIntoFile, rootDir } from '../tool-utils';
 import { pressCarouselItems } from './utils/pressCarousel';
 import { getMarkdownIt, loadMustachePartials, markdownToPageHtml, renderMustache } from './utils/render';
 import { Env, OrgSponsor, PlanPageParams, Sponsors, TemplateParams } from './utils/types';
-import { getPlans, StripePublicConfig } from '@joplin/lib/utils/joplinCloud';
+import { getPlans, loadStripeConfig } from '@joplin/lib/utils/joplinCloud';
 import { shuffle } from '@joplin/lib/array';
 const dirname = require('path').dirname;
 const glob = require('glob');
 const path = require('path');
 
-const env = Env.Prod;
+const env = Env.Dev;
 const buildTime = Date.now();
 
 const websiteAssetDir = `${rootDir}/Assets/WebsiteAssets`;
 const mainTemplateHtml = fs.readFileSync(`${websiteAssetDir}/templates/main-new.mustache`, 'utf8');
 const frontTemplateHtml = fs.readFileSync(`${websiteAssetDir}/templates/front.mustache`, 'utf8');
 const plansTemplateHtml = fs.readFileSync(`${websiteAssetDir}/templates/plans.mustache`, 'utf8');
-const stripeConfigs: Record<Env, StripePublicConfig> = JSON.parse(fs.readFileSync(`${rootDir}/packages/server/stripeConfig.json`, 'utf8'));
+const stripeConfig = loadStripeConfig(env, `${rootDir}/packages/server/stripeConfig.json`);
 const partialDir = `${websiteAssetDir}/templates/partials`;
-
-const stripeConfig = stripeConfigs[env];
 
 let tocMd_: string = null;
 let tocHtml_: string = null;

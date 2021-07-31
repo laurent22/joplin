@@ -107,7 +107,7 @@ async function main() {
 	];
 
 	if (env === Env.Dev) {
-		corsAllowedDomains.push('http://localhost:8080');
+		corsAllowedDomains.push('http://localhost:8077');
 	}
 
 	function acceptOrigin(origin: string): boolean {

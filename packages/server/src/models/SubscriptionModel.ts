@@ -50,11 +50,12 @@ export default class SubscriptionModel extends BaseModel<Subscription> {
 		return this.db(this.tableName).select(this.defaultFields).where('user_id', '=', userId).where('is_deleted', '=', 0).first();
 	}
 
-	public async saveUserAndSubscription(email: string, accountType: AccountType, stripeUserId: string, stripeSubscriptionId: string) {
+	public async saveUserAndSubscription(email: string, fullName: string, accountType: AccountType, stripeUserId: string, stripeSubscriptionId: string) {
 		return this.withTransaction(async () => {
 			const user = await this.models().user().save({
 				account_type: accountType,
 				email,
+				full_name: fullName,
 				email_confirmed: 1,
 				password: uuidgen(),
 				must_set_password: 1,

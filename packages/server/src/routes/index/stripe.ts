@@ -11,6 +11,7 @@ import getRawBody = require('raw-body');
 import { AccountType } from '../../models/UserModel';
 import { initStripe, priceIdToAccountType, stripeConfig } from '../../utils/stripe';
 import { Subscription } from '../../db';
+import { findPrice, PricePeriod } from '@joplin/lib/utils/joplinCloud';
 
 const logger = Logger.create('/stripe');
 
@@ -99,7 +100,7 @@ export const postHandlers: PostHandlers = {
 	// - Start the Stripe CLI tool: `stripe listen --forward-to http://joplincloud.local:22300/stripe/webhook`
 	// - Copy the webhook secret, and paste it in joplin-credentials/server.env (under STRIPE_WEBHOOK_SECRET)
 	// - Start the local Joplin Server, `npm run start-dev`, running under http://joplincloud.local:22300
-	// - Start the workflow from http://localhost:8080/plans/
+	// - Start the workflow from http://localhost:8077/plans/
 	// - The local website often is not configured to send email, but you can see them in the database, in the "emails" table.
 	//
 	// # Simplified workflow
@@ -180,8 +181,17 @@ export const postHandlers: PostHandlers = {
 				const checkoutSession: Stripe.Checkout.Session = event.data.object as Stripe.Checkout.Session;
 				const userEmail = checkoutSession.customer_details.email || checkoutSession.customer_email;
 
+				let customerName = '';
+				try {
+					const customer = await stripe.customers.retrieve(checkoutSession.customer as string) as Stripe.Customer;
+					customerName = customer.name;
+				} catch (error) {
+					logger.error('Could not fetch customer information:', error);
+				}
+
 				logger.info('Checkout session completed:', checkoutSession.id);
 				logger.info('User email:', userEmail);
+				logger.info('User name:', customerName);
 
 				let accountType = AccountType.Basic;
 				try {
@@ -205,6 +215,7 @@ export const postHandlers: PostHandlers = {
 
 				await ctx.joplin.models.subscription().saveUserAndSubscription(
 					userEmail,
+					customerName,
 					accountType,
 					stripeUserId,
 					stripeSubscriptionId
@@ -317,6 +328,8 @@ const getHandlers: Record<string, StripeRouteHandler> = {
 	},
 
 	checkoutTest: async (_stripe: Stripe, _path: SubPath, _ctx: AppContext) => {
+		const basicPrice = findPrice(stripeConfig().prices, { accountType: 1, period: PricePeriod.Monthly });
+
 		return `
 			<head>
 				<title>Checkout</title>
@@ -343,7 +356,7 @@ const getHandlers: Record<string, StripeRouteHandler> = {
 			<body>
 				<button id="checkout">Subscribe</button>
 				<script>
-					var PRICE_ID = ${JSON.stringify(stripeConfig().basicPriceId)};
+					var PRICE_ID = ${basicPrice.id};
 
 					function handleResult() {
 						console.info('Redirected to checkout');

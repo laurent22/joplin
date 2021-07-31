@@ -1,3 +1,4 @@
+import { findPrice, PricePeriod } from '@joplin/lib/utils/joplinCloud';
 import { AccountType } from '../../models/UserModel';
 import { initStripe, stripeConfig } from '../../utils/stripe';
 import { beforeAllDb, afterAllTests, beforeEachDb, models, koaAppContext, expectNotThrow } from '../../utils/testing/testUtils';
@@ -7,8 +8,8 @@ import { postHandlers } from './stripe';
 async function createUserViaSubscription(userEmail: string, eventId: string = '') {
 	eventId = eventId || uuidgen();
 	const stripeSessionId = 'sess_123';
-	const stripePriceId = stripeConfig().proPriceId;
-	await models().keyValue().setValue(`stripeSessionToPriceId::${stripeSessionId}`, stripePriceId);
+	const stripePrice = findPrice(stripeConfig().prices, { accountType: 2, period: PricePeriod.Monthly });
+	await models().keyValue().setValue(`stripeSessionToPriceId::${stripeSessionId}`, stripePrice.id);
 
 	const ctx = await koaAppContext();
 	const stripe = initStripe();

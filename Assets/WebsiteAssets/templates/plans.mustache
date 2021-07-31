@@ -10,8 +10,24 @@
 				</p>
 			</div>
 		</div>
+
+		<div style="display: flex; justify-content: center; margin-top: 1.2em">	
+			<div class="form-check form-check-inline">
+				<input id="pay-monthly-radio" class="form-check-input" type="radio" name="pay-radio" checked value="monthly">
+				<label style="font-weight: bold" class="form-check-label" for="pay-monthly-radio">
+					Pay Monthly
+				</label>
+			</div>
+
+			<div class="form-check form-check-inline">
+				<input id="pay-yearly-radio" class="form-check-input" type="radio" name="pay-radio" value="yearly">
+				<label style="font-weight: bold" class="form-check-label" for="pay-yearly-radio">
+					Pay Yearly
+				</label>
+			</div>	
+		</div>
 		
-		<div class="row">
+		<div class="row plan-group plan-prices-monthly">
 			{{#plans.basic}}
 				{{> plan}}
 			{{/plans.basic}}
@@ -33,22 +49,33 @@
 	<script src="https://js.stripe.com/v3/"></script>
 
 	<script>
-	var stripe = Stripe('{{{stripeConfig.publishableKey}}}');
+		let subscriptionPeriod = 'monthly';
+		var stripe = Stripe('{{{stripeConfig.publishableKey}}}');
 
-	var createCheckoutSession = function(priceId) {
-		console.info('Creating Stripe session for price:', priceId);
+		var createCheckoutSession = function(priceId) {
+			console.info('Creating Stripe session for price:', priceId);
 
-		return fetch("{{{stripeConfig.webhookBaseUrl}}}/stripe/createCheckoutSession", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json"
-			},
-			body: JSON.stringify({
-				priceId: priceId
+			return fetch("{{{stripeConfig.webhookBaseUrl}}}/stripe/createCheckoutSession", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json"
+				},
+				body: JSON.stringify({
+					priceId: priceId
+				})
+			}).then(function(result) {
+				return result.json();
+			});
+		};
+
+		$(() => {
+			$("input[name='pay-radio']").change(function() {
+				const period = $("input[type='radio'][name='pay-radio']:checked").val();
+				subscriptionPeriod = period;
+			
+				$('.plan-group').removeClass(period === 'monthly' ? 'plan-prices-yearly' : 'plan-prices-monthly');
+				$('.plan-group').addClass('plan-prices-' + period);
 			})
-		}).then(function(result) {
-			return result.json();
 		});
-	};
 	</script>
 </div>

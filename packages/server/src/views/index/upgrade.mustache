@@ -6,9 +6,15 @@
 	<table class="table is-hoverable user-props-table">
 		<tbody>
 			<tr>
-				<th class="basic-plan">Basic - {{basicPrice}}</th>
-				<th>Pro - {{proPrice}}</th>
+				<th class="basic-plan">Basic - {{basicPrice.formattedMonthlyAmount}} / month</th>
+				<th>Pro - {{proPrice.formattedMonthlyAmount}} / month</th>
 			</tr>
+
+			{{#showYearlyPrices}}
+			<tr>
+				<td>{{basicPrice.formattedAmount}} / year</td><td>{{proPrice.formattedAmount}} / year</td>
+			</tr>
+			{{/showYearlyPrices}}
 
 			{{#planRows}}
 				<tr>

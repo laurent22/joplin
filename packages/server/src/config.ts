@@ -1,7 +1,8 @@
 import { rtrimSlashes } from '@joplin/lib/path-utils';
-import { Config, DatabaseConfig, DatabaseConfigClient, Env, MailerConfig, RouteType, StripeConfig, StripePublicConfig } from './utils/types';
+import { Config, DatabaseConfig, DatabaseConfigClient, Env, MailerConfig, RouteType, StripeConfig } from './utils/types';
 import * as pathUtils from 'path';
 import { readFile } from 'fs-extra';
+import { loadStripeConfig, StripePublicConfig } from '@joplin/lib/utils/joplinCloud';
 
 export interface EnvVariables {
 	APP_NAME?: string;
@@ -131,9 +132,7 @@ export async function initConfig(envType: Env, env: EnvVariables, overrides: any
 	const rootDir = pathUtils.dirname(__dirname);
 
 	const packageJson = await readPackageJson(`${rootDir}/package.json`);
-	const stripePublicConfigs = JSON.parse(await readFile(`${rootDir}/stripeConfig.json`, 'utf8'));
-	const stripePublicConfig = stripePublicConfigs[envType === Env.BuildTypes ? Env.Dev : envType];
-	if (!stripePublicConfig) throw new Error('Could not load Stripe config');
+	const stripePublicConfig = loadStripeConfig(envType === Env.BuildTypes ? Env.Dev : envType, `${rootDir}/stripeConfig.json`);
 
 	const viewDir = `${rootDir}/src/views`;
 	const appPort = env.APP_PORT ? Number(env.APP_PORT) : 22300;
