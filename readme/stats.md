@@ -2,9 +2,9 @@
 
 | Name  | Value |
 | ----- | ----- |
-| Total Windows downloads | 1,560,826 |
+| Total Windows downloads | 1,560,829 |
 | Total macOs downloads | 608,045 |
-| Total Linux downloads | 516,515 |
+| Total Linux downloads | 516,516 |
 | Windows % | 58%   |
 | macOS % | 23%   |
 | Linux % | 19%   |
@@ -18,7 +18,7 @@
 | Version | Date  | Windows | macOS | Linux | Total |
 | ----- | ----- | ----- | ----- | ----- | ----- |
 | [v2.2.2](https://github.com/laurent22/joplin/releases/tag/v2.2.2) (p) | 2021-07-19T10:28:35Z | 1,902 | 500   | 454   | 2,856 |
-| [v2.1.9](https://github.com/laurent22/joplin/releases/tag/v2.1.9) | 2021-07-19T10:28:43Z | 25,453 | 11,667 | 8,547 | 45,667 |
+| [v2.1.9](https://github.com/laurent22/joplin/releases/tag/v2.1.9) | 2021-07-19T10:28:43Z | 25,456 | 11,667 | 8,548 | 45,671 |
 | [v2.2.1](https://github.com/laurent22/joplin/releases/tag/v2.2.1) (p) | 2021-07-09T17:38:25Z | 1,807 | 377   | 357   | 2,541 |
 | [v2.1.8](https://github.com/laurent22/joplin/releases/tag/v2.1.8) | 2021-07-03T08:25:16Z | 29,016 | 12,106 | 12,601 | 53,723 |
 | [v2.1.7](https://github.com/laurent22/joplin/releases/tag/v2.1.7) | 2021-06-26T19:48:55Z | 13,280 | 6,361 | 3,578 | 23,219 |
