@@ -3,7 +3,7 @@ const { basename } = require('./path-utils');
 const shim = require('./shim').default;
 const JoplinError = require('./JoplinError').default;
 const { Buffer } = require('buffer');
-const { GetObjectCommand, ListObjectsV2Command, HeadObjectCommand, PutObjectCommand, DeleteObjectCommand, DeleteObjectsCommand } = require("@aws-sdk/client-s3");
+const { GetObjectCommand, ListObjectsV2Command, HeadObjectCommand, PutObjectCommand, DeleteObjectCommand, DeleteObjectsCommand, CopyObjectCommand } = require('@aws-sdk/client-s3');
 
 const S3_MAX_DELETES = 1000;
 
@@ -34,10 +34,10 @@ class FileApiDriverAmazonS3 {
 	// Need to make a custom promise, built-in promise is broken: https://github.com/aws/aws-sdk-js/issues/1436
 	async s3GetObject(key) {
 		return new Promise((resolve, reject) => {
-                       this.api().send( new GetObjectCommand({
+			this.api().send(new GetObjectCommand({
 				Bucket: this.s3_bucket_,
 				Key: key,
-                       }), (err, response) => {
+			}), (err, response) => {
 				if (err) reject(err);
 				else resolve(response);
 			});
@@ -46,12 +46,12 @@ class FileApiDriverAmazonS3 {
 
 	async s3ListObjects(key, cursor) {
 		return new Promise((resolve, reject) => {
-                       this.api().send( new ListObjectsV2Command({
+			this.api().send(new ListObjectsV2Command({
 				Bucket: this.s3_bucket_,
 				Prefix: key,
 				Delimiter: '/',
 				ContinuationToken: cursor,
-                       }), (err, response) => {
+			}), (err, response) => {
 				if (err) reject(err);
 				else resolve(response);
 			});
@@ -60,10 +60,10 @@ class FileApiDriverAmazonS3 {
 
 	async s3HeadObject(key) {
 		return new Promise((resolve, reject) => {
-                       this.api().send( new HeadObjectCommand({
+			this.api().send(new HeadObjectCommand({
 				Bucket: this.s3_bucket_,
 				Key: key,
-                       }), (err, response) => {
+			}), (err, response) => {
 				if (err) reject(err);
 				else resolve(response);
 			});
@@ -72,11 +72,11 @@ class FileApiDriverAmazonS3 {
 
 	async s3PutObject(key, body) {
 		return new Promise((resolve, reject) => {
-                       this.api().send(new PutObjectCommand({
+			this.api().send(new PutObjectCommand({
 				Bucket: this.s3_bucket_,
 				Key: key,
 				Body: body,
-                       }), (err, response) => {
+			}), (err, response) => {
 				if (err) reject(err);
 				else resolve(response);
 			});
@@ -88,12 +88,12 @@ class FileApiDriverAmazonS3 {
 		const body = await shim.fsDriver().readFile(path, 'base64');
 		const fileStat = await shim.fsDriver().stat(path);
 		return new Promise((resolve, reject) => {
-                       this.api().send(new PutObjectCommand({
+			this.api().send(new PutObjectCommand({
 				Bucket: this.s3_bucket_,
 				Key: key,
 				Body: Buffer.from(body, 'base64'),
 				ContentLength: `${fileStat.size}`,
-                       }), (err, response) => {
+			}), (err, response) => {
 				if (err) reject(err);
 				else resolve(response);
 			});
@@ -102,10 +102,10 @@ class FileApiDriverAmazonS3 {
 
 	async s3DeleteObject(key) {
 		return new Promise((resolve, reject) => {
-                       this.api().send(new DeleteObjectCommand({
+			this.api().send(new DeleteObjectCommand({
 				Bucket: this.s3_bucket_,
 				Key: key,
-                       }),
+			}),
 			(err, response) => {
 				if (err) {
 					console.log(err.code);
@@ -119,10 +119,10 @@ class FileApiDriverAmazonS3 {
 	// Assumes key is formatted, like `{Key: 's3 path'}`
 	async s3DeleteObjects(keys) {
 		return new Promise((resolve, reject) => {
-                       this.api().send(new DeleteObjectsCommand({
+			this.api().send(new DeleteObjectsCommand({
 				Bucket: this.s3_bucket_,
 				Delete: { Objects: keys },
-                       }),
+			}),
 			(err, response) => {
 				if (err) {
 					console.log(err.code);
@@ -189,19 +189,19 @@ class FileApiDriverAmazonS3 {
 			prefixPath = `${prefixPath}/`;
 		}
 
-               // There is a bug/quirk of aws-sdk-js-v3 which causes the
-               // S3Client systemClockOffset to be wildly inaccurate. This
-               // effectively removes the offset and sets it to system time.
-               // See https://github.com/aws/aws-sdk-js-v3/issues/2208 for more.
-               // If the user's time actaully off, then this should correctly
-               // result in a RequestTimeTooSkewed error from s3ListObjects.
-               this.api().config.systemClockOffset = 0;
+		// There is a bug/quirk of aws-sdk-js-v3 which causes the
+		// S3Client systemClockOffset to be wildly inaccurate. This
+		// effectively removes the offset and sets it to system time.
+		// See https://github.com/aws/aws-sdk-js-v3/issues/2208 for more.
+		// If the user's time actaully off, then this should correctly
+		// result in a RequestTimeTooSkewed error from s3ListObjects.
+		this.api().config.systemClockOffset = 0;
 
 		let response = await this.s3ListObjects(prefixPath);
 
-               // In aws-sdk-js-v3 if there are no contents it no longer returns
-               // an empty array. This creates an Empty array to pass onward.
-               if(response.Contents === undefined) response.Contents = [];
+		// In aws-sdk-js-v3 if there are no contents it no longer returns
+		// an empty array. This creates an Empty array to pass onward.
+		if (response.Contents === undefined) response.Contents = [];
 
 		let output = this.metadataToStats_(response.Contents, prefixPath);
 
@@ -327,7 +327,7 @@ class FileApiDriverAmazonS3 {
 
 	async move(oldPath, newPath) {
 		const req = new Promise((resolve, reject) => {
-			this.api().send( new CopyObjectCommand({
+			this.api().send(new CopyObjectCommand({
 				Bucket: this.s3_bucket_,
 				CopySource: this.makePath_(oldPath),
 				Key: newPath,
@@ -368,9 +368,9 @@ class FileApiDriverAmazonS3 {
 		};
 
 		let response = await listRecursive();
-		 // In aws-sdk-js-v3 if there are no contents it no longer returns
-               // an empty array. This creates an Empty array to pass onward.
-               if(response.Contents === undefined) response.Contents = [];
+		// In aws-sdk-js-v3 if there are no contents it no longer returns
+		// an empty array. This creates an Empty array to pass onward.
+		if (response.Contents === undefined) response.Contents = [];
 		let keys = response.Contents.map((content) => content.Key);
 
 		while (response.IsTruncated) {

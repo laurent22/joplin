@@ -4,7 +4,7 @@ const Setting = require('./models/Setting').default;
 const { FileApi } = require('./file-api.js');
 const Synchronizer = require('./Synchronizer').default;
 const { FileApiDriverAmazonS3 } = require('./file-api-driver-amazon-s3.js');
-const { S3Client, HeadBucketCommand } = require("@aws-sdk/client-s3");
+const { S3Client, HeadBucketCommand } = require('@aws-sdk/client-s3');
 
 class SyncTargetAmazonS3 extends BaseSyncTarget {
 	static id() {
@@ -39,10 +39,10 @@ class SyncTargetAmazonS3 extends BaseSyncTarget {
 	s3AuthParameters() {
 		return {
 			// We need to set a region. See https://github.com/aws/aws-sdk-js-v3/issues/1845#issuecomment-754832210
-			region: "us-east-1",
+			region: 'us-east-1',
 			credentials: {
-			accessKeyId: Setting.value('sync.8.username'),
-				secretAccessKey: Setting.value('sync.8.password')
+				accessKeyId: Setting.value('sync.8.username'),
+				secretAccessKey: Setting.value('sync.8.password'),
 			},
 			UseArnRegion: true, // override the request region with the region inferred from requested resource's ARN
 			forcePathStyle: true,
@@ -55,22 +55,22 @@ class SyncTargetAmazonS3 extends BaseSyncTarget {
 
 		this.api_ = new S3Client(this.s3AuthParameters());
 
-                // There is a bug with auto skew correction in aws-sdk-js-v3
-                // and this attempts to remove the skew correction for all calls.
-                // There are some additional spots in the app where we reset this
-                // to zero as well as it appears the skew logic gets triggered
-                // which makes "RequestTimeTooSkewed" errors...
-                // See https://github.com/aws/aws-sdk-js-v3/issues/2208
+		// There is a bug with auto skew correction in aws-sdk-js-v3
+		// and this attempts to remove the skew correction for all calls.
+		// There are some additional spots in the app where we reset this
+		// to zero as well as it appears the skew logic gets triggered
+		// which makes "RequestTimeTooSkewed" errors...
+		// See https://github.com/aws/aws-sdk-js-v3/issues/2208
 		this.api_.config.systemClockOffset = 0;
 		return this.api_;
 	}
 
 	static async newFileApi_(syncTargetId, options) {
 		const apiOptions = {
-			region: "us-east-1",
+			region: 'us-east-1',
 			credentials: {
-			accessKeyId: options.username(),
-				secretAccessKey: options.password()
+				accessKeyId: options.username(),
+				secretAccessKey: options.password(),
 			},
 			UseArnRegion: true, // override the request region with the region inferred from requested resource's ARN
 			forcePathStyle: true,
@@ -98,11 +98,11 @@ class SyncTargetAmazonS3 extends BaseSyncTarget {
 				fileApi.driver().api().send(
 
 					new HeadBucketCommand({
-					Bucket: options.path(),
-				}),(err, response) => {
-					if (err) reject(err);
-					else resolve(response);
-				});
+						Bucket: options.path(),
+					}),(err, response) => {
+						if (err) reject(err);
+						else resolve(response);
+					});
 			});
 			const result = await headBucketReq;
 			if (!result) throw new Error(`AWS S3 bucket not found: ${SyncTargetAmazonS3.s3BucketName()}`);
