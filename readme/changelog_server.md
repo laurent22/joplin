@@ -1,5 +1,9 @@
 # Joplin Server Changelog
 
+## [server-v2.2.10](https://github.com/laurent22/joplin/releases/tag/server-v2.2.10) - 2021-08-01T10:04:53Z
+
+- Improved: Allows providing a coupon when creating the Stripe checkout session (b5b6111)
+
 ## [server-v2.2.9-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.2.9-beta) (Pre-release) - 2021-07-31T13:52:53Z
 
 - New: Add Docker major, minor and beta version tags (#5237 by [@JackGruber](https://github.com/JackGruber))
