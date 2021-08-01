@@ -16,7 +16,7 @@ const https = require('https');
 const toRelative = require('relative');
 const timers = require('timers');
 const zlib = require('zlib');
-const Response = require('node-fetch').Response;
+const { Response } = require('node-fetch');
 
 function fileExists(filePath) {
 	try {
