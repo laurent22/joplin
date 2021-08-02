@@ -29,7 +29,7 @@ https://github.com/laurent22/joplin/blob/dev/
 			href="&#x2F;css/bootstrap5.0.2.min.css"
 			as="style"
 		/>
-		<link rel="stylesheet" href="&#x2F;css/fontawesome-all.min.css?t=1627739182405">
+		<link rel="stylesheet" href="&#x2F;css/fontawesome-all.min.css?t=1627922646989">
 		<link
 			href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
 			rel="stylesheet"
@@ -37,7 +37,7 @@ https://github.com/laurent22/joplin/blob/dev/
 			media="all"
 			onload="this.media='all'; this.onload = null"
 		/>
-		<link rel="stylesheet" href="&#x2F;css/site.css?t=1627739182405" as="style" />
+		<link rel="stylesheet" href="&#x2F;css/site.css?t=1627922646989" as="style" />
 		<title>Joplin Cloud Plans | Joplin</title>
 
 		<script
@@ -134,6 +134,12 @@ https://github.com/laurent22/joplin/blob/dev/
 			</div>
 		</div>
 
+		<noscript>
+			<div class="alert alert-danger alert-env-dev" role="alert" style='text-align: center; margin-top: 10px;'>
+				To use this page please enable JavaScript!
+			</div>
+		</noscript>
+
 		<div style="display: flex; justify-content: center; margin-top: 1.2em">	
 			<div class="form-check form-check-inline">
 				<input id="pay-monthly-radio" class="form-check-input" type="radio" name="pay-radio" checked value="monthly">
@@ -184,7 +190,7 @@ https://github.com/laurent22/joplin/blob/dev/
 			<p class="unchecked-text"><i class="fas fa-times feature feature-off"></i>Priority support</p>
 		
 		<p class="text-center subscribe-wrapper">
-			<a id="subscribeButton-basic" href="" class="button-link btn-white">Try it now</a>
+			<a id="subscribeButton-basic" href="" class="button-link btn-white subscribeButton">Try it now</a>
 		</p>
 	</div>
 
@@ -257,7 +263,7 @@ https://github.com/laurent22/joplin/blob/dev/
 			<p class="unchecked-text"><i class="fas fa-times feature feature-off"></i>Priority support</p>
 		
 		<p class="text-center subscribe-wrapper">
-			<a id="subscribeButton-pro" href="" class="button-link btn-white">Try it now</a>
+			<a id="subscribeButton-pro" href="" class="button-link btn-white subscribeButton">Try it now</a>
 		</p>
 	</div>
 
@@ -330,7 +336,7 @@ https://github.com/laurent22/joplin/blob/dev/
 
 		
 		<p class="text-center subscribe-wrapper">
-			<a id="subscribeButton-business" href="mailto:business@joplincloud.com?subject&#x3D;Joplin%20Cloud%20Business%20Account%20Order&amp;body&#x3D;Hello%2C%0A%0AThis%20is%20an%20automatically%20generated%20email.%20The%20Business%20feature%20is%20coming%20soon%2C%20and%20in%20the%20meantime%20we%20offer%20a%20business%20discount%20if%20you%20would%20like%20to%20register%20multiple%20users.%0A%0AIf%20so%20please%20let%20us%20know%20the%20following%20details%20and%20we%20will%20get%20back%20to%20you%20as%20soon%20as%20possible%3A%0A%0A-%20Name%3A%20%0A%0A-%20Email%3A%20%0A%0A-%20Number%20of%20users%3A%20" class="button-link btn-white">Contact us</a>
+			<a id="subscribeButton-business" href="mailto:business@joplincloud.com?subject&#x3D;Joplin%20Cloud%20Business%20Account%20Order&amp;body&#x3D;Hello%2C%0A%0AThis%20is%20an%20automatically%20generated%20email.%20The%20Business%20feature%20is%20coming%20soon%2C%20and%20in%20the%20meantime%20we%20offer%20a%20business%20discount%20if%20you%20would%20like%20to%20register%20multiple%20users.%0A%0AIf%20so%20please%20let%20us%20know%20the%20following%20details%20and%20we%20will%20get%20back%20to%20you%20as%20soon%20as%20possible%3A%0A%0A-%20Name%3A%20%0A%0A-%20Email%3A%20%0A%0A-%20Number%20of%20users%3A%20" class="button-link btn-white subscribeButton">Contact us</a>
 		</p>
 	</div>
 
@@ -388,11 +394,34 @@ https://github.com/laurent22/joplin/blob/dev/
 	<script src="https://js.stripe.com/v3/"></script>
 
 	<script>
+		const urlQuery = new URLSearchParams(location.search);
 		let subscriptionPeriod = 'monthly';
 		var stripe = Stripe('pk_live_51IvkOPLx4fybOTqJow8RFsWs0eDznPeBlXMw6s8SIDQeCM8bAFNYlBdDsyonAwRcJgBCoSlvFzAbhJgLFxzzTu4r0006aw846C');
 
+		let checkoutSessionUser = null;
+
+		// Temporary setup to allow Beta users to start their subscription.
+		function setupBetaHandling(query) {
+			let accountType = Number(query.get('account_type'));
+			if (isNaN(accountType)) accountType = 1;
+
+			const email = query.get('email');
+			if (!email) return;
+		
+			$('.account-type-3').css('display', 'none');
+			$('.subscribeButton').text('Buy now');
+			
+			if (accountType === 2) {
+				$('.account-type-1').css('display', 'none');
+			}
+
+			checkoutSessionUser = { email, accountType };
+		}
+
 		var createCheckoutSession = function(priceId) {
-			console.info('Creating Stripe session for price:', priceId);
+			const coupon = urlQuery.get('coupon') || '';
+
+			console.info('Creating Stripe session for price:', priceId, 'Coupon:', coupon);
 
 			return fetch("https://joplincloud.com/stripe/createCheckoutSession", {
 				method: "POST",
@@ -400,10 +429,17 @@ https://github.com/laurent22/joplin/blob/dev/
 					"Content-Type": "application/json"
 				},
 				body: JSON.stringify({
-					priceId: priceId
+					priceId: priceId,
+					coupon: coupon,
+					email: checkoutSessionUser ? checkoutSessionUser.email : '',
 				})
-			}).then(function(result) {
-				return result.json();
+			}).then(async function(result) {
+				if (!result.ok) {
+					console.error('Could not create Stripe checkout session', await result.text());
+					alert('The checkout session could not be created. Please contact support@joplincloud.com for support.');
+				} else {
+					return result.json();
+				}
 			});
 		};
 
@@ -414,7 +450,9 @@ https://github.com/laurent22/joplin/blob/dev/
 			
 				$('.plan-group').removeClass(period === 'monthly' ? 'plan-prices-yearly' : 'plan-prices-monthly');
 				$('.plan-group').addClass('plan-prices-' + period);
-			})
+			});
+
+			setupBetaHandling(urlQuery);
 		});
 	</script>
 </div>
@@ -458,7 +496,7 @@ https://github.com/laurent22/joplin/blob/dev/
 			</footer>
 		</div>
 
-		<script src="&#x2F;js/script.js?t=1627739182405"></script>
+		<script src="&#x2F;js/script.js?t=1627922646989"></script>
 
 <script>
 	if (window.location.hostname !== 'localhost') {

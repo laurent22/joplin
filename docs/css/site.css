@@ -886,6 +886,10 @@ footer .right-links a {
 	margin-bottom: 1em;
 }
 
+.plan-group {
+	justify-content: center;
+}
+
 .plan-group .plan-price-yearly-per-year {
 	display: flex;
 	justify-content: flex-end;
