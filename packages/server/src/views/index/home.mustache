@@ -1,3 +1,12 @@
+{{#showBetaMessage}}
+	<div class="notification is-warning">
+		<p class="block">This is a free beta account that will expire in <strong>{{betaExpiredDays}} day(s).</strong></p>
+		<p class="block">To continue using it after this date, please start the subscription by clicking on the button below.</p>
+		<p class="block">From the next screen, select either monthly or yearly payments and click "Buy now".</p>
+		<a href="{{{betaStartSubUrl}}}" class="button is-link">Start Subscription</a>
+	</div>
+{{/showBetaMessage}}
+
 <h2 class="title">Welcome to {{global.appName}}</h2>
 <div class="block readable-block">
 	<p class="block">To start using {{global.appName}}, make sure to <a href="https://joplinapp.org/download">download one of the Joplin applications</a>, either for desktop or for your mobile phone.</p>

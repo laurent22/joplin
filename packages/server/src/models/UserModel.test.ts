@@ -1,6 +1,8 @@
 import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, checkThrowAsync, createItem } from '../utils/testing/testUtils';
 import { EmailSender, User } from '../db';
 import { ErrorUnprocessableEntity } from '../utils/errors';
+import { betaUserDateRange, stripeConfig } from '../utils/stripe';
+import { AccountType } from './UserModel';
 
 describe('UserModel', function() {
 
@@ -84,6 +86,56 @@ describe('UserModel', function() {
 		expect(email.sent_success).toBe(0);
 		expect(email.sent_time).toBe(0);
 		expect(email.error).toBe('');
+	});
+
+	test('should send a beta reminder email', async function() {
+		stripeConfig().enabled = true;
+		const { user: user1 } = await createUserAndSession(1, false, { email: 'toto@example.com' });
+		const range = betaUserDateRange();
+
+		await models().user().save({
+			id: user1.id,
+			created_time: range[0],
+			account_type: AccountType.Pro,
+		});
+
+		Date.now = jest.fn(() => range[0] + 6912000 * 1000); // 80 days later
+
+		await models().user().handleBetaUserEmails();
+
+		expect((await models().email().all()).length).toBe(2);
+
+		{
+			const email = (await models().email().all()).pop();
+			expect(email.recipient_email).toBe('toto@example.com');
+			expect(email.subject.indexOf('10 days') > 0).toBe(true);
+			expect(email.body.indexOf('10 days') > 0).toBe(true);
+			expect(email.body.indexOf('toto%40example.com') > 0).toBe(true);
+			expect(email.body.indexOf('account_type=2') > 0).toBe(true);
+		}
+
+		await models().user().handleBetaUserEmails();
+
+		// It should not send a second email
+		expect((await models().email().all()).length).toBe(2);
+
+		Date.now = jest.fn(() => range[0] + 7603200 * 1000); // 88 days later
+
+		await models().user().handleBetaUserEmails();
+
+		expect((await models().email().all()).length).toBe(3);
+
+		{
+			const email = (await models().email().all()).pop();
+			expect(email.subject.indexOf('2 days') > 0).toBe(true);
+			expect(email.body.indexOf('2 days') > 0).toBe(true);
+		}
+
+		await models().user().handleBetaUserEmails();
+
+		expect((await models().email().all()).length).toBe(3);
+
+		stripeConfig().enabled = false;
 	});
 
 });

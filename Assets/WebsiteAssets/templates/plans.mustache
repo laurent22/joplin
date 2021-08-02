@@ -11,6 +11,12 @@
 			</div>
 		</div>
 
+		<noscript>
+			<div class="alert alert-danger alert-env-dev" role="alert" style='text-align: center; margin-top: 10px;'>
+				To use this page please enable JavaScript!
+			</div>
+		</noscript>
+
 		<div style="display: flex; justify-content: center; margin-top: 1.2em">	
 			<div class="form-check form-check-inline">
 				<input id="pay-monthly-radio" class="form-check-input" type="radio" name="pay-radio" checked value="monthly">
@@ -49,11 +55,31 @@
 	<script src="https://js.stripe.com/v3/"></script>
 
 	<script>
+		const urlQuery = new URLSearchParams(location.search);
 		let subscriptionPeriod = 'monthly';
 		var stripe = Stripe('{{{stripeConfig.publishableKey}}}');
 
+		let checkoutSessionUser = null;
+
+		// Temporary setup to allow Beta users to start their subscription.
+		function setupBetaHandling(query) {
+			let accountType = Number(query.get('account_type'));
+			if (isNaN(accountType)) accountType = 1;
+
+			const email = query.get('email');
+			if (!email) return;
+		
+			$('.account-type-3').css('display', 'none');
+			$('.subscribeButton').text('Buy now');
+			
+			if (accountType === 2) {
+				$('.account-type-1').css('display', 'none');
+			}
+
+			checkoutSessionUser = { email, accountType };
+		}
+
 		var createCheckoutSession = function(priceId) {
-			const urlQuery = new URLSearchParams(location.search);
 			const coupon = urlQuery.get('coupon') || '';
 
 			console.info('Creating Stripe session for price:', priceId, 'Coupon:', coupon);
@@ -66,6 +92,7 @@
 				body: JSON.stringify({
 					priceId: priceId,
 					coupon: coupon,
+					email: checkoutSessionUser ? checkoutSessionUser.email : '',
 				})
 			}).then(async function(result) {
 				if (!result.ok) {
@@ -84,7 +111,9 @@
 			
 				$('.plan-group').removeClass(period === 'monthly' ? 'plan-prices-yearly' : 'plan-prices-monthly');
 				$('.plan-group').addClass('plan-prices-' + period);
-			})
+			});
+
+			setupBetaHandling(urlQuery);
 		});
 	</script>
 </div>

@@ -102,6 +102,7 @@ function mailerConfigFromEnv(env: EnvVariables): MailerConfig {
 function stripeConfigFromEnv(publicConfig: StripePublicConfig, env: EnvVariables): StripeConfig {
 	return {
 		...publicConfig,
+		enabled: !!env.STRIPE_SECRET_KEY,
 		secretKey: env.STRIPE_SECRET_KEY || '',
 		webhookSecret: env.STRIPE_WEBHOOK_SECRET || '',
 	};

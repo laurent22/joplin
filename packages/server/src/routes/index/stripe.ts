@@ -9,7 +9,7 @@ import { Stripe } from 'stripe';
 import Logger from '@joplin/lib/Logger';
 import getRawBody = require('raw-body');
 import { AccountType } from '../../models/UserModel';
-import { initStripe, priceIdToAccountType, stripeConfig } from '../../utils/stripe';
+import { betaUserTrialPeriodDays, initStripe, isBetaUser, priceIdToAccountType, stripeConfig } from '../../utils/stripe';
 import { Subscription } from '../../db';
 import { findPrice, PricePeriod } from '@joplin/lib/utils/joplinCloud';
 
@@ -34,6 +34,7 @@ async function stripeEvent(stripe: Stripe, req: any): Promise<Stripe.Event> {
 interface CreateCheckoutSessionFields {
 	priceId: string;
 	coupon: string;
+	email: string;
 }
 
 type StripeRouteHandler = (stripe: Stripe, path: SubPath, ctx: AppContext)=> Promise<any>;
@@ -63,6 +64,8 @@ export const postHandlers: PostHandlers = {
 
 		const checkoutSession: Stripe.Checkout.SessionCreateParams = {
 			mode: 'subscription',
+			// Stripe supports many payment method types but it seems only
+			// "card" is supported for recurring subscriptions.
 			payment_method_types: ['card'],
 			line_items: [
 				{
@@ -89,6 +92,20 @@ export const postHandlers: PostHandlers = {
 			];
 		}
 
+		if (fields.email) {
+			checkoutSession.customer_email = fields.email.trim();
+
+			// If it's a Beta user, we set the trial end period to the end of
+			// the beta period. So for example if there's 7 weeks left on the
+			// Beta period, the trial will be 49 days. This is so Beta users can
+			// setup the subscription at any time without losing the free beta
+			// period.
+			const existingUser = await ctx.joplin.models.user().loadByEmail(checkoutSession.customer_email);
+			if (existingUser && await isBetaUser(ctx.joplin.models, existingUser.id)) {
+				checkoutSession.subscription_data.trial_period_days = betaUserTrialPeriodDays(existingUser.created_time);
+			}
+		}
+
 		// See https://stripe.com/docs/api/checkout/sessions/create
 		// for additional parameters to pass.
 		const session = await stripe.checkout.sessions.create(checkoutSession);
@@ -100,9 +117,7 @@ export const postHandlers: PostHandlers = {
 		// can create the right account, either Basic or Pro.
 		await ctx.joplin.models.keyValue().setValue(`stripeSessionToPriceId::${session.id}`, priceId);
 
-		return {
-			sessionId: session.id,
-		};
+		return { sessionId: session.id };
 	},
 
 	// # How to test the complete workflow locally
@@ -126,15 +141,17 @@ export const postHandlers: PostHandlers = {
 	webhook: async (stripe: Stripe, _path: SubPath, ctx: AppContext, event: Stripe.Event = null, logErrors: boolean = true) => {
 		event = event ? event : await stripeEvent(stripe, ctx.req);
 
+		const models = ctx.joplin.models;
+
 		// Webhook endpoints might occasionally receive the same event more than
 		// once.
 		// https://stripe.com/docs/webhooks/best-practices#duplicate-events
 		const eventDoneKey = `stripeEventDone::${event.id}`;
-		if (await ctx.joplin.models.keyValue().value<number>(eventDoneKey)) {
+		if (await models.keyValue().value<number>(eventDoneKey)) {
 			logger.info(`Skipping event that has already been done: ${event.id}`);
 			return;
 		}
-		await ctx.joplin.models.keyValue().setValue(eventDoneKey, 1);
+		await models.keyValue().setValue(eventDoneKey, 1);
 
 		const hooks: any = {
 
@@ -206,7 +223,7 @@ export const postHandlers: PostHandlers = {
 
 				let accountType = AccountType.Basic;
 				try {
-					const priceId: string = await ctx.joplin.models.keyValue().value(`stripeSessionToPriceId::${checkoutSession.id}`);
+					const priceId: string = await models.keyValue().value(`stripeSessionToPriceId::${checkoutSession.id}`);
 					accountType = priceIdToAccountType(priceId);
 					logger.info('Price ID:', priceId);
 				} catch (error) {
@@ -224,13 +241,37 @@ export const postHandlers: PostHandlers = {
 				const stripeUserId = checkoutSession.customer as string;
 				const stripeSubscriptionId = checkoutSession.subscription as string;
 
-				await ctx.joplin.models.subscription().saveUserAndSubscription(
-					userEmail,
-					customerName,
-					accountType,
-					stripeUserId,
-					stripeSubscriptionId
-				);
+				const existingUser = await models.user().loadByEmail(userEmail);
+
+				if (existingUser) {
+					if (await isBetaUser(models, existingUser.id)) {
+						logger.info(`Setting up Beta user subscription: ${existingUser.email}`);
+
+						// First set the account type correctly (in case the
+						// user also upgraded or downgraded their account)
+						await models.user().save({ id: existingUser.id, account_type: accountType });
+
+						// Then save the subscription
+						await models.subscription().save({
+							user_id: existingUser.id,
+							stripe_user_id: stripeUserId,
+							stripe_subscription_id: stripeSubscriptionId,
+							last_payment_time: Date.now(),
+						});
+					} else {
+						// TODO: Some users accidentally subscribe multiple
+						// times - in that case, cancel the subscription and
+						// don't do anything more.
+					}
+				} else {
+					await models.subscription().saveUserAndSubscription(
+						userEmail,
+						customerName,
+						accountType,
+						stripeUserId,
+						stripeSubscriptionId
+					);
+				}
 			},
 
 			'invoice.paid': async () => {
@@ -246,7 +287,7 @@ export const postHandlers: PostHandlers = {
 				// saved in checkout.session.completed.
 
 				const invoice = event.data.object as Stripe.Invoice;
-				await ctx.joplin.models.subscription().handlePayment(invoice.subscription as string, true);
+				await models.subscription().handlePayment(invoice.subscription as string, true);
 			},
 
 			'invoice.payment_failed': async () => {
@@ -258,7 +299,7 @@ export const postHandlers: PostHandlers = {
 
 				const invoice = event.data.object as Stripe.Invoice;
 				const subId = invoice.subscription as string;
-				await ctx.joplin.models.subscription().handlePayment(subId, false);
+				await models.subscription().handlePayment(subId, false);
 			},
 
 			'customer.subscription.deleted': async () => {
@@ -266,8 +307,8 @@ export const postHandlers: PostHandlers = {
 				// by the user. In that case, we disable the user.
 
 				const { sub } = await getSubscriptionInfo(event, ctx);
-				await ctx.joplin.models.user().enable(sub.user_id, false);
-				await ctx.joplin.models.subscription().toggleSoftDelete(sub.id, true);
+				await models.user().enable(sub.user_id, false);
+				await models.subscription().toggleSoftDelete(sub.id, true);
 			},
 
 			'customer.subscription.updated': async () => {
@@ -276,11 +317,11 @@ export const postHandlers: PostHandlers = {
 
 				const { sub, stripeSub } = await getSubscriptionInfo(event, ctx);
 				const newAccountType = priceIdToAccountType(stripeSub.items.data[0].price.id);
-				const user = await ctx.joplin.models.user().load(sub.user_id, { fields: ['id'] });
+				const user = await models.user().load(sub.user_id, { fields: ['id'] });
 				if (!user) throw new Error(`No such user: ${user.id}`);
 
 				logger.info(`Updating subscription of user ${user.id} to ${newAccountType}`);
-				await ctx.joplin.models.user().save({ id: user.id, account_type: newAccountType });
+				await models.user().save({ id: user.id, account_type: newAccountType });
 			},
 
 		};

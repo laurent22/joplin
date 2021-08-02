@@ -10,6 +10,7 @@ import { formatMaxItemSize, formatMaxTotalSize, formatTotalSize, formatTotalSize
 import { getCanShareFolder, totalSizeClass } from '../../models/utils/user';
 import config from '../../config';
 import { escapeHtml } from '../../utils/htmlUtils';
+import { betaStartSubUrl, betaUserTrialPeriodDays, isBetaUser } from '../../utils/stripe';
 
 const router: Router = new Router(RouteType.Web);
 
@@ -69,6 +70,9 @@ router.get('home', async (_path: SubPath, ctx: AppContext) => {
 				},
 			],
 			showUpgradeProButton: subscription && user.account_type === AccountType.Basic,
+			showBetaMessage: await isBetaUser(ctx.joplin.models, user.id),
+			betaExpiredDays: betaUserTrialPeriodDays(user.created_time, 0, 0),
+			betaStartSubUrl: betaStartSubUrl(user.email, user.account_type),
 			setupMessageHtml: setupMessageHtml(),
 		};
 

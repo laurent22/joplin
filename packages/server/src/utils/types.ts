@@ -77,6 +77,7 @@ export interface MailerConfig {
 }
 
 export interface StripeConfig extends StripePublicConfig {
+	enabled: boolean;
 	secretKey: string;
 	webhookSecret: string;
 }

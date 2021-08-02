@@ -101,3 +101,38 @@ export async function updateSubscriptionType(models: Models, userId: Uuid, newAc
 	const stripe = initStripe();
 	await stripe.subscriptions.update(sub.stripe_subscription_id, { items });
 }
+
+export function betaUserDateRange(): number[] {
+	return [1623785440603, 1626690298054];
+}
+
+export async function isBetaUser(models: Models, userId: Uuid): Promise<boolean> {
+	if (!stripeConfig().enabled) return false;
+
+	const user = await models.user().load(userId, { fields: ['created_time'] });
+	if (!user) throw new Error(`No such user: ${userId}`);
+
+	const range = betaUserDateRange();
+
+	if (user.created_time > range[1]) return false; // approx 19/07/2021 11:24
+	if (user.created_time < range[0]) return false;
+
+	const sub = await models.subscription().byUserId(userId);
+	return !sub;
+}
+
+export function betaUserTrialPeriodDays(userCreatedTime: number, fromDateTime: number = 0, minDays: number = 7): number {
+	fromDateTime = fromDateTime ? fromDateTime : Date.now();
+
+	const oneDayMs = 86400 * 1000;
+	const oneMonthMs = oneDayMs * 30;
+	const endOfBetaPeriodMs = userCreatedTime + oneMonthMs * 3;
+	const remainingTimeMs = endOfBetaPeriodMs - fromDateTime;
+	const remainingTimeDays = Math.ceil(remainingTimeMs / oneDayMs);
+	// Stripe requires a minimum of 48 hours, but let's put 7 days to be sure
+	return remainingTimeDays < minDays ? minDays : remainingTimeDays;
+}
+
+export function betaStartSubUrl(email: string, accountType: AccountType): string {
+	return `https://joplinapp.org/plans/?email=${encodeURIComponent(email)}&account_type=${encodeURIComponent(accountType)}`;
+}

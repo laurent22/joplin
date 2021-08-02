@@ -12,6 +12,15 @@ import { confirmUrl, resetPasswordUrl } from '../utils/urlUtils';
 import { checkRepeatPassword, CheckRepeatPasswordInput } from '../routes/index/users';
 import accountConfirmationTemplate from '../views/emails/accountConfirmationTemplate';
 import resetPasswordTemplate from '../views/emails/resetPasswordTemplate';
+import { betaStartSubUrl, betaUserDateRange, betaUserTrialPeriodDays, isBetaUser, stripeConfig } from '../utils/stripe';
+import endOfBetaTemplate from '../views/emails/endOfBetaTemplate';
+
+interface UserEmailDetails {
+	sender_id: EmailSender;
+	recipient_id: Uuid;
+	recipient_email: string;
+	recipient_name: string;
+}
 
 export enum AccountType {
 	Default = 0,
@@ -261,16 +270,22 @@ export default class UserModel extends BaseModel<User> {
 		await this.save({ id: user.id, email_confirmed: 1 });
 	}
 
+	private userEmailDetails(user: User): UserEmailDetails {
+		return {
+			sender_id: EmailSender.NoReply,
+			recipient_id: user.id,
+			recipient_email: user.email,
+			recipient_name: user.full_name || '',
+		};
+	}
+
 	public async sendAccountConfirmationEmail(user: User) {
 		const validationToken = await this.models().token().generate(user.id);
 		const url = encodeURI(confirmUrl(user.id, validationToken));
 
 		await this.models().email().push({
 			...accountConfirmationTemplate({ url }),
-			sender_id: EmailSender.NoReply,
-			recipient_id: user.id,
-			recipient_email: user.email,
-			recipient_name: user.full_name || '',
+			...this.userEmailDetails(user),
 		});
 	}
 
@@ -283,10 +298,7 @@ export default class UserModel extends BaseModel<User> {
 
 		await this.models().email().push({
 			...resetPasswordTemplate({ url }),
-			sender_id: EmailSender.NoReply,
-			recipient_id: user.id,
-			recipient_email: user.email,
-			recipient_name: user.full_name || '',
+			...this.userEmailDetails(user),
 		});
 	}
 
@@ -295,6 +307,44 @@ export default class UserModel extends BaseModel<User> {
 		const user = await this.models().token().userFromToken(token);
 		await this.models().user().save({ id: user.id, password: fields.password });
 		await this.models().token().deleteByValue(user.id, token);
+	}
+
+	public async handleBetaUserEmails() {
+		if (!stripeConfig().enabled) return;
+
+		const range = betaUserDateRange();
+
+		const betaUsers = await this
+			.db('users')
+			.select(['id', 'email', 'full_name', 'account_type', 'created_time'])
+			.where('created_time', '>=', range[0])
+			.andWhere('created_time', '<=', range[1]);
+
+		const reminderIntervals = [14, 3];
+
+		for (const user of betaUsers) {
+			if (!(await isBetaUser(this.models(), user.id))) continue;
+
+			const remainingDays = betaUserTrialPeriodDays(user.created_time, 0, 0);
+
+			for (const reminderInterval of reminderIntervals) {
+				if (remainingDays <= reminderInterval) {
+					const sentKey = `betaUser::emailSent::${reminderInterval}::${user.id}`;
+
+					if (!(await this.models().keyValue().value(sentKey))) {
+						await this.models().email().push({
+							...endOfBetaTemplate({
+								expireDays: remainingDays,
+								startSubUrl: betaStartSubUrl(user.email, user.account_type),
+							}),
+							...this.userEmailDetails(user),
+						});
+
+						await this.models().keyValue().setValue(sentKey, 1);
+					}
+				}
+			}
+		}
 	}
 
 	private formatValues(user: User): User {
