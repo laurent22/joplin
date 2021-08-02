@@ -138,4 +138,26 @@ describe('UserModel', function() {
 		stripeConfig().enabled = false;
 	});
 
+	test('should disable beta account once expired', async function() {
+		stripeConfig().enabled = true;
+		const { user: user1 } = await createUserAndSession(1, false, { email: 'toto@example.com' });
+		const range = betaUserDateRange();
+		await models().user().save({
+			id: user1.id,
+			created_time: range[0],
+			account_type: AccountType.Pro,
+		});
+
+		Date.now = jest.fn(() => range[0] + 8640000 * 1000); // 100 days later
+
+		await models().user().handleBetaUserEmails();
+
+		expect((await models().email().all()).length).toBe(4);
+		const email = (await models().email().all()).pop();
+		expect(email.subject.indexOf('beta account is expired') > 0).toBe(true);
+
+		const reloadedUser = await models().user().load(user1.id);
+		expect(reloadedUser.can_upload).toBe(0);
+	});
+
 });

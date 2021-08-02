@@ -248,8 +248,13 @@ export const postHandlers: PostHandlers = {
 						logger.info(`Setting up Beta user subscription: ${existingUser.email}`);
 
 						// First set the account type correctly (in case the
-						// user also upgraded or downgraded their account)
-						await models.user().save({ id: existingUser.id, account_type: accountType });
+						// user also upgraded or downgraded their account). Also
+						// re-enable upload if it was disabled.
+						await models.user().save({
+							id: existingUser.id,
+							account_type: accountType,
+							can_upload: 1,
+						});
 
 						// Then save the subscription
 						await models.subscription().save({

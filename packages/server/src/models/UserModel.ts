@@ -320,7 +320,7 @@ export default class UserModel extends BaseModel<User> {
 			.where('created_time', '>=', range[0])
 			.andWhere('created_time', '<=', range[1]);
 
-		const reminderIntervals = [14, 3];
+		const reminderIntervals = [14, 3, 0];
 
 		for (const user of betaUsers) {
 			if (!(await isBetaUser(this.models(), user.id))) continue;
@@ -343,6 +343,10 @@ export default class UserModel extends BaseModel<User> {
 						await this.models().keyValue().setValue(sentKey, 1);
 					}
 				}
+			}
+
+			if (remainingDays <= 0) {
+				await this.save({ id: user.id, can_upload: 0 });
 			}
 		}
 	}
