@@ -2164,7 +2164,7 @@ msgstr "Sök i aktuell anteckning"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:59
 msgid "There was an error downloading this attachment:"
-msgstr "Något blev fel vid nedladdningen av denna bilaga:"
+msgstr "Något blev fel vid hämtningen av denna bilaga:"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:62
 #: packages/lib/services/ResourceEditWatcher/index.js:196
@@ -2767,7 +2767,7 @@ msgstr "Inget objekt med ID %s"
 
 #: packages/app-mobile/components/screens/Note.js:170
 msgid "This attachment is not downloaded or not decrypted yet."
-msgstr "Denna bilaga är inte nedladdad eller ännu inte dekrypterad."
+msgstr "Denna bilaga är inte hämtad eller ännu inte dekrypterad."
 
 #: packages/app-mobile/components/screens/Note.js:175
 #, javascript-format
@@ -3193,7 +3193,7 @@ msgstr "Kan inte flytta anteckning till \"%s\" anteckningsbok"
 
 #: packages/lib/models/Resource.js:353
 msgid "Not downloaded"
-msgstr "Inte nedladdad"
+msgstr "Inte hämtad"
 
 #: packages/lib/models/Resource.js:355
 msgid "Downloading"
@@ -3201,7 +3201,7 @@ msgstr "Hämtar"
 
 #: packages/lib/models/Resource.js:357
 msgid "Downloaded"
-msgstr "Nedladdad"
+msgstr "Hämtad"
 
 #: packages/lib/models/Resource.js:359
 msgid "Error"
@@ -3357,7 +3357,7 @@ msgstr "Ange Cloud-lösenord"
 
 #: packages/lib/models/Setting.js:394
 msgid "Attachment download behaviour"
-msgstr "Beteende för nedladdning av bilaga"
+msgstr "Beteende för hämtning av bilaga"
 
 #: packages/lib/models/Setting.js:395
 msgid ""
@@ -3996,7 +3996,7 @@ msgstr "Bilagor"
 
 #: packages/lib/services/ReportService.js:205
 msgid "Downloaded and decrypted"
-msgstr "Nedladdade och dekrypterade"
+msgstr "Hämtade och dekrypterade"
 
 #: packages/lib/services/ReportService.js:205
 #: packages/lib/services/ReportService.js:206
@@ -4008,7 +4008,7 @@ msgstr "%s: %d"
 
 #: packages/lib/services/ReportService.js:206
 msgid "Downloaded and encrypted"
-msgstr "Nedladdade och krypterade"
+msgstr "Hämtade och krypterade"
 
 #: packages/lib/services/ReportService.js:207
 msgid "Created locally"
