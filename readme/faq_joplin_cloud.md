@@ -14,4 +14,6 @@ If you exceed the storage space, you will not be able to upload new notes. You m
 
 ## Do you offer discounts?
 
-We can offer discounts for students, schools and universities, or nonprofit organisations. To get this discount please contact us.
+We offer a 50% discount for students. To get claim it, please [contact us](mailto:support@joplincloud.com) from your university or school email address. You will then receive a URL you can use to subscribe to Joplin Cloud while benefiting from the 50% discount. This is valid for a whole year and can be renewed for as long as you are in education by contacting us again.
+
+We may also offer bulk discounts for companies, associations and nonprofit organisations. Please [contact us](mailto:support@joplincloud.com) for more details.
