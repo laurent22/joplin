@@ -230,12 +230,10 @@ class FileApiDriverAmazonS3 {
 			// response object depending on the env (node/react-native).
 			// See shim-init-node.js/shim-init-react.js.
 			const streamed_response = new shim.Response(response.Body);
-			output = await streamed_response.text();
-
 			if (options.target === 'file') {
 				const filePath = options.path;
 				if (!filePath) throw new Error('get: target options.path is missing');
-
+				output = await streamed_response.buffer();
 				// TODO: check if this ever hits on RN
 				await shim.fsDriver().writeBinaryFile(filePath, output);
 				return {
@@ -253,7 +251,7 @@ class FileApiDriverAmazonS3 {
 			}
 
 			if (responseFormat === 'text') {
-				output = output.toString();
+				output = streamed_response.text();
 			}
 
 			return output;
