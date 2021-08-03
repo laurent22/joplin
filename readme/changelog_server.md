@@ -1,5 +1,12 @@
 # Joplin Server Changelog
 
+## [server-v2.2.11-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.2.11-beta) (Pre-release) - 2021-08-03T18:48:00Z
+
+- Improved: Disable beta account once expired (785248b)
+- Improved: Handle beta user upgrade (8910c87)
+- Improved: Prevent duplicate Stripe subscriptions and improved Stripe workflow testing (6ac22ed)
+- Fixed: Fixed support emails (724aa72)
+
 ## [server-v2.2.10](https://github.com/laurent22/joplin/releases/tag/server-v2.2.10) - 2021-08-01T10:04:53Z
 
 - Improved: Allows providing a coupon when creating the Stripe checkout session (b5b6111)
