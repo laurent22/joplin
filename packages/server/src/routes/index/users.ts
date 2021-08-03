@@ -16,7 +16,7 @@ import { formatMaxItemSize, formatMaxTotalSize, formatTotalSize, formatTotalSize
 import { getCanShareFolder, totalSizeClass } from '../../models/utils/user';
 import { yesNoDefaultOptions } from '../../utils/views/select';
 import { confirmUrl } from '../../utils/urlUtils';
-import { cancelSubscription, updateSubscriptionType } from '../../utils/stripe';
+import { cancelSubscriptionByUserId, updateSubscriptionType } from '../../utils/stripe';
 import { createCsrfTag } from '../../utils/csrf';
 
 export interface CheckRepeatPasswordInput {
@@ -277,7 +277,7 @@ router.post('users', async (path: SubPath, ctx: AppContext) => {
 				await userModel.save(userToSave, { isNew: false });
 			}
 		} else if (fields.user_cancel_subscription_button) {
-			await cancelSubscription(ctx.joplin.models, userId);
+			await cancelSubscriptionByUserId(ctx.joplin.models, userId);
 			const sessionId = contextSessionId(ctx, false);
 			if (sessionId) {
 				await ctx.joplin.models.session().logout(sessionId);
@@ -294,7 +294,7 @@ router.post('users', async (path: SubPath, ctx: AppContext) => {
 					await userModel.save({ id: user.id, must_set_password: 1 });
 					await userModel.sendAccountConfirmationEmail(user);
 				} else if (fields.cancel_subscription_button) {
-					await cancelSubscription(ctx.joplin.models, userId);
+					await cancelSubscriptionByUserId(ctx.joplin.models, userId);
 				} else if (fields.update_subscription_basic_button) {
 					await updateSubscriptionType(ctx.joplin.models, userId, AccountType.Basic);
 				} else if (fields.update_subscription_pro_button) {
