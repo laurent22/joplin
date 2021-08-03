@@ -105,6 +105,7 @@ export interface Config {
 	mailer: MailerConfig;
 	stripe: StripeConfig;
 	supportEmail: string;
+	supportName: string;
 	businessEmail: string;
 	isJoplinCloud: boolean;
 }

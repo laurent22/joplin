@@ -43,6 +43,8 @@ export interface EnvVariables {
 	ERROR_STACK_TRACES?: string;
 
 	SUPPORT_EMAIL?: string;
+	SUPPORT_NAME?: string;
+
 	BUSINESS_EMAIL?: string;
 }
 
@@ -135,6 +137,7 @@ export async function initConfig(envType: Env, env: EnvVariables, overrides: any
 	const packageJson = await readPackageJson(`${rootDir}/package.json`);
 	const stripePublicConfig = loadStripeConfig(envType === Env.BuildTypes ? Env.Dev : envType, `${rootDir}/stripeConfig.json`);
 
+	const appName = env.APP_NAME || 'Joplin Server';
 	const viewDir = `${rootDir}/src/views`;
 	const appPort = env.APP_PORT ? Number(env.APP_PORT) : 22300;
 	const baseUrl = baseUrlFromEnv(env, appPort);
@@ -143,7 +146,7 @@ export async function initConfig(envType: Env, env: EnvVariables, overrides: any
 
 	config_ = {
 		appVersion: packageJson.version,
-		appName: env.APP_NAME || 'Joplin Server',
+		appName,
 		isJoplinCloud: apiBaseUrl.includes('.joplincloud.com'),
 		env: envType,
 		rootDir: rootDir,
@@ -163,6 +166,7 @@ export async function initConfig(envType: Env, env: EnvVariables, overrides: any
 		termsEnabled: env.TERMS_ENABLED === '1',
 		accountTypesEnabled: env.ACCOUNT_TYPES_ENABLED === '1',
 		supportEmail,
+		supportName: env.SUPPORT_NAME || appName,
 		businessEmail: env.BUSINESS_EMAIL || supportEmail,
 		...overrides,
 	};
