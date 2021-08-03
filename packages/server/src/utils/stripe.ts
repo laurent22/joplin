@@ -50,11 +50,15 @@ export function stripePriceIdByStripeSub(stripeSub: Stripe.Subscription): string
 	return stripeSub.items.data[0].price.id;
 }
 
-export async function cancelSubscription(models: Models, userId: Uuid) {
+export async function cancelSubscriptionByUserId(models: Models, userId: Uuid) {
 	const sub = await models.subscription().byUserId(userId);
 	if (!sub) throw new Error(`No subscription for user: ${userId}`);
 	const stripe = initStripe();
 	await stripe.subscriptions.del(sub.stripe_subscription_id);
+}
+
+export async function cancelSubscription(stripe: Stripe, stripeSubId: string) {
+	await stripe.subscriptions.del(stripeSubId);
 }
 
 export async function updateSubscriptionType(models: Models, userId: Uuid, newAccountType: AccountType) {

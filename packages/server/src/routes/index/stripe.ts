@@ -9,7 +9,7 @@ import { Stripe } from 'stripe';
 import Logger from '@joplin/lib/Logger';
 import getRawBody = require('raw-body');
 import { AccountType } from '../../models/UserModel';
-import { betaUserTrialPeriodDays, initStripe, isBetaUser, priceIdToAccountType, stripeConfig } from '../../utils/stripe';
+import { betaUserTrialPeriodDays, cancelSubscription, initStripe, isBetaUser, priceIdToAccountType, stripeConfig } from '../../utils/stripe';
 import { Subscription } from '../../db';
 import { findPrice, PricePeriod } from '@joplin/lib/utils/joplinCloud';
 
@@ -244,8 +244,10 @@ export const postHandlers: PostHandlers = {
 				const existingUser = await models.user().loadByEmail(userEmail);
 
 				if (existingUser) {
-					if (await isBetaUser(models, existingUser.id)) {
-						logger.info(`Setting up Beta user subscription: ${existingUser.email}`);
+					const sub = await models.subscription().byUserId(existingUser.id);
+
+					if (!sub) {
+						logger.info(`Setting up subscription for existing user: ${existingUser.email}`);
 
 						// First set the account type correctly (in case the
 						// user also upgraded or downgraded their account). Also
@@ -264,11 +266,15 @@ export const postHandlers: PostHandlers = {
 							last_payment_time: Date.now(),
 						});
 					} else {
-						// TODO: Some users accidentally subscribe multiple
-						// times - in that case, cancel the subscription and
-						// don't do anything more.
+						// The user already has a subscription. Most likely
+						// they accidentally created a second one, so cancel
+						// it.
+						logger.info(`User ${existingUser.email} already has a subscription: ${sub.stripe_subscription_id} - cancelling duplicate`);
+						await cancelSubscription(stripe, stripeSubscriptionId);
 					}
 				} else {
+					logger.info(`Creating subscription for new user: ${userEmail}`);
+
 					await models.subscription().saveUserAndSubscription(
 						userEmail,
 						customerName,
