@@ -15,6 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.4.2\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-cli/app/app-gui.js:452
 msgid "To delete a tag, untag the associated notes."
@@ -694,7 +696,7 @@ msgstr "Startar synkronisering..."
 
 #: packages/app-cli/app/command-sync.js:235
 msgid "Downloading resources..."
-msgstr "Laddar ned resurser..."
+msgstr "Hämtar resurser..."
 
 #: packages/app-cli/app/command-sync.js:247
 #, javascript-format
@@ -916,7 +918,7 @@ msgstr "Ny version: %s"
 
 #: packages/app-desktop/checkForUpdates.js:189
 msgid "Download"
-msgstr "Hämtad"
+msgstr "Hämta"
 
 #: packages/app-desktop/checkForUpdates.js:189
 msgid "Skip this version"
@@ -1703,9 +1705,8 @@ msgid "Share notebook..."
 msgstr "Dela anteckningsbok..."
 
 #: packages/app-desktop/gui/MainScreen/commands/showShareNoteDialog.js:16
-#, fuzzy
 msgid "Publish note..."
-msgstr "Dela anteckning..."
+msgstr "Publisera anteckning..."
 
 #: packages/app-desktop/gui/MainScreen/commands/showSpellCheckerMenu.js:19
 #: packages/lib/services/spellChecker/SpellCheckerService.js:180
@@ -1827,7 +1828,7 @@ msgstr "Zooma ut"
 
 #: packages/app-desktop/gui/MenuBar.js:619
 msgid "&Go"
-msgstr ""
+msgstr "&Gå"
 
 #: packages/app-desktop/gui/MenuBar.js:625
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteBody.js:17
@@ -2163,12 +2164,12 @@ msgstr "Sök i aktuell anteckning"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:59
 msgid "There was an error downloading this attachment:"
-msgstr "Något blev fel vid nedladdningen av denna bilaga:"
+msgstr "Ett fel uppstod vid hämtningen av denna bilaga:"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:62
 #: packages/lib/services/ResourceEditWatcher/index.js:196
 msgid "This attachment is not downloaded or not decrypted yet"
-msgstr "Denna bilaga hämtas eller dekrypteras inte ännu"
+msgstr "Denna bilaga är inte hämtad eller inte dekrypterad ännu"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:92
 msgid "Open..."
@@ -2324,9 +2325,8 @@ msgstr ""
 "Varning: alla resurser visas inte för förbättrad prestanda (limit: %s)."
 
 #: packages/app-desktop/gui/Root.js:98
-#, fuzzy
 msgid "Confirmation"
-msgstr "Konfiguration"
+msgstr "Bekräftelse"
 
 #: packages/app-desktop/gui/Root.js:111
 msgid "The Web Clipper needs your authorisation to access your data."
@@ -2407,9 +2407,8 @@ msgid "Share Notebook"
 msgstr "Dela anteckningsbok"
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:144
-#, fuzzy
 msgid "Unpublish note"
-msgstr "Sluta dela anteckningen"
+msgstr "Sluta publisera anteckningen"
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:171
 msgid "Synchronising..."
@@ -2435,7 +2434,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:187
 msgid "Publish Notes"
-msgstr ""
+msgstr "Publicera anteckningar"
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:189
 msgid "Copy Shareable Link"
@@ -2768,7 +2767,7 @@ msgstr "Inget objekt med ID %s"
 
 #: packages/app-mobile/components/screens/Note.js:170
 msgid "This attachment is not downloaded or not decrypted yet."
-msgstr "Denna bilaga är inte nedladdad eller ännu inte dekrypterad."
+msgstr "Denna bilaga är inte hämtad eller inte dekrypterad ännu."
 
 #: packages/app-mobile/components/screens/Note.js:175
 #, javascript-format
@@ -3194,7 +3193,7 @@ msgstr "Kan inte flytta anteckning till \"%s\" anteckningsbok"
 
 #: packages/lib/models/Resource.js:353
 msgid "Not downloaded"
-msgstr "Inte nedladdad"
+msgstr "Inte hämtad"
 
 #: packages/lib/models/Resource.js:355
 msgid "Downloading"
@@ -3202,7 +3201,7 @@ msgstr "Hämtar"
 
 #: packages/lib/models/Resource.js:357
 msgid "Downloaded"
-msgstr "Nedladdad"
+msgstr "Hämtad"
 
 #: packages/lib/models/Resource.js:359
 msgid "Error"
@@ -3358,7 +3357,7 @@ msgstr "Ange Cloud-lösenord"
 
 #: packages/lib/models/Setting.js:394
 msgid "Attachment download behaviour"
-msgstr "Beteende för nedladdning av bilaga"
+msgstr "Beteende för hämtning av bilagor"
 
 #: packages/lib/models/Setting.js:395
 msgid ""
@@ -3366,9 +3365,9 @@ msgid ""
 "In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
 "the attachments are downloaded whether you open the note or not."
 msgstr ""
-"I \"Manuellt\" läge, bilagor laddas bara ner när du klickar på dem. I "
-"\"Automatiskt\" laddas de ner när du öppnar anteckningen. I \"Alltid\" "
-"laddas alla bilagor ner oavsett om du öppnar anteckningen eller inte."
+"I läget \"Manuellt\" hämtas bilagorna bara när du klickar på dem. I "
+"\"Automatiskt\" hämtas de när du öppnar anteckningen. I \"Alltid\" hämtas "
+"alla bilagor oavsett om du öppnar anteckningen eller inte."
 
 #: packages/lib/models/Setting.js:398
 msgid "Always"
@@ -3524,11 +3523,11 @@ msgstr "Aktivera innehållsförteckningen"
 
 #: packages/lib/models/Setting.js:679
 msgid "Enable ~sub~ syntax"
-msgstr ""
+msgstr "Aktivera ~sub~ syntax"
 
 #: packages/lib/models/Setting.js:680
 msgid "Enable ^sup^ syntax"
-msgstr ""
+msgstr "Aktivera ^sup^ syntax"
 
 #: packages/lib/models/Setting.js:681
 msgid "Enable deflist syntax"
@@ -3625,7 +3624,7 @@ msgstr "Ladda upp lokal data igen för synkroniseringsmålet"
 
 #: packages/lib/models/Setting.js:822
 msgid "Delete local data and re-download from sync target"
-msgstr "Ta bort lokal data och ladda ner den igen från synkroniseringsmålet"
+msgstr "Ta bort lokal data och hämta igen från synkroniseringsmålet"
 
 #: packages/lib/models/Setting.js:827
 msgid "Automatically update the application"
@@ -3997,7 +3996,7 @@ msgstr "Bilagor"
 
 #: packages/lib/services/ReportService.js:205
 msgid "Downloaded and decrypted"
-msgstr "Nedladdade och dekrypterade"
+msgstr "Hämtade och dekrypterade"
 
 #: packages/lib/services/ReportService.js:205
 #: packages/lib/services/ReportService.js:206
@@ -4009,7 +4008,7 @@ msgstr "%s: %d"
 
 #: packages/lib/services/ReportService.js:206
 msgid "Downloaded and encrypted"
-msgstr "Nedladdade och krypterade"
+msgstr "Hämtade och krypterade"
 
 #: packages/lib/services/ReportService.js:207
 msgid "Created locally"
