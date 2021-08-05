@@ -79,7 +79,7 @@ export default function(theme: any) {
 		
 		p, h1, h2, h3, h4, h5, h6, ul, table {
 			margin-top: .6em;
-			margin-bottom: .65em;
+			margin-bottom: 1.35em;
 
 			/*
 				Adds support for RTL text in the note body. It automatically detects the direction using the content.
