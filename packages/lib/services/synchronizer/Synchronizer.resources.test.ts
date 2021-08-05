@@ -254,14 +254,21 @@ describe('Synchronizer.resources', function() {
 			// attached to it, and check that it has the original content.
 			const allNotes = await Note.all();
 			expect(allNotes.length).toBe(2);
+			const resourceConflictFolderId = await Resource.resourceConflictFolderId();
 			const conflictNote = allNotes.find((v: NoteEntity) => {
-				return !!v.is_conflict;
+				return v.parent_id === resourceConflictFolderId;
 			});
 			expect(!!conflictNote).toBe(true);
 			const resourceIds = await Note.linkedResourceIds(conflictNote.body);
 			expect(resourceIds.length).toBe(1);
 			const conflictContent = await Resource.resourceBlobContent(resourceIds[0], 'utf8');
 			expect(conflictContent).toBe('1234 MOD 1');
+
+			// Also check that the conflict folder has been created and that it
+			// is a top folder.
+			const resourceConflictFolder = await Folder.load(resourceConflictFolderId);
+			expect(resourceConflictFolder).toBeTruthy();
+			expect(resourceConflictFolder.parent_id).toBeFalsy();
 		}
 	}));
 

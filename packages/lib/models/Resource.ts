@@ -389,15 +389,31 @@ export default class Resource extends BaseItem {
 		return newResource;
 	}
 
-	static async createConflictResourceNote(resource: ResourceEntity) {
-		const Note = this.getClass('Note');
+	public static async resourceConflictFolderId(): Promise<string> {
+		const folder = await this.resourceConflictFolder();
+		return folder.id;
+	}
 
+	private static async resourceConflictFolder(): Promise<any> {
+		const conflictFolderTitle = _('Conflicts (attachments)');
+		const Folder = this.getClass('Folder');
+
+		const folder = await Folder.loadByTitle(conflictFolderTitle);
+		if (!folder || folder.parent_id) {
+			return Folder.save({ title: conflictFolderTitle });
+		}
+
+		return folder;
+	}
+
+	public static async createConflictResourceNote(resource: ResourceEntity) {
+		const Note = this.getClass('Note');
 		const conflictResource = await Resource.duplicateResource(resource.id);
 
 		await Note.save({
 			title: _('Attachment conflict: "%s"', resource.title),
 			body: _('There was a [conflict](%s) on the attachment below.\n\n%s', 'https://joplinapp.org/conflict/', Resource.markdownTag(conflictResource)),
-			is_conflict: 1,
+			parent_id: await this.resourceConflictFolderId(),
 		}, { changeSource: ItemChange.SOURCE_SYNC });
 	}
 
