@@ -18,7 +18,7 @@ const { surroundKeywords, nextWhitespaceIndex, removeDiacritics } = require('@jo
 const { mergeOverlappingIntervals } = require('@joplin/lib/ArrayUtils.js');
 import markupLanguageUtils from '../utils/markupLanguageUtils';
 import focusEditorIfEditorCommand from '@joplin/lib/services/commands/focusEditorIfEditorCommand';
-import Logger from '../../lib/Logger';
+import Logger from '@joplin/lib/Logger';
 
 const logger = Logger.create('GotoAnything');
 
