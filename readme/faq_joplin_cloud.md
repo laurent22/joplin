@@ -2,11 +2,15 @@
 
 ## What is Joplin Cloud?
 
-Joplin supports various ways to synchronise data with cloud file hosting services. It does that in a generic way, which allows it to support many providers. However there are limits to what can be done in such a generic way - for example, certain performance optimisations are not possible, and more advanced features such as the ability to publish notes or share notebooks cannot be implemented.
+Joplin Cloud allows you to synchronise your notes automatically to all your devices. Moreover, this service gives you access to additional features:
 
-This is where Joplin Cloud comes into place. It is a solution developed specifically for Joplin and as such offers various improvements, such as improved synchronisation performances, support for publishing notes, and sharing and collaborating on notebooks.
+- Publish a note to the internet and share it with others. The published note will be updated automatically whenever you make a change.
 
-Moreover, by getting a subscription you are supporting the development of the project as a whole, including the open source applications. Such support helps in the long term to provide bug and security fixes, add new features, and provide support.
+- Collaborate on a notebook with other Joplin Cloud users. You can share a notebook with other users who will then have full access to it - they can read, change or add more notes, images or documents to the notebook. This is convenient to work on ideas or on a project with others.
+
+- Improved sync performances. Compared to other sync options, Joplin Cloud, being developed specifically for Joplin, is faster and consumes less resources.
+
+Moreover, by getting a subscription you are supporting the development of the project as a whole, including the open source applications. Such support needed in the long term to provide bug and security fixes, add new features, and provide support.
 
 ## What if I exceed the storage space?
 
@@ -14,6 +18,6 @@ If you exceed the storage space, you will not be able to upload new notes. You m
 
 ## Do you offer discounts?
 
-We offer a 50% discount for students. To get claim it, please [contact us](mailto:support@joplincloud.com) from your university or school email address. You will then receive a URL you can use to subscribe to Joplin Cloud while benefiting from the 50% discount. This is valid for a whole year and can be renewed for as long as you are in education by contacting us again.
+We offer a 50% discount to students. To claim it, please [contact us](mailto:support@joplincloud.com) from your university or school email address. You will then receive a URL you can use to subscribe to Joplin Cloud while benefiting from the 50% discount. This is valid for a whole year and can be renewed for as long as you are in education by contacting us again.
 
 We may also offer bulk discounts for companies, associations and nonprofit organisations. Please [contact us](mailto:support@joplincloud.com) for more details.
