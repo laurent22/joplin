@@ -1,7 +1,7 @@
 import ResourceEditWatcher from '@joplin/lib/services/ResourceEditWatcher/index';
 import CommandService from '@joplin/lib/services/CommandService';
 import KeymapService from '@joplin/lib/services/KeymapService';
-import PluginService from '@joplin/lib/services/plugins/PluginService';
+import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import resourceEditWatcherReducer, { defaultState as resourceEditWatcherDefaultState } from '@joplin/lib/services/ResourceEditWatcher/reducer';
 import { defaultState, State } from '@joplin/lib/reducer';
 import PluginRunner from './services/plugins/PluginRunner';
@@ -547,12 +547,14 @@ class Application extends BaseApplication {
 
 		const pluginSettings = service.unserializePluginSettings(Setting.value('plugins.states'));
 
-		// Users can add and remove plugins from the config screen at any
-		// time, however we only effectively uninstall the plugin the next
-		// time the app is started. What plugin should be uninstalled is
-		// stored in the settings.
-		const newSettings = service.clearUpdateState(await service.uninstallPlugins(pluginSettings));
-		Setting.setValue('plugins.states', newSettings);
+		{
+			// Users can add and remove plugins from the config screen at any
+			// time, however we only effectively uninstall the plugin the next
+			// time the app is started. What plugin should be uninstalled is
+			// stored in the settings.
+			const newSettings = service.clearUpdateState(await service.uninstallPlugins(pluginSettings));
+			Setting.setValue('plugins.states', newSettings);
+		}
 
 		try {
 			if (await shim.fsDriver().exists(Setting.value('pluginDir'))) {
@@ -574,6 +576,25 @@ class Application extends BaseApplication {
 			}
 		} catch (error) {
 			this.logger().error(`There was an error loading plugins from ${Setting.value('plugins.devPluginPaths')}:`, error);
+		}
+
+		{
+			// Users can potentially delete files from /plugins or even delete
+			// the complete folder. When that happens, we still have the plugin
+			// info in the state, which can cause various issues, so to sort it
+			// out we remove from the state any plugin that has *not* been loaded
+			// above (meaning the file was missing).
+			// https://github.com/laurent22/joplin/issues/5253
+			const oldSettings = service.unserializePluginSettings(Setting.value('plugins.states'));
+			const newSettings: PluginSettings = {};
+			for (const pluginId of Object.keys(oldSettings)) {
+				if (!service.pluginIds.includes(pluginId)) {
+					this.logger().warn('Found a plugin in the state that has not been loaded, which means the plugin might have been deleted outside Joplin - removing it from the state:', pluginId);
+					continue;
+				}
+				newSettings[pluginId] = oldSettings[pluginId];
+			}
+			Setting.setValue('plugins.states', newSettings);
 		}
 
 		this.checkAllPluginStartedIID_ = setInterval(() => {

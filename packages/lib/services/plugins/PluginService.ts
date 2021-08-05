@@ -87,6 +87,10 @@ export default class PluginService extends BaseService {
 		return this.plugins_;
 	}
 
+	public get pluginIds(): string[] {
+		return Object.keys(this.plugins_);
+	}
+
 	public get isSafeMode(): boolean {
 		return this.isSafeMode_;
 	}
