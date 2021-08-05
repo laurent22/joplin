@@ -412,6 +412,11 @@ p,
 	background-size: contain;
 }
 
+#work-together-section .frame-bg {
+	background-size: 100% 50%;
+	padding-bottom: 5px;
+}
+
 /* save-web-section  */
 #save-web-section {
 	padding-top: 80px;
