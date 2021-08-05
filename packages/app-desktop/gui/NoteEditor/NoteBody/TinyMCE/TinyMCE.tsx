@@ -625,6 +625,13 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 
 					// This is triggered when an external file is dropped on the editor
 					editor.on('drop', (event: any) => {
+						// Prevent the message "Dropped file type is not
+						// supported" to show up. It was added in a recent
+						// TinyMCE version and doesn't apply since we do support
+						// the file type.
+						// https://stackoverflow.com/questions/64782955/tinymce-inline-drag-and-drop-image-upload-not-working
+						event.preventDefault();
+
 						props_onDrop.current(event);
 					});
 
