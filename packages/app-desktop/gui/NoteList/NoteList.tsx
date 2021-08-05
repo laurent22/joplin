@@ -286,6 +286,7 @@ class NoteListComponent extends React.Component {
 	}
 
 	componentDidUpdate(prevProps: any) {
+		this.fitItemHeight();
 		if (prevProps.selectedNoteIds !== this.props.selectedNoteIds && this.props.selectedNoteIds.length === 1) {
 			const id = this.props.selectedNoteIds[0];
 			const doRefocus = this.props.notes.length < prevProps.notes.length;
@@ -425,6 +426,17 @@ class NoteListComponent extends React.Component {
 		}
 	}
 
+	fitItemHeight() {
+		// If a note item are styled by CSS, its height is considered.
+		// NOTE: this.itemHeight doesn't need to be in this.state.
+		const ref = Object.values<any>(this.itemAnchorRefs_)[0];
+		const height = ref && ref.current && ref.current.getHeight();
+		if (height > 0) { 
+			// To avoid generating too many narrow items
+			this.itemHeight = Math.max(height, 8);
+		}
+	}
+
 	updateSizeState() {
 		this.setState({
 			width: this.noteListRef.current.clientWidth,
@@ -438,6 +450,7 @@ class NoteListComponent extends React.Component {
 
 	componentDidMount() {
 		this.props.resizableLayoutEventEmitter.on('resize', this.resizableLayout_resize);
+		this.fitItemHeight();
 		this.updateSizeState();
 	}
 
@@ -476,7 +489,7 @@ class NoteListComponent extends React.Component {
 			<ItemList
 				ref={this.itemListRef}
 				disabled={this.props.isInsertingNotes}
-				itemHeight={this.style().listItem.height}
+				itemHeight={this.itemHeight}
 				className={'note-list'}
 				items={this.props.notes}
 				style={style}

@@ -73,6 +73,9 @@ function NoteListItem(props: NoteListItemProps, ref: any) {
 			focus: function() {
 				if (anchorRef.current) anchorRef.current.focus();
 			},
+			getHeight: function() {
+				return anchorRef.current && anchorRef.current.clientHeight;
+			}
 		};
 	});
 
