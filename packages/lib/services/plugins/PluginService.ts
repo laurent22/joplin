@@ -262,16 +262,30 @@ export default class PluginService extends BaseService {
 
 		const manifestObj = JSON.parse(manifestText);
 
-		const deprecationNotices = [];
+		interface DeprecationNotice {
+			goneInVersion: string;
+			message: string;
+			isError: boolean;
+		}
+
+		const deprecationNotices: DeprecationNotice[] = [];
 
 		if (!manifestObj.app_min_version) {
 			manifestObj.app_min_version = '1.4';
-			deprecationNotices.push('The manifest must contain an "app_min_version" key, which should be the minimum version of the app you support. It was automatically set to "1.4", but please update your manifest.json file.');
+			deprecationNotices.push({
+				message: 'The manifest must contain an "app_min_version" key, which should be the minimum version of the app you support.',
+				goneInVersion: '1.4',
+				isError: true,
+			});
 		}
 
 		if (!manifestObj.id) {
 			manifestObj.id = pluginIdIfNotSpecified;
-			deprecationNotices.push(`The manifest must contain an "id" key, which should be a globally unique ID for your plugin, such as "com.example.MyPlugin" or a UUID. It was automatically set to "${manifestObj.id}", but please update your manifest.json file.`);
+			deprecationNotices.push({
+				message: 'The manifest must contain an "id" key, which should be a globally unique ID for your plugin, such as "com.example.MyPlugin" or a UUID.',
+				goneInVersion: '1.4',
+				isError: true,
+			});
 		}
 
 		const manifest = manifestFromObject(manifestObj);
@@ -280,8 +294,8 @@ export default class PluginService extends BaseService {
 
 		const plugin = new Plugin(baseDir, manifest, scriptText, (action: any) => this.store_.dispatch(action), dataDir);
 
-		for (const msg of deprecationNotices) {
-			plugin.deprecationNotice('1.5', msg);
+		for (const notice of deprecationNotices) {
+			plugin.deprecationNotice(notice.goneInVersion, notice.message, notice.isError);
 		}
 
 		// Sanity check, although at that point the plugin ID should have
