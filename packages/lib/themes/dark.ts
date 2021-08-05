@@ -11,7 +11,7 @@ const theme: Theme = {
 	// content. It's basically dark gray text on white background
 	backgroundColor: '#1D2024',
 	backgroundColorTransparent: 'rgba(255,255,255,0.9)',
-	oddBackgroundColor: '#dddddd',
+	oddBackgroundColor: '#141517',
 	color: '#dddddd',
 	colorError: 'red',
 	colorWarn: '#9A5B00',
