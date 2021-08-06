@@ -53,7 +53,7 @@ export default class JoplinViewsDialogs {
 	 */
 	async create(id: string): Promise<ViewHandle> {
 		if (!id) {
-			this.plugin.deprecationNotice('1.5', 'Creating a view without an ID is deprecated. To fix it, change your call to `joplin.views.dialogs.create("my-unique-id")`');
+			this.plugin.deprecationNotice('1.5', 'Creating a view without an ID is deprecated. To fix it, change your call to `joplin.views.dialogs.create("my-unique-id")`', true);
 			id = `${this.plugin.viewCount}`;
 		}
 
@@ -98,4 +98,13 @@ export default class JoplinViewsDialogs {
 		return this.controller(handle).open();
 	}
 
+	/**
+	 * Toggle on whether to fit the dialog size to the content or not.
+	 * When set to false, the dialog stretches to fill the application
+	 * window.
+	 * @default true
+	 */
+	public async setFitToContent(handle: ViewHandle, status: boolean) {
+		return this.controller(handle).fitToContent = status;
+	}
 }

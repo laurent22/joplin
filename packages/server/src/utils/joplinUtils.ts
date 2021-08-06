@@ -218,7 +218,7 @@ async function renderNote(share: Share, note: NoteEntity, resourceInfos: Resourc
 	return {
 		body: bodyHtml,
 		mime: 'text/html',
-		size: bodyHtml.length,
+		size: Buffer.byteLength(bodyHtml, 'utf-8'),
 	};
 }
 

@@ -4,6 +4,10 @@ It is possible to get the apps to display or log more information that might hel
 
 ## Desktop application
 
+If the application starts with a white screen, open **View &gt; Toggle Developer Tools** in the menu. Then check in the console if there is any error or warning and please let us know about it.
+
+Otherwise, follow these instructions:
+
 - Click on menu **Help &gt; Open Profile Directory** and add a file named "flags.txt" in your directory with the following content: `--open-dev-tools --debug --log-level debug`
 - Restart the application
 - The development tools should now be opened. Click the "Console" tab

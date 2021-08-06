@@ -2,18 +2,34 @@ import * as fs from 'fs-extra';
 import markdownUtils, { MarkdownTableHeader, MarkdownTableRow } from '@joplin/lib/markdownUtils';
 
 export default async function(readmePath: string, manifests: any) {
-	const rows: MarkdownTableRow[] = [];
+	let rows: MarkdownTableRow[] = [];
 
 	for (const pluginId in manifests) {
 		rows.push(manifests[pluginId]);
 	}
+
+	rows = rows.map(row => {
+		return {
+			...row,
+			download_url: `https://github.com/joplin/plugins/raw/master/plugins/${row.id}/plugin.jpl`,
+		};
+	});
 
 	const headers: MarkdownTableHeader[] = [
 		{
 			name: 'homepage_url',
 			label: '&nbsp;',
 			filter: (value: string) => {
+				if (!value) return '-';
 				return `[🏠](${markdownUtils.escapeLinkUrl(value)})`;
+			},
+		},
+		{
+			name: 'download_url',
+			label: '&nbsp;',
+			filter: (value: string) => {
+				if (!value) return '-';
+				return `[⬇️](${markdownUtils.escapeLinkUrl(value)})`;
 			},
 		},
 		{

@@ -1,7 +1,7 @@
 import ResourceEditWatcher from '@joplin/lib/services/ResourceEditWatcher/index';
 import CommandService from '@joplin/lib/services/CommandService';
 import KeymapService from '@joplin/lib/services/KeymapService';
-import PluginService from '@joplin/lib/services/plugins/PluginService';
+import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import resourceEditWatcherReducer, { defaultState as resourceEditWatcherDefaultState } from '@joplin/lib/services/ResourceEditWatcher/reducer';
 import { defaultState, State } from '@joplin/lib/reducer';
 import PluginRunner from './services/plugins/PluginRunner';
@@ -41,12 +41,13 @@ const Menu = bridge().Menu;
 const PluginManager = require('@joplin/lib/services/PluginManager');
 import RevisionService from '@joplin/lib/services/RevisionService';
 import MigrationService from '@joplin/lib/services/MigrationService';
-const CssUtils = require('@joplin/lib/CssUtils');
+import { loadCustomCss, injectCustomStyles } from '@joplin/lib/CssUtils';
 // import  populateDatabase from '@joplin/lib/services/debug/populateDatabase';
 
 const commands = [
 	require('./gui/MainScreen/commands/editAlarm'),
 	require('./gui/MainScreen/commands/exportPdf'),
+	require('./gui/MainScreen/commands/gotoAnything'),
 	require('./gui/MainScreen/commands/hideModalMessage'),
 	require('./gui/MainScreen/commands/moveToFolder'),
 	require('./gui/MainScreen/commands/newFolder'),
@@ -58,13 +59,14 @@ const commands = [
 	require('./gui/MainScreen/commands/openTag'),
 	require('./gui/MainScreen/commands/print'),
 	require('./gui/MainScreen/commands/renameFolder'),
-	require('./gui/MainScreen/commands/showShareFolderDialog'),
 	require('./gui/MainScreen/commands/renameTag'),
 	require('./gui/MainScreen/commands/search'),
 	require('./gui/MainScreen/commands/setTags'),
 	require('./gui/MainScreen/commands/showModalMessage'),
 	require('./gui/MainScreen/commands/showNoteContentProperties'),
 	require('./gui/MainScreen/commands/showNoteProperties'),
+	require('./gui/MainScreen/commands/showPrompt'),
+	require('./gui/MainScreen/commands/showShareFolderDialog'),
 	require('./gui/MainScreen/commands/showShareNoteDialog'),
 	require('./gui/MainScreen/commands/showSpellCheckerMenu'),
 	require('./gui/MainScreen/commands/toggleEditors'),
@@ -72,7 +74,6 @@ const commands = [
 	require('./gui/MainScreen/commands/toggleNoteList'),
 	require('./gui/MainScreen/commands/toggleSideBar'),
 	require('./gui/MainScreen/commands/toggleVisiblePanes'),
-	require('./gui/MainScreen/commands/showPrompt'),
 	require('./gui/NoteEditor/commands/focusElementNoteBody'),
 	require('./gui/NoteEditor/commands/focusElementNoteTitle'),
 	require('./gui/NoteEditor/commands/showLocalSearch'),
@@ -564,12 +565,14 @@ class Application extends BaseApplication {
 
 		const pluginSettings = service.unserializePluginSettings(Setting.value('plugins.states'));
 
-		// Users can add and remove plugins from the config screen at any
-		// time, however we only effectively uninstall the plugin the next
-		// time the app is started. What plugin should be uninstalled is
-		// stored in the settings.
-		const newSettings = service.clearUpdateState(await service.uninstallPlugins(pluginSettings));
-		Setting.setValue('plugins.states', newSettings);
+		{
+			// Users can add and remove plugins from the config screen at any
+			// time, however we only effectively uninstall the plugin the next
+			// time the app is started. What plugin should be uninstalled is
+			// stored in the settings.
+			const newSettings = service.clearUpdateState(await service.uninstallPlugins(pluginSettings));
+			Setting.setValue('plugins.states', newSettings);
+		}
 
 		try {
 			if (await shim.fsDriver().exists(Setting.value('pluginDir'))) {
@@ -591,6 +594,25 @@ class Application extends BaseApplication {
 			}
 		} catch (error) {
 			this.logger().error(`There was an error loading plugins from ${Setting.value('plugins.devPluginPaths')}:`, error);
+		}
+
+		{
+			// Users can potentially delete files from /plugins or even delete
+			// the complete folder. When that happens, we still have the plugin
+			// info in the state, which can cause various issues, so to sort it
+			// out we remove from the state any plugin that has *not* been loaded
+			// above (meaning the file was missing).
+			// https://github.com/laurent22/joplin/issues/5253
+			const oldSettings = service.unserializePluginSettings(Setting.value('plugins.states'));
+			const newSettings: PluginSettings = {};
+			for (const pluginId of Object.keys(oldSettings)) {
+				if (!service.pluginIds.includes(pluginId)) {
+					this.logger().warn('Found a plugin in the state that has not been loaded, which means the plugin might have been deleted outside Joplin - removing it from the state:', pluginId);
+					continue;
+				}
+				newSettings[pluginId] = oldSettings[pluginId];
+			}
+			Setting.setValue('plugins.states', newSettings);
 		}
 
 		this.checkAllPluginStartedIID_ = setInterval(() => {
@@ -627,7 +649,7 @@ class Application extends BaseApplication {
 
 		// Loads app-wide styles. (Markdown preview-specific styles loaded in app.js)
 		const filename = Setting.custom_css_files.JOPLIN_APP;
-		await CssUtils.injectCustomStyles(`${dir}/${filename}`);
+		await injectCustomStyles('appStyles', `${dir}/${filename}`);
 
 		AlarmService.setDriver(new AlarmServiceDriverNode({ appName: packageInfo.build.appId }));
 		AlarmService.setLogger(reg.logger());
@@ -703,9 +725,9 @@ class Application extends BaseApplication {
 		});
 
 		// Loads custom Markdown preview styles
-		const cssString = await CssUtils.loadCustomCss(`${Setting.value('profileDir')}/userstyle.css`);
+		const cssString = await loadCustomCss(`${Setting.value('profileDir')}/userstyle.css`);
 		this.store().dispatch({
-			type: 'LOAD_CUSTOM_CSS',
+			type: 'CUSTOM_CSS_APPEND',
 			css: cssString,
 		});
 

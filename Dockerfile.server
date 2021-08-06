@@ -74,3 +74,16 @@ ENV RUNNING_IN_DOCKER=1
 EXPOSE ${APP_PORT}
 
 CMD [ "npm", "--prefix", "packages/server", "start" ]
+
+# Build-time metadata
+# https://github.com/opencontainers/image-spec/blob/master/annotations.md
+ARG BUILD_DATE
+ARG REVISION
+ARG VERSION
+LABEL org.opencontainers.image.created="$BUILD_DATE" \
+      org.opencontainers.image.title="Joplin Server" \
+      org.opencontainers.image.description="Docker image for Joplin Server" \
+      org.opencontainers.image.url="https://joplinapp.org/" \
+      org.opencontainers.image.revision="$REVISION" \
+      org.opencontainers.image.source="https://github.com/laurent22/joplin.git" \
+      org.opencontainers.image.version="${VERSION}"

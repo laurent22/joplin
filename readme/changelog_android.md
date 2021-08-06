@@ -1,5 +1,25 @@
 # Joplin Android app changelog
 
+## [android-v2.2.1](https://github.com/laurent22/joplin/releases/tag/android-v2.2.1) (Pre-release) - 2021-07-13T17:37:38Z
+
+- New: Added improved editor (beta)
+- Improved: Disable backup to Google Drive (#5114 by Roman Musin)
+- Improved: Interpret only valid search filters (#5103) (#3871 by [@JackGruber](https://github.com/JackGruber))
+- Improved: Removed old editor code (e01a175)
+
+## [android-v2.1.4](https://github.com/laurent22/joplin/releases/tag/android-v2.1.4) - 2021-07-03T08:31:36Z
+
+- Fixed: Fixes #5133: Items keep being uploaded to Joplin Server after a note has been shared.
+- Fixed: Fixed issue where untitled notes where created after a note had been shared and synced
+
+## [android-v2.1.3](https://github.com/laurent22/joplin/releases/tag/android-v2.1.3) - 2021-06-27T13:34:12Z
+
+- New: Add support for X-API-MIN-VERSION header (51f3c00)
+- Improved: Activate Joplin Server optimisations (3d03321)
+- Improved: Also allow disabling TLS errors for Joplin Cloud to go around error UNABLE_TO_GET_ISSUER_CERT_LOCALLY (118a2f9)
+- Fixed: Fixed search when the index contains non-existing notes (5ecac21)
+- Fixed: Fixed version number on config screen (65e9268)
+
 ## [android-v2.1.2](https://github.com/laurent22/joplin/releases/tag/android-v2.1.2) (Pre-release) - 2021-06-20T18:36:23Z
 
 - Fixed: Fixed error that could prevent a revision from being created, and that would prevent the revision service from processing the rest of the notes (#5051)

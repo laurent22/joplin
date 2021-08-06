@@ -35,7 +35,6 @@ import { ShareInvitation } from '@joplin/lib/services/share/reducer';
 import ShareService from '@joplin/lib/services/share/ShareService';
 import { reg } from '@joplin/lib/registry';
 import removeKeylessItems from '../ResizableLayout/utils/removeKeylessItems';
-import ClipperServer from '@joplin/lib/ClipperServer';
 
 const { connect } = require('react-redux');
 const { PromptDialog } = require('../PromptDialog.min.js');
@@ -112,32 +111,33 @@ const defaultLayout: LayoutItem = {
 const commands = [
 	require('./commands/editAlarm'),
 	require('./commands/exportPdf'),
+	require('./commands/gotoAnything'),
 	require('./commands/hideModalMessage'),
 	require('./commands/moveToFolder'),
-	require('./commands/newNote'),
 	require('./commands/newFolder'),
+	require('./commands/newNote'),
 	require('./commands/newSubFolder'),
 	require('./commands/newTodo'),
+	require('./commands/openFolder'),
+	require('./commands/openNote'),
+	require('./commands/openTag'),
 	require('./commands/print'),
 	require('./commands/renameFolder'),
-	require('./commands/showShareFolderDialog'),
 	require('./commands/renameTag'),
 	require('./commands/search'),
 	require('./commands/setTags'),
 	require('./commands/showModalMessage'),
 	require('./commands/showNoteContentProperties'),
 	require('./commands/showNoteProperties'),
+	require('./commands/showPrompt'),
+	require('./commands/showShareFolderDialog'),
 	require('./commands/showShareNoteDialog'),
 	require('./commands/showSpellCheckerMenu'),
 	require('./commands/toggleEditors'),
+	require('./commands/toggleLayoutMoveMode'),
 	require('./commands/toggleNoteList'),
 	require('./commands/toggleSideBar'),
 	require('./commands/toggleVisiblePanes'),
-	require('./commands/toggleLayoutMoveMode'),
-	require('./commands/openNote'),
-	require('./commands/openFolder'),
-	require('./commands/openTag'),
-	require('./commands/showPrompt'),
 ];
 
 class MainScreenComponent extends React.Component<Props, State> {
@@ -580,24 +580,12 @@ class MainScreenComponent extends React.Component<Props, State> {
 			void reg.scheduleSync(1000);
 		};
 
-		const onApiGrantAuthorization = (accept: boolean) => {
-			ClipperServer.instance().api.acceptAuthToken(accept);
-		};
-
 		let msg = null;
 
 		// When adding something here, don't forget to update the condition in
 		// this.messageBoxVisible()
 
-		if (this.props.needApiAuth) {
-			msg = this.renderNotificationMessage(
-				_('The Web Clipper needs your authorisation to access your data.'),
-				_('Grant authorisation'),
-				() => onApiGrantAuthorization(true),
-				_('Reject'),
-				() => onApiGrantAuthorization(false)
-			);
-		} else if (this.props.isSafeMode) {
+		if (this.props.isSafeMode) {
 			msg = this.renderNotificationMessage(
 				_('Safe mode is currently active. Note rendering and all plugins are temporarily disabled.'),
 				_('Disable safe mode and restart'),
@@ -794,6 +782,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 				scripts={view.scripts}
 				pluginId={plugin.id}
 				buttons={view.buttons}
+				fitToContent={view.fitToContent}
 			/>);
 		}
 

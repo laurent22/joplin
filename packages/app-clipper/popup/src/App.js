@@ -237,12 +237,18 @@ class AppComponent extends Component {
 	renderStartupScreen() {
 		const messages = {
 			serverFoundState: {
+				// We need to display the "Connecting to the Joplin
+				// application..." message because if the app doesn't currently
+				// allow access to the clipper API, the clipper tries several
+				// ports and it takes time before failing. So if we don't
+				// display any message, it looks like it's not doing anything
+				// when clicking on the extension button.
 				'searching': 'Connecting to the Joplin application...',
 				'not_found': 'Error: Could not connect to the Joplin application. Please ensure that it is started and that the clipper service is enabled in the configuration.',
 			},
 			authState: {
 				'starting': 'Starting...',
-				'waiting': 'The Joplin Web Clipper requires your authorisation in order to access your data. To do, please open the Joplin desktop application and grant permission. Note: Joplin 2.1+ is needed to use this version of the Web Clipper.',
+				'waiting': 'The Joplin Web Clipper requires your authorisation in order to access your data. To proceed, please open the Joplin desktop application and grant permission. Note: Joplin 2.1+ is needed to use this version of the Web Clipper.',
 				'rejected': 'Permission to access your data was not granted. To try again please close this popup and open it again.',
 			},
 		};

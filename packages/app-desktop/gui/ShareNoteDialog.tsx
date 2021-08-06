@@ -27,6 +27,9 @@ interface Props {
 function styles_(props: Props) {
 	return buildStyle('ShareNoteDialog', props.themeId, (theme: any) => {
 		return {
+			root: {
+				minWidth: 500,
+			},
 			noteList: {
 				marginBottom: 10,
 			},
@@ -138,7 +141,7 @@ export function ShareNoteDialog(props: Props) {
 					continue;
 				}
 
-				reg.logger().error('ShareNoteDialog: Cannot share note:', error);
+				reg.logger().error('ShareNoteDialog: Cannot publish note:', error);
 
 				setSharesState('idle');
 				alert(JoplinServerApi.connectionErrorMessage(error));
@@ -165,7 +168,7 @@ export function ShareNoteDialog(props: Props) {
 
 	const renderNote = (note: NoteEntity) => {
 		const unshareButton = !props.shares.find(s => s.note_id === note.id) ? null : (
-			<Button tooltip={_('Unshare note')} iconName="fas fa-share-alt" onClick={() => unshareNoteButton_click({ noteId: note.id })}/>
+			<Button tooltip={_('Unpublish note')} iconName="fas fa-share-alt" onClick={() => unshareNoteButton_click({ noteId: note.id })}/>
 		);
 
 		// const removeButton = notes.length <= 1 ? null : (
@@ -213,8 +216,8 @@ export function ShareNoteDialog(props: Props) {
 
 	function renderContent() {
 		return (
-			<div>
-				<DialogTitle title={_('Share Notes')}/>
+			<div style={styles.root}>
+				<DialogTitle title={_('Publish Notes')}/>
 				{renderNoteList(notes)}
 				<button disabled={['creating', 'synchronizing'].indexOf(sharesState) >= 0} style={styles.copyShareLinkButton} onClick={shareLinkButton_click}>{_n('Copy Shareable Link', 'Copy Shareable Links', noteCount)}</button>
 				<div style={theme.textStyle}>{statusMessage(sharesState)}</div>

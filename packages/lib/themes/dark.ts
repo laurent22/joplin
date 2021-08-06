@@ -1,14 +1,17 @@
 import { Theme, ThemeAppearance } from './type';
+import lightTheme from './light';
 
 // This is the default dark theme in Joplin
 const theme: Theme = {
+	...lightTheme,
+
 	appearance: ThemeAppearance.Dark,
 
 	// Color scheme "1" is the basic one, like used to display the note
 	// content. It's basically dark gray text on white background
 	backgroundColor: '#1D2024',
 	backgroundColorTransparent: 'rgba(255,255,255,0.9)',
-	oddBackgroundColor: '#dddddd',
+	oddBackgroundColor: '#141517',
 	color: '#dddddd',
 	colorError: 'red',
 	colorWarn: '#9A5B00',

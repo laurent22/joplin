@@ -88,6 +88,8 @@ async function main() {
 	await updateCodeProjVersion(`${rootDir}/packages/app-mobile/ios/Joplin.xcodeproj/project.pbxproj`, iosVersionHack(majorMinorVersion));
 	await updateClipperManifestVersion(`${rootDir}/packages/app-clipper/manifest.json`, majorMinorVersion);
 	await updatePluginGeneratorTemplateVersion(`${rootDir}/packages/generator-joplin/generators/app/templates/src/manifest.json`, majorMinorVersion);
+
+	console.info('Version numbers have been updated. Consider running `npm i` to update the lock files');
 }
 
 main().catch((error) => {

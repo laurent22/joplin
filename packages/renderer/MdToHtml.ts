@@ -406,7 +406,7 @@ export default class MdToHtml {
 			this.lastCodeHighlightCacheKey_ = options.codeHighlightCacheKey;
 		}
 
-		const cacheKey = md5(escape(body + JSON.stringify(options) + JSON.stringify(options.theme)));
+		const cacheKey = md5(escape(body + this.customCss_ + JSON.stringify(options) + JSON.stringify(options.theme)));
 		const cachedOutput = this.cachedOutputs_[cacheKey];
 		if (cachedOutput) return cachedOutput;
 

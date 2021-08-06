@@ -44,13 +44,16 @@ function createSubRequestContext(ctx: AppContext, subRequest: SubRequest): AppCo
 			...subRequest.headers,
 		},
 		body: subRequest.body,
-		appLogger: ctx.appLogger,
+		joplin: {
+			...ctx.joplin,
+			appLogger: ctx.joplin.appLogger,
+			services: ctx.joplin.services,
+			db: ctx.joplin.db,
+			models: ctx.joplin.models,
+			routes: ctx.joplin.routes,
+		},
 		path: `/${subRequest.url}`,
 		url: fullUrl,
-		services: ctx.services,
-		db: ctx.db,
-		models: ctx.models,
-		routes: ctx.routes,
 	};
 
 	return newContext;

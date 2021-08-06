@@ -2,7 +2,7 @@ import { SubPath, ResponseType, Response } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
-import { ErrorNotFound } from '../../utils/errors';
+import { ErrorForbidden, ErrorNotFound } from '../../utils/errors';
 import { Item, Share } from '../../db';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { FileViewerResponse, renderItem as renderJoplinItem } from '../../utils/joplinUtils';
@@ -24,19 +24,22 @@ const router: Router = new Router(RouteType.Web);
 router.public = true;
 
 router.get('shares/:id', async (path: SubPath, ctx: AppContext) => {
-	const shareModel = ctx.models.share();
+	const shareModel = ctx.joplin.models.share();
 
 	const share = await shareModel.load(path.id);
 	if (!share) throw new ErrorNotFound();
 
-	const itemModel = ctx.models.item();
+	const user = await ctx.joplin.models.user().load(share.owner_id);
+	if (!user.enabled) throw new ErrorForbidden('This account has been disabled');
+
+	const itemModel = ctx.joplin.models.item();
 
 	const item = await itemModel.loadWithContent(share.item_id);
 	if (!item) throw new ErrorNotFound();
 
 	const result = await renderItem(ctx, item, share);
 
-	ctx.models.share().checkShareUrl(share, ctx.URL.origin);
+	ctx.joplin.models.share().checkShareUrl(share, ctx.URL.origin);
 
 	ctx.response.body = result.body;
 	ctx.response.set('Content-Type', result.mime);

@@ -18,6 +18,9 @@ const { surroundKeywords, nextWhitespaceIndex, removeDiacritics } = require('@jo
 const { mergeOverlappingIntervals } = require('@joplin/lib/ArrayUtils.js');
 import markupLanguageUtils from '../utils/markupLanguageUtils';
 import focusEditorIfEditorCommand from '@joplin/lib/services/commands/focusEditorIfEditorCommand';
+import Logger from '@joplin/lib/Logger';
+
+const logger = Logger.create('GotoAnything');
 
 const PLUGIN_NAME = 'gotoAnything';
 
@@ -79,11 +82,14 @@ class Dialog extends React.PureComponent<Props, State> {
 	private itemListRef: any;
 	private listUpdateIID_: any;
 	private markupToHtml_: any;
+	private userCallback_: any = null;
 
 	constructor(props: Props) {
 		super(props);
 
 		const startString = props?.userData?.startString ? props?.userData?.startString : '';
+
+		this.userCallback_ = props?.userData?.callback;
 
 		this.state = {
 			query: startString,
@@ -378,7 +384,7 @@ class Dialog extends React.PureComponent<Props, State> {
 			}
 
 			// make list scroll to top in every search
-			this.itemListRef.current.makeItemIndexVisible(0);
+			this.makeItemIndexVisible(0);
 
 			this.setState({
 				listType: listType,
@@ -391,12 +397,31 @@ class Dialog extends React.PureComponent<Props, State> {
 		}
 	}
 
+	private makeItemIndexVisible(index: number) {
+		// Looks like it's not always defined
+		// https://github.com/laurent22/joplin/issues/5184#issuecomment-879714850
+		if (!this.itemListRef || !this.itemListRef.current) {
+			logger.warn('Trying to set item index but the item list is not defined. Index: ', index);
+			return;
+		}
+
+		this.itemListRef.current.makeItemIndexVisible(index);
+	}
+
 	async gotoItem(item: any) {
 		this.props.dispatch({
 			pluginName: PLUGIN_NAME,
 			type: 'PLUGINLEGACY_DIALOG_SET',
 			open: false,
 		});
+
+		if (this.userCallback_) {
+			this.userCallback_.resolve({
+				type: this.state.listType,
+				item: { ...item },
+			});
+			return;
+		}
 
 		if (item.type === BaseModel.TYPE_COMMAND) {
 			void CommandService.instance().execute(item.id, ...item.commandArgs);
@@ -506,7 +531,7 @@ class Dialog extends React.PureComponent<Props, State> {
 
 			const newId = this.state.results[index].id;
 
-			this.itemListRef.current.makeItemIndexVisible(index);
+			this.makeItemIndexVisible(index);
 
 			this.setState({ selectedItemId: newId });
 		}
@@ -592,6 +617,9 @@ GotoAnything.manifest = {
 			userData: {
 				startString: ':',
 			},
+		},
+		{
+			id: 'controlledApi',
 		},
 	],
 
