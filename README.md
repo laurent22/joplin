@@ -165,7 +165,6 @@ The Web Clipper is a browser extension that allows you to save web pages and scr
 - Supports multiple languages.
 - External editor support - open notes in your favorite external editor with one click in Joplin.
 - Extensible functionality through plugin and data APIs.
-- Template support with data variables for auto creation of time & dates.
 - Custom CSS support for customisation of both the rendered markdown and overall user interface.
 - Customisable layout allows toggling, movement and sizing of various elements.
 - Keyboard shortcuts are editable and allow binding of most Joplin commands with export/import functionality.
@@ -375,29 +374,6 @@ Rendered markdown can be customized by placing a userstyle file in the profile d
 The whole UI can be customized by placing a custom editor style file in the profile directory `~/.config/joplin-desktop/userchrome.css`.
 
 Important: userstyle.css and userchrome.css are provided for your convenience, but they are advanced settings, and styles you define may break from one version to the next. If you want to use them, please know that it might require regular development work from you to keep them working. The Joplin team cannot make a commitment to keep the application HTML structure stable.
-
-# Note templates
-
-In the **desktop app**, templates can be used to create new notes or to insert into existing ones by adding a template file to the `templates` directory (File > Templates). For example creating the file `hours.md` in the `templates` directory with the contents:
-
-```markdown
-Date: {{date}}
-Hours:
-Details:
-```
-
-Templates can then be inserted from the menu (File->Templates).
-
-The currently supported template variables are:
-
-| Variable | Description | Example |
-| --- | --- | --- |
-| `{{date}}` | Today's date formatted based on the settings format | 2019-01-01 |
-| `{{time}}` | Current time formatted based on the settings format | 13:00 |
-| `{{datetime}}` | Current date and time formatted based on the settings format | 01/01/19 1:00 PM |
-| `{{#custom_datetime}}` | Current date and/or time formatted based on a supplied string (using [moment.js](https://momentjs.com/) formatting) | `{{#custom_datetime}}M d{{/custom_datetime}}` |
-| `{{bowm}}` | Date of the beginning of the week (when week starts on Monday) based on the settings format | |
-| `{{bows}}` | Date of the beginning of the week (when week starts on Sunday) based on the settings format | |
 
 # Plugins
 

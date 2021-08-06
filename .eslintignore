@@ -267,9 +267,6 @@ packages/app-desktop/gui/MainScreen/commands/renameTag.js.map
 packages/app-desktop/gui/MainScreen/commands/search.d.ts
 packages/app-desktop/gui/MainScreen/commands/search.js
 packages/app-desktop/gui/MainScreen/commands/search.js.map
-packages/app-desktop/gui/MainScreen/commands/selectTemplate.d.ts
-packages/app-desktop/gui/MainScreen/commands/selectTemplate.js
-packages/app-desktop/gui/MainScreen/commands/selectTemplate.js.map
 packages/app-desktop/gui/MainScreen/commands/setTags.d.ts
 packages/app-desktop/gui/MainScreen/commands/setTags.js
 packages/app-desktop/gui/MainScreen/commands/setTags.js.map
@@ -1584,6 +1581,9 @@ packages/plugin-repo-cli/lib/types.js.map
 packages/plugin-repo-cli/lib/updateReadme.d.ts
 packages/plugin-repo-cli/lib/updateReadme.js
 packages/plugin-repo-cli/lib/updateReadme.js.map
+packages/plugin-repo-cli/lib/updateReadme.test.d.ts
+packages/plugin-repo-cli/lib/updateReadme.test.js
+packages/plugin-repo-cli/lib/updateReadme.test.js.map
 packages/plugins/ToggleSidebars/api/index.d.ts
 packages/plugins/ToggleSidebars/api/index.js
 packages/plugins/ToggleSidebars/api/index.js.map

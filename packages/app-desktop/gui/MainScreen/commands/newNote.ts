@@ -2,7 +2,6 @@ import { utils, CommandRuntime, CommandDeclaration, CommandContext } from '@jopl
 import { _ } from '@joplin/lib/locale';
 import Setting from '@joplin/lib/models/Setting';
 import Note from '@joplin/lib/models/Note';
-const TemplateUtils = require('@joplin/lib/TemplateUtils');
 
 export const declaration: CommandDeclaration = {
 	name: 'newNote',
@@ -12,11 +11,9 @@ export const declaration: CommandDeclaration = {
 
 export const runtime = (): CommandRuntime => {
 	return {
-		execute: async (_context: CommandContext, template: string = null, isTodo: boolean = false) => {
+		execute: async (_context: CommandContext, body: string = '', isTodo: boolean = false) => {
 			const folderId = Setting.value('activeFolderId');
 			if (!folderId) return;
-
-			const body = template ? TemplateUtils.render(template) : '';
 
 			const defaultValues = Note.previewFieldsWithDefaultValues({ includeTimestamps: false });
 
