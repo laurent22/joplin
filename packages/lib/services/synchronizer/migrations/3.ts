@@ -3,7 +3,7 @@ import JoplinDatabase from '../../../JoplinDatabase';
 import Setting from '../../../models/Setting';
 import { SyncInfo, updateSyncInfoCache, uploadSyncInfo } from '../syncInfoUtils';
 
-export default async function(api: FileApi, db: JoplinDatabase) {
+export default async function(api: FileApi, db: JoplinDatabase): Promise<void> {
 	const masterKeys = await db.selectAll('SELECT * FROM master_keys');
 
 	const masterKeyMap: Record<string, any> = {};

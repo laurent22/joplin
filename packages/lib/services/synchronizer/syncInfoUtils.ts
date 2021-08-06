@@ -28,11 +28,16 @@ export class SyncInfo {
 	private masterKeys_: MasterKeyEntity[] = [];
 	private updatedTime_: number = 0;
 
+	public constructor() {
+		this.e2ee_ = { value: false, updatedTime: 0 };
+		this.activeMasterKeyId_ = { value: '', updatedTime: 0 };
+	}
+
 	public serialize(): string {
 		return JSON.stringify({
 			version: this.version,
-			e2ee: this.e2ee,
-			activeMasterKeyId: this.activeMasterKeyId,
+			e2ee: this.e2ee_,
+			activeMasterKeyId: this.activeMasterKeyId_,
 			masterKeys: this.masterKeys,
 			updatedTime: this.updatedTime_,
 		});

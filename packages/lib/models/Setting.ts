@@ -194,7 +194,7 @@ class Setting extends BaseModel {
 		cacheDir: '',
 		pluginDir: '',
 		flagOpenDevTools: false,
-		syncVersion: 2,
+		syncVersion: 3,
 		startupDevPlugins: [],
 	};
 

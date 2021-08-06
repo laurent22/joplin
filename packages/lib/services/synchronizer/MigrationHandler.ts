@@ -19,8 +19,6 @@ export type MigrationFunction = (api: FileApi, db: JoplinDatabase)=> Promise<voi
 // - Add tests in synchronizer_migrationHandler
 const migrations: MigrationFunction[] = [
 	null,
-	require('./migrations/1.js').default,
-	require('./migrations/2.js').default,
 	migration1,
 	migration2,
 	migration3,
@@ -133,10 +131,14 @@ export default class MigrationHandler extends BaseService {
 					await migration(this.api_, this.db_);
 					if (autoLockError) throw autoLockError;
 
-					await this.api_.put('info.json', this.serializeSyncTargetInfo({
-						...syncTargetInfo,
-						version: newVersion,
-					}));
+					// For legacy support. New migrations should set the sync
+					// target info directly as needed.
+					if ([1, 2].includes(newVersion)) {
+						await this.api_.put('info.json', this.serializeSyncTargetInfo({
+							...syncTargetInfo,
+							version: newVersion,
+						}));
+					}
 
 					this.logger().info(`MigrationHandler: Done migrating from version ${fromVersion} to version ${newVersion}`);
 				} catch (error) {
