@@ -29,6 +29,8 @@ export default async function(appContext: AppContext, env: Env, dbConnection: Db
 	// The joplinBase object is immutable because it is shared by all requests.
 	// Then a "joplin" context property is created from it per request, which
 	// contains request-specific properties such as the owner or notifications.
+	// See here for the reason:
+	// https://github.com/koajs/koa/issues/1554
 	appContext.joplinBase = Object.freeze({
 		env: env,
 		db: dbConnection,

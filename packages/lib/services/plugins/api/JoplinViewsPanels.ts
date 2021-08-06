@@ -31,7 +31,7 @@ export default class JoplinViewsPanels {
 	 */
 	public async create(id: string): Promise<ViewHandle> {
 		if (!id) {
-			this.plugin.deprecationNotice('1.5', 'Creating a view without an ID is deprecated. To fix it, change your call to `joplin.views.panels.create("my-unique-id")`');
+			this.plugin.deprecationNotice('1.5', 'Creating a view without an ID is deprecated. To fix it, change your call to `joplin.views.panels.create("my-unique-id")`', true);
 			id = `${this.plugin.viewCount}`;
 		}
 

@@ -7,6 +7,8 @@ console.info(rootDir);
 module.exports = {
 	src: '',
 	fn: async function() {
+		// Note that this script is slow so it's best to manually run it after
+		// adding a TypeScript file.
 		const tsFiles = glob.sync('{**/*.ts,**/*.tsx}', {
 			cwd: rootDir,
 			ignore: [

@@ -545,7 +545,7 @@ function NoteEditor(props: NoteEditorProps) {
 					onTitleChange={onTitleChange}
 				/>
 				{renderSearchInfo()}
-				<div style={{ display: 'flex', flex: 1, paddingLeft: theme.editorPaddingLeft }}>
+				<div style={{ display: 'flex', flex: 1, paddingLeft: theme.editorPaddingLeft, maxHeight: '100%' }}>
 					{editor}
 				</div>
 				<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>

@@ -96,6 +96,7 @@
 								<li class="tsd-kind-class"><a href="classes/joplinviewsmenus.html" class="tsd-kind-icon">Joplin<wbr>Views<wbr>Menus</a></li>
 								<li class="tsd-kind-class"><a href="classes/joplinviewspanels.html" class="tsd-kind-icon">Joplin<wbr>Views<wbr>Panels</a></li>
 								<li class="tsd-kind-class"><a href="classes/joplinviewstoolbarbuttons.html" class="tsd-kind-icon">Joplin<wbr>Views<wbr>Toolbar<wbr>Buttons</a></li>
+								<li class="tsd-kind-class"><a href="classes/joplinwindow.html" class="tsd-kind-icon">Joplin<wbr>Window</a></li>
 								<li class="tsd-kind-class"><a href="classes/joplinworkspace.html" class="tsd-kind-icon">Joplin<wbr>Workspace</a></li>
 							</ul>
 						</section>
@@ -113,6 +114,7 @@
 								<li class="tsd-kind-interface"><a href="interfaces/exportcontext.html" class="tsd-kind-icon">Export<wbr>Context</a></li>
 								<li class="tsd-kind-interface"><a href="interfaces/exportmodule.html" class="tsd-kind-icon">Export<wbr>Module</a></li>
 								<li class="tsd-kind-interface"><a href="interfaces/exportoptions.html" class="tsd-kind-icon">Export<wbr>Options</a></li>
+								<li class="tsd-kind-interface"><a href="interfaces/implementation.html" class="tsd-kind-icon">Implementation</a></li>
 								<li class="tsd-kind-interface"><a href="interfaces/importcontext.html" class="tsd-kind-icon">Import<wbr>Context</a></li>
 								<li class="tsd-kind-interface"><a href="interfaces/importmodule.html" class="tsd-kind-icon">Import<wbr>Module</a></li>
 								<li class="tsd-kind-interface"><a href="interfaces/itemchangeevent.html" class="tsd-kind-icon">Item<wbr>Change<wbr>Event</a></li>
@@ -243,7 +245,7 @@
 				<section class="tsd-panel tsd-member tsd-kind-type-alias">
 					<a name="postmessagehandler" class="tsd-anchor"></a>
 					<h3>Post<wbr>Message<wbr>Handler</h3>
-					<div class="tsd-signature tsd-kind-icon">Post<wbr>Message<wbr>Handler<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<div class="tsd-signature tsd-kind-icon">Post<wbr>Message<wbr>Handler<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 					</aside>
 					<div class="tsd-type-declaration">
@@ -251,15 +253,12 @@
 						<ul class="tsd-parameters">
 							<li class="tsd-parameter-signature">
 								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias">
-									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
 								</ul>
 								<ul class="tsd-descriptions">
 									<li class="tsd-description">
 										<h4 class="tsd-parameters-title">Parameters</h4>
 										<ul class="tsd-parameters">
-											<li>
-												<h5>id: <span class="tsd-signature-type">string</span></h5>
-											</li>
 											<li>
 												<h5>message: <span class="tsd-signature-type">any</span></h5>
 											</li>
@@ -435,6 +434,9 @@
 						<a href="classes/joplinviewstoolbarbuttons.html" class="tsd-kind-icon">joplin.views.toolbarButtons</a>
 					</li>
 					<li class=" tsd-kind-class">
+						<a href="classes/joplinwindow.html" class="tsd-kind-icon">joplin.window</a>
+					</li>
+					<li class=" tsd-kind-class">
 						<a href="classes/joplinworkspace.html" class="tsd-kind-icon">joplin.workspace</a>
 					</li>
 					<li class=" tsd-kind-interface">
@@ -469,6 +471,9 @@
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/exportoptions.html" class="tsd-kind-icon">ExportOptions</a>
+					</li>
+					<li class=" tsd-kind-interface">
+						<a href="interfaces/implementation.html" class="tsd-kind-icon">Implementation</a>
 					</li>
 					<li class=" tsd-kind-interface">
 						<a href="interfaces/importcontext.html" class="tsd-kind-icon">ImportContext</a>

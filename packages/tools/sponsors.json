@@ -25,10 +25,6 @@
 			"id": "3061769"
 		},
 		{
-			"name": "wasteisobscene",
-			"id": "53228972"
-		},
-		{
 			"name": "mcejp",
 			"id": "29300939"
 		},
@@ -75,6 +71,33 @@
 		{
 			"name": "konishi-t",
 			"id": "24908652"
+		},
+		{
+			"name": "clmntsl",
+			"id": "82579431"
+		}
+	],
+	"orgs": [
+		{
+			"url": "https://seirei.ne.jp",
+			"title": "Serei Network",
+			"imageName": "SeireiNetwork.png"
+		},
+		{
+			"url": "https://usrigging.com/",
+			"title": "U.S. Ringing Supply",
+			"imageName": "RingingSupply.svg"
+		},
+		{
+			"url": "https://tranio.com/italy/",
+			"title": "Tranio",
+			"imageName": "Tranio.png"
+		},
+		{
+			"url": "https://www.hosting.de/nextcloud/?mtm_campaign=managed-nextcloud&mtm_kwd=joplinapp&mtm_source=joplinapp-github&mtm_medium=banner",
+			"urlWebsite": "https://www.hosting.de/nextcloud/?mtm_campaign=managed-nextcloud&mtm_kwd=joplinapp&mtm_source=joplinapp-webseite&mtm_medium=banner",
+			"title": "Hosting.de",
+			"imageName": "HostingDe.png"
 		}
 	]
 }

@@ -1,4 +1,4 @@
-# Tips 💡
+# Tips
 
 The first few notes should have given you an overview of the main functionalities of Joplin, but there's more it can do. See below for some of these features and how to get more help using the app:
 
@@ -9,6 +9,10 @@ The first few notes should have given you an overview of the main functionalitie
 The Web Clipper is a browser extension that allows you to save web pages and screenshots from your browser. To start using it, open the Joplin desktop application, go to the Web Clipper Options and follow the instructions.
 
 More info on the official website: https://joplinapp.org/clipper/
+
+## Plugins
+
+Joplin supports many plugins that allows you to add new features to the app, such as tabs, a table of content for your notes, a way to manage favourite notes, and many other ones. To add a plugin, go to the "Plugins" section in the config screen. From there you can search and install plugins, as well as search or update plugins.
 
 ## Attachments
 

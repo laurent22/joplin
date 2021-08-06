@@ -4,6 +4,7 @@ import { ErrorBadRequest, ErrorForbidden, ErrorNotFound } from './errors';
 import Router from './Router';
 import { AppContext, HttpMethod, RouteType } from './types';
 import { URL } from 'url';
+import { csrfCheck } from './csrf';
 
 const { ltrimSlashes, rtrimSlashes } = require('@joplin/lib/path-utils');
 
@@ -188,10 +189,14 @@ export async function execRequest(routes: Routers, ctx: AppContext) {
 	const endPoint = match.route.findEndPoint(ctx.request.method as HttpMethod, match.subPath.schema);
 	if (ctx.URL && !isValidOrigin(ctx.URL.origin, baseUrl(endPoint.type), endPoint.type)) throw new ErrorNotFound(`Invalid origin: ${ctx.URL.origin}`, 'invalidOrigin');
 
+	const isPublicRoute = match.route.isPublic(match.subPath.schema);
+
 	// This is a generic catch-all for all private end points - if we
 	// couldn't get a valid session, we exit now. Individual end points
 	// might have additional permission checks depending on the action.
-	if (!match.route.isPublic(match.subPath.schema) && !ctx.joplin.owner) throw new ErrorForbidden();
+	if (!isPublicRoute && !ctx.joplin.owner) throw new ErrorForbidden();
+
+	await csrfCheck(ctx, isPublicRoute);
 
 	return endPoint.handler(match.subPath, ctx);
 }

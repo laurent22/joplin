@@ -612,35 +612,44 @@ export default class ItemModel extends BaseModel<Item> {
 			while (true) {
 				const latestProcessedChange = await this.models().keyValue().value<string>('ItemModel::updateTotalSizes::latestProcessedChange');
 
-				const changes = await this.models().change().allFromId(latestProcessedChange || '');
-				if (!changes.length) break;
+				const paginatedChanges = await this.models().change().allFromId(latestProcessedChange || '');
+				const changes = paginatedChanges.items;
 
-				const itemIds: Uuid[] = unique(changes.map(c => c.item_id));
-				const userItems: UserItem[] = await this.db('user_items').select('user_id').whereIn('item_id', itemIds);
-				const userIds: Uuid[] = unique(userItems.map(u => u.user_id));
+				if (!changes.length) {
+					// `allFromId()` may return empty pages when all items have
+					// been deleted. In that case, we only save the cursor and
+					// continue.
+					await this.models().keyValue().setValue('ItemModel::updateTotalSizes::latestProcessedChange', paginatedChanges.cursor);
+				} else {
+					const itemIds: Uuid[] = unique(changes.map(c => c.item_id));
+					const userItems: UserItem[] = await this.db('user_items').select('user_id').whereIn('item_id', itemIds);
+					const userIds: Uuid[] = unique(userItems.map(u => u.user_id));
 
-				const totalSizes: TotalSizeRow[] = [];
-				for (const userId of userIds) {
-					if (doneUserIds[userId]) continue;
+					const totalSizes: TotalSizeRow[] = [];
+					for (const userId of userIds) {
+						if (doneUserIds[userId]) continue;
 
-					totalSizes.push({
-						userId,
-						totalSize: await this.calculateUserTotalSize(userId),
-					});
-
-					doneUserIds[userId] = true;
-				}
-
-				await this.withTransaction(async () => {
-					for (const row of totalSizes) {
-						await this.models().user().save({
-							id: row.userId,
-							total_item_size: row.totalSize,
+						totalSizes.push({
+							userId,
+							totalSize: await this.calculateUserTotalSize(userId),
 						});
+
+						doneUserIds[userId] = true;
 					}
 
-					await this.models().keyValue().setValue('ItemModel::updateTotalSizes::latestProcessedChange', changes[changes.length - 1].id);
-				}, 'ItemModel::updateTotalSizes');
+					await this.withTransaction(async () => {
+						for (const row of totalSizes) {
+							await this.models().user().save({
+								id: row.userId,
+								total_item_size: row.totalSize,
+							});
+						}
+
+						await this.models().keyValue().setValue('ItemModel::updateTotalSizes::latestProcessedChange', paginatedChanges.cursor);
+					}, 'ItemModel::updateTotalSizes');
+				}
+
+				if (!paginatedChanges.has_more) break;
 			}
 		} finally {
 			this.updatingTotalSizes_ = false;

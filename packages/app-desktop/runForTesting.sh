@@ -43,11 +43,12 @@ do
 		echo "config sync.target 2" >> "$CMD_FILE" 
 		echo "config sync.2.path /Users/laurent/Temp/SyncTestE2EE" >> "$CMD_FILE" 
 
+		# echo "config keychain.supported 0" >> "$CMD_FILE" 
 		# echo "config sync.target 10" >> "$CMD_FILE" 
 		# # echo "config sync.10.path http://api.joplincloud.local:22300" >> "$CMD_FILE" 
 		# echo "config sync.10.username $USER_EMAIL" >> "$CMD_FILE" 
-		# echo "config sync.10.password 123456" >> "$CMD_FILE" 
-	
+		# echo "config sync.10.password hunter1hunter2hunter3" >> "$CMD_FILE" 	
+		
 	elif [[ $CMD == "e2ee" ]]; then
 	
 		echo "e2ee enable --password 111111" >> "$CMD_FILE" 

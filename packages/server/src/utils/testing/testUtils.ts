@@ -19,6 +19,8 @@ import { FolderEntity, NoteEntity, ResourceEntity } from '@joplin/lib/services/d
 import { ModelType } from '@joplin/lib/BaseModel';
 import { initializeJoplinUtils } from '../joplinUtils';
 import MustacheService from '../../services/MustacheService';
+import uuidgen from '../uuidgen';
+import { createCsrfToken } from '../csrf';
 
 // Takes into account the fact that this file will be inside the /dist directory
 // when it runs.
@@ -58,6 +60,8 @@ function initGlobalLogger() {
 
 let createdDbPath_: string = null;
 export async function beforeAllDb(unitName: string) {
+	unitName = unitName.replace(/\//g, '_');
+
 	createdDbPath_ = `${packageRootDir}/db-test-${unitName}.sqlite`;
 
 	const tempDir = `${packageRootDir}/temp/test-${unitName}`;
@@ -77,6 +81,7 @@ export async function beforeAllDb(unitName: string) {
 
 	await initConfig(Env.Dev, {
 		SQLITE_DATABASE: createdDbPath_,
+		SUPPORT_EMAIL: 'testing@localhost',
 	}, {
 		tempDir: tempDir,
 	});
@@ -159,6 +164,13 @@ export async function koaAppContext(options: AppContextTestOptions = null): Prom
 		...options.request,
 	};
 
+	const owner = options.sessionId ? await models().session().sessionUser(options.sessionId) : null;
+
+	// To pass the CSRF check, we create the token here and assign it
+	// automatically if it's a POST request with a body.
+	const csrfToken = owner ? await createCsrfToken(models(), owner) : '';
+	if (typeof reqOptions.body === 'object') reqOptions.body._csrf = csrfToken;
+
 	if (!reqOptions.method) reqOptions.method = 'GET';
 	if (!reqOptions.url) reqOptions.url = '/home';
 	if (!reqOptions.headers) reqOptions.headers = {};
@@ -170,8 +182,6 @@ export async function koaAppContext(options: AppContextTestOptions = null): Prom
 
 	const req = httpMocks.createRequest(reqOptions);
 	req.__isMocked = true;
-
-	const owner = options.sessionId ? await models().session().sessionUser(options.sessionId) : null;
 
 	const appLogger = Logger.create('AppTest');
 
@@ -216,6 +226,7 @@ export const testAssetDir = `${packageRootDir}/assets/tests`;
 interface UserAndSession {
 	user: User;
 	session: Session;
+	password: string;
 }
 
 export function db() {
@@ -241,9 +252,11 @@ interface CreateUserAndSessionOptions {
 }
 
 export const createUserAndSession = async function(index: number = 1, isAdmin: boolean = false, options: CreateUserAndSessionOptions = null): Promise<UserAndSession> {
+	const password = uuidgen();
+
 	options = {
 		email: `user${index}@localhost`,
-		password: '123456',
+		password,
 		...options,
 	};
 
@@ -252,7 +265,8 @@ export const createUserAndSession = async function(index: number = 1, isAdmin: b
 
 	return {
 		user: await models().user().load(user.id),
-		session: session,
+		session,
+		password,
 	};
 };
 

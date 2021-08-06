@@ -15,6 +15,10 @@ const { render } = require('react-dom');
 const { connect, Provider } = require('react-redux');
 import Setting from '@joplin/lib/models/Setting';
 import shim from '@joplin/lib/shim';
+import ClipperServer from '@joplin/lib/ClipperServer';
+import DialogTitle from './DialogTitle';
+import DialogButtonRow, { ButtonSpec, ClickEvent, ClickEventHandler } from './DialogButtonRow';
+import Dialog from './Dialog';
 const { ImportScreen } = require('./ImportScreen.min.js');
 const { ResourceScreen } = require('./ResourceScreen.js');
 const { Navigator } = require('./Navigator.min.js');
@@ -28,6 +32,14 @@ interface Props {
 	dispatch: Function;
 	size: Size;
 	zoomFactor: number;
+	needApiAuth: boolean;
+}
+
+interface ModalDialogProps {
+	themeId: number;
+	message: string;
+	buttonSpecs: ButtonSpec[];
+	onClick: ClickEventHandler;
 }
 
 const GlobalStyle = createGlobalStyle`
@@ -91,6 +103,54 @@ class RootComponent extends React.Component<Props, any> {
 		await WelcomeUtils.install(this.props.dispatch);
 	}
 
+	private renderModalMessage(props: ModalDialogProps) {
+		if (!props) return null;
+
+		const renderContent = () => {
+			return (
+				<div>
+					<DialogTitle title={_('Confirmation')}/>
+					<p>{props.message}</p>
+					<DialogButtonRow
+						themeId={props.themeId}
+						onClick={props.onClick}
+						okButtonShow={false}
+						cancelButtonShow={false}
+						customButtons={props.buttonSpecs}
+					/>
+				</div>
+			);
+		};
+
+		return <Dialog renderContent={renderContent}/>;
+	}
+
+	private modalDialogProps(): ModalDialogProps {
+		if (!this.props.needApiAuth) return null;
+
+		let message = '';
+		const buttonSpecs: ButtonSpec[] = [];
+		let onClick: ClickEventHandler = null;
+
+		if (this.props.needApiAuth) {
+			message = _('The Web Clipper needs your authorisation to access your data.');
+			buttonSpecs.push({ name: 'ok', label: _('Grant authorisation') });
+			buttonSpecs.push({ name: 'cancel', label: _('Reject') });
+			onClick = (event: ClickEvent) => {
+				ClipperServer.instance().api.acceptAuthToken(event.buttonName === 'ok');
+			};
+		} else {
+			return null;
+		}
+
+		return {
+			themeId: this.props.themeId,
+			buttonSpecs,
+			message,
+			onClick,
+		};
+	}
+
 	public render() {
 		const navigatorStyle = {
 			width: this.props.size.width / this.props.zoomFactor,
@@ -115,6 +175,7 @@ class RootComponent extends React.Component<Props, any> {
 					<MenuBar/>
 					<GlobalStyle/>
 					<Navigator style={navigatorStyle} screens={screens} />
+					{this.renderModalMessage(this.modalDialogProps())}
 				</ThemeProvider>
 			</StyleSheetManager>
 		);
@@ -127,6 +188,7 @@ const mapStateToProps = (state: any) => {
 		zoomFactor: state.settings.windowContentZoomFactor / 100,
 		appState: state.appState,
 		themeId: state.settings.theme,
+		needApiAuth: state.needApiAuth,
 	};
 };
 

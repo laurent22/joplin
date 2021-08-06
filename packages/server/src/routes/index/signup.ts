@@ -6,7 +6,7 @@ import { bodyFields } from '../../utils/requestUtils';
 import config from '../../config';
 import defaultView from '../../utils/defaultView';
 import { View } from '../../services/MustacheService';
-import { checkPassword } from './users';
+import { checkRepeatPassword } from './users';
 import { NotificationKey } from '../../models/NotificationModel';
 import { AccountType } from '../../models/UserModel';
 import { ErrorForbidden } from '../../utils/errors';
@@ -41,7 +41,7 @@ router.post('signup', async (_path: SubPath, ctx: AppContext) => {
 
 	try {
 		const formUser = await bodyFields<FormUser>(ctx.req);
-		const password = checkPassword(formUser, true);
+		const password = checkRepeatPassword(formUser, true);
 
 		const user = await ctx.joplin.models.user().save({
 			account_type: AccountType.Basic,

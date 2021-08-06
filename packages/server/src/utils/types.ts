@@ -1,4 +1,5 @@
 import { LoggerWrapper } from '@joplin/lib/Logger';
+import { StripePublicConfig } from '@joplin/lib/utils/joplinCloud';
 import * as Koa from 'koa';
 import { DbConnection, User, Uuid } from '../db';
 import { Models } from '../models/factory';
@@ -37,14 +38,14 @@ export interface AppContext extends Koa.Context {
 	// All the properties under `joplin` were previously at the root, so to make
 	// sure they are no longer used anywhere we set them to "never", as that
 	// would trigger the TypeScript compiler. Later on, all this can be removed.
-	env: never;
-	db: never;
-	models: never;
-	appLogger: never;
-	notifications: never;
-	owner: never;
-	routes: never;
-	services: never;
+	// env: never;
+	// db: never;
+	// models: never;
+	// appLogger: never;
+	// notifications: never;
+	// owner: never;
+	// routes: never;
+	// services: never;
 }
 
 export enum DatabaseConfigClient {
@@ -75,9 +76,9 @@ export interface MailerConfig {
 	noReplyEmail: string;
 }
 
-export interface StripeConfig {
+export interface StripeConfig extends StripePublicConfig {
+	enabled: boolean;
 	secretKey: string;
-	publishableKey: string;
 	webhookSecret: string;
 }
 
@@ -103,6 +104,10 @@ export interface Config {
 	database: DatabaseConfig;
 	mailer: MailerConfig;
 	stripe: StripeConfig;
+	supportEmail: string;
+	supportName: string;
+	businessEmail: string;
+	isJoplinCloud: boolean;
 }
 
 export enum HttpMethod {

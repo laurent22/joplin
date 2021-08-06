@@ -20,6 +20,7 @@ describe('SubscriptionModel', function() {
 	test('should create a user and subscription', async function() {
 		await models().subscription().saveUserAndSubscription(
 			'toto@example.com',
+			'Toto',
 			AccountType.Pro,
 			'STRIPE_USER_ID',
 			'STRIPE_SUB_ID'
@@ -30,6 +31,7 @@ describe('SubscriptionModel', function() {
 
 		expect(user.account_type).toBe(AccountType.Pro);
 		expect(user.email).toBe('toto@example.com');
+		expect(user.full_name).toBe('Toto');
 		expect(getCanShareFolder(user)).toBe(1);
 		expect(getMaxItemSize(user)).toBe(200 * MB);
 

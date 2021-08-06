@@ -78,7 +78,7 @@ export interface State {
 	hasDisabledSyncItems: boolean;
 	hasDisabledEncryptionItems: boolean;
 	customCss: string;
-	templates: any[];
+	hasLegacyTemplates: boolean;
 	collapsedFolderIds: string[];
 	clipperServer: StateClipperServer;
 	decryptionWorker: StateDecryptionWorker;
@@ -131,7 +131,7 @@ export const defaultState: State = {
 	hasDisabledSyncItems: false,
 	hasDisabledEncryptionItems: false,
 	customCss: '',
-	templates: [],
+	hasLegacyTemplates: false,
 	collapsedFolderIds: [],
 	clipperServer: {
 		startState: 'idle',
@@ -1015,6 +1015,10 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 			}
 			break;
 
+		case 'CONTAINS_LEGACY_TEMPLATES':
+			draft.hasLegacyTemplates = true;
+			break;
+
 		case 'SYNC_STARTED':
 			draft.syncStarted = true;
 			break;
@@ -1115,12 +1119,8 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 			}
 			break;
 
-		case 'LOAD_CUSTOM_CSS':
-			draft.customCss = action.css;
-			break;
-
-		case 'TEMPLATE_UPDATE_ALL':
-			draft.templates = action.templates;
+		case 'CUSTOM_CSS_APPEND':
+			draft.customCss += action.css;
 			break;
 
 		case 'SET_NOTE_TAGS':

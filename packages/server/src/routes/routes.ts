@@ -17,12 +17,14 @@ import indexItems from './index/items';
 import indexLogin from './index/login';
 import indexLogout from './index/logout';
 import indexNotifications from './index/notifications';
+import indexPassword from './index/password';
 import indexSignup from './index/signup';
 import indexShares from './index/shares';
 import indexUsers from './index/users';
 import indexStripe from './index/stripe';
 import indexTerms from './index/terms';
 import indexPrivacy from './index/privacy';
+import indexUpgrade from './index/upgrade';
 
 import defaultRoute from './default';
 
@@ -41,6 +43,7 @@ const routes: Routers = {
 	'changes': indexChanges,
 	'home': indexHome,
 	'items': indexItems,
+	'password': indexPassword,
 	'login': indexLogin,
 	'logout': indexLogout,
 	'notifications': indexNotifications,
@@ -50,6 +53,7 @@ const routes: Routers = {
 	'stripe': indexStripe,
 	'terms': indexTerms,
 	'privacy': indexPrivacy,
+	'upgrade': indexUpgrade,
 
 	'': defaultRoute,
 };

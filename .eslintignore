@@ -53,6 +53,7 @@ packages/app-mobile/locales
 packages/app-mobile/node_modules
 packages/app-mobile/pluginAssets/
 packages/app-mobile/lib/rnInjectedJs/
+packages/app-mobile/components/NoteEditor/CodeMirror.bundle.js
 packages/lib/assets/
 packages/lib/rnInjectedJs/
 packages/lib/vendor/
@@ -272,9 +273,6 @@ packages/app-desktop/gui/MainScreen/commands/renameTag.js.map
 packages/app-desktop/gui/MainScreen/commands/search.d.ts
 packages/app-desktop/gui/MainScreen/commands/search.js
 packages/app-desktop/gui/MainScreen/commands/search.js.map
-packages/app-desktop/gui/MainScreen/commands/selectTemplate.d.ts
-packages/app-desktop/gui/MainScreen/commands/selectTemplate.js
-packages/app-desktop/gui/MainScreen/commands/selectTemplate.js.map
 packages/app-desktop/gui/MainScreen/commands/setTags.d.ts
 packages/app-desktop/gui/MainScreen/commands/setTags.js
 packages/app-desktop/gui/MainScreen/commands/setTags.js.map
@@ -377,6 +375,9 @@ packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js.map
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/styles/index.d.ts
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/styles/index.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/styles/index.js.map
+packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/openEditDialog.d.ts
+packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/openEditDialog.js
+packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/openEditDialog.js.map
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.d.ts
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js.map
@@ -707,6 +708,12 @@ packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js.ma
 packages/app-mobile/components/NoteBodyViewer/hooks/useSource.d.ts
 packages/app-mobile/components/NoteBodyViewer/hooks/useSource.js
 packages/app-mobile/components/NoteBodyViewer/hooks/useSource.js.map
+packages/app-mobile/components/NoteEditor/CodeMirror.d.ts
+packages/app-mobile/components/NoteEditor/CodeMirror.js
+packages/app-mobile/components/NoteEditor/CodeMirror.js.map
+packages/app-mobile/components/NoteEditor/NoteEditor.d.ts
+packages/app-mobile/components/NoteEditor/NoteEditor.js
+packages/app-mobile/components/NoteEditor/NoteEditor.js.map
 packages/app-mobile/components/SelectDateTimeDialog.d.ts
 packages/app-mobile/components/SelectDateTimeDialog.js
 packages/app-mobile/components/SelectDateTimeDialog.js.map
@@ -824,6 +831,9 @@ packages/lib/BaseSyncTarget.js.map
 packages/lib/ClipperServer.d.ts
 packages/lib/ClipperServer.js
 packages/lib/ClipperServer.js.map
+packages/lib/CssUtils.d.ts
+packages/lib/CssUtils.js
+packages/lib/CssUtils.js.map
 packages/lib/HtmlToMd.d.ts
 packages/lib/HtmlToMd.js
 packages/lib/HtmlToMd.js.map
@@ -863,6 +873,9 @@ packages/lib/Synchronizer.js.map
 packages/lib/TaskQueue.d.ts
 packages/lib/TaskQueue.js
 packages/lib/TaskQueue.js.map
+packages/lib/array.d.ts
+packages/lib/array.js
+packages/lib/array.js.map
 packages/lib/commands/historyBackward.d.ts
 packages/lib/commands/historyBackward.js
 packages/lib/commands/historyBackward.js.map
@@ -1307,6 +1320,9 @@ packages/lib/services/plugins/api/JoplinViewsPanels.js.map
 packages/lib/services/plugins/api/JoplinViewsToolbarButtons.d.ts
 packages/lib/services/plugins/api/JoplinViewsToolbarButtons.js
 packages/lib/services/plugins/api/JoplinViewsToolbarButtons.js.map
+packages/lib/services/plugins/api/JoplinWindow.d.ts
+packages/lib/services/plugins/api/JoplinWindow.js
+packages/lib/services/plugins/api/JoplinWindow.js.map
 packages/lib/services/plugins/api/JoplinWorkspace.d.ts
 packages/lib/services/plugins/api/JoplinWorkspace.js
 packages/lib/services/plugins/api/JoplinWorkspace.js.map
@@ -1430,6 +1446,9 @@ packages/lib/services/searchengine/queryBuilder.js.map
 packages/lib/services/share/ShareService.d.ts
 packages/lib/services/share/ShareService.js
 packages/lib/services/share/ShareService.js.map
+packages/lib/services/share/ShareService.test.d.ts
+packages/lib/services/share/ShareService.test.js
+packages/lib/services/share/ShareService.test.js.map
 packages/lib/services/share/reducer.d.ts
 packages/lib/services/share/reducer.js
 packages/lib/services/share/reducer.js.map
@@ -1553,6 +1572,9 @@ packages/lib/time.js.map
 packages/lib/utils/credentialFiles.d.ts
 packages/lib/utils/credentialFiles.js
 packages/lib/utils/credentialFiles.js.map
+packages/lib/utils/joplinCloud.d.ts
+packages/lib/utils/joplinCloud.js
+packages/lib/utils/joplinCloud.js.map
 packages/lib/uuid.d.ts
 packages/lib/uuid.js
 packages/lib/uuid.js.map
@@ -1589,6 +1611,9 @@ packages/plugin-repo-cli/lib/types.js.map
 packages/plugin-repo-cli/lib/updateReadme.d.ts
 packages/plugin-repo-cli/lib/updateReadme.js
 packages/plugin-repo-cli/lib/updateReadme.js.map
+packages/plugin-repo-cli/lib/updateReadme.test.d.ts
+packages/plugin-repo-cli/lib/updateReadme.test.js
+packages/plugin-repo-cli/lib/updateReadme.test.js.map
 packages/plugins/ToggleSidebars/api/index.d.ts
 packages/plugins/ToggleSidebars/api/index.js
 packages/plugins/ToggleSidebars/api/index.js.map
@@ -1676,15 +1701,15 @@ packages/renderer/pathUtils.js.map
 packages/renderer/utils.d.ts
 packages/renderer/utils.js
 packages/renderer/utils.js.map
-packages/tools/build-website.d.ts
-packages/tools/build-website.js
-packages/tools/build-website.js.map
 packages/tools/buildServerDocker.d.ts
 packages/tools/buildServerDocker.js
 packages/tools/buildServerDocker.js.map
 packages/tools/generate-database-types.d.ts
 packages/tools/generate-database-types.js
 packages/tools/generate-database-types.js.map
+packages/tools/generate-images.d.ts
+packages/tools/generate-images.js
+packages/tools/generate-images.js.map
 packages/tools/lerna-add.d.ts
 packages/tools/lerna-add.js
 packages/tools/lerna-add.js.map
@@ -1709,4 +1734,16 @@ packages/tools/tool-utils.js.map
 packages/tools/update-readme-sponsors.d.ts
 packages/tools/update-readme-sponsors.js
 packages/tools/update-readme-sponsors.js.map
+packages/tools/website/build.d.ts
+packages/tools/website/build.js
+packages/tools/website/build.js.map
+packages/tools/website/utils/pressCarousel.d.ts
+packages/tools/website/utils/pressCarousel.js
+packages/tools/website/utils/pressCarousel.js.map
+packages/tools/website/utils/render.d.ts
+packages/tools/website/utils/render.js
+packages/tools/website/utils/render.js.map
+packages/tools/website/utils/types.d.ts
+packages/tools/website/utils/types.js
+packages/tools/website/utils/types.js.map
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD

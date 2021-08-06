@@ -1,6 +1,7 @@
 import { EmailSender, Subscription, Uuid } from '../db';
 import { ErrorNotFound } from '../utils/errors';
 import uuidgen from '../utils/uuidgen';
+import paymentFailedTemplate from '../views/emails/paymentFailedTemplate';
 import BaseModel from './BaseModel';
 import { AccountType } from './UserModel';
 
@@ -27,12 +28,13 @@ export default class SubscriptionModel extends BaseModel<Subscription> {
 		} else {
 			toSave.last_payment_failed_time = now;
 
-			const user = await this.models().user().load(sub.user_id, { fields: ['email'] });
+			const user = await this.models().user().load(sub.user_id, { fields: ['email', 'id', 'full_name'] });
 
 			await this.models().email().push({
-				subject: `${this.appName} subscription payment failed`,
-				body: `Your invoice payment has failed. Please follow this URL to update your payment details: \n\n[Manage your subscription](${this.baseUrl}/portal)`,
+				...paymentFailedTemplate(),
 				recipient_email: user.email,
+				recipient_id: user.id,
+				recipient_name: user.full_name || '',
 				sender_id: EmailSender.Support,
 			});
 		}
@@ -41,18 +43,19 @@ export default class SubscriptionModel extends BaseModel<Subscription> {
 	}
 
 	public async byStripeSubscriptionId(id: string): Promise<Subscription> {
-		return this.db(this.tableName).select(this.defaultFields).where('stripe_subscription_id', '=', id).first();
+		return this.db(this.tableName).select(this.defaultFields).where('stripe_subscription_id', '=', id).where('is_deleted', '=', 0).first();
 	}
 
 	public async byUserId(userId: Uuid): Promise<Subscription> {
-		return this.db(this.tableName).select(this.defaultFields).where('user_id', '=', userId).first();
+		return this.db(this.tableName).select(this.defaultFields).where('user_id', '=', userId).where('is_deleted', '=', 0).first();
 	}
 
-	public async saveUserAndSubscription(email: string, accountType: AccountType, stripeUserId: string, stripeSubscriptionId: string) {
+	public async saveUserAndSubscription(email: string, fullName: string, accountType: AccountType, stripeUserId: string, stripeSubscriptionId: string) {
 		return this.withTransaction(async () => {
 			const user = await this.models().user().save({
 				account_type: accountType,
 				email,
+				full_name: fullName,
 				email_confirmed: 1,
 				password: uuidgen(),
 				must_set_password: 1,
@@ -67,6 +70,12 @@ export default class SubscriptionModel extends BaseModel<Subscription> {
 
 			return { user, subscription };
 		});
+	}
+
+	public async toggleSoftDelete(id: number, isDeleted: boolean) {
+		const sub = await this.load(`${id}`);
+		if (!sub) throw new Error(`No such subscription: ${id}`);
+		await this.save({ id, is_deleted: isDeleted ? 1 : 0 });
 	}
 
 }

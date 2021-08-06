@@ -19,6 +19,10 @@ import { reg } from '@joplin/lib/registry';
 
 const logger = Logger.create('ShareFolderDialog');
 
+const StyledRoot = styled.div`
+	min-width: 500px;
+`;
+
 const StyledFolder = styled.div`
 	border: 1px solid ${(props) => props.theme.dividerColor};
 	padding: 0.5em;
@@ -303,7 +307,7 @@ function ShareFolderDialog(props: Props) {
 
 	function renderContent() {
 		return (
-			<div>
+			<StyledRoot>
 				<DialogTitle title={_('Share Notebook')}/>
 				{renderFolder()}
 				{renderAddRecipient()}
@@ -317,7 +321,7 @@ function ShareFolderDialog(props: Props) {
 					cancelButtonLabel={_('Close')}
 					customButtons={customButtons}
 				/>
-			</div>
+			</StyledRoot>
 		);
 	}
 

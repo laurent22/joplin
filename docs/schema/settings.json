@@ -448,7 +448,7 @@
 		"editor.beta": {
 			"type": "boolean",
 			"default": false,
-			"description": "Opt-in to the editor beta. This beta adds list continuation, Markdown preview, and Markdown shortcuts. If you find bugs, please report them in the Discourse forum.",
+			"description": "Opt-in to the editor beta. This beta adds list continuation and syntax highlighting. If you find bugs, please report them in the Discourse forum.",
 			"$comment": "private"
 		},
 		"newTodoFocus": {
@@ -648,7 +648,7 @@
 		},
 		"style.editor.fontSize": {
 			"type": "integer",
-			"default": 13,
+			"default": 15,
 			"description": "Editor font size",
 			"minimum": 4,
 			"maximum": 50

@@ -35,7 +35,6 @@ import { ShareInvitation } from '@joplin/lib/services/share/reducer';
 import ShareService from '@joplin/lib/services/share/ShareService';
 import { reg } from '@joplin/lib/registry';
 import removeKeylessItems from '../ResizableLayout/utils/removeKeylessItems';
-import ClipperServer from '@joplin/lib/ClipperServer';
 import { localSyncTargetInfo, masterKeyAll } from '@joplin/lib/services/synchronizer/syncTargetInfoUtils';
 
 const { connect } = require('react-redux');
@@ -65,6 +64,7 @@ interface Props {
 	showMissingMasterKeyMessage: boolean;
 	showNeedUpgradingMasterKeyMessage: boolean;
 	showShouldReencryptMessage: boolean;
+	showInstallTemplatesPlugin: boolean;
 	focusedField: string;
 	themeId: number;
 	settingEditorCodeView: boolean;
@@ -126,7 +126,6 @@ const commands = [
 	require('./commands/renameFolder'),
 	require('./commands/renameTag'),
 	require('./commands/search'),
-	require('./commands/selectTemplate'),
 	require('./commands/setTags'),
 	require('./commands/showModalMessage'),
 	require('./commands/showNoteContentProperties'),
@@ -554,6 +553,16 @@ class MainScreenComponent extends React.Component<Props, State> {
 			});
 		};
 
+		const onViewPluginScreen = () => {
+			this.props.dispatch({
+				type: 'NAV_GO',
+				routeName: 'Config',
+				props: {
+					defaultSection: 'plugins',
+				},
+			});
+		};
+
 		const onRestartAndUpgrade = async () => {
 			Setting.setValue('sync.upgradeState', Setting.SYNC_UPGRADE_STATE_MUST_DO);
 			await Setting.saveAll();
@@ -572,24 +581,12 @@ class MainScreenComponent extends React.Component<Props, State> {
 			void reg.scheduleSync(1000);
 		};
 
-		const onApiGrantAuthorization = (accept: boolean) => {
-			ClipperServer.instance().api.acceptAuthToken(accept);
-		};
-
 		let msg = null;
 
 		// When adding something here, don't forget to update the condition in
 		// this.messageBoxVisible()
 
-		if (this.props.needApiAuth) {
-			msg = this.renderNotificationMessage(
-				_('The Web Clipper needs your authorisation to access your data.'),
-				_('Grant authorisation'),
-				() => onApiGrantAuthorization(true),
-				_('Reject'),
-				() => onApiGrantAuthorization(false)
-			);
-		} else if (this.props.isSafeMode) {
+		if (this.props.isSafeMode) {
 			msg = this.renderNotificationMessage(
 				_('Safe mode is currently active. Note rendering and all plugins are temporarily disabled.'),
 				_('Disable safe mode and restart'),
@@ -642,6 +639,12 @@ class MainScreenComponent extends React.Component<Props, State> {
 				_('Set the password'),
 				onViewEncryptionConfigScreen
 			);
+		} else if (this.props.showInstallTemplatesPlugin) {
+			msg = this.renderNotificationMessage(
+				'The template feature has been moved to a plugin called "Templates".',
+				'Install plugin',
+				onViewPluginScreen
+			);
 		}
 
 		return (
@@ -653,7 +656,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 
 	messageBoxVisible(props: Props = null) {
 		if (!props) props = this.props;
-		return props.hasDisabledSyncItems || props.showMissingMasterKeyMessage || props.showNeedUpgradingMasterKeyMessage || props.showShouldReencryptMessage || props.hasDisabledEncryptionItems || this.props.shouldUpgradeSyncTarget || props.isSafeMode || this.showShareInvitationNotification(props) || this.props.needApiAuth;
+		return props.hasDisabledSyncItems || props.showMissingMasterKeyMessage || props.showNeedUpgradingMasterKeyMessage || props.showShouldReencryptMessage || props.hasDisabledEncryptionItems || this.props.shouldUpgradeSyncTarget || props.isSafeMode || this.showShareInvitationNotification(props) || this.props.needApiAuth || this.props.showInstallTemplatesPlugin;
 	}
 
 	registerCommands() {
@@ -780,6 +783,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 				scripts={view.scripts}
 				pluginId={plugin.id}
 				buttons={view.buttons}
+				fitToContent={view.fitToContent}
 			/>);
 		}
 
@@ -872,7 +876,6 @@ const mapStateToProps = (state: AppState) => {
 		selectedNoteId: state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null,
 		pluginsLegacy: state.pluginsLegacy,
 		plugins: state.pluginService.plugins,
-		templates: state.templates,
 		customCss: state.customCss,
 		editorNoteStatuses: state.editorNoteStatuses,
 		hasNotesBeingSaved: stateUtils.hasNotesBeingSaved(state),
@@ -883,6 +886,7 @@ const mapStateToProps = (state: AppState) => {
 		shareInvitations: state.shareService.shareInvitations,
 		isSafeMode: state.settings.isSafeMode,
 		needApiAuth: state.needApiAuth,
+		showInstallTemplatesPlugin: state.hasLegacyTemplates && !state.pluginService.plugins['joplin.plugin.templates'],
 	};
 };
 

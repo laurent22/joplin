@@ -1,11 +1,5 @@
 #!/usr/bin/env node
 
-// To test the tool with existing packages, the best is to:
-//
-// - Create a separate copy of the plugin repo
-// - Reset back a few commits
-// - Run with the --dry-run option: `plugin-repo-cli build ~/src/joplin-plugins-test/ --dry-run`
-
 import * as fs from 'fs-extra';
 import * as path from 'path';
 import * as process from 'process';

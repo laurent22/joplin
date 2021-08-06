@@ -25,6 +25,10 @@ export default class CronService extends BaseService {
 		cron.schedule('0 * * * *', async () => {
 			await runCronTask('updateTotalSizes', async () => this.models.item().updateTotalSizes());
 		});
+
+		cron.schedule('0 12 * * *', async () => {
+			await runCronTask('handleBetaUserEmails', async () => this.models.user().handleBetaUserEmails());
+		});
 	}
 
 }
