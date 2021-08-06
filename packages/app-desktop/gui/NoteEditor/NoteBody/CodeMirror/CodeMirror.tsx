@@ -32,6 +32,7 @@ const shared = require('@joplin/lib/components/shared/note-screen-shared.js');
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
 import { reg } from '@joplin/lib/registry';
+import ErrorBoundary from '../../../ErrorBoundary';
 
 const menuUtils = new MenuUtils(CommandService.instance());
 
@@ -599,7 +600,16 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 			pluginAssets: renderedBody.pluginAssets,
 			downloadResources: Setting.value('sync.resourceDownloadMode'),
 		};
-		webviewRef.current.wrappedInstance.send('setHtml', renderedBody.html, options);
+
+		// It seems when there's an error immediately when the component is
+		// mounted, webviewReady might be true, but webviewRef.current will be
+		// undefined. Maybe due to the error boundary that unmount components.
+		// Since we can't do much about it we just print an error.
+		if (webviewRef.current && webviewRef.current.wrappedInstance) {
+			webviewRef.current.wrappedInstance.send('setHtml', renderedBody.html, options);
+		} else {
+			console.error('Trying to set HTML on an undefined webview ref');
+		}
 	}, [renderedBody, webviewReady]);
 
 	useEffect(() => {
@@ -791,16 +801,18 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 	}
 
 	return (
-		<div style={styles.root} ref={rootRef}>
-			<div style={styles.rowToolbar}>
-				<Toolbar themeId={props.themeId} />
-				{props.noteToolbar}
+		<ErrorBoundary message="The text editor encountered a fatal error and could not continue. The error might be due to a plugin, so please try to disable some of them and try again.">
+			<div style={styles.root} ref={rootRef}>
+				<div style={styles.rowToolbar}>
+					<Toolbar themeId={props.themeId} />
+					{props.noteToolbar}
+				</div>
+				<div style={styles.rowEditorViewer}>
+					{renderEditor()}
+					{renderViewer()}
+				</div>
 			</div>
-			<div style={styles.rowEditorViewer}>
-				{renderEditor()}
-				{renderViewer()}
-			</div>
-		</div>
+		</ErrorBoundary>
 	);
 }
 
