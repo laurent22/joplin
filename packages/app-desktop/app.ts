@@ -41,7 +41,6 @@ const Menu = bridge().Menu;
 const PluginManager = require('@joplin/lib/services/PluginManager');
 import RevisionService from '@joplin/lib/services/RevisionService';
 import MigrationService from '@joplin/lib/services/MigrationService';
-const TemplateUtils = require('@joplin/lib/TemplateUtils');
 import { loadCustomCss, injectCustomStyles } from '@joplin/lib/CssUtils';
 // import  populateDatabase from '@joplin/lib/services/debug/populateDatabase';
 
@@ -62,7 +61,6 @@ const commands = [
 	require('./gui/MainScreen/commands/renameFolder'),
 	require('./gui/MainScreen/commands/renameTag'),
 	require('./gui/MainScreen/commands/search'),
-	require('./gui/MainScreen/commands/selectTemplate'),
 	require('./gui/MainScreen/commands/setTags'),
 	require('./gui/MainScreen/commands/showModalMessage'),
 	require('./gui/MainScreen/commands/showNoteContentProperties'),
@@ -538,6 +536,26 @@ class Application extends BaseApplication {
 		return cssString;
 	}
 
+	private async checkForLegacyTemplates() {
+		const templatesDir = `${Setting.value('profileDir')}/templates`;
+		if (await shim.fsDriver().exists(templatesDir)) {
+			try {
+				const files = await shim.fsDriver().readDirStats(templatesDir);
+				for (const file of files) {
+					if (file.path.endsWith('.md')) {
+						// There is atleast one template.
+						this.store().dispatch({
+							type: 'CONTAINS_LEGACY_TEMPLATES',
+						});
+						break;
+					}
+				}
+			} catch (error) {
+				reg.logger().error(`Failed to read templates directory: ${error}`);
+			}
+		}
+	}
+
 	private async initPluginService() {
 		const service = PluginService.instance();
 
@@ -616,8 +634,6 @@ class Application extends BaseApplication {
 		if (!electronIsDev) argv.splice(1, 0, '.');
 
 		argv = await super.start(argv);
-
-		await fs.mkdirp(Setting.value('templateDir'), 0o755);
 
 		await this.applySettingsSideEffects();
 
@@ -715,17 +731,12 @@ class Application extends BaseApplication {
 			css: cssString,
 		});
 
-		const templates = await TemplateUtils.loadTemplates(Setting.value('templateDir'));
-
-		this.store().dispatch({
-			type: 'TEMPLATE_UPDATE_ALL',
-			templates: templates,
-		});
-
 		this.store().dispatch({
 			type: 'NOTE_DEVTOOLS_SET',
 			value: Setting.value('flagOpenDevTools'),
 		});
+
+		await this.checkForLegacyTemplates();
 
 		// Note: Auto-update currently doesn't work in Linux: it downloads the update
 		// but then doesn't install it on exit.
