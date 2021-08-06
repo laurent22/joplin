@@ -431,7 +431,7 @@ class NoteListComponent extends React.Component {
 		// NOTE: this.itemHeight doesn't need to be in this.state.
 		const ref = Object.values<any>(this.itemAnchorRefs_)[0];
 		const height = ref && ref.current && ref.current.getHeight();
-		if (height > 0) { 
+		if (height > 0) {
 			// To avoid generating too many narrow items
 			this.itemHeight = Math.max(height, 8);
 		}
