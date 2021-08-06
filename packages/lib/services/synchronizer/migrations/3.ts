@@ -1,20 +1,11 @@
 import { FileApi } from '../../../file-api';
 import JoplinDatabase from '../../../JoplinDatabase';
-import Setting from '../../../models/Setting';
-import { SyncInfo, updateSyncInfoCache, uploadSyncInfo } from '../syncInfoUtils';
+import { localSyncInfo, updateLocalSyncInfo } from '../syncInfoUtils';
 
-export default async function(api: FileApi, db: JoplinDatabase): Promise<void> {
-	const masterKeys = await db.selectAll('SELECT * FROM master_keys');
+export default async function(_pi: FileApi, _db: JoplinDatabase): Promise<void> {
+	// The local sync info cache is populated on application startup so for the
+	// migration we only need to upload that local cache.
 
-	const masterKeyMap: Record<string, any> = {};
-	for (const mk of masterKeys) masterKeyMap[mk.id] = mk;
-
-	const syncInfo = new SyncInfo();
-	syncInfo.version = 3;
-	syncInfo.e2ee = Setting.valueNoThrow('encryption.enabled', false);
-	syncInfo.masterKeys = masterKeys;
-	syncInfo.activeMasterKeyId = Setting.valueNoThrow('encryption.activeMasterKeyId', '');
-
-	await uploadSyncInfo(api, syncInfo);
-	await updateSyncInfoCache(syncInfo);
+	const syncInfo = localSyncInfo();
+	await updateLocalSyncInfo(syncInfo);
 }
