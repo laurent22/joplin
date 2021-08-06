@@ -133,7 +133,7 @@ export default class Synchronizer {
 
 	migrationHandler() {
 		if (this.migrationHandler_) return this.migrationHandler_;
-		this.migrationHandler_ = new MigrationHandler(this.api(), this.lockHandler(), this.appType_, this.clientId_);
+		this.migrationHandler_ = new MigrationHandler(this.api(), this.db(), this.lockHandler(), this.appType_, this.clientId_);
 		return this.migrationHandler_;
 	}
 

@@ -12,6 +12,7 @@ const { setSyncTargetName, fileApi, synchronizer, decryptionWorker, encryptionSe
 const { deploySyncTargetSnapshot, testData, checkTestData } = require('../../testing/syncTargetUtils');
 import Setting from '../../models/Setting';
 import MasterKey from '../../models/MasterKey';
+import { db } from '../../testing/test-utils';
 
 const specTimeout = 60000 * 10; // Nextcloud tests can be slow
 
@@ -26,7 +27,7 @@ function lockHandler(): LockHandler {
 
 function migrationHandler(clientId: string = 'abcd'): MigrationHandler {
 	if (migrationHandler_) return migrationHandler_;
-	migrationHandler_ = new MigrationHandler(fileApi(), lockHandler(), 'desktop', clientId);
+	migrationHandler_ = new MigrationHandler(fileApi(), db(), lockHandler(), 'desktop', clientId);
 	return migrationHandler_;
 }
 

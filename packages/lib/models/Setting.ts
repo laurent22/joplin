@@ -1251,6 +1251,12 @@ class Setting extends BaseModel {
 				storage: SettingStorage.File,
 			},
 
+			'syncInfoCache': {
+				value: '',
+				type: SettingItemType.String,
+				public: false,
+			},
+
 			isSafeMode: {
 				value: false,
 				type: SettingItemType.Bool,
@@ -1669,6 +1675,12 @@ class Setting extends BaseModel {
 
 		const md = this.settingMetadata(key);
 		return copyIfNeeded(md.value);
+	}
+
+	// This function returns the default value if the setting key does not exist.
+	public static valueNoThrow(key: string, defaultValue: any) {
+		if (!this.keyExists(key)) return defaultValue;
+		return this.value(key);
 	}
 
 	static isEnum(key: string) {

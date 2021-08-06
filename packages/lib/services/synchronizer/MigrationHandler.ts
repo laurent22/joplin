@@ -1,21 +1,30 @@
 import LockHandler, { LockType } from './LockHandler';
 import { Dirnames } from './utils/types';
 import BaseService from '../BaseService';
+import migration1 from './migrations/1';
+import migration2 from './migrations/2';
+import migration3 from './migrations/3';
+import Setting from '../../models/Setting';
+import JoplinError from '../../JoplinError';
+import { FileApi } from '../../file-api';
+import JoplinDatabase from '../../JoplinDatabase';
+const { sprintf } = require('sprintf-js');
+
+export type MigrationFunction = (api: FileApi, db: JoplinDatabase)=> Promise<void>;
 
 // To add a new migration:
 // - Add the migration logic in ./migrations/VERSION_NUM.js
 // - Add the file to the array below.
 // - Set Setting.syncVersion to VERSION_NUM in models/Setting.js
 // - Add tests in synchronizer_migrationHandler
-const migrations = [
+const migrations: MigrationFunction[] = [
 	null,
 	require('./migrations/1.js').default,
 	require('./migrations/2.js').default,
+	migration1,
+	migration2,
+	migration3,
 ];
-
-import Setting from '../../models/Setting';
-const { sprintf } = require('sprintf-js');
-import JoplinError from '../../JoplinError';
 
 interface SyncTargetInfo {
 	version: number;
@@ -27,10 +36,12 @@ export default class MigrationHandler extends BaseService {
 	private lockHandler_: LockHandler = null;
 	private clientType_: string;
 	private clientId_: string;
+	private db_: JoplinDatabase;
 
-	constructor(api: any, lockHandler: LockHandler, clientType: string, clientId: string) {
+	public constructor(api: FileApi, db: JoplinDatabase, lockHandler: LockHandler, clientType: string, clientId: string) {
 		super();
 		this.api_ = api;
+		this.db_ = db;
 		this.lockHandler_ = lockHandler;
 		this.clientType_ = clientType;
 		this.clientId_ = clientId;
@@ -119,7 +130,7 @@ export default class MigrationHandler extends BaseService {
 
 				try {
 					if (autoLockError) throw autoLockError;
-					await migration(this.api_);
+					await migration(this.api_, this.db_);
 					if (autoLockError) throw autoLockError;
 
 					await this.api_.put('info.json', this.serializeSyncTargetInfo({

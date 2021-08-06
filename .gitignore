@@ -1467,6 +1467,12 @@ packages/lib/services/synchronizer/migrations/1.js.map
 packages/lib/services/synchronizer/migrations/2.d.ts
 packages/lib/services/synchronizer/migrations/2.js
 packages/lib/services/synchronizer/migrations/2.js.map
+packages/lib/services/synchronizer/migrations/3.d.ts
+packages/lib/services/synchronizer/migrations/3.js
+packages/lib/services/synchronizer/migrations/3.js.map
+packages/lib/services/synchronizer/syncInfoUtils.d.ts
+packages/lib/services/synchronizer/syncInfoUtils.js
+packages/lib/services/synchronizer/syncInfoUtils.js.map
 packages/lib/services/synchronizer/synchronizer_LockHandler.test.d.ts
 packages/lib/services/synchronizer/synchronizer_LockHandler.test.js
 packages/lib/services/synchronizer/synchronizer_LockHandler.test.js.map
