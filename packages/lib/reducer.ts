@@ -983,9 +983,9 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 			handleItemDelete(draft, action);
 			break;
 
-		case 'MASTERKEY_UPDATE_ALL':
-			draft.masterKeys = action.items;
-			break;
+			// case 'MASTERKEY_UPDATE_ALL':
+			// 	draft.masterKeys = action.items;
+			// 	break;
 
 		case 'MASTERKEY_SET_NOT_LOADED':
 			draft.notLoadedMasterKeys = action.ids;

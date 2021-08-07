@@ -1,6 +1,7 @@
 import { FileApi } from '../../file-api';
 import JoplinDatabase from '../../JoplinDatabase';
 import Setting from '../../models/Setting';
+import { State } from '../../reducer';
 import { MasterKeyEntity } from '../database/types';
 
 export interface SyncInfoValueBoolean {
@@ -76,6 +77,10 @@ export function saveLocalSyncInfo(syncInfo: SyncInfo) {
 
 export function localSyncInfo(): SyncInfo {
 	return new SyncInfo(Setting.value('syncInfoCache'));
+}
+
+export function localSyncInfoFromState(state: State): SyncInfo {
+	return new SyncInfo(state.settings['syncInfoCache']);
 }
 
 export function mergeSyncInfos(s1: SyncInfo, s2: SyncInfo): SyncInfo {
