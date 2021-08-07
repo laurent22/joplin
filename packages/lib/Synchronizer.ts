@@ -73,7 +73,7 @@ export default class Synchronizer {
 	private logger_: Logger = new Logger();
 	private state_: string = 'idle';
 	private cancelling_: boolean = false;
-	private maxResourceSize_: number = null;
+	public maxResourceSize_: number = null;
 	private downloadQueue_: any = null;
 	private clientId_: string;
 	private lockHandler_: LockHandler;

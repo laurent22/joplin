@@ -1,6 +1,6 @@
 import FsDriverNode from './fs-driver-node';
 import shim from './shim';
-const { expectThrow } = require('./testing/test-utils.js');
+import { expectThrow } from './testing/test-utils';
 
 // On Windows, path.resolve is going to convert a path such as
 // /tmp/file.txt to c:\tmp\file.txt
@@ -21,9 +21,9 @@ describe('fsDriver', function() {
 		expect(fsDriver.resolveRelativePathWithinDir('/test', 'myfile.txt').toLowerCase()).toBe(platformPath('/test/myfile.txt'));
 		expect(fsDriver.resolveRelativePathWithinDir('/test/temp', './mydir/../test.txt').toLowerCase()).toBe(platformPath('/test/temp/test.txt'));
 
-		expectThrow(() => fsDriver.resolveRelativePathWithinDir('/test/temp', '../myfile.txt'));
-		expectThrow(() => fsDriver.resolveRelativePathWithinDir('/test/temp', './mydir/../../test.txt'));
-		expectThrow(() => fsDriver.resolveRelativePathWithinDir('/test/temp', '/var/local/no.txt'));
+		await expectThrow(() => fsDriver.resolveRelativePathWithinDir('/test/temp', '../myfile.txt'));
+		await expectThrow(() => fsDriver.resolveRelativePathWithinDir('/test/temp', './mydir/../../test.txt'));
+		await expectThrow(() => fsDriver.resolveRelativePathWithinDir('/test/temp', '/var/local/no.txt'));
 	});
 
 });

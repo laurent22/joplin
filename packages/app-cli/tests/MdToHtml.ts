@@ -1,7 +1,7 @@
 import MdToHtml from '@joplin/renderer/MdToHtml';
 const os = require('os');
 const { filename } = require('@joplin/lib/path-utils');
-const { setupDatabaseAndSynchronizer, switchClient } = require('@joplin/lib/testing/test-utils.js');
+import { setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
 import shim from '@joplin/lib/shim';
 const { themeStyle } = require('@joplin/lib/theme');
 
