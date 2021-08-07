@@ -4,6 +4,7 @@ const shim = require('./shim').default;
 const JoplinError = require('./JoplinError').default;
 const { Buffer } = require('buffer');
 const { GetObjectCommand, ListObjectsV2Command, HeadObjectCommand, PutObjectCommand, DeleteObjectCommand, DeleteObjectsCommand, CopyObjectCommand } = require('@aws-sdk/client-s3');
+const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
 
 const S3_MAX_DELETES = 1000;
 
@@ -31,19 +32,21 @@ class FileApiDriverAmazonS3 {
 		return error.name.indexOf(errorCode) >= 0;
 	}
 
-	// Need to make a custom promise, built-in promise is broken: https://github.com/aws/aws-sdk-js/issues/1436
-	async s3GetObject(key) {
-		return new Promise((resolve, reject) => {
-			this.api().send(new GetObjectCommand({
-				Bucket: this.s3_bucket_,
-				Key: key,
-			}), (err, response) => {
-				if (err) reject(err);
-				else resolve(response);
-			});
+	// Because of the way AWS-SDK-v3 works for getting data from a bucket we will
+	// use a pre-signed URL to avoid https://github.com/aws/aws-sdk-js-v3/issues/1877
+	async s3GenerateGetURL(key) {
+		const signedUrl = await getSignedUrl(this.api(), new GetObjectCommand({
+			Bucket: this.s3_bucket_,
+			Key: key,
+		}), {
+			expiresIn: 3600,
 		});
+		return signedUrl;
 	}
 
+	// We've now moved to aws-sdk-v3 and this note is outdated, but explains the promise structure.
+	// Need to make a custom promise, built-in promise is broken: https://github.com/aws/aws-sdk-js/issues/1436
+	// TODO: Re-factor to https://github.com/aws/aws-sdk-js-v3/tree/main/clients/client-s3#asyncawait
 	async s3ListObjects(key, cursor) {
 		return new Promise((resolve, reject) => {
 			this.api().send(new ListObjectsV2Command({
@@ -225,33 +228,17 @@ class FileApiDriverAmazonS3 {
 
 		try {
 			let output = null;
-			const response = await this.s3GetObject(remotePath);
-			// Be aware the shim will expose a slightly different
-			// response object depending on the env (node/react-native).
-			// See shim-init-node.js/shim-init-react.js.
-			const streamed_response = new shim.Response(response.Body);
+			let response = null;
+
+			const s3Url = await this.s3GenerateGetURL(remotePath);
+
 			if (options.target === 'file') {
-				const filePath = options.path;
-				if (!filePath) throw new Error('get: target options.path is missing');
-				output = await streamed_response.buffer();
-				// TODO: check if this ever hits on RN
-				await shim.fsDriver().writeBinaryFile(filePath, output);
-				return {
-					ok: true,
-					path: filePath,
-					text: () => {
-						return response.statusMessage;
-					},
-					json: () => {
-						return { message: `${response.statusCode}: ${response.statusMessage}` };
-					},
-					status: response.statusCode,
-					headers: response.headers,
-				};
+				output = await shim.fetchBlob(s3Url, options);
 			}
 
 			if (responseFormat === 'text') {
-				output = streamed_response.text();
+				response = await shim.fetch(s3Url, options);
+				output = await response.text();
 			}
 
 			return output;
