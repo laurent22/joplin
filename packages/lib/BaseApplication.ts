@@ -49,7 +49,7 @@ import handleSyncStartupOperation from './services/synchronizer/utils/handleSync
 import SyncTargetJoplinCloud from './SyncTargetJoplinCloud';
 const { toSystemSlashes } = require('./path-utils');
 const { setAutoFreeze } = require('immer');
-import { encryptionEnabled } from './services/synchronizer/syncInfoUtils';
+import { getEncryptionEnabled } from './services/synchronizer/syncInfoUtils';
 
 const appLogger: LoggerWrapper = Logger.create('App');
 
@@ -785,7 +785,7 @@ export default class BaseApplication {
 			// and if encryption is enabled. This code runs only when shouldReencrypt = -1
 			// which can be set by a maintenance script for example.
 			const folderCount = await Folder.count();
-			const itShould = encryptionEnabled() && !!folderCount ? Setting.SHOULD_REENCRYPT_YES : Setting.SHOULD_REENCRYPT_NO;
+			const itShould = getEncryptionEnabled() && !!folderCount ? Setting.SHOULD_REENCRYPT_YES : Setting.SHOULD_REENCRYPT_NO;
 			Setting.setValue('encryption.shouldReencrypt', itShould);
 		}
 

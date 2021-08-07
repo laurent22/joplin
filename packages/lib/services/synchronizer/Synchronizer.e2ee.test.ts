@@ -10,7 +10,7 @@ import MasterKey from '../../models/MasterKey';
 import BaseItem from '../../models/BaseItem';
 import { ResourceEntity } from '../database/types';
 import Synchronizer from '../../Synchronizer';
-import { encryptionEnabled, setEncryptionEnabled } from '../synchronizer/syncInfoUtils';
+import { getEncryptionEnabled, setEncryptionEnabled } from '../synchronizer/syncInfoUtils';
 
 let insideBeforeEach = false;
 
@@ -83,9 +83,9 @@ describe('Synchronizer.e2ee', function() {
 		await switchClient(2);
 
 		// Synchronising should enable encryption since we're going to get a master key
-		expect(encryptionEnabled()).toBe(false);
+		expect(getEncryptionEnabled()).toBe(false);
 		await synchronizerStart();
-		expect(encryptionEnabled()).toBe(true);
+		expect(getEncryptionEnabled()).toBe(true);
 
 		// Check that we got the master key from client 1
 		const masterKey = (await MasterKey.all())[0];
@@ -189,7 +189,7 @@ describe('Synchronizer.e2ee', function() {
 		await switchClient(2);
 
 		await synchronizerStart();
-		expect(encryptionEnabled()).toBe(true);
+		expect(getEncryptionEnabled()).toBe(true);
 
 		// If we try to disable encryption now, it should throw an error because some items are
 		// currently encrypted. They must be decrypted first so that they can be sent as

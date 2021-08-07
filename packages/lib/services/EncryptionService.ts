@@ -4,10 +4,9 @@ import shim from '../shim';
 import Setting from '../models/Setting';
 import MasterKey from '../models/MasterKey';
 import BaseItem from '../models/BaseItem';
-import { setEncryptionEnabled } from '../services/synchronizer/syncInfoUtils';
-
-const { padLeft } = require('../string-utils.js');
+import { getActiveMasterKeyId, setActiveMasterKeyId, setEncryptionEnabled } from '../services/synchronizer/syncInfoUtils';
 import JoplinError from '../JoplinError';
+const { padLeft } = require('../string-utils.js');
 
 function hexPad(s: string, length: number) {
 	return padLeft(s, length, '0');
@@ -113,7 +112,7 @@ export default class EncryptionService {
 
 	async enableEncryption(masterKey: MasterKeyEntity, password: string = null) {
 		setEncryptionEnabled(true);
-		Setting.setValue('encryption.activeMasterKeyId', masterKey.id);
+		setActiveMasterKeyId(masterKey.id);
 
 		if (password) {
 			const passwordCache = Setting.value('encryption.passwordCache');
@@ -143,7 +142,7 @@ export default class EncryptionService {
 	async loadMasterKeysFromSettings() {
 		const masterKeys = await MasterKey.all();
 		const passwords = Setting.value('encryption.passwordCache');
-		const activeMasterKeyId = Setting.value('encryption.activeMasterKeyId');
+		const activeMasterKeyId = getActiveMasterKeyId();
 
 		this.logger().info(`Trying to load ${masterKeys.length} master keys...`);
 

@@ -158,12 +158,22 @@ export class SyncInfo {
 // Shortcuts to simplify the refactoring
 // ---------------------------------------------------------
 
-export function encryptionEnabled() {
+export function getEncryptionEnabled() {
 	return localSyncInfo().e2ee;
 }
 
 export function setEncryptionEnabled(v: boolean) {
 	const s = localSyncInfo();
 	s.e2ee = v;
+	saveLocalSyncInfo(s);
+}
+
+export function getActiveMasterKeyId() {
+	return localSyncInfo().activeMasterKeyId;
+}
+
+export function setActiveMasterKeyId(id: string) {
+	const s = localSyncInfo();
+	s.activeMasterKeyId = id;
 	saveLocalSyncInfo(s);
 }
