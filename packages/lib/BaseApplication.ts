@@ -425,10 +425,16 @@ export default class BaseApplication {
 				}
 			},
 
-			// TODO
-
-			'encryption.enabled': async () => {
+			// Note: this used to run when "encryption.enabled" was changed, but
+			// now we run it anytime any property of the sync target info is
+			// changed. This is not optimal but:
+			// - The sync target info rarely changes.
+			// - All the calls below are cheap or do nothing if there's nothing
+			//   to do.
+			'syncInfoCache': async () => {
 				if (this.hasGui()) {
+					appLogger.info('"syncInfoCache" was changed - setting up encryption related code');
+
 					await EncryptionService.instance().loadMasterKeysFromSettings();
 					void DecryptionWorker.instance().scheduleStart();
 					const loadedMasterKeyIds = EncryptionService.instance().loadedMasterKeyIds();
@@ -443,6 +449,7 @@ export default class BaseApplication {
 					void reg.scheduleSync();
 				}
 			},
+
 			'sync.interval': async () => {
 				if (this.hasGui()) reg.setupRecurrentSync();
 			},
@@ -450,8 +457,7 @@ export default class BaseApplication {
 
 		sideEffects['timeFormat'] = sideEffects['dateFormat'];
 		sideEffects['locale'] = sideEffects['dateFormat'];
-		sideEffects['encryption.activeMasterKeyId'] = sideEffects['encryption.enabled'];
-		sideEffects['encryption.passwordCache'] = sideEffects['encryption.enabled'];
+		sideEffects['encryption.passwordCache'] = sideEffects['syncInfoCache'];
 
 		if (action) {
 			const effect = sideEffects[action.key];
