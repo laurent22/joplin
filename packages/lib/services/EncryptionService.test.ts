@@ -5,6 +5,7 @@ import Setting from '../models/Setting';
 import BaseItem from '../models/BaseItem';
 import MasterKey from '../models/MasterKey';
 import EncryptionService from '../services/EncryptionService';
+import { setEncryptionEnabled } from '../services/synchronizer/syncInfoUtils';
 
 let service: EncryptionService = null;
 
@@ -15,7 +16,7 @@ describe('services_EncryptionService', function() {
 		await switchClient(1);
 		service = new EncryptionService();
 		BaseItem.encryptionService_ = service;
-		Setting.setValue('encryption.enabled', true);
+		setEncryptionEnabled(true);
 		done();
 	});
 

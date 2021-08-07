@@ -1,11 +1,10 @@
 import time from '../../time';
-import Setting from '../../models/Setting';
 import { allNotesFolders, localNotesFoldersSameAsRemote } from '../../testing/test-utils-synchronizer';
-
-const { synchronizerStart, setupDatabaseAndSynchronizer, sleep, switchClient, syncTargetId, loadEncryptionMasterKey, decryptionWorker } = require('../../testing/test-utils.js');
+import { synchronizerStart, setupDatabaseAndSynchronizer, sleep, switchClient, syncTargetId, loadEncryptionMasterKey, decryptionWorker } from '../../testing/test-utils';
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import BaseItem from '../../models/BaseItem';
+import { setEncryptionEnabled } from '../synchronizer/syncInfoUtils';
 
 describe('Synchronizer.conflicts', function() {
 
@@ -227,7 +226,7 @@ describe('Synchronizer.conflicts', function() {
 
 	async function ignorableNoteConflictTest(withEncryption: boolean) {
 		if (withEncryption) {
-			Setting.setValue('encryption.enabled', true);
+			setEncryptionEnabled(true);
 			await loadEncryptionMasterKey();
 		}
 

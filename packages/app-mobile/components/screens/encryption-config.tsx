@@ -10,8 +10,9 @@ import EncryptionService from '@joplin/lib/services/EncryptionService';
 import { _ } from '@joplin/lib/locale';
 import time from '@joplin/lib/time';
 import shared from '@joplin/lib/components/shared/encryption-config-shared';
-import { MasterKeyEntity } from '../../../lib/services/database/types';
+import { MasterKeyEntity } from '@joplin/lib/services/database/types';
 import { State } from '@joplin/lib/reducer';
+import { SyncInfo } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 
 interface Props {
 
@@ -301,12 +302,14 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent<Props> {
 }
 
 const EncryptionConfigScreen = connect((state: State) => {
+	const syncInfo = new SyncInfo(state.settings['syncInfoCache']);
+
 	return {
 		themeId: state.settings.theme,
-		masterKeys: state.masterKeys,
+		masterKeys: syncInfo.masterKeys,
 		passwords: state.settings['encryption.passwordCache'],
-		encryptionEnabled: state.settings['encryption.enabled'],
-		activeMasterKeyId: state.settings['encryption.activeMasterKeyId'],
+		encryptionEnabled: syncInfo.e2ee,
+		activeMasterKeyId: syncInfo.activeMasterKeyId,
 		notLoadedMasterKeys: state.notLoadedMasterKeys,
 	};
 })(EncryptionConfigScreenComponent);

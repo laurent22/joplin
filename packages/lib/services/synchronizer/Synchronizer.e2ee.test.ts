@@ -10,6 +10,7 @@ import MasterKey from '../../models/MasterKey';
 import BaseItem from '../../models/BaseItem';
 import { ResourceEntity } from '../database/types';
 import Synchronizer from '../../Synchronizer';
+import { encryptionEnabled, setEncryptionEnabled } from '../synchronizer/syncInfoUtils';
 
 let insideBeforeEach = false;
 
@@ -31,7 +32,7 @@ describe('Synchronizer.e2ee', function() {
 	});
 
 	it('notes and folders should get encrypted when encryption is enabled', (async () => {
-		Setting.setValue('encryption.enabled', true);
+		setEncryptionEnabled(true);
 		const masterKey = await loadEncryptionMasterKey();
 		const folder1 = await Folder.save({ title: 'folder1' });
 		let note1 = await Note.save({ title: 'un', body: 'to be encrypted', parent_id: folder1.id });
@@ -74,7 +75,7 @@ describe('Synchronizer.e2ee', function() {
 
 	it('should enable encryption automatically when downloading new master key (and none was previously available)',(async () => {
 		// Enable encryption on client 1 and sync an item
-		Setting.setValue('encryption.enabled', true);
+		setEncryptionEnabled(true);
 		await loadEncryptionMasterKey();
 		let folder1 = await Folder.save({ title: 'folder1' });
 		await synchronizerStart();
@@ -82,9 +83,9 @@ describe('Synchronizer.e2ee', function() {
 		await switchClient(2);
 
 		// Synchronising should enable encryption since we're going to get a master key
-		expect(Setting.value('encryption.enabled')).toBe(false);
+		expect(encryptionEnabled()).toBe(false);
 		await synchronizerStart();
-		expect(Setting.value('encryption.enabled')).toBe(true);
+		expect(encryptionEnabled()).toBe(true);
 
 		// Check that we got the master key from client 1
 		const masterKey = (await MasterKey.all())[0];
@@ -158,7 +159,7 @@ describe('Synchronizer.e2ee', function() {
 	}));
 
 	it('should upload decrypted items to sync target after encryption disabled', (async () => {
-		Setting.setValue('encryption.enabled', true);
+		setEncryptionEnabled(true);
 		await loadEncryptionMasterKey();
 
 		await Folder.save({ title: 'folder1' });
@@ -179,7 +180,7 @@ describe('Synchronizer.e2ee', function() {
 		// which means it's going to fail in unexpected way. So the loop below wait for beforeEach to be done.
 		while (insideBeforeEach) await time.msleep(100);
 
-		Setting.setValue('encryption.enabled', true);
+		setEncryptionEnabled(true);
 		const masterKey = await loadEncryptionMasterKey();
 
 		await Folder.save({ title: 'folder1' });
@@ -188,7 +189,7 @@ describe('Synchronizer.e2ee', function() {
 		await switchClient(2);
 
 		await synchronizerStart();
-		expect(Setting.value('encryption.enabled')).toBe(true);
+		expect(encryptionEnabled()).toBe(true);
 
 		// If we try to disable encryption now, it should throw an error because some items are
 		// currently encrypted. They must be decrypted first so that they can be sent as
@@ -212,7 +213,7 @@ describe('Synchronizer.e2ee', function() {
 	}));
 
 	it('should set the resource file size after decryption', (async () => {
-		Setting.setValue('encryption.enabled', true);
+		setEncryptionEnabled(true);
 		const masterKey = await loadEncryptionMasterKey();
 
 		const folder1 = await Folder.save({ title: 'folder1' });
@@ -367,7 +368,7 @@ describe('Synchronizer.e2ee', function() {
 	}));
 
 	it('should not encrypt notes that are shared by link', (async () => {
-		Setting.setValue('encryption.enabled', true);
+		setEncryptionEnabled(true);
 		await loadEncryptionMasterKey();
 
 		await createFolderTree('', [
@@ -459,7 +460,7 @@ describe('Synchronizer.e2ee', function() {
 			return;
 		}
 
-		Setting.setValue('encryption.enabled', true);
+		setEncryptionEnabled(true);
 		await loadEncryptionMasterKey();
 
 		const folder1 = await createFolderTree('', [

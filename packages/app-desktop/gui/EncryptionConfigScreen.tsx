@@ -10,7 +10,8 @@ import shim from '@joplin/lib/shim';
 import dialogs from './dialogs';
 import bridge from '../services/bridge';
 import shared from '@joplin/lib/components/shared/encryption-config-shared';
-import { MasterKeyEntity } from '../../lib/services/database/types';
+import { MasterKeyEntity } from '@joplin/lib/services/database/types';
+import { encryptionEnabled, SyncInfo } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 
 interface Props {
 
@@ -167,7 +168,7 @@ class EncryptionConfigScreenComponent extends React.Component<Props> {
 		}
 
 		const onToggleButtonClick = async () => {
-			const isEnabled = Setting.value('encryption.enabled');
+			const isEnabled = encryptionEnabled();
 
 			let answer = null;
 			if (isEnabled) {
@@ -295,12 +296,14 @@ class EncryptionConfigScreenComponent extends React.Component<Props> {
 }
 
 const mapStateToProps = (state: State) => {
+	const syncInfo = new SyncInfo(state.settings['syncInfoCache']);
+
 	return {
 		themeId: state.settings.theme,
-		masterKeys: state.masterKeys,
+		masterKeys: syncInfo.masterKeys,
 		passwords: state.settings['encryption.passwordCache'],
-		encryptionEnabled: state.settings['encryption.enabled'],
-		activeMasterKeyId: state.settings['encryption.activeMasterKeyId'],
+		encryptionEnabled: syncInfo.e2ee,
+		activeMasterKeyId: syncInfo.activeMasterKeyId,
 		shouldReencrypt: state.settings['encryption.shouldReencrypt'] >= Setting.SHOULD_REENCRYPT_YES,
 		notLoadedMasterKeys: state.notLoadedMasterKeys,
 	};

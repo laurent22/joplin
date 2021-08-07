@@ -54,6 +54,7 @@ import { credentialFile, readCredentialFile } from '../utils/credentialFiles';
 import SyncTargetJoplinCloud from '../SyncTargetJoplinCloud';
 import KeychainService from '../services/keychain/KeychainService';
 import { loadKeychainServiceAndSettings } from '../services/SettingUtils';
+import { setEncryptionEnabled } from '../services/synchronizer/syncInfoUtils';
 const md5 = require('md5');
 const S3 = require('aws-sdk/clients/s3');
 const { Dirnames } = require('../services/synchronizer/utils/types');
@@ -847,7 +848,7 @@ class TestApp extends BaseApplication {
 		// For now, disable sync and encryption to avoid spurious intermittent failures
 		// caused by them interupting processing and causing delays.
 		Setting.setValue('sync.interval', 0);
-		Setting.setValue('encryption.enabled', false);
+		setEncryptionEnabled(true);
 
 		this.initRedux();
 		Setting.dispatchUpdateAll();

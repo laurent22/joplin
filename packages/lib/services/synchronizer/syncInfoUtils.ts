@@ -45,21 +45,19 @@ export async function migrateLocalSyncInfo(db: JoplinDatabase) {
 	syncInfo.setKeyTimestamp('activeMasterKeyId', 0);
 	syncInfo.updatedTime = 0;
 
-	await updateLocalSyncInfo(syncInfo);
+	await saveLocalSyncInfo(syncInfo);
 }
 
 export async function uploadSyncInfo(api: FileApi, syncInfo: SyncInfo) {
 	await api.put('info.json', syncInfo.serialize());
 }
 
-export function updateLocalSyncInfo(syncInfo: SyncInfo) {
+export function saveLocalSyncInfo(syncInfo: SyncInfo) {
 	Setting.setValue('syncInfoCache', syncInfo.serialize());
 }
 
 export function localSyncInfo(): SyncInfo {
-	const s = new SyncInfo();
-	s.load(Setting.value('syncInfoCache'));
-	return s;
+	return new SyncInfo(Setting.value('syncInfoCache'));
 }
 
 export class SyncInfo {
@@ -70,10 +68,12 @@ export class SyncInfo {
 	private masterKeys_: MasterKeyEntity[] = [];
 	private updatedTime_: number = 0;
 
-	public constructor() {
+	public constructor(serialized: string = null) {
 		this.e2ee_ = { value: false, updatedTime: 0 };
 		this.activeMasterKeyId_ = { value: '', updatedTime: 0 };
 		this.updatedTime_ = 0;
+
+		if (serialized) this.load(serialized);
 	}
 
 	public serialize(): string {
@@ -158,6 +158,12 @@ export class SyncInfo {
 // Shortcuts to simplify the refactoring
 // ---------------------------------------------------------
 
-// export function encryptionEnabled() {
-// 	return localSyncInfo().e2ee;
-// }
+export function encryptionEnabled() {
+	return localSyncInfo().e2ee;
+}
+
+export function setEncryptionEnabled(v: boolean) {
+	const s = localSyncInfo();
+	s.e2ee = v;
+	saveLocalSyncInfo(s);
+}

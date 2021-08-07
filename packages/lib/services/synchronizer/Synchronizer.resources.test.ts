@@ -3,14 +3,14 @@ import shim from '../../shim';
 import Setting from '../../models/Setting';
 import { NoteEntity } from '../../services/database/types';
 import { remoteNotesFoldersResources, remoteResources } from '../../testing/test-utils-synchronizer';
-
-const { synchronizerStart, tempFilePath, resourceFetcher, supportDir, setupDatabaseAndSynchronizer, synchronizer, fileApi, switchClient, syncTargetId, encryptionService, loadEncryptionMasterKey, fileContentEqual, checkThrowAsync } = require('../../testing/test-utils.js');
+import { synchronizerStart, tempFilePath, resourceFetcher, supportDir, setupDatabaseAndSynchronizer, synchronizer, fileApi, switchClient, syncTargetId, encryptionService, loadEncryptionMasterKey, fileContentEqual, checkThrowAsync } from '../../testing/test-utils';
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import Resource from '../../models/Resource';
 import ResourceFetcher from '../../services/ResourceFetcher';
 import BaseItem from '../../models/BaseItem';
 import { ModelType } from '../../BaseModel';
+import { setEncryptionEnabled } from '../synchronizer/syncInfoUtils';
 
 let insideBeforeEach = false;
 
@@ -144,7 +144,7 @@ describe('Synchronizer.resources', function() {
 	}));
 
 	it('should encrypt resources', (async () => {
-		Setting.setValue('encryption.enabled', true);
+		setEncryptionEnabled(true);
 		const masterKey = await loadEncryptionMasterKey();
 
 		const folder1 = await Folder.save({ title: 'folder1' });

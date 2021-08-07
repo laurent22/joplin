@@ -4,6 +4,7 @@ import shim from '../shim';
 import Setting from '../models/Setting';
 import MasterKey from '../models/MasterKey';
 import BaseItem from '../models/BaseItem';
+import { setEncryptionEnabled } from '../services/synchronizer/syncInfoUtils';
 
 const { padLeft } = require('../string-utils.js');
 import JoplinError from '../JoplinError';
@@ -111,7 +112,7 @@ export default class EncryptionService {
 	}
 
 	async enableEncryption(masterKey: MasterKeyEntity, password: string = null) {
-		Setting.setValue('encryption.enabled', true);
+		setEncryptionEnabled(true);
 		Setting.setValue('encryption.activeMasterKeyId', masterKey.id);
 
 		if (password) {
@@ -134,8 +135,7 @@ export default class EncryptionService {
 		// const hasEncryptedItems = await BaseItem.hasEncryptedItems();
 		// if (hasEncryptedItems) throw new Error(_('Encryption cannot currently be disabled because some items are still encrypted. Please wait for all the items to be decrypted and try again.'));
 
-		Setting.setValue('encryption.enabled', false);
-		// The only way to make sure everything gets decrypted on the sync target is
+		setEncryptionEnabled(false); // The only way to make sure everything gets decrypted on the sync target is
 		// to re-sync everything.
 		await BaseItem.forceSyncAll();
 	}

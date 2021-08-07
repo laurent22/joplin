@@ -1,10 +1,9 @@
-import Setting from '../../models/Setting';
-
-const { synchronizerStart, setupDatabaseAndSynchronizer, switchClient, encryptionService, loadEncryptionMasterKey } = require('../../testing/test-utils.js');
+import { synchronizerStart, setupDatabaseAndSynchronizer, switchClient, encryptionService, loadEncryptionMasterKey } from '../../testing/test-utils';
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import Tag from '../../models/Tag';
 import MasterKey from '../../models/MasterKey';
+import { setEncryptionEnabled } from '../synchronizer/syncInfoUtils';
 
 describe('Synchronizer.tags', function() {
 
@@ -18,7 +17,7 @@ describe('Synchronizer.tags', function() {
 	async function shoudSyncTagTest(withEncryption: boolean) {
 		let masterKey = null;
 		if (withEncryption) {
-			Setting.setValue('encryption.enabled', true);
+			setEncryptionEnabled(true);
 			masterKey = await loadEncryptionMasterKey();
 		}
 
