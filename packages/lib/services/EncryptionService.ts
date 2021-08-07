@@ -196,7 +196,7 @@ export default class EncryptionService {
 		return !!this.loadedMasterKeys_[id];
 	}
 
-	async loadMasterKey_(model: MasterKeyEntity, password: string, makeActive = false) {
+	public async loadMasterKey_(model: MasterKeyEntity, password: string, makeActive = false) {
 		if (!model.id) throw new Error('Master key does not have an ID - save it first');
 		this.loadedMasterKeys_[model.id] = await this.decryptMasterKey_(model, password);
 		if (makeActive) this.setActiveMasterKeyId(model.id);

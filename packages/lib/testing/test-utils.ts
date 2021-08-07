@@ -28,7 +28,7 @@ import NoteTag from '../models/NoteTag';
 import Revision from '../models/Revision';
 import MasterKey from '../models/MasterKey';
 import BaseItem from '../models/BaseItem';
-const { FileApi } = require('../file-api.js');
+import { FileApi } from '../file-api';
 const FileApiDriverMemory = require('../file-api-driver-memory').default;
 const { FileApiDriverLocal } = require('../file-api-driver-local.js');
 const { FileApiDriverWebDav } = require('../file-api-driver-webdav.js');
@@ -54,7 +54,8 @@ import { credentialFile, readCredentialFile } from '../utils/credentialFiles';
 import SyncTargetJoplinCloud from '../SyncTargetJoplinCloud';
 import KeychainService from '../services/keychain/KeychainService';
 import { loadKeychainServiceAndSettings } from '../services/SettingUtils';
-import { setEncryptionEnabled } from '../services/synchronizer/syncInfoUtils';
+import { setActiveMasterKeyId, setEncryptionEnabled } from '../services/synchronizer/syncInfoUtils';
+import Synchronizer from '../Synchronizer';
 const md5 = require('md5');
 const S3 = require('aws-sdk/clients/s3');
 const { Dirnames } = require('../services/synchronizer/utils/types');
@@ -66,14 +67,14 @@ const { Dirnames } = require('../services/synchronizer/utils/types');
 // Jest, to make debugging easier, but it's not clear how to get this info).
 const suiteName_ = uuid.createNano();
 
-const databases_: any[] = [];
-let synchronizers_: any[] = [];
-const fileApis_: any = {};
-const encryptionServices_: any[] = [];
-const revisionServices_: any[] = [];
-const decryptionWorkers_: any[] = [];
-const resourceServices_: any[] = [];
-const resourceFetchers_: any[] = [];
+const databases_: JoplinDatabase[] = [];
+let synchronizers_: Synchronizer[] = [];
+const fileApis_: Record<number, FileApi> = {};
+const encryptionServices_: EncryptionService[] = [];
+const revisionServices_: RevisionService[] = [];
+const decryptionWorkers_: DecryptionWorker[] = [];
+const resourceServices_: ResourceService[] = [];
+const resourceFetchers_: ResourceFetcher[] = [];
 const kvStores_: KvStore[] = [];
 let currentClient_ = 1;
 
@@ -498,6 +499,8 @@ async function loadEncryptionMasterKey(id: number = null, useExisting = false) {
 	}
 
 	await service.loadMasterKey_(masterKey, '123456', true);
+
+	setActiveMasterKeyId(masterKey.id);
 
 	return masterKey;
 }

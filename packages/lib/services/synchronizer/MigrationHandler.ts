@@ -8,6 +8,7 @@ import Setting from '../../models/Setting';
 import JoplinError from '../../JoplinError';
 import { FileApi } from '../../file-api';
 import JoplinDatabase from '../../JoplinDatabase';
+import { SyncInfo } from './syncInfoUtils';
 const { sprintf } = require('sprintf-js');
 
 export type MigrationFunction = (api: FileApi, db: JoplinDatabase)=> Promise<void>;
@@ -66,19 +67,17 @@ export default class MigrationHandler extends BaseService {
 		return JSON.stringify(info);
 	}
 
-	async checkCanSync(): Promise<SyncTargetInfo> {
+	public async checkCanSync(remoteInfo: SyncInfo) {
 		const supportedSyncTargetVersion = Setting.value('syncVersion');
-		const syncTargetInfo = await this.fetchSyncTargetInfo();
+		// const syncTargetInfo = await this.fetchSyncTargetInfo();
 
-		if (syncTargetInfo.version) {
-			if (syncTargetInfo.version > supportedSyncTargetVersion) {
-				throw new JoplinError(sprintf('Sync version of the target (%d) is greater than the version supported by the client (%d). Please upgrade your client.', syncTargetInfo.version, supportedSyncTargetVersion), 'outdatedClient');
-			} else if (syncTargetInfo.version < supportedSyncTargetVersion) {
-				throw new JoplinError(sprintf('Sync version of the target (%d) is lower than the version supported by the client (%d). Please upgrade the sync target.', syncTargetInfo.version, supportedSyncTargetVersion), 'outdatedSyncTarget');
+		if (remoteInfo.version) {
+			if (remoteInfo.version > supportedSyncTargetVersion) {
+				throw new JoplinError(sprintf('Sync version of the target (%d) is greater than the version supported by the client (%d). Please upgrade your client.', remoteInfo.version, supportedSyncTargetVersion), 'outdatedClient');
+			} else if (remoteInfo.version < supportedSyncTargetVersion) {
+				throw new JoplinError(sprintf('Sync version of the target (%d) is lower than the version supported by the client (%d). Please upgrade the sync target.', remoteInfo.version, supportedSyncTargetVersion), 'outdatedSyncTarget');
 			}
 		}
-
-		return syncTargetInfo;
 	}
 
 	async upgrade(targetVersion: number = 0) {

@@ -1173,6 +1173,9 @@ packages/lib/services/database/types.js.map
 packages/lib/services/debug/populateDatabase.d.ts
 packages/lib/services/debug/populateDatabase.js
 packages/lib/services/debug/populateDatabase.js.map
+packages/lib/services/e2ee/utils.d.ts
+packages/lib/services/e2ee/utils.js
+packages/lib/services/e2ee/utils.js.map
 packages/lib/services/interop/InteropService.d.ts
 packages/lib/services/interop/InteropService.js
 packages/lib/services/interop/InteropService.js.map
