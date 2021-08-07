@@ -52,7 +52,8 @@ import JoplinServerApi from '../JoplinServerApi';
 import { FolderEntity } from '../services/database/types';
 import { credentialFile, readCredentialFile } from '../utils/credentialFiles';
 import SyncTargetJoplinCloud from '../SyncTargetJoplinCloud';
-const { loadKeychainServiceAndSettings } = require('../services/SettingUtils');
+import KeychainService from '../services/keychain/KeychainService';
+import { loadKeychainServiceAndSettings } from '../services/SettingUtils';
 const md5 = require('md5');
 const S3 = require('aws-sdk/clients/s3');
 const { Dirnames } = require('../services/synchronizer/utils/types');
@@ -823,6 +824,8 @@ class TestApp extends BaseApplication {
 	private logger_: LoggerWrapper;
 
 	public constructor(hasGui = true) {
+		KeychainService.instance().enabled = false;
+
 		super();
 		this.hasGui_ = hasGui;
 		this.middlewareCalls_ = [];

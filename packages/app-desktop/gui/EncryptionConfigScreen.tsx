@@ -1,17 +1,23 @@
 const React = require('react');
 const { connect } = require('react-redux');
-const Setting = require('@joplin/lib/models/Setting').default;
-const EncryptionService = require('@joplin/lib/services/EncryptionService').default;
-const { themeStyle } = require('@joplin/lib/theme');
-const { _ } = require('@joplin/lib/locale');
-const time = require('@joplin/lib/time').default;
-const shim = require('@joplin/lib/shim').default;
-const dialogs = require('./dialogs').default;
-const shared = require('@joplin/lib/components/shared/encryption-config-shared.js');
-const bridge = require('electron').remote.require('./bridge').default;
+import Setting from '@joplin/lib/models/Setting';
+import EncryptionService from '@joplin/lib/services/EncryptionService';
+import { themeStyle } from '@joplin/lib/theme';
+import { _ } from '@joplin/lib/locale';
+import time from '@joplin/lib/time';
+import { State } from '@joplin/lib/reducer';
+import shim from '@joplin/lib/shim';
+import dialogs from './dialogs';
+import bridge from '../services/bridge';
+import shared from '@joplin/lib/components/shared/encryption-config-shared';
+import { MasterKeyEntity } from '../../lib/services/database/types';
 
-class EncryptionConfigScreenComponent extends React.Component {
-	constructor(props) {
+interface Props {
+
+}
+
+class EncryptionConfigScreenComponent extends React.Component<Props> {
+	constructor(props: Props) {
 		super(props);
 
 		shared.constructor(this, props);
@@ -27,7 +33,7 @@ class EncryptionConfigScreenComponent extends React.Component {
 		shared.componentDidMount(this);
 	}
 
-	componentDidUpdate(prevProps) {
+	componentDidUpdate(prevProps: Props) {
 		shared.componentDidUpdate(this, prevProps);
 	}
 
@@ -35,7 +41,7 @@ class EncryptionConfigScreenComponent extends React.Component {
 		return shared.checkPasswords(this);
 	}
 
-	renderMasterKey(mk) {
+	renderMasterKey(mk: MasterKeyEntity) {
 		const theme = themeStyle(this.props.themeId);
 
 		const passwordStyle = {
@@ -49,7 +55,7 @@ class EncryptionConfigScreenComponent extends React.Component {
 			return shared.onSavePasswordClick(this, mk);
 		};
 
-		const onPasswordChange = event => {
+		const onPasswordChange = (event: any) => {
 			return shared.onPasswordChange(this, mk, event.target.value);
 		};
 
@@ -188,7 +194,7 @@ class EncryptionConfigScreenComponent extends React.Component {
 			<button
 				style={theme.buttonStyle}
 				onClick={() => {
-					onToggleButtonClick();
+					void onToggleButtonClick();
 				}}
 			>
 				{this.props.encryptionEnabled ? _('Disable encryption') : _('Enable encryption')}
@@ -288,7 +294,7 @@ class EncryptionConfigScreenComponent extends React.Component {
 	}
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state: State) => {
 	return {
 		themeId: state.settings.theme,
 		masterKeys: state.masterKeys,
@@ -302,4 +308,4 @@ const mapStateToProps = state => {
 
 const EncryptionConfigScreen = connect(mapStateToProps)(EncryptionConfigScreenComponent);
 
-module.exports = { EncryptionConfigScreen };
+export default EncryptionConfigScreen;

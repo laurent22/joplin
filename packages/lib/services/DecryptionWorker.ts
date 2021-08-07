@@ -9,6 +9,13 @@ import KvStore from './KvStore';
 
 const EventEmitter = require('events');
 
+interface DecryptionResult {
+	skippedItemCount?: number;
+	decryptedItemCounts?: number;
+	decryptedItemCount?: number;
+	error: any;
+}
+
 export default class DecryptionWorker {
 
 	public static instance_: DecryptionWorker = null;
@@ -107,7 +114,7 @@ export default class DecryptionWorker {
 		this.dispatch(action);
 	}
 
-	async start_(options: any = null) {
+	private async start_(options: any = null): Promise<DecryptionResult> {
 		if (options === null) options = {};
 		if (!('masterKeyNotLoadedHandler' in options)) options.masterKeyNotLoadedHandler = 'throw';
 		if (!('errorHandler' in options)) options.errorHandler = 'log';
@@ -260,10 +267,11 @@ export default class DecryptionWorker {
 		let decryptedItemCount = 0;
 		for (const itemType in decryptedItemCounts) decryptedItemCount += decryptedItemCounts[itemType];
 
-		const finalReport = {
+		const finalReport: DecryptionResult = {
 			skippedItemCount: skippedItemCount,
 			decryptedItemCounts: decryptedItemCounts,
 			decryptedItemCount: decryptedItemCount,
+			error: null,
 		};
 
 		this.dispatchReport(Object.assign({}, finalReport, { state: 'idle' }));
@@ -276,7 +284,7 @@ export default class DecryptionWorker {
 		return finalReport;
 	}
 
-	async start(options: any) {
+	public async start(options: any = {}) {
 		this.startCalls_.push(true);
 		let output = null;
 		try {

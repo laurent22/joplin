@@ -46,7 +46,7 @@ export default class EncryptionService {
 	private chunkSize_ = 5000;
 	private loadedMasterKeys_: Record<string, string> = {};
 	private activeMasterKeyId_: string = null;
-	private defaultEncryptionMethod_ = EncryptionService.METHOD_SJCL_1A;
+	public defaultEncryptionMethod_ = EncryptionService.METHOD_SJCL_1A; // public because used in tests
 	private defaultMasterKeyEncryptionMethod_ = EncryptionService.METHOD_SJCL_4;
 	private logger_ = new Logger();
 
