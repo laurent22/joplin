@@ -14,7 +14,7 @@ function platformPath(path: string) {
 
 describe('fsDriver', function() {
 
-	it('should resolveRelativePathWithinDir', () => {
+	it('should resolveRelativePathWithinDir', async () => {
 		const fsDriver = new FsDriverNode();
 		expect(fsDriver.resolveRelativePathWithinDir('/test/temp', './my/file.txt').toLowerCase()).toBe(platformPath('/test/temp/my/file.txt'));
 		expect(fsDriver.resolveRelativePathWithinDir('/', './test').toLowerCase()).toBe(platformPath('/test'));

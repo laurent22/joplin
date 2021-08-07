@@ -52,8 +52,22 @@ export async function uploadSyncInfo(api: FileApi, syncInfo: SyncInfo) {
 }
 
 export async function fetchSyncInfo(api: FileApi): Promise<SyncInfo> {
-	const r: string = await api.get('info.json');
-	return new SyncInfo(r);
+	const syncTargetInfoText = await api.get('info.json');
+
+	// Returns version 0 if the sync target is empty
+	let output: any = { version: 0 };
+
+	if (syncTargetInfoText) {
+		output = JSON.parse(syncTargetInfoText);
+		if (!output.version) throw new Error('Missing "version" field in info.json');
+	} else {
+		// If info.json is not present, this might be an old sync target, in
+		// which case we can at least get the version number from version.txt
+		const oldVersion = await api.get('.sync/version.txt');
+		if (oldVersion) output = { version: 1 };
+	}
+
+	return new SyncInfo(JSON.stringify(output));
 }
 
 export function saveLocalSyncInfo(syncInfo: SyncInfo) {

@@ -139,6 +139,7 @@ function setSyncTargetName(name: string) {
 }
 
 setSyncTargetName('memory');
+// setSyncTargetName('filesystem');
 // setSyncTargetName('nextcloud');
 // setSyncTargetName('dropbox');
 // setSyncTargetName('onedrive');
@@ -154,7 +155,7 @@ const syncDir = `${oldTestDir}/sync/${suiteName_}`;
 // anyway.
 let defaultJestTimeout = 90 * 1000;
 if (isNetworkSyncTarget_) defaultJestTimeout = 60 * 1000 * 10;
-jest.setTimeout(defaultJestTimeout);
+if (typeof jest !== 'undefined') jest.setTimeout(defaultJestTimeout);
 
 const dbLogger = new Logger();
 dbLogger.addTarget(TargetType.Console);
@@ -264,6 +265,8 @@ async function switchClient(id: number, options: any = null) {
 	BaseItem.revisionService_ = revisionServices_[id];
 
 	await Setting.reset();
+	Setting.settingFilename = `settings-${id}.json`;
+
 	Setting.setConstant('resourceDirName', resourceDirName(id));
 	Setting.setConstant('resourceDir', resourceDir(id));
 	Setting.setConstant('pluginDir', pluginDir(id));
@@ -271,6 +274,10 @@ async function switchClient(id: number, options: any = null) {
 	await loadKeychainServiceAndSettings(options.keychainEnabled ? KeychainServiceDriver : KeychainServiceDriverDummy);
 
 	Setting.setValue('sync.wipeOutFailSafe', false); // To keep things simple, always disable fail-safe unless explicitely set in the test itself
+
+	// More generally, this function should clear all data, and so that should
+	// include settings.json
+	await clearSettingFile(id);
 }
 
 async function clearDatabase(id: number = null) {
@@ -338,7 +345,13 @@ async function setupDatabase(id: number = null, options: any = null) {
 	await databases_[id].open({ name: filePath });
 
 	BaseModel.setDb(databases_[id]);
+	await clearSettingFile(id);
 	await loadKeychainServiceAndSettings(options.keychainEnabled ? KeychainServiceDriver : KeychainServiceDriverDummy);
+}
+
+async function clearSettingFile(id: number) {
+	Setting.settingFilename = `settings-${id}.json`;
+	await fs.remove(Setting.settingFilePath);
 }
 
 export async function createFolderTree(parentId: string, tree: any[], num: number = 0): Promise<FolderEntity> {

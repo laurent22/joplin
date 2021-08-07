@@ -8,7 +8,7 @@ import Setting from '../../models/Setting';
 import JoplinError from '../../JoplinError';
 import { FileApi } from '../../file-api';
 import JoplinDatabase from '../../JoplinDatabase';
-import { SyncInfo } from './syncInfoUtils';
+import { fetchSyncInfo, SyncInfo } from './syncInfoUtils';
 const { sprintf } = require('sprintf-js');
 
 export type MigrationFunction = (api: FileApi, db: JoplinDatabase)=> Promise<void>;
@@ -67,9 +67,9 @@ export default class MigrationHandler extends BaseService {
 		return JSON.stringify(info);
 	}
 
-	public async checkCanSync(remoteInfo: SyncInfo) {
+	public async checkCanSync(remoteInfo: SyncInfo = null) {
+		remoteInfo = remoteInfo || await fetchSyncInfo(this.api_);
 		const supportedSyncTargetVersion = Setting.value('syncVersion');
-		// const syncTargetInfo = await this.fetchSyncTargetInfo();
 
 		if (remoteInfo.version) {
 			if (remoteInfo.version > supportedSyncTargetVersion) {
