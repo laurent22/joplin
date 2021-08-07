@@ -7,7 +7,7 @@ import Folder from '../models/Folder';
 import Note from '../models/Note';
 import Resource from '../models/Resource';
 import SearchEngine from '../services/searchengine/SearchEngine';
-import { setupAndEnableEncryption } from './e2ee/utils';
+import { loadMasterKeysFromSettings, setupAndEnableEncryption } from './e2ee/utils';
 
 describe('services/ResourceService', function() {
 
@@ -140,7 +140,7 @@ describe('services/ResourceService', function() {
 
 		const masterKey = await loadEncryptionMasterKey();
 		await setupAndEnableEncryption(masterKey, '123456');
-		await encryptionService().loadMasterKeysFromSettings();
+		await loadMasterKeysFromSettings(encryptionService());
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 		await shim.attachFileToNote(note1, `${supportDir}/photo.jpg`); // R1
@@ -152,7 +152,7 @@ describe('services/ResourceService', function() {
 
 		await synchronizer().start();
 		await setupAndEnableEncryption(masterKey, '123456');
-		await encryptionService().loadMasterKeysFromSettings();
+		await loadMasterKeysFromSettings(encryptionService());
 		await decryptionWorker().start();
 		{
 			const n1 = await Note.load(note1.id);

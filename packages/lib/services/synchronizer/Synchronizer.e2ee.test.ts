@@ -11,7 +11,7 @@ import BaseItem from '../../models/BaseItem';
 import { ResourceEntity } from '../database/types';
 import Synchronizer from '../../Synchronizer';
 import { getEncryptionEnabled, setEncryptionEnabled } from '../synchronizer/syncInfoUtils';
-import { setupAndDisableEncryption, setupAndEnableEncryption } from '../e2ee/utils';
+import { loadMasterKeysFromSettings, setupAndDisableEncryption, setupAndEnableEncryption } from '../e2ee/utils';
 
 let insideBeforeEach = false;
 
@@ -111,7 +111,7 @@ describe('Synchronizer.e2ee', function() {
 
 		// Now client 2 set the master key password
 		Setting.setObjectValue('encryption.passwordCache', masterKey.id, '123456');
-		await encryptionService().loadMasterKeysFromSettings();
+		await loadMasterKeysFromSettings(encryptionService());
 
 		// Now that master key should be loaded
 		expect(encryptionService().loadedMasterKeyIds()[0]).toBe(masterKey.id);
@@ -144,7 +144,7 @@ describe('Synchronizer.e2ee', function() {
 		let masterKey = await encryptionService().generateMasterKey('123456');
 		masterKey = await MasterKey.save(masterKey);
 		await setupAndEnableEncryption(masterKey, '123456');
-		await encryptionService().loadMasterKeysFromSettings();
+		await loadMasterKeysFromSettings(encryptionService());
 		await synchronizerStart();
 
 		// Even though the folder has not been changed it should have been synced again so that
@@ -198,7 +198,7 @@ describe('Synchronizer.e2ee', function() {
 
 		// Now supply the password, and decrypt the items
 		Setting.setObjectValue('encryption.passwordCache', masterKey.id, '123456');
-		await encryptionService().loadMasterKeysFromSettings();
+		await loadMasterKeysFromSettings(encryptionService());
 		await decryptionWorker().start();
 
 		// Try to disable encryption again
@@ -227,7 +227,7 @@ describe('Synchronizer.e2ee', function() {
 
 		await synchronizerStart();
 		Setting.setObjectValue('encryption.passwordCache', masterKey.id, '123456');
-		await encryptionService().loadMasterKeysFromSettings();
+		await loadMasterKeysFromSettings(encryptionService());
 
 		const fetcher = newResourceFetcher(synchronizer());
 		fetcher.queueDownload_(resource1.id);
@@ -250,7 +250,7 @@ describe('Synchronizer.e2ee', function() {
 
 		const masterKey = await loadEncryptionMasterKey();
 		await setupAndEnableEncryption(masterKey, '123456');
-		await encryptionService().loadMasterKeysFromSettings();
+		await loadMasterKeysFromSettings(encryptionService());
 
 		await synchronizerStart();
 
@@ -265,7 +265,7 @@ describe('Synchronizer.e2ee', function() {
 		await shim.attachFileToNote(note1, `${supportDir}/photo.jpg`);
 		const masterKey = await loadEncryptionMasterKey();
 		await setupAndEnableEncryption(masterKey, '123456');
-		await encryptionService().loadMasterKeysFromSettings();
+		await loadMasterKeysFromSettings(encryptionService());
 		// await synchronizerStart();
 
 		// const resource1 = (await Resource.all())[0];
@@ -277,7 +277,7 @@ describe('Synchronizer.e2ee', function() {
 		await shim.attachFileToNote(note1, `${supportDir}/photo.jpg`);
 		const masterKey = await loadEncryptionMasterKey();
 		await setupAndEnableEncryption(masterKey, '123456');
-		await encryptionService().loadMasterKeysFromSettings();
+		await loadMasterKeysFromSettings(encryptionService());
 		await synchronizerStart();
 		expect(await allSyncTargetItemsEncrypted()).toBe(true);
 
@@ -285,7 +285,7 @@ describe('Synchronizer.e2ee', function() {
 
 		await synchronizerStart();
 		Setting.setObjectValue('encryption.passwordCache', masterKey.id, '123456');
-		await encryptionService().loadMasterKeysFromSettings();
+		await loadMasterKeysFromSettings(encryptionService());
 		await decryptionWorker().start();
 
 		let resource = (await Resource.all())[0];
@@ -312,7 +312,7 @@ describe('Synchronizer.e2ee', function() {
 		const note = await Note.save({ title: 'ma note' });
 		const masterKey = await loadEncryptionMasterKey();
 		await setupAndEnableEncryption(masterKey, '123456');
-		await encryptionService().loadMasterKeysFromSettings();
+		await loadMasterKeysFromSettings(encryptionService());
 		await synchronizerStart();
 
 		await switchClient(2);
@@ -329,7 +329,7 @@ describe('Synchronizer.e2ee', function() {
 		await Note.save({ id: note.id, encryption_cipher_text: 'doesntlookright' });
 
 		Setting.setObjectValue('encryption.passwordCache', masterKey.id, '123456');
-		await encryptionService().loadMasterKeysFromSettings();
+		await loadMasterKeysFromSettings(encryptionService());
 
 		hasThrown = await checkThrowAsync(async () => await decryptionWorker().start({ errorHandler: 'throw' }));
 		expect(hasThrown).toBe(true);

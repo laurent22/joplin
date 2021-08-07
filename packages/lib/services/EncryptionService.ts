@@ -4,7 +4,6 @@ import shim from '../shim';
 import Setting from '../models/Setting';
 import MasterKey from '../models/MasterKey';
 import BaseItem from '../models/BaseItem';
-import { getActiveMasterKeyId } from '../services/synchronizer/syncInfoUtils';
 import JoplinError from '../JoplinError';
 const { padLeft } = require('../string-utils.js');
 
@@ -139,28 +138,28 @@ export default class EncryptionService {
 	// 	await BaseItem.forceSyncAll();
 	// }
 
-	async loadMasterKeysFromSettings() {
-		const masterKeys = await MasterKey.all();
-		const passwords = Setting.value('encryption.passwordCache');
-		const activeMasterKeyId = getActiveMasterKeyId();
+	// async loadMasterKeysFromSettings() {
+	// 	const masterKeys = await MasterKey.all();
+	// 	const passwords = Setting.value('encryption.passwordCache');
+	// 	const activeMasterKeyId = getActiveMasterKeyId();
 
-		this.logger().info(`Trying to load ${masterKeys.length} master keys...`);
+	// 	this.logger().info(`Trying to load ${masterKeys.length} master keys...`);
 
-		for (let i = 0; i < masterKeys.length; i++) {
-			const mk = masterKeys[i];
-			const password = passwords[mk.id];
-			if (this.isMasterKeyLoaded(mk.id)) continue;
-			if (!password) continue;
+	// 	for (let i = 0; i < masterKeys.length; i++) {
+	// 		const mk = masterKeys[i];
+	// 		const password = passwords[mk.id];
+	// 		if (this.isMasterKeyLoaded(mk.id)) continue;
+	// 		if (!password) continue;
 
-			try {
-				await this.loadMasterKey_(mk, password, activeMasterKeyId === mk.id);
-			} catch (error) {
-				this.logger().warn(`Cannot load master key ${mk.id}. Invalid password?`, error);
-			}
-		}
+	// 		try {
+	// 			await this.loadMasterKey_(mk, password, activeMasterKeyId === mk.id);
+	// 		} catch (error) {
+	// 			this.logger().warn(`Cannot load master key ${mk.id}. Invalid password?`, error);
+	// 		}
+	// 	}
 
-		this.logger().info(`Loaded master keys: ${this.loadedMasterKeysCount()}`);
-	}
+	// 	this.logger().info(`Loaded master keys: ${this.loadedMasterKeysCount()}`);
+	// }
 
 	loadedMasterKeysCount() {
 		let output = 0;

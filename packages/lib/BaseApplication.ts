@@ -50,6 +50,7 @@ import SyncTargetJoplinCloud from './SyncTargetJoplinCloud';
 const { toSystemSlashes } = require('./path-utils');
 const { setAutoFreeze } = require('immer');
 import { getEncryptionEnabled } from './services/synchronizer/syncInfoUtils';
+import { loadMasterKeysFromSettings } from './services/e2ee/utils';
 
 const appLogger: LoggerWrapper = Logger.create('App');
 
@@ -435,7 +436,7 @@ export default class BaseApplication {
 				if (this.hasGui()) {
 					appLogger.info('"syncInfoCache" was changed - setting up encryption related code');
 
-					await EncryptionService.instance().loadMasterKeysFromSettings();
+					await loadMasterKeysFromSettings(EncryptionService.instance());
 					void DecryptionWorker.instance().scheduleStart();
 					const loadedMasterKeyIds = EncryptionService.instance().loadedMasterKeyIds();
 
@@ -818,7 +819,7 @@ export default class BaseApplication {
 		DecryptionWorker.instance().setLogger(globalLogger);
 		DecryptionWorker.instance().setEncryptionService(EncryptionService.instance());
 		DecryptionWorker.instance().setKvStore(KvStore.instance());
-		await EncryptionService.instance().loadMasterKeysFromSettings();
+		await loadMasterKeysFromSettings(EncryptionService.instance());
 		DecryptionWorker.instance().on('resourceMetadataButNotBlobDecrypted', this.decryptionWorker_resourceMetadataButNotBlobDecrypted);
 
 		ResourceFetcher.instance().setFileApi(() => {
