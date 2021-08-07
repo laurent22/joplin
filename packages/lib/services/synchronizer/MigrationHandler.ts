@@ -30,7 +30,7 @@ interface SyncTargetInfo {
 
 export default class MigrationHandler extends BaseService {
 
-	private api_: any = null;
+	private api_: FileApi = null;
 	private lockHandler_: LockHandler = null;
 	private clientType_: string;
 	private clientId_: string;

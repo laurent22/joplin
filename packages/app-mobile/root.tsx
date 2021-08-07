@@ -63,7 +63,7 @@ const { LogScreen } = require('./components/screens/log.js');
 const { StatusScreen } = require('./components/screens/status.js');
 const { SearchScreen } = require('./components/screens/search.js');
 const { OneDriveLoginScreen } = require('./components/screens/onedrive-login.js');
-const { EncryptionConfigScreen } = require('./components/screens/encryption-config.js');
+import EncryptionConfigScreen from './components/screens/encryption-config';
 const { DropboxLoginScreen } = require('./components/screens/dropbox-login.js');
 const { MenuContext } = require('react-native-popup-menu');
 const { SideMenu } = require('./components/side-menu.js');

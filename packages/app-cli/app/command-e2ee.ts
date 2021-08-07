@@ -1,11 +1,11 @@
 const { BaseCommand } = require('./base-command.js');
-const { _ } = require('@joplin/lib/locale');
-const EncryptionService = require('@joplin/lib/services/EncryptionService').default;
-const DecryptionWorker = require('@joplin/lib/services/DecryptionWorker').default;
-const BaseItem = require('@joplin/lib/models/BaseItem').default;
-const Setting = require('@joplin/lib/models/Setting').default;
-const shim = require('@joplin/lib/shim').default;
-const pathUtils = require('@joplin/lib/path-utils');
+import { _ } from '@joplin/lib/locale';
+import EncryptionService from '@joplin/lib/services/EncryptionService';
+import DecryptionWorker from '@joplin/lib/services/DecryptionWorker';
+import BaseItem from '@joplin/lib/models/BaseItem';
+import Setting from '@joplin/lib/models/Setting';
+import shim from '@joplin/lib/shim';
+import * as pathUtils from '@joplin/lib/path-utils';
 const imageType = require('image-type');
 const readChunk = require('read-chunk');
 
@@ -28,10 +28,10 @@ class Command extends BaseCommand {
 		];
 	}
 
-	async action(args) {
+	async action(args: any) {
 		const options = args.options;
 
-		const askForMasterKey = async error => {
+		const askForMasterKey = async (error: any) => {
 			const masterKeyId = error.masterKeyId;
 			const password = await this.prompt(_('Enter master password:'), { type: 'string', secure: true });
 			if (!password) {
@@ -155,9 +155,9 @@ class Command extends BaseCommand {
 			const targetPath = args.path;
 			if (!targetPath) throw new Error('Please specify the sync target path.');
 
-			const dirPaths = function(targetPath) {
-				const paths = [];
-				fs.readdirSync(targetPath).forEach(path => {
+			const dirPaths = function(targetPath: string) {
+				const paths: string[] = [];
+				fs.readdirSync(targetPath).forEach((path: string) => {
 					paths.push(path);
 				});
 				return paths;

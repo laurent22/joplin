@@ -1,14 +1,15 @@
-const EncryptionService = require('../../services/EncryptionService').default;
-const { _ } = require('../../locale');
-const BaseItem = require('../../models/BaseItem').default;
-const Setting = require('../../models/Setting').default;
-const MasterKey = require('../../models/MasterKey').default;
-const { reg } = require('../../registry.js');
-const shim = require('../../shim').default;
+import EncryptionService from '../../services/EncryptionService';
+import { _ } from '../../locale';
+import BaseItem from '../../models/BaseItem';
+import Setting from '../../models/Setting';
+import MasterKey from '../../models/MasterKey';
+import { reg } from '../../registry.js';
+import shim from '../../shim';
+import { MasterKeyEntity } from '../../services/database/types';
 
-const shared = {};
+const shared: any = {};
 
-shared.constructor = function(comp, props) {
+shared.constructor = function(comp: any, props: any) {
 	comp.state = {
 		passwordChecks: {},
 		stats: {
@@ -22,7 +23,7 @@ shared.constructor = function(comp, props) {
 	shared.refreshStatsIID_ = null;
 };
 
-shared.refreshStats = async function(comp) {
+shared.refreshStats = async function(comp: any) {
 	const stats = await BaseItem.encryptedItemsStats();
 	comp.setState({
 		stats: stats,
@@ -34,7 +35,7 @@ shared.reencryptData = async function() {
 	if (!ok) return;
 
 	await BaseItem.forceSyncAll();
-	reg.waitForSyncFinishedThenSync();
+	void reg.waitForSyncFinishedThenSync();
 	Setting.setValue('encryption.shouldReencrypt', Setting.SHOULD_REENCRYPT_NO);
 	alert(_('Your data is going to be re-encrypted and synced again.'));
 };
@@ -43,7 +44,7 @@ shared.dontReencryptData = function() {
 	Setting.setValue('encryption.shouldReencrypt', Setting.SHOULD_REENCRYPT_NO);
 };
 
-shared.upgradeMasterKey = async function(comp, masterKey) {
+shared.upgradeMasterKey = async function(comp: any, masterKey: MasterKeyEntity) {
 	const passwordCheck = comp.state.passwordChecks[masterKey.id];
 	if (!passwordCheck) {
 		alert(_('Please enter your password in the master key list below before upgrading the key.'));
@@ -54,14 +55,14 @@ shared.upgradeMasterKey = async function(comp, masterKey) {
 		const password = comp.state.passwords[masterKey.id];
 		const newMasterKey = await EncryptionService.instance().upgradeMasterKey(masterKey, password);
 		await MasterKey.save(newMasterKey);
-		reg.waitForSyncFinishedThenSync();
+		void reg.waitForSyncFinishedThenSync();
 		alert(_('The master key has been upgraded successfully!'));
 	} catch (error) {
 		alert(_('Could not upgrade master key: %s', error.message));
 	}
 };
 
-shared.componentDidMount = async function(comp) {
+shared.componentDidMount = async function(comp: any) {
 	shared.componentDidUpdate(comp);
 
 	shared.refreshStats(comp);
@@ -81,7 +82,7 @@ shared.componentDidMount = async function(comp) {
 	}, 3000);
 };
 
-shared.componentDidUpdate = async function(comp, prevProps = null) {
+shared.componentDidUpdate = async function(comp: any, prevProps: any = null) {
 	if (prevProps && comp.props.passwords !== prevProps.passwords) {
 		comp.setState({ passwords: Object.assign({}, comp.props.passwords) });
 	}
@@ -98,7 +99,7 @@ shared.componentWillUnmount = function() {
 	}
 };
 
-shared.checkPasswords = async function(comp) {
+shared.checkPasswords = async function(comp: any) {
 	const passwordChecks = Object.assign({}, comp.state.passwordChecks);
 	for (let i = 0; i < comp.props.masterKeys.length; i++) {
 		const mk = comp.props.masterKeys[i];
@@ -109,14 +110,14 @@ shared.checkPasswords = async function(comp) {
 	comp.setState({ passwordChecks: passwordChecks });
 };
 
-shared.decryptedStatText = function(comp) {
+shared.decryptedStatText = function(comp: any) {
 	const stats = comp.state.stats;
 	const doneCount = stats.encrypted !== null ? stats.total - stats.encrypted : '-';
 	const totalCount = stats.total !== null ? stats.total : '-';
 	return _('Decrypted items: %s / %s', doneCount, totalCount);
 };
 
-shared.onSavePasswordClick = function(comp, mk) {
+shared.onSavePasswordClick = function(comp: any, mk: MasterKeyEntity) {
 	const password = comp.state.passwords[mk.id];
 	if (!password) {
 		Setting.deleteObjectValue('encryption.passwordCache', mk.id);
@@ -127,10 +128,10 @@ shared.onSavePasswordClick = function(comp, mk) {
 	comp.checkPasswords();
 };
 
-shared.onPasswordChange = function(comp, mk, password) {
+shared.onPasswordChange = function(comp: any, mk: MasterKeyEntity, password: string) {
 	const passwords = Object.assign({}, comp.state.passwords);
 	passwords[mk.id] = password;
 	comp.setState({ passwords: passwords });
 };
 
-module.exports = shared;
+export default shared;
