@@ -435,6 +435,9 @@ export default class Synchronizer {
 
 					logger.info('Sync target local info:', localInfo);
 
+					// console.info('LOCAL', localInfo);
+					// console.info('REMOTE', remoteInfo);
+
 					if (!syncInfoEquals(localInfo, remoteInfo)) {
 						const newInfo = mergeSyncInfos(localInfo, remoteInfo);
 						const previousE2EE = localInfo.e2ee;
@@ -444,6 +447,8 @@ export default class Synchronizer {
 						await uploadSyncInfo(this.api(), newInfo);
 						await saveLocalSyncInfo(newInfo);
 						await this.lockHandler().releaseLock(LockType.Exclusive, this.appType_, this.clientId_);
+
+						// console.info('NEW', newInfo);
 
 						if (newInfo.e2ee !== previousE2EE) {
 							if (newInfo.e2ee) {

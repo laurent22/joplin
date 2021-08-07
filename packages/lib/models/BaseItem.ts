@@ -599,7 +599,8 @@ export default class BaseItem extends BaseModel {
 	}
 
 	public static async itemsThatNeedSync(syncTarget: number, limit = 100): Promise<ItemsThatNeedSyncResult> {
-		const classNames = this.syncItemClassNames();
+		// Although we keep the master keys in the database, we no longer sync them
+		const classNames = this.syncItemClassNames().filter(n => n !== 'MasterKey');
 
 		for (let i = 0; i < classNames.length; i++) {
 			const className = classNames[i];
@@ -688,7 +689,7 @@ export default class BaseItem extends BaseModel {
 		throw new Error('Unreachable');
 	}
 
-	static syncItemClassNames() {
+	static syncItemClassNames(): string[] {
 		return BaseItem.syncItemDefinitions_.map((def: any) => {
 			return def.className;
 		});

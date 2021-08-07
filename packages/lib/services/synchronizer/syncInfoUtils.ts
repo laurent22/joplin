@@ -67,8 +67,8 @@ export function localSyncInfo(): SyncInfo {
 export function mergeSyncInfos(s1: SyncInfo, s2: SyncInfo): SyncInfo {
 	const output: SyncInfo = new SyncInfo();
 
-	output.e2ee = s1.keyTimestamp('e2ee') > s2.keyTimestamp('e2ee') ? s1.e2ee : s2.e2ee;
-	output.activeMasterKeyId = s1.keyTimestamp('activeMasterKeyId') > s2.keyTimestamp('activeMasterKeyId') ? s1.activeMasterKeyId : s2.activeMasterKeyId;
+	output.setWithTimestamp(s1.keyTimestamp('e2ee') > s2.keyTimestamp('e2ee') ? s1 : s2, 'e2ee');
+	output.setWithTimestamp(s1.keyTimestamp('activeMasterKeyId') > s2.keyTimestamp('activeMasterKeyId') ? s1 : s2, 'activeMasterKeyId');
 	output.version = s1.version > s2.version ? s1.version : s2.version;
 
 	output.masterKeys = s1.masterKeys.slice();
@@ -125,6 +125,13 @@ export class SyncInfo {
 		this.masterKeys_ = 'masterKeys' in s ? s.masterKeys : [];
 	}
 
+	public setWithTimestamp(fromSyncInfo: SyncInfo, propName: string) {
+		if (!(propName in (this as any))) throw new Error(`Invalid prop name: ${propName}`);
+
+		(this as any)[propName] = (fromSyncInfo as any)[propName];
+		this.setKeyTimestamp(propName, fromSyncInfo.keyTimestamp(propName));
+	}
+
 	public get version(): number {
 		return this.version_;
 	}
@@ -166,15 +173,13 @@ export class SyncInfo {
 	}
 
 	public keyTimestamp(name: string): number {
-		const v: any = (this as any)[`${name}_`];
-		if (!v) throw new Error(`Invalid name: ${name}`);
-		return v.updateTime;
+		if (!(`${name}_` in (this as any))) throw new Error(`Invalid name: ${name}`);
+		return (this as any)[`${name}_`].updatedTime;
 	}
 
 	public setKeyTimestamp(name: string, timestamp: number) {
-		const v: any = (this as any)[`${name}_`];
-		if (!v) throw new Error(`Invalid name: ${name}`);
-		v.updatedTime = timestamp;
+		if (!(`${name}_` in (this as any))) throw new Error(`Invalid name: ${name}`);
+		(this as any)[`${name}_`].updatedTime = timestamp;
 	}
 
 }

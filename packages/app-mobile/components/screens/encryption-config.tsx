@@ -13,6 +13,7 @@ import shared from '@joplin/lib/components/shared/encryption-config-shared';
 import { MasterKeyEntity } from '@joplin/lib/services/database/types';
 import { State } from '@joplin/lib/reducer';
 import { SyncInfo } from '@joplin/lib/services/synchronizer/syncInfoUtils';
+import { generateMasterKeyAndEnableEncryption, setupAndDisableEncryption } from '@joplin/lib/services/e2ee/utils';
 
 interface Props {
 
@@ -144,7 +145,7 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent<Props> {
 				const password2 = this.state.passwordPromptConfirmAnswer;
 				if (!password2) throw new Error(_('Confirm password cannot be empty'));
 				if (password !== password2) throw new Error(_('Passwords do not match!'));
-				await EncryptionService.instance().generateMasterKeyAndEnableEncryption(password);
+				await generateMasterKeyAndEnableEncryption(EncryptionService.instance(), password);
 				this.setState({ passwordPromptShow: false });
 			} catch (error) {
 				await dialogs.error(this, error.message);
@@ -222,7 +223,7 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent<Props> {
 				if (!ok) return;
 
 				try {
-					await EncryptionService.instance().disableEncryption();
+					await setupAndDisableEncryption();
 				} catch (error) {
 					await dialogs.error(this, error.message);
 				}

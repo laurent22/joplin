@@ -11,7 +11,8 @@ import dialogs from './dialogs';
 import bridge from '../services/bridge';
 import shared from '@joplin/lib/components/shared/encryption-config-shared';
 import { MasterKeyEntity } from '@joplin/lib/services/database/types';
-import { encryptionEnabled, SyncInfo } from '@joplin/lib/services/synchronizer/syncInfoUtils';
+import { getEncryptionEnabled, SyncInfo } from '@joplin/lib/services/synchronizer/syncInfoUtils';
+import { generateMasterKeyAndEnableEncryption, setupAndDisableEncryption } from '../../lib/services/e2ee/utils';
 
 interface Props {
 
@@ -168,7 +169,7 @@ class EncryptionConfigScreenComponent extends React.Component<Props> {
 		}
 
 		const onToggleButtonClick = async () => {
-			const isEnabled = encryptionEnabled();
+			const isEnabled = getEncryptionEnabled();
 
 			let answer = null;
 			if (isEnabled) {
@@ -181,9 +182,9 @@ class EncryptionConfigScreenComponent extends React.Component<Props> {
 
 			try {
 				if (isEnabled) {
-					await EncryptionService.instance().disableEncryption();
+					await setupAndDisableEncryption();
 				} else {
-					await EncryptionService.instance().generateMasterKeyAndEnableEncryption(answer);
+					await generateMasterKeyAndEnableEncryption(EncryptionService.instance(), answer);
 				}
 			} catch (error) {
 				await dialogs.alert(error.message);

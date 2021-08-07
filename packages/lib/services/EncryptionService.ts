@@ -4,7 +4,7 @@ import shim from '../shim';
 import Setting from '../models/Setting';
 import MasterKey from '../models/MasterKey';
 import BaseItem from '../models/BaseItem';
-import { getActiveMasterKeyId, setActiveMasterKeyId, setEncryptionEnabled } from '../services/synchronizer/syncInfoUtils';
+import { getActiveMasterKeyId } from '../services/synchronizer/syncInfoUtils';
 import JoplinError from '../JoplinError';
 const { padLeft } = require('../string-utils.js');
 
@@ -102,42 +102,42 @@ export default class EncryptionService {
 		return this.logger_;
 	}
 
-	async generateMasterKeyAndEnableEncryption(password: string) {
-		let masterKey = await this.generateMasterKey(password);
-		masterKey = await MasterKey.save(masterKey);
-		await this.enableEncryption(masterKey, password);
-		await this.loadMasterKeysFromSettings();
-		return masterKey;
-	}
+	// async generateMasterKeyAndEnableEncryption(password: string) {
+	// 	let masterKey = await this.generateMasterKey(password);
+	// 	masterKey = await MasterKey.save(masterKey);
+	// 	await this.enableEncryption(masterKey, password);
+	// 	await this.loadMasterKeysFromSettings();
+	// 	return masterKey;
+	// }
 
-	async enableEncryption(masterKey: MasterKeyEntity, password: string = null) {
-		setEncryptionEnabled(true);
-		setActiveMasterKeyId(masterKey.id);
+	// async enableEncryption(masterKey: MasterKeyEntity, password: string = null) {
+	// 	setEncryptionEnabled(true);
+	// 	setActiveMasterKeyId(masterKey.id);
 
-		if (password) {
-			const passwordCache = Setting.value('encryption.passwordCache');
-			passwordCache[masterKey.id] = password;
-			Setting.setValue('encryption.passwordCache', passwordCache);
-		}
+	// 	if (password) {
+	// 		const passwordCache = Setting.value('encryption.passwordCache');
+	// 		passwordCache[masterKey.id] = password;
+	// 		Setting.setValue('encryption.passwordCache', passwordCache);
+	// 	}
 
-		// Mark only the non-encrypted ones for sync since, if there are encrypted ones,
-		// it means they come from the sync target and are already encrypted over there.
-		await BaseItem.markAllNonEncryptedForSync();
-	}
+	// 	// Mark only the non-encrypted ones for sync since, if there are encrypted ones,
+	// 	// it means they come from the sync target and are already encrypted over there.
+	// 	await BaseItem.markAllNonEncryptedForSync();
+	// }
 
-	async disableEncryption() {
-		// Allow disabling encryption even if some items are still encrypted, because whether E2EE is enabled or disabled
-		// should not affect whether items will enventually be decrypted or not (DecryptionWorker will still work as
-		// long as there are encrypted items). Also even if decryption is disabled, it's possible that encrypted items
-		// will still be received via synchronisation.
+	// async disableEncryption() {
+	// 	// Allow disabling encryption even if some items are still encrypted, because whether E2EE is enabled or disabled
+	// 	// should not affect whether items will enventually be decrypted or not (DecryptionWorker will still work as
+	// 	// long as there are encrypted items). Also even if decryption is disabled, it's possible that encrypted items
+	// 	// will still be received via synchronisation.
 
-		// const hasEncryptedItems = await BaseItem.hasEncryptedItems();
-		// if (hasEncryptedItems) throw new Error(_('Encryption cannot currently be disabled because some items are still encrypted. Please wait for all the items to be decrypted and try again.'));
+	// 	// const hasEncryptedItems = await BaseItem.hasEncryptedItems();
+	// 	// if (hasEncryptedItems) throw new Error(_('Encryption cannot currently be disabled because some items are still encrypted. Please wait for all the items to be decrypted and try again.'));
 
-		setEncryptionEnabled(false); // The only way to make sure everything gets decrypted on the sync target is
-		// to re-sync everything.
-		await BaseItem.forceSyncAll();
-	}
+	// 	setEncryptionEnabled(false); // The only way to make sure everything gets decrypted on the sync target is
+	// 	// to re-sync everything.
+	// 	await BaseItem.forceSyncAll();
+	// }
 
 	async loadMasterKeysFromSettings() {
 		const masterKeys = await MasterKey.all();
