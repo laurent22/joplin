@@ -16,6 +16,7 @@ const migrations = [
 import Setting from '../../models/Setting';
 const { sprintf } = require('sprintf-js');
 import JoplinError from '../../JoplinError';
+import { FileApi } from '../../file-api';
 
 interface SyncTargetInfo {
 	version: number;
@@ -23,12 +24,12 @@ interface SyncTargetInfo {
 
 export default class MigrationHandler extends BaseService {
 
-	private api_: any = null;
+	private api_: FileApi = null;
 	private lockHandler_: LockHandler = null;
 	private clientType_: string;
 	private clientId_: string;
 
-	constructor(api: any, lockHandler: LockHandler, clientType: string, clientId: string) {
+	constructor(api: FileApi, lockHandler: LockHandler, clientType: string, clientId: string) {
 		super();
 		this.api_ = api;
 		this.lockHandler_ = lockHandler;

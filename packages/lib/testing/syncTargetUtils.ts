@@ -1,12 +1,12 @@
-const { syncDir, synchronizer, supportDir, loadEncryptionMasterKey, setupDatabaseAndSynchronizer, switchClient } = require('../testing/test-utils.js');
-const Setting = require('../models/Setting').default;
-const Folder = require('../models/Folder').default;
-const Note = require('../models/Note').default;
-const Tag = require('../models/Tag').default;
-const Resource = require('../models/Resource').default;
-const markdownUtils = require('../markdownUtils').default;
-const shim = require('../shim').default;
-const fs = require('fs-extra');
+import { syncDir, synchronizer, supportDir, loadEncryptionMasterKey, setupDatabaseAndSynchronizer, switchClient } from '../testing/test-utils';
+import Setting from '../models/Setting';
+import Folder from '../models/Folder';
+import Note from '../models/Note';
+import Tag from '../models/Tag';
+import Resource from '../models/Resource';
+import markdownUtils from '../markdownUtils';
+import shim from '../shim';
+import * as fs from 'fs-extra';
 
 const snapshotBaseDir = `${supportDir}/syncTargetSnapshots`;
 
@@ -36,8 +36,8 @@ const testData = {
 	},
 };
 
-async function createTestData(data) {
-	async function recurseStruct(s, parentId = '') {
+async function createTestData(data: any) {
+	async function recurseStruct(s: any, parentId: string = '') {
 		for (const n in s) {
 			if (n.toLowerCase().includes('folder')) {
 				const folder = await Folder.save({ title: n, parent_id: parentId });
@@ -60,8 +60,8 @@ async function createTestData(data) {
 	await recurseStruct(data);
 }
 
-async function checkTestData(data) {
-	async function recurseCheck(s) {
+async function checkTestData(data: any) {
+	async function recurseCheck(s: any) {
 		for (const n in s) {
 			const obj = s[n];
 
@@ -98,13 +98,13 @@ async function checkTestData(data) {
 	await recurseCheck(data);
 }
 
-async function deploySyncTargetSnapshot(syncTargetType, syncVersion) {
+async function deploySyncTargetSnapshot(syncTargetType: string, syncVersion: number) {
 	const sourceDir = `${snapshotBaseDir}/${syncVersion}/${syncTargetType}`;
 	await fs.remove(syncDir);
 	await fs.copy(sourceDir, syncDir);
 }
 
-async function main(syncTargetType) {
+async function main(syncTargetType: string) {
 	const validSyncTargetTypes = ['normal', 'e2ee'];
 	if (!validSyncTargetTypes.includes(syncTargetType)) throw new Error(`Sync target type must be: ${validSyncTargetTypes.join(', ')}`);
 
@@ -129,7 +129,7 @@ async function main(syncTargetType) {
 	console.info(`Sync target snapshot created in: ${destDir}`);
 }
 
-module.exports = {
+export {
 	checkTestData,
 	main,
 	testData,

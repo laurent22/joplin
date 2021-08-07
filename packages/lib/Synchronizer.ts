@@ -21,8 +21,11 @@ import ShareService from './services/share/ShareService';
 import TaskQueue from './TaskQueue';
 import ItemUploader from './services/synchronizer/ItemUploader';
 import { FileApi } from './file-api';
+import JoplinDatabase from './JoplinDatabase';
 const { sprintf } = require('sprintf-js');
 const { Dirnames } = require('./services/synchronizer/utils/types');
+
+const logger = Logger.create('Synchronizer');
 
 interface RemoteItem {
 	id: string;
@@ -62,7 +65,7 @@ export default class Synchronizer {
 
 	public static verboseMode: boolean = true;
 
-	private db_: any;
+	private db_: JoplinDatabase;
 	private api_: FileApi;
 	private appType_: string;
 	private logger_: Logger = new Logger();
@@ -87,7 +90,7 @@ export default class Synchronizer {
 
 	public dispatch: Function;
 
-	public constructor(db: any, api: FileApi, appType: string) {
+	public constructor(db: JoplinDatabase, api: FileApi, appType: string) {
 		this.db_ = db;
 		this.api_ = api;
 		this.appType_ = appType;
@@ -214,9 +217,9 @@ export default class Synchronizer {
 		}
 
 		if (Synchronizer.verboseMode) {
-			this.logger().info(line.join(': '));
+			logger.info(line.join(': '));
 		} else {
-			this.logger().debug(line.join(': '));
+			logger.debug(line.join(': '));
 		}
 
 		if (!this.progressReport_[action]) this.progressReport_[action] = 0;
@@ -234,7 +237,7 @@ export default class Synchronizer {
 	}
 
 	async logSyncSummary(report: any) {
-		this.logger().info('Operations completed: ');
+		logger.info('Operations completed: ');
 		for (const n in report) {
 			if (!report.hasOwnProperty(n)) continue;
 			if (n == 'errors') continue;
@@ -243,20 +246,20 @@ export default class Synchronizer {
 			if (n == 'state') continue;
 			if (n == 'startTime') continue;
 			if (n == 'completedTime') continue;
-			this.logger().info(`${n}: ${report[n] ? report[n] : '-'}`);
+			logger.info(`${n}: ${report[n] ? report[n] : '-'}`);
 		}
 		const folderCount = await Folder.count();
 		const noteCount = await Note.count();
 		const resourceCount = await Resource.count();
-		this.logger().info(`Total folders: ${folderCount}`);
-		this.logger().info(`Total notes: ${noteCount}`);
-		this.logger().info(`Total resources: ${resourceCount}`);
+		logger.info(`Total folders: ${folderCount}`);
+		logger.info(`Total notes: ${noteCount}`);
+		logger.info(`Total resources: ${resourceCount}`);
 
 		if (Synchronizer.reportHasErrors(report)) {
-			this.logger().warn('There was some errors:');
+			logger.warn('There was some errors:');
 			for (let i = 0; i < report.errors.length; i++) {
 				const e = report.errors[i];
-				this.logger().warn(e);
+				logger.warn(e);
 			}
 		}
 	}
@@ -291,8 +294,8 @@ export default class Synchronizer {
 
 		for (const r of lastRequests) {
 			const timestamp = time.unixMsToLocalHms(r.timestamp);
-			this.logger().info(`Req ${timestamp}: ${r.request}`);
-			this.logger().info(`Res ${timestamp}: ${r.response}`);
+			logger.info(`Req ${timestamp}: ${r.request}`);
+			logger.info(`Res ${timestamp}: ${r.response}`);
 		}
 	}
 
@@ -394,11 +397,11 @@ export default class Synchronizer {
 		// plain text.
 		try {
 			if (this.resourceService()) {
-				this.logger().info('Indexing resources...');
+				logger.info('Indexing resources...');
 				await this.resourceService().indexNoteResources();
 			}
 		} catch (error) {
-			this.logger().error('Error indexing resources:', error);
+			logger.error('Error indexing resources:', error);
 		}
 
 		// Before synchronising make sure all share_id properties are set
@@ -417,10 +420,10 @@ export default class Synchronizer {
 			try {
 				const syncTargetInfo = await this.migrationHandler().checkCanSync();
 
-				this.logger().info('Sync target info:', syncTargetInfo);
+				logger.info('Sync target info:', syncTargetInfo);
 
 				if (!syncTargetInfo.version) {
-					this.logger().info('Sync target is new - setting it up...');
+					logger.info('Sync target is new - setting it up...');
 					await this.migrationHandler().upgrade(Setting.value('syncVersion'));
 				}
 			} catch (error) {
@@ -433,7 +436,7 @@ export default class Synchronizer {
 			syncLock = await this.lockHandler().acquireLock(LockType.Sync, this.appType_, this.clientId_);
 
 			this.lockHandler().startAutoLockRefresh(syncLock, (error: any) => {
-				this.logger().warn('Could not refresh lock - cancelling sync. Error was:', error);
+				logger.warn('Could not refresh lock - cancelling sync. Error was:', error);
 				this.syncTargetIsLocked_ = true;
 				void this.cancel();
 			});
@@ -518,7 +521,7 @@ export default class Synchronizer {
 							} catch (error) {
 								if (error.code === 'rejectedByTarget') {
 									this.progressReport_.errors.push(error);
-									this.logger().warn(`Rejected by target: ${path}: ${error.message}`);
+									logger.warn(`Rejected by target: ${path}: ${error.message}`);
 									completeItemProcessing(path);
 									continue;
 								} else {
@@ -577,7 +580,7 @@ export default class Synchronizer {
 								// already been done" on the next loop, and sync
 								// will never finish because we'll always end up
 								// here.
-								this.logger().info(`Need to upload a resource, but blob is not present: ${path}`);
+								logger.info(`Need to upload a resource, but blob is not present: ${path}`);
 								await handleCannotSyncItem(ItemClass, syncTargetId, local, 'Trying to upload resource, but only metadata is present.');
 								action = null;
 							} else {
@@ -589,7 +592,7 @@ export default class Synchronizer {
 									const localResourceContentPath = result.path;
 
 									if (resource.size >= 10 * 1000 * 1000) {
-										this.logger().warn(`Uploading a large resource (resourceId: ${local.id}, size:${resource.size} bytes) which may tie up the sync process.`);
+										logger.warn(`Uploading a large resource (resourceId: ${local.id}, size:${resource.size} bytes) which may tie up the sync process.`);
 									}
 
 									await this.apiCall('put', remoteContentPath, null, { path: localResourceContentPath, source: 'file', shareId: resource.share_id });
@@ -750,7 +753,7 @@ export default class Synchronizer {
 
 			if (this.downloadQueue_) await this.downloadQueue_.stop();
 			this.downloadQueue_ = new TaskQueue('syncDownload');
-			this.downloadQueue_.logger_ = this.logger();
+			this.downloadQueue_.logger_ = logger;
 
 			if (syncSteps.indexOf('delta') >= 0) {
 				// At this point all the local items that have changed have been pushed to remote
@@ -779,7 +782,7 @@ export default class Synchronizer {
 
 						wipeOutFailSafe: Setting.value('sync.wipeOutFailSafe'),
 
-						logger: this.logger(),
+						logger: logger,
 					});
 
 					const remotes: RemoteItem[] = listResult.items;
@@ -860,7 +863,7 @@ export default class Synchronizer {
 						} catch (error) {
 							if (error.code === 'rejectedByTarget') {
 								this.progressReport_.errors.push(error);
-								this.logger().warn(`Rejected by target: ${path}: ${error.message}`);
+								logger.warn(`Rejected by target: ${path}: ${error.message}`);
 								action = null;
 							} else {
 								error.message = `On file ${path}: ${error.message}`;
@@ -876,7 +879,7 @@ export default class Synchronizer {
 
 						if (action == 'createLocal' || action == 'updateLocal') {
 							if (content === null) {
-								this.logger().warn(`Remote has been deleted between now and the delta() call? In that case it will be handled during the next sync: ${path}`);
+								logger.warn(`Remote has been deleted between now and the delta() call? In that case it will be handled during the next sync: ${path}`);
 								continue;
 							}
 							content = ItemClass.filter(content);
@@ -914,11 +917,11 @@ export default class Synchronizer {
 
 							if (!hasAutoEnabledEncryption && content.type_ === BaseModel.TYPE_MASTER_KEY && !masterKeysBefore) {
 								hasAutoEnabledEncryption = true;
-								this.logger().info('One master key was downloaded and none was previously available: automatically enabling encryption');
-								this.logger().info('Using master key: ', content.id);
+								logger.info('One master key was downloaded and none was previously available: automatically enabling encryption');
+								logger.info('Using master key: ', content.id);
 								await this.encryptionService().enableEncryption(content);
 								await this.encryptionService().loadMasterKeysFromSettings();
-								this.logger().info('Encryption has been enabled with downloaded master key as active key. However, note that no password was initially supplied. It will need to be provided by user.');
+								logger.info('Encryption has been enabled with downloaded master key as active key. However, note that no password was initially supplied. It will need to be provided by user.');
 							}
 
 							if (content.encryption_applied) this.dispatch({ type: 'SYNC_GOT_ENCRYPTED_ITEM' });
@@ -989,7 +992,7 @@ export default class Synchronizer {
 				// Only log an info statement for this since this is a common condition that is reported
 				// in the application, and needs to be resolved by the user.
 				// Or it's a temporary issue that will be resolved on next sync.
-				this.logger().info(error.message);
+				logger.info(error.message);
 
 				if (error.code === 'failSafe' || error.code === 'lockError') {
 					// Get the message to display on UI, but not in testing to avoid poluting stdout
@@ -998,10 +1001,10 @@ export default class Synchronizer {
 				}
 			} else if (error.code === 'unknownItemType') {
 				this.progressReport_.errors.push(_('Unknown item type downloaded - please upgrade Joplin to the latest version'));
-				this.logger().error(error);
+				logger.error(error);
 			} else {
-				this.logger().error(error);
-				if (error.details) this.logger().error('Details:', error.details);
+				logger.error(error);
+				if (error.details) logger.error('Details:', error.details);
 
 				// Don't save to the report errors that are due to things like temporary network errors or timeout.
 				if (!shim.fetchRequestCanBeRetried(error)) {
@@ -1019,7 +1022,7 @@ export default class Synchronizer {
 		this.syncTargetIsLocked_ = false;
 
 		if (this.cancelling()) {
-			this.logger().info('Synchronisation was cancelled.');
+			logger.info('Synchronisation was cancelled.');
 			this.cancelling_ = false;
 		}
 
@@ -1029,7 +1032,7 @@ export default class Synchronizer {
 			try {
 				await this.shareService_.maintenance();
 			} catch (error) {
-				this.logger().error('Could not run share service maintenance:', error);
+				logger.error('Could not run share service maintenance:', error);
 			}
 		}
 

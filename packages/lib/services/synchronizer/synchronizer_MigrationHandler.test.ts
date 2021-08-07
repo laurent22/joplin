@@ -1,17 +1,15 @@
 import LockHandler from '../../services/synchronizer/LockHandler';
 import MigrationHandler from '../../services/synchronizer/MigrationHandler';
 import { Dirnames } from '../../services/synchronizer/utils/types';
+import { setSyncTargetName, fileApi, synchronizer, decryptionWorker, encryptionService, setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow } from '../../testing/test-utils';
+import { deploySyncTargetSnapshot, testData, checkTestData } from '../../testing/syncTargetUtils';
+import Setting from '../../models/Setting';
+import MasterKey from '../../models/MasterKey';
 
 // To create a sync target snapshot for the current syncVersion:
 // - In test-utils, set syncTargetName_ to "filesystem"
 // - Then run:
 // gulp buildTests -L && node tests-build/support/createSyncTargetSnapshot.js normal && node tests-build/support/createSyncTargetSnapshot.js e2ee
-
-
-const { setSyncTargetName, fileApi, synchronizer, decryptionWorker, encryptionService, setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow } = require('../../testing/test-utils.js');
-const { deploySyncTargetSnapshot, testData, checkTestData } = require('../../testing/syncTargetUtils');
-import Setting from '../../models/Setting';
-import MasterKey from '../../models/MasterKey';
 
 const specTimeout = 60000 * 10; // Nextcloud tests can be slow
 

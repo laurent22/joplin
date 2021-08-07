@@ -1,14 +1,12 @@
-/* eslint-disable no-unused-vars, @typescript-eslint/no-unused-vars, prefer-const */
+import { fileContentEqual, setupDatabaseAndSynchronizer, supportDir, switchClient, objectsEqual, checkThrowAsync } from '../testing/test-utils';
+import Folder from '../models/Folder';
+import Note from '../models/Note';
+import Setting from '../models/Setting';
+import BaseItem from '../models/BaseItem';
+import MasterKey from '../models/MasterKey';
+import EncryptionService from '../services/EncryptionService';
 
-const { fileContentEqual, setupDatabaseAndSynchronizer, supportDir, switchClient, objectsEqual, checkThrowAsync } = require('../testing/test-utils.js');
-const Folder = require('../models/Folder').default;
-const Note = require('../models/Note').default;
-const Setting = require('../models/Setting').default;
-const BaseItem = require('../models/BaseItem').default;
-const MasterKey = require('../models/MasterKey').default;
-const EncryptionService = require('../services/EncryptionService').default;
-
-let service = null;
+let service: EncryptionService = null;
 
 describe('services_EncryptionService', function() {
 
@@ -85,7 +83,7 @@ describe('services_EncryptionService', function() {
 			encryptionMethod: EncryptionService.METHOD_SJCL_2,
 		});
 
-		const hasThrown = await checkThrowAsync(async () => await service.upgradeMasterKey(masterKey, '777'));
+		await checkThrowAsync(async () => await service.upgradeMasterKey(masterKey, '777'));
 	}));
 
 	it('should require a checksum only for old master keys', (async () => {
@@ -128,7 +126,7 @@ describe('services_EncryptionService', function() {
 			encryptionMethod: EncryptionService.METHOD_SJCL,
 		}));
 
-		const masterKey3 = await MasterKey.save(await service.generateMasterKey('123456'));
+		await MasterKey.save(await service.generateMasterKey('123456'));
 
 		const needUpgrade = service.masterKeysThatNeedUpgrading(await MasterKey.all());
 
