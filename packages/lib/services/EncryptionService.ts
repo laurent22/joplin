@@ -5,6 +5,7 @@ import Setting from '../models/Setting';
 import MasterKey from '../models/MasterKey';
 import BaseItem from '../models/BaseItem';
 import JoplinError from '../JoplinError';
+import { getActiveMasterKeyId, setActiveMasterKeyId } from './synchronizer/syncInfoUtils';
 const { padLeft } = require('../string-utils.js');
 
 function hexPad(s: string, length: number) {
@@ -49,7 +50,6 @@ export default class EncryptionService {
 	// changed easily since the chunk size is incorporated into the encrypted data.
 	private chunkSize_ = 5000;
 	private decryptedMasterKeys_: Record<string, DecryptedMasterKey> = {};
-	private activeMasterKeyId_: string = null;
 	public defaultEncryptionMethod_ = EncryptionService.METHOD_SJCL_1A; // public because used in tests
 	private defaultMasterKeyEncryptionMethod_ = EncryptionService.METHOD_SJCL_4;
 	private logger_ = new Logger();
@@ -78,7 +78,6 @@ export default class EncryptionService {
 		// changed easily since the chunk size is incorporated into the encrypted data.
 		this.chunkSize_ = 5000;
 		this.decryptedMasterKeys_ = {};
-		this.activeMasterKeyId_ = null;
 		this.defaultEncryptionMethod_ = EncryptionService.METHOD_SJCL_1A;
 		this.defaultMasterKeyEncryptionMethod_ = EncryptionService.METHOD_SJCL_4;
 		this.logger_ = new Logger();
@@ -119,16 +118,17 @@ export default class EncryptionService {
 	}
 
 	setActiveMasterKeyId(id: string) {
-		this.activeMasterKeyId_ = id;
+		setActiveMasterKeyId(id);
 	}
 
 	activeMasterKeyId() {
-		if (!this.activeMasterKeyId_) {
+		const id = getActiveMasterKeyId();
+		if (!id) {
 			const error: any = new Error('No master key is defined as active. Check this: Either one or more master keys exist but no password was provided for any of them. Or no master key exist. Or master keys and password exist, but none was set as active.');
 			error.code = 'noActiveMasterKey';
 			throw error;
 		}
-		return this.activeMasterKeyId_;
+		return id;
 	}
 
 	public isMasterKeyLoaded(masterKey: MasterKeyEntity) {
