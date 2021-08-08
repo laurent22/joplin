@@ -536,11 +536,15 @@ async function initFileApi() {
 		api.setAuthToken(authToken);
 		fileApi = new FileApi('', new FileApiDriverDropbox(api));
 	} else if (syncTargetId_ == SyncTargetRegistry.nameToId('onedrive')) {
-		// To get a token, open the URL below, then copy the *complete*
-		// redirection URL in onedrive-auth.txt. Keep in mind that auth
+		// To get a token, open the URL below corresponding to your account type,
+		// then copy the *complete* redirection URL in onedrive-auth.txt. Keep in mind that auth
 		// data only lasts 1h for OneDrive.
 		//
+		// Personal OneDrive Account:
 		// https://login.live.com/oauth20_authorize.srf?client_id=f1e68e1e-a729-4514-b041-4fdd5c7ac03a&scope=files.readwrite,offline_access&response_type=token&redirect_uri=https://joplinapp.org
+		//
+		// Business OneDrive Account:
+		// https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=f1e68e1e-a729-4514-b041-4fdd5c7ac03a&scope=files.readwrite offline_access&response_type=token&redirect_uri=https://joplinapp.org
 		//
 		// Also for now OneDrive tests cannot be run in parallel because
 		// for that each suite would need its own sub-directory within the
