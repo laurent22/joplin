@@ -223,7 +223,7 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent<Props> {
 				if (!ok) return;
 
 				try {
-					await setupAndDisableEncryption();
+					await setupAndDisableEncryption(EncryptionService.instance());
 				} catch (error) {
 					await dialogs.error(this, error.message);
 				}
