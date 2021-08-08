@@ -165,7 +165,7 @@ describe('Synchronizer.revisions', function() {
 
 		await Note.save({ title: 'ma note', updated_time: dateInPast, created_time: dateInPast }, { autoTimestamp: false });
 		const masterKey = await loadEncryptionMasterKey();
-		await setupAndEnableEncryption(masterKey, '123456');
+		await setupAndEnableEncryption(encryptionService(), masterKey, '123456');
 		await loadMasterKeysFromSettings(encryptionService());
 		await synchronizerStart();
 

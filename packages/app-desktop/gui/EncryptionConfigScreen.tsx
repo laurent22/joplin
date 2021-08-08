@@ -183,7 +183,7 @@ class EncryptionConfigScreenComponent extends React.Component<Props> {
 			if (!answer) return;
 
 			try {
-				await toggleAndSetupEncryption(!isEnabled, masterKey, answer);
+				await toggleAndSetupEncryption(EncryptionService.instance(), !isEnabled, masterKey, answer);
 			} catch (error) {
 				await dialogs.alert(error.message);
 			}

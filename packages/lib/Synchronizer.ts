@@ -453,9 +453,9 @@ export default class Synchronizer {
 						if (newInfo.e2ee !== previousE2EE) {
 							if (newInfo.e2ee) {
 								const mk = getActiveMasterKey(newInfo);
-								await setupAndEnableEncryption(mk);
+								await setupAndEnableEncryption(this.encryptionService(), mk);
 							} else {
-								await setupAndDisableEncryption();
+								await setupAndDisableEncryption(this.encryptionService());
 							}
 						}
 					} else {

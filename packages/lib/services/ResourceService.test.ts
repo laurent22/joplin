@@ -139,7 +139,7 @@ describe('services/ResourceService', function() {
 		// Eventually R1 is deleted because service thinks that it was at some point associated with a note, but no longer.
 
 		const masterKey = await loadEncryptionMasterKey();
-		await setupAndEnableEncryption(masterKey, '123456');
+		await setupAndEnableEncryption(encryptionService(), masterKey, '123456');
 		await loadMasterKeysFromSettings(encryptionService());
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
@@ -151,7 +151,7 @@ describe('services/ResourceService', function() {
 		await switchClient(2);
 
 		await synchronizer().start();
-		await setupAndEnableEncryption(masterKey, '123456');
+		await setupAndEnableEncryption(encryptionService(), masterKey, '123456');
 		await loadMasterKeysFromSettings(encryptionService());
 		await decryptionWorker().start();
 		{

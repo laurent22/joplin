@@ -17,6 +17,11 @@ export function isValidHeaderIdentifier(id: string, ignoreTooLongLength = false)
 	return /JED\d\d/.test(id);
 }
 
+interface DecryptedMasterKey {
+	updatedTime: number;
+	plainText: string;
+}
+
 export default class EncryptionService {
 
 	public static instance_: EncryptionService = null;
@@ -43,7 +48,7 @@ export default class EncryptionService {
 	// So making the block 10 times smaller make it 100 times faster! So for now using 5KB. This can be
 	// changed easily since the chunk size is incorporated into the encrypted data.
 	private chunkSize_ = 5000;
-	private loadedMasterKeys_: Record<string, string> = {};
+	private decryptedMasterKeys_: Record<string, DecryptedMasterKey> = {};
 	private activeMasterKeyId_: string = null;
 	public defaultEncryptionMethod_ = EncryptionService.METHOD_SJCL_1A; // public because used in tests
 	private defaultMasterKeyEncryptionMethod_ = EncryptionService.METHOD_SJCL_4;
@@ -72,7 +77,7 @@ export default class EncryptionService {
 		// So making the block 10 times smaller make it 100 times faster! So for now using 5KB. This can be
 		// changed easily since the chunk size is incorporated into the encrypted data.
 		this.chunkSize_ = 5000;
-		this.loadedMasterKeys_ = {};
+		this.decryptedMasterKeys_ = {};
 		this.activeMasterKeyId_ = null;
 		this.defaultEncryptionMethod_ = EncryptionService.METHOD_SJCL_1A;
 		this.defaultMasterKeyEncryptionMethod_ = EncryptionService.METHOD_SJCL_4;
@@ -101,73 +106,8 @@ export default class EncryptionService {
 		return this.logger_;
 	}
 
-	// async generateMasterKeyAndEnableEncryption(password: string) {
-	// 	let masterKey = await this.generateMasterKey(password);
-	// 	masterKey = await MasterKey.save(masterKey);
-	// 	await this.enableEncryption(masterKey, password);
-	// 	await this.loadMasterKeysFromSettings();
-	// 	return masterKey;
-	// }
-
-	// async enableEncryption(masterKey: MasterKeyEntity, password: string = null) {
-	// 	setEncryptionEnabled(true);
-	// 	setActiveMasterKeyId(masterKey.id);
-
-	// 	if (password) {
-	// 		const passwordCache = Setting.value('encryption.passwordCache');
-	// 		passwordCache[masterKey.id] = password;
-	// 		Setting.setValue('encryption.passwordCache', passwordCache);
-	// 	}
-
-	// 	// Mark only the non-encrypted ones for sync since, if there are encrypted ones,
-	// 	// it means they come from the sync target and are already encrypted over there.
-	// 	await BaseItem.markAllNonEncryptedForSync();
-	// }
-
-	// async disableEncryption() {
-	// 	// Allow disabling encryption even if some items are still encrypted, because whether E2EE is enabled or disabled
-	// 	// should not affect whether items will enventually be decrypted or not (DecryptionWorker will still work as
-	// 	// long as there are encrypted items). Also even if decryption is disabled, it's possible that encrypted items
-	// 	// will still be received via synchronisation.
-
-	// 	// const hasEncryptedItems = await BaseItem.hasEncryptedItems();
-	// 	// if (hasEncryptedItems) throw new Error(_('Encryption cannot currently be disabled because some items are still encrypted. Please wait for all the items to be decrypted and try again.'));
-
-	// 	setEncryptionEnabled(false); // The only way to make sure everything gets decrypted on the sync target is
-	// 	// to re-sync everything.
-	// 	await BaseItem.forceSyncAll();
-	// }
-
-	// async loadMasterKeysFromSettings() {
-	// 	const masterKeys = await MasterKey.all();
-	// 	const passwords = Setting.value('encryption.passwordCache');
-	// 	const activeMasterKeyId = getActiveMasterKeyId();
-
-	// 	this.logger().info(`Trying to load ${masterKeys.length} master keys...`);
-
-	// 	for (let i = 0; i < masterKeys.length; i++) {
-	// 		const mk = masterKeys[i];
-	// 		const password = passwords[mk.id];
-	// 		if (this.isMasterKeyLoaded(mk.id)) continue;
-	// 		if (!password) continue;
-
-	// 		try {
-	// 			await this.loadMasterKey_(mk, password, activeMasterKeyId === mk.id);
-	// 		} catch (error) {
-	// 			this.logger().warn(`Cannot load master key ${mk.id}. Invalid password?`, error);
-	// 		}
-	// 	}
-
-	// 	this.logger().info(`Loaded master keys: ${this.loadedMasterKeysCount()}`);
-	// }
-
 	loadedMasterKeysCount() {
-		let output = 0;
-		for (const n in this.loadedMasterKeys_) {
-			if (!this.loadedMasterKeys_[n]) continue;
-			output++;
-		}
-		return output;
+		return Object.keys(this.decryptedMasterKeys_).length;
 	}
 
 	chunkSize() {
@@ -191,44 +131,34 @@ export default class EncryptionService {
 		return this.activeMasterKeyId_;
 	}
 
-	isMasterKeyLoaded(id: string) {
-		return !!this.loadedMasterKeys_[id];
+	public isMasterKeyLoaded(masterKey: MasterKeyEntity) {
+		const d = this.decryptedMasterKeys_[masterKey.id];
+		if (!d) return false;
+		return d.updatedTime === masterKey.updated_time;
 	}
 
 	public async loadMasterKey_(model: MasterKeyEntity, password: string, makeActive = false) {
 		if (!model.id) throw new Error('Master key does not have an ID - save it first');
-		this.loadedMasterKeys_[model.id] = await this.decryptMasterKey_(model, password);
+		this.decryptedMasterKeys_[model.id] = await this.decryptMasterKey_(model, password);
 		if (makeActive) this.setActiveMasterKeyId(model.id);
 	}
 
 	unloadMasterKey(model: MasterKeyEntity) {
-		delete this.loadedMasterKeys_[model.id];
+		delete this.decryptedMasterKeys_[model.id];
 	}
 
-	// unloadAllMasterKeys() {
-	// 	for (const id in this.loadedMasterKeys_) {
-	// 		if (!this.loadedMasterKeys_.hasOwnProperty(id)) continue;
-	// 		this.unloadMasterKey(this.loadedMasterKeys_[id]);
-	// 	}
-	// }
-
 	loadedMasterKey(id: string) {
-		if (!this.loadedMasterKeys_[id]) {
+		if (!this.decryptedMasterKeys_[id]) {
 			const error: any = new Error(`Master key is not loaded: ${id}`);
 			error.code = 'masterKeyNotLoaded';
 			error.masterKeyId = id;
 			throw error;
 		}
-		return this.loadedMasterKeys_[id];
+		return this.decryptedMasterKeys_[id];
 	}
 
 	loadedMasterKeyIds() {
-		const output = [];
-		for (const id in this.loadedMasterKeys_) {
-			if (!this.loadedMasterKeys_.hasOwnProperty(id)) continue;
-			output.push(id);
-		}
-		return output;
+		return Object.keys(this.decryptedMasterKeys_);
 	}
 
 	fsDriver() {
@@ -241,22 +171,6 @@ export default class EncryptionService {
 		const bitArray = sjcl.hash.sha256.hash(string);
 		return sjcl.codec.hex.fromBits(bitArray);
 	}
-
-	// async seedSjcl() {
-	// 	throw new Error('NOT TESTED');
-
-	// 	// Just putting this here in case it becomes needed
-	// 	// Normally seeding random bytes is not needed for our use since
-	// 	// we use shim.randomBytes directly to generate master keys.
-
-	// 	const sjcl = shim.sjclModule;
-	// 	const randomBytes = await shim.randomBytes(1024 / 8);
-	// 	const hexBytes = randomBytes.map(a => {
-	// 		return a.toString(16);
-	// 	});
-	// 	const hexSeed = sjcl.codec.hex.toBits(hexBytes.join(''));
-	// 	sjcl.random.addEntropy(hexSeed, 1024, 'shim.randomBytes');
-	// }
 
 	async generateApiToken() {
 		return await this.randomHexString(64);
@@ -316,13 +230,17 @@ export default class EncryptionService {
 		return model;
 	}
 
-	async decryptMasterKey_(model: MasterKeyEntity, password: string) {
+	private async decryptMasterKey_(model: MasterKeyEntity, password: string): Promise<DecryptedMasterKey> {
 		const plainText = await this.decrypt(model.encryption_method, password, model.content);
 		if (model.encryption_method === EncryptionService.METHOD_SJCL_2) {
 			const checksum = this.sha256(plainText);
 			if (checksum !== model.checksum) throw new Error('Could not decrypt master key (checksum failed)');
 		}
-		return plainText;
+
+		return {
+			updatedTime: model.updated_time,
+			plainText,
+		};
 	}
 
 	async checkMasterKeyPassword(model: MasterKeyEntity, password: string) {
@@ -467,7 +385,7 @@ export default class EncryptionService {
 
 		const method = options.encryptionMethod;
 		const masterKeyId = this.activeMasterKeyId();
-		const masterKeyPlainText = this.loadedMasterKey(masterKeyId);
+		const masterKeyPlainText = this.loadedMasterKey(masterKeyId).plainText;
 
 		const header = {
 			encryptionMethod: method,
@@ -500,7 +418,7 @@ export default class EncryptionService {
 		if (!options) options = {};
 
 		const header: any = await this.decodeHeaderSource_(source);
-		const masterKeyPlainText = this.loadedMasterKey(header.masterKeyId);
+		const masterKeyPlainText = this.loadedMasterKey(header.masterKeyId).plainText;
 
 		let doneSize = 0;
 

@@ -8,7 +8,7 @@ import { getActiveMasterKeyId, setEncryptionEnabled } from '../synchronizer/sync
 
 const logger = Logger.create('e2ee/utils');
 
-export async function setupAndEnableEncryption(masterKey: MasterKeyEntity = null, password: string = null) {
+export async function setupAndEnableEncryption(service: EncryptionService, masterKey: MasterKeyEntity = null, password: string = null) {
 	if (!masterKey) {
 		// May happen for example if there are master keys in info.json but none
 		// of them is set as active. But in fact, unless there is a bug in the
@@ -27,9 +27,11 @@ export async function setupAndEnableEncryption(masterKey: MasterKeyEntity = null
 	// Mark only the non-encrypted ones for sync since, if there are encrypted ones,
 	// it means they come from the sync target and are already encrypted over there.
 	await BaseItem.markAllNonEncryptedForSync();
+
+	await loadMasterKeysFromSettings(service);
 }
 
-export async function setupAndDisableEncryption() {
+export async function setupAndDisableEncryption(service: EncryptionService) {
 	// Allow disabling encryption even if some items are still encrypted, because whether E2EE is enabled or disabled
 	// should not affect whether items will enventually be decrypted or not (DecryptionWorker will still work as
 	// long as there are encrypted items). Also even if decryption is disabled, it's possible that encrypted items
@@ -40,24 +42,28 @@ export async function setupAndDisableEncryption() {
 	// The only way to make sure everything gets decrypted on the sync target is
 	// to re-sync everything.
 	await BaseItem.forceSyncAll();
+
+	await loadMasterKeysFromSettings(service);
 }
 
-export async function toggleAndSetupEncryption(enabled: boolean, masterKey: MasterKeyEntity, password: string) {
+export async function toggleAndSetupEncryption(service: EncryptionService, enabled: boolean, masterKey: MasterKeyEntity, password: string) {
 	if (!enabled) {
-		await setupAndDisableEncryption();
+		await setupAndDisableEncryption(service);
 	} else {
 		if (masterKey) {
-			await setupAndEnableEncryption(masterKey, password);
+			await setupAndEnableEncryption(service, masterKey, password);
 		} else {
 			await generateMasterKeyAndEnableEncryption(EncryptionService.instance(), password);
 		}
 	}
+
+	await loadMasterKeysFromSettings(service);
 }
 
 export async function generateMasterKeyAndEnableEncryption(service: EncryptionService, password: string) {
 	let masterKey = await service.generateMasterKey(password);
 	masterKey = await MasterKey.save(masterKey);
-	await setupAndEnableEncryption(masterKey, password);
+	await setupAndEnableEncryption(service, masterKey, password);
 	await loadMasterKeysFromSettings(service);
 	return masterKey;
 }
@@ -72,7 +78,7 @@ export async function loadMasterKeysFromSettings(service: EncryptionService) {
 	for (let i = 0; i < masterKeys.length; i++) {
 		const mk = masterKeys[i];
 		const password = passwords[mk.id];
-		if (service.isMasterKeyLoaded(mk.id)) continue;
+		if (service.isMasterKeyLoaded(mk)) continue;
 		if (!password) continue;
 
 		try {
@@ -84,30 +90,3 @@ export async function loadMasterKeysFromSettings(service: EncryptionService) {
 
 	logger.info(`Loaded master keys: ${service.loadedMasterKeysCount()}`);
 }
-
-// interface DecryptedMasterKey {
-// 	updatedTime: number;
-// 	plainText: string;
-// }
-
-// let decryptedMasterKeys_:Record<string, DecryptedMasterKey> = {};
-
-// async function decryptedMasterKey(service: EncryptionService, masterKeyId:string):Promise<string> {
-// 	const mk = localSyncInfo().masterKeys.find(mk => mk.id === masterKeyId);
-// 	if (!mk) throw new Error('No such key: ' + masterKeyId);
-
-// 	const existing = decryptedMasterKeys_[mk.id];
-// 	if (existing && existing.updatedTime === mk.updated_time) return existing.plainText;
-
-// 	const passwordCache = Setting.value('encryption.passwordCache');
-// 	const password = passwordCache[masterKeyId];
-
-// 	const plainText = await service.decryptMasterKey(mk, password);
-
-// 	decryptedMasterKeys_[mk.id] = {
-// 		updatedTime: mk.updated_time,
-// 		plainText,
-// 	};
-
-// 	return plainText;
-// }
