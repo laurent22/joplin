@@ -42,6 +42,18 @@ export async function setupAndDisableEncryption() {
 	await BaseItem.forceSyncAll();
 }
 
+export async function toggleAndSetupEncryption(enabled: boolean, masterKey: MasterKeyEntity, password: string) {
+	if (!enabled) {
+		await setupAndDisableEncryption();
+	} else {
+		if (masterKey) {
+			await setupAndEnableEncryption(masterKey, password);
+		} else {
+			await generateMasterKeyAndEnableEncryption(EncryptionService.instance(), password);
+		}
+	}
+}
+
 export async function generateMasterKeyAndEnableEncryption(service: EncryptionService, password: string) {
 	let masterKey = await service.generateMasterKey(password);
 	masterKey = await MasterKey.save(masterKey);
@@ -72,3 +84,30 @@ export async function loadMasterKeysFromSettings(service: EncryptionService) {
 
 	logger.info(`Loaded master keys: ${service.loadedMasterKeysCount()}`);
 }
+
+// interface DecryptedMasterKey {
+// 	updatedTime: number;
+// 	plainText: string;
+// }
+
+// let decryptedMasterKeys_:Record<string, DecryptedMasterKey> = {};
+
+// async function decryptedMasterKey(service: EncryptionService, masterKeyId:string):Promise<string> {
+// 	const mk = localSyncInfo().masterKeys.find(mk => mk.id === masterKeyId);
+// 	if (!mk) throw new Error('No such key: ' + masterKeyId);
+
+// 	const existing = decryptedMasterKeys_[mk.id];
+// 	if (existing && existing.updatedTime === mk.updated_time) return existing.plainText;
+
+// 	const passwordCache = Setting.value('encryption.passwordCache');
+// 	const password = passwordCache[masterKeyId];
+
+// 	const plainText = await service.decryptMasterKey(mk, password);
+
+// 	decryptedMasterKeys_[mk.id] = {
+// 		updatedTime: mk.updated_time,
+// 		plainText,
+// 	};
+
+// 	return plainText;
+// }

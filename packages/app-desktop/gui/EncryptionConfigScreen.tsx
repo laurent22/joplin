@@ -12,11 +12,10 @@ import bridge from '../services/bridge';
 import shared from '@joplin/lib/components/shared/encryption-config-shared';
 import { MasterKeyEntity } from '@joplin/lib/services/database/types';
 import { getEncryptionEnabled, SyncInfo } from '@joplin/lib/services/synchronizer/syncInfoUtils';
-import { generateMasterKeyAndEnableEncryption, setupAndDisableEncryption } from '../../lib/services/e2ee/utils';
+import { toggleAndSetupEncryption } from '../../lib/services/e2ee/utils';
+import MasterKey from '../../lib/models/MasterKey';
 
-interface Props {
-
-}
+interface Props {}
 
 class EncryptionConfigScreenComponent extends React.Component<Props> {
 	constructor(props: Props) {
@@ -170,22 +169,21 @@ class EncryptionConfigScreenComponent extends React.Component<Props> {
 
 		const onToggleButtonClick = async () => {
 			const isEnabled = getEncryptionEnabled();
+			const masterKey = MasterKey.latest();
 
 			let answer = null;
 			if (isEnabled) {
 				answer = await dialogs.confirm(_('Disabling encryption means *all* your notes and attachments are going to be re-synchronised and sent unencrypted to the sync target. Do you wish to continue?'));
 			} else {
-				answer = await dialogs.prompt(_('Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target. Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.'), '', '', { type: 'password' });
+				const msg = [_('Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target. Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.')];
+				if (masterKey) msg.push(_('Encryption will be enabled using the master key created on %s', time.unixMsToLocalDateTime(masterKey.created_time)));
+				answer = await dialogs.prompt(msg.join('\n\n'), '', '', { type: 'password' });
 			}
 
 			if (!answer) return;
 
 			try {
-				if (isEnabled) {
-					await setupAndDisableEncryption();
-				} else {
-					await generateMasterKeyAndEnableEncryption(EncryptionService.instance(), answer);
-				}
+				await toggleAndSetupEncryption(!isEnabled, masterKey, answer);
 			} catch (error) {
 				await dialogs.alert(error.message);
 			}
