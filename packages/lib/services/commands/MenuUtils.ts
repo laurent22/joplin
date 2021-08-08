@@ -89,10 +89,6 @@ export default class MenuUtils {
 		return item;
 	}
 
-	public isCommandEnabled(commandName: string): boolean {
-		return this.service.isEnabled(commandName);
-	}
-
 	public commandToStatefulMenuItem(commandName: string, ...args: any[]): MenuItem {
 		return this.commandToMenuItem(commandName, () => {
 			return this.service.execute(commandName, ...args);

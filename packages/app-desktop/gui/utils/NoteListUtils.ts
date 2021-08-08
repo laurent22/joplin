@@ -191,7 +191,7 @@ export default class NoteListUtils {
 			const location = info.view.location;
 			if (location !== MenuItemLocation.Context && location !== MenuItemLocation.NoteListContextMenu) continue;
 
-			if (menuUtils.isCommandEnabled(info.view.commandName)) {
+			if (cmdService.isEnabled(info.view.commandName)) {
 				menu.append(
 					new MenuItem(menuUtils.commandToStatefulMenuItem(info.view.commandName, noteIds))
 				);
