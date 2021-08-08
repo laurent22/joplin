@@ -1,7 +1,7 @@
 import { encryptionService, msleep, setupDatabaseAndSynchronizer, switchClient } from '../testing/test-utils';
 import MasterKey from './MasterKey';
 
-describe('models/Revision', function() {
+describe('models/MasterKey', function() {
 
 	beforeEach(async (done) => {
 		await setupDatabaseAndSynchronizer(1);
