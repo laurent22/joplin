@@ -463,35 +463,7 @@ export default class Synchronizer {
 						// Note: that's probably not needed anymore?
 						// await uploadSyncInfo(this.api(), remoteInfo);
 					}
-
-					// if (!syncTargetInfoEquals(localInfo, remoteInfo)) {
-					// 	const newInfo = mergeSyncTargetInfos(localInfo, remoteInfo);
-					// 	logger.info('Sync target info differs between local and remote - merging infos: ', newInfo);
-					// 	await setRemoteSyncTargetInfo(this.api(), newInfo);
-					// 	setLocalSyncTargetInfo(newInfo);
-
-					// 	if (localInfo.e2ee !== remoteInfo.e2ee) {
-					// 		if (newInfo.e2ee) {
-					// 			const mk = activeMasterKey(newInfo);
-					// 			await setupAndEnableEncryption(mk);
-					// 		} else {
-					// 			await setupAndDisableEncryption();
-					// 		}
-					// 	}
-					// } else {
-					// 	// Set it to remote anyway so that timestamps are the same
-					// 	setLocalSyncTargetInfo(remoteInfo);
-					// }
 				}
-
-				// const syncTargetInfo = await this.migrationHandler().checkCanSync();
-
-				// logger.info('Sync target info:', syncTargetInfo);
-
-				// if (!syncTargetInfo.version) {
-				// 	logger.info('Sync target is new - setting it up...');
-				// 	await this.migrationHandler().upgrade(Setting.value('syncVersion'));
-				// }
 			} catch (error) {
 				if (error.code === 'outdatedSyncTarget') {
 					Setting.setValue('sync.upgradeState', Setting.SYNC_UPGRADE_STATE_SHOULD_DO);

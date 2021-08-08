@@ -133,7 +133,7 @@ export class SyncInfo {
 	}
 
 	public serialize(): string {
-		return JSON.stringify(this.toObject());
+		return JSON.stringify(this.toObject(), null, '\t');
 	}
 
 	public load(serialized: string) {
