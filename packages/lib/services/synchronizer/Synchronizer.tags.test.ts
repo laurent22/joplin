@@ -32,7 +32,7 @@ describe('Synchronizer.tags', function() {
 		await synchronizerStart();
 		if (withEncryption) {
 			const masterKey_2 = await MasterKey.load(masterKey.id);
-			await encryptionService().loadMasterKey_(masterKey_2, '123456', true);
+			await encryptionService().loadMasterKey(masterKey_2, '123456', true);
 			const t = await Tag.load(tag.id);
 			await Tag.decrypt(t);
 		}

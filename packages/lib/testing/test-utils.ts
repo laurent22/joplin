@@ -511,7 +511,7 @@ async function loadEncryptionMasterKey(id: number = null, useExisting = false) {
 		masterKey = masterKeys[0];
 	}
 
-	await service.loadMasterKey_(masterKey, '123456', true);
+	await service.loadMasterKey(masterKey, '123456', true);
 
 	setActiveMasterKeyId(masterKey.id);
 

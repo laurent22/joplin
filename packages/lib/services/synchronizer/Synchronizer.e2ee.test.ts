@@ -57,7 +57,7 @@ describe('Synchronizer.e2ee', function() {
 		expect(masterKey_2.content).toBe(masterKey.content);
 		expect(masterKey_2.checksum).toBe(masterKey.checksum);
 		// Now load the master key we got from client 1 and try to decrypt
-		await encryptionService().loadMasterKey_(masterKey_2, '123456', true);
+		await encryptionService().loadMasterKey(masterKey_2, '123456', true);
 		// Get the decrypted items back
 		await Folder.decrypt(folder1_2);
 		await Note.decrypt(note1_2);

@@ -82,7 +82,7 @@ export async function loadMasterKeysFromSettings(service: EncryptionService) {
 		if (!password) continue;
 
 		try {
-			await service.loadMasterKey_(mk, password, activeMasterKeyId === mk.id);
+			await service.loadMasterKey(mk, password, activeMasterKeyId === mk.id);
 		} catch (error) {
 			logger.warn(`Cannot load master key ${mk.id}. Invalid password?`, error);
 		}

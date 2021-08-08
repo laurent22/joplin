@@ -137,9 +137,12 @@ export default class EncryptionService {
 		return d.updatedTime === masterKey.updated_time;
 	}
 
-	public async loadMasterKey_(model: MasterKeyEntity, password: string, makeActive = false) {
+	public async loadMasterKey(model: MasterKeyEntity, password: string, makeActive = false) {
 		if (!model.id) throw new Error('Master key does not have an ID - save it first');
-		this.decryptedMasterKeys_[model.id] = await this.decryptMasterKey_(model, password);
+		this.decryptedMasterKeys_[model.id] = {
+			plainText: await this.decryptMasterKey_(model, password),
+			updatedTime: model.updated_time,
+		};
 		if (makeActive) this.setActiveMasterKeyId(model.id);
 	}
 
@@ -230,17 +233,14 @@ export default class EncryptionService {
 		return model;
 	}
 
-	private async decryptMasterKey_(model: MasterKeyEntity, password: string): Promise<DecryptedMasterKey> {
+	public async decryptMasterKey_(model: MasterKeyEntity, password: string): Promise<string> {
 		const plainText = await this.decrypt(model.encryption_method, password, model.content);
 		if (model.encryption_method === EncryptionService.METHOD_SJCL_2) {
 			const checksum = this.sha256(plainText);
 			if (checksum !== model.checksum) throw new Error('Could not decrypt master key (checksum failed)');
 		}
 
-		return {
-			updatedTime: model.updated_time,
-			plainText,
-		};
+		return plainText;
 	}
 
 	async checkMasterKeyPassword(model: MasterKeyEntity, password: string) {
