@@ -100,7 +100,7 @@ class Command extends BaseCommand {
 		}
 
 		if (args.command === 'disable') {
-			await setupAndDisableEncryption();
+			await setupAndDisableEncryption(EncryptionService.instance());
 			return;
 		}
 
