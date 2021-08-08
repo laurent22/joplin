@@ -13,11 +13,10 @@ import shared from '@joplin/lib/components/shared/encryption-config-shared';
 import { MasterKeyEntity } from '@joplin/lib/services/database/types';
 import { State } from '@joplin/lib/reducer';
 import { SyncInfo } from '@joplin/lib/services/synchronizer/syncInfoUtils';
-import { generateMasterKeyAndEnableEncryption, setupAndDisableEncryption } from '@joplin/lib/services/e2ee/utils';
+import { setupAndDisableEncryption, toggleAndSetupEncryption } from '@joplin/lib/services/e2ee/utils';
+import MasterKey from '../../../lib/models/MasterKey';
 
-interface Props {
-
-}
+interface Props {}
 
 class EncryptionConfigScreenComponent extends BaseScreenComponent<Props> {
 	static navigationOptions(): any {
@@ -33,17 +32,13 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent<Props> {
 			passwordPromptConfirmAnswer: '',
 		};
 
-		shared.constructor(this, props);
+		shared.initialize(this, props);
 
 		this.styles_ = {};
 	}
 
 	componentWillUnmount() {
 		this.isMounted_ = false;
-	}
-
-	initState(props: Props) {
-		return shared.initState(this, props);
 	}
 
 	async refreshStats() {
@@ -137,6 +132,7 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent<Props> {
 
 	passwordPromptComponent() {
 		const theme = themeStyle(this.props.themeId);
+		const masterKey = MasterKey.latest();
 
 		const onEnableClick = async () => {
 			try {
@@ -145,16 +141,23 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent<Props> {
 				const password2 = this.state.passwordPromptConfirmAnswer;
 				if (!password2) throw new Error(_('Confirm password cannot be empty'));
 				if (password !== password2) throw new Error(_('Passwords do not match!'));
-				await generateMasterKeyAndEnableEncryption(EncryptionService.instance(), password);
+				await toggleAndSetupEncryption(EncryptionService.instance(), true, masterKey, password);
+				// await generateMasterKeyAndEnableEncryption(EncryptionService.instance(), password);
 				this.setState({ passwordPromptShow: false });
 			} catch (error) {
 				await dialogs.error(this, error.message);
 			}
 		};
 
+		const messages = shared.enableEncryptionConfirmationMessages(masterKey);
+
+		const messageComps = messages.map(msg => {
+			return <Text key={msg} style={{ fontSize: theme.fontSize, color: theme.color, marginBottom: 10 }}>{msg}</Text>;
+		});
+
 		return (
 			<View style={{ flex: 1, borderColor: theme.dividerColor, borderWidth: 1, padding: 10, marginTop: 10, marginBottom: 10 }}>
-				<Text style={{ fontSize: theme.fontSize, color: theme.color, marginBottom: 10 }}>{_('Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target. Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.')}</Text>
+				<View>{messageComps}</View>
 				<Text style={this.styles().normalText}>{_('Password:')}</Text>
 				<TextInput
 					selectionColor={theme.textSelectionColor}
