@@ -52,9 +52,10 @@ import JoplinServerApi from '../JoplinServerApi';
 import { FolderEntity } from '../services/database/types';
 import { credentialFile, readCredentialFile } from '../utils/credentialFiles';
 import SyncTargetJoplinCloud from '../SyncTargetJoplinCloud';
-const { loadKeychainServiceAndSettings } = require('../services/SettingUtils');
+import KeychainService from '../services/keychain/KeychainService';
+import { loadKeychainServiceAndSettings } from '../services/SettingUtils';
 const md5 = require('md5');
-const S3 = require('aws-sdk/clients/s3');
+const { S3Client } = require('@aws-sdk/client-s3');
 const { Dirnames } = require('../services/synchronizer/utils/types');
 
 // Each suite has its own separate data and temp directory so that multiple
@@ -535,11 +536,15 @@ async function initFileApi() {
 		api.setAuthToken(authToken);
 		fileApi = new FileApi('', new FileApiDriverDropbox(api));
 	} else if (syncTargetId_ == SyncTargetRegistry.nameToId('onedrive')) {
-		// To get a token, open the URL below, then copy the *complete*
-		// redirection URL in onedrive-auth.txt. Keep in mind that auth
+		// To get a token, open the URL below corresponding to your account type,
+		// then copy the *complete* redirection URL in onedrive-auth.txt. Keep in mind that auth
 		// data only lasts 1h for OneDrive.
 		//
+		// Personal OneDrive Account:
 		// https://login.live.com/oauth20_authorize.srf?client_id=f1e68e1e-a729-4514-b041-4fdd5c7ac03a&scope=files.readwrite,offline_access&response_type=token&redirect_uri=https://joplinapp.org
+		//
+		// Business OneDrive Account:
+		// https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=f1e68e1e-a729-4514-b041-4fdd5c7ac03a&scope=files.readwrite offline_access&response_type=token&redirect_uri=https://joplinapp.org
 		//
 		// Also for now OneDrive tests cannot be run in parallel because
 		// for that each suite would need its own sub-directory within the
@@ -564,10 +569,16 @@ async function initFileApi() {
 		const appDir = await api.appDirectory();
 		fileApi = new FileApi(appDir, new FileApiDriverOneDrive(api));
 	} else if (syncTargetId_ == SyncTargetRegistry.nameToId('amazon_s3')) {
+
+		// We make sure for S3 tests run in band because tests
+		// share the same directory which will cause locking errors.
+
+		mustRunInBand();
+
 		const amazonS3CredsPath = `${oldTestDir}/support/amazon-s3-auth.json`;
 		const amazonS3Creds = require(amazonS3CredsPath);
 		if (!amazonS3Creds || !amazonS3Creds.accessKeyId) throw new Error(`AWS auth JSON missing in ${amazonS3CredsPath} format should be: { "accessKeyId": "", "secretAccessKey": "", "bucket": "mybucket"}`);
-		const api = new S3({ accessKeyId: amazonS3Creds.accessKeyId, secretAccessKey: amazonS3Creds.secretAccessKey, s3UseArnRegion: true });
+		const api = new S3Client({ region: 'us-east-1', accessKeyId: amazonS3Creds.accessKeyId, secretAccessKey: amazonS3Creds.secretAccessKey, s3UseArnRegion: true });
 		fileApi = new FileApi('', new FileApiDriverAmazonS3(api, amazonS3Creds.bucket));
 	} else if (syncTargetId_ == SyncTargetRegistry.nameToId('joplinServer')) {
 		mustRunInBand();
@@ -823,6 +834,8 @@ class TestApp extends BaseApplication {
 	private logger_: LoggerWrapper;
 
 	public constructor(hasGui = true) {
+		KeychainService.instance().enabled = false;
+
 		super();
 		this.hasGui_ = hasGui;
 		this.middlewareCalls_ = [];

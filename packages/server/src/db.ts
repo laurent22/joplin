@@ -394,6 +394,7 @@ export interface Email extends WithDates {
 	sent_time?: number;
 	sent_success?: number;
 	error?: string;
+	key?: string;
 }
 
 export interface Token extends WithDates {
@@ -549,6 +550,7 @@ export const databaseSchema: DatabaseTables = {
 		error: { type: 'string' },
 		updated_time: { type: 'string' },
 		created_time: { type: 'string' },
+		key: { type: 'string' },
 	},
 	tokens: {
 		id: { type: 'number' },

@@ -42,7 +42,6 @@
   "dependencies": {
     "@joplin/lib": "2.1",
     "@joplin/renderer": "2.1",
-    "aws-sdk": "^2.588.0",
     "chalk": "^4.1.0",
     "compare-version": "^0.1.2",
     "fs-extra": "^5.0.0",

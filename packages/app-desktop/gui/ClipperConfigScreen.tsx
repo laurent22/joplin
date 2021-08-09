@@ -1,13 +1,14 @@
 const React = require('react');
 const { connect } = require('react-redux');
-const bridge = require('electron').remote.require('./bridge').default;
-const { themeStyle } = require('@joplin/lib/theme');
-const { _ } = require('@joplin/lib/locale');
-const ClipperServer = require('@joplin/lib/ClipperServer').default;
-const Setting = require('@joplin/lib/models/Setting').default;
 const { clipboard } = require('electron');
 const ExtensionBadge = require('./ExtensionBadge.min');
-const EncryptionService = require('@joplin/lib/services/EncryptionService').default;
+import bridge from '../services/bridge';
+import { themeStyle } from '@joplin/lib/theme';
+import { _ } from '@joplin/lib/locale';
+import ClipperServer from '@joplin/lib/ClipperServer';
+import Setting from '@joplin/lib/models/Setting';
+import EncryptionService from '@joplin/lib/services/EncryptionService';
+import { AppState } from '../app';
 
 class ClipperConfigScreenComponent extends React.Component {
 	constructor() {
@@ -18,12 +19,12 @@ class ClipperConfigScreenComponent extends React.Component {
 
 	disableClipperServer_click() {
 		Setting.setValue('clipperServer.autoStart', false);
-		ClipperServer.instance().stop();
+		void ClipperServer.instance().stop();
 	}
 
 	enableClipperServer_click() {
 		Setting.setValue('clipperServer.autoStart', true);
-		ClipperServer.instance().start();
+		void ClipperServer.instance().start();
 	}
 
 	chromeButton_click() {
@@ -165,7 +166,7 @@ class ClipperConfigScreenComponent extends React.Component {
 	}
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state: AppState) => {
 	return {
 		themeId: state.settings.theme,
 		clipperServer: state.clipperServer,
@@ -176,4 +177,4 @@ const mapStateToProps = state => {
 
 const ClipperConfigScreen = connect(mapStateToProps)(ClipperConfigScreenComponent);
 
-module.exports = { ClipperConfigScreen };
+export default ClipperConfigScreen;

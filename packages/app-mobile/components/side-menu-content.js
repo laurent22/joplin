@@ -30,7 +30,7 @@ class SideMenuContentComponent extends Component {
 		this.syncIconRotationValue = new Animated.Value(0);
 		this.syncIconRotation = this.syncIconRotationValue.interpolate({
 			inputRange: [0, 1],
-			outputRange: ['360deg', '0deg'],
+			outputRange: ['0deg', '360deg'],
 		});
 	}
 

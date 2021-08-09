@@ -3,6 +3,8 @@ import { EmailSender, User } from '../db';
 import { ErrorUnprocessableEntity } from '../utils/errors';
 import { betaUserDateRange, stripeConfig } from '../utils/stripe';
 import { AccountType } from './UserModel';
+import { failedPaymentDisableUploadInterval } from './SubscriptionModel';
+import { stripePortalUrl } from '../utils/urlUtils';
 
 describe('UserModel', function() {
 
@@ -158,6 +160,44 @@ describe('UserModel', function() {
 
 		const reloadedUser = await models().user().load(user1.id);
 		expect(reloadedUser.can_upload).toBe(0);
+	});
+
+	test('should disable upload and send an email if payment failed', async function() {
+		stripeConfig().enabled = true;
+
+		const { user: user1 } = await models().subscription().saveUserAndSubscription('toto@example.com', 'Toto', AccountType.Basic, 'usr_111', 'sub_111');
+		await models().subscription().saveUserAndSubscription('tutu@example.com', 'Tutu', AccountType.Basic, 'usr_222', 'sub_222');
+
+		const sub = await models().subscription().byUserId(user1.id);
+
+		const now = Date.now();
+		const paymentFailedTime = now - failedPaymentDisableUploadInterval - 10;
+		await models().subscription().save({
+			id: sub.id,
+			last_payment_time: now - failedPaymentDisableUploadInterval * 2,
+			last_payment_failed_time: paymentFailedTime,
+		});
+
+		await models().user().handleFailedPaymentSubscriptions();
+
+		{
+			const user1 = await models().user().loadByEmail('toto@example.com');
+			expect(user1.can_upload).toBe(0);
+
+			const email = (await models().email().all()).pop();
+			expect(email.key).toBe(`payment_failed_upload_disabled_${paymentFailedTime}`);
+			expect(email.body).toContain(stripePortalUrl());
+		}
+
+		const beforeEmailCount = (await models().email().all()).length;
+		await models().user().handleFailedPaymentSubscriptions();
+		const afterEmailCount = (await models().email().all()).length;
+		expect(beforeEmailCount).toBe(afterEmailCount);
+
+		{
+			const user2 = await models().user().loadByEmail('tutu@example.com');
+			expect(user2.can_upload).toBe(1);
+		}
 	});
 
 });
