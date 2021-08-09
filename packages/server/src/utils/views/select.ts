@@ -34,3 +34,10 @@ export function yesNoDefaultOptions(object: any, key: string): Option[] {
 		selectOption('No', '0', object[key] === 0),
 	];
 }
+
+export function yesNoOptions(object: any, key: string): Option[] {
+	return [
+		selectOption('Yes', '1', object[key] === 1),
+		selectOption('No', '0', object[key] === 0),
+	];
+}

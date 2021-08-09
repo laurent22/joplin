@@ -1,4 +1,25 @@
 import dayjs = require('dayjs');
+import utc = require('dayjs/plugin/utc');
+import timezone = require('dayjs/plugin/timezone');
+
+function defaultTimezone() {
+	return dayjs.tz.guess();
+}
+
+function initDayJs() {
+	dayjs.extend(utc);
+	dayjs.extend(timezone);
+	dayjs.tz.setDefault(defaultTimezone());
+}
+
+initDayJs();
+
+export const Second = 60 * 1000;
+export const Minute = 60 * Second;
+export const Hour = 60 * Minute;
+export const Day = 24 * Hour;
+export const Week = 7 * Day;
+export const Month = 30 * Day;
 
 export function msleep(ms: number) {
 	return new Promise((resolve: Function) => {
@@ -9,10 +30,8 @@ export function msleep(ms: number) {
 }
 
 export function formatDateTime(ms: number): string {
-	return dayjs(ms).format('D MMM YY HH:mm:ss');
+	return `${dayjs(ms).format('D MMM YY HH:mm:ss')} (${defaultTimezone()})`;
 }
-
-
 
 // Use the utility functions below to easily measure performance of a block or
 // line of code.
