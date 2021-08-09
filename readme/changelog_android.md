@@ -1,5 +1,13 @@
 # Joplin Android app changelog
 
+## [android-v2.2.2](https://github.com/laurent22/joplin/releases/tag/android-v2.2.2) (Pre-release) - 2021-08-09T18:27:44Z
+
+- Improved: Ensure that timestamps are not changed when sharing or unsharing a note (cafaa9c)
+- Improved: Fix AWS S3 sync error and upgrade framework to v3 (#5212) (#4810 by Lee Matos)
+- Improved: Handles OneDrive throttling responses and sets User-Agent based on Microsoft best practices (#5246) (#5244 by [@alec](https://github.com/alec))
+- Improved: Make sync icon spin in the right direction (#5275) (#4588 by Lee Matos)
+- Fixed: Fixed issue with orphaned resource being created in case of a resource conflict (#5223)
+
 ## [android-v2.2.1](https://github.com/laurent22/joplin/releases/tag/android-v2.2.1) (Pre-release) - 2021-07-13T17:37:38Z
 
 - New: Added improved editor (beta)
