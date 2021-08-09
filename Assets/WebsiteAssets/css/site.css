@@ -86,6 +86,12 @@ a {
 	color: #90b1d9;
 }
 
+blockquote {
+    border-left: .25em solid #e0e0e0;
+    padding: 0 1em;
+    opacity: .7;
+}
+
 .img-center {
 	display: block;
 	margin: auto;
