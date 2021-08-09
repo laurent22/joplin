@@ -245,10 +245,6 @@ export default class Resource extends BaseItem {
 		return this.fsDriver().readFile(this.fullPath(resource), 'Buffer');
 	}
 
-	static setContent(resource: ResourceEntity, content: any) {
-		return this.fsDriver().writeBinaryFile(this.fullPath(resource), content);
-	}
-
 	static isResourceUrl(url: string) {
 		return url && url.length === 34 && url[0] === ':' && url[1] === '/';
 	}
