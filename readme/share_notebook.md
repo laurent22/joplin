@@ -1,6 +1,8 @@
+# Sharing a notebook with Joplin Cloud
+
 Using Joplin Cloud you can share notebooks between users and collaborate on them - i.e. any participant can view or modify notes in the shared notebook.
 
-# How does it work?
+## How does it work?
 
 When connected to Joplin Cloud, a new "Share notebook" menu item is available when right-clicking on a notebook.
 
@@ -18,9 +20,9 @@ Then, finally, once the invitation is accepted, Joplin will download all the sha
 
 ![Share notebook sidebar](https://joplinapp.org/images/share_notebook/SidebarShared.png)
 
-# FAQ
+## FAQ
 
-## What's the availability of the notebook sharing feature?
+### What's the availability of the notebook sharing feature?
 
 The notebook sharing feature is available on Joplin Cloud.
 
@@ -28,21 +30,21 @@ On desktop, you can share notebooks and of course view or modify any notebook th
 
 On mobile and CLI, you cannot currently share notebooks, but you can view or modify any notebook that has been shared with you.
 
-## If I share a notebook with someone, what access do they have?
+### If I share a notebook with someone, what access do they have?
 
 Currently they have full access to the data, including reading, writing and deleting notebooks or notes. In a future version, access control might be implemented. For example, to only give read-only access to the shared notebook.
 
-## What can actually be shared?
+### What can actually be shared?
 
 All the sub-notebooks, notes and resources within the shared notebook are shared.
 
-## Does it work with End-To-End-Encryption?
+### Does it work with End-To-End-Encryption?
 
 Yes and no. It is possible to use the share notebook feature even with E2EE enabled, however any shared notebook or note will not be encrypted, otherwise you would have had to give your master key password to the people you share with, which you'd probably not want to do.
 
 In a future version, this might be supported. For example by automatically creating a new master key for the shared notebook. You would then provide the recipients with that master key password.
 
-## What can it be used for?
+### What can it be used for?
 
 Some ideas:
 
