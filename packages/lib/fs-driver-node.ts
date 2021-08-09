@@ -26,16 +26,6 @@ export default class FsDriverNode extends FsDriverBase {
 		}
 	}
 
-	public async writeBinaryFile(path: string, content: any) {
-		try {
-			// let buffer = new Buffer(content);
-			const buffer = Buffer.from(content);
-			return await fs.writeFile(path, buffer);
-		} catch (error) {
-			throw this.fsErrorToJsError_(error, path);
-		}
-	}
-
 	public async writeFile(path: string, string: string, encoding: string = 'base64') {
 		try {
 			if (encoding === 'buffer') {
