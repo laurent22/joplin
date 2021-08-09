@@ -1,5 +1,30 @@
 # Joplin changelog
 
+## [v2.2.5](https://github.com/laurent22/joplin/releases/tag/v2.2.5) (Pre-release) - 2021-08-07T10:35:24Z
+
+- Improved: Remove template feature (replaced by template plugin) (e9d5901)
+
+## [v2.2.4](https://github.com/laurent22/joplin/releases/tag/v2.2.4) (Pre-release) - 2021-08-05T16:42:48Z
+
+IMPORTANT: If you are a plugin developer or if, as a user, you notice a plugin that no longer works, please read this post: https://discourse.joplinapp.org/t/19278
+
+- New: Plugins: Add ability to make dialogs fit the application window ([#5219](https://github.com/laurent22/joplin/issues/5219) by [@Ahmad45123](https://github.com/Ahmad45123))
+- New: Plugins: Add support for loading application chrome and note CSS from the plugin (07d2a60)
+- New: Turn old plugin deprecation notices into errors (7f00e4e)
+- Improved: Converted Clipper notification to a modal dialog that shows up in all screens (fb9ec10)
+- Improved: GotoAnything sometimes is not working on first try ([#5184](https://github.com/laurent22/joplin/issues/5184))
+- Improved: Increase space between paragraphs in viewer and Rich Text editor to match Markdown editor ([#5256](https://github.com/laurent22/joplin/issues/5256))
+- Fixed: Disable "Dropped file type is not supported" notification in Rich Text editor ([#5268](https://github.com/laurent22/joplin/issues/5268))
+- Fixed: Do not export share properties ([#5232](https://github.com/laurent22/joplin/issues/5232))
+- Fixed: Fixed header spacing (regression) (d3cd843)
+- Fixed: Fixed issue with orphaned resource being created in case of a resource conflict ([#5223](https://github.com/laurent22/joplin/issues/5223))
+- Fixed: Fixed plugin state when it has been deleted outside the app ([#5253](https://github.com/laurent22/joplin/issues/5253))
+- Fixed: Fixed recipient list colors in Share Notebook dialog ([#5258](https://github.com/laurent22/joplin/issues/5258))
+- Fixed: Fixed share note color in note list ([#5259](https://github.com/laurent22/joplin/issues/5259))
+- Fixed: Focus is lost while searching in all notes ([#5208](https://github.com/laurent22/joplin/issues/5208))
+- Fixed: Import highlighted text from ENEX files ([#5213](https://github.com/laurent22/joplin/issues/5213))
+- Fixed: Katex code could be broken after editing it in Rich Text editor ([#5241](https://github.com/laurent22/joplin/issues/5241))
+
 ## [v2.2.2](https://github.com/laurent22/joplin/releases/tag/v2.2.2) (Pre-release) - 2021-07-19T10:28:35Z
 
 Attention: The default font size has been changed in the Markdown editor. You can change it back in Config > Appearance > Editor font size.
