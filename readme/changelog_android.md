@@ -1,6 +1,6 @@
 # Joplin Android app changelog
 
-## [android-v2.2.2](https://github.com/laurent22/joplin/releases/tag/android-v2.2.2) (Pre-release) - 2021-08-09T18:27:44Z
+## [android-v2.2.3](https://github.com/laurent22/joplin/releases/tag/android-v2.2.3) (Pre-release) - 2021-08-09T18:48:29Z
 
 - Improved: Ensure that timestamps are not changed when sharing or unsharing a note (cafaa9c)
 - Improved: Fix AWS S3 sync error and upgrade framework to v3 (#5212) (#4810 by Lee Matos)
