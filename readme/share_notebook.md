@@ -6,19 +6,19 @@ Using Joplin Cloud you can share notebooks between users and collaborate on them
 
 When connected to Joplin Cloud, a new "Share notebook" menu item is available when right-clicking on a notebook.
 
-![Context menu share notebook option](https://joplinapp.org/images/share_notebook/Sidebar.png)
+<img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/share_notebook/Sidebar.png" width="50%"/>
 
 Click on it, and it will display a new dialog where you can add any number of recipients. From this dialog you can also remove a recipient or unshare the whole notebook, in which case it will be removed from everybody's note collection, except yours.
 
-![Share notebook dialog](https://joplinapp.org/images/share_notebook/Dialog.png)
+<img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/share_notebook/Dialog.png" width="50%"/>
 
 Once this is done, the recipient(s) will receive a notification in Joplin the next time they synchronise their data:
 
-![Share notebook notification](https://joplinapp.org/images/share_notebook/Notification.png)
+<img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/share_notebook/Notification.png" width="75%"/>
 
 Then, finally, once the invitation is accepted, Joplin will download all the shared notebooks and notes. A shared notebook is denoted by the usual Share icon. Now the invited user can read or modify the shared notes, add attachments, etc. and the changes will be visible to everyone with access to the notebook.
 
-![Share notebook sidebar](https://joplinapp.org/images/share_notebook/SidebarShared.png)
+<img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/share_notebook/SidebarShared.png" width="50%"/>
 
 ## FAQ
 

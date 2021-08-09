@@ -6,7 +6,7 @@ Notes exported from Evernote via .enex files [can be imported](https://joplinapp
 
 The notes can be [synchronised](#synchronisation) with various targets including the file system (for example with a network directory), Nextcloud, Dropbox, OneDrive or WebDAV. When synchronising the notes, notebooks, tags and other metadata are saved to plain text files which can be easily inspected, backed up and moved around.
 
-<img src="https://joplinapp.org/images/ScreenshotTerminal.png" style="max-width: 60%">
+<img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/ScreenshotTerminal.png" style="max-width: 60%">
 
 # Installation
 
@@ -28,7 +28,7 @@ Arch Linux       | An Arch Linux package is available [here](https://aur.archlin
 
 To start the application type `joplin`. This will open the user interface, which has three main panes: Notebooks, Notes and the text of the current note. There are also additional panels that can be toggled on and off via [shortcuts](#shortcuts).
 
-<img src="https://joplinapp.org/images/ScreenshotTerminalCaptions.png" height="450px">
+<img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/ScreenshotTerminalCaptions.png" height="450px">
 
 ## Input modes
 
@@ -145,13 +145,13 @@ To initiate the synchronisation process, type `:sync`. You will be asked to foll
 
 When Ctrl+Clicking a URL (or opening with the shortcut 'o' while it is highlighted), most terminals will open that URL in the default browser. However, one issue, especially with long URLs, is that they can end up like this:
 
-<img src="https://joplinapp.org/images/UrlCut.png" width="300px">
+<img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/UrlCut.png" width="300px">
 
 Not only it makes the text hard to read, but the link, being cut in two, will also not be clickable.
 
 As a solution Joplin tries to start a mini-server in the background and, if successful, all the links will be converted to a much shorter URL:
 
-<img src="https://joplinapp.org/images/UrlNoCut.png" width="300px">
+<img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/UrlNoCut.png" width="300px">
 
 Since this is still an actual URL, the terminal will still make it clickable. And with shorter URLs, the text is more readable and the links unlikely to be cut. Both resources (files that are attached to notes) and external links are handled in this way.
 
