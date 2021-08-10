@@ -29,7 +29,7 @@
     "@aws-sdk/s3-request-presigner": "^3.23.0",
     "@joplin/fork-htmlparser2": "^4.1.30",
     "@joplin/fork-sax": "^1.2.34",
-    "@joplin/renderer": "^1.8.2",
+    "@joplin/renderer": "~2.2",
     "@joplin/turndown": "^4.0.52",
     "@joplin/turndown-plugin-gfm": "^1.0.34",
     "async-mutex": "^0.1.3",
