@@ -1,6 +1,6 @@
 {
   "name": "@joplin/plugins",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Sub-package to group official Joplin plugins",
   "private": true,
   "license": "MIT"

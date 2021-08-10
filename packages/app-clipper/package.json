@@ -4,7 +4,7 @@
   "scripts": {
     "postinstall": "cd popup && npm install"
   },
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Joplin Web Clipper",
   "main": "main.js",
   "author": "Laurent Cozic",
