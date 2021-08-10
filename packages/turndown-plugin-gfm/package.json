@@ -4,7 +4,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "1.0.32",
+  "version": "1.0.33",
   "author": "Dom Christie",
   "main": "lib/turndown-plugin-gfm.cjs.js",
   "devDependencies": {
