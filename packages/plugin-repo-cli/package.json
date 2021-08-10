@@ -1,6 +1,6 @@
 {
   "name": "@joplin/plugin-repo-cli",
-  "version": "2.2.0",
+  "version": "2.2.3",
   "description": "",
   "main": "index.js",
   "bin": {
@@ -18,8 +18,8 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@joplin/lib": "^1.8.2",
-    "@joplin/tools": "^1.8.2",
+    "@joplin/lib": "^2.2.3",
+    "@joplin/tools": "^2.2.3",
     "fs-extra": "^9.0.1",
     "gh-release-assets": "^2.0.0",
     "node-fetch": "^2.6.1",
