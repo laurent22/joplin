@@ -74,19 +74,35 @@ export default class SubscriptionModel extends BaseModel<Subscription> {
 
 		const now = Date.now();
 
-		const toSave: Subscription = { id: sub.id };
-
 		if (success) {
-			toSave.last_payment_time = now;
-			toSave.last_payment_failed_time = 0;
-			await this.save(toSave);
+			// When a payment is successful, we also activate upload and enable
+			// the user, in case it has been disabled previously due to a failed
+			// payment.
+			const user = await this.models().user().load(sub.user_id);
+
+			await this.withTransaction(async () => {
+				if (!user.enabled || !user.can_upload) {
+					await this.models().user().save({
+						id: sub.user_id,
+						enabled: 1,
+						can_upload: 1,
+					});
+				}
+
+				await this.save({
+					id: sub.id,
+					last_payment_time: now,
+					last_payment_failed_time: 0,
+				});
+			});
 		} else {
 			// We only update the payment failed time if it's not already set
 			// since the only thing that matter is the first time the payment
 			// failed.
+			//
+			// We don't update the user can_upload and enabled properties here
+			// because it's done after a few days from CronService.
 			if (!sub.last_payment_failed_time) {
-				toSave.last_payment_failed_time = now;
-
 				const user = await this.models().user().load(sub.user_id, { fields: ['email', 'id', 'full_name'] });
 
 				await this.models().email().push({
@@ -97,7 +113,10 @@ export default class SubscriptionModel extends BaseModel<Subscription> {
 					sender_id: EmailSender.Support,
 				});
 
-				await this.save(toSave);
+				await this.save({
+					id: sub.id,
+					last_payment_failed_time: now,
+				});
 			}
 		}
 	}
