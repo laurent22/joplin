@@ -174,11 +174,15 @@ async function main() {
 	}
 
 	await execCommandVerbose('git', ['pull']);
-	await execCommandVerbose('git', ['add', '-A']);
-	await execCommandVerbose('git', ['commit', '-m', `Android release v${version}`]);
-	await execCommandVerbose('git', ['tag', tagName]);
-	await execCommandVerbose('git', ['push']);
-	await execCommandVerbose('git', ['push', '--tags']);
+
+	// NOT TESTED: These commands should not be necessary anymore since they are
+	// done in completeReleaseWithChangelog()
+
+	// await execCommandVerbose('git', ['add', '-A']);
+	// await execCommandVerbose('git', ['commit', '-m', `Android release v${version}`]);
+	// await execCommandVerbose('git', ['tag', tagName]);
+	// await execCommandVerbose('git', ['push']);
+	// await execCommandVerbose('git', ['push', '--tags']);
 
 	console.info(`Creating GitHub release ${tagName}...`);
 
