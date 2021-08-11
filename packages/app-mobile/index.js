@@ -6,10 +6,6 @@
 
 // So there's basically still a one way flux: React => SQLite => Redux => React
 
-// For aws-sdk-js-v3
-import 'react-native-get-random-values';
-import 'react-native-url-polyfill/auto';
-
 import { LogBox, AppRegistry } from 'react-native';
 const Root = require('./root').default;
 
