@@ -42,10 +42,14 @@ class SyncTargetAmazonS3 extends BaseSyncTarget {
 
 	s3AuthParameters() {
 		return {
-			accessKeyId: Setting.value('sync.8.username'),
-			secretAccessKey: Setting.value('sync.8.password'),
-			s3UseArnRegion: true, // override the request region with the region inferred from requested resource's ARN
-			s3ForcePathStyle: true,
+			// We need to set a region. See https://github.com/aws/aws-sdk-js-v3/issues/1845#issuecomment-754832210
+			region: Setting.value('sync.8.region'),
+			credentials: {
+				accessKeyId: Setting.value('sync.8.username'),
+				secretAccessKey: Setting.value('sync.8.password'),
+			},
+			UseArnRegion: true, // override the request region with the region inferred from requested resource's ARN
+			forcePathStyle: true,
 			endpoint: Setting.value('sync.8.url'),
 		};
 	}
@@ -59,10 +63,13 @@ class SyncTargetAmazonS3 extends BaseSyncTarget {
 
 	static async newFileApi_(syncTargetId, options) {
 		const apiOptions = {
-			accessKeyId: options.username(),
-			secretAccessKey: options.password(),
-			s3UseArnRegion: true,
-			s3ForcePathStyle: true,
+			region: options.region(),
+			credentials: {
+				accessKeyId: options.username(),
+				secretAccessKey: options.password(),
+			},
+			UseArnRegion: true, // override the request region with the region inferred from requested resource's ARN
+			forcePathStyle: true,
 			endpoint: options.url(),
 		};
 
@@ -81,7 +88,6 @@ class SyncTargetAmazonS3 extends BaseSyncTarget {
 			ok: false,
 			errorMessage: '',
 		};
-
 		try {
 			const headBucketReq = new Promise((resolve, reject) => {
 				fileApi.driver().api().headBucket({

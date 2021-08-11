@@ -518,6 +518,17 @@ class Setting extends BaseModel {
 				label: () => _('AWS S3 URL'),
 				storage: SettingStorage.File,
 			},
+			'sync.8.region': {
+		                value: '',
+                		type: SettingItemType.String,
+                		section: 'sync',
+                		show: (settings: any) => {
+                    			return settings['sync.target'] == SyncTargetRegistry.nameToId('amazon_s3');
+                	},
+                		public: true,
+                		label: () => _('AWS Region'),
+                		storage: SettingStorage.File,
+            		},
 			'sync.8.username': {
 				value: '',
 				type: SettingItemType.String,
