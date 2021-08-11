@@ -12,6 +12,8 @@ const { pregQuote } = require('../../string-utils-common');
 const { MarkupToHtml } = require('@joplin/renderer');
 
 export default class InteropService_Importer_Md extends InteropService_Importer_Base {
+	private importedNotes: any = {};
+
 	async exec(result: ImportExportResult) {
 		let parentFolderId = null;
 
@@ -59,38 +61,66 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 		}
 	}
 
+	trimAnchorLink(link: string) {
+		if (link.indexOf('#') <= 0) return link;
+
+		const splitted = link.split('#');
+		splitted.pop();
+		return splitted.join('#');
+	}
+
 	/**
 	 * Parse text for links, attempt to find local file, if found create Joplin resource
 	 * and update link accordingly.
 	 */
-	async importLocalFiles(filePath: string, md: string) {
+	async importLocalFiles(filePath: string, md: string, parentFolderId: string) {
 		let updated = md;
 		const fileLinks = unique(markdownUtils.extractFileUrls(md));
 		await Promise.all(fileLinks.map(async (encodedLink: string) => {
 			const link = decodeURI(encodedLink);
-			const attachmentPath = filename(`${dirname(filePath)}/${link}`, true);
-			const pathWithExtension = `${attachmentPath}.${fileExtension(link)}`;
+			// Handle anchor links appropriately
+			const trimmedLink = this.trimAnchorLink(link);
+			const attachmentPath = filename(`${dirname(filePath)}/${trimmedLink}`, true);
+			const pathWithExtension = `${attachmentPath}.${fileExtension(trimmedLink)}`;
 			const stat = await shim.fsDriver().stat(pathWithExtension);
 			const isDir = stat ? stat.isDirectory() : false;
 			if (stat && !isDir) {
-				const resource = await shim.createResourceFromPath(pathWithExtension);
-				// NOTE: use ](link) in case the link also appears elsewhere, such as in alt text
-				const linkPatternEscaped = pregQuote(`](${link})`);
+				const supportedFileExtension = this.metadata().fileExtensions;
+				const resolvedPath = shim.fsDriver().resolve(pathWithExtension);
+				let id: string = '';
+				// If the link looks like a note, then import it
+				if (supportedFileExtension.indexOf(fileExtension(trimmedLink).toLowerCase()) >= 0) {
+					// If the note hasn't been imported yet, do so now
+					if (!this.importedNotes[resolvedPath]) {
+						await this.importFile(resolvedPath, parentFolderId);
+					}
+
+					id = this.importedNotes[resolvedPath].id;
+				} else {
+					const resource = await shim.createResourceFromPath(pathWithExtension);
+					id = resource.id;
+				}
+
+				// NOTE: use ](encodedLink in case the link also appears elsewhere, such as in alt text
+				const linkPatternEscaped = pregQuote(`](${this.trimAnchorLink(encodedLink)}`);
 				const reg = new RegExp(linkPatternEscaped, 'g');
-				updated = updated.replace(reg, `](:/${resource.id})`);
+				updated = updated.replace(reg, `](:/${id}`);
 			}
 		}));
 		return updated;
 	}
 
 	async importFile(filePath: string, parentFolderId: string) {
+		if (this.importedNotes[filePath]) return this.importedNotes[filePath];
+		this.importedNotes[filePath] = { message: 'Note building in progress' };
 		const stat = await shim.fsDriver().stat(filePath);
 		if (!stat) throw new Error(`Cannot read ${filePath}`);
+		const ext = fileExtension(filePath);
 		const title = filename(filePath);
 		const body = await shim.fsDriver().readFile(filePath);
 		let updatedBody;
 		try {
-			updatedBody = await this.importLocalFiles(filePath, body);
+			updatedBody = await this.importLocalFiles(filePath, body, parentFolderId);
 		} catch (error) {
 			// console.error(`Problem importing links for file ${filePath}, error:\n ${error}`);
 		}
@@ -102,9 +132,11 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 			created_time: stat.birthtime.getTime(),
 			user_updated_time: stat.mtime.getTime(),
 			user_created_time: stat.birthtime.getTime(),
-			markup_language: MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN,
+			markup_language: ext === 'html' ? MarkupToHtml.MARKUP_LANGUAGE_HTML : MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN,
 		};
 
-		return Note.save(note, { autoTimestamp: false });
+		return Note.save(note, { autoTimestamp: false }).then((n) => {
+			this.importedNotes[filePath] = n;
+		});
 	}
 }
