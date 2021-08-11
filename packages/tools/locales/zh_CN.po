@@ -6,6 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: 南宫小骏 <jackytsu@vip.qq.com>\n"
 "Language-Team: zh_CN <jackytsu.vip.qq.com>\n"
 "Language: zh_CN\n"
@@ -1631,7 +1633,6 @@ msgid "Share notebook..."
 msgstr "分享笔记本..."
 
 #: packages/app-desktop/gui/MainScreen/commands/showShareNoteDialog.js:16
-#, fuzzy
 msgid "Publish note..."
 msgstr "分享笔记..."
 
@@ -2237,9 +2238,8 @@ msgid "Warning: not all resources shown for performance reasons (limit: %s)."
 msgstr "警告: 由于性能原因无法显示所有资源 (最多：%s)。"
 
 #: packages/app-desktop/gui/Root.js:98
-#, fuzzy
 msgid "Confirmation"
-msgstr "配置"
+msgstr "确认"
 
 #: packages/app-desktop/gui/Root.js:111
 msgid "The Web Clipper needs your authorisation to access your data."
@@ -2316,7 +2316,6 @@ msgid "Share Notebook"
 msgstr "分享笔记本"
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:144
-#, fuzzy
 msgid "Unpublish note"
 msgstr "取消分享笔记"
 
@@ -2341,7 +2340,7 @@ msgstr "注意: 笔记分享后，便不再在服务器上加密。"
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:187
 msgid "Publish Notes"
-msgstr ""
+msgstr "分享笔记"
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:189
 msgid "Copy Shareable Link"
