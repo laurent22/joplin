@@ -32,7 +32,7 @@
     ],
     "owner": "Laurent Cozic"
   },
-  "version": "2.2.1",
+  "version": "2.2.2",
   "bin": {
     "joplin": "./main.js"
   },
@@ -42,6 +42,7 @@
   "dependencies": {
     "@joplin/lib": "~2.2",
     "@joplin/renderer": "~2.2",
+    "aws-sdk": "^2.588.0",
     "chalk": "^4.1.0",
     "compare-version": "^0.1.2",
     "fs-extra": "^5.0.0",

@@ -141,10 +141,10 @@ android {
         applicationId "net.cozic.joplin"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-		versionCode 2097642
-		versionName "2.2.3"
+		versionCode 2097644
+		versionName "2.2.5"
 		ndk {
-			abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
+			abiFilters "armeabi-v7a", "x86"
 		}
 		
         // https://github.com/react-native-community/react-native-camera/issues/2138
@@ -158,7 +158,7 @@ android {
             reset()
             enable enableSeparateBuildPerCPUArchitecture
             universalApk false  // If true, also generate a universal APK
-            include "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
+            include "armeabi-v7a", "x86"
         }
     }
     signingConfigs {

@@ -1,5 +1,11 @@
 # Joplin Android app changelog
 
+## [android-v2.2.5](https://github.com/laurent22/joplin/releases/tag/android-v2.2.5) (Pre-release) - 2021-08-11T10:54:38Z
+
+- Revert "Plugins: Add ability to make dialogs fit the application window (#5219)" as it breaks several plugin webviews.
+- Revert "Resolves #4810, Resolves #4610: Fix AWS S3 sync error and upgrade framework to v3 (#5212)" due to incompatibility with some AWS providers.
+- Improved: Upgraded React Native to v0.64 (afb7e1a)
+
 ## [android-v2.2.3](https://github.com/laurent22/joplin/releases/tag/android-v2.2.3) (Pre-release) - 2021-08-09T18:48:29Z
 
 - Improved: Ensure that timestamps are not changed when sharing or unsharing a note (cafaa9c)

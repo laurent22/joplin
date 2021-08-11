@@ -9,7 +9,6 @@ const styled = require('styled-components').default;
 
 interface Props extends UserWebviewProps {
 	buttons: ButtonSpec[];
-	fitToContent: boolean;
 }
 
 const StyledRoot = styled.div`
@@ -114,7 +113,7 @@ export default function UserWebviewDialog(props: Props) {
 						viewId={props.viewId}
 						themeId={props.themeId}
 						borderBottom={false}
-						fitToContent={props.fitToContent}
+						fitToContent={true}
 						onSubmit={onSubmit}
 						onDismiss={onDismiss}
 						onReady={onReady}
