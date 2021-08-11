@@ -493,7 +493,7 @@ SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   DoubleConversion: cf9b38bf0b2d048436d9a82ad2abe1404f11e7de
   FBLazyVector: e686045572151edef46010a6f819ade377dfeb4b
-  FBReactNativeSpec: 7149d70e8f519eefadbbeecef2000ff9868fe1bf
+  FBReactNativeSpec: d2f54de51f69366bd1f5c1fb9270698dce678f8d
   glog: 73c2498ac6884b13ede40eda8228cb1eee9d9d62
   JoplinCommonShareExtension: 270b4f8eb4e22828eeda433a04ed689fc1fd09b5
   JoplinRNShareExtension: 7137e9787374e1b0797ecbef9103d1588d90e403
@@ -509,17 +509,17 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 80c46bd381fd06e418e0d4f53672dc1d1945c4c3
   React-jsinspector: cc614ec18a9ca96fd275100c16d74d62ee11f0ae
   react-native-alarm-notification: 466e4ad56fbd948ecac26e657f292dca8bf483d5
-  react-native-camera: 35854c4f764a4a6cf61c1c3525888b92f0fe4b31
-  react-native-document-picker: 0bba80cc56caab1f67dbaa81ff557e3a9b7f2b9f
-  react-native-geolocation: c956aeb136625c23e0dce0467664af2c437888c9
+  react-native-camera: 5c1fbfecf63b802b8ca4a71c60d30a71550fb348
+  react-native-document-picker: b3e78a8f7fef98b5cb069f20fc35797d55e68e28
+  react-native-geolocation: cbd9d6bd06bac411eed2671810f454d4908484a8
   react-native-get-random-values: 237bffb1c7e05fb142092681531810a29ba53015
-  react-native-image-picker: c6d75c4ab2cf46f9289f341242b219cb3c1180d3
-  react-native-image-resizer: a79bcffdef1b52160ff91db0d6fa24816a4ff332
-  react-native-netinfo: e849fc21ca2f4128a5726c801a82fc6f4a6db50d
-  react-native-slider: e99fc201cefe81270fc9d81714a7a0f5e566b168
-  react-native-sqlite-storage: 418ef4afc5e6df6ce3574c4617e5f0b65cffde55
-  react-native-version-info: 36490da17d2c6b5cc21321c70e433784dee7ed0b
-  react-native-webview: 4e96d493f9f90ba4f03b28933f30b2964df07e39
+  react-native-image-picker: 32d1ad2c0024ca36161ae0d5c2117e2d6c441f11
+  react-native-image-resizer: b53bf95ad880100e20262687e41f76fdbc9df255
+  react-native-netinfo: 34f4d7a42f49157f3b45c14217d256bce7dc9682
+  react-native-slider: b733e17fdd31186707146debf1f04b5d94aa1a93
+  react-native-sqlite-storage: ce71689c5a73b79390a1ab213555ae80979a5dc7
+  react-native-version-info: 64f0f0bf3da6316298f9cd6085d50ba3a992d0c7
+  react-native-webview: c51f73be304c61d359ec3e7c5e4e8f2c977fd360
   React-perflogger: 25373e382fed75ce768a443822f07098a15ab737
   React-RCTActionSheet: af7796ba49ffe4ca92e7277a5d992d37203f7da5
   React-RCTAnimation: 6a2e76ab50c6f25b428d81b76a5a45351c4d77aa
@@ -533,9 +533,9 @@ SPEC CHECKSUMS:
   React-runtimeexecutor: a9904c6d0218fb9f8b19d6dd88607225927668f9
   ReactCommon: 149906e01aa51142707a10665185db879898e966
   rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
-  RNCClipboard: c7abea1baea58adca5c1f29e56dd5261837b4892
-  RNCPushNotificationIOS: ec7ffe65c7b5097f8d287fd627e1c1674ea69cef
-  RNDateTimePicker: 6f62fd42ac8b58bcc30c43ac3620e5097e8a227f
+  RNCClipboard: 8f9f12fabf3c06e976f19f87a62c89e28dfedfca
+  RNCPushNotificationIOS: 20c4403b2ef8732297ea81e22f66c41bed7aaedf
+  RNDateTimePicker: e9fcd5ecdc0c5b018871e0d178d6040dca11973c
   RNFileViewer: 83cc066ad795b1f986791d03b56fe0ee14b6a69f
   RNFS: 2bd9eb49dc82fa9676382f0585b992c424cd59df
   RNQuickAction: 6d404a869dc872cde841ad3147416a670d13fa93
@@ -546,4 +546,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 6aeb91c381b1a03c0c8c78b2f504699bd569b7e3
 
-COCOAPODS: 1.10.2
+COCOAPODS: 1.10.1
