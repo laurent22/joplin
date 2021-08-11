@@ -1,5 +1,9 @@
 # Joplin terminal app changelog
 
+## [cli-v2.2.2](https://github.com/laurent22/joplin/releases/tag/cli-v2.2.2) - 2021-08-11T15:34:56Z
+
+- Fixed: Fixed version command so that it does not require the keychain (15766d1)
+
 ## [cli-v2.2.1](https://github.com/laurent22/joplin/releases/tag/cli-v2.2.1) - 2021-08-10T10:21:09Z
 
 - Improved: Ensure that timestamps are not changed when sharing or unsharing a note (cafaa9c)
