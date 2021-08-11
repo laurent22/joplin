@@ -252,7 +252,7 @@ class FileApiDriverAmazonS3 {
 			}
 
 
-			if(response.status > 200){
+			if(!response.ok){
 			    throw {name: response.statusText, output: output};
 			}
 
