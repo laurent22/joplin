@@ -3,6 +3,9 @@ const { basename } = require('./path-utils');
 const shim = require('./shim').default;
 const JoplinError = require('./JoplinError').default;
 const { Buffer } = require('buffer');
+const { GetObjectCommand, ListObjectsV2Command, HeadObjectCommand, PutObjectCommand, DeleteObjectCommand, DeleteObjectsCommand, CopyObjectCommand } = require('@aws-sdk/client-s3');
+const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
+const parser = require('fast-xml-parser');
 
 const S3_MAX_DELETES = 1000;
 
@@ -26,8 +29,17 @@ class FileApiDriverAmazonS3 {
 	}
 
 	hasErrorCode_(error, errorCode) {
-		if (!error || typeof error.code !== 'string') return false;
-		return error.code.indexOf(errorCode) >= 0;
+		if (!error) return false;
+
+		if(error.name) {
+			return error.name.indexOf(errorCode) >= 0; }
+		else if(error.code) {
+			return error.code.indexOf(errorCode) >= 0; }
+		else if(error.Code) {
+			return error.Code.indexOf(errorCode) >= 0; }
+		else{
+			return false;
+		}
 	}
 
 	// Need to make a custom promise, built-in promise is broken: https://github.com/aws/aws-sdk-js/issues/1436
@@ -239,14 +251,38 @@ class FileApiDriverAmazonS3 {
 				output = output.toString();
 			}
 
+
+			if(response.status > 200){
+			    throw {name: response.statusText, output: output};
+			}
+
+
 			return output;
 		} catch (error) {
-			if (this.hasErrorCode_(error, 'NoSuchKey')) {
+			// Because we are using fetch and not the S3Client.send command
+			// we need to manually parse the s3 error and pass that through
+			// for error checking.
+
+			let parsedOutput = '';
+
+			// If error.output is not xml or not present the else case should
+			// actually let us see the output of the error.
+			parsedOutput = parser.parse(error.output);
+
+			if (this.hasErrorCode_(parsedOutput.Error, 'AuthorizationHeaderMalformed')){
+				throw error.output;
+			}
+			if (this.hasErrorCode_(parsedOutput.Error, 'NoSuchKey')) {
 				return null;
-			} else if (this.hasErrorCode_(error, 'AccessDenied')) {
+			} else if (this.hasErrorCode_(parsedOutput.Error, 'AccessDenied')) {
 				throw new JoplinError('Do not have proper permissions to Bucket', 'rejectedByTarget');
 			} else {
-				throw error;
+				if (error.output) {
+					throw error.output;
+				}
+				else{
+					throw error;
+				}
 			}
 		}
 	}
