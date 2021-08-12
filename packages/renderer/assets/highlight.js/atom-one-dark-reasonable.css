@@ -6,9 +6,6 @@ Original One Dark Syntax theme from https://github.com/atom/one-dark-syntax
 
 */
 .hljs {
-  display: block;
-  overflow-x: auto;
-  padding: 0.5em;
   color: #abb2bf;
   background: #282c34;
 }
@@ -52,10 +49,12 @@ Original One Dark Syntax theme from https://github.com/atom/one-dark-syntax
 .hljs-literal {
   color: #56b6c2;
 }
-.hljs-string, .hljs-regexp, .hljs-addition, .hljs-attribute, .hljs-meta-string {
+.hljs-string, .hljs-regexp, .hljs-addition, .hljs-attribute, .hljs-meta .hljs-string {
   color: #98c379;
 }
-.hljs-built_in, .hljs-class .hljs-title {
+.hljs-built_in,
+.hljs-title.class_,
+.hljs-class .hljs-title {
   color: #e6c07b;
 }
 .hljs-attr, .hljs-variable, .hljs-template-variable, .hljs-type, .hljs-selector-class, .hljs-selector-attr, .hljs-selector-pseudo, .hljs-number {
