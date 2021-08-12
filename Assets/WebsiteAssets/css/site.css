@@ -113,6 +113,10 @@ blockquote {
 	font-size: 16px !important;
 }
 
+.button-link {
+	white-space: nowrap;
+}
+
 .sponsor-button i {
 	font-size: 0.8em;
 }
@@ -285,6 +289,12 @@ p,
 	color: #0557ba;
 	border-color: #0557ba;
 	/* margin-bottom: 10px; */
+}
+
+div.navbar-mobile-content a.sponsor-button {
+	padding: 4px 12px;
+	font-size: 0.9em;
+	margin-right: 1em;
 }
 
 #nav-section.white-bg a {
