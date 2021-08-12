@@ -320,12 +320,16 @@ export default class ElectronAppWrapper {
 		}
 
 		// Someone tried to open a second instance - focus our window instead
-		this.electronApp_.on('second-instance', () => {
+		this.electronApp_.on('second-instance', (_e: any, argv: string[]) => {
 			const win = this.window();
 			if (!win) return;
 			if (win.isMinimized()) win.restore();
 			win.show();
 			win.focus();
+			if (process.platform !== 'darwin') {
+				const url = argv.find((arg) => arg.startsWith('joplin://'));
+				if (!!url) this.onUrl(url)
+			}				
 		});
 
 		return false;
@@ -352,6 +356,14 @@ export default class ElectronAppWrapper {
 		this.electronApp_.on('activate', () => {
 			this.win_.show();
 		});
+
+		this.electronApp_.on('open-url', (_event: any, url: string) => {
+			this.onUrl(url);
+		});
+	}
+
+	async onUrl(url: string) {
+		console.log(`on url: ${url}`);
 	}
 
 }

@@ -36,6 +36,14 @@ const env = envFromArgs(process.argv);
 const profilePath = profileFromArgs(process.argv);
 const isDebugMode = !!process.argv && process.argv.indexOf('--debug') >= 0;
 
+if (env === 'dev' && process.platform === 'win32') {
+	electronApp.setAsDefaultProtocolClient('joplin', process.execPath, [
+		resolve(process.argv[1])
+	]);
+} else {
+	electronApp.setAsDefaultProtocolClient('joplin');
+}
+
 const wrapper = new ElectronAppWrapper(electronApp, env, profilePath, isDebugMode);
 
 initBridge(wrapper);
