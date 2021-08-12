@@ -29,7 +29,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/markdown.md
 			href="&#x2F;css/bootstrap5.0.2.min.css"
 			as="style"
 		/>
-		<link rel="stylesheet" href="&#x2F;css/fontawesome-all.min.css?t=1628159924590">
+		<link rel="stylesheet" href="&#x2F;css/fontawesome-all.min.css?t=1628514896838">
 		<link
 			href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
 			rel="stylesheet"
@@ -37,7 +37,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/markdown.md
 			media="all"
 			onload="this.media='all'; this.onload = null"
 		/>
-		<link rel="stylesheet" href="&#x2F;css/site.css?t=1628159924590" as="style" />
+		<link rel="stylesheet" href="&#x2F;css/site.css?t=1628514896838" as="style" />
 		<title>Markdown Guide | Joplin</title>
 
 		<script
@@ -122,6 +122,13 @@ https://github.com/laurent22/joplin/blob/dev/readme/markdown.md
 </ul>
 </li>
 <li>
+<p>Joplin Cloud</p>
+<ul>
+<li><a href="/share_notebook/">Sharing a notebook</a></li>
+<li><a href="/publish_note/">Publishing a note</a></li>
+</ul>
+</li>
+<li>
 <p>Joplin API - Get Started</p>
 <ul>
 <li><a href="/api/overview/">Joplin API Overview</a></li>
@@ -186,7 +193,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/markdown.md
 		</div>
 	</div>
 </div>
-			<div class="page-container page-markdown">
+			<div class="help-page-container page-markdown">
 				<div class="container">
 					<div class="row content-wrapper">
 						<div id="toc"><div><ul>
@@ -209,6 +216,13 @@ https://github.com/laurent22/joplin/blob/dev/readme/markdown.md
 <li><a href="/debugging/">How to enable debug mode</a></li>
 <li><a href="/rich_text_editor/">About the Rich Text editor limitations</a></li>
 <li><a href="/faq/">FAQ</a></li>
+</ul>
+</li>
+<li>
+<p>Joplin Cloud</p>
+<ul>
+<li><a href="/share_notebook/">Sharing a notebook</a></li>
+<li><a href="/publish_note/">Publishing a note</a></li>
 </ul>
 </li>
 <li>
@@ -269,7 +283,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/markdown.md
 								Running in prod mode!
 							</div>
 							<div class="donate-links">
-<p><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=E8JMYD2LQ8MMA&amp;lc=GB&amp;item_name=Joplin+Development&amp;currency_code=EUR&amp;bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted"><img src="https://joplinapp.org/images/badges/Donate-PayPal-green.svg" alt="Donate using PayPal"></a> <a href="https://github.com/sponsors/laurent22/"><img src="https://joplinapp.org/images/badges/GitHub-Badge.svg" alt="Sponsor on GitHub"></a> <a href="https://www.patreon.com/joplin"><img src="https://joplinapp.org/images/badges/Patreon-Badge.svg" alt="Become a patron"></a> <a href="https://joplinapp.org/donate/#donations"><img src="https://joplinapp.org/images/badges/Donate-IBAN.svg" alt="Donate using IBAN"></a></p>
+<p><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=E8JMYD2LQ8MMA&amp;lc=GB&amp;item_name=Joplin+Development&amp;currency_code=EUR&amp;bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Donate-PayPal-green.svg" alt="Donate using PayPal"></a> <a href="https://github.com/sponsors/laurent22/"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/GitHub-Badge.svg" alt="Sponsor on GitHub"></a> <a href="https://www.patreon.com/joplin"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Patreon-Badge.svg" alt="Become a patron"></a> <a href="https://joplinapp.org/donate/#donations"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Donate-IBAN.svg" alt="Donate using IBAN"></a></p>
 </div>
 <h1>Markdown Guide<a name="markdown-guide" href="#markdown-guide" class="heading-anchor">🔗</a></h1>
 <p>Markdown is a simple way to format text that looks great on any device. It doesn't do anything fancy like change the font size, color, or type — just the essentials, using keyboard symbols you already know. Since it is plain text, it is an easy way to author notes and documents and when needed it can be converted to a rich text HTML document.</p>
@@ -439,10 +453,10 @@ f(x) = \int_{-\infty}^\infty
 $$
 </code></pre>
 <p>Here is an example with the Markdown and rendered result side by side:</p>
-<img src="https://joplinapp.org/images/Katex.png" height="345px">
+<img src="/images/Katex.png" height="345px">
 <h3>Chemical equations<a name="chemical-equations" href="#chemical-equations" class="heading-anchor">🔗</a></h3>
 <p>Joplin supports chemical equations via the mhchem plugin for KaTeX. This plugin is automatically enabled if you enable math notation. See the <a href="https://mhchem.github.io/MathJax-mhchem/">mhchem documentation</a> for the syntax.</p>
-<img src="https://joplinapp.org/images/Katex_mhchem.png" height="196px">
+<img src="/images/Katex_mhchem.png" height="196px">
 <h3>Diagrams<a name="diagrams" href="#diagrams" class="heading-anchor">🔗</a></h3>
 <p>You can create diagrams in Joplin using the <a href="https://mermaidjs.github.io/">Mermaid syntax</a>. To add such a graph, wrap the Mermaid script inside a &quot;```mermaid&quot; code block like this:</p>
 <pre><code>```mermaid
@@ -454,7 +468,7 @@ graph TD;
 ```
 </code></pre>
 <p>This is how it would look with the Markdown on the left, and rendered graph on the right:</p>
-<p><img src="https://joplinapp.org/images/Mermaid.png" alt="Mermaid support in Joplin"></p>
+<p><img src="/images/Mermaid.png" alt="Mermaid support in Joplin"></p>
 <p>Note that Mermaid graphs are always rendered on a white background regardless of the current theme. This is because they can contain various colours that may not be compatible with the current theme.</p>
 <h3>Checkboxes<a name="checkboxes" href="#checkboxes" class="heading-anchor">🔗</a></h3>
 <p>Checkboxes can be added like so:</p>
@@ -463,7 +477,7 @@ graph TD;
 - [ ] Eggs
 </code></pre>
 <p>Which would turn into:</p>
-<p><img src="https://joplinapp.org/images/Markdown_checkbox.jpg" alt="Checkbox support in Joplin"></p>
+<p><img src="/images/Markdown_checkbox.jpg" alt="Checkbox support in Joplin"></p>
 <p>The checkboxes can then be ticked in the mobile and desktop applications.</p>
 <h3>HTML support<a name="html-support" href="#html-support" class="heading-anchor">🔗</a></h3>
 <p>It is generally recommended to enter the notes as Markdown as it makes the notes easier to edit. However for cases where certain features aren't supported (such as strikethrough or to highlight text), you can also use HTML code directly. For example this would be a valid note:</p>
@@ -488,14 +502,14 @@ graph TD;
 <td>See <a href="https://markdown-it.github.io/#md3=%7B%22source%22%3A%22This%20is%20line1%5CnThis%20is%20line2%5Cn%5CnThis%20is%20a%20line%20with%202%20trailing%20spaces%20%20%5CnNext%20line%5Cn%5CnClick%20the%20%60breaks%60%20checkbox%20above%20to%20see%20the%20difference.%5CnJoplin%27s%20default%20is%20hard%20breaks%20%28checked%20%60breaks%60%20checkbox%29.%22%2C%22defaults%22%3A%7B%22html%22%3Afalse%2C%22xhtmlOut%22%3Afalse%2C%22breaks%22%3Afalse%2C%22langPrefix%22%3A%22language-%22%2C%22linkify%22%3Afalse%2C%22typographer%22%3Afalse%2C%22_highlight%22%3Afalse%2C%22_strict%22%3Afalse%2C%22_view%22%3A%22html%22%7D%7D">breaks</a> markdown-it demo</td>
 <td>Joplin uses hard breaks by default, which means that a line break is rendered as <code>&lt;br&gt;</code>. Enable soft breaks for traditional markdown line-break behaviour.</td>
 <td>no</td>
-<td><a href="https://joplinapp.org/images/md_plugins/softbreaks_plugin.jpg">View</a></td>
+<td><a href="/images/md_plugins/softbreaks_plugin.jpg">View</a></td>
 </tr>
 <tr>
 <td>Typographer</td>
 <td>See <a href="https://markdown-it.github.io/#md3=%7B%22source%22%3A%22%23%20Typographic%20replacements%5Cn%5Cn%28c%29%20%28C%29%20%28r%29%20%28R%29%20%28tm%29%20%28TM%29%20%28p%29%20%28P%29%20%2B-%5Cn%5Cntest..%20test...%20test.....%20test%3F.....%20test!....%5Cn%5Cn!!!!!!%20%3F%3F%3F%3F%20%2C%2C%20%20--%20---%5Cn%5Cn%5C%22Smartypants%2C%20double%20quotes%5C%22%20and%20%27single%20quotes%27%5Cn%22%2C%22defaults%22%3A%7B%22html%22%3Afalse%2C%22xhtmlOut%22%3Afalse%2C%22breaks%22%3Afalse%2C%22langPrefix%22%3A%22language-%22%2C%22linkify%22%3Atrue%2C%22typographer%22%3Atrue%2C%22_highlight%22%3Atrue%2C%22_strict%22%3Afalse%2C%22_view%22%3A%22html%22%7D%7D">typographer</a> markdown-it demo</td>
 <td>Does typographic replacements, (c) -&gt; © and so on</td>
 <td>no</td>
-<td><a href="https://joplinapp.org/images/md_plugins/typographer_plugin.jpg">View</a></td>
+<td><a href="/images/md_plugins/typographer_plugin.jpg">View</a></td>
 </tr>
 <tr>
 <td>Linkify</td>
@@ -509,91 +523,91 @@ graph TD;
 <td><code>$$math expr$$</code> or <code>$math$</code></td>
 <td><a href="#math-notation">See above</a></td>
 <td>yes</td>
-<td><a href="https://joplinapp.org/images/md_plugins/katex_plugin.jpg">View</a></td>
+<td><a href="/images/md_plugins/katex_plugin.jpg">View</a></td>
 </tr>
 <tr>
 <td><a href="https://fountain.io">Fountain</a></td>
 <td><code>```fountain</code><br/>Your screenplay...<br/><code>```</code></td>
 <td>Adds support for the Fountain markup language, a plain text markup language for screenwriting</td>
 <td>no</td>
-<td><a href="https://joplinapp.org/images/md_plugins/fountain_plugin.jpg">View</a></td>
+<td><a href="/images/md_plugins/fountain_plugin.jpg">View</a></td>
 </tr>
 <tr>
 <td><a href="https://mermaid-js.github.io/mermaid/">Mermaid</a></td>
 <td><code>```mermaid</code><br/>mermaid syntax...<br/><code>```</code></td>
 <td>See <a href="https://mermaid-js.github.io/mermaid/#/examples">plugin page</a> for full description</td>
 <td>yes</td>
-<td><a href="https://joplinapp.org/images/md_plugins/mermaid.jpg">View</a></td>
+<td><a href="/images/md_plugins/mermaid.jpg">View</a></td>
 </tr>
 <tr>
 <td><a href="https://github.com/markdown-it/markdown-it-mark">Mark</a></td>
 <td><code>==marked==</code></td>
 <td>Transforms into <code>&lt;mark&gt;marked&lt;/mark&gt;</code> (highlighted)</td>
 <td>yes</td>
-<td><a href="https://joplinapp.org/images/md_plugins/mark_plugin.jpg">View</a></td>
+<td><a href="/images/md_plugins/mark_plugin.jpg">View</a></td>
 </tr>
 <tr>
 <td><a href="https://github.com/markdown-it/markdown-it-footnote">Footnote</a></td>
 <td><code>Simples inline footnote ^[I'm inline!]</code></td>
 <td>See <a href="https://github.com/markdown-it/markdown-it-footnote">plugin page</a> for full description</td>
 <td>yes</td>
-<td><a href="https://joplinapp.org/images/md_plugins/footnote_plugin.jpg">View</a></td>
+<td><a href="/images/md_plugins/footnote_plugin.jpg">View</a></td>
 </tr>
 <tr>
 <td><a href="https://github.com/nagaozen/markdown-it-toc-done-right">TOC</a></td>
 <td>Any of <code>${toc}, [[toc]], [toc], [[_toc_]]</code></td>
 <td>Adds a table of contents to the location of the toc page. Based on headings and sub-headings</td>
 <td>yes</td>
-<td><a href="https://joplinapp.org/images/md_plugins/toc_plugin.jpg">View</a></td>
+<td><a href="/images/md_plugins/toc_plugin.jpg">View</a></td>
 </tr>
 <tr>
 <td><a href="https://github.com/markdown-it/markdown-it-sub">Sub</a></td>
 <td><code>X~1~</code></td>
 <td>Transforms into X<sub>1</sub></td>
 <td>no</td>
-<td><a href="https://joplinapp.org/images/md_plugins/sub_plugin.jpg">View</a></td>
+<td><a href="/images/md_plugins/sub_plugin.jpg">View</a></td>
 </tr>
 <tr>
 <td><a href="https://github.com/markdown-it/markdown-it-sup">Sup</a></td>
 <td><code>X^2^</code></td>
 <td>Transforms into X<sup>2</sup></td>
 <td>no</td>
-<td><a href="https://joplinapp.org/images/md_plugins/sup_plugin.jpg">View</a></td>
+<td><a href="/images/md_plugins/sup_plugin.jpg">View</a></td>
 </tr>
 <tr>
 <td><a href="https://github.com/markdown-it/markdown-it-deflist">Deflist</a></td>
 <td>See <a href="http://johnmacfarlane.net/pandoc/README.html#definition-lists">pandoc</a> page for syntax</td>
 <td>Adds the html <code>&lt;dl&gt;</code> tag accessible through markdown</td>
 <td>no</td>
-<td><a href="https://joplinapp.org/images/md_plugins/deflist_plugin.jpg">View</a></td>
+<td><a href="/images/md_plugins/deflist_plugin.jpg">View</a></td>
 </tr>
 <tr>
 <td><a href="https://github.com/markdown-it/markdown-it-abbr">Abbr</a></td>
 <td>*[HTML]: Hyper Text Markup Language<br/>The HTML specification</td>
 <td>Allows definition of abbreviations that can be hovered over later for a full expansion</td>
 <td>no</td>
-<td><a href="https://joplinapp.org/images/md_plugins/abbr_plugin.jpg">View</a></td>
+<td><a href="/images/md_plugins/abbr_plugin.jpg">View</a></td>
 </tr>
 <tr>
 <td><a href="https://github.com/markdown-it/markdown-it-emoji">Emoji</a></td>
 <td><code>:smile:</code></td>
 <td>Transforms into 😄. See <a href="https://gist.github.com/rxaviers/7360908">this list</a> for more emojis</td>
 <td>no</td>
-<td><a href="https://joplinapp.org/images/md_plugins/emoji_plugin.jpg">View</a></td>
+<td><a href="/images/md_plugins/emoji_plugin.jpg">View</a></td>
 </tr>
 <tr>
 <td><a href="https://github.com/markdown-it/markdown-it-ins">Insert</a></td>
 <td><code>++inserted++</code></td>
 <td>Transforms into <code>&lt;ins&gt;inserted&lt;/ins&gt;</code> (<ins>inserted</ins>)</td>
 <td>no</td>
-<td><a href="https://joplinapp.org/images/md_plugins/insert_plugin.jpg">View</a></td>
+<td><a href="/images/md_plugins/insert_plugin.jpg">View</a></td>
 </tr>
 <tr>
 <td><a href="https://github.com/RedBug312/markdown-it-multimd-table">Multitable</a></td>
 <td>See <a href="https://fletcher.github.io/MultiMarkdown-6/syntax/tables.html">MultiMarkdown</a> page</td>
 <td>Adds more power and customization to markdown tables</td>
 <td>no</td>
-<td><a href="https://joplinapp.org/images/md_plugins/multitable_plugin.jpg">View</a></td>
+<td><a href="/images/md_plugins/multitable_plugin.jpg">View</a></td>
 </tr>
 </tbody>
 </table>
@@ -642,7 +656,7 @@ graph TD;
 			</footer>
 		</div>
 
-		<script src="&#x2F;js/script.js?t=1628159924590"></script>
+		<script src="&#x2F;js/script.js?t=1628514896838"></script>
 
 <script>
 	if (window.location.hostname !== 'localhost') {

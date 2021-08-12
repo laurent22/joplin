@@ -29,7 +29,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog.md
 			href="&#x2F;css/bootstrap5.0.2.min.css"
 			as="style"
 		/>
-		<link rel="stylesheet" href="&#x2F;css/fontawesome-all.min.css?t=1628159924590">
+		<link rel="stylesheet" href="&#x2F;css/fontawesome-all.min.css?t=1628514896838">
 		<link
 			href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
 			rel="stylesheet"
@@ -37,7 +37,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog.md
 			media="all"
 			onload="this.media='all'; this.onload = null"
 		/>
-		<link rel="stylesheet" href="&#x2F;css/site.css?t=1628159924590" as="style" />
+		<link rel="stylesheet" href="&#x2F;css/site.css?t=1628514896838" as="style" />
 		<title>Joplin changelog | Joplin</title>
 
 		<script
@@ -122,6 +122,13 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog.md
 </ul>
 </li>
 <li>
+<p>Joplin Cloud</p>
+<ul>
+<li><a href="/share_notebook/">Sharing a notebook</a></li>
+<li><a href="/publish_note/">Publishing a note</a></li>
+</ul>
+</li>
+<li>
 <p>Joplin API - Get Started</p>
 <ul>
 <li><a href="/api/overview/">Joplin API Overview</a></li>
@@ -186,7 +193,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog.md
 		</div>
 	</div>
 </div>
-			<div class="page-container page-changelog">
+			<div class="help-page-container page-changelog">
 				<div class="container">
 					<div class="row content-wrapper">
 						<div id="toc"><div><ul>
@@ -209,6 +216,13 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog.md
 <li><a href="/debugging/">How to enable debug mode</a></li>
 <li><a href="/rich_text_editor/">About the Rich Text editor limitations</a></li>
 <li><a href="/faq/">FAQ</a></li>
+</ul>
+</li>
+<li>
+<p>Joplin Cloud</p>
+<ul>
+<li><a href="/share_notebook/">Sharing a notebook</a></li>
+<li><a href="/publish_note/">Publishing a note</a></li>
 </ul>
 </li>
 <li>
@@ -269,9 +283,33 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog.md
 								Running in prod mode!
 							</div>
 							<div class="donate-links">
-<p><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=E8JMYD2LQ8MMA&amp;lc=GB&amp;item_name=Joplin+Development&amp;currency_code=EUR&amp;bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted"><img src="https://joplinapp.org/images/badges/Donate-PayPal-green.svg" alt="Donate using PayPal"></a> <a href="https://github.com/sponsors/laurent22/"><img src="https://joplinapp.org/images/badges/GitHub-Badge.svg" alt="Sponsor on GitHub"></a> <a href="https://www.patreon.com/joplin"><img src="https://joplinapp.org/images/badges/Patreon-Badge.svg" alt="Become a patron"></a> <a href="https://joplinapp.org/donate/#donations"><img src="https://joplinapp.org/images/badges/Donate-IBAN.svg" alt="Donate using IBAN"></a></p>
+<p><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=E8JMYD2LQ8MMA&amp;lc=GB&amp;item_name=Joplin+Development&amp;currency_code=EUR&amp;bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Donate-PayPal-green.svg" alt="Donate using PayPal"></a> <a href="https://github.com/sponsors/laurent22/"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/GitHub-Badge.svg" alt="Sponsor on GitHub"></a> <a href="https://www.patreon.com/joplin"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Patreon-Badge.svg" alt="Become a patron"></a> <a href="https://joplinapp.org/donate/#donations"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Donate-IBAN.svg" alt="Donate using IBAN"></a></p>
 </div>
 <h1>Joplin changelog<a name="joplin-changelog" href="#joplin-changelog" class="heading-anchor">🔗</a></h1>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/v2.2.5">v2.2.5</a> (Pre-release) - 2021-08-07T10:35:24Z<a name="v2-2-5-https-github-com-laurent22-joplin-releases-tag-v2-2-5-pre-release-2021-08-07t10-35-24z" href="#v2-2-5-https-github-com-laurent22-joplin-releases-tag-v2-2-5-pre-release-2021-08-07t10-35-24z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>Improved: Remove template feature (replaced by template plugin) (e9d5901)</li>
+</ul>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/v2.2.4">v2.2.4</a> (Pre-release) - 2021-08-05T16:42:48Z<a name="v2-2-4-https-github-com-laurent22-joplin-releases-tag-v2-2-4-pre-release-2021-08-05t16-42-48z" href="#v2-2-4-https-github-com-laurent22-joplin-releases-tag-v2-2-4-pre-release-2021-08-05t16-42-48z" class="heading-anchor">🔗</a></h2>
+<p>IMPORTANT: If you are a plugin developer or if, as a user, you notice a plugin that no longer works, please read this post: <a href="https://discourse.joplinapp.org/t/19278">https://discourse.joplinapp.org/t/19278</a></p>
+<ul>
+<li>New: Plugins: Add ability to make dialogs fit the application window (<a href="https://github.com/laurent22/joplin/issues/5219">#5219</a> by <a href="https://github.com/Ahmad45123">@Ahmad45123</a>)</li>
+<li>New: Plugins: Add support for loading application chrome and note CSS from the plugin (07d2a60)</li>
+<li>New: Turn old plugin deprecation notices into errors (7f00e4e)</li>
+<li>Improved: Converted Clipper notification to a modal dialog that shows up in all screens (fb9ec10)</li>
+<li>Improved: GotoAnything sometimes is not working on first try (<a href="https://github.com/laurent22/joplin/issues/5184">#5184</a>)</li>
+<li>Improved: Increase space between paragraphs in viewer and Rich Text editor to match Markdown editor (<a href="https://github.com/laurent22/joplin/issues/5256">#5256</a>)</li>
+<li>Fixed: Disable &quot;Dropped file type is not supported&quot; notification in Rich Text editor (<a href="https://github.com/laurent22/joplin/issues/5268">#5268</a>)</li>
+<li>Fixed: Do not export share properties (<a href="https://github.com/laurent22/joplin/issues/5232">#5232</a>)</li>
+<li>Fixed: Fixed header spacing (regression) (d3cd843)</li>
+<li>Fixed: Fixed issue with orphaned resource being created in case of a resource conflict (<a href="https://github.com/laurent22/joplin/issues/5223">#5223</a>)</li>
+<li>Fixed: Fixed plugin state when it has been deleted outside the app (<a href="https://github.com/laurent22/joplin/issues/5253">#5253</a>)</li>
+<li>Fixed: Fixed recipient list colors in Share Notebook dialog (<a href="https://github.com/laurent22/joplin/issues/5258">#5258</a>)</li>
+<li>Fixed: Fixed share note color in note list (<a href="https://github.com/laurent22/joplin/issues/5259">#5259</a>)</li>
+<li>Fixed: Focus is lost while searching in all notes (<a href="https://github.com/laurent22/joplin/issues/5208">#5208</a>)</li>
+<li>Fixed: Import highlighted text from ENEX files (<a href="https://github.com/laurent22/joplin/issues/5213">#5213</a>)</li>
+<li>Fixed: Katex code could be broken after editing it in Rich Text editor (<a href="https://github.com/laurent22/joplin/issues/5241">#5241</a>)</li>
+</ul>
 <h2><a href="https://github.com/laurent22/joplin/releases/tag/v2.2.2">v2.2.2</a> (Pre-release) - 2021-07-19T10:28:35Z<a name="v2-2-2-https-github-com-laurent22-joplin-releases-tag-v2-2-2-pre-release-2021-07-19t10-28-35z" href="#v2-2-2-https-github-com-laurent22-joplin-releases-tag-v2-2-2-pre-release-2021-07-19t10-28-35z" class="heading-anchor">🔗</a></h2>
 <p>Attention: The default font size has been changed in the Markdown editor. You can change it back in Config &gt; Appearance &gt; Editor font size.</p>
 <ul>
@@ -3470,7 +3508,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog.md
 			</footer>
 		</div>
 
-		<script src="&#x2F;js/script.js?t=1628159924590"></script>
+		<script src="&#x2F;js/script.js?t=1628514896838"></script>
 
 <script>
 	if (window.location.hostname !== 'localhost') {

@@ -4,6 +4,7 @@ import shim from './shim';
 import BaseService from './services/BaseService';
 import reducer, { setStore } from './reducer';
 import KeychainServiceDriver from './services/keychain/KeychainServiceDriver.node';
+import KeychainServiceDriverDummy from './services/keychain/KeychainServiceDriver.dummy';
 import { _, setLocale } from './locale';
 import KvStore from './services/KvStore';
 import SyncTargetJoplinServer from './SyncTargetJoplinServer';
@@ -56,6 +57,10 @@ const appLogger: LoggerWrapper = Logger.create('App');
 
 // const ntpClient = require('./vendor/ntp-client');
 // ntpClient.dgram = require('dgram');
+
+interface StartOptions {
+	keychainEnabled?: boolean;
+}
 
 export default class BaseApplication {
 
@@ -666,7 +671,12 @@ export default class BaseApplication {
 		return toSystemSlashes(output, 'linux');
 	}
 
-	async start(argv: string[]): Promise<any> {
+	async start(argv: string[], options: StartOptions = null): Promise<any> {
+		options = {
+			keychainEnabled: true,
+			...options,
+		};
+
 		const startFlags = await this.handleStartFlags_(argv);
 
 		argv = startFlags.argv;
@@ -755,7 +765,7 @@ export default class BaseApplication {
 		reg.setDb(this.database_);
 		BaseModel.setDb(this.database_);
 
-		await loadKeychainServiceAndSettings(KeychainServiceDriver);
+		await loadKeychainServiceAndSettings(options.keychainEnabled ? KeychainServiceDriver : KeychainServiceDriverDummy);
 		await handleSyncStartupOperation();
 
 		appLogger.info(`Client ID: ${Setting.value('clientId')}`);

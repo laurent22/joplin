@@ -24,6 +24,10 @@ a {
 	padding-bottom: 225px;
 }
 
+.help-page-container img {
+	margin-bottom: 1rem;
+}
+
 .press-carousel .photo {
 	width: 123px;
 	height: 136px;
@@ -84,6 +88,12 @@ a {
 .light-blue,
 .light-blue * {
 	color: #90b1d9;
+}
+
+blockquote {
+    border-left: .25em solid #e0e0e0;
+    padding: 0 1em;
+    opacity: .7;
 }
 
 .img-center {
@@ -410,6 +420,11 @@ p,
 	background-position: left;
 	background-repeat: no-repeat;
 	background-size: contain;
+}
+
+#work-together-section .frame-bg {
+	background-size: 100% 50%;
+	padding-bottom: 5px;
 }
 
 /* save-web-section  */
@@ -781,7 +796,7 @@ footer .right-links a {
 	}
 
 	#top-section,
-	.page-container {
+	.help-page-container {
 		padding-top: 80px;
 	}
 
@@ -831,7 +846,7 @@ footer .right-links a {
 	margin-bottom: 0;
 }
 
-.page-container {
+.help-page-container {
 	padding-top: 90px;
 	padding-bottom: 50px;
 }

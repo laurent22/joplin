@@ -62,6 +62,17 @@
 					</select>
 				</div>
 			</div>
+
+			<div class="field">
+				<label class="label">Can upload</label>
+				<div class="select">
+					<select name="can_upload">
+						{{#canUploadOptions}}
+							<option value="{{value}}" {{#selected}}selected{{/selected}}>{{label}}</option>
+						{{/canUploadOptions}}
+					</select>
+				</div>
+			</div>
 		{{/global.owner.is_admin}}
 
 		<div class="field">
@@ -102,6 +113,7 @@
 			{{#global.owner.is_admin}}
 				<div class="control block">
 					<p class="block">Stripe Subscription ID: <a href="https://dashboard.stripe.com/subscriptions/{{subscription.stripe_subscription_id}}">{{subscription.stripe_subscription_id}}</a></p>
+					<p class="block">Last payment status: <strong>{{subLastPaymentStatus}}</strong> on <strong>{{subLastPaymentDate}}</strong></p>
 					{{#showUpdateSubscriptionBasic}}
 						<input type="submit" name="update_subscription_basic_button" class="button is-warning" value="Downgrade to Basic" />
 					{{/showUpdateSubscriptionBasic}}

@@ -14,10 +14,11 @@ import { AccountType, accountTypeOptions, accountTypeToString } from '../../mode
 import uuidgen from '../../utils/uuidgen';
 import { formatMaxItemSize, formatMaxTotalSize, formatTotalSize, formatTotalSizePercent, yesOrNo } from '../../utils/strings';
 import { getCanShareFolder, totalSizeClass } from '../../models/utils/user';
-import { yesNoDefaultOptions } from '../../utils/views/select';
+import { yesNoDefaultOptions, yesNoOptions } from '../../utils/views/select';
 import { confirmUrl } from '../../utils/urlUtils';
 import { cancelSubscriptionByUserId, updateSubscriptionType } from '../../utils/stripe';
 import { createCsrfTag } from '../../utils/csrf';
+import { formatDateTime } from '../../utils/time';
 
 export interface CheckRepeatPasswordInput {
 	password: string;
@@ -58,6 +59,7 @@ function makeUser(isNew: boolean, fields: any): User {
 	if ('max_item_size' in fields) user.max_item_size = intOrDefaultToValue(fields, 'max_item_size');
 	if ('max_total_item_size' in fields) user.max_total_item_size = intOrDefaultToValue(fields, 'max_total_item_size');
 	if ('can_share_folder' in fields) user.can_share_folder = boolOrDefaultToValue(fields, 'can_share_folder');
+	if ('can_upload' in fields) user.can_upload = intOrDefaultToValue(fields, 'can_upload');
 	if ('account_type' in fields) user.account_type = Number(fields.account_type);
 
 	const password = checkRepeatPassword(fields, false);
@@ -120,13 +122,13 @@ router.get('users/:id', async (path: SubPath, ctx: AppContext, user: User = null
 	const owner = ctx.joplin.owner;
 	const isMe = userIsMe(path);
 	const isNew = userIsNew(path);
-	const userModel = ctx.joplin.models.user();
+	const models = ctx.joplin.models;
 	const userId = userIsMe(path) ? owner.id : path.id;
 
-	user = !isNew ? user || await userModel.load(userId) : null;
+	user = !isNew ? user || await models.user().load(userId) : null;
 	if (isNew && !user) user = defaultUser();
 
-	await userModel.checkIfAllowed(ctx.joplin.owner, AclAction.Read, user);
+	await models.user().checkIfAllowed(ctx.joplin.owner, AclAction.Read, user);
 
 	let postUrl = '';
 
@@ -150,16 +152,21 @@ router.get('users/:id', async (path: SubPath, ctx: AppContext, user: User = null
 	view.content.csrfTag = await createCsrfTag(ctx);
 
 	if (subscription) {
+		const lastPaymentAttempt = models.subscription().lastPaymentAttempt(subscription);
+
 		view.content.subscription = subscription;
 		view.content.showCancelSubscription = !isNew;
 		view.content.showUpdateSubscriptionBasic = !isNew && !!owner.is_admin && user.account_type !== AccountType.Basic;
 		view.content.showUpdateSubscriptionPro = !isNew && user.account_type !== AccountType.Pro;
+		view.content.subLastPaymentStatus = lastPaymentAttempt.status;
+		view.content.subLastPaymentDate = formatDateTime(lastPaymentAttempt.time);
 	}
 
 	view.content.showRestoreButton = !isNew && !!owner.is_admin && !user.enabled;
 	view.content.showResetPasswordButton = !isNew && owner.is_admin && user.enabled;
 	view.content.canSetEmail = isNew || owner.is_admin;
 	view.content.canShareFolderOptions = yesNoDefaultOptions(user, 'can_share_folder');
+	view.content.canUploadOptions = yesNoOptions(user, 'can_upload');
 	view.jsFiles.push('zxcvbn');
 	view.cssFiles.push('index/user');
 

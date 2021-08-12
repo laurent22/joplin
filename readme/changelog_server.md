@@ -1,5 +1,15 @@
 # Joplin Server Changelog
 
+## [server-v2.3.1-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.3.1-beta) (Pre-release) - 2021-08-12T15:49:58Z
+
+- Improved: Allow setting email key to prevent the same email to be sent multiple times (391204c)
+- Improved: Clarify beta transition message (c4fcfec)
+- Improved: Disable upload for accounts with subscription failed payments (f14c74d)
+- Improved: Re-enable account when subscription is paid (4b5318c)
+- Improved: Set better filename and mime type for files downloaded via published notes (#5286)
+- Fixed: Fix regression (6359c9c)
+- Fixed: Fixed layout of notes on mobile devices (#5269)
+
 ## [server-v2.2.11-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.2.11-beta) (Pre-release) - 2021-08-03T18:48:00Z
 
 - Improved: Disable beta account once expired (785248b)
