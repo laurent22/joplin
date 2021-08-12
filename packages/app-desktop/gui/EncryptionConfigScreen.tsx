@@ -12,8 +12,8 @@ import bridge from '../services/bridge';
 import shared from '@joplin/lib/components/shared/encryption-config-shared';
 import { MasterKeyEntity } from '@joplin/lib/services/database/types';
 import { getEncryptionEnabled, SyncInfo } from '@joplin/lib/services/synchronizer/syncInfoUtils';
-import { toggleAndSetupEncryption } from '../../lib/services/e2ee/utils';
-import MasterKey from '../../lib/models/MasterKey';
+import { toggleAndSetupEncryption } from '@joplin/lib/services/e2ee/utils';
+import MasterKey from '@joplin/lib/models/MasterKey';
 
 interface Props {}
 

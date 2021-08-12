@@ -14,7 +14,7 @@ import { MasterKeyEntity } from '@joplin/lib/services/database/types';
 import { State } from '@joplin/lib/reducer';
 import { SyncInfo } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 import { setupAndDisableEncryption, toggleAndSetupEncryption } from '@joplin/lib/services/e2ee/utils';
-import MasterKey from '../../../lib/models/MasterKey';
+import MasterKey from '@joplin/lib/models/MasterKey';
 
 interface Props {}
 
