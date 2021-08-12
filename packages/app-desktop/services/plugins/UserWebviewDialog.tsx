@@ -32,6 +32,8 @@ const Dialog = styled.div`
 	padding: ${(props: any) => `${props.theme.mainPadding}px`};
 	border-radius: 4px;
 	box-shadow: 0 6px 10px #00000077;
+	width: ${(props: any) => props.fitToContent ? 'auto' : '90vw'};
+	height: ${(props: any) => props.fitToContent ? 'auto' : '80vh'};
 `;
 
 const UserWebViewWrapper = styled.div`
@@ -104,7 +106,7 @@ export default function UserWebviewDialog(props: Props) {
 
 	return (
 		<StyledRoot>
-			<Dialog>
+			<Dialog fitToContent={props.fitToContent}>
 				<UserWebViewWrapper>
 					<UserWebview
 						ref={webviewRef}
