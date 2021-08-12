@@ -1,6 +1,6 @@
 {
   "name": "@joplin/app-desktop",
-  "version": "2.2.7",
+  "version": "2.3.0",
   "description": "Joplin for Desktop",
   "main": "main.js",
   "private": true,
@@ -93,7 +93,7 @@
   },
   "homepage": "https://github.com/laurent22/joplin#readme",
   "devDependencies": {
-    "@joplin/tools": "~2.2",
+    "@joplin/tools": "~2.3",
     "@testing-library/react-hooks": "^3.4.2",
     "@types/jest": "^26.0.15",
     "@types/node": "^14.14.6",
@@ -122,8 +122,8 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.13.0",
-    "@joplin/lib": "~2.2",
-    "@joplin/renderer": "~2.2",
+    "@joplin/lib": "~2.3",
+    "@joplin/renderer": "~2.3",
     "async-mutex": "^0.1.3",
     "codemirror": "^5.56.0",
     "color": "^3.1.2",
