@@ -17,7 +17,7 @@ USER_NUM=$1
 COMMANDS=($(echo $2 | tr "," "\n"))
 PROFILE_DIR=~/.config/joplindev-desktop-$USER_NUM
 
-CMD_FILE="$SCRIPT_DIR/runForSharingCommands-$USER_NUM.txt"
+CMD_FILE="$SCRIPT_DIR/runForTestingCommands-$USER_NUM.txt"
 rm -f "$CMD_FILE"
 touch "$CMD_FILE"
 
@@ -40,17 +40,17 @@ do
 		USER_EMAIL="user$USER_NUM@example.com"
 		rm -rf "$PROFILE_DIR"
 
-		rm -rf "$HOME/Temp/SyncTestE2EE copy"
-		rsync -a "$HOME/Temp/SyncTestE2EE/" "$HOME/Temp/SyncTestE2EE copy/"
+		# rm -rf "$HOME/Temp/SyncTestE2EE copy"
+		# rsync -a "$HOME/Temp/SyncTestE2EE/" "$HOME/Temp/SyncTestE2EE copy/"
 
-		echo "config sync.target 2" >> "$CMD_FILE" 
-		echo "config sync.2.path \"$HOME/Temp/SyncTestE2EE copy/\"" >> "$CMD_FILE" 
+		# echo "config sync.target 2" >> "$CMD_FILE" 
+		# echo "config sync.2.path \"$HOME/Temp/SyncTestE2EE copy/\"" >> "$CMD_FILE" 
 
-		# echo "config keychain.supported 0" >> "$CMD_FILE" 
-		# echo "config sync.target 10" >> "$CMD_FILE" 
-		# # echo "config sync.10.path http://api.joplincloud.local:22300" >> "$CMD_FILE" 
-		# echo "config sync.10.username $USER_EMAIL" >> "$CMD_FILE" 
-		# echo "config sync.10.password hunter1hunter2hunter3" >> "$CMD_FILE" 
+		echo "config keychain.supported 0" >> "$CMD_FILE" 
+		echo "config sync.target 10" >> "$CMD_FILE" 
+		# echo "config sync.10.path http://api.joplincloud.local:22300" >> "$CMD_FILE" 
+		echo "config sync.10.username $USER_EMAIL" >> "$CMD_FILE" 
+		echo "config sync.10.password hunter1hunter2hunter3" >> "$CMD_FILE" 
 	
 	elif [[ $CMD == "e2ee" ]]; then
 	
