@@ -10,17 +10,18 @@ import shim from '@joplin/lib/shim';
 import dialogs from './dialogs';
 import bridge from '../services/bridge';
 import shared from '@joplin/lib/components/shared/encryption-config-shared';
-import { MasterKeyEntity } from '../../lib/services/database/types';
+import { MasterKeyEntity } from '@joplin/lib/services/database/types';
+import { getEncryptionEnabled, SyncInfo } from '@joplin/lib/services/synchronizer/syncInfoUtils';
+import { toggleAndSetupEncryption } from '../../lib/services/e2ee/utils';
+import MasterKey from '../../lib/models/MasterKey';
 
-interface Props {
-
-}
+interface Props {}
 
 class EncryptionConfigScreenComponent extends React.Component<Props> {
 	constructor(props: Props) {
 		super(props);
 
-		shared.constructor(this, props);
+		shared.initialize(this, props);
 	}
 
 	componentWillUnmount() {
@@ -167,23 +168,21 @@ class EncryptionConfigScreenComponent extends React.Component<Props> {
 		}
 
 		const onToggleButtonClick = async () => {
-			const isEnabled = Setting.value('encryption.enabled');
+			const isEnabled = getEncryptionEnabled();
+			const masterKey = MasterKey.latest();
 
 			let answer = null;
 			if (isEnabled) {
 				answer = await dialogs.confirm(_('Disabling encryption means *all* your notes and attachments are going to be re-synchronised and sent unencrypted to the sync target. Do you wish to continue?'));
 			} else {
-				answer = await dialogs.prompt(_('Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target. Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.'), '', '', { type: 'password' });
+				const msg = shared.enableEncryptionConfirmationMessages(masterKey);
+				answer = await dialogs.prompt(msg.join('\n\n'), '', '', { type: 'password' });
 			}
 
 			if (!answer) return;
 
 			try {
-				if (isEnabled) {
-					await EncryptionService.instance().disableEncryption();
-				} else {
-					await EncryptionService.instance().generateMasterKeyAndEnableEncryption(answer);
-				}
+				await toggleAndSetupEncryption(EncryptionService.instance(), !isEnabled, masterKey, answer);
 			} catch (error) {
 				await dialogs.alert(error.message);
 			}
@@ -295,12 +294,14 @@ class EncryptionConfigScreenComponent extends React.Component<Props> {
 }
 
 const mapStateToProps = (state: State) => {
+	const syncInfo = new SyncInfo(state.settings['syncInfoCache']);
+
 	return {
 		themeId: state.settings.theme,
-		masterKeys: state.masterKeys,
+		masterKeys: syncInfo.masterKeys,
 		passwords: state.settings['encryption.passwordCache'],
-		encryptionEnabled: state.settings['encryption.enabled'],
-		activeMasterKeyId: state.settings['encryption.activeMasterKeyId'],
+		encryptionEnabled: syncInfo.e2ee,
+		activeMasterKeyId: syncInfo.activeMasterKeyId,
 		shouldReencrypt: state.settings['encryption.shouldReencrypt'] >= Setting.SHOULD_REENCRYPT_YES,
 		notLoadedMasterKeys: state.notLoadedMasterKeys,
 	};

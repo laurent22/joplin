@@ -978,6 +978,9 @@ packages/lib/models/ItemChange.js.map
 packages/lib/models/MasterKey.d.ts
 packages/lib/models/MasterKey.js
 packages/lib/models/MasterKey.js.map
+packages/lib/models/MasterKey.test.d.ts
+packages/lib/models/MasterKey.test.js
+packages/lib/models/MasterKey.test.js.map
 packages/lib/models/Migration.d.ts
 packages/lib/models/Migration.js
 packages/lib/models/Migration.js.map
@@ -1173,6 +1176,9 @@ packages/lib/services/database/types.js.map
 packages/lib/services/debug/populateDatabase.d.ts
 packages/lib/services/debug/populateDatabase.js
 packages/lib/services/debug/populateDatabase.js.map
+packages/lib/services/e2ee/utils.d.ts
+packages/lib/services/e2ee/utils.js
+packages/lib/services/e2ee/utils.js.map
 packages/lib/services/interop/InteropService.d.ts
 packages/lib/services/interop/InteropService.js
 packages/lib/services/interop/InteropService.js.map
@@ -1500,6 +1506,12 @@ packages/lib/services/synchronizer/migrations/1.js.map
 packages/lib/services/synchronizer/migrations/2.d.ts
 packages/lib/services/synchronizer/migrations/2.js
 packages/lib/services/synchronizer/migrations/2.js.map
+packages/lib/services/synchronizer/migrations/3.d.ts
+packages/lib/services/synchronizer/migrations/3.js
+packages/lib/services/synchronizer/migrations/3.js.map
+packages/lib/services/synchronizer/syncInfoUtils.d.ts
+packages/lib/services/synchronizer/syncInfoUtils.js
+packages/lib/services/synchronizer/syncInfoUtils.js.map
 packages/lib/services/synchronizer/synchronizer_LockHandler.test.d.ts
 packages/lib/services/synchronizer/synchronizer_LockHandler.test.js
 packages/lib/services/synchronizer/synchronizer_LockHandler.test.js.map

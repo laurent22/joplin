@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 
-const markdownUtils = require('./markdownUtils').default;
+import markdownUtils from './markdownUtils';
 
 describe('markdownUtils', function() {
 
@@ -44,7 +44,7 @@ describe('markdownUtils', function() {
 		];
 
 		for (let i = 0; i < testCases.length; i++) {
-			const md = testCases[i][0];
+			const md = testCases[i][0] as string;
 			const actual = markdownUtils.extractImageUrls(md);
 			const expected = testCases[i][1];
 			expect(actual.join(' ')).toBe((expected as string[]).join(' '));
@@ -70,7 +70,7 @@ describe('markdownUtils', function() {
 		];
 
 		for (let i = 0; i < testCases.length; i++) {
-			const md = testCases[i][0];
+			const md = testCases[i][0] as string;
 			const actual = markdownUtils.extractFileUrls(md);
 			const expected = testCases[i][1];
 

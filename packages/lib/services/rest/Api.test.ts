@@ -1,8 +1,7 @@
 import { PaginationOrderDir } from '../../models/utils/types';
 import Api, { RequestMethod } from '../../services/rest/Api';
 import shim from '../../shim';
-
-const { setupDatabaseAndSynchronizer, switchClient, checkThrowAsync, db, msleep, supportDir } = require('../../testing/test-utils.js');
+import { setupDatabaseAndSynchronizer, switchClient, checkThrowAsync, db, msleep, supportDir } from '../../testing/test-utils';
 import Folder from '../../models/Folder';
 import Resource from '../../models/Resource';
 import Note from '../../models/Note';

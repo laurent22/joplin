@@ -1,10 +1,11 @@
-import { fileContentEqual, setupDatabaseAndSynchronizer, supportDir, switchClient, objectsEqual, checkThrowAsync } from '../testing/test-utils';
+import { fileContentEqual, setupDatabaseAndSynchronizer, supportDir, switchClient, objectsEqual, checkThrowAsync, msleep } from '../testing/test-utils';
 import Folder from '../models/Folder';
 import Note from '../models/Note';
 import Setting from '../models/Setting';
 import BaseItem from '../models/BaseItem';
 import MasterKey from '../models/MasterKey';
 import EncryptionService from '../services/EncryptionService';
+import { setEncryptionEnabled } from '../services/synchronizer/syncInfoUtils';
 
 let service: EncryptionService = null;
 
@@ -15,7 +16,7 @@ describe('services_EncryptionService', function() {
 		await switchClient(1);
 		service = new EncryptionService();
 		BaseItem.encryptionService_ = service;
-		Setting.setValue('encryption.enabled', true);
+		setEncryptionEnabled(true);
 		done();
 	});
 
@@ -65,14 +66,14 @@ describe('services_EncryptionService', function() {
 		// Check that master key plain text is still the same
 		const plainTextOld = await service.decryptMasterKey_(masterKey, '123456');
 		const plainTextNew = await service.decryptMasterKey_(upgradedMasterKey, '123456');
-		expect(plainTextOld.content).toBe(plainTextNew.content);
+		expect(plainTextOld).toBe(plainTextNew);
 
 		// Check that old content can be decrypted with new master key
-		await service.loadMasterKey_(masterKey, '123456', true);
+		await service.loadMasterKey(masterKey, '123456', true);
 		const cipherText = await service.encryptString('some secret');
 		const plainTextFromOld = await service.decryptString(cipherText);
 
-		await service.loadMasterKey_(upgradedMasterKey, '123456', true);
+		await service.loadMasterKey(upgradedMasterKey, '123456', true);
 		const plainTextFromNew = await service.decryptString(cipherText);
 
 		expect(plainTextFromOld).toBe(plainTextFromNew);
@@ -138,7 +139,7 @@ describe('services_EncryptionService', function() {
 		let masterKey = await service.generateMasterKey('123456');
 		masterKey = await MasterKey.save(masterKey);
 
-		await service.loadMasterKey_(masterKey, '123456', true);
+		await service.loadMasterKey(masterKey, '123456', true);
 
 		const cipherText = await service.encryptString('some secret');
 		const plainText = await service.decryptString(cipherText);
@@ -159,7 +160,7 @@ describe('services_EncryptionService', function() {
 	it('should decrypt various encryption methods', (async () => {
 		let masterKey = await service.generateMasterKey('123456');
 		masterKey = await MasterKey.save(masterKey);
-		await service.loadMasterKey_(masterKey, '123456', true);
+		await service.loadMasterKey(masterKey, '123456', true);
 
 		{
 			const cipherText = await service.encryptString('some secret', {
@@ -186,7 +187,7 @@ describe('services_EncryptionService', function() {
 		let masterKey = await service.generateMasterKey('123456');
 		masterKey = await MasterKey.save(masterKey);
 
-		await service.loadMasterKey_(masterKey, '123456', true);
+		await service.loadMasterKey(masterKey, '123456', true);
 
 		const cipherText = await service.encryptString('some secret');
 
@@ -202,7 +203,7 @@ describe('services_EncryptionService', function() {
 		let masterKey = await service.generateMasterKey('123456');
 		masterKey = await MasterKey.save(masterKey);
 
-		await service.loadMasterKey_(masterKey, '123456', true);
+		await service.loadMasterKey(masterKey, '123456', true);
 
 		let cipherText = await service.encryptString('some secret');
 		cipherText += 'ABCDEFGHIJ';
@@ -215,7 +216,7 @@ describe('services_EncryptionService', function() {
 	it('should encrypt and decrypt notes and folders', (async () => {
 		let masterKey = await service.generateMasterKey('123456');
 		masterKey = await MasterKey.save(masterKey);
-		await service.loadMasterKey_(masterKey, '123456', true);
+		await service.loadMasterKey(masterKey, '123456', true);
 
 		const folder = await Folder.save({ title: 'folder' });
 		const note = await Note.save({ title: 'encrypted note', body: 'something', parent_id: folder.id });
@@ -246,7 +247,7 @@ describe('services_EncryptionService', function() {
 	it('should encrypt and decrypt files', (async () => {
 		let masterKey = await service.generateMasterKey('123456');
 		masterKey = await MasterKey.save(masterKey);
-		await service.loadMasterKey_(masterKey, '123456', true);
+		await service.loadMasterKey(masterKey, '123456', true);
 
 		const sourcePath = `${supportDir}/photo.jpg`;
 		const encryptedPath = `${Setting.value('tempDir')}/photo.crypted`;
@@ -263,7 +264,7 @@ describe('services_EncryptionService', function() {
 		let masterKey = await service.generateMasterKey('123456');
 		masterKey = await MasterKey.save(masterKey);
 
-		await service.loadMasterKey_(masterKey, '123456', true);
+		await service.loadMasterKey(masterKey, '123456', true);
 
 		// First check that we can replicate the error with the old encryption method
 		service.defaultEncryptionMethod_ = EncryptionService.METHOD_SJCL;
@@ -275,5 +276,21 @@ describe('services_EncryptionService', function() {
 		const cipherText = await service.encryptString('🐶🐶🐶'.substr(0,5));
 		const plainText = await service.decryptString(cipherText);
 		expect(plainText).toBe('🐶🐶🐶'.substr(0,5));
+	}));
+
+	it('should check if a master key is loaded', (async () => {
+		let masterKey = await service.generateMasterKey('123456');
+		masterKey = await MasterKey.save(masterKey);
+
+		await service.loadMasterKey(masterKey, '123456', true);
+
+		expect(service.isMasterKeyLoaded(masterKey)).toBe(true);
+
+		await msleep(1);
+
+		// If the master key is modified afterwards it should report that it is
+		// *not* loaded since it doesn't have this new version.
+		masterKey = await MasterKey.save(masterKey);
+		expect(service.isMasterKeyLoaded(masterKey)).toBe(false);
 	}));
 });

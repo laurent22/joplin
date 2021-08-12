@@ -13,6 +13,7 @@ const { filename, safeFilename } = require('../path-utils');
 const { FsDriverDummy } = require('../fs-driver-dummy.js');
 import JoplinError from '../JoplinError';
 import itemCanBeEncrypted from './utils/itemCanBeEncrypted';
+import { getEncryptionEnabled } from '../services/synchronizer/syncInfoUtils';
 
 export default class Resource extends BaseItem {
 
@@ -196,7 +197,7 @@ export default class Resource extends BaseItem {
 	public static async fullPathForSyncUpload(resource: ResourceEntity) {
 		const plainTextPath = this.fullPath(resource);
 
-		if (!Setting.value('encryption.enabled') || !itemCanBeEncrypted(resource as any)) {
+		if (!getEncryptionEnabled() || !itemCanBeEncrypted(resource as any)) {
 			// Normally not possible since itemsThatNeedSync should only return decrypted items
 			if (resource.encryption_blob_encrypted) throw new Error('Trying to access encrypted resource but encryption is currently disabled');
 			return { path: plainTextPath, resource: resource };

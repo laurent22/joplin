@@ -35,6 +35,7 @@ import { ShareInvitation } from '@joplin/lib/services/share/reducer';
 import ShareService from '@joplin/lib/services/share/ShareService';
 import { reg } from '@joplin/lib/registry';
 import removeKeylessItems from '../ResizableLayout/utils/removeKeylessItems';
+import { localSyncInfoFromState } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 
 const { connect } = require('react-redux');
 const { PromptDialog } = require('../PromptDialog.min.js');
@@ -856,6 +857,8 @@ class MainScreenComponent extends React.Component<Props, State> {
 }
 
 const mapStateToProps = (state: AppState) => {
+	const syncInfo = localSyncInfoFromState(state);
+
 	return {
 		themeId: state.settings.theme,
 		settingEditorCodeView: state.settings['editor.codeView'],
@@ -863,8 +866,8 @@ const mapStateToProps = (state: AppState) => {
 		notes: state.notes,
 		hasDisabledSyncItems: state.hasDisabledSyncItems,
 		hasDisabledEncryptionItems: state.hasDisabledEncryptionItems,
-		showMissingMasterKeyMessage: state.notLoadedMasterKeys.length && state.masterKeys.length,
-		showNeedUpgradingMasterKeyMessage: !!EncryptionService.instance().masterKeysThatNeedUpgrading(state.masterKeys).length,
+		showMissingMasterKeyMessage: state.notLoadedMasterKeys.length && syncInfo.masterKeys.length,
+		showNeedUpgradingMasterKeyMessage: !!EncryptionService.instance().masterKeysThatNeedUpgrading(syncInfo.masterKeys).length,
 		showShouldReencryptMessage: state.settings['encryption.shouldReencrypt'] >= Setting.SHOULD_REENCRYPT_YES,
 		shouldUpgradeSyncTarget: state.settings['sync.upgradeState'] === Setting.SYNC_UPGRADE_STATE_SHOULD_DO,
 		selectedFolderId: state.selectedFolderId,

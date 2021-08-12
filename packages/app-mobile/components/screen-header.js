@@ -14,6 +14,7 @@ const { themeStyle } = require('./global-style.js');
 const { Dropdown } = require('./Dropdown.js');
 const { dialogs } = require('../utils/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
+const { localSyncInfoFromState } = require('@joplin/lib/services/synchronizer/syncInfoUtils');
 
 Icon.loadFont();
 
@@ -528,6 +529,8 @@ ScreenHeaderComponent.defaultProps = {
 };
 
 const ScreenHeader = connect(state => {
+	const syncInfo = localSyncInfoFromState(state);
+
 	return {
 		historyCanGoBack: state.historyCanGoBack,
 		locale: state.settings.locale,
@@ -535,7 +538,7 @@ const ScreenHeader = connect(state => {
 		themeId: state.settings.theme,
 		noteSelectionEnabled: state.noteSelectionEnabled,
 		selectedNoteIds: state.selectedNoteIds,
-		showMissingMasterKeyMessage: state.notLoadedMasterKeys.length && state.masterKeys.length,
+		showMissingMasterKeyMessage: state.notLoadedMasterKeys.length && syncInfo.masterKeys.length,
 		hasDisabledSyncItems: state.hasDisabledSyncItems,
 		shouldUpgradeSyncTarget: state.settings['sync.upgradeState'] === Setting.SYNC_UPGRADE_STATE_SHOULD_DO,
 	};

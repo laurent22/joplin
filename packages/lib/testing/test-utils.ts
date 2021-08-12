@@ -28,7 +28,7 @@ import NoteTag from '../models/NoteTag';
 import Revision from '../models/Revision';
 import MasterKey from '../models/MasterKey';
 import BaseItem from '../models/BaseItem';
-const { FileApi } = require('../file-api.js');
+import { FileApi } from '../file-api';
 const FileApiDriverMemory = require('../file-api-driver-memory').default;
 const { FileApiDriverLocal } = require('../file-api-driver-local.js');
 const { FileApiDriverWebDav } = require('../file-api-driver-webdav.js');
@@ -54,6 +54,8 @@ import { credentialFile, readCredentialFile } from '../utils/credentialFiles';
 import SyncTargetJoplinCloud from '../SyncTargetJoplinCloud';
 import KeychainService from '../services/keychain/KeychainService';
 import { loadKeychainServiceAndSettings } from '../services/SettingUtils';
+import { setActiveMasterKeyId, setEncryptionEnabled } from '../services/synchronizer/syncInfoUtils';
+import Synchronizer from '../Synchronizer';
 const md5 = require('md5');
 const S3 = require('aws-sdk/clients/s3');
 const { Dirnames } = require('../services/synchronizer/utils/types');
@@ -65,14 +67,14 @@ const { Dirnames } = require('../services/synchronizer/utils/types');
 // Jest, to make debugging easier, but it's not clear how to get this info).
 const suiteName_ = uuid.createNano();
 
-const databases_: any[] = [];
-let synchronizers_: any[] = [];
-const fileApis_: any = {};
-const encryptionServices_: any[] = [];
-const revisionServices_: any[] = [];
-const decryptionWorkers_: any[] = [];
-const resourceServices_: any[] = [];
-const resourceFetchers_: any[] = [];
+const databases_: JoplinDatabase[] = [];
+let synchronizers_: Synchronizer[] = [];
+const fileApis_: Record<number, FileApi> = {};
+const encryptionServices_: EncryptionService[] = [];
+const revisionServices_: RevisionService[] = [];
+const decryptionWorkers_: DecryptionWorker[] = [];
+const resourceServices_: ResourceService[] = [];
+const resourceFetchers_: ResourceFetcher[] = [];
 const kvStores_: KvStore[] = [];
 let currentClient_ = 1;
 
@@ -137,6 +139,7 @@ function setSyncTargetName(name: string) {
 }
 
 setSyncTargetName('memory');
+// setSyncTargetName('filesystem');
 // setSyncTargetName('nextcloud');
 // setSyncTargetName('dropbox');
 // setSyncTargetName('onedrive');
@@ -152,7 +155,7 @@ const syncDir = `${oldTestDir}/sync/${suiteName_}`;
 // anyway.
 let defaultJestTimeout = 90 * 1000;
 if (isNetworkSyncTarget_) defaultJestTimeout = 60 * 1000 * 10;
-jest.setTimeout(defaultJestTimeout);
+if (typeof jest !== 'undefined') jest.setTimeout(defaultJestTimeout);
 
 const dbLogger = new Logger();
 dbLogger.addTarget(TargetType.Console);
@@ -262,6 +265,8 @@ async function switchClient(id: number, options: any = null) {
 	BaseItem.revisionService_ = revisionServices_[id];
 
 	await Setting.reset();
+	Setting.settingFilename = `settings-${id}.json`;
+
 	Setting.setConstant('resourceDirName', resourceDirName(id));
 	Setting.setConstant('resourceDir', resourceDir(id));
 	Setting.setConstant('pluginDir', pluginDir(id));
@@ -269,6 +274,10 @@ async function switchClient(id: number, options: any = null) {
 	await loadKeychainServiceAndSettings(options.keychainEnabled ? KeychainServiceDriver : KeychainServiceDriverDummy);
 
 	Setting.setValue('sync.wipeOutFailSafe', false); // To keep things simple, always disable fail-safe unless explicitely set in the test itself
+
+	// More generally, this function should clear all data, and so that should
+	// include settings.json
+	await clearSettingFile(id);
 }
 
 async function clearDatabase(id: number = null) {
@@ -336,7 +345,13 @@ async function setupDatabase(id: number = null, options: any = null) {
 	await databases_[id].open({ name: filePath });
 
 	BaseModel.setDb(databases_[id]);
+	await clearSettingFile(id);
 	await loadKeychainServiceAndSettings(options.keychainEnabled ? KeychainServiceDriver : KeychainServiceDriverDummy);
+}
+
+async function clearSettingFile(id: number) {
+	Setting.settingFilename = `settings-${id}.json`;
+	await fs.remove(Setting.settingFilePath);
 }
 
 export async function createFolderTree(parentId: string, tree: any[], num: number = 0): Promise<FolderEntity> {
@@ -496,7 +511,9 @@ async function loadEncryptionMasterKey(id: number = null, useExisting = false) {
 		masterKey = masterKeys[0];
 	}
 
-	await service.loadMasterKey_(masterKey, '123456', true);
+	await service.loadMasterKey(masterKey, '123456', true);
+
+	setActiveMasterKeyId(masterKey.id);
 
 	return masterKey;
 }
@@ -851,7 +868,7 @@ class TestApp extends BaseApplication {
 		// For now, disable sync and encryption to avoid spurious intermittent failures
 		// caused by them interupting processing and causing delays.
 		Setting.setValue('sync.interval', 0);
-		Setting.setValue('encryption.enabled', false);
+		setEncryptionEnabled(true);
 
 		this.initRedux();
 		Setting.dispatchUpdateAll();

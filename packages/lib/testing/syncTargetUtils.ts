@@ -1,4 +1,4 @@
-import { syncDir, synchronizer, supportDir, loadEncryptionMasterKey, setupDatabaseAndSynchronizer, switchClient } from '../testing/test-utils';
+import { syncDir, synchronizer, supportDir, loadEncryptionMasterKey, setupDatabaseAndSynchronizer, switchClient, synchronizerStart } from '../testing/test-utils';
 import Setting from '../models/Setting';
 import Folder from '../models/Folder';
 import Note from '../models/Note';
@@ -7,10 +7,13 @@ import Resource from '../models/Resource';
 import markdownUtils from '../markdownUtils';
 import shim from '../shim';
 import * as fs from 'fs-extra';
+import { setEncryptionEnabled } from '../services/synchronizer/syncInfoUtils';
+const { shimInit } = require('../shim-init-node');
+const sharp = require('sharp');
 
 const snapshotBaseDir = `${supportDir}/syncTargetSnapshots`;
 
-const testData = {
+export const testData = {
 	folder1: {
 		subFolder1: {},
 		subFolder2: {
@@ -36,8 +39,8 @@ const testData = {
 	},
 };
 
-async function createTestData(data: any) {
-	async function recurseStruct(s: any, parentId: string = '') {
+export async function createTestData(data: any) {
+	async function recurseStruct(s: any, parentId = '') {
 		for (const n in s) {
 			if (n.toLowerCase().includes('folder')) {
 				const folder = await Folder.save({ title: n, parent_id: parentId });
@@ -60,7 +63,7 @@ async function createTestData(data: any) {
 	await recurseStruct(data);
 }
 
-async function checkTestData(data: any) {
+export async function checkTestData(data: any) {
 	async function recurseCheck(s: any) {
 		for (const n in s) {
 			const obj = s[n];
@@ -98,13 +101,15 @@ async function checkTestData(data: any) {
 	await recurseCheck(data);
 }
 
-async function deploySyncTargetSnapshot(syncTargetType: string, syncVersion: number) {
+export async function deploySyncTargetSnapshot(syncTargetType: string, syncVersion: number) {
 	const sourceDir = `${snapshotBaseDir}/${syncVersion}/${syncTargetType}`;
 	await fs.remove(syncDir);
 	await fs.copy(sourceDir, syncDir);
 }
 
-async function main(syncTargetType: string) {
+export async function main(syncTargetType: string) {
+	shimInit(sharp);
+
 	const validSyncTargetTypes = ['normal', 'e2ee'];
 	if (!validSyncTargetTypes.includes(syncTargetType)) throw new Error(`Sync target type must be: ${validSyncTargetTypes.join(', ')}`);
 
@@ -113,9 +118,11 @@ async function main(syncTargetType: string) {
 	await createTestData(testData);
 
 	if (syncTargetType === 'e2ee') {
-		Setting.setValue('encryption.enabled', true);
+		setEncryptionEnabled(true);
 		await loadEncryptionMasterKey();
 	}
+
+	await synchronizerStart();
 
 	await synchronizer().start();
 
@@ -128,10 +135,3 @@ async function main(syncTargetType: string) {
 
 	console.info(`Sync target snapshot created in: ${destDir}`);
 }
-
-export {
-	checkTestData,
-	main,
-	testData,
-	deploySyncTargetSnapshot,
-};

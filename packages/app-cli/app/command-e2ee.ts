@@ -6,6 +6,8 @@ import BaseItem from '@joplin/lib/models/BaseItem';
 import Setting from '@joplin/lib/models/Setting';
 import shim from '@joplin/lib/shim';
 import * as pathUtils from '@joplin/lib/path-utils';
+import { getEncryptionEnabled } from '@joplin/lib/services/synchronizer/syncInfoUtils';
+import { generateMasterKeyAndEnableEncryption, loadMasterKeysFromSettings, setupAndDisableEncryption } from '@joplin/lib/services/e2ee/utils';
 const imageType = require('image-type');
 const readChunk = require('read-chunk');
 
@@ -39,7 +41,7 @@ class Command extends BaseCommand {
 				return false;
 			}
 			Setting.setObjectValue('encryption.passwordCache', masterKeyId, password);
-			await EncryptionService.instance().loadMasterKeysFromSettings();
+			await loadMasterKeysFromSettings(EncryptionService.instance());
 			return true;
 		};
 
@@ -93,12 +95,12 @@ class Command extends BaseCommand {
 				}
 			}
 
-			await EncryptionService.instance().generateMasterKeyAndEnableEncryption(password);
+			await generateMasterKeyAndEnableEncryption(EncryptionService.instance(), password);
 			return;
 		}
 
 		if (args.command === 'disable') {
-			await EncryptionService.instance().disableEncryption();
+			await setupAndDisableEncryption(EncryptionService.instance());
 			return;
 		}
 
@@ -115,7 +117,7 @@ class Command extends BaseCommand {
 		}
 
 		if (args.command === 'status') {
-			this.stdout(_('Encryption is: %s', Setting.value('encryption.enabled') ? _('Enabled') : _('Disabled')));
+			this.stdout(_('Encryption is: %s', getEncryptionEnabled() ? _('Enabled') : _('Disabled')));
 			return;
 		}
 

@@ -50,6 +50,8 @@ import handleSyncStartupOperation from './services/synchronizer/utils/handleSync
 import SyncTargetJoplinCloud from './SyncTargetJoplinCloud';
 const { toSystemSlashes } = require('./path-utils');
 const { setAutoFreeze } = require('immer');
+import { getEncryptionEnabled } from './services/synchronizer/syncInfoUtils';
+import { loadMasterKeysFromSettings } from './services/e2ee/utils';
 
 const appLogger: LoggerWrapper = Logger.create('App');
 
@@ -428,9 +430,18 @@ export default class BaseApplication {
 					syswidecas.addCAs(f);
 				}
 			},
-			'encryption.enabled': async () => {
+
+			// Note: this used to run when "encryption.enabled" was changed, but
+			// now we run it anytime any property of the sync target info is
+			// changed. This is not optimal but:
+			// - The sync target info rarely changes.
+			// - All the calls below are cheap or do nothing if there's nothing
+			//   to do.
+			'syncInfoCache': async () => {
 				if (this.hasGui()) {
-					await EncryptionService.instance().loadMasterKeysFromSettings();
+					appLogger.info('"syncInfoCache" was changed - setting up encryption related code');
+
+					await loadMasterKeysFromSettings(EncryptionService.instance());
 					void DecryptionWorker.instance().scheduleStart();
 					const loadedMasterKeyIds = EncryptionService.instance().loadedMasterKeyIds();
 
@@ -444,6 +455,7 @@ export default class BaseApplication {
 					void reg.scheduleSync();
 				}
 			},
+
 			'sync.interval': async () => {
 				if (this.hasGui()) reg.setupRecurrentSync();
 			},
@@ -451,8 +463,7 @@ export default class BaseApplication {
 
 		sideEffects['timeFormat'] = sideEffects['dateFormat'];
 		sideEffects['locale'] = sideEffects['dateFormat'];
-		sideEffects['encryption.activeMasterKeyId'] = sideEffects['encryption.enabled'];
-		sideEffects['encryption.passwordCache'] = sideEffects['encryption.enabled'];
+		sideEffects['encryption.passwordCache'] = sideEffects['syncInfoCache'];
 
 		if (action) {
 			const effect = sideEffects[action.key];
@@ -791,7 +802,7 @@ export default class BaseApplication {
 			// and if encryption is enabled. This code runs only when shouldReencrypt = -1
 			// which can be set by a maintenance script for example.
 			const folderCount = await Folder.count();
-			const itShould = Setting.value('encryption.enabled') && !!folderCount ? Setting.SHOULD_REENCRYPT_YES : Setting.SHOULD_REENCRYPT_NO;
+			const itShould = getEncryptionEnabled() && !!folderCount ? Setting.SHOULD_REENCRYPT_YES : Setting.SHOULD_REENCRYPT_NO;
 			Setting.setValue('encryption.shouldReencrypt', itShould);
 		}
 
@@ -818,7 +829,7 @@ export default class BaseApplication {
 		DecryptionWorker.instance().setLogger(globalLogger);
 		DecryptionWorker.instance().setEncryptionService(EncryptionService.instance());
 		DecryptionWorker.instance().setKvStore(KvStore.instance());
-		await EncryptionService.instance().loadMasterKeysFromSettings();
+		await loadMasterKeysFromSettings(EncryptionService.instance());
 		DecryptionWorker.instance().on('resourceMetadataButNotBlobDecrypted', this.decryptionWorker_resourceMetadataButNotBlobDecrypted);
 
 		ResourceFetcher.instance().setFileApi(() => {
