@@ -58,6 +58,15 @@ class ActionButtonComponent extends React.Component {
 		this.newNoteNavigate(this.props.parentFolderId, false);
 	}
 
+	newSubNotebook_press() {
+		this.props.dispatch({
+			type: 'NAV_GO',
+			routeName: 'Folder',
+			folderId: null,
+			parentFolderId: this.props.parentFolderId,
+		});
+	}
+
 	renderIconMultiStates() {
 		const button = this.props.buttons[this.state.buttonIndex];
 		return <Icon name={button.icon} style={styles.actionButtonIcon} />;
@@ -73,6 +82,15 @@ class ActionButtonComponent extends React.Component {
 
 		if (this.props.addFolderNoteButtons) {
 			if (this.props.folders.length) {
+				buttons.push({
+					title: _('New sub-notebook'),
+					onPress: () => {
+						this.newSubNotebook_press();
+					},
+					color: '#9b59b6',
+					icon: 'md-checkbox-outline',
+				});
+
 				buttons.push({
 					title: _('New to-do'),
 					onPress: () => {
