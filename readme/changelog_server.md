@@ -1,6 +1,6 @@
 # Joplin Server Changelog
 
-## [server-v2.3.2-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.3.2-beta) (Pre-release) - 2021-08-12T16:26:23Z
+## [server-v2.3.3-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.3.3-beta) (Pre-release) - 2021-08-13T09:14:40Z
 
 - Improved: Allow setting email key to prevent the same email to be sent multiple times (391204c)
 - Improved: Clarify beta transition message (c4fcfec)
