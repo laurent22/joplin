@@ -1,5 +1,9 @@
 # Joplin Android app changelog
 
+## [android-v2.3.3](https://github.com/laurent22/joplin/releases/tag/android-v2.3.3) (Pre-release) - 2021-08-12T20:46:15Z
+
+- Improved: Improved E2EE usability by making its state a property of the sync target (#5276)
+
 ## [android-v2.2.5](https://github.com/laurent22/joplin/releases/tag/android-v2.2.5) (Pre-release) - 2021-08-11T10:54:38Z
 
 - Revert "Plugins: Add ability to make dialogs fit the application window (#5219)" as it breaks several plugin webviews.
