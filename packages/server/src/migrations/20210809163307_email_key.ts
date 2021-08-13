@@ -6,9 +6,9 @@ export async function up(db: DbConnection): Promise<any> {
 		table.text('key', 'mediumtext').defaultTo('').notNullable();
 	});
 
-	await db.schema.alterTable('emails', function(table: Knex.CreateTableBuilder) {
-		table.unique(['recipient_email', 'key']);
-	});
+	// await db.schema.alterTable('emails', function(table: Knex.CreateTableBuilder) {
+	// 	table.unique(['recipient_email', 'key']);
+	// });
 }
 
 export async function down(_db: DbConnection): Promise<any> {
