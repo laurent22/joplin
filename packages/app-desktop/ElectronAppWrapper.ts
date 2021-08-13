@@ -30,12 +30,14 @@ export default class ElectronAppWrapper {
 	private buildDir_: string = null;
 	private rendererProcessQuitReply_: RendererProcessQuitReply = null;
 	private pluginWindows_: PluginWindows = {};
+	private initialUrl_: string = null;
 
-	constructor(electronApp: any, env: string, profilePath: string, isDebugMode: boolean) {
+	constructor(electronApp: any, env: string, profilePath: string, isDebugMode: boolean, initialUrl: string) {
 		this.electronApp_ = electronApp;
 		this.env_ = env;
 		this.isDebugMode_ = isDebugMode;
 		this.profilePath_ = profilePath;
+		this.initialUrl_ = initialUrl;
 	}
 
 	electronApp() {
@@ -183,6 +185,8 @@ export default class ElectronAppWrapper {
 				// save the response and try quit again.
 				this.rendererProcessQuitReply_ = args;
 				this.electronApp_.quit();
+			} else if (message === 'getInitialUrl' && this.initialUrl_) {
+				this.openUrl(this.initialUrl_);
 			}
 		});
 
@@ -328,7 +332,7 @@ export default class ElectronAppWrapper {
 			win.focus();
 			if (process.platform !== 'darwin') {
 				const url = argv.find((arg) => arg.startsWith('joplin://'));
-				if (url) this.onUrl(url);
+				if (url) this.openUrl(url);
 			}
 		});
 
@@ -358,11 +362,11 @@ export default class ElectronAppWrapper {
 		});
 
 		this.electronApp_.on('open-url', (_event: any, url: string) => {
-			this.onUrl(url);
-		});
+			this.openUrl(url);
+		});	
 	}
 
-	async onUrl(url: string) {
+	async openUrl(url: string) {
 		this.win_.webContents.send('asynchronous-message', 'openUrl', {
 			url: url,
 		});

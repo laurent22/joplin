@@ -185,6 +185,15 @@ class MainScreenComponent extends React.Component<Props, State> {
 		this.layoutModeListenerKeyDown = this.layoutModeListenerKeyDown.bind(this);
 
 		window.addEventListener('resize', this.window_resize);
+
+		ipcRenderer.on('asynchronous-message', (_event: any, message: string, args: any) => {
+			if (message === 'openUrl') {
+				console.log(`openUrl ${args.url}`);
+				const noteId = (args.url as string).substring('joplin://'.length);
+				CommandService.instance().execute('openNote', noteId);
+			}
+		});		
+		ipcRenderer.send('asynchronous-message', 'getInitialUrl');
 	}
 
 	private updateLayoutPluginViews(layout: LayoutItem, plugins: PluginStates) {

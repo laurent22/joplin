@@ -41,7 +41,6 @@ import RevisionService from '@joplin/lib/services/RevisionService';
 import MigrationService from '@joplin/lib/services/MigrationService';
 import { loadCustomCss, injectCustomStyles } from '@joplin/lib/CssUtils';
 // import  populateDatabase from '@joplin/lib/services/debug/populateDatabase';
-const ipcRenderer = require('electron').ipcRenderer;
 
 const commands = [
 	require('./gui/MainScreen/commands/editAlarm'),
@@ -162,14 +161,6 @@ class Application extends BaseApplication {
 		super();
 
 		this.bridge_nativeThemeUpdated = this.bridge_nativeThemeUpdated.bind(this);
-
-		ipcRenderer.on('asynchronous-message', (_event: any, message: string, args: any) => {
-			if (message === 'openUrl') {
-				const noteId = (args.url as string).substring('joplin://'.length);
-				CommandService.instance().execute('openNote', noteId);
-			}
-		});
-
 	}
 
 	hasGui() {
