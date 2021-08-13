@@ -328,8 +328,8 @@ export default class ElectronAppWrapper {
 			win.focus();
 			if (process.platform !== 'darwin') {
 				const url = argv.find((arg) => arg.startsWith('joplin://'));
-				if (!!url) this.onUrl(url)
-			}				
+				if (url) this.onUrl(url);
+			}
 		});
 
 		return false;
