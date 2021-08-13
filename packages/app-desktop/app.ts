@@ -166,20 +166,7 @@ class Application extends BaseApplication {
 		ipcRenderer.on('asynchronous-message', (_event: any, message: string, args: any) => {
 			if (message === 'openUrl') {
 				const noteId = (args.url as string).substring('joplin://'.length);
-				console.log(`open note ${noteId}`);
-
 				CommandService.instance().execute('openNote', noteId);
-				// const item = Note
-				// this.store().dispatch({
-				// 	type: 'FOLDER_AND_NOTE_SELECT',
-				// 	folderId: item.parent_id,
-				// 	noteId: item.id,
-				// });				
-				// this.store().dispatch({
-				// 	type: 'NAV_GO',
-				// 	routeName: 'Note',
-				// 	noteId: noteId,
-				// });
 			}
 		});
 
