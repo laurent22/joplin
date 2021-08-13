@@ -1,5 +1,9 @@
 # Joplin Server Changelog
 
+## [server-v2.3.7-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.3.7-beta) (Pre-release) - 2021-08-13T21:20:17Z
+
+- Fixed: Fix migrations (a9961ae)
+
 ## [server-v2.3.6-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.3.6-beta) (Pre-release) - 2021-08-13T20:59:41Z
 
 - Fixed: Fix migrations (f518549)
