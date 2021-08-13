@@ -61,7 +61,7 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 		}
 	}
 
-	trimAnchorLink(link: string) {
+	private trimAnchorLink(link: string) {
 		if (link.indexOf('#') <= 0) return link;
 
 		const splitted = link.split('#');
@@ -112,6 +112,9 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 
 	async importFile(filePath: string, parentFolderId: string) {
 		if (this.importedNotes[filePath]) return this.importedNotes[filePath];
+		// TODO: Always create note here (to get an ID) and then fill in the body later
+		// registering this here will prevent an infinite loop when running
+		// into notes with cyclical references
 		this.importedNotes[filePath] = { message: 'Note building in progress' };
 		const stat = await shim.fsDriver().stat(filePath);
 		if (!stat) throw new Error(`Cannot read ${filePath}`);

@@ -110,7 +110,7 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 		}
 	}
 
-	async getNoteExportContent_(modNote: NoteEntity) {
+	private async getNoteExportContent_(modNote: NoteEntity) {
 		return await Note.serializeForEdit(modNote);
 	}
 
@@ -137,29 +137,29 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 		}
 	}
 
-	async findReasonableFilename(_resource: any, filePath: string) {
+	private async findReasonableFilename(resource: any, filePath: string) {
 		let fileName = basename(filePath);
 
-		if (_resource.filename) {
-			fileName = _resource.filename;
-		} else if (_resource.title) {
-			fileName = friendlySafeFilename(_resource.title);
+		if (resource.filename) {
+			fileName = resource.filename;
+		} else if (resource.title) {
+			fileName = friendlySafeFilename(resource.title);
 		}
 
 		// Fall back on the resource filename saved in the users resource folder
 		return fileName;
 	}
 
-	async processResource(_resource: any, filePath: string) {
+	async processResource(resource: any, filePath: string) {
 		const context = this.context();
 		if (!context.destResourcePaths) context.destResourcePaths = {};
 
-		const fileName = await this.findReasonableFilename(_resource, filePath);
+		const fileName = await this.findReasonableFilename(resource, filePath);
 		let destResourcePath = `${this.resourceDir_}/${fileName}`;
 		destResourcePath = await shim.fsDriver().findUniqueFilename(destResourcePath, Object.values(context.destResourcePaths), true);
 		await shim.fsDriver().copy(filePath, destResourcePath);
 
-		context.destResourcePaths[_resource.id] = destResourcePath;
+		context.destResourcePaths[resource.id] = destResourcePath;
 		this.updateContext(context);
 	}
 
