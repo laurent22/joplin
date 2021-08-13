@@ -8,6 +8,8 @@ import JoplinViews from './JoplinViews';
 import JoplinInterop from './JoplinInterop';
 import JoplinSettings from './JoplinSettings';
 import JoplinContentScripts from './JoplinContentScripts';
+import JoplinClipboard from './JoplinClipboard';
+import JoplinWindow from './JoplinWindow';
 /**
  * This is the main entry point to the Joplin API. You can access various services using the provided accessors.
  *
@@ -33,8 +35,12 @@ export default class Joplin {
     private interop_;
     private settings_;
     private contentScripts_;
+    private clipboard_;
+    private window_;
     constructor(implementation: any, plugin: Plugin, store: any);
     get data(): JoplinData;
+    get clipboard(): JoplinClipboard;
+    get window(): JoplinWindow;
     get plugins(): JoplinPlugins;
     get workspace(): JoplinWorkspace;
     get contentScripts(): JoplinContentScripts;

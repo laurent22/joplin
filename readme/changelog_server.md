@@ -1,5 +1,35 @@
 # Joplin Server Changelog
 
+## [server-v2.3.2-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.3.2-beta) (Pre-release) - 2021-08-12T16:26:23Z
+
+- Improved: Allow setting email key to prevent the same email to be sent multiple times (391204c)
+- Improved: Clarify beta transition message (c4fcfec)
+- Improved: Disable upload for accounts with subscription failed payments (f14c74d)
+- Improved: Re-enable account when subscription is paid (4b5318c)
+- Improved: Set better filename and mime type for files downloaded via published notes (#5286)
+- Fixed: Fixed publishing of notes with HTML markup type (97726b0)
+- Fixed: Fix regression (6359c9c)
+- Fixed: Fixed layout of notes on mobile devices (#5269)
+
+## [server-v2.2.11-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.2.11-beta) (Pre-release) - 2021-08-03T18:48:00Z
+
+- Improved: Disable beta account once expired (785248b)
+- Improved: Handle beta user upgrade (8910c87)
+- Improved: Prevent duplicate Stripe subscriptions and improved Stripe workflow testing (6ac22ed)
+- Fixed: Fixed support emails (724aa72)
+
+## [server-v2.2.10](https://github.com/laurent22/joplin/releases/tag/server-v2.2.10) - 2021-08-01T10:04:53Z
+
+- Improved: Allows providing a coupon when creating the Stripe checkout session (b5b6111)
+
+## [server-v2.2.9-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.2.9-beta) (Pre-release) - 2021-07-31T13:52:53Z
+
+- New: Add Docker major, minor and beta version tags (#5237 by [@JackGruber](https://github.com/JackGruber))
+- New: Add support for Stripe yearly subscriptions (f2547fe)
+- Improved: Improve installation instructions (53b4d7a)
+- Fixed: Fixed certain URLs (282f782)
+- Fixed: Published notes that contain non-alphabetical characters could end up being truncated (#5229)
+
 ## [server-v2.2.8-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.2.8-beta) (Pre-release) - 2021-07-24T16:55:58Z
 
 - New: Added form tokens to prevent CSRF attacks (19b45de)

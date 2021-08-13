@@ -29,10 +29,6 @@ class NoteSearchBarComponent extends React.Component {
 		return style;
 	}
 
-	componentDidMount() {
-		this.refs.searchInput.focus();
-	}
-
 	buttonIconComponent(iconName, clickHandler, isEnabled) {
 		const theme = themeStyle(this.props.themeId);
 

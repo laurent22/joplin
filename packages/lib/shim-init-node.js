@@ -154,7 +154,7 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 			}
 
 			if (!mustResize) {
-				shim.fsDriver().copy(filePath, targetPath);
+				await shim.fsDriver().copy(filePath, targetPath);
 				return true;
 			}
 

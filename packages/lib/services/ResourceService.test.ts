@@ -2,14 +2,14 @@ import time from '../time';
 import NoteResource from '../models/NoteResource';
 import ResourceService from '../services/ResourceService';
 import shim from '../shim';
-
-const { resourceService, decryptionWorker, supportDir, encryptionService, loadEncryptionMasterKey, allSyncTargetItemsEncrypted, setupDatabaseAndSynchronizer, db, synchronizer, switchClient } = require('../testing/test-utils.js');
+import { resourceService, decryptionWorker, supportDir, encryptionService, loadEncryptionMasterKey, allSyncTargetItemsEncrypted, setupDatabaseAndSynchronizer, db, synchronizer, switchClient } from '../testing/test-utils';
 import Folder from '../models/Folder';
 import Note from '../models/Note';
 import Resource from '../models/Resource';
 import SearchEngine from '../services/searchengine/SearchEngine';
+import { loadMasterKeysFromSettings, setupAndEnableEncryption } from './e2ee/utils';
 
-describe('services_ResourceService', function() {
+describe('services/ResourceService', function() {
 
 	beforeEach(async (done) => {
 		await setupDatabaseAndSynchronizer(1);
@@ -139,8 +139,8 @@ describe('services_ResourceService', function() {
 		// Eventually R1 is deleted because service thinks that it was at some point associated with a note, but no longer.
 
 		const masterKey = await loadEncryptionMasterKey();
-		await encryptionService().enableEncryption(masterKey, '123456');
-		await encryptionService().loadMasterKeysFromSettings();
+		await setupAndEnableEncryption(encryptionService(), masterKey, '123456');
+		await loadMasterKeysFromSettings(encryptionService());
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 		await shim.attachFileToNote(note1, `${supportDir}/photo.jpg`); // R1
@@ -151,8 +151,8 @@ describe('services_ResourceService', function() {
 		await switchClient(2);
 
 		await synchronizer().start();
-		await encryptionService().enableEncryption(masterKey, '123456');
-		await encryptionService().loadMasterKeysFromSettings();
+		await setupAndEnableEncryption(encryptionService(), masterKey, '123456');
+		await loadMasterKeysFromSettings(encryptionService());
 		await decryptionWorker().start();
 		{
 			const n1 = await Note.load(note1.id);

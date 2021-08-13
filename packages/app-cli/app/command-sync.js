@@ -187,6 +187,7 @@ class Command extends BaseCommand {
 				try {
 					const migrationHandler = new MigrationHandler(
 						sync.api(),
+						reg.db(),
 						sync.lockHandler(),
 						Setting.value('appType'),
 						Setting.value('clientId')

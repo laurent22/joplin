@@ -1,4 +1,5 @@
 import { LoggerWrapper } from '@joplin/lib/Logger';
+import { StripePublicConfig } from '@joplin/lib/utils/joplinCloud';
 import * as Koa from 'koa';
 import { DbConnection, User, Uuid } from '../db';
 import { Models } from '../models/factory';
@@ -75,14 +76,8 @@ export interface MailerConfig {
 	noReplyEmail: string;
 }
 
-export interface StripePublicConfig {
-	publishableKey: string;
-	basicPriceId: string;
-	proPriceId: string;
-	webhookBaseUrl: string;
-}
-
 export interface StripeConfig extends StripePublicConfig {
+	enabled: boolean;
 	secretKey: string;
 	webhookSecret: string;
 }
@@ -110,6 +105,7 @@ export interface Config {
 	mailer: MailerConfig;
 	stripe: StripeConfig;
 	supportEmail: string;
+	supportName: string;
 	businessEmail: string;
 	isJoplinCloud: boolean;
 }

@@ -52,6 +52,13 @@ export default class EmailService extends BaseService {
 			};
 		}
 
+		if (senderId === EmailSender.Support) {
+			return {
+				name: this.config.supportName,
+				email: this.config.supportEmail,
+			};
+		}
+
 		throw new Error(`Invalid sender ID: ${senderId}`);
 	}
 

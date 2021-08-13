@@ -4,6 +4,7 @@ import shim from './shim';
 import BaseService from './services/BaseService';
 import reducer, { setStore } from './reducer';
 import KeychainServiceDriver from './services/keychain/KeychainServiceDriver.node';
+import KeychainServiceDriverDummy from './services/keychain/KeychainServiceDriver.dummy';
 import { _, setLocale } from './locale';
 import KvStore from './services/KvStore';
 import SyncTargetJoplinServer from './SyncTargetJoplinServer';
@@ -49,11 +50,17 @@ import handleSyncStartupOperation from './services/synchronizer/utils/handleSync
 import SyncTargetJoplinCloud from './SyncTargetJoplinCloud';
 const { toSystemSlashes } = require('./path-utils');
 const { setAutoFreeze } = require('immer');
+import { getEncryptionEnabled } from './services/synchronizer/syncInfoUtils';
+import { loadMasterKeysFromSettings } from './services/e2ee/utils';
 
 const appLogger: LoggerWrapper = Logger.create('App');
 
 // const ntpClient = require('./vendor/ntp-client');
 // ntpClient.dgram = require('dgram');
+
+interface StartOptions {
+	keychainEnabled?: boolean;
+}
 
 export default class BaseApplication {
 
@@ -423,9 +430,18 @@ export default class BaseApplication {
 					syswidecas.addCAs(f);
 				}
 			},
-			'encryption.enabled': async () => {
+
+			// Note: this used to run when "encryption.enabled" was changed, but
+			// now we run it anytime any property of the sync target info is
+			// changed. This is not optimal but:
+			// - The sync target info rarely changes.
+			// - All the calls below are cheap or do nothing if there's nothing
+			//   to do.
+			'syncInfoCache': async () => {
 				if (this.hasGui()) {
-					await EncryptionService.instance().loadMasterKeysFromSettings();
+					appLogger.info('"syncInfoCache" was changed - setting up encryption related code');
+
+					await loadMasterKeysFromSettings(EncryptionService.instance());
 					void DecryptionWorker.instance().scheduleStart();
 					const loadedMasterKeyIds = EncryptionService.instance().loadedMasterKeyIds();
 
@@ -439,6 +455,7 @@ export default class BaseApplication {
 					void reg.scheduleSync();
 				}
 			},
+
 			'sync.interval': async () => {
 				if (this.hasGui()) reg.setupRecurrentSync();
 			},
@@ -446,8 +463,7 @@ export default class BaseApplication {
 
 		sideEffects['timeFormat'] = sideEffects['dateFormat'];
 		sideEffects['locale'] = sideEffects['dateFormat'];
-		sideEffects['encryption.activeMasterKeyId'] = sideEffects['encryption.enabled'];
-		sideEffects['encryption.passwordCache'] = sideEffects['encryption.enabled'];
+		sideEffects['encryption.passwordCache'] = sideEffects['syncInfoCache'];
 
 		if (action) {
 			const effect = sideEffects[action.key];
@@ -655,7 +671,12 @@ export default class BaseApplication {
 		return toSystemSlashes(output, 'linux');
 	}
 
-	async start(argv: string[]): Promise<any> {
+	async start(argv: string[], options: StartOptions = null): Promise<any> {
+		options = {
+			keychainEnabled: true,
+			...options,
+		};
+
 		const startFlags = await this.handleStartFlags_(argv);
 
 		argv = startFlags.argv;
@@ -677,7 +698,6 @@ export default class BaseApplication {
 
 		Setting.setConstant('env', initArgs.env);
 		Setting.setConstant('profileDir', profileDir);
-		Setting.setConstant('templateDir', `${profileDir}/templates`);
 		Setting.setConstant('resourceDirName', resourceDirName);
 		Setting.setConstant('resourceDir', resourceDir);
 		Setting.setConstant('tempDir', tempDir);
@@ -745,7 +765,7 @@ export default class BaseApplication {
 		reg.setDb(this.database_);
 		BaseModel.setDb(this.database_);
 
-		await loadKeychainServiceAndSettings(KeychainServiceDriver);
+		await loadKeychainServiceAndSettings(options.keychainEnabled ? KeychainServiceDriver : KeychainServiceDriverDummy);
 		await handleSyncStartupOperation();
 
 		appLogger.info(`Client ID: ${Setting.value('clientId')}`);
@@ -782,7 +802,7 @@ export default class BaseApplication {
 			// and if encryption is enabled. This code runs only when shouldReencrypt = -1
 			// which can be set by a maintenance script for example.
 			const folderCount = await Folder.count();
-			const itShould = Setting.value('encryption.enabled') && !!folderCount ? Setting.SHOULD_REENCRYPT_YES : Setting.SHOULD_REENCRYPT_NO;
+			const itShould = getEncryptionEnabled() && !!folderCount ? Setting.SHOULD_REENCRYPT_YES : Setting.SHOULD_REENCRYPT_NO;
 			Setting.setValue('encryption.shouldReencrypt', itShould);
 		}
 
@@ -809,7 +829,7 @@ export default class BaseApplication {
 		DecryptionWorker.instance().setLogger(globalLogger);
 		DecryptionWorker.instance().setEncryptionService(EncryptionService.instance());
 		DecryptionWorker.instance().setKvStore(KvStore.instance());
-		await EncryptionService.instance().loadMasterKeysFromSettings();
+		await loadMasterKeysFromSettings(EncryptionService.instance());
 		DecryptionWorker.instance().on('resourceMetadataButNotBlobDecrypted', this.decryptionWorker_resourceMetadataButNotBlobDecrypted);
 
 		ResourceFetcher.instance().setFileApi(() => {

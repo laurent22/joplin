@@ -24,7 +24,7 @@ export interface RenderResultPluginAsset {
 export interface RenderResult {
 	html: string;
 	pluginAssets: RenderResultPluginAsset[];
-	cssStrings?: string[];
+	cssStrings: string[];
 }
 
 export interface OptionsResourceModel {

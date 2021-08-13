@@ -18,10 +18,12 @@
 						<a class="navbar-item" href="{{{global.baseUrl}}}/changes">Log</a>
 					</div>
 					<div class="navbar-end">
-						<a class="navbar-item" href="{{{global.baseUrl}}}/users/me">{{global.userDisplayName}}</a>
+						<div class="navbar-item">
+							<a class="button is-info navbar-item" href="{{{global.baseUrl}}}/users/me">{{global.userDisplayName}}</a>
+						</div>
 						<div class="navbar-item">
 							<form method="post" action="{{{global.baseUrl}}}/logout">
-								<button class="button is-primary">Logout</button>
+								<button class="button is-dark">Logout</button>
 							</form>
 						</div>
 					</div>

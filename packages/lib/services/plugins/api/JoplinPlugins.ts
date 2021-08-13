@@ -54,7 +54,7 @@ export default class JoplinPlugins {
 	 * @deprecated Use joplin.contentScripts.register()
 	 */
 	public async registerContentScript(type: ContentScriptType, id: string, scriptPath: string) {
-		this.plugin.deprecationNotice('1.8', 'joplin.plugins.registerContentScript() is deprecated in favour of joplin.contentScripts.register()');
+		this.plugin.deprecationNotice('1.8', 'joplin.plugins.registerContentScript() is deprecated in favour of joplin.contentScripts.register()', true);
 		return this.plugin.registerContentScript(type, id, scriptPath);
 	}
 

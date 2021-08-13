@@ -23,13 +23,17 @@ interface State {
 	pluginInfos: PluginInfo[];
 }
 
-interface Props {}
+interface Props {
+	message?: string;
+}
 
 export default class ErrorBoundary extends React.Component<Props, State> {
 
 	public state: State = { error: null, errorInfo: null, pluginInfos: [] };
 
-	componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+	componentDidCatch(error: any, errorInfo: ErrorInfo) {
+		if (typeof error === 'string') error = { message: error };
+
 		const pluginInfos: PluginInfo[] = [];
 		try {
 			const service = PluginService.instance();
@@ -59,6 +63,11 @@ export default class ErrorBoundary extends React.Component<Props, State> {
 		};
 
 		ipcRenderer.on('appClose', onAppClose);
+	}
+
+	renderMessage() {
+		const message = this.props.message || 'Joplin encountered a fatal error and could not continue.';
+		return <p>{message}</p>;
 	}
 
 	render() {
@@ -118,8 +127,9 @@ export default class ErrorBoundary extends React.Component<Props, State> {
 				return (
 					<div style={{ overflow: 'auto', fontFamily: 'sans-serif', padding: '5px 20px' }}>
 						<h1>Error</h1>
-						<p>Joplin encountered a fatal error and could not continue. To report the error, please copy the *entire content* of this page and post it on Joplin forum or GitHub.</p>
-						<p>To continue you may close the app. Alternatively, if the error persists you may try to <a href="#" onClick={safeMode_click}>restart in safe mode</a>, which will temporarily disable all plugins.</p>
+						{this.renderMessage()}
+						<p>To report the error, please copy the *entire content* of this page and post it on Joplin forum or GitHub.</p>
+						<p>If the error persists you may try to <a href="#" onClick={safeMode_click}>restart in safe mode</a>, which will temporarily disable all plugins.</p>
 						{output}
 					</div>
 				);

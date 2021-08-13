@@ -12,6 +12,19 @@ import { confirmUrl, resetPasswordUrl } from '../utils/urlUtils';
 import { checkRepeatPassword, CheckRepeatPasswordInput } from '../routes/index/users';
 import accountConfirmationTemplate from '../views/emails/accountConfirmationTemplate';
 import resetPasswordTemplate from '../views/emails/resetPasswordTemplate';
+import { betaStartSubUrl, betaUserDateRange, betaUserTrialPeriodDays, isBetaUser, stripeConfig } from '../utils/stripe';
+import endOfBetaTemplate from '../views/emails/endOfBetaTemplate';
+import Logger from '@joplin/lib/Logger';
+import paymentFailedUploadDisabledTemplate from '../views/emails/paymentFailedUploadDisabledTemplate';
+
+const logger = Logger.create('UserModel');
+
+interface UserEmailDetails {
+	sender_id: EmailSender;
+	recipient_id: Uuid;
+	recipient_email: string;
+	recipient_name: string;
+}
 
 export enum AccountType {
 	Default = 0,
@@ -112,6 +125,7 @@ export default class UserModel extends BaseModel<User> {
 		if ('max_item_size' in object) user.max_item_size = object.max_item_size;
 		if ('max_total_item_size' in object) user.max_total_item_size = object.max_total_item_size;
 		if ('can_share_folder' in object) user.can_share_folder = object.can_share_folder;
+		if ('can_upload' in object) user.can_upload = object.can_upload;
 		if ('account_type' in object) user.account_type = object.account_type;
 		if ('must_set_password' in object) user.must_set_password = object.must_set_password;
 
@@ -261,16 +275,22 @@ export default class UserModel extends BaseModel<User> {
 		await this.save({ id: user.id, email_confirmed: 1 });
 	}
 
+	private userEmailDetails(user: User): UserEmailDetails {
+		return {
+			sender_id: EmailSender.NoReply,
+			recipient_id: user.id,
+			recipient_email: user.email,
+			recipient_name: user.full_name || '',
+		};
+	}
+
 	public async sendAccountConfirmationEmail(user: User) {
 		const validationToken = await this.models().token().generate(user.id);
 		const url = encodeURI(confirmUrl(user.id, validationToken));
 
 		await this.models().email().push({
 			...accountConfirmationTemplate({ url }),
-			sender_id: EmailSender.NoReply,
-			recipient_id: user.id,
-			recipient_email: user.email,
-			recipient_name: user.full_name || '',
+			...this.userEmailDetails(user),
 		});
 	}
 
@@ -283,10 +303,7 @@ export default class UserModel extends BaseModel<User> {
 
 		await this.models().email().push({
 			...resetPasswordTemplate({ url }),
-			sender_id: EmailSender.NoReply,
-			recipient_id: user.id,
-			recipient_email: user.email,
-			recipient_name: user.full_name || '',
+			...this.userEmailDetails(user),
 		});
 	}
 
@@ -295,6 +312,75 @@ export default class UserModel extends BaseModel<User> {
 		const user = await this.models().token().userFromToken(token);
 		await this.models().user().save({ id: user.id, password: fields.password });
 		await this.models().token().deleteByValue(user.id, token);
+	}
+
+	// public async disableUnpaidAccounts() {
+
+	// }
+
+	public async handleBetaUserEmails() {
+		if (!stripeConfig().enabled) return;
+
+		const range = betaUserDateRange();
+
+		const betaUsers = await this
+			.db('users')
+			.select(['id', 'email', 'full_name', 'account_type', 'created_time'])
+			.where('created_time', '>=', range[0])
+			.andWhere('created_time', '<=', range[1]);
+
+		const reminderIntervals = [14, 3, 0];
+
+		for (const user of betaUsers) {
+			if (!(await isBetaUser(this.models(), user.id))) continue;
+
+			const remainingDays = betaUserTrialPeriodDays(user.created_time, 0, 0);
+
+			for (const reminderInterval of reminderIntervals) {
+				if (remainingDays <= reminderInterval) {
+					const sentKey = `betaUser::emailSent::${reminderInterval}::${user.id}`;
+
+					if (!(await this.models().keyValue().value(sentKey))) {
+						await this.models().email().push({
+							...endOfBetaTemplate({
+								expireDays: remainingDays,
+								startSubUrl: betaStartSubUrl(user.email, user.account_type),
+							}),
+							...this.userEmailDetails(user),
+						});
+
+						await this.models().keyValue().setValue(sentKey, 1);
+					}
+				}
+			}
+
+			if (remainingDays <= 0) {
+				await this.save({ id: user.id, can_upload: 0 });
+			}
+		}
+	}
+
+	public async handleFailedPaymentSubscriptions() {
+		const subscriptions = await this.models().subscription().shouldDisableUploadSubscriptions();
+		const users = await this.loadByIds(subscriptions.map(s => s.user_id));
+
+		await this.withTransaction(async () => {
+			for (const sub of subscriptions) {
+				const user = users.find(u => u.id === sub.user_id);
+				if (!user) {
+					logger.error(`Could not find user for subscription ${sub.id}`);
+					continue;
+				}
+
+				await this.save({ id: user.id, can_upload: 0 });
+
+				await this.models().email().push({
+					...paymentFailedUploadDisabledTemplate(),
+					...this.userEmailDetails(user),
+					key: `payment_failed_upload_disabled_${sub.last_payment_failed_time}`,
+				});
+			}
+		});
 	}
 
 	private formatValues(user: User): User {

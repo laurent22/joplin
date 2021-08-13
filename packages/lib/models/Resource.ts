@@ -13,6 +13,7 @@ const { filename, safeFilename } = require('../path-utils');
 const { FsDriverDummy } = require('../fs-driver-dummy.js');
 import JoplinError from '../JoplinError';
 import itemCanBeEncrypted from './utils/itemCanBeEncrypted';
+import { getEncryptionEnabled } from '../services/synchronizer/syncInfoUtils';
 
 export default class Resource extends BaseItem {
 
@@ -196,7 +197,7 @@ export default class Resource extends BaseItem {
 	public static async fullPathForSyncUpload(resource: ResourceEntity) {
 		const plainTextPath = this.fullPath(resource);
 
-		if (!Setting.value('encryption.enabled') || !itemCanBeEncrypted(resource as any)) {
+		if (!getEncryptionEnabled() || !itemCanBeEncrypted(resource as any)) {
 			// Normally not possible since itemsThatNeedSync should only return decrypted items
 			if (resource.encryption_blob_encrypted) throw new Error('Trying to access encrypted resource but encryption is currently disabled');
 			return { path: plainTextPath, resource: resource };
@@ -389,15 +390,31 @@ export default class Resource extends BaseItem {
 		return newResource;
 	}
 
-	static async createConflictResourceNote(resource: ResourceEntity) {
-		const Note = this.getClass('Note');
+	public static async resourceConflictFolderId(): Promise<string> {
+		const folder = await this.resourceConflictFolder();
+		return folder.id;
+	}
 
+	private static async resourceConflictFolder(): Promise<any> {
+		const conflictFolderTitle = _('Conflicts (attachments)');
+		const Folder = this.getClass('Folder');
+
+		const folder = await Folder.loadByTitle(conflictFolderTitle);
+		if (!folder || folder.parent_id) {
+			return Folder.save({ title: conflictFolderTitle });
+		}
+
+		return folder;
+	}
+
+	public static async createConflictResourceNote(resource: ResourceEntity) {
+		const Note = this.getClass('Note');
 		const conflictResource = await Resource.duplicateResource(resource.id);
 
 		await Note.save({
 			title: _('Attachment conflict: "%s"', resource.title),
 			body: _('There was a [conflict](%s) on the attachment below.\n\n%s', 'https://joplinapp.org/conflict/', Resource.markdownTag(conflictResource)),
-			is_conflict: 1,
+			parent_id: await this.resourceConflictFolderId(),
 		}, { changeSource: ItemChange.SOURCE_SYNC });
 	}
 

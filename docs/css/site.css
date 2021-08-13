@@ -24,6 +24,10 @@ a {
 	padding-bottom: 225px;
 }
 
+.help-page-container img {
+	margin-bottom: 1rem;
+}
+
 .press-carousel .photo {
 	width: 123px;
 	height: 136px;
@@ -84,6 +88,12 @@ a {
 .light-blue,
 .light-blue * {
 	color: #90b1d9;
+}
+
+blockquote {
+    border-left: .25em solid #e0e0e0;
+    padding: 0 1em;
+    opacity: .7;
 }
 
 .img-center {
@@ -410,6 +420,11 @@ p,
 	background-position: left;
 	background-repeat: no-repeat;
 	background-size: contain;
+}
+
+#work-together-section .frame-bg {
+	background-size: 100% 50%;
+	padding-bottom: 5px;
 }
 
 /* save-web-section  */
@@ -781,7 +796,7 @@ footer .right-links a {
 	}
 
 	#top-section,
-	.page-container {
+	.help-page-container {
 		padding-top: 80px;
 	}
 
@@ -831,7 +846,7 @@ footer .right-links a {
 	margin-bottom: 0;
 }
 
-.page-container {
+.help-page-container {
 	padding-top: 90px;
 	padding-bottom: 50px;
 }
@@ -848,7 +863,7 @@ footer .right-links a {
 	padding: 30px 20px;
 	padding-bottom: 30px;
 	margin-bottom: 50px;
-	margin-top: 60px;
+	margin-top: 40px;
 }
 
 .price-container p {
@@ -871,7 +886,7 @@ footer .right-links a {
 .price-container-blue {
 	background: linear-gradient(251.85deg, #0b4f99 -11.85%, #002d61 104.73%);
 	box-shadow: 0px 4px 16px rgba(105, 132, 172, 0.13);
-	margin-top: 40px;
+	margin-top: 30px;
 	padding-top: 50px;
 	color: white;
 }
@@ -884,6 +899,44 @@ footer .right-links a {
 	display: flex;
 	flex-direction: row;
 	margin-bottom: 1em;
+}
+
+.plan-group {
+	justify-content: center;
+}
+
+.plan-group .plan-price-yearly-per-year {
+	display: flex;
+	justify-content: flex-end;
+	margin-top: -20px;
+	margin-bottom: 10px;
+}
+
+.plan-group .plan-price-yearly-per-year .per-year {
+	bottom: 0;
+}
+
+.plan-group.plan-prices-monthly .plan-price-yearly {
+	display: none;
+}
+
+.plan-group.plan-prices-monthly .plan-price-yearly-per-year {
+	display: none;
+}
+
+.plan-group.plan-prices-yearly .plan-price-monthly {
+	text-decoration: line-through;
+	opacity: 0.7;
+	font-size: 16px;
+	font-weight: normal;
+}
+
+.plan-group.plan-prices-yearly .account-type-3 .plan-price-monthly {
+	display: none;
+}
+
+.plan-group.plan-prices-yearly .plan-price-monthly .per-month {
+	display: none;
 }
 
 .price-row .plan-type {

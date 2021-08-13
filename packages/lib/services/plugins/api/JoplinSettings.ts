@@ -77,7 +77,7 @@ export default class JoplinSettings {
 	 * Registers a new setting.
 	 */
 	public async registerSetting(key: string, settingItem: SettingItem) {
-		this.plugin_.deprecationNotice('1.8', 'joplin.settings.registerSetting() is deprecated in favour of joplin.settings.registerSettings()');
+		this.plugin_.deprecationNotice('1.8', 'joplin.settings.registerSetting() is deprecated in favour of joplin.settings.registerSettings()', true);
 		await this.registerSettings({ [key]: settingItem });
 	}
 

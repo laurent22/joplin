@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 import JoplinServerApi from '@joplin/lib/JoplinServerApi';
 import { _, _n } from '@joplin/lib/locale';
 import Note from '@joplin/lib/models/Note';
-import Setting from '@joplin/lib/models/Setting';
 import DialogButtonRow from './DialogButtonRow';
 import { themeStyle, buildStyle } from '@joplin/lib/theme';
 import { reg } from '@joplin/lib/registry';
@@ -15,6 +14,7 @@ import { NoteEntity } from '@joplin/lib/services/database/types';
 import Button from './Button/Button';
 import { connect } from 'react-redux';
 import { AppState } from '../app';
+import { getEncryptionEnabled } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 const { clipboard } = require('electron');
 
 interface Props {
@@ -210,7 +210,7 @@ export function ShareNoteDialog(props: Props) {
 	};
 
 	function renderEncryptionWarningMessage() {
-		if (!Setting.value('encryption.enabled')) return null;
+		if (!getEncryptionEnabled()) return null;
 		return <div style={theme.textStyle}>{_('Note: When a note is shared, it will no longer be encrypted on the server.')}<hr/></div>;
 	}
 

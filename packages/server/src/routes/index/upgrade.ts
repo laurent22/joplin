@@ -2,10 +2,10 @@ import { SubPath, redirect } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
-import { getFeatureList, getPlans } from '@joplin/lib/utils/joplinCloud';
+import { findPrice, getFeatureList, getPlans, PricePeriod } from '@joplin/lib/utils/joplinCloud';
 import config from '../../config';
 import defaultView from '../../utils/defaultView';
-import { stripeConfig, updateSubscriptionType } from '../../utils/stripe';
+import { stripeConfig, stripePriceIdByUserId, updateSubscriptionType } from '../../utils/stripe';
 import { bodyFields } from '../../utils/requestUtils';
 import { NotificationKey } from '../../models/NotificationModel';
 import { AccountType } from '../../models/UserModel';
@@ -46,13 +46,21 @@ router.get('upgrade', async (_path: SubPath, ctx: AppContext) => {
 		});
 	}
 
+	const priceId = await stripePriceIdByUserId(ctx.joplin.models, ctx.joplin.owner.id);
+	const currentPrice = findPrice(stripeConfig().prices, { priceId });
+	const upgradePrice = findPrice(stripeConfig().prices, {
+		accountType: AccountType.Pro,
+		period: currentPrice.period,
+	});
+
 	const view = defaultView('upgrade', 'Upgrade');
 	view.content = {
 		planRows,
-		basicPrice: plans.basic.price,
-		proPrice: plans.pro.price,
+		basicPrice: currentPrice,
+		proPrice: upgradePrice,
 		postUrl: upgradeUrl(),
 		csrfTag: await createCsrfTag(ctx),
+		showYearlyPrices: currentPrice.period === PricePeriod.Yearly,
 	};
 	view.cssFiles = ['index/upgrade'];
 	return view;

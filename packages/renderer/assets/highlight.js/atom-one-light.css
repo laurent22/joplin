@@ -19,9 +19,6 @@ hue-6-2: #c18401
 */
 
 .hljs {
-  display: block;
-  overflow-x: auto;
-  padding: 0.5em;
   color: #383a42;
   background: #fafafa;
 }
@@ -54,13 +51,8 @@ hue-6-2: #c18401
 .hljs-regexp,
 .hljs-addition,
 .hljs-attribute,
-.hljs-meta-string {
+.hljs-meta .hljs-string {
   color: #50a14f;
-}
-
-.hljs-built_in,
-.hljs-class .hljs-title {
-  color: #c18401;
 }
 
 .hljs-attr,
@@ -81,6 +73,12 @@ hue-6-2: #c18401
 .hljs-selector-id,
 .hljs-title {
   color: #4078f2;
+}
+
+.hljs-built_in,
+.hljs-title.class_,
+.hljs-class .hljs-title {
+  color: #c18401;
 }
 
 .hljs-emphasis {

@@ -1,7 +1,8 @@
 import { rtrimSlashes } from '@joplin/lib/path-utils';
-import { Config, DatabaseConfig, DatabaseConfigClient, Env, MailerConfig, RouteType, StripeConfig, StripePublicConfig } from './utils/types';
+import { Config, DatabaseConfig, DatabaseConfigClient, Env, MailerConfig, RouteType, StripeConfig } from './utils/types';
 import * as pathUtils from 'path';
 import { readFile } from 'fs-extra';
+import { loadStripeConfig, StripePublicConfig } from '@joplin/lib/utils/joplinCloud';
 
 export interface EnvVariables {
 	APP_NAME?: string;
@@ -42,6 +43,8 @@ export interface EnvVariables {
 	ERROR_STACK_TRACES?: string;
 
 	SUPPORT_EMAIL?: string;
+	SUPPORT_NAME?: string;
+
 	BUSINESS_EMAIL?: string;
 }
 
@@ -101,6 +104,7 @@ function mailerConfigFromEnv(env: EnvVariables): MailerConfig {
 function stripeConfigFromEnv(publicConfig: StripePublicConfig, env: EnvVariables): StripeConfig {
 	return {
 		...publicConfig,
+		enabled: !!env.STRIPE_SECRET_KEY,
 		secretKey: env.STRIPE_SECRET_KEY || '',
 		webhookSecret: env.STRIPE_WEBHOOK_SECRET || '',
 	};
@@ -131,10 +135,9 @@ export async function initConfig(envType: Env, env: EnvVariables, overrides: any
 	const rootDir = pathUtils.dirname(__dirname);
 
 	const packageJson = await readPackageJson(`${rootDir}/package.json`);
-	const stripePublicConfigs = JSON.parse(await readFile(`${rootDir}/stripeConfig.json`, 'utf8'));
-	const stripePublicConfig = stripePublicConfigs[envType === Env.BuildTypes ? Env.Dev : envType];
-	if (!stripePublicConfig) throw new Error('Could not load Stripe config');
+	const stripePublicConfig = loadStripeConfig(envType === Env.BuildTypes ? Env.Dev : envType, `${rootDir}/stripeConfig.json`);
 
+	const appName = env.APP_NAME || 'Joplin Server';
 	const viewDir = `${rootDir}/src/views`;
 	const appPort = env.APP_PORT ? Number(env.APP_PORT) : 22300;
 	const baseUrl = baseUrlFromEnv(env, appPort);
@@ -143,7 +146,7 @@ export async function initConfig(envType: Env, env: EnvVariables, overrides: any
 
 	config_ = {
 		appVersion: packageJson.version,
-		appName: env.APP_NAME || 'Joplin Server',
+		appName,
 		isJoplinCloud: apiBaseUrl.includes('.joplincloud.com'),
 		env: envType,
 		rootDir: rootDir,
@@ -163,6 +166,7 @@ export async function initConfig(envType: Env, env: EnvVariables, overrides: any
 		termsEnabled: env.TERMS_ENABLED === '1',
 		accountTypesEnabled: env.ACCOUNT_TYPES_ENABLED === '1',
 		supportEmail,
+		supportName: env.SUPPORT_NAME || appName,
 		businessEmail: env.BUSINESS_EMAIL || supportEmail,
 		...overrides,
 	};
