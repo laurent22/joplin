@@ -22,6 +22,7 @@ class SideMenuContentComponent extends Component {
 
 		this.tagButton_press = this.tagButton_press.bind(this);
 		this.newFolderButton_press = this.newFolderButton_press.bind(this);
+		this.moveNotebookButton_press = this.moveNotebookButton_press.bind(this);
 		this.synchronize_press = this.synchronize_press.bind(this);
 		this.configButton_press = this.configButton_press.bind(this);
 		this.allNotesButton_press = this.allNotesButton_press.bind(this);
@@ -204,6 +205,16 @@ class SideMenuContentComponent extends Component {
 		});
 	}
 
+	moveNotebookButton_press() {
+		this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
+
+		this.props.dispatch({
+			type: 'NAV_GO',
+			routeName: 'MoveNotebook',
+			selectedFolderId: this.props.selectedFolderId,
+		});
+	}
+
 	newFolderButton_press() {
 		this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
 
@@ -308,6 +319,8 @@ class SideMenuContentComponent extends Component {
 		const items = [];
 
 		items.push(this.makeDivider('divider_1'));
+
+		items.push(this.renderSidebarButton('moveNotebook_button', _('Move Notebook'), 'move-outline', this.moveNotebookButton_press));
 
 		items.push(this.renderSidebarButton('newFolder_button', _('New Notebook'), 'md-folder-open', this.newFolderButton_press));
 

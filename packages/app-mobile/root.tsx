@@ -60,6 +60,7 @@ const { TagsScreen } = require('./components/screens/tags.js');
 import ConfigScreen from './components/screens/ConfigScreen';
 const { FolderScreen } = require('./components/screens/folder.js');
 const { LogScreen } = require('./components/screens/log.js');
+const { MoveNotebookScreen } = require('./components/screens/move-notebook.js');
 const { StatusScreen } = require('./components/screens/status.js');
 const { SearchScreen } = require('./components/screens/search.js');
 const { OneDriveLoginScreen } = require('./components/screens/onedrive-login.js');
@@ -812,6 +813,7 @@ class AppComponent extends React.Component {
 			EncryptionConfig: { screen: EncryptionConfigScreen },
 			UpgradeSyncTarget: { screen: UpgradeSyncTargetScreen },
 			Log: { screen: LogScreen },
+			MoveNotebook: { screen: MoveNotebookScreen },
 			Status: { screen: StatusScreen },
 			Search: { screen: SearchScreen },
 			Config: { screen: ConfigScreen },
