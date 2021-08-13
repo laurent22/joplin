@@ -1,5 +1,9 @@
 # Joplin Server Changelog
 
+## [server-v2.3.6-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.3.6-beta) (Pre-release) - 2021-08-13T20:59:41Z
+
+- Fixed: Fix migrations (f518549)
+
 ## [server-v2.3.5-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.3.5-beta) (Pre-release) - 2021-08-13T18:01:20Z
 
 - Fixed: Fixed pagination link styling (d42d181)
