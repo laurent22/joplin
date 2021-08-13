@@ -363,7 +363,9 @@ export default class ElectronAppWrapper {
 	}
 
 	async onUrl(url: string) {
-		console.log(`on url: ${url}`);
+		this.win_.webContents.send('asynchronous-message', 'openUrl', {
+			url: url,
+		});
 	}
 
 }
