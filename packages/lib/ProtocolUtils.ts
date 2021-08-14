@@ -14,7 +14,11 @@ export function getTagUrl(tagId: string) {
 	return `joplin://x-callback-url/openTag?id=${encodeURIComponent(tagId)}`;
 }
 
-export type Command = 'openNote' | 'openFolder' | 'openTag';
+export enum Command {
+    openNote = 'openNote',
+    openFolder = 'openFolder',
+    openTag = 'openTag',
+}
 
 export interface CallbackUrlInfo {
     command: Command;
