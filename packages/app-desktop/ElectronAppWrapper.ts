@@ -60,6 +60,10 @@ export default class ElectronAppWrapper {
 		return this.env_;
 	}
 
+	initialUrl() {
+		return this.initialUrl_;
+	}
+
 	createWindow() {
 		// Set to true to view errors if the application does not start
 		const debugEarlyBugs = this.env_ === 'dev' || this.isDebugMode_;
@@ -185,8 +189,6 @@ export default class ElectronAppWrapper {
 				// save the response and try quit again.
 				this.rendererProcessQuitReply_ = args;
 				this.electronApp_.quit();
-			} else if (message === 'mainScreenReady' && this.initialUrl_) {
-				void this.openUrl(this.initialUrl_);
 			}
 		});
 
