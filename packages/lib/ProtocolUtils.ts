@@ -1,3 +1,7 @@
+export function isCallbackUrl(s: string) {
+	return s.startsWith('joplin://x-callback-url/');
+}
+
 export function getNoteUrl(noteId: string) {
 	return `joplin://x-callback-url/openNote?id=${noteId}`;
 }

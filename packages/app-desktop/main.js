@@ -7,6 +7,7 @@ const Logger = require('@joplin/lib/Logger').default;
 const FsDriverNode = require('@joplin/lib/fs-driver-node').default;
 const envFromArgs = require('@joplin/lib/envFromArgs');
 const packageInfo = require('./packageInfo.js');
+const { isCallbackUrl } = require('@joplin/lib/ProtocolUtils');
 
 // Electron takes the application name from package.json `name` and
 // displays this in the tray icon toolip and message box titles, however in
@@ -44,7 +45,7 @@ if (env === 'dev' && process.platform === 'win32') {
 	electronApp.setAsDefaultProtocolClient('joplin');
 }
 
-const initialUrl = process.argv.find((arg) => arg.startsWith('joplin://'));
+const initialUrl = process.argv.find((arg) => isCallbackUrl(arg));
 
 const wrapper = new ElectronAppWrapper(electronApp, env, profilePath, isDebugMode, initialUrl);
 
