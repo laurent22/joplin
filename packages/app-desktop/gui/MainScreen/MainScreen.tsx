@@ -194,9 +194,9 @@ class MainScreenComponent extends React.Component<Props, State> {
 			}
 		});
 
-		const initialUrl = (bridge().electronApp() as ElectronAppWrapper).initialUrl();
-		if (initialUrl) {
-			this.openUrl(initialUrl);
+		const initialCallbackUrl = (bridge().electronApp() as ElectronAppWrapper).initialCallbackUrl();
+		if (initialCallbackUrl) {
+			this.openUrl(initialCallbackUrl);
 		}
 	}
 

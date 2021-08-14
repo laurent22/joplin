@@ -45,9 +45,9 @@ if (env === 'dev' && process.platform === 'win32') {
 	electronApp.setAsDefaultProtocolClient('joplin');
 }
 
-const initialUrl = process.argv.find((arg) => isCallbackUrl(arg));
+const initialCallbackUrl = process.argv.find((arg) => isCallbackUrl(arg));
 
-const wrapper = new ElectronAppWrapper(electronApp, env, profilePath, isDebugMode, initialUrl);
+const wrapper = new ElectronAppWrapper(electronApp, env, profilePath, isDebugMode, initialCallbackUrl);
 
 initBridge(wrapper);
 

@@ -30,14 +30,14 @@ export default class ElectronAppWrapper {
 	private buildDir_: string = null;
 	private rendererProcessQuitReply_: RendererProcessQuitReply = null;
 	private pluginWindows_: PluginWindows = {};
-	private initialUrl_: string = null;
+	private initialCallbackUrl_: string = null;
 
-	constructor(electronApp: any, env: string, profilePath: string, isDebugMode: boolean, initialUrl: string) {
+	constructor(electronApp: any, env: string, profilePath: string, isDebugMode: boolean, initialCallbackUrl: string) {
 		this.electronApp_ = electronApp;
 		this.env_ = env;
 		this.isDebugMode_ = isDebugMode;
 		this.profilePath_ = profilePath;
-		this.initialUrl_ = initialUrl;
+		this.initialCallbackUrl_ = initialCallbackUrl;
 	}
 
 	electronApp() {
@@ -60,8 +60,8 @@ export default class ElectronAppWrapper {
 		return this.env_;
 	}
 
-	initialUrl() {
-		return this.initialUrl_;
+	initialCallbackUrl() {
+		return this.initialCallbackUrl_;
 	}
 
 	createWindow() {
