@@ -20,6 +20,7 @@ import Logger from '@joplin/lib/Logger';
 import { FolderEntity } from '@joplin/lib/services/database/types';
 import stateToWhenClauseContext from '../../services/commands/stateToWhenClauseContext';
 import { store } from '@joplin/lib/reducer';
+import { getFolderUrl, getTagUrl } from '@joplin/lib/ProtocolUtils';
 const { connect } = require('react-redux');
 const shared = require('@joplin/lib/components/shared/side-menu-shared.js');
 const { themeStyle } = require('@joplin/lib/theme');
@@ -326,10 +327,31 @@ class SidebarComponent extends React.Component<Props, State> {
 			);
 		}
 
+		if (itemType === BaseModel.TYPE_FOLDER) {
+			menu.append(
+				new MenuItem({
+					label: _('Copy folder URL'),
+					click: async () => {
+						const { clipboard } = require('electron');
+						clipboard.writeText(getFolderUrl(itemId));
+					},
+				})
+			);
+		}
+
 		if (itemType === BaseModel.TYPE_TAG) {
 			menu.append(new MenuItem(
 				menuUtils.commandToStatefulMenuItem('renameTag', itemId)
 			));
+			menu.append(
+				new MenuItem({
+					label: _('Copy tag URL'),
+					click: async () => {
+						const { clipboard } = require('electron');
+						clipboard.writeText(getTagUrl(itemId));
+					},
+				})
+			);
 		}
 
 		const pluginViews = pluginUtils.viewsByType(this.pluginsRef.current, 'menuItem');

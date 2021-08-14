@@ -36,6 +36,7 @@ import ShareService from '@joplin/lib/services/share/ShareService';
 import { reg } from '@joplin/lib/registry';
 import removeKeylessItems from '../ResizableLayout/utils/removeKeylessItems';
 import { localSyncInfoFromState } from '@joplin/lib/services/synchronizer/syncInfoUtils';
+import { parseUrl } from '@joplin/lib/ProtocolUtils';
 
 const { connect } = require('react-redux');
 const { PromptDialog } = require('../PromptDialog.min.js');
@@ -189,11 +190,11 @@ class MainScreenComponent extends React.Component<Props, State> {
 		ipcRenderer.on('asynchronous-message', (_event: any, message: string, args: any) => {
 			if (message === 'openUrl') {
 				console.log(`openUrl ${args.url}`);
-				const noteId = (args.url as string).substring('joplin://'.length);
-				CommandService.instance().execute('openNote', noteId);
+				const { command, params } = parseUrl(args.url);
+				void CommandService.instance().execute(command, params.id);
 			}
-		});		
-		ipcRenderer.send('asynchronous-message', 'getInitialUrl');
+		});
+		ipcRenderer.send('asynchronous-message', 'mainScreenReady');
 	}
 
 	private updateLayoutPluginViews(layout: LayoutItem, plugins: PluginStates) {

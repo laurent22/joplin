@@ -185,8 +185,8 @@ export default class ElectronAppWrapper {
 				// save the response and try quit again.
 				this.rendererProcessQuitReply_ = args;
 				this.electronApp_.quit();
-			} else if (message === 'getInitialUrl' && this.initialUrl_) {
-				this.openUrl(this.initialUrl_);
+			} else if (message === 'mainScreenReady' && this.initialUrl_) {
+				void this.openUrl(this.initialUrl_);
 			}
 		});
 
@@ -332,7 +332,9 @@ export default class ElectronAppWrapper {
 			win.focus();
 			if (process.platform !== 'darwin') {
 				const url = argv.find((arg) => arg.startsWith('joplin://'));
-				if (url) this.openUrl(url);
+				if (url) {
+					void this.openUrl(url);
+				}
 			}
 		});
 
@@ -362,8 +364,8 @@ export default class ElectronAppWrapper {
 		});
 
 		this.electronApp_.on('open-url', (_event: any, url: string) => {
-			this.openUrl(url);
-		});	
+			void this.openUrl(url);
+		});
 	}
 
 	async openUrl(url: string) {
