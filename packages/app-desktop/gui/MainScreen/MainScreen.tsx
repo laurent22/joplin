@@ -36,7 +36,7 @@ import ShareService from '@joplin/lib/services/share/ShareService';
 import { reg } from '@joplin/lib/registry';
 import removeKeylessItems from '../ResizableLayout/utils/removeKeylessItems';
 import { localSyncInfoFromState } from '@joplin/lib/services/synchronizer/syncInfoUtils';
-import { parseUrl } from '@joplin/lib/ProtocolUtils';
+import { parseCallbackUrl } from '@joplin/lib/ProtocolUtils';
 import ElectronAppWrapper from '../../ElectronAppWrapper';
 
 const { connect } = require('react-redux');
@@ -202,7 +202,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 
 	private openUrl(url: string) {
 		console.log(`openUrl ${url}`);
-		const { command, params } = parseUrl(url);
+		const { command, params } = parseCallbackUrl(url);
 		void CommandService.instance().execute(command, params.id);
 	}
 

@@ -21,7 +21,7 @@ export interface CallbackUrlInfo {
     params: Record<string, string>;
 }
 
-export function parseUrl(s: string): CallbackUrlInfo {
+export function parseCallbackUrl(s: string): CallbackUrlInfo {
 	if (!isCallbackUrl(s)) throw new Error(`Invalid callback url ${s}`);
 	const url = new URL(s);
 
