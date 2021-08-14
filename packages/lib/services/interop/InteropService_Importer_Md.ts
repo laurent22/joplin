@@ -4,6 +4,7 @@ import { _ } from '../../locale';
 import InteropService_Importer_Base from './InteropService_Importer_Base';
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
+import { NoteEntity } from '../database/types';
 const { basename, filename, rtrimSlashes, fileExtension, dirname } = require('../../path-utils');
 import shim from '../../shim';
 import markdownUtils from '../../markdownUtils';
@@ -12,7 +13,7 @@ const { pregQuote } = require('../../string-utils-common');
 const { MarkupToHtml } = require('@joplin/renderer');
 
 export default class InteropService_Importer_Md extends InteropService_Importer_Base {
-	private importedNotes: any = {};
+	private importedNotes: Record<string, NoteEntity> = {};
 
 	async exec(result: ImportExportResult) {
 		let parentFolderId = null;
@@ -101,45 +102,52 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 					id = resource.id;
 				}
 
-				// NOTE: use ](encodedLink in case the link also appears elsewhere, such as in alt text
-				const linkPatternEscaped = pregQuote(`](${this.trimAnchorLink(encodedLink)}`);
+				// NOTE: use ](link in case the link also appears elsewhere, such as in alt text
+				const linkPatternEscaped = pregQuote(`](${this.trimAnchorLink(link)}`);
+				// We need to use the encoded link as well because some links (link's with spaces)
+				// will appear encoded in the source. Other links (unicode chars) will not
+				const encodedLinkPatternEscaped = pregQuote(`](${this.trimAnchorLink(encodedLink)}`);
 				const reg = new RegExp(linkPatternEscaped, 'g');
+				const encodedReg = new RegExp(encodedLinkPatternEscaped, 'g');
 				updated = updated.replace(reg, `](:/${id}`);
+				updated = updated.replace(encodedReg, `](:/${id}`);
 			}
 		}));
 		return updated;
 	}
 
 	async importFile(filePath: string, parentFolderId: string) {
-		if (this.importedNotes[filePath]) return this.importedNotes[filePath];
-		// TODO: Always create note here (to get an ID) and then fill in the body later
-		// registering this here will prevent an infinite loop when running
-		// into notes with cyclical references
-		this.importedNotes[filePath] = { message: 'Note building in progress' };
-		const stat = await shim.fsDriver().stat(filePath);
-		if (!stat) throw new Error(`Cannot read ${filePath}`);
-		const ext = fileExtension(filePath);
-		const title = filename(filePath);
-		const body = await shim.fsDriver().readFile(filePath);
-		let updatedBody;
-		try {
-			updatedBody = await this.importLocalFiles(filePath, body, parentFolderId);
-		} catch (error) {
-			// console.error(`Problem importing links for file ${filePath}, error:\n ${error}`);
-		}
+		const resolvedPath = shim.fsDriver().resolve(filePath);
+		if (this.importedNotes[resolvedPath]) return this.importedNotes[resolvedPath];
+
+		const stat = await shim.fsDriver().stat(resolvedPath);
+		if (!stat) throw new Error(`Cannot read ${resolvedPath}`);
+		const ext = fileExtension(resolvedPath);
+		const title = filename(resolvedPath);
+		const body = await shim.fsDriver().readFile(resolvedPath);
 		const note = {
 			parent_id: parentFolderId,
 			title: title,
-			body: updatedBody || body,
+			body: body,
 			updated_time: stat.mtime.getTime(),
 			created_time: stat.birthtime.getTime(),
 			user_updated_time: stat.mtime.getTime(),
 			user_created_time: stat.birthtime.getTime(),
 			markup_language: ext === 'html' ? MarkupToHtml.MARKUP_LANGUAGE_HTML : MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN,
 		};
+		this.importedNotes[resolvedPath] = await Note.save(note, { autoTimestamp: false });
 
-		return Note.save(note, { autoTimestamp: false }).then((n) => {
-			this.importedNotes[filePath] = n;
-		});
+		try {
+			const updatedBody = await this.importLocalFiles(resolvedPath, body, parentFolderId);
+			const updatedNote = {
+				...this.importedNotes[resolvedPath],
+				body: updatedBody || body,
+			};
+			this.importedNotes[resolvedPath] = await Note.save(updatedNote, { isNew: false });
+		} catch (error) {
+			// console.error(`Problem importing links for file ${resolvedPath}, error:\n ${error}`);
+		}
+
+		return this.importedNotes[resolvedPath];
 	}
 }
