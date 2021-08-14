@@ -38,7 +38,7 @@ export default async function(ctx: AppContext) {
 
 		const responseFormat = routeResponseFormat(ctx);
 
-		if (error.retryAfterMs) ctx.set('Retry-After', Math.ceil(error.retryAfterMs / 1000).toString());
+		if (error.retryAfterMs) ctx.response.set('Retry-After', Math.ceil(error.retryAfterMs / 1000).toString());
 
 		if (error.code === 'invalidOrigin') {
 			ctx.response.body = error.message;
