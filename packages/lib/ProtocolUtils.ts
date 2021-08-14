@@ -3,15 +3,15 @@ export function isCallbackUrl(s: string) {
 }
 
 export function getNoteUrl(noteId: string) {
-	return `joplin://x-callback-url/openNote?id=${noteId}`;
+	return `joplin://x-callback-url/openNote?id=${encodeURIComponent(noteId)}`;
 }
 
 export function getFolderUrl(folderId: string) {
-	return `joplin://x-callback-url/openFolder?id=${folderId}`;
+	return `joplin://x-callback-url/openFolder?id=${encodeURIComponent(folderId)}`;
 }
 
 export function getTagUrl(tagId: string) {
-	return `joplin://x-callback-url/openTag?id=${tagId}`;
+	return `joplin://x-callback-url/openTag?id=${encodeURIComponent(tagId)}`;
 }
 
 export type Command = 'openNote' | 'openFolder' | 'openTag';
