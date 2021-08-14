@@ -246,27 +246,27 @@ class FileApiDriverAmazonS3 {
 					headers: response.headers,
 				};
 			}
-
-			if (responseFormat === 'text') {
-				output = output.toString();
+			else if (responseFormat === 'text') {
+				response = await shim.fetch(s3Url, options);
+				// we need to make sure that errors get thrown as we are manually fetching above.
+				if(!response.ok){
+					throw {name: response.statusText, output: output};
+				}
+				output = await response.text();
 			}
-
-
-			if(!response.ok){
-			    throw {name: response.statusText, output: output};
-			}
-
 
 			return output;
 		} catch (error) {
-			// Because we are using fetch and not the S3Client.send command
-			// we need to manually parse the s3 error and pass that through
-			// for error checking.
+
+			// This means that the error was on the Desktop client side and we need to handle that.
+			// On Mobile it won't match because FetchError is a node-fetch feature.
+			// https://github.com/node-fetch/node-fetch/blob/main/docs/ERROR-HANDLING.md
+			if(error.name === "FetchError"){ throw error.message }
 
 			let parsedOutput = '';
 
-			// If error.output is not xml or not present the else case should
-			// actually let us see the output of the error.
+			// If error.output is not xml the last else case should
+			// actually let us see the output of error.
 			parsedOutput = parser.parse(error.output);
 
 			if (this.hasErrorCode_(parsedOutput.Error, 'AuthorizationHeaderMalformed')){

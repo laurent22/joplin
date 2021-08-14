@@ -25,7 +25,7 @@ class SyncTargetAmazonS3 extends BaseSyncTarget {
 	}
 
 	static label() {
-		return `${_('AWS S3')} (Beta)`;
+		return `${_('S3')} (Beta)`;
 	}
 
 	static description() {
@@ -40,6 +40,7 @@ class SyncTargetAmazonS3 extends BaseSyncTarget {
 		return Setting.value('sync.8.path');
 	}
 
+	// These are the settings that get read from disk to instantiate the API.
 	s3AuthParameters() {
 		return {
 			// We need to set a region. See https://github.com/aws/aws-sdk-js-v3/issues/1845#issuecomment-754832210
@@ -48,8 +49,8 @@ class SyncTargetAmazonS3 extends BaseSyncTarget {
 				accessKeyId: Setting.value('sync.8.username'),
 				secretAccessKey: Setting.value('sync.8.password'),
 			},
-			UseArnRegion: true, // override the request region with the region inferred from requested resource's ARN
-			forcePathStyle: true,
+			UseArnRegion: true, // override the request region with the region inferred from requested resource's ARN.
+			forcePathStyle: Setting.value('sync.8.forcePathStyle'), // Older implementations may not support more modern access, so we expose this to allow people the option to toggle.
 			endpoint: Setting.value('sync.8.url'),
 		};
 	}
@@ -62,14 +63,16 @@ class SyncTargetAmazonS3 extends BaseSyncTarget {
 	}
 
 	static async newFileApi_(syncTargetId, options) {
-		const apiOptions = {
+			// These options are read from the form on the page
+			// so we can test new config choices without overriding the current settings.
+			const apiOptions = {
 			region: options.region(),
 			credentials: {
 				accessKeyId: options.username(),
 				secretAccessKey: options.password(),
 			},
-			UseArnRegion: true, // override the request region with the region inferred from requested resource's ARN
-			forcePathStyle: true,
+			UseArnRegion: true, // override the request region with the region inferred from requested resource's ARN.
+			forcePathStyle: options.forcePathStyle(),
 			endpoint: options.url(),
 		};
 
@@ -79,6 +82,11 @@ class SyncTargetAmazonS3 extends BaseSyncTarget {
 		fileApi.setSyncTargetId(syncTargetId);
 		return fileApi;
 	}
+
+// With the aws-sdk-v3-js some errors (301/403) won't get their XML parsed properly.
+// I think it's this issue: https://github.com/aws/aws-sdk-js-v3/issues/1596
+// If you save the config on desktop, restart the app and attempt a sync, we should get a clearer error message because the sync logic has more robust XML error parsing.
+// We could implement that here, but the above workaround saves some code.
 
 	static async checkConfig(options) {
 		const fileApi = await SyncTargetAmazonS3.newFileApi_(SyncTargetAmazonS3.id(), options);
@@ -98,11 +106,16 @@ class SyncTargetAmazonS3 extends BaseSyncTarget {
 				});
 			});
 			const result = await headBucketReq;
+
 			if (!result) throw new Error(`AWS S3 bucket not found: ${SyncTargetAmazonS3.s3BucketName()}`);
 			output.ok = true;
 		} catch (error) {
-			output.errorMessage = error.message;
-			if (error.code) output.errorMessage += ` (Code ${error.code})`;
+			if(error.message) {
+				output.errorMessage = error.message;
+			}
+			if (error.code) {
+				output.errorMessage += ` (Code ${error.code})`;
+			}
 		}
 
 		return output;
