@@ -22,7 +22,7 @@ export interface CallbackUrlInfo {
 }
 
 export function parseUrl(s: string): CallbackUrlInfo {
-	if (!s.startsWith('joplin://')) return null;
+	if (!isCallbackUrl(s)) throw new Error(`Invalid callback url ${s}`);
 	const url = new URL(s);
 
 	const params: Record<string, string> = {};
