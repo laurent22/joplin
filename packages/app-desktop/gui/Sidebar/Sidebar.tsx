@@ -29,6 +29,7 @@ const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
 const { substrWithEllipsis } = require('@joplin/lib/string-utils');
 const { ALL_NOTES_FILTER_ID } = require('@joplin/lib/reserved-ids');
+const { clipboard } = require('electron');
 
 const logger = Logger.create('Sidebar');
 
@@ -331,8 +332,7 @@ class SidebarComponent extends React.Component<Props, State> {
 			menu.append(
 				new MenuItem({
 					label: _('Copy notebook URL'),
-					click: async () => {
-						const { clipboard } = require('electron');
+					click: () => {
 						clipboard.writeText(getFolderUrl(itemId));
 					},
 				})
@@ -346,8 +346,7 @@ class SidebarComponent extends React.Component<Props, State> {
 			menu.append(
 				new MenuItem({
 					label: _('Copy tag URL'),
-					click: async () => {
-						const { clipboard } = require('electron');
+					click: () => {
 						clipboard.writeText(getTagUrl(itemId));
 					},
 				})

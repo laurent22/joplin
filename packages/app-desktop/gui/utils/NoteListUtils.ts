@@ -15,6 +15,7 @@ const MenuItem = bridge().MenuItem;
 import Note from '@joplin/lib/models/Note';
 import Setting from '@joplin/lib/models/Setting';
 const { substrWithEllipsis } = require('@joplin/lib/string-utils');
+const { clipboard } = require('electron');
 
 interface ContextMenuProps {
 	notes: any[];
@@ -123,7 +124,6 @@ export default class NoteListUtils {
 				new MenuItem({
 					label: _('Copy Markdown link'),
 					click: async () => {
-						const { clipboard } = require('electron');
 						const links = [];
 						for (let i = 0; i < noteIds.length; i++) {
 							const note = await Note.load(noteIds[i]);
@@ -138,8 +138,7 @@ export default class NoteListUtils {
 				menu.append(
 					new MenuItem({
 						label: _('Copy note URL'),
-						click: async () => {
-							const { clipboard } = require('electron');
+						click: () => {
 							clipboard.writeText(getNoteUrl(noteIds[0]));
 						},
 					})

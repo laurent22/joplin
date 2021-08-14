@@ -16,16 +16,16 @@ export function getTagUrl(tagId: string) {
 
 export type Command = 'openNote' | 'openFolder' | 'openTag';
 
-export interface UlrInfo {
+export interface CallbackUrlInfo {
     command: Command;
-    params: any;
+    params: Record<string, string>;
 }
 
-export function parseUrl(s: string): UlrInfo {
+export function parseUrl(s: string): CallbackUrlInfo {
 	if (!s.startsWith('joplin://')) return null;
 	const url = new URL(s);
 
-	const params: any = {};
+	const params: Record<string, string> = {};
 	for (const [key, value] of url.searchParams) {
 		params[key] = value;
 	}
