@@ -330,7 +330,7 @@ class SidebarComponent extends React.Component<Props, State> {
 		if (itemType === BaseModel.TYPE_FOLDER) {
 			menu.append(
 				new MenuItem({
-					label: _('Copy folder URL'),
+					label: _('Copy notebook URL'),
 					click: async () => {
 						const { clipboard } = require('electron');
 						clipboard.writeText(getFolderUrl(itemId));
