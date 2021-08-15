@@ -1,14 +1,13 @@
 const InteropService_Importer_Md = require('../../services/interop/InteropService_Importer_Md').default;
 const Note = require('../../models/Note').default;
 import { setupDatabaseAndSynchronizer, supportDir, switchClient } from '../../testing/test-utils';
-const { fileExtension } = require('../../path-utils');
 const { MarkupToHtml } = require('@joplin/renderer');
 
 
 describe('InteropService_Importer_Md: importLocalImages', function() {
 	async function importNote(path: string) {
 		const importer = new InteropService_Importer_Md();
-		importer.setMetadata({ fileExtensions: [fileExtension(path)] });
+		importer.setMetadata({ fileExtensions: ['md', 'html'] });
 		return await importer.importFile(path, 'notebook');
 	}
 
@@ -111,7 +110,9 @@ describe('InteropService_Importer_Md: importLocalImages', function() {
 		const note = await importNote(`${supportDir}/test_notes/md/sample.html`);
 
 		const items = await Note.linkedItems(note.body);
-		expect(items.length).toBe(2);
+		expect(items.length).toBe(3);
+		const noteIds = await Note.linkedNoteIds(note.body);
+		expect(noteIds.length).toBe(1);
 		expect(note.markup_language).toBe(MarkupToHtml.MARKUP_LANGUAGE_HTML);
 		const preservedAlt = note.body.includes('alt="../../photo.jpg"');
 		expect(preservedAlt).toBe(true);

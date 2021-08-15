@@ -78,7 +78,7 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 	async importLocalFiles(filePath: string, md: string, parentFolderId: string) {
 		let updated = md;
 		const markdownLinks = markdownUtils.extractFileUrls(md);
-		const htmlLinks = htmlUtils.extractImageUrls(md);
+		const htmlLinks = htmlUtils.extractFileUrls(md);
 		const fileLinks = unique(markdownLinks.concat(htmlLinks));
 		await Promise.all(fileLinks.map(async (encodedLink: string) => {
 			const link = decodeURI(encodedLink);
@@ -120,7 +120,7 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 					updated = updated.replace(reg, `:/${id}`);
 
 					// HTML links
-					const htmlLinkRegex = `(?<=src=[\\"\\'])${linkToReplace}(?=[\\"\\'])`;
+					const htmlLinkRegex = `(?<=(?:src|href)=["'])${linkToReplace}(?=["'])`;
 					const htmlReg = new RegExp(htmlLinkRegex, 'g');
 					updated = updated.replace(htmlReg, `:/${id}`);
 				}
