@@ -159,8 +159,8 @@ function NoteEditor(props: NoteEditorProps) {
 			customCss: props.customCss,
 		});
 
-		return markupToHtml.allAssets(markupLanguage, theme);
-	}, [props.themeId, props.customCss]);
+		return markupToHtml.allAssets(markupLanguage, theme, { contentMaxWidth: props.contentMaxWidth });
+	}, [props.themeId, props.customCss, props.contentMaxWidth]);
 
 	const handleProvisionalFlag = useCallback(() => {
 		if (props.isProvisional) {
@@ -400,6 +400,7 @@ function NoteEditor(props: NoteEditorProps) {
 		noteToolbarButtonInfos: props.toolbarButtonInfos,
 		plugins: props.plugins,
 		fontSize: Setting.value('style.editor.fontSize'),
+		contentMaxWidth: props.contentMaxWidth,
 	};
 
 	let editor = null;
@@ -601,6 +602,7 @@ const mapStateToProps = (state: AppState) => {
 		setTagsToolbarButtonInfo: toolbarButtonUtils.commandsToToolbarButtons([
 			'setTags',
 		], whenClauseContext)[0],
+		contentMaxWidth: state.settings['style.editor.contentMaxWidth'],
 	};
 };
 

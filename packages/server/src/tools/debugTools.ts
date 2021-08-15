@@ -1,4 +1,4 @@
-import { DbConnection, dropTables, migrateDb } from '../db';
+import { DbConnection, dropTables, migrateLatest } from '../db';
 import newModelFactory from '../models/factory';
 import { AccountType } from '../models/UserModel';
 import { Config } from '../utils/types';
@@ -15,7 +15,7 @@ export async function handleDebugCommands(argv: any, db: DbConnection, config: C
 
 export async function createTestUsers(db: DbConnection, config: Config) {
 	await dropTables(db);
-	await migrateDb(db);
+	await migrateLatest(db);
 
 	const password = 'hunter1hunter2hunter3';
 	const models = newModelFactory(db, config);

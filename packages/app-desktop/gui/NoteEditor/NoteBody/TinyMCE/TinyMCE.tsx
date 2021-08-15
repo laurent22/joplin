@@ -14,18 +14,18 @@ import { _, closestSupportedLocale } from '@joplin/lib/locale';
 import useContextMenu from './utils/useContextMenu';
 import { copyHtmlToClipboard } from '../../utils/clipboardUtils';
 import shim from '@joplin/lib/shim';
-
-const { MarkupToHtml } = require('@joplin/renderer');
+import { MarkupToHtml } from '@joplin/renderer';
 import { reg } from '@joplin/lib/registry';
 import BaseItem from '@joplin/lib/models/BaseItem';
 import setupToolbarButtons from './utils/setupToolbarButtons';
 import { plainTextToHtml } from '@joplin/lib/htmlUtils';
 import openEditDialog from './utils/openEditDialog';
-const { themeStyle } = require('@joplin/lib/theme');
+import { MarkupToHtmlOptions } from '../../utils/useMarkupToHtml';
+import { themeStyle } from '@joplin/lib/theme';
 const { clipboard } = require('electron');
 const supportedLocales = require('./supportedLocales');
 
-function markupRenderOptions(override: any = null) {
+function markupRenderOptions(override: MarkupToHtmlOptions = null): MarkupToHtmlOptions {
 	return {
 		plugins: {
 			checkbox: {
@@ -148,8 +148,6 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		if (!resourceMd) return;
 		const result = await props.markupToHtml(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, resourceMd, markupRenderOptions({ bodyOnly: true }));
 		editor.insertContent(result.html);
-		// editor.fire('joplinChange');
-		// dispatchDidUpdate(editor);
 	}, [props.markupToHtml, editor]);
 
 	const insertResourcesIntoContentRef = useRef(null);

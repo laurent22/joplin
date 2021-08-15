@@ -972,6 +972,8 @@ class Setting extends BaseModel {
 				storage: SettingStorage.File,
 			},
 
+			'style.editor.contentMaxWidth': { value: 600, type: SettingItemType.Int, public: true, storage: SettingStorage.File, appTypes: [AppType.Desktop], section: 'appearance', label: () => _('Editor maximum width'), description: () => _('Set it to 0 to make it take the complete available space.') },
+
 			'ui.layout': { value: {}, type: SettingItemType.Object, storage: SettingStorage.File, public: false, appTypes: [AppType.Desktop] },
 
 			// TODO: Is there a better way to do this? The goal here is to simply have
