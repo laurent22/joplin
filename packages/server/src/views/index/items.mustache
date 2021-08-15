@@ -1,18 +1,3 @@
 {{#itemTable}}
 	{{>table}}
 {{/itemTable}}
-
-<form id="item_form" action="{{{postUrl}}}" method="POST" class="block">
-	<input type="submit" name="delete_all_button" class="button is-danger" value="Delete all" />
-</form>
-
-<script>
-	onDocumentReady(function() {
-		document.getElementById("item_form").addEventListener('submit', function(event) {
-			if (event.submitter.getAttribute('name') === 'delete_all_button') {
-				const response = prompt('This will DELETE all your notes, and it cannot be undone. If you wish to continue, please type "confirm".');
-				if (response !== 'confirm') event.preventDefault();
-			}
-		});
-	});
-</script>

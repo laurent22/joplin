@@ -52,3 +52,15 @@ table.table th .sort-button i {
 .footer .content {
 	opacity: 0.5;
 }
+
+ul li {
+	list-style-type: disc;
+}
+
+ul.pagination-list li {
+	list-style-type: none;
+}
+
+.readable-block {
+	max-width: 740px;
+}

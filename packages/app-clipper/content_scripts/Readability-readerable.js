@@ -1,7 +1,6 @@
-// https://github.com/mozilla/readability/tree/814f0a3884350b6f1adfdebb79ca3599e9806605
+// v0.4.1 - https://github.com/mozilla/readability/commit/28843b6de84447dd6cef04058fda336938e628dc
 
 /* eslint-env es6:false */
-/* globals exports */
 /*
  * Copyright (c) 2010 Arc90 Inc
  *
@@ -26,27 +25,38 @@
 var REGEXPS = {
 	// NOTE: These two regular expressions are duplicated in
 	// Readability.js. Please keep both copies in sync.
-	unlikelyCandidates: /-ad-|ai2html|banner|breadcrumbs|combx|comment|community|cover-wrap|disqus|extra|foot|gdpr|header|legends|menu|related|remark|replies|rss|shoutbox|sidebar|skyscraper|social|sponsor|supplemental|ad-break|agegate|pagination|pager|popup|yom-remote/i,
-	okMaybeItsACandidate: /and|article|body|column|main|shadow/i,
-};
-
-function isNodeVisible(node) {
-	// Have to null-check node.style to deal with SVG and MathML nodes.
-	return (!node.style || node.style.display != 'none') && !node.hasAttribute('hidden');
-}
-
-/**
- * Decides whether or not the document is reader-able without parsing the whole thing.
- *
- * @return boolean Whether or not we suspect Readability.parse() will suceeed at returning an article object.
- */
-function isProbablyReaderable(doc, isVisible) {
-	if (!isVisible) {
-		isVisible = isNodeVisible;
+	unlikelyCandidates: /-ad-|ai2html|banner|breadcrumbs|combx|comment|community|cover-wrap|disqus|extra|footer|gdpr|header|legends|menu|related|remark|replies|rss|shoutbox|sidebar|skyscraper|social|sponsor|supplemental|ad-break|agegate|pagination|pager|popup|yom-remote/i,
+	okMaybeItsACandidate: /and|article|body|column|content|main|shadow/i,
+  };
+  
+  function isNodeVisible(node) {
+	// Have to null-check node.style and node.className.indexOf to deal with SVG and MathML nodes.
+	return (!node.style || node.style.display != "none")
+	  && !node.hasAttribute("hidden")
+	  //check for "fallback-image" so that wikimedia math images are displayed
+	  && (!node.hasAttribute("aria-hidden") || node.getAttribute("aria-hidden") != "true" || (node.className && node.className.indexOf && node.className.indexOf("fallback-image") !== -1));
+  }
+  
+  /**
+   * Decides whether or not the document is reader-able without parsing the whole thing.
+   * @param {Object} options Configuration object.
+   * @param {number} [options.minContentLength=140] The minimum node content length used to decide if the document is readerable.
+   * @param {number} [options.minScore=20] The minumum cumulated 'score' used to determine if the document is readerable.
+   * @param {Function} [options.visibilityChecker=isNodeVisible] The function used to determine if a node is visible.
+   * @return {boolean} Whether or not we suspect Readability.parse() will suceeed at returning an article object.
+   */
+  function isProbablyReaderable(doc, options = {}) {
+	// For backward compatibility reasons 'options' can either be a configuration object or the function used
+	// to determine if a node is visible.
+	if (typeof options == "function") {
+	  options = { visibilityChecker: options };
 	}
-
-	var nodes = doc.querySelectorAll('p, pre');
-
+  
+	var defaultOptions = { minScore: 20, minContentLength: 140, visibilityChecker: isNodeVisible };
+	options = Object.assign(defaultOptions, options);
+  
+	var nodes = doc.querySelectorAll("p, pre");
+  
 	// Get <div> nodes which have <br> node(s) and append them into the `nodes` variable.
 	// Some articles' DOM structures might look like
 	// <div>
@@ -54,46 +64,47 @@ function isProbablyReaderable(doc, isVisible) {
 	//   <br>
 	//   Sentences<br>
 	// </div>
-	var brNodes = doc.querySelectorAll('div > br');
+	var brNodes = doc.querySelectorAll("div > br");
 	if (brNodes.length) {
-		var set = new Set(nodes);
-		[].forEach.call(brNodes, function(node) {
-			set.add(node.parentNode);
-		});
-		nodes = Array.from(set);
+	  var set = new Set(nodes);
+	  [].forEach.call(brNodes, function (node) {
+		set.add(node.parentNode);
+	  });
+	  nodes = Array.from(set);
 	}
-
+  
 	var score = 0;
 	// This is a little cheeky, we use the accumulator 'score' to decide what to return from
 	// this callback:
-	return [].some.call(nodes, function(node) {
-		if (!isVisible(node))
-			return false;
-
-		var matchString = node.className + ' ' + node.id;
-		if (REGEXPS.unlikelyCandidates.test(matchString) &&
-        !REGEXPS.okMaybeItsACandidate.test(matchString)) {
-			return false;
-		}
-
-		if (node.matches('li p')) {
-			return false;
-		}
-
-		var textContentLength = node.textContent.trim().length;
-		if (textContentLength < 140) {
-			return false;
-		}
-
-		score += Math.sqrt(textContentLength - 140);
-
-		if (score > 20) {
-			return true;
-		}
+	return [].some.call(nodes, function (node) {
+	  if (!options.visibilityChecker(node)) {
 		return false;
+	  }
+  
+	  var matchString = node.className + " " + node.id;
+	  if (REGEXPS.unlikelyCandidates.test(matchString) &&
+		  !REGEXPS.okMaybeItsACandidate.test(matchString)) {
+		return false;
+	  }
+  
+	  if (node.matches("li p")) {
+		return false;
+	  }
+  
+	  var textContentLength = node.textContent.trim().length;
+	  if (textContentLength < options.minContentLength) {
+		return false;
+	  }
+  
+	  score += Math.sqrt(textContentLength - options.minContentLength);
+  
+	  if (score > options.minScore) {
+		return true;
+	  }
+	  return false;
 	});
-}
-
-if (typeof exports === 'object') {
-	exports.isProbablyReaderable = isProbablyReaderable;
-}
+  }
+  
+  if (typeof module === "object") {
+	module.exports = isProbablyReaderable;
+  }

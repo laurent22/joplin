@@ -7,8 +7,8 @@ import { argv } from 'yargs';
 import Logger, { LoggerWrapper, TargetType } from '@joplin/lib/Logger';
 import config, { initConfig, runningInDocker, EnvVariables } from './config';
 import { createDb, dropDb } from './tools/dbTools';
-import { dropTables, connectDb, disconnectDb, migrateDb, waitForConnection, sqliteDefaultDir } from './db';
-import { AppContext, Env } from './utils/types';
+import { dropTables, connectDb, disconnectDb, migrateLatest, waitForConnection, sqliteDefaultDir, migrateList, migrateUp, migrateDown } from './db';
+import { AppContext, Env, KoaNext } from './utils/types';
 import FsDriverNode from '@joplin/lib/fs-driver-node';
 import routeHandler from './middleware/routeHandler';
 import notificationHandler from './middleware/notificationHandler';
@@ -17,6 +17,7 @@ import setupAppContext from './utils/setupAppContext';
 import { initializeJoplinUtils } from './utils/joplinUtils';
 import startServices from './utils/startServices';
 import { credentialFile } from './utils/testing/testUtils';
+import apiVersionHandler from './middleware/apiVersionHandler';
 
 const cors = require('@koa/cors');
 const nodeEnvFile = require('node-env-file');
@@ -105,6 +106,10 @@ async function main() {
 		'https://joplinapp.org',
 	];
 
+	if (env === Env.Dev) {
+		corsAllowedDomains.push('http://localhost:8077');
+	}
+
 	function acceptOrigin(origin: string): boolean {
 		const hostname = (new URL(origin)).hostname;
 		const userContentDomain = envVariables.USER_CONTENT_BASE_URL ? (new URL(envVariables.USER_CONTENT_BASE_URL)).hostname : '';
@@ -112,12 +117,50 @@ async function main() {
 		if (hostname === userContentDomain) return true;
 
 		const hostnameNoSub = hostname.split('.').slice(1).join('.');
+
+		// console.info('CORS check for origin', origin, 'Allowed domains', corsAllowedDomains);
+
 		if (hostnameNoSub === userContentDomain) return true;
 
-		if (corsAllowedDomains.indexOf(origin) === 0) return true;
+		if (corsAllowedDomains.includes(origin)) return true;
 
 		return false;
 	}
+
+	// This is used to catch any low level error thrown from a middleware. It
+	// won't deal with errors from routeHandler, which catches and handles its
+	// own errors.
+	app.use(async (ctx: AppContext, next: KoaNext) => {
+		try {
+			await next();
+		} catch (error) {
+			ctx.status = error.httpCode || 500;
+
+			// Since this is a low level error, rendering a view might fail too,
+			// so catch this and default to rendering JSON.
+			try {
+				ctx.body = await ctx.joplin.services.mustache.renderView({
+					name: 'error',
+					title: 'Error',
+					path: 'index/error',
+					content: { error },
+				});
+			} catch (anotherError) {
+				ctx.body = { error: anotherError.message };
+			}
+		}
+	});
+
+	// Creates the request-specific "joplin" context property.
+	app.use(async (ctx: AppContext, next: KoaNext) => {
+		ctx.joplin = {
+			...ctx.joplinBase,
+			owner: null,
+			notifications: [],
+		};
+
+		return next();
+	});
 
 	app.use(cors({
 		// https://github.com/koajs/cors/issues/52#issuecomment-413887382
@@ -132,6 +175,8 @@ async function main() {
 			}
 		},
 	}));
+
+	app.use(apiVersionHandler);
 	app.use(ownerHandler);
 	app.use(notificationHandler);
 	app.use(routeHandler);
@@ -160,10 +205,23 @@ async function main() {
 		fs.writeFileSync(pidFile, `${process.pid}`);
 	}
 
-	if (argv.migrateDb) {
+	let runCommandAndExitApp = true;
+
+	if (argv.migrateLatest) {
 		const db = await connectDb(config().database);
-		await migrateDb(db);
+		await migrateLatest(db);
 		await disconnectDb(db);
+	} else if (argv.migrateUp) {
+		const db = await connectDb(config().database);
+		await migrateUp(db);
+		await disconnectDb(db);
+	} else if (argv.migrateDown) {
+		const db = await connectDb(config().database);
+		await migrateDown(db);
+		await disconnectDb(db);
+	} else if (argv.migrateList) {
+		const db = await connectDb(config().database);
+		console.info(await migrateList(db));
 	} else if (argv.dropDb) {
 		await dropDb(config().database, { ignoreIfNotExists: true });
 	} else if (argv.dropTables) {
@@ -173,6 +231,8 @@ async function main() {
 	} else if (argv.createDb) {
 		await createDb(config().database);
 	} else {
+		runCommandAndExitApp = false;
+
 		appLogger().info(`Starting server v${config().appVersion} (${env}) on port ${config().port} and PID ${process.pid}...`);
 		appLogger().info('Running in Docker:', runningInDocker());
 		appLogger().info('Public base URL:', config().baseUrl);
@@ -188,21 +248,23 @@ async function main() {
 		delete connectionCheckLogInfo.connection;
 
 		appLogger().info('Connection check:', connectionCheckLogInfo);
-		const appContext = app.context as AppContext;
+		const ctx = app.context as AppContext;
 
-		await setupAppContext(appContext, env, connectionCheck.connection, appLogger);
-		await initializeJoplinUtils(config(), appContext.models, appContext.services.mustache);
+		await setupAppContext(ctx, env, connectionCheck.connection, appLogger);
+		await initializeJoplinUtils(config(), ctx.joplinBase.models, ctx.joplinBase.services.mustache);
 
 		appLogger().info('Migrating database...');
-		await migrateDb(appContext.db);
+		await migrateLatest(ctx.joplinBase.db);
 
 		appLogger().info('Starting services...');
-		await startServices(appContext);
+		await startServices(ctx.joplinBase.services);
 
 		appLogger().info(`Call this for testing: \`curl ${config().apiBaseUrl}/api/ping\``);
 
 		app.listen(config().port);
 	}
+
+	if (runCommandAndExitApp) process.exit(0);
 }
 
 main().catch((error: any) => {

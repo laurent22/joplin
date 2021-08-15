@@ -1,8 +1,8 @@
 import shim from '../../../shim';
 import MigrationHandler from '../MigrationHandler';
-const { useEffect, useState } = shim.react();
 import Setting from '../../../models/Setting';
 import { reg } from '../../../registry';
+const { useEffect, useState } = shim.react();
 
 export interface SyncTargetUpgradeResult {
 	done: boolean;
@@ -26,6 +26,7 @@ export default function useSyncTargetUpgrade(): SyncTargetUpgradeResult {
 			reg.logger().info('useSyncTargetUpgrade: Create migration handler...');
 			const migrationHandler = new MigrationHandler(
 				synchronizer.api(),
+				reg.db(),
 				synchronizer.lockHandler(),
 				Setting.value('appType'),
 				Setting.value('clientId')

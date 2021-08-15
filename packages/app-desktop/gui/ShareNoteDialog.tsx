@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 import JoplinServerApi from '@joplin/lib/JoplinServerApi';
 import { _, _n } from '@joplin/lib/locale';
 import Note from '@joplin/lib/models/Note';
-import Setting from '@joplin/lib/models/Setting';
 import DialogButtonRow from './DialogButtonRow';
 import { themeStyle, buildStyle } from '@joplin/lib/theme';
 import { reg } from '@joplin/lib/registry';
@@ -15,6 +14,7 @@ import { NoteEntity } from '@joplin/lib/services/database/types';
 import Button from './Button/Button';
 import { connect } from 'react-redux';
 import { AppState } from '../app';
+import { getEncryptionEnabled } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 const { clipboard } = require('electron');
 
 interface Props {
@@ -27,6 +27,9 @@ interface Props {
 function styles_(props: Props) {
 	return buildStyle('ShareNoteDialog', props.themeId, (theme: any) => {
 		return {
+			root: {
+				minWidth: 500,
+			},
 			noteList: {
 				marginBottom: 10,
 			},
@@ -138,7 +141,7 @@ export function ShareNoteDialog(props: Props) {
 					continue;
 				}
 
-				reg.logger().error('ShareNoteDialog: Cannot share note:', error);
+				reg.logger().error('ShareNoteDialog: Cannot publish note:', error);
 
 				setSharesState('idle');
 				alert(JoplinServerApi.connectionErrorMessage(error));
@@ -165,7 +168,7 @@ export function ShareNoteDialog(props: Props) {
 
 	const renderNote = (note: NoteEntity) => {
 		const unshareButton = !props.shares.find(s => s.note_id === note.id) ? null : (
-			<Button tooltip={_('Unshare note')} iconName="fas fa-share-alt" onClick={() => unshareNoteButton_click({ noteId: note.id })}/>
+			<Button tooltip={_('Unpublish note')} iconName="fas fa-share-alt" onClick={() => unshareNoteButton_click({ noteId: note.id })}/>
 		);
 
 		// const removeButton = notes.length <= 1 ? null : (
@@ -207,14 +210,14 @@ export function ShareNoteDialog(props: Props) {
 	};
 
 	function renderEncryptionWarningMessage() {
-		if (!Setting.value('encryption.enabled')) return null;
+		if (!getEncryptionEnabled()) return null;
 		return <div style={theme.textStyle}>{_('Note: When a note is shared, it will no longer be encrypted on the server.')}<hr/></div>;
 	}
 
 	function renderContent() {
 		return (
-			<div>
-				<DialogTitle title={_('Share Notes')}/>
+			<div style={styles.root}>
+				<DialogTitle title={_('Publish Notes')}/>
 				{renderNoteList(notes)}
 				<button disabled={['creating', 'synchronizing'].indexOf(sharesState) >= 0} style={styles.copyShareLinkButton} onClick={shareLinkButton_click}>{_n('Copy Shareable Link', 'Copy Shareable Links', noteCount)}</button>
 				<div style={theme.textStyle}>{statusMessage(sharesState)}</div>

@@ -7,10 +7,27 @@ function formatCssSize(v: any): string {
 	return `${v}px`;
 }
 
-export default function(theme: any) {
+export interface Options {
+	contentMaxWidth?: number;
+}
+
+export default function(theme: any, options: Options = null) {
+	options = {
+		contentMaxWidth: 0,
+		...options,
+	};
+
 	theme = theme ? theme : {};
 
 	const fontFamily = '\'Avenir\', \'Arial\', sans-serif';
+
+	const maxWidthCss = options.contentMaxWidth ? `
+		#rendered-md {
+			max-width: ${options.contentMaxWidth}px;
+			margin-left: auto;
+			margin-right: auto;
+		}
+	` : '';
 
 	const css =
 		`
@@ -61,6 +78,8 @@ export default function(theme: any) {
 			background: rgba(100, 100, 100, 0.7); 
 		}
 
+		${maxWidthCss}
+
 		/* Remove top padding and margin from first child so that top of rendered text is aligned to top of text editor text */
 
 		#rendered-md > h1:first-child,
@@ -79,7 +98,7 @@ export default function(theme: any) {
 		
 		p, h1, h2, h3, h4, h5, h6, ul, table {
 			margin-top: .6em;
-			margin-bottom: .65em;
+			margin-bottom: 1.35em;
 
 			/*
 				Adds support for RTL text in the note body. It automatically detects the direction using the content.
@@ -87,6 +106,11 @@ export default function(theme: any) {
 			*/
 			unicode-bidi: plaintext;
 		}
+
+		h1, h2, h3, h4, h5, h6, ul, table {
+			margin-bottom: 0.65em;
+		}
+
 		h1, h2, h3, h4, h5, h6 {
 			line-height: 1.5em;
 		}
@@ -205,7 +229,7 @@ export default function(theme: any) {
 			border-left: 4px solid ${theme.codeBorderColor};
 			padding-left: 1.2em;
 			margin-left: 0;
-			opacity: .7;
+			opacity: ${theme.blockQuoteOpacity};
 		}
 
 		.jop-tinymce table,

@@ -1,7 +1,8 @@
 import { ModelType } from '../../BaseModel';
 import { FileApi, MultiPutItem } from '../../file-api';
 import Logger from '../../Logger';
-import BaseItem, { ItemThatNeedSync } from '../../models/BaseItem';
+import BaseItem from '../../models/BaseItem';
+import { BaseItemEntity } from '../database/types';
 
 const logger = Logger.create('ItemUploader');
 
@@ -32,7 +33,7 @@ export default class ItemUploader {
 		this.maxBatchSize_ = v;
 	}
 
-	public async serializeAndUploadItem(ItemClass: any, path: string, local: ItemThatNeedSync) {
+	public async serializeAndUploadItem(ItemClass: any, path: string, local: BaseItemEntity) {
 		const preUploadItem = this.preUploadedItems_[path];
 		if (preUploadItem) {
 			if (this.preUploadedItemUpdatedTimes_[path] !== local.updated_time) {
@@ -52,7 +53,7 @@ export default class ItemUploader {
 		await this.apiCall_('put', path, content);
 	}
 
-	public async preUploadItems(items: ItemThatNeedSync[]) {
+	public async preUploadItems(items: BaseItemEntity[]) {
 		if (!this.api_.supportsMultiPut) return;
 
 		const itemsToUpload: BatchItem[] = [];

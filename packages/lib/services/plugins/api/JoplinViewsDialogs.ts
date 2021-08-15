@@ -5,7 +5,7 @@ import { ButtonSpec, ViewHandle, DialogResult } from './types';
 
 /**
  * Allows creating and managing dialogs. A dialog is modal window that
- * contains a webview and a row of buttons. You can update the update the
+ * contains a webview and a row of buttons. You can update the
  * webview using the `setHtml` method. Dialogs are hidden by default and
  * you need to call `open()` to open them. Once the user clicks on a
  * button, the `open` call will return an object indicating what button was
@@ -53,7 +53,7 @@ export default class JoplinViewsDialogs {
 	 */
 	async create(id: string): Promise<ViewHandle> {
 		if (!id) {
-			this.plugin.deprecationNotice('1.5', 'Creating a view without an ID is deprecated. To fix it, change your call to `joplin.views.dialogs.create("my-unique-id")`');
+			this.plugin.deprecationNotice('1.5', 'Creating a view without an ID is deprecated. To fix it, change your call to `joplin.views.dialogs.create("my-unique-id")`', true);
 			id = `${this.plugin.viewCount}`;
 		}
 

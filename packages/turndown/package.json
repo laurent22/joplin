@@ -1,11 +1,9 @@
 {
   "name": "@joplin/turndown",
   "description": "A library that converts HTML to Markdown",
-  "version": "4.0.49",
+  "version": "4.0.54",
   "author": "Dom Christie",
   "main": "lib/turndown.cjs.js",
-  "module": "lib/turndown.es.js",
-  "jsnext:main": "lib/turndown.es.js",
   "publishConfig": {
     "access": "public"
   },

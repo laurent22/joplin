@@ -40,8 +40,7 @@ joplin.plugins.register({
 		`);
 
 		const result3 = await dialogs.open(handle3);
-		console.info('Got result: ' + JSON.stringify(result3));		
-		
+		console.info('Got result: ' + JSON.stringify(result3));
 	},
 
 });

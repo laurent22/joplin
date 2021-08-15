@@ -1,4 +1,4 @@
-import { setupDatabaseAndSynchronizer, switchClient, createFolderTree, supportDir } from '../testing/test-utils';
+import { setupDatabaseAndSynchronizer, switchClient, createFolderTree, supportDir, msleep } from '../testing/test-utils';
 import Folder from '../models/Folder';
 import { allNotesFolders } from '../testing/test-utils-synchronizer';
 import Note from '../models/Note';
@@ -326,37 +326,96 @@ describe('models_Folder.sharing', function() {
 
 		await Folder.updateAllShareIds();
 
-		// await NoteResource.updateResourceShareIds();
-
 		{
 			const resource: ResourceEntity = await Resource.load(resourceId);
 			expect(resource.share_id).toBe('');
 		}
 	});
 
-	// it('should not recursively delete when non-owner deletes a shared folder', async () => {
-	// 	const folder = await createFolderTree('', [
-	// 		{
-	// 			title: 'folder 1',
-	// 			children: [
-	// 				{
-	// 					title: 'note 1',
-	// 				},
-	// 			],
-	// 		},
-	// 	]);
+	it('should unshare items that are no longer part of an existing share', async () => {
+		await createFolderTree('', [
+			{
+				title: 'folder 1',
+				share_id: '1',
+				children: [
+					{
+						title: 'note 1',
+					},
+				],
+			},
+			{
+				title: 'folder 2',
+				share_id: '2',
+				children: [
+					{
+						title: 'note 2',
+					},
+				],
+			},
+		]);
 
-	// 	BaseItem.shareService_ = {
-	// 		isSharedFolderOwner: (_folderId: string) => false,
-	// 	} as any;
+		const resourceService = new ResourceService();
 
-	// 	await Folder.save({ id: folder.id, share_id: 'abcd1234' });
-	// 	await Folder.updateAllShareIds();
+		const folder1: FolderEntity = await Folder.loadByTitle('folder 1');
+		const folder2: FolderEntity = await Folder.loadByTitle('folder 2');
+		let note1: NoteEntity = await Note.loadByTitle('note 1');
+		let note2: NoteEntity = await Note.loadByTitle('note 2');
+		note1 = await shim.attachFileToNote(note1, testImagePath);
+		note2 = await shim.attachFileToNote(note2, testImagePath);
+		const resourceId1 = (await Note.linkedResourceIds(note1.body))[0];
+		const resourceId2 = (await Note.linkedResourceIds(note2.body))[0];
 
-	// 	await Folder.delete(folder.id);
+		await resourceService.indexNoteResources();
 
-	// 	expect((await Folder.all()).length).toBe(0);
-	// 	expect((await Note.all()).length).toBe(1);
-	// });
+		await Folder.updateAllShareIds();
+
+		await Folder.updateNoLongerSharedItems(['1']);
+
+		// Since `updateNoLongerSharedItems` sets the parent_id too,
+		// double-check that it's not actually modified.
+		expect((await Note.loadByTitle('note 1')).parent_id).toBe(folder1.id);
+		expect((await Note.loadByTitle('note 2')).parent_id).toBe(folder2.id);
+		expect((await Folder.loadByTitle('folder 1')).parent_id).toBe(folder1.parent_id);
+		expect((await Folder.loadByTitle('folder 2')).parent_id).toBe(folder2.parent_id);
+
+		// At this point, all items associated with share 2 should have their
+		// share_id cleared, because the share no longer exists. We also
+		// double-check that share 1 hasn't been cleared.
+		expect((await Note.loadByTitle('note 1')).share_id).toBe('1');
+		expect((await Note.loadByTitle('note 2')).share_id).toBe('');
+		expect((await Folder.loadByTitle('folder 1')).share_id).toBe('1');
+		expect((await Folder.loadByTitle('folder 2')).share_id).toBe('');
+		expect((await Resource.load(resourceId1)).share_id).toBe('1');
+		expect((await Resource.load(resourceId2)).share_id).toBe('');
+
+		// If we pass an empty array, it means there are no active share
+		// anymore, so all share_id should be cleared.
+		await Folder.updateNoLongerSharedItems([]);
+		expect((await Note.loadByTitle('note 1')).share_id).toBe('');
+		expect((await Folder.loadByTitle('folder 1')).share_id).toBe('');
+		expect((await Resource.load(resourceId1)).share_id).toBe('');
+
+		{
+			// If we run it again, it should not update the notes since the share_id
+			// has already been cleared.
+			const resource1 = await Resource.load(resourceId1);
+			const resource2 = await Resource.load(resourceId2);
+			const note1 = await Note.loadByTitle('note 1');
+			const note2 = await Note.loadByTitle('note 2');
+			const folder1 = await Folder.loadByTitle('folder 1');
+			const folder2 = await Folder.loadByTitle('folder 2');
+
+			await msleep(1);
+
+			await Folder.updateNoLongerSharedItems(['1']);
+
+			expect((await Resource.load(resourceId1)).updated_time).toBe(resource1.updated_time);
+			expect((await Resource.load(resourceId2)).updated_time).toBe(resource2.updated_time);
+			expect((await Note.loadByTitle('note 1')).updated_time).toBe(note1.updated_time);
+			expect((await Note.loadByTitle('note 2')).updated_time).toBe(note2.updated_time);
+			expect((await Folder.loadByTitle('folder 1')).updated_time).toBe(folder1.updated_time);
+			expect((await Folder.loadByTitle('folder 2')).updated_time).toBe(folder2.updated_time);
+		}
+	});
 
 });

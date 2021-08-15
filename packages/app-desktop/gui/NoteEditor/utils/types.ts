@@ -4,6 +4,7 @@ import { ToolbarButtonInfo } from '@joplin/lib/services/commands/ToolbarButtonUt
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 import { MarkupLanguage } from '@joplin/renderer';
 import { RenderResult, RenderResultPluginAsset } from '@joplin/renderer/MarkupToHtml';
+import { MarkupToHtmlOptions } from './useMarkupToHtml';
 
 export interface ToolbarButtonInfos {
 	[key: string]: ToolbarButtonInfo;
@@ -37,6 +38,7 @@ export interface NoteEditorProps {
 	toolbarButtonInfos: ToolbarButtonInfo[];
 	setTagsToolbarButtonInfo: ToolbarButtonInfo;
 	richTextBannerDismissed: boolean;
+	contentMaxWidth: number;
 }
 
 export interface NoteBodyEditorProps {
@@ -51,7 +53,7 @@ export interface NoteBodyEditorProps {
 	onWillChange(event: any): void;
 	onMessage(event: any): void;
 	onScroll(event: any): void;
-	markupToHtml: (markupLanguage: MarkupLanguage, markup: string, options: any)=> Promise<RenderResult>;
+	markupToHtml: (markupLanguage: MarkupLanguage, markup: string, options: MarkupToHtmlOptions)=> Promise<RenderResult>;
 	htmlToMarkdown: Function;
 	allAssets: (markupLanguage: MarkupLanguage)=> Promise<RenderResultPluginAsset[]>;
 	disabled: boolean;
@@ -67,6 +69,7 @@ export interface NoteBodyEditorProps {
 	noteToolbarButtonInfos: ToolbarButtonInfo[];
 	plugins: PluginStates;
 	fontSize: number;
+	contentMaxWidth: number;
 }
 
 export interface FormNote {

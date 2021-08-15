@@ -458,7 +458,7 @@ export default class Note extends BaseItem {
 		return this.modelSelectAll('SELECT * FROM notes WHERE is_conflict = 0');
 	}
 
-	static async updateGeolocation(noteId: string) {
+	public static async updateGeolocation(noteId: string): Promise<void> {
 		if (!Setting.value('trackLocation')) return;
 		if (!Note.updateGeolocationEnabled_) return;
 
@@ -503,7 +503,7 @@ export default class Note extends BaseItem {
 		note.longitude = geoData.coords.longitude;
 		note.latitude = geoData.coords.latitude;
 		note.altitude = geoData.coords.altitude;
-		return Note.save(note, { ignoreProvisionalFlag: true });
+		await Note.save(note, { ignoreProvisionalFlag: true });
 	}
 
 	static filter(note: NoteEntity) {
@@ -633,7 +633,7 @@ export default class Note extends BaseItem {
 		return n.updated_time < date;
 	}
 
-	static async save(o: NoteEntity, options: any = null) {
+	public static async save(o: NoteEntity, options: any = null): Promise<NoteEntity> {
 		const isNew = this.isNew(o, options);
 
 		// If true, this is a provisional note - it will be saved permanently

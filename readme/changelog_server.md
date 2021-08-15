@@ -1,5 +1,106 @@
 # Joplin Server Changelog
 
+## [server-v2.3.4-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.3.4-beta) (Pre-release) - 2021-08-13T16:56:17Z
+
+- Improved: Allow setting email key to prevent the same email to be sent multiple times (391204c)
+- Improved: Clarify beta transition message (c4fcfec)
+- Improved: Disable upload for accounts with subscription failed payments (f14c74d)
+- Improved: Re-enable account when subscription is paid (4b5318c)
+- Improved: Set better filename and mime type for files downloaded via published notes (#5286)
+- Fixed: Fixed publishing of notes with HTML markup type (97726b0)
+- Fixed: Fix regression (6359c9c)
+- Fixed: Fixed layout of notes on mobile devices (#5269)
+
+## [server-v2.2.11-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.2.11-beta) (Pre-release) - 2021-08-03T18:48:00Z
+
+- Improved: Disable beta account once expired (785248b)
+- Improved: Handle beta user upgrade (8910c87)
+- Improved: Prevent duplicate Stripe subscriptions and improved Stripe workflow testing (6ac22ed)
+- Fixed: Fixed support emails (724aa72)
+
+## [server-v2.2.10](https://github.com/laurent22/joplin/releases/tag/server-v2.2.10) - 2021-08-01T10:04:53Z
+
+- Improved: Allows providing a coupon when creating the Stripe checkout session (b5b6111)
+
+## [server-v2.2.9-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.2.9-beta) (Pre-release) - 2021-07-31T13:52:53Z
+
+- New: Add Docker major, minor and beta version tags (#5237 by [@JackGruber](https://github.com/JackGruber))
+- New: Add support for Stripe yearly subscriptions (f2547fe)
+- Improved: Improve installation instructions (53b4d7a)
+- Fixed: Fixed certain URLs (282f782)
+- Fixed: Published notes that contain non-alphabetical characters could end up being truncated (#5229)
+
+## [server-v2.2.8-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.2.8-beta) (Pre-release) - 2021-07-24T16:55:58Z
+
+- New: Added form tokens to prevent CSRF attacks (19b45de)
+- Improved: Allow admin to change Stripe subscription (75a421e)
+- Improved: Allow enabling or disabling a user. Handle cancelling subscription. (27c3cbd)
+- Improved: Allow user to upgrade account (e83ab93)
+- Improved: Allow users to cancel Stripe subscription (b7e9848)
+- Improved: Clarify error message when user info cannot be saved (4567b78)
+- Improved: Explain how to use Joplin Server with a Joplin app (3f993af)
+- Improved: Handle Stripe webhook receiving multiple times the same event (252d069)
+- Improved: Make sure email URLs are displayed as clickable links (7245aea)
+- Improved: Moved email templates to separate files (6a93cb2)
+- Improved: Set default of env SUPPORT_EMAIL to "SUPPORT_EMAIL" to make it clear it needs to be set (92520e5)
+
+## [server-v2.2.7-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.2.7-beta) (Pre-release) - 2021-07-11T17:31:42Z
+
+- New: Added support for resetting user password (62b6198)
+- Improved: Check password complexity (240cb35)
+- Improved: Disallow changing email address until a secure solution to change it is implemented (f8d2c26)
+- Fixed: Fixed mail queue as some emails were not being processed (89f4ca1)
+
+## [server-v2.2.6-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.2.6-beta) (Pre-release) - 2021-07-09T15:57:47Z
+
+- New: Add Docker image labels (#5158 by [@JackGruber](https://github.com/JackGruber))
+- Fixed: Fixed change processing logic (5a27d4d)
+- Fixed: Fixed styling of shared note (6c1a6b0)
+
+## [server-v2.2.5-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.2.5-beta) (Pre-release) - 2021-07-03T21:40:37Z
+
+- Improved: Make app context immutable and derive the per-request context properties from it (e210926)
+
+## [server-v2.2.4-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.2.4-beta) (Pre-release) - 2021-07-03T21:10:29Z
+
+- Fixed: Fixed issue with user sessions being mixed up (238cc86)
+
+## [server-v2.2.3-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.2.3-beta) (Pre-release) - 2021-07-03T19:38:36Z
+
+- Fixed: Fixed size of a database field (264f36f)
+
+## [server-v2.2.2-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.2.2-beta) (Pre-release) - 2021-07-03T18:28:35Z
+
+- Improved: Improved logging and reliability of cron tasks (d99c34f)
+- Improved: Only emit "created" event when new user is saved (8883df2)
+
+## [server-v2.2.1-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.2.1-beta) (Pre-release) - 2021-07-03T15:41:32Z
+
+- New: Add support for account max total size (b507fbf)
+- Improved: Display max size info in dashboard (3d18514)
+- Improved: Hide "Is Admin" from dashboard (7447793)
+- Improved: Moved Joplin-specific context properties under its own namespace (bfa7ea7)
+- Improved: Normalize email addresses before saving them (427218b)
+- Improved: Remove dangerous "Delete all" button for now (125af75)
+
+## [server-v2.1.6-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.1.6-beta) (Pre-release) - 2021-06-24T10:01:46Z
+
+- Fixed: Fixed accessing main website (Regression) (f868797)
+
+## [server-v2.1.5-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.1.5-beta) (Pre-release) - 2021-06-24T08:26:38Z
+
+- New: Add support for X-API-MIN-VERSION header (51f3c00)
+
+## [server-v2.1.4-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.1.4-beta) (Pre-release) - 2021-06-24T07:26:03Z
+
+- Improved: Split permission to share note or folder (0c12c7f)
+- Fixed: Fixed handling of max item size for encrypted items (112157e)
+- Fixed: Fixed transaction locking issue when a sub-transaction fails (12aae48)
+
+## [server-v2.1.3-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.1.3-beta) (Pre-release) - 2021-06-19T14:15:06Z
+
+- New: Add support for uploading multiple items in one request (3b9c02e)
+
 ## [server-v2.1.1](https://github.com/laurent22/joplin/releases/tag/server-v2.1.1) - 2021-06-17T17:27:29Z
 
 - New: Added account info to dashboard and title to pages (7f0b3fd)

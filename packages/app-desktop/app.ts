@@ -1,7 +1,7 @@
 import ResourceEditWatcher from '@joplin/lib/services/ResourceEditWatcher/index';
 import CommandService from '@joplin/lib/services/CommandService';
 import KeymapService from '@joplin/lib/services/KeymapService';
-import PluginService from '@joplin/lib/services/plugins/PluginService';
+import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import resourceEditWatcherReducer, { defaultState as resourceEditWatcherDefaultState } from '@joplin/lib/services/ResourceEditWatcher/reducer';
 import { defaultState, State } from '@joplin/lib/reducer';
 import PluginRunner from './services/plugins/PluginRunner';
@@ -26,28 +26,26 @@ import ExternalEditWatcher from '@joplin/lib/services/ExternalEditWatcher';
 import produce from 'immer';
 import iterateItems from './gui/ResizableLayout/utils/iterateItems';
 import validateLayout from './gui/ResizableLayout/utils/validateLayout';
-
 const { FoldersScreenUtils } = require('@joplin/lib/folders-screen-utils.js');
-import MasterKey from '@joplin/lib/models/MasterKey';
 import Folder from '@joplin/lib/models/Folder';
 const fs = require('fs-extra');
 import Tag from '@joplin/lib/models/Tag';
 import { reg } from '@joplin/lib/registry';
 const packageInfo = require('./packageInfo.js');
 import DecryptionWorker from '@joplin/lib/services/DecryptionWorker';
-const ClipperServer = require('@joplin/lib/ClipperServer');
+import ClipperServer from '@joplin/lib/ClipperServer';
 const { webFrame } = require('electron');
 const Menu = bridge().Menu;
 const PluginManager = require('@joplin/lib/services/PluginManager');
 import RevisionService from '@joplin/lib/services/RevisionService';
 import MigrationService from '@joplin/lib/services/MigrationService';
-const TemplateUtils = require('@joplin/lib/TemplateUtils');
-const CssUtils = require('@joplin/lib/CssUtils');
+import { loadCustomCss, injectCustomStyles } from '@joplin/lib/CssUtils';
 // import  populateDatabase from '@joplin/lib/services/debug/populateDatabase';
 
 const commands = [
 	require('./gui/MainScreen/commands/editAlarm'),
 	require('./gui/MainScreen/commands/exportPdf'),
+	require('./gui/MainScreen/commands/gotoAnything'),
 	require('./gui/MainScreen/commands/hideModalMessage'),
 	require('./gui/MainScreen/commands/moveToFolder'),
 	require('./gui/MainScreen/commands/newFolder'),
@@ -59,14 +57,14 @@ const commands = [
 	require('./gui/MainScreen/commands/openTag'),
 	require('./gui/MainScreen/commands/print'),
 	require('./gui/MainScreen/commands/renameFolder'),
-	require('./gui/MainScreen/commands/showShareFolderDialog'),
 	require('./gui/MainScreen/commands/renameTag'),
 	require('./gui/MainScreen/commands/search'),
-	require('./gui/MainScreen/commands/selectTemplate'),
 	require('./gui/MainScreen/commands/setTags'),
 	require('./gui/MainScreen/commands/showModalMessage'),
 	require('./gui/MainScreen/commands/showNoteContentProperties'),
 	require('./gui/MainScreen/commands/showNoteProperties'),
+	require('./gui/MainScreen/commands/showPrompt'),
+	require('./gui/MainScreen/commands/showShareFolderDialog'),
 	require('./gui/MainScreen/commands/showShareNoteDialog'),
 	require('./gui/MainScreen/commands/showSpellCheckerMenu'),
 	require('./gui/MainScreen/commands/toggleEditors'),
@@ -74,7 +72,6 @@ const commands = [
 	require('./gui/MainScreen/commands/toggleNoteList'),
 	require('./gui/MainScreen/commands/toggleSideBar'),
 	require('./gui/MainScreen/commands/toggleVisiblePanes'),
-	require('./gui/MainScreen/commands/showPrompt'),
 	require('./gui/NoteEditor/commands/focusElementNoteBody'),
 	require('./gui/NoteEditor/commands/focusElementNoteTitle'),
 	require('./gui/NoteEditor/commands/showLocalSearch'),
@@ -537,6 +534,26 @@ class Application extends BaseApplication {
 		return cssString;
 	}
 
+	private async checkForLegacyTemplates() {
+		const templatesDir = `${Setting.value('profileDir')}/templates`;
+		if (await shim.fsDriver().exists(templatesDir)) {
+			try {
+				const files = await shim.fsDriver().readDirStats(templatesDir);
+				for (const file of files) {
+					if (file.path.endsWith('.md')) {
+						// There is atleast one template.
+						this.store().dispatch({
+							type: 'CONTAINS_LEGACY_TEMPLATES',
+						});
+						break;
+					}
+				}
+			} catch (error) {
+				reg.logger().error(`Failed to read templates directory: ${error}`);
+			}
+		}
+	}
+
 	private async initPluginService() {
 		const service = PluginService.instance();
 
@@ -546,12 +563,14 @@ class Application extends BaseApplication {
 
 		const pluginSettings = service.unserializePluginSettings(Setting.value('plugins.states'));
 
-		// Users can add and remove plugins from the config screen at any
-		// time, however we only effectively uninstall the plugin the next
-		// time the app is started. What plugin should be uninstalled is
-		// stored in the settings.
-		const newSettings = service.clearUpdateState(await service.uninstallPlugins(pluginSettings));
-		Setting.setValue('plugins.states', newSettings);
+		{
+			// Users can add and remove plugins from the config screen at any
+			// time, however we only effectively uninstall the plugin the next
+			// time the app is started. What plugin should be uninstalled is
+			// stored in the settings.
+			const newSettings = service.clearUpdateState(await service.uninstallPlugins(pluginSettings));
+			Setting.setValue('plugins.states', newSettings);
+		}
 
 		try {
 			if (await shim.fsDriver().exists(Setting.value('pluginDir'))) {
@@ -575,6 +594,25 @@ class Application extends BaseApplication {
 			this.logger().error(`There was an error loading plugins from ${Setting.value('plugins.devPluginPaths')}:`, error);
 		}
 
+		{
+			// Users can potentially delete files from /plugins or even delete
+			// the complete folder. When that happens, we still have the plugin
+			// info in the state, which can cause various issues, so to sort it
+			// out we remove from the state any plugin that has *not* been loaded
+			// above (meaning the file was missing).
+			// https://github.com/laurent22/joplin/issues/5253
+			const oldSettings = service.unserializePluginSettings(Setting.value('plugins.states'));
+			const newSettings: PluginSettings = {};
+			for (const pluginId of Object.keys(oldSettings)) {
+				if (!service.pluginIds.includes(pluginId)) {
+					this.logger().warn('Found a plugin in the state that has not been loaded, which means the plugin might have been deleted outside Joplin - removing it from the state:', pluginId);
+					continue;
+				}
+				newSettings[pluginId] = oldSettings[pluginId];
+			}
+			Setting.setValue('plugins.states', newSettings);
+		}
+
 		this.checkAllPluginStartedIID_ = setInterval(() => {
 			if (service.allPluginsStarted) {
 				clearInterval(this.checkAllPluginStartedIID_);
@@ -595,8 +633,6 @@ class Application extends BaseApplication {
 
 		argv = await super.start(argv);
 
-		await fs.mkdirp(Setting.value('templateDir'), 0o755);
-
 		await this.applySettingsSideEffects();
 
 		if (Setting.value('sync.upgradeState') === Setting.SYNC_UPGRADE_STATE_MUST_DO) {
@@ -611,7 +647,7 @@ class Application extends BaseApplication {
 
 		// Loads app-wide styles. (Markdown preview-specific styles loaded in app.js)
 		const filename = Setting.custom_css_files.JOPLIN_APP;
-		await CssUtils.injectCustomStyles(`${dir}/${filename}`);
+		await injectCustomStyles('appStyles', `${dir}/${filename}`);
 
 		AlarmService.setDriver(new AlarmServiceDriverNode({ appName: packageInfo.build.appId }));
 		AlarmService.setLogger(reg.logger());
@@ -669,12 +705,12 @@ class Application extends BaseApplication {
 			items: tags,
 		});
 
-		const masterKeys = await MasterKey.all();
+		// const masterKeys = await MasterKey.all();
 
-		this.dispatch({
-			type: 'MASTERKEY_UPDATE_ALL',
-			items: masterKeys,
-		});
+		// this.dispatch({
+		// 	type: 'MASTERKEY_UPDATE_ALL',
+		// 	items: masterKeys,
+		// });
 
 		this.store().dispatch({
 			type: 'FOLDER_SELECT',
@@ -687,23 +723,18 @@ class Application extends BaseApplication {
 		});
 
 		// Loads custom Markdown preview styles
-		const cssString = await CssUtils.loadCustomCss(`${Setting.value('profileDir')}/userstyle.css`);
+		const cssString = await loadCustomCss(`${Setting.value('profileDir')}/userstyle.css`);
 		this.store().dispatch({
-			type: 'LOAD_CUSTOM_CSS',
+			type: 'CUSTOM_CSS_APPEND',
 			css: cssString,
-		});
-
-		const templates = await TemplateUtils.loadTemplates(Setting.value('templateDir'));
-
-		this.store().dispatch({
-			type: 'TEMPLATE_UPDATE_ALL',
-			templates: templates,
 		});
 
 		this.store().dispatch({
 			type: 'NOTE_DEVTOOLS_SET',
 			value: Setting.value('flagOpenDevTools'),
 		});
+
+		await this.checkForLegacyTemplates();
 
 		// Note: Auto-update currently doesn't work in Linux: it downloads the update
 		// but then doesn't install it on exit.
@@ -757,7 +788,7 @@ class Application extends BaseApplication {
 		ClipperServer.instance().setDispatch(this.store().dispatch);
 
 		if (Setting.value('clipperServer.autoStart')) {
-			ClipperServer.instance().start();
+			void ClipperServer.instance().start();
 		}
 
 		ExternalEditWatcher.instance().setLogger(reg.logger());

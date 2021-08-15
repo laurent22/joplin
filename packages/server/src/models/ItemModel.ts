@@ -1,11 +1,12 @@
 import BaseModel, { SaveOptions, LoadOptions, DeleteOptions, ValidateOptions, AclAction } from './BaseModel';
-import { ItemType, databaseSchema, Uuid, Item, ShareType, Share, ChangeType, User } from '../db';
+import { ItemType, databaseSchema, Uuid, Item, ShareType, Share, ChangeType, User, UserItem } from '../db';
 import { defaultPagination, paginateDbQuery, PaginatedResults, Pagination } from './utils/pagination';
 import { isJoplinItemName, isJoplinResourceBlobPath, linkedResourceIds, serializeJoplinItem, unserializeJoplinItem } from '../utils/joplinUtils';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { ApiError, ErrorForbidden, ErrorUnprocessableEntity } from '../utils/errors';
 import { Knex } from 'knex';
 import { ChangePreviousItem } from './ChangeModel';
+import { unique } from '../utils/array';
 
 const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
 
@@ -38,6 +39,8 @@ export interface ItemSaveOption extends SaveOptions {
 }
 
 export default class ItemModel extends BaseModel<Item> {
+
+	private updatingTotalSizes_: boolean = false;
 
 	protected get tableName(): string {
 		return 'items';
@@ -227,54 +230,6 @@ export default class ItemModel extends BaseModel<Item> {
 		return output;
 	}
 
-	// private async folderChildrenItems(userId: Uuid, folderId: string): Promise<Item[]> {
-	// 	let output: Item[] = [];
-
-	// 	const rows: Item[] = await this
-	// 		.db('user_items')
-	// 		.leftJoin('items', 'items.id', 'user_items.item_id')
-	// 		.select('items.id', 'items.jop_id', 'items.jop_type')
-	// 		.where('items.jop_parent_id', '=', folderId)
-	// 		.where('user_items.user_id', '=', userId);
-
-	// 	for (const row of rows) {
-	// 		output.push(row);
-
-	// 		if (row.jop_type === ModelType.Folder) {
-	// 			const children = await this.folderChildrenItems(userId, row.jop_id);
-	// 			output = output.concat(children);
-	// 		}
-	// 	}
-
-	// 	return output;
-	// }
-
-	// public async shareJoplinFolderAndContent(shareId: Uuid, fromUserId: Uuid, toUserId: Uuid, folderId: string) {
-	// 	const folderItem = await this.loadByJopId(fromUserId, folderId, { fields: ['id'] });
-	// 	if (!folderItem) throw new ErrorNotFound(`Could not find folder "${folderId}" for share "${shareId}"`);
-
-	// 	const items = [folderItem].concat(await this.folderChildrenItems(fromUserId, folderId));
-
-	// 	const alreadySharedItemIds: string[] = await this
-	// 		.db('user_items')
-	// 		.pluck('item_id')
-	// 		.whereIn('item_id', items.map(i => i.id))
-	// 		.where('user_id', '=', toUserId)
-	// 		// .where('share_id', '!=', '');
-
-	// 	await this.withTransaction(async () => {
-	// 		for (const item of items) {
-	// 			if (alreadySharedItemIds.includes(item.id)) continue;
-	// 			await this.models().userItem().add(toUserId, item.id, shareId);
-
-	// 			if (item.jop_type === ModelType.Note) {
-	// 				const resourceIds = await this.models().itemResource().byItemId(item.id);
-	// 				await this.models().share().updateResourceShareStatus(true, shareId, fromUserId, toUserId, resourceIds);
-	// 			}
-	// 		}
-	// 	});
-	// }
-
 	public itemToJoplinItem(itemRow: Item): any {
 		if (itemRow.jop_type <= 0) throw new Error(`Not a Joplin item: ${itemRow.id}`);
 		if (!itemRow.content) throw new Error('Item content is missing');
@@ -410,7 +365,7 @@ export default class ItemModel extends BaseModel<Item> {
 					};
 				}
 			}
-		});
+		}, 'ItemModel::saveFromRawContent');
 
 		return output;
 	}
@@ -636,7 +591,79 @@ export default class ItemModel extends BaseModel<Item> {
 			}
 
 			return item;
-		});
+		}, 'ItemModel::saveForUser');
+	}
+
+	public async updateTotalSizes(): Promise<void> {
+		interface TotalSizeRow {
+			userId: Uuid;
+			totalSize: number;
+		}
+
+		// Total sizes are updated once an hour, so unless there's something
+		// very wrong this error shouldn't happen.
+		if (this.updatingTotalSizes_) throw new Error('Already updating total sizes');
+
+		this.updatingTotalSizes_ = true;
+
+		const doneUserIds: Record<Uuid, boolean> = {};
+
+		try {
+			while (true) {
+				const latestProcessedChange = await this.models().keyValue().value<string>('ItemModel::updateTotalSizes::latestProcessedChange');
+
+				const paginatedChanges = await this.models().change().allFromId(latestProcessedChange || '');
+				const changes = paginatedChanges.items;
+
+				if (!changes.length) {
+					// `allFromId()` may return empty pages when all items have
+					// been deleted. In that case, we only save the cursor and
+					// continue.
+					await this.models().keyValue().setValue('ItemModel::updateTotalSizes::latestProcessedChange', paginatedChanges.cursor);
+				} else {
+					const itemIds: Uuid[] = unique(changes.map(c => c.item_id));
+					const userItems: UserItem[] = await this.db('user_items').select('user_id').whereIn('item_id', itemIds);
+					const userIds: Uuid[] = unique(userItems.map(u => u.user_id));
+
+					const totalSizes: TotalSizeRow[] = [];
+					for (const userId of userIds) {
+						if (doneUserIds[userId]) continue;
+
+						totalSizes.push({
+							userId,
+							totalSize: await this.calculateUserTotalSize(userId),
+						});
+
+						doneUserIds[userId] = true;
+					}
+
+					await this.withTransaction(async () => {
+						for (const row of totalSizes) {
+							await this.models().user().save({
+								id: row.userId,
+								total_item_size: row.totalSize,
+							});
+						}
+
+						await this.models().keyValue().setValue('ItemModel::updateTotalSizes::latestProcessedChange', paginatedChanges.cursor);
+					}, 'ItemModel::updateTotalSizes');
+				}
+
+				if (!paginatedChanges.has_more) break;
+			}
+		} finally {
+			this.updatingTotalSizes_ = false;
+		}
+	}
+
+	public async calculateUserTotalSize(userId: Uuid): Promise<number> {
+		const result = await this.db('items')
+			.sum('items.content_size', { as: 'total' })
+			.leftJoin('user_items', 'items.id', 'user_items.item_id')
+			.where('user_items.user_id', userId)
+			.first();
+
+		return result && result.total ? result.total : 0;
 	}
 
 	public async save(_item: Item, _options: SaveOptions = {}): Promise<Item> {

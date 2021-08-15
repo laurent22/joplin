@@ -25,6 +25,8 @@ This would be an example of valid cURL call using a token:
 
 In the documentation below, the token will not be specified every time however you will need to include it.
 
+If needed you may also [request the token programmatically](https://github.com/laurent22/joplin/blob/dev/readme/spec/clipper_auth.md)
+
 # Using the API
 
 All the calls, unless noted otherwise, receives and send **JSON data**. For example to create a new note:
@@ -55,6 +57,7 @@ To get the IDs only of all the tags:
 	curl http://localhost:41184/tags?fields=id
 
 By default API results will contain the following fields: **id**, **parent_id**, **title**
+
 # Pagination
 
 All API calls that return multiple results will be paginated and will return the following structure:
@@ -113,7 +116,7 @@ Call **GET /ping** to check if the service is available. It should return "Jopli
 
 # Searching
 
-Call **GET /search?query=YOUR_QUERY** to search for notes. This end-point supports the `field` parameter which is recommended to use so that you only get the data that you need. The query syntax is as described in the main documentation: https://joplinapp.org/#searching
+Call **GET /search?query=YOUR_QUERY** to search for notes. This end-point supports the `field` parameter which is recommended to use so that you only get the data that you need. The query syntax is as described in the main documentation: https://joplinapp.org/help/#searching
 
 To retrieve non-notes items, such as notebooks or tags, add a `type` parameter and set it to the required [item type name](#item-type-id). In that case, full text search will not be used - instead it will be a simple case-insensitive search. You can also use `*` as a wildcard. This is convenient for example to retrieve notebooks or tags by title.
 

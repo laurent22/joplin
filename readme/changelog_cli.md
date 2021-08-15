@@ -1,5 +1,34 @@
 # Joplin terminal app changelog
 
+## [cli-v2.2.2](https://github.com/laurent22/joplin/releases/tag/cli-v2.2.2) - 2021-08-11T15:34:56Z
+
+- Fixed: Fixed version command so that it does not require the keychain (15766d1)
+
+## [cli-v2.2.1](https://github.com/laurent22/joplin/releases/tag/cli-v2.2.1) - 2021-08-10T10:21:09Z
+
+- Improved: Ensure that timestamps are not changed when sharing or unsharing a note (cafaa9c)
+- Improved: Fix AWS S3 sync error and upgrade framework to v3 (#5212) (#4810 by Lee Matos)
+- Improved: Handles OneDrive throttling responses and sets User-Agent based on Microsoft best practices (#5246) (#5244 by [@alec](https://github.com/alec))
+- Improved: Interpret only valid search filters (#5103) (#3871 by [@JackGruber](https://github.com/JackGruber))
+- Fixed: Do not export share properties (#5232)
+- Fixed: Fixed issue with orphaned resource being created in case of a resource conflict (#5223)
+- Fixed: Import highlighted text from ENEX files (#5213)
+
+## [cli-v2.1.2](https://github.com/laurent22/joplin/releases/tag/cli-v2.1.2) - 2021-06-27T15:51:36Z
+
+- New: Add support for X-API-MIN-VERSION header (51f3c00)
+- New: Added flag to disable local lock when synchronising (7aff6d2)
+- Improved: Allow uploading items in batch when synchronising with Joplin Server (0222c0f)
+- Improved: Also allow disabling TLS errors for Joplin Cloud to go around error UNABLE_TO_GET_ISSUER_CERT_LOCALLY (118a2f9)
+- Improved: Improved first sync speed when synchronising with Joplin Server (4dc1210)
+- Improved: Mask auth token and password in log (0d33955)
+- Improved: Optimise first synchronisation, when items have never been synced before (15ce5cd)
+- Improved: Update Mermaid: 8.8.4 -&gt; 8.10.2 (#5092 by Helmut K. C. Tessarek)
+- Fixed: Fixed error that could prevent a revision from being created, and that would prevent the revision service from processing the rest of the notes (#5051)
+- Fixed: Fixed issue when trying to sync an item associated with a share that no longer exists (5bb68ba)
+- Fixed: Fixed search when the index contains non-existing notes (5ecac21)
+- Fixed: Handle special type of code block when importing ENEX files (#4965)
+
 ## [cli-v2.0.1](https://github.com/laurent22/joplin/releases/tag/cli-v2.0.1) - 2021-06-16T19:06:28Z
 
 - New: Add new date format YYMMDD (#4954 by Helmut K. C. Tessarek)

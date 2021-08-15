@@ -13,9 +13,12 @@ interface HookDependencies {
 	plugins: PluginStates;
 }
 
-interface MarkupToHtmlOptions {
+export interface MarkupToHtmlOptions {
 	replaceResourceInternalToExternalLinks?: boolean;
 	resourceInfos?: ResourceInfos;
+	contentMaxWidth?: number;
+	plugins?: Record<string, any>;
+	bodyOnly?: boolean;
 }
 
 export default function useMarkupToHtml(deps: HookDependencies) {
@@ -26,7 +29,7 @@ export default function useMarkupToHtml(deps: HookDependencies) {
 			resourceBaseUrl: `file://${Setting.value('resourceDir')}/`,
 			customCss: customCss || '',
 		});
-	}, [plugins]);
+	}, [plugins, customCss]);
 
 	return useCallback(async (markupLanguage: number, md: string, options: MarkupToHtmlOptions = null): Promise<any> => {
 		options = {

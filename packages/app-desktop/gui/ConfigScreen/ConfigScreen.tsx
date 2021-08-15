@@ -4,16 +4,16 @@ import ButtonBar from './ButtonBar';
 import Button, { ButtonLevel } from '../Button/Button';
 import { _ } from '@joplin/lib/locale';
 import bridge from '../../services/bridge';
-import Setting, { SyncStartupOperation } from '@joplin/lib/models/Setting';
+import Setting, { AppType, SyncStartupOperation } from '@joplin/lib/models/Setting';
 import control_PluginsStates from './controls/plugins/PluginsStates';
+import EncryptionConfigScreen from '../EncryptionConfigScreen';
 
 const { connect } = require('react-redux');
 const { themeStyle } = require('@joplin/lib/theme');
 const pathUtils = require('@joplin/lib/path-utils');
 const SyncTargetRegistry = require('@joplin/lib/SyncTargetRegistry');
 const shared = require('@joplin/lib/components/shared/config-shared.js');
-const { EncryptionConfigScreen } = require('../EncryptionConfigScreen.min');
-const { ClipperConfigScreen } = require('../ClipperConfigScreen.min');
+import ClipperConfigScreen from '../ClipperConfigScreen';
 const { KeymapConfigScreen } = require('../KeymapConfig/KeymapConfigScreen');
 
 const settingKeyToControl: any = {
@@ -360,7 +360,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 		const md = Setting.settingMetadata(key);
 
-		const descriptionText = Setting.keyDescription(key, 'desktop');
+		const descriptionText = Setting.keyDescription(key, AppType.Desktop);
 		const descriptionComp = this.renderDescription(this.props.themeId, descriptionText);
 
 		if (settingKeyToControl[key]) {

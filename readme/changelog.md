@@ -1,9 +1,91 @@
 # Joplin changelog
 
+## [v2.2.5](https://github.com/laurent22/joplin/releases/tag/v2.2.5) (Pre-release) - 2021-08-07T10:35:24Z
+
+- Improved: Remove template feature (replaced by template plugin) (e9d5901)
+
+## [v2.2.4](https://github.com/laurent22/joplin/releases/tag/v2.2.4) (Pre-release) - 2021-08-05T16:42:48Z
+
+IMPORTANT: If you are a plugin developer or if, as a user, you notice a plugin that no longer works, please read this post: https://discourse.joplinapp.org/t/19278
+
+- New: Plugins: Add ability to make dialogs fit the application window ([#5219](https://github.com/laurent22/joplin/issues/5219) by [@Ahmad45123](https://github.com/Ahmad45123))
+- New: Plugins: Add support for loading application chrome and note CSS from the plugin (07d2a60)
+- New: Turn old plugin deprecation notices into errors (7f00e4e)
+- Improved: Converted Clipper notification to a modal dialog that shows up in all screens (fb9ec10)
+- Improved: GotoAnything sometimes is not working on first try ([#5184](https://github.com/laurent22/joplin/issues/5184))
+- Improved: Increase space between paragraphs in viewer and Rich Text editor to match Markdown editor ([#5256](https://github.com/laurent22/joplin/issues/5256))
+- Fixed: Disable "Dropped file type is not supported" notification in Rich Text editor ([#5268](https://github.com/laurent22/joplin/issues/5268))
+- Fixed: Do not export share properties ([#5232](https://github.com/laurent22/joplin/issues/5232))
+- Fixed: Fixed header spacing (regression) (d3cd843)
+- Fixed: Fixed issue with orphaned resource being created in case of a resource conflict ([#5223](https://github.com/laurent22/joplin/issues/5223))
+- Fixed: Fixed plugin state when it has been deleted outside the app ([#5253](https://github.com/laurent22/joplin/issues/5253))
+- Fixed: Fixed recipient list colors in Share Notebook dialog ([#5258](https://github.com/laurent22/joplin/issues/5258))
+- Fixed: Fixed share note color in note list ([#5259](https://github.com/laurent22/joplin/issues/5259))
+- Fixed: Focus is lost while searching in all notes ([#5208](https://github.com/laurent22/joplin/issues/5208))
+- Fixed: Import highlighted text from ENEX files ([#5213](https://github.com/laurent22/joplin/issues/5213))
+- Fixed: Katex code could be broken after editing it in Rich Text editor ([#5241](https://github.com/laurent22/joplin/issues/5241))
+
+## [v2.2.2](https://github.com/laurent22/joplin/releases/tag/v2.2.2) (Pre-release) - 2021-07-19T10:28:35Z
+
+Attention: The default font size has been changed in the Markdown editor. You can change it back in Config > Appearance > Editor font size.
+
+- Improved: Ensure that timestamps are not changed when sharing or unsharing a note (cafaa9c)
+- Improved: Make Markdown editor styling closer to view styling ([#5174](https://github.com/laurent22/joplin/issues/5174))
+- Improved: Make sure clipper authorisation notification is displayed, even when in config screen (b2de27b)
+
+## [v2.1.9](https://github.com/laurent22/joplin/releases/tag/v2.1.9) - 2021-07-19T10:28:43Z
+
+- Improved: Ensure that timestamps are not changed when sharing or unsharing a note (cafaa9c)
+- Improved: Make sure clipper authorisation notification is displayed, even when in config screen (b2de27b)
+
+## [v2.2.1](https://github.com/laurent22/joplin/releases/tag/v2.2.1) (Pre-release) - 2021-07-09T17:38:25Z
+
+- New: Add keyboard shortcuts for inserting lists in Rich Text editor ([#5137](https://github.com/laurent22/joplin/issues/5137) by Philipp Keck)
+- New: Plugins: Add support for gotoAnything command so that it can be called from plugins (00b39e4)
+- Improved: Interpret only valid search filters ([#5103](https://github.com/laurent22/joplin/issues/5103)) ([#3871](https://github.com/laurent22/joplin/issues/3871) by [@JackGruber](https://github.com/JackGruber))
+- Fixed: Empty note list panel does not scale with the note content panel ([#5141](https://github.com/laurent22/joplin/issues/5141)) ([#4524](https://github.com/laurent22/joplin/issues/4524) by Siddharth Magadum)
+- Fixed: Fix double-paste also on Linux ([#5143](https://github.com/laurent22/joplin/issues/5143)) ([#4243](https://github.com/laurent22/joplin/issues/4243) by Philipp Keck)
+- Fixed: Joplin crashes when trying to Change application layout ([#5134](https://github.com/laurent22/joplin/issues/5134)) ([#5111](https://github.com/laurent22/joplin/issues/5111) by [@mablin7](https://github.com/mablin7))
+- Fixed: Plugins: Fix type of PostMessageHandler ([#5138](https://github.com/laurent22/joplin/issues/5138) by [@thejohnfreeman](https://github.com/thejohnfreeman))
+
+## [v2.1.8](https://github.com/laurent22/joplin/releases/tag/v2.1.8) - 2021-07-03T08:25:16Z
+
+- Fixes [#5133](https://github.com/laurent22/joplin/issues/5133): Items keep being uploaded to Joplin Server after a note has been shared.
+- Fixed issue where untitled notes where created after a note had been shared and synced
+
+## [v2.1.7](https://github.com/laurent22/joplin/releases/tag/v2.1.7) - 2021-06-26T19:48:55Z
+
+- New: Add support for Joplin Server X-API-MIN-VERSION header (51f3c00)
+- Improved: Activate Joplin Server optimisations (3d03321)
+- Fixed: Fixed search when the index contains non-existing notes (5ecac21)
+- Fixed: Notes would appear to be in the wrong notebook after having been shared (9693187)
+
+## [v2.1.5](https://github.com/laurent22/joplin/releases/tag/v2.1.5) (Pre-release) - 2021-06-23T15:08:52Z
+
+- New: Plugins: Add support for read and writing text, HTML and images from/to clipboard (50ecdc2)
+- Improved: Web Clipper now must request authorisation before accessing the application data (67d9977)
+- Improved: Also allow disabling TLS errors for Joplin Cloud to go around error UNABLE_TO_GET_ISSUER_CERT_LOCALLY (118a2f9)
+- Improved: Apply monospace font to code dialog in Rich Text editor ([#4905](https://github.com/laurent22/joplin/issues/4905))
+- Fixed: Handle special type of code block when importing ENEX files ([#4965](https://github.com/laurent22/joplin/issues/4965))
+- Fixed: Fixed error that could prevent a revision from being created, and that would prevent the revision service from processing the rest of the notes ([#5051](https://github.com/laurent22/joplin/issues/5051))
+- Fixed: Fixed issue when trying to sync an item associated with a share that no longer exists (5bb68ba)
+- Fixed: Fixed note history line count information (Regression) (caabdbd)
+- Fixed: Fixed readability of links in notification banners ([#4983](https://github.com/laurent22/joplin/issues/4983))
+
+## [v2.1.3](https://github.com/laurent22/joplin/releases/tag/v2.1.3) (Pre-release) - 2021-06-19T16:32:51Z
+
+- Improved: Optimise first synchronisation, when items have never been synced before (15ce5cd)
+- Improved: Allow uploading items in batch when synchronising with Joplin Server (0222c0f)
+- Improved: Improved first sync speed when synchronising with Joplin Server (4dc1210)
+- Improved: Mask auth token and password in log (0d33955)
+- Improved: Added feature flags to disable Joplin Server sync optimisations by default, so that it still work with server 2.0 (326fef4)
+- Improved: Update Mermaid: 8.8.4 -&gt; 8.10.2 ([#5092](https://github.com/laurent22/joplin/issues/5092) by Helmut K. C. Tessarek)
+- Fixed: Plugins: Fixed saving secure settings to the keychain, and added way to store plugin settings to settings.json (ab9bbcb)
+
 ## [v2.0.11](https://github.com/laurent22/joplin/releases/tag/v2.0.11) - 2021-06-16T17:55:49Z
 
 - Improved: Prevent sync process from being stuck when the download state of a resource is invalid (5c6fd93)
-- Fixed: Prevent app from crashing when loading a setting value that has been removed ([#5086](https://github.com/laurent22/joplin/issues/5086))
+- Fixed: Prevent app from crashing when loading a setting value that has been removed ([[#5086](https://github.com/laurent22/joplin/issues/5086)](https://github.com/laurent22/joplin/issues/5086))
 
 ## [v2.0.10](https://github.com/laurent22/joplin/releases/tag/v2.0.10) - 2021-06-16T07:58:29Z
 

@@ -65,6 +65,7 @@ export default class JoplinSettings {
 			if ('minimum' in setting) internalSettingItem.minimum = setting.minimum;
 			if ('maximum' in setting) internalSettingItem.maximum = setting.maximum;
 			if ('step' in setting) internalSettingItem.step = setting.step;
+			if ('storage' in setting) internalSettingItem.storage = setting.storage;
 
 			await Setting.registerSetting(this.namespacedKey(key), internalSettingItem);
 		}
@@ -76,7 +77,7 @@ export default class JoplinSettings {
 	 * Registers a new setting.
 	 */
 	public async registerSetting(key: string, settingItem: SettingItem) {
-		this.plugin_.deprecationNotice('1.8', 'joplin.settings.registerSetting() is deprecated in favour of joplin.settings.registerSettings()');
+		this.plugin_.deprecationNotice('1.8', 'joplin.settings.registerSetting() is deprecated in favour of joplin.settings.registerSettings()', true);
 		await this.registerSettings({ [key]: settingItem });
 	}
 

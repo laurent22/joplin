@@ -2,6 +2,17 @@
 
 set -e
 
+trap 'handleError' ERR
+
+handleError() {
+    echo ""
+    echo "If you encountered an error, please consider fixing"
+    echo "the script for your environment and creating a pull"
+    echo "request instead of asking for support on GitHub or"
+    echo "the forum. The error message above should tell you"
+    echo "where and why the error happened."
+}
+
 #-----------------------------------------------------
 # Variables
 #-----------------------------------------------------
@@ -162,11 +173,13 @@ DESKTOP=${DESKTOP,,}  # convert to lower case
 
 # Detect distribution environment
 DISTVER=$(lsb_release -is) && DISTVER=$DISTVER$(lsb_release -rs)
+DISTCODENAME=$(lsb_release -cs)
 #-----------------------------------------------------
 echo 'Create Desktop icon...'
 # Check for "The SUID sandbox helper binary was found, but is not configured correctly" problem.
 # It is present in Debian 10 Buster. A (temporary) patch will be applied at .desktop file
-if [ "$DISTVER" = "Debian10" ]
+# Linux Mint 4 Debbie is based on Debian 10 and requires the same param handling.
+if [ "$DISTVER" = "Debian10" ] || [ "$DISTVER" = "Linuxmint4" ] && [ "$DISTCODENAME" = "debbie" ]
 then
   SANDBOXPARAM=" --no-sandbox"
 else

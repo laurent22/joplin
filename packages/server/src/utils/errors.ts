@@ -51,6 +51,16 @@ export class ErrorBadRequest extends ApiError {
 
 }
 
+export class ErrorPreconditionFailed extends ApiError {
+	public static httpCode: number = 412;
+
+	public constructor(message: string = 'Precondition Failed') {
+		super(message, ErrorPreconditionFailed.httpCode);
+		Object.setPrototypeOf(this, ErrorPreconditionFailed.prototype);
+	}
+
+}
+
 export class ErrorUnprocessableEntity extends ApiError {
 	public static httpCode: number = 422;
 
@@ -84,6 +94,17 @@ export class ErrorPayloadTooLarge extends ApiError {
 	public constructor(message: string = 'Payload Too Large') {
 		super(message, ErrorPayloadTooLarge.httpCode);
 		Object.setPrototypeOf(this, ErrorPayloadTooLarge.prototype);
+	}
+}
+
+export class ErrorTooManyRequests extends ApiError {
+	public static httpCode: number = 429;
+	public retryAfterMs: number = 0;
+
+	public constructor(message: string = null, retryAfterMs: number = 0) {
+		super(message === null ? 'Too Many Requests' : message, ErrorTooManyRequests.httpCode);
+		this.retryAfterMs = retryAfterMs;
+		Object.setPrototypeOf(this, ErrorTooManyRequests.prototype);
 	}
 }
 
