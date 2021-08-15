@@ -8,6 +8,7 @@ import { NoteEntity } from '../database/types';
 const { basename, filename, rtrimSlashes, fileExtension, dirname } = require('../../path-utils');
 import shim from '../../shim';
 import markdownUtils from '../../markdownUtils';
+import htmlUtils from '../../htmlUtils';
 const { unique } = require('../../ArrayUtils');
 const { pregQuote } = require('../../string-utils-common');
 const { MarkupToHtml } = require('@joplin/renderer');
@@ -76,7 +77,9 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 	 */
 	async importLocalFiles(filePath: string, md: string, parentFolderId: string) {
 		let updated = md;
-		const fileLinks = unique(markdownUtils.extractFileUrls(md));
+		const markdownLinks = markdownUtils.extractFileUrls(md);
+		const htmlLinks = htmlUtils.extractImageUrls(md);
+		const fileLinks = unique(markdownLinks.concat(htmlLinks));
 		await Promise.all(fileLinks.map(async (encodedLink: string) => {
 			const link = decodeURI(encodedLink);
 			// Handle anchor links appropriately
@@ -111,9 +114,15 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 				for (let j = 0; j < linksToReplace.length; j++) {
 					const linkToReplace = pregQuote(linksToReplace[j]);
 
+					// Markdown links
 					const linkRegex = `(?<=\\]\\()\\<?${linkToReplace}\\>?(?=.*\\))`;
 					const reg = new RegExp(linkRegex, 'g');
 					updated = updated.replace(reg, `:/${id}`);
+
+					// HTML links
+					const htmlLinkRegex = `(?<=src=[\\"\\'])${linkToReplace}(?=[\\"\\'])`;
+					const htmlReg = new RegExp(htmlLinkRegex, 'g');
+					updated = updated.replace(htmlReg, `:/${id}`);
 				}
 			}
 		}));

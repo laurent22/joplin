@@ -110,9 +110,10 @@ describe('InteropService_Importer_Md: importLocalImages', function() {
 	it('should import notes with html file extension as html', async function() {
 		const note = await importNote(`${supportDir}/test_notes/md/sample.html`);
 
-		// Uncomment this when an HTML importer is added
-		// const items = await Note.linkedItems(note.body);
-		// expect(items.length).toBe(1);
+		const items = await Note.linkedItems(note.body);
+		expect(items.length).toBe(2);
 		expect(note.markup_language).toBe(MarkupToHtml.MARKUP_LANGUAGE_HTML);
+		const preservedAlt = note.body.includes('alt="../../photo.jpg"');
+		expect(preservedAlt).toBe(true);
 	});
 });
