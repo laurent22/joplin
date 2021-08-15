@@ -21,6 +21,7 @@ import { initializeJoplinUtils } from '../joplinUtils';
 import MustacheService from '../../services/MustacheService';
 import uuidgen from '../uuidgen';
 import { createCsrfToken } from '../csrf';
+import { cookieSet } from '../cookies';
 
 // Takes into account the fact that this file will be inside the /dist directory
 // when it runs.
@@ -211,7 +212,7 @@ export async function koaAppContext(options: AppContextTestOptions = null): Prom
 	};
 
 	if (options.sessionId) {
-		appContext.cookies.set('sessionId', options.sessionId);
+		cookieSet(appContext, 'sessionId', options.sessionId);
 	}
 
 	return appContext as AppContext;
