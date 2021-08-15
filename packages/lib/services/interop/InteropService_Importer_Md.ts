@@ -102,15 +102,19 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 					id = resource.id;
 				}
 
-				// NOTE: use ](link in case the link also appears elsewhere, such as in alt text
-				const linkPatternEscaped = pregQuote(`](${this.trimAnchorLink(link)}`);
+				// The first is a normal link, the second is supports the <link> and [](<link with spaces>) syntax
+				// Only opening patterns are consider in order to cover all occurances
 				// We need to use the encoded link as well because some links (link's with spaces)
 				// will appear encoded in the source. Other links (unicode chars) will not
-				const encodedLinkPatternEscaped = pregQuote(`](${this.trimAnchorLink(encodedLink)}`);
-				const reg = new RegExp(linkPatternEscaped, 'g');
-				const encodedReg = new RegExp(encodedLinkPatternEscaped, 'g');
-				updated = updated.replace(reg, `](:/${id}`);
-				updated = updated.replace(encodedReg, `](:/${id}`);
+				const linksToReplace = [this.trimAnchorLink(link), this.trimAnchorLink(encodedLink)];
+
+				for (let j = 0; j < linksToReplace.length; j++) {
+					const linkToReplace = pregQuote(linksToReplace[j]);
+
+					const linkRegex = `(?<=\\]\\()\\<?${linkToReplace}\\>?(?=.*\\))`;
+					const reg = new RegExp(linkRegex, 'g');
+					updated = updated.replace(reg, `:/${id}`);
+				}
 			}
 		}));
 		return updated;
