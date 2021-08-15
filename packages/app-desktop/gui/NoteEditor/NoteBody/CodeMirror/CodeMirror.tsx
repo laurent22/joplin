@@ -475,6 +475,20 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				color: ${theme.codeColor};
 			}
 
+			div.CodeMirror span.cm-comment.cm-jn-inline-code {
+				border: 1px solid ${theme.codeBorderColor};
+				background-color: ${theme.codeBackgroundColor};
+				padding-right: .2em;
+				padding-left: .2em;
+				border-radius: .25em;
+			}
+
+			div.CodeMirror pre.cm-jn-code-block {
+				background-color: ${theme.codeBackgroundColor};
+				padding-right: .2em;
+				padding-left: .2em;
+			}
+
 			div.CodeMirror span.cm-strong {
 				color: ${theme.colorBright};
 			}
