@@ -55,6 +55,7 @@ export interface SettingItem {
 	needRestart?: boolean;
 	autoSave?: boolean;
 	storage?: SettingStorage;
+	hideLabel?: boolean;
 }
 
 interface SettingItems {
@@ -306,6 +307,19 @@ class Setting extends BaseModel {
 				appTypes: [AppType.Desktop],
 				storage: SettingStorage.File,
 			},
+
+			'sync.openSyncWizard': {
+				value: null,
+				type: SettingItemType.Button,
+				public: true,
+				appTypes: [AppType.Desktop],
+				label: () => _('Open Sync Wizard...'),
+				hideLabel: true,
+				section: 'sync',
+				// advanced: true,
+				// description: () => 'If the data on the sync target is incorrect or empty, you can use this button to force a re-upload of your data to the sync target. Application will have to be restarted',
+			},
+
 			'sync.target': {
 				value: SyncTargetRegistry.nameToId('dropbox'),
 				type: SettingItemType.Int,

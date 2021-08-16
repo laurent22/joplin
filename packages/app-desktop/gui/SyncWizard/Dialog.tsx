@@ -12,6 +12,7 @@ import bridge from '../../services/bridge';
 import StyledInput from '../style/StyledInput';
 import Setting from '../../../lib/models/Setting';
 import SyncTargetJoplinCloud from '../../../lib/SyncTargetJoplinCloud';
+import StyledLink from '../style/StyledLink';
 
 interface Props {
 	themeId: number;
@@ -34,6 +35,11 @@ const SyncTargetDescription = styled.div`
 	${props => props.height ? `height: ${props.height}px` : ''};
 	margin-bottom: 1.3em;
 	line-height: ${props => props.theme.lineHeight};
+	font-size: 16px;
+`;
+
+const CreateAccountLink = styled(StyledLink)`
+	font-size: 16px;
 `;
 
 const ContentRoot = styled.div`
@@ -101,6 +107,7 @@ const FeatureLine = styled.div`
 	margin-bottom: .5em;
 	opacity: ${props => props.enabled ? 1 : 0.5};
 	position: relative;
+	font-size: 16px;
 `;
 
 const FeatureLabel = styled.div`
@@ -148,6 +155,7 @@ export default function(props: Props) {
 	const joplinCloudDescriptionRef = useRef(null);
 	const [joplinCloudEmail, setJoplinCloudEmail] = useState('');
 	const [joplinCloudPassword, setJoplinCloudPassword] = useState('');
+	const [joplinCloudLoginInProgress, setJoplinCloudLoginInProgress] = useState(false);
 
 	function closeDialog(dispatch: Function) {
 		dispatch({
@@ -186,41 +194,55 @@ export default function(props: Props) {
 	}, []);
 
 	const onJoplinCloudPasswordChange = useCallback((event: any) => {
-		console.info(event.target.value);
 		setJoplinCloudPassword(event.target.value);
 	}, []);
 
 	const onJoplinCloudLoginClick = useCallback(async () => {
-		const result = await SyncTargetJoplinCloud.checkConfig({
-			password: () => joplinCloudPassword,
-			path: () => Setting.value('sync.10.path'),
-			userContentPath: () => Setting.value('sync.10.userContentPath'),
-			username: () => joplinCloudEmail,
-		});
+		setJoplinCloudLoginInProgress(true);
 
-		if (result.ok) {
-			Setting.setValue('sync.target', 10);
-			Setting.setValue('sync.10.username', joplinCloudEmail);
-			Setting.setValue('sync.10.password', joplinCloudPassword);
-			await Setting.saveAll();
+		try {
+			const result = await SyncTargetJoplinCloud.checkConfig({
+				password: () => joplinCloudPassword,
+				path: () => Setting.value('sync.10.path'),
+				userContentPath: () => Setting.value('sync.10.userContentPath'),
+				username: () => joplinCloudEmail,
+			});
 
-			alert(_('Thank you! Your Joplin Cloud account is now setup and ready to use.'));
+			if (result.ok) {
+				Setting.setValue('sync.target', 10);
+				Setting.setValue('sync.10.username', joplinCloudEmail);
+				Setting.setValue('sync.10.password', joplinCloudPassword);
+				await Setting.saveAll();
 
-			closeDialog(props.dispatch);
-		} else {
-			alert(_('There was an error setting up your Joplin Cloud account. Please verify your email and password and try again. Error was:\n\n%s', result.errorMessage));
+				alert(_('Thank you! Your Joplin Cloud account is now setup and ready to use.'));
+
+				closeDialog(props.dispatch);
+
+				props.dispatch({
+					type: 'NAV_GO',
+					routeName: 'Main',
+				});
+			} else {
+				alert(_('There was an error setting up your Joplin Cloud account. Please verify your email and password and try again. Error was:\n\n%s', result.errorMessage));
+			}
+		} finally {
+			setJoplinCloudLoginInProgress(false);
 		}
 	}, [joplinCloudEmail, joplinCloudPassword, props.dispatch]);
+
+	const onJoplinCloudCreateAccountClick = useCallback(() => {
+		bridge().openExternal('https://joplinapp.org/plans/');
+	}, []);
 
 	function renderJoplinCloudLoginForm() {
 		return (
 			<JoplinCloudLoginForm>
-				<div>Login below, or <a href="#">create an account</a>.</div>
+				<div>{_('Login below.')} <CreateAccountLink href="#" onClick={onJoplinCloudCreateAccountClick}>{_('Or create an account.')}</CreateAccountLink></div>
 				<FormLabel>Email</FormLabel>
 				<StyledInput type="email" onChange={onJoplinCloudEmailChange}/>
 				<FormLabel>Password</FormLabel>
 				<StyledInput type="password" onChange={onJoplinCloudPasswordChange}/>
-				<SelectButton mt="1.3em" level={ButtonLevel.Primary} title={_('Login')} onClick={onJoplinCloudLoginClick}/>
+				<SelectButton mt="1.3em" disabled={joplinCloudLoginInProgress} level={ButtonLevel.Primary} title={_('Login')} onClick={onJoplinCloudLoginClick}/>
 			</JoplinCloudLoginForm>
 		);
 	}
@@ -248,6 +270,7 @@ export default function(props: Props) {
 					level={ButtonLevel.Primary}
 					title={_('Select')}
 					onClick={() => onSelectButtonClick(info.name)}
+					disabled={joplinCloudLoginInProgress}
 				/>
 			);
 		}
