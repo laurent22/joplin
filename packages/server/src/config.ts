@@ -46,6 +46,8 @@ export interface EnvVariables {
 	SUPPORT_NAME?: string;
 
 	BUSINESS_EMAIL?: string;
+
+	COOKIES_SECURE?: string;
 }
 
 let runningInDocker_: boolean = false;
@@ -168,6 +170,7 @@ export async function initConfig(envType: Env, env: EnvVariables, overrides: any
 		supportEmail,
 		supportName: env.SUPPORT_NAME || appName,
 		businessEmail: env.BUSINESS_EMAIL || supportEmail,
+		cookieSecure: env.COOKIES_SECURE === '1',
 		...overrides,
 	};
 }

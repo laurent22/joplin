@@ -6,6 +6,8 @@ import { formParse } from '../../utils/requestUtils';
 import config from '../../config';
 import defaultView from '../../utils/defaultView';
 import { View } from '../../services/MustacheService';
+import limiterLoginBruteForce from '../../utils/request/limiterLoginBruteForce';
+import { cookieSet } from '../../utils/cookies';
 
 function makeView(error: any = null): View {
 	const view = defaultView('login', 'Login');
@@ -25,11 +27,13 @@ router.get('login', async (_path: SubPath, _ctx: AppContext) => {
 });
 
 router.post('login', async (_path: SubPath, ctx: AppContext) => {
+	await limiterLoginBruteForce(ctx.ip);
+
 	try {
 		const body = await formParse(ctx.req);
 
 		const session = await ctx.joplin.models.session().authenticate(body.fields.email, body.fields.password);
-		ctx.cookies.set('sessionId', session.id);
+		cookieSet(ctx, 'sessionId', session.id);
 		return redirect(ctx, `${config().baseUrl}/home`);
 	} catch (error) {
 		return makeView(error);

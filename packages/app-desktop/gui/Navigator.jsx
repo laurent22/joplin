@@ -8,7 +8,7 @@ class NavigatorComponent extends Component {
 	UNSAFE_componentWillReceiveProps(newProps) {
 		if (newProps.route) {
 			const screenInfo = this.props.screens[newProps.route.routeName];
-			const devMarker = Setting.value('env') === 'dev' ? ' (DEV)' : '';
+			const devMarker = Setting.value('env') === 'dev' ? ` (DEV - ${Setting.value('profileDir')})` : '';
 			const windowTitle = [`Joplin${devMarker}`];
 			if (screenInfo.title) {
 				windowTitle.push(screenInfo.title());

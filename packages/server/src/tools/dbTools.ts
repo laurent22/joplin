@@ -1,4 +1,4 @@
-import { connectDb, disconnectDb, migrateDb } from '../db';
+import { connectDb, disconnectDb, migrateLatest } from '../db';
 import * as fs from 'fs-extra';
 import { DatabaseConfig } from '../utils/types';
 
@@ -46,7 +46,7 @@ export async function createDb(config: DatabaseConfig, options: CreateDbOptions 
 
 	try {
 		const db = await connectDb(config);
-		await migrateDb(db);
+		await migrateLatest(db);
 		await disconnectDb(db);
 	} catch (error) {
 		error.message += `: ${config.name}`;

@@ -58,7 +58,6 @@ export default class WebviewController extends ViewController {
 				scripts: [],
 				opened: false,
 				buttons: null,
-				fitToContent: true,
 			},
 		});
 	}
@@ -174,11 +173,4 @@ export default class WebviewController extends ViewController {
 		this.setStoreProp('buttons', buttons);
 	}
 
-	public get fitToContent(): boolean {
-		return this.storeView.fitToContent;
-	}
-
-	public set fitToContent(fitToContent: boolean) {
-		this.setStoreProp('fitToContent', fitToContent);
-	}
 }

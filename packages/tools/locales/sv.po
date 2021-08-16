@@ -3153,7 +3153,7 @@ msgstr "titel"
 
 #: packages/lib/models/Folder.js:39 packages/lib/models/Note.js:37
 msgid "updated date"
-msgstr "uppdaterad datum"
+msgstr "uppdaterat datum"
 
 #: packages/lib/models/Folder.js:103
 msgid "Conflicts"
@@ -3171,7 +3171,7 @@ msgstr ""
 
 #: packages/lib/models/Note.js:38
 msgid "created date"
-msgstr "skapad datum"
+msgstr "skapat datum"
 
 #: packages/lib/models/Note.js:39
 msgid "custom order"

@@ -97,6 +97,17 @@ export class ErrorPayloadTooLarge extends ApiError {
 	}
 }
 
+export class ErrorTooManyRequests extends ApiError {
+	public static httpCode: number = 429;
+	public retryAfterMs: number = 0;
+
+	public constructor(message: string = null, retryAfterMs: number = 0) {
+		super(message === null ? 'Too Many Requests' : message, ErrorTooManyRequests.httpCode);
+		this.retryAfterMs = retryAfterMs;
+		Object.setPrototypeOf(this, ErrorTooManyRequests.prototype);
+	}
+}
+
 export function errorToString(error: Error): string {
 	const msg: string[] = [];
 	msg.push(error.message ? error.message : 'Unknown error');

@@ -1,5 +1,23 @@
 # Joplin Android app changelog
 
+## [android-v2.3.3](https://github.com/laurent22/joplin/releases/tag/android-v2.3.3) (Pre-release) - 2021-08-12T20:46:15Z
+
+- Improved: Improved E2EE usability by making its state a property of the sync target (#5276)
+
+## [android-v2.2.5](https://github.com/laurent22/joplin/releases/tag/android-v2.2.5) (Pre-release) - 2021-08-11T10:54:38Z
+
+- Revert "Plugins: Add ability to make dialogs fit the application window (#5219)" as it breaks several plugin webviews.
+- Revert "Resolves #4810, Resolves #4610: Fix AWS S3 sync error and upgrade framework to v3 (#5212)" due to incompatibility with some AWS providers.
+- Improved: Upgraded React Native to v0.64 (afb7e1a)
+
+## [android-v2.2.3](https://github.com/laurent22/joplin/releases/tag/android-v2.2.3) (Pre-release) - 2021-08-09T18:48:29Z
+
+- Improved: Ensure that timestamps are not changed when sharing or unsharing a note (cafaa9c)
+- Improved: Fix AWS S3 sync error and upgrade framework to v3 (#5212) (#4810 by Lee Matos)
+- Improved: Handles OneDrive throttling responses and sets User-Agent based on Microsoft best practices (#5246) (#5244 by [@alec](https://github.com/alec))
+- Improved: Make sync icon spin in the right direction (#5275) (#4588 by Lee Matos)
+- Fixed: Fixed issue with orphaned resource being created in case of a resource conflict (#5223)
+
 ## [android-v2.2.1](https://github.com/laurent22/joplin/releases/tag/android-v2.2.1) (Pre-release) - 2021-07-13T17:37:38Z
 
 - New: Added improved editor (beta)

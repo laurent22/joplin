@@ -402,8 +402,16 @@ class Application extends BaseApplication {
 		}
 	}
 
+	// We need this special case here because by the time the `version` command
+	// runs, the keychain has already been setup.
+	checkIfKeychainEnabled(argv) {
+		return argv.indexOf('version') < 0;
+	}
+
 	async start(argv) {
-		argv = await super.start(argv);
+		const keychainEnabled = this.checkIfKeychainEnabled(argv);
+
+		argv = await super.start(argv, { keychainEnabled });
 
 		cliUtils.setStdout(object => {
 			return this.stdout(object);

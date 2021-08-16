@@ -1,5 +1,5 @@
 import BaseModel from '../BaseModel';
-const { fileApi } = require('../testing/../testing/test-utils.js');
+import { fileApi } from '../testing/../testing/test-utils';
 import Folder from '../models/Folder';
 import Note from '../models/Note';
 import BaseItem from '../models/BaseItem';

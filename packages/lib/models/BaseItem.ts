@@ -9,6 +9,7 @@ import Database from '../database';
 import ItemChange from './ItemChange';
 import ShareService from '../services/share/ShareService';
 import itemCanBeEncrypted from './utils/itemCanBeEncrypted';
+import { getEncryptionEnabled } from '../services/synchronizer/syncInfoUtils';
 const JoplinError = require('../JoplinError.js');
 const { sprintf } = require('sprintf-js');
 const moment = require('moment');
@@ -410,7 +411,7 @@ export default class BaseItem extends BaseModel {
 
 		const serialized = await ItemClass.serialize(item, shownKeys);
 
-		if (!Setting.value('encryption.enabled') || !ItemClass.encryptionSupported() || !itemCanBeEncrypted(item)) {
+		if (!getEncryptionEnabled() || !ItemClass.encryptionSupported() || !itemCanBeEncrypted(item)) {
 			// Normally not possible since itemsThatNeedSync should only return decrypted items
 			if (item.encryption_applied) throw new JoplinError('Item is encrypted but encryption is currently disabled', 'cannotSyncEncrypted');
 			return serialized;
@@ -598,7 +599,8 @@ export default class BaseItem extends BaseModel {
 	}
 
 	public static async itemsThatNeedSync(syncTarget: number, limit = 100): Promise<ItemsThatNeedSyncResult> {
-		const classNames = this.syncItemClassNames();
+		// Although we keep the master keys in the database, we no longer sync them
+		const classNames = this.syncItemClassNames().filter(n => n !== 'MasterKey');
 
 		for (let i = 0; i < classNames.length; i++) {
 			const className = classNames[i];
@@ -687,7 +689,7 @@ export default class BaseItem extends BaseModel {
 		throw new Error('Unreachable');
 	}
 
-	static syncItemClassNames() {
+	static syncItemClassNames(): string[] {
 		return BaseItem.syncItemDefinitions_.map((def: any) => {
 			return def.className;
 		});

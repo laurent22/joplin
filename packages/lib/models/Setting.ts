@@ -194,7 +194,7 @@ class Setting extends BaseModel {
 		cacheDir: '',
 		pluginDir: '',
 		flagOpenDevTools: false,
-		syncVersion: 2,
+		syncVersion: 3,
 		startupDevPlugins: [],
 	};
 
@@ -210,6 +210,7 @@ class Setting extends BaseModel {
 	private static customSections_: SettingSections = {};
 	private static changedKeys_: string[] = [];
 	private static fileHandler_: FileHandler = null;
+	private static settingFilename_: string = 'settings.json';
 
 	static tableName() {
 		return 'settings';
@@ -233,7 +234,15 @@ class Setting extends BaseModel {
 	}
 
 	public static get settingFilePath(): string {
-		return `${this.value('profileDir')}/settings.json`;
+		return `${this.value('profileDir')}/${this.settingFilename_}`;
+	}
+
+	public static get settingFilename(): string {
+		return this.settingFilename_;
+	}
+
+	public static set settingFilename(v: string) {
+		this.settingFilename_ = v;
 	}
 
 	public static get fileHandler(): FileHandler {
@@ -963,6 +972,8 @@ class Setting extends BaseModel {
 				storage: SettingStorage.File,
 			},
 
+			'style.editor.contentMaxWidth': { value: 600, type: SettingItemType.Int, public: true, storage: SettingStorage.File, appTypes: [AppType.Desktop], section: 'appearance', label: () => _('Editor maximum width'), description: () => _('Set it to 0 to make it take the complete available space.') },
+
 			'ui.layout': { value: {}, type: SettingItemType.Object, storage: SettingStorage.File, public: false, appTypes: [AppType.Desktop] },
 
 			// TODO: Is there a better way to do this? The goal here is to simply have
@@ -1249,6 +1260,12 @@ class Setting extends BaseModel {
 				'Thus an item with a factor of 2 will take twice as much space as an item with a factor of 1.' +
 				'Restart app to see changes.'),
 				storage: SettingStorage.File,
+			},
+
+			'syncInfoCache': {
+				value: '',
+				type: SettingItemType.String,
+				public: false,
 			},
 
 			isSafeMode: {
@@ -1669,6 +1686,12 @@ class Setting extends BaseModel {
 
 		const md = this.settingMetadata(key);
 		return copyIfNeeded(md.value);
+	}
+
+	// This function returns the default value if the setting key does not exist.
+	public static valueNoThrow(key: string, defaultValue: any) {
+		if (!this.keyExists(key)) return defaultValue;
+		return this.value(key);
 	}
 
 	static isEnum(key: string) {

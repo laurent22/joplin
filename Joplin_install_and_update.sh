@@ -2,6 +2,17 @@
 
 set -e
 
+trap 'handleError' ERR
+
+handleError() {
+    echo ""
+    echo "If you encountered an error, please consider fixing"
+    echo "the script for your environment and creating a pull"
+    echo "request instead of asking for support on GitHub or"
+    echo "the forum. The error message above should tell you"
+    echo "where and why the error happened."
+}
+
 #-----------------------------------------------------
 # Variables
 #-----------------------------------------------------

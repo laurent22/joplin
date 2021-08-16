@@ -40,4 +40,26 @@ describe('SubscriptionModel', function() {
 		expect(sub.user_id).toBe(user.id);
 	});
 
+	test('should enable and allow the user to upload if a payment is successful', async function() {
+		let { user } = await models().subscription().saveUserAndSubscription(
+			'toto@example.com',
+			'Toto',
+			AccountType.Pro,
+			'STRIPE_USER_ID',
+			'STRIPE_SUB_ID'
+		);
+
+		await models().user().save({
+			id: user.id,
+			enabled: 0,
+			can_upload: 0,
+		});
+
+		await models().subscription().handlePayment('STRIPE_SUB_ID', true);
+
+		user = await models().user().load(user.id);
+		expect(user.can_upload).toBe(1);
+		expect(user.enabled).toBe(1);
+	});
+
 });

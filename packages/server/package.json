@@ -1,14 +1,15 @@
 {
   "name": "@joplin/server",
-  "version": "2.2.11",
+  "version": "2.3.4",
   "private": true,
   "scripts": {
     "start-dev": "nodemon --config nodemon.json --ext ts,js,mustache,css,tsx dist/app.js --env dev",
+    "start-dev-no-watch": "node dist/app.js --env dev",
     "devCreateDb": "node dist/app.js --env dev --create-db",
     "devDropTables": "node dist/app.js --env dev --drop-tables",
     "devDropDb": "node dist/app.js --env dev --drop-db",
     "start": "node dist/app.js",
-    "generateTypes": "rm -f db-buildTypes.sqlite && npm run start -- --migrate-db --env buildTypes && node dist/tools/generateTypes.js && mv db-buildTypes.sqlite schema.sqlite",
+    "generateTypes": "rm -f db-buildTypes.sqlite && npm run start -- --migrate-latest --env buildTypes && node dist/tools/generateTypes.js && mv db-buildTypes.sqlite schema.sqlite",
     "tsc": "tsc --project tsconfig.json",
     "test": "jest --verbose=false",
     "test-ci": "npm run test",
@@ -18,8 +19,8 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.1",
-    "@joplin/lib": "^1.0.9",
-    "@joplin/renderer": "^1.7.4",
+    "@joplin/lib": "~2.3",
+    "@joplin/renderer": "~2.3",
     "@koa/cors": "^3.1.0",
     "bcryptjs": "^2.4.3",
     "bulma": "^0.9.1",
@@ -42,6 +43,7 @@
     "pg": "^8.5.1",
     "pretty-bytes": "^5.6.0",
     "query-string": "^6.8.3",
+    "rate-limiter-flexible": "^2.2.4",
     "raw-body": "^2.4.1",
     "sqlite3": "^4.1.0",
     "stripe": "^8.150.0",
@@ -49,7 +51,7 @@
     "zxcvbn": "^4.4.2"
   },
   "devDependencies": {
-    "@joplin/tools": "^1.0.9",
+    "@joplin/tools": "~2.3",
     "@rmp135/sql-ts": "^1.7.0",
     "@types/fs-extra": "^8.0.0",
     "@types/jest": "^26.0.15",

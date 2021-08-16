@@ -20,7 +20,7 @@ Otherwise, follow these instructions:
 
 ## Mobile application
 
-- In the Configuration screen, press on the **Log button** and post a screenshot of any error/warning.
+- In the [Configuration screen](https://github.com/laurent22/joplin/blob/dev/readme/config_screen.md), press on the **Log button** and post a screenshot of any error/warning.
 
 # Creating a low-level bug report on Android
 

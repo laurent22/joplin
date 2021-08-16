@@ -1,6 +1,7 @@
 import { User } from '../../db';
 import routeHandler from '../../middleware/routeHandler';
 import { NotificationKey } from '../../models/NotificationModel';
+import { cookieGet } from '../../utils/cookies';
 import { ErrorForbidden } from '../../utils/errors';
 import { execRequest, execRequestC } from '../../utils/testing/apiUtils';
 import { beforeAllDb, afterAllTests, beforeEachDb, koaAppContext, createUserAndSession, models, parseHtml, checkContextError, expectHttpError } from '../../utils/testing/testUtils';
@@ -240,7 +241,7 @@ describe('index/users', function() {
 				password: newPassword,
 				password2: newPassword,
 			});
-			const sessionId = context.cookies.get('sessionId');
+			const sessionId = cookieGet(context, 'sessionId');
 			expect(sessionId).toBeFalsy();
 		}
 
@@ -253,7 +254,7 @@ describe('index/users', function() {
 				password2: newPassword,
 				token: token2,
 			});
-			const sessionId = context.cookies.get('sessionId');
+			const sessionId = cookieGet(context, 'sessionId');
 			expect(sessionId).toBeFalsy();
 		}
 
@@ -266,7 +267,7 @@ describe('index/users', function() {
 		});
 
 		// Check that the user has been logged in
-		const sessionId = context.cookies.get('sessionId');
+		const sessionId = cookieGet(context, 'sessionId');
 		const session = await models().session().load(sessionId);
 		expect(session.user_id).toBe(user1.id);
 
@@ -303,7 +304,7 @@ describe('index/users', function() {
 		user1 = await models().user().load(user1.id);
 
 		// Check that the user has been logged in
-		const sessionId = context.cookies.get('sessionId');
+		const sessionId = cookieGet(context, 'sessionId');
 		expect(sessionId).toBeFalsy();
 
 		// Check that the email has been verified

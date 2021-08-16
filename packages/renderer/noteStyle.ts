@@ -7,10 +7,27 @@ function formatCssSize(v: any): string {
 	return `${v}px`;
 }
 
-export default function(theme: any) {
+export interface Options {
+	contentMaxWidth?: number;
+}
+
+export default function(theme: any, options: Options = null) {
+	options = {
+		contentMaxWidth: 0,
+		...options,
+	};
+
 	theme = theme ? theme : {};
 
 	const fontFamily = '\'Avenir\', \'Arial\', sans-serif';
+
+	const maxWidthCss = options.contentMaxWidth ? `
+		#rendered-md {
+			max-width: ${options.contentMaxWidth}px;
+			margin-left: auto;
+			margin-right: auto;
+		}
+	` : '';
 
 	const css =
 		`
@@ -60,6 +77,8 @@ export default function(theme: any) {
 		::-webkit-scrollbar-thumb:hover {
 			background: rgba(100, 100, 100, 0.7); 
 		}
+
+		${maxWidthCss}
 
 		/* Remove top padding and margin from first child so that top of rendered text is aligned to top of text editor text */
 

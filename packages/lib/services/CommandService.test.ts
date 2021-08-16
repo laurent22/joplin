@@ -3,8 +3,7 @@ import ToolbarButtonUtils from '../services/commands/ToolbarButtonUtils';
 import CommandService, { CommandDeclaration, CommandRuntime } from '../services/CommandService';
 import stateToWhenClauseContext from '../services/commands/stateToWhenClauseContext';
 import KeymapService from '../services/KeymapService';
-
-const { setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow } = require('../testing/test-utils.js');
+import { setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow } from '../testing/test-utils';
 
 interface TestCommand {
 	declaration: CommandDeclaration;

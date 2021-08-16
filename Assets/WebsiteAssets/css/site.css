@@ -24,6 +24,10 @@ a {
 	padding-bottom: 225px;
 }
 
+.help-page-container img {
+	margin-bottom: 1rem;
+}
+
 .press-carousel .photo {
 	width: 123px;
 	height: 136px;
@@ -86,6 +90,12 @@ a {
 	color: #90b1d9;
 }
 
+blockquote {
+    border-left: .25em solid #e0e0e0;
+    padding: 0 1em;
+    opacity: .7;
+}
+
 .img-center {
 	display: block;
 	margin: auto;
@@ -101,6 +111,10 @@ a {
 
 .small {
 	font-size: 16px !important;
+}
+
+.button-link {
+	white-space: nowrap;
 }
 
 .sponsor-button i {
@@ -275,6 +289,12 @@ p,
 	color: #0557ba;
 	border-color: #0557ba;
 	/* margin-bottom: 10px; */
+}
+
+div.navbar-mobile-content a.sponsor-button {
+	padding: 4px 12px;
+	font-size: 0.9em;
+	margin-right: 1em;
 }
 
 #nav-section.white-bg a {
@@ -786,7 +806,7 @@ footer .right-links a {
 	}
 
 	#top-section,
-	.page-container {
+	.help-page-container {
 		padding-top: 80px;
 	}
 
@@ -836,7 +856,7 @@ footer .right-links a {
 	margin-bottom: 0;
 }
 
-.page-container {
+.help-page-container {
 	padding-top: 90px;
 	padding-bottom: 50px;
 }

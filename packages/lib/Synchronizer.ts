@@ -12,7 +12,7 @@ import Resource from './models/Resource';
 import ItemChange from './models/ItemChange';
 import ResourceLocalState from './models/ResourceLocalState';
 import MasterKey from './models/MasterKey';
-import BaseModel from './BaseModel';
+import BaseModel, { ModelType } from './BaseModel';
 import time from './time';
 import ResourceService from './services/ResourceService';
 import EncryptionService from './services/EncryptionService';
@@ -22,6 +22,8 @@ import TaskQueue from './TaskQueue';
 import ItemUploader from './services/synchronizer/ItemUploader';
 import { FileApi } from './file-api';
 import JoplinDatabase from './JoplinDatabase';
+import { fetchSyncInfo, getActiveMasterKey, localSyncInfo, mergeSyncInfos, saveLocalSyncInfo, syncInfoEquals, uploadSyncInfo } from './services/synchronizer/syncInfoUtils';
+import { setupAndDisableEncryption, setupAndEnableEncryption } from './services/e2ee/utils';
 const { sprintf } = require('sprintf-js');
 const { Dirnames } = require('./services/synchronizer/utils/types');
 
@@ -71,7 +73,7 @@ export default class Synchronizer {
 	private logger_: Logger = new Logger();
 	private state_: string = 'idle';
 	private cancelling_: boolean = false;
-	private maxResourceSize_: number = null;
+	public maxResourceSize_: number = null;
 	private downloadQueue_: any = null;
 	private clientId_: string;
 	private lockHandler_: LockHandler;
@@ -136,7 +138,7 @@ export default class Synchronizer {
 
 	migrationHandler() {
 		if (this.migrationHandler_) return this.migrationHandler_;
-		this.migrationHandler_ = new MigrationHandler(this.api(), this.lockHandler(), this.appType_, this.clientId_);
+		this.migrationHandler_ = new MigrationHandler(this.api(), this.db(), this.lockHandler(), this.appType_, this.clientId_);
 		return this.migrationHandler_;
 	}
 
@@ -369,8 +371,8 @@ export default class Synchronizer {
 		this.syncTargetIsLocked_ = false;
 		this.cancelling_ = false;
 
-		const masterKeysBefore = await MasterKey.count();
-		let hasAutoEnabledEncryption = false;
+		// const masterKeysBefore = await MasterKey.count();
+		// let hasAutoEnabledEncryption = false;
 
 		const synchronizationId = time.unixMs().toString();
 
@@ -418,13 +420,49 @@ export default class Synchronizer {
 			this.api().setTempDirName(Dirnames.Temp);
 
 			try {
-				const syncTargetInfo = await this.migrationHandler().checkCanSync();
+				const remoteInfo = await fetchSyncInfo(this.api());
+				logger.info('Sync target remote info:', remoteInfo);
 
-				logger.info('Sync target info:', syncTargetInfo);
-
-				if (!syncTargetInfo.version) {
+				if (!remoteInfo.version) {
 					logger.info('Sync target is new - setting it up...');
 					await this.migrationHandler().upgrade(Setting.value('syncVersion'));
+				} else {
+					logger.info('Sync target is already setup - checking it...');
+
+					await this.migrationHandler().checkCanSync(remoteInfo);
+
+					const localInfo = await localSyncInfo();
+
+					logger.info('Sync target local info:', localInfo);
+
+					// console.info('LOCAL', localInfo);
+					// console.info('REMOTE', remoteInfo);
+
+					if (!syncInfoEquals(localInfo, remoteInfo)) {
+						const newInfo = mergeSyncInfos(localInfo, remoteInfo);
+						const previousE2EE = localInfo.e2ee;
+						logger.info('Sync target info differs between local and remote - merging infos: ', newInfo.toObject());
+
+						await this.lockHandler().acquireLock(LockType.Exclusive, this.appType_, this.clientId_);
+						await uploadSyncInfo(this.api(), newInfo);
+						await saveLocalSyncInfo(newInfo);
+						await this.lockHandler().releaseLock(LockType.Exclusive, this.appType_, this.clientId_);
+
+						// console.info('NEW', newInfo);
+
+						if (newInfo.e2ee !== previousE2EE) {
+							if (newInfo.e2ee) {
+								const mk = getActiveMasterKey(newInfo);
+								await setupAndEnableEncryption(this.encryptionService(), mk);
+							} else {
+								await setupAndDisableEncryption(this.encryptionService());
+							}
+						}
+					} else {
+						// Set it to remote anyway so that timestamps are the same
+						// Note: that's probably not needed anymore?
+						// await uploadSyncInfo(this.api(), remoteInfo);
+					}
 				}
 			} catch (error) {
 				if (error.code === 'outdatedSyncTarget') {
@@ -542,6 +580,12 @@ export default class Synchronizer {
 								reason = 'local has changes';
 							}
 						}
+
+						// We no longer upload Master Keys however we keep them
+						// in the database for extra safety. In a future
+						// version, once it's confirmed that the new E2EE system
+						// works well, we can delete them.
+						if (local.type_ === ModelType.MasterKey) action = null;
 
 						this.logSyncOperation(action, local, remote, reason);
 
@@ -911,18 +955,37 @@ export default class Synchronizer {
 								await ResourceLocalState.save({ resource_id: content.id, fetch_status: Resource.FETCH_STATUS_IDLE });
 							}
 
-							await ItemClass.save(content, options);
+							if (content.type_ === ModelType.MasterKey) {
+								// Special case for master keys - if we download
+								// one, we only add it to the store if it's not
+								// already there. That can happen for example if
+								// the new E2EE migration was processed at a
+								// time a master key was still on the sync
+								// target. In that case, info.json would not
+								// have it.
+								//
+								// If info.json already has the key we shouldn't
+								// update because the most up to date keys
+								// should always be in info.json now.
+								const existingMasterKey = await MasterKey.load(content.id);
+								if (!existingMasterKey) {
+									logger.info(`Downloaded a master key that was not in info.json - adding it to the store. ID: ${content.id}`);
+									await MasterKey.save(content);
+								}
+							} else {
+								await ItemClass.save(content, options);
+							}
 
 							if (creatingOrUpdatingResource) this.dispatch({ type: 'SYNC_CREATED_OR_UPDATED_RESOURCE', id: content.id });
 
-							if (!hasAutoEnabledEncryption && content.type_ === BaseModel.TYPE_MASTER_KEY && !masterKeysBefore) {
-								hasAutoEnabledEncryption = true;
-								logger.info('One master key was downloaded and none was previously available: automatically enabling encryption');
-								logger.info('Using master key: ', content.id);
-								await this.encryptionService().enableEncryption(content);
-								await this.encryptionService().loadMasterKeysFromSettings();
-								logger.info('Encryption has been enabled with downloaded master key as active key. However, note that no password was initially supplied. It will need to be provided by user.');
-							}
+							// if (!hasAutoEnabledEncryption && content.type_ === BaseModel.TYPE_MASTER_KEY && !masterKeysBefore) {
+							// 	hasAutoEnabledEncryption = true;
+							// 	logger.info('One master key was downloaded and none was previously available: automatically enabling encryption');
+							// 	logger.info('Using master key: ', content.id);
+							// 	await this.encryptionService().enableEncryption(content);
+							// 	await this.encryptionService().loadMasterKeysFromSettings();
+							// 	logger.info('Encryption has been enabled with downloaded master key as active key. However, note that no password was initially supplied. It will need to be provided by user.');
+							// }
 
 							if (content.encryption_applied) this.dispatch({ type: 'SYNC_GOT_ENCRYPTED_ITEM' });
 						} else if (action == 'deleteLocal') {

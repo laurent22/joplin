@@ -13,9 +13,12 @@ interface HookDependencies {
 	plugins: PluginStates;
 }
 
-interface MarkupToHtmlOptions {
+export interface MarkupToHtmlOptions {
 	replaceResourceInternalToExternalLinks?: boolean;
 	resourceInfos?: ResourceInfos;
+	contentMaxWidth?: number;
+	plugins?: Record<string, any>;
+	bodyOnly?: boolean;
 }
 
 export default function useMarkupToHtml(deps: HookDependencies) {

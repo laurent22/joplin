@@ -4,7 +4,7 @@ import shim from './shim';
 const fs = require('fs-extra');
 const os = require('os');
 const { filename } = require('./path-utils');
-const { setupDatabaseAndSynchronizer, switchClient, expectNotThrow, supportDir } = require('./testing/test-utils.js');
+import { setupDatabaseAndSynchronizer, switchClient, expectNotThrow, supportDir } from './testing/test-utils';
 const { enexXmlToMd } = require('./import-enex-md-gen.js');
 const { importEnex } = require('./import-enex');
 import Note from './models/Note';
