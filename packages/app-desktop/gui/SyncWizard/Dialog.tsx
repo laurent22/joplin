@@ -27,7 +27,7 @@ const TopTitle = styled.div`
 	display: flex;
 	justify-content: center;
 	margin-top: 0.8em;
-	margin-bottom: 1.8em;
+	margin-bottom: 1.5em;
 `;
 
 const SyncTargetDescription = styled.div`
@@ -40,6 +40,14 @@ const ContentRoot = styled.div`
 	background-color: ${props => props.theme.backgroundColor3};
 	padding: 1em;
 	padding-right: 0;
+`;
+
+const SelfHostingMessage = styled.div`
+	color: ${props => props.theme.color};
+	padding-right: 1em;
+	font-style: italic;
+	margin-top: 1em;
+	opacity: 0.6;
 `;
 
 const SyncTargetBoxes = styled.div`
@@ -71,7 +79,7 @@ const SyncTargetBox = styled.div`
 	background-color: ${props => props.theme.backgroundColor};
 	border: 1px solid ${props => props.theme.dividerColor};
 	border-radius: 8px;
-	padding: 1em 2.2em 2em 2.2em;
+	padding: 0.8em 2.2em 2em 2.2em;
 	margin-right: 1em;
 	max-width: 400px;
 	opacity: ${props => props.faded ? 0.5 : 1};
@@ -265,6 +273,18 @@ export default function(props: Props) {
 		);
 	}
 
+	const onSelfHostingClick = useCallback(() => {
+		closeDialog(props.dispatch);
+
+		props.dispatch({
+			type: 'NAV_GO',
+			routeName: 'Config',
+			props: {
+				defaultSection: 'sync',
+			},
+		});
+	}, [props.dispatch]);
+
 	function renderContent() {
 		const boxes: any[] = [];
 
@@ -274,7 +294,7 @@ export default function(props: Props) {
 			boxes.push(renderSyncTarget(info));
 		}
 
-		const selfHostingMessage = showJoplinCloudForm ? null : <p>Self-hosting? Joplin also supports various self-hosting options such as Nextcloud, WebDAV, AWS S3 and Joplin Server. <a href="#">Click here to select one</a></p>;
+		const selfHostingMessage = showJoplinCloudForm ? null : <SelfHostingMessage>Self-hosting? Joplin also supports various self-hosting options such as Nextcloud, WebDAV, AWS S3 and Joplin Server. <a href="#" onClick={onSelfHostingClick}>Click here to select one</a>.</SelfHostingMessage>;
 
 		return (
 			<ContentRoot>
