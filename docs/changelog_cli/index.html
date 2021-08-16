@@ -29,7 +29,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog_cli.md
 			href="&#x2F;css/bootstrap5.0.2.min.css"
 			as="style"
 		/>
-		<link rel="stylesheet" href="&#x2F;css/fontawesome-all.min.css?t=1628514896838">
+		<link rel="stylesheet" href="&#x2F;css/fontawesome-all.min.css?t=1629128996550">
 		<link
 			href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
 			rel="stylesheet"
@@ -37,7 +37,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog_cli.md
 			media="all"
 			onload="this.media='all'; this.onload = null"
 		/>
-		<link rel="stylesheet" href="&#x2F;css/site.css?t=1628514896838" as="style" />
+		<link rel="stylesheet" href="&#x2F;css/site.css?t=1629128996550" as="style" />
 		<title>Joplin terminal app changelog | Joplin</title>
 
 		<script
@@ -68,7 +68,10 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog_cli.md
 <a href="/plans/" class="button-link btn-trans plans-button">Joplin Cloud</a><a class="button-link btn-blue sponsor-button" href="/donate">
 	<i class="fas fa-heart heart-full"></i><i class="far fa-heart heart-line"></i>&nbsp;Support us
 </a>			</div>
-			<div class="col-9 text-right d-block d-md-none">
+			<div class="col-9 text-right d-block d-md-none navbar-mobile-content">
+<a class="button-link btn-blue sponsor-button" href="/donate">
+	<i class="fas fa-heart heart-full"></i><i class="far fa-heart heart-line"></i>&nbsp;Support us
+</a>
 				<span class="pointer"
 					><img
 						src="&#x2F;images/mobile-menu-black-open-icon.png"
@@ -286,6 +289,26 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog_cli.md
 <p><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=E8JMYD2LQ8MMA&amp;lc=GB&amp;item_name=Joplin+Development&amp;currency_code=EUR&amp;bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Donate-PayPal-green.svg" alt="Donate using PayPal"></a> <a href="https://github.com/sponsors/laurent22/"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/GitHub-Badge.svg" alt="Sponsor on GitHub"></a> <a href="https://www.patreon.com/joplin"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Patreon-Badge.svg" alt="Become a patron"></a> <a href="https://joplinapp.org/donate/#donations"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Donate-IBAN.svg" alt="Donate using IBAN"></a></p>
 </div>
 <h1>Joplin terminal app changelog<a name="joplin-terminal-app-changelog" href="#joplin-terminal-app-changelog" class="heading-anchor">🔗</a></h1>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/cli-v2.3.2">cli-v2.3.2</a> - 2021-08-16T09:38:40Z<a name="cli-v2-3-2-https-github-com-laurent22-joplin-releases-tag-cli-v2-3-2-2021-08-16t09-38-40z" href="#cli-v2-3-2-https-github-com-laurent22-joplin-releases-tag-cli-v2-3-2-2021-08-16t09-38-40z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>Improved: Improved E2EE usability by making its state a property of the sync target (#5276)</li>
+<li>Fixed: Bump hightlight.js to v11.2 (#5278) (#5245 by Roman Musin)</li>
+<li>Fixed: Fixed version command so that it does not require the keychain (ca6d8ec)</li>
+</ul>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/cli-v2.2.2">cli-v2.2.2</a> - 2021-08-11T15:34:56Z<a name="cli-v2-2-2-https-github-com-laurent22-joplin-releases-tag-cli-v2-2-2-2021-08-11t15-34-56z" href="#cli-v2-2-2-https-github-com-laurent22-joplin-releases-tag-cli-v2-2-2-2021-08-11t15-34-56z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>Fixed: Fixed version command so that it does not require the keychain (15766d1)</li>
+</ul>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/cli-v2.2.1">cli-v2.2.1</a> - 2021-08-10T10:21:09Z<a name="cli-v2-2-1-https-github-com-laurent22-joplin-releases-tag-cli-v2-2-1-2021-08-10t10-21-09z" href="#cli-v2-2-1-https-github-com-laurent22-joplin-releases-tag-cli-v2-2-1-2021-08-10t10-21-09z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>Improved: Ensure that timestamps are not changed when sharing or unsharing a note (cafaa9c)</li>
+<li>Improved: Fix AWS S3 sync error and upgrade framework to v3 (#5212) (#4810 by Lee Matos)</li>
+<li>Improved: Handles OneDrive throttling responses and sets User-Agent based on Microsoft best practices (#5246) (#5244 by <a href="https://github.com/alec">@alec</a>)</li>
+<li>Improved: Interpret only valid search filters (#5103) (#3871 by <a href="https://github.com/JackGruber">@JackGruber</a>)</li>
+<li>Fixed: Do not export share properties (#5232)</li>
+<li>Fixed: Fixed issue with orphaned resource being created in case of a resource conflict (#5223)</li>
+<li>Fixed: Import highlighted text from ENEX files (#5213)</li>
+</ul>
 <h2><a href="https://github.com/laurent22/joplin/releases/tag/cli-v2.1.2">cli-v2.1.2</a> - 2021-06-27T15:51:36Z<a name="cli-v2-1-2-https-github-com-laurent22-joplin-releases-tag-cli-v2-1-2-2021-06-27t15-51-36z" href="#cli-v2-1-2-https-github-com-laurent22-joplin-releases-tag-cli-v2-1-2-2021-06-27t15-51-36z" class="heading-anchor">🔗</a></h2>
 <ul>
 <li>New: Add support for X-API-MIN-VERSION header (51f3c00)</li>
@@ -650,7 +673,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog_cli.md
 			</footer>
 		</div>
 
-		<script src="&#x2F;js/script.js?t=1628514896838"></script>
+		<script src="&#x2F;js/script.js?t=1629128996550"></script>
 
 <script>
 	if (window.location.hostname !== 'localhost') {

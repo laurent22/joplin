@@ -16,9 +16,10 @@
 		},
 		"sync.target": {
 			"type": "integer",
-			"default": 7,
+			"default": 0,
 			"description": "Synchronisation target",
 			"enum": [
+				0,
 				2,
 				3,
 				5,
@@ -663,6 +664,11 @@
 			"default": "",
 			"description": "Editor monospace font family. Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used."
 		},
+		"style.editor.contentMaxWidth": {
+			"type": "integer",
+			"default": 600,
+			"description": "Editor maximum width. Set it to 0 to make it take the complete available space."
+		},
 		"ui.layout": {
 			"type": "object",
 			"default": {},
@@ -881,6 +887,11 @@
 			"type": "integer",
 			"default": 2,
 			"description": "Note area growth factor. The factor property sets how the item will grow or shrink to fit the available space in its container with respect to the other items. Thus an item with a factor of 2 will take twice as much space as an item with a factor of 1.Restart app to see changes."
+		},
+		"syncInfoCache": {
+			"type": "string",
+			"default": "",
+			"$comment": "private"
 		},
 		"isSafeMode": {
 			"type": "boolean",
