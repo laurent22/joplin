@@ -176,6 +176,7 @@ echo 'Create Desktop icon...'
 # Detect distribution environment, and apply --no-sandbox fix
 SANDBOXPARAM=""
 # lsb_release isn't available on some platforms (e.g. opensuse)
+# The equivalent of lsb_release in OpenSuse is the file /usr/lib/os-release
 if command -v lsb_release &> /dev/null; then
   DISTVER=$(lsb_release -is) && DISTVER=$DISTVER$(lsb_release -rs)
   DISTCODENAME=$(lsb_release -cs)
