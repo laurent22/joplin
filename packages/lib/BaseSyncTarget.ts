@@ -25,6 +25,14 @@ export default class BaseSyncTarget {
 		return false;
 	}
 
+	public static description(): string {
+		return '';
+	}
+
+	public static supportsSelfHosted(): boolean {
+		return true;
+	}
+
 	public option(name: string, defaultValue: any = null) {
 		return this.options_ && name in this.options_ ? this.options_[name] : defaultValue;
 	}

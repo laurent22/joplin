@@ -2,7 +2,7 @@ import { SqlQuery } from '../../database';
 import JoplinDatabase from '../../JoplinDatabase';
 import BaseItem from '../../models/BaseItem';
 import Setting from '../../models/Setting';
-const SyncTargetRegistry = require('../../SyncTargetRegistry');
+import SyncTargetRegistry from '../../SyncTargetRegistry';
 
 async function clearSyncContext() {
 	const syncTargetIds = SyncTargetRegistry.allIds();

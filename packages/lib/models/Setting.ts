@@ -3,7 +3,7 @@ import { _, supportedLocalesToLanguages, defaultLocale } from '../locale';
 import eventManager from '../eventManager';
 import BaseModel from '../BaseModel';
 import Database from '../database';
-const SyncTargetRegistry = require('../SyncTargetRegistry.js');
+import SyncTargetRegistry from '../SyncTargetRegistry';
 import time from '../time';
 import FileHandler, { SettingValues } from './settings/FileHandler';
 const { sprintf } = require('sprintf-js');

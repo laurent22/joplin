@@ -18,10 +18,11 @@ const DialogRoot = styled.div`
 	background-color: ${props => props.theme.backgroundColor};
 	padding: 16px;
 	box-shadow: 6px 6px 20px rgba(0,0,0,0.5);
-	margin-top: 20px;
+	margin: 20px;
 	min-height: fit-content;
 	display: flex;
 	flex-direction: column;
+	border-radius: 10px;
 `;
 
 interface Props {

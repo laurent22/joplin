@@ -78,7 +78,7 @@ import SearchEngine from '@joplin/lib/services/searchengine/SearchEngine';
 const WelcomeUtils = require('@joplin/lib/WelcomeUtils');
 const { themeStyle } = require('./components/global-style.js');
 
-const SyncTargetRegistry = require('@joplin/lib/SyncTargetRegistry.js');
+import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 const SyncTargetFilesystem = require('@joplin/lib/SyncTargetFilesystem.js');
 const SyncTargetNextcloud = require('@joplin/lib/SyncTargetNextcloud.js');
 const SyncTargetWebDAV = require('@joplin/lib/SyncTargetWebDAV.js');

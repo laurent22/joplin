@@ -11,7 +11,7 @@ import EncryptionConfigScreen from '../EncryptionConfigScreen';
 const { connect } = require('react-redux');
 const { themeStyle } = require('@joplin/lib/theme');
 const pathUtils = require('@joplin/lib/path-utils');
-const SyncTargetRegistry = require('@joplin/lib/SyncTargetRegistry');
+import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 const shared = require('@joplin/lib/components/shared/config-shared.js');
 import ClipperConfigScreen from '../ClipperConfigScreen';
 const { KeymapConfigScreen } = require('../KeymapConfig/KeymapConfigScreen');

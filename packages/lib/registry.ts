@@ -1,7 +1,7 @@
 import Logger from './Logger';
 import Setting from './models/Setting';
 import shim from './shim';
-const SyncTargetRegistry = require('./SyncTargetRegistry.js');
+import SyncTargetRegistry from './SyncTargetRegistry';
 
 class Registry {
 
