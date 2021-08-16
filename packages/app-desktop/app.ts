@@ -870,7 +870,7 @@ class Application extends BaseApplication {
 				type: 'DIALOG_OPEN',
 				name: 'syncWizard',
 			});
-		}, 5000);
+		}, 2000);
 
 		return null;
 	}

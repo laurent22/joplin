@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState, useRef } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import { _ } from '@joplin/lib/locale';
 import DialogButtonRow from '../DialogButtonRow';
 import Dialog from '../Dialog';
@@ -10,6 +10,8 @@ import useElementSize from '@joplin/lib/hooks/useElementSize';
 import Button, { ButtonLevel } from '../Button/Button';
 import bridge from '../../services/bridge';
 import StyledInput from '../style/StyledInput';
+import Setting from '../../../lib/models/Setting';
+import SyncTargetJoplinCloud from '../../../lib/SyncTargetJoplinCloud';
 
 interface Props {
 	themeId: number;
@@ -72,6 +74,7 @@ const SyncTargetBox = styled.div`
 	padding: 1em 2.2em 2em 2.2em;
 	margin-right: 1em;
 	max-width: 400px;
+	opacity: ${props => props.faded ? 0.5 : 1};
 `;
 
 const FeatureList = styled.div`
@@ -135,13 +138,19 @@ const logosImageNames: Record<string, string> = {
 export default function(props: Props) {
 	const [showJoplinCloudForm, setShowJoplinCloudForm] = useState(false);
 	const joplinCloudDescriptionRef = useRef(null);
+	const [joplinCloudEmail, setJoplinCloudEmail] = useState('');
+	const [joplinCloudPassword, setJoplinCloudPassword] = useState('');
 
-	const onButtonRowClick = () => {
-		props.dispatch({
+	function closeDialog(dispatch: Function) {
+		dispatch({
 			type: 'DIALOG_CLOSE',
 			name: 'syncWizard',
 		});
-	};
+	}
+
+	const onButtonRowClick = useCallback(() => {
+		closeDialog(props.dispatch);
+	}, [props.dispatch]);
 
 	const { height: descriptionHeight } = useElementSize(joplinCloudDescriptionRef);
 
@@ -153,8 +162,6 @@ export default function(props: Props) {
 	}
 
 	function renderFeatures(name: string) {
-		if (showJoplinCloudForm) return null;
-
 		return (
 			<FeatureList>
 				{[
@@ -166,37 +173,67 @@ export default function(props: Props) {
 		);
 	}
 
+	const onJoplinCloudEmailChange = useCallback((event: any) => {
+		setJoplinCloudEmail(event.target.value);
+	}, []);
+
+	const onJoplinCloudPasswordChange = useCallback((event: any) => {
+		console.info(event.target.value);
+		setJoplinCloudPassword(event.target.value);
+	}, []);
+
+	const onJoplinCloudLoginClick = useCallback(async () => {
+		const result = await SyncTargetJoplinCloud.checkConfig({
+			password: () => joplinCloudPassword,
+			path: () => Setting.value('sync.10.path'),
+			userContentPath: () => Setting.value('sync.10.userContentPath'),
+			username: () => joplinCloudEmail,
+		});
+
+		if (result.ok) {
+			Setting.setValue('sync.target', 10);
+			Setting.setValue('sync.10.username', joplinCloudEmail);
+			Setting.setValue('sync.10.password', joplinCloudPassword);
+			await Setting.saveAll();
+
+			alert(_('Thank you! Your Joplin Cloud account is now setup and ready to use.'));
+
+			closeDialog(props.dispatch);
+		} else {
+			alert(_('There was an error setting up your Joplin Cloud account. Please verify your email and password and try again. Error was:\n\n%s', result.errorMessage));
+		}
+	}, [joplinCloudEmail, joplinCloudPassword, props.dispatch]);
+
 	function renderJoplinCloudLoginForm() {
 		return (
 			<JoplinCloudLoginForm>
 				<div>Login below, or <a href="#">create an account</a>.</div>
 				<FormLabel>Email</FormLabel>
-				<StyledInput type="email"/>
+				<StyledInput type="email" onChange={onJoplinCloudEmailChange}/>
 				<FormLabel>Password</FormLabel>
-				<StyledInput type="password"/>
-				<SelectButton mt="1.3em" level={ButtonLevel.Primary} title={_('Login')}/>
+				<StyledInput type="password" onChange={onJoplinCloudPasswordChange}/>
+				<SelectButton mt="1.3em" level={ButtonLevel.Primary} title={_('Login')} onClick={onJoplinCloudLoginClick}/>
 			</JoplinCloudLoginForm>
 		);
 	}
 
-	function onSelectButtonClick(name: string) {
+	const onSelectButtonClick = useCallback(async (name: string) => {
 		if (name === 'joplinCloud') {
 			setShowJoplinCloudForm(true);
 		} else {
-			// TODO
+			Setting.setValue('sync.target', name === 'dropbox' ? 7 : 3);
+			await Setting.saveAll();
+			closeDialog(props.dispatch);
+			props.dispatch({
+				type: 'NAV_GO',
+				routeName: name === 'dropbox' ? 'DropboxLogin' : 'OneDriveLogin',
+			});
 		}
-	}
+	}, [props.dispatch]);
 
 	function renderSelectArea(info: SyncTargetInfo) {
 		if (info.name === 'joplinCloud' && showJoplinCloudForm) {
 			return renderJoplinCloudLoginForm();
-			// return (
-			// 	<div>
-			// 		<a href="#">Signup with Joplin Cloud</a>
-			// 		<br/>
-			// 		<a href="#">Login with Joplin Cloud</a>
-			// 	</div>
-			// );
 		} else {
 			return (
 				<SelectButton
@@ -215,13 +252,14 @@ export default function(props: Props) {
 		const logoImageName = logosImageNames[info.name];
 		const logoImageSrc = logoImageName ? `${bridge().buildDir()}/images/syncTargetLogos/${logoImageName}` : '';
 		const logo = logoImageSrc ? <SyncTargetLogo src={logoImageSrc}/> : null;
-		const descriptionComp = showJoplinCloudForm ? null : <SyncTargetDescription height={height} ref={info.name === 'joplinCloud' ? joplinCloudDescriptionRef : null}>{info.description}</SyncTargetDescription>;
+		const descriptionComp = <SyncTargetDescription height={height} ref={info.name === 'joplinCloud' ? joplinCloudDescriptionRef : null}>{info.description}</SyncTargetDescription>;
+		const featuresComp = showJoplinCloudForm && info.name === 'joplinCloud' ? null : renderFeatures(info.name);
 
 		return (
-			<SyncTargetBox id={key} key={key}>
+			<SyncTargetBox id={key} key={key} faded={showJoplinCloudForm && info.name !== 'joplinCloud'}>
 				<SyncTargetTitle>{logo}{info.label}</SyncTargetTitle>
 				{descriptionComp}
-				{renderFeatures(info.name)}
+				{featuresComp}
 				{renderSelectArea(info)}
 			</SyncTargetBox>
 		);
@@ -233,7 +271,6 @@ export default function(props: Props) {
 		for (const name of syncTargetNames) {
 			const info = SyncTargetRegistry.infoByName(name);
 			if (info.supportsSelfHosted) continue;
-			if (showJoplinCloudForm && info.name !== 'joplinCloud') continue;
 			boxes.push(renderSyncTarget(info));
 		}
 
