@@ -319,7 +319,7 @@ class Setting extends BaseModel {
 			},
 
 			'sync.target': {
-				value: SyncTargetRegistry.nameToId('dropbox'),
+				value: 0,
 				type: SettingItemType.Int,
 				isEnum: true,
 				public: true,

@@ -855,6 +855,9 @@ packages/lib/SyncTargetJoplinCloud.js.map
 packages/lib/SyncTargetJoplinServer.d.ts
 packages/lib/SyncTargetJoplinServer.js
 packages/lib/SyncTargetJoplinServer.js.map
+packages/lib/SyncTargetNone.d.ts
+packages/lib/SyncTargetNone.js
+packages/lib/SyncTargetNone.js.map
 packages/lib/SyncTargetOneDrive.d.ts
 packages/lib/SyncTargetOneDrive.js
 packages/lib/SyncTargetOneDrive.js.map
