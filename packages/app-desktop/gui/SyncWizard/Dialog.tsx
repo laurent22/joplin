@@ -24,13 +24,6 @@ const StyledRoot = styled.div`
 	max-width: 1200px;
 `;
 
-const TopTitle = styled.div`
-	display: flex;
-	justify-content: center;
-	margin-top: 0.8em;
-	margin-bottom: 1.5em;
-`;
-
 const SyncTargetDescription = styled.div`
 	${props => props.height ? `height: ${props.height}px` : ''};
 	margin-bottom: 1.3em;
@@ -321,7 +314,6 @@ export default function(props: Props) {
 
 		return (
 			<ContentRoot>
-				<TopTitle>{_('Joplin can synchronise your notes using various providers. Select one from the list below:')}</TopTitle>
 				<SyncTargetBoxes>
 					{boxes}
 				</SyncTargetBoxes>
@@ -333,7 +325,7 @@ export default function(props: Props) {
 	function renderDialogWrapper() {
 		return (
 			<StyledRoot>
-				<DialogTitle title={_('Synchronisation Wizard')} justifyContent="center"/>
+				<DialogTitle title={_('Joplin can synchronise your notes using various providers. Select one from the list below.')} justifyContent="center"/>
 				{renderContent()}
 				<DialogButtonRow
 					themeId={props.themeId}
