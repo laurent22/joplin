@@ -1,5 +1,11 @@
 # Joplin terminal app changelog
 
+## [cli-v2.3.2](https://github.com/laurent22/joplin/releases/tag/cli-v2.3.2) - 2021-08-16T09:38:40Z
+
+- Improved: Improved E2EE usability by making its state a property of the sync target (#5276)
+- Fixed: Bump hightlight.js to v11.2 (#5278) (#5245 by Roman Musin)
+- Fixed: Fixed version command so that it does not require the keychain (ca6d8ec)
+
 ## [cli-v2.2.2](https://github.com/laurent22/joplin/releases/tag/cli-v2.2.2) - 2021-08-11T15:34:56Z
 
 - Fixed: Fixed version command so that it does not require the keychain (15766d1)
