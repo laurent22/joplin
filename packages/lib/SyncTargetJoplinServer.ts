@@ -51,6 +51,10 @@ export default class SyncTargetJoplinServer extends BaseSyncTarget {
 		return 'joplinServer';
 	}
 
+	public static description() {
+		return 'Besides synchronisation and improved performances, Joplin Server also gives access to Joplin-specific sharing features.';
+	}
+
 	public static label() {
 		return `${_('Joplin Server')} (Beta)`;
 	}

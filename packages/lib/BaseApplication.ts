@@ -30,7 +30,7 @@ const fs = require('fs-extra');
 import JoplinError from './JoplinError';
 const EventEmitter = require('events');
 const syswidecas = require('./vendor/syswide-cas');
-const SyncTargetRegistry = require('./SyncTargetRegistry.js');
+import SyncTargetRegistry from './SyncTargetRegistry';
 const SyncTargetFilesystem = require('./SyncTargetFilesystem.js');
 const SyncTargetNextcloud = require('./SyncTargetNextcloud.js');
 const SyncTargetWebDAV = require('./SyncTargetWebDAV.js');

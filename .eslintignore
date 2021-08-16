@@ -573,6 +573,9 @@ packages/app-desktop/gui/Sidebar/styles/index.js.map
 packages/app-desktop/gui/StatusScreen/StatusScreen.d.ts
 packages/app-desktop/gui/StatusScreen/StatusScreen.js
 packages/app-desktop/gui/StatusScreen/StatusScreen.js.map
+packages/app-desktop/gui/SyncWizard/Dialog.d.ts
+packages/app-desktop/gui/SyncWizard/Dialog.js
+packages/app-desktop/gui/SyncWizard/Dialog.js.map
 packages/app-desktop/gui/TagList.d.ts
 packages/app-desktop/gui/TagList.js
 packages/app-desktop/gui/TagList.js.map
@@ -870,6 +873,9 @@ packages/lib/SyncTargetJoplinServer.js.map
 packages/lib/SyncTargetOneDrive.d.ts
 packages/lib/SyncTargetOneDrive.js
 packages/lib/SyncTargetOneDrive.js.map
+packages/lib/SyncTargetRegistry.d.ts
+packages/lib/SyncTargetRegistry.js
+packages/lib/SyncTargetRegistry.js.map
 packages/lib/Synchronizer.d.ts
 packages/lib/Synchronizer.js
 packages/lib/Synchronizer.js.map
@@ -927,6 +933,12 @@ packages/lib/fs-driver-node.js.map
 packages/lib/fsDriver.test.d.ts
 packages/lib/fsDriver.test.js
 packages/lib/fsDriver.test.js.map
+packages/lib/hooks/useElementSize.d.ts
+packages/lib/hooks/useElementSize.js
+packages/lib/hooks/useElementSize.js.map
+packages/lib/hooks/useEventListener.d.ts
+packages/lib/hooks/useEventListener.js
+packages/lib/hooks/useEventListener.js.map
 packages/lib/htmlUtils.d.ts
 packages/lib/htmlUtils.js
 packages/lib/htmlUtils.js.map
