@@ -52,6 +52,7 @@ const { toSystemSlashes } = require('./path-utils');
 const { setAutoFreeze } = require('immer');
 import { getEncryptionEnabled } from './services/synchronizer/syncInfoUtils';
 import { loadMasterKeysFromSettings } from './services/e2ee/utils';
+import SyncTargetNone from './SyncTargetNone';
 
 const appLogger: LoggerWrapper = Logger.create('App');
 
@@ -705,6 +706,7 @@ export default class BaseApplication {
 		Setting.setConstant('cacheDir', cacheDir);
 		Setting.setConstant('pluginDir', `${profileDir}/plugins`);
 
+		SyncTargetRegistry.addClass(SyncTargetNone);
 		SyncTargetRegistry.addClass(SyncTargetFilesystem);
 		SyncTargetRegistry.addClass(SyncTargetOneDrive);
 		SyncTargetRegistry.addClass(SyncTargetNextcloud);

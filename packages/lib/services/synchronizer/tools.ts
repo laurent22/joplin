@@ -9,8 +9,9 @@ async function clearSyncContext() {
 
 	for (const syncTargetId of syncTargetIds) {
 		const key = `sync.${syncTargetId}.context`;
-		if (!Setting.keyExists(key)) break;
-		Setting.resetKey(key);
+		if (Setting.keyExists(key)) {
+			Setting.resetKey(key);
+		}
 	}
 
 	await Setting.saveAll();

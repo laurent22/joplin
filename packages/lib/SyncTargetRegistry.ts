@@ -1,5 +1,3 @@
-import SyncTargetNone from './SyncTargetNone';
-
 export interface SyncTargetInfo {
 	id: number;
 	name: string;
@@ -21,17 +19,17 @@ export default class SyncTargetRegistry {
 	private static reg_: Record<number, SyncTargetInfo> = {};
 
 	private static get reg() {
-		if (!this.reg_[0]) {
-			this.reg_[0] = {
-				id: 0,
-				name: SyncTargetNone.targetName(),
-				label: SyncTargetNone.label(),
-				classRef: SyncTargetNone,
-				description: SyncTargetNone.description(),
-				supportsSelfHosted: false,
-				supportsConfigCheck: false,
-			};
-		}
+		// if (!this.reg_[0]) {
+		// 	this.reg_[0] = {
+		// 		id: 0,
+		// 		name: SyncTargetNone.targetName(),
+		// 		label: SyncTargetNone.label(),
+		// 		classRef: SyncTargetNone,
+		// 		description: SyncTargetNone.description(),
+		// 		supportsSelfHosted: false,
+		// 		supportsConfigCheck: false,
+		// 	};
+		// }
 
 		return this.reg_;
 	}
