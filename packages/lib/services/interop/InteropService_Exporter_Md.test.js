@@ -10,7 +10,7 @@ const Resource = require('../../models/Resource').default;
 const Note = require('../../models/Note').default;
 const shim = require('../../shim').default;
 
-describe('services_InteropService_Exporter_Md', function() {
+describe('interop/InteropService_Exporter_Md', function() {
 
 	beforeEach(async (done) => {
 		await setupDatabaseAndSynchronizer(1);

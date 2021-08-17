@@ -28,6 +28,7 @@ describe('pathUtils', function() {
 		expect(!!friendlySafeFilename('...')).toBe(true);
 
 		// Check that it optionally handles filenames with extension
+		expect(friendlySafeFilename('file', null, true)).toBe('file');
 		expect(friendlySafeFilename('  testing.md', null, true)).toBe('testing.md');
 		expect(friendlySafeFilename('testing.safe??ext##', null, true)).toBe('testing.safeext');
 		expect(friendlySafeFilename('thatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylongthatsreallylong.md', null, true)).toBe('thatsreallylongthatsreallylongthatsreallylongthats.md');
