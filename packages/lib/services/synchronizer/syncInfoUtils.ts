@@ -2,7 +2,7 @@ import { FileApi } from '../../file-api';
 import JoplinDatabase from '../../JoplinDatabase';
 import Setting from '../../models/Setting';
 import { State } from '../../reducer';
-import { MasterKeyEntity } from '../database/types';
+import { MasterKeyEntity } from '../e2ee/types';
 
 export interface SyncInfoValueBoolean {
 	value: boolean;
@@ -232,4 +232,25 @@ export function getActiveMasterKey(s: SyncInfo = null): MasterKeyEntity | null {
 	s = s || localSyncInfo();
 	if (!s.activeMasterKeyId) return null;
 	return s.masterKeys.find(mk => mk.id === s.activeMasterKeyId);
+}
+
+export function setMasterKeyEnabled(mkId: string, enabled: boolean = true) {
+	const s = localSyncInfo();
+	const idx = s.masterKeys.findIndex(mk => mk.id === mkId);
+	if (idx < 0) throw new Error(`No such master key: ${mkId}`);
+
+	if (mkId === getActiveMasterKeyId() && !enabled) throw new Error('The active master key cannot be disabled');
+
+	s.masterKeys[idx] = {
+		...s.masterKeys[idx],
+		enabled: enabled ? 1 : 0,
+		updated_time: Date.now(),
+	};
+
+	saveLocalSyncInfo(s);
+}
+
+export function masterKeyEnabled(mk: MasterKeyEntity): boolean {
+	if ('enabled' in mk) return !!mk.enabled;
+	return true;
 }

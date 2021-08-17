@@ -859,10 +859,10 @@ class Application extends BaseApplication {
 		// 		type: 'NAV_GO',
 		// 		routeName: 'Config',
 		// 		props: {
-		// 			defaultSection: 'plugins',
+		// 			defaultSection: 'encryption',
 		// 		},
 		// 	});
-		// }, 5000);
+		// }, 2000);
 
 
 		// setTimeout(() => {

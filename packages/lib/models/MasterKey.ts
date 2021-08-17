@@ -1,5 +1,5 @@
 import BaseModel from '../BaseModel';
-import { MasterKeyEntity } from '../services/database/types';
+import { MasterKeyEntity } from '../services/e2ee/types';
 import { localSyncInfo, saveLocalSyncInfo } from '../services/synchronizer/syncInfoUtils';
 import BaseItem from './BaseItem';
 import uuid from '../uuid';

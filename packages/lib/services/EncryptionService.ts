@@ -1,4 +1,4 @@
-import { MasterKeyEntity } from './database/types';
+import { MasterKeyEntity } from './e2ee/types';
 import Logger from '../Logger';
 import shim from '../shim';
 import Setting from '../models/Setting';

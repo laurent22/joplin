@@ -10,8 +10,8 @@ import shim from '@joplin/lib/shim';
 import dialogs from './dialogs';
 import bridge from '../services/bridge';
 import shared from '@joplin/lib/components/shared/encryption-config-shared';
-import { MasterKeyEntity } from '@joplin/lib/services/database/types';
-import { getEncryptionEnabled, SyncInfo } from '@joplin/lib/services/synchronizer/syncInfoUtils';
+import { MasterKeyEntity } from '@joplin/lib/services/e2ee/types';
+import { getEncryptionEnabled, masterKeyEnabled, SyncInfo } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 import { toggleAndSetupEncryption } from '@joplin/lib/services/e2ee/utils';
 import MasterKey from '@joplin/lib/models/MasterKey';
 
@@ -42,7 +42,7 @@ class EncryptionConfigScreenComponent extends React.Component<Props> {
 		return shared.checkPasswords(this);
 	}
 
-	renderMasterKey(mk: MasterKeyEntity) {
+	private renderMasterKey(mk: MasterKeyEntity, isDefault: boolean) {
 		const theme = themeStyle(this.props.themeId);
 
 		const passwordStyle = {
@@ -60,17 +60,20 @@ class EncryptionConfigScreenComponent extends React.Component<Props> {
 			return shared.onPasswordChange(this, mk, event.target.value);
 		};
 
+		const onToggleEnabledClick = () => {
+			return shared.onToggleEnabledClick(this, mk);
+		};
+
 		const password = this.state.passwords[mk.id] ? this.state.passwords[mk.id] : '';
-		const active = this.props.activeMasterKeyId === mk.id ? '✔' : '';
+		const isActive = this.props.activeMasterKeyId === mk.id;
+		const activeIcon = isActive ? '✔' : '';
 		const passwordOk = this.state.passwordChecks[mk.id] === true ? '✔' : '❌';
 
 		return (
 			<tr key={mk.id}>
-				<td style={theme.textStyle}>{active}</td>
-				<td style={theme.textStyle}>{mk.id}</td>
-				<td style={theme.textStyle}>{mk.source_application}</td>
-				<td style={theme.textStyle}>{time.formatMsToLocal(mk.created_time)}</td>
-				<td style={theme.textStyle}>{time.formatMsToLocal(mk.updated_time)}</td>
+				<td style={theme.textStyle}>{activeIcon}</td>
+				<td style={theme.textStyle}>{mk.id}<br/>{_('Source: ')}{mk.source_application}</td>
+				<td style={theme.textStyle}>{_('Created: ')}{time.formatMsToLocal(mk.created_time)}<br/>{_('Updated: ')}{time.formatMsToLocal(mk.updated_time)}</td>
 				<td style={theme.textStyle}>
 					<input type="password" style={passwordStyle} value={password} onChange={event => onPasswordChange(event)} />{' '}
 					<button style={theme.buttonStyle} onClick={() => onSaveClick()}>
@@ -78,6 +81,9 @@ class EncryptionConfigScreenComponent extends React.Component<Props> {
 					</button>
 				</td>
 				<td style={theme.textStyle}>{passwordOk}</td>
+				<td style={theme.textStyle}>
+					<button disabled={isActive || isDefault} style={theme.buttonStyle} onClick={() => onToggleEnabledClick()}>{masterKeyEnabled(mk) ? _('Disable') : _('Enable')}</button>
+				</td>
 			</tr>
 		);
 	}
@@ -121,6 +127,7 @@ class EncryptionConfigScreenComponent extends React.Component<Props> {
 
 	renderReencryptData() {
 		if (!shim.isElectron()) return null;
+		if (!this.props.shouldReencrypt) return null;
 
 		const theme = themeStyle(this.props.themeId);
 		const buttonLabel = _('Re-encrypt data');
@@ -146,9 +153,51 @@ class EncryptionConfigScreenComponent extends React.Component<Props> {
 		);
 	}
 
+	private renderMasterKeySection(masterKeys: MasterKeyEntity[], isEnabledMasterKeys: boolean) {
+		const theme = themeStyle(this.props.themeId);
+		const mkComps = [];
+		const showTable = isEnabledMasterKeys || this.state.showDisabledMasterKeys;
+		const latestMasterKey = MasterKey.latest();
+
+		for (let i = 0; i < masterKeys.length; i++) {
+			const mk = masterKeys[i];
+			mkComps.push(this.renderMasterKey(mk, isEnabledMasterKeys && latestMasterKey && mk.id === latestMasterKey.id));
+		}
+
+		const headerComp = isEnabledMasterKeys ? <h1 style={theme.h1Style}>{_('Master Keys')}</h1> : <a onClick={() => shared.toggleShowDisabledMasterKeys(this) } style={{ ...theme.urlStyle, display: 'inline-block', marginBottom: 10 }} href="#">{showTable ? _('Hide disabled master keys') : _('Show disabled master keys')}</a>;
+		const infoComp = isEnabledMasterKeys ? <p style={theme.textStyle}>{_('Note: Only one master key is going to be used for encryption (the one marked as "active"). Any of the keys might be used for decryption, depending on how the notes or notebooks were originally encrypted.')}</p> : null;
+		const tableComp = !showTable ? null : (
+			<table>
+				<tbody>
+					<tr>
+						<th style={theme.textStyle}>{_('Active')}</th>
+						<th style={theme.textStyle}>{_('ID')}</th>
+						<th style={theme.textStyle}>{_('Date')}</th>
+						<th style={theme.textStyle}>{_('Password')}</th>
+						<th style={theme.textStyle}>{_('Valid')}</th>
+						<th style={theme.textStyle}>{_('Actions')}</th>
+					</tr>
+					{mkComps}
+				</tbody>
+			</table>
+		);
+
+		if (mkComps.length) {
+			return (
+				<div>
+					{headerComp}
+					{tableComp}
+					{infoComp}
+				</div>
+			);
+		}
+
+		return null;
+	}
+
 	render() {
 		const theme = themeStyle(this.props.themeId);
-		const masterKeys = this.props.masterKeys;
+		const masterKeys: MasterKeyEntity[] = this.props.masterKeys;
 
 		const containerStyle = Object.assign({}, theme.containerStyle, {
 			padding: theme.configScreenPadding,
@@ -156,13 +205,10 @@ class EncryptionConfigScreenComponent extends React.Component<Props> {
 			backgroundColor: theme.backgroundColor3,
 		});
 
-		const mkComps = [];
 		const nonExistingMasterKeyIds = this.props.notLoadedMasterKeys.slice();
 
 		for (let i = 0; i < masterKeys.length; i++) {
 			const mk = masterKeys[i];
-			mkComps.push(this.renderMasterKey(mk));
-
 			const idx = nonExistingMasterKeyIds.indexOf(mk.id);
 			if (idx >= 0) nonExistingMasterKeyIds.splice(idx, 1);
 		}
@@ -203,30 +249,8 @@ class EncryptionConfigScreenComponent extends React.Component<Props> {
 		const needUpgradeSection = this.renderNeedUpgradeSection();
 		const reencryptDataSection = this.renderReencryptData();
 
-		let masterKeySection = null;
-
-		if (mkComps.length) {
-			masterKeySection = (
-				<div>
-					<h1 style={theme.h1Style}>{_('Master Keys')}</h1>
-					<table>
-						<tbody>
-							<tr>
-								<th style={theme.textStyle}>{_('Active')}</th>
-								<th style={theme.textStyle}>{_('ID')}</th>
-								<th style={theme.textStyle}>{_('Source')}</th>
-								<th style={theme.textStyle}>{_('Created')}</th>
-								<th style={theme.textStyle}>{_('Updated')}</th>
-								<th style={theme.textStyle}>{_('Password')}</th>
-								<th style={theme.textStyle}>{_('Password OK')}</th>
-							</tr>
-							{mkComps}
-						</tbody>
-					</table>
-					<p style={theme.textStyle}>{_('Note: Only one master key is going to be used for encryption (the one marked as "active"). Any of the keys might be used for decryption, depending on how the notes or notebooks were originally encrypted.')}</p>
-				</div>
-			);
-		}
+		const enabledMasterKeySection = this.renderMasterKeySection(masterKeys.filter(mk => masterKeyEnabled(mk)), true);
+		const disabledMasterKeySection = this.renderMasterKeySection(masterKeys.filter(mk => !masterKeyEnabled(mk)), false);
 
 		let nonExistingMasterKeySection = null;
 
@@ -284,7 +308,8 @@ class EncryptionConfigScreenComponent extends React.Component<Props> {
 					{toggleButton}
 					{needUpgradeSection}
 					{this.props.shouldReencrypt ? reencryptDataSection : null}
-					{masterKeySection}
+					{enabledMasterKeySection}
+					{disabledMasterKeySection}
 					{nonExistingMasterKeySection}
 					{!this.props.shouldReencrypt ? reencryptDataSection : null}
 				</div>

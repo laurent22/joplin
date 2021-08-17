@@ -22,6 +22,7 @@ async function main() {
 			'main.notes_fts_segdir',
 			'main.notes_fts_docsize',
 			'main.notes_fts_stat',
+			'main.master_keys',
 		],
 	};
 
