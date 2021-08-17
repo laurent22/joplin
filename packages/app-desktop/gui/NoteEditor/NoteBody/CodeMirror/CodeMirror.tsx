@@ -483,7 +483,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				border-radius: .25em;
 			}
 
-			div.CodeMirror pre.cm-jn-code-block {
+			div.CodeMirror div.cm-jn-code-block {
 				background-color: ${theme.codeBackgroundColor};
 				padding-right: .2em;
 				padding-left: .2em;
