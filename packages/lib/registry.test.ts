@@ -36,6 +36,7 @@ describe('Registry', function() {
 
 		beforeEach(() => {
 			Setting.setValue('sync.mobileWifiOnly', true);
+			Setting.setValue('sync.target', 1);
 			reg.setIsOnMobileData(true);
 		});
 

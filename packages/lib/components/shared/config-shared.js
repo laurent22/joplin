@@ -1,5 +1,5 @@
 const Setting = require('../../models/Setting').default;
-const SyncTargetRegistry = require('../../SyncTargetRegistry');
+const SyncTargetRegistry = require('../../SyncTargetRegistry').default;
 const ObjectUtils = require('../../ObjectUtils');
 const { _ } = require('../../locale');
 const { createSelector } = require('reselect');

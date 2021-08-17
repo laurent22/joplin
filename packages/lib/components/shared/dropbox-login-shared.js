@@ -1,5 +1,5 @@
 const shim = require('../../shim').default;
-const SyncTargetRegistry = require('../../SyncTargetRegistry');
+const SyncTargetRegistry = require('../../SyncTargetRegistry').default;
 const { reg } = require('../../registry.js');
 const { _ } = require('../../locale');
 const Setting = require('../../models/Setting').default;

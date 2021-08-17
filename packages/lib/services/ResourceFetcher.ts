@@ -161,14 +161,19 @@ export default class ResourceFetcher extends BaseService {
 			return;
 		}
 
+		const fileApi = await this.fileApi();
+
+		if (!fileApi) {
+			this.logger().debug('ResourceFetcher: Disabled because fileApi is not set');
+			return;
+		}
+
 		this.fetchingItems_[resourceId] = resource;
 
 		const localResourceContentPath = Resource.fullPath(resource, !!resource.encryption_blob_encrypted);
 		const remoteResourceContentPath = `${Dirnames.Resources}/${resource.id}`;
 
 		await Resource.setLocalState(resource, { fetch_status: Resource.FETCH_STATUS_STARTED });
-
-		const fileApi = await this.fileApi();
 
 		this.logger().debug(`ResourceFetcher: Downloading resource: ${resource.id}`);
 

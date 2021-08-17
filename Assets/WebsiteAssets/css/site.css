@@ -18,6 +18,14 @@ a {
 	text-decoration: none;
 }
 
+ol, ul {
+	padding-left: 1rem;
+}
+
+.row > ul, ol {
+	margin-left: 1rem;
+}
+
 #main-container {
 	position: relative;
 	min-height: 100vh;
@@ -897,7 +905,7 @@ footer .right-links a {
 	background: linear-gradient(251.85deg, #0b4f99 -11.85%, #002d61 104.73%);
 	box-shadow: 0px 4px 16px rgba(105, 132, 172, 0.13);
 	margin-top: 30px;
-	padding-top: 50px;
+	padding-top: 40px;
 	color: white;
 }
 
@@ -957,6 +965,7 @@ footer .right-links a {
 
 .price-row .plan-type img {
 	width: 65px;
+	margin-bottom: 0;
 }
 
 .price-row .plan-price {

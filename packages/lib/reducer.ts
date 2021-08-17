@@ -55,7 +55,7 @@ export interface State {
 	folders: any[];
 	tags: any[];
 	masterKeys: any[];
-	notLoadedMasterKeys: any[];
+	notLoadedMasterKeys: string[];
 	searches: any[];
 	highlightedWords: string[];
 	selectedNoteIds: string[];

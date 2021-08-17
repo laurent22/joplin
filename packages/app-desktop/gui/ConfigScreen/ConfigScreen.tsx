@@ -11,7 +11,7 @@ import EncryptionConfigScreen from '../EncryptionConfigScreen';
 const { connect } = require('react-redux');
 const { themeStyle } = require('@joplin/lib/theme');
 const pathUtils = require('@joplin/lib/path-utils');
-const SyncTargetRegistry = require('@joplin/lib/SyncTargetRegistry');
+import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 const shared = require('@joplin/lib/components/shared/config-shared.js');
 import ClipperConfigScreen from '../ClipperConfigScreen';
 const { KeymapConfigScreen } = require('../KeymapConfig/KeymapConfigScreen');
@@ -94,6 +94,11 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			Setting.setValue('sync.startupOperation', SyncStartupOperation.ClearLocalData);
 			await Setting.saveAll();
 			bridge().restart();
+		} else if (key === 'sync.openSyncWizard') {
+			this.props.dispatch({
+				type: 'DIALOG_OPEN',
+				name: 'syncWizard',
+			});
 		} else {
 			throw new Error(`Unhandled key: ${key}`);
 		}
@@ -606,11 +611,15 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				</div>
 			);
 		} else if (md.type === Setting.TYPE_BUTTON) {
+			const labelComp = md.hideLabel ? null : (
+				<div style={labelStyle}>
+					<label>{md.label()}</label>
+				</div>
+			);
+
 			return (
 				<div key={key} style={rowStyle}>
-					<div style={labelStyle}>
-						<label>{md.label()}</label>
-					</div>
+					{labelComp}
 					<Button level={ButtonLevel.Secondary} title={md.label()} onClick={md.onClick ? md.onClick : () => this.handleSettingButton(key)}/>
 					{descriptionComp}
 				</div>

@@ -1,5 +1,9 @@
 # Joplin Android app changelog
 
+## [android-v2.3.4](https://github.com/laurent22/joplin/releases/tag/android-v2.3.4) (Pre-release) - 2021-08-15T13:27:57Z
+
+- Fixed: Bump hightlight.js to v11.2 (#5278) (#5245 by Roman Musin)
+
 ## [android-v2.3.3](https://github.com/laurent22/joplin/releases/tag/android-v2.3.3) (Pre-release) - 2021-08-12T20:46:15Z
 
 - Improved: Improved E2EE usability by making its state a property of the sync target (#5276)

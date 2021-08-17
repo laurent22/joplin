@@ -1,5 +1,23 @@
 # Joplin changelog
 
+## [v2.3.3](https://github.com/laurent22/joplin/releases/tag/v2.3.3) - 2021-08-14T09:19:40Z
+
+CAUTION: This release will ask you to upgrade your sync target, whether it's Dropbox, OneDrive, Joplin Cloud, etc. Once it is done, only apps version 2.3+ will be able to sync with it, so make sure you are ready to upgrade all your apps before installing this version.
+
+- Improved: Improved E2EE usability by making its state a property of the sync target ([#5276](https://github.com/laurent22/joplin/issues/5276))
+
+## [v2.2.7](https://github.com/laurent22/joplin/releases/tag/v2.2.7) - 2021-08-11T11:03:26Z
+
+- Revert "Plugins: Add ability to make dialogs fit the application window ([#5219](https://github.com/laurent22/joplin/issues/5219))" as it breaks several plugin webviews.
+- Revert "Resolves [#4810](https://github.com/laurent22/joplin/issues/4810), Resolves [#4610](https://github.com/laurent22/joplin/issues/4610): Fix AWS S3 sync error and upgrade framework to v3 ([#5212](https://github.com/laurent22/joplin/issues/5212))" due to incompatibility with some AWS providers.
+
+## [v2.2.6](https://github.com/laurent22/joplin/releases/tag/v2.2.6) (Pre-release) - 2021-08-09T19:29:20Z
+
+- Improved: Fix AWS S3 sync error and upgrade framework to v3 ([#5212](https://github.com/laurent22/joplin/issues/5212)) ([#4810](https://github.com/laurent22/joplin/issues/4810) by Lee Matos)
+- Improved: Handles OneDrive throttling responses and sets User-Agent based on Microsoft best practices ([#5246](https://github.com/laurent22/joplin/issues/5246)) ([#5244](https://github.com/laurent22/joplin/issues/5244) by [@alec](https://github.com/alec))
+- Improved: Plugins: Hide note list menu items for commands that are disabled ([#5270](https://github.com/laurent22/joplin/issues/5270) by [@Ahmad45123](https://github.com/Ahmad45123))
+- Improved: Prevent plugins from crashing the application ([#5273](https://github.com/laurent22/joplin/issues/5273))
+
 ## [v2.2.5](https://github.com/laurent22/joplin/releases/tag/v2.2.5) (Pre-release) - 2021-08-07T10:35:24Z
 
 - Improved: Remove template feature (replaced by template plugin) (e9d5901)

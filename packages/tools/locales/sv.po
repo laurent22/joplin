@@ -2525,7 +2525,7 @@ msgstr "Exportera felsökningsrapport"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.js:43
 msgid "Duplicate"
-msgstr "Duplikat"
+msgstr "Duplicera"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.js:48
 #, javascript-format

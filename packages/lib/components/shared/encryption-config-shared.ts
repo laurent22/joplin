@@ -5,8 +5,9 @@ import Setting from '../../models/Setting';
 import MasterKey from '../../models/MasterKey';
 import { reg } from '../../registry.js';
 import shim from '../../shim';
-import { MasterKeyEntity } from '../../services/database/types';
+import { MasterKeyEntity } from '../../services/e2ee/types';
 import time from '../../time';
+import { masterKeyEnabled, setMasterKeyEnabled } from '../../services/synchronizer/syncInfoUtils';
 
 class Shared {
 
@@ -20,6 +21,7 @@ class Shared {
 				total: null,
 			},
 			passwords: Object.assign({}, props.passwords),
+			showDisabledMasterKeys: false,
 		};
 		comp.isMounted_ = false;
 
@@ -31,6 +33,10 @@ class Shared {
 		comp.setState({
 			stats: stats,
 		});
+	}
+
+	public async toggleShowDisabledMasterKeys(comp: any) {
+		comp.setState({ showDisabledMasterKeys: !comp.state.showDisabledMasterKeys });
 	}
 
 	public async reencryptData() {
@@ -136,6 +142,10 @@ class Shared {
 		const passwords = Object.assign({}, comp.state.passwords);
 		passwords[mk.id] = password;
 		comp.setState({ passwords: passwords });
+	}
+
+	public onToggleEnabledClick(_comp: any, mk: MasterKeyEntity) {
+		setMasterKeyEnabled(mk.id, !masterKeyEnabled(mk));
 	}
 
 	public enableEncryptionConfirmationMessages(masterKey: MasterKeyEntity) {
