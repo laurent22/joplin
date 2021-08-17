@@ -8,9 +8,8 @@ import Setting from '../../models/Setting';
 import { MarkupToHtml } from '@joplin/renderer';
 import { ResourceEntity } from '../database/types';
 import { contentScriptsToRendererRules } from '../plugins/utils/loadContentScripts';
-const { basename, friendlySafeFilename, rtrimSlashes } = require('../../path-utils');
+import { basename, friendlySafeFilename, rtrimSlashes, dirname } from '../../path-utils';
 const { themeStyle } = require('../../theme');
-const { dirname } = require('../../path-utils');
 const { escapeHtml } = require('../../string-utils.js');
 const { assetsToHeaders } = require('@joplin/renderer');
 
@@ -53,7 +52,7 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 				if (pathPart) {
 					output = `${pathPart}/${output}`;
 				} else {
-					output = `${friendlySafeFilename(item.title, null, true)}/${output}`;
+					output = `${friendlySafeFilename(item.title)}/${output}`;
 					output = await shim.fsDriver().findUniqueFilename(output);
 				}
 			}
@@ -98,7 +97,7 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 			if (this.filePath_) {
 				noteFilePath = this.filePath_;
 			} else {
-				noteFilePath = `${dirPath}/${friendlySafeFilename(item.title, null, true)}.html`;
+				noteFilePath = `${dirPath}/${friendlySafeFilename(item.title)}.html`;
 				noteFilePath = await shim.fsDriver().findUniqueFilename(noteFilePath);
 			}
 

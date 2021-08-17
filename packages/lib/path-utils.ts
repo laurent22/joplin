@@ -75,7 +75,8 @@ export function friendlySafeFilename(e: string, maxLength: number = null, preser
 	let fileExt = '';
 
 	if (preserveExtension) {
-		fileExt = `.${safeFileExtension(fileExtension(e))}`;
+		const baseExt = fileExtension(e);
+		fileExt = baseExt ? `.${safeFileExtension(baseExt)}` : '';
 		e = filename(e);
 	}
 
