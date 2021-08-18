@@ -34,6 +34,8 @@ jobs:
               $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
           sudo apt-get update || true
           sudo apt-get install -y docker-ce docker-ce-cli containerd.io
+          docker run --privileged --rm tonistiigi/binfmt --install all
+          sudo docker buildx ls
 
       - uses: actions/checkout@v2
       - uses: olegtarasov/get-tag@v2.1
