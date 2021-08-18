@@ -149,6 +149,23 @@ describe('synchronizer_LockHandler', function() {
 		}
 	}));
 
+	it('should ignore locks by same client when trying to acquire exclusive lock', (async () => {
+		const lockHandler = newLockHandler();
+
+		await lockHandler.acquireLock(LockType.Sync, 'desktop', '111');
+
+		await expectThrow(async () => {
+			await lockHandler.acquireLock(LockType.Exclusive, 'desktop', '111', { clearExistingSyncLocksFromTheSameClient: false });
+		}, 'hasSyncLock');
+
+		await expectNotThrow(async () => {
+			await lockHandler.acquireLock(LockType.Exclusive, 'desktop', '111', { clearExistingSyncLocksFromTheSameClient: true });
+		});
+
+		const activeLock = await lockHandler.activeLock(LockType.Exclusive);
+		expect(activeLock.clientId).toBe('111');
+	}));
+
 	// it('should not have race conditions', (async () => {
 	// 	const lockHandler = newLockHandler();
 

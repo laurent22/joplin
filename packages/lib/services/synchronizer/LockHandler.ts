@@ -18,6 +18,29 @@ export interface Lock {
 	updatedTime?: number;
 }
 
+export interface AcquireLockOptions {
+	// In theory, a client that tries to acquire an exclusive lock shouldn't
+	// also have a sync lock. It can however happen when the app is closed
+	// before the end of the sync process, and then the user tries to upgrade
+	// the sync target.
+	//
+	// So maybe we could always automatically clear the sync locks (that belongs
+	// to the current client) when acquiring an exclusive lock, but to be safe
+	// we make the behaviour explicit via this option. It is used for example
+	// when migrating a sync target.
+	//
+	// https://discourse.joplinapp.org/t/error-upgrading-to-2-3-3/19549/4?u=laurent
+	clearExistingSyncLocksFromTheSameClient?: boolean;
+	timeoutMs?: number;
+}
+
+function defaultAcquireLockOptions(): AcquireLockOptions {
+	return {
+		clearExistingSyncLocksFromTheSameClient: false,
+		timeoutMs: 0,
+	};
+}
+
 interface RefreshTimer {
 	id: any;
 	inProgress: boolean;
@@ -198,7 +221,7 @@ export default class LockHandler {
 		return `(${lock.clientType} #${lock.clientId})`;
 	}
 
-	private async acquireExclusiveLock(clientType: string, clientId: string, timeoutMs: number = 0): Promise<Lock> {
+	private async acquireExclusiveLock(clientType: string, clientId: string, options: AcquireLockOptions = null): Promise<Lock> {
 		// The logic to acquire an exclusive lock, while avoiding race conditions is as follow:
 		//
 		// - Check if there is a lock file present
@@ -209,13 +232,18 @@ export default class LockHandler {
 		//
 		// -If there is no lock file, create one with my identifier and try the whole cycle again to avoid race condition (re-check that the lock file is really mine)-.
 
+		options = {
+			...defaultAcquireLockOptions(),
+			...options,
+		};
+
 		const startTime = Date.now();
 
 		async function waitForTimeout() {
-			if (!timeoutMs) return false;
+			if (!options.timeoutMs) return false;
 
 			const elapsed = Date.now() - startTime;
-			if (timeoutMs && elapsed < timeoutMs) {
+			if (options.timeoutMs && elapsed < options.timeoutMs) {
 				await time.sleep(2);
 				return true;
 			}
@@ -230,8 +258,12 @@ export default class LockHandler {
 				]);
 
 				if (activeSyncLock) {
-					if (await waitForTimeout()) continue;
-					throw new JoplinError(`Cannot acquire exclusive lock because the following clients have a sync lock on the target: ${this.lockToClientString(activeSyncLock)}`, 'hasSyncLock');
+					if (options.clearExistingSyncLocksFromTheSameClient && activeSyncLock.clientId === clientId && activeSyncLock.clientType === clientType) {
+						await this.releaseLock(LockType.Sync, clientType, clientId);
+					} else {
+						if (await waitForTimeout()) continue;
+						throw new JoplinError(`Cannot acquire exclusive lock because the following clients have a sync lock on the target: ${this.lockToClientString(activeSyncLock)}`, 'hasSyncLock');
+					}
 				}
 
 				if (activeExclusiveLock) {
@@ -336,17 +368,22 @@ export default class LockHandler {
 		delete this.refreshTimers_[handle];
 	}
 
-	async acquireLock(lockType: LockType, clientType: string, clientId: string, timeoutMs: number = 0): Promise<Lock> {
+	public async acquireLock(lockType: LockType, clientType: string, clientId: string, options: AcquireLockOptions = null): Promise<Lock> {
+		options = {
+			...defaultAcquireLockOptions(),
+			...options,
+		};
+
 		if (lockType === LockType.Sync) {
 			return this.acquireSyncLock(clientType, clientId);
 		} else if (lockType === LockType.Exclusive) {
-			return this.acquireExclusiveLock(clientType, clientId, timeoutMs);
+			return this.acquireExclusiveLock(clientType, clientId, options);
 		} else {
 			throw new Error(`Invalid lock type: ${lockType}`);
 		}
 	}
 
-	async releaseLock(lockType: LockType, clientType: string, clientId: string) {
+	public async releaseLock(lockType: LockType, clientType: string, clientId: string) {
 		await this.api_.delete(this.lockFilePath({
 			type: lockType,
 			clientType: clientType,
