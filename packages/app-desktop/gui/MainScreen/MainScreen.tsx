@@ -785,6 +785,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 				scripts={view.scripts}
 				pluginId={plugin.id}
 				buttons={view.buttons}
+				fitToContent={view.fitToContent}
 			/>);
 		}
 
