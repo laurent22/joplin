@@ -433,27 +433,27 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				font-family: ${monospaceFonts.join(', ')} !important;
 			}
 
-			.CodeMirror .cm-header-1 {
+			div.CodeMirror span.cm-header-1 {
 				font-size: 1.5em;
 				color: ${theme.color};
 			}
 
-			.CodeMirror .cm-header-2 {
+			div.CodeMirror span.cm-header-2 {
 				font-size: 1.3em;
 				color: ${theme.color};
 			}
 
-			.CodeMirror .cm-header-3 {
+			div.CodeMirror span.cm-header-3 {
 				font-size: 1.1em;
 				color: ${theme.color};
 			}
 
-			.CodeMirror .cm-header-4, .CodeMirror .cm-header-5, .CodeMirror .cm-header-6 {
+			div.CodeMirror span.cm-header-4, div.CodeMirror span.cm-header-5, div.CodeMirror span.cm-header-6 {
 				font-size: 1em;
 				color: ${theme.color};
 			}
 
-			.CodeMirror .cm-quote {
+			div.CodeMirror span.cm-quote {
 				color: ${theme.color};
 				opacity: ${theme.blockQuoteOpacity};
 			}
@@ -467,7 +467,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				opacity: 0.5;
 			}
 
-			.CodeMirror .cm-variable-2, .CodeMirror .cm-variable-3, .CodeMirror .cm-keyword {
+			div.CodeMirror span.cm-variable-2, div.CodeMirror span.cm-variable-3, div.CodeMirror span.cm-keyword {
 				color: ${theme.color};
 			}
 
