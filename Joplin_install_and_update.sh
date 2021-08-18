@@ -171,19 +171,23 @@ else
 fi
 DESKTOP=${DESKTOP,,}  # convert to lower case
 
-# Detect distribution environment
-DISTVER=$(lsb_release -is) && DISTVER=$DISTVER$(lsb_release -rs)
-DISTCODENAME=$(lsb_release -cs)
-#-----------------------------------------------------
 echo 'Create Desktop icon...'
-# Check for "The SUID sandbox helper binary was found, but is not configured correctly" problem.
-# It is present in Debian 10 Buster. A (temporary) patch will be applied at .desktop file
-# Linux Mint 4 Debbie is based on Debian 10 and requires the same param handling.
-if [ "$DISTVER" = "Debian10" ] || [ "$DISTVER" = "Linuxmint4" ] && [ "$DISTCODENAME" = "debbie" ]
-then
-  SANDBOXPARAM=" --no-sandbox"
-else
-  SANDBOXPARAM=""
+
+# Detect distribution environment, and apply --no-sandbox fix
+SANDBOXPARAM=""
+# lsb_release isn't available on some platforms (e.g. opensuse)
+# The equivalent of lsb_release in OpenSuse is the file /usr/lib/os-release
+if command -v lsb_release &> /dev/null; then
+  DISTVER=$(lsb_release -is) && DISTVER=$DISTVER$(lsb_release -rs)
+  DISTCODENAME=$(lsb_release -cs)
+  #-----------------------------------------------------
+  # Check for "The SUID sandbox helper binary was found, but is not configured correctly" problem.
+  # It is present in Debian 1X. A (temporary) patch will be applied at .desktop file
+  # Linux Mint 4 Debbie is based on Debian 10 and requires the same param handling.
+  if [ $DISTVER =~ Debian1. ] || [ "$DISTVER" = "Linuxmint4" ] && [ "$DISTCODENAME" = "debbie" ]
+  then
+    SANDBOXPARAM=" --no-sandbox"
+  fi
 fi
 
 # Initially only desktop environments that were confirmed to use desktop files stored in
