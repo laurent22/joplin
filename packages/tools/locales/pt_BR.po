@@ -1706,7 +1706,7 @@ msgstr "Compartilhar caderno..."
 
 #: packages/app-desktop/gui/MainScreen/commands/showShareNoteDialog.js:16
 msgid "Publish note..."
-msgstr "Publicar nota…"
+msgstr "Publicar nota..."
 
 #: packages/app-desktop/gui/MainScreen/commands/showSpellCheckerMenu.js:19
 #: packages/lib/services/spellChecker/SpellCheckerService.js:180
