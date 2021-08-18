@@ -475,11 +475,12 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				color: ${theme.codeColor};
 			}
 
+			/* Negative margins are needed to componsate for the border */
 			div.CodeMirror span.cm-comment.cm-jn-inline-code {
 				border: 1px solid ${theme.codeBorderColor};
 				background-color: ${theme.codeBackgroundColor};
-				padding-right: .2em;
-				padding-left: .2em;
+				margin-left: -1px;
+				margin-right: -1px;
 				border-radius: .25em;
 			}
 
