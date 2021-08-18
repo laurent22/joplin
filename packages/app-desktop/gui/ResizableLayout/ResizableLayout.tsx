@@ -11,13 +11,13 @@ import { StyledWrapperRoot, StyledMoveOverlay, MoveModeRootWrapper, MoveModeRoot
 import { Resizable } from 're-resizable';
 const EventEmitter = require('events');
 
-interface onResizeEvent {
+interface OnResizeEvent {
 	layout: LayoutItem;
 }
 
 interface Props {
 	layout: LayoutItem;
-	onResize(event: onResizeEvent): void;
+	onResize(event: OnResizeEvent): void;
 	width?: number;
 	height?: number;
 	renderItem: Function;
