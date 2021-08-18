@@ -114,6 +114,7 @@ const commands = [
 	require('./commands/editAlarm'),
 	require('./commands/exportPdf'),
 	require('./commands/gotoAnything'),
+	require('./commands/commandPalette'),
 	require('./commands/hideModalMessage'),
 	require('./commands/moveToFolder'),
 	require('./commands/newFolder'),

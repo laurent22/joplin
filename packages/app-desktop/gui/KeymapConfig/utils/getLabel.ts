@@ -16,16 +16,12 @@ const getLabel = (commandName: string): string => {
 		return _('Quit');
 	case 'zoomActualSize':
 		return _('Actual Size');
-	case 'gotoAnything':
-		return _('Goto Anything...');
 	case 'help':
 		return _('Website and documentation');
 	case 'hideApp':
 		return _('Hide Joplin');
 	case 'closeWindow':
 		return _('Close Window');
-	case 'commandPalette':
-		return _('Command palette');
 	case 'config':
 		return shim.isMac() ? _('Preferences') : _('Options');
 	}
