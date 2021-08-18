@@ -16,7 +16,7 @@ The application is available for Windows, Linux, macOS, Android and iOS (the ter
 
 # Installation
 
-Three types of applications are available: for the **desktop** (Windows, macOS and Linux), for **mobile** (Android and iOS) and for **terminal** (Windows, macOS, Linux and FreeBSD). All applications have similar user interfaces and can synchronise with each other.
+Three types of applications are available: for **desktop** (Windows, macOS and Linux), for **mobile** (Android and iOS) and for **terminal** (Windows, macOS, Linux and FreeBSD). All the applications have similar user interfaces and can synchronise with each other.
 
 ## Desktop applications
 
