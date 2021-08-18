@@ -16,6 +16,11 @@ require('pg').types.setTypeParser(20, function(val: any) {
 
 const logger = Logger.create('db');
 
+// To prevent error "SQLITE_ERROR: too many SQL variables", SQL statements with
+// "IN" clauses shouldn't contain more than the number of variables below.s
+// https://www.sqlite.org/limits.html#max_variable_number
+export const SqliteMaxVariableNum = 999;
+
 const migrationDir = `${__dirname}/migrations`;
 export const sqliteDefaultDir = pathUtils.dirname(__dirname);
 

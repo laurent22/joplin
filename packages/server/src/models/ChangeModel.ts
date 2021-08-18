@@ -1,5 +1,5 @@
 import { Knex } from 'knex';
-import { Change, ChangeType, Item, Uuid } from '../db';
+import { Change, ChangeType, Item, SqliteMaxVariableNum, Uuid } from '../db';
 import { md5 } from '../utils/crypto';
 import { ErrorResyncRequired } from '../utils/errors';
 import BaseModel, { SaveOptions } from './BaseModel';
@@ -59,7 +59,7 @@ export default class ChangeModel extends BaseModel<Change> {
 		return `${this.baseUrl}/changes`;
 	}
 
-	public async allFromId(id: string, limit: number = 1000): Promise<PaginatedChanges> {
+	public async allFromId(id: string, limit: number = SqliteMaxVariableNum): Promise<PaginatedChanges> {
 		const startChange: Change = id ? await this.load(id) : null;
 		const query = this.db(this.tableName).select(...this.defaultFields);
 		if (startChange) void query.where('counter', '>', startChange.counter);
