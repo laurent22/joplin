@@ -15,6 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.4.2\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-cli/app/app-gui.js:452
 msgid "To delete a tag, untag the associated notes."
@@ -927,7 +929,7 @@ msgstr "Télécharger"
 
 #: packages/app-desktop/checkForUpdates.js:189
 msgid "Skip this version"
-msgstr "Ignorer cette versiojn"
+msgstr "Ignorer cette version"
 
 #: packages/app-desktop/checkForUpdates.js:189
 msgid "Full changelog"
@@ -1179,13 +1181,12 @@ msgid "You do not have any installed plugin."
 msgstr "Vous n'avez pas de plugins."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:232
-#, fuzzy
 msgid "Could not connect to plugin repository"
-msgstr "Impossible d'installer le module : %s"
+msgstr "Impossible de télécharger la liste de plugins"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:234
 msgid "Try again"
-msgstr ""
+msgstr "Réessayer"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:242
 msgid "Plugin tools"
@@ -1716,9 +1717,8 @@ msgid "Share notebook..."
 msgstr "Partager carnet..."
 
 #: packages/app-desktop/gui/MainScreen/commands/showShareNoteDialog.js:16
-#, fuzzy
 msgid "Publish note..."
-msgstr "Partager la note..."
+msgstr "Publier la note..."
 
 #: packages/app-desktop/gui/MainScreen/commands/showSpellCheckerMenu.js:19
 #: packages/lib/services/spellChecker/SpellCheckerService.js:180
@@ -1851,9 +1851,8 @@ msgid "Focus"
 msgstr "Naviguer"
 
 #: packages/app-desktop/gui/MenuBar.js:631
-#, fuzzy
 msgid "Note&book"
-msgstr "Carnets"
+msgstr "Carnet"
 
 #: packages/app-desktop/gui/MenuBar.js:637
 msgid "&Note"
@@ -2341,18 +2340,16 @@ msgstr ""
 "performance (limite : %s)."
 
 #: packages/app-desktop/gui/Root.js:98
-#, fuzzy
 msgid "Confirmation"
-msgstr "Configuration"
+msgstr "Confirmation"
 
 #: packages/app-desktop/gui/Root.js:111
 msgid "The Web Clipper needs your authorisation to access your data."
-msgstr ""
+msgstr "Le Web Clipper requiert votre autorisation pour accéder à vos données."
 
 #: packages/app-desktop/gui/Root.js:112
-#, fuzzy
 msgid "Grant authorisation"
-msgstr "Code d'authentification :"
+msgstr "Autoriser"
 
 #: packages/app-desktop/gui/Root.js:136
 msgid "OneDrive Login"
@@ -2423,9 +2420,8 @@ msgid "Share Notebook"
 msgstr "Partager le carnet"
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:144
-#, fuzzy
 msgid "Unpublish note"
-msgstr "Annuler le partage"
+msgstr "Annuler la publication"
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:171
 msgid "Synchronising..."
@@ -2452,7 +2448,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:187
 msgid "Publish Notes"
-msgstr ""
+msgstr "Publier des notes"
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:189
 msgid "Copy Shareable Link"
@@ -2710,7 +2706,7 @@ msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen.js:407
 msgid "Feature flags"
-msgstr ""
+msgstr "Feature flags"
 
 #: packages/app-mobile/components/screens/ConfigScreen.js:410
 msgid "More information"
@@ -3006,9 +3002,8 @@ msgid "File system"
 msgstr "Système de fichier"
 
 #: packages/lib/SyncTargetJoplinCloud.js:28
-#, fuzzy
 msgid "Joplin Cloud"
-msgstr "Forum Joplin"
+msgstr "Joplin Cloud"
 
 #: packages/lib/SyncTargetJoplinServer.js:57
 msgid "Joplin Server"
@@ -3066,9 +3061,9 @@ msgid "Cancelling..."
 msgstr "Annulation..."
 
 #: packages/lib/Synchronizer.js:156
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Completed: %s (%s)"
-msgstr "Terminé : %s"
+msgstr "Terminé : %s (%s)"
 
 #: packages/lib/Synchronizer.js:158
 #, javascript-format
@@ -3369,14 +3364,12 @@ msgid "Joplin Server password"
 msgstr "Serveur Joplin : Mot de passe"
 
 #: packages/lib/models/Setting.js:371
-#, fuzzy
 msgid "Joplin Cloud email"
-msgstr "Serveur Joplin : Email"
+msgstr "Joplin Cloud : Email"
 
 #: packages/lib/models/Setting.js:382
-#, fuzzy
 msgid "Joplin Cloud password"
-msgstr "Serveur Joplin : Mot de passe"
+msgstr "Joplin Cloud : Mot de passe"
 
 #: packages/lib/models/Setting.js:394
 msgid "Attachment download behaviour"
@@ -4225,15 +4218,16 @@ msgstr ""
 
 #: packages/server/dist/models/UserModel.js:189
 #: packages/server/dist/models/UserModel.js:194
-#, fuzzy
 msgid "attachment"
-msgstr "Fichiers joints"
+msgstr "fichier joint"
 
 #: packages/server/dist/models/UserModel.js:189
 #, javascript-format
 msgid ""
 "Cannot save %s \"%s\" because it is larger than than the allowed limit (%s)"
 msgstr ""
+"Impossible d'enregistrer l'élément %s \"%s\" car il excède la limite allouée "
+"(%s)"
 
 #: packages/server/dist/models/UserModel.js:194
 #, javascript-format
@@ -4241,6 +4235,8 @@ msgid ""
 "Cannot save %s \"%s\" because it would go over the total allowed size (%s) "
 "for this account"
 msgstr ""
+"Impossible d'enregistrer l'élément %s \"%s\" car cela excèderait la limite "
+"totale allouée (%s) pour ce compte"
 
 #~ msgid "Share Notes"
 #~ msgstr "Partager les notes"
