@@ -3,6 +3,7 @@
 # This file is distributed under the same license as the Joplin-CLI package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # Updated by Renato Xavier da Silveira Rosa <renatoxsr@gmail.com>, 2018.
+# Updated by Sailon Bispo Nascimento (forshaw/forsh4w/forsh4w4) <sailonbr@gmail.com>, 2021.
 #
 msgid ""
 msgstr ""
@@ -16,6 +17,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 3.0\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-cli/app/app-gui.js:452
 msgid "To delete a tag, untag the associated notes."
@@ -1088,9 +1091,8 @@ msgstr "A aplicação deve ser reiniciada para essas alterações tomarem efeito
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:459
 #: packages/app-desktop/gui/NoteList/NoteList.js:164
-#, fuzzy
 msgid "Do it now"
-msgstr "Faça agora"
+msgstr "Fazer agora"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:459
 msgid "Later"
@@ -1584,7 +1586,6 @@ msgstr "Aceitar"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:476
 #: packages/app-desktop/gui/Root.js:113
-#, fuzzy
 msgid "Reject"
 msgstr "Rejeitar"
 
@@ -1704,9 +1705,8 @@ msgid "Share notebook..."
 msgstr "Compartilhar caderno..."
 
 #: packages/app-desktop/gui/MainScreen/commands/showShareNoteDialog.js:16
-#, fuzzy
 msgid "Publish note..."
-msgstr "Compartilhar nota..."
+msgstr "Publicar nota..."
 
 #: packages/app-desktop/gui/MainScreen/commands/showSpellCheckerMenu.js:19
 #: packages/lib/services/spellChecker/SpellCheckerService.js:180
@@ -2127,14 +2127,12 @@ msgid "Redo"
 msgstr "Refazer"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:104
-#, fuzzy
 msgid "Indent less"
-msgstr "Indentar menos"
+msgstr "Diminuir indentação"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:108
-#, fuzzy
 msgid "Indent more"
-msgstr "Indentar mais"
+msgstr "Aumentar indentação"
 
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:112
 msgid "Toggle comment"
@@ -2324,9 +2322,8 @@ msgstr ""
 "(limite: %s)."
 
 #: packages/app-desktop/gui/Root.js:98
-#, fuzzy
 msgid "Confirmation"
-msgstr "Configuração"
+msgstr "Confirmação"
 
 #: packages/app-desktop/gui/Root.js:111
 msgid "The Web Clipper needs your authorisation to access your data."
@@ -2407,9 +2404,8 @@ msgid "Share Notebook"
 msgstr "Compartilhar Caderno"
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:144
-#, fuzzy
 msgid "Unpublish note"
-msgstr "Descompartilhar nota"
+msgstr "Cancelar a publicação da nota"
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:171
 msgid "Synchronising..."
@@ -2435,7 +2431,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:187
 msgid "Publish Notes"
-msgstr ""
+msgstr "Publicar Notas"
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:189
 msgid "Copy Shareable Link"
@@ -2691,9 +2687,8 @@ msgstr ""
 "Somente para fins de debugging: exporte seu perfil para um cartão SD externo."
 
 #: packages/app-mobile/components/screens/ConfigScreen.js:407
-#, fuzzy
 msgid "Feature flags"
-msgstr "Apresenta flags"
+msgstr "Feature flags"
 
 #: packages/app-mobile/components/screens/ConfigScreen.js:410
 msgid "More information"
@@ -2957,9 +2952,9 @@ msgid "Usage: %s"
 msgstr "Uso: %s"
 
 #: packages/lib/BaseApplication.js:231
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Unknown flag: %s"
-msgstr "Flag desconhecido: %s"
+msgstr "Flag desconhecida: %s"
 
 #: packages/lib/JoplinServerApi.js:73
 #, javascript-format
