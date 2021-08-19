@@ -82,7 +82,6 @@ shared.saveSettings = function(comp) {
 	for (const key in comp.state.settings) {
 		if (!comp.state.settings.hasOwnProperty(key)) continue;
 		if (comp.state.changedSettingKeys.indexOf(key) < 0) continue;
-		console.info('Saving', key, comp.state.settings[key]);
 		Setting.setValue(key, comp.state.settings[key]);
 	}
 
