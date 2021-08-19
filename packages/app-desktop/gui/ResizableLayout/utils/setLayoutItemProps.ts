@@ -19,5 +19,6 @@ export default function setLayoutItemProps(layout: LayoutItem, key: string, prop
 		}
 
 		recurseFind(draftState);
+		window.dispatchEvent(new Event('resize'));
 	}));
 }
