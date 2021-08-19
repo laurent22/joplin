@@ -4,7 +4,7 @@ const Setting = require('./models/Setting').default;
 const { FileApi } = require('./file-api.js');
 const Synchronizer = require('./Synchronizer').default;
 const { FileApiDriverAmazonS3 } = require('./file-api-driver-amazon-s3.js');
-const S3 = require('aws-sdk/clients/s3');
+const { S3Client, HeadBucketCommand } = require('@aws-sdk/client-s3');
 
 class SyncTargetAmazonS3 extends BaseSyncTarget {
 	static id() {
@@ -58,7 +58,16 @@ class SyncTargetAmazonS3 extends BaseSyncTarget {
 	api() {
 		if (this.api_) return this.api_;
 
-		this.api_ = new S3(this.s3AuthParameters());
+		this.api_ = new S3Client(this.s3AuthParameters());
+
+		// There is a bug with auto skew correction in aws-sdk-js-v3
+		// and this attempts to remove the skew correction for all calls.
+		// There are some additional spots in the app where we reset this
+		// to zero as well as it appears the skew logic gets triggered
+		// which makes "RequestTimeTooSkewed" errors...
+		// See https://github.com/aws/aws-sdk-js-v3/issues/2208
+		this.api_.config.systemClockOffset = 0;
+
 		return this.api_;
 	}
 
@@ -76,7 +85,7 @@ class SyncTargetAmazonS3 extends BaseSyncTarget {
 			endpoint: options.url(),
 		};
 
-		const api = new S3(apiOptions);
+		const api = new S3Client(apiOptions);
 		const driver = new FileApiDriverAmazonS3(api, SyncTargetAmazonS3.s3BucketName());
 		const fileApi = new FileApi('', driver);
 		fileApi.setSyncTargetId(syncTargetId);
@@ -98,12 +107,14 @@ class SyncTargetAmazonS3 extends BaseSyncTarget {
 		};
 		try {
 			const headBucketReq = new Promise((resolve, reject) => {
-				fileApi.driver().api().headBucket({
-					Bucket: options.path(),
-				},(err, response) => {
-					if (err) reject(err);
-					else resolve(response);
-				});
+				fileApi.driver().api().send(
+
+					new HeadBucketCommand({
+						Bucket: options.path(),
+					}),(err, response) => {
+						if (err) reject(err);
+						else resolve(response);
+					});
 			});
 			const result = await headBucketReq;
 
