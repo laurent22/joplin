@@ -31,13 +31,16 @@ class FileApiDriverAmazonS3 {
 	hasErrorCode_(error, errorCode) {
 		if (!error) return false;
 
-		if(error.name) {
-			return error.name.indexOf(errorCode) >= 0; }
-		else if(error.code) {
-			return error.code.indexOf(errorCode) >= 0; }
-		else if(error.Code) {
-			return error.Code.indexOf(errorCode) >= 0; }
-		else{
+		if (error.name) {
+			return error.name.indexOf(errorCode) >= 0;
+		}
+		else if (error.code) {
+			return error.code.indexOf(errorCode) >= 0;
+		}
+		else if (error.Code) {
+			return error.Code.indexOf(errorCode) >= 0;
+		}
+		else {
 			return false;
 		}
 	}
@@ -116,14 +119,12 @@ class FileApiDriverAmazonS3 {
 			this.api().deleteObject({
 				Bucket: this.s3_bucket_,
 				Key: key,
-			},
-			(err, response) => {
-				if (err) {
-					console.log(err.code);
-					console.log(err.message);
-					reject(err);
-				} else { resolve(response); }
-			});
+			}),
+				(err, response) => {
+					if (err) {
+						reject(err);
+					} else { resolve(response); }
+				});
 		});
 	}
 
@@ -133,14 +134,12 @@ class FileApiDriverAmazonS3 {
 			this.api().deleteObjects({
 				Bucket: this.s3_bucket_,
 				Delete: { Objects: keys },
-			},
-			(err, response) => {
-				if (err) {
-					console.log(err.code);
-					console.log(err.message);
-					reject(err);
-				} else { resolve(response); }
-			});
+			}),
+				(err, response) => {
+					if (err) {
+						reject(err);
+					} else { resolve(response); }
+				});
 		});
 	}
 
@@ -248,11 +247,12 @@ class FileApiDriverAmazonS3 {
 			}
 			else if (responseFormat === 'text') {
 				response = await shim.fetch(s3Url, options);
-				// we need to make sure that errors get thrown as we are manually fetching above.
-				if(!response.ok){
-					throw {name: response.statusText, output: output};
-				}
+
 				output = await response.text();
+				// we need to make sure that errors get thrown as we are manually fetching above.
+				if (!response.ok) {
+					throw { name: response.statusText, output: output };
+				}
 			}
 
 			return output;
@@ -261,26 +261,28 @@ class FileApiDriverAmazonS3 {
 			// This means that the error was on the Desktop client side and we need to handle that.
 			// On Mobile it won't match because FetchError is a node-fetch feature.
 			// https://github.com/node-fetch/node-fetch/blob/main/docs/ERROR-HANDLING.md
-			if(error.name === "FetchError"){ throw error.message }
+			if (error.name === "FetchError") { throw error.message }
 
 			let parsedOutput = '';
 
 			// If error.output is not xml the last else case should
 			// actually let us see the output of error.
-			parsedOutput = parser.parse(error.output);
+			if (error.output) {
+				parsedOutput = parser.parse(error.output);
+				if (this.hasErrorCode_(parsedOutput.Error, 'AuthorizationHeaderMalformed')) {
+					throw error.output;
+				}
 
-			if (this.hasErrorCode_(parsedOutput.Error, 'AuthorizationHeaderMalformed')){
-				throw error.output;
-			}
-			if (this.hasErrorCode_(parsedOutput.Error, 'NoSuchKey')) {
-				return null;
-			} else if (this.hasErrorCode_(parsedOutput.Error, 'AccessDenied')) {
-				throw new JoplinError('Do not have proper permissions to Bucket', 'rejectedByTarget');
+				if (this.hasErrorCode_(parsedOutput.Error, 'NoSuchKey')) {
+					return null;
+				} else if (this.hasErrorCode_(parsedOutput.Error, 'AccessDenied')) {
+					throw new JoplinError('Do not have proper permissions to Bucket', 'rejectedByTarget');
+				}
 			} else {
 				if (error.output) {
 					throw error.output;
 				}
-				else{
+				else {
 					throw error;
 				}
 			}
@@ -350,7 +352,7 @@ class FileApiDriverAmazonS3 {
 				Bucket: this.s3_bucket_,
 				CopySource: this.makePath_(oldPath),
 				Key: newPath,
-			},(err, response) => {
+			}), (err, response) => {
 				if (err) reject(err);
 				else resolve(response);
 			});
