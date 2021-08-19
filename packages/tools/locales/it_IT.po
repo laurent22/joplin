@@ -1,14 +1,14 @@
-# SOME DESCRIPTIVE TITLE.
+# ITALIAN TRANSLATION FOR JOPLIN.
 # Copyright (C) YEAR Laurent Cozic
 # This file is distributed under the same license as the Joplin-CLI package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# ALBANO BATTISTELLA <albano_battistella@hotmail.com>, 2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Manuel Tassi <mannivuwiki@gmail.com>\n"
-"Language-Team: \n"
+"Last-Translator: Albano Battistella <albano_battistella@hotmail.com>\n"
+"Language-Team: italian\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1710,7 +1710,7 @@ msgstr "Condividi taccuino..."
 #: packages/app-desktop/gui/MainScreen/commands/showShareNoteDialog.js:16
 #, fuzzy
 msgid "Publish note..."
-msgstr "Condividi note..."
+msgstr "Pubblica nota..."
 
 #: packages/app-desktop/gui/MainScreen/commands/showSpellCheckerMenu.js:19
 #: packages/lib/services/spellChecker/SpellCheckerService.js:180
@@ -1843,9 +1843,8 @@ msgid "Focus"
 msgstr "Focus"
 
 #: packages/app-desktop/gui/MenuBar.js:631
-#, fuzzy
 msgid "Note&book"
-msgstr "Taccuini"
+msgstr "Taccuino"
 
 #: packages/app-desktop/gui/MenuBar.js:637
 msgid "&Note"
@@ -2332,18 +2331,16 @@ msgstr ""
 "prestazioni (limite: %s)."
 
 #: packages/app-desktop/gui/Root.js:98
-#, fuzzy
 msgid "Confirmation"
-msgstr "Configurazione"
+msgstr "Conferma"
 
 #: packages/app-desktop/gui/Root.js:111
 msgid "The Web Clipper needs your authorisation to access your data."
-msgstr ""
+msgstr "Il Web Clipper ha bisogno della tua autorizzazione per accedere ai tuoi dati."
 
 #: packages/app-desktop/gui/Root.js:112
-#, fuzzy
 msgid "Grant authorisation"
-msgstr "Token autorizzativo:"
+msgstr "Concedi autorizzazione"
 
 #: packages/app-desktop/gui/Root.js:136
 msgid "OneDrive Login"
@@ -2416,9 +2413,8 @@ msgid "Share Notebook"
 msgstr "Condividi Taccuino"
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:144
-#, fuzzy
 msgid "Unpublish note"
-msgstr "Disattiva condivisione"
+msgstr "Annulla pubblicazione nota"
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:171
 msgid "Synchronising..."
@@ -2526,7 +2522,6 @@ msgid "Retry"
 msgstr "Riprova"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.js:137
-#, fuzzy
 msgid "Advanced tools"
 msgstr "Strumenti avanzati"
 
@@ -2701,7 +2696,7 @@ msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen.js:407
 msgid "Feature flags"
-msgstr ""
+msgstr "Flag di funzionalità"
 
 #: packages/app-mobile/components/screens/ConfigScreen.js:410
 msgid "More information"
@@ -2999,9 +2994,8 @@ msgid "File system"
 msgstr "File system"
 
 #: packages/lib/SyncTargetJoplinCloud.js:28
-#, fuzzy
 msgid "Joplin Cloud"
-msgstr "Joplin Forum"
+msgstr "Joplin Cloud"
 
 #: packages/lib/SyncTargetJoplinServer.js:57
 msgid "Joplin Server"
@@ -3059,9 +3053,9 @@ msgid "Cancelling..."
 msgstr "Annullamento..."
 
 #: packages/lib/Synchronizer.js:156
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Completed: %s (%s)"
-msgstr "Completata: %s"
+msgstr "Completato: %s (%s)"
 
 #: packages/lib/Synchronizer.js:158
 #, javascript-format
@@ -3364,14 +3358,12 @@ msgid "Joplin Server password"
 msgstr "Password Joplin Server"
 
 #: packages/lib/models/Setting.js:371
-#, fuzzy
 msgid "Joplin Cloud email"
-msgstr "Email Server Joplin"
+msgstr "E-mail Joplin Cloud"
 
 #: packages/lib/models/Setting.js:382
-#, fuzzy
 msgid "Joplin Cloud password"
-msgstr "Password Joplin Server"
+msgstr "Password Joplin Cloud"
 
 #: packages/lib/models/Setting.js:394
 msgid "Attachment download behaviour"
@@ -4256,25 +4248,21 @@ msgstr ""
 #~ msgid "Joplin Server username"
 #~ msgstr "Nome Utente Joplin Server"
 
-#, fuzzy
 #~ msgid "marked text"
-#~ msgstr "testo Sottolineato"
+#~ msgstr "testo contrassegnato"
 
-#, fuzzy
 #~ msgid "Mark"
-#~ msgstr "Marcatura"
+#~ msgstr "Contrassegna"
 
 #~ msgid "Full Release Notes"
 #~ msgstr "Note di rilascio complete"
 
-#, fuzzy
 #~ msgid ""
 #~ "If the font is incorrect or empty, it will default to a generic monospace "
 #~ "font."
 #~ msgstr ""
-#~ "Questo carattere deve essere * monospazio* o non funzionerà "
-#~ "correttamente. Se il carattere è errato o vuoto, verrà impostato "
-#~ "automaticamente su un carattere generico monospace."
+#~ "Se il carattere non è corretto o è vuoto, verrà utilizzato per impostazione predefinita un carattere "
+#~ "monospazio generico."
 
 #~ msgid ""
 #~ "This should be a *monospace* font or some elements will render "
@@ -4389,7 +4377,6 @@ msgstr ""
 #~ msgid "Unknown level ID: %s"
 #~ msgstr "Livello ID sconosciuto: %s"
 
-#, fuzzy
 #~ msgid "Synchronize"
 #~ msgstr "Sincronizza"
 
@@ -4403,11 +4390,9 @@ msgstr ""
 #~ "Questo elemento è attualmente crittografato: %s \"%s\". Attendi che tutti "
 #~ "gli elementi siano decodificati e riprova."
 
-#, fuzzy
 #~ msgid "Remove tag \"%s\" and its descendant tags from all notes?"
-#~ msgstr "Rimuovere l'etichetta \"%s\" da tutte le note?"
+#~ msgstr "Rimuovere il tag \"%s\" e i suoi tag discendenti da tutte le note?"
 
-#, fuzzy
 #~ msgid ""
 #~ "Could not synchronise with OneDrive.\n"
 #~ "\n"
@@ -4423,9 +4408,8 @@ msgstr ""
 #~ "\n"
 #~ "Si prega di considerare l'idea di utilizzare un account OneDrive normale."
 
-#, fuzzy
 #~ msgid "Cannot move tag to this location."
-#~ msgstr "Impossibile spostare il Taccuino in questa posizione"
+#~ msgstr "Impossibile spostare il tag in questa posizione."
 
 #~ msgid "Add or remove tags"
 #~ msgstr "Aggiungi o rimuovi etichette"
@@ -4454,9 +4438,8 @@ msgstr ""
 #~ msgid "Confirm password"
 #~ msgstr "Conferma password"
 
-#, fuzzy
 #~ msgid "Missing required argument: note"
-#~ msgstr "Argomento richiesto mancante: %s"
+#~ msgstr "Argomento obbligatorio mancante: nota"
 
 #~ msgid "Synchronisation status"
 #~ msgstr "Stato di sincronizzazione"
@@ -4473,9 +4456,8 @@ msgstr ""
 #~ msgid "Clipper Options"
 #~ msgstr "Opzioni Clipper"
 
-#, fuzzy
 #~ msgid "Permission to write to external storage"
-#~ msgstr "Permesso di usare la fotocamera"
+#~ msgstr "Autorizzazione a scrivere su memoria esterna"
 
 #~ msgid "Cancel synchronisation"
 #~ msgstr "Annulla la sincronizzazione"
