@@ -2,9 +2,6 @@
 
 FROM node:16
 
-RUN apt-get update
-RUN apt-get --yes install vim
-
 RUN echo "Node: $(node --version)"
 RUN echo "Npm: $(npm --version)"
 
