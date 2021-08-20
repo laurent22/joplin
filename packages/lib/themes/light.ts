@@ -43,7 +43,7 @@ const theme: Theme = {
 	searchMarkerBackgroundColor: '#F7D26E',
 	searchMarkerColor: 'black',
 
-	warningBackgroundColor: '#FFD08D',
+	warningBackgroundColor: '#FF0000B3',
 
 	tableBackgroundColor: 'rgb(247, 247, 247)',
 	codeBackgroundColor: 'rgb(243, 243, 243)',

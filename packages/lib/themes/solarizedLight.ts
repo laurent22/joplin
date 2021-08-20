@@ -24,7 +24,7 @@ const theme: Theme = {
 	raisedBackgroundColor: '#eee8d5',
 	raisedColor: '#073642',
 
-	warningBackgroundColor: '#b5890055',
+	warningBackgroundColor: '#FF6969B3',
 
 	tableBackgroundColor: '#fdf6e3',
 	codeBackgroundColor: '#fdf6e3',
