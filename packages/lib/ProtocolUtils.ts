@@ -16,7 +16,7 @@ export function getTagUrl(tagId: string) {
 	return `joplin://x-callback-url/openTag?id=${encodeURIComponent(tagId)}`;
 }
 
-export enum Command {
+export const enum Command {
     OpenNote = 'openNote',
     OpenFolder = 'openFolder',
     OpenTag = 'openTag',

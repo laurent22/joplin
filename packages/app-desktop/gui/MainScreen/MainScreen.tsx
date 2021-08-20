@@ -36,7 +36,7 @@ import ShareService from '@joplin/lib/services/share/ShareService';
 import { reg } from '@joplin/lib/registry';
 import removeKeylessItems from '../ResizableLayout/utils/removeKeylessItems';
 import { localSyncInfoFromState } from '@joplin/lib/services/synchronizer/syncInfoUtils';
-import { Command, parseCallbackUrl } from '@joplin/lib/ProtocolUtils';
+import { parseCallbackUrl } from '@joplin/lib/ProtocolUtils';
 import ElectronAppWrapper from '../../ElectronAppWrapper';
 import { showMissingMasterKeyMessage } from '@joplin/lib/services/e2ee/utils';
 
@@ -205,7 +205,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 	private openUrl(url: string) {
 		console.log(`openUrl ${url}`);
 		const { command, params } = parseCallbackUrl(url);
-		void CommandService.instance().execute(Command[command], params.id);
+		void CommandService.instance().execute(command.toString(), params.id);
 	}
 
 	private updateLayoutPluginViews(layout: LayoutItem, plugins: PluginStates) {

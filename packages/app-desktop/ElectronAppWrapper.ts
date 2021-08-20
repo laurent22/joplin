@@ -1,6 +1,7 @@
 import Logger from '@joplin/lib/Logger';
 import { PluginMessage } from './services/plugins/PluginRunner';
 import shim from '@joplin/lib/shim';
+import { isCallbackUrl } from '@joplin/lib/ProtocolUtils';
 
 const { BrowserWindow, Tray, screen } = require('electron');
 const url = require('url');
@@ -333,7 +334,7 @@ export default class ElectronAppWrapper {
 			win.show();
 			win.focus();
 			if (process.platform !== 'darwin') {
-				const url = argv.find((arg) => arg.startsWith('joplin://'));
+				const url = argv.find((arg) => isCallbackUrl(arg));
 				if (url) {
 					void this.openUrl(url);
 				}
