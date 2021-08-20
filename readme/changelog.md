@@ -1,5 +1,12 @@
 # Joplin changelog
 
+## [v2.3.5](https://github.com/laurent22/joplin/releases/tag/v2.3.5) - 2021-08-17T06:43:30Z
+
+- Improved: Allow setting a max width for the editor content (8063c94)
+- Improved: Improved Markdown editor code styling, and add CSS classes for code ([#5314](https://github.com/laurent22/joplin/issues/5314)) ([#5297](https://github.com/laurent22/joplin/issues/5297) by [@CalebJohn](https://github.com/CalebJohn))
+- Fixed: Bump hightlight.js to v11.2 ([#5278](https://github.com/laurent22/joplin/issues/5278)) ([#5245](https://github.com/laurent22/joplin/issues/5245) by Roman Musin)
+- Fixed (Regression): Fixed file paths when exporting as HTML ([#5325](https://github.com/laurent22/joplin/issues/5325))
+
 ## [v2.3.3](https://github.com/laurent22/joplin/releases/tag/v2.3.3) - 2021-08-14T09:19:40Z
 
 CAUTION: This release will ask you to upgrade your sync target, whether it's Dropbox, OneDrive, Joplin Cloud, etc. Once it is done, only apps version 2.3+ will be able to sync with it, so make sure you are ready to upgrade all your apps before installing this version.
