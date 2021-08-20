@@ -1,6 +1,18 @@
 # Joplin Server Changelog
 
-## [server-v2.3.2-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.3.2-beta) (Pre-release) - 2021-08-12T16:26:23Z
+## [server-v2.3.7-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.3.7-beta) (Pre-release) - 2021-08-13T21:20:17Z
+
+- Fixed: Fix migrations (a9961ae)
+
+## [server-v2.3.6-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.3.6-beta) (Pre-release) - 2021-08-13T20:59:41Z
+
+- Fixed: Fix migrations (f518549)
+
+## [server-v2.3.5-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.3.5-beta) (Pre-release) - 2021-08-13T18:01:20Z
+
+- Fixed: Fixed pagination link styling (d42d181)
+
+## [server-v2.3.4-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.3.4-beta) (Pre-release) - 2021-08-13T16:56:17Z
 
 - Improved: Allow setting email key to prevent the same email to be sent multiple times (391204c)
 - Improved: Clarify beta transition message (c4fcfec)

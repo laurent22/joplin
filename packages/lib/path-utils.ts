@@ -65,6 +65,14 @@ for (let i = 0; i < 32; i++) {
 
 const friendlySafeFilename_blackListNames = ['.', '..', 'CON', 'PRN', 'AUX', 'NUL', 'COM1', 'COM2', 'COM3', 'COM4', 'COM5', 'COM6', 'COM7', 'COM8', 'COM9', 'LPT1', 'LPT2', 'LPT3', 'LPT4', 'LPT5', 'LPT6', 'LPT7', 'LPT8', 'LPT9'];
 
+// The goal of this function is to provide a safe filename, that should work in
+// any filesystem, but that's still user friendly, in particular because it
+// supports any charset - Chinese, Russian, etc.
+//
+// "Safe" however doesn't mean it can be safely inserted in any content (HTML,
+// Markdown, etc.) - it still needs to be encoded by the calling code according
+// to the context.
+
 export function friendlySafeFilename(e: string, maxLength: number = null, preserveExtension: boolean = false) {
 	// Although Windows supports paths up to 255 characters, but that includes the filename and its
 	// parent directory path. Also there's generally no good reason for dir or file names
@@ -75,7 +83,8 @@ export function friendlySafeFilename(e: string, maxLength: number = null, preser
 	let fileExt = '';
 
 	if (preserveExtension) {
-		fileExt = `.${safeFileExtension(fileExtension(e))}`;
+		const baseExt = fileExtension(e);
+		fileExt = baseExt ? `.${safeFileExtension(baseExt)}` : '';
 		e = filename(e);
 	}
 

@@ -16,6 +16,11 @@ require('pg').types.setTypeParser(20, function(val: any) {
 
 const logger = Logger.create('db');
 
+// To prevent error "SQLITE_ERROR: too many SQL variables", SQL statements with
+// "IN" clauses shouldn't contain more than the number of variables below.s
+// https://www.sqlite.org/limits.html#max_variable_number
+export const SqliteMaxVariableNum = 999;
+
 const migrationDir = `${__dirname}/migrations`;
 export const sqliteDefaultDir = pathUtils.dirname(__dirname);
 
@@ -121,12 +126,83 @@ export async function disconnectDb(db: DbConnection) {
 	await db.destroy();
 }
 
-export async function migrateDb(db: DbConnection) {
+export async function migrateLatest(db: DbConnection) {
 	await db.migrate.latest({
 		directory: migrationDir,
-		// Disable transactions because the models might open one too
-		disableTransactions: true,
 	});
+}
+
+export async function migrateUp(db: DbConnection) {
+	await db.migrate.up({
+		directory: migrationDir,
+	});
+}
+
+export async function migrateDown(db: DbConnection) {
+	await db.migrate.down({
+		directory: migrationDir,
+	});
+}
+
+export async function migrateList(db: DbConnection, asString: boolean = true) {
+	const migrations: any = await db.migrate.list({
+		directory: migrationDir,
+	});
+
+	// The migration array has a rather inconsistent format:
+	//
+	// [
+	//   // Done migrations
+	//   [
+	//     '20210809222118_email_key_fix.js',
+	//     '20210814123815_testing.js',
+	//     '20210814123816_testing.js'
+	//   ],
+	//   // Not done migrations
+	//   [
+	//     {
+	//       file: '20210814123817_testing.js',
+	//       directory: '/path/to/packages/server/dist/migrations'
+	//     }
+	//   ]
+	// ]
+
+	if (!asString) return migrations;
+
+	const formatName = (migrationInfo: any) => {
+		const name = migrationInfo.file ? migrationInfo.file : migrationInfo;
+
+		const s = name.split('.');
+		s.pop();
+		return s.join('.');
+	};
+
+	interface Line {
+		text: string;
+		done: boolean;
+	}
+
+	const output: Line[] = [];
+
+	for (const s of migrations[0]) {
+		output.push({
+			text: formatName(s),
+			done: true,
+		});
+	}
+
+	for (const s of migrations[1]) {
+		output.push({
+			text: formatName(s),
+			done: false,
+		});
+	}
+
+	output.sort((a, b) => {
+		return a.text < b.text ? -1 : +1;
+	});
+
+	return output.map(l => `${l.done ? '✓' : '✗'} ${l.text}`).join('\n');
 }
 
 function allTableNames(): string[] {

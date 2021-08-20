@@ -73,9 +73,9 @@ export default class MigrationHandler extends BaseService {
 
 		if (remoteInfo.version) {
 			if (remoteInfo.version > supportedSyncTargetVersion) {
-				throw new JoplinError(sprintf('Sync version of the target (%d) is greater than the version supported by the client (%d). Please upgrade your client.', remoteInfo.version, supportedSyncTargetVersion), 'outdatedClient');
+				throw new JoplinError(sprintf('Sync version of the target (%d) is greater than the version supported by the app (%d). Please upgrade your app.', remoteInfo.version, supportedSyncTargetVersion), 'outdatedClient');
 			} else if (remoteInfo.version < supportedSyncTargetVersion) {
-				throw new JoplinError(sprintf('Sync version of the target (%d) is lower than the version supported by the client (%d). Please upgrade the sync target.', remoteInfo.version, supportedSyncTargetVersion), 'outdatedSyncTarget');
+				throw new JoplinError(sprintf('Sync version of the target (%d) is lower than the version supported by the app (%d). Please upgrade the sync target.', remoteInfo.version, supportedSyncTargetVersion), 'outdatedSyncTarget');
 			}
 		}
 	}
@@ -85,7 +85,7 @@ export default class MigrationHandler extends BaseService {
 		const syncTargetInfo = await this.fetchSyncTargetInfo();
 
 		if (syncTargetInfo.version > supportedSyncTargetVersion) {
-			throw new JoplinError(sprintf('Sync version of the target (%d) is greater than the version supported by the client (%d). Please upgrade your client.', syncTargetInfo.version, supportedSyncTargetVersion), 'outdatedClient');
+			throw new JoplinError(sprintf('Sync version of the target (%d) is greater than the version supported by the app (%d). Please upgrade your app.', syncTargetInfo.version, supportedSyncTargetVersion), 'outdatedClient');
 		}
 
 		// if (supportedSyncTargetVersion !== migrations.length - 1) {
@@ -106,7 +106,11 @@ export default class MigrationHandler extends BaseService {
 		}
 
 		this.logger().info('MigrationHandler: Acquiring exclusive lock');
-		const exclusiveLock = await this.lockHandler_.acquireLock(LockType.Exclusive, this.clientType_, this.clientId_, 1000 * 30);
+		const exclusiveLock = await this.lockHandler_.acquireLock(LockType.Exclusive, this.clientType_, this.clientId_, {
+			clearExistingSyncLocksFromTheSameClient: true,
+			timeoutMs: 1000 * 30,
+		});
+
 		let autoLockError = null;
 		this.lockHandler_.startAutoLockRefresh(exclusiveLock, (error: any) => {
 			autoLockError = error;

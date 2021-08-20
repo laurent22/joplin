@@ -2,9 +2,9 @@ import Logger from '../../Logger';
 import BaseItem from '../../models/BaseItem';
 import MasterKey from '../../models/MasterKey';
 import Setting from '../../models/Setting';
-import { MasterKeyEntity } from '../database/types';
+import { MasterKeyEntity } from './types';
 import EncryptionService from '../EncryptionService';
-import { getActiveMasterKeyId, setEncryptionEnabled } from '../synchronizer/syncInfoUtils';
+import { getActiveMasterKeyId, masterKeyEnabled, setEncryptionEnabled, SyncInfo } from '../synchronizer/syncInfoUtils';
 
 const logger = Logger.create('e2ee/utils');
 
@@ -89,4 +89,17 @@ export async function loadMasterKeysFromSettings(service: EncryptionService) {
 	}
 
 	logger.info(`Loaded master keys: ${service.loadedMasterKeysCount()}`);
+}
+
+export function showMissingMasterKeyMessage(syncInfo: SyncInfo, notLoadedMasterKeys: string[]) {
+	if (!syncInfo.masterKeys.length) return false;
+
+	notLoadedMasterKeys = notLoadedMasterKeys.slice();
+
+	for (let i = notLoadedMasterKeys.length - 1; i >= 0; i--) {
+		const mk = syncInfo.masterKeys.find(mk => mk.id === notLoadedMasterKeys[i]);
+		if (!masterKeyEnabled(mk)) notLoadedMasterKeys.pop();
+	}
+
+	return !!notLoadedMasterKeys.length;
 }

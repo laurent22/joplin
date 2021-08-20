@@ -30,6 +30,14 @@ export default class SyncTargetJoplinCloud extends BaseSyncTarget {
 		return _('Joplin Cloud');
 	}
 
+	public static description() {
+		return _('Joplin\'s own sync service. Also gives access to Joplin-specific features such as publishing notes or collaborating on notebooks with others.');
+	}
+
+	public static supportsSelfHosted(): boolean {
+		return false;
+	}
+
 	public async isAuthenticated() {
 		return true;
 	}

@@ -416,6 +416,8 @@ class Dialog extends React.PureComponent<Props, State> {
 		});
 
 		if (this.userCallback_) {
+			logger.info('gotoItem: user callback', item);
+
 			this.userCallback_.resolve({
 				type: this.state.listType,
 				item: { ...item },
@@ -424,6 +426,7 @@ class Dialog extends React.PureComponent<Props, State> {
 		}
 
 		if (item.type === BaseModel.TYPE_COMMAND) {
+			logger.info('gotoItem: execute command', item);
 			void CommandService.instance().execute(item.id, ...item.commandArgs);
 			void focusEditorIfEditorCommand(item.id, CommandService.instance());
 			return;
@@ -442,6 +445,8 @@ class Dialog extends React.PureComponent<Props, State> {
 		}
 
 		if (this.state.listType === BaseModel.TYPE_NOTE) {
+			logger.info('gotoItem: note', item);
+
 			this.props.dispatch({
 				type: 'FOLDER_AND_NOTE_SELECT',
 				folderId: item.parent_id,
@@ -450,11 +455,15 @@ class Dialog extends React.PureComponent<Props, State> {
 
 			CommandService.instance().scheduleExecute('focusElement', 'noteBody');
 		} else if (this.state.listType === BaseModel.TYPE_TAG) {
+			logger.info('gotoItem: tag', item);
+
 			this.props.dispatch({
 				type: 'TAG_SELECT',
 				id: item.id,
 			});
 		} else if (this.state.listType === BaseModel.TYPE_FOLDER) {
+			logger.info('gotoItem: folder', item);
+
 			this.props.dispatch({
 				type: 'FOLDER_SELECT',
 				id: item.id,
@@ -602,6 +611,7 @@ GotoAnything.manifest = {
 	name: PLUGIN_NAME,
 	menuItems: [
 		{
+			id: 'gotoAnything',
 			name: 'main',
 			parent: 'go',
 			label: _('Goto Anything...'),
@@ -609,6 +619,7 @@ GotoAnything.manifest = {
 			screens: ['Main'],
 		},
 		{
+			id: 'commandPalette',
 			name: 'main',
 			parent: 'tools',
 			label: _('Command palette'),

@@ -24,7 +24,6 @@ import { reg } from '@joplin/lib/registry';
 const packageInfo = require('../packageInfo.js');
 const { clipboard } = require('electron');
 const Menu = bridge().Menu;
-const PluginManager = require('@joplin/lib/services/PluginManager');
 
 const menuUtils = new MenuUtils(CommandService.instance());
 
@@ -751,16 +750,8 @@ function useMenu(props: Props) {
 				rootMenus[key].submenu = cleanUpSeparators(rootMenus[key].submenu);
 			}
 
-			{
-				// This is for GotoAnything only - should be refactored since this plugin manager is not used otherwise
-				const pluginMenuItems = PluginManager.instance().menuItems();
-				for (const item of pluginMenuItems) {
-					if (!item.parent) continue;
-					const itemParent = rootMenus[item.parent] ? rootMenus[item.parent] : 'tools';
-					itemParent.submenu.push(separator());
-					itemParent.submenu.push(item);
-				}
-			}
+			rootMenus.go.submenu.push(menuItemDic.gotoAnything);
+			rootMenus.tools.submenu.push(menuItemDic.commandPalette);
 
 			for (const view of props.pluginMenuItems) {
 				const location: MenuItemLocation = view.location;

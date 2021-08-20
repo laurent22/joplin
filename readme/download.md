@@ -10,7 +10,7 @@ Your download of <span class="downloaded-filename">Joplin</span> is in progress.
   
 Access your notes on Windows, macOS or Linux.
 
-<!-- DESKTOP-DOWNLOAD-LINKS --><a href='https://github.com/laurent22/joplin/releases/download/v2.1.9/Joplin-Setup-2.1.9.exe'><img alt='Get it on Windows' width="134px" src='https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/BadgeWindows.png'/></a> <a href='https://github.com/laurent22/joplin/releases/download/v2.1.9/Joplin-2.1.9.dmg'><img alt='Get it on macOS' width="134px" src='https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/BadgeMacOS.png'/></a> <a href='https://github.com/laurent22/joplin/releases/download/v2.1.9/Joplin-2.1.9.AppImage'><img alt='Get it on Linux' width="134px" src='https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/BadgeLinux.png'/></a><!-- DESKTOP-DOWNLOAD-LINKS -->
+<!-- DESKTOP-DOWNLOAD-LINKS --><a href='https://github.com/laurent22/joplin/releases/download/v2.3.5/Joplin-Setup-2.3.5.exe'><img alt='Get it on Windows' width="134px" src='https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/BadgeWindows.png'/></a> <a href='https://github.com/laurent22/joplin/releases/download/v2.3.5/Joplin-2.3.5.dmg'><img alt='Get it on macOS' width="134px" src='https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/BadgeMacOS.png'/></a> <a href='https://github.com/laurent22/joplin/releases/download/v2.3.5/Joplin-2.3.5.AppImage'><img alt='Get it on Linux' width="134px" src='https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/BadgeLinux.png'/></a><!-- DESKTOP-DOWNLOAD-LINKS -->
 
 </div>
 

@@ -1,4 +1,4 @@
-import app from '../app';
+import app, { AppState, AppStateDialog } from '../app';
 import MainScreen from './MainScreen/MainScreen';
 import ConfigScreen from './ConfigScreen/ConfigScreen';
 import StatusScreen from './StatusScreen/StatusScreen';
@@ -10,7 +10,6 @@ import { Size } from './ResizableLayout/utils/types';
 import MenuBar from './MenuBar';
 import { _ } from '@joplin/lib/locale';
 const React = require('react');
-
 const { render } = require('react-dom');
 const { connect, Provider } = require('react-redux');
 import Setting from '@joplin/lib/models/Setting';
@@ -19,6 +18,7 @@ import ClipperServer from '@joplin/lib/ClipperServer';
 import DialogTitle from './DialogTitle';
 import DialogButtonRow, { ButtonSpec, ClickEvent, ClickEventHandler } from './DialogButtonRow';
 import Dialog from './Dialog';
+import SyncWizardDialog from './SyncWizard/Dialog';
 const { ImportScreen } = require('./ImportScreen.min.js');
 const { ResourceScreen } = require('./ResourceScreen.js');
 const { Navigator } = require('./Navigator.min.js');
@@ -33,6 +33,7 @@ interface Props {
 	size: Size;
 	zoomFactor: number;
 	needApiAuth: boolean;
+	dialogs: AppStateDialog;
 }
 
 interface ModalDialogProps {
@@ -41,6 +42,24 @@ interface ModalDialogProps {
 	buttonSpecs: ButtonSpec[];
 	onClick: ClickEventHandler;
 }
+
+interface RegisteredDialogProps {
+	themeId: number;
+	key: string;
+	dispatch: Function;
+}
+
+interface RegisteredDialog {
+	render: (props: RegisteredDialogProps)=> any;
+}
+
+const registeredDialogs: Record<string, RegisteredDialog> = {
+	syncWizard: {
+		render: (props: RegisteredDialogProps) => {
+			return <SyncWizardDialog key={props.key} dispatch={props.dispatch} themeId={props.themeId}/>;
+		},
+	},
+};
 
 const GlobalStyle = createGlobalStyle`
 	* {
@@ -151,6 +170,22 @@ class RootComponent extends React.Component<Props, any> {
 		};
 	}
 
+	private renderDialogs() {
+		if (!this.props.dialogs.length) return null;
+
+		const output: any[] = [];
+		for (const dialog of this.props.dialogs) {
+			const md = registeredDialogs[dialog.name];
+			if (!md) throw new Error(`Unknown dialog: ${dialog.name}`);
+			output.push(md.render({
+				key: dialog.name,
+				themeId: this.props.themeId,
+				dispatch: this.props.dispatch,
+			}));
+		}
+		return output;
+	}
+
 	public render() {
 		const navigatorStyle = {
 			width: this.props.size.width / this.props.zoomFactor,
@@ -176,19 +211,21 @@ class RootComponent extends React.Component<Props, any> {
 					<GlobalStyle/>
 					<Navigator style={navigatorStyle} screens={screens} />
 					{this.renderModalMessage(this.modalDialogProps())}
+					{this.renderDialogs()}
 				</ThemeProvider>
 			</StyleSheetManager>
 		);
 	}
 }
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: AppState) => {
 	return {
 		size: state.windowContentSize,
 		zoomFactor: state.settings.windowContentZoomFactor / 100,
 		appState: state.appState,
 		themeId: state.settings.theme,
 		needApiAuth: state.needApiAuth,
+		dialogs: state.dialogs,
 	};
 };
 

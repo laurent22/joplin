@@ -21,6 +21,11 @@ async function renderItem(context: AppContext, item: Item, share: Share): Promis
 	};
 }
 
+function createContentDispositionHeader(filename: string) {
+	const encoded = encodeURIComponent(friendlySafeFilename(filename));
+	return `attachment; filename*=UTF-8''${encoded}; filename="${encoded}"`;
+}
+
 const router: Router = new Router(RouteType.Web);
 
 router.public = true;
@@ -46,7 +51,7 @@ router.get('shares/:id', async (path: SubPath, ctx: AppContext) => {
 	ctx.response.body = result.body;
 	ctx.response.set('Content-Type', result.mime);
 	ctx.response.set('Content-Length', result.size.toString());
-	if (result.filename) ctx.response.set('Content-disposition', `attachment; filename="${friendlySafeFilename(result.filename)}"`);
+	if (result.filename) ctx.response.set('Content-disposition', createContentDispositionHeader(result.filename));
 	return new Response(ResponseType.KoaResponse, ctx.response);
 }, RouteType.UserContent);
 

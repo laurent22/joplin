@@ -6,8 +6,6 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 "Last-Translator: 南宫小骏 <jackytsu@vip.qq.com>\n"
 "Language-Team: zh_CN <jackytsu.vip.qq.com>\n"
 "Language: zh_CN\n"
@@ -183,7 +181,7 @@ msgstr "标记待办事项为完成。"
 msgid "Note is not a to-do: \"%s\""
 msgstr "笔记并非待办事项：“%s”"
 
-#: packages/app-cli/app/command-e2ee.js:18
+#: packages/app-cli/app/command-e2ee.js:29
 msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
 "`status`, `decrypt-file` and `target-status`."
@@ -191,64 +189,66 @@ msgstr ""
 "管理 E2EE 配置。命令为: `enable`、`disable`、`decrypt`、`status`、`decrypt-"
 "file` 和 `target-status`。"
 
-#: packages/app-cli/app/command-e2ee.js:36
-#: packages/app-cli/app/command-e2ee.js:75
+#: packages/app-cli/app/command-e2ee.js:45
+#: packages/app-cli/app/command-e2ee.js:82
 msgid "Enter master password:"
 msgstr "输入主密码："
 
-#: packages/app-cli/app/command-e2ee.js:38
-#: packages/app-cli/app/command-e2ee.js:77
-#: packages/app-cli/app/command-e2ee.js:87
+#: packages/app-cli/app/command-e2ee.js:47
+#: packages/app-cli/app/command-e2ee.js:84
+#: packages/app-cli/app/command-e2ee.js:93
 msgid "Operation cancelled"
 msgstr "操作已取消"
 
-#: packages/app-cli/app/command-e2ee.js:47
+#: packages/app-cli/app/command-e2ee.js:55
 msgid ""
 "Starting decryption... Please wait as it may take several minutes depending "
 "on how much there is to decrypt."
 msgstr ""
 "开始解密，请稍候... 取决于需解密的文件数量，解密环节可能需要等待几分钟。"
 
-#: packages/app-cli/app/command-e2ee.js:55
+#: packages/app-cli/app/command-e2ee.js:62
 #, javascript-format
 msgid "Decrypted items: %d"
 msgstr "解密条目: %d"
 
-#: packages/app-cli/app/command-e2ee.js:56
+#: packages/app-cli/app/command-e2ee.js:64
 #, javascript-format
 msgid "Skipped items: %d (use --retry-failed-items to retry decrypting them)"
 msgstr "跳过条目: %d (使用 —retry-failed-items 来尝试重新解密)"
 
-#: packages/app-cli/app/command-e2ee.js:70
+#: packages/app-cli/app/command-e2ee.js:78
 msgid "Completed decryption."
 msgstr "已完成解密。"
 
-#: packages/app-cli/app/command-e2ee.js:85
-#: packages/app-mobile/components/screens/encryption-config.js:163
+#: packages/app-cli/app/command-e2ee.js:91
+#: packages/app-mobile/components/screens/encryption-config.js:151
 msgid "Confirm password:"
 msgstr "确认密码："
 
-#: packages/app-cli/app/command-e2ee.js:91
-#: packages/app-mobile/components/screens/encryption-config.js:140
+#: packages/app-cli/app/command-e2ee.js:97
+#: packages/app-mobile/components/screens/encryption-config.js:132
 msgid "Passwords do not match!"
 msgstr "密码不匹配！"
 
-#: packages/app-cli/app/command-e2ee.js:118
+#: packages/app-cli/app/command-e2ee.js:121
+#: packages/app-desktop/gui/EncryptionConfigScreen.js:235
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:443
-#: packages/app-mobile/components/screens/encryption-config.js:280
+#: packages/app-mobile/components/screens/encryption-config.js:224
 msgid "Enabled"
 msgstr "已启用"
 
-#: packages/app-cli/app/command-e2ee.js:118
+#: packages/app-cli/app/command-e2ee.js:121
+#: packages/app-desktop/gui/EncryptionConfigScreen.js:235
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:443
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:110
-#: packages/app-mobile/components/screens/encryption-config.js:280
-#: packages/lib/models/Setting.js:839
+#: packages/app-mobile/components/screens/encryption-config.js:224
+#: packages/lib/models/Setting.js:855
 msgid "Disabled"
 msgstr "已禁用"
 
-#: packages/app-cli/app/command-e2ee.js:118
-#: packages/app-mobile/components/screens/encryption-config.js:280
+#: packages/app-cli/app/command-e2ee.js:121
+#: packages/app-mobile/components/screens/encryption-config.js:224
 #, javascript-format
 msgid "Encryption is: %s"
 msgstr "加密状态: %s"
@@ -656,20 +656,20 @@ msgstr "同步目标: %s (%s)"
 msgid "Cannot initialise synchroniser."
 msgstr "无法初始化同步。"
 
-#: packages/app-cli/app/command-sync.js:212
+#: packages/app-cli/app/command-sync.js:213
 msgid "Starting synchronisation..."
 msgstr "开始同步..."
 
-#: packages/app-cli/app/command-sync.js:235
+#: packages/app-cli/app/command-sync.js:236
 msgid "Downloading resources..."
 msgstr "下载资源中..."
 
-#: packages/app-cli/app/command-sync.js:247
+#: packages/app-cli/app/command-sync.js:248
 #, javascript-format
 msgid "Sync target must be upgraded! Run `%s` to proceed."
 msgstr "需要升级同步目标！运行 `%s` 以继续。"
 
-#: packages/app-cli/app/command-sync.js:265
+#: packages/app-cli/app/command-sync.js:266
 msgid "Cancelling... Please wait."
 msgstr "正在取消... 请稍候。"
 
@@ -713,11 +713,6 @@ msgstr "切换到 [notebook] - 所有进一步操作将在该笔记本中进行�
 #: packages/app-cli/app/command-version.js:11
 msgid "Displays version information"
 msgstr "显示版本信息"
-
-#: packages/app-cli/app/command-version.js:16
-#, javascript-format
-msgid "%s %s (%s)"
-msgstr "%s %s (%s)"
 
 #: packages/app-cli/app/gui/FolderListWidget.js:31
 msgid "Search:"
@@ -793,14 +788,14 @@ msgstr "导出到“%s”，格式为“%s”。请稍等..."
 msgid "Could not export notes: %s"
 msgstr "无法导出笔记：%s"
 
-#: packages/app-desktop/app.js:370
+#: packages/app-desktop/app.js:387
 #, javascript-format
 msgid "Open %s"
 msgstr "打开 %s"
 
-#: packages/app-desktop/app.js:372
+#: packages/app-desktop/app.js:389
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:14
-#: packages/app-desktop/gui/MenuBar.js:213
+#: packages/app-desktop/gui/MenuBar.js:211
 msgid "Quit"
 msgstr "退出"
 
@@ -809,19 +804,19 @@ msgstr "退出"
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.js:22
 #: packages/app-desktop/gui/DialogButtonRow.js:39
 #: packages/app-desktop/gui/DialogButtonRow.min.js:30
-#: packages/app-desktop/gui/MenuBar.js:377
+#: packages/app-desktop/gui/MenuBar.js:343
 #: packages/app-desktop/gui/PromptDialog.min.js:235
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:20
 #: packages/app-mobile/components/CameraView.js:160
 #: packages/app-mobile/components/ModalDialog.js:67
-#: packages/app-mobile/components/screens/ConfigScreen.js:152
+#: packages/app-mobile/components/screens/ConfigScreen.js:154
 #: packages/app-mobile/components/side-menu-content.js:150
 msgid "OK"
 msgstr "确认"
 
 #: packages/app-desktop/bridge.js:110 packages/app-desktop/bridge.js:126
 #: packages/app-desktop/checkForUpdates.js:189
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:521
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:528
 #: packages/app-desktop/gui/DialogButtonRow.js:42
 #: packages/app-desktop/gui/DialogButtonRow.min.js:38
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:52
@@ -830,14 +825,14 @@ msgstr "确认"
 #: packages/app-desktop/gui/ResourceScreen.js:96
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:214
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:455
-#: packages/app-desktop/gui/utils/NoteListUtils.js:169
+#: packages/app-desktop/gui/utils/NoteListUtils.js:171
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:21
 #: packages/app-mobile/components/CameraView.js:161
 #: packages/app-mobile/components/ModalDialog.js:70
 #: packages/app-mobile/components/SelectDateTimeDialog.js:82
 #: packages/app-mobile/components/screens/Note.js:100
 #: packages/app-mobile/components/screens/Note.js:532
-#: packages/app-mobile/components/screens/encryption-config.js:185
+#: packages/app-mobile/components/screens/encryption-config.js:161
 #: packages/app-mobile/components/side-menu-content.js:156
 #: packages/app-mobile/components/side-menu-content.js:165
 #: packages/app-mobile/components/side-menu-content.js:338
@@ -913,54 +908,66 @@ msgstr "停止"
 msgid "Toggle safe mode"
 msgstr "切换安全模式"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.js:34
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:40
 msgid "Token has been copied to the clipboard!"
 msgstr "令牌已复制到剪贴板！"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.js:37
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:44
 msgid "Are you sure you want to renew the authorisation token?"
 msgstr "确定要更新授权令牌吗？"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.js:67
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:84
 msgid "The web clipper service is enabled and set to auto-start."
 msgstr "网页剪辑服务已启用且将自动启动。"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.js:69
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:91
 #, javascript-format
 msgid "Status: Started on port %d"
 msgstr "状态：在 %d 端口运行"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.js:72
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:97
 #, javascript-format
 msgid "Status: %s"
 msgstr "状态：%s"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.js:74
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:103
 msgid "Disable Web Clipper Service"
 msgstr "禁用网页剪辑服务"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.js:77
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:109
 msgid "The web clipper service is not enabled."
 msgstr "网页剪辑未启用。"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.js:78
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:114
 msgid "Enable Web Clipper Service"
 msgstr "启用网页剪辑服务"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.js:89
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:137
 msgid ""
 "Joplin Web Clipper allows saving web pages and screenshots from your browser "
 "to Joplin."
 msgstr "Joplin 网页剪辑器可以让你将浏览器中的网页和屏幕截图保存到 Joplin。"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.js:90
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:142
 msgid "In order to use the web clipper, you need to do the following:"
 msgstr "要使用网页剪辑器，你需要执行以下步骤："
 
+#: packages/app-desktop/gui/ClipperConfigScreen.js:92
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:150
 msgid "Step 1: Enable the clipper service"
 msgstr "步骤一: 启用网页剪辑服务"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.js:93
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:155
 msgid ""
 "This service allows the browser extension to communicate with Joplin. When "
@@ -970,32 +977,39 @@ msgstr ""
 "该服务允许浏览器扩展与 Joplin 通信。当启用它时，你的防火墙可能会要求你允许 "
 "Joplin 监听一个特定的端口。"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.js:96
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:169
 msgid "Step 2: Install the extension"
 msgstr "步骤二: 安装扩展"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.js:97
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:174
 msgid "Download and install the relevant extension for your browser:"
 msgstr "为您的浏览器下载并安装相关的扩展："
 
+#: packages/app-desktop/gui/ClipperConfigScreen.js:102
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:189
 msgid "Advanced options"
 msgstr "高级选项"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.js:103
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:194
 msgid "Authorisation token:"
 msgstr "授权令牌："
 
+#: packages/app-desktop/gui/ClipperConfigScreen.js:108
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:208
 msgid "Copy token"
 msgstr "复制令牌"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.js:109
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:214
 msgid ""
 "This authorisation token is only needed to allow third-party applications to "
 "access Joplin."
 msgstr "该授权令牌仅用于允许第三方应用程序访问 Joplin。"
 
+#: packages/app-desktop/gui/ClipperConfigScreen.js:111
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:222
 msgid "Renew token"
 msgstr "更新令牌"
@@ -1005,56 +1019,56 @@ msgid "Apply"
 msgstr "应用"
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.js:30
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:521
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:528
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:187
 #: packages/lib/commands/historyBackward.js:17
 msgid "Back"
 msgstr "返回"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:127
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:133
 msgid "This will open a new screen. Save your current changes?"
 msgstr "这将打开一个新页面。是否保存当前更改？"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:193
-#: packages/app-mobile/components/screens/ConfigScreen.js:276
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:199
+#: packages/app-mobile/components/screens/ConfigScreen.js:305
 msgid "Check synchronisation configuration"
 msgstr "检查同步配置"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:203
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:209
 msgid "Show Advanced Settings"
 msgstr "显示高级选项"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:392
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:398
 msgid "Path:"
 msgstr "路径："
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:397
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:403
 msgid "Browse..."
 msgstr "浏览..."
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:399
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:405
 msgid "Arguments:"
 msgstr "参数："
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:447
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:454
 msgid "The application must be restarted for these changes to take effect."
 msgstr "必须重新启动应用程序才能使这些更改生效。"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:459
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:466
 #: packages/app-desktop/gui/NoteList/NoteList.js:164
 msgid "Do it now"
 msgstr "现在完成"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:459
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:466
 msgid "Later"
 msgstr "稍后"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:512
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:519
 msgid "Restart now"
 msgstr "立即重启"
 
 #: packages/app-desktop/gui/ConfigScreen/Sidebar.js:89
-#: packages/lib/models/Setting.js:1662
+#: packages/lib/models/Setting.js:1689
 msgid "Plugins"
 msgstr "插件"
 
@@ -1063,7 +1077,7 @@ msgstr "插件"
 #: packages/app-desktop/gui/ResourceScreen.js:96
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:193
 #: packages/app-desktop/gui/utils/NoteListUtils.js:140
-#: packages/app-desktop/gui/utils/NoteListUtils.js:169
+#: packages/app-desktop/gui/utils/NoteListUtils.js:171
 #: packages/app-mobile/components/screens/Note.js:860
 #: packages/app-mobile/components/side-menu-content.js:146
 msgid "Delete"
@@ -1161,16 +1175,44 @@ msgstr "无法安装插件：%s"
 msgid "Submit"
 msgstr "提交"
 
+#: packages/app-desktop/gui/EncryptionConfigScreen.js:73
+#, fuzzy
+msgid "Source: "
+msgstr "来源"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.js:76
+#, fuzzy
+msgid "Created: "
+msgstr "创建于：%s"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.js:79
+#, fuzzy
+msgid "Updated: "
+msgstr "已更新：%s"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.js:84
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:96
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:50
-#: packages/app-mobile/components/screens/encryption-config.js:125
+#: packages/app-mobile/components/screens/encryption-config.js:118
 msgid "Save"
 msgstr "保存"
 
+#: packages/app-desktop/gui/EncryptionConfigScreen.js:87
+#, fuzzy
+msgid "Disable"
+msgstr "已禁用"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.js:87
+#: packages/app-mobile/components/screens/encryption-config.js:157
+msgid "Enable"
+msgstr "启用"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.js:105
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:145
 msgid "Master keys that need upgrading"
 msgstr "需要升级的主密钥"
 
+#: packages/app-desktop/gui/EncryptionConfigScreen.js:106
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:150
 msgid ""
 "The following master keys use an out-dated encryption algorithm and it is "
@@ -1180,6 +1222,9 @@ msgstr ""
 "以下主密钥使用了过时的加密算法，建议对其进行升级。 升级后的主密钥仍将能够照常"
 "解密和加密您的数据。"
 
+#: packages/app-desktop/gui/EncryptionConfigScreen.js:110
+#: packages/app-desktop/gui/EncryptionConfigScreen.js:148
+#: packages/app-desktop/gui/EncryptionConfigScreen.js:219
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:164
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:309
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:390
@@ -1188,20 +1233,24 @@ msgstr ""
 msgid "ID"
 msgstr "ID"
 
+#: packages/app-desktop/gui/EncryptionConfigScreen.js:111
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:169
 msgid "Upgrade"
 msgstr "升级"
 
+#: packages/app-desktop/gui/EncryptionConfigScreen.js:120
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:182
 msgid "Re-encrypt data"
 msgstr "重新加密数据"
 
+#: packages/app-desktop/gui/EncryptionConfigScreen.js:121
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:184
 msgid ""
 "The default encryption method has been changed to a more secure one and it "
 "is recommended that you apply it to your data."
 msgstr "默认的加密方法已更改为一种更安全的方法，建议您将其应用于您的数据。"
 
+#: packages/app-desktop/gui/EncryptionConfigScreen.js:121
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:184
 msgid ""
 "You may use the tool below to re-encrypt your data, for example if you know "
@@ -1210,6 +1259,7 @@ msgstr ""
 "您可以使用下面的工具重新加密您的数据。例如，在当您知道某些笔记使用了过时的加"
 "密方法时。"
 
+#: packages/app-desktop/gui/EncryptionConfigScreen.js:122
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:186
 #, javascript-format
 msgid ""
@@ -1238,16 +1288,66 @@ msgstr ""
 "\n"
 "重要提醒: 在一台设备上只需要运行一次。"
 
+#: packages/app-desktop/gui/EncryptionConfigScreen.js:127
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:198
 msgid "Re-encryption"
 msgstr "重新加密"
 
+#: packages/app-desktop/gui/EncryptionConfigScreen.js:131
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:213
 msgid "Ignore"
 msgstr "忽略"
 
+#: packages/app-desktop/gui/EncryptionConfigScreen.js:142
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:290
+msgid "Master Keys"
+msgstr "主密码"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.js:142
+msgid "Hide disabled master keys"
+msgstr ""
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.js:142
+msgid "Show disabled master keys"
+msgstr ""
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.js:143
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:343
+msgid ""
+"Note: Only one master key is going to be used for encryption (the one marked "
+"as \"active\"). Any of the keys might be used for decryption, depending on "
+"how the notes or notebooks were originally encrypted."
+msgstr ""
+"注意：仅有一个主密码会用于加密（被标记为 \"正在使用\" 的主密码）。但列出的所"
+"有密码都可用于解密，这取决于笔记或笔记本最初是如何加密的。"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.js:147
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:304
+msgid "Active"
+msgstr "正在使用"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.js:149
+msgid "Date"
+msgstr ""
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.js:150
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:329
+msgid "Password"
+msgstr "密码"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.js:151
+#, fuzzy
+msgid "Valid"
+msgstr "无效"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.js:152
+#, fuzzy
+msgid "Actions"
+msgstr "动作"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.js:182
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:244
-#: packages/app-mobile/components/screens/encryption-config.js:215
+#: packages/app-mobile/components/screens/encryption-config.js:180
 msgid ""
 "Disabling encryption means *all* your notes and attachments are going to be "
 "re-synchronised and sent unencrypted to the sync target. Do you wish to "
@@ -1256,8 +1356,58 @@ msgstr ""
 "禁用加密会导致 *所有笔记与附件* 重新同步，并以非加密的数据形式发送到同步目"
 "标。确定继续吗？"
 
+#: packages/app-desktop/gui/EncryptionConfigScreen.js:200
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:275
+#: packages/app-mobile/components/screens/encryption-config.js:213
+msgid "Disable encryption"
+msgstr "禁用加密"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.js:200
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:275
+#: packages/app-mobile/components/screens/encryption-config.js:213
+msgid "Enable encryption"
+msgstr "启用加密"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.js:214
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:371
+#: packages/app-mobile/components/screens/encryption-config.js:207
+msgid "Missing Master Keys"
+msgstr "缺少主密码"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.js:215
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:376
+#: packages/app-mobile/components/screens/encryption-config.js:208
+msgid ""
+"The master keys with these IDs are used to encrypt some of your items, "
+"however the application does not currently have access to them. It is likely "
+"they will eventually be downloaded via synchronisation."
+msgstr ""
+"具有这些 ID 的主密钥用于加密某些项，但应用程序目前无法访问它们。最终它们很可"
+"能通过同步下载。"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.js:226
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:414
+#: packages/app-mobile/components/screens/encryption-config.js:218
+msgid ""
+"For more information about End-To-End Encryption (E2EE) and advice on how to "
+"enable it please check the documentation:"
+msgstr ""
+"若想了解有关端到端加密 (E2EE) 的更多信息，以及如何启用它的建议，请查阅文档："
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.js:231
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:433
+#: packages/app-mobile/components/screens/encryption-config.js:223
+#: packages/app-mobile/components/screens/status.js:142
+msgid "Status"
+msgstr "状态"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.js:233
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:438
+msgid "Encryption is:"
+msgstr "加密状态："
+
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:246
-#: packages/app-mobile/components/screens/encryption-config.js:150
+#: packages/lib/components/shared/encryption-config-shared.js:149
 msgid ""
 "Enabling encryption means *all* your notes and attachments are going to be "
 "re-synchronised and sent encrypted to the sync target. Do not lose the "
@@ -1268,24 +1418,6 @@ msgstr ""
 "请勿丢失该密码！为了安全目的，此密码是您解密数据的 *唯一方式* ！若确认启动加"
 "密，请在下方输入您的密码。"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:275
-#: packages/app-mobile/components/screens/encryption-config.js:258
-msgid "Disable encryption"
-msgstr "禁用加密"
-
-#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:275
-#: packages/app-mobile/components/screens/encryption-config.js:258
-msgid "Enable encryption"
-msgstr "启用加密"
-
-#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:290
-msgid "Master Keys"
-msgstr "主密码"
-
-#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:304
-msgid "Active"
-msgstr "正在使用"
-
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:314
 msgid "Source"
 msgstr "来源"
@@ -1295,55 +1427,9 @@ msgstr "来源"
 msgid "Created"
 msgstr "创建日期"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:329
-msgid "Password"
-msgstr "密码"
-
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:334
 msgid "Password OK"
 msgstr "密码可用"
-
-#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:343
-msgid ""
-"Note: Only one master key is going to be used for encryption (the one marked "
-"as \"active\"). Any of the keys might be used for decryption, depending on "
-"how the notes or notebooks were originally encrypted."
-msgstr ""
-"注意：仅有一个主密码会用于加密（被标记为 \"正在使用\" 的主密码）。但列出的所"
-"有密码都可用于解密，这取决于笔记或笔记本最初是如何加密的。"
-
-#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:371
-#: packages/app-mobile/components/screens/encryption-config.js:248
-msgid "Missing Master Keys"
-msgstr "缺少主密码"
-
-#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:376
-#: packages/app-mobile/components/screens/encryption-config.js:249
-msgid ""
-"The master keys with these IDs are used to encrypt some of your items, "
-"however the application does not currently have access to them. It is likely "
-"they will eventually be downloaded via synchronisation."
-msgstr ""
-"具有这些 ID 的主密钥用于加密某些项，但应用程序目前无法访问它们。最终它们很可"
-"能通过同步下载。"
-
-#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:414
-#: packages/app-mobile/components/screens/encryption-config.js:268
-msgid ""
-"For more information about End-To-End Encryption (E2EE) and advice on how to "
-"enable it please check the documentation:"
-msgstr ""
-"若想了解有关端到端加密 (E2EE) 的更多信息，以及如何启用它的建议，请查阅文档："
-
-#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:433
-#: packages/app-mobile/components/screens/encryption-config.js:279
-#: packages/app-mobile/components/screens/status.js:142
-msgid "Status"
-msgstr "状态"
-
-#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:438
-msgid "Encryption is:"
-msgstr "加密状态："
 
 #: packages/app-desktop/gui/ExtensionBadge.min.js:10
 msgid "Firefox Extension"
@@ -1364,20 +1450,20 @@ msgid ""
 msgstr "将新建笔记本“%s”，并将文件“%s”导入其中"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:63
-#: packages/lib/services/KeymapService.js:178
+#: packages/lib/services/KeymapService.js:176
 #, javascript-format
 msgid "Error: %s"
 msgstr "错误：%s"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:120
-#: packages/app-desktop/gui/NoteSearchBar.min.js:168
+#: packages/app-desktop/gui/NoteSearchBar.min.js:164
 #: packages/app-desktop/gui/lib/SearchInput/SearchInput.js:38
 msgid "Search..."
 msgstr "搜索..."
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:121
-#: packages/app-desktop/gui/MenuBar.js:433
-#: packages/app-desktop/gui/MenuBar.js:486 packages/app-desktop/gui/Root.js:138
+#: packages/app-desktop/gui/MenuBar.js:392
+#: packages/app-desktop/gui/MenuBar.js:440 packages/app-desktop/gui/Root.js:162
 msgid "Import"
 msgstr "导入"
 
@@ -1411,63 +1497,48 @@ msgid "Restore"
 msgstr "恢复"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:16
-#: packages/app-desktop/gui/MenuBar.js:320
-msgid "Insert template"
-msgstr "插入模版"
-
-#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:18
-#: packages/app-desktop/gui/MenuBar.js:586
+#: packages/app-desktop/gui/MenuBar.js:540
 msgid "Actual Size"
 msgstr "实际大小"
 
-#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:20
-#: packages/app-desktop/plugins/GotoAnything.js:480
-msgid "Goto Anything..."
-msgstr "跳转到任意内容..."
-
-#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:22
-#: packages/app-desktop/gui/MenuBar.js:654
+#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:18
+#: packages/app-desktop/gui/MenuBar.js:608
 msgid "Website and documentation"
 msgstr "网站与文档"
 
-#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:24
+#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:20
 msgid "Hide Joplin"
 msgstr "隐藏 Joplin"
 
-#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:26
-#: packages/app-desktop/gui/MenuBar.js:474
+#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:22
+#: packages/app-desktop/gui/MenuBar.js:433
 msgid "Close Window"
 msgstr "关闭窗口"
 
-#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:28
-#: packages/app-desktop/plugins/GotoAnything.js:487
-msgid "Command palette"
-msgstr "命令面板"
-
-#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:30
+#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:24
 msgid "Preferences"
 msgstr "首选项"
 
-#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:30
-#: packages/app-desktop/gui/MenuBar.js:344 packages/app-desktop/gui/Root.js:139
+#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:24
+#: packages/app-desktop/gui/MenuBar.js:310 packages/app-desktop/gui/Root.js:163
 msgid "Options"
 msgstr "选项"
 
-#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:37
+#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:31
 msgid "Invalid"
 msgstr "无效"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:459
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:470
 msgid ""
 "Safe mode is currently active. Note rendering and all plugins are "
 "temporarily disabled."
 msgstr "安全模式当前已被激活。笔记渲染和所有的插件被临时禁用。"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:459
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:470
 msgid "Disable safe mode and restart"
 msgstr "禁用安全模式并重启"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:462
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:473
 msgid ""
 "The sync target needs to be upgraded before Joplin can sync. The operation "
 "may take a few minutes to complete and the app needs to be restarted. To "
@@ -1476,63 +1547,68 @@ msgstr ""
 "需要更新同步目标以启用 Joplin 同步。该操作可能需要数分钟时间完成，应用也需要"
 "重启。单击链接以继续。"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:462
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:473
 msgid "Restart and upgrade"
 msgstr "重启后升级"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:465
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:476
 msgid "Some items cannot be decrypted."
 msgstr "一些项目无法被解密。"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:465
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:468
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:476
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:479
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:490
 msgid "View them now"
 msgstr "立刻查看"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:468
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:479
 msgid "One of your master keys use an obsolete encryption method."
 msgstr "您的主密钥之一使用了过时的加密方法。"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:471
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:482
 msgid ""
 "The default encryption method has been changed, you should re-encrypt your "
 "data."
 msgstr "默认的加密方法已更改，您应当重新加密数据。"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:471
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:482
 msgid "More info"
 msgstr "更多信息"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:476
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:487
 #, javascript-format
 msgid "%s (%s) would like to share a notebook with you."
 msgstr "%s (%s) 想要分享笔记本给你。"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:476
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:487
 msgid "Accept"
 msgstr "接受"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:476
-#: packages/app-desktop/gui/Root.js:113
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:487
+#: packages/app-desktop/gui/Root.js:121
 msgid "Reject"
 msgstr "拒绝"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:479
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:490
 msgid "Some items cannot be synchronised."
 msgstr "一些条目无法被同步。"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:482
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:493
 msgid "One or more master keys need a password."
 msgstr "一个或多个主密钥需要密码。"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:482
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:493
 msgid "Set the password"
 msgstr "设置密码"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:605
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:619
 msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
 msgstr "使用箭头移动布局项。按“Escape”退出。"
+
+#: packages/app-desktop/gui/MainScreen/commands/commandPalette.js:18
+#, fuzzy
+msgid "Command palette..."
+msgstr "命令面板"
 
 #: packages/app-desktop/gui/MainScreen/commands/editAlarm.js:20
 #: packages/app-mobile/components/SelectDateTimeDialog.js:84
@@ -1548,6 +1624,11 @@ msgstr "设置提醒："
 #: packages/app-desktop/gui/MainScreen/commands/exportPdf.js:32
 msgid "PDF File"
 msgstr "PDF 文件"
+
+#: packages/app-desktop/gui/MainScreen/commands/gotoAnything.js:23
+#: packages/app-desktop/plugins/GotoAnything.js:497
+msgid "Goto Anything..."
+msgstr "跳转到任意内容..."
 
 #: packages/app-desktop/gui/MainScreen/commands/moveToFolder.js:18
 msgid "Move to notebook"
@@ -1565,9 +1646,9 @@ msgstr "新建笔记本"
 msgid "Notebook title:"
 msgstr "笔记本标题："
 
-#: packages/app-desktop/gui/MainScreen/commands/newNote.js:20
+#: packages/app-desktop/gui/MainScreen/commands/newNote.js:19
 #: packages/app-mobile/components/action-button.js:86
-#: packages/app-mobile/setupQuickActions.js:14
+#: packages/app-mobile/setUpQuickActions.js:14
 msgid "New note"
 msgstr "新建笔记"
 
@@ -1577,7 +1658,7 @@ msgstr "新建子笔记本"
 
 #: packages/app-desktop/gui/MainScreen/commands/newTodo.js:17
 #: packages/app-mobile/components/action-button.js:77
-#: packages/app-mobile/setupQuickActions.js:15
+#: packages/app-mobile/setUpQuickActions.js:15
 msgid "New to-do"
 msgstr "新建待办事项"
 
@@ -1602,10 +1683,6 @@ msgstr "重命名笔记本："
 #: packages/app-desktop/gui/MainScreen/commands/renameTag.js:30
 msgid "Rename tag:"
 msgstr "重命名标签："
-
-#: packages/app-desktop/gui/MainScreen/commands/selectTemplate.js:24
-msgid "Template file:"
-msgstr "模版文件："
 
 #: packages/app-desktop/gui/MainScreen/commands/setTags.js:17
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:492
@@ -1661,104 +1738,83 @@ msgstr "切换边栏"
 msgid "Toggle editor layout"
 msgstr "切换编辑器布局"
 
-#: packages/app-desktop/gui/MenuBar.js:167
+#: packages/app-desktop/gui/MenuBar.js:165
 #, javascript-format
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr "从“%s” 导入为“%s”格式 。请稍等..."
 
-#: packages/app-desktop/gui/MenuBar.js:291 packages/app-desktop/gui/Root.js:141
+#: packages/app-desktop/gui/MenuBar.js:288 packages/app-desktop/gui/Root.js:165
 msgid "Synchronisation Status"
 msgstr "同步状态"
 
-#: packages/app-desktop/gui/MenuBar.js:310
-msgid "Create note from template"
-msgstr "从模版创建笔记"
-
-#: packages/app-desktop/gui/MenuBar.js:315
-msgid "Create to-do from template"
-msgstr "从模版创建待办事项"
-
-#: packages/app-desktop/gui/MenuBar.js:326
-msgid "Open template directory"
-msgstr "打开模版目录"
-
-#: packages/app-desktop/gui/MenuBar.js:331
-msgid "Refresh templates"
-msgstr "刷新模版"
-
-#: packages/app-desktop/gui/MenuBar.js:357
+#: packages/app-desktop/gui/MenuBar.js:323
 msgid "Note attachments..."
 msgstr "笔记附件..."
 
-#: packages/app-desktop/gui/MenuBar.js:377
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:668
+#: packages/app-desktop/gui/MenuBar.js:343
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:702
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:13
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:136
 msgid "Copy"
 msgstr "复制"
 
-#: packages/app-desktop/gui/MenuBar.js:388
-#: packages/app-desktop/gui/MenuBar.js:466
-#: packages/app-desktop/gui/MenuBar.js:768
+#: packages/app-desktop/gui/MenuBar.js:354
+#: packages/app-desktop/gui/MenuBar.js:425
+#: packages/app-desktop/gui/MenuBar.js:713
 msgid "&File"
 msgstr "文件 (&F)"
 
-#: packages/app-desktop/gui/MenuBar.js:394
-#: packages/app-desktop/gui/MenuBar.js:687
+#: packages/app-desktop/gui/MenuBar.js:360
+#: packages/app-desktop/gui/MenuBar.js:641
 msgid "About Joplin"
 msgstr "关于 Joplin"
 
-#: packages/app-desktop/gui/MenuBar.js:401
+#: packages/app-desktop/gui/MenuBar.js:367
 msgid "Preferences..."
 msgstr "首选项..."
 
-#: packages/app-desktop/gui/MenuBar.js:411
-#: packages/app-desktop/gui/MenuBar.js:664
+#: packages/app-desktop/gui/MenuBar.js:377
+#: packages/app-desktop/gui/MenuBar.js:618
 msgid "Check for updates..."
 msgstr "检查更新..."
 
-#: packages/app-desktop/gui/MenuBar.js:426
-#: packages/app-desktop/gui/MenuBar.js:481
-msgid "Templates"
-msgstr "模版"
-
-#: packages/app-desktop/gui/MenuBar.js:437
-#: packages/app-desktop/gui/MenuBar.js:489
+#: packages/app-desktop/gui/MenuBar.js:396
+#: packages/app-desktop/gui/MenuBar.js:443
 msgid "Export all"
 msgstr "导出全部"
 
-#: packages/app-desktop/gui/MenuBar.js:449
+#: packages/app-desktop/gui/MenuBar.js:408
 #, javascript-format
 msgid "Hide %s"
 msgstr "隐藏 %s"
 
-#: packages/app-desktop/gui/MenuBar.js:512
-#: packages/app-desktop/gui/MenuBar.js:772
+#: packages/app-desktop/gui/MenuBar.js:466
+#: packages/app-desktop/gui/MenuBar.js:717
 msgid "&Edit"
 msgstr "编辑 (&E)"
 
-#: packages/app-desktop/gui/MenuBar.js:544
+#: packages/app-desktop/gui/MenuBar.js:498
 msgid "&View"
 msgstr "视图 (&V)"
 
-#: packages/app-desktop/gui/MenuBar.js:552
+#: packages/app-desktop/gui/MenuBar.js:506
 msgid "Layout button sequence"
 msgstr "布局按钮序列"
 
-#: packages/app-desktop/gui/MenuBar.js:597
-#: packages/app-desktop/gui/MenuBar.js:603
+#: packages/app-desktop/gui/MenuBar.js:551
+#: packages/app-desktop/gui/MenuBar.js:557
 msgid "Zoom In"
 msgstr "放大"
 
-#: packages/app-desktop/gui/MenuBar.js:610
+#: packages/app-desktop/gui/MenuBar.js:564
 msgid "Zoom Out"
 msgstr "缩小"
 
-#: packages/app-desktop/gui/MenuBar.js:619
+#: packages/app-desktop/gui/MenuBar.js:573
 msgid "&Go"
 msgstr "跳转 (&G)"
 
-#: packages/app-desktop/gui/MenuBar.js:625
+#: packages/app-desktop/gui/MenuBar.js:579
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteBody.js:17
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteTitle.js:17
 #: packages/app-desktop/gui/NoteList/commands/focusElementNoteList.js:18
@@ -1766,32 +1822,32 @@ msgstr "跳转 (&G)"
 msgid "Focus"
 msgstr "聚焦于"
 
-#: packages/app-desktop/gui/MenuBar.js:631
+#: packages/app-desktop/gui/MenuBar.js:585
 msgid "Note&book"
 msgstr "笔记本 (&B)"
 
-#: packages/app-desktop/gui/MenuBar.js:637
+#: packages/app-desktop/gui/MenuBar.js:591
 msgid "&Note"
 msgstr "笔记 (&N)"
 
-#: packages/app-desktop/gui/MenuBar.js:647
+#: packages/app-desktop/gui/MenuBar.js:601
 msgid "&Tools"
 msgstr "工具 (&T)"
 
-#: packages/app-desktop/gui/MenuBar.js:651
+#: packages/app-desktop/gui/MenuBar.js:605
 msgid "&Help"
 msgstr "帮助 (&H)"
 
-#: packages/app-desktop/gui/MenuBar.js:658
+#: packages/app-desktop/gui/MenuBar.js:612
 msgid "Joplin Forum"
 msgstr "Joplin 论坛"
 
-#: packages/app-desktop/gui/MenuBar.js:661
-#: packages/app-mobile/components/screens/ConfigScreen.js:425
+#: packages/app-desktop/gui/MenuBar.js:615
+#: packages/app-mobile/components/screens/ConfigScreen.js:454
 msgid "Make a donation"
 msgstr "捐助"
 
-#: packages/app-desktop/gui/MenuBar.js:673
+#: packages/app-desktop/gui/MenuBar.js:627
 msgid "Toggle development tools"
 msgstr "打开/关闭开发者工具"
 
@@ -1812,14 +1868,14 @@ msgid "Lines"
 msgstr "行"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.js:98
-#: packages/lib/models/Setting.js:539 packages/lib/models/Setting.js:540
-#: packages/lib/models/Setting.js:541
+#: packages/lib/models/Setting.js:554 packages/lib/models/Setting.js:555
+#: packages/lib/models/Setting.js:556
 msgid "Editor"
 msgstr "编辑器"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.js:99
-#: packages/lib/models/Setting.js:539 packages/lib/models/Setting.js:540
-#: packages/lib/models/Setting.js:542
+#: packages/lib/models/Setting.js:554 packages/lib/models/Setting.js:555
+#: packages/lib/models/Setting.js:557
 msgid "Viewer"
 msgstr "查看器"
 
@@ -1835,79 +1891,80 @@ msgstr "统计数据"
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.js:113
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:260
 #: packages/app-desktop/gui/ShareNoteDialog.js:192
+#: packages/app-desktop/gui/SyncWizard/Dialog.js:280
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:24
 msgid "Close"
 msgstr "关闭"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:183
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:184
 msgid "strong text"
 msgstr "加粗文本"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:184
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:185
 msgid "emphasised text"
 msgstr "强调文本"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:186
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:187
 msgid "Insert Hyperlink"
 msgstr "插入超链接"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:220
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:222
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:221
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:223
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:224
 msgid "List item"
 msgstr "列表项"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:552
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:574
 msgid "Layout"
 msgstr "布局"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:552
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:574
 #, javascript-format
 msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
 "note."
 msgstr "该笔记没有任何内容。点击 \"%s\" 切换到编辑器并编辑笔记。"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:661
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:695
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:18
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:128
 msgid "Cut"
 msgstr "剪切"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:675
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:709
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:23
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:143
 msgid "Paste"
 msgstr "粘贴"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:520
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:518
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:53
 #: packages/app-mobile/components/screens/Note.js:801
 msgid "Attach file"
 msgstr "附加文件"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:530
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:528
 msgid "Code Block"
 msgstr "代码块"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:539
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:537
 msgid "Inline Code"
 msgstr "内联代码"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:554
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:552
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:83
 msgid "Insert Date Time"
 msgstr "插入时间"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1004
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1008
 msgid "Drop notes or files here"
 msgstr "将笔记或文件拖到此处"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1004
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1008
 msgid "Code View"
 msgstr "代码视图"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1004
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1008
 #, javascript-format
 msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
@@ -1947,31 +2004,31 @@ msgstr "订阅"
 msgid "Click to add tags..."
 msgstr "单击以添加标签..."
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:338
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:339
 msgid ""
 "This Rich Text editor has a number of limitations and it is recommended to "
 "be aware of them before using it."
 msgstr "此富文本编辑器有许多限制，建议在使用它之前注意它们。"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:342
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:343
 msgid "Read more about it"
 msgstr "进一步了解"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:347
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:348
 msgid "Dismiss"
 msgstr "忽略"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:383
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:384
 msgid "The following attachments are being watched for changes:"
 msgstr "下列附件将被监控变化："
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:386
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:387
 msgid ""
 "The attachments will no longer be watched when you switch to a different "
 "note."
 msgstr "当您切换到其他笔记时，这些附件将不再被监控。"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:392
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:393
 #, javascript-format
 msgid "In: %s"
 msgstr "位于：%s"
@@ -1981,8 +2038,8 @@ msgid "to-do"
 msgstr "待办事项"
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.js:79
-#: packages/server/dist/models/UserModel.js:189
-#: packages/server/dist/models/UserModel.js:194
+#: packages/server/dist/models/UserModel.js:196
+#: packages/server/dist/models/UserModel.js:201
 msgid "note"
 msgstr "笔记"
 
@@ -2127,7 +2184,7 @@ msgid "View"
 msgstr "视图"
 
 #: packages/app-desktop/gui/NoteList/NoteList.js:163
-#: packages/lib/models/Setting.js:555
+#: packages/lib/models/Setting.js:570
 msgid "Sort notes by"
 msgstr "笔记排序方式"
 
@@ -2169,7 +2226,7 @@ msgid "URL"
 msgstr "URL"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:34
-#: packages/lib/models/Setting.js:1666
+#: packages/lib/models/Setting.js:1693
 msgid "Note History"
 msgstr "笔记历史"
 
@@ -2211,8 +2268,8 @@ msgid "Action"
 msgstr "动作"
 
 #: packages/app-desktop/gui/ResourceScreen.js:43
-#: packages/lib/models/BaseItem.js:720 packages/lib/path-utils.js:83
-#: packages/lib/path-utils.js:118
+#: packages/lib/models/BaseItem.js:722 packages/lib/path-utils.js:90
+#: packages/lib/path-utils.js:131
 msgid "Untitled"
 msgstr "无标题"
 
@@ -2237,27 +2294,27 @@ msgstr "没有资源！"
 msgid "Warning: not all resources shown for performance reasons (limit: %s)."
 msgstr "警告: 由于性能原因无法显示所有资源 (最多：%s)。"
 
-#: packages/app-desktop/gui/Root.js:98
+#: packages/app-desktop/gui/Root.js:106
 msgid "Confirmation"
 msgstr "确认"
 
-#: packages/app-desktop/gui/Root.js:111
+#: packages/app-desktop/gui/Root.js:119
 msgid "The Web Clipper needs your authorisation to access your data."
 msgstr "Web Clipper 需要你的授权才能访问你的数据。"
 
-#: packages/app-desktop/gui/Root.js:112
+#: packages/app-desktop/gui/Root.js:120
 msgid "Grant authorisation"
 msgstr "授权令牌"
 
-#: packages/app-desktop/gui/Root.js:136
+#: packages/app-desktop/gui/Root.js:160
 msgid "OneDrive Login"
 msgstr "登录 OneDrive"
 
-#: packages/app-desktop/gui/Root.js:137
+#: packages/app-desktop/gui/Root.js:161
 msgid "Dropbox Login"
 msgstr "登录 Dropbox"
 
-#: packages/app-desktop/gui/Root.js:140
+#: packages/app-desktop/gui/Root.js:164
 msgid "Note attachments"
 msgstr "笔记附件"
 
@@ -2380,7 +2437,7 @@ msgstr "全部笔记"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:455
 #: packages/app-mobile/components/side-menu-content.js:338
-#: packages/lib/commands/synchronize.js:18
+#: packages/lib/commands/synchronize.js:19
 msgid "Synchronise"
 msgstr "同步"
 
@@ -2427,6 +2484,57 @@ msgstr "高级工具"
 msgid "Export debug report"
 msgstr "导出调试报告"
 
+#: packages/app-desktop/gui/SyncWizard/Dialog.js:157
+#, fuzzy
+msgid "Sync your notes"
+msgstr "笔记排序方式"
+
+#: packages/app-desktop/gui/SyncWizard/Dialog.js:158
+msgid "Publish notes to the internet"
+msgstr ""
+
+#: packages/app-desktop/gui/SyncWizard/Dialog.js:159
+#, fuzzy
+msgid "Collaborate on notebooks with others"
+msgstr "请先创建一本笔记本"
+
+#: packages/app-desktop/gui/SyncWizard/Dialog.js:182
+msgid "Thank you! Your Joplin Cloud account is now setup and ready to use."
+msgstr ""
+
+#: packages/app-desktop/gui/SyncWizard/Dialog.js:190
+#, javascript-format
+msgid ""
+"There was an error setting up your Joplin Cloud account. Please verify your "
+"email and password and try again. Error was:\n"
+"\n"
+"%s"
+msgstr ""
+
+#: packages/app-desktop/gui/SyncWizard/Dialog.js:203
+msgid "Login below."
+msgstr ""
+
+#: packages/app-desktop/gui/SyncWizard/Dialog.js:205
+#, fuzzy
+msgid "Or create an account."
+msgstr "新建笔记。"
+
+#: packages/app-desktop/gui/SyncWizard/Dialog.js:210
+msgid "Login"
+msgstr ""
+
+#: packages/app-desktop/gui/SyncWizard/Dialog.js:231
+#, fuzzy
+msgid "Select"
+msgstr "全选"
+
+#: packages/app-desktop/gui/SyncWizard/Dialog.js:278
+msgid ""
+"Joplin can synchronise your notes using various providers. Select one from "
+"the list below."
+msgstr ""
+
 #: packages/app-desktop/gui/utils/NoteListUtils.js:43
 msgid "Duplicate"
 msgstr "复制"
@@ -2453,17 +2561,17 @@ msgstr "切换为待办事项"
 msgid "Copy Markdown link"
 msgstr "复制 Markdown 链接"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:163
+#: packages/app-desktop/gui/utils/NoteListUtils.js:165
 #, javascript-format
 msgid "Delete note \"%s\"?"
 msgstr "是否删除笔记“%s”？"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:166
+#: packages/app-desktop/gui/utils/NoteListUtils.js:168
 #, javascript-format
 msgid "Delete these %d notes?"
 msgstr "是否删除这 %d 条笔记？"
 
-#: packages/app-desktop/plugins/GotoAnything.js:455
+#: packages/app-desktop/plugins/GotoAnything.js:471
 msgid ""
 "Type a note title or part of its content to jump to it. Or type # followed "
 "by a tag name, or @ followed by a notebook name. Or type : to search for "
@@ -2471,6 +2579,10 @@ msgid ""
 msgstr ""
 "输入笔记标题或部分内容以转跳到它。或者输入 # 跟着一个标签名，或者输入 @ 跟着"
 "一个笔记本名字，或者输入 : 以搜索命令。"
+
+#: packages/app-desktop/plugins/GotoAnything.js:505
+msgid "Command palette"
+msgstr "命令面板"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:22
 #: packages/app-mobile/components/screens/Note.js:530
@@ -2516,86 +2628,86 @@ msgstr "新建笔记本"
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr "当前没有任何笔记。点击 (+) 按钮创建。"
 
-#: packages/app-mobile/components/screen-header.js:185
+#: packages/app-mobile/components/screen-header.js:187
 msgid "Delete these notes?"
 msgstr "是否删除这些笔记？"
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:61
+#: packages/app-mobile/components/screens/ConfigScreen.js:60
 msgid "Warning"
 msgstr "警告"
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:61
-#: packages/app-mobile/components/screens/ConfigScreen.js:151
+#: packages/app-mobile/components/screens/ConfigScreen.js:60
+#: packages/app-mobile/components/screens/ConfigScreen.js:153
 msgid ""
 "In order to use file system synchronisation your permission to write to "
 "external storage is required."
 msgstr "要使用文件系统同步，您需要写入外部存储的权限。"
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:150
+#: packages/app-mobile/components/screens/ConfigScreen.js:152
 msgid "Information"
 msgstr "说明"
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:283
-#: packages/app-mobile/components/screens/encryption-config.js:264
+#: packages/app-mobile/components/screens/ConfigScreen.js:312
+#: packages/app-mobile/components/screens/encryption-config.js:215
 msgid "Encryption Config"
 msgstr "加密配置"
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:388
+#: packages/app-mobile/components/screens/ConfigScreen.js:417
 msgid "Tools"
 msgstr "工具"
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:389
+#: packages/app-mobile/components/screens/ConfigScreen.js:418
 msgid "Sync Status"
 msgstr "同步状态"
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:390
+#: packages/app-mobile/components/screens/ConfigScreen.js:419
 msgid "Log"
 msgstr "日志"
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:392
+#: packages/app-mobile/components/screens/ConfigScreen.js:421
 msgid "Creating report..."
 msgstr "新建报告..."
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:392
+#: packages/app-mobile/components/screens/ConfigScreen.js:421
 msgid "Export Debug Report"
 msgstr "导出调试报告"
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:394
+#: packages/app-mobile/components/screens/ConfigScreen.js:423
 msgid "Fixing search index..."
 msgstr "正在修复搜索索引..."
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:394
+#: packages/app-mobile/components/screens/ConfigScreen.js:423
 msgid "Fix search index"
 msgstr "修复搜索索引"
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:394
+#: packages/app-mobile/components/screens/ConfigScreen.js:423
 msgid ""
 "Use this to rebuild the search index if there is a problem with search. It "
 "may take a long time depending on the number of notes."
 msgstr ""
 "如果搜索功能遇到问题，可以使用这个重建索引。花费的时间取决于笔记的数量。"
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:396
+#: packages/app-mobile/components/screens/ConfigScreen.js:425
 msgid "Exporting profile..."
 msgstr "正在导出配置文件..."
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:396
+#: packages/app-mobile/components/screens/ConfigScreen.js:425
 msgid "Export profile"
 msgstr "导出配置文件"
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:396
+#: packages/app-mobile/components/screens/ConfigScreen.js:425
 msgid "For debugging purpose only: export your profile to an external SD card."
 msgstr "仅用于调试目的：将您的配置文件导出到外部 SD 卡。"
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:407
+#: packages/app-mobile/components/screens/ConfigScreen.js:436
 msgid "Feature flags"
 msgstr "特性标志"
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:410
+#: packages/app-mobile/components/screens/ConfigScreen.js:439
 msgid "More information"
 msgstr "更多信息"
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:416
+#: packages/app-mobile/components/screens/ConfigScreen.js:445
 msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
 "them in your phone settings, in Apps > Joplin > Permissions"
@@ -2603,39 +2715,39 @@ msgstr ""
 "本应用程序需要下列权限才能正常运作。请在您的手机设置 (应用 > Joplin > 权限) "
 "中启用它们"
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:417
+#: packages/app-mobile/components/screens/ConfigScreen.js:446
 msgid ""
 "- Storage: to allow attaching files to notes and to enable filesystem "
 "synchronisation."
 msgstr "- 存储：允许将文件附加到笔记中和启用文件系统同步。"
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:418
+#: packages/app-mobile/components/screens/ConfigScreen.js:447
 msgid "- Camera: to allow taking a picture and attaching it to a note."
 msgstr "- 相机：允许拍照并将照片添加到一条笔记中。"
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:419
+#: packages/app-mobile/components/screens/ConfigScreen.js:448
 msgid "- Location: to allow attaching geo-location information to a note."
 msgstr "- 定位：允许将地理位置信息附加到一条笔记中。"
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:430
+#: packages/app-mobile/components/screens/ConfigScreen.js:459
 msgid "Joplin website"
 msgstr "Joplin 官网"
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:435
+#: packages/app-mobile/components/screens/ConfigScreen.js:464
 msgid "Privacy Policy"
 msgstr "隐私政策"
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:439
+#: packages/app-mobile/components/screens/ConfigScreen.js:468
 #, javascript-format
 msgid "Database v%s"
 msgstr "数据库 v%s"
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:441
+#: packages/app-mobile/components/screens/ConfigScreen.js:470
 #, javascript-format
 msgid "FTS enabled: %d"
 msgstr "FTS 已开启: %d"
 
-#: packages/app-mobile/components/screens/ConfigScreen.js:443
+#: packages/app-mobile/components/screens/ConfigScreen.js:472
 #: packages/app-mobile/components/side-menu-content.js:316
 msgid "Configuration"
 msgstr "配置"
@@ -2701,7 +2813,7 @@ msgid "Unsupported image type: %s"
 msgstr "不支持的图片类型：%s"
 
 #: packages/app-mobile/components/screens/Note.js:750
-#: packages/app-mobile/components/screens/encryption-config.js:120
+#: packages/app-mobile/components/screens/encryption-config.js:113
 #, javascript-format
 msgid "Created: %s"
 msgstr "创建于：%s"
@@ -2755,11 +2867,11 @@ msgstr "添加内容"
 msgid "Add title"
 msgstr "添加标题"
 
-#: packages/app-mobile/components/screens/NoteTagsDialog.js:163
+#: packages/app-mobile/components/screens/NoteTagsDialog.js:165
 msgid "New tags:"
 msgstr "新建标签："
 
-#: packages/app-mobile/components/screens/NoteTagsDialog.js:178
+#: packages/app-mobile/components/screens/NoteTagsDialog.js:180
 msgid "Type new tags or select from list"
 msgstr "输入新的标签或从列表中选择"
 
@@ -2775,27 +2887,23 @@ msgstr "通过 Dropbox 登录"
 msgid "Enter code here"
 msgstr "在此输入代码"
 
-#: packages/app-mobile/components/screens/encryption-config.js:119
+#: packages/app-mobile/components/screens/encryption-config.js:112
 #, javascript-format
 msgid "Master Key %s"
 msgstr "主密钥 %s"
 
-#: packages/app-mobile/components/screens/encryption-config.js:122
-#: packages/app-mobile/components/screens/encryption-config.js:151
+#: packages/app-mobile/components/screens/encryption-config.js:115
+#: packages/app-mobile/components/screens/encryption-config.js:147
 msgid "Password:"
 msgstr "密码："
 
-#: packages/app-mobile/components/screens/encryption-config.js:137
+#: packages/app-mobile/components/screens/encryption-config.js:127
 msgid "Password cannot be empty"
 msgstr "密码不可为空"
 
-#: packages/app-mobile/components/screens/encryption-config.js:139
+#: packages/app-mobile/components/screens/encryption-config.js:130
 msgid "Confirm password cannot be empty"
 msgstr "确保密码不可为空"
-
-#: packages/app-mobile/components/screens/encryption-config.js:177
-msgid "Enable"
-msgstr "启用"
 
 #: packages/app-mobile/components/screens/folder.js:87
 #, javascript-format
@@ -2840,13 +2948,13 @@ msgstr "新建笔记本"
 msgid "Mobile data - auto-sync disabled"
 msgstr "手机数据自动同步被禁用"
 
-#: packages/lib/BaseApplication.js:152 packages/lib/BaseApplication.js:164
-#: packages/lib/BaseApplication.js:196
+#: packages/lib/BaseApplication.js:154 packages/lib/BaseApplication.js:166
+#: packages/lib/BaseApplication.js:198
 #, javascript-format
 msgid "Usage: %s"
 msgstr "使用情况：%s"
 
-#: packages/lib/BaseApplication.js:231
+#: packages/lib/BaseApplication.js:233
 #, javascript-format
 msgid "Unknown flag: %s"
 msgstr "未知标记：%s"
@@ -2879,13 +2987,23 @@ msgstr "文件系统"
 msgid "Joplin Cloud"
 msgstr "Joplin 论坛"
 
-#: packages/lib/SyncTargetJoplinServer.js:57
+#: packages/lib/SyncTargetJoplinCloud.js:31
+msgid ""
+"Joplin's own sync service. Also gives access to Joplin-specific features "
+"such as publishing notes or collaborating on notebooks with others."
+msgstr ""
+
+#: packages/lib/SyncTargetJoplinServer.js:60
 msgid "Joplin Server"
 msgstr "Joplin 服务器"
 
 #: packages/lib/SyncTargetNextcloud.js:25
 msgid "Nextcloud"
 msgstr "Nextcloud"
+
+#: packages/lib/SyncTargetNone.js:22
+msgid "(None)"
+msgstr ""
 
 #: packages/lib/SyncTargetOneDrive.js:32
 msgid "OneDrive"
@@ -2895,64 +3013,64 @@ msgstr "OneDrive"
 msgid "WebDAV"
 msgstr "WebDAV"
 
-#: packages/lib/Synchronizer.js:140
+#: packages/lib/Synchronizer.js:143
 #, javascript-format
 msgid "Created local items: %d."
 msgstr "已新建本地项目: %d。"
 
-#: packages/lib/Synchronizer.js:142
+#: packages/lib/Synchronizer.js:145
 #, javascript-format
 msgid "Updated local items: %d."
 msgstr "已更新本地项目: %d。"
 
-#: packages/lib/Synchronizer.js:144
+#: packages/lib/Synchronizer.js:147
 #, javascript-format
 msgid "Created remote items: %d."
 msgstr "已新建远程项目: %d。"
 
-#: packages/lib/Synchronizer.js:146
+#: packages/lib/Synchronizer.js:149
 #, javascript-format
 msgid "Updated remote items: %d."
 msgstr "已更新远程项目: %d。"
 
-#: packages/lib/Synchronizer.js:148
+#: packages/lib/Synchronizer.js:151
 #, javascript-format
 msgid "Deleted local items: %d."
 msgstr "已删除本地项目: %d。"
 
-#: packages/lib/Synchronizer.js:150
+#: packages/lib/Synchronizer.js:153
 #, javascript-format
 msgid "Deleted remote items: %d."
 msgstr "已删除远程项目: %d。"
 
-#: packages/lib/Synchronizer.js:152
+#: packages/lib/Synchronizer.js:155
 #, javascript-format
 msgid "Fetched items: %d/%d."
 msgstr "已获取项目: %d/%d."
 
-#: packages/lib/Synchronizer.js:154
+#: packages/lib/Synchronizer.js:157
 msgid "Cancelling..."
 msgstr "正在取消..."
 
-#: packages/lib/Synchronizer.js:156
+#: packages/lib/Synchronizer.js:159
 #, javascript-format
 msgid "Completed: %s (%s)"
 msgstr "已完成: %s（%s）"
 
-#: packages/lib/Synchronizer.js:158
+#: packages/lib/Synchronizer.js:161
 #, javascript-format
 msgid "Last error: %s"
 msgstr "最后错误: %s"
 
-#: packages/lib/Synchronizer.js:272
+#: packages/lib/Synchronizer.js:275
 msgid "Idle"
 msgstr "空闲"
 
-#: packages/lib/Synchronizer.js:274
+#: packages/lib/Synchronizer.js:277
 msgid "In progress"
 msgstr "正在进行"
 
-#: packages/lib/Synchronizer.js:923
+#: packages/lib/Synchronizer.js:984
 msgid ""
 "Unknown item type downloaded - please upgrade Joplin to the latest version"
 msgstr "已下载项目为未知类型，请将 Joplin 升级至最新版本"
@@ -2996,40 +3114,45 @@ msgstr ""
 "\n"
 "请重试。"
 
-#: packages/lib/components/shared/encryption-config-shared.js:33
+#: packages/lib/components/shared/encryption-config-shared.js:50
 msgid ""
 "Please confirm that you would like to re-encrypt your complete database."
 msgstr "请确认您要重新加密整个数据库。"
 
-#: packages/lib/components/shared/encryption-config-shared.js:39
+#: packages/lib/components/shared/encryption-config-shared.js:56
 msgid "Your data is going to be re-encrypted and synced again."
 msgstr "您的数据将被重新加密并再次同步。"
 
-#: packages/lib/components/shared/encryption-config-shared.js:49
+#: packages/lib/components/shared/encryption-config-shared.js:66
 msgid ""
 "Please enter your password in the master key list below before upgrading the "
 "key."
 msgstr "在升级密钥之前，请在下面的主密钥列表中输入您的密码。"
 
-#: packages/lib/components/shared/encryption-config-shared.js:58
+#: packages/lib/components/shared/encryption-config-shared.js:74
 msgid "The master key has been upgraded successfully!"
 msgstr "主密钥已成功升级！"
 
-#: packages/lib/components/shared/encryption-config-shared.js:60
+#: packages/lib/components/shared/encryption-config-shared.js:77
 #, javascript-format
 msgid "Could not upgrade master key: %s"
 msgstr "无法升级主密钥：%s"
 
-#: packages/lib/components/shared/encryption-config-shared.js:116
+#: packages/lib/components/shared/encryption-config-shared.js:127
 #, javascript-format
 msgid "Decrypted items: %s / %s"
 msgstr "已解密条目： %s / %s"
 
-#: packages/lib/models/BaseItem.js:719
+#: packages/lib/components/shared/encryption-config-shared.js:151
+#, javascript-format
+msgid "Encryption will be enabled using the master key created on %s"
+msgstr ""
+
+#: packages/lib/models/BaseItem.js:721
 msgid "Encrypted"
 msgstr "已加密"
 
-#: packages/lib/models/BaseItem.js:780
+#: packages/lib/models/BaseItem.js:782
 msgid "Encrypted items cannot be modified"
 msgstr "无法修改已加密的条目"
 
@@ -3076,28 +3199,33 @@ msgstr "无法复制笔记到笔记本 \"%s\""
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "无法移动笔记到笔记本 \"%s\""
 
-#: packages/lib/models/Resource.js:353
+#: packages/lib/models/Resource.js:354
 msgid "Not downloaded"
 msgstr "未下载"
 
-#: packages/lib/models/Resource.js:355
+#: packages/lib/models/Resource.js:356
 msgid "Downloading"
 msgstr "下载中"
 
-#: packages/lib/models/Resource.js:357
+#: packages/lib/models/Resource.js:358
 msgid "Downloaded"
 msgstr "已下载"
 
-#: packages/lib/models/Resource.js:359
+#: packages/lib/models/Resource.js:360
 msgid "Error"
 msgstr "错误"
 
-#: packages/lib/models/Resource.js:404
+#: packages/lib/models/Resource.js:408
+#, fuzzy
+msgid "Conflicts (attachments)"
+msgstr "笔记附件"
+
+#: packages/lib/models/Resource.js:422
 #, javascript-format
 msgid "Attachment conflict: \"%s\""
 msgstr "附件冲突：“%s”"
 
-#: packages/lib/models/Resource.js:405
+#: packages/lib/models/Resource.js:423
 #, javascript-format
 msgid ""
 "There was a [conflict](%s) on the attachment below.\n"
@@ -3108,20 +3236,20 @@ msgstr ""
 "\n"
 "%s"
 
-#: packages/lib/models/Setting.js:109
+#: packages/lib/models/Setting.js:115
 msgid "yes"
 msgstr "是"
 
-#: packages/lib/models/Setting.js:109 packages/lib/models/Setting.js:110
+#: packages/lib/models/Setting.js:115 packages/lib/models/Setting.js:116
 #, javascript-format
 msgid "(wysiwyg: %s)"
 msgstr "(兼容所见即所得编辑器: %s)"
 
-#: packages/lib/models/Setting.js:110
+#: packages/lib/models/Setting.js:116
 msgid "no"
 msgstr "否"
 
-#: packages/lib/models/Setting.js:112
+#: packages/lib/models/Setting.js:118
 #, javascript-format
 msgid ""
 "Attention: If you change this location, make sure you copy all your content "
@@ -3131,43 +3259,47 @@ msgstr ""
 "注意: 如果您更改该位置，请确保在同步之前将所有内容复制到该位置，否则将删除所"
 "有文件！ 更多详细信息请参阅常见问题解答 (FAQ) : %s"
 
-#: packages/lib/models/Setting.js:118
+#: packages/lib/models/Setting.js:124
 msgid "Light"
 msgstr "明亮"
 
-#: packages/lib/models/Setting.js:119
+#: packages/lib/models/Setting.js:125
 msgid "Dark"
 msgstr "暗黑"
 
-#: packages/lib/models/Setting.js:120
+#: packages/lib/models/Setting.js:126
 msgid "Dracula"
 msgstr "德古拉紫 (Dracula)"
 
-#: packages/lib/models/Setting.js:121
+#: packages/lib/models/Setting.js:127
 msgid "Solarised Light"
 msgstr "日光亮 (Solarised)"
 
-#: packages/lib/models/Setting.js:122
+#: packages/lib/models/Setting.js:128
 msgid "Solarised Dark"
 msgstr "日光暗 (Solarised)"
 
-#: packages/lib/models/Setting.js:123
+#: packages/lib/models/Setting.js:129
 msgid "Nord"
 msgstr "北欧 (Nord)"
 
-#: packages/lib/models/Setting.js:124
+#: packages/lib/models/Setting.js:130
 msgid "Aritim Dark"
 msgstr "暗黑 (Aritim)"
 
-#: packages/lib/models/Setting.js:125
+#: packages/lib/models/Setting.js:131
 msgid "OLED Dark"
 msgstr "纯黑 (OLED)"
 
-#: packages/lib/models/Setting.js:147
+#: packages/lib/models/Setting.js:152
+msgid "Open Sync Wizard..."
+msgstr ""
+
+#: packages/lib/models/Setting.js:162
 msgid "Synchronisation target"
 msgstr "同步目标"
 
-#: packages/lib/models/Setting.js:149
+#: packages/lib/models/Setting.js:164
 msgid ""
 "The target to synchronise to. Each sync target may have additional "
 "parameters which are named as `sync.NUM.NAME` (all documented below)."
@@ -3175,75 +3307,75 @@ msgstr ""
 "所要同步的目标。每个同步目标都可能有名为 `sync.NUM.NAME` 的附加参数 (见下"
 "文) 。"
 
-#: packages/lib/models/Setting.js:182
+#: packages/lib/models/Setting.js:197
 msgid "Directory to synchronise with (absolute path)"
 msgstr "同步目录 (绝对路径)"
 
-#: packages/lib/models/Setting.js:194
+#: packages/lib/models/Setting.js:209
 msgid "Nextcloud WebDAV URL"
 msgstr "Nextcloud WebDAV URL"
 
-#: packages/lib/models/Setting.js:206
+#: packages/lib/models/Setting.js:221
 msgid "Nextcloud username"
 msgstr "Nextcloud 用户名"
 
-#: packages/lib/models/Setting.js:217
+#: packages/lib/models/Setting.js:232
 msgid "Nextcloud password"
 msgstr "Nextcloud 密码"
 
-#: packages/lib/models/Setting.js:228
+#: packages/lib/models/Setting.js:243
 msgid "WebDAV URL"
 msgstr "WebDAV URL"
 
-#: packages/lib/models/Setting.js:240
+#: packages/lib/models/Setting.js:255
 msgid "WebDAV username"
 msgstr "WebDAV 用户名"
 
-#: packages/lib/models/Setting.js:251
+#: packages/lib/models/Setting.js:266
 msgid "WebDAV password"
 msgstr "WebDAV 密码"
 
-#: packages/lib/models/Setting.js:270
+#: packages/lib/models/Setting.js:285
 msgid "AWS S3 bucket"
 msgstr "AWS S3 存储桶"
 
-#: packages/lib/models/Setting.js:282
+#: packages/lib/models/Setting.js:297
 msgid "AWS S3 URL"
 msgstr "AWS S3 URL"
 
-#: packages/lib/models/Setting.js:293
+#: packages/lib/models/Setting.js:308
 msgid "AWS key"
 msgstr "AWS 密钥"
 
-#: packages/lib/models/Setting.js:304
+#: packages/lib/models/Setting.js:319
 msgid "AWS secret"
 msgstr "AWS 密码"
 
-#: packages/lib/models/Setting.js:315
+#: packages/lib/models/Setting.js:330
 msgid "Joplin Server URL"
 msgstr "Joplin 服务器 URL"
 
-#: packages/lib/models/Setting.js:333
+#: packages/lib/models/Setting.js:348
 msgid "Joplin Server email"
 msgstr "Joplin Server 邮箱"
 
-#: packages/lib/models/Setting.js:344
+#: packages/lib/models/Setting.js:359
 msgid "Joplin Server password"
 msgstr "Joplin 服务器密码"
 
-#: packages/lib/models/Setting.js:371
+#: packages/lib/models/Setting.js:386
 msgid "Joplin Cloud email"
 msgstr "Joplin 论坛邮箱"
 
-#: packages/lib/models/Setting.js:382
+#: packages/lib/models/Setting.js:397
 msgid "Joplin Cloud password"
 msgstr "Joplin 论坛密码"
 
-#: packages/lib/models/Setting.js:394
+#: packages/lib/models/Setting.js:409
 msgid "Attachment download behaviour"
 msgstr "附件下载行为"
 
-#: packages/lib/models/Setting.js:395
+#: packages/lib/models/Setting.js:410
 msgid ""
 "In \"Manual\" mode, attachments are downloaded only when you click on them. "
 "In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
@@ -3252,195 +3384,195 @@ msgstr ""
 "在“手动”模式下，只有单击附件时才会下载它们。在“自动”中，当你打开笔记时，它们"
 "就会被下载下来。在 “总是”中，无论你是否打开笔记，所有的附件都会被下载。"
 
-#: packages/lib/models/Setting.js:398
+#: packages/lib/models/Setting.js:413
 msgid "Always"
 msgstr "总是"
 
-#: packages/lib/models/Setting.js:399
+#: packages/lib/models/Setting.js:414
 msgid "Manual"
 msgstr "手动"
 
-#: packages/lib/models/Setting.js:400
+#: packages/lib/models/Setting.js:415
 msgid "Auto"
 msgstr "自动"
 
-#: packages/lib/models/Setting.js:420
+#: packages/lib/models/Setting.js:435
 msgid "Max concurrent connections"
 msgstr "最大并发连接数"
 
-#: packages/lib/models/Setting.js:433
+#: packages/lib/models/Setting.js:448
 msgid "Language"
 msgstr "语言"
 
-#: packages/lib/models/Setting.js:444
+#: packages/lib/models/Setting.js:459
 msgid "Date format"
 msgstr "日期格式"
 
-#: packages/lib/models/Setting.js:465
+#: packages/lib/models/Setting.js:480
 msgid "Time format"
 msgstr "时间格式"
 
-#: packages/lib/models/Setting.js:484
+#: packages/lib/models/Setting.js:499
 msgid "Theme"
 msgstr "主题"
 
-#: packages/lib/models/Setting.js:495
+#: packages/lib/models/Setting.js:510
 msgid "Automatically switch theme to match system theme"
 msgstr "根据系统主题自动切换"
 
-#: packages/lib/models/Setting.js:507
+#: packages/lib/models/Setting.js:522
 msgid "Preferred light theme"
 msgstr "首选亮色主题"
 
-#: packages/lib/models/Setting.js:521
+#: packages/lib/models/Setting.js:536
 msgid "Preferred dark theme"
 msgstr "首选暗色主题"
 
-#: packages/lib/models/Setting.js:531
+#: packages/lib/models/Setting.js:546
 msgid "Show note counts"
 msgstr "显示笔记数"
 
-#: packages/lib/models/Setting.js:539 packages/lib/models/Setting.js:541
-#: packages/lib/models/Setting.js:542
+#: packages/lib/models/Setting.js:554 packages/lib/models/Setting.js:556
+#: packages/lib/models/Setting.js:557
 msgid "Split View"
 msgstr "分栏视图"
 
-#: packages/lib/models/Setting.js:539
+#: packages/lib/models/Setting.js:554
 #, javascript-format
 msgid "%s / %s / %s"
 msgstr "%s / %s / %s"
 
-#: packages/lib/models/Setting.js:540 packages/lib/models/Setting.js:541
-#: packages/lib/models/Setting.js:542
+#: packages/lib/models/Setting.js:555 packages/lib/models/Setting.js:556
+#: packages/lib/models/Setting.js:557
 #, javascript-format
 msgid "%s / %s"
 msgstr "%s / %s"
 
-#: packages/lib/models/Setting.js:546
+#: packages/lib/models/Setting.js:561
 msgid "Uncompleted to-dos on top"
 msgstr "置顶未完成待办事项"
 
-#: packages/lib/models/Setting.js:547
+#: packages/lib/models/Setting.js:562
 msgid "Show completed to-dos"
 msgstr "显示已完成待办事项"
 
-#: packages/lib/models/Setting.js:573
+#: packages/lib/models/Setting.js:588
 msgid "Auto-pair braces, parenthesis, quotations, etc."
 msgstr "自动配对花括号、圆括号、引号等。"
 
-#: packages/lib/models/Setting.js:576 packages/lib/models/Setting.js:595
+#: packages/lib/models/Setting.js:591 packages/lib/models/Setting.js:610
 msgid "Reverse sort order"
 msgstr "倒序"
 
-#: packages/lib/models/Setting.js:583
+#: packages/lib/models/Setting.js:598
 msgid "Sort notebooks by"
 msgstr "笔记本排序方式"
 
-#: packages/lib/models/Setting.js:596
+#: packages/lib/models/Setting.js:611
 msgid "Save geo-location with notes"
 msgstr "保存地理位置信息到笔记中"
 
-#: packages/lib/models/Setting.js:618
+#: packages/lib/models/Setting.js:633
 msgid "When creating a new to-do:"
 msgstr "当新建待办事项时："
 
-#: packages/lib/models/Setting.js:621 packages/lib/models/Setting.js:637
+#: packages/lib/models/Setting.js:636 packages/lib/models/Setting.js:652
 msgid "Focus title"
 msgstr "聚焦标题"
 
-#: packages/lib/models/Setting.js:622 packages/lib/models/Setting.js:638
+#: packages/lib/models/Setting.js:637 packages/lib/models/Setting.js:653
 msgid "Focus body"
 msgstr "聚焦正文"
 
-#: packages/lib/models/Setting.js:634
+#: packages/lib/models/Setting.js:649
 msgid "When creating a new note:"
 msgstr "当新建笔记时："
 
-#: packages/lib/models/Setting.js:667
+#: packages/lib/models/Setting.js:682
 msgid "Enable soft breaks"
 msgstr "启动软换行"
 
-#: packages/lib/models/Setting.js:668
+#: packages/lib/models/Setting.js:683
 msgid "Enable typographer support"
 msgstr "启用 Typographer 支持"
 
-#: packages/lib/models/Setting.js:669
+#: packages/lib/models/Setting.js:684
 msgid "Enable Linkify"
 msgstr "启用自动链接"
 
-#: packages/lib/models/Setting.js:670
+#: packages/lib/models/Setting.js:685
 msgid "Enable math expressions"
 msgstr "启用数学表达式"
 
-#: packages/lib/models/Setting.js:671
+#: packages/lib/models/Setting.js:686
 msgid "Enable Fountain syntax support"
 msgstr "启用 Fountain 语法支持"
 
-#: packages/lib/models/Setting.js:672
+#: packages/lib/models/Setting.js:687
 msgid "Enable Mermaid diagrams support"
 msgstr "启用 Mermaid 流程图支持"
 
-#: packages/lib/models/Setting.js:673
+#: packages/lib/models/Setting.js:688
 msgid "Enable audio player"
 msgstr "启用音频播放器"
 
-#: packages/lib/models/Setting.js:674
+#: packages/lib/models/Setting.js:689
 msgid "Enable video player"
 msgstr "启用视频播放器"
 
-#: packages/lib/models/Setting.js:675
+#: packages/lib/models/Setting.js:690
 msgid "Enable PDF viewer"
 msgstr "启用 PDF 查看器"
 
-#: packages/lib/models/Setting.js:676
+#: packages/lib/models/Setting.js:691
 msgid "Enable ==mark== syntax"
 msgstr "启用 ==mark== 语法"
 
-#: packages/lib/models/Setting.js:677
+#: packages/lib/models/Setting.js:692
 msgid "Enable footnotes"
 msgstr "启用脚注"
 
-#: packages/lib/models/Setting.js:678
+#: packages/lib/models/Setting.js:693
 msgid "Enable table of contents extension"
 msgstr "启用目录扩展"
 
-#: packages/lib/models/Setting.js:679
+#: packages/lib/models/Setting.js:694
 msgid "Enable ~sub~ syntax"
 msgstr "启用 ~sub~ 语法"
 
-#: packages/lib/models/Setting.js:680
+#: packages/lib/models/Setting.js:695
 msgid "Enable ^sup^ syntax"
 msgstr "启用 ^sup^ 语法"
 
-#: packages/lib/models/Setting.js:681
+#: packages/lib/models/Setting.js:696
 msgid "Enable deflist syntax"
 msgstr "启用清单语法"
 
-#: packages/lib/models/Setting.js:682
+#: packages/lib/models/Setting.js:697
 msgid "Enable abbreviation syntax"
 msgstr "启用缩写语法"
 
-#: packages/lib/models/Setting.js:683
+#: packages/lib/models/Setting.js:698
 msgid "Enable markdown emoji"
 msgstr "启用 Markdown Emoji"
 
-#: packages/lib/models/Setting.js:684
+#: packages/lib/models/Setting.js:699
 msgid "Enable ++insert++ syntax"
 msgstr "启用 ++insert++ 语法"
 
-#: packages/lib/models/Setting.js:685
+#: packages/lib/models/Setting.js:700
 msgid "Enable multimarkdown table extension"
 msgstr "启用 MultiMarkdown 表格扩展"
 
-#: packages/lib/models/Setting.js:696
+#: packages/lib/models/Setting.js:711
 msgid "Show tray icon"
 msgstr "显示托盘图标"
 
-#: packages/lib/models/Setting.js:698
+#: packages/lib/models/Setting.js:713
 msgid "Note: Does not work in all desktop environments."
 msgstr "注意: 在部分桌面环境下无法工作。"
 
-#: packages/lib/models/Setting.js:698
+#: packages/lib/models/Setting.js:713
 msgid ""
 "This will allow Joplin to run in the background. It is recommended to enable "
 "this setting so that your notes are constantly being synchronised, thus "
@@ -3449,39 +3581,39 @@ msgstr ""
 "这将允许 Joplin 在后台运行，如果你经常修改和同步笔记，推荐启用该设置来减少可"
 "能的冲突。"
 
-#: packages/lib/models/Setting.js:702
+#: packages/lib/models/Setting.js:717
 msgid "Start application minimised in the tray icon"
 msgstr "应用程序启动时最小化到托盘"
 
-#: packages/lib/models/Setting.js:722
+#: packages/lib/models/Setting.js:737
 msgid "Editor font size"
 msgstr "编辑器字体大小"
 
-#: packages/lib/models/Setting.js:729
+#: packages/lib/models/Setting.js:744
 msgid "Editor font"
 msgstr "编辑器字体"
 
-#: packages/lib/models/Setting.js:736 packages/lib/models/Setting.js:743
-#: packages/lib/models/Setting.js:889
+#: packages/lib/models/Setting.js:751 packages/lib/models/Setting.js:758
+#: packages/lib/models/Setting.js:905
 msgid "Default"
 msgstr "默认"
 
-#: packages/lib/models/Setting.js:754
+#: packages/lib/models/Setting.js:769
 msgid "Editor font family"
 msgstr "编辑器字体族"
 
-#: packages/lib/models/Setting.js:755
+#: packages/lib/models/Setting.js:770
 msgid ""
 "Used for most text in the markdown editor. If not found, a generic "
 "proportional (variable width) font is used."
 msgstr ""
 "用于 markdown 编辑器中的大多数文本。如果没找到，会使用默认（非等宽）字体。"
 
-#: packages/lib/models/Setting.js:764
+#: packages/lib/models/Setting.js:779
 msgid "Editor monospace font family"
 msgstr "编辑器等宽字体族"
 
-#: packages/lib/models/Setting.js:765
+#: packages/lib/models/Setting.js:780
 msgid ""
 "Used where a fixed width font is needed to lay out text legibly (e.g. "
 "tables, checkboxes, code). If not found, a generic monospace (fixed width) "
@@ -3490,64 +3622,72 @@ msgstr ""
 "用于那些需要使用固定宽度的字体来清晰地布局文本的场景（例如：表格、多选框和代"
 "码块）。如果没有找到，会使用默认（等宽）字体。"
 
-#: packages/lib/models/Setting.js:786
+#: packages/lib/models/Setting.js:783
+msgid "Editor maximum width"
+msgstr ""
+
+#: packages/lib/models/Setting.js:783
+msgid "Set it to 0 to make it take the complete available space."
+msgstr ""
+
+#: packages/lib/models/Setting.js:802
 msgid "Custom stylesheet for rendered Markdown"
 msgstr "适用于已渲染 Markdown 的自定义样式表"
 
-#: packages/lib/models/Setting.js:802
+#: packages/lib/models/Setting.js:818
 msgid "Custom stylesheet for Joplin-wide app styles"
 msgstr "适用于 Joplin 全域应用样式的自定义样式表"
 
-#: packages/lib/models/Setting.js:812
+#: packages/lib/models/Setting.js:828
 msgid "Re-upload local data to sync target"
 msgstr "重新上传本地数据到同步目标"
 
-#: packages/lib/models/Setting.js:822
+#: packages/lib/models/Setting.js:838
 msgid "Delete local data and re-download from sync target"
 msgstr "删除本地数据并从同步目标导入数据"
 
-#: packages/lib/models/Setting.js:827
+#: packages/lib/models/Setting.js:843
 msgid "Automatically update the application"
 msgstr "自动更新应用"
 
-#: packages/lib/models/Setting.js:828
+#: packages/lib/models/Setting.js:844
 msgid "Get pre-releases when checking for updates"
 msgstr "检查更新时获取预发行版本"
 
-#: packages/lib/models/Setting.js:828
+#: packages/lib/models/Setting.js:844
 #, javascript-format
 msgid "See the pre-release page for more details: %s"
 msgstr "参阅预发行页面以获得更多信息：%s"
 
-#: packages/lib/models/Setting.js:836
+#: packages/lib/models/Setting.js:852
 msgid "Synchronisation interval"
 msgstr "同步间隔"
 
-#: packages/lib/models/Setting.js:840 packages/lib/models/Setting.js:841
-#: packages/lib/models/Setting.js:842
+#: packages/lib/models/Setting.js:856 packages/lib/models/Setting.js:857
+#: packages/lib/models/Setting.js:858
 #, javascript-format
 msgid "%d minutes"
 msgstr "%d 分钟"
 
-#: packages/lib/models/Setting.js:843
+#: packages/lib/models/Setting.js:859
 #, javascript-format
 msgid "%d hour"
 msgstr "%d 小时"
 
-#: packages/lib/models/Setting.js:844 packages/lib/models/Setting.js:845
+#: packages/lib/models/Setting.js:860 packages/lib/models/Setting.js:861
 #, javascript-format
 msgid "%d hours"
 msgstr "%d 小时"
 
-#: packages/lib/models/Setting.js:855
+#: packages/lib/models/Setting.js:871
 msgid "Synchronise only over WiFi connection"
 msgstr "只通过 WiFi 网络同步数据"
 
-#: packages/lib/models/Setting.js:862
+#: packages/lib/models/Setting.js:878
 msgid "Text editor command"
 msgstr "文本编辑器命令"
 
-#: packages/lib/models/Setting.js:862
+#: packages/lib/models/Setting.js:878
 msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
@@ -3555,63 +3695,63 @@ msgstr ""
 "该文本编辑器命令 (可包括参数) 将会被用于打开笔记。若未提供将尝试自动检测默认"
 "编辑器。"
 
-#: packages/lib/models/Setting.js:863
+#: packages/lib/models/Setting.js:879
 msgid "Page size for PDF export"
 msgstr "PDF 导出时的页面规格"
 
-#: packages/lib/models/Setting.js:865
+#: packages/lib/models/Setting.js:881
 msgid "A4"
 msgstr "A4"
 
-#: packages/lib/models/Setting.js:866
+#: packages/lib/models/Setting.js:882
 msgid "Letter"
 msgstr "信函 (Letter)"
 
-#: packages/lib/models/Setting.js:867
+#: packages/lib/models/Setting.js:883
 msgid "A3"
 msgstr "A3"
 
-#: packages/lib/models/Setting.js:868
+#: packages/lib/models/Setting.js:884
 msgid "A5"
 msgstr "A5"
 
-#: packages/lib/models/Setting.js:869
+#: packages/lib/models/Setting.js:885
 msgid "Tabloid"
 msgstr "文摘 (Tabloid)"
 
-#: packages/lib/models/Setting.js:870
+#: packages/lib/models/Setting.js:886
 msgid "Legal"
 msgstr "法律专用纸 (Legal)"
 
-#: packages/lib/models/Setting.js:873
+#: packages/lib/models/Setting.js:889
 msgid "Page orientation for PDF export"
 msgstr "PDF 导出的页面方向"
 
-#: packages/lib/models/Setting.js:875
+#: packages/lib/models/Setting.js:891
 msgid "Portrait"
 msgstr "竖版"
 
-#: packages/lib/models/Setting.js:876
+#: packages/lib/models/Setting.js:892
 msgid "Landscape"
 msgstr "横板"
 
-#: packages/lib/models/Setting.js:886
+#: packages/lib/models/Setting.js:902
 msgid "Keyboard Mode"
 msgstr "键盘模式"
 
-#: packages/lib/models/Setting.js:890
+#: packages/lib/models/Setting.js:906
 msgid "Emacs"
 msgstr "Emacs"
 
-#: packages/lib/models/Setting.js:891
+#: packages/lib/models/Setting.js:907
 msgid "Vim"
 msgstr "Vim"
 
-#: packages/lib/models/Setting.js:918
+#: packages/lib/models/Setting.js:934
 msgid "Custom TLS certificates"
 msgstr "自定义 TLS 证书"
 
-#: packages/lib/models/Setting.js:919
+#: packages/lib/models/Setting.js:935
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
 "or path to individual cert files. For example: /my/cert_dir, /other/custom."
@@ -3622,15 +3762,15 @@ msgstr ""
 "如: /my/cert_dir,/other/custom.pem 。 请注意，如果更改 TLS 设置，则必须先保存"
 "更改，之后再点击 \"检查同步配置\" 。"
 
-#: packages/lib/models/Setting.js:941
+#: packages/lib/models/Setting.js:957
 msgid "Ignore TLS certificate errors"
 msgstr "忽略 TLS 证书错误"
 
-#: packages/lib/models/Setting.js:950
+#: packages/lib/models/Setting.js:966
 msgid "Fail-safe"
 msgstr "故障保护"
 
-#: packages/lib/models/Setting.js:951
+#: packages/lib/models/Setting.js:967
 msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
@@ -3638,35 +3778,35 @@ msgstr ""
 "故障保护 (Fail-safe) ：当同步目标为空时 (通常是配置错误或 Bug ) ，不要删除本"
 "地数据"
 
-#: packages/lib/models/Setting.js:955
+#: packages/lib/models/Setting.js:971
 msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
 msgstr "请指定 API 服务器应使用的端口。 如果未设置，将使用默认值。"
 
-#: packages/lib/models/Setting.js:960
+#: packages/lib/models/Setting.js:976
 msgid "Enable note history"
 msgstr "启用笔记历史"
 
-#: packages/lib/models/Setting.js:970
+#: packages/lib/models/Setting.js:986
 msgid "days"
 msgstr "天"
 
-#: packages/lib/models/Setting.js:970
+#: packages/lib/models/Setting.js:986
 #, javascript-format
 msgid "%d days"
 msgstr "%d 天"
 
-#: packages/lib/models/Setting.js:972
+#: packages/lib/models/Setting.js:988
 msgid "Keep note history for"
 msgstr "保留笔记历史"
 
-#: packages/lib/models/Setting.js:999
+#: packages/lib/models/Setting.js:1015
 msgid "Notebook list growth factor"
 msgstr "笔记本列表增长因子"
 
-#: packages/lib/models/Setting.js:1000 packages/lib/models/Setting.js:1013
-#: packages/lib/models/Setting.js:1026
+#: packages/lib/models/Setting.js:1016 packages/lib/models/Setting.js:1029
+#: packages/lib/models/Setting.js:1042
 msgid ""
 "The factor property sets how the item will grow or shrink to fit the "
 "available space in its container with respect to the other items. Thus an "
@@ -3676,58 +3816,58 @@ msgstr ""
 "因子属性决定了列表上的一项如何增长或缩小，以适应其容器中相对于其他项目的可用"
 "空间。因此因子为 2 的项是因数为 1 的项占用空间的两倍。重启软件以查看变化。"
 
-#: packages/lib/models/Setting.js:1012
+#: packages/lib/models/Setting.js:1028
 msgid "Note list growth factor"
 msgstr "笔记列表增长因子"
 
-#: packages/lib/models/Setting.js:1025
+#: packages/lib/models/Setting.js:1041
 msgid "Note area growth factor"
 msgstr "笔记区域增长因子"
 
-#: packages/lib/models/Setting.js:1253
+#: packages/lib/models/Setting.js:1274
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "无效的选项值: \"%s\" 。可用值有: %s。"
 
-#: packages/lib/models/Setting.js:1652
+#: packages/lib/models/Setting.js:1679
 msgid "General"
 msgstr "通用选项"
 
-#: packages/lib/models/Setting.js:1654
+#: packages/lib/models/Setting.js:1681
 msgid "Synchronisation"
 msgstr "同步"
 
-#: packages/lib/models/Setting.js:1656
+#: packages/lib/models/Setting.js:1683
 msgid "Appearance"
 msgstr "外观"
 
-#: packages/lib/models/Setting.js:1658
+#: packages/lib/models/Setting.js:1685
 msgid "Note"
 msgstr "笔记"
 
-#: packages/lib/models/Setting.js:1660
+#: packages/lib/models/Setting.js:1687
 #: packages/lib/services/interop/InteropService.js:49
 #: packages/lib/services/interop/InteropService.js:59
 msgid "Markdown"
 msgstr "Markdown"
 
-#: packages/lib/models/Setting.js:1664
+#: packages/lib/models/Setting.js:1691
 msgid "Application"
 msgstr "应用程序"
 
-#: packages/lib/models/Setting.js:1668
+#: packages/lib/models/Setting.js:1695
 msgid "Encryption"
 msgstr "加密"
 
-#: packages/lib/models/Setting.js:1670
+#: packages/lib/models/Setting.js:1697
 msgid "Web Clipper"
 msgstr "网页剪辑器"
 
-#: packages/lib/models/Setting.js:1672
+#: packages/lib/models/Setting.js:1699
 msgid "Keyboard Shortcuts"
 msgstr "键盘快捷键"
 
-#: packages/lib/models/Setting.js:1679
+#: packages/lib/models/Setting.js:1706
 msgid ""
 "These plugins enhance the Markdown renderer with additional features. Please "
 "note that, while these features might be useful, they are not standard "
@@ -3743,7 +3883,7 @@ msgstr ""
 "使用了这些插件的笔记，就将会丢失插件的格式。下面已表明插件与所见即所得 "
 "(WYSIWYG) 编辑器兼容与否。"
 
-#: packages/lib/models/Setting.js:1681
+#: packages/lib/models/Setting.js:1708
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr "笔记与设置储存于：%s"
@@ -3779,40 +3919,40 @@ msgstr ""
 "录，并只会读写该目录中的文件。本应用没有任何权限访问此目录以外的任何文件或个"
 "人信息，也不会与第三方分享任何数据。"
 
-#: packages/lib/onedrive-api.js:392
+#: packages/lib/onedrive-api.js:405
 msgid ""
 "Cannot refresh token: authentication data is missing. Starting the "
 "synchronisation again may fix the problem."
 msgstr "无法刷新令牌：缺少认证数据。重新同步可能会修正此错误。"
 
-#: packages/lib/services/KeymapService.js:275
+#: packages/lib/services/KeymapService.js:273
 msgid "command"
 msgstr "命令"
 
-#: packages/lib/services/KeymapService.js:275
-#: packages/lib/services/KeymapService.js:280
+#: packages/lib/services/KeymapService.js:273
+#: packages/lib/services/KeymapService.js:278
 #, javascript-format
 msgid "\"%s\" is missing the required \"%s\" property."
 msgstr "“%s”缺少必须的属性“%s”。"
 
-#: packages/lib/services/KeymapService.js:280
-#: packages/lib/services/KeymapService.js:287
+#: packages/lib/services/KeymapService.js:278
+#: packages/lib/services/KeymapService.js:285
 msgid "accelerator"
 msgstr "加速键"
 
-#: packages/lib/services/KeymapService.js:287
+#: packages/lib/services/KeymapService.js:285
 #, javascript-format
 msgid "Invalid %s: %s."
 msgstr "无效的%s：%s。"
 
-#: packages/lib/services/KeymapService.js:305
+#: packages/lib/services/KeymapService.js:303
 #, javascript-format
 msgid ""
 "Accelerator \"%s\" is used for \"%s\" and \"%s\" commands. This may lead to "
 "unexpected behaviour."
 msgstr "加速键“%s”被用于“%s”和“%s”命令。这可能导致未期待的行为。"
 
-#: packages/lib/services/KeymapService.js:330
+#: packages/lib/services/KeymapService.js:328
 #, javascript-format
 msgid "Accelerator \"%s\" is not valid."
 msgstr "加速键“%s”无效。"
@@ -4052,23 +4192,48 @@ msgid ""
 "now](%s)"
 msgstr "默认管理员密码不安全且尚未更改！[现在更改](%s)"
 
-#: packages/server/dist/models/UserModel.js:189
-#: packages/server/dist/models/UserModel.js:194
+#: packages/server/dist/models/UserModel.js:196
+#: packages/server/dist/models/UserModel.js:201
 msgid "attachment"
 msgstr "附件"
 
-#: packages/server/dist/models/UserModel.js:189
+#: packages/server/dist/models/UserModel.js:196
 #, javascript-format
 msgid ""
 "Cannot save %s \"%s\" because it is larger than than the allowed limit (%s)"
 msgstr "无法保存 %s “%s”，因为超过了允许的限制大小（%s）。"
 
-#: packages/server/dist/models/UserModel.js:194
+#: packages/server/dist/models/UserModel.js:201
 #, javascript-format
 msgid ""
 "Cannot save %s \"%s\" because it would go over the total allowed size (%s) "
 "for this account"
 msgstr "无法保存 %s “%s”，因为超过了允许的限制大小（%s）"
+
+#, javascript-format
+#~ msgid "%s %s (%s)"
+#~ msgstr "%s %s (%s)"
+
+#~ msgid "Insert template"
+#~ msgstr "插入模版"
+
+#~ msgid "Template file:"
+#~ msgstr "模版文件："
+
+#~ msgid "Create note from template"
+#~ msgstr "从模版创建笔记"
+
+#~ msgid "Create to-do from template"
+#~ msgstr "从模版创建待办事项"
+
+#~ msgid "Open template directory"
+#~ msgstr "打开模版目录"
+
+#~ msgid "Refresh templates"
+#~ msgstr "刷新模版"
+
+#~ msgid "Templates"
+#~ msgstr "模版"
 
 #~ msgid "Share Notes"
 #~ msgstr "分享笔记"
@@ -4164,9 +4329,6 @@ msgstr "无法保存 %s “%s”，因为超过了允许的限制大小（%s）"
 
 #~ msgid "Please create a notebook first."
 #~ msgstr "请先创建一本笔记本。"
-
-#~ msgid "Please create a notebook first"
-#~ msgstr "请先创建一本笔记本"
 
 #~ msgid "Usage"
 #~ msgstr "用法提示"

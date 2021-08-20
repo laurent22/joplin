@@ -443,7 +443,7 @@ export default class Synchronizer {
 						const previousE2EE = localInfo.e2ee;
 						logger.info('Sync target info differs between local and remote - merging infos: ', newInfo.toObject());
 
-						await this.lockHandler().acquireLock(LockType.Exclusive, this.appType_, this.clientId_);
+						await this.lockHandler().acquireLock(LockType.Exclusive, this.appType_, this.clientId_, { clearExistingSyncLocksFromTheSameClient: true });
 						await uploadSyncInfo(this.api(), newInfo);
 						await saveLocalSyncInfo(newInfo);
 						await this.lockHandler().releaseLock(LockType.Exclusive, this.appType_, this.clientId_);

@@ -171,6 +171,34 @@ module.exports = {
 					},
 				}],
 				'@typescript-eslint/no-floating-promises': ['error'],
+				'@typescript-eslint/naming-convention': ['error',
+					// Naming conventions over the codebase is very inconsistent
+					// unfortunately and fixing it would be way too much work.
+					// In general, we use "strictCamelCase" for variable names.
+
+					// {
+					// 	selector: 'default',
+					// 	format: ['StrictPascalCase', 'strictCamelCase', 'snake_case', 'UPPER_CASE'],
+					// 	leadingUnderscore: 'allow',
+					// 	trailingUnderscore: 'allow',
+					// },
+					{
+						selector: 'enumMember',
+						format: ['StrictPascalCase'],
+					},
+					{
+						selector: 'enumMember',
+						format: null,
+						'filter': {
+							'regex': '^(GET|POST|PUT|DELETE|PATCH|HEAD|SQLite|PostgreSQL|ASC|DESC|E2EE|OR|AND|UNION|INTERSECT|EXCLUSION|INCLUSION|EUR|GBP|USD)$',
+							'match': true,
+						},
+					},
+					{
+						selector: 'interface',
+						format: ['StrictPascalCase'],
+					},
+				],
 			},
 		},
 	],

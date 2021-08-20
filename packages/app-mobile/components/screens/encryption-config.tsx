@@ -10,7 +10,7 @@ import EncryptionService from '@joplin/lib/services/EncryptionService';
 import { _ } from '@joplin/lib/locale';
 import time from '@joplin/lib/time';
 import shared from '@joplin/lib/components/shared/encryption-config-shared';
-import { MasterKeyEntity } from '@joplin/lib/services/database/types';
+import { MasterKeyEntity } from '@joplin/lib/services/e2ee/types';
 import { State } from '@joplin/lib/reducer';
 import { SyncInfo } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 import { setupAndDisableEncryption, toggleAndSetupEncryption } from '@joplin/lib/services/e2ee/utils';

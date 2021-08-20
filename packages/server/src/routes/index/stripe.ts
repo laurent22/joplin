@@ -256,6 +256,7 @@ export const postHandlers: PostHandlers = {
 							id: existingUser.id,
 							account_type: accountType,
 							can_upload: 1,
+							enabled: 1,
 						});
 
 						// Then save the subscription

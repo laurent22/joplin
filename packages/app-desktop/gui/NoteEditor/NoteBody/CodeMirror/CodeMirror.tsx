@@ -33,10 +33,11 @@ const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
 import { reg } from '@joplin/lib/registry';
 import ErrorBoundary from '../../../ErrorBoundary';
+import { MarkupToHtmlOptions } from '../../utils/useMarkupToHtml';
 
 const menuUtils = new MenuUtils(CommandService.instance());
 
-function markupRenderOptions(override: any = null) {
+function markupRenderOptions(override: MarkupToHtmlOptions = null): MarkupToHtmlOptions {
 	return { ...override };
 }
 
@@ -384,6 +385,12 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		if (Setting.value('style.editor.monospaceFontFamily')) monospaceFonts.push(`"${Setting.value('style.editor.monospaceFontFamily')}"`);
 		monospaceFonts.push('monospace');
 
+		const maxWidthCss = props.contentMaxWidth ? `
+			margin-right: auto !important;
+			margin-left: auto !important;
+			max-width: ${props.contentMaxWidth}px !important;	
+		` : '';
+
 		const element = document.createElement('style');
 		element.setAttribute('id', 'codemirrorStyle');
 		document.head.appendChild(element);
@@ -418,6 +425,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				/* Add a fixed right padding to account for the appearance (and disappearance) */
 				/* of the sidebar */
 				padding-right: 10px !important;
+				${maxWidthCss}
 			}
 
 			/* This enforces monospace for certain elements (code, tables, etc.) */
@@ -425,27 +433,27 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				font-family: ${monospaceFonts.join(', ')} !important;
 			}
 
-			.CodeMirror .cm-header-1 {
+			div.CodeMirror span.cm-header-1 {
 				font-size: 1.5em;
 				color: ${theme.color};
 			}
 
-			.CodeMirror .cm-header-2 {
+			div.CodeMirror span.cm-header-2 {
 				font-size: 1.3em;
 				color: ${theme.color};
 			}
 
-			.CodeMirror .cm-header-3 {
+			div.CodeMirror span.cm-header-3 {
 				font-size: 1.1em;
 				color: ${theme.color};
 			}
 
-			.CodeMirror .cm-header-4, .CodeMirror .cm-header-5, .CodeMirror .cm-header-6 {
+			div.CodeMirror span.cm-header-4, div.CodeMirror span.cm-header-5, div.CodeMirror span.cm-header-6 {
 				font-size: 1em;
 				color: ${theme.color};
 			}
 
-			.CodeMirror .cm-quote {
+			div.CodeMirror span.cm-quote {
 				color: ${theme.color};
 				opacity: ${theme.blockQuoteOpacity};
 			}
@@ -459,12 +467,27 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				opacity: 0.5;
 			}
 
-			.CodeMirror .cm-variable-2, .CodeMirror .cm-variable-3, .CodeMirror .cm-keyword {
+			div.CodeMirror span.cm-variable-2, div.CodeMirror span.cm-variable-3, div.CodeMirror span.cm-keyword {
 				color: ${theme.color};
 			}
 
 			div.CodeMirror span.cm-comment {
 				color: ${theme.codeColor};
+			}
+
+			/* Negative margins are needed to componsate for the border */
+			div.CodeMirror span.cm-comment.cm-jn-inline-code {
+				border: 1px solid ${theme.codeBorderColor};
+				background-color: ${theme.codeBackgroundColor};
+				margin-left: -1px;
+				margin-right: -1px;
+				border-radius: .25em;
+			}
+
+			div.CodeMirror div.cm-jn-code-block {
+				background-color: ${theme.codeBackgroundColor};
+				padding-right: .2em;
+				padding-left: .2em;
 			}
 
 			div.CodeMirror span.cm-strong {
@@ -533,7 +556,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		return () => {
 			document.head.removeChild(element);
 		};
-	}, [props.themeId]);
+	}, [props.themeId, props.contentMaxWidth]);
 
 	const webview_domReady = useCallback(() => {
 		setWebviewReady(true);
@@ -572,7 +595,10 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				bodyToRender = `<i>${_('This note has no content. Click on "%s" to toggle the editor and edit the note.', _('Layout'))}</i>`;
 			}
 
-			const result = await props.markupToHtml(props.contentMarkupLanguage, bodyToRender, markupRenderOptions({ resourceInfos: props.resourceInfos }));
+			const result = await props.markupToHtml(props.contentMarkupLanguage, bodyToRender, markupRenderOptions({
+				resourceInfos: props.resourceInfos,
+				contentMaxWidth: props.contentMaxWidth,
+			}));
 
 			if (cancelled) return;
 
@@ -795,6 +821,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 					viewerStyle={styles.viewer}
 					onIpcMessage={webview_ipcMessage}
 					onDomReady={webview_domReady}
+					contentMaxWidth={props.contentMaxWidth}
 				/>
 			</div>
 		);

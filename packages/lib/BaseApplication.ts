@@ -30,7 +30,7 @@ const fs = require('fs-extra');
 import JoplinError from './JoplinError';
 const EventEmitter = require('events');
 const syswidecas = require('./vendor/syswide-cas');
-const SyncTargetRegistry = require('./SyncTargetRegistry.js');
+import SyncTargetRegistry from './SyncTargetRegistry';
 const SyncTargetFilesystem = require('./SyncTargetFilesystem.js');
 const SyncTargetNextcloud = require('./SyncTargetNextcloud.js');
 const SyncTargetWebDAV = require('./SyncTargetWebDAV.js');
@@ -52,6 +52,7 @@ const { toSystemSlashes } = require('./path-utils');
 const { setAutoFreeze } = require('immer');
 import { getEncryptionEnabled } from './services/synchronizer/syncInfoUtils';
 import { loadMasterKeysFromSettings } from './services/e2ee/utils';
+import SyncTargetNone from './SyncTargetNone';
 
 const appLogger: LoggerWrapper = Logger.create('App');
 
@@ -705,6 +706,7 @@ export default class BaseApplication {
 		Setting.setConstant('cacheDir', cacheDir);
 		Setting.setConstant('pluginDir', `${profileDir}/plugins`);
 
+		SyncTargetRegistry.addClass(SyncTargetNone);
 		SyncTargetRegistry.addClass(SyncTargetFilesystem);
 		SyncTargetRegistry.addClass(SyncTargetOneDrive);
 		SyncTargetRegistry.addClass(SyncTargetNextcloud);

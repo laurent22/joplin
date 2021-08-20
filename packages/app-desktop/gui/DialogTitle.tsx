@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 
 const Root = styled.div`
+	display: flex;
+	justify-content: ${props => props.justifyContent ? props.justifyContent : 'flex-start'};
 	font-family: ${props => props.theme.fontFamily};
 	font-size: ${props => props.theme.fontSize * 1.5}px;
 	line-height: 1.6em;
@@ -12,10 +14,11 @@ const Root = styled.div`
 
 interface Props {
 	title: string;
+	justifyContent?: string;
 }
 
 export default function DialogTitle(props: Props) {
 	return (
-		<Root>{props.title}</Root>
+		<Root justifyContent={props.justifyContent}>{props.title}</Root>
 	);
 }

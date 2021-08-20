@@ -15,6 +15,7 @@ const { Dropdown } = require('./Dropdown.js');
 const { dialogs } = require('../utils/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
 const { localSyncInfoFromState } = require('@joplin/lib/services/synchronizer/syncInfoUtils');
+const { showMissingMasterKeyMessage } = require('@joplin/lib/services/e2ee/utils');
 
 Icon.loadFont();
 
@@ -538,7 +539,7 @@ const ScreenHeader = connect(state => {
 		themeId: state.settings.theme,
 		noteSelectionEnabled: state.noteSelectionEnabled,
 		selectedNoteIds: state.selectedNoteIds,
-		showMissingMasterKeyMessage: state.notLoadedMasterKeys.length && syncInfo.masterKeys.length,
+		showMissingMasterKeyMessage: showMissingMasterKeyMessage(syncInfo, state.notLoadedMasterKeys),
 		hasDisabledSyncItems: state.hasDisabledSyncItems,
 		shouldUpgradeSyncTarget: state.settings['sync.upgradeState'] === Setting.SYNC_UPGRADE_STATE_SHOULD_DO,
 	};

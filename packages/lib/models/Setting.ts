@@ -3,7 +3,7 @@ import { _, supportedLocalesToLanguages, defaultLocale } from '../locale';
 import eventManager from '../eventManager';
 import BaseModel from '../BaseModel';
 import Database from '../database';
-const SyncTargetRegistry = require('../SyncTargetRegistry.js');
+import SyncTargetRegistry from '../SyncTargetRegistry';
 import time from '../time';
 import FileHandler, { SettingValues } from './settings/FileHandler';
 const { sprintf } = require('sprintf-js');
@@ -55,6 +55,7 @@ export interface SettingItem {
 	needRestart?: boolean;
 	autoSave?: boolean;
 	storage?: SettingStorage;
+	hideLabel?: boolean;
 }
 
 interface SettingItems {
@@ -306,8 +307,19 @@ class Setting extends BaseModel {
 				appTypes: [AppType.Desktop],
 				storage: SettingStorage.File,
 			},
+
+			'sync.openSyncWizard': {
+				value: null,
+				type: SettingItemType.Button,
+				public: true,
+				appTypes: [AppType.Desktop],
+				label: () => _('Open Sync Wizard...'),
+				hideLabel: true,
+				section: 'sync',
+			},
+
 			'sync.target': {
-				value: SyncTargetRegistry.nameToId('dropbox'),
+				value: 0,
 				type: SettingItemType.Int,
 				isEnum: true,
 				public: true,
@@ -971,6 +983,8 @@ class Setting extends BaseModel {
 					_('Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, code). If not found, a generic monospace (fixed width) font is used.'),
 				storage: SettingStorage.File,
 			},
+
+			'style.editor.contentMaxWidth': { value: 600, type: SettingItemType.Int, public: true, storage: SettingStorage.File, appTypes: [AppType.Desktop], section: 'appearance', label: () => _('Editor maximum width'), description: () => _('Set it to 0 to make it take the complete available space.') },
 
 			'ui.layout': { value: {}, type: SettingItemType.Object, storage: SettingStorage.File, public: false, appTypes: [AppType.Desktop] },
 

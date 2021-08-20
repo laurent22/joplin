@@ -19,7 +19,7 @@ const { BaseScreenComponent } = require('../base-screen.js');
 const { Dropdown } = require('../Dropdown.js');
 const { themeStyle } = require('../global-style.js');
 const shared = require('@joplin/lib/components/shared/config-shared.js');
-const SyncTargetRegistry = require('@joplin/lib/SyncTargetRegistry');
+import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 const RNFS = require('react-native-fs');
 
 class ConfigScreenComponent extends BaseScreenComponent {
@@ -27,7 +27,9 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		return { header: null };
 	}
 
-	constructor() {
+	private componentsY_: Record<string, number> = {};
+
+	public constructor() {
 		super();
 		this.styles_ = {};
 
@@ -36,6 +38,8 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			profileExportStatus: 'idle',
 			profileExportPath: '',
 		};
+
+		this.scrollViewRef_ = React.createRef();
 
 		shared.init(this);
 
@@ -264,10 +268,39 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		return this.styles_[themeId];
 	}
 
+	private onHeaderLayout(key: string, event: any) {
+		const layout = event.nativeEvent.layout;
+		this.componentsY_[`header_${key}`] = layout.y;
+	}
+
+	private onSectionLayout(key: string, event: any) {
+		const layout = event.nativeEvent.layout;
+		this.componentsY_[`section_${key}`] = layout.y;
+	}
+
+	private componentY(key: string): number {
+		if ((`section_${key}`) in this.componentsY_) return this.componentsY_[`section_${key}`];
+		if ((`header_${key}`) in this.componentsY_) return this.componentsY_[`header_${key}`];
+		console.error(`ConfigScreen: Could not find key to scroll to: ${key}`);
+		return 0;
+	}
+
+	public componentDidMount() {
+		if (this.props.navigation.state.sectionName) {
+			setTimeout(() => {
+				this.scrollViewRef_.current.scrollTo({
+					x: 0,
+					y: this.componentY(this.props.navigation.state.sectionName),
+					animated: true,
+				});
+			}, 200);
+		}
+	}
+
 	renderHeader(key: string, title: string) {
 		const theme = themeStyle(this.props.themeId);
 		return (
-			<View key={key} style={this.styles().headerWrapperStyle}>
+			<View key={key} style={this.styles().headerWrapperStyle} onLayout={(event: any) => this.onHeaderLayout(key, event)}>
 				<Text style={theme.headerStyle}>{title}</Text>
 			</View>
 		);
@@ -335,7 +368,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		if (!settingComps.length) return null;
 
 		return (
-			<View key={key}>
+			<View key={key} onLayout={(event: any) => this.onSectionLayout(key, event)}>
 				{this.renderHeader(section.name, Setting.sectionNameToLabel(section.name))}
 				<View>{settingComps}</View>
 			</View>
@@ -602,7 +635,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		return (
 			<View style={this.rootStyle(this.props.themeId).root}>
 				<ScreenHeader title={_('Configuration')} showSaveButton={true} showSearchButton={false} showSideMenuButton={false} saveButtonDisabled={!this.state.changedSettingKeys.length} onSaveButtonPress={this.saveButton_press} />
-				<ScrollView>{settingComps}</ScrollView>
+				<ScrollView ref={this.scrollViewRef_}>{settingComps}</ScrollView>
 			</View>
 		);
 	}

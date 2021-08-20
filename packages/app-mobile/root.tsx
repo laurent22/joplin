@@ -78,13 +78,14 @@ import SearchEngine from '@joplin/lib/services/searchengine/SearchEngine';
 const WelcomeUtils = require('@joplin/lib/WelcomeUtils');
 const { themeStyle } = require('./components/global-style.js');
 
-const SyncTargetRegistry = require('@joplin/lib/SyncTargetRegistry.js');
+import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 const SyncTargetFilesystem = require('@joplin/lib/SyncTargetFilesystem.js');
 const SyncTargetNextcloud = require('@joplin/lib/SyncTargetNextcloud.js');
 const SyncTargetWebDAV = require('@joplin/lib/SyncTargetWebDAV.js');
 const SyncTargetDropbox = require('@joplin/lib/SyncTargetDropbox.js');
 const SyncTargetAmazonS3 = require('@joplin/lib/SyncTargetAmazonS3.js');
 
+SyncTargetRegistry.addClass(SyncTargetNone);
 SyncTargetRegistry.addClass(SyncTargetOneDrive);
 SyncTargetRegistry.addClass(SyncTargetNextcloud);
 SyncTargetRegistry.addClass(SyncTargetWebDAV);
@@ -103,6 +104,7 @@ import setIgnoreTlsErrors from './utils/TlsUtils';
 import ShareService from '@joplin/lib/services/share/ShareService';
 import setupNotifications from './utils/setupNotifications';
 import { loadMasterKeysFromSettings } from '@joplin/lib/services/e2ee/utils';
+import SyncTargetNone from '../lib/SyncTargetNone';
 
 let storeDispatch = function(_action: any) {};
 

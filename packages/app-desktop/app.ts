@@ -46,6 +46,7 @@ const commands = [
 	require('./gui/MainScreen/commands/editAlarm'),
 	require('./gui/MainScreen/commands/exportPdf'),
 	require('./gui/MainScreen/commands/gotoAnything'),
+	require('./gui/MainScreen/commands/commandPalette'),
 	require('./gui/MainScreen/commands/hideModalMessage'),
 	require('./gui/MainScreen/commands/moveToFolder'),
 	require('./gui/MainScreen/commands/newFolder'),
@@ -114,6 +115,10 @@ interface AppStateRoute {
 	props: any;
 }
 
+export interface AppStateDialog {
+	name: string;
+}
+
 export interface AppState extends State {
 	route: AppStateRoute;
 	navHistory: any[];
@@ -130,6 +135,7 @@ export interface AppState extends State {
 	// Extra reducer keys go here
 	watchedResources: any;
 	mainLayout: LayoutItem;
+	dialogs: AppStateDialog[];
 }
 
 const appDefaultState: AppState = {
@@ -150,6 +156,7 @@ const appDefaultState: AppState = {
 	layoutMoveMode: false,
 	mainLayout: null,
 	startupPluginsLoaded: false,
+	dialogs: [],
 	...resourceEditWatcherDefaultState,
 };
 
@@ -367,6 +374,30 @@ class Application extends BaseApplication {
 				if (action.field === state.focusedField) {
 					newState = Object.assign({}, state);
 					newState.focusedField = null;
+				}
+				break;
+
+			case 'DIALOG_OPEN':
+
+				{
+					newState = Object.assign({}, state);
+					const newDialogs = newState.dialogs.slice();
+
+					if (newDialogs.find(d => d.name === action.name)) throw new Error(`This dialog is already opened: ${action.name}`);
+
+					newDialogs.push({
+						name: action.name,
+					});
+					newState.dialogs = newDialogs;
+				}
+				break;
+
+			case 'DIALOG_CLOSE':
+
+				{
+					newState = Object.assign({}, state);
+					const newDialogs = newState.dialogs.slice().filter(d => d.name !== action.name);
+					newState.dialogs = newDialogs;
 				}
 				break;
 
@@ -829,10 +860,18 @@ class Application extends BaseApplication {
 		// 		type: 'NAV_GO',
 		// 		routeName: 'Config',
 		// 		props: {
-		// 			defaultSection: 'plugins',
+		// 			defaultSection: 'encryption',
 		// 		},
 		// 	});
-		// }, 5000);
+		// }, 2000);
+
+
+		// setTimeout(() => {
+		// 	this.dispatch({
+		// 		type: 'DIALOG_OPEN',
+		// 		name: 'syncWizard',
+		// 	});
+		// }, 2000);
 
 		return null;
 	}
