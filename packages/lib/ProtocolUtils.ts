@@ -17,9 +17,9 @@ export function getTagUrl(tagId: string) {
 }
 
 export enum Command {
-    openNote = 'openNote',
-    openFolder = 'openFolder',
-    openTag = 'openTag',
+    OpenNote = 'openNote',
+    OpenFolder = 'openFolder',
+    OpenTag = 'openTag',
 }
 
 export interface CallbackUrlInfo {
