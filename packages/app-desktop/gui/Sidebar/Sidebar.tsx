@@ -665,6 +665,9 @@ class SidebarComponent extends React.Component<Props, State> {
 		if (this.props.folders.length) {
 			const allNotesSelected = this.props.notesParentType === 'SmartFilter' && this.props.selectedSmartFilterId === ALL_NOTES_FILTER_ID;
 			const result = shared.renderFolders(this.props, this.renderFolderItem.bind(this));
+			result.items.sort((a: any, b: any) => {
+				return a.props.folderTitle.localeCompare(b.props.folderTitle, undefined, { sensitivity: 'accent', numeric: true });
+			});
 			const folderItems = [this.renderAllNotesItem(allNotesSelected)].concat(result.items);
 			this.folderItemsOrder_ = result.order;
 			items.push(
