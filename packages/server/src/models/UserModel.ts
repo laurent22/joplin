@@ -304,6 +304,10 @@ export default class UserModel extends BaseModel<User> {
 		await this.models().token().deleteByValue(user.id, token);
 	}
 
+	// As a general rule the `enabled` and  `can_upload` properties should not
+	// be set directly (except maybe in tests) - instead the appropriate user
+	// flags should be set, and this function will derive the enabled/can_upload
+	// properties from them.
 	public async updateFromFlags(userId: Uuid) {
 		const flags = await this.models().userFlag().allByUserId(userId);
 		const user = await this.load(userId, { fields: ['id', 'can_upload', 'enabled'] });
