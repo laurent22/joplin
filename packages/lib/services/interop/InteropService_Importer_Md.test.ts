@@ -1,7 +1,7 @@
-const InteropService_Importer_Md = require('../../services/interop/InteropService_Importer_Md').default;
-const Note = require('../../models/Note').default;
+import InteropService_Importer_Md from '../../services/interop/InteropService_Importer_Md';
+import Note from '../../models/Note';
 import { setupDatabaseAndSynchronizer, supportDir, switchClient } from '../../testing/test-utils';
-const { MarkupToHtml } = require('@joplin/renderer');
+import { MarkupToHtml } from '@joplin/renderer';
 
 
 describe('InteropService_Importer_Md: importLocalImages', function() {

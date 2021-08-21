@@ -5,13 +5,13 @@ import InteropService_Importer_Base from './InteropService_Importer_Base';
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import { NoteEntity } from '../database/types';
-const { basename, filename, rtrimSlashes, fileExtension, dirname } = require('../../path-utils');
+import { basename, filename, rtrimSlashes, fileExtension, dirname } from '../../path-utils';
 import shim from '../../shim';
 import markdownUtils from '../../markdownUtils';
 import htmlUtils from '../../htmlUtils';
 const { unique } = require('../../ArrayUtils');
 const { pregQuote } = require('../../string-utils-common');
-const { MarkupToHtml } = require('@joplin/renderer');
+import { MarkupToHtml } from '@joplin/renderer';
 
 export default class InteropService_Importer_Md extends InteropService_Importer_Base {
 	private importedNotes: Record<string, NoteEntity> = {};

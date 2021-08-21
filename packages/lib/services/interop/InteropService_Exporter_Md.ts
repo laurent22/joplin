@@ -4,9 +4,9 @@ import shim from '../../shim';
 import markdownUtils from '../../markdownUtils';
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
-import { NoteEntity } from '../database/types';
+import { NoteEntity, ResourceEntity } from '../database/types';
 import { basename, dirname, friendlySafeFilename } from '../../path-utils';
-const { MarkupToHtml } = require('@joplin/renderer');
+import { MarkupToHtml } from '@joplin/renderer';
 
 export default class InteropService_Exporter_Md extends InteropService_Exporter_Base {
 
@@ -137,7 +137,7 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 		}
 	}
 
-	private async findReasonableFilename(resource: any, filePath: string) {
+	private async findReasonableFilename(resource: ResourceEntity, filePath: string) {
 		let fileName = basename(filePath);
 
 		if (resource.filename) {
@@ -150,7 +150,7 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 		return fileName;
 	}
 
-	async processResource(resource: any, filePath: string) {
+	async processResource(resource: ResourceEntity, filePath: string) {
 		const context = this.context();
 		if (!context.destResourcePaths) context.destResourcePaths = {};
 
