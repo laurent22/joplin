@@ -1,5 +1,5 @@
 import { User, Session, DbConnection, connectDb, disconnectDb, truncateTables, Item, Uuid } from '../../db';
-import { createDb } from '../../tools/dbTools';
+import { createDb, CreateDbOptions } from '../../tools/dbTools';
 import modelFactory from '../../models/factory';
 import { AppContext, Env } from '../types';
 import config, { initConfig } from '../../config';
@@ -60,7 +60,7 @@ function initGlobalLogger() {
 }
 
 let createdDbPath_: string = null;
-export async function beforeAllDb(unitName: string) {
+export async function beforeAllDb(unitName: string, createDbOptions: CreateDbOptions = null) {
 	unitName = unitName.replace(/\//g, '_');
 
 	createdDbPath_ = `${packageRootDir}/db-test-${unitName}.sqlite`;
@@ -89,7 +89,7 @@ export async function beforeAllDb(unitName: string) {
 
 	initGlobalLogger();
 
-	await createDb(config().database, { dropIfExists: true });
+	await createDb(config().database, { dropIfExists: true, ...createDbOptions });
 	db_ = await connectDb(config().database);
 
 	const mustache = new MustacheService(config().viewDir, config().baseUrl);

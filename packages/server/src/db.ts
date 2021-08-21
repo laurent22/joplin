@@ -52,6 +52,11 @@ export interface ConnectionCheckResult {
 	connection: DbConnection;
 }
 
+export interface Migration {
+	name: string;
+	done: boolean;
+}
+
 export function makeKnexConfig(dbConfig: DatabaseConfig): KnexDatabaseConfig {
 	const connection: DbConfigConnection = {};
 
@@ -167,8 +172,6 @@ export async function migrateList(db: DbConnection, asString: boolean = true) {
 	//   ]
 	// ]
 
-	if (!asString) return migrations;
-
 	const formatName = (migrationInfo: any) => {
 		const name = migrationInfo.file ? migrationInfo.file : migrationInfo;
 
@@ -177,32 +180,43 @@ export async function migrateList(db: DbConnection, asString: boolean = true) {
 		return s.join('.');
 	};
 
-	interface Line {
-		text: string;
-		done: boolean;
-	}
-
-	const output: Line[] = [];
+	const output: Migration[] = [];
 
 	for (const s of migrations[0]) {
 		output.push({
-			text: formatName(s),
+			name: formatName(s),
 			done: true,
 		});
 	}
 
 	for (const s of migrations[1]) {
 		output.push({
-			text: formatName(s),
+			name: formatName(s),
 			done: false,
 		});
 	}
 
 	output.sort((a, b) => {
-		return a.text < b.text ? -1 : +1;
+		return a.name < b.name ? -1 : +1;
 	});
 
-	return output.map(l => `${l.done ? '✓' : '✗'} ${l.text}`).join('\n');
+	if (!asString) return output;
+
+	return output.map(l => `${l.done ? '✓' : '✗'} ${l.name}`).join('\n');
+}
+
+export async function nextMigration(db: DbConnection): Promise<string> {
+	const list = await migrateList(db, false) as Migration[];
+
+	let nextMigration: Migration = null;
+
+	while (list.length) {
+		const migration = list.pop();
+		if (migration.done) return nextMigration ? nextMigration.name : '';
+		nextMigration = migration;
+	}
+
+	return '';
 }
 
 function allTableNames(): string[] {
