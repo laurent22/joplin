@@ -1,4 +1,4 @@
-import { EmailSender, Subscription, User, Uuid } from '../db';
+import { EmailSender, Subscription, User, UserFlagType, Uuid } from '../db';
 import { ErrorNotFound } from '../utils/errors';
 import { Day } from '../utils/time';
 import uuidgen from '../utils/uuidgen';
@@ -81,13 +81,9 @@ export default class SubscriptionModel extends BaseModel<Subscription> {
 			const user = await this.models().user().load(sub.user_id);
 
 			await this.withTransaction(async () => {
-				if (!user.enabled || !user.can_upload) {
-					await this.models().user().save({
-						id: sub.user_id,
-						enabled: 1,
-						can_upload: 1,
-					});
-				}
+				await this.models().userFlag().remove(user.id, UserFlagType.FailedPaymentWarning);
+				await this.models().userFlag().remove(user.id, UserFlagType.FailedPaymentFinal);
+				await this.models().user().updateFromFlags(user.id);
 
 				await this.save({
 					id: sub.id,

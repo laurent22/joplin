@@ -296,7 +296,10 @@ router.post('users', async (path: SubPath, ctx: AppContext) => {
 				if (fields.disable_button || fields.restore_button) {
 					const user = await userModel.load(path.id);
 					await userModel.checkIfAllowed(ctx.joplin.owner, AclAction.Delete, user);
-					await userModel.enable(path.id, !!fields.restore_button);
+					await userModel.save({
+						id: path.id,
+						enabled: fields.restore_button ? 1 : 0,
+					});
 				} else if (fields.send_reset_password_email) {
 					const user = await userModel.load(path.id);
 					await userModel.save({ id: user.id, must_set_password: 1 });

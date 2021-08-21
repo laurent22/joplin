@@ -28,6 +28,13 @@ export default class TokenModel extends BaseModel<UserFlag> {
 		}
 	}
 
+	public async remove(userId: Uuid, type: UserFlagType) {
+		await this.db(this.tableName)
+			.where('user_id', '=', userId)
+			.where('type', '=', type)
+			.delete();
+	}
+
 	public async byUserId(userId: Uuid, type: UserFlagType): Promise<UserFlag> {
 		return this.db(this.tableName)
 			.where('user_id', '=', userId)

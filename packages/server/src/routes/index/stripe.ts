@@ -10,7 +10,7 @@ import Logger from '@joplin/lib/Logger';
 import getRawBody = require('raw-body');
 import { AccountType } from '../../models/UserModel';
 import { betaUserTrialPeriodDays, cancelSubscription, initStripe, isBetaUser, priceIdToAccountType, stripeConfig } from '../../utils/stripe';
-import { Subscription } from '../../db';
+import { Subscription, UserFlagType } from '../../db';
 import { findPrice, PricePeriod } from '@joplin/lib/utils/joplinCloud';
 
 const logger = Logger.create('/stripe');
@@ -250,14 +250,19 @@ export const postHandlers: PostHandlers = {
 						logger.info(`Setting up subscription for existing user: ${existingUser.email}`);
 
 						// First set the account type correctly (in case the
-						// user also upgraded or downgraded their account). Also
-						// re-enable upload if it was disabled.
+						// user also upgraded or downgraded their account).
 						await models.user().save({
 							id: existingUser.id,
 							account_type: accountType,
-							can_upload: 1,
-							enabled: 1,
 						});
+
+						// Also clear any payment and subscription related flags
+						// since if we're here it means payment was successful
+						await models.userFlag().remove(existingUser.id, UserFlagType.FailedPaymentWarning);
+						await models.userFlag().remove(existingUser.id, UserFlagType.FailedPaymentFinal);
+						await models.userFlag().remove(existingUser.id, UserFlagType.SubscriptionCancelled);
+						await models.userFlag().remove(existingUser.id, UserFlagType.AccountWithoutSubscription);
+						await models.user().updateFromFlags(existingUser.id);
 
 						// Then save the subscription
 						await models.subscription().save({
@@ -319,8 +324,9 @@ export const postHandlers: PostHandlers = {
 				// by the user. In that case, we disable the user.
 
 				const { sub } = await getSubscriptionInfo(event, ctx);
-				await models.user().enable(sub.user_id, false);
 				await models.subscription().toggleSoftDelete(sub.id, true);
+				await models.userFlag().add(sub.user_id, UserFlagType.SubscriptionCancelled);
+				await models.user().updateFromFlags(sub.user_id);
 			},
 
 			'customer.subscription.updated': async () => {

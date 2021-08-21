@@ -340,6 +340,7 @@ export enum UserFlagType {
 	FailedPaymentFinal = 2,
 	AccountOverLimit = 3,
 	AccountWithoutSubscription = 4,
+	SubscriptionCancelled = 5,
 }
 
 export enum FileContentType {

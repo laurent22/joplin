@@ -245,16 +245,6 @@ export default class UserModel extends BaseModel<User> {
 		return !!s[0].length && !!s[1].length;
 	}
 
-	public async enable(id: Uuid, enabled: boolean) {
-		const user = await this.load(id);
-		if (!user) throw new ErrorNotFound(`No such user: ${id}`);
-		await this.save({ id, enabled: enabled ? 1 : 0 });
-	}
-
-	public async disable(id: Uuid) {
-		await this.enable(id, false);
-	}
-
 	public async delete(id: string): Promise<void> {
 		const shares = await this.models().share().sharesByUser(id);
 
@@ -330,6 +320,8 @@ export default class UserModel extends BaseModel<User> {
 		} else if (flags.find(f => f.type === UserFlagType.FailedPaymentWarning)) {
 			newProps.can_upload = 0;
 		} else if (flags.find(f => f.type === UserFlagType.FailedPaymentFinal)) {
+			newProps.enabled = 0;
+		} else if (flags.find(f => f.type === UserFlagType.SubscriptionCancelled)) {
 			newProps.enabled = 0;
 		}
 
