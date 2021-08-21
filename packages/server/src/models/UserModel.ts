@@ -1,5 +1,5 @@
 import BaseModel, { AclAction, SaveOptions, ValidateOptions } from './BaseModel';
-import { EmailSender, Item, User, Uuid } from '../db';
+import { EmailSender, Item, User, UserFlagType, Uuid } from '../db';
 import * as auth from '../utils/auth';
 import { ErrorUnprocessableEntity, ErrorForbidden, ErrorPayloadTooLarge, ErrorNotFound } from '../utils/errors';
 import { ModelType } from '@joplin/lib/BaseModel';
@@ -314,9 +314,32 @@ export default class UserModel extends BaseModel<User> {
 		await this.models().token().deleteByValue(user.id, token);
 	}
 
-	// public async disableUnpaidAccounts() {
+	public async updateFromFlags(userId: Uuid) {
+		const flags = await this.models().userFlag().allByUserId(userId);
+		const user = await this.load(userId, { fields: ['id', 'can_upload', 'enabled'] });
 
-	// }
+		const newProps: User = {
+			can_upload: 1,
+			enabled: 1,
+		};
+
+		if (flags.find(f => f.type === UserFlagType.AccountWithoutSubscription)) {
+			newProps.can_upload = 0;
+		} else if (flags.find(f => f.type === UserFlagType.AccountOverLimit)) {
+			newProps.can_upload = 0;
+		} else if (flags.find(f => f.type === UserFlagType.FailedPaymentWarning)) {
+			newProps.can_upload = 0;
+		} else if (flags.find(f => f.type === UserFlagType.FailedPaymentFinal)) {
+			newProps.enabled = 0;
+		}
+
+		if (user.can_upload !== newProps.can_upload || user.enabled !== newProps.enabled) {
+			await this.save({
+				id: userId,
+				...newProps,
+			});
+		}
+	}
 
 	public async handleBetaUserEmails() {
 		if (!stripeConfig().enabled) return;
@@ -355,7 +378,10 @@ export default class UserModel extends BaseModel<User> {
 			}
 
 			if (remainingDays <= 0) {
-				await this.save({ id: user.id, can_upload: 0 });
+				await this.withTransaction(async () => {
+					await this.models().userFlag().add(user.id, UserFlagType.AccountWithoutSubscription);
+					await this.updateFromFlags(user.id);
+				});
 			}
 		}
 	}
@@ -372,7 +398,8 @@ export default class UserModel extends BaseModel<User> {
 					continue;
 				}
 
-				await this.save({ id: user.id, can_upload: 0 });
+				await this.models().userFlag().add(user.id, UserFlagType.FailedPaymentWarning);
+				await this.updateFromFlags(user.id);
 
 				await this.models().email().push({
 					...paymentFailedUploadDisabledTemplate(),

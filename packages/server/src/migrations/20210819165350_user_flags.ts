@@ -11,7 +11,7 @@ export async function up(db: DbConnection): Promise<any> {
 	});
 
 	await db.schema.alterTable('user_flags', (table: Knex.CreateTableBuilder) => {
-		table.index(['user_id']);
+		table.unique(['user_id', 'type']);
 	});
 }
 

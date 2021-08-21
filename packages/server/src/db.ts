@@ -529,12 +529,10 @@ export interface User extends WithDates, WithUuid {
 	enabled?: number;
 }
 
-export interface UserFlag {
+export interface UserFlag extends WithDates {
 	id?: number;
 	user_id?: Uuid;
 	type?: UserFlagType;
-	updated_time?: string;
-	created_time?: string;
 }
 
 export const databaseSchema: DatabaseTables = {
