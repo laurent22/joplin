@@ -72,6 +72,12 @@ class HtmlUtils {
 		return this.extractImageUrls(html).concat(this.extractAnchorUrls(html));
 	}
 
+	public replaceResourceUrl(html: string, urlToReplace: string, id: string) {
+		const htmlLinkRegex = `(?<=(?:src|href)=["'])${urlToReplace}(?=["'])`;
+		const htmlReg = new RegExp(htmlLinkRegex, 'g');
+		return html.replace(htmlReg, `:/${id}`);
+	}
+
 	public replaceImageUrls(html: string, callback: Function) {
 		return this.processImageTags(html, (data: any) => {
 			const newSrc = callback(data.src);

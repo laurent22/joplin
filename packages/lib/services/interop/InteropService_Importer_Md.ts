@@ -115,14 +115,10 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 					const linkToReplace = pregQuote(linksToReplace[j]);
 
 					// Markdown links
-					const linkRegex = `(?<=\\]\\()\\<?${linkToReplace}\\>?(?=.*\\))`;
-					const reg = new RegExp(linkRegex, 'g');
-					updated = updated.replace(reg, `:/${id}`);
+					updated = markdownUtils.replaceResourceUrl(updated, linkToReplace, id);
 
 					// HTML links
-					const htmlLinkRegex = `(?<=(?:src|href)=["'])${linkToReplace}(?=["'])`;
-					const htmlReg = new RegExp(htmlLinkRegex, 'g');
-					updated = updated.replace(htmlReg, `:/${id}`);
+					updated = htmlUtils.replaceResourceUrl(updated, linkToReplace, id);
 				}
 			}
 		}));

@@ -100,6 +100,12 @@ const markdownUtils = {
 		return output;
 	},
 
+	replaceResourceUrl(md: string, urlToReplace: string, id: string) {
+		const linkRegex = `(?<=\\]\\()\\<?${urlToReplace}\\>?(?=.*\\))`;
+		const reg = new RegExp(linkRegex, 'g');
+		return md.replace(reg, `:/${id}`);
+	},
+
 	extractImageUrls(md: string) {
 		return markdownUtils.extractFileUrls(md,true);
 	},
