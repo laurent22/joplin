@@ -53,6 +53,7 @@ const propertyTypes: Record<string, string> = {
 	'users.max_total_item_size': 'number | null',
 	'users.max_item_size': 'number | null',
 	'users.total_item_size': 'number',
+	'user_flags.type': 'UserFlagType',
 };
 
 function insertContentIntoFile(filePath: string, markerOpen: string, markerClose: string, contentToInsert: string): void {

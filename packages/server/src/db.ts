@@ -335,6 +335,13 @@ export enum ChangeType {
 	Delete = 3,
 }
 
+export enum UserFlagType {
+	FailedPaymentWarning = 1,
+	FailedPaymentFinal = 2,
+	AccountOverLimit = 3,
+	AccountWithoutSubscription = 4,
+}
+
 export enum FileContentType {
 	Any = 1,
 	JoplinItem = 2,
@@ -522,6 +529,14 @@ export interface User extends WithDates, WithUuid {
 	enabled?: number;
 }
 
+export interface UserFlag {
+	id?: number;
+	user_id?: Uuid;
+	type?: UserFlagType;
+	updated_time?: string;
+	created_time?: string;
+}
+
 export const databaseSchema: DatabaseTables = {
 	sessions: {
 		id: { type: 'string' },
@@ -678,6 +693,13 @@ export const databaseSchema: DatabaseTables = {
 		max_total_item_size: { type: 'string' },
 		total_item_size: { type: 'string' },
 		enabled: { type: 'number' },
+	},
+	user_flags: {
+		id: { type: 'number' },
+		user_id: { type: 'string' },
+		type: { type: 'number' },
+		updated_time: { type: 'string' },
+		created_time: { type: 'string' },
 	},
 };
 // AUTO-GENERATED-TYPES
