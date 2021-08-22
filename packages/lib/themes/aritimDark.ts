@@ -24,7 +24,7 @@ const theme: Theme = {
 	raisedBackgroundColor: '#2b5278', // Table, hover
 	raisedColor: '#141a21',
 
-	warningBackgroundColor: '#9a2f2f', // Info / Warning boxes bg color
+	warningBackgroundColor: '#821A1A', // Info / Warning boxes bg color
 
 	tableBackgroundColor: '#141a21', // Table (even) background color
 	codeBackgroundColor: '#141a21', // Single line code bg
