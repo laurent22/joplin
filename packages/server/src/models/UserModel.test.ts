@@ -1,5 +1,5 @@
 import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, checkThrowAsync, createItem } from '../utils/testing/testUtils';
-import { EmailSender, User } from '../db';
+import { EmailSender, User, UserFlagType } from '../db';
 import { ErrorUnprocessableEntity } from '../utils/errors';
 import { betaUserDateRange, stripeConfig } from '../utils/stripe';
 import { AccountType } from './UserModel';
@@ -160,6 +160,9 @@ describe('UserModel', function() {
 
 		const reloadedUser = await models().user().load(user1.id);
 		expect(reloadedUser.can_upload).toBe(0);
+
+		const userFlag = await models().userFlag().byUserId(user1.id, UserFlagType.AccountWithoutSubscription);
+		expect(userFlag).toBeTruthy();
 	});
 
 	test('should disable upload and send an email if payment failed', async function() {

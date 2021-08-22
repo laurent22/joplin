@@ -52,6 +52,11 @@ export interface ConnectionCheckResult {
 	connection: DbConnection;
 }
 
+export interface Migration {
+	name: string;
+	done: boolean;
+}
+
 export function makeKnexConfig(dbConfig: DatabaseConfig): KnexDatabaseConfig {
 	const connection: DbConfigConnection = {};
 
@@ -167,8 +172,6 @@ export async function migrateList(db: DbConnection, asString: boolean = true) {
 	//   ]
 	// ]
 
-	if (!asString) return migrations;
-
 	const formatName = (migrationInfo: any) => {
 		const name = migrationInfo.file ? migrationInfo.file : migrationInfo;
 
@@ -177,32 +180,43 @@ export async function migrateList(db: DbConnection, asString: boolean = true) {
 		return s.join('.');
 	};
 
-	interface Line {
-		text: string;
-		done: boolean;
-	}
-
-	const output: Line[] = [];
+	const output: Migration[] = [];
 
 	for (const s of migrations[0]) {
 		output.push({
-			text: formatName(s),
+			name: formatName(s),
 			done: true,
 		});
 	}
 
 	for (const s of migrations[1]) {
 		output.push({
-			text: formatName(s),
+			name: formatName(s),
 			done: false,
 		});
 	}
 
 	output.sort((a, b) => {
-		return a.text < b.text ? -1 : +1;
+		return a.name < b.name ? -1 : +1;
 	});
 
-	return output.map(l => `${l.done ? '✓' : '✗'} ${l.text}`).join('\n');
+	if (!asString) return output;
+
+	return output.map(l => `${l.done ? '✓' : '✗'} ${l.name}`).join('\n');
+}
+
+export async function nextMigration(db: DbConnection): Promise<string> {
+	const list = await migrateList(db, false) as Migration[];
+
+	let nextMigration: Migration = null;
+
+	while (list.length) {
+		const migration = list.pop();
+		if (migration.done) return nextMigration ? nextMigration.name : '';
+		nextMigration = migration;
+	}
+
+	return '';
 }
 
 function allTableNames(): string[] {
@@ -319,6 +333,15 @@ export enum ChangeType {
 	Create = 1,
 	Update = 2,
 	Delete = 3,
+}
+
+export enum UserFlagType {
+	FailedPaymentWarning = 1,
+	FailedPaymentFinal = 2,
+	AccountOverLimit = 3,
+	AccountWithoutSubscription = 4,
+	SubscriptionCancelled = 5,
+	ManuallyDisabled = 6,
 }
 
 export enum FileContentType {
@@ -508,6 +531,12 @@ export interface User extends WithDates, WithUuid {
 	enabled?: number;
 }
 
+export interface UserFlag extends WithDates {
+	id?: number;
+	user_id?: Uuid;
+	type?: UserFlagType;
+}
+
 export const databaseSchema: DatabaseTables = {
 	sessions: {
 		id: { type: 'string' },
@@ -664,6 +693,13 @@ export const databaseSchema: DatabaseTables = {
 		max_total_item_size: { type: 'string' },
 		total_item_size: { type: 'string' },
 		enabled: { type: 'number' },
+	},
+	user_flags: {
+		id: { type: 'number' },
+		user_id: { type: 'string' },
+		type: { type: 'number' },
+		updated_time: { type: 'string' },
+		created_time: { type: 'string' },
 	},
 };
 // AUTO-GENERATED-TYPES

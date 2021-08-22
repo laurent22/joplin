@@ -5,7 +5,8 @@ import { DatabaseConfig } from '../utils/types';
 const { execCommand } = require('@joplin/tools/tool-utils');
 
 export interface CreateDbOptions {
-	dropIfExists: boolean;
+	dropIfExists?: boolean;
+	autoMigrate?: boolean;
 }
 
 export interface DropDbOptions {
@@ -15,6 +16,7 @@ export interface DropDbOptions {
 export async function createDb(config: DatabaseConfig, options: CreateDbOptions = null) {
 	options = {
 		dropIfExists: false,
+		autoMigrate: true,
 		...options,
 	};
 
@@ -46,7 +48,7 @@ export async function createDb(config: DatabaseConfig, options: CreateDbOptions 
 
 	try {
 		const db = await connectDb(config);
-		await migrateLatest(db);
+		if (options.autoMigrate) await migrateLatest(db);
 		await disconnectDb(db);
 	} catch (error) {
 		error.message += `: ${config.name}`;

@@ -174,7 +174,10 @@ describe('shares.link', function() {
 			note_id: noteItem.jop_id,
 		});
 
-		await models().user().disable(user.id);
+		await models().user().save({
+			id: user.id,
+			enabled: 0,
+		});
 
 		await expectHttpError(async () => getShareContent(share.id), ErrorForbidden.httpCode);
 	});

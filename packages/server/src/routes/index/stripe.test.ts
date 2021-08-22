@@ -1,4 +1,5 @@
 import { findPrice, PricePeriod } from '@joplin/lib/utils/joplinCloud';
+import { UserFlagType } from '../../db';
 import { AccountType } from '../../models/UserModel';
 import { betaUserTrialPeriodDays, isBetaUser, stripeConfig } from '../../utils/stripe';
 import { beforeAllDb, afterAllTests, beforeEachDb, models, koaAppContext, expectNotThrow } from '../../utils/testing/testUtils';
@@ -191,5 +192,26 @@ describe('index/stripe', function() {
 		}
 	});
 
+	test('should re-enable account if successful payment is made', async function() {
+		const stripe = mockStripe();
+		const ctx = await koaAppContext();
+
+		await createUserViaSubscription(ctx, 'toto@example.com', { stripe, subscriptionId: 'sub_init' });
+		let user = (await models().user().all())[0];
+		await models().user().save({
+			id: user.id,
+			enabled: 0,
+			can_upload: 0,
+		});
+
+		await models().userFlag().add(user.id, UserFlagType.FailedPaymentFinal);
+
+		await simulateWebhook(ctx, 'invoice.paid', { subscription: 'sub_init' });
+
+		user = await models().user().load(user.id);
+
+		expect(user.enabled).toBe(1);
+		expect(user.can_upload).toBe(1);
+	});
 
 });

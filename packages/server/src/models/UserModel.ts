@@ -1,5 +1,5 @@
 import BaseModel, { AclAction, SaveOptions, ValidateOptions } from './BaseModel';
-import { EmailSender, Item, User, Uuid } from '../db';
+import { EmailSender, Item, User, UserFlagType, Uuid } from '../db';
 import * as auth from '../utils/auth';
 import { ErrorUnprocessableEntity, ErrorForbidden, ErrorPayloadTooLarge, ErrorNotFound } from '../utils/errors';
 import { ModelType } from '@joplin/lib/BaseModel';
@@ -245,16 +245,6 @@ export default class UserModel extends BaseModel<User> {
 		return !!s[0].length && !!s[1].length;
 	}
 
-	public async enable(id: Uuid, enabled: boolean) {
-		const user = await this.load(id);
-		if (!user) throw new ErrorNotFound(`No such user: ${id}`);
-		await this.save({ id, enabled: enabled ? 1 : 0 });
-	}
-
-	public async disable(id: Uuid) {
-		await this.enable(id, false);
-	}
-
 	public async delete(id: string): Promise<void> {
 		const shares = await this.models().share().sharesByUser(id);
 
@@ -314,10 +304,6 @@ export default class UserModel extends BaseModel<User> {
 		await this.models().token().deleteByValue(user.id, token);
 	}
 
-	// public async disableUnpaidAccounts() {
-
-	// }
-
 	public async handleBetaUserEmails() {
 		if (!stripeConfig().enabled) return;
 
@@ -355,7 +341,7 @@ export default class UserModel extends BaseModel<User> {
 			}
 
 			if (remainingDays <= 0) {
-				await this.save({ id: user.id, can_upload: 0 });
+				await this.models().userFlag().add(user.id, UserFlagType.AccountWithoutSubscription);
 			}
 		}
 	}
@@ -372,7 +358,7 @@ export default class UserModel extends BaseModel<User> {
 					continue;
 				}
 
-				await this.save({ id: user.id, can_upload: 0 });
+				await this.models().userFlag().add(user.id, UserFlagType.FailedPaymentWarning);
 
 				await this.models().email().push({
 					...paymentFailedUploadDisabledTemplate(),
