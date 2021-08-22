@@ -27,14 +27,10 @@ export default class UserFlagModels extends BaseModel<UserFlag> {
 			...options,
 		};
 
-		const now = Date.now();
-
 		try {
 			await this.save({
 				user_id: userId,
 				type,
-				created_time: now,
-				updated_time: now,
 			});
 		} catch (error) {
 			if (!isUniqueConstraintError(error)) {
