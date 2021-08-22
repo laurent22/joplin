@@ -56,7 +56,7 @@ export default class FsDriverBase {
 		return output;
 	}
 
-	public async findUniqueFilename(name: string, reservedNames: string[] = null): Promise<string> {
+	public async findUniqueFilename(name: string, reservedNames: string[] = null, markdownSafe: boolean = false): Promise<string> {
 		if (reservedNames === null) {
 			reservedNames = [];
 		}
@@ -70,7 +70,11 @@ export default class FsDriverBase {
 			// Check if the filename does not exist in the filesystem and is not reserved
 			const exists = await this.exists(nameToTry) || reservedNames.includes(nameToTry);
 			if (!exists) return nameToTry;
-			nameToTry = `${nameNoExt} (${counter})${extension}`;
+			if (!markdownSafe) {
+				nameToTry = `${nameNoExt} (${counter})${extension}`;
+			} else {
+				nameToTry = `${nameNoExt}-${counter}${extension}`;
+			}
 			counter++;
 			if (counter >= 1000) {
 				nameToTry = `${nameNoExt} (${new Date().getTime()})${extension}`;
