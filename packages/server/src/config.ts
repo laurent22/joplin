@@ -94,8 +94,8 @@ function mailerConfigFromEnv(env: EnvVariables): MailerConfig {
 	return {
 		enabled: env.MAILER_ENABLED !== '0',
 		host: env.MAILER_HOST || '',
-		port: Number(env.MAILER_PORT || 587),
-		secure: !!Number(env.MAILER_SECURE) || true,
+		port: Number(env.MAILER_PORT || 465),
+		encryption: env.MAILER_SECURE || 'smtps',
 		authUser: env.MAILER_AUTH_USER || '',
 		authPassword: env.MAILER_AUTH_PASSWORD || '',
 		noReplyName: env.MAILER_NOREPLY_NAME || '',

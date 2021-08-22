@@ -23,7 +23,9 @@ export default class EmailService extends BaseService {
 			this.transport_ = createTransport({
 				host: this.config.mailer.host,
 				port: this.config.mailer.port,
-				secure: this.config.mailer.secure,
+				secure: (this.config.mailer.encryption == 'smtps'),
+				ignoreTLS: (this.config.mailer.encryption == 'none'),
+				requireTLS: (this.config.mailer.encryption == 'starttls'),
 				auth: {
 					user: this.config.mailer.authUser,
 					pass: this.config.mailer.authPassword,
