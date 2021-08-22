@@ -4,7 +4,7 @@ import { RouteType } from '../../utils/types';
 import { AppContext, HttpMethod } from '../../utils/types';
 import { bodyFields, contextSessionId, formParse } from '../../utils/requestUtils';
 import { ErrorForbidden, ErrorUnprocessableEntity } from '../../utils/errors';
-import { User, UserFlagType, Uuid } from '../../services/database/types';
+import { User, UserFlagType, userFlagTypeToLabel, Uuid } from '../../services/database/types';
 import config from '../../config';
 import { View } from '../../services/MustacheService';
 import defaultView from '../../utils/defaultView';
@@ -141,6 +141,12 @@ router.get('users/:id', async (path: SubPath, ctx: AppContext, user: User = null
 		postUrl = `${config().baseUrl}/users/${user.id}`;
 	}
 
+	let userFlags: string[] = isNew ? null : (await models.userFlag().allByUserId(user.id)).map(f => {
+		return `${formatDateTime(f.created_time)}: ${userFlagTypeToLabel(f.type)}`;
+	});
+
+	if (!userFlags || !userFlags.length || !owner.is_admin) userFlags = null;
+
 	const subscription = !isNew ? await ctx.joplin.models.subscription().byUserId(userId) : null;
 
 	const view: View = defaultView('user', 'Profile');
@@ -168,6 +174,8 @@ router.get('users/:id', async (path: SubPath, ctx: AppContext, user: User = null
 	view.content.canSetEmail = isNew || owner.is_admin;
 	view.content.canShareFolderOptions = yesNoDefaultOptions(user, 'can_share_folder');
 	view.content.canUploadOptions = yesNoOptions(user, 'can_upload');
+	view.content.userFlags = userFlags;
+
 	view.jsFiles.push('zxcvbn');
 	view.cssFiles.push('index/user');
 
@@ -296,8 +304,7 @@ router.post('users', async (path: SubPath, ctx: AppContext) => {
 				if (fields.disable_button || fields.restore_button) {
 					const user = await models.user().load(path.id);
 					await models.user().checkIfAllowed(ctx.joplin.owner, AclAction.Delete, user);
-
-					await models.userFlag().toggle(user.id, UserFlagType.ManuallyDisabled, !!fields.restore_button);
+					await models.userFlag().toggle(user.id, UserFlagType.ManuallyDisabled, !fields.restore_button);
 				} else if (fields.send_reset_password_email) {
 					const user = await models.user().load(path.id);
 					await models.user().save({ id: user.id, must_set_password: 1 });

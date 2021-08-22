@@ -36,6 +36,21 @@ export enum UserFlagType {
 	ManuallyDisabled = 6,
 }
 
+export function userFlagTypeToLabel(t: UserFlagType): string {
+	const s: Record<UserFlagType, string> = {
+		[UserFlagType.FailedPaymentWarning]: 'Failed Payment (Warning)',
+		[UserFlagType.FailedPaymentFinal]: 'Failed Payment (Final)',
+		[UserFlagType.AccountOverLimit]: 'Account Over Limit',
+		[UserFlagType.AccountWithoutSubscription]: 'Account Without Subscription',
+		[UserFlagType.SubscriptionCancelled]: 'Subscription Cancelled',
+		[UserFlagType.ManuallyDisabled]: 'Manually Disabled',
+	};
+
+	if (!s[t]) throw new Error(`Unknown flag type: ${t}`);
+
+	return s[t];
+}
+
 export enum FileContentType {
 	Any = 1,
 	JoplinItem = 2,
