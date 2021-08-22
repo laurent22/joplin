@@ -2,7 +2,7 @@ import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models,
 import { EmailSender, User, UserFlagType } from '../services/database/types';
 import { ErrorUnprocessableEntity } from '../utils/errors';
 import { betaUserDateRange, stripeConfig } from '../utils/stripe';
-import { AccountType } from './UserModel';
+import { accountByType, AccountType } from './UserModel';
 import { failedPaymentDisableUploadInterval } from './SubscriptionModel';
 import { stripePortalUrl } from '../utils/urlUtils';
 
@@ -200,6 +200,70 @@ describe('UserModel', function() {
 		{
 			const user2 = await models().user().loadByEmail('tutu@example.com');
 			expect(user2.can_upload).toBe(1);
+		}
+	});
+
+	test('should send emails when the account is over the size limit', async function() {
+		const { user: user1 } = await createUserAndSession(1);
+		const { user: user2 } = await createUserAndSession(2);
+
+		await models().user().save({
+			id: user1.id,
+			account_type: AccountType.Basic,
+			total_item_size: accountByType(AccountType.Basic).max_total_item_size * 0.85,
+		});
+
+		await models().user().save({
+			id: user2.id,
+			account_type: AccountType.Pro,
+			total_item_size: accountByType(AccountType.Pro).max_total_item_size * 0.2,
+		});
+
+		const emailBeforeCount = (await models().email().all()).length;
+
+		await models().user().handleOversizedAccounts();
+
+		const emailAfterCount = (await models().email().all()).length;
+
+		expect(emailAfterCount).toBe(emailBeforeCount + 1);
+
+		const email = (await models().email().all()).pop();
+		expect(email.recipient_id).toBe(user1.id);
+		expect(email.subject).toContain('80%');
+
+		{
+			// Running it again should not send a second email
+			await models().user().handleOversizedAccounts();
+			expect((await models().email().all()).length).toBe(emailBeforeCount + 1);
+		}
+
+		{
+			// Now check that the 100% email is sent too
+
+			await models().user().save({
+				id: user2.id,
+				total_item_size: accountByType(AccountType.Pro).max_total_item_size * 1.1,
+			});
+
+			// User upload should be enabled at this point
+			expect((await models().user().load(user2.id)).can_upload).toBe(1);
+
+			const emailBeforeCount = (await models().email().all()).length;
+			await models().user().handleOversizedAccounts();
+			const emailAfterCount = (await models().email().all()).length;
+
+			// User upload should be disabled
+			expect((await models().user().load(user2.id)).can_upload).toBe(0);
+
+			expect(emailAfterCount).toBe(emailBeforeCount + 1);
+			const email = (await models().email().all()).pop();
+
+			expect(email.recipient_id).toBe(user2.id);
+			expect(email.subject).toContain('100%');
+
+			// Running it again should not send a second email
+			await models().user().handleOversizedAccounts();
+			expect((await models().email().all()).length).toBe(emailBeforeCount + 1);
 		}
 	});
 
