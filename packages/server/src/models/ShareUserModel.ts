@@ -1,4 +1,4 @@
-import { Item, Share, ShareType, ShareUser, ShareUserStatus, User, Uuid } from '../db';
+import { Item, Share, ShareType, ShareUser, ShareUserStatus, User, Uuid } from '../services/database/types';
 import { ErrorForbidden, ErrorNotFound } from '../utils/errors';
 import BaseModel, { AclAction, DeleteOptions } from './BaseModel';
 import { getCanShareFolder } from './utils/user';

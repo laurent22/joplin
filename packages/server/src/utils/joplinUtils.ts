@@ -11,7 +11,7 @@ import MasterKey from '@joplin/lib/models/MasterKey';
 import Revision from '@joplin/lib/models/Revision';
 import { Config } from './types';
 import * as fs from 'fs-extra';
-import { Item, Share, Uuid } from '../db';
+import { Item, Share, Uuid } from '../services/database/types';
 import ItemModel from '../models/ItemModel';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import { formatDateTime } from './time';

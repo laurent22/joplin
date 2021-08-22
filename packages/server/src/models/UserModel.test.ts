@@ -1,5 +1,5 @@
 import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, checkThrowAsync, createItem } from '../utils/testing/testUtils';
-import { EmailSender, User, UserFlagType } from '../db';
+import { EmailSender, User, UserFlagType } from '../services/database/types';
 import { ErrorUnprocessableEntity } from '../utils/errors';
 import { betaUserDateRange, stripeConfig } from '../utils/stripe';
 import { AccountType } from './UserModel';

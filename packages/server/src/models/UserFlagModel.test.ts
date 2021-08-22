@@ -1,4 +1,4 @@
-import { UserFlagType } from '../db';
+import { UserFlagType } from '../services/database/types';
 import { beforeAllDb, afterAllTests, beforeEachDb, models, createUserAndSession } from '../utils/testing/testUtils';
 
 describe('UserFlagModel', function() {

@@ -1,4 +1,5 @@
-import { User, Session, DbConnection, connectDb, disconnectDb, truncateTables, Item, Uuid } from '../../db';
+import { DbConnection, connectDb, disconnectDb, truncateTables } from '../../db';
+import { User, Session, Item, Uuid } from '../../services/database/types';
 import { createDb, CreateDbOptions } from '../../tools/dbTools';
 import modelFactory from '../../models/factory';
 import { AppContext, Env } from '../types';

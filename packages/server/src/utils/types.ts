@@ -1,11 +1,12 @@
 import { LoggerWrapper } from '@joplin/lib/Logger';
 import { StripePublicConfig } from '@joplin/lib/utils/joplinCloud';
 import * as Koa from 'koa';
-import { DbConnection, User, Uuid } from '../db';
+import { User, Uuid } from '../services/database/types';
 import { Models } from '../models/factory';
 import { Account } from '../models/UserModel';
 import { Services } from '../services/types';
 import { Routers } from './routeUtils';
+import { DbConnection } from '../db';
 
 export enum Env {
 	Dev = 'dev',

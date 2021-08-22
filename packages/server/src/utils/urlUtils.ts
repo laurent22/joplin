@@ -1,6 +1,6 @@
 import { URL } from 'url';
 import config from '../config';
-import { Uuid } from '../db';
+import { Uuid } from '../services/database/types';
 
 export function setQueryParameters(url: string, query: any): string {
 	if (!query) return url;

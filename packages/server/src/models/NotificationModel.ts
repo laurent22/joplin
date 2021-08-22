@@ -1,4 +1,4 @@
-import { Notification, NotificationLevel, Uuid } from '../db';
+import { Notification, NotificationLevel, Uuid } from '../services/database/types';
 import { ErrorUnprocessableEntity } from '../utils/errors';
 import BaseModel, { ValidateOptions } from './BaseModel';
 

@@ -4,7 +4,7 @@ import { RouteType } from '../../utils/types';
 import { ErrorForbidden } from '../../utils/errors';
 import { AppContext } from '../../utils/types';
 import { bodyFields } from '../../utils/requestUtils';
-import { User } from '../../db';
+import { User } from '../../services/database/types';
 import limiterLoginBruteForce from '../../utils/request/limiterLoginBruteForce';
 
 const router = new Router(RouteType.Api);

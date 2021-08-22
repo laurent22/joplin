@@ -1,5 +1,5 @@
 import BaseModel, { AclAction, SaveOptions, ValidateOptions } from './BaseModel';
-import { EmailSender, Item, User, UserFlagType, Uuid } from '../db';
+import { EmailSender, Item, User, UserFlagType, Uuid } from '../services/database/types';
 import * as auth from '../utils/auth';
 import { ErrorUnprocessableEntity, ErrorForbidden, ErrorPayloadTooLarge, ErrorNotFound } from '../utils/errors';
 import { ModelType } from '@joplin/lib/BaseModel';

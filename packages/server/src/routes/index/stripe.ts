@@ -10,7 +10,7 @@ import Logger from '@joplin/lib/Logger';
 import getRawBody = require('raw-body');
 import { AccountType } from '../../models/UserModel';
 import { betaUserTrialPeriodDays, cancelSubscription, initStripe, isBetaUser, priceIdToAccountType, stripeConfig } from '../../utils/stripe';
-import { Subscription, UserFlagType } from '../../db';
+import { Subscription, UserFlagType } from '../../services/database/types';
 import { findPrice, PricePeriod } from '@joplin/lib/utils/joplinCloud';
 
 const logger = Logger.create('/stripe');

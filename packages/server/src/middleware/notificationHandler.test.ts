@@ -1,5 +1,6 @@
 import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, koaAppContext, koaNext } from '../utils/testing/testUtils';
-import { defaultAdminEmail, defaultAdminPassword, Notification } from '../db';
+import { Notification } from '../services/database/types';
+import { defaultAdminEmail, defaultAdminPassword } from '../db';
 import notificationHandler from './notificationHandler';
 
 describe('notificationHandler', function() {

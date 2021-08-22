@@ -1,4 +1,4 @@
-import { Session } from '../../db';
+import { Session } from '../../services/database/types';
 import routeHandler from '../../middleware/routeHandler';
 import { cookieGet } from '../../utils/cookies';
 import { beforeAllDb, afterAllTests, beforeEachDb, koaAppContext, models, parseHtml, createUser } from '../../utils/testing/testUtils';

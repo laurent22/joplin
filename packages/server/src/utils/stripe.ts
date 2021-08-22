@@ -1,7 +1,7 @@
 import globalConfig from '../config';
 import { StripeConfig } from './types';
 import { Stripe } from 'stripe';
-import { Subscription, Uuid } from '../db';
+import { Subscription, Uuid } from '../services/database/types';
 import { Models } from '../models/factory';
 import { AccountType } from '../models/UserModel';
 import { findPrice, PricePeriod } from '@joplin/lib/utils/joplinCloud';

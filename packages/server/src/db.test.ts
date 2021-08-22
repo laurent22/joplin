@@ -5,7 +5,7 @@ it('should pass', async function() {
 // import { afterAllTests, beforeAllDb, beforeEachDb, db } from "./utils/testing/testUtils";
 // import sqlts from '@rmp135/sql-ts';
 // import config from "./config";
-// import { connectDb, DbConnection, disconnectDb, migrateDown, migrateList, migrateUp, nextMigration } from "./db";
+// import { connectDb, DbConnection, disconnectDb, migrateDown, migrateList, migrateUp, nextMigration } from "./services/database/types";
 
 // async function dbSchemaSnapshot(db:DbConnection):Promise<any> {
 // 	return sqlts.toObject({

@@ -1,5 +1,5 @@
 import { findPrice, PricePeriod } from '@joplin/lib/utils/joplinCloud';
-import { UserFlagType } from '../../db';
+import { UserFlagType } from '../../services/database/types';
 import { AccountType } from '../../models/UserModel';
 import { betaUserTrialPeriodDays, isBetaUser, stripeConfig } from '../../utils/stripe';
 import { beforeAllDb, afterAllTests, beforeEachDb, models, koaAppContext, expectNotThrow } from '../../utils/testing/testUtils';

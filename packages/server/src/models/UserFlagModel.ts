@@ -1,4 +1,5 @@
-import { isUniqueConstraintError, User, UserFlag, UserFlagType, Uuid } from '../db';
+import { isUniqueConstraintError } from '../db';
+import { User, UserFlag, UserFlagType, Uuid } from '../services/database/types';
 import BaseModel from './BaseModel';
 
 interface AddRemoveOptions {

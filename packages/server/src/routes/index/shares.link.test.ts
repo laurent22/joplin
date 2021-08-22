@@ -1,4 +1,4 @@
-import { Share, ShareType } from '../../db';
+import { Share, ShareType } from '../../services/database/types';
 import routeHandler from '../../middleware/routeHandler';
 import { ErrorForbidden } from '../../utils/errors';
 import { postApi } from '../../utils/testing/apiUtils';

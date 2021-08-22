@@ -1,4 +1,4 @@
-import { KeyValue } from '../db';
+import { KeyValue } from '../services/database/types';
 import BaseModel from './BaseModel';
 
 export enum ValueType {

@@ -2,7 +2,7 @@ import Logger from '@joplin/lib/Logger';
 import BaseService from './BaseService';
 import Mail = require('nodemailer/lib/mailer');
 import { createTransport } from 'nodemailer';
-import { Email, EmailSender } from '../db';
+import { Email, EmailSender } from '../services/database/types';
 import { errorToString } from '../utils/errors';
 import EmailModel from '../models/EmailModel';
 import { markdownBodyToHtml, markdownBodyToPlainText } from './email/utils';

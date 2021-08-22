@@ -1,4 +1,4 @@
-import { ChangeType, ItemType, UserItem, Uuid } from '../db';
+import { ChangeType, ItemType, UserItem, Uuid } from '../services/database/types';
 import BaseModel, { DeleteOptions, LoadOptions, SaveOptions } from './BaseModel';
 import { unique } from '../utils/array';
 import { ErrorNotFound } from '../utils/errors';

@@ -1,4 +1,4 @@
-import { Item, Uuid } from '../../db';
+import { Item, Uuid } from '../../services/database/types';
 import { formParse } from '../../utils/requestUtils';
 import { respondWithItemContent, SubPath } from '../../utils/routeUtils';
 import Router from '../../utils/Router';

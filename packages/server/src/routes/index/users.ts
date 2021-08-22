@@ -4,7 +4,7 @@ import { RouteType } from '../../utils/types';
 import { AppContext, HttpMethod } from '../../utils/types';
 import { bodyFields, contextSessionId, formParse } from '../../utils/requestUtils';
 import { ErrorForbidden, ErrorUnprocessableEntity } from '../../utils/errors';
-import { User, UserFlagType, Uuid } from '../../db';
+import { User, UserFlagType, Uuid } from '../../services/database/types';
 import config from '../../config';
 import { View } from '../../services/MustacheService';
 import defaultView from '../../utils/defaultView';

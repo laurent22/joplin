@@ -1,4 +1,5 @@
-import { WithDates, WithUuid, databaseSchema, DbConnection, ItemType, Uuid, User } from '../db';
+import { WithDates, WithUuid, databaseSchema, ItemType, Uuid, User } from '../services/database/types';
+import { DbConnection } from '../db';
 import TransactionHandler from '../utils/TransactionHandler';
 import uuidgen from '../utils/uuidgen';
 import { ErrorUnprocessableEntity, ErrorBadRequest } from '../utils/errors';

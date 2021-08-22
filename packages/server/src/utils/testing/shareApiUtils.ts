@@ -1,6 +1,6 @@
 import { FolderEntity } from '@joplin/lib/services/database/types';
 import { linkedResourceIds } from '../joplinUtils';
-import { Item, Share, ShareType, ShareUser, ShareUserStatus, User, Uuid } from '../../db';
+import { Item, Share, ShareType, ShareUser, ShareUserStatus, User, Uuid } from '../../services/database/types';
 import routeHandler from '../../middleware/routeHandler';
 import { AppContext } from '../types';
 import { patchApi, postApi } from './apiUtils';

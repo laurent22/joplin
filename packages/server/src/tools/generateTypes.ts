@@ -2,7 +2,7 @@ import sqlts from '@rmp135/sql-ts';
 
 require('source-map-support').install();
 
-const dbFilePath: string = `${__dirname}/../../src/db.ts`;
+const dbFilePath: string = `${__dirname}/../../src/services/database/types.ts`;
 
 const fileReplaceWithinMarker = '// AUTO-GENERATED-TYPES';
 

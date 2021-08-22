@@ -3,7 +3,7 @@ import * as fs from 'fs-extra';
 import config from '../config';
 import { filename } from '@joplin/lib/path-utils';
 import { NotificationView } from '../utils/types';
-import { User } from '../db';
+import { User } from '../services/database/types';
 import { makeUrl, UrlType } from '../utils/routeUtils';
 
 export interface RenderOptions {

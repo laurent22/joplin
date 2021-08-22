@@ -1,4 +1,4 @@
-import { EmailSender, Subscription, User, UserFlagType, Uuid } from '../db';
+import { EmailSender, Subscription, User, UserFlagType, Uuid } from '../services/database/types';
 import { ErrorNotFound } from '../utils/errors';
 import { Day } from '../utils/time';
 import uuidgen from '../utils/uuidgen';

@@ -1,4 +1,4 @@
-import { EmailSender } from '../db';
+import { EmailSender } from '../services/database/types';
 import { beforeAllDb, afterAllTests, beforeEachDb, models, createUserAndSession } from '../utils/testing/testUtils';
 import paymentFailedTemplate from '../views/emails/paymentFailedTemplate';
 

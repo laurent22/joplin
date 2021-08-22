@@ -1,4 +1,4 @@
-import { ChangeType, Share, ShareType, ShareUser, ShareUserStatus } from '../../db';
+import { ChangeType, Share, ShareType, ShareUser, ShareUserStatus } from '../../services/database/types';
 import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, createNote, createFolder, updateItem, createItemTree, makeNoteSerializedBody, updateNote, expectHttpError, createResource } from '../../utils/testing/testUtils';
 import { postApi, patchApi, getApi, deleteApi } from '../../utils/testing/apiUtils';
 import { PaginatedDeltaChanges } from '../../models/ChangeModel';
