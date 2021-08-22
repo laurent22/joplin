@@ -381,6 +381,9 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 			`.CodeMirror-selected {
 				background: #6b6b6b !important;
 			}` : '';
+		// Vim mode draws a fat cursor in the background, we don't want to add background colors
+		// to the inline code in this case (it would hide the cursor)
+		const codeBackgroundColor = Setting.value('editor.keyboardMode') !== 'vim' ? theme.codeBackgroundColor : 'inherit';
 		const monospaceFonts = [];
 		if (Setting.value('style.editor.monospaceFontFamily')) monospaceFonts.push(`"${Setting.value('style.editor.monospaceFontFamily')}"`);
 		monospaceFonts.push('monospace');
@@ -476,9 +479,9 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 			}
 
 			/* Negative margins are needed to componsate for the border */
-			div.CodeMirror span.cm-comment.cm-jn-inline-code {
+			div.CodeMirror span.cm-comment.cm-jn-inline-code:not(.cm-search-marker):not(.cm-fat-cursor-mark):not(.cm-search-marker-selected):not(.CodeMirror-selectedtext) {
 				border: 1px solid ${theme.codeBorderColor};
-				background-color: ${theme.codeBackgroundColor};
+				background-color: ${codeBackgroundColor};
 				margin-left: -1px;
 				margin-right: -1px;
 				border-radius: .25em;
