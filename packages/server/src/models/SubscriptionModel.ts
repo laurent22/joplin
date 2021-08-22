@@ -81,9 +81,10 @@ export default class SubscriptionModel extends BaseModel<Subscription> {
 			const user = await this.models().user().load(sub.user_id);
 
 			await this.withTransaction(async () => {
-				await this.models().userFlag().remove(user.id, UserFlagType.FailedPaymentWarning);
-				await this.models().userFlag().remove(user.id, UserFlagType.FailedPaymentFinal);
-				await this.models().user().updateFromFlags(user.id);
+				await this.models().userFlag().removeMulti(user.id, [
+					UserFlagType.FailedPaymentWarning,
+					UserFlagType.FailedPaymentFinal,
+				]);
 
 				await this.save({
 					id: sub.id,

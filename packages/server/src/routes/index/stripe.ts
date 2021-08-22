@@ -258,11 +258,12 @@ export const postHandlers: PostHandlers = {
 
 						// Also clear any payment and subscription related flags
 						// since if we're here it means payment was successful
-						await models.userFlag().remove(existingUser.id, UserFlagType.FailedPaymentWarning);
-						await models.userFlag().remove(existingUser.id, UserFlagType.FailedPaymentFinal);
-						await models.userFlag().remove(existingUser.id, UserFlagType.SubscriptionCancelled);
-						await models.userFlag().remove(existingUser.id, UserFlagType.AccountWithoutSubscription);
-						await models.user().updateFromFlags(existingUser.id);
+						await models.userFlag().removeMulti(existingUser.id, [
+							UserFlagType.FailedPaymentWarning,
+							UserFlagType.FailedPaymentFinal,
+							UserFlagType.SubscriptionCancelled,
+							UserFlagType.AccountWithoutSubscription,
+						]);
 
 						// Then save the subscription
 						await models.subscription().save({
@@ -326,7 +327,6 @@ export const postHandlers: PostHandlers = {
 				const { sub } = await getSubscriptionInfo(event, ctx);
 				await models.subscription().toggleSoftDelete(sub.id, true);
 				await models.userFlag().add(sub.user_id, UserFlagType.SubscriptionCancelled);
-				await models.user().updateFromFlags(sub.user_id);
 			},
 
 			'customer.subscription.updated': async () => {

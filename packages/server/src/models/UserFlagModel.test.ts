@@ -19,20 +19,23 @@ describe('UserFlagModel', function() {
 		const { user } = await createUserAndSession(1);
 
 		const beforeTime = Date.now();
-		let flag = await models().userFlag().add(user.id, UserFlagType.AccountOverLimit);
+		await models().userFlag().add(user.id, UserFlagType.AccountOverLimit);
+		const flag = await models().userFlag().byUserId(user.id, UserFlagType.AccountOverLimit);
 
 		expect(flag.user_id).toBe(user.id);
 		expect(flag.type).toBe(UserFlagType.AccountOverLimit);
 		expect(flag.created_time).toBeGreaterThanOrEqual(beforeTime);
 		expect(flag.updated_time).toBeGreaterThanOrEqual(beforeTime);
 
-		flag = await models().userFlag().byUserId(user.id, UserFlagType.AccountOverLimit);
+		const flagCountBefore = (await models().userFlag().all()).length;
+		await models().userFlag().add(user.id, UserFlagType.AccountOverLimit);
+		const flagCountAfter = (await models().userFlag().all()).length;
+		expect(flagCountBefore).toBe(flagCountAfter);
 
-		const sameFlag = await models().userFlag().add(user.id, UserFlagType.AccountOverLimit);
-		expect(flag.id).toBe(sameFlag.id);
-
-		let differentFlag = await models().userFlag().add(user.id, UserFlagType.FailedPaymentFinal);
-		differentFlag = await models().userFlag().byUserId(user.id, UserFlagType.FailedPaymentFinal);
+		await models().userFlag().add(user.id, UserFlagType.FailedPaymentFinal);
+		const flagCountAfter2 = (await models().userFlag().all()).length;
+		expect(flagCountAfter2).toBe(flagCountBefore + 1);
+		const differentFlag = await models().userFlag().byUserId(user.id, UserFlagType.FailedPaymentFinal);
 		expect(flag.id).not.toBe(differentFlag.id);
 	});
 

@@ -341,6 +341,7 @@ export enum UserFlagType {
 	AccountOverLimit = 3,
 	AccountWithoutSubscription = 4,
 	SubscriptionCancelled = 5,
+	ManuallyDisabled = 6,
 }
 
 export enum FileContentType {
