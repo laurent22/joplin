@@ -7,7 +7,7 @@ const theme: Theme = {
 	backgroundColor: '#fdf6e3',
 	backgroundColorTransparent: 'rgba(253, 246, 227, 0.9)',
 	oddBackgroundColor: '#eee8d5',
-	color: '#11051F', // For regular text
+	color: '#657b83', // For regular text
 	colorError: '#dc322f',
 	colorWarn: '#cb4b16',
 	colorFaded: '#839496', // For less important text;
@@ -24,7 +24,7 @@ const theme: Theme = {
 	raisedBackgroundColor: '#eee8d5',
 	raisedColor: '#073642',
 
-	warningBackgroundColor: '#FF6969',
+	warningBackgroundColor: '#b5890055',
 
 	tableBackgroundColor: '#fdf6e3',
 	codeBackgroundColor: '#fdf6e3',

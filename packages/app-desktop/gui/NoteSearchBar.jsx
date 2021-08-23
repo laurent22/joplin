@@ -14,7 +14,6 @@ class NoteSearchBarComponent extends React.Component {
 		this.closeButton_click = this.closeButton_click.bind(this);
 
 		this.backgroundColor = undefined;
-		this.isSearchResultFound = undefined;
 	}
 
 	style() {
@@ -113,6 +112,7 @@ class NoteSearchBarComponent extends React.Component {
 
 	render() {
 		const query = this.props.query ? this.props.query : '';
+		let isSearchResultFound = false;
 
 		// backgroundColor needs to cached to a local variable to prevent the
 		// colour from blinking.
@@ -121,10 +121,10 @@ class NoteSearchBarComponent extends React.Component {
 		if (!this.props.searching) {
 			if (this.props.resultCount === 0 && query.length > 0) {
 				this.backgroundColor = theme.warningBackgroundColor;
-				this.isSearchResultFound = false;
+				isSearchResultFound = false;
 			} else {
 				this.backgroundColor = theme.backgroundColor;
-				this.isSearchResultFound = true;
+				isSearchResultFound = true;
 			}
 		}
 		if (this.backgroundColor === undefined) {
@@ -167,17 +167,13 @@ class NoteSearchBarComponent extends React.Component {
 						onKeyDown={this.searchInput_keyDown}
 						ref="searchInput"
 						type="text"
-						style={{
-							width: 200, marginRight: 5,
-							backgroundColor: this.backgroundColor,
-							color: theme.color,
-						}}
+						style={{ width: 200, marginRight: 5, backgroundColor: this.backgroundColor, color: theme.color }}
 					/>
 					{allowScrolling ? nextButton : null}
 					{allowScrolling ? previousButton : null}
 					{allowScrolling ? matchesFoundString : null}
 					{!allowScrolling ? viewerWarning : null}
-					{this.isSearchResultFound === false && <span> Phrase Not Found </span>}
+					{isSearchResultFound === false && <span>{ _('Phrase Not Found') }</span>}
 				</div>
 			</div>
 		);
