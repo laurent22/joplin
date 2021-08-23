@@ -1,6 +1,11 @@
 # https://versatile.nl/blog/deploying-lerna-web-apps-with-docker
 
-FROM node:16
+FROM node:16-bullseye
+
+RUN apt-get update \
+    && apt-get install -y \
+    python \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN echo "Node: $(node --version)"
 RUN echo "Npm: $(npm --version)"
