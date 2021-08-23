@@ -69,9 +69,6 @@ packages/app-cli/tests/HtmlToMd.js.map
 packages/app-cli/tests/MdToHtml.d.ts
 packages/app-cli/tests/MdToHtml.js
 packages/app-cli/tests/MdToHtml.js.map
-packages/app-cli/tests/MdToMd.d.ts
-packages/app-cli/tests/MdToMd.js
-packages/app-cli/tests/MdToMd.js.map
 packages/app-cli/tests/services/keychain/KeychainService.d.ts
 packages/app-cli/tests/services/keychain/KeychainService.js
 packages/app-cli/tests/services/keychain/KeychainService.js.map
@@ -1080,12 +1077,6 @@ packages/lib/services/CommandService.test.js.map
 packages/lib/services/DecryptionWorker.d.ts
 packages/lib/services/DecryptionWorker.js
 packages/lib/services/DecryptionWorker.js.map
-packages/lib/services/EncryptionService.d.ts
-packages/lib/services/EncryptionService.js
-packages/lib/services/EncryptionService.js.map
-packages/lib/services/EncryptionService.test.d.ts
-packages/lib/services/EncryptionService.test.js
-packages/lib/services/EncryptionService.test.js.map
 packages/lib/services/ExternalEditWatcher.d.ts
 packages/lib/services/ExternalEditWatcher.js
 packages/lib/services/ExternalEditWatcher.js.map
@@ -1179,6 +1170,12 @@ packages/lib/services/database/types.js.map
 packages/lib/services/debug/populateDatabase.d.ts
 packages/lib/services/debug/populateDatabase.js
 packages/lib/services/debug/populateDatabase.js.map
+packages/lib/services/e2ee/EncryptionService.d.ts
+packages/lib/services/e2ee/EncryptionService.js
+packages/lib/services/e2ee/EncryptionService.js.map
+packages/lib/services/e2ee/EncryptionService.test.d.ts
+packages/lib/services/e2ee/EncryptionService.test.js
+packages/lib/services/e2ee/EncryptionService.test.js.map
 packages/lib/services/e2ee/types.d.ts
 packages/lib/services/e2ee/types.js
 packages/lib/services/e2ee/types.js.map
@@ -1233,6 +1230,7 @@ packages/lib/services/interop/InteropService_Importer_Jex.js.map
 packages/lib/services/interop/InteropService_Importer_Md.d.ts
 packages/lib/services/interop/InteropService_Importer_Md.js
 packages/lib/services/interop/InteropService_Importer_Md.js.map
+packages/lib/services/interop/InteropService_Importer_Md.test.d.ts
 packages/lib/services/interop/InteropService_Importer_Md.test.js
 packages/lib/services/interop/InteropService_Importer_Md.test.js.map
 packages/lib/services/interop/InteropService_Importer_Raw.d.ts

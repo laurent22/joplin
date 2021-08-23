@@ -1,6 +1,6 @@
 const { BaseCommand } = require('./base-command.js');
 import { _ } from '@joplin/lib/locale';
-import EncryptionService from '@joplin/lib/services/EncryptionService';
+import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
 import DecryptionWorker from '@joplin/lib/services/DecryptionWorker';
 import BaseItem from '@joplin/lib/models/BaseItem';
 import Setting from '@joplin/lib/models/Setting';

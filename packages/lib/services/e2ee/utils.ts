@@ -3,7 +3,7 @@ import BaseItem from '../../models/BaseItem';
 import MasterKey from '../../models/MasterKey';
 import Setting from '../../models/Setting';
 import { MasterKeyEntity } from './types';
-import EncryptionService from '../EncryptionService';
+import EncryptionService from './EncryptionService';
 import { getActiveMasterKeyId, masterKeyEnabled, setEncryptionEnabled, SyncInfo } from '../synchronizer/syncInfoUtils';
 
 const logger = Logger.create('e2ee/utils');

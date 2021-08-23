@@ -6,7 +6,7 @@ const { BaseScreenComponent } = require('../base-screen.js');
 const { themeStyle } = require('../global-style.js');
 const DialogBox = require('react-native-dialogbox').default;
 const { dialogs } = require('../../utils/dialogs.js');
-import EncryptionService from '@joplin/lib/services/EncryptionService';
+import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
 import { _ } from '@joplin/lib/locale';
 import time from '@joplin/lib/time';
 import shared from '@joplin/lib/components/shared/encryption-config-shared';

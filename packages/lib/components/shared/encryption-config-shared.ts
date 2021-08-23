@@ -1,4 +1,4 @@
-import EncryptionService from '../../services/EncryptionService';
+import EncryptionService from '../../services/e2ee/EncryptionService';
 import { _ } from '../../locale';
 import BaseItem from '../../models/BaseItem';
 import Setting from '../../models/Setting';

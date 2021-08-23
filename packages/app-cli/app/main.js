@@ -27,7 +27,7 @@ const { shimInit } = require('@joplin/lib/shim-init-node.js');
 const shim = require('@joplin/lib/shim').default;
 const { _ } = require('@joplin/lib/locale');
 const { FileApiDriverLocal } = require('@joplin/lib/file-api-driver-local.js');
-const EncryptionService = require('@joplin/lib/services/EncryptionService').default;
+const EncryptionService = require('@joplin/lib/services/e2ee/EncryptionService').default;
 const envFromArgs = require('@joplin/lib/envFromArgs');
 
 const env = envFromArgs(process.argv);

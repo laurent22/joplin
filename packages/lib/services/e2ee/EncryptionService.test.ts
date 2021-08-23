@@ -1,11 +1,11 @@
-import { fileContentEqual, setupDatabaseAndSynchronizer, supportDir, switchClient, objectsEqual, checkThrowAsync, msleep } from '../testing/test-utils';
-import Folder from '../models/Folder';
-import Note from '../models/Note';
-import Setting from '../models/Setting';
-import BaseItem from '../models/BaseItem';
-import MasterKey from '../models/MasterKey';
-import EncryptionService from '../services/EncryptionService';
-import { setEncryptionEnabled } from '../services/synchronizer/syncInfoUtils';
+import { fileContentEqual, setupDatabaseAndSynchronizer, supportDir, switchClient, objectsEqual, checkThrowAsync, msleep } from '../../testing/test-utils';
+import Folder from '../../models/Folder';
+import Note from '../../models/Note';
+import Setting from '../../models/Setting';
+import BaseItem from '../../models/BaseItem';
+import MasterKey from '../../models/MasterKey';
+import EncryptionService from './EncryptionService';
+import { setEncryptionEnabled } from '../synchronizer/syncInfoUtils';
 
 let service: EncryptionService = null;
 
