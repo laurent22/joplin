@@ -59,7 +59,7 @@
 
 ## [server-v2.2.8-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.2.8-beta) (Pre-release) - 2021-07-24T16:55:58Z
 
-- New: Added form tokens to prevent CSRF attacks (19b45de)
+- New: Added form tokens to prevent CSRF attacks (CVE-2021-23431) (19b45de)
 - Improved: Allow admin to change Stripe subscription (75a421e)
 - Improved: Allow enabling or disabling a user. Handle cancelling subscription. (27c3cbd)
 - Improved: Allow user to upgrade account (e83ab93)
