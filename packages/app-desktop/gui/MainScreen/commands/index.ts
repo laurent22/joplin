@@ -9,9 +9,12 @@ import * as newFolder from './newFolder';
 import * as newNote from './newNote';
 import * as newSubFolder from './newSubFolder';
 import * as newTodo from './newTodo';
+import * as notesSortOrderSwitch from './notesSortOrderSwitch';
+import * as notesSortOrderToggleReverse from './notesSortOrderToggleReverse';
 import * as openFolder from './openFolder';
 import * as openNote from './openNote';
 import * as openTag from './openTag';
+import * as perNotebookSortOrder from './perNotebookSortOrder';
 import * as print from './print';
 import * as renameFolder from './renameFolder';
 import * as renameTag from './renameTag';
@@ -41,9 +44,12 @@ const index:any[] = [
 	newNote,
 	newSubFolder,
 	newTodo,
+	notesSortOrderSwitch,
+	notesSortOrderToggleReverse,
 	openFolder,
 	openNote,
 	openTag,
+	perNotebookSortOrder,
 	print,
 	renameFolder,
 	renameTag,

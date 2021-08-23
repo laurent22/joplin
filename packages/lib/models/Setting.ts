@@ -774,6 +774,56 @@ class Setting extends BaseModel {
 				storage: SettingStorage.File,
 			},
 			'notes.sortOrder.reverse': { value: true, type: SettingItemType.Bool, storage: SettingStorage.File, section: 'note', public: true, label: () => _('Reverse sort order'), appTypes: [AppType.Cli] },
+			// NOTE: A setting whose name starts with 'notes.sortOrder' is special,
+			// which implies changing the setting automatically triggers the reflesh of notes.
+			// See lib/BaseApplication.ts/generalMiddleware() for details.
+			'notes.sortOrder.buttonsVisible': { value: true, type: SettingItemType.Bool, storage: SettingStorage.File, section: 'note', public: true, label: () => _('Show sort order buttons'), appTypes: [AppType.Desktop] },
+			'notes.perFieldReversalEnabled': {
+				value: true,
+				type: SettingItemType.Bool,
+				storage: SettingStorage.File,
+				section: 'note',
+				public: true,
+				label: () => _('Enable per-field sort order reversal'),
+				appTypes: [AppType.Cli, AppType.Desktop]
+			},
+			'notes.perFieldReverse': {
+				value: {
+					user_updated_time: true,
+					user_created_time: true,
+					title: false,
+					order: false,
+				},
+				type: SettingItemType.Object,
+				storage: SettingStorage.File,
+				section: 'note',
+				public: false,
+				appTypes: [AppType.Cli, AppType.Desktop]
+			},
+			'notes.perNotebookSortOrderEnabled': {
+				value: true,
+				type: SettingItemType.Bool,
+				storage: SettingStorage.File,
+				section: 'note',
+				public: true,
+				label: () => _('Enable per-notebook sort order'),
+				appTypes: [AppType.Cli, AppType.Desktop]
+			},
+			'notes.perNotebookSortOrders': {
+				value: {},
+				type: SettingItemType.Object,
+				storage: SettingStorage.File,
+				section: 'note',
+				public: false,
+				appTypes: [AppType.Cli, AppType.Desktop]
+			},
+			'notes.sharedSortOrder': {
+				value: {},
+				type: SettingItemType.Object,
+				section: 'note',
+				public: false,
+				appTypes: [AppType.Cli, AppType.Desktop]
+			},
 			'folders.sortOrder.field': {
 				value: 'title',
 				type: SettingItemType.String,
