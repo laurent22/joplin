@@ -70,7 +70,7 @@ export interface MailerConfig {
 	enabled: boolean;
 	host: string;
 	port: number;
-	secure: boolean;
+	encryption: string;
 	authUser: string;
 	authPassword: string;
 	noReplyName: string;
