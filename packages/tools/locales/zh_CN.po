@@ -1176,19 +1176,16 @@ msgid "Submit"
 msgstr "提交"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.js:73
-#, fuzzy
 msgid "Source: "
-msgstr "来源"
+msgstr "来源： "
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.js:76
-#, fuzzy
 msgid "Created: "
-msgstr "创建于：%s"
+msgstr "创建于： "
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.js:79
-#, fuzzy
 msgid "Updated: "
-msgstr "已更新：%s"
+msgstr "更新于： "
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.js:84
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:96
@@ -1198,9 +1195,8 @@ msgid "Save"
 msgstr "保存"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.js:87
-#, fuzzy
 msgid "Disable"
-msgstr "已禁用"
+msgstr "禁用"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.js:87
 #: packages/app-mobile/components/screens/encryption-config.js:157
@@ -1305,11 +1301,11 @@ msgstr "主密码"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.js:142
 msgid "Hide disabled master keys"
-msgstr ""
+msgstr "隐藏禁用的密钥"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.js:142
 msgid "Show disabled master keys"
-msgstr ""
+msgstr "显示禁用的密钥"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.js:143
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:343
@@ -1328,7 +1324,7 @@ msgstr "正在使用"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.js:149
 msgid "Date"
-msgstr ""
+msgstr "日期"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.js:150
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:329
@@ -1336,12 +1332,10 @@ msgid "Password"
 msgstr "密码"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.js:151
-#, fuzzy
 msgid "Valid"
-msgstr "无效"
+msgstr "有效"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.js:152
-#, fuzzy
 msgid "Actions"
 msgstr "动作"
 
@@ -1606,9 +1600,8 @@ msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
 msgstr "使用箭头移动布局项。按“Escape”退出。"
 
 #: packages/app-desktop/gui/MainScreen/commands/commandPalette.js:18
-#, fuzzy
 msgid "Command palette..."
-msgstr "命令面板"
+msgstr "命令面板..."
 
 #: packages/app-desktop/gui/MainScreen/commands/editAlarm.js:20
 #: packages/app-mobile/components/SelectDateTimeDialog.js:84
@@ -2485,22 +2478,20 @@ msgid "Export debug report"
 msgstr "导出调试报告"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:157
-#, fuzzy
 msgid "Sync your notes"
-msgstr "笔记排序方式"
+msgstr "同步笔记"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:158
 msgid "Publish notes to the internet"
-msgstr ""
+msgstr "把笔记发布到互联网"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:159
-#, fuzzy
 msgid "Collaborate on notebooks with others"
-msgstr "请先创建一本笔记本"
+msgstr "与他人共同协作笔记本"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:182
 msgid "Thank you! Your Joplin Cloud account is now setup and ready to use."
-msgstr ""
+msgstr "感谢！你的 Joplin Cloud 帐号已经设置完毕。"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:190
 #, javascript-format
@@ -2510,30 +2501,32 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"设置你的 Joplin Cloud 帐号时发生了一个错误。请确认你的邮箱和密码是否正确，然"
+"后再试一次。错误是：\n"
+"\n"
+"%s"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:203
 msgid "Login below."
-msgstr ""
+msgstr "在下方登录。"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:205
-#, fuzzy
 msgid "Or create an account."
-msgstr "新建笔记。"
+msgstr "创建帐号。"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:210
 msgid "Login"
-msgstr ""
+msgstr "登录"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:231
-#, fuzzy
 msgid "Select"
-msgstr "全选"
+msgstr "选择"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:278
 msgid ""
 "Joplin can synchronise your notes using various providers. Select one from "
 "the list below."
-msgstr ""
+msgstr "Joplin 可以使用多种途径来同步你的笔记。可以从下列选项中选择一种方式。"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.js:43
 msgid "Duplicate"
@@ -2992,6 +2985,8 @@ msgid ""
 "Joplin's own sync service. Also gives access to Joplin-specific features "
 "such as publishing notes or collaborating on notebooks with others."
 msgstr ""
+"Joplin 自己的同步服务。同时也提供 Joplin 的一些特性，比如发布笔记或者与他人协"
+"作笔记本。"
 
 #: packages/lib/SyncTargetJoplinServer.js:60
 msgid "Joplin Server"
@@ -3003,7 +2998,7 @@ msgstr "Nextcloud"
 
 #: packages/lib/SyncTargetNone.js:22
 msgid "(None)"
-msgstr ""
+msgstr "（无）"
 
 #: packages/lib/SyncTargetOneDrive.js:32
 msgid "OneDrive"
@@ -3146,7 +3141,7 @@ msgstr "已解密条目： %s / %s"
 #: packages/lib/components/shared/encryption-config-shared.js:151
 #, javascript-format
 msgid "Encryption will be enabled using the master key created on %s"
-msgstr ""
+msgstr "将使用创建于 %s 的密钥来启用加密功能"
 
 #: packages/lib/models/BaseItem.js:721
 msgid "Encrypted"
@@ -3216,9 +3211,8 @@ msgid "Error"
 msgstr "错误"
 
 #: packages/lib/models/Resource.js:408
-#, fuzzy
 msgid "Conflicts (attachments)"
-msgstr "笔记附件"
+msgstr "冲突（附件）"
 
 #: packages/lib/models/Resource.js:422
 #, javascript-format
@@ -3293,7 +3287,7 @@ msgstr "纯黑 (OLED)"
 
 #: packages/lib/models/Setting.js:152
 msgid "Open Sync Wizard..."
-msgstr ""
+msgstr "打开同步向导..."
 
 #: packages/lib/models/Setting.js:162
 msgid "Synchronisation target"
@@ -3624,11 +3618,11 @@ msgstr ""
 
 #: packages/lib/models/Setting.js:783
 msgid "Editor maximum width"
-msgstr ""
+msgstr "编辑器最大宽度"
 
 #: packages/lib/models/Setting.js:783
 msgid "Set it to 0 to make it take the complete available space."
-msgstr ""
+msgstr "设置为 0 则占用全部可用空间。"
 
 #: packages/lib/models/Setting.js:802
 msgid "Custom stylesheet for rendered Markdown"
