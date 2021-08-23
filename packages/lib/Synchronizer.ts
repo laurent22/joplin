@@ -22,7 +22,7 @@ import TaskQueue from './TaskQueue';
 import ItemUploader from './services/synchronizer/ItemUploader';
 import { FileApi } from './file-api';
 import JoplinDatabase from './JoplinDatabase';
-import { fetchSyncInfo, getActiveMasterKey, localSyncInfo, mergeSyncInfos, saveLocalSyncInfo, syncInfoEquals, uploadSyncInfo } from './services/synchronizer/syncInfoUtils';
+import { fetchSyncInfo, getActiveMasterKey, localSyncInfo, mergeSyncInfos, saveLocalSyncInfo, setPpkIfNotExist, syncInfoEquals, uploadSyncInfo } from './services/synchronizer/syncInfoUtils';
 import { setupAndDisableEncryption, setupAndEnableEncryption } from './services/e2ee/utils';
 const { sprintf } = require('sprintf-js');
 const { Dirnames } = require('./services/synchronizer/utils/types');
@@ -434,6 +434,8 @@ export default class Synchronizer {
 					const localInfo = await localSyncInfo();
 
 					logger.info('Sync target local info:', localInfo);
+
+					setPpkIfNotExist(localInfo, remoteInfo);
 
 					// console.info('LOCAL', localInfo);
 					// console.info('REMOTE', remoteInfo);

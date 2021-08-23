@@ -1194,6 +1194,12 @@ packages/lib/services/e2ee/EncryptionService.js.map
 packages/lib/services/e2ee/EncryptionService.test.d.ts
 packages/lib/services/e2ee/EncryptionService.test.js
 packages/lib/services/e2ee/EncryptionService.test.js.map
+packages/lib/services/e2ee/ppk.d.ts
+packages/lib/services/e2ee/ppk.js
+packages/lib/services/e2ee/ppk.js.map
+packages/lib/services/e2ee/ppk.test.d.ts
+packages/lib/services/e2ee/ppk.test.js
+packages/lib/services/e2ee/ppk.test.js.map
 packages/lib/services/e2ee/types.d.ts
 packages/lib/services/e2ee/types.js
 packages/lib/services/e2ee/types.js.map
@@ -1515,6 +1521,9 @@ packages/lib/services/synchronizer/Synchronizer.conflicts.test.js.map
 packages/lib/services/synchronizer/Synchronizer.e2ee.test.d.ts
 packages/lib/services/synchronizer/Synchronizer.e2ee.test.js
 packages/lib/services/synchronizer/Synchronizer.e2ee.test.js.map
+packages/lib/services/synchronizer/Synchronizer.ppk.test.d.ts
+packages/lib/services/synchronizer/Synchronizer.ppk.test.js
+packages/lib/services/synchronizer/Synchronizer.ppk.test.js.map
 packages/lib/services/synchronizer/Synchronizer.resources.test.d.ts
 packages/lib/services/synchronizer/Synchronizer.resources.test.js
 packages/lib/services/synchronizer/Synchronizer.resources.test.js.map

@@ -106,6 +106,10 @@ class FileApi {
 		return !!this.driver().supportsAccurateTimestamp;
 	}
 
+	public get requiresPublicPrivateKeyPair(): boolean {
+		return !!this.driver().requiresPublicPrivateKeyPair;
+	}
+
 	async fetchRemoteDateOffset_() {
 		const tempFile = `${this.tempDirName()}/timeCheck${Math.round(Math.random() * 1000000)}.txt`;
 		const startTime = Date.now();
