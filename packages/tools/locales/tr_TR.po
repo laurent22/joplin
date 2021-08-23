@@ -14,7 +14,9 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0\n"
+"X-Generator: Poedit 2.4.3\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-cli/app/app-gui.js:452
 msgid "To delete a tag, untag the associated notes."
@@ -1231,19 +1233,16 @@ msgid "Submit"
 msgstr "Gönder"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.js:73
-#, fuzzy
 msgid "Source: "
-msgstr "Kaynak"
+msgstr "Kaynak: "
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.js:76
-#, fuzzy
 msgid "Created: "
-msgstr "Oluşturulma: %s"
+msgstr "Oluşturulma: "
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.js:79
-#, fuzzy
 msgid "Updated: "
-msgstr "Güncellendi: %s"
+msgstr "Güncelleme: "
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.js:84
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:96
@@ -1253,7 +1252,6 @@ msgid "Save"
 msgstr "Kaydet"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.js:87
-#, fuzzy
 msgid "Disable"
 msgstr "Pasif"
 
@@ -1367,11 +1365,11 @@ msgstr "Ana Anahtarlar"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.js:142
 msgid "Hide disabled master keys"
-msgstr ""
+msgstr "İnaktif ana anahtarları gizle"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.js:142
 msgid "Show disabled master keys"
-msgstr ""
+msgstr "İnaktif ana anahtarları görüntüle"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.js:143
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:343
@@ -1392,7 +1390,7 @@ msgstr "Aktif"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.js:149
 msgid "Date"
-msgstr ""
+msgstr "Tarih"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.js:150
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:329
@@ -1400,12 +1398,10 @@ msgid "Password"
 msgstr "Şifre"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.js:151
-#, fuzzy
 msgid "Valid"
-msgstr "Geçersiz"
+msgstr "Geçerli"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.js:152
-#, fuzzy
 msgid "Actions"
 msgstr "İşlem"
 
@@ -1688,9 +1684,8 @@ msgstr ""
 "“Escape” tuşuna basabilirsiniz."
 
 #: packages/app-desktop/gui/MainScreen/commands/commandPalette.js:18
-#, fuzzy
 msgid "Command palette..."
-msgstr "Komut paleti"
+msgstr "Komut paleti…"
 
 #: packages/app-desktop/gui/MainScreen/commands/editAlarm.js:20
 #: packages/app-mobile/components/SelectDateTimeDialog.js:84
@@ -1792,9 +1787,8 @@ msgid "Share notebook..."
 msgstr "No deferini paylaş..."
 
 #: packages/app-desktop/gui/MainScreen/commands/showShareNoteDialog.js:16
-#, fuzzy
 msgid "Publish note..."
-msgstr "Notu paylaş..."
+msgstr "Notu yayımla…"
 
 #: packages/app-desktop/gui/MainScreen/commands/showSpellCheckerMenu.js:19
 #: packages/lib/services/spellChecker/SpellCheckerService.js:180
@@ -2392,18 +2386,17 @@ msgid "Warning: not all resources shown for performance reasons (limit: %s)."
 msgstr "Uyarı: performans sebebi ile tüm kaynaklar görüntülenmedi (limit: %s)."
 
 #: packages/app-desktop/gui/Root.js:106
-#, fuzzy
 msgid "Confirmation"
-msgstr "Yapılandırma"
+msgstr "Doğrulama"
 
 #: packages/app-desktop/gui/Root.js:119
 msgid "The Web Clipper needs your authorisation to access your data."
 msgstr ""
+"Web Alıntılayıcısı’nın verinize erişebilmesi için izninize ihtiyacı var."
 
 #: packages/app-desktop/gui/Root.js:120
-#, fuzzy
 msgid "Grant authorisation"
-msgstr "Yetkilendirme anahtarı:"
+msgstr "Yetkilendirme ver"
 
 #: packages/app-desktop/gui/Root.js:160
 msgid "OneDrive Login"
@@ -2472,7 +2465,6 @@ msgid "Share Notebook"
 msgstr "Not Defterini Paylaş"
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:144
-#, fuzzy
 msgid "Unpublish note"
 msgstr "Notu paylaşmayı bırak"
 
@@ -2499,7 +2491,7 @@ msgstr "Not: Bir not paylaşıldığında artık sunucuda şifreli olmayacak."
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:187
 msgid "Publish Notes"
-msgstr ""
+msgstr "Notları Yayımla"
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:189
 msgid "Copy Shareable Link"
@@ -2588,22 +2580,22 @@ msgid "Export debug report"
 msgstr "Hata Ayıklama Raporunu Dışa Aktar"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:157
-#, fuzzy
 msgid "Sync your notes"
-msgstr "Notları sırala"
+msgstr "Notları senkron et"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:158
 msgid "Publish notes to the internet"
-msgstr ""
+msgstr "Notları İnternet’e yayımla"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:159
-#, fuzzy
 msgid "Collaborate on notebooks with others"
-msgstr "Lütfen önce bir not defteri oluşturun"
+msgstr "Başkalarıyla işbirliği halinde not defterlerini ortak yönetin"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:182
 msgid "Thank you! Your Joplin Cloud account is now setup and ready to use."
 msgstr ""
+"Teşekkürler! Joplin Cloud hesabınız başarıyla oluşuruldu ve artık kullanıma "
+"hazır."
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:190
 #, javascript-format
@@ -2613,30 +2605,34 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"Joplin iCloud hesabınız oluşturulurken bir sorunla karşılaşıldı. Lütfen e-"
+"posta adresinizi ve parolanızı kontrol ederek yeniden deneyin: Hata Mesajı:\n"
+"\n"
+"%s"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:203
 msgid "Login below."
-msgstr ""
+msgstr "Aşağıdan giriş yapabilirsiniz."
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:205
-#, fuzzy
 msgid "Or create an account."
-msgstr "Yeni bir not oluşturur."
+msgstr "Ya da yeni bir hesap oluştur."
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:210
 msgid "Login"
-msgstr ""
+msgstr "Giriş"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:231
-#, fuzzy
 msgid "Select"
-msgstr "Tümünü seç"
+msgstr "Seç"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:278
 msgid ""
 "Joplin can synchronise your notes using various providers. Select one from "
 "the list below."
 msgstr ""
+"Joplin notlarınızı pek çok sağlayıcıyı kullanarak senkron edebilir. Lütfen "
+"aşağıdan bunlardan birini seçin."
 
 #: packages/app-desktop/gui/utils/NoteListUtils.js:43
 msgid "Duplicate"
@@ -3107,6 +3103,9 @@ msgid ""
 "Joplin's own sync service. Also gives access to Joplin-specific features "
 "such as publishing notes or collaborating on notebooks with others."
 msgstr ""
+"Joplin’in kendi senkronizasyon servisi. Bu servis ayrıca Joplin’e özel, "
+"notları paylaşma veya başkalarıyla işbirliği yaparak ortak yönetmenizi "
+"sağlar."
 
 #: packages/lib/SyncTargetJoplinServer.js:60
 msgid "Joplin Server"
@@ -3118,7 +3117,7 @@ msgstr "Nextcloud"
 
 #: packages/lib/SyncTargetNone.js:22
 msgid "(None)"
-msgstr ""
+msgstr "(Hiçbiri)"
 
 #: packages/lib/SyncTargetOneDrive.js:32
 msgid "OneDrive"
@@ -3264,7 +3263,7 @@ msgstr "Şifresi çözülen öğeler: %s / %s"
 #: packages/lib/components/shared/encryption-config-shared.js:151
 #, javascript-format
 msgid "Encryption will be enabled using the master key created on %s"
-msgstr ""
+msgstr "Şifreleme %s anında oluşmuş ana anahtar kullanılarak aktifleştirilecek"
 
 #: packages/lib/models/BaseItem.js:721
 msgid "Encrypted"
@@ -3334,9 +3333,8 @@ msgid "Error"
 msgstr "Hata"
 
 #: packages/lib/models/Resource.js:408
-#, fuzzy
 msgid "Conflicts (attachments)"
-msgstr "Ek Dosyalar"
+msgstr "Çakışmalar (ek dosyalar)"
 
 #: packages/lib/models/Resource.js:422
 #, javascript-format
@@ -3412,7 +3410,7 @@ msgstr "OLED Karanlık"
 
 #: packages/lib/models/Setting.js:152
 msgid "Open Sync Wizard..."
-msgstr ""
+msgstr "Senkronizasyon Sihirbazını Aç…"
 
 #: packages/lib/models/Setting.js:162
 msgid "Synchronisation target"
@@ -3748,11 +3746,11 @@ msgstr ""
 
 #: packages/lib/models/Setting.js:783
 msgid "Editor maximum width"
-msgstr ""
+msgstr "Düzenleyici azami genişlik"
 
 #: packages/lib/models/Setting.js:783
 msgid "Set it to 0 to make it take the complete available space."
-msgstr ""
+msgstr "0 olarak belirtmeniz durumunda tüm uygun boş alanı kullanacaktır."
 
 #: packages/lib/models/Setting.js:802
 msgid "Custom stylesheet for rendered Markdown"
@@ -4348,11 +4346,13 @@ msgid ""
 msgstr "%s \"%s\" kaydedilemedi, çünkü izin verilen limitten (%s) daha büyük"
 
 #: packages/server/dist/models/UserModel.js:201
-#, fuzzy, javascript-format
+#, javascript-format
 msgid ""
 "Cannot save %s \"%s\" because it would go over the total allowed size (%s) "
 "for this account"
-msgstr "%s \"%s\" kaydedilemedi, çünkü izin verilen limitten (%s) daha büyük"
+msgstr ""
+"%s \"%s\" kaydedilemedi, çünkü bu hesap için izin verilen limitten (%s) daha "
+"büyük"
 
 #, javascript-format
 #~ msgid "%s %s (%s)"
