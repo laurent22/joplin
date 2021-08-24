@@ -156,6 +156,10 @@ class NoteSearchBarComponent extends React.Component {
 			</div>
 		);
 
+		const notFoundWarning = (
+			<span> { _('Phrase Not Found') } </span>
+		);
+
 		return (
 			<div className="note-search-bar" style={this.props.style}>
 				<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
@@ -173,7 +177,7 @@ class NoteSearchBarComponent extends React.Component {
 					{allowScrolling ? previousButton : null}
 					{allowScrolling ? matchesFoundString : null}
 					{!allowScrolling ? viewerWarning : null}
-					{isSearchResultFound === false && <span>{ _('Phrase Not Found') }</span>}
+					{!isSearchResultFound && notFoundWarning}
 				</div>
 			</div>
 		);
