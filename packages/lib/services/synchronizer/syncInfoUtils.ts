@@ -2,7 +2,7 @@ import { FileApi } from '../../file-api';
 import JoplinDatabase from '../../JoplinDatabase';
 import Setting from '../../models/Setting';
 import { State } from '../../reducer';
-import { generateKeyPair, PublicPrivateKeyPair } from '../e2ee/ppk';
+import { PublicPrivateKeyPair } from '../e2ee/ppk';
 import { MasterKeyEntity } from '../e2ee/types';
 
 export interface SyncInfoValueBoolean {
@@ -274,10 +274,4 @@ export function setMasterKeyEnabled(mkId: string, enabled: boolean = true) {
 export function masterKeyEnabled(mk: MasterKeyEntity): boolean {
 	if ('enabled' in mk) return !!mk.enabled;
 	return true;
-}
-
-export function setPpkIfNotExist(localInfo: SyncInfo, remoteInfo: SyncInfo) {
-	if (!localInfo.ppk && !remoteInfo.ppk) {
-		localInfo.ppk = generateKeyPair();
-	}
 }

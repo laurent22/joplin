@@ -22,8 +22,9 @@ import TaskQueue from './TaskQueue';
 import ItemUploader from './services/synchronizer/ItemUploader';
 import { FileApi } from './file-api';
 import JoplinDatabase from './JoplinDatabase';
-import { fetchSyncInfo, getActiveMasterKey, localSyncInfo, mergeSyncInfos, saveLocalSyncInfo, setPpkIfNotExist, syncInfoEquals, uploadSyncInfo } from './services/synchronizer/syncInfoUtils';
+import { fetchSyncInfo, getActiveMasterKey, localSyncInfo, mergeSyncInfos, saveLocalSyncInfo, syncInfoEquals, uploadSyncInfo } from './services/synchronizer/syncInfoUtils';
 import { setupAndDisableEncryption, setupAndEnableEncryption } from './services/e2ee/utils';
+import { setPpkIfNotExist } from './services/e2ee/ppk';
 const { sprintf } = require('sprintf-js');
 const { Dirnames } = require('./services/synchronizer/utils/types');
 
@@ -420,51 +421,52 @@ export default class Synchronizer {
 			this.api().setTempDirName(Dirnames.Temp);
 
 			try {
-				const remoteInfo = await fetchSyncInfo(this.api());
+				let remoteInfo = await fetchSyncInfo(this.api());
 				logger.info('Sync target remote info:', remoteInfo);
 
 				if (!remoteInfo.version) {
 					logger.info('Sync target is new - setting it up...');
 					await this.migrationHandler().upgrade(Setting.value('syncVersion'));
-				} else {
-					logger.info('Sync target is already setup - checking it...');
+					remoteInfo = await fetchSyncInfo(this.api());
+				}
 
-					await this.migrationHandler().checkCanSync(remoteInfo);
+				logger.info('Sync target is already setup - checking it...');
 
-					const localInfo = await localSyncInfo();
+				await this.migrationHandler().checkCanSync(remoteInfo);
 
-					logger.info('Sync target local info:', localInfo);
+				const localInfo = await localSyncInfo();
 
-					setPpkIfNotExist(localInfo, remoteInfo);
+				logger.info('Sync target local info:', localInfo);
 
-					// console.info('LOCAL', localInfo);
-					// console.info('REMOTE', remoteInfo);
+				await setPpkIfNotExist(this.encryptionService(), localInfo, remoteInfo);
 
-					if (!syncInfoEquals(localInfo, remoteInfo)) {
-						const newInfo = mergeSyncInfos(localInfo, remoteInfo);
-						const previousE2EE = localInfo.e2ee;
-						logger.info('Sync target info differs between local and remote - merging infos: ', newInfo.toObject());
+				// console.info('LOCAL', localInfo);
+				// console.info('REMOTE', remoteInfo);
 
-						await this.lockHandler().acquireLock(LockType.Exclusive, this.appType_, this.clientId_, { clearExistingSyncLocksFromTheSameClient: true });
-						await uploadSyncInfo(this.api(), newInfo);
-						await saveLocalSyncInfo(newInfo);
-						await this.lockHandler().releaseLock(LockType.Exclusive, this.appType_, this.clientId_);
+				if (!syncInfoEquals(localInfo, remoteInfo)) {
+					const newInfo = mergeSyncInfos(localInfo, remoteInfo);
+					const previousE2EE = localInfo.e2ee;
+					logger.info('Sync target info differs between local and remote - merging infos: ', newInfo.toObject());
 
-						// console.info('NEW', newInfo);
+					await this.lockHandler().acquireLock(LockType.Exclusive, this.appType_, this.clientId_, { clearExistingSyncLocksFromTheSameClient: true });
+					await uploadSyncInfo(this.api(), newInfo);
+					await saveLocalSyncInfo(newInfo);
+					await this.lockHandler().releaseLock(LockType.Exclusive, this.appType_, this.clientId_);
 
-						if (newInfo.e2ee !== previousE2EE) {
-							if (newInfo.e2ee) {
-								const mk = getActiveMasterKey(newInfo);
-								await setupAndEnableEncryption(this.encryptionService(), mk);
-							} else {
-								await setupAndDisableEncryption(this.encryptionService());
-							}
+					// console.info('NEW', newInfo);
+
+					if (newInfo.e2ee !== previousE2EE) {
+						if (newInfo.e2ee) {
+							const mk = getActiveMasterKey(newInfo);
+							await setupAndEnableEncryption(this.encryptionService(), mk);
+						} else {
+							await setupAndDisableEncryption(this.encryptionService());
 						}
-					} else {
-						// Set it to remote anyway so that timestamps are the same
-						// Note: that's probably not needed anymore?
-						// await uploadSyncInfo(this.api(), remoteInfo);
 					}
+				} else {
+					// Set it to remote anyway so that timestamps are the same
+					// Note: that's probably not needed anymore?
+					// await uploadSyncInfo(this.api(), remoteInfo);
 				}
 			} catch (error) {
 				if (error.code === 'outdatedSyncTarget') {

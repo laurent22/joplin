@@ -1,6 +1,5 @@
 import { FileApi } from '../../../file-api';
 import JoplinDatabase from '../../../JoplinDatabase';
-import { generateKeyPair } from '../../e2ee/ppk';
 import { localSyncInfo, saveLocalSyncInfo, uploadSyncInfo } from '../syncInfoUtils';
 
 export default async function(api: FileApi, _db: JoplinDatabase): Promise<void> {
@@ -9,7 +8,6 @@ export default async function(api: FileApi, _db: JoplinDatabase): Promise<void> 
 
 	const syncInfo = localSyncInfo();
 	syncInfo.version = 3;
-	syncInfo.ppk = generateKeyPair();
 	await uploadSyncInfo(api, syncInfo);
 	saveLocalSyncInfo(syncInfo);
 }

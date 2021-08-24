@@ -4,7 +4,7 @@ import Note from '../../models/Note';
 import Setting from '../../models/Setting';
 import BaseItem from '../../models/BaseItem';
 import MasterKey from '../../models/MasterKey';
-import EncryptionService from './EncryptionService';
+import EncryptionService, { EncryptionMethod } from './EncryptionService';
 import { setEncryptionEnabled } from '../synchronizer/syncInfoUtils';
 
 let service: EncryptionService = null;
@@ -22,7 +22,7 @@ describe('services_EncryptionService', function() {
 
 	it('should encode and decode header', (async () => {
 		const header = {
-			encryptionMethod: EncryptionService.METHOD_SJCL,
+			encryptionMethod: EncryptionMethod.SJCL,
 			masterKeyId: '01234568abcdefgh01234568abcdefgh',
 		};
 
@@ -53,7 +53,7 @@ describe('services_EncryptionService', function() {
 	it('should upgrade a master key', (async () => {
 		// Create an old style master key
 		let masterKey = await service.generateMasterKey('123456', {
-			encryptionMethod: EncryptionService.METHOD_SJCL_2,
+			encryptionMethod: EncryptionMethod.SJCL2,
 		});
 		masterKey = await MasterKey.save(masterKey);
 
@@ -81,7 +81,7 @@ describe('services_EncryptionService', function() {
 
 	it('should not upgrade master key if invalid password', (async () => {
 		const masterKey = await service.generateMasterKey('123456', {
-			encryptionMethod: EncryptionService.METHOD_SJCL_2,
+			encryptionMethod: EncryptionMethod.SJCL2,
 		});
 
 		await checkThrowAsync(async () => await service.upgradeMasterKey(masterKey, '777'));
@@ -89,7 +89,7 @@ describe('services_EncryptionService', function() {
 
 	it('should require a checksum only for old master keys', (async () => {
 		const masterKey = await service.generateMasterKey('123456', {
-			encryptionMethod: EncryptionService.METHOD_SJCL_2,
+			encryptionMethod: EncryptionMethod.SJCL2,
 		});
 
 		expect(!!masterKey.checksum).toBe(true);
@@ -98,7 +98,7 @@ describe('services_EncryptionService', function() {
 
 	it('should not require a checksum for new master keys', (async () => {
 		const masterKey = await service.generateMasterKey('123456', {
-			encryptionMethod: EncryptionService.METHOD_SJCL_4,
+			encryptionMethod: EncryptionMethod.SJCL4,
 		});
 
 		expect(!masterKey.checksum).toBe(true);
@@ -110,7 +110,7 @@ describe('services_EncryptionService', function() {
 
 	it('should throw an error if master key decryption fails', (async () => {
 		const masterKey = await service.generateMasterKey('123456', {
-			encryptionMethod: EncryptionService.METHOD_SJCL_4,
+			encryptionMethod: EncryptionMethod.SJCL4,
 		});
 
 		const hasThrown = await checkThrowAsync(async () => await service.decryptMasterKey_(masterKey, 'wrong'));
@@ -120,11 +120,11 @@ describe('services_EncryptionService', function() {
 
 	it('should return the master keys that need an upgrade', (async () => {
 		const masterKey1 = await MasterKey.save(await service.generateMasterKey('123456', {
-			encryptionMethod: EncryptionService.METHOD_SJCL_2,
+			encryptionMethod: EncryptionMethod.SJCL2,
 		}));
 
 		const masterKey2 = await MasterKey.save(await service.generateMasterKey('123456', {
-			encryptionMethod: EncryptionService.METHOD_SJCL,
+			encryptionMethod: EncryptionMethod.SJCL,
 		}));
 
 		await MasterKey.save(await service.generateMasterKey('123456'));
@@ -164,22 +164,22 @@ describe('services_EncryptionService', function() {
 
 		{
 			const cipherText = await service.encryptString('some secret', {
-				encryptionMethod: EncryptionService.METHOD_SJCL_2,
+				encryptionMethod: EncryptionMethod.SJCL2,
 			});
 			const plainText = await service.decryptString(cipherText);
 			expect(plainText).toBe('some secret');
 			const header = await service.decodeHeaderString(cipherText);
-			expect(header.encryptionMethod).toBe(EncryptionService.METHOD_SJCL_2);
+			expect(header.encryptionMethod).toBe(EncryptionMethod.SJCL2);
 		}
 
 		{
 			const cipherText = await service.encryptString('some secret', {
-				encryptionMethod: EncryptionService.METHOD_SJCL_3,
+				encryptionMethod: EncryptionMethod.SJCL3,
 			});
 			const plainText = await service.decryptString(cipherText);
 			expect(plainText).toBe('some secret');
 			const header = await service.decodeHeaderString(cipherText);
-			expect(header.encryptionMethod).toBe(EncryptionService.METHOD_SJCL_3);
+			expect(header.encryptionMethod).toBe(EncryptionMethod.SJCL3);
 		}
 	}));
 
@@ -267,12 +267,12 @@ describe('services_EncryptionService', function() {
 		await service.loadMasterKey(masterKey, '123456', true);
 
 		// First check that we can replicate the error with the old encryption method
-		service.defaultEncryptionMethod_ = EncryptionService.METHOD_SJCL;
+		service.defaultEncryptionMethod_ = EncryptionMethod.SJCL;
 		const hasThrown = await checkThrowAsync(async () => await service.encryptString('🐶🐶🐶'.substr(0,5)));
 		expect(hasThrown).toBe(true);
 
 		// Now check that the new one fixes the problem
-		service.defaultEncryptionMethod_ = EncryptionService.METHOD_SJCL_1A;
+		service.defaultEncryptionMethod_ = EncryptionMethod.SJCL1a;
 		const cipherText = await service.encryptString('🐶🐶🐶'.substr(0,5));
 		const plainText = await service.decryptString(cipherText);
 		expect(plainText).toBe('🐶🐶🐶'.substr(0,5));

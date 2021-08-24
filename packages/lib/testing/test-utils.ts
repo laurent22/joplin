@@ -505,11 +505,12 @@ function resourceFetcher(id: number = null) {
 
 async function loadEncryptionMasterKey(id: number = null, useExisting = false) {
 	const service = encryptionService(id);
+	const password = '123456';
 
 	let masterKey = null;
 
 	if (!useExisting) { // Create it
-		masterKey = await service.generateMasterKey('123456');
+		masterKey = await service.generateMasterKey(password);
 		masterKey = await MasterKey.save(masterKey);
 	} else { // Use the one already available
 		const masterKeys = await MasterKey.all();
@@ -517,7 +518,12 @@ async function loadEncryptionMasterKey(id: number = null, useExisting = false) {
 		masterKey = masterKeys[0];
 	}
 
-	await service.loadMasterKey(masterKey, '123456', true);
+	const passwordCache = Setting.value('encryption.passwordCache');
+	passwordCache[masterKey.id] = password;
+	Setting.setValue('encryption.passwordCache', passwordCache);
+	await Setting.saveAll();
+
+	await service.loadMasterKey(masterKey, password, true);
 
 	setActiveMasterKeyId(masterKey.id);
 

@@ -1,6 +1,7 @@
-import { synchronizerStart, setupDatabaseAndSynchronizer, fileApi, switchClient } from '../../testing/test-utils';
+import { synchronizerStart, setupDatabaseAndSynchronizer, fileApi, switchClient, loadEncryptionMasterKey } from '../../testing/test-utils';
 import Folder from '../../models/Folder';
-import { fetchSyncInfo, localSyncInfo } from '../synchronizer/syncInfoUtils';
+import { fetchSyncInfo, localSyncInfo, setEncryptionEnabled } from '../synchronizer/syncInfoUtils';
+import { EncryptionMethod } from '../e2ee/EncryptionService';
 
 describe('Synchronizer.ppk', function() {
 
@@ -11,7 +12,21 @@ describe('Synchronizer.ppk', function() {
 		done();
 	});
 
+	it('should not create a public private key pair if not using E2EE', async () => {
+		await Folder.save({});
+		expect(localSyncInfo().ppk).toBeFalsy();
+		await synchronizerStart();
+		const remoteInfo = await fetchSyncInfo(fileApi());
+		expect(localSyncInfo().ppk).toBeFalsy();
+		expect(remoteInfo.ppk).toBeFalsy();
+	});
+
 	it('should create a public private key pair if it does not exist', async () => {
+		setEncryptionEnabled(true);
+		await loadEncryptionMasterKey();
+
+		const beforeTime = Date.now();
+
 		await Folder.save({});
 		expect(localSyncInfo().ppk).toBeFalsy();
 		await synchronizerStart();
@@ -19,6 +34,15 @@ describe('Synchronizer.ppk', function() {
 		expect(localSyncInfo().ppk).toBeTruthy();
 		expect(remoteInfo.ppk).toBeTruthy();
 		const clientLocalPPK1 = localSyncInfo().ppk;
+		expect(clientLocalPPK1.createdTime).toBeGreaterThanOrEqual(beforeTime);
+		expect(clientLocalPPK1.privateKey.encryptionMethod).toBe(EncryptionMethod.SJCL4);
+		expect(clientLocalPPK1.publicKey.encryptionMethod).toBe(EncryptionMethod.SJCL4);
+
+		// Rather arbitrary length check - it's just to make sure there's
+		// something there. Other tests should ensure the content is valid or
+		// not.
+		expect(clientLocalPPK1.privateKey.ciphertext.length).toBeGreaterThan(320);
+		expect(clientLocalPPK1.publicKey.ciphertext.length).toBeGreaterThan(320);
 
 		await switchClient(2);
 
@@ -26,8 +50,8 @@ describe('Synchronizer.ppk', function() {
 		await synchronizerStart();
 		expect(localSyncInfo().ppk).toBeTruthy();
 		const clientLocalPPK2 = localSyncInfo().ppk;
-		expect(clientLocalPPK1.privateKey).toBe(clientLocalPPK2.privateKey);
-		expect(clientLocalPPK1.publicKey).toBe(clientLocalPPK2.publicKey);
+		expect(clientLocalPPK1.privateKey.ciphertext).toBe(clientLocalPPK2.privateKey.ciphertext);
+		expect(clientLocalPPK1.publicKey.ciphertext).toBe(clientLocalPPK2.publicKey.ciphertext);
 	});
 
 });
