@@ -4,6 +4,9 @@ import Logger from '../../Logger';
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import Setting from '../../models/Setting';
+import EncryptionService from '../e2ee/EncryptionService';
+import { MasterKeyEntity } from '../e2ee/types';
+import { getActiveMasterKey, getEncryptionEnabled } from '../synchronizer/syncInfoUtils';
 import { State, stateRootKey, StateShare } from './reducer';
 
 const logger = Logger.create('ShareService');
@@ -13,6 +16,7 @@ export default class ShareService {
 	private static instance_: ShareService;
 	private api_: JoplinServerApi = null;
 	private store_: Store<any> = null;
+	private encryptionService_:EncryptionService = null;
 
 	public static instance(): ShareService {
 		if (this.instance_) return this.instance_;
@@ -20,8 +24,9 @@ export default class ShareService {
 		return this.instance_;
 	}
 
-	public initialize(store: Store<any>, api: JoplinServerApi = null) {
+	public initialize(store: Store<any>, encryptionService: EncryptionService, api: JoplinServerApi = null) {
 		this.store_ = store;
+		this.encryptionService_ = encryptionService;
 		this.api_ = api;
 	}
 
@@ -62,6 +67,23 @@ export default class ShareService {
 
 		if (folder.parent_id) {
 			await Folder.save({ id: folder.id, parent_id: '' });
+		}
+
+		let folderMasterKey:MasterKeyEntity = null;
+
+		if (getEncryptionEnabled()) {
+			const mk = getActiveMasterKey();
+
+			// Shouldn't happen
+			if (!mk) throw new Error('Cannot share notebook because even though E2EE is enabled, no master key is set as active');
+
+			const password = Setting.value('encryption.passwordCache')[mk.id];
+
+			// Shouldn't happen
+			if (!password) throw new Error('Cannot share notebook because the active master key password could not be retrieved');
+
+			// TODO: encrypt with user own public key instead
+			folderMasterKey = await this.encryptionService_.generateMasterKey(password);
 		}
 
 		const share = await this.api().exec('POST', 'api/shares', {}, { folder_id: folderId });
@@ -175,6 +197,13 @@ export default class ShareService {
 	}
 
 	public async addShareRecipient(shareId: string, recipientEmail: string) {
+		if (getEncryptionEnabled()) {
+			// TODO: get master key associated with share
+			// TODO: fetch recipient public key
+			// TODO: encrypt master key with it
+			// TODO: attach encrypted mk to share_user object
+		}
+
 		return this.api().exec('POST', `api/shares/${shareId}/users`, {}, {
 			email: recipientEmail,
 		});

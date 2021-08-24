@@ -1,5 +1,5 @@
 import Note from '../../models/Note';
-import { msleep, setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
+import { encryptionService, msleep, setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
 import ShareService from './ShareService';
 import reducer from '../../reducer';
 import { createStore } from 'redux';
@@ -20,7 +20,7 @@ function mockApi() {
 function mockService() {
 	const service = new ShareService();
 	const store = createStore(reducer as any);
-	service.initialize(store, mockApi() as any);
+	service.initialize(store, encryptionService(), mockApi() as any);
 	return service;
 }
 
