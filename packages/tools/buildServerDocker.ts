@@ -14,10 +14,6 @@ function getIsPreRelease(tagName: string): boolean {
 	return tagName.indexOf('-beta') > 0;
 }
 
-function flatten<T>(array: (T | T[])[]): T[] {
-	return [].concat(...array);
-}
-
 function normalizePlatform(platform: string) {
 	return platform.replace(/\//g, '-');
 }
@@ -37,8 +33,11 @@ async function main() {
 	} catch (error) {
 		console.info('Could not get git commit: metadata revision field will be empty');
 	}
-	const buildArgs = { BUILD_DATE: buildDate, REVISION: revision, VERSION: imageVersion };
-	const flattenedBuildArgs = flatten((Object.keys(buildArgs) as (keyof typeof buildArgs)[]).map((k) => ['--build-arg', `${k}=${buildArgs[k]}`]));
+	const buildArgs = [
+		`--build-arg BUILD_DATE="${buildDate}"`,
+		`--build-arg REVISION="${revision}"`,
+		`--build-arg VERSION="${imageVersion}"`,
+	];
 	const dockerTags: string[] = [];
 	const versionPart = imageVersion.split('.');
 	dockerTags.push(isPreRelease ? 'beta' : 'latest');
@@ -68,7 +67,7 @@ async function main() {
 			'docker', 'build',
 			'--platform', platform,
 			'-t', `${DockerImageName}:${imageVersion}-${normalizedPlatform}`,
-			...flattenedBuildArgs,
+			...buildArgs,
 			'-f', 'Dockerfile.server',
 			'.',
 		]);
@@ -83,10 +82,14 @@ async function main() {
 	if (pushImages) {
 		for (const tag of dockerTags) {
 			// manifest create requires the tags being amended in to exist on the remote, so this all can only happen if pushImages is true
+			const platformArgs: string[] = [];
+			for (const platform in platforms) {
+				platformArgs.concat('--amend', `${DockerImageName}:${imageVersion}-${normalizePlatform(platform)}`);
+			}
 			await execCommand2([
 				'docker', 'manifest', 'create',
 				`${DockerImageName}:${tag}`,
-				...flatten(platforms.map((platform) => ['--amend', `${DockerImageName}:${imageVersion}-${normalizePlatform(platform)}`])),
+				...platformArgs,
 			]);
 			await execCommand2([
 				'docker', 'manifest', 'push',
