@@ -177,7 +177,7 @@ class NoteSearchBarComponent extends React.Component {
 					{allowScrolling ? previousButton : null}
 					{allowScrolling ? matchesFoundString : null}
 					{!allowScrolling ? viewerWarning : null}
-					{!isSearchResultFound && notFoundWarning}
+					{!isSearchResultFound ? notFoundWarning : null}
 				</div>
 			</div>
 		);
