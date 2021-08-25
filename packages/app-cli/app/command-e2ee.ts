@@ -6,8 +6,9 @@ import BaseItem from '@joplin/lib/models/BaseItem';
 import Setting from '@joplin/lib/models/Setting';
 import shim from '@joplin/lib/shim';
 import * as pathUtils from '@joplin/lib/path-utils';
-import { getEncryptionEnabled } from '@joplin/lib/services/synchronizer/syncInfoUtils';
+import { getEncryptionEnabled, localSyncInfo, saveLocalSyncInfo } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 import { generateMasterKeyAndEnableEncryption, loadMasterKeysFromSettings, setupAndDisableEncryption } from '@joplin/lib/services/e2ee/utils';
+import { generateKeyPair } from '../../lib/services/e2ee/ppk';
 const imageType = require('image-type');
 const readChunk = require('read-chunk');
 
@@ -17,7 +18,7 @@ class Command extends BaseCommand {
 	}
 
 	description() {
-		return _('Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, `decrypt-file` and `target-status`.');
+		return _('Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, `decrypt-file`, `generate-ppk` and `target-status`.');
 	}
 
 	options() {
@@ -149,6 +150,19 @@ class Command extends BaseCommand {
 				}
 			}
 			return;
+		}
+
+		if (args.command === 'generate-ppk') {
+			const syncInfo = localSyncInfo();
+			if (syncInfo.ppk) throw new Error('This account already has a public-private key pair');
+
+			const argPassword = options.password ? options.password.toString() : '';
+			if (!argPassword) throw new Error('Password must be provided'); // TODO: should get from prompt
+			const ppk = await generateKeyPair(EncryptionService.instance(), argPassword);
+
+			syncInfo.ppk = ppk;
+			saveLocalSyncInfo(syncInfo);
+			await Setting.saveAll();
 		}
 
 		if (args.command === 'target-status') {

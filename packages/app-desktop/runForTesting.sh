@@ -55,7 +55,16 @@ do
 	elif [[ $CMD == "e2ee" ]]; then
 	
 		echo "e2ee enable --password 111111" >> "$CMD_FILE" 
+
+	elif [[ $CMD == "sync" ]]; then
 	
+		echo "sync" >> "$CMD_FILE" 
+
+	elif [[ $CMD == "generatePpk" ]]; then
+	
+		echo "e2ee generate-ppk --password 111111" >> "$CMD_FILE" 
+		echo "sync" >> "$CMD_FILE" 
+
 	else
 	
 		echo "Unknown command: $CMD"

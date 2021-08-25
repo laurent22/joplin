@@ -1,7 +1,9 @@
 import { Store } from 'redux';
 import JoplinServerApi from '../../JoplinServerApi';
+import { _ } from '../../locale';
 import Logger from '../../Logger';
 import Folder from '../../models/Folder';
+import MasterKey from '../../models/MasterKey';
 import Note from '../../models/Note';
 import Setting from '../../models/Setting';
 import EncryptionService from '../e2ee/EncryptionService';
@@ -86,6 +88,7 @@ export default class ShareService {
 			const password = getPpkPassword(syncInfo.ppk);
 
 			folderMasterKey = await ppkGenerateMasterKey(this.encryptionService_, syncInfo.ppk, password);
+			folderMasterKey = await MasterKey.save(folderMasterKey);
 
 			addMasterKey(syncInfo, folderMasterKey);
 		}
@@ -204,7 +207,8 @@ export default class ShareService {
 	}
 
 	private async userPublicKey(userEmail: string): Promise<string> {
-		return this.api().exec('GET', `api/users/${encodeURIComponent(userEmail)}/public_key`);
+		const r = await this.api().exec('GET', `api/users/${encodeURIComponent(userEmail)}/public_key`);
+		return r.content;
 	}
 
 	public async addShareRecipient(shareId: string, masterKeyId: string, recipientEmail: string) {
@@ -215,18 +219,21 @@ export default class ShareService {
 			const masterKey = syncInfo.masterKeys.find(m => m.id === masterKeyId);
 			if (!masterKey) throw new Error(`Cannot find master key with ID ${masterKeyId}`);
 
+			const recipientPublicKey = await this.userPublicKey(recipientEmail);
+			if (!recipientPublicKey) throw new Error(_('Cannot share notebook with recipient %s because they do not have a public key. Ask them to create one from the menu "%s"', recipientEmail, 'Tools > Generate Public-Private Key pair'));
+
 			recipientMasterKey = await ppkReencryptMasterKey(
 				this.encryptionService_,
 				masterKey,
 				syncInfo.ppk,
 				getPpkPassword(syncInfo.ppk),
-				await this.userPublicKey(recipientEmail)
+				recipientPublicKey
 			);
 		}
 
 		return this.api().exec('POST', `api/shares/${shareId}/users`, {}, {
 			email: recipientEmail,
-			master_key: recipientMasterKey,
+			master_key: JSON.stringify(recipientMasterKey),
 		});
 	}
 
