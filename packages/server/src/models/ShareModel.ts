@@ -318,36 +318,38 @@ export default class ShareModel extends BaseModel<Share> {
 		});
 	}
 
-	public async shareFolder(owner: User, folderId: string): Promise<Share> {
+	public async shareFolder(owner: User, folderId: string, masterKeyId: string): Promise<Share> {
 		const folderItem = await this.models().item().loadByJopId(owner.id, folderId);
 		if (!folderItem) throw new ErrorNotFound(`No such folder: ${folderId}`);
 
 		const share = await this.models().share().byUserAndItemId(owner.id, folderItem.id);
 		if (share) return share;
 
-		const shareToSave = {
+		const shareToSave: Share = {
 			type: ShareType.Folder,
 			item_id: folderItem.id,
 			owner_id: owner.id,
 			folder_id: folderId,
+			master_key_id: masterKeyId,
 		};
 
 		await this.checkIfAllowed(owner, AclAction.Create, shareToSave);
 		return super.save(shareToSave);
 	}
 
-	public async shareNote(owner: User, noteId: string): Promise<Share> {
+	public async shareNote(owner: User, noteId: string, masterKeyId: string): Promise<Share> {
 		const noteItem = await this.models().item().loadByJopId(owner.id, noteId);
 		if (!noteItem) throw new ErrorNotFound(`No such note: ${noteId}`);
 
 		const existingShare = await this.byItemId(noteItem.id);
 		if (existingShare) return existingShare;
 
-		const shareToSave = {
+		const shareToSave: Share = {
 			type: ShareType.Note,
 			item_id: noteItem.id,
 			owner_id: owner.id,
 			note_id: noteId,
+			master_key_id: masterKeyId,
 		};
 
 		await this.checkIfAllowed(owner, AclAction.Create, shareToSave);

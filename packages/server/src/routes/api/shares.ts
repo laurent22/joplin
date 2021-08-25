@@ -19,11 +19,18 @@ router.public = true;
 router.post('api/shares', async (_path: SubPath, ctx: AppContext) => {
 	ownerRequired(ctx);
 
+	interface Fields {
+		folder_id?: string;
+		note_id?: string;
+		master_key_id?: string;
+	}
+
 	const shareModel = ctx.joplin.models.share();
-	const fields = await bodyFields<any>(ctx.req);
+	const fields = await bodyFields<Fields>(ctx.req);
 	const shareInput: ShareApiInput = shareModel.fromApiInput(fields) as ShareApiInput;
 	if (fields.folder_id) shareInput.folder_id = fields.folder_id;
 	if (fields.note_id) shareInput.note_id = fields.note_id;
+	const masterKeyId = fields.master_key_id || '';
 
 	// - The API end point should only expose two ways of sharing:
 	//     - By folder_id (JoplinRootFolder)
@@ -31,9 +38,9 @@ router.post('api/shares', async (_path: SubPath, ctx: AppContext) => {
 	// - Additionally, the App method is available, but not exposed via the API.
 
 	if (shareInput.folder_id) {
-		return ctx.joplin.models.share().shareFolder(ctx.joplin.owner, shareInput.folder_id);
+		return ctx.joplin.models.share().shareFolder(ctx.joplin.owner, shareInput.folder_id, masterKeyId);
 	} else if (shareInput.note_id) {
-		return ctx.joplin.models.share().shareNote(ctx.joplin.owner, shareInput.note_id);
+		return ctx.joplin.models.share().shareNote(ctx.joplin.owner, shareInput.note_id, masterKeyId);
 	} else {
 		throw new ErrorBadRequest('Either folder_id or note_id must be provided');
 	}

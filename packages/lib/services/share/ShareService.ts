@@ -5,12 +5,17 @@ import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import Setting from '../../models/Setting';
 import EncryptionService from '../e2ee/EncryptionService';
-import { ppkGenerateMasterKey } from '../e2ee/ppk';
+import { getPpkPassword, ppkGenerateMasterKey, ppkReencryptMasterKey } from '../e2ee/ppk';
 import { MasterKeyEntity } from '../e2ee/types';
 import { addMasterKey, getEncryptionEnabled, localSyncInfo } from '../synchronizer/syncInfoUtils';
 import { State, stateRootKey, StateShare } from './reducer';
 
 const logger = Logger.create('ShareService');
+
+interface ApiShare {
+	id: string;
+	master_key_id: string;
+}
 
 export default class ShareService {
 
@@ -62,7 +67,7 @@ export default class ShareService {
 		return this.api_;
 	}
 
-	public async shareFolder(folderId: string) {
+	public async shareFolder(folderId: string): Promise<ApiShare> {
 		const folder = await Folder.load(folderId);
 		if (!folder) throw new Error(`No such folder: ${folderId}`);
 
@@ -78,8 +83,7 @@ export default class ShareService {
 			// Shouldn't happen
 			if (!syncInfo.ppk) throw new Error('Cannot share notebook because E2EE is enabled and no Public Private Key pair exists.');
 
-			// Shouldn't happen
-			const password = Setting.value('encryption.passwordCache')[syncInfo.ppk.id];
+			const password = getPpkPassword(syncInfo.ppk);
 
 			folderMasterKey = await ppkGenerateMasterKey(this.encryptionService_, syncInfo.ppk, password);
 
@@ -199,16 +203,30 @@ export default class ShareService {
 		return this.state.shareInvitations;
 	}
 
-	public async addShareRecipient(shareId: string, recipientEmail: string) {
+	private async userPublicKey(userEmail: string): Promise<string> {
+		return this.api().exec('GET', `api/users/${encodeURIComponent(userEmail)}/public_key`);
+	}
+
+	public async addShareRecipient(shareId: string, masterKeyId: string, recipientEmail: string) {
+		let recipientMasterKey: MasterKeyEntity = null;
+
 		if (getEncryptionEnabled()) {
-			// TODO: get master key associated with share
-			// TODO: fetch recipient public key
-			// TODO: re-encrypt master key with it
-			// TODO: attach encrypted mk to share_user object
+			const syncInfo = localSyncInfo();
+			const masterKey = syncInfo.masterKeys.find(m => m.id === masterKeyId);
+			if (!masterKey) throw new Error(`Cannot find master key with ID ${masterKeyId}`);
+
+			recipientMasterKey = await ppkReencryptMasterKey(
+				this.encryptionService_,
+				masterKey,
+				syncInfo.ppk,
+				getPpkPassword(syncInfo.ppk),
+				await this.userPublicKey(recipientEmail)
+			);
 		}
 
 		return this.api().exec('POST', `api/shares/${shareId}/users`, {}, {
 			email: recipientEmail,
+			master_key: recipientMasterKey,
 		});
 	}
 

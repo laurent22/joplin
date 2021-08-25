@@ -78,8 +78,8 @@ describe('ShareModel', function() {
 			},
 		});
 
-		const share1 = await models().share().shareNote(user1, '00000000000000000000000000000001');
-		const share2 = await models().share().shareNote(user1, '00000000000000000000000000000001');
+		const share1 = await models().share().shareNote(user1, '00000000000000000000000000000001', '');
+		const share2 = await models().share().shareNote(user1, '00000000000000000000000000000001', '');
 
 		expect(share1.id).toBe(share2.id);
 	});
@@ -93,7 +93,7 @@ describe('ShareModel', function() {
 			},
 		});
 
-		await models().share().shareNote(user1, '00000000000000000000000000000001');
+		await models().share().shareNote(user1, '00000000000000000000000000000001', '');
 		const noteItem = await models().item().loadByJopId(user1.id, '00000000000000000000000000000001');
 		await models().item().delete(noteItem.id);
 		expect(await models().item().load(noteItem.id)).toBeFalsy();

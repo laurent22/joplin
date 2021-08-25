@@ -28,8 +28,10 @@ router.get('api/users/:id', async (path: SubPath, ctx: AppContext) => {
 
 router.publicSchemas.push('api/users/:id/public_key');
 
+// "id" in this case is actually the email address
 router.get('api/users/:id/public_key', async (path: SubPath, ctx: AppContext) => {
-	const user = await fetchUser(path, ctx);
+	const user = await ctx.joplin.models.user().loadByEmail(path.id);
+	if (!user) return ''; // Don't throw an error to prevent polling the end point
 	return ctx.joplin.models.user().publicKey(user.id);
 });
 

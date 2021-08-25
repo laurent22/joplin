@@ -80,6 +80,13 @@ async function loadPpk(service: EncryptionService, ppk: PublicPrivateKeyPair, pa
 	return keys;
 }
 
+async function loadPublicKey(publicKey: PublicKey): Promise<NodeRSA> {
+	const keys = new NodeRSA();
+	keys.setOptions(nodeRSAOptions());
+	keys.importKey(publicKey, 'pkcs1-public-pem');
+	return keys;
+}
+
 export function ppkEncryptionHandler(nodeRSA: NodeRSA): EncryptionCustomHandler {
 	return {
 		context: {
@@ -117,4 +124,21 @@ export async function ppkDecryptMasterKeyContent(service: EncryptionService, mas
 	return service.decryptMasterKeyContent(masterKey, '', {
 		encryptionHandler: handler,
 	});
+}
+
+export async function ppkReencryptMasterKey(service: EncryptionService, masterKey: MasterKeyEntity, decryptionPpk: PublicPrivateKeyPair, decryptionPassword: string, encryptionPublicKey: PublicKey): Promise<MasterKeyEntity> {
+	const encryptionHandler = ppkEncryptionHandler(await loadPublicKey(encryptionPublicKey));
+	const decryptionHandler = ppkEncryptionHandler(await loadPpk(service, decryptionPpk, decryptionPassword));
+
+	return service.reencryptMasterKey(masterKey, '', {
+		encryptionHandler: decryptionHandler,
+	}, {
+		encryptionHandler: encryptionHandler,
+	});
+}
+
+export function getPpkPassword(ppk: PublicPrivateKeyPair): string {
+	const p = Setting.value('encryption.passwordCache')[ppk.id];
+	if (!p) throw new Error(`Could not retrieve password for Public Private Key ${ppk.id}`);
+	return p;
 }
