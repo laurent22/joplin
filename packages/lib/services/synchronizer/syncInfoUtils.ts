@@ -275,3 +275,11 @@ export function masterKeyEnabled(mk: MasterKeyEntity): boolean {
 	if ('enabled' in mk) return !!mk.enabled;
 	return true;
 }
+
+export function addMasterKey(syncInfo: SyncInfo, masterKey: MasterKeyEntity) {
+	// Sanity check - because shouldn't happen
+	if (syncInfo.masterKeys.find(mk => mk.id === masterKey.id)) throw new Error('Master key is already present');
+
+	syncInfo.masterKeys.push(masterKey);
+	saveLocalSyncInfo(syncInfo);
+}

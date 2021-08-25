@@ -39,14 +39,14 @@ describe('services_EncryptionService', function() {
 
 		let hasThrown = false;
 		try {
-			await service.decryptMasterKey_(masterKey, 'wrongpassword');
+			await service.decryptMasterKeyContent(masterKey, 'wrongpassword');
 		} catch (error) {
 			hasThrown = true;
 		}
 
 		expect(hasThrown).toBe(true);
 
-		const decryptedMasterKey = await service.decryptMasterKey_(masterKey, '123456');
+		const decryptedMasterKey = await service.decryptMasterKeyContent(masterKey, '123456');
 		expect(decryptedMasterKey.length).toBe(512);
 	}));
 
@@ -57,15 +57,15 @@ describe('services_EncryptionService', function() {
 		});
 		masterKey = await MasterKey.save(masterKey);
 
-		let upgradedMasterKey = await service.upgradeMasterKey(masterKey, '123456');
+		let upgradedMasterKey = await service.reencryptMasterKey(masterKey, '123456');
 		upgradedMasterKey = await MasterKey.save(upgradedMasterKey);
 
 		// Check that master key has been upgraded (different ciphertext)
 		expect(masterKey.content).not.toBe(upgradedMasterKey.content);
 
 		// Check that master key plain text is still the same
-		const plainTextOld = await service.decryptMasterKey_(masterKey, '123456');
-		const plainTextNew = await service.decryptMasterKey_(upgradedMasterKey, '123456');
+		const plainTextOld = await service.decryptMasterKeyContent(masterKey, '123456');
+		const plainTextNew = await service.decryptMasterKeyContent(upgradedMasterKey, '123456');
 		expect(plainTextOld).toBe(plainTextNew);
 
 		// Check that old content can be decrypted with new master key
@@ -84,7 +84,7 @@ describe('services_EncryptionService', function() {
 			encryptionMethod: EncryptionMethod.SJCL2,
 		});
 
-		await checkThrowAsync(async () => await service.upgradeMasterKey(masterKey, '777'));
+		await checkThrowAsync(async () => await service.reencryptMasterKey(masterKey, '777'));
 	}));
 
 	it('should require a checksum only for old master keys', (async () => {
@@ -104,7 +104,7 @@ describe('services_EncryptionService', function() {
 		expect(!masterKey.checksum).toBe(true);
 		expect(!!masterKey.content).toBe(true);
 
-		const decryptedMasterKey = await service.decryptMasterKey_(masterKey, '123456');
+		const decryptedMasterKey = await service.decryptMasterKeyContent(masterKey, '123456');
 		expect(decryptedMasterKey.length).toBe(512);
 	}));
 
@@ -113,7 +113,7 @@ describe('services_EncryptionService', function() {
 			encryptionMethod: EncryptionMethod.SJCL4,
 		});
 
-		const hasThrown = await checkThrowAsync(async () => await service.decryptMasterKey_(masterKey, 'wrong'));
+		const hasThrown = await checkThrowAsync(async () => await service.decryptMasterKeyContent(masterKey, 'wrong'));
 
 		expect(hasThrown).toBe(true);
 	}));
@@ -293,4 +293,5 @@ describe('services_EncryptionService', function() {
 		masterKey = await MasterKey.save(masterKey);
 		expect(service.isMasterKeyLoaded(masterKey)).toBe(false);
 	}));
+
 });

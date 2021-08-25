@@ -1,5 +1,5 @@
 import { afterAllCleanUp, encryptionService, setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
-import { decryptPrivateKey, generateKeyPair } from './ppk';
+import { decryptPrivateKey, generateKeyPair, ppkDecryptMasterKeyContent, ppkGenerateMasterKey } from './ppk';
 
 describe('e2ee/ppk', function() {
 
@@ -40,5 +40,13 @@ describe('e2ee/ppk', function() {
 		expect(privateKey1).not.toBe(privateKey2);
 		expect(publicKey1).not.toBe(publicKey2);
 	});
+
+	it('should encrypt a master key using PPK', (async () => {
+		const ppk = await generateKeyPair(encryptionService(), '111111');
+		const masterKey = await ppkGenerateMasterKey(encryptionService(), ppk, '111111');
+		const plainText = await ppkDecryptMasterKeyContent(encryptionService(), masterKey, ppk, '111111');
+		expect(plainText.length).toBeGreaterThan(50); // Just checking it's not empty
+		expect(plainText).not.toBe(masterKey.content);
+	}));
 
 });

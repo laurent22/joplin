@@ -25,17 +25,25 @@ interface DecryptedMasterKey {
 	plainText: string;
 }
 
+export interface EncryptionCustomHandler {
+	context?: any;
+	encrypt(context: any, hexaBytes: string, password: string): Promise<string>;
+	decrypt(context: any, hexaBytes: string, password: string): Promise<string>;
+}
+
 export enum EncryptionMethod {
 	SJCL = 1,
 	SJCL2 = 2,
 	SJCL3 = 3,
 	SJCL4 = 4,
 	SJCL1a = 5,
+	Custom = 6,
 }
 
 export interface EncryptOptions {
 	encryptionMethod?: EncryptionMethod;
 	onProgress?: Function;
+	encryptionHandler?: EncryptionCustomHandler;
 }
 
 export default class EncryptionService {
@@ -146,7 +154,7 @@ export default class EncryptionService {
 		logger.info(`Loading master key: ${model.id}. Make active:`, makeActive);
 
 		this.decryptedMasterKeys_[model.id] = {
-			plainText: await this.decryptMasterKey_(model, password),
+			plainText: await this.decryptMasterKeyContent(model, password),
 			updatedTime: model.updated_time,
 		};
 
@@ -201,23 +209,28 @@ export default class EncryptionService {
 		return output.filter(mk => mk.encryption_method <= 5);
 	}
 
-	async upgradeMasterKey(model: MasterKeyEntity, decryptionPassword: string) {
+	public async reencryptMasterKey(model: MasterKeyEntity, decryptionPassword: string, decryptOptions: EncryptOptions = null, encryptOptions: EncryptOptions = null) {
 		const newEncryptionMethod = this.defaultMasterKeyEncryptionMethod_;
-		const plainText = await this.decryptMasterKey_(model, decryptionPassword);
-		const newContent = await this.encryptMasterKeyContent_(newEncryptionMethod, plainText, decryptionPassword);
+		const plainText = await this.decryptMasterKeyContent(model, decryptionPassword, decryptOptions);
+		const newContent = await this.encryptMasterKeyContent_(newEncryptionMethod, plainText, decryptionPassword, encryptOptions);
 		return { ...model, ...newContent };
 	}
 
-	private async encryptMasterKeyContent_(encryptionMethod: EncryptionMethod, hexaBytes: any, password: string): Promise<MasterKeyEntity> {
-		// Checksum is not necessary since decryption will already fail if data is invalid
-		const checksum = encryptionMethod === EncryptionMethod.SJCL2 ? this.sha256(hexaBytes) : '';
-		const cipherText = await this.encrypt(encryptionMethod, password, hexaBytes);
-
-		return {
-			checksum: checksum,
-			encryption_method: encryptionMethod,
-			content: cipherText,
-		};
+	private async encryptMasterKeyContent_(encryptionMethod: EncryptionMethod, hexaBytes: string, password: string, options: EncryptOptions): Promise<MasterKeyEntity> {
+		if (encryptionMethod === EncryptionMethod.Custom) {
+			return {
+				checksum: '',
+				encryption_method: EncryptionMethod.Custom,
+				content: await options.encryptionHandler.encrypt(options.encryptionHandler.context, hexaBytes, password),
+			};
+		} else {
+			return {
+				// Checksum is not necessary since decryption will already fail if data is invalid
+				checksum: encryptionMethod === EncryptionMethod.SJCL2 ? this.sha256(hexaBytes) : '',
+				encryption_method: encryptionMethod,
+				content: await this.encrypt(encryptionMethod, password, hexaBytes),
+			};
+		}
 	}
 
 	private async generateMasterKeyContent_(password: string, options: EncryptOptions = null) {
@@ -228,7 +241,7 @@ export default class EncryptionService {
 		const bytes: any[] = await shim.randomBytes(256);
 		const hexaBytes = bytes.map(a => hexPad(a.toString(16), 2)).join('');
 
-		return this.encryptMasterKeyContent_(options.encryptionMethod, hexaBytes, password);
+		return this.encryptMasterKeyContent_(options.encryptionMethod, hexaBytes, password, options);
 	}
 
 	public async generateMasterKey(password: string, options: EncryptOptions = null) {
@@ -242,7 +255,14 @@ export default class EncryptionService {
 		return model;
 	}
 
-	public async decryptMasterKey_(model: MasterKeyEntity, password: string): Promise<string> {
+	public async decryptMasterKeyContent(model: MasterKeyEntity, password: string, options: EncryptOptions = null): Promise<string> {
+		options = options || {};
+
+		if (model.encryption_method === EncryptionMethod.Custom) {
+			if (!options.encryptionHandler) throw new Error('Master key was encrypted using a custom method, but no encryptionHandler is provided');
+			return options.encryptionHandler.decrypt(options.encryptionHandler.context, model.content, password);
+		}
+
 		const plainText = await this.decrypt(model.encryption_method, password, model.content);
 		if (model.encryption_method === EncryptionMethod.SJCL2) {
 			const checksum = this.sha256(plainText);
@@ -254,7 +274,7 @@ export default class EncryptionService {
 
 	public async checkMasterKeyPassword(model: MasterKeyEntity, password: string) {
 		try {
-			await this.decryptMasterKey_(model, password);
+			await this.decryptMasterKeyContent(model, password);
 		} catch (error) {
 			return false;
 		}

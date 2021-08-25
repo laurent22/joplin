@@ -5,8 +5,9 @@ import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import Setting from '../../models/Setting';
 import EncryptionService from '../e2ee/EncryptionService';
+import { ppkGenerateMasterKey } from '../e2ee/ppk';
 import { MasterKeyEntity } from '../e2ee/types';
-import { getActiveMasterKey, getEncryptionEnabled } from '../synchronizer/syncInfoUtils';
+import { addMasterKey, getEncryptionEnabled, localSyncInfo } from '../synchronizer/syncInfoUtils';
 import { State, stateRootKey, StateShare } from './reducer';
 
 const logger = Logger.create('ShareService');
@@ -16,7 +17,7 @@ export default class ShareService {
 	private static instance_: ShareService;
 	private api_: JoplinServerApi = null;
 	private store_: Store<any> = null;
-	private encryptionService_:EncryptionService = null;
+	private encryptionService_: EncryptionService = null;
 
 	public static instance(): ShareService {
 		if (this.instance_) return this.instance_;
@@ -69,24 +70,26 @@ export default class ShareService {
 			await Folder.save({ id: folder.id, parent_id: '' });
 		}
 
-		let folderMasterKey:MasterKeyEntity = null;
+		let folderMasterKey: MasterKeyEntity = null;
 
 		if (getEncryptionEnabled()) {
-			const mk = getActiveMasterKey();
+			const syncInfo = localSyncInfo();
 
 			// Shouldn't happen
-			if (!mk) throw new Error('Cannot share notebook because even though E2EE is enabled, no master key is set as active');
-
-			const password = Setting.value('encryption.passwordCache')[mk.id];
+			if (!syncInfo.ppk) throw new Error('Cannot share notebook because E2EE is enabled and no Public Private Key pair exists.');
 
 			// Shouldn't happen
-			if (!password) throw new Error('Cannot share notebook because the active master key password could not be retrieved');
+			const password = Setting.value('encryption.passwordCache')[syncInfo.ppk.id];
 
-			// TODO: encrypt with user own public key instead
-			folderMasterKey = await this.encryptionService_.generateMasterKey(password);
+			folderMasterKey = await ppkGenerateMasterKey(this.encryptionService_, syncInfo.ppk, password);
+
+			addMasterKey(syncInfo, folderMasterKey);
 		}
 
-		const share = await this.api().exec('POST', 'api/shares', {}, { folder_id: folderId });
+		const share = await this.api().exec('POST', 'api/shares', {}, {
+			folder_id: folderId,
+			master_key_id: folderMasterKey ? folderMasterKey.id : '',
+		});
 
 		// Note: race condition if the share is created but the app crashes
 		// before setting share_id on the folder. See unshareFolder() for info.
@@ -200,7 +203,7 @@ export default class ShareService {
 		if (getEncryptionEnabled()) {
 			// TODO: get master key associated with share
 			// TODO: fetch recipient public key
-			// TODO: encrypt master key with it
+			// TODO: re-encrypt master key with it
 			// TODO: attach encrypted mk to share_user object
 		}
 
