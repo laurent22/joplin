@@ -44,20 +44,23 @@ router.post('api/shares/:id/users', async (path: SubPath, ctx: AppContext) => {
 
 	interface UserInput {
 		email: string;
+		master_key?: string;
 	}
 
 	const fields = await bodyFields(ctx.req) as UserInput;
 	const user = await ctx.joplin.models.user().loadByEmail(fields.email);
 	if (!user) throw new ErrorNotFound('User not found');
 
+	const masterKey = fields.master_key || '';
 	const shareId = path.id;
 
 	await ctx.joplin.models.shareUser().checkIfAllowed(ctx.joplin.owner, AclAction.Create, {
 		share_id: shareId,
 		user_id: user.id,
+		master_key: masterKey,
 	});
 
-	return ctx.joplin.models.shareUser().addByEmail(shareId, user.email);
+	return ctx.joplin.models.shareUser().addByEmail(shareId, user.email, masterKey);
 });
 
 router.get('api/shares/:id/users', async (path: SubPath, ctx: AppContext) => {

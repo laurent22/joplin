@@ -137,6 +137,7 @@ export interface ShareUser extends WithDates, WithUuid {
 	share_id?: Uuid;
 	user_id?: Uuid;
 	status?: ShareUserStatus;
+	master_key?: string;
 }
 
 export interface Item extends WithDates, WithUuid {
@@ -293,6 +294,7 @@ export const databaseSchema: DatabaseTables = {
 		status: { type: 'number' },
 		updated_time: { type: 'string' },
 		created_time: { type: 'string' },
+		master_key: { type: 'string' },
 	},
 	items: {
 		id: { type: 'string' },

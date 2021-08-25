@@ -1,4 +1,4 @@
-import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, checkThrowAsync, createItem } from '../utils/testing/testUtils';
+import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, checkThrowAsync, createItem, expectThrow } from '../utils/testing/testUtils';
 import { EmailSender, User, UserFlagType } from '../services/database/types';
 import { ErrorUnprocessableEntity } from '../utils/errors';
 import { betaUserDateRange, stripeConfig } from '../utils/stripe';
@@ -265,6 +265,58 @@ describe('UserModel', function() {
 			await models().user().handleOversizedAccounts();
 			expect((await models().email().all()).length).toBe(emailBeforeCount + 1);
 		}
+	});
+
+	test('should get the user public key', async function() {
+		const { user: user1 } = await createUserAndSession(1);
+		const { user: user2 } = await createUserAndSession(2);
+		const { user: user3 } = await createUserAndSession(3);
+		const { user: user4 } = await createUserAndSession(4);
+
+		const syncInfo1: any = {
+			'version': 3,
+			'e2ee': {
+				'value': false,
+				'updatedTime': 0,
+			},
+			'ppk': {
+				'value': {
+					publicKey: 'PUBLIC_KEY_1',
+					privateKey: {
+						encryptionMode: 4,
+						ciphertext: 'PRIVATE_KEY',
+					},
+				},
+				'updatedTime': 0,
+			},
+		};
+
+		const syncInfo2: any = JSON.parse(JSON.stringify(syncInfo1));
+		syncInfo2.ppk.value.publicKey = 'PUBLIC_KEY_2';
+
+		const syncInfo3: any = JSON.parse(JSON.stringify(syncInfo1));
+		delete syncInfo3.ppk;
+
+		await models().item().saveForUser(user1.id, {
+			content: Buffer.from(JSON.stringify(syncInfo1)),
+			name: 'info.json',
+		});
+
+		await models().item().saveForUser(user2.id, {
+			content: Buffer.from(JSON.stringify(syncInfo2)),
+			name: 'info.json',
+		});
+
+		await models().item().saveForUser(user3.id, {
+			content: Buffer.from(JSON.stringify(syncInfo3)),
+			name: 'info.json',
+		});
+
+		expect(await models().user().publicKey(user1.id)).toBe('PUBLIC_KEY_1');
+		expect(await models().user().publicKey(user2.id)).toBe('PUBLIC_KEY_2');
+		expect(await models().user().publicKey(user3.id)).toBe('');
+
+		await expectThrow(async () => models().user().publicKey(user4.id));
 	});
 
 });

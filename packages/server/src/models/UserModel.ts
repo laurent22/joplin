@@ -439,6 +439,18 @@ export default class UserModel extends BaseModel<User> {
 		return output;
 	}
 
+	private async syncInfo(userId: Uuid): Promise<any> {
+		const item = await this.models().item().loadByName(userId, 'info.json');
+		if (!item) throw new Error('Cannot find info.json file');
+		const withContent = await this.models().item().loadWithContent(item.id);
+		return JSON.parse(withContent.content.toString());
+	}
+
+	public async publicKey(userId: string): Promise<string> {
+		const syncInfo = await this.syncInfo(userId);
+		return syncInfo.ppk?.value.publicKey || '';
+	}
+
 	// Note that when the "password" property is provided, it is going to be
 	// hashed automatically. It means that it is not safe to do:
 	//

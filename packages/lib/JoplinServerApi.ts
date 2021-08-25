@@ -142,7 +142,7 @@ export default class JoplinServerApi {
 		}
 
 		if (sessionId) headers['X-API-AUTH'] = sessionId;
-		headers['X-API-MIN-VERSION'] = '2.1.4';
+		headers['X-API-MIN-VERSION'] = '2.5.0';
 
 		const fetchOptions: any = {};
 		fetchOptions.headers = headers;

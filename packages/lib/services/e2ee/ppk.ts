@@ -3,13 +3,12 @@ import Setting from '../../models/Setting';
 import { getActiveMasterKey, SyncInfo } from '../synchronizer/syncInfoUtils';
 import EncryptionService, { EncryptionMethod } from './EncryptionService';
 
-interface Key {
+interface PrivateKey {
 	encryptionMethod: EncryptionMethod;
 	ciphertext: string;
 }
 
-export interface PublicKey extends Key {}
-export interface PrivateKey extends Key {}
+export type PublicKey = string;
 
 export interface PublicPrivateKeyPair {
 	publicKey: PublicKey;
@@ -17,14 +16,14 @@ export interface PublicPrivateKeyPair {
 	createdTime: number;
 }
 
-async function encryptKey(encryptionService: EncryptionService, password: string, plainText: string): Promise<Key> {
+async function encryptPrivateKey(encryptionService: EncryptionService, password: string, plainText: string): Promise<PrivateKey> {
 	return {
 		encryptionMethod: EncryptionMethod.SJCL4,
 		ciphertext: await encryptionService.encrypt(EncryptionMethod.SJCL4, password, plainText),
 	};
 }
 
-export async function decryptKey(encryptionService: EncryptionService, encryptedKey: Key, password: string): Promise<string> {
+export async function decryptPrivateKey(encryptionService: EncryptionService, encryptedKey: PrivateKey, password: string): Promise<string> {
 	return encryptionService.decrypt(encryptedKey.encryptionMethod, password, encryptedKey.ciphertext);
 }
 
@@ -37,8 +36,8 @@ export async function generateKeyPair(encryptionService: EncryptionService, pass
 	if (!keys.isPublic()) throw new Error('No public key was generated');
 
 	return {
-		privateKey: await encryptKey(encryptionService, password, keys.exportKey('pkcs1-private-pem')),
-		publicKey: await encryptKey(encryptionService, password, keys.exportKey('pkcs1-public-pem')),
+		privateKey: await encryptPrivateKey(encryptionService, password, keys.exportKey('pkcs1-private-pem')),
+		publicKey: keys.exportKey('pkcs1-public-pem'),
 		createdTime: Date.now(),
 	};
 }

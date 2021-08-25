@@ -26,6 +26,13 @@ router.get('api/users/:id', async (path: SubPath, ctx: AppContext) => {
 	return user;
 });
 
+router.publicSchemas.push('api/users/:id/public_key');
+
+router.get('api/users/:id/public_key', async (path: SubPath, ctx: AppContext) => {
+	const user = await fetchUser(path, ctx);
+	return ctx.joplin.models.user().publicKey(user.id);
+});
+
 router.post('api/users', async (_path: SubPath, ctx: AppContext) => {
 	await ctx.joplin.models.user().checkIfAllowed(ctx.joplin.owner, AclAction.Create);
 	const user = await postedUserFromContext(ctx);
