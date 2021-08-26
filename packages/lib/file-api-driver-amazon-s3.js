@@ -246,8 +246,7 @@ class FileApiDriverAmazonS3 {
 
 			if (options.target === 'file') {
 				output = await shim.fetchBlob(s3Url, options);
-			}
-			else if (responseFormat === 'text') {
+			} else if (responseFormat === 'text') {
 				response = await shim.fetch(s3Url, options);
 
 				output = await response.text();

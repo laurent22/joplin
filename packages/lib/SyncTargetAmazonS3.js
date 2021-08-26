@@ -75,7 +75,7 @@ class SyncTargetAmazonS3 extends BaseSyncTarget {
 		// These options are read from the form on the page
 		// so we can test new config choices without overriding the current settings.
 		const apiOptions = {
-		region: options.region(),
+			region: options.region(),
 			credentials: {
 				accessKeyId: options.username(),
 				secretAccessKey: options.password(),
