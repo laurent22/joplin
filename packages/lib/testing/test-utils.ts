@@ -602,7 +602,7 @@ async function initFileApi() {
 		const appDir = await api.appDirectory();
 		fileApi = new FileApi(appDir, new FileApiDriverOneDrive(api));
 	} else if (syncTargetId_ == SyncTargetRegistry.nameToId('amazon_s3')) {
-		
+
 		// We make sure for S3 tests run in band because tests
 		// share the same directory which will cause locking errors.
 
@@ -611,7 +611,7 @@ async function initFileApi() {
 		const amazonS3CredsPath = `${oldTestDir}/support/amazon-s3-auth.json`;
 		const amazonS3Creds = require(amazonS3CredsPath);
 		if (!amazonS3Creds || !amazonS3Creds.credentials) throw new Error(`AWS auth JSON missing in ${amazonS3CredsPath} format should be: { "credentials": { "accessKeyId": "", "secretAccessKey": "", } "bucket": "mybucket", region: "", forcePathStyle: ""}`);
-        const api = new S3Client({ region: amazonS3Creds.region, credentials:amazonS3Creds.credentials, s3UseArnRegion: true, forcePathStyle: amazonS3Creds.forcePathStyle ,endpoint: amazonS3Creds.endpoint});
+		const api = new S3Client({ region: amazonS3Creds.region, credentials: amazonS3Creds.credentials, s3UseArnRegion: true, forcePathStyle: amazonS3Creds.forcePathStyle, endpoint: amazonS3Creds.endpoint });
 		fileApi = new FileApi('', new FileApiDriverAmazonS3(api, amazonS3Creds.bucket));
 	} else if (syncTargetId_ == SyncTargetRegistry.nameToId('joplinServer')) {
 		mustRunInBand();

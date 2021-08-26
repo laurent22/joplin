@@ -33,14 +33,11 @@ class FileApiDriverAmazonS3 {
 
 		if (error.name) {
 			return error.name.indexOf(errorCode) >= 0;
-		}
-		else if (error.code) {
+		} else if (error.code) {
 			return error.code.indexOf(errorCode) >= 0;
-		}
-		else if (error.Code) {
+		} else if (error.Code) {
 			return error.Code.indexOf(errorCode) >= 0;
-		}
-		else {
+		} else {
 			return false;
 		}
 	}
@@ -266,7 +263,7 @@ class FileApiDriverAmazonS3 {
 			// This means that the error was on the Desktop client side and we need to handle that.
 			// On Mobile it won't match because FetchError is a node-fetch feature.
 			// https://github.com/node-fetch/node-fetch/blob/main/docs/ERROR-HANDLING.md
-			if (error.name === "FetchError") { throw error.message }
+			if (error.name === 'FetchError') { throw error.message; }
 
 			let parsedOutput = '';
 
@@ -286,8 +283,7 @@ class FileApiDriverAmazonS3 {
 			} else {
 				if (error.output) {
 					throw error.output;
-				}
-				else {
+				} else {
 					throw error;
 				}
 			}

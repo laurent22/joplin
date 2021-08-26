@@ -522,18 +522,18 @@ class Setting extends BaseModel {
 				storage: SettingStorage.File,
 			},
 			'sync.8.region': {
-						value: '',
-						type: SettingItemType.String,
-						section: 'sync',
-						show: (settings: any) => {
-							return settings['sync.target'] == SyncTargetRegistry.nameToId('amazon_s3');
-					},
-								filter: value => {
+				value: '',
+				type: SettingItemType.String,
+				section: 'sync',
+				show: (settings: any) => {
+					return settings['sync.target'] == SyncTargetRegistry.nameToId('amazon_s3');
+				},
+				filter: value => {
 					return value ? value.trim() : '';
 				},
-						public: true,
-						label: () => _('Region'),
-						storage: SettingStorage.File,
+				public: true,
+				label: () => _('Region'),
+				storage: SettingStorage.File,
 			},
 			'sync.8.username': {
 				value: '',
