@@ -25,6 +25,7 @@ export interface StateShare {
 	type: number;
 	folder_id: string;
 	note_id: string;
+	master_key_id: string;
 	user?: StateShareUserUser;
 }
 

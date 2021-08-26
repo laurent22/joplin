@@ -3,6 +3,11 @@
 # Setup the sync parameters for user X and create a few folders and notes to
 # allow sharing. Also calls the API to create the test users and clear the data.
 
+# For example, to setup a user for sharing, and another as recipient with E2EE
+# enabled:
+
+# ./runForTesting.sh 1 createUsers,createData,reset,e2ee,sync && ./runForTesting.sh 2 reset,generatePpk && ./runForTesting.sh 1
+
 set -e
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"

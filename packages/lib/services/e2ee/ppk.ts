@@ -87,19 +87,27 @@ async function loadPublicKey(publicKey: PublicKey): Promise<NodeRSA> {
 	return keys;
 }
 
-export function ppkEncryptionHandler(nodeRSA: NodeRSA): EncryptionCustomHandler {
+export function ppkEncryptionHandler(ppkId: string, nodeRSA: NodeRSA): EncryptionCustomHandler {
+	interface Context {
+		nodeRSA: NodeRSA;
+		ppkId: string;
+	}
+
 	return {
 		context: {
 			nodeRSA,
+			ppkId,
 		},
-		encrypt: async (context: any, hexaBytes: string, _password: string): Promise<string> => {
+		encrypt: async (context: Context, hexaBytes: string, _password: string): Promise<string> => {
 			return JSON.stringify({
+				ppkId: context.ppkId,
 				scheme: nodeRSAEncryptionScheme,
 				ciphertext: context.nodeRSA.encrypt(hexaBytes, 'hex'),
 			});
 		},
-		decrypt: async (context: any, ciphertext: string, _password: string): Promise<string> => {
+		decrypt: async (context: Context, ciphertext: string, _password: string): Promise<string> => {
 			const parsed = JSON.parse(ciphertext);
+			if (parsed.ppkId !== context.ppkId) throw new Error(`Needs private key ${parsed.ppkId} to decrypt, but using ${context.ppkId}`);
 			return context.nodeRSA.decrypt(Buffer.from(parsed.ciphertext, 'hex'), 'utf8');
 		},
 	};
@@ -108,7 +116,7 @@ export function ppkEncryptionHandler(nodeRSA: NodeRSA): EncryptionCustomHandler 
 // Generates a master key and encrypts it using the provided PPK
 export async function ppkGenerateMasterKey(service: EncryptionService, ppk: PublicPrivateKeyPair, password: string): Promise<MasterKeyEntity> {
 	const nodeRSA = await loadPpk(service, ppk, password);
-	const handler = ppkEncryptionHandler(nodeRSA);
+	const handler = ppkEncryptionHandler(ppk.id, nodeRSA);
 
 	return service.generateMasterKey('', {
 		encryptionMethod: EncryptionMethod.Custom,
@@ -119,16 +127,16 @@ export async function ppkGenerateMasterKey(service: EncryptionService, ppk: Publ
 // Decrypt the content of a master key that was encrypted using ppkGenerateMasterKey()
 export async function ppkDecryptMasterKeyContent(service: EncryptionService, masterKey: MasterKeyEntity, ppk: PublicPrivateKeyPair, password: string): Promise<string> {
 	const nodeRSA = await loadPpk(service, ppk, password);
-	const handler = ppkEncryptionHandler(nodeRSA);
+	const handler = ppkEncryptionHandler(ppk.id, nodeRSA);
 
 	return service.decryptMasterKeyContent(masterKey, '', {
 		encryptionHandler: handler,
 	});
 }
 
-export async function ppkReencryptMasterKey(service: EncryptionService, masterKey: MasterKeyEntity, decryptionPpk: PublicPrivateKeyPair, decryptionPassword: string, encryptionPublicKey: PublicKey): Promise<MasterKeyEntity> {
-	const encryptionHandler = ppkEncryptionHandler(await loadPublicKey(encryptionPublicKey));
-	const decryptionHandler = ppkEncryptionHandler(await loadPpk(service, decryptionPpk, decryptionPassword));
+export async function ppkReencryptMasterKey(service: EncryptionService, masterKey: MasterKeyEntity, decryptionPpk: PublicPrivateKeyPair, decryptionPassword: string, encryptionPublicKey: PublicPrivateKeyPair): Promise<MasterKeyEntity> {
+	const encryptionHandler = ppkEncryptionHandler(encryptionPublicKey.id, await loadPublicKey(encryptionPublicKey.publicKey));
+	const decryptionHandler = ppkEncryptionHandler(decryptionPpk.id, await loadPpk(service, decryptionPpk, decryptionPassword));
 
 	return service.reencryptMasterKey(masterKey, '', {
 		encryptionHandler: decryptionHandler,

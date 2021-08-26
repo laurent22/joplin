@@ -6,15 +6,16 @@ import Folder from '../../models/Folder';
 import MasterKey from '../../models/MasterKey';
 import Note from '../../models/Note';
 import Setting from '../../models/Setting';
+import { FolderEntity } from '../database/types';
 import EncryptionService from '../e2ee/EncryptionService';
-import { getPpkPassword, ppkGenerateMasterKey, ppkReencryptMasterKey } from '../e2ee/ppk';
+import { getPpkPassword, ppkGenerateMasterKey, ppkReencryptMasterKey, PublicPrivateKeyPair } from '../e2ee/ppk';
 import { MasterKeyEntity } from '../e2ee/types';
 import { addMasterKey, getEncryptionEnabled, localSyncInfo } from '../synchronizer/syncInfoUtils';
 import { State, stateRootKey, StateShare } from './reducer';
 
 const logger = Logger.create('ShareService');
 
-interface ApiShare {
+export interface ApiShare {
 	id: string;
 	master_key_id: string;
 }
@@ -73,10 +74,6 @@ export default class ShareService {
 		const folder = await Folder.load(folderId);
 		if (!folder) throw new Error(`No such folder: ${folderId}`);
 
-		if (folder.parent_id) {
-			await Folder.save({ id: folder.id, parent_id: '' });
-		}
-
 		let folderMasterKey: MasterKeyEntity = null;
 
 		if (getEncryptionEnabled()) {
@@ -91,6 +88,18 @@ export default class ShareService {
 			folderMasterKey = await MasterKey.save(folderMasterKey);
 
 			addMasterKey(syncInfo, folderMasterKey);
+		}
+
+		const newFolderProps: FolderEntity = {};
+
+		if (folder.parent_id) newFolderProps.parent_id = '';
+		if (folderMasterKey) newFolderProps.master_key_id = folderMasterKey.id;
+
+		if (Object.keys(newFolderProps).length) {
+			await Folder.save({
+				id: folder.id,
+				...newFolderProps,
+			});
 		}
 
 		const share = await this.api().exec('POST', 'api/shares', {}, {
@@ -206,9 +215,8 @@ export default class ShareService {
 		return this.state.shareInvitations;
 	}
 
-	private async userPublicKey(userEmail: string): Promise<string> {
-		const r = await this.api().exec('GET', `api/users/${encodeURIComponent(userEmail)}/public_key`);
-		return r.content;
+	private async userPublicKey(userEmail: string): Promise<PublicPrivateKeyPair> {
+		return this.api().exec('GET', `api/users/${encodeURIComponent(userEmail)}/public_key`);
 	}
 
 	public async addShareRecipient(shareId: string, masterKeyId: string, recipientEmail: string) {
@@ -219,8 +227,10 @@ export default class ShareService {
 			const masterKey = syncInfo.masterKeys.find(m => m.id === masterKeyId);
 			if (!masterKey) throw new Error(`Cannot find master key with ID ${masterKeyId}`);
 
-			const recipientPublicKey = await this.userPublicKey(recipientEmail);
+			const recipientPublicKey: PublicPrivateKeyPair = await this.userPublicKey(recipientEmail);
 			if (!recipientPublicKey) throw new Error(_('Cannot share notebook with recipient %s because they do not have a public key. Ask them to create one from the menu "%s"', recipientEmail, 'Tools > Generate Public-Private Key pair'));
+
+			logger.info('Reencrypting master key with recipient public key', recipientPublicKey);
 
 			recipientMasterKey = await ppkReencryptMasterKey(
 				this.encryptionService_,
@@ -272,6 +282,43 @@ export default class ShareService {
 			type: 'SHARE_INVITATION_SET',
 			shareInvitations: result.items,
 		});
+	}
+
+	public async shareById(id: string) {
+		const stateShare = this.state.shares.find(s => s.id === id);
+		if (stateShare) return stateShare;
+
+		const refreshedShares = await this.refreshShares();
+		const refreshedShare = refreshedShares.find(s => s.id === id);
+		if (!refreshedShare) throw new Error(`Could not find share with ID: ${id}`);
+		return refreshedShare;
+	}
+
+	// In most cases the share objects will already be part of the state, so
+	// this function checks there first. If the required share objects are not
+	// present, it refreshes them from the API.
+	public async sharesByIds(ids: string[]) {
+		const buildOutput = async (shares: StateShare[]) => {
+			const output: Record<string, StateShare> = {};
+			for (const share of shares) {
+				if (ids.includes(share.id)) output[share.id] = share;
+			}
+			return output;
+		};
+
+		let output = await buildOutput(this.state.shares);
+		if (Object.keys(output).length === ids.length) return output;
+
+		const refreshedShares = await this.refreshShares();
+		output = await buildOutput(refreshedShares);
+
+		if (Object.keys(output).length !== ids.length) {
+			logger.error('sharesByIds: Need:', ids);
+			logger.error('sharesByIds: Got:', Object.keys(refreshedShares));
+			throw new Error('Could not retrieve required share objects');
+		}
+
+		return output;
 	}
 
 	public async refreshShares(): Promise<StateShare[]> {

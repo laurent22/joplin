@@ -32,8 +32,12 @@ router.publicSchemas.push('api/users/:id/public_key');
 router.get('api/users/:id/public_key', async (path: SubPath, ctx: AppContext) => {
 	const user = await ctx.joplin.models.user().loadByEmail(path.id);
 	if (!user) return ''; // Don't throw an error to prevent polling the end point
+
+	const ppk = await ctx.joplin.models.user().publicPrivateKey(user.id);
+
 	return {
-		content: await ctx.joplin.models.user().publicKey(user.id),
+		id: ppk.id,
+		publicKey: ppk.publicKey,
 	};
 });
 

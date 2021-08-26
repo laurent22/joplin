@@ -44,6 +44,7 @@ export interface EncryptOptions {
 	encryptionMethod?: EncryptionMethod;
 	onProgress?: Function;
 	encryptionHandler?: EncryptionCustomHandler;
+	masterKeyId?: string;
 }
 
 export default class EncryptionService {
@@ -411,7 +412,7 @@ export default class EncryptionService {
 		}, options);
 
 		const method = options.encryptionMethod;
-		const masterKeyId = this.activeMasterKeyId();
+		const masterKeyId = options.masterKeyId ? options.masterKeyId : this.activeMasterKeyId();
 		const masterKeyPlainText = this.loadedMasterKey(masterKeyId).plainText;
 
 		const header = {
