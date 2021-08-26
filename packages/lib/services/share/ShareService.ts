@@ -225,7 +225,7 @@ export default class ShareService {
 		if (getEncryptionEnabled()) {
 			const syncInfo = localSyncInfo();
 			const masterKey = syncInfo.masterKeys.find(m => m.id === masterKeyId);
-			if (!masterKey) throw new Error(`Cannot find master key with ID ${masterKeyId}`);
+			if (!masterKey) throw new Error(`Cannot find master key with ID "${masterKeyId}"`);
 
 			const recipientPublicKey: PublicPrivateKeyPair = await this.userPublicKey(recipientEmail);
 			if (!recipientPublicKey) throw new Error(_('Cannot share notebook with recipient %s because they do not have a public key. Ask them to create one from the menu "%s"', recipientEmail, 'Tools > Generate Public-Private Key pair'));

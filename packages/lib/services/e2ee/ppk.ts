@@ -1,7 +1,7 @@
 import * as NodeRSA from 'node-rsa';
 import Setting from '../../models/Setting';
 import uuid from '../../uuid';
-import { getActiveMasterKey, SyncInfo } from '../synchronizer/syncInfoUtils';
+import { getActiveMasterKey, saveLocalSyncInfo, SyncInfo } from '../synchronizer/syncInfoUtils';
 import EncryptionService, { EncryptionCustomHandler, EncryptionMethod } from './EncryptionService';
 import { MasterKeyEntity } from './types';
 
@@ -55,6 +55,18 @@ export async function generateKeyPair(encryptionService: EncryptionService, pass
 	};
 }
 
+export async function generateKeyPairAndSave(encryptionService: EncryptionService, localInfo: SyncInfo, password: string): Promise<PublicPrivateKeyPair> {
+	localInfo.ppk = await generateKeyPair(encryptionService, password);
+	saveLocalSyncInfo(localInfo);
+
+	const passwords = Setting.value('encryption.passwordCache');
+	passwords[localInfo.ppk.id] = password;
+	Setting.setValue('encryption.passwordCache', passwords);
+	await Setting.saveAll();
+
+	return localInfo.ppk;
+}
+
 export async function setPpkIfNotExist(service: EncryptionService, localInfo: SyncInfo, remoteInfo: SyncInfo) {
 	if (localInfo.ppk || remoteInfo.ppk) return;
 
@@ -65,12 +77,15 @@ export async function setPpkIfNotExist(service: EncryptionService, localInfo: Sy
 	const password = passwords[masterKey.id];
 	if (!password) return;
 
-	localInfo.ppk = await generateKeyPair(service, password);
-
-	passwords[localInfo.ppk.id] = password;
-	Setting.setValue('encryption.passwordCache', passwords);
-	await Setting.saveAll();
+	await generateKeyPairAndSave(service, localInfo, password);
 }
+
+// 	localInfo.ppk = await generateKeyPair(service, password);
+
+// 	passwords[localInfo.ppk.id] = password;
+// 	Setting.setValue('encryption.passwordCache', passwords);
+// 	await Setting.saveAll();
+// }
 
 async function loadPpk(service: EncryptionService, ppk: PublicPrivateKeyPair, password: string): Promise<NodeRSA> {
 	const keys = new NodeRSA();
