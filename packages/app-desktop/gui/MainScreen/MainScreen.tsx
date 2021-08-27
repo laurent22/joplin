@@ -37,6 +37,7 @@ import { reg } from '@joplin/lib/registry';
 import removeKeylessItems from '../ResizableLayout/utils/removeKeylessItems';
 import { localSyncInfoFromState } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 import { showMissingMasterKeyMessage } from '@joplin/lib/services/e2ee/utils';
+import { MasterKeyEntity } from '../../../lib/services/e2ee/types';
 
 const { connect } = require('react-redux');
 const { PromptDialog } = require('../PromptDialog.min.js');
@@ -577,8 +578,8 @@ class MainScreenComponent extends React.Component<Props, State> {
 			bridge().restart();
 		};
 
-		const onInvitationRespond = async (shareUserId: string, accept: boolean) => {
-			await ShareService.instance().respondInvitation(shareUserId, accept);
+		const onInvitationRespond = async (shareUserId: string, masterKey: MasterKeyEntity, accept: boolean) => {
+			await ShareService.instance().respondInvitation(shareUserId, masterKey, accept);
 			await ShareService.instance().refreshShareInvitations();
 			void reg.scheduleSync(1000);
 		};
@@ -625,9 +626,9 @@ class MainScreenComponent extends React.Component<Props, State> {
 			msg = this.renderNotificationMessage(
 				_('%s (%s) would like to share a notebook with you.', sharer.full_name, sharer.email),
 				_('Accept'),
-				() => onInvitationRespond(invitation.id, true),
+				() => onInvitationRespond(invitation.id, invitation.master_key, true),
 				_('Reject'),
-				() => onInvitationRespond(invitation.id, false)
+				() => onInvitationRespond(invitation.id, invitation.master_key, false)
 			);
 		} else if (this.props.hasDisabledSyncItems) {
 			msg = this.renderNotificationMessage(

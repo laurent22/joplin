@@ -11,13 +11,22 @@ import EncryptionService from '../e2ee/EncryptionService';
 import { getPpkPassword, ppkGenerateMasterKey, ppkReencryptMasterKey, PublicPrivateKeyPair } from '../e2ee/ppk';
 import { MasterKeyEntity } from '../e2ee/types';
 import { addMasterKey, getEncryptionEnabled, localSyncInfo } from '../synchronizer/syncInfoUtils';
-import { State, stateRootKey, StateShare } from './reducer';
+import { ShareInvitation, State, stateRootKey, StateShare } from './reducer';
 
 const logger = Logger.create('ShareService');
 
 export interface ApiShare {
 	id: string;
 	master_key_id: string;
+}
+
+function formatShareInvitations(invitations: any[]): ShareInvitation[] {
+	return invitations.map(inv => {
+		return {
+			...inv,
+			master_key: inv.master_key ? JSON.parse(inv.master_key) : null,
+		};
+	});
 }
 
 export default class ShareService {
@@ -267,8 +276,12 @@ export default class ShareService {
 		return this.api().exec('GET', 'api/share_users');
 	}
 
-	public async respondInvitation(shareUserId: string, accept: boolean) {
+	public async respondInvitation(shareUserId: string, masterKey: MasterKeyEntity, accept: boolean) {
 		if (accept) {
+			if (masterKey) {
+				// TODO: save it
+			}
+
 			await this.api().exec('PATCH', `api/share_users/${shareUserId}`, null, { status: 1 });
 		} else {
 			await this.api().exec('PATCH', `api/share_users/${shareUserId}`, null, { status: 2 });
@@ -278,9 +291,12 @@ export default class ShareService {
 	public async refreshShareInvitations() {
 		const result = await this.loadShareInvitations();
 
+		const invitations = formatShareInvitations(result.items);
+		logger.info('Refresh share invitations:', invitations);
+
 		this.store.dispatch({
 			type: 'SHARE_INVITATION_SET',
-			shareInvitations: result.items,
+			shareInvitations: invitations,
 		});
 	}
 
@@ -324,6 +340,8 @@ export default class ShareService {
 	public async refreshShares(): Promise<StateShare[]> {
 		const result = await this.loadShares();
 
+		logger.info('Refreshed shares:', result);
+
 		this.store.dispatch({
 			type: 'SHARE_SET',
 			shares: result.items,
@@ -334,6 +352,8 @@ export default class ShareService {
 
 	public async refreshShareUsers(shareId: string) {
 		const result = await this.loadShareUsers(shareId);
+
+		logger.info('Refreshed share users:', result);
 
 		this.store.dispatch({
 			type: 'SHARE_USER_SET',
