@@ -189,7 +189,9 @@ export default class EncryptionService {
 	}
 
 	masterKeysThatNeedUpgrading(masterKeys: MasterKeyEntity[]) {
-		return MasterKey.allWithoutEncryptionMethod(masterKeys, this.defaultMasterKeyEncryptionMethod_);
+		const output = MasterKey.allWithoutEncryptionMethod(masterKeys, this.defaultMasterKeyEncryptionMethod_);
+		// Anything below 5 is a new encryption method and doesn't need an upgrade
+		return output.filter(mk => mk.encryption_method <= 5);
 	}
 
 	async upgradeMasterKey(model: MasterKeyEntity, decryptionPassword: string) {
