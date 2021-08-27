@@ -12,7 +12,7 @@
 - Improved: Switch to node:16-bullseye base image (#5202 by [@piotrb](https://github.com/piotrb))
 - Fixed: Prevent crash when returning too many rows using SQLite (1efe3d3)
 - Fixed: Filenames with non-ascii characters could not be downloaded from published note (#5328)
-- Fixed: Fix missing CSS file error (#5309 by [@aaron](https://github.com/aaron))
+- Fixed: Fix missing CSS file error (#5309 by [@whalehub](https://github.com/whalehub))
 - Fixed: Fixed second duration (c7421df)
 
 ## [server-v2.3.7-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.3.7-beta) (Pre-release) - 2021-08-13T21:20:17Z
