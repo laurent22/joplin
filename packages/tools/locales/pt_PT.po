@@ -1124,7 +1124,7 @@ msgid "Restart now"
 msgstr "Reiniciar agora"
 
 #: packages/app-desktop/gui/ConfigScreen/Sidebar.js:89
-#: packages/lib/models/Setting.js:1689
+#: packages/lib/models/Setting.js:1690
 msgid "Plugins"
 msgstr "Plugins"
 
@@ -1835,7 +1835,7 @@ msgid "Note attachments..."
 msgstr "Anexos das notas..."
 
 #: packages/app-desktop/gui/MenuBar.js:343
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:702
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:705
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:13
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:136
 msgid "Copy"
@@ -1998,11 +1998,11 @@ msgstr "Inserir Hiperligação"
 msgid "List item"
 msgstr "Listar item"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:574
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:577
 msgid "Layout"
 msgstr "Estrutura"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:574
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:577
 #, javascript-format
 msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
@@ -2011,13 +2011,13 @@ msgstr ""
 "Esta nota não tem conteúdo. Carregue em \"%s\" para abrir o editor e editar "
 "a nota."
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:695
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:698
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:18
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:128
 msgid "Cut"
 msgstr "Cortar"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:709
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:712
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:23
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:143
 msgid "Paste"
@@ -2129,8 +2129,8 @@ msgid "to-do"
 msgstr "tarefa"
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.js:79
-#: packages/server/dist/models/UserModel.js:196
-#: packages/server/dist/models/UserModel.js:201
+#: packages/server/dist/models/UserModel.js:199
+#: packages/server/dist/models/UserModel.js:204
 msgid "note"
 msgstr "nota"
 
@@ -2319,7 +2319,7 @@ msgid "URL"
 msgstr "Endereço"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:34
-#: packages/lib/models/Setting.js:1693
+#: packages/lib/models/Setting.js:1694
 msgid "Note History"
 msgstr "Histórico de notas"
 
@@ -3894,11 +3894,15 @@ msgstr "Emacs"
 msgid "Vim"
 msgstr "Vim"
 
-#: packages/lib/models/Setting.js:934
+#: packages/lib/models/Setting.js:920
+msgid "Do not resize images"
+msgstr ""
+
+#: packages/lib/models/Setting.js:935
 msgid "Custom TLS certificates"
 msgstr "Certificados TLS personalizados"
 
-#: packages/lib/models/Setting.js:935
+#: packages/lib/models/Setting.js:936
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
 "or path to individual cert files. For example: /my/cert_dir, /other/custom."
@@ -3911,15 +3915,15 @@ msgstr ""
 "configurações TLS, você deve guardar suas alterações antes de carregar em "
 "\"Verificar configuração de sincronização\"."
 
-#: packages/lib/models/Setting.js:957
+#: packages/lib/models/Setting.js:958
 msgid "Ignore TLS certificate errors"
 msgstr "Ignorar erros de certificados TLS"
 
-#: packages/lib/models/Setting.js:966
+#: packages/lib/models/Setting.js:967
 msgid "Fail-safe"
 msgstr "Segurança contra falhas"
 
-#: packages/lib/models/Setting.js:967
+#: packages/lib/models/Setting.js:968
 msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
@@ -3928,7 +3932,7 @@ msgstr ""
 "sincronização está em branco (muitas vezes o resultado de uma má "
 "configuração ou erro)"
 
-#: packages/lib/models/Setting.js:971
+#: packages/lib/models/Setting.js:972
 msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
@@ -3936,29 +3940,29 @@ msgstr ""
 "Especifique a porta que deve ser utilizada pelo servidor de API. Caso não "
 "esteja definida, será utilizada a pré-definição."
 
-#: packages/lib/models/Setting.js:976
+#: packages/lib/models/Setting.js:977
 msgid "Enable note history"
 msgstr "Ativar histórico de notas"
 
-#: packages/lib/models/Setting.js:986
+#: packages/lib/models/Setting.js:987
 msgid "days"
 msgstr "dias"
 
-#: packages/lib/models/Setting.js:986
+#: packages/lib/models/Setting.js:987
 #, javascript-format
 msgid "%d days"
 msgstr "%d dias"
 
-#: packages/lib/models/Setting.js:988
+#: packages/lib/models/Setting.js:989
 msgid "Keep note history for"
 msgstr "Manter histórico de notas por"
 
-#: packages/lib/models/Setting.js:1015
+#: packages/lib/models/Setting.js:1016
 msgid "Notebook list growth factor"
 msgstr "Fator de crescimento do caderno"
 
-#: packages/lib/models/Setting.js:1016 packages/lib/models/Setting.js:1029
-#: packages/lib/models/Setting.js:1042
+#: packages/lib/models/Setting.js:1017 packages/lib/models/Setting.js:1030
+#: packages/lib/models/Setting.js:1043
 msgid ""
 "The factor property sets how the item will grow or shrink to fit the "
 "available space in its container with respect to the other items. Thus an "
@@ -3970,58 +3974,58 @@ msgstr ""
 "um item com um fator de 2 ocupará o dobro do espaço de um item com um fator "
 "de 1. Reinicie a aplicação para ver as alterações."
 
-#: packages/lib/models/Setting.js:1028
+#: packages/lib/models/Setting.js:1029
 msgid "Note list growth factor"
 msgstr "Fator de crescimento da lista de notas"
 
-#: packages/lib/models/Setting.js:1041
+#: packages/lib/models/Setting.js:1042
 msgid "Note area growth factor"
 msgstr "Fator de crescimento da área de notas"
 
-#: packages/lib/models/Setting.js:1274
+#: packages/lib/models/Setting.js:1275
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Valor de opção inválido: \"%s\". Os valores possíveis são: %s."
 
-#: packages/lib/models/Setting.js:1679
+#: packages/lib/models/Setting.js:1680
 msgid "General"
 msgstr "Geral"
 
-#: packages/lib/models/Setting.js:1681
+#: packages/lib/models/Setting.js:1682
 msgid "Synchronisation"
 msgstr "Sincronização"
 
-#: packages/lib/models/Setting.js:1683
+#: packages/lib/models/Setting.js:1684
 msgid "Appearance"
 msgstr "Aparência"
 
-#: packages/lib/models/Setting.js:1685
+#: packages/lib/models/Setting.js:1686
 msgid "Note"
 msgstr "Nota"
 
-#: packages/lib/models/Setting.js:1687
+#: packages/lib/models/Setting.js:1688
 #: packages/lib/services/interop/InteropService.js:49
 #: packages/lib/services/interop/InteropService.js:59
 msgid "Markdown"
 msgstr "Markdown"
 
-#: packages/lib/models/Setting.js:1691
+#: packages/lib/models/Setting.js:1692
 msgid "Application"
 msgstr "Aplicação"
 
-#: packages/lib/models/Setting.js:1695
+#: packages/lib/models/Setting.js:1696
 msgid "Encryption"
 msgstr "Encriptação"
 
-#: packages/lib/models/Setting.js:1697
+#: packages/lib/models/Setting.js:1698
 msgid "Web Clipper"
 msgstr "Recorte Web"
 
-#: packages/lib/models/Setting.js:1699
+#: packages/lib/models/Setting.js:1700
 msgid "Keyboard Shortcuts"
 msgstr "Atalhos do Teclado"
 
-#: packages/lib/models/Setting.js:1706
+#: packages/lib/models/Setting.js:1707
 msgid ""
 "These plugins enhance the Markdown renderer with additional features. Please "
 "note that, while these features might be useful, they are not standard "
@@ -4038,7 +4042,7 @@ msgstr ""
 "destes plugins nesse editor, perderá a formatação do plugin. Está indicado "
 "abaixo quais os plugins que são ou não compatíveis com o editor WYSIWYG."
 
-#: packages/lib/models/Setting.js:1708
+#: packages/lib/models/Setting.js:1709
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr "As notas e definições são guardadas em: %s"
@@ -4291,7 +4295,7 @@ msgstr "Por favor especifique o formato de importação para %s"
 msgid "There is no data to export."
 msgstr "Não há dados para exportar."
 
-#: packages/lib/services/interop/InteropService_Importer_Md.js:41
+#: packages/lib/services/interop/InteropService_Importer_Md.js:46
 msgid "Please specify the notebook where the notes should be imported to."
 msgstr ""
 "Por favor, especifique o caderno para onde as notas devem ser importadas."
@@ -4355,7 +4359,7 @@ msgstr "Versão do Perfil: %s"
 msgid "Keychain Supported: %s"
 msgstr "Porta-Chaves Suportado: %s"
 
-#: packages/server/dist/middleware/notificationHandler.js:28
+#: packages/server/dist/middleware/notificationHandler.js:29
 #, javascript-format
 msgid ""
 "The default admin password is insecure and has not been changed! [Change it "
@@ -4364,19 +4368,18 @@ msgstr ""
 "A palavra-passe padrão de administrador é insegura e não foi mudada! [Mudá-"
 "la agora](%s)"
 
-#: packages/server/dist/models/UserModel.js:196
-#: packages/server/dist/models/UserModel.js:201
+#: packages/server/dist/models/UserModel.js:199
+#: packages/server/dist/models/UserModel.js:204
 #, fuzzy
 msgid "attachment"
 msgstr "Anexos"
 
-#: packages/server/dist/models/UserModel.js:196
+#: packages/server/dist/models/UserModel.js:199
 #, javascript-format
-msgid ""
-"Cannot save %s \"%s\" because it is larger than than the allowed limit (%s)"
+msgid "Cannot save %s \"%s\" because it is larger than the allowed limit (%s)"
 msgstr ""
 
-#: packages/server/dist/models/UserModel.js:201
+#: packages/server/dist/models/UserModel.js:204
 #, javascript-format
 msgid ""
 "Cannot save %s \"%s\" because it would go over the total allowed size (%s) "

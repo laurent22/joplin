@@ -1124,7 +1124,7 @@ msgid "Restart now"
 msgstr "Рестартуј сада"
 
 #: packages/app-desktop/gui/ConfigScreen/Sidebar.js:89
-#: packages/lib/models/Setting.js:1689
+#: packages/lib/models/Setting.js:1690
 msgid "Plugins"
 msgstr "Додаци"
 
@@ -1852,7 +1852,7 @@ msgid "Note attachments..."
 msgstr "Прилози у белешкама..."
 
 #: packages/app-desktop/gui/MenuBar.js:343
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:702
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:705
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:13
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:136
 msgid "Copy"
@@ -2021,11 +2021,11 @@ msgstr "Уметни хипер-везу"
 msgid "List item"
 msgstr "Lиста ставки"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:574
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:577
 msgid "Layout"
 msgstr "Распоред"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:574
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:577
 #, javascript-format
 msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
@@ -2034,13 +2034,13 @@ msgstr ""
 "Ова белешка нема садржаја. Кликните на \"%s\" да активирате едитор и уредите "
 "белешку."
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:695
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:698
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:18
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:128
 msgid "Cut"
 msgstr "Исеци"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:709
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:712
 #: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:23
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:143
 msgid "Paste"
@@ -2151,8 +2151,8 @@ msgid "to-do"
 msgstr "ставка задужења"
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.js:79
-#: packages/server/dist/models/UserModel.js:196
-#: packages/server/dist/models/UserModel.js:201
+#: packages/server/dist/models/UserModel.js:199
+#: packages/server/dist/models/UserModel.js:204
 msgid "note"
 msgstr "белешка"
 
@@ -2346,7 +2346,7 @@ msgid "URL"
 msgstr "УРЛ"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:34
-#: packages/lib/models/Setting.js:1693
+#: packages/lib/models/Setting.js:1694
 msgid "Note History"
 msgstr "Историја о белешци"
 
@@ -3942,11 +3942,15 @@ msgstr "Емакс"
 msgid "Vim"
 msgstr "Вим"
 
-#: packages/lib/models/Setting.js:934
+#: packages/lib/models/Setting.js:920
+msgid "Do not resize images"
+msgstr ""
+
+#: packages/lib/models/Setting.js:935
 msgid "Custom TLS certificates"
 msgstr "Прилагођени ТЛС сертификати"
 
-#: packages/lib/models/Setting.js:935
+#: packages/lib/models/Setting.js:936
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
 "or path to individual cert files. For example: /my/cert_dir, /other/custom."
@@ -3959,15 +3963,15 @@ msgstr ""
 "ТЛС подешавањима неопходно је да сачувате ваше промене пре него што кликнете "
 "на \"Провери поставке синхронизације\"."
 
-#: packages/lib/models/Setting.js:957
+#: packages/lib/models/Setting.js:958
 msgid "Ignore TLS certificate errors"
 msgstr "Занемари грешке са ТЛС сертификатима"
 
-#: packages/lib/models/Setting.js:966
+#: packages/lib/models/Setting.js:967
 msgid "Fail-safe"
 msgstr "Сигурни услови"
 
-#: packages/lib/models/Setting.js:967
+#: packages/lib/models/Setting.js:968
 msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
@@ -3975,7 +3979,7 @@ msgstr ""
 "Сигурни услови: Не бришите локалне податке када је одредиште за "
 "синхронизацију празно (често буде резултат погрешне конфигурације или грешке)"
 
-#: packages/lib/models/Setting.js:971
+#: packages/lib/models/Setting.js:972
 msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
@@ -3983,29 +3987,29 @@ msgstr ""
 "Одредите порт који треба да се користи за \"API\" сервер. Ако није подешен, "
 "подразумевани ће се користити."
 
-#: packages/lib/models/Setting.js:976
+#: packages/lib/models/Setting.js:977
 msgid "Enable note history"
 msgstr "Омогући историју бележнице"
 
-#: packages/lib/models/Setting.js:986
+#: packages/lib/models/Setting.js:987
 msgid "days"
 msgstr "дана"
 
-#: packages/lib/models/Setting.js:986
+#: packages/lib/models/Setting.js:987
 #, javascript-format
 msgid "%d days"
 msgstr "%d дана"
 
-#: packages/lib/models/Setting.js:988
+#: packages/lib/models/Setting.js:989
 msgid "Keep note history for"
 msgstr "Чувај историју белешке"
 
-#: packages/lib/models/Setting.js:1015
+#: packages/lib/models/Setting.js:1016
 msgid "Notebook list growth factor"
 msgstr "Фактор раста бележнице"
 
-#: packages/lib/models/Setting.js:1016 packages/lib/models/Setting.js:1029
-#: packages/lib/models/Setting.js:1042
+#: packages/lib/models/Setting.js:1017 packages/lib/models/Setting.js:1030
+#: packages/lib/models/Setting.js:1043
 msgid ""
 "The factor property sets how the item will grow or shrink to fit the "
 "available space in its container with respect to the other items. Thus an "
@@ -4013,60 +4017,60 @@ msgid ""
 "factor of 1.Restart app to see changes."
 msgstr ""
 
-#: packages/lib/models/Setting.js:1028
+#: packages/lib/models/Setting.js:1029
 msgid "Note list growth factor"
 msgstr "Фактор раста листе белешки"
 
-#: packages/lib/models/Setting.js:1041
+#: packages/lib/models/Setting.js:1042
 msgid "Note area growth factor"
 msgstr "Фактор раста простора белешки"
 
-#: packages/lib/models/Setting.js:1274
+#: packages/lib/models/Setting.js:1275
 #, javascript-format
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Неважећа вредност за опцију: \"%s\". Могуће вредности су: %s."
 
-#: packages/lib/models/Setting.js:1679
+#: packages/lib/models/Setting.js:1680
 msgid "General"
 msgstr "Опште"
 
-#: packages/lib/models/Setting.js:1681
+#: packages/lib/models/Setting.js:1682
 msgid "Synchronisation"
 msgstr "Синхронизација"
 
-#: packages/lib/models/Setting.js:1683
+#: packages/lib/models/Setting.js:1684
 msgid "Appearance"
 msgstr "Изглед"
 
-#: packages/lib/models/Setting.js:1685
+#: packages/lib/models/Setting.js:1686
 msgid "Note"
 msgstr "Белешка"
 
-#: packages/lib/models/Setting.js:1687
+#: packages/lib/models/Setting.js:1688
 #: packages/lib/services/interop/InteropService.js:49
 #: packages/lib/services/interop/InteropService.js:59
 msgid "Markdown"
 msgstr "Маркдаун"
 
-#: packages/lib/models/Setting.js:1691
+#: packages/lib/models/Setting.js:1692
 msgid "Application"
 msgstr "Апликација"
 
-#: packages/lib/models/Setting.js:1695
+#: packages/lib/models/Setting.js:1696
 #, fuzzy
 msgid "Encryption"
 msgstr "Шифровање"
 
-#: packages/lib/models/Setting.js:1697
+#: packages/lib/models/Setting.js:1698
 #, fuzzy
 msgid "Web Clipper"
 msgstr "Опције веб клипера"
 
-#: packages/lib/models/Setting.js:1699
+#: packages/lib/models/Setting.js:1700
 msgid "Keyboard Shortcuts"
 msgstr "Пречице на тастатури"
 
-#: packages/lib/models/Setting.js:1706
+#: packages/lib/models/Setting.js:1707
 msgid ""
 "These plugins enhance the Markdown renderer with additional features. Please "
 "note that, while these features might be useful, they are not standard "
@@ -4077,7 +4081,7 @@ msgid ""
 "the WYSIWYG editor."
 msgstr ""
 
-#: packages/lib/models/Setting.js:1708
+#: packages/lib/models/Setting.js:1709
 #, javascript-format
 msgid "Notes and settings are stored in: %s"
 msgstr "Белешке и подешавања су складиштени у: %s"
@@ -4326,7 +4330,7 @@ msgstr "Молимо вас наведите увозни формат за %s"
 msgid "There is no data to export."
 msgstr "Нема података за извоз."
 
-#: packages/lib/services/interop/InteropService_Importer_Md.js:41
+#: packages/lib/services/interop/InteropService_Importer_Md.js:46
 msgid "Please specify the notebook where the notes should be imported to."
 msgstr "Молимо вас одаберите бележницу у коју ће белешке бити увезене."
 
@@ -4389,7 +4393,7 @@ msgstr "Верзија профила: %s"
 msgid "Keychain Supported: %s"
 msgstr ""
 
-#: packages/server/dist/middleware/notificationHandler.js:28
+#: packages/server/dist/middleware/notificationHandler.js:29
 #, javascript-format
 msgid ""
 "The default admin password is insecure and has not been changed! [Change it "
@@ -4398,18 +4402,17 @@ msgstr ""
 "Подразумевана лозинка је несигурна и мора бити промењена! [Промени је сада] "
 "(%s)"
 
-#: packages/server/dist/models/UserModel.js:196
-#: packages/server/dist/models/UserModel.js:201
+#: packages/server/dist/models/UserModel.js:199
+#: packages/server/dist/models/UserModel.js:204
 msgid "attachment"
 msgstr "приложи фајл"
 
-#: packages/server/dist/models/UserModel.js:196
+#: packages/server/dist/models/UserModel.js:199
 #, fuzzy, javascript-format
-msgid ""
-"Cannot save %s \"%s\" because it is larger than than the allowed limit (%s)"
+msgid "Cannot save %s \"%s\" because it is larger than the allowed limit (%s)"
 msgstr "Није могуће сачувати %s \"%s\" зато што је веће од дозвољеног (%s)"
 
-#: packages/server/dist/models/UserModel.js:201
+#: packages/server/dist/models/UserModel.js:204
 #, javascript-format
 msgid ""
 "Cannot save %s \"%s\" because it would go over the total allowed size (%s) "
