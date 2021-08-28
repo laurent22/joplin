@@ -275,16 +275,20 @@ In the **desktop application** or **mobile application**, select "OneDrive" as t
 
 In the **terminal application**, to initiate the synchronisation process, type `:sync`. You will be asked to follow a link to authorise the application (simply input your Microsoft credentials - you do not need to register with OneDrive).
 
-## AWS S3 synchronisation
+## S3 synchronisation
 
-In the **desktop application** or **mobile application**, select "AWS S3 (Beta)" as the synchronisation target in the [Configuration screen](https://github.com/laurent22/joplin/blob/dev/readme/config_screen.md).
+As of Joplin 2.x.x, Joplin supports multiple S3 providers. We expose some options that will need to be configured depending on your provider of choice. We have tested with UpCloud, AWS, and Linode. others should work as well.
 
-- **AWS S3 Bucket:** The name of your Bucket, such as `joplin-bucket`
-- **AWS S3 URL:** Fully qualified URL; By default this should be `https://s3.amazonaws.com/`
-- **AWS key & AWS secret:**  IAM user's programmatic access key.  To create a new key & secret, visit [IAM Security Credentials](https://console.aws.amazon.com/iam/home#/security_credentials).
+In the **desktop application** or **mobile application**, select "S3 (Beta)" as the synchronisation target in the [Configuration screen](https://github.com/laurent22/joplin/blob/dev/readme/config_screen.md).
+
+- **S3 Bucket:** The name of your Bucket, such as `joplin-bucket`
+- **S3 URL:** Fully qualified URL; For AWS this should be `https://s3.amazonaws.com/`
+- **S3 Access Key & S3 Secret Key:**  The User's programmatic access key.  To create a new key & secret on AWS, visit [IAM Security Credentials](https://console.aws.amazon.com/iam/home#/security_credentials). For other providers follow their documentation.
+- **S3 Region:** Some providers require you to provide the region of your bucket. This is usually in the form of "eu-west1" or something similar depending on your region. For providers that do not require a region, you can leave it blank.
+- **Force Path Style**: This setting enables Joplin to talk to S3 providers using an older style S3 Path. Depending on your provider you may need to try with this on and off.
 
 
-While creating a new Bucket for Joplin, disable **Bucket Versioning**, enable **Block all public access** and enable **Default encryption** with `Amazon S3 key (SSE-S3)`.
+While creating a new Bucket for Joplin, disable **Bucket Versioning**, enable **Block all public access** and enable **Default encryption** with `Amazon S3 key (SSE-S3)`. Some providers do not expose these options, and it could create a syncing problem. Do attempt and report back so we can update the documentation appropriately.
 
 To add a **Bucket Policy** from the AWS S3 Web Console, navigate to the **Permissions** tab. Temporarily disable **Block all public access**  to edit the Bucket policy, something along the lines of:
 ```
@@ -311,7 +315,26 @@ To add a **Bucket Policy** from the AWS S3 Web Console, navigate to the **Permis
 }
 ```
 
+### Configuration settings for tested providers
 
+All providers will require a bucket, Access Key, and Secret Key.
+
+If you provide a configuration and you receive "success!" on the "check config" then your S3 sync should work for your provider. If you do not receive success, you may need to adjust your settings, or save them, restart the app, and attempt a sync. This may reveal more clear error messaging that will help you deduce the problem.
+
+### AWS
+- URL: https://s3.amazonaws.com
+- Region: required
+- Force Path Style: unchecked
+
+### Linode
+- URL: https://<region>.linodeobjects.com
+- Region: empty
+- Force Path Style: unchecked
+
+### UpCloud
+- URL: https://<account>.<region>.upcloudobjects.com (They will provide you with multiple URLs, the one that follows this pattern should work.)
+- Region: required
+- Force Path Style: unchecked
 
 # Encryption
 
