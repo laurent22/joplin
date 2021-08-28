@@ -1740,6 +1740,9 @@ packages/tools/generate-database-types.js.map
 packages/tools/generate-images.d.ts
 packages/tools/generate-images.js
 packages/tools/generate-images.js.map
+packages/tools/git-changelog.d.ts
+packages/tools/git-changelog.js
+packages/tools/git-changelog.js.map
 packages/tools/lerna-add.d.ts
 packages/tools/lerna-add.js
 packages/tools/lerna-add.js.map
