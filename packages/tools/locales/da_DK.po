@@ -15,6 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.4.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-cli/app/app-gui.js:452
 msgid "To delete a tag, untag the associated notes."
@@ -1214,19 +1216,16 @@ msgid "Submit"
 msgstr "Gem"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.js:73
-#, fuzzy
 msgid "Source: "
-msgstr "Kilde"
+msgstr "Kilde: "
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.js:76
-#, fuzzy
 msgid "Created: "
-msgstr "Oprettet: %s"
+msgstr "Oprettet: "
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.js:79
-#, fuzzy
 msgid "Updated: "
-msgstr "Opdateret: %s"
+msgstr "Opdateret: "
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.js:84
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:96
@@ -1236,9 +1235,8 @@ msgid "Save"
 msgstr "Gem"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.js:87
-#, fuzzy
 msgid "Disable"
-msgstr "Deaktiveret"
+msgstr "Deaktiver"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.js:87
 #: packages/app-mobile/components/screens/encryption-config.js:157
@@ -1350,11 +1348,11 @@ msgstr "Hovednøgler"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.js:142
 msgid "Hide disabled master keys"
-msgstr ""
+msgstr "Skjul deaktiverede hovednøgler"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.js:142
 msgid "Show disabled master keys"
-msgstr ""
+msgstr "Vis deaktiverede hovednøgler"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.js:143
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:343
@@ -1374,7 +1372,7 @@ msgstr "Aktiv"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.js:149
 msgid "Date"
-msgstr ""
+msgstr "Dato"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.js:150
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:329
@@ -1382,14 +1380,12 @@ msgid "Password"
 msgstr "Kodeord"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.js:151
-#, fuzzy
 msgid "Valid"
-msgstr "Ugyldig"
+msgstr "Gyldig"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.js:152
-#, fuzzy
 msgid "Actions"
-msgstr "Handling"
+msgstr "Handlinger"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.js:182
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:244
@@ -1663,9 +1659,8 @@ msgstr ""
 "afslutte."
 
 #: packages/app-desktop/gui/MainScreen/commands/commandPalette.js:18
-#, fuzzy
 msgid "Command palette..."
-msgstr "Kommando-udvalg"
+msgstr "Kommando-udvalg..."
 
 #: packages/app-desktop/gui/MainScreen/commands/editAlarm.js:20
 #: packages/app-mobile/components/SelectDateTimeDialog.js:84
@@ -2569,22 +2564,20 @@ msgid "Export debug report"
 msgstr "Eksporter fejlrapport"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:157
-#, fuzzy
 msgid "Sync your notes"
-msgstr "Sorter noter efter"
+msgstr "Synk dine noter"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:158
 msgid "Publish notes to the internet"
-msgstr ""
+msgstr "Udgiv noter til internettet"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:159
-#, fuzzy
 msgid "Collaborate on notebooks with others"
-msgstr "Opret først en notesbog"
+msgstr "Samarbejd med andre om notesbøger"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:182
 msgid "Thank you! Your Joplin Cloud account is now setup and ready to use."
-msgstr ""
+msgstr "Mange tak! Din Joplin Cloud-konto er nu indstillet og klar til brug."
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:190
 #, javascript-format
@@ -2594,30 +2587,34 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"Der opstod en fejl ved opsætning af din Joplin Cloud-konto. Tjek venligst "
+"din e-mail og adgangskode og prøv igen. Fejl var:\n"
+"\n"
+"%s"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:203
 msgid "Login below."
-msgstr ""
+msgstr "Log ind nedenfor."
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:205
-#, fuzzy
 msgid "Or create an account."
-msgstr "Opretter en ny note."
+msgstr "Eller opret en konto."
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:210
 msgid "Login"
-msgstr ""
+msgstr "Login"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:231
-#, fuzzy
 msgid "Select"
-msgstr "Vælg alt"
+msgstr "Vælg"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:278
 msgid ""
 "Joplin can synchronise your notes using various providers. Select one from "
 "the list below."
 msgstr ""
+"Joplin kan synkronisere dine noter ved hjælp af forskellige "
+"tjenesteudbydere. Vælg en fra listen nedenfor."
 
 #: packages/app-desktop/gui/utils/NoteListUtils.js:43
 msgid "Duplicate"
@@ -3092,6 +3089,8 @@ msgid ""
 "Joplin's own sync service. Also gives access to Joplin-specific features "
 "such as publishing notes or collaborating on notebooks with others."
 msgstr ""
+"Joplin's egen synkroniseringstjeneste. Giver også adgang til særlige Joplin-"
+"funktioner såsom publicering af noter og samarbejde med andre om notesbøger."
 
 #: packages/lib/SyncTargetJoplinServer.js:60
 msgid "Joplin Server"
@@ -3103,7 +3102,7 @@ msgstr "Nextcloud"
 
 #: packages/lib/SyncTargetNone.js:22
 msgid "(None)"
-msgstr ""
+msgstr "(Ingen)"
 
 #: packages/lib/SyncTargetOneDrive.js:32
 msgid "OneDrive"
@@ -3249,7 +3248,7 @@ msgstr "Dekrypterede emner: %s / %s"
 #: packages/lib/components/shared/encryption-config-shared.js:151
 #, javascript-format
 msgid "Encryption will be enabled using the master key created on %s"
-msgstr ""
+msgstr "Kryptering vil aktiveres med hovednøglen oprettet den %s"
 
 #: packages/lib/models/BaseItem.js:721
 msgid "Encrypted"
@@ -3319,9 +3318,8 @@ msgid "Error"
 msgstr "Fejl"
 
 #: packages/lib/models/Resource.js:408
-#, fuzzy
 msgid "Conflicts (attachments)"
-msgstr "Note vedhæftninger"
+msgstr "Konflikter (vedhæftninger)"
 
 #: packages/lib/models/Resource.js:422
 #, javascript-format
@@ -3397,7 +3395,7 @@ msgstr "OLED Mørkt"
 
 #: packages/lib/models/Setting.js:152
 msgid "Open Sync Wizard..."
-msgstr ""
+msgstr "Open Synk-hjælper..."
 
 #: packages/lib/models/Setting.js:162
 msgid "Synchronisation target"
@@ -3731,11 +3729,11 @@ msgstr ""
 
 #: packages/lib/models/Setting.js:783
 msgid "Editor maximum width"
-msgstr ""
+msgstr "Maksimal bredde på editor"
 
 #: packages/lib/models/Setting.js:783
 msgid "Set it to 0 to make it take the complete available space."
-msgstr ""
+msgstr "Indtil den til 0 for at bruge hele den tilgængelige plads."
 
 #: packages/lib/models/Setting.js:802
 msgid "Custom stylesheet for rendered Markdown"
