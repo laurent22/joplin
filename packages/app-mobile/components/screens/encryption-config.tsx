@@ -288,6 +288,8 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent<Props> {
 
 					<Text style={this.styles().titleText}>{_('Status')}</Text>
 					<Text style={this.styles().normalText}>{_('Encryption is: %s', this.props.encryptionEnabled ? _('Enabled') : _('Disabled'))}</Text>
+					<Text style={this.styles().normalText}>{shared.masterPasswordStatus(this)}</Text>
+
 					{decryptedItemsInfo}
 					{toggleButton}
 					{passwordPromptComp}
@@ -315,6 +317,7 @@ const EncryptionConfigScreen = connect((state: State) => {
 		encryptionEnabled: syncInfo.e2ee,
 		activeMasterKeyId: syncInfo.activeMasterKeyId,
 		notLoadedMasterKeys: state.notLoadedMasterKeys,
+		masterPassword: state.settings['encryption.masterPassword'],
 	};
 })(EncryptionConfigScreenComponent);
 

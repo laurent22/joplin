@@ -8,6 +8,7 @@ import shim from '../../shim';
 import { MasterKeyEntity } from '../../services/e2ee/types';
 import time from '../../time';
 import { masterKeyEnabled, setMasterKeyEnabled } from '../../services/synchronizer/syncInfoUtils';
+import { findMasterKeyPassword } from '../../services/e2ee/utils';
 
 class Shared {
 
@@ -22,6 +23,7 @@ class Shared {
 			},
 			passwords: Object.assign({}, props.passwords),
 			showDisabledMasterKeys: false,
+			masterPasswordInput: '',// props.masterPassword,
 		};
 		comp.isMounted_ = false;
 
@@ -108,15 +110,35 @@ class Shared {
 		}
 	}
 
+	public async masterPasswordIsValid(comp: any, masterPassword: string = null) {
+		const activeMasterKey = comp.props.masterKeys.find((mk: MasterKeyEntity) => mk.id === comp.props.activeMasterKeyId);
+		masterPassword = masterPassword === null ? comp.props.masterPassword : masterPassword;
+		if (activeMasterKey && masterPassword) {
+			return EncryptionService.instance().checkMasterKeyPassword(activeMasterKey, masterPassword);
+		}
+
+		return false;
+	}
+
 	public async checkPasswords(comp: any) {
 		const passwordChecks = Object.assign({}, comp.state.passwordChecks);
 		for (let i = 0; i < comp.props.masterKeys.length; i++) {
 			const mk = comp.props.masterKeys[i];
-			const password = comp.state.passwords[mk.id];
+			const password = await findMasterKeyPassword(EncryptionService.instance(), mk);
 			const ok = password ? await EncryptionService.instance().checkMasterKeyPassword(mk, password) : false;
 			passwordChecks[mk.id] = ok;
 		}
+
+		passwordChecks['master'] = await this.masterPasswordIsValid(comp);
+
 		comp.setState({ passwordChecks: passwordChecks });
+	}
+
+	public masterPasswordStatus(comp: any) {
+		// Don't translate for now because that's temporary - later it should
+		// always be set and the label should be replaced by a "Change master
+		// password" button.
+		return comp.props.masterPassword ? 'Master password is set' : 'Master password is not set';
 	}
 
 	public decryptedStatText(comp: any) {
@@ -138,10 +160,12 @@ class Shared {
 		comp.checkPasswords();
 	}
 
-	public onPasswordChange(comp: any, mk: MasterKeyEntity, password: string) {
-		const passwords = Object.assign({}, comp.state.passwords);
-		passwords[mk.id] = password;
-		comp.setState({ passwords: passwords });
+	public onMasterPasswordChange(comp: any, value: string) {
+		comp.setState({ masterPasswordInput: value });
+	}
+
+	public onMasterPasswordSave(comp: any) {
+		Setting.setValue('encryption.masterPassword', comp.state.masterPasswordInput);
 	}
 
 	public onToggleEnabledClick(_comp: any, mk: MasterKeyEntity) {

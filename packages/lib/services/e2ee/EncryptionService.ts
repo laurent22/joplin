@@ -245,7 +245,7 @@ export default class EncryptionService {
 		return plainText;
 	}
 
-	async checkMasterKeyPassword(model: MasterKeyEntity, password: string) {
+	public async checkMasterKeyPassword(model: MasterKeyEntity, password: string) {
 		try {
 			await this.decryptMasterKey_(model, password);
 		} catch (error) {
@@ -255,7 +255,7 @@ export default class EncryptionService {
 		return true;
 	}
 
-	wrapSjclError(sjclError: any) {
+	private wrapSjclError(sjclError: any) {
 		const error = new Error(sjclError.message);
 		error.stack = sjclError.stack;
 		return error;

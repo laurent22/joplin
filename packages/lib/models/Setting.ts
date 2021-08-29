@@ -919,6 +919,7 @@ class Setting extends BaseModel {
 			'encryption.enabled': { value: false, type: SettingItemType.Bool, public: false },
 			'encryption.activeMasterKeyId': { value: '', type: SettingItemType.String, public: false },
 			'encryption.passwordCache': { value: {}, type: SettingItemType.Object, public: false, secure: true },
+			'encryption.masterPassword': { value: '', type: SettingItemType.String, public: false, secure: true },
 			'encryption.shouldReencrypt': {
 				value: -1, // will be set on app startup
 				type: SettingItemType.Int,

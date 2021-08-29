@@ -103,7 +103,7 @@ import { clearSharedFilesCache } from './utils/ShareUtils';
 import setIgnoreTlsErrors from './utils/TlsUtils';
 import ShareService from '@joplin/lib/services/share/ShareService';
 import setupNotifications from './utils/setupNotifications';
-import { loadMasterKeysFromSettings } from '@joplin/lib/services/e2ee/utils';
+import { loadMasterKeysFromSettings, migrateMasterPassword } from '@joplin/lib/services/e2ee/utils';
 import SyncTargetNone from '../lib/SyncTargetNone';
 
 let storeDispatch = function(_action: any) {};
@@ -483,6 +483,7 @@ async function initialize(dispatch: Function) {
 		reg.logger().info('Loading settings...');
 
 		await loadKeychainServiceAndSettings(KeychainServiceDriverMobile);
+		await migrateMasterPassword();
 
 		if (!Setting.value('clientId')) Setting.setValue('clientId', uuid.create());
 
