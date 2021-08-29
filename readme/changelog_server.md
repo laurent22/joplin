@@ -1,10 +1,11 @@
 # Joplin Server Changelog
 
-## [server-v2.4.1-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.4.1-beta) (Pre-release) - 2021-08-23T08:52:28Z
+## [server-v2.4.2](https://github.com/laurent22/joplin/releases/tag/server-v2.4.2) - 2021-08-28T17:45:41Z
 
 - New: Add request rate limter on session and login end points (543413d)
 - New: Add support for user flags (82b157b)
 - New: Added commands to control db migrations - list, down, up (2c79ce2)
+- Improved: Display user flags in profile when logged in as admin (4394329)
 - Improved: Handle flags for accounts over limit (6e087bc)
 - Improved: Increase cookies security - set HttpOnly, Secure and SameSite flags (bcadb36)
 - Improved: No longer install vim into the image (#5337 by [@piotrb](https://github.com/piotrb))
