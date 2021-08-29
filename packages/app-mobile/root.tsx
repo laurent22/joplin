@@ -531,7 +531,6 @@ async function initialize(dispatch: Function) {
 		// ----------------------------------------------------------------
 
 		EncryptionService.fsDriver_ = fsDriver;
-		EncryptionService.instance().setLogger(mainLogger);
 		// eslint-disable-next-line require-atomic-updates
 		BaseItem.encryptionService_ = EncryptionService.instance();
 		BaseItem.shareService_ = ShareService.instance();

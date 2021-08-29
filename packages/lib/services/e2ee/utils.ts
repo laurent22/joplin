@@ -45,6 +45,8 @@ export async function setupAndDisableEncryption(service: EncryptionService) {
 }
 
 export async function toggleAndSetupEncryption(service: EncryptionService, enabled: boolean, masterKey: MasterKeyEntity, password: string) {
+	logger.info('toggleAndSetupEncryption: enabled:', enabled, ' Master key', masterKey);
+
 	if (!enabled) {
 		await setupAndDisableEncryption(service);
 	} else {
@@ -156,4 +158,10 @@ export function showMissingMasterKeyMessage(syncInfo: SyncInfo, notLoadedMasterK
 	}
 
 	return !!notLoadedMasterKeys.length;
+}
+
+export function getDefaultMasterKey(): MasterKeyEntity {
+	const mk = getActiveMasterKey();
+	if (mk) return mk;
+	return MasterKey.latest();
 }

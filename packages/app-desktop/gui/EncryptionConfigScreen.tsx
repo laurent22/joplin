@@ -12,7 +12,7 @@ import bridge from '../services/bridge';
 import shared from '@joplin/lib/components/shared/encryption-config-shared';
 import { MasterKeyEntity } from '@joplin/lib/services/e2ee/types';
 import { getEncryptionEnabled, masterKeyEnabled, SyncInfo } from '@joplin/lib/services/synchronizer/syncInfoUtils';
-import { toggleAndSetupEncryption } from '@joplin/lib/services/e2ee/utils';
+import { getDefaultMasterKey, toggleAndSetupEncryption } from '@joplin/lib/services/e2ee/utils';
 import MasterKey from '@joplin/lib/models/MasterKey';
 import StyledInput from './style/StyledInput';
 import Button, { ButtonLevel } from './Button/Button';
@@ -57,6 +57,41 @@ class EncryptionConfigScreenComponent extends React.Component<Props> {
 			return shared.onToggleEnabledClick(this, mk);
 		};
 
+		const passwordStyle = {
+			color: theme.color,
+			backgroundColor: theme.backgroundColor,
+			border: '1px solid',
+			borderColor: theme.dividerColor,
+		};
+
+		const onSaveClick = () => {
+			return shared.onSavePasswordClick(this, mk);
+		};
+
+		const onPasswordChange = (event: any) => {
+			return shared.onPasswordChange(this, mk, event.target.value);
+		};
+
+		const renderPasswordInput = (masterKeyId: string) => {
+			if (this.state.masterPasswordKeys[masterKeyId]) {
+				return (
+					<td style={{ ...theme.textStyle, color: theme.colorFaded, fontStyle: 'italic' }}>
+						({_('Master password')})
+					</td>
+				);
+			} else {
+				return (
+					<td style={theme.textStyle}>
+						<input type="password" style={passwordStyle} value={password} onChange={event => onPasswordChange(event)} />{' '}
+						<button style={theme.buttonStyle} onClick={() => onSaveClick()}>
+							{_('Save')}
+						</button>
+					</td>
+				);
+			}
+		};
+
+		const password = this.state.passwords[mk.id] ? this.state.passwords[mk.id] : '';
 		const isActive = this.props.activeMasterKeyId === mk.id;
 		const activeIcon = isActive ? '✔' : '';
 		const passwordOk = this.state.passwordChecks[mk.id] === true ? '✔' : '❌';
@@ -66,6 +101,7 @@ class EncryptionConfigScreenComponent extends React.Component<Props> {
 				<td style={theme.textStyle}>{activeIcon}</td>
 				<td style={theme.textStyle}>{mk.id}<br/>{_('Source: ')}{mk.source_application}</td>
 				<td style={theme.textStyle}>{_('Created: ')}{time.formatMsToLocal(mk.created_time)}<br/>{_('Updated: ')}{time.formatMsToLocal(mk.updated_time)}</td>
+				{renderPasswordInput(mk.id)}
 				<td style={theme.textStyle}>{passwordOk}</td>
 				<td style={theme.textStyle}>
 					<button disabled={isActive || isDefault} style={theme.buttonStyle} onClick={() => onToggleEnabledClick()}>{masterKeyEnabled(mk) ? _('Disable') : _('Enable')}</button>
@@ -159,6 +195,7 @@ class EncryptionConfigScreenComponent extends React.Component<Props> {
 						<th style={theme.textStyle}>{_('Active')}</th>
 						<th style={theme.textStyle}>{_('ID')}</th>
 						<th style={theme.textStyle}>{_('Date')}</th>
+						<th style={theme.textStyle}>{_('Password')}</th>
 						<th style={theme.textStyle}>{_('Valid')}</th>
 						<th style={theme.textStyle}>{_('Actions')}</th>
 					</tr>
@@ -181,7 +218,7 @@ class EncryptionConfigScreenComponent extends React.Component<Props> {
 	}
 
 	private renderMasterPassword() {
-		if (!this.props.encryptionEnabled) return null;
+		if (!this.props.encryptionEnabled && !this.props.masterKeys.length) return null;
 
 		const theme = themeStyle(this.props.themeId);
 
@@ -233,7 +270,7 @@ class EncryptionConfigScreenComponent extends React.Component<Props> {
 
 		const onToggleButtonClick = async () => {
 			const isEnabled = getEncryptionEnabled();
-			const masterKey = MasterKey.latest();
+			const masterKey = getDefaultMasterKey();
 
 			let answer = null;
 			if (isEnabled) {

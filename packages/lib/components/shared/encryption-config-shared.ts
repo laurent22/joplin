@@ -17,13 +17,16 @@ class Shared {
 	public initialize(comp: any, props: any) {
 		comp.state = {
 			passwordChecks: {},
+			// Master keys that can be decrypted with the master password
+			// (normally all of them, but for legacy support we need this).
+			masterPasswordKeys: {},
 			stats: {
 				encrypted: null,
 				total: null,
 			},
 			passwords: Object.assign({}, props.passwords),
 			showDisabledMasterKeys: false,
-			masterPasswordInput: '',// props.masterPassword,
+			masterPasswordInput: '',
 		};
 		comp.isMounted_ = false;
 
@@ -122,16 +125,18 @@ class Shared {
 
 	public async checkPasswords(comp: any) {
 		const passwordChecks = Object.assign({}, comp.state.passwordChecks);
+		const masterPasswordKeys = Object.assign({}, comp.state.masterPasswordKeys);
 		for (let i = 0; i < comp.props.masterKeys.length; i++) {
 			const mk = comp.props.masterKeys[i];
 			const password = await findMasterKeyPassword(EncryptionService.instance(), mk);
 			const ok = password ? await EncryptionService.instance().checkMasterKeyPassword(mk, password) : false;
 			passwordChecks[mk.id] = ok;
+			masterPasswordKeys[mk.id] = password === comp.props.masterPassword;
 		}
 
 		passwordChecks['master'] = await this.masterPasswordIsValid(comp);
 
-		comp.setState({ passwordChecks: passwordChecks });
+		comp.setState({ passwordChecks, masterPasswordKeys });
 	}
 
 	public masterPasswordStatus(comp: any) {
@@ -166,6 +171,12 @@ class Shared {
 
 	public onMasterPasswordSave(comp: any) {
 		Setting.setValue('encryption.masterPassword', comp.state.masterPasswordInput);
+	}
+
+	public onPasswordChange(comp: any, mk: MasterKeyEntity, password: string) {
+		const passwords = Object.assign({}, comp.state.passwords);
+		passwords[mk.id] = password;
+		comp.setState({ passwords: passwords });
 	}
 
 	public onToggleEnabledClick(_comp: any, mk: MasterKeyEntity) {
