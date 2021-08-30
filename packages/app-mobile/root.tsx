@@ -14,7 +14,7 @@ import ResourceService from '@joplin/lib/services/ResourceService';
 import KvStore from '@joplin/lib/services/KvStore';
 import NoteScreen from './components/screens/Note';
 import UpgradeSyncTargetScreen from './components/screens/UpgradeSyncTargetScreen';
-import Setting from '@joplin/lib/models/Setting';
+import Setting, { Env } from '@joplin/lib/models/Setting';
 import RNFetchBlob from 'rn-fetch-blob';
 import PoorManIntervals from '@joplin/lib/PoorManIntervals';
 import reducer from '@joplin/lib/reducer';
@@ -103,7 +103,7 @@ import { clearSharedFilesCache } from './utils/ShareUtils';
 import setIgnoreTlsErrors from './utils/TlsUtils';
 import ShareService from '@joplin/lib/services/share/ShareService';
 import setupNotifications from './utils/setupNotifications';
-import { loadMasterKeysFromSettings } from '@joplin/lib/services/e2ee/utils';
+import { loadMasterKeysFromSettings, migrateMasterPassword } from '@joplin/lib/services/e2ee/utils';
 import SyncTargetNone from '../lib/SyncTargetNone';
 
 let storeDispatch = function(_action: any) {};
@@ -474,7 +474,7 @@ async function initialize(dispatch: Function) {
 		if (Setting.value('env') == 'prod') {
 			await db.open({ name: 'joplin.sqlite' });
 		} else {
-			await db.open({ name: 'joplin-101.sqlite' });
+			await db.open({ name: 'joplin-104.sqlite' });
 
 			// await db.clearForTesting();
 		}
@@ -483,6 +483,14 @@ async function initialize(dispatch: Function) {
 		reg.logger().info('Loading settings...');
 
 		await loadKeychainServiceAndSettings(KeychainServiceDriverMobile);
+		await migrateMasterPassword();
+
+		if (Setting.value('env') === Env.Dev) {
+			// Setting.setValue('sync.10.path', 'https://api.joplincloud.com');
+			// Setting.setValue('sync.10.userContentPath', 'https://joplinusercontent.com');
+			Setting.setValue('sync.10.path', 'http://api.joplincloud.local:22300');
+			Setting.setValue('sync.10.userContentPath', 'http://joplinusercontent.local:22300');
+		}
 
 		if (!Setting.value('clientId')) Setting.setValue('clientId', uuid.create());
 
@@ -530,7 +538,6 @@ async function initialize(dispatch: Function) {
 		// ----------------------------------------------------------------
 
 		EncryptionService.fsDriver_ = fsDriver;
-		EncryptionService.instance().setLogger(mainLogger);
 		// eslint-disable-next-line require-atomic-updates
 		BaseItem.encryptionService_ = EncryptionService.instance();
 		BaseItem.shareService_ = ShareService.instance();
@@ -725,6 +732,9 @@ class AppComponent extends React.Component {
 		setupQuickActions(this.props.dispatch, this.props.selectedFolderId);
 
 		await setupNotifications(this.props.dispatch);
+
+		// Setting.setValue('encryption.masterPassword', 'WRONG');
+		// setTimeout(() => NavService.go('EncryptionConfig'), 2000);
 	}
 
 	componentWillUnmount() {

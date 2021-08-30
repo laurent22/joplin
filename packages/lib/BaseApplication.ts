@@ -43,7 +43,7 @@ import SearchEngine from './services/searchengine/SearchEngine';
 import RevisionService from './services/RevisionService';
 import ResourceService from './services/ResourceService';
 import DecryptionWorker from './services/DecryptionWorker';
-const { loadKeychainServiceAndSettings } = require('./services/SettingUtils');
+import { loadKeychainServiceAndSettings } from './services/SettingUtils';
 import MigrationService from './services/MigrationService';
 import ShareService from './services/share/ShareService';
 import handleSyncStartupOperation from './services/synchronizer/utils/handleSyncStartupOperation';
@@ -51,7 +51,7 @@ import SyncTargetJoplinCloud from './SyncTargetJoplinCloud';
 const { toSystemSlashes } = require('./path-utils');
 const { setAutoFreeze } = require('immer');
 import { getEncryptionEnabled } from './services/synchronizer/syncInfoUtils';
-import { loadMasterKeysFromSettings } from './services/e2ee/utils';
+import { loadMasterKeysFromSettings, migrateMasterPassword } from './services/e2ee/utils';
 import SyncTargetNone from './SyncTargetNone';
 
 const appLogger: LoggerWrapper = Logger.create('App');
@@ -465,6 +465,7 @@ export default class BaseApplication {
 		sideEffects['timeFormat'] = sideEffects['dateFormat'];
 		sideEffects['locale'] = sideEffects['dateFormat'];
 		sideEffects['encryption.passwordCache'] = sideEffects['syncInfoCache'];
+		sideEffects['encryption.masterPassword'] = sideEffects['syncInfoCache'];
 
 		if (action) {
 			const effect = sideEffects[action.key];
@@ -768,6 +769,7 @@ export default class BaseApplication {
 		BaseModel.setDb(this.database_);
 
 		await loadKeychainServiceAndSettings(options.keychainEnabled ? KeychainServiceDriver : KeychainServiceDriverDummy);
+		await migrateMasterPassword();
 		await handleSyncStartupOperation();
 
 		appLogger.info(`Client ID: ${Setting.value('clientId')}`);
@@ -825,7 +827,6 @@ export default class BaseApplication {
 
 		KvStore.instance().setDb(reg.db());
 
-		EncryptionService.instance().setLogger(globalLogger);
 		BaseItem.encryptionService_ = EncryptionService.instance();
 		BaseItem.shareService_ = ShareService.instance();
 		DecryptionWorker.instance().setLogger(globalLogger);

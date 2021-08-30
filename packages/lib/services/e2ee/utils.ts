@@ -4,11 +4,11 @@ import MasterKey from '../../models/MasterKey';
 import Setting from '../../models/Setting';
 import { MasterKeyEntity } from './types';
 import EncryptionService from './EncryptionService';
-import { getActiveMasterKeyId, masterKeyEnabled, setEncryptionEnabled, SyncInfo } from '../synchronizer/syncInfoUtils';
+import { getActiveMasterKey, getActiveMasterKeyId, masterKeyEnabled, setEncryptionEnabled, SyncInfo } from '../synchronizer/syncInfoUtils';
 
 const logger = Logger.create('e2ee/utils');
 
-export async function setupAndEnableEncryption(service: EncryptionService, masterKey: MasterKeyEntity = null, password: string = null) {
+export async function setupAndEnableEncryption(service: EncryptionService, masterKey: MasterKeyEntity = null, masterPassword: string = null) {
 	if (!masterKey) {
 		// May happen for example if there are master keys in info.json but none
 		// of them is set as active. But in fact, unless there is a bug in the
@@ -18,10 +18,8 @@ export async function setupAndEnableEncryption(service: EncryptionService, maste
 
 	setEncryptionEnabled(true, masterKey ? masterKey.id : null);
 
-	if (masterKey && password) {
-		const passwordCache = Setting.value('encryption.passwordCache');
-		passwordCache[masterKey.id] = password;
-		Setting.setValue('encryption.passwordCache', passwordCache);
+	if (masterPassword) {
+		Setting.setValue('encryption.masterPassword', masterPassword);
 	}
 
 	// Mark only the non-encrypted ones for sync since, if there are encrypted ones,
@@ -47,6 +45,8 @@ export async function setupAndDisableEncryption(service: EncryptionService) {
 }
 
 export async function toggleAndSetupEncryption(service: EncryptionService, enabled: boolean, masterKey: MasterKeyEntity, password: string) {
+	logger.info('toggleAndSetupEncryption: enabled:', enabled, ' Master key', masterKey);
+
 	if (!enabled) {
 		await setupAndDisableEncryption(service);
 	} else {
@@ -68,17 +68,65 @@ export async function generateMasterKeyAndEnableEncryption(service: EncryptionSe
 	return masterKey;
 }
 
+// Migration function to initialise the master password. Normally it is set when
+// enabling E2EE, but previously it wasn't. So here we check if the password is
+// set. If it is not, we set it from the active master key. It needs to be
+// called after the settings have been initialized.
+export async function migrateMasterPassword() {
+	if (Setting.value('encryption.masterPassword')) return; // Already migrated
+
+	logger.info('Master password is not set - trying to get it from the active master key...');
+
+	const mk = getActiveMasterKey();
+	if (!mk) return;
+
+	const masterPassword = Setting.value('encryption.passwordCache')[mk.id];
+	if (masterPassword) {
+		Setting.setValue('encryption.masterPassword', masterPassword);
+		logger.info('Master password is now set.');
+
+		// Also clear the key passwords that match the master password to avoid
+		// any confusion.
+		const cache = Setting.value('encryption.passwordCache');
+		const newCache = { ...cache };
+		for (const [mkId, password] of Object.entries(cache)) {
+			if (password === masterPassword) {
+				delete newCache[mkId];
+			}
+		}
+		Setting.setValue('encryption.passwordCache', newCache);
+		await Setting.saveAll();
+	}
+}
+
+// All master keys normally should be decryped with the master password, however
+// previously any master key could be encrypted with any password, so to support
+// this legacy case, we first check if the MK decrypts with the master password.
+// If not, try with the master key specific password, if any is defined.
+export async function findMasterKeyPassword(service: EncryptionService, masterKey: MasterKeyEntity): Promise<string> {
+	const masterPassword = Setting.value('encryption.masterPassword');
+	if (masterPassword && await service.checkMasterKeyPassword(masterKey, masterPassword)) {
+		logger.info('findMasterKeyPassword: Using master password');
+		return masterPassword;
+	}
+
+	logger.info('findMasterKeyPassword: No master password is defined - trying to get master key specific password');
+
+	const passwords = Setting.value('encryption.passwordCache');
+	return passwords[masterKey.id];
+}
+
 export async function loadMasterKeysFromSettings(service: EncryptionService) {
 	const masterKeys = await MasterKey.all();
-	const passwords = Setting.value('encryption.passwordCache');
 	const activeMasterKeyId = getActiveMasterKeyId();
 
 	logger.info(`Trying to load ${masterKeys.length} master keys...`);
 
 	for (let i = 0; i < masterKeys.length; i++) {
 		const mk = masterKeys[i];
-		const password = passwords[mk.id];
 		if (service.isMasterKeyLoaded(mk)) continue;
+
+		const password = await findMasterKeyPassword(service, mk);
 		if (!password) continue;
 
 		try {
@@ -110,4 +158,10 @@ export function showMissingMasterKeyMessage(syncInfo: SyncInfo, notLoadedMasterK
 	}
 
 	return !!notLoadedMasterKeys.length;
+}
+
+export function getDefaultMasterKey(): MasterKeyEntity {
+	const mk = getActiveMasterKey();
+	if (mk) return mk;
+	return MasterKey.latest();
 }

@@ -116,15 +116,29 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent<Props> {
 		inputStyle.borderBottomWidth = 1;
 		inputStyle.borderBottomColor = theme.dividerColor;
 
+		const renderPasswordInput = (masterKeyId: string) => {
+			if (this.state.masterPasswordKeys[masterKeyId] || !this.state.passwordChecks['master']) {
+				return (
+					<Text style={{ ...this.styles().normalText, color: theme.colorFaded, fontStyle: 'italic' }}>({_('Master password')})</Text>
+				);
+			} else {
+				return (
+					<View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
+						<TextInput selectionColor={theme.textSelectionColor} keyboardAppearance={theme.keyboardAppearance} secureTextEntry={true} value={password} onChangeText={(text: string) => onPasswordChange(text)} style={inputStyle}></TextInput>
+						<Text style={{ fontSize: theme.fontSize, marginRight: 10, color: theme.color }}>{passwordOk}</Text>
+						<Button title={_('Save')} onPress={() => onSaveClick()}></Button>
+					</View>
+				);
+			}
+		};
+
 		return (
 			<View key={mk.id}>
 				<Text style={this.styles().titleText}>{_('Master Key %s', mk.id.substr(0, 6))}</Text>
 				<Text style={this.styles().normalText}>{_('Created: %s', time.formatMsToLocal(mk.created_time))}</Text>
 				<View style={{ flexDirection: 'row', alignItems: 'center' }}>
 					<Text style={{ flex: 0, fontSize: theme.fontSize, marginRight: 10, color: theme.color }}>{_('Password:')}</Text>
-					<TextInput selectionColor={theme.textSelectionColor} keyboardAppearance={theme.keyboardAppearance} secureTextEntry={true} value={password} onChangeText={(text: string) => onPasswordChange(text)} style={inputStyle}></TextInput>
-					<Text style={{ fontSize: theme.fontSize, marginRight: 10, color: theme.color }}>{passwordOk}</Text>
-					<Button title={_('Save')} onPress={() => onSaveClick()}></Button>
+					{renderPasswordInput(mk.id)}
 				</View>
 			</View>
 		);
@@ -201,6 +215,43 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent<Props> {
 				</View>
 			</View>
 		);
+	}
+
+	private renderMasterPassword() {
+		if (!this.props.encryptionEnabled && !this.props.masterKeys.length) return null;
+
+		const theme = themeStyle(this.props.themeId);
+
+		const onMasterPasswordSave = async () => {
+			shared.onMasterPasswordSave(this);
+
+			if (!(await shared.masterPasswordIsValid(this, this.state.masterPasswordInput))) {
+				alert('Password is invalid. Please try again.');
+			}
+		};
+
+		const inputStyle: any = { flex: 1, marginRight: 10, color: theme.color };
+		inputStyle.borderBottomWidth = 1;
+		inputStyle.borderBottomColor = theme.dividerColor;
+
+		if (this.state.passwordChecks['master']) {
+			return (
+				<View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+					<Text style={{ ...this.styles().normalText, flex: 0, marginRight: 5 }}>{_('Master password:')}</Text>
+					<Text style={{ ...this.styles().normalText, fontWeight: 'bold' }}>{_('Loaded')}</Text>
+				</View>
+			);
+		} else {
+			return (
+				<View style={{ display: 'flex', flexDirection: 'column', marginTop: 10 }}>
+					<Text style={this.styles().normalText}>{'The master password is not set or is invalid. Please type it below:'}</Text>
+					<View style={{ display: 'flex', flexDirection: 'row', marginTop: 10 }}>
+						<TextInput selectionColor={theme.textSelectionColor} keyboardAppearance={theme.keyboardAppearance} secureTextEntry={true} value={this.state.masterPasswordInput} onChangeText={(text: string) => shared.onMasterPasswordChange(this, text)} style={inputStyle}></TextInput>
+						<Button onPress={onMasterPasswordSave} title={_('Save')} />
+					</View>
+				</View>
+			);
+		}
 	}
 
 	render() {
@@ -289,6 +340,7 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent<Props> {
 					<Text style={this.styles().titleText}>{_('Status')}</Text>
 					<Text style={this.styles().normalText}>{_('Encryption is: %s', this.props.encryptionEnabled ? _('Enabled') : _('Disabled'))}</Text>
 					{decryptedItemsInfo}
+					{this.renderMasterPassword()}
 					{toggleButton}
 					{passwordPromptComp}
 					{mkComps}
@@ -315,6 +367,7 @@ const EncryptionConfigScreen = connect((state: State) => {
 		encryptionEnabled: syncInfo.e2ee,
 		activeMasterKeyId: syncInfo.activeMasterKeyId,
 		notLoadedMasterKeys: state.notLoadedMasterKeys,
+		masterPassword: state.settings['encryption.masterPassword'],
 	};
 })(EncryptionConfigScreenComponent);
 
