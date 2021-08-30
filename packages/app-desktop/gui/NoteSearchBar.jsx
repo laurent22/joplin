@@ -142,9 +142,10 @@ class NoteSearchBarComponent extends React.Component {
 			color: theme.colorFaded,
 			backgroundColor: theme.backgroundColor,
 		});
-		const matchesFoundString = (query.length > 0 && this.props.resultCount > 0) ? (
+
+		const matchesFoundString = (query.length > 0 && this.props.resultCount >= 0) ? (
 			<div style={textStyle}>
-				{`${this.props.selectedIndex + 1} / ${this.props.resultCount}`}
+				{`${this.props.resultCount === 0 ? 0 : this.props.selectedIndex + 1} / ${this.props.resultCount}`}
 			</div>
 		) : null;
 
@@ -157,7 +158,7 @@ class NoteSearchBarComponent extends React.Component {
 		);
 
 		const notFoundWarning = (
-			<span> { _('Phrase Not Found') } </span>
+			<span style={{ marginLeft: 5 }}> { _('Phrase Not Found') } </span>
 		);
 
 		return (
