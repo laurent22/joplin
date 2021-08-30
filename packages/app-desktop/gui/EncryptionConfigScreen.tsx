@@ -73,7 +73,7 @@ class EncryptionConfigScreenComponent extends React.Component<Props> {
 		};
 
 		const renderPasswordInput = (masterKeyId: string) => {
-			if (this.state.masterPasswordKeys[masterKeyId]) {
+			if (this.state.masterPasswordKeys[masterKeyId] || !this.state.passwordChecks['master']) {
 				return (
 					<td style={{ ...theme.textStyle, color: theme.colorFaded, fontStyle: 'italic' }}>
 						({_('Master password')})
