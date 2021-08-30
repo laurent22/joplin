@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Po-Chiang Chao (BobChao) <bobchao@gmail.com>\n"
+"Last-Translator: SiderealArt <nelson22768384@gmail.com>\n"
 "Language-Team: yaozeye <yaozeye@yaozeye.onmicrosoft.com>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
@@ -15,6 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 3.0\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-cli/app/app-gui.js:452
 msgid "To delete a tag, untag the associated notes."
@@ -871,7 +873,7 @@ msgstr "下載"
 
 #: packages/app-desktop/checkForUpdates.js:189
 msgid "Skip this version"
-msgstr "這版不更新"
+msgstr "跳過此版本"
 
 #: packages/app-desktop/checkForUpdates.js:189
 msgid "Full changelog"
@@ -908,7 +910,7 @@ msgstr "切換安全模式"
 #: packages/app-desktop/gui/ClipperConfigScreen.js:34
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:40
 msgid "Token has been copied to the clipboard!"
-msgstr "Token 已經被複製到剪貼簿!"
+msgstr "Token 已經被複製到剪貼簿！"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.js:37
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:44
@@ -924,13 +926,13 @@ msgstr "網頁剪輯服務已啟用，並設置為自動啟動。"
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:91
 #, javascript-format
 msgid "Status: Started on port %d"
-msgstr "狀態: 已在 %d 埠上啟動"
+msgstr "狀態：已在 %d 埠上啟動"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.js:72
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:97
 #, javascript-format
 msgid "Status: %s"
-msgstr "狀態: %s"
+msgstr "狀態：%s"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.js:74
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:103
@@ -1094,7 +1096,7 @@ msgstr "已安裝"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:140
 msgid "Update"
-msgstr "已更新"
+msgstr "更新"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:142
 msgid "Updating..."
@@ -1105,7 +1107,7 @@ msgstr "更新中..."
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:324
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:30
 msgid "Updated"
-msgstr "更新時間"
+msgstr "已更新"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:154
 msgid "Please upgrade Joplin to use this plugin"
@@ -1195,9 +1197,8 @@ msgid "Save"
 msgstr "儲存"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.js:87
-#, fuzzy
 msgid "Disable"
-msgstr "已停用"
+msgstr "停用"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.js:87
 #: packages/app-mobile/components/screens/encryption-config.js:157
@@ -1326,7 +1327,7 @@ msgstr "使用中"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.js:149
 msgid "Date"
-msgstr ""
+msgstr "日期"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.js:150
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:329
@@ -1603,9 +1604,8 @@ msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
 msgstr "使用方向鍵移動佈局項，點擊「Esc」退出。"
 
 #: packages/app-desktop/gui/MainScreen/commands/commandPalette.js:18
-#, fuzzy
 msgid "Command palette..."
-msgstr "命令模式"
+msgstr "命令選擇區..."
 
 #: packages/app-desktop/gui/MainScreen/commands/editAlarm.js:20
 #: packages/app-mobile/components/SelectDateTimeDialog.js:84
@@ -2398,7 +2398,7 @@ msgstr "注意：分享記事後，該記事將不會在伺服器上加密。"
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:187
 msgid "Publish Notes"
-msgstr ""
+msgstr "發布記事"
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:189
 msgid "Copy Shareable Link"
@@ -2486,13 +2486,12 @@ msgid "Export debug report"
 msgstr "匯出除錯報告"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:157
-#, fuzzy
 msgid "Sync your notes"
-msgstr "記事排序依據"
+msgstr "同步您的筆記"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:158
 msgid "Publish notes to the internet"
-msgstr ""
+msgstr "將記事發布至網路上"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:159
 #, fuzzy
@@ -2514,16 +2513,15 @@ msgstr ""
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:203
 msgid "Login below."
-msgstr ""
+msgstr "於下方登入。"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:205
-#, fuzzy
 msgid "Or create an account."
-msgstr "新增記事。"
+msgstr "或是建立帳號。"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:210
 msgid "Login"
-msgstr ""
+msgstr "登入"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:231
 #, fuzzy
@@ -3005,7 +3003,7 @@ msgstr "Nextcloud"
 
 #: packages/lib/SyncTargetNone.js:22
 msgid "(None)"
-msgstr ""
+msgstr "(無)"
 
 #: packages/lib/SyncTargetOneDrive.js:32
 msgid "OneDrive"
@@ -3295,7 +3293,7 @@ msgstr "纯黑 (OLED)"
 
 #: packages/lib/models/Setting.js:152
 msgid "Open Sync Wizard..."
-msgstr ""
+msgstr "開啟同步精靈..."
 
 #: packages/lib/models/Setting.js:162
 msgid "Synchronisation target"
@@ -3522,7 +3520,7 @@ msgstr "啟用音效播放器"
 
 #: packages/lib/models/Setting.js:689
 msgid "Enable video player"
-msgstr "啟用視頻播放器"
+msgstr "啟用影片播放器"
 
 #: packages/lib/models/Setting.js:690
 msgid "Enable PDF viewer"
@@ -3628,11 +3626,11 @@ msgstr ""
 
 #: packages/lib/models/Setting.js:783
 msgid "Editor maximum width"
-msgstr ""
+msgstr "編輯器最大寬度"
 
 #: packages/lib/models/Setting.js:783
 msgid "Set it to 0 to make it take the complete available space."
-msgstr ""
+msgstr "設置為 0 將占滿可用空間。"
 
 #: packages/lib/models/Setting.js:802
 msgid "Custom stylesheet for rendered Markdown"
@@ -3753,7 +3751,7 @@ msgstr "Vim"
 
 #: packages/lib/models/Setting.js:920
 msgid "Do not resize images"
-msgstr ""
+msgstr "不要縮放圖片"
 
 #: packages/lib/models/Setting.js:935
 msgid "Custom TLS certificates"
@@ -3904,7 +3902,7 @@ msgstr "標籤「%s」已存在，請選擇其他名稱。"
 #: packages/lib/onedrive-api-node-utils.js:46
 #, javascript-format
 msgid "All potential ports are in use - please report the issue at %s"
-msgstr "所有預設埠號都在使用中 - 請到%s回報此問題"
+msgstr "所有預設埠號都在使用中 - 請到 %s 回報此問題"
 
 #: packages/lib/onedrive-api-node-utils.js:86
 msgid ""
