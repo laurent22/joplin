@@ -259,6 +259,14 @@ export default class JoplinDatabase extends Database {
 				folders: {},
 				resources: {},
 				tags: {},
+				item_changes: {
+					type: 'The type of change - either 1 (created), 2 (updated) or 3 (deleted)',
+					created_time: 'When the event was generated',
+					item_type: 'The item type (see table above for the list of item types)',
+					item_id: 'The item ID',
+					before_change_item: 'Unused',
+					source: 'Unused',
+				},
 			};
 
 			const baseItems = ['notes', 'folders', 'tags', 'resources'];

@@ -990,6 +990,9 @@ packages/lib/models/Folder.test.js.map
 packages/lib/models/ItemChange.d.ts
 packages/lib/models/ItemChange.js
 packages/lib/models/ItemChange.js.map
+packages/lib/models/ItemChange.test.d.ts
+packages/lib/models/ItemChange.test.js
+packages/lib/models/ItemChange.test.js.map
 packages/lib/models/MasterKey.d.ts
 packages/lib/models/MasterKey.js
 packages/lib/models/MasterKey.js.map
@@ -1404,6 +1407,12 @@ packages/lib/services/rest/actionApi.desktop.js.map
 packages/lib/services/rest/routes/auth.d.ts
 packages/lib/services/rest/routes/auth.js
 packages/lib/services/rest/routes/auth.js.map
+packages/lib/services/rest/routes/events.d.ts
+packages/lib/services/rest/routes/events.js
+packages/lib/services/rest/routes/events.js.map
+packages/lib/services/rest/routes/events.test.d.ts
+packages/lib/services/rest/routes/events.test.js
+packages/lib/services/rest/routes/events.test.js.map
 packages/lib/services/rest/routes/folders.d.ts
 packages/lib/services/rest/routes/folders.js
 packages/lib/services/rest/routes/folders.js.map

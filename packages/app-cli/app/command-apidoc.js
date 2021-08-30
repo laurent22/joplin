@@ -381,6 +381,30 @@ async function fetchAllNotes() {
 			}
 		}
 
+		{
+			const tableFields = reg.db().tableFields('item_changes', { includeDescription: true });
+
+			lines.push('# Events');
+			lines.push('');
+			lines.push('This end point can be used to retrieve the latest note changes. Currently only note changes are tracked.');
+			lines.push('');
+			lines.push('## Properties');
+			lines.push('');
+			lines.push(this.createPropertiesTable(tableFields));
+			lines.push('');
+			lines.push('## GET /events');
+			lines.push('');
+			lines.push('Returns a paginated list of recent events. A `cursor` property should be provided, which tells from what point in time the events should be returned. The API will return a `cursor` property, to tell from where to resume retrieving events, as well as an `has_more` (tells if more changes can be retrieved) and `items` property, which will contain the list of events. Events are kept for up to 90 days.');
+			lines.push('');
+			lines.push('If no `cursor` property is provided, the API will respond with the latest change ID. That can be used to retrieve future events later on.');
+			lines.push('');
+			lines.push('The results are paginated so will need to may multiple calls to retrieve all the events. Use the `has_more` property to know if more can be retrieved.');
+			lines.push('');
+			lines.push('## GET /events/:id');
+			lines.push('');
+			lines.push('Returns the event with the given ID.');
+		}
+
 		const outFilePath = args['file'];
 
 		await shim.fsDriver().writeFile(outFilePath, lines.join('\n'), 'utf8');
