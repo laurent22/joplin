@@ -1644,6 +1644,12 @@ packages/plugin-repo-cli/lib/gitCompareUrl.js.map
 packages/plugin-repo-cli/lib/gitCompareUrl.test.d.ts
 packages/plugin-repo-cli/lib/gitCompareUrl.test.js
 packages/plugin-repo-cli/lib/gitCompareUrl.test.js.map
+packages/plugin-repo-cli/lib/overrideUtils.d.ts
+packages/plugin-repo-cli/lib/overrideUtils.js
+packages/plugin-repo-cli/lib/overrideUtils.js.map
+packages/plugin-repo-cli/lib/overrideUtils.test.d.ts
+packages/plugin-repo-cli/lib/overrideUtils.test.js
+packages/plugin-repo-cli/lib/overrideUtils.test.js.map
 packages/plugin-repo-cli/lib/types.d.ts
 packages/plugin-repo-cli/lib/types.js
 packages/plugin-repo-cli/lib/types.js.map
@@ -1653,6 +1659,9 @@ packages/plugin-repo-cli/lib/updateReadme.js.map
 packages/plugin-repo-cli/lib/updateReadme.test.d.ts
 packages/plugin-repo-cli/lib/updateReadme.test.js
 packages/plugin-repo-cli/lib/updateReadme.test.js.map
+packages/plugin-repo-cli/lib/utils.d.ts
+packages/plugin-repo-cli/lib/utils.js
+packages/plugin-repo-cli/lib/utils.js.map
 packages/plugins/ToggleSidebars/api/index.d.ts
 packages/plugins/ToggleSidebars/api/index.js
 packages/plugins/ToggleSidebars/api/index.js.map

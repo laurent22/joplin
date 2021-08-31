@@ -10,18 +10,8 @@ import updateReadme from './lib/updateReadme';
 import { NpmPackage } from './lib/types';
 import gitCompareUrl from './lib/gitCompareUrl';
 import commandUpdateRelease from './commands/updateRelease';
-
-function stripOffPackageOrg(name: string): string {
-	const n = name.split('/');
-	if (n[0][0] === '@') n.splice(0, 1);
-	return n.join('/');
-}
-
-function isJoplinPluginPackage(pack: any): boolean {
-	if (!pack.keywords || !pack.keywords.includes('joplin-plugin')) return false;
-	if (stripOffPackageOrg(pack.name).indexOf('joplin-plugin') !== 0) return false;
-	return true;
-}
+import { isJoplinPluginPackage, readJsonFile } from './lib/utils';
+import { applyManifestOverrides, getObsoleteManifests, readManifestOverrides } from './lib/overrideUtils';
 
 function pluginInfoFromSearchResults(results: any[]): NpmPackage[] {
 	const output: NpmPackage[] = [];
@@ -47,16 +37,6 @@ async function checkPluginRepository(dirPath: string, dryRun: boolean) {
 	await gitRepoCleanTry();
 	if (!dryRun) await gitPullTry();
 	chdir(previousDir);
-}
-
-async function readJsonFile(manifestPath: string, defaultValue: any = null): Promise<any> {
-	if (!(await fs.pathExists(manifestPath))) {
-		if (defaultValue === null) throw new Error(`No such file: ${manifestPath}`);
-		return defaultValue;
-	}
-
-	const content = await fs.readFile(manifestPath, 'utf8');
-	return JSON.parse(content);
 }
 
 async function extractPluginFilesFromPackage(existingManifests: any, workDir: string, packageName: string, destDir: string): Promise<any> {
@@ -149,12 +129,12 @@ function chdir(path: string): string {
 
 async function processNpmPackage(npmPackage: NpmPackage, repoDir: string) {
 	const tempDir = `${repoDir}/temp`;
-	const obsoleteManifestsPath = path.resolve(repoDir, 'obsoletes.json');
 
 	await fs.mkdirp(tempDir);
 
 	const originalPluginManifests = await readManifests(repoDir);
-	const obsoleteManifests = await readJsonFile(obsoleteManifestsPath, {});
+	const manifestOverrides = await readManifestOverrides(repoDir);
+	const obsoleteManifests = getObsoleteManifests(manifestOverrides);
 	const existingManifests = {
 		...originalPluginManifests,
 		...obsoleteManifests,
@@ -199,6 +179,8 @@ async function processNpmPackage(npmPackage: NpmPackage, repoDir: string) {
 			...manifests,
 		};
 
+		manifests = applyManifestOverrides(manifests, manifestOverrides);
+
 		await writeManifests(repoDir, manifests);
 		await updateReadme(`${repoDir}/README.md`, manifests);
 	}
@@ -223,9 +205,8 @@ async function commandBuild(args: CommandBuildArgs) {
 	await checkPluginRepository(repoDir, dryRun);
 
 	// When starting, always update and commit README, in case something has
-	// been updated via a pull request (for example obsoletes.json being
-	// modified). We do that separately so that the README update doesn't get
-	// mixed up with plugin updates, as in this example:
+	// been updated via a pull request. We do that separately so that the README
+	// update doesn't get mixed up with plugin updates, as in this example:
 	// https://github.com/joplin/plugins/commit/8a65bbbf64bf267674f854a172466ffd4f07c672
 	const manifests = await readManifests(repoDir);
 	await updateReadme(`${repoDir}/README.md`, manifests);
