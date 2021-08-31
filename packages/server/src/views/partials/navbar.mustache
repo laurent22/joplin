@@ -18,6 +18,9 @@
 						<a class="navbar-item" href="{{{global.baseUrl}}}/changes">Log</a>
 					</div>
 					<div class="navbar-end">
+						{{#global.isJoplinCloud}}
+							<a class="navbar-item" href="{{{global.baseUrl}}}/help">Help</a>
+						{{/global.isJoplinCloud}}
 						<div class="navbar-item">
 							<form method="post" action="{{{global.baseUrl}}}/logout">
 								<button class="button is-dark">Logout</button>

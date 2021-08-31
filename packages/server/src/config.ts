@@ -149,7 +149,7 @@ export async function initConfig(envType: Env, env: EnvVariables, overrides: any
 	config_ = {
 		appVersion: packageJson.version,
 		appName,
-		isJoplinCloud: apiBaseUrl.includes('.joplincloud.com'),
+		isJoplinCloud: apiBaseUrl.includes('.joplincloud.com') || apiBaseUrl.includes('.joplincloud.local'),
 		env: envType,
 		rootDir: rootDir,
 		viewDir: viewDir,
