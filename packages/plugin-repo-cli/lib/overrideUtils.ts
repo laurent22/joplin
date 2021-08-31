@@ -2,8 +2,8 @@ import * as path from 'path';
 import { readJsonFile } from './utils';
 
 export interface ManifestOverride {
-	obsolete?: boolean;
-	recommended?: boolean;
+	_obsolete?: boolean;
+	_recommended?: boolean;
 }
 
 export type ManifestOverrides = Record<string, ManifestOverride>;
@@ -16,7 +16,7 @@ export function applyManifestOverrides(manifests: any, overrides: ManifestOverri
 			// If the manifest does not exist in the destination, it means the
 			// plugin has been taken out, so the obsolete property should be set
 			// to `true`. If not, it's an error.
-			if (!override.obsolete) {
+			if (!override._obsolete) {
 				console.error(`Could not find manifest for plugin ${pluginId} when applying override`);
 			}
 			continue;
@@ -34,7 +34,7 @@ export function getObsoleteManifests(overrides: ManifestOverrides) {
 	const output: any = {};
 
 	for (const [pluginId, override] of Object.entries(overrides)) {
-		if (override.obsolete) {
+		if (override._obsolete) {
 			output[pluginId] = override;
 		}
 	}

@@ -34,8 +34,10 @@ async function checkPluginRepository(dirPath: string, dryRun: boolean) {
 	if (!(await fs.pathExists(`${dirPath}/.git`))) throw new Error(`Directory is not a Git repository: ${dirPath}`);
 
 	const previousDir = chdir(dirPath);
-	await gitRepoCleanTry();
-	if (!dryRun) await gitPullTry();
+	if (!dryRun) {
+		await gitRepoCleanTry();
+		await gitPullTry();
+	}
 	chdir(previousDir);
 }
 
@@ -127,7 +129,7 @@ function chdir(path: string): string {
 	return previous;
 }
 
-async function processNpmPackage(npmPackage: NpmPackage, repoDir: string) {
+async function processNpmPackage(npmPackage: NpmPackage, repoDir: string, dryRun: boolean) {
 	const tempDir = `${repoDir}/temp`;
 
 	await fs.mkdirp(tempDir);
@@ -188,11 +190,13 @@ async function processNpmPackage(npmPackage: NpmPackage, repoDir: string) {
 	chdir(repoDir);
 	await fs.remove(tempDir);
 
-	if (!(await gitRepoClean())) {
-		await execCommand2('git add -A', { showOutput: false });
-		await execCommand2(['git', 'commit', '-m', commitMessage(actionType, manifest, previousManifest, npmPackage, error)], { showOutput: false });
-	} else {
-		console.info('Nothing to commit');
+	if (!dryRun) {
+		if (!(await gitRepoClean())) {
+			await execCommand2('git add -A', { showOutput: false });
+			await execCommand2(['git', 'commit', '-m', commitMessage(actionType, manifest, previousManifest, npmPackage, error)], { showOutput: false });
+		} else {
+			console.info('Nothing to commit');
+		}
 	}
 }
 
@@ -211,29 +215,34 @@ async function commandBuild(args: CommandBuildArgs) {
 	const manifests = await readManifests(repoDir);
 	await updateReadme(`${repoDir}/README.md`, manifests);
 	const previousDir = chdir(repoDir);
-	if (!(await gitRepoClean())) {
-		console.info('Updating README...');
-		await execCommand2('git add -A', { showOutput: true });
-		await execCommand2('git commit -m "Update README"', { showOutput: true });
+
+	if (!dryRun) {
+		if (!(await gitRepoClean())) {
+			console.info('Updating README...');
+			await execCommand2('git add -A', { showOutput: true });
+			await execCommand2('git commit -m "Update README"', { showOutput: true });
+		}
 	}
+
 	chdir(previousDir);
 
 	const searchResults = (await execCommand2('npm search joplin-plugin --searchlimit 5000 --json', { showOutput: false })).trim();
 	const npmPackages = pluginInfoFromSearchResults(JSON.parse(searchResults));
 
 	for (const npmPackage of npmPackages) {
-		await processNpmPackage(npmPackage, repoDir);
+		await processNpmPackage(npmPackage, repoDir, dryRun);
 	}
 
 	if (!dryRun) {
 		await commandUpdateRelease(args);
+
 		if (!(await gitRepoClean())) {
 			await execCommand2('git add -A', { showOutput: true });
 			await execCommand2('git commit -m "Update stats"', { showOutput: true });
 		}
-	}
 
-	if (!dryRun) await execCommand2('git push');
+		await execCommand2('git push');
+	}
 }
 
 async function commandVersion() {

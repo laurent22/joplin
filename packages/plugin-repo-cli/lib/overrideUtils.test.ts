@@ -16,7 +16,7 @@ describe('overrideUtils', () => {
 				'_publish_hash': 'sha256:5676da6b9ad71fc5a9779d3bde13f17de5352344711e135f0db8c62c6dbb5696',
 				'_publish_commit': 'master:19e515bd67e51cc37bd270a32d2898ca009a0de2',
 				'_npm_package_name': 'joplin-plugin-backlinks',
-				'obsolete': true,
+				'_obsolete': true,
 			},
 			'MyPlugin': {
 				'manifest_version': 1,
@@ -31,10 +31,10 @@ describe('overrideUtils', () => {
 				'_publish_hash': 'sha256:065285d06ea3c084e7f8f8c23583de8d70c4d586274a242c4c750f6faad8c7cb',
 				'_publish_commit': '',
 				'_npm_package_name': 'joplin-plugin-testing-new-plugin',
-				'obsolete': true,
+				'_obsolete': true,
 			},
 			'io.github.jackgruber.copytags': {
-				'recommended': true,
+				'_recommended': true,
 			},
 		};
 
@@ -83,13 +83,13 @@ describe('overrideUtils', () => {
 
 		const overrides: ManifestOverrides = {
 			'io.github.jackgruber.copytags': {
-				recommended: true,
+				_recommended: true,
 			},
 		};
 
 		const updatedManifests = applyManifestOverrides(manifests, overrides);
-		expect(updatedManifests['io.github.jackgruber.copytags'].recommended).toBe(true);
-		expect(updatedManifests['joplin.plugin.ambrt.backlinksToNote'].recommended).toBe(undefined);
+		expect(updatedManifests['io.github.jackgruber.copytags']._recommended).toBe(true);
+		expect(updatedManifests['joplin.plugin.ambrt.backlinksToNote']._recommended).toBe(undefined);
 	});
 
 });
