@@ -13,7 +13,8 @@
     "tsc": "tsc --project tsconfig.json",
     "watch": "tsc --watch --project tsconfig.json",
     "test": "jest",
-    "test-ci": "npm run test"
+    "test-ci": "npm run test",
+    "start": "node index.js"
   },
   "author": "",
   "license": "MIT",
