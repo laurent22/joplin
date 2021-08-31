@@ -383,8 +383,8 @@ export default class UserModel extends BaseModel<User> {
 			.db(this.tableName)
 			.select(['id', 'total_item_size', 'max_total_item_size', 'account_type', 'email', 'full_name'])
 			.where(function() {
-				void this.whereRaw('total_item_size > ? AND account_type = ?', [alertLimit1 * basicAccount.max_total_item_size, AccountType.Basic])
-					.orWhereRaw('total_item_size > ? AND account_type = ?', [alertLimit1 * proAccount.max_total_item_size, AccountType.Pro]);
+				void this.whereRaw('total_item_size > ? AND account_type = ?', [Math.round(alertLimit1 * basicAccount.max_total_item_size), AccountType.Basic])
+					.orWhereRaw('total_item_size > ? AND account_type = ?', [Math.round(alertLimit1 * proAccount.max_total_item_size), AccountType.Pro]);
 			})
 			// Users who are disabled or who cannot upload already received the
 			// notification.

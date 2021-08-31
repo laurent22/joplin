@@ -210,13 +210,13 @@ describe('UserModel', function() {
 		await models().user().save({
 			id: user1.id,
 			account_type: AccountType.Basic,
-			total_item_size: accountByType(AccountType.Basic).max_total_item_size * 0.85,
+			total_item_size: Math.round(accountByType(AccountType.Basic).max_total_item_size * 0.85),
 		});
 
 		await models().user().save({
 			id: user2.id,
 			account_type: AccountType.Pro,
-			total_item_size: accountByType(AccountType.Pro).max_total_item_size * 0.2,
+			total_item_size: Math.round(accountByType(AccountType.Pro).max_total_item_size * 0.2),
 		});
 
 		const emailBeforeCount = (await models().email().all()).length;
@@ -242,7 +242,7 @@ describe('UserModel', function() {
 
 			await models().user().save({
 				id: user2.id,
-				total_item_size: accountByType(AccountType.Pro).max_total_item_size * 1.1,
+				total_item_size: Math.round(accountByType(AccountType.Pro).max_total_item_size * 1.1),
 			});
 
 			// User upload should be enabled at this point

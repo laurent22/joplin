@@ -69,14 +69,16 @@ export async function beforeAllDb(unitName: string, createDbOptions: CreateDbOpt
 	const tempDir = `${packageRootDir}/temp/test-${unitName}`;
 	await fs.mkdirp(tempDir);
 
-	// Uncomment the code below to run the test units with Postgres. Run first
-	// `docker-compose -f docker-compose.db-dev.yml` to get a dev db.
+	// Uncomment the code below to run the test units with Postgres. Run this:
+	//
+	// sudo docker compose -f docker-compose.db-dev.yml up
 
 	// await initConfig(Env.Dev, {
 	// 	DB_CLIENT: 'pg',
 	// 	POSTGRES_DATABASE: unitName,
 	// 	POSTGRES_USER: 'joplin',
 	// 	POSTGRES_PASSWORD: 'joplin',
+	// 	SUPPORT_EMAIL: 'testing@localhost',
 	// }, {
 	// 	tempDir: tempDir,
 	// });
