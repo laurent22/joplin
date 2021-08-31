@@ -16,5 +16,7 @@ If you are already on a Pro account, and you need more space for specific reason
 
 ## Further information
 
+- [Joplin Offical Website](https://joplinapp.org)
+- [Joplin Support Forum](https://discourse.joplinapp.org/)
 - [Joplin Cloud Privacy Policy](/privacy)
 - [Joplin Cloud Terms & Conditions](/terms)
