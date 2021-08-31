@@ -10,7 +10,7 @@ Joplin Cloud allows you to synchronise your notes automatically to all your devi
 
 - Improved sync performances. Compared to other sync options, Joplin Cloud, being developed specifically for Joplin, is faster and consumes less resources.
 
-Moreover, by getting a subscription you are supporting the development of the project as a whole, including the open source applications. Such support needed in the long term to provide bug and security fixes, add new features, and provide support.
+Moreover, by getting a subscription you are supporting the development of the project as a whole, including the open source applications. Such support is needed in the long term to provide bug and security fixes, add new features, and provide support.
 
 ## What if I exceed the storage space?
 
