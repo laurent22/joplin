@@ -139,7 +139,6 @@ const RecommendedBadge = styled.a`
 	font-size: ${props => props.theme.fontSize}px;
 	border: 1px solid ${props => props.theme.colorWarn};
 	padding: 5px;
-	margin-bottom: 10px;
 	border-radius: 50px;
 	opacity: 0.8;
 	
