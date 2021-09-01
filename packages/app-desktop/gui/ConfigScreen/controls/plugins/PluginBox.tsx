@@ -133,6 +133,21 @@ const StyledDescription = styled.div`
 	line-height: 1.6em;
 `;
 
+const RecommendedBadge = styled.a`
+	font-family: ${props => props.theme.fontFamily};
+	color: ${props => props.theme.colorWarn};
+	font-size: ${props => props.theme.fontSize}px;
+	border: 1px solid ${props => props.theme.colorWarn};
+	padding: 5px;
+	margin-bottom: 10px;
+	border-radius: 50px;
+	opacity: 0.8;
+	
+	&:hover {
+		opacity: 1;
+	}
+`;
+
 export default function(props: Props) {
 	const item = useMemo(() => {
 		return props.item ? props.item : manifestToItem(props.manifest);
@@ -143,6 +158,10 @@ export default function(props: Props) {
 		if (!manifest.homepage_url) return;
 		bridge().openExternal(manifest.homepage_url);
 	}, [item]);
+
+	const onRecommendedClick = useCallback(() => {
+		bridge().openExternal('https://github.com/joplin/plugins/blob/master/readme/recommended.md#recommended-plugins');
+	}, []);
 
 	// For plugins in dev mode things like enabling/disabling or
 	// uninstalling them doesn't make sense, as that should be done by
@@ -222,11 +241,18 @@ export default function(props: Props) {
 		);
 	}
 
+	function renderRecommendedBadge() {
+		if (props.onToggle) return null;
+		if (!item.manifest._recommended) return null;
+		return <RecommendedBadge href="#" title={_('The Joplin team has vetted this plugin and it meets our standards for security and performance.')} onClick={onRecommendedClick}><i className="fas fa-crown"></i></RecommendedBadge>;
+	}
+
 	return (
 		<CellRoot isCompatible={props.isCompatible}>
 			<CellTop>
 				<StyledNameAndVersion mb={'5px'}><StyledName onClick={onNameClick} href="#" style={{ marginRight: 5 }}>{item.manifest.name} {item.deleted ? _('(%s)', 'Deleted') : ''}</StyledName><StyledVersion>v{item.manifest.version}</StyledVersion></StyledNameAndVersion>
 				{renderToggleButton()}
+				{renderRecommendedBadge()}
 			</CellTop>
 			<CellContent>
 				<StyledDescription>{item.manifest.description}</StyledDescription>

@@ -873,6 +873,16 @@ class Application extends BaseApplication {
 		// 	});
 		// }, 2000);
 
+		// setTimeout(() => {
+		// 	this.dispatch({
+		// 		type: 'NAV_GO',
+		// 		routeName: 'Config',
+		// 		props: {
+		// 			defaultSection: 'plugins',
+		// 		},
+		// 	});
+		// }, 2000);
+
 		return null;
 	}
 

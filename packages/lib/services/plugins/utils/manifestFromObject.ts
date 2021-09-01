@@ -24,6 +24,13 @@ export default function manifestFromObject(o: any): PluginManifest {
 		return o[name];
 	};
 
+	const getBoolean = (name: string, required: boolean = true, defaultValue: boolean = false): boolean => {
+		if (required && !o[name]) throw new Error(`Missing required field: ${name}`);
+		if (!o[name]) return defaultValue;
+		if (typeof o[name] !== 'boolean') throw new Error(`Field must be a boolean: ${name}`);
+		return o[name];
+	};
+
 	const permissions: PluginPermission[] = [];
 
 	const manifest: PluginManifest = {
@@ -39,6 +46,8 @@ export default function manifestFromObject(o: any): PluginManifest {
 		repository_url: getString('repository_url', false),
 		keywords: getStrings('keywords', false),
 		permissions: permissions,
+
+		_recommended: getBoolean('_recommended', false, false),
 	};
 
 	validatePluginId(manifest.id);
