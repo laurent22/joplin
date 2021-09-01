@@ -6,7 +6,7 @@ import MenuUtils from '@joplin/lib/services/commands/MenuUtils';
 import InteropServiceHelper from '../../InteropServiceHelper';
 import { _ } from '@joplin/lib/locale';
 import { MenuItemLocation } from '@joplin/lib/services/plugins/api/types';
-import { getNoteCallbackUrl } from '@joplin/lib/ProtocolUtils';
+import { getNoteCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 
 import BaseModel from '@joplin/lib/BaseModel';
 const bridge = require('electron').remote.require('./bridge').default;

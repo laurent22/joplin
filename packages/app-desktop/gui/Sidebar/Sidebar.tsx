@@ -20,7 +20,7 @@ import Logger from '@joplin/lib/Logger';
 import { FolderEntity } from '@joplin/lib/services/database/types';
 import stateToWhenClauseContext from '../../services/commands/stateToWhenClauseContext';
 import { store } from '@joplin/lib/reducer';
-import { getFolderCallbackUrl, getTagCallbackUrl } from '@joplin/lib/ProtocolUtils';
+import { getFolderCallbackUrl, getTagCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 const { connect } = require('react-redux');
 const shared = require('@joplin/lib/components/shared/side-menu-shared.js');
 const { themeStyle } = require('@joplin/lib/theme');

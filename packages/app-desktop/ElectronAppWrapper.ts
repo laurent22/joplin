@@ -1,7 +1,7 @@
 import Logger from '@joplin/lib/Logger';
 import { PluginMessage } from './services/plugins/PluginRunner';
 import shim from '@joplin/lib/shim';
-import { isCallbackUrl } from '@joplin/lib/ProtocolUtils';
+import { isCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 
 const { BrowserWindow, Tray, screen } = require('electron');
 const url = require('url');

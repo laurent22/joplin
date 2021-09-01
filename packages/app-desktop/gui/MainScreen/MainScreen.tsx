@@ -36,7 +36,7 @@ import ShareService from '@joplin/lib/services/share/ShareService';
 import { reg } from '@joplin/lib/registry';
 import removeKeylessItems from '../ResizableLayout/utils/removeKeylessItems';
 import { localSyncInfoFromState } from '@joplin/lib/services/synchronizer/syncInfoUtils';
-import { parseCallbackUrl } from '@joplin/lib/ProtocolUtils';
+import { parseCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 import ElectronAppWrapper from '../../ElectronAppWrapper';
 import { showMissingMasterKeyMessage } from '@joplin/lib/services/e2ee/utils';
 
