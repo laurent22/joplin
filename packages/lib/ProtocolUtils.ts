@@ -4,26 +4,26 @@ export function isCallbackUrl(s: string) {
 	return s.startsWith('joplin://x-callback-url/');
 }
 
-export function getNoteUrl(noteId: string) {
+export function getNoteCallbackUrl(noteId: string) {
 	return `joplin://x-callback-url/openNote?id=${encodeURIComponent(noteId)}`;
 }
 
-export function getFolderUrl(folderId: string) {
+export function getFolderCallbackUrl(folderId: string) {
 	return `joplin://x-callback-url/openFolder?id=${encodeURIComponent(folderId)}`;
 }
 
-export function getTagUrl(tagId: string) {
+export function getTagCallbackUrl(tagId: string) {
 	return `joplin://x-callback-url/openTag?id=${encodeURIComponent(tagId)}`;
 }
 
-export const enum Command {
+export const enum CallbackUrlCommand {
     OpenNote = 'openNote',
     OpenFolder = 'openFolder',
     OpenTag = 'openTag',
 }
 
 export interface CallbackUrlInfo {
-    command: Command;
+    command: CallbackUrlCommand;
     params: Record<string, string>;
 }
 
@@ -31,7 +31,7 @@ export function parseCallbackUrl(s: string): CallbackUrlInfo {
 	if (!isCallbackUrl(s)) throw new Error(`Invalid callback url ${s}`);
 	const url = new URL(s, true);
 	return {
-		command: url.pathname.substring(url.pathname.lastIndexOf('/') + 1) as Command,
+		command: url.pathname.substring(url.pathname.lastIndexOf('/') + 1) as CallbackUrlCommand,
 		params: url.query,
 	};
 }

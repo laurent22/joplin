@@ -6,7 +6,7 @@ import MenuUtils from '@joplin/lib/services/commands/MenuUtils';
 import InteropServiceHelper from '../../InteropServiceHelper';
 import { _ } from '@joplin/lib/locale';
 import { MenuItemLocation } from '@joplin/lib/services/plugins/api/types';
-import { getNoteUrl } from '@joplin/lib/ProtocolUtils';
+import { getNoteCallbackUrl } from '@joplin/lib/ProtocolUtils';
 
 import BaseModel from '@joplin/lib/BaseModel';
 const bridge = require('electron').remote.require('./bridge').default;
@@ -137,9 +137,9 @@ export default class NoteListUtils {
 			if (noteIds.length == 1) {
 				menu.append(
 					new MenuItem({
-						label: _('Copy note URL'),
+						label: _('Copy external link'),
 						click: () => {
-							clipboard.writeText(getNoteUrl(noteIds[0]));
+							clipboard.writeText(getNoteCallbackUrl(noteIds[0]));
 						},
 					})
 				);

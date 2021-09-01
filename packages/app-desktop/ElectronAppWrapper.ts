@@ -336,7 +336,7 @@ export default class ElectronAppWrapper {
 			if (process.platform !== 'darwin') {
 				const url = argv.find((arg) => isCallbackUrl(arg));
 				if (url) {
-					void this.openUrl(url);
+					void this.openCallbackUrl(url);
 				}
 			}
 		});
@@ -367,12 +367,12 @@ export default class ElectronAppWrapper {
 		});
 
 		this.electronApp_.on('open-url', (_event: any, url: string) => {
-			void this.openUrl(url);
+			void this.openCallbackUrl(url);
 		});
 	}
 
-	async openUrl(url: string) {
-		this.win_.webContents.send('asynchronous-message', 'openUrl', {
+	async openCallbackUrl(url: string) {
+		this.win_.webContents.send('asynchronous-message', 'openCallbackUrl', {
 			url: url,
 		});
 	}

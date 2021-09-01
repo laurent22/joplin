@@ -20,7 +20,7 @@ import Logger from '@joplin/lib/Logger';
 import { FolderEntity } from '@joplin/lib/services/database/types';
 import stateToWhenClauseContext from '../../services/commands/stateToWhenClauseContext';
 import { store } from '@joplin/lib/reducer';
-import { getFolderUrl, getTagUrl } from '@joplin/lib/ProtocolUtils';
+import { getFolderCallbackUrl, getTagCallbackUrl } from '@joplin/lib/ProtocolUtils';
 const { connect } = require('react-redux');
 const shared = require('@joplin/lib/components/shared/side-menu-shared.js');
 const { themeStyle } = require('@joplin/lib/theme');
@@ -331,9 +331,9 @@ class SidebarComponent extends React.Component<Props, State> {
 		if (itemType === BaseModel.TYPE_FOLDER) {
 			menu.append(
 				new MenuItem({
-					label: _('Copy notebook URL'),
+					label: _('Copy external link'),
 					click: () => {
-						clipboard.writeText(getFolderUrl(itemId));
+						clipboard.writeText(getFolderCallbackUrl(itemId));
 					},
 				})
 			);
@@ -345,9 +345,9 @@ class SidebarComponent extends React.Component<Props, State> {
 			));
 			menu.append(
 				new MenuItem({
-					label: _('Copy tag URL'),
+					label: _('Copy external link'),
 					click: () => {
-						clipboard.writeText(getTagUrl(itemId));
+						clipboard.writeText(getTagCallbackUrl(itemId));
 					},
 				})
 			);

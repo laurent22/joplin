@@ -191,18 +191,18 @@ class MainScreenComponent extends React.Component<Props, State> {
 		window.addEventListener('resize', this.window_resize);
 
 		ipcRenderer.on('asynchronous-message', (_event: any, message: string, args: any) => {
-			if (message === 'openUrl') {
-				this.openUrl(args.url);
+			if (message === 'openCallbackUrl') {
+				this.openCallbackUrl(args.url);
 			}
 		});
 
 		const initialCallbackUrl = (bridge().electronApp() as ElectronAppWrapper).initialCallbackUrl();
 		if (initialCallbackUrl) {
-			this.openUrl(initialCallbackUrl);
+			this.openCallbackUrl(initialCallbackUrl);
 		}
 	}
 
-	private openUrl(url: string) {
+	private openCallbackUrl(url: string) {
 		console.log(`openUrl ${url}`);
 		const { command, params } = parseCallbackUrl(url);
 		void CommandService.instance().execute(command.toString(), params.id);
