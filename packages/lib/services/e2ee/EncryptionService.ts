@@ -195,7 +195,7 @@ export default class EncryptionService {
 		return await this.randomHexString(64);
 	}
 
-	async randomHexString(byteCount: number) {
+	private async randomHexString(byteCount: number) {
 		const bytes: any[] = await shim.randomBytes(byteCount);
 		return bytes
 			.map(a => {
@@ -204,7 +204,7 @@ export default class EncryptionService {
 			.join('');
 	}
 
-	masterKeysThatNeedUpgrading(masterKeys: MasterKeyEntity[]) {
+	public masterKeysThatNeedUpgrading(masterKeys: MasterKeyEntity[]) {
 		return MasterKey.allWithoutEncryptionMethod(masterKeys, [this.defaultMasterKeyEncryptionMethod_, EncryptionMethod.Custom]);
 	}
 
