@@ -1,5 +1,12 @@
 # Joplin Server Changelog
 
+## [server-v2.4.3-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.4.3-beta) (Pre-release) - 2021-09-02T17:49:11Z
+
+- New: Added Help page for Joplin Cloud (6520a48)
+- New: Added icon next to profile button (5805a41)
+- Improved: Display note title as page title when sharing note (82331c9)
+- Fixed: Fixed calculation of max sizes for Postgres (93a4ad0)
+
 ## [server-v2.4.2](https://github.com/laurent22/joplin/releases/tag/server-v2.4.2) - 2021-08-28T17:45:41Z
 
 - New: Add request rate limter on session and login end points (543413d)
