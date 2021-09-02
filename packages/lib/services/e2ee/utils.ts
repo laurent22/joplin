@@ -170,8 +170,8 @@ export function getDefaultMasterKey(): MasterKeyEntity {
 // Get the master password if set, or throw an exception. This ensures that
 // things aren't accidentally encrypted with an empty string. Calling code
 // should look for "undefinedMasterPassword" code and prompt for password.
-export function getMasterPassword(): string {
+export function getMasterPassword(throwIfNotSet: boolean = true): string {
 	const password = Setting.value('encryption.masterPassword');
-	if (!password) throw new JoplinError('Master password is not set', 'undefinedMasterPassword');
+	if (!password && throwIfNotSet) throw new JoplinError('Master password is not set', 'undefinedMasterPassword');
 	return password;
 }

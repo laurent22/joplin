@@ -8,7 +8,7 @@ import Note from '../../models/Note';
 import Setting from '../../models/Setting';
 import { FolderEntity } from '../database/types';
 import EncryptionService from '../e2ee/EncryptionService';
-import { ppkReencryptMasterKey, PublicPrivateKeyPair } from '../e2ee/ppk';
+import { PublicPrivateKeyPair, reencryptFromPasswordToPublicKey, reencryptFromPublicKeyToPassword } from '../e2ee/ppk';
 import { MasterKeyEntity } from '../e2ee/types';
 import { getMasterPassword } from '../e2ee/utils';
 import { addMasterKey, getEncryptionEnabled, localSyncInfo } from '../synchronizer/syncInfoUtils';
@@ -92,7 +92,7 @@ export default class ShareService {
 			// Shouldn't happen
 			if (!syncInfo.ppk) throw new Error('Cannot share notebook because E2EE is enabled and no Public Private Key pair exists.');
 
-			folderMasterKey = await this.encryptionService_.generateMasterKey(getMasterPassword()); // await ppkGenerateMasterKey(this.encryptionService_, syncInfo.ppk, getMasterPassword());
+			folderMasterKey = await this.encryptionService_.generateMasterKey(getMasterPassword());
 			folderMasterKey = await MasterKey.save(folderMasterKey);
 
 			addMasterKey(syncInfo, folderMasterKey);
@@ -240,10 +240,9 @@ export default class ShareService {
 
 			logger.info('Reencrypting master key with recipient public key', recipientPublicKey);
 
-			recipientMasterKey = await ppkReencryptMasterKey(
+			recipientMasterKey = await reencryptFromPasswordToPublicKey(
 				this.encryptionService_,
 				masterKey,
-				syncInfo.ppk,
 				getMasterPassword(),
 				recipientPublicKey
 			);
@@ -276,10 +275,21 @@ export default class ShareService {
 	}
 
 	public async respondInvitation(shareUserId: string, masterKey: MasterKeyEntity, accept: boolean) {
+		logger.info('respondInvitation: ', shareUserId, accept);
+
 		if (accept) {
 			if (masterKey) {
-				// TODO: decrypt it with private key
-				// TODO: reencrypt with master password
+				const reencryptedMasterKey = await reencryptFromPublicKeyToPassword(
+					this.encryptionService_,
+					masterKey,
+					localSyncInfo().ppk,
+					getMasterPassword(),
+					getMasterPassword()
+				);
+
+				logger.info('respondInvitation: Key has been reencrypted using master password', reencryptedMasterKey);
+
+				await MasterKey.save(reencryptedMasterKey);
 			}
 
 			await this.api().exec('PATCH', `api/share_users/${shareUserId}`, null, { status: 1 });

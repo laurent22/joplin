@@ -1,9 +1,9 @@
 import * as NodeRSA from 'node-rsa';
-import Setting from '../../models/Setting';
 import uuid from '../../uuid';
 import { getActiveMasterKey, saveLocalSyncInfo, SyncInfo } from '../synchronizer/syncInfoUtils';
 import EncryptionService, { EncryptionCustomHandler, EncryptionMethod } from './EncryptionService';
 import { MasterKeyEntity } from './types';
+import { getMasterPassword } from './utils';
 
 interface PrivateKey {
 	encryptionMethod: EncryptionMethod;
@@ -58,12 +58,6 @@ export async function generateKeyPair(encryptionService: EncryptionService, pass
 export async function generateKeyPairAndSave(encryptionService: EncryptionService, localInfo: SyncInfo, password: string): Promise<PublicPrivateKeyPair> {
 	localInfo.ppk = await generateKeyPair(encryptionService, password);
 	saveLocalSyncInfo(localInfo);
-
-	const passwords = Setting.value('encryption.passwordCache');
-	passwords[localInfo.ppk.id] = password;
-	Setting.setValue('encryption.passwordCache', passwords);
-	await Setting.saveAll();
-
 	return localInfo.ppk;
 }
 
@@ -73,11 +67,10 @@ export async function setPpkIfNotExist(service: EncryptionService, localInfo: Sy
 	const masterKey = getActiveMasterKey(localInfo);
 	if (!masterKey) return;
 
-	const passwords = Setting.value('encryption.passwordCache');
-	const password = passwords[masterKey.id];
+	const password = getMasterPassword(false);
 	if (!password) return;
 
-	await generateKeyPairAndSave(service, localInfo, password);
+	await generateKeyPairAndSave(service, localInfo, getMasterPassword());
 }
 
 async function loadPpk(service: EncryptionService, ppk: PublicPrivateKeyPair, password: string): Promise<NodeRSA> {
@@ -170,10 +163,4 @@ export async function ppkReencryptMasterKey(service: EncryptionService, masterKe
 	}, {
 		encryptionHandler: encryptionHandler,
 	});
-}
-
-export function getPpkPassword(ppk: PublicPrivateKeyPair): string {
-	const p = Setting.value('encryption.passwordCache')[ppk.id];
-	if (!p) throw new Error(`Could not retrieve password for Public Private Key ${ppk.id}`);
-	return p;
 }
