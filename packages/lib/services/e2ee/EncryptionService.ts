@@ -218,7 +218,7 @@ export default class EncryptionService {
 	public async encryptMasterKeyContent(encryptionMethod: EncryptionMethod, hexaBytes: string, password: string, options: EncryptOptions = null): Promise<MasterKeyEntity> {
 		options = { ...options };
 
-		if (encryptionMethod === null) encryptionMethod = this.defaultEncryptionMethod_;
+		if (encryptionMethod === null) encryptionMethod = this.defaultMasterKeyEncryptionMethod_;
 
 		if (options.encryptionHandler) {
 			return {

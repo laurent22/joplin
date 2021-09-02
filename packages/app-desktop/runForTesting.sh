@@ -6,7 +6,7 @@
 # For example, to setup a user for sharing, and another as recipient with E2EE
 # enabled:
 
-# ./runForTesting.sh 1 createUsers,createData,reset,e2ee,sync && ./runForTesting.sh 2 reset,generatePpk && ./runForTesting.sh 1
+# ./runForTesting.sh 1 createUsers,createData,reset,e2ee,sync && ./runForTesting.sh 2 reset,e2ee,sync && ./runForTesting.sh 1
 
 set -e
 
@@ -55,7 +55,7 @@ do
 		echo "config sync.target 10" >> "$CMD_FILE" 
 		# echo "config sync.10.path http://api.joplincloud.local:22300" >> "$CMD_FILE" 
 		echo "config sync.10.username $USER_EMAIL" >> "$CMD_FILE" 
-		echo "config sync.10.password hunter1hunter2hunter3" >> "$CMD_FILE" 
+		echo "config sync.10.password hunter1hunter2hunter3" >> "$CMD_FILE"
 	
 	elif [[ $CMD == "e2ee" ]]; then
 	
@@ -65,10 +65,10 @@ do
 	
 		echo "sync" >> "$CMD_FILE" 
 
-	elif [[ $CMD == "generatePpk" ]]; then
+	# elif [[ $CMD == "generatePpk" ]]; then
 	
-		echo "e2ee generate-ppk --password 111111" >> "$CMD_FILE" 
-		echo "sync" >> "$CMD_FILE" 
+	# 	echo "e2ee generate-ppk --password 111111" >> "$CMD_FILE" 
+	# 	echo "sync" >> "$CMD_FILE" 
 
 	else
 	
