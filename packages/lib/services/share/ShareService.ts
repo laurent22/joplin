@@ -8,8 +8,9 @@ import Note from '../../models/Note';
 import Setting from '../../models/Setting';
 import { FolderEntity } from '../database/types';
 import EncryptionService from '../e2ee/EncryptionService';
-import { getPpkPassword, ppkGenerateMasterKey, ppkReencryptMasterKey, PublicPrivateKeyPair } from '../e2ee/ppk';
+import { ppkReencryptMasterKey, PublicPrivateKeyPair } from '../e2ee/ppk';
 import { MasterKeyEntity } from '../e2ee/types';
+import { getMasterPassword } from '../e2ee/utils';
 import { addMasterKey, getEncryptionEnabled, localSyncInfo } from '../synchronizer/syncInfoUtils';
 import { ShareInvitation, State, stateRootKey, StateShare } from './reducer';
 
@@ -91,9 +92,7 @@ export default class ShareService {
 			// Shouldn't happen
 			if (!syncInfo.ppk) throw new Error('Cannot share notebook because E2EE is enabled and no Public Private Key pair exists.');
 
-			const password = getPpkPassword(syncInfo.ppk);
-
-			folderMasterKey = await ppkGenerateMasterKey(this.encryptionService_, syncInfo.ppk, password);
+			folderMasterKey = await this.encryptionService_.generateMasterKey(getMasterPassword()); // await ppkGenerateMasterKey(this.encryptionService_, syncInfo.ppk, getMasterPassword());
 			folderMasterKey = await MasterKey.save(folderMasterKey);
 
 			addMasterKey(syncInfo, folderMasterKey);
@@ -245,7 +244,7 @@ export default class ShareService {
 				this.encryptionService_,
 				masterKey,
 				syncInfo.ppk,
-				getPpkPassword(syncInfo.ppk),
+				getMasterPassword(),
 				recipientPublicKey
 			);
 		}
@@ -279,7 +278,8 @@ export default class ShareService {
 	public async respondInvitation(shareUserId: string, masterKey: MasterKeyEntity, accept: boolean) {
 		if (accept) {
 			if (masterKey) {
-				// TODO: save it
+				// TODO: decrypt it with private key
+				// TODO: reencrypt with master password
 			}
 
 			await this.api().exec('PATCH', `api/share_users/${shareUserId}`, null, { status: 1 });

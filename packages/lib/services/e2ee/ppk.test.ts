@@ -1,5 +1,5 @@
 import { afterAllCleanUp, encryptionService, setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
-import { decryptPrivateKey, generateKeyPair, ppkDecryptMasterKeyContent, ppkGenerateMasterKey } from './ppk';
+import { decryptPrivateKey, generateKeyPair, ppkDecryptMasterKeyContent, ppkGenerateMasterKey, reencryptFromPasswordToPublicKey, reencryptFromPublicKeyToPassword } from './ppk';
 
 describe('e2ee/ppk', function() {
 
@@ -47,6 +47,32 @@ describe('e2ee/ppk', function() {
 		const plainText = await ppkDecryptMasterKeyContent(encryptionService(), masterKey, ppk, '111111');
 		expect(plainText.length).toBeGreaterThan(50); // Just checking it's not empty
 		expect(plainText).not.toBe(masterKey.content);
+	}));
+
+	it('should transmit key using a public-private key', (async () => {
+		// This simulate sending a key from one user to another using
+		// public-private key encryption. For example used when sharing a
+		// notebook while E2EE is enabled.
+
+		// User 1 generates a master key
+		const key1 = await encryptionService().generateMasterKey('mk_1111');
+
+		// Using user 2 private key, he reencrypts the master key
+		const ppk2 = await generateKeyPair(encryptionService(), 'ppk_1111');
+		const ppkEncrypted = await reencryptFromPasswordToPublicKey(encryptionService(), key1, 'mk_1111', ppk2);
+
+		// Once user 2 gets the master key, he can decrypt it using his private key
+		const key2 = await reencryptFromPublicKeyToPassword(encryptionService(), ppkEncrypted, ppk2, 'ppk_1111', 'mk_2222');
+
+		// Once it's done, both users should have the same master key
+		const plaintext1 = await encryptionService().decryptMasterKeyContent(key1, 'mk_1111');
+		const plaintext2 = await encryptionService().decryptMasterKeyContent(key2, 'mk_2222');
+
+		expect(plaintext1).toBe(plaintext2);
+
+		// We should make sure that the keys are also different when encrypted
+		// since they should be using different passwords.
+		expect(key1.content).not.toBe(key2.content);
 	}));
 
 });

@@ -5,6 +5,7 @@ import Setting from '../../models/Setting';
 import { MasterKeyEntity } from './types';
 import EncryptionService from './EncryptionService';
 import { getActiveMasterKey, getActiveMasterKeyId, masterKeyEnabled, setEncryptionEnabled, SyncInfo } from '../synchronizer/syncInfoUtils';
+import JoplinError from '../../JoplinError';
 
 const logger = Logger.create('e2ee/utils');
 
@@ -164,4 +165,13 @@ export function getDefaultMasterKey(): MasterKeyEntity {
 	const mk = getActiveMasterKey();
 	if (mk) return mk;
 	return MasterKey.latest();
+}
+
+// Get the master password if set, or throw an exception. This ensures that
+// things aren't accidentally encrypted with an empty string. Calling code
+// should look for "undefinedMasterPassword" code and prompt for password.
+export function getMasterPassword(): string {
+	const password = Setting.value('encryption.masterPassword');
+	if (!password) throw new JoplinError('Master password is not set', 'undefinedMasterPassword');
+	return password;
 }

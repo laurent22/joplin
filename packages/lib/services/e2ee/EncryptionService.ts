@@ -211,11 +211,15 @@ export default class EncryptionService {
 	public async reencryptMasterKey(model: MasterKeyEntity, decryptionPassword: string, decryptOptions: EncryptOptions = null, encryptOptions: EncryptOptions = null): Promise<MasterKeyEntity> {
 		const newEncryptionMethod = this.defaultMasterKeyEncryptionMethod_;
 		const plainText = await this.decryptMasterKeyContent(model, decryptionPassword, decryptOptions);
-		const newContent = await this.encryptMasterKeyContent_(newEncryptionMethod, plainText, decryptionPassword, encryptOptions);
+		const newContent = await this.encryptMasterKeyContent(newEncryptionMethod, plainText, decryptionPassword, encryptOptions);
 		return { ...model, ...newContent };
 	}
 
-	private async encryptMasterKeyContent_(encryptionMethod: EncryptionMethod, hexaBytes: string, password: string, options: EncryptOptions): Promise<MasterKeyEntity> {
+	public async encryptMasterKeyContent(encryptionMethod: EncryptionMethod, hexaBytes: string, password: string, options: EncryptOptions = null): Promise<MasterKeyEntity> {
+		options = { ...options };
+
+		if (encryptionMethod === null) encryptionMethod = this.defaultEncryptionMethod_;
+
 		if (options.encryptionHandler) {
 			return {
 				checksum: '',
@@ -240,7 +244,7 @@ export default class EncryptionService {
 		const bytes: any[] = await shim.randomBytes(256);
 		const hexaBytes = bytes.map(a => hexPad(a.toString(16), 2)).join('');
 
-		return this.encryptMasterKeyContent_(options.encryptionMethod, hexaBytes, password, options);
+		return this.encryptMasterKeyContent(options.encryptionMethod, hexaBytes, password, options);
 	}
 
 	public async generateMasterKey(password: string, options: EncryptOptions = null) {

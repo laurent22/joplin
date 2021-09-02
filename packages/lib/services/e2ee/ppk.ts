@@ -80,13 +80,6 @@ export async function setPpkIfNotExist(service: EncryptionService, localInfo: Sy
 	await generateKeyPairAndSave(service, localInfo, password);
 }
 
-// 	localInfo.ppk = await generateKeyPair(service, password);
-
-// 	passwords[localInfo.ppk.id] = password;
-// 	Setting.setValue('encryption.passwordCache', passwords);
-// 	await Setting.saveAll();
-// }
-
 async function loadPpk(service: EncryptionService, ppk: PublicPrivateKeyPair, password: string): Promise<NodeRSA> {
 	const keys = new NodeRSA();
 	keys.setOptions(nodeRSAOptions());
@@ -148,6 +141,25 @@ export async function ppkDecryptMasterKeyContent(service: EncryptionService, mas
 		encryptionHandler: handler,
 	});
 }
+
+export async function reencryptFromPasswordToPublicKey(service: EncryptionService, masterKey: MasterKeyEntity, decryptionPassword: string, encryptionPublicKey: PublicPrivateKeyPair): Promise<MasterKeyEntity> {
+	const encryptionHandler = ppkEncryptionHandler(encryptionPublicKey.id, await loadPublicKey(encryptionPublicKey.publicKey));
+
+	const plainText = await service.decryptMasterKeyContent(masterKey, decryptionPassword);
+	const newContent = await service.encryptMasterKeyContent(EncryptionMethod.Custom, plainText, '', { encryptionHandler });
+
+	return { ...masterKey, ...newContent };
+}
+
+export async function reencryptFromPublicKeyToPassword(service: EncryptionService, masterKey: MasterKeyEntity, decryptionPpk: PublicPrivateKeyPair, decryptionPassword: string, encryptionPassword: string): Promise<MasterKeyEntity> {
+	const decryptionHandler = ppkEncryptionHandler(decryptionPpk.id, await loadPpk(service, decryptionPpk, decryptionPassword));
+
+	const plainText = await service.decryptMasterKeyContent(masterKey, '', { encryptionHandler: decryptionHandler });
+	const newContent = await service.encryptMasterKeyContent(null, plainText, encryptionPassword);
+
+	return { ...masterKey, ...newContent };
+}
+
 
 export async function ppkReencryptMasterKey(service: EncryptionService, masterKey: MasterKeyEntity, decryptionPpk: PublicPrivateKeyPair, decryptionPassword: string, encryptionPublicKey: PublicPrivateKeyPair): Promise<MasterKeyEntity> {
 	const encryptionHandler = ppkEncryptionHandler(encryptionPublicKey.id, await loadPublicKey(encryptionPublicKey.publicKey));
