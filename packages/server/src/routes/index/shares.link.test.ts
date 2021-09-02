@@ -73,6 +73,7 @@ describe('shares.link', function() {
 		expect(bodyHtml).toContain('rendered-md'); // Means we have the HTML body
 		expect(bodyHtml).toContain('Testing title'); // Means the note has been rendered
 		expect(bodyHtml).toContain('Testing body');
+		expect(bodyHtml).toContain('<title>Testing title'); // Means the page title is set to the note title
 	});
 
 	test('should load plugins', async function() {

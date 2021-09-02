@@ -1,5 +1,4 @@
 import JoplinDatabase from '@joplin/lib/JoplinDatabase';
-// import Logger from '@joplin/lib/Logger';
 import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
 import BaseItem from '@joplin/lib/models/BaseItem';
 import Note from '@joplin/lib/models/Note';
@@ -25,6 +24,8 @@ import Setting from '@joplin/lib/models/Setting';
 import { Models } from '../models/factory';
 import MustacheService from '../services/MustacheService';
 import Logger from '@joplin/lib/Logger';
+import config from '../config';
+const { substrWithEllipsis } = require('@joplin/lib/string-utils');
 
 const logger = Logger.create('JoplinUtils');
 
@@ -81,9 +82,6 @@ export async function initializeJoplinUtils(config: Config, models: Models, must
 	BaseItem.loadClass('NoteTag', NoteTag);
 	BaseItem.loadClass('MasterKey', MasterKey);
 	BaseItem.loadClass('Revision', Revision);
-
-	// mustache_ = new MustacheService(config.viewDir, config.baseUrl);
-	// mustache_.prefersDarkEnabled = false;
 }
 
 export function linkedResourceIds(body: string): string[] {
@@ -148,7 +146,7 @@ async function noteLinkedItemInfos(userId: Uuid, itemModel: ItemModel, note: Not
 
 		output[jopId] = {
 			item: itemModel.itemToJoplinItem(item),
-			file: null,// itemFileWithContent.file,
+			file: null,
 		};
 	}
 
@@ -213,7 +211,8 @@ async function renderNote(share: Share, note: NoteEntity, resourceInfos: Resourc
 		cssFiles: ['items/note'],
 		jsFiles: ['items/note'],
 		name: 'note',
-		title: 'Note',
+		title: `${substrWithEllipsis(note.title, 0, 100)} - ${config().appName}`,
+		titleOverride: true,
 		path: 'index/items/note',
 		content: {
 			note: {
