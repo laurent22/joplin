@@ -6,6 +6,7 @@ import MenuUtils from '@joplin/lib/services/commands/MenuUtils';
 import InteropServiceHelper from '../../InteropServiceHelper';
 import { _ } from '@joplin/lib/locale';
 import { MenuItemLocation } from '@joplin/lib/services/plugins/api/types';
+import { getNoteCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 
 import BaseModel from '@joplin/lib/BaseModel';
 const bridge = require('electron').remote.require('./bridge').default;
@@ -14,6 +15,7 @@ const MenuItem = bridge().MenuItem;
 import Note from '@joplin/lib/models/Note';
 import Setting from '@joplin/lib/models/Setting';
 const { substrWithEllipsis } = require('@joplin/lib/string-utils');
+const { clipboard } = require('electron');
 
 interface ContextMenuProps {
 	notes: any[];
@@ -122,7 +124,6 @@ export default class NoteListUtils {
 				new MenuItem({
 					label: _('Copy Markdown link'),
 					click: async () => {
-						const { clipboard } = require('electron');
 						const links = [];
 						for (let i = 0; i < noteIds.length; i++) {
 							const note = await Note.load(noteIds[i]);
@@ -132,6 +133,17 @@ export default class NoteListUtils {
 					},
 				})
 			);
+
+			if (noteIds.length == 1) {
+				menu.append(
+					new MenuItem({
+						label: _('Copy external link'),
+						click: () => {
+							clipboard.writeText(getNoteCallbackUrl(noteIds[0]));
+						},
+					})
+				);
+			}
 
 			if ([9, 10].includes(Setting.value('sync.target'))) {
 				menu.append(
