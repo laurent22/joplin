@@ -60,6 +60,7 @@ export default class ShareModel extends BaseModel<Share> {
 		if (object.folder_id) output.folder_id = object.folder_id;
 		if (object.owner_id) output.owner_id = object.owner_id;
 		if (object.note_id) output.note_id = object.note_id;
+		if (object.master_key_id) output.master_key_id = object.master_key_id;
 
 		return output;
 	}
@@ -142,6 +143,20 @@ export default class ShareModel extends BaseModel<Share> {
 		const query = this.db(this.tableName)
 			.select(this.defaultFields)
 			.where('owner_id', '=', userId);
+
+		if (type) void query.andWhere('type', '=', type);
+
+		return query;
+	}
+
+	public async participatedSharesByUser(userId: Uuid, type: ShareType = null): Promise<Share[]> {
+		const query = this.db(this.tableName)
+			.select(this.defaultFields)
+			.whereIn('id', this.db('share_users')
+				.select('share_id')
+				.where('user_id', '=', userId)
+				.andWhere('status', '=', ShareUserStatus.Accepted
+				));
 
 		if (type) void query.andWhere('type', '=', type);
 

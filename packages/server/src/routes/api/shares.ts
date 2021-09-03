@@ -112,13 +112,17 @@ router.get('api/shares/:id', async (path: SubPath, ctx: AppContext) => {
 	throw new ErrorNotFound();
 });
 
+// This end points returns both the shares owned by the user, and those they
+// participate in.
 router.get('api/shares', async (_path: SubPath, ctx: AppContext) => {
 	ownerRequired(ctx);
 
-	const shares = ctx.joplin.models.share().toApiOutput(await ctx.joplin.models.share().sharesByUser(ctx.joplin.owner.id)) as Share[];
+	const ownedShares = ctx.joplin.models.share().toApiOutput(await ctx.joplin.models.share().sharesByUser(ctx.joplin.owner.id)) as Share[];
+	const participatedShares = ctx.joplin.models.share().toApiOutput(await ctx.joplin.models.share().participatedSharesByUser(ctx.joplin.owner.id));
+
 	// Fake paginated results so that it can be added later on, if needed.
 	return {
-		items: shares.map(share => {
+		items: ownedShares.concat(participatedShares).map(share => {
 			return {
 				...share,
 				user: {

@@ -67,6 +67,20 @@ describe('ShareModel', function() {
 
 		expect(shares3.length).toBe(1);
 		expect(shares3.find(s => s.folder_id === '000000000000000000000000000000F1')).toBeTruthy();
+
+		const participatedShares1 = await models().share().participatedSharesByUser(user1.id, ShareType.Folder);
+		const participatedShares2 = await models().share().participatedSharesByUser(user2.id, ShareType.Folder);
+		const participatedShares3 = await models().share().participatedSharesByUser(user3.id, ShareType.Folder);
+
+		expect(participatedShares1.length).toBe(1);
+		expect(participatedShares1[0].owner_id).toBe(user2.id);
+		expect(participatedShares1[0].folder_id).toBe('000000000000000000000000000000F2');
+
+		expect(participatedShares2.length).toBe(0);
+
+		expect(participatedShares3.length).toBe(1);
+		expect(participatedShares3[0].owner_id).toBe(user1.id);
+		expect(participatedShares3[0].folder_id).toBe('000000000000000000000000000000F1');
 	});
 
 	test('should generate only one link per shared note', async function() {
