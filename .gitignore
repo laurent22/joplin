@@ -850,9 +850,6 @@ packages/lib/Logger.js.map
 packages/lib/PoorManIntervals.d.ts
 packages/lib/PoorManIntervals.js
 packages/lib/PoorManIntervals.js.map
-packages/lib/ProtocolUtils.d.ts
-packages/lib/ProtocolUtils.js
-packages/lib/ProtocolUtils.js.map
 packages/lib/SyncTargetJoplinCloud.d.ts
 packages/lib/SyncTargetJoplinCloud.js
 packages/lib/SyncTargetJoplinCloud.js.map
