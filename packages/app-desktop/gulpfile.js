@@ -28,7 +28,7 @@ const buildParallel = [
 	'compilePackageInfo',
 	'copyPluginAssets',
 	'copyTinyMceLangs',
-	// 'updateIgnoredTypeScriptBuild',
+	'updateIgnoredTypeScriptBuild',
 ];
 
 gulp.task('build', gulp.parallel(...buildParallel));
