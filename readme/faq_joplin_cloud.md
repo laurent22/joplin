@@ -2,7 +2,7 @@
 
 ## What is Joplin Cloud?
 
-Joplin Cloud allows you to synchronise your notes automatically to all your devices. Moreover, this service gives you access to additional features:
+[Joplin Cloud](https://joplincloud.com) allows you to synchronise your notes automatically to all your devices. Moreover, this service gives you access to additional features:
 
 - Publish a note to the internet and share it with others. The published note will be updated automatically whenever you make a change.
 
