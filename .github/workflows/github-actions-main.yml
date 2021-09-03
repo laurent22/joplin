@@ -35,6 +35,14 @@ jobs:
           sudo apt-get update || true
           sudo apt-get install -y docker-ce docker-ce-cli containerd.io
 
+          # the next line enables multi-architecture support for docker, it basically makes it use qemu for non native platforms
+          # See https://hub.docker.com/r/tonistiigi/binfmt for more info
+          docker run --privileged --rm tonistiigi/binfmt --install all
+
+          # this just prints the info about what platforms are supported in the builder (can help debugging if something isn't working right)
+          # and also proves the above worked properly
+          sudo docker buildx ls
+
       - uses: actions/checkout@v2
       - uses: olegtarasov/get-tag@v2.1
       - uses: actions/setup-node@v2

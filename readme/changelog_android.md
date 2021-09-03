@@ -1,5 +1,15 @@
 # Joplin Android app changelog
 
+## [android-v2.4.1](https://github.com/laurent22/joplin/releases/tag/android-v2.4.1) (Pre-release) - 2021-08-30T13:37:34Z
+
+- New: Add a way to disable a master key (7faa58e)
+- New: Add support for single master password, to simplify handling of multiple encryption keys (ce89ee5)
+- New: Added "None" sync target to allow disabling synchronisation (f5f05e6)
+- Improved: Do not display master key upgrade warnings for new master keys (70efadd)
+- Improved: Improved sync locks so that they do not prevent upgrading a sync target (06ed58b)
+- Improved: Show the used tags first in the tagging dialog (#5315 by [@JackGruber](https://github.com/JackGruber))
+- Fixed: Fixed crash when a required master key does not exist (#5391)
+
 ## [android-v2.3.4](https://github.com/laurent22/joplin/releases/tag/android-v2.3.4) (Pre-release) - 2021-08-15T13:27:57Z
 
 - Fixed: Bump hightlight.js to v11.2 (#5278) (#5245 by Roman Musin)

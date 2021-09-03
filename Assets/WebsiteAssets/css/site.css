@@ -910,7 +910,7 @@ footer .bottom-links-row p {
 	border-radius: 20px;
 	padding: 30px 20px;
 	padding-bottom: 30px;
-	margin-bottom: 50px;
+	margin-bottom: 20px;
 	margin-top: 40px;
 }
 
@@ -951,6 +951,11 @@ footer .bottom-links-row p {
 
 .plan-group {
 	justify-content: center;
+}
+
+.plan-group .joplin-cloud-login-info {
+	margin-bottom: 40px;
+	text-align: center;
 }
 
 .plan-group .plan-price-yearly-per-year {
