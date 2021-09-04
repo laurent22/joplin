@@ -3,7 +3,7 @@
 // general, any desktop component should import this file, and not the lib
 // one.
 
-import { AppState } from '../../app';
+import { AppState } from '../../app.reducer';
 import libStateToWhenClauseContext, { WhenClauseContextOptions } from '@joplin/lib/services/commands/stateToWhenClauseContext';
 import layoutItemProp from '../../gui/ResizableLayout/utils/layoutItemProp';
 

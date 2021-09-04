@@ -13,7 +13,7 @@ import { StateShare } from '@joplin/lib/services/share/reducer';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import Button from './Button/Button';
 import { connect } from 'react-redux';
-import { AppState } from '../app';
+import { AppState } from '../app.reducer';
 import { getEncryptionEnabled } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 const { clipboard } = require('electron');
 

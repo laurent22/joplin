@@ -2,7 +2,7 @@ import { CommandContext, CommandDeclaration, CommandRuntime } from '@joplin/lib/
 import { _ } from '@joplin/lib/locale';
 import setLayoutItemProps from '../../ResizableLayout/utils/setLayoutItemProps';
 import layoutItemProp from '../../ResizableLayout/utils/layoutItemProp';
-import { AppState } from '../../../app';
+import { AppState } from '../../../app.reducer';
 
 export const declaration: CommandDeclaration = {
 	name: 'toggleNoteList',

@@ -3,7 +3,6 @@ import CommandService from '@joplin/lib/services/CommandService';
 import KeymapService from '@joplin/lib/services/KeymapService';
 import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import resourceEditWatcherReducer, { defaultState as resourceEditWatcherDefaultState } from '@joplin/lib/services/ResourceEditWatcher/reducer';
-import { State } from '@joplin/lib/reducer';
 import PluginRunner from './services/plugins/PluginRunner';
 import PlatformImplementation from './services/plugins/PlatformImplementation';
 import shim from '@joplin/lib/shim';
@@ -19,7 +18,6 @@ import SpellCheckerService from '@joplin/lib/services/spellChecker/SpellCheckerS
 import SpellCheckerServiceDriverNative from './services/spellChecker/SpellCheckerServiceDriverNative';
 import bridge from './services/bridge';
 import menuCommandNames from './gui/menuCommandNames';
-import { LayoutItem } from './gui/ResizableLayout/utils/types';
 import stateToWhenClauseContext from './services/commands/stateToWhenClauseContext';
 import ResourceService from '@joplin/lib/services/ResourceService';
 import ExternalEditWatcher from '@joplin/lib/services/ExternalEditWatcher';
@@ -60,39 +58,11 @@ const globalCommands = appCommands.concat(libCommands);
 import editorCommandDeclarations from './gui/NoteEditor/editorCommandDeclarations';
 import ShareService from '@joplin/lib/services/share/ShareService';
 import checkForUpdates from './checkForUpdates';
+import { AppState } from './app.reducer';
 
 const pluginClasses = [
 	require('./plugins/GotoAnything').default,
 ];
-
-interface AppStateRoute {
-	type: string;
-	routeName: string;
-	props: any;
-}
-
-export interface AppStateDialog {
-	name: string;
-}
-
-export interface AppState extends State {
-	route: AppStateRoute;
-	navHistory: any[];
-	noteVisiblePanes: string[];
-	windowContentSize: any;
-	watchedNoteFiles: string[];
-	lastEditorScrollPercents: any;
-	devToolsVisible: boolean;
-	visibleDialogs: any; // empty object if no dialog is visible. Otherwise contains the list of visible dialogs.
-	focusedField: string;
-	layoutMoveMode: boolean;
-	startupPluginsLoaded: boolean;
-
-	// Extra reducer keys go here
-	watchedResources: any;
-	mainLayout: LayoutItem;
-	dialogs: AppStateDialog[];
-}
 
 const appDefaultState = createAppDefaultState(
 	bridge().windowContentSize(),

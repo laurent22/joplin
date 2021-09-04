@@ -1,4 +1,5 @@
-import app, { AppState, AppStateDialog } from '../app';
+import app from '../app';
+import { AppState, AppStateDialog } from '../app.reducer';
 import MainScreen from './MainScreen/MainScreen';
 import ConfigScreen from './ConfigScreen/ConfigScreen';
 import StatusScreen from './StatusScreen/StatusScreen';

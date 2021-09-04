@@ -17,7 +17,7 @@ import { stateUtils } from '@joplin/lib/reducer';
 import InteropServiceHelper from '../../InteropServiceHelper';
 import { _ } from '@joplin/lib/locale';
 import NoteListWrapper from '../NoteListWrapper/NoteListWrapper';
-import { AppState } from '../../app';
+import { AppState } from '../../app.reducer';
 import { saveLayout, loadLayout } from '../ResizableLayout/utils/persist';
 import Setting from '@joplin/lib/models/Setting';
 import produce from 'immer';
