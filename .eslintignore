@@ -64,7 +64,7 @@ packages/tools/PortableAppsLauncher
 packages/fork-*
 plugin_types/
 readme/
-commands/index.ts
+**/commands/index.ts
 
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
 packages/app-cli/app/LinkSelector.d.ts
@@ -886,6 +886,9 @@ packages/lib/JoplinServerApi.js.map
 packages/lib/Logger.d.ts
 packages/lib/Logger.js
 packages/lib/Logger.js.map
+packages/lib/ObjectUtils.d.ts
+packages/lib/ObjectUtils.js
+packages/lib/ObjectUtils.js.map
 packages/lib/PoorManIntervals.d.ts
 packages/lib/PoorManIntervals.js
 packages/lib/PoorManIntervals.js.map
