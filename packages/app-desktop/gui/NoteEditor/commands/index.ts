@@ -4,7 +4,7 @@ import * as focusElementNoteTitle from './focusElementNoteTitle';
 import * as showLocalSearch from './showLocalSearch';
 import * as showRevisions from './showRevisions';
 
-const index: any[] = [
+const index:any[] = [
 	focusElementNoteBody,
 	focusElementNoteTitle,
 	showLocalSearch,

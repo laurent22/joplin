@@ -30,7 +30,7 @@ import * as toggleNoteList from './toggleNoteList';
 import * as toggleSideBar from './toggleSideBar';
 import * as toggleVisiblePanes from './toggleVisiblePanes';
 
-const index: any[] = [
+const index:any[] = [
 	commandPalette,
 	editAlarm,
 	exportPdf,

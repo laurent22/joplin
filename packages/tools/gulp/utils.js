@@ -182,4 +182,13 @@ utils.insertContentIntoFile = async (filePath, marker, contentToInsert, createIf
 	}
 };
 
+utils.getFilename = (path) => {
+	const lastPart = path.split('/').pop();
+	if (lastPart.indexOf('.') < 0) return lastPart;
+
+	const splitted = lastPart.split('.');
+	splitted.pop();
+	return splitted.join('.');
+};
+
 module.exports = utils;

@@ -3,7 +3,7 @@ import * as historyBackward from './historyBackward';
 import * as historyForward from './historyForward';
 import * as synchronize from './synchronize';
 
-const index: any[] = [
+const index:any[] = [
 	historyBackward,
 	historyForward,
 	synchronize,

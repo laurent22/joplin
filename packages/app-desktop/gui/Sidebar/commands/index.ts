@@ -1,7 +1,7 @@
 // AUTO-GENERATED using `gulp buildCommandIndex`
 import * as focusElementSideBar from './focusElementSideBar';
 
-const index: any[] = [
+const index:any[] = [
 	focusElementSideBar,
 ];
 

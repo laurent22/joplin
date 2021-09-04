@@ -11,7 +11,7 @@ import * as stopExternalEditing from './stopExternalEditing';
 import * as toggleExternalEditing from './toggleExternalEditing';
 import * as toggleSafeMode from './toggleSafeMode';
 
-const index: any[] = [
+const index:any[] = [
 	copyDevCommand,
 	exportFolders,
 	exportNotes,

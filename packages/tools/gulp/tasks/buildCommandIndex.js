@@ -1,7 +1,6 @@
 const utils = require('../utils');
 const glob = require('glob');
 const rootDir = utils.rootDir();
-const pathUtils = require('@joplin/lib/path-utils');
 
 async function processDirectory(dir) {
 	const tsFiles = glob.sync('{**/*.ts,**/*.tsx}', {
@@ -11,7 +10,7 @@ async function processDirectory(dir) {
 	const fileContent = [];
 
 	for (const tsFile of tsFiles) {
-		const f = pathUtils.filename(tsFile);
+		const f = utils.getFilename(tsFile);
 		fileContent.push(`import * as ${f} from './${f}';`);
 	}
 
@@ -20,7 +19,7 @@ async function processDirectory(dir) {
 	fileContent.push('const index:any[] = [');
 
 	for (const tsFile of tsFiles) {
-		const f = pathUtils.filename(tsFile);
+		const f = utils.getFilename(tsFile);
 		fileContent.push(`\t${f},`);
 	}
 
