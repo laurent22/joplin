@@ -117,6 +117,12 @@ packages/app-desktop/InteropServiceHelper.js.map
 packages/app-desktop/app.d.ts
 packages/app-desktop/app.js
 packages/app-desktop/app.js.map
+packages/app-desktop/app.reducer.d.ts
+packages/app-desktop/app.reducer.js
+packages/app-desktop/app.reducer.js.map
+packages/app-desktop/app.reducer.test.d.ts
+packages/app-desktop/app.reducer.test.js
+packages/app-desktop/app.reducer.test.js.map
 packages/app-desktop/bridge.d.ts
 packages/app-desktop/bridge.js
 packages/app-desktop/bridge.js.map
