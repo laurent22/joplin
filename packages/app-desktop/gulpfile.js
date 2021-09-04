@@ -19,6 +19,7 @@ const tasks = {
 	},
 	tsc: require('@joplin/tools/gulp/tasks/tsc'),
 	updateIgnoredTypeScriptBuild: require('@joplin/tools/gulp/tasks/updateIgnoredTypeScriptBuild'),
+	buildCommandIndex: require('@joplin/tools/gulp/tasks/buildCommandIndex'),
 };
 
 utils.registerGulpTasks(gulp, tasks);
@@ -29,6 +30,7 @@ const buildParallel = [
 	'copyPluginAssets',
 	'copyTinyMceLangs',
 	'updateIgnoredTypeScriptBuild',
+	'buildCommandIndex',
 ];
 
 gulp.task('build', gulp.parallel(...buildParallel));

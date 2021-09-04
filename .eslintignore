@@ -64,6 +64,7 @@ packages/tools/PortableAppsLauncher
 packages/fork-*
 plugin_types/
 readme/
+**/commands/index.ts
 
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
 packages/app-cli/app/LinkSelector.d.ts
@@ -117,6 +118,12 @@ packages/app-desktop/InteropServiceHelper.js.map
 packages/app-desktop/app.d.ts
 packages/app-desktop/app.js
 packages/app-desktop/app.js.map
+packages/app-desktop/app.reducer.d.ts
+packages/app-desktop/app.reducer.js
+packages/app-desktop/app.reducer.js.map
+packages/app-desktop/app.reducer.test.d.ts
+packages/app-desktop/app.reducer.test.js
+packages/app-desktop/app.reducer.test.js.map
 packages/app-desktop/bridge.d.ts
 packages/app-desktop/bridge.js
 packages/app-desktop/bridge.js.map
@@ -135,6 +142,9 @@ packages/app-desktop/commands/exportNotes.js.map
 packages/app-desktop/commands/focusElement.d.ts
 packages/app-desktop/commands/focusElement.js
 packages/app-desktop/commands/focusElement.js.map
+packages/app-desktop/commands/index.d.ts
+packages/app-desktop/commands/index.js
+packages/app-desktop/commands/index.js.map
 packages/app-desktop/commands/openProfileDirectory.d.ts
 packages/app-desktop/commands/openProfileDirectory.js
 packages/app-desktop/commands/openProfileDirectory.js.map
@@ -240,6 +250,9 @@ packages/app-desktop/gui/MainScreen/commands/gotoAnything.js.map
 packages/app-desktop/gui/MainScreen/commands/hideModalMessage.d.ts
 packages/app-desktop/gui/MainScreen/commands/hideModalMessage.js
 packages/app-desktop/gui/MainScreen/commands/hideModalMessage.js.map
+packages/app-desktop/gui/MainScreen/commands/index.d.ts
+packages/app-desktop/gui/MainScreen/commands/index.js
+packages/app-desktop/gui/MainScreen/commands/index.js.map
 packages/app-desktop/gui/MainScreen/commands/moveToFolder.d.ts
 packages/app-desktop/gui/MainScreen/commands/moveToFolder.js
 packages/app-desktop/gui/MainScreen/commands/moveToFolder.js.map
@@ -396,21 +409,24 @@ packages/app-desktop/gui/NoteEditor/NoteEditor.js.map
 packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.d.ts
 packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.js
 packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.js.map
-packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.d.ts
-packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js
-packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js.map
 packages/app-desktop/gui/NoteEditor/commands/focusElementNoteBody.d.ts
 packages/app-desktop/gui/NoteEditor/commands/focusElementNoteBody.js
 packages/app-desktop/gui/NoteEditor/commands/focusElementNoteBody.js.map
 packages/app-desktop/gui/NoteEditor/commands/focusElementNoteTitle.d.ts
 packages/app-desktop/gui/NoteEditor/commands/focusElementNoteTitle.js
 packages/app-desktop/gui/NoteEditor/commands/focusElementNoteTitle.js.map
+packages/app-desktop/gui/NoteEditor/commands/index.d.ts
+packages/app-desktop/gui/NoteEditor/commands/index.js
+packages/app-desktop/gui/NoteEditor/commands/index.js.map
 packages/app-desktop/gui/NoteEditor/commands/showLocalSearch.d.ts
 packages/app-desktop/gui/NoteEditor/commands/showLocalSearch.js
 packages/app-desktop/gui/NoteEditor/commands/showLocalSearch.js.map
 packages/app-desktop/gui/NoteEditor/commands/showRevisions.d.ts
 packages/app-desktop/gui/NoteEditor/commands/showRevisions.js
 packages/app-desktop/gui/NoteEditor/commands/showRevisions.js.map
+packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.d.ts
+packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.js
+packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.js.map
 packages/app-desktop/gui/NoteEditor/styles/index.d.ts
 packages/app-desktop/gui/NoteEditor/styles/index.js
 packages/app-desktop/gui/NoteEditor/styles/index.js.map
@@ -465,12 +481,18 @@ packages/app-desktop/gui/NoteList/NoteList.js.map
 packages/app-desktop/gui/NoteList/commands/focusElementNoteList.d.ts
 packages/app-desktop/gui/NoteList/commands/focusElementNoteList.js
 packages/app-desktop/gui/NoteList/commands/focusElementNoteList.js.map
+packages/app-desktop/gui/NoteList/commands/index.d.ts
+packages/app-desktop/gui/NoteList/commands/index.js
+packages/app-desktop/gui/NoteList/commands/index.js.map
 packages/app-desktop/gui/NoteListControls/NoteListControls.d.ts
 packages/app-desktop/gui/NoteListControls/NoteListControls.js
 packages/app-desktop/gui/NoteListControls/NoteListControls.js.map
 packages/app-desktop/gui/NoteListControls/commands/focusSearch.d.ts
 packages/app-desktop/gui/NoteListControls/commands/focusSearch.js
 packages/app-desktop/gui/NoteListControls/commands/focusSearch.js.map
+packages/app-desktop/gui/NoteListControls/commands/index.d.ts
+packages/app-desktop/gui/NoteListControls/commands/index.js
+packages/app-desktop/gui/NoteListControls/commands/index.js.map
 packages/app-desktop/gui/NoteListItem.d.ts
 packages/app-desktop/gui/NoteListItem.js
 packages/app-desktop/gui/NoteListItem.js.map
@@ -567,6 +589,9 @@ packages/app-desktop/gui/Sidebar/Sidebar.js.map
 packages/app-desktop/gui/Sidebar/commands/focusElementSideBar.d.ts
 packages/app-desktop/gui/Sidebar/commands/focusElementSideBar.js
 packages/app-desktop/gui/Sidebar/commands/focusElementSideBar.js.map
+packages/app-desktop/gui/Sidebar/commands/index.d.ts
+packages/app-desktop/gui/Sidebar/commands/index.js
+packages/app-desktop/gui/Sidebar/commands/index.js.map
 packages/app-desktop/gui/Sidebar/styles/index.d.ts
 packages/app-desktop/gui/Sidebar/styles/index.js
 packages/app-desktop/gui/Sidebar/styles/index.js.map
@@ -861,6 +886,9 @@ packages/lib/JoplinServerApi.js.map
 packages/lib/Logger.d.ts
 packages/lib/Logger.js
 packages/lib/Logger.js.map
+packages/lib/ObjectUtils.d.ts
+packages/lib/ObjectUtils.js
+packages/lib/ObjectUtils.js.map
 packages/lib/PoorManIntervals.d.ts
 packages/lib/PoorManIntervals.js
 packages/lib/PoorManIntervals.js.map
@@ -894,6 +922,9 @@ packages/lib/commands/historyBackward.js.map
 packages/lib/commands/historyForward.d.ts
 packages/lib/commands/historyForward.js
 packages/lib/commands/historyForward.js.map
+packages/lib/commands/index.d.ts
+packages/lib/commands/index.js
+packages/lib/commands/index.js.map
 packages/lib/commands/openMasterPasswordDialog.d.ts
 packages/lib/commands/openMasterPasswordDialog.js
 packages/lib/commands/openMasterPasswordDialog.js.map

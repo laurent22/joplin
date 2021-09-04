@@ -1,6 +1,4 @@
-const ObjectUtils = {};
-
-ObjectUtils.sortByValue = function(object) {
+export function sortByValue(object: any) {
 	const temp = [];
 	for (const k in object) {
 		if (!object.hasOwnProperty(k)) continue;
@@ -19,16 +17,16 @@ ObjectUtils.sortByValue = function(object) {
 		return v1 < v2 ? -1 : +1;
 	});
 
-	const output = {};
+	const output: any = {};
 	for (let i = 0; i < temp.length; i++) {
 		const item = temp[i];
 		output[item.key] = item.value;
 	}
 
 	return output;
-};
+}
 
-ObjectUtils.fieldsEqual = function(o1, o2) {
+export function fieldsEqual(o1: any, o2: any) {
 	if ((!o1 || !o2) && o1 !== o2) return false;
 
 	for (const k in o1) {
@@ -42,10 +40,10 @@ ObjectUtils.fieldsEqual = function(o1, o2) {
 	if (c1.length !== c2.length) return false;
 
 	return true;
-};
+}
 
-ObjectUtils.convertValuesToFunctions = function(o) {
-	const output = {};
+export function convertValuesToFunctions(o: any) {
+	const output: any = {};
 	for (const n in o) {
 		if (!o.hasOwnProperty(n)) continue;
 		output[n] = () => {
@@ -53,11 +51,26 @@ ObjectUtils.convertValuesToFunctions = function(o) {
 		};
 	}
 	return output;
-};
+}
 
-ObjectUtils.isEmpty = function(o) {
+export function isEmpty(o: any) {
 	if (!o) return true;
 	return Object.keys(o).length === 0 && o.constructor === Object;
-};
+}
 
-module.exports = ObjectUtils;
+// export function isStringifiable(o:any):boolean {
+// 	if (o === null || o === undefined) return true;
+
+// 	if (Array.isArray(o)) {
+// 		for (const e of o) {
+// 			if (!isStringifiable(e)) return false;
+// 		}
+// 		return true;
+// 	}
+
+// 	if (typeof o === 'object') {
+
+// 	}
+
+// 	return true;
+// }
