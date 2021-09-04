@@ -19,6 +19,7 @@ interface Props {
 	onClick?: ClickEventHandler;
 	okButtonShow?: boolean;
 	cancelButtonShow?: boolean;
+	okButtonLabel?: string;
 	cancelButtonLabel?: string;
 	okButtonRef?: any;
 	customButtons?: ButtonSpec[];
@@ -69,7 +70,7 @@ export default function DialogButtonRow(props: Props) {
 	if (props.okButtonShow !== false) {
 		buttonComps.push(
 			<button key="ok" style={buttonStyle} onClick={okButton_click} ref={props.okButtonRef} onKeyDown={onKeyDown}>
-				{_('OK')}
+				{props.okButtonLabel ? props.okButtonLabel : _('OK')}
 			</button>
 		);
 	}

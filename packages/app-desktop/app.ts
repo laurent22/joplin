@@ -538,7 +538,7 @@ class Application extends BaseApplication {
 		// setTimeout(() => {
 		// 	this.dispatch({
 		// 		type: 'DIALOG_OPEN',
-		// 		name: 'syncWizard',
+		// 		name: 'masterPassword',
 		// 	});
 		// }, 2000);
 
