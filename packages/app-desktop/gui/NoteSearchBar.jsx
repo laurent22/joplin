@@ -112,7 +112,6 @@ class NoteSearchBarComponent extends React.Component {
 
 	render() {
 		const query = this.props.query ? this.props.query : '';
-		let isSearchResultFound = false;
 
 		// backgroundColor needs to cached to a local variable to prevent the
 		// colour from blinking.
@@ -121,10 +120,8 @@ class NoteSearchBarComponent extends React.Component {
 		if (!this.props.searching) {
 			if (this.props.resultCount === 0 && query.length > 0) {
 				this.backgroundColor = theme.warningBackgroundColor;
-				isSearchResultFound = false;
 			} else {
 				this.backgroundColor = theme.backgroundColor;
-				isSearchResultFound = true;
 			}
 		}
 		if (this.backgroundColor === undefined) {
@@ -157,10 +154,6 @@ class NoteSearchBarComponent extends React.Component {
 			</div>
 		);
 
-		const notFoundWarning = (
-			<span style={{ marginLeft: 5 }}> { _('Phrase Not Found') } </span>
-		);
-
 		return (
 			<div className="note-search-bar" style={this.props.style}>
 				<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
@@ -178,7 +171,6 @@ class NoteSearchBarComponent extends React.Component {
 					{allowScrolling ? previousButton : null}
 					{allowScrolling ? matchesFoundString : null}
 					{!allowScrolling ? viewerWarning : null}
-					{!isSearchResultFound ? notFoundWarning : null}
 				</div>
 			</div>
 		);
