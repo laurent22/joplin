@@ -37,6 +37,7 @@ import { reg } from '@joplin/lib/registry';
 import removeKeylessItems from '../ResizableLayout/utils/removeKeylessItems';
 import { localSyncInfoFromState } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 import { showMissingMasterKeyMessage } from '@joplin/lib/services/e2ee/utils';
+import commands from './commands/index';
 
 const { connect } = require('react-redux');
 const { PromptDialog } = require('../PromptDialog.min.js');
@@ -109,39 +110,6 @@ const defaultLayout: LayoutItem = {
 		{ key: 'editor' },
 	],
 };
-
-const commands = [
-	require('./commands/editAlarm'),
-	require('./commands/exportPdf'),
-	require('./commands/gotoAnything'),
-	require('./commands/commandPalette'),
-	require('./commands/hideModalMessage'),
-	require('./commands/moveToFolder'),
-	require('./commands/newFolder'),
-	require('./commands/newNote'),
-	require('./commands/newSubFolder'),
-	require('./commands/newTodo'),
-	require('./commands/openFolder'),
-	require('./commands/openNote'),
-	require('./commands/openTag'),
-	require('./commands/print'),
-	require('./commands/renameFolder'),
-	require('./commands/renameTag'),
-	require('./commands/search'),
-	require('./commands/setTags'),
-	require('./commands/showModalMessage'),
-	require('./commands/showNoteContentProperties'),
-	require('./commands/showNoteProperties'),
-	require('./commands/showPrompt'),
-	require('./commands/showShareFolderDialog'),
-	require('./commands/showShareNoteDialog'),
-	require('./commands/showSpellCheckerMenu'),
-	require('./commands/toggleEditors'),
-	require('./commands/toggleLayoutMoveMode'),
-	require('./commands/toggleNoteList'),
-	require('./commands/toggleSideBar'),
-	require('./commands/toggleVisiblePanes'),
-];
 
 class MainScreenComponent extends React.Component<Props, State> {
 

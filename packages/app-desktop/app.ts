@@ -38,68 +38,26 @@ const PluginManager = require('@joplin/lib/services/PluginManager');
 import RevisionService from '@joplin/lib/services/RevisionService';
 import MigrationService from '@joplin/lib/services/MigrationService';
 import { loadCustomCss, injectCustomStyles } from '@joplin/lib/CssUtils';
+import mainScreenCommands from './gui/MainScreen/commands/index';
+import noteEditorCommands from './gui/NoteEditor/commands/index';
+import noteListCommands from './gui/NoteList/commands/index';
+import noteListControlsCommands from './gui/NoteListControls/commands/index';
+import sidebarCommands from './gui/Sidebar/commands/index';
+import appCommands from './commands/index';
+import libCommands from '@joplin/lib/commands/index';
 // import  populateDatabase from '@joplin/lib/services/debug/populateDatabase';
 
-const commands = [
-	require('./gui/MainScreen/commands/editAlarm'),
-	require('./gui/MainScreen/commands/exportPdf'),
-	require('./gui/MainScreen/commands/gotoAnything'),
-	require('./gui/MainScreen/commands/commandPalette'),
-	require('./gui/MainScreen/commands/hideModalMessage'),
-	require('./gui/MainScreen/commands/moveToFolder'),
-	require('./gui/MainScreen/commands/newFolder'),
-	require('./gui/MainScreen/commands/newNote'),
-	require('./gui/MainScreen/commands/newSubFolder'),
-	require('./gui/MainScreen/commands/newTodo'),
-	require('./gui/MainScreen/commands/openFolder'),
-	require('./gui/MainScreen/commands/openNote'),
-	require('./gui/MainScreen/commands/openTag'),
-	require('./gui/MainScreen/commands/print'),
-	require('./gui/MainScreen/commands/renameFolder'),
-	require('./gui/MainScreen/commands/renameTag'),
-	require('./gui/MainScreen/commands/search'),
-	require('./gui/MainScreen/commands/setTags'),
-	require('./gui/MainScreen/commands/showModalMessage'),
-	require('./gui/MainScreen/commands/showNoteContentProperties'),
-	require('./gui/MainScreen/commands/showNoteProperties'),
-	require('./gui/MainScreen/commands/showPrompt'),
-	require('./gui/MainScreen/commands/showShareFolderDialog'),
-	require('./gui/MainScreen/commands/showShareNoteDialog'),
-	require('./gui/MainScreen/commands/showSpellCheckerMenu'),
-	require('./gui/MainScreen/commands/toggleEditors'),
-	require('./gui/MainScreen/commands/toggleLayoutMoveMode'),
-	require('./gui/MainScreen/commands/toggleNoteList'),
-	require('./gui/MainScreen/commands/toggleSideBar'),
-	require('./gui/MainScreen/commands/toggleVisiblePanes'),
-	require('./gui/NoteEditor/commands/focusElementNoteBody'),
-	require('./gui/NoteEditor/commands/focusElementNoteTitle'),
-	require('./gui/NoteEditor/commands/showLocalSearch'),
-	require('./gui/NoteEditor/commands/showRevisions'),
-	require('./gui/NoteList/commands/focusElementNoteList'),
-	require('./gui/NoteListControls/commands/focusSearch'),
-	require('./gui/Sidebar/commands/focusElementSideBar'),
-];
+const commands = mainScreenCommands
+	.concat(noteEditorCommands)
+	.concat(noteListCommands)
+	.concat(noteListControlsCommands)
+	.concat(sidebarCommands);
 
 // Commands that are not tied to any particular component.
 // The runtime for these commands can be loaded when the app starts.
-const globalCommands = [
-	require('./commands/copyDevCommand'),
-	require('./commands/exportFolders'),
-	require('./commands/exportNotes'),
-	require('./commands/focusElement'),
-	require('./commands/openProfileDirectory'),
-	require('./commands/replaceMisspelling'),
-	require('./commands/startExternalEditing'),
-	require('./commands/stopExternalEditing'),
-	require('./commands/toggleExternalEditing'),
-	require('./commands/toggleSafeMode'),
-	require('./commands/restoreNoteRevision'),
-	require('@joplin/lib/commands/historyBackward'),
-	require('@joplin/lib/commands/historyForward'),
-	require('@joplin/lib/commands/synchronize'),
-];
+const globalCommands = appCommands.concat(libCommands);
 
-import editorCommandDeclarations from './gui/NoteEditor/commands/editorCommandDeclarations';
+import editorCommandDeclarations from './gui/NoteEditor/editorCommandDeclarations';
 import ShareService from '@joplin/lib/services/share/ShareService';
 import checkForUpdates from './checkForUpdates';
 

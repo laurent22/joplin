@@ -166,4 +166,20 @@ utils.setPackagePrivateField = async function(filePath, value) {
 	await fs.writeFile(filePath, JSON.stringify(obj, null, 2), 'utf8');
 };
 
+utils.insertContentIntoFile = async (filePath, marker, contentToInsert, createIfNotExist = false) => {
+	const fs = require('fs-extra');
+	const fileExists = await fs.pathExists(filePath);
+
+	if (!fileExists) {
+		if (!createIfNotExist) throw new Error(`File not found: ${filePath}`);
+		await fs.writeFile(filePath, `${marker}\n${contentToInsert}\n${marker}`);
+	} else {
+		let content = await fs.readFile(filePath, 'utf-8');
+		// [^]* matches any character including new lines
+		const regex = new RegExp(`${marker}[^]*?${marker}`);
+		content = content.replace(regex, `${marker}\n${contentToInsert}\n${marker}`);
+		await fs.writeFile(filePath, content);
+	}
+};
+
 module.exports = utils;
