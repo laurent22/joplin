@@ -894,6 +894,9 @@ packages/lib/commands/historyBackward.js.map
 packages/lib/commands/historyForward.d.ts
 packages/lib/commands/historyForward.js
 packages/lib/commands/historyForward.js.map
+packages/lib/commands/openMasterPasswordDialog.d.ts
+packages/lib/commands/openMasterPasswordDialog.js
+packages/lib/commands/openMasterPasswordDialog.js.map
 packages/lib/commands/synchronize.d.ts
 packages/lib/commands/synchronize.js
 packages/lib/commands/synchronize.js.map

@@ -59,6 +59,13 @@ const registeredDialogs: Record<string, RegisteredDialog> = {
 			return <SyncWizardDialog key={props.key} dispatch={props.dispatch} themeId={props.themeId}/>;
 		},
 	},
+
+	masterPassword: {
+		render: (_props: RegisteredDialogProps) => {
+			return <div>TTTTTTTTTTTTTTTTTTT</div>
+			//return <SyncWizardDialog key={props.key} dispatch={props.dispatch} themeId={props.themeId}/>;
+		},
+	},
 };
 
 const GlobalStyle = createGlobalStyle`
