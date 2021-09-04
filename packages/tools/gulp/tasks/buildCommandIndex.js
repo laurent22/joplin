@@ -4,7 +4,7 @@ const rootDir = utils.rootDir();
 const pathUtils = require('@joplin/lib/path-utils');
 
 async function processDirectory(dir) {
-	const tsFiles = glob.sync('*.ts', {
+	const tsFiles = glob.sync('{**/*.ts,**/*.tsx}', {
 		cwd: dir,
 	}).filter(f => f !== 'index.ts');
 

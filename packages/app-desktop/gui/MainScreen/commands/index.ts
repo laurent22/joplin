@@ -17,6 +17,7 @@ import * as renameFolder from './renameFolder';
 import * as renameTag from './renameTag';
 import * as search from './search';
 import * as setTags from './setTags';
+import * as showModalMessage from './showModalMessage';
 import * as showNoteContentProperties from './showNoteContentProperties';
 import * as showNoteProperties from './showNoteProperties';
 import * as showPrompt from './showPrompt';
@@ -48,6 +49,7 @@ const index: any[] = [
 	renameTag,
 	search,
 	setTags,
+	showModalMessage,
 	showNoteContentProperties,
 	showNoteProperties,
 	showPrompt,
