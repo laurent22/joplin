@@ -1,4 +1,4 @@
-import { AppState } from '../../app';
+import { AppState } from '../../app.reducer';
 import eventManager from '@joplin/lib/eventManager';
 import NoteListUtils from '../utils/NoteListUtils';
 import { _ } from '@joplin/lib/locale';

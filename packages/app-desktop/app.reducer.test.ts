@@ -1,4 +1,4 @@
-import { AppState } from './app';
+import { AppState } from './app.reducer';
 import appReducer, { createAppDefaultState } from './app.reducer';
 
 describe('app.reducer', function() {

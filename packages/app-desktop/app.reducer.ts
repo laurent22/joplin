@@ -1,10 +1,43 @@
 import produce from 'immer';
 import Setting from '@joplin/lib/models/Setting';
-import { defaultState } from '@joplin/lib/reducer';
-import { AppState } from './app';
+import { defaultState, State } from '@joplin/lib/reducer';
 import iterateItems from './gui/ResizableLayout/utils/iterateItems';
 import { LayoutItem } from './gui/ResizableLayout/utils/types';
 import validateLayout from './gui/ResizableLayout/utils/validateLayout';
+
+export interface AppStateRoute {
+	type: string;
+	routeName: string;
+	props: any;
+}
+
+export enum AppStateDialogName {
+	SyncWizard = 'syncWizard',
+	MasterPassword = 'masterPassword',
+}
+
+export interface AppStateDialog {
+	name: AppStateDialogName;
+}
+
+export interface AppState extends State {
+	route: AppStateRoute;
+	navHistory: any[];
+	noteVisiblePanes: string[];
+	windowContentSize: any;
+	watchedNoteFiles: string[];
+	lastEditorScrollPercents: any;
+	devToolsVisible: boolean;
+	visibleDialogs: any; // empty object if no dialog is visible. Otherwise contains the list of visible dialogs.
+	focusedField: string;
+	layoutMoveMode: boolean;
+	startupPluginsLoaded: boolean;
+
+	// Extra reducer keys go here
+	watchedResources: any;
+	mainLayout: LayoutItem;
+	dialogs: AppStateDialog[];
+}
 
 export function createAppDefaultState(windowContentSize: any, resourceEditWatcherDefaultState: any): AppState {
 	return {

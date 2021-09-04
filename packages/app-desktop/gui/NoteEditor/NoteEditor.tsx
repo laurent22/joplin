@@ -20,7 +20,7 @@ import CommandService from '@joplin/lib/services/CommandService';
 import ToolbarButton from '../ToolbarButton/ToolbarButton';
 import Button, { ButtonLevel } from '../Button/Button';
 import eventManager from '@joplin/lib/eventManager';
-import { AppState } from '../../app';
+import { AppState } from '../../app.reducer';
 import ToolbarButtonUtils from '@joplin/lib/services/commands/ToolbarButtonUtils';
 import { _ } from '@joplin/lib/locale';
 import TagList from '../TagList';

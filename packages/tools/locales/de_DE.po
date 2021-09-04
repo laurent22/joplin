@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Atalanttore <atalanttore@googlemail.com>\n"
+"Last-Translator: marph91 <martin.d@andix.de>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
 "MIME-Version: 1.0\n"
@@ -30,7 +30,7 @@ msgstr ""
 
 #: packages/app-cli/app/app-gui.js:750
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
-msgstr "Drücke Strg+D oder tippe „exit“, um die Anwendung zu beenden"
+msgstr "Drücke Strg+D oder gebe „exit“ ein, um die Anwendung zu beenden"
 
 #: packages/app-cli/app/app.js:63
 #, javascript-format
@@ -69,7 +69,7 @@ msgstr "Hintergrundsynchronisation wird abgebrochen … Bitte warten."
 #: packages/app-cli/app/app.js:256
 #, javascript-format
 msgid "No such command: %s"
-msgstr "Ungültiger Befehl: %s"
+msgstr "Befehl nicht gefunden: %s"
 
 #: packages/app-cli/app/app.js:304
 #, javascript-format
@@ -138,11 +138,12 @@ msgid ""
 "Runs the commands contained in the text file. There should be one command "
 "per line."
 msgstr ""
-"Führe Befehle aus Textdatei aus. Jede Zeile darf nur einen Befehl enthalten."
+"Führe Befehle aus der Textdatei aus. Jede Zeile darf nur einen Befehl "
+"enthalten."
 
 #: packages/app-cli/app/command-cat.js:14
 msgid "Displays the given note."
-msgstr "Zeigt die jeweilige Notiz an."
+msgstr "Zeigt die angegebene Notiz an."
 
 #: packages/app-cli/app/command-cat.js:18
 msgid "Displays the complete information about note."
@@ -1249,19 +1250,16 @@ msgid "Submit"
 msgstr "Absenden"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.js:73
-#, fuzzy
 msgid "Source: "
-msgstr "Quelle"
+msgstr "Quelle: "
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.js:76
-#, fuzzy
 msgid "Created: "
-msgstr "Erstellt: %s"
+msgstr "Erstellt: "
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.js:79
-#, fuzzy
 msgid "Updated: "
-msgstr "Aktualisiert: %s"
+msgstr "Aktualisiert: "
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.js:84
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:96
@@ -1271,9 +1269,8 @@ msgid "Save"
 msgstr "Speichern"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.js:87
-#, fuzzy
 msgid "Disable"
-msgstr "Deaktiviert"
+msgstr "Deaktivieren"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.js:87
 #: packages/app-mobile/components/screens/encryption-config.js:157
@@ -1387,11 +1384,11 @@ msgstr "Hauptschlüssel"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.js:142
 msgid "Hide disabled master keys"
-msgstr ""
+msgstr "Deaktivierte Hauptschlüssel ausblenden"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.js:142
 msgid "Show disabled master keys"
-msgstr ""
+msgstr "Deaktivierte Hauptschlüssel anzeigen"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.js:143
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:343
@@ -1412,7 +1409,7 @@ msgstr "Aktiv"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.js:149
 msgid "Date"
-msgstr ""
+msgstr "Datum"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.js:150
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:329
@@ -1420,14 +1417,12 @@ msgid "Password"
 msgstr "Passwort"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.js:151
-#, fuzzy
 msgid "Valid"
-msgstr "Ungültig"
+msgstr "Gültig"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.js:152
-#, fuzzy
 msgid "Actions"
-msgstr "Aktion"
+msgstr "Aktionen"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.js:182
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:244
@@ -1709,9 +1704,8 @@ msgstr ""
 "zum Beenden „Escape“."
 
 #: packages/app-desktop/gui/MainScreen/commands/commandPalette.js:18
-#, fuzzy
 msgid "Command palette..."
-msgstr "Befehlspalette"
+msgstr "Befehlspalette..."
 
 #: packages/app-desktop/gui/MainScreen/commands/editAlarm.js:20
 #: packages/app-mobile/components/SelectDateTimeDialog.js:84
@@ -1810,12 +1804,11 @@ msgstr "Notiz-Eigenschaften"
 
 #: packages/app-desktop/gui/MainScreen/commands/showShareFolderDialog.js:16
 msgid "Share notebook..."
-msgstr "Notizbuch teilen ..."
+msgstr "Notizbuch teilen..."
 
 #: packages/app-desktop/gui/MainScreen/commands/showShareNoteDialog.js:16
-#, fuzzy
 msgid "Publish note..."
-msgstr "Notiz teilen ..."
+msgstr "Notiz veröffentlichen..."
 
 #: packages/app-desktop/gui/MainScreen/commands/showSpellCheckerMenu.js:19
 #: packages/lib/services/spellChecker/SpellCheckerService.js:180
@@ -2421,18 +2414,17 @@ msgstr ""
 "(Obergrenze: %s)."
 
 #: packages/app-desktop/gui/Root.js:106
-#, fuzzy
 msgid "Confirmation"
-msgstr "Konfiguration"
+msgstr "Bestätigung"
 
 #: packages/app-desktop/gui/Root.js:119
 msgid "The Web Clipper needs your authorisation to access your data."
 msgstr ""
+"Der Web Clipper benötigt deine Genehmigung, um auf die Daten zuzugreifen."
 
 #: packages/app-desktop/gui/Root.js:120
-#, fuzzy
 msgid "Grant authorisation"
-msgstr "Berechtigungstoken:"
+msgstr "Genehmigung erteilen"
 
 #: packages/app-desktop/gui/Root.js:160
 msgid "OneDrive Login"
@@ -2505,9 +2497,8 @@ msgid "Share Notebook"
 msgstr "Notizbuch teilen"
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:144
-#, fuzzy
 msgid "Unpublish note"
-msgstr "Notiz nicht mehr teilen"
+msgstr "Veröffentlichung der Notiz aufheben"
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:171
 msgid "Synchronising..."
@@ -2534,7 +2525,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:187
 msgid "Publish Notes"
-msgstr ""
+msgstr "Notizen veröffentlichen"
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:189
 msgid "Copy Shareable Link"
@@ -2625,22 +2616,21 @@ msgid "Export debug report"
 msgstr "Ereignisprotokoll exportieren"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:157
-#, fuzzy
 msgid "Sync your notes"
-msgstr "Sortiere Notizen nach"
+msgstr "Synchronisiere deine Notizen"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:158
 msgid "Publish notes to the internet"
-msgstr ""
+msgstr "Notizen im Internet veröffentlichen"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:159
-#, fuzzy
 msgid "Collaborate on notebooks with others"
-msgstr "Bitte erstelle zuerst ein Notizbuch"
+msgstr "Gemeinsam mit anderen an Notizbüchern arbeiten"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:182
 msgid "Thank you! Your Joplin Cloud account is now setup and ready to use."
 msgstr ""
+"Vielen Dank! Das Joplin Cloud-Konto ist nun eingerichtet und einsatzbereit."
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:190
 #, javascript-format
@@ -2650,30 +2640,34 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"Beim Einrichten des Joplin Cloud-Kontos ist ein Fehler aufgetreten. Bitte "
+"überprüfe E-Mail und Passwort und versuche es erneut. Der Fehler war:\n"
+"\n"
+"%s"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:203
 msgid "Login below."
-msgstr ""
+msgstr "Melde dich unten an."
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:205
-#, fuzzy
 msgid "Or create an account."
-msgstr "Erstellt eine neue Notiz."
+msgstr "Oder erstelle ein Konto."
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:210
 msgid "Login"
-msgstr ""
+msgstr "Anmeldung"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:231
-#, fuzzy
 msgid "Select"
-msgstr "Alles auswählen"
+msgstr "Auswählen"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:278
 msgid ""
 "Joplin can synchronise your notes using various providers. Select one from "
 "the list below."
 msgstr ""
+"Joplin kann deine Notizen mit verschiedenen Anbietern synchronisieren. Wähle "
+"einen aus der folgenden Liste aus."
 
 #: packages/app-desktop/gui/utils/NoteListUtils.js:43
 msgid "Duplicate"
@@ -3148,6 +3142,9 @@ msgid ""
 "Joplin's own sync service. Also gives access to Joplin-specific features "
 "such as publishing notes or collaborating on notebooks with others."
 msgstr ""
+"Joplins eigener Synchronisationsdienst. Ermöglicht auch den Zugriff auf "
+"Joplin-spezifische Funktionen wie das Veröffentlichen von Notizen oder die "
+"Zusammenarbeit an Notizbüchern mit anderen."
 
 #: packages/lib/SyncTargetJoplinServer.js:60
 msgid "Joplin Server"
@@ -3159,7 +3156,7 @@ msgstr "Nextcloud"
 
 #: packages/lib/SyncTargetNone.js:22
 msgid "(None)"
-msgstr ""
+msgstr "(Keiner)"
 
 #: packages/lib/SyncTargetOneDrive.js:32
 msgid "OneDrive"
@@ -3307,6 +3304,8 @@ msgstr "Entschlüsselte Objekte: %s / %s"
 #, javascript-format
 msgid "Encryption will be enabled using the master key created on %s"
 msgstr ""
+"Die Verschlüsselung wird mit dem Hauptschlüssel aktiviert, der am %s "
+"erstellt wurde"
 
 #: packages/lib/models/BaseItem.js:721
 msgid "Encrypted"
@@ -3378,9 +3377,8 @@ msgid "Error"
 msgstr "Fehler"
 
 #: packages/lib/models/Resource.js:408
-#, fuzzy
 msgid "Conflicts (attachments)"
-msgstr "Anhänge"
+msgstr "Konflikte (Anhänge)"
 
 #: packages/lib/models/Resource.js:422
 #, javascript-format
@@ -3456,7 +3454,7 @@ msgstr "OLED dunkel"
 
 #: packages/lib/models/Setting.js:152
 msgid "Open Sync Wizard..."
-msgstr ""
+msgstr "Sync-Assistent öffnen..."
 
 #: packages/lib/models/Setting.js:162
 msgid "Synchronisation target"
@@ -3806,11 +3804,11 @@ msgstr ""
 
 #: packages/lib/models/Setting.js:783
 msgid "Editor maximum width"
-msgstr ""
+msgstr "Maximale Breite des Editors"
 
 #: packages/lib/models/Setting.js:783
 msgid "Set it to 0 to make it take the complete available space."
-msgstr ""
+msgstr "Setze ihn auf 0, damit er den gesamten verfügbaren Platz einnimmt."
 
 #: packages/lib/models/Setting.js:802
 msgid "Custom stylesheet for rendered Markdown"
@@ -3932,7 +3930,7 @@ msgstr "Vim"
 
 #: packages/lib/models/Setting.js:920
 msgid "Do not resize images"
-msgstr ""
+msgstr "Größe der Bilder nicht ändern"
 
 #: packages/lib/models/Setting.js:935
 msgid "Custom TLS certificates"
@@ -4417,20 +4415,20 @@ msgid "attachment"
 msgstr "Anhang"
 
 #: packages/server/dist/models/UserModel.js:199
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Cannot save %s \"%s\" because it is larger than the allowed limit (%s)"
 msgstr ""
 "Kann %s \"%s\" nicht speichern, da es größer ist als das erlaubte Limit (%s)"
 
 #: packages/server/dist/models/UserModel.js:204
-#, fuzzy, javascript-format
+#, javascript-format
 msgid ""
 "Cannot save %s \"%s\" because it would go over the total allowed size (%s) "
 "for this account"
 msgstr ""
-"Kann %s \"%s\" nicht speichern, da es größer ist als das erlaubte Limit (%s)"
+"Kann %s \"%s\" nicht speichern, da es die zulässige Gesamtgröße (%s) für "
+"dieses Konto überschreiten würde"
 
-#, javascript-format
 #~ msgid "%s %s (%s)"
 #~ msgstr "%s %s (%s)"
 

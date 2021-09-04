@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { AppState } from '../app';
+import { AppState } from '../app.reducer';
 import CommandService, { SearchResult as CommandSearchResult } from '@joplin/lib/services/CommandService';
 import KeymapService from '@joplin/lib/services/KeymapService';
 import shim from '@joplin/lib/shim';
