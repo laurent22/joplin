@@ -20,15 +20,15 @@ Any kind of file can be attached to a note. In Markdown, links to these files ar
 
 Images can be attached either by clicking on "Attach file" or by pasting (with `Ctrl+V` or `Cmd+V`) an image directly in the editor, or by drag and dropping an image.
 
-More info about attachments: https://joplinapp.org#attachments--resources
+More info about attachments: https://joplinapp.org/help/#attachments
 
 ## Search
 
-Joplin supports advanced search queries, which are fully documented on the official website: https://joplinapp.org#searching
+Joplin supports advanced search queries, which are fully documented on the official website: https://joplinapp.org/help/#searching
 
 ## Alarms
 
-An alarm can be associated with any to-do. It will be triggered at the given time by displaying a notification. To use this feature, see the documentation: https://joplinapp.org#notifications
+An alarm can be associated with any to-do. It will be triggered at the given time by displaying a notification. To use this feature, see the documentation: https://joplinapp.org/help/#notifications
 
 ## Markdown advanced tips
 
@@ -56,7 +56,7 @@ f(x) = \int_{-\infty}^\infty
     \,d\xi
 $$
 
-Various other tricks are possible, such as using HTML, or customising the CSS. See the Markdown documentation for more info - https://joplinapp.org#markdown
+Various other tricks are possible, such as using HTML, or customising the CSS. See the Markdown documentation for more info - https://joplinapp.org/markdown/
 
 ## Community and further help
 
