@@ -4,8 +4,6 @@ import shim from '../../shim';
 import cssToTheme from './cssToTheme';
 
 export default async function(cssBaseDir: string): Promise<Record<string, Theme>> {
-	// if (!cssBaseDir) cssBaseDir = __dirname + '/../../themes';
-
 	const themeDirs = (await shim.fsDriver().readDirStats(cssBaseDir)).filter(f => f.isDirectory());
 
 	const output: Record<string, Theme> = {};
@@ -24,8 +22,6 @@ export default async function(cssBaseDir: string): Promise<Record<string, Theme>
 
 		output[themeId] = cssToTheme(cssContent, cssFile);
 	}
-
-	console.info('OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO', output);
 
 	return output;
 }

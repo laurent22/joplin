@@ -15,6 +15,8 @@ import KvStore from '@joplin/lib/services/KvStore';
 import NoteScreen from './components/screens/Note';
 import UpgradeSyncTargetScreen from './components/screens/UpgradeSyncTargetScreen';
 import Setting, { Env } from '@joplin/lib/models/Setting';
+import loadCssToTheme from '@joplin/lib/services/style/loadCssToTheme';
+import { loadThemes } from '@joplin/lib/theme';
 import RNFetchBlob from 'rn-fetch-blob';
 import PoorManIntervals from '@joplin/lib/PoorManIntervals';
 import reducer from '@joplin/lib/reducer';
@@ -480,6 +482,10 @@ async function initialize(dispatch: Function) {
 		}
 
 		reg.logger().info('Database is ready.');
+
+		const themes = await loadCssToTheme('node_modules/@joplin/lib/themes');
+		await loadThemes(themes);
+
 		reg.logger().info('Loading settings...');
 
 		await loadKeychainServiceAndSettings(KeychainServiceDriverMobile);
