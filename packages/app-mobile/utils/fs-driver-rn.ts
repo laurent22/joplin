@@ -128,8 +128,9 @@ export default class FsDriverRN extends FsDriverBase {
 		};
 	}
 
-	public close(): void {
+	public close(): Promise<void> {
 		// Nothing
+		return null;
 	}
 
 	public readFile(path: string, encoding = 'utf8') {

@@ -21,6 +21,7 @@ import DialogButtonRow, { ButtonSpec, ClickEvent, ClickEventHandler } from './Di
 import Dialog from './Dialog';
 import SyncWizardDialog from './SyncWizard/Dialog';
 import MasterPasswordDialog from './MasterPasswordDialog/Dialog';
+import StyleSheetContainer from './StyleSheets/StyleSheetContainer';
 const { ImportScreen } = require('./ImportScreen.min.js');
 const { ResourceScreen } = require('./ResourceScreen.js');
 const { Navigator } = require('./Navigator.min.js');
@@ -215,6 +216,7 @@ class RootComponent extends React.Component<Props, any> {
 		return (
 			<StyleSheetManager disableVendorPrefixes>
 				<ThemeProvider theme={theme}>
+					<StyleSheetContainer themeId={this.props.themeId}></StyleSheetContainer>
 					<MenuBar/>
 					<GlobalStyle/>
 					<Navigator style={navigatorStyle} screens={screens} />

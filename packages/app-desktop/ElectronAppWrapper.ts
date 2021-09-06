@@ -237,7 +237,7 @@ export default class ElectronAppWrapper {
 			const iid = setInterval(() => {
 				if (this.electronApp().isReady()) {
 					clearInterval(iid);
-					resolve();
+					resolve(null);
 				}
 			}, 10);
 		});

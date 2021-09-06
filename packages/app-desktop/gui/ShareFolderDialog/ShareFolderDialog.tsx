@@ -16,6 +16,7 @@ import { ShareUserStatus, StateShare, StateShareUser } from '@joplin/lib/service
 import { State } from '@joplin/lib/reducer';
 import { connect } from 'react-redux';
 import { reg } from '@joplin/lib/registry';
+import useAsyncEffect, { AsyncEffectEvent } from '@joplin/lib/hooks/useAsyncEffect';
 
 const logger = Logger.create('ShareFolderDialog');
 
@@ -98,20 +99,6 @@ interface Props {
 
 interface RecipientDeleteEvent {
 	shareUserId: string;
-}
-
-interface AsyncEffectEvent {
-	cancelled: boolean;
-}
-
-function useAsyncEffect(effect: Function, dependencies: any[]) {
-	useEffect(() => {
-		const event = { cancelled: false };
-		effect(event);
-		return () => {
-			event.cancelled = true;
-		};
-	}, dependencies);
 }
 
 enum ShareState {
