@@ -240,7 +240,7 @@ export default class ElectronAppWrapper {
 	async waitForElectronAppReady() {
 		if (this.electronApp().isReady()) return Promise.resolve();
 
-		return new Promise((resolve) => {
+		return new Promise<void>((resolve) => {
 			const iid = setInterval(() => {
 				if (this.electronApp().isReady()) {
 					clearInterval(iid);
@@ -367,6 +367,7 @@ export default class ElectronAppWrapper {
 		});
 
 		this.electronApp_.on('open-url', (_event: any, url: string) => {
+			_event.preventDefault();
 			void this.openCallbackUrl(url);
 		});
 	}
