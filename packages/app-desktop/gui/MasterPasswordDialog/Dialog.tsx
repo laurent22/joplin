@@ -3,24 +3,13 @@ import { useCallback } from 'react';
 import { _ } from '@joplin/lib/locale';
 import DialogButtonRow from '../DialogButtonRow';
 import Dialog from '../Dialog';
-import styled from 'styled-components';
 import DialogTitle from '../DialogTitle';
+import StyledInput from '../style/StyledInput';
 
 interface Props {
 	themeId: number;
 	dispatch: Function;
 }
-
-const StyledRoot = styled.div`
-	min-width: 500px;
-	max-width: 1200px;
-`;
-
-const ContentRoot = styled.div`
-	background-color: ${props => props.theme.backgroundColor3};
-	padding: 1em;
-	padding-right: 0;
-`;
 
 export default function(props: Props) {
 	function closeDialog(dispatch: Function) {
@@ -36,15 +25,16 @@ export default function(props: Props) {
 
 	function renderContent() {
 		return (
-			<ContentRoot>
-				aaaaaaaaaa
-			</ContentRoot>
+			<div className="dialog-content form">
+				<label>Enter your master password:</label>
+				<StyledInput type="password"/>
+			</div>
 		);
 	}
 
 	function renderDialogWrapper() {
 		return (
-			<StyledRoot>
+			<div className="dialog-root">
 				<DialogTitle title={_('Master password')}/>
 				{renderContent()}
 				<DialogButtonRow
@@ -53,11 +43,11 @@ export default function(props: Props) {
 					okButtonLabel={_('Save')}
 					cancelButtonLabel={_('Close')}
 				/>
-			</StyledRoot>
+			</div>
 		);
 	}
 
 	return (
-		<Dialog renderContent={renderDialogWrapper}/>
+		<Dialog className="master-password-dialog" renderContent={renderDialogWrapper}/>
 	);
 }

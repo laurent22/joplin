@@ -144,3 +144,22 @@ a {
 *:focus {
     outline: none;
 }
+
+.form {
+	display: flex;
+	flex-direction: column;
+}
+
+.form label {
+	margin-bottom: 10px;
+}
+
+.master-password-dialog .dialog-root {
+	min-width: 500px;
+	max-width: 1200px;
+}
+
+.master-password-dialog .dialog-content {
+	background-color: var(--joplin-background-color3);
+	padding: 1em;
+}

@@ -27,11 +27,12 @@ const DialogRoot = styled.div`
 
 interface Props {
 	renderContent: Function;
+	className?: string;
 }
 
 export default function Dialog(props: Props) {
 	return (
-		<DialogModalLayer>
+		<DialogModalLayer className={props.className}>
 			<DialogRoot>
 				{props.renderContent()}
 			</DialogRoot>
