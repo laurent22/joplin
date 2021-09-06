@@ -140,7 +140,7 @@ class NoteSearchBarComponent extends React.Component {
 			backgroundColor: theme.backgroundColor,
 		});
 
-		const matchesFoundString = (query.length > 0 && this.props.resultCount >= 0) ? (
+		const matchesFoundString = (query.length > 0) ? (
 			<div style={textStyle}>
 				{`${this.props.resultCount === 0 ? 0 : this.props.selectedIndex + 1} / ${this.props.resultCount}`}
 			</div>
