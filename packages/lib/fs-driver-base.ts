@@ -21,6 +21,38 @@ export default class FsDriverBase {
 		throw new Error('Not implemented');
 	}
 
+	public async readFile(_path: string, _encoding: string = 'utf8'): Promise<any> {
+		throw new Error('Not implemented');
+	}
+
+	public async copy(_source: string, _dest: string) {
+		throw new Error('Not implemented');
+	}
+
+	public async mkdir(_path: string) {
+		throw new Error('Not implemented');
+	}
+
+	public async unlink(_path: string) {
+		throw new Error('Not implemented');
+	}
+
+	public async move(_source: string, _dest: string) {
+		throw new Error('Not implemented');
+	}
+
+	public async readFileChunk(_handle: any, _length: number, _encoding: string = 'base64'): Promise<string> {
+		throw new Error('Not implemented');
+	}
+
+	public async open(_path: string, _mode: any): Promise<any> {
+		throw new Error('Not implemented');
+	}
+
+	public async close(_handle: any): Promise<any> {
+		throw new Error('Not implemented');
+	}
+
 	public async readDirStats(_path: string, _options: ReadDirStatsOptions = null): Promise<Stat[]> {
 		throw new Error('Not implemented');
 	}
