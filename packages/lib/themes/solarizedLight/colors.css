@@ -1,0 +1,37 @@
+:root {
+	--joplin-appearance: light;
+	--joplin-background-color: #fdf6e3;
+	--joplin-background-color-transparent: rgba(253, 246, 227, 0.9);
+	--joplin-odd-background-color: #eee8d5;
+	--joplin-color: #657b83;
+	--joplin-color-error: #dc322f;
+	--joplin-color-warn: #cb4b16;
+	--joplin-color-warn-url: #155BDA;
+	--joplin-color-faded: #839496;
+	--joplin-color-bright: #073642;
+	--joplin-divider-color: #eee8d5;
+	--joplin-selected-color: #eee8d5;
+	--joplin-url-color: #268bd2;
+	--joplin-background-color2: #002b36;
+	--joplin-color2: #eee8d5;
+	--joplin-selected-color2: #6c71c4;
+	--joplin-color-error2: #cb4b16;
+	--joplin-color-warn2: #ffcb81;
+	--joplin-background-color3: #F4F5F6;
+	--joplin-background-color-hover3: #CBDAF1;
+	--joplin-color3: #738598;
+	--joplin-background-color4: #ffffff;
+	--joplin-color4: #2D6BDC;
+	--joplin-raised-background-color: #eee8d5;
+	--joplin-raised-color: #073642;
+	--joplin-search-marker-background-color: #F7D26E;
+	--joplin-search-marker-color: black;
+	--joplin-warning-background-color: #b5890055;
+	--joplin-table-background-color: #fdf6e3;
+	--joplin-code-background-color: #fdf6e3;
+	--joplin-code-border-color: #eee8d5;
+	--joplin-code-color: #002b36;
+	--joplin-block-quote-opacity: 0.7;
+	--joplin-code-mirror-theme: solarized light;
+	--joplin-code-theme-css: atom-one-light.css;
+}

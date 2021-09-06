@@ -1,29 +1,31 @@
 import { Theme } from './themes/type';
 
-import theme_light from './themes/light';
-import theme_dark from './themes/dark';
-import theme_dracula from './themes/dracula';
-import theme_solarizedLight from './themes/solarizedLight';
-import theme_solarizedDark from './themes/solarizedDark';
-import theme_nord from './themes/nord';
-import theme_aritimDark from './themes/aritimDark';
-import theme_oledDark from './themes/oledDark';
-import Setting from './models/Setting';
+// import theme_light from './themes/light';
+// import theme_dark from './themes/dark';
+// import theme_dracula from './themes/dracula';
+// import theme_solarizedLight from './themes/solarizedLight';
+// import theme_solarizedDark from './themes/solarizedDark';
+// import theme_nord from './themes/nord';
+// import theme_aritimDark from './themes/aritimDark';
+// import theme_oledDark from './themes/oledDark';
+// import Setting from './models/Setting';
 
 const Color = require('color');
 
-const themes: any = {
-	[Setting.THEME_LIGHT]: theme_light,
-	[Setting.THEME_DARK]: theme_dark,
-	[Setting.THEME_DRACULA]: theme_dracula,
-	[Setting.THEME_SOLARIZED_LIGHT]: theme_solarizedLight,
-	[Setting.THEME_SOLARIZED_DARK]: theme_solarizedDark,
-	[Setting.THEME_NORD]: theme_nord,
-	[Setting.THEME_ARITIM_DARK]: theme_aritimDark,
-	[Setting.THEME_OLED_DARK]: theme_oledDark,
-};
+let themes: any = {};
 
-function themeById(themeId: string) {
+// const themes: any = {
+// 	[Setting.THEME_LIGHT]: theme_light,
+// 	[Setting.THEME_DARK]: theme_dark,
+// 	[Setting.THEME_DRACULA]: theme_dracula,
+// 	[Setting.THEME_SOLARIZED_LIGHT]: theme_solarizedLight,
+// 	[Setting.THEME_SOLARIZED_DARK]: theme_solarizedDark,
+// 	[Setting.THEME_NORD]: theme_nord,
+// 	[Setting.THEME_ARITIM_DARK]: theme_aritimDark,
+// 	[Setting.THEME_OLED_DARK]: theme_oledDark,
+// };
+
+export function themeById(themeId: string) {
 	if (!themes[themeId]) throw new Error(`Invalid theme ID: ${themeId}`);
 	const output = Object.assign({}, themes[themeId]);
 
@@ -365,7 +367,11 @@ function addExtraStyles(style: any) {
 
 const themeCache_: any = {};
 
-function themeStyle(themeId: number) {
+export function loadThemes(t: Record<string, Theme>) {
+	themes = t;
+}
+
+export function themeStyle(themeId: number) {
 	if (!themeId) throw new Error('Theme must be specified');
 
 	const zoomRatio = 1;
@@ -405,7 +411,7 @@ const cachedStyles_: any = {
 // cacheKey must be a globally unique key, and must change whenever
 // the dependencies of the style change. If the style depends only
 // on the theme, a static string can be provided as a cache key.
-function buildStyle(cacheKey: any, themeId: number, callback: Function) {
+export function buildStyle(cacheKey: any, themeId: number, callback: Function) {
 	cacheKey = Array.isArray(cacheKey) ? cacheKey.join('_') : cacheKey;
 
 	// We clear the cache whenever switching themes
@@ -425,5 +431,3 @@ function buildStyle(cacheKey: any, themeId: number, callback: Function) {
 
 	return cachedStyles_.styles[cacheKey].style;
 }
-
-export { themeStyle, buildStyle, themeById };

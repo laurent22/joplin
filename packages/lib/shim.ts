@@ -1,3 +1,4 @@
+import FsDriverBase from './fs-driver-base';
 import { NoteEntity, ResourceEntity } from './services/database/types';
 
 let isTestingEnv_ = false;
@@ -185,7 +186,7 @@ const shim = {
 
 	FormData: typeof FormData !== 'undefined' ? FormData : null,
 
-	fsDriver: (): any => {
+	fsDriver: (): FsDriverBase => {
 		throw new Error('Not implemented');
 	},
 

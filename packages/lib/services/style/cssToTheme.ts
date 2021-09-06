@@ -13,6 +13,11 @@ function formatCssToThemeVariable(cssVariable: string): string {
 	}).join('');
 }
 
+// function unquoteValue(v:string):string {
+// 	if (v.startsWith("'") && v.endsWith("'") || v.startsWith('"') && v.endsWith('"')) return v.substr(1, v.length - 2);
+// 	return v;
+// }
+
 export default function cssToTheme(css: string, sourceFilePath: string): Theme {
 	const o = cssParser.parse(css, {
 		silent: false,

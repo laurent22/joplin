@@ -58,7 +58,7 @@ const input: Theme = {
 
 const expected = `
 :root {
-	--joplin-appearance: 'light';
+	--joplin-appearance: light;
 	--joplin-background-color: #ffffff;
 	--joplin-background-color-transparent: rgba(255,255,255,0.9);
 	--joplin-odd-background-color: #eeeeee;
@@ -91,8 +91,8 @@ const expected = `
 	--joplin-code-border-color: rgb(220, 220, 220);
 	--joplin-code-color: rgb(0,0,0);
 	--joplin-block-quote-opacity: 0.7;
-	--joplin-code-mirror-theme: 'default';
-	--joplin-code-theme-css: 'atom-one-light.css';
+	--joplin-code-mirror-theme: default;
+	--joplin-code-theme-css: atom-one-light.css;
 }`;
 
 describe('themeToCss', function() {

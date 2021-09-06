@@ -1531,6 +1531,9 @@ packages/lib/services/style/cssToTheme.js.map
 packages/lib/services/style/cssToTheme.test.d.ts
 packages/lib/services/style/cssToTheme.test.js
 packages/lib/services/style/cssToTheme.test.js.map
+packages/lib/services/style/loadCssToTheme.d.ts
+packages/lib/services/style/loadCssToTheme.js
+packages/lib/services/style/loadCssToTheme.js.map
 packages/lib/services/style/themeToCss.d.ts
 packages/lib/services/style/themeToCss.js
 packages/lib/services/style/themeToCss.js.map
@@ -1798,6 +1801,9 @@ packages/renderer/utils.js.map
 packages/tools/buildServerDocker.d.ts
 packages/tools/buildServerDocker.js
 packages/tools/buildServerDocker.js.map
+packages/tools/convertThemesToCss.d.ts
+packages/tools/convertThemesToCss.js
+packages/tools/convertThemesToCss.js.map
 packages/tools/generate-database-types.d.ts
 packages/tools/generate-database-types.js
 packages/tools/generate-database-types.js.map

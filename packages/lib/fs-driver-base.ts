@@ -21,6 +21,10 @@ export default class FsDriverBase {
 		throw new Error('Not implemented');
 	}
 
+	public async readFile(_path: string, _encoding: string = 'utf8'): Promise<any> {
+		throw new Error('Not implemented');
+	}
+
 	public async readDirStats(_path: string, _options: ReadDirStatsOptions = null): Promise<Stat[]> {
 		throw new Error('Not implemented');
 	}

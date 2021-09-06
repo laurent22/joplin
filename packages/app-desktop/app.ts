@@ -22,6 +22,7 @@ import stateToWhenClauseContext from './services/commands/stateToWhenClauseConte
 import ResourceService from '@joplin/lib/services/ResourceService';
 import ExternalEditWatcher from '@joplin/lib/services/ExternalEditWatcher';
 import appReducer, { createAppDefaultState } from './app.reducer';
+import loadCssToTheme from '@joplin/lib/services/style/loadCssToTheme';
 const { FoldersScreenUtils } = require('@joplin/lib/folders-screen-utils.js');
 import Folder from '@joplin/lib/models/Folder';
 const fs = require('fs-extra');
@@ -59,6 +60,7 @@ import editorCommandDeclarations from './gui/NoteEditor/editorCommandDeclaration
 import ShareService from '@joplin/lib/services/share/ShareService';
 import checkForUpdates from './checkForUpdates';
 import { AppState } from './app.reducer';
+import { loadThemes } from '@joplin/lib/theme';
 
 const pluginClasses = [
 	require('./plugins/GotoAnything').default,
@@ -334,6 +336,9 @@ class Application extends BaseApplication {
 		argv = await super.start(argv);
 
 		await this.applySettingsSideEffects();
+
+		const themes = await loadCssToTheme('node_modules/@joplin/lib/themes');
+		await loadThemes(themes);
 
 		if (Setting.value('sync.upgradeState') === Setting.SYNC_UPGRADE_STATE_MUST_DO) {
 			reg.logger().info('app.start: doing upgradeSyncTarget action');
