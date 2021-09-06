@@ -50,7 +50,7 @@ class EncryptionConfigScreenComponent extends React.Component<Props> {
 		return shared.checkPasswords(this);
 	}
 
-	private renderMasterKey(mk: MasterKeyEntity, isDefault: boolean) {
+	private renderMasterKey(mk: MasterKeyEntity, _isDefault: boolean) {
 		const theme = themeStyle(this.props.themeId);
 
 		const onToggleEnabledClick = () => {
@@ -104,7 +104,7 @@ class EncryptionConfigScreenComponent extends React.Component<Props> {
 				{renderPasswordInput(mk.id)}
 				<td style={theme.textStyle}>{passwordOk}</td>
 				<td style={theme.textStyle}>
-					<button disabled={isActive || isDefault} style={theme.buttonStyle} onClick={() => onToggleEnabledClick()}>{masterKeyEnabled(mk) ? _('Disable') : _('Enable')}</button>
+					<button style={theme.buttonStyle} onClick={() => onToggleEnabledClick()}>{masterKeyEnabled(mk) ? _('Disable') : _('Enable')}</button>
 				</td>
 			</tr>
 		);
@@ -270,7 +270,11 @@ class EncryptionConfigScreenComponent extends React.Component<Props> {
 
 		const onToggleButtonClick = async () => {
 			const isEnabled = getEncryptionEnabled();
-			const masterKey = getDefaultMasterKey();
+			let masterKey = getDefaultMasterKey();
+
+			// If the user has explicitly disabled the master key, we generate a
+			// new one. Needed for one the password has been forgotten.
+			if (!masterKey.enabled) masterKey = null;
 
 			let answer = null;
 			if (isEnabled) {

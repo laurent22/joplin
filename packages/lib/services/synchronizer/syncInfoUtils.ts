@@ -239,7 +239,10 @@ export function setMasterKeyEnabled(mkId: string, enabled: boolean = true) {
 	const idx = s.masterKeys.findIndex(mk => mk.id === mkId);
 	if (idx < 0) throw new Error(`No such master key: ${mkId}`);
 
-	if (mkId === getActiveMasterKeyId() && !enabled) throw new Error('The active master key cannot be disabled');
+	// Disabled for now as it's needed to disable even the main master key when the password has been forgotten
+	// https://discourse.joplinapp.org/t/syncing-error-with-joplin-cloud-and-e2ee-master-key-is-not-loaded/20115/5?u=laurent
+	//
+	// if (mkId === getActiveMasterKeyId() && !enabled) throw new Error('The active master key cannot be disabled');
 
 	s.masterKeys[idx] = {
 		...s.masterKeys[idx],
