@@ -630,6 +630,11 @@
 			"default": {},
 			"$comment": "private"
 		},
+		"encryption.masterPassword": {
+			"type": "string",
+			"default": "",
+			"$comment": "private"
+		},
 		"encryption.shouldReencrypt": {
 			"type": "integer",
 			"default": -1,

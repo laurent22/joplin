@@ -29,7 +29,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog.md
 			href="&#x2F;css/bootstrap5.0.2.min.css"
 			as="style"
 		/>
-		<link rel="stylesheet" href="&#x2F;css/fontawesome-all.min.css?t=1629455871213">
+		<link rel="stylesheet" href="&#x2F;css/fontawesome-all.min.css?t=1630951685439">
 		<link
 			href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
 			rel="stylesheet"
@@ -37,7 +37,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog.md
 			media="all"
 			onload="this.media='all'; this.onload = null"
 		/>
-		<link rel="stylesheet" href="&#x2F;css/site.css?t=1629455871213" as="style" />
+		<link rel="stylesheet" href="&#x2F;css/site.css?t=1630951685439" as="style" />
 		<title>Joplin changelog | Joplin</title>
 
 		<script
@@ -289,6 +289,48 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog.md
 <p><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=E8JMYD2LQ8MMA&amp;lc=GB&amp;item_name=Joplin+Development&amp;currency_code=EUR&amp;bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Donate-PayPal-green.svg" alt="Donate using PayPal"></a> <a href="https://github.com/sponsors/laurent22/"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/GitHub-Badge.svg" alt="Sponsor on GitHub"></a> <a href="https://www.patreon.com/joplin"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Patreon-Badge.svg" alt="Become a patron"></a> <a href="https://joplinapp.org/donate/#donations"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Donate-IBAN.svg" alt="Donate using IBAN"></a></p>
 </div>
 <h1>Joplin changelog<a name="joplin-changelog" href="#joplin-changelog" class="heading-anchor">🔗</a></h1>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/v2.4.5">v2.4.5</a> (Pre-release) - 2021-09-06T18:03:28Z<a name="v2-4-5-https-github-com-laurent22-joplin-releases-tag-v2-4-5-pre-release-2021-09-06t18-03-28z" href="#v2-4-5-https-github-com-laurent22-joplin-releases-tag-v2-4-5-pre-release-2021-09-06t18-03-28z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>New: Linux: Add Centos 7 for no sandbox (<a href="https://github.com/laurent22/joplin/issues/5401">#5401</a> by <a href="https://github.com/geant44">@geant44</a>)</li>
+<li>Improved: Allow disabling any master key, including default or active one (9407efd)</li>
+<li>Improved: Api: Add support for &quot;events&quot; end point to retrieve info about latest note changes (<a href="https://github.com/laurent22/joplin/issues/5199">#5199</a>)</li>
+<li>Improved: Load themes as CSS variables for use in custom themes and internal components (478d4ac)</li>
+<li>Improved: Sort plugin results according to recommended property, and display Recommended tag (d97ba57)</li>
+<li>Fixed: Handle invalid search index in Goto Anything (<a href="https://github.com/laurent22/joplin/issues/5417">#5417</a>)</li>
+<li>Fixed: Plugins: Fixed import API (736bbbd)</li>
+</ul>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/v2.4.4">v2.4.4</a> (Pre-release) - 2021-08-30T16:02:51Z<a name="v2-4-4-https-github-com-laurent22-joplin-releases-tag-v2-4-4-pre-release-2021-08-30t16-02-51z" href="#v2-4-4-https-github-com-laurent22-joplin-releases-tag-v2-4-4-pre-release-2021-08-30t16-02-51z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>New: Add support for single master password, to simplify handling of multiple encryption keys (ce89ee5)</li>
+</ul>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/v2.4.3">v2.4.3</a> (Pre-release) - 2021-08-28T15:27:32Z<a name="v2-4-3-https-github-com-laurent22-joplin-releases-tag-v2-4-3-pre-release-2021-08-28t15-27-32z" href="#v2-4-3-https-github-com-laurent22-joplin-releases-tag-v2-4-3-pre-release-2021-08-28t15-27-32z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>Improved: Display link to browse plugins when repository cannot be reached (<a href="https://github.com/laurent22/joplin/issues/5161">#5161</a>)</li>
+<li>Fixed: Fixed crash when a required master key does not exist (<a href="https://github.com/laurent22/joplin/issues/5391">#5391</a>)</li>
+</ul>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/v2.4.2">v2.4.2</a> (Pre-release) - 2021-08-27T17:13:21Z<a name="v2-4-2-https-github-com-laurent22-joplin-releases-tag-v2-4-2-pre-release-2021-08-27t17-13-21z" href="#v2-4-2-https-github-com-laurent22-joplin-releases-tag-v2-4-2-pre-release-2021-08-27t17-13-21z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>Improved: Allow specific deprecated plugins to still work (f19c4ab)</li>
+<li>Improved: Disable inline code background in vim mode (<a href="https://github.com/laurent22/joplin/issues/5370">#5370</a>) (<a href="https://github.com/laurent22/joplin/issues/5364">#5364</a> by <a href="https://github.com/CalebJohn">@CalebJohn</a>)</li>
+<li>Improved: Do not display master key upgrade warnings for new master keys (70efadd)</li>
+<li>Improved: Various improvements to Markdown import and export (<a href="https://github.com/laurent22/joplin/issues/5290">#5290</a> by <a href="https://github.com/CalebJohn">@CalebJohn</a>)</li>
+<li>Fixed: &quot;Move to notebook&quot; would break with empty input (<a href="https://github.com/laurent22/joplin/issues/5346">#5346</a>)</li>
+<li>Fixed: Prevent it from crashing with too long search queries (<a href="https://github.com/laurent22/joplin/issues/5380">#5380</a>)</li>
+</ul>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/v2.4.1">v2.4.1</a> (Pre-release) - 2021-08-21T11:52:30Z<a name="v2-4-1-https-github-com-laurent22-joplin-releases-tag-v2-4-1-pre-release-2021-08-21t11-52-30z" href="#v2-4-1-https-github-com-laurent22-joplin-releases-tag-v2-4-1-pre-release-2021-08-21t11-52-30z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>New: Add Sync Wizard dialog (fe4900d)</li>
+<li>New: Add a way to disable a master key (7faa58e)</li>
+<li>New: Added &quot;None&quot; sync target to allow disabling synchronisation (f5f05e6)</li>
+<li>Improved: Improved sync locks so that they do not prevent upgrading a sync target (06ed58b)</li>
+<li>Improved: Place code-block background in the back in Markdown editor (<a href="https://github.com/laurent22/joplin/issues/5322">#5322</a> by <a href="https://github.com/CalebJohn">@CalebJohn</a>)</li>
+<li>Improved: Plugins: Improved support for fitToContent webview property (<a href="https://github.com/laurent22/joplin/issues/5298">#5298</a>) (<a href="https://github.com/laurent22/joplin/issues/5288">#5288</a> by <a href="https://github.com/Ahmad45123">@Ahmad45123</a>)</li>
+<li>Improved: Removes markdown inline code padding (<a href="https://github.com/laurent22/joplin/issues/5331">#5331</a> by <a href="https://github.com/CalebJohn">@CalebJohn</a>)</li>
+<li>Improved: Split code block class in two (<a href="https://github.com/laurent22/joplin/issues/5359">#5359</a> by <a href="https://github.com/CalebJohn">@CalebJohn</a>)</li>
+<li>Fixed: Add more specific classes for CodeMirror elements (<a href="https://github.com/laurent22/joplin/issues/5333">#5333</a>) (<a href="https://github.com/laurent22/joplin/issues/5327">#5327</a> by <a href="https://github.com/CalebJohn">@CalebJohn</a>)</li>
+<li>Fixed: Fixed file paths when exporting as HTML (<a href="https://github.com/laurent22/joplin/issues/5325">#5325</a>)</li>
+<li>Fixed: GotoAnything is not working on first try (<a href="https://github.com/laurent22/joplin/issues/5184">#5184</a>)</li>
+</ul>
 <h2><a href="https://github.com/laurent22/joplin/releases/tag/v2.3.5">v2.3.5</a> - 2021-08-17T06:43:30Z<a name="v2-3-5-https-github-com-laurent22-joplin-releases-tag-v2-3-5-2021-08-17t06-43-30z" href="#v2-3-5-https-github-com-laurent22-joplin-releases-tag-v2-3-5-2021-08-17t06-43-30z" class="heading-anchor">🔗</a></h2>
 <ul>
 <li>Improved: Allow setting a max width for the editor content (8063c94)</li>
@@ -3501,41 +3543,35 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog.md
 				</div>
 			</div>
 
-			<footer class="darkblue-bg">
-				<div class="container">
-					<div class="row">
-						<div class="col-3 d-none d-md-block">
-							<img src="&#x2F;images/logo-text.svg" alt="" width="150" />
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-12">
-							<hr />
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-12 col-md-6">
-							<img
-								src="&#x2F;images/logo-text.svg"
-								width="120"
-								class="img-center d-block d-md-none"
-								alt=""
-							/>
-							<br class="d-block d-md-none" />
-							<p class="text-center-sm">Copyright &copy; 2016-2021 Laurent Cozic</p>
-						</div>
-						<div class="col-12 col-md-6 right-links">
-							<p class="text-right text-center-sm">
-								<a href="https://github.com/laurent22/joplin/" class="github-link"><i class="fab fa-github"></i> GitHub Repository</a>
-								<a href="/privacy/">Privacy Policy</a>
-							</p>
-						</div>
-					</div>
-				</div>
-			</footer>
+			
+<footer class="darkblue-bg">
+	<div class="container">
+		<div class="row">
+			<div class="col-12 col-md-12 social-links">
+				<a href="https://twitter.com/joplinapp" title="Twitter feed"><i class="fab fa-twitter"></i></a>
+				<a href="https://github.com/laurent22/joplin/" title="GitHub repository"><i class="fab fa-github"></i></a>
+				<a href="https://www.patreon.com/joplin" title="Patreon blog"><i class="fab fa-patreon"></i></a>
+				<a href="https://discordapp.com/invite/d2HMPwE" title="Discord chat"><i class="fab fa-discord"></i></a>
+				<a href="https://www.reddit.com/r/joplinapp/" title="Subreddit"><i class="fab fa-reddit"></i></a>
+			</div>
 		</div>
 
-		<script src="&#x2F;js/script.js?t=1629455871213"></script>
+		<div class="row bottom-links-row">
+			<div class="col-12 col-md-6">
+				<p class="text-center-sm">Copyright &copy; 2016-2021 Laurent Cozic</p>
+			</div>
+			<div class="col-12 col-md-6">
+				<p class="text-right text-center-sm right-links">
+					<span class="footer-right">
+						<a href="/privacy/">Privacy Policy</a>
+					</span>
+				</p>
+			</div>
+		</div>
+	</div>
+</footer>		</div>
+
+		<script src="&#x2F;js/script.js?t=1630951685439"></script>
 
 <script>
 	if (window.location.hostname !== 'localhost') {

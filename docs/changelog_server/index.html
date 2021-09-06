@@ -29,7 +29,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog_server.md
 			href="&#x2F;css/bootstrap5.0.2.min.css"
 			as="style"
 		/>
-		<link rel="stylesheet" href="&#x2F;css/fontawesome-all.min.css?t=1629455871213">
+		<link rel="stylesheet" href="&#x2F;css/fontawesome-all.min.css?t=1630951685439">
 		<link
 			href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
 			rel="stylesheet"
@@ -37,7 +37,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog_server.md
 			media="all"
 			onload="this.media='all'; this.onload = null"
 		/>
-		<link rel="stylesheet" href="&#x2F;css/site.css?t=1629455871213" as="style" />
+		<link rel="stylesheet" href="&#x2F;css/site.css?t=1630951685439" as="style" />
 		<title>Joplin Server Changelog | Joplin</title>
 
 		<script
@@ -289,6 +289,29 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog_server.md
 <p><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=E8JMYD2LQ8MMA&amp;lc=GB&amp;item_name=Joplin+Development&amp;currency_code=EUR&amp;bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Donate-PayPal-green.svg" alt="Donate using PayPal"></a> <a href="https://github.com/sponsors/laurent22/"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/GitHub-Badge.svg" alt="Sponsor on GitHub"></a> <a href="https://www.patreon.com/joplin"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Patreon-Badge.svg" alt="Become a patron"></a> <a href="https://joplinapp.org/donate/#donations"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Donate-IBAN.svg" alt="Donate using IBAN"></a></p>
 </div>
 <h1>Joplin Server Changelog<a name="joplin-server-changelog" href="#joplin-server-changelog" class="heading-anchor">🔗</a></h1>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.4.3-beta">server-v2.4.3-beta</a> (Pre-release) - 2021-09-02T17:49:11Z<a name="server-v2-4-3-beta-https-github-com-laurent22-joplin-releases-tag-server-v2-4-3-beta-pre-release-2021-09-02t17-49-11z" href="#server-v2-4-3-beta-https-github-com-laurent22-joplin-releases-tag-server-v2-4-3-beta-pre-release-2021-09-02t17-49-11z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>New: Added Help page for Joplin Cloud (6520a48)</li>
+<li>New: Added icon next to profile button (5805a41)</li>
+<li>Improved: Display note title as page title when sharing note (82331c9)</li>
+<li>Fixed: Fixed calculation of max sizes for Postgres (93a4ad0)</li>
+</ul>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.4.2">server-v2.4.2</a> - 2021-08-28T17:45:41Z<a name="server-v2-4-2-https-github-com-laurent22-joplin-releases-tag-server-v2-4-2-2021-08-28t17-45-41z" href="#server-v2-4-2-https-github-com-laurent22-joplin-releases-tag-server-v2-4-2-2021-08-28t17-45-41z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>New: Add request rate limter on session and login end points (543413d)</li>
+<li>New: Add support for user flags (82b157b)</li>
+<li>New: Added commands to control db migrations - list, down, up (2c79ce2)</li>
+<li>Improved: Display user flags in profile when logged in as admin (4394329)</li>
+<li>Improved: Handle flags for accounts over limit (6e087bc)</li>
+<li>Improved: Increase cookies security - set HttpOnly, Secure and SameSite flags (bcadb36)</li>
+<li>Improved: No longer install vim into the image (#5337 by <a href="https://github.com/piotrb">@piotrb</a>)</li>
+<li>Improved: Re-enable account when new subscription is associated with it (ac82e4b)</li>
+<li>Improved: Switch to node:16-bullseye base image (#5202 by <a href="https://github.com/piotrb">@piotrb</a>)</li>
+<li>Fixed: Prevent crash when returning too many rows using SQLite (1efe3d3)</li>
+<li>Fixed: Filenames with non-ascii characters could not be downloaded from published note (#5328)</li>
+<li>Fixed: Fix missing CSS file error (#5309 by <a href="https://github.com/whalehub">@whalehub</a>)</li>
+<li>Fixed: Fixed second duration (c7421df)</li>
+</ul>
 <h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.3.7-beta">server-v2.3.7-beta</a> (Pre-release) - 2021-08-13T21:20:17Z<a name="server-v2-3-7-beta-https-github-com-laurent22-joplin-releases-tag-server-v2-3-7-beta-pre-release-2021-08-13t21-20-17z" href="#server-v2-3-7-beta-https-github-com-laurent22-joplin-releases-tag-server-v2-3-7-beta-pre-release-2021-08-13t21-20-17z" class="heading-anchor">🔗</a></h2>
 <ul>
 <li>Fixed: Fix migrations (a9961ae)</li>
@@ -333,7 +356,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog_server.md
 </ul>
 <h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.2.8-beta">server-v2.2.8-beta</a> (Pre-release) - 2021-07-24T16:55:58Z<a name="server-v2-2-8-beta-https-github-com-laurent22-joplin-releases-tag-server-v2-2-8-beta-pre-release-2021-07-24t16-55-58z" href="#server-v2-2-8-beta-https-github-com-laurent22-joplin-releases-tag-server-v2-2-8-beta-pre-release-2021-07-24t16-55-58z" class="heading-anchor">🔗</a></h2>
 <ul>
-<li>New: Added form tokens to prevent CSRF attacks (19b45de)</li>
+<li>New: Added form tokens to prevent CSRF attacks (CVE-2021-23431) (19b45de)</li>
 <li>Improved: Allow admin to change Stripe subscription (75a421e)</li>
 <li>Improved: Allow enabling or disabling a user. Handle cancelling subscription. (27c3cbd)</li>
 <li>Improved: Allow user to upgrade account (e83ab93)</li>
@@ -509,41 +532,35 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog_server.md
 				</div>
 			</div>
 
-			<footer class="darkblue-bg">
-				<div class="container">
-					<div class="row">
-						<div class="col-3 d-none d-md-block">
-							<img src="&#x2F;images/logo-text.svg" alt="" width="150" />
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-12">
-							<hr />
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-12 col-md-6">
-							<img
-								src="&#x2F;images/logo-text.svg"
-								width="120"
-								class="img-center d-block d-md-none"
-								alt=""
-							/>
-							<br class="d-block d-md-none" />
-							<p class="text-center-sm">Copyright &copy; 2016-2021 Laurent Cozic</p>
-						</div>
-						<div class="col-12 col-md-6 right-links">
-							<p class="text-right text-center-sm">
-								<a href="https://github.com/laurent22/joplin/" class="github-link"><i class="fab fa-github"></i> GitHub Repository</a>
-								<a href="/privacy/">Privacy Policy</a>
-							</p>
-						</div>
-					</div>
-				</div>
-			</footer>
+			
+<footer class="darkblue-bg">
+	<div class="container">
+		<div class="row">
+			<div class="col-12 col-md-12 social-links">
+				<a href="https://twitter.com/joplinapp" title="Twitter feed"><i class="fab fa-twitter"></i></a>
+				<a href="https://github.com/laurent22/joplin/" title="GitHub repository"><i class="fab fa-github"></i></a>
+				<a href="https://www.patreon.com/joplin" title="Patreon blog"><i class="fab fa-patreon"></i></a>
+				<a href="https://discordapp.com/invite/d2HMPwE" title="Discord chat"><i class="fab fa-discord"></i></a>
+				<a href="https://www.reddit.com/r/joplinapp/" title="Subreddit"><i class="fab fa-reddit"></i></a>
+			</div>
 		</div>
 
-		<script src="&#x2F;js/script.js?t=1629455871213"></script>
+		<div class="row bottom-links-row">
+			<div class="col-12 col-md-6">
+				<p class="text-center-sm">Copyright &copy; 2016-2021 Laurent Cozic</p>
+			</div>
+			<div class="col-12 col-md-6">
+				<p class="text-right text-center-sm right-links">
+					<span class="footer-right">
+						<a href="/privacy/">Privacy Policy</a>
+					</span>
+				</p>
+			</div>
+		</div>
+	</div>
+</footer>		</div>
+
+		<script src="&#x2F;js/script.js?t=1630951685439"></script>
 
 <script>
 	if (window.location.hostname !== 'localhost') {

@@ -1,5 +1,47 @@
 # Joplin changelog
 
+## [v2.4.5](https://github.com/laurent22/joplin/releases/tag/v2.4.5) (Pre-release) - 2021-09-06T18:03:28Z
+
+- New: Linux: Add Centos 7 for no sandbox ([#5401](https://github.com/laurent22/joplin/issues/5401) by [@geant44](https://github.com/geant44))
+- Improved: Allow disabling any master key, including default or active one (9407efd)
+- Improved: Api: Add support for "events" end point to retrieve info about latest note changes ([#5199](https://github.com/laurent22/joplin/issues/5199))
+- Improved: Load themes as CSS variables for use in custom themes and internal components (478d4ac)
+- Improved: Sort plugin results according to recommended property, and display Recommended tag (d97ba57)
+- Fixed: Handle invalid search index in Goto Anything ([#5417](https://github.com/laurent22/joplin/issues/5417))
+- Fixed: Plugins: Fixed import API (736bbbd)
+
+## [v2.4.4](https://github.com/laurent22/joplin/releases/tag/v2.4.4) (Pre-release) - 2021-08-30T16:02:51Z
+
+- New: Add support for single master password, to simplify handling of multiple encryption keys (ce89ee5)
+
+## [v2.4.3](https://github.com/laurent22/joplin/releases/tag/v2.4.3) (Pre-release) - 2021-08-28T15:27:32Z
+
+- Improved: Display link to browse plugins when repository cannot be reached ([#5161](https://github.com/laurent22/joplin/issues/5161))
+- Fixed: Fixed crash when a required master key does not exist ([#5391](https://github.com/laurent22/joplin/issues/5391))
+
+## [v2.4.2](https://github.com/laurent22/joplin/releases/tag/v2.4.2) (Pre-release) - 2021-08-27T17:13:21Z
+
+- Improved: Allow specific deprecated plugins to still work (f19c4ab)
+- Improved: Disable inline code background in vim mode ([#5370](https://github.com/laurent22/joplin/issues/5370)) ([#5364](https://github.com/laurent22/joplin/issues/5364) by [@CalebJohn](https://github.com/CalebJohn))
+- Improved: Do not display master key upgrade warnings for new master keys (70efadd)
+- Improved: Various improvements to Markdown import and export ([#5290](https://github.com/laurent22/joplin/issues/5290) by [@CalebJohn](https://github.com/CalebJohn))
+- Fixed: "Move to notebook" would break with empty input ([#5346](https://github.com/laurent22/joplin/issues/5346))
+- Fixed: Prevent it from crashing with too long search queries ([#5380](https://github.com/laurent22/joplin/issues/5380))
+
+## [v2.4.1](https://github.com/laurent22/joplin/releases/tag/v2.4.1) (Pre-release) - 2021-08-21T11:52:30Z
+
+- New: Add Sync Wizard dialog (fe4900d)
+- New: Add a way to disable a master key (7faa58e)
+- New: Added "None" sync target to allow disabling synchronisation (f5f05e6)
+- Improved: Improved sync locks so that they do not prevent upgrading a sync target (06ed58b)
+- Improved: Place code-block background in the back in Markdown editor ([#5322](https://github.com/laurent22/joplin/issues/5322) by [@CalebJohn](https://github.com/CalebJohn))
+- Improved: Plugins: Improved support for fitToContent webview property ([#5298](https://github.com/laurent22/joplin/issues/5298)) ([#5288](https://github.com/laurent22/joplin/issues/5288) by [@Ahmad45123](https://github.com/Ahmad45123))
+- Improved: Removes markdown inline code padding ([#5331](https://github.com/laurent22/joplin/issues/5331) by [@CalebJohn](https://github.com/CalebJohn))
+- Improved: Split code block class in two ([#5359](https://github.com/laurent22/joplin/issues/5359) by [@CalebJohn](https://github.com/CalebJohn))
+- Fixed: Add more specific classes for CodeMirror elements ([#5333](https://github.com/laurent22/joplin/issues/5333)) ([#5327](https://github.com/laurent22/joplin/issues/5327) by [@CalebJohn](https://github.com/CalebJohn))
+- Fixed: Fixed file paths when exporting as HTML ([#5325](https://github.com/laurent22/joplin/issues/5325))
+- Fixed: GotoAnything is not working on first try ([#5184](https://github.com/laurent22/joplin/issues/5184))
+
 ## [v2.3.5](https://github.com/laurent22/joplin/releases/tag/v2.3.5) - 2021-08-17T06:43:30Z
 
 - Improved: Allow setting a max width for the editor content (8063c94)

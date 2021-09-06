@@ -29,7 +29,7 @@ ol, ul {
 #main-container {
 	position: relative;
 	min-height: 100vh;
-	padding-bottom: 225px;
+	padding-bottom: 127px; /* Needs to be the height of the footer */
 }
 
 .help-page-container img {
@@ -583,7 +583,7 @@ div.navbar-mobile-content a.sponsor-button {
 
 /* footer section  */
 footer {
-	padding-top: 50px;
+	padding-top: 30px;
 	padding-bottom: 30px;
 	position: absolute;
 	bottom: 0;
@@ -594,6 +594,7 @@ footer a,
 footer p {
 	color: #90b1d9;
 	text-decoration: none;
+	margin-bottom: 0;
 }
 
 footer a:hover {
@@ -615,6 +616,35 @@ footer .button-link {
 
 footer .right-links a {
 	margin-left: 15px;
+}
+
+footer .footer-right {
+	margin-left: 30px;
+}
+
+footer .social-links {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	padding-bottom: 20px;
+	border-bottom: 1px solid #315885;
+}
+
+footer .social-links a:hover {
+	color: #e8f3ff;
+}
+
+footer .social-links i {
+	margin-left: 15px;
+	font-size: 22px;
+}
+
+footer .bottom-links-row {
+	padding-top: 20px;
+}
+
+footer .bottom-links-row p {
+	font-size: 1.1em;
 }
 
 /*****************************************************************
@@ -679,7 +709,7 @@ footer .right-links a {
 	#main-container {
 		position: relative;
 		min-height: 100vh;
-		padding-bottom: 260px;
+		padding-bottom: 130px;
 	}
 
 	.front-page h1 {
@@ -866,7 +896,7 @@ footer .right-links a {
 
 .help-page-container {
 	padding-top: 90px;
-	padding-bottom: 50px;
+	padding-bottom: 70px;
 }
 
 .donate-links {
@@ -880,7 +910,7 @@ footer .right-links a {
 	border-radius: 20px;
 	padding: 30px 20px;
 	padding-bottom: 30px;
-	margin-bottom: 50px;
+	margin-bottom: 20px;
 	margin-top: 40px;
 }
 
@@ -921,6 +951,11 @@ footer .right-links a {
 
 .plan-group {
 	justify-content: center;
+}
+
+.plan-group .joplin-cloud-login-info {
+	margin-bottom: 40px;
+	text-align: center;
 }
 
 .plan-group .plan-price-yearly-per-year {
