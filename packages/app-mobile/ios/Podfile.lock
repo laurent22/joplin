@@ -488,7 +488,7 @@ SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   DoubleConversion: cf9b38bf0b2d048436d9a82ad2abe1404f11e7de
   FBLazyVector: e686045572151edef46010a6f819ade377dfeb4b
-  FBReactNativeSpec: 6da2c8ff1ebe6b6cf4510fcca58c24c4d02b16fc
+  FBReactNativeSpec: d2f54de51f69366bd1f5c1fb9270698dce678f8d
   glog: 73c2498ac6884b13ede40eda8228cb1eee9d9d62
   JoplinCommonShareExtension: 270b4f8eb4e22828eeda433a04ed689fc1fd09b5
   JoplinRNShareExtension: 7137e9787374e1b0797ecbef9103d1588d90e403
