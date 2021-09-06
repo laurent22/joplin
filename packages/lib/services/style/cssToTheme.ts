@@ -1,5 +1,8 @@
 import { Theme } from '../../themes/type';
-import * as cssParser from 'css';
+
+// Need to include it that way due to a bug in the lib:
+// https://github.com/reworkcss/css/pull/146#issuecomment-740412799
+const cssParse = require('css/lib/parse');
 
 function formatCssToThemeVariable(cssVariable: string): string {
 	const elements = cssVariable.substr(2).split('-');
@@ -19,7 +22,7 @@ function formatCssToThemeVariable(cssVariable: string): string {
 // }
 
 export default function cssToTheme(css: string, sourceFilePath: string): Theme {
-	const o = cssParser.parse(css, {
+	const o = cssParse(css, {
 		silent: false,
 		source: sourceFilePath,
 	});
@@ -29,9 +32,9 @@ export default function cssToTheme(css: string, sourceFilePath: string): Theme {
 	// Need "as any" because outdated TS definition file
 
 	const rootRule = o.stylesheet.rules[0];
-	if (!(rootRule as any).selectors.includes(':root')) throw new Error('`:root` rule not found');
+	if (!rootRule.selectors.includes(':root')) throw new Error('`:root` rule not found');
 
-	const declarations: cssParser.Declaration[] = (rootRule as any).declarations;
+	const declarations: any[] = rootRule.declarations;
 
 	const output: any = {};
 	for (const declaration of declarations) {

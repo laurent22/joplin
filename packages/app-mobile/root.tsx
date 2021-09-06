@@ -15,8 +15,6 @@ import KvStore from '@joplin/lib/services/KvStore';
 import NoteScreen from './components/screens/Note';
 import UpgradeSyncTargetScreen from './components/screens/UpgradeSyncTargetScreen';
 import Setting, { Env } from '@joplin/lib/models/Setting';
-import loadCssToTheme from '@joplin/lib/services/style/loadCssToTheme';
-import { loadThemes } from '@joplin/lib/theme';
 import RNFetchBlob from 'rn-fetch-blob';
 import PoorManIntervals from '@joplin/lib/PoorManIntervals';
 import reducer from '@joplin/lib/reducer';
@@ -483,9 +481,6 @@ async function initialize(dispatch: Function) {
 
 		reg.logger().info('Database is ready.');
 
-		const themes = await loadCssToTheme('node_modules/@joplin/lib/themes');
-		await loadThemes(themes);
-
 		reg.logger().info('Loading settings...');
 
 		await loadKeychainServiceAndSettings(KeychainServiceDriverMobile);
@@ -647,7 +642,7 @@ async function initialize(dispatch: Function) {
 
 class AppComponent extends React.Component {
 
-	constructor() {
+	public constructor() {
 		super();
 
 		this.state = {
@@ -690,7 +685,7 @@ class AppComponent extends React.Component {
 	// https://github.com/laurent22/joplin/issues/3807
 	// https://discourse.joplinapp.org/t/webdav-config-encryption-config-randomly-lost-on-android/11364
 	// https://discourse.joplinapp.org/t/android-keeps-on-resetting-my-sync-and-theme/11443
-	async componentDidMount() {
+	public async componentDidMount() {
 		if (this.props.appState == 'starting') {
 			this.props.dispatch({
 				type: 'APP_STATE_SET',
@@ -743,13 +738,13 @@ class AppComponent extends React.Component {
 		// setTimeout(() => NavService.go('EncryptionConfig'), 2000);
 	}
 
-	componentWillUnmount() {
+	public componentWillUnmount() {
 		AppState.removeEventListener('change', this.onAppStateChange_);
 		Linking.removeEventListener('url', this.handleOpenURL_);
 		if (this.unsubscribeNetInfoHandler_) this.unsubscribeNetInfoHandler_();
 	}
 
-	componentDidUpdate(prevProps: any) {
+	public componentDidUpdate(prevProps: any) {
 		if (this.props.showSideMenu !== prevProps.showSideMenu) {
 			Animated.timing(this.state.sideMenuContentOpacity, {
 				toValue: this.props.showSideMenu ? 0.5 : 0,
@@ -758,7 +753,7 @@ class AppComponent extends React.Component {
 		}
 	}
 
-	async backButtonHandler() {
+	private async backButtonHandler() {
 		if (this.props.noteSelectionEnabled) {
 			this.props.dispatch({ type: 'NOTE_SELECTION_END' });
 			return true;
@@ -779,7 +774,7 @@ class AppComponent extends React.Component {
 		return false;
 	}
 
-	async handleShareData() {
+	private async handleShareData() {
 		const sharedData = await ShareExtension.data();
 		if (sharedData) {
 			reg.logger().info('Received shared data');
@@ -791,14 +786,14 @@ class AppComponent extends React.Component {
 		}
 	}
 
-	UNSAFE_componentWillReceiveProps(newProps: any) {
+	public UNSAFE_componentWillReceiveProps(newProps: any) {
 		if (newProps.syncStarted != this.lastSyncStarted_) {
 			if (!newProps.syncStarted) FoldersScreenUtils.refreshFolders();
 			this.lastSyncStarted_ = newProps.syncStarted;
 		}
 	}
 
-	sideMenu_change(isOpen: boolean) {
+	private sideMenu_change(isOpen: boolean) {
 		// Make sure showSideMenu property of state is updated
 		// when the menu is open/closed.
 		this.props.dispatch({
@@ -806,7 +801,7 @@ class AppComponent extends React.Component {
 		});
 	}
 
-	render() {
+	public render() {
 		if (this.props.appState != 'ready') return null;
 		const theme = themeStyle(this.props.themeId);
 
