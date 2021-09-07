@@ -73,6 +73,18 @@ export async function setPpkIfNotExist(service: EncryptionService, localInfo: Sy
 	await generateKeyPairAndSave(service, localInfo, getMasterPassword());
 }
 
+export async function ppkPasswordIsValid(service: EncryptionService, ppk: PublicPrivateKeyPair, password: string):Promise<boolean> {
+	if (!ppk) throw new Error('PPK is undefined');
+
+	try {
+		await loadPpk(service, ppk, password);
+	} catch (error) {
+		return false;
+	}
+
+	return true;
+}
+
 async function loadPpk(service: EncryptionService, ppk: PublicPrivateKeyPair, password: string): Promise<NodeRSA> {
 	const keys = new NodeRSA();
 	keys.setOptions(nodeRSAOptions());

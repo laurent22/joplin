@@ -3,7 +3,7 @@ import { _ } from '../locale';
 
 export const declaration: CommandDeclaration = {
 	name: 'openMasterPasswordDialog',
-	label: () => _('Set master password'),
+	label: () => _('Manage master password...'),
 	iconName: 'fas fa-key',
 };
 

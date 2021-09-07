@@ -1,5 +1,5 @@
-import { afterAllCleanUp, encryptionService, setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
-import { decryptPrivateKey, generateKeyPair, ppkDecryptMasterKeyContent, ppkGenerateMasterKey, reencryptFromPasswordToPublicKey, reencryptFromPublicKeyToPassword } from './ppk';
+import { afterAllCleanUp, encryptionService, expectThrow, setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
+import { decryptPrivateKey, generateKeyPair, ppkDecryptMasterKeyContent, ppkGenerateMasterKey, ppkPasswordIsValid, reencryptFromPasswordToPublicKey, reencryptFromPublicKeyToPassword } from './ppk';
 
 describe('e2ee/ppk', function() {
 
@@ -47,6 +47,13 @@ describe('e2ee/ppk', function() {
 		const plainText = await ppkDecryptMasterKeyContent(encryptionService(), masterKey, ppk, '111111');
 		expect(plainText.length).toBeGreaterThan(50); // Just checking it's not empty
 		expect(plainText).not.toBe(masterKey.content);
+	}));
+
+	it('should check if a PPK password is valid', (async () => {
+		const ppk = await generateKeyPair(encryptionService(), '111111');
+		expect(await ppkPasswordIsValid(encryptionService(), ppk, '222')).toBe(false);
+		expect(await ppkPasswordIsValid(encryptionService(), ppk, '111111')).toBe(true);
+		await expectThrow(async () => ppkPasswordIsValid(encryptionService(), null, '111111'));
 	}));
 
 	it('should transmit key using a public-private key', (async () => {

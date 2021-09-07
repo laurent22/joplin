@@ -4,8 +4,9 @@ import MasterKey from '../../models/MasterKey';
 import Setting from '../../models/Setting';
 import { MasterKeyEntity } from './types';
 import EncryptionService from './EncryptionService';
-import { getActiveMasterKey, getActiveMasterKeyId, masterKeyEnabled, setEncryptionEnabled, SyncInfo } from '../synchronizer/syncInfoUtils';
+import { getActiveMasterKey, getActiveMasterKeyId, localSyncInfo, masterKeyEnabled, setEncryptionEnabled, SyncInfo } from '../synchronizer/syncInfoUtils';
 import JoplinError from '../../JoplinError';
+import { generateKeyPairAndSave, ppkPasswordIsValid } from './ppk';
 
 const logger = Logger.create('e2ee/utils');
 
@@ -174,4 +175,72 @@ export function getMasterPassword(throwIfNotSet: boolean = true): string {
 	const password = Setting.value('encryption.masterPassword');
 	if (!password && throwIfNotSet) throw new JoplinError('Master password is not set', 'undefinedMasterPassword');
 	return password;
+}
+
+export async function updateMasterPassword(currentPassword:string, newPassword:string) {
+	const syncInfo = localSyncInfo();
+
+	if (currentPassword) {
+		
+
+		// TODO: reencrypt all keys
+		// Should decrypt with currentPassword
+		// If not, check passwordCache
+		// If can't be decrypted - throw an error - user needs to reset the password (clear password, disabled all keys)
+	} else {
+		if (syncInfo.ppk || syncInfo.masterKeys?.length) throw new Error('Previous password must be provided in order to reencrypt the encryption keys');
+		await generateKeyPairAndSave(EncryptionService.instance(), syncInfo, newPassword);
+		Setting.setValue('encryption.masterPassword', newPassword);
+	}
+}
+
+export enum MasterPasswordStatus {
+	Unknown = 0,
+	Loaded = 1,
+	NotSet = 2,
+	Invalid = 3,
+	Valid = 4,
+}
+
+export async function getMasterPasswordStatus():Promise<MasterPasswordStatus> {
+	const password = getMasterPassword(false);
+	if (!password) return MasterPasswordStatus.NotSet;
+
+	try {
+		const isValid = await masterPasswordIsValid(password);
+		return isValid ? MasterPasswordStatus.Valid : MasterPasswordStatus.Invalid;
+	} catch (error) {
+		if (error.code === 'noKeyToDecrypt') return MasterPasswordStatus.Loaded;
+		throw error;
+	}
+}
+
+const masterPasswordStatusMessages = {
+	[MasterPasswordStatus.Unknown]: 'Checking...',
+	[MasterPasswordStatus.Loaded]: 'Loaded',
+	[MasterPasswordStatus.NotSet]: 'Not set',
+	[MasterPasswordStatus.Valid]: '✓ ' + 'Valid',
+	[MasterPasswordStatus.Invalid]: '❌ ' + 'Invalid',
+};
+
+export function getMasterPasswordStatusMessage(status:MasterPasswordStatus):string {
+	return masterPasswordStatusMessages[status];
+}
+
+export async function masterPasswordIsValid(masterPassword: string):Promise<boolean> {
+	// A valid password is basically one that decrypts the private key, but due
+	// to backward compatibility not all users have a PPK yet, so we also check
+	// based on the active master key.
+
+	const ppk = localSyncInfo().ppk;
+	if (ppk) {
+		return ppkPasswordIsValid(EncryptionService.instance(), ppk, masterPassword);
+	}
+
+	const masterKey = getDefaultMasterKey();
+	if (masterKey) {
+		return EncryptionService.instance().checkMasterKeyPassword(masterKey, masterPassword);
+	}
+
+	throw new JoplinError('Cannot check master password validity as no key is present', 'noKeyToDecrypt');
 }
