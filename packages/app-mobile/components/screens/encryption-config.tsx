@@ -13,8 +13,7 @@ import shared from '@joplin/lib/components/shared/encryption-config-shared';
 import { MasterKeyEntity } from '@joplin/lib/services/e2ee/types';
 import { State } from '@joplin/lib/reducer';
 import { SyncInfo } from '@joplin/lib/services/synchronizer/syncInfoUtils';
-import { setupAndDisableEncryption, toggleAndSetupEncryption } from '@joplin/lib/services/e2ee/utils';
-import MasterKey from '@joplin/lib/models/MasterKey';
+import { getDefaultMasterKey, setupAndDisableEncryption, toggleAndSetupEncryption } from '@joplin/lib/services/e2ee/utils';
 
 interface Props {}
 
@@ -146,7 +145,11 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent<Props> {
 
 	passwordPromptComponent() {
 		const theme = themeStyle(this.props.themeId);
-		const masterKey = MasterKey.latest();
+		let masterKey = getDefaultMasterKey();
+
+		// If the user has explicitly disabled the master key, we generate a
+		// new one. Needed for one the password has been forgotten.
+		if (!masterKey.enabled) masterKey = null;
 
 		const onEnableClick = async () => {
 			try {
