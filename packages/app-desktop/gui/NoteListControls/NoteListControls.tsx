@@ -92,12 +92,12 @@ export default function NoteListControls(props: Props) {
 			user_created_time: 'far fa-calendar-plus',
 			title: 'fas fa-font',
 			order: 'fas fa-wrench',
-		}
-		return (iconMap[field] || iconMap['title']) + ' ' + field;
+		};
+		return `${iconMap[field] || iconMap['title']} ${field}`;
 	}
 
 	function sortOrderReverseIcon() {
-		return Setting.value(SETTING_REVERSE) ? "fas fa-long-arrow-alt-up" : "fas fa-long-arrow-alt-down";
+		return Setting.value(SETTING_REVERSE) ? 'fas fa-long-arrow-alt-up' : 'fas fa-long-arrow-alt-down';
 	}
 
 	function sortOrderButtonsVisible() {

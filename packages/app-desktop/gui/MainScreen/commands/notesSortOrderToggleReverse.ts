@@ -14,7 +14,7 @@ export const declaration: CommandDeclaration = {
 export const runtime = (): CommandRuntime => {
 	return {
 		execute: async (_context: CommandContext) => {
-			const reverse = Setting.value(SETTING_REVERSE)
+			const reverse = Setting.value(SETTING_REVERSE);
 			return CommandService.instance().execute(NOTES_SORT_ORDER_SWITCH, undefined, !reverse);
 		},
 	};

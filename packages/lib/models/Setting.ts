@@ -785,7 +785,7 @@ class Setting extends BaseModel {
 				section: 'note',
 				public: true,
 				label: () => _('Enable per-field sort order reversal'),
-				appTypes: [AppType.Cli, AppType.Desktop]
+				appTypes: [AppType.Cli, AppType.Desktop],
 			},
 			'notes.perFieldReverse': {
 				value: {
@@ -798,7 +798,7 @@ class Setting extends BaseModel {
 				storage: SettingStorage.File,
 				section: 'note',
 				public: false,
-				appTypes: [AppType.Cli, AppType.Desktop]
+				appTypes: [AppType.Cli, AppType.Desktop],
 			},
 			'notes.perNotebookSortOrderEnabled': {
 				value: true,
@@ -807,7 +807,7 @@ class Setting extends BaseModel {
 				section: 'note',
 				public: true,
 				label: () => _('Enable per-notebook sort order'),
-				appTypes: [AppType.Cli, AppType.Desktop]
+				appTypes: [AppType.Cli, AppType.Desktop],
 			},
 			'notes.perNotebookSortOrders': {
 				value: {},
@@ -815,14 +815,14 @@ class Setting extends BaseModel {
 				storage: SettingStorage.File,
 				section: 'note',
 				public: false,
-				appTypes: [AppType.Cli, AppType.Desktop]
+				appTypes: [AppType.Cli, AppType.Desktop],
 			},
 			'notes.sharedSortOrder': {
 				value: {},
 				type: SettingItemType.Object,
 				section: 'note',
 				public: false,
-				appTypes: [AppType.Cli, AppType.Desktop]
+				appTypes: [AppType.Cli, AppType.Desktop],
 			},
 			'folders.sortOrder.field': {
 				value: 'title',

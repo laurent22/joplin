@@ -269,7 +269,7 @@ function useMenu(props: Props) {
 						// checked: Setting.value(`${type}.sortOrder.field`) === field,
 						click: () => {
 							if (type === 'notes') {
-								CommandService.instance().execute('notesSortOrderSwitch', field);
+								void CommandService.instance().execute('notesSortOrderSwitch', field);
 							} else {
 								Setting.setValue(`${type}.sortOrder.field`, field);
 							}
@@ -282,7 +282,7 @@ function useMenu(props: Props) {
 				if (type == 'notes') {
 					sortItems.push(
 						{ ...menuItemDic.notesSortOrderToggleReverse, type: 'checkbox' },
-						{ ...menuItemDic.notesSortOrderSwitch, visible: false },
+						{ ...menuItemDic.notesSortOrderSwitch, visible: false }
 					);
 				} else {
 					sortItems.push({

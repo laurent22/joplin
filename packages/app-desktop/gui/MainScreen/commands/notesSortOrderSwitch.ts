@@ -17,7 +17,7 @@ export const notesSortOrderFieldArray = (): string[] => {
 		fields = Setting.enumOptionValues(SETTING_FIELD).sort().reverse();
 	}
 	return fields;
-}
+};
 
 export const notesSortOrderNextField = (currentField: string) => {
 	const fields = notesSortOrderFieldArray();
@@ -27,7 +27,7 @@ export const notesSortOrderNextField = (currentField: string) => {
 	} else {
 		return fields[(index + 1) % fields.length];
 	}
-}
+};
 
 export const declaration: CommandDeclaration = {
 	name: NOTES_SORT_ORDER_SWITCH,
@@ -41,7 +41,7 @@ export const runtime = (): CommandRuntime => {
 			// field: Sort order's field. undefined means switching a field.
 			// reverse: whether the sort order is reversed or not. undefined means toggling.
 			//
-			// To support CommandService.cheduleExecute(), field accepts an size-two Array, 
+			// To support CommandService.cheduleExecute(), field accepts an size-two Array,
 			// which means [field, reverse].
 			let nextField: string;
 			let nextReverse: boolean;

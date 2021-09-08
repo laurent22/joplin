@@ -4,7 +4,7 @@ import { State } from '@joplin/lib/reducer';
 import app from '../../../app';
 import eventManager from '@joplin/lib/eventManager';
 import {
-	notesSortOrderFieldArray, NOTES_SORT_ORDER_SWITCH, SETTING_FIELD, SETTING_REVERSE, SETTING_PER_FIELD_REVERSAL_ENABLED
+	notesSortOrderFieldArray, NOTES_SORT_ORDER_SWITCH, SETTING_FIELD, SETTING_REVERSE, SETTING_PER_FIELD_REVERSAL_ENABLED,
 } from './notesSortOrderSwitch';
 import { _ } from '@joplin/lib/locale';
 
@@ -79,7 +79,7 @@ export const runtime = (): CommandRuntime => {
 			}
 		},
 	};
-}
+};
 
 function onNotebookSelectionMayChange() {
 	const selectedId = getSelectedNotebookId();
@@ -104,7 +104,7 @@ function onNotebookSelectionMayChange() {
 	}
 	if (perNotebookSortOrderEnabled()) {
 		if (next.field != field || next.reverse != reverse) {
-			CommandService.instance().execute(NOTES_SORT_ORDER_SWITCH, next.field, next.reverse);
+			void CommandService.instance().execute(NOTES_SORT_ORDER_SWITCH, next.field, next.reverse);
 		}
 	}
 }
