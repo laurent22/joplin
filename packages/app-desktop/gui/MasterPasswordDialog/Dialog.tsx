@@ -7,6 +7,7 @@ import Dialog from '../Dialog';
 import DialogTitle from '../DialogTitle';
 import StyledInput from '../style/StyledInput';
 import { getMasterPasswordStatus, getMasterPasswordStatusMessage, masterPasswordIsValid, MasterPasswordStatus, updateMasterPassword } from '@joplin/lib/services/e2ee/utils';
+import { reg } from '@joplin/lib/registry';
 
 interface Props {
 	themeId: number;
@@ -30,13 +31,13 @@ export default function(props: Props) {
 		});
 	}
 
-	useAsyncEffect(async (event:AsyncEffectEvent) => {
+	useAsyncEffect(async (event: AsyncEffectEvent) => {
 		const newStatus = await getMasterPasswordStatus();
 		if (event.cancelled) return;
 		setStatus(newStatus);
 	}, []);
 
-	const onButtonRowClick = useCallback(async (event:ClickEvent) => {
+	const onButtonRowClick = useCallback(async (event: ClickEvent) => {
 		if (event.buttonName === 'cancel') {
 			closeDialog(props.dispatch);
 			return;
@@ -45,7 +46,7 @@ export default function(props: Props) {
 		if (event.buttonName === 'ok') {
 			setUpdatingPassword(true);
 			try {
-				await updateMasterPassword(currentPassword, password1);
+				await updateMasterPassword(currentPassword, password1, () => reg.waitForSyncFinishedThenSync());
 				closeDialog(props.dispatch);
 			} catch (error) {
 				alert(error.message);
@@ -56,15 +57,15 @@ export default function(props: Props) {
 		}
 	}, [props.dispatch, currentPassword, password1]);
 
-	const onCurrentPasswordChange = useCallback((event:any) => {
+	const onCurrentPasswordChange = useCallback((event: any) => {
 		setCurrentPassword(event.target.value);
 	}, []);
 
-	const onPasswordChange1 = useCallback((event:any) => {
+	const onPasswordChange1 = useCallback((event: any) => {
 		setPassword1(event.target.value);
 	}, []);
 
-	const onPasswordChange2 = useCallback((event:any) => {
+	const onPasswordChange2 = useCallback((event: any) => {
 		setPassword2(event.target.value);
 	}, []);
 
@@ -80,7 +81,7 @@ export default function(props: Props) {
 		setShowPasswordForm(status === MasterPasswordStatus.NotSet);
 	}, [status]);
 
-	useAsyncEffect(async (event:AsyncEffectEvent) => {
+	useAsyncEffect(async (event: AsyncEffectEvent) => {
 		const isValid = await masterPasswordIsValid(currentPassword);
 		if (event.cancelled) return;
 		setCurrentPasswordIsValid(isValid);
@@ -101,7 +102,7 @@ export default function(props: Props) {
 							<div className="current-password-wrapper">
 								<StyledInput
 									disabled={status === MasterPasswordStatus.NotSet}
-									placeholder={status === MasterPasswordStatus.NotSet ? '(' + _('Not set') + ')': ''}
+									placeholder={status === MasterPasswordStatus.NotSet ? `(${_('Not set')})` : ''}
 									type="password"
 									value={currentPassword}
 									onChange={onCurrentPasswordChange}
