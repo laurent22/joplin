@@ -12,7 +12,7 @@ import bridge from '../services/bridge';
 import shared from '@joplin/lib/components/shared/encryption-config-shared';
 import { MasterKeyEntity } from '@joplin/lib/services/e2ee/types';
 import { getEncryptionEnabled, masterKeyEnabled, SyncInfo } from '@joplin/lib/services/synchronizer/syncInfoUtils';
-import { getDefaultMasterKey, toggleAndSetupEncryption } from '@joplin/lib/services/e2ee/utils';
+import { getDefaultMasterKey, toggleAndSetupEncryption, getMasterPassword } from '@joplin/lib/services/e2ee/utils';
 import MasterKey from '@joplin/lib/models/MasterKey';
 import StyledInput from './style/StyledInput';
 import Button, { ButtonLevel } from './Button/Button';
@@ -218,7 +218,7 @@ class EncryptionConfigScreenComponent extends React.Component<Props> {
 	}
 
 	private renderMasterPassword() {
-		if (!this.props.encryptionEnabled && !this.props.masterKeys.length) return null;
+		// if (!this.props.encryptionEnabled && !this.props.masterKeys.length) return null;
 
 		const theme = themeStyle(this.props.themeId);
 
@@ -230,24 +230,41 @@ class EncryptionConfigScreenComponent extends React.Component<Props> {
 			}
 		};
 
-		if (this.state.passwordChecks['master']) {
-			return (
-				<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-					<span style={theme.textStyle}>{_('Master password:')}</span>&nbsp;&nbsp;
-					<span style={{ ...theme.textStyle, fontWeight: 'bold' }}>✔ {_('Loaded')}</span>
-				</div>
-			);
-		} else {
-			return (
-				<div style={{ display: 'flex', flexDirection: 'column' }}>
-					<span style={theme.textStyle}>❌ {'The master password is not set or is invalid. Please type it below:'}</span>
-					<div style={{ display: 'flex', flexDirection: 'row', marginTop: 10 }}>
-						<MasterPasswordInput placeholder={_('Enter your master password')} type="password" value={this.state.masterPasswordInput} onChange={(event: any) => shared.onMasterPasswordChange(this, event.target.value)} />{' '}
-						<Button ml="10px" level={ButtonLevel.Secondary} onClick={onMasterPasswordSave} title={_('Save')} />
-					</div>
-				</div>
-			);
-		}
+		// const status = this.getMasterPasswordStatus();
+
+		// const statusMessages = {
+		// 	[MasterPasswordStatus.NotSet]: 'Not set',
+		// 	[MasterPasswordStatus.Valid]: '✓ ' + 'Valid',
+		// 	[MasterPasswordStatus.Invalid]: '❌ ' + 'Invalid',
+		// };
+
+		return (
+			<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+				<span style={theme.textStyle}>{_('Master password:')}</span>&nbsp;
+				<span style={{ ...theme.textStyle, fontWeight: 'bold' }}>{statusMessages[status]}</span>
+			</div>
+		);
+
+		// if (this.state.passwordChecks['master']) {
+		// 	return (
+		// 		<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+		// 			<span style={theme.textStyle}>{_('Status:')}</span>&nbsp;&nbsp;
+		// 			<span style={{ ...theme.textStyle, fontWeight: 'bold' }}>{statusMessages[status]}</span>
+		// 		</div>
+		// 	);
+		// } else {
+
+
+		// 	return (
+		// 		<div style={{ display: 'flex', flexDirection: 'column' }}>
+		// 			<span style={theme.textStyle}>❌ {'The master password is not set or is invalid. Please type it below:'}</span>
+		// 			<div style={{ display: 'flex', flexDirection: 'row', marginTop: 10 }}>
+		// 				<MasterPasswordInput placeholder={_('Enter your master password')} type="password" value={this.state.masterPasswordInput} onChange={(event: any) => shared.onMasterPasswordChange(this, event.target.value)} />{' '}
+		// 				<Button ml="10px" level={ButtonLevel.Secondary} onClick={onMasterPasswordSave} title={_('Save')} />
+		// 			</div>
+		// 		</div>
+		// 	);
+		// }
 	}
 
 	render() {
@@ -359,11 +376,13 @@ class EncryptionConfigScreenComponent extends React.Component<Props> {
 							</p>
 						</div>
 					}
-					<h1 style={theme.h1Style}>{_('Status')}</h1>
+					<h1 style={theme.h1Style}>{_('Master password')}</h1>
+					{this.renderMasterPassword()}
+
+					<h1 style={theme.h1Style}>{_('End-to-end encryption')}</h1>
 					<p style={theme.textStyle}>
 						{_('Encryption is:')} <strong>{this.props.encryptionEnabled ? _('Enabled') : _('Disabled')}</strong>
 					</p>
-					{this.renderMasterPassword()}
 					{decryptedItemsInfo}
 					{toggleButton}
 					{needUpgradeSection}
