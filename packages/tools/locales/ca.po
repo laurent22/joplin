@@ -12,13 +12,13 @@ msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
 "Last-Translator: Xavi Ivars <xavi.ivars@gmail.com>\n"
-"Language-Team: jmontane@softcatala.org\n"
+"Language-Team: xavivars@softcatala.org\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.4.1\n"
+"X-Generator: Poedit 3.0\n"
 "POT-Creation-Date: \n"
 "PO-Revision-Date: \n"
 
@@ -181,8 +181,8 @@ msgid ""
 "Duplicates the notes matching <note> to [notebook]. If no notebook is "
 "specified the note is duplicated in the current notebook."
 msgstr ""
-"Duplica les notes que coincideixen amb <note> a [blocdenotes]. Si no "
-"indiqueu cap bloc de notes es dupliquen en el bloc de notes actual."
+"Duplica les notes que coincideixen amb <note> a [notebook]. Si no indiqueu "
+"cap bloc de notes, es dupliquen en el bloc de notes actual."
 
 #: packages/app-cli/app/command-done.js:14
 msgid "Marks a to-do as done."
@@ -229,7 +229,7 @@ msgstr "Elements desxifrats: %d"
 #, javascript-format
 msgid "Skipped items: %d (use --retry-failed-items to retry decrypting them)"
 msgstr ""
-"Elements omesos: %d (utilitza --retry-failed-items per tornar a intentar "
+"Elements omesos: %d (utilitza --retry-failed-items per a tornar a intentar "
 "desxifrar-los)"
 
 #: packages/app-cli/app/command-e2ee.js:78
@@ -276,8 +276,8 @@ msgstr "Edita la nota."
 msgid ""
 "No text editor is defined. Please set it using `config editor <editor-path>`"
 msgstr ""
-"No hi ha definit cap editor de text. Establiu-ne un usant `config editor "
-"<editor-path>`"
+"No hi ha definit cap editor de text. Establiu-ne un usant \"config editor "
+"<editor-path>\""
 
 #: packages/app-cli/app/command-edit.js:40
 msgid "No active notebook."
@@ -291,14 +291,14 @@ msgstr "La nota «%s» no existeix. Voleu crear-la?"
 #: packages/app-cli/app/command-edit.js:75
 msgid "Starting to edit note. Close the editor to get back to the prompt."
 msgstr ""
-"S'està iniciant l'edició del a nota. Tanqueu l'editor per a tornar a "
+"S'està iniciant l'edició de la nota. Tanqueu l'editor per a tornar a "
 "l'indicador."
 
 #: packages/app-cli/app/command-edit.js:82
 #: packages/app-desktop/commands/startExternalEditing.js:32
 #, javascript-format
 msgid "Error opening note in editor: %s"
-msgstr "S'ha produït un error a l'obrir la nota amb l'editor: %s"
+msgstr "S'ha produït un error en l'obrir la nota amb l'editor: %s"
 
 #: packages/app-cli/app/command-edit.js:97
 msgid "Note has been saved."
@@ -331,7 +331,7 @@ msgstr "Exporta només el bloc de notes indicat."
 
 #: packages/app-cli/app/command-geoloc.js:13
 msgid "Displays a geolocation URL for the note."
-msgstr "Motra una URL de geolocalitzacio de la nota."
+msgstr "Mostra un URL de geolocalització de la nota."
 
 #: packages/app-cli/app/command-help.js:13
 msgid "Displays usage information."
@@ -366,10 +366,10 @@ msgid ""
 "using the shortcuts `$n` or `$b` for, respectively, the currently selected "
 "note or notebook. `$c` can be used to refer to the currently selected item."
 msgstr ""
-"En qualsevol ordre, podeu referenciar una nota o bloc de notes per el títol "
-"o l'ID, o podeu usar dreceres «$n» o «$b» per a, respectivament, la nota o "
-"el bloc de nota seleccionat. Podeu usar «$c» per a fer referència a "
-"l'element seleccionat."
+"En qualsevol ordre, podeu referenciar una nota o bloc de notes pel títol o "
+"l'ID, o podeu usar dreceres «$n» o «$b» per a, respectivament, la nota o el "
+"bloc de nota seleccionat. Podeu usar «$c» per a fer referència a l'element "
+"seleccionat."
 
 #: packages/app-cli/app/command-help.js:79
 msgid "To move from one pane to another, press Tab or Shift+Tab."
@@ -553,7 +553,7 @@ msgid ""
 "be deleted."
 msgstr ""
 "Voleu suprimir el bloc de notes? També se suprimiran totes les notes i els "
-"sub-blocs d'aquest bloc de notes."
+"subblocs d'aquest bloc de notes."
 
 #: packages/app-cli/app/command-rmnote.js:13
 msgid "Deletes the notes matching <note-pattern>."
@@ -583,8 +583,8 @@ msgid ""
 "Start, stop or check the API server. To specify on which port it should run, "
 "set the api.port config variable. Commands are (%s)."
 msgstr ""
-"Arrenca, atura o verifica el servidor API. Per especificar a quin port ha de "
-"córrer, estableix la variable api.port. Les ordres són (%s)."
+"Arrenca, atura o verifica el servidor API. Per a especificar a quin port ha "
+"de córrer, estableix la variable api.port. Les ordres són (%s)."
 
 #: packages/app-cli/app/command-server.js:38
 #, javascript-format
@@ -622,8 +622,8 @@ msgstr "Mostra un resum sobre les notes i blocs de notes."
 msgid ""
 "To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`"
 msgstr ""
-"Per a reintentar el desxifratge d'aquests elements. Executa `e2ee decrypt --"
-"retry-failed-items`"
+"Per a reintentar el desxifratge d'aquests elements. Executa \"e2ee decrypt --"
+"retry-failed-items\""
 
 #: packages/app-cli/app/command-sync.js:29
 msgid "Synchronises with remote storage."
@@ -660,7 +660,7 @@ msgstr ""
 #: packages/app-desktop/gui/DropboxLoginScreen.js:30
 #: packages/app-mobile/components/screens/dropbox-login.js:59
 msgid "Step 1: Open this URL in your browser to authorise the application:"
-msgstr "Pas 1: Obriu aquest URL al navegador per autoritzar l'aplicació:"
+msgstr "Pas 1: Obriu aquest URL al navegador per a autoritzar l'aplicació:"
 
 #: packages/app-cli/app/command-sync.js:94
 #: packages/app-desktop/gui/DropboxLoginScreen.js:32
@@ -740,9 +740,9 @@ msgid ""
 "target is a regular note it will be converted to a to-do). Use \"clear\" to "
 "convert the to-do back to a regular note."
 msgstr ""
-"<todo-command> pot ser «toggle» o «clear». Useu «toggle» per a canviar el "
+"<todo-command> pot ser «toggle» o «clear». Useu «toggle» per a canviar els "
 "llistats de tasques entre l'estat de finalitzat i no finalitzat (si "
-"l'objectiu és una nota normal es convertirà a un llistat de tasques "
+"l'objectiu és una nota normal, es convertirà a un llistat de tasques "
 "pendents). Useu «clear» per a convertir un llistat de tasques pendents a una "
 "nota normal."
 
@@ -797,7 +797,7 @@ msgstr ""
 
 #: packages/app-cli/app/gui/NoteWidget.js:50
 msgid "You may also type `status` for more information."
-msgstr "També podeu escriure `status` per obtenir més informació."
+msgstr "També podeu escriure \"status\" per a obtenir més informació."
 
 #: packages/app-cli/app/help-utils.js:56
 msgid "Enum"
@@ -896,7 +896,7 @@ msgstr "Cancel·la"
 msgid ""
 "The app is now going to close. Please relaunch it to complete the process."
 msgstr ""
-"L'aplicació es tancarà ara. Si us plau, torneu-la a executar per completar "
+"L'aplicació es tancarà ara. Si us plau, torneu-la a executar per a completar "
 "el procés."
 
 #: packages/app-desktop/checkForUpdates.js:171
@@ -906,7 +906,7 @@ msgstr "La versió actual està actualitzada."
 #: packages/app-desktop/checkForUpdates.js:184
 #, javascript-format
 msgid "%s (pre-release)"
-msgstr "%s (pre-llençament)"
+msgstr "%s (prellançament)"
 
 #: packages/app-desktop/checkForUpdates.js:187
 msgid "An update is available, do you want to download it now?"
@@ -976,7 +976,7 @@ msgstr "Esteu segur que voleu renovar el testimoni d'autorització?"
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:84
 msgid "The web clipper service is enabled and set to auto-start."
 msgstr ""
-"El servei de desa-retalls de webs és actiu i configurat per a iniciar-se "
+"El servei de porta-retalls de webs és actiu i configurat per a iniciar-se "
 "automàticament."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.js:69
@@ -994,17 +994,17 @@ msgstr "Estat: %s"
 #: packages/app-desktop/gui/ClipperConfigScreen.js:74
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:103
 msgid "Disable Web Clipper Service"
-msgstr "Desactiva el servei del desa-retalls de webs"
+msgstr "Desactiva el servei del porta-retalls de webs"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.js:77
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:109
 msgid "The web clipper service is not enabled."
-msgstr "El servei del desa-retalls de webs no està activat."
+msgstr "El servei del porta-retalls de webs no està activat."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.js:78
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:114
 msgid "Enable Web Clipper Service"
-msgstr "Activa el servei del desa-retalls de webs"
+msgstr "Activa el servei del porta-retalls de webs"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.js:89
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:137
@@ -1012,18 +1012,18 @@ msgid ""
 "Joplin Web Clipper allows saving web pages and screenshots from your browser "
 "to Joplin."
 msgstr ""
-"El desa-retalls de webs del Joplin us permet desar pàgines web i captures de "
-"pantalla del navegador web al Joplin."
+"El porta-retalls de webs del Joplin us permet desar pàgines web i captures "
+"de pantalla del navegador web al Joplin."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.js:90
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:142
 msgid "In order to use the web clipper, you need to do the following:"
-msgstr "Per a poder usar el desa-retalls de webs, cal que feu el següent:"
+msgstr "Per a poder usar el porta-retalls de webs, cal que feu el següent:"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.js:92
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:150
 msgid "Step 1: Enable the clipper service"
-msgstr "Pas 1: Activeu el servei del desa-retalls de webs"
+msgstr "Pas 1: Activeu el servei del porta-retalls de webs"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.js:93
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:155
@@ -1033,7 +1033,7 @@ msgid ""
 "to a particular port."
 msgstr ""
 "Aquest servei permet que l'extensió del navegador pugui comunicar-se amb el "
-"Joplin. En activar-la, el tallafocs us podria demanar  de donar permís al "
+"Joplin. En activar-la, el tallafoc us podria demanar  de donar permís al "
 "Joplin per a escoltar un port determinat."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.js:96
@@ -1067,7 +1067,7 @@ msgid ""
 "This authorisation token is only needed to allow third-party applications to "
 "access Joplin."
 msgstr ""
-"Aquest testimoni d'autorització només és necessari per permetre l'accés "
+"Aquest testimoni d'autorització només és necessari per a permetre l'accés "
 "d'aplicacions de tercers al Joplin."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.js:111
@@ -1173,7 +1173,7 @@ msgstr "Actualització"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:154
 msgid "Please upgrade Joplin to use this plugin"
-msgstr "Si us plau, actualitzeu Joplin per utilitzar aquest connector"
+msgstr "Si us plau, actualitzeu Joplin per a utilitzar aquest connector"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:168
 #, javascript-format
@@ -1238,7 +1238,7 @@ msgstr "Tramet"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.js:73
 msgid "Source: "
-msgstr "Font:"
+msgstr "Font: "
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.js:76
 msgid "Created: "
@@ -1316,9 +1316,9 @@ msgid ""
 "You may use the tool below to re-encrypt your data, for example if you know "
 "that some of your notes are encrypted with an obsolete encryption method."
 msgstr ""
-"Podeu utilitzar l'eina següent per re-xifrar les vostres dades, per exemple "
-"si sabeu que algunes de les vostres notes estan xifrades amb un mètode de "
-"xifratge obsolet."
+"Podeu utilitzar l'eina següent per tornar a xifrar les vostres dades, per "
+"exemple si sabeu que algunes de les vostres notes estan xifrades amb un "
+"mètode de xifratge obsolet."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.js:122
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:186
@@ -1346,7 +1346,7 @@ msgstr ""
 "1. Sincronitzeu tots els vostres dispositius.\n"
 "2. Feu click en \"%s\".\n"
 "3. Deixeu-lo executant-se fins que acabi. Mentre s'executa, eviteu fer "
-"canvis en cap nota des dels altres dispositius per evitar els conflictes.\n"
+"canvis en cap nota des dels altres dispositius per a evitar els conflictes.\n"
 "4. Un cop la sincronització està acabada en aquest dispositiu, sincronitzeu "
 "tots els altres dispositius, i deixeu-los executant-se fins que acabin.\n"
 "\n"
@@ -1382,7 +1382,7 @@ msgid ""
 "as \"active\"). Any of the keys might be used for decryption, depending on "
 "how the notes or notebooks were originally encrypted."
 msgstr ""
-"Nota: només s'usarà una clau mestre per al xifratge (la marcada com a "
+"Nota: només s'usarà una clau mestra per al xifratge (la marcada com a "
 "«activa»). Qualsevol de les claus es podrien usar per a desxifrar, depenent "
 "de com es van xifrar originalment les notes o blocs de notes."
 
@@ -1446,9 +1446,9 @@ msgid ""
 "however the application does not currently have access to them. It is likely "
 "they will eventually be downloaded via synchronisation."
 msgstr ""
-"Les claus mestres amb aquests IDs s'usen per a xifrar alguns dels elements. "
-"Tot i això l'aplicació actualment no hi té accés. Probablement es baixin via "
-"sincrontizació."
+"Les claus mestres amb aquests ID s'usen per a xifrar alguns dels elements. "
+"Tot i això l'aplicació actualment no hi té accés. Probablement es baixaran "
+"via sincronització."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.js:226
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:414
@@ -1558,7 +1558,7 @@ msgid ""
 "Press the shortcut and then press ENTER. Or, press BACKSPACE to clear the "
 "shortcut."
 msgstr ""
-"Premeu la drecera i premeu RETORN. O, premeu RETROCÉS per esborrar la "
+"Premeu la drecera i premeu RETORN. O, premeu RETROCÉS per a esborrar la "
 "drecera."
 
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:51
@@ -1680,8 +1680,8 @@ msgstr "Establiu la contrasenya"
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:619
 msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
 msgstr ""
-"Utilitzeu les fletxes per moure els elements de la disposició. Premeu "
-"«Escapa» per sortir."
+"Utilitzeu les fletxes per a moure els elements de la disposició. Premeu "
+"«Escapa» per a sortir."
 
 #: packages/app-desktop/gui/MainScreen/commands/commandPalette.js:18
 msgid "Command palette..."
@@ -1876,7 +1876,7 @@ msgstr "&Visualitza"
 
 #: packages/app-desktop/gui/MenuBar.js:506
 msgid "Layout button sequence"
-msgstr "Seqûència del botó de disposició"
+msgstr "Seqüència del botó de disposició"
 
 #: packages/app-desktop/gui/MenuBar.js:551
 #: packages/app-desktop/gui/MenuBar.js:557
@@ -2050,7 +2050,7 @@ msgid ""
 "switch to %s to edit the note."
 msgstr ""
 "Espereu que tots els adjunts hagin estat descarregats i desxifrats. També "
-"podeu canviar a %s per editar la nota."
+"podeu canviar a %s per a editar la nota."
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/plugins/lists.js:2151
 msgid "Checkbox list"
@@ -2083,7 +2083,7 @@ msgstr "Subíndex"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:285
 msgid "Click to add tags..."
-msgstr "Feu clic per afegir etiquetes..."
+msgstr "Feu clic per a afegir etiquetes..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:339
 msgid ""
@@ -2225,7 +2225,7 @@ msgstr "Cerca en la nota actual"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:59
 msgid "There was an error downloading this attachment:"
-msgstr "Hi ha hagut un error al descarregar aquest adjunt:"
+msgstr "Hi ha hagut un error en baixar aquest adjunt:"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:62
 #: packages/lib/services/ResourceEditWatcher/index.js:196
@@ -2260,7 +2260,7 @@ msgstr "Missatge o enllaç no suportat: %s"
 
 #: packages/app-desktop/gui/NoteList/NoteList.js:163
 msgid "Custom order"
-msgstr "Ordrenació personalitzada"
+msgstr "Ordenació personalitzada"
 
 #: packages/app-desktop/gui/NoteList/NoteList.js:163
 msgid "View"
@@ -2277,8 +2277,8 @@ msgid ""
 "To manually sort the notes, the sort order must be changed to \"%s\" in the "
 "menu \"%s\" > \"%s\""
 msgstr ""
-"Per ordenar les notes manualment, l'ordre de classificació s'ha de canviar a "
-"\"%s\" en el menú \"%s\" > \"%s\""
+"Per a ordenar les notes manualment, l'ordre de classificació s'ha de canviar "
+"a \"%s\" en el menú \"%s\" > \"%s\""
 
 #: packages/app-desktop/gui/NoteList/NoteList.js:415
 msgid "No notes in here. Create one by clicking on \"New note\"."
@@ -2334,7 +2334,7 @@ msgid ""
 "Click \"%s\" to restore the note. It will be copied in the notebook named "
 "\"%s\". The current version of the note will not be replaced or modified."
 msgstr ""
-"Cliqueu «%s» per restaurar la nota. Aquesta serà copiada al el notebook "
+"Feu clic «%s» per a restaurar la nota. Aquesta serà copiada al bloc de notes "
 "anomenat «%s». La versió actual de la nota no serà substituïda o modificada."
 
 #: packages/app-desktop/gui/PromptDialog.min.js:249
@@ -2370,7 +2370,7 @@ msgid ""
 "notes. Please be careful when deleting one of them as they cannot be "
 "restored afterwards."
 msgstr ""
-"Aquesta és una eina avançada per mostrar els adjunts que estan enllaçats a "
+"Aquesta és una eina avançada per a mostrar els adjunts que estan enllaçats a "
 "les vostres notes. Tingueu precaució en suprimir-ne un, ja que després no es "
 "poden restaurar."
 
@@ -2391,7 +2391,8 @@ msgstr "Confirmació"
 #: packages/app-desktop/gui/Root.js:119
 msgid "The Web Clipper needs your authorisation to access your data."
 msgstr ""
-"El porta-retalls web necessita autorització per accedir a les vostres dades."
+"El porta-retalls web necessita autorització per a accedir a les vostres "
+"dades."
 
 #: packages/app-desktop/gui/Root.js:120
 msgid "Grant authorisation"
@@ -2516,7 +2517,7 @@ msgid ""
 msgstr ""
 "Voleu suprimir el bloc de notes \"%s\"? \n"
 "\n"
-"També se suprimiran totes les notes i els sub-blocs d'aquest bloc de notes."
+"També se suprimiran totes les notes i els subblocs d'aquest bloc de notes."
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:197
 #, javascript-format
@@ -2652,7 +2653,7 @@ msgstr "Alterna entre el tipus nota i tasques pendents"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.js:87
 msgid "Switch to note type"
-msgstr "Canvia el tipos a nota"
+msgstr "Canvia el tipus a nota"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.js:93
 msgid "Switch to to-do type"
@@ -2679,9 +2680,9 @@ msgid ""
 "by a tag name, or @ followed by a notebook name. Or type : to search for "
 "commands."
 msgstr ""
-"Escriviu un títol de nota o part del seu contingut per saltar a la nota. O "
+"Escriviu un títol de nota o part del seu contingut per a saltar a la nota. O "
 "escriviu # seguit d'un nom d'etiqueta, o @ seguit d'un nom de bloc de notes. "
-"O escriviu : per a cercar entre les ordres."
+"O escriviu \":\" per a cercar entre les ordres."
 
 #: packages/app-desktop/plugins/GotoAnything.js:505
 msgid "Command palette"
@@ -2701,11 +2702,11 @@ msgstr "No"
 
 #: packages/app-mobile/components/CameraView.js:158
 msgid "Permission to use camera"
-msgstr "Permís per utilitzar la càmara"
+msgstr "Permís per a utilitzar la càmera"
 
 #: packages/app-mobile/components/CameraView.js:159
 msgid "Your permission to use your camera is required."
-msgstr "Es necessita el vostre permís per utilitzar la càmara."
+msgstr "Es necessita el vostre permís per a utilitzar la càmera."
 
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:27
 msgid "Open"
@@ -2745,8 +2746,8 @@ msgid ""
 "In order to use file system synchronisation your permission to write to "
 "external storage is required."
 msgstr ""
-"Per utilitzar la sincronització del sistema de fitxers, cal el vostre permís "
-"per escriure a l'emmagatzematge extern."
+"Per a utilitzar la sincronització del sistema de fitxers, cal el vostre "
+"permís per a escriure a l'emmagatzematge extern."
 
 #: packages/app-mobile/components/screens/ConfigScreen.js:152
 msgid "Information"
@@ -2790,8 +2791,8 @@ msgid ""
 "Use this to rebuild the search index if there is a problem with search. It "
 "may take a long time depending on the number of notes."
 msgstr ""
-"Utilitzeu això per reconstruir l'índex de cerca si hi ha un problema amb la "
-"cerca. Pot trigar molt en funció del nombre de notes."
+"Utilitzeu això per a reconstruir l'índex de cerca si hi ha un problema amb "
+"la cerca. Pot trigar molt en funció del nombre de notes."
 
 #: packages/app-mobile/components/screens/ConfigScreen.js:425
 msgid "Exporting profile..."
@@ -2903,7 +2904,7 @@ msgid ""
 "You may turn off this option at any time in the Configuration screen."
 msgstr ""
 "Per tal d'associar una geolocalització a la nota, l'aplicació necessita "
-"permís per accedir a la vostra ubicació.\n"
+"permís per a accedir a la vostra ubicació.\n"
 "\n"
 "Podeu desactivar aquesta opció en qualsevol moment a la pantalla de "
 "configuració."
@@ -2960,7 +2961,7 @@ msgstr "Fes una foto"
 
 #: packages/app-mobile/components/screens/Note.js:807
 msgid "Choose an option"
-msgstr "Esculliu una opció"
+msgstr "Escolliu una opció"
 
 #: packages/app-mobile/components/screens/Note.js:840
 msgid "Convert to note"
@@ -3185,7 +3186,7 @@ msgstr "Ociós"
 
 #: packages/lib/Synchronizer.js:277
 msgid "In progress"
-msgstr "En progés"
+msgstr "En progrés"
 
 #: packages/lib/Synchronizer.js:984
 msgid ""
@@ -3228,7 +3229,7 @@ msgid ""
 "\n"
 "Please try again."
 msgstr ""
-"No s'ha pogut autoritzar l'aplciació:\n"
+"No s'ha pogut autoritzar l'aplicació:\n"
 "\n"
 "%s\n"
 "\n"
@@ -3379,7 +3380,7 @@ msgid ""
 msgstr ""
 "Atenció: si canvieu aquesta ubicació, assegureu-vos de copiar-hi tot el "
 "contingut abans de sincronitzar; en cas contrari, se suprimiran tots els "
-"fitxers. Consulteu les FAQ per obtenir més detalls: %s"
+"fitxers. Consulteu les FAQ per a obtenir més detalls: %s"
 
 #: packages/lib/models/Setting.js:124
 msgid "Light"
@@ -3541,7 +3542,7 @@ msgstr "Tema"
 
 #: packages/lib/models/Setting.js:510
 msgid "Automatically switch theme to match system theme"
-msgstr "Canvia de tema automàticament per coincidir amb el tema del sistema"
+msgstr "Canvia de tema automàticament per a coincidir amb el tema del sistema"
 
 #: packages/lib/models/Setting.js:522
 msgid "Preferred light theme"
@@ -3553,7 +3554,7 @@ msgstr "Tema fosc preferit"
 
 #: packages/lib/models/Setting.js:546
 msgid "Show note counts"
-msgstr "Mostra el número de notes"
+msgstr "Mostra el nombre de notes"
 
 #: packages/lib/models/Setting.js:554 packages/lib/models/Setting.js:556
 #: packages/lib/models/Setting.js:557
@@ -3617,7 +3618,7 @@ msgstr "Activa els salts de línia"
 
 #: packages/lib/models/Setting.js:683
 msgid "Enable typographer support"
-msgstr "Activa el soport tipogràfic"
+msgstr "Activa el suport tipogràfic"
 
 #: packages/lib/models/Setting.js:684
 msgid "Enable Linkify"
@@ -3702,7 +3703,7 @@ msgid ""
 "reducing the number of conflicts."
 msgstr ""
 "Això permetrà que Joplin s’executi en segon pla. Es recomana habilitar "
-"aquesta configuració perquè les notes es sincronitzin constantment, reduint "
+"aquesta configuració perquè les notes se sincronitzin constantment, reduint "
 "així el nombre de conflictes."
 
 #: packages/lib/models/Setting.js:717
@@ -3724,7 +3725,7 @@ msgstr "Per defecte"
 
 #: packages/lib/models/Setting.js:769
 msgid "Editor font family"
-msgstr "Famíllia de lletra de l'editor"
+msgstr "Família de lletra de l'editor"
 
 #: packages/lib/models/Setting.js:770
 msgid ""
@@ -3766,7 +3767,7 @@ msgstr "Full d'estil personalitzat per a estils d'aplicacions de tot Joplin"
 
 #: packages/lib/models/Setting.js:828
 msgid "Re-upload local data to sync target"
-msgstr "Torna a pujar les dades locals per sincronitzar la destinació"
+msgstr "Torna a pujar les dades locals per a sincronitzar la destinació"
 
 #: packages/lib/models/Setting.js:838
 msgid "Delete local data and re-download from sync target"
@@ -3780,12 +3781,12 @@ msgstr "Actualitza automàticament l'aplicació"
 
 #: packages/lib/models/Setting.js:844
 msgid "Get pre-releases when checking for updates"
-msgstr "Obtén pre-llançaments quan cerqui actualitzacions"
+msgstr "Obtén prellançaments quan cerqui actualitzacions"
 
 #: packages/lib/models/Setting.js:844
 #, javascript-format
 msgid "See the pre-release page for more details: %s"
-msgstr "Consulta la pàgina de pre-llançament per a més detalls: %s"
+msgstr "Consulta la pàgina de prellançament per a més detalls: %s"
 
 #: packages/lib/models/Setting.js:852
 msgid "Synchronisation interval"
@@ -3893,9 +3894,9 @@ msgid ""
 msgstr ""
 "Una llista separada per comes de camins a directoris d'on carregar els "
 "certificats, o el camí a fitxers de certificats concrets. Per exemple, "
-"el_meu/dir_cert, /altres/personalitzat.pem. Tingueu en compte que si feu "
-"canvis en la configuració TLS, cal que els deseu abans de fer clic a "
-"«Comprova la configuració de la sincronització»."
+"directori/subdirectori_certificats, /altres/personalitzat.pem. Tingueu en "
+"compte que si feu canvis en la configuració TLS, cal que els deseu abans de "
+"fer clic a «Comprova la configuració de la sincronització»."
 
 #: packages/lib/models/Setting.js:958
 msgid "Ignore TLS certificate errors"
@@ -3951,10 +3952,11 @@ msgid ""
 "item with a factor of 2 will take twice as much space as an item with a "
 "factor of 1.Restart app to see changes."
 msgstr ""
-"La propietat factor defineix com l’element creixerà o es reduirà per ajustar-"
-"se a l’espai disponible al seu contenidor respecte als altres elements. Per "
-"tant, un element amb un factor de 2 ocuparà el doble d’espai que un element "
-"amb un factor de 1. Reinicieu l’aplicació per veure els canvis."
+"La propietat factor defineix com l’element creixerà o es reduirà per a "
+"ajustar-se a l’espai disponible al seu contenidor respecte als altres "
+"elements. Per tant, un element amb un factor de 2 ocuparà el doble d’espai "
+"que un element amb un factor d'1. Reinicieu l’aplicació per a veure els "
+"canvis."
 
 #: packages/lib/models/Setting.js:1029
 msgid "Note list growth factor"
@@ -4017,7 +4019,7 @@ msgid ""
 "formatting. It is indicated below which plugins are compatible or not with "
 "the WYSIWYG editor."
 msgstr ""
-"Aquests connectors milloren el renderitzador de Markdown amb funcions "
+"Aquestes extensions milloren el renderitzador de Markdown amb funcions "
 "addicionals. Tingueu en compte que, tot i que aquestes funcions poden ser "
 "útils, no són Markdown estàndard i, per tant, la majoria només funcionaran "
 "dins de Joplin. A més, alguns d’ells són *incompatibles* amb l’editor "
@@ -4063,7 +4065,7 @@ msgid ""
 msgstr ""
 "Obriu l'URL següent al navegador per a autenticar l'aplicació. L'aplicació "
 "crearà un directori a «Aplicacions/Joplin» i només llegirà i escriurà "
-"fitxers en aquest directory. No tindrà accés a cap fitxer fora d'aquesta "
+"fitxers en aquest directory. No tindrà accés a cap fitxer fora d'aquest "
 "directori ni a cap dada personal. No es compartirà cap dada amb terceres "
 "parts."
 
@@ -4119,7 +4121,7 @@ msgid ""
 "target. In order to find these items, either search for the title or the ID "
 "(which is displayed in brackets above)."
 msgstr ""
-"Aquests elements es mantindran al dispositiu però no es pujaran a la "
+"Aquests elements es mantindran al dispositiu, però no es pujaran a la "
 "destinació de sincronització. Per a poder trobar aquests elements, podeu "
 "cercar pel títol o la ID (que es mostra entre claudàtors a sobre)."
 
@@ -4202,7 +4204,7 @@ msgstr "Conflictius: %d"
 #: packages/lib/services/ReportService.js:242
 #, javascript-format
 msgid "To delete: %d"
-msgstr "Per suprimir: %d"
+msgstr "Per a suprimir: %d"
 
 #: packages/lib/services/ReportService.js:244
 msgid "Folders"
@@ -4274,7 +4276,7 @@ msgstr "Indiqueu el format d'importació per a %s"
 
 #: packages/lib/services/interop/InteropService_Exporter_Jex.js:43
 msgid "There is no data to export."
-msgstr "No hi ha dades per exportar."
+msgstr "No hi ha dades per a exportar."
 
 #: packages/lib/services/interop/InteropService_Importer_Md.js:46
 msgid "Please specify the notebook where the notes should be imported to."
