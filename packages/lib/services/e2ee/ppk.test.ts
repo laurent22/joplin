@@ -1,5 +1,5 @@
 import { afterAllCleanUp, encryptionService, expectThrow, setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
-import { decryptPrivateKey, generateKeyPair, ppkDecryptMasterKeyContent, ppkGenerateMasterKey, ppkPasswordIsValid, reencryptFromPasswordToPublicKey, reencryptFromPublicKeyToPassword } from './ppk';
+import { decryptPrivateKey, generateKeyPair, ppkDecryptMasterKeyContent, ppkGenerateMasterKey, ppkPasswordIsValid, mkReencryptFromPasswordToPublicKey, mkReencryptFromPublicKeyToPassword } from './ppk';
 
 describe('e2ee/ppk', function() {
 
@@ -66,10 +66,10 @@ describe('e2ee/ppk', function() {
 
 		// Using user 2 private key, he reencrypts the master key
 		const ppk2 = await generateKeyPair(encryptionService(), 'ppk_1111');
-		const ppkEncrypted = await reencryptFromPasswordToPublicKey(encryptionService(), key1, 'mk_1111', ppk2);
+		const ppkEncrypted = await mkReencryptFromPasswordToPublicKey(encryptionService(), key1, 'mk_1111', ppk2);
 
 		// Once user 2 gets the master key, he can decrypt it using his private key
-		const key2 = await reencryptFromPublicKeyToPassword(encryptionService(), ppkEncrypted, ppk2, 'ppk_1111', 'mk_2222');
+		const key2 = await mkReencryptFromPublicKeyToPassword(encryptionService(), ppkEncrypted, ppk2, 'ppk_1111', 'mk_2222');
 
 		// Once it's done, both users should have the same master key
 		const plaintext1 = await encryptionService().decryptMasterKeyContent(key1, 'mk_1111');

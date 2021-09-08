@@ -67,7 +67,7 @@ class Shared {
 
 		try {
 			const password = comp.state.passwords[masterKey.id];
-			const newMasterKey = await EncryptionService.instance().reencryptMasterKey(masterKey, password);
+			const newMasterKey = await EncryptionService.instance().reencryptMasterKey(masterKey, password, password);
 			await MasterKey.save(newMasterKey);
 			void reg.waitForSyncFinishedThenSync();
 			alert(_('The master key has been upgraded successfully!'));

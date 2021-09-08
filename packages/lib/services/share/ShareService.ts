@@ -8,7 +8,7 @@ import Note from '../../models/Note';
 import Setting from '../../models/Setting';
 import { FolderEntity } from '../database/types';
 import EncryptionService from '../e2ee/EncryptionService';
-import { PublicPrivateKeyPair, reencryptFromPasswordToPublicKey, reencryptFromPublicKeyToPassword } from '../e2ee/ppk';
+import { PublicPrivateKeyPair, mkReencryptFromPasswordToPublicKey, mkReencryptFromPublicKeyToPassword } from '../e2ee/ppk';
 import { MasterKeyEntity } from '../e2ee/types';
 import { getMasterPassword } from '../e2ee/utils';
 import { addMasterKey, getEncryptionEnabled, localSyncInfo } from '../synchronizer/syncInfoUtils';
@@ -240,7 +240,7 @@ export default class ShareService {
 
 			logger.info('Reencrypting master key with recipient public key', recipientPublicKey);
 
-			recipientMasterKey = await reencryptFromPasswordToPublicKey(
+			recipientMasterKey = await mkReencryptFromPasswordToPublicKey(
 				this.encryptionService_,
 				masterKey,
 				getMasterPassword(),
@@ -279,7 +279,7 @@ export default class ShareService {
 
 		if (accept) {
 			if (masterKey) {
-				const reencryptedMasterKey = await reencryptFromPublicKeyToPassword(
+				const reencryptedMasterKey = await mkReencryptFromPublicKeyToPassword(
 					this.encryptionService_,
 					masterKey,
 					localSyncInfo().ppk,

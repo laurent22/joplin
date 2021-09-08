@@ -4,9 +4,9 @@ import MasterKey from '../../models/MasterKey';
 import Setting from '../../models/Setting';
 import { MasterKeyEntity } from './types';
 import EncryptionService from './EncryptionService';
-import { getActiveMasterKey, getActiveMasterKeyId, localSyncInfo, masterKeyEnabled, setEncryptionEnabled, SyncInfo } from '../synchronizer/syncInfoUtils';
+import { getActiveMasterKey, getActiveMasterKeyId, localSyncInfo, masterKeyEnabled, saveLocalSyncInfo, setEncryptionEnabled, SyncInfo } from '../synchronizer/syncInfoUtils';
 import JoplinError from '../../JoplinError';
-import { generateKeyPairAndSave, ppkPasswordIsValid } from './ppk';
+import { generateKeyPairAndSave, pkReencryptPrivateKey, ppkPasswordIsValid } from './ppk';
 
 const logger = Logger.create('e2ee/utils');
 
@@ -177,21 +177,49 @@ export function getMasterPassword(throwIfNotSet: boolean = true): string {
 	return password;
 }
 
-export async function updateMasterPassword(currentPassword:string, newPassword:string) {
+export async function updateMasterPassword(currentPassword: string, newPassword: string, waitForSyncFinishedThenSync: Function = null) {
 	const syncInfo = localSyncInfo();
 
 	if (currentPassword) {
-		
+		const reencryptedMasterKeys: MasterKeyEntity[] = [];
+		let reencryptedPpk = null;
 
-		// TODO: reencrypt all keys
-		// Should decrypt with currentPassword
-		// If not, check passwordCache
-		// If can't be decrypted - throw an error - user needs to reset the password (clear password, disabled all keys)
+		for (const mk of localSyncInfo().masterKeys) {
+			try {
+				reencryptedMasterKeys.push(await EncryptionService.instance().reencryptMasterKey(mk, currentPassword, newPassword));
+			} catch (error) {
+				error.message = `Master key ${mk.id} could not be reencrypted - this is most likely due to an incorrect password. Please try again. Error was: ${error.message}`;
+				throw error;
+			}
+		}
+
+		if (localSyncInfo().ppk) {
+			try {
+				reencryptedPpk = await pkReencryptPrivateKey(EncryptionService.instance(), localSyncInfo().ppk, currentPassword, newPassword);
+			} catch (error) {
+				error.message = `Private key could not be reencrypted - this is most likely due to an incorrect password. Please try again. Error was: ${error.message}`;
+				throw error;
+			}
+		}
+
+		Setting.setValue('encryption.masterPassword', newPassword);
+
+		for (const mk of reencryptedMasterKeys) {
+			await MasterKey.save(mk);
+		}
+
+		if (reencryptedPpk) {
+			const syncInfo = localSyncInfo();
+			syncInfo.ppk = reencryptedPpk;
+			saveLocalSyncInfo(syncInfo);
+		}
 	} else {
 		if (syncInfo.ppk || syncInfo.masterKeys?.length) throw new Error('Previous password must be provided in order to reencrypt the encryption keys');
 		await generateKeyPairAndSave(EncryptionService.instance(), syncInfo, newPassword);
 		Setting.setValue('encryption.masterPassword', newPassword);
 	}
+
+	if (waitForSyncFinishedThenSync) void waitForSyncFinishedThenSync();
 }
 
 export enum MasterPasswordStatus {
@@ -202,7 +230,7 @@ export enum MasterPasswordStatus {
 	Valid = 4,
 }
 
-export async function getMasterPasswordStatus():Promise<MasterPasswordStatus> {
+export async function getMasterPasswordStatus(): Promise<MasterPasswordStatus> {
 	const password = getMasterPassword(false);
 	if (!password) return MasterPasswordStatus.NotSet;
 
@@ -223,11 +251,11 @@ const masterPasswordStatusMessages = {
 	[MasterPasswordStatus.Invalid]: '❌ ' + 'Invalid',
 };
 
-export function getMasterPasswordStatusMessage(status:MasterPasswordStatus):string {
+export function getMasterPasswordStatusMessage(status: MasterPasswordStatus): string {
 	return masterPasswordStatusMessages[status];
 }
 
-export async function masterPasswordIsValid(masterPassword: string):Promise<boolean> {
+export async function masterPasswordIsValid(masterPassword: string): Promise<boolean> {
 	// A valid password is basically one that decrypts the private key, but due
 	// to backward compatibility not all users have a PPK yet, so we also check
 	// based on the active master key.
