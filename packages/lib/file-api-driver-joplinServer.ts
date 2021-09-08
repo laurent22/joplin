@@ -40,6 +40,10 @@ export default class FileApiDriverJoplinServer {
 		return true;
 	}
 
+	public get requiresPublicPrivateKeyPair() {
+		return true;
+	}
+
 	public requestRepeatCount() {
 		return 3;
 	}

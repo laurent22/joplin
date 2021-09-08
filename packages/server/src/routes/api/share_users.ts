@@ -43,6 +43,7 @@ router.get('api/share_users', async (_path: SubPath, ctx: AppContext) => {
 		items.push({
 			id: su.id,
 			status: su.status,
+			master_key: su.master_key,
 			share: {
 				id: share.id,
 				folder_id: share.folder_id,
