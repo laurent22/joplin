@@ -75,7 +75,12 @@ export async function generateMasterKeyAndEnableEncryption(service: EncryptionSe
 // set. If it is not, we set it from the active master key. It needs to be
 // called after the settings have been initialized.
 export async function migrateMasterPassword() {
-	if (Setting.value('encryption.masterPassword')) return; // Already migrated
+	// Already migrated
+	if (Setting.value('encryption.masterPassword')) return;
+
+	// If a PPK is defined it means the master password has been set at some
+	// point so no need to run the migration
+	if (localSyncInfo().ppk) return;
 
 	logger.info('Master password is not set - trying to get it from the active master key...');
 

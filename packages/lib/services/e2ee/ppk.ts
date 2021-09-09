@@ -1,6 +1,6 @@
 import * as NodeRSA from 'node-rsa';
 import uuid from '../../uuid';
-import { getActiveMasterKey, saveLocalSyncInfo, SyncInfo } from '../synchronizer/syncInfoUtils';
+import { saveLocalSyncInfo, SyncInfo } from '../synchronizer/syncInfoUtils';
 import EncryptionService, { EncryptionCustomHandler, EncryptionMethod } from './EncryptionService';
 import { MasterKeyEntity } from './types';
 import { getMasterPassword } from './utils';
@@ -72,9 +72,6 @@ export async function generateKeyPairAndSave(encryptionService: EncryptionServic
 
 export async function setPpkIfNotExist(service: EncryptionService, localInfo: SyncInfo, remoteInfo: SyncInfo) {
 	if (localInfo.ppk || remoteInfo.ppk) return;
-
-	const masterKey = getActiveMasterKey(localInfo);
-	if (!masterKey) return;
 
 	const password = getMasterPassword(false);
 	if (!password) return;
