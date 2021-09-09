@@ -41,7 +41,7 @@ export const runtime = (): CommandRuntime => {
 			// field: Sort order's field. undefined means switching a field.
 			// reverse: whether the sort order is reversed or not. undefined means toggling.
 			//
-			// To support CommandService.cheduleExecute(), field accepts an size-two Array,
+			// To support CommandService.scheduleExecute(), field accepts an size-two Array,
 			// which means [field, reverse].
 			let nextField: string;
 			let nextReverse: boolean;
@@ -56,7 +56,7 @@ export const runtime = (): CommandRuntime => {
 			const currentReverse = Setting.value(SETTING_REVERSE);
 			const enabled = Setting.value(SETTING_PER_FIELD_REVERSAL_ENABLED);
 			if (enabled) {
-				if (perFieldReverse == null) {
+				if (perFieldReverse === null) {
 					perFieldReverse = { ...Setting.value(SETTING_PER_FIELD_REVERSE) };
 				}
 			}
