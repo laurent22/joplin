@@ -1,9 +1,9 @@
 import { afterAllCleanUp, setupDatabaseAndSynchronizer, switchClient, encryptionService, expectNotThrow, expectThrow } from '../../testing/test-utils';
 import MasterKey from '../../models/MasterKey';
 import { migrateMasterPassword, showMissingMasterKeyMessage, updateMasterPassword } from './utils';
-import { localSyncInfo, setActiveMasterKeyId, setMasterKeyEnabled } from '../synchronizer/syncInfoUtils';
+import { localSyncInfo, saveLocalSyncInfo, setActiveMasterKeyId, setMasterKeyEnabled } from '../synchronizer/syncInfoUtils';
 import Setting from '../../models/Setting';
-import { generateKeyPairAndSave, ppkPasswordIsValid } from './ppk';
+import { generateKeyPair, ppkPasswordIsValid } from './ppk';
 
 describe('e2ee/utils', function() {
 
@@ -78,7 +78,10 @@ describe('e2ee/utils', function() {
 		Setting.setValue('encryption.masterPassword', masterPassword1);
 		const mk1 = await MasterKey.save(await encryptionService().generateMasterKey(masterPassword1));
 		const mk2 = await MasterKey.save(await encryptionService().generateMasterKey(masterPassword1));
-		await generateKeyPairAndSave(encryptionService(), localSyncInfo(), masterPassword1);
+
+		const syncInfo = localSyncInfo();
+		syncInfo.ppk = await generateKeyPair(encryptionService(), masterPassword1);
+		saveLocalSyncInfo(syncInfo);
 
 		await updateMasterPassword(masterPassword1, masterPassword2);
 
@@ -93,11 +96,12 @@ describe('e2ee/utils', function() {
 		await expectThrow(async () => updateMasterPassword('wrong', masterPassword1));
 	});
 
-	it('should set the master password and generate a PPK if not already set', async () => {
+	it('should only set the master password if not already set', async () => {
 		expect(localSyncInfo().ppk).toBeFalsy();
 		await updateMasterPassword('', '111111');
 		expect(Setting.value('encryption.masterPassword')).toBe('111111');
-		expect(await ppkPasswordIsValid(encryptionService(), localSyncInfo().ppk, '111111')).toBe(true);
+		expect(localSyncInfo().ppk).toBeFalsy();
+		expect(localSyncInfo().masterKeys.length).toBe(0);
 	});
 
 });

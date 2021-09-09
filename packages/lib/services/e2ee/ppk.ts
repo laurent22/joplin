@@ -1,9 +1,7 @@
 import * as NodeRSA from 'node-rsa';
 import uuid from '../../uuid';
-import { saveLocalSyncInfo, SyncInfo } from '../synchronizer/syncInfoUtils';
 import EncryptionService, { EncryptionCustomHandler, EncryptionMethod } from './EncryptionService';
 import { MasterKeyEntity } from './types';
-import { getMasterPassword } from './utils';
 
 interface PrivateKey {
 	encryptionMethod: EncryptionMethod;
@@ -62,21 +60,6 @@ export async function pkReencryptPrivateKey(encryptionService: EncryptionService
 		...ppk,
 		privateKey: await encryptPrivateKey(encryptionService, encryptionPassword, decryptedPrivate),
 	};
-}
-
-export async function generateKeyPairAndSave(encryptionService: EncryptionService, localInfo: SyncInfo, password: string): Promise<PublicPrivateKeyPair> {
-	localInfo.ppk = await generateKeyPair(encryptionService, password);
-	saveLocalSyncInfo(localInfo);
-	return localInfo.ppk;
-}
-
-export async function setPpkIfNotExist(service: EncryptionService, localInfo: SyncInfo, remoteInfo: SyncInfo) {
-	if (localInfo.ppk || remoteInfo.ppk) return;
-
-	const password = getMasterPassword(false);
-	if (!password) return;
-
-	await generateKeyPairAndSave(service, localInfo, getMasterPassword());
 }
 
 export async function ppkPasswordIsValid(service: EncryptionService, ppk: PublicPrivateKeyPair, password: string): Promise<boolean> {

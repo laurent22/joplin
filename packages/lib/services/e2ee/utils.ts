@@ -6,7 +6,7 @@ import { MasterKeyEntity } from './types';
 import EncryptionService from './EncryptionService';
 import { getActiveMasterKey, getActiveMasterKeyId, localSyncInfo, masterKeyEnabled, saveLocalSyncInfo, setEncryptionEnabled, SyncInfo } from '../synchronizer/syncInfoUtils';
 import JoplinError from '../../JoplinError';
-import { generateKeyPairAndSave, pkReencryptPrivateKey, ppkPasswordIsValid } from './ppk';
+import { pkReencryptPrivateKey, ppkPasswordIsValid } from './ppk';
 
 const logger = Logger.create('e2ee/utils');
 
@@ -183,9 +183,9 @@ export function getMasterPassword(throwIfNotSet: boolean = true): string {
 }
 
 export async function updateMasterPassword(currentPassword: string, newPassword: string, waitForSyncFinishedThenSync: Function = null) {
-	const syncInfo = localSyncInfo();
+	if (localSyncInfo().ppk || localSyncInfo().masterKeys?.length) {
+		if (!currentPassword) throw new Error('Previous password must be provided in order to reencrypt the encryption keys');
 
-	if (currentPassword) {
 		const reencryptedMasterKeys: MasterKeyEntity[] = [];
 		let reencryptedPpk = null;
 
@@ -207,8 +207,6 @@ export async function updateMasterPassword(currentPassword: string, newPassword:
 			}
 		}
 
-		Setting.setValue('encryption.masterPassword', newPassword);
-
 		for (const mk of reencryptedMasterKeys) {
 			await MasterKey.save(mk);
 		}
@@ -218,11 +216,9 @@ export async function updateMasterPassword(currentPassword: string, newPassword:
 			syncInfo.ppk = reencryptedPpk;
 			saveLocalSyncInfo(syncInfo);
 		}
-	} else {
-		if (syncInfo.ppk || syncInfo.masterKeys?.length) throw new Error('Previous password must be provided in order to reencrypt the encryption keys');
-		await generateKeyPairAndSave(EncryptionService.instance(), syncInfo, newPassword);
-		Setting.setValue('encryption.masterPassword', newPassword);
 	}
+
+	Setting.setValue('encryption.masterPassword', newPassword);
 
 	if (waitForSyncFinishedThenSync) void waitForSyncFinishedThenSync();
 }
