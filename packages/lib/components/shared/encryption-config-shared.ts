@@ -186,9 +186,17 @@ class Shared {
 		setMasterKeyEnabled(mk.id, !masterKeyEnabled(mk));
 	}
 
-	public enableEncryptionConfirmationMessages(masterKey: MasterKeyEntity) {
-		const msg = [_('Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target. Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.')];
+	public enableEncryptionConfirmationMessages(masterKey: MasterKeyEntity, hasMasterPassword: boolean) {
+		const msg = [_('Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target.')];
+
+		if (hasMasterPassword) {
+			msg.push(_('To continue, please enter your master password below.'));
+		} else {
+			msg.push(_('Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.'));
+		}
+
 		if (masterKey) msg.push(_('Encryption will be enabled using the master key created on %s', time.unixMsToLocalDateTime(masterKey.created_time)));
+
 		return msg;
 	}
 

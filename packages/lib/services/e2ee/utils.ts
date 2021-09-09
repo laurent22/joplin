@@ -169,10 +169,10 @@ export function showMissingMasterKeyMessage(syncInfo: SyncInfo, notLoadedMasterK
 
 export function getDefaultMasterKey(): MasterKeyEntity {
 	let mk = getActiveMasterKey();
-	if (!mk || !mk.enabled) {
+	if (!mk || masterKeyEnabled(mk)) {
 		mk = MasterKey.latest();
 	}
-	return mk && mk.enabled ? mk : null;
+	return mk && masterKeyEnabled(mk) ? mk : null;
 }
 
 // Get the master password if set, or throw an exception. This ensures that
@@ -237,13 +237,13 @@ export async function getMasterPasswordStatus(): Promise<MasterPasswordStatus> {
 	const password = getMasterPassword(false);
 	if (!password) return MasterPasswordStatus.NotSet;
 
-	try {
-		const isValid = await masterPasswordIsValid(password);
-		return isValid ? MasterPasswordStatus.Valid : MasterPasswordStatus.Invalid;
-	} catch (error) {
-		if (error.code === 'noKeyToDecrypt') return MasterPasswordStatus.Loaded;
-		throw error;
-	}
+	// try {
+	const isValid = await masterPasswordIsValid(password);
+	return isValid ? MasterPasswordStatus.Valid : MasterPasswordStatus.Invalid;
+	// } catch (error) {
+	// 	if (error.code === 'noKeyToDecrypt') return MasterPasswordStatus.Loaded;
+	// 	throw error;
+	// }
 }
 
 const masterPasswordStatusMessages = {
@@ -275,5 +275,10 @@ export async function masterPasswordIsValid(masterPassword: string): Promise<boo
 		return EncryptionService.instance().checkMasterKeyPassword(masterKey, masterPassword);
 	}
 
-	throw new JoplinError('Cannot check master password validity as no key is present', 'noKeyToDecrypt');
+	// There may not be any key to decrypt if the master password has been set,
+	// but the user has never synchronized. In which case, it's sufficient to
+	// compare to whatever they've entered earlier.
+	return Setting.value('encryption.masterPassword') === masterPassword;
+
+	// throw new JoplinError('Cannot check master password validity as no key is present', 'noKeyToDecrypt');
 }

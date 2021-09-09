@@ -146,6 +146,7 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent<Props> {
 	passwordPromptComponent() {
 		const theme = themeStyle(this.props.themeId);
 		const masterKey = getDefaultMasterKey();
+		const hasMasterPassword = !!this.props.masterPassword;
 
 		const onEnableClick = async () => {
 			try {
@@ -162,7 +163,7 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent<Props> {
 			}
 		};
 
-		const messages = shared.enableEncryptionConfirmationMessages(masterKey);
+		const messages = shared.enableEncryptionConfirmationMessages(masterKey, hasMasterPassword);
 
 		const messageComps = messages.map(msg => {
 			return <Text key={msg} style={{ fontSize: theme.fontSize, color: theme.color, marginBottom: 10 }}>{msg}</Text>;

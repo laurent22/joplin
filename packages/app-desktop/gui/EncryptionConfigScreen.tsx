@@ -11,7 +11,7 @@ import dialogs from './dialogs';
 import shared from '@joplin/lib/components/shared/encryption-config-shared';
 import { MasterKeyEntity } from '@joplin/lib/services/e2ee/types';
 import { getEncryptionEnabled, masterKeyEnabled, SyncInfo } from '@joplin/lib/services/synchronizer/syncInfoUtils';
-import { getDefaultMasterKey, toggleAndSetupEncryption, getMasterPasswordStatusMessage } from '@joplin/lib/services/e2ee/utils';
+import { getDefaultMasterKey, toggleAndSetupEncryption, getMasterPasswordStatusMessage, masterPasswordIsValid } from '@joplin/lib/services/e2ee/utils';
 import MasterKey from '@joplin/lib/models/MasterKey';
 import CommandService from '@joplin/lib/services/CommandService';
 import Button, { ButtonLevel } from './Button/Button';
@@ -132,8 +132,8 @@ class EncryptionConfigScreenComponent extends React.Component<Props> {
 
 		return (
 			<div>
-				<h2>{_('Master keys that need upgrading')}</h2>
-				<p style={theme.textStyle}>{_('The following master keys use an out-dated encryption algorithm and it is recommended to upgrade them. The upgraded master key will still be able to decrypt and encrypt your data as usual.')}</p>
+				<h2>{_('Encryption keys that need upgrading')}</h2>
+				<p style={theme.textStyle}>{_('The following keys use an out-dated encryption algorithm and it is recommended to upgrade them. The upgraded key will still be able to decrypt and encrypt your data as usual.')}</p>
 				<table>
 					<tbody>
 						<tr>
@@ -186,8 +186,8 @@ class EncryptionConfigScreenComponent extends React.Component<Props> {
 			mkComps.push(this.renderMasterKey(mk, isEnabledMasterKeys && latestMasterKey && mk.id === latestMasterKey.id));
 		}
 
-		const headerComp = isEnabledMasterKeys ? <h2>{_('Master Keys')}</h2> : <a onClick={() => shared.toggleShowDisabledMasterKeys(this) } style={{ ...theme.urlStyle, display: 'inline-block', marginBottom: 10 }} href="#">{showTable ? _('Hide disabled master keys') : _('Show disabled master keys')}</a>;
-		const infoComp = isEnabledMasterKeys ? <p style={theme.textStyle}>{'Note: Only one master key is going to be used for encryption (the one marked as "active"). Any of the keys might be used for decryption, depending on how the notes or notebooks were originally encrypted.'}</p> : null;
+		const headerComp = isEnabledMasterKeys ? <h2>{_('Encryption Keys')}</h2> : <a onClick={() => shared.toggleShowDisabledMasterKeys(this) } style={{ ...theme.urlStyle, display: 'inline-block', marginBottom: 10 }} href="#">{showTable ? _('Hide disabled keys') : _('Show disabled keys')}</a>;
+		const infoComp: any = null; // isEnabledMasterKeys ? <p style={theme.textStyle}>{'Note: Only one key is going to be used for encryption (the one marked as "active"). Any of the keys might be used for decryption, depending on how the notes or notebooks were originally encrypted.'}</p> : null;
 		const tableComp = !showTable ? null : (
 			<table>
 				<tbody>
@@ -286,16 +286,24 @@ class EncryptionConfigScreenComponent extends React.Component<Props> {
 		const onToggleButtonClick = async () => {
 			const isEnabled = getEncryptionEnabled();
 			const masterKey = getDefaultMasterKey();
+			const hasMasterPassword = !!this.props.masterPassword;
 
 			let answer = null;
 			if (isEnabled) {
 				answer = await dialogs.confirm(_('Disabling encryption means *all* your notes and attachments are going to be re-synchronised and sent unencrypted to the sync target. Do you wish to continue?'));
+				if (!answer) return;
 			} else {
-				const msg = shared.enableEncryptionConfirmationMessages(masterKey);
+				const msg = shared.enableEncryptionConfirmationMessages(masterKey, hasMasterPassword);
 				answer = await dialogs.prompt(msg.join('\n\n'), '', '', { type: 'password' });
-			}
+				if (!answer) return;
 
-			if (!answer) return;
+				if (hasMasterPassword) {
+					if (!(await masterPasswordIsValid(answer))) {
+						alert('Invalid password. Please try again. If you have forgotten your password you will need to reset it.');
+						return;
+					}
+				}
+			}
 
 			try {
 				await toggleAndSetupEncryption(EncryptionService.instance(), !isEnabled, masterKey, answer);
@@ -337,8 +345,8 @@ class EncryptionConfigScreenComponent extends React.Component<Props> {
 
 			nonExistingMasterKeySection = (
 				<div>
-					<h2>{_('Missing Master Keys')}</h2>
-					<p style={theme.textStyle}>{_('The master keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is likely they will eventually be downloaded via synchronisation.')}</p>
+					<h2>{_('Missing Encryption Keys')}</h2>
+					<p style={theme.textStyle}>{_('The keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is likely they will eventually be downloaded via synchronisation.')}</p>
 					<table>
 						<tbody>
 							<tr>
@@ -369,8 +377,6 @@ class EncryptionConfigScreenComponent extends React.Component<Props> {
 		return (
 			<div className="encryption-config-screen">
 				<div style={containerStyle}>
-					{this.renderMasterPassword()}
-
 					<h2>{_('End-to-end encryption')}</h2>
 					<p>
 						{_('Encryption is:')} <strong>{this.props.encryptionEnabled ? _('Enabled') : _('Disabled')}</strong>
@@ -383,6 +389,7 @@ class EncryptionConfigScreenComponent extends React.Component<Props> {
 					{disabledMasterKeySection}
 					{nonExistingMasterKeySection}
 					{!this.props.shouldReencrypt ? reencryptDataSection : null}
+					{this.renderMasterPassword()}
 				</div>
 			</div>
 		);
