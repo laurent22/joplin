@@ -168,9 +168,11 @@ export function showMissingMasterKeyMessage(syncInfo: SyncInfo, notLoadedMasterK
 }
 
 export function getDefaultMasterKey(): MasterKeyEntity {
-	const mk = getActiveMasterKey();
-	if (mk) return mk;
-	return MasterKey.latest();
+	let mk = getActiveMasterKey();
+	if (!mk || !mk.enabled) {
+		mk = MasterKey.latest();
+	}
+	return mk && mk.enabled ? mk : null;
 }
 
 // Get the master password if set, or throw an exception. This ensures that

@@ -145,11 +145,7 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent<Props> {
 
 	passwordPromptComponent() {
 		const theme = themeStyle(this.props.themeId);
-		let masterKey = getDefaultMasterKey();
-
-		// If the user has explicitly disabled the master key, we generate a
-		// new one. Needed for one the password has been forgotten.
-		if (!masterKey.enabled) masterKey = null;
+		const masterKey = getDefaultMasterKey();
 
 		const onEnableClick = async () => {
 			try {
