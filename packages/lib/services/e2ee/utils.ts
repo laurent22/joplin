@@ -162,8 +162,8 @@ export function showMissingMasterKeyMessage(syncInfo: SyncInfo, notLoadedMasterK
 
 export function getDefaultMasterKey(): MasterKeyEntity {
 	let mk = getActiveMasterKey();
-	if (!mk || !mk.enabled) {
+	if (!mk || masterKeyEnabled(mk)) {
 		mk = MasterKey.latest();
 	}
-	return mk && mk.enabled ? mk : null;
+	return mk && masterKeyEnabled(mk) ? mk : null;
 }
