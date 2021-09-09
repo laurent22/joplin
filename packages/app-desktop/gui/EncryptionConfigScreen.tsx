@@ -274,7 +274,7 @@ class EncryptionConfigScreenComponent extends React.Component<Props> {
 
 			// If the user has explicitly disabled the master key, we generate a
 			// new one. Needed for one the password has been forgotten.
-			if (!masterKey.enabled) masterKey = null;
+			if (masterKey && !masterKey.enabled) masterKey = null;
 
 			let answer = null;
 			if (isEnabled) {
