@@ -151,6 +151,11 @@ General classes
 
 * {
 	color: var(--joplin-color);
+	font-size: 16px;
+}
+
+h2 {
+	font-size: 24px;
 }
 
 .form {
@@ -198,6 +203,13 @@ a {
 Component-specific classes
 ========================================================================================= */
 
+.config-screen .config-section {
+	border-bottom: 1px solid var(--joplin-divider-color);
+	padding-bottom: 20px;
+}
+
+
+
 .master-password-dialog .dialog-root {
 	min-width: 500px;
 	max-width: 600px;
@@ -226,4 +238,17 @@ Component-specific classes
 
 .master-password-dialog .fa-times {
 	color: var(--joplin-color-error);
+}
+
+
+
+
+
+.encryption-config-screen > .config-section > .manage-password-button {
+	display: flex;
+}
+
+.encryption-config-screen .config-section > .status {
+	display: flex;
+	flex-direction: row;
 }

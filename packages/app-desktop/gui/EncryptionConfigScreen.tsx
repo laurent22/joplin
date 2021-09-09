@@ -8,20 +8,20 @@ import time from '@joplin/lib/time';
 import { State } from '@joplin/lib/reducer';
 import shim from '@joplin/lib/shim';
 import dialogs from './dialogs';
-import bridge from '../services/bridge';
 import shared from '@joplin/lib/components/shared/encryption-config-shared';
 import { MasterKeyEntity } from '@joplin/lib/services/e2ee/types';
 import { getEncryptionEnabled, masterKeyEnabled, SyncInfo } from '@joplin/lib/services/synchronizer/syncInfoUtils';
-import { getDefaultMasterKey, toggleAndSetupEncryption, getMasterPassword } from '@joplin/lib/services/e2ee/utils';
+import { getDefaultMasterKey, toggleAndSetupEncryption, getMasterPasswordStatusMessage } from '@joplin/lib/services/e2ee/utils';
 import MasterKey from '@joplin/lib/models/MasterKey';
-import StyledInput from './style/StyledInput';
+import CommandService from '@joplin/lib/services/CommandService';
 import Button, { ButtonLevel } from './Button/Button';
-import styled from 'styled-components';
+// import StyledInput from './style/StyledInput';
+// import styled from 'styled-components';
 
-const MasterPasswordInput = styled(StyledInput)`
-	min-width: 300px;
-	align-items: center;
-`;
+// const MasterPasswordInput = styled(StyledInput)`
+// 	min-width: 300px;
+// 	align-items: center;
+// `;
 
 interface Props {}
 
@@ -132,7 +132,7 @@ class EncryptionConfigScreenComponent extends React.Component<Props> {
 
 		return (
 			<div>
-				<h1 style={theme.h1Style}>{_('Master keys that need upgrading')}</h1>
+				<h2>{_('Master keys that need upgrading')}</h2>
 				<p style={theme.textStyle}>{_('The following master keys use an out-dated encryption algorithm and it is recommended to upgrade them. The upgraded master key will still be able to decrypt and encrypt your data as usual.')}</p>
 				<table>
 					<tbody>
@@ -164,7 +164,7 @@ class EncryptionConfigScreenComponent extends React.Component<Props> {
 
 		return (
 			<div>
-				<h1 style={theme.h1Style}>{_('Re-encryption')}</h1>
+				<h2>{_('Re-encryption')}</h2>
 				<p style={theme.textStyle} dangerouslySetInnerHTML={{ __html: t }}></p>
 				<span style={{ marginRight: 10 }}>
 					<button onClick={() => shared.reencryptData()} style={theme.buttonStyle}>{buttonLabel}</button>
@@ -186,7 +186,7 @@ class EncryptionConfigScreenComponent extends React.Component<Props> {
 			mkComps.push(this.renderMasterKey(mk, isEnabledMasterKeys && latestMasterKey && mk.id === latestMasterKey.id));
 		}
 
-		const headerComp = isEnabledMasterKeys ? <h1 style={theme.h1Style}>{_('Master Keys')}</h1> : <a onClick={() => shared.toggleShowDisabledMasterKeys(this) } style={{ ...theme.urlStyle, display: 'inline-block', marginBottom: 10 }} href="#">{showTable ? _('Hide disabled master keys') : _('Show disabled master keys')}</a>;
+		const headerComp = isEnabledMasterKeys ? <h2>{_('Master Keys')}</h2> : <a onClick={() => shared.toggleShowDisabledMasterKeys(this) } style={{ ...theme.urlStyle, display: 'inline-block', marginBottom: 10 }} href="#">{showTable ? _('Hide disabled master keys') : _('Show disabled master keys')}</a>;
 		const infoComp = isEnabledMasterKeys ? <p style={theme.textStyle}>{'Note: Only one master key is going to be used for encryption (the one marked as "active"). Any of the keys might be used for decryption, depending on how the notes or notebooks were originally encrypted.'}</p> : null;
 		const tableComp = !showTable ? null : (
 			<table>
@@ -220,17 +220,13 @@ class EncryptionConfigScreenComponent extends React.Component<Props> {
 	private renderMasterPassword() {
 		// if (!this.props.encryptionEnabled && !this.props.masterKeys.length) return null;
 
-		const theme = themeStyle(this.props.themeId);
+		// const theme = themeStyle(this.props.themeId);
 
-		const onMasterPasswordSave = async () => {
-			shared.onMasterPasswordSave(this);
-
-			if (!(await shared.masterPasswordIsValid(this, this.state.masterPasswordInput))) {
-				alert('Password is invalid. Please try again.');
-			}
+		const onManageMasterPassword = async () => {
+			void CommandService.instance().execute('openMasterPasswordDialog');
 		};
 
-		// const status = this.getMasterPasswordStatus();
+		// const status = await getMasterPasswordStatus();
 
 		// const statusMessages = {
 		// 	[MasterPasswordStatus.NotSet]: 'Not set',
@@ -239,9 +235,10 @@ class EncryptionConfigScreenComponent extends React.Component<Props> {
 		// };
 
 		return (
-			<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-				<span style={theme.textStyle}>{_('Master password:')}</span>&nbsp;
-				<span style={{ ...theme.textStyle, fontWeight: 'bold' }}>{statusMessages[status]}</span>
+			<div className="config-section">
+				<h2>{_('Master password')}</h2>
+				<p className="status"><span>{_('Master password:')}</span>&nbsp;<span className="bold">{getMasterPasswordStatusMessage(this.state.masterPasswordStatus)}</span></p>
+				<Button className="manage-password-button" level={ButtonLevel.Secondary} onClick={onManageMasterPassword} title={CommandService.instance().label('openMasterPasswordDialog')} />
 			</div>
 		);
 
@@ -273,6 +270,7 @@ class EncryptionConfigScreenComponent extends React.Component<Props> {
 
 		const containerStyle = Object.assign({}, theme.containerStyle, {
 			padding: theme.configScreenPadding,
+			paddingTop: 0,
 			overflow: 'auto',
 			backgroundColor: theme.backgroundColor3,
 		});
@@ -310,7 +308,7 @@ class EncryptionConfigScreenComponent extends React.Component<Props> {
 			}
 		};
 
-		const decryptedItemsInfo = <p style={theme.textStyle}>{shared.decryptedStatText(this)}</p>;
+		const decryptedItemsInfo = <p>{shared.decryptedStatText(this)}</p>;
 		const toggleButton = (
 			<button
 				style={theme.buttonStyle}
@@ -343,7 +341,7 @@ class EncryptionConfigScreenComponent extends React.Component<Props> {
 
 			nonExistingMasterKeySection = (
 				<div>
-					<h1 style={theme.h1Style}>{_('Missing Master Keys')}</h1>
+					<h2>{_('Missing Master Keys')}</h2>
 					<p style={theme.textStyle}>{_('The master keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is likely they will eventually be downloaded via synchronisation.')}</p>
 					<table>
 						<tbody>
@@ -357,30 +355,28 @@ class EncryptionConfigScreenComponent extends React.Component<Props> {
 			);
 		}
 
+		// <div className="alert alert-warning" style={{ backgroundColor: theme.warningBackgroundColor, paddingLeft: 10, paddingRight: 10, paddingTop: 2, paddingBottom: 2 }}>
+		// 	<p style={theme.textStyle}>
+		// 		<span>{_('For more information about End-To-End Encryption (E2EE) and advice on how to enable it please check the documentation:')}</span>{' '}
+		// 		<a
+		// 			onClick={() => {
+		// 				bridge().openExternal('https://joplinapp.org/e2ee/');
+		// 			}}
+		// 			href="#"
+		// 			style={theme.urlStyle}
+		// 		>
+		// 			https://joplinapp.org/e2ee/
+		// 		</a>
+		// 	</p>
+		// </div>
+
 		return (
-			<div>
+			<div className="encryption-config-screen">
 				<div style={containerStyle}>
-					{
-						<div className="alert alert-warning" style={{ backgroundColor: theme.warningBackgroundColor, paddingLeft: 10, paddingRight: 10, paddingTop: 2, paddingBottom: 2 }}>
-							<p style={theme.textStyle}>
-								<span>{_('For more information about End-To-End Encryption (E2EE) and advice on how to enable it please check the documentation:')}</span>{' '}
-								<a
-									onClick={() => {
-										bridge().openExternal('https://joplinapp.org/e2ee/');
-									}}
-									href="#"
-									style={theme.urlStyle}
-								>
-									https://joplinapp.org/e2ee/
-								</a>
-							</p>
-						</div>
-					}
-					<h1 style={theme.h1Style}>{_('Master password')}</h1>
 					{this.renderMasterPassword()}
 
-					<h1 style={theme.h1Style}>{_('End-to-end encryption')}</h1>
-					<p style={theme.textStyle}>
+					<h2>{_('End-to-end encryption')}</h2>
+					<p>
 						{_('Encryption is:')} <strong>{this.props.encryptionEnabled ? _('Enabled') : _('Disabled')}</strong>
 					</p>
 					{decryptedItemsInfo}

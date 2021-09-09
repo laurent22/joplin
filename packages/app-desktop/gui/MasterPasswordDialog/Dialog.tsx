@@ -82,7 +82,7 @@ export default function(props: Props) {
 	}, [status]);
 
 	useAsyncEffect(async (event: AsyncEffectEvent) => {
-		const isValid = await masterPasswordIsValid(currentPassword);
+		const isValid = currentPassword ? await masterPasswordIsValid(currentPassword) : false;
 		if (event.cancelled) return;
 		setCurrentPasswordIsValid(isValid);
 	}, [currentPassword]);

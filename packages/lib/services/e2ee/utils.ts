@@ -261,6 +261,8 @@ export async function masterPasswordIsValid(masterPassword: string): Promise<boo
 	// to backward compatibility not all users have a PPK yet, so we also check
 	// based on the active master key.
 
+	if (!masterPassword) throw new Error('Password is empty');
+
 	const ppk = localSyncInfo().ppk;
 	if (ppk) {
 		return ppkPasswordIsValid(EncryptionService.instance(), ppk, masterPassword);

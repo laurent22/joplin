@@ -8,7 +8,7 @@ import shim from '../../shim';
 import { MasterKeyEntity } from '../../services/e2ee/types';
 import time from '../../time';
 import { masterKeyEnabled, setMasterKeyEnabled } from '../../services/synchronizer/syncInfoUtils';
-import { findMasterKeyPassword } from '../../services/e2ee/utils';
+import { findMasterKeyPassword, getMasterPasswordStatus, MasterPasswordStatus } from '../../services/e2ee/utils';
 
 class Shared {
 
@@ -17,6 +17,7 @@ class Shared {
 	public initialize(comp: any, props: any) {
 		comp.state = {
 			passwordChecks: {},
+			masterPasswordStatus: MasterPasswordStatus.Unknown,
 			// Master keys that can be decrypted with the master password
 			// (normally all of them, but for legacy support we need this).
 			masterPasswordKeys: {},
@@ -134,9 +135,11 @@ class Shared {
 			masterPasswordKeys[mk.id] = password === comp.props.masterPassword;
 		}
 
-		passwordChecks['master'] = await this.masterPasswordIsValid(comp);
-
-		comp.setState({ passwordChecks, masterPasswordKeys });
+		comp.setState({
+			passwordChecks,
+			masterPasswordKeys,
+			masterPasswordStatus: await getMasterPasswordStatus(),
+		});
 	}
 
 	public masterPasswordStatus(comp: any) {

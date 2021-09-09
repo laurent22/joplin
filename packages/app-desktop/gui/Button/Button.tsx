@@ -27,23 +27,25 @@ const StyledTitle = styled.span`
 
 `;
 
+const buttonHeight = 32; // props.theme.toolbarHeight
+
 const StyledButtonBase = styled.button`
 	display: flex;
 	align-items: center;
 	flex-direction: row;
-	height: ${(props: any) => `${props.theme.toolbarHeight}px`};
-	min-height: ${(props: any) => `${props.theme.toolbarHeight}px`};
-	max-height: ${(props: any) => `${props.theme.toolbarHeight}px`};
-	width: ${(props: any) => props.iconOnly ? `${props.theme.toolbarHeight}px` : 'auto'};
-	${(props: any) => props.iconOnly ? `min-width: ${props.theme.toolbarHeight}px;` : ''}
+	height: ${buttonHeight}px;
+	min-height: ${buttonHeight}px;
+	max-height: ${buttonHeight}px;
+	width: ${(props: any) => props.iconOnly ? `${buttonHeight}px` : 'auto'};
+	${(props: any) => props.iconOnly ? `min-width: ${buttonHeight}px;` : ''}
 	${(props: any) => !props.iconOnly ? 'min-width: 100px;' : ''}
-	${(props: any) => props.iconOnly ? `max-width: ${props.theme.toolbarHeight}px;` : ''}
+	${(props: any) => props.iconOnly ? `max-width: ${buttonHeight}px;` : ''}
 	box-sizing: border-box;
 	border-radius: 3px;
 	border-style: solid;
 	border-width: 1px;
 	font-size: ${(props: any) => props.theme.fontSize}px;
-	padding: 0 ${(props: any) => props.iconOnly ? 4 : 8}px;
+	padding: 0 ${(props: any) => props.iconOnly ? 4 : 14}px;
 	justify-content: center;
 	opacity: ${(props: any) => props.disabled ? 0.5 : 1};
 	user-select: none;

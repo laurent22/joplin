@@ -524,23 +524,23 @@ class Application extends BaseApplication {
 		// 	console.info(CommandService.instance().commandsToMarkdownTable(this.store().getState()));
 		// }, 2000);
 
-		// setTimeout(() => {
-		// 	this.dispatch({
-		// 		type: 'NAV_GO',
-		// 		routeName: 'Config',
-		// 		props: {
-		// 			defaultSection: 'encryption',
-		// 		},
-		// 	});
-		// }, 2000);
-
-
 		setTimeout(() => {
 			this.dispatch({
-				type: 'DIALOG_OPEN',
-				name: 'masterPassword',
+				type: 'NAV_GO',
+				routeName: 'Config',
+				props: {
+					defaultSection: 'encryption',
+				},
 			});
 		}, 2000);
+
+
+		// setTimeout(() => {
+		// 	this.dispatch({
+		// 		type: 'DIALOG_OPEN',
+		// 		name: 'masterPassword',
+		// 	});
+		// }, 2000);
 
 		// setTimeout(() => {
 		// 	this.dispatch({
