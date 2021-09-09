@@ -270,11 +270,7 @@ class EncryptionConfigScreenComponent extends React.Component<Props> {
 
 		const onToggleButtonClick = async () => {
 			const isEnabled = getEncryptionEnabled();
-			let masterKey = getDefaultMasterKey();
-
-			// If the user has explicitly disabled the master key, we generate a
-			// new one. Needed for one the password has been forgotten.
-			if (masterKey && !masterKey.enabled) masterKey = null;
+			const masterKey = getDefaultMasterKey();
 
 			let answer = null;
 			if (isEnabled) {
