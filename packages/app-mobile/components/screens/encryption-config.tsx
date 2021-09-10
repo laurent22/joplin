@@ -9,11 +9,13 @@ const { dialogs } = require('../../utils/dialogs.js');
 import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
 import { _ } from '@joplin/lib/locale';
 import time from '@joplin/lib/time';
-import shared from '@joplin/lib/components/shared/encryption-config-shared';
+// import shared from '@joplin/lib/components/shared/encryption-config-shared';
 import { MasterKeyEntity } from '@joplin/lib/services/e2ee/types';
 import { State } from '@joplin/lib/reducer';
 import { SyncInfo } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 import { getDefaultMasterKey, setupAndDisableEncryption, toggleAndSetupEncryption } from '@joplin/lib/services/e2ee/utils';
+
+const shared: any = {};
 
 interface Props {}
 
@@ -164,7 +166,7 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent<Props> {
 
 		const messages = shared.enableEncryptionConfirmationMessages(masterKey);
 
-		const messageComps = messages.map(msg => {
+		const messageComps = messages.map((msg: string) => {
 			return <Text key={msg} style={{ fontSize: theme.fontSize, color: theme.color, marginBottom: 10 }}>{msg}</Text>;
 		});
 
