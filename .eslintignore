@@ -208,9 +208,9 @@ packages/app-desktop/gui/DialogTitle.js.map
 packages/app-desktop/gui/DropboxLoginScreen.d.ts
 packages/app-desktop/gui/DropboxLoginScreen.js
 packages/app-desktop/gui/DropboxLoginScreen.js.map
-packages/app-desktop/gui/EncryptionConfigScreen.d.ts
-packages/app-desktop/gui/EncryptionConfigScreen.js
-packages/app-desktop/gui/EncryptionConfigScreen.js.map
+packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.d.ts
+packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js
+packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js.map
 packages/app-desktop/gui/ErrorBoundary.d.ts
 packages/app-desktop/gui/ErrorBoundary.js
 packages/app-desktop/gui/ErrorBoundary.js.map
@@ -931,9 +931,9 @@ packages/lib/commands/index.js.map
 packages/lib/commands/synchronize.d.ts
 packages/lib/commands/synchronize.js
 packages/lib/commands/synchronize.js.map
-packages/lib/components/shared/encryption-config-shared.d.ts
-packages/lib/components/shared/encryption-config-shared.js
-packages/lib/components/shared/encryption-config-shared.js.map
+packages/lib/components/EncryptionConfigScreen/utils.d.ts
+packages/lib/components/EncryptionConfigScreen/utils.js
+packages/lib/components/EncryptionConfigScreen/utils.js.map
 packages/lib/database.d.ts
 packages/lib/database.js
 packages/lib/database.js.map

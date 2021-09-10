@@ -103,7 +103,7 @@ export async function migrateMasterPassword() {
 // previously any master key could be encrypted with any password, so to support
 // this legacy case, we first check if the MK decrypts with the master password.
 // If not, try with the master key specific password, if any is defined.
-export async function findMasterKeyPassword(service: EncryptionService, masterKey: MasterKeyEntity): Promise<string> {
+export async function findMasterKeyPassword(service: EncryptionService, masterKey: MasterKeyEntity, passwordCache: Record<string, string> = null): Promise<string> {
 	const masterPassword = Setting.value('encryption.masterPassword');
 	if (masterPassword && await service.checkMasterKeyPassword(masterKey, masterPassword)) {
 		logger.info('findMasterKeyPassword: Using master password');
@@ -112,7 +112,7 @@ export async function findMasterKeyPassword(service: EncryptionService, masterKe
 
 	logger.info('findMasterKeyPassword: No master password is defined - trying to get master key specific password');
 
-	const passwords = Setting.value('encryption.passwordCache');
+	const passwords = passwordCache ? passwordCache : Setting.value('encryption.passwordCache');
 	return passwords[masterKey.id];
 }
 
