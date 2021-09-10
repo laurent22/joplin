@@ -139,7 +139,7 @@ const EncryptionConfigScreen = (props: Props) => {
 				// await generateMasterKeyAndEnableEncryption(EncryptionService.instance(), password);
 				setPasswordPromptShow(false);
 			} catch (error) {
-				await dialogs.error(this, error.message);
+				alert(error.message);
 			}
 		};
 
@@ -236,13 +236,13 @@ const EncryptionConfigScreen = (props: Props) => {
 
 	const onToggleButtonClick = async () => {
 		if (props.encryptionEnabled) {
-			const ok = await dialogs.confirm(this, _('Disabling encryption means *all* your notes and attachments are going to be re-synchronised and sent unencrypted to the sync target. Do you wish to continue?'));
+			const ok = await dialogs.confirmRef(dialogBoxRef.current, _('Disabling encryption means *all* your notes and attachments are going to be re-synchronised and sent unencrypted to the sync target. Do you wish to continue?'));
 			if (!ok) return;
 
 			try {
 				await setupAndDisableEncryption(EncryptionService.instance());
 			} catch (error) {
-				await dialogs.error(this, error.message);
+				alert(error.message);
 			}
 		} else {
 			setPasswordPromptShow(true);
