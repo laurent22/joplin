@@ -6,7 +6,7 @@ import { _ } from '@joplin/lib/locale';
 import bridge from '../../services/bridge';
 import Setting, { AppType, SyncStartupOperation } from '@joplin/lib/models/Setting';
 import control_PluginsStates from './controls/plugins/PluginsStates';
-import EncryptionConfigScreen from '../EncryptionConfigScreen';
+import EncryptionConfigScreen from '../EncryptionConfigScreen/EncryptionConfigScreen';
 
 const { connect } = require('react-redux');
 const { themeStyle } = require('@joplin/lib/theme');

@@ -45,7 +45,7 @@
     "markdown-it-sup": "^1.0.0",
     "markdown-it-toc-done-right": "^4.1.0",
     "md5": "^2.2.1",
-    "mermaid": "^8.10.2",
+    "mermaid": "^8.12.1",
     "uslug": "git+https://github.com/laurent22/uslug.git#emoji-support"
   },
   "gitHead": "80c0089d2c52aff608b2bea74389de5a7f12f2e2"

@@ -25,6 +25,7 @@ function useEventListener(
 		const eventListener = (event: Event) => {
 			// eslint-disable-next-line no-extra-boolean-cast
 			if (!!savedHandler?.current) {
+				// @ts-ignore
 				savedHandler.current(event);
 			}
 		};

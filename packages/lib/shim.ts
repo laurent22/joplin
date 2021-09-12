@@ -1,22 +1,26 @@
+import * as React from 'react';
 import { NoteEntity, ResourceEntity } from './services/database/types';
 
 let isTestingEnv_ = false;
 
-// We need to ensure that there's only one instance of React being used by
-// all the packages. In particular, the lib might need React to define
-// generic hooks, but it shouldn't have React in its dependencies as that
-// would cause the following error:
+// We need to ensure that there's only one instance of React being used by all
+// the packages. In particular, the lib might need React to define generic
+// hooks, but it shouldn't have React in its dependencies as that would cause
+// the following error:
 //
 // https://reactjs.org/warnings/invalid-hook-call-warning.html#duplicate-react
 //
-// So instead, the **applications** include React as a dependency, then
-// pass it to any other packages using the shim. Essentially, only one
-// package should require React, and in our case that should be one of the
-// applications (app-desktop, app-mobile, etc.) since we are sure they
-// won't be dependency to other packages (unlike the lib which can be
-// included anywhere).
-
-let react_: any = null;
+// So instead, the **applications** include React as a dependency, then pass it
+// to any other packages using the shim. Essentially, only one package should
+// require React, and in our case that should be one of the applications
+// (app-desktop, app-mobile, etc.) since we are sure they won't be dependency to
+// other packages (unlike the lib which can be included anywhere).
+//
+// Regarding the type - althought we import React, we only use it as a type
+// using `typeof React`. This is just to get types in hooks.
+//
+// https://stackoverflow.com/a/42816077/561309
+let react_: typeof React = null;
 
 const shim = {
 	Geolocation: null as any,

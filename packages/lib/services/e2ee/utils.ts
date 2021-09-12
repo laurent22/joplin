@@ -82,6 +82,10 @@ export async function migrateMasterPassword() {
 	// point so no need to run the migration
 	if (localSyncInfo().ppk) return;
 
+	// If a PPK is defined it means the master password has been set at some
+	// point so no need to run the migration
+	if (localSyncInfo().ppk) return;
+
 	logger.info('Master password is not set - trying to get it from the active master key...');
 
 	const mk = getActiveMasterKey();
@@ -110,7 +114,7 @@ export async function migrateMasterPassword() {
 // previously any master key could be encrypted with any password, so to support
 // this legacy case, we first check if the MK decrypts with the master password.
 // If not, try with the master key specific password, if any is defined.
-export async function findMasterKeyPassword(service: EncryptionService, masterKey: MasterKeyEntity): Promise<string> {
+export async function findMasterKeyPassword(service: EncryptionService, masterKey: MasterKeyEntity, passwordCache: Record<string, string> = null): Promise<string> {
 	const masterPassword = Setting.value('encryption.masterPassword');
 	if (masterPassword && await service.checkMasterKeyPassword(masterKey, masterPassword)) {
 		logger.info('findMasterKeyPassword: Using master password');
@@ -119,7 +123,7 @@ export async function findMasterKeyPassword(service: EncryptionService, masterKe
 
 	logger.info('findMasterKeyPassword: No master password is defined - trying to get master key specific password');
 
-	const passwords = Setting.value('encryption.passwordCache');
+	const passwords = passwordCache ? passwordCache : Setting.value('encryption.passwordCache');
 	return passwords[masterKey.id];
 }
 
@@ -279,6 +283,4 @@ export async function masterPasswordIsValid(masterPassword: string): Promise<boo
 	// but the user has never synchronized. In which case, it's sufficient to
 	// compare to whatever they've entered earlier.
 	return Setting.value('encryption.masterPassword') === masterPassword;
-
-	// throw new JoplinError('Cannot check master password validity as no key is present', 'noKeyToDecrypt');
 }
