@@ -62,6 +62,7 @@ const rules: RendererRules = {
 	code_inline: require('./MdToHtml/rules/code_inline').default,
 	fountain: require('./MdToHtml/rules/fountain').default,
 	mermaid: require('./MdToHtml/rules/mermaid').default,
+	source_map: require('./MdToHtml/rules/source_map').default,
 };
 
 const hljs = require('highlight.js');
