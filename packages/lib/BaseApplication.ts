@@ -630,7 +630,7 @@ export default class BaseApplication {
 		BaseSyncTarget.dispatch = this.store().dispatch;
 		DecryptionWorker.instance().dispatch = this.store().dispatch;
 		ResourceFetcher.instance().dispatch = this.store().dispatch;
-		ShareService.instance().initialize(this.store(), EncryptionService.instance());
+		ShareService.instance().initialize(this.store());
 	}
 
 	deinitRedux() {
