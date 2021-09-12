@@ -589,4 +589,25 @@ describe('reducer', function() {
 		expect(state.selectedFolderId).toEqual(null);
 		expect(state.selectedNoteIds[0]).toEqual(notes[1].id);
 	});
+
+	// tests for NOTE_UPDATE_ALL about issue #5447
+	it('should not change selectedNoteIds object when selections are not changed', async () => {
+		const folders = await createNTestFolders(1);
+		const notes = await createNTestNotes(5, folders[0]);
+		{
+			// Case 1. Selected notes are changed when one of selected notes is deleted.
+			let state = initTestState(folders, 0, notes, [0, 2, 4]);
+			state = reducer(state, { type: 'NOTE_UPDATE_ALL', notes: notes.slice(0, 4), notesSource: 'test' });
+			const expected = [notes[0].id, notes[2].id].sort();
+			expect([...state.selectedNoteIds].sort()).toEqual(expected);
+		}
+		{
+			// Case 2. Selected notes and object identity are unchanged when notes are not changed.
+			let state = initTestState(folders, 0, notes, [0, 2, 4]);
+			const expected = state.selectedNoteIds;
+			state = reducer(state, { type: 'NOTE_UPDATE_ALL', notes: notes, notesSource: 'test' });
+			// Object identity is checked. Don't use toEqual() or toStrictEqual() here.
+			expect(state.selectedNoteIds).toBe(expected);
+		}
+	});
 });
