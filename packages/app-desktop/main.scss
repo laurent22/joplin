@@ -239,15 +239,3 @@ Component-specific classes
 .master-password-dialog .fa-times {
 	color: var(--joplin-color-error);
 }
-
-
-
-
-.manage-password-section > .managebutton {
-	display: flex;
-}
-
-.manage-password-section > .status {
-	display: flex;
-	flex-direction: row;
-}
