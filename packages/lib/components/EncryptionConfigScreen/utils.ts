@@ -4,7 +4,7 @@ import BaseItem, { EncryptedItemsStats } from '../../models/BaseItem';
 import useAsyncEffect, { AsyncEffectEvent } from '../../hooks/useAsyncEffect';
 import { MasterKeyEntity } from '../../services/e2ee/types';
 import time from '../../time';
-import { findMasterKeyPassword } from '../../services/e2ee/utils';
+import { findMasterKeyPassword, getMasterPasswordStatus, MasterPasswordStatus } from '../../services/e2ee/utils';
 import EncryptionService from '../../services/e2ee/EncryptionService';
 import { masterKeyEnabled, setMasterKeyEnabled } from '../../services/synchronizer/syncInfoUtils';
 import MasterKey from '../../models/MasterKey';
@@ -155,6 +155,7 @@ export const useInputPasswords = (propsPasswords: Record<string, string>) => {
 export const usePasswordChecker = (masterKeys: MasterKeyEntity[], activeMasterKeyId: string, masterPassword: string, passwords: Record<string, string>) => {
 	const [passwordChecks, setPasswordChecks] = useState<PasswordChecks>({});
 	const [masterPasswordKeys, setMasterPasswordKeys] = useState<PasswordChecks>({});
+	const [masterPasswordStatus, setMasterPasswordStatus] = useState<MasterPasswordStatus>(MasterPasswordStatus.Unknown);
 
 	useAsyncEffect(async (event: AsyncEffectEvent) => {
 		const newPasswordChecks: PasswordChecks = {};
@@ -174,9 +175,10 @@ export const usePasswordChecker = (masterKeys: MasterKeyEntity[], activeMasterKe
 
 		setPasswordChecks(newPasswordChecks);
 		setMasterPasswordKeys(newMasterPasswordKeys);
+		setMasterPasswordStatus(await getMasterPasswordStatus(masterPassword));
 	}, [masterKeys, masterPassword]);
 
-	return { passwordChecks, masterPasswordKeys };
+	return { passwordChecks, masterPasswordKeys, masterPasswordStatus };
 };
 
 export const upgradeMasterKey = async (masterKey: MasterKeyEntity, passwordChecks: PasswordChecks, passwords: Record<string, string>): Promise<string> => {

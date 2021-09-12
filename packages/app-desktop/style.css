@@ -243,12 +243,11 @@ Component-specific classes
 
 
 
-
-.encryption-config-screen > .config-section > .manage-password-button {
+.manage-password-section > .managebutton {
 	display: flex;
 }
 
-.encryption-config-screen .config-section > .status {
+.manage-password-section > .status {
 	display: flex;
 	flex-direction: row;
 }

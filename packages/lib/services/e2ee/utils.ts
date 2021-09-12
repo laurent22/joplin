@@ -237,8 +237,8 @@ export enum MasterPasswordStatus {
 	Valid = 4,
 }
 
-export async function getMasterPasswordStatus(): Promise<MasterPasswordStatus> {
-	const password = getMasterPassword(false);
+export async function getMasterPasswordStatus(password: string = null): Promise<MasterPasswordStatus> {
+	password = password === null ? getMasterPassword(false) : password;
 	if (!password) return MasterPasswordStatus.NotSet;
 
 	// try {
