@@ -28,6 +28,7 @@ const EncryptionService = require('@joplin/lib/services/e2ee/EncryptionService')
 const bridge = require('electron').remote.require('./bridge').default;
 const { FileApiDriverLocal } = require('@joplin/lib/file-api-driver-local.js');
 const React = require('react');
+const NodeRSA = require('node-rsa');
 
 if (bridge().env() === 'dev') {
 	const newConsole = function(oldConsole) {
@@ -92,7 +93,7 @@ function appVersion() {
 	return p.version;
 }
 
-shimInit(null, keytar, React, appVersion);
+shimInit(null, keytar, React, NodeRSA, appVersion);
 
 // Disable drag and drop of links inside application (which would
 // open it as if the whole app was a browser)

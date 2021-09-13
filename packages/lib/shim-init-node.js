@@ -62,8 +62,10 @@ const gunzipFile = function(source, destination) {
 	});
 };
 
-function shimInit(sharp = null, keytar = null, React = null, appVersion = null) {
+function shimInit(sharp = null, keytar = null, React = null, RSA = null, appVersion = null) {
 	keytar = (shim.isWindows() || shim.isMac()) && !shim.isPortable() ? keytar : null;
+
+	shim.setRSA(RSA);
 
 	shim.fsDriver = () => {
 		throw new Error('Not implemented');

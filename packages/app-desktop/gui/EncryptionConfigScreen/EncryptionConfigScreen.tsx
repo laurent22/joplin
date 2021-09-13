@@ -17,11 +17,6 @@ import Setting from '@joplin/lib/models/Setting';
 import CommandService from '@joplin/lib/services/CommandService';
 import { PublicPrivateKeyPair } from '@joplin/lib/services/e2ee/ppk';
 
-// const MasterPasswordInput = styled(StyledInput)`
-// 	min-width: 300px;
-// 	align-items: center;
-// `;
-
 interface Props {
 	themeId: any;
 	masterKeys: MasterKeyEntity[];

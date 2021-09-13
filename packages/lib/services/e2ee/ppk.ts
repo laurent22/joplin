@@ -1,4 +1,5 @@
 import * as NodeRSA from 'node-rsa';
+import shim from '../../shim';
 import uuid from '../../uuid';
 import EncryptionService, { EncryptionCustomHandler, EncryptionMethod } from './EncryptionService';
 import { MasterKeyEntity } from './types';
@@ -15,6 +16,11 @@ export interface PublicPrivateKeyPair {
 	publicKey: PublicKey;
 	privateKey: PrivateKey;
 	createdTime: number;
+}
+
+function newNodeRsa() {
+	const RSA = shim.RSA();
+	return new RSA();
 }
 
 async function encryptPrivateKey(encryptionService: EncryptionService, password: string, plainText: string): Promise<PrivateKey> {
@@ -37,7 +43,7 @@ function nodeRSAOptions(): NodeRSA.Options {
 }
 
 export async function generateKeyPair(encryptionService: EncryptionService, password: string): Promise<PublicPrivateKeyPair> {
-	const keys = new NodeRSA();
+	const keys = newNodeRsa();
 	keys.setOptions(nodeRSAOptions());
 	keys.generateKeyPair(2048, 65537);
 
@@ -75,7 +81,7 @@ export async function ppkPasswordIsValid(service: EncryptionService, ppk: Public
 }
 
 async function loadPpk(service: EncryptionService, ppk: PublicPrivateKeyPair, password: string): Promise<NodeRSA> {
-	const keys = new NodeRSA();
+	const keys = newNodeRsa();
 	keys.setOptions(nodeRSAOptions());
 	keys.importKey(ppk.publicKey, 'pkcs1-public-pem');
 	keys.importKey(await decryptPrivateKey(service, ppk.privateKey, password), 'pkcs1-private-pem');
@@ -83,7 +89,7 @@ async function loadPpk(service: EncryptionService, ppk: PublicPrivateKeyPair, pa
 }
 
 async function loadPublicKey(publicKey: PublicKey): Promise<NodeRSA> {
-	const keys = new NodeRSA();
+	const keys = newNodeRsa();
 	keys.setOptions(nodeRSAOptions());
 	keys.importKey(publicKey, 'pkcs1-public-pem');
 	return keys;
@@ -153,22 +159,3 @@ export async function mkReencryptFromPublicKeyToPassword(service: EncryptionServ
 
 	return { ...masterKey, ...newContent };
 }
-
-// export async function reencryptFromPasswordToPassword(service: EncryptionService, masterKey: MasterKeyEntity, decryptionPassword: string, encryptionPassword: string): Promise<MasterKeyEntity> {
-// 	const plainText = await service.decryptMasterKeyContent(masterKey, decryptionPassword);
-// 	const newContent = await service.encryptMasterKeyContent(null, plainText, encryptionPassword);
-
-// 	return { ...masterKey, ...newContent };
-// }
-
-
-// export async function ppkReencryptMasterKey(service: EncryptionService, masterKey: MasterKeyEntity, decryptionPpk: PublicPrivateKeyPair, decryptionPassword: string, encryptionPublicKey: PublicPrivateKeyPair): Promise<MasterKeyEntity> {
-// 	const encryptionHandler = ppkEncryptionHandler(encryptionPublicKey.id, await loadPublicKey(encryptionPublicKey.publicKey));
-// 	const decryptionHandler = ppkEncryptionHandler(decryptionPpk.id, await loadPpk(service, decryptionPpk, decryptionPassword));
-
-// 	return service.reencryptMasterKey(masterKey, '', '', {
-// 		encryptionHandler: decryptionHandler,
-// 	}, {
-// 		encryptionHandler: encryptionHandler,
-// 	});
-// }
