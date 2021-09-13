@@ -65,6 +65,7 @@ const expected = `
 	--joplin-odd-background-color: #eeeeee;
 	--joplin-color: #32373F;
 	--joplin-color-error: red;
+	--joplin-color-correct: green;
 	--joplin-color-warn: rgb(228,86,0);
 	--joplin-color-warn-url: #155BDA;
 	--joplin-color-faded: #7C8B9E;
