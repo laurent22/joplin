@@ -137,6 +137,14 @@ export const postHandlers: PostHandlers = {
 	//
 	// - The public config is under packages/server/stripeConfig.json
 	// - The private config is in the server .env file
+	//
+	// # Failed Stripe cli login
+	//
+	// If the tool show this error, with code "api_key_expired":
+	//
+	// > FATAL Error while authenticating with Stripe: Authorization failed
+	//
+	// Need to logout and login again to refresh the CLI token - `stripe logout && stripe login`
 
 	webhook: async (stripe: Stripe, _path: SubPath, ctx: AppContext, event: Stripe.Event = null, logErrors: boolean = true) => {
 		event = event ? event : await stripeEvent(stripe, ctx.req);
@@ -426,7 +434,7 @@ const getHandlers: Record<string, StripeRouteHandler> = {
 			<body>
 				<button id="checkout">Subscribe</button>
 				<script>
-					var PRICE_ID = ${basicPrice.id};
+					var PRICE_ID = ${JSON.stringify(basicPrice.id)};
 
 					function handleResult() {
 						console.info('Redirected to checkout');
