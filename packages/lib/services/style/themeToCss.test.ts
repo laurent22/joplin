@@ -11,6 +11,7 @@ const input: Theme = {
 	oddBackgroundColor: '#eeeeee',
 	color: '#32373F', // For regular text
 	colorError: 'red',
+	colorCorrect: 'green',
 	colorWarn: 'rgb(228,86,0)',
 	colorWarnUrl: '#155BDA',
 	colorFaded: '#7C8B9E', // For less important text
