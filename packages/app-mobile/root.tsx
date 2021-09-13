@@ -552,7 +552,7 @@ async function initialize(dispatch: Function) {
 		// / E2EE SETUP
 		// ----------------------------------------------------------------
 
-		await ShareService.instance().initialize(store, EncryptionService.instance());
+		await ShareService.instance().initialize(store);
 
 		reg.logger().info('Loading folders...');
 
