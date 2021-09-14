@@ -1128,14 +1128,14 @@ msgstr ""
 #: ElectronClient/gui/NoteEditor/utils/useMessageHandler.js:70
 #: ElectronClient/gui/NoteText.min.js:833
 msgid "There was an error downloading this attachment:"
-msgstr "Något blev fel vid nedladdningen av denna bilaga:"
+msgstr "Något blev fel vid hämtningen av denna bilaga:"
 
 #: ElectronClient/gui/NoteEditor/utils/useMessageHandler.js:73
 #: ElectronClient/gui/NoteText.min.js:835
 #: ReactNativeClient/lib/services/ResourceEditWatcher.js:146
 #, fuzzy
 msgid "This attachment is not downloaded or not decrypted yet"
-msgstr "Denna bilaga är inte nedladdad eller ännu inte dekrypterad."
+msgstr "Denna bilaga är inte hämtad eller ännu inte dekrypterad."
 
 #: ElectronClient/gui/NoteEditor/utils/contextMenu.js:39
 #: ElectronClient/gui/NoteText.min.js:778
@@ -2432,7 +2432,7 @@ msgstr ""
 
 #: ReactNativeClient/lib/models/Setting.js:224
 msgid "Attachment download behaviour"
-msgstr "Beteende för nedladdning av bilaga"
+msgstr "Beteende för hämtning av bilagor"
 
 #: ReactNativeClient/lib/models/Setting.js:225
 msgid ""
@@ -2914,7 +2914,7 @@ msgstr "Anteckningar och inställningar lagras i: %s"
 
 #: ReactNativeClient/lib/models/Resource.js:317
 msgid "Not downloaded"
-msgstr "Inte nedladdad"
+msgstr "Inte hämtad"
 
 #: ReactNativeClient/lib/models/Resource.js:318
 #, fuzzy
@@ -2923,7 +2923,7 @@ msgstr "Laddar ned resurser..."
 
 #: ReactNativeClient/lib/models/Resource.js:319
 msgid "Downloaded"
-msgstr "Nedladdad"
+msgstr "Hämtad"
 
 #: ReactNativeClient/lib/models/Resource.js:371
 #, fuzzy, javascript-format
@@ -2936,7 +2936,7 @@ msgid ""
 "There was a [conflict](%s) on the attachment below.\n"
 "\n"
 "%s"
-msgstr "Något blev fel vid nedladdningen av denna bilaga:"
+msgstr "Något blev fel vid hämtningen av denna bilaga:"
 
 #: ReactNativeClient/lib/models/Tag.js:384
 #, fuzzy
@@ -3409,7 +3409,7 @@ msgstr "Inget objekt med ID %s"
 
 #: ReactNativeClient/lib/components/screens/note.js:180
 msgid "This attachment is not downloaded or not decrypted yet."
-msgstr "Denna bilaga är inte nedladdad eller ännu inte dekrypterad."
+msgstr "Denna bilaga är inte hämtad eller ännu inte dekrypterad."
 
 #: ReactNativeClient/lib/components/screens/note.js:184
 #, javascript-format
@@ -3650,7 +3650,7 @@ msgstr "Bifoga fil"
 
 #: ReactNativeClient/lib/services/report.js:190
 msgid "Downloaded and decrypted"
-msgstr "Nedladdade och dekrypterade"
+msgstr "Hämtade och dekrypterade"
 
 #: ReactNativeClient/lib/services/report.js:190
 #: ReactNativeClient/lib/services/report.js:191
@@ -3661,7 +3661,7 @@ msgstr "%s: %s"
 
 #: ReactNativeClient/lib/services/report.js:191
 msgid "Downloaded and encrypted"
-msgstr "Nedladdade och krypterade"
+msgstr "Hämtade och krypterade"
 
 #: ReactNativeClient/lib/services/report.js:204
 #, fuzzy
