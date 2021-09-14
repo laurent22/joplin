@@ -1,5 +1,11 @@
 # Joplin Server Changelog
 
+## [server-v2.4.4-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.4.4-beta) (Pre-release) - 2021-09-14T11:12:38Z
+
+- New: Add link to Stripe subscription page to manage payment details (4e7fe66)
+- New: Add transaction info to debug deadlock issues (01b653f)
+- Improved: Enable multi platform builds (amd64, armv7 and arm64) (#5338 by Piotr Banasik)
+
 ## [server-v2.4.3-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.4.3-beta) (Pre-release) - 2021-09-02T17:49:11Z
 
 - New: Added Help page for Joplin Cloud (6520a48)
