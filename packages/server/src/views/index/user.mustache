@@ -132,6 +132,9 @@
 						<a href="{{{global.baseUrl}}}/upgrade" class="button is-warning block">Upgrade to Pro</a>
 					{{/showUpdateSubscriptionPro}}
 					{{#showCancelSubscription}}
+						<p class="block"><a href="{{stripePortalUrl}}">Manage payment details</a></p>
+					{{/showCancelSubscription}}
+					{{#showCancelSubscription}}
 						<p id="user_cancel_subscription_link" class="block"><a href="#">Cancel subscription</a></p>
 						<input type="submit" id="user_cancel_subscription_button" name="user_cancel_subscription_button" class="button is-danger" value="Cancel subscription" />
 					{{/showCancelSubscription}}

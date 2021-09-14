@@ -126,7 +126,7 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 			}
 
 			return this.save({ ...shareUser, status });
-		});
+		}, 'ShareUserModel::setStatus');
 	}
 
 	public async deleteByShare(share: Share): Promise<void> {

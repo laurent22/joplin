@@ -15,7 +15,7 @@ import uuidgen from '../../utils/uuidgen';
 import { formatMaxItemSize, formatMaxTotalSize, formatTotalSize, formatTotalSizePercent, yesOrNo } from '../../utils/strings';
 import { getCanShareFolder, totalSizeClass } from '../../models/utils/user';
 import { yesNoDefaultOptions, yesNoOptions } from '../../utils/views/select';
-import { confirmUrl } from '../../utils/urlUtils';
+import { confirmUrl, stripePortalUrl } from '../../utils/urlUtils';
 import { cancelSubscriptionByUserId, updateSubscriptionType } from '../../utils/stripe';
 import { createCsrfTag } from '../../utils/csrf';
 import { formatDateTime } from '../../utils/time';
@@ -175,6 +175,7 @@ router.get('users/:id', async (path: SubPath, ctx: AppContext, user: User = null
 	view.content.canShareFolderOptions = yesNoDefaultOptions(user, 'can_share_folder');
 	view.content.canUploadOptions = yesNoOptions(user, 'can_upload');
 	view.content.userFlags = userFlags;
+	view.content.stripePortalUrl = stripePortalUrl();
 
 	view.jsFiles.push('zxcvbn');
 	view.cssFiles.push('index/user');

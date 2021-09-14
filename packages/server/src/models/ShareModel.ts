@@ -315,7 +315,7 @@ export default class ShareModel extends BaseModel<Share> {
 			for (const item of items) {
 				await this.models().userItem().add(userId, item.id);
 			}
-		});
+		}, 'ShareModel::createSharedFolderUserItems');
 	}
 
 	public async shareFolder(owner: User, folderId: string): Promise<Share> {
