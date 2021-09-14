@@ -141,7 +141,7 @@ export default class UserItemModel extends BaseModel<UserItem> {
 			}
 
 			return super.save(userItem, options);
-		});
+		}, 'UserItemModel::save');
 	}
 
 	public async delete(_id: string | string[], _options: DeleteOptions = {}): Promise<void> {

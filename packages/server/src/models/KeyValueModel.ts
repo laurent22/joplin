@@ -48,7 +48,7 @@ export default class NotificationModel extends BaseModel<KeyValue> {
 				value: this.serializeValue(value),
 				type,
 			});
-		});
+		}, 'KeyValueModel::setValue');
 	}
 
 	public async value<T>(key: string, defaultValue: Value = null): Promise<T> {

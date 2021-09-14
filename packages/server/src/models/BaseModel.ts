@@ -7,6 +7,9 @@ import { Models } from './factory';
 import * as EventEmitter from 'events';
 import { Config } from '../utils/types';
 import personalizedUserContentBaseUrl from '@joplin/lib/services/joplinServer/personalizedUserContentBaseUrl';
+import Logger from '@joplin/lib/Logger';
+
+const logger = Logger.create('BaseModel');
 
 export interface SaveOptions {
 	isNew?: boolean;
@@ -163,33 +166,39 @@ export default abstract class BaseModel<T> {
 	//
 	// The `name` argument is only for debugging, so that any stuck transaction
 	// can be more easily identified.
-	protected async withTransaction<T>(fn: Function, name: string = null): Promise<T> {
-		const debugTransaction = false;
+	protected async withTransaction<T>(fn: Function, name: string): Promise<T> {
+		const debugSteps = false;
+		const debugTimeout = true;
+		const timeoutMs = 10000;
 
-		const debugTimerId = debugTransaction ? setTimeout(() => {
-			console.info('Transaction did not complete:', name, txIndex);
-		}, 5000) : null;
+		let txIndex = 0;
 
-		const txIndex = await this.transactionHandler_.start();
+		const debugTimerId = debugTimeout ? setTimeout(() => {
+			logger.error('Transaction did not complete:', name, txIndex);
+			logger.error('Transaction stack:');
+			logger.error(this.transactionHandler_.stackInfo);
+		}, timeoutMs) : null;
 
-		if (debugTransaction) console.info('START', name, txIndex);
+		txIndex = await this.transactionHandler_.start(name);
+
+		if (debugSteps) console.info('START', name, txIndex);
 
 		let output: T = null;
 
 		try {
 			output = await fn();
 		} catch (error) {
-			await this.transactionHandler_.rollback(txIndex);
-
-			if (debugTransaction) {
+			if (debugSteps) {
 				console.info('ROLLBACK', name, txIndex);
 				clearTimeout(debugTimerId);
 			}
 
+			await this.transactionHandler_.rollback(txIndex);
+
 			throw error;
 		}
 
-		if (debugTransaction) {
+		if (debugSteps) {
 			console.info('COMMIT', name, txIndex);
 			clearTimeout(debugTimerId);
 		}
