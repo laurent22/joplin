@@ -1,7 +1,7 @@
 import { afterAllCleanUp, setupDatabaseAndSynchronizer, switchClient, encryptionService, expectNotThrow, expectThrow } from '../../testing/test-utils';
 import MasterKey from '../../models/MasterKey';
 import { migrateMasterPassword, showMissingMasterKeyMessage, updateMasterPassword } from './utils';
-import { localSyncInfo, saveLocalSyncInfo, setActiveMasterKeyId, setMasterKeyEnabled } from '../synchronizer/syncInfoUtils';
+import { localSyncInfo, setActiveMasterKeyId, setMasterKeyEnabled, setPpk } from '../synchronizer/syncInfoUtils';
 import Setting from '../../models/Setting';
 import { generateKeyPair, ppkPasswordIsValid } from './ppk';
 
@@ -79,9 +79,7 @@ describe('e2ee/utils', function() {
 		const mk1 = await MasterKey.save(await encryptionService().generateMasterKey(masterPassword1));
 		const mk2 = await MasterKey.save(await encryptionService().generateMasterKey(masterPassword1));
 
-		const syncInfo = localSyncInfo();
-		syncInfo.ppk = await generateKeyPair(encryptionService(), masterPassword1);
-		saveLocalSyncInfo(syncInfo);
+		setPpk(await generateKeyPair(encryptionService(), masterPassword1));
 
 		await updateMasterPassword(masterPassword1, masterPassword2);
 
@@ -96,8 +94,25 @@ describe('e2ee/utils', function() {
 		await expectThrow(async () => updateMasterPassword('wrong', masterPassword1));
 	});
 
-	// TODO: also test when ppk or keys exist, but master key is not currentlly set. - should decrypt and verify that the password is valid
-	// TODO: test when changing password, when no key is present
+	it('should set and verify master password when a data key exists', async () => {
+		const password = '111111';
+
+		await MasterKey.save(await encryptionService().generateMasterKey(password));
+
+		await expectThrow(async () => updateMasterPassword('', 'wrong'));
+		await expectNotThrow(async () => updateMasterPassword('', password));
+		expect(Setting.value('encryption.masterPassword')).toBe(password);
+	});
+
+	it('should set and verify master password when a private key exists', async () => {
+		const password = '111111';
+
+		setPpk(await generateKeyPair(encryptionService(), password));
+
+		await expectThrow(async () => updateMasterPassword('', 'wrong'));
+		await expectNotThrow(async () => updateMasterPassword('', password));
+		expect(Setting.value('encryption.masterPassword')).toBe(password);
+	});
 
 	it('should only set the master password if not already set', async () => {
 		expect(localSyncInfo().ppk).toBeFalsy();
@@ -105,6 +120,14 @@ describe('e2ee/utils', function() {
 		expect(Setting.value('encryption.masterPassword')).toBe('111111');
 		expect(localSyncInfo().ppk).toBeFalsy();
 		expect(localSyncInfo().masterKeys.length).toBe(0);
+	});
+
+	it('should change the master password even if no key is present', async () => {
+		await updateMasterPassword('', '111111');
+		expect(Setting.value('encryption.masterPassword')).toBe('111111');
+
+		await updateMasterPassword('111111', '222222');
+		expect(Setting.value('encryption.masterPassword')).toBe('222222');
 	});
 
 });

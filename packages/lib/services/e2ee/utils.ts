@@ -196,6 +196,8 @@ export function getMasterPassword(throwIfNotSet: boolean = true): string {
 export async function updateMasterPassword(currentPassword: string, newPassword: string, waitForSyncFinishedThenSync: Function = null) {
 	if (!newPassword) throw new Error('New password must be set');
 
+	if (currentPassword && !(await masterPasswordIsValid(currentPassword))) throw new Error('Master password is not valid. Please try again.');
+
 	const needToReencrypt = !!currentPassword && !!newPassword && currentPassword !== newPassword;
 
 	if (needToReencrypt) {
@@ -229,9 +231,9 @@ export async function updateMasterPassword(currentPassword: string, newPassword:
 			syncInfo.ppk = reencryptedPpk;
 			saveLocalSyncInfo(syncInfo);
 		}
+	} else {
+		if (!currentPassword && !(await masterPasswordIsValid(newPassword))) throw new Error('Master password is not valid. Please try again.');
 	}
-
-	if (!(await masterPasswordIsValid(newPassword))) throw new Error('Master password is not valid. Please try again.');
 
 	Setting.setValue('encryption.masterPassword', newPassword);
 
@@ -250,13 +252,8 @@ export async function getMasterPasswordStatus(password: string = null): Promise<
 	password = password === null ? getMasterPassword(false) : password;
 	if (!password) return MasterPasswordStatus.NotSet;
 
-	// try {
 	const isValid = await masterPasswordIsValid(password);
 	return isValid ? MasterPasswordStatus.Valid : MasterPasswordStatus.Invalid;
-	// } catch (error) {
-	// 	if (error.code === 'noKeyToDecrypt') return MasterPasswordStatus.Loaded;
-	// 	throw error;
-	// }
 }
 
 const masterPasswordStatusMessages = {
