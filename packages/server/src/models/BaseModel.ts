@@ -174,7 +174,7 @@ export default abstract class BaseModel<T> {
 		let txIndex = 0;
 
 		const debugTimerId = debugTimeout ? setTimeout(() => {
-			logger.error('Transaction did not complete:', name, txIndex);
+			logger.error(`Transaction #${txIndex} did not complete:`, name);
 			logger.error('Transaction stack:');
 			logger.error(this.transactionHandler_.stackInfo);
 		}, timeoutMs) : null;
@@ -188,20 +188,16 @@ export default abstract class BaseModel<T> {
 		try {
 			output = await fn();
 		} catch (error) {
-			if (debugSteps) {
-				console.info('ROLLBACK', name, txIndex);
-				clearTimeout(debugTimerId);
-			}
+			if (debugSteps) console.info('ROLLBACK', name, txIndex);
 
 			await this.transactionHandler_.rollback(txIndex);
 
 			throw error;
+		} finally {
+			if (debugTimerId) clearTimeout(debugTimerId);
 		}
 
-		if (debugSteps) {
-			console.info('COMMIT', name, txIndex);
-			clearTimeout(debugTimerId);
-		}
+		if (debugSteps) console.info('COMMIT', name, txIndex);
 
 		await this.transactionHandler_.commit(txIndex);
 		return output;
