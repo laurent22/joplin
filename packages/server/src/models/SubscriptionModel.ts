@@ -91,7 +91,7 @@ export default class SubscriptionModel extends BaseModel<Subscription> {
 					last_payment_time: now,
 					last_payment_failed_time: 0,
 				});
-			});
+			}, 'SubscriptionModel::handlePayment');
 		} else {
 			// We only update the payment failed time if it's not already set
 			// since the only thing that matter is the first time the payment
@@ -145,7 +145,7 @@ export default class SubscriptionModel extends BaseModel<Subscription> {
 			});
 
 			return { user, subscription };
-		});
+		}, 'SubscriptionModel::saveUserAndSubscription');
 	}
 
 	public async toggleSoftDelete(id: number, isDeleted: boolean) {

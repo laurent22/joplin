@@ -369,7 +369,7 @@ export default class UserModel extends BaseModel<User> {
 					key: `payment_failed_upload_disabled_${sub.last_payment_failed_time}`,
 				});
 			}
-		});
+		}, 'UserModel::handleFailedPaymentSubscriptions');
 	}
 
 	public async handleOversizedAccounts() {
@@ -430,7 +430,7 @@ export default class UserModel extends BaseModel<User> {
 					});
 				}
 			}
-		});
+		}, 'UserModel::handleOversizedAccounts');
 	}
 
 	private formatValues(user: User): User {
@@ -466,7 +466,7 @@ export default class UserModel extends BaseModel<User> {
 			if (isNew) UserModel.eventEmitter.emit('created');
 
 			return savedUser;
-		});
+		}, 'UserModel::save');
 	}
 
 }

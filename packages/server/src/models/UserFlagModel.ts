@@ -70,7 +70,7 @@ export default class UserFlagModels extends BaseModel<UserFlag> {
 				await this.add(userId, flagType, { updateUser: false });
 			}
 			await this.updateUserFromFlags(userId);
-		});
+		}, 'UserFlagModels::addMulti');
 	}
 
 	public async removeMulti(userId: Uuid, flagTypes: UserFlagType[]) {
@@ -79,7 +79,7 @@ export default class UserFlagModels extends BaseModel<UserFlag> {
 				await this.remove(userId, flagType, { updateUser: false });
 			}
 			await this.updateUserFromFlags(userId);
-		});
+		}, 'UserFlagModels::removeMulti');
 	}
 
 	// As a general rule the `enabled` and  `can_upload` properties should not
