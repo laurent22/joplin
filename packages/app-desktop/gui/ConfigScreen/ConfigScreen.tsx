@@ -699,7 +699,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		// screenComp is a custom config screen, such as the encryption config screen or keymap config screen.
 		// These screens handle their own loading/saving of settings and have bespoke rendering.
 		// When screenComp is null, it means we are viewing the regular settings.
-		const screenComp = this.state.screenName ? <div style={{ overflow: 'scroll', flex: 1 }}>{this.screenFromName(this.state.screenName)}</div> : null;
+		const screenComp = this.state.screenName ? <div className="config-screen-content-wrapper" style={{ overflow: 'scroll', flex: 1 }}>{this.screenFromName(this.state.screenName)}</div> : null;
 
 		if (screenComp) containerStyle.display = 'none';
 

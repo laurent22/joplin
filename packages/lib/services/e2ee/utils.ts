@@ -188,10 +188,17 @@ export function getMasterPassword(throwIfNotSet: boolean = true): string {
 	return password;
 }
 
+// - If both a current and new password is provided, and they are different, it
+//   means the password is being changed, so all the keys are reencrypted with
+//   the new password.
+// - If the current password is not provided, the master password is simply set
+//   according to newPassword.
 export async function updateMasterPassword(currentPassword: string, newPassword: string, waitForSyncFinishedThenSync: Function = null) {
-	if (localSyncInfo().ppk || localSyncInfo().masterKeys?.length) {
-		if (!currentPassword) throw new Error('Previous password must be provided in order to reencrypt the encryption keys');
+	if (!newPassword) throw new Error('New password must be set');
 
+	const needToReencrypt = !!currentPassword && !!newPassword && currentPassword !== newPassword;
+
+	if (needToReencrypt) {
 		const reencryptedMasterKeys: MasterKeyEntity[] = [];
 		let reencryptedPpk = null;
 
@@ -199,7 +206,7 @@ export async function updateMasterPassword(currentPassword: string, newPassword:
 			try {
 				reencryptedMasterKeys.push(await EncryptionService.instance().reencryptMasterKey(mk, currentPassword, newPassword));
 			} catch (error) {
-				error.message = `Master key ${mk.id} could not be reencrypted - this is most likely due to an incorrect password. Please try again. Error was: ${error.message}`;
+				error.message = `Key ${mk.id} could not be reencrypted - this is most likely due to an incorrect password. Please try again. Error was: ${error.message}`;
 				throw error;
 			}
 		}
@@ -223,6 +230,8 @@ export async function updateMasterPassword(currentPassword: string, newPassword:
 			saveLocalSyncInfo(syncInfo);
 		}
 	}
+
+	if (!(await masterPasswordIsValid(newPassword))) throw new Error('Master password is not valid. Please try again.');
 
 	Setting.setValue('encryption.masterPassword', newPassword);
 
@@ -278,6 +287,9 @@ export async function masterPasswordIsValid(masterPassword: string): Promise<boo
 	if (masterKey) {
 		return EncryptionService.instance().checkMasterKeyPassword(masterKey, masterPassword);
 	}
+
+	// If the password has never been set, then whatever password is provided is considered valid.
+	if (!Setting.value('encryption.masterPassword')) return true;
 
 	// There may not be any key to decrypt if the master password has been set,
 	// but the user has never synchronized. In which case, it's sufficient to

@@ -156,7 +156,12 @@ General classes
 
 h2 {
 	font-size: 24px;
+
+	&.-no-top-margin {
+		margin-top: 0;
+	}
 }
+
 
 .form {
 	display: flex;

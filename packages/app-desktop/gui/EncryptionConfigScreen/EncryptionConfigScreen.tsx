@@ -186,7 +186,7 @@ const EncryptionConfigScreen = (props: Props) => {
 
 		if (mkComps.length) {
 			return (
-				<div>
+				<div className="section">
 					{headerComp}
 					{tableComp}
 					{infoComp}
@@ -240,18 +240,20 @@ const EncryptionConfigScreen = (props: Props) => {
 		const reencryptDataSection = renderReencryptData();
 
 		return (
-			<div className="encryption-section">
-				<h2>{_('End-to-end encryption')}</h2>
-				<p>
-					{_('Encryption:')} <strong>{props.encryptionEnabled ? _('Enabled') : _('Disabled')}</strong>
-				</p>
-				<p>
-					{_('Public-Private Key Pair:')} <strong>{props.ppk ? _('Generated') : _('Not generated')}</strong>
-				</p>
-				{decryptedItemsInfo}
-				{toggleButton}
-				{needUpgradeSection}
-				{props.shouldReencrypt ? reencryptDataSection : null}
+			<div className="section">
+				<div className="encryption-section">
+					<h2 className="-no-top-margin">{_('End-to-end encryption')}</h2>
+					<p>
+						{_('Encryption:')} <strong>{props.encryptionEnabled ? _('Enabled') : _('Disabled')}</strong>
+					</p>
+					<p>
+						{_('Public-Private Key Pair:')} <strong>{props.ppk ? _('Generated') : _('Not generated')}</strong>
+					</p>
+					{decryptedItemsInfo}
+					{toggleButton}
+					{needUpgradeSection}
+					{props.shouldReencrypt ? reencryptDataSection : null}
+				</div>
 			</div>
 		);
 	};
@@ -261,11 +263,21 @@ const EncryptionConfigScreen = (props: Props) => {
 			void CommandService.instance().execute('openMasterPasswordDialog');
 		};
 
+		const buttonTitle = CommandService.instance().label('openMasterPasswordDialog');
+		const needPassword = Object.values(passwordChecks).includes(false);
+
+		const needPasswordMessage = !needPassword ? null : (
+			<p className="needpassword">{_('Your master password is needed to decrypt some of your data.')}<br/>{_('Please click on "%s" to proceed', buttonTitle)}</p>
+		);
+
 		return (
-			<div className="manage-password-section">
-				<h2>{_('Master password')}</h2>
-				<p className="status"><span>{_('Master password:')}</span>&nbsp;<span className="bold">{getMasterPasswordStatusMessage(masterPasswordStatus)}</span></p>
-				<Button className="managebutton" level={ButtonLevel.Secondary} onClick={onManageMasterPassword} title={CommandService.instance().label('openMasterPasswordDialog')} />
+			<div className="section">
+				<div className="manage-password-section">
+					<h2>{_('Master password')}</h2>
+					<p className="status"><span>{_('Master password:')}</span>&nbsp;<span className="bold">{getMasterPasswordStatusMessage(masterPasswordStatus)}</span></p>
+					{needPasswordMessage}
+					<Button className="managebutton" level={needPassword ? ButtonLevel.Primary : ButtonLevel.Secondary} onClick={onManageMasterPassword} title={buttonTitle} />
+				</div>
 			</div>
 		);
 	};
@@ -293,7 +305,7 @@ const EncryptionConfigScreen = (props: Props) => {
 			}
 
 			nonExistingMasterKeySection = (
-				<div>
+				<div className="section">
 					<h2>{_('Missing Keys')}</h2>
 					<p>{_('The keys with these IDs are used to encrypt some of your items, however the application does not currently have access to them. It is likely they will eventually be downloaded via synchronisation.')}</p>
 					<table>
@@ -311,21 +323,19 @@ const EncryptionConfigScreen = (props: Props) => {
 		return nonExistingMasterKeySection;
 	};
 
-	const containerStyle = Object.assign({}, theme.containerStyle, {
-		padding: theme.configScreenPadding,
-		overflow: 'auto',
-		backgroundColor: theme.backgroundColor3,
-	});
+	// const containerStyle = Object.assign({}, theme.containerStyle, {
+	// 	padding: theme.configScreenPadding,
+	// 	overflow: 'auto',
+	// 	backgroundColor: theme.backgroundColor3,
+	// });
 
 	return (
-		<div className="encryption-config-screen">
-			<div style={containerStyle}>
-				{renderEncryptionSection()}
-				{renderMasterKeySection(props.masterKeys.filter(mk => masterKeyEnabled(mk)), true)}
-				{renderMasterKeySection(props.masterKeys.filter(mk => !masterKeyEnabled(mk)), false)}
-				{renderNonExistingMasterKeysSection()}
-				{renderMasterPasswordSection()}
-			</div>
+		<div className="config-screen-content">
+			{renderEncryptionSection()}
+			{renderMasterPasswordSection()}
+			{renderMasterKeySection(props.masterKeys.filter(mk => masterKeyEnabled(mk)), true)}
+			{renderMasterKeySection(props.masterKeys.filter(mk => !masterKeyEnabled(mk)), false)}
+			{renderNonExistingMasterKeysSection()}
 		</div>
 	);
 };

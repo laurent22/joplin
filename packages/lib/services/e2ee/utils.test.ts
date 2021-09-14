@@ -96,6 +96,9 @@ describe('e2ee/utils', function() {
 		await expectThrow(async () => updateMasterPassword('wrong', masterPassword1));
 	});
 
+	// TODO: also test when ppk or keys exist, but master key is not currentlly set. - should decrypt and verify that the password is valid
+	// TODO: test when changing password, when no key is present
+
 	it('should only set the master password if not already set', async () => {
 		expect(localSyncInfo().ppk).toBeFalsy();
 		await updateMasterPassword('', '111111');
