@@ -1,6 +1,6 @@
 # Joplin Server Changelog
 
-## [server-v2.4.5-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.4.5-beta) (Pre-release) - 2021-09-14T12:02:34Z
+## [server-v2.4.6-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.4.6-beta) (Pre-release) - 2021-09-14T15:02:21Z
 
 - New: Add link to Stripe subscription page to manage payment details (4e7fe66)
 - New: Add transaction info to debug deadlock issues (01b653f)
