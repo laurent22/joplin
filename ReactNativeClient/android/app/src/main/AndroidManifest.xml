@@ -100,12 +100,17 @@
 			android:name=".share.ShareActivity"
 			android:configChanges="orientation"
 			android:label="@string/app_name"
-			android:screenOrientation="portrait"
-			android:theme="@style/AppTheme" >
+			android:excludeFromRecents="true"
+			android:theme="@style/AppTheme">
 			<intent-filter>
 				<action android:name="android.intent.action.SEND" />
 				<category android:name="android.intent.category.DEFAULT" />
-				<data android:mimeType="text/plain" />
+				<data android:mimeType="*/*" />
+			</intent-filter>
+			<intent-filter>
+				<action android:name="android.intent.action.SEND_MULTIPLE" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<data android:mimeType="*/*" />
 			</intent-filter>
 		</activity>
 	</application>

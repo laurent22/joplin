@@ -41,4 +41,23 @@ describe('StringUtils', function() {
 		}
 	}));
 
+	it('should find the next whitespace character', asyncTest(async () => {
+		const testCases = [
+			['', [[0, 0]]],
+			['Joplin', [[0, 6], [3, 6], [6, 6]]],
+			['Joplin is a free, open source\n note taking and *to-do* application', [[0, 6], [12, 17], [23, 29], [48, 54]]],
+		];
+
+		testCases.forEach((t, i) => {
+			const str = t[0];
+			t[1].forEach((pair, j) => {
+				const begin = pair[0];
+				const expected = pair[1];
+
+				const actual = StringUtils.nextWhitespaceIndex(str, begin);
+				expect(actual).toBe(expected, `Test string ${i} - case ${j}`);
+			});
+		});
+	}));
+
 });

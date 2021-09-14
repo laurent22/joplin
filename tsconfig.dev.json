@@ -1,0 +1,11 @@
+{
+	"extends": "./tsconfig",
+    "compilerOptions": {
+		// There's currently a bug in Electron that makes it fail to load the source maps
+		// (it tries to load them from the root of the app even though they are in
+		// sub-folders). So to have source maps anyway in dev, we use inline source maps.
+		// https://github.com/electron/electron/issues/22996
+		"sourceMap": false,
+		"inlineSourceMap": true
+	}
+}

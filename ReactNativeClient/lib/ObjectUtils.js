@@ -2,7 +2,7 @@ const ObjectUtils = {};
 
 ObjectUtils.sortByValue = function(object) {
 	const temp = [];
-	for (let k in object) {
+	for (const k in object) {
 		if (!object.hasOwnProperty(k)) continue;
 		temp.push({
 			key: k,
@@ -31,7 +31,7 @@ ObjectUtils.sortByValue = function(object) {
 ObjectUtils.fieldsEqual = function(o1, o2) {
 	if ((!o1 || !o2) && o1 !== o2) return false;
 
-	for (let k in o1) {
+	for (const k in o1) {
 		if (!o1.hasOwnProperty(k)) continue;
 		if (o1[k] !== o2[k]) return false;
 	}
@@ -46,7 +46,7 @@ ObjectUtils.fieldsEqual = function(o1, o2) {
 
 ObjectUtils.convertValuesToFunctions = function(o) {
 	const output = {};
-	for (let n in o) {
+	for (const n in o) {
 		if (!o.hasOwnProperty(n)) continue;
 		output[n] = () => {
 			return typeof o[n] === 'function' ? o[n]() : o[n];

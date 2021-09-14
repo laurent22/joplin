@@ -26,7 +26,7 @@ class Command extends BaseCommand {
 
 		const ok = force ? true : await this.prompt(notes.length > 1 ? _('%d notes match this pattern. Delete them?', notes.length) : _('Delete note?'), { booleanAnswerDefault: 'n' });
 		if (!ok) return;
-		let ids = notes.map(n => n.id);
+		const ids = notes.map(n => n.id);
 		await Note.batchDelete(ids);
 	}
 }

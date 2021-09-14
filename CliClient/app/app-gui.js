@@ -5,6 +5,7 @@ const Tag = require('lib/models/Tag.js');
 const BaseModel = require('lib/BaseModel.js');
 const Note = require('lib/models/Note.js');
 const Resource = require('lib/models/Resource.js');
+const Setting = require('lib/models/Setting.js');
 const { reducer, defaultState } = require('lib/reducer.js');
 const { splitCommandString } = require('lib/string-utils.js');
 const { reg } = require('lib/registry.js');
@@ -32,6 +33,8 @@ const FolderListWidget = require('./gui/FolderListWidget.js');
 const NoteListWidget = require('./gui/NoteListWidget.js');
 const StatusBarWidget = require('./gui/StatusBarWidget.js');
 const ConsoleWidget = require('./gui/ConsoleWidget.js');
+const LinkSelector = require('./LinkSelector.js').default;
+
 
 class AppGui {
 	constructor(app, store, keymap) {
@@ -72,6 +75,8 @@ class AppGui {
 
 			this.currentShortcutKeys_ = [];
 			this.lastShortcutKeyTime_ = 0;
+
+			this.linkSelector_ = new LinkSelector();
 
 			// Recurrent sync is setup only when the GUI is started. In
 			// a regular command it's not necessary since the process
@@ -134,7 +139,7 @@ class AppGui {
 			const item = folderList.currentItem;
 
 			if (item === '-') {
-				let newIndex = event.currentIndex + (event.previousIndex < event.currentIndex ? +1 : -1);
+				const newIndex = event.currentIndex + (event.previousIndex < event.currentIndex ? +1 : -1);
 				let nextItem = folderList.itemAt(newIndex);
 				if (!nextItem) nextItem = folderList.itemAt(event.previousIndex);
 
@@ -186,7 +191,7 @@ class AppGui {
 			borderRightWidth: 1,
 		};
 		noteList.on('currentItemChange', async () => {
-			let note = noteList.currentItem;
+			const note = noteList.currentItem;
 			this.store_.dispatch({
 				type: 'NOTE_SELECT',
 				id: note ? note.id : null,
@@ -243,9 +248,9 @@ class AppGui {
 
 		const hLayout = new HLayoutWidget();
 		hLayout.name = 'hLayout';
-		hLayout.addChild(folderList, { type: 'stretch', factor: 1 });
-		hLayout.addChild(noteList, { type: 'stretch', factor: 1 });
-		hLayout.addChild(noteLayout, { type: 'stretch', factor: 2 });
+		hLayout.addChild(folderList, { type: 'stretch', factor: Setting.value('layout.folderList.factor') });
+		hLayout.addChild(noteList, { type: 'stretch', factor: Setting.value('layout.noteList.factor') });
+		hLayout.addChild(noteLayout, { type: 'stretch', factor: Setting.value('layout.note.factor') });
 
 		const vLayout = new VLayoutWidget();
 		vLayout.name = 'vLayout';
@@ -338,7 +343,7 @@ class AppGui {
 
 		if (consoleWidget.isMaximized__ === doMaximize) return;
 
-		let constraints = {
+		const constraints = {
 			type: 'stretch',
 			factor: !doMaximize ? 1 : 4,
 		};
@@ -415,10 +420,10 @@ class AppGui {
 	async handleModelAction(action) {
 		this.logger().info('Action:', action);
 
-		let state = Object.assign({}, defaultState);
+		const state = Object.assign({}, defaultState);
 		state.notes = this.widget('noteList').items;
 
-		let newState = reducer(state, action);
+		const newState = reducer(state, action);
 
 		if (newState !== state) {
 			this.widget('noteList').items = newState.notes;
@@ -454,6 +459,30 @@ class AppGui {
 			} else {
 				this.stdout(_('Please select the note or notebook to be deleted first.'));
 			}
+		} else if (cmd === 'next_link' || cmd === 'previous_link') {
+			const noteText = this.widget('noteText');
+
+			noteText.render();
+
+			if (cmd === 'next_link') this.linkSelector_.changeLink(noteText, 1);
+			else this.linkSelector_.changeLink(noteText, -1);
+
+			this.linkSelector_.scrollWidget(noteText);
+
+			const cursorOffsetX = this.widget('mainWindow').width - noteText.innerWidth - 8;
+			const cursorOffsetY = 1 - noteText.scrollTop_;
+
+			if (this.linkSelector_.link) {
+				this.term_.moveTo(
+					this.linkSelector_.noteX + cursorOffsetX,
+					this.linkSelector_.noteY + cursorOffsetY
+				);
+				setTimeout(() => this.term_.term().inverse(this.linkSelector_.link), 50);
+			}
+		} else if (cmd === 'open_link') {
+			if (this.widget('noteText').hasFocus) {
+				this.linkSelector_.openLink(this.widget('noteText'));
+			}
 		} else if (cmd === 'toggle_console') {
 			if (!this.consoleIsShown()) {
 				this.showConsole();
@@ -485,9 +514,9 @@ class AppGui {
 		// this.logger().debug('Got command: ' + cmd);
 
 		try {
-			let note = this.widget('noteList').currentItem;
-			let folder = this.widget('folderList').currentItem;
-			let args = splitCommandString(cmd);
+			const note = this.widget('noteList').currentItem;
+			const folder = this.widget('folderList').currentItem;
+			const args = splitCommandString(cmd);
 
 			for (let i = 0; i < args.length; i++) {
 				if (args[i] == '$n') {
@@ -548,7 +577,7 @@ class AppGui {
 	stdout(text) {
 		if (text === null || text === undefined) return;
 
-		let lines = text.split('\n');
+		const lines = text.split('\n');
 		for (let i = 0; i < lines.length; i++) {
 			const v = typeof lines[i] === 'object' ? JSON.stringify(lines[i]) : lines[i];
 			this.widget('console').addLine(v);
@@ -626,7 +655,7 @@ class AppGui {
 
 			if (link.type === 'item') {
 				const itemId = link.id;
-				let item = await BaseItem.loadItemById(itemId);
+				const item = await BaseItem.loadItemById(itemId);
 				if (!item) throw new Error(`No item with ID ${itemId}`); // Should be nearly impossible
 
 				if (item.type_ === BaseModel.TYPE_RESOURCE) {
@@ -750,7 +779,7 @@ class AppGui {
 				// -------------------------------------------------------------------------
 
 				const shortcutKey = this.currentShortcutKeys_.join('');
-				let keymapItem = this.keymapItemByKey(shortcutKey);
+				const keymapItem = this.keymapItemByKey(shortcutKey);
 
 				// If this command is an alias to another command, resolve to the actual command
 
@@ -766,7 +795,7 @@ class AppGui {
 					if (keymapItem.type === 'function') {
 						this.processFunctionCommand(keymapItem.command);
 					} else if (keymapItem.type === 'prompt') {
-						let promptOptions = {};
+						const promptOptions = {};
 						if ('cursorPosition' in keymapItem) promptOptions.cursorPosition = keymapItem.cursorPosition;
 						const commandString = await statusBar.prompt(keymapItem.command ? keymapItem.command : '', null, promptOptions);
 						this.addCommandToConsole(commandString);

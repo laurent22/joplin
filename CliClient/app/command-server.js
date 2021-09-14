@@ -18,14 +18,15 @@ class Command extends BaseCommand {
 		const command = args.command;
 
 		const ClipperServer = require('lib/ClipperServer');
-		const stdoutFn = (s) => this.stdout(s);
+		ClipperServer.instance().initialize();
+		const stdoutFn = (...s) => this.stdout(s.join(' '));
 		const clipperLogger = new Logger();
 		clipperLogger.addTarget('file', { path: `${Setting.value('profileDir')}/log-clipper.txt` });
 		clipperLogger.addTarget('console', { console: {
 			info: stdoutFn,
 			warn: stdoutFn,
 			error: stdoutFn,
-		}});
+		} });
 		ClipperServer.instance().setDispatch(() => {});
 		ClipperServer.instance().setLogger(clipperLogger);
 

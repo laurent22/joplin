@@ -12,7 +12,7 @@ const fs = require('fs-extra');
 const baseDir = `${dirname(__dirname)}/tests/fuzzing`;
 const syncDir = `${baseDir}/sync`;
 const joplinAppPath = `${__dirname}/main.js`;
-let syncDurations = [];
+const syncDurations = [];
 
 const fsDriver = new FsDriverNode();
 Logger.fsDriver_ = fsDriver;
@@ -34,10 +34,10 @@ function createClient(id) {
 }
 
 async function createClients() {
-	let output = [];
-	let promises = [];
+	const output = [];
+	const promises = [];
 	for (let clientId = 0; clientId < 2; clientId++) {
-		let client = createClient(clientId);
+		const client = createClient(clientId);
 		promises.push(fs.remove(client.profileDir));
 		promises.push(
 			execCommand(client, 'config sync.target 2').then(() => {
@@ -2064,8 +2064,8 @@ function randomWord() {
 }
 
 function execCommand(client, command, options = {}) {
-	let exePath = `node ${joplinAppPath}`;
-	let cmd = `${exePath} --update-geolocation-disabled --env dev --log-level debug --profile ${client.profileDir} ${command}`;
+	const exePath = `node ${joplinAppPath}`;
+	const cmd = `${exePath} --update-geolocation-disabled --env dev --log-level debug --profile ${client.profileDir} ${command}`;
 	logger.info(`${client.id}: ${command}`);
 
 	if (options.killAfter) {
@@ -2073,7 +2073,7 @@ function execCommand(client, command, options = {}) {
 	}
 
 	return new Promise((resolve, reject) => {
-		let childProcess = exec(cmd, (error, stdout, stderr) => {
+		const childProcess = exec(cmd, (error, stdout, stderr) => {
 			if (error) {
 				if (error.signal == 'SIGTERM') {
 					resolve('Process was killed');
@@ -2096,7 +2096,7 @@ function execCommand(client, command, options = {}) {
 }
 
 async function clientItems(client) {
-	let itemsJson = await execCommand(client, 'dump');
+	const itemsJson = await execCommand(client, 'dump');
 	try {
 		return JSON.parse(itemsJson);
 	} catch (error) {
@@ -2105,7 +2105,7 @@ async function clientItems(client) {
 }
 
 function randomTag(items) {
-	let tags = [];
+	const tags = [];
 	for (let i = 0; i < items.length; i++) {
 		if (items[i].type_ != 5) continue;
 		tags.push(items[i]);
@@ -2115,7 +2115,7 @@ function randomTag(items) {
 }
 
 function randomNote(items) {
-	let notes = [];
+	const notes = [];
 	for (let i = 0; i < items.length; i++) {
 		if (items[i].type_ != 1) continue;
 		notes.push(items[i]);
@@ -2125,14 +2125,14 @@ function randomNote(items) {
 }
 
 async function execRandomCommand(client) {
-	let possibleCommands = [
+	const possibleCommands = [
 		['mkbook {word}', 40], // CREATE FOLDER
 		['mknote {word}', 70], // CREATE NOTE
 		[
 			async () => {
 				// DELETE RANDOM ITEM
-				let items = await clientItems(client);
-				let item = randomElement(items);
+				const items = await clientItems(client);
+				const item = randomElement(items);
 				if (!item) return;
 
 				if (item.type_ == 1) {
@@ -2150,8 +2150,8 @@ async function execRandomCommand(client) {
 		[
 			async () => {
 				// SYNC
-				let avgSyncDuration = averageSyncDuration();
-				let options = {};
+				const avgSyncDuration = averageSyncDuration();
+				const options = {};
 				if (!isNaN(avgSyncDuration)) {
 					if (Math.random() >= 0.5) {
 						options.killAfter = avgSyncDuration * Math.random();
@@ -2164,8 +2164,8 @@ async function execRandomCommand(client) {
 		[
 			async () => {
 				// UPDATE RANDOM ITEM
-				let items = await clientItems(client);
-				let item = randomNote(items);
+				const items = await clientItems(client);
+				const item = randomNote(items);
 				if (!item) return;
 
 				return execCommand(client, `set ${item.id} title "${randomWord()}"`);
@@ -2175,12 +2175,12 @@ async function execRandomCommand(client) {
 		[
 			async () => {
 				// ADD TAG
-				let items = await clientItems(client);
-				let note = randomNote(items);
+				const items = await clientItems(client);
+				const note = randomNote(items);
 				if (!note) return;
 
-				let tag = randomTag(items);
-				let tagTitle = !tag || Math.random() >= 0.9 ? `tag-${randomWord()}` : tag.title;
+				const tag = randomTag(items);
+				const tagTitle = !tag || Math.random() >= 0.9 ? `tag-${randomWord()}` : tag.title;
 
 				return execCommand(client, `tag add ${tagTitle} ${note.id}`);
 			},
@@ -2191,7 +2191,7 @@ async function execRandomCommand(client) {
 	let cmd = null;
 	while (true) {
 		cmd = randomElement(possibleCommands);
-		let r = 1 + Math.floor(Math.random() * 100);
+		const r = 1 + Math.floor(Math.random() * 100);
 		if (r <= cmd[1]) break;
 	}
 
@@ -2210,7 +2210,7 @@ function averageSyncDuration() {
 }
 
 function randomNextCheckTime() {
-	let output = time.unixMs() + 1000 + Math.random() * 1000 * 120;
+	const output = time.unixMs() + 1000 + Math.random() * 1000 * 120;
 	logger.info(`Next sync check: ${time.unixMsToIso(output)} (${Math.round((output - time.unixMs()) / 1000)} sec.)`);
 	return output;
 }
@@ -2223,11 +2223,11 @@ function findItem(items, itemId) {
 }
 
 function compareItems(item1, item2) {
-	let output = [];
-	for (let n in item1) {
+	const output = [];
+	for (const n in item1) {
 		if (!item1.hasOwnProperty(n)) continue;
-		let p1 = item1[n];
-		let p2 = item2[n];
+		const p1 = item1[n];
+		const p2 = item2[n];
 
 		if (n == 'notes_') {
 			p1.sort();
@@ -2243,13 +2243,13 @@ function compareItems(item1, item2) {
 }
 
 function findMissingItems_(items1, items2) {
-	let output = [];
+	const output = [];
 
 	for (let i = 0; i < items1.length; i++) {
-		let item1 = items1[i];
+		const item1 = items1[i];
 		let found = false;
 		for (let j = 0; j < items2.length; j++) {
-			let item2 = items2[j];
+			const item2 = items2[j];
 			if (item1.id == item2.id) {
 				found = true;
 				break;
@@ -2269,33 +2269,33 @@ function findMissingItems(items1, items2) {
 }
 
 async function compareClientItems(clientItems) {
-	let itemCounts = [];
+	const itemCounts = [];
 	for (let i = 0; i < clientItems.length; i++) {
-		let items = clientItems[i];
+		const items = clientItems[i];
 		itemCounts.push(items.length);
 	}
 	logger.info(`Item count: ${itemCounts.join(', ')}`);
 
-	let missingItems = findMissingItems(clientItems[0], clientItems[1]);
+	const missingItems = findMissingItems(clientItems[0], clientItems[1]);
 	if (missingItems[0].length || missingItems[1].length) {
 		logger.error('Items are different');
 		logger.error(missingItems);
 		process.exit(1);
 	}
 
-	let differences = [];
-	let items = clientItems[0];
+	const differences = [];
+	const items = clientItems[0];
 	for (let i = 0; i < items.length; i++) {
-		let item1 = items[i];
+		const item1 = items[i];
 		for (let clientId = 1; clientId < clientItems.length; clientId++) {
-			let item2 = findItem(clientItems[clientId], item1.id);
+			const item2 = findItem(clientItems[clientId], item1.id);
 			if (!item2) {
 				logger.error(`Item not found on client ${clientId}:`);
 				logger.error(item1);
 				process.exit(1);
 			}
 
-			let diff = compareItems(item1, item2);
+			const diff = compareItems(item1, item2);
 			if (diff.length) {
 				differences.push({
 					item1: JSON.stringify(item1),
@@ -2315,7 +2315,7 @@ async function compareClientItems(clientItems) {
 async function main() {
 	await fs.remove(syncDir);
 
-	let clients = await createClients();
+	const clients = await createClients();
 	let clientId = 0;
 
 	for (let i = 0; i < clients.length; i++) {
@@ -2348,7 +2348,7 @@ async function main() {
 
 		if (state == 'syncCheck') {
 			state = 'waitForSyncCheck';
-			let clientItems = [];
+			const clientItems = [];
 			// Up to 3 sync operations must be performed by each clients in order for them
 			// to be perfectly in sync - in order for each items to send their changes
 			// and get those from the other clients, and to also get changes that are
@@ -2356,12 +2356,12 @@ async function main() {
 			// with another one).
 			for (let loopCount = 0; loopCount < 3; loopCount++) {
 				for (let i = 0; i < clients.length; i++) {
-					let beforeTime = time.unixMs();
+					const beforeTime = time.unixMs();
 					await execCommand(clients[i], 'sync');
 					syncDurations.push(time.unixMs() - beforeTime);
 					if (syncDurations.length > 20) syncDurations.splice(0, 1);
 					if (loopCount === 2) {
-						let dump = await execCommand(clients[i], 'dump');
+						const dump = await execCommand(clients[i], 'dump');
 						clientItems[i] = JSON.parse(dump);
 					}
 				}

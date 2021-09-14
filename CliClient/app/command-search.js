@@ -18,8 +18,8 @@ class Command extends BaseCommand {
 	}
 
 	async action(args) {
-		let pattern = args['pattern'];
-		let folderTitle = args['notebook'];
+		const pattern = args['pattern'];
+		const folderTitle = args['notebook'];
 
 		let folder = null;
 		if (folderTitle) {

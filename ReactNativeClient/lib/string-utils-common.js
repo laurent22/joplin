@@ -38,7 +38,7 @@ function replaceRegexDiacritics(regexString) {
 
 	let output = '';
 	for (let i = 0; i < regexString.length; i++) {
-		let c = regexString[i];
+		const c = regexString[i];
 		const r = diacriticReplacements[c];
 		if (r) {
 			output += r;

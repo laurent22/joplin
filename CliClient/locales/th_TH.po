@@ -1,0 +1,3629 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Laurent Cozic
+# This file is distributed under the same license as the Joplin-CLI package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Joplin-CLI 1.0.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: th_TH\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 2.3\n"
+
+#: CliClient/app/command-cp.js:13
+msgid ""
+"Duplicates the notes matching <note> to [notebook]. If no notebook is "
+"specified the note is duplicated in the current notebook."
+msgstr ""
+
+#: CliClient/app/command-cp.js:24 CliClient/app/command-cp.js:27
+#: CliClient/app/command-import.js:34 CliClient/app/command-mv.js:22
+#: CliClient/app/command-mv.js:25 CliClient/app/command-use.js:21
+#: CliClient/app/command-ren.js:23 CliClient/app/command-rmbook.js:25
+#: CliClient/app/command-cat.js:25 CliClient/app/command-rmnote.js:25
+#: CliClient/app/command-attach.js:21 CliClient/app/command-export.js:36
+#: CliClient/app/command-export.js:40 CliClient/app/command-geoloc.js:20
+#: CliClient/app/command-search.js:27 CliClient/app/command-set.js:32
+#: CliClient/app/command-help.js:66 CliClient/app/command-todo.js:21
+#: CliClient/app/command-tag.js:33 CliClient/app/command-tag.js:36
+#: CliClient/app/command-tag.js:42 CliClient/app/command-tag.js:43
+#: CliClient/app/command-tag.js:81 CliClient/app/command-tag.js:87
+#: CliClient/app/command-done.js:20
+#: ReactNativeClient/lib/services/InteropService.js:218
+#: ReactNativeClient/lib/services/InteropService.js:239
+#, javascript-format
+msgid "Cannot find \"%s\"."
+msgstr "ไม่พบ \"%s\""
+
+#: CliClient/app/command-ls.js:18
+#, fuzzy
+msgid ""
+"Displays the notes in the current notebook. Use `ls /` to display the list "
+"of notebooks."
+msgstr "แสดงบันทึกในสมุดบันทึกปัจจุบัน ใช้ `ls /` เพื่อแสดงรายการสมุดบันทึก"
+
+#: CliClient/app/command-ls.js:27
+msgid "Displays only the first top <num> notes."
+msgstr "แสดงเฉพาะบันทึก <num> อันดับแรก"
+
+#: CliClient/app/command-ls.js:28
+#, fuzzy
+msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
+msgstr "จัดเรียงรายการโดย <field> (เช่น. title, updated_time, created_time)"
+
+#: CliClient/app/command-ls.js:29
+msgid "Reverses the sorting order."
+msgstr ""
+
+#: CliClient/app/command-ls.js:30
+msgid ""
+"Displays only the items of the specific type(s). Can be `n` for notes, `t` "
+"for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
+"to-dos, while `-ttd` would display notes and to-dos."
+msgstr ""
+
+#: CliClient/app/command-ls.js:31
+#, fuzzy
+msgid "Either \"text\" or \"json\""
+msgstr "ไม่ “text” ก็ “json”"
+
+#: CliClient/app/command-ls.js:32 CliClient/app/command-tag.js:18
+msgid ""
+"Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, "
+"TODO_CHECKED (for to-dos), TITLE"
+msgstr ""
+
+#: CliClient/app/command-ls.js:63
+msgid "Please select a notebook first."
+msgstr "โปรดเลือกสมุดบันทึกก่อน"
+
+#: CliClient/app/command-import.js:14
+msgid "Imports data into Joplin."
+msgstr "นำเข้าข้อมูลเข้ามาที่ Joplin"
+
+#: CliClient/app/command-import.js:25
+#, javascript-format
+msgid "Source format: %s"
+msgstr "ฟอร์แมตต้นฉบับ: %s"
+
+#: CliClient/app/command-import.js:26
+#, fuzzy
+msgid "Do not ask for confirmation."
+msgstr "อย่าถามให้ยืนยัน"
+
+#: CliClient/app/command-import.js:27
+#, fuzzy, javascript-format
+msgid "Output format: %s"
+msgstr "ฟอร์แมตต้นฉบับ: %s"
+
+#: CliClient/app/command-import.js:47 ElectronClient/gui/ImportScreen.min.js:69
+#, javascript-format
+msgid "Found: %d."
+msgstr "พบ: %d"
+
+#: CliClient/app/command-import.js:48 ElectronClient/gui/ImportScreen.min.js:70
+#, javascript-format
+msgid "Created: %d."
+msgstr "สร้างเมื่อ: %d"
+
+#: CliClient/app/command-import.js:49 ElectronClient/gui/ImportScreen.min.js:71
+#, javascript-format
+msgid "Updated: %d."
+msgstr "แก้ไขเมื่อ: %d"
+
+#: CliClient/app/command-import.js:50 ElectronClient/gui/ImportScreen.min.js:72
+#, javascript-format
+msgid "Skipped: %d."
+msgstr "ข้าม: %d"
+
+#: CliClient/app/command-import.js:51 ElectronClient/gui/ImportScreen.min.js:73
+#, javascript-format
+msgid "Resources: %d."
+msgstr "ทรัพยากร: %d"
+
+#: CliClient/app/command-import.js:52 ElectronClient/gui/ImportScreen.min.js:74
+#, javascript-format
+msgid "Tagged: %d."
+msgstr "แท็ก: %d"
+
+#: CliClient/app/command-import.js:65
+msgid "Importing notes..."
+msgstr "กำลังนำเข้าบันทึก..."
+
+#: CliClient/app/command-import.js:70 ElectronClient/gui/ImportScreen.min.js:89
+#, javascript-format
+msgid "The notes have been imported: %s"
+msgstr "บันทึกได้ถูกนำเข้าแล้ว: %s"
+
+#: CliClient/app/help-utils.js:56
+msgid "Enum"
+msgstr "Enum"
+
+#: CliClient/app/help-utils.js:56
+#, fuzzy, javascript-format
+msgid "Type: %s."
+msgstr "ชนิด: %s"
+
+#: CliClient/app/help-utils.js:57
+#, javascript-format
+msgid "Possible values: %s."
+msgstr "ค่าที่เป็นไปได้: %s"
+
+#: CliClient/app/help-utils.js:71
+#, javascript-format
+msgid "Default: %s"
+msgstr ""
+
+#: CliClient/app/help-utils.js:77
+msgid "Possible keys/values:"
+msgstr ""
+
+#: CliClient/app/command-server.js:14
+#, javascript-format
+msgid ""
+"Start, stop or check the API server. To specify on which port it should run, "
+"set the api.port config variable. Commands are (%s)."
+msgstr ""
+
+#: CliClient/app/command-server.js:37
+#, javascript-format
+msgid "Server is already running on port %d"
+msgstr "เซิร์ฟเวอร์กำลังทำงานอยู่แล้วที่พอร์ต %d"
+
+#: CliClient/app/command-server.js:43
+#, javascript-format
+msgid "Server is running on port %d"
+msgstr "เซิร์ฟเวอร์กำลังทำงานที่พอร์ต %d"
+
+#: CliClient/app/command-server.js:43 CliClient/app/command-server.js:46
+#, fuzzy
+msgid "Server is not running."
+msgstr "เซิร์ฟเวอร์ไม่ทำงาน"
+
+#: CliClient/app/command-e2ee.js:18
+msgid ""
+"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
+"`status`, `decrypt-file` and `target-status`."
+msgstr ""
+"จัดการการตั้งค่า E2EE คำสั่งคือ `enable`, `disable`, `decrypt`, `status`, `decrypt-"
+"file` และ `target-status`"
+
+#: CliClient/app/command-e2ee.js:36 CliClient/app/command-e2ee.js:72
+msgid "Enter master password:"
+msgstr ""
+
+#: CliClient/app/command-e2ee.js:38 CliClient/app/command-e2ee.js:74
+#: CliClient/app/command-e2ee.js:79
+msgid "Operation cancelled"
+msgstr "ระบวนการถูกยกเลิก"
+
+#: CliClient/app/command-e2ee.js:47
+#, fuzzy
+msgid ""
+"Starting decryption... Please wait as it may take several minutes depending "
+"on how much there is to decrypt."
+msgstr ""
+"เริ่มต้นการถอดรหัส... โปรดรอสักครู่ อาจจะใช้เวลาสองถึงสามนาที "
+"ขึ้นอยู่กับว่าปริมาณของไฟล์ต้องถอดรหัส"
+
+#: CliClient/app/command-e2ee.js:53
+#, fuzzy, javascript-format
+msgid "Decrypted items: %d"
+msgstr "รายการที่ถูกถอดรหัส: %s / %s"
+
+#: CliClient/app/command-e2ee.js:54
+#, javascript-format
+msgid "Skipped items: %d (use --retry-failed-items to retry decrypting them)"
+msgstr ""
+
+#: CliClient/app/command-e2ee.js:68
+msgid "Completed decryption."
+msgstr "ถอดรหัสเรียบร้อยแล้ว"
+
+#: CliClient/app/command-e2ee.js:77
+#: ReactNativeClient/lib/components/screens/encryption-config.js:163
+msgid "Confirm password:"
+msgstr "ยืนยันรหัสผ่าน:"
+
+#: CliClient/app/command-e2ee.js:83
+#: ReactNativeClient/lib/components/screens/encryption-config.js:140
+msgid "Passwords do not match!"
+msgstr "รหัสผ่านไม่เหมือนกัน!"
+
+#: CliClient/app/command-e2ee.js:108
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:442
+#: ReactNativeClient/lib/components/screens/encryption-config.js:280
+msgid "Enabled"
+msgstr "เปิด"
+
+#: CliClient/app/command-e2ee.js:108
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:442
+#: ReactNativeClient/lib/models/Setting.js:607
+#: ReactNativeClient/lib/components/screens/encryption-config.js:280
+msgid "Disabled"
+msgstr "ปิด"
+
+#: CliClient/app/command-e2ee.js:108
+#: ReactNativeClient/lib/components/screens/encryption-config.js:280
+#, fuzzy, javascript-format
+msgid "Encryption is: %s"
+msgstr "การเข้ารหัส: %s"
+
+#: CliClient/app/command-mkbook.js:12
+msgid "Creates a new notebook."
+msgstr "สร้างสมุดบันทึกใหม่"
+
+#: CliClient/app/command-mv.js:14
+msgid "Moves the notes matching <note> to [notebook]."
+msgstr ""
+
+#: CliClient/app/command-config.js:13
+msgid ""
+"Gets or sets a config value. If [value] is not provided, it will show the "
+"value of [name]. If neither [name] nor [value] is provided, it will list the "
+"current configuration."
+msgstr ""
+
+#: CliClient/app/command-config.js:18
+msgid "Also displays unset and hidden config variables."
+msgstr ""
+
+#: CliClient/app/command-config.js:79
+#, javascript-format
+msgid "%s = %s (%s)"
+msgstr "%s = %s (%s)"
+
+#: CliClient/app/command-config.js:81
+#, javascript-format
+msgid "%s = %s"
+msgstr "%s = %s"
+
+#: CliClient/app/command-use.js:12
+msgid ""
+"Switches to [notebook] - all further operations will happen within this "
+"notebook."
+msgstr ""
+
+#: CliClient/app/command-sync.js:28
+msgid "Synchronises with remote storage."
+msgstr "ซิงโครไนซ์กับแหล่งเก็บข้อมูลระยะไกล"
+
+#: CliClient/app/command-sync.js:32
+msgid "Sync to provided target (defaults to sync.target config value)"
+msgstr ""
+
+#: CliClient/app/command-sync.js:77 CliClient/app/command-sync.js:91
+#: ElectronClient/gui/OneDriveLoginScreen.min.js:40
+msgid ""
+"Authentication was not completed (did not receive an authentication token)."
+msgstr "การขออนุมัติไม่สมบูรณ์ (ไม่ได้รับ Token เพื่อขออนุมัติ)"
+
+#: CliClient/app/command-sync.js:86
+#: ElectronClient/gui/DropboxLoginScreen.min.js:42
+#: ReactNativeClient/lib/components/screens/dropbox-login.js:58
+msgid ""
+"To allow Joplin to synchronise with Dropbox, please follow the steps below:"
+msgstr ""
+
+#: CliClient/app/command-sync.js:87
+#: ElectronClient/gui/DropboxLoginScreen.min.js:47
+#: ReactNativeClient/lib/components/screens/dropbox-login.js:59
+msgid "Step 1: Open this URL in your browser to authorise the application:"
+msgstr "ขั้นตอนที่ 1: เปิด URL นี้ในเว็บเบราว์เซอร์ เพื่อขออนุมัติแอปพลิเคชั่น"
+
+#: CliClient/app/command-sync.js:89
+#: ElectronClient/gui/DropboxLoginScreen.min.js:57
+#: ReactNativeClient/lib/components/screens/dropbox-login.js:65
+msgid "Step 2: Enter the code provided by Dropbox:"
+msgstr "ขั้นตอนที่ 2: กรอกรหัสที่ได้มาจาก Dropbox:"
+
+#: CliClient/app/command-sync.js:101
+#, javascript-format
+msgid "Not authentified with %s. Please provide any missing credentials."
+msgstr ""
+
+#: CliClient/app/command-sync.js:124
+#, fuzzy
+msgid "Synchronisation is already in progress."
+msgstr "การซิงโครไนซ์กำลังดำเนินการอยู่"
+
+#: CliClient/app/command-sync.js:129
+#, javascript-format
+msgid ""
+"Lock file is already being hold. If you know that no synchronisation is "
+"taking place, you may delete the lock file at \"%s\" and resume the "
+"operation."
+msgstr ""
+
+#: CliClient/app/command-sync.js:175
+#, javascript-format
+msgid "Synchronisation target: %s (%s)"
+msgstr "จุดหมายการซิงโครไนซ์: %s (%s)"
+
+#: CliClient/app/command-sync.js:177
+#, fuzzy
+msgid "Cannot initialise synchroniser."
+msgstr "มีบางรายการที่ไม่สามารถซิงโครไนซ์ได้"
+
+#: CliClient/app/command-sync.js:179
+msgid "Starting synchronisation..."
+msgstr "เริ่มต้นการซิงโครไนซ์..."
+
+#: CliClient/app/command-sync.js:202
+msgid "Downloading resources..."
+msgstr "กำลังดาวน์โหลดทรัพยากร..."
+
+#: CliClient/app/command-sync.js:226
+msgid "Cancelling... Please wait."
+msgstr "กำลังยกเลิก... โปรดรอสักครู่..."
+
+#: CliClient/app/command-ren.js:14
+msgid "Renames the given <item> (note or notebook) to <name>."
+msgstr ""
+
+#: CliClient/app/command-rmbook.js:13
+msgid "Deletes the given notebook."
+msgstr "ลบสมุดบันทึกที่เลือก"
+
+#: CliClient/app/command-rmbook.js:17
+msgid "Deletes the notebook without asking for confirmation."
+msgstr "ลบสมุดบันทึกโดยไม่ต้องถามการยืนยัน"
+
+#: CliClient/app/command-rmbook.js:26
+#: ReactNativeClient/lib/components/screens/notes.js:154
+msgid ""
+"Delete notebook? All notes and sub-notebooks within this notebook will also "
+"be deleted."
+msgstr ""
+
+#: CliClient/app/command-mktodo.js:12
+msgid "Creates a new to-do."
+msgstr "สร้าง to-do ใหม่"
+
+#: CliClient/app/command-mktodo.js:16 CliClient/app/command-mknote.js:16
+msgid "Notes can only be created within a notebook."
+msgstr ""
+
+#: CliClient/app/command-cat.js:14
+msgid "Displays the given note."
+msgstr "แสดงบันทึกที่เลือก"
+
+#: CliClient/app/command-cat.js:18
+msgid "Displays the complete information about note."
+msgstr "แสดงข้อมูลทั้งหมดของบันทึก"
+
+#: CliClient/app/command-edit.js:17
+msgid "Edit note."
+msgstr "แก้ไขบันทึก"
+
+#: CliClient/app/command-edit.js:30
+msgid ""
+"No text editor is defined. Please set it using `config editor <editor-path>`"
+msgstr ""
+
+#: CliClient/app/command-edit.js:40
+msgid "No active notebook."
+msgstr "ไม่มีสมุดบันทึกที่ถูกใช้งาน"
+
+#: CliClient/app/command-edit.js:46
+#, javascript-format
+msgid "Note does not exist: \"%s\". Create it?"
+msgstr ""
+
+#: CliClient/app/app-gui.js:446
+msgid "To delete a tag, untag the associated notes."
+msgstr ""
+
+#: CliClient/app/app-gui.js:456
+#, fuzzy
+msgid "Please select the note or notebook to be deleted first."
+msgstr "โปรดเลือกบันทึกหรือสมุดบันทึกที่ต้องการลบก่อน"
+
+#: CliClient/app/app-gui.js:720
+msgid "Press Ctrl+D or type \"exit\" to exit the application"
+msgstr "กด Ctrl+D หรือพิมพ์ \"exit\" เพื่อออกจากแอปพลิเคชั่น"
+
+#: CliClient/app/command-rmnote.js:13
+msgid "Deletes the notes matching <note-pattern>."
+msgstr ""
+
+#: CliClient/app/command-rmnote.js:17
+msgid "Deletes the notes without asking for confirmation."
+msgstr ""
+
+#: CliClient/app/command-rmnote.js:27
+#, javascript-format
+msgid "%d notes match this pattern. Delete them?"
+msgstr ""
+
+#: CliClient/app/command-rmnote.js:27
+#: ReactNativeClient/lib/components/screens/note.js:461
+msgid "Delete note?"
+msgstr "ลบบันทึก?"
+
+#: CliClient/app/command-attach.js:13
+#, fuzzy
+msgid "Attaches the given file to the note."
+msgstr "แนบไฟล์ที่ถูกเลือกกับบันทึก"
+
+#: CliClient/app/command-version.js:11
+msgid "Displays version information"
+msgstr "แสดงข้อมูลเวอร์ชั่น"
+
+#: CliClient/app/command-version.js:16
+#, javascript-format
+msgid "%s %s (%s)"
+msgstr "%s %s (%s)"
+
+#: CliClient/app/command-undone.js:12
+msgid "Marks a to-do as non-completed."
+msgstr ""
+
+#: CliClient/app/command-export.js:13
+msgid ""
+"Exports Joplin data to the given path. By default, it will export the "
+"complete database including notebooks, notes, tags and resources."
+msgstr ""
+
+#: CliClient/app/command-export.js:23
+#, fuzzy, javascript-format
+msgid "Destination format: %s"
+msgstr "ฟอร์แมตปลายทาง: %s"
+
+#: CliClient/app/command-export.js:23
+#, fuzzy
+msgid "Exports only the given note."
+msgstr "ส่งออกเฉพาะบันทึกที่เลือก"
+
+#: CliClient/app/command-export.js:23
+msgid "Exports only the given notebook."
+msgstr "ส่งออกเฉพาะสมุดบันทึกที่เลือก"
+
+#: CliClient/app/command-mknote.js:12
+msgid "Creates a new note."
+msgstr "สร้างบันทึกใหม่"
+
+#: CliClient/app/main.js:80
+msgid "Type `joplin help` for usage information."
+msgstr "พิมพ์ `joplin help` สำหรับข้อมูลการใช้งาน"
+
+#: CliClient/app/main.js:82
+msgid "Fatal error:"
+msgstr "ผิดพลาดร้ายแรง:"
+
+#: CliClient/app/command-geoloc.js:13
+msgid "Displays a geolocation URL for the note."
+msgstr "แสดง URL ตำแหน่งภูมิศาสตร์สำหรับบันทึก"
+
+#: CliClient/app/gui/NoteWidget.js:36
+msgid ""
+"Welcome to Joplin!\n"
+"\n"
+"Type `:help shortcuts` for the list of keyboard shortcuts, or just `:help` "
+"for usage information.\n"
+"\n"
+"For example, to create a notebook press `mb`; to create a note press `mn`."
+msgstr ""
+"ยินดีต้อนรับสู่ Joplin!\n"
+"\n"
+"พิมพ์ `:help shortcuts` สำหรับรายการคีย์ลัด หรือพิมพ์ `:help` สำหรับข้อมูลการใช้งาน\n"
+"\n"
+"ตัวอย่างเช่น สร้างสมุดบันทึกใหม่พิมพ์ `mb`; สร้างบันทึกใหม่พิมพ์ `mn`."
+
+#: CliClient/app/gui/NoteWidget.js:48
+msgid ""
+"One or more items are currently encrypted and you may need to supply a "
+"master password. To do so please type `e2ee decrypt`. If you have already "
+"supplied the password, the encrypted items are being decrypted in the "
+"background and will be available soon."
+msgstr ""
+
+#: CliClient/app/gui/NoteWidget.js:50
+#, fuzzy
+msgid "You may also type `status` for more information."
+msgstr "อย่าถามให้ยืนยัน"
+
+#: CliClient/app/gui/FolderListWidget.js:31
+msgid "Search:"
+msgstr "ค้นหา:"
+
+#: CliClient/app/command-search.js:13
+msgid "Searches for the given <pattern> in all the notes."
+msgstr ""
+
+#: CliClient/app/command-set.js:22
+#, javascript-format
+msgid ""
+"Sets the property <name> of the given <note> to the given [value]. Possible "
+"properties are:\n"
+"\n"
+"%s"
+msgstr ""
+
+#: CliClient/app/cli-utils.js:108
+#, javascript-format
+msgid "Missing required argument: %s"
+msgstr ""
+
+#: CliClient/app/cli-utils.js:139 ReactNativeClient/lib/services/report.js:151
+#, javascript-format
+msgid "%s: %s"
+msgstr "%s: %s"
+
+#: CliClient/app/cli-utils.js:143
+#, fuzzy
+msgid "Your choice: "
+msgstr "ตัวเลือกของคุณ:"
+
+#: CliClient/app/cli-utils.js:150
+#, javascript-format
+msgid "Invalid answer: %s"
+msgstr ""
+
+#: CliClient/app/cli-utils.js:160 CliClient/app/app.js:136
+msgid "Y"
+msgstr "Y"
+
+#: CliClient/app/cli-utils.js:160 CliClient/app/app.js:136
+msgid "n"
+msgstr "n"
+
+#: CliClient/app/base-command.js:15
+#, fuzzy
+msgid "Cannot change encrypted item"
+msgstr "ไม่สามารถเปลี่ยนรายการการเข้ารหัส"
+
+#: CliClient/app/command-help.js:13
+msgid "Displays usage information."
+msgstr "แสดงข้อมูลการใช้งาน"
+
+#: CliClient/app/command-help.js:36
+#, fuzzy, javascript-format
+msgid "For information on how to customise the shortcuts please visit %s"
+msgstr "สำหรับข้อมูลเพิ่มเติมสำหรับการปรับแต่งคีย์ลัด ไปที่ %s"
+
+#: CliClient/app/command-help.js:44
+#, fuzzy
+msgid "Shortcuts are not available in CLI mode."
+msgstr "คีย์ลัดใช้ไม่ได้ในโหมด CLI"
+
+#: CliClient/app/command-help.js:71
+msgid ""
+"Type `help [command]` for more information about a command; or type `help "
+"all` for the complete usage information."
+msgstr ""
+"พิมพ์ `help [คำสั่ง]` สำหรับข้อมูลเพิ่มเติมของคำสั่งนั้นๆ หรือพิมพ์ `help all` "
+"สำหรับข้อมูลการใช้งานทั้งหมด"
+
+#: CliClient/app/command-help.js:73
+msgid "The possible commands are:"
+msgstr "คำสั่งที่เป็นไปได้คือ:"
+
+#: CliClient/app/command-help.js:77
+msgid ""
+"In any command, a note or notebook can be referred to by title or ID, or "
+"using the shortcuts `$n` or `$b` for, respectively, the currently selected "
+"note or notebook. `$c` can be used to refer to the currently selected item."
+msgstr ""
+
+#: CliClient/app/command-help.js:79
+msgid "To move from one pane to another, press Tab or Shift+Tab."
+msgstr ""
+
+#: CliClient/app/command-help.js:80
+msgid ""
+"Use the arrows and page up/down to scroll the lists and text areas "
+"(including this console)."
+msgstr ""
+
+#: CliClient/app/command-help.js:81
+#, fuzzy
+msgid "To maximise/minimise the console, press \"tc\"."
+msgstr "ขยาย/ย่อ คอนโซล พิมพ์ “tc”"
+
+#: CliClient/app/command-help.js:82
+msgid "To enter command line mode, press \":\""
+msgstr ""
+
+#: CliClient/app/command-help.js:83
+msgid "To exit command line mode, press ESCAPE"
+msgstr ""
+
+#: CliClient/app/command-help.js:84
+msgid ""
+"For the list of keyboard shortcuts and config options, type `help keymap`"
+msgstr "สำหรับรายการคีย์ลัดและตัวเลือกการตั้งค่า พิมพ์ `help keymap`"
+
+#: CliClient/app/command-todo.js:14
+msgid ""
+"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to "
+"toggle the given to-do between completed and uncompleted state (If the "
+"target is a regular note it will be converted to a to-do). Use \"clear\" to "
+"convert the to-do back to a regular note."
+msgstr ""
+
+#: CliClient/app/command-exit.js:11
+msgid "Exits the application."
+msgstr "ออกจากแอปพลิเคชั่น"
+
+#: CliClient/app/app.js:61
+#, javascript-format
+msgid "More than one item match \"%s\". Please narrow down your query."
+msgstr ""
+
+#: CliClient/app/app.js:91
+#, fuzzy
+msgid "No notebook selected."
+msgstr "สมุดบันทึกไม่ได้ถูกเลือก"
+
+#: CliClient/app/app.js:97
+#, fuzzy
+msgid "No notebook has been specified."
+msgstr "สมุดบันทึกไม่ได้ระบุ"
+
+#: CliClient/app/app.js:136
+msgid "N"
+msgstr "N"
+
+#: CliClient/app/app.js:136
+msgid "y"
+msgstr "y"
+
+#: CliClient/app/app.js:169
+#, fuzzy
+msgid "Cancelling background synchronisation... Please wait."
+msgstr "กำลังยกเลิกการซิงโครไนซ์เบื้องหลัง... โปรดรอสักครู่"
+
+#: CliClient/app/app.js:254
+#, javascript-format
+msgid "No such command: %s"
+msgstr "ไม่มีคำสั่ง: %s"
+
+#: CliClient/app/app.js:302
+#, javascript-format
+msgid "The command \"%s\" is only available in GUI mode"
+msgstr "คำสั่ง “%s” มีเฉพาะในโหมด GUI เท่านั้น"
+
+#: CliClient/app/command-status.js:13
+msgid "Displays summary about the notes and notebooks."
+msgstr ""
+
+#: CliClient/app/command-status.js:44
+msgid ""
+"To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`"
+msgstr ""
+
+#: CliClient/app/command-tag.js:14
+msgid ""
+"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to "
+"assign or remove [tag] from [note], to list notes associated with [tag], or "
+"to list tags associated with [note]. The command `tag list` can be used to "
+"list all the tags (use -l for long option)."
+msgstr ""
+
+#: CliClient/app/command-tag.js:90
+#, javascript-format
+msgid "Invalid command: \"%s\""
+msgstr "คำสั่งไม่ถูกต้อง: \"%s\""
+
+#: CliClient/app/command-done.js:14
+msgid "Marks a to-do as done."
+msgstr ""
+
+#: CliClient/app/command-done.js:21
+#, javascript-format
+msgid "Note is not a to-do: \"%s\""
+msgstr ""
+
+#: ElectronClient/bridge.js:101 ElectronClient/bridge.js:112
+#: ElectronClient/bridge.js:125 ElectronClient/bridge.js:135
+#: ElectronClient/checkForUpdates.js:139
+#: ElectronClient/gui/DialogButtonRow.min.js:30
+#: ElectronClient/gui/PromptDialog.min.js:235
+#: ElectronClient/gui/ConfigScreen.min.js:185
+#: ElectronClient/gui/ConfigScreen.min.js:754 ElectronClient/app.js:618
+#: ReactNativeClient/lib/components/ModalDialog.js:67
+#: ReactNativeClient/lib/components/CameraView.js:182
+#: ReactNativeClient/lib/components/side-menu-content.js:150
+msgid "OK"
+msgstr "ตกลง"
+
+#: ElectronClient/bridge.js:112 ElectronClient/bridge.js:125
+#: ElectronClient/gui/DialogButtonRow.min.js:38
+#: ElectronClient/gui/SideBar/SideBar.min.js:296
+#: ElectronClient/gui/SideBar/SideBar.min.js:660
+#: ElectronClient/gui/SideBar.min.js:319 ElectronClient/gui/SideBar.min.js:724
+#: ElectronClient/gui/NoteList.min.js:148
+#: ElectronClient/gui/utils/NoteListUtils.js:184
+#: ElectronClient/gui/PromptDialog.min.js:242
+#: ElectronClient/gui/ConfigScreen.min.js:744
+#: ElectronClient/gui/NoteList/NoteList.min.js:153
+#: ElectronClient/gui/ResourceScreen.js:94
+#: ReactNativeClient/lib/shim-init-node.js:91
+#: ReactNativeClient/lib/components/select-date-time-dialog.js:70
+#: ReactNativeClient/lib/components/select-date-time-dialog.js:89
+#: ReactNativeClient/lib/components/ModalDialog.js:70
+#: ReactNativeClient/lib/components/CameraView.js:183
+#: ReactNativeClient/lib/components/side-menu-content.js:156
+#: ReactNativeClient/lib/components/side-menu-content.js:165
+#: ReactNativeClient/lib/components/side-menu-content.js:338
+#: ReactNativeClient/lib/components/screens/encryption-config.js:185
+#: ReactNativeClient/lib/components/screens/note.js:97
+#: ReactNativeClient/lib/components/screens/note.js:526
+msgid "Cancel"
+msgstr "ยกเลิก"
+
+#: ElectronClient/plugins/GotoAnything.min.js:454
+msgid ""
+"Type a note title or part of its content to jump to it. Or type # followed "
+"by a tag name, or @ followed by a notebook name."
+msgstr ""
+
+#: ElectronClient/plugins/GotoAnything.min.js:493
+msgid "Goto Anything..."
+msgstr ""
+
+#: ElectronClient/InteropServiceHelper.js:147
+#, fuzzy, javascript-format
+msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
+msgstr "กำลังนำเข้าจาก “%s” ไปเป็นฟอร์แมต “%s” โปรดรอสักครู่..."
+
+#: ElectronClient/InteropServiceHelper.js:164
+#, javascript-format
+msgid "Could not export notes: %s"
+msgstr ""
+
+#: ElectronClient/checkForUpdates.js:138
+#, fuzzy
+msgid "Current version is up-to-date."
+msgstr "เป็นเวอร์ชั่นปัจจุบันแล้ว"
+
+#: ElectronClient/checkForUpdates.js:148
+#, fuzzy, javascript-format
+msgid "%s (pre-release)"
+msgstr "%s (pre-release)"
+
+#: ElectronClient/checkForUpdates.js:152
+#, fuzzy
+msgid "An update is available, do you want to download it now?"
+msgstr "มีอัพเดทใหม่ คุณต้องการดาวน์โหลดเลยหรือไม่?"
+
+#: ElectronClient/checkForUpdates.js:152
+#, javascript-format
+msgid "Your version: %s"
+msgstr "เวอร์ชั่นของคุณ: %s"
+
+#: ElectronClient/checkForUpdates.js:152
+#, javascript-format
+msgid "New version: %s"
+msgstr "เวอร์ชั่นใหม่: %s"
+
+#: ElectronClient/checkForUpdates.js:153 ElectronClient/app.js:608
+#: ReactNativeClient/lib/shim-init-node.js:91
+#: ReactNativeClient/lib/components/screens/note.js:524
+msgid "Yes"
+msgstr "ใช่"
+
+#: ElectronClient/checkForUpdates.js:153 ElectronClient/app.js:608
+#: ReactNativeClient/lib/shim-init-node.js:91
+#: ReactNativeClient/lib/components/screens/note.js:525
+msgid "No"
+msgstr "ไม่"
+
+#: ElectronClient/checkForUpdates.js:153
+msgid "Full Release Notes"
+msgstr ""
+
+#: ElectronClient/gui/NoteRevisionViewer.min.js:75
+#, javascript-format
+msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
+msgstr ""
+
+#: ElectronClient/gui/NoteRevisionViewer.min.js:100
+msgid "This note has no history"
+msgstr "บันทึกนี้ไม่มีประวัติย้อนหลัง"
+
+#: ElectronClient/gui/NoteRevisionViewer.min.js:142
+#: ElectronClient/gui/NoteEditor/utils/useMessageHandler.js:110
+#: ElectronClient/gui/NoteText.min.js:865
+#, javascript-format
+msgid "Unsupported link or message: %s"
+msgstr ""
+
+#: ElectronClient/gui/NoteRevisionViewer.min.js:177
+msgid "Restore"
+msgstr "กู้คืน"
+
+#: ElectronClient/gui/NoteRevisionViewer.min.js:178
+#, javascript-format
+msgid ""
+"Click \"%s\" to restore the note. It will be copied in the notebook named "
+"\"%s\". The current version of the note will not be replaced or modified."
+msgstr ""
+
+#: ElectronClient/gui/NoteRevisionViewer.min.js:187
+#: ElectronClient/gui/NoteText.min.js:1671
+#: ElectronClient/gui/ConfigScreen.min.js:744
+#: ElectronClient/gui/Header.min.js:316
+#: ElectronClient/gui/Header/Header.min.js:302
+#: ReactNativeClient/lib/commands/historyBackward.js:16
+#, fuzzy
+msgid "Back"
+msgstr "กลับ"
+
+#: ElectronClient/gui/SideBar/SideBar.min.js:269
+#: ElectronClient/gui/SideBar.min.js:283
+#, fuzzy
+msgid "Remove"
+msgstr "ลบ"
+
+#: ElectronClient/gui/SideBar/SideBar.min.js:272
+#: ElectronClient/gui/SideBar.min.js:286
+#: ReactNativeClient/lib/components/side-menu-content.js:148
+#, fuzzy, javascript-format
+msgid ""
+"Delete notebook \"%s\"?\n"
+"\n"
+"All notes and sub-notebooks within this notebook will also be deleted."
+msgstr ""
+"ลบสมุดบันทึก \"%s\"?\n"
+"\n"
+"บันทึกทั้งหมดและสมุดบันทึกย่อยภายในสมุดบันทึกนี้จะถูกลบไปด้วย"
+
+#: ElectronClient/gui/SideBar/SideBar.min.js:273
+#: ElectronClient/gui/SideBar.min.js:287
+#: ElectronClient/gui/utils/NoteListUtils.js:161
+#: ElectronClient/gui/utils/NoteListUtils.js:184
+#: ElectronClient/gui/ResourceScreen.js:46
+#: ElectronClient/gui/ResourceScreen.js:94
+#: ReactNativeClient/lib/components/screen-header.js:356
+#: ReactNativeClient/lib/components/side-menu-content.js:146
+#: ReactNativeClient/lib/components/screens/note.js:868
+msgid "Delete"
+msgstr "ลบ"
+
+#: ElectronClient/gui/SideBar/SideBar.min.js:276
+#, fuzzy, javascript-format
+msgid "Remove tag \"%s\" and its descendant tags from all notes?"
+msgstr "ลบแท็ก \"%s\" ออกจากบันทึกทั้งหมด?"
+
+#: ElectronClient/gui/SideBar/SideBar.min.js:278
+#: ElectronClient/gui/SideBar.min.js:292
+msgid "Remove this search from the sidebar?"
+msgstr "ลบการค้นหานี้ออกจากแถบด้านข้าง?"
+
+#: ElectronClient/gui/SideBar/SideBar.min.js:337
+#: ElectronClient/gui/SideBar.min.js:382
+#: ElectronClient/gui/utils/NoteListUtils.js:154 ElectronClient/app.js:677
+#: ElectronClient/app.js:727
+msgid "Export"
+msgstr "ส่งออก"
+
+#: ElectronClient/gui/SideBar/SideBar.min.js:660
+#: ElectronClient/gui/SideBar.min.js:724
+#: ReactNativeClient/lib/components/side-menu-content.js:338
+msgid "Synchronise"
+msgstr "ซิงโครไนซ์"
+
+#: ElectronClient/gui/SideBar/SideBar.min.js:694
+#: ElectronClient/gui/SideBar.min.js:757
+#: ReactNativeClient/lib/components/side-menu-content.js:360
+#: ReactNativeClient/lib/components/screens/notes.js:189
+msgid "All notes"
+msgstr "บันทึกทั้งหมด"
+
+#: ElectronClient/gui/SideBar/SideBar.min.js:699
+#: ElectronClient/gui/SideBar.min.js:762
+#: ReactNativeClient/lib/components/side-menu-content.js:364
+msgid "Notebooks"
+msgstr "สมุดบันทึก"
+
+#: ElectronClient/gui/SideBar/SideBar.min.js:716
+#: ElectronClient/gui/MainScreen/commands/setTags.js:17
+#: ElectronClient/gui/SideBar.min.js:779
+#: ElectronClient/gui/NoteText.min.js:1634
+#: ElectronClient/gui/NoteText.min.js:1810
+#: ReactNativeClient/lib/components/side-menu-content.js:314
+#: ReactNativeClient/lib/components/screens/tags.js:101
+#: ReactNativeClient/lib/components/screens/note.js:841
+msgid "Tags"
+msgstr "แท็ก"
+
+#: ElectronClient/gui/SideBar/SideBar.min.js:735
+#: ElectronClient/gui/SideBar.min.js:797
+#: ReactNativeClient/lib/components/side-menu-content.js:325
+#, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "กำลังถอดรหัสรายการ: %d/%d"
+
+#: ElectronClient/gui/SideBar/SideBar.min.js:740
+#: ElectronClient/gui/SideBar.min.js:802
+#: ReactNativeClient/lib/components/side-menu-content.js:330
+#, javascript-format
+msgid "Fetching resources: %d/%d"
+msgstr ""
+
+#: ElectronClient/gui/SideBar/commands/focusElementSideBar.js:15
+msgid "Sidebar"
+msgstr "แถบด้านข้าง"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:144
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:260
+#: ElectronClient/gui/NoteText.min.js:1547
+msgid "strong text"
+msgstr ""
+
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:145
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:261
+msgid "emphasised text"
+msgstr ""
+
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:147
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:263
+#: ElectronClient/gui/NoteText.min.js:1616
+msgid "Insert Hyperlink"
+msgstr "แทรกไฮเปอร์ลิงก์"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:180
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:182
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:183
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:298
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:300
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:301
+#: ElectronClient/gui/NoteText.min.js:1591
+#: ElectronClient/gui/NoteText.min.js:1595
+#: ElectronClient/gui/NoteText.min.js:1604
+msgid "List item"
+msgstr ""
+
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:236
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:354
+#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:15
+msgid "Cut"
+msgstr "ตัด"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:243
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:361
+#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:81
+#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:10
+#: ElectronClient/gui/NoteText.min.js:804 ElectronClient/app.js:618
+msgid "Copy"
+msgstr "คัดลอก"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:250
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:368
+#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:20
+msgid "Paste"
+msgstr "วาง"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:291
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:457
+#: ElectronClient/gui/NoteText.min.js:1085
+msgid "Layout"
+msgstr ""
+
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:291
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:457
+#: ElectronClient/gui/NoteText.min.js:1085
+#, javascript-format
+msgid ""
+"This note has no content. Click on \"%s\" to toggle the editor and edit the "
+"note."
+msgstr ""
+
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/plugins/lists.js:2151
+#, fuzzy
+msgid "Checkbox list"
+msgstr "ช่องทำเครื่องหมาย"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:470
+#: ElectronClient/gui/ConfigScreen.min.js:642
+#: ReactNativeClient/lib/components/screens/note.js:1110
+msgid "Edit"
+msgstr "แก้ไข"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:526
+#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:50
+#: ElectronClient/gui/NoteText.min.js:1627
+#: ElectronClient/gui/NoteText.min.js:1726
+msgid "Attach file"
+msgstr "แนบไฟล์"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:535
+msgid "Code Block"
+msgstr ""
+
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:544
+msgid "Inline Code"
+msgstr ""
+
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:559
+#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:80
+#: ElectronClient/gui/NoteText.min.js:1778
+msgid "Insert Date Time"
+msgstr "แทรก วันที่และเวลา"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:903
+msgid "Drop notes or files here"
+msgstr ""
+
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:903
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:401
+#, fuzzy
+msgid "Code View"
+msgstr "Code"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:903
+#, javascript-format
+msgid ""
+"Please wait for all attachments to be downloaded and decrypted. You may also "
+"switch to %s to edit the note."
+msgstr ""
+
+#: ElectronClient/gui/NoteEditor/utils/useMessageHandler.js:70
+#: ElectronClient/gui/NoteText.min.js:833
+msgid "There was an error downloading this attachment:"
+msgstr ""
+
+#: ElectronClient/gui/NoteEditor/utils/useMessageHandler.js:73
+#: ElectronClient/gui/NoteText.min.js:835
+#: ReactNativeClient/lib/services/ResourceEditWatcher.js:146
+msgid "This attachment is not downloaded or not decrypted yet"
+msgstr ""
+
+#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:39
+#: ElectronClient/gui/NoteText.min.js:778
+msgid "Open..."
+msgstr "เปิด..."
+
+#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:52
+#: ElectronClient/gui/NoteText.min.js:786
+msgid "Save as..."
+msgstr "บันทึกเป็น..."
+
+#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:65
+msgid "Reveal file in folder"
+msgstr ""
+
+#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:73
+#: ElectronClient/gui/NoteText.min.js:797
+msgid "Copy path to clipboard"
+msgstr "คัดลอกที่อยู่ (path) ไปที่คลิปบอร์ด"
+
+#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:88
+#: ElectronClient/gui/NoteText.min.js:811
+msgid "Copy Link Address"
+msgstr "คัดลอกที่อยู่ลิงก์"
+
+#: ElectronClient/gui/NoteEditor/NoteEditor.js:283
+#: ElectronClient/gui/NoteText.min.js:2121
+msgid "to-do"
+msgstr "to-do"
+
+#: ElectronClient/gui/NoteEditor/NoteEditor.js:283
+#: ElectronClient/gui/NoteText.min.js:2121
+msgid "note"
+msgstr "บันทึก"
+
+#: ElectronClient/gui/NoteEditor/NoteEditor.js:283
+#: ElectronClient/gui/NoteText.min.js:2121
+#, javascript-format
+msgid "Creating new %s..."
+msgstr "สร้าง %s..."
+
+#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:25
+msgid "Select all"
+msgstr "เลือกทั้งหมด"
+
+#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:30
+#: ElectronClient/gui/NoteText.min.js:1690
+msgid "Bold"
+msgstr "ตัวหนา"
+
+#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:35
+#: ElectronClient/gui/NoteText.min.js:1698
+msgid "Italic"
+msgstr "ตัวเอียง"
+
+#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:40
+#: ElectronClient/gui/NoteText.min.js:1710
+msgid "Hyperlink"
+msgstr "ไฮเปอร์ลิงก์"
+
+#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:45
+#: ElectronClient/gui/NoteText.min.js:1718
+msgid "Code"
+msgstr "Code"
+
+#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:55
+#: ElectronClient/gui/NoteText.min.js:1738
+msgid "Numbered List"
+msgstr "รายการแบบตัวเลข"
+
+#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:60
+#: ElectronClient/gui/NoteText.min.js:1746
+#, fuzzy
+msgid "Bulleted List"
+msgstr "รายการ"
+
+#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:65
+#: ElectronClient/gui/NoteText.min.js:1754
+msgid "Checkbox"
+msgstr "ช่องทำเครื่องหมาย"
+
+#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:70
+#: ElectronClient/gui/NoteText.min.js:1762
+msgid "Heading"
+msgstr "หัวข้อ"
+
+#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:75
+#: ElectronClient/gui/NoteText.min.js:1770
+#, fuzzy
+msgid "Horizontal Rule"
+msgstr "เส้นขั้น"
+
+#: ElectronClient/gui/NoteEditor/commands/focusElementNoteTitle.js:15
+msgid "Note title"
+msgstr "ชื่อบันทึก"
+
+#: ElectronClient/gui/NoteEditor/commands/showLocalSearch.js:15
+msgid "Search in current note"
+msgstr "ค้นหาในบันทึกปัจจุบัน"
+
+#: ElectronClient/gui/NoteEditor/commands/focusElementNoteBody.js:15
+#, fuzzy
+msgid "Note body"
+msgstr "เนื้อความบันทึก"
+
+#: ElectronClient/gui/NotePropertiesDialog.min.js:26
+#: ElectronClient/gui/FolderPropertiesDialog.min.js:21
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:163
+#: ElectronClient/gui/ResourceScreen.js:38
+#, fuzzy
+msgid "ID"
+msgstr "ไอดี"
+
+#: ElectronClient/gui/NotePropertiesDialog.min.js:27
+msgid "Created"
+msgstr "สร้างเมื่อ"
+
+#: ElectronClient/gui/NotePropertiesDialog.min.js:28
+msgid "Updated"
+msgstr "แก้ไขเมื่อ"
+
+#: ElectronClient/gui/NotePropertiesDialog.min.js:29
+msgid "Completed"
+msgstr ""
+
+#: ElectronClient/gui/NotePropertiesDialog.min.js:30
+#, fuzzy
+msgid "Location"
+msgstr "ตำแหน่ง"
+
+#: ElectronClient/gui/NotePropertiesDialog.min.js:31
+msgid "URL"
+msgstr "URL"
+
+#: ElectronClient/gui/NotePropertiesDialog.min.js:32
+#: ReactNativeClient/lib/models/Setting.js:1253
+msgid "Note History"
+msgstr "ประวัติบันทึกย้อนหลัง"
+
+#: ElectronClient/gui/NotePropertiesDialog.min.js:33
+msgid "Markup"
+msgstr "Markup"
+
+#: ElectronClient/gui/NotePropertiesDialog.min.js:305
+msgid "Previous versions of this note"
+msgstr "เวอร์ชั่นก่อนหน้าของบันทึกนี้"
+
+#: ElectronClient/gui/NotePropertiesDialog.min.js:382
+#: ElectronClient/gui/MainScreen/commands/showNoteProperties.js:16
+#: ElectronClient/gui/NoteText.min.js:1834
+msgid "Note properties"
+msgstr "คุณสมบัติของบันทึก"
+
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:295
+#, fuzzy
+msgid "Some items cannot be synchronised."
+msgstr "รายการที่ไม่สามารถทำการซิงโครไนซ์"
+
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:300
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:312
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:336
+msgid "View them now"
+msgstr ""
+
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:307
+#, fuzzy
+msgid "Some items cannot be decrypted."
+msgstr "มีบางรายการที่ไม่สามารถซิงโครไนซ์ได้"
+
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:319
+msgid "One or more master keys need a password."
+msgstr ""
+
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:324
+msgid "Set the password"
+msgstr "ตั้งรหัสผ่าน"
+
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:331
+msgid "One of your master keys use an obsolete encryption method."
+msgstr ""
+
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:343
+msgid ""
+"The default encryption method has been changed, you should re-encrypt your "
+"data."
+msgstr ""
+
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:348
+#, fuzzy
+msgid "More info"
+msgstr "ข้อมูลเพิ่มเติม"
+
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:419
+msgid "Search..."
+msgstr "ค้นหา..."
+
+#: ElectronClient/gui/MainScreen/commands/showNoteContentProperties.js:16
+msgid "Statistics..."
+msgstr ""
+
+#: ElectronClient/gui/MainScreen/commands/renameFolder.js:17
+#: ElectronClient/gui/MainScreen/commands/renameTag.js:17
+#: ElectronClient/gui/SideBar.min.js:339 ElectronClient/gui/SideBar.min.js:389
+#: ReactNativeClient/lib/components/side-menu-content.js:129
+msgid "Rename"
+msgstr "แก้ไขชื่อ"
+
+#: ElectronClient/gui/MainScreen/commands/renameFolder.js:26
+#: ElectronClient/gui/MainScreen.min.js:292
+msgid "Rename notebook:"
+msgstr "แก้ไขชื่อสมุดบันทึก"
+
+#: ElectronClient/gui/MainScreen/commands/newTodo.js:16
+#: ElectronClient/gui/MainScreen/commands/newTodo.js:28
+#: ReactNativeClient/lib/components/action-button.js:64
+#: ReactNativeClient/setUpQuickActions.js:15
+msgid "New to-do"
+msgstr "สร้าง to-do"
+
+#: ElectronClient/gui/MainScreen/commands/toggleNoteList.js:15
+#: ElectronClient/gui/MainScreen/commands/toggleNoteList.js:26
+#, fuzzy
+msgid "Toggle note list"
+msgstr "สลับรายการบันทึก"
+
+#: ElectronClient/gui/MainScreen/commands/toggleSidebar.js:15
+#: ElectronClient/gui/MainScreen/commands/toggleSidebar.js:26
+msgid "Toggle sidebar"
+msgstr "สลับแถบด้านข้าง"
+
+#: ElectronClient/gui/MainScreen/commands/editAlarm.js:19
+#: ElectronClient/gui/NoteText.min.js:1642
+#: ElectronClient/gui/NoteText.min.js:1828
+#: ReactNativeClient/lib/components/screens/note.js:826
+msgid "Set alarm"
+msgstr "ตั้งการแจ้งเตือน"
+
+#: ElectronClient/gui/MainScreen/commands/editAlarm.js:31
+#: ElectronClient/gui/MainScreen.min.js:417
+msgid "Set alarm:"
+msgstr "ตั้งการแจ้งเตือน:"
+
+#: ElectronClient/gui/MainScreen/commands/exportPdf.js:19
+#: ElectronClient/gui/MainScreen/commands/exportPdf.js:30
+#: ElectronClient/gui/MainScreen.min.js:549
+msgid "PDF File"
+msgstr "ไฟล์ PDF"
+
+#: ElectronClient/gui/MainScreen/commands/newNote.js:20
+#: ElectronClient/gui/MainScreen/commands/newNote.js:47
+#: ReactNativeClient/lib/components/action-button.js:73
+#: ReactNativeClient/setUpQuickActions.js:14
+msgid "New note"
+msgstr "สร้างบันทึกใหม่"
+
+#: ElectronClient/gui/MainScreen/commands/moveToFolder.js:17
+#, fuzzy
+msgid "Move to notebook"
+msgstr "ย้ายไปสมุดบันทึก..."
+
+#: ElectronClient/gui/MainScreen/commands/moveToFolder.js:36
+#: ElectronClient/gui/MainScreen.min.js:272
+#, fuzzy
+msgid "Move to notebook:"
+msgstr "ย้ายไปสมุดบันทึก..."
+
+#: ElectronClient/gui/MainScreen/commands/toggleVisiblePanes.js:15
+msgid "Toggle editor layout"
+msgstr ""
+
+#: ElectronClient/gui/MainScreen/commands/renameTag.js:26
+#: ElectronClient/gui/MainScreen.min.js:313
+msgid "Rename tag:"
+msgstr "แก้ไขชื่อแท็ก"
+
+#: ElectronClient/gui/MainScreen/commands/newNotebook.js:17
+#: ElectronClient/gui/MainScreen/commands/newNotebook.js:57
+msgid "New notebook"
+msgstr "สร้างสมุดบันทึกใหม่"
+
+#: ElectronClient/gui/MainScreen/commands/newNotebook.js:25
+#: ElectronClient/gui/MainScreen.min.js:178
+msgid "Notebook title:"
+msgstr "ชื่อสมุดบันทึก:"
+
+#: ElectronClient/gui/MainScreen/commands/showShareNoteDialog.js:15
+msgid "Share note..."
+msgstr "แบ่งปันบันทึก..."
+
+#: ElectronClient/gui/MainScreen/commands/selectTemplate.js:23
+#: ElectronClient/gui/MainScreen.min.js:448
+msgid "Template file:"
+msgstr "ไฟล์เทมเพลต:"
+
+#: ElectronClient/gui/MainScreen/commands/setTags.js:44
+#: ElectronClient/gui/MainScreen.min.js:221
+msgid "Add or remove tags:"
+msgstr "เพิ่มหรือลบแท็ก:"
+
+#: ElectronClient/gui/MainScreen/commands/print.js:16
+msgid "Print"
+msgstr "พิมพ์"
+
+#: ElectronClient/gui/MainScreen/commands/print.js:25
+#: ElectronClient/gui/NoteText.min.js:1321
+msgid "Only one note can be printed at a time."
+msgstr ""
+
+#: ElectronClient/gui/NoteToolbar/NoteToolbar.js:32
+#: ElectronClient/gui/NoteText.min.js:1656
+#, javascript-format
+msgid "In: %s"
+msgstr "ใน: %s"
+
+#: ElectronClient/gui/SideBar.min.js:290
+#, javascript-format
+msgid "Remove tag \"%s\" from all notes?"
+msgstr "ลบแท็ก \"%s\" ออกจากบันทึกทั้งหมด?"
+
+#: ElectronClient/gui/SideBar.min.js:304
+msgid "New sub-notebook"
+msgstr "สร้างสมุดบันทึกย่อยใหม่"
+
+#: ElectronClient/gui/ClipperConfigScreen.min.js:39
+msgid "Token has been copied to the clipboard!"
+msgstr "Token ได้ถูกคัดลอกไปที่คลิปบอร์ดแล้ว!"
+
+#: ElectronClient/gui/ClipperConfigScreen.min.js:69
+msgid "The web clipper service is enabled and set to auto-start."
+msgstr ""
+
+#: ElectronClient/gui/ClipperConfigScreen.min.js:76
+#, javascript-format
+msgid "Status: Started on port %d"
+msgstr "สถานะ: เริ่มทำงาน ที่พอร์ต %d"
+
+#: ElectronClient/gui/ClipperConfigScreen.min.js:82
+#, javascript-format
+msgid "Status: %s"
+msgstr "สถานะ: %s"
+
+#: ElectronClient/gui/ClipperConfigScreen.min.js:88
+msgid "Disable Web Clipper Service"
+msgstr "ปิดบริการ Web Clipper"
+
+#: ElectronClient/gui/ClipperConfigScreen.min.js:94
+msgid "The web clipper service is not enabled."
+msgstr ""
+
+#: ElectronClient/gui/ClipperConfigScreen.min.js:99
+msgid "Enable Web Clipper Service"
+msgstr "เปิดใช้บริการ Web Clipper"
+
+#: ElectronClient/gui/ClipperConfigScreen.min.js:122
+msgid ""
+"Joplin Web Clipper allows saving web pages and screenshots from your browser "
+"to Joplin."
+msgstr ""
+
+#: ElectronClient/gui/ClipperConfigScreen.min.js:127
+msgid "In order to use the web clipper, you need to do the following:"
+msgstr "ในการที่จะใช้ web clipper คุณจำเป็นต้องทำสิ่งต่อไปนี้:"
+
+#: ElectronClient/gui/ClipperConfigScreen.min.js:135
+msgid "Step 1: Enable the clipper service"
+msgstr "ขั้นตอนที่ 1: เปิดใช้บริการ clipper"
+
+#: ElectronClient/gui/ClipperConfigScreen.min.js:140
+#, fuzzy
+msgid ""
+"This service allows the browser extension to communicate with Joplin. When "
+"enabling it your firewall may ask you to give permission to Joplin to listen "
+"to a particular port."
+msgstr ""
+"บริการนี้จะอนุญาตให้เว็บเบราว์เซอร์ติดต่อกับ Joplin ได้ และเมื่อเปิดใช้งานแล้ว "
+"ไฟล์วอลล์ของคุณอาจจะต้องการให้คุณอนุญาตสิทธิ์ Joplin ในการเข้าถึงพอร์ตบางพอร์ต"
+
+#: ElectronClient/gui/ClipperConfigScreen.min.js:154
+msgid "Step 2: Install the extension"
+msgstr "ขั้นตอนที่ 2: ติดตั้งส่วนเสริม"
+
+#: ElectronClient/gui/ClipperConfigScreen.min.js:159
+msgid "Download and install the relevant extension for your browser:"
+msgstr "ดาวน์โหลดและติดตั้งส่วนเสริมที่เกี่ยวข้องสำหรับเว็บเบราว์เซอร์ของคุณ:"
+
+#: ElectronClient/gui/ClipperConfigScreen.min.js:174
+msgid "Advanced options"
+msgstr "ตัวเลือกขั้นสูง"
+
+#: ElectronClient/gui/ClipperConfigScreen.min.js:179
+msgid "Authorisation token:"
+msgstr "Token สำหรับการขออนุมัติ:"
+
+#: ElectronClient/gui/ClipperConfigScreen.min.js:189
+msgid "Copy token"
+msgstr "คัดลอก Token"
+
+#: ElectronClient/gui/ClipperConfigScreen.min.js:195
+msgid ""
+"This authorisation token is only needed to allow third-party applications to "
+"access Joplin."
+msgstr "Token สำหรับการขออนุมัตินี้ ใช้เพื่ออนุญาตแอปพลิเคชั่น third-party เพื่อเข้าถึง Joplin"
+
+#: ElectronClient/gui/Root.min.js:89
+msgid "OneDrive Login"
+msgstr "เข้าสู่ระบบ OneDrive"
+
+#: ElectronClient/gui/Root.min.js:90
+msgid "Dropbox Login"
+msgstr "เข้าสู่ระบบ Dropbox"
+
+#: ElectronClient/gui/Root.min.js:91 ElectronClient/app.js:673
+#: ElectronClient/app.js:724
+msgid "Import"
+msgstr "นำเข้า"
+
+#: ElectronClient/gui/Root.min.js:92 ElectronClient/app.js:561
+msgid "Options"
+msgstr "ตัวเลือก"
+
+#: ElectronClient/gui/Root.min.js:93
+#, fuzzy
+msgid "Note attachments"
+msgstr "ไฟล์แนบ"
+
+#: ElectronClient/gui/Root.min.js:94 ElectronClient/app.js:500
+msgid "Synchronisation Status"
+msgstr "สถานะการซิงโครไนซ์"
+
+#: ElectronClient/gui/ExtensionBadge.min.js:10
+msgid "Firefox Extension"
+msgstr "ส่วนเสริมของ Firefox"
+
+#: ElectronClient/gui/ExtensionBadge.min.js:17
+msgid "Chrome Web Store"
+msgstr "Chrome Web Store"
+
+#: ElectronClient/gui/ExtensionBadge.min.js:44
+msgid "Get it now:"
+msgstr ""
+
+#: ElectronClient/gui/ImportScreen.min.js:62
+#, javascript-format
+msgid ""
+"New notebook \"%s\" will be created and file \"%s\" will be imported into it"
+msgstr ""
+
+#: ElectronClient/gui/DropboxLoginScreen.min.js:67
+#: ReactNativeClient/lib/components/screens/dropbox-login.js:68
+msgid "Submit"
+msgstr ""
+
+#: ElectronClient/gui/NoteList.min.js:147
+#: ElectronClient/gui/NoteList/NoteList.min.js:152
+msgid "Custom order"
+msgstr ""
+
+#: ElectronClient/gui/NoteList.min.js:147
+#: ElectronClient/gui/NoteList/NoteList.min.js:152
+#, fuzzy
+msgid "View"
+msgstr "&มุมมอง"
+
+#: ElectronClient/gui/NoteList.min.js:147
+#: ElectronClient/gui/NoteList/NoteList.min.js:152
+#: ReactNativeClient/lib/models/Setting.js:370
+msgid "Sort notes by"
+msgstr "จัดเรียงบันทึกโดย"
+
+#: ElectronClient/gui/NoteList.min.js:147
+#: ElectronClient/gui/NoteList/NoteList.min.js:152
+#, javascript-format
+msgid ""
+"To manually sort the notes, the sort order must be changed to \"%s\" in the "
+"menu \"%s\" > \"%s\""
+msgstr ""
+
+#: ElectronClient/gui/NoteList.min.js:148
+#: ElectronClient/gui/NoteList/NoteList.min.js:153
+msgid "Do it now"
+msgstr ""
+
+#: ElectronClient/gui/NoteList.min.js:452
+#: ElectronClient/gui/NoteList/NoteList.min.js:425
+msgid "No notes in here. Create one by clicking on \"New note\"."
+msgstr ""
+
+#: ElectronClient/gui/NoteList.min.js:452
+#: ElectronClient/gui/NoteList/NoteList.min.js:425
+msgid ""
+"There is currently no notebook. Create one by clicking on \"New notebook\"."
+msgstr ""
+
+#: ElectronClient/gui/utils/NoteListUtils.js:37
+#: ReactNativeClient/lib/components/screen-header.js:362
+msgid "Duplicate"
+msgstr ""
+
+#: ElectronClient/gui/utils/NoteListUtils.js:42
+#, fuzzy, javascript-format
+msgid "%s - Copy"
+msgstr "%s - คัดลอก"
+
+#: ElectronClient/gui/utils/NoteListUtils.js:62
+#, fuzzy
+msgid "Switch between note and to-do type"
+msgstr "สลับไปมาระหว่างชนิดของ บันทึก และ to-do"
+
+#: ElectronClient/gui/utils/NoteListUtils.js:91
+#, fuzzy
+msgid "Switch to note type"
+msgstr "เปลี่ยนชนิดเป็นบันทึก"
+
+#: ElectronClient/gui/utils/NoteListUtils.js:100
+#, fuzzy
+msgid "Switch to to-do type"
+msgstr "เปลี่ยนชนิดเป็น to-do"
+
+#: ElectronClient/gui/utils/NoteListUtils.js:110
+#: ReactNativeClient/lib/components/screens/note.js:855
+msgid "Copy Markdown link"
+msgstr "คัดลอกลิงก์ Markdown"
+
+#: ElectronClient/gui/utils/NoteListUtils.js:178
+#, fuzzy, javascript-format
+msgid "Delete note \"%s\"?"
+msgstr "ลบบันทึก \"%s\"?"
+
+#: ElectronClient/gui/utils/NoteListUtils.js:180
+#, fuzzy, javascript-format
+msgid "Delete these %d notes?"
+msgstr "ลบบันทึก %d เหล่านี้?"
+
+#: ElectronClient/gui/FolderPropertiesDialog.min.js:22
+msgid "Name"
+msgstr "ชื่อ"
+
+#: ElectronClient/gui/FolderPropertiesDialog.min.js:23
+msgid "Icon"
+msgstr "ไอคอน"
+
+#: ElectronClient/gui/FolderPropertiesDialog.min.js:272
+msgid "Notebook properties"
+msgstr "คุณสมบัติสมุดบันทึก"
+
+#: ElectronClient/gui/NoteText.min.js:781
+#, javascript-format
+msgid "This file could not be opened: %s"
+msgstr "ไม่สามารถเปิดไฟล์นี้ได้: %s"
+
+#: ElectronClient/gui/NoteText.min.js:1551
+msgid "emphasized text"
+msgstr ""
+
+#: ElectronClient/gui/NoteText.min.js:1792
+msgid "Click to stop external editing"
+msgstr ""
+
+#: ElectronClient/gui/NoteText.min.js:1793
+msgid "Watching..."
+msgstr ""
+
+#: ElectronClient/gui/NoteText.min.js:1801
+#: ElectronClient/commands/startExternalEditing.js:18
+#, fuzzy
+msgid "Edit in external editor"
+msgstr "แก้ไขด้วยโปรแกรมภายนอก"
+
+#: ElectronClient/gui/NoteText.min.js:1852
+#, fuzzy
+msgid "Content Properties"
+msgstr "คุณสมบัติของบันทึก"
+
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:95
+#: ReactNativeClient/lib/components/screens/encryption-config.js:125
+msgid "Save"
+msgstr "บันทึก"
+
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:144
+msgid "Master keys that need upgrading"
+msgstr ""
+
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:149
+msgid ""
+"The following master keys use an out-dated encryption algorithm and it is "
+"recommended to upgrade them. The upgraded master key will still be able to "
+"decrypt and encrypt your data as usual."
+msgstr ""
+
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:168
+msgid "Upgrade"
+msgstr ""
+
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:181
+#, fuzzy
+msgid "Re-encrypt data"
+msgstr "เลือกวันที่"
+
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:183
+msgid ""
+"The default encryption method has been changed to a more secure one and it "
+"is recommended that you apply it to your data."
+msgstr ""
+
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:183
+msgid ""
+"You may use the tool below to re-encrypt your data, for example if you know "
+"that some of your notes are encrypted with an obsolete encryption method."
+msgstr ""
+
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:185
+#, javascript-format
+msgid ""
+"In order to do so, your entire data set will have to be encrypted and "
+"synchronised, so it is best to run it overnight.\n"
+"\n"
+"To start, please follow these instructions:\n"
+"\n"
+"1. Synchronise all your devices.\n"
+"2. Click \"%s\".\n"
+"3. Let it run to completion. While it runs, avoid changing any note on your "
+"other devices, to avoid conflicts.\n"
+"4. Once sync is done on this device, sync all your other devices and let it "
+"run to completion.\n"
+"\n"
+"Important: you only need to run this ONCE on one device."
+msgstr ""
+
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:432
+#: ReactNativeClient/lib/components/screens/encryption-config.js:279
+#: ReactNativeClient/lib/components/screens/status.js:142
+msgid "Status"
+msgstr "สถานะ"
+
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:437
+msgid "Encryption is:"
+msgstr ""
+
+#: ElectronClient/gui/StatusScreen.min.js:33
+msgid "Please select where the sync status should be exported to"
+msgstr ""
+
+#: ElectronClient/gui/StatusScreen.min.js:71
+#: ReactNativeClient/lib/components/screens/status.js:112
+#, fuzzy
+msgid "Retry All"
+msgstr "ลองอีกครั้ง"
+
+#: ElectronClient/gui/StatusScreen.min.js:96
+#: ReactNativeClient/lib/components/screens/status.js:118
+msgid "Retry"
+msgstr "ลองอีกครั้ง"
+
+#: ElectronClient/gui/MainScreen.min.js:165
+msgid "Please create a notebook first."
+msgstr "โปรดสร้างสมุดบันทึกก่อน"
+
+#: ElectronClient/gui/MainScreen.min.js:171
+msgid "Please create a notebook first"
+msgstr "โปรดสร้างสมุดบันทึกก่อน"
+
+#: ElectronClient/gui/PromptDialog.min.js:249
+#, fuzzy
+msgid "Clear"
+msgstr "ล้าง"
+
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:76
+msgid "Words"
+msgstr "คำ"
+
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:77
+msgid "Characters"
+msgstr "ตัวอักษร"
+
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:78
+msgid "Characters excluding spaces"
+msgstr "ตัวอักษรไม่รวมวรรค"
+
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:79
+msgid "Lines"
+msgstr "บรรทัด"
+
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:98
+#: ReactNativeClient/lib/models/Setting.js:355
+#: ReactNativeClient/lib/models/Setting.js:356
+#: ReactNativeClient/lib/models/Setting.js:357
+msgid "Editor"
+msgstr "ตัวแก้ไข"
+
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:99
+#: ReactNativeClient/lib/models/Setting.js:355
+#: ReactNativeClient/lib/models/Setting.js:356
+#: ReactNativeClient/lib/models/Setting.js:358
+#, fuzzy
+msgid "Viewer"
+msgstr "Viewer"
+
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:107
+#, fuzzy
+msgid "Statistics"
+msgstr "สถานะ"
+
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:111
+#, javascript-format
+msgid "Read time: %s min"
+msgstr ""
+
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:112
+#: ElectronClient/gui/ShareNoteDialog.js:175
+msgid "Close"
+msgstr "ปิด"
+
+#: ElectronClient/gui/ConfigScreen.min.js:82
+msgid "This will open a new screen. Save your current changes?"
+msgstr ""
+
+#: ElectronClient/gui/ConfigScreen.min.js:170
+#: ReactNativeClient/lib/components/screens/config.js:307
+msgid "Check synchronisation configuration"
+msgstr "ตรวจสอบการตั้งค่าซิงโครไนซ์"
+
+#: ElectronClient/gui/ConfigScreen.min.js:179
+#, fuzzy
+msgid "Unknown"
+msgstr "ไม่รู้จัก"
+
+#: ElectronClient/gui/ConfigScreen.min.js:183
+#, fuzzy
+msgid "Checking..."
+msgstr "กำลังตรวจสอบ..."
+
+#: ElectronClient/gui/ConfigScreen.min.js:187
+#: ReactNativeClient/lib/models/Resource.js:320
+msgid "Error"
+msgstr "ผิดพลาด"
+
+#: ElectronClient/gui/ConfigScreen.min.js:198
+msgid ""
+"The Joplin Nextcloud App is either not installed or misconfigured. Please "
+"see the full error message below:"
+msgstr ""
+
+#: ElectronClient/gui/ConfigScreen.min.js:211
+msgid "Show Log"
+msgstr ""
+
+#: ElectronClient/gui/ConfigScreen.min.js:224
+msgid "Joplin Nextcloud App status:"
+msgstr "สถานะ Joplin Nextcloud App:"
+
+#: ElectronClient/gui/ConfigScreen.min.js:238
+msgid "Check Status"
+msgstr "ตรวจสอบสถานะ"
+
+#: ElectronClient/gui/ConfigScreen.min.js:245
+msgid "Help"
+msgstr "ช่วยเหลือ"
+
+#: ElectronClient/gui/ConfigScreen.min.js:264
+#, fuzzy
+msgid "Show Advanced Settings"
+msgstr "แสดงการตั้งค่าขั้นสูง"
+
+#: ElectronClient/gui/ConfigScreen.min.js:521
+#, fuzzy
+msgid "Browse..."
+msgstr "เปิด..."
+
+#: ElectronClient/gui/ConfigScreen.min.js:761
+msgid "Apply"
+msgstr ""
+
+#: ElectronClient/gui/Header.min.js:267
+#: ElectronClient/gui/Header/Header.min.js:253
+#, fuzzy
+msgid "Usage"
+msgstr "การใช้งาน"
+
+#: ElectronClient/gui/NoteList/commands/focusElementNoteList.js:15
+msgid "Note list"
+msgstr "รายการบันทึก"
+
+#: ElectronClient/gui/Header/commands/focusSearch.js:15
+msgid "Search in all the notes"
+msgstr "ค้นหาในบันทึกทั้งหมด"
+
+#: ElectronClient/gui/ResourceScreen.js:31
+#, fuzzy
+msgid "Title"
+msgstr "ชื่อเรื่อง"
+
+#: ElectronClient/gui/ResourceScreen.js:35
+msgid "Size"
+msgstr "ขนาด"
+
+#: ElectronClient/gui/ResourceScreen.js:39
+#, fuzzy
+msgid "Action"
+msgstr "การกระทำ"
+
+#: ElectronClient/gui/ResourceScreen.js:42
+#: ReactNativeClient/lib/path-utils.js:65
+#: ReactNativeClient/lib/path-utils.js:101
+#: ReactNativeClient/lib/models/BaseItem.js:720
+msgid "Untitled"
+msgstr "ไม่มีชื่อ"
+
+#: ElectronClient/gui/ResourceScreen.js:93
+#, fuzzy, javascript-format
+msgid "Delete attachment \"%s\"?"
+msgstr "ลบบันทึก \"%s\"?"
+
+#: ElectronClient/gui/ResourceScreen.js:139
+msgid ""
+"This is an advanced tool to show the attachments that are linked to your "
+"notes. Please be careful when deleting one of them as they cannot be "
+"restored afterwards."
+msgstr ""
+
+#: ElectronClient/gui/ResourceScreen.js:140
+msgid "Please wait..."
+msgstr "โปรดรอสักครู่..."
+
+#: ElectronClient/gui/ResourceScreen.js:142
+msgid "No resources!"
+msgstr "ไม่มีทรัพยากร"
+
+#: ElectronClient/gui/ResourceScreen.js:144
+#, fuzzy, javascript-format
+msgid "Warning: not all resources shown for performance reasons (limit: %s)."
+msgstr "คำเตือน: ทรัพยากรทั้งหมดไม่ได้ถูกแสดง ด้วยเห็นผลเรื่องสมรรถภาพ (จำกัด: %s)"
+
+#: ElectronClient/gui/ShareNoteDialog.js:158
+msgid "Synchronising..."
+msgstr "กำลังซิงโครไนซ์..."
+
+#: ElectronClient/gui/ShareNoteDialog.js:160
+msgid "Generating link..."
+msgid_plural "Generating links..."
+msgstr[0] "กำลังสร้างลิงก์..."
+
+#: ElectronClient/gui/ShareNoteDialog.js:162
+msgid "Link has been copied to clipboard!"
+msgid_plural "Links have been copied to clipboard!"
+msgstr[0] "ลิงก์ได้ถูกคัดลอกไปที่คลิปบอร์ดแล้ว"
+
+#: ElectronClient/gui/ShareNoteDialog.js:165
+msgid ""
+"Note: When a note is shared, it will no longer be encrypted on the server."
+msgstr ""
+
+#: ElectronClient/gui/ShareNoteDialog.js:170
+msgid "Share Notes"
+msgstr "แบ่งปันบันทึก"
+
+#: ElectronClient/gui/ShareNoteDialog.js:172
+msgid "Copy Shareable Link"
+msgid_plural "Copy Shareable Links"
+msgstr[0] "คัดลอกลิงก์ที่สามารถแบ่งปันได้"
+
+#: ElectronClient/commands/stopExternalEditing.js:16
+#, fuzzy
+msgid "Stop external editing"
+msgstr "หยุดการแก้ไขภายนอก"
+
+#: ElectronClient/commands/startExternalEditing.js:29
+#, javascript-format
+msgid "Error opening note in editor: %s"
+msgstr ""
+
+#: ElectronClient/app.js:460
+#, javascript-format
+msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
+msgstr "กำลังนำเข้าจาก “%s” ไปเป็นฟอร์แมต “%s” โปรดรอสักครู่..."
+
+#: ElectronClient/app.js:522
+msgid "Create note from template"
+msgstr "สร้างบันทึกจากเทมเพลต"
+
+#: ElectronClient/app.js:528
+msgid "Create to-do from template"
+msgstr "สร้าง to-do จากเทมเพลต"
+
+#: ElectronClient/app.js:534
+msgid "Insert template"
+msgstr "แทรกเทมเพลต"
+
+#: ElectronClient/app.js:541
+msgid "Open template directory"
+msgstr "เปิดไดเรกทอรี่เทมเพลต"
+
+#: ElectronClient/app.js:548
+msgid "Refresh templates"
+msgstr "รีเฟรชเทมเพลต"
+
+#: ElectronClient/app.js:574
+#, fuzzy
+msgid "Note attachments..."
+msgstr "ไฟล์แนบ"
+
+#: ElectronClient/app.js:596
+#, fuzzy, javascript-format
+msgid "Revision: %s (%s)"
+msgstr "Revision: %s (%s)"
+
+#: ElectronClient/app.js:603
+#, javascript-format
+msgid "%s %s (%s, %s)"
+msgstr "%s %s (%s, %s)"
+
+#: ElectronClient/app.js:605
+#, javascript-format
+msgid "Client ID: %s"
+msgstr "Client ID: %s"
+
+#: ElectronClient/app.js:606
+#, javascript-format
+msgid "Sync Version: %s"
+msgstr "ซิงค์เวอร์ชั่น: %s"
+
+#: ElectronClient/app.js:607
+#, javascript-format
+msgid "Profile Version: %s"
+msgstr "เวอร์ชั่นโปรไฟล์: %s"
+
+#: ElectronClient/app.js:608
+#, javascript-format
+msgid "Keychain Supported: %s"
+msgstr ""
+
+#: ElectronClient/app.js:630 ElectronClient/app.js:706
+msgid "&File"
+msgstr "&ไฟล์"
+
+#: ElectronClient/app.js:636 ElectronClient/app.js:905
+msgid "About Joplin"
+msgstr "เกี่ยวกับ Joplin"
+
+#: ElectronClient/app.js:643
+msgid "Preferences..."
+msgstr ""
+
+#: ElectronClient/app.js:653 ElectronClient/app.js:887
+msgid "Check for updates..."
+msgstr "ตรวจสอบการอัพเดท..."
+
+#: ElectronClient/app.js:666 ElectronClient/app.js:719
+msgid "Templates"
+msgstr "เทมเพลต"
+
+#: ElectronClient/app.js:692
+#, javascript-format
+msgid "Hide %s"
+msgstr "ซ่อน %s"
+
+#: ElectronClient/app.js:699
+msgid "Quit"
+msgstr "ออก"
+
+#: ElectronClient/app.js:712
+msgid "Close Window"
+msgstr "ปิดหน้าต่าง"
+
+#: ElectronClient/app.js:757
+msgid "&Edit"
+msgstr "&แก้ไข"
+
+#: ElectronClient/app.js:776
+msgid "&View"
+msgstr "&มุมมอง"
+
+#: ElectronClient/app.js:782
+msgid "Layout button sequence"
+msgstr ""
+
+#: ElectronClient/app.js:822
+msgid "Focus"
+msgstr ""
+
+#: ElectronClient/app.js:828
+#, fuzzy
+msgid "Actual Size"
+msgstr "ขนาดจริง"
+
+#: ElectronClient/app.js:839 ElectronClient/app.js:845
+#, fuzzy
+msgid "Zoom In"
+msgstr "ซูมเข้า"
+
+#: ElectronClient/app.js:852
+#, fuzzy
+msgid "Zoom Out"
+msgstr "ซูมออก"
+
+#: ElectronClient/app.js:860
+#, fuzzy
+msgid "&Note"
+msgstr "บันทึก"
+
+#: ElectronClient/app.js:870
+msgid "&Tools"
+msgstr "&เครื่องมือ"
+
+#: ElectronClient/app.js:874
+msgid "&Help"
+msgstr "&ช่วยเหลือ"
+
+#: ElectronClient/app.js:877
+msgid "Website and documentation"
+msgstr "เว็บไซต์และเอกสารต่างๆ"
+
+#: ElectronClient/app.js:881
+#, fuzzy
+msgid "Joplin Forum"
+msgstr "Joplin Forum"
+
+#: ElectronClient/app.js:884
+#: ReactNativeClient/lib/components/screens/config.js:495
+#, fuzzy
+msgid "Make a donation"
+msgstr "บริจาคช่วยเหลือ"
+
+#: ElectronClient/app.js:894
+#, fuzzy
+msgid "Toggle development tools"
+msgstr "สลับเครื่องมือนักพัฒนา"
+
+#: ElectronClient/app.js:1037
+#, javascript-format
+msgid "Open %s"
+msgstr "เปิด %s"
+
+#: ElectronClient/app.js:1039
+msgid "Exit"
+msgstr "ออก"
+
+#: ReactNativeClient/lib/onedrive-api-node-utils.js:85
+msgid ""
+"The application has been authorised - you may now close this browser tab."
+msgstr "แอปพลิเคชั่นนี้ได้รับการอนุมัติแล้ว - คุณสามารถปิดแท็ปเว็บเบราว์เซอร์นี้ได้"
+
+#: ReactNativeClient/lib/onedrive-api-node-utils.js:87
+msgid "The application has been successfully authorised."
+msgstr "แอปพลิเคชั่นนี้ได้รับการอนุมัติเป็นที่เรียบร้อยแล้ว"
+
+#: ReactNativeClient/lib/onedrive-api-node-utils.js:115
+msgid ""
+"Please open the following URL in your browser to authenticate the "
+"application. The application will create a directory in \"Apps/Joplin\" and "
+"will only read and write files in this directory. It will have no access to "
+"any files outside this directory nor to any other personal data. No data "
+"will be shared with any third party."
+msgstr ""
+
+#: ReactNativeClient/lib/registry.js:156
+msgid ""
+"Could not synchronise with OneDrive.\n"
+"\n"
+"This error often happens when using OneDrive for Business, which "
+"unfortunately cannot be supported.\n"
+"\n"
+"Please consider using a regular OneDrive account."
+msgstr ""
+
+#: ReactNativeClient/lib/logger.js:178
+#, javascript-format
+msgid "Unknown log level: %s"
+msgstr ""
+
+#: ReactNativeClient/lib/logger.js:187
+#, javascript-format
+msgid "Unknown level ID: %s"
+msgstr ""
+
+#: ReactNativeClient/lib/SyncTargetAmazonS3.js:28
+msgid "AWS S3"
+msgstr ""
+
+#: ReactNativeClient/lib/SyncTargetDropbox.js:25
+msgid "Dropbox"
+msgstr "Dropbox"
+
+#: ReactNativeClient/lib/shim-init-node.js:90
+#: ReactNativeClient/lib/components/screens/note.js:523
+#, javascript-format
+msgid ""
+"You are about to attach a large image (%dx%d pixels). Would you like to "
+"resize it down to %d pixels before attaching it?"
+msgstr ""
+
+#: ReactNativeClient/lib/shim-init-node.js:156
+#, javascript-format
+msgid "Cannot access %s"
+msgstr "ไม่สามารถเข้าถึง %s"
+
+#: ReactNativeClient/lib/models/Folder.js:28
+#: ReactNativeClient/lib/models/Note.js:25
+#, fuzzy
+msgid "title"
+msgstr "ชื่อเรื่อง"
+
+#: ReactNativeClient/lib/models/Folder.js:29
+#: ReactNativeClient/lib/models/Note.js:26
+#, fuzzy
+msgid "updated date"
+msgstr "แก้ไขเมื่อ"
+
+#: ReactNativeClient/lib/models/Folder.js:89
+msgid "Conflicts"
+msgstr "ขัดแย้ง"
+
+#: ReactNativeClient/lib/models/Folder.js:374
+#, fuzzy
+msgid "Cannot move notebook to this location"
+msgstr "ไม่สามารถย้ายสมุดบันทึกมาที่ตำแหน่งนี้"
+
+#: ReactNativeClient/lib/models/Folder.js:426
+#, fuzzy, javascript-format
+msgid "Notebooks cannot be named \"%s\", which is a reserved title."
+msgstr "สมุดบันทึกไม่สามารถใช้ชื่อ “%s” เพราะมีคำสงวน"
+
+#: ReactNativeClient/lib/models/Setting.js:39
+#, fuzzy
+msgid "yes"
+msgstr "ใช่"
+
+#: ReactNativeClient/lib/models/Setting.js:39
+#: ReactNativeClient/lib/models/Setting.js:40
+#, javascript-format
+msgid "(wysiwyg: %s)"
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:40
+#, fuzzy
+msgid "no"
+msgstr "n"
+
+#: ReactNativeClient/lib/models/Setting.js:43
+#, javascript-format
+msgid ""
+"Attention: If you change this location, make sure you copy all your content "
+"to it before syncing, otherwise all files will be removed! See the FAQ for "
+"more details: %s"
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:51
+#, fuzzy
+msgid "Light"
+msgstr "สว่าง"
+
+#: ReactNativeClient/lib/models/Setting.js:52
+#, fuzzy
+msgid "Dark"
+msgstr "มืด"
+
+#: ReactNativeClient/lib/models/Setting.js:53
+msgid "Dracula"
+msgstr "Dracula"
+
+#: ReactNativeClient/lib/models/Setting.js:54
+msgid "Solarised Light"
+msgstr "Solarised Light"
+
+#: ReactNativeClient/lib/models/Setting.js:55
+msgid "Solarised Dark"
+msgstr "Solarised Dark"
+
+#: ReactNativeClient/lib/models/Setting.js:56
+msgid "Nord"
+msgstr "Nord"
+
+#: ReactNativeClient/lib/models/Setting.js:57
+msgid "Aritim Dark"
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:58
+msgid "OLED Dark"
+msgstr "OLED Dark"
+
+#: ReactNativeClient/lib/models/Setting.js:80
+msgid "Synchronisation target"
+msgstr "จุดหมายการซิงโครไนซ์"
+
+#: ReactNativeClient/lib/models/Setting.js:82
+msgid ""
+"The target to synchonise to. Each sync target may have additional parameters "
+"which are named as `sync.NUM.NAME` (all documented below)."
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:104
+msgid "Directory to synchronise with (absolute path)"
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:116
+msgid "Nextcloud WebDAV URL"
+msgstr "Nextcloud WebDAV URL"
+
+#: ReactNativeClient/lib/models/Setting.js:127
+msgid "Nextcloud username"
+msgstr "ชื่อผู้ใช้ Nextcloud"
+
+#: ReactNativeClient/lib/models/Setting.js:137
+msgid "Nextcloud password"
+msgstr "รหัสผ่าน Nextcloud"
+
+#: ReactNativeClient/lib/models/Setting.js:149
+msgid "WebDAV URL"
+msgstr "WebDAV URL"
+
+#: ReactNativeClient/lib/models/Setting.js:160
+msgid "WebDAV username"
+msgstr "ชื่อผู้ใช้ WebDAV"
+
+#: ReactNativeClient/lib/models/Setting.js:170
+msgid "WebDAV password"
+msgstr "รหัสผ่าน WebDAV"
+
+#: ReactNativeClient/lib/models/Setting.js:189
+msgid "AWS S3 bucket"
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:200
+msgid "AWS key"
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:210
+msgid "AWS secret"
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:224
+msgid "Attachment download behaviour"
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:225
+msgid ""
+"In \"Manual\" mode, attachments are downloaded only when you click on them. "
+"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
+"the attachments are downloaded whether you open the note or not."
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:228
+#, fuzzy
+msgid "Always"
+msgstr "ตลอดเวลา"
+
+#: ReactNativeClient/lib/models/Setting.js:229
+msgid "Manual"
+msgstr "ทำด้วยตนเอง"
+
+#: ReactNativeClient/lib/models/Setting.js:230
+msgid "Auto"
+msgstr "อัตโนมัติ"
+
+#: ReactNativeClient/lib/models/Setting.js:247
+msgid "Max concurrent connections"
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:256
+msgid "Language"
+msgstr "ภาษา"
+
+#: ReactNativeClient/lib/models/Setting.js:266
+msgid "Date format"
+msgstr "รูปแบบวันที่"
+
+#: ReactNativeClient/lib/models/Setting.js:285
+msgid "Time format"
+msgstr "รูปแบบเวลา"
+
+#: ReactNativeClient/lib/models/Setting.js:304
+msgid "Theme"
+msgstr "ธีม"
+
+#: ReactNativeClient/lib/models/Setting.js:315
+msgid "Automatically switch theme to match system theme"
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:327
+msgid "Preferred light theme"
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:341
+msgid "Preferred dark theme"
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:346
+#, fuzzy
+msgid "Show note counts"
+msgstr "แสดงจำนวนบันทึก"
+
+#: ReactNativeClient/lib/models/Setting.js:355
+#: ReactNativeClient/lib/models/Setting.js:357
+#: ReactNativeClient/lib/models/Setting.js:358
+msgid "Split View"
+msgstr "มุมมองแบบแบ่งครึ่ง"
+
+#: ReactNativeClient/lib/models/Setting.js:355
+#, javascript-format
+msgid "%s / %s / %s"
+msgstr "%s / %s / %s"
+
+#: ReactNativeClient/lib/models/Setting.js:356
+#: ReactNativeClient/lib/models/Setting.js:357
+#: ReactNativeClient/lib/models/Setting.js:358
+#, javascript-format
+msgid "%s / %s"
+msgstr "%s / %s"
+
+#: ReactNativeClient/lib/models/Setting.js:361
+#, fuzzy
+msgid "Uncompleted to-dos on top"
+msgstr "to-do ที่ยังไม่เสร็จไว้บนสุด"
+
+#: ReactNativeClient/lib/models/Setting.js:362
+#, fuzzy
+msgid "Show completed to-dos"
+msgstr "แสดง to-do ที่เสร็จแล้ว"
+
+#: ReactNativeClient/lib/models/Setting.js:387
+#, fuzzy
+msgid "Auto-pair braces, parenthesis, quotations, etc."
+msgstr "จับคู่อัตโนมัติ {}, (), \"\", ฯลฯ"
+
+#: ReactNativeClient/lib/models/Setting.js:395
+msgid "Use CodeMirror as the code editor (WARNING: BETA)."
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:397
+#: ReactNativeClient/lib/models/Setting.js:415
+#, fuzzy
+msgid "Reverse sort order"
+msgstr "จัดเรียงย้อนกลับ"
+
+#: ReactNativeClient/lib/models/Setting.js:404
+msgid "Sort notebooks by"
+msgstr "จัดเรียงสมุดบันทึกโดย"
+
+#: ReactNativeClient/lib/models/Setting.js:416
+#, fuzzy
+msgid "Save geo-location with notes"
+msgstr "บันทึกตำหน่งภูมิศาสตร์"
+
+#: ReactNativeClient/lib/models/Setting.js:435
+msgid "When creating a new to-do:"
+msgstr "เมื่อสร้าง to-do ใหม่:"
+
+#: ReactNativeClient/lib/models/Setting.js:438
+#: ReactNativeClient/lib/models/Setting.js:453
+#, fuzzy
+msgid "Focus title"
+msgstr "โฟกัสที่ชื่อเรื่อง"
+
+#: ReactNativeClient/lib/models/Setting.js:439
+#: ReactNativeClient/lib/models/Setting.js:454
+#, fuzzy
+msgid "Focus body"
+msgstr "โฟกัสที่เนื้อเรื่อง"
+
+#: ReactNativeClient/lib/models/Setting.js:450
+#, fuzzy
+msgid "When creating a new note:"
+msgstr "เมื่อสร้างบันทึกใหม่:"
+
+#: ReactNativeClient/lib/models/Setting.js:464
+msgid "Enable soft breaks"
+msgstr "เปิดใช้งาน Soft Break"
+
+#: ReactNativeClient/lib/models/Setting.js:465
+#, fuzzy
+msgid "Enable typographer support"
+msgstr "เปิดใช้งานการรองรับ Typographer"
+
+#: ReactNativeClient/lib/models/Setting.js:466
+msgid "Enable math expressions"
+msgstr "เปิดใช้งาน Math Expressions"
+
+#: ReactNativeClient/lib/models/Setting.js:467
+msgid "Enable Fountain syntax support"
+msgstr "เปิดใช้งานการรองรับ Fountain syntax"
+
+#: ReactNativeClient/lib/models/Setting.js:468
+msgid "Enable Mermaid diagrams support"
+msgstr "เปิดใช้งานการรองรับ Mermaid diagram"
+
+#: ReactNativeClient/lib/models/Setting.js:470
+msgid "Enable ==mark== syntax"
+msgstr "เปิดใช้งาน ==mark== syntax"
+
+#: ReactNativeClient/lib/models/Setting.js:471
+msgid "Enable footnotes"
+msgstr "เปิดใช้งาน Footnotes"
+
+#: ReactNativeClient/lib/models/Setting.js:472
+msgid "Enable table of contents extension"
+msgstr "เปิดใช้งานส่วนเสริมสารบัญ"
+
+#: ReactNativeClient/lib/models/Setting.js:473
+msgid "Enable ~sub~ syntax"
+msgstr "เปิดใช้งาน ~sub~ syntax"
+
+#: ReactNativeClient/lib/models/Setting.js:474
+msgid "Enable ^sup^ syntax"
+msgstr "เปิดใช้งาน ^sup^ syntax"
+
+#: ReactNativeClient/lib/models/Setting.js:475
+msgid "Enable deflist syntax"
+msgstr "เปิดใช้งาน deflist syntax"
+
+#: ReactNativeClient/lib/models/Setting.js:476
+msgid "Enable abbreviation syntax"
+msgstr "เปิดใช้งาน abbreviation syntax"
+
+#: ReactNativeClient/lib/models/Setting.js:477
+msgid "Enable markdown emoji"
+msgstr "เปิดใช้งาน Markdown Emoji"
+
+#: ReactNativeClient/lib/models/Setting.js:478
+msgid "Enable ++insert++ syntax"
+msgstr "เปิดใช้งาน ++insert++syntax"
+
+#: ReactNativeClient/lib/models/Setting.js:479
+msgid "Enable multimarkdown table extension"
+msgstr "เปิดใช้งานส่วนเสริมตาราง Multimarkdown"
+
+#: ReactNativeClient/lib/models/Setting.js:491
+msgid "Show tray icon"
+msgstr "แสดงไอคอนใน System tray"
+
+#: ReactNativeClient/lib/models/Setting.js:493
+#, fuzzy
+msgid "Note: Does not work in all desktop environments."
+msgstr "หมายเหตุ: ทำงานได้กับบาง Desktop Environment เท่านั้น"
+
+#: ReactNativeClient/lib/models/Setting.js:493
+msgid ""
+"This will allow Joplin to run in the background. It is recommended to enable "
+"this setting so that your notes are constantly being synchronised, thus "
+"reducing the number of conflicts."
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:497
+msgid "Start application minimised in the tray icon"
+msgstr "เริ่มต้นแอปพลิเคชั่นโดยย่อไว้ที่ไอคอน System tray"
+
+#: ReactNativeClient/lib/models/Setting.js:516
+msgid "Editor font size"
+msgstr "ขนาดตัวอักษรของตัวแก้ไข"
+
+#: ReactNativeClient/lib/models/Setting.js:524
+msgid "Editor font"
+msgstr "แบบตัวอักษรของตัวแก้ไข"
+
+#: ReactNativeClient/lib/models/Setting.js:548
+msgid "Editor font family"
+msgstr "ตระกูลของแบบตัวอักษรของตัวแก้ไข"
+
+#: ReactNativeClient/lib/models/Setting.js:550
+#, fuzzy
+msgid ""
+"This should be a *monospace* font or some elements will render incorrectly. "
+"If the font is incorrect or empty, it will default to a generic monospace "
+"font."
+msgstr ""
+"เพื่อการแสดงผลที่ถูกต้อง จำเป็นต้องใช้ตัวอักษรแบบ *monospace* "
+"ถ้าตัวอักษรไม่ถูกต้องหรือว่างเว้นไว้ จะใช้ตัวอักษรแบบ monospace ค่าเริ่มต้น"
+
+#: ReactNativeClient/lib/models/Setting.js:589
+#, fuzzy
+msgid "Custom stylesheet for Joplin-wide app styles"
+msgstr "Stylesheet แบบกำหนดเอง สำหรับ Joplin"
+
+#: ReactNativeClient/lib/models/Setting.js:595
+msgid "Automatically update the application"
+msgstr "อัพเดทแอปพลิเคชั่นอัตโนมัติ"
+
+#: ReactNativeClient/lib/models/Setting.js:596
+msgid "Get pre-releases when checking for updates"
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:596
+#, javascript-format
+msgid "See the pre-release page for more details: %s"
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:604
+msgid "Synchronisation interval"
+msgstr "ความถี่ในการซิงโครไนซ์"
+
+#: ReactNativeClient/lib/models/Setting.js:608
+#: ReactNativeClient/lib/models/Setting.js:609
+#: ReactNativeClient/lib/models/Setting.js:610
+#, javascript-format
+msgid "%d minutes"
+msgstr "%d นาที"
+
+#: ReactNativeClient/lib/models/Setting.js:611
+#, javascript-format
+msgid "%d hour"
+msgstr "%d ชั่วโมง"
+
+#: ReactNativeClient/lib/models/Setting.js:612
+#: ReactNativeClient/lib/models/Setting.js:613
+#, javascript-format
+msgid "%d hours"
+msgstr "%d ชั่วโมง"
+
+#: ReactNativeClient/lib/models/Setting.js:622
+msgid "Text editor command"
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:622
+msgid ""
+"The editor command (may include arguments) that will be used to open a note. "
+"If none is provided it will try to auto-detect the default editor."
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:623
+msgid "Page size for PDF export"
+msgstr "ขนาดของหน้า สำหรับการส่งออก PDF"
+
+#: ReactNativeClient/lib/models/Setting.js:625
+msgid "A4"
+msgstr "A4"
+
+#: ReactNativeClient/lib/models/Setting.js:626
+msgid "Letter"
+msgstr "Letter"
+
+#: ReactNativeClient/lib/models/Setting.js:627
+msgid "A3"
+msgstr "A3"
+
+#: ReactNativeClient/lib/models/Setting.js:628
+msgid "A5"
+msgstr "A5"
+
+#: ReactNativeClient/lib/models/Setting.js:629
+msgid "Tabloid"
+msgstr "Tabloid"
+
+#: ReactNativeClient/lib/models/Setting.js:630
+msgid "Legal"
+msgstr "Legal"
+
+#: ReactNativeClient/lib/models/Setting.js:633
+#, fuzzy
+msgid "Page orientation for PDF export"
+msgstr "การจัดวางหน้า สำหรับการส่งออก PDF"
+
+#: ReactNativeClient/lib/models/Setting.js:635
+msgid "Portrait"
+msgstr "แนวตั้ง"
+
+#: ReactNativeClient/lib/models/Setting.js:636
+msgid "Landscape"
+msgstr "แนวนอน"
+
+#: ReactNativeClient/lib/models/Setting.js:647
+msgid "Keyboard Mode"
+msgstr "โหมดของคีย์บอร์ด"
+
+#: ReactNativeClient/lib/models/Setting.js:650
+msgid "Default"
+msgstr "ค่าเริ่มต้น"
+
+#: ReactNativeClient/lib/models/Setting.js:651
+msgid "Emacs"
+msgstr "Emacs"
+
+#: ReactNativeClient/lib/models/Setting.js:652
+msgid "Vim"
+msgstr "Vim"
+
+#: ReactNativeClient/lib/models/Setting.js:667
+msgid "Custom TLS certificates"
+msgstr "TLS certificate แบบกำหนดเอง"
+
+#: ReactNativeClient/lib/models/Setting.js:668
+msgid ""
+"Comma-separated list of paths to directories to load the certificates from, "
+"or path to individual cert files. For example: /my/cert_dir, /other/custom."
+"pem. Note that if you make changes to the TLS settings, you must save your "
+"changes before clicking on \"Check synchronisation configuration\"."
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:680
+msgid "Ignore TLS certificate errors"
+msgstr "เพิกเฉยข้อผิดพลาด TLS certificate"
+
+#: ReactNativeClient/lib/models/Setting.js:689
+msgid "Fail-safe"
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:690
+msgid ""
+"Fail-safe: Do not wipe out local data when sync target is empty (often the "
+"result of a misconfiguration or bug)"
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:694
+msgid ""
+"Specify the port that should be used by the API server. If not set, a "
+"default will be used."
+msgstr "ระบุพอร์ตที่จะใช้โดยเซิร์ฟเวอร์ API ถ้าไม่ระบุ จะใช้ค่าเริ่มต้น"
+
+#: ReactNativeClient/lib/models/Setting.js:702
+msgid "Enable note history"
+msgstr "เปิดใช้ประวัติบันทึกย้อนหลัง"
+
+#: ReactNativeClient/lib/models/Setting.js:712
+msgid "days"
+msgstr "วัน"
+
+#: ReactNativeClient/lib/models/Setting.js:712
+#, javascript-format
+msgid "%d days"
+msgstr "%d วัน"
+
+#: ReactNativeClient/lib/models/Setting.js:714
+#, fuzzy
+msgid "Keep note history for"
+msgstr "เก็บประวัติบันทึกย้อนหลังเป็นเวลา"
+
+#: ReactNativeClient/lib/models/Setting.js:741
+msgid "Notebook list growth factor"
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:743
+#: ReactNativeClient/lib/models/Setting.js:756
+#: ReactNativeClient/lib/models/Setting.js:769
+msgid ""
+"The factor property sets how the item will grow or shrink to fit the "
+"available space in its container with respect to the other items. Thus an "
+"item with a factor of 2 will take twice as much space as an item with a "
+"factor of 1.Restart app to see changes."
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:754
+msgid "Note list growth factor"
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:767
+msgid "Note area growth factor"
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:919
+#, fuzzy, javascript-format
+msgid "Invalid option value: \"%s\". Possible values are: %s."
+msgstr "ค่าของตัวเลือกไม่ถูกต้อง: \"%s\" ค่าที่เป็นไปได้คือ: %s."
+
+#: ReactNativeClient/lib/models/Setting.js:1247
+msgid "General"
+msgstr "ทั่วไป"
+
+#: ReactNativeClient/lib/models/Setting.js:1248
+msgid "Synchronisation"
+msgstr "การซิงโครไนซ์"
+
+#: ReactNativeClient/lib/models/Setting.js:1249
+#, fuzzy
+msgid "Appearance"
+msgstr "รูปร่างหน้าตา"
+
+#: ReactNativeClient/lib/models/Setting.js:1250
+msgid "Note"
+msgstr "บันทึก"
+
+#: ReactNativeClient/lib/models/Setting.js:1251
+msgid "Plugins"
+msgstr "ปลั๊กอิน"
+
+#: ReactNativeClient/lib/models/Setting.js:1252
+msgid "Application"
+msgstr "แอปพลิเคชัน"
+
+#: ReactNativeClient/lib/models/Setting.js:1254
+msgid "Encryption"
+msgstr "การเข้ารหัส"
+
+#: ReactNativeClient/lib/models/Setting.js:1255
+msgid "Web Clipper"
+msgstr "Web Clipper"
+
+#: ReactNativeClient/lib/models/Setting.js:1260
+msgid ""
+"These plugins enhance the Markdown renderer with additional features. Please "
+"note that, while these features might be useful, they are not standard "
+"Markdown and thus most of them will only work in Joplin. Additionally, some "
+"of them are *incompatible* with the WYSIWYG editor. If you open a note that "
+"uses one of these plugins in that editor, you will lose the plugin "
+"formatting. It is indicated below which plugins are compatible or not with "
+"the WYSIWYG editor."
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:1261
+#, fuzzy, javascript-format
+msgid "Notes and settings are stored in: %s"
+msgstr "บันทึก และ การตั้งค่า จะถูกเก็บไว้ใน: %s"
+
+#: ReactNativeClient/lib/models/Resource.js:317
+msgid "Not downloaded"
+msgstr "ยังไม่ได้ดาวน์โหลด"
+
+#: ReactNativeClient/lib/models/Resource.js:318
+msgid "Downloading"
+msgstr "กำลังดาวน์โหลด"
+
+#: ReactNativeClient/lib/models/Resource.js:319
+msgid "Downloaded"
+msgstr "ดาวน์โหลดแล้ว"
+
+#: ReactNativeClient/lib/models/Resource.js:371
+#, fuzzy, javascript-format
+msgid "Attachment conflict: \"%s\""
+msgstr "ไฟล์แนบ"
+
+#: ReactNativeClient/lib/models/Resource.js:372
+#, javascript-format
+msgid ""
+"There was a [conflict](%s) on the attachment below.\n"
+"\n"
+"%s"
+msgstr ""
+
+#: ReactNativeClient/lib/models/Tag.js:384
+#, fuzzy
+msgid "Cannot move tag to this location."
+msgstr "ไม่สามารถย้ายสมุดบันทึกมาที่ตำแหน่งนี้"
+
+#: ReactNativeClient/lib/models/Tag.js:429
+msgid "Tag name cannot start or end with a `/`."
+msgstr ""
+
+#: ReactNativeClient/lib/models/Tag.js:431
+msgid "Tag name cannot contain `//`."
+msgstr ""
+
+#: ReactNativeClient/lib/models/Tag.js:482
+#, javascript-format
+msgid "The tag \"%s\" already exists. Please choose a different name."
+msgstr "แท็ก “%s” มีอยู่แล้ว โปรดใช้ชื่ออื่น"
+
+#: ReactNativeClient/lib/models/Note.js:27
+#, fuzzy
+msgid "created date"
+msgstr "สร้างเมื่อ"
+
+#: ReactNativeClient/lib/models/Note.js:28
+msgid "custom order"
+msgstr ""
+
+#: ReactNativeClient/lib/models/Note.js:92
+msgid "This note does not have geolocation information."
+msgstr "บันทึกนี้ไม่มีตำแหน่งภูมิศาสตร์"
+
+#: ReactNativeClient/lib/models/Note.js:466
+#, javascript-format
+msgid "Cannot copy note to \"%s\" notebook"
+msgstr "มันสามารถคัดลอกบันทึกไปที่สมุดบันทึก \"%s\""
+
+#: ReactNativeClient/lib/models/Note.js:477
+#, javascript-format
+msgid "Cannot move note to \"%s\" notebook"
+msgstr "ไม่สามารถย้ายบันทึกไปที่สมุดบันทึก \"%s\""
+
+#: ReactNativeClient/lib/models/BaseItem.js:719
+msgid "Encrypted"
+msgstr "เข้ารหัสแล้ว"
+
+#: ReactNativeClient/lib/models/BaseItem.js:779
+#, fuzzy
+msgid "Encrypted items cannot be modified"
+msgstr "รายการที่เข้ารหัสแล้วไม่สามารถแก้ไขได้"
+
+#: ReactNativeClient/lib/SyncTargetOneDriveDev.js:15
+#, fuzzy
+msgid "OneDrive Dev (For testing only)"
+msgstr "OneDrive Dev (เพื่อทดสอบเท่านั้น)"
+
+#: ReactNativeClient/lib/BaseApplication.js:139
+#: ReactNativeClient/lib/BaseApplication.js:152
+#: ReactNativeClient/lib/BaseApplication.js:183
+#, javascript-format
+msgid "Usage: %s"
+msgstr ""
+
+#: ReactNativeClient/lib/BaseApplication.js:218
+#, javascript-format
+msgid "Unknown flag: %s"
+msgstr ""
+
+#: ReactNativeClient/lib/SyncTargetOneDrive.js:25
+msgid "OneDrive"
+msgstr "OneDrive"
+
+#: ReactNativeClient/lib/components/select-date-time-dialog.js:65
+msgid "Clear alarm"
+msgstr "ยกเลิกแจ้งเตือน"
+
+#: ReactNativeClient/lib/components/select-date-time-dialog.js:68
+#, fuzzy
+msgid "Save alarm"
+msgstr "บันทึกแจ้งเตือน"
+
+#: ReactNativeClient/lib/components/select-date-time-dialog.js:86
+msgid "Select date"
+msgstr "เลือกวันที่"
+
+#: ReactNativeClient/lib/components/select-date-time-dialog.js:88
+msgid "Confirm"
+msgstr "ยืนยัน"
+
+#: ReactNativeClient/lib/components/CameraView.js:180
+msgid "Permission to use camera"
+msgstr "สิทธิ์การเข้าใช้งานกล้อง"
+
+#: ReactNativeClient/lib/components/CameraView.js:181
+msgid "Your permission to use your camera is required."
+msgstr ""
+
+#: ReactNativeClient/lib/components/screen-header.js:185
+msgid "Delete these notes?"
+msgstr "ลบบันทึกเหล่านี้?"
+
+#: ReactNativeClient/lib/components/screen-header.js:392
+msgid "Move to notebook..."
+msgstr "ย้ายไปสมุดบันทึก..."
+
+#: ReactNativeClient/lib/components/screen-header.js:433
+#, javascript-format
+msgid "Move %d notes to notebook \"%s\"?"
+msgstr "ย้ายบันทึก %d ไปที่สมุดบันทึก “%s”?"
+
+#: ReactNativeClient/lib/components/screen-header.js:451
+msgid "Press to set the decryption password."
+msgstr "โปรดตั้งรหัสผ่านสำหรับการถอดรหัส"
+
+#: ReactNativeClient/lib/components/screen-header.js:452
+msgid "Some items cannot be synchronised. Press for more info."
+msgstr "มีบางรายการที่ไม่สามารถทำการซิงโครไนซ์ได้ กดเพื่อดูข้อมูลเพิ่มเติม"
+
+#: ReactNativeClient/lib/components/side-menu-content.js:126
+#, javascript-format
+msgid "Notebook: %s"
+msgstr "สมุดบันทึก: %s"
+
+#: ReactNativeClient/lib/components/side-menu-content.js:132
+msgid "Encrypted notebooks cannot be renamed"
+msgstr "สมุดบันทึกที่ถูกเข้ารหัสจะไม่สามารถแก้ไขชื่อได้"
+
+#: ReactNativeClient/lib/components/side-menu-content.js:312
+#, fuzzy
+msgid "New Notebook"
+msgstr "สมุดบันทึกใหม่"
+
+#: ReactNativeClient/lib/components/side-menu-content.js:316
+#: ReactNativeClient/lib/components/screens/config.js:549
+msgid "Configuration"
+msgstr "การตั้งค่า"
+
+#: ReactNativeClient/lib/components/note-list.js:97
+#, fuzzy
+msgid "You currently have no notebooks."
+msgstr "คุณยังไม่มีสมุดบันทึกใดเลย"
+
+#: ReactNativeClient/lib/components/note-list.js:101
+msgid "Create a notebook"
+msgstr "สร้างสมุดบันทึก"
+
+#: ReactNativeClient/lib/components/note-list.js:105
+msgid "There are currently no notes. Create one by clicking on the (+) button."
+msgstr "ไม่มีบันทึกอยู่เลย สามารถสร้างบันทึกใหม่ได้โดยคลิกที่ปุ่ม (+)"
+
+#: ReactNativeClient/lib/components/shared/config-shared.js:46
+msgid "Checking... Please wait."
+msgstr "กำลังตรวจสอบ... โปรดรอสักครู่..."
+
+#: ReactNativeClient/lib/components/shared/config-shared.js:48
+#, fuzzy
+msgid "Success! Synchronisation configuration appears to be correct."
+msgstr "สำเร็จ! การตั้งค่าการซิงโครไนซ์ดูเหมือนจะถูกต้อง"
+
+#: ReactNativeClient/lib/components/shared/config-shared.js:50
+msgid ""
+"Error. Please check that URL, username, password, etc. are correct and that "
+"the sync target is accessible. The reported error was:"
+msgstr ""
+
+#: ReactNativeClient/lib/components/shared/dropbox-login-shared.js:39
+msgid "The application has been authorised!"
+msgstr "แอปพลิเคชั่นได้รับการอนุมัติแล้ว!"
+
+#: ReactNativeClient/lib/components/shared/dropbox-login-shared.js:43
+#, javascript-format
+msgid ""
+"Could not authorise application:\n"
+"\n"
+"%s\n"
+"\n"
+"Please try again."
+msgstr ""
+"ไม่สามารถอนุมัติแอปพลิเคชั่น:\n"
+"\n"
+"%s\n"
+"\n"
+"โปรดลองอีกครั้ง"
+
+#: ReactNativeClient/lib/components/shared/encryption-config-shared.js:31
+msgid ""
+"Please confirm that you would like to re-encrypt your complete database."
+msgstr ""
+
+#: ReactNativeClient/lib/components/shared/encryption-config-shared.js:37
+msgid "Your data is going to be re-encrypted and synced again."
+msgstr ""
+
+#: ReactNativeClient/lib/components/shared/encryption-config-shared.js:47
+msgid ""
+"Please enter your password in the master key list below before upgrading the "
+"key."
+msgstr ""
+
+#: ReactNativeClient/lib/components/shared/encryption-config-shared.js:56
+msgid "The master key has been upgraded successfully!"
+msgstr ""
+
+#: ReactNativeClient/lib/components/shared/encryption-config-shared.js:58
+#, javascript-format
+msgid "Could not upgrade master key: %s"
+msgstr ""
+
+#: ReactNativeClient/lib/components/shared/encryption-config-shared.js:110
+#, javascript-format
+msgid "Decrypted items: %s / %s"
+msgstr "รายการที่ถูกถอดรหัส: %s / %s"
+
+#: ReactNativeClient/lib/components/screens/folder.js:87
+#, javascript-format
+msgid "The notebook could not be saved: %s"
+msgstr "ไม่สามารถบันทึกสมุดบันทึก: %s"
+
+#: ReactNativeClient/lib/components/screens/folder.js:109
+msgid "Edit notebook"
+msgstr "แก้ไขสมุดบันทึก"
+
+#: ReactNativeClient/lib/components/screens/folder.js:110
+msgid "Enter notebook title"
+msgstr "กรอกชื่อของสมุดบันทึก"
+
+#: ReactNativeClient/lib/components/screens/onedrive-login.js:109
+msgid "Login with OneDrive"
+msgstr "เข้าสู่ระบบด้วย OneDrive"
+
+#: ReactNativeClient/lib/components/screens/onedrive-login.js:120
+#: ReactNativeClient/lib/components/screens/log.js:109
+#: ReactNativeClient/lib/components/screens/status.js:144
+msgid "Refresh"
+msgstr "รีเฟรช"
+
+#: ReactNativeClient/lib/components/screens/NoteTagsDialog.js:163
+msgid "New tags:"
+msgstr "แท็กใหม่:"
+
+#: ReactNativeClient/lib/components/screens/NoteTagsDialog.js:178
+#, fuzzy
+msgid "Type new tags or select from list"
+msgstr "กรอกแท็กใหม่หรือเลือกจากรายการ"
+
+#: ReactNativeClient/lib/components/screens/dropbox-login.js:55
+msgid "Login with Dropbox"
+msgstr "เข้าสู่ระบบด้วย Dropbox"
+
+#: ReactNativeClient/lib/components/screens/dropbox-login.js:66
+msgid "Enter code here"
+msgstr "กรอกรหัสที่นี่"
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:119
+#, javascript-format
+msgid "Master Key %s"
+msgstr "มาสเตอร์คีย์ %s"
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:120
+#: ReactNativeClient/lib/components/screens/note.js:773
+#, javascript-format
+msgid "Created: %s"
+msgstr "สร้างเมื่อ: %s"
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:122
+#: ReactNativeClient/lib/components/screens/encryption-config.js:151
+msgid "Password:"
+msgstr "รหัสผ่าน:"
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:137
+#, fuzzy
+msgid "Password cannot be empty"
+msgstr "รหัสผ่านไม่สามารถเว้นว่างได้"
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:139
+msgid "Confirm password cannot be empty"
+msgstr "รหัสผ่านยืนยันไม่สามารถเว้นว่างได้"
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:150
+msgid ""
+"Enabling encryption means *all* your notes and attachments are going to be "
+"re-synchronised and sent encrypted to the sync target. Do not lose the "
+"password as, for security purposes, this will be the *only* way to decrypt "
+"the data! To enable encryption, please enter your password below."
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:177
+msgid "Enable"
+msgstr "เปิด"
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:248
+msgid "Missing Master Keys"
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:249
+msgid ""
+"The master keys with these IDs are used to encrypt some of your items, "
+"however the application does not currently have access to them. It is likely "
+"they will eventually be downloaded via synchronisation."
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:258
+#, fuzzy
+msgid "Disable encryption"
+msgstr "ปิดการเข้ารหัส"
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:258
+#, fuzzy
+msgid "Enable encryption"
+msgstr "เปิดการเข้ารหัส"
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:264
+#: ReactNativeClient/lib/components/screens/config.js:316
+msgid "Encryption Config"
+msgstr "ตั้งค่าการเข้ารหัส"
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:268
+msgid ""
+"For more information about End-To-End Encryption (E2EE) and advice on how to "
+"enable it please check the documentation:"
+msgstr ""
+"สำหรับข้อมูลเพิ่มเติมเกี่ยวกับการเข้ารหัสแบบ End-To-End Encryption (E2EE) "
+"และคำแนะนำในการเปิดใช้งาน โปรดอ่านคู่มือการใช้งาน:"
+
+#: ReactNativeClient/lib/components/screens/log.js:100
+#: ReactNativeClient/lib/components/screens/config.js:439
+msgid "Log"
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/log.js:117
+msgid "Show all"
+msgstr "แสดงทั้งหมด"
+
+#: ReactNativeClient/lib/components/screens/log.js:117
+#, fuzzy
+msgid "Errors only"
+msgstr "ข้อผิดพลาดเท่านั้น"
+
+#: ReactNativeClient/lib/components/screens/config.js:50
+#, fuzzy
+msgid "Warning"
+msgstr "คำเตือน"
+
+#: ReactNativeClient/lib/components/screens/config.js:50
+msgid ""
+"In order to use file system synchronisation your permission to write to "
+"external storage is required."
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/config.js:436
+msgid "Tools"
+msgstr "เครื่องมือ"
+
+#: ReactNativeClient/lib/components/screens/config.js:438
+msgid "Sync Status"
+msgstr "สถานะการซิงค์"
+
+#: ReactNativeClient/lib/components/screens/config.js:441
+msgid "Creating report..."
+msgstr "กำลังสร้างรายงาน..."
+
+#: ReactNativeClient/lib/components/screens/config.js:441
+msgid "Export Debug Report"
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/config.js:443
+msgid "Fixing search index..."
+msgstr "กำลังซ่อมดัชนีค้นหา..."
+
+#: ReactNativeClient/lib/components/screens/config.js:443
+msgid "Fix search index"
+msgstr "ซ่อมดัชนีย์ค้นหา"
+
+#: ReactNativeClient/lib/components/screens/config.js:443
+msgid ""
+"Use this to rebuild the search index if there is a problem with search. It "
+"may take a long time depending on the number of notes."
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/config.js:446
+#, fuzzy
+msgid "Exporting profile..."
+msgstr "กำลังส่งออกโปรไฟล์..."
+
+#: ReactNativeClient/lib/components/screens/config.js:446
+#, fuzzy
+msgid "Export profile"
+msgstr "ส่งออกโปรไฟล์"
+
+#: ReactNativeClient/lib/components/screens/config.js:446
+msgid "For debugging purpose only: export your profile to an external SD card."
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/config.js:461
+msgid "More information"
+msgstr "ข้อมูลเพิ่มเติม"
+
+#: ReactNativeClient/lib/components/screens/config.js:471
+msgid ""
+"To work correctly, the app needs the following permissions. Please enable "
+"them in your phone settings, in Apps > Joplin > Permissions"
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/config.js:474
+msgid ""
+"- Storage: to allow attaching files to notes and to enable filesystem "
+"synchronisation."
+msgstr "- แหล่งเก็บข้อมูล: สำหรับการแนบไฟล์กับบันทึกและการเปิดใช้งานการซิงโครไนซ์กับไฟล์ระบบ"
+
+#: ReactNativeClient/lib/components/screens/config.js:477
+msgid "- Camera: to allow taking a picture and attaching it to a note."
+msgstr "- กล้อง: สำหรับถ่ายภาพและแนบไว้กับบันทึก"
+
+#: ReactNativeClient/lib/components/screens/config.js:480
+msgid "- Location: to allow attaching geo-location information to a note."
+msgstr "- สถานที่ตั้ง: สำหรับแนบข้อมูลที่ตั้งทางภูมิศาสตร์ไว้กับบันทึก"
+
+#: ReactNativeClient/lib/components/screens/config.js:509
+msgid "Joplin website"
+msgstr "เว็บไซต์ของ Joplin"
+
+#: ReactNativeClient/lib/components/screens/config.js:537
+#, fuzzy, javascript-format
+msgid "Database v%s"
+msgstr "ฐานข้อมูล v%s"
+
+#: ReactNativeClient/lib/components/screens/config.js:543
+#, fuzzy, javascript-format
+msgid "FTS enabled: %d"
+msgstr "เปิดใช้ FTS: %d"
+
+#: ReactNativeClient/lib/components/screens/note.js:97
+#, fuzzy
+msgid "This note has been modified:"
+msgstr "บันทึกนี้ได้ถูกแก้ไขเมื่อ:"
+
+#: ReactNativeClient/lib/components/screens/note.js:97
+msgid "Save changes"
+msgstr "บันทึกการเปลี่ยนแปลง"
+
+#: ReactNativeClient/lib/components/screens/note.js:97
+msgid "Discard changes"
+msgstr "ยกเลิกการเปลี่ยนแปลง"
+
+#: ReactNativeClient/lib/components/screens/note.js:161
+#, javascript-format
+msgid "No item with ID %s"
+msgstr "ไม่มีรายการที่มี ID %s"
+
+#: ReactNativeClient/lib/components/screens/note.js:180
+msgid "This attachment is not downloaded or not decrypted yet."
+msgstr "ไฟล์แนบนี้ยังไม่ได้ดาวน์โหลดหรือยังไม่ได้ถอดรหัส"
+
+#: ReactNativeClient/lib/components/screens/note.js:184
+#, javascript-format
+msgid "The Joplin mobile app does not currently support this type of link: %s"
+msgstr "แอป Joplin mobile ยังไม่รองรับชนิดของลิงก์นี้: %s"
+
+#: ReactNativeClient/lib/components/screens/note.js:188
+#, javascript-format
+msgid "Links with protocol \"%s\" are not supported"
+msgstr "ไม่รองรับลิงก์ที่ใช้โปรโตคอลนี้ “%s”"
+
+#: ReactNativeClient/lib/components/screens/note.js:618
+#, fuzzy, javascript-format
+msgid "Unsupported image type: %s"
+msgstr "ไม่รองรับภาพนี้ประเภทนี้: %s"
+
+#: ReactNativeClient/lib/components/screens/note.js:774
+#, fuzzy, javascript-format
+msgid "Updated: %s"
+msgstr "แก้ไขเมื่อ: %s"
+
+#: ReactNativeClient/lib/components/screens/note.js:778
+msgid "View on map"
+msgstr "แสดงในแผนที่"
+
+#: ReactNativeClient/lib/components/screens/note.js:785
+msgid "Go to source URL"
+msgstr "ไปที่ URL แหล่งที่มา"
+
+#: ReactNativeClient/lib/components/screens/note.js:813
+msgid "Attach..."
+msgstr "แนบ..."
+
+#: ReactNativeClient/lib/components/screens/note.js:815
+msgid "Choose an option"
+msgstr ""
+
+#: ReactNativeClient/lib/components/screens/note.js:815
+#, fuzzy
+msgid "Take photo"
+msgstr "ถ่ายรูป"
+
+#: ReactNativeClient/lib/components/screens/note.js:815
+msgid "Attach photo"
+msgstr "แนบรูปภาพ"
+
+#: ReactNativeClient/lib/components/screens/note.js:815
+msgid "Attach any file"
+msgstr "แนบไฟล์"
+
+#: ReactNativeClient/lib/components/screens/note.js:834
+msgid "Share"
+msgstr "แบ่งปัน"
+
+#: ReactNativeClient/lib/components/screens/note.js:848
+msgid "Convert to note"
+msgstr "แปลงเป็นบันทึก"
+
+#: ReactNativeClient/lib/components/screens/note.js:848
+msgid "Convert to todo"
+msgstr "แปลงเป็น to-do"
+
+#: ReactNativeClient/lib/components/screens/note.js:862
+msgid "Properties"
+msgstr "คุณสมบัติ"
+
+#: ReactNativeClient/lib/components/screens/note.js:1042
+#: ReactNativeClient/lib/components/screens/note.js:1100
+msgid "Add body"
+msgstr "เพิ่มเนื้อความ"
+
+#: ReactNativeClient/lib/components/screens/note.js:1150
+msgid "Add title"
+msgstr "เพิ่มชื่อเรื่อง"
+
+#: ReactNativeClient/lib/components/screens/search.js:163
+msgid "Search"
+msgstr "ค้นหา"
+
+#: ReactNativeClient/lib/onedrive-api.js:342
+msgid ""
+"Cannot refresh token: authentication data is missing. Starting the "
+"synchronisation again may fix the problem."
+msgstr ""
+
+#: ReactNativeClient/lib/synchronizer.js:94
+#, javascript-format
+msgid "Created local items: %d."
+msgstr ""
+
+#: ReactNativeClient/lib/synchronizer.js:95
+#, javascript-format
+msgid "Updated local items: %d."
+msgstr ""
+
+#: ReactNativeClient/lib/synchronizer.js:96
+#, javascript-format
+msgid "Created remote items: %d."
+msgstr ""
+
+#: ReactNativeClient/lib/synchronizer.js:97
+#, javascript-format
+msgid "Updated remote items: %d."
+msgstr ""
+
+#: ReactNativeClient/lib/synchronizer.js:98
+#, javascript-format
+msgid "Deleted local items: %d."
+msgstr ""
+
+#: ReactNativeClient/lib/synchronizer.js:99
+#, javascript-format
+msgid "Deleted remote items: %d."
+msgstr ""
+
+#: ReactNativeClient/lib/synchronizer.js:100
+#, javascript-format
+msgid "Fetched items: %d/%d."
+msgstr ""
+
+#: ReactNativeClient/lib/synchronizer.js:102
+msgid "Cancelling..."
+msgstr "กำลังยกเลิก..."
+
+#: ReactNativeClient/lib/synchronizer.js:103
+#, javascript-format
+msgid "Completed: %s"
+msgstr "เสร็จสิ้นเมื่อ: %s"
+
+#: ReactNativeClient/lib/synchronizer.js:104
+#, javascript-format
+msgid "Last error: %s"
+msgstr "ข้อผิดพลาดล่าสุด: %s"
+
+#: ReactNativeClient/lib/synchronizer.js:204
+#, fuzzy
+msgid "Idle"
+msgstr "ว่าง"
+
+#: ReactNativeClient/lib/synchronizer.js:205
+msgid "In progress"
+msgstr "กำลังกำเนินการ"
+
+#: ReactNativeClient/lib/JoplinServerApi.js:71
+#, javascript-format
+msgid ""
+"Could not connect to the Joplin Nextcloud app. Please check the "
+"configuration in the Synchronisation config screen. Full error was:\n"
+"\n"
+"%s"
+msgstr ""
+
+#: ReactNativeClient/lib/SyncTargetNextcloud.js:26
+msgid "Nextcloud"
+msgstr "Nextcloud"
+
+#: ReactNativeClient/lib/SyncTargetWebDAV.js:23
+msgid "WebDAV"
+msgstr "WebDAV"
+
+#: ReactNativeClient/lib/SyncTargetFilesystem.js:18
+msgid "File system"
+msgstr ""
+
+#: ReactNativeClient/lib/commands/historyForward.js:16
+msgid "Forward"
+msgstr ""
+
+#: ReactNativeClient/lib/commands/synchronize.js:17
+#, fuzzy
+msgid "Synchronize"
+msgstr "ซิงโครไนซ์"
+
+#: ReactNativeClient/lib/services/InteropService_Exporter_Jex.js:29
+#, fuzzy
+msgid "There is no data to export."
+msgstr "ไม่มีข้อมูลที่จะส่งออก"
+
+#: ReactNativeClient/lib/services/RevisionService.js:215
+#, fuzzy
+msgid "Restored Notes"
+msgstr "กู้คืนบันทึก"
+
+#: ReactNativeClient/lib/services/InteropService_Importer_Md.js:29
+#, fuzzy
+msgid "Please specify the notebook where the notes should be imported to."
+msgstr "โปรดระบุสมุดบันทึกสำหรับทำการนำเข้าบันทึก"
+
+#: ReactNativeClient/lib/services/report.js:121
+msgid "Items that cannot be synchronised"
+msgstr "รายการที่ไม่สามารถทำการซิงโครไนซ์"
+
+#: ReactNativeClient/lib/services/report.js:123
+msgid ""
+"These items will remain on the device but will not be uploaded to the sync "
+"target. In order to find these items, either search for the title or the ID "
+"(which is displayed in brackets above)."
+msgstr ""
+
+#: ReactNativeClient/lib/services/report.js:130
+#, fuzzy, javascript-format
+msgid "%s (%s) could not be uploaded: %s"
+msgstr "%s (%s) ไม่สามารถอัพโหลด: %s"
+
+#: ReactNativeClient/lib/services/report.js:132
+#, fuzzy, javascript-format
+msgid "Item \"%s\" could not be downloaded: %s"
+msgstr "รายการ “%s” ไม่สามารถดาวน์โหลด: %s"
+
+#: ReactNativeClient/lib/services/report.js:142
+msgid "Items that cannot be decrypted"
+msgstr "รายการที่ไม่สามารถทำการถอดรหัส"
+
+#: ReactNativeClient/lib/services/report.js:144
+msgid ""
+"Joplin failed to decrypt these items multiple times, possibly because they "
+"are corrupted or too large. These items will remain on the device but Joplin "
+"will no longer attempt to decrypt them."
+msgstr ""
+
+#: ReactNativeClient/lib/services/report.js:182
+#, fuzzy
+msgid "Attachments"
+msgstr "ไฟล์แนบ"
+
+#: ReactNativeClient/lib/services/report.js:190
+msgid "Downloaded and decrypted"
+msgstr "ดาวน์โหลดและถอดรหัสแล้ว"
+
+#: ReactNativeClient/lib/services/report.js:190
+#: ReactNativeClient/lib/services/report.js:191
+#: ReactNativeClient/lib/services/report.js:194
+#, javascript-format
+msgid "%s: %d"
+msgstr "%s: %d"
+
+#: ReactNativeClient/lib/services/report.js:191
+msgid "Downloaded and encrypted"
+msgstr "ดาวน์โหลดและเข้ารหัสแล้ว"
+
+#: ReactNativeClient/lib/services/report.js:204
+msgid "Attachments that could not be downloaded"
+msgstr "ไฟล์แนบไม่สามารถดาวน์โหลดได้"
+
+#: ReactNativeClient/lib/services/report.js:209
+#, javascript-format
+msgid "%s (%s): %s"
+msgstr "%s (%s): %s"
+
+#: ReactNativeClient/lib/services/report.js:222
+msgid "Sync status (synced items / total items)"
+msgstr "สถานะซิงค์ (รายการที่ซิงค์ไปแล้ว / รายการทั้งหมด)"
+
+#: ReactNativeClient/lib/services/report.js:226
+#, javascript-format
+msgid "%s: %d/%d"
+msgstr "%s: %d/%d"
+
+#: ReactNativeClient/lib/services/report.js:229
+#, javascript-format
+msgid "Total: %d/%d"
+msgstr "ทั้งหมด: %d/%d"
+
+#: ReactNativeClient/lib/services/report.js:231
+#, javascript-format
+msgid "Conflicted: %d"
+msgstr ""
+
+#: ReactNativeClient/lib/services/report.js:232
+#, javascript-format
+msgid "To delete: %d"
+msgstr ""
+
+#: ReactNativeClient/lib/services/report.js:236
+msgid "Folders"
+msgstr "โฟลเดอร์"
+
+#: ReactNativeClient/lib/services/report.js:244
+#, javascript-format
+msgid "%s: %d notes"
+msgstr "%s: %d บันทึก"
+
+#: ReactNativeClient/lib/services/report.js:252
+msgid "Coming alarms"
+msgstr ""
+
+#: ReactNativeClient/lib/services/report.js:257
+#, fuzzy, javascript-format
+msgid "On %s: %s"
+msgstr "เมื่อ %s: %s"
+
+#: ReactNativeClient/lib/services/InteropService.js:29
+#: ReactNativeClient/lib/services/InteropService.js:68
+msgid "Joplin Export File"
+msgstr "ไฟล์ส่งออก Joplin"
+
+#: ReactNativeClient/lib/services/InteropService.js:36
+#: ReactNativeClient/lib/services/InteropService.js:83
+msgid "Markdown"
+msgstr "Markdown"
+
+#: ReactNativeClient/lib/services/InteropService.js:41
+#: ReactNativeClient/lib/services/InteropService.js:73
+msgid "Joplin Export Directory"
+msgstr "ไดเรกทอรี่ส่งออก Joplin"
+
+#: ReactNativeClient/lib/services/InteropService.js:47
+msgid "Evernote Export File (as Markdown)"
+msgstr "ไฟล์ส่งออก Evernote (เป็น Markdown)"
+
+#: ReactNativeClient/lib/services/InteropService.js:55
+msgid "Evernote Export File (as HTML)"
+msgstr "ไฟล์ส่งออก Evernote (เป็น HTML)"
+
+#: ReactNativeClient/lib/services/InteropService.js:78
+#, fuzzy
+msgid "Json Export Directory"
+msgstr "ไดเรกทอรี่ส่งออก Json"
+
+#: ReactNativeClient/lib/services/InteropService.js:90
+msgid "HTML File"
+msgstr "ไฟล์ HTML"
+
+#: ReactNativeClient/lib/services/InteropService.js:95
+msgid "HTML Directory"
+msgstr "ไดเรกทอรี่ HTML"
+
+#: ReactNativeClient/lib/services/InteropService.js:128
+msgid "File"
+msgstr "ไฟล์"
+
+#: ReactNativeClient/lib/services/InteropService.js:128
+msgid "Directory"
+msgstr "ไดเรกทอรี่"
+
+#: ReactNativeClient/lib/services/InteropService.js:174
+#, fuzzy, javascript-format
+msgid "Cannot load \"%s\" module for format \"%s\" and output \"%s\""
+msgstr "ไม่สามารถโหลดโมดูล “%s” สำหรับฟอร์แมต “%s”"
+
+#: ReactNativeClient/lib/services/InteropService.js:232
+#, javascript-format
+msgid "Please specify import format for %s"
+msgstr ""
+
+#: ReactNativeClient/lib/services/InteropService.js:361
+#, javascript-format
+msgid ""
+"This item is currently encrypted: %s \"%s\". Please wait for all items to be "
+"decrypted and try again."
+msgstr ""
+
+#~ msgid "Add or remove tags"
+#~ msgstr "เพิ่มหรือลบแท็ก"
+
+#~ msgid "Link"
+#~ msgstr "ลิงก์"
+
+#, fuzzy
+#~ msgid "Split"
+#~ msgstr "มุมมองแบบแบ่งครึ่ง"
+
+#~ msgid "Information"
+#~ msgstr "ข้อมูล"
+
+#~ msgid "Resources"
+#~ msgstr "ทรัพยากร"
+
+#~ msgid "Master Keys"
+#~ msgstr "มาสเตอร์คีย์"
+
+#~ msgid "Source"
+#~ msgstr "ต้นฉบับ"
+
+#~ msgid "Password"
+#~ msgstr "รหัสผ่าน"

@@ -2,6 +2,13 @@ const Setting = require('lib/models/Setting.js');
 
 const parameters_ = {};
 
+parameters_.test = {
+	oneDriveTest: {
+		id: 'f1e68e1e-a729-4514-b041-4fdd5c7ac03a',
+		secret: '~PC7cwAC_AXGICk_V0~12SmI9lbaC-MBDT',
+	},
+};
+
 parameters_.dev = {
 	oneDrive: {
 		id: 'cbabb902-d276-4ea4-aa88-062a5889d6dc',
@@ -32,13 +39,19 @@ parameters_.prod = {
 	},
 };
 
+let envOverride_ = null;
+function setEnvOverride(env) {
+	envOverride_ = env;
+}
+
 function parameters(env = null) {
+	if (envOverride_) env = envOverride_;
 	if (env === null) env = Setting.value('env');
-	let output = parameters_[env];
+	const output = parameters_[env];
 	if (Setting.value('isDemo')) {
 		output.oneDrive = output.oneDriveDemo;
 	}
 	return output;
 }
 
-module.exports = { parameters };
+module.exports = { parameters, setEnvOverride };

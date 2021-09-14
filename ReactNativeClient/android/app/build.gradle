@@ -65,6 +65,11 @@ import com.android.build.OutputFile
  * ]
  */
 
+project.ext.react = [
+    entryFile: "index.android.js",
+    enableHermes: false,  // clean and rebuild if changing
+]
+
 apply from: "../../node_modules/react-native/react.gradle"
 
 /**
@@ -82,8 +87,34 @@ def enableSeparateBuildPerCPUArchitecture = false
  */
 def enableProguardInReleaseBuilds = false
 
+/**
+ * The preferred build flavor of JavaScriptCore.
+ *
+ * For example, to use the international variant, you can use:
+ * `def jscFlavor = 'org.webkit:android-jsc-intl:+'`
+ *
+ * The international variant includes ICU i18n library and necessary data
+ * allowing to use e.g. `Date.toLocaleString` and `String.localeCompare` that
+ * give correct results when using with locales other than en-US.  Note that
+ * this variant is about 6MiB larger per architecture than default.
+ */
+def jscFlavor = 'org.webkit:android-jsc:+'
+/**
+ * Whether to enable the Hermes VM.
+ *
+ * This should be set on project.ext.react and mirrored here.  If it is not set
+ * on project.ext.react, JavaScript will not be compiled to Hermes Bytecode
+ * and the benefits of using Hermes will therefore be sharply reduced.
+ */
+def enableHermes = project.ext.react.get("enableHermes", false);
+
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
+
+	// To fix this error:
+	// > java.io.UncheckedIOException: java.io.IOException: Execution of compression failed. java.lang.OutOfMemoryError
+	// https://stackoverflow.com/q/57284812/561309
+	dexOptions { javaMaxHeapSize "4g" }
     
     compileOptions {
 		sourceCompatibility JavaVersion.VERSION_1_8
@@ -94,8 +125,8 @@ android {
 		applicationId "net.cozic.joplin"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-		versionCode 2097543
-		versionName "1.0.307"
+		versionCode 2097576
+		versionName "1.0.340"
 		ndk {
 			abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
 		}
@@ -110,6 +141,12 @@ android {
 		}
 	}
 	signingConfigs {
+		debug {
+            storeFile file('debug.keystore')
+            storePassword 'android'
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+        }
 		release {
 			if (project.hasProperty('JOPLIN_RELEASE_STORE_FILE')) {
 				storeFile file(JOPLIN_RELEASE_STORE_FILE)
@@ -120,18 +157,23 @@ android {
 		}
 	}
 	buildTypes {
+		debug {
+            signingConfig signingConfigs.debug
+        }
 		release {
+			// Caution! In production, you need to generate your own keystore file.
+            // see https://facebook.github.io/react-native/docs/signed-apk-android.
+			signingConfig signingConfigs.release
 			minifyEnabled enableProguardInReleaseBuilds
 			proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
-			signingConfig signingConfigs.release
 		}
 	}
 	// applicationVariants are e.g. debug, release
 	applicationVariants.all { variant ->
 		variant.outputs.each { output ->
 			// For each separate APK per architecture, set a unique version code as described here:
-			// http://tools.android.com/tech-docs/new-build-system/user-guide/apk-splits
-			def versionCodes = ["armeabi-v7a":1, "x86":2, "arm64-v8a": 3, "x86_64": 4]
+			// https://developer.android.com/studio/build/configure-apk-splits.html
+            def versionCodes = ["armeabi-v7a": 1, "x86": 2, "arm64-v8a": 3, "x86_64": 4]
 			def abi = output.getFilter(OutputFile.ABI)
 			if (abi != null) {  // null for the universal-debug, universal-release variants
 				output.versionCodeOverride =
@@ -139,16 +181,11 @@ android {
 			}
 		}
 	}
-	packagingOptions {
-		pickFirst '**/libjsc.so'
-		pickFirst '**/libc++_shared.so'
-	}
+	
 }
 
 dependencies {
-    implementation project(':@react-native-community_slider')
 	implementation "org.webkit:android-jsc:r241213"
-    implementation project(':react-native-webview')
     compile project(':react-native-push-notification')
     // implementation (project(':react-native-camera')) {
     // 	// This is required because com.google.firebase requires v16.0.x of com.google.android.gms
@@ -168,16 +205,26 @@ dependencies {
 	implementation project(':react-native-vector-icons')
 	implementation project(':react-native-fs')
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
+    implementation "com.android.support:appcompat-v7:28.0.0"
     implementation "com.facebook.react:react-native:+"  // From node_modules
+
+    if (enableHermes) {
+        def hermesPath = "../../node_modules/hermes-engine/android/";
+        debugImplementation files(hermesPath + "hermes-debug.aar")
+        releaseImplementation files(hermesPath + "hermes-release.aar")
+    } else {
+        implementation jscFlavor
+    }
+
 	implementation project(':react-native-sqlite-storage')
 	implementation project(':rn-fetch-blob')
 	implementation project(':react-native-document-picker')
 	implementation project(':react-native-image-resizer')
-	implementation project(':react-native-share-extension')
+	// implementation project(':react-native-share-extension')
 	implementation project(':react-native-version-info')
 	implementation project(':react-native-camera')
 	implementation "com.facebook.react:react-native:+"
+	implementation project(':react-native-quick-actions')
 
 	// implementation "com.google.android.gms:play-services-base:16.0.1" // For Firebase
 	// implementation 'me.leolin:ShortcutBadger:1.1.21@aar' // For Firebase - this line if you wish to use badge on Android
@@ -208,4 +255,5 @@ task copyDownloadableDepsToLibs(type: Copy) {
 	into 'libs'
 }
 
+apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
 apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"

@@ -50,9 +50,11 @@ describe('services_Revision', function() {
 		expect(rev2.title).toBe('hello welcome');
 		expect(rev2.author).toBe('');
 
-		await time.sleep(0.5);
+		const time_rev2 = Date.now();
+		await time.msleep(10);
 
-		await service.deleteOldRevisions(400);
+		const ttl = Date.now() - time_rev2 - 1;
+		await service.deleteOldRevisions(ttl);
 		const revisions2 = await Revision.allByType(BaseModel.TYPE_NOTE, n1_v1.id);
 		expect(revisions2.length).toBe(0);
 	}));
@@ -63,12 +65,16 @@ describe('services_Revision', function() {
 		const n1_v0 = await Note.save({ title: '' });
 		const n1_v1 = await Note.save({ id: n1_v0.id, title: 'hello' });
 		await service.collectRevisions();
-		await time.sleep(1);
+
+		const time_v1 = Date.now();
+		await time.msleep(100);
+
 		const n1_v2 = await Note.save({ id: n1_v1.id, title: 'hello welcome' });
 		await service.collectRevisions();
 		expect((await Revision.allByType(BaseModel.TYPE_NOTE, n1_v1.id)).length).toBe(2);
 
-		await service.deleteOldRevisions(1000);
+		const ttl = Date.now() - time_v1 - 1;
+		await service.deleteOldRevisions(ttl);
 		const revisions = await Revision.allByType(BaseModel.TYPE_NOTE, n1_v1.id);
 		expect(revisions.length).toBe(1);
 
@@ -82,15 +88,20 @@ describe('services_Revision', function() {
 		const n1_v0 = await Note.save({ title: '' });
 		const n1_v1 = await Note.save({ id: n1_v0.id, title: 'one' });
 		await service.collectRevisions();
-		await time.sleep(1);
+		const time_v1 = Date.now();
+		await time.msleep(100);
+
 		const n1_v2 = await Note.save({ id: n1_v1.id, title: 'one two' });
 		await service.collectRevisions();
-		await time.sleep(1);
+		const time_v2 = Date.now();
+		await time.msleep(100);
+
 		const n1_v3 = await Note.save({ id: n1_v1.id, title: 'one two three' });
 		await service.collectRevisions();
 
 		{
-			await service.deleteOldRevisions(2000);
+			const ttl = Date.now() - time_v1 - 1;
+			await service.deleteOldRevisions(ttl);
 			const revisions = await Revision.allByType(BaseModel.TYPE_NOTE, n1_v1.id);
 			expect(revisions.length).toBe(2);
 
@@ -102,7 +113,8 @@ describe('services_Revision', function() {
 		}
 
 		{
-			await service.deleteOldRevisions(1000);
+			const ttl = Date.now() - time_v2 - 1;
+			await service.deleteOldRevisions(ttl);
 			const revisions = await Revision.allByType(BaseModel.TYPE_NOTE, n1_v1.id);
 			expect(revisions.length).toBe(1);
 
@@ -119,14 +131,17 @@ describe('services_Revision', function() {
 		const n2_v0 = await Note.save({ title: '' });
 		const n2_v1 = await Note.save({ id: n2_v0.id, title: 'note 2' });
 		await service.collectRevisions();
-		await time.sleep(1);
+		const time_n2_v1 = Date.now();
+		await time.msleep(100);
+
 		const n1_v2 = await Note.save({ id: n1_v1.id, title: 'note 1 (v2)' });
 		const n2_v2 = await Note.save({ id: n2_v1.id, title: 'note 2 (v2)' });
 		await service.collectRevisions();
 
 		expect((await Revision.all()).length).toBe(4);
 
-		await service.deleteOldRevisions(1000);
+		const ttl = Date.now() - time_n2_v1 - 1;
+		await service.deleteOldRevisions(ttl);
 
 		{
 			const revisions = await Revision.allByType(BaseModel.TYPE_NOTE, n1_v1.id);
@@ -183,7 +198,7 @@ describe('services_Revision', function() {
 		const n1 = await Note.save({ title: 'hello' });
 		const noteId = n1.id;
 
-		await sleep(0.1);
+		await time.msleep(100);
 
 		// Set the interval in such a way that the note is considered an old one.
 		Setting.setValue('revisionService.oldNoteInterval', 50);
@@ -332,7 +347,9 @@ describe('services_Revision', function() {
 		const n1_v0 = await Note.save({ title: '' });
 		const n1_v1 = await Note.save({ id: n1_v0.id, title: 'hello' });
 		await revisionService().collectRevisions(); // REV 1
-		await time.sleep(0.5);
+		const timeRev1 = Date.now();
+		await time.msleep(100);
+
 		const n1_v2 = await Note.save({ id: n1_v1.id, title: 'hello welcome' });
 		await revisionService().collectRevisions(); // REV 2
 
@@ -341,7 +358,8 @@ describe('services_Revision', function() {
 		const revisions = await Revision.all();
 		await Revision.save({ id: revisions[0].id, encryption_applied: 1 });
 
-		await revisionService().deleteOldRevisions(500);
+		const ttl = Date.now() - timeRev1 - 1;
+		await revisionService().deleteOldRevisions(ttl);
 		expect((await Revision.all()).length).toBe(2);
 	}));
 
@@ -353,7 +371,9 @@ describe('services_Revision', function() {
 		const n1_v0 = await Note.save({ title: '' });
 		const n1_v1 = await Note.save({ id: n1_v0.id, title: 'hello' });
 		await revisionService().collectRevisions(); // REV 1
-		await time.sleep(0.5);
+		const timeRev1 = Date.now();
+		await time.msleep(100);
+
 		const n1_v2 = await Note.save({ id: n1_v1.id, title: 'hello welcome' });
 		await revisionService().collectRevisions(); // REV 2
 
@@ -362,12 +382,14 @@ describe('services_Revision', function() {
 		const revisions = await Revision.all();
 		await Revision.save({ id: revisions[1].id, encryption_applied: 1 });
 
-		await revisionService().deleteOldRevisions(500);
+		let ttl = Date.now() - timeRev1 - 1;
+		await revisionService().deleteOldRevisions(ttl);
 		expect((await Revision.all()).length).toBe(2);
 
 		await Revision.save({ id: revisions[1].id, encryption_applied: 0 });
 
-		await revisionService().deleteOldRevisions(500);
+		ttl = Date.now() - timeRev1 - 1;
+		await revisionService().deleteOldRevisions(ttl);
 		expect((await Revision.all()).length).toBe(1);
 	}));
 
@@ -406,17 +428,20 @@ describe('services_Revision', function() {
 		const n1_v0 = await Note.save({ title: '' });
 		const n1_v1 = await Note.save({ id: n1_v0.id, title: 'hello' });
 		await revisionService().collectRevisions(); // REV 1
+		const timeRev1 = Date.now();
+		await time.sleep(2);
 
+		const timeRev2 = Date.now();
 		const n1_v2 = await Note.save({ id: n1_v0.id, title: 'hello 2' });
 		await revisionService().collectRevisions(); // REV 2
 		expect((await Revision.all()).length).toBe(2);
 
-		Setting.setValue('revisionService.intervalBetweenRevisions', 1000);
+		const interval = Date.now() - timeRev1 + 1;
+		Setting.setValue('revisionService.intervalBetweenRevisions', interval);
 
 		const n1_v3 = await Note.save({ id: n1_v0.id, title: 'hello 3' });
-		await revisionService().collectRevisions(); // No rev because there's already a rev that is less than 1000 ms old
-
+		await revisionService().collectRevisions(); // No rev because time since last rev is less than the required 'interval between revisions'
+		expect(Date.now() - interval < timeRev2).toBe(true); // check the computer is not too slow for this test
 		expect((await Revision.all()).length).toBe(2);
 	}));
-
 });

@@ -1,9 +1,6 @@
 package net.cozic.joplin.share;
 
-
-// import ReactActivity
 import com.facebook.react.ReactActivity;
-
 
 public class ShareActivity extends ReactActivity {
 		@Override

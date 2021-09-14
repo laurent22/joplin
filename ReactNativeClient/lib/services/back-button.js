@@ -11,7 +11,7 @@ class BackButtonService {
 
 	static async back() {
 		if (this.handlers_.length) {
-			let r = await this.handlers_[this.handlers_.length - 1]();
+			const r = await this.handlers_[this.handlers_.length - 1]();
 			if (r) return r;
 		}
 

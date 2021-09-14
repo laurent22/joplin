@@ -1,11 +1,11 @@
 const Folder = require('lib/models/Folder');
 const BaseModel = require('lib/BaseModel');
 
-let shared = {};
+const shared = {};
 
 function folderHasChildren_(folders, folderId) {
 	for (let i = 0; i < folders.length; i++) {
-		let folder = folders[i];
+		const folder = folders[i];
 		if (folder.parent_id === folderId) return true;
 	}
 	return false;
@@ -15,7 +15,7 @@ function folderIsVisible(folders, folderId, collapsedFolderIds) {
 	if (!collapsedFolderIds || !collapsedFolderIds.length) return true;
 
 	while (true) {
-		let folder = BaseModel.byId(folders, folderId);
+		const folder = BaseModel.byId(folders, folderId);
 		if (!folder) throw new Error(`No folder with id ${folder.id}`);
 		if (!folder.parent_id) return true;
 		if (collapsedFolderIds.indexOf(folder.parent_id) >= 0) return false;
@@ -26,7 +26,7 @@ function folderIsVisible(folders, folderId, collapsedFolderIds) {
 function renderFoldersRecursive_(props, renderItem, items, parentId, depth, order) {
 	const folders = props.folders;
 	for (let i = 0; i < folders.length; i++) {
-		let folder = folders[i];
+		const folder = folders[i];
 		if (!Folder.idsEqual(folder.parent_id, parentId)) continue;
 		if (!folderIsVisible(props.folders, folder.id, props.collapsedFolderIds)) continue;
 		const hasChildren = folderHasChildren_(folders, folder.id);
@@ -49,11 +49,11 @@ shared.renderFolders = function(props, renderItem) {
 };
 
 shared.renderTags = function(props, renderItem) {
-	let tags = props.tags.slice();
+	const tags = props.tags.slice();
 	tags.sort((a, b) => {
 		return a.title < b.title ? -1 : +1;
 	});
-	let tagItems = [];
+	const tagItems = [];
 	const order = [];
 	for (let i = 0; i < tags.length; i++) {
 		const tag = tags[i];

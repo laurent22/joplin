@@ -24,12 +24,11 @@ class Command extends BaseCommand {
 			['-p, --password <password>', 'Use this password as master password (For security reasons, it is not recommended to use this option).'],
 			['-v, --verbose', 'More verbose output for the `target-status` command'],
 			['-o, --output <directory>', 'Output directory'],
+			['--retry-failed-items', 'Applies to `decrypt` command - retries decrypting items that previously could not be decrypted.'],
 		];
 	}
 
 	async action(args) {
-		// change-password
-
 		const options = args.options;
 
 		const askForMasterKey = async error => {
@@ -44,13 +43,38 @@ class Command extends BaseCommand {
 			return true;
 		};
 
+		const startDecryption = async () => {
+			this.stdout(_('Starting decryption... Please wait as it may take several minutes depending on how much there is to decrypt.'));
+
+			while (true) {
+				try {
+					const result = await DecryptionWorker.instance().start();
+					const line = [];
+					line.push(_('Decrypted items: %d', result.decryptedItemCount));
+					if (result.skippedItemCount) line.push(_('Skipped items: %d (use --retry-failed-items to retry decrypting them)', result.skippedItemCount));
+					this.stdout(line.join('\n'));
+					break;
+				} catch (error) {
+					if (error.code === 'masterKeyNotLoaded') {
+						const ok = await askForMasterKey(error);
+						if (!ok) return;
+						continue;
+					}
+
+					throw error;
+				}
+			}
+
+			this.stdout(_('Completed decryption.'));
+		};
+
 		if (args.command === 'enable') {
 			const password = options.password ? options.password.toString() : await this.prompt(_('Enter master password:'), { type: 'string', secure: true });
 			if (!password) {
 				this.stdout(_('Operation cancelled'));
 				return;
 			}
-			const password2 = await this.prompt(_('Confirm master password:'), { type: 'string', secure: true });
+			const password2 = await this.prompt(_('Confirm password:'), { type: 'string', secure: true });
 			if (!password2) {
 				this.stdout(_('Operation cancelled'));
 				return;
@@ -73,24 +97,8 @@ class Command extends BaseCommand {
 				const plainText = await EncryptionService.instance().decryptString(args.path);
 				this.stdout(plainText);
 			} else {
-				this.stdout(_('Starting decryption... Please wait as it may take several minutes depending on how much there is to decrypt.'));
-
-				while (true) {
-					try {
-						await DecryptionWorker.instance().start();
-						break;
-					} catch (error) {
-						if (error.code === 'masterKeyNotLoaded') {
-							const ok = await askForMasterKey(error);
-							if (!ok) return;
-							continue;
-						}
-
-						throw error;
-					}
-				}
-
-				this.stdout(_('Completed decryption.'));
+				if (args.options['retry-failed-items']) await DecryptionWorker.instance().clearDisabledItems();
+				await startDecryption();
 			}
 
 			return;
@@ -138,7 +146,7 @@ class Command extends BaseCommand {
 			if (!targetPath) throw new Error('Please specify the sync target path.');
 
 			const dirPaths = function(targetPath) {
-				let paths = [];
+				const paths = [];
 				fs.readdirSync(targetPath).forEach(path => {
 					paths.push(path);
 				});
@@ -151,10 +159,10 @@ class Command extends BaseCommand {
 			let encryptedResourceCount = 0;
 			let otherItemCount = 0;
 
-			let encryptedPaths = [];
-			let decryptedPaths = [];
+			const encryptedPaths = [];
+			const decryptedPaths = [];
 
-			let paths = dirPaths(targetPath);
+			const paths = dirPaths(targetPath);
 
 			for (let i = 0; i < paths.length; i++) {
 				const path = paths[i];
@@ -164,7 +172,7 @@ class Command extends BaseCommand {
 				// this.stdout(fullPath);
 
 				if (path === '.resource') {
-					let resourcePaths = dirPaths(fullPath);
+					const resourcePaths = dirPaths(fullPath);
 					for (let j = 0; j < resourcePaths.length; j++) {
 						const resourcePath = resourcePaths[j];
 						resourceCount++;

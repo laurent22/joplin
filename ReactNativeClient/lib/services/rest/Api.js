@@ -19,47 +19,19 @@ const ArrayUtils = require('lib/ArrayUtils.js');
 const { netUtils } = require('lib/net-utils');
 const { fileExtension, safeFileExtension, safeFilename, filename } = require('lib/path-utils');
 const ApiResponse = require('lib/services/rest/ApiResponse');
-const SearchEngineUtils = require('lib/services/SearchEngineUtils');
+const SearchEngineUtils = require('lib/services/searchengine/SearchEngineUtils');
 const { FoldersScreenUtils } = require('lib/folders-screen-utils.js');
 const uri2path = require('file-uri-to-path');
-
-class ApiError extends Error {
-	constructor(message, httpCode = 400) {
-		super(message);
-		this.httpCode_ = httpCode;
-	}
-
-	get httpCode() {
-		return this.httpCode_;
-	}
-}
-
-class ErrorMethodNotAllowed extends ApiError {
-	constructor(message = 'Method Not Allowed') {
-		super(message, 405);
-	}
-}
-class ErrorNotFound extends ApiError {
-	constructor(message = 'Not Found') {
-		super(message, 404);
-	}
-}
-class ErrorForbidden extends ApiError {
-	constructor(message = 'Forbidden') {
-		super(message, 403);
-	}
-}
-class ErrorBadRequest extends ApiError {
-	constructor(message = 'Bad Request') {
-		super(message, 400);
-	}
-}
+const { MarkupToHtml } = require('lib/joplin-renderer');
+const { uuid } = require('lib/uuid');
+const { ErrorMethodNotAllowed, ErrorForbidden, ErrorBadRequest, ErrorNotFound } = require('./errors');
 
 class Api {
-	constructor(token = null) {
+	constructor(token = null, actionApi = null) {
 		this.token_ = token;
 		this.knownNounces_ = {};
 		this.logger_ = new Logger();
+		this.actionApi_ = actionApi;
 	}
 
 	get token() {
@@ -72,7 +44,7 @@ class Api {
 
 		const pathParts = path.split('/');
 		const callSuffix = pathParts.splice(0, 1)[0];
-		let callName = `action_${callSuffix}`;
+		const callName = `action_${callSuffix}`;
 		return {
 			callName: callName,
 			params: pathParts,
@@ -119,7 +91,7 @@ class Api {
 
 		let id = null;
 		let link = null;
-		let params = parsedPath.params;
+		const params = parsedPath.params;
 
 		if (params.length >= 1) {
 			id = params[0];
@@ -245,7 +217,21 @@ class Api {
 		const query = request.query.query;
 		if (!query) throw new ErrorBadRequest('Missing "query" parameter');
 
-		return await SearchEngineUtils.notesForQuery(query, this.notePreviewsOptions_(request));
+		const queryType = request.query.type ? BaseModel.modelNameToType(request.query.type) : BaseModel.TYPE_NOTE;
+
+		if (queryType !== BaseItem.TYPE_NOTE) {
+			const ModelClass = BaseItem.getClassByItemType(queryType);
+			const options = {};
+			const fields = this.fields_(request, []);
+			if (fields.length) options.fields = fields;
+			const sqlQueryPart = query.replace(/\*/g, '%');
+			options.where = 'title LIKE ?';
+			options.whereParams = [sqlQueryPart];
+			options.caseInsensitive = true;
+			return await ModelClass.all(options);
+		} else {
+			return await SearchEngineUtils.notesForQuery(query, this.notePreviewsOptions_(request));
+		}
 	}
 
 	async action_folders(request, id = null, link = null) {
@@ -335,7 +321,7 @@ class Api {
 			if (!request.files.length) throw new ErrorBadRequest('Resource cannot be created without a file');
 			const filePath = request.files[0].path;
 			const defaultProps = request.bodyJson(this.readonlyProperties('POST'));
-			return shim.createResourceFromPath(filePath, defaultProps);
+			return shim.createResourceFromPath(filePath, defaultProps, { userSideValidation: true });
 		}
 
 		return this.defaultAction_(BaseModel.TYPE_RESOURCE, request, id, link);
@@ -361,6 +347,25 @@ class Api {
 		return options;
 	}
 
+	async execServiceActionFromRequest_(externalApi, request) {
+		const action = externalApi[request.action];
+		if (!action) throw new ErrorNotFound(`Invalid action: ${request.action}`);
+		const args = Object.assign({}, request);
+		delete args.action;
+		return action(args);
+	}
+
+	async action_services(request, serviceName) {
+		this.checkToken_(request);
+
+		if (request.method !== 'POST') throw new ErrorMethodNotAllowed();
+		if (!this.actionApi_) throw new ErrorNotFound('No action API has been setup!');
+		if (!this.actionApi_[serviceName]) throw new ErrorNotFound(`No such service: ${serviceName}`);
+
+		const externalApi = this.actionApi_[serviceName]();
+		return this.execServiceActionFromRequest_(externalApi, JSON.parse(request.body));
+	}
+
 	async action_notes(request, id = null, link = null) {
 		this.checkToken_(request);
 
@@ -369,10 +374,11 @@ class Api {
 				return Tag.tagsByNoteId(id);
 			} else if (link && link === 'resources') {
 				const note = await Note.load(id);
+				if (!note) throw new ErrorNotFound();
 				const resourceIds = await Note.linkedResourceIds(note.body);
 				const output = [];
 				const loadOptions = this.defaultLoadOptions_(request);
-				for (let resourceId of resourceIds) {
+				for (const resourceId of resourceIds) {
 					output.push(await Resource.load(resourceId, loadOptions));
 				}
 				return output;
@@ -434,6 +440,22 @@ class Api {
 			return note;
 		}
 
+		if (request.method === 'PUT') {
+			const note = await Note.load(id);
+
+			if (!note) throw new ErrorNotFound();
+
+			const updatedNote = await this.defaultAction_(BaseModel.TYPE_NOTE, request, id, link);
+
+			const requestNote = JSON.parse(request.body);
+			if (requestNote.tags || requestNote.tags === '') {
+				const tagTitles = requestNote.tags.split(',');
+				await Tag.setNoteTagsByTitles(id, tagTitles);
+			}
+
+			return updatedNote;
+		}
+
 		return this.defaultAction_(BaseModel.TYPE_NOTE, request, id, link);
 	}
 
@@ -481,9 +503,16 @@ class Api {
 				});
 
 				const styleTag = style.length ? `<style>${styleString}</style>` + '\n' : '';
-				output.body = styleTag + minify(requestNote.body_html, minifyOptions);
+				let minifiedHtml = '';
+				try {
+					minifiedHtml = minify(requestNote.body_html, minifyOptions);
+				} catch (error) {
+					console.warn('Could not minify HTML - using non-minified HTML instead', error);
+					minifiedHtml = requestNote.body_html;
+				}
+				output.body = styleTag + minifiedHtml;
 				output.body = htmlUtils.prependBaseUrl(output.body, baseUrl);
-				output.markup_language = Note.MARKUP_LANGUAGE_HTML;
+				output.markup_language = MarkupToHtml.MARKUP_LANGUAGE_HTML;
 			} else {
 				// Convert to Markdown
 				// Parsing will not work if the HTML is not wrapped in a top level tag, which is not guaranteed
@@ -493,7 +522,7 @@ class Api {
 					baseUrl: baseUrl,
 					anchorNames: requestNote.anchor_names ? requestNote.anchor_names : [],
 				});
-				output.markup_language = Note.MARKUP_LANGUAGE_MARKDOWN;
+				output.markup_language = MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN;
 			}
 		}
 
@@ -512,7 +541,7 @@ class Api {
 		if ('is_todo' in requestNote) output.is_todo = Database.formatValue(Database.TYPE_INT, requestNote.is_todo);
 		if ('markup_language' in requestNote) output.markup_language = Database.formatValue(Database.TYPE_INT, requestNote.markup_language);
 
-		if (!output.markup_language) output.markup_language = Note.MARKUP_LANGUAGE_MARKDOWN;
+		if (!output.markup_language) output.markup_language = MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN;
 
 		return output;
 	}
@@ -568,7 +597,7 @@ class Api {
 		return output;
 	}
 
-	async downloadImage_(url /*, allowFileProtocolImages */) {
+	async downloadImage_(url /* , allowFileProtocolImages */) {
 		const tempDir = Setting.value('tempDir');
 
 		const isDataUrl = url && url.toLowerCase().indexOf('data:') === 0;
@@ -577,8 +606,10 @@ class Api {
 		let fileExt = isDataUrl ? mimeUtils.toFileExtension(mimeUtils.fromDataUrl(url)) : safeFileExtension(fileExtension(url).toLowerCase());
 		if (!mimeUtils.fromFileExtension(fileExt)) fileExt = ''; // If the file extension is unknown - clear it.
 		if (fileExt) fileExt = `.${fileExt}`;
-		let imagePath = `${tempDir}/${safeFilename(name)}${fileExt}`;
-		if (await shim.fsDriver().exists(imagePath)) imagePath = `${tempDir}/${safeFilename(name)}_${md5(`${Math.random()}_${Date.now()}`).substr(0, 10)}${fileExt}`;
+
+		// Append a UUID because simply checking if the file exists is not enough since
+		// multiple resources can be downloaded at the same time (race condition).
+		let imagePath = `${tempDir}/${safeFilename(name)}_${uuid.create()}${fileExt}`;
 
 		try {
 			if (isDataUrl) {
@@ -628,7 +659,7 @@ class Api {
 	}
 
 	async createResourcesFromPaths_(urls) {
-		for (let url in urls) {
+		for (const url in urls) {
 			if (!urls.hasOwnProperty(url)) continue;
 			const urlInfo = urls[url];
 			try {
@@ -642,7 +673,7 @@ class Api {
 	}
 
 	async removeTempFiles_(urls) {
-		for (let url in urls) {
+		for (const url in urls) {
 			if (!urls.hasOwnProperty(url)) continue;
 			const urlInfo = urls[url];
 			try {
@@ -656,7 +687,7 @@ class Api {
 	replaceImageUrlsByResources_(markupLanguage, md, urls, imageSizes) {
 		const imageSizesIndexes = {};
 
-		if (markupLanguage === Note.MARKUP_LANGUAGE_HTML) {
+		if (markupLanguage === MarkupToHtml.MARKUP_LANGUAGE_HTML) {
 			return htmlUtils.replaceImageUrls(md, imageUrl => {
 				const urlInfo = urls[imageUrl];
 				if (!urlInfo || !urlInfo.resource) return imageUrl;

@@ -4,7 +4,7 @@ require('app-module-path').addPath(__dirname);
 
 const { time } = require('lib/time-utils.js');
 const { asyncTest, fileContentEqual, revisionService, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('test-utils.js');
-const SearchEngine = require('lib/services/SearchEngine');
+const SearchEngine = require('lib/services/searchengine/SearchEngine');
 const ResourceService = require('lib/services/ResourceService');
 const ItemChangeUtils = require('lib/services/ItemChangeUtils');
 const Note = require('lib/models/Note');
@@ -21,6 +21,7 @@ describe('models_ItemChange', function() {
 
 	beforeEach(async (done) => {
 		await setupDatabaseAndSynchronizer(1);
+		await switchClient(1);
 		searchEngine = new SearchEngine();
 		searchEngine.setDb(db());
 		done();

@@ -58,6 +58,10 @@ class KvStore extends BaseService {
 		await this.db().exec('DELETE FROM key_values WHERE `key` = ?', [key]);
 	}
 
+	async deleteByPrefix(prefix) {
+		await this.db().exec('DELETE FROM key_values WHERE `key` LIKE ?', [`${prefix}%`]);
+	}
+
 	async clear() {
 		await this.db().exec('DELETE FROM key_values');
 	}
@@ -84,7 +88,7 @@ class KvStore extends BaseService {
 	}
 
 	async searchByPrefix(prefix) {
-		let results = await this.db().selectAll('SELECT `key`, `value`, `type` FROM key_values WHERE `key` LIKE ?', [`${prefix}%`]);
+		const results = await this.db().selectAll('SELECT `key`, `value`, `type` FROM key_values WHERE `key` LIKE ?', [`${prefix}%`]);
 		return this.formatValues_(results);
 	}
 

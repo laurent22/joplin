@@ -4,6 +4,7 @@ require('app-module-path').addPath(__dirname);
 
 const { time } = require('lib/time-utils.js');
 const { asyncTest, fileContentEqual, setupDatabase, setupDatabaseAndSynchronizer, db, synchronizer, fileApi, sleep, clearDatabase, switchClient, syncTargetId, objectsEqual, checkThrowAsync } = require('test-utils.js');
+const { shim } = require('lib/shim');
 const Setting = require('lib/models/Setting.js');
 
 process.on('unhandledRejection', (reason, p) => {
@@ -13,6 +14,8 @@ process.on('unhandledRejection', (reason, p) => {
 describe('models_Setting', function() {
 
 	beforeEach(async (done) => {
+		await setupDatabaseAndSynchronizer(1);
+		await switchClient(1);
 		done();
 	});
 

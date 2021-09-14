@@ -91,6 +91,10 @@ class PluginManager {
 						itemName: item.name,
 					});
 				};
+
+				if (item.accelerator instanceof Function) {
+					item.accelerator = item.accelerator();
+				}
 			}
 
 			output = output.concat(menuItems);

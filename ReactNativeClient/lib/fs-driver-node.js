@@ -6,7 +6,7 @@ class FsDriverNode extends FsDriverBase {
 	fsErrorToJsError_(error, path = null) {
 		let msg = error.toString();
 		if (path !== null) msg += `. Path: ${path}`;
-		let output = new Error(msg);
+		const output = new Error(msg);
 		if (error.code) output.code = error.code;
 		return output;
 	}
@@ -26,7 +26,7 @@ class FsDriverNode extends FsDriverBase {
 	async writeBinaryFile(path, content) {
 		try {
 			// let buffer = new Buffer(content);
-			let buffer = Buffer.from(content);
+			const buffer = Buffer.from(content);
 			return await fs.writeFile(path, buffer);
 		} catch (error) {
 			throw this.fsErrorToJsError_(error, path);
@@ -82,7 +82,13 @@ class FsDriverNode extends FsDriverBase {
 	}
 
 	async mkdir(path) {
-		return fs.mkdirp(path);
+		// Note that mkdirp() does not throw an error if the directory
+		// could not be created. This would make the synchroniser to
+		// incorrectly try to sync with a non-existing dir:
+		// https://github.com/laurent22/joplin/issues/2117
+		const r = await fs.mkdirp(path);
+		if (!(await this.exists(path))) throw new Error(`Could not create directory: ${path}`);
+		return r;
 	}
 
 	async stat(path) {
@@ -119,7 +125,7 @@ class FsDriverNode extends FsDriverBase {
 		let output = [];
 		for (let i = 0; i < items.length; i++) {
 			const item = items[i];
-			let stat = await this.stat(`${path}/${item}`);
+			const stat = await this.stat(`${path}/${item}`);
 			if (!stat) continue; // Has been deleted between the readdir() call and now
 			stat.path = stat.path.substr(path.length + 1);
 			output.push(stat);
@@ -173,7 +179,7 @@ class FsDriverNode extends FsDriverBase {
 	}
 
 	async readFileChunk(handle, length, encoding = 'base64') {
-		//let buffer = new Buffer(length);
+		// let buffer = new Buffer(length);
 		let buffer = Buffer.alloc(length);
 		const result = await fs.read(handle, buffer, 0, length, null);
 		if (!result.bytesRead) return null;

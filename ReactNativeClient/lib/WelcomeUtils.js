@@ -30,7 +30,7 @@ class WelcomeUtils {
 
 			let noteBody = noteAsset.body;
 
-			for (let resourceUrl in noteAsset.resources) {
+			for (const resourceUrl in noteAsset.resources) {
 				if (!noteAsset.resources.hasOwnProperty(resourceUrl)) continue;
 				const resourceAsset = noteAsset.resources[resourceUrl];
 				const ext = fileExtension(resourceUrl);

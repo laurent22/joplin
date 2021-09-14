@@ -91,7 +91,7 @@ class TagsScreenComponent extends BaseScreenComponent {
 	render() {
 		const theme = themeStyle(this.props.theme);
 
-		let rootStyle = {
+		const rootStyle = {
 			flex: 1,
 			backgroundColor: theme.backgroundColor,
 		};

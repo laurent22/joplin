@@ -1,0 +1,451 @@
+<!doctype html>
+<html>
+
+<!--
+
+!!! WARNING !!!
+
+This file was auto-generated from readme/spec/sync_lock.md and any manual change
+made to it will be overwritten. To make a change to this file please modify
+the source Markdown file:
+
+https://github.com/laurent22/joplin/blob/master/readme/spec/sync_lock.md
+
+-->
+
+<head>
+	<title>Sync Lock Specifications | Joplin</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://joplinapp.org/css/bootstrap.min.css">
+	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+	<!-- <link rel="stylesheet" href="https://joplinapp.org/css/fontawesome-all.min.css">  -->
+	<link rel="stylesheet" href="https://joplinapp.org/css/fork-awesome.min.css"> 
+	<script src="https://joplinapp.org/js/jquery-3.2.1.slim.min.js"></script>
+	<style>
+	body {
+		background-color: #F1F1F1;
+		color: #333333;
+	}
+	table {
+		margin-bottom: 1em;
+	}
+	td, th {
+		padding: .8em;
+		border: 1px solid #ccc;
+	}
+
+	.page-markdown table pre,
+	.page-markdown table blockquote {
+		margin-bottom: 0;
+	}
+
+	.page-markdown table pre,
+	.page-markdown table blockquote {
+		margin-bottom: 0;
+	}
+
+	.page-markdown table pre {
+		background-color: rgba(0,0,0,0);
+		border: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	h1, h2 {
+		border-bottom: 1px solid #eaecef;
+		padding-bottom: 0.3em;
+		font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+		font-weight: 600;
+		font-size: 2em;
+		margin-bottom: 16px;
+	}
+	h2 {
+		font-size: 1.6em;
+	}
+	h3 {
+		font-size: 1.3em;
+	}
+	code {
+		color: black;
+		background-color: #eee;
+		border: 1px solid #ccc;
+		font-size: .85em;
+	}
+	pre code {
+		border: none;
+	}
+	pre {
+		font-size: .85em;
+	}
+	blockquote {
+		font-size: 1em;
+		color: #555;
+	};
+	#toc ul {
+		margin-bottom: 10px;
+	}
+	#toc > ul > li {
+		margin-bottom: 10px;
+	}
+	#toc {
+		padding-bottom: 1em;
+	}
+	.title {
+		display: flex;
+		align-items: center;
+	}
+	.title-icon {
+		display: flex;
+		height: 1em;
+	}
+	.title-text {
+		display: flex;
+		font-weight: normal;
+		margin-bottom: .2em;
+		margin-left: .5em;
+	}
+	.sub-title {
+		font-weight: normal;
+	}
+	.container {
+		background-color: white;
+		padding: 0;
+		box-shadow: 0 10px 20px #888888;
+	}
+	table.screenshots {
+		margin-top: 2em;
+		margin-bottom: 2em;
+	}
+	table.screenshots th {
+		height: 3em;
+		text-align: center;
+	}
+	table.screenshots th, 
+	table.screenshots td {
+		border: 1px solid #C2C2C2;
+	}
+	img[align="left"] {
+		margin-right: 10px;
+		margin-bottom: 10px;
+	}
+	.mobile-screenshot {
+		height: 40em;
+		padding: 1em;
+	}
+	.cli-screenshot-wrapper {
+		background-color: black;
+		vertical-align: top;
+		padding: 1em 2em 1em 1em;
+	}
+	.cli-screenshot {
+		font-family: "Monaco", "Inconsolata", "CONSOLAS", "Deja Vu Sans Mono", "Droid Sans Mono", "Andale Mono", monospace;
+		background-color: black;
+		color: white;
+		border: none;
+	}
+	.cli-screenshot .prompt {
+		color: #48C2F0;
+	}
+	.top-screenshot {
+		margin-top: 2em;
+		text-align: center;
+	}
+	.header {
+		position: relative;
+		padding-left: 2em;
+		padding-right: 2em;
+		padding-top: 1em;
+		padding-bottom: 1em;
+		color: white;
+		background-color: #2B2B3D;
+	}
+	.header a h1 {
+		color: white;
+	}
+	.header a:hover {
+		text-decoration: none;
+	}
+	.content {
+		padding-left: 2em;
+		padding-right: 2em;
+		padding-bottom: 2em;
+		padding-top: 2em;
+	}
+	.forkme {
+		position: absolute;
+		right: 0;
+		top:0;
+	}
+	.nav-wrapper {
+		position: relative;
+		width: inherit;
+	}
+	.nav {
+		background-color: black;
+		display: table;
+		width: inherit;
+	}
+	.nav.sticky {
+		position:fixed;
+		top: 0;
+		width: inherit;
+		box-shadow: 0 0 10px #000000;
+	}
+	.nav a {
+		color: white;
+		display: inline-block;
+		padding: .6em .9em .6em .9em;
+	}
+	.nav ul {
+		padding-left: 2em;
+		margin-bottom: 0;
+		display: table-cell;
+		/* min-width: 250px; */
+		/* For GSoC: */
+		min-width: 470px;
+	}
+	.nav ul li {
+		display: inline-block;
+		padding: 0;
+	}
+	.nav li.selected {
+		background-color: #222;
+		font-weight: bold;
+	}
+	.nav-right {
+		display: table-cell;
+		width: 100%;
+		text-align: right;
+		vertical-align: middle;
+		line-height: 0;
+	}
+	.nav-right .share-btn {
+		display: none;
+	}
+	.nav-right .small-share-btn {
+		display: none;
+	}
+	.footer {
+		padding-top: 1em;
+		border-top: 1px solid #d4d4d4;
+		margin-top: 2em;
+		color: gray;
+		font-size: .9em;
+	}
+	a.heading-anchor {
+		display: inline-block;
+		opacity: 0;
+		width: 1.3em;
+		font-size: 0.7em;
+		margin-left: 0.4em;
+		line-height: 1em;
+		text-decoration: none;
+		transition: opacity 0.3s;
+	}
+	a.heading-anchor:hover,
+	h1:hover a.heading-anchor,
+	h2:hover a.heading-anchor,
+	h3:hover a.heading-anchor,
+	h4:hover a.heading-anchor,
+	h5:hover a.heading-anchor,
+	h6:hover a.heading-anchor {
+		opacity: 1;
+	}
+
+	.bottom-links {
+		display: flex;
+		justify-content: center;
+		border-top: 1px solid #d4d4d4;
+		margin-top: 30px;
+		padding-top: 25px;
+	}
+
+	@media all and (min-width: 400px) {
+		.nav-right .share-btn {
+			display: inline-block;
+		}
+		.nav-right .small-share-btn {
+			display: none;
+		}
+	}
+</style>
+</head>
+
+<body>
+
+<div class="container page-sync_lock">
+
+<div class="header">
+	<a class="forkme" href="https://github.com/laurent22/joplin"><img src="https://joplinapp.org/images/ForkMe.png"/></a>
+	<a href="https://joplinapp.org"><h1 class="title"><img class="title-icon" src="https://joplinapp.org/images/Icon512.png"><span class="title-text">Joplin</span></h1></a>
+	<p class="sub-title">An open source note taking and to-do application with synchronisation capabilities</p>
+</div>
+
+<div class="nav-wrapper">
+	<div class="nav">
+		<ul>
+			<li class=""><a href="https:&#x2F;&#x2F;joplinapp.org/" title="Home"><i class="fa fa-home"></i></a></li>
+			<li><a href="https://discourse.joplinapp.org" title="Forum">Forum</a></li>
+			<li><a class="help" href="#" title="Menu">Menu</a></li>
+			<!-- <li><a class="gsod" href="https://joplinapp.org/gsod2020/" title="Google Season of Docs 2020">GSoD 2020</a></li> -->
+		</ul>
+		<div class="nav-right">
+			<!--
+				<iframe class="share-btn" src="https://www.facebook.com/plugins/share_button.php?href=http%3A%2F%2Fjoplinapp.org&layout=button&size=small&mobile_iframe=true&width=60&height=20&appId" width="60" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+				<iframe class="share-btn" src="https://platform.twitter.com/widgets/tweet_button.html?url=http%3A%2F%2Fjoplinapp.org" width="62" height="20" title="Tweet" style="border: 0; overflow: hidden;"></iframe>
+			-->
+			<iframe class="share-btn share-btn-github" src="https://ghbtns.com/github-btn.html?user=laurent22&repo=joplin&type=star&count=true" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
+		</div>
+	</div>
+</div>
+
+<div class="content">
+	<div id="toc"><ul>
+<li>
+<p>Applications</p>
+<ul>
+<li><a href="https://joplinapp.org/desktop/">Desktop application</a></li>
+<li><a href="https://joplinapp.org/mobile/">Mobile applications</a></li>
+<li><a href="https://joplinapp.org/terminal/">Terminal application</a></li>
+<li><a href="https://joplinapp.org/clipper/">Web Clipper</a></li>
+</ul>
+</li>
+<li>
+<p>Support</p>
+<ul>
+<li><a href="https://discourse.joplinapp.org">Joplin Forum</a></li>
+<li><a href="https://joplinapp.org/markdown/">Markdown Guide</a></li>
+<li><a href="https://joplinapp.org/e2ee/">How to enable end-to-end encryption</a></li>
+<li><a href="https://joplinapp.org/conflict/">What is a conflict?</a></li>
+<li><a href="https://joplinapp.org/debugging/">How to enable debug mode</a></li>
+<li><a href="https://joplinapp.org/api/">API documentation</a></li>
+<li><a href="https://joplinapp.org/faq/">FAQ</a></li>
+</ul>
+</li>
+<li>
+<p>Development</p>
+<ul>
+<li><a href="https://joplinapp.org/spec/e2ee/">End-to-end encryption spec</a></li>
+<li><a href="https://joplinapp.org/spec/history/">Note History spec</a></li>
+<li><a href="https://joplinapp.org/spec/sync_lock/">Sync Lock spec</a></li>
+</ul>
+</li>
+<li>
+<p>Google Summer of Code 2020</p>
+<ul>
+<li><a href="https://joplinapp.org/gsoc2020">Google Summer of Code 2020</a></li>
+<li><a href="https://joplinapp.org/gsoc2020/ideas/">Project Ideas</a></li>
+</ul>
+</li>
+<li>
+<p>About</p>
+<ul>
+<li><a href="https://joplinapp.org/changelog/">Changelog (Desktop App)</a></li>
+<li><a href="https://joplinapp.org/changelog_cli/">Changelog (CLI App)</a></li>
+<li><a href="https://joplinapp.org/stats/">Stats</a></li>
+<li><a href="https://joplinapp.org/donate/">Donate</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<h1>Lock types<a name="lock-types" href="#lock-types" class="heading-anchor">🔗</a></h1>
+<p>There are two types of locks:</p>
+<ul>
+<li><strong>SYNC</strong>: Used when synchronising a client with a target. There can be multiple SYNC locks simultaneously.</li>
+<li><strong>EXCLUSIVE</strong>: Used when a client upgrades a sync target. There can be only one EXCLUSIVE lock.</li>
+</ul>
+<h1>Timeout<a name="timeout" href="#timeout" class="heading-anchor">🔗</a></h1>
+<p>When a client acquires a lock, it must refresh it every X seconds. A lock timeout after Y seconds (where X &lt; Y). A lock with a timestamp greater than Y is considered expired and can be ignored by other clients. A client that tries to refresh a lock that has expired should fail.</p>
+<p>For example, if a client is currently syncing, it must stop doing so if it couldn't refresh the lock with Y seconds.</p>
+<p>For example, if a client is upgrading a target, it must stop doing so if it couldn't refresh the lock within Y seconds.</p>
+<h1>Acquiring a SYNC lock<a name="acquiring-a-sync-lock" href="#acquiring-a-sync-lock" class="heading-anchor">🔗</a></h1>
+<ul>
+<li>The client check if there is a valid EXCLUSIVE lock on the target</li>
+<li>If there is, it must stop the sync process</li>
+<li>Otherwise it checks if it owns a SYNC lock on the target
+<ul>
+<li>If it does, it starts syncing
+<ul>
+<li>When syncing is done, it releases the SYNC lock</li>
+</ul>
+</li>
+<li>If it doesn't, it acquires a SYNC lock and repeat the complete process from the beginning (to avoid race conditions)</li>
+</ul>
+</li>
+</ul>
+<h1>Acquiring an EXCLUSIVE lock<a name="acquiring-an-exclusive-lock" href="#acquiring-an-exclusive-lock" class="heading-anchor">🔗</a></h1>
+<ul>
+<li>The client check if there is a valid EXCLUSIVE or SYNC lock on the target</li>
+<li>If there is, it must stop the upgrade process (or wait till target is unlocked)</li>
+<li>Otherwise it checks if it owns an EXCLUSIVE lock on the target
+<ul>
+<li>If it does, it starts upgrading the target
+<ul>
+<li>When upgrading is done, it releases the EXCLUSIVE lock</li>
+</ul>
+</li>
+<li>If it doesn't, it acquires an EXCLUSIVE lock and repeat the complete process from the beginning (to avoid race conditions)</li>
+</ul>
+</li>
+</ul>
+<h1>Lock files<a name="lock-files" href="#lock-files" class="heading-anchor">🔗</a></h1>
+<p>The lock files are in format <code>&lt;lockType&gt;_&lt;clientType&gt;_&lt;clientId&gt;.json</code> with lockType being &quot;exclusive&quot; or &quot;sync&quot;, clientType being &quot;desktop&quot;, &quot;mobile&quot; or &quot;cli&quot; and clientId is the globally unique ID assigned to a client profile when it is created.</p>
+<p>The have the following content:</p>
+<pre><code class="language-json">{
+    &quot;type&quot;: &quot;exclusive&quot;,
+    &quot;clientType&quot;: &lt;string&gt;,
+    &quot;clientId&quot;: &lt;string&gt;,
+    &quot;updatedTime&quot;: &lt;timestamp in milliseconds&gt;,
+}
+</code></pre>
+<p>(Note that the lock file content is for information purpose only. Its content is not used in the lock algorithm since all data can be derived from the filename and file timestamp)</p>
+<p>Although only one client can acquire an exclusive lock, there can be multiple <code>exclusive_*.json</code> lock files in the lock folder (for example if a client crashed before releasing a lock or if two clients try to acquire a lock at the exact same time). In this case, only the oldest lock amongst the active ones is the valid one. If there are two locks with the same timestamp, the one with lowest client ID is the valid one.</p>
+<h1>Sync Target Migration<a name="sync-target-migration" href="#sync-target-migration" class="heading-anchor">🔗</a></h1>
+<p>First the app checks the sync target version - if it's new (no version), it set it up by upgrading to the latest sync version.</p>
+<p>If it's the same as the client supported version, it syncs as normal.</p>
+<p>If it's lower than the client supported version, the client does not allow sync and instead displays a message asking the user to upgrade the sync target (upgradeState = SHOULD_UPGRADE).</p>
+<p>If the user click on the link to upgrade, upgradeState becomes MUST_UPGRADE, and the app restarts.</p>
+<p>On startup, the app check the upgradeState setting. If it is MUST_UPGRADE it displays the upgrade screen and starts upgrarding. Once done it sets upgradeState back to IDLE, and restart the app.</p>
+
+		<div class="bottom-links">
+			<a href="https://github.com/laurent22/joplin/blob/master/readme/spec/sync_lock.md">
+				<i class="fa fa-github"></i> Improve this doc
+			</a>
+		</div>
+<script>
+	function stickyHeader() { 
+		return; // Disabled
+
+		if ($(window).scrollTop() > 179) {
+			$('.nav').addClass('sticky'); 
+		} else {
+			$('.nav').removeClass('sticky');
+		}
+	}
+
+	$('#toc').hide();
+
+	$('.help').click(function(event) {
+		event.preventDefault();
+		$('#toc').show();
+	});
+
+	$(window).scroll(function() {
+		stickyHeader();
+	});
+
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-103586105-1', 'auto');
+	ga('send', 'pageview');
+</script>
+
+<div class="footer">
+Copyright (c) 2016-2020 Laurent Cozic
+</div>
+</body>
+</html>

@@ -13,15 +13,18 @@ class ClipperServer {
 		this.startState_ = 'idle';
 		this.server_ = null;
 		this.port_ = null;
-		this.api_ = new Api(() => {
-			return Setting.value('api.token');
-		});
 	}
 
 	static instance() {
 		if (this.instance_) return this.instance_;
 		this.instance_ = new ClipperServer();
 		return this.instance_;
+	}
+
+	initialize(actionApi = null) {
+		this.api_ = new Api(() => {
+			return Setting.value('api.token');
+		}, actionApi);
 	}
 
 	setLogger(l) {
@@ -143,6 +146,8 @@ class ClipperServer {
 					writeResponseInstance(code, response);
 				} else if (typeof response === 'string') {
 					writeResponseText(code, response);
+				} else if (response === null || response === undefined) {
+					writeResponseText(code, '');
 				} else {
 					writeResponseJson(code, response);
 				}
@@ -155,13 +160,14 @@ class ClipperServer {
 			const execRequest = async (request, body = '', files = []) => {
 				try {
 					const response = await this.api_.route(request.method, url.pathname, url.query, body, files);
-					writeResponse(200, response ? response : '');
+					writeResponse(200, response);
 				} catch (error) {
 					this.logger().error(error);
 					const httpCode = error.httpCode ? error.httpCode : 500;
 					const msg = [];
 					if (httpCode >= 500) msg.push('Internal Server Error');
 					if (error.message) msg.push(error.message);
+					if (error.stack) msg.push(`\n\n${error.stack}`);
 
 					writeResponse(httpCode, { error: msg.join(': ') });
 				}

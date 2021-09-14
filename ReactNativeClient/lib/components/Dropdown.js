@@ -112,6 +112,7 @@ class Dropdown extends React.Component {
 				<TouchableOpacity
 					style={headerWrapperStyle}
 					ref={ref => (this.headerRef_ = ref)}
+					disabled={this.props.disabled}
 					onPress={() => {
 						this.updateHeaderCoordinates();
 						this.setState({ listVisible: true });

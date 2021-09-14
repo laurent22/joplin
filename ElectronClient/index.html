@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<!--
+		No CPS because we need to allow everything due to some dependencies (eg. depd, which comes from maybe Node or Electron
+		uses 'eval'.
+		<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval'">
+		-->
+		<title>Joplin</title>
+		<link rel="stylesheet" href="style.css">
+		<link rel="stylesheet" href="node_modules/@fortawesome/fontawesome-free/css/all.min.css">
+		<link rel="stylesheet" href="node_modules/react-datetime/css/react-datetime.css">
+		<link rel="stylesheet" href="node_modules/smalltalk/css/smalltalk.css">
+		<link rel="stylesheet" href="node_modules/codemirror/lib/codemirror.css">
+
+		<style>
+			.smalltalk {
+				background-color: rgba(0,0,0,.5);
+			}
+			.smalltalk input {
+				margin-top: 1em;
+			}
+			.smalltalk .page {
+				max-width: 30em;
+			}
+			mark {
+				background: #CF3F00;
+				color: white;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="react-root"></div>
+		<script src="main-html.js"></script>
+		<style>
+			/* Disable dragging of links (which are often buttons) */
+			a:not([draggable=true]), img:not([draggable=true]) {
+				-webkit-user-drag: none;
+				user-drag: none;
+			}
+		</style>
+	</body>
+</html>

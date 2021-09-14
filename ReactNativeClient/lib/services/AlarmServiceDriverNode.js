@@ -72,6 +72,11 @@ class AlarmServiceDriverNode {
 				};
 				if ('body' in notification) o.message = notification.body;
 
+				// Message is required on Windows 7 however we don't want to repeat the title so
+				// make it an empty string.
+				// https://github.com/laurent22/joplin/issues/2144
+				if (!o.message) o.message = '-';
+
 				this.logger().info('AlarmServiceDriverNode::scheduleNotification: Triggering notification:', o);
 
 				notifier.notify(o, (error, response) => {

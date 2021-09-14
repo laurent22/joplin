@@ -15,11 +15,11 @@ function wrap(text, indent) {
 }
 
 function renderOptions(options) {
-	let output = [];
+	const output = [];
 	const optionColWidth = getOptionColWidth(options);
 
 	for (let i = 0; i < options.length; i++) {
-		let option = options[i];
+		const option = options[i];
 		const flag = option[0];
 		const indent = INDENT + INDENT + ' '.repeat(optionColWidth + 2);
 
@@ -33,7 +33,7 @@ function renderOptions(options) {
 }
 
 function renderCommand(cmd) {
-	let output = [];
+	const output = [];
 	output.push(INDENT + cmd.usage());
 	output.push('');
 	output.push(wrap(cmd.description(), INDENT + INDENT));
@@ -48,14 +48,14 @@ function renderCommand(cmd) {
 }
 
 function getCommands() {
-	let output = [];
+	const output = [];
 	fs.readdirSync(__dirname).forEach(path => {
 		if (path.indexOf('command-') !== 0) return;
 		const ext = fileExtension(path);
 		if (ext != 'js') return;
 
-		let CommandClass = require(`./${path}`);
-		let cmd = new CommandClass();
+		const CommandClass = require(`./${path}`);
+		const cmd = new CommandClass();
 		if (!cmd.enabled()) return;
 		if (cmd.hidden()) return;
 		output.push(cmd);
@@ -73,7 +73,7 @@ function getOptionColWidth(options) {
 }
 
 function getHeader() {
-	let output = [];
+	const output = [];
 
 	output.push('NAME');
 	output.push('');
@@ -84,7 +84,7 @@ function getHeader() {
 	output.push('DESCRIPTION');
 	output.push('');
 
-	let description = [];
+	const description = [];
 	description.push('Joplin is a note taking and to-do application, which can handle a large number of notes organised into notebooks.');
 	description.push('The notes are searchable, can be copied, tagged and modified with your own text editor.');
 	description.push('\n\n');
@@ -98,7 +98,7 @@ function getHeader() {
 }
 
 function getFooter() {
-	let output = [];
+	const output = [];
 
 	output.push('WEBSITE');
 	output.push('');
@@ -120,10 +120,10 @@ async function main() {
 	// setLocale('fr_FR');
 
 	const commands = getCommands();
-	let commandBlocks = [];
+	const commandBlocks = [];
 
 	for (let i = 0; i < commands.length; i++) {
-		let cmd = commands[i];
+		const cmd = commands[i];
 		commandBlocks.push(renderCommand(cmd));
 	}
 

@@ -4,6 +4,7 @@ import PopupDialog, { DialogTitle, DialogButton } from 'react-native-popup-dialo
 import DatePicker from 'react-native-datepicker';
 import moment from 'moment';
 import { _ } from 'lib/locale.js';
+const { time } = require('lib/time-utils.js');
 
 class SelectDateTimeDialog extends React.PureComponent {
 
@@ -21,7 +22,7 @@ class SelectDateTimeDialog extends React.PureComponent {
 			this.setState({ date: newProps.date });
 		}
 
-		if ('shown' in newProps) {
+		if ('shown' in newProps && newProps.shown != this.shown_) {
 			this.show(newProps.shown);
 		}
 	}
@@ -41,7 +42,7 @@ class SelectDateTimeDialog extends React.PureComponent {
 	}
 
 	dateTimeFormat() {
-		return 'MM/DD/YYYY HH:mm';
+		return time.dateTimeFormat();
 	}
 
 	stringToDate(s) {
@@ -78,7 +79,7 @@ class SelectDateTimeDialog extends React.PureComponent {
 				width={0.9}
 				height={350}
 			>
-				<View style={{flex: 1, margin: 20, alignItems: 'center'}}>
+				<View style={{ flex: 1, margin: 20, alignItems: 'center' }}>
 					<DatePicker
 						date={this.state.date}
 						mode="datetime"
@@ -87,7 +88,7 @@ class SelectDateTimeDialog extends React.PureComponent {
 						confirmBtnText={_('Confirm')}
 						cancelBtnText={_('Cancel')}
 						onDateChange={(date) => { this.setState({ date: this.stringToDate(date) }); }}
-						style={{width: 300}}
+						style={{ width: 300 }}
 						customStyles={{
 							btnConfirm: {
 								paddingVertical: 0,
@@ -104,4 +105,5 @@ class SelectDateTimeDialog extends React.PureComponent {
 
 }
 
+// eslint-disable-next-line import/prefer-default-export
 export { SelectDateTimeDialog };

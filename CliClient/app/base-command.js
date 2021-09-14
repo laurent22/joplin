@@ -50,7 +50,7 @@ class BaseCommand {
 	async cancel() {}
 
 	name() {
-		let r = this.usage().split(' ');
+		const r = this.usage().split(' ');
 		return r[0];
 	}
 

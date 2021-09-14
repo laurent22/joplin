@@ -40,8 +40,8 @@ function createClient(id) {
 const client = createClient(1);
 
 function execCommand(client, command) {
-	let exePath = `node ${joplinAppPath}`;
-	let cmd = `${exePath} --update-geolocation-disabled --env dev --profile ${client.profileDir} ${command}`;
+	const exePath = `node ${joplinAppPath}`;
+	const cmd = `${exePath} --update-geolocation-disabled --env dev --profile ${client.profileDir} ${command}`;
 	logger.info(`${client.id}: ${command}`);
 
 	return new Promise((resolve, reject) => {
@@ -129,8 +129,8 @@ testUnits.testCat = async () => {
 	await execCommand(client, 'mkbook nb1');
 	await execCommand(client, 'mknote mynote');
 
-	let folder = await Folder.loadByTitle('nb1');
-	let note = await Note.loadFolderNoteByField(folder.id, 'title', 'mynote');
+	const folder = await Folder.loadByTitle('nb1');
+	const note = await Note.loadFolderNoteByField(folder.id, 'title', 'mynote');
 
 	let r = await execCommand(client, 'cat mynote');
 	assertTrue(r.indexOf('mynote') >= 0);
@@ -149,7 +149,7 @@ testUnits.testConfig = async () => {
 	await Setting.load();
 	assertEquals('subl', Setting.value('editor'));
 
-	let r = await execCommand(client, 'config');
+	const r = await execCommand(client, 'config');
 	assertTrue(r.indexOf('editor') >= 0);
 	assertTrue(r.indexOf('subl') >= 0);
 };
@@ -161,14 +161,14 @@ testUnits.testCp = async () => {
 
 	await execCommand(client, 'cp n1');
 
-	let f1 = await Folder.loadByTitle('nb1');
-	let f2 = await Folder.loadByTitle('nb2');
+	const f1 = await Folder.loadByTitle('nb1');
+	const f2 = await Folder.loadByTitle('nb2');
 	let notes = await Note.previews(f1.id);
 
 	assertEquals(2, notes.length);
 
 	await execCommand(client, 'cp n1 nb2');
-	let notesF1 = await Note.previews(f1.id);
+	const notesF1 = await Note.previews(f1.id);
 	assertEquals(2, notesF1.length);
 	notes = await Note.previews(f2.id);
 	assertEquals(1, notes.length);
@@ -179,7 +179,7 @@ testUnits.testLs = async () => {
 	await execCommand(client, 'mkbook nb1');
 	await execCommand(client, 'mknote note1');
 	await execCommand(client, 'mknote note2');
-	let r = await execCommand(client, 'ls');
+	const r = await execCommand(client, 'ls');
 
 	assertTrue(r.indexOf('note1') >= 0);
 	assertTrue(r.indexOf('note2') >= 0);
@@ -191,8 +191,8 @@ testUnits.testMv = async () => {
 	await execCommand(client, 'mknote n1');
 	await execCommand(client, 'mv n1 nb2');
 
-	let f1 = await Folder.loadByTitle('nb1');
-	let f2 = await Folder.loadByTitle('nb2');
+	const f1 = await Folder.loadByTitle('nb1');
+	const f2 = await Folder.loadByTitle('nb2');
 	let notes1 = await Note.previews(f1.id);
 	let notes2 = await Note.previews(f2.id);
 
@@ -218,18 +218,18 @@ async function main() {
 	logger.info(await execCommand(client, 'version'));
 
 	await db.open({ name: `${client.profileDir}/database.sqlite` });
-	BaseModel.db_ = db;
+	BaseModel.setDb(db);
 	await Setting.load();
 
 	let onlyThisTest = 'testMv';
 	onlyThisTest = '';
 
-	for (let n in testUnits) {
+	for (const n in testUnits) {
 		if (!testUnits.hasOwnProperty(n)) continue;
 		if (onlyThisTest && n != onlyThisTest) continue;
 
 		await clearDatabase();
-		let testName = n.substr(4).toLowerCase();
+		const testName = n.substr(4).toLowerCase();
 		process.stdout.write(`${testName}: `);
 		await testUnits[n]();
 		console.info('');

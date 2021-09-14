@@ -1,0 +1,4 @@
+- [ ] Not checked
+- [x] Checked!!
+    - [x] Indented, with **bold**
+    - [ ] Indented, not checked

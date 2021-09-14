@@ -1,5 +1,6 @@
 const moment = require('moment');
 const { dirname, basename } = require('lib/path-utils.js');
+const { shim } = require('lib/shim.js');
 
 class FileApiDriverOneDrive {
 	constructor(api) {
@@ -22,7 +23,7 @@ class FileApiDriverOneDrive {
 	}
 
 	makeItems_(odItems) {
-		let output = [];
+		const output = [];
 		for (let i = 0; i < odItems.length; i++) {
 			output.push(this.makeItem_(odItems[i]));
 		}
@@ -30,7 +31,7 @@ class FileApiDriverOneDrive {
 	}
 
 	makeItem_(odItem) {
-		let output = {
+		const output = {
 			path: odItem.name,
 			isDir: 'folder' in odItem,
 		};
@@ -57,13 +58,13 @@ class FileApiDriverOneDrive {
 	}
 
 	async stat(path) {
-		let item = await this.statRaw_(path);
+		const item = await this.statRaw_(path);
 		if (!item) return null;
 		return this.makeItem_(item);
 	}
 
 	async setTimestamp(path, timestamp) {
-		let body = {
+		const body = {
 			fileSystemInfo: {
 				lastModifiedDateTime:
 					`${moment
@@ -72,11 +73,15 @@ class FileApiDriverOneDrive {
 						.format('YYYY-MM-DDTHH:mm:ss.SSS')}Z`,
 			},
 		};
-		let item = await this.api_.execJson('PATCH', this.makePath_(path), null, body);
+		const item = await this.api_.execJson('PATCH', this.makePath_(path), null, body);
 		return this.makeItem_(item);
 	}
 
 	async list(path, options = null) {
+		options = Object.assign({}, {
+			context: null,
+		}, options);
+
 		let query = this.itemFilter_();
 		let url = `${this.makePath_(path)}:/children`;
 
@@ -85,7 +90,7 @@ class FileApiDriverOneDrive {
 			url = options.context;
 		}
 
-		let r = await this.api_.execJson('GET', url, query);
+		const r = await this.api_.execJson('GET', url, query);
 
 		return {
 			hasMore: !!r['@odata.nextLink'],
@@ -99,10 +104,10 @@ class FileApiDriverOneDrive {
 
 		try {
 			if (options.target == 'file') {
-				let response = await this.api_.exec('GET', `${this.makePath_(path)}:/content`, null, null, options);
+				const response = await this.api_.exec('GET', `${this.makePath_(path)}:/content`, null, null, options);
 				return response;
 			} else {
-				let content = await this.api_.execText('GET', `${this.makePath_(path)}:/content`);
+				const content = await this.api_.execText('GET', `${this.makePath_(path)}:/content`);
 				return content;
 			}
 		} catch (error) {
@@ -115,7 +120,7 @@ class FileApiDriverOneDrive {
 		let item = await this.stat(path);
 		if (item) return item;
 
-		let parentPath = dirname(path);
+		const parentPath = dirname(path);
 		item = await this.api_.execJson('POST', `${this.makePath_(parentPath)}:/children`, this.itemFilter_(), {
 			name: basename(path),
 			folder: {},
@@ -129,19 +134,14 @@ class FileApiDriverOneDrive {
 
 		let response = null;
 
-		try {
-			if (options.source == 'file') {
-				response = await this.api_.exec('PUT', `${this.makePath_(path)}:/content`, null, null, options);
-			} else {
-				options.headers = { 'Content-Type': 'text/plain' };
-				response = await this.api_.exec('PUT', `${this.makePath_(path)}:/content`, null, content, options);
-			}
-		} catch (error) {
-			if (error && error.code === 'BadRequest' && error.message === 'Maximum request length exceeded.') {
-				error.code = 'rejectedByTarget';
-				error.message = 'Resource exceeds OneDrive max file size (4MB)';
-			}
-			throw error;
+		if (options.source == 'file') {
+			// We need to check the file size as files > 4 MBs are uploaded in a different way than files < 4 MB (see https://docs.microsoft.com/de-de/onedrive/developer/rest-api/concepts/upload?view=odsp-graph-online)
+			const fileSize = (await shim.fsDriver().stat(options.path)).size;
+			path = fileSize < 4 * 1024 * 1024 ? `${this.makePath_(path)}:/content` : `${this.makePath_(path)}:/createUploadSession`;
+			response = await this.api_.exec('PUT', path, null, null, options);
+		} else {
+			options.headers = { 'Content-Type': 'text/plain' };
+			response = await this.api_.exec('PUT', `${this.makePath_(path)}:/content`, null, content, options);
 		}
 
 		return response;
@@ -185,24 +185,41 @@ class FileApiDriverOneDrive {
 
 	async pathDetails_(path) {
 		if (this.pathCache_[path]) return this.pathCache_[path];
-		let output = await this.api_.execJson('GET', path);
+		const output = await this.api_.execJson('GET', path);
 		this.pathCache_[path] = output;
 		return this.pathCache_[path];
 	}
 
-	clearRoot() {
-		throw new Error('Not implemented');
+	async clearRoot() {
+		const recurseItems = async (path) => {
+			const result = await this.list(this.fileApi_.fullPath_(path));
+			const output = [];
+
+			for (const item of result.items) {
+				const fullPath = `${path}/${item.path}`;
+				if (item.isDir) {
+					await recurseItems(fullPath);
+				}
+				await this.delete(this.fileApi_.fullPath_(fullPath));
+			}
+
+			return output;
+		};
+
+		await recurseItems('');
 	}
 
 	async delta(path, options = null) {
-		let output = {
+		const output = {
 			hasMore: false,
 			context: {},
 			items: [],
 		};
 
 		const freshStartDelta = () => {
-			const url = `${this.makePath_(path)}:/delta`;
+			// Business Accounts are only allowed to make delta requests to the root. For some reason /delta gives an error for personal accounts and :/delta an error for business accounts
+			const accountProperties = this.api_.accountProperties_;
+			const url = (accountProperties.accountType === 'business') ? `/drives/${accountProperties.driveId}/root/delta` : `${this.makePath_(path)}:/delta`;
 			const query = this.itemFilter_();
 			query.select += ',deleted';
 			return { url: url, query: query };
@@ -211,7 +228,7 @@ class FileApiDriverOneDrive {
 		const pathDetails = await this.pathDetails_(path);
 		const pathId = pathDetails.id;
 
-		let context = options ? options.context : null;
+		const context = options ? options.context : null;
 		let url = context ? context.nextLink : null;
 		let query = null;
 
@@ -248,16 +265,16 @@ class FileApiDriverOneDrive {
 			}
 		}
 
-		let items = [];
+		const items = [];
 
-		// The delta API might return things that happen in subdirectories of the root and we don't want to
-		// deal with these since all the files we're interested in are at the root (The .resource dir
-		// is special since it's managed directly by the clients and resources never change - only the
-		// associated .md file at the root is synced). So in the loop below we check that the parent is
-		// indeed the root, otherwise the item is skipped.
-		// (Not sure but it's possible the delta API also returns events for files that are copied outside
-		//  of the app directory and later deleted or modified. We also don't want to deal with
-		//  these files during sync).
+		// The delta API might return things that happens in subdirectories and outside of the joplin directory.
+		// We don't want to deal with these since all the files we're interested in are at the root of the joplin directory
+		// (The .resource dir is special since it's managed directly by the clients and resources never change - only the
+		// associated .md file at the root is synced). So in the loop below we check that the parent is indeed the joplin
+		// directory, otherwise the item is skipped.
+		// At OneDrive for Business delta requests can only make at the root of OneDrive.  Not sure but it's possible that
+		// the delta API also returns events for files that are copied outside of the app directory and later deleted or
+		// modified when using OneDrive Personal).
 
 		for (let i = 0; i < response.value.length; i++) {
 			const v = response.value[i];
@@ -282,10 +299,10 @@ class FileApiDriverOneDrive {
 		// https://dev.onedrive.com/items/view_delta.htm
 		// The same item may appear more than once in a delta feed, for various reasons. You should use the last occurrence you see.
 		// So remove any duplicate item from the array.
-		let temp = [];
-		let seenPaths = [];
+		const temp = [];
+		const seenPaths = [];
 		for (let i = output.items.length - 1; i >= 0; i--) {
-			let item = output.items[i];
+			const item = output.items[i];
 			if (seenPaths.indexOf(item.path) >= 0) continue;
 			temp.splice(0, 0, item);
 			seenPaths.push(item.path);

@@ -21,11 +21,15 @@ class Command extends BaseCommand {
 			.filter(m => m.type === 'importer')
 			.map(m => m.format);
 
-		return [['--format <format>', _('Source format: %s', ['auto'].concat(formats).join(', '))], ['-f, --force', _('Do not ask for confirmation.')]];
+		return [
+			['--format <format>', _('Source format: %s', ['auto'].concat(formats).join(', '))],
+			['-f, --force', _('Do not ask for confirmation.')],
+			['--output-format <output-format>', _('Output format: %s', 'md, html')],
+		];
 	}
 
 	async action(args) {
-		let folder = await app().loadItem(BaseModel.TYPE_FOLDER, args.notebook);
+		const folder = await app().loadItem(BaseModel.TYPE_FOLDER, args.notebook);
 
 		if (args.notebook && !folder) throw new Error(_('Cannot find "%s".', args.notebook));
 
@@ -39,7 +43,7 @@ class Command extends BaseCommand {
 		// onProgress/onError supported by Enex import only
 
 		importOptions.onProgress = progressState => {
-			let line = [];
+			const line = [];
 			line.push(_('Found: %d.', progressState.loaded));
 			line.push(_('Created: %d.', progressState.created));
 			if (progressState.updated) line.push(_('Updated: %d.', progressState.updated));
@@ -51,13 +55,13 @@ class Command extends BaseCommand {
 		};
 
 		importOptions.onError = error => {
-			let s = error.trace ? error.trace : error.toString();
+			const s = error.trace ? error.trace : error.toString();
 			this.stdout(s);
 		};
 
-		app()
-			.gui()
-			.showConsole();
+		if (args.options.outputFormat) importOptions.outputFormat = args.options.outputFormat;
+
+		app().gui().showConsole();
 		this.stdout(_('Importing notes...'));
 		const service = new InteropService();
 		const result = await service.import(importOptions);

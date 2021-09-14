@@ -1,0 +1,484 @@
+<!doctype html>
+<html>
+
+<!--
+
+!!! WARNING !!!
+
+This file was auto-generated from readme/gsod2020/index.md and any manual change
+made to it will be overwritten. To make a change to this file please modify
+the source Markdown file:
+
+https://github.com/laurent22/joplin/blob/master/readme/gsod2020/index.md
+
+-->
+
+<head>
+	<title>Google Season of Docs | Joplin</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://joplinapp.org/css/bootstrap.min.css">
+	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+	<!-- <link rel="stylesheet" href="https://joplinapp.org/css/fontawesome-all.min.css">  -->
+	<link rel="stylesheet" href="https://joplinapp.org/css/fork-awesome.min.css"> 
+	<script src="https://joplinapp.org/js/jquery-3.2.1.slim.min.js"></script>
+	<style>
+	body {
+		background-color: #F1F1F1;
+		color: #333333;
+	}
+	table {
+		margin-bottom: 1em;
+	}
+	td, th {
+		padding: .8em;
+		border: 1px solid #ccc;
+	}
+
+	.page-markdown table pre,
+	.page-markdown table blockquote {
+		margin-bottom: 0;
+	}
+
+	.page-markdown table pre,
+	.page-markdown table blockquote {
+		margin-bottom: 0;
+	}
+
+	.page-markdown table pre {
+		background-color: rgba(0,0,0,0);
+		border: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	h1, h2 {
+		border-bottom: 1px solid #eaecef;
+		padding-bottom: 0.3em;
+		font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+		font-weight: 600;
+		font-size: 2em;
+		margin-bottom: 16px;
+	}
+	h2 {
+		font-size: 1.6em;
+	}
+	h3 {
+		font-size: 1.3em;
+	}
+	code {
+		color: black;
+		background-color: #eee;
+		border: 1px solid #ccc;
+		font-size: .85em;
+	}
+	pre code {
+		border: none;
+	}
+	pre {
+		font-size: .85em;
+	}
+	blockquote {
+		font-size: 1em;
+		color: #555;
+	};
+	#toc ul {
+		margin-bottom: 10px;
+	}
+	#toc > ul > li {
+		margin-bottom: 10px;
+	}
+	#toc {
+		padding-bottom: 1em;
+	}
+	.title {
+		display: flex;
+		align-items: center;
+	}
+	.title-icon {
+		display: flex;
+		height: 1em;
+	}
+	.title-text {
+		display: flex;
+		font-weight: normal;
+		margin-bottom: .2em;
+		margin-left: .5em;
+	}
+	.sub-title {
+		font-weight: normal;
+	}
+	.container {
+		background-color: white;
+		padding: 0;
+		box-shadow: 0 10px 20px #888888;
+	}
+	table.screenshots {
+		margin-top: 2em;
+		margin-bottom: 2em;
+	}
+	table.screenshots th {
+		height: 3em;
+		text-align: center;
+	}
+	table.screenshots th, 
+	table.screenshots td {
+		border: 1px solid #C2C2C2;
+	}
+	img[align="left"] {
+		margin-right: 10px;
+		margin-bottom: 10px;
+	}
+	.mobile-screenshot {
+		height: 40em;
+		padding: 1em;
+	}
+	.cli-screenshot-wrapper {
+		background-color: black;
+		vertical-align: top;
+		padding: 1em 2em 1em 1em;
+	}
+	.cli-screenshot {
+		font-family: "Monaco", "Inconsolata", "CONSOLAS", "Deja Vu Sans Mono", "Droid Sans Mono", "Andale Mono", monospace;
+		background-color: black;
+		color: white;
+		border: none;
+	}
+	.cli-screenshot .prompt {
+		color: #48C2F0;
+	}
+	.top-screenshot {
+		margin-top: 2em;
+		text-align: center;
+	}
+	.header {
+		position: relative;
+		padding-left: 2em;
+		padding-right: 2em;
+		padding-top: 1em;
+		padding-bottom: 1em;
+		color: white;
+		background-color: #2B2B3D;
+	}
+	.header a h1 {
+		color: white;
+	}
+	.header a:hover {
+		text-decoration: none;
+	}
+	.content {
+		padding-left: 2em;
+		padding-right: 2em;
+		padding-bottom: 2em;
+		padding-top: 2em;
+	}
+	.forkme {
+		position: absolute;
+		right: 0;
+		top:0;
+	}
+	.nav-wrapper {
+		position: relative;
+		width: inherit;
+	}
+	.nav {
+		background-color: black;
+		display: table;
+		width: inherit;
+	}
+	.nav.sticky {
+		position:fixed;
+		top: 0;
+		width: inherit;
+		box-shadow: 0 0 10px #000000;
+	}
+	.nav a {
+		color: white;
+		display: inline-block;
+		padding: .6em .9em .6em .9em;
+	}
+	.nav ul {
+		padding-left: 2em;
+		margin-bottom: 0;
+		display: table-cell;
+		/* min-width: 250px; */
+		/* For GSoC: */
+		min-width: 470px;
+	}
+	.nav ul li {
+		display: inline-block;
+		padding: 0;
+	}
+	.nav li.selected {
+		background-color: #222;
+		font-weight: bold;
+	}
+	.nav-right {
+		display: table-cell;
+		width: 100%;
+		text-align: right;
+		vertical-align: middle;
+		line-height: 0;
+	}
+	.nav-right .share-btn {
+		display: none;
+	}
+	.nav-right .small-share-btn {
+		display: none;
+	}
+	.footer {
+		padding-top: 1em;
+		border-top: 1px solid #d4d4d4;
+		margin-top: 2em;
+		color: gray;
+		font-size: .9em;
+	}
+	a.heading-anchor {
+		display: inline-block;
+		opacity: 0;
+		width: 1.3em;
+		font-size: 0.7em;
+		margin-left: 0.4em;
+		line-height: 1em;
+		text-decoration: none;
+		transition: opacity 0.3s;
+	}
+	a.heading-anchor:hover,
+	h1:hover a.heading-anchor,
+	h2:hover a.heading-anchor,
+	h3:hover a.heading-anchor,
+	h4:hover a.heading-anchor,
+	h5:hover a.heading-anchor,
+	h6:hover a.heading-anchor {
+		opacity: 1;
+	}
+
+	.bottom-links {
+		display: flex;
+		justify-content: center;
+		border-top: 1px solid #d4d4d4;
+		margin-top: 30px;
+		padding-top: 25px;
+	}
+
+	@media all and (min-width: 400px) {
+		.nav-right .share-btn {
+			display: inline-block;
+		}
+		.nav-right .small-share-btn {
+			display: none;
+		}
+	}
+</style>
+</head>
+
+<body>
+
+<div class="container page-index">
+
+<div class="header">
+	<a class="forkme" href="https://github.com/laurent22/joplin"><img src="https://joplinapp.org/images/ForkMe.png"/></a>
+	<a href="https://joplinapp.org"><h1 class="title"><img class="title-icon" src="https://joplinapp.org/images/Icon512.png"><span class="title-text">Joplin</span></h1></a>
+	<p class="sub-title">An open source note taking and to-do application with synchronisation capabilities</p>
+</div>
+
+<div class="nav-wrapper">
+	<div class="nav">
+		<ul>
+			<li class=""><a href="https:&#x2F;&#x2F;joplinapp.org/" title="Home"><i class="fa fa-home"></i></a></li>
+			<li><a href="https://discourse.joplinapp.org" title="Forum">Forum</a></li>
+			<li><a class="help" href="#" title="Menu">Menu</a></li>
+			<!-- <li><a class="gsod" href="https://joplinapp.org/gsod2020/" title="Google Season of Docs 2020">GSoD 2020</a></li> -->
+		</ul>
+		<div class="nav-right">
+			<!--
+				<iframe class="share-btn" src="https://www.facebook.com/plugins/share_button.php?href=http%3A%2F%2Fjoplinapp.org&layout=button&size=small&mobile_iframe=true&width=60&height=20&appId" width="60" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+				<iframe class="share-btn" src="https://platform.twitter.com/widgets/tweet_button.html?url=http%3A%2F%2Fjoplinapp.org" width="62" height="20" title="Tweet" style="border: 0; overflow: hidden;"></iframe>
+			-->
+			<iframe class="share-btn share-btn-github" src="https://ghbtns.com/github-btn.html?user=laurent22&repo=joplin&type=star&count=true" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
+		</div>
+	</div>
+</div>
+
+<div class="content">
+	<div id="toc"><ul>
+<li>
+<p>Applications</p>
+<ul>
+<li><a href="https://joplinapp.org/desktop/">Desktop application</a></li>
+<li><a href="https://joplinapp.org/mobile/">Mobile applications</a></li>
+<li><a href="https://joplinapp.org/terminal/">Terminal application</a></li>
+<li><a href="https://joplinapp.org/clipper/">Web Clipper</a></li>
+</ul>
+</li>
+<li>
+<p>Support</p>
+<ul>
+<li><a href="https://discourse.joplinapp.org">Joplin Forum</a></li>
+<li><a href="https://joplinapp.org/markdown/">Markdown Guide</a></li>
+<li><a href="https://joplinapp.org/e2ee/">How to enable end-to-end encryption</a></li>
+<li><a href="https://joplinapp.org/conflict/">What is a conflict?</a></li>
+<li><a href="https://joplinapp.org/debugging/">How to enable debug mode</a></li>
+<li><a href="https://joplinapp.org/api/">API documentation</a></li>
+<li><a href="https://joplinapp.org/faq/">FAQ</a></li>
+</ul>
+</li>
+<li>
+<p>Development</p>
+<ul>
+<li><a href="https://joplinapp.org/spec/e2ee/">End-to-end encryption spec</a></li>
+<li><a href="https://joplinapp.org/spec/history/">Note History spec</a></li>
+<li><a href="https://joplinapp.org/spec/sync_lock/">Sync Lock spec</a></li>
+</ul>
+</li>
+<li>
+<p>Google Summer of Code 2020</p>
+<ul>
+<li><a href="https://joplinapp.org/gsoc2020">Google Summer of Code 2020</a></li>
+<li><a href="https://joplinapp.org/gsoc2020/ideas/">Project Ideas</a></li>
+</ul>
+</li>
+<li>
+<p>About</p>
+<ul>
+<li><a href="https://joplinapp.org/changelog/">Changelog (Desktop App)</a></li>
+<li><a href="https://joplinapp.org/changelog_cli/">Changelog (CLI App)</a></li>
+<li><a href="https://joplinapp.org/stats/">Stats</a></li>
+<li><a href="https://joplinapp.org/donate/">Donate</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<h1>Google Season of Doc 2020<a name="google-season-of-doc-2020" href="#google-season-of-doc-2020" class="heading-anchor">🔗</a></h1>
+<p>Joplin has a young but well proven history. It all started by single idea but is rising more and more commitment as well as demands.</p>
+<p>Joplin is about to make another big step to answers these demands by being an organization at Google Summer of Code 2020.<br>
+During the young history of the GSoC campaign it was noticed that it would be a greate help if documenation is centralized and making it a continuous read.  The current documentation tells when to do what and how clearly. In addition, the source code of Joplin is clean and well strucutred, so it is easy to understand.<br>
+Nevertheless, there are additional and essential information scattered around on the Forum and GitHub which rely on an active community, so that are being shared with them who need them. It can be said that this happens very well but it is aggreed that this situation has to be improved to free resources for working on the source coden and lower entry barriers for new contributors.</p>
+<p>For these reasons, all students and Joplin users and developers are welcome to participate in the hopefully first year Summer of Docs program with Joplin. Here's how.</p>
+<p>Mentors, administrators and students: read <a href="https://developers.google.com/season-of-docs">Season of Docs</a> occasionally. Also read the <a href="https://developers.google.com/season-of-docs/docs/faq">Season of Docs FAQ</a>.<br>
+<strong>Most IMPORTANT, read this page carefully, line by line. We don't want to quote pharagraphs from this page answering question in the forum.<br>
+Moreover, watch/subscribe the topic <a href="https://discourse.joplinapp.org/t/gsoc-2020-live-blog/6219">GSoC 2020 live blog</a> as this page here contains rather static content whereas the mentioned topic is updated much more freuqently.</strong></p>
+<p>All participants will need a Google account in order to join the program. So, save time and create one now. In addition, all participants need to join the  <a href="https://discourse.joplinapp.org">Joplin Forum</a>.</p>
+<hr>
+<h1>Instructions for students<a name="instructions-for-students" href="#instructions-for-students" class="heading-anchor">🔗</a></h1>
+<p>Students wishing to participate in Season of Docs must realize, that this is a important professional opportunity. You will be required to produce applicable and readable documenation for Joplin in 3 months. Your mentors, will dedicate a portion of their time to mentoring you. Therefore, we seek candidates who are committed to helping Joplin and its community long-term and are willing to both do quality work, and be proactive in communicating with your mentor(s).</p>
+<p>You don't have to be a proven technical writter - in fact, this whole program is meant to facilitate to support Joplin and other Open Source communities by techinal writters. However, experience in technical writting and/or coding experience is welcome.</p>
+<p>In general it can be said, that question shall be asked early and clearly, given everyone the possibility to understand why you want to have this question answered and how it helps to achieve the project's goal.</p>
+<p>Before you can be accepted as a student we expect you to communicate very activily with the community and contributors and summerize what could help them most and link that work on your proposal.<br>
+If your idea is related to codebase documentation it is welcome that you fix little bugs. You may browse the GitHub Issues to find some simple tasks. See the good first issues which are a good way to make yourself familiar with the code base.</p>
+<p>You should start learning the components that you plan on working on before the start date. Support can be found in the forum and on our dedicated discourse channel.</p>
+<p>Do not worry, the timeline from Google reserves a lot of time for bonding periods so use that time wisely. Good communication is key. To allow us to respond quickly tag your questions with <code>GSoC-2020</code>.</p>
+<p>You should plan to communicate with your team several times per week, and formally report progress and plans weekly. You are free to chose the format, it can be an sophisticated online document or simple continuous blog on GitHub.</p>
+<p>Moreover, we require that you come to clear agreement on how to commit, test and build.</p>
+<p>Students who neglect active communication will be failed!</p>
+<h2>General instructions<a name="general-instructions" href="#general-instructions" class="heading-anchor">🔗</a></h2>
+<p>First of all, please read the above referenced resources and the <a href="https://developers.google.com/open-source/gsoc/faq">GSoC FAQ</a>. Pay special attention to the <strong>Eligibility</strong> section of the FAQ.</p>
+<p>We stronly recomment to follow the recommented steps, see next section, closley. It is slightly differs from the steps given for the closed GSoC application period.<br>
+The procedure reflects some of the lessons learnt in the GSOC 2020 campaign, so you may compare the recommended steps and scan the change history of the <a href="https://discourse.joplinapp.org/t/gsoc-2020-live-blog/6219">GSoC 2020 live blog</a>.</p>
+<h2>Recommended steps<a name="recommended-steps" href="#recommended-steps" class="heading-anchor">🔗</a></h2>
+<ol>
+<li>Join the <a href="https://discourse.joplinapp.org">Joplin Forum</a>, introduce yourself in a structured manner, share your GitHub username, and meet your fellow developers in the <a href="https://discourse.joplinapp.org/c/gsoc">GSoC category</a>. The subject of the topic shall contain your username, e.g. <code>_Introducing \&lt;username&gt;_</code>.</li>
+<li>Read Student proposal guidelines and the <a href="https://developers.google.com/season-of-docs/docs/tech-writer-guide">GSoD Student Manual</a></li>
+<li>Take a look at the <a href="https://joplinapp.org/gsod2020/ideas/">list of ideas</a>. You can have you own idea added by posting it in the <a href="https://discourse.joplinapp.org/c/features">Features category</a></li>
+<li>Come up with project that you're interested in and discuss it in <a href="https://discourse.joplinapp.org/c/features">Features category</a> if a corresponding does not already exist.</li>
+<li>Write a first draft and get someone to review it
+<ol>
+<li>Remember: you must link to work such as commits in your proposal. A private place will be created wihtinn the forum for that purposes.</li>
+<li>If you want to add functionality to the codebase or documenation, have it approved  <a href="https://discourse.joplinapp.org/c/features">Features category</a></li>
+<li><strong>IMPORTANT</strong>: If you contribute to the codebase do only one contribution at a time and wait until it is approved.</li>
+</ol>
+</li>
+<li>Submit your proposal to the mentors writting a private message at <code>@mentors</code> in the <a href="https://discourse.joplinapp.org">Joplin Forum</a> and wait for their feedback</li>
+<li>Submit proposal using <a href="https://summerofcode.withgoogle.com/">Google's web interface</a> well ahead of the deadline. You can update it at anytime, even the final proposal.</li>
+<li>Submit proof of enrolment well ahead of the deadline</li>
+</ol>
+<p>Coming up with an interesting idea is probably the most difficult part. It should be something interesting for Joplin, for Open Source in general and for you. And it must be something that you can realistically achieve in the time available to you.</p>
+<p>A good start is finding out what the most pressing issues are in the projects in which you are interested. Join the forum and subscribe to GitHub repository for that project or go into its discourse channel: meet developers and your potential mentor, as well as start learning the code-base. We recommend strongly getting involved in advance of the beginning of GSoC, and we will look favourably on applications from students who have already started to act like Open Source developers.</p>
+<h2>Student proposal guidelines<a name="student-proposal-guidelines" href="#student-proposal-guidelines" class="heading-anchor">🔗</a></h2>
+<p>A project proposal is what you will be judged upon. Write a clear proposal on what you plan to do, the scope of your project, and why we should choose you to do it. Proposals are the basis of the GSoC projects and therefore one of the most important things to do well. The proposal is not only the basis of our decision of which student to choose, it has also an effect on Google's decision as to how many student slots are assigned to Joplin.</p>
+<p>Below is the application template:</p>
+<blockquote>
+<p><strong>Introduction</strong></p>
+<p>Every software project should solve a problem. Before offering the solution (your Google Summer of Code project), you should first define the problem. What’s the current state of things? What’s the issue you wish to solve and why? Then you should conclude with a sentence or two about your solution. Include links to discussions, features, or bugs that describe the problem further if necessary.</p>
+<p><strong>Project goals</strong></p>
+<p>Be short and to the point, and perhaps format it as a list. Propose a clear list of deliverables, explaining exactly what you promise to do and what you do not plan to do. “Future developments” can be mentioned, but your promise for the Google Summer of Code term is what counts.</p>
+<p><strong>Implementation</strong></p>
+<p>Be detailed. Describe what you plan to do as a solution for the problem you defined above. Include technical details, showing that you understand the technology. Illustrate key technical elements of your proposed solution in reasonable detail. Include writing unit tests throughout the coding period, as well as code documentation. These critical elements cannot be left to the last few weeks of the program. If user documentation will be required, or apidox, etc. these should be written during each week, not at the end.</p>
+<p><strong>Timeline</strong></p>
+<p>Show that you understand the problem, have a solution, have also broken it down into manageable parts, and that you have a realistic plan on how to accomplish your goal. Here you set expectations, so don’t make promises you can’t keep. A modest, realistic and detailed timeline is better than promising the impossible.</p>
+<p>If you have other commitments during GSoC, such as a job, vacation, exams, internship, seminars, or papers to write, disclose them here. GSoC should be treated like a full-time job, and we will expect approximately 40 hours of work per week. <em>If you have conflicts, explain how you will work around them.</em> If you are found to have conflicts which you did not disclose, you may be failed.</p>
+<p>Open and clear communication is of utmost importance. <strong>Include your plans for communication in your proposal; daily if possible.</strong> You will need to initiate weekly formal communication such as a blog post on to be agreed placed. Lack of communication will result in you being failed.</p>
+<p><strong>About me</strong></p>
+<p>Provide your contact information (IRC nick, email, IM, phone) and write a few sentences about you and why you think you are the best for this job. <strong>Prior contributions to Joplin are required; list your commits.</strong> Name people (other developers, students, professors) who can act as a reference for you. Mention your field of study if necessary. Now is the time to join the relevant irc/telegram channels, mail lists and blog feeds. We want you to be a part of our community, not just contribute your code.</p>
+<p><em>Tell us if you are submitting proposals to other organizations, and whether or not you would choose Joplin if given the choice.</em></p>
+<p><em>Other things to think about:</em></p>
+<ul>
+<li>
+<p>Are you comfortable working independently under a supervisor or mentor who is several thousand miles away, and perhaps 12 time zones away? How will you work with your mentor to track your work? Have you worked in this style before?</p>
+</li>
+<li>
+<p>If your native language is not English, are you comfortable working closely with a supervisor whose native language is English? What is your native language, as that may help us find a mentor who has the same native language?</p>
+</li>
+<li>
+<p>After you have written your proposal, you should get it reviewed. Do not rely on the Joplin mentors to do it for you via the web interface, although we will try to comment on every proposal. It is wise to ask a colleague or a developer to critique your proposal. Clarity and completeness are important.</p>
+</li>
+</ul>
+</blockquote>
+<h2>Accepted Students<a name="accepted-students" href="#accepted-students" class="heading-anchor">🔗</a></h2>
+<p>Your primary responsibility is finishing your project under the guidance of your mentors. To do that, you must submit code regularly and stay in frequent and effective communication with your mentors and team. To pass the evaluations, you must do both the communication and the documentation.</p>
+<p>All students will create a report page by tool up to their choice. Keep this up-to-date, as this is one of our primary evaluation tools.</p>
+<h1>Instructions for mentors<a name="instructions-for-mentors" href="#instructions-for-mentors" class="heading-anchor">🔗</a></h1>
+<h2>Ideas<a name="ideas" href="#ideas" class="heading-anchor">🔗</a></h2>
+<p>If you're a Joplin developer or motivated user and you wish to participate in Summer of Code, make a proposal in the the <a href="https://discourse.joplinapp.org/c/features">Features category of the Joplin Forum</a>, based what your Joplin project needs.</p>
+<p>If you wish to mentor, please read the <a href="https://developers.google.com/season-of-docs/docs/admin-guide">GSoD Mentor Guide</a> and the <a href="https://developers.google.com/season-of-docs/docs/faq">Season of Doc FAQ</a>. Also, please contact the staff and get the go-ahead from them before editing the ideas page, adding your idea.</p>
+<p>Your idea proposal should be a brief description of what the project is, what the desired goals would be, what the student should know and an email address for contact. Students are not required to follow your idea to the letter, so regard your proposal as inspiration for the students.</p>
+<h2>Mentoring<a name="mentoring" href="#mentoring" class="heading-anchor">🔗</a></h2>
+<p>Anyone developer can be a mentor if you meet the GSoD eligibility requirements. We will potentially assign a student to you who has never worked on such a large project and will need some help. Make sure you're up for the task. Mentoring takes time, and lots and lots of communication.</p>
+<p>Before subscribing yourself as a mentor, please make sure that the staff is aware of that. Ask them to send the Summer of Code Administrators an email confirming your involvement in the team. This is just a formality to make sure you are a real person we can trust; the administrators cannot know all active developers by their Google account ID. Then drop us an message in the forum.</p>
+<p>You will subscribe to the relevant tags in the forum to discuss ideas. You will need to read the proposals as they come in, and vote on the proposals. Daily communication is required with your student during the Community Bonding period, and multiple times per week during the doc development period.</p>
+<p>Finally, know that we will never assign you to a project you do not want to work on. We will not assign you more projects than you can/want to take on either. And you will have a backup mentor, just in case something unforeseen takes place.</p>
+<h1>Ideas<a name="ideas-1" href="#ideas-1" class="heading-anchor">🔗</a></h1>
+<p>Please see below for a list of project ideas:</p>
+<p><a href="https://joplinapp.org/gsod2020/ideas/">https://joplinapp.org/gsod2020/ideas/</a></p>
+
+		<div class="bottom-links">
+			<a href="https://github.com/laurent22/joplin/blob/master/readme/gsod2020/index.md">
+				<i class="fa fa-github"></i> Improve this doc
+			</a>
+		</div>
+<script>
+	function stickyHeader() { 
+		return; // Disabled
+
+		if ($(window).scrollTop() > 179) {
+			$('.nav').addClass('sticky'); 
+		} else {
+			$('.nav').removeClass('sticky');
+		}
+	}
+
+	$('#toc').hide();
+
+	$('.help').click(function(event) {
+		event.preventDefault();
+		$('#toc').show();
+	});
+
+	$(window).scroll(function() {
+		stickyHeader();
+	});
+
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-103586105-1', 'auto');
+	ga('send', 'pageview');
+</script>
+
+<div class="footer">
+Copyright (c) 2016-2020 Laurent Cozic
+</div>
+</body>
+</html>

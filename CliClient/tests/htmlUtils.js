@@ -20,6 +20,7 @@ describe('htmlUtils', function() {
 			['<img src="http://test.com/img.png"/>', ['http://test.com/img.png']],
 			['<img src="http://test.com/img.png"/> <img src="http://test.com/img2.png"/>', ['http://test.com/img.png', 'http://test.com/img2.png']],
 			['<img src="http://test.com/img.png" alt="testing"  >', ['http://test.com/img.png']],
+			['<img src=""/> <img src="http://test.com/img2.png"/>', ['http://test.com/img2.png']],
 			['nothing here', []],
 			['', []],
 		];

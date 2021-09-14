@@ -20,7 +20,8 @@ https://github.com/laurent22/joplin/blob/master/readme/donate.md
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="https://joplinapp.org/css/bootstrap.min.css">
 	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
-	<link rel="stylesheet" href="https://joplinapp.org/css/fontawesome-all.min.css"> 
+	<!-- <link rel="stylesheet" href="https://joplinapp.org/css/fontawesome-all.min.css">  -->
+	<link rel="stylesheet" href="https://joplinapp.org/css/fork-awesome.min.css"> 
 	<script src="https://joplinapp.org/js/jquery-3.2.1.slim.min.js"></script>
 	<style>
 	body {
@@ -85,15 +86,28 @@ https://github.com/laurent22/joplin/blob/master/readme/donate.md
 	#toc ul {
 		margin-bottom: 10px;
 	}
+	#toc > ul > li {
+		margin-bottom: 10px;
+	}
 	#toc {
 		padding-bottom: 1em;
 	}
+	.title {
+		display: flex;
+		align-items: center;
+	}
 	.title-icon {
-		height: 2em;
+		display: flex;
+		height: 1em;
+	}
+	.title-text {
+		display: flex;
+		font-weight: normal;
+		margin-bottom: .2em;
+		margin-left: .5em;
 	}
 	.sub-title {
-		font-weight: bold;
-		font-size: 1.5em;
+		font-weight: normal;
 	}
 	.container {
 		background-color: white;
@@ -150,6 +164,9 @@ https://github.com/laurent22/joplin/blob/master/readme/donate.md
 	.header a h1 {
 		color: white;
 	}
+	.header a:hover {
+		text-decoration: none;
+	}
 	.content {
 		padding-left: 2em;
 		padding-right: 2em;
@@ -185,7 +202,9 @@ https://github.com/laurent22/joplin/blob/master/readme/donate.md
 		padding-left: 2em;
 		margin-bottom: 0;
 		display: table-cell;
-		min-width: 250px;
+		/* min-width: 250px; */
+		/* For GSoC: */
+		min-width: 470px;
 	}
 	.nav ul li {
 		display: inline-block;
@@ -234,6 +253,15 @@ https://github.com/laurent22/joplin/blob/master/readme/donate.md
 	h6:hover a.heading-anchor {
 		opacity: 1;
 	}
+
+	.bottom-links {
+		display: flex;
+		justify-content: center;
+		border-top: 1px solid #d4d4d4;
+		margin-top: 30px;
+		padding-top: 25px;
+	}
+
 	@media all and (min-width: 400px) {
 		.nav-right .share-btn {
 			display: inline-block;
@@ -251,8 +279,8 @@ https://github.com/laurent22/joplin/blob/master/readme/donate.md
 
 <div class="header">
 	<a class="forkme" href="https://github.com/laurent22/joplin"><img src="https://joplinapp.org/images/ForkMe.png"/></a>
-	<a href="https://joplinapp.org"><h1 id="joplin"><img class="title-icon" src="https://joplinapp.org/images/Icon512.png">oplin</h1></a>
-	<p class="sub-title">An open source note taking and to-do application with synchronisation capabilities.</p>
+	<a href="https://joplinapp.org"><h1 class="title"><img class="title-icon" src="https://joplinapp.org/images/Icon512.png"><span class="title-text">Joplin</span></h1></a>
+	<p class="sub-title">An open source note taking and to-do application with synchronisation capabilities</p>
 </div>
 
 <div class="nav-wrapper">
@@ -261,6 +289,7 @@ https://github.com/laurent22/joplin/blob/master/readme/donate.md
 			<li class=""><a href="https:&#x2F;&#x2F;joplinapp.org/" title="Home"><i class="fa fa-home"></i></a></li>
 			<li><a href="https://discourse.joplinapp.org" title="Forum">Forum</a></li>
 			<li><a class="help" href="#" title="Menu">Menu</a></li>
+			<!-- <li><a class="gsod" href="https://joplinapp.org/gsod2020/" title="Google Season of Docs 2020">GSoD 2020</a></li> -->
 		</ul>
 		<div class="nav-right">
 			<!--
@@ -287,11 +316,27 @@ https://github.com/laurent22/joplin/blob/master/readme/donate.md
 <p>Support</p>
 <ul>
 <li><a href="https://discourse.joplinapp.org">Joplin Forum</a></li>
+<li><a href="https://joplinapp.org/markdown/">Markdown Guide</a></li>
 <li><a href="https://joplinapp.org/e2ee/">How to enable end-to-end encryption</a></li>
-<li><a href="https://joplinapp.org/spec/">End-to-end encryption spec</a></li>
+<li><a href="https://joplinapp.org/conflict/">What is a conflict?</a></li>
 <li><a href="https://joplinapp.org/debugging/">How to enable debug mode</a></li>
 <li><a href="https://joplinapp.org/api/">API documentation</a></li>
 <li><a href="https://joplinapp.org/faq/">FAQ</a></li>
+</ul>
+</li>
+<li>
+<p>Development</p>
+<ul>
+<li><a href="https://joplinapp.org/spec/e2ee/">End-to-end encryption spec</a></li>
+<li><a href="https://joplinapp.org/spec/history/">Note History spec</a></li>
+<li><a href="https://joplinapp.org/spec/sync_lock/">Sync Lock spec</a></li>
+</ul>
+</li>
+<li>
+<p>Google Summer of Code 2020</p>
+<ul>
+<li><a href="https://joplinapp.org/gsoc2020">Google Summer of Code 2020</a></li>
+<li><a href="https://joplinapp.org/gsoc2020/ideas/">Project Ideas</a></li>
 </ul>
 </li>
 <li>
@@ -306,23 +351,30 @@ https://github.com/laurent22/joplin/blob/master/readme/donate.md
 </ul>
 </div>
 <h1>Support Joplin development<a name="support-joplin-development" href="#support-joplin-development" class="heading-anchor">🔗</a></h1>
-<p>Donations to Joplin support the development of the project. Developing quality applications mostly takes time, but there are also some expenses, such as digital certificates to sign the applications, app store fees, hosting, etc. Most of all, your donation will make it possible to keep up the current development standard.</p>
-<p>There are various ways to send a donation:</p>
-<h2>Paypal<a name="paypal" href="#paypal" class="heading-anchor">🔗</a></h2>
-<p>To donate via Paypal, please follow this link:</p>
-<p><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=E8JMYD2LQ8MMA&lc=GB&item_name=Joplin+Development&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted"><img src="https://joplinapp.org/images/PayPalDonate.png" height="60px"/></a></p>
+<p>Donations to Joplin support the development of the project. Developing quality applications mostly takes time, but there are also some expenses, such as digital certificates to sign the applications, app store fees, hosting, etc. Most of all, your donation will make it possible to keep up the current development standards.</p>
+<h2>PayPal<a name="paypal" href="#paypal" class="heading-anchor">🔗</a></h2>
+<p>To donate via PayPal, please follow this link:</p>
+<p><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=E8JMYD2LQ8MMA&amp;lc=GB&amp;item_name=Joplin+Development&amp;currency_code=EUR&amp;bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted"><img src="https://joplinapp.org/images/badges/Donate-PayPal-green.svg" alt="Donate on PayPal"></a></p>
+<h2>GitHub Sponsor<a name="github-sponsor" href="#github-sponsor" class="heading-anchor">🔗</a></h2>
+<p>Or follow this link to become a GitHub Sponsor:</p>
+<p><a href="https://github.com/sponsors/laurent22/"><img src="https://joplinapp.org/images/badges/GitHub-Badge.svg" alt="Sponsor on GitHub"></a></p>
 <h2>Patreon<a name="patreon" href="#patreon" class="heading-anchor">🔗</a></h2>
-<p>Or you may support the project on Patreon:</p>
-<p><a href="https://www.patreon.com/joplin"><img src="https://joplinapp.org/images/badges/Patreon.png"/></a></p>
+<p>Alternatively you may support the project on Patreon:</p>
+<p><a href="https://www.patreon.com/joplin"><img src="https://joplinapp.org/images/badges/Patreon-Badge.svg" alt="Become a patron"></a></p>
 <h2>Other way to support the development<a name="other-way-to-support-the-development" href="#other-way-to-support-the-development" class="heading-anchor">🔗</a></h2>
 <p>Finally, there are other ways to support the development of Joplin:</p>
 <ul>
 <li>Consider rating the app on <a href="https://play.google.com/store/apps/details?id=net.cozic.joplin&amp;utm_source=GitHub&amp;utm_campaign=README&amp;pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1">Google Play</a> or <a href="https://itunes.apple.com/us/app/joplin/id1315599797">App Store</a>.</li>
 <li><a href="https://joplinapp.org/#localisation">Create or update a translation</a>.</li>
-<li>Help with the <a href="https://github.com/laurent22/joplin">documentation</a>.</li>
 <li>Vote for or review the app on <a href="https://alternativeto.net/software/joplin/">alternativeTo</a> or <a href="https://www.producthunt.com/posts/joplin">Product Hunt</a>.</li>
+<li>Help improve <a href="https://en.wikipedia.org/wiki/Draft:Joplin_(software)">the Wikipedia article</a></li>
 </ul>
 
+		<div class="bottom-links">
+			<a href="https://github.com/laurent22/joplin/blob/master/readme/donate.md">
+				<i class="fa fa-github"></i> Improve this doc
+			</a>
+		</div>
 <script>
 	function stickyHeader() { 
 		return; // Disabled
@@ -354,7 +406,7 @@ https://github.com/laurent22/joplin/blob/master/readme/donate.md
 </script>
 
 <div class="footer">
-Copyright (c) 2016-2019 Laurent Cozic
+Copyright (c) 2016-2020 Laurent Cozic
 </div>
 </body>
 </html>

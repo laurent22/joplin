@@ -23,15 +23,12 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 		this.state = {
 			passwordPromptShow: false,
 			passwordPromptAnswer: '',
+			passwordPromptConfirmAnswer: '',
 		};
 
 		shared.constructor(this);
 
 		this.styles_ = {};
-	}
-
-	componentDidMount() {
-		this.isMounted_ = true;
 	}
 
 	componentWillUnmount() {
@@ -46,12 +43,13 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 		return shared.refreshStats(this);
 	}
 
-	UNSAFE_componentWillMount() {
-		this.initState(this.props);
+	componentDidMount() {
+		this.isMounted_ = true;
+		shared.componentDidMount(this);
 	}
 
-	UNSAFE_componentWillReceiveProps(nextProps) {
-		this.initState(nextProps);
+	componentDidUpdate(prevProps) {
+		shared.componentDidUpdate(this, prevProps);
 	}
 
 	async checkPasswords() {
@@ -65,7 +63,7 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 		if (this.styles_[themeId]) return this.styles_[themeId];
 		this.styles_ = {};
 
-		let styles = {
+		const styles = {
 			titleText: {
 				flex: 1,
 				fontWeight: 'bold',
@@ -81,6 +79,12 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 				flex: 1,
 				fontSize: theme.fontSize,
 				color: theme.color,
+			},
+			normalTextInput: {
+				margin: 10,
+				color: theme.color,
+				borderWidth: 1,
+				borderColor: theme.dividerColor,
 			},
 			container: {
 				flex: 1,
@@ -103,12 +107,12 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 			return shared.onPasswordChange(this, mk, text);
 		};
 
-		const password = this.state.passwords[mk.id] ? this.state.passwords[mk.id] : '';
+		const password = this.props.passwords[mk.id] ? this.props.passwords[mk.id] : '';
 		const passwordOk = this.state.passwordChecks[mk.id] === true ? '✔' : '❌';
 
 		const inputStyle = { flex: 1, marginRight: 10, color: theme.color };
 		inputStyle.borderBottomWidth = 1;
-		inputStyle.borderBottomColor = theme.strongDividerColor;
+		inputStyle.borderBottomColor = theme.dividerColor;
 
 		return (
 			<View key={mk.id}>
@@ -116,7 +120,7 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 				<Text style={this.styles().normalText}>{_('Created: %s', time.formatMsToLocal(mk.created_time))}</Text>
 				<View style={{ flexDirection: 'row', alignItems: 'center' }}>
 					<Text style={{ flex: 0, fontSize: theme.fontSize, marginRight: 10, color: theme.color }}>{_('Password:')}</Text>
-					<TextInput selectionColor={theme.textSelectionColor} secureTextEntry={true} value={password} onChangeText={text => onPasswordChange(text)} style={inputStyle}></TextInput>
+					<TextInput selectionColor={theme.textSelectionColor} keyboardAppearance={theme.keyboardAppearance} secureTextEntry={true} value={password} onChangeText={text => onPasswordChange(text)} style={inputStyle}></TextInput>
 					<Text style={{ fontSize: theme.fontSize, marginRight: 10, color: theme.color }}>{passwordOk}</Text>
 					<Button title={_('Save')} onPress={() => onSaveClick()}></Button>
 				</View>
@@ -131,6 +135,9 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 			try {
 				const password = this.state.passwordPromptAnswer;
 				if (!password) throw new Error(_('Password cannot be empty'));
+				const password2 = this.state.passwordPromptConfirmAnswer;
+				if (!password2) throw new Error(_('Confirm password cannot be empty'));
+				if (password !== password2) throw new Error(_('Passwords do not match!'));
 				await EncryptionService.instance().generateMasterKeyAndEnableEncryption(password);
 				this.setState({ passwordPromptShow: false });
 			} catch (error) {
@@ -140,14 +147,28 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 
 		return (
 			<View style={{ flex: 1, borderColor: theme.dividerColor, borderWidth: 1, padding: 10, marginTop: 10, marginBottom: 10 }}>
-				<Text style={{ fontSize: theme.fontSize, color: theme.color }}>{_('Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target. Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.')}</Text>
+				<Text style={{ fontSize: theme.fontSize, color: theme.color, marginBottom: 10 }}>{_('Enabling encryption means *all* your notes and attachments are going to be re-synchronised and sent encrypted to the sync target. Do not lose the password as, for security purposes, this will be the *only* way to decrypt the data! To enable encryption, please enter your password below.')}</Text>
+				<Text style={this.styles().normalText}>{_('Password:')}</Text>
 				<TextInput
 					selectionColor={theme.textSelectionColor}
-					style={{ margin: 10, color: theme.color, borderWidth: 1, borderColor: theme.dividerColor }}
+					keyboardAppearance={theme.keyboardAppearance}
+					style={this.styles().normalTextInput}
 					secureTextEntry={true}
 					value={this.state.passwordPromptAnswer}
 					onChangeText={text => {
 						this.setState({ passwordPromptAnswer: text });
+					}}
+				></TextInput>
+
+				<Text style={this.styles().normalText}>{_('Confirm password:')}</Text>
+				<TextInput
+					selectionColor={theme.textSelectionColor}
+					keyboardAppearance={theme.keyboardAppearance}
+					style={this.styles().normalTextInput}
+					secureTextEntry={true}
+					value={this.state.passwordPromptConfirmAnswer}
+					onChangeText={text => {
+						this.setState({ passwordPromptConfirmAnswer: text });
 					}}
 				></TextInput>
 				<View style={{ flexDirection: 'row' }}>
@@ -174,12 +195,12 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 
 	render() {
 		const theme = themeStyle(this.props.theme);
-		const masterKeys = this.state.masterKeys;
+		const masterKeys = this.props.masterKeys;
 		const decryptedItemsInfo = this.props.encryptionEnabled ? <Text style={this.styles().normalText}>{shared.decryptedStatText(this)}</Text> : null;
 
 		const mkComps = [];
 
-		let nonExistingMasterKeyIds = this.props.notLoadedMasterKeys.slice();
+		const nonExistingMasterKeyIds = this.props.notLoadedMasterKeys.slice();
 
 		for (let i = 0; i < masterKeys.length; i++) {
 			const mk = masterKeys[i];
@@ -203,6 +224,7 @@ class EncryptionConfigScreenComponent extends BaseScreenComponent {
 				this.setState({
 					passwordPromptShow: true,
 					passwordPromptAnswer: '',
+					passwordPromptConfirmAnswer: '',
 				});
 				return;
 			}

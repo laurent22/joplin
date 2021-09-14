@@ -1,3 +1,6 @@
+const fetch = require('node-fetch');
+const fs = require('fs-extra');
+
 const toolUtils = {};
 
 toolUtils.execCommand = function(command) {
@@ -18,6 +21,26 @@ toolUtils.execCommand = function(command) {
 	});
 };
 
+toolUtils.execCommandWithPipes = function(executable, args) {
+	const spawn = require('child_process').spawn;
+
+	return new Promise((resolve, reject) => {
+		const child = spawn(executable, args, { stdio: 'inherit' });
+
+		child.on('error', (error) => {
+			reject(error);
+		});
+
+		child.on('close', (code) => {
+			if (code !== 0) {
+				reject(`Ended with code ${code}`);
+			} else {
+				resolve();
+			}
+		});
+	});
+};
+
 toolUtils.downloadFile = function(url, targetPath) {
 	const https = require('https');
 	const fs = require('fs');
@@ -28,7 +51,7 @@ toolUtils.downloadFile = function(url, targetPath) {
 			if (response.statusCode !== 200) reject(new Error(`HTTP error ${response.statusCode}`));
 			response.pipe(file);
 			file.on('finish', function() {
-				//file.close();
+				// file.close();
 				resolve();
 			});
 		}).on('error', (error) => {
@@ -74,13 +97,75 @@ toolUtils.fileExists = async function(filePath) {
 		fs.stat(filePath, function(err) {
 			if (err == null) {
 				resolve(true);
-			} else if(err.code == 'ENOENT') {
+			} else if (err.code == 'ENOENT') {
 				resolve(false);
 			} else {
 				reject(err);
 			}
 		});
 	});
+};
+
+async function loadGitHubUsernameCache() {
+	const path = `${__dirname}/github_username_cache.json`;
+
+	if (await fs.exists(path)) {
+		const jsonString = await fs.readFile(path);
+		return JSON.parse(jsonString);
+	}
+
+	return {};
+}
+
+async function saveGitHubUsernameCache(cache) {
+	const path = `${__dirname}/github_username_cache.json`;
+	await fs.writeFile(path, JSON.stringify(cache));
+}
+
+toolUtils.githubUsername = async function(email, name) {
+	const cache = await loadGitHubUsernameCache();
+	const cacheKey = `${email}:${name}`;
+	if (cacheKey in cache) return cache[cacheKey];
+
+	let output = null;
+
+	const oauthToken = await toolUtils.githubOauthToken();
+
+	const urlsToTry = [
+		`https://api.github.com/search/users?q=${encodeURI(email)}+in:email`,
+		`https://api.github.com/search/users?q=user:${encodeURI(name)}`,
+	];
+
+	for (const url of urlsToTry) {
+		const response = await fetch(url, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+				'Authorization': `token ${oauthToken}`,
+			},
+		});
+
+		const responseText = await response.text();
+
+		if (!response.ok) continue;
+
+		const responseJson = JSON.parse(responseText);
+		if (!responseJson || !responseJson.items || responseJson.items.length !== 1) continue;
+
+		output = responseJson.items[0].login;
+		break;
+	}
+
+	cache[cacheKey] = output;
+	await saveGitHubUsernameCache(cache);
+
+	return output;
+};
+
+toolUtils.patreonOauthToken = async function() {
+	const fs = require('fs-extra');
+	const r = await fs.readFile(`${__dirname}/patreon_oauth_token.txt`);
+	return r.toString();
 };
 
 toolUtils.githubOauthToken = async function() {
@@ -94,8 +179,6 @@ toolUtils.githubRelease = async function(project, tagName, options = null) {
 		isDraft: false,
 		isPreRelease: false,
 	}, options);
-
-	const fetch = require('node-fetch');
 
 	const oauthToken = await toolUtils.githubOauthToken();
 

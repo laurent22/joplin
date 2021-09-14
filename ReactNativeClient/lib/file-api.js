@@ -116,7 +116,7 @@ class FileApi {
 	}
 
 	fullPath_(path) {
-		let output = [];
+		const output = [];
 		if (this.baseDir()) output.push(this.baseDir());
 		if (path) output.push(path);
 		return output.join('/');
@@ -128,17 +128,27 @@ class FileApi {
 		if (!options) options = {};
 		if (!('includeHidden' in options)) options.includeHidden = false;
 		if (!('context' in options)) options.context = null;
+		if (!('includeDirs' in options)) options.includeDirs = true;
+		if (!('syncItemsOnly' in options)) options.syncItemsOnly = false;
 
 		this.logger().debug(`list ${this.baseDir()}`);
 
-		const result = await tryAndRepeat(() => this.driver_.list(this.baseDir(), options), this.requestRepeatCount());
+		const result = await tryAndRepeat(() => this.driver_.list(this.fullPath_(path), options), this.requestRepeatCount());
 
 		if (!options.includeHidden) {
-			let temp = [];
+			const temp = [];
 			for (let i = 0; i < result.items.length; i++) {
 				if (!isHidden(result.items[i].path)) temp.push(result.items[i]);
 			}
 			result.items = temp;
+		}
+
+		if (!options.includeDirs) {
+			result.items = result.items.filter(f => !f.isDir);
+		}
+
+		if (options.syncItemsOnly) {
+			result.items = result.items.filter(f => !f.isDir && BaseItem.isSystemPath(f.path));
 		}
 
 		return result;
@@ -148,7 +158,7 @@ class FileApi {
 	setTimestamp(path, timestampMs) {
 		this.logger().debug(`setTimestamp ${this.fullPath_(path)}`);
 		return tryAndRepeat(() => this.driver_.setTimestamp(this.fullPath_(path), timestampMs), this.requestRepeatCount());
-		//return this.driver_.setTimestamp(this.fullPath_(path), timestampMs);
+		// return this.driver_.setTimestamp(this.fullPath_(path), timestampMs);
 	}
 
 	mkdir(path) {
@@ -172,6 +182,7 @@ class FileApi {
 		// });
 	}
 
+	// Returns UTF-8 encoded string by default, or a Response if `options.target = 'file'`
 	get(path, options = null) {
 		if (!options) options = {};
 		if (!options.encoding) options.encoding = 'utf8';
@@ -216,7 +227,7 @@ class FileApi {
 }
 
 function basicDeltaContextFromOptions_(options) {
-	let output = {
+	const output = {
 		timestamp: 0,
 		filesAtTimestamp: [],
 		statsCache: null,
@@ -245,9 +256,16 @@ async function basicDelta(path, getDirStatFn, options) {
 	const itemIds = await options.allItemIdsHandler();
 	if (!Array.isArray(itemIds)) throw new Error('Delta API not supported - local IDs must be provided');
 
+	const logger = options && options.logger ? options.logger : new Logger();
+
 	const context = basicDeltaContextFromOptions_(options);
 
-	let newContext = {
+	if (context.timestamp > Date.now()) {
+		logger.warn(`BasicDelta: Context timestamp is greater than current time: ${context.timestamp}`);
+		logger.warn('BasicDelta: Sync will continue but it is likely that nothing will be synced');
+	}
+
+	const newContext = {
 		timestamp: context.timestamp,
 		filesAtTimestamp: context.filesAtTimestamp.slice(),
 		statsCache: context.statsCache,
@@ -267,6 +285,13 @@ async function basicDelta(path, getDirStatFn, options) {
 
 	let output = [];
 
+	const updateReport = {
+		timestamp: context.timestamp,
+		older: 0,
+		newer: 0,
+		equal: 0,
+	};
+
 	// Find out which files have been changed since the last time. Note that we keep
 	// both the timestamp of the most recent change, *and* the items that exactly match
 	// this timestamp. This to handle cases where an item is modified while this delta
@@ -281,16 +306,23 @@ async function basicDelta(path, getDirStatFn, options) {
 
 		if (stat.isDir) continue;
 
-		if (stat.updated_time < context.timestamp) continue;
+		if (stat.updated_time < context.timestamp) {
+			updateReport.older++;
+			continue;
+		}
 
 		// Special case for items that exactly match the timestamp
 		if (stat.updated_time === context.timestamp) {
-			if (context.filesAtTimestamp.indexOf(stat.path) >= 0) continue;
+			if (context.filesAtTimestamp.indexOf(stat.path) >= 0) {
+				updateReport.equal++;
+				continue;
+			}
 		}
 
 		if (stat.updated_time > newContext.timestamp) {
 			newContext.timestamp = stat.updated_time;
 			newContext.filesAtTimestamp = [];
+			updateReport.newer++;
 		}
 
 		newContext.filesAtTimestamp.push(stat.path);
@@ -299,12 +331,14 @@ async function basicDelta(path, getDirStatFn, options) {
 		if (output.length >= outputLimit) break;
 	}
 
+	logger.info(`BasicDelta: Report: ${JSON.stringify(updateReport)}`);
+
 	if (!newContext.deletedItemsProcessed) {
 		// Find out which items have been deleted on the sync target by comparing the items
 		// we have to the items on the target.
 		// Note that when deleted items are processed it might result in the output having
 		// more items than outputLimit. This is acceptable since delete operations are cheap.
-		let deletedItems = [];
+		const deletedItems = [];
 		for (let i = 0; i < itemIds.length; i++) {
 			const itemId = itemIds[i];
 

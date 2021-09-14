@@ -13,10 +13,6 @@ class BaseSyncTarget {
 		return false;
 	}
 
-	static resourceDirName() {
-		return '.resource';
-	}
-
 	option(name, defaultValue = null) {
 		return this.options_ && name in this.options_ ? this.options_[name] : defaultValue;
 	}
@@ -31,6 +27,11 @@ class BaseSyncTarget {
 
 	db() {
 		return this.db_;
+	}
+
+	// If [] is returned it means all platforms are supported
+	static unsupportedPlatforms() {
+		return [];
 	}
 
 	async isAuthenticated() {

@@ -19,22 +19,31 @@ shared.noteExists = async function(noteId) {
 	return !!existingNote;
 };
 
+// Note has been deleted while user was modifying it. In that case, we
+// just save a new note so that user can keep editing.
+shared.handleNoteDeletedWhileEditing_ = async (note) => {
+	if (await shared.noteExists(note.id)) return null;
+
+	reg.logger().info('Note has been deleted while it was being edited - recreating it.');
+
+	let newNote = Object.assign({}, note);
+	delete newNote.id;
+	newNote = await Note.save(newNote);
+
+	return Note.load(newNote.id);
+};
+
 shared.saveNoteButton_press = async function(comp, folderId = null, options = null) {
-	options = Object.assign(
-		{},
-		{
-			autoTitle: true,
-		},
-		options
-	);
+	options = Object.assign({}, {
+		autoTitle: true,
+	}, options);
 
 	const releaseMutex = await saveNoteMutex_.acquire();
 
 	let note = Object.assign({}, comp.state.note);
 
-	// Note has been deleted while user was modifying it. In that case, we
-	// just save a new note by clearing the note ID.
-	if (note.id && !(await shared.noteExists(note.id))) delete note.id;
+	const recreatedNote = await shared.handleNoteDeletedWhileEditing_(note);
+	if (recreatedNote) note = recreatedNote;
 
 	if (folderId) {
 		note.parent_id = folderId;
@@ -46,16 +55,16 @@ shared.saveNoteButton_press = async function(comp, folderId = null, options = nu
 		note.parent_id = folder.id;
 	}
 
-	let isNew = !note.id;
+	const isProvisionalNote = comp.props.provisionalNoteIds.includes(note.id);
 
-	let saveOptions = { userSideValidation: true };
-	if (!isNew) {
-		saveOptions.fields = BaseModel.diffObjectsFields(comp.state.lastSavedNote, note);
-	}
+	const saveOptions = {
+		userSideValidation: true,
+		fields: BaseModel.diffObjectsFields(comp.state.lastSavedNote, note),
+	};
 
-	const hasAutoTitle = comp.state.newAndNoTitleChangeNoteId || (isNew && !note.title);
+	const hasAutoTitle = comp.state.newAndNoTitleChangeNoteId || (isProvisionalNote && !note.title);
 	if (hasAutoTitle && options.autoTitle) {
-		note.title = Note.defaultTitle(note);
+		note.title = Note.defaultTitle(note.body);
 		if (saveOptions.fields && saveOptions.fields.indexOf('title') < 0) saveOptions.fields.push('title');
 	}
 
@@ -64,7 +73,7 @@ shared.saveNoteButton_press = async function(comp, folderId = null, options = nu
 	const stateNote = comp.state.note;
 
 	// Note was reloaded while being saved.
-	if (!isNew && (!stateNote || stateNote.id !== savedNote.id)) return releaseMutex();
+	if (!recreatedNote && (!stateNote || stateNote.id !== savedNote.id)) return releaseMutex();
 
 	// Re-assign any property that might have changed during saving (updated_time, etc.)
 	note = Object.assign(note, savedNote);
@@ -81,20 +90,18 @@ shared.saveNoteButton_press = async function(comp, folderId = null, options = nu
 		note.body = stateNote.body;
 	}
 
-	let newState = {
+	const newState = {
 		lastSavedNote: Object.assign({}, note),
 		note: note,
 	};
 
-	if (isNew && hasAutoTitle) newState.newAndNoTitleChangeNoteId = note.id;
+	if (isProvisionalNote && hasAutoTitle) newState.newAndNoTitleChangeNoteId = note.id;
 
 	if (!options.autoTitle) newState.newAndNoTitleChangeNoteId = null;
 
 	comp.setState(newState);
 
-	// await shared.refreshAttachedResources(comp, newState.note.body);
-
-	if (isNew) {
+	if (isProvisionalNote) {
 		Note.updateGeolocation(note.id).then(geoNote => {
 			const stateNote = comp.state.note;
 			if (!stateNote || !geoNote) return;
@@ -116,47 +123,30 @@ shared.saveNoteButton_press = async function(comp, folderId = null, options = nu
 		});
 	}
 
-	if (isNew) {
-		// Clear the newNote item now that the note has been saved, and
-		// make sure that the note we're editing is selected.
-		comp.props.dispatch({
-			type: 'NOTE_SELECT',
-			id: savedNote.id,
-		});
-	}
-
 	releaseMutex();
 };
 
 shared.saveOneProperty = async function(comp, name, value) {
 	let note = Object.assign({}, comp.state.note);
 
-	// Note has been deleted while user was modifying it. In that, we
-	// just save a new note by clearing the note ID.
-	if (note.id && !(await shared.noteExists(note.id))) delete note.id;
+	const recreatedNote = await shared.handleNoteDeletedWhileEditing_(note);
+	if (recreatedNote) note = recreatedNote;
 
-	// reg.logger().info('Saving note property: ', note.id, name, value);
+	let toSave = { id: note.id };
+	toSave[name] = value;
+	toSave = await Note.save(toSave);
+	note[name] = toSave[name];
 
-	if (note.id) {
-		let toSave = { id: note.id };
-		toSave[name] = value;
-		toSave = await Note.save(toSave);
-		note[name] = toSave[name];
-
-		comp.setState({
-			lastSavedNote: Object.assign({}, note),
-			note: note,
-		});
-	} else {
-		note[name] = value;
-		comp.setState({ note: note });
-	}
+	comp.setState({
+		lastSavedNote: Object.assign({}, note),
+		note: note,
+	});
 };
 
 shared.noteComponent_change = function(comp, propName, propValue) {
-	let newState = {};
+	const newState = {};
 
-	let note = Object.assign({}, comp.state.note);
+	const note = Object.assign({}, comp.state.note);
 	note[propName] = propValue;
 	newState.note = note;
 
@@ -199,19 +189,20 @@ shared.attachedResources = async function(noteBody) {
 
 shared.isModified = function(comp) {
 	if (!comp.state.note || !comp.state.lastSavedNote) return false;
-	let diff = BaseModel.diffObjects(comp.state.lastSavedNote, comp.state.note);
+	const diff = BaseModel.diffObjects(comp.state.lastSavedNote, comp.state.note);
 	delete diff.type_;
 	return !!Object.getOwnPropertyNames(diff).length;
 };
 
 shared.initState = async function(comp) {
-	let note = null;
+	const isProvisionalNote = comp.props.provisionalNoteIds.includes(comp.props.noteId);
+
+	const note = await Note.load(comp.props.noteId);
 	let mode = 'view';
-	if (!comp.props.noteId) {
-		note = comp.props.itemType == 'todo' ? Note.newTodo(comp.props.folderId) : Note.new(comp.props.folderId);
+
+	if (isProvisionalNote && !comp.props.sharedData) {
 		mode = 'edit';
-	} else {
-		note = await Note.load(comp.props.noteId);
+		comp.scheduleFocusUpdate();
 	}
 
 	const folder = Folder.byId(comp.props.folders, note.parent_id);
@@ -226,22 +217,39 @@ shared.initState = async function(comp) {
 		noteResources: await shared.attachedResources(note ? note.body : ''),
 	});
 
+
 	if (comp.props.sharedData) {
-		this.noteComponent_change(comp, 'body', comp.props.sharedData.value);
+		if (comp.props.sharedData.title) {
+			this.noteComponent_change(comp, 'title', comp.props.sharedData.title);
+		}
+		if (comp.props.sharedData.text) {
+			this.noteComponent_change(comp, 'body', comp.props.sharedData.text);
+		}
+		if (comp.props.sharedData.resources) {
+			for (let i = 0; i < comp.props.sharedData.resources.length; i++) {
+				const resource = comp.props.sharedData.resources[i];
+				reg.logger().info(`about to attach resource ${JSON.stringify(resource)}`);
+				await comp.attachFile({
+					uri: resource.uri,
+					type: resource.mimeType,
+					fileName: resource.name,
+				}, null);
+			}
+		}
 	}
 
 	// eslint-disable-next-line require-atomic-updates
-	comp.lastLoadedNoteId_ = note ? note.id : null;
+	comp.lastLoadedNoteId_ = note.id;
 };
 
 shared.toggleIsTodo_onPress = function(comp) {
-	let newNote = Note.toggleIsTodo(comp.state.note);
-	let newState = { note: newNote };
+	const newNote = Note.toggleIsTodo(comp.state.note);
+	const newState = { note: newNote };
 	comp.setState(newState);
 };
 
 shared.toggleCheckbox = function(ipcMessage, noteBody) {
-	let newBody = noteBody.split('\n');
+	const newBody = noteBody.split('\n');
 	const p = ipcMessage.split(':');
 	const lineIndex = Number(p[p.length - 1]);
 	if (lineIndex >= newBody.length) {

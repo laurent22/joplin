@@ -1,27 +1,11 @@
 const React = require('react');
 
 const { StyleSheet } = require('react-native');
-const { globalStyle, themeStyle } = require('lib/components/global-style.js');
+const { themeStyle } = require('lib/components/global-style.js');
 
-const styleObject_ = {
-	screen: {
-		flex: 1,
-		backgroundColor: globalStyle.backgroundColor,
-	},
-};
-
-const styles_ = StyleSheet.create(styleObject_);
-
-let rootStyles_ = {};
+const rootStyles_ = {};
 
 class BaseScreenComponent extends React.Component {
-	styles() {
-		return styles_;
-	}
-
-	styleObject() {
-		return styleObject_;
-	}
 
 	rootStyle(themeId) {
 		const theme = themeStyle(themeId);

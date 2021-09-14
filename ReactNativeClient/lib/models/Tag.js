@@ -14,8 +14,8 @@ class Tag extends BaseItem {
 	}
 
 	static async noteIds(tagId) {
-		let rows = await this.db().selectAll('SELECT note_id FROM note_tags WHERE tag_id = ?', [tagId]);
-		let output = [];
+		const rows = await this.db().selectAll('SELECT note_id FROM note_tags WHERE tag_id = ?', [tagId]);
+		const output = [];
 		for (let i = 0; i < rows.length; i++) {
 			output.push(rows[i].note_id);
 		}
@@ -25,7 +25,7 @@ class Tag extends BaseItem {
 	static async notes(tagId, options = null) {
 		if (options === null) options = {};
 
-		let noteIds = await this.noteIds(tagId);
+		const noteIds = await this.noteIds(tagId);
 		if (!noteIds.length) return [];
 
 		return Note.previews(
@@ -58,7 +58,7 @@ class Tag extends BaseItem {
 	}
 
 	static async addNote(tagId, noteId) {
-		let hasIt = await this.hasNote(tagId, noteId);
+		const hasIt = await this.hasNote(tagId, noteId);
 		if (hasIt) return;
 
 		const output = await NoteTag.save({
@@ -68,14 +68,14 @@ class Tag extends BaseItem {
 
 		this.dispatch({
 			type: 'TAG_UPDATE_ONE',
-			item: await Tag.load(tagId),
+			item: await Tag.loadWithCount(tagId),
 		});
 
 		return output;
 	}
 
 	static async removeNote(tagId, noteId) {
-		let noteTags = await NoteTag.modelSelectAll('SELECT id FROM note_tags WHERE tag_id = ? and note_id = ?', [tagId, noteId]);
+		const noteTags = await NoteTag.modelSelectAll('SELECT id FROM note_tags WHERE tag_id = ? and note_id = ?', [tagId, noteId]);
 		for (let i = 0; i < noteTags.length; i++) {
 			await NoteTag.delete(noteTags[i].id);
 		}
@@ -86,29 +86,45 @@ class Tag extends BaseItem {
 		});
 	}
 
+	static loadWithCount(tagId) {
+		const sql = 'SELECT * FROM tags_with_note_count WHERE id = ?';
+		return this.modelSelectOne(sql, [tagId]);
+	}
+
 	static async hasNote(tagId, noteId) {
-		let r = await this.db().selectOne('SELECT note_id FROM note_tags WHERE tag_id = ? AND note_id = ? LIMIT 1', [tagId, noteId]);
+		const r = await this.db().selectOne('SELECT note_id FROM note_tags WHERE tag_id = ? AND note_id = ? LIMIT 1', [tagId, noteId]);
 		return !!r;
 	}
 
-	static tagsWithNotesSql_() {
-		return 'select distinct tags.id from tags left join note_tags nt on nt.tag_id = tags.id left join notes on notes.id = nt.note_id where notes.id IS NOT NULL';
-	}
-
 	static async allWithNotes() {
-		return await Tag.modelSelectAll(`SELECT * FROM tags WHERE id IN (${this.tagsWithNotesSql_()})`);
+		return await Tag.modelSelectAll('SELECT * FROM tags_with_note_count');
 	}
 
 	static async searchAllWithNotes(options) {
 		if (!options) options = {};
 		if (!options.conditions) options.conditions = [];
-		options.conditions.push(`id IN (${this.tagsWithNotesSql_()})`);
+		options.conditions.push('id IN (SELECT distinct id FROM tags_with_note_count)');
 		return this.search(options);
 	}
 
 	static async tagsByNoteId(noteId) {
 		const tagIds = await NoteTag.tagIdsByNoteId(noteId);
 		return this.modelSelectAll(`SELECT * FROM tags WHERE id IN ("${tagIds.join('","')}")`);
+	}
+
+	static async commonTagsByNoteIds(noteIds) {
+		if (!noteIds || noteIds.length === 0) {
+			return [];
+		}
+		let commonTagIds = await NoteTag.tagIdsByNoteId(noteIds[0]);
+		for (let i = 1; i < noteIds.length; i++) {
+			const tagIds = await NoteTag.tagIdsByNoteId(noteIds[i]);
+			commonTagIds = commonTagIds.filter(value => tagIds.includes(value));
+			if (commonTagIds.length === 0) {
+				break;
+			}
+		}
+		return this.modelSelectAll(`SELECT * FROM tags WHERE id IN ("${commonTagIds.join('","')}")`);
 	}
 
 	static async loadByTitle(title) {

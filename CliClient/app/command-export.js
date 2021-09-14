@@ -17,17 +17,19 @@ class Command extends BaseCommand {
 		const service = new InteropService();
 		const formats = service
 			.modules()
-			.filter(m => m.type === 'exporter')
+			.filter(m => m.type === 'exporter' && m.format !== 'html')
 			.map(m => m.format + (m.description ? ` (${m.description})` : ''));
 
 		return [['--format <format>', _('Destination format: %s', formats.join(', '))], ['--note <note>', _('Exports only the given note.')], ['--notebook <notebook>', _('Exports only the given notebook.')]];
 	}
 
 	async action(args) {
-		let exportOptions = {};
+		const exportOptions = {};
 		exportOptions.path = args.path;
 
 		exportOptions.format = args.options.format ? args.options.format : 'jex';
+
+		if (exportOptions.format === 'html') throw new Error('HTML export is not supported. Please use the desktop application.');
 
 		if (args.options.note) {
 			const notes = await app().loadItems(BaseModel.TYPE_NOTE, args.options.note, { parent: app().currentFolder() });

@@ -5,42 +5,71 @@
 ; Ignore "BUCK" generated dirs
 <PROJECT_ROOT>/\.buckd/
 
-; Ignore unexpected extra "@providesModule"
-.*/node_modules/.*/node_modules/fbjs/.*
+; Ignore polyfills
+node_modules/react-native/Libraries/polyfills/.*
 
-; Ignore duplicate module providers
-; For RN Apps installed via npm, "Libraries" folder is inside
-; "node_modules/react-native" but in the source repo it is in the root
-.*/Libraries/react-native/React.js
-.*/Libraries/react-native/ReactNative.js
+; These should not be required directly
+; require from fbjs/lib instead: require('fbjs/lib/warning')
+node_modules/warning/.*
+
+; Flow doesn't support platforms
+.*/Libraries/Utilities/LoadingView.js
+
+[untyped]
+.*/node_modules/@react-native-community/cli/.*/.*
 
 [include]
 
 [libs]
 node_modules/react-native/Libraries/react-native/react-native-interface.js
-node_modules/react-native/flow
+node_modules/react-native/flow/
 
 [options]
 emoji=true
 
-module.system=haste
+esproposal.optional_chaining=enable
+esproposal.nullish_coalescing=enable
 
-experimental.strict_type_args=true
+module.file_ext=.js
+module.file_ext=.json
+module.file_ext=.ios.js
 
 munge_underscores=true
 
-module.name_mapper='^[./a-zA-Z0-9$_-]+\.\(bmp\|gif\|jpg\|jpeg\|png\|psd\|svg\|webp\|m4v\|mov\|mp4\|mpeg\|mpg\|webm\|aac\|aiff\|caf\|m4a\|mp3\|wav\|html\|pdf\)$' -> 'RelativeImageStub'
+module.name_mapper='^react-native$' -> '<PROJECT_ROOT>/node_modules/react-native/Libraries/react-native/react-native-implementation'
+module.name_mapper='^react-native/\(.*\)$' -> '<PROJECT_ROOT>/node_modules/react-native/\1'
+module.name_mapper='^[./a-zA-Z0-9$_-]+\.\(bmp\|gif\|jpg\|jpeg\|png\|psd\|svg\|webp\|m4v\|mov\|mp4\|mpeg\|mpg\|webm\|aac\|aiff\|caf\|m4a\|mp3\|wav\|html\|pdf\)$' -> '<PROJECT_ROOT>/node_modules/react-native/Libraries/Image/RelativeImageStub'
 
 suppress_type=$FlowIssue
 suppress_type=$FlowFixMe
-suppress_type=$FixMe
+suppress_type=$FlowFixMeProps
+suppress_type=$FlowFixMeState
 
-suppress_comment=\\(.\\|\n\\)*\\$FlowFixMe\\($\\|[^(]\\|(\\(>=0\\.\\(4[0-2]\\|[1-3][0-9]\\|[0-9]\\).[0-9]\\)? *\\(site=[a-z,_]*react_native[a-z,_]*\\)?)\\)
-suppress_comment=\\(.\\|\n\\)*\\$FlowIssue\\((\\(>=0\\.\\(4[0-2]\\|[1-3][0-9]\\|[0-9]\\).[0-9]\\)? *\\(site=[a-z,_]*react_native[a-z,_]*\\)?)\\)?:? #[0-9]+
-suppress_comment=\\(.\\|\n\\)*\\$FlowFixedInNextDeploy
+suppress_comment=\\(.\\|\n\\)*\\$FlowFixMe\\($\\|[^(]\\|(\\(<VERSION>\\)? *\\(site=[a-z,_]*react_native\\(_ios\\)?_\\(oss\\|fb\\)[a-z,_]*\\)?)\\)
+suppress_comment=\\(.\\|\n\\)*\\$FlowIssue\\((\\(<VERSION>\\)? *\\(site=[a-z,_]*react_native\\(_ios\\)?_\\(oss\\|fb\\)[a-z,_]*\\)?)\\)?:? #[0-9]+
 suppress_comment=\\(.\\|\n\\)*\\$FlowExpectedError
 
-unsafe.enable_getters_and_setters=true
+[lints]
+sketchy-null-number=warn
+sketchy-null-mixed=warn
+sketchy-number=warn
+untyped-type-import=warn
+nonstrict-import=warn
+deprecated-type=warn
+unsafe-getters-setters=warn
+inexact-spread=warn
+unnecessary-invariant=warn
+signature-verification-failure=warn
+deprecated-utility=error
+
+[strict]
+deprecated-type
+nonstrict-import
+sketchy-null
+unclear-type
+unsafe-getters-setters
+untyped-import
+untyped-type-import
 
 [version]
-^0.92.0
+^0.105.0

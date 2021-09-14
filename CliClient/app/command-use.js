@@ -17,7 +17,7 @@ class Command extends BaseCommand {
 	}
 
 	async action(args) {
-		let folder = await app().loadItem(BaseModel.TYPE_FOLDER, args['notebook']);
+		const folder = await app().loadItem(BaseModel.TYPE_FOLDER, args['notebook']);
 		if (!folder) throw new Error(_('Cannot find "%s".', args['notebook']));
 		app().switchCurrentFolder(folder);
 	}

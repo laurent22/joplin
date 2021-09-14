@@ -1,4 +1,4 @@
-const { PushNotificationIOS } = require('react-native');
+import PushNotificationIOS from '@react-native-community/push-notification-ios';
 
 class AlarmServiceDriver {
 	constructor() {
@@ -68,7 +68,7 @@ class AlarmServiceDriver {
 		const iosNotification = {
 			id: `${notification.id}`,
 			alertTitle: notification.title,
-			fireDate: notification.date,
+			fireDate: notification.date.toISOString(),
 			userInfo: { id: `${notification.id}` },
 		};
 

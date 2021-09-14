@@ -4,14 +4,14 @@ It is possible to get the apps to display or log more information that might hel
 
 ## Desktop application
 
-- Add a file named "flags.txt" in the config directory (should be `~/.config/joplin-desktop` or `c:\Users\YOUR_NAME\.config\joplin-desktop`) with the following content: `--open-dev-tools --log-level debug`
+- Add a file named "flags.txt" in the config directory (should be `~/.config/joplin-desktop` or `c:\Users\YOUR_NAME\.config\joplin-desktop`) with the following content: `--open-dev-tools --debug --log-level debug`
 - Restart the application
 - The development tools should now be opened. Click the "Console" tab
 - Now repeat the action that was causing problem. The console might output warnings or errors - please add them to the GitHub issue. Also open log.txt in the config folder and if there is any error or warning, please also add them to the issue.
 
 ## CLI application
 
-- Start the app with `joplin --log-level debug`
+- Start the app with `joplin --debug --log-level debug`
 - Check the log.txt as specified above for the desktop application and attach the log to the GitHub issue (or just the warnings/errors if any)
 
 ## Mobile application
@@ -53,7 +53,7 @@ Your users can retrieve crash reports from their device and send them to you via
 
 3) Select Diagnostics & Usage Data
 
-4) Locate the log for the crashed app. The logs will be named in the format: <AppName>_<DateTime>_<DeviceName>
+4) Locate the log for the crashed app. The logs will be named in the format: `<AppName>_<DateTime>_<DeviceName>`
 
 5) Select the desired log. Then, using the text selection UI select the entire text of the log. Once the text is selected, tap Copy
 

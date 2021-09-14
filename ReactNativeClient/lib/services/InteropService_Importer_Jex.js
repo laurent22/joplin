@@ -15,9 +15,9 @@ class InteropService_Importer_Jex extends InteropService_Importer_Base {
 				cwd: tempDir,
 			});
 		} catch (error) {
-			let msg = [`Cannot untar file ${this.sourcePath_}`, error.message];
+			const msg = [`Cannot untar file ${this.sourcePath_}`, error.message];
 			if (error.data) msg.push(JSON.stringify(error.data));
-			let e = new Error(msg.join(': '));
+			const e = new Error(msg.join(': '));
 			throw e;
 		}
 

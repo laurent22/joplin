@@ -49,4 +49,41 @@ describe('ArrayUtils', function() {
 		expect(ArrayUtils.contentEquals(['b'], ['a', 'b'])).toBe(false);
 	}));
 
+	it('should merge overlapping intervals', asyncTest(async () => {
+		const testCases = [
+			[
+				[],
+				[],
+			],
+			[
+				[[0, 50]],
+				[[0, 50]],
+			],
+			[
+				[[0, 20], [20, 30]],
+				[[0, 30]],
+			],
+			[
+				[[0, 10], [10, 50], [15, 30], [20, 80], [80, 95]],
+				[[0, 95]],
+			],
+			[
+				[[0, 5], [0, 10], [25, 35], [30, 60], [50, 60], [85, 100]],
+				[[0, 10], [25, 60], [85, 100]],
+			],
+			[
+				[[0, 5], [10, 40], [35, 50], [35, 75], [50, 60], [80, 85], [80, 90]],
+				[[0, 5], [10, 75], [80, 90]],
+			],
+		];
+
+		testCases.forEach((t, i) => {
+			const intervals = t[0];
+			const expected = t[1];
+
+			const actual = ArrayUtils.mergeOverlappingIntervals(intervals, intervals.length);
+			expect(actual).toEqual(expected, `Test case ${i}`);
+		});
+	}));
+
 });

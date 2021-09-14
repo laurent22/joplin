@@ -44,10 +44,10 @@ function createChangeLog(releases) {
 
 	for (let i = 0; i < releases.length; i++) {
 		const r = releases[i];
-		let s = [];
+		const s = [];
 		s.push(`## ${r.tag_name} - ${r.published_at}`);
 		s.push('');
-		let body = r.body.replace(/#(\d+)/g, '[#$1](https://github.com/laurent22/joplin/issues/$1)');
+		const body = r.body.replace(/#(\d+)/g, '[#$1](https://github.com/laurent22/joplin/issues/$1)');
 		s.push(body);
 		output.push(s.join('\n'));
 	}

@@ -1,0 +1,3845 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Laurent Cozic
+# This file is distributed under the same license as the Joplin-CLI package.
+# Harris Arvanitis <xaris@tuta.io>, 2019.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Joplin-CLI 1.0.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: Harris Arvanitis <xaris@tuta.io>\n"
+"Language-Team: \n"
+"Language: el_GR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.2.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: CliClient/app/command-cp.js:13
+msgid ""
+"Duplicates the notes matching <note> to [notebook]. If no notebook is "
+"specified the note is duplicated in the current notebook."
+msgstr ""
+"Αντιγράφει τις σημειώσεις που ταιριάζουν με τη  <note> στο [σημειωματάριο]. "
+"Εάν δεν έχει οριστεί κανένα σημειωματάριο, η σημείωση αντιγράφεται στον "
+"τρέχον."
+
+#: CliClient/app/command-cp.js:24 CliClient/app/command-cp.js:27
+#: CliClient/app/command-import.js:34 CliClient/app/command-mv.js:22
+#: CliClient/app/command-mv.js:25 CliClient/app/command-use.js:21
+#: CliClient/app/command-ren.js:23 CliClient/app/command-rmbook.js:25
+#: CliClient/app/command-cat.js:25 CliClient/app/command-rmnote.js:25
+#: CliClient/app/command-attach.js:21 CliClient/app/command-export.js:36
+#: CliClient/app/command-export.js:40 CliClient/app/command-geoloc.js:20
+#: CliClient/app/command-search.js:27 CliClient/app/command-set.js:32
+#: CliClient/app/command-help.js:66 CliClient/app/command-todo.js:21
+#: CliClient/app/command-tag.js:33 CliClient/app/command-tag.js:36
+#: CliClient/app/command-tag.js:42 CliClient/app/command-tag.js:43
+#: CliClient/app/command-tag.js:81 CliClient/app/command-tag.js:87
+#: CliClient/app/command-done.js:20
+#: ReactNativeClient/lib/services/InteropService.js:218
+#: ReactNativeClient/lib/services/InteropService.js:239
+#, javascript-format
+msgid "Cannot find \"%s\"."
+msgstr "Δεν είναι δυνατή η εύρεση του \"%s\"."
+
+#: CliClient/app/command-ls.js:18
+msgid ""
+"Displays the notes in the current notebook. Use `ls /` to display the list "
+"of notebooks."
+msgstr ""
+"Εμφανίζει τις σημειώσεις στο τρέχον σημειωματάριο. Χρησιμοποιήστε το `ls /` "
+"για να εμφανίσετε τη λίστα των σημειωματάριων."
+
+#: CliClient/app/command-ls.js:27
+msgid "Displays only the first top <num> notes."
+msgstr "Εμφανίζει μόνο τις πρώτες <num> σημειώσεις."
+
+#: CliClient/app/command-ls.js:28
+msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
+msgstr ""
+"Ταξινόμηση του στοιχείου με <field> (π.χ. τίτλος, ώρα_ενημέρωσης, "
+"ώρα_δημιουργίας)."
+
+#: CliClient/app/command-ls.js:29
+msgid "Reverses the sorting order."
+msgstr "Αντιστρέφει τη σειρά ταξινόμησης."
+
+#: CliClient/app/command-ls.js:30
+msgid ""
+"Displays only the items of the specific type(s). Can be `n` for notes, `t` "
+"for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
+"to-dos, while `-ttd` would display notes and to-dos."
+msgstr ""
+"Εμφανίζει μόνο τα στοιχεία του συγκεκριμένου τύπου. Μπορεί να είναι `n` για "
+"σημειώσεις, `t` για to-dos ή `nt` για σημειώσεις και to-dos (π.χ. `-tt` θα "
+"εμφανίζει μόνο τα to-dos, ενώ το `-ttd` και σημειώσεις και to-dos."
+
+#: CliClient/app/command-ls.js:31
+msgid "Either \"text\" or \"json\""
+msgstr "Είτε \"text\" ή \"json\""
+
+#: CliClient/app/command-ls.js:32 CliClient/app/command-tag.js:18
+msgid ""
+"Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, "
+"TODO_CHECKED (for to-dos), TITLE"
+msgstr ""
+"Χρησιμοποιήστε τη μορφή μακράς λίστας. Η μορφή είναι ID, NOTE_COUNT (για "
+"σημειωματάριο), DATE, TODO_CHECKED (για to-dos), TITLE"
+
+#: CliClient/app/command-ls.js:63
+msgid "Please select a notebook first."
+msgstr "Παρακαλώ επιλέξτε πρώτα σημειωματάριο."
+
+#: CliClient/app/command-import.js:14
+msgid "Imports data into Joplin."
+msgstr "Εισάγει δεδομένα στο Joplin."
+
+#: CliClient/app/command-import.js:25
+#, javascript-format
+msgid "Source format: %s"
+msgstr "Μορφή προέλευσης: %s"
+
+#: CliClient/app/command-import.js:26
+msgid "Do not ask for confirmation."
+msgstr "Χωρίς να ζητείται επιβεβαίωση."
+
+#: CliClient/app/command-import.js:27
+#, fuzzy, javascript-format
+msgid "Output format: %s"
+msgstr "Μορφή προέλευσης: %s"
+
+#: CliClient/app/command-import.js:47 ElectronClient/gui/ImportScreen.min.js:69
+#, javascript-format
+msgid "Found: %d."
+msgstr "Βρέθηκε: %d."
+
+#: CliClient/app/command-import.js:48 ElectronClient/gui/ImportScreen.min.js:70
+#, javascript-format
+msgid "Created: %d."
+msgstr "Δημιουργήθηκε: %d."
+
+#: CliClient/app/command-import.js:49 ElectronClient/gui/ImportScreen.min.js:71
+#, javascript-format
+msgid "Updated: %d."
+msgstr "Ενημερώθηκε: %d."
+
+#: CliClient/app/command-import.js:50 ElectronClient/gui/ImportScreen.min.js:72
+#, javascript-format
+msgid "Skipped: %d."
+msgstr "Παραλείφθηκε: %d."
+
+#: CliClient/app/command-import.js:51 ElectronClient/gui/ImportScreen.min.js:73
+#, javascript-format
+msgid "Resources: %d."
+msgstr "Πόροι: %d."
+
+#: CliClient/app/command-import.js:52 ElectronClient/gui/ImportScreen.min.js:74
+#, javascript-format
+msgid "Tagged: %d."
+msgstr "Με ετικέτα: %d."
+
+#: CliClient/app/command-import.js:65
+msgid "Importing notes..."
+msgstr "Εισαγωγή σημειώσεων..."
+
+#: CliClient/app/command-import.js:70 ElectronClient/gui/ImportScreen.min.js:89
+#, javascript-format
+msgid "The notes have been imported: %s"
+msgstr "Οι σημειώσεις έχουν εισαχθεί: %s"
+
+#: CliClient/app/help-utils.js:56
+msgid "Enum"
+msgstr "Enum"
+
+#: CliClient/app/help-utils.js:56
+#, javascript-format
+msgid "Type: %s."
+msgstr "Τύπος: %s."
+
+#: CliClient/app/help-utils.js:57
+#, javascript-format
+msgid "Possible values: %s."
+msgstr "Πιθανές τιμές: %s."
+
+#: CliClient/app/help-utils.js:71
+#, javascript-format
+msgid "Default: %s"
+msgstr "Προεπιλογή: %s"
+
+#: CliClient/app/help-utils.js:77
+msgid "Possible keys/values:"
+msgstr "Πιθανά πλήκτρα / τιμές:"
+
+#: CliClient/app/command-server.js:14
+#, javascript-format
+msgid ""
+"Start, stop or check the API server. To specify on which port it should run, "
+"set the api.port config variable. Commands are (%s)."
+msgstr ""
+"Ξεκινήστε, σταματήστε ή ελέγξτε τον διακομιστή API. Για να καθορίσετε σε "
+"ποια θύρα θα πρέπει να εκτελεστεί, ορίστε τη μεταβλητή api.port. Οι εντολές "
+"είναι (%s)."
+
+#: CliClient/app/command-server.js:37
+#, javascript-format
+msgid "Server is already running on port %d"
+msgstr "Ο διακομιστής εκτελείται ήδη στη θύρα %d"
+
+#: CliClient/app/command-server.js:43
+#, javascript-format
+msgid "Server is running on port %d"
+msgstr "Ο διακομιστής εκτελείται στη θύρα %d"
+
+#: CliClient/app/command-server.js:43 CliClient/app/command-server.js:46
+msgid "Server is not running."
+msgstr "Ο διακομιστής δεν εκτελείται."
+
+#: CliClient/app/command-e2ee.js:18
+msgid ""
+"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
+"`status`, `decrypt-file` and `target-status`."
+msgstr ""
+"Διαχειρίζεται τις ρυθμίσεις του E2EE. Οι εντολές είναι `enable`, `disable`, "
+"`decrypt`, `status`, `decrypt-file` και `target-status`."
+
+#: CliClient/app/command-e2ee.js:36 CliClient/app/command-e2ee.js:72
+msgid "Enter master password:"
+msgstr "Πληκτρολογήστε τον κωδικό πρόσβασης:"
+
+#: CliClient/app/command-e2ee.js:38 CliClient/app/command-e2ee.js:74
+#: CliClient/app/command-e2ee.js:79
+msgid "Operation cancelled"
+msgstr "Η λειτουργία ακυρώθηκε"
+
+#: CliClient/app/command-e2ee.js:47
+msgid ""
+"Starting decryption... Please wait as it may take several minutes depending "
+"on how much there is to decrypt."
+msgstr ""
+"Εκκίνηση αποκρυπτογράφησης... Παρακαλώ περιμένετε καθώς μπορεί να διαρκέσει "
+"αρκετά λεπτά ανάλογα με το μέγεθος αυτών που πρέπει να αποκρυπτογραφηθούν."
+
+#: CliClient/app/command-e2ee.js:53
+#, fuzzy, javascript-format
+msgid "Decrypted items: %d"
+msgstr "Αποκρυπτογραφημένα στοιχεία: %s / %s"
+
+#: CliClient/app/command-e2ee.js:54
+#, javascript-format
+msgid "Skipped items: %d (use --retry-failed-items to retry decrypting them)"
+msgstr ""
+
+#: CliClient/app/command-e2ee.js:68
+msgid "Completed decryption."
+msgstr "Η αποκρυπτογράφηση ολοκληρώθηκε."
+
+#: CliClient/app/command-e2ee.js:77
+#: ReactNativeClient/lib/components/screens/encryption-config.js:163
+msgid "Confirm password:"
+msgstr "Επιβεβαίωση κωδικού πρόσβασης:"
+
+#: CliClient/app/command-e2ee.js:83
+#: ReactNativeClient/lib/components/screens/encryption-config.js:140
+msgid "Passwords do not match!"
+msgstr "Ο κωδικός πρόσβασης δεν μπορεί να είναι κενός!"
+
+#: CliClient/app/command-e2ee.js:108
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:442
+#: ReactNativeClient/lib/components/screens/encryption-config.js:280
+msgid "Enabled"
+msgstr "Ενεργοποιημένη"
+
+#: CliClient/app/command-e2ee.js:108
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:442
+#: ReactNativeClient/lib/models/Setting.js:607
+#: ReactNativeClient/lib/components/screens/encryption-config.js:280
+msgid "Disabled"
+msgstr "Απενεργοποιημένη"
+
+#: CliClient/app/command-e2ee.js:108
+#: ReactNativeClient/lib/components/screens/encryption-config.js:280
+#, javascript-format
+msgid "Encryption is: %s"
+msgstr "Η κρυπτογράφηση είναι: %s"
+
+#: CliClient/app/command-mkbook.js:12
+msgid "Creates a new notebook."
+msgstr "Δημιουργεί ένα νέο σημειωματάριο."
+
+#: CliClient/app/command-mv.js:14
+msgid "Moves the notes matching <note> to [notebook]."
+msgstr "Μετακινεί τις σημειώσεις που περιέχουν <note> στο [σημειωματάριο]"
+
+#: CliClient/app/command-config.js:13
+msgid ""
+"Gets or sets a config value. If [value] is not provided, it will show the "
+"value of [name]. If neither [name] nor [value] is provided, it will list the "
+"current configuration."
+msgstr ""
+"Αποκτά ή ορίζει την τιμή μιας παραμέτρου. Αν δεν υπάρχει [τιμή], θα "
+"εμφανιστεί  το [όνομα]. Εάν δεν υπάρχει ούτε [όνομα] ούτε [τιμή], θα "
+"εμφανιστεί η τρέχουσα παράμετρος."
+
+#: CliClient/app/command-config.js:18
+msgid "Also displays unset and hidden config variables."
+msgstr "Εμφανίζει επίσης μη ορισμένες και κρυφές μεταβλητές."
+
+#: CliClient/app/command-config.js:79
+#, javascript-format
+msgid "%s = %s (%s)"
+msgstr "%s = %s (%s)"
+
+#: CliClient/app/command-config.js:81
+#, javascript-format
+msgid "%s = %s"
+msgstr "%s = %s"
+
+#: CliClient/app/command-use.js:12
+msgid ""
+"Switches to [notebook] - all further operations will happen within this "
+"notebook."
+msgstr ""
+"Αλλάζει σε [σημειωματάριο] - όλες οι περαιτέρω λειτουργίες θα "
+"πραγματοποιηθούν μέσα σε αυτό το σημειωματάριο."
+
+#: CliClient/app/command-sync.js:28
+msgid "Synchronises with remote storage."
+msgstr "Συγχρονίζει με απομακρυσμένο αποθηκευτικό χώρο."
+
+#: CliClient/app/command-sync.js:32
+msgid "Sync to provided target (defaults to sync.target config value)"
+msgstr ""
+"Συγχρονισμός με το ορισμένο προορισμό (προεπιλεγμένη τιμή συγχρονισμού sync."
+"target)"
+
+#: CliClient/app/command-sync.js:77 CliClient/app/command-sync.js:91
+#: ElectronClient/gui/OneDriveLoginScreen.min.js:40
+msgid ""
+"Authentication was not completed (did not receive an authentication token)."
+msgstr ""
+"Ο έλεγχος ταυτότητας δεν ολοκληρώθηκε (δεν παρελήφθει κανένα authentication "
+"token)."
+
+#: CliClient/app/command-sync.js:86
+#: ElectronClient/gui/DropboxLoginScreen.min.js:42
+#: ReactNativeClient/lib/components/screens/dropbox-login.js:58
+msgid ""
+"To allow Joplin to synchronise with Dropbox, please follow the steps below:"
+msgstr ""
+"Για να επιτρέψετε στο Joplin να συγχρονιστεί με το Dropbox, ακολουθήστε τα "
+"παρακάτω βήματα:"
+
+#: CliClient/app/command-sync.js:87
+#: ElectronClient/gui/DropboxLoginScreen.min.js:47
+#: ReactNativeClient/lib/components/screens/dropbox-login.js:59
+msgid "Step 1: Open this URL in your browser to authorise the application:"
+msgstr ""
+"Βήμα 1: Ανοίξτε αυτήν τη διεύθυνση URL στο πρόγραμμα περιήγησής σας για να "
+"εξουσιοδοτήσετε την εφαρμογή:"
+
+#: CliClient/app/command-sync.js:89
+#: ElectronClient/gui/DropboxLoginScreen.min.js:57
+#: ReactNativeClient/lib/components/screens/dropbox-login.js:65
+msgid "Step 2: Enter the code provided by Dropbox:"
+msgstr "Βήμα 2: Εισάγετε τον κωδικό που παρέχεται από το Dropbox:"
+
+#: CliClient/app/command-sync.js:101
+#, javascript-format
+msgid "Not authentified with %s. Please provide any missing credentials."
+msgstr ""
+"Δεν έγινε επαλήθευση με το %s. Παρακαλώ καταχωρίστε τα διαπιστευτήρια που "
+"λείπουν."
+
+#: CliClient/app/command-sync.js:124
+msgid "Synchronisation is already in progress."
+msgstr "Ο συγχρονισμός είναι ήδη σε εξέλιξη."
+
+#: CliClient/app/command-sync.js:129
+#, javascript-format
+msgid ""
+"Lock file is already being hold. If you know that no synchronisation is "
+"taking place, you may delete the lock file at \"%s\" and resume the "
+"operation."
+msgstr ""
+"Το αρχείο κλειδώματος έχει ήδη δημιουργηθεί. Αν γνωρίζετε ότι δεν "
+"πραγματοποιείται συγχρονισμός, μπορείτε να διαγράψετε το αρχείο κλειδώματος "
+"στο \"%s\" και να συνεχίσετε τη λειτουργία."
+
+#: CliClient/app/command-sync.js:175
+#, javascript-format
+msgid "Synchronisation target: %s (%s)"
+msgstr "Στόχος συγχρονισμού: %s (%s)"
+
+#: CliClient/app/command-sync.js:177
+#, fuzzy
+msgid "Cannot initialise synchroniser."
+msgstr "Δεν είναι δυνατή η προετοιμασία του συγχρονιστή."
+
+#: CliClient/app/command-sync.js:179
+msgid "Starting synchronisation..."
+msgstr "Έναρξη συγχρονισμού..."
+
+#: CliClient/app/command-sync.js:202
+msgid "Downloading resources..."
+msgstr "Λήψη πόρων.."
+
+#: CliClient/app/command-sync.js:226
+msgid "Cancelling... Please wait."
+msgstr "Ακύρωση... Παρακαλώ περιμένετε."
+
+#: CliClient/app/command-ren.js:14
+msgid "Renames the given <item> (note or notebook) to <name>."
+msgstr ""
+"Μετονομάζει το καθορισμένο <item> (σημείωση ή σημειωματάριο) στο <name>."
+
+#: CliClient/app/command-rmbook.js:13
+msgid "Deletes the given notebook."
+msgstr "Διαγράφει το καθορισμένο σημειωματάριο."
+
+#: CliClient/app/command-rmbook.js:17
+msgid "Deletes the notebook without asking for confirmation."
+msgstr "Διαγράφει το σημειωματάριο χωρίς να ζητηθεί επιβεβαίωση."
+
+#: CliClient/app/command-rmbook.js:26
+#: ReactNativeClient/lib/components/screens/notes.js:154
+msgid ""
+"Delete notebook? All notes and sub-notebooks within this notebook will also "
+"be deleted."
+msgstr ""
+"Διαγραφή σημειωματάριου; Όλες οι σημειώσεις και τα υπο-σημειωματάρια θα "
+"διαγραφούν επίσης."
+
+#: CliClient/app/command-mktodo.js:12
+msgid "Creates a new to-do."
+msgstr "Δημιουργεί ένα νέο to-do."
+
+#: CliClient/app/command-mktodo.js:16 CliClient/app/command-mknote.js:16
+msgid "Notes can only be created within a notebook."
+msgstr "Σημειώσεις μπορούν να δημιουργηθούν μόνο μέσα σε σημειωματάριο."
+
+#: CliClient/app/command-cat.js:14
+msgid "Displays the given note."
+msgstr "Εμφανίζει τη καθορισμένη σημείωση."
+
+#: CliClient/app/command-cat.js:18
+msgid "Displays the complete information about note."
+msgstr "Εμφανίζει όλες τις πληροφορίες σχετικά με τη σημείωση."
+
+#: CliClient/app/command-edit.js:17
+msgid "Edit note."
+msgstr "Eπεξεργασία σημείωσης."
+
+#: CliClient/app/command-edit.js:30
+msgid ""
+"No text editor is defined. Please set it using `config editor <editor-path>`"
+msgstr ""
+"Δεν έχει οριστεί πρόγραμμα επεξεργασίας κειμένου. Παρακαλώ ορίστε το "
+"χρησιμοποιώντας   `config editor <editor-path>`"
+
+#: CliClient/app/command-edit.js:40
+msgid "No active notebook."
+msgstr "Δεν υπάρχει ενεργό σημειωματάριο."
+
+#: CliClient/app/command-edit.js:46
+#, javascript-format
+msgid "Note does not exist: \"%s\". Create it?"
+msgstr "Δεν υπάρχει η σημείωση : \"%s\". Να δημιουργηθεί;"
+
+#: CliClient/app/app-gui.js:446
+msgid "To delete a tag, untag the associated notes."
+msgstr ""
+"Για να διαγράψετε μία ετικέτα, αφαιρέστε την πρώτα από τις σχετικές "
+"σημειώσεις."
+
+#: CliClient/app/app-gui.js:456
+msgid "Please select the note or notebook to be deleted first."
+msgstr ""
+"Παρακαλώ πρώτα επιλέξτε τη σημείωση ή το σημειωματάριο που θέλετε να "
+"διαγραφτεί."
+
+#: CliClient/app/app-gui.js:720
+msgid "Press Ctrl+D or type \"exit\" to exit the application"
+msgstr ""
+"Πατήστε Ctrl+D ή πληκτρολογήστε \"exit\" για να βγείτε από την εφαρμογή"
+
+#: CliClient/app/command-rmnote.js:13
+msgid "Deletes the notes matching <note-pattern>."
+msgstr "Διαγράφει τις σημειώσεις <note-pattern>."
+
+#: CliClient/app/command-rmnote.js:17
+msgid "Deletes the notes without asking for confirmation."
+msgstr "Διαγράφει τις σημειώσεις χωρίς να ζητηθεί επιβεβαίωση."
+
+#: CliClient/app/command-rmnote.js:27
+#, javascript-format
+msgid "%d notes match this pattern. Delete them?"
+msgstr "%d σημειώσεις ταιριάζουν. Θέλετε να διαγραφούν;"
+
+#: CliClient/app/command-rmnote.js:27
+#: ReactNativeClient/lib/components/screens/note.js:461
+msgid "Delete note?"
+msgstr "Να διαγραφεί η σημείωση;"
+
+#: CliClient/app/command-attach.js:13
+msgid "Attaches the given file to the note."
+msgstr "Προσθέτει το καθορισμένο αρχείο στη σημείωση."
+
+#: CliClient/app/command-version.js:11
+msgid "Displays version information"
+msgstr "Εμφανίζει πληροφορίες έκδοσης"
+
+#: CliClient/app/command-version.js:16
+#, javascript-format
+msgid "%s %s (%s)"
+msgstr "%s %s (%s)"
+
+#: CliClient/app/command-undone.js:12
+msgid "Marks a to-do as non-completed."
+msgstr "Σήμανση ενός to-do σε μη-ολοκληρωμένο."
+
+#: CliClient/app/command-export.js:13
+msgid ""
+"Exports Joplin data to the given path. By default, it will export the "
+"complete database including notebooks, notes, tags and resources."
+msgstr ""
+"Εξάγει τα δεδομένα του Joplin στη καθορισμένη διαδρομή. Από προεπιλογή, θα "
+"εξάγει την πλήρη βάση δεδομένων, συμπεριλαμβανομένων των σημειωματάριων, των "
+"σημειώσεων, των ετικετών και των πόρων."
+
+#: CliClient/app/command-export.js:23
+#, javascript-format
+msgid "Destination format: %s"
+msgstr "Μορφή προορισμού: %s"
+
+#: CliClient/app/command-export.js:23
+msgid "Exports only the given note."
+msgstr "Εξάγει μόνο την καθορισμένη σημείωση."
+
+#: CliClient/app/command-export.js:23
+msgid "Exports only the given notebook."
+msgstr "Εξάγει μόνο το καθορισμένο σημειωματάριο."
+
+#: CliClient/app/command-mknote.js:12
+msgid "Creates a new note."
+msgstr "Δημιουργεί μία νέα σημείωση."
+
+#: CliClient/app/main.js:80
+msgid "Type `joplin help` for usage information."
+msgstr "Πληκτρολογήστε `joplin help` για πληροφορίες χρήσης."
+
+#: CliClient/app/main.js:82
+msgid "Fatal error:"
+msgstr "Ανεπανόρθωτο σφάλμα:"
+
+#: CliClient/app/command-geoloc.js:13
+msgid "Displays a geolocation URL for the note."
+msgstr "Εμφανίζει τη διεύθυνση URL της γεωγραφικής θέσης για τη σημείωση."
+
+#: CliClient/app/gui/NoteWidget.js:36
+msgid ""
+"Welcome to Joplin!\n"
+"\n"
+"Type `:help shortcuts` for the list of keyboard shortcuts, or just `:help` "
+"for usage information.\n"
+"\n"
+"For example, to create a notebook press `mb`; to create a note press `mn`."
+msgstr ""
+"Καλώς ήλθατε στο Joplin!\n"
+"\n"
+"Πληκτρολογίστε `:help shortcuts` για τη λίστα συντομεύσεων πληκτρολογίου ή "
+"απλά `:help` για πληροφορίες χρήσης.\n"
+"\n"
+"Για παράδειγμα, για να δημιουργήσετε ένα σημειωματάριο πατήστε `mb` ενώ για "
+"να δημιουργήσετε μια σημείωση πατήστε `mn`."
+
+#: CliClient/app/gui/NoteWidget.js:48
+msgid ""
+"One or more items are currently encrypted and you may need to supply a "
+"master password. To do so please type `e2ee decrypt`. If you have already "
+"supplied the password, the encrypted items are being decrypted in the "
+"background and will be available soon."
+msgstr ""
+"Ένα ή περισσότερα στοιχεία είναι κρυπτογραφημένα και ίσως χρειαστεί να "
+"δώσετε τον κωδικό πρόσβασης. Για να το κάνετε αυτό, πληκτρολογήστε `e2ee "
+"decrypt`. Αν έχετε ήδη δώσει τον κωδικό πρόσβασης, τα κρυπτογραφημένα "
+"στοιχεία αποκρυπτογραφούνται στο παρασκήνιο και θα είναι σύντομα διαθέσιμα."
+
+#: CliClient/app/gui/NoteWidget.js:50
+msgid "You may also type `status` for more information."
+msgstr ""
+"Μπορείτε επίσης να πληκτρολογήσετε `status` για περισσότερες πληροφορίες."
+
+#: CliClient/app/gui/FolderListWidget.js:31
+msgid "Search:"
+msgstr "Εύρεση:"
+
+#: CliClient/app/command-search.js:13
+msgid "Searches for the given <pattern> in all the notes."
+msgstr "Αναζητά το καθορισμένο <pattern> σε όλες τις σημειώσεις."
+
+#: CliClient/app/command-set.js:22
+#, javascript-format
+msgid ""
+"Sets the property <name> of the given <note> to the given [value]. Possible "
+"properties are:\n"
+"\n"
+"%s"
+msgstr ""
+"Ορίζει την ιδιότητα <name> του καθορισμένου <note> στην καθορισμένη [τιμή]. "
+"Πιθανές ιδιότητες είναι:\n"
+"\n"
+"%s"
+
+#: CliClient/app/cli-utils.js:108
+#, javascript-format
+msgid "Missing required argument: %s"
+msgstr "Λείπει το απαιτούμενο όρισμα: %s"
+
+#: CliClient/app/cli-utils.js:139 ReactNativeClient/lib/services/report.js:151
+#, javascript-format
+msgid "%s: %s"
+msgstr "%s: %s"
+
+#: CliClient/app/cli-utils.js:143
+msgid "Your choice: "
+msgstr "Η επιλογή σας: "
+
+#: CliClient/app/cli-utils.js:150
+#, javascript-format
+msgid "Invalid answer: %s"
+msgstr "Μη έγκυρη απάντηση: %s"
+
+#: CliClient/app/cli-utils.js:160 CliClient/app/app.js:136
+msgid "Y"
+msgstr "Ν"
+
+#: CliClient/app/cli-utils.js:160 CliClient/app/app.js:136
+msgid "n"
+msgstr "ο"
+
+#: CliClient/app/base-command.js:15
+msgid "Cannot change encrypted item"
+msgstr "Δεν είναι δυνατή η αλλαγή κρυπτογραφημένου στοιχείου"
+
+#: CliClient/app/command-help.js:13
+msgid "Displays usage information."
+msgstr "Εμφανίζει πληροφορίες χρήσης."
+
+#: CliClient/app/command-help.js:36
+#, javascript-format
+msgid "For information on how to customise the shortcuts please visit %s"
+msgstr ""
+"Για πληροφορίες σχετικά με τον τρόπο προσαρμογής των συντομεύσεων, "
+"επισκεφτείτε το %s"
+
+#: CliClient/app/command-help.js:44
+msgid "Shortcuts are not available in CLI mode."
+msgstr "Οι συντομεύσεις δεν είναι διαθέσιμες στη λειτουργία CLI."
+
+#: CliClient/app/command-help.js:71
+msgid ""
+"Type `help [command]` for more information about a command; or type `help "
+"all` for the complete usage information."
+msgstr ""
+"Πληκτρολογήστε `help [command]` για περισσότερες πληροφορίες σχετικά με μια "
+"εντολή, ή πληκτρολογήστε `help all` για όλες τις πληροφορίες χρήσης."
+
+#: CliClient/app/command-help.js:73
+msgid "The possible commands are:"
+msgstr "Οι πιθανές εντολές είναι:"
+
+#: CliClient/app/command-help.js:77
+msgid ""
+"In any command, a note or notebook can be referred to by title or ID, or "
+"using the shortcuts `$n` or `$b` for, respectively, the currently selected "
+"note or notebook. `$c` can be used to refer to the currently selected item."
+msgstr ""
+"Σε οποιαδήποτε εντολή, μπορείτε να αναφέρετε μια σημείωση ή ένα "
+"σημειωματάριο με τον τίτλο ή το αναγνωριστικό (ID), ή χρησιμοποιώντας τις "
+"συντομεύσεις `$n` ή `$b` αντίστοιχα. Η `$c` μπορεί να χρησιμοποιηθεί για να "
+"το τρέχον επιλεγμένο στοιχείο."
+
+#: CliClient/app/command-help.js:79
+msgid "To move from one pane to another, press Tab or Shift+Tab."
+msgstr ""
+"Για να μετακινηθείτε από ένα παράθυρο σε άλλο, πατήστε Tab ή Shift + Tab."
+
+#: CliClient/app/command-help.js:80
+msgid ""
+"Use the arrows and page up/down to scroll the lists and text areas "
+"(including this console)."
+msgstr ""
+"Χρησιμοποιήστε τα βελάκια πατώντας πάνω/κάτω για να μετακινηθείτε στις "
+"λίστες και τις περιοχές κειμένου (συμπεριλαμβανομένης αυτής της κονσόλας)."
+
+#: CliClient/app/command-help.js:81
+msgid "To maximise/minimise the console, press \"tc\"."
+msgstr "Για μεγιστοποιήση/ελαχιστοποιήση της κονσόλας, πατήστε \"tc\"."
+
+#: CliClient/app/command-help.js:82
+msgid "To enter command line mode, press \":\""
+msgstr "Για να εισέλθετε στη λειτουργία γραμμής εντολών, πατήστε \":\""
+
+#: CliClient/app/command-help.js:83
+msgid "To exit command line mode, press ESCAPE"
+msgstr "Για έξοδο από τη λειτουργία γραμμής εντολών, πατήστε ESCAPE"
+
+#: CliClient/app/command-help.js:84
+msgid ""
+"For the list of keyboard shortcuts and config options, type `help keymap`"
+msgstr ""
+"Για τη λίστα των συντομεύσεων πληκτρολογίου και των ρυθμίσεων, "
+"πληκτρολογήστε `help keymap`"
+
+#: CliClient/app/command-todo.js:14
+msgid ""
+"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to "
+"toggle the given to-do between completed and uncompleted state (If the "
+"target is a regular note it will be converted to a to-do). Use \"clear\" to "
+"convert the to-do back to a regular note."
+msgstr ""
+"<todo-command> μπορεί να είναι \"toggle\" ή \"clear\". Χρησιμοποιήστε το "
+"\"toggle\" για εναλλαγή κατάστασης του συγκεκριμένου to-do μεταξύ "
+"ολοκληρωμένου και μη-ολοκληρωμένου (εάν ο χρησιμοποιηθεί σε κανονική "
+"σημείωση, θα μετατραπεί σε to-do). Χρησιμοποιήστε το \"clear\" για να "
+"μετατρέψετε το to-do σε κανονική σημείωση."
+
+#: CliClient/app/command-exit.js:11
+msgid "Exits the application."
+msgstr "Βγαίνει από την εφαρμογή."
+
+#: CliClient/app/app.js:61
+#, javascript-format
+msgid "More than one item match \"%s\". Please narrow down your query."
+msgstr ""
+"Περισσότερα από ένα στοιχεία ταιριάζουν με το \"%s\". Παρακαλώ περιορίστε το "
+"ερώτημά σας."
+
+#: CliClient/app/app.js:91
+msgid "No notebook selected."
+msgstr "Κανένα σημειωματάριο δεν έχει επιλεχθεί."
+
+#: CliClient/app/app.js:97
+msgid "No notebook has been specified."
+msgstr "Κανένα σημειωματάριο δεν έχει καθοριστεί."
+
+#: CliClient/app/app.js:136
+msgid "N"
+msgstr "Ο"
+
+#: CliClient/app/app.js:136
+msgid "y"
+msgstr "ν"
+
+#: CliClient/app/app.js:169
+msgid "Cancelling background synchronisation... Please wait."
+msgstr "Ακύρωση συγχρονισμού ... Παρακαλώ περιμένετε."
+
+#: CliClient/app/app.js:254
+#, javascript-format
+msgid "No such command: %s"
+msgstr "Δεν υπάρχει τέτοια εντολή: %s"
+
+#: CliClient/app/app.js:302
+#, javascript-format
+msgid "The command \"%s\" is only available in GUI mode"
+msgstr ""
+"Η εντολή  \"%s\" είναι διαθέσιμη μόνο σε λειτουργία γραφικού περιβάλλοντος "
+"(GUI)"
+
+#: CliClient/app/command-status.js:13
+msgid "Displays summary about the notes and notebooks."
+msgstr "Εμφανίζει περίληψη για τις σημειώσεις και τα σημειωματάρια."
+
+#: CliClient/app/command-status.js:44
+msgid ""
+"To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`"
+msgstr ""
+"Για να επαναλάβετε την αποκρυπτογράφηση αυτών των στοιχείων. Τρέξτε `e2ee "
+"decrypt --retry-failed-items`"
+
+#: CliClient/app/command-tag.js:14
+msgid ""
+"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to "
+"assign or remove [tag] from [note], to list notes associated with [tag], or "
+"to list tags associated with [note]. The command `tag list` can be used to "
+"list all the tags (use -l for long option)."
+msgstr ""
+"<tag-command> μπορεί να είναι \"add\", \"remove\", \"list\" ή \"notetags\" "
+"για προσθήκη ή αφαίρεση [ετικέτας] στη [σημείωση], για λίστα σημειώσεων με "
+"τη συγκεκριμένη [ετικέτα] ή για λίστα ετικετών της συγκεκριμένης "
+"[σημείωσης]. Η εντολή `tag list` μπορεί να χρησιμοποιηθεί για να πάρετε "
+"λίστα με όλες τις ετικέτες (χρησιμοποιήστε το -l για μακρά επιλογή)."
+
+#: CliClient/app/command-tag.js:90
+#, javascript-format
+msgid "Invalid command: \"%s\""
+msgstr "Ακυρη εντολή: \"%s\""
+
+#: CliClient/app/command-done.js:14
+msgid "Marks a to-do as done."
+msgstr "Επισημαίνει μία σημείωση to-do ως ολοκληρωμένη."
+
+#: CliClient/app/command-done.js:21
+#, javascript-format
+msgid "Note is not a to-do: \"%s\""
+msgstr "Η σημείωση δεν είναι  to-do: \"%s\""
+
+#: ElectronClient/bridge.js:101 ElectronClient/bridge.js:112
+#: ElectronClient/bridge.js:125 ElectronClient/bridge.js:135
+#: ElectronClient/checkForUpdates.js:139
+#: ElectronClient/gui/DialogButtonRow.min.js:30
+#: ElectronClient/gui/PromptDialog.min.js:235
+#: ElectronClient/gui/ConfigScreen.min.js:185
+#: ElectronClient/gui/ConfigScreen.min.js:754 ElectronClient/app.js:618
+#: ReactNativeClient/lib/components/ModalDialog.js:67
+#: ReactNativeClient/lib/components/CameraView.js:182
+#: ReactNativeClient/lib/components/side-menu-content.js:150
+msgid "OK"
+msgstr "Εντάξει"
+
+#: ElectronClient/bridge.js:112 ElectronClient/bridge.js:125
+#: ElectronClient/gui/DialogButtonRow.min.js:38
+#: ElectronClient/gui/SideBar/SideBar.min.js:296
+#: ElectronClient/gui/SideBar/SideBar.min.js:660
+#: ElectronClient/gui/SideBar.min.js:319 ElectronClient/gui/SideBar.min.js:724
+#: ElectronClient/gui/NoteList.min.js:148
+#: ElectronClient/gui/utils/NoteListUtils.js:184
+#: ElectronClient/gui/PromptDialog.min.js:242
+#: ElectronClient/gui/ConfigScreen.min.js:744
+#: ElectronClient/gui/NoteList/NoteList.min.js:153
+#: ElectronClient/gui/ResourceScreen.js:94
+#: ReactNativeClient/lib/shim-init-node.js:91
+#: ReactNativeClient/lib/components/select-date-time-dialog.js:70
+#: ReactNativeClient/lib/components/select-date-time-dialog.js:89
+#: ReactNativeClient/lib/components/ModalDialog.js:70
+#: ReactNativeClient/lib/components/CameraView.js:183
+#: ReactNativeClient/lib/components/side-menu-content.js:156
+#: ReactNativeClient/lib/components/side-menu-content.js:165
+#: ReactNativeClient/lib/components/side-menu-content.js:338
+#: ReactNativeClient/lib/components/screens/encryption-config.js:185
+#: ReactNativeClient/lib/components/screens/note.js:97
+#: ReactNativeClient/lib/components/screens/note.js:526
+msgid "Cancel"
+msgstr "Άκυρο"
+
+#: ElectronClient/plugins/GotoAnything.min.js:454
+msgid ""
+"Type a note title or part of its content to jump to it. Or type # followed "
+"by a tag name, or @ followed by a notebook name."
+msgstr ""
+"Πληκτρολογήστε έναν τίτλο σημείωσης ή μέρος του περιεχομένου του  για να "
+"μεταβείτε σε αυτόν. Ή πληκτρολογήστε # ακολουθούμενο από ένα όνομα ετικέτας "
+"ή @ ακολουθούμενο από ένα σημειωματάριο."
+
+#: ElectronClient/plugins/GotoAnything.min.js:493
+msgid "Goto Anything..."
+msgstr "Γρήγορη Μετακίνηση..."
+
+#: ElectronClient/InteropServiceHelper.js:147
+#, fuzzy, javascript-format
+msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
+msgstr "Εισαγωγή από \"%s\" σε μορφή \"%s\". Παρακαλώ περιμένετε..."
+
+#: ElectronClient/InteropServiceHelper.js:164
+#, fuzzy, javascript-format
+msgid "Could not export notes: %s"
+msgstr "Δεν ήταν δυνατή η αναβάθμιση του master κλειδιού: %s"
+
+#: ElectronClient/checkForUpdates.js:138
+msgid "Current version is up-to-date."
+msgstr "Η τρέχουσα έκδοση είναι ενημερωμένη."
+
+#: ElectronClient/checkForUpdates.js:148
+#, javascript-format
+msgid "%s (pre-release)"
+msgstr "%s (pre-release)"
+
+#: ElectronClient/checkForUpdates.js:152
+msgid "An update is available, do you want to download it now?"
+msgstr "Υπάρχει διαθέσιμη μια ενημέρωση, θέλετε να την κατεβάσετε τώρα;"
+
+#: ElectronClient/checkForUpdates.js:152
+#, javascript-format
+msgid "Your version: %s"
+msgstr "Η έκδοσή σου: %s"
+
+#: ElectronClient/checkForUpdates.js:152
+#, javascript-format
+msgid "New version: %s"
+msgstr "Νέα έκδοση: %s"
+
+#: ElectronClient/checkForUpdates.js:153 ElectronClient/app.js:608
+#: ReactNativeClient/lib/shim-init-node.js:91
+#: ReactNativeClient/lib/components/screens/note.js:524
+msgid "Yes"
+msgstr "Ναι"
+
+#: ElectronClient/checkForUpdates.js:153 ElectronClient/app.js:608
+#: ReactNativeClient/lib/shim-init-node.js:91
+#: ReactNativeClient/lib/components/screens/note.js:525
+msgid "No"
+msgstr "Όχι"
+
+#: ElectronClient/checkForUpdates.js:153
+msgid "Full Release Notes"
+msgstr "Πλήρεις σημειώσεις έκδοσης"
+
+#: ElectronClient/gui/NoteRevisionViewer.min.js:75
+#, javascript-format
+msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
+msgstr ""
+"Η σημείωση \"%s\" έχει επαναφερθεί με επιτυχία στο σημειωματάριο \"%s\"."
+
+#: ElectronClient/gui/NoteRevisionViewer.min.js:100
+msgid "This note has no history"
+msgstr "Αυτή η σημείωση δεν έχει ιστορικό"
+
+#: ElectronClient/gui/NoteRevisionViewer.min.js:142
+#: ElectronClient/gui/NoteEditor/utils/useMessageHandler.js:110
+#: ElectronClient/gui/NoteText.min.js:865
+#, javascript-format
+msgid "Unsupported link or message: %s"
+msgstr "Μη υποστηριζόμενος σύνδεσμος ή μήνυμα: %s"
+
+#: ElectronClient/gui/NoteRevisionViewer.min.js:177
+msgid "Restore"
+msgstr "Επαναφορά"
+
+#: ElectronClient/gui/NoteRevisionViewer.min.js:178
+#, javascript-format
+msgid ""
+"Click \"%s\" to restore the note. It will be copied in the notebook named "
+"\"%s\". The current version of the note will not be replaced or modified."
+msgstr ""
+"Κάντε κλικ στο \"%s\" για να επαναφέρετε τη σημείωση. Θα αντιγραφεί στο "
+"σημειωματάριο που ονομάζεται \"%s\". Η τρέχουσα έκδοση της σημείωσης δεν "
+"αντικαθίσταται ή τροποποιείται."
+
+#: ElectronClient/gui/NoteRevisionViewer.min.js:187
+#: ElectronClient/gui/NoteText.min.js:1671
+#: ElectronClient/gui/ConfigScreen.min.js:744
+#: ElectronClient/gui/Header.min.js:316
+#: ElectronClient/gui/Header/Header.min.js:302
+#: ReactNativeClient/lib/commands/historyBackward.js:16
+msgid "Back"
+msgstr "Πίσω"
+
+#: ElectronClient/gui/SideBar/SideBar.min.js:269
+#: ElectronClient/gui/SideBar.min.js:283
+msgid "Remove"
+msgstr "Κατάργηση"
+
+#: ElectronClient/gui/SideBar/SideBar.min.js:272
+#: ElectronClient/gui/SideBar.min.js:286
+#: ReactNativeClient/lib/components/side-menu-content.js:148
+#, javascript-format
+msgid ""
+"Delete notebook \"%s\"?\n"
+"\n"
+"All notes and sub-notebooks within this notebook will also be deleted."
+msgstr ""
+"Διαγραφή σημειωματάριου \"%s\";\n"
+"\n"
+"Όλες οι σημειώσεις και τα υπο-σημειωματάρια που περιέχει θα διαγραφούν "
+"επίσης."
+
+#: ElectronClient/gui/SideBar/SideBar.min.js:273
+#: ElectronClient/gui/SideBar.min.js:287
+#: ElectronClient/gui/utils/NoteListUtils.js:161
+#: ElectronClient/gui/utils/NoteListUtils.js:184
+#: ElectronClient/gui/ResourceScreen.js:46
+#: ElectronClient/gui/ResourceScreen.js:94
+#: ReactNativeClient/lib/components/screen-header.js:356
+#: ReactNativeClient/lib/components/side-menu-content.js:146
+#: ReactNativeClient/lib/components/screens/note.js:868
+msgid "Delete"
+msgstr "Διαγραφή"
+
+#: ElectronClient/gui/SideBar/SideBar.min.js:276
+#, fuzzy, javascript-format
+msgid "Remove tag \"%s\" and its descendant tags from all notes?"
+msgstr "Κατάργηση της ετικέτας \"%s\" από όλες τις σημειώσεις;"
+
+#: ElectronClient/gui/SideBar/SideBar.min.js:278
+#: ElectronClient/gui/SideBar.min.js:292
+msgid "Remove this search from the sidebar?"
+msgstr "Κατάργηση αυτής της αναζήτησης από την πλευρική μπάρα;"
+
+#: ElectronClient/gui/SideBar/SideBar.min.js:337
+#: ElectronClient/gui/SideBar.min.js:382
+#: ElectronClient/gui/utils/NoteListUtils.js:154 ElectronClient/app.js:677
+#: ElectronClient/app.js:727
+msgid "Export"
+msgstr "Εξαγωγή"
+
+#: ElectronClient/gui/SideBar/SideBar.min.js:660
+#: ElectronClient/gui/SideBar.min.js:724
+#: ReactNativeClient/lib/components/side-menu-content.js:338
+msgid "Synchronise"
+msgstr "Συγχρονισμός"
+
+#: ElectronClient/gui/SideBar/SideBar.min.js:694
+#: ElectronClient/gui/SideBar.min.js:757
+#: ReactNativeClient/lib/components/side-menu-content.js:360
+#: ReactNativeClient/lib/components/screens/notes.js:189
+msgid "All notes"
+msgstr "Όλες οι σημειώσεις"
+
+#: ElectronClient/gui/SideBar/SideBar.min.js:699
+#: ElectronClient/gui/SideBar.min.js:762
+#: ReactNativeClient/lib/components/side-menu-content.js:364
+msgid "Notebooks"
+msgstr "Σημειωματάρια"
+
+#: ElectronClient/gui/SideBar/SideBar.min.js:716
+#: ElectronClient/gui/MainScreen/commands/setTags.js:17
+#: ElectronClient/gui/SideBar.min.js:779
+#: ElectronClient/gui/NoteText.min.js:1634
+#: ElectronClient/gui/NoteText.min.js:1810
+#: ReactNativeClient/lib/components/side-menu-content.js:314
+#: ReactNativeClient/lib/components/screens/tags.js:101
+#: ReactNativeClient/lib/components/screens/note.js:841
+msgid "Tags"
+msgstr "Ετικέτες"
+
+#: ElectronClient/gui/SideBar/SideBar.min.js:735
+#: ElectronClient/gui/SideBar.min.js:797
+#: ReactNativeClient/lib/components/side-menu-content.js:325
+#, javascript-format
+msgid "Decrypting items: %d/%d"
+msgstr "Αποκρυπτογράφηση αντικειμένων: %d/%d"
+
+#: ElectronClient/gui/SideBar/SideBar.min.js:740
+#: ElectronClient/gui/SideBar.min.js:802
+#: ReactNativeClient/lib/components/side-menu-content.js:330
+#, javascript-format
+msgid "Fetching resources: %d/%d"
+msgstr "Λήψη πόρων: %d/%d"
+
+#: ElectronClient/gui/SideBar/commands/focusElementSideBar.js:15
+msgid "Sidebar"
+msgstr "Πλευρική μπάρα"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:144
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:260
+#: ElectronClient/gui/NoteText.min.js:1547
+msgid "strong text"
+msgstr "έντονη γραφή"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:145
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:261
+#, fuzzy
+msgid "emphasised text"
+msgstr "πλάγια γραφή"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:147
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:263
+#: ElectronClient/gui/NoteText.min.js:1616
+msgid "Insert Hyperlink"
+msgstr "Εισαγωγή υπερσύνδεσης"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:180
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:182
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:183
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:298
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:300
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:301
+#: ElectronClient/gui/NoteText.min.js:1591
+#: ElectronClient/gui/NoteText.min.js:1595
+#: ElectronClient/gui/NoteText.min.js:1604
+msgid "List item"
+msgstr "Στοιχείο λίστας"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:236
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:354
+#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:15
+msgid "Cut"
+msgstr "Αποκοπή"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:243
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:361
+#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:81
+#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:10
+#: ElectronClient/gui/NoteText.min.js:804 ElectronClient/app.js:618
+msgid "Copy"
+msgstr "Αντιγραφή"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:250
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:368
+#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:20
+msgid "Paste"
+msgstr "Επικόλληση"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:291
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:457
+#: ElectronClient/gui/NoteText.min.js:1085
+msgid "Layout"
+msgstr "Διάταξη"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:291
+#: ElectronClient/gui/NoteEditor/NoteBody/AceEditor/AceEditor.js:457
+#: ElectronClient/gui/NoteText.min.js:1085
+#, javascript-format
+msgid ""
+"This note has no content. Click on \"%s\" to toggle the editor and edit the "
+"note."
+msgstr ""
+"Αυτή η σημείωση δεν περιέχει περιεχόμενο. Κάντε κλικ στο \"%s\" για να "
+"επεξεργαστείτε τη σημείωση στον editor."
+
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/plugins/lists.js:2151
+#, fuzzy
+msgid "Checkbox list"
+msgstr "Πλαίσιο ελέγχου"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:470
+#: ElectronClient/gui/ConfigScreen.min.js:642
+#: ReactNativeClient/lib/components/screens/note.js:1110
+msgid "Edit"
+msgstr "Επεξεργασία"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:526
+#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:50
+#: ElectronClient/gui/NoteText.min.js:1627
+#: ElectronClient/gui/NoteText.min.js:1726
+msgid "Attach file"
+msgstr "Επισύναψη αρχείου"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:535
+msgid "Code Block"
+msgstr ""
+
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:544
+msgid "Inline Code"
+msgstr ""
+
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:559
+#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:80
+#: ElectronClient/gui/NoteText.min.js:1778
+msgid "Insert Date Time"
+msgstr "Εισαγωγή Ημερομηνίας Ώρας"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:903
+msgid "Drop notes or files here"
+msgstr ""
+
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:903
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:401
+#, fuzzy
+msgid "Code View"
+msgstr "Κώδικας"
+
+#: ElectronClient/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:903
+#, javascript-format
+msgid ""
+"Please wait for all attachments to be downloaded and decrypted. You may also "
+"switch to %s to edit the note."
+msgstr ""
+
+#: ElectronClient/gui/NoteEditor/utils/useMessageHandler.js:70
+#: ElectronClient/gui/NoteText.min.js:833
+msgid "There was an error downloading this attachment:"
+msgstr "Παρουσιάστηκε σφάλμα κατά τη λήψη αυτού του συνημμένου:"
+
+#: ElectronClient/gui/NoteEditor/utils/useMessageHandler.js:73
+#: ElectronClient/gui/NoteText.min.js:835
+#: ReactNativeClient/lib/services/ResourceEditWatcher.js:146
+msgid "This attachment is not downloaded or not decrypted yet"
+msgstr "Αυτό το συνημμένο δεν έχει ακόμη μεταφορτωθεί ή αποκρυπτογραφηθεί"
+
+#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:39
+#: ElectronClient/gui/NoteText.min.js:778
+msgid "Open..."
+msgstr "Άνοιγμα..."
+
+#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:52
+#: ElectronClient/gui/NoteText.min.js:786
+msgid "Save as..."
+msgstr "Αποθήκευση ως..."
+
+#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:65
+msgid "Reveal file in folder"
+msgstr ""
+
+#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:73
+#: ElectronClient/gui/NoteText.min.js:797
+msgid "Copy path to clipboard"
+msgstr "Αντιγραφή διαδρομής στο πρόχειρο"
+
+#: ElectronClient/gui/NoteEditor/utils/contextMenu.js:88
+#: ElectronClient/gui/NoteText.min.js:811
+msgid "Copy Link Address"
+msgstr "Αντιγραφή διεύθυνσης σύνδεσης"
+
+#: ElectronClient/gui/NoteEditor/NoteEditor.js:283
+#: ElectronClient/gui/NoteText.min.js:2121
+msgid "to-do"
+msgstr "to-do"
+
+#: ElectronClient/gui/NoteEditor/NoteEditor.js:283
+#: ElectronClient/gui/NoteText.min.js:2121
+msgid "note"
+msgstr "σημείωση"
+
+#: ElectronClient/gui/NoteEditor/NoteEditor.js:283
+#: ElectronClient/gui/NoteText.min.js:2121
+#, javascript-format
+msgid "Creating new %s..."
+msgstr "Δημιουργία νεου %s..."
+
+#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:25
+msgid "Select all"
+msgstr "Επιλογή όλων"
+
+#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:30
+#: ElectronClient/gui/NoteText.min.js:1690
+msgid "Bold"
+msgstr "Έντονη γραφή"
+
+#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:35
+#: ElectronClient/gui/NoteText.min.js:1698
+msgid "Italic"
+msgstr "Πλάγια γραφή"
+
+#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:40
+#: ElectronClient/gui/NoteText.min.js:1710
+msgid "Hyperlink"
+msgstr "Υπερσύνδεση"
+
+#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:45
+#: ElectronClient/gui/NoteText.min.js:1718
+msgid "Code"
+msgstr "Κώδικας"
+
+#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:55
+#: ElectronClient/gui/NoteText.min.js:1738
+msgid "Numbered List"
+msgstr "Αριθμημένη λίστα"
+
+#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:60
+#: ElectronClient/gui/NoteText.min.js:1746
+msgid "Bulleted List"
+msgstr "Λίστα με κουκκίδες"
+
+#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:65
+#: ElectronClient/gui/NoteText.min.js:1754
+msgid "Checkbox"
+msgstr "Πλαίσιο ελέγχου"
+
+#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:70
+#: ElectronClient/gui/NoteText.min.js:1762
+msgid "Heading"
+msgstr "Επικεφαλίδα"
+
+#: ElectronClient/gui/NoteEditor/commands/editorCommandDeclarations.js:75
+#: ElectronClient/gui/NoteText.min.js:1770
+msgid "Horizontal Rule"
+msgstr "Οριζόντια Διαγράμμιση"
+
+#: ElectronClient/gui/NoteEditor/commands/focusElementNoteTitle.js:15
+msgid "Note title"
+msgstr "Τίτλος σημειωματάριου"
+
+#: ElectronClient/gui/NoteEditor/commands/showLocalSearch.js:15
+msgid "Search in current note"
+msgstr "Αναζήτηση στην τρέχουσα σημείωση"
+
+#: ElectronClient/gui/NoteEditor/commands/focusElementNoteBody.js:15
+msgid "Note body"
+msgstr "Σώμα σημειώσεων"
+
+#: ElectronClient/gui/NotePropertiesDialog.min.js:26
+#: ElectronClient/gui/FolderPropertiesDialog.min.js:21
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:163
+#: ElectronClient/gui/ResourceScreen.js:38
+msgid "ID"
+msgstr "ID"
+
+#: ElectronClient/gui/NotePropertiesDialog.min.js:27
+msgid "Created"
+msgstr "Δημιουργήθηκε"
+
+#: ElectronClient/gui/NotePropertiesDialog.min.js:28
+msgid "Updated"
+msgstr "Ενημερώθηκε"
+
+#: ElectronClient/gui/NotePropertiesDialog.min.js:29
+msgid "Completed"
+msgstr "Ολοκληρώθηκε"
+
+#: ElectronClient/gui/NotePropertiesDialog.min.js:30
+msgid "Location"
+msgstr "Τοποθεσία"
+
+#: ElectronClient/gui/NotePropertiesDialog.min.js:31
+msgid "URL"
+msgstr "URL"
+
+#: ElectronClient/gui/NotePropertiesDialog.min.js:32
+#: ReactNativeClient/lib/models/Setting.js:1253
+msgid "Note History"
+msgstr "Ιστορικό Σημειώσεων"
+
+#: ElectronClient/gui/NotePropertiesDialog.min.js:33
+msgid "Markup"
+msgstr "Markup"
+
+#: ElectronClient/gui/NotePropertiesDialog.min.js:305
+msgid "Previous versions of this note"
+msgstr "Προηγούμενες εκδόσεις αυτής της σημείωσης"
+
+#: ElectronClient/gui/NotePropertiesDialog.min.js:382
+#: ElectronClient/gui/MainScreen/commands/showNoteProperties.js:16
+#: ElectronClient/gui/NoteText.min.js:1834
+msgid "Note properties"
+msgstr "Ιδιότητες σημείωσης"
+
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:295
+msgid "Some items cannot be synchronised."
+msgstr "Ορισμένα στοιχεία δεν μπορούν να συγχρονιστούν."
+
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:300
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:312
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:336
+msgid "View them now"
+msgstr "Προβολή τώρα"
+
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:307
+msgid "Some items cannot be decrypted."
+msgstr "Δεν είναι δυνατή η αποκρυπτογράφηση ορισμένων στοιχείων."
+
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:319
+msgid "One or more master keys need a password."
+msgstr "Ένα ή περισσότερα κύρια κλειδιά χρειάζονται έναν κωδικό πρόσβασης."
+
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:324
+msgid "Set the password"
+msgstr "Ορισμός κωδικού πρόσβασης"
+
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:331
+msgid "One of your master keys use an obsolete encryption method."
+msgstr ""
+"Ένα από τα κύρια κλειδιά σας χρησιμοποιεί μια παλιά μέθοδο κρυπτογράφησης."
+
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:343
+msgid ""
+"The default encryption method has been changed, you should re-encrypt your "
+"data."
+msgstr ""
+"Η προεπιλεγμένη μέθοδος κρυπτογράφησης έχει αλλάξει, θα πρέπει να "
+"κρυπτογραφήσετε εκ νέου τα δεδομένα σας."
+
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:348
+msgid "More info"
+msgstr "Περισσότερες πληροφορίες"
+
+#: ElectronClient/gui/MainScreen/MainScreen.min.js:419
+msgid "Search..."
+msgstr "Αναζήτηση..."
+
+#: ElectronClient/gui/MainScreen/commands/showNoteContentProperties.js:16
+msgid "Statistics..."
+msgstr ""
+
+#: ElectronClient/gui/MainScreen/commands/renameFolder.js:17
+#: ElectronClient/gui/MainScreen/commands/renameTag.js:17
+#: ElectronClient/gui/SideBar.min.js:339 ElectronClient/gui/SideBar.min.js:389
+#: ReactNativeClient/lib/components/side-menu-content.js:129
+msgid "Rename"
+msgstr "Μετονομασία"
+
+#: ElectronClient/gui/MainScreen/commands/renameFolder.js:26
+#: ElectronClient/gui/MainScreen.min.js:292
+msgid "Rename notebook:"
+msgstr "Μετονομασία σημειωματάριου:"
+
+#: ElectronClient/gui/MainScreen/commands/newTodo.js:16
+#: ElectronClient/gui/MainScreen/commands/newTodo.js:28
+#: ReactNativeClient/lib/components/action-button.js:64
+#: ReactNativeClient/setUpQuickActions.js:15
+msgid "New to-do"
+msgstr "Νέο to-do"
+
+#: ElectronClient/gui/MainScreen/commands/toggleNoteList.js:15
+#: ElectronClient/gui/MainScreen/commands/toggleNoteList.js:26
+msgid "Toggle note list"
+msgstr "Εναλλαγή λίστας σημειώσεων"
+
+#: ElectronClient/gui/MainScreen/commands/toggleSidebar.js:15
+#: ElectronClient/gui/MainScreen/commands/toggleSidebar.js:26
+msgid "Toggle sidebar"
+msgstr "Εναλλαγή πλευρικής μπάρας"
+
+#: ElectronClient/gui/MainScreen/commands/editAlarm.js:19
+#: ElectronClient/gui/NoteText.min.js:1642
+#: ElectronClient/gui/NoteText.min.js:1828
+#: ReactNativeClient/lib/components/screens/note.js:826
+msgid "Set alarm"
+msgstr "Ορισμός υπενθύμισης"
+
+#: ElectronClient/gui/MainScreen/commands/editAlarm.js:31
+#: ElectronClient/gui/MainScreen.min.js:417
+msgid "Set alarm:"
+msgstr "Ορισμός ειδοποίησης:"
+
+#: ElectronClient/gui/MainScreen/commands/exportPdf.js:19
+#: ElectronClient/gui/MainScreen/commands/exportPdf.js:30
+#: ElectronClient/gui/MainScreen.min.js:549
+msgid "PDF File"
+msgstr "Αρχείο PDF"
+
+#: ElectronClient/gui/MainScreen/commands/newNote.js:20
+#: ElectronClient/gui/MainScreen/commands/newNote.js:47
+#: ReactNativeClient/lib/components/action-button.js:73
+#: ReactNativeClient/setUpQuickActions.js:14
+msgid "New note"
+msgstr "Νέα σημείωση"
+
+#: ElectronClient/gui/MainScreen/commands/moveToFolder.js:17
+msgid "Move to notebook"
+msgstr "Μετακίνηση στο σημειωματάριο"
+
+#: ElectronClient/gui/MainScreen/commands/moveToFolder.js:36
+#: ElectronClient/gui/MainScreen.min.js:272
+msgid "Move to notebook:"
+msgstr "Μετακίνηση στο σημειωματάριο:"
+
+#: ElectronClient/gui/MainScreen/commands/toggleVisiblePanes.js:15
+msgid "Toggle editor layout"
+msgstr "Εναλλαγή διάταξης editor"
+
+#: ElectronClient/gui/MainScreen/commands/renameTag.js:26
+#: ElectronClient/gui/MainScreen.min.js:313
+msgid "Rename tag:"
+msgstr "Μετονομασία ετικέτας:"
+
+#: ElectronClient/gui/MainScreen/commands/newNotebook.js:17
+#: ElectronClient/gui/MainScreen/commands/newNotebook.js:57
+msgid "New notebook"
+msgstr "Νέο σημειωματάριο"
+
+#: ElectronClient/gui/MainScreen/commands/newNotebook.js:25
+#: ElectronClient/gui/MainScreen.min.js:178
+msgid "Notebook title:"
+msgstr "Τίτλος σημειωματάριου:"
+
+#: ElectronClient/gui/MainScreen/commands/showShareNoteDialog.js:15
+msgid "Share note..."
+msgstr "Κοινοποίηση σημείωσης..."
+
+#: ElectronClient/gui/MainScreen/commands/selectTemplate.js:23
+#: ElectronClient/gui/MainScreen.min.js:448
+msgid "Template file:"
+msgstr "Αρχείο προτύπου:"
+
+#: ElectronClient/gui/MainScreen/commands/setTags.js:44
+#: ElectronClient/gui/MainScreen.min.js:221
+msgid "Add or remove tags:"
+msgstr "Προσθήκη ή διαγραφή ετικετών:"
+
+#: ElectronClient/gui/MainScreen/commands/print.js:16
+msgid "Print"
+msgstr "Εκτύπωση"
+
+#: ElectronClient/gui/MainScreen/commands/print.js:25
+#: ElectronClient/gui/NoteText.min.js:1321
+msgid "Only one note can be printed at a time."
+msgstr "Μόνο μία σημείωση τη φορά μπορεί να εκτυπωθεί."
+
+#: ElectronClient/gui/NoteToolbar/NoteToolbar.js:32
+#: ElectronClient/gui/NoteText.min.js:1656
+#, javascript-format
+msgid "In: %s"
+msgstr "Στο: %s"
+
+#: ElectronClient/gui/SideBar.min.js:290
+#, javascript-format
+msgid "Remove tag \"%s\" from all notes?"
+msgstr "Κατάργηση της ετικέτας \"%s\" από όλες τις σημειώσεις;"
+
+#: ElectronClient/gui/SideBar.min.js:304
+msgid "New sub-notebook"
+msgstr "Νέο υπο-σημειωματάριο"
+
+#: ElectronClient/gui/ClipperConfigScreen.min.js:39
+msgid "Token has been copied to the clipboard!"
+msgstr "Το Token έχει αντιγραφεί στο πρόχειρο!"
+
+#: ElectronClient/gui/ClipperConfigScreen.min.js:69
+msgid "The web clipper service is enabled and set to auto-start."
+msgstr ""
+"Η υπηρεσία web clipper είναι ενεργοποιημένη και έχει ρυθμιστεί για αυτόματη "
+"εκκίνηση."
+
+#: ElectronClient/gui/ClipperConfigScreen.min.js:76
+#, javascript-format
+msgid "Status: Started on port %d"
+msgstr "Κατάσταση: Ξεκίνησε στην πόρτα %d"
+
+#: ElectronClient/gui/ClipperConfigScreen.min.js:82
+#, javascript-format
+msgid "Status: %s"
+msgstr "Κατάσταση: %s"
+
+#: ElectronClient/gui/ClipperConfigScreen.min.js:88
+msgid "Disable Web Clipper Service"
+msgstr "Απενεργοποίηση υπηρεσίας Web Clipper"
+
+#: ElectronClient/gui/ClipperConfigScreen.min.js:94
+msgid "The web clipper service is not enabled."
+msgstr "Η υπηρεσία Web Clipper δεν είναι ενεργοποιημένη."
+
+#: ElectronClient/gui/ClipperConfigScreen.min.js:99
+msgid "Enable Web Clipper Service"
+msgstr "Ενεργοποίηση υπηρεσίας Web Clipper"
+
+#: ElectronClient/gui/ClipperConfigScreen.min.js:122
+msgid ""
+"Joplin Web Clipper allows saving web pages and screenshots from your browser "
+"to Joplin."
+msgstr ""
+"Το Joplin Web Clipper επιτρέπει την αποθήκευση ιστοσελίδων και screenshots "
+"από το πρόγραμμα περιήγησης στο Joplin."
+
+#: ElectronClient/gui/ClipperConfigScreen.min.js:127
+msgid "In order to use the web clipper, you need to do the following:"
+msgstr "Για να χρησιμοποιήσετε το web clipper, πρέπει να κάνετε τα εξής:"
+
+#: ElectronClient/gui/ClipperConfigScreen.min.js:135
+msgid "Step 1: Enable the clipper service"
+msgstr "Βήμα 1: Ενεργοποιήστε την υπηρεσία"
+
+#: ElectronClient/gui/ClipperConfigScreen.min.js:140
+msgid ""
+"This service allows the browser extension to communicate with Joplin. When "
+"enabling it your firewall may ask you to give permission to Joplin to listen "
+"to a particular port."
+msgstr ""
+"Αυτή η υπηρεσία επιτρέπει στην επέκταση του προγράμματος περιήγησης να "
+"επικοινωνεί με το Joplin. Όταν την ενεργοποιήσετε, το τείχος προστασίας "
+"μπορεί να σας ζητήσει να δώσετε άδεια στο Joplin να επικοινωνεί μέσω της "
+"συγκεκριμένης πόρτας."
+
+#: ElectronClient/gui/ClipperConfigScreen.min.js:154
+msgid "Step 2: Install the extension"
+msgstr "Βήμα 2: Εγκαταστήστε την επέκταση"
+
+#: ElectronClient/gui/ClipperConfigScreen.min.js:159
+msgid "Download and install the relevant extension for your browser:"
+msgstr ""
+"Κάντε λήψη και εγκατάσταση της αντίστοιχης επέκτασης για το πρόγραμμα "
+"περιήγησής σας:"
+
+#: ElectronClient/gui/ClipperConfigScreen.min.js:174
+msgid "Advanced options"
+msgstr "Επιλογές για προχωρημένους"
+
+#: ElectronClient/gui/ClipperConfigScreen.min.js:179
+msgid "Authorisation token:"
+msgstr "Token εξουσιοδότησης:"
+
+#: ElectronClient/gui/ClipperConfigScreen.min.js:189
+msgid "Copy token"
+msgstr "Αντιγραφή token"
+
+#: ElectronClient/gui/ClipperConfigScreen.min.js:195
+msgid ""
+"This authorisation token is only needed to allow third-party applications to "
+"access Joplin."
+msgstr ""
+"Αυτό το token εξουσιοδότησης απαιτείται μόνο για να επιτρέπει σε εφαρμογές "
+"τρίτων να έχουν πρόσβαση στην Joplin."
+
+#: ElectronClient/gui/Root.min.js:89
+msgid "OneDrive Login"
+msgstr "Σύνδεση OneDrive"
+
+#: ElectronClient/gui/Root.min.js:90
+msgid "Dropbox Login"
+msgstr "Σύνδεση Dropbox"
+
+#: ElectronClient/gui/Root.min.js:91 ElectronClient/app.js:673
+#: ElectronClient/app.js:724
+msgid "Import"
+msgstr "Εισαγωγή"
+
+#: ElectronClient/gui/Root.min.js:92 ElectronClient/app.js:561
+msgid "Options"
+msgstr "Επιλογές"
+
+#: ElectronClient/gui/Root.min.js:93
+msgid "Note attachments"
+msgstr "Επισυναπτόμενα σημειώσεων"
+
+#: ElectronClient/gui/Root.min.js:94 ElectronClient/app.js:500
+msgid "Synchronisation Status"
+msgstr "Κατάσταση Συγχρονισμού"
+
+#: ElectronClient/gui/ExtensionBadge.min.js:10
+msgid "Firefox Extension"
+msgstr "Επέκταση Firefox"
+
+#: ElectronClient/gui/ExtensionBadge.min.js:17
+msgid "Chrome Web Store"
+msgstr "Chrome Web Store"
+
+#: ElectronClient/gui/ExtensionBadge.min.js:44
+msgid "Get it now:"
+msgstr "Λήψη τώρα:"
+
+#: ElectronClient/gui/ImportScreen.min.js:62
+#, javascript-format
+msgid ""
+"New notebook \"%s\" will be created and file \"%s\" will be imported into it"
+msgstr ""
+"Θα δημιουργηθεί νέο σημειωματάριο \"% s\" και θα εισαχθεί το αρχείο \"% s\""
+
+#: ElectronClient/gui/DropboxLoginScreen.min.js:67
+#: ReactNativeClient/lib/components/screens/dropbox-login.js:68
+msgid "Submit"
+msgstr "Yποβολή"
+
+#: ElectronClient/gui/NoteList.min.js:147
+#: ElectronClient/gui/NoteList/NoteList.min.js:152
+msgid "Custom order"
+msgstr ""
+
+#: ElectronClient/gui/NoteList.min.js:147
+#: ElectronClient/gui/NoteList/NoteList.min.js:152
+#, fuzzy
+msgid "View"
+msgstr "&Εμφάνιση"
+
+#: ElectronClient/gui/NoteList.min.js:147
+#: ElectronClient/gui/NoteList/NoteList.min.js:152
+#: ReactNativeClient/lib/models/Setting.js:370
+msgid "Sort notes by"
+msgstr "Ταξινόμηση σημειώσεων κατά"
+
+#: ElectronClient/gui/NoteList.min.js:147
+#: ElectronClient/gui/NoteList/NoteList.min.js:152
+#, javascript-format
+msgid ""
+"To manually sort the notes, the sort order must be changed to \"%s\" in the "
+"menu \"%s\" > \"%s\""
+msgstr ""
+
+#: ElectronClient/gui/NoteList.min.js:148
+#: ElectronClient/gui/NoteList/NoteList.min.js:153
+#, fuzzy
+msgid "Do it now"
+msgstr "Λήψη τώρα:"
+
+#: ElectronClient/gui/NoteList.min.js:452
+#: ElectronClient/gui/NoteList/NoteList.min.js:425
+msgid "No notes in here. Create one by clicking on \"New note\"."
+msgstr ""
+"Δεν υπάρχουν σημειώσεις εδώ μέσα. Δημιουργήστε μία πατώντας στο \"Νέα "
+"σημείωση\"."
+
+#: ElectronClient/gui/NoteList.min.js:452
+#: ElectronClient/gui/NoteList/NoteList.min.js:425
+msgid ""
+"There is currently no notebook. Create one by clicking on \"New notebook\"."
+msgstr ""
+"Δεν υπάρχει κανένα σημειωματάριο. Δημιουργήστε ένα πατώντας στο \"Νέο "
+"σημειωματάριο\"."
+
+#: ElectronClient/gui/utils/NoteListUtils.js:37
+#: ReactNativeClient/lib/components/screen-header.js:362
+msgid "Duplicate"
+msgstr "Δημιουργία αντιγράφου"
+
+#: ElectronClient/gui/utils/NoteListUtils.js:42
+#, javascript-format
+msgid "%s - Copy"
+msgstr "%s - Αντίγραφο"
+
+#: ElectronClient/gui/utils/NoteListUtils.js:62
+msgid "Switch between note and to-do type"
+msgstr "Εναλλαγή μεταξύ σημείωσης και to-do"
+
+#: ElectronClient/gui/utils/NoteListUtils.js:91
+msgid "Switch to note type"
+msgstr "Αλλαγή σε σημείωση"
+
+#: ElectronClient/gui/utils/NoteListUtils.js:100
+msgid "Switch to to-do type"
+msgstr "Αλλαγή σε to-do"
+
+#: ElectronClient/gui/utils/NoteListUtils.js:110
+#: ReactNativeClient/lib/components/screens/note.js:855
+msgid "Copy Markdown link"
+msgstr "Αντιγραφή συνδέσμου Markdown"
+
+#: ElectronClient/gui/utils/NoteListUtils.js:178
+#, javascript-format
+msgid "Delete note \"%s\"?"
+msgstr "Διαγραφή σημείωσης \"%s\";"
+
+#: ElectronClient/gui/utils/NoteListUtils.js:180
+#, javascript-format
+msgid "Delete these %d notes?"
+msgstr "Διαγραφή των σημειώσεων %d;"
+
+#: ElectronClient/gui/FolderPropertiesDialog.min.js:22
+msgid "Name"
+msgstr "Όνομα"
+
+#: ElectronClient/gui/FolderPropertiesDialog.min.js:23
+msgid "Icon"
+msgstr "Εικονίδιο"
+
+#: ElectronClient/gui/FolderPropertiesDialog.min.js:272
+msgid "Notebook properties"
+msgstr "Ιδιότητες σημειωματαρίου"
+
+#: ElectronClient/gui/NoteText.min.js:781
+#, javascript-format
+msgid "This file could not be opened: %s"
+msgstr "Αυτό το αρχείο δεν ήταν δυνατό να ανοιχτεί: %s"
+
+#: ElectronClient/gui/NoteText.min.js:1551
+msgid "emphasized text"
+msgstr "πλάγια γραφή"
+
+#: ElectronClient/gui/NoteText.min.js:1792
+msgid "Click to stop external editing"
+msgstr "Κάντε κλικ για να σταματήσετε την εξωτερική επεξεργασία"
+
+#: ElectronClient/gui/NoteText.min.js:1793
+msgid "Watching..."
+msgstr "Παρακολούθηση..."
+
+#: ElectronClient/gui/NoteText.min.js:1801
+#: ElectronClient/commands/startExternalEditing.js:18
+msgid "Edit in external editor"
+msgstr "Επεξεργασία σε εξωτερικό editor"
+
+#: ElectronClient/gui/NoteText.min.js:1852
+msgid "Content Properties"
+msgstr "Ιδιότητες Περιεχομένου"
+
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:95
+#: ReactNativeClient/lib/components/screens/encryption-config.js:125
+msgid "Save"
+msgstr "Αποθήκευση"
+
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:144
+msgid "Master keys that need upgrading"
+msgstr "Κύρια κλειδιά που χρειάζονται αναβάθμιση"
+
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:149
+msgid ""
+"The following master keys use an out-dated encryption algorithm and it is "
+"recommended to upgrade them. The upgraded master key will still be able to "
+"decrypt and encrypt your data as usual."
+msgstr ""
+"Τα ακόλουθα πρωτεύοντα κλειδιά χρησιμοποιούν έναν παλιό αλγόριθμο "
+"κρυπτογράφησης και συνιστάται η αναβάθμισή τους. Το αναβαθμισμένο πρωτεύον "
+"κλειδί θα εξακολουθεί να μπορεί να αποκρυπτογραφήσει και να κρυπτογραφήσει "
+"τα δεδομένα σας ως συνήθως."
+
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:168
+msgid "Upgrade"
+msgstr "Αναβάθμιση"
+
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:181
+msgid "Re-encrypt data"
+msgstr "Επανακρυπτογράφηση δεδομένων"
+
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:183
+msgid ""
+"The default encryption method has been changed to a more secure one and it "
+"is recommended that you apply it to your data."
+msgstr ""
+"Η προεπιλεγμένη μέθοδος κρυπτογράφησης έχει αλλάξει μία σε πιο ασφαλή και "
+"συνιστάται να την εφαρμόσετε στα δεδομένα σας."
+
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:183
+msgid ""
+"You may use the tool below to re-encrypt your data, for example if you know "
+"that some of your notes are encrypted with an obsolete encryption method."
+msgstr ""
+"Μπορείτε να χρησιμοποιήσετε το παρακάτω εργαλείο για να κρυπτογραφήσετε εκ "
+"νέου τα δεδομένα σας, για παράδειγμα, εάν γνωρίζετε ότι ορισμένες από τις "
+"σημειώσεις σας είναι κρυπτογραφημένες με μια παρωχημένη μέθοδο "
+"κρυπτογράφησης."
+
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:185
+#, javascript-format
+msgid ""
+"In order to do so, your entire data set will have to be encrypted and "
+"synchronised, so it is best to run it overnight.\n"
+"\n"
+"To start, please follow these instructions:\n"
+"\n"
+"1. Synchronise all your devices.\n"
+"2. Click \"%s\".\n"
+"3. Let it run to completion. While it runs, avoid changing any note on your "
+"other devices, to avoid conflicts.\n"
+"4. Once sync is done on this device, sync all your other devices and let it "
+"run to completion.\n"
+"\n"
+"Important: you only need to run this ONCE on one device."
+msgstr ""
+"Για να το κάνετε αυτό, ολόκληρο το σύνολο δεδομένων σας θα πρέπει να "
+"κρυπτογραφηθεί και να συγχρονιστεί, επομένως είναι καλύτερο να το εκτελέσετε "
+"κατά τη διάρκεια της νύχτας.\n"
+"\n"
+"Για να ξεκινήσετε, ακολουθήστε τις παρακάτω οδηγίες:\n"
+"\n"
+"1. Συγχρονίστε όλες τις συσκευές σας.\n"
+"2. Κάντε κλικ στο κουμπί \"%s\".\n"
+"3. Αφήστε το να τρέξει μέχρι να ολοκληρωθεί. Κατά την εκτέλεσή του, "
+"αποφύγετε να αλλάξετε οποιαδήποτε σημείωση στις άλλες συσκευές σας, για να "
+"αποφύγετε διενέξεις.\n"
+"4. Μόλις ολοκληρωθεί ο συγχρονισμός σε αυτήν τη συσκευή, συγχρονίστε όλες "
+"τις άλλες συσκευές σας και αφήστε τον συγχρονισμό να ολοκληρωθεί.\n"
+"\n"
+"Σημαντικό: χρειάζεται να τρέξει ΜΟΝΟ μία φορά σε μια συσκευή."
+
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:432
+#: ReactNativeClient/lib/components/screens/encryption-config.js:279
+#: ReactNativeClient/lib/components/screens/status.js:142
+msgid "Status"
+msgstr "Κατάσταση"
+
+#: ElectronClient/gui/EncryptionConfigScreen.min.js:437
+msgid "Encryption is:"
+msgstr "Η κρυπτογράφηση είναι:"
+
+#: ElectronClient/gui/StatusScreen.min.js:33
+msgid "Please select where the sync status should be exported to"
+msgstr ""
+"Επιλέξτε την τοποθεσία στην οποία θα εξαχθεί η κατάσταση του συγχρονισμού"
+
+#: ElectronClient/gui/StatusScreen.min.js:71
+#: ReactNativeClient/lib/components/screens/status.js:112
+msgid "Retry All"
+msgstr "Δοκιμή ξανά για Όλα"
+
+#: ElectronClient/gui/StatusScreen.min.js:96
+#: ReactNativeClient/lib/components/screens/status.js:118
+msgid "Retry"
+msgstr "Δοκιμή ξανά"
+
+#: ElectronClient/gui/MainScreen.min.js:165
+msgid "Please create a notebook first."
+msgstr "Παρακαλώ πρώτα δημιουργήστε ένα σημειωματάριο."
+
+#: ElectronClient/gui/MainScreen.min.js:171
+msgid "Please create a notebook first"
+msgstr "Παρακαλώ πρώτα δημιουργήστε ένα σημειωματάριο"
+
+#: ElectronClient/gui/PromptDialog.min.js:249
+msgid "Clear"
+msgstr "Καθαρισμός"
+
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:76
+msgid "Words"
+msgstr "Λέξεις"
+
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:77
+msgid "Characters"
+msgstr "Χαρακτήρες"
+
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:78
+msgid "Characters excluding spaces"
+msgstr "Χαρακτήρες χωρίς τα κενά"
+
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:79
+msgid "Lines"
+msgstr "Γραμμές"
+
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:98
+#: ReactNativeClient/lib/models/Setting.js:355
+#: ReactNativeClient/lib/models/Setting.js:356
+#: ReactNativeClient/lib/models/Setting.js:357
+msgid "Editor"
+msgstr "Επεξεργασία"
+
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:99
+#: ReactNativeClient/lib/models/Setting.js:355
+#: ReactNativeClient/lib/models/Setting.js:356
+#: ReactNativeClient/lib/models/Setting.js:358
+msgid "Viewer"
+msgstr "Εμφάνιση"
+
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:107
+#, fuzzy
+msgid "Statistics"
+msgstr "Κατάσταση"
+
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:111
+#, javascript-format
+msgid "Read time: %s min"
+msgstr ""
+
+#: ElectronClient/gui/NoteContentPropertiesDialog.js:112
+#: ElectronClient/gui/ShareNoteDialog.js:175
+msgid "Close"
+msgstr "Κλείσιμο"
+
+#: ElectronClient/gui/ConfigScreen.min.js:82
+msgid "This will open a new screen. Save your current changes?"
+msgstr "Αυτό θα ανοίξει μια νέα οθόνη. Να αποθηκευθούν οι τρέχουσες αλλαγές;"
+
+#: ElectronClient/gui/ConfigScreen.min.js:170
+#: ReactNativeClient/lib/components/screens/config.js:307
+msgid "Check synchronisation configuration"
+msgstr "Ελέγχος ρυθμίσεων συγχρονισμού"
+
+#: ElectronClient/gui/ConfigScreen.min.js:179
+msgid "Unknown"
+msgstr "Άγνωστο"
+
+#: ElectronClient/gui/ConfigScreen.min.js:183
+msgid "Checking..."
+msgstr "Έλεγχος..."
+
+#: ElectronClient/gui/ConfigScreen.min.js:187
+#: ReactNativeClient/lib/models/Resource.js:320
+msgid "Error"
+msgstr "Σφάλμα"
+
+#: ElectronClient/gui/ConfigScreen.min.js:198
+msgid ""
+"The Joplin Nextcloud App is either not installed or misconfigured. Please "
+"see the full error message below:"
+msgstr ""
+"Η εφαρμογή Joplin δεν έχει εγκατασταθεί ή έχει ρυθμιστεί εσφαλμένα. Δείτε το "
+"πλήρες μήνυμα σφάλματος παρακάτω:"
+
+#: ElectronClient/gui/ConfigScreen.min.js:211
+msgid "Show Log"
+msgstr "Εμφάνιση αρχείου καταγραφής"
+
+#: ElectronClient/gui/ConfigScreen.min.js:224
+msgid "Joplin Nextcloud App status:"
+msgstr "Κατάσταση εφαρμογής Joplin:"
+
+#: ElectronClient/gui/ConfigScreen.min.js:238
+msgid "Check Status"
+msgstr "Έλεγχος Κατάστασης"
+
+#: ElectronClient/gui/ConfigScreen.min.js:245
+msgid "Help"
+msgstr "Βοήθεια"
+
+#: ElectronClient/gui/ConfigScreen.min.js:264
+msgid "Show Advanced Settings"
+msgstr "Εμφάνιση επιλογών για προχωρημένους"
+
+#: ElectronClient/gui/ConfigScreen.min.js:521
+msgid "Browse..."
+msgstr "Αναζήτηση..."
+
+#: ElectronClient/gui/ConfigScreen.min.js:761
+msgid "Apply"
+msgstr "Εφαρμογή"
+
+#: ElectronClient/gui/Header.min.js:267
+#: ElectronClient/gui/Header/Header.min.js:253
+msgid "Usage"
+msgstr "Χρήση"
+
+#: ElectronClient/gui/NoteList/commands/focusElementNoteList.js:15
+msgid "Note list"
+msgstr "Λίστα σημειώσεων"
+
+#: ElectronClient/gui/Header/commands/focusSearch.js:15
+msgid "Search in all the notes"
+msgstr "Αναζήτηση σε όλες τις σημειώσεις"
+
+#: ElectronClient/gui/ResourceScreen.js:31
+msgid "Title"
+msgstr "Τίτλος"
+
+#: ElectronClient/gui/ResourceScreen.js:35
+msgid "Size"
+msgstr "Μέγεθος"
+
+#: ElectronClient/gui/ResourceScreen.js:39
+msgid "Action"
+msgstr "Ενέργεια"
+
+#: ElectronClient/gui/ResourceScreen.js:42
+#: ReactNativeClient/lib/path-utils.js:65
+#: ReactNativeClient/lib/path-utils.js:101
+#: ReactNativeClient/lib/models/BaseItem.js:720
+msgid "Untitled"
+msgstr "Χωρίς τίτλο"
+
+#: ElectronClient/gui/ResourceScreen.js:93
+#, javascript-format
+msgid "Delete attachment \"%s\"?"
+msgstr "Διαγραφή συνημμένου \"%s\";"
+
+#: ElectronClient/gui/ResourceScreen.js:139
+msgid ""
+"This is an advanced tool to show the attachments that are linked to your "
+"notes. Please be careful when deleting one of them as they cannot be "
+"restored afterwards."
+msgstr ""
+"Αυτό είναι ένα προηγμένο εργαλείο για την εμφάνιση των συνημμένων που "
+"συνδέονται με τις σημειώσεις σας. Να είστε προσεκτικοί όταν διαγράφετε ένα "
+"από αυτά, καθώς δεν μπορούν να αποκατασταθούν μετά."
+
+#: ElectronClient/gui/ResourceScreen.js:140
+msgid "Please wait..."
+msgstr "Παρακαλώ περιμένετε..."
+
+#: ElectronClient/gui/ResourceScreen.js:142
+msgid "No resources!"
+msgstr "Χωρίς πόρους!"
+
+#: ElectronClient/gui/ResourceScreen.js:144
+#, javascript-format
+msgid "Warning: not all resources shown for performance reasons (limit: %s)."
+msgstr ""
+"Προειδοποίηση: δεν εμφανίζονται όλοι οι πόροι για λόγους απόδοσης (όριο:% s)."
+
+#: ElectronClient/gui/ShareNoteDialog.js:158
+msgid "Synchronising..."
+msgstr "Συγχρονισμός..."
+
+#: ElectronClient/gui/ShareNoteDialog.js:160
+msgid "Generating link..."
+msgid_plural "Generating links..."
+msgstr[0] "Δημιουργία συνδέσμου..."
+msgstr[1] "Δημιουργία νεου %s..."
+
+#: ElectronClient/gui/ShareNoteDialog.js:162
+msgid "Link has been copied to clipboard!"
+msgid_plural "Links have been copied to clipboard!"
+msgstr[0] "Ο σύνδεσμος έχει αντιγραφεί στο πρόχειρο!"
+msgstr[1] "Ο σύνδεσμοι έχει αντιγραφεί στο πρόχειρο!"
+
+#: ElectronClient/gui/ShareNoteDialog.js:165
+msgid ""
+"Note: When a note is shared, it will no longer be encrypted on the server."
+msgstr ""
+"Σημείωση: Όταν μια σημείωση είναι κοινόχρηστη, δεν θα κρυπτογραφείται πλέον "
+"στο διακομιστή."
+
+#: ElectronClient/gui/ShareNoteDialog.js:170
+msgid "Share Notes"
+msgstr "Κοινοποίηση Σημειώσεων"
+
+#: ElectronClient/gui/ShareNoteDialog.js:172
+msgid "Copy Shareable Link"
+msgid_plural "Copy Shareable Links"
+msgstr[0] "Αντιγραφή Συνδέσμου Κοινοποίησης"
+msgstr[1] "Αντιγραφή Συνδέσμων Κοινοποίησης"
+
+#: ElectronClient/commands/stopExternalEditing.js:16
+msgid "Stop external editing"
+msgstr "Διακοπή εξωτερικής επεξεργασίας"
+
+#: ElectronClient/commands/startExternalEditing.js:29
+#, javascript-format
+msgid "Error opening note in editor: %s"
+msgstr "Σφάλμα κατά το άνοιγμα της σημείωσης στον editor: %s"
+
+#: ElectronClient/app.js:460
+#, javascript-format
+msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
+msgstr "Εισαγωγή από \"%s\" σε μορφή \"%s\". Παρακαλώ περιμένετε..."
+
+#: ElectronClient/app.js:522
+msgid "Create note from template"
+msgstr "Δημιουργία σημείωσης από πρότυπο"
+
+#: ElectronClient/app.js:528
+msgid "Create to-do from template"
+msgstr "Δημιουργία to-do από πρότυπο"
+
+#: ElectronClient/app.js:534
+msgid "Insert template"
+msgstr "Εισαγωγή προτύπου"
+
+#: ElectronClient/app.js:541
+msgid "Open template directory"
+msgstr "Άνοιγμα φακέλου προτύπου"
+
+#: ElectronClient/app.js:548
+msgid "Refresh templates"
+msgstr "Ανανέωση προτύπων"
+
+#: ElectronClient/app.js:574
+msgid "Note attachments..."
+msgstr "Επισυναπτόμενα..."
+
+#: ElectronClient/app.js:596
+#, javascript-format
+msgid "Revision: %s (%s)"
+msgstr "Αναθεώρηση: %s (%s)"
+
+#: ElectronClient/app.js:603
+#, javascript-format
+msgid "%s %s (%s, %s)"
+msgstr "%s %s (%s, %s)"
+
+#: ElectronClient/app.js:605
+#, javascript-format
+msgid "Client ID: %s"
+msgstr "Αναγνωριστικό προγράμματος-πελάτη: %s"
+
+#: ElectronClient/app.js:606
+#, javascript-format
+msgid "Sync Version: %s"
+msgstr "Έκδοση συγχρονισμού: %s"
+
+#: ElectronClient/app.js:607
+#, javascript-format
+msgid "Profile Version: %s"
+msgstr "Έκδοση προφίλ: %s"
+
+#: ElectronClient/app.js:608
+#, javascript-format
+msgid "Keychain Supported: %s"
+msgstr ""
+
+#: ElectronClient/app.js:630 ElectronClient/app.js:706
+msgid "&File"
+msgstr "&Αρχείο"
+
+#: ElectronClient/app.js:636 ElectronClient/app.js:905
+msgid "About Joplin"
+msgstr "Σχετικά με το Joplin"
+
+#: ElectronClient/app.js:643
+msgid "Preferences..."
+msgstr "Προτιμήσεις..."
+
+#: ElectronClient/app.js:653 ElectronClient/app.js:887
+msgid "Check for updates..."
+msgstr "Ελεγχος για ενημερώσεις..."
+
+#: ElectronClient/app.js:666 ElectronClient/app.js:719
+msgid "Templates"
+msgstr "Πρότυπα"
+
+#: ElectronClient/app.js:692
+#, javascript-format
+msgid "Hide %s"
+msgstr "Απόκρυψη %s"
+
+#: ElectronClient/app.js:699
+msgid "Quit"
+msgstr "Έξοδος"
+
+#: ElectronClient/app.js:712
+msgid "Close Window"
+msgstr "Κλείσιμο παραθύρου"
+
+#: ElectronClient/app.js:757
+msgid "&Edit"
+msgstr "&Επεξεργασία"
+
+#: ElectronClient/app.js:776
+msgid "&View"
+msgstr "&Εμφάνιση"
+
+#: ElectronClient/app.js:782
+msgid "Layout button sequence"
+msgstr "Ακολουθία κουμπιών διάταξης"
+
+#: ElectronClient/app.js:822
+msgid "Focus"
+msgstr "Εστίαση σε"
+
+#: ElectronClient/app.js:828
+msgid "Actual Size"
+msgstr "Πραγματικό μέγεθος"
+
+#: ElectronClient/app.js:839 ElectronClient/app.js:845
+msgid "Zoom In"
+msgstr "Μεγέθυνση"
+
+#: ElectronClient/app.js:852
+msgid "Zoom Out"
+msgstr "Σμίκρινση"
+
+#: ElectronClient/app.js:860
+#, fuzzy
+msgid "&Note"
+msgstr "Σημείωση"
+
+#: ElectronClient/app.js:870
+msgid "&Tools"
+msgstr "&Εργαλεία"
+
+#: ElectronClient/app.js:874
+msgid "&Help"
+msgstr "&Βοήθεια"
+
+#: ElectronClient/app.js:877
+msgid "Website and documentation"
+msgstr "Ιστοσελίδα και εγχειρίδια"
+
+#: ElectronClient/app.js:881
+msgid "Joplin Forum"
+msgstr "Joplin φόρουμ"
+
+#: ElectronClient/app.js:884
+#: ReactNativeClient/lib/components/screens/config.js:495
+msgid "Make a donation"
+msgstr "Κάντε μια δωρεά"
+
+#: ElectronClient/app.js:894
+msgid "Toggle development tools"
+msgstr "Εναλλαγή εργαλείων προγραμματισμού"
+
+#: ElectronClient/app.js:1037
+#, javascript-format
+msgid "Open %s"
+msgstr "Άνοιγμα %s"
+
+#: ElectronClient/app.js:1039
+msgid "Exit"
+msgstr "Έξοδος"
+
+#: ReactNativeClient/lib/onedrive-api-node-utils.js:85
+msgid ""
+"The application has been authorised - you may now close this browser tab."
+msgstr ""
+"Η εφαρμογή έχει εξουσιοδοτηθεί - μπορείτε τώρα να κλείσετε αυτήν την καρτέλα "
+"του προγράμματος περιήγησης."
+
+#: ReactNativeClient/lib/onedrive-api-node-utils.js:87
+msgid "The application has been successfully authorised."
+msgstr "Η εφαρμογή έχει εξουσιοδοτηθεί με επιτυχία."
+
+#: ReactNativeClient/lib/onedrive-api-node-utils.js:115
+msgid ""
+"Please open the following URL in your browser to authenticate the "
+"application. The application will create a directory in \"Apps/Joplin\" and "
+"will only read and write files in this directory. It will have no access to "
+"any files outside this directory nor to any other personal data. No data "
+"will be shared with any third party."
+msgstr ""
+"Παρακαλώ ανοίξτε την ακόλουθη διεύθυνση URL στο πρόγραμμα περιήγησής σας για "
+"να πιστοποιήσετε την εφαρμογή. Η εφαρμογή θα δημιουργήσει έναν φάκελο στο "
+"\"Apps / Joplin\" και θα διαβάζει και θα γράφει μόνο αρχεία σε αυτόν. Δεν θα "
+"έχει πρόσβαση σε αρχεία εκτός αυτού του φακέλου ούτε σε άλλα προσωπικά "
+"δεδομένα. Δεν πρόκειται να κοινοποιηθούν δεδομένα σε τρίτους."
+
+#: ReactNativeClient/lib/registry.js:156
+#, fuzzy
+msgid ""
+"Could not synchronise with OneDrive.\n"
+"\n"
+"This error often happens when using OneDrive for Business, which "
+"unfortunately cannot be supported.\n"
+"\n"
+"Please consider using a regular OneDrive account."
+msgstr ""
+"Δεν ήταν δυνατός ο συγχρονισμός με το OneDrive.\n"
+"\n"
+"Αυτό το σφάλμα συμβαίνει συχνά όταν χρησιμοποιείτε το OneDrive for Business, "
+"το οποίο δυστυχώς δεν υποστηρίζεται.\n"
+"\n"
+"Παρακαλώ σκεφτείτε να χρησιμοποιήσετε έναν κανονικό λογαριασμό OneDrive."
+
+#: ReactNativeClient/lib/logger.js:178
+#, javascript-format
+msgid "Unknown log level: %s"
+msgstr "Άγνωστο log level: %s"
+
+#: ReactNativeClient/lib/logger.js:187
+#, javascript-format
+msgid "Unknown level ID: %s"
+msgstr "Άγνωστο level ID: %s"
+
+#: ReactNativeClient/lib/SyncTargetAmazonS3.js:28
+msgid "AWS S3"
+msgstr ""
+
+#: ReactNativeClient/lib/SyncTargetDropbox.js:25
+msgid "Dropbox"
+msgstr "Dropbox"
+
+#: ReactNativeClient/lib/shim-init-node.js:90
+#: ReactNativeClient/lib/components/screens/note.js:523
+#, javascript-format
+msgid ""
+"You are about to attach a large image (%dx%d pixels). Would you like to "
+"resize it down to %d pixels before attaching it?"
+msgstr ""
+"Πρόκειται να επισυνάψετε μια μεγάλη εικόνα (%dx%d pixels). Θα θέλατε να "
+"αλλάξετε το μέγεθός της σε %d pixel πριν την επισυνάψετε;"
+
+#: ReactNativeClient/lib/shim-init-node.js:156
+#, javascript-format
+msgid "Cannot access %s"
+msgstr "Δεν είναι δυνατή η πρόσβαση στο %s"
+
+#: ReactNativeClient/lib/models/Folder.js:28
+#: ReactNativeClient/lib/models/Note.js:25
+msgid "title"
+msgstr "τίτλος"
+
+#: ReactNativeClient/lib/models/Folder.js:29
+#: ReactNativeClient/lib/models/Note.js:26
+msgid "updated date"
+msgstr "ημερομηνία ενημέρωσης"
+
+#: ReactNativeClient/lib/models/Folder.js:89
+msgid "Conflicts"
+msgstr "Διενέξεις"
+
+#: ReactNativeClient/lib/models/Folder.js:374
+msgid "Cannot move notebook to this location"
+msgstr "Δεν είναι δυνατή η μετακίνηση του σημειωματάριου σε αυτήν τη θέση"
+
+#: ReactNativeClient/lib/models/Folder.js:426
+#, javascript-format
+msgid "Notebooks cannot be named \"%s\", which is a reserved title."
+msgstr ""
+"Τα σημειωματάρια δεν μπορούν να ονομαστούν  \"%s\", που είναι δεσμευμένος "
+"τίτλος."
+
+#: ReactNativeClient/lib/models/Setting.js:39
+msgid "yes"
+msgstr "ναι"
+
+#: ReactNativeClient/lib/models/Setting.js:39
+#: ReactNativeClient/lib/models/Setting.js:40
+#, javascript-format
+msgid "(wysiwyg: %s)"
+msgstr "(wysiwyg: %s)"
+
+#: ReactNativeClient/lib/models/Setting.js:40
+msgid "no"
+msgstr "όχι"
+
+#: ReactNativeClient/lib/models/Setting.js:43
+#, javascript-format
+msgid ""
+"Attention: If you change this location, make sure you copy all your content "
+"to it before syncing, otherwise all files will be removed! See the FAQ for "
+"more details: %s"
+msgstr ""
+"Προσοχή: Αν αλλάξετε αυτή τη θέση, βεβαιωθείτε ότι αντιγράφετε όλο το "
+"περιεχόμενό σας πριν από το συγχρονισμό, διαφορετικά θα καταργηθούν όλα τα "
+"αρχεία! Δείτε τις συνήθεις ερωτήσεις για περισσότερες λεπτομέρειες: %s"
+
+#: ReactNativeClient/lib/models/Setting.js:51
+msgid "Light"
+msgstr "Light"
+
+#: ReactNativeClient/lib/models/Setting.js:52
+msgid "Dark"
+msgstr "Dark"
+
+#: ReactNativeClient/lib/models/Setting.js:53
+msgid "Dracula"
+msgstr "Dracula"
+
+#: ReactNativeClient/lib/models/Setting.js:54
+msgid "Solarised Light"
+msgstr "Solarised Light"
+
+#: ReactNativeClient/lib/models/Setting.js:55
+msgid "Solarised Dark"
+msgstr "Solarised Dark"
+
+#: ReactNativeClient/lib/models/Setting.js:56
+msgid "Nord"
+msgstr "Nord"
+
+#: ReactNativeClient/lib/models/Setting.js:57
+msgid "Aritim Dark"
+msgstr "Aritim Dark"
+
+#: ReactNativeClient/lib/models/Setting.js:58
+msgid "OLED Dark"
+msgstr "OLED Dark"
+
+#: ReactNativeClient/lib/models/Setting.js:80
+msgid "Synchronisation target"
+msgstr "Στόχος συγχρονισμού"
+
+#: ReactNativeClient/lib/models/Setting.js:82
+msgid ""
+"The target to synchonise to. Each sync target may have additional parameters "
+"which are named as `sync.NUM.NAME` (all documented below)."
+msgstr ""
+"Ο προορισμός συγχρονισμού. Κάθε προορισμός συγχρονισμού μπορεί να έχει "
+"πρόσθετες παραμέτρους οι οποίες ονομάζονται ως `sync.NUM.NAME` (οι οποίες "
+"αναφέρονται παρακάτω)."
+
+#: ReactNativeClient/lib/models/Setting.js:104
+msgid "Directory to synchronise with (absolute path)"
+msgstr "Φάκελος για συγχρονισμό (absolute path)"
+
+#: ReactNativeClient/lib/models/Setting.js:116
+msgid "Nextcloud WebDAV URL"
+msgstr "Nextcloud WebDAV URL"
+
+#: ReactNativeClient/lib/models/Setting.js:127
+msgid "Nextcloud username"
+msgstr "Nextcloud username"
+
+#: ReactNativeClient/lib/models/Setting.js:137
+msgid "Nextcloud password"
+msgstr "Nextcloud password"
+
+#: ReactNativeClient/lib/models/Setting.js:149
+msgid "WebDAV URL"
+msgstr "WebDAV URL"
+
+#: ReactNativeClient/lib/models/Setting.js:160
+msgid "WebDAV username"
+msgstr "WebDAV username"
+
+#: ReactNativeClient/lib/models/Setting.js:170
+msgid "WebDAV password"
+msgstr "WebDAV password"
+
+#: ReactNativeClient/lib/models/Setting.js:189
+msgid "AWS S3 bucket"
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:200
+msgid "AWS key"
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:210
+msgid "AWS secret"
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:224
+msgid "Attachment download behaviour"
+msgstr "Συμπεριφορά λήψης συνημμένων"
+
+#: ReactNativeClient/lib/models/Setting.js:225
+msgid ""
+"In \"Manual\" mode, attachments are downloaded only when you click on them. "
+"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
+"the attachments are downloaded whether you open the note or not."
+msgstr ""
+"Στη \"Χειροκίνητη\" λειτουργία, τα συνημμένα λαμβάνονται μόνο όταν κάνετε "
+"κλικ σε αυτά. Στην \"Αυτόματη\" λειτουργία, λαμβάνονται όταν ανοίγετε τη "
+"σημείωση. Στην λειτουργία \"Πάντα\", όλα τα συνημμένα λαμβάνονται είτε "
+"ανοίγετε τη σημείωση είτε όχι."
+
+#: ReactNativeClient/lib/models/Setting.js:228
+msgid "Always"
+msgstr "Πάντα"
+
+#: ReactNativeClient/lib/models/Setting.js:229
+msgid "Manual"
+msgstr "Χειροκίνητα"
+
+#: ReactNativeClient/lib/models/Setting.js:230
+msgid "Auto"
+msgstr "Αυτόματα"
+
+#: ReactNativeClient/lib/models/Setting.js:247
+msgid "Max concurrent connections"
+msgstr "Μέγιστος αριθμός ταυτόχρονων συνδέσεων"
+
+#: ReactNativeClient/lib/models/Setting.js:256
+msgid "Language"
+msgstr "Γλώσσα"
+
+#: ReactNativeClient/lib/models/Setting.js:266
+msgid "Date format"
+msgstr "Μορφή ημερομηνίας"
+
+#: ReactNativeClient/lib/models/Setting.js:285
+msgid "Time format"
+msgstr "Μορφή ώρας"
+
+#: ReactNativeClient/lib/models/Setting.js:304
+msgid "Theme"
+msgstr "Θέμα"
+
+#: ReactNativeClient/lib/models/Setting.js:315
+msgid "Automatically switch theme to match system theme"
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:327
+msgid "Preferred light theme"
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:341
+msgid "Preferred dark theme"
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:346
+msgid "Show note counts"
+msgstr "Εμφάνιση πλήθους σημειώσεων"
+
+#: ReactNativeClient/lib/models/Setting.js:355
+#: ReactNativeClient/lib/models/Setting.js:357
+#: ReactNativeClient/lib/models/Setting.js:358
+msgid "Split View"
+msgstr "Διαίρεση προβολής"
+
+#: ReactNativeClient/lib/models/Setting.js:355
+#, javascript-format
+msgid "%s / %s / %s"
+msgstr "%s / %s / %s"
+
+#: ReactNativeClient/lib/models/Setting.js:356
+#: ReactNativeClient/lib/models/Setting.js:357
+#: ReactNativeClient/lib/models/Setting.js:358
+#, javascript-format
+msgid "%s / %s"
+msgstr "%s / %s"
+
+#: ReactNativeClient/lib/models/Setting.js:361
+msgid "Uncompleted to-dos on top"
+msgstr "Μη ολοκληρωμένα to-dos στην κορυφή"
+
+#: ReactNativeClient/lib/models/Setting.js:362
+msgid "Show completed to-dos"
+msgstr "Εμφάνιση ολοκληρωμένων to-dos"
+
+#: ReactNativeClient/lib/models/Setting.js:387
+msgid "Auto-pair braces, parenthesis, quotations, etc."
+msgstr "Αυτόματη-σύζευξη αγκίστρων, παρενθέσεων, εισαγωγικών, κ.λπ."
+
+#: ReactNativeClient/lib/models/Setting.js:395
+msgid "Use CodeMirror as the code editor (WARNING: BETA)."
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:397
+#: ReactNativeClient/lib/models/Setting.js:415
+msgid "Reverse sort order"
+msgstr "Αντίστροφη σειρά ταξινόμησης"
+
+#: ReactNativeClient/lib/models/Setting.js:404
+msgid "Sort notebooks by"
+msgstr "Ταξινόμηση σημειωματάριων κατά"
+
+#: ReactNativeClient/lib/models/Setting.js:416
+msgid "Save geo-location with notes"
+msgstr "Αποθήκευση της γεωγραφικής τοποθεσίας μαζί με της σημειώσεις"
+
+#: ReactNativeClient/lib/models/Setting.js:435
+msgid "When creating a new to-do:"
+msgstr "Κατά τη δημιουργία ενός νέου to-do:"
+
+#: ReactNativeClient/lib/models/Setting.js:438
+#: ReactNativeClient/lib/models/Setting.js:453
+msgid "Focus title"
+msgstr "Eστίαση στον τίτλο"
+
+#: ReactNativeClient/lib/models/Setting.js:439
+#: ReactNativeClient/lib/models/Setting.js:454
+msgid "Focus body"
+msgstr "Eστίαση στο σώμα"
+
+#: ReactNativeClient/lib/models/Setting.js:450
+msgid "When creating a new note:"
+msgstr "Κατά τη δημιουργία μιας νέας σημείωσης:"
+
+#: ReactNativeClient/lib/models/Setting.js:464
+msgid "Enable soft breaks"
+msgstr "Ενεργοποίηση soft breaks"
+
+#: ReactNativeClient/lib/models/Setting.js:465
+msgid "Enable typographer support"
+msgstr "Ενεργοποίηση υποστήριξης typographer"
+
+#: ReactNativeClient/lib/models/Setting.js:466
+msgid "Enable math expressions"
+msgstr "Ενεργοποίηση math expressions"
+
+#: ReactNativeClient/lib/models/Setting.js:467
+msgid "Enable Fountain syntax support"
+msgstr "Ενεργοποίηση υποστήριξης Fountain syntax"
+
+#: ReactNativeClient/lib/models/Setting.js:468
+msgid "Enable Mermaid diagrams support"
+msgstr "Ενεργοποίηση υποστήριξης διαγραμμάτων Mermaid"
+
+#: ReactNativeClient/lib/models/Setting.js:470
+msgid "Enable ==mark== syntax"
+msgstr "Ενεργοποίηση ==mark== syntax"
+
+#: ReactNativeClient/lib/models/Setting.js:471
+msgid "Enable footnotes"
+msgstr "Ενεργοποίηση footnotes"
+
+#: ReactNativeClient/lib/models/Setting.js:472
+msgid "Enable table of contents extension"
+msgstr "Ενεργοποίηση επέκτασης table of contents"
+
+#: ReactNativeClient/lib/models/Setting.js:473
+msgid "Enable ~sub~ syntax"
+msgstr "Ενεργοποίηση ~sub~ syntax"
+
+#: ReactNativeClient/lib/models/Setting.js:474
+msgid "Enable ^sup^ syntax"
+msgstr "Ενεργοποίηση ^sup^ syntax"
+
+#: ReactNativeClient/lib/models/Setting.js:475
+msgid "Enable deflist syntax"
+msgstr "Ενεργοποίηση deflist syntax"
+
+#: ReactNativeClient/lib/models/Setting.js:476
+msgid "Enable abbreviation syntax"
+msgstr "Ενεργοποίηση abbreviation syntax"
+
+#: ReactNativeClient/lib/models/Setting.js:477
+msgid "Enable markdown emoji"
+msgstr "Ενεργοποίηση markdown emoji"
+
+#: ReactNativeClient/lib/models/Setting.js:478
+msgid "Enable ++insert++ syntax"
+msgstr "Ενεργοποίηση ++insert++ syntax"
+
+#: ReactNativeClient/lib/models/Setting.js:479
+msgid "Enable multimarkdown table extension"
+msgstr "Ενεργοποίηση επέκτασης multimarkdown table"
+
+#: ReactNativeClient/lib/models/Setting.js:491
+msgid "Show tray icon"
+msgstr "Εμφάνιση εικονιδίου στη γραμμή εργασιών"
+
+#: ReactNativeClient/lib/models/Setting.js:493
+msgid "Note: Does not work in all desktop environments."
+msgstr "Σημείωση: Δεν λειτουργεί σε όλα τα γραφικά περιβάλλοντα."
+
+#: ReactNativeClient/lib/models/Setting.js:493
+msgid ""
+"This will allow Joplin to run in the background. It is recommended to enable "
+"this setting so that your notes are constantly being synchronised, thus "
+"reducing the number of conflicts."
+msgstr ""
+"Αυτό θα επιτρέψει στο Joplin να τρέξει στο παρασκήνιο. Συνιστάται να "
+"ενεργοποιήσετε αυτήν τη ρύθμιση έτσι ώστε οι σημειώσεις σας να "
+"συγχρονίζονται συνεχώς, μειώνοντας έτσι τον αριθμό των διενέξεων."
+
+#: ReactNativeClient/lib/models/Setting.js:497
+msgid "Start application minimised in the tray icon"
+msgstr "Έναρξη εφαρμογής ελαχιστοποιημένη στη γραμμή εργασιών"
+
+#: ReactNativeClient/lib/models/Setting.js:516
+msgid "Editor font size"
+msgstr "Μέγεθος γραμματοσειράς editor"
+
+#: ReactNativeClient/lib/models/Setting.js:524
+msgid "Editor font"
+msgstr "Γραμματοσειρά editor"
+
+#: ReactNativeClient/lib/models/Setting.js:548
+msgid "Editor font family"
+msgstr "Οικογένεια γραμματοσειράς editor"
+
+#: ReactNativeClient/lib/models/Setting.js:550
+#, fuzzy
+msgid ""
+"This should be a *monospace* font or some elements will render incorrectly. "
+"If the font is incorrect or empty, it will default to a generic monospace "
+"font."
+msgstr ""
+"H γραμματοσειρά πρέπει να είναι *monospace* αλλιώς δεν θα λειτουργήσει "
+"σωστά. Εάν η γραμματοσειρά είναι εσφαλμένη ή κενή, θα προεπιλεγεί μια γενική "
+"γραμματοσειρά *monospace*."
+
+#: ReactNativeClient/lib/models/Setting.js:589
+msgid "Custom stylesheet for Joplin-wide app styles"
+msgstr "Προσαρμοσμένο stylesheet για όλες τις εφαρμογές Joplin"
+
+#: ReactNativeClient/lib/models/Setting.js:595
+msgid "Automatically update the application"
+msgstr "Αυτόματη ενημέρωση της εφαρμογής"
+
+#: ReactNativeClient/lib/models/Setting.js:596
+msgid "Get pre-releases when checking for updates"
+msgstr "Λήψη προεκδόσεων κατά τον έλεγχο για ενημερώσεις"
+
+#: ReactNativeClient/lib/models/Setting.js:596
+#, javascript-format
+msgid "See the pre-release page for more details: %s"
+msgstr "Δείτε τη σελίδα προέκδοσης για περισσότερες λεπτομέρειες: %s"
+
+#: ReactNativeClient/lib/models/Setting.js:604
+msgid "Synchronisation interval"
+msgstr "Διάστημα συγχρονισμού"
+
+#: ReactNativeClient/lib/models/Setting.js:608
+#: ReactNativeClient/lib/models/Setting.js:609
+#: ReactNativeClient/lib/models/Setting.js:610
+#, javascript-format
+msgid "%d minutes"
+msgstr "%d΄λεπτά"
+
+#: ReactNativeClient/lib/models/Setting.js:611
+#, javascript-format
+msgid "%d hour"
+msgstr "%d ώρα"
+
+#: ReactNativeClient/lib/models/Setting.js:612
+#: ReactNativeClient/lib/models/Setting.js:613
+#, javascript-format
+msgid "%d hours"
+msgstr "%d ώρες"
+
+#: ReactNativeClient/lib/models/Setting.js:622
+msgid "Text editor command"
+msgstr "Εντολή \"Επεξεργαστή κειμένου\""
+
+#: ReactNativeClient/lib/models/Setting.js:622
+msgid ""
+"The editor command (may include arguments) that will be used to open a note. "
+"If none is provided it will try to auto-detect the default editor."
+msgstr ""
+"Η εντολή του editor (που μπορεί να περιλαμβάνει ορίσματα) θα χρησιμοποιηθεί "
+"για το άνοιγμα μιας σημείωσης. Εάν δεν δωθεί καμία, θα προσπαθήσει να "
+"ανιχνεύσει αυτόματα το προεπιλεγμένο πρόγραμμα επεξεργασίας."
+
+#: ReactNativeClient/lib/models/Setting.js:623
+msgid "Page size for PDF export"
+msgstr "Μέγεθος σελίδας για εξαγωγή PDF"
+
+#: ReactNativeClient/lib/models/Setting.js:625
+msgid "A4"
+msgstr "A4"
+
+#: ReactNativeClient/lib/models/Setting.js:626
+msgid "Letter"
+msgstr "Letter"
+
+#: ReactNativeClient/lib/models/Setting.js:627
+msgid "A3"
+msgstr "A3"
+
+#: ReactNativeClient/lib/models/Setting.js:628
+msgid "A5"
+msgstr "A5"
+
+#: ReactNativeClient/lib/models/Setting.js:629
+msgid "Tabloid"
+msgstr "Tabloid"
+
+#: ReactNativeClient/lib/models/Setting.js:630
+msgid "Legal"
+msgstr "Legal"
+
+#: ReactNativeClient/lib/models/Setting.js:633
+msgid "Page orientation for PDF export"
+msgstr "Προσανατολισμός σελίδας για εξαγωγή PDF"
+
+#: ReactNativeClient/lib/models/Setting.js:635
+msgid "Portrait"
+msgstr "Κάθετη"
+
+#: ReactNativeClient/lib/models/Setting.js:636
+msgid "Landscape"
+msgstr "Οριζόντια"
+
+#: ReactNativeClient/lib/models/Setting.js:647
+msgid "Keyboard Mode"
+msgstr "Λειτουργία πληκτρολογίου"
+
+#: ReactNativeClient/lib/models/Setting.js:650
+msgid "Default"
+msgstr "Προεπιλογή"
+
+#: ReactNativeClient/lib/models/Setting.js:651
+msgid "Emacs"
+msgstr "Emacs"
+
+#: ReactNativeClient/lib/models/Setting.js:652
+msgid "Vim"
+msgstr "Vim"
+
+#: ReactNativeClient/lib/models/Setting.js:667
+msgid "Custom TLS certificates"
+msgstr "Custom πιστοποιητικά TLS"
+
+#: ReactNativeClient/lib/models/Setting.js:668
+msgid ""
+"Comma-separated list of paths to directories to load the certificates from, "
+"or path to individual cert files. For example: /my/cert_dir, /other/custom."
+"pem. Note that if you make changes to the TLS settings, you must save your "
+"changes before clicking on \"Check synchronisation configuration\"."
+msgstr ""
+"Λίστα διαδρομών από φακέλους, διαχωρισμένων με κόμμα, για τη φόρτωση των "
+"πιστοποιητικών, ή διαδρομή των μεμονωμένων αρχείων πιστοποιητικών. Για "
+"παράδειγμα: /my/cert_dir, /other/custom.pem. Σημειώστε ότι αν κάνετε αλλαγές "
+"στις ρυθμίσεις TLS, πρέπει να αποθηκεύσετε τις αλλαγές σας πριν κάνετε κλικ "
+"στο \"Έλεγχος ρύθμισης παραμέτρων συγχρονισμού\"."
+
+#: ReactNativeClient/lib/models/Setting.js:680
+msgid "Ignore TLS certificate errors"
+msgstr "Παράβλεψη σφαλμάτων πιστοποιητικού TLS"
+
+#: ReactNativeClient/lib/models/Setting.js:689
+msgid "Fail-safe"
+msgstr "Ασφαλής"
+
+#: ReactNativeClient/lib/models/Setting.js:690
+msgid ""
+"Fail-safe: Do not wipe out local data when sync target is empty (often the "
+"result of a misconfiguration or bug)"
+msgstr ""
+"Ασφάλεια: Mην διαγράφετε τα τοπικά δεδομένα όταν ο προορισμός συγχρονισμού "
+"είναι κενός (συχνά το αποτέλεσμα μιας εσφαλμένης ρύθμισης παραμέτρων ή ενός "
+"σφάλματος)"
+
+#: ReactNativeClient/lib/models/Setting.js:694
+msgid ""
+"Specify the port that should be used by the API server. If not set, a "
+"default will be used."
+msgstr ""
+"Καθορίστε τη πόρτα που πρέπει να χρησιμοποιείται από το διακομιστή API. Εάν "
+"δεν οριστεί, θα χρησιμοποιηθεί μια προεπιλογή."
+
+#: ReactNativeClient/lib/models/Setting.js:702
+msgid "Enable note history"
+msgstr "Ενεργοποίηση ιστορικού σημειώσεων"
+
+#: ReactNativeClient/lib/models/Setting.js:712
+msgid "days"
+msgstr "ημέρες"
+
+#: ReactNativeClient/lib/models/Setting.js:712
+#, javascript-format
+msgid "%d days"
+msgstr "%d ημέρες"
+
+#: ReactNativeClient/lib/models/Setting.js:714
+msgid "Keep note history for"
+msgstr "Διατήρηση ιστορικού σημειώσεων για"
+
+#: ReactNativeClient/lib/models/Setting.js:741
+msgid "Notebook list growth factor"
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:743
+#: ReactNativeClient/lib/models/Setting.js:756
+#: ReactNativeClient/lib/models/Setting.js:769
+msgid ""
+"The factor property sets how the item will grow or shrink to fit the "
+"available space in its container with respect to the other items. Thus an "
+"item with a factor of 2 will take twice as much space as an item with a "
+"factor of 1.Restart app to see changes."
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:754
+msgid "Note list growth factor"
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:767
+msgid "Note area growth factor"
+msgstr ""
+
+#: ReactNativeClient/lib/models/Setting.js:919
+#, javascript-format
+msgid "Invalid option value: \"%s\". Possible values are: %s."
+msgstr "Άκυρη τιμή: \" %s\". Οι πιθανές τιμές είναι: %s."
+
+#: ReactNativeClient/lib/models/Setting.js:1247
+msgid "General"
+msgstr "Γενικά"
+
+#: ReactNativeClient/lib/models/Setting.js:1248
+msgid "Synchronisation"
+msgstr "Συγχρονισμός"
+
+#: ReactNativeClient/lib/models/Setting.js:1249
+msgid "Appearance"
+msgstr "Εμφάνιση"
+
+#: ReactNativeClient/lib/models/Setting.js:1250
+msgid "Note"
+msgstr "Σημείωση"
+
+#: ReactNativeClient/lib/models/Setting.js:1251
+msgid "Plugins"
+msgstr "Πρόσθετα"
+
+#: ReactNativeClient/lib/models/Setting.js:1252
+msgid "Application"
+msgstr "Εφαρμογή"
+
+#: ReactNativeClient/lib/models/Setting.js:1254
+msgid "Encryption"
+msgstr "Κρυπτογράφηση"
+
+#: ReactNativeClient/lib/models/Setting.js:1255
+msgid "Web Clipper"
+msgstr "Web Clipper"
+
+#: ReactNativeClient/lib/models/Setting.js:1260
+msgid ""
+"These plugins enhance the Markdown renderer with additional features. Please "
+"note that, while these features might be useful, they are not standard "
+"Markdown and thus most of them will only work in Joplin. Additionally, some "
+"of them are *incompatible* with the WYSIWYG editor. If you open a note that "
+"uses one of these plugins in that editor, you will lose the plugin "
+"formatting. It is indicated below which plugins are compatible or not with "
+"the WYSIWYG editor."
+msgstr ""
+"Αυτά τα πρόσθετα βελτιώνουν τον Markdown renderer με πρόσθετες δυνατότητες. "
+"Λάβετε υπόψη ότι, παρόλο που αυτές οι δυνατότητες μπορεί να είναι χρήσιμες, "
+"δεν είναι τυπικές Markdown και επομένως οι περισσότερες από αυτές θα "
+"λειτουργούν μόνο στο Joplin. Επιπλέον, ορισμένα από αυτά είναι *ασύμβατα* με "
+"το πρόγραμμα επεξεργασίας WYSIWYG. Εάν ανοίξετε μια σημείωση που "
+"χρησιμοποιεί ένα από αυτά τα πρόσθετα σε αυτόν τον επεξεργαστή, θα χάσετε τη "
+"μορφοποίηση της προσθήκης. Υποδεικνύεται παρακάτω ποια πρόσθετα είναι "
+"συμβατά ή όχι με τον επεξεργαστή WYSIWYG."
+
+#: ReactNativeClient/lib/models/Setting.js:1261
+#, javascript-format
+msgid "Notes and settings are stored in: %s"
+msgstr "Οι σημειώσεις και οι ρυθμίσεις αποθηκεύονται στο: %s"
+
+#: ReactNativeClient/lib/models/Resource.js:317
+msgid "Not downloaded"
+msgstr "Δεν έγινε λήψη"
+
+#: ReactNativeClient/lib/models/Resource.js:318
+msgid "Downloading"
+msgstr "Λήψη"
+
+#: ReactNativeClient/lib/models/Resource.js:319
+msgid "Downloaded"
+msgstr "Έχουν ληφθεί"
+
+#: ReactNativeClient/lib/models/Resource.js:371
+#, fuzzy, javascript-format
+msgid "Attachment conflict: \"%s\""
+msgstr "Επισυναπτόμενα"
+
+#: ReactNativeClient/lib/models/Resource.js:372
+#, fuzzy, javascript-format
+msgid ""
+"There was a [conflict](%s) on the attachment below.\n"
+"\n"
+"%s"
+msgstr "Παρουσιάστηκε σφάλμα κατά τη λήψη αυτού του συνημμένου:"
+
+#: ReactNativeClient/lib/models/Tag.js:384
+#, fuzzy
+msgid "Cannot move tag to this location."
+msgstr "Δεν είναι δυνατή η μετακίνηση του σημειωματάριου σε αυτήν τη θέση"
+
+#: ReactNativeClient/lib/models/Tag.js:429
+msgid "Tag name cannot start or end with a `/`."
+msgstr ""
+
+#: ReactNativeClient/lib/models/Tag.js:431
+msgid "Tag name cannot contain `//`."
+msgstr ""
+
+#: ReactNativeClient/lib/models/Tag.js:482
+#, javascript-format
+msgid "The tag \"%s\" already exists. Please choose a different name."
+msgstr "Η ετικέτα \"%s\" υπάρχει ήδη. Επιλέξτε ένα διαφορετικό όνομα."
+
+#: ReactNativeClient/lib/models/Note.js:27
+msgid "created date"
+msgstr "ημερομηνία δημιουργίας"
+
+#: ReactNativeClient/lib/models/Note.js:28
+msgid "custom order"
+msgstr ""
+
+#: ReactNativeClient/lib/models/Note.js:92
+msgid "This note does not have geolocation information."
+msgstr "Αυτή η σημείωση δεν διαθέτει πληροφορίες γεωγραφικής θέσης."
+
+#: ReactNativeClient/lib/models/Note.js:466
+#, javascript-format
+msgid "Cannot copy note to \"%s\" notebook"
+msgstr "Δεν είναι δυνατή η αντιγραφή της σημείωσης στο σημειωματάριο \"%s\""
+
+#: ReactNativeClient/lib/models/Note.js:477
+#, javascript-format
+msgid "Cannot move note to \"%s\" notebook"
+msgstr "Δεν είναι δυνατή η μετακίνηση της σημείωσης στο σημειωματάριο \"%s\""
+
+#: ReactNativeClient/lib/models/BaseItem.js:719
+msgid "Encrypted"
+msgstr "Κρυπτογραφημένο"
+
+#: ReactNativeClient/lib/models/BaseItem.js:779
+msgid "Encrypted items cannot be modified"
+msgstr "Δεν είναι δυνατή η τροποποίηση κρυπτογραφημένων στοιχείων"
+
+#: ReactNativeClient/lib/SyncTargetOneDriveDev.js:15
+msgid "OneDrive Dev (For testing only)"
+msgstr "OneDrive Dev (For testing only)"
+
+#: ReactNativeClient/lib/BaseApplication.js:139
+#: ReactNativeClient/lib/BaseApplication.js:152
+#: ReactNativeClient/lib/BaseApplication.js:183
+#, javascript-format
+msgid "Usage: %s"
+msgstr "Χρήση: %s"
+
+#: ReactNativeClient/lib/BaseApplication.js:218
+#, javascript-format
+msgid "Unknown flag: %s"
+msgstr "Άγνωστο flag: %s"
+
+#: ReactNativeClient/lib/SyncTargetOneDrive.js:25
+msgid "OneDrive"
+msgstr "OneDrive"
+
+#: ReactNativeClient/lib/components/select-date-time-dialog.js:65
+msgid "Clear alarm"
+msgstr "Διαγραφή ειδοποίησης"
+
+#: ReactNativeClient/lib/components/select-date-time-dialog.js:68
+msgid "Save alarm"
+msgstr "Αποθήκευση ειδοποίησης"
+
+#: ReactNativeClient/lib/components/select-date-time-dialog.js:86
+msgid "Select date"
+msgstr "Επιλογή ημερομηνίας"
+
+#: ReactNativeClient/lib/components/select-date-time-dialog.js:88
+msgid "Confirm"
+msgstr "Επιβεβαίωση"
+
+#: ReactNativeClient/lib/components/CameraView.js:180
+msgid "Permission to use camera"
+msgstr "Άδεια χρήσης κάμερας"
+
+#: ReactNativeClient/lib/components/CameraView.js:181
+msgid "Your permission to use your camera is required."
+msgstr "Απαιτείται η άδειά σας για τη χρήση της φωτογραφικής σας μηχανής."
+
+#: ReactNativeClient/lib/components/screen-header.js:185
+msgid "Delete these notes?"
+msgstr "Να διαγραφούν αυτές οι σημειώσεις;"
+
+#: ReactNativeClient/lib/components/screen-header.js:392
+msgid "Move to notebook..."
+msgstr "Μετακίνηση στο σημειωματάριο..."
+
+#: ReactNativeClient/lib/components/screen-header.js:433
+#, javascript-format
+msgid "Move %d notes to notebook \"%s\"?"
+msgstr "Μετακίνηση %d σημειώσεων στο σημειωματάριο \"%s\";"
+
+#: ReactNativeClient/lib/components/screen-header.js:451
+msgid "Press to set the decryption password."
+msgstr "Πατήστε για να ορίσετε τον κωδικό αποκρυπτογράφησης."
+
+#: ReactNativeClient/lib/components/screen-header.js:452
+msgid "Some items cannot be synchronised. Press for more info."
+msgstr ""
+"Ορισμένα στοιχεία δεν είναι δυνατό να συγχρονιστούν. Πατήστε για "
+"περισσότερες πληροφορίες."
+
+#: ReactNativeClient/lib/components/side-menu-content.js:126
+#, javascript-format
+msgid "Notebook: %s"
+msgstr "Σημειωματάριο: %s"
+
+#: ReactNativeClient/lib/components/side-menu-content.js:132
+msgid "Encrypted notebooks cannot be renamed"
+msgstr "Τα κρυπτογραφημένα σημειωματάρια δεν μπορούν να μετονομαστούν"
+
+#: ReactNativeClient/lib/components/side-menu-content.js:312
+msgid "New Notebook"
+msgstr "Νέο σημειωματάριο"
+
+#: ReactNativeClient/lib/components/side-menu-content.js:316
+#: ReactNativeClient/lib/components/screens/config.js:549
+msgid "Configuration"
+msgstr "Ρυθμίσεις"
+
+#: ReactNativeClient/lib/components/note-list.js:97
+msgid "You currently have no notebooks."
+msgstr "Αυτή τη στιγμή δεν έχετε σημειωματάρια."
+
+#: ReactNativeClient/lib/components/note-list.js:101
+msgid "Create a notebook"
+msgstr "Δημιουργία σημειωματάριου"
+
+#: ReactNativeClient/lib/components/note-list.js:105
+msgid "There are currently no notes. Create one by clicking on the (+) button."
+msgstr ""
+"Δεν υπάρχουν προς το παρόν σημειώσεις. Δημιουργήστε μία κάνοντας κλικ στο "
+"κουμπί (+)."
+
+#: ReactNativeClient/lib/components/shared/config-shared.js:46
+msgid "Checking... Please wait."
+msgstr "Έλεγχος... Παρακαλώ περιμένετε."
+
+#: ReactNativeClient/lib/components/shared/config-shared.js:48
+msgid "Success! Synchronisation configuration appears to be correct."
+msgstr "Επιτυχία! Οι ρυθμίσεις συγχρονισμού φαίνονται να είναι σωστές."
+
+#: ReactNativeClient/lib/components/shared/config-shared.js:50
+msgid ""
+"Error. Please check that URL, username, password, etc. are correct and that "
+"the sync target is accessible. The reported error was:"
+msgstr ""
+"Σφάλμα. Παρακαλώ ελέγξτε ότι η διεύθυνση URL, το όνομα, ο κωδικός, κλπ είναι "
+"σωστά και ότι το προορισμός συγχρονισμού είναι προσπελάσιμος. Το σφάλμα ήταν:"
+
+#: ReactNativeClient/lib/components/shared/dropbox-login-shared.js:39
+msgid "The application has been authorised!"
+msgstr "Η εφαρμογή έχει εγκριθεί!"
+
+#: ReactNativeClient/lib/components/shared/dropbox-login-shared.js:43
+#, javascript-format
+msgid ""
+"Could not authorise application:\n"
+"\n"
+"%s\n"
+"\n"
+"Please try again."
+msgstr ""
+"Δεν ήταν δυνατή η εξουσιοδότηση της εφαρμογής:\n"
+"\n"
+"%s\n"
+"\n"
+"Παρακαλώ προσπαθήστε ξανά."
+
+#: ReactNativeClient/lib/components/shared/encryption-config-shared.js:31
+msgid ""
+"Please confirm that you would like to re-encrypt your complete database."
+msgstr ""
+"Επιβεβαιώστε ότι θέλετε να ξανακρυπτογραφήσετε την πλήρη βάση δεδομένων σας."
+
+#: ReactNativeClient/lib/components/shared/encryption-config-shared.js:37
+msgid "Your data is going to be re-encrypted and synced again."
+msgstr ""
+"Τα δεδομένα σας πρόκειται να κρυπτογραφηθούν και να συγχρονιστούν ξανά."
+
+#: ReactNativeClient/lib/components/shared/encryption-config-shared.js:47
+msgid ""
+"Please enter your password in the master key list below before upgrading the "
+"key."
+msgstr ""
+"Εισαγάγετε τον κωδικό πρόσβασής σας στη λίστα του master κλειδιού πριν "
+"αναβαθμίσετε το κλειδί."
+
+#: ReactNativeClient/lib/components/shared/encryption-config-shared.js:56
+msgid "The master key has been upgraded successfully!"
+msgstr "Το κλειδί master αναβαθμίστηκε με επιτυχία!"
+
+#: ReactNativeClient/lib/components/shared/encryption-config-shared.js:58
+#, javascript-format
+msgid "Could not upgrade master key: %s"
+msgstr "Δεν ήταν δυνατή η αναβάθμιση του master κλειδιού: %s"
+
+#: ReactNativeClient/lib/components/shared/encryption-config-shared.js:110
+#, javascript-format
+msgid "Decrypted items: %s / %s"
+msgstr "Αποκρυπτογραφημένα στοιχεία: %s / %s"
+
+#: ReactNativeClient/lib/components/screens/folder.js:87
+#, javascript-format
+msgid "The notebook could not be saved: %s"
+msgstr "Αυτό το σημειωματάριο δεν μπορεί να σωθεί: %s"
+
+#: ReactNativeClient/lib/components/screens/folder.js:109
+msgid "Edit notebook"
+msgstr "Επεξεργασία σημειωματάριου"
+
+#: ReactNativeClient/lib/components/screens/folder.js:110
+msgid "Enter notebook title"
+msgstr "Δώστε τον τίτλο του σημειωματάριου"
+
+#: ReactNativeClient/lib/components/screens/onedrive-login.js:109
+msgid "Login with OneDrive"
+msgstr "Είσοδος με Onedrive"
+
+#: ReactNativeClient/lib/components/screens/onedrive-login.js:120
+#: ReactNativeClient/lib/components/screens/log.js:109
+#: ReactNativeClient/lib/components/screens/status.js:144
+msgid "Refresh"
+msgstr "Ανανέωση"
+
+#: ReactNativeClient/lib/components/screens/NoteTagsDialog.js:163
+msgid "New tags:"
+msgstr "Νέες ετικέτες:"
+
+#: ReactNativeClient/lib/components/screens/NoteTagsDialog.js:178
+msgid "Type new tags or select from list"
+msgstr "Πληκτρολογήστε καινούρια ετικέτα ή επιλέξτε από την λίστα"
+
+#: ReactNativeClient/lib/components/screens/dropbox-login.js:55
+msgid "Login with Dropbox"
+msgstr "Είσοδος με Dropbox"
+
+#: ReactNativeClient/lib/components/screens/dropbox-login.js:66
+msgid "Enter code here"
+msgstr "Βάλτε τον κωδικό εδώ"
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:119
+#, javascript-format
+msgid "Master Key %s"
+msgstr "Κύριο Κλειδί %s"
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:120
+#: ReactNativeClient/lib/components/screens/note.js:773
+#, javascript-format
+msgid "Created: %s"
+msgstr "Δημιουργήθηκε: %s"
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:122
+#: ReactNativeClient/lib/components/screens/encryption-config.js:151
+msgid "Password:"
+msgstr "Κωδικός:"
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:137
+msgid "Password cannot be empty"
+msgstr "Ο κωδικός πρόσβασης δεν μπορεί να είναι κενός"
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:139
+msgid "Confirm password cannot be empty"
+msgstr "Η επιβεβαίωση του κωδικού πρόσβασης δεν μπορεί να είναι κενή"
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:150
+msgid ""
+"Enabling encryption means *all* your notes and attachments are going to be "
+"re-synchronised and sent encrypted to the sync target. Do not lose the "
+"password as, for security purposes, this will be the *only* way to decrypt "
+"the data! To enable encryption, please enter your password below."
+msgstr ""
+"Αν ενεργοποιήσετε την κρυπτογράφηση *όλες* οι σημειώσεις και τα συνημμένα "
+"σας πρόκειται να επανασυγχρονιστούν και να σταλούν κρυπτογραφημένα στον "
+"προορισμό συγχρονισμού. Μην χάσετε τον κωδικό πρόσβασης γιατί, για λόγους "
+"ασφαλείας, αυτός θα είναι ο *μοναδικός* τρόπος για την αποκρυπτογράφηση των "
+"δεδομένων! Για να ενεργοποιήσετε την κρυπτογράφηση, πληκτρολογήστε τον "
+"κωδικό πρόσβασης παρακάτω."
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:177
+msgid "Enable"
+msgstr "Ενεργό"
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:248
+msgid "Missing Master Keys"
+msgstr "Απουσία κυρίως κλειδιών"
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:249
+msgid ""
+"The master keys with these IDs are used to encrypt some of your items, "
+"however the application does not currently have access to them. It is likely "
+"they will eventually be downloaded via synchronisation."
+msgstr ""
+"Τα κύρια κλειδιά με αυτά τα αναγνωριστικά (ID) χρησιμοποιούνται για την "
+"κρυπτογράφηση ορισμένων αντικειμένων σας, ωστόσο η εφαρμογή δεν έχει αυτή τη "
+"στιγμή πρόσβαση σε αυτά. Είναι πιθανό τελικά να ληφθούν μέσω συγχρονισμού."
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:258
+msgid "Disable encryption"
+msgstr "Απενεργοποίηση κρυπτογράφησης"
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:258
+msgid "Enable encryption"
+msgstr "Ενεργοποίηση κρυπτογράφησης"
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:264
+#: ReactNativeClient/lib/components/screens/config.js:316
+msgid "Encryption Config"
+msgstr "Ρυθμίσεις κρυπτογράφησης"
+
+#: ReactNativeClient/lib/components/screens/encryption-config.js:268
+msgid ""
+"For more information about End-To-End Encryption (E2EE) and advice on how to "
+"enable it please check the documentation:"
+msgstr ""
+"Για περισσότερες πληροφορίες σχετικά με την κρυπτογράφηση End-To-End (E2EE) "
+"και συμβουλές σχετικά με τον τρόπο ενεργοποίησής της, ελέγξτε το εγχειρίδιο:"
+
+#: ReactNativeClient/lib/components/screens/log.js:100
+#: ReactNativeClient/lib/components/screens/config.js:439
+msgid "Log"
+msgstr "Log"
+
+#: ReactNativeClient/lib/components/screens/log.js:117
+msgid "Show all"
+msgstr "Εμφάνιση όλων"
+
+#: ReactNativeClient/lib/components/screens/log.js:117
+msgid "Errors only"
+msgstr "Μόνο σφάλματα"
+
+#: ReactNativeClient/lib/components/screens/config.js:50
+msgid "Warning"
+msgstr "Προειδοποίηση"
+
+#: ReactNativeClient/lib/components/screens/config.js:50
+msgid ""
+"In order to use file system synchronisation your permission to write to "
+"external storage is required."
+msgstr ""
+"Για να χρησιμοποιήσετε το συγχρονισμό του συστήματος αρχείων απαιτείται η "
+"άδειά σας για εγγραφή στον εξωτερικό χώρο αποθήκευσης."
+
+#: ReactNativeClient/lib/components/screens/config.js:436
+msgid "Tools"
+msgstr "Εργαλεία"
+
+#: ReactNativeClient/lib/components/screens/config.js:438
+msgid "Sync Status"
+msgstr "Κατάσταση Συγχρονισμού"
+
+#: ReactNativeClient/lib/components/screens/config.js:441
+msgid "Creating report..."
+msgstr "Δημιουργία αναφοράς..."
+
+#: ReactNativeClient/lib/components/screens/config.js:441
+msgid "Export Debug Report"
+msgstr "Εξαγωγή Aναφοράς Debug"
+
+#: ReactNativeClient/lib/components/screens/config.js:443
+msgid "Fixing search index..."
+msgstr "Διόρθωση ευρετηρίων αναζήτησης..."
+
+#: ReactNativeClient/lib/components/screens/config.js:443
+msgid "Fix search index"
+msgstr "Διόρθωση ευρετηρίων αναζήτησης"
+
+#: ReactNativeClient/lib/components/screens/config.js:443
+msgid ""
+"Use this to rebuild the search index if there is a problem with search. It "
+"may take a long time depending on the number of notes."
+msgstr ""
+"Χρησιμοποιήστε το για να ξαναφτιάξετε το ευρετήριο αναζήτησης, εάν υπάρχει "
+"πρόβλημα με την αναζήτηση. Μπορεί να χρειαστεί πολύς χρόνος ανάλογα με τον "
+"αριθμό των σημειώσεων."
+
+#: ReactNativeClient/lib/components/screens/config.js:446
+msgid "Exporting profile..."
+msgstr "Γίνεται εξαγωγή προφίλ..."
+
+#: ReactNativeClient/lib/components/screens/config.js:446
+msgid "Export profile"
+msgstr "Εξαγωγή προφίλ"
+
+#: ReactNativeClient/lib/components/screens/config.js:446
+msgid "For debugging purpose only: export your profile to an external SD card."
+msgstr ""
+"Για τον εντοπισμό σφαλμάτων και μόνο: εξαγάγετε το προφίλ σας σε μια "
+"εξωτερική κάρτα SD."
+
+#: ReactNativeClient/lib/components/screens/config.js:461
+msgid "More information"
+msgstr "Περισσότερες πληροφορίες"
+
+#: ReactNativeClient/lib/components/screens/config.js:471
+msgid ""
+"To work correctly, the app needs the following permissions. Please enable "
+"them in your phone settings, in Apps > Joplin > Permissions"
+msgstr ""
+"Για να λειτουργήσει σωστά, η εφαρμογή χρειάζεται τα ακόλουθα δικαιώματα. "
+"Ενεργοποιήστε τα στις ρυθμίσεις του τηλεφώνου σας, στο Apps> Joplin> "
+"Permissions"
+
+#: ReactNativeClient/lib/components/screens/config.js:474
+msgid ""
+"- Storage: to allow attaching files to notes and to enable filesystem "
+"synchronisation."
+msgstr ""
+"- Αποθήκευση: για να επιτρέπεται η προσάρτηση αρχείων στις σημειώσεις και η "
+"ενεργοποίηση συγχρονισμού αρχείων συστήματος."
+
+#: ReactNativeClient/lib/components/screens/config.js:477
+msgid "- Camera: to allow taking a picture and attaching it to a note."
+msgstr ""
+"- Φωτογραφική μηχανή: για να μπορείτε να τραβήξετε μια φωτογραφία και να την "
+"προσαρτήσετε σε μια σημείωση."
+
+#: ReactNativeClient/lib/components/screens/config.js:480
+msgid "- Location: to allow attaching geo-location information to a note."
+msgstr ""
+"- Τοποθεσία: να επιτρέπεται η επισύναψη πληροφοριών γεωγραφικής θέσης σε μια "
+"σημείωση."
+
+#: ReactNativeClient/lib/components/screens/config.js:509
+msgid "Joplin website"
+msgstr "Joplin website"
+
+#: ReactNativeClient/lib/components/screens/config.js:537
+#, javascript-format
+msgid "Database v%s"
+msgstr "Βάση Δεδομένων v%s"
+
+#: ReactNativeClient/lib/components/screens/config.js:543
+#, javascript-format
+msgid "FTS enabled: %d"
+msgstr "FTS ενεργοποιημένο: %d"
+
+#: ReactNativeClient/lib/components/screens/note.js:97
+msgid "This note has been modified:"
+msgstr "Αυτή η σημείωση έχει τροποποιηθεί:"
+
+#: ReactNativeClient/lib/components/screens/note.js:97
+msgid "Save changes"
+msgstr "Αποθήκευση αλλαγών"
+
+#: ReactNativeClient/lib/components/screens/note.js:97
+msgid "Discard changes"
+msgstr "Απόρριψη αλλαγών"
+
+#: ReactNativeClient/lib/components/screens/note.js:161
+#, javascript-format
+msgid "No item with ID %s"
+msgstr "Δεν υπάρχει στοιχείο με αναγνωριστικό %s"
+
+#: ReactNativeClient/lib/components/screens/note.js:180
+msgid "This attachment is not downloaded or not decrypted yet."
+msgstr "Αυτό το συνημμένο δεν έχει ακόμη μεταφορτωθεί ή αποκρυπτογραφηθεί."
+
+#: ReactNativeClient/lib/components/screens/note.js:184
+#, javascript-format
+msgid "The Joplin mobile app does not currently support this type of link: %s"
+msgstr ""
+"Η εφαρμογή Joplin για κινητά δεν υποστηρίζει αυτήν τη στιγμή αυτόν τον τύπο "
+"συνδέσμου: %s"
+
+#: ReactNativeClient/lib/components/screens/note.js:188
+#, javascript-format
+msgid "Links with protocol \"%s\" are not supported"
+msgstr "Σύνδεσμοι με πρωτόκολλο \"%s\" δεν υποστηρίζονται"
+
+#: ReactNativeClient/lib/components/screens/note.js:618
+#, javascript-format
+msgid "Unsupported image type: %s"
+msgstr "Μη υποστηριζόμενος τύπος εικόνας: %s"
+
+#: ReactNativeClient/lib/components/screens/note.js:774
+#, javascript-format
+msgid "Updated: %s"
+msgstr "Ενημερώθηκε: %s"
+
+#: ReactNativeClient/lib/components/screens/note.js:778
+msgid "View on map"
+msgstr "Προβολή στο χάρτη"
+
+#: ReactNativeClient/lib/components/screens/note.js:785
+msgid "Go to source URL"
+msgstr "Μεταβείτε στη διεύθυνση URL προέλευσης"
+
+#: ReactNativeClient/lib/components/screens/note.js:813
+msgid "Attach..."
+msgstr "Επισύναψη..."
+
+#: ReactNativeClient/lib/components/screens/note.js:815
+msgid "Choose an option"
+msgstr "Διαλέξτε μία επιλογή"
+
+#: ReactNativeClient/lib/components/screens/note.js:815
+msgid "Take photo"
+msgstr "Βγάλτε μια φωτογραφία"
+
+#: ReactNativeClient/lib/components/screens/note.js:815
+msgid "Attach photo"
+msgstr "Επισυνάψτε μία φωτογραφία"
+
+#: ReactNativeClient/lib/components/screens/note.js:815
+msgid "Attach any file"
+msgstr "Επισυνάψτε οποιοδήποτε αρχείο"
+
+#: ReactNativeClient/lib/components/screens/note.js:834
+msgid "Share"
+msgstr "Κοινοποίηση"
+
+#: ReactNativeClient/lib/components/screens/note.js:848
+msgid "Convert to note"
+msgstr "Μετατροπή σε σημείωση"
+
+#: ReactNativeClient/lib/components/screens/note.js:848
+msgid "Convert to todo"
+msgstr "Μετατροπή σε to-do"
+
+#: ReactNativeClient/lib/components/screens/note.js:862
+msgid "Properties"
+msgstr "Ιδιότητες"
+
+#: ReactNativeClient/lib/components/screens/note.js:1042
+#: ReactNativeClient/lib/components/screens/note.js:1100
+msgid "Add body"
+msgstr "Προσθήκη σώματος κειμένου"
+
+#: ReactNativeClient/lib/components/screens/note.js:1150
+msgid "Add title"
+msgstr "Προσθήκη τίτλου"
+
+#: ReactNativeClient/lib/components/screens/search.js:163
+msgid "Search"
+msgstr "Εύρεση"
+
+#: ReactNativeClient/lib/onedrive-api.js:342
+msgid ""
+"Cannot refresh token: authentication data is missing. Starting the "
+"synchronisation again may fix the problem."
+msgstr ""
+"Δεν είναι δυνατή η ανανέωση του token: δεν υπάρχουν δεδομένα ελέγχου "
+"ταυτότητας. Η επανεκκίνηση του συγχρονισμού, μπορεί να διορθώσει το πρόβλημα."
+
+#: ReactNativeClient/lib/synchronizer.js:94
+#, javascript-format
+msgid "Created local items: %d."
+msgstr "Δημιουργημένα τοπικά στοιχεία: %d."
+
+#: ReactNativeClient/lib/synchronizer.js:95
+#, javascript-format
+msgid "Updated local items: %d."
+msgstr "Ενημερωμένα τοπικά στοιχεία: %d."
+
+#: ReactNativeClient/lib/synchronizer.js:96
+#, javascript-format
+msgid "Created remote items: %d."
+msgstr "Δημιουργημένα απομακρυσμένα στοιχεία: %d."
+
+#: ReactNativeClient/lib/synchronizer.js:97
+#, javascript-format
+msgid "Updated remote items: %d."
+msgstr "Ενημερωμένα απομακρυσμένα στοιχεία: %d."
+
+#: ReactNativeClient/lib/synchronizer.js:98
+#, javascript-format
+msgid "Deleted local items: %d."
+msgstr "Διαγραμμένα τοπικά στοιχεία: %d."
+
+#: ReactNativeClient/lib/synchronizer.js:99
+#, javascript-format
+msgid "Deleted remote items: %d."
+msgstr "Διαγραμμένα απομακρυσμένα στοιχεία: %d."
+
+#: ReactNativeClient/lib/synchronizer.js:100
+#, javascript-format
+msgid "Fetched items: %d/%d."
+msgstr "Ληφθέντα στοιχεία: %d/%d."
+
+#: ReactNativeClient/lib/synchronizer.js:102
+msgid "Cancelling..."
+msgstr "Ακύρωση..."
+
+#: ReactNativeClient/lib/synchronizer.js:103
+#, javascript-format
+msgid "Completed: %s"
+msgstr "Ολοκληρώθηκε: %s"
+
+#: ReactNativeClient/lib/synchronizer.js:104
+#, javascript-format
+msgid "Last error: %s"
+msgstr "Τελευταίο σφάλμα: %s"
+
+#: ReactNativeClient/lib/synchronizer.js:204
+msgid "Idle"
+msgstr "Αδρανής"
+
+#: ReactNativeClient/lib/synchronizer.js:205
+msgid "In progress"
+msgstr "Σε εξέλιξη"
+
+#: ReactNativeClient/lib/JoplinServerApi.js:71
+#, javascript-format
+msgid ""
+"Could not connect to the Joplin Nextcloud app. Please check the "
+"configuration in the Synchronisation config screen. Full error was:\n"
+"\n"
+"%s"
+msgstr ""
+"Δεν ήταν δυνατή η σύνδεση στην εφαρμογή Joplin. Ελέγξτε τις παραμέτρους στην "
+"οθόνη ρυθμίσεων συγχρονισμού. Το πλήρες σφάλμα ήταν:\n"
+"\n"
+"%s"
+
+#: ReactNativeClient/lib/SyncTargetNextcloud.js:26
+msgid "Nextcloud"
+msgstr "Nextcloud"
+
+#: ReactNativeClient/lib/SyncTargetWebDAV.js:23
+msgid "WebDAV"
+msgstr "WebDAV"
+
+#: ReactNativeClient/lib/SyncTargetFilesystem.js:18
+msgid "File system"
+msgstr "File system"
+
+#: ReactNativeClient/lib/commands/historyForward.js:16
+msgid "Forward"
+msgstr ""
+
+#: ReactNativeClient/lib/commands/synchronize.js:17
+#, fuzzy
+msgid "Synchronize"
+msgstr "Συγχρονισμός"
+
+#: ReactNativeClient/lib/services/InteropService_Exporter_Jex.js:29
+msgid "There is no data to export."
+msgstr "Δεν υπάρχουν δεδομένα για εξαγωγή."
+
+#: ReactNativeClient/lib/services/RevisionService.js:215
+msgid "Restored Notes"
+msgstr "Ανακτημένες σημειώσεις"
+
+#: ReactNativeClient/lib/services/InteropService_Importer_Md.js:29
+msgid "Please specify the notebook where the notes should be imported to."
+msgstr ""
+"Προσδιορίστε το σημειωματάριο στο οποίο πρέπει να εισαχθούν οι σημειώσεις."
+
+#: ReactNativeClient/lib/services/report.js:121
+msgid "Items that cannot be synchronised"
+msgstr "Στοιχεία που δεν μπορούν να συγχρονιστούν"
+
+#: ReactNativeClient/lib/services/report.js:123
+msgid ""
+"These items will remain on the device but will not be uploaded to the sync "
+"target. In order to find these items, either search for the title or the ID "
+"(which is displayed in brackets above)."
+msgstr ""
+"Αυτά τα στοιχεία θα παραμείνουν στη συσκευή, αλλά δεν θα μεταφορτωθούν στο "
+"στόχο συγχρονισμού. Για να βρείτε αυτά τα στοιχεία, αναζητήστε είτε τον "
+"τίτλο είτε το αναγνωριστικό (το οποίο εμφανίζεται στις παραπάνω παρενθέσεις)."
+
+#: ReactNativeClient/lib/services/report.js:130
+#, javascript-format
+msgid "%s (%s) could not be uploaded: %s"
+msgstr "%s (%s) δεν μπορούν να ανέβουν: %s"
+
+#: ReactNativeClient/lib/services/report.js:132
+#, javascript-format
+msgid "Item \"%s\" could not be downloaded: %s"
+msgstr "Το στοιχείο \"%s\" δεν μπορεί να κατέβει: %s"
+
+#: ReactNativeClient/lib/services/report.js:142
+msgid "Items that cannot be decrypted"
+msgstr "Στοιχεία που δεν μπορούν αποκρυπτογραφηθούν"
+
+#: ReactNativeClient/lib/services/report.js:144
+msgid ""
+"Joplin failed to decrypt these items multiple times, possibly because they "
+"are corrupted or too large. These items will remain on the device but Joplin "
+"will no longer attempt to decrypt them."
+msgstr ""
+"Το Joplin απέτυχε να αποκρυπτογραφήσει αυτά τα στοιχεία πολλές φορές, "
+"πιθανώς επειδή είναι αλλοιωμένα ή πολύ μεγάλα. Αυτά τα στοιχεία θα "
+"παραμείνουν στη συσκευή, αλλά το Joplin δεν θα προσπαθήσει πλέον να τα "
+"αποκρυπτογραφήσει."
+
+#: ReactNativeClient/lib/services/report.js:182
+msgid "Attachments"
+msgstr "Επισυναπτόμενα"
+
+#: ReactNativeClient/lib/services/report.js:190
+msgid "Downloaded and decrypted"
+msgstr "Μεταφορτωμένα και αποκρυπτογραφημένα"
+
+#: ReactNativeClient/lib/services/report.js:190
+#: ReactNativeClient/lib/services/report.js:191
+#: ReactNativeClient/lib/services/report.js:194
+#, javascript-format
+msgid "%s: %d"
+msgstr "%s: %d"
+
+#: ReactNativeClient/lib/services/report.js:191
+msgid "Downloaded and encrypted"
+msgstr "Μεταφορτωμένα και κρυπτογραφημένα"
+
+#: ReactNativeClient/lib/services/report.js:204
+msgid "Attachments that could not be downloaded"
+msgstr "Συνημμένα που δεν ήταν δυνατή η λήψη τους"
+
+#: ReactNativeClient/lib/services/report.js:209
+#, javascript-format
+msgid "%s (%s): %s"
+msgstr "%s (%s): %s"
+
+#: ReactNativeClient/lib/services/report.js:222
+msgid "Sync status (synced items / total items)"
+msgstr "Κατάσταση συγχρονισμού (συγχρονισμένα στοιχεία / σύνολο αρχείων)"
+
+#: ReactNativeClient/lib/services/report.js:226
+#, javascript-format
+msgid "%s: %d/%d"
+msgstr "%s: %d/%d"
+
+#: ReactNativeClient/lib/services/report.js:229
+#, javascript-format
+msgid "Total: %d/%d"
+msgstr "Σύνολο: %d/%d"
+
+#: ReactNativeClient/lib/services/report.js:231
+#, javascript-format
+msgid "Conflicted: %d"
+msgstr "Με διένεξη: %d"
+
+#: ReactNativeClient/lib/services/report.js:232
+#, javascript-format
+msgid "To delete: %d"
+msgstr "Προς διαγραφή: %d"
+
+#: ReactNativeClient/lib/services/report.js:236
+msgid "Folders"
+msgstr "Φάκελοι"
+
+#: ReactNativeClient/lib/services/report.js:244
+#, javascript-format
+msgid "%s: %d notes"
+msgstr "%s: %d σημειώσεις"
+
+#: ReactNativeClient/lib/services/report.js:252
+msgid "Coming alarms"
+msgstr "Προσεχείς ειδοποιήσεις"
+
+#: ReactNativeClient/lib/services/report.js:257
+#, javascript-format
+msgid "On %s: %s"
+msgstr "Στο %s: %s"
+
+#: ReactNativeClient/lib/services/InteropService.js:29
+#: ReactNativeClient/lib/services/InteropService.js:68
+msgid "Joplin Export File"
+msgstr "Αρχείο εξαγωγής Joplin"
+
+#: ReactNativeClient/lib/services/InteropService.js:36
+#: ReactNativeClient/lib/services/InteropService.js:83
+msgid "Markdown"
+msgstr "Markdown"
+
+#: ReactNativeClient/lib/services/InteropService.js:41
+#: ReactNativeClient/lib/services/InteropService.js:73
+msgid "Joplin Export Directory"
+msgstr "Φάκελος εξαγωγής Joplin"
+
+#: ReactNativeClient/lib/services/InteropService.js:47
+msgid "Evernote Export File (as Markdown)"
+msgstr "Αρχείο εξαγωγής Evernote (σαν Markdown)"
+
+#: ReactNativeClient/lib/services/InteropService.js:55
+msgid "Evernote Export File (as HTML)"
+msgstr "Αρχείο εξαγωγής Evernote (σαν HTML)"
+
+#: ReactNativeClient/lib/services/InteropService.js:78
+msgid "Json Export Directory"
+msgstr "Φάκελος εξαγωγής Json"
+
+#: ReactNativeClient/lib/services/InteropService.js:90
+msgid "HTML File"
+msgstr "Αρχείο HTML"
+
+#: ReactNativeClient/lib/services/InteropService.js:95
+msgid "HTML Directory"
+msgstr "Φάκελος HTML"
+
+#: ReactNativeClient/lib/services/InteropService.js:128
+msgid "File"
+msgstr "Αρχείο"
+
+#: ReactNativeClient/lib/services/InteropService.js:128
+msgid "Directory"
+msgstr "Φάκελος"
+
+#: ReactNativeClient/lib/services/InteropService.js:174
+#, fuzzy, javascript-format
+msgid "Cannot load \"%s\" module for format \"%s\" and output \"%s\""
+msgstr "Δεν είναι δυνατή η φόρτωση του module \"%s\" για τη μορφή \"%s\""
+
+#: ReactNativeClient/lib/services/InteropService.js:232
+#, javascript-format
+msgid "Please specify import format for %s"
+msgstr "Παρακαλώ καθορίστε τη μορφή εισαγωγής για το %s"
+
+#: ReactNativeClient/lib/services/InteropService.js:361
+#, javascript-format
+msgid ""
+"This item is currently encrypted: %s \"%s\". Please wait for all items to be "
+"decrypted and try again."
+msgstr ""
+"Αυτό το στοιχείο είναι κρυπτογραφημένο: %s \"%s\". Περιμένετε να "
+"αποκρυπτογραφηθούν όλα τα στοιχεία και δοκιμάστε ξανά."
+
+#~ msgid "Add or remove tags"
+#~ msgstr "Προσθήκη ή αφαίρεση ετικετών"
+
+#~ msgid "Link"
+#~ msgstr "Σύνδεσμος"
+
+#~ msgid "Content properties"
+#~ msgstr "Ιδιότητες περιεχομένου"
+
+#~ msgid "Split"
+#~ msgstr "Διαχωρισμός"
+
+#~ msgid "Information"
+#~ msgstr "Πληροφορίες"
+
+#, fuzzy
+#~ msgid "Resources"
+#~ msgstr "Πόροι: %d."
+
+#~ msgid ""
+#~ "Disabling encryption means *all* your notes and attachments are going to "
+#~ "be re-synchronised and sent unencrypted to the sync target. Do you wish "
+#~ "to continue?"
+#~ msgstr ""
+#~ "Αν απενεργοποιήσετε την κρυπτογράφηση *όλες* οι σημειώσεις και τα "
+#~ "συνημμένα σας πρόκειται να επανασυγχρονιστούν και να σταλούν χωρίς "
+#~ "κρυπτογράφηση στον προορισμό συγχρονισμού. Θέλετε να συνεχίσετε;"
+
+#~ msgid "Master Keys"
+#~ msgstr "Κύρια κλειδιά"
+
+#~ msgid "Active"
+#~ msgstr "Ενεργό"
+
+#~ msgid "Source"
+#~ msgstr "Πηγή"
+
+#~ msgid "Password"
+#~ msgstr "Κωδικός"
+
+#~ msgid "Password OK"
+#~ msgstr "Κωδικός OK"
+
+#~ msgid ""
+#~ "Note: Only one master key is going to be used for encryption (the one "
+#~ "marked as \"active\"). Any of the keys might be used for decryption, "
+#~ "depending on how the notes or notebooks were originally encrypted."
+#~ msgstr ""
+#~ "Σημείωση: Μόνο ένα κύριο κλειδί (master key) πρόκειται να χρησιμοποιηθεί "
+#~ "για την κρυπτογράφηση (το χαρακτηρισμένο ως \"ενεργό\"). Οποιοδήποτε από "
+#~ "τα κλειδιά μπορεί να χρησιμοποιηθεί για αποκρυπτογράφηση, ανάλογα με τον "
+#~ "τρόπο με τον οποίο οι σημειώσεις ή τα σημειωματάρια ήταν αρχικά "
+#~ "κρυπτογραφημένα."
+
+#, fuzzy
+#~ msgid "marked text"
+#~ msgstr "πλάγια γραφή"
+
+#~ msgid "Global zoom percentage"
+#~ msgstr "Ποσοστό καθολικού ζουμ"
+
+#~ msgid "Writes all settings to STDOUT as JSON including secure variables."
+#~ msgstr ""
+#~ "Γράφει όλες τις ρυθμίσεις στο STDOUT ως JSON συμπεριλαμβανομένων των "
+#~ "ασφαλών μεταβλητών."
+
+#~ msgid "Reads in JSON formatted settings from STDIN."
+#~ msgstr "Διαβάζει με μορφοποιημένες ρυθμίσεις JSON από το STDIN."
+
+#~ msgid "Reads in settings from <file>. <file> must contain valid JSON."
+#~ msgstr ""
+#~ "Διαβάζει τις ρυθμίσεις από το  <file>. Το <file> πρέπει να είναι έγκυρο "
+#~ "JSON."
+
+#~ msgid "Synchronisation is already in progress. State: %s"
+#~ msgstr "Ο συγχρονισμός είναι ήδη σε εξέλιξη. Κατάσταση: %s"
+
+#, fuzzy
+#~ msgid "Confirm master password:"
+#~ msgstr "Πληκτρολογήστε τον κωδικό πρόσβασης:"
+
+#, fuzzy
+#~ msgid "Confirm password"
+#~ msgstr "Πληκτρολογήστε τον κωδικό πρόσβασης:"
+
+#, fuzzy
+#~ msgid "Missing required argument: note"
+#~ msgstr "Λείπει το απαιτούμενο όρισμα: %s"

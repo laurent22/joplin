@@ -1,6 +1,9 @@
 const stringToStream = require('string-to-stream');
 const cleanHtml = require('clean-html');
 const resourceUtils = require('lib/resourceUtils.js');
+const { isSelfClosingTag } = require('lib/htmlUtils');
+const Entities = require('html-entities').AllHtmlEntities;
+const htmlentities = new Entities().encode;
 
 function addResourceTag(lines, resource, attributes) {
 	// Note: refactor to use Resource.markdownTag
@@ -11,7 +14,7 @@ function addResourceTag(lines, resource, attributes) {
 	const src = `:/${resource.id}`;
 
 	if (resourceUtils.isImageMimeType(resource.mime)) {
-		lines.push(resourceUtils.imgElement({src, attributes}));
+		lines.push(resourceUtils.imgElement({ src, attributes }));
 	} else if (resource.mime === 'audio/x-m4a') {
 		/**
 		 * TODO: once https://github.com/laurent22/joplin/issues/1794 is resolved,
@@ -36,8 +39,8 @@ function addResourceTag(lines, resource, attributes) {
 
 function attributeToLowerCase(node) {
 	if (!node.attributes) return {};
-	let output = {};
-	for (let n in node.attributes) {
+	const output = {};
+	for (const n in node.attributes) {
 		if (!node.attributes.hasOwnProperty(n)) continue;
 		output[n.toLowerCase()] = node.attributes[n];
 	}
@@ -45,7 +48,7 @@ function attributeToLowerCase(node) {
 }
 
 function enexXmlToHtml_(stream, resources) {
-	let remainingResources = resources.slice();
+	const remainingResources = resources.slice();
 
 	const removeRemainingResource = id => {
 		for (let i = 0; i < remainingResources.length; i++) {
@@ -56,12 +59,12 @@ function enexXmlToHtml_(stream, resources) {
 		}
 	};
 
-	return new Promise((resolve, reject) => {
+	return new Promise((resolve) => {
 		const options = {};
 		const strict = false;
-		var saxStream = require('sax').createStream(strict, options);
+		const saxStream = require('sax').createStream(strict, options);
 
-		let section = {
+		const section = {
 			type: 'text',
 			lines: [],
 			parent: null,
@@ -69,12 +72,11 @@ function enexXmlToHtml_(stream, resources) {
 
 		saxStream.on('error', function(e) {
 			console.warn(e);
-			// reject(e);
 		});
 
 
 		saxStream.on('text', function(text) {
-			section.lines.push(text);
+			section.lines.push(htmlentities(text));
 		});
 
 		saxStream.on('opentag', function(node) {
@@ -87,7 +89,7 @@ function enexXmlToHtml_(stream, resources) {
 
 				let resource = null;
 				for (let i = 0; i < resources.length; i++) {
-					let r = resources[i];
+					const r = resources[i];
 					if (r.id == hash) {
 						resource = r;
 						removeRemainingResource(r.id);
@@ -99,7 +101,7 @@ function enexXmlToHtml_(stream, resources) {
 					// TODO: Extract this duplicate of code in ./import-enex-md-gen.js
 					let found = false;
 					for (let i = 0; i < remainingResources.length; i++) {
-						let r = remainingResources[i];
+						const r = remainingResources[i];
 						if (!r.id) {
 							resource = Object.assign({}, r);
 							resource.id = hash;
@@ -110,7 +112,7 @@ function enexXmlToHtml_(stream, resources) {
 					}
 
 					if (!found) {
-						reject(`Hash with no associated resource: ${hash}`);
+						// console.warn(`Hash with no associated resource: ${hash}`);
 					}
 				}
 
@@ -121,17 +123,19 @@ function enexXmlToHtml_(stream, resources) {
 					section.lines = addResourceTag(section.lines, resource, nodeAttributes);
 				}
 			} else if (tagName == 'en-todo') {
-				section.lines.push('<input type="checkbox" onclick="return false;" />');
-			} else if (node.isSelfClosing) {
-				section.lines.push(`<${tagName}${attributesStr}>`);
+				const nodeAttributes = attributeToLowerCase(node);
+				const checkedHtml = nodeAttributes.checked && nodeAttributes.checked.toLowerCase() == 'true' ? ' checked="checked" ' : ' ';
+				section.lines.push(`<input${checkedHtml}type="checkbox" onclick="return false;" />`);
+			} else if (isSelfClosingTag(tagName)) {
+				section.lines.push(`<${tagName}${attributesStr}/>`);
 			} else {
-				section.lines.push(`<${tagName}${attributesStr} />`);
+				section.lines.push(`<${tagName}${attributesStr}>`);
 			}
 		});
 
-		saxStream.on('closetag', function(n) {
-			const tagName = n ? n.toLowerCase() : n;
-			section.lines.push(`</${tagName}>`);
+		saxStream.on('closetag', function(node) {
+			const tagName = node ? node.toLowerCase() : node;
+			if (!isSelfClosingTag(tagName)) section.lines.push(`</${tagName}>`);
 		});
 
 		saxStream.on('attribute', function() {});
@@ -149,22 +153,22 @@ function enexXmlToHtml_(stream, resources) {
 
 async function enexXmlToHtml(xmlString, resources, options = {}) {
 	const stream = stringToStream(xmlString);
-	let result = await enexXmlToHtml_(stream, resources, options);
+	const result = await enexXmlToHtml_(stream, resources, options);
 
-	try {
-		const preCleaning = result.content.lines.join(''); // xmlString
-		const final = await beautifyHtml(preCleaning);
-		return final.join('');
-	} catch (error) {
-		console.warn(error);
-	}
+	const preCleaning = result.content.lines.join('');
+	const final = await beautifyHtml(preCleaning);
+	return final.join('');
 }
 
 const beautifyHtml = (html) => {
 	return new Promise((resolve) => {
-		const options = {wrap: 0};
-		cleanHtml.clean(html, options, (...cleanedHtml) => resolve(cleanedHtml));
+		try {
+			cleanHtml.clean(html, { wrap: 0 }, (...cleanedHtml) => resolve(cleanedHtml));
+		} catch (error) {
+			console.warn(`Could not clean HTML - the "unclean" version will be used: ${error.message}: ${html.trim().substr(0, 512).replace(/[\n\r]/g, ' ')}...`);
+			resolve([html]);
+		}
 	});
 };
 
-module.exports = {enexXmlToHtml};
+module.exports = { enexXmlToHtml };

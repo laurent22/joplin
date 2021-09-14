@@ -15,10 +15,10 @@ class DatabaseDriverNode {
 	}
 
 	sqliteErrorToJsError(error, sql = null, params = null) {
-		let msg = [error.toString()];
+		const msg = [error.toString()];
 		if (sql) msg.push(sql);
 		if (params) msg.push(params);
-		let output = new Error(msg.join(': '));
+		const output = new Error(msg.join(': '));
 		if (error.code) output.code = error.code;
 		return output;
 	}

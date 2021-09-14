@@ -47,7 +47,7 @@ class Application extends BaseApplication {
 	}
 
 	async loadItem(type, pattern, options = null) {
-		let output = await this.loadItems(type, pattern, options);
+		const output = await this.loadItems(type, pattern, options);
 
 		if (output.length > 1) {
 			// output.sort((a, b) => { return a.user_updated_time < b.user_updated_time ? +1 : -1; });
@@ -144,7 +144,7 @@ class Application extends BaseApplication {
 			if (options.type === 'boolean') {
 				if (answer === null) return false; // Pressed ESCAPE
 				if (!answer) answer = options.answers[0];
-				let positiveIndex = options.booleanAnswerDefault == 'y' ? 0 : 1;
+				const positiveIndex = options.booleanAnswerDefault == 'y' ? 0 : 1;
 				return answer.toLowerCase() === options.answers[positiveIndex].toLowerCase();
 			} else {
 				return answer;
@@ -181,7 +181,7 @@ class Application extends BaseApplication {
 				const ext = fileExtension(path);
 				if (ext != 'js') return;
 
-				let CommandClass = require(`./${path}`);
+				const CommandClass = require(`./${path}`);
 				let cmd = new CommandClass();
 				if (!cmd.enabled()) return;
 				cmd = this.setupCommand(cmd);
@@ -192,8 +192,8 @@ class Application extends BaseApplication {
 		}
 
 		if (uiType !== null) {
-			let temp = [];
-			for (let n in this.commands_) {
+			const temp = [];
+			for (const n in this.commands_) {
 				if (!this.commands_.hasOwnProperty(n)) continue;
 				const c = this.commands_[n];
 				if (!c.supportsUi(uiType)) continue;
@@ -207,8 +207,8 @@ class Application extends BaseApplication {
 
 	async commandNames() {
 		const metadata = await this.commandMetadata();
-		let output = [];
-		for (let n in metadata) {
+		const output = [];
+		for (const n in metadata) {
 			if (!metadata.hasOwnProperty(n)) continue;
 			output.push(n);
 		}
@@ -227,7 +227,7 @@ class Application extends BaseApplication {
 		const commands = this.commands();
 
 		output = {};
-		for (let n in commands) {
+		for (const n in commands) {
 			if (!commands.hasOwnProperty(n)) continue;
 			const cmd = commands[n];
 			output[n] = cmd.metadata();
@@ -251,7 +251,7 @@ class Application extends BaseApplication {
 			CommandClass = require(`${__dirname}/command-${name}.js`);
 		} catch (error) {
 			if (error.message && error.message.indexOf('Cannot find module') >= 0) {
-				let e = new Error(_('No such command: %s', name));
+				const e = new Error(_('No such command: %s', name));
 				e.type = 'notFound';
 				throw e;
 			} else {
@@ -324,6 +324,9 @@ class Application extends BaseApplication {
 			{ keys: ['PAGE_DOWN'], type: 'function', command: 'page_down' },
 			{ keys: ['ENTER'], type: 'function', command: 'activate' },
 			{ keys: ['DELETE', 'BACKSPACE'], type: 'function', command: 'delete' },
+			{ keys: ['n'], type: 'function', command: 'next_link' },
+			{ keys: ['b'], type: 'function', command: 'previous_link' },
+			{ keys: ['o'], type: 'function', command: 'open_link' },
 			{ keys: [' '], command: 'todo toggle $n' },
 			{ keys: ['tc'], type: 'function', command: 'toggle_console' },
 			{ keys: ['tm'], type: 'function', command: 'toggle_metadata' },
@@ -362,9 +365,21 @@ class Application extends BaseApplication {
 		}
 
 		const output = [];
-		for (let n in itemsByCommand) {
+		for (const n in itemsByCommand) {
 			if (!itemsByCommand.hasOwnProperty(n)) continue;
 			output.push(itemsByCommand[n]);
+		}
+
+		// Map reserved shortcuts to their equivalent key
+		// https://github.com/cronvel/terminal-kit/issues/101
+		for (let i = 0; i < output.length; i++) {
+			const newKeys = output[i].keys.map(k => {
+				k = k.replace(/CTRL_H/g, 'BACKSPACE');
+				k = k.replace(/CTRL_I/g, 'TAB');
+				k = k.replace(/CTRL_M/g, 'ENTER');
+				return k;
+			});
+			output[i].keys = newKeys;
 		}
 
 		return output;
@@ -399,7 +414,7 @@ class Application extends BaseApplication {
 
 			await Setting.saveAll();
 
-			// Need to call exit() explicitely, otherwise Node wait for any timeout to complete
+			// Need to call exit() explicitly, otherwise Node wait for any timeout to complete
 			// https://stackoverflow.com/questions/18050095
 			process.exit(0);
 		} else {

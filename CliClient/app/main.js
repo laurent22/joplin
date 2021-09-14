@@ -8,8 +8,8 @@ require('app-module-path').addPath(__dirname);
 
 const compareVersion = require('compare-version');
 const nodeVersion = process && process.versions && process.versions.node ? process.versions.node : '0.0.0';
-if (compareVersion(nodeVersion, '8.0.0') < 0) {
-	console.error(`Joplin requires Node 8+. Detected version ${nodeVersion}`);
+if (compareVersion(nodeVersion, '10.0.0') < 0) {
+	console.error(`Joplin requires Node 10+. Detected version ${nodeVersion}`);
 	process.exit(1);
 }
 
@@ -29,6 +29,9 @@ const { shimInit } = require('lib/shim-init-node.js');
 const { _ } = require('lib/locale.js');
 const { FileApiDriverLocal } = require('lib/file-api-driver-local.js');
 const EncryptionService = require('lib/services/EncryptionService');
+const envFromArgs = require('lib/envFromArgs');
+
+const env = envFromArgs(process.argv);
 
 const fsDriver = new FsDriverNode();
 Logger.fsDriver_ = fsDriver;
@@ -46,7 +49,7 @@ BaseItem.loadClass('NoteTag', NoteTag);
 BaseItem.loadClass('MasterKey', MasterKey);
 BaseItem.loadClass('Revision', Revision);
 
-Setting.setConstant('appId', 'net.cozic.joplin-cli');
+Setting.setConstant('appId', `net.cozic.joplin${env === 'dev' ? 'dev' : ''}-cli`);
 Setting.setConstant('appType', 'cli');
 
 shimInit();
@@ -54,7 +57,7 @@ shimInit();
 const application = app();
 
 if (process.platform === 'win32') {
-	var rl = require('readline').createInterface({
+	const rl = require('readline').createInterface({
 		input: process.stdin,
 		output: process.stdout,
 	});

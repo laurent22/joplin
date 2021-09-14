@@ -15,6 +15,10 @@ class Command extends BaseCommand {
 		return 'Build the API doc';
 	}
 
+	enabled() {
+		return false;
+	}
+
 	createPropertiesTable(tableFields) {
 		const headers = [
 			{ name: 'name', label: 'Name' },
@@ -52,7 +56,6 @@ class Command extends BaseCommand {
 		lines.push('# Joplin API');
 		lines.push('');
 
-		lines.push('When the Web Clipper service is enabled, Joplin exposes a [REST API](https://en.wikipedia.org/wiki/Representational_state_transfer) which allows third-party applications to access Joplin\'s data and to create, modify or delete notes, notebooks, resources or tags.');
 		lines.push('');
 		lines.push('In order to use it, you\'ll first need to find on which port the service is running. To do so, open the Web Clipper Options in Joplin and if the service is running it should tell you on which port. Normally it runs on port **41184**. If you want to find it programmatically, you may follow this kind of algorithm:');
 		lines.push('');
@@ -131,6 +134,24 @@ class Command extends BaseCommand {
 		lines.push('');
 		lines.push('Call **GET /search?query=YOUR_QUERY** to search for notes. This end-point supports the `field` parameter which is recommended to use so that you only get the data that you need. The query syntax is as described in the main documentation: https://joplinapp.org/#searching');
 		lines.push('');
+		lines.push('To retrieve non-notes items, such as notebooks or tags, add a `type` parameter and set it to the required [item type name](#item-type-id). In that case, full text search will not be used - instead it will be a simple case-insensitive search. You can also use `*` as a wildcard. This is convenient for example to retrieve notebooks or tags by title.');
+		lines.push('');
+		lines.push('For example, to retrieve the notebook named `recipes`: **GET /search?query=recipes&type=folder**');
+		lines.push('');
+		lines.push('To retrieve all the tags that start with `project-`: **GET /search?query=project-*&type=tag**');
+		lines.push('');
+
+		lines.push('# Item type IDs');
+		lines.push('');
+		lines.push('Item type IDs might be refered to in certain object you will retrieve from the API. This is the correspondance between name and ID:');
+		lines.push('');
+		lines.push('Name | Value');
+		lines.push('---- | -----');
+		for (const t of BaseModel.typeEnum_) {
+			const value = t[1];
+			lines.push(`${BaseModel.modelTypeToName(value)} | ${value}   `);
+		}
+		lines.push('');
 
 		for (let i = 0; i < models.length; i++) {
 			const model = models[i];
@@ -208,6 +229,11 @@ class Command extends BaseCommand {
 				lines.push('');
 				lines.push('Gets all the tags attached to this note.');
 				lines.push('');
+
+				lines.push('## GET /notes/:id/resources');
+				lines.push('');
+				lines.push('Gets all the resources attached to this note.');
+				lines.push('');
 			}
 
 			if (model.type === BaseModel.TYPE_FOLDER) {
@@ -264,7 +290,7 @@ class Command extends BaseCommand {
 				lines.push('');
 				lines.push('### Creating a note with a specific ID');
 				lines.push('');
-				lines.push('When a new note is created, it is automatically assigned a new unique ID so **normally you do not need to set the ID**. However, if for some reason you want to set it, you can supply it as the `id` property. It needs to be a 32 characters long hexadecimal string. **Make sure it is unique**, for example by generating it using whatever GUID function is available in your programming language.');
+				lines.push('When a new note is created, it is automatically assigned a new unique ID so **normally you do not need to set the ID**. However, if for some reason you want to set it, you can supply it as the `id` property. It needs to be a **32 characters long string** in hexadecimal. **Make sure it is unique**, for example by generating it using whatever GUID function is available in your programming language.');
 				lines.push('');
 				lines.push('      curl --data \'{ "id": "00a87474082744c1a8515da6aa5792d2", "title": "My note with custom ID"}\' http://127.0.0.1:41184/notes');
 				lines.push('');

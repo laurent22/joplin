@@ -20,7 +20,8 @@ https://github.com/laurent22/joplin/blob/master/readme/changelog_cli.md
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="https://joplinapp.org/css/bootstrap.min.css">
 	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
-	<link rel="stylesheet" href="https://joplinapp.org/css/fontawesome-all.min.css"> 
+	<!-- <link rel="stylesheet" href="https://joplinapp.org/css/fontawesome-all.min.css">  -->
+	<link rel="stylesheet" href="https://joplinapp.org/css/fork-awesome.min.css"> 
 	<script src="https://joplinapp.org/js/jquery-3.2.1.slim.min.js"></script>
 	<style>
 	body {
@@ -85,15 +86,28 @@ https://github.com/laurent22/joplin/blob/master/readme/changelog_cli.md
 	#toc ul {
 		margin-bottom: 10px;
 	}
+	#toc > ul > li {
+		margin-bottom: 10px;
+	}
 	#toc {
 		padding-bottom: 1em;
 	}
+	.title {
+		display: flex;
+		align-items: center;
+	}
 	.title-icon {
-		height: 2em;
+		display: flex;
+		height: 1em;
+	}
+	.title-text {
+		display: flex;
+		font-weight: normal;
+		margin-bottom: .2em;
+		margin-left: .5em;
 	}
 	.sub-title {
-		font-weight: bold;
-		font-size: 1.5em;
+		font-weight: normal;
 	}
 	.container {
 		background-color: white;
@@ -150,6 +164,9 @@ https://github.com/laurent22/joplin/blob/master/readme/changelog_cli.md
 	.header a h1 {
 		color: white;
 	}
+	.header a:hover {
+		text-decoration: none;
+	}
 	.content {
 		padding-left: 2em;
 		padding-right: 2em;
@@ -185,7 +202,9 @@ https://github.com/laurent22/joplin/blob/master/readme/changelog_cli.md
 		padding-left: 2em;
 		margin-bottom: 0;
 		display: table-cell;
-		min-width: 250px;
+		/* min-width: 250px; */
+		/* For GSoC: */
+		min-width: 470px;
 	}
 	.nav ul li {
 		display: inline-block;
@@ -234,6 +253,15 @@ https://github.com/laurent22/joplin/blob/master/readme/changelog_cli.md
 	h6:hover a.heading-anchor {
 		opacity: 1;
 	}
+
+	.bottom-links {
+		display: flex;
+		justify-content: center;
+		border-top: 1px solid #d4d4d4;
+		margin-top: 30px;
+		padding-top: 25px;
+	}
+
 	@media all and (min-width: 400px) {
 		.nav-right .share-btn {
 			display: inline-block;
@@ -251,8 +279,8 @@ https://github.com/laurent22/joplin/blob/master/readme/changelog_cli.md
 
 <div class="header">
 	<a class="forkme" href="https://github.com/laurent22/joplin"><img src="https://joplinapp.org/images/ForkMe.png"/></a>
-	<a href="https://joplinapp.org"><h1 id="joplin"><img class="title-icon" src="https://joplinapp.org/images/Icon512.png">oplin</h1></a>
-	<p class="sub-title">An open source note taking and to-do application with synchronisation capabilities.</p>
+	<a href="https://joplinapp.org"><h1 class="title"><img class="title-icon" src="https://joplinapp.org/images/Icon512.png"><span class="title-text">Joplin</span></h1></a>
+	<p class="sub-title">An open source note taking and to-do application with synchronisation capabilities</p>
 </div>
 
 <div class="nav-wrapper">
@@ -261,6 +289,7 @@ https://github.com/laurent22/joplin/blob/master/readme/changelog_cli.md
 			<li class=""><a href="https:&#x2F;&#x2F;joplinapp.org/" title="Home"><i class="fa fa-home"></i></a></li>
 			<li><a href="https://discourse.joplinapp.org" title="Forum">Forum</a></li>
 			<li><a class="help" href="#" title="Menu">Menu</a></li>
+			<!-- <li><a class="gsod" href="https://joplinapp.org/gsod2020/" title="Google Season of Docs 2020">GSoD 2020</a></li> -->
 		</ul>
 		<div class="nav-right">
 			<!--
@@ -287,11 +316,27 @@ https://github.com/laurent22/joplin/blob/master/readme/changelog_cli.md
 <p>Support</p>
 <ul>
 <li><a href="https://discourse.joplinapp.org">Joplin Forum</a></li>
+<li><a href="https://joplinapp.org/markdown/">Markdown Guide</a></li>
 <li><a href="https://joplinapp.org/e2ee/">How to enable end-to-end encryption</a></li>
-<li><a href="https://joplinapp.org/spec/">End-to-end encryption spec</a></li>
+<li><a href="https://joplinapp.org/conflict/">What is a conflict?</a></li>
 <li><a href="https://joplinapp.org/debugging/">How to enable debug mode</a></li>
 <li><a href="https://joplinapp.org/api/">API documentation</a></li>
 <li><a href="https://joplinapp.org/faq/">FAQ</a></li>
+</ul>
+</li>
+<li>
+<p>Development</p>
+<ul>
+<li><a href="https://joplinapp.org/spec/e2ee/">End-to-end encryption spec</a></li>
+<li><a href="https://joplinapp.org/spec/history/">Note History spec</a></li>
+<li><a href="https://joplinapp.org/spec/sync_lock/">Sync Lock spec</a></li>
+</ul>
+</li>
+<li>
+<p>Google Summer of Code 2020</p>
+<ul>
+<li><a href="https://joplinapp.org/gsoc2020">Google Summer of Code 2020</a></li>
+<li><a href="https://joplinapp.org/gsoc2020/ideas/">Project Ideas</a></li>
 </ul>
 </li>
 <li>
@@ -306,6 +351,116 @@ https://github.com/laurent22/joplin/blob/master/readme/changelog_cli.md
 </ul>
 </div>
 <h1>Joplin terminal app changelog<a name="joplin-terminal-app-changelog" href="#joplin-terminal-app-changelog" class="heading-anchor">🔗</a></h1>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/cli-v1.0.167">cli-v1.0.167</a> - 2020-09-04T17:15:49Z<a name="cli-v1-0-167-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-167-2020-09-04t17-15-49z" href="#cli-v1-0-167-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-167-2020-09-04t17-15-49z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>New: Add mechanism to lock and upgrade sync targets (#3524)</li>
+<li>Improved: Add search filters (#3213) (#1877 by Naveen M V)</li>
+<li>Improved: Add support for OneDrive for Business (#3433) (#1266 by <a href="https://github.com/jonath92">@jonath92</a>)</li>
+<li>Improved: Added link navigation shortcuts (#3275) (#3217 by j-krl)</li>
+<li>Improved: When searching, weight notes using Okapi BM25 score (#3454 by Naveen M V)</li>
+<li>Fixed: Fixed sync fetching issue (#3599) (#3591 by <a href="https://github.com/alexchee">@alexchee</a>)</li>
+</ul>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/cli-v1.0.166">cli-v1.0.166</a> - 2020-08-02T14:03:26Z<a name="cli-v1-0-166-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-166-2020-08-02t14-03-26z" href="#cli-v1-0-166-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-166-2020-08-02t14-03-26z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>New: Add support for AWS S3 synchronisation (Beta) (#2815 by <a href="https://github.com/alexchee">@alexchee</a>)</li>
+<li>Fixed: Desktop-only scripts were incorrectly being loaded in CLI server tool (#3548)</li>
+<li>Fixed: Fix filename when exporting notebook as Markdown (#3473)</li>
+<li>Fixed: Fixed attachments being out of order when importing Enex file</li>
+</ul>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/cli-v1.0.165">cli-v1.0.165</a> - 2020-07-10T18:51:42Z<a name="cli-v1-0-165-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-165-2020-07-10t18-51-42z" href="#cli-v1-0-165-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-165-2020-07-10t18-51-42z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>New: Translation: Add bahasa indonesia (id_ID.po) (#3246 by <a href="https://github.com/ffadilaputra">@ffadilaputra</a>)</li>
+<li>Improved: Allow importing ENEX files as HTML</li>
+<li>Improved: Disable support for HTML export for now as it does not work</li>
+<li>Improved: Upload attachments &gt; 4 MB when using OneDrive (#3195) (#173 by <a href="https://github.com/TheOnlyTrueJonathanHeard">@TheOnlyTrueJonathanHeard</a>)</li>
+<li>Fixed: Fixed import of checkboxes in ENEX files (#3402)</li>
+<li>Fixed: Fixed various bugs related to the import of ENEX files as HTML</li>
+<li>Fixed: Only de-duplicate imported notebook titles when needed (#2331)</li>
+<li>Fixed: Prevent desktop.ini file from breaking sync lock (#3381)</li>
+<li>Fixed: Prevent notebook to be the parent of itself (#3334)</li>
+<li>Fixed: Sync would fail in some cases due to a database error (#3234)</li>
+</ul>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/cli-v1.0.164">cli-v1.0.164</a> - 2020-05-13T15:30:22Z<a name="cli-v1-0-164-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-164-2020-05-13t15-30-22z" href="#cli-v1-0-164-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-164-2020-05-13t15-30-22z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>New: Added support for basic search</li>
+<li>Improved: Improve automatic title generation (#2955) (#2915 by anirudh murali)</li>
+<li>Improved: Improve handling of encrypted items</li>
+<li>Improved: Made layout configurable (#3069 by <a href="https://github.com/jyuvaraj03">@jyuvaraj03</a>)</li>
+<li>Improved: Start resource fetcher service when a note has been decrypted</li>
+<li>Fixed: Better handling of missing table field bug on Linux (#3088)</li>
+<li>Fixed: Fix format of geolocation data (#2673 by <a href="https://github.com/mic704b">@mic704b</a>)</li>
+</ul>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/cli-v1.0.163">cli-v1.0.163</a> - 2020-04-10T18:31:50Z<a name="cli-v1-0-163-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-163-2020-04-10t18-31-50z" href="#cli-v1-0-163-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-163-2020-04-10t18-31-50z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>Improved: Update ko.po (#2986 by <a href="https://github.com/xmlangel">@xmlangel</a>)</li>
+<li>Improved: Update it_IT.po (#2978 by <a href="https://github.com/abonte">@abonte</a>)</li>
+<li>Improved: Update nb_NO.po (#2973 by Mats Estensen)</li>
+<li>Improved: Update zh_CN.po (#2971 by <a href="https://github.com/troilus">@troilus</a>)</li>
+<li>Fixed: Add support for retrying decryption after it has failed multiple times (#2981)</li>
+<li>Fixed: When modifying a conflicted note, it would disappear from the view (#2709)</li>
+<li>Fixed: Prevent decryption loop when a resource cannot be decrypted (#2257)</li>
+</ul>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/cli-v1.0.162">cli-v1.0.162</a> - 2020-04-01T17:16:14Z<a name="cli-v1-0-162-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-162-2020-04-01t17-16-14z" href="#cli-v1-0-162-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-162-2020-04-01t17-16-14z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>New: Compatibility with new master key and sync target encryption</li>
+</ul>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/cli-v1.0.161">cli-v1.0.161</a> - 2020-03-07T01:20:04Z<a name="cli-v1-0-161-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-161-2020-03-07t01-20-04z" href="#cli-v1-0-161-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-161-2020-03-07t01-20-04z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>New: Add more context to encryption errors</li>
+<li>Improved: Changed default encryption method to CCM</li>
+<li>Improved: Change geolocation service to freegeoip.app to improve privacy (#2503 by Helmut K. C. Tessarek)</li>
+<li>Fixed: Handle invalid UTF-8 data when encrypting (#2591)</li>
+<li>Fixed: Fixed issue when a notebook does not have a parent (#2536)</li>
+<li>Fixed: Better handling of rare error in WebDAV server (#2485)</li>
+<li>Fixed: Fix importing of very large attachments (150MB+) from Evernote ENEX files</li>
+</ul>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/cli-v1.0.154">cli-v1.0.154</a> - 2020-02-07T23:22:24Z<a name="cli-v1-0-154-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-154-2020-02-07t23-22-24z" href="#cli-v1-0-154-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-154-2020-02-07t23-22-24z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>New: Added new date format YYYY.MM.DD (#2318 by XSAkos)</li>
+<li>Improved: Reset time fields when duplicating a note (#2428 by <a href="https://github.com/tekdel">@tekdel</a>)</li>
+<li>Improved: More info for &quot;unknown profile version&quot; error message (#2361 by <a href="https://github.com/mic704b">@mic704b</a>)</li>
+<li>Improved: Handle Thai language in search (#2387) (#2279 by Kirtan Purohit)</li>
+<li>Fixed: Fix escaping of title when generating a markdown link (#2456) (#2085 by Helmut K. C. Tessarek)</li>
+<li>Fixed: Fix console messages being displayed in GUI (#2457 by Helmut K. C. Tessarek)</li>
+</ul>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/cli-v1.0.153">cli-v1.0.153</a> - 2020-01-24T23:16:32Z<a name="cli-v1-0-153-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-153-2020-01-24t23-16-32z" href="#cli-v1-0-153-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-153-2020-01-24t23-16-32z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>New: Added new, more secure encryption methods, so that they can be switched to at a later time</li>
+<li>New: Add --export, --import, and --import-file flags to joplin config (#2179 by Marcus Hill)</li>
+<li>New: Added more logging for resource fetching to try to debug issue</li>
+<li>New: Add warning message when user tries to upload a file 10MB or larger (#2102) (#2097 by Marcus Hill)</li>
+<li>Improved: Replace note links with relative paths in MD Exporter (#2161 by Vaidotas Simkus)</li>
+<li>Improved: Upgrade sqlite (#2248 by Devon Zuegel)</li>
+<li>Improved: Extract note renderer to separate package (WIP) (#2206 by Laurent Cozic)</li>
+<li>Improved: Better handling of resource download errors, and added resource info to sync status screen</li>
+<li>Improved: Update CliClient node dependency to 10+ (#2177 by <a href="https://github.com/joeltaylor">@joeltaylor</a>)</li>
+<li>Improved: Allow exporting a note as HTML</li>
+<li>Improved: Improved logging during sync to allow finding bugs more easily</li>
+<li>Fixed: Handle WebDAV servers that do not return a last modified date (fixes <a href="http://mail.ru">mail.ru</a>) (#2091)</li>
+<li>Fixed: Restaured translations that had been accidentally deleted (#2126)</li>
+<li>Fixed: Prevent synch from happening if target dir could not be created, in local sync (#2117)</li>
+<li>Fixed: Handle rare case when notebook has a parent that no longer exists, which causes a crash when sorting (#2088)</li>
+</ul>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/cli-v1.0.150">cli-v1.0.150</a> - 2019-11-11T19:19:03Z<a name="cli-v1-0-150-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-150-2019-11-11t19-19-03z" href="#cli-v1-0-150-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-150-2019-11-11t19-19-03z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>New: Add command to list all tags for a note (#2003) (#1974)</li>
+<li>New: Added concept of sync version and client ID to allow upgrading sync targets</li>
+<li>Improved: Set user-agent header to Joplin/1.0 (#2064) (#2042)</li>
+<li>Improved: Update sharp tp v0.23.2 (for node 13 compatibility) (#2063)</li>
+<li>Improved: Handle special shortcuts such as Ctrl+H</li>
+<li>Improved: Handle WebDAV server with empty XML namespaces (#2002)</li>
+<li>Improved: Allow apps to work with read-only profile</li>
+<li>Improved: Support italic in span tags (#1966)</li>
+<li>Improved: Allow setting user timestamps with &quot;set&quot; command</li>
+<li>Improved: Allow a sync client to lock a sync target, so that migration operations can be performed on it</li>
+<li>Improved: Give correct mime type to more file types</li>
+<li>Improved: Use profile temp dir when exporting files (#1932)</li>
+<li>Improved: Confirm encryption password (#1937)</li>
+<li>Fixed: Handle paths with spaces for text editor (#2039)</li>
+<li>Fixed: Apply default style to notes in HTML format (#1960)</li>
+<li>Fixed: Fixed translation of &quot;Synchronisation Status&quot; (#1906)</li>
+<li>Fixed: App would crash if trying to index a note that has not been decrypted yet (#1938)</li>
+</ul>
 <h2><a href="https://github.com/laurent22/joplin/releases/tag/cli-v1.0.149">cli-v1.0.149</a> - 2019-09-27T21:18:57Z<a name="cli-v1-0-149-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-149-2019-09-27t21-18-57z" href="#cli-v1-0-149-https-github-com-laurent22-joplin-releases-tag-cli-v1-0-149-2019-09-27t21-18-57z" class="heading-anchor">🔗</a></h2>
 <ul>
 <li>New: Add support to Termux by returning a default when platform name cannot be determined (#1905)</li>
@@ -370,6 +525,11 @@ https://github.com/laurent22/joplin/blob/master/readme/changelog_cli.md
 <li>Fixed: Restored inline code styling (#1326)</li>
 </ul>
 
+		<div class="bottom-links">
+			<a href="https://github.com/laurent22/joplin/blob/master/readme/changelog_cli.md">
+				<i class="fa fa-github"></i> Improve this doc
+			</a>
+		</div>
 <script>
 	function stickyHeader() { 
 		return; // Disabled
@@ -401,7 +561,7 @@ https://github.com/laurent22/joplin/blob/master/readme/changelog_cli.md
 </script>
 
 <div class="footer">
-Copyright (c) 2016-2019 Laurent Cozic
+Copyright (c) 2016-2020 Laurent Cozic
 </div>
 </body>
 </html>

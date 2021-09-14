@@ -43,7 +43,7 @@ class AppNavComponent extends Component {
 		// Note: certain screens are kept into memory, in particular Notes and Search
 		// so that the scroll position is not lost when the user navigate away from them.
 
-		let route = this.props.route;
+		const route = this.props.route;
 		let Screen = null;
 		let notesScreenVisible = false;
 		let searchScreenVisible = false;
@@ -59,7 +59,7 @@ class AppNavComponent extends Component {
 		// Keep the search screen loaded if the user is viewing a note from that search screen
 		// so that if the back button is pressed, the screen is still loaded. However, unload
 		// it if navigating away.
-		let searchScreenLoaded = searchScreenVisible || (this.previousRouteName_ == 'Search' && route.routeName == 'Note');
+		const searchScreenLoaded = searchScreenVisible || (this.previousRouteName_ == 'Search' && route.routeName == 'Note');
 
 		this.previousRouteName_ = route.routeName;
 

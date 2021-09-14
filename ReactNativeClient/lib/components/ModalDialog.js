@@ -16,7 +16,7 @@ class ModalDialog extends React.Component {
 		if (this.styles_[themeId]) return this.styles_[themeId];
 		this.styles_ = {};
 
-		let styles = {
+		const styles = {
 			modalWrapper: {
 				flex: 1,
 				justifyContent: 'center',

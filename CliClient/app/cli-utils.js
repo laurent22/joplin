@@ -2,6 +2,7 @@ const yargParser = require('yargs-parser');
 const { _ } = require('lib/locale.js');
 const { time } = require('lib/time-utils.js');
 const stringPadding = require('string-padding');
+const { Logger } = require('lib/logger.js');
 
 const cliUtils = {};
 
@@ -11,27 +12,27 @@ cliUtils.printArray = function(logFunction, rows) {
 	const ALIGN_LEFT = 0;
 	const ALIGN_RIGHT = 1;
 
-	let colWidths = [];
-	let colAligns = [];
+	const colWidths = [];
+	const colAligns = [];
 
 	for (let i = 0; i < rows.length; i++) {
-		let row = rows[i];
+		const row = rows[i];
 
 		for (let j = 0; j < row.length; j++) {
-			let item = row[j];
-			let width = item ? item.toString().length : 0;
-			let align = typeof item == 'number' ? ALIGN_RIGHT : ALIGN_LEFT;
+			const item = row[j];
+			const width = item ? item.toString().length : 0;
+			const align = typeof item == 'number' ? ALIGN_RIGHT : ALIGN_LEFT;
 			if (!colWidths[j] || colWidths[j] < width) colWidths[j] = width;
 			if (colAligns.length <= j) colAligns[j] = align;
 		}
 	}
 
 	for (let row = 0; row < rows.length; row++) {
-		let line = [];
+		const line = [];
 		for (let col = 0; col < colWidths.length; col++) {
-			let item = rows[row][col];
-			let width = colWidths[col];
-			let dir = colAligns[col] == ALIGN_LEFT ? stringPadding.RIGHT : stringPadding.LEFT;
+			const item = rows[row][col];
+			const width = colWidths[col];
+			const dir = colAligns[col] == ALIGN_LEFT ? stringPadding.RIGHT : stringPadding.LEFT;
 			line.push(stringPadding(item, width, ' ', dir));
 		}
 		logFunction(line.join(' '));
@@ -39,7 +40,7 @@ cliUtils.printArray = function(logFunction, rows) {
 };
 
 cliUtils.parseFlags = function(flags) {
-	let output = {};
+	const output = {};
 	flags = flags.split(',');
 	for (let i = 0; i < flags.length; i++) {
 		let f = flags[i].trim();
@@ -76,11 +77,11 @@ cliUtils.parseCommandArg = function(arg) {
 cliUtils.makeCommandArgs = function(cmd, argv) {
 	let cmdUsage = cmd.usage();
 	cmdUsage = yargParser(cmdUsage);
-	let output = {};
+	const output = {};
 
-	let options = cmd.options();
-	let booleanFlags = [];
-	let aliases = {};
+	const options = cmd.options();
+	const booleanFlags = [];
+	const aliases = {};
 	for (let i = 0; i < options.length; i++) {
 		if (options[i].length != 2) throw new Error(`Invalid options: ${options[i]}`);
 		let flags = options[i][0];
@@ -97,7 +98,7 @@ cliUtils.makeCommandArgs = function(cmd, argv) {
 		}
 	}
 
-	let args = yargParser(argv, {
+	const args = yargParser(argv, {
 		boolean: booleanFlags,
 		alias: aliases,
 		string: ['_'],
@@ -113,8 +114,8 @@ cliUtils.makeCommandArgs = function(cmd, argv) {
 		}
 	}
 
-	let argOptions = {};
-	for (let key in args) {
+	const argOptions = {};
+	for (const key in args) {
 		if (!args.hasOwnProperty(key)) continue;
 		if (key == '_') continue;
 		argOptions[key] = args[key];
@@ -134,7 +135,7 @@ cliUtils.promptMcq = function(message, answers) {
 	});
 
 	message += '\n\n';
-	for (let n in answers) {
+	for (const n in answers) {
 		if (!answers.hasOwnProperty(n)) continue;
 		message += `${_('%s: %s', n, answers[n])}\n`;
 	}
@@ -243,6 +244,19 @@ cliUtils.redrawDone = function() {
 
 	redrawLastLog_ = null;
 	redrawStarted_ = false;
+};
+
+cliUtils.stdoutLogger = function(stdout) {
+	const stdoutFn = (...s) => stdout(s.join(' '));
+
+	const logger = new Logger();
+	logger.addTarget('console', { console: {
+		info: stdoutFn,
+		warn: stdoutFn,
+		error: stdoutFn,
+	} });
+
+	return logger;
 };
 
 module.exports = { cliUtils };

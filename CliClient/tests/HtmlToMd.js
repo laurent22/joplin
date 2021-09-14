@@ -13,8 +13,6 @@ const { shim } = require('lib/shim');
 const HtmlToMd = require('lib/HtmlToMd');
 const { enexXmlToMd } = require('lib/import-enex-md-gen.js');
 
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 60 * 60 * 1000; // Can run for a while since everything is in the same test unit
-
 process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
 });
@@ -39,7 +37,9 @@ describe('HtmlToMd', function() {
 			const htmlPath = `${basePath}/${htmlFilename}`;
 			const mdPath = `${basePath}/${filename(htmlFilename)}.md`;
 
-			// if (htmlFilename !== 'table_with_pipe.html') continue;
+			// if (htmlFilename !== 'joplin_source_2.html') continue;
+
+			// if (htmlFilename.indexOf('image_preserve_size') !== 0) continue;
 
 			const htmlToMdOptions = {};
 
@@ -48,7 +48,11 @@ describe('HtmlToMd', function() {
 				// This is straightforward when the document is still in DOM format, as with the clipper,
 				// but otherwise it would need to be somehow parsed out from the HTML. Here we just
 				// hard code the anchors that we know are in the file.
-				htmlToMdOptions.anchorNames = ['first', 'second'];
+				htmlToMdOptions.anchorNames = ['first', 'second', 'fourth'];
+			}
+
+			if (htmlFilename.indexOf('image_preserve_size') === 0) {
+				htmlToMdOptions.preserveImageTagsWithSize = true;
 			}
 
 			const html = await shim.fsDriver().readFile(htmlPath);

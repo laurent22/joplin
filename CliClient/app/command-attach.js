@@ -14,9 +14,9 @@ class Command extends BaseCommand {
 	}
 
 	async action(args) {
-		let title = args['note'];
+		const title = args['note'];
 
-		let note = await app().loadItem(BaseModel.TYPE_NOTE, title, { parent: app().currentFolder() });
+		const note = await app().loadItem(BaseModel.TYPE_NOTE, title, { parent: app().currentFolder() });
 		this.encryptionCheck(note);
 		if (!note) throw new Error(_('Cannot find "%s".', title));
 

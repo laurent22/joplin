@@ -35,13 +35,13 @@ class Revision extends BaseItem {
 			deleted: [],
 		};
 
-		for (let k in newObject) {
+		for (const k in newObject) {
 			if (!newObject.hasOwnProperty(k)) continue;
 			if (oldObject[k] === newObject[k]) continue;
 			output.new[k] = newObject[k];
 		}
 
-		for (let k in oldObject) {
+		for (const k in oldObject) {
 			if (!oldObject.hasOwnProperty(k)) continue;
 			if (!(k in newObject)) output.deleted.push(k);
 		}
@@ -53,7 +53,7 @@ class Revision extends BaseItem {
 		patch = JSON.parse(patch);
 		const output = Object.assign({}, object);
 
-		for (let k in patch.new) {
+		for (const k in patch.new) {
 			output[k] = patch.new[k];
 		}
 

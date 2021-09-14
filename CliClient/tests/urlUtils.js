@@ -25,7 +25,7 @@ describe('urlUtils', function() {
 		expect(urlUtils.prependBaseUrl('', 'http://example.com/something')).toBe('http://example.com/something');
 		expect(urlUtils.prependBaseUrl('testing.html', '')).toBe('testing.html');
 
-		// It shouldn't prepend anyting for these:
+		// It shouldn't prepend anything for these:
 		expect(urlUtils.prependBaseUrl('mailto:emailme@example.com', 'http://example.com')).toBe('mailto:emailme@example.com');
 		expect(urlUtils.prependBaseUrl('javascript:var%20testing=true', 'http://example.com')).toBe('javascript:var%20testing=true');
 		expect(urlUtils.prependBaseUrl('http://alreadyabsolute.com', 'http://example.com')).toBe('http://alreadyabsolute.com');

@@ -12,8 +12,6 @@ const BaseModel = require('lib/BaseModel.js');
 const { shim } = require('lib/shim');
 const { enexXmlToMd } = require('lib/import-enex-md-gen.js');
 
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 60 * 60 * 1000; // Can run for a while since everything is in the same test unit
-
 process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
 });
