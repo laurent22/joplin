@@ -197,8 +197,6 @@ const EncryptionConfigScreen = (props: Props) => {
 		return null;
 	};
 
-	// const { inputMasterPassword, onMasterPasswordSave, onMasterPasswordChange } = useInputMasterPassword(props.masterKeys, props.activeMasterKeyId);
-
 	const onToggleButtonClick = useCallback(() => async () => {
 		const isEnabled = getEncryptionEnabled();
 		const masterKey = getDefaultMasterKey();
@@ -322,12 +320,6 @@ const EncryptionConfigScreen = (props: Props) => {
 
 		return nonExistingMasterKeySection;
 	};
-
-	// const containerStyle = Object.assign({}, theme.containerStyle, {
-	// 	padding: theme.configScreenPadding,
-	// 	overflow: 'auto',
-	// 	backgroundColor: theme.backgroundColor3,
-	// });
 
 	return (
 		<div className="config-screen-content">

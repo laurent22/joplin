@@ -111,7 +111,7 @@ export default function(props: Props) {
 							</div>
 						</div>
 						<div className="form-input-group">
-							<label>{'Enter new password'}</label>
+							<label>{'Enter password'}</label>
 							<StyledInput type="password" value={password1} onChange={onPasswordChange1}/>
 						</div>
 						<div className="form-input-group">

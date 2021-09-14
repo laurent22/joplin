@@ -268,7 +268,7 @@ export function getMasterPasswordStatusMessage(status: MasterPasswordStatus): st
 	return masterPasswordStatusMessages[status];
 }
 
-export async function masterPasswordIsValid(masterPassword: string): Promise<boolean> {
+export async function masterPasswordIsValid(masterPassword: string, activeMasterKey: MasterKeyEntity = null): Promise<boolean> {
 	// A valid password is basically one that decrypts the private key, but due
 	// to backward compatibility not all users have a PPK yet, so we also check
 	// based on the active master key.
@@ -280,7 +280,7 @@ export async function masterPasswordIsValid(masterPassword: string): Promise<boo
 		return ppkPasswordIsValid(EncryptionService.instance(), ppk, masterPassword);
 	}
 
-	const masterKey = getDefaultMasterKey();
+	const masterKey = activeMasterKey ? activeMasterKey : getDefaultMasterKey();
 	if (masterKey) {
 		return EncryptionService.instance().checkMasterKeyPassword(masterKey, masterPassword);
 	}
