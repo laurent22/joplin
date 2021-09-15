@@ -15,7 +15,7 @@ import MasterKey from './models/MasterKey';
 import BaseModel, { ModelType } from './BaseModel';
 import time from './time';
 import ResourceService from './services/ResourceService';
-import EncryptionService from './services/EncryptionService';
+import EncryptionService from './services/e2ee/EncryptionService';
 import JoplinError from './JoplinError';
 import ShareService from './services/share/ShareService';
 import TaskQueue from './TaskQueue';

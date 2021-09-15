@@ -442,10 +442,10 @@ describe('services_InteropService', function() {
 		await service.export({ path: outDir, format: 'md' });
 
 		expect(await shim.fsDriver().exists(`${outDir}/folder1/生活.md`)).toBe(true);
-		expect(await shim.fsDriver().exists(`${outDir}/folder1/生活 (1).md`)).toBe(true);
-		expect(await shim.fsDriver().exists(`${outDir}/folder1/生活 (2).md`)).toBe(true);
+		expect(await shim.fsDriver().exists(`${outDir}/folder1/生活-1.md`)).toBe(true);
+		expect(await shim.fsDriver().exists(`${outDir}/folder1/生活-2.md`)).toBe(true);
 		expect(await shim.fsDriver().exists(`${outDir}/folder1/Untitled.md`)).toBe(true);
-		expect(await shim.fsDriver().exists(`${outDir}/folder1/Untitled (1).md`)).toBe(true);
+		expect(await shim.fsDriver().exists(`${outDir}/folder1/Untitled-1.md`)).toBe(true);
 		expect(await shim.fsDriver().exists(`${outDir}/folder1/salut, ça roule _.md`)).toBe(true);
 		expect(await shim.fsDriver().exists(`${outDir}/ジョプリン/ジョプリン.md`)).toBe(true);
 	}));

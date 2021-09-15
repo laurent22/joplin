@@ -8,7 +8,7 @@ In some cases however, the extra markup format that appears in notes can be seen
 
 However **there is a catch**: in Joplin, notes, even when edited with this Rich Text editor, are **still Markdown** under the hood. This is generally a good thing, because it means you can switch at any time between Markdown and Rich Text editor, and the note is still readable. It is also good if you sync with the mobile application, which doesn't have a rich text editor. The catch is that since Markdown is used under the hood, it means the rich text editor has a number of limitations it inherits from that format:
 
-- For a start, **most Markdown plugins will not be compatible**. If you open a Markdown note that makes use of such plugin in the Rich Text editor, it is likely you will lose the plugin special formatting. The only supported plugins are the "fenced" plugins - those that wrap a section of text in triple backticks (for example, KaTeX, Mermaid, etc. are working). You can see on the Markdown config screen which plugins that are compatible or not.
+- For a start, **most Markdown plugins will not be compatible**. If you open a Markdown note that makes use of such plugin in the Rich Text editor, it is likely you will lose the plugin special formatting. The only supported plugins are the "fenced" plugins - those that wrap a section of text in triple backticks (for example, KaTeX, Mermaid, etc. are working). You can see a plugin's compatibility on the Markdown config screen.
 
 - It is not possible to have multiple new lines in a row. Because in Markdown, multiple new lines would be collapsed into one when rendered.
 

@@ -1,7 +1,8 @@
 import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, expectThrow, createFolder, createItemTree3, expectNotThrow } from '../utils/testing/testUtils';
-import { ChangeType, Item, SqliteMaxVariableNum, Uuid } from '../db';
+import { ChangeType, Item, Uuid } from '../services/database/types';
 import { msleep } from '../utils/time';
 import { ChangePagination } from './ChangeModel';
+import { SqliteMaxVariableNum } from '../db';
 
 async function makeTestItem(userId: Uuid, num: number): Promise<Item> {
 	return models().item().saveForUser(userId, {

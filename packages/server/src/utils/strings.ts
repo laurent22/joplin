@@ -1,4 +1,4 @@
-import { User } from '../db';
+import { User } from '../services/database/types';
 import { getMaxItemSize, getMaxTotalItemSize, totalSizePercent } from '../models/utils/user';
 import { formatBytes } from './bytes';
 

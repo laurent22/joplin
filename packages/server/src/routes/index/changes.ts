@@ -2,7 +2,7 @@ import { SubPath } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
-import { changeTypeToString } from '../../db';
+import { changeTypeToString } from '../../services/database/types';
 import { PaginationOrderDir } from '../../models/utils/pagination';
 import { formatDateTime } from '../../utils/time';
 import defaultView from '../../utils/defaultView';

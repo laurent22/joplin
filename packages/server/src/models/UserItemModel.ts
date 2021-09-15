@@ -1,4 +1,4 @@
-import { ChangeType, ItemType, UserItem, Uuid } from '../db';
+import { ChangeType, ItemType, UserItem, Uuid } from '../services/database/types';
 import BaseModel, { DeleteOptions, LoadOptions, SaveOptions } from './BaseModel';
 import { unique } from '../utils/array';
 import { ErrorNotFound } from '../utils/errors';
@@ -141,7 +141,7 @@ export default class UserItemModel extends BaseModel<UserItem> {
 			}
 
 			return super.save(userItem, options);
-		});
+		}, 'UserItemModel::save');
 	}
 
 	public async delete(_id: string | string[], _options: DeleteOptions = {}): Promise<void> {

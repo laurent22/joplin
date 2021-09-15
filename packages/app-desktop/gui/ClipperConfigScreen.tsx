@@ -7,8 +7,8 @@ import { themeStyle } from '@joplin/lib/theme';
 import { _ } from '@joplin/lib/locale';
 import ClipperServer from '@joplin/lib/ClipperServer';
 import Setting from '@joplin/lib/models/Setting';
-import EncryptionService from '@joplin/lib/services/EncryptionService';
-import { AppState } from '../app';
+import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
+import { AppState } from '../app.reducer';
 
 class ClipperConfigScreenComponent extends React.Component {
 	constructor() {

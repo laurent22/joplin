@@ -2,7 +2,7 @@ import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models,
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { deleteApi, getApi, putApi } from '../../utils/testing/apiUtils';
-import { Item } from '../../db';
+import { Item } from '../../services/database/types';
 import { PaginatedItems, SaveFromRawContentResult } from '../../models/ItemModel';
 import { shareFolderWithUser } from '../../utils/testing/shareApiUtils';
 import { resourceBlobPath } from '../../utils/joplinUtils';

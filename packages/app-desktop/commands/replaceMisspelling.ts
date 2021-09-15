@@ -1,5 +1,5 @@
 import CommandService, { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
-import { AppState } from '../app';
+import { AppState } from '../app.reducer';
 import bridge from '../services/bridge';
 
 export const declaration: CommandDeclaration = {

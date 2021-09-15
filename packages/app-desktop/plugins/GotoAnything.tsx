@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { AppState } from '../app';
+import { AppState } from '../app.reducer';
 import CommandService, { SearchResult as CommandSearchResult } from '@joplin/lib/services/CommandService';
 import KeymapService from '@joplin/lib/services/KeymapService';
 import shim from '@joplin/lib/shim';
@@ -336,6 +336,10 @@ class Dialog extends React.PureComponent<Props, State> {
 					// Can't make any sense of this code so...
 					// @ts-ignore
 					const notesById = notes.reduce((obj, { id, body, markup_language }) => ((obj[[id]] = { id, body, markup_language }), obj), {});
+
+					// Filter out search results that are associated with non-existing notes.
+					// https://github.com/laurent22/joplin/issues/5417
+					results = results.filter(r => !!notesById[r.id]);
 
 					for (let i = 0; i < results.length; i++) {
 						const row = results[i];

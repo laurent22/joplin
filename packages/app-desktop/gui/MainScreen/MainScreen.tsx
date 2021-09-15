@@ -17,7 +17,7 @@ import { stateUtils } from '@joplin/lib/reducer';
 import InteropServiceHelper from '../../InteropServiceHelper';
 import { _ } from '@joplin/lib/locale';
 import NoteListWrapper from '../NoteListWrapper/NoteListWrapper';
-import { AppState } from '../../app';
+import { AppState } from '../../app.reducer';
 import { saveLayout, loadLayout } from '../ResizableLayout/utils/persist';
 import Setting from '@joplin/lib/models/Setting';
 import produce from 'immer';
@@ -29,7 +29,7 @@ import { themeStyle } from '@joplin/lib/theme';
 import validateLayout from '../ResizableLayout/utils/validateLayout';
 import iterateItems from '../ResizableLayout/utils/iterateItems';
 import removeItem from '../ResizableLayout/utils/removeItem';
-import EncryptionService from '@joplin/lib/services/EncryptionService';
+import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
 import ShareFolderDialog from '../ShareFolderDialog/ShareFolderDialog';
 import { ShareInvitation } from '@joplin/lib/services/share/reducer';
 import ShareService from '@joplin/lib/services/share/ShareService';
@@ -37,6 +37,7 @@ import { reg } from '@joplin/lib/registry';
 import removeKeylessItems from '../ResizableLayout/utils/removeKeylessItems';
 import { localSyncInfoFromState } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 import { showMissingMasterKeyMessage } from '@joplin/lib/services/e2ee/utils';
+import commands from './commands/index';
 
 const { connect } = require('react-redux');
 const { PromptDialog } = require('../PromptDialog.min.js');
@@ -109,39 +110,6 @@ const defaultLayout: LayoutItem = {
 		{ key: 'editor' },
 	],
 };
-
-const commands = [
-	require('./commands/editAlarm'),
-	require('./commands/exportPdf'),
-	require('./commands/gotoAnything'),
-	require('./commands/commandPalette'),
-	require('./commands/hideModalMessage'),
-	require('./commands/moveToFolder'),
-	require('./commands/newFolder'),
-	require('./commands/newNote'),
-	require('./commands/newSubFolder'),
-	require('./commands/newTodo'),
-	require('./commands/openFolder'),
-	require('./commands/openNote'),
-	require('./commands/openTag'),
-	require('./commands/print'),
-	require('./commands/renameFolder'),
-	require('./commands/renameTag'),
-	require('./commands/search'),
-	require('./commands/setTags'),
-	require('./commands/showModalMessage'),
-	require('./commands/showNoteContentProperties'),
-	require('./commands/showNoteProperties'),
-	require('./commands/showPrompt'),
-	require('./commands/showShareFolderDialog'),
-	require('./commands/showShareNoteDialog'),
-	require('./commands/showSpellCheckerMenu'),
-	require('./commands/toggleEditors'),
-	require('./commands/toggleLayoutMoveMode'),
-	require('./commands/toggleNoteList'),
-	require('./commands/toggleSideBar'),
-	require('./commands/toggleVisiblePanes'),
-];
 
 class MainScreenComponent extends React.Component<Props, State> {
 

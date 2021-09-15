@@ -399,3 +399,31 @@ Deletes the tag with ID :id
 ## DELETE /tags/:id/notes/:note_id
 
 Remove the tag from the note.
+
+# Events
+
+This end point can be used to retrieve the latest note changes. Currently only note changes are tracked.
+
+## Properties
+
+| Name  | Type  | Description |
+| ----- | ----- | ----- |
+| id    | int   |       |
+| item_type | int   | The item type (see table above for the list of item types) |
+| item_id | text  | The item ID |
+| type  | int   | The type of change - either 1 (created), 2 (updated) or 3 (deleted) |
+| created_time | int   | When the event was generated |
+| source | int   | Unused |
+| before_change_item | text  | Unused |
+
+## GET /events
+
+Returns a paginated list of recent events. A `cursor` property should be provided, which tells from what point in time the events should be returned. The API will return a `cursor` property, to tell from where to resume retrieving events, as well as an `has_more` (tells if more changes can be retrieved) and `items` property, which will contain the list of events. Events are kept for up to 90 days.
+
+If no `cursor` property is provided, the API will respond with the latest change ID. That can be used to retrieve future events later on.
+
+The results are paginated so will need to may multiple calls to retrieve all the events. Use the `has_more` property to know if more can be retrieved.
+
+## GET /events/:id
+
+Returns the event with the given ID.

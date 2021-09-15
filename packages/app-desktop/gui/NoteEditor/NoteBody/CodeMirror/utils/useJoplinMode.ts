@@ -128,11 +128,11 @@ export default function useJoplinMode(CodeMirror: any) {
 				} else if (state.outer.thisLine && state.outer.thisLine.fencedCodeEnd) {
 					state.inCodeBlock = false;
 					isMonospace = true;
-					token = `${token} line-background-cm-jn-code-block`;
+					token = `${token} line-cm-jn-code-block line-background-cm-jn-code-block-background`;
 				} else if (state.outer.code === -1 || state.inCodeBlock) {
 					state.inCodeBlock = true;
 					isMonospace = true;
-					token = `${token} line-background-cm-jn-code-block`;
+					token = `${token} line-cm-jn-code-block line-background-cm-jn-code-block-background`;
 				} else if (stream.pos > 0 && stream.string[stream.pos - 1] === '`' &&
 										!!token && token.includes('comment')) {
 					// This grabs the closing backtick for inline Code
@@ -184,7 +184,7 @@ export default function useJoplinMode(CodeMirror: any) {
 
 				state.inTable = false;
 
-				if (state.inCodeBlock) return 'line-background-cm-jn-code-block';
+				if (state.inCodeBlock) return 'line-cm-jn-code-block line-background-cm-jn-code-block-background';
 
 				return null;
 			},

@@ -64,3 +64,23 @@ ul.pagination-list li {
 .readable-block {
 	max-width: 740px;
 }
+
+a.heading-anchor {
+	display: inline-block;
+	opacity: 0;
+	width: 1.3em;
+	font-size: 0.7em;
+	margin-left: 0.4em;
+	line-height: 1em;
+	text-decoration: none;
+	transition: opacity 0.3s;
+}
+a.heading-anchor:hover,
+h1:hover a.heading-anchor,
+h2:hover a.heading-anchor,
+h3:hover a.heading-anchor,
+h4:hover a.heading-anchor,
+h5:hover a.heading-anchor,
+h6:hover a.heading-anchor {
+	opacity: 1;
+}

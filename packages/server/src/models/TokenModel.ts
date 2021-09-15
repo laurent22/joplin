@@ -1,4 +1,4 @@
-import { Token, User, Uuid } from '../db';
+import { Token, User, Uuid } from '../services/database/types';
 import { ErrorForbidden, ErrorNotFound } from '../utils/errors';
 import uuidgen from '../utils/uuidgen';
 import BaseModel from './BaseModel';

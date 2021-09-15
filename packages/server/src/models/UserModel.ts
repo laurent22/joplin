@@ -1,5 +1,5 @@
 import BaseModel, { AclAction, SaveOptions, ValidateOptions } from './BaseModel';
-import { EmailSender, Item, User, Uuid } from '../db';
+import { EmailSender, Item, User, UserFlagType, Uuid } from '../services/database/types';
 import * as auth from '../utils/auth';
 import { ErrorUnprocessableEntity, ErrorForbidden, ErrorPayloadTooLarge, ErrorNotFound } from '../utils/errors';
 import { ModelType } from '@joplin/lib/BaseModel';
@@ -16,6 +16,9 @@ import { betaStartSubUrl, betaUserDateRange, betaUserTrialPeriodDays, isBetaUser
 import endOfBetaTemplate from '../views/emails/endOfBetaTemplate';
 import Logger from '@joplin/lib/Logger';
 import paymentFailedUploadDisabledTemplate from '../views/emails/paymentFailedUploadDisabledTemplate';
+import oversizedAccount1 from '../views/emails/oversizedAccount1';
+import oversizedAccount2 from '../views/emails/oversizedAccount2';
+import dayjs = require('dayjs');
 
 const logger = Logger.create('UserModel');
 
@@ -188,7 +191,7 @@ export default class UserModel extends BaseModel<User> {
 		const maxItemSize = getMaxItemSize(user);
 		const maxSize = maxItemSize * (itemIsEncrypted(item) ? 2.2 : 1);
 		if (maxSize && itemSize > maxSize) {
-			throw new ErrorPayloadTooLarge(_('Cannot save %s "%s" because it is larger than than the allowed limit (%s)',
+			throw new ErrorPayloadTooLarge(_('Cannot save %s "%s" because it is larger than the allowed limit (%s)',
 				isNote ? _('note') : _('attachment'),
 				itemTitle ? itemTitle : item.name,
 				formatBytes(maxItemSize)
@@ -243,16 +246,6 @@ export default class UserModel extends BaseModel<User> {
 		const s = email.split('@');
 		if (s.length !== 2) return false;
 		return !!s[0].length && !!s[1].length;
-	}
-
-	public async enable(id: Uuid, enabled: boolean) {
-		const user = await this.load(id);
-		if (!user) throw new ErrorNotFound(`No such user: ${id}`);
-		await this.save({ id, enabled: enabled ? 1 : 0 });
-	}
-
-	public async disable(id: Uuid) {
-		await this.enable(id, false);
 	}
 
 	public async delete(id: string): Promise<void> {
@@ -314,10 +307,6 @@ export default class UserModel extends BaseModel<User> {
 		await this.models().token().deleteByValue(user.id, token);
 	}
 
-	// public async disableUnpaidAccounts() {
-
-	// }
-
 	public async handleBetaUserEmails() {
 		if (!stripeConfig().enabled) return;
 
@@ -355,7 +344,7 @@ export default class UserModel extends BaseModel<User> {
 			}
 
 			if (remainingDays <= 0) {
-				await this.save({ id: user.id, can_upload: 0 });
+				await this.models().userFlag().add(user.id, UserFlagType.AccountWithoutSubscription);
 			}
 		}
 	}
@@ -372,7 +361,7 @@ export default class UserModel extends BaseModel<User> {
 					continue;
 				}
 
-				await this.save({ id: user.id, can_upload: 0 });
+				await this.models().userFlag().add(user.id, UserFlagType.FailedPaymentWarning);
 
 				await this.models().email().push({
 					...paymentFailedUploadDisabledTemplate(),
@@ -380,7 +369,68 @@ export default class UserModel extends BaseModel<User> {
 					key: `payment_failed_upload_disabled_${sub.last_payment_failed_time}`,
 				});
 			}
-		});
+		}, 'UserModel::handleFailedPaymentSubscriptions');
+	}
+
+	public async handleOversizedAccounts() {
+		const alertLimit1 = 0.8;
+		const alertLimitMax = 1;
+
+		const basicAccount = accountByType(AccountType.Basic);
+		const proAccount = accountByType(AccountType.Pro);
+
+		const users: User[] = await this
+			.db(this.tableName)
+			.select(['id', 'total_item_size', 'max_total_item_size', 'account_type', 'email', 'full_name'])
+			.where(function() {
+				void this.whereRaw('total_item_size > ? AND account_type = ?', [Math.round(alertLimit1 * basicAccount.max_total_item_size), AccountType.Basic])
+					.orWhereRaw('total_item_size > ? AND account_type = ?', [Math.round(alertLimit1 * proAccount.max_total_item_size), AccountType.Pro]);
+			})
+			// Users who are disabled or who cannot upload already received the
+			// notification.
+			.andWhere('enabled', '=', 1)
+			.andWhere('can_upload', '=', 1);
+
+		const makeEmailKey = (user: User, alertLimit: number): string => {
+			return [
+				'oversizedAccount',
+				user.account_type,
+				alertLimit * 100,
+				// Also add the month/date to the key so that we don't send more than one email a month
+				dayjs(Date.now()).format('MMYY'),
+			].join('::');
+		};
+
+		await this.withTransaction(async () => {
+			for (const user of users) {
+				const maxTotalItemSize = getMaxTotalItemSize(user);
+				const account = accountByType(user.account_type);
+
+				if (user.total_item_size > maxTotalItemSize * alertLimitMax) {
+					await this.models().email().push({
+						...oversizedAccount2({
+							percentLimit: alertLimitMax * 100,
+							url: this.baseUrl,
+						}),
+						...this.userEmailDetails(user),
+						sender_id: EmailSender.Support,
+						key: makeEmailKey(user, alertLimitMax),
+					});
+
+					await this.models().userFlag().add(user.id, UserFlagType.AccountOverLimit);
+				} else if (maxTotalItemSize > account.max_total_item_size * alertLimit1) {
+					await this.models().email().push({
+						...oversizedAccount1({
+							percentLimit: alertLimit1 * 100,
+							url: this.baseUrl,
+						}),
+						...this.userEmailDetails(user),
+						sender_id: EmailSender.Support,
+						key: makeEmailKey(user, alertLimit1),
+					});
+				}
+			}
+		}, 'UserModel::handleOversizedAccounts');
 	}
 
 	private formatValues(user: User): User {
@@ -416,7 +466,7 @@ export default class UserModel extends BaseModel<User> {
 			if (isNew) UserModel.eventEmitter.emit('created');
 
 			return savedUser;
-		});
+		}, 'UserModel::save');
 	}
 
 }

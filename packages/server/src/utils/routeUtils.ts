@@ -1,5 +1,5 @@
 import { baseUrl } from '../config';
-import { Item, ItemAddressingType, Uuid } from '../db';
+import { Item, ItemAddressingType, Uuid } from '../services/database/types';
 import { ErrorBadRequest, ErrorForbidden, ErrorNotFound } from './errors';
 import Router from './Router';
 import { AppContext, HttpMethod, RouteType } from './types';

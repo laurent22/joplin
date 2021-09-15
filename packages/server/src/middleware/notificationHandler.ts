@@ -1,6 +1,7 @@
 import { AppContext, KoaNext, NotificationView } from '../utils/types';
 import { isApiRequest } from '../utils/requestUtils';
-import { defaultAdminEmail, defaultAdminPassword, NotificationLevel } from '../db';
+import { NotificationLevel } from '../services/database/types';
+import { defaultAdminEmail, defaultAdminPassword } from '../db';
 import { _ } from '@joplin/lib/locale';
 import Logger from '@joplin/lib/Logger';
 import * as MarkdownIt from 'markdown-it';

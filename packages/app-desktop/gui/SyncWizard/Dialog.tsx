@@ -10,8 +10,8 @@ import useElementSize from '@joplin/lib/hooks/useElementSize';
 import Button, { ButtonLevel } from '../Button/Button';
 import bridge from '../../services/bridge';
 import StyledInput from '../style/StyledInput';
-import Setting from '../../../lib/models/Setting';
-import SyncTargetJoplinCloud from '../../../lib/SyncTargetJoplinCloud';
+import Setting from '@joplin/lib/models/Setting';
+import SyncTargetJoplinCloud from '@joplin/lib/SyncTargetJoplinCloud';
 import StyledLink from '../style/StyledLink';
 
 interface Props {

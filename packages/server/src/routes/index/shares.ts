@@ -3,7 +3,7 @@ import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
 import { ErrorForbidden, ErrorNotFound } from '../../utils/errors';
-import { Item, Share } from '../../db';
+import { Item, Share } from '../../services/database/types';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { FileViewerResponse, renderItem as renderJoplinItem } from '../../utils/joplinUtils';
 import { friendlySafeFilename } from '@joplin/lib/path-utils';

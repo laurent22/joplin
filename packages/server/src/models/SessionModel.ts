@@ -1,5 +1,5 @@
 import BaseModel from './BaseModel';
-import { User, Session, Uuid } from '../db';
+import { User, Session, Uuid } from '../services/database/types';
 import uuidgen from '../utils/uuidgen';
 import { ErrorForbidden } from '../utils/errors';
 

@@ -1,4 +1,4 @@
-import { KeyValue } from '../db';
+import { KeyValue } from '../services/database/types';
 import BaseModel from './BaseModel';
 
 export enum ValueType {
@@ -48,7 +48,7 @@ export default class NotificationModel extends BaseModel<KeyValue> {
 				value: this.serializeValue(value),
 				type,
 			});
-		});
+		}, 'KeyValueModel::setValue');
 	}
 
 	public async value<T>(key: string, defaultValue: Value = null): Promise<T> {

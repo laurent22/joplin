@@ -53,7 +53,7 @@ export default class InteropService {
 				{
 					...defaultImportExportModule(ModuleType.Importer),
 					format: 'md',
-					fileExtensions: ['md', 'markdown', 'txt'],
+					fileExtensions: ['md', 'markdown', 'txt', 'html'],
 					sources: [FileSystemItem.File, FileSystemItem.Directory],
 					isNoteArchive: false, // Tells whether the file can contain multiple notes (eg. Enex or Jex format)
 					description: _('Markdown'),
@@ -401,10 +401,16 @@ export default class InteropService {
 			resourcePaths: {},
 		};
 
+		// Prepare to process each type before starting any
+		// This will allow exporters to operate on the full context
 		for (let typeOrderIndex = 0; typeOrderIndex < typeOrder.length; typeOrderIndex++) {
 			const type = typeOrder[typeOrderIndex];
 
 			await exporter.prepareForProcessingItemType(type, itemsToExport);
+		}
+
+		for (let typeOrderIndex = 0; typeOrderIndex < typeOrder.length; typeOrderIndex++) {
+			const type = typeOrder[typeOrderIndex];
 
 			for (let i = 0; i < itemsToExport.length; i++) {
 				const itemType = itemsToExport[i].type;

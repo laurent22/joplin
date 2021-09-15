@@ -10,7 +10,7 @@ import Logger from '@joplin/lib/Logger';
 import getRawBody = require('raw-body');
 import { AccountType } from '../../models/UserModel';
 import { betaUserTrialPeriodDays, cancelSubscription, initStripe, isBetaUser, priceIdToAccountType, stripeConfig } from '../../utils/stripe';
-import { Subscription } from '../../db';
+import { Subscription, UserFlagType } from '../../services/database/types';
 import { findPrice, PricePeriod } from '@joplin/lib/utils/joplinCloud';
 
 const logger = Logger.create('/stripe');
@@ -137,6 +137,14 @@ export const postHandlers: PostHandlers = {
 	//
 	// - The public config is under packages/server/stripeConfig.json
 	// - The private config is in the server .env file
+	//
+	// # Failed Stripe cli login
+	//
+	// If the tool show this error, with code "api_key_expired":
+	//
+	// > FATAL Error while authenticating with Stripe: Authorization failed
+	//
+	// Need to logout and login again to refresh the CLI token - `stripe logout && stripe login`
 
 	webhook: async (stripe: Stripe, _path: SubPath, ctx: AppContext, event: Stripe.Event = null, logErrors: boolean = true) => {
 		event = event ? event : await stripeEvent(stripe, ctx.req);
@@ -250,14 +258,20 @@ export const postHandlers: PostHandlers = {
 						logger.info(`Setting up subscription for existing user: ${existingUser.email}`);
 
 						// First set the account type correctly (in case the
-						// user also upgraded or downgraded their account). Also
-						// re-enable upload if it was disabled.
+						// user also upgraded or downgraded their account).
 						await models.user().save({
 							id: existingUser.id,
 							account_type: accountType,
-							can_upload: 1,
-							enabled: 1,
 						});
+
+						// Also clear any payment and subscription related flags
+						// since if we're here it means payment was successful
+						await models.userFlag().removeMulti(existingUser.id, [
+							UserFlagType.FailedPaymentWarning,
+							UserFlagType.FailedPaymentFinal,
+							UserFlagType.SubscriptionCancelled,
+							UserFlagType.AccountWithoutSubscription,
+						]);
 
 						// Then save the subscription
 						await models.subscription().save({
@@ -319,8 +333,8 @@ export const postHandlers: PostHandlers = {
 				// by the user. In that case, we disable the user.
 
 				const { sub } = await getSubscriptionInfo(event, ctx);
-				await models.user().enable(sub.user_id, false);
 				await models.subscription().toggleSoftDelete(sub.id, true);
+				await models.userFlag().add(sub.user_id, UserFlagType.SubscriptionCancelled);
 			},
 
 			'customer.subscription.updated': async () => {
@@ -420,7 +434,7 @@ const getHandlers: Record<string, StripeRouteHandler> = {
 			<body>
 				<button id="checkout">Subscribe</button>
 				<script>
-					var PRICE_ID = ${basicPrice.id};
+					var PRICE_ID = ${JSON.stringify(basicPrice.id)};
 
 					function handleResult() {
 						console.info('Redirected to checkout');

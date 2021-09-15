@@ -1,4 +1,4 @@
-import { User } from '../../db';
+import { User } from '../../services/database/types';
 import { accountByType } from '../UserModel';
 
 export function getCanShareFolder(user: User): number {

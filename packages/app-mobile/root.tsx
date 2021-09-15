@@ -14,7 +14,7 @@ import ResourceService from '@joplin/lib/services/ResourceService';
 import KvStore from '@joplin/lib/services/KvStore';
 import NoteScreen from './components/screens/Note';
 import UpgradeSyncTargetScreen from './components/screens/UpgradeSyncTargetScreen';
-import Setting from '@joplin/lib/models/Setting';
+import Setting, { Env } from '@joplin/lib/models/Setting';
 import RNFetchBlob from 'rn-fetch-blob';
 import PoorManIntervals from '@joplin/lib/PoorManIntervals';
 import reducer from '@joplin/lib/reducer';
@@ -97,13 +97,13 @@ SyncTargetRegistry.addClass(SyncTargetJoplinCloud);
 
 import FsDriverRN from './utils/fs-driver-rn';
 import DecryptionWorker from '@joplin/lib/services/DecryptionWorker';
-import EncryptionService from '@joplin/lib/services/EncryptionService';
+import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
 import MigrationService from '@joplin/lib/services/MigrationService';
 import { clearSharedFilesCache } from './utils/ShareUtils';
 import setIgnoreTlsErrors from './utils/TlsUtils';
 import ShareService from '@joplin/lib/services/share/ShareService';
 import setupNotifications from './utils/setupNotifications';
-import { loadMasterKeysFromSettings } from '@joplin/lib/services/e2ee/utils';
+import { loadMasterKeysFromSettings, migrateMasterPassword } from '@joplin/lib/services/e2ee/utils';
 import SyncTargetNone from '../lib/SyncTargetNone';
 
 let storeDispatch = function(_action: any) {};
@@ -474,7 +474,7 @@ async function initialize(dispatch: Function) {
 		if (Setting.value('env') == 'prod') {
 			await db.open({ name: 'joplin.sqlite' });
 		} else {
-			await db.open({ name: 'joplin-101.sqlite' });
+			await db.open({ name: 'joplin-104.sqlite' });
 
 			// await db.clearForTesting();
 		}
@@ -483,6 +483,14 @@ async function initialize(dispatch: Function) {
 		reg.logger().info('Loading settings...');
 
 		await loadKeychainServiceAndSettings(KeychainServiceDriverMobile);
+		await migrateMasterPassword();
+
+		if (Setting.value('env') === Env.Dev) {
+			// Setting.setValue('sync.10.path', 'https://api.joplincloud.com');
+			// Setting.setValue('sync.10.userContentPath', 'https://joplinusercontent.com');
+			Setting.setValue('sync.10.path', 'http://api.joplincloud.local:22300');
+			Setting.setValue('sync.10.userContentPath', 'http://joplinusercontent.local:22300');
+		}
 
 		if (!Setting.value('clientId')) Setting.setValue('clientId', uuid.create());
 
@@ -530,7 +538,6 @@ async function initialize(dispatch: Function) {
 		// ----------------------------------------------------------------
 
 		EncryptionService.fsDriver_ = fsDriver;
-		EncryptionService.instance().setLogger(mainLogger);
 		// eslint-disable-next-line require-atomic-updates
 		BaseItem.encryptionService_ = EncryptionService.instance();
 		BaseItem.shareService_ = ShareService.instance();
@@ -634,7 +641,7 @@ async function initialize(dispatch: Function) {
 
 class AppComponent extends React.Component {
 
-	constructor() {
+	public constructor() {
 		super();
 
 		this.state = {
@@ -677,7 +684,7 @@ class AppComponent extends React.Component {
 	// https://github.com/laurent22/joplin/issues/3807
 	// https://discourse.joplinapp.org/t/webdav-config-encryption-config-randomly-lost-on-android/11364
 	// https://discourse.joplinapp.org/t/android-keeps-on-resetting-my-sync-and-theme/11443
-	async componentDidMount() {
+	public async componentDidMount() {
 		if (this.props.appState == 'starting') {
 			this.props.dispatch({
 				type: 'APP_STATE_SET',
@@ -725,15 +732,18 @@ class AppComponent extends React.Component {
 		setupQuickActions(this.props.dispatch, this.props.selectedFolderId);
 
 		await setupNotifications(this.props.dispatch);
+
+		// Setting.setValue('encryption.masterPassword', 'WRONG');
+		// setTimeout(() => NavService.go('EncryptionConfig'), 2000);
 	}
 
-	componentWillUnmount() {
+	public componentWillUnmount() {
 		AppState.removeEventListener('change', this.onAppStateChange_);
 		Linking.removeEventListener('url', this.handleOpenURL_);
 		if (this.unsubscribeNetInfoHandler_) this.unsubscribeNetInfoHandler_();
 	}
 
-	componentDidUpdate(prevProps: any) {
+	public componentDidUpdate(prevProps: any) {
 		if (this.props.showSideMenu !== prevProps.showSideMenu) {
 			Animated.timing(this.state.sideMenuContentOpacity, {
 				toValue: this.props.showSideMenu ? 0.5 : 0,
@@ -742,7 +752,7 @@ class AppComponent extends React.Component {
 		}
 	}
 
-	async backButtonHandler() {
+	private async backButtonHandler() {
 		if (this.props.noteSelectionEnabled) {
 			this.props.dispatch({ type: 'NOTE_SELECTION_END' });
 			return true;
@@ -763,7 +773,7 @@ class AppComponent extends React.Component {
 		return false;
 	}
 
-	async handleShareData() {
+	private async handleShareData() {
 		const sharedData = await ShareExtension.data();
 		if (sharedData) {
 			reg.logger().info('Received shared data');
@@ -775,14 +785,14 @@ class AppComponent extends React.Component {
 		}
 	}
 
-	UNSAFE_componentWillReceiveProps(newProps: any) {
+	public UNSAFE_componentWillReceiveProps(newProps: any) {
 		if (newProps.syncStarted != this.lastSyncStarted_) {
 			if (!newProps.syncStarted) FoldersScreenUtils.refreshFolders();
 			this.lastSyncStarted_ = newProps.syncStarted;
 		}
 	}
 
-	sideMenu_change(isOpen: boolean) {
+	private sideMenu_change(isOpen: boolean) {
 		// Make sure showSideMenu property of state is updated
 		// when the menu is open/closed.
 		this.props.dispatch({
@@ -790,7 +800,7 @@ class AppComponent extends React.Component {
 		});
 	}
 
-	render() {
+	public render() {
 		if (this.props.appState != 'ready') return null;
 		const theme = themeStyle(this.props.themeId);
 

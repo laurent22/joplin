@@ -1,5 +1,5 @@
 import { ErrorBadRequest, ErrorNotFound } from '../../utils/errors';
-import { Share, ShareType } from '../../db';
+import { Share, ShareType } from '../../services/database/types';
 import { bodyFields, ownerRequired } from '../../utils/requestUtils';
 import { SubPath } from '../../utils/routeUtils';
 import Router from '../../utils/Router';

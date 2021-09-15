@@ -1,4 +1,4 @@
-import { ChangeType, Share, ShareType, ShareUser, ShareUserStatus } from '../../db';
+import { ChangeType, Share, ShareType, ShareUser, ShareUserStatus } from '../../services/database/types';
 import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, createNote, createFolder, updateItem, createItemTree, makeNoteSerializedBody, updateNote, expectHttpError, createResource } from '../../utils/testing/testUtils';
 import { postApi, patchApi, getApi, deleteApi } from '../../utils/testing/apiUtils';
 import { PaginatedDeltaChanges } from '../../models/ChangeModel';
@@ -844,7 +844,10 @@ describe('shares.folder', function() {
 	test('should check permissions - cannot share with a disabled account', async function() {
 		const { session: session1 } = await createUserAndSession(1);
 		const { user: user2, session: session2 } = await createUserAndSession(2);
-		await models().user().disable(user2.id);
+		await models().user().save({
+			id: user2.id,
+			enabled: 0,
+		});
 
 		await expectHttpError(async () =>
 			shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F1', [

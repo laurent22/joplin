@@ -1,6 +1,6 @@
 import { CommandDeclaration, CommandRuntime, CommandContext } from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
-import { AppState } from '../../../app';
+import { AppState } from '../../../app.reducer';
 
 export const declaration: CommandDeclaration = {
 	name: 'toggleLayoutMoveMode',

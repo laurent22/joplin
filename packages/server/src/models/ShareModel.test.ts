@@ -1,6 +1,6 @@
 import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, checkThrowAsync, createItem, createItemTree } from '../utils/testing/testUtils';
 import { ErrorBadRequest, ErrorNotFound } from '../utils/errors';
-import { ShareType } from '../db';
+import { ShareType } from '../services/database/types';
 import { shareWithUserAndAccept } from '../utils/testing/shareApiUtils';
 
 describe('ShareModel', function() {

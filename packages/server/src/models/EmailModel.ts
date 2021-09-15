@@ -1,4 +1,4 @@
-import { Uuid, Email, EmailSender } from '../db';
+import { Uuid, Email, EmailSender } from '../services/database/types';
 import BaseModel from './BaseModel';
 
 export interface EmailToSend {

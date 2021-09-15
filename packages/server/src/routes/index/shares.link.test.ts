@@ -1,4 +1,4 @@
-import { Share, ShareType } from '../../db';
+import { Share, ShareType } from '../../services/database/types';
 import routeHandler from '../../middleware/routeHandler';
 import { ErrorForbidden } from '../../utils/errors';
 import { postApi } from '../../utils/testing/apiUtils';
@@ -73,6 +73,7 @@ describe('shares.link', function() {
 		expect(bodyHtml).toContain('rendered-md'); // Means we have the HTML body
 		expect(bodyHtml).toContain('Testing title'); // Means the note has been rendered
 		expect(bodyHtml).toContain('Testing body');
+		expect(bodyHtml).toContain('<title>Testing title'); // Means the page title is set to the note title
 	});
 
 	test('should load plugins', async function() {
@@ -174,7 +175,10 @@ describe('shares.link', function() {
 			note_id: noteItem.jop_id,
 		});
 
-		await models().user().disable(user.id);
+		await models().user().save({
+			id: user.id,
+			enabled: 0,
+		});
 
 		await expectHttpError(async () => getShareContent(share.id), ErrorForbidden.httpCode);
 	});
