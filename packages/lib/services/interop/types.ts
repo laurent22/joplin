@@ -103,6 +103,21 @@ export interface ImportExportResult {
 	warnings: string[];
 }
 
+// These are the fields that will be included in an exported YAML note
+export interface YamlExportMetaData {
+	'Title'?: string;
+	'Source'?: string;
+	'Author'?: string;
+	'Latitude'?: number;
+	'Longitude'?: number;
+	'Altitude'?: number;
+	'Completed?'?: boolean;
+	'Due'?: string;
+	'Updated'?: string;
+	'Created'?: string;
+	'Tags'?: string[];
+}
+
 function moduleFullLabel(moduleSource: FileSystemItem = null): string {
 	const label = [`${this.format.toUpperCase()} - ${this.description}`];
 	if (moduleSource && this.sources.length > 1) {

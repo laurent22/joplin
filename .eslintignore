@@ -1279,6 +1279,9 @@ packages/lib/services/interop/InteropService_Exporter_Md.js.map
 packages/lib/services/interop/InteropService_Exporter_Raw.d.ts
 packages/lib/services/interop/InteropService_Exporter_Raw.js
 packages/lib/services/interop/InteropService_Exporter_Raw.js.map
+packages/lib/services/interop/InteropService_Exporter_Yaml.d.ts
+packages/lib/services/interop/InteropService_Exporter_Yaml.js
+packages/lib/services/interop/InteropService_Exporter_Yaml.js.map
 packages/lib/services/interop/InteropService_Importer_Base.d.ts
 packages/lib/services/interop/InteropService_Importer_Base.js
 packages/lib/services/interop/InteropService_Importer_Base.js.map
@@ -1303,6 +1306,12 @@ packages/lib/services/interop/InteropService_Importer_Md.test.js.map
 packages/lib/services/interop/InteropService_Importer_Raw.d.ts
 packages/lib/services/interop/InteropService_Importer_Raw.js
 packages/lib/services/interop/InteropService_Importer_Raw.js.map
+packages/lib/services/interop/InteropService_Importer_Yaml.d.ts
+packages/lib/services/interop/InteropService_Importer_Yaml.js
+packages/lib/services/interop/InteropService_Importer_Yaml.js.map
+packages/lib/services/interop/InteropService_Importer_Yaml.test.d.ts
+packages/lib/services/interop/InteropService_Importer_Yaml.test.js
+packages/lib/services/interop/InteropService_Importer_Yaml.test.js.map
 packages/lib/services/interop/types.d.ts
 packages/lib/services/interop/types.js
 packages/lib/services/interop/types.js.map

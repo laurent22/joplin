@@ -60,6 +60,14 @@ export default class InteropService {
 				},
 				{
 					...defaultImportExportModule(ModuleType.Importer),
+					format: 'yaml',
+					fileExtensions: ['md', 'markdown', 'txt', 'html'],
+					sources: [FileSystemItem.File, FileSystemItem.Directory],
+					isNoteArchive: false, // Tells whether the file can contain multiple notes (eg. Enex or Jex format)
+					description: _('Markdown + YAML'),
+				},
+				{
+					...defaultImportExportModule(ModuleType.Importer),
 					format: 'raw',
 					sources: [FileSystemItem.Directory],
 					description: _('Joplin Export Directory'),
@@ -104,6 +112,12 @@ export default class InteropService {
 					format: 'md',
 					target: FileSystemItem.Directory,
 					description: _('Markdown'),
+				},
+				{
+					...defaultImportExportModule(ModuleType.Exporter),
+					format: 'yaml',
+					target: FileSystemItem.Directory,
+					description: _('Markdown + YAML'),
 				},
 				{
 					...defaultImportExportModule(ModuleType.Exporter),

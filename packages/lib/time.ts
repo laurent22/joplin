@@ -110,6 +110,13 @@ class Time {
 		return m.isValid() ? m.toDate() : defaultValue;
 	}
 
+	public anythingToMs(o: any, defaultValue: Date = null) {
+		if (o && o.toDate) return o.toDate();
+		if (!o) return defaultValue;
+		const m = moment(o);
+		return m.isValid() ? m.toDate().getTime() : defaultValue;
+	}
+
 	public msleep(ms: number) {
 		return new Promise((resolve: Function) => {
 			shim.setTimeout(() => {
