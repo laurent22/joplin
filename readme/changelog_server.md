@@ -1,5 +1,9 @@
 # Joplin Server Changelog
 
+## [server-v2.4.8-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.4.8-beta) (Pre-release) - 2021-09-15T22:16:59Z
+
+- New: Added support for app level slow SQL query log (5e8b742)
+
 ## [server-v2.4.7-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.4.7-beta) (Pre-release) - 2021-09-15T15:58:46Z
 
 - Improved: Improve flag logic (c229821)

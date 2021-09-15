@@ -1,6 +1,6 @@
 {
   "name": "@joplin/server",
-  "version": "2.4.7",
+  "version": "2.4.8",
   "private": true,
   "scripts": {
     "start-dev": "nodemon --config nodemon.json --ext ts,js,mustache,css,tsx dist/app.js --env dev",
