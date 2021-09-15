@@ -2,6 +2,7 @@ import { routeResponseFormat, Response, RouteResponseFormat, execRequest } from 
 import { AppContext, Env } from '../utils/types';
 import { isView, View } from '../services/MustacheService';
 import config from '../config';
+import { userIp } from '../utils/requestUtils';
 
 export default async function(ctx: AppContext) {
 	const requestStartTime = Date.now();
@@ -26,9 +27,9 @@ export default async function(ctx: AppContext) {
 		}
 	} catch (error) {
 		if (error.httpCode >= 400 && error.httpCode < 500) {
-			ctx.joplin.appLogger().error(`${error.httpCode}: ` + `${ctx.request.method} ${ctx.path}` + ` : ${error.message}`);
+			ctx.joplin.appLogger().error(`${error.httpCode}: ` + `${ctx.request.method} ${ctx.path}` + `: ${userIp(ctx)}: ${error.message}`);
 		} else {
-			ctx.joplin.appLogger().error(error);
+			ctx.joplin.appLogger().error(userIp(ctx), error);
 		}
 
 		// Uncomment this when getting HTML blobs as errors while running tests.

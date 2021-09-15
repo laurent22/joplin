@@ -435,7 +435,7 @@ export default class UserModel extends BaseModel<User> {
 
 	private formatValues(user: User): User {
 		const output: User = { ...user };
-		if ('email' in output) output.email = user.email.trim().toLowerCase();
+		if ('email' in output) output.email = (`${user.email}`).trim().toLowerCase();
 		return output;
 	}
 

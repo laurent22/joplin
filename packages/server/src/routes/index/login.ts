@@ -2,7 +2,7 @@ import { SubPath, redirect, makeUrl, UrlType } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
-import { formParse } from '../../utils/requestUtils';
+import { formParse, userIp } from '../../utils/requestUtils';
 import config from '../../config';
 import defaultView from '../../utils/defaultView';
 import { View } from '../../services/MustacheService';
@@ -27,7 +27,7 @@ router.get('login', async (_path: SubPath, _ctx: AppContext) => {
 });
 
 router.post('login', async (_path: SubPath, ctx: AppContext) => {
-	await limiterLoginBruteForce(ctx.ip);
+	await limiterLoginBruteForce(userIp(ctx));
 
 	try {
 		const body = await formParse(ctx.req);
