@@ -1,5 +1,10 @@
 # Joplin Server Changelog
 
+## [server-v2.4.7-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.4.7-beta) (Pre-release) - 2021-09-15T15:58:46Z
+
+- Improved: Improve flag logic (c229821)
+- Fixed: Fixed handling of brute force limiter by getting correct user IP (3ce947e)
+
 ## [server-v2.4.6-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.4.6-beta) (Pre-release) - 2021-09-14T15:02:21Z
 
 - New: Add link to Stripe subscription page to manage payment details (4e7fe66)
