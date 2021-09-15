@@ -104,25 +104,55 @@ export async function waitForConnection(dbConfig: DatabaseConfig): Promise<Conne
 	}
 }
 
+function makeSlowQueryHandler(duration: number, connection: any, sql: string, bindings: any[]) {
+	return setTimeout(() => {
+		try {
+			logger.warn(`Slow query (${duration}ms+):`, connection.raw(sql, bindings).toString());
+		} catch (error) {
+			logger.error('Could not log slow query', { sql, bindings }, error);
+		}
+	}, duration);
+}
+
+export function setupSlowQueryLog(connection: DbConnection, slowQueryLogMinDuration: number) {
+	interface QueryInfo {
+		timeoutId: any;
+		startTime: number;
+	}
+
+	const queryInfos: Record<any, QueryInfo> = {};
+
+	connection.on('query', (data) => {
+		const timeoutId = makeSlowQueryHandler(slowQueryLogMinDuration, connection, data.sql, data.bindings);
+
+		queryInfos[data.__knexQueryUid] = {
+			timeoutId,
+			startTime: Date.now(),
+		};
+	});
+
+	connection.on('query-response', (_response, data) => {
+		const q = queryInfos[data.__knexQueryUid];
+		if (q) {
+			clearTimeout(q.timeoutId);
+			delete queryInfos[data.__knexQueryUid];
+		}
+	});
+
+	connection.on('query-error', (_response, data) => {
+		const q = queryInfos[data.__knexQueryUid];
+		if (q) {
+			clearTimeout(q.timeoutId);
+			delete queryInfos[data.__knexQueryUid];
+		}
+	});
+}
+
 export async function connectDb(dbConfig: DatabaseConfig): Promise<DbConnection> {
 	const connection = knex(makeKnexConfig(dbConfig));
 
-	const debugSlowQueries = false;
-
-	if (debugSlowQueries) {
-		const startTimes: Record<string, number> = {};
-
-		const slowQueryDuration = 10;
-
-		connection.on('query', (data) => {
-			startTimes[data.__knexQueryUid] = Date.now();
-		});
-
-		connection.on('query-response', (_response, data) => {
-			const duration = Date.now() - startTimes[data.__knexQueryUid];
-			if (duration < slowQueryDuration) return;
-			console.info(`SQL: ${data.sql} (${duration}ms)`);
-		});
+	if (dbConfig.slowQueryLogEnabled) {
+		setupSlowQueryLog(connection, dbConfig.slowQueryLogMinDuration);
 	}
 
 	return connection;

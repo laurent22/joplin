@@ -48,12 +48,26 @@ export interface EnvVariables {
 	BUSINESS_EMAIL?: string;
 
 	COOKIES_SECURE?: string;
+
+	SLOW_QUERY_LOG_ENABLED?: string;
+	SLOW_QUERY_LOG_MIN_DURATION?: string; // ms
 }
 
 let runningInDocker_: boolean = false;
 
 export function runningInDocker(): boolean {
 	return runningInDocker_;
+}
+
+function envParseBool(s: string): boolean {
+	return s === '1';
+}
+
+function envParseInt(s: string, defaultValue: number = null): number {
+	if (!s) return defaultValue === null ? 0 : defaultValue;
+	const output = Number(s);
+	if (isNaN(output)) throw new Error(`Invalid number: ${s}`);
+	return output;
 }
 
 function databaseHostFromEnv(runningInDocker: boolean, env: EnvVariables): string {
@@ -72,8 +86,16 @@ function databaseHostFromEnv(runningInDocker: boolean, env: EnvVariables): strin
 }
 
 function databaseConfigFromEnv(runningInDocker: boolean, env: EnvVariables): DatabaseConfig {
+	const baseConfig: DatabaseConfig = {
+		client: DatabaseConfigClient.Null,
+		name: '',
+		slowQueryLogEnabled: envParseBool(env.SLOW_QUERY_LOG_ENABLED),
+		slowQueryLogMinDuration: envParseInt(env.SLOW_QUERY_LOG_MIN_DURATION, 10000),
+	};
+
 	if (env.DB_CLIENT === 'pg') {
 		return {
+			...baseConfig,
 			client: DatabaseConfigClient.PostgreSQL,
 			name: env.POSTGRES_DATABASE || 'joplin',
 			user: env.POSTGRES_USER || 'joplin',
@@ -84,6 +106,7 @@ function databaseConfigFromEnv(runningInDocker: boolean, env: EnvVariables): Dat
 	}
 
 	return {
+		...baseConfig,
 		client: DatabaseConfigClient.SQLite,
 		name: env.SQLITE_DATABASE,
 		asyncStackTraces: true,

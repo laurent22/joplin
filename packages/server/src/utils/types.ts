@@ -50,6 +50,7 @@ export interface AppContext extends Koa.Context {
 }
 
 export enum DatabaseConfigClient {
+	Null = 'null',
 	PostgreSQL = 'pg',
 	SQLite = 'sqlite3',
 }
@@ -64,6 +65,8 @@ export interface DatabaseConfig {
 	user?: string;
 	password?: string;
 	asyncStackTraces?: boolean;
+	slowQueryLogEnabled?: boolean;
+	slowQueryLogMinDuration?: number;
 }
 
 export interface MailerConfig {
