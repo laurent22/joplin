@@ -3,7 +3,7 @@ import BaseModel from '../../BaseModel';
 import Note from '../../models/Note';
 import NoteTag from '../../models/NoteTag';
 import Tag from '../../models/Tag';
-import Time from '../../time';
+import time from '../../time';
 import { NoteEntity } from '../database/types';
 import { YamlExportMetaData } from './types';
 
@@ -57,7 +57,7 @@ export default class InteropService_Exporter_Yaml extends InteropService_Exporte
 	}
 
 	private convertDate(datetime: number): string {
-		return Time.formatMsToLocal(datetime);
+		return time.formatMsToLocal(datetime);
 	}
 
 	private extractMetadata(note: NoteEntity) {

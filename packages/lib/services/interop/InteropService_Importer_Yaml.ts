@@ -1,7 +1,7 @@
 import InteropService_Importer_Md from './InteropService_Importer_Md';
 import Note from '../../models/Note';
 import Tag from '../../models/Tag';
-import Time from '../../time';
+import time from '../../time';
 import { NoteEntity } from '../database/types';
 
 import * as yaml from 'js-yaml';
@@ -71,8 +71,8 @@ export default class InteropService_Importer_Yaml extends InteropService_Importe
 			is_todo: ('completed?' in md) ? 1 : 0,
 		};
 
-		if (md['created']) { metadata['user_created_time'] = Time.anythingToMs(md['created']); }
-		if (md['updated']) { metadata['user_updated_time'] = Time.anythingToMs(md['updated']); }
+		if (md['created']) { metadata['user_created_time'] = time.anythingToMs(md['created']); }
+		if (md['updated']) { metadata['user_updated_time'] = time.anythingToMs(md['updated']); }
 
 		if ('latitude' in md) { metadata['latitude'] = md['latitude']; }
 		if ('longitude' in md) { metadata['longitude'] = md['longitude']; }
@@ -83,7 +83,7 @@ export default class InteropService_Importer_Yaml extends InteropService_Importe
 				// Completed time isn't preserved, so we use a sane choice here
 				metadata['todo_completed'] = metadata['user_updated_time'];
 			}
-			if ('due' in md) { metadata['todo_due'] = Time.anythingToMs(md['due']); }
+			if ('due' in md) { metadata['todo_due'] = time.anythingToMs(md['due']); }
 		}
 
 		// Tags are handled seperately from typical metadata
@@ -106,7 +106,7 @@ export default class InteropService_Importer_Yaml extends InteropService_Importe
 
 		const noteItem = await Note.save(updatedNote, { isNew: false, autoTimestamp: false });
 
-		for (const tag of tags) { void Tag.addNoteTagByTitle(noteItem.id, tag); }
+		for (const tag of tags) { await Tag.addNoteTagByTitle(noteItem.id, tag); }
 
 		return noteItem;
 	}

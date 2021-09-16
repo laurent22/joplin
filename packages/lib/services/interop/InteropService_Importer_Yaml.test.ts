@@ -1,7 +1,7 @@
 import InteropService_Importer_Yaml from '../../services/interop/InteropService_Importer_Yaml';
 import Note from '../../models/Note';
 import Tag from '../../models/Tag';
-import Time from '../../time';
+import time from '../../time';
 import { setupDatabaseAndSynchronizer, supportDir, switchClient } from '../../testing/test-utils';
 
 
@@ -19,10 +19,11 @@ describe('InteropService_Importer_Yaml: importMetadata', function() {
 	});
 	it('should import file and set all metadata correctly', async function() {
 		const note = await importNote(`${supportDir}/test_notes/yaml/full.md`);
+		const format = 'DD/MM/YYYY HH:mm';
 
 		expect(note.title).toBe('Test Note Title');
-		expect(note.user_updated_time).toBe(1556754840000);
-		expect(note.user_created_time).toBe(1556754840000);
+		expect(time.formatMsToLocal(note.user_updated_time, format)).toBe('01/05/2019 16:54');
+		expect(time.formatMsToLocal(note.user_created_time, format)).toBe('01/05/2019 16:54');
 		expect(note.source_url).toBe('https://joplinapp.org');
 		expect(note.author).toBe('Joplin');
 		expect(note.latitude).toBe('37.08402100');
@@ -30,11 +31,8 @@ describe('InteropService_Importer_Yaml: importMetadata', function() {
 		expect(note.altitude).toBe('0.0000');
 		expect(note.is_todo).toBe(1);
 		expect(note.todo_completed).toBeUndefined();
-		expect(note.todo_due).toBe(1629615600000);
+		expect(time.formatMsToLocal(note.todo_due, format)).toBe('22/08/2021 00:00');
 		expect(note.body).toBe('This is the note body\n');
-
-		// Wait for tags to be populated in the database
-		await Time.msleep(500);
 
 		const tags = await Tag.tagsByNoteId(note.id);
 		expect(tags.length).toBe(3);
@@ -58,9 +56,6 @@ describe('InteropService_Importer_Yaml: importMetadata', function() {
 		const itemIds = await Note.linkedItemIds(note.body);
 		expect(itemIds.length).toBe(1);
 
-		// Wait for tags to be populated in the database
-		await Time.msleep(500);
-
 		const tags = await Tag.tagsByNoteId(note.id);
 		expect(tags.length).toBe(1);
 	});
@@ -75,9 +70,6 @@ describe('InteropService_Importer_Yaml: importMetadata', function() {
 
 		expect(note.title).toBe('norm');
 		expect(note.body).toBe('note body\n');
-
-		// Wait for tags to be populated in the database
-		await Time.msleep(500);
 
 		const tags = await Tag.tagsByNoteId(note.id);
 		expect(tags.length).toBe(3);
