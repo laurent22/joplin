@@ -76,6 +76,9 @@ packages/app-cli/app/command-e2ee.js.map
 packages/app-cli/app/command-settingschema.d.ts
 packages/app-cli/app/command-settingschema.js
 packages/app-cli/app/command-settingschema.js.map
+packages/app-cli/app/command-testing.d.ts
+packages/app-cli/app/command-testing.js
+packages/app-cli/app/command-testing.js.map
 packages/app-cli/app/services/plugins/PluginRunner.d.ts
 packages/app-cli/app/services/plugins/PluginRunner.js
 packages/app-cli/app/services/plugins/PluginRunner.js.map
