@@ -122,8 +122,16 @@ export function setupSlowQueryLog(connection: DbConnection, slowQueryLogMinDurat
 
 	const queryInfos: Record<any, QueryInfo> = {};
 
+	// These queries do not return a response, so "query-response" is not
+	// called.
+	const ignoredQueries = /^BEGIN|SAVEPOINT|RELEASE SAVEPOINT|COMMIT|ROLLBACK/gi;
+
 	connection.on('query', (data) => {
-		const timeoutId = makeSlowQueryHandler(slowQueryLogMinDuration, connection, data.sql, data.bindings);
+		const sql: string = data.sql;
+
+		if (!sql || sql.match(ignoredQueries)) return;
+
+		const timeoutId = makeSlowQueryHandler(slowQueryLogMinDuration, connection, sql, data.bindings);
 
 		queryInfos[data.__knexQueryUid] = {
 			timeoutId,
