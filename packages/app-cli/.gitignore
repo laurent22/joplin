@@ -25,3 +25,4 @@ tests/support/onedrive-auth.txt
 build/
 patches/
 createUsers-*.txt
+tools/temp/

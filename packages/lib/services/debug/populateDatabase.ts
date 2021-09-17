@@ -8,6 +8,7 @@ export interface Options {
 	tagCount?: number;
 	tagsPerNote?: number;
 	silent?: number;
+	clearDatabase?: boolean;
 }
 
 function randomIndex(array: any[]): number {
@@ -45,10 +46,11 @@ export default async function populateDatabase(db: any, options: Options = null)
 		noteCount: 0,
 		tagCount: 0,
 		tagsPerNote: 0,
+		clearDatabase: false,
 		...options,
 	};
 
-	await db.clearForTesting();
+	if (options.clearDatabase) await db.clearForTesting();
 
 	const createdFolderIds: string[] = [];
 	const createdNoteIds: string[] = [];
