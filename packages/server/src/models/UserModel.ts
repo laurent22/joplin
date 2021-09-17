@@ -469,4 +469,12 @@ export default class UserModel extends BaseModel<User> {
 		}, 'UserModel::save');
 	}
 
+	public async saveMulti(users: User[], options: SaveOptions = {}): Promise<void> {
+		await this.withTransaction(async () => {
+			for (const user of users) {
+				await this.save(user, options);
+			}
+		}, 'UserModel::saveMulti');
+	}
+
 }
