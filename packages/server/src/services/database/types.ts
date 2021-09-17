@@ -6,6 +6,7 @@ export enum ItemAddressingType {
 }
 
 export enum NotificationLevel {
+	Error = 5,
 	Important = 10,
 	Normal = 20,
 }

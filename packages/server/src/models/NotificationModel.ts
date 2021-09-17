@@ -1,8 +1,10 @@
 import { Notification, NotificationLevel, Uuid } from '../services/database/types';
 import { ErrorUnprocessableEntity } from '../utils/errors';
+import uuidgen from '../utils/uuidgen';
 import BaseModel, { ValidateOptions } from './BaseModel';
 
 export enum NotificationKey {
+	Any = 'any',
 	ConfirmEmail = 'confirmEmail',
 	PasswordSet = 'passwordSet',
 	EmailConfirmed = 'emailConfirmed',
@@ -52,6 +54,10 @@ export default class NotificationModel extends BaseModel<Notification> {
 				level: NotificationLevel.Normal,
 				message: 'Thank you! Your account has been successfully upgraded to Pro.',
 			},
+			[NotificationKey.Any]: {
+				level: NotificationLevel.Normal,
+				message: '',
+			},
 		};
 
 		const type = notificationTypes[key];
@@ -72,7 +78,9 @@ export default class NotificationModel extends BaseModel<Notification> {
 			}
 		}
 
-		return this.save({ key, message, level, owner_id: userId });
+		const actualKey = key === NotificationKey.Any ? `any_${uuidgen()}` : key;
+
+		return this.save({ key: actualKey, message, level, owner_id: userId });
 	}
 
 	public async markAsRead(userId: Uuid, key: NotificationKey): Promise<void> {

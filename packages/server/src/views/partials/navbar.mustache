@@ -16,6 +16,9 @@
 						{{/global.owner.is_admin}}
 						<a class="navbar-item" href="{{{global.baseUrl}}}/items">Items</a>
 						<a class="navbar-item" href="{{{global.baseUrl}}}/changes">Log</a>
+						{{#global.owner.is_admin}}
+							<a class="navbar-item" href="{{{global.baseUrl}}}/tasks">Tasks</a>
+						{{/global.owner.is_admin}}
 					</div>
 					<div class="navbar-end">
 						{{#global.isJoplinCloud}}

@@ -98,7 +98,7 @@ export default class SubscriptionModel extends BaseModel<Subscription> {
 			// failed.
 			//
 			// We don't update the user can_upload and enabled properties here
-			// because it's done after a few days from CronService.
+			// because it's done after a few days from TaskService.
 			if (!sub.last_payment_failed_time) {
 				const user = await this.models().user().load(sub.user_id, { fields: ['email', 'id', 'full_name'] });
 
