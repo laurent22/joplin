@@ -1,3 +1,20 @@
+// This script can be used to simulate a running production environment, by
+// having multiple users in parallel changing notes and synchronising.
+//
+// To get it working:
+//
+// - Run the Postgres database -- `sudo docker-compose --file docker-compose.db-dev.yml up`
+// - Update the DB parameters in ~/joplin-credentials/server.env to use the dev
+//   database
+// - Run the server - `JOPLIN_IS_TESTING=1 npm run start-dev`
+// - Then run this script - `node populateDatabase.js`
+//
+// Currently it doesn't actually create the users, so that should be done using:
+//
+// curl --data '{"action": "createTestUsers", "count": 400, "fromNum": 1}' -H 'Content-Type: application/json' http://api.joplincloud.local:22300/api/debug
+//
+// That will create n users with email `user<n>@example.com`
+
 import * as fs from 'fs-extra';
 import { homedir } from 'os';
 import { execCommand2 } from '@joplin/tools/tool-utils';
@@ -73,8 +90,13 @@ const main = async () => {
 	// run the scripts (faster)
 	await execCommand2(['npm', 'run', 'build']);
 
+	const focusUserNum = 400;
+
 	while (true) {
-		const userNum = randomInt(minUserNum, maxUserNum);
+		let userNum = randomInt(minUserNum, maxUserNum);
+
+		if (Math.random() >= .7) userNum = focusUserNum;
+
 		void processUser(userNum);
 		await waitForProcessing(10);
 	}
