@@ -114,3 +114,17 @@ export function errorToString(error: Error): string {
 	if (error.stack) msg.push(error.stack);
 	return msg.join(': ');
 }
+
+interface PlainObjectError {
+	httpCode?: number;
+	message?: string;
+	code?: string;
+}
+
+export function errorToPlainObject(error: any): PlainObjectError {
+	const output: PlainObjectError = {};
+	if ('httpCode' in error) output.httpCode = error.httpCode;
+	if ('code' in error) output.code = error.code;
+	if ('message' in error) output.message = error.message;
+	return output;
+}

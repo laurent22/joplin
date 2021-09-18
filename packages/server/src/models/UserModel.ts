@@ -180,7 +180,7 @@ export default class UserModel extends BaseModel<User> {
 	}
 
 	public async checkMaxItemSizeLimit(user: User, buffer: Buffer, item: Item, joplinItem: any) {
-		// If the item is encrypted, we apply a multipler because encrypted
+		// If the item is encrypted, we apply a multiplier because encrypted
 		// items can be much larger (seems to be up to twice the size but for
 		// safety let's go with 2.2).
 
@@ -198,14 +198,20 @@ export default class UserModel extends BaseModel<User> {
 			));
 		}
 
-		// Also apply a multiplier to take into account E2EE overhead
-		const maxTotalItemSize = getMaxTotalItemSize(user) * 1.5;
-		if (maxTotalItemSize && user.total_item_size + itemSize >= maxTotalItemSize) {
-			throw new ErrorPayloadTooLarge(_('Cannot save %s "%s" because it would go over the total allowed size (%s) for this account',
-				isNote ? _('note') : _('attachment'),
-				itemTitle ? itemTitle : item.name,
-				formatBytes(maxTotalItemSize)
-			));
+		// We allow lock files to go through so that sync can happen, which in
+		// turns allow user to fix oversized account by deleting items.
+		const isWhiteListed = itemSize < 200 && item.name.startsWith('locks/');
+
+		if (!isWhiteListed) {
+			// Also apply a multiplier to take into account E2EE overhead
+			const maxTotalItemSize = getMaxTotalItemSize(user) * 1.5;
+			if (maxTotalItemSize && user.total_item_size + itemSize >= maxTotalItemSize) {
+				throw new ErrorPayloadTooLarge(_('Cannot save %s "%s" because it would go over the total allowed size (%s) for this account',
+					isNote ? _('note') : _('attachment'),
+					itemTitle ? itemTitle : item.name,
+					formatBytes(maxTotalItemSize)
+				));
+			}
 		}
 	}
 
