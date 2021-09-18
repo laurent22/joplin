@@ -623,7 +623,11 @@ export default class ItemModel extends BaseModel<Item> {
 				} else {
 					const itemIds: Uuid[] = unique(changes.map(c => c.item_id));
 					const userItems: UserItem[] = await this.db('user_items').select('user_id').whereIn('item_id', itemIds);
-					const userIds: Uuid[] = unique(userItems.map(u => u.user_id));
+					const userIds: Uuid[] = unique(
+						userItems
+							.map(u => u.user_id)
+							.concat(changes.map(c => c.user_id))
+					);
 
 					const totalSizes: TotalSizeRow[] = [];
 					for (const userId of userIds) {
