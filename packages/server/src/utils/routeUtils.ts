@@ -271,6 +271,7 @@ export enum UrlType {
 	Login = 'login',
 	Terms = 'terms',
 	Privacy = 'privacy',
+	Tasks = 'tasks',
 }
 
 export function makeUrl(urlType: UrlType): string {
