@@ -22,7 +22,7 @@ export interface Task {
 	id: TaskId;
 	description: string;
 	schedule: string;
-	run(models: Models): Promise<void>;
+	run(models: Models): void;
 }
 
 export type Tasks = Record<TaskId, Task>;
@@ -63,6 +63,8 @@ export default class TaskService extends BaseService {
 		return this.taskStates_[id];
 	}
 
+	// TODO: add tests
+
 	public async runTask(id: TaskId, runType: RunType) {
 		const state = this.taskState(id);
 		if (state.running) throw new Error(`Task is already running: ${id}`);
@@ -93,6 +95,8 @@ export default class TaskService extends BaseService {
 
 	public async runInBackground() {
 		for (const [taskId, task] of Object.entries(this.tasks_)) {
+			if (!task.schedule) continue;
+
 			logger.info(`Scheduling task "${taskId}": ${task.schedule}`);
 
 			cron.schedule(task.schedule, async () => {
