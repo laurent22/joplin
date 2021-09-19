@@ -283,9 +283,9 @@ packages/app-desktop/gui/MainScreen/commands/openNote.js.map
 packages/app-desktop/gui/MainScreen/commands/openTag.d.ts
 packages/app-desktop/gui/MainScreen/commands/openTag.js
 packages/app-desktop/gui/MainScreen/commands/openTag.js.map
-packages/app-desktop/gui/MainScreen/commands/perNotebookSortOrder.d.ts
-packages/app-desktop/gui/MainScreen/commands/perNotebookSortOrder.js
-packages/app-desktop/gui/MainScreen/commands/perNotebookSortOrder.js.map
+packages/app-desktop/gui/MainScreen/commands/perFolderSortOrder.d.ts
+packages/app-desktop/gui/MainScreen/commands/perFolderSortOrder.js
+packages/app-desktop/gui/MainScreen/commands/perFolderSortOrder.js.map
 packages/app-desktop/gui/MainScreen/commands/print.d.ts
 packages/app-desktop/gui/MainScreen/commands/print.js
 packages/app-desktop/gui/MainScreen/commands/print.js.map

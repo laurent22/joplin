@@ -800,7 +800,7 @@ class Setting extends BaseModel {
 				public: false,
 				appTypes: [AppType.Cli, AppType.Desktop],
 			},
-			'notes.perNotebookSortOrderEnabled': {
+			'notes.perFolderSortOrderEnabled': {
 				value: true,
 				type: SettingItemType.Bool,
 				storage: SettingStorage.File,
@@ -809,7 +809,7 @@ class Setting extends BaseModel {
 				label: () => _('Enable per-notebook sort order'),
 				appTypes: [AppType.Cli, AppType.Desktop],
 			},
-			'notes.perNotebookSortOrders': {
+			'notes.perFolderSortOrders': {
 				value: {},
 				type: SettingItemType.Object,
 				storage: SettingStorage.File,

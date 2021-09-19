@@ -18,7 +18,7 @@ export default function() {
 		'notesSortOrderSwitch',
 		'notesSortOrderToggleReverse',
 		'openProfileDirectory',
-		'perNotebookSortOrder',
+		'perFolderSortOrder',
 		'print',
 		'setTags',
 		'showLocalSearch',

@@ -14,7 +14,7 @@ import * as notesSortOrderToggleReverse from './notesSortOrderToggleReverse';
 import * as openFolder from './openFolder';
 import * as openNote from './openNote';
 import * as openTag from './openTag';
-import * as perNotebookSortOrder from './perNotebookSortOrder';
+import * as perFolderSortOrder from './perFolderSortOrder';
 import * as print from './print';
 import * as renameFolder from './renameFolder';
 import * as renameTag from './renameTag';
@@ -49,7 +49,7 @@ const index:any[] = [
 	openFolder,
 	openNote,
 	openTag,
-	perNotebookSortOrder,
+	perFolderSortOrder,
 	print,
 	renameFolder,
 	renameTag,

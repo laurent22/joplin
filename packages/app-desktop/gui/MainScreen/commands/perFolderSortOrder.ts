@@ -9,10 +9,10 @@ import {
 import { _ } from '@joplin/lib/locale';
 
 
-export const PER_NOTEBOOK_SORT_ORDER = 'perNotebookSortOrder';
-export const SETTING_PER_NOTEBOOK_SORT_ORDER_ENABLED = 'notes.perNotebookSortOrderEnabled';
+export const PER_FOLDER_SORT_ORDER = 'perFolderSortOrder';
+export const SETTING_PER_FOLDER_SORT_ORDER_ENABLED = 'notes.perFolderSortOrderEnabled';
 
-let previousNotebookId: string = null;
+let previousFolderId: string = null;
 let ownSortOrders: { [key: string]: any } = null;
 const sharedSortOrder: { [key: string]: any } = {
 	field: 'user_updated_time',
@@ -23,33 +23,33 @@ const sharedSortOrder: { [key: string]: any } = {
 	order: false,
 };
 
-export function selectedNotebookHasOwnSortOrder() {
-	return hasOwnSortOrder(getSelectedNotebookId());
+export function selectedFolderHasOwnSortOrder() {
+	return hasOwnSortOrder(getSelectedFolderId());
 }
 
-export function hasOwnSortOrder(notebookId: string) {
-	return notebookId && ownSortOrders && ownSortOrders.hasOwnProperty(notebookId + SUFFIX_FIELD);
+export function hasOwnSortOrder(folderId: string) {
+	return folderId && ownSortOrders && ownSortOrders.hasOwnProperty(folderId + SUFFIX_FIELD);
 }
 
 export const declaration: CommandDeclaration = {
-	name: PER_NOTEBOOK_SORT_ORDER,
+	name: PER_FOLDER_SORT_ORDER,
 	label: () => _('Toggle own sort order'),
 };
 
 export const runtime = (): CommandRuntime => {
 	loadOwnSortOrders();
 	loadSharedSortOrder();
-	eventManager.appStateOn('notesParentType', onNotebookSelectionMayChange);
-	eventManager.appStateOn('selectedFolderId', onNotebookSelectionMayChange);
+	eventManager.appStateOn('notesParentType', onFolderSelectionMayChange);
+	eventManager.appStateOn('selectedFolderId', onFolderSelectionMayChange);
 
 	return {
 		enabledCondition: 'oneFolderSelected',
 
-		execute: async (context: CommandContext, notebookId?: string, own?: boolean) => {
-			let targetId = notebookId;
-			const selectedId = getSelectedNotebookId(context.state);
+		execute: async (context: CommandContext, folderId?: string, own?: boolean) => {
+			let targetId = folderId;
+			const selectedId = getSelectedFolderId(context.state);
 			if (!targetId) {
-				targetId = selectedId; // default: selected notebook
+				targetId = selectedId; // default: selected folder
 				if (!targetId) return;
 			}
 			const targetOwn = hasOwnSortOrder(targetId);
@@ -81,40 +81,40 @@ export const runtime = (): CommandRuntime => {
 	};
 };
 
-function onNotebookSelectionMayChange() {
-	const selectedId = getSelectedNotebookId();
-	if (previousNotebookId === null) previousNotebookId = selectedId;
-	if (previousNotebookId === selectedId) return;
+function onFolderSelectionMayChange() {
+	const selectedId = getSelectedFolderId();
+	if (previousFolderId === null) previousFolderId = selectedId;
+	if (previousFolderId === selectedId) return;
 	const field = getCurrentField();
 	const reverse = getCurrentReverse();
-	const previousNotebookHasOwnSortOrder = hasOwnSortOrder(previousNotebookId);
-	if (previousNotebookHasOwnSortOrder) {
-		setOwnSortOrder(previousNotebookId, field, reverse);
+	const previousFolderHasOwnSortOrder = hasOwnSortOrder(previousFolderId);
+	if (previousFolderHasOwnSortOrder) {
+		setOwnSortOrder(previousFolderId, field, reverse);
 	} else {
 		setSharedSortOrder(field, reverse);
 	}
-	previousNotebookId = selectedId;
+	previousFolderId = selectedId;
 	let next;
 	if (hasOwnSortOrder(selectedId)) {
 		next = getOwnSortOrder(selectedId);
-	} else if (previousNotebookHasOwnSortOrder) {
+	} else if (previousFolderHasOwnSortOrder) {
 		next = sharedSortOrder;
 	} else {
 		return;
 	}
-	if (perNotebookSortOrderEnabled()) {
+	if (perFolderSortOrderEnabled()) {
 		if (next.field != field || next.reverse != reverse) {
 			void CommandService.instance().execute(NOTES_SORT_ORDER_SWITCH, next.field, next.reverse);
 		}
 	}
 }
 
-const OWN_SORT_ORDERS = 'notes.perNotebookSortOrders';
+const OWN_SORT_ORDERS = 'notes.perFolderSortOrders';
 const SHARED_SORT_ORDER = 'notes.sharedSortOrder';
 const SUFFIX_FIELD = '$field';
 const SUFFIX_REVERSE = '$reverse';
 
-function getSelectedNotebookId(state?: State): string {
+function getSelectedFolderId(state?: State): string {
 	const s = state ? state : app().store().getState();
 	if (s.notesParentType === 'Folder') {
 		return s.selectedFolderId;
@@ -135,25 +135,25 @@ function perFieldReversalEnabled(): boolean {
 	return Setting.value(SETTING_PER_FIELD_REVERSAL_ENABLED);
 }
 
-function perNotebookSortOrderEnabled(): boolean {
-	return Setting.value(SETTING_PER_NOTEBOOK_SORT_ORDER_ENABLED);
+function perFolderSortOrderEnabled(): boolean {
+	return Setting.value(SETTING_PER_FOLDER_SORT_ORDER_ENABLED);
 }
 
-function getOwnSortOrder(notebookId: string) {
-	const field = ownSortOrders[notebookId + SUFFIX_FIELD] as string;
-	const reverse = ownSortOrders[notebookId + SUFFIX_REVERSE] as boolean;
+function getOwnSortOrder(folderId: string) {
+	const field = ownSortOrders[folderId + SUFFIX_FIELD] as string;
+	const reverse = ownSortOrders[folderId + SUFFIX_REVERSE] as boolean;
 	return { field, reverse };
 }
 
-function setOwnSortOrder(notebookId: string, field: string, reverse: boolean) {
-	const old = getOwnSortOrder(notebookId);
+function setOwnSortOrder(folderId: string, field: string, reverse: boolean) {
+	const old = getOwnSortOrder(folderId);
 	let dirty = false;
 	if (old.field !== field) {
-		ownSortOrders[notebookId + SUFFIX_FIELD] = field;
+		ownSortOrders[folderId + SUFFIX_FIELD] = field;
 		dirty = true;
 	}
 	if (old.reverse !== reverse) {
-		ownSortOrders[notebookId + SUFFIX_REVERSE] = reverse;
+		ownSortOrders[folderId + SUFFIX_REVERSE] = reverse;
 		dirty = true;
 	}
 	if (dirty) {
@@ -161,14 +161,14 @@ function setOwnSortOrder(notebookId: string, field: string, reverse: boolean) {
 	}
 }
 
-function deleteOwnSortOrder(notebookId: string) {
+function deleteOwnSortOrder(folderId: string) {
 	let dirty = false;
-	if (ownSortOrders.hasOwnProperty(notebookId + SUFFIX_FIELD)) {
-		delete ownSortOrders[notebookId + SUFFIX_FIELD];
+	if (ownSortOrders.hasOwnProperty(folderId + SUFFIX_FIELD)) {
+		delete ownSortOrders[folderId + SUFFIX_FIELD];
 		dirty = true;
 	}
-	if (ownSortOrders.hasOwnProperty(notebookId + SUFFIX_REVERSE)) {
-		delete ownSortOrders[notebookId + SUFFIX_REVERSE];
+	if (ownSortOrders.hasOwnProperty(folderId + SUFFIX_REVERSE)) {
+		delete ownSortOrders[folderId + SUFFIX_REVERSE];
 		dirty = true;
 	}
 	if (dirty) {
