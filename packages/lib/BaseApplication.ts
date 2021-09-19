@@ -251,6 +251,12 @@ export default class BaseApplication {
 				continue;
 			}
 
+			if (arg.indexOf('--user-data-dir=') === 0) {
+				// Electron-specific flag. Allows users to run the app with chromedriver.
+				argv.splice(0, 1);
+				continue;
+			}
+
 			if (arg.length && arg[0] == '-') {
 				throw new JoplinError(_('Unknown flag: %s', arg), 'flagError');
 			} else {

@@ -9,6 +9,7 @@ function formatCssSize(v: any): string {
 
 export interface Options {
 	contentMaxWidth?: number;
+	contentMaxWidthTarget?: string;
 }
 
 export default function(theme: any, options: Options = null) {
@@ -21,8 +22,9 @@ export default function(theme: any, options: Options = null) {
 
 	const fontFamily = '\'Avenir\', \'Arial\', sans-serif';
 
+	const maxWidthTarget = options.contentMaxWidthTarget ? options.contentMaxWidthTarget : '#rendered-md';
 	const maxWidthCss = options.contentMaxWidth ? `
-		#rendered-md {
+		${maxWidthTarget} {
 			max-width: ${options.contentMaxWidth}px;
 			margin-left: auto;
 			margin-right: auto;

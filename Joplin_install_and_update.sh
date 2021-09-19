@@ -137,8 +137,8 @@ fi
 #-----------------------------------------------------
 print 'Downloading Joplin...'
 TEMP_DIR=$(mktemp -d)
-wget -O ${TEMP_DIR}/Joplin.AppImage https://github.com/laurent22/joplin/releases/download/v${RELEASE_VERSION}/Joplin-${RELEASE_VERSION}.AppImage
-wget -O ${TEMP_DIR}/joplin.png https://joplinapp.org/images/Icon512.png
+wget -O "${TEMP_DIR}/Joplin.AppImage" "https://github.com/laurent22/joplin/releases/download/v${RELEASE_VERSION}/Joplin-${RELEASE_VERSION}.AppImage"
+wget -O "${TEMP_DIR}/joplin.png" https://joplinapp.org/images/Icon512.png
 
 #-----------------------------------------------------
 print 'Installing Joplin...'
@@ -149,7 +149,7 @@ rm -f ~/.joplin/*.AppImage ~/.local/share/applications/joplin.desktop ~/.joplin/
 mkdir -p ~/.joplin/
 
 # Download the latest version
-mv ${TEMP_DIR}/Joplin.AppImage ~/.joplin/Joplin.AppImage
+mv "${TEMP_DIR}/Joplin.AppImage" ~/.joplin/Joplin.AppImage
 
 # Gives execution privileges
 chmod +x ~/.joplin/Joplin.AppImage
@@ -159,7 +159,7 @@ print "${COLOR_GREEN}OK${COLOR_RESET}"
 #-----------------------------------------------------
 print 'Installing icon...'
 mkdir -p ~/.local/share/icons/hicolor/512x512/apps
-mv ${TEMP_DIR}/joplin.png ~/.local/share/icons/hicolor/512x512/apps/joplin.png
+mv "${TEMP_DIR}/joplin.png" ~/.local/share/icons/hicolor/512x512/apps/joplin.png
 print "${COLOR_GREEN}OK${COLOR_RESET}"
 
 # Detect desktop environment
@@ -222,7 +222,7 @@ fi
 print "${COLOR_GREEN}Joplin version${COLOR_RESET} ${RELEASE_VERSION} ${COLOR_GREEN}installed.${COLOR_RESET}"
 
 # Record version
-echo $RELEASE_VERSION > ~/.joplin/VERSION
+echo "$RELEASE_VERSION" > ~/.joplin/VERSION
 
 #-----------------------------------------------------
 if [[ "$SHOW_CHANGELOG" == true ]]; then
@@ -232,5 +232,5 @@ fi
 
 #-----------------------------------------------------
 print "Cleaning up..."
-rm -rf $TEMP_DIR
+rm -rf "$TEMP_DIR"
 print "${COLOR_GREEN}OK${COLOR_RESET}"

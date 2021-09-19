@@ -17,7 +17,7 @@ export enum Env {
 export interface NotificationView {
 	id: Uuid;
 	messageHtml: string;
-	level: string;
+	levelClassName: string;
 	closeUrl: string;
 }
 

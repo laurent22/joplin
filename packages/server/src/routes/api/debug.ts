@@ -1,5 +1,5 @@
 import config from '../../config';
-import { createTestUsers } from '../../tools/debugTools';
+import { clearDatabase, createTestUsers, CreateTestUsersOptions } from '../../tools/debugTools';
 import { bodyFields } from '../../utils/requestUtils';
 import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
@@ -12,6 +12,8 @@ router.public = true;
 
 interface Query {
 	action: string;
+	count?: number;
+	fromNum?: number;
 }
 
 router.post('api/debug', async (_path: SubPath, ctx: AppContext) => {
@@ -20,7 +22,16 @@ router.post('api/debug', async (_path: SubPath, ctx: AppContext) => {
 	console.info(`Action: ${query.action}`);
 
 	if (query.action === 'createTestUsers') {
-		await createTestUsers(ctx.joplin.db, config());
+		const options: CreateTestUsersOptions = {};
+
+		if ('count' in query) options.count = query.count;
+		if ('fromNum' in query) options.fromNum = query.fromNum;
+
+		await createTestUsers(ctx.joplin.db, config(), options);
+	}
+
+	if (query.action === 'clearDatabase') {
+		await clearDatabase(ctx.joplin.db);
 	}
 });
 

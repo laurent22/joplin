@@ -196,6 +196,34 @@ describe('ItemModel', function() {
 		expect((await models().user().load(user3.id)).total_item_size).toBe(totalSize3);
 	});
 
+	test('should update total size when an item is deleted', async function() {
+		const { user: user1 } = await createUserAndSession(1);
+
+		await createItemTree3(user1.id, '', '', [
+			{
+				id: '000000000000000000000000000000F1',
+				children: [
+					{
+						id: '00000000000000000000000000000001',
+					},
+				],
+			},
+		]);
+
+		const folder1 = await models().item().loadByJopId(user1.id, '000000000000000000000000000000F1');
+		const note1 = await models().item().loadByJopId(user1.id, '00000000000000000000000000000001');
+
+		await models().item().updateTotalSizes();
+
+		expect((await models().user().load(user1.id)).total_item_size).toBe(folder1.content_size + note1.content_size);
+
+		await models().item().delete(note1.id);
+
+		await models().item().updateTotalSizes();
+
+		expect((await models().user().load(user1.id)).total_item_size).toBe(folder1.content_size);
+	});
+
 	test('should include shared items in total size calculation', async function() {
 		const { user: user1, session: session1 } = await createUserAndSession(1);
 		const { user: user2, session: session2 } = await createUserAndSession(2);

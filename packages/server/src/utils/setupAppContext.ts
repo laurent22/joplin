@@ -7,15 +7,15 @@ import routes from '../routes/routes';
 import ShareService from '../services/ShareService';
 import { Services } from '../services/types';
 import EmailService from '../services/EmailService';
-import CronService from '../services/CronService';
 import MustacheService from '../services/MustacheService';
+import setupTaskService from './setupTaskService';
 
 async function setupServices(env: Env, models: Models, config: Config): Promise<Services> {
 	const output: Services = {
 		share: new ShareService(env, models, config),
 		email: new EmailService(env, models, config),
-		cron: new CronService(env, models, config),
 		mustache: new MustacheService(config.viewDir, config.baseUrl),
+		tasks: setupTaskService(env, models, config),
 	};
 
 	await output.mustache.loadPartials();

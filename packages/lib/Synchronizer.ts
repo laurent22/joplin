@@ -480,6 +480,31 @@ export default class Synchronizer {
 			});
 
 			// ========================================================================
+			// 2. DELETE_REMOTE
+			// ------------------------------------------------------------------------
+			// Delete the remote items that have been deleted locally.
+			// ========================================================================
+
+			if (syncSteps.indexOf('delete_remote') >= 0) {
+				const deletedItems = await BaseItem.deletedItems(syncTargetId);
+				for (let i = 0; i < deletedItems.length; i++) {
+					if (this.cancelling()) break;
+
+					const item = deletedItems[i];
+					const path = BaseItem.systemPath(item.item_id);
+					this.logSyncOperation('deleteRemote', null, { id: item.item_id }, 'local has been deleted');
+					await this.apiCall('delete', path);
+
+					if (item.item_type === BaseModel.TYPE_RESOURCE) {
+						const remoteContentPath = resourceRemotePath(item.item_id);
+						await this.apiCall('delete', remoteContentPath);
+					}
+
+					await BaseItem.remoteDeletedItem(syncTargetId, item.item_id);
+				}
+			} // DELETE_REMOTE STEP
+
+			// ========================================================================
 			// 1. UPLOAD
 			// ------------------------------------------------------------------------
 			// First, find all the items that have been changed since the
@@ -762,31 +787,6 @@ export default class Synchronizer {
 					if (!result.hasMore) break;
 				}
 			} // UPLOAD STEP
-
-			// ========================================================================
-			// 2. DELETE_REMOTE
-			// ------------------------------------------------------------------------
-			// Delete the remote items that have been deleted locally.
-			// ========================================================================
-
-			if (syncSteps.indexOf('delete_remote') >= 0) {
-				const deletedItems = await BaseItem.deletedItems(syncTargetId);
-				for (let i = 0; i < deletedItems.length; i++) {
-					if (this.cancelling()) break;
-
-					const item = deletedItems[i];
-					const path = BaseItem.systemPath(item.item_id);
-					this.logSyncOperation('deleteRemote', null, { id: item.item_id }, 'local has been deleted');
-					await this.apiCall('delete', path);
-
-					if (item.item_type === BaseModel.TYPE_RESOURCE) {
-						const remoteContentPath = resourceRemotePath(item.item_id);
-						await this.apiCall('delete', remoteContentPath);
-					}
-
-					await BaseItem.remoteDeletedItem(syncTargetId, item.item_id);
-				}
-			} // DELETE_REMOTE STEP
 
 			// ------------------------------------------------------------------------
 			// 3. DELTA

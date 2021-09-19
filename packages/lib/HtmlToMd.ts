@@ -6,6 +6,7 @@ export interface ParseOptions {
 	anchorNames?: string[];
 	preserveImageTagsWithSize?: boolean;
 	baseUrl?: string;
+	disableEscapeContent?: boolean;
 }
 
 export default class HtmlToMd {
@@ -20,6 +21,7 @@ export default class HtmlToMd {
 			emDelimiter: '*',
 			strongDelimiter: '**',
 			br: '',
+			disableEscapeContent: 'disableEscapeContent' in options ? options.disableEscapeContent : false,
 		});
 		turndown.use(turndownPluginGfm);
 		turndown.remove('script');

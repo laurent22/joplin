@@ -42,6 +42,13 @@ async function handleSqliteInProdNotification(ctx: AppContext) {
 	}
 }
 
+function levelClassName(level: NotificationLevel): string {
+	if (level === NotificationLevel.Important) return 'is-warning';
+	if (level === NotificationLevel.Normal) return 'is-info';
+	if (level === NotificationLevel.Error) return 'is-danger';
+	throw new Error(`Unknown level: ${level}`);
+}
+
 async function makeNotificationViews(ctx: AppContext): Promise<NotificationView[]> {
 	const markdownIt = new MarkdownIt();
 
@@ -52,7 +59,7 @@ async function makeNotificationViews(ctx: AppContext): Promise<NotificationView[
 		views.push({
 			id: n.id,
 			messageHtml: markdownIt.render(n.message),
-			level: n.level === NotificationLevel.Important ? 'warning' : 'info',
+			levelClassName: levelClassName(n.level),
 			closeUrl: notificationModel.closeUrl(n.id),
 		});
 	}

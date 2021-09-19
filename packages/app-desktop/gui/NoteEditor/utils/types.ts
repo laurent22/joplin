@@ -6,6 +6,10 @@ import { MarkupLanguage } from '@joplin/renderer';
 import { RenderResult, RenderResultPluginAsset } from '@joplin/renderer/MarkupToHtml';
 import { MarkupToHtmlOptions } from './useMarkupToHtml';
 
+export interface AllAssetsOptions {
+	contentMaxWidthTarget?: string;
+}
+
 export interface ToolbarButtonInfos {
 	[key: string]: ToolbarButtonInfo;
 }
@@ -55,7 +59,7 @@ export interface NoteBodyEditorProps {
 	onScroll(event: any): void;
 	markupToHtml: (markupLanguage: MarkupLanguage, markup: string, options: MarkupToHtmlOptions)=> Promise<RenderResult>;
 	htmlToMarkdown: Function;
-	allAssets: (markupLanguage: MarkupLanguage)=> Promise<RenderResultPluginAsset[]>;
+	allAssets: (markupLanguage: MarkupLanguage, options: AllAssetsOptions)=> Promise<RenderResultPluginAsset[]>;
 	disabled: boolean;
 	dispatch: Function;
 	noteToolbar: any;
