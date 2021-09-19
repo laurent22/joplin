@@ -16,6 +16,7 @@ const { dialogs } = require('../utils/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
 const { localSyncInfoFromState } = require('@joplin/lib/services/synchronizer/syncInfoUtils');
 const { showMissingMasterKeyMessage } = require('@joplin/lib/services/e2ee/utils');
+const { substrWithEllipsis } = require('@joplin/lib/string-utils');
 
 Icon.loadFont();
 
@@ -184,10 +185,20 @@ class ScreenHeaderComponent extends React.PureComponent {
 	async deleteButton_press() {
 		// Dialog needs to be displayed as a child of the parent component, otherwise
 		// it won't be visible within the header component.
-		const ok = await dialogs.confirm(this.props.parentComponent, _('Delete these notes?'));
+		const noteIds = this.props.selectedNoteIds;
+
+		let msg = '';
+		if (noteIds.length === 1) {
+			const note = await Note.load(noteIds[0]);
+			if (!note) return;
+			msg = _('Delete note "%s"?', substrWithEllipsis(note.title, 0, 32));
+		} else {
+			msg = _('Delete these %d notes?', noteIds.length);
+		}
+
+		const ok = await dialogs.confirm(this.props.parentComponent, msg);
 		if (!ok) return;
 
-		const noteIds = this.props.selectedNoteIds;
 		this.props.dispatch({ type: 'NOTE_SELECTION_END' });
 		await Note.batchDelete(noteIds);
 	}
