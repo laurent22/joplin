@@ -6,7 +6,8 @@ import { EditorCommand, NoteBodyEditorProps } from '../../utils/types';
 import { commandAttachFileToBody, handlePasteEvent } from '../../utils/resourceHandling';
 import { ScrollOptions, ScrollOptionTypes } from '../../utils/types';
 import { CommandValue } from '../../utils/types';
-import { useScrollHandler, usePrevious, cursorPositionToTextOffset, useRootSize } from './utils';
+import { useScrollHandler, usePrevious, cursorPositionToTextOffset } from './utils';
+import useElementSize from '@joplin/lib/hooks/useElementSize';
 import Toolbar from './Toolbar';
 import styles_ from './styles';
 import { RenderedBody, defaultRenderedBody } from './utils/types';
@@ -59,7 +60,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 	const props_onChangeRef = useRef<Function>(null);
 	props_onChangeRef.current = props.onChange;
 
-	const rootSize = useRootSize({ rootRef });
+	const rootSize = useElementSize(rootRef);
 
 	usePluginServiceRegistration(ref);
 
