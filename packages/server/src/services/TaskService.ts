@@ -63,8 +63,6 @@ export default class TaskService extends BaseService {
 		return this.taskStates_[id];
 	}
 
-	// TODO: add tests
-
 	public async runTask(id: TaskId, runType: RunType) {
 		const state = this.taskState(id);
 		if (state.running) throw new Error(`Task is already running: ${id}`);

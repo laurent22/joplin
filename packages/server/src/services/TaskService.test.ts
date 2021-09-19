@@ -69,9 +69,8 @@ describe('TaskService', function() {
 		expect(service.taskState('test').lastCompletionTime).toBeFalsy();
 		expect(service.taskState('test').lastRunTime.getTime()).toBeGreaterThanOrEqual(startTime.getTime());
 
-		await msleep(1);
 		finishTask = true;
-		await msleep(3);
+		await msleep(10);
 
 		expect(taskHasRan).toBe(true);
 		expect(service.taskState('test').running).toBe(false);
