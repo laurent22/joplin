@@ -152,6 +152,11 @@ function NoteEditor(props: NoteEditorProps) {
 	});
 
 	const allAssets = useCallback(async (markupLanguage: number, options: AllAssetsOptions = null): Promise<any[]> => {
+		options = {
+			contentMaxWidthTarget: '',
+			...options,
+		};
+
 		const theme = themeStyle(props.themeId);
 
 		const markupToHtml = markupLanguageUtils.newMarkupToHtml({}, {
