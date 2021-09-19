@@ -138,5 +138,5 @@ export function betaUserTrialPeriodDays(userCreatedTime: number, fromDateTime: n
 }
 
 export function betaStartSubUrl(email: string, accountType: AccountType): string {
-	return `https://joplinapp.org/plans/?email=${encodeURIComponent(email)}&account_type=${encodeURIComponent(accountType)}`;
+	return `${globalConfig().joplinAppBaseUrl}/plans/?email=${encodeURIComponent(email)}&account_type=${encodeURIComponent(accountType)}`;
 }

@@ -10,6 +10,7 @@ export interface EnvVariables {
 	APP_BASE_URL?: string;
 	USER_CONTENT_BASE_URL?: string;
 	API_BASE_URL?: string;
+	JOPLINAPP_BASE_URL?: string;
 
 	APP_PORT?: string;
 	DB_CLIENT?: string;
@@ -59,11 +60,15 @@ export function runningInDocker(): boolean {
 	return runningInDocker_;
 }
 
-function envParseBool(s: string): boolean {
+function envReadString(s: string, defaultValue: string = ''): string {
+	return s === undefined || s === null ? defaultValue : s;
+}
+
+function envReadBool(s: string): boolean {
 	return s === '1';
 }
 
-function envParseInt(s: string, defaultValue: number = null): number {
+function envReadInt(s: string, defaultValue: number = null): number {
 	if (!s) return defaultValue === null ? 0 : defaultValue;
 	const output = Number(s);
 	if (isNaN(output)) throw new Error(`Invalid number: ${s}`);
@@ -89,8 +94,8 @@ function databaseConfigFromEnv(runningInDocker: boolean, env: EnvVariables): Dat
 	const baseConfig: DatabaseConfig = {
 		client: DatabaseConfigClient.Null,
 		name: '',
-		slowQueryLogEnabled: envParseBool(env.SLOW_QUERY_LOG_ENABLED),
-		slowQueryLogMinDuration: envParseInt(env.SLOW_QUERY_LOG_MIN_DURATION, 10000),
+		slowQueryLogEnabled: envReadBool(env.SLOW_QUERY_LOG_ENABLED),
+		slowQueryLogMinDuration: envReadInt(env.SLOW_QUERY_LOG_MIN_DURATION, 10000),
 	};
 
 	if (env.DB_CLIENT === 'pg') {
@@ -187,6 +192,7 @@ export async function initConfig(envType: Env, env: EnvVariables, overrides: any
 		showErrorStackTraces: (env.ERROR_STACK_TRACES === undefined && envType === Env.Dev) || env.ERROR_STACK_TRACES === '1',
 		apiBaseUrl,
 		userContentBaseUrl: env.USER_CONTENT_BASE_URL ? env.USER_CONTENT_BASE_URL : baseUrl,
+		joplinAppBaseUrl: envReadString(env.JOPLINAPP_BASE_URL, 'https://joplinapp.org'),
 		signupEnabled: env.SIGNUP_ENABLED === '1',
 		termsEnabled: env.TERMS_ENABLED === '1',
 		accountTypesEnabled: env.ACCOUNT_TYPES_ENABLED === '1',

@@ -101,6 +101,7 @@ export interface Config {
 	baseUrl: string;
 	apiBaseUrl: string;
 	userContentBaseUrl: string;
+	joplinAppBaseUrl: string;
 	signupEnabled: boolean;
 	termsEnabled: boolean;
 	accountTypesEnabled: boolean;

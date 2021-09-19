@@ -13,7 +13,7 @@ function makeView(error: any = null): View {
 	const view = defaultView('login', 'Login');
 	view.content = {
 		error,
-		signupUrl: config().signupEnabled ? makeUrl(UrlType.Signup) : '',
+		signupUrl: config().signupEnabled || config().isJoplinCloud ? makeUrl(UrlType.Signup) : '',
 	};
 	return view;
 }
