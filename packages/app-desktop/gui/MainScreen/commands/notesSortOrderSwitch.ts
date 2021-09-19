@@ -2,19 +2,13 @@ import { CommandContext, CommandDeclaration, CommandRuntime } from '@joplin/lib/
 import Setting from '@joplin/lib/models/Setting';
 import { _ } from '@joplin/lib/locale';
 
-export const NOTES_SORT_ORDER_SWITCH = 'notesSortOrderSwitch';
-export const SETTING_FIELD = 'notes.sortOrder.field';
-export const SETTING_REVERSE = 'notes.sortOrder.reverse';
-export const SETTING_PER_FIELD_REVERSAL_ENABLED = 'notes.perFieldReversalEnabled';
-export const SETTING_PER_FIELD_REVERSE = 'notes.perFieldReverse';
-
 let fields: string[] = null;
 let perFieldReverse: { [field: string]: boolean } = null;
 
 export const notesSortOrderFieldArray = (): string[] => {
 	// The order of the fields is strictly determinate.
 	if (fields == null) {
-		fields = Setting.enumOptionValues(SETTING_FIELD).sort().reverse();
+		fields = Setting.enumOptionValues('notes.sortOrder.field').sort().reverse();
 	}
 	return fields;
 };
@@ -30,7 +24,7 @@ export const notesSortOrderNextField = (currentField: string) => {
 };
 
 export const declaration: CommandDeclaration = {
-	name: NOTES_SORT_ORDER_SWITCH,
+	name: 'notesSortOrderSwitch',
 	label: () => _('Switch sort order'),
 	parentLabel: () => _('Notes'),
 };
@@ -52,12 +46,12 @@ export const runtime = (): CommandRuntime => {
 				nextField = field[0];
 				nextReverse = field[1];
 			}
-			const currentField = Setting.value(SETTING_FIELD);
-			const currentReverse = Setting.value(SETTING_REVERSE);
-			const enabled = Setting.value(SETTING_PER_FIELD_REVERSAL_ENABLED);
+			const currentField = Setting.value('notes.sortOrder.field');
+			const currentReverse = Setting.value('notes.sortOrder.reverse');
+			const enabled = Setting.value('notes.perFieldReversalEnabled');
 			if (enabled) {
 				if (perFieldReverse === null) {
-					perFieldReverse = { ...Setting.value(SETTING_PER_FIELD_REVERSE) };
+					perFieldReverse = { ...Setting.value('notes.perFieldReverse') };
 				}
 			}
 			if (typeof field === 'undefined') {
@@ -76,17 +70,17 @@ export const runtime = (): CommandRuntime => {
 				}
 			}
 			if (currentField !== nextField) {
-				Setting.setValue(SETTING_FIELD, nextField);
+				Setting.setValue('notes.sortOrder.field', nextField);
 			}
 			if (currentReverse !== nextReverse) {
-				Setting.setValue(SETTING_REVERSE, nextReverse);
+				Setting.setValue('notes.sortOrder.reverse', nextReverse);
 			}
 			if (enabled) {
 				// nextField is sane here.
 				nextReverse = !!nextReverse;
 				if (perFieldReverse[nextField] !== nextReverse) {
 					perFieldReverse[nextField] = nextReverse;
-					Setting.setValue(SETTING_PER_FIELD_REVERSE, { ...perFieldReverse });
+					Setting.setValue('notes.perFieldReverse', { ...perFieldReverse });
 				}
 			}
 		},

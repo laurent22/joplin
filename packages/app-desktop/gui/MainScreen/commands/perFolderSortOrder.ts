@@ -3,14 +3,8 @@ import Setting from '@joplin/lib/models/Setting';
 import { State } from '@joplin/lib/reducer';
 import app from '../../../app';
 import eventManager from '@joplin/lib/eventManager';
-import {
-	notesSortOrderFieldArray, NOTES_SORT_ORDER_SWITCH, SETTING_FIELD, SETTING_REVERSE, SETTING_PER_FIELD_REVERSAL_ENABLED,
-} from './notesSortOrderSwitch';
+import { notesSortOrderFieldArray } from './notesSortOrderSwitch';
 import { _ } from '@joplin/lib/locale';
-
-
-export const PER_FOLDER_SORT_ORDER = 'perFolderSortOrder';
-export const SETTING_PER_FOLDER_SORT_ORDER_ENABLED = 'notes.perFolderSortOrderEnabled';
 
 let previousFolderId: string = null;
 let ownSortOrders: { [key: string]: any } = null;
@@ -32,7 +26,7 @@ export function hasOwnSortOrder(folderId: string) {
 }
 
 export const declaration: CommandDeclaration = {
-	name: PER_FOLDER_SORT_ORDER,
+	name: 'perFolderSortOrder',
 	label: () => _('Toggle own sort order'),
 };
 
@@ -63,11 +57,11 @@ export const runtime = (): CommandRuntime => {
 			if (newOwn) {
 				let field: string, reverse: boolean;
 				if (!hasOwnSortOrder(selectedId)) {
-					field = getCurrentField();
-					reverse = getCurrentReverse();
+					field = Setting.value('notes.sortOrder.field');
+					reverse = Setting.value('notes.sortOrder.reverse');
 				} else {
 					field = sharedSortOrder.field;
-					if (perFieldReversalEnabled()) {
+					if (Setting.value('notes.perFieldReversalEnabled')) {
 						reverse = sharedSortOrder[field];
 					} else {
 						reverse = sharedSortOrder.reverse;
@@ -85,8 +79,8 @@ function onFolderSelectionMayChange() {
 	const selectedId = getSelectedFolderId();
 	if (previousFolderId === null) previousFolderId = selectedId;
 	if (previousFolderId === selectedId) return;
-	const field = getCurrentField();
-	const reverse = getCurrentReverse();
+	const field = Setting.value('notes.sortOrder.field');
+	const reverse = Setting.value('notes.sortOrder.reverse');
 	const previousFolderHasOwnSortOrder = hasOwnSortOrder(previousFolderId);
 	if (previousFolderHasOwnSortOrder) {
 		setOwnSortOrder(previousFolderId, field, reverse);
@@ -102,15 +96,13 @@ function onFolderSelectionMayChange() {
 	} else {
 		return;
 	}
-	if (perFolderSortOrderEnabled()) {
+	if (Setting.value('notes.perFolderSortOrderEnabled')) {
 		if (next.field != field || next.reverse != reverse) {
-			void CommandService.instance().execute(NOTES_SORT_ORDER_SWITCH, next.field, next.reverse);
+			void CommandService.instance().execute('notesSortOrderSwitch', next.field, next.reverse);
 		}
 	}
 }
 
-const OWN_SORT_ORDERS = 'notes.perFolderSortOrders';
-const SHARED_SORT_ORDER = 'notes.sharedSortOrder';
 const SUFFIX_FIELD = '$field';
 const SUFFIX_REVERSE = '$reverse';
 
@@ -121,22 +113,6 @@ function getSelectedFolderId(state?: State): string {
 	} else {
 		return '';
 	}
-}
-
-function getCurrentField(): string {
-	return Setting.value(SETTING_FIELD);
-}
-
-function getCurrentReverse(): boolean {
-	return Setting.value(SETTING_REVERSE);
-}
-
-function perFieldReversalEnabled(): boolean {
-	return Setting.value(SETTING_PER_FIELD_REVERSAL_ENABLED);
-}
-
-function perFolderSortOrderEnabled(): boolean {
-	return Setting.value(SETTING_PER_FOLDER_SORT_ORDER_ENABLED);
 }
 
 function getOwnSortOrder(folderId: string) {
@@ -157,7 +133,7 @@ function setOwnSortOrder(folderId: string, field: string, reverse: boolean) {
 		dirty = true;
 	}
 	if (dirty) {
-		Setting.setValue(OWN_SORT_ORDERS, { ...ownSortOrders });
+		Setting.setValue('notes.perFolderSortOrders', { ...ownSortOrders });
 	}
 }
 
@@ -172,17 +148,17 @@ function deleteOwnSortOrder(folderId: string) {
 		dirty = true;
 	}
 	if (dirty) {
-		Setting.setValue(OWN_SORT_ORDERS, { ...ownSortOrders });
+		Setting.setValue('notes.perFolderSortOrders', { ...ownSortOrders });
 	}
 }
 
 function loadOwnSortOrders() {
-	ownSortOrders = { ...Setting.value(OWN_SORT_ORDERS) };
+	ownSortOrders = { ...Setting.value('notes.perFolderSortOrders') };
 }
 
 function loadSharedSortOrder() {
 	const validFields = notesSortOrderFieldArray();
-	const value = Setting.value(SHARED_SORT_ORDER);
+	const value = Setting.value('notes.sharedSortOrder');
 	for (const key in sharedSortOrder) {
 		if (value.hasOwnProperty(key)) {
 			if (key !== 'field' || validFields.includes(value.field)) {
@@ -207,6 +183,6 @@ function setSharedSortOrder(field: string, reverse: boolean) {
 		dirty = true;
 	}
 	if (dirty) {
-		Setting.setValue(SHARED_SORT_ORDER, { ...sharedSortOrder });
+		Setting.setValue('notes.sharedSortOrder', { ...sharedSortOrder });
 	}
 }

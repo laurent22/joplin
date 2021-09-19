@@ -6,9 +6,7 @@ import CommandService from '@joplin/lib/services/CommandService';
 import { runtime as focusSearchRuntime } from './commands/focusSearch';
 import Setting from '@joplin/lib/models/Setting';
 import Note from '@joplin/lib/models/Note';
-import { notesSortOrderNextField, SETTING_FIELD, SETTING_REVERSE, NOTES_SORT_ORDER_SWITCH }
-	from '../MainScreen/commands/notesSortOrderSwitch';
-import { NOTES_SORT_ORDER_TOGGLE_REVERSE } from '../MainScreen/commands/notesSortOrderToggleReverse';
+import { notesSortOrderNextField } from '../MainScreen/commands/notesSortOrderSwitch';
 import app from '../../app';
 const styled = require('styled-components').default;
 
@@ -70,23 +68,23 @@ export default function NoteListControls(props: Props) {
 	}
 
 	function onSortOrderFieldButtonClick() {
-		void CommandService.instance().execute(NOTES_SORT_ORDER_SWITCH);
+		void CommandService.instance().execute('notesSortOrderSwitch');
 	}
 
 	function onSortOrderReverseButtonClick() {
-		void CommandService.instance().execute(NOTES_SORT_ORDER_TOGGLE_REVERSE);
+		void CommandService.instance().execute('notesSortOrderToggleReverse');
 	}
 
 	function sortOrderFieldTooltip() {
-		const term1 = CommandService.instance().label(NOTES_SORT_ORDER_SWITCH);
-		const field = Setting.value(SETTING_FIELD);
+		const term1 = CommandService.instance().label('notesSortOrderSwitch');
+		const field = Setting.value('notes.sortOrder.field');
 		const term2 = Note.fieldToLabel(field);
 		const term3 = Note.fieldToLabel(notesSortOrderNextField(field));
 		return `${term1}:\n ${term2} -> ${term3}`;
 	}
 
 	function sortOrderFieldIcon() {
-		const field = Setting.value(SETTING_FIELD);
+		const field = Setting.value('notes.sortOrder.field');
 		const iconMap: any = {
 			user_updated_time: 'far fa-calendar-alt',
 			user_created_time: 'far fa-calendar-plus',
@@ -97,7 +95,7 @@ export default function NoteListControls(props: Props) {
 	}
 
 	function sortOrderReverseIcon() {
-		return Setting.value(SETTING_REVERSE) ? 'fas fa-long-arrow-alt-up' : 'fas fa-long-arrow-alt-down';
+		return Setting.value('notes.sortOrder.reverse') ? 'fas fa-long-arrow-alt-up' : 'fas fa-long-arrow-alt-down';
 	}
 
 	function sortOrderButtonsVisible() {
@@ -125,7 +123,7 @@ export default function NoteListControls(props: Props) {
 				{soButtonsVisible &&
 					<StyledPairButtonR
 						className="sort-order-reverse-button"
-						tooltip={CommandService.instance().label(NOTES_SORT_ORDER_TOGGLE_REVERSE)}
+						tooltip={CommandService.instance().label('notesSortOrderToggleReverse')}
 						iconName={sortOrderReverseIcon()}
 						level={ButtonLevel.Secondary}
 						onClick={onSortOrderReverseButtonClick}
