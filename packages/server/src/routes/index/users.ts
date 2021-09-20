@@ -265,7 +265,7 @@ interface FormFields {
 	disable_button: string;
 	restore_button: string;
 	cancel_subscription_button: string;
-	send_reset_password_email: string;
+	send_account_confirmation_email: string;
 	update_subscription_basic_button: string;
 	update_subscription_pro_button: string;
 	user_cancel_subscription_button: string;
@@ -306,7 +306,7 @@ router.post('users', async (path: SubPath, ctx: AppContext) => {
 					const user = await models.user().load(path.id);
 					await models.user().checkIfAllowed(ctx.joplin.owner, AclAction.Delete, user);
 					await models.userFlag().toggle(user.id, UserFlagType.ManuallyDisabled, !fields.restore_button);
-				} else if (fields.send_reset_password_email) {
+				} else if (fields.send_account_confirmation_email) {
 					const user = await models.user().load(path.id);
 					await models.user().save({ id: user.id, must_set_password: 1 });
 					await models.user().sendAccountConfirmationEmail(user);
