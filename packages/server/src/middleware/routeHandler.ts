@@ -25,7 +25,7 @@ export default async function(ctx: AppContext) {
 				owner: ctx.joplin.owner,
 				supportEmail: config().supportEmail,
 				impersonatorAdminSessionId,
-				csrfTag: impersonatorAdminSessionId ? await createCsrfTag(ctx) : null,
+				csrfTag: impersonatorAdminSessionId ? await createCsrfTag(ctx, false) : null,
 			});
 		} else {
 			ctx.response.status = 200;
