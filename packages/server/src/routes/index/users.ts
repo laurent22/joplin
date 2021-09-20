@@ -309,7 +309,7 @@ router.post('users', async (path: SubPath, ctx: AppContext) => {
 		} else if (fields.stop_impersonate_button) {
 			await stopImpersonating(ctx);
 			return redirect(ctx, config().baseUrl);
-		} if (ctx.joplin.owner.is_admin) {
+		} else if (ctx.joplin.owner.is_admin) {
 			if (fields.disable_button || fields.restore_button) {
 				const user = await models.user().load(path.id);
 				await models.user().checkIfAllowed(ctx.joplin.owner, AclAction.Delete, user);
