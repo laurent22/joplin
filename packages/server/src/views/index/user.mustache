@@ -94,8 +94,11 @@
 
 		<div class="control block">
 			<input type="submit" name="post_button" class="button is-primary" value="{{buttonTitle}}" />
+			{{#showImpersonateButton}}
+				<input type="submit" name="impersonate_button" class="button is-link" value="Impersonate user" />
+			{{/showImpersonateButton}}
 			{{#showResetPasswordButton}}
-				<input type="submit" name="send_account_confirmation_email" class="button is-warning" value="Send account confirmation email" />
+				<input type="submit" name="send_account_confirmation_email" class="button is-link" value="Send account confirmation email" />
 			{{/showResetPasswordButton}}
 			{{#showDisableButton}}
 				<input type="submit" name="disable_button" class="button is-danger" value="Disable" />
