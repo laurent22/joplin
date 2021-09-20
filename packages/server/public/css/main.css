@@ -45,6 +45,10 @@ table.table th .sort-button i {
 	margin-left: 0.5rem;
 }
 
+table.table tr.is-disabled {
+	opacity: 0.5;
+}
+
 .footer {
 	background-color: transparent;
 }

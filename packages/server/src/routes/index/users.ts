@@ -107,6 +107,7 @@ router.get('users', async (_path: SubPath, ctx: AppContext) => {
 	view.content.users = users.map(user => {
 		return {
 			...user,
+			displayName: user.full_name ? user.full_name : '(not set)',
 			formattedItemMaxSize: formatMaxItemSize(user),
 			formattedTotalSize: formatTotalSize(user),
 			formattedMaxTotalSize: formatMaxTotalSize(user),
@@ -114,6 +115,7 @@ router.get('users', async (_path: SubPath, ctx: AppContext) => {
 			totalSizeClass: totalSizeClass(user),
 			formattedAccountType: accountTypeToString(user.account_type),
 			formattedCanShareFolder: yesOrNo(getCanShareFolder(user)),
+			rowClassName: user.enabled ? '' : 'is-disabled',
 		};
 	});
 	return view;
