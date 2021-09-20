@@ -1,3 +1,4 @@
+import { Knex } from 'knex';
 import { EmailSender, Subscription, User, UserFlagType, Uuid } from '../services/database/types';
 import { ErrorNotFound } from '../utils/errors';
 import { Day } from '../utils/time';
@@ -6,8 +7,8 @@ import paymentFailedTemplate from '../views/emails/paymentFailedTemplate';
 import BaseModel from './BaseModel';
 import { AccountType } from './UserModel';
 
-export const failedPaymentDisableUploadInterval = 7 * Day;
-export const failedPaymentDisableAccount = 14 * Day;
+export const failedPaymentWarningInterval = 7 * Day;
+export const failedPaymentFinalAccount = 14 * Day;
 
 interface UserAndSubscription {
 	user: User;
@@ -48,24 +49,23 @@ export default class SubscriptionModel extends BaseModel<Subscription> {
 		};
 	}
 
-	public async shouldDisableUploadSubscriptions(): Promise<Subscription[]> {
-		const cutOffTime = Date.now() - failedPaymentDisableUploadInterval;
-
-		return this.db('users')
+	private failedPaymentSubscriptionsBaseQuery(cutOffTime: number): Knex.QueryBuilder {
+		const query = this.db('users')
 			.leftJoin('subscriptions', 'users.id', 'subscriptions.user_id')
 			.select('subscriptions.id', 'subscriptions.user_id', 'last_payment_failed_time')
-			.where('users.can_upload', '=', 1)
-			.andWhere('last_payment_failed_time', '>', this.db.ref('last_payment_time'))
-			.andWhere('subscriptions.is_deleted', '=', 0)
-			.andWhere('last_payment_failed_time', '<', cutOffTime);
+			.where('last_payment_failed_time', '>', this.db.ref('last_payment_time'))
+			.where('subscriptions.is_deleted', '=', 0)
+			.where('last_payment_failed_time', '<', cutOffTime)
+			.where('users.enabled', '=', 1);
+		return query;
 	}
 
-	public async shouldDisableAccountSubscriptions(): Promise<Subscription[]> {
-		const cutOffTime = Date.now() - failedPaymentDisableAccount;
+	public async failedPaymentWarningSubscriptions(): Promise<Subscription[]> {
+		return this.failedPaymentSubscriptionsBaseQuery(Date.now() - failedPaymentWarningInterval);
+	}
 
-		return this.db(this.tableName)
-			.where('last_payment_failed_time', '>', 'last_payment_time')
-			.andWhere('last_payment_failed_time', '<', cutOffTime);
+	public async failedPaymentFinalSubscriptions(): Promise<Subscription[]> {
+		return this.failedPaymentSubscriptionsBaseQuery(Date.now() - failedPaymentFinalAccount);
 	}
 
 	public async handlePayment(stripeSubscriptionId: string, success: boolean) {

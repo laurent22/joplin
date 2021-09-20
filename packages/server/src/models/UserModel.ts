@@ -1,5 +1,5 @@
 import BaseModel, { AclAction, SaveOptions, ValidateOptions } from './BaseModel';
-import { EmailSender, Item, User, UserFlagType, Uuid } from '../services/database/types';
+import { EmailSender, Item, Subscription, User, UserFlagType, Uuid } from '../services/database/types';
 import * as auth from '../utils/auth';
 import { ErrorUnprocessableEntity, ErrorForbidden, ErrorPayloadTooLarge, ErrorNotFound } from '../utils/errors';
 import { ModelType } from '@joplin/lib/BaseModel';
@@ -19,6 +19,9 @@ import paymentFailedUploadDisabledTemplate from '../views/emails/paymentFailedUp
 import oversizedAccount1 from '../views/emails/oversizedAccount1';
 import oversizedAccount2 from '../views/emails/oversizedAccount2';
 import dayjs = require('dayjs');
+import { failedPaymentFinalAccount } from './SubscriptionModel';
+import { Day } from '../utils/time';
+import paymentFailedAccountDisabledTemplate from '../views/emails/paymentFailedAccountDisabledTemplate';
 
 const logger = Logger.create('UserModel');
 
@@ -356,24 +359,54 @@ export default class UserModel extends BaseModel<User> {
 	}
 
 	public async handleFailedPaymentSubscriptions() {
-		const subscriptions = await this.models().subscription().shouldDisableUploadSubscriptions();
-		const users = await this.loadByIds(subscriptions.map(s => s.user_id));
+		interface SubInfo {
+			subs: Subscription[];
+			templateFn: Function;
+			emailKeyPrefix: string;
+			flagType: UserFlagType;
+		}
+
+		const subInfos: SubInfo[] = [
+			{
+				subs: await this.models().subscription().failedPaymentWarningSubscriptions(),
+				emailKeyPrefix: 'payment_failed_upload_disabled_',
+				flagType: UserFlagType.FailedPaymentWarning,
+				templateFn: () => paymentFailedUploadDisabledTemplate({ disabledInDays: Math.round(failedPaymentFinalAccount / Day) }),
+			},
+			{
+				subs: await this.models().subscription().failedPaymentFinalSubscriptions(),
+				emailKeyPrefix: 'payment_failed_account_disabled_',
+				flagType: UserFlagType.FailedPaymentFinal,
+				templateFn: () => paymentFailedAccountDisabledTemplate(),
+			},
+		];
+
+		let users: User[] = [];
+		for (const subInfo of subInfos) {
+			users = users.concat(await this.loadByIds(subInfo.subs.map(s => s.user_id)));
+		}
 
 		await this.withTransaction(async () => {
-			for (const sub of subscriptions) {
-				const user = users.find(u => u.id === sub.user_id);
-				if (!user) {
-					logger.error(`Could not find user for subscription ${sub.id}`);
-					continue;
+			for (const subInfo of subInfos) {
+				for (const sub of subInfo.subs) {
+					const user = users.find(u => u.id === sub.user_id);
+					if (!user) {
+						logger.error(`Could not find user for subscription ${sub.id}`);
+						continue;
+					}
+
+					const existingFlag = await this.models().userFlag().byUserId(user.id, subInfo.flagType);
+
+					if (!existingFlag) {
+						await this.models().userFlag().add(user.id, subInfo.flagType);
+
+						await this.models().email().push({
+							...subInfo.templateFn(),
+							...this.userEmailDetails(user),
+							key: `${subInfo.emailKeyPrefix}${sub.last_payment_failed_time}`,
+						});
+					}
 				}
-
-				await this.models().userFlag().add(user.id, UserFlagType.FailedPaymentWarning);
-
-				await this.models().email().push({
-					...paymentFailedUploadDisabledTemplate(),
-					...this.userEmailDetails(user),
-					key: `payment_failed_upload_disabled_${sub.last_payment_failed_time}`,
-				});
 			}
 		}, 'UserModel::handleFailedPaymentSubscriptions');
 	}
