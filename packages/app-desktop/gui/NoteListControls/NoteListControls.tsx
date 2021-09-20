@@ -1,17 +1,21 @@
+import { AppState } from '../../app.reducer';
 import * as React from 'react';
 import { useEffect, useRef } from 'react';
 import SearchBar from '../SearchBar/SearchBar';
 import Button, { ButtonLevel } from '../Button/Button';
 import CommandService from '@joplin/lib/services/CommandService';
 import { runtime as focusSearchRuntime } from './commands/focusSearch';
-import Setting from '@joplin/lib/models/Setting';
 import Note from '@joplin/lib/models/Note';
 import { notesSortOrderNextField } from '../MainScreen/commands/notesSortOrderSwitch';
-import app from '../../app';
+const { connect } = require('react-redux');
 const styled = require('styled-components').default;
 
 interface Props {
 	showNewNoteButtons: boolean;
+	sortOrderButtonsVisible: boolean;
+	sortOrderField: string;
+	sortOrderReverse: boolean;
+	notesParentType: string;
 	height: number;
 }
 
@@ -48,7 +52,7 @@ const ButtonContainer = styled.div`
 	flex-direction: row;
 `;
 
-export default function NoteListControls(props: Props) {
+function NoteListControls(props: Props) {
 	const searchBarRef = useRef(null);
 
 	useEffect(function() {
@@ -77,14 +81,14 @@ export default function NoteListControls(props: Props) {
 
 	function sortOrderFieldTooltip() {
 		const term1 = CommandService.instance().label('notesSortOrderSwitch');
-		const field = Setting.value('notes.sortOrder.field');
+		const field = props.sortOrderField;
 		const term2 = Note.fieldToLabel(field);
 		const term3 = Note.fieldToLabel(notesSortOrderNextField(field));
 		return `${term1}:\n ${term2} -> ${term3}`;
 	}
 
 	function sortOrderFieldIcon() {
-		const field = Setting.value('notes.sortOrder.field');
+		const field = props.sortOrderField;
 		const iconMap: any = {
 			user_updated_time: 'far fa-calendar-alt',
 			user_created_time: 'far fa-calendar-plus',
@@ -95,23 +99,21 @@ export default function NoteListControls(props: Props) {
 	}
 
 	function sortOrderReverseIcon() {
-		return Setting.value('notes.sortOrder.reverse') ? 'fas fa-long-arrow-alt-up' : 'fas fa-long-arrow-alt-down';
+		return props.sortOrderReverse ? 'fas fa-long-arrow-alt-up' : 'fas fa-long-arrow-alt-down';
 	}
 
-	function sortOrderButtonsVisible() {
-		let visible = Setting.value('notes.sortOrder.buttonsVisible');
-		if (app().store().getState().notesParentType === 'Search') visible = false;
+	function showsSortOrderButtons() {
+		let visible = props.sortOrderButtonsVisible;
+		if (props.notesParentType === 'Search') visible = false;
 		return visible;
 	}
 
 	function renderNewNoteButtons() {
 		if (!props.showNewNoteButtons) return null;
 
-		const soButtonsVisible = sortOrderButtonsVisible();
-
 		return (
 			<ButtonContainer>
-				{soButtonsVisible &&
+				{showsSortOrderButtons() &&
 					<StyledPairButtonL
 						className="sort-order-field-button"
 						tooltip={sortOrderFieldTooltip()}
@@ -120,7 +122,7 @@ export default function NoteListControls(props: Props) {
 						onClick={onSortOrderFieldButtonClick}
 					/>
 				}
-				{soButtonsVisible &&
+				{showsSortOrderButtons() &&
 					<StyledPairButtonR
 						className="sort-order-reverse-button"
 						tooltip={CommandService.instance().label('notesSortOrderToggleReverse')}
@@ -154,3 +156,14 @@ export default function NoteListControls(props: Props) {
 		</StyledRoot>
 	);
 }
+
+const mapStateToProps = (state: AppState) => {
+	return {
+		sortOrderButtonsVisible: state.settings['notes.sortOrder.buttonsVisible'],
+		sortOrderField: state.settings['notes.sortOrder.field'],
+		sortOrderReverse: state.settings['notes.sortOrder.reverse'],
+		notesParentType: state.notesParentType,
+	};
+};
+
+export default connect(mapStateToProps)(NoteListControls);
