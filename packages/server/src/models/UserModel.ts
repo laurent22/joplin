@@ -1,5 +1,5 @@
 import BaseModel, { AclAction, SaveOptions, ValidateOptions } from './BaseModel';
-import { EmailSender, Item, Subscription, User, UserFlagType, Uuid } from '../services/database/types';
+import { EmailSender, Item, NotificationLevel, Subscription, User, UserFlagType, Uuid } from '../services/database/types';
 import * as auth from '../utils/auth';
 import { ErrorUnprocessableEntity, ErrorForbidden, ErrorPayloadTooLarge, ErrorNotFound } from '../utils/errors';
 import { ModelType } from '@joplin/lib/BaseModel';
@@ -22,6 +22,9 @@ import dayjs = require('dayjs');
 import { failedPaymentFinalAccount } from './SubscriptionModel';
 import { Day } from '../utils/time';
 import paymentFailedAccountDisabledTemplate from '../views/emails/paymentFailedAccountDisabledTemplate';
+import changeEmailConfirmationTemplate from '../views/emails/changeEmailConfirmationTemplate';
+import changeEmailNotificationTemplate from '../views/emails/changeEmailNotificationTemplate';
+import { NotificationKey } from './NotificationModel';
 
 const logger = Logger.create('UserModel');
 
@@ -162,6 +165,7 @@ export default class UserModel extends BaseModel<User> {
 
 			const canBeChangedByNonAdmin = [
 				'full_name',
+				'email',
 				'password',
 			];
 
@@ -270,11 +274,57 @@ export default class UserModel extends BaseModel<User> {
 		}, 'UserModel::delete');
 	}
 
-	public async confirmEmail(userId: Uuid, token: string) {
+	private async confirmEmail(user: User) {
+		await this.save({ id: user.id, email_confirmed: 1 });
+	}
+
+	public async processEmailConfirmation(userId: Uuid, token: string, beforeChangingEmailHandler: Function) {
 		await this.models().token().checkToken(userId, token);
 		const user = await this.models().user().load(userId);
 		if (!user) throw new ErrorNotFound('No such user');
-		await this.save({ id: user.id, email_confirmed: 1 });
+
+		const newEmail = await this.models().keyValue().value(`newEmail::${userId}`);
+		if (newEmail) {
+			await beforeChangingEmailHandler(newEmail);
+			await this.completeEmailChange(user);
+		} else {
+			await this.confirmEmail(user);
+		}
+	}
+
+	public async initiateEmailChange(userId: Uuid, newEmail: string) {
+		const beforeSaveUser = await this.models().user().load(userId);
+
+		await this.models().notification().add(userId, NotificationKey.Any, NotificationLevel.Important, 'A confirmation email has been sent to your new address. Please follow the link in that email to confirm. Your email will only be updated after that.');
+
+		await this.models().keyValue().setValue(`newEmail::${userId}`, newEmail);
+
+		await this.models().user().sendChangeEmailConfirmationEmail(newEmail, beforeSaveUser);
+		await this.models().user().sendChangeEmailNotificationEmail(beforeSaveUser.email, beforeSaveUser);
+	}
+
+	public async completeEmailChange(user: User) {
+		const newEmailKey = `newEmail::${user.id}`;
+		const newEmail = await this.models().keyValue().value<string>(newEmailKey);
+
+		const oldEmail = user.email;
+
+		const userToSave: User = {
+			id: user.id,
+			email_confirmed: 1,
+			email: newEmail,
+		};
+
+		await this.withTransaction(async () => {
+			if (newEmail) {
+				// We keep the old email just in case. Probably yagni but it's easy enough to do.
+				await this.models().keyValue().setValue(`oldEmail::${user.id}_${Date.now()}`, oldEmail);
+				await this.models().keyValue().deleteValue(newEmailKey);
+			}
+			await this.save(userToSave);
+		}, 'UserModel::confirmEmail');
+
+		logger.info(`Changed email of user ${user.id} from "${oldEmail}" to "${newEmail}"`);
 	}
 
 	private userEmailDetails(user: User): UserEmailDetails {
@@ -293,6 +343,24 @@ export default class UserModel extends BaseModel<User> {
 		await this.models().email().push({
 			...accountConfirmationTemplate({ url }),
 			...this.userEmailDetails(user),
+		});
+	}
+
+	public async sendChangeEmailConfirmationEmail(recipientEmail: string, user: User) {
+		const validationToken = await this.models().token().generate(user.id);
+		const url = encodeURI(confirmUrl(user.id, validationToken));
+
+		await this.models().email().push({
+			...changeEmailConfirmationTemplate({ url }),
+			...this.userEmailDetails(user),
+			recipient_email: recipientEmail,
+		});
+	}
+	public async sendChangeEmailNotificationEmail(recipientEmail: string, user: User) {
+		await this.models().email().push({
+			...changeEmailNotificationTemplate(),
+			...this.userEmailDetails(user),
+			recipient_email: recipientEmail,
 		});
 	}
 

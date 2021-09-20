@@ -5,7 +5,6 @@ import { defaultAdminEmail, defaultAdminPassword } from '../db';
 import { _ } from '@joplin/lib/locale';
 import Logger from '@joplin/lib/Logger';
 import * as MarkdownIt from 'markdown-it';
-import config from '../config';
 import { NotificationKey } from '../models/NotificationModel';
 import { profileUrl } from '../utils/urlUtils';
 
@@ -29,18 +28,18 @@ async function handleChangeAdminPasswordNotification(ctx: AppContext) {
 	}
 }
 
-async function handleSqliteInProdNotification(ctx: AppContext) {
-	if (!ctx.joplin.owner.is_admin) return;
+// async function handleSqliteInProdNotification(ctx: AppContext) {
+// 	if (!ctx.joplin.owner.is_admin) return;
 
-	const notificationModel = ctx.joplin.models.notification();
+// 	const notificationModel = ctx.joplin.models.notification();
 
-	if (config().database.client === 'sqlite3' && ctx.joplin.env === 'prod') {
-		await notificationModel.add(
-			ctx.joplin.owner.id,
-			NotificationKey.UsingSqliteInProd
-		);
-	}
-}
+// 	if (config().database.client === 'sqlite3' && ctx.joplin.env === 'prod') {
+// 		await notificationModel.add(
+// 			ctx.joplin.owner.id,
+// 			NotificationKey.UsingSqliteInProd
+// 		);
+// 	}
+// }
 
 function levelClassName(level: NotificationLevel): string {
 	if (level === NotificationLevel.Important) return 'is-warning';
@@ -78,7 +77,7 @@ export default async function(ctx: AppContext, next: KoaNext): Promise<void> {
 		if (!ctx.joplin.owner) return next();
 
 		await handleChangeAdminPasswordNotification(ctx);
-		await handleSqliteInProdNotification(ctx);
+		// await handleSqliteInProdNotification(ctx);
 		ctx.joplin.notifications = await makeNotificationViews(ctx);
 	} catch (error) {
 		logger.error(error);

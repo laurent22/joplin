@@ -69,13 +69,13 @@ describe('TaskService', function() {
 		expect(service.taskState('test').lastCompletionTime).toBeFalsy();
 		expect(service.taskState('test').lastRunTime.getTime()).toBeGreaterThanOrEqual(startTime.getTime());
 
+		await msleep(10);
 		finishTask = true;
 		await msleep(10);
 
 		expect(taskHasRan).toBe(true);
 		expect(service.taskState('test').running).toBe(false);
 		expect(service.taskState('test').lastCompletionTime.getTime()).toBeGreaterThan(startTime.getTime());
-
 	});
 
 });
