@@ -59,6 +59,7 @@ import editorCommandDeclarations from './gui/NoteEditor/editorCommandDeclaration
 import ShareService from '@joplin/lib/services/share/ShareService';
 import checkForUpdates from './checkForUpdates';
 import { AppState } from './app.reducer';
+import PerFolderSortOrderService from './services/sortOrder/PerFolderSortOrderService';
 
 const pluginClasses = [
 	require('./plugins/GotoAnything').default,
@@ -363,6 +364,8 @@ class Application extends BaseApplication {
 		PluginManager.instance().register(pluginClasses);
 
 		this.initRedux();
+
+		PerFolderSortOrderService.initialize();
 
 		CommandService.instance().initialize(this.store(), Setting.value('env') == 'dev', stateToWhenClauseContext);
 

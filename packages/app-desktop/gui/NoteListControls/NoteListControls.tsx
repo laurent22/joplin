@@ -6,7 +6,7 @@ import Button, { ButtonLevel } from '../Button/Button';
 import CommandService from '@joplin/lib/services/CommandService';
 import { runtime as focusSearchRuntime } from './commands/focusSearch';
 import Note from '@joplin/lib/models/Note';
-import { notesSortOrderNextField } from '../MainScreen/commands/notesSortOrderSwitch';
+import { notesSortOrderNextField } from '../../services/sortOrder/notesSortOrderUtils';
 const { connect } = require('react-redux');
 const styled = require('styled-components').default;
 
@@ -72,15 +72,15 @@ function NoteListControls(props: Props) {
 	}
 
 	function onSortOrderFieldButtonClick() {
-		void CommandService.instance().execute('notesSortOrderSwitch');
+		void CommandService.instance().execute('toggleNotesSortOrderField');
 	}
 
 	function onSortOrderReverseButtonClick() {
-		void CommandService.instance().execute('notesSortOrderToggleReverse');
+		void CommandService.instance().execute('toggleNotesSortOrderReverse');
 	}
 
 	function sortOrderFieldTooltip() {
-		const term1 = CommandService.instance().label('notesSortOrderSwitch');
+		const term1 = CommandService.instance().label('toggleNotesSortOrderField');
 		const field = props.sortOrderField;
 		const term2 = Note.fieldToLabel(field);
 		const term3 = Note.fieldToLabel(notesSortOrderNextField(field));
@@ -125,7 +125,7 @@ function NoteListControls(props: Props) {
 				{showsSortOrderButtons() &&
 					<StyledPairButtonR
 						className="sort-order-reverse-button"
-						tooltip={CommandService.instance().label('notesSortOrderToggleReverse')}
+						tooltip={CommandService.instance().label('toggleNotesSortOrderReverse')}
 						iconName={sortOrderReverseIcon()}
 						level={ButtonLevel.Secondary}
 						onClick={onSortOrderReverseButtonClick}

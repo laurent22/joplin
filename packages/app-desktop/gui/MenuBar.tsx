@@ -136,7 +136,7 @@ function useMenuStates(menu: any, props: Props) {
 					menuItemSetChecked(`sort:${type}:${field}`, (props as any)[`${type}.sortOrder.field`] === field);
 				}
 
-				const id = type == 'notes' ? 'notesSortOrderToggleReverse' : `sort:${type}:reverse`;
+				const id = type == 'notes' ? 'toggleNotesSortOrderReverse' : `sort:${type}:reverse`;
 				menuItemSetChecked(id, (props as any)[`${type}.sortOrder.reverse`]);
 			}
 
@@ -269,7 +269,7 @@ function useMenu(props: Props) {
 						// checked: Setting.value(`${type}.sortOrder.field`) === field,
 						click: () => {
 							if (type === 'notes') {
-								void CommandService.instance().execute('notesSortOrderSwitch', field);
+								void CommandService.instance().execute('toggleNotesSortOrderField', field);
 							} else {
 								Setting.setValue(`${type}.sortOrder.field`, field);
 							}
@@ -281,8 +281,8 @@ function useMenu(props: Props) {
 
 				if (type == 'notes') {
 					sortItems.push(
-						{ ...menuItemDic.notesSortOrderToggleReverse, type: 'checkbox' },
-						{ ...menuItemDic.notesSortOrderSwitch, visible: false }
+						{ ...menuItemDic.toggleNotesSortOrderReverse, type: 'checkbox' },
+						{ ...menuItemDic.toggleNotesSortOrderField, visible: false }
 					);
 				} else {
 					sortItems.push({
