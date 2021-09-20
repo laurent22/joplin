@@ -1,12 +1,11 @@
 import CommandService, { CommandContext, CommandDeclaration, CommandRuntime } from '@joplin/lib/services/CommandService';
 import Setting from '@joplin/lib/models/Setting';
-import { State } from '@joplin/lib/reducer';
-import app from '../../../app';
 import eventManager from '@joplin/lib/eventManager';
 import { notesSortOrderFieldArray } from './notesSortOrderSwitch';
 import { _ } from '@joplin/lib/locale';
 
 let previousFolderId: string = null;
+const folderState = { notesParentType: '', selectedFolderId: '' };
 let ownSortOrders: { [key: string]: any } = null;
 const sharedSortOrder: { [key: string]: any } = {
 	field: 'user_updated_time',
@@ -16,10 +15,6 @@ const sharedSortOrder: { [key: string]: any } = {
 	title: false,
 	order: false,
 };
-
-export function selectedFolderHasOwnSortOrder() {
-	return hasOwnSortOrder(getSelectedFolderId());
-}
 
 export function hasOwnSortOrder(folderId: string) {
 	return folderId && ownSortOrders && ownSortOrders.hasOwnProperty(folderId + SUFFIX_FIELD);
@@ -33,8 +28,8 @@ export const declaration: CommandDeclaration = {
 export const runtime = (): CommandRuntime => {
 	loadOwnSortOrders();
 	loadSharedSortOrder();
-	eventManager.appStateOn('notesParentType', onFolderSelectionMayChange);
-	eventManager.appStateOn('selectedFolderId', onFolderSelectionMayChange);
+	eventManager.appStateOn('notesParentType', onFolderSelectionMayChange.bind(null, 'notesParentType'));
+	eventManager.appStateOn('selectedFolderId', onFolderSelectionMayChange.bind(null, 'selectedFolderId'));
 
 	return {
 		enabledCondition: 'oneFolderSelected',
@@ -75,8 +70,10 @@ export const runtime = (): CommandRuntime => {
 	};
 };
 
-function onFolderSelectionMayChange() {
-	const selectedId = getSelectedFolderId();
+function onFolderSelectionMayChange(cause: string, event: any) {
+	if (cause !== 'notesParentType' && cause !== 'selectedFolderId') return;
+	folderState[cause] = event.value;
+	const selectedId = getSelectedFolderId(folderState);
 	if (previousFolderId === null) previousFolderId = selectedId;
 	if (previousFolderId === selectedId) return;
 	const field = Setting.value('notes.sortOrder.field');
@@ -106,10 +103,9 @@ function onFolderSelectionMayChange() {
 const SUFFIX_FIELD = '$field';
 const SUFFIX_REVERSE = '$reverse';
 
-function getSelectedFolderId(state?: State): string {
-	const s = state ? state : app().store().getState();
-	if (s.notesParentType === 'Folder') {
-		return s.selectedFolderId;
+function getSelectedFolderId(state: { notesParentType: string; selectedFolderId: string }): string {
+	if (state.notesParentType === 'Folder') {
+		return state.selectedFolderId;
 	} else {
 		return '';
 	}
