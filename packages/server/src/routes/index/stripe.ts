@@ -407,6 +407,7 @@ const getHandlers: Record<string, StripeRouteHandler> = {
 
 	checkoutTest: async (_stripe: Stripe, _path: SubPath, _ctx: AppContext) => {
 		const basicPrice = findPrice(stripeConfig().prices, { accountType: 1, period: PricePeriod.Monthly });
+		const proPrice = findPrice(stripeConfig().prices, { accountType: 2, period: PricePeriod.Monthly });
 
 		return `
 			<head>
@@ -432,30 +433,36 @@ const getHandlers: Record<string, StripeRouteHandler> = {
 				</script>
 			</head>
 			<body>
-				<button id="checkout">Subscribe</button>
+				<button id="checkout_basic">Subscribe Basic</button>
+				<button id="checkout_pro">Subscribe Pro</button>
 				<script>
-					var PRICE_ID = ${JSON.stringify(basicPrice.id)};
+					var BASIC_PRICE_ID = ${JSON.stringify(basicPrice.id)};
+					var PRO_PRICE_ID = ${JSON.stringify(proPrice.id)};
 
 					function handleResult() {
 						console.info('Redirected to checkout');
 					}
 
-					document
-						.getElementById("checkout")
-						.addEventListener("click", function(evt) {
-							evt.preventDefault();
-
-							// You'll have to define PRICE_ID as a price ID before this code block
-							createCheckoutSession(PRICE_ID).then(function(data) {
-								// Call Stripe.js method to redirect to the new Checkout page
-								stripe
-									.redirectToCheckout({
-										sessionId: data.sessionId
-									})
-									.then(handleResult);
-							});
+					function createSessionAndRedirect(priceId) {
+						createCheckoutSession(priceId).then(function(data) {
+							// Call Stripe.js method to redirect to the new Checkout page
+							stripe
+								.redirectToCheckout({
+									sessionId: data.sessionId
+								})
+								.then(handleResult);
 						});
-			
+					}
+
+					document.getElementById("checkout_basic").addEventListener("click", function(evt) {
+						evt.preventDefault();
+						createSessionAndRedirect(BASIC_PRICE_ID);
+					});
+
+					document.getElementById("checkout_pro").addEventListener("click", function(evt) {
+						evt.preventDefault();
+						createSessionAndRedirect(PRO_PRICE_ID);
+					});
 				</script>
 			</body>
 		`;
