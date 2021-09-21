@@ -2,7 +2,7 @@ import { SubPath, redirect } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
 import { AppContext, HttpMethod } from '../../utils/types';
-import { bodyFields, contextSessionId, formParse } from '../../utils/requestUtils';
+import { bodyFields, formParse } from '../../utils/requestUtils';
 import { ErrorForbidden, ErrorUnprocessableEntity } from '../../utils/errors';
 import { User, UserFlagType, userFlagTypeToLabel, Uuid } from '../../services/database/types';
 import config from '../../config';
@@ -291,7 +291,7 @@ interface FormFields {
 	send_account_confirmation_email: string;
 	update_subscription_basic_button: string;
 	update_subscription_pro_button: string;
-	user_cancel_subscription_button: string;
+	// user_cancel_subscription_button: string;
 	impersonate_button: string;
 	stop_impersonate_button: string;
 }
@@ -324,13 +324,13 @@ router.post('users', async (path: SubPath, ctx: AppContext) => {
 
 				await models.user().save(userToSave, { isNew: false });
 			}
-		} else if (fields.user_cancel_subscription_button) {
-			await cancelSubscriptionByUserId(models, userId);
-			const sessionId = contextSessionId(ctx, false);
-			if (sessionId) {
-				await models.session().logout(sessionId);
-				return redirect(ctx, config().baseUrl);
-			}
+		// } else if (fields.user_cancel_subscription_button) {
+		// 	await cancelSubscriptionByUserId(models, userId);
+		// 	const sessionId = contextSessionId(ctx, false);
+		// 	if (sessionId) {
+		// 		await models.session().logout(sessionId);
+		// 		return redirect(ctx, config().baseUrl);
+		// 	}
 		} else if (fields.stop_impersonate_button) {
 			await stopImpersonating(ctx);
 			return redirect(ctx, config().baseUrl);

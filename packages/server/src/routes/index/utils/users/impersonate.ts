@@ -11,6 +11,7 @@ export function getImpersonatorAdminSessionId(ctx: AppContext): string {
 export async function startImpersonating(ctx: AppContext, userId: Uuid) {
 	const adminSessionId = contextSessionId(ctx);
 	const user = await ctx.joplin.models.session().sessionUser(adminSessionId);
+	if (!user) throw new Error(`No user for session: ${adminSessionId}`);
 	if (!user.is_admin) throw new ErrorForbidden('Impersonator must be an admin');
 
 	const impersonatedSession = await ctx.joplin.models.session().createUserSession(userId);
@@ -22,9 +23,11 @@ export async function stopImpersonating(ctx: AppContext) {
 	const adminSessionId = cookieGet(ctx, 'adminSessionId');
 	if (!adminSessionId) throw new Error('Missing cookie adminSessionId');
 
-	const adminUser = await ctx.joplin.models.session().sessionUser(adminSessionId);
-	if (!adminUser.is_admin) throw new ErrorForbidden('User must be an admin');
-
+	// This function simply moves the adminSessionId back to sessionId. There's
+	// no need to check if anything is valid because that will be done by other
+	// session checking routines. We also don't want this function to fail
+	// because it would leave the cookies in an invalid state (for example if
+	// the admin has lost their sessions, or the user no longer exists).
 	cookieDelete(ctx, 'adminSessionId');
 	cookieSet(ctx, 'sessionId', adminSessionId);
 }
