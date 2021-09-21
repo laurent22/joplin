@@ -53,7 +53,7 @@ describe('TaskService', function() {
 						clearInterval(iid);
 						taskHasRan = true;
 					}
-				}, 1);
+				}, 10);
 			},
 			schedule: '',
 		};

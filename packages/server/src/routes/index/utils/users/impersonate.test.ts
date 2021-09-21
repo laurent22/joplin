@@ -52,15 +52,15 @@ describe('users/impersonate', function() {
 		await expectThrow(async () => startImpersonating(ctx, adminUser.id));
 	});
 
-	test('should not stop impersonating if not admin', async function() {
-		const ctx = await koaAppContext();
+	// test('should not stop impersonating if not admin', async function() {
+	// 	const ctx = await koaAppContext();
 
-		await createUserAndSession(1, true);
-		const { session } = await createUserAndSession(2);
+	// 	await createUserAndSession(1, true);
+	// 	const { session } = await createUserAndSession(2);
 
-		cookieSet(ctx, 'adminSessionId', session.id);
+	// 	cookieSet(ctx, 'adminSessionId', session.id);
 
-		await expectThrow(async () => stopImpersonating(ctx));
-	});
+	// 	await expectThrow(async () => stopImpersonating(ctx));
+	// });
 
 });
