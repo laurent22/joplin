@@ -166,7 +166,7 @@ router.get('users/:id', async (path: SubPath, ctx: AppContext, user: User = null
 		const lastPaymentAttempt = models.subscription().lastPaymentAttempt(subscription);
 
 		view.content.subscription = subscription;
-		view.content.showCancelSubscription = !isNew;
+		view.content.showManageSubscription = !isNew;
 		view.content.showUpdateSubscriptionBasic = !isNew && !!owner.is_admin && user.account_type !== AccountType.Basic;
 		view.content.showUpdateSubscriptionPro = !isNew && user.account_type !== AccountType.Pro;
 		view.content.subLastPaymentStatus = lastPaymentAttempt.status;

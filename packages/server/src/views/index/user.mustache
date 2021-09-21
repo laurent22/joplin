@@ -120,25 +120,22 @@
 					{{#showUpdateSubscriptionPro}}
 						<input type="submit" name="update_subscription_pro_button" class="button is-warning" value="Upgrade to Pro" />
 					{{/showUpdateSubscriptionPro}}
-					{{#showCancelSubscription}}
-						<input type="submit" name="cancel_subscription_button" class="button is-danger" value="Cancel subscription" />
-					{{/showCancelSubscription}}
 				</div>
 			{{/global.owner.is_admin}}
 
 			{{^global.owner.is_admin}}
-				<div class="control block">
-					{{#showUpdateSubscriptionPro}}
-						<a href="{{{global.baseUrl}}}/upgrade" class="button is-warning block">Upgrade to Pro</a>
-					{{/showUpdateSubscriptionPro}}
-					{{#showCancelSubscription}}
-						<p class="block"><a href="{{stripePortalUrl}}">Manage payment details</a></p>
-					{{/showCancelSubscription}}
-					{{#showCancelSubscription}}
-						<p id="user_cancel_subscription_link" class="block"><a href="#">Cancel subscription</a></p>
-						<input type="submit" id="user_cancel_subscription_button" name="user_cancel_subscription_button" class="button is-danger" value="Cancel subscription" />
-					{{/showCancelSubscription}}
-				</div>
+				{{#showUpdateSubscriptionPro}}
+					<div class="control block">
+						<p><a href="{{{global.baseUrl}}}/upgrade" class="button is-warning block">Upgrade to Pro</a></p>
+						<p class="help">Click for more info about the Pro plan and to upgrade your account.</p>
+					</div>
+				{{/showUpdateSubscriptionPro}}
+				{{#showManageSubscription}}
+					<div class="control block">
+						<p><a class="button is-link" target="_blank" href="{{stripePortalUrl}}">Manage subscription</a></p>
+						<p class="help">Click to update your payment details, switch to a different billing cycle or plan, or to cancel your subscription.</p>
+					</div>
+				{{/showManageSubscription}}
 			{{/global.owner.is_admin}}
 		</div>
 	{{/subscription}}
@@ -158,15 +155,6 @@
 
 <script>
 	$(() => {
-		if ($('#user_cancel_subscription_link').length) {
-			$('#user_cancel_subscription_button').hide();
-			$('#user_cancel_subscription_link').show();
-			$('#user_cancel_subscription_link').click((event) => {
-				event.preventDefault();
-				$('#user_cancel_subscription_button').click();
-			});
-		}
-
 		document.getElementById("user_form").addEventListener('submit', function(event) {
 			if (event.submitter.getAttribute('name') === 'disable_button') {
 				const ok = confirm('Disable this account?');
@@ -176,21 +164,6 @@
 			if (event.submitter.getAttribute('name') === 'restore_button') {
 				const ok = confirm('Restore this account?');
 				if (!ok) event.preventDefault();
-			}
-
-			if (event.submitter.getAttribute('name') === 'cancel_subscription_button') {
-				const ok = confirm('Cancel this subscription?');
-				if (!ok) event.preventDefault();
-			}
-
-			if (event.submitter.getAttribute('name') === 'user_cancel_subscription_button') {
-				const answer = prompt('After cancelling your subscription, your account will be deleted and you will no longer be able to use it for synchronisation. This cannot be undone. If you would like to proceed please type "confirm" in the box below.');
-				if (answer !== 'confirm') {
-					event.preventDefault();
-					alert('The subscription was not cancelled.');
-				} else {
-					alert('Thank you. Your subscription is now going to be cancelled and you will be logged out.');
-				}
 			}
 
 			if (event.submitter.getAttribute('name') === 'update_subscription_basic_button') {
