@@ -31,6 +31,7 @@ interface AppContextJoplin {
 	account: Account;
 	routes: Routers;
 	services: Services;
+	path: string;
 }
 
 export interface AppContext extends Koa.Context {

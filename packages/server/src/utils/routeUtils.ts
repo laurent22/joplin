@@ -178,12 +178,12 @@ export function userIdFromUserContentUrl(url: string): Uuid {
 }
 
 export function routeResponseFormat(context: AppContext): RouteResponseFormat {
-	const path = context.path;
+	const path = context.joplin.path;
 	return path.indexOf('api') === 0 || path.indexOf('/api') === 0 ? RouteResponseFormat.Json : RouteResponseFormat.Html;
 }
 
 export async function execRequest(routes: Routers, ctx: AppContext) {
-	const match = findMatchingRoute(ctx.path, routes);
+	const match = findMatchingRoute(ctx.joplin.path, routes);
 	if (!match) throw new ErrorNotFound();
 
 	const endPoint = match.route.findEndPoint(ctx.request.method as HttpMethod, match.subPath.schema);

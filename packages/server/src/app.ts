@@ -148,6 +148,7 @@ async function main() {
 		ctx.joplin = {
 			...ctx.joplinBase,
 			owner: null,
+			path: ctx.path.slice((new URL(config().baseUrl)).pathname.length - 1),
 			notifications: [],
 		};
 
