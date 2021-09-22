@@ -1,13 +1,12 @@
 import * as React from 'react';
 import Sidebar from './Sidebar';
 import ButtonBar from './ButtonBar';
-import Button, { ButtonLevel } from '../Button/Button';
+import Button, { ButtonLevel, ButtonSize } from '../Button/Button';
 import { _ } from '@joplin/lib/locale';
 import bridge from '../../services/bridge';
 import Setting, { AppType, SyncStartupOperation } from '@joplin/lib/models/Setting';
 import control_PluginsStates from './controls/plugins/PluginsStates';
 import EncryptionConfigScreen from '../EncryptionConfigScreen/EncryptionConfigScreen';
-
 const { connect } = require('react-redux');
 const { themeStyle } = require('@joplin/lib/theme');
 const pathUtils = require('@joplin/lib/path-utils');
@@ -515,6 +514,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 											level={ButtonLevel.Secondary}
 											title={_('Browse...')}
 											onClick={browseButtonClick}
+											size={ButtonSize.Small}
 										/>
 									</div>
 								</div>
