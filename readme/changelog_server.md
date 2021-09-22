@@ -1,5 +1,22 @@
 # Joplin Server Changelog
 
+## [server-v2.4.9-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.4.9-beta) (Pre-release) - 2021-09-22T16:31:23Z
+
+- New: Add support for changing user own email (63e88c0)
+- Improved: Allow an admin to impersonate a user (03b4b6e)
+- Improved: Allow entering coupon code on Stripe checkout page (4577c9c)
+- Improved: Clear cookie when account has been deleted to allow viewing login page again (061761f)
+- Improved: Exclude certain queries from slow log (4e70ca6)
+- Improved: Handle Joplin Cloud failed subscription payments (a6b1cff)
+- Improved: Improved support for background tasks and added admin UI to view them (cd877f6)
+- Improved: Improved user list page (4d38397)
+- Improved: Link to Joplin Cloud signup page on login page (d850eed)
+- Improved: Manage subscription entirely from Stripe (7fac194)
+- Improved: Redirect to user page after changing a user (c91d4bd)
+- Improved: Rename admin button "Send reset password email" to more correct "Send account information email" (37d446b)
+- Improved: Sync deleted items first to allow fixing oversized accounts (43c594b)
+- Fixed: Fixed calculating total item size after an item has been deleted (024967c)
+
 ## [server-v2.4.8-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.4.8-beta) (Pre-release) - 2021-09-15T22:16:59Z
 
 - New: Added support for app level slow SQL query log (5e8b742)
