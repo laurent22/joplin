@@ -1,5 +1,11 @@
 # Joplin Android app changelog
 
+## [android-v2.4.2](https://github.com/laurent22/joplin/releases/tag/android-v2.4.2) (Pre-release) - 2021-09-22T17:02:37Z
+
+- Improved: Allow disabling any master key, including default or active one (9407efd)
+- Improved: Update Mermaid 8.10.2 -&gt; 8.12.1 and fix gitGraph crash (#5448) (#5295 by Helmut K. C. Tessarek)
+- Fixed: Misinterpreted search term after filter in quotation marks (#5445) (#5444 by [@JackGruber](https://github.com/JackGruber))
+
 ## [android-v2.4.1](https://github.com/laurent22/joplin/releases/tag/android-v2.4.1) (Pre-release) - 2021-08-30T13:37:34Z
 
 - New: Add a way to disable a master key (7faa58e)
