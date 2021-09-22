@@ -292,3 +292,7 @@ export function setPpk(ppk: PublicPrivateKeyPair) {
 	syncInfo.ppk = ppk;
 	saveLocalSyncInfo(syncInfo);
 }
+
+export function masterKeyById(id: string) {
+	return localSyncInfo().masterKeys.find(mk => mk.id === id);
+}

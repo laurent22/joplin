@@ -1,7 +1,7 @@
-import { afterAllCleanUp, setupDatabaseAndSynchronizer, switchClient, encryptionService, expectNotThrow, expectThrow } from '../../testing/test-utils';
+import { afterAllCleanUp, setupDatabaseAndSynchronizer, switchClient, encryptionService, expectNotThrow, expectThrow, kvStore } from '../../testing/test-utils';
 import MasterKey from '../../models/MasterKey';
-import { migrateMasterPassword, showMissingMasterKeyMessage, updateMasterPassword } from './utils';
-import { localSyncInfo, setActiveMasterKeyId, setMasterKeyEnabled, setPpk } from '../synchronizer/syncInfoUtils';
+import { migrateMasterPassword, resetMasterPassword, showMissingMasterKeyMessage, updateMasterPassword } from './utils';
+import { localSyncInfo, masterKeyById, masterKeyEnabled, setActiveMasterKeyId, setMasterKeyEnabled, setPpk } from '../synchronizer/syncInfoUtils';
 import Setting from '../../models/Setting';
 import { generateKeyPair, ppkPasswordIsValid } from './ppk';
 
@@ -128,6 +128,24 @@ describe('e2ee/utils', function() {
 
 		await updateMasterPassword('111111', '222222');
 		expect(Setting.value('encryption.masterPassword')).toBe('222222');
+	});
+
+	it('should reset a master password', async () => {
+		const masterPassword1 = '111111';
+		const masterPassword2 = '222222';
+		Setting.setValue('encryption.masterPassword', masterPassword1);
+		const mk1 = await MasterKey.save(await encryptionService().generateMasterKey(masterPassword1));
+		const mk2 = await MasterKey.save(await encryptionService().generateMasterKey(masterPassword1));
+		setPpk(await generateKeyPair(encryptionService(), masterPassword1));
+
+		const previousPpk = localSyncInfo().ppk;
+		await resetMasterPassword(encryptionService(), kvStore(), masterPassword2);
+
+		expect(masterKeyEnabled(masterKeyById(mk1.id))).toBe(false);
+		expect(masterKeyEnabled(masterKeyById(mk2.id))).toBe(false);
+		expect(localSyncInfo().ppk.id).not.toBe(previousPpk.id);
+		expect(localSyncInfo().ppk.privateKey.ciphertext).not.toBe(previousPpk.privateKey.ciphertext);
+		expect(localSyncInfo().ppk.publicKey).not.toBe(previousPpk.publicKey);
 	});
 
 });

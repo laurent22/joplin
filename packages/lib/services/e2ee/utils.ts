@@ -6,7 +6,8 @@ import { MasterKeyEntity } from './types';
 import EncryptionService from './EncryptionService';
 import { getActiveMasterKey, getActiveMasterKeyId, localSyncInfo, masterKeyEnabled, saveLocalSyncInfo, setEncryptionEnabled, SyncInfo } from '../synchronizer/syncInfoUtils';
 import JoplinError from '../../JoplinError';
-import { pkReencryptPrivateKey, ppkPasswordIsValid } from './ppk';
+import { generateKeyPair, pkReencryptPrivateKey, ppkPasswordIsValid } from './ppk';
+import KvStore from '../KvStore';
 
 const logger = Logger.create('e2ee/utils');
 
@@ -193,7 +194,7 @@ export function getMasterPassword(throwIfNotSet: boolean = true): string {
 //   the new password.
 // - If the current password is not provided, the master password is simply set
 //   according to newPassword.
-export async function updateMasterPassword(currentPassword: string, newPassword: string, waitForSyncFinishedThenSync: Function = null) {
+export async function updateMasterPassword(currentPassword: string, newPassword: string) {
 	if (!newPassword) throw new Error('New password must be set');
 
 	if (currentPassword && !(await masterPasswordIsValid(currentPassword))) throw new Error('Master password is not valid. Please try again.');
@@ -208,6 +209,7 @@ export async function updateMasterPassword(currentPassword: string, newPassword:
 			try {
 				reencryptedMasterKeys.push(await EncryptionService.instance().reencryptMasterKey(mk, currentPassword, newPassword));
 			} catch (error) {
+				if (!masterKeyEnabled(mk)) continue; // Ignore if the master key is disabled, because the password is probably forgotten
 				error.message = `Key ${mk.id} could not be reencrypted - this is most likely due to an incorrect password. Please try again. Error was: ${error.message}`;
 				throw error;
 			}
@@ -236,8 +238,25 @@ export async function updateMasterPassword(currentPassword: string, newPassword:
 	}
 
 	Setting.setValue('encryption.masterPassword', newPassword);
+}
 
-	if (waitForSyncFinishedThenSync) void waitForSyncFinishedThenSync();
+export async function resetMasterPassword(encryptionService: EncryptionService, kvStore: KvStore, newPassword: string) {
+	for (const mk of localSyncInfo().masterKeys) {
+		if (!masterKeyEnabled(mk)) continue;
+		mk.enabled = 0;
+		await MasterKey.save(mk);
+	}
+
+	const syncInfo = localSyncInfo();
+	if (syncInfo.ppk) {
+		await kvStore.setValue(`oldppk::${Date.now()}`, JSON.stringify(syncInfo.ppk));
+		syncInfo.ppk = await generateKeyPair(encryptionService, newPassword);
+		saveLocalSyncInfo(syncInfo);
+	}
+
+	// TODO: Unshare any folder associated with a disabled master key?
+
+	Setting.setValue('encryption.masterPassword', newPassword);
 }
 
 export enum MasterPasswordStatus {

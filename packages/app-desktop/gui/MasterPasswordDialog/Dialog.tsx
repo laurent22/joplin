@@ -6,12 +6,19 @@ import DialogButtonRow, { ClickEvent } from '../DialogButtonRow';
 import Dialog from '../Dialog';
 import DialogTitle from '../DialogTitle';
 import StyledInput from '../style/StyledInput';
-import { getMasterPasswordStatus, getMasterPasswordStatusMessage, masterPasswordIsValid, MasterPasswordStatus, updateMasterPassword } from '@joplin/lib/services/e2ee/utils';
+import { getMasterPasswordStatus, getMasterPasswordStatusMessage, masterPasswordIsValid, MasterPasswordStatus, resetMasterPassword, updateMasterPassword } from '@joplin/lib/services/e2ee/utils';
 import { reg } from '@joplin/lib/registry';
+import EncryptionService from '../../../lib/services/e2ee/EncryptionService';
+import KvStore from '../../../lib/services/KvStore';
 
 interface Props {
 	themeId: number;
 	dispatch: Function;
+}
+
+enum Mode {
+	Set = 1,
+	Reset = 2,
 }
 
 export default function(props: Props) {
@@ -23,13 +30,14 @@ export default function(props: Props) {
 	const [saveButtonDisabled, setSaveButtonDisabled] = useState(true);
 	const [showPasswordForm, setShowPasswordForm] = useState(false);
 	const [updatingPassword, setUpdatingPassword] = useState(false);
+	const [mode, setMode] = useState<Mode>(Mode.Set);
 
-	function closeDialog(dispatch: Function) {
-		dispatch({
+	const onClose = useCallback(() => {
+		props.dispatch({
 			type: 'DIALOG_CLOSE',
 			name: 'masterPassword',
 		});
-	}
+	}, [props.dispatch]);
 
 	useAsyncEffect(async (event: AsyncEffectEvent) => {
 		const newStatus = await getMasterPasswordStatus();
@@ -39,15 +47,22 @@ export default function(props: Props) {
 
 	const onButtonRowClick = useCallback(async (event: ClickEvent) => {
 		if (event.buttonName === 'cancel') {
-			closeDialog(props.dispatch);
+			onClose();
 			return;
 		}
 
 		if (event.buttonName === 'ok') {
 			setUpdatingPassword(true);
 			try {
-				await updateMasterPassword(currentPassword, password1, () => reg.waitForSyncFinishedThenSync());
-				closeDialog(props.dispatch);
+				if (mode === Mode.Set) {
+					await updateMasterPassword(currentPassword, password1);
+				} else if (mode === Mode.Reset) {
+					await resetMasterPassword(EncryptionService.instance(), KvStore.instance(), password1);
+				} else {
+					throw new Error(`Unknown mode: ${mode}`);
+				}
+				void reg.waitForSyncFinishedThenSync();
+				onClose();
 			} catch (error) {
 				alert(error.message);
 			} finally {
@@ -55,7 +70,7 @@ export default function(props: Props) {
 			}
 			return;
 		}
-	}, [props.dispatch, currentPassword, password1]);
+	}, [currentPassword, password1, onClose, mode]);
 
 	const onCurrentPasswordChange = useCallback((event: any) => {
 		setCurrentPassword(event.target.value);
@@ -71,6 +86,15 @@ export default function(props: Props) {
 
 	const onShowPasswordForm = useCallback(() => {
 		setShowPasswordForm(true);
+	}, []);
+
+	const onToggleMode = useCallback(() => {
+		setMode(m => {
+			return m === Mode.Set ? Mode.Reset : Mode.Set;
+		});
+		setCurrentPassword('');
+		setPassword1('');
+		setPassword2('');
 	}, []);
 
 	useEffect(() => {
@@ -93,23 +117,35 @@ export default function(props: Props) {
 	}
 
 	function renderPasswordForm() {
+		const renderCurrentPassword = () => {
+			if (status === MasterPasswordStatus.NotSet) return null;
+			if (mode === Mode.Reset) return null;
+
+			return (
+				<div className="form-input-group">
+					<label>{'Current password'}</label>
+					<div className="current-password-wrapper">
+						<StyledInput
+							type="password"
+							value={currentPassword}
+							onChange={onCurrentPasswordChange}
+						/>
+						{renderCurrentPasswordIcon()}
+					</div>
+				</div>
+			);
+		};
+
+		const renderResetMasterPasswordLink = () => {
+			if (mode === Mode.Reset) return null;
+			return <p><a href="#" onClick={onToggleMode}>Reset master password</a></p>;
+		};
+
 		if (showPasswordForm) {
 			return (
 				<div>
 					<div className="form">
-						<div className="form-input-group">
-							<label>{'Current password'}</label>
-							<div className="current-password-wrapper">
-								<StyledInput
-									disabled={status === MasterPasswordStatus.NotSet}
-									placeholder={status === MasterPasswordStatus.NotSet ? `(${_('Not set')})` : ''}
-									type="password"
-									value={currentPassword}
-									onChange={onCurrentPasswordChange}
-								/>
-								{renderCurrentPasswordIcon()}
-							</div>
-						</div>
+						{renderCurrentPassword()}
 						<div className="form-input-group">
 							<label>{'Enter password'}</label>
 							<StyledInput type="password" value={password1} onChange={onPasswordChange1}/>
@@ -120,6 +156,7 @@ export default function(props: Props) {
 						</div>
 					</div>
 					<p className="bold">Please make sure you remember your password. For security reasons, it is not possible to recover it if it is lost.</p>
+					{renderResetMasterPasswordLink()}
 				</div>
 			);
 		} else {
@@ -132,26 +169,38 @@ export default function(props: Props) {
 	}
 
 	function renderContent() {
-		return (
-			<div className="dialog-content">
-				<p>Your master password is used to protect sensitive information. In particular, it is used to encrypt your notes when end-to-end encryption (E2EE) is enabled, or to share and encrypt notes with someone who has E2EE enabled.</p>
-				<p>
-					<span>{'Master password status:'}</span> <span className="bold">{getMasterPasswordStatusMessage(status)}</span>
-				</p>
-				{renderPasswordForm()}
-			</div>
-		);
+		if (mode === Mode.Reset) {
+			return (
+				<div className="dialog-content">
+					<p>Attention: After resetting your password it will no longer be possible to decrypt any data encrypted with your current password. All encrypted shared notebooks will also be unshared, so please ask the notebook owner to share it again with you.</p>
+					{renderPasswordForm()}
+				</div>
+			);
+		} else {
+			return (
+				<div className="dialog-content">
+					<p>Your master password is used to protect sensitive information. In particular, it is used to encrypt your notes when end-to-end encryption (E2EE) is enabled, or to share and encrypt notes with someone who has E2EE enabled.</p>
+					<p>
+						<span>{'Master password status:'}</span> <span className="bold">{getMasterPasswordStatusMessage(status)}</span>
+					</p>
+					{renderPasswordForm()}
+				</div>
+			);
+		}
 	}
+
+	const dialogTitle = mode === Mode.Set ? _('Manager master password') : `⚠️ ${_('Reset master password')} ⚠️`;
+	const okButtonLabel = mode === Mode.Set ? _('Save') : `⚠️ ${_('Reset master password')} ⚠️`;
 
 	function renderDialogWrapper() {
 		return (
 			<div className="dialog-root">
-				<DialogTitle title={_('Master password')}/>
+				<DialogTitle title={dialogTitle}/>
 				{renderContent()}
 				<DialogButtonRow
 					themeId={props.themeId}
 					onClick={onButtonRowClick}
-					okButtonLabel={_('Save')}
+					okButtonLabel={okButtonLabel}
 					okButtonDisabled={saveButtonDisabled}
 					cancelButtonDisabled={updatingPassword}
 				/>
@@ -160,6 +209,6 @@ export default function(props: Props) {
 	}
 
 	return (
-		<Dialog className="master-password-dialog" renderContent={renderDialogWrapper}/>
+		<Dialog onClose={onClose} className="master-password-dialog" renderContent={renderDialogWrapper}/>
 	);
 }

@@ -197,31 +197,30 @@ const EncryptionConfigScreen = (props: Props) => {
 		return null;
 	};
 
-	const onToggleButtonClick = useCallback(() => async () => {
+	const onToggleButtonClick = useCallback(async () => {
 		const isEnabled = getEncryptionEnabled();
+		const newEnabled = !isEnabled;
 		const masterKey = getDefaultMasterKey();
 		const hasMasterPassword = !!props.masterPassword;
+		let newPassword = '';
 
-		let answer = null;
 		if (isEnabled) {
-			answer = await dialogs.confirm(_('Disabling encryption means *all* your notes and attachments are going to be re-synchronised and sent unencrypted to the sync target. Do you wish to continue?'));
+			const answer = await dialogs.confirm(_('Disabling encryption means *all* your notes and attachments are going to be re-synchronised and sent unencrypted to the sync target. Do you wish to continue?'));
 			if (!answer) return;
 		} else {
 			const msg = enableEncryptionConfirmationMessages(masterKey, hasMasterPassword);
-			answer = await dialogs.prompt(msg.join('\n\n'), '', '', { type: 'password' });
+			newPassword = await dialogs.prompt(msg.join('\n\n'), '', '', { type: 'password' });
 		}
 
-		if (!answer) return;
-
-		if (hasMasterPassword) {
-			if (!(await masterPasswordIsValid(answer))) {
+		if (hasMasterPassword && newEnabled) {
+			if (!(await masterPasswordIsValid(newPassword))) {
 				alert('Invalid password. Please try again. If you have forgotten your password you will need to reset it.');
 				return;
 			}
 		}
 
 		try {
-			await toggleAndSetupEncryption(EncryptionService.instance(), !isEnabled, masterKey, answer);
+			await toggleAndSetupEncryption(EncryptionService.instance(), newEnabled, masterKey, newPassword);
 		} catch (error) {
 			await dialogs.alert(error.message);
 		}
@@ -230,9 +229,11 @@ const EncryptionConfigScreen = (props: Props) => {
 	const renderEncryptionSection = () => {
 		const decryptedItemsInfo = <p>{decryptedStatText(stats)}</p>;
 		const toggleButton = (
-			<button style={theme.buttonStyle} onClick={onToggleButtonClick}>
-				{props.encryptionEnabled ? _('Disable encryption') : _('Enable encryption')}
-			</button>
+			<Button
+				onClick={onToggleButtonClick}
+				title={props.encryptionEnabled ? _('Disable encryption') : _('Enable encryption')}
+				level={ButtonLevel.Secondary}
+			/>
 		);
 		const needUpgradeSection = renderNeedUpgradeSection();
 		const reencryptDataSection = renderReencryptData();
@@ -280,6 +281,20 @@ const EncryptionConfigScreen = (props: Props) => {
 		);
 	};
 
+	const onClearMasterPassword = useCallback(() => {
+		Setting.setValue('encryption.masterPassword', '');
+	}, []);
+
+	const renderDebugSection = () => {
+		if (Setting.value('env') !== 'dev') return null;
+
+		return (
+			<div style={{ paddingBottom: '20px' }}>
+				<Button level={ButtonLevel.Secondary} onClick={onClearMasterPassword} title="Clear master password" />
+			</div>
+		);
+	};
+
 	const renderNonExistingMasterKeysSection = () => {
 		let nonExistingMasterKeySection = null;
 
@@ -323,6 +338,7 @@ const EncryptionConfigScreen = (props: Props) => {
 
 	return (
 		<div className="config-screen-content">
+			{renderDebugSection()}
 			{renderEncryptionSection()}
 			{renderMasterPasswordSection()}
 			{renderMasterKeySection(props.masterKeys.filter(mk => masterKeyEnabled(mk)), true)}
