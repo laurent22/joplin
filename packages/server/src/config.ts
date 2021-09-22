@@ -211,6 +211,20 @@ export function baseUrl(type: RouteType): string {
 	throw new Error(`Unknown type: ${type}`);
 }
 
+export function trimBasePath(path: string): string {
+	const apiBasePath = rtrimSlashes((new URL(config().apiBaseUrl)).pathname);
+	const basePath = rtrimSlashes((new URL(config().baseUrl)).pathname);
+	const userContentBasePath = rtrimSlashes((new URL(config().userContentBaseUrl)).pathname);
+	if (path.startsWith(apiBasePath)) {
+		return path.slice(apiBasePath.length);
+	} else if (path.startsWith(basePath)) {
+		return path.slice(basePath.length);
+	} else if (path.startsWith(userContentBasePath)) {
+		return path.slice(userContentBasePath.length);
+	}
+	throw new Error(`Base path not found: ${path}`);
+}
+
 // User content URL is not supported for now so only show the URL if the
 // user content is hosted on the same domain. Needs to get cookie working
 // across domains to get user content url working.

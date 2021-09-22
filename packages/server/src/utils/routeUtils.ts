@@ -1,4 +1,4 @@
-import config, { baseUrl } from '../config';
+import config, { baseUrl, trimBasePath } from '../config';
 import { Item, ItemAddressingType, Uuid } from '../services/database/types';
 import { ErrorBadRequest, ErrorForbidden, ErrorNotFound } from './errors';
 import Router from './Router';
@@ -178,12 +178,13 @@ export function userIdFromUserContentUrl(url: string): Uuid {
 }
 
 export function routeResponseFormat(context: AppContext): RouteResponseFormat {
-	const path = context.joplin.path;
+	const path = trimBasePath(context.path);
 	return path.indexOf('api') === 0 || path.indexOf('/api') === 0 ? RouteResponseFormat.Json : RouteResponseFormat.Html;
 }
 
 export async function execRequest(routes: Routers, ctx: AppContext) {
-	const match = findMatchingRoute(ctx.joplin.path, routes);
+	const path = trimBasePath(ctx.path);
+	const match = findMatchingRoute(path, routes);
 	if (!match) throw new ErrorNotFound();
 
 	const endPoint = match.route.findEndPoint(ctx.request.method as HttpMethod, match.subPath.schema);
