@@ -9,6 +9,7 @@ import config, { initConfig, runningInDocker, EnvVariables } from './config';
 import { createDb, dropDb } from './tools/dbTools';
 import { dropTables, connectDb, disconnectDb, migrateLatest, waitForConnection, sqliteDefaultDir, migrateList, migrateUp, migrateDown } from './db';
 import { AppContext, Env, KoaNext } from './utils/types';
+import { rtrimSlashes } from '@joplin/lib/path-utils';
 import FsDriverNode from '@joplin/lib/fs-driver-node';
 import routeHandler from './middleware/routeHandler';
 import notificationHandler from './middleware/notificationHandler';
@@ -145,10 +146,13 @@ async function main() {
 
 	// Creates the request-specific "joplin" context property.
 	app.use(async (ctx: AppContext, next: KoaNext) => {
+		const basePath = rtrimSlashes((new URL(config().baseUrl)).pathname);
+		const path = ctx.path.slice(basePath.length);
+
 		ctx.joplin = {
 			...ctx.joplinBase,
 			owner: null,
-			path: ctx.path.slice((new URL(config().baseUrl)).pathname.length - 1),
+			path: path,
 			notifications: [],
 		};
 
