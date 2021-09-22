@@ -487,8 +487,8 @@ msgid ""
 "to-dos, while `-tnt` would display notes and to-dos."
 msgstr ""
 "Affiche uniquement les notes du ou des types spécifiés. Le type peut‑être "
-"`n` pour les notes, `t` pour les tâches (par exemple, `‑tt` affiche "
-"uniquement les tâches, tandis que `‑tnt` affiche les notes et les tâches)."
+"`n` pour les notes, `t` pour les tâches (par exemple, `-tt` affiche "
+"uniquement les tâches, tandis que `-tnt` affiche les notes et les tâches)."
 
 #: packages/app-cli/app/command-ls.js:31
 msgid "Either \"text\" or \"json\""
@@ -2292,7 +2292,7 @@ msgstr "Lien ou message non géré : %s"
 
 #: packages/app-desktop/gui/NoteList/NoteList.js:163
 msgid "Custom order"
-msgstr "Ordre personalisé"
+msgstr "Ordre personnalisé"
 
 #: packages/app-desktop/gui/NoteList/NoteList.js:163
 msgid "View"
@@ -2671,7 +2671,7 @@ msgid ""
 "the list below."
 msgstr ""
 "Joplin peut synchroniser vos notes grâce à divers fournisseurs. "
-"Selectionnez‑en un dans la liste ci‑dessous."
+"Sélectionnez‑en un dans la liste ci‑dessous."
 
 #: packages/app-desktop/gui/utils/NoteListUtils.js:43
 msgid "Duplicate"
@@ -3344,7 +3344,7 @@ msgstr "date de création"
 
 #: packages/lib/models/Note.js:39
 msgid "custom order"
-msgstr "ordre personalisé"
+msgstr "ordre personnalisé"
 
 #: packages/lib/models/Note.js:117
 msgid "This note does not have geolocation information."
