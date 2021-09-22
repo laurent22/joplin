@@ -10,6 +10,7 @@
     "test-ci": "jest --config=jest.config.js --forceExit",
     "build": "gulp build",
     "start": "gulp build -L && node \"build/main.js\" --stack-trace-enabled --log-level debug --env dev",
+    "start-no-build": "node \"build/main.js\" --stack-trace-enabled --log-level debug --env dev",
     "tsc": "node node_modules/typescript/bin/tsc --project tsconfig.json",
     "watch": "node node_modules/typescript/bin/tsc --watch --project tsconfig.json"
   },

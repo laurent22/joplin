@@ -1,31 +1,32 @@
 import { Routers } from '../utils/routeUtils';
 
 import apiBatch from './api/batch';
+import apiBatchItems from './api/batch_items';
 import apiDebug from './api/debug';
 import apiEvents from './api/events';
-import apiBatchItems from './api/batch_items';
 import apiItems from './api/items';
 import apiPing from './api/ping';
 import apiSessions from './api/sessions';
-import apiUsers from './api/users';
 import apiShares from './api/shares';
 import apiShareUsers from './api/share_users';
+import apiUsers from './api/users';
 
 import indexChanges from './index/changes';
+import indexHelp from './index/help';
 import indexHome from './index/home';
 import indexItems from './index/items';
 import indexLogin from './index/login';
 import indexLogout from './index/logout';
 import indexNotifications from './index/notifications';
 import indexPassword from './index/password';
-import indexSignup from './index/signup';
-import indexShares from './index/shares';
-import indexUsers from './index/users';
-import indexStripe from './index/stripe';
-import indexTerms from './index/terms';
 import indexPrivacy from './index/privacy';
+import indexShares from './index/shares';
+import indexSignup from './index/signup';
+import indexStripe from './index/stripe';
+import indexTasks from './index/tasks';
+import indexTerms from './index/terms';
 import indexUpgrade from './index/upgrade';
-import indexHelp from './index/help';
+import indexUsers from './index/users';
 
 import defaultRoute from './default';
 
@@ -56,6 +57,7 @@ const routes: Routers = {
 	'privacy': indexPrivacy,
 	'upgrade': indexUpgrade,
 	'help': indexHelp,
+	'tasks': indexTasks,
 
 	'': defaultRoute,
 };

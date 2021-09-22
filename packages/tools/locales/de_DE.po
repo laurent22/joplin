@@ -235,33 +235,33 @@ msgid "Completed decryption."
 msgstr "Entschlüsselung abgeschlossen."
 
 #: packages/app-cli/app/command-e2ee.js:91
-#: packages/app-mobile/components/screens/encryption-config.js:151
+#: packages/app-mobile/components/screens/encryption-config.js:137
 msgid "Confirm password:"
 msgstr "Passwort bestätigen:"
 
 #: packages/app-cli/app/command-e2ee.js:97
-#: packages/app-mobile/components/screens/encryption-config.js:132
+#: packages/app-mobile/components/screens/encryption-config.js:118
 msgid "Passwords do not match!"
 msgstr "Passwörter sind nicht identisch!"
 
 #: packages/app-cli/app/command-e2ee.js:121
-#: packages/app-desktop/gui/EncryptionConfigScreen.js:235
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:443
-#: packages/app-mobile/components/screens/encryption-config.js:224
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:253
+#: packages/app-mobile/components/screens/encryption-config.js:221
 msgid "Enabled"
 msgstr "Aktiviert"
 
 #: packages/app-cli/app/command-e2ee.js:121
-#: packages/app-desktop/gui/EncryptionConfigScreen.js:235
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:443
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:253
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:110
-#: packages/app-mobile/components/screens/encryption-config.js:224
-#: packages/lib/models/Setting.js:855
+#: packages/app-mobile/components/screens/encryption-config.js:221
+#: packages/lib/models/Setting.js:856
 msgid "Disabled"
 msgstr "Deaktiviert"
 
 #: packages/app-cli/app/command-e2ee.js:121
-#: packages/app-mobile/components/screens/encryption-config.js:224
+#: packages/app-mobile/components/screens/encryption-config.js:221
 #, javascript-format
 msgid "Encryption is: %s"
 msgstr "Verschlüsselung ist: %s"
@@ -849,12 +849,12 @@ msgstr "Es wird nach „%s“ im Format „%s“ exportiert. Bitte warten ..."
 msgid "Could not export notes: %s"
 msgstr "Konnte Notizen nicht exportieren: %s"
 
-#: packages/app-desktop/app.js:387
+#: packages/app-desktop/app.js:158
 #, javascript-format
 msgid "Open %s"
 msgstr "Öffne %s"
 
-#: packages/app-desktop/app.js:389
+#: packages/app-desktop/app.js:160
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:14
 #: packages/app-desktop/gui/MenuBar.js:211
 msgid "Quit"
@@ -893,7 +893,7 @@ msgstr "OK"
 #: packages/app-mobile/components/SelectDateTimeDialog.js:82
 #: packages/app-mobile/components/screens/Note.js:100
 #: packages/app-mobile/components/screens/Note.js:532
-#: packages/app-mobile/components/screens/encryption-config.js:161
+#: packages/app-mobile/components/screens/encryption-config.js:147
 #: packages/app-mobile/components/side-menu-content.js:156
 #: packages/app-mobile/components/side-menu-content.js:165
 #: packages/app-mobile/components/side-menu-content.js:338
@@ -1146,7 +1146,7 @@ msgstr "Jetzt neu starten"
 msgid "Plugins"
 msgstr "Erweiterungen"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:125
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:141
 #: packages/app-desktop/gui/ResourceScreen.js:47
 #: packages/app-desktop/gui/ResourceScreen.js:96
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:193
@@ -1157,38 +1157,44 @@ msgstr "Erweiterungen"
 msgid "Delete"
 msgstr "Löschen"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:130
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:146
 msgid "Install"
 msgstr "Installieren"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:132
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:148
 msgid "Installing..."
 msgstr "Wird installiert ..."
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:134
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:150
 msgid "Installed"
 msgstr "Installiert"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:140
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:156
 msgid "Update"
 msgstr "Aktualisieren"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:142
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:158
 msgid "Updating..."
 msgstr "Wird aktualisiert ..."
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:144
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:146
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:160
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:162
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:324
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:30
 msgid "Updated"
 msgstr "Aktualisiert"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:154
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:170
 msgid "Please upgrade Joplin to use this plugin"
 msgstr "Bitte aktualisiere Joplin, um diese Erweiterung zu nutzen"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:168
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:183
+msgid ""
+"The Joplin team has vetted this plugin and it meets our standards for "
+"security and performance."
+msgstr ""
+
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:192
 #, javascript-format
 msgid "(%s)"
 msgstr "(%s)"
@@ -1199,6 +1205,7 @@ msgid "Delete plugin \"%s\"?"
 msgstr "Erweiterung „%s“ löschen?"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:180
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:240
 msgid "Browse all plugins"
 msgstr "Alle Erweiterungen durchsuchen"
 
@@ -1211,31 +1218,32 @@ msgid "You do not have any installed plugin."
 msgstr "Es sind keine Erweiterungen installiert."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:232
-msgid "Could not connect to plugin repository"
+#, fuzzy
+msgid "Could not connect to plugin repository."
 msgstr "Konnte keine Verbindung zum Plugin-Repository herstellen"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:234
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:236
 msgid "Try again"
 msgstr "Versuche es erneut"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:242
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:248
 msgid "Plugin tools"
 msgstr "Erweiterungswerkzeuge"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:243
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:249
 msgid "Manage your plugins"
 msgstr "Erweiterungen verwalten"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js:68
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js:77
 msgid "No results"
 msgstr "Keine Ergebnisse"
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js:80
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js:89
 #: packages/app-desktop/gui/ResourceScreen.js:142
 msgid "Please wait..."
 msgstr "Bitte warten ..."
 
-#: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js:80
+#: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.js:89
 msgid "Search for plugins..."
 msgstr "Suche nach Erweiterungen ..."
 
@@ -1249,41 +1257,22 @@ msgstr "Erweiterung konnte nicht installiert werden: %s"
 msgid "Submit"
 msgstr "Absenden"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen.js:73
-msgid "Source: "
-msgstr "Quelle: "
-
-#: packages/app-desktop/gui/EncryptionConfigScreen.js:76
-msgid "Created: "
-msgstr "Erstellt: "
-
-#: packages/app-desktop/gui/EncryptionConfigScreen.js:79
-msgid "Updated: "
-msgstr "Aktualisiert: "
-
-#: packages/app-desktop/gui/EncryptionConfigScreen.js:84
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:96
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:110
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:180
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:50
-#: packages/app-mobile/components/screens/encryption-config.js:118
+#: packages/app-mobile/components/screens/encryption-config.js:96
+#: packages/app-mobile/components/screens/encryption-config.js:167
 msgid "Save"
 msgstr "Speichern"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen.js:87
-msgid "Disable"
-msgstr "Deaktivieren"
-
-#: packages/app-desktop/gui/EncryptionConfigScreen.js:87
-#: packages/app-mobile/components/screens/encryption-config.js:157
-msgid "Enable"
-msgstr "Aktivieren"
-
-#: packages/app-desktop/gui/EncryptionConfigScreen.js:105
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:145
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:59
 msgid "Master keys that need upgrading"
 msgstr "Hauptschlüssel, die aktualisiert werden müssen"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen.js:106
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:150
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:60
 msgid ""
 "The following master keys use an out-dated encryption algorithm and it is "
 "recommended to upgrade them. The upgraded master key will still be able to "
@@ -1294,29 +1283,29 @@ msgstr ""
 "aktualisierte Hauptschlüssel wird deine Daten weiterhin wie gewohnt "
 "entschlüsseln und verschlüsseln können."
 
-#: packages/app-desktop/gui/EncryptionConfigScreen.js:110
-#: packages/app-desktop/gui/EncryptionConfigScreen.js:148
-#: packages/app-desktop/gui/EncryptionConfigScreen.js:219
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:164
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:309
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:390
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:64
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:145
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:237
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:28
 #: packages/app-desktop/gui/ResourceScreen.js:39
 msgid "ID"
 msgstr "ID"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen.js:111
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:169
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:65
 msgid "Upgrade"
 msgstr "Upgrade"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen.js:120
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:182
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:74
 msgid "Re-encrypt data"
 msgstr "Daten neu verschlüsseln"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen.js:121
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:184
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:75
 msgid ""
 "The default encryption method has been changed to a more secure one and it "
 "is recommended that you apply it to your data."
@@ -1325,8 +1314,8 @@ msgstr ""
 "wird empfohlen, sie auf deine Daten anzuwenden."
 
 # TBH, I like „Sie“ and „Ihr“ better than „du“ and „dein“, but since the latter is used throught other translations above, I changed it here to be consistent. I wouldn’t mind having it changed back, but then it needs to be done across all entries.
-#: packages/app-desktop/gui/EncryptionConfigScreen.js:121
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:184
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:75
 msgid ""
 "You may use the tool below to re-encrypt your data, for example if you know "
 "that some of your notes are encrypted with an obsolete encryption method."
@@ -1335,8 +1324,8 @@ msgstr ""
 "verschlüsseln, falls einige deiner Notizen mit einer veralteten "
 "Verschlüsselungsmethode verschlüsselt sein sollten."
 
-#: packages/app-desktop/gui/EncryptionConfigScreen.js:122
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:186
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:76
 #, javascript-format
 msgid ""
 "In order to do so, your entire data set will have to be encrypted and "
@@ -1367,66 +1356,19 @@ msgstr ""
 "\n"
 "Wichtig: Du musst diese Prozedur nur EINMAL auf einem Gerät starten."
 
-#: packages/app-desktop/gui/EncryptionConfigScreen.js:127
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:198
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:81
 msgid "Re-encryption"
 msgstr "Neuverschlüsselung"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen.js:131
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:213
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:85
 msgid "Ignore"
 msgstr "Ignorieren"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen.js:142
-#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:290
-msgid "Master Keys"
-msgstr "Hauptschlüssel"
-
-#: packages/app-desktop/gui/EncryptionConfigScreen.js:142
-msgid "Hide disabled master keys"
-msgstr "Deaktivierte Hauptschlüssel ausblenden"
-
-#: packages/app-desktop/gui/EncryptionConfigScreen.js:142
-msgid "Show disabled master keys"
-msgstr "Deaktivierte Hauptschlüssel anzeigen"
-
-#: packages/app-desktop/gui/EncryptionConfigScreen.js:143
-#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:343
-msgid ""
-"Note: Only one master key is going to be used for encryption (the one marked "
-"as \"active\"). Any of the keys might be used for decryption, depending on "
-"how the notes or notebooks were originally encrypted."
-msgstr ""
-"Hinweis: Nur ein Hauptschlüssel wird für die Verschlüsselung verwendet (der "
-"als \"aktiv\" markierte). Jeder der Schlüssel kann für die Entschlüsselung "
-"verwendet werden, abhängig davon, wie die jeweiligen Notizen oder "
-"Notizbücher ursprünglich verschlüsselt wurden."
-
-#: packages/app-desktop/gui/EncryptionConfigScreen.js:147
-#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:304
-msgid "Active"
-msgstr "Aktiv"
-
-#: packages/app-desktop/gui/EncryptionConfigScreen.js:149
-msgid "Date"
-msgstr "Datum"
-
-#: packages/app-desktop/gui/EncryptionConfigScreen.js:150
-#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:329
-msgid "Password"
-msgstr "Passwort"
-
-#: packages/app-desktop/gui/EncryptionConfigScreen.js:151
-msgid "Valid"
-msgstr "Gültig"
-
-#: packages/app-desktop/gui/EncryptionConfigScreen.js:152
-msgid "Actions"
-msgstr "Aktionen"
-
-#: packages/app-desktop/gui/EncryptionConfigScreen.js:182
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:244
-#: packages/app-mobile/components/screens/encryption-config.js:180
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:200
+#: packages/app-mobile/components/screens/encryption-config.js:179
 msgid ""
 "Disabling encryption means *all* your notes and attachments are going to be "
 "re-synchronised and sent unencrypted to the sync target. Do you wish to "
@@ -1436,61 +1378,8 @@ msgstr ""
 "Anhänge neu synchronisiert und unverschlüsselt an das Synchronisationsziel "
 "gesendet. Möchtest du fortfahren?"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen.js:200
-#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:275
-#: packages/app-mobile/components/screens/encryption-config.js:213
-msgid "Disable encryption"
-msgstr "Verschlüsselung deaktivieren"
-
-#: packages/app-desktop/gui/EncryptionConfigScreen.js:200
-#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:275
-#: packages/app-mobile/components/screens/encryption-config.js:213
-msgid "Enable encryption"
-msgstr "Verschlüsselung aktivieren"
-
-#: packages/app-desktop/gui/EncryptionConfigScreen.js:214
-#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:371
-#: packages/app-mobile/components/screens/encryption-config.js:207
-msgid "Missing Master Keys"
-msgstr "Fehlende Hauptschlüssel"
-
-#: packages/app-desktop/gui/EncryptionConfigScreen.js:215
-#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:376
-#: packages/app-mobile/components/screens/encryption-config.js:208
-msgid ""
-"The master keys with these IDs are used to encrypt some of your items, "
-"however the application does not currently have access to them. It is likely "
-"they will eventually be downloaded via synchronisation."
-msgstr ""
-"Die Hauptschlüssel mit diesen IDs werden zur Verschlüsselung einiger deiner "
-"Objekte verwendet, die Anwendung hat jedoch derzeit keinen Zugriff darauf. "
-"Es ist wahrscheinlich, dass sie irgendwann über die Synchronisation "
-"heruntergeladen werden."
-
-#: packages/app-desktop/gui/EncryptionConfigScreen.js:226
-#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:414
-#: packages/app-mobile/components/screens/encryption-config.js:218
-msgid ""
-"For more information about End-To-End Encryption (E2EE) and advice on how to "
-"enable it please check the documentation:"
-msgstr ""
-"Weitere Informationen zur Ende-zu-Ende-Verschlüsselung (E2EE) und Hinweise "
-"zur Aktivierung findest du in der Dokumentation (auf Englisch):"
-
-#: packages/app-desktop/gui/EncryptionConfigScreen.js:231
-#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:433
-#: packages/app-mobile/components/screens/encryption-config.js:223
-#: packages/app-mobile/components/screens/status.js:142
-msgid "Status"
-msgstr "Status"
-
-#: packages/app-desktop/gui/EncryptionConfigScreen.js:233
-#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:438
-msgid "Encryption is:"
-msgstr "Die Verschlüsselung ist:"
-
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:246
-#: packages/lib/components/shared/encryption-config-shared.js:149
+#: packages/lib/components/EncryptionConfigScreen/utils.js:51
 msgid ""
 "Enabling encryption means *all* your notes and attachments are going to be "
 "re-synchronised and sent encrypted to the sync target. Do not lose the "
@@ -1504,6 +1393,28 @@ msgstr ""
 "entschlüsseln! Um die Verschlüsselung zu aktivieren, gib bitte unten dein "
 "Passwort ein."
 
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:275
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:218
+#: packages/app-mobile/components/screens/encryption-config.js:210
+msgid "Disable encryption"
+msgstr "Verschlüsselung deaktivieren"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:275
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:218
+#: packages/app-mobile/components/screens/encryption-config.js:210
+msgid "Enable encryption"
+msgstr "Verschlüsselung aktivieren"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:290
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:139
+msgid "Master Keys"
+msgstr "Hauptschlüssel"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:304
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:144
+msgid "Active"
+msgstr "Aktiv"
+
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:314
 msgid "Source"
 msgstr "Quelle"
@@ -1513,9 +1424,130 @@ msgstr "Quelle"
 msgid "Created"
 msgstr "Erstellt"
 
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:329
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:147
+msgid "Password"
+msgstr "Passwort"
+
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:334
 msgid "Password OK"
 msgstr "Passwort OK"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:343
+msgid ""
+"Note: Only one master key is going to be used for encryption (the one marked "
+"as \"active\"). Any of the keys might be used for decryption, depending on "
+"how the notes or notebooks were originally encrypted."
+msgstr ""
+"Hinweis: Nur ein Hauptschlüssel wird für die Verschlüsselung verwendet (der "
+"als \"aktiv\" markierte). Jeder der Schlüssel kann für die Entschlüsselung "
+"verwendet werden, abhängig davon, wie die jeweiligen Notizen oder "
+"Notizbücher ursprünglich verschlüsselt wurden."
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:371
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:232
+#: packages/app-mobile/components/screens/encryption-config.js:204
+msgid "Missing Master Keys"
+msgstr "Fehlende Hauptschlüssel"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:376
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:233
+#: packages/app-mobile/components/screens/encryption-config.js:205
+msgid ""
+"The master keys with these IDs are used to encrypt some of your items, "
+"however the application does not currently have access to them. It is likely "
+"they will eventually be downloaded via synchronisation."
+msgstr ""
+"Die Hauptschlüssel mit diesen IDs werden zur Verschlüsselung einiger deiner "
+"Objekte verwendet, die Anwendung hat jedoch derzeit keinen Zugriff darauf. "
+"Es ist wahrscheinlich, dass sie irgendwann über die Synchronisation "
+"heruntergeladen werden."
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:414
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:244
+#: packages/app-mobile/components/screens/encryption-config.js:215
+msgid ""
+"For more information about End-To-End Encryption (E2EE) and advice on how to "
+"enable it please check the documentation:"
+msgstr ""
+"Weitere Informationen zur Ende-zu-Ende-Verschlüsselung (E2EE) und Hinweise "
+"zur Aktivierung findest du in der Dokumentation (auf Englisch):"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:433
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:249
+#: packages/app-mobile/components/screens/encryption-config.js:220
+#: packages/app-mobile/components/screens/status.js:142
+msgid "Status"
+msgstr "Status"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen.min.js:438
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:251
+msgid "Encryption is:"
+msgstr "Die Verschlüsselung ist:"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:103
+#: packages/app-mobile/components/screens/encryption-config.js:89
+#, fuzzy
+msgid "Master password"
+msgstr "Master-Passwort eingeben:"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:118
+msgid "Source: "
+msgstr "Quelle: "
+
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:121
+msgid "Created: "
+msgstr "Erstellt: "
+
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:124
+msgid "Updated: "
+msgstr "Aktualisiert: "
+
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:129
+msgid "Disable"
+msgstr "Deaktivieren"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:129
+#: packages/app-mobile/components/screens/encryption-config.js:143
+msgid "Enable"
+msgstr "Aktivieren"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:139
+msgid "Hide disabled master keys"
+msgstr "Deaktivierte Hauptschlüssel ausblenden"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:139
+msgid "Show disabled master keys"
+msgstr "Deaktivierte Hauptschlüssel anzeigen"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:146
+msgid "Date"
+msgstr "Datum"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:148
+msgid "Valid"
+msgstr "Gültig"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:149
+msgid "Actions"
+msgstr "Aktionen"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:166
+#: packages/app-mobile/components/screens/encryption-config.js:159
+#, fuzzy
+msgid "Master password:"
+msgstr "Master-Passwort eingeben:"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:170
+#: packages/app-mobile/components/screens/encryption-config.js:160
+#, fuzzy
+msgid "Loaded"
+msgstr "Heruntergeladen"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:178
+#, fuzzy
+msgid "Enter your master password"
+msgstr "Master-Passwort eingeben:"
 
 #: packages/app-desktop/gui/ExtensionBadge.min.js:10
 msgid "Firefox Extension"
@@ -1544,14 +1576,14 @@ msgid "Error: %s"
 msgstr "Fehler: %s"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:120
-#: packages/app-desktop/gui/NoteSearchBar.min.js:164
+#: packages/app-desktop/gui/NoteSearchBar.min.js:165
 #: packages/app-desktop/gui/lib/SearchInput/SearchInput.js:38
 msgid "Search..."
 msgstr "Suchen ..."
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:121
 #: packages/app-desktop/gui/MenuBar.js:392
-#: packages/app-desktop/gui/MenuBar.js:440 packages/app-desktop/gui/Root.js:162
+#: packages/app-desktop/gui/MenuBar.js:440 packages/app-desktop/gui/Root.js:163
 msgid "Import"
 msgstr "Importieren"
 
@@ -1610,7 +1642,7 @@ msgid "Preferences"
 msgstr "Einstellungen"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:24
-#: packages/app-desktop/gui/MenuBar.js:310 packages/app-desktop/gui/Root.js:163
+#: packages/app-desktop/gui/MenuBar.js:310 packages/app-desktop/gui/Root.js:164
 msgid "Options"
 msgstr "Optionen"
 
@@ -1618,7 +1650,7 @@ msgstr "Optionen"
 msgid "Invalid"
 msgstr "Ungültig"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:470
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:439
 msgid ""
 "Safe mode is currently active. Note rendering and all plugins are "
 "temporarily disabled."
@@ -1626,11 +1658,11 @@ msgstr ""
 "Sicherer Modus aktiv. Notizdarstellung und alle Plugins werden vorübergehend "
 "deaktiviert."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:470
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:439
 msgid "Disable safe mode and restart"
 msgstr "Sicheren Modus beenden und neu starten"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:473
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:442
 msgid ""
 "The sync target needs to be upgraded before Joplin can sync. The operation "
 "may take a few minutes to complete and the app needs to be restarted. To "
@@ -1640,26 +1672,26 @@ msgstr ""
 "synchronisiert werden kann. Der Vorgang kann einige Minuten dauern, und die "
 "App muss neu gestartet werden. Um fortzufahren, klicke bitte auf den Link."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:473
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:442
 msgid "Restart and upgrade"
 msgstr "Neustarten und aktualisieren"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:476
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:445
 msgid "Some items cannot be decrypted."
 msgstr "Einige Elemente können nicht entschlüsselt werden."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:476
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:479
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:490
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:445
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:448
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:459
 msgid "View them now"
 msgstr "Zeige sie jetzt an"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:479
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:448
 msgid "One of your master keys use an obsolete encryption method."
 msgstr ""
 "Einer deiner Hauptschlüssel verwendet eine veraltete Verschlüsselungsmethode."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:482
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:451
 msgid ""
 "The default encryption method has been changed, you should re-encrypt your "
 "data."
@@ -1667,37 +1699,37 @@ msgstr ""
 "Die Standardverschlüsselungsmethode wurde geändert. Du solltest deine Daten "
 "erneut verschlüsseln."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:482
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:451
 msgid "More info"
 msgstr "Weitere Information"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:487
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:456
 #, javascript-format
 msgid "%s (%s) would like to share a notebook with you."
 msgstr "%s (%s) möchte ein Notizbuch mit dir teilen."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:487
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:456
 msgid "Accept"
 msgstr "Akzeptieren"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:487
-#: packages/app-desktop/gui/Root.js:121
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:456
+#: packages/app-desktop/gui/Root.js:122
 msgid "Reject"
 msgstr "Ablehnen"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:490
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:459
 msgid "Some items cannot be synchronised."
 msgstr "Einige Elemente können nicht synchronisiert werden."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:493
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:462
 msgid "One or more master keys need a password."
 msgstr "Mindestens ein Hauptschlüssel benötigt ein Passwort."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:493
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:462
 msgid "Set the password"
 msgstr "Gib das Passwort ein"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:619
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:588
 msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
 msgstr ""
 "Verwenden Sie die Pfeile, um die Layoutelemente zu verschieben. Drücken Sie "
@@ -1723,7 +1755,7 @@ msgid "PDF File"
 msgstr "PDF-Datei"
 
 #: packages/app-desktop/gui/MainScreen/commands/gotoAnything.js:23
-#: packages/app-desktop/plugins/GotoAnything.js:497
+#: packages/app-desktop/plugins/GotoAnything.js:500
 msgid "Goto Anything..."
 msgstr "Gehe zu ..."
 
@@ -1840,7 +1872,7 @@ msgstr "Editor-Layout umschalten"
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr "Aus „%s“ im Format „%s“ wird importiert. Bitte warten ..."
 
-#: packages/app-desktop/gui/MenuBar.js:288 packages/app-desktop/gui/Root.js:165
+#: packages/app-desktop/gui/MenuBar.js:288 packages/app-desktop/gui/Root.js:166
 msgid "Synchronisation Status"
 msgstr "Synchronisations-Status"
 
@@ -1849,8 +1881,8 @@ msgid "Note attachments..."
 msgstr "Notiz-Anhänge ..."
 
 #: packages/app-desktop/gui/MenuBar.js:343
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:705
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:13
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:706
+#: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.js:13
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:136
 msgid "Copy"
 msgstr "Kopieren"
@@ -1987,36 +2019,36 @@ msgid "Statistics"
 msgstr "Statistik"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.js:113
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:260
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:252
 #: packages/app-desktop/gui/ShareNoteDialog.js:192
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:280
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:24
 msgid "Close"
 msgstr "Schließen"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:184
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:185
 msgid "strong text"
 msgstr "fetter Text"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:185
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:186
 msgid "emphasised text"
 msgstr "hervorgehobener Text"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:187
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:188
 msgid "Insert Hyperlink"
 msgstr "Weblink einfügen"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:221
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:223
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:222
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:224
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:225
 msgid "List item"
 msgstr "Listeneintrag"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:577
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:578
 msgid "Layout"
 msgstr "Layout"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:577
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:578
 #, javascript-format
 msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
@@ -2025,20 +2057,20 @@ msgstr ""
 "Diese Notiz hat keinen Inhalt. Klicke auf „%s“, um den Editor zu aktivieren "
 "und die Notiz zu bearbeiten."
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:698
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:18
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:699
+#: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.js:18
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:128
 msgid "Cut"
 msgstr "Ausschneiden"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:712
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:23
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:713
+#: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.js:23
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:143
 msgid "Paste"
 msgstr "Einfügen"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:518
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:53
+#: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.js:53
 #: packages/app-mobile/components/screens/Note.js:801
 msgid "Attach file"
 msgstr "Datei anhängen"
@@ -2052,7 +2084,7 @@ msgid "Inline Code"
 msgstr "Code im Fließtext"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:552
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:83
+#: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.js:83
 msgid "Insert Date Time"
 msgstr "Datum / Uhrzeit einfügen"
 
@@ -2103,11 +2135,11 @@ msgstr "Hochgestellt"
 msgid "Subscript"
 msgstr "Tiefgestellt"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:285
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:288
 msgid "Click to add tags..."
 msgstr "Zum Hinzufügen von Schlagwörtern klicken ..."
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:339
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:342
 msgid ""
 "This Rich Text editor has a number of limitations and it is recommended to "
 "be aware of them before using it."
@@ -2115,19 +2147,19 @@ msgstr ""
 "Dieser Rich Text Editor hat eine Reihe von Unzulänglichkeiten, die bei der "
 "Nutzung beachtet werden sollten."
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:343
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:346
 msgid "Read more about it"
 msgstr "Mehr erfahren"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:348
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:351
 msgid "Dismiss"
 msgstr "Ausblenden"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:384
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:387
 msgid "The following attachments are being watched for changes:"
 msgstr "Die folgenden Anhänge werden auf Änderungen überwacht:"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:387
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:390
 msgid ""
 "The attachments will no longer be watched when you switch to a different "
 "note."
@@ -2135,7 +2167,7 @@ msgstr ""
 "Die Anhänge werden nicht mehr überwacht, wenn Sie zu einer anderen Notiz "
 "wechseln."
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:393
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.js:396
 #, javascript-format
 msgid "In: %s"
 msgstr "In: %s"
@@ -2146,7 +2178,7 @@ msgstr "Aufgabe"
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.js:79
 #: packages/server/dist/models/UserModel.js:199
-#: packages/server/dist/models/UserModel.js:204
+#: packages/server/dist/models/UserModel.js:208
 msgid "note"
 msgstr "Notiz"
 
@@ -2155,86 +2187,6 @@ msgstr "Notiz"
 #, javascript-format
 msgid "Creating new %s..."
 msgstr "Neue(s) %s wird erstellt ..."
-
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:28
-msgid "Select all"
-msgstr "Alles auswählen"
-
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:33
-msgid "Bold"
-msgstr "Fett"
-
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:38
-msgid "Italic"
-msgstr "Kursiv"
-
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:43
-msgid "Hyperlink"
-msgstr "Hyperlink"
-
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:48
-msgid "Code"
-msgstr "Code"
-
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:58
-msgid "Numbered List"
-msgstr "Nummerierte Liste"
-
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:63
-msgid "Bulleted List"
-msgstr "Aufzählung"
-
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:68
-msgid "Checkbox"
-msgstr "Kontrollkästchen"
-
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:73
-msgid "Heading"
-msgstr "Überschrift"
-
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:78
-msgid "Horizontal Rule"
-msgstr "Horizontale Linie"
-
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:88
-msgid "Delete line"
-msgstr "Zeile löschen"
-
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:92
-msgid "Duplicate line"
-msgstr "Dupliziere Zeile"
-
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:96
-msgid "Undo"
-msgstr "Rückgängig"
-
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:100
-msgid "Redo"
-msgstr "Wiederholen"
-
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:104
-msgid "Indent less"
-msgstr "Ausrücken"
-
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:108
-msgid "Indent more"
-msgstr "Einrücken"
-
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:112
-msgid "Toggle comment"
-msgstr "Kommentar ein-/ausschalten"
-
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:116
-msgid "Sort selected lines"
-msgstr "Ausgewählte Zeilen bearbeiten"
-
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:120
-msgid "Swap line up"
-msgstr "Zeile nach oben verschieben"
-
-#: packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.js:124
-msgid "Swap line down"
-msgstr "Zeile nach unten verschieben"
 
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteBody.js:16
 msgid "Note body"
@@ -2247,6 +2199,86 @@ msgstr "Notiz-Titel"
 #: packages/app-desktop/gui/NoteEditor/commands/showLocalSearch.js:16
 msgid "Search in current note"
 msgstr "Aktuelle Notiz durchsuchen"
+
+#: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.js:28
+msgid "Select all"
+msgstr "Alles auswählen"
+
+#: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.js:33
+msgid "Bold"
+msgstr "Fett"
+
+#: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.js:38
+msgid "Italic"
+msgstr "Kursiv"
+
+#: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.js:43
+msgid "Hyperlink"
+msgstr "Hyperlink"
+
+#: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.js:48
+msgid "Code"
+msgstr "Code"
+
+#: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.js:58
+msgid "Numbered List"
+msgstr "Nummerierte Liste"
+
+#: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.js:63
+msgid "Bulleted List"
+msgstr "Aufzählung"
+
+#: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.js:68
+msgid "Checkbox"
+msgstr "Kontrollkästchen"
+
+#: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.js:73
+msgid "Heading"
+msgstr "Überschrift"
+
+#: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.js:78
+msgid "Horizontal Rule"
+msgstr "Horizontale Linie"
+
+#: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.js:88
+msgid "Delete line"
+msgstr "Zeile löschen"
+
+#: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.js:92
+msgid "Duplicate line"
+msgstr "Dupliziere Zeile"
+
+#: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.js:96
+msgid "Undo"
+msgstr "Rückgängig"
+
+#: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.js:100
+msgid "Redo"
+msgstr "Wiederholen"
+
+#: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.js:104
+msgid "Indent less"
+msgstr "Ausrücken"
+
+#: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.js:108
+msgid "Indent more"
+msgstr "Einrücken"
+
+#: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.js:112
+msgid "Toggle comment"
+msgstr "Kommentar ein-/ausschalten"
+
+#: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.js:116
+msgid "Sort selected lines"
+msgstr "Ausgewählte Zeilen bearbeiten"
+
+#: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.js:120
+msgid "Swap line up"
+msgstr "Zeile nach oben verschieben"
+
+#: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.js:124
+msgid "Swap line down"
+msgstr "Zeile nach unten verschieben"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.js:59
 msgid "There was an error downloading this attachment:"
@@ -2413,36 +2445,36 @@ msgstr ""
 "Warnung: Aus Leistungsgründen werden nicht alle Anhänge angezeigt "
 "(Obergrenze: %s)."
 
-#: packages/app-desktop/gui/Root.js:106
+#: packages/app-desktop/gui/Root.js:107
 msgid "Confirmation"
 msgstr "Bestätigung"
 
-#: packages/app-desktop/gui/Root.js:119
+#: packages/app-desktop/gui/Root.js:120
 msgid "The Web Clipper needs your authorisation to access your data."
 msgstr ""
 "Der Web Clipper benötigt deine Genehmigung, um auf die Daten zuzugreifen."
 
-#: packages/app-desktop/gui/Root.js:120
+#: packages/app-desktop/gui/Root.js:121
 msgid "Grant authorisation"
 msgstr "Genehmigung erteilen"
 
-#: packages/app-desktop/gui/Root.js:160
+#: packages/app-desktop/gui/Root.js:161
 msgid "OneDrive Login"
 msgstr "OneDrive-Anmeldung"
 
-#: packages/app-desktop/gui/Root.js:161
+#: packages/app-desktop/gui/Root.js:162
 msgid "Dropbox Login"
 msgstr "Dropbox-Anmeldung"
 
-#: packages/app-desktop/gui/Root.js:164
+#: packages/app-desktop/gui/Root.js:165
 msgid "Note attachments"
 msgstr "Anhänge"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:141
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:133
 msgid "Unshare"
 msgstr "Nicht mehr teilen"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:183
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:175
 msgid ""
 "Delete this invitation? The recipient will no longer have access to this "
 "shared notebook."
@@ -2450,41 +2482,41 @@ msgstr ""
 "Einladung löschen? Der Empfänger hat dann keinen Zugriff mehr auf dieses "
 "freigegebene Notizbuch."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:197
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:189
 msgid "Add recipient:"
 msgstr "Füge Empfänger hinzu:"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:200
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:192
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:28
 #: packages/app-mobile/components/screens/Note.js:826
 msgid "Share"
 msgstr "Teilen"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:209
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:201
 msgid "Recipient has not yet accepted the invitation"
 msgstr "Empfänger hat die Einladung noch nicht akzeptiert"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:210
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:202
 msgid "Recipient has rejected the invitation"
 msgstr "Empfänger hat die Einladung abgewiesen"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:211
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:203
 msgid "Recipient has accepted the invitation"
 msgstr "Empfänger hat die Einladung akzeptiert"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:221
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:213
 msgid "Recipients:"
 msgstr "Empfänger:"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:233
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:225
 msgid "Synchronizing..."
 msgstr "Wird synchronisiert ..."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:234
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:226
 msgid "Sharing notebook..."
 msgstr "Notizbuch wird geteilt ..."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:244
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:236
 msgid ""
 "Unshare this notebook? The recipients will no longer have access to its "
 "content."
@@ -2492,7 +2524,7 @@ msgstr ""
 "Teilen des Notizbuch beenden? Der Empfänger wird keinen Zugriff mehr auf den "
 "Inhalt haben."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:254
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:246
 msgid "Share Notebook"
 msgstr "Notizbuch teilen"
 
@@ -2705,7 +2737,7 @@ msgstr "Notiz „%s“ löschen?"
 msgid "Delete these %d notes?"
 msgstr "Sollen diese %d Notizen gelöscht werden?"
 
-#: packages/app-desktop/plugins/GotoAnything.js:471
+#: packages/app-desktop/plugins/GotoAnything.js:474
 msgid ""
 "Type a note title or part of its content to jump to it. Or type # followed "
 "by a tag name, or @ followed by a notebook name. Or type : to search for "
@@ -2715,7 +2747,7 @@ msgstr ""
 "springen. Oder gib # gefolgt von einem Schlagwort oder @ gefolgt vom Namen "
 "eines Notizbuchs ein. Oder gib : für eine Suche nach Kommandos ein."
 
-#: packages/app-desktop/plugins/GotoAnything.js:505
+#: packages/app-desktop/plugins/GotoAnything.js:508
 msgid "Command palette"
 msgstr "Befehlspalette"
 
@@ -2787,7 +2819,7 @@ msgid "Information"
 msgstr "Information"
 
 #: packages/app-mobile/components/screens/ConfigScreen.js:312
-#: packages/app-mobile/components/screens/encryption-config.js:215
+#: packages/app-mobile/components/screens/encryption-config.js:212
 msgid "Encryption Config"
 msgstr "Verschlüsselungskonfiguration"
 
@@ -2961,7 +2993,7 @@ msgid "Unsupported image type: %s"
 msgstr "Nicht unterstütztes Fotoformat: %s"
 
 #: packages/app-mobile/components/screens/Note.js:750
-#: packages/app-mobile/components/screens/encryption-config.js:113
+#: packages/app-mobile/components/screens/encryption-config.js:101
 #, javascript-format
 msgid "Created: %s"
 msgstr "Erstellt: %s"
@@ -3035,21 +3067,21 @@ msgstr "Mit Dropbox anmelden"
 msgid "Enter code here"
 msgstr "Hier Code eingeben"
 
-#: packages/app-mobile/components/screens/encryption-config.js:112
+#: packages/app-mobile/components/screens/encryption-config.js:100
 #, javascript-format
 msgid "Master Key %s"
 msgstr "Hauptschlüssel %s"
 
-#: packages/app-mobile/components/screens/encryption-config.js:115
-#: packages/app-mobile/components/screens/encryption-config.js:147
+#: packages/app-mobile/components/screens/encryption-config.js:103
+#: packages/app-mobile/components/screens/encryption-config.js:133
 msgid "Password:"
 msgstr "Passwort:"
 
-#: packages/app-mobile/components/screens/encryption-config.js:127
+#: packages/app-mobile/components/screens/encryption-config.js:113
 msgid "Password cannot be empty"
 msgstr "Passwort darf nicht leer sein"
 
-#: packages/app-mobile/components/screens/encryption-config.js:130
+#: packages/app-mobile/components/screens/encryption-config.js:116
 msgid "Confirm password cannot be empty"
 msgstr "Bestätigungs-Passwort darf nicht leer sein"
 
@@ -3102,7 +3134,7 @@ msgstr "Mobile Daten - Auto-Synchronisierung deaktiviert"
 msgid "Usage: %s"
 msgstr "Nutzung: %s"
 
-#: packages/lib/BaseApplication.js:233
+#: packages/lib/BaseApplication.js:238
 #, javascript-format
 msgid "Unknown flag: %s"
 msgstr "Unbekanntes Argument: %s"
@@ -3232,6 +3264,45 @@ msgstr "Unbekannter Eintrags-Typ heruntergeladen - bitte aktualisiere Joplin"
 msgid "Forward"
 msgstr "Weiter"
 
+#: packages/lib/components/EncryptionConfigScreen/utils.js:47
+#, javascript-format
+msgid "Decrypted items: %s / %s"
+msgstr "Entschlüsselte Objekte: %s / %s"
+
+#: packages/lib/components/EncryptionConfigScreen/utils.js:53
+#, javascript-format
+msgid "Encryption will be enabled using the master key created on %s"
+msgstr ""
+"Die Verschlüsselung wird mit dem Hauptschlüssel aktiviert, der am %s "
+"erstellt wurde"
+
+#: packages/lib/components/EncryptionConfigScreen/utils.js:65
+msgid ""
+"Please confirm that you would like to re-encrypt your complete database."
+msgstr ""
+"Bitte bestätige, dass du deine gesamte Datenbank neu verschlüsseln möchtest."
+
+#: packages/lib/components/EncryptionConfigScreen/utils.js:71
+msgid "Your data is going to be re-encrypted and synced again."
+msgstr "Deine Daten werden neu verschlüsselt und erneut synchronisiert."
+
+#: packages/lib/components/EncryptionConfigScreen/utils.js:147
+msgid ""
+"Please enter your password in the master key list below before upgrading the "
+"key."
+msgstr ""
+"Bitte gib zuerst dein Passwort in der unten stehenden Liste der "
+"Hauptschlüssel ein, bevor du den Schlüssel aktualisierst."
+
+#: packages/lib/components/EncryptionConfigScreen/utils.js:154
+msgid "The master key has been upgraded successfully!"
+msgstr "Der Hauptschlüssel wurde erfolgreich aktualisiert!"
+
+#: packages/lib/components/EncryptionConfigScreen/utils.js:157
+#, javascript-format
+msgid "Could not upgrade master key: %s"
+msgstr "Konnte Hauptschlüssel nicht aktualisieren: %s"
+
 #: packages/lib/components/shared/config-shared.js:50
 msgid "Checking... Please wait."
 msgstr "Wird überprüft … Bitte warten."
@@ -3267,45 +3338,6 @@ msgstr ""
 "%s\n"
 "\n"
 "Bitte versuche es erneut."
-
-#: packages/lib/components/shared/encryption-config-shared.js:50
-msgid ""
-"Please confirm that you would like to re-encrypt your complete database."
-msgstr ""
-"Bitte bestätige, dass du deine gesamte Datenbank neu verschlüsseln möchtest."
-
-#: packages/lib/components/shared/encryption-config-shared.js:56
-msgid "Your data is going to be re-encrypted and synced again."
-msgstr "Deine Daten werden neu verschlüsselt und erneut synchronisiert."
-
-#: packages/lib/components/shared/encryption-config-shared.js:66
-msgid ""
-"Please enter your password in the master key list below before upgrading the "
-"key."
-msgstr ""
-"Bitte gib zuerst dein Passwort in der unten stehenden Liste der "
-"Hauptschlüssel ein, bevor du den Schlüssel aktualisierst."
-
-#: packages/lib/components/shared/encryption-config-shared.js:74
-msgid "The master key has been upgraded successfully!"
-msgstr "Der Hauptschlüssel wurde erfolgreich aktualisiert!"
-
-#: packages/lib/components/shared/encryption-config-shared.js:77
-#, javascript-format
-msgid "Could not upgrade master key: %s"
-msgstr "Konnte Hauptschlüssel nicht aktualisieren: %s"
-
-#: packages/lib/components/shared/encryption-config-shared.js:127
-#, javascript-format
-msgid "Decrypted items: %s / %s"
-msgstr "Entschlüsselte Objekte: %s / %s"
-
-#: packages/lib/components/shared/encryption-config-shared.js:151
-#, javascript-format
-msgid "Encryption will be enabled using the master key created on %s"
-msgstr ""
-"Die Verschlüsselung wird mit dem Hauptschlüssel aktiviert, der am %s "
-"erstellt wurde"
 
 #: packages/lib/models/BaseItem.js:721
 msgid "Encrypted"
@@ -3762,24 +3794,24 @@ msgstr ""
 msgid "Start application minimised in the tray icon"
 msgstr "Anwendung minimiert als Taskleistensymbol starten"
 
-#: packages/lib/models/Setting.js:737
+#: packages/lib/models/Setting.js:738
 msgid "Editor font size"
 msgstr "Schriftgröße im Editor"
 
-#: packages/lib/models/Setting.js:744
+#: packages/lib/models/Setting.js:745
 msgid "Editor font"
 msgstr "Schriftart im Editor"
 
-#: packages/lib/models/Setting.js:751 packages/lib/models/Setting.js:758
-#: packages/lib/models/Setting.js:905
+#: packages/lib/models/Setting.js:752 packages/lib/models/Setting.js:759
+#: packages/lib/models/Setting.js:906
 msgid "Default"
 msgstr "Standard"
 
-#: packages/lib/models/Setting.js:769
+#: packages/lib/models/Setting.js:770
 msgid "Editor font family"
 msgstr "Schriftfamilie im Editor"
 
-#: packages/lib/models/Setting.js:770
+#: packages/lib/models/Setting.js:771
 msgid ""
 "Used for most text in the markdown editor. If not found, a generic "
 "proportional (variable width) font is used."
@@ -3788,11 +3820,11 @@ msgstr ""
 "wird eine generische Proportional-Schriftart (mit variabler Breite) "
 "verwendet."
 
-#: packages/lib/models/Setting.js:779
+#: packages/lib/models/Setting.js:780
 msgid "Editor monospace font family"
 msgstr "Nichtproportionale Schriftfamilie im Editor"
 
-#: packages/lib/models/Setting.js:780
+#: packages/lib/models/Setting.js:781
 msgid ""
 "Used where a fixed width font is needed to lay out text legibly (e.g. "
 "tables, checkboxes, code). If not found, a generic monospace (fixed width) "
@@ -3802,72 +3834,72 @@ msgstr ""
 "Tabellen, Kontrollkästchen, Code). Falls nicht vorhanden wird eine Monotype-"
 "Scrhiftart (mit fester Breite) verwendet."
 
-#: packages/lib/models/Setting.js:783
+#: packages/lib/models/Setting.js:784
 msgid "Editor maximum width"
 msgstr "Maximale Breite des Editors"
 
-#: packages/lib/models/Setting.js:783
+#: packages/lib/models/Setting.js:784
 msgid "Set it to 0 to make it take the complete available space."
 msgstr "Setze ihn auf 0, damit er den gesamten verfügbaren Platz einnimmt."
 
-#: packages/lib/models/Setting.js:802
+#: packages/lib/models/Setting.js:803
 msgid "Custom stylesheet for rendered Markdown"
 msgstr "Benutzerdefinierte Formatvorlagen für gerendertes Markdown"
 
-#: packages/lib/models/Setting.js:818
+#: packages/lib/models/Setting.js:819
 msgid "Custom stylesheet for Joplin-wide app styles"
 msgstr "Benutzerdefinierte Formatvorlagen für Joplin-weite Anwendungsstile"
 
-#: packages/lib/models/Setting.js:828
+#: packages/lib/models/Setting.js:829
 msgid "Re-upload local data to sync target"
 msgstr "Lade lokale Daten erneut auf das Synchronisierungsziel hoch"
 
-#: packages/lib/models/Setting.js:838
+#: packages/lib/models/Setting.js:839
 msgid "Delete local data and re-download from sync target"
 msgstr "Lösche lokale Daten und lade Daten erneut vom Synchronisierungsziel"
 
-#: packages/lib/models/Setting.js:843
+#: packages/lib/models/Setting.js:844
 msgid "Automatically update the application"
 msgstr "Die Anwendung automatisch aktualisieren"
 
-#: packages/lib/models/Setting.js:844
+#: packages/lib/models/Setting.js:845
 msgid "Get pre-releases when checking for updates"
 msgstr "Bei der Suche nach Aktualisierungen Vorabveröffentlichungen erhalten"
 
-#: packages/lib/models/Setting.js:844
+#: packages/lib/models/Setting.js:845
 #, javascript-format
 msgid "See the pre-release page for more details: %s"
 msgstr "Weitere Informationen findest Du auf der Vorabversionsseite: %s"
 
-#: packages/lib/models/Setting.js:852
+#: packages/lib/models/Setting.js:853
 msgid "Synchronisation interval"
 msgstr "Synchronisationsintervall"
 
-#: packages/lib/models/Setting.js:856 packages/lib/models/Setting.js:857
-#: packages/lib/models/Setting.js:858
+#: packages/lib/models/Setting.js:857 packages/lib/models/Setting.js:858
+#: packages/lib/models/Setting.js:859
 #, javascript-format
 msgid "%d minutes"
 msgstr "%d Minuten"
 
-#: packages/lib/models/Setting.js:859
+#: packages/lib/models/Setting.js:860
 #, javascript-format
 msgid "%d hour"
 msgstr "%d Stunde"
 
-#: packages/lib/models/Setting.js:860 packages/lib/models/Setting.js:861
+#: packages/lib/models/Setting.js:861 packages/lib/models/Setting.js:862
 #, javascript-format
 msgid "%d hours"
 msgstr "%d Stunden"
 
-#: packages/lib/models/Setting.js:871
+#: packages/lib/models/Setting.js:872
 msgid "Synchronise only over WiFi connection"
 msgstr "Nur über WiFi-Verbindung synchronisieren"
 
-#: packages/lib/models/Setting.js:878
+#: packages/lib/models/Setting.js:879
 msgid "Text editor command"
 msgstr "Texteditor-Befehl"
 
-#: packages/lib/models/Setting.js:878
+#: packages/lib/models/Setting.js:879
 msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
@@ -3876,61 +3908,57 @@ msgstr ""
 "einer Notiz verwendet wird. Wenn keiner angegeben wird, wird versucht, den "
 "Standard-Editor automatisch zu erkennen."
 
-#: packages/lib/models/Setting.js:879
+#: packages/lib/models/Setting.js:880
 msgid "Page size for PDF export"
 msgstr "Seitengröße für den PDF-Export"
 
-#: packages/lib/models/Setting.js:881
+#: packages/lib/models/Setting.js:882
 msgid "A4"
 msgstr "A4"
 
-#: packages/lib/models/Setting.js:882
+#: packages/lib/models/Setting.js:883
 msgid "Letter"
 msgstr "Letter"
 
-#: packages/lib/models/Setting.js:883
+#: packages/lib/models/Setting.js:884
 msgid "A3"
 msgstr "A3"
 
-#: packages/lib/models/Setting.js:884
+#: packages/lib/models/Setting.js:885
 msgid "A5"
 msgstr "A5"
 
-#: packages/lib/models/Setting.js:885
+#: packages/lib/models/Setting.js:886
 msgid "Tabloid"
 msgstr "Tabloid"
 
-#: packages/lib/models/Setting.js:886
+#: packages/lib/models/Setting.js:887
 msgid "Legal"
 msgstr "Legal"
 
-#: packages/lib/models/Setting.js:889
+#: packages/lib/models/Setting.js:890
 msgid "Page orientation for PDF export"
 msgstr "Seitenausrichtung für den PDF-Export"
 
-#: packages/lib/models/Setting.js:891
+#: packages/lib/models/Setting.js:892
 msgid "Portrait"
 msgstr "Hochformat"
 
-#: packages/lib/models/Setting.js:892
+#: packages/lib/models/Setting.js:893
 msgid "Landscape"
 msgstr "Querformat"
 
-#: packages/lib/models/Setting.js:902
+#: packages/lib/models/Setting.js:903
 msgid "Keyboard Mode"
 msgstr "Tastatur-Modus"
 
-#: packages/lib/models/Setting.js:906
+#: packages/lib/models/Setting.js:907
 msgid "Emacs"
 msgstr "Emacs"
 
-#: packages/lib/models/Setting.js:907
+#: packages/lib/models/Setting.js:908
 msgid "Vim"
 msgstr "Vim"
-
-#: packages/lib/models/Setting.js:920
-msgid "Do not resize images"
-msgstr "Größe der Bilder nicht ändern"
 
 #: packages/lib/models/Setting.js:935
 msgid "Custom TLS certificates"
@@ -4410,7 +4438,7 @@ msgstr ""
 "[Jetzt ändern](%s)"
 
 #: packages/server/dist/models/UserModel.js:199
-#: packages/server/dist/models/UserModel.js:204
+#: packages/server/dist/models/UserModel.js:208
 msgid "attachment"
 msgstr "Anhang"
 
@@ -4420,7 +4448,7 @@ msgid "Cannot save %s \"%s\" because it is larger than the allowed limit (%s)"
 msgstr ""
 "Kann %s \"%s\" nicht speichern, da es größer ist als das erlaubte Limit (%s)"
 
-#: packages/server/dist/models/UserModel.js:204
+#: packages/server/dist/models/UserModel.js:208
 #, javascript-format
 msgid ""
 "Cannot save %s \"%s\" because it would go over the total allowed size (%s) "
@@ -4428,6 +4456,9 @@ msgid ""
 msgstr ""
 "Kann %s \"%s\" nicht speichern, da es die zulässige Gesamtgröße (%s) für "
 "dieses Konto überschreiten würde"
+
+#~ msgid "Do not resize images"
+#~ msgstr "Größe der Bilder nicht ändern"
 
 #~ msgid "%s %s (%s)"
 #~ msgstr "%s %s (%s)"

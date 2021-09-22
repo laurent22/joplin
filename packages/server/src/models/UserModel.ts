@@ -1,5 +1,5 @@
 import BaseModel, { AclAction, SaveOptions, ValidateOptions } from './BaseModel';
-import { EmailSender, Item, User, UserFlagType, Uuid } from '../services/database/types';
+import { EmailSender, Item, NotificationLevel, Subscription, User, UserFlagType, Uuid } from '../services/database/types';
 import * as auth from '../utils/auth';
 import { ErrorUnprocessableEntity, ErrorForbidden, ErrorPayloadTooLarge, ErrorNotFound } from '../utils/errors';
 import { ModelType } from '@joplin/lib/BaseModel';
@@ -19,6 +19,12 @@ import paymentFailedUploadDisabledTemplate from '../views/emails/paymentFailedUp
 import oversizedAccount1 from '../views/emails/oversizedAccount1';
 import oversizedAccount2 from '../views/emails/oversizedAccount2';
 import dayjs = require('dayjs');
+import { failedPaymentFinalAccount } from './SubscriptionModel';
+import { Day } from '../utils/time';
+import paymentFailedAccountDisabledTemplate from '../views/emails/paymentFailedAccountDisabledTemplate';
+import changeEmailConfirmationTemplate from '../views/emails/changeEmailConfirmationTemplate';
+import changeEmailNotificationTemplate from '../views/emails/changeEmailNotificationTemplate';
+import { NotificationKey } from './NotificationModel';
 
 const logger = Logger.create('UserModel');
 
@@ -159,6 +165,7 @@ export default class UserModel extends BaseModel<User> {
 
 			const canBeChangedByNonAdmin = [
 				'full_name',
+				'email',
 				'password',
 			];
 
@@ -180,7 +187,7 @@ export default class UserModel extends BaseModel<User> {
 	}
 
 	public async checkMaxItemSizeLimit(user: User, buffer: Buffer, item: Item, joplinItem: any) {
-		// If the item is encrypted, we apply a multipler because encrypted
+		// If the item is encrypted, we apply a multiplier because encrypted
 		// items can be much larger (seems to be up to twice the size but for
 		// safety let's go with 2.2).
 
@@ -198,14 +205,20 @@ export default class UserModel extends BaseModel<User> {
 			));
 		}
 
-		// Also apply a multiplier to take into account E2EE overhead
-		const maxTotalItemSize = getMaxTotalItemSize(user) * 1.5;
-		if (maxTotalItemSize && user.total_item_size + itemSize >= maxTotalItemSize) {
-			throw new ErrorPayloadTooLarge(_('Cannot save %s "%s" because it would go over the total allowed size (%s) for this account',
-				isNote ? _('note') : _('attachment'),
-				itemTitle ? itemTitle : item.name,
-				formatBytes(maxTotalItemSize)
-			));
+		// We allow lock files to go through so that sync can happen, which in
+		// turns allow user to fix oversized account by deleting items.
+		const isWhiteListed = itemSize < 200 && item.name.startsWith('locks/');
+
+		if (!isWhiteListed) {
+			// Also apply a multiplier to take into account E2EE overhead
+			const maxTotalItemSize = getMaxTotalItemSize(user) * 1.5;
+			if (maxTotalItemSize && user.total_item_size + itemSize >= maxTotalItemSize) {
+				throw new ErrorPayloadTooLarge(_('Cannot save %s "%s" because it would go over the total allowed size (%s) for this account',
+					isNote ? _('note') : _('attachment'),
+					itemTitle ? itemTitle : item.name,
+					formatBytes(maxTotalItemSize)
+				));
+			}
 		}
 	}
 
@@ -261,11 +274,57 @@ export default class UserModel extends BaseModel<User> {
 		}, 'UserModel::delete');
 	}
 
-	public async confirmEmail(userId: Uuid, token: string) {
+	private async confirmEmail(user: User) {
+		await this.save({ id: user.id, email_confirmed: 1 });
+	}
+
+	public async processEmailConfirmation(userId: Uuid, token: string, beforeChangingEmailHandler: Function) {
 		await this.models().token().checkToken(userId, token);
 		const user = await this.models().user().load(userId);
 		if (!user) throw new ErrorNotFound('No such user');
-		await this.save({ id: user.id, email_confirmed: 1 });
+
+		const newEmail = await this.models().keyValue().value(`newEmail::${userId}`);
+		if (newEmail) {
+			await beforeChangingEmailHandler(newEmail);
+			await this.completeEmailChange(user);
+		} else {
+			await this.confirmEmail(user);
+		}
+	}
+
+	public async initiateEmailChange(userId: Uuid, newEmail: string) {
+		const beforeSaveUser = await this.models().user().load(userId);
+
+		await this.models().notification().add(userId, NotificationKey.Any, NotificationLevel.Important, 'A confirmation email has been sent to your new address. Please follow the link in that email to confirm. Your email will only be updated after that.');
+
+		await this.models().keyValue().setValue(`newEmail::${userId}`, newEmail);
+
+		await this.models().user().sendChangeEmailConfirmationEmail(newEmail, beforeSaveUser);
+		await this.models().user().sendChangeEmailNotificationEmail(beforeSaveUser.email, beforeSaveUser);
+	}
+
+	public async completeEmailChange(user: User) {
+		const newEmailKey = `newEmail::${user.id}`;
+		const newEmail = await this.models().keyValue().value<string>(newEmailKey);
+
+		const oldEmail = user.email;
+
+		const userToSave: User = {
+			id: user.id,
+			email_confirmed: 1,
+			email: newEmail,
+		};
+
+		await this.withTransaction(async () => {
+			if (newEmail) {
+				// We keep the old email just in case. Probably yagni but it's easy enough to do.
+				await this.models().keyValue().setValue(`oldEmail::${user.id}_${Date.now()}`, oldEmail);
+				await this.models().keyValue().deleteValue(newEmailKey);
+			}
+			await this.save(userToSave);
+		}, 'UserModel::confirmEmail');
+
+		logger.info(`Changed email of user ${user.id} from "${oldEmail}" to "${newEmail}"`);
 	}
 
 	private userEmailDetails(user: User): UserEmailDetails {
@@ -284,6 +343,24 @@ export default class UserModel extends BaseModel<User> {
 		await this.models().email().push({
 			...accountConfirmationTemplate({ url }),
 			...this.userEmailDetails(user),
+		});
+	}
+
+	public async sendChangeEmailConfirmationEmail(recipientEmail: string, user: User) {
+		const validationToken = await this.models().token().generate(user.id);
+		const url = encodeURI(confirmUrl(user.id, validationToken));
+
+		await this.models().email().push({
+			...changeEmailConfirmationTemplate({ url }),
+			...this.userEmailDetails(user),
+			recipient_email: recipientEmail,
+		});
+	}
+	public async sendChangeEmailNotificationEmail(recipientEmail: string, user: User) {
+		await this.models().email().push({
+			...changeEmailNotificationTemplate(),
+			...this.userEmailDetails(user),
+			recipient_email: recipientEmail,
 		});
 	}
 
@@ -350,24 +427,54 @@ export default class UserModel extends BaseModel<User> {
 	}
 
 	public async handleFailedPaymentSubscriptions() {
-		const subscriptions = await this.models().subscription().shouldDisableUploadSubscriptions();
-		const users = await this.loadByIds(subscriptions.map(s => s.user_id));
+		interface SubInfo {
+			subs: Subscription[];
+			templateFn: Function;
+			emailKeyPrefix: string;
+			flagType: UserFlagType;
+		}
+
+		const subInfos: SubInfo[] = [
+			{
+				subs: await this.models().subscription().failedPaymentWarningSubscriptions(),
+				emailKeyPrefix: 'payment_failed_upload_disabled_',
+				flagType: UserFlagType.FailedPaymentWarning,
+				templateFn: () => paymentFailedUploadDisabledTemplate({ disabledInDays: Math.round(failedPaymentFinalAccount / Day) }),
+			},
+			{
+				subs: await this.models().subscription().failedPaymentFinalSubscriptions(),
+				emailKeyPrefix: 'payment_failed_account_disabled_',
+				flagType: UserFlagType.FailedPaymentFinal,
+				templateFn: () => paymentFailedAccountDisabledTemplate(),
+			},
+		];
+
+		let users: User[] = [];
+		for (const subInfo of subInfos) {
+			users = users.concat(await this.loadByIds(subInfo.subs.map(s => s.user_id)));
+		}
 
 		await this.withTransaction(async () => {
-			for (const sub of subscriptions) {
-				const user = users.find(u => u.id === sub.user_id);
-				if (!user) {
-					logger.error(`Could not find user for subscription ${sub.id}`);
-					continue;
+			for (const subInfo of subInfos) {
+				for (const sub of subInfo.subs) {
+					const user = users.find(u => u.id === sub.user_id);
+					if (!user) {
+						logger.error(`Could not find user for subscription ${sub.id}`);
+						continue;
+					}
+
+					const existingFlag = await this.models().userFlag().byUserId(user.id, subInfo.flagType);
+
+					if (!existingFlag) {
+						await this.models().userFlag().add(user.id, subInfo.flagType);
+
+						await this.models().email().push({
+							...subInfo.templateFn(),
+							...this.userEmailDetails(user),
+							key: `${subInfo.emailKeyPrefix}${sub.last_payment_failed_time}`,
+						});
+					}
 				}
-
-				await this.models().userFlag().add(user.id, UserFlagType.FailedPaymentWarning);
-
-				await this.models().email().push({
-					...paymentFailedUploadDisabledTemplate(),
-					...this.userEmailDetails(user),
-					key: `payment_failed_upload_disabled_${sub.last_payment_failed_time}`,
-				});
 			}
 		}, 'UserModel::handleFailedPaymentSubscriptions');
 	}
@@ -435,7 +542,7 @@ export default class UserModel extends BaseModel<User> {
 
 	private formatValues(user: User): User {
 		const output: User = { ...user };
-		if ('email' in output) output.email = user.email.trim().toLowerCase();
+		if ('email' in output) output.email = (`${user.email}`).trim().toLowerCase();
 		return output;
 	}
 
@@ -467,6 +574,14 @@ export default class UserModel extends BaseModel<User> {
 
 			return savedUser;
 		}, 'UserModel::save');
+	}
+
+	public async saveMulti(users: User[], options: SaveOptions = {}): Promise<void> {
+		await this.withTransaction(async () => {
+			for (const user of users) {
+				await this.save(user, options);
+			}
+		}, 'UserModel::saveMulti');
 	}
 
 }

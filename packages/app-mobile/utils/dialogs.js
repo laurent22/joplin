@@ -35,7 +35,7 @@ dialogs.confirm = (parentComponent, message) => {
 	if (!parentComponent) throw new Error('parentComponent is required');
 	if (!('dialogbox' in parentComponent)) throw new Error('A "dialogbox" component must be defined on the parent component!');
 
-	return dialogs.confirmRef(parentComponent.dialogBox, message);
+	return dialogs.confirmRef(parentComponent.dialogbox, message);
 };
 
 dialogs.pop = (parentComponent, message, buttons, options = null) => {

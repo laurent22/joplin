@@ -1,4 +1,4 @@
-import { baseUrl } from '../config';
+import config, { baseUrl } from '../config';
 import { Item, ItemAddressingType, Uuid } from '../services/database/types';
 import { ErrorBadRequest, ErrorForbidden, ErrorNotFound } from './errors';
 import Router from './Router';
@@ -271,8 +271,13 @@ export enum UrlType {
 	Login = 'login',
 	Terms = 'terms',
 	Privacy = 'privacy',
+	Tasks = 'tasks',
 }
 
 export function makeUrl(urlType: UrlType): string {
-	return `${baseUrl(RouteType.Web)}/${urlType}`;
+	if (config().isJoplinCloud && urlType === UrlType.Signup) {
+		return `${config().joplinAppBaseUrl}/plans`;
+	} else {
+		return `${baseUrl(RouteType.Web)}/${urlType}`;
+	}
 }

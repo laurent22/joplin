@@ -42,9 +42,6 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 		this.sidebar_selectionChange = this.sidebar_selectionChange.bind(this);
 		this.checkSyncConfig_ = this.checkSyncConfig_.bind(this);
-		// this.checkNextcloudAppButton_click = this.checkNextcloudAppButton_click.bind(this);
-		this.showLogButton_click = this.showLogButton_click.bind(this);
-		this.nextcloudAppHelpLink_click = this.nextcloudAppHelpLink_click.bind(this);
 		this.onCancelClick = this.onCancelClick.bind(this);
 		this.onSaveClick = this.onSaveClick.bind(this);
 		this.onApplyClick = this.onApplyClick.bind(this);
@@ -56,19 +53,6 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 	async checkSyncConfig_() {
 		await shared.checkSyncConfig(this, this.state.settings);
-	}
-
-	// async checkNextcloudAppButton_click() {
-	// 	this.setState({ showNextcloudAppLog: true });
-	// 	await shared.checkNextcloudApp(this, this.state.settings);
-	// }
-
-	showLogButton_click() {
-		this.setState({ showNextcloudAppLog: true });
-	}
-
-	nextcloudAppHelpLink_click() {
-		bridge().openExternal('https://joplinapp.org/nextcloud_app');
 	}
 
 	UNSAFE_componentWillMount() {

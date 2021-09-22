@@ -314,7 +314,7 @@ export default abstract class BaseModel<T> {
 			}
 
 			const deletedCount = await query.del();
-			if (!options.allowNoOp && deletedCount !== ids.length) throw new Error(`${ids.length} row(s) should have been deleted but ${deletedCount} row(s) were deleted`);
+			if (!options.allowNoOp && deletedCount !== ids.length) throw new Error(`${ids.length} row(s) should have been deleted but ${deletedCount} row(s) were deleted. ID: ${id}`);
 		}, 'BaseModel::delete');
 	}
 

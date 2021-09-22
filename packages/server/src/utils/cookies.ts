@@ -15,3 +15,7 @@ export function cookieSet(ctx: AppContext, name: string, value: string) {
 export function cookieGet(ctx: AppContext, name: string) {
 	return ctx.cookies.get(name);
 }
+
+export function cookieDelete(ctx: AppContext, name: string) {
+	return cookieSet(ctx, name, '');
+}

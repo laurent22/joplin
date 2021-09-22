@@ -95,17 +95,34 @@ export default class UserFlagModels extends BaseModel<UserFlag> {
 			enabled: 1,
 		};
 
-		if (flags.find(f => f.type === UserFlagType.AccountWithoutSubscription)) {
+		const accountWithoutSubscriptionFlag = flags.find(f => f.type === UserFlagType.AccountWithoutSubscription);
+		const accountOverLimitFlag = flags.find(f => f.type === UserFlagType.AccountOverLimit);
+		const failedPaymentWarningFlag = flags.find(f => f.type === UserFlagType.FailedPaymentWarning);
+		const failedPaymentFinalFlag = flags.find(f => f.type === UserFlagType.FailedPaymentFinal);
+		const subscriptionCancelledFlag = flags.find(f => f.type === UserFlagType.SubscriptionCancelled);
+		const manuallyDisabledFlag = flags.find(f => f.type === UserFlagType.ManuallyDisabled);
+
+		if (accountWithoutSubscriptionFlag) {
 			newProps.can_upload = 0;
-		} else if (flags.find(f => f.type === UserFlagType.AccountOverLimit)) {
+		}
+
+		if (accountOverLimitFlag) {
 			newProps.can_upload = 0;
-		} else if (flags.find(f => f.type === UserFlagType.FailedPaymentWarning)) {
+		}
+
+		if (failedPaymentWarningFlag) {
 			newProps.can_upload = 0;
-		} else if (flags.find(f => f.type === UserFlagType.FailedPaymentFinal)) {
+		}
+
+		if (failedPaymentFinalFlag) {
 			newProps.enabled = 0;
-		} else if (flags.find(f => f.type === UserFlagType.SubscriptionCancelled)) {
+		}
+
+		if (subscriptionCancelledFlag) {
 			newProps.enabled = 0;
-		} else if (flags.find(f => f.type === UserFlagType.ManuallyDisabled)) {
+		}
+
+		if (manuallyDisabledFlag) {
 			newProps.enabled = 0;
 		}
 

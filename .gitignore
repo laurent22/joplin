@@ -61,6 +61,9 @@ packages/app-cli/app/command-e2ee.js.map
 packages/app-cli/app/command-settingschema.d.ts
 packages/app-cli/app/command-settingschema.js
 packages/app-cli/app/command-settingschema.js.map
+packages/app-cli/app/command-testing.d.ts
+packages/app-cli/app/command-testing.js
+packages/app-cli/app/command-testing.js.map
 packages/app-cli/app/services/plugins/PluginRunner.d.ts
 packages/app-cli/app/services/plugins/PluginRunner.js
 packages/app-cli/app/services/plugins/PluginRunner.js.map
@@ -94,6 +97,9 @@ packages/app-cli/tests/services/plugins/sandboxProxy.js.map
 packages/app-cli/tests/testUtils.d.ts
 packages/app-cli/tests/testUtils.js
 packages/app-cli/tests/testUtils.js.map
+packages/app-cli/tools/populateDatabase.d.ts
+packages/app-cli/tools/populateDatabase.js
+packages/app-cli/tools/populateDatabase.js.map
 packages/app-desktop/ElectronAppWrapper.d.ts
 packages/app-desktop/ElectronAppWrapper.js
 packages/app-desktop/ElectronAppWrapper.js.map

@@ -3,7 +3,7 @@ import { EmailSender, User, UserFlagType } from '../services/database/types';
 import { ErrorUnprocessableEntity } from '../utils/errors';
 import { betaUserDateRange, stripeConfig } from '../utils/stripe';
 import { accountByType, AccountType } from './UserModel';
-import { failedPaymentDisableUploadInterval } from './SubscriptionModel';
+import { failedPaymentFinalAccount, failedPaymentWarningInterval } from './SubscriptionModel';
 import { stripePortalUrl } from '../utils/urlUtils';
 
 describe('UserModel', function() {
@@ -163,9 +163,10 @@ describe('UserModel', function() {
 
 		const userFlag = await models().userFlag().byUserId(user1.id, UserFlagType.AccountWithoutSubscription);
 		expect(userFlag).toBeTruthy();
+		stripeConfig().enabled = false;
 	});
 
-	test('should disable upload and send an email if payment failed', async function() {
+	test('should disable upload and send an email if payment failed recently', async function() {
 		stripeConfig().enabled = true;
 
 		const { user: user1 } = await models().subscription().saveUserAndSubscription('toto@example.com', 'Toto', AccountType.Basic, 'usr_111', 'sub_111');
@@ -174,10 +175,10 @@ describe('UserModel', function() {
 		const sub = await models().subscription().byUserId(user1.id);
 
 		const now = Date.now();
-		const paymentFailedTime = now - failedPaymentDisableUploadInterval - 10;
+		const paymentFailedTime = now - failedPaymentWarningInterval - 10;
 		await models().subscription().save({
 			id: sub.id,
-			last_payment_time: now - failedPaymentDisableUploadInterval * 2,
+			last_payment_time: now - failedPaymentWarningInterval * 2,
 			last_payment_failed_time: paymentFailedTime,
 		});
 
@@ -190,6 +191,7 @@ describe('UserModel', function() {
 			const email = (await models().email().all()).pop();
 			expect(email.key).toBe(`payment_failed_upload_disabled_${paymentFailedTime}`);
 			expect(email.body).toContain(stripePortalUrl());
+			expect(email.body).toContain('14 days');
 		}
 
 		const beforeEmailCount = (await models().email().all()).length;
@@ -201,6 +203,37 @@ describe('UserModel', function() {
 			const user2 = await models().user().loadByEmail('tutu@example.com');
 			expect(user2.can_upload).toBe(1);
 		}
+
+		stripeConfig().enabled = false;
+	});
+
+	test('should disable disable the account and send an email if payment failed for good', async function() {
+		stripeConfig().enabled = true;
+
+		const { user: user1 } = await models().subscription().saveUserAndSubscription('toto@example.com', 'Toto', AccountType.Basic, 'usr_111', 'sub_111');
+
+		const sub = await models().subscription().byUserId(user1.id);
+
+		const now = Date.now();
+		const paymentFailedTime = now - failedPaymentFinalAccount - 10;
+		await models().subscription().save({
+			id: sub.id,
+			last_payment_time: now - failedPaymentFinalAccount * 2,
+			last_payment_failed_time: paymentFailedTime,
+		});
+
+		await models().user().handleFailedPaymentSubscriptions();
+
+		{
+			const user1 = await models().user().loadByEmail('toto@example.com');
+			expect(user1.enabled).toBe(0);
+
+			const email = (await models().email().all()).pop();
+			expect(email.key).toBe(`payment_failed_account_disabled_${paymentFailedTime}`);
+			expect(email.body).toContain(stripePortalUrl());
+		}
+
+		stripeConfig().enabled = false;
 	});
 
 	test('should send emails when the account is over the size limit', async function() {

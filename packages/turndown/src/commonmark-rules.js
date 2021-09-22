@@ -1,4 +1,4 @@
-import { repeat, isCodeBlockSpecialCase1, isCodeBlockSpecialCase2, isCodeBlock } from './utilities'
+import { repeat, isCodeBlockSpecialCase1, isCodeBlockSpecialCase2, isCodeBlock, getStyleProp } from './utilities'
 const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = (new Entities()).encode;
 
@@ -73,7 +73,15 @@ rules.highlight = {
 // HTML to avoid any ambiguity.
 
 rules.insert = {
-  filter: 'ins',
+  filter: function (node, options) {
+    // TinyMCE represents this either with an <INS> tag (when pressing the
+    // toolbar button) or using style "text-decoration" (when using shortcut
+    // Cmd+U)
+    //
+    // https://github.com/laurent22/joplin/issues/5480
+    if (node.nodeName === 'INS') return true;
+    return getStyleProp(node, 'text-decoration') === 'underline';
+  },
 
   replacement: function (content, node, options) {
     return '<ins>' + content + '</ins>'
