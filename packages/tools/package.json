@@ -7,7 +7,9 @@
   "scripts": {
     "updateIgnored": "gulp updateIgnoredTypeScriptBuild",
     "tsc": "tsc --project tsconfig.json",
-    "watch": "tsc --watch --project tsconfig.json"
+    "watch": "tsc --watch --project tsconfig.json",
+    "test": "jest --verbose=false",
+    "test-ci": "npm run test"
   },
   "publishConfig": {
     "access": "public"
@@ -41,6 +43,8 @@
     "@types/fs-extra": "^9.0.6",
     "@types/mustache": "^0.8.32",
     "@types/node": "^14.14.6",
+    "@types/jest": "^26.0.15",
+    "jest": "^26.6.3",
     "gulp": "^4.0.2",
     "sass": "^1.39.2",
     "sqlite3": "^5.0.0",

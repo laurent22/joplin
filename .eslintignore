@@ -1816,6 +1816,9 @@ packages/renderer/utils.js.map
 packages/tools/buildServerDocker.d.ts
 packages/tools/buildServerDocker.js
 packages/tools/buildServerDocker.js.map
+packages/tools/buildServerDocker.test.d.ts
+packages/tools/buildServerDocker.test.js
+packages/tools/buildServerDocker.test.js.map
 packages/tools/convertThemesToCss.d.ts
 packages/tools/convertThemesToCss.js
 packages/tools/convertThemesToCss.js.map

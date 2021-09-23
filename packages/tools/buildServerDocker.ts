@@ -1,14 +1,14 @@
 import { execCommand2, rootDir } from './tool-utils';
 import * as moment from 'moment';
 
-function getVersionFromTag(tagName: string, isPreRelease: boolean): string {
+export function getVersionFromTag(tagName: string, isPreRelease: boolean): string {
 	if (tagName.indexOf('server-') !== 0) throw new Error(`Invalid tag: ${tagName}`);
 	const s = tagName.split('-');
 	const suffix = isPreRelease ? '-beta' : '';
 	return s[1].substr(1) + suffix;
 }
 
-function getIsPreRelease(tagName: string): boolean {
+export function getIsPreRelease(tagName: string): boolean {
 	return tagName.indexOf('-beta') > 0;
 }
 
@@ -51,8 +51,10 @@ async function main() {
 	}
 }
 
-main().catch((error) => {
-	console.error('Fatal error');
-	console.error(error);
-	process.exit(1);
-});
+if (require.main === module) {
+	main().catch((error) => {
+		console.error('Fatal error');
+		console.error(error);
+		process.exit(1);
+	});
+}
