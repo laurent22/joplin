@@ -300,7 +300,32 @@ interface NoteResourceRecognition {
 	objID?: string;
 }
 
-export default function importEnex(parentFolderId: string, filePath: string, importOptions: ImportOptions = null) {
+const preProcessFile = async (filePath: string): Promise<string> => {
+	const content: string = await shim.fsDriver().readFile(filePath, 'utf8');
+
+	// The note content in an ENEX file is wrapped in a CDATA block so it means
+	// that any "]]>" inside the note must be somehow escaped, or else the CDATA
+	// block would be closed at the wrong point.
+	//
+	// The problem is that Evernote appears to encode "]]>" as "]]<![CDATA[>]]>"
+	// instead of the more sensible "]]&gt;", or perhaps they have nothing in
+	// place to properly escape data imported from their web clipper. In any
+	// case it results in invalid XML that Evernote cannot even import back.
+	//
+	// Handling that invalid XML with SAX would also be very tricky, so instead
+	// we add a pre-processing step that converts this tags to just "&gt;". It
+	// should be safe to do so because such content can only be within the body
+	// of a note - and ">" or "&gt;" is equivalent.
+	//
+	// Ref: https://discourse.joplinapp.org/t/20470/4
+	const newContent = content.replace(/<!\[CDATA\[>\]\]>/g, '&gt;');
+	if (content === newContent) return filePath;
+	const newFilePath = `${Setting.value('tempDir')}/${md5(Date.now() + Math.random())}.enex`;
+	await shim.fsDriver().writeFile(newFilePath, newContent, 'utf8');
+	return newFilePath;
+};
+
+export default async function importEnex(parentFolderId: string, filePath: string, importOptions: ImportOptions = null) {
 	if (!importOptions) importOptions = {};
 	if (!('fuzzyMatching' in importOptions)) importOptions.fuzzyMatching = false;
 	if (!('onProgress' in importOptions)) importOptions.onProgress = function() {};
@@ -323,6 +348,9 @@ export default function importEnex(parentFolderId: string, filePath: string, imp
 		};
 	}
 
+	const fileToProcess = await preProcessFile(filePath);
+	const needToDeleteFileToProcess = fileToProcess !== filePath;
+
 	return new Promise((resolve) => {
 		const progressState = {
 			loaded: 0,
@@ -333,7 +361,7 @@ export default function importEnex(parentFolderId: string, filePath: string, imp
 			notesTagged: 0,
 		};
 
-		const stream = fs.createReadStream(filePath);
+		const stream = fs.createReadStream(fileToProcess);
 
 		const options = {};
 		const strict = true;
@@ -613,6 +641,7 @@ export default function importEnex(parentFolderId: string, filePath: string, imp
 				void processNotes().then(allDone => {
 					if (allDone) {
 						shim.clearTimeout(iid);
+						if (needToDeleteFileToProcess) void shim.fsDriver().remove(fileToProcess);
 						resolve(null);
 					}
 				});
