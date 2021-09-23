@@ -1000,6 +1000,9 @@ packages/lib/import-enex-md-gen.js.map
 packages/lib/import-enex-md-gen.test.d.ts
 packages/lib/import-enex-md-gen.test.js
 packages/lib/import-enex-md-gen.test.js.map
+packages/lib/import-enex.d.ts
+packages/lib/import-enex.js
+packages/lib/import-enex.js.map
 packages/lib/locale.d.ts
 packages/lib/locale.js
 packages/lib/locale.js.map
