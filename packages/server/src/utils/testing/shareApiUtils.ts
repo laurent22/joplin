@@ -66,6 +66,21 @@ async function createItemTree3(sessionId: Uuid, userId: Uuid, parentFolderId: st
 	}
 }
 
+export async function inviteUserToShare(share: Share, sharerSessionId: string, recipientEmail: string, acceptShare: boolean = true) {
+	let shareUser = await postApi(sharerSessionId, `shares/${share.id}/users`, {
+		email: recipientEmail,
+	}) as ShareUser;
+
+	shareUser = await models().shareUser().load(shareUser.id);
+
+	if (acceptShare) {
+		const session = await models().session().createUserSession(shareUser.user_id);
+		await patchApi(session.id, `share_users/${shareUser.id}`, { status: ShareUserStatus.Accepted });
+	}
+
+	return shareUser;
+}
+
 export async function shareFolderWithUser(sharerSessionId: string, shareeSessionId: string, sharedFolderId: string, itemTree: any, acceptShare: boolean = true): Promise<ShareResult> {
 	itemTree = Array.isArray(itemTree) ? itemTree : convertTree(itemTree);
 
@@ -93,15 +108,7 @@ export async function shareFolderWithUser(sharerSessionId: string, shareeSession
 		}
 	}
 
-	let shareUser = await postApi(sharerSessionId, `shares/${share.id}/users`, {
-		email: sharee.email,
-	}) as ShareUser;
-
-	shareUser = await models().shareUser().load(shareUser.id);
-
-	if (acceptShare) {
-		await patchApi(shareeSessionId, `share_users/${shareUser.id}`, { status: ShareUserStatus.Accepted });
-	}
+	const shareUser = await inviteUserToShare(share, sharerSessionId, sharee.email, acceptShare);
 
 	await models().share().updateSharedItems3();
 
@@ -146,7 +153,6 @@ export async function shareWithUserAndAccept(sharerSessionId: string, shareeSess
 	await patchApi(shareeSessionId, `share_users/${shareUser.id}`, { status: ShareUserStatus.Accepted });
 
 	await models().share().updateSharedItems3();
-	// await models().share().updateSharedItems2(sharee.id);
 
 	return { share, item, shareUser };
 }

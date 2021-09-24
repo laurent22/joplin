@@ -368,4 +368,23 @@ export default class ShareModel extends BaseModel<Share> {
 		}, 'ShareModel::delete');
 	}
 
+	public async itemCountByShareId(shareId: Uuid): Promise<number> {
+		const r = await this
+			.db('items')
+			.count('id', { as: 'item_count' })
+			.where('jop_share_id', '=', shareId);
+		return r[0].item_count;
+	}
+
+	public async itemCountByShareIdPerUser(shareId: Uuid): Promise<{ item_count: number; user_id: Uuid }[]> {
+		return this.db('user_items')
+			.select(this.db.raw('user_id, count(user_id) as item_count'))
+			.whereIn('item_id',
+				this.db('items')
+					.select('id')
+					.where('jop_share_id', '=', shareId)
+			).groupBy('user_id') as any;
+	}
+
+
 }

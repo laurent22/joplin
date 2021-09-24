@@ -15,6 +15,14 @@ require('pg').types.setTypeParser(20, function(val: any) {
 	return parseInt(val, 10);
 });
 
+// Also need this to get integers for count() queries.
+// https://knexjs.org/#Builder-count
+declare module 'knex/types/result' {
+    interface Registry {
+        Count: number;
+    }
+}
+
 const logger = Logger.create('db');
 
 // To prevent error "SQLITE_ERROR: too many SQL variables", SQL statements with
