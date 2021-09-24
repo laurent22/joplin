@@ -139,7 +139,7 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 
 		await this.withTransaction(async () => {
 			await this.delete(shareUsers.map(s => s.id));
-		}, 'ShareUserModel::delete');
+		}, 'ShareUserModel::deleteByShare');
 	}
 
 	public async delete(id: string | string[], _options: DeleteOptions = {}): Promise<void> {
