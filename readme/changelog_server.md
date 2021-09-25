@@ -1,5 +1,10 @@
 # Joplin Server Changelog
 
+## [server-v2.4.10-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.4.10-beta) (Pre-release) - 2021-09-25T19:07:05Z
+
+- Improved: Improved share service reliability and optimised performance (0175348)
+- Security: Implement clickjacking defense (e3fd34e)
+
 ## [server-v2.4.9](https://github.com/laurent22/joplin/releases/tag/server-v2.4.9-beta) - 2021-09-22T16:31:23Z
 
 - New: Add support for changing user own email (63e88c0)
