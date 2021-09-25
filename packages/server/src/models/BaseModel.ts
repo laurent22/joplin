@@ -11,6 +11,8 @@ import Logger from '@joplin/lib/Logger';
 
 const logger = Logger.create('BaseModel');
 
+type SavePoint = string;
+
 export interface SaveOptions {
 	isNew?: boolean;
 	skipValidation?: boolean;
@@ -49,6 +51,7 @@ export default abstract class BaseModel<T> {
 	private modelFactory_: Function;
 	private static eventEmitter_: EventEmitter = null;
 	private config_: Config;
+	private savePoints_: SavePoint[] = [];
 
 	public constructor(db: DbConnection, modelFactory: Function, config: Config) {
 		this.db_ = db;
@@ -287,6 +290,25 @@ export default abstract class BaseModel<T> {
 	public async loadByIds(ids: string[], options: LoadOptions = {}): Promise<T[]> {
 		if (!ids.length) return [];
 		return this.db(this.tableName).select(options.fields || this.defaultFields).whereIn('id', ids);
+	}
+
+	public async setSavePoint(): Promise<SavePoint> {
+		const name = `sp_${uuidgen()}`;
+		await this.db.raw(`SAVEPOINT ${name}`);
+		this.savePoints_.push(name);
+		return name;
+	}
+
+	public async rollbackSavePoint(savePoint: SavePoint) {
+		const last = this.savePoints_.pop();
+		if (last !== savePoint) throw new Error('Rollback save point does not match');
+		await this.db.raw(`ROLLBACK TO SAVEPOINT ${savePoint}`);
+	}
+
+	public async releaseSavePoint(savePoint: SavePoint) {
+		const last = this.savePoints_.pop();
+		if (last !== savePoint) throw new Error('Rollback save point does not match');
+		await this.db.raw(`RELEASE SAVEPOINT ${savePoint}`);
 	}
 
 	public async exists(id: string): Promise<boolean> {

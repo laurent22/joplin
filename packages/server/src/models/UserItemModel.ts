@@ -1,7 +1,8 @@
-import { ChangeType, ItemType, UserItem, Uuid } from '../services/database/types';
+import { ChangeType, Item, ItemType, UserItem, Uuid } from '../services/database/types';
 import BaseModel, { DeleteOptions, LoadOptions, SaveOptions } from './BaseModel';
 import { unique } from '../utils/array';
 import { ErrorNotFound } from '../utils/errors';
+import { Knex } from 'knex';
 
 interface DeleteByShare {
 	id: Uuid;
@@ -123,25 +124,38 @@ export default class UserItemModel extends BaseModel<UserItem> {
 		await this.deleteBy({ byShareId: shareId, byUserId: userId });
 	}
 
+	public async addMulti(userId: Uuid, itemsQuery: Knex.QueryBuilder | Item[], options: SaveOptions = {}): Promise<void> {
+		const items: Item[] = Array.isArray(itemsQuery) ? itemsQuery : await itemsQuery.whereNotIn('id', this.db('user_items').select('item_id').where('user_id', '=', userId));
+		if (!items.length) return;
+
+		await this.withTransaction(async () => {
+			for (const item of items) {
+				if (!('name' in item) || !('id' in item)) throw new Error('item.id and item.name must be set');
+
+				await super.save({
+					user_id: userId,
+					item_id: item.id,
+				}, options);
+
+				if (this.models().item().shouldRecordChange(item.name)) {
+					await this.models().change().save({
+						item_type: ItemType.UserItem,
+						item_id: item.id,
+						item_name: item.name,
+						type: ChangeType.Create,
+						previous_item: '',
+						user_id: userId,
+					});
+				}
+			}
+		}, 'UserItemModel::addMulti');
+	}
+
 	public async save(userItem: UserItem, options: SaveOptions = {}): Promise<UserItem> {
 		if (userItem.id) throw new Error('User items cannot be modified (only created or deleted)'); // Sanity check - shouldn't happen
-
 		const item = await this.models().item().load(userItem.item_id, { fields: ['id', 'name'] });
-
-		return this.withTransaction(async () => {
-			if (this.models().item().shouldRecordChange(item.name)) {
-				await this.models().change().save({
-					item_type: ItemType.UserItem,
-					item_id: userItem.item_id,
-					item_name: item.name,
-					type: ChangeType.Create,
-					previous_item: '',
-					user_id: userItem.user_id,
-				});
-			}
-
-			return super.save(userItem, options);
-		}, 'UserItemModel::save');
+		await this.addMulti(userItem.user_id, [item], options);
+		return this.byUserAndItemId(userItem.user_id, item.id);
 	}
 
 	public async delete(_id: string | string[], _options: DeleteOptions = {}): Promise<void> {

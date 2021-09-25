@@ -340,18 +340,8 @@ export default class ShareModel extends BaseModel<Share> {
 	// however can be called after a user accept a share, or to correct share
 	// errors, but re-assigning all items to a user.
 	public async createSharedFolderUserItems(shareId: Uuid, userId: Uuid) {
-		const items = await this.models().item().byShareId(shareId, { fields: ['id'] });
-
-		await this.withTransaction(async () => {
-			for (const item of items) {
-				try {
-					await this.models().userItem().add(userId, item.id);
-				} catch (error) {
-					if (isUniqueConstraintError(error)) continue;
-					throw error;
-				}
-			}
-		}, 'ShareModel::createSharedFolderUserItems');
+		const query = this.models().item().byShareIdQuery(shareId, { fields: ['id', 'name'] });
+		await this.models().userItem().addMulti(userId, query);
 	}
 
 	public async shareFolder(owner: User, folderId: string): Promise<Share> {
