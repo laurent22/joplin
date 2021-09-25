@@ -106,11 +106,16 @@ export default class ItemModel extends BaseModel<Item> {
 		return path.replace(extractNameRegex, '$1');
 	}
 
-	public async byShareId(shareId: Uuid, options: LoadOptions = {}): Promise<Item[]> {
+	public byShareIdQuery(shareId: Uuid, options: LoadOptions = {}): Knex.QueryBuilder {
 		return this
 			.db('items')
 			.select(this.selectFields(options, null, 'items'))
 			.where('jop_share_id', '=', shareId);
+	}
+
+	public async byShareId(shareId: Uuid, options: LoadOptions = {}): Promise<Item[]> {
+		const query = this.byShareIdQuery(shareId, options);
+		return await query;
 	}
 
 	public async loadByJopIds(userId: Uuid | Uuid[], jopIds: string[], options: LoadOptions = {}): Promise<Item[]> {
