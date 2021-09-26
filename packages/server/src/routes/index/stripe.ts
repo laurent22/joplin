@@ -86,6 +86,8 @@ export const postHandlers: PostHandlers = {
 		};
 
 		if (fields.coupon) {
+			delete checkoutSession.allow_promotion_codes;
+
 			checkoutSession.discounts = [
 				{
 					coupon: fields.coupon.trim(),
