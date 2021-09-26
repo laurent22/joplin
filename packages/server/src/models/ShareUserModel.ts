@@ -1,5 +1,5 @@
 import { Item, Share, ShareType, ShareUser, ShareUserStatus, User, Uuid } from '../services/database/types';
-import { ErrorForbidden, ErrorNotFound } from '../utils/errors';
+import { ErrorBadRequest, ErrorForbidden, ErrorNotFound } from '../utils/errors';
 import BaseModel, { AclAction, DeleteOptions } from './BaseModel';
 import { getCanShareFolder } from './utils/user';
 
@@ -116,6 +116,8 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 	public async setStatus(shareId: Uuid, userId: Uuid, status: ShareUserStatus): Promise<Item> {
 		const shareUser = await this.byShareAndUserId(shareId, userId);
 		if (!shareUser) throw new ErrorNotFound(`Item has not been shared with this user: ${shareId} / ${userId}`);
+
+		if (shareUser.status === status) throw new ErrorBadRequest(`Share ${shareId} status is already ${status}`);
 
 		const share = await this.models().share().load(shareId);
 		if (!share) throw new ErrorNotFound(`No such share: ${shareId}`);
