@@ -1,5 +1,10 @@
 # Joplin Server Changelog
 
+## [server-v2.4.11-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.4.11-beta) - 2021-09-26T17:10:57Z
+
+- Improved: Do not allow accepting share more than once (57a1d03)
+- Fixed: Fixed Stripe checkout when a coupon is used (c45f961)
+
 ## [server-v2.4.10-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.4.10-beta) (Pre-release) - 2021-09-25T19:07:05Z
 
 - Improved: Improved share service reliability and optimised performance (0175348)
