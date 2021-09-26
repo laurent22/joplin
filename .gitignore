@@ -841,6 +841,9 @@ packages/generator-joplin/generators/app/templates/api_index.js.map
 packages/generator-joplin/generators/app/templates/src/index.d.ts
 packages/generator-joplin/generators/app/templates/src/index.js
 packages/generator-joplin/generators/app/templates/src/index.js.map
+packages/htmlpack/src/index.d.ts
+packages/htmlpack/src/index.js
+packages/htmlpack/src/index.js.map
 packages/lib/AsyncActionQueue.d.ts
 packages/lib/AsyncActionQueue.js
 packages/lib/AsyncActionQueue.js.map
