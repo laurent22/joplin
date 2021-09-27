@@ -118,7 +118,6 @@ export default class UserModel extends BaseModel<User> {
 	public async login(email: string, password: string): Promise<User> {
 		const user = await this.loadByEmail(email);
 		if (!user) return null;
-		if (!user.enabled) throw new ErrorForbidden('This account is disabled. Please contact support if you need to re-activate it.');
 		if (!auth.checkPassword(password, user.password)) return null;
 		return user;
 	}
