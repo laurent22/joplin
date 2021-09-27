@@ -49,7 +49,7 @@ describe('InteropService_Importer_Yaml: importMetadata', function() {
 		expect(note.author).not.toBe('xxx');
 		expect(note.body).toBe('---\nauthor: xxx\n---\n\nnote body\n');
 	});
-	it('should only import duplicate notes and tags are not created', async function() {
+	it('should only import, duplicate notes and tags are not created', async function() {
 		const note = await importNote(`${supportDir}/test_notes/yaml/duplicates.md`);
 
 		expect(note.title).toBe('ddd');
@@ -65,7 +65,7 @@ describe('InteropService_Importer_Yaml: importMetadata', function() {
 		expect(note.title).toBe('001');
 		expect(note.body).toBe('note body\n');
 	});
-	it('should normalize whitespace a load correctly', async function() {
+	it('should normalize whitespace and load correctly', async function() {
 		const note = await importNote(`${supportDir}/test_notes/yaml/normalize.md`);
 
 		expect(note.title).toBe('norm');

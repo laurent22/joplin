@@ -111,7 +111,7 @@ export interface YamlExportMetaData {
 	'Latitude'?: number;
 	'Longitude'?: number;
 	'Altitude'?: number;
-	'Completed?'?: boolean;
+	'Completed?'?: string;
 	'Due'?: string;
 	'Updated'?: string;
 	'Created'?: string;

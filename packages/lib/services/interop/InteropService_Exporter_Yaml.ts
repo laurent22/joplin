@@ -9,6 +9,8 @@ import { YamlExportMetaData } from './types';
 
 import * as yaml from 'js-yaml';
 
+export const fieldOrder = ['Title', 'Updated', 'Created', 'Source', 'Author', 'Latitude', 'Longitude', 'Altitude', 'Completed?', 'Due', 'Tags'];
+
 export default class InteropService_Exporter_Yaml extends InteropService_Exporter_Md {
 
 	public async prepareForProcessingItemType(itemType: number, itemsToExport: any[]) {
@@ -78,7 +80,8 @@ export default class InteropService_Exporter_Yaml extends InteropService_Exporte
 
 		// todo
 		if (note.is_todo) {
-			md['Completed?'] = !!note.todo_completed;
+			// boolean is not support by the yaml FAILSAFE_SCHEMA
+			md['Completed?'] = note.todo_completed ? 'True' : 'False';
 		}
 		if (note.todo_due) { md['Due'] = this.convertDate(note.todo_due); }
 
@@ -90,18 +93,19 @@ export default class InteropService_Exporter_Yaml extends InteropService_Exporte
 		const context = this.context();
 		if (context.noteTags[note.id]) {
 			const tagIds = context.noteTags[note.id];
-			const tags = tagIds.map((id: string) => context.tagTitles[id]);
+			const tags = tagIds.map((id: string) => context.tagTitles[id]).sort();
 			md['Tags'] = tags;
 		}
 
 		// This guarentees that fields will always be ordered the same way
 		// which can be useful if users are using this for generating diffs
-		const fieldOrder = ['Title', 'Updated', 'Created', 'Source', 'Author', 'Latitude', 'Longitude', 'Altitude', 'Completed?', 'Due', 'Tags'];
 		const sort = (a: string, b: string) => {
 			return fieldOrder.indexOf(a) - fieldOrder.indexOf(b);
 		};
 
-		return yaml.dump(md, { sortKeys: sort });
+		// The FAILSAFE_SCHEMA allows this to export strings that look like numbers without
+		// the added '' quotes around the text
+		return yaml.dump(md, { sortKeys: sort, schema: yaml.FAILSAFE_SCHEMA });
 	}
 
 	public async getNoteExportContent_(modNote: NoteEntity) {

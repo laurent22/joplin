@@ -1267,6 +1267,9 @@ packages/lib/services/interop/InteropService_Exporter_Raw.js.map
 packages/lib/services/interop/InteropService_Exporter_Yaml.d.ts
 packages/lib/services/interop/InteropService_Exporter_Yaml.js
 packages/lib/services/interop/InteropService_Exporter_Yaml.js.map
+packages/lib/services/interop/InteropService_Exporter_Yaml.test.d.ts
+packages/lib/services/interop/InteropService_Exporter_Yaml.test.js
+packages/lib/services/interop/InteropService_Exporter_Yaml.test.js.map
 packages/lib/services/interop/InteropService_Importer_Base.d.ts
 packages/lib/services/interop/InteropService_Importer_Base.js
 packages/lib/services/interop/InteropService_Importer_Base.js.map
