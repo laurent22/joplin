@@ -9,6 +9,24 @@ import { YamlExportMetaData } from './types';
 
 import * as yaml from 'js-yaml';
 
+// There is a special case (negative numbers) where the yaml library will force quotations
+// These need to be stripped
+function trimQuotes(rawOutput: string): string {
+	return rawOutput.split('\n').map(line => {
+		const index = line.indexOf(': \'-');
+		if (index >= 0) {
+			// The plus 2 eats the : and space characters
+			const start = line.substring(0, index + 2);
+			//  The plus 3 eats the quote character
+			const end = line.substring(index + 3, line.length - 1);
+			return start + end;
+		}
+		return line;
+	}).join('\n');
+
+
+}
+
 export const fieldOrder = ['Title', 'Updated', 'Created', 'Source', 'Author', 'Latitude', 'Longitude', 'Altitude', 'Completed?', 'Due', 'Tags'];
 
 export default class InteropService_Exporter_Yaml extends InteropService_Exporter_Md {
@@ -81,7 +99,7 @@ export default class InteropService_Exporter_Yaml extends InteropService_Exporte
 		// todo
 		if (note.is_todo) {
 			// boolean is not support by the yaml FAILSAFE_SCHEMA
-			md['Completed?'] = note.todo_completed ? 'True' : 'False';
+			md['Completed?'] = note.todo_completed ? 'Yes' : 'No';
 		}
 		if (note.todo_due) { md['Due'] = this.convertDate(note.todo_due); }
 
@@ -103,10 +121,16 @@ export default class InteropService_Exporter_Yaml extends InteropService_Exporte
 			return fieldOrder.indexOf(a) - fieldOrder.indexOf(b);
 		};
 
-		// The FAILSAFE_SCHEMA allows this to export strings that look like numbers without
-		// the added '' quotes around the text
-		return yaml.dump(md, { sortKeys: sort, schema: yaml.FAILSAFE_SCHEMA });
+		// The FAILSAFE_SCHEMA along with noCompatMode allows this to export strings that look
+		// like numbers (or yes/no) without the added '' quotes around the text
+		const rawOutput = yaml.dump(md, { sortKeys: sort, noCompatMode: true, schema: yaml.FAILSAFE_SCHEMA });
+		// The additional trimming is the unfortunate result of the yaml library insisting on
+		// quoting negative numbers.
+		// For now the trimQuotes function only trims quotes associated with a negative number
+		// but it can be extended to support more special cases in the future if necessary.
+		return trimQuotes(rawOutput);
 	}
+
 
 	public async getNoteExportContent_(modNote: NoteEntity) {
 		const noteContent = await Note.replaceResourceInternalToExternalLinks(await Note.serialize(modNote, ['body']));

@@ -53,10 +53,10 @@ describe('interop/InteropService_Exporter_Yaml', function() {
 
 	test('should export without additional quotes', (async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
-		await Note.save({ title: '60', body: '**ma note**', parent_id: folder1.id });
+		await Note.save({ title: '-60', body: '**ma note**', parent_id: folder1.id });
 
-		const content = await exportAndLoad(`${exportDir()}/folder1/60.md`);
-		expect(content).toContain('Title: 60');
+		const content = await exportAndLoad(`${exportDir()}/folder1/-60.md`);
+		expect(content).toContain('Title: -60');
 		expect(content).toContain('Latitude: 0.00000000');
 	}));
 
@@ -77,7 +77,7 @@ describe('interop/InteropService_Exporter_Yaml', function() {
 
 		const content = await exportAndLoad(`${exportDir()}/folder1/Todo.md`);
 		expect(content).toContain(`Due: ${time.formatMsToLocal(1)}`);
-		expect(content).toContain('Completed?: False');
+		expect(content).toContain('Completed?: No');
 	}));
 
 	test('should export author', (async () => {

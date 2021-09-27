@@ -74,4 +74,14 @@ describe('InteropService_Importer_Yaml: importMetadata', function() {
 		const tags = await Tag.tagsByNoteId(note.id);
 		expect(tags.length).toBe(3);
 	});
+	it('should load unquoted special forms correctl', async function() {
+		const note = await importNote(`${supportDir}/test_notes/yaml/unquoted.md`);
+
+		expect(note.title).toBe('Unquoted');
+		expect(note.body).toBe('note body\n');
+
+		expect(note.longitude).toBe('-94.51350100');
+		expect(note.is_todo).toBe(1);
+		expect(note.todo_completed).toBeUndefined();
+	});
 });

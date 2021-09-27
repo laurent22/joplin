@@ -71,8 +71,8 @@ export default class InteropService_Importer_Yaml extends InteropService_Importe
 			is_todo: ('completed?' in md) ? 1 : 0,
 		};
 
-		if (md['created']) { metadata['user_created_time'] = time.anythingToMs(md['created']); }
-		if (md['updated']) { metadata['user_updated_time'] = time.anythingToMs(md['updated']); }
+		if (md['created']) { metadata['user_created_time'] = time.anythingToMs(md['created'], Date.now()); }
+		if (md['updated']) { metadata['user_updated_time'] = time.anythingToMs(md['updated'], Date.now()); }
 
 		if ('latitude' in md) { metadata['latitude'] = md['latitude']; }
 		if ('longitude' in md) { metadata['longitude'] = md['longitude']; }
@@ -83,7 +83,10 @@ export default class InteropService_Importer_Yaml extends InteropService_Importe
 				// Completed time isn't preserved, so we use a sane choice here
 				metadata['todo_completed'] = metadata['user_updated_time'];
 			}
-			if ('due' in md) { metadata['todo_due'] = time.anythingToMs(md['due']); }
+			if ('due' in md) {
+				const due_date = time.anythingToMs(md['due'], null);
+				if (due_date) { metadata['todo_due'] = due_date; }
+			}
 		}
 
 		// Tags are handled seperately from typical metadata

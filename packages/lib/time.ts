@@ -110,11 +110,18 @@ class Time {
 		return m.isValid() ? m.toDate() : defaultValue;
 	}
 
-	public anythingToMs(o: any, defaultValue: Date = null) {
+	public anythingToMs(o: any, defaultValue: number = null) {
 		if (o && o.toDate) return o.toDate();
 		if (!o) return defaultValue;
-		const m = moment(o);
-		return m.isValid() ? m.toDate().getTime() : defaultValue;
+		// There are a few date formats supported by Joplin that are not supported by
+		// moment without an explicit format specifier. The typical case is that a user
+		// has a preferred data format. This means we should try the currently assigned
+		// date first, and then attempt to load a generic date string.
+		const m = moment(o, this.dateTimeFormat());
+		if (m.isValid()) return m.toDate().getTime();
+		// moment will fall back on Date.parse, so we might as well use it directly
+		const d = Date.parse(o);
+		return isNaN(d) ? defaultValue : d;
 	}
 
 	public msleep(ms: number) {
