@@ -15,7 +15,7 @@ import * as fs from 'fs-extra';
 import * as jsdom from 'jsdom';
 import setupAppContext from '../setupAppContext';
 import { ApiError } from '../errors';
-import { putApi } from './apiUtils';
+import { getApi, putApi } from './apiUtils';
 import { FolderEntity, NoteEntity, ResourceEntity } from '@joplin/lib/services/database/types';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { initializeJoplinUtils } from '../joplinUtils';
@@ -325,6 +325,11 @@ export async function createItemTree3(userId: Uuid, parentFolderId: string, shar
 		const newItem = result[`${jopItem.id}.md`].item;
 		if (isFolder && jopItem.children.length) await createItemTree3(userId, newItem.jop_id, shareId, jopItem.children);
 	}
+}
+
+export async function getItem(sessionId: string, path: string): Promise<string> {
+	const item: Buffer = await getApi(sessionId, `items/${path}/content`);
+	return item.toString();
 }
 
 export async function createItem(sessionId: string, path: string, content: string | Buffer): Promise<Item> {

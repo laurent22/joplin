@@ -2,9 +2,9 @@ import { SubPath, redirect } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
 import { AppContext, HttpMethod } from '../../utils/types';
-import { bodyFields, contextSessionId, formParse } from '../../utils/requestUtils';
+import { bodyFields, formParse } from '../../utils/requestUtils';
 import { ErrorForbidden, ErrorUnprocessableEntity } from '../../utils/errors';
-import { User, UserFlagType, userFlagTypeToLabel, Uuid } from '../../services/database/types';
+import { User, UserFlagType, Uuid } from '../../services/database/types';
 import config from '../../config';
 import { View } from '../../services/MustacheService';
 import defaultView from '../../utils/defaultView';
@@ -16,10 +16,12 @@ import { formatMaxItemSize, formatMaxTotalSize, formatTotalSize, formatTotalSize
 import { getCanShareFolder, totalSizeClass } from '../../models/utils/user';
 import { yesNoDefaultOptions, yesNoOptions } from '../../utils/views/select';
 import { confirmUrl, stripePortalUrl } from '../../utils/urlUtils';
-import { cancelSubscriptionByUserId, updateSubscriptionType } from '../../utils/stripe';
+import { cancelSubscriptionByUserId, updateCustomerEmail, updateSubscriptionType } from '../../utils/stripe';
 import { createCsrfTag } from '../../utils/csrf';
 import { formatDateTime } from '../../utils/time';
 import { cookieSet } from '../../utils/cookies';
+import { startImpersonating, stopImpersonating } from './utils/users/impersonate';
+import { userFlagToString } from '../../models/UserFlagModel';
 
 export interface CheckRepeatPasswordInput {
 	password: string;
@@ -62,6 +64,7 @@ function makeUser(isNew: boolean, fields: any): User {
 	if ('can_share_folder' in fields) user.can_share_folder = boolOrDefaultToValue(fields, 'can_share_folder');
 	if ('can_upload' in fields) user.can_upload = intOrDefaultToValue(fields, 'can_upload');
 	if ('account_type' in fields) user.account_type = Number(fields.account_type);
+	if ('email' in fields) user.email = fields.email;
 
 	const password = checkRepeatPassword(fields, false);
 	if (password) user.password = password;
@@ -144,7 +147,7 @@ router.get('users/:id', async (path: SubPath, ctx: AppContext, user: User = null
 	}
 
 	let userFlags: string[] = isNew ? null : (await models.userFlag().allByUserId(user.id)).map(f => {
-		return `${formatDateTime(f.created_time)}: ${userFlagTypeToLabel(f.type)}`;
+		return userFlagToString(f);
 	});
 
 	if (!userFlags || !userFlags.length || !owner.is_admin) userFlags = null;
@@ -164,16 +167,16 @@ router.get('users/:id', async (path: SubPath, ctx: AppContext, user: User = null
 		const lastPaymentAttempt = models.subscription().lastPaymentAttempt(subscription);
 
 		view.content.subscription = subscription;
-		view.content.showCancelSubscription = !isNew;
+		view.content.showManageSubscription = !isNew;
 		view.content.showUpdateSubscriptionBasic = !isNew && !!owner.is_admin && user.account_type !== AccountType.Basic;
 		view.content.showUpdateSubscriptionPro = !isNew && user.account_type !== AccountType.Pro;
 		view.content.subLastPaymentStatus = lastPaymentAttempt.status;
 		view.content.subLastPaymentDate = formatDateTime(lastPaymentAttempt.time);
 	}
 
+	view.content.showImpersonateButton = !isNew && !!owner.is_admin && user.enabled && user.id !== owner.id;
 	view.content.showRestoreButton = !isNew && !!owner.is_admin && !user.enabled;
 	view.content.showResetPasswordButton = !isNew && owner.is_admin && user.enabled;
-	view.content.canSetEmail = isNew || owner.is_admin;
 	view.content.canShareFolderOptions = yesNoDefaultOptions(user, 'can_share_folder');
 	view.content.canUploadOptions = yesNoOptions(user, 'can_upload');
 	view.content.userFlags = userFlags;
@@ -196,11 +199,30 @@ router.get('users/:id', async (path: SubPath, ctx: AppContext, user: User = null
 router.publicSchemas.push('users/:id/confirm');
 
 router.get('users/:id/confirm', async (path: SubPath, ctx: AppContext, error: Error = null) => {
+	const models = ctx.joplin.models;
 	const userId = path.id;
 	const token = ctx.query.token;
-	if (token) await ctx.joplin.models.user().confirmEmail(userId, token);
 
-	const user = await ctx.joplin.models.user().load(userId);
+	if (token) {
+		const beforeChangingEmailHandler = async (newEmail: string) => {
+			if (config().stripe.enabled) {
+				try {
+					await updateCustomerEmail(models, userId, newEmail);
+				} catch (error) {
+					if (['no_sub', 'no_stripe_sub'].includes(error.code)) {
+						// ok - the user just doesn't have a subscription
+					} else {
+						error.message = `Your Stripe subscription email could not be updated. As a result your account email has not been changed. Please try again or contact support. Error was: ${error.message}`;
+						throw error;
+					}
+				}
+			}
+		};
+
+		await models.user().processEmailConfirmation(userId, token, beforeChangingEmailHandler);
+	}
+
+	const user = await models.user().load(userId);
 
 	if (user.must_set_password) {
 		const view: View = {
@@ -218,8 +240,8 @@ router.get('users/:id/confirm', async (path: SubPath, ctx: AppContext, error: Er
 
 		return view;
 	} else {
-		await ctx.joplin.models.token().deleteByValue(userId, token);
-		await ctx.joplin.models.notification().add(userId, NotificationKey.EmailConfirmed);
+		await models.token().deleteByValue(userId, token);
+		await models.notification().add(userId, NotificationKey.EmailConfirmed);
 
 		if (ctx.joplin.owner) {
 			return redirect(ctx, `${config().baseUrl}/home`);
@@ -270,12 +292,15 @@ interface FormFields {
 	send_account_confirmation_email: string;
 	update_subscription_basic_button: string;
 	update_subscription_pro_button: string;
-	user_cancel_subscription_button: string;
+	// user_cancel_subscription_button: string;
+	impersonate_button: string;
+	stop_impersonate_button: string;
 }
 
 router.post('users', async (path: SubPath, ctx: AppContext) => {
 	let user: User = {};
-	const userId = userIsMe(path) ? ctx.joplin.owner.id : path.id;
+	const owner = ctx.joplin.owner;
+	const userId = userIsMe(path) ? owner.id : path.id;
 
 	try {
 		const body = await formParse(ctx.req);
@@ -288,39 +313,48 @@ router.post('users', async (path: SubPath, ctx: AppContext) => {
 
 		if (fields.post_button) {
 			const userToSave: User = models.user().fromApiInput(user);
-			await models.user().checkIfAllowed(ctx.joplin.owner, isNew ? AclAction.Create : AclAction.Update, userToSave);
+			await models.user().checkIfAllowed(owner, isNew ? AclAction.Create : AclAction.Update, userToSave);
 
 			if (isNew) {
 				await models.user().save(userToSave);
 			} else {
+				if (userToSave.email && !owner.is_admin) {
+					await models.user().initiateEmailChange(userId, userToSave.email);
+					delete userToSave.email;
+				}
+
 				await models.user().save(userToSave, { isNew: false });
 			}
-		} else if (fields.user_cancel_subscription_button) {
-			await cancelSubscriptionByUserId(models, userId);
-			const sessionId = contextSessionId(ctx, false);
-			if (sessionId) {
-				await models.session().logout(sessionId);
+		// } else if (fields.user_cancel_subscription_button) {
+		// 	await cancelSubscriptionByUserId(models, userId);
+		// 	const sessionId = contextSessionId(ctx, false);
+		// 	if (sessionId) {
+		// 		await models.session().logout(sessionId);
+		// 		return redirect(ctx, config().baseUrl);
+		// 	}
+		} else if (fields.stop_impersonate_button) {
+			await stopImpersonating(ctx);
+			return redirect(ctx, config().baseUrl);
+		} else if (owner.is_admin) {
+			if (fields.disable_button || fields.restore_button) {
+				const user = await models.user().load(path.id);
+				await models.user().checkIfAllowed(owner, AclAction.Delete, user);
+				await models.userFlag().toggle(user.id, UserFlagType.ManuallyDisabled, !fields.restore_button);
+			} else if (fields.send_account_confirmation_email) {
+				const user = await models.user().load(path.id);
+				await models.user().save({ id: user.id, must_set_password: 1 });
+				await models.user().sendAccountConfirmationEmail(user);
+			} else if (fields.impersonate_button) {
+				await startImpersonating(ctx, userId);
 				return redirect(ctx, config().baseUrl);
-			}
-		} else {
-			if (ctx.joplin.owner.is_admin) {
-				if (fields.disable_button || fields.restore_button) {
-					const user = await models.user().load(path.id);
-					await models.user().checkIfAllowed(ctx.joplin.owner, AclAction.Delete, user);
-					await models.userFlag().toggle(user.id, UserFlagType.ManuallyDisabled, !fields.restore_button);
-				} else if (fields.send_account_confirmation_email) {
-					const user = await models.user().load(path.id);
-					await models.user().save({ id: user.id, must_set_password: 1 });
-					await models.user().sendAccountConfirmationEmail(user);
-				} else if (fields.cancel_subscription_button) {
-					await cancelSubscriptionByUserId(models, userId);
-				} else if (fields.update_subscription_basic_button) {
-					await updateSubscriptionType(models, userId, AccountType.Basic);
-				} else if (fields.update_subscription_pro_button) {
-					await updateSubscriptionType(models, userId, AccountType.Pro);
-				} else {
-					throw new Error('Invalid form button');
-				}
+			} else if (fields.cancel_subscription_button) {
+				await cancelSubscriptionByUserId(models, userId);
+			} else if (fields.update_subscription_basic_button) {
+				await updateSubscriptionType(models, userId, AccountType.Basic);
+			} else if (fields.update_subscription_pro_button) {
+				await updateSubscriptionType(models, userId, AccountType.Pro);
+			} else {
+				throw new Error('Invalid form button');
 			}
 		}
 

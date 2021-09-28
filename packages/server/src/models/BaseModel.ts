@@ -11,6 +11,8 @@ import Logger from '@joplin/lib/Logger';
 
 const logger = Logger.create('BaseModel');
 
+type SavePoint = string;
+
 export interface SaveOptions {
 	isNew?: boolean;
 	skipValidation?: boolean;
@@ -49,6 +51,7 @@ export default abstract class BaseModel<T> {
 	private modelFactory_: Function;
 	private static eventEmitter_: EventEmitter = null;
 	private config_: Config;
+	private savePoints_: SavePoint[] = [];
 
 	public constructor(db: DbConnection, modelFactory: Function, config: Config) {
 		this.db_ = db;
@@ -208,6 +211,13 @@ export default abstract class BaseModel<T> {
 		return rows as T[];
 	}
 
+	public async count(): Promise<number> {
+		const r = await this
+			.db(this.tableName)
+			.count('*', { as: 'item_count' });
+		return r[0].item_count;
+	}
+
 	public fromApiInput(object: T): T {
 		const blackList = ['updated_time', 'created_time', 'owner_id'];
 		const whiteList = Object.keys(databaseSchema[this.tableName]);
@@ -289,6 +299,25 @@ export default abstract class BaseModel<T> {
 		return this.db(this.tableName).select(options.fields || this.defaultFields).whereIn('id', ids);
 	}
 
+	public async setSavePoint(): Promise<SavePoint> {
+		const name = `sp_${uuidgen()}`;
+		await this.db.raw(`SAVEPOINT ${name}`);
+		this.savePoints_.push(name);
+		return name;
+	}
+
+	public async rollbackSavePoint(savePoint: SavePoint) {
+		const last = this.savePoints_.pop();
+		if (last !== savePoint) throw new Error('Rollback save point does not match');
+		await this.db.raw(`ROLLBACK TO SAVEPOINT ${savePoint}`);
+	}
+
+	public async releaseSavePoint(savePoint: SavePoint) {
+		const last = this.savePoints_.pop();
+		if (last !== savePoint) throw new Error('Rollback save point does not match');
+		await this.db.raw(`RELEASE SAVEPOINT ${savePoint}`);
+	}
+
 	public async exists(id: string): Promise<boolean> {
 		const o = await this.load(id, { fields: ['id'] });
 		return !!o;
@@ -314,7 +343,7 @@ export default abstract class BaseModel<T> {
 			}
 
 			const deletedCount = await query.del();
-			if (!options.allowNoOp && deletedCount !== ids.length) throw new Error(`${ids.length} row(s) should have been deleted but ${deletedCount} row(s) were deleted`);
+			if (!options.allowNoOp && deletedCount !== ids.length) throw new Error(`${ids.length} row(s) should have been deleted but ${deletedCount} row(s) were deleted. ID: ${id}`);
 		}, 'BaseModel::delete');
 	}
 

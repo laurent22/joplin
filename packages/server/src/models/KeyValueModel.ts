@@ -8,7 +8,7 @@ export enum ValueType {
 
 type Value = number | string;
 
-export default class NotificationModel extends BaseModel<KeyValue> {
+export default class KeyValueModel extends BaseModel<KeyValue> {
 
 	protected get tableName(): string {
 		return 'key_values';
@@ -59,6 +59,10 @@ export default class NotificationModel extends BaseModel<KeyValue> {
 
 	public async deleteValue(key: string): Promise<void> {
 		await this.db(this.tableName).where('key', '=', key).delete();
+	}
+
+	public async delete(_id: string | string[] | number | number[], _options: any = {}): Promise<void> {
+		throw new Error('Call ::deleteValue()');
 	}
 
 }

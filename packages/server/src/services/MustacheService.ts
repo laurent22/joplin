@@ -43,6 +43,8 @@ interface GlobalParams {
 	userDisplayName?: string;
 	supportEmail?: string;
 	isJoplinCloud?: boolean;
+	impersonatorAdminSessionId?: string;
+	csrfTag?: string;
 }
 
 export function isView(o: any): boolean {

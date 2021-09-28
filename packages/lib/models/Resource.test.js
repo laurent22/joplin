@@ -6,7 +6,7 @@ const shim = require('../shim').default;
 
 const testImagePath = `${supportDir}/photo.jpg`;
 
-describe('models_Resource', function() {
+describe('models/Resource', function() {
 
 	beforeEach(async (done) => {
 		await setupDatabaseAndSynchronizer(1);

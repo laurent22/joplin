@@ -5,6 +5,7 @@ import { Subscription, Uuid } from '../services/database/types';
 import { Models } from '../models/factory';
 import { AccountType } from '../models/UserModel';
 import { findPrice, PricePeriod } from '@joplin/lib/utils/joplinCloud';
+import { ErrorWithCode } from './errors';
 const stripeLib = require('stripe');
 
 export interface SubscriptionInfo {
@@ -32,11 +33,11 @@ export function accountTypeToPriceId(accountType: AccountType): string {
 
 export async function subscriptionInfoByUserId(models: Models, userId: Uuid): Promise<SubscriptionInfo> {
 	const sub = await models.subscription().byUserId(userId);
-	if (!sub) throw new Error('Could not retrieve subscription info');
+	if (!sub) throw new ErrorWithCode('Could not retrieve subscription info', 'no_sub');
 
 	const stripe = initStripe();
 	const stripeSub = await stripe.subscriptions.retrieve(sub.stripe_subscription_id);
-	if (!stripeSub) throw new Error('Could not retrieve Stripe subscription');
+	if (!stripeSub) throw new ErrorWithCode('Could not retrieve Stripe subscription', 'no_stripe_sub');
 
 	return { sub, stripeSub };
 }
@@ -139,4 +140,12 @@ export function betaUserTrialPeriodDays(userCreatedTime: number, fromDateTime: n
 
 export function betaStartSubUrl(email: string, accountType: AccountType): string {
 	return `${globalConfig().joplinAppBaseUrl}/plans/?email=${encodeURIComponent(email)}&account_type=${encodeURIComponent(accountType)}`;
+}
+
+export async function updateCustomerEmail(models: Models, userId: Uuid, newEmail: string) {
+	const subInfo = await subscriptionInfoByUserId(models, userId);
+	const stripe = initStripe();
+	await stripe.customers.update(subInfo.sub.stripe_user_id, {
+		email: newEmail,
+	});
 }

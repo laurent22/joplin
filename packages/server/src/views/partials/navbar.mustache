@@ -32,6 +32,14 @@
 						<div class="navbar-item">
 							<a class="button is-info navbar-item" href="{{{global.baseUrl}}}/users/me"><i class="fas fa-user-alt"></i>&nbsp;&nbsp;{{global.userDisplayName}}</a>
 						</div>
+						{{#global.impersonatorAdminSessionId}}
+							<div class="navbar-item">
+								<form method="post" action="{{{global.baseUrl}}}/users">
+									{{{global.csrfTag}}}
+									<button name="stop_impersonate_button" value="stop_impersonate_button" class="button is-danger navbar-item"><i class="fas fa-times"></i>&nbsp;&nbsp;Back To Admin</a>
+								</form>
+							</div>
+						{{/global.impersonatorAdminSessionId}}
 					</div>
 				</div>
 			{{/global.owner}}

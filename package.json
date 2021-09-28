@@ -37,6 +37,7 @@
     "releaseIOS": "node packages/tools/release-ios.js",
     "releasePluginGenerator": "node packages/tools/release-plugin-generator.js",
     "releaseServer": "node packages/tools/release-server.js",
+    "tagServerLatest": "node packages/tools/tagServerLatest.js",
     "buildServerDocker": "node packages/tools/buildServerDocker.js",
     "setupNewRelease": "node ./packages/tools/setupNewRelease",
     "test-ci": "lerna run test-ci --stream",

@@ -18,6 +18,7 @@ import { initializeJoplinUtils } from './utils/joplinUtils';
 import startServices from './utils/startServices';
 import { credentialFile } from './utils/testing/testUtils';
 import apiVersionHandler from './middleware/apiVersionHandler';
+import clickJackingHandler from './middleware/clickJackingHandler';
 
 const cors = require('@koa/cors');
 const nodeEnvFile = require('node-env-file');
@@ -171,6 +172,7 @@ async function main() {
 	app.use(apiVersionHandler);
 	app.use(ownerHandler);
 	app.use(notificationHandler);
+	app.use(clickJackingHandler);
 	app.use(routeHandler);
 
 	await initConfig(env, envVariables);

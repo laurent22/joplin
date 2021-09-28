@@ -15,7 +15,11 @@ async function main() {
 	const tagName = `server-${version}${versionSuffix}`;
 
 	const changelogPath = `${rootDir}/readme/changelog_server.md`;
-	await completeReleaseWithChangelog(changelogPath, version, tagName, 'Server', isPreRelease);
+
+	// We don't mark the changelog entry as pre-release because they all are
+	// initially. It's only after a number of days once it's clear that the
+	// release is stable that it is marked as "latest".
+	await completeReleaseWithChangelog(changelogPath, version, tagName, 'Server', false);
 }
 
 main().catch((error) => {

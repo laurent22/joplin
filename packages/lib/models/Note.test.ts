@@ -15,7 +15,7 @@ async function allItems() {
 	return folders.concat(notes);
 }
 
-describe('models_Note', function() {
+describe('models/Note', function() {
 	beforeEach(async (done) => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);

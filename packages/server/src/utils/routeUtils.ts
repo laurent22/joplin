@@ -1,5 +1,5 @@
 import config, { baseUrl } from '../config';
-import { Item, ItemAddressingType, Uuid } from '../services/database/types';
+import { Item, ItemAddressingType, User, Uuid } from '../services/database/types';
 import { ErrorBadRequest, ErrorForbidden, ErrorNotFound } from './errors';
 import Router from './Router';
 import { AppContext, HttpMethod, RouteType } from './types';
@@ -182,6 +182,12 @@ export function routeResponseFormat(context: AppContext): RouteResponseFormat {
 	return path.indexOf('api') === 0 || path.indexOf('/api') === 0 ? RouteResponseFormat.Json : RouteResponseFormat.Html;
 }
 
+function disabledAccountCheck(route: MatchedRoute, user: User) {
+	if (!user || user.enabled) return;
+
+	if (route.subPath.schema.startsWith('api/')) throw new ErrorForbidden(`This account is disabled. Please login to ${config().baseUrl} for more information.`);
+}
+
 export async function execRequest(routes: Routers, ctx: AppContext) {
 	const match = findMatchingRoute(ctx.path, routes);
 	if (!match) throw new ErrorNotFound();
@@ -197,6 +203,7 @@ export async function execRequest(routes: Routers, ctx: AppContext) {
 	if (!isPublicRoute && !ctx.joplin.owner) throw new ErrorForbidden();
 
 	await csrfCheck(ctx, isPublicRoute);
+	disabledAccountCheck(match, ctx.joplin.owner);
 
 	return endPoint.handler(match.subPath, ctx);
 }

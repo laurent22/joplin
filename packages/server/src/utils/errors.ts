@@ -14,6 +14,12 @@ export class ApiError extends Error {
 	}
 }
 
+export class ErrorWithCode extends ApiError {
+	public constructor(message: string, code: string) {
+		super(message, null, code);
+	}
+}
+
 export class ErrorMethodNotAllowed extends ApiError {
 	public static httpCode: number = 400;
 

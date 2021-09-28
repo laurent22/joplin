@@ -8,6 +8,9 @@ import BaseModel, { AclAction, DeleteOptions, ValidateOptions } from './BaseMode
 import { userIdFromUserContentUrl } from '../utils/routeUtils';
 import { getCanShareFolder } from './utils/user';
 import { isUniqueConstraintError } from '../db';
+import Logger from '@joplin/lib/Logger';
+
+const logger = Logger.create('ShareModel');
 
 export default class ShareModel extends BaseModel<Share> {
 
@@ -215,6 +218,32 @@ export default class ShareModel extends BaseModel<Share> {
 			}
 		};
 
+		// This function add any missing item to a user's collection. Normally
+		// it shouldn't be necessary since items are added or removed based on
+		// the Change events, but it seems it can happen anyway, possibly due to
+		// a race condition somewhere. So this function corrects this by
+		// re-assigning any missing items.
+		//
+		// It should be relatively quick to call since it's restricted to shares
+		// that have recently changed, and the performed SQL queries are
+		// index-based.
+		const checkForMissingUserItems = async (shares: Share[]) => {
+			for (const share of shares) {
+				const realShareItemCount = await this.itemCountByShareId(share.id);
+				const shareItemCountPerUser = await this.itemCountByShareIdPerUser(share.id);
+
+				for (const row of shareItemCountPerUser) {
+					if (row.item_count < realShareItemCount) {
+						logger.warn(`checkForMissingUserItems: User is missing some items: Share ${share.id}: User ${row.user_id}`);
+						await this.createSharedFolderUserItems(share.id, row.user_id);
+					} else if (row.item_count > realShareItemCount) {
+						// Shouldn't be possible but log it just in case
+						logger.warn(`checkForMissingUserItems: User has too many items (??): Share ${share.id}: User ${row.user_id}`);
+					}
+				}
+			}
+		};
+
 		// This loop essentially applies the change made by one user to all the
 		// other users in the share.
 		//
@@ -260,6 +289,8 @@ export default class ShareModel extends BaseModel<Share> {
 						// too.
 					}
 
+					await checkForMissingUserItems(shares);
+
 					await this.models().keyValue().setValue('ShareService::latestProcessedChange', paginatedChanges.cursor);
 				}, 'ShareService::updateSharedItems3');
 			}
@@ -304,18 +335,13 @@ export default class ShareModel extends BaseModel<Share> {
 		}
 	}
 
-	// That should probably only be called when a user accepts the share
-	// invitation. At this point, we want to share all the items immediately.
-	// Afterwards, items that are added or removed are processed by the share
-	// service.
+	// The items that are added or removed from a share are processed by the
+	// share service, and added as user_utems to each user. This function
+	// however can be called after a user accept a share, or to correct share
+	// errors, but re-assigning all items to a user.
 	public async createSharedFolderUserItems(shareId: Uuid, userId: Uuid) {
-		const items = await this.models().item().byShareId(shareId, { fields: ['id'] });
-
-		await this.withTransaction(async () => {
-			for (const item of items) {
-				await this.models().userItem().add(userId, item.id);
-			}
-		}, 'ShareModel::createSharedFolderUserItems');
+		const query = this.models().item().byShareIdQuery(shareId, { fields: ['id', 'name'] });
+		await this.models().userItem().addMulti(userId, query);
 	}
 
 	public async shareFolder(owner: User, folderId: string): Promise<Share> {
@@ -367,5 +393,24 @@ export default class ShareModel extends BaseModel<Share> {
 			}
 		}, 'ShareModel::delete');
 	}
+
+	public async itemCountByShareId(shareId: Uuid): Promise<number> {
+		const r = await this
+			.db('items')
+			.count('id', { as: 'item_count' })
+			.where('jop_share_id', '=', shareId);
+		return r[0].item_count;
+	}
+
+	public async itemCountByShareIdPerUser(shareId: Uuid): Promise<{ item_count: number; user_id: Uuid }[]> {
+		return this.db('user_items')
+			.select(this.db.raw('user_id, count(user_id) as item_count'))
+			.whereIn('item_id',
+				this.db('items')
+					.select('id')
+					.where('jop_share_id', '=', shareId)
+			).groupBy('user_id') as any;
+	}
+
 
 }

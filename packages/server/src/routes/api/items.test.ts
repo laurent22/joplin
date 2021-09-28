@@ -1,4 +1,4 @@
-import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, createItem, makeTempFileWithContent, makeNoteSerializedBody, createItemTree, expectHttpError, createNote, expectNoHttpError } from '../../utils/testing/testUtils';
+import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, createItem, makeTempFileWithContent, makeNoteSerializedBody, createItemTree, expectHttpError, createNote, expectNoHttpError, getItem } from '../../utils/testing/testUtils';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { deleteApi, getApi, putApi } from '../../utils/testing/apiUtils';
@@ -270,6 +270,19 @@ describe('api_items', function() {
 
 		const item = await models().item().loadByName(user1.id, resourceBlobPath('000000000000000000000000000000E1'));
 		expect(item.jop_share_id).toBe(share.id);
+	});
+
+	test('should not upload or download items if the account is disabled', async function() {
+		const { session, user } = await createUserAndSession(1);
+
+		// Should work
+		await createItem(session.id, 'root:/test1.txt:', 'test1');
+		expect(await getItem(session.id, 'root:/test1.txt:')).toBe('test1');
+
+		// Should no longer work
+		await models().user().save({ id: user.id, enabled: 0 });
+		await expectHttpError(async () => createItem(session.id, 'root:/test2.txt:', 'test2'), ErrorForbidden.httpCode);
+		await expectHttpError(async () => getItem(session.id, 'root:/test1.txt:'), ErrorForbidden.httpCode);
 	});
 
 	test('should check permissions - only share participants can associate an item with a share', async function() {
