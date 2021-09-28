@@ -484,13 +484,22 @@ export default class UserModel extends BaseModel<User> {
 
 		const basicAccount = accountByType(AccountType.Basic);
 		const proAccount = accountByType(AccountType.Pro);
+		const basicDefaultLimit1 = Math.round(alertLimit1 * basicAccount.max_total_item_size);
+		const proDefaultLimit1 = Math.round(alertLimit1 * proAccount.max_total_item_size);
+		const basicDefaultLimitMax = Math.round(alertLimitMax * basicAccount.max_total_item_size);
+		const proDefaultLimitMax = Math.round(alertLimitMax * proAccount.max_total_item_size);
+
+		// ------------------------------------------------------------------------
+		// First, find all the accounts that are over the limit and send an
+		// email to the owner. Also flag accounts that are over 100% full.
+		// ------------------------------------------------------------------------
 
 		const users: User[] = await this
 			.db(this.tableName)
 			.select(['id', 'total_item_size', 'max_total_item_size', 'account_type', 'email', 'full_name'])
 			.where(function() {
-				void this.whereRaw('total_item_size > ? AND account_type = ?', [Math.round(alertLimit1 * basicAccount.max_total_item_size), AccountType.Basic])
-					.orWhereRaw('total_item_size > ? AND account_type = ?', [Math.round(alertLimit1 * proAccount.max_total_item_size), AccountType.Pro]);
+				void this.whereRaw('total_item_size > ? AND account_type = ?', [basicDefaultLimit1, AccountType.Basic])
+					.orWhereRaw('total_item_size > ? AND account_type = ?', [proDefaultLimit1, AccountType.Pro]);
 			})
 			// Users who are disabled or who cannot upload already received the
 			// notification.
@@ -536,7 +545,32 @@ export default class UserModel extends BaseModel<User> {
 					});
 				}
 			}
-		}, 'UserModel::handleOversizedAccounts');
+		}, 'UserModel::handleOversizedAccounts::1');
+
+		// ------------------------------------------------------------------------
+		// Secondly, find all the accounts that have previously been flagged and
+		// that are now under the limit. Remove the flag from these accounts.
+		// ------------------------------------------------------------------------
+
+		const flaggedUsers = await this
+			.db({ f: 'user_flags' })
+			.select(['u.id', 'u.total_item_size', 'u.max_total_item_size', 'u.account_type', 'u.email', 'u.full_name'])
+			.join({ u: 'users' }, 'u.id', 'f.user_id')
+			.where('f.type', '=', UserFlagType.AccountOverLimit)
+			.where(function() {
+				void this
+					.whereRaw('u.total_item_size < ? AND u.account_type = ?', [basicDefaultLimitMax, AccountType.Basic])
+					.orWhereRaw('u.total_item_size < ? AND u.account_type = ?', [proDefaultLimitMax, AccountType.Pro]);
+			});
+
+		await this.withTransaction(async () => {
+			for (const user of flaggedUsers) {
+				const maxTotalItemSize = getMaxTotalItemSize(user);
+				if (user.total_item_size < maxTotalItemSize) {
+					await this.models().userFlag().remove(user.id, UserFlagType.AccountOverLimit);
+				}
+			}
+		}, 'UserModel::handleOversizedAccounts::2');
 	}
 
 	private formatValues(user: User): User {
