@@ -4,7 +4,7 @@ import { RouteType } from '../../utils/types';
 import { AppContext, HttpMethod } from '../../utils/types';
 import { bodyFields, formParse } from '../../utils/requestUtils';
 import { ErrorForbidden, ErrorUnprocessableEntity } from '../../utils/errors';
-import { User, UserFlagType, Uuid } from '../../services/database/types';
+import { User, UserFlag, UserFlagType, Uuid } from '../../services/database/types';
 import config from '../../config';
 import { View } from '../../services/MustacheService';
 import defaultView from '../../utils/defaultView';
@@ -146,11 +146,18 @@ router.get('users/:id', async (path: SubPath, ctx: AppContext, user: User = null
 		postUrl = `${config().baseUrl}/users/${user.id}`;
 	}
 
-	let userFlags: string[] = isNew ? [] : (await models.userFlag().allByUserId(user.id)).map(f => {
-		return userFlagToString(f);
+	interface UserFlagView extends UserFlag {
+		message: string;
+	}
+
+	let userFlagViews: UserFlagView[] = isNew ? [] : (await models.userFlag().allByUserId(user.id)).map(f => {
+		return {
+			...f,
+			message: userFlagToString(f),
+		};
 	});
 
-	if (!owner.is_admin) userFlags = [];
+	if (!owner.is_admin) userFlagViews = [];
 
 	const subscription = !isNew ? await ctx.joplin.models.subscription().byUserId(userId) : null;
 
@@ -179,8 +186,8 @@ router.get('users/:id', async (path: SubPath, ctx: AppContext, user: User = null
 	view.content.showResetPasswordButton = !isNew && owner.is_admin && user.enabled;
 	view.content.canShareFolderOptions = yesNoDefaultOptions(user, 'can_share_folder');
 	view.content.canUploadOptions = yesNoOptions(user, 'can_upload');
-	view.content.hasFlags = !!userFlags.length;
-	view.content.userFlags = userFlags;
+	view.content.hasFlags = !!userFlagViews.length;
+	view.content.userFlagViews = userFlagViews;
 	view.content.stripePortalUrl = stripePortalUrl();
 
 	view.jsFiles.push('zxcvbn');
@@ -296,6 +303,7 @@ interface FormFields {
 	// user_cancel_subscription_button: string;
 	impersonate_button: string;
 	stop_impersonate_button: string;
+	delete_user_flags: string;
 }
 
 router.post('users', async (path: SubPath, ctx: AppContext) => {
@@ -326,13 +334,14 @@ router.post('users', async (path: SubPath, ctx: AppContext) => {
 
 				await models.user().save(userToSave, { isNew: false });
 			}
-		// } else if (fields.user_cancel_subscription_button) {
-		// 	await cancelSubscriptionByUserId(models, userId);
-		// 	const sessionId = contextSessionId(ctx, false);
-		// 	if (sessionId) {
-		// 		await models.session().logout(sessionId);
-		// 		return redirect(ctx, config().baseUrl);
-		// 	}
+			// } else if (fields.user_cancel_subscription_button) {
+			// 	await cancelSubscriptionByUserId(models, userId);
+			// 	const sessionId = contextSessionId(ctx, false);
+			// 	if (sessionId) {
+			// 		await models.session().logout(sessionId);
+			// 		return redirect(ctx, config().baseUrl);
+			// 	}
+
 		} else if (fields.stop_impersonate_button) {
 			await stopImpersonating(ctx);
 			return redirect(ctx, config().baseUrl);
@@ -354,6 +363,16 @@ router.post('users', async (path: SubPath, ctx: AppContext) => {
 				await updateSubscriptionType(models, userId, AccountType.Basic);
 			} else if (fields.update_subscription_pro_button) {
 				await updateSubscriptionType(models, userId, AccountType.Pro);
+			} else if (fields.delete_user_flags) {
+				const userFlagTypes: UserFlagType[] = [];
+				for (const key of Object.keys(fields)) {
+					if (key.startsWith('user_flag_')) {
+						const type = Number(key.substr(10));
+						userFlagTypes.push(type);
+					}
+				}
+
+				await models.userFlag().removeMulti(userId, userFlagTypes);
 			} else {
 				throw new Error('Invalid form button');
 			}
