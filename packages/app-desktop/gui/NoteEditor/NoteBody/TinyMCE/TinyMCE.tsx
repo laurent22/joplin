@@ -394,7 +394,8 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			}
 
 			.tox .tox-dialog-wrap__backdrop {
-				background-color: #303030 !important;
+				background-color: ${theme.backgroundColor} !important;
+				opacity:0.7
 			}
 			
 			.tox .tox-editor-header {
