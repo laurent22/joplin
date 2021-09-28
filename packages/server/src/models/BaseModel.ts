@@ -211,6 +211,13 @@ export default abstract class BaseModel<T> {
 		return rows as T[];
 	}
 
+	public async count(): Promise<number> {
+		const r = await this
+			.db(this.tableName)
+			.count('*', { as: 'item_count' });
+		return r[0].item_count;
+	}
+
 	public fromApiInput(object: T): T {
 		const blackList = ['updated_time', 'created_time', 'owner_id'];
 		const whiteList = Object.keys(databaseSchema[this.tableName]);

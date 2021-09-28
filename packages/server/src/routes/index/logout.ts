@@ -11,6 +11,7 @@ const router = new Router(RouteType.Web);
 router.post('logout', async (_path: SubPath, ctx: AppContext) => {
 	const sessionId = contextSessionId(ctx, false);
 	cookieSet(ctx, 'sessionId', '');
+	cookieSet(ctx, 'adminSessionId', '');
 	await ctx.joplin.models.session().logout(sessionId);
 	return redirect(ctx, `${config().baseUrl}/login`);
 });
