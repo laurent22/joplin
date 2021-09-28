@@ -146,11 +146,11 @@ router.get('users/:id', async (path: SubPath, ctx: AppContext, user: User = null
 		postUrl = `${config().baseUrl}/users/${user.id}`;
 	}
 
-	let userFlags: string[] = isNew ? null : (await models.userFlag().allByUserId(user.id)).map(f => {
+	let userFlags: string[] = isNew ? [] : (await models.userFlag().allByUserId(user.id)).map(f => {
 		return userFlagToString(f);
 	});
 
-	if (!userFlags || !userFlags.length || !owner.is_admin) userFlags = null;
+	if (!owner.is_admin) userFlags = [];
 
 	const subscription = !isNew ? await ctx.joplin.models.subscription().byUserId(userId) : null;
 
@@ -179,6 +179,7 @@ router.get('users/:id', async (path: SubPath, ctx: AppContext, user: User = null
 	view.content.showResetPasswordButton = !isNew && owner.is_admin && user.enabled;
 	view.content.canShareFolderOptions = yesNoDefaultOptions(user, 'can_share_folder');
 	view.content.canUploadOptions = yesNoOptions(user, 'can_upload');
+	view.content.hasFlags = !!userFlags.length;
 	view.content.userFlags = userFlags;
 	view.content.stripePortalUrl = stripePortalUrl();
 

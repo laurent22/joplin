@@ -12,6 +12,7 @@ import { AccountType } from '../../models/UserModel';
 import { betaUserTrialPeriodDays, cancelSubscription, initStripe, isBetaUser, priceIdToAccountType, stripeConfig } from '../../utils/stripe';
 import { Subscription, UserFlagType } from '../../services/database/types';
 import { findPrice, PricePeriod } from '@joplin/lib/utils/joplinCloud';
+import { Models } from '../../models/factory';
 
 const logger = Logger.create('/stripe');
 
@@ -55,6 +56,64 @@ async function getSubscriptionInfo(event: Stripe.Event, ctx: AppContext): Promis
 	if (!sub) throw new Error(`No subscription with ID: ${stripeSub.id}`);
 	return { sub, stripeSub };
 }
+
+export const handleSubscriptionCreated = async (stripe: Stripe, models: Models, customerName: string, userEmail: string, accountType: AccountType, stripeUserId: string, stripeSubscriptionId: string) => {
+	const existingUser = await models.user().loadByEmail(userEmail);
+
+	if (existingUser) {
+		const sub = await models.subscription().byUserId(existingUser.id);
+
+		if (!sub) {
+			logger.info(`Setting up subscription for existing user: ${existingUser.email}`);
+
+			// First set the account type correctly (in case the
+			// user also upgraded or downgraded their account).
+			await models.user().save({
+				id: existingUser.id,
+				account_type: accountType,
+			});
+
+			// Also clear any payment and subscription related flags
+			// since if we're here it means payment was successful
+			await models.userFlag().removeMulti(existingUser.id, [
+				UserFlagType.FailedPaymentWarning,
+				UserFlagType.FailedPaymentFinal,
+				UserFlagType.SubscriptionCancelled,
+				UserFlagType.AccountWithoutSubscription,
+			]);
+
+			// Then save the subscription
+			await models.subscription().save({
+				user_id: existingUser.id,
+				stripe_user_id: stripeUserId,
+				stripe_subscription_id: stripeSubscriptionId,
+				last_payment_time: Date.now(),
+			});
+		} else {
+			if (sub.stripe_subscription_id === stripeSubscriptionId) {
+				// Stripe probably dispatched a "customer.subscription.created"
+				// event after "checkout.session.completed", so we already have
+				// save the subscription and can skip processing.
+			} else {
+				// The user already has a subscription. Most likely
+				// they accidentally created a second one, so cancel
+				// it.
+				logger.info(`User ${existingUser.email} already has a subscription: ${sub.stripe_subscription_id} - cancelling duplicate`);
+				await cancelSubscription(stripe, stripeSubscriptionId);
+			}
+		}
+	} else {
+		logger.info(`Creating subscription for new user: ${userEmail}`);
+
+		await models.subscription().saveUserAndSubscription(
+			userEmail,
+			customerName,
+			accountType,
+			stripeUserId,
+			stripeSubscriptionId
+		);
+	}
+};
 
 export const postHandlers: PostHandlers = {
 
@@ -172,51 +231,6 @@ export const postHandlers: PostHandlers = {
 				// For testing: `stripe trigger checkout.session.completed`
 				// Or use /checkoutTest URL.
 
-				// {
-				//   "object": {
-				//     "id": "cs_test_xxxxxxxxxxxxxxxxxx",
-				//     "object": "checkout.session",
-				//     "allow_promotion_codes": null,
-				//     "amount_subtotal": 499,
-				//     "amount_total": 499,
-				//     "billing_address_collection": null,
-				//     "cancel_url": "http://joplincloud.local:22300/stripe/cancel",
-				//     "client_reference_id": null,
-				//     "currency": "gbp",
-				//     "customer": "cus_xxxxxxxxxxxx",
-				//     "customer_details": {
-				//       "email": "toto@example.com",
-				//       "tax_exempt": "none",
-				//       "tax_ids": [
-				//       ]
-				//     },
-				//     "customer_email": null,
-				//     "livemode": false,
-				//     "locale": null,
-				//     "metadata": {
-				//     },
-				//     "mode": "subscription",
-				//     "payment_intent": null,
-				//     "payment_method_options": {
-				//     },
-				//     "payment_method_types": [
-				//       "card"
-				//     ],
-				//     "payment_status": "paid",
-				//     "setup_intent": null,
-				//     "shipping": null,
-				//     "shipping_address_collection": null,
-				//     "submit_type": null,
-				//     "subscription": "sub_xxxxxxxxxxxxxxxx",
-				//     "success_url": "http://joplincloud.local:22300/stripe/success?session_id={CHECKOUT_SESSION_ID}",
-				//     "total_details": {
-				//       "amount_discount": 0,
-				//       "amount_shipping": 0,
-				//       "amount_tax": 0
-				//     }
-				//   }
-				// }
-
 				const checkoutSession: Stripe.Checkout.Session = event.data.object as Stripe.Checkout.Session;
 				const userEmail = checkoutSession.customer_details.email || checkoutSession.customer_email;
 
@@ -252,55 +266,41 @@ export const postHandlers: PostHandlers = {
 				const stripeUserId = checkoutSession.customer as string;
 				const stripeSubscriptionId = checkoutSession.subscription as string;
 
-				const existingUser = await models.user().loadByEmail(userEmail);
+				await handleSubscriptionCreated(
+					stripe,
+					models,
+					customerName,
+					userEmail,
+					accountType,
+					stripeUserId,
+					stripeSubscriptionId
+				);
+			},
 
-				if (existingUser) {
-					const sub = await models.subscription().byUserId(existingUser.id);
+			'customer.subscription.created': async () => {
+				const stripeSub: Stripe.Subscription = event.data.object as Stripe.Subscription;
+				const stripeUserId = stripeSub.customer as string;
+				const stripeSubscriptionId = stripeSub.id;
+				const customer = await stripe.customers.retrieve(stripeUserId) as Stripe.Customer;
 
-					if (!sub) {
-						logger.info(`Setting up subscription for existing user: ${existingUser.email}`);
-
-						// First set the account type correctly (in case the
-						// user also upgraded or downgraded their account).
-						await models.user().save({
-							id: existingUser.id,
-							account_type: accountType,
-						});
-
-						// Also clear any payment and subscription related flags
-						// since if we're here it means payment was successful
-						await models.userFlag().removeMulti(existingUser.id, [
-							UserFlagType.FailedPaymentWarning,
-							UserFlagType.FailedPaymentFinal,
-							UserFlagType.SubscriptionCancelled,
-							UserFlagType.AccountWithoutSubscription,
-						]);
-
-						// Then save the subscription
-						await models.subscription().save({
-							user_id: existingUser.id,
-							stripe_user_id: stripeUserId,
-							stripe_subscription_id: stripeSubscriptionId,
-							last_payment_time: Date.now(),
-						});
-					} else {
-						// The user already has a subscription. Most likely
-						// they accidentally created a second one, so cancel
-						// it.
-						logger.info(`User ${existingUser.email} already has a subscription: ${sub.stripe_subscription_id} - cancelling duplicate`);
-						await cancelSubscription(stripe, stripeSubscriptionId);
-					}
-				} else {
-					logger.info(`Creating subscription for new user: ${userEmail}`);
-
-					await models.subscription().saveUserAndSubscription(
-						userEmail,
-						customerName,
-						accountType,
-						stripeUserId,
-						stripeSubscriptionId
-					);
+				let accountType = AccountType.Basic;
+				try {
+					// Really have to dig out the price ID
+					const priceId = stripeSub.items.data[0].price.id;
+					accountType = priceIdToAccountType(priceId);
+				} catch (error) {
+					logger.error('Could not determine account type from price ID - defaulting to "Basic"', error);
 				}
+
+				await handleSubscriptionCreated(
+					stripe,
+					models,
+					customer.name,
+					customer.email,
+					accountType,
+					stripeUserId,
+					stripeSubscriptionId
+				);
 			},
 
 			'invoice.paid': async () => {

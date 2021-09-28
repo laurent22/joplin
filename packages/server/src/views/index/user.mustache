@@ -140,16 +140,16 @@
 		</div>
 	{{/subscription}}
 
-	{{#userFlags}}
-		<h1 class="title">Flags</h1>
-	{{/userFlags}}
-	
-	{{#userFlags}}
-		<ul>
-			<li>{{.}}</li>
-		</ul>
-	{{/userFlags}}
-	
+	{{#hasFlags}}
+		<div class="content">
+			<h1 class="title">Flags</h1>
+			{{#userFlags}}
+				<ul>
+					<li>{{.}}</li>
+				</ul>
+			{{/userFlags}}
+		</div>
+	{{/hasFlags}}	
 
 </form>
 
