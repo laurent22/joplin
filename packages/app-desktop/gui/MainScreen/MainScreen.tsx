@@ -75,6 +75,7 @@ interface Props {
 	shareInvitations: ShareInvitation[];
 	isSafeMode: boolean;
 	needApiAuth: boolean;
+	processingShareInvitationResponse: boolean;
 }
 
 interface ShareFolderDialogOptions {
@@ -197,6 +198,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 	}
 
 	private showShareInvitationNotification(props: Props): boolean {
+		if (props.processingShareInvitationResponse) return false;
 		return !!props.shareInvitations.find(i => i.status === 0);
 	}
 
@@ -546,8 +548,16 @@ class MainScreenComponent extends React.Component<Props, State> {
 		};
 
 		const onInvitationRespond = async (shareUserId: string, accept: boolean) => {
-			await ShareService.instance().respondInvitation(shareUserId, accept);
-			await ShareService.instance().refreshShareInvitations();
+			// The below functions can take a bit of time to complete so in the
+			// meantime we hide the notification so that the user doesn't click
+			// multiple times on the Accept link.
+			ShareService.instance().setProcessingShareInvitationResponse(true);
+			try {
+				await ShareService.instance().respondInvitation(shareUserId, accept);
+				await ShareService.instance().refreshShareInvitations();
+			} finally {
+				ShareService.instance().setProcessingShareInvitationResponse(false);
+			}
 			void reg.scheduleSync(1000);
 		};
 
@@ -853,6 +863,7 @@ const mapStateToProps = (state: AppState) => {
 		mainLayout: state.mainLayout,
 		startupPluginsLoaded: state.startupPluginsLoaded,
 		shareInvitations: state.shareService.shareInvitations,
+		processingShareInvitationResponse: state.shareService.processingShareInvitationResponse,
 		isSafeMode: state.settings.isSafeMode,
 		needApiAuth: state.needApiAuth,
 		showInstallTemplatesPlugin: state.hasLegacyTemplates && !state.pluginService.plugins['joplin.plugin.templates'],

@@ -844,6 +844,9 @@ packages/generator-joplin/generators/app/templates/api_index.js.map
 packages/generator-joplin/generators/app/templates/src/index.d.ts
 packages/generator-joplin/generators/app/templates/src/index.js
 packages/generator-joplin/generators/app/templates/src/index.js.map
+packages/htmlpack/src/index.d.ts
+packages/htmlpack/src/index.js
+packages/htmlpack/src/index.js.map
 packages/lib/AsyncActionQueue.d.ts
 packages/lib/AsyncActionQueue.js
 packages/lib/AsyncActionQueue.js.map
@@ -991,6 +994,9 @@ packages/lib/import-enex-md-gen.js.map
 packages/lib/import-enex-md-gen.test.d.ts
 packages/lib/import-enex-md-gen.test.js
 packages/lib/import-enex-md-gen.test.js.map
+packages/lib/import-enex.d.ts
+packages/lib/import-enex.js
+packages/lib/import-enex.js.map
 packages/lib/locale.d.ts
 packages/lib/locale.js
 packages/lib/locale.js.map
@@ -1813,6 +1819,9 @@ packages/renderer/utils.js.map
 packages/tools/buildServerDocker.d.ts
 packages/tools/buildServerDocker.js
 packages/tools/buildServerDocker.js.map
+packages/tools/buildServerDocker.test.d.ts
+packages/tools/buildServerDocker.test.js
+packages/tools/buildServerDocker.test.js.map
 packages/tools/convertThemesToCss.d.ts
 packages/tools/convertThemesToCss.js
 packages/tools/convertThemesToCss.js.map
@@ -1846,6 +1855,9 @@ packages/tools/release-server.js.map
 packages/tools/setupNewRelease.d.ts
 packages/tools/setupNewRelease.js
 packages/tools/setupNewRelease.js.map
+packages/tools/tagServerLatest.d.ts
+packages/tools/tagServerLatest.js
+packages/tools/tagServerLatest.js.map
 packages/tools/tool-utils.d.ts
 packages/tools/tool-utils.js
 packages/tools/tool-utils.js.map

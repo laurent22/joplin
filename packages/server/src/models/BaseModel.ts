@@ -8,8 +8,16 @@ import * as EventEmitter from 'events';
 import { Config } from '../utils/types';
 import personalizedUserContentBaseUrl from '@joplin/lib/services/joplinServer/personalizedUserContentBaseUrl';
 import Logger from '@joplin/lib/Logger';
+import dbuuid from '../utils/dbuuid';
 
 const logger = Logger.create('BaseModel');
+
+type SavePoint = string;
+
+export enum UuidType {
+	NanoId = 1,
+	Native = 2,
+}
 
 export interface SaveOptions {
 	isNew?: boolean;
@@ -49,6 +57,7 @@ export default abstract class BaseModel<T> {
 	private modelFactory_: Function;
 	private static eventEmitter_: EventEmitter = null;
 	private config_: Config;
+	private savePoints_: SavePoint[] = [];
 
 	public constructor(db: DbConnection, modelFactory: Function, config: Config) {
 		this.db_ = db;
@@ -136,6 +145,10 @@ export default abstract class BaseModel<T> {
 		return true;
 	}
 
+	protected uuidType(): UuidType {
+		return UuidType.NanoId;
+	}
+
 	protected autoTimestampEnabled(): boolean {
 		return true;
 	}
@@ -208,6 +221,13 @@ export default abstract class BaseModel<T> {
 		return rows as T[];
 	}
 
+	public async count(): Promise<number> {
+		const r = await this
+			.db(this.tableName)
+			.count('*', { as: 'item_count' });
+		return r[0].item_count;
+	}
+
 	public fromApiInput(object: T): T {
 		const blackList = ['updated_time', 'created_time', 'owner_id'];
 		const whiteList = Object.keys(databaseSchema[this.tableName]);
@@ -247,13 +267,12 @@ export default abstract class BaseModel<T> {
 
 	public async save(object: T, options: SaveOptions = {}): Promise<T> {
 		if (!object) throw new Error('Object cannot be empty');
-
 		const toSave = Object.assign({}, object);
 
 		const isNew = await this.isNew(object, options);
 
 		if (this.hasUuid() && isNew && !(toSave as WithUuid).id) {
-			(toSave as WithUuid).id = uuidgen();
+			(toSave as WithUuid).id = this.uuidType() === UuidType.NanoId ? uuidgen() : dbuuid();
 		}
 
 		if (this.autoTimestampEnabled()) {
@@ -287,6 +306,25 @@ export default abstract class BaseModel<T> {
 	public async loadByIds(ids: string[], options: LoadOptions = {}): Promise<T[]> {
 		if (!ids.length) return [];
 		return this.db(this.tableName).select(options.fields || this.defaultFields).whereIn('id', ids);
+	}
+
+	public async setSavePoint(): Promise<SavePoint> {
+		const name = `sp_${uuidgen()}`;
+		await this.db.raw(`SAVEPOINT ${name}`);
+		this.savePoints_.push(name);
+		return name;
+	}
+
+	public async rollbackSavePoint(savePoint: SavePoint) {
+		const last = this.savePoints_.pop();
+		if (last !== savePoint) throw new Error('Rollback save point does not match');
+		await this.db.raw(`ROLLBACK TO SAVEPOINT ${savePoint}`);
+	}
+
+	public async releaseSavePoint(savePoint: SavePoint) {
+		const last = this.savePoints_.pop();
+		if (last !== savePoint) throw new Error('Rollback save point does not match');
+		await this.db.raw(`RELEASE SAVEPOINT ${savePoint}`);
 	}
 
 	public async exists(id: string): Promise<boolean> {

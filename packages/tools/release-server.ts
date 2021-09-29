@@ -3,9 +3,11 @@ import { execCommand2, rootDir, gitPullTry, completeReleaseWithChangelog } from 
 const serverDir = `${rootDir}/packages/server`;
 
 async function main() {
-	const argv = require('yargs').argv;
-	if (!['release', 'prerelease'].includes(argv.type)) throw new Error('Must specify release type. Either --type=release or --type=prerelease');
-	const isPreRelease = argv.type === 'prerelease';
+	// const argv = require('yargs').argv;
+	// if (!['release', 'prerelease'].includes(argv.type)) throw new Error('Must specify release type. Either --type=release or --type=prerelease');
+	// const isPreRelease = argv.type === 'prerelease';
+
+	const isPreRelease = false;
 
 	await gitPullTry();
 
@@ -15,6 +17,7 @@ async function main() {
 	const tagName = `server-${version}${versionSuffix}`;
 
 	const changelogPath = `${rootDir}/readme/changelog_server.md`;
+
 	await completeReleaseWithChangelog(changelogPath, version, tagName, 'Server', isPreRelease);
 }
 

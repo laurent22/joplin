@@ -9,7 +9,7 @@ import ResourceService from '../services/ResourceService';
 
 const testImagePath = `${supportDir}/photo.jpg`;
 
-describe('models_Folder.sharing', function() {
+describe('models/Folder.sharing', function() {
 
 	beforeEach(async (done) => {
 		await setupDatabaseAndSynchronizer(1);

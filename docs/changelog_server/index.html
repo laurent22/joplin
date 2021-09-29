@@ -29,7 +29,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog_server.md
 			href="&#x2F;css/bootstrap5.0.2.min.css"
 			as="style"
 		/>
-		<link rel="stylesheet" href="&#x2F;css/fontawesome-all.min.css?t=1630951685439">
+		<link rel="stylesheet" href="&#x2F;css/fontawesome-all.min.css?t=1632929414476">
 		<link
 			href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
 			rel="stylesheet"
@@ -37,7 +37,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog_server.md
 			media="all"
 			onload="this.media='all'; this.onload = null"
 		/>
-		<link rel="stylesheet" href="&#x2F;css/site.css?t=1630951685439" as="style" />
+		<link rel="stylesheet" href="&#x2F;css/site.css?t=1632929414476" as="style" />
 		<title>Joplin Server Changelog | Joplin</title>
 
 		<script
@@ -289,7 +289,48 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog_server.md
 <p><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=E8JMYD2LQ8MMA&amp;lc=GB&amp;item_name=Joplin+Development&amp;currency_code=EUR&amp;bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Donate-PayPal-green.svg" alt="Donate using PayPal"></a> <a href="https://github.com/sponsors/laurent22/"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/GitHub-Badge.svg" alt="Sponsor on GitHub"></a> <a href="https://www.patreon.com/joplin"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Patreon-Badge.svg" alt="Become a patron"></a> <a href="https://joplinapp.org/donate/#donations"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Donate-IBAN.svg" alt="Donate using IBAN"></a></p>
 </div>
 <h1>Joplin Server Changelog<a name="joplin-server-changelog" href="#joplin-server-changelog" class="heading-anchor">🔗</a></h1>
-<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.4.3-beta">server-v2.4.3-beta</a> (Pre-release) - 2021-09-02T17:49:11Z<a name="server-v2-4-3-beta-https-github-com-laurent22-joplin-releases-tag-server-v2-4-3-beta-pre-release-2021-09-02t17-49-11z" href="#server-v2-4-3-beta-https-github-com-laurent22-joplin-releases-tag-server-v2-4-3-beta-pre-release-2021-09-02t17-49-11z" class="heading-anchor">🔗</a></h2>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.4.11-beta">server-v2.4.11-beta</a> - 2021-09-26T17:10:57Z<a name="server-v2-4-11-beta-https-github-com-laurent22-joplin-releases-tag-server-v2-4-11-beta-2021-09-26t17-10-57z" href="#server-v2-4-11-beta-https-github-com-laurent22-joplin-releases-tag-server-v2-4-11-beta-2021-09-26t17-10-57z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>Improved: Do not allow accepting share more than once (57a1d03)</li>
+<li>Fixed: Fixed Stripe checkout when a coupon is used (c45f961)</li>
+</ul>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.4.10-beta">server-v2.4.10-beta</a> (Pre-release) - 2021-09-25T19:07:05Z<a name="server-v2-4-10-beta-https-github-com-laurent22-joplin-releases-tag-server-v2-4-10-beta-pre-release-2021-09-25t19-07-05z" href="#server-v2-4-10-beta-https-github-com-laurent22-joplin-releases-tag-server-v2-4-10-beta-pre-release-2021-09-25t19-07-05z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>Improved: Improved share service reliability and optimised performance (0175348)</li>
+<li>Security: Implement clickjacking defense (e3fd34e)</li>
+</ul>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.4.9-beta">server-v2.4.9</a> - 2021-09-22T16:31:23Z<a name="server-v2-4-9-https-github-com-laurent22-joplin-releases-tag-server-v2-4-9-beta-2021-09-22t16-31-23z" href="#server-v2-4-9-https-github-com-laurent22-joplin-releases-tag-server-v2-4-9-beta-2021-09-22t16-31-23z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>New: Add support for changing user own email (63e88c0)</li>
+<li>Improved: Allow an admin to impersonate a user (03b4b6e)</li>
+<li>Improved: Allow entering coupon code on Stripe checkout page (4577c9c)</li>
+<li>Improved: Clear cookie when account has been deleted to allow viewing login page again (061761f)</li>
+<li>Improved: Exclude certain queries from slow log (4e70ca6)</li>
+<li>Improved: Handle Joplin Cloud failed subscription payments (a6b1cff)</li>
+<li>Improved: Improved support for background tasks and added admin UI to view them (cd877f6)</li>
+<li>Improved: Improved user list page (4d38397)</li>
+<li>Improved: Link to Joplin Cloud signup page on login page (d850eed)</li>
+<li>Improved: Manage subscription entirely from Stripe (7fac194)</li>
+<li>Improved: Redirect to user page after changing a user (c91d4bd)</li>
+<li>Improved: Rename admin button &quot;Send reset password email&quot; to more correct &quot;Send account information email&quot; (37d446b)</li>
+<li>Improved: Sync deleted items first to allow fixing oversized accounts (43c594b)</li>
+<li>Fixed: Fixed calculating total item size after an item has been deleted (024967c)</li>
+</ul>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.4.8-beta">server-v2.4.8</a> - 2021-09-15T22:16:59Z<a name="server-v2-4-8-https-github-com-laurent22-joplin-releases-tag-server-v2-4-8-beta-2021-09-15t22-16-59z" href="#server-v2-4-8-https-github-com-laurent22-joplin-releases-tag-server-v2-4-8-beta-2021-09-15t22-16-59z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>New: Added support for app level slow SQL query log (5e8b742)</li>
+</ul>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.4.7-beta">server-v2.4.7</a> - 2021-09-15T15:58:46Z<a name="server-v2-4-7-https-github-com-laurent22-joplin-releases-tag-server-v2-4-7-beta-2021-09-15t15-58-46z" href="#server-v2-4-7-https-github-com-laurent22-joplin-releases-tag-server-v2-4-7-beta-2021-09-15t15-58-46z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>Improved: Improve flag logic (c229821)</li>
+<li>Fixed: Fixed handling of brute force limiter by getting correct user IP (3ce947e)</li>
+</ul>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.4.6-beta">server-v2.4.6</a> - 2021-09-14T15:02:21Z<a name="server-v2-4-6-https-github-com-laurent22-joplin-releases-tag-server-v2-4-6-beta-2021-09-14t15-02-21z" href="#server-v2-4-6-https-github-com-laurent22-joplin-releases-tag-server-v2-4-6-beta-2021-09-14t15-02-21z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>New: Add link to Stripe subscription page to manage payment details (4e7fe66)</li>
+<li>New: Add transaction info to debug deadlock issues (01b653f)</li>
+</ul>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.4.3-beta">server-v2.4.3</a> - 2021-09-02T17:49:11Z<a name="server-v2-4-3-https-github-com-laurent22-joplin-releases-tag-server-v2-4-3-beta-2021-09-02t17-49-11z" href="#server-v2-4-3-https-github-com-laurent22-joplin-releases-tag-server-v2-4-3-beta-2021-09-02t17-49-11z" class="heading-anchor">🔗</a></h2>
 <ul>
 <li>New: Added Help page for Joplin Cloud (6520a48)</li>
 <li>New: Added icon next to profile button (5805a41)</li>
@@ -312,19 +353,19 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog_server.md
 <li>Fixed: Fix missing CSS file error (#5309 by <a href="https://github.com/whalehub">@whalehub</a>)</li>
 <li>Fixed: Fixed second duration (c7421df)</li>
 </ul>
-<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.3.7-beta">server-v2.3.7-beta</a> (Pre-release) - 2021-08-13T21:20:17Z<a name="server-v2-3-7-beta-https-github-com-laurent22-joplin-releases-tag-server-v2-3-7-beta-pre-release-2021-08-13t21-20-17z" href="#server-v2-3-7-beta-https-github-com-laurent22-joplin-releases-tag-server-v2-3-7-beta-pre-release-2021-08-13t21-20-17z" class="heading-anchor">🔗</a></h2>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.3.7-beta">server-v2.3.7</a> - 2021-08-13T21:20:17Z<a name="server-v2-3-7-https-github-com-laurent22-joplin-releases-tag-server-v2-3-7-beta-2021-08-13t21-20-17z" href="#server-v2-3-7-https-github-com-laurent22-joplin-releases-tag-server-v2-3-7-beta-2021-08-13t21-20-17z" class="heading-anchor">🔗</a></h2>
 <ul>
 <li>Fixed: Fix migrations (a9961ae)</li>
 </ul>
-<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.3.6-beta">server-v2.3.6-beta</a> (Pre-release) - 2021-08-13T20:59:41Z<a name="server-v2-3-6-beta-https-github-com-laurent22-joplin-releases-tag-server-v2-3-6-beta-pre-release-2021-08-13t20-59-41z" href="#server-v2-3-6-beta-https-github-com-laurent22-joplin-releases-tag-server-v2-3-6-beta-pre-release-2021-08-13t20-59-41z" class="heading-anchor">🔗</a></h2>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.3.6-beta">server-v2.3.6</a> - 2021-08-13T20:59:41Z<a name="server-v2-3-6-https-github-com-laurent22-joplin-releases-tag-server-v2-3-6-beta-2021-08-13t20-59-41z" href="#server-v2-3-6-https-github-com-laurent22-joplin-releases-tag-server-v2-3-6-beta-2021-08-13t20-59-41z" class="heading-anchor">🔗</a></h2>
 <ul>
 <li>Fixed: Fix migrations (f518549)</li>
 </ul>
-<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.3.5-beta">server-v2.3.5-beta</a> (Pre-release) - 2021-08-13T18:01:20Z<a name="server-v2-3-5-beta-https-github-com-laurent22-joplin-releases-tag-server-v2-3-5-beta-pre-release-2021-08-13t18-01-20z" href="#server-v2-3-5-beta-https-github-com-laurent22-joplin-releases-tag-server-v2-3-5-beta-pre-release-2021-08-13t18-01-20z" class="heading-anchor">🔗</a></h2>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.3.5-beta">server-v2.3.5</a> - 2021-08-13T18:01:20Z<a name="server-v2-3-5-https-github-com-laurent22-joplin-releases-tag-server-v2-3-5-beta-2021-08-13t18-01-20z" href="#server-v2-3-5-https-github-com-laurent22-joplin-releases-tag-server-v2-3-5-beta-2021-08-13t18-01-20z" class="heading-anchor">🔗</a></h2>
 <ul>
 <li>Fixed: Fixed pagination link styling (d42d181)</li>
 </ul>
-<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.3.4-beta">server-v2.3.4-beta</a> (Pre-release) - 2021-08-13T16:56:17Z<a name="server-v2-3-4-beta-https-github-com-laurent22-joplin-releases-tag-server-v2-3-4-beta-pre-release-2021-08-13t16-56-17z" href="#server-v2-3-4-beta-https-github-com-laurent22-joplin-releases-tag-server-v2-3-4-beta-pre-release-2021-08-13t16-56-17z" class="heading-anchor">🔗</a></h2>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.3.4-beta">server-v2.3.4</a> - 2021-08-13T16:56:17Z<a name="server-v2-3-4-https-github-com-laurent22-joplin-releases-tag-server-v2-3-4-beta-2021-08-13t16-56-17z" href="#server-v2-3-4-https-github-com-laurent22-joplin-releases-tag-server-v2-3-4-beta-2021-08-13t16-56-17z" class="heading-anchor">🔗</a></h2>
 <ul>
 <li>Improved: Allow setting email key to prevent the same email to be sent multiple times (391204c)</li>
 <li>Improved: Clarify beta transition message (c4fcfec)</li>
@@ -335,7 +376,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog_server.md
 <li>Fixed: Fix regression (6359c9c)</li>
 <li>Fixed: Fixed layout of notes on mobile devices (#5269)</li>
 </ul>
-<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.2.11-beta">server-v2.2.11-beta</a> (Pre-release) - 2021-08-03T18:48:00Z<a name="server-v2-2-11-beta-https-github-com-laurent22-joplin-releases-tag-server-v2-2-11-beta-pre-release-2021-08-03t18-48-00z" href="#server-v2-2-11-beta-https-github-com-laurent22-joplin-releases-tag-server-v2-2-11-beta-pre-release-2021-08-03t18-48-00z" class="heading-anchor">🔗</a></h2>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.2.11-beta">server-v2.2.11</a> - 2021-08-03T18:48:00Z<a name="server-v2-2-11-https-github-com-laurent22-joplin-releases-tag-server-v2-2-11-beta-2021-08-03t18-48-00z" href="#server-v2-2-11-https-github-com-laurent22-joplin-releases-tag-server-v2-2-11-beta-2021-08-03t18-48-00z" class="heading-anchor">🔗</a></h2>
 <ul>
 <li>Improved: Disable beta account once expired (785248b)</li>
 <li>Improved: Handle beta user upgrade (8910c87)</li>
@@ -346,7 +387,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog_server.md
 <ul>
 <li>Improved: Allows providing a coupon when creating the Stripe checkout session (b5b6111)</li>
 </ul>
-<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.2.9-beta">server-v2.2.9-beta</a> (Pre-release) - 2021-07-31T13:52:53Z<a name="server-v2-2-9-beta-https-github-com-laurent22-joplin-releases-tag-server-v2-2-9-beta-pre-release-2021-07-31t13-52-53z" href="#server-v2-2-9-beta-https-github-com-laurent22-joplin-releases-tag-server-v2-2-9-beta-pre-release-2021-07-31t13-52-53z" class="heading-anchor">🔗</a></h2>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.2.9-beta">server-v2.2.9</a> - 2021-07-31T13:52:53Z<a name="server-v2-2-9-https-github-com-laurent22-joplin-releases-tag-server-v2-2-9-beta-2021-07-31t13-52-53z" href="#server-v2-2-9-https-github-com-laurent22-joplin-releases-tag-server-v2-2-9-beta-2021-07-31t13-52-53z" class="heading-anchor">🔗</a></h2>
 <ul>
 <li>New: Add Docker major, minor and beta version tags (#5237 by <a href="https://github.com/JackGruber">@JackGruber</a>)</li>
 <li>New: Add support for Stripe yearly subscriptions (f2547fe)</li>
@@ -354,7 +395,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog_server.md
 <li>Fixed: Fixed certain URLs (282f782)</li>
 <li>Fixed: Published notes that contain non-alphabetical characters could end up being truncated (#5229)</li>
 </ul>
-<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.2.8-beta">server-v2.2.8-beta</a> (Pre-release) - 2021-07-24T16:55:58Z<a name="server-v2-2-8-beta-https-github-com-laurent22-joplin-releases-tag-server-v2-2-8-beta-pre-release-2021-07-24t16-55-58z" href="#server-v2-2-8-beta-https-github-com-laurent22-joplin-releases-tag-server-v2-2-8-beta-pre-release-2021-07-24t16-55-58z" class="heading-anchor">🔗</a></h2>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.2.8-beta">server-v2.2.8</a> - 2021-07-24T16:55:58Z<a name="server-v2-2-8-https-github-com-laurent22-joplin-releases-tag-server-v2-2-8-beta-2021-07-24t16-55-58z" href="#server-v2-2-8-https-github-com-laurent22-joplin-releases-tag-server-v2-2-8-beta-2021-07-24t16-55-58z" class="heading-anchor">🔗</a></h2>
 <ul>
 <li>New: Added form tokens to prevent CSRF attacks (CVE-2021-23431) (19b45de)</li>
 <li>Improved: Allow admin to change Stripe subscription (75a421e)</li>
@@ -368,37 +409,37 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog_server.md
 <li>Improved: Moved email templates to separate files (6a93cb2)</li>
 <li>Improved: Set default of env SUPPORT_EMAIL to &quot;SUPPORT_EMAIL&quot; to make it clear it needs to be set (92520e5)</li>
 </ul>
-<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.2.7-beta">server-v2.2.7-beta</a> (Pre-release) - 2021-07-11T17:31:42Z<a name="server-v2-2-7-beta-https-github-com-laurent22-joplin-releases-tag-server-v2-2-7-beta-pre-release-2021-07-11t17-31-42z" href="#server-v2-2-7-beta-https-github-com-laurent22-joplin-releases-tag-server-v2-2-7-beta-pre-release-2021-07-11t17-31-42z" class="heading-anchor">🔗</a></h2>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.2.7-beta">server-v2.2.7</a> - 2021-07-11T17:31:42Z<a name="server-v2-2-7-https-github-com-laurent22-joplin-releases-tag-server-v2-2-7-beta-2021-07-11t17-31-42z" href="#server-v2-2-7-https-github-com-laurent22-joplin-releases-tag-server-v2-2-7-beta-2021-07-11t17-31-42z" class="heading-anchor">🔗</a></h2>
 <ul>
 <li>New: Added support for resetting user password (62b6198)</li>
 <li>Improved: Check password complexity (240cb35)</li>
 <li>Improved: Disallow changing email address until a secure solution to change it is implemented (f8d2c26)</li>
 <li>Fixed: Fixed mail queue as some emails were not being processed (89f4ca1)</li>
 </ul>
-<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.2.6-beta">server-v2.2.6-beta</a> (Pre-release) - 2021-07-09T15:57:47Z<a name="server-v2-2-6-beta-https-github-com-laurent22-joplin-releases-tag-server-v2-2-6-beta-pre-release-2021-07-09t15-57-47z" href="#server-v2-2-6-beta-https-github-com-laurent22-joplin-releases-tag-server-v2-2-6-beta-pre-release-2021-07-09t15-57-47z" class="heading-anchor">🔗</a></h2>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.2.6-beta">server-v2.2.6</a> - 2021-07-09T15:57:47Z<a name="server-v2-2-6-https-github-com-laurent22-joplin-releases-tag-server-v2-2-6-beta-2021-07-09t15-57-47z" href="#server-v2-2-6-https-github-com-laurent22-joplin-releases-tag-server-v2-2-6-beta-2021-07-09t15-57-47z" class="heading-anchor">🔗</a></h2>
 <ul>
 <li>New: Add Docker image labels (#5158 by <a href="https://github.com/JackGruber">@JackGruber</a>)</li>
 <li>Fixed: Fixed change processing logic (5a27d4d)</li>
 <li>Fixed: Fixed styling of shared note (6c1a6b0)</li>
 </ul>
-<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.2.5-beta">server-v2.2.5-beta</a> (Pre-release) - 2021-07-03T21:40:37Z<a name="server-v2-2-5-beta-https-github-com-laurent22-joplin-releases-tag-server-v2-2-5-beta-pre-release-2021-07-03t21-40-37z" href="#server-v2-2-5-beta-https-github-com-laurent22-joplin-releases-tag-server-v2-2-5-beta-pre-release-2021-07-03t21-40-37z" class="heading-anchor">🔗</a></h2>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.2.5-beta">server-v2.2.5</a> - 2021-07-03T21:40:37Z<a name="server-v2-2-5-https-github-com-laurent22-joplin-releases-tag-server-v2-2-5-beta-2021-07-03t21-40-37z" href="#server-v2-2-5-https-github-com-laurent22-joplin-releases-tag-server-v2-2-5-beta-2021-07-03t21-40-37z" class="heading-anchor">🔗</a></h2>
 <ul>
 <li>Improved: Make app context immutable and derive the per-request context properties from it (e210926)</li>
 </ul>
-<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.2.4-beta">server-v2.2.4-beta</a> (Pre-release) - 2021-07-03T21:10:29Z<a name="server-v2-2-4-beta-https-github-com-laurent22-joplin-releases-tag-server-v2-2-4-beta-pre-release-2021-07-03t21-10-29z" href="#server-v2-2-4-beta-https-github-com-laurent22-joplin-releases-tag-server-v2-2-4-beta-pre-release-2021-07-03t21-10-29z" class="heading-anchor">🔗</a></h2>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.2.4-beta">server-v2.2.4</a> - 2021-07-03T21:10:29Z<a name="server-v2-2-4-https-github-com-laurent22-joplin-releases-tag-server-v2-2-4-beta-2021-07-03t21-10-29z" href="#server-v2-2-4-https-github-com-laurent22-joplin-releases-tag-server-v2-2-4-beta-2021-07-03t21-10-29z" class="heading-anchor">🔗</a></h2>
 <ul>
 <li>Fixed: Fixed issue with user sessions being mixed up (238cc86)</li>
 </ul>
-<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.2.3-beta">server-v2.2.3-beta</a> (Pre-release) - 2021-07-03T19:38:36Z<a name="server-v2-2-3-beta-https-github-com-laurent22-joplin-releases-tag-server-v2-2-3-beta-pre-release-2021-07-03t19-38-36z" href="#server-v2-2-3-beta-https-github-com-laurent22-joplin-releases-tag-server-v2-2-3-beta-pre-release-2021-07-03t19-38-36z" class="heading-anchor">🔗</a></h2>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.2.3-beta">server-v2.2.3</a> - 2021-07-03T19:38:36Z<a name="server-v2-2-3-https-github-com-laurent22-joplin-releases-tag-server-v2-2-3-beta-2021-07-03t19-38-36z" href="#server-v2-2-3-https-github-com-laurent22-joplin-releases-tag-server-v2-2-3-beta-2021-07-03t19-38-36z" class="heading-anchor">🔗</a></h2>
 <ul>
 <li>Fixed: Fixed size of a database field (264f36f)</li>
 </ul>
-<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.2.2-beta">server-v2.2.2-beta</a> (Pre-release) - 2021-07-03T18:28:35Z<a name="server-v2-2-2-beta-https-github-com-laurent22-joplin-releases-tag-server-v2-2-2-beta-pre-release-2021-07-03t18-28-35z" href="#server-v2-2-2-beta-https-github-com-laurent22-joplin-releases-tag-server-v2-2-2-beta-pre-release-2021-07-03t18-28-35z" class="heading-anchor">🔗</a></h2>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.2.2-beta">server-v2.2.2</a> - 2021-07-03T18:28:35Z<a name="server-v2-2-2-https-github-com-laurent22-joplin-releases-tag-server-v2-2-2-beta-2021-07-03t18-28-35z" href="#server-v2-2-2-https-github-com-laurent22-joplin-releases-tag-server-v2-2-2-beta-2021-07-03t18-28-35z" class="heading-anchor">🔗</a></h2>
 <ul>
 <li>Improved: Improved logging and reliability of cron tasks (d99c34f)</li>
 <li>Improved: Only emit &quot;created&quot; event when new user is saved (8883df2)</li>
 </ul>
-<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.2.1-beta">server-v2.2.1-beta</a> (Pre-release) - 2021-07-03T15:41:32Z<a name="server-v2-2-1-beta-https-github-com-laurent22-joplin-releases-tag-server-v2-2-1-beta-pre-release-2021-07-03t15-41-32z" href="#server-v2-2-1-beta-https-github-com-laurent22-joplin-releases-tag-server-v2-2-1-beta-pre-release-2021-07-03t15-41-32z" class="heading-anchor">🔗</a></h2>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.2.1-beta">server-v2.2.1</a> - 2021-07-03T15:41:32Z<a name="server-v2-2-1-https-github-com-laurent22-joplin-releases-tag-server-v2-2-1-beta-2021-07-03t15-41-32z" href="#server-v2-2-1-https-github-com-laurent22-joplin-releases-tag-server-v2-2-1-beta-2021-07-03t15-41-32z" class="heading-anchor">🔗</a></h2>
 <ul>
 <li>New: Add support for account max total size (b507fbf)</li>
 <li>Improved: Display max size info in dashboard (3d18514)</li>
@@ -407,21 +448,21 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog_server.md
 <li>Improved: Normalize email addresses before saving them (427218b)</li>
 <li>Improved: Remove dangerous &quot;Delete all&quot; button for now (125af75)</li>
 </ul>
-<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.1.6-beta">server-v2.1.6-beta</a> (Pre-release) - 2021-06-24T10:01:46Z<a name="server-v2-1-6-beta-https-github-com-laurent22-joplin-releases-tag-server-v2-1-6-beta-pre-release-2021-06-24t10-01-46z" href="#server-v2-1-6-beta-https-github-com-laurent22-joplin-releases-tag-server-v2-1-6-beta-pre-release-2021-06-24t10-01-46z" class="heading-anchor">🔗</a></h2>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.1.6-beta">server-v2.1.6</a> - 2021-06-24T10:01:46Z<a name="server-v2-1-6-https-github-com-laurent22-joplin-releases-tag-server-v2-1-6-beta-2021-06-24t10-01-46z" href="#server-v2-1-6-https-github-com-laurent22-joplin-releases-tag-server-v2-1-6-beta-2021-06-24t10-01-46z" class="heading-anchor">🔗</a></h2>
 <ul>
 <li>Fixed: Fixed accessing main website (Regression) (f868797)</li>
 </ul>
-<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.1.5-beta">server-v2.1.5-beta</a> (Pre-release) - 2021-06-24T08:26:38Z<a name="server-v2-1-5-beta-https-github-com-laurent22-joplin-releases-tag-server-v2-1-5-beta-pre-release-2021-06-24t08-26-38z" href="#server-v2-1-5-beta-https-github-com-laurent22-joplin-releases-tag-server-v2-1-5-beta-pre-release-2021-06-24t08-26-38z" class="heading-anchor">🔗</a></h2>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.1.5-beta">server-v2.1.5</a> - 2021-06-24T08:26:38Z<a name="server-v2-1-5-https-github-com-laurent22-joplin-releases-tag-server-v2-1-5-beta-2021-06-24t08-26-38z" href="#server-v2-1-5-https-github-com-laurent22-joplin-releases-tag-server-v2-1-5-beta-2021-06-24t08-26-38z" class="heading-anchor">🔗</a></h2>
 <ul>
 <li>New: Add support for X-API-MIN-VERSION header (51f3c00)</li>
 </ul>
-<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.1.4-beta">server-v2.1.4-beta</a> (Pre-release) - 2021-06-24T07:26:03Z<a name="server-v2-1-4-beta-https-github-com-laurent22-joplin-releases-tag-server-v2-1-4-beta-pre-release-2021-06-24t07-26-03z" href="#server-v2-1-4-beta-https-github-com-laurent22-joplin-releases-tag-server-v2-1-4-beta-pre-release-2021-06-24t07-26-03z" class="heading-anchor">🔗</a></h2>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.1.4-beta">server-v2.1.4</a> - 2021-06-24T07:26:03Z<a name="server-v2-1-4-https-github-com-laurent22-joplin-releases-tag-server-v2-1-4-beta-2021-06-24t07-26-03z" href="#server-v2-1-4-https-github-com-laurent22-joplin-releases-tag-server-v2-1-4-beta-2021-06-24t07-26-03z" class="heading-anchor">🔗</a></h2>
 <ul>
 <li>Improved: Split permission to share note or folder (0c12c7f)</li>
 <li>Fixed: Fixed handling of max item size for encrypted items (112157e)</li>
 <li>Fixed: Fixed transaction locking issue when a sub-transaction fails (12aae48)</li>
 </ul>
-<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.1.3-beta">server-v2.1.3-beta</a> (Pre-release) - 2021-06-19T14:15:06Z<a name="server-v2-1-3-beta-https-github-com-laurent22-joplin-releases-tag-server-v2-1-3-beta-pre-release-2021-06-19t14-15-06z" href="#server-v2-1-3-beta-https-github-com-laurent22-joplin-releases-tag-server-v2-1-3-beta-pre-release-2021-06-19t14-15-06z" class="heading-anchor">🔗</a></h2>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.1.3-beta">server-v2.1.3</a> - 2021-06-19T14:15:06Z<a name="server-v2-1-3-https-github-com-laurent22-joplin-releases-tag-server-v2-1-3-beta-2021-06-19t14-15-06z" href="#server-v2-1-3-https-github-com-laurent22-joplin-releases-tag-server-v2-1-3-beta-2021-06-19t14-15-06z" class="heading-anchor">🔗</a></h2>
 <ul>
 <li>New: Add support for uploading multiple items in one request (3b9c02e)</li>
 </ul>
@@ -456,14 +497,14 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog_server.md
 <li>Improved: Handle custom user content URLs (a36b13d)</li>
 <li>Fixed: Fixed error when creating user (594084e)</li>
 </ul>
-<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.0.9-beta">server-v2.0.9-beta</a> (Pre-release) - 2021-06-11T16:49:05Z<a name="server-v2-0-9-beta-https-github-com-laurent22-joplin-releases-tag-server-v2-0-9-beta-pre-release-2021-06-11t16-49-05z" href="#server-v2-0-9-beta-https-github-com-laurent22-joplin-releases-tag-server-v2-0-9-beta-pre-release-2021-06-11t16-49-05z" class="heading-anchor">🔗</a></h2>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.0.9-beta">server-v2.0.9</a> - 2021-06-11T16:49:05Z<a name="server-v2-0-9-https-github-com-laurent22-joplin-releases-tag-server-v2-0-9-beta-2021-06-11t16-49-05z" href="#server-v2-0-9-https-github-com-laurent22-joplin-releases-tag-server-v2-0-9-beta-2021-06-11t16-49-05z" class="heading-anchor">🔗</a></h2>
 <ul>
 <li>New: Add navbar on login and sign up page (7a3a208)</li>
 <li>New: Added option to enable or disable stack traces (5614eb9)</li>
 <li>Improved: Handle custom user content URLs (a36b13d)</li>
 <li>Fixed: Fixed error when creating user (594084e)</li>
 </ul>
-<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.0.6">server-v2.0.6</a> (Pre-release) - 2021-06-07T17:27:27Z<a name="server-v2-0-6-https-github-com-laurent22-joplin-releases-tag-server-v2-0-6-pre-release-2021-06-07t17-27-27z" href="#server-v2-0-6-https-github-com-laurent22-joplin-releases-tag-server-v2-0-6-pre-release-2021-06-07t17-27-27z" class="heading-anchor">🔗</a></h2>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.0.6">server-v2.0.6</a> - 2021-06-07T17:27:27Z<a name="server-v2-0-6-https-github-com-laurent22-joplin-releases-tag-server-v2-0-6-2021-06-07t17-27-27z" href="#server-v2-0-6-https-github-com-laurent22-joplin-releases-tag-server-v2-0-6-2021-06-07t17-27-27z" class="heading-anchor">🔗</a></h2>
 <ul>
 <li>New: Add Stripe integration (770af6a)</li>
 <li>New: Add request duration to log (c8d7ecb)</li>
@@ -472,21 +513,21 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog_server.md
 <li>Improved: Check share ID when uploading a note (3c41b45)</li>
 <li>Improved: Load shared user content from correct domain (de45740)</li>
 </ul>
-<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.0.5">server-v2.0.5</a> (Pre-release) - 2021-06-02T08:14:47Z<a name="server-v2-0-5-https-github-com-laurent22-joplin-releases-tag-server-v2-0-5-pre-release-2021-06-02t08-14-47z" href="#server-v2-0-5-https-github-com-laurent22-joplin-releases-tag-server-v2-0-5-pre-release-2021-06-02t08-14-47z" class="heading-anchor">🔗</a></h2>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.0.5">server-v2.0.5</a> - 2021-06-02T08:14:47Z<a name="server-v2-0-5-https-github-com-laurent22-joplin-releases-tag-server-v2-0-5-2021-06-02t08-14-47z" href="#server-v2-0-5-https-github-com-laurent22-joplin-releases-tag-server-v2-0-5-2021-06-02t08-14-47z" class="heading-anchor">🔗</a></h2>
 <ul>
 <li>New: Add version number on website (0ef7e98)</li>
 <li>New: Added signup pages (41ed66d)</li>
 <li>Improved: Allow disabling item upload for a user (f8a26cf)</li>
 </ul>
-<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.0.4">server-v2.0.4</a> (Pre-release) - 2021-05-25T18:33:11Z<a name="server-v2-0-4-https-github-com-laurent22-joplin-releases-tag-server-v2-0-4-pre-release-2021-05-25t18-33-11z" href="#server-v2-0-4-https-github-com-laurent22-joplin-releases-tag-server-v2-0-4-pre-release-2021-05-25t18-33-11z" class="heading-anchor">🔗</a></h2>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.0.4">server-v2.0.4</a> - 2021-05-25T18:33:11Z<a name="server-v2-0-4-https-github-com-laurent22-joplin-releases-tag-server-v2-0-4-2021-05-25t18-33-11z" href="#server-v2-0-4-https-github-com-laurent22-joplin-releases-tag-server-v2-0-4-2021-05-25t18-33-11z" class="heading-anchor">🔗</a></h2>
 <ul>
 <li>Fixed: Fixed Item and Log page when using Postgres (ee0f237)</li>
 </ul>
-<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.0.3">server-v2.0.3</a> (Pre-release) - 2021-05-25T18:08:46Z<a name="server-v2-0-3-https-github-com-laurent22-joplin-releases-tag-server-v2-0-3-pre-release-2021-05-25t18-08-46z" href="#server-v2-0-3-https-github-com-laurent22-joplin-releases-tag-server-v2-0-3-pre-release-2021-05-25t18-08-46z" class="heading-anchor">🔗</a></h2>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.0.3">server-v2.0.3</a> - 2021-05-25T18:08:46Z<a name="server-v2-0-3-https-github-com-laurent22-joplin-releases-tag-server-v2-0-3-2021-05-25t18-08-46z" href="#server-v2-0-3-https-github-com-laurent22-joplin-releases-tag-server-v2-0-3-2021-05-25t18-08-46z" class="heading-anchor">🔗</a></h2>
 <ul>
 <li>Fixed: Fixed handling of request origin (12a6634)</li>
 </ul>
-<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.0.2">server-v2.0.2</a> (Pre-release) - 2021-05-25T19:15:50Z<a name="server-v2-0-2-https-github-com-laurent22-joplin-releases-tag-server-v2-0-2-pre-release-2021-05-25t19-15-50z" href="#server-v2-0-2-https-github-com-laurent22-joplin-releases-tag-server-v2-0-2-pre-release-2021-05-25t19-15-50z" class="heading-anchor">🔗</a></h2>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.0.2">server-v2.0.2</a> - 2021-05-25T19:15:50Z<a name="server-v2-0-2-https-github-com-laurent22-joplin-releases-tag-server-v2-0-2-2021-05-25t19-15-50z" href="#server-v2-0-2-https-github-com-laurent22-joplin-releases-tag-server-v2-0-2-2021-05-25t19-15-50z" class="heading-anchor">🔗</a></h2>
 <ul>
 <li>New: Add mailer service (ed8ee67)</li>
 <li>New: Add support for item size limit (6afde54)</li>
@@ -506,7 +547,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog_server.md
 <li>Fixed: Fixed deleting a note that has been shared (489995d)</li>
 <li>Fixed: Make sure temp files are deleted after upload is done (#4540)</li>
 </ul>
-<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.0.1">server-v2.0.1</a> (Pre-release) - 2021-05-14T13:55:45Z<a name="server-v2-0-1-https-github-com-laurent22-joplin-releases-tag-server-v2-0-1-pre-release-2021-05-14t13-55-45z" href="#server-v2-0-1-https-github-com-laurent22-joplin-releases-tag-server-v2-0-1-pre-release-2021-05-14t13-55-45z" class="heading-anchor">🔗</a></h2>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.0.1">server-v2.0.1</a> - 2021-05-14T13:55:45Z<a name="server-v2-0-1-https-github-com-laurent22-joplin-releases-tag-server-v2-0-1-2021-05-14t13-55-45z" href="#server-v2-0-1-https-github-com-laurent22-joplin-releases-tag-server-v2-0-1-2021-05-14t13-55-45z" class="heading-anchor">🔗</a></h2>
 <ul>
 <li>New: Add support for sharing notes via a link (ccbc329)</li>
 <li>New: Add support for sharing a folder (#4772)</li>
@@ -560,7 +601,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog_server.md
 	</div>
 </footer>		</div>
 
-		<script src="&#x2F;js/script.js?t=1630951685439"></script>
+		<script src="&#x2F;js/script.js?t=1632929414476"></script>
 
 <script>
 	if (window.location.hostname !== 'localhost') {

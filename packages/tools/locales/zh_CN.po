@@ -1118,7 +1118,7 @@ msgstr "请升级 Joplin 以使用此插件"
 msgid ""
 "The Joplin team has vetted this plugin and it meets our standards for "
 "security and performance."
-msgstr ""
+msgstr "Joplin 团队已经通过了该插件的审查，它符合我们对于安全和性能的要求。"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:192
 #, javascript-format
@@ -1144,9 +1144,8 @@ msgid "You do not have any installed plugin."
 msgstr "您尚未安装任何插件。"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:232
-#, fuzzy
 msgid "Could not connect to plugin repository."
-msgstr "无法连接到插件库"
+msgstr "无法连接到插件库。"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:236
 msgid "Try again"
@@ -1395,9 +1394,8 @@ msgstr "加密状态："
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:103
 #: packages/app-mobile/components/screens/encryption-config.js:89
-#, fuzzy
 msgid "Master password"
-msgstr "输入主密码："
+msgstr "主密码"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:118
 msgid "Source: "
@@ -1442,20 +1440,17 @@ msgstr "动作"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:166
 #: packages/app-mobile/components/screens/encryption-config.js:159
-#, fuzzy
 msgid "Master password:"
-msgstr "输入主密码："
+msgstr "主密码："
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:170
 #: packages/app-mobile/components/screens/encryption-config.js:160
-#, fuzzy
 msgid "Loaded"
-msgstr "已下载"
+msgstr "已加载"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:178
-#, fuzzy
 msgid "Enter your master password"
-msgstr "输入主密码："
+msgstr "请输入主密码"
 
 #: packages/app-desktop/gui/ExtensionBadge.min.js:10
 msgid "Firefox Extension"
@@ -4224,7 +4219,7 @@ msgid "attachment"
 msgstr "附件"
 
 #: packages/server/dist/models/UserModel.js:199
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Cannot save %s \"%s\" because it is larger than the allowed limit (%s)"
 msgstr "无法保存 %s “%s”，因为超过了允许的限制大小（%s）。"
 

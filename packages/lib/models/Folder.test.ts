@@ -9,7 +9,7 @@ async function allItems() {
 	return folders.concat(notes);
 }
 
-describe('models_Folder', function() {
+describe('models/Folder', function() {
 
 	beforeEach(async (done) => {
 		await setupDatabaseAndSynchronizer(1);

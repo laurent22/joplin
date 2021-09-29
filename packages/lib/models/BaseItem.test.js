@@ -2,7 +2,7 @@ const { setupDatabaseAndSynchronizer, switchClient } = require('../testing/test-
 const Folder = require('../models/Folder').default;
 const Note = require('../models/Note').default;
 
-describe('models_BaseItem', function() {
+describe('models/BaseItem', function() {
 
 	beforeEach(async (done) => {
 		await setupDatabaseAndSynchronizer(1);

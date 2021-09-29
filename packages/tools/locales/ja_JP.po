@@ -15,6 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.4.2\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-cli/app/app-gui.js:452
 msgid "To delete a tag, untag the associated notes."
@@ -1156,6 +1158,8 @@ msgid ""
 "The Joplin team has vetted this plugin and it meets our standards for "
 "security and performance."
 msgstr ""
+"Joplinチームによる審査済み。このプラグインはJoplinのセキュリティーおよび性能"
+"基準を満たしています。"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:192
 #, javascript-format
@@ -1181,9 +1185,8 @@ msgid "You do not have any installed plugin."
 msgstr "インストールされているプラグインはありません。"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:232
-#, fuzzy
 msgid "Could not connect to plugin repository."
-msgstr "プラグインレポジトリに接続できませんでした"
+msgstr "プラグインレポジトリに接続できませんでした。"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:236
 msgid "Try again"
@@ -1442,29 +1445,24 @@ msgstr "暗号化の状態:"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:103
 #: packages/app-mobile/components/screens/encryption-config.js:89
-#, fuzzy
 msgid "Master password"
-msgstr "マスターパスワードを入力してください:"
+msgstr "マスターパスワード"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:118
-#, fuzzy
 msgid "Source: "
-msgstr "ソース"
+msgstr "ソース: "
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:121
-#, fuzzy
 msgid "Created: "
-msgstr "作成しました：%s"
+msgstr "作成： "
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:124
-#, fuzzy
 msgid "Updated: "
-msgstr "アップデート: %s"
+msgstr "更新: "
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:129
-#, fuzzy
 msgid "Disable"
-msgstr "無効"
+msgstr "無効化"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:129
 #: packages/app-mobile/components/screens/encryption-config.js:143
@@ -1473,42 +1471,37 @@ msgstr "有効"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:139
 msgid "Hide disabled master keys"
-msgstr ""
+msgstr "無効化したマスターキーを表示しない"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:139
 msgid "Show disabled master keys"
-msgstr ""
+msgstr "無効化したマスターキーを表示する"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:146
 msgid "Date"
-msgstr ""
+msgstr "日時"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:148
-#, fuzzy
 msgid "Valid"
-msgstr "無効"
+msgstr "正当性"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:149
-#, fuzzy
 msgid "Actions"
 msgstr "操作"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:166
 #: packages/app-mobile/components/screens/encryption-config.js:159
-#, fuzzy
 msgid "Master password:"
-msgstr "マスターパスワードを入力してください:"
+msgstr "マスターパスワード:"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:170
 #: packages/app-mobile/components/screens/encryption-config.js:160
-#, fuzzy
 msgid "Loaded"
-msgstr "ダウンロード済み"
+msgstr "読み込み済み"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:178
-#, fuzzy
 msgid "Enter your master password"
-msgstr "マスターパスワードを入力してください:"
+msgstr "マスターパスワードを入力してください"
 
 #: packages/app-desktop/gui/ExtensionBadge.min.js:10
 msgid "Firefox Extension"
@@ -1695,9 +1688,8 @@ msgstr ""
 "矢印を使ってレイアウトアイテムを移動してください。\"Esc\" で終了します。"
 
 #: packages/app-desktop/gui/MainScreen/commands/commandPalette.js:18
-#, fuzzy
 msgid "Command palette..."
-msgstr "コマンドパレット"
+msgstr "コマンドパレット..."
 
 #: packages/app-desktop/gui/MainScreen/commands/editAlarm.js:20
 #: packages/app-mobile/components/SelectDateTimeDialog.js:84
@@ -1799,9 +1791,8 @@ msgid "Share notebook..."
 msgstr "ノートブックを共有..."
 
 #: packages/app-desktop/gui/MainScreen/commands/showShareNoteDialog.js:16
-#, fuzzy
 msgid "Publish note..."
-msgstr "ノートを共有..."
+msgstr "ノートを公開..."
 
 #: packages/app-desktop/gui/MainScreen/commands/showSpellCheckerMenu.js:19
 #: packages/lib/services/spellChecker/SpellCheckerService.js:180
@@ -2395,18 +2386,17 @@ msgid "Warning: not all resources shown for performance reasons (limit: %s)."
 msgstr "注意: 性能上の理由により、リソースは最大 %s 件までしか表示されません。"
 
 #: packages/app-desktop/gui/Root.js:107
-#, fuzzy
 msgid "Confirmation"
-msgstr "設定"
+msgstr "確認"
 
 #: packages/app-desktop/gui/Root.js:120
 msgid "The Web Clipper needs your authorisation to access your data."
 msgstr ""
+"Webクリッパーがデータにアクセスすることについてあなたの許可が必要です。"
 
 #: packages/app-desktop/gui/Root.js:121
-#, fuzzy
 msgid "Grant authorisation"
-msgstr "認証トークン:"
+msgstr "許可する"
 
 #: packages/app-desktop/gui/Root.js:161
 msgid "OneDrive Login"
@@ -2479,9 +2469,8 @@ msgid "Share Notebook"
 msgstr "ノートブックを共有"
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:144
-#, fuzzy
 msgid "Unpublish note"
-msgstr "ノートの共有を解除"
+msgstr "ノートの公開を停止"
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:171
 msgid "Synchronising..."
@@ -2505,7 +2494,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:187
 msgid "Publish Notes"
-msgstr ""
+msgstr "ノートを公開"
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:189
 msgid "Copy Shareable Link"
@@ -2593,22 +2582,22 @@ msgid "Export debug report"
 msgstr "デバッグレポートの出力"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:157
-#, fuzzy
 msgid "Sync your notes"
-msgstr "ノートのソート方法"
+msgstr "ノートを同期する"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:158
 msgid "Publish notes to the internet"
-msgstr ""
+msgstr "ノートをインターネットに公開する"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:159
-#, fuzzy
 msgid "Collaborate on notebooks with others"
-msgstr "まず最初にノートブックを作成して下さい"
+msgstr "ノートブック上で共同作業を行う"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:182
 msgid "Thank you! Your Joplin Cloud account is now setup and ready to use."
 msgstr ""
+"ありがとうございます! Joplin Cloudアカウントのセットアップが完了し、利用でき"
+"る状態になりました。"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:190
 #, javascript-format
@@ -2618,30 +2607,34 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"Joplin Cloudアカウントのセットアップ中にエラーが発生しました。メールアドレス"
+"とパスワードを確認してもう一度お試しください。エラーの内容は次のとおりです:\n"
+"\n"
+"%s"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:203
 msgid "Login below."
-msgstr ""
+msgstr "以下からログイン。"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:205
-#, fuzzy
 msgid "Or create an account."
-msgstr "あたらしいノートを作成します。"
+msgstr "またはアカウントを作成。"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:210
 msgid "Login"
-msgstr ""
+msgstr "ログイン"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:231
-#, fuzzy
 msgid "Select"
-msgstr "すべて選択"
+msgstr "選択"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:278
 msgid ""
 "Joplin can synchronise your notes using various providers. Select one from "
 "the list below."
 msgstr ""
+"Joplinではノートの同期先としてさまざまなクラウドプロバイダーを利用できます。"
+"下の一覧から1つお選びください。"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.js:43
 msgid "Duplicate"
@@ -3107,6 +3100,8 @@ msgid ""
 "Joplin's own sync service. Also gives access to Joplin-specific features "
 "such as publishing notes or collaborating on notebooks with others."
 msgstr ""
+"Joplin独自の同期サービスです。特定ノートの公開や共有ノートブック上での共同作"
+"業などJoplin固有の機能も利用可能です。"
 
 #: packages/lib/SyncTargetJoplinServer.js:60
 msgid "Joplin Server"
@@ -3118,7 +3113,7 @@ msgstr "Nextcloud"
 
 #: packages/lib/SyncTargetNone.js:22
 msgid "(None)"
-msgstr ""
+msgstr "(なし)"
 
 #: packages/lib/SyncTargetOneDrive.js:32
 msgid "OneDrive"
@@ -3204,7 +3199,7 @@ msgstr "復号済み（非暗号化）アイテム: %s/%s"
 #: packages/lib/components/EncryptionConfigScreen/utils.js:53
 #, javascript-format
 msgid "Encryption will be enabled using the master key created on %s"
-msgstr ""
+msgstr "%sに作成されたマスターキーを使用して暗号化を有効にします"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.js:65
 msgid ""
@@ -3337,9 +3332,8 @@ msgid "Error"
 msgstr "エラー"
 
 #: packages/lib/models/Resource.js:408
-#, fuzzy
 msgid "Conflicts (attachments)"
-msgstr "添付ファイル一覧"
+msgstr "衝突 (添付ファイル)"
 
 #: packages/lib/models/Resource.js:422
 #, javascript-format
@@ -3415,7 +3409,7 @@ msgstr "ダークモード"
 
 #: packages/lib/models/Setting.js:152
 msgid "Open Sync Wizard..."
-msgstr ""
+msgstr "同期ウィザードを開く..."
 
 #: packages/lib/models/Setting.js:162
 msgid "Synchronisation target"
@@ -3748,11 +3742,11 @@ msgstr ""
 
 #: packages/lib/models/Setting.js:784
 msgid "Editor maximum width"
-msgstr ""
+msgstr "エディター内での最大表示幅"
 
 #: packages/lib/models/Setting.js:784
 msgid "Set it to 0 to make it take the complete available space."
-msgstr ""
+msgstr "幅いっぱいに表示させたいときは 0 に設定してください。"
 
 #: packages/lib/models/Setting.js:803
 msgid "Custom stylesheet for rendered Markdown"
@@ -4336,16 +4330,18 @@ msgid "attachment"
 msgstr "添付ファイル"
 
 #: packages/server/dist/models/UserModel.js:199
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Cannot save %s \"%s\" because it is larger than the allowed limit (%s)"
 msgstr "%s \"%s\" を保存できません。サイズが上限 (%s) を超えるためです"
 
 #: packages/server/dist/models/UserModel.js:208
-#, fuzzy, javascript-format
+#, javascript-format
 msgid ""
 "Cannot save %s \"%s\" because it would go over the total allowed size (%s) "
 "for this account"
-msgstr "%s \"%s\" を保存できません。サイズが上限 (%s) を超えるためです"
+msgstr ""
+"%s \"%s\" を保存できません。このアカウントに許可された合計サイズの上限 (%s) "
+"を超えるためです"
 
 #, javascript-format
 #~ msgid "%s %s (%s)"
