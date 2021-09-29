@@ -1,5 +1,30 @@
 # Joplin changelog
 
+## [v2.4.8](https://github.com/laurent22/joplin/releases/tag/v2.4.8) - 2021-09-22T19:01:46Z
+
+- Fixed: Fixed Sync Wizard logo images on Windows (da88475)
+- Improved: Improved plugin search and installing new plugins from China ([#5161](https://github.com/laurent22/joplin/issues/5161))
+
+## [v2.4.7](https://github.com/laurent22/joplin/releases/tag/v2.4.7) (Pre-release) - 2021-09-19T12:53:22Z
+
+- New: MacOS: Added Cmd+Backspace shortcut to delete line ([#5478](https://github.com/laurent22/joplin/issues/5478) by Helmut K. C. Tessarek)
+- Improved: Display 0/0 when no search results are found in editor ([#5360](https://github.com/laurent22/joplin/issues/5360)) ([#5299](https://github.com/laurent22/joplin/issues/5299) by Nikhil Gautam)
+- Improved: Do not escape content when copying from Rich Text editor ([#5440](https://github.com/laurent22/joplin/issues/5440))
+- Improved: Fire resize event whenever the layout changes ([#5344](https://github.com/laurent22/joplin/issues/5344)) ([#5233](https://github.com/laurent22/joplin/issues/5233) by [@CalebJohn](https://github.com/CalebJohn))
+- Improved: Linux: Installer: properly quote variables ([#5476](https://github.com/laurent22/joplin/issues/5476) by [@a1346054](https://github.com/a1346054))
+- Improved: Support for user-data-dir flag ([#5467](https://github.com/laurent22/joplin/issues/5467) by [@Marph](https://github.com/Marph))
+- Improved: Sync deleted items first to allow fixing oversized accounts (43c594b)
+- Improved: Update Mermaid 8.10.2 -&gt; 8.12.1 and fix gitGraph crash ([#5448](https://github.com/laurent22/joplin/issues/5448)) ([#5295](https://github.com/laurent22/joplin/issues/5295) by Helmut K. C. Tessarek)
+- Fixed: Editor max width was not always applied in Rich Text editor ([#5461](https://github.com/laurent22/joplin/issues/5461))
+- Fixed: Misinterpreted search term after filter in quotation marks ([#5445](https://github.com/laurent22/joplin/issues/5445)) ([#5444](https://github.com/laurent22/joplin/issues/5444) by [@JackGruber](https://github.com/JackGruber))
+- Fixed: Plugin onNoteSelectionChange() is triggered twice after a search ([#5449](https://github.com/laurent22/joplin/issues/5449)) ([#5447](https://github.com/laurent22/joplin/issues/5447) by Kenichi Kobayashi)
+- Fixed: Underline was not applied when using Cmd+U in Rich Text editor ([#5480](https://github.com/laurent22/joplin/issues/5480))
+
+## [v2.4.6](https://github.com/laurent22/joplin/releases/tag/v2.4.6) (Pre-release) - 2021-09-09T18:57:17Z
+
+- New: Plugins: Add support for enabledConditions when creating menu item from command (9260b2a)
+- Fixed: Fix handling of disabled master keys when enabling E2EE (267c321)
+
 ## [v2.4.5](https://github.com/laurent22/joplin/releases/tag/v2.4.5) (Pre-release) - 2021-09-06T18:03:28Z
 
 - New: Linux: Add Centos 7 for no sandbox ([#5401](https://github.com/laurent22/joplin/issues/5401) by [@geant44](https://github.com/geant44))

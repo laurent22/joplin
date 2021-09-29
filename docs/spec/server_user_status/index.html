@@ -5,11 +5,11 @@
 
 !!! WARNING !!!
 
-This file was auto-generated from readme/nextcloud_app.md and any manual change
+This file was auto-generated from readme/spec/server_user_status.md and any manual change
 made to it will be overwritten. To make a change to this file please modify
 the source Markdown file:
 
-https://github.com/laurent22/joplin/blob/dev/readme/nextcloud_app.md
+https://github.com/laurent22/joplin/blob/dev/readme/spec/server_user_status.md
 
 -->
 
@@ -29,7 +29,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/nextcloud_app.md
 			href="&#x2F;css/bootstrap5.0.2.min.css"
 			as="style"
 		/>
-		<link rel="stylesheet" href="&#x2F;css/fontawesome-all.min.css?t=1630951685439">
+		<link rel="stylesheet" href="&#x2F;css/fontawesome-all.min.css?t=1632929414476">
 		<link
 			href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
 			rel="stylesheet"
@@ -37,8 +37,8 @@ https://github.com/laurent22/joplin/blob/dev/readme/nextcloud_app.md
 			media="all"
 			onload="this.media='all'; this.onload = null"
 		/>
-		<link rel="stylesheet" href="&#x2F;css/site.css?t=1630951685439" as="style" />
-		<title>Joplin Web API for Nextcloud | Joplin</title>
+		<link rel="stylesheet" href="&#x2F;css/site.css?t=1632929414476" as="style" />
+		<title>Joplin Server user status | Joplin</title>
 
 		<script
 			src="&#x2F;js/jquery-3.6.0.min.js"
@@ -196,7 +196,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/nextcloud_app.md
 		</div>
 	</div>
 </div>
-			<div class="help-page-container page-nextcloud_app">
+			<div class="help-page-container page-server_user_status">
 				<div class="container">
 					<div class="row content-wrapper">
 						<div id="toc"><div><ul>
@@ -288,50 +288,38 @@ https://github.com/laurent22/joplin/blob/dev/readme/nextcloud_app.md
 							<div class="donate-links">
 <p><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=E8JMYD2LQ8MMA&amp;lc=GB&amp;item_name=Joplin+Development&amp;currency_code=EUR&amp;bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Donate-PayPal-green.svg" alt="Donate using PayPal"></a> <a href="https://github.com/sponsors/laurent22/"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/GitHub-Badge.svg" alt="Sponsor on GitHub"></a> <a href="https://www.patreon.com/joplin"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Patreon-Badge.svg" alt="Become a patron"></a> <a href="https://joplinapp.org/donate/#donations"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Donate-IBAN.svg" alt="Donate using IBAN"></a></p>
 </div>
-<h1>Joplin Web API for Nextcloud<a name="joplin-web-api-for-nextcloud" href="#joplin-web-api-for-nextcloud" class="heading-anchor">🔗</a></h1>
-<hr>
-<p><strong>IMPORTANT: THIS APPLICATION IS DEPRECATED AND WILL NO LONGER BE SUPPORTED FROM JOPLIN 1.6.x</strong></p>
-<p>It is <a href="https://discourse.joplinapp.org/t/joplin-web-api-for-nextcloud/4491/72?u=laurent">deprecated</a> in favour of <a href="https://discourse.joplinapp.org/t/joplin-server-pre-release-is-now-available/13605">Joplin Server</a>, so if you are relying on it please do not upgrade to Joplin 1.6.x till you are ready to migrate to Joplin Server or some other alternative.</p>
-<hr>
-<p><strong>This is a beta feature, not yet completed. More info coming soon!</strong></p>
-<p>The app can be downloaded from there: <a href="https://apps.nextcloud.com/apps/joplin">https://apps.nextcloud.com/apps/joplin</a></p>
-<p>The Joplin Web API for Nextcloud is a helper application that enables certain features that are not possible otherwise. In particular:</p>
-<ul>
-<li>Sharing a note publicly</li>
-<li>Sharing a note with another Joplin user (who uses the same Nextcloud instance)</li>
-<li>Collaborating on a note</li>
-<li>Sharing a notebook</li>
-</ul>
-<h2>FAQ<a name="faq" href="#faq" class="heading-anchor">🔗</a></h2>
-<blockquote>
-<p>Does it work with encrypted notes?</p>
-</blockquote>
-<p>No</p>
-<blockquote>
-<p>Does it render images and other attachments?</p>
-</blockquote>
-<p>No</p>
-<blockquote>
-<p>How about math formulas?</p>
-</blockquote>
-<p>No</p>
-<blockquote>
-<p>Can I share a notebook?</p>
-</blockquote>
-<p>No</p>
-<blockquote>
-<p>Can I edit a shared note directly on the browser?</p>
-</blockquote>
-<p>No</p>
-<h2>TODO<a name="todo" href="#todo" class="heading-anchor">🔗</a></h2>
-<ul>
-<li>[ ] Handle encrypted notes (shared notes will be unencrypted on server)</li>
-<li>[ ] Move Joplin note renderer to separate package and re-use it to render notes in the Nextcloud app</li>
-<li>[ ] Allow editing note in browser</li>
-</ul>
+<h1>Joplin Server user status<a name="joplin-server-user-status" href="#joplin-server-user-status" class="heading-anchor">🔗</a></h1>
+<h2>User flags<a name="user-flags" href="#user-flags" class="heading-anchor">🔗</a></h2>
+<p>User flags are used to indicate problem conditions with a particular account. They are usually automatically set by various services, for example when an account go over the limit, or when a payment fails. Likewise they are removed automatically when the condition changes.</p>
+<p>The list of flags is defined in <code>UserFlagType</code>.</p>
+<h2>User status<a name="user-status" href="#user-status" class="heading-anchor">🔗</a></h2>
+<p>A user can have various status that affects the possible actions they can do. <strong>User statuses are derived from user flags</strong>.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Status</th>
+<th>Values</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>can_upload</td>
+<td>0 or 1</td>
+<td>Whether the user can upload items, such as notes or tags, to the server.</td>
+</tr>
+<tr>
+<td>enabled</td>
+<td>0 or 1</td>
+<td>A disabled user cannot upload or download data from the server API anymore. However, they can still login to the website, make change to their profile, etc.</td>
+</tr>
+</tbody>
+</table>
+<p>Perhaps a third status: &quot;blocked&quot; could be created. It would be like <code>enabled = 0</code>, except they won't be able to login to the website either.</p>
+<p>These status should only be set as a results of user flags. In other words, the application should not directly set <code>enabled</code> to 0 or 1 but instead set a user flag that would indicate the issue. A script will then process the user flags and set the status as a result.</p>
 
 								<div class="bottom-links">
-									<a href="https://github.com/laurent22/joplin/blob/dev/readme/nextcloud_app.md">
+									<a href="https://github.com/laurent22/joplin/blob/dev/readme/spec/server_user_status.md">
 										<i class="fab fa-github"></i> Improve this doc
 									</a>
 								</div>
@@ -368,7 +356,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/nextcloud_app.md
 	</div>
 </footer>		</div>
 
-		<script src="&#x2F;js/script.js?t=1630951685439"></script>
+		<script src="&#x2F;js/script.js?t=1632929414476"></script>
 
 <script>
 	if (window.location.hostname !== 'localhost') {
