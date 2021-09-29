@@ -1,5 +1,16 @@
 # Joplin Server Changelog
 
+## [server-v2.5.1](https://github.com/laurent22/joplin/releases/tag/server-v2.5.1) - 2021-09-29T15:52:34Z
+
+- New: Add support for events and use them to track background tasks (79d1ad7)
+- Improved: Allow manually deleting a user flag (3a11885)
+- Improved: Also clear admin session ID on logout after impersonating a user (24945a0)
+- Improved: Correctly attach Stripe sub to Joplin Server sub when it is recreated from Stripe (5da820a)
+- Improved: Display banner when an account is disabled and provide reason (8c9331c)
+- Improved: Only disable API access when an account is disabled (6fec2a9)
+- Improved: Remove AccountOverLimit flag from accounts that are now below the limit (5de5370)
+- Improved: Send reminder email every time a payment fails (2dd8045)
+
 ## [server-v2.4.11-beta](https://github.com/laurent22/joplin/releases/tag/server-v2.4.11-beta) - 2021-09-26T17:10:57Z
 
 - Improved: Do not allow accepting share more than once (57a1d03)
