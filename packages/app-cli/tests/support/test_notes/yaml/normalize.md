@@ -1,5 +1,5 @@
 ---
-   Title: norm
+Title: norm
 Tags:
 		- tag1
 - tag2

@@ -10,7 +10,6 @@ function isTruthy(str: string): boolean {
 	return str.toLowerCase() in ['true', 'yes'];
 }
 
-// Removes leading whitespace from variable lines
 // Enforces exactly 2 spaces in front of list items
 function normalizeYamlWhitespace(yaml: string[]): string[] {
 	return yaml.map(line => {
@@ -19,7 +18,7 @@ function normalizeYamlWhitespace(yaml: string[]): string[] {
 			return `  ${l}`;
 		}
 
-		return l;
+		return line;
 	});
 }
 

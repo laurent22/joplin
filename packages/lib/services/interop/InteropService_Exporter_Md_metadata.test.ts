@@ -19,7 +19,7 @@ describe('interop/InteropService_Exporter_Md_metadata', function() {
 
 		await service.export({
 			path: exportDir(),
-			format: 'yaml',
+			format: 'md_metadata',
 		});
 
 		return await fs.readFile(path, 'utf8');
@@ -95,6 +95,7 @@ describe('interop/InteropService_Exporter_Md_metadata', function() {
 		const content = await exportAndLoad(`${exportDir()}/folder1/Source.md`);
 		expect(content).toContain('Source: https://joplinapp.org');
 	}));
+
 	test('should export fields in the correct order', (async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 
@@ -113,5 +114,13 @@ describe('interop/InteropService_Exporter_Md_metadata', function() {
 		const content = await exportAndLoad(`${exportDir()}/folder1/Fields.md`);
 		const fieldIndices = fieldOrder.map(field => content.indexOf(field));
 		expect(fieldIndices).toBe(fieldIndices.sort());
+	}));
+
+	test('should export title with a newline encoded', (async () => {
+		const folder1 = await Folder.save({ title: 'folder1' });
+		await Note.save({ title: 'Source\ntitle', body: '**ma note**', parent_id: folder1.id });
+
+		const content = await exportAndLoad(`${exportDir()}/folder1/Source_title.md`);
+		expect(content).toContain('Title: |-\n  Source\n  title');
 	}));
 });

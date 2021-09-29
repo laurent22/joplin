@@ -74,7 +74,7 @@ describe('InteropService_Importer_Md_metadata: importMetadata', function() {
 		const tags = await Tag.tagsByNoteId(note.id);
 		expect(tags.length).toBe(3);
 	});
-	it('should load unquoted special forms correctl', async function() {
+	it('should load unquoted special forms correctly', async function() {
 		const note = await importNote(`${supportDir}/test_notes/yaml/unquoted.md`);
 
 		expect(note.title).toBe('Unquoted');
@@ -83,5 +83,10 @@ describe('InteropService_Importer_Md_metadata: importMetadata', function() {
 		expect(note.longitude).toBe('-94.51350100');
 		expect(note.is_todo).toBe(1);
 		expect(note.todo_completed).toBeUndefined();
+	});
+	it('should load notes with newline in the title', async function() {
+		const note = await importNote(`${supportDir}/test_notes/yaml/title_newline.md`);
+
+		expect(note.title).toBe('First\nSecond');
 	});
 });
