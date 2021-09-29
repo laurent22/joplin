@@ -114,12 +114,11 @@ describe('InteropService_Importer_Md_frontmatter: importMetadata', function() {
 		expect(note.author).toBe('Hao Liang');
 
 		const tags = await Tag.tagsByNoteId(note.id);
-		expect(tags.length).toBe(3);
+		expect(tags.length).toBe(2);
 
 		const tagTitles = tags.map(tag => tag.title);
 		expect(tagTitles).toContain('yaml');
 		expect(tagTitles).toContain('rmd');
-		expect(tagTitles).toContain('medicine');
 	});
 	it('should import r-markdown files with alternative author syntax', async function() {
 		const note = await importNote(`${supportDir}/test_notes/yaml/r-markdown_author.md`);

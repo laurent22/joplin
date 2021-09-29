@@ -94,9 +94,20 @@ export default class InteropService_Importer_Md_frontmatter extends InteropServi
 		if ('author' in md) { metadata['author'] = extractAuthor(md['author']); }
 
 		// The date fallback gives support for MultiMarkdown format, r-markdown, and pandoc formats
-		if ('created' in md) { metadata['user_created_time'] = time.anythingToMs(md['created'], Date.now()); } else if ('date' in md) { metadata['user_created_time'] = time.anythingToMs(md['date'], Date.now()); }
+		if ('created' in md) {
+			metadata['user_created_time'] = time.anythingToMs(md['created'], Date.now());
+		} else if ('date' in md) {
+			metadata['user_created_time'] = time.anythingToMs(md['date'], Date.now());
+		}
 
-		if ('updated' in md) { metadata['user_updated_time'] = time.anythingToMs(md['updated'], Date.now()); } else if ('date' in md) { metadata['user_updated_time'] = time.anythingToMs(md['date'], Date.now()); }
+		if ('updated' in md) {
+			metadata['user_updated_time'] = time.anythingToMs(md['updated'], Date.now());
+		} else if ('lastmod' in md) {
+			// Add support for hugo
+			metadata['user_updated_time'] = time.anythingToMs(md['lastmod'], Date.now());
+		} else if ('date' in md) {
+			metadata['user_updated_time'] = time.anythingToMs(md['date'], Date.now());
+		}
 
 		if ('latitude' in md) { metadata['latitude'] = md['latitude']; }
 		if ('longitude' in md) { metadata['longitude'] = md['longitude']; }
@@ -118,13 +129,9 @@ export default class InteropService_Importer_Md_frontmatter extends InteropServi
 		if ('tags' in md) {
 			// Only create unique tags
 			tags = md['tags'];
-		}
-		// Adding support for r-markdown/pandoc
-		if ('keywords' in md) {
+		} else if ('keywords' in md) {
+			// Adding support for r-markdown/pandoc
 			tags = tags.concat(md['keywords']);
-		}
-		if ('category' in md) {
-			tags = tags.concat(md['category']);
 		}
 
 		// Only create unique tags
