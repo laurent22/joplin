@@ -1,6 +1,13 @@
 # Joplin changelog
 
-## [v2.4.8](https://github.com/laurent22/joplin/releases/tag/v2.4.8) - 2021-09-22T19:01:46Z
+## [v2.4.9](https://github.com/laurent22/joplin/releases/tag/v2.4.9) - 2021-09-29T19:08:58Z
+
+- Improved: Allow importing certain corrupted ENEX files (f144dae)
+- Improved: Improved accepting a folder share (8ada059)
+- Improved: Make exported HTML more readable on mobile (b1d0c15)
+- Fixed: Fix default sync target (4b39d30)
+
+## [v2.4.8](https://github.com/laurent22/joplin/releases/tag/v2.4.8) (Pre-release) - 2021-09-22T19:01:46Z
 
 - Fixed: Fixed Sync Wizard logo images on Windows (da88475)
 - Improved: Improved plugin search and installing new plugins from China ([#5161](https://github.com/laurent22/joplin/issues/5161))
