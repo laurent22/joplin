@@ -1,6 +1,6 @@
 {
   "name": "@joplin/server",
-  "version": "2.4.11",
+  "version": "2.5.1",
   "private": true,
   "scripts": {
     "start-dev": "nodemon --config nodemon.json --ext ts,js,mustache,css,tsx dist/app.js --env dev",
@@ -15,13 +15,15 @@
     "test-ci": "npm run test",
     "test-debug": "node --inspect node_modules/.bin/jest -- --verbose=false",
     "clean": "rm -rf dist/",
+    "stripeListen": "stripe listen --forward-to http://joplincloud.local:22300/stripe/webhook",
     "watch": "tsc --watch --project tsconfig.json"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.1",
-    "@joplin/lib": "~2.4",
-    "@joplin/renderer": "~2.4",
+    "@joplin/lib": "~2.5",
+    "@joplin/renderer": "~2.5",
     "@koa/cors": "^3.1.0",
+    "@types/uuid": "^8.3.1",
     "bcryptjs": "^2.4.3",
     "bulma": "^0.9.1",
     "bulma-prefers-dark": "^0.1.0-beta.0",
@@ -47,11 +49,12 @@
     "raw-body": "^2.4.1",
     "sqlite3": "^4.1.0",
     "stripe": "^8.150.0",
+    "uuid": "^8.3.2",
     "yargs": "^14.0.0",
     "zxcvbn": "^4.4.2"
   },
   "devDependencies": {
-    "@joplin/tools": "~2.4",
+    "@joplin/tools": "~2.5",
     "@rmp135/sql-ts": "^1.7.0",
     "@types/fs-extra": "^8.0.0",
     "@types/jest": "^26.0.15",

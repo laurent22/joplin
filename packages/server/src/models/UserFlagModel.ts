@@ -79,6 +79,8 @@ export default class UserFlagModels extends BaseModel<UserFlag> {
 	}
 
 	public async removeMulti(userId: Uuid, flagTypes: UserFlagType[]) {
+		if (!flagTypes.length) return;
+
 		await this.withTransaction(async () => {
 			for (const flagType of flagTypes) {
 				await this.remove(userId, flagType, { updateUser: false });

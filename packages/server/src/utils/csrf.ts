@@ -20,6 +20,7 @@ export async function csrfCheck(ctx: AppContext, isPublicRoute: boolean) {
 
 	const fields = await bodyFields<BodyWithCsrfToken>(ctx.req);
 	if (!fields._csrf) throw new ErrorForbidden('CSRF token is missing');
+	if (Array.isArray(fields._csrf)) throw new Error('Multiple CSRF tokens inside the form!');
 
 	if (!(await ctx.joplin.models.token().isValid(userId, fields._csrf))) {
 		throw new ErrorForbidden(`Invalid CSRF token: ${fields._csrf}`);

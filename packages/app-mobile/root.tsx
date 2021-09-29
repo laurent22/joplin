@@ -498,6 +498,7 @@ async function initialize(dispatch: Function) {
 			let locale = NativeModules.I18nManager.localeIdentifier;
 			if (!locale) locale = defaultLocale();
 			Setting.setValue('locale', closestSupportedLocale(locale));
+			Setting.setValue('sync.target', 0);
 			Setting.setValue('firstStart', 0);
 		}
 

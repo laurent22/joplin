@@ -34,7 +34,7 @@ async function handleUserFlags(ctx: AppContext): Promise<NotificationView> {
 	const user = ctx.joplin.owner;
 
 	const flags = await ctx.joplin.models.userFlag().allByUserId(ctx.joplin.owner.id);
-	const flagStrings = flags.map(f => `- ${userFlagToString(f)}`);
+	const flagStrings = flags.map(f => `- ${userFlagToString(f)}`).join('\n');
 
 	if (!user.enabled || !user.can_upload) {
 		return {

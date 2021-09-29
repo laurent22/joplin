@@ -93,6 +93,7 @@ export async function createTestUsers(db: DbConnection, config: Config, options:
 			});
 
 			await models.userFlag().add(user.id, UserFlagType.AccountOverLimit);
+			await models.userFlag().add(user.id, UserFlagType.FailedPaymentWarning);
 		}
 	}
 }

@@ -1,4 +1,4 @@
-export type Uuid = string;
+export type Uuid = any;
 
 export enum ItemAddressingType {
 	Id = 1,
@@ -26,6 +26,11 @@ export enum ChangeType {
 	Create = 1,
 	Update = 2,
 	Delete = 3,
+}
+
+export enum EventType {
+	TaskStarted = 1,
+	TaskCompleted = 2,
 }
 
 export enum UserFlagType {
@@ -245,6 +250,13 @@ export interface UserFlag extends WithDates {
 	type?: UserFlagType;
 }
 
+export interface Event extends WithUuid {
+	counter?: number;
+	type?: EventType;
+	name?: string;
+	created_time?: number;
+}
+
 export const databaseSchema: DatabaseTables = {
 	sessions: {
 		id: { type: 'string' },
@@ -407,6 +419,13 @@ export const databaseSchema: DatabaseTables = {
 		user_id: { type: 'string' },
 		type: { type: 'number' },
 		updated_time: { type: 'string' },
+		created_time: { type: 'string' },
+	},
+	events: {
+		id: { type: 'string' },
+		counter: { type: 'number' },
+		type: { type: 'number' },
+		name: { type: 'string' },
 		created_time: { type: 'string' },
 	},
 };

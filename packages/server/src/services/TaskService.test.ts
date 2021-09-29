@@ -26,7 +26,7 @@ describe('TaskService', function() {
 		const service = newService();
 
 		const task: Task = {
-			id: 'test',
+			id: 123456,
 			description: '',
 			run: (_models: Models) => {},
 			schedule: '',
@@ -34,7 +34,7 @@ describe('TaskService', function() {
 
 		service.registerTask(task);
 
-		expect(service.tasks['test']).toBeTruthy();
+		expect(service.tasks[123456]).toBeTruthy();
 		await expectThrow(async () => service.registerTask(task));
 	});
 
@@ -44,8 +44,10 @@ describe('TaskService', function() {
 		let finishTask = false;
 		let taskHasRan = false;
 
+		const taskId = 123456;
+
 		const task: Task = {
-			id: 'test',
+			id: taskId,
 			description: '',
 			run: async (_models: Models) => {
 				const iid = setInterval(() => {
@@ -60,22 +62,23 @@ describe('TaskService', function() {
 
 		service.registerTask(task);
 
-		expect(service.taskState('test').running).toBe(false);
+		expect(service.taskState(taskId).running).toBe(false);
 
 		const startTime = new Date();
 
-		void service.runTask('test', RunType.Manual);
-		expect(service.taskState('test').running).toBe(true);
-		expect(service.taskState('test').lastCompletionTime).toBeFalsy();
-		expect(service.taskState('test').lastRunTime.getTime()).toBeGreaterThanOrEqual(startTime.getTime());
+		void service.runTask(taskId, RunType.Manual);
+		expect(service.taskState(taskId).running).toBe(true);
 
 		await msleep(10);
 		finishTask = true;
 		await msleep(10);
 
 		expect(taskHasRan).toBe(true);
-		expect(service.taskState('test').running).toBe(false);
-		expect(service.taskState('test').lastCompletionTime.getTime()).toBeGreaterThan(startTime.getTime());
+		expect(service.taskState(taskId).running).toBe(false);
+
+		const events = await service.taskLastEvents(taskId);
+		expect(events.taskStarted.created_time).toBeGreaterThanOrEqual(startTime.getTime());
+		expect(events.taskCompleted.created_time).toBeGreaterThan(startTime.getTime());
 	});
 
 });
