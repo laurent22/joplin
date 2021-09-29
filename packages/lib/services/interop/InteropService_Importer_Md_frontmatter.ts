@@ -44,7 +44,7 @@ function extractAuthor(author: any): string {
 	return '';
 }
 
-export default class InteropService_Importer_Md_metadata extends InteropService_Importer_Md {
+export default class InteropService_Importer_Md_frontmatter extends InteropService_Importer_Md {
 
 	private getNoteHeader(note: string) {
 		// Ignore the leading `---`

@@ -103,8 +103,8 @@ export interface ImportExportResult {
 	warnings: string[];
 }
 
-// These are the fields that will be included in an exported YAML note
-export interface MdMetadataExport {
+// These are the fields that will be included in an exported Md+Front Matter note
+export interface MdFrontMatterExport {
 	'Title'?: string;
 	'Source'?: string;
 	'Author'?: string;

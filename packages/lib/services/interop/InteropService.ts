@@ -60,11 +60,11 @@ export default class InteropService {
 				},
 				{
 					...defaultImportExportModule(ModuleType.Importer),
-					format: 'md_metadata',
+					format: 'md_frontmatter',
 					fileExtensions: ['md', 'markdown', 'txt', 'html'],
 					sources: [FileSystemItem.File, FileSystemItem.Directory],
 					isNoteArchive: false, // Tells whether the file can contain multiple notes (eg. Enex or Jex format)
-					description: _('Markdown + Metadata'),
+					description: _('Markdown + Front Matter'),
 				},
 				{
 					...defaultImportExportModule(ModuleType.Importer),
@@ -115,9 +115,9 @@ export default class InteropService {
 				},
 				{
 					...defaultImportExportModule(ModuleType.Exporter),
-					format: 'md_metadata',
+					format: 'md_frontmatter',
 					target: FileSystemItem.Directory,
-					description: _('Markdown + Metadata'),
+					description: _('Markdown + Front Matter'),
 				},
 				{
 					...defaultImportExportModule(ModuleType.Exporter),

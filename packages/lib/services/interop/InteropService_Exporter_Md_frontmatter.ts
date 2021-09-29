@@ -5,7 +5,7 @@ import NoteTag from '../../models/NoteTag';
 import Tag from '../../models/Tag';
 import time from '../../time';
 import { NoteEntity } from '../database/types';
-import { MdMetadataExport } from './types';
+import { MdFrontMatterExport } from './types';
 
 import * as yaml from 'js-yaml';
 
@@ -29,7 +29,7 @@ function trimQuotes(rawOutput: string): string {
 
 export const fieldOrder = ['Title', 'Updated', 'Created', 'Source', 'Author', 'Latitude', 'Longitude', 'Altitude', 'Completed?', 'Due', 'Tags'];
 
-export default class InteropService_Exporter_Md_metadata extends InteropService_Exporter_Md {
+export default class InteropService_Exporter_Md_frontmatter extends InteropService_Exporter_Md {
 
 	public async prepareForProcessingItemType(itemType: number, itemsToExport: any[]) {
 		await super.prepareForProcessingItemType(itemType, itemsToExport);
@@ -81,7 +81,7 @@ export default class InteropService_Exporter_Md_metadata extends InteropService_
 	}
 
 	private extractMetadata(note: NoteEntity) {
-		const md: MdMetadataExport = {};
+		const md: MdFrontMatterExport = {};
 		// Every variable needs to be converted seperately, so they will be handles in groups
 		//
 		// title
