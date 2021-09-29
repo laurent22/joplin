@@ -3,9 +3,11 @@ import { execCommand2, rootDir, gitPullTry, completeReleaseWithChangelog } from 
 const serverDir = `${rootDir}/packages/server`;
 
 async function main() {
-	const argv = require('yargs').argv;
-	if (!['release', 'prerelease'].includes(argv.type)) throw new Error('Must specify release type. Either --type=release or --type=prerelease');
-	const isPreRelease = argv.type === 'prerelease';
+	// const argv = require('yargs').argv;
+	// if (!['release', 'prerelease'].includes(argv.type)) throw new Error('Must specify release type. Either --type=release or --type=prerelease');
+	// const isPreRelease = argv.type === 'prerelease';
+
+	const isPreRelease = false;
 
 	await gitPullTry();
 
@@ -16,10 +18,7 @@ async function main() {
 
 	const changelogPath = `${rootDir}/readme/changelog_server.md`;
 
-	// We don't mark the changelog entry as pre-release because they all are
-	// initially. It's only after a number of days once it's clear that the
-	// release is stable that it is marked as "latest".
-	await completeReleaseWithChangelog(changelogPath, version, tagName, 'Server', false);
+	await completeReleaseWithChangelog(changelogPath, version, tagName, 'Server', isPreRelease);
 }
 
 main().catch((error) => {
