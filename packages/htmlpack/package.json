@@ -3,6 +3,7 @@
   "version": "1.0.1",
   "description": "Pack an HTML file and all its linked resources into a single HTML file",
   "main": "dist/index.js",
+  "private": true,
   "scripts": {
     "tsc": "tsc --project tsconfig.json",
     "watch": "tsc --watch --project tsconfig.json"
@@ -18,5 +19,6 @@
   },
   "devDependencies": {
     "@types/fs-extra": "^9.0.6"
-  }
+  },
+  "gitHead": "eb4b0e64eab40a51b0895d3a40a9d8c3cb7b1b14"
 }

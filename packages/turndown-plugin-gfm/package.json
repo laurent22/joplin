@@ -41,5 +41,5 @@
     "build-test": "browserify test/turndown-plugin-gfm-test.js --outfile test/turndown-plugin-gfm-test.browser.js",
     "prepare": "npm run build"
   },
-  "gitHead": "80c0089d2c52aff608b2bea74389de5a7f12f2e2"
+  "gitHead": "eb4b0e64eab40a51b0895d3a40a9d8c3cb7b1b14"
 }
