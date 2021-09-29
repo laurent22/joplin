@@ -15,6 +15,7 @@
     "test-ci": "npm run test",
     "test-debug": "node --inspect node_modules/.bin/jest -- --verbose=false",
     "clean": "rm -rf dist/",
+    "stripeListen": "stripe listen --forward-to http://joplincloud.local:22300/stripe/webhook",
     "watch": "tsc --watch --project tsconfig.json"
   },
   "dependencies": {

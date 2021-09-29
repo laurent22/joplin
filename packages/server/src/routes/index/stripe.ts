@@ -408,9 +408,11 @@ const getHandlers: Record<string, StripeRouteHandler> = {
 			</html>`;
 	},
 
-	checkoutTest: async (_stripe: Stripe, _path: SubPath, _ctx: AppContext) => {
+	checkoutTest: async (_stripe: Stripe, _path: SubPath, ctx: AppContext) => {
 		const basicPrice = findPrice(stripeConfig().prices, { accountType: 1, period: PricePeriod.Monthly });
 		const proPrice = findPrice(stripeConfig().prices, { accountType: 2, period: PricePeriod.Monthly });
+
+		const customPriceId = ctx.request.query.price_id;
 
 		return `
 			<head>
@@ -438,9 +440,15 @@ const getHandlers: Record<string, StripeRouteHandler> = {
 			<body>
 				<button id="checkout_basic">Subscribe Basic</button>
 				<button id="checkout_pro">Subscribe Pro</button>
+				<button id="checkout_custom">Subscribe Custom</button>
 				<script>
 					var BASIC_PRICE_ID = ${JSON.stringify(basicPrice.id)};
 					var PRO_PRICE_ID = ${JSON.stringify(proPrice.id)};
+					var CUSTOM_PRICE_ID = ${JSON.stringify(customPriceId)};
+
+					if (!CUSTOM_PRICE_ID) {
+						document.getElementById('checkout_custom').style.display = 'none';
+					}
 
 					function handleResult() {
 						console.info('Redirected to checkout');
@@ -465,6 +473,11 @@ const getHandlers: Record<string, StripeRouteHandler> = {
 					document.getElementById("checkout_pro").addEventListener("click", function(evt) {
 						evt.preventDefault();
 						createSessionAndRedirect(PRO_PRICE_ID);
+					});
+
+					document.getElementById("checkout_custom").addEventListener("click", function(evt) {
+						evt.preventDefault();
+						createSessionAndRedirect(CUSTOM_PRICE_ID);
 					});
 				</script>
 			</body>
