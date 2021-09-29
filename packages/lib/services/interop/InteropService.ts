@@ -60,11 +60,11 @@ export default class InteropService {
 				},
 				{
 					...defaultImportExportModule(ModuleType.Importer),
-					format: 'yaml',
+					format: 'md_metadata',
 					fileExtensions: ['md', 'markdown', 'txt', 'html'],
 					sources: [FileSystemItem.File, FileSystemItem.Directory],
 					isNoteArchive: false, // Tells whether the file can contain multiple notes (eg. Enex or Jex format)
-					description: _('Markdown + YAML'),
+					description: _('Markdown + Metadata'),
 				},
 				{
 					...defaultImportExportModule(ModuleType.Importer),
@@ -115,9 +115,9 @@ export default class InteropService {
 				},
 				{
 					...defaultImportExportModule(ModuleType.Exporter),
-					format: 'yaml',
+					format: 'md_metadata',
 					target: FileSystemItem.Directory,
-					description: _('Markdown + YAML'),
+					description: _('Markdown + Metadata'),
 				},
 				{
 					...defaultImportExportModule(ModuleType.Exporter),

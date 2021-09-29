@@ -4,7 +4,7 @@ import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import Tag from '../../models/Tag';
 import time from '../../time';
-import { fieldOrder } from './InteropService_Exporter_Yaml';
+import { fieldOrder } from './InteropService_Exporter_Md_metadata';
 import * as fs from 'fs-extra';
 
 async function recreateExportDir() {
@@ -13,7 +13,7 @@ async function recreateExportDir() {
 	await fs.mkdirp(dir);
 }
 
-describe('interop/InteropService_Exporter_Yaml', function() {
+describe('interop/InteropService_Exporter_Md_metadata', function() {
 	async function exportAndLoad(path: string): Promise<string> {
 		const service = InteropService.instance();
 

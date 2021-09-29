@@ -23,7 +23,7 @@ function normalizeYamlWhitespace(yaml: string[]): string[] {
 	});
 }
 
-export default class InteropService_Importer_Yaml extends InteropService_Importer_Md {
+export default class InteropService_Importer_Md_metadata extends InteropService_Importer_Md {
 
 	private getNoteHeader(note: string) {
 		// Ignore the leading `---`

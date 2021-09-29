@@ -1,13 +1,13 @@
-import InteropService_Importer_Yaml from '../../services/interop/InteropService_Importer_Yaml';
+import InteropService_Importer_Md_metadata from '../../services/interop/InteropService_Importer_Md_metadata';
 import Note from '../../models/Note';
 import Tag from '../../models/Tag';
 import time from '../../time';
 import { setupDatabaseAndSynchronizer, supportDir, switchClient } from '../../testing/test-utils';
 
 
-describe('InteropService_Importer_Yaml: importMetadata', function() {
+describe('InteropService_Importer_Md_metadata: importMetadata', function() {
 	async function importNote(path: string) {
-		const importer = new InteropService_Importer_Yaml();
+		const importer = new InteropService_Importer_Md_metadata();
 		importer.setMetadata({ fileExtensions: ['md', 'html'] });
 		return await importer.importFile(path, 'notebook');
 	}

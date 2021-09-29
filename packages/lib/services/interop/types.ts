@@ -104,7 +104,7 @@ export interface ImportExportResult {
 }
 
 // These are the fields that will be included in an exported YAML note
-export interface YamlExportMetaData {
+export interface MdMetadataExport {
 	'Title'?: string;
 	'Source'?: string;
 	'Author'?: string;
