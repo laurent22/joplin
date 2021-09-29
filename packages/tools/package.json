@@ -1,6 +1,6 @@
 {
   "name": "@joplin/tools",
-  "version": "2.4.2",
+  "version": "2.4.3",
   "description": "Various tools for Joplin",
   "main": "index.js",
   "author": "Laurent Cozic",
@@ -20,8 +20,8 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@joplin/lib": "^2.4.2",
-    "@joplin/renderer": "^2.4.2",
+    "@joplin/lib": "^2.4.3",
+    "@joplin/renderer": "^2.4.3",
     "execa": "^4.1.0",
     "fs-extra": "^4.0.3",
     "gettext-parser": "^1.3.0",
