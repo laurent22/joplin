@@ -1,11 +1,18 @@
 import Logger from '@joplin/lib/Logger';
 import { Models } from '../models/factory';
 import BaseService from './BaseService';
+import { Event, EventType } from './database/types';
 const cron = require('node-cron');
 
 const logger = Logger.create('TaskService');
 
-type TaskId = string;
+export enum TaskId {
+	DeleteExpiredTokens = 1,
+	UpdateTotalSizes = 2,
+	HandleOversizedAccounts = 3,
+	HandleBetaUserEmails = 4,
+	HandleFailedPaymentSubscriptions = 5,
+}
 
 export enum RunType {
 	Scheduled = 1,
@@ -25,24 +32,25 @@ export interface Task {
 	run(models: Models): void;
 }
 
-export type Tasks = Record<TaskId, Task>;
+export type Tasks = Record<number, Task>;
 
 interface TaskState {
 	running: boolean;
-	lastRunTime: Date;
-	lastCompletionTime: Date;
 }
 
 const defaultTaskState: TaskState = {
 	running: false,
-	lastRunTime: null,
-	lastCompletionTime: null,
 };
+
+interface TaskEvents {
+	taskStarted: Event;
+	taskCompleted: Event;
+}
 
 export default class TaskService extends BaseService {
 
 	private tasks_: Tasks = {};
-	private taskStates_: Record<TaskId, TaskState> = {};
+	private taskStates_: Record<number, TaskState> = {};
 
 	public registerTask(task: Task) {
 		if (this.tasks_[task.id]) throw new Error(`Already a task with this ID: ${task.id}`);
@@ -63,6 +71,13 @@ export default class TaskService extends BaseService {
 		return this.taskStates_[id];
 	}
 
+	public async taskLastEvents(id: TaskId): Promise<TaskEvents> {
+		return {
+			taskStarted: await this.models.event().lastEventByTypeAndName(EventType.TaskStarted, id.toString()),
+			taskCompleted: await this.models.event().lastEventByTypeAndName(EventType.TaskCompleted, id.toString()),
+		};
+	}
+
 	public async runTask(id: TaskId, runType: RunType) {
 		const state = this.taskState(id);
 		if (state.running) throw new Error(`Task is already running: ${id}`);
@@ -72,8 +87,9 @@ export default class TaskService extends BaseService {
 		this.taskStates_[id] = {
 			...this.taskStates_[id],
 			running: true,
-			lastRunTime: new Date(),
 		};
+
+		await this.models.event().create(EventType.TaskStarted, id.toString());
 
 		try {
 			logger.info(`Running "${id}" (${runTypeToString(runType)})...`);
@@ -85,8 +101,9 @@ export default class TaskService extends BaseService {
 		this.taskStates_[id] = {
 			...this.taskStates_[id],
 			running: false,
-			lastCompletionTime: new Date(),
 		};
+
+		await this.models.event().create(EventType.TaskCompleted, id.toString());
 
 		logger.info(`Completed "${id}" in ${Date.now() - startTime}ms`);
 	}
@@ -95,10 +112,10 @@ export default class TaskService extends BaseService {
 		for (const [taskId, task] of Object.entries(this.tasks_)) {
 			if (!task.schedule) continue;
 
-			logger.info(`Scheduling task "${taskId}": ${task.schedule}`);
+			logger.info(`Scheduling task #${taskId} (${task.description}): ${task.schedule}`);
 
 			cron.schedule(task.schedule, async () => {
-				await this.runTask(taskId, RunType.Scheduled);
+				await this.runTask(Number(taskId), RunType.Scheduled);
 			});
 		}
 	}

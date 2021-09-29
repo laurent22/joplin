@@ -7,7 +7,7 @@ async function loadSettingsFromFile(): Promise<any> {
 	return JSON.parse(await fs.readFile(Setting.settingFilePath, 'utf8'));
 }
 
-describe('models_Setting', function() {
+describe('models/Setting', function() {
 
 	beforeEach(async (done) => {
 		await setupDatabaseAndSynchronizer(1);
@@ -174,7 +174,7 @@ describe('models_Setting', function() {
 	}));
 
 	it('should not save to file if nothing has changed', (async () => {
-		Setting.setValue('sync.target', 9);
+		Setting.setValue('sync.mobileWifiOnly', true);
 		await Setting.saveAll();
 
 		{
@@ -182,7 +182,7 @@ describe('models_Setting', function() {
 			// changed.
 			const beforeStat = await fs.stat(Setting.settingFilePath);
 			await msleep(1001);
-			Setting.setValue('sync.target', 8);
+			Setting.setValue('sync.mobileWifiOnly', false);
 			await Setting.saveAll();
 			const afterStat = await fs.stat(Setting.settingFilePath);
 			expect(afterStat.mtime.getTime()).toBeGreaterThan(beforeStat.mtime.getTime());
@@ -191,7 +191,7 @@ describe('models_Setting', function() {
 		{
 			const beforeStat = await fs.stat(Setting.settingFilePath);
 			await msleep(1001);
-			Setting.setValue('sync.target', 8);
+			Setting.setValue('sync.mobileWifiOnly', false);
 			const afterStat = await fs.stat(Setting.settingFilePath);
 			await Setting.saveAll();
 			expect(afterStat.mtime.getTime()).toBe(beforeStat.mtime.getTime());

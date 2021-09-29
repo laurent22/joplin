@@ -22,9 +22,12 @@ export function forgotPasswordUrl(): string {
 	return `${config().baseUrl}/password/forgot`;
 }
 
-
 export function profileUrl(): string {
 	return `${config().baseUrl}/users/me`;
+}
+
+export function helpUrl(): string {
+	return `${config().baseUrl}/help`;
 }
 
 export function confirmUrl(userId: Uuid, validationToken: string): string {

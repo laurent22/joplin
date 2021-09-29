@@ -790,6 +790,7 @@ export default class BaseApplication {
 				Setting.setValue('sync.interval', 3600);
 			}
 
+			Setting.setValue('sync.target', 0);
 			Setting.setValue('firstStart', 0);
 		} else {
 			setLocale(Setting.value('locale'));

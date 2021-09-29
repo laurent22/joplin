@@ -100,21 +100,23 @@ export default class SubscriptionModel extends BaseModel<Subscription> {
 			// We don't update the user can_upload and enabled properties here
 			// because it's done after a few days from TaskService.
 			if (!sub.last_payment_failed_time) {
-				const user = await this.models().user().load(sub.user_id, { fields: ['email', 'id', 'full_name'] });
-
-				await this.models().email().push({
-					...paymentFailedTemplate(),
-					recipient_email: user.email,
-					recipient_id: user.id,
-					recipient_name: user.full_name || '',
-					sender_id: EmailSender.Support,
-				});
-
 				await this.save({
 					id: sub.id,
 					last_payment_failed_time: now,
 				});
 			}
+
+			// We send an email reminder every time the payment fails because
+			// previous emails might not have been received for whatever reason.
+			const user = await this.models().user().load(sub.user_id, { fields: ['email', 'id', 'full_name'] });
+
+			await this.models().email().push({
+				...paymentFailedTemplate(),
+				recipient_email: user.email,
+				recipient_id: user.id,
+				recipient_name: user.full_name || '',
+				sender_id: EmailSender.Support,
+			});
 		}
 	}
 
