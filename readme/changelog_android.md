@@ -1,5 +1,9 @@
 # Joplin Android app changelog
 
+## [android-v2.4.3](https://github.com/laurent22/joplin/releases/tag/android-v2.4.3) - 2021-09-29T18:47:24Z
+
+- Fixed: Fix default sync target (4b39d30)
+
 ## [android-v2.4.2](https://github.com/laurent22/joplin/releases/tag/android-v2.4.2) (Pre-release) - 2021-09-22T17:02:37Z
 
 - Improved: Allow disabling any master key, including default or active one (9407efd)
