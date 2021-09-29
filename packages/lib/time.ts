@@ -119,9 +119,8 @@ class Time {
 		// date first, and then attempt to load a generic date string.
 		const m = moment(o, this.dateTimeFormat());
 		if (m.isValid()) return m.toDate().getTime();
-		// moment will fall back on Date.parse, so we might as well use it directly
-		const d = Date.parse(o);
-		return isNaN(d) ? defaultValue : d;
+		const d = moment(o);
+		return d.isValid() ? d.toDate().getTime() : defaultValue;
 	}
 
 	public msleep(ms: number) {
@@ -158,7 +157,6 @@ class Time {
 			}, 1000);
 		});
 	}
-
 }
 
 const time = new Time();

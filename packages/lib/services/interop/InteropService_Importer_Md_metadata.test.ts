@@ -89,4 +89,42 @@ describe('InteropService_Importer_Md_metadata: importMetadata', function() {
 
 		expect(note.title).toBe('First\nSecond');
 	});
+	it('should import dates (without time) correctly', async function() {
+		const note = await importNote(`${supportDir}/test_notes/yaml/short_date.md`);
+		const format = 'YYYY-MM-DD HH:mm';
+
+		expect(time.formatMsToLocal(note.user_updated_time, format)).toBe('2021-01-01 00:00');
+		expect(time.formatMsToLocal(note.user_created_time, format)).toBe('2017-01-01 00:00');
+	});
+	it('should load tags even with the inline syntax', async function() {
+		const note = await importNote(`${supportDir}/test_notes/yaml/inline_tags.md`);
+
+		expect(note.title).toBe('Inline Tags');
+
+		const tags = await Tag.tagsByNoteId(note.id);
+		expect(tags.length).toBe(2);
+	});
+	it('should import r-markdown files correctly and set what metadata it can', async function() {
+		const note = await importNote(`${supportDir}/test_notes/yaml/r-markdown.md`);
+		const format = 'YYYY-MM-DD HH:mm';
+
+		expect(note.title).toBe('YAML metadata for R Markdown with examples');
+		expect(time.formatMsToLocal(note.user_updated_time, format)).toBe('2021-06-10 00:00');
+		expect(time.formatMsToLocal(note.user_created_time, format)).toBe('2021-06-10 00:00');
+		expect(note.author).toBe('Hao Liang');
+
+		const tags = await Tag.tagsByNoteId(note.id);
+		expect(tags.length).toBe(3);
+
+		const tagTitles = tags.map(tag => tag.title);
+		expect(tagTitles).toContain('yaml');
+		expect(tagTitles).toContain('rmd');
+		expect(tagTitles).toContain('medicine');
+	});
+	it('should import r-markdown files with alternative author syntax', async function() {
+		const note = await importNote(`${supportDir}/test_notes/yaml/r-markdown_author.md`);
+
+		expect(note.title).toBe('Distill for R Markdown');
+		expect(note.author).toBe('JJ Allaire');
+	});
 });

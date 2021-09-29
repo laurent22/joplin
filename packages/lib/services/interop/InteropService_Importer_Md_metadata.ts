@@ -22,6 +22,28 @@ function normalizeYamlWhitespace(yaml: string[]): string[] {
 	});
 }
 
+// This is a helper functon to convert an arbitrary author variable into a string
+// the use case is for loading from r-markdown/pandoc style notes
+// references:
+// https://pandoc.org/MANUAL.html#extension-yaml_metadata_block
+// https://github.com/hao203/rmarkdown-YAML
+function extractAuthor(author: any): string {
+	if (!author) return '';
+
+	if (typeof(author) === 'string') {
+		return author;
+	} else if (Array.isArray(author)) {
+		// Joplin only supports a single author, so we take the first one
+		return extractAuthor(author[0]);
+	} else if (typeof(author) === 'object') {
+		if ('name' in author) {
+			return author['name'];
+		}
+	}
+
+	return '';
+}
+
 export default class InteropService_Importer_Md_metadata extends InteropService_Importer_Md {
 
 	private getNoteHeader(note: string) {
@@ -66,12 +88,15 @@ export default class InteropService_Importer_Md_metadata extends InteropService_
 		const metadata: NoteEntity = {
 			title: md['title'] || '',
 			source_url: md['source'] || '',
-			author: md['author'] || '',
 			is_todo: ('completed?' in md) ? 1 : 0,
 		};
 
-		if (md['created']) { metadata['user_created_time'] = time.anythingToMs(md['created'], Date.now()); }
-		if (md['updated']) { metadata['user_updated_time'] = time.anythingToMs(md['updated'], Date.now()); }
+		if ('author' in md) { metadata['author'] = extractAuthor(md['author']); }
+
+		// The date fallback gives support for MultiMarkdown format, r-markdown, and pandoc formats
+		if ('created' in md) { metadata['user_created_time'] = time.anythingToMs(md['created'], Date.now()); } else if ('date' in md) { metadata['user_created_time'] = time.anythingToMs(md['date'], Date.now()); }
+
+		if ('updated' in md) { metadata['user_updated_time'] = time.anythingToMs(md['updated'], Date.now()); } else if ('date' in md) { metadata['user_updated_time'] = time.anythingToMs(md['date'], Date.now()); }
 
 		if ('latitude' in md) { metadata['latitude'] = md['latitude']; }
 		if ('longitude' in md) { metadata['longitude'] = md['longitude']; }
@@ -92,8 +117,18 @@ export default class InteropService_Importer_Md_metadata extends InteropService_
 		let tags: string[] = [];
 		if ('tags' in md) {
 			// Only create unique tags
-			tags = [...new Set(md['tags'])] as string[];
+			tags = md['tags'];
 		}
+		// Adding support for r-markdown/pandoc
+		if ('keywords' in md) {
+			tags = tags.concat(md['keywords']);
+		}
+		if ('category' in md) {
+			tags = tags.concat(md['category']);
+		}
+
+		// Only create unique tags
+		tags = [...new Set(tags)] as string[];
 
 		metadata['body'] = body;
 
