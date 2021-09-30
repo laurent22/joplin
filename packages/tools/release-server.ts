@@ -7,18 +7,18 @@ async function main() {
 	// if (!['release', 'prerelease'].includes(argv.type)) throw new Error('Must specify release type. Either --type=release or --type=prerelease');
 	// const isPreRelease = argv.type === 'prerelease';
 
-	const isPreRelease = false;
+	// const isPreRelease = false;
 
 	await gitPullTry();
 
 	process.chdir(serverDir);
 	const version = (await execCommand2('npm version patch')).trim();
-	const versionSuffix = isPreRelease ? '-beta' : '';
+	const versionSuffix = ''; // isPreRelease ? '-beta' : '';
 	const tagName = `server-${version}${versionSuffix}`;
 
 	const changelogPath = `${rootDir}/readme/changelog_server.md`;
 
-	await completeReleaseWithChangelog(changelogPath, version, tagName, 'Server', isPreRelease);
+	await completeReleaseWithChangelog(changelogPath, version, tagName, 'Server', false);
 }
 
 main().catch((error) => {

@@ -2,9 +2,9 @@
 
 | Name  | Value |
 | ----- | ----- |
-| Total Windows downloads | 1,715,115 |
-| Total macOs downloads | 669,036 |
-| Total Linux downloads | 568,463 |
+| Total Windows downloads | 1,716,439 |
+| Total macOs downloads | 669,782 |
+| Total Linux downloads | 568,646 |
 | Windows % | 58%   |
 | macOS % | 23%   |
 | Linux % | 19%   |
@@ -17,7 +17,8 @@
 
 | Version | Date  | Windows | macOS | Linux | Total |
 | ----- | ----- | ----- | ----- | ----- | ----- |
-| [v2.4.8](https://github.com/laurent22/joplin/releases/tag/v2.4.8) | 2021-09-22T19:01:46Z | 1,597 | 607   | 318   | 2,522 |
+| [v2.4.9](https://github.com/laurent22/joplin/releases/tag/v2.4.9) | 2021-09-29T19:08:58Z | 21    | 11    | 8     | 40    |
+| [v2.4.8](https://github.com/laurent22/joplin/releases/tag/v2.4.8) (p) | 2021-09-22T19:01:46Z | 2,853 | 1,322 | 481   | 4,656 |
 | [v2.4.7](https://github.com/laurent22/joplin/releases/tag/v2.4.7) (p) | 2021-09-19T12:53:22Z | 838   | 225   | 172   | 1,235 |
 | [v2.4.6](https://github.com/laurent22/joplin/releases/tag/v2.4.6) (p) | 2021-09-09T18:57:17Z | 1,420 | 430   | 482   | 2,332 |
 | [v2.4.5](https://github.com/laurent22/joplin/releases/tag/v2.4.5) (p) | 2021-09-06T18:03:28Z | 902   | 242   | 198   | 1,342 |
@@ -25,45 +26,45 @@
 | [v2.4.3](https://github.com/laurent22/joplin/releases/tag/v2.4.3) (p) | 2021-08-28T15:27:32Z | 710   | 174   | 139   | 1,023 |
 | [v2.4.2](https://github.com/laurent22/joplin/releases/tag/v2.4.2) (p) | 2021-08-27T17:13:21Z | 458   | 122   | 66    | 646   |
 | [v2.4.1](https://github.com/laurent22/joplin/releases/tag/v2.4.1) (p) | 2021-08-21T11:52:30Z | 1,346 | 348   | 307   | 2,001 |
-| [v2.3.5](https://github.com/laurent22/joplin/releases/tag/v2.3.5) | 2021-08-17T06:43:30Z | 80,184 | 31,222 | 32,836 | 144,242 |
-| [v2.3.3](https://github.com/laurent22/joplin/releases/tag/v2.3.3) | 2021-08-14T09:19:40Z | 13,992 | 6,840 | 4,018 | 24,850 |
-| [v2.2.7](https://github.com/laurent22/joplin/releases/tag/v2.2.7) | 2021-08-11T11:03:26Z | 14,487 | 7,462 | 2,547 | 24,496 |
+| [v2.3.5](https://github.com/laurent22/joplin/releases/tag/v2.3.5) | 2021-08-17T06:43:30Z | 80,212 | 31,240 | 32,846 | 144,298 |
+| [v2.3.3](https://github.com/laurent22/joplin/releases/tag/v2.3.3) | 2021-08-14T09:19:40Z | 13,993 | 6,840 | 4,018 | 24,851 |
+| [v2.2.7](https://github.com/laurent22/joplin/releases/tag/v2.2.7) | 2021-08-11T11:03:26Z | 14,488 | 7,462 | 2,547 | 24,497 |
 | [v2.2.6](https://github.com/laurent22/joplin/releases/tag/v2.2.6) (p) | 2021-08-09T19:29:20Z | 7,316 | 4,591 | 932   | 12,839 |
 | [v2.2.5](https://github.com/laurent22/joplin/releases/tag/v2.2.5) (p) | 2021-08-07T10:35:24Z | 1,055 | 252   | 182   | 1,489 |
 | [v2.2.4](https://github.com/laurent22/joplin/releases/tag/v2.2.4) (p) | 2021-08-05T16:42:48Z | 751   | 182   | 108   | 1,041 |
 | [v2.2.2](https://github.com/laurent22/joplin/releases/tag/v2.2.2) (p) | 2021-07-19T10:28:35Z | 2,670 | 712   | 622   | 4,004 |
-| [v2.1.9](https://github.com/laurent22/joplin/releases/tag/v2.1.9) | 2021-07-19T10:28:43Z | 45,488 | 18,728 | 16,656 | 80,872 |
+| [v2.1.9](https://github.com/laurent22/joplin/releases/tag/v2.1.9) | 2021-07-19T10:28:43Z | 45,489 | 18,728 | 16,656 | 80,873 |
 | [v2.2.1](https://github.com/laurent22/joplin/releases/tag/v2.2.1) (p) | 2021-07-09T17:38:25Z | 2,006 | 391   | 368   | 2,765 |
-| [v2.1.8](https://github.com/laurent22/joplin/releases/tag/v2.1.8) | 2021-07-03T08:25:16Z | 29,296 | 12,131 | 12,642 | 54,069 |
+| [v2.1.8](https://github.com/laurent22/joplin/releases/tag/v2.1.8) | 2021-07-03T08:25:16Z | 29,297 | 12,131 | 12,642 | 54,070 |
 | [v2.1.7](https://github.com/laurent22/joplin/releases/tag/v2.1.7) | 2021-06-26T19:48:55Z | 13,420 | 6,370 | 3,591 | 23,381 |
 | [v2.1.5](https://github.com/laurent22/joplin/releases/tag/v2.1.5) (p) | 2021-06-23T15:08:52Z | 1,096 | 221   | 172   | 1,489 |
 | [v2.1.3](https://github.com/laurent22/joplin/releases/tag/v2.1.3) (p) | 2021-06-19T16:32:51Z | 1,241 | 285   | 190   | 1,716 |
-| [v2.0.11](https://github.com/laurent22/joplin/releases/tag/v2.0.11) | 2021-06-16T17:55:49Z | 22,605 | 9,205 | 9,754 | 41,564 |
+| [v2.0.11](https://github.com/laurent22/joplin/releases/tag/v2.0.11) | 2021-06-16T17:55:49Z | 22,606 | 9,205 | 9,754 | 41,565 |
 | [v2.0.10](https://github.com/laurent22/joplin/releases/tag/v2.0.10) | 2021-06-16T07:58:29Z | 2,072 | 907   | 352   | 3,331 |
-| [v2.0.9](https://github.com/laurent22/joplin/releases/tag/v2.0.9) (p) | 2021-06-12T09:30:30Z | 1,139 | 282   | 867   | 2,288 |
+| [v2.0.9](https://github.com/laurent22/joplin/releases/tag/v2.0.9) (p) | 2021-06-12T09:30:30Z | 1,140 | 282   | 867   | 2,289 |
 | [v2.0.8](https://github.com/laurent22/joplin/releases/tag/v2.0.8) (p) | 2021-06-10T16:15:08Z | 783   | 216   | 562   | 1,561 |
 | [v2.0.4](https://github.com/laurent22/joplin/releases/tag/v2.0.4) (p) | 2021-06-02T12:54:17Z | 1,360 | 381   | 366   | 2,107 |
 | [v2.0.2](https://github.com/laurent22/joplin/releases/tag/v2.0.2) (p) | 2021-05-21T18:07:48Z | 2,306 | 482   | 1,654 | 4,442 |
 | [v2.0.1](https://github.com/laurent22/joplin/releases/tag/v2.0.1) (p) | 2021-05-15T13:22:58Z | 847   | 260   | 1,012 | 2,119 |
-| [v1.8.5](https://github.com/laurent22/joplin/releases/tag/v1.8.5) | 2021-05-10T11:58:14Z | 37,281 | 16,215 | 19,361 | 72,857 |
+| [v1.8.5](https://github.com/laurent22/joplin/releases/tag/v1.8.5) | 2021-05-10T11:58:14Z | 37,283 | 16,215 | 19,361 | 72,859 |
 | [v1.8.4](https://github.com/laurent22/joplin/releases/tag/v1.8.4) (p) | 2021-05-09T18:05:05Z | 828   | 127   | 445   | 1,400 |
 | [v1.8.3](https://github.com/laurent22/joplin/releases/tag/v1.8.3) (p) | 2021-05-04T10:38:16Z | 1,574 | 298   | 928   | 2,800 |
 | [v1.8.2](https://github.com/laurent22/joplin/releases/tag/v1.8.2) (p) | 2021-04-25T10:50:51Z | 1,781 | 429   | 1,274 | 3,484 |
 | [v1.8.1](https://github.com/laurent22/joplin/releases/tag/v1.8.1) (p) | 2021-03-29T10:46:41Z | 3,207 | 818   | 2,439 | 6,464 |
-| [v1.7.11](https://github.com/laurent22/joplin/releases/tag/v1.7.11) | 2021-02-03T12:50:01Z | 114,985 | 42,683 | 64,200 | 221,868 |
+| [v1.7.11](https://github.com/laurent22/joplin/releases/tag/v1.7.11) | 2021-02-03T12:50:01Z | 114,987 | 42,684 | 64,200 | 221,871 |
 | [v1.7.10](https://github.com/laurent22/joplin/releases/tag/v1.7.10) | 2021-01-30T13:25:29Z | 13,915 | 4,842 | 4,448 | 23,205 |
 | [v1.7.9](https://github.com/laurent22/joplin/releases/tag/v1.7.9) (p) | 2021-01-28T09:50:21Z | 500   | 130   | 495   | 1,125 |
 | [v1.7.6](https://github.com/laurent22/joplin/releases/tag/v1.7.6) (p) | 2021-01-27T10:36:05Z | 306   | 90    | 284   | 680   |
 | [v1.7.5](https://github.com/laurent22/joplin/releases/tag/v1.7.5) (p) | 2021-01-26T09:53:05Z | 384   | 201   | 450   | 1,035 |
 | [v1.7.4](https://github.com/laurent22/joplin/releases/tag/v1.7.4) (p) | 2021-01-22T17:58:38Z | 684   | 201   | 621   | 1,506 |
-| [v1.6.8](https://github.com/laurent22/joplin/releases/tag/v1.6.8) | 2021-01-20T18:11:34Z | 18,685 | 7,681 | 7,590 | 33,956 |
+| [v1.6.8](https://github.com/laurent22/joplin/releases/tag/v1.6.8) | 2021-01-20T18:11:34Z | 18,686 | 7,681 | 7,590 | 33,957 |
 | [v1.7.3](https://github.com/laurent22/joplin/releases/tag/v1.7.3) (p) | 2021-01-20T11:23:50Z | 343   | 74    | 440   | 857   |
-| [v1.6.7](https://github.com/laurent22/joplin/releases/tag/v1.6.7) | 2021-01-11T23:20:33Z | 10,792 | 4,627 | 4,538 | 19,957 |
+| [v1.6.7](https://github.com/laurent22/joplin/releases/tag/v1.6.7) | 2021-01-11T23:20:33Z | 10,793 | 4,627 | 4,538 | 19,958 |
 | [v1.6.6](https://github.com/laurent22/joplin/releases/tag/v1.6.6) | 2021-01-09T16:15:31Z | 12,460 | 3,414 | 4,791 | 20,665 |
 | [v1.6.5](https://github.com/laurent22/joplin/releases/tag/v1.6.5) (p) | 2021-01-09T01:24:32Z | 864   | 70    | 304   | 1,238 |
 | [v1.6.4](https://github.com/laurent22/joplin/releases/tag/v1.6.4) (p) | 2021-01-07T19:11:32Z | 386   | 76    | 199   | 661   |
 | [v1.6.2](https://github.com/laurent22/joplin/releases/tag/v1.6.2) (p) | 2021-01-04T22:34:55Z | 669   | 226   | 586   | 1,481 |
-| [v1.5.14](https://github.com/laurent22/joplin/releases/tag/v1.5.14) | 2020-12-30T01:48:46Z | 11,262 | 5,198 | 5,520 | 21,980 |
+| [v1.5.14](https://github.com/laurent22/joplin/releases/tag/v1.5.14) | 2020-12-30T01:48:46Z | 11,263 | 5,198 | 5,520 | 21,981 |
 | [v1.6.1](https://github.com/laurent22/joplin/releases/tag/v1.6.1) (p) | 2020-12-29T19:37:45Z | 167   | 35    | 164   | 366   |
 | [v1.5.13](https://github.com/laurent22/joplin/releases/tag/v1.5.13) | 2020-12-29T18:29:15Z | 621   | 216   | 197   | 1,034 |
 | [v1.5.12](https://github.com/laurent22/joplin/releases/tag/v1.5.12) | 2020-12-28T15:14:08Z | 2,401 | 1,766 | 918   | 5,085 |
@@ -73,7 +74,7 @@
 | [v1.5.8](https://github.com/laurent22/joplin/releases/tag/v1.5.8) (p) | 2020-12-20T09:45:19Z | 563   | 161   | 638   | 1,362 |
 | [v1.5.7](https://github.com/laurent22/joplin/releases/tag/v1.5.7) (p) | 2020-12-10T12:58:33Z | 885   | 251   | 989   | 2,125 |
 | [v1.5.4](https://github.com/laurent22/joplin/releases/tag/v1.5.4) (p) | 2020-12-05T12:07:49Z | 690   | 164   | 630   | 1,484 |
-| [v1.4.19](https://github.com/laurent22/joplin/releases/tag/v1.4.19) | 2020-12-01T11:11:16Z | 25,968 | 13,406 | 11,647 | 51,021 |
+| [v1.4.19](https://github.com/laurent22/joplin/releases/tag/v1.4.19) | 2020-12-01T11:11:16Z | 25,969 | 13,406 | 11,647 | 51,022 |
 | [v1.4.18](https://github.com/laurent22/joplin/releases/tag/v1.4.18) | 2020-11-28T12:21:41Z | 11,212 | 3,877 | 3,113 | 18,202 |
 | [v1.4.16](https://github.com/laurent22/joplin/releases/tag/v1.4.16) | 2020-11-27T19:40:16Z | 1,473 | 825   | 591   | 2,889 |
 | [v1.4.15](https://github.com/laurent22/joplin/releases/tag/v1.4.15) | 2020-11-27T13:25:43Z | 889   | 485   | 270   | 1,644 |
@@ -82,7 +83,7 @@
 | [v1.4.10](https://github.com/laurent22/joplin/releases/tag/v1.4.10) (p) | 2020-11-14T09:53:15Z | 620   | 194   | 683   | 1,497 |
 | [v1.4.9](https://github.com/laurent22/joplin/releases/tag/v1.4.9) (p) | 2020-11-11T14:23:17Z | 616   | 139   | 400   | 1,155 |
 | [v1.4.7](https://github.com/laurent22/joplin/releases/tag/v1.4.7) (p) | 2020-11-07T18:23:29Z | 516   | 171   | 513   | 1,200 |
-| [v1.3.18](https://github.com/laurent22/joplin/releases/tag/v1.3.18) | 2020-11-06T12:07:02Z | 31,198 | 11,327 | 10,506 | 53,031 |
+| [v1.3.18](https://github.com/laurent22/joplin/releases/tag/v1.3.18) | 2020-11-06T12:07:02Z | 31,199 | 11,327 | 10,506 | 53,032 |
 | [v1.3.17](https://github.com/laurent22/joplin/releases/tag/v1.3.17) (p) | 2020-11-06T11:35:15Z | 48    | 21    | 22    | 91    |
 | [v1.4.6](https://github.com/laurent22/joplin/releases/tag/v1.4.6) (p) | 2020-11-05T22:44:12Z | 440   | 91    | 52    | 583   |
 | [v1.3.15](https://github.com/laurent22/joplin/releases/tag/v1.3.15) | 2020-11-04T12:22:50Z | 2,345 | 1,296 | 843   | 4,484 |
@@ -95,7 +96,7 @@
 | [v1.3.3](https://github.com/laurent22/joplin/releases/tag/v1.3.3) (p) | 2020-10-17T10:56:57Z | 118   | 45    | 32    | 195   |
 | [v1.3.2](https://github.com/laurent22/joplin/releases/tag/v1.3.2) (p) | 2020-10-11T20:39:49Z | 665   | 178   | 563   | 1,406 |
 | [v1.3.1](https://github.com/laurent22/joplin/releases/tag/v1.3.1) (p) | 2020-10-11T15:10:18Z | 83    | 50    | 42    | 175   |
-| [v1.2.6](https://github.com/laurent22/joplin/releases/tag/v1.2.6) | 2020-10-09T13:56:59Z | 44,750 | 17,728 | 14,037 | 76,515 |
+| [v1.2.6](https://github.com/laurent22/joplin/releases/tag/v1.2.6) | 2020-10-09T13:56:59Z | 44,751 | 17,728 | 14,037 | 76,516 |
 | [v1.2.4](https://github.com/laurent22/joplin/releases/tag/v1.2.4) (p) | 2020-09-30T07:34:29Z | 814   | 244   | 797   | 1,855 |
 | [v1.2.3](https://github.com/laurent22/joplin/releases/tag/v1.2.3) (p) | 2020-09-29T15:13:02Z | 217   | 65    | 79    | 361   |
 | [v1.2.2](https://github.com/laurent22/joplin/releases/tag/v1.2.2) (p) | 2020-09-22T20:31:55Z | 883   | 204   | 637   | 1,724 |
@@ -111,7 +112,7 @@
 | [v1.0.236](https://github.com/laurent22/joplin/releases/tag/v1.0.236) (p) | 2020-08-28T09:16:54Z | 319   | 115   | 106   | 540   |
 | [v1.0.235](https://github.com/laurent22/joplin/releases/tag/v1.0.235) (p) | 2020-08-18T22:08:01Z | 1,778 | 493   | 924   | 3,195 |
 | [v1.0.234](https://github.com/laurent22/joplin/releases/tag/v1.0.234) (p) | 2020-08-17T23:13:02Z | 552   | 129   | 102   | 783   |
-| [v1.0.233](https://github.com/laurent22/joplin/releases/tag/v1.0.233) | 2020-08-01T14:51:15Z | 43,694 | 18,195 | 12,361 | 74,250 |
+| [v1.0.233](https://github.com/laurent22/joplin/releases/tag/v1.0.233) | 2020-08-01T14:51:15Z | 43,695 | 18,195 | 12,361 | 74,251 |
 | [v1.0.232](https://github.com/laurent22/joplin/releases/tag/v1.0.232) (p) | 2020-07-28T22:34:40Z | 658   | 227   | 180   | 1,065 |
 | [v1.0.227](https://github.com/laurent22/joplin/releases/tag/v1.0.227) | 2020-07-07T20:44:54Z | 40,686 | 15,281 | 9,633 | 65,600 |
 | [v1.0.226](https://github.com/laurent22/joplin/releases/tag/v1.0.226) (p) | 2020-07-04T10:21:26Z | 4,916 | 2,257 | 690   | 7,863 |
@@ -121,7 +122,7 @@
 | [v1.0.220](https://github.com/laurent22/joplin/releases/tag/v1.0.220) | 2020-06-13T18:26:22Z | 31,977 | 9,924 | 6,415 | 48,316 |
 | [v1.0.218](https://github.com/laurent22/joplin/releases/tag/v1.0.218) | 2020-06-07T10:43:34Z | 14,546 | 6,973 | 2,958 | 24,477 |
 | [v1.0.217](https://github.com/laurent22/joplin/releases/tag/v1.0.217) (p) | 2020-06-06T15:17:27Z | 230   | 97    | 56    | 383   |
-| [v1.0.216](https://github.com/laurent22/joplin/releases/tag/v1.0.216) | 2020-05-24T14:21:01Z | 37,685 | 14,280 | 10,182 | 62,147 |
+| [v1.0.216](https://github.com/laurent22/joplin/releases/tag/v1.0.216) | 2020-05-24T14:21:01Z | 37,687 | 14,280 | 10,182 | 62,149 |
 | [v1.0.214](https://github.com/laurent22/joplin/releases/tag/v1.0.214) (p) | 2020-05-21T17:15:15Z | 6,562 | 3,472 | 764   | 10,798 |
 | [v1.0.212](https://github.com/laurent22/joplin/releases/tag/v1.0.212) (p) | 2020-05-21T07:48:39Z | 216   | 72    | 49    | 337   |
 | [v1.0.211](https://github.com/laurent22/joplin/releases/tag/v1.0.211) (p) | 2020-05-20T08:59:16Z | 305   | 136   | 89    | 530   |
@@ -138,7 +139,7 @@
 | [v1.0.190](https://github.com/laurent22/joplin/releases/tag/v1.0.190) (p) | 2020-03-06T01:22:22Z | 381   | 95    | 87    | 563   |
 | [v1.0.189](https://github.com/laurent22/joplin/releases/tag/v1.0.189) (p) | 2020-03-04T17:27:15Z | 350   | 100   | 97    | 547   |
 | [v1.0.187](https://github.com/laurent22/joplin/releases/tag/v1.0.187) (p) | 2020-03-01T12:31:06Z | 925   | 234   | 270   | 1,429 |
-| [v1.0.179](https://github.com/laurent22/joplin/releases/tag/v1.0.179) | 2020-01-24T22:42:41Z | 71,266 | 28,592 | 22,543 | 122,401 |
+| [v1.0.179](https://github.com/laurent22/joplin/releases/tag/v1.0.179) | 2020-01-24T22:42:41Z | 71,266 | 28,593 | 22,543 | 122,402 |
 | [v1.0.178](https://github.com/laurent22/joplin/releases/tag/v1.0.178) | 2020-01-20T19:06:45Z | 17,592 | 5,967 | 2,588 | 26,147 |
 | [v1.0.177](https://github.com/laurent22/joplin/releases/tag/v1.0.177) (p) | 2019-12-30T14:40:40Z | 1,950 | 442   | 690   | 3,082 |
 | [v1.0.176](https://github.com/laurent22/joplin/releases/tag/v1.0.176) (p) | 2019-12-14T10:36:44Z | 3,128 | 2,538 | 469   | 6,135 |
@@ -236,7 +237,7 @@
 | [v0.10.30](https://github.com/laurent22/joplin/releases/tag/v0.10.30) | 2017-11-30T20:28:16Z | 726   | 1,373 | 422   | 2,521 |
 | [v0.10.28](https://github.com/laurent22/joplin/releases/tag/v0.10.28) | 2017-11-30T01:07:46Z | 1,346 | 1,705 | 876   | 3,927 |
 | [v0.10.26](https://github.com/laurent22/joplin/releases/tag/v0.10.26) | 2017-11-29T16:02:17Z | 191   | 705   | 263   | 1,159 |
-| [v0.10.25](https://github.com/laurent22/joplin/releases/tag/v0.10.25) | 2017-11-24T14:27:49Z | 152   | 700   | 6,503 | 7,355 |
+| [v0.10.25](https://github.com/laurent22/joplin/releases/tag/v0.10.25) | 2017-11-24T14:27:49Z | 152   | 700   | 6,505 | 7,357 |
 | [v0.10.23](https://github.com/laurent22/joplin/releases/tag/v0.10.23) | 2017-11-21T19:38:41Z | 136   | 652   | 30    | 818   |
 | [v0.10.22](https://github.com/laurent22/joplin/releases/tag/v0.10.22) | 2017-11-20T21:45:57Z | 88    | 649   | 21    | 758   |
 | [v0.10.21](https://github.com/laurent22/joplin/releases/tag/v0.10.21) | 2017-11-18T00:53:15Z | 56    | 642   | 15    | 713   |

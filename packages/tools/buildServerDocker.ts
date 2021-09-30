@@ -8,8 +8,11 @@ export function getVersionFromTag(tagName: string, isPreRelease: boolean): strin
 	return s[1].substr(1) + suffix;
 }
 
-export function getIsPreRelease(tagName: string): boolean {
-	return tagName.indexOf('-beta') > 0;
+export function getIsPreRelease(_tagName: string): boolean {
+	// For now we only create pre-releases from CI. It's after, once the release
+	// has been proven stable, that it is tagged as "latest".
+	return true;
+	// return tagName.indexOf('-beta') > 0;
 }
 
 async function main() {
@@ -30,8 +33,7 @@ async function main() {
 	const buildArgs = `--build-arg BUILD_DATE="${buildDate}" --build-arg REVISION="${revision}" --build-arg VERSION="${imageVersion}"`;
 	const dockerTags: string[] = [];
 	const versionPart = imageVersion.split('.');
-	// dockerTags.push(isPreRelease ? 'beta' : 'latest');
-	dockerTags.push('beta');
+	dockerTags.push(isPreRelease ? 'beta' : 'latest');
 	dockerTags.push(versionPart[0] + (isPreRelease ? '-beta' : ''));
 	dockerTags.push(`${versionPart[0]}.${versionPart[1]}${isPreRelease ? '-beta' : ''}`);
 	dockerTags.push(imageVersion);
