@@ -13,9 +13,11 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.1\n"
+"X-Generator: Poedit 2.0.6\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-cli/app/app-gui.js:452
 msgid "To delete a tag, untag the associated notes."
@@ -136,6 +138,7 @@ msgid ""
 "Runs the commands contained in the text file. There should be one command "
 "per line."
 msgstr ""
+"Запуск команд из текстового файла. Необходимо указать по команде на строку."
 
 #: packages/app-cli/app/command-cat.js:14
 msgid "Displays the given note."
@@ -919,11 +922,11 @@ msgstr "Загрузить"
 
 #: packages/app-desktop/checkForUpdates.js:189
 msgid "Skip this version"
-msgstr ""
+msgstr "Пропустить эту версию"
 
 #: packages/app-desktop/checkForUpdates.js:189
 msgid "Full changelog"
-msgstr ""
+msgstr "Полный список изменений"
 
 #: packages/app-desktop/commands/copyDevCommand.js:18
 msgid "Copy dev mode command to clipboard"
@@ -950,9 +953,8 @@ msgid "Stop"
 msgstr "Остановить"
 
 #: packages/app-desktop/commands/toggleSafeMode.js:18
-#, fuzzy
 msgid "Toggle safe mode"
-msgstr "Переключить боковую панель"
+msgstr "Включить безопасный режим"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.js:34
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:40
@@ -962,7 +964,7 @@ msgstr "Токен скопирован в буфер обмена!"
 #: packages/app-desktop/gui/ClipperConfigScreen.js:37
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:44
 msgid "Are you sure you want to renew the authorisation token?"
-msgstr ""
+msgstr "Вы точно хотите обновить токен авторизации?"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.js:67
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:84
@@ -1063,7 +1065,7 @@ msgstr ""
 #: packages/app-desktop/gui/ClipperConfigScreen.js:111
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:222
 msgid "Renew token"
-msgstr ""
+msgstr "Обновить токен"
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.js:27
 msgid "Apply"
@@ -1170,6 +1172,8 @@ msgid ""
 "The Joplin team has vetted this plugin and it meets our standards for "
 "security and performance."
 msgstr ""
+"Команда Joplin проверила данный плагин и он соответствует нашим стандартам "
+"безопасности и производительности."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:192
 #, javascript-format
@@ -1195,18 +1199,16 @@ msgid "You do not have any installed plugin."
 msgstr "У вас нет установленных плагинов."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:232
-#, fuzzy
 msgid "Could not connect to plugin repository."
-msgstr "Не удалось установить плагин: %s"
+msgstr "Не удалось соединиться с репозиторием плагинов."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:236
 msgid "Try again"
-msgstr ""
+msgstr "Еще раз"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:248
-#, fuzzy
 msgid "Plugin tools"
-msgstr "Плагины"
+msgstr "Утилиты для плагинов"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:249
 msgid "Manage your plugins"
@@ -1461,29 +1463,24 @@ msgstr "Шифрование:"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:103
 #: packages/app-mobile/components/screens/encryption-config.js:89
-#, fuzzy
 msgid "Master password"
-msgstr "Введите мастер-пароль:"
+msgstr "Мастер-пароль:"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:118
-#, fuzzy
 msgid "Source: "
 msgstr "Источник"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:121
-#, fuzzy
 msgid "Created: "
 msgstr "Создано: %s"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:124
-#, fuzzy
 msgid "Updated: "
 msgstr "Обновлено: %s"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:129
-#, fuzzy
 msgid "Disable"
-msgstr "Отключено"
+msgstr "Отключить"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:129
 #: packages/app-mobile/components/screens/encryption-config.js:143
@@ -1492,42 +1489,37 @@ msgstr "Включить"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:139
 msgid "Hide disabled master keys"
-msgstr ""
+msgstr "Скрыть отключенные главные ключи"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:139
 msgid "Show disabled master keys"
-msgstr ""
+msgstr "Показать отключенные главные ключи"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:146
 msgid "Date"
-msgstr ""
+msgstr "Дата"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:148
-#, fuzzy
 msgid "Valid"
-msgstr "Недопустимо"
+msgstr "Проверено"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:149
-#, fuzzy
 msgid "Actions"
-msgstr "Действие"
+msgstr "Действия"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:166
 #: packages/app-mobile/components/screens/encryption-config.js:159
-#, fuzzy
 msgid "Master password:"
-msgstr "Введите мастер-пароль:"
+msgstr "Главный пароль:"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:170
 #: packages/app-mobile/components/screens/encryption-config.js:160
-#, fuzzy
 msgid "Loaded"
 msgstr "Загружено"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:178
-#, fuzzy
 msgid "Enter your master password"
-msgstr "Введите мастер-пароль:"
+msgstr "Введите главный пароль:"
 
 #: packages/app-desktop/gui/ExtensionBadge.min.js:10
 msgid "Firefox Extension"
@@ -1634,10 +1626,12 @@ msgid ""
 "Safe mode is currently active. Note rendering and all plugins are "
 "temporarily disabled."
 msgstr ""
+"Активен безопасный режим. Отображение заметок и все плагины временно "
+"отключены."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:439
 msgid "Disable safe mode and restart"
-msgstr ""
+msgstr "Отключить безопасный режим и перезапустить"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:442
 msgid ""
@@ -1682,16 +1676,16 @@ msgstr "Дополнительная информация"
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:456
 #, javascript-format
 msgid "%s (%s) would like to share a notebook with you."
-msgstr ""
+msgstr "%s (%s) желает поделиться блокнотом с вами."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:456
 msgid "Accept"
-msgstr ""
+msgstr "Принять"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:456
 #: packages/app-desktop/gui/Root.js:122
 msgid "Reject"
-msgstr ""
+msgstr "Отказаться"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:459
 msgid "Some items cannot be synchronised."
@@ -1712,9 +1706,8 @@ msgstr ""
 "выхода."
 
 #: packages/app-desktop/gui/MainScreen/commands/commandPalette.js:18
-#, fuzzy
 msgid "Command palette..."
-msgstr "Палитра команд"
+msgstr "Палитра команд..."
 
 #: packages/app-desktop/gui/MainScreen/commands/editAlarm.js:20
 #: packages/app-mobile/components/SelectDateTimeDialog.js:84
@@ -1812,14 +1805,12 @@ msgid "Note properties"
 msgstr "Свойства заметки"
 
 #: packages/app-desktop/gui/MainScreen/commands/showShareFolderDialog.js:16
-#, fuzzy
 msgid "Share notebook..."
-msgstr "Поделиться заметкой..."
+msgstr "Поделиться блокнотом..."
 
 #: packages/app-desktop/gui/MainScreen/commands/showShareNoteDialog.js:16
-#, fuzzy
 msgid "Publish note..."
-msgstr "Поделиться заметкой..."
+msgstr "Опубликовать заметку..."
 
 #: packages/app-desktop/gui/MainScreen/commands/showSpellCheckerMenu.js:19
 #: packages/lib/services/spellChecker/SpellCheckerService.js:180
@@ -1931,9 +1922,8 @@ msgid "Focus"
 msgstr "Фокус"
 
 #: packages/app-desktop/gui/MenuBar.js:585
-#, fuzzy
 msgid "Note&book"
-msgstr "Блокноты"
+msgstr "Блок&ноты"
 
 #: packages/app-desktop/gui/MenuBar.js:591
 msgid "&Note"
@@ -2095,11 +2085,11 @@ msgstr "Правка"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:17
 msgid "Highlight"
-msgstr ""
+msgstr "Выделение"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:22
 msgid "Strikethrough"
-msgstr ""
+msgstr "Зачеркнутый"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.js:27
 msgid "Insert"
@@ -2220,9 +2210,8 @@ msgid "Delete line"
 msgstr "Удалить строку"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.js:92
-#, fuzzy
 msgid "Duplicate line"
-msgstr "Создать дубликат"
+msgstr "Дубликат строки"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.js:96
 msgid "Undo"
@@ -2417,18 +2406,16 @@ msgstr ""
 "(ограничение:%s)."
 
 #: packages/app-desktop/gui/Root.js:107
-#, fuzzy
 msgid "Confirmation"
-msgstr "Конфигурация"
+msgstr "Подтверждение"
 
 #: packages/app-desktop/gui/Root.js:120
 msgid "The Web Clipper needs your authorisation to access your data."
 msgstr ""
 
 #: packages/app-desktop/gui/Root.js:121
-#, fuzzy
 msgid "Grant authorisation"
-msgstr "Токен авторизации:"
+msgstr "Одобрить авторизацию"
 
 #: packages/app-desktop/gui/Root.js:161
 msgid "OneDrive Login"
@@ -2443,19 +2430,20 @@ msgid "Note attachments"
 msgstr "Вложения заметки"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:133
-#, fuzzy
 msgid "Unshare"
-msgstr "Поделиться"
+msgstr "Отмена доступа"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:175
 msgid ""
 "Delete this invitation? The recipient will no longer have access to this "
 "shared notebook."
 msgstr ""
+"Удалить приглашение? Получатель больше не сможет получить доступ к этому "
+"общему блокноту."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:189
 msgid "Add recipient:"
-msgstr ""
+msgstr "Добавить получателя:"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:192
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:28
@@ -2465,45 +2453,43 @@ msgstr "Поделиться"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:201
 msgid "Recipient has not yet accepted the invitation"
-msgstr ""
+msgstr "Получатель еще не принял приглашение"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:202
 msgid "Recipient has rejected the invitation"
-msgstr ""
+msgstr "Получатель отказал в приглашении"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:203
 msgid "Recipient has accepted the invitation"
-msgstr ""
+msgstr "Получатель принял приглашение"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:213
 msgid "Recipients:"
-msgstr ""
+msgstr "Получатели:"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:225
-#, fuzzy
 msgid "Synchronizing..."
 msgstr "Синхронизация..."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:226
-#, fuzzy
 msgid "Sharing notebook..."
-msgstr "Поделиться заметкой..."
+msgstr "Поделиться блокнотом..."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:236
 msgid ""
 "Unshare this notebook? The recipients will no longer have access to its "
 "content."
 msgstr ""
+"Снять общий доступ? Получатели больше не смогут получить доступ к этому "
+"содержимому."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:246
-#, fuzzy
 msgid "Share Notebook"
-msgstr "Поделиться заметками"
+msgstr "Поделиться блокнотом"
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:144
-#, fuzzy
 msgid "Unpublish note"
-msgstr "Поделиться"
+msgstr "Снять публикацию"
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:171
 msgid "Synchronising..."
@@ -2532,7 +2518,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:187
 msgid "Publish Notes"
-msgstr ""
+msgstr "Публиковать заметку"
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:189
 msgid "Copy Shareable Link"
@@ -2615,32 +2601,29 @@ msgid "Retry"
 msgstr "Повторить попытку"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.js:137
-#, fuzzy
 msgid "Advanced tools"
-msgstr "Расширенные настройки"
+msgstr "Расширенные инструменты"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.js:139
-#, fuzzy
 msgid "Export debug report"
 msgstr "Экспортировать отладочный отчет"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:157
-#, fuzzy
 msgid "Sync your notes"
-msgstr "Сортировать заметки по"
+msgstr "Сортировать ваши заметки"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:158
 msgid "Publish notes to the internet"
-msgstr ""
+msgstr "Опубликовать заметки в Интернет"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:159
-#, fuzzy
 msgid "Collaborate on notebooks with others"
-msgstr "Пожалуйста, сначала создайте блокнот"
+msgstr "Делитесь блокнотами с другими"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:182
 msgid "Thank you! Your Joplin Cloud account is now setup and ready to use."
 msgstr ""
+"Спасибо! Ваша учетная запись Joplin Cloud настроена и готова к использованию."
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:190
 #, javascript-format
@@ -2650,30 +2633,34 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"При настройке Joplin Cloud возникла ошибка. Пожалуйста, проверьте ваш e-mail "
+"и пароль и попробуйте заново. Ошибка: \n"
+"\n"
+"%s"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:203
 msgid "Login below."
-msgstr ""
+msgstr "Войдите"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:205
-#, fuzzy
 msgid "Or create an account."
-msgstr "Создает новую заметку."
+msgstr "Или создайте новую учетную запись."
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:210
 msgid "Login"
-msgstr ""
+msgstr "Вход"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:231
-#, fuzzy
 msgid "Select"
-msgstr "Выбрать все"
+msgstr "Выбрать"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:278
 msgid ""
 "Joplin can synchronise your notes using various providers. Select one from "
 "the list below."
 msgstr ""
+"Joplin может синхронизировать ваши заметки используя разных поставщиков. "
+"Выберите одного из них в списке ниже."
 
 #: packages/app-desktop/gui/utils/NoteListUtils.js:43
 msgid "Duplicate"
@@ -2845,11 +2832,11 @@ msgstr "Только для отладки: экспорт вашего проф
 
 #: packages/app-mobile/components/screens/ConfigScreen.js:436
 msgid "Feature flags"
-msgstr ""
+msgstr "Флаги функций"
 
 #: packages/app-mobile/components/screens/ConfigScreen.js:439
 msgid "More information"
-msgstr "Дополнительная информация"
+msgstr "Подробнее"
 
 #: packages/app-mobile/components/screens/ConfigScreen.js:445
 msgid ""
@@ -2875,8 +2862,7 @@ msgstr "- Камера: позволяет сделать снимок и при
 #: packages/app-mobile/components/screens/ConfigScreen.js:448
 msgid "- Location: to allow attaching geo-location information to a note."
 msgstr ""
-"- Местоположение: позволяет прикрепить информацию о географическом "
-"местоположении к заметке."
+"- Местоположение: позволяет прикрепить информацию о геолокации к заметке."
 
 #: packages/app-mobile/components/screens/ConfigScreen.js:459
 msgid "Joplin website"
@@ -3099,7 +3085,7 @@ msgstr "Новый блокнот"
 
 #: packages/app-mobile/components/side-menu-content.js:351
 msgid "Mobile data - auto-sync disabled"
-msgstr ""
+msgstr "Мобильная сеть - авто-синхронизация отключена"
 
 #: packages/lib/BaseApplication.js:154 packages/lib/BaseApplication.js:166
 #: packages/lib/BaseApplication.js:198
@@ -3137,15 +3123,17 @@ msgid "File system"
 msgstr "Файловая система"
 
 #: packages/lib/SyncTargetJoplinCloud.js:28
-#, fuzzy
 msgid "Joplin Cloud"
-msgstr "Форум Joplin"
+msgstr "Joplin Cloud"
 
 #: packages/lib/SyncTargetJoplinCloud.js:31
 msgid ""
 "Joplin's own sync service. Also gives access to Joplin-specific features "
 "such as publishing notes or collaborating on notebooks with others."
 msgstr ""
+"Собственный сервис от Joplin. Кроме того, позволяет поучить доступ к "
+"специфичным функциям Joplin, как публикация заметок и общай работа с "
+"блокнотами."
 
 #: packages/lib/SyncTargetJoplinServer.js:60
 msgid "Joplin Server"
@@ -3157,7 +3145,7 @@ msgstr "Nextcloud"
 
 #: packages/lib/SyncTargetNone.js:22
 msgid "(None)"
-msgstr ""
+msgstr "(Нет)"
 
 #: packages/lib/SyncTargetOneDrive.js:32
 msgid "OneDrive"
@@ -3207,7 +3195,7 @@ msgid "Cancelling..."
 msgstr "Отмена..."
 
 #: packages/lib/Synchronizer.js:159
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Completed: %s (%s)"
 msgstr "Завершено: %s"
 
@@ -3243,7 +3231,7 @@ msgstr "Расшифровано элементов: %s / %s"
 #: packages/lib/components/EncryptionConfigScreen/utils.js:53
 #, javascript-format
 msgid "Encryption will be enabled using the master key created on %s"
-msgstr ""
+msgstr "Шифрование будет включено, используя главный ключ %s"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.js:65
 msgid ""
@@ -3377,9 +3365,8 @@ msgid "Error"
 msgstr "Ошибка"
 
 #: packages/lib/models/Resource.js:408
-#, fuzzy
 msgid "Conflicts (attachments)"
-msgstr "Вложения заметки"
+msgstr "Конфликты (вложения)"
 
 #: packages/lib/models/Resource.js:422
 #, javascript-format
@@ -3519,23 +3506,20 @@ msgid "Joplin Server URL"
 msgstr "URL сервера Joplin"
 
 #: packages/lib/models/Setting.js:348
-#, fuzzy
 msgid "Joplin Server email"
-msgstr "Сервер Joplin"
+msgstr "E-mail сервера Joplin"
 
 #: packages/lib/models/Setting.js:359
 msgid "Joplin Server password"
 msgstr "Пароль сервера Joplin"
 
 #: packages/lib/models/Setting.js:386
-#, fuzzy
 msgid "Joplin Cloud email"
-msgstr "Сервер Joplin"
+msgstr "E-mail для Joplin Cloud"
 
 #: packages/lib/models/Setting.js:397
-#, fuzzy
 msgid "Joplin Cloud password"
-msgstr "Пароль сервера Joplin"
+msgstr "Пароль для Joplin Cloud"
 
 #: packages/lib/models/Setting.js:409
 msgid "Attachment download behaviour"
@@ -3776,11 +3760,12 @@ msgid ""
 "Used for most text in the markdown editor. If not found, a generic "
 "proportional (variable width) font is used."
 msgstr ""
+"Используется для большинства текста в редакторе Mardown. Если не найден - "
+"используется подменный пропорциональный шрифт."
 
 #: packages/lib/models/Setting.js:780
-#, fuzzy
 msgid "Editor monospace font family"
-msgstr "Семейство шрифтов редактора"
+msgstr "Семейство моноширинных шрифтов редактора"
 
 #: packages/lib/models/Setting.js:781
 msgid ""
@@ -3788,14 +3773,17 @@ msgid ""
 "tables, checkboxes, code). If not found, a generic monospace (fixed width) "
 "font is used."
 msgstr ""
+"Применяется там, где нужен шрифт фиксированной ширины для лучшего "
+"отображения текста (таблицы, отметки, код). Если не найден - используется "
+"подменный моноширинный шрифт."
 
 #: packages/lib/models/Setting.js:784
 msgid "Editor maximum width"
-msgstr ""
+msgstr "Максимальная ширина редктора"
 
 #: packages/lib/models/Setting.js:784
 msgid "Set it to 0 to make it take the complete available space."
-msgstr ""
+msgstr "Установите в 0 для использования всего доступного пространства."
 
 #: packages/lib/models/Setting.js:803
 msgid "Custom stylesheet for rendered Markdown"
@@ -3807,11 +3795,11 @@ msgstr "Пользовательская таблица стилей для пр
 
 #: packages/lib/models/Setting.js:829
 msgid "Re-upload local data to sync target"
-msgstr ""
+msgstr "Перегрузка локальных данных в цель синхронизации"
 
 #: packages/lib/models/Setting.js:839
 msgid "Delete local data and re-download from sync target"
-msgstr ""
+msgstr "Удалить локальные данные и перегрузить данные с цели синхронизации"
 
 #: packages/lib/models/Setting.js:844
 msgid "Automatically update the application"
@@ -3850,7 +3838,7 @@ msgstr "%d часов"
 
 #: packages/lib/models/Setting.js:872
 msgid "Synchronise only over WiFi connection"
-msgstr ""
+msgstr "Синхронизировать только через Wi-Fi"
 
 #: packages/lib/models/Setting.js:879
 msgid "Text editor command"
@@ -4383,14 +4371,14 @@ msgstr ""
 
 #: packages/server/dist/models/UserModel.js:199
 #: packages/server/dist/models/UserModel.js:208
-#, fuzzy
 msgid "attachment"
-msgstr "Вложения"
+msgstr "вложение"
 
 #: packages/server/dist/models/UserModel.js:199
 #, javascript-format
 msgid "Cannot save %s \"%s\" because it is larger than the allowed limit (%s)"
 msgstr ""
+"Невозможно сохранить %s \"%s\" из-за превышения допустимого лимита (%s)"
 
 #: packages/server/dist/models/UserModel.js:208
 #, javascript-format
@@ -4398,8 +4386,9 @@ msgid ""
 "Cannot save %s \"%s\" because it would go over the total allowed size (%s) "
 "for this account"
 msgstr ""
+"Невозможно сохранить %s \"%s\" из-за превышения допустимого размера (%s) для "
+"этой учетной записи"
 
-#, javascript-format
 #~ msgid "%s %s (%s)"
 #~ msgstr "%s %s (%s)"
 
