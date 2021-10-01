@@ -50,17 +50,6 @@ class PreviewComponent extends React.PureComponent {
 				<a className={'Confirm Button'} href="#" onClick={this.props.onConfirmClick}>Confirm</a>
 			</div>
 		);
-
-		// return (
-		// 	<div className="Preview">
-		// 		<a className={"Confirm Button"} onClick={this.props.onConfirmClick}>Confirm</a>
-		// 		<h2>Preview:</h2>
-		// 		<input className={"Title"} value={this.props.title} onChange={this.props.onTitleChange}/>
-		// 		<div className={"BodyWrapper"}>
-		// 			<div className={"Body"} ref={this.bodyRef} dangerouslySetInnerHTML={{__html: this.props.body_html}}></div>
-		// 		</div>
-		// 	</div>
-		// );
 	}
 
 }
@@ -131,6 +120,7 @@ class AppComponent extends Component {
 					api_base_url: baseUrl,
 					parent_id: this.props.selectedFolderId,
 					tags: this.state.selectedTags.join(','),
+					token: bridge().token(),
 				});
 
 				window.close();
@@ -194,6 +184,8 @@ class AppComponent extends Component {
 	}
 
 	async componentDidMount() {
+		bridge().onReactAppStarts();
+
 		try {
 			await this.loadContentScripts();
 		} catch (error) {
@@ -242,7 +234,52 @@ class AppComponent extends Component {
 		}
 	}
 
+	renderStartupScreen() {
+		const messages = {
+			serverFoundState: {
+				// We need to display the "Connecting to the Joplin
+				// application..." message because if the app doesn't currently
+				// allow access to the clipper API, the clipper tries several
+				// ports and it takes time before failing. So if we don't
+				// display any message, it looks like it's not doing anything
+				// when clicking on the extension button.
+				'searching': 'Connecting to the Joplin application...',
+				'not_found': 'Error: Could not connect to the Joplin application. Please ensure that it is started and that the clipper service is enabled in the configuration.',
+			},
+			authState: {
+				'starting': 'Starting...',
+				'waiting': 'The Joplin Web Clipper requires your authorisation in order to access your data. To proceed, please open the Joplin desktop application and grant permission. Note: Joplin 2.1+ is needed to use this version of the Web Clipper.',
+				'rejected': 'Permission to access your data was not granted. To try again please close this popup and open it again.',
+			},
+		};
+
+		const foundState = this.props.clipperServer.foundState;
+
+		let msg = '';
+		let title = '';
+
+		if (messages.serverFoundState[foundState]) {
+			msg = messages.serverFoundState[foundState];
+		} else {
+			msg = messages.authState[this.props.authStatus];
+			title = <h1>{'Permission needed'}</h1>;
+		}
+
+		if (!msg) throw new Error(`Invalidate state: ${foundState} / ${this.props.authStatus}`);
+
+		return (
+			<div className="App Startup">
+				{title}
+				{msg}
+			</div>
+		);
+	}
+
 	render() {
+		if (this.props.authStatus !== 'accepted') {
+			return this.renderStartupScreen();
+		}
+
 		if (!this.state.contentScriptLoaded) {
 			let msg = 'Loading...';
 			if (this.state.contentScriptError) msg = `The Joplin extension is not available on this tab due to: ${this.state.contentScriptError}`;
@@ -417,6 +454,7 @@ const mapStateToProps = (state) => {
 		tags: state.tags,
 		selectedFolderId: state.selectedFolderId,
 		isProbablyReaderable: state.isProbablyReaderable,
+		authStatus: state.authStatus,
 	};
 };
 

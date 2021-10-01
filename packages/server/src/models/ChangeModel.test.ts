@@ -1,11 +1,12 @@
-import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, expectThrow, createFolder } from '../utils/testing/testUtils';
-import { ChangeType, Item, Uuid } from '../db';
+import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, expectThrow, createFolder, createItemTree3, expectNotThrow } from '../utils/testing/testUtils';
+import { ChangeType, Item, Uuid } from '../services/database/types';
 import { msleep } from '../utils/time';
 import { ChangePagination } from './ChangeModel';
+import { SqliteMaxVariableNum } from '../db';
 
 async function makeTestItem(userId: Uuid, num: number): Promise<Item> {
 	return models().item().saveForUser(userId, {
-		name: `0000000000000000000000000000000${num}.md`,
+		name: `${num.toString().padStart(32, '0')}.md`,
 	});
 }
 
@@ -128,6 +129,61 @@ describe('ChangeModel', function() {
 		await msleep(1); await itemModel.saveForUser(user.id, { id: item1.id, name: `test_mod${i++}` }); // UPDATE 1
 
 		await expectThrow(async () => changeModel.delta(user.id, { limit: 1, cursor: 'invalid' }), 'resyncRequired');
+	});
+
+	test('should tell that there are more changes even when current page is empty', async function() {
+		const { user: user1 } = await createUserAndSession(1);
+
+		const changeCount = 10;
+
+		const itemsToCreate: any[] = [];
+		for (let i = 0; i < changeCount / 2; i++) {
+			itemsToCreate.push({
+				id: (`${i}`).padStart(32, '0'),
+				children: [],
+			});
+		}
+
+		await createItemTree3(user1.id, '', '', itemsToCreate);
+		await models().item().deleteAll(user1.id);
+
+		expect((await models().change().all()).length).toBe(changeCount);
+
+		// Since all items have been deleted, the first change page is empty.
+		// However the "hasMore" property should be true to tell caller that
+		// they should fetch more changes.
+		const allFromIds1 = await models().change().allFromId('', changeCount / 2);
+		expect(allFromIds1.items.length).toBe(0);
+		expect(allFromIds1.has_more).toBe(true);
+
+		const allFromIds2 = await models().change().allFromId(allFromIds1.cursor, changeCount / 2);
+		expect(allFromIds2.items.length).toBe(5);
+		expect(allFromIds2.has_more).toBe(true);
+
+		const allFromIds3 = await models().change().allFromId(allFromIds2.cursor, changeCount / 2);
+		expect(allFromIds3.items.length).toBe(0);
+		expect(allFromIds3.has_more).toBe(false);
+	});
+
+	test('should not fail when retrieving many changes', async function() {
+		// Create many changes and verify that, by default, the SQL query that
+		// returns change doesn't fail. Before the max number of items was set
+		// to 1000 and it would fail with "SQLITE_ERROR: too many SQL variables"
+		// with SQLite. So now it's set to 999.
+
+		const { user } = await createUserAndSession(1, true);
+
+		for (let i = 0; i < 1010; i++) {
+			await makeTestItem(user.id, i);
+		}
+
+		let changeCount = 0;
+		await expectNotThrow(async () => {
+			const changes = await models().change().allFromId('');
+			changeCount = changes.items.length;
+		});
+
+		expect(changeCount).toBe(SqliteMaxVariableNum);
 	});
 
 });

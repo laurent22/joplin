@@ -521,6 +521,7 @@
 						name: 'screenshotArea',
 						content: content,
 						api_base_url: command.api_base_url,
+						token: command.token,
 					});
 				}, 100);
 			};

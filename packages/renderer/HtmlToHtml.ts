@@ -154,6 +154,7 @@ export default class HtmlToHtml {
 			return {
 				html: html,
 				pluginAssets: [],
+				cssStrings: [],
 			};
 		}
 
@@ -168,6 +169,7 @@ export default class HtmlToHtml {
 			const output: RenderResult = {
 				html: splitted.html,
 				pluginAssets: [],
+				cssStrings: [],
 			};
 
 			if (options.externalAssetsOnly) {
@@ -182,6 +184,7 @@ export default class HtmlToHtml {
 		return {
 			html: styleHtml + html,
 			pluginAssets: [],
+			cssStrings: [],
 		};
 	}
 }

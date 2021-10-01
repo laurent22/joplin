@@ -64,28 +64,6 @@ a {
 	opacity: 1;
 }
 
-/*
-.note-list .list-item-container:hover {
-	background-color: rgba(0,160,255,0.1) !important;
-}
-*/
-
-/*
-.editor-toolbar .button:not(.disabled):hover,
-.header .button:not(.disabled):hover {
-	background-color: rgba(0,160,255,0.1);
-	border: 1px solid rgba(0,160,255,0.5);
-	box-sizing: 'border-box';
-}
-
-.editor-toolbar .button:not(.disabled):active,
-.header .button:not(.disabled):active {
-	background-color: rgba(0,160,255,0.2);
-	border: 1px solid rgba(0,160,255,0.7);
-	box-sizing: 'border-box';
-}
-*/
-
 .editor-toolbar .button,
 .header .button {
 	border: 1px solid rgba(0,160,255,0);
@@ -162,11 +140,6 @@ a {
 	from {transform: rotate(0deg);}
 	to {transform: rotate(360deg);}
 }
-
-/* .joplin-tinymce .tox-editor-header {
-	padding-left: 88px;
-	padding-right: 150px;
-} */
 
 *:focus {
     outline: none;

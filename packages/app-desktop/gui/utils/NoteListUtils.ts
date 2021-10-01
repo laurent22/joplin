@@ -1,6 +1,5 @@
 import { utils as pluginUtils, PluginStates } from '@joplin/lib/services/plugins/reducer';
 import CommandService from '@joplin/lib/services/CommandService';
-import SyncTargetJoplinServer from '@joplin/lib/SyncTargetJoplinServer';
 import eventManager from '@joplin/lib/eventManager';
 import InteropService from '@joplin/lib/services/interop/InteropService';
 import MenuUtils from '@joplin/lib/services/commands/MenuUtils';
@@ -134,7 +133,7 @@ export default class NoteListUtils {
 				})
 			);
 
-			if (Setting.value('sync.target') === SyncTargetJoplinServer.id()) {
+			if ([9, 10].includes(Setting.value('sync.target'))) {
 				menu.append(
 					new MenuItem(
 						menuUtils.commandToStatefulMenuItem('showShareNoteDialog', noteIds.slice())
@@ -192,9 +191,11 @@ export default class NoteListUtils {
 			const location = info.view.location;
 			if (location !== MenuItemLocation.Context && location !== MenuItemLocation.NoteListContextMenu) continue;
 
-			menu.append(
-				new MenuItem(menuUtils.commandToStatefulMenuItem(info.view.commandName, noteIds))
-			);
+			if (cmdService.isEnabled(info.view.commandName)) {
+				menu.append(
+					new MenuItem(menuUtils.commandToStatefulMenuItem(info.view.commandName, noteIds))
+				);
+			}
 		}
 
 		return menu;

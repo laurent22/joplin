@@ -4,6 +4,7 @@ import shim from './shim';
 import BaseService from './services/BaseService';
 import reducer, { setStore } from './reducer';
 import KeychainServiceDriver from './services/keychain/KeychainServiceDriver.node';
+import KeychainServiceDriverDummy from './services/keychain/KeychainServiceDriver.dummy';
 import { _, setLocale } from './locale';
 import KvStore from './services/KvStore';
 import SyncTargetJoplinServer from './SyncTargetJoplinServer';
@@ -29,31 +30,38 @@ const fs = require('fs-extra');
 import JoplinError from './JoplinError';
 const EventEmitter = require('events');
 const syswidecas = require('./vendor/syswide-cas');
-const SyncTargetRegistry = require('./SyncTargetRegistry.js');
+import SyncTargetRegistry from './SyncTargetRegistry';
 const SyncTargetFilesystem = require('./SyncTargetFilesystem.js');
 const SyncTargetNextcloud = require('./SyncTargetNextcloud.js');
 const SyncTargetWebDAV = require('./SyncTargetWebDAV.js');
 const SyncTargetDropbox = require('./SyncTargetDropbox.js');
 const SyncTargetAmazonS3 = require('./SyncTargetAmazonS3.js');
-import EncryptionService from './services/EncryptionService';
+import EncryptionService from './services/e2ee/EncryptionService';
 import ResourceFetcher from './services/ResourceFetcher';
 import SearchEngineUtils from './services/searchengine/SearchEngineUtils';
 import SearchEngine from './services/searchengine/SearchEngine';
 import RevisionService from './services/RevisionService';
 import ResourceService from './services/ResourceService';
 import DecryptionWorker from './services/DecryptionWorker';
-const { loadKeychainServiceAndSettings } = require('./services/SettingUtils');
+import { loadKeychainServiceAndSettings } from './services/SettingUtils';
 import MigrationService from './services/MigrationService';
 import ShareService from './services/share/ShareService';
 import handleSyncStartupOperation from './services/synchronizer/utils/handleSyncStartupOperation';
 import SyncTargetJoplinCloud from './SyncTargetJoplinCloud';
 const { toSystemSlashes } = require('./path-utils');
 const { setAutoFreeze } = require('immer');
+import { getEncryptionEnabled } from './services/synchronizer/syncInfoUtils';
+import { loadMasterKeysFromSettings, migrateMasterPassword } from './services/e2ee/utils';
+import SyncTargetNone from './SyncTargetNone';
 
 const appLogger: LoggerWrapper = Logger.create('App');
 
 // const ntpClient = require('./vendor/ntp-client');
 // ntpClient.dgram = require('dgram');
+
+interface StartOptions {
+	keychainEnabled?: boolean;
+}
 
 export default class BaseApplication {
 
@@ -243,6 +251,12 @@ export default class BaseApplication {
 				continue;
 			}
 
+			if (arg.indexOf('--user-data-dir=') === 0) {
+				// Electron-specific flag. Allows users to run the app with chromedriver.
+				argv.splice(0, 1);
+				continue;
+			}
+
 			if (arg.length && arg[0] == '-') {
 				throw new JoplinError(_('Unknown flag: %s', arg), 'flagError');
 			} else {
@@ -313,7 +327,7 @@ export default class BaseApplication {
 				notes = await Tag.notes(parentId, options);
 			} else if (parentType === BaseModel.TYPE_SEARCH) {
 				const search = BaseModel.byId(state.searches, parentId);
-				notes = await SearchEngineUtils.notesForQuery(search.query_pattern);
+				notes = await SearchEngineUtils.notesForQuery(search.query_pattern, true);
 				const parsedQuery = await SearchEngine.instance().parseQuery(search.query_pattern);
 				highlightedWords = SearchEngine.instance().allParsedQueryTerms(parsedQuery);
 			} else if (parentType === BaseModel.TYPE_SMART_FILTER) {
@@ -423,9 +437,18 @@ export default class BaseApplication {
 					syswidecas.addCAs(f);
 				}
 			},
-			'encryption.enabled': async () => {
+
+			// Note: this used to run when "encryption.enabled" was changed, but
+			// now we run it anytime any property of the sync target info is
+			// changed. This is not optimal but:
+			// - The sync target info rarely changes.
+			// - All the calls below are cheap or do nothing if there's nothing
+			//   to do.
+			'syncInfoCache': async () => {
 				if (this.hasGui()) {
-					await EncryptionService.instance().loadMasterKeysFromSettings();
+					appLogger.info('"syncInfoCache" was changed - setting up encryption related code');
+
+					await loadMasterKeysFromSettings(EncryptionService.instance());
 					void DecryptionWorker.instance().scheduleStart();
 					const loadedMasterKeyIds = EncryptionService.instance().loadedMasterKeyIds();
 
@@ -439,6 +462,7 @@ export default class BaseApplication {
 					void reg.scheduleSync();
 				}
 			},
+
 			'sync.interval': async () => {
 				if (this.hasGui()) reg.setupRecurrentSync();
 			},
@@ -446,8 +470,8 @@ export default class BaseApplication {
 
 		sideEffects['timeFormat'] = sideEffects['dateFormat'];
 		sideEffects['locale'] = sideEffects['dateFormat'];
-		sideEffects['encryption.activeMasterKeyId'] = sideEffects['encryption.enabled'];
-		sideEffects['encryption.passwordCache'] = sideEffects['encryption.enabled'];
+		sideEffects['encryption.passwordCache'] = sideEffects['syncInfoCache'];
+		sideEffects['encryption.masterPassword'] = sideEffects['syncInfoCache'];
 
 		if (action) {
 			const effect = sideEffects[action.key];
@@ -655,7 +679,12 @@ export default class BaseApplication {
 		return toSystemSlashes(output, 'linux');
 	}
 
-	async start(argv: string[]): Promise<any> {
+	async start(argv: string[], options: StartOptions = null): Promise<any> {
+		options = {
+			keychainEnabled: true,
+			...options,
+		};
+
 		const startFlags = await this.handleStartFlags_(argv);
 
 		argv = startFlags.argv;
@@ -677,7 +706,6 @@ export default class BaseApplication {
 
 		Setting.setConstant('env', initArgs.env);
 		Setting.setConstant('profileDir', profileDir);
-		Setting.setConstant('templateDir', `${profileDir}/templates`);
 		Setting.setConstant('resourceDirName', resourceDirName);
 		Setting.setConstant('resourceDir', resourceDir);
 		Setting.setConstant('tempDir', tempDir);
@@ -685,6 +713,7 @@ export default class BaseApplication {
 		Setting.setConstant('cacheDir', cacheDir);
 		Setting.setConstant('pluginDir', `${profileDir}/plugins`);
 
+		SyncTargetRegistry.addClass(SyncTargetNone);
 		SyncTargetRegistry.addClass(SyncTargetFilesystem);
 		SyncTargetRegistry.addClass(SyncTargetOneDrive);
 		SyncTargetRegistry.addClass(SyncTargetNextcloud);
@@ -745,7 +774,8 @@ export default class BaseApplication {
 		reg.setDb(this.database_);
 		BaseModel.setDb(this.database_);
 
-		await loadKeychainServiceAndSettings(KeychainServiceDriver);
+		await loadKeychainServiceAndSettings(options.keychainEnabled ? KeychainServiceDriver : KeychainServiceDriverDummy);
+		await migrateMasterPassword();
 		await handleSyncStartupOperation();
 
 		appLogger.info(`Client ID: ${Setting.value('clientId')}`);
@@ -760,13 +790,17 @@ export default class BaseApplication {
 				Setting.setValue('sync.interval', 3600);
 			}
 
+			Setting.setValue('sync.target', 0);
 			Setting.setValue('firstStart', 0);
 		} else {
 			setLocale(Setting.value('locale'));
 		}
 
 		if (Setting.value('env') === Env.Dev) {
-			Setting.setValue('sync.10.path', 'http://api-joplincloud.local:22300');
+			// Setting.setValue('sync.10.path', 'https://api.joplincloud.com');
+			// Setting.setValue('sync.10.userContentPath', 'https://joplinusercontent.com');
+			Setting.setValue('sync.10.path', 'http://api.joplincloud.local:22300');
+			Setting.setValue('sync.10.userContentPath', 'http://joplinusercontent.local:22300');
 		}
 
 		// For now always disable fuzzy search due to performance issues:
@@ -779,7 +813,7 @@ export default class BaseApplication {
 			// and if encryption is enabled. This code runs only when shouldReencrypt = -1
 			// which can be set by a maintenance script for example.
 			const folderCount = await Folder.count();
-			const itShould = Setting.value('encryption.enabled') && !!folderCount ? Setting.SHOULD_REENCRYPT_YES : Setting.SHOULD_REENCRYPT_NO;
+			const itShould = getEncryptionEnabled() && !!folderCount ? Setting.SHOULD_REENCRYPT_YES : Setting.SHOULD_REENCRYPT_NO;
 			Setting.setValue('encryption.shouldReencrypt', itShould);
 		}
 
@@ -800,13 +834,12 @@ export default class BaseApplication {
 
 		KvStore.instance().setDb(reg.db());
 
-		EncryptionService.instance().setLogger(globalLogger);
 		BaseItem.encryptionService_ = EncryptionService.instance();
 		BaseItem.shareService_ = ShareService.instance();
 		DecryptionWorker.instance().setLogger(globalLogger);
 		DecryptionWorker.instance().setEncryptionService(EncryptionService.instance());
 		DecryptionWorker.instance().setKvStore(KvStore.instance());
-		await EncryptionService.instance().loadMasterKeysFromSettings();
+		await loadMasterKeysFromSettings(EncryptionService.instance());
 		DecryptionWorker.instance().on('resourceMetadataButNotBlobDecrypted', this.decryptionWorker_resourceMetadataButNotBlobDecrypted);
 
 		ResourceFetcher.instance().setFileApi(() => {

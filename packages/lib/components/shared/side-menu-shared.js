@@ -1,4 +1,5 @@
 const Folder = require('../../models/Folder').default;
+const Setting = require('../../models/Setting').default;
 const BaseModel = require('../../BaseModel').default;
 
 const shared = {};
@@ -80,6 +81,20 @@ shared.synchronize_press = async function(comp) {
 	const { reg } = require('../../registry.js');
 
 	const action = comp.props.syncStarted ? 'cancel' : 'start';
+
+	if (!Setting.value('sync.target')) {
+		comp.props.dispatch({
+			type: 'SIDE_MENU_CLOSE',
+		});
+
+		comp.props.dispatch({
+			type: 'NAV_GO',
+			routeName: 'Config',
+			sectionName: 'sync',
+		});
+
+		return 'init';
+	}
 
 	if (!(await reg.syncTarget().isAuthenticated())) {
 		if (reg.syncTarget().authRouteName()) {

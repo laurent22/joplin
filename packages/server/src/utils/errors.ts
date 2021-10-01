@@ -14,6 +14,12 @@ export class ApiError extends Error {
 	}
 }
 
+export class ErrorWithCode extends ApiError {
+	public constructor(message: string, code: string) {
+		super(message, null, code);
+	}
+}
+
 export class ErrorMethodNotAllowed extends ApiError {
 	public static httpCode: number = 400;
 
@@ -47,6 +53,16 @@ export class ErrorBadRequest extends ApiError {
 	public constructor(message: string = 'Bad Request') {
 		super(message, ErrorBadRequest.httpCode);
 		Object.setPrototypeOf(this, ErrorBadRequest.prototype);
+	}
+
+}
+
+export class ErrorPreconditionFailed extends ApiError {
+	public static httpCode: number = 412;
+
+	public constructor(message: string = 'Precondition Failed') {
+		super(message, ErrorPreconditionFailed.httpCode);
+		Object.setPrototypeOf(this, ErrorPreconditionFailed.prototype);
 	}
 
 }
@@ -87,9 +103,34 @@ export class ErrorPayloadTooLarge extends ApiError {
 	}
 }
 
+export class ErrorTooManyRequests extends ApiError {
+	public static httpCode: number = 429;
+	public retryAfterMs: number = 0;
+
+	public constructor(message: string = null, retryAfterMs: number = 0) {
+		super(message === null ? 'Too Many Requests' : message, ErrorTooManyRequests.httpCode);
+		this.retryAfterMs = retryAfterMs;
+		Object.setPrototypeOf(this, ErrorTooManyRequests.prototype);
+	}
+}
+
 export function errorToString(error: Error): string {
 	const msg: string[] = [];
 	msg.push(error.message ? error.message : 'Unknown error');
 	if (error.stack) msg.push(error.stack);
 	return msg.join(': ');
+}
+
+interface PlainObjectError {
+	httpCode?: number;
+	message?: string;
+	code?: string;
+}
+
+export function errorToPlainObject(error: any): PlainObjectError {
+	const output: PlainObjectError = {};
+	if ('httpCode' in error) output.httpCode = error.httpCode;
+	if ('code' in error) output.code = error.code;
+	if ('message' in error) output.message = error.message;
+	return output;
 }

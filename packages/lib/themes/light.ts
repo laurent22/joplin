@@ -11,7 +11,8 @@ const theme: Theme = {
 	oddBackgroundColor: '#eeeeee',
 	color: '#32373F', // For regular text
 	colorError: 'red',
-	colorWarn: 'rgb(228 86 0)',
+	colorWarn: 'rgb(228,86,0)',
+	colorWarnUrl: '#155BDA',
 	colorFaded: '#7C8B9E', // For less important text
 	colorBright: '#000000', // For important text
 	dividerColor: '#dddddd',
@@ -48,6 +49,8 @@ const theme: Theme = {
 	codeBackgroundColor: 'rgb(243, 243, 243)',
 	codeBorderColor: 'rgb(220, 220, 220)',
 	codeColor: 'rgb(0,0,0)',
+
+	blockQuoteOpacity: 0.7,
 
 	codeMirrorTheme: 'default',
 	codeThemeCss: 'atom-one-light.css',

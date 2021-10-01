@@ -77,6 +77,6 @@ export default function stateToWhenClauseContext(state: State, options: WhenClau
 		folderIsShareRootAndOwnedByUser: commandFolder ? isRootSharedFolder(commandFolder) && isSharedFolderOwner(state, commandFolder.id) : false,
 		folderIsShared: commandFolder ? !!commandFolder.share_id : false,
 
-		joplinServerConnected: state.settings['sync.target'] === 9,
+		joplinServerConnected: [9, 10].includes(state.settings['sync.target']),
 	};
 }

@@ -14,7 +14,7 @@ The rendering engine is the same as the main applications, which allows us to us
 
 ### Attached resources
 
-Any resource attached to the note is also shared - so for example images will be displayed, and it will be possible to open any attached PDF. This 
+Any resource attached to the note is also shared - so for example images will be displayed, and it will be possible to open any attached PDF. 
 
 ### Linked note
 

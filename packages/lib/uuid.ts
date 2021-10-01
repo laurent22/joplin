@@ -9,10 +9,10 @@ const { customAlphabet } = require('nanoid/non-secure');
 const nanoid = customAlphabet('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', 22);
 
 export default {
-	create: function() {
+	create: function(): string {
 		return createUuidV4().replace(/-/g, '');
 	},
-	createNano: function() {
+	createNano: function(): string {
 		return nanoid();
 	},
 };

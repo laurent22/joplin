@@ -1,10 +1,16 @@
 import { ModelType } from '@joplin/lib/BaseModel';
 import { resourceBlobPath } from '../utils/joplinUtils';
-import { Change, ChangeType, isUniqueConstraintError, Item, Share, ShareType, ShareUserStatus, User, Uuid } from '../db';
+import { Change, ChangeType, Item, Share, ShareType, ShareUserStatus, User, Uuid } from '../services/database/types';
 import { unique } from '../utils/array';
 import { ErrorBadRequest, ErrorForbidden, ErrorNotFound } from '../utils/errors';
 import { setQueryParameters } from '../utils/urlUtils';
 import BaseModel, { AclAction, DeleteOptions, ValidateOptions } from './BaseModel';
+import { userIdFromUserContentUrl } from '../utils/routeUtils';
+import { getCanShareFolder } from './utils/user';
+import { isUniqueConstraintError } from '../db';
+import Logger from '@joplin/lib/Logger';
+
+const logger = Logger.create('ShareModel');
 
 export default class ShareModel extends BaseModel<Share> {
 
@@ -14,7 +20,10 @@ export default class ShareModel extends BaseModel<Share> {
 
 	public async checkIfAllowed(user: User, action: AclAction, resource: Share = null): Promise<void> {
 		if (action === AclAction.Create) {
-			if (!user.can_share) throw new ErrorForbidden('The sharing feature is not enabled for this account');
+			if (resource.type === ShareType.Folder && !getCanShareFolder(user)) throw new ErrorForbidden('The sharing feature is not enabled for this account');
+
+			// Note that currently all users can always share notes by URL so
+			// there's no check on the permission
 
 			if (!await this.models().item().userHasItem(user.id, resource.item_id)) throw new ErrorForbidden('cannot share an item not owned by the user');
 
@@ -30,6 +39,19 @@ export default class ShareModel extends BaseModel<Share> {
 
 		if (action === AclAction.Delete) {
 			if (user.id !== resource.owner_id) throw new ErrorForbidden('no access to this share');
+		}
+	}
+
+	public checkShareUrl(share: Share, shareUrl: string) {
+		if (this.baseUrl === this.userContentBaseUrl) return; // OK
+
+		const userId = userIdFromUserContentUrl(shareUrl);
+		const shareUserId = share.owner_id.toLowerCase();
+
+		if (userId.length >= 10 && shareUserId.indexOf(userId) === 0) {
+			// OK
+		} else {
+			throw new ErrorBadRequest('Invalid origin (User Content)');
 		}
 	}
 
@@ -79,8 +101,8 @@ export default class ShareModel extends BaseModel<Share> {
 		return !!r;
 	}
 
-	public shareUrl(id: Uuid, query: any = null): string {
-		return setQueryParameters(`${this.baseUrl}/shares/${id}`, query);
+	public shareUrl(shareOwnerId: Uuid, id: Uuid, query: any = null): string {
+		return setQueryParameters(`${this.personalizedUserContentBaseUrl(shareOwnerId)}/shares/${id}`, query);
 	}
 
 	public async byItemId(itemId: Uuid): Promise<Share | null> {
@@ -196,6 +218,32 @@ export default class ShareModel extends BaseModel<Share> {
 			}
 		};
 
+		// This function add any missing item to a user's collection. Normally
+		// it shouldn't be necessary since items are added or removed based on
+		// the Change events, but it seems it can happen anyway, possibly due to
+		// a race condition somewhere. So this function corrects this by
+		// re-assigning any missing items.
+		//
+		// It should be relatively quick to call since it's restricted to shares
+		// that have recently changed, and the performed SQL queries are
+		// index-based.
+		const checkForMissingUserItems = async (shares: Share[]) => {
+			for (const share of shares) {
+				const realShareItemCount = await this.itemCountByShareId(share.id);
+				const shareItemCountPerUser = await this.itemCountByShareIdPerUser(share.id);
+
+				for (const row of shareItemCountPerUser) {
+					if (row.item_count < realShareItemCount) {
+						logger.warn(`checkForMissingUserItems: User is missing some items: Share ${share.id}: User ${row.user_id}`);
+						await this.createSharedFolderUserItems(share.id, row.user_id);
+					} else if (row.item_count > realShareItemCount) {
+						// Shouldn't be possible but log it just in case
+						logger.warn(`checkForMissingUserItems: User has too many items (??): Share ${share.id}: User ${row.user_id}`);
+					}
+				}
+			}
+		};
+
 		// This loop essentially applies the change made by one user to all the
 		// other users in the share.
 		//
@@ -214,32 +262,40 @@ export default class ShareModel extends BaseModel<Share> {
 		while (true) {
 			const latestProcessedChange = await this.models().keyValue().value<string>('ShareService::latestProcessedChange');
 
-			const changes = await this.models().change().allFromId(latestProcessedChange || '');
-			if (!changes.length) break;
+			const paginatedChanges = await this.models().change().allFromId(latestProcessedChange || '');
+			const changes = paginatedChanges.items;
 
-			const items = await this.models().item().loadByIds(changes.map(c => c.item_id));
-			const shareIds = unique(items.filter(i => !!i.jop_share_id).map(i => i.jop_share_id));
-			const shares = await this.models().share().loadByIds(shareIds);
+			if (!changes.length) {
+				await this.models().keyValue().setValue('ShareService::latestProcessedChange', paginatedChanges.cursor);
+			} else {
+				const items = await this.models().item().loadByIds(changes.map(c => c.item_id));
+				const shareIds = unique(items.filter(i => !!i.jop_share_id).map(i => i.jop_share_id));
+				const shares = await this.models().share().loadByIds(shareIds);
 
-			await this.withTransaction(async () => {
-				for (const change of changes) {
-					const item = items.find(i => i.id === change.item_id);
+				await this.withTransaction(async () => {
+					for (const change of changes) {
+						const item = items.find(i => i.id === change.item_id);
 
-					if (change.type === ChangeType.Create) {
-						await handleCreated(change, item, shares.find(s => s.id === item.jop_share_id));
+						if (change.type === ChangeType.Create) {
+							await handleCreated(change, item, shares.find(s => s.id === item.jop_share_id));
+						}
+
+						if (change.type === ChangeType.Update) {
+							await handleUpdated(change, item, shares.find(s => s.id === item.jop_share_id));
+						}
+
+						// We don't need to handle ChangeType.Delete because when an
+						// item is deleted, all its associated userItems are deleted
+						// too.
 					}
 
-					if (change.type === ChangeType.Update) {
-						await handleUpdated(change, item, shares.find(s => s.id === item.jop_share_id));
-					}
+					await checkForMissingUserItems(shares);
 
-					// We don't need to handle ChangeType.Delete because when an
-					// item is deleted, all its associated userItems are deleted
-					// too.
-				}
+					await this.models().keyValue().setValue('ShareService::latestProcessedChange', paginatedChanges.cursor);
+				}, 'ShareService::updateSharedItems3');
+			}
 
-				await this.models().keyValue().setValue('ShareService::latestProcessedChange', changes[changes.length - 1].id);
-			});
+			if (!paginatedChanges.has_more) break;
 		}
 	}
 
@@ -279,18 +335,13 @@ export default class ShareModel extends BaseModel<Share> {
 		}
 	}
 
-	// That should probably only be called when a user accepts the share
-	// invitation. At this point, we want to share all the items immediately.
-	// Afterwards, items that are added or removed are processed by the share
-	// service.
+	// The items that are added or removed from a share are processed by the
+	// share service, and added as user_utems to each user. This function
+	// however can be called after a user accept a share, or to correct share
+	// errors, but re-assigning all items to a user.
 	public async createSharedFolderUserItems(shareId: Uuid, userId: Uuid) {
-		const items = await this.models().item().byShareId(shareId, { fields: ['id'] });
-
-		await this.withTransaction(async () => {
-			for (const item of items) {
-				await this.models().userItem().add(userId, item.id);
-			}
-		});
+		const query = this.models().item().byShareIdQuery(shareId, { fields: ['id', 'name'] });
+		await this.models().userItem().addMulti(userId, query);
 	}
 
 	public async shareFolder(owner: User, folderId: string): Promise<Share> {
@@ -342,5 +393,24 @@ export default class ShareModel extends BaseModel<Share> {
 			}
 		}, 'ShareModel::delete');
 	}
+
+	public async itemCountByShareId(shareId: Uuid): Promise<number> {
+		const r = await this
+			.db('items')
+			.count('id', { as: 'item_count' })
+			.where('jop_share_id', '=', shareId);
+		return r[0].item_count;
+	}
+
+	public async itemCountByShareIdPerUser(shareId: Uuid): Promise<{ item_count: number; user_id: Uuid }[]> {
+		return this.db('user_items')
+			.select(this.db.raw('user_id, count(user_id) as item_count'))
+			.whereIn('item_id',
+				this.db('items')
+					.select('id')
+					.where('jop_share_id', '=', shareId)
+			).groupBy('user_id') as any;
+	}
+
 
 }

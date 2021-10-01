@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { AppState } from '../app';
+import { AppState } from '../app.reducer';
 import CommandService, { SearchResult as CommandSearchResult } from '@joplin/lib/services/CommandService';
 import KeymapService from '@joplin/lib/services/KeymapService';
 import shim from '@joplin/lib/shim';
@@ -18,6 +18,9 @@ const { surroundKeywords, nextWhitespaceIndex, removeDiacritics } = require('@jo
 const { mergeOverlappingIntervals } = require('@joplin/lib/ArrayUtils.js');
 import markupLanguageUtils from '../utils/markupLanguageUtils';
 import focusEditorIfEditorCommand from '@joplin/lib/services/commands/focusEditorIfEditorCommand';
+import Logger from '@joplin/lib/Logger';
+
+const logger = Logger.create('GotoAnything');
 
 const PLUGIN_NAME = 'gotoAnything';
 
@@ -47,6 +50,12 @@ interface State {
 	listType: number;
 	showHelp: boolean;
 	resultsInBody: boolean;
+	commandArgs: string[];
+}
+
+interface CommandQuery {
+	name: string;
+	args: string[];
 }
 
 class GotoAnything {
@@ -73,11 +82,14 @@ class Dialog extends React.PureComponent<Props, State> {
 	private itemListRef: any;
 	private listUpdateIID_: any;
 	private markupToHtml_: any;
+	private userCallback_: any = null;
 
 	constructor(props: Props) {
 		super(props);
 
 		const startString = props?.userData?.startString ? props?.userData?.startString : '';
+
+		this.userCallback_ = props?.userData?.callback;
 
 		this.state = {
 			query: startString,
@@ -87,6 +99,7 @@ class Dialog extends React.PureComponent<Props, State> {
 			listType: BaseModel.TYPE_NOTE,
 			showHelp: false,
 			resultsInBody: false,
+			commandArgs: [],
 		};
 
 		this.styles_ = {};
@@ -250,6 +263,15 @@ class Dialog extends React.PureComponent<Props, State> {
 		return this.markupToHtml_;
 	}
 
+	private parseCommandQuery(query: string): CommandQuery {
+		const fullQuery = query;
+		const splitted = fullQuery.split(/\s+/);
+		return {
+			name: splitted.length ? splitted[0] : '',
+			args: splitted.slice(1),
+		};
+	}
+
 	async updateList() {
 		let resultsInBody = false;
 
@@ -260,13 +282,16 @@ class Dialog extends React.PureComponent<Props, State> {
 			let listType = null;
 			let searchQuery = '';
 			let keywords = null;
+			let commandArgs: string[] = [];
 
 			if (this.state.query.indexOf(':') === 0) { // COMMANDS
-				const query = this.state.query.substr(1);
-				listType = BaseModel.TYPE_COMMAND;
-				keywords = [query];
+				const commandQuery = this.parseCommandQuery(this.state.query.substr(1));
 
-				const commandResults = CommandService.instance().searchCommands(query, true);
+				listType = BaseModel.TYPE_COMMAND;
+				keywords = [commandQuery.name];
+				commandArgs = commandQuery.args;
+
+				const commandResults = CommandService.instance().searchCommands(commandQuery.name, true);
 
 				results = commandResults.map((result: CommandSearchResult) => {
 					return {
@@ -311,6 +336,10 @@ class Dialog extends React.PureComponent<Props, State> {
 					// Can't make any sense of this code so...
 					// @ts-ignore
 					const notesById = notes.reduce((obj, { id, body, markup_language }) => ((obj[[id]] = { id, body, markup_language }), obj), {});
+
+					// Filter out search results that are associated with non-existing notes.
+					// https://github.com/laurent22/joplin/issues/5417
+					results = results.filter(r => !!notesById[r.id]);
 
 					for (let i = 0; i < results.length; i++) {
 						const row = results[i];
@@ -359,7 +388,7 @@ class Dialog extends React.PureComponent<Props, State> {
 			}
 
 			// make list scroll to top in every search
-			this.itemListRef.current.makeItemIndexVisible(0);
+			this.makeItemIndexVisible(0);
 
 			this.setState({
 				listType: listType,
@@ -367,8 +396,20 @@ class Dialog extends React.PureComponent<Props, State> {
 				keywords: keywords ? keywords : await this.keywords(searchQuery),
 				selectedItemId: results.length === 0 ? null : results[0].id,
 				resultsInBody: resultsInBody,
+				commandArgs: commandArgs,
 			});
 		}
+	}
+
+	private makeItemIndexVisible(index: number) {
+		// Looks like it's not always defined
+		// https://github.com/laurent22/joplin/issues/5184#issuecomment-879714850
+		if (!this.itemListRef || !this.itemListRef.current) {
+			logger.warn('Trying to set item index but the item list is not defined. Index: ', index);
+			return;
+		}
+
+		this.itemListRef.current.makeItemIndexVisible(index);
 	}
 
 	async gotoItem(item: any) {
@@ -378,8 +419,19 @@ class Dialog extends React.PureComponent<Props, State> {
 			open: false,
 		});
 
+		if (this.userCallback_) {
+			logger.info('gotoItem: user callback', item);
+
+			this.userCallback_.resolve({
+				type: this.state.listType,
+				item: { ...item },
+			});
+			return;
+		}
+
 		if (item.type === BaseModel.TYPE_COMMAND) {
-			void CommandService.instance().execute(item.id);
+			logger.info('gotoItem: execute command', item);
+			void CommandService.instance().execute(item.id, ...item.commandArgs);
 			void focusEditorIfEditorCommand(item.id, CommandService.instance());
 			return;
 		}
@@ -397,6 +449,8 @@ class Dialog extends React.PureComponent<Props, State> {
 		}
 
 		if (this.state.listType === BaseModel.TYPE_NOTE) {
+			logger.info('gotoItem: note', item);
+
 			this.props.dispatch({
 				type: 'FOLDER_AND_NOTE_SELECT',
 				folderId: item.parent_id,
@@ -405,11 +459,15 @@ class Dialog extends React.PureComponent<Props, State> {
 
 			CommandService.instance().scheduleExecute('focusElement', 'noteBody');
 		} else if (this.state.listType === BaseModel.TYPE_TAG) {
+			logger.info('gotoItem: tag', item);
+
 			this.props.dispatch({
 				type: 'TAG_SELECT',
 				id: item.id,
 			});
 		} else if (this.state.listType === BaseModel.TYPE_FOLDER) {
+			logger.info('gotoItem: folder', item);
+
 			this.props.dispatch({
 				type: 'FOLDER_SELECT',
 				id: item.id,
@@ -426,6 +484,7 @@ class Dialog extends React.PureComponent<Props, State> {
 			id: itemId,
 			parent_id: parentId,
 			type: itemType,
+			commandArgs: this.state.commandArgs,
 		});
 	}
 
@@ -466,7 +525,7 @@ class Dialog extends React.PureComponent<Props, State> {
 	selectedItem() {
 		const index = this.selectedItemIndex();
 		if (index < 0) return null;
-		return this.state.results[index];
+		return { ...this.state.results[index], commandArgs: this.state.commandArgs };
 	}
 
 	input_onKeyDown(event: any) {
@@ -485,7 +544,7 @@ class Dialog extends React.PureComponent<Props, State> {
 
 			const newId = this.state.results[index].id;
 
-			this.itemListRef.current.makeItemIndexVisible(index);
+			this.makeItemIndexVisible(index);
 
 			this.setState({ selectedItemId: newId });
 		}
@@ -556,6 +615,7 @@ GotoAnything.manifest = {
 	name: PLUGIN_NAME,
 	menuItems: [
 		{
+			id: 'gotoAnything',
 			name: 'main',
 			parent: 'go',
 			label: _('Goto Anything...'),
@@ -563,6 +623,7 @@ GotoAnything.manifest = {
 			screens: ['Main'],
 		},
 		{
+			id: 'commandPalette',
 			name: 'main',
 			parent: 'tools',
 			label: _('Command palette'),
@@ -571,6 +632,9 @@ GotoAnything.manifest = {
 			userData: {
 				startString: ':',
 			},
+		},
+		{
+			id: 'controlledApi',
 		},
 	],
 

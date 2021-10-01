@@ -1,7 +1,5 @@
 import LockHandler, { LockType, LockHandlerOptions, Lock } from '../../services/synchronizer/LockHandler';
-
-
-const { isNetworkSyncTarget, fileApi, setupDatabaseAndSynchronizer, synchronizer, switchClient, msleep, expectThrow, expectNotThrow } = require('../../testing/test-utils.js');
+import { isNetworkSyncTarget, fileApi, setupDatabaseAndSynchronizer, synchronizer, switchClient, msleep, expectThrow, expectNotThrow } from '../../testing/test-utils';
 
 // For tests with memory of file system we can use low intervals to make the tests faster.
 // However if we use such low values with network sync targets, some calls might randomly fail with
@@ -149,6 +147,23 @@ describe('synchronizer_LockHandler', function() {
 			const activeLock = await lockHandler.activeLock(LockType.Exclusive);
 			expect(activeLock.clientId).toBe('1');
 		}
+	}));
+
+	it('should ignore locks by same client when trying to acquire exclusive lock', (async () => {
+		const lockHandler = newLockHandler();
+
+		await lockHandler.acquireLock(LockType.Sync, 'desktop', '111');
+
+		await expectThrow(async () => {
+			await lockHandler.acquireLock(LockType.Exclusive, 'desktop', '111', { clearExistingSyncLocksFromTheSameClient: false });
+		}, 'hasSyncLock');
+
+		await expectNotThrow(async () => {
+			await lockHandler.acquireLock(LockType.Exclusive, 'desktop', '111', { clearExistingSyncLocksFromTheSameClient: true });
+		});
+
+		const activeLock = await lockHandler.activeLock(LockType.Exclusive);
+		expect(activeLock.clientId).toBe('111');
 	}));
 
 	// it('should not have race conditions', (async () => {

@@ -6,7 +6,8 @@ import { EditorCommand, NoteBodyEditorProps } from '../../utils/types';
 import { commandAttachFileToBody, handlePasteEvent } from '../../utils/resourceHandling';
 import { ScrollOptions, ScrollOptionTypes } from '../../utils/types';
 import { CommandValue } from '../../utils/types';
-import { useScrollHandler, usePrevious, cursorPositionToTextOffset, useRootSize } from './utils';
+import { useScrollHandler, usePrevious, cursorPositionToTextOffset } from './utils';
+import useElementSize from '@joplin/lib/hooks/useElementSize';
 import Toolbar from './Toolbar';
 import styles_ from './styles';
 import { RenderedBody, defaultRenderedBody } from './utils/types';
@@ -32,10 +33,12 @@ const shared = require('@joplin/lib/components/shared/note-screen-shared.js');
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
 import { reg } from '@joplin/lib/registry';
+import ErrorBoundary from '../../../ErrorBoundary';
+import { MarkupToHtmlOptions } from '../../utils/useMarkupToHtml';
 
 const menuUtils = new MenuUtils(CommandService.instance());
 
-function markupRenderOptions(override: any = null) {
+function markupRenderOptions(override: MarkupToHtmlOptions = null): MarkupToHtmlOptions {
 	return { ...override };
 }
 
@@ -57,7 +60,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 	const props_onChangeRef = useRef<Function>(null);
 	props_onChangeRef.current = props.onChange;
 
-	const rootSize = useRootSize({ rootRef });
+	const rootSize = useElementSize(rootRef);
 
 	usePluginServiceRegistration(ref);
 
@@ -224,10 +227,12 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 						textHeading: () => addListItem('## ', ''),
 						textHorizontalRule: () => addListItem('* * *'),
 						'editor.execCommand': (value: CommandValue) => {
-							if (editorRef.current[value.name]) {
-								if (!('args' in value)) value.args = [];
+							if (!('args' in value)) value.args = [];
 
+							if (editorRef.current[value.name]) {
 								editorRef.current[value.name](...value.args);
+							} else if (editorRef.current.commandExists(value.name)) {
+								editorRef.current.execCommand(value.name);
 							} else {
 								reg.logger().warn('CodeMirror execCommand: unsupported command: ', value.name);
 							}
@@ -377,9 +382,18 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 			`.CodeMirror-selected {
 				background: #6b6b6b !important;
 			}` : '';
+		// Vim mode draws a fat cursor in the background, we don't want to add background colors
+		// to the inline code in this case (it would hide the cursor)
+		const codeBackgroundColor = Setting.value('editor.keyboardMode') !== 'vim' ? theme.codeBackgroundColor : 'inherit';
 		const monospaceFonts = [];
 		if (Setting.value('style.editor.monospaceFontFamily')) monospaceFonts.push(`"${Setting.value('style.editor.monospaceFontFamily')}"`);
 		monospaceFonts.push('monospace');
+
+		const maxWidthCss = props.contentMaxWidth ? `
+			margin-right: auto !important;
+			margin-left: auto !important;
+			max-width: ${props.contentMaxWidth}px !important;	
+		` : '';
 
 		const element = document.createElement('style');
 		element.setAttribute('id', 'codemirrorStyle');
@@ -394,7 +408,9 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				color: inherit !important;
 				background-color: inherit !important;
 				position: absolute !important;
-				-webkit-box-shadow: none !important; // Some themes add a box shadow for some reason
+				/* Some themes add a box shadow for some reason */
+				-webkit-box-shadow: none !important;
+				line-height: ${theme.lineHeight} !important;
 			}
 
 			.CodeMirror-lines {
@@ -413,6 +429,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				/* Add a fixed right padding to account for the appearance (and disappearance) */
 				/* of the sidebar */
 				padding-right: 10px !important;
+				${maxWidthCss}
 			}
 
 			/* This enforces monospace for certain elements (code, tables, etc.) */
@@ -420,20 +437,69 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				font-family: ${monospaceFonts.join(', ')} !important;
 			}
 
-			.cm-header-1 {
+			div.CodeMirror span.cm-header-1 {
 				font-size: 1.5em;
+				color: ${theme.color};
 			}
 
-			.cm-header-2 {
+			div.CodeMirror span.cm-header-2 {
 				font-size: 1.3em;
+				color: ${theme.color};
 			}
 
-			.cm-header-3 {
+			div.CodeMirror span.cm-header-3 {
 				font-size: 1.1em;
+				color: ${theme.color};
 			}
 
-			.cm-header-4, .cm-header-5, .cm-header-6 {
+			div.CodeMirror span.cm-header-4, div.CodeMirror span.cm-header-5, div.CodeMirror span.cm-header-6 {
 				font-size: 1em;
+				color: ${theme.color};
+			}
+
+			div.CodeMirror span.cm-quote {
+				color: ${theme.color};
+				opacity: ${theme.blockQuoteOpacity};
+			}
+
+			div.CodeMirror span.cm-link-text {
+				color: ${theme.urlColor};
+			}
+
+			div.CodeMirror span.cm-url {
+				color: ${theme.urlColor};
+				opacity: 0.5;
+			}
+
+			div.CodeMirror span.cm-variable-2, div.CodeMirror span.cm-variable-3, div.CodeMirror span.cm-keyword {
+				color: ${theme.color};
+			}
+
+			div.CodeMirror span.cm-comment {
+				color: ${theme.codeColor};
+			}
+
+			/* Negative margins are needed to componsate for the border */
+			div.CodeMirror span.cm-comment.cm-jn-inline-code:not(.cm-search-marker):not(.cm-fat-cursor-mark):not(.cm-search-marker-selected):not(.CodeMirror-selectedtext) {
+				border: 1px solid ${theme.codeBorderColor};
+				background-color: ${codeBackgroundColor};
+				margin-left: -1px;
+				margin-right: -1px;
+				border-radius: .25em;
+			}
+
+			div.CodeMirror div.cm-jn-code-block-background {
+				background-color: ${theme.codeBackgroundColor};
+				padding-right: .2em;
+				padding-left: .2em;
+			}
+
+			div.CodeMirror span.cm-strong {
+				color: ${theme.colorBright};
+			}
+
+			div.CodeMirror span.cm-hr {
+				color: ${theme.dividerColor};
 			}
 
 			.cm-header-1, .cm-header-2, .cm-header-3, .cm-header-4, .cm-header-5, .cm-header-6 {
@@ -465,6 +531,8 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 			}
 
 			/* The default dark theme colors don't have enough contrast with the background */
+
+			/*
 			.cm-s-nord span.cm-comment {
 				color: #9aa4b6 !important;
 			}
@@ -484,6 +552,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 			.cm-s-solarized.cm-s-dark span.cm-comment {
 				color: #8ba1a7 !important;
 			}
+			*/
 
 			${selectionColorCss}
 		`));
@@ -491,7 +560,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		return () => {
 			document.head.removeChild(element);
 		};
-	}, [props.themeId]);
+	}, [props.themeId, props.contentMaxWidth]);
 
 	const webview_domReady = useCallback(() => {
 		setWebviewReady(true);
@@ -530,7 +599,10 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				bodyToRender = `<i>${_('This note has no content. Click on "%s" to toggle the editor and edit the note.', _('Layout'))}</i>`;
 			}
 
-			const result = await props.markupToHtml(props.contentMarkupLanguage, bodyToRender, markupRenderOptions({ resourceInfos: props.resourceInfos }));
+			const result = await props.markupToHtml(props.contentMarkupLanguage, bodyToRender, markupRenderOptions({
+				resourceInfos: props.resourceInfos,
+				contentMaxWidth: props.contentMaxWidth,
+			}));
 
 			if (cancelled) return;
 
@@ -558,7 +630,16 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 			pluginAssets: renderedBody.pluginAssets,
 			downloadResources: Setting.value('sync.resourceDownloadMode'),
 		};
-		webviewRef.current.wrappedInstance.send('setHtml', renderedBody.html, options);
+
+		// It seems when there's an error immediately when the component is
+		// mounted, webviewReady might be true, but webviewRef.current will be
+		// undefined. Maybe due to the error boundary that unmount components.
+		// Since we can't do much about it we just print an error.
+		if (webviewRef.current && webviewRef.current.wrappedInstance) {
+			webviewRef.current.wrappedInstance.send('setHtml', renderedBody.html, options);
+		} else {
+			console.error('Trying to set HTML on an undefined webview ref');
+		}
 	}, [renderedBody, webviewReady]);
 
 	useEffect(() => {
@@ -744,22 +825,25 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 					viewerStyle={styles.viewer}
 					onIpcMessage={webview_ipcMessage}
 					onDomReady={webview_domReady}
+					contentMaxWidth={props.contentMaxWidth}
 				/>
 			</div>
 		);
 	}
 
 	return (
-		<div style={styles.root} ref={rootRef}>
-			<div style={styles.rowToolbar}>
-				<Toolbar themeId={props.themeId} />
-				{props.noteToolbar}
+		<ErrorBoundary message="The text editor encountered a fatal error and could not continue. The error might be due to a plugin, so please try to disable some of them and try again.">
+			<div style={styles.root} ref={rootRef}>
+				<div style={styles.rowToolbar}>
+					<Toolbar themeId={props.themeId} />
+					{props.noteToolbar}
+				</div>
+				<div style={styles.rowEditorViewer}>
+					{renderEditor()}
+					{renderViewer()}
+				</div>
 			</div>
-			<div style={styles.rowEditorViewer}>
-				{renderEditor()}
-				{renderViewer()}
-			</div>
-		</div>
+		</ErrorBoundary>
 	);
 }
 

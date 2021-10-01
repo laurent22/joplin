@@ -7,6 +7,7 @@ import SyncTargetJoplinServer, { initFileApi } from './SyncTargetJoplinServer';
 
 interface FileApiOptions {
 	path(): string;
+	userContentPath(): string;
 	username(): string;
 	password(): string;
 }
@@ -29,6 +30,14 @@ export default class SyncTargetJoplinCloud extends BaseSyncTarget {
 		return _('Joplin Cloud');
 	}
 
+	public static description() {
+		return _('Joplin\'s own sync service. Also gives access to Joplin-specific features such as publishing notes or collaborating on notebooks with others.');
+	}
+
+	public static supportsSelfHosted(): boolean {
+		return false;
+	}
+
 	public async isAuthenticated() {
 		return true;
 	}
@@ -40,12 +49,13 @@ export default class SyncTargetJoplinCloud extends BaseSyncTarget {
 	public static async checkConfig(options: FileApiOptions) {
 		return SyncTargetJoplinServer.checkConfig({
 			...options,
-		});
+		}, SyncTargetJoplinCloud.id());
 	}
 
 	protected async initFileApi() {
-		return initFileApi(this.logger(), {
+		return initFileApi(SyncTargetJoplinCloud.id(), this.logger(), {
 			path: () => Setting.value('sync.10.path'),
+			userContentPath: () => Setting.value('sync.10.userContentPath'),
 			username: () => Setting.value('sync.10.username'),
 			password: () => Setting.value('sync.10.password'),
 		});

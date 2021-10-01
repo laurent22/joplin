@@ -1,6 +1,6 @@
 {
   "name": "@joplin/plugin-repo-cli",
-  "version": "2.0.2",
+  "version": "2.5.0",
   "description": "",
   "main": "index.js",
   "bin": {
@@ -13,13 +13,14 @@
     "tsc": "tsc --project tsconfig.json",
     "watch": "tsc --watch --project tsconfig.json",
     "test": "jest",
-    "test-ci": "npm run test"
+    "test-ci": "npm run test",
+    "start": "node index.js"
   },
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@joplin/lib": "^1.8.2",
-    "@joplin/tools": "^1.8.2",
+    "@joplin/lib": "~2.5",
+    "@joplin/tools": "~2.5",
     "fs-extra": "^9.0.1",
     "gh-release-assets": "^2.0.0",
     "node-fetch": "^2.6.1",
@@ -31,5 +32,6 @@
     "@types/node": "^14.14.6",
     "jest": "^26.6.3",
     "typescript": "^4.1.3"
-  }
+  },
+  "gitHead": "eb4b0e64eab40a51b0895d3a40a9d8c3cb7b1b14"
 }

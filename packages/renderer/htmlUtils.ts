@@ -158,7 +158,7 @@ class HtmlUtils {
 		// "link" can be used to escape the parser and inject JavaScript.
 		// Adding "meta" too for the same reason as it shouldn't be used in
 		// notes anyway.
-		const disallowedTags = ['script', 'iframe', 'frameset', 'frame', 'object', 'base', 'embed', 'link', 'meta', 'noscript'];
+		const disallowedTags = ['script', 'iframe', 'frameset', 'frame', 'object', 'base', 'embed', 'link', 'meta', 'noscript', 'button', 'form', 'input', 'select', 'textarea', 'option', 'optgroup'];
 
 		const parser = new htmlparser2.Parser({
 

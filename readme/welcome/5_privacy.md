@@ -1,6 +1,6 @@
 # Privacy
 
-Joplin values your privacy and security by giving you complete control over your information and digital footprint.
+Joplin values your privacy by giving you complete control over your information and digital footprint.
 
 Joplin applications do not send any data to any service without your authorisation. Any data that Joplin saves, such as notes or images, are saved to your own device and you are free to delete this data at any time.
 

@@ -1,5 +1,5 @@
 import { resourceBlobPath } from '../utils/joplinUtils';
-import { Item, ItemResource, Uuid } from '../db';
+import { Item, ItemResource, Uuid } from '../services/database/types';
 import BaseModel from './BaseModel';
 
 export default class ItemResourceModel extends BaseModel<ItemResource> {
@@ -34,7 +34,7 @@ export default class ItemResourceModel extends BaseModel<ItemResource> {
 					resource_id: resourceId,
 				});
 			}
-		});
+		}, 'ItemResourceModel::addResourceIds');
 	}
 
 	public async byItemId(itemId: Uuid): Promise<string[]> {

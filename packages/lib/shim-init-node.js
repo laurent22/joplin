@@ -158,7 +158,7 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null, 
 			}
 
 			if (!mustResize) {
-				shim.fsDriver().copy(filePath, targetPath);
+				await shim.fsDriver().copy(filePath, targetPath);
 				return true;
 			}
 
@@ -490,13 +490,12 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null, 
 				maxSockets: 1,
 				keepAliveMsecs: 5000,
 			};
-			if (url.startsWith('https')) {
-				shim.httpAgent_ = new https.Agent(AgentSettings);
-			} else {
-				shim.httpAgent_ = new http.Agent(AgentSettings);
-			}
+			shim.httpAgent_ = {
+				http: new http.Agent(AgentSettings),
+				https: new https.Agent(AgentSettings),
+			};
 		}
-		return shim.httpAgent_;
+		return url.startsWith('https') ? shim.httpAgent_.https : shim.httpAgent_.http;
 	};
 
 	shim.openOrCreateFile = (filepath, defaultContents) => {

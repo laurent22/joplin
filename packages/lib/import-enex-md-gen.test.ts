@@ -4,16 +4,16 @@ import shim from './shim';
 const fs = require('fs-extra');
 const os = require('os');
 const { filename } = require('./path-utils');
-const { setupDatabaseAndSynchronizer, switchClient, expectNotThrow, supportDir } = require('./testing/test-utils.js');
+import { setupDatabaseAndSynchronizer, switchClient, expectNotThrow, supportDir } from './testing/test-utils';
 const { enexXmlToMd } = require('./import-enex-md-gen.js');
-const { importEnex } = require('./import-enex');
+import importEnex from './import-enex';
 import Note from './models/Note';
 import Tag from './models/Tag';
 import Resource from './models/Resource';
 
 const enexSampleBaseDir = `${supportDir}/../enex_to_md`;
 
-describe('EnexToMd', function() {
+describe('import-enex-md-gen', function() {
 
 	beforeEach(async (done) => {
 		await setupDatabaseAndSynchronizer(1);
@@ -31,7 +31,7 @@ describe('EnexToMd', function() {
 			const htmlPath = `${enexSampleBaseDir}/${htmlFilename}`;
 			const mdPath = `${enexSampleBaseDir}/${filename(htmlFilename)}.md`;
 
-			// if (htmlFilename !== 'multiline_inner_text.html') continue;
+			// if (htmlFilename !== 'highlight.html') continue;
 
 			const html = await shim.fsDriver().readFile(htmlPath);
 			let expectedMd = await shim.fsDriver().readFile(mdPath);

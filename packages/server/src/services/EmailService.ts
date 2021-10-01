@@ -1,11 +1,11 @@
 import Logger from '@joplin/lib/Logger';
-import UserModel from '../models/UserModel';
 import BaseService from './BaseService';
 import Mail = require('nodemailer/lib/mailer');
 import { createTransport } from 'nodemailer';
-import { Email, EmailSender } from '../db';
+import { Email, EmailSender } from '../services/database/types';
 import { errorToString } from '../utils/errors';
-import MarkdownIt = require('markdown-it');
+import EmailModel from '../models/EmailModel';
+import { markdownBodyToHtml, markdownBodyToPlainText } from './email/utils';
 
 const logger = Logger.create('EmailService');
 
@@ -52,17 +52,14 @@ export default class EmailService extends BaseService {
 			};
 		}
 
+		if (senderId === EmailSender.Support) {
+			return {
+				name: this.config.supportName,
+				email: this.config.supportEmail,
+			};
+		}
+
 		throw new Error(`Invalid sender ID: ${senderId}`);
-	}
-
-	private markdownBodyToPlainText(md: string): string {
-		// Just convert the links to plain URLs
-		return md.replace(/\[.*\]\((.*)\)/g, '$1');
-	}
-
-	private markdownBodyToHtml(md: string): string {
-		const markdownIt = new MarkdownIt();
-		return markdownIt.render(md);
 	}
 
 	private escapeEmailField(f: string): string {
@@ -94,8 +91,8 @@ export default class EmailService extends BaseService {
 					from: this.formatNameAndEmail(sender.email, sender.name),
 					to: this.formatNameAndEmail(email.recipient_email, email.recipient_name),
 					subject: email.subject,
-					text: this.markdownBodyToPlainText(email.body),
-					html: this.markdownBodyToHtml(email.body),
+					text: markdownBodyToPlainText(email.body),
+					html: markdownBodyToHtml(email.body),
 				};
 
 				const emailToSave: Email = {
@@ -128,8 +125,8 @@ export default class EmailService extends BaseService {
 			return;
 		}
 
-		UserModel.eventEmitter.on('created', () => {
-			logger.info('User was created - scheduling maintenance');
+		EmailModel.eventEmitter.on('queued', () => {
+			logger.info('Email was queued - scheduling maintenance');
 			void this.scheduleMaintenance();
 		});
 

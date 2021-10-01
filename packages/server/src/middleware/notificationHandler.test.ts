@@ -1,5 +1,6 @@
 import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, koaAppContext, koaNext } from '../utils/testing/testUtils';
-import { defaultAdminEmail, defaultAdminPassword, Notification } from '../db';
+import { Notification, UserFlagType } from '../services/database/types';
+import { defaultAdminEmail, defaultAdminPassword } from '../db';
 import notificationHandler from './notificationHandler';
 
 describe('notificationHandler', function() {
@@ -19,39 +20,44 @@ describe('notificationHandler', function() {
 	test('should check admin password', async function() {
 		const { session } = await createUserAndSession(1, true);
 
+		// The default admin password actually doesn't pass the complexity
+		// check, so we need to skip validation for testing here. Eventually, a
+		// better mechanism to set the initial default admin password should
+		// probably be implemented.
+
 		const admin = await models().user().save({
 			email: defaultAdminEmail,
 			password: defaultAdminPassword,
 			is_admin: 1,
-		});
+		}, { skipValidation: true });
 
 		{
-			const context = await koaAppContext({ sessionId: session.id });
-			await notificationHandler(context, koaNext);
+			const ctx = await koaAppContext({ sessionId: session.id });
+			await notificationHandler(ctx, koaNext);
 
 			const notifications: Notification[] = await models().notification().all();
 			expect(notifications.length).toBe(1);
 			expect(notifications[0].key).toBe('change_admin_password');
 			expect(notifications[0].read).toBe(0);
 
-			expect(context.notifications.length).toBe(1);
+			expect(ctx.joplin.notifications.length).toBe(1);
 		}
 
 		{
 			await models().user().save({
 				id: admin.id,
 				password: 'changed!',
-			});
+			}, { skipValidation: true });
 
-			const context = await koaAppContext({ sessionId: session.id });
-			await notificationHandler(context, koaNext);
+			const ctx = await koaAppContext({ sessionId: session.id });
+			await notificationHandler(ctx, koaNext);
 
 			const notifications: Notification[] = await models().notification().all();
 			expect(notifications.length).toBe(1);
 			expect(notifications[0].key).toBe('change_admin_password');
 			expect(notifications[0].read).toBe(1);
 
-			expect(context.notifications.length).toBe(0);
+			expect(ctx.joplin.notifications.length).toBe(0);
 		}
 	});
 
@@ -68,6 +74,17 @@ describe('notificationHandler', function() {
 
 		const notifications: Notification[] = await models().notification().all();
 		expect(notifications.length).toBe(0);
+	});
+
+	test('should display a banner if the account is disabled', async function() {
+		const { session, user } = await createUserAndSession(1);
+
+		await models().userFlag().add(user.id, UserFlagType.FailedPaymentFinal);
+
+		const ctx = await koaAppContext({ sessionId: session.id });
+		await notificationHandler(ctx, koaNext);
+
+		expect(ctx.joplin.notifications.find(v => v.id === 'accountDisabled')).toBeTruthy();
 	});
 
 });

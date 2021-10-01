@@ -1,0 +1,45 @@
+<h1 class="title">Upgrade your account</h1>
+<p class="subtitle">Upgrade to a Pro account to get the following benefits.</p>
+
+<form id="upgrade_form" action="{{{postUrl}}}" method="POST">
+	{{{csrfTag}}}
+	<table class="table is-hoverable user-props-table">
+		<tbody>
+			<tr>
+				<th class="basic-plan">Basic - {{basicPrice.formattedMonthlyAmount}} / month</th>
+				<th>Pro - {{proPrice.formattedMonthlyAmount}} / month</th>
+			</tr>
+
+			{{#showYearlyPrices}}
+			<tr>
+				<td>{{basicPrice.formattedAmount}} / year</td><td>{{proPrice.formattedAmount}} / year</td>
+			</tr>
+			{{/showYearlyPrices}}
+
+			{{#planRows}}
+				<tr>
+					<td class="basic-plan">
+						{{basicLabel}}
+					</td>
+					<td>
+						{{proLabel}}
+					</td>
+				</tr>
+			{{/planRows}}
+
+			<tr>
+				<td></td>
+				<td><input type="submit" id="upgrade_button" name="upgrade_button" class="button is-success" value="Upgrade to Pro" /></td>
+			</tr>
+		</tbody>
+	</table>
+</form>
+
+<script>
+$(() => {
+	$('#upgrade_form').submit((event) => {
+		const ok = confirm('Your account is going to be upgraded to Pro. Do you wish to continue?');
+		if (!ok) event.preventDefault();
+	});
+});
+</script>

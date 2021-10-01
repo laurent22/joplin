@@ -5,6 +5,7 @@ const tasks = {
 	// copyLib: require('./packages/tools/gulp/tasks/copyLib'),
 	// tsc: require('./packages/tools/gulp/tasks/tsc'),
 	updateIgnoredTypeScriptBuild: require('./packages/tools/gulp/tasks/updateIgnoredTypeScriptBuild'),
+	buildCommandIndex: require('./packages/tools/gulp/tasks/buildCommandIndex'),
 	// deleteBuildDirs: require('./packages/tools/gulp/tasks/deleteBuildDirs'),
 	completePublishAll: {
 		fn: async () => {

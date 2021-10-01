@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { FormNote, ScrollOptionTypes } from './types';
-import editorCommandDeclarations from '../commands/editorCommandDeclarations';
+import editorCommandDeclarations from '../editorCommandDeclarations';
 import CommandService, { CommandDeclaration, CommandRuntime, CommandContext } from '@joplin/lib/services/CommandService';
 import time from '@joplin/lib/time';
 import { reg } from '@joplin/lib/registry';

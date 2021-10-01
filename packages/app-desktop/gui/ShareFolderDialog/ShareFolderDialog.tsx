@@ -16,8 +16,13 @@ import { ShareUserStatus, StateShare, StateShareUser } from '@joplin/lib/service
 import { State } from '@joplin/lib/reducer';
 import { connect } from 'react-redux';
 import { reg } from '@joplin/lib/registry';
+import useAsyncEffect, { AsyncEffectEvent } from '@joplin/lib/hooks/useAsyncEffect';
 
 const logger = Logger.create('ShareFolderDialog');
+
+const StyledRoot = styled.div`
+	min-width: 500px;
+`;
 
 const StyledFolder = styled.div`
 	border: 1px solid ${(props) => props.theme.dividerColor};
@@ -94,20 +99,6 @@ interface Props {
 
 interface RecipientDeleteEvent {
 	shareUserId: string;
-}
-
-interface AsyncEffectEvent {
-	cancelled: boolean;
-}
-
-function useAsyncEffect(effect: Function, dependencies: any[]) {
-	useEffect(() => {
-		const event = { cancelled: false };
-		effect(event);
-		return () => {
-			event.cancelled = true;
-		};
-	}, dependencies);
 }
 
 enum ShareState {
@@ -303,7 +294,7 @@ function ShareFolderDialog(props: Props) {
 
 	function renderContent() {
 		return (
-			<div>
+			<StyledRoot>
 				<DialogTitle title={_('Share Notebook')}/>
 				{renderFolder()}
 				{renderAddRecipient()}
@@ -317,7 +308,7 @@ function ShareFolderDialog(props: Props) {
 					cancelButtonLabel={_('Close')}
 					customButtons={customButtons}
 				/>
-			</div>
+			</StyledRoot>
 		);
 	}
 

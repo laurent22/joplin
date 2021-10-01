@@ -1,5 +1,3 @@
- [![Travis Build Status](https://travis-ci.com/laurent22/joplin.svg?branch=master)](https://travis-ci.com/laurent22/joplin) [![Appveyor Build Status](https://ci.appveyor.com/api/projects/status/github/laurent22/joplin?branch=master&passingText=master%20-%20OK&svg=true)](https://ci.appveyor.com/project/laurent22/joplin)
-
 # Building the applications
 
 The Joplin source code is hosted on a [monorepo](https://en.wikipedia.org/wiki/Monorepo) managed by Lerna. The usage of Lerna is mostly transparent as the needed commands have been moved to the root package.json and thus are invoked for example when running `npm install` or `npm run watch`. The main thing to know about Lerna is that it links the packages in the monorepo using `npm link`, so if you check the node_modules directory you will see links instead of actual directories for certain packages. This is something to keep in mind as these links can cause issues in some cases.

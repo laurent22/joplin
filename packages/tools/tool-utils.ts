@@ -65,7 +65,7 @@ async function insertChangelog(tag: string, changelogPath: string, changelog: st
 }
 
 export async function completeReleaseWithChangelog(changelogPath: string, newVersion: string, newTag: string, appName: string, isPreRelease: boolean) {
-	const changelog = (await execCommand2(`node ${rootDir}/packages/tools/git-changelog ${newTag}`, { })).trim();
+	const changelog = (await execCommand2(`node ${rootDir}/packages/tools/git-changelog ${newTag} --publish-format full`, { })).trim();
 
 	const newChangelog = await insertChangelog(newTag, changelogPath, changelog, isPreRelease);
 
@@ -109,7 +109,7 @@ async function saveGitHubUsernameCache(cache: any) {
 // Returns the project root dir
 export const rootDir = require('path').dirname(require('path').dirname(__dirname));
 
-export function execCommand(command: string, options: any = null) {
+export function execCommand(command: string, options: any = null): Promise<string> {
 	options = options || {};
 
 	const exec = require('child_process').exec;
@@ -322,6 +322,11 @@ export async function githubUsername(email: string, name: string) {
 
 	const urlsToTry = [
 		`https://api.github.com/search/users?q=${encodeURI(email)}+in:email`,
+
+		// Note that this can fail if the email could not be found and the user
+		// shares a name with someone else. It's rare enough that we can leave
+		// it for now.
+		// https://github.com/laurent22/joplin/pull/5390
 		`https://api.github.com/search/users?q=user:${encodeURI(name)}`,
 	];
 

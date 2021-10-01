@@ -1,10 +1,11 @@
 import AsyncActionQueue from '@joplin/lib/AsyncActionQueue';
-import UndoRedoService from '@joplin/lib/services/UndoRedoService';
 import uuid from '@joplin/lib/uuid';
 import Setting from '@joplin/lib/models/Setting';
 import shim from '@joplin/lib/shim';
+import UndoRedoService from '@joplin/lib/services/UndoRedoService';
 import NoteBodyViewer from '../NoteBodyViewer/NoteBodyViewer';
 import checkPermissions from '../../utils/checkPermissions';
+import NoteEditor, { ChangeEvent, UndoRedoDepthChangeEvent } from '../NoteEditor/NoteEditor';
 
 const FileViewer = require('react-native-file-viewer').default;
 const React = require('react');
@@ -42,6 +43,7 @@ const ImagePicker = require('react-native-image-picker').default;
 import SelectDateTimeDialog from '../SelectDateTimeDialog';
 import ShareExtension from '../../utils/ShareExtension.js';
 import CameraView from '../CameraView';
+import { NoteEntity } from '@joplin/lib/services/database/types';
 const urlUtils = require('@joplin/lib/urlUtils');
 
 const emptyArray: any[] = [];
@@ -94,6 +96,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.saveButtonHasBeenShown_ = false;
 
 		this.styles_ = {};
+
+		this.editorRef = React.createRef();
 
 		const saveDialog = async () => {
 			if (this.isModified()) {
@@ -210,12 +214,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 			}
 		};
 
-		this.useBetaEditor = () => {
-			// Disable for now
-			return false;
-			// return Setting.value('editor.beta') && Platform.OS !== 'android';
-		};
-
 		this.takePhoto_onPress = this.takePhoto_onPress.bind(this);
 		this.cameraView_onPhoto = this.cameraView_onPhoto.bind(this);
 		this.cameraView_onCancel = this.cameraView_onCancel.bind(this);
@@ -236,16 +234,38 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.body_selectionChange = this.body_selectionChange.bind(this);
 		this.onBodyViewerLoadEnd = this.onBodyViewerLoadEnd.bind(this);
 		this.onBodyViewerCheckboxChange = this.onBodyViewerCheckboxChange.bind(this);
+		this.onBodyChange = this.onBodyChange.bind(this);
+		this.onUndoRedoDepthChange = this.onUndoRedoDepthChange.bind(this);
 	}
 
-	undoRedoService_stackChange() {
-		this.setState({ undoRedoButtonState: {
-			canUndo: this.undoRedoService_.canUndo,
-			canRedo: this.undoRedoService_.canRedo,
-		} });
+	private useEditorBeta(): boolean {
+		return this.props.useEditorBeta;
 	}
 
-	async undoRedo(type: string) {
+	private onBodyChange(event: ChangeEvent) {
+		shared.noteComponent_change(this, 'body', event.value);
+		this.scheduleSave();
+	}
+
+	private onUndoRedoDepthChange(event: UndoRedoDepthChangeEvent) {
+		if (this.useEditorBeta()) {
+			this.setState({ undoRedoButtonState: {
+				canUndo: !!event.undoDepth,
+				canRedo: !!event.redoDepth,
+			} });
+		}
+	}
+
+	private undoRedoService_stackChange() {
+		if (!this.useEditorBeta()) {
+			this.setState({ undoRedoButtonState: {
+				canUndo: this.undoRedoService_.canUndo,
+				canRedo: this.undoRedoService_.canRedo,
+			} });
+		}
+	}
+
+	private async undoRedo(type: string) {
 		const undoState = await this.undoRedoService_[type](this.undoState());
 		if (!undoState) return;
 
@@ -259,11 +279,25 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	screenHeader_undoButtonPress() {
-		void this.undoRedo('undo');
+		if (this.useEditorBeta()) {
+			this.editorRef.current.undo();
+		} else {
+			void this.undoRedo('undo');
+		}
 	}
 
 	screenHeader_redoButtonPress() {
-		void this.undoRedo('redo');
+		if (this.useEditorBeta()) {
+			this.editorRef.current.redo();
+		} else {
+			void this.undoRedo('redo');
+		}
+	}
+
+	undoState(noteBody: string = null) {
+		return {
+			body: noteBody === null ? this.state.note.body : noteBody,
+		};
 	}
 
 	styles() {
@@ -361,12 +395,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 		return shared.isModified(this);
 	}
 
-	undoState(noteBody: string = null) {
-		return {
-			body: noteBody === null ? this.state.note.body : noteBody,
-		};
-	}
-
 	async requestGeoLocationPermissions() {
 		if (!Setting.value('trackLocation')) return;
 
@@ -454,6 +482,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		} else {
 			this.undoRedoService_.schedulePush(this.undoState());
 		}
+
 		shared.noteComponent_change(this, 'body', text);
 		this.scheduleSave();
 	}
@@ -678,7 +707,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		const newNote = Object.assign({}, this.state.note);
 
-		if (this.state.mode == 'edit' && !this.useBetaEditor() && !!this.selection) {
+		if (this.state.mode == 'edit' && !!this.selection) {
 			const prefix = newNote.body.substring(0, this.selection.start);
 			const suffix = newNote.body.substring(this.selection.end);
 			newNote.body = `${prefix}\n${resourceTag}\n${suffix}`;
@@ -850,6 +879,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 			output.push({
 				title: _('Attach...'),
 				onPress: async () => {
+					if (this.state.mode === 'edit' && this.useEditorBeta()) {
+						alert('Attaching files from the beta editor is not yet supported. You may do so from the viewer mode instead.');
+						return;
+					}
+
 					const buttons = [];
 
 					// On iOS, it will show "local files", which means certain files saved from the browser
@@ -1023,7 +1057,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		}
 
 		const theme = themeStyle(this.props.themeId);
-		const note = this.state.note;
+		const note: NoteEntity = this.state.note;
 		const isTodo = !!Number(note.is_todo);
 
 		if (this.state.showCamera) {
@@ -1034,7 +1068,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 		const keywords = this.props.searchQuery && !!this.props.ftsEnabled ? this.props.highlightedWords : emptyArray;
 
 		let bodyComponent = null;
-		if (this.state.mode == 'view' && !this.useBetaEditor()) {
+		if (this.state.mode == 'view') {
 			// Note: as of 2018-12-29 it's important not to display the viewer if the note body is empty,
 			// to avoid the HACK_webviewLoadingState related bug.
 			bodyComponent =
@@ -1057,95 +1091,52 @@ class NoteScreenComponent extends BaseScreenComponent {
 					/>
 				);
 		} else {
-			// bodyComponent = this.useBetaEditor()
-			// 	// Note: blurOnSubmit is necessary to get multiline to work.
-			// 	// See https://github.com/facebook/react-native/issues/12717#issuecomment-327001997
-			// 	//
-			// 	// 2020-10-16: As of React Native 0.63, the Markdown Editor no longer crashes in Android, however the
-			// 	// cursor is still too unreliable to be usable, so we disable it in Android.
-			// 	? <MarkdownEditor
-			// 		ref={this.markdownEditorRef} // For focusing the Markdown editor
-			// 		editorFont={editorFont(this.props.editorFont)}
-			// 		style={this.styles().bodyTextInput}
-			// 		previewStyles={this.styles().noteBodyViewer}
-			// 		value={note.body}
-			// 		borderColor={this.styles().markdownButtons.borderColor}
-			// 		markdownButtonsColor={this.styles().markdownButtons.color}
-			// 		saveText={(text:string) => this.body_changeText(text)}
-			// 		blurOnSubmit={false}
-			// 		selectionColor={theme.textSelectionColor}
-			// 		keyboardAppearance={theme.keyboardAppearance}
-			// 		placeholder={_('Add body')}
-			// 		placeholderTextColor={theme.colorFaded}
-			// 		noteBodyViewer={{
-			// 			onJoplinLinkClick: this.onJoplinLinkClick_,
-			// 			style: this.styles().noteBodyViewerPreview,
-			// 			paddingBottom: 0,
-			// 			webViewStyle: theme,
-			// 			noteBody: note.body,
-			// 			noteMarkupLanguage: note.markup_language,
-			// 			noteResources: this.state.noteResources,
-			// 			highlightedKeywords: keywords,
-			// 			themeId: this.props.themeId,
-			// 			noteHash: this.props.noteHash,
-			// 			onCheckboxChange: this.onBodyViewerCheckboxChange,
-			// 			onMarkForDownload: this.onMarkForDownload,
-			// 			onLoadEnd: this.onBodyViewerLoadEnd,
-			// 		}}
+			// Note: In theory ScrollView can be used to provide smoother scrolling of the TextInput.
+			// However it causes memory or rendering issues on older Android devices, probably because
+			// the whole text input has to be in memory for the scrollview to work. So we keep it as
+			// a plain TextInput for now.
+			// See https://github.com/laurent22/joplin/issues/3041
 
-			// 	/>
-			// 	:
-			// 	// Note: In theory ScrollView can be used to provide smoother scrolling of the TextInput.
-			// 	// However it causes memory or rendering issues on older Android devices, probably because
-			// 	// the whole text input has to be in memory for the scrollview to work. So we keep it as
-			// 	// a plain TextInput for now.
-			// 	// See https://github.com/laurent22/joplin/issues/3041
+			// IMPORTANT: The TextInput selection is unreliable and cannot be used in a controlled component
+			// context. In other words, the selection should be considered read-only. For example, if the seleciton
+			// is saved to the state in onSelectionChange and the current text in onChangeText, then set
+			// back in `selection` and `value` props, it will mostly work. But when typing fast, sooner or
+			// later the real selection will be different from what is stored in the state, thus making
+			// the cursor jump around. Eg, when typing "abcdef", it will do this:
+			//     abcd|
+			//     abcde|
+			//     abcde|f
 
-			// 	// IMPORTANT: The TextInput selection is unreliable and cannot be used in a controlled component
-			// 	// context. In other words, the selection should be considered read-only. For example, if the seleciton
-			// 	// is saved to the state in onSelectionChange and the current text in onChangeText, then set
-			// 	// back in `selection` and `value` props, it will mostly work. But when typing fast, sooner or
-			// 	// later the real selection will be different from what is stored in the state, thus making
-			// 	// the cursor jump around. Eg, when typing "abcdef", it will do this:
-			// 	//     abcd|
-			// 	//     abcde|
-			// 	//     abcde|f
-			// 	(
-			// 		<TextInput
-			// 			autoCapitalize="sentences"
-			// 			style={this.styles().bodyTextInput}
-			// 			ref="noteBodyTextField"
-			// 			multiline={true}
-			// 			value={note.body}
-			// 			onChangeText={(text:string) => this.body_changeText(text)}
-			// 			onSelectionChange={this.body_selectionChange}
-			// 			blurOnSubmit={false}
-			// 			selectionColor={theme.textSelectionColor}
-			// 			keyboardAppearance={theme.keyboardAppearance}
-			// 			placeholder={_('Add body')}
-			// 			placeholderTextColor={theme.colorFaded}
-			// 		/>
-			// 	);
-
-			bodyComponent = (
-				<TextInput
-					autoCapitalize="sentences"
+			if (!this.useEditorBeta()) {
+				bodyComponent = (
+					<TextInput
+						autoCapitalize="sentences"
+						style={this.styles().bodyTextInput}
+						ref="noteBodyTextField"
+						multiline={true}
+						value={note.body}
+						onChangeText={(text: string) => this.body_changeText(text)}
+						onSelectionChange={this.body_selectionChange}
+						blurOnSubmit={false}
+						selectionColor={theme.textSelectionColor}
+						keyboardAppearance={theme.keyboardAppearance}
+						placeholder={_('Add body')}
+						placeholderTextColor={theme.colorFaded}
+						// need some extra padding for iOS so that the keyboard won't cover last line of the note
+						// see https://github.com/laurent22/joplin/issues/3607
+						paddingBottom={ Platform.OS === 'ios' ? 40 : 0}
+					/>
+				);
+			} else {
+				bodyComponent = <NoteEditor
+					ref={this.editorRef}
+					themeId={this.props.themeId}
+					initialText={note.body}
+					onChange={this.onBodyChange}
+					onUndoRedoDepthChange={this.onUndoRedoDepthChange}
 					style={this.styles().bodyTextInput}
-					ref="noteBodyTextField"
-					multiline={true}
-					value={note.body}
-					onChangeText={(text: string) => this.body_changeText(text)}
-					onSelectionChange={this.body_selectionChange}
-					blurOnSubmit={false}
-					selectionColor={theme.textSelectionColor}
-					keyboardAppearance={theme.keyboardAppearance}
-					placeholder={_('Add body')}
-					placeholderTextColor={theme.colorFaded}
-					// need some extra padding for iOS so that the keyboard won't cover last line of the note
-					// see https://github.com/laurent22/joplin/issues/3607
-					paddingBottom={ Platform.OS === 'ios' ? 40 : 0}
-				/>
-			);
+				/>;
+			}
 		}
 
 		const renderActionButton = () => {
@@ -1218,7 +1209,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 				/>
 				{titleComp}
 				{bodyComponent}
-				{!this.useBetaEditor() && actionButtonComp}
+				{actionButtonComp}
 
 				<SelectDateTimeDialog themeId={this.props.themeId} shown={this.state.alarmDialogShown} date={dueDate} onAccept={this.onAlarmDialogAccept} onReject={this.onAlarmDialogReject} />
 
@@ -1248,6 +1239,7 @@ const NoteScreen = connect((state: any) => {
 		showSideMenu: state.showSideMenu,
 		provisionalNoteIds: state.provisionalNoteIds,
 		highlightedWords: state.highlightedWords,
+		useEditorBeta: state.settings['editor.beta'],
 	};
 })(NoteScreenComponent);
 

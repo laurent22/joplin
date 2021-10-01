@@ -69,6 +69,8 @@ import ShareUserModel from './ShareUserModel';
 import KeyValueModel from './KeyValueModel';
 import TokenModel from './TokenModel';
 import SubscriptionModel from './SubscriptionModel';
+import UserFlagModel from './UserFlagModel';
+import EventModel from './EventModel';
 import { Config } from '../utils/types';
 
 export class Models {
@@ -135,6 +137,14 @@ export class Models {
 
 	public subscription() {
 		return new SubscriptionModel(this.db_, newModelFactory, this.config_);
+	}
+
+	public userFlag() {
+		return new UserFlagModel(this.db_, newModelFactory, this.config_);
+	}
+
+	public event() {
+		return new EventModel(this.db_, newModelFactory, this.config_);
 	}
 
 }

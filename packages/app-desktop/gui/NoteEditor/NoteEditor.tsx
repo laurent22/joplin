@@ -14,13 +14,13 @@ import useMarkupToHtml from './utils/useMarkupToHtml';
 import useFormNote, { OnLoadEvent } from './utils/useFormNote';
 import useFolder from './utils/useFolder';
 import styles_ from './styles';
-import { NoteEditorProps, FormNote, ScrollOptions, ScrollOptionTypes, OnChangeEvent, NoteBodyEditorProps } from './utils/types';
+import { NoteEditorProps, FormNote, ScrollOptions, ScrollOptionTypes, OnChangeEvent, NoteBodyEditorProps, AllAssetsOptions } from './utils/types';
 import ResourceEditWatcher from '@joplin/lib/services/ResourceEditWatcher/index';
 import CommandService from '@joplin/lib/services/CommandService';
 import ToolbarButton from '../ToolbarButton/ToolbarButton';
 import Button, { ButtonLevel } from '../Button/Button';
 import eventManager from '@joplin/lib/eventManager';
-import { AppState } from '../../app';
+import { AppState } from '../../app.reducer';
 import ToolbarButtonUtils from '@joplin/lib/services/commands/ToolbarButtonUtils';
 import { _ } from '@joplin/lib/locale';
 import TagList from '../TagList';
@@ -151,7 +151,12 @@ function NoteEditor(props: NoteEditorProps) {
 		plugins: props.plugins,
 	});
 
-	const allAssets = useCallback(async (markupLanguage: number): Promise<any[]> => {
+	const allAssets = useCallback(async (markupLanguage: number, options: AllAssetsOptions = null): Promise<any[]> => {
+		options = {
+			contentMaxWidthTarget: '',
+			...options,
+		};
+
 		const theme = themeStyle(props.themeId);
 
 		const markupToHtml = markupLanguageUtils.newMarkupToHtml({}, {
@@ -159,8 +164,11 @@ function NoteEditor(props: NoteEditorProps) {
 			customCss: props.customCss,
 		});
 
-		return markupToHtml.allAssets(markupLanguage, theme);
-	}, [props.themeId, props.customCss]);
+		return markupToHtml.allAssets(markupLanguage, theme, {
+			contentMaxWidth: props.contentMaxWidth,
+			contentMaxWidthTarget: options.contentMaxWidthTarget,
+		});
+	}, [props.themeId, props.customCss, props.contentMaxWidth]);
 
 	const handleProvisionalFlag = useCallback(() => {
 		if (props.isProvisional) {
@@ -400,6 +408,7 @@ function NoteEditor(props: NoteEditorProps) {
 		noteToolbarButtonInfos: props.toolbarButtonInfos,
 		plugins: props.plugins,
 		fontSize: Setting.value('style.editor.fontSize'),
+		contentMaxWidth: props.contentMaxWidth,
 	};
 
 	let editor = null;
@@ -545,7 +554,7 @@ function NoteEditor(props: NoteEditorProps) {
 					onTitleChange={onTitleChange}
 				/>
 				{renderSearchInfo()}
-				<div style={{ display: 'flex', flex: 1, paddingLeft: theme.editorPaddingLeft }}>
+				<div style={{ display: 'flex', flex: 1, paddingLeft: theme.editorPaddingLeft, maxHeight: '100%' }}>
 					{editor}
 				</div>
 				<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
@@ -601,6 +610,7 @@ const mapStateToProps = (state: AppState) => {
 		setTagsToolbarButtonInfo: toolbarButtonUtils.commandsToToolbarButtons([
 			'setTags',
 		], whenClauseContext)[0],
+		contentMaxWidth: state.settings['style.editor.contentMaxWidth'],
 	};
 };
 

@@ -1,8 +1,7 @@
-import { SubPath, redirect, respondWithItemContent } from '../../utils/routeUtils';
+import { SubPath, respondWithItemContent } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
-import { formParse } from '../../utils/requestUtils';
 import { ErrorNotFound } from '../../utils/errors';
 import config, { showItemUrls } from '../../config';
 import { formatDateTime } from '../../utils/time';
@@ -16,12 +15,12 @@ const router = new Router(RouteType.Web);
 
 router.get('items', async (_path: SubPath, ctx: AppContext) => {
 	const pagination = makeTablePagination(ctx.query, 'name', PaginationOrderDir.ASC);
-	const paginatedItems = await ctx.models.item().children(ctx.owner.id, '', pagination, { fields: ['id', 'name', 'updated_time', 'mime_type', 'content_size'] });
+	const paginatedItems = await ctx.joplin.models.item().children(ctx.joplin.owner.id, '', pagination, { fields: ['id', 'name', 'updated_time', 'mime_type', 'content_size'] });
 
 	const table: Table = {
-		baseUrl: ctx.models.item().itemUrl(),
+		baseUrl: ctx.joplin.models.item().itemUrl(),
 		requestQuery: ctx.query,
-		pageCount: Math.ceil((await ctx.models.item().childrenCount(ctx.owner.id, '')) / pagination.limit),
+		pageCount: Math.ceil((await ctx.joplin.models.item().childrenCount(ctx.joplin.owner.id, '')) / pagination.limit),
 		pagination,
 		headers: [
 			{
@@ -64,7 +63,7 @@ router.get('items', async (_path: SubPath, ctx: AppContext) => {
 		}),
 	};
 
-	const view: View = defaultView('items');
+	const view: View = defaultView('items', 'Items');
 	view.content.itemTable = makeTableView(table),
 	view.content.postUrl = `${config().baseUrl}/items`;
 	view.cssFiles = ['index/items'];
@@ -72,24 +71,10 @@ router.get('items', async (_path: SubPath, ctx: AppContext) => {
 });
 
 router.get('items/:id/content', async (path: SubPath, ctx: AppContext) => {
-	const itemModel = ctx.models.item();
+	const itemModel = ctx.joplin.models.item();
 	const item = await itemModel.loadWithContent(path.id);
 	if (!item) throw new ErrorNotFound();
 	return respondWithItemContent(ctx.response, item, item.content);
 }, RouteType.UserContent);
-
-router.post('items', async (_path: SubPath, ctx: AppContext) => {
-	const body = await formParse(ctx.req);
-	const fields = body.fields;
-
-	if (fields.delete_all_button) {
-		const itemModel = ctx.models.item();
-		await itemModel.deleteAll(ctx.owner.id);
-	} else {
-		throw new Error('Invalid form button');
-	}
-
-	return redirect(ctx, await ctx.models.item().itemUrl());
-});
 
 export default router;

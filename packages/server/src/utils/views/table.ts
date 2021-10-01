@@ -4,11 +4,13 @@ import { setQueryParameters } from '../urlUtils';
 const defaultSortOrder = PaginationOrderDir.ASC;
 
 function headerIsSelectedClass(name: string, pagination: Pagination): string {
+	if (!pagination) return '';
 	const orderBy = pagination.order[0].by;
 	return name === orderBy ? 'is-selected' : '';
 }
 
 function headerSortIconDir(name: string, pagination: Pagination): string {
+	if (!pagination) return '';
 	const orderBy = pagination.order[0].by;
 	const orderDir = orderBy === name ? pagination.order[0].dir : defaultSortOrder;
 	return orderDir === PaginationOrderDir.ASC ? 'up' : 'down';
@@ -35,6 +37,7 @@ interface HeaderView {
 
 interface RowItem {
 	value: string;
+	checkbox?: boolean;
 	url?: string;
 	stretch?: boolean;
 }
@@ -45,6 +48,7 @@ interface RowItemView {
 	value: string;
 	classNames: string[];
 	url: string;
+	checkbox: boolean;
 }
 
 type RowView = RowItemView[];
@@ -52,10 +56,10 @@ type RowView = RowItemView[];
 export interface Table {
 	headers: Header[];
 	rows: Row[];
-	baseUrl: string;
-	requestQuery: any;
-	pageCount: number;
-	pagination: Pagination;
+	baseUrl?: string;
+	requestQuery?: any;
+	pageCount?: number;
+	pagination?: Pagination;
 }
 
 export interface TableView {
@@ -77,7 +81,7 @@ export function makeTablePagination(query: any, defaultOrderField: string, defau
 function makeHeaderView(header: Header, parentBaseUrl: string, baseUrlQuery: PaginationQueryParams, pagination: Pagination): HeaderView {
 	return {
 		label: header.label,
-		sortLink: setQueryParameters(parentBaseUrl, { ...baseUrlQuery, 'order_by': header.name, 'order_dir': headerNextOrder(header.name, pagination) }),
+		sortLink: !pagination ? null : setQueryParameters(parentBaseUrl, { ...baseUrlQuery, 'order_by': header.name, 'order_dir': headerNextOrder(header.name, pagination) }),
 		classNames: [header.stretch ? 'stretch' : 'nowrap', headerIsSelectedClass(header.name, pagination)],
 		iconDir: headerSortIconDir(header.name, pagination),
 	};
@@ -89,14 +93,21 @@ function makeRowView(row: Row): RowView {
 			value: rowItem.value,
 			classNames: [rowItem.stretch ? 'stretch' : 'nowrap'],
 			url: rowItem.url,
+			checkbox: rowItem.checkbox,
 		};
 	});
 }
 
 export function makeTableView(table: Table): TableView {
-	const baseUrlQuery = filterPaginationQueryParams(table.requestQuery);
-	const pagination = table.pagination;
-	const paginationLinks = createPaginationLinks(pagination.page, table.pageCount, setQueryParameters(table.baseUrl, { ...baseUrlQuery, 'page': 'PAGE_NUMBER' }));
+	let paginationLinks: PageLink[] = [];
+	let baseUrlQuery: PaginationQueryParams = null;
+	let pagination: Pagination = null;
+
+	if (table.pageCount) {
+		baseUrlQuery = filterPaginationQueryParams(table.requestQuery);
+		pagination = table.pagination;
+		paginationLinks = createPaginationLinks(pagination.page, table.pageCount, setQueryParameters(table.baseUrl, { ...baseUrlQuery, 'page': 'PAGE_NUMBER' }));
+	}
 
 	return {
 		headers: table.headers.map(h => makeHeaderView(h, table.baseUrl, baseUrlQuery, pagination)),

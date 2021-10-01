@@ -1,5 +1,65 @@
 # Joplin terminal app changelog
 
+## [cli-v2.4.1](https://github.com/laurent22/joplin/releases/tag/cli-v2.4.1) - 2021-09-29T15:28:01Z
+
+- New: Add a way to disable a master key (7faa58e)
+- New: Add support for single master password, to simplify handling of multiple encryption keys (ce89ee5)
+- New: Added "None" sync target to allow disabling synchronisation (f5f05e6)
+- Improved: Allow importing certain corrupted ENEX files (f144dae)
+- Improved: Improved sync locks so that they do not prevent upgrading a sync target (06ed58b)
+- Fixed: Fixed file paths when exporting as HTML (#5325)
+- Fixed: Misinterpreted search term after filter in quotation marks (#5445) (#5444 by [@JackGruber](https://github.com/JackGruber))
+- Fixed: Setting note contents using "set" command does not update note timestamp (#5435)
+
+## [cli-v2.3.2](https://github.com/laurent22/joplin/releases/tag/cli-v2.3.2) - 2021-08-16T09:38:40Z
+
+- Improved: Improved E2EE usability by making its state a property of the sync target (#5276)
+- Fixed: Bump hightlight.js to v11.2 (#5278) (#5245 by Roman Musin)
+- Fixed: Fixed version command so that it does not require the keychain (ca6d8ec)
+
+## [cli-v2.2.2](https://github.com/laurent22/joplin/releases/tag/cli-v2.2.2) - 2021-08-11T15:34:56Z
+
+- Fixed: Fixed version command so that it does not require the keychain (15766d1)
+
+## [cli-v2.2.1](https://github.com/laurent22/joplin/releases/tag/cli-v2.2.1) - 2021-08-10T10:21:09Z
+
+- Improved: Ensure that timestamps are not changed when sharing or unsharing a note (cafaa9c)
+- Improved: Fix AWS S3 sync error and upgrade framework to v3 (#5212) (#4810 by Lee Matos)
+- Improved: Handles OneDrive throttling responses and sets User-Agent based on Microsoft best practices (#5246) (#5244 by [@alec](https://github.com/alec))
+- Improved: Interpret only valid search filters (#5103) (#3871 by [@JackGruber](https://github.com/JackGruber))
+- Fixed: Do not export share properties (#5232)
+- Fixed: Fixed issue with orphaned resource being created in case of a resource conflict (#5223)
+- Fixed: Import highlighted text from ENEX files (#5213)
+
+## [cli-v2.1.2](https://github.com/laurent22/joplin/releases/tag/cli-v2.1.2) - 2021-06-27T15:51:36Z
+
+- New: Add support for X-API-MIN-VERSION header (51f3c00)
+- New: Added flag to disable local lock when synchronising (7aff6d2)
+- Improved: Allow uploading items in batch when synchronising with Joplin Server (0222c0f)
+- Improved: Also allow disabling TLS errors for Joplin Cloud to go around error UNABLE_TO_GET_ISSUER_CERT_LOCALLY (118a2f9)
+- Improved: Improved first sync speed when synchronising with Joplin Server (4dc1210)
+- Improved: Mask auth token and password in log (0d33955)
+- Improved: Optimise first synchronisation, when items have never been synced before (15ce5cd)
+- Improved: Update Mermaid: 8.8.4 -&gt; 8.10.2 (#5092 by Helmut K. C. Tessarek)
+- Fixed: Fixed error that could prevent a revision from being created, and that would prevent the revision service from processing the rest of the notes (#5051)
+- Fixed: Fixed issue when trying to sync an item associated with a share that no longer exists (5bb68ba)
+- Fixed: Fixed search when the index contains non-existing notes (5ecac21)
+- Fixed: Handle special type of code block when importing ENEX files (#4965)
+
+## [cli-v2.0.1](https://github.com/laurent22/joplin/releases/tag/cli-v2.0.1) - 2021-06-16T19:06:28Z
+
+- New: Add new date format YYMMDD (#4954 by Helmut K. C. Tessarek)
+- New: Add support for sharing notebooks with Joplin Server (#4772)
+- Improved: Allow setting up E2EE without having to confirm the password (c5b0529)
+- Improved: Conflict notes will now populate a new field with the ID of the conflict note. (#5049 by [@Ahmad45123](https://github.com/Ahmad45123))
+- Improved: Import SVG as images when importing ENEX files (#4968)
+- Improved: Improve search with Asian scripts (#5018) (#4613 by [@mablin7](https://github.com/mablin7))
+- Improved: Prevent sync process from being stuck when the download state of a resource is invalid (5c6fd93)
+- Fixed: Fixed possible crash when trying to delete corrupted revision in revision service (#4845)
+- Fixed: Fixed user content URLs when sharing note via Joplin Server (2cf7067)
+- Fixed: Improved importing Evernote notes that contain codeblocks (#4965)
+- Fixed: Items are filtered in the API search (#5017) (#5007 by [@JackGruber](https://github.com/JackGruber))
+
 ## [cli-v1.8.1](https://github.com/laurent22/joplin/releases/tag/cli-v1.8.1) - 2021-05-10T09:38:05Z
 
 - New: Add "id" and "due" search filters (#4898 by [@JackGruber](https://github.com/JackGruber))

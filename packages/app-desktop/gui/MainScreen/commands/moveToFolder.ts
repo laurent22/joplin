@@ -34,7 +34,7 @@ export const runtime = (comp: any): CommandRuntime => {
 					value: '',
 					autocomplete: startFolders,
 					onClose: async (answer: any) => {
-						if (answer != null) {
+						if (answer) {
 							for (let i = 0; i < noteIds.length; i++) {
 								await Note.moveToFolder(noteIds[i], answer.value);
 							}

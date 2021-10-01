@@ -7,7 +7,7 @@ async function loadSettingsFromFile(): Promise<any> {
 	return JSON.parse(await fs.readFile(Setting.settingFilePath, 'utf8'));
 }
 
-describe('models_Setting', function() {
+describe('models/Setting', function() {
 
 	beforeEach(async (done) => {
 		await setupDatabaseAndSynchronizer(1);
@@ -28,6 +28,24 @@ describe('models_Setting', function() {
 		output = Setting.subValues('sync.4', settings);
 		expect('path' in output).toBe(false);
 		expect('username' in output).toBe(false);
+	}));
+
+	it('should not fail when trying to load a key that no longer exist from the setting file', (async () => {
+		// To handle the case where a setting value exists in the database but
+		// the metadata has been removed in a new Joplin version.
+		// https://github.com/laurent22/joplin/issues/5086
+
+		Setting.setValue('sync.target', 9); // Saved to file
+		await Setting.saveAll();
+
+		const settingValues = await Setting.fileHandler.load();
+		settingValues['itsgone'] = 'myvalue';
+		await Setting.fileHandler.save(settingValues);
+
+		await Setting.reset();
+
+		await expectNotThrow(async () => Setting.load());
+		await expectThrow(async () => Setting.value('itsgone'));
 	}));
 
 	it('should allow registering new settings dynamically', (async () => {
@@ -156,7 +174,7 @@ describe('models_Setting', function() {
 	}));
 
 	it('should not save to file if nothing has changed', (async () => {
-		Setting.setValue('sync.target', 9);
+		Setting.setValue('sync.mobileWifiOnly', true);
 		await Setting.saveAll();
 
 		{
@@ -164,7 +182,7 @@ describe('models_Setting', function() {
 			// changed.
 			const beforeStat = await fs.stat(Setting.settingFilePath);
 			await msleep(1001);
-			Setting.setValue('sync.target', 8);
+			Setting.setValue('sync.mobileWifiOnly', false);
 			await Setting.saveAll();
 			const afterStat = await fs.stat(Setting.settingFilePath);
 			expect(afterStat.mtime.getTime()).toBeGreaterThan(beforeStat.mtime.getTime());
@@ -173,7 +191,7 @@ describe('models_Setting', function() {
 		{
 			const beforeStat = await fs.stat(Setting.settingFilePath);
 			await msleep(1001);
-			Setting.setValue('sync.target', 8);
+			Setting.setValue('sync.mobileWifiOnly', false);
 			const afterStat = await fs.stat(Setting.settingFilePath);
 			await Setting.saveAll();
 			expect(afterStat.mtime.getTime()).toBe(beforeStat.mtime.getTime());

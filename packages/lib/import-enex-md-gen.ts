@@ -32,6 +32,7 @@ interface ParserStateTag {
 	name: string;
 	visible: boolean;
 	isCodeBlock: boolean;
+	isHighlight: boolean;
 }
 
 interface ParserStateList {
@@ -503,30 +504,25 @@ function isCodeBlock(context: any, nodeName: string, attributes: any) {
 	if (nodeName === 'code') return true;
 
 	if (attributes && attributes.style) {
-		const enCodeBlock = cssValue(context, attributes.style, '-en-codeblock');
+		// Yes, this property sometimes appears as -en-codeblock, sometimes as
+		// --en-codeblock. Would be too easy to import ENEX data otherwise.
+		// https://github.com/laurent22/joplin/issues/4965
+		const enCodeBlock = cssValue(context, attributes.style, '-en-codeblock') || cssValue(context, attributes.style, '--en-codeblock');
 		if (enCodeBlock && enCodeBlock.toLowerCase() === 'true') return true;
 	}
 	return false;
 }
 
-// function removeSectionParent(section:Section | string) {
-// 	if (typeof section === 'string') return section;
-
-// 	section = { ...section };
-// 	delete section.parent;
-
-// 	section.lines = section.lines.slice();
-
-// 	for (let i = 0; i < section.lines.length; i++) {
-// 		section.lines[i] = removeSectionParent(section.lines[i]);
-// 	}
-
-// 	return section;
-// }
-
-// function printSection(section:Section) {
-// 	console.info(JSON.stringify(removeSectionParent(section), null, 4));
-// }
+function isHighlight(context: any, _nodeName: string, attributes: any) {
+	if (attributes && attributes.style) {
+		// Evernote uses various inconsistent CSS prefixes: so far I've found
+		// "--en", "-en", "-evernote", so I'm guessing "--evernote" probably
+		// exists too.
+		const enHighlight = cssValue(context, attributes.style, '-evernote-highlight') || cssValue(context, attributes.style, '--evernote-highlight');
+		if (enHighlight && enHighlight.toLowerCase() === 'true') return true;
+	}
+	return false;
+}
 
 function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<EnexXmlToMdArrayResult> {
 	const remainingResources = resources.slice();
@@ -604,6 +600,7 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<Ene
 				name: n,
 				visible: isVisible,
 				isCodeBlock: isCodeBlock(this, n, nodeAttributes),
+				isHighlight: isHighlight(this, n, nodeAttributes),
 			};
 
 			state.tags.push(tagInfo);
@@ -683,7 +680,6 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<Ene
 			} else if (n == 'caption') {
 				if (section.type != 'table') {
 					displaySaxWarning(this, 'Found a <caption> tag outside of a <table>');
-					// return;
 				}
 
 				const newSection: Section = {
@@ -703,13 +699,6 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<Ene
 				section.lines.push(newSection);
 				section = newSection;
 			} else if (tagInfo.isCodeBlock) {
-				// state.inPre = false;
-
-				// const previousIsPre = state.tags.length ? state.tags[state.tags.length - 1].name === 'pre' : false;
-				// if (previousIsPre) {
-				// 	section.lines.pop();
-				// }
-
 				state.inCode.push(true);
 				state.currentCode = '';
 
@@ -743,6 +732,8 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<Ene
 					section.lines.push(`${indent + container.counter}. `);
 					container.counter++;
 				}
+			} else if (tagInfo.isHighlight) {
+				section.lines.push('==');
 			} else if (isStrongTag(n)) {
 				section.lines.push('**');
 			} else if (isStrikeTag(n)) {
@@ -905,6 +896,8 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<Ene
 				// End of note
 			} else if (!poppedTag.visible) {
 				if (section && section.parent) section = section.parent;
+			} else if (poppedTag.isHighlight) {
+				section.lines.push('==');
 			} else if (poppedTag.isCodeBlock) {
 				state.inCode.pop();
 

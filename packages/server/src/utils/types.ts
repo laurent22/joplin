@@ -1,9 +1,12 @@
 import { LoggerWrapper } from '@joplin/lib/Logger';
+import { StripePublicConfig } from '@joplin/lib/utils/joplinCloud';
 import * as Koa from 'koa';
-import { DbConnection, User, Uuid } from '../db';
+import { User, Uuid } from '../services/database/types';
 import { Models } from '../models/factory';
+import { Account } from '../models/UserModel';
 import { Services } from '../services/types';
 import { Routers } from './routeUtils';
+import { DbConnection } from '../db';
 
 export enum Env {
 	Dev = 'dev',
@@ -14,22 +17,40 @@ export enum Env {
 export interface NotificationView {
 	id: Uuid;
 	messageHtml: string;
-	level: string;
+	levelClassName: string;
 	closeUrl: string;
 }
 
-export interface AppContext extends Koa.Context {
+interface AppContextJoplin {
 	env: Env;
 	db: DbConnection;
 	models: Models;
 	appLogger(): LoggerWrapper;
 	notifications: NotificationView[];
 	owner: User;
+	account: Account;
 	routes: Routers;
 	services: Services;
 }
 
+export interface AppContext extends Koa.Context {
+	joplin: AppContextJoplin;
+
+	// All the properties under `joplin` were previously at the root, so to make
+	// sure they are no longer used anywhere we set them to "never", as that
+	// would trigger the TypeScript compiler. Later on, all this can be removed.
+	// env: never;
+	// db: never;
+	// models: never;
+	// appLogger: never;
+	// notifications: never;
+	// owner: never;
+	// routes: never;
+	// services: never;
+}
+
 export enum DatabaseConfigClient {
+	Null = 'null',
 	PostgreSQL = 'pg',
 	SQLite = 'sqlite3',
 }
@@ -44,6 +65,8 @@ export interface DatabaseConfig {
 	user?: string;
 	password?: string;
 	asyncStackTraces?: boolean;
+	slowQueryLogEnabled?: boolean;
+	slowQueryLogMinDuration?: number;
 }
 
 export interface MailerConfig {
@@ -57,9 +80,9 @@ export interface MailerConfig {
 	noReplyEmail: string;
 }
 
-export interface StripeConfig {
+export interface StripeConfig extends StripePublicConfig {
+	enabled: boolean;
 	secretKey: string;
-	publishableKey: string;
 	webhookSecret: string;
 }
 
@@ -78,9 +101,19 @@ export interface Config {
 	baseUrl: string;
 	apiBaseUrl: string;
 	userContentBaseUrl: string;
+	joplinAppBaseUrl: string;
+	signupEnabled: boolean;
+	termsEnabled: boolean;
+	accountTypesEnabled: boolean;
+	showErrorStackTraces: boolean;
 	database: DatabaseConfig;
 	mailer: MailerConfig;
 	stripe: StripeConfig;
+	supportEmail: string;
+	supportName: string;
+	businessEmail: string;
+	isJoplinCloud: boolean;
+	cookieSecure: boolean;
 }
 
 export enum HttpMethod {

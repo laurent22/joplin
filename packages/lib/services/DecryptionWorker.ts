@@ -6,8 +6,16 @@ import ResourceService from './ResourceService';
 import Logger from '../Logger';
 import shim from '../shim';
 import KvStore from './KvStore';
+import EncryptionService from './e2ee/EncryptionService';
 
 const EventEmitter = require('events');
+
+interface DecryptionResult {
+	skippedItemCount?: number;
+	decryptedItemCounts?: number;
+	decryptedItemCount?: number;
+	error: any;
+}
 
 export default class DecryptionWorker {
 
@@ -21,7 +29,7 @@ export default class DecryptionWorker {
 	private kvStore_: KvStore = null;
 	private maxDecryptionAttempts_ = 2;
 	private startCalls_: boolean[] = [];
-	private encryptionService_: any = null;
+	private encryptionService_: EncryptionService = null;
 
 	constructor() {
 		this.state_ = 'idle';
@@ -107,7 +115,7 @@ export default class DecryptionWorker {
 		this.dispatch(action);
 	}
 
-	async start_(options: any = null) {
+	private async start_(options: any = null): Promise<DecryptionResult> {
 		if (options === null) options = {};
 		if (!('masterKeyNotLoadedHandler' in options)) options.masterKeyNotLoadedHandler = 'throw';
 		if (!('errorHandler' in options)) options.errorHandler = 'log';
@@ -126,6 +134,11 @@ export default class DecryptionWorker {
 			const msg = 'DecryptionWorker: cannot start because no master key is currently loaded.';
 			this.logger().info(msg);
 			const ids = await MasterKey.allIds();
+
+			// Note that the current implementation means that a warning will be
+			// displayed even if the user has no encrypted note. Just having
+			// encrypted master key is sufficient. Not great but good enough for
+			// now.
 
 			if (ids.length) {
 				if (options.masterKeyNotLoadedHandler === 'throw') {
@@ -260,10 +273,11 @@ export default class DecryptionWorker {
 		let decryptedItemCount = 0;
 		for (const itemType in decryptedItemCounts) decryptedItemCount += decryptedItemCounts[itemType];
 
-		const finalReport = {
+		const finalReport: DecryptionResult = {
 			skippedItemCount: skippedItemCount,
 			decryptedItemCounts: decryptedItemCounts,
 			decryptedItemCount: decryptedItemCount,
+			error: null,
 		};
 
 		this.dispatchReport(Object.assign({}, finalReport, { state: 'idle' }));
@@ -276,7 +290,7 @@ export default class DecryptionWorker {
 		return finalReport;
 	}
 
-	async start(options: any) {
+	public async start(options: any = {}) {
 		this.startCalls_.push(true);
 		let output = null;
 		try {

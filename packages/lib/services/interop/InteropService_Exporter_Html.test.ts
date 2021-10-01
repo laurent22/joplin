@@ -6,6 +6,7 @@ import Note from '../../models/Note';
 import * as fs from 'fs-extra';
 import { tempFilePath } from '../../testing/test-utils';
 import { ContentScriptType } from '../../services/plugins/api/types';
+import { FileSystemItem } from './types';
 
 async function recreateExportDir() {
 	const dir = exportDir();
@@ -13,7 +14,7 @@ async function recreateExportDir() {
 	await fs.mkdirp(dir);
 }
 
-describe('services_InteropService_Exporter_Html', function() {
+describe('interop/InteropService_Exporter_Html', function() {
 
 	beforeEach(async (done) => {
 		await setupDatabaseAndSynchronizer(1);
@@ -35,6 +36,29 @@ describe('services_InteropService_Exporter_Html', function() {
 
 		const content = await fs.readFile(filePath, 'utf8');
 		expect(content).toContain('<strong>ma note</strong>');
+	}));
+
+	test('should export HTML directory', (async () => {
+		const service = InteropService.instance();
+		const folder1 = await Folder.save({ title: 'folder1' });
+		await Folder.save({ title: 'folder2' });
+		await Note.save({ title: 'note1', parent_id: folder1.id });
+		await Note.save({ title: 'note2', parent_id: folder1.id });
+
+		const dir = exportDir();
+		await service.export({
+			path: dir,
+			format: 'html',
+			target: FileSystemItem.Directory,
+		});
+
+		const rootDirs = await fs.readdir(dir);
+		rootDirs.sort();
+		expect(rootDirs).toEqual(['folder1', 'folder2']);
+
+		const files = await fs.readdir(`${dir}/${rootDirs[0]}`);
+		expect(files).toContain('note1.html');
+		expect(files).toContain('note2.html');
 	}));
 
 	test('should export plugin assets', (async () => {

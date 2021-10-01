@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
-import { AppState } from '../app';
+import { AppState } from '../app.reducer';
 import InteropService from '@joplin/lib/services/interop/InteropService';
 import { stateUtils } from '@joplin/lib/reducer';
 import CommandService from '@joplin/lib/services/CommandService';
@@ -24,8 +24,6 @@ import { reg } from '@joplin/lib/registry';
 const packageInfo = require('../packageInfo.js');
 const { clipboard } = require('electron');
 const Menu = bridge().Menu;
-const PluginManager = require('@joplin/lib/services/PluginManager');
-const TemplateUtils = require('@joplin/lib/TemplateUtils');
 
 const menuUtils = new MenuUtils(CommandService.instance());
 
@@ -301,7 +299,6 @@ function useMenu(props: Props) {
 
 			const importItems = [];
 			const exportItems = [];
-			const templateItems: any[] = [];
 			const ioService = InteropService.instance();
 			const ioModules = ioService.modules();
 			for (let i = 0; i < ioModules.length; i++) {
@@ -365,39 +362,6 @@ function useMenu(props: Props) {
 			const newFolderItem = menuItemDic.newFolder;
 			const newSubFolderItem = menuItemDic.newSubFolder;
 			const printItem = menuItemDic.print;
-
-			templateItems.push({
-				label: _('Create note from template'),
-				click: () => {
-					void CommandService.instance().execute('selectTemplate', 'note');
-				},
-			}, {
-				label: _('Create to-do from template'),
-				click: () => {
-					void CommandService.instance().execute('selectTemplate', 'todo');
-				},
-			}, {
-				label: _('Insert template'),
-				accelerator: keymapService.getAccelerator('insertTemplate'),
-				click: () => {
-					void CommandService.instance().execute('selectTemplate');
-				},
-			}, {
-				label: _('Open template directory'),
-				click: () => {
-					void bridge().openItem(Setting.value('templateDir'));
-				},
-			}, {
-				label: _('Refresh templates'),
-				click: async () => {
-					const templates = await TemplateUtils.loadTemplates(Setting.value('templateDir'));
-
-					props.dispatch({
-						type: 'TEMPLATE_UPDATE_ALL',
-						templates: templates,
-					});
-				},
-			});
 
 			let toolsItems: any[] = [];
 
@@ -494,13 +458,6 @@ function useMenu(props: Props) {
 					type: 'separator',
 					visible: shim.isMac() ? false : true,
 				}, {
-					label: _('Templates'),
-					visible: shim.isMac() ? false : true,
-					submenu: templateItems,
-				}, {
-					type: 'separator',
-					visible: shim.isMac() ? false : true,
-				}, {
 					label: _('Import'),
 					visible: shim.isMac() ? false : true,
 					submenu: importItems,
@@ -526,6 +483,14 @@ function useMenu(props: Props) {
 					click: () => { bridge().electronApp().hide(); },
 				} : noItem,
 
+				shim.isMac() ? {
+					role: 'hideothers',
+				} : noItem,
+
+				shim.isMac() ? {
+					role: 'unhide',
+				} : noItem,
+
 				{
 					type: 'separator',
 				},
@@ -545,11 +510,6 @@ function useMenu(props: Props) {
 						platforms: ['darwin'],
 						accelerator: shim.isMac() && keymapService.getAccelerator('closeWindow'),
 						selector: 'performClose:',
-					}, {
-						type: 'separator',
-					}, {
-						label: _('Templates'),
-						submenu: templateItems,
 					}, {
 						type: 'separator',
 					}, {
@@ -790,15 +750,8 @@ function useMenu(props: Props) {
 				rootMenus[key].submenu = cleanUpSeparators(rootMenus[key].submenu);
 			}
 
-			{
-				// This is for GotoAnything only - should be refactored since this plugin manager is not used otherwise
-				const pluginMenuItems = PluginManager.instance().menuItems();
-				for (const item of pluginMenuItems) {
-					const itemParent = rootMenus[item.parent] ? rootMenus[item.parent] : 'tools';
-					itemParent.submenu.push(separator());
-					itemParent.submenu.push(item);
-				}
-			}
+			rootMenus.go.submenu.push(menuItemDic.gotoAnything);
+			rootMenus.tools.submenu.push(menuItemDic.commandPalette);
 
 			for (const view of props.pluginMenuItems) {
 				const location: MenuItemLocation = view.location;

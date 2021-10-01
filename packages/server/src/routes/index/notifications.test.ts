@@ -1,4 +1,4 @@
-import { NotificationLevel } from '../../db';
+import { NotificationLevel } from '../../services/database/types';
 import routeHandler from '../../middleware/routeHandler';
 import { NotificationKey } from '../../models/NotificationModel';
 import { beforeAllDb, afterAllTests, beforeEachDb, koaAppContext, models, createUserAndSession } from '../../utils/testing/testUtils';

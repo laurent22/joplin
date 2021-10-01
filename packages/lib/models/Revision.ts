@@ -17,15 +17,65 @@ export default class Revision extends BaseItem {
 		return BaseModel.TYPE_REVISION;
 	}
 
-	static createTextPatch(oldText: string, newText: string) {
+	public static createTextPatchLegacy(oldText: string, newText: string): string {
 		return dmp.patch_toText(dmp.patch_make(oldText, newText));
 	}
 
-	static applyTextPatch(text: string, patch: string) {
+	public static createTextPatch(oldText: string, newText: string): string {
+		// Note that, once parsed, the resulting object will not exactly be like
+		// a dmp patch object. This is because the library overrides the
+		// toString() prototype function of the dmp patch object, and uses it in
+		// certain functions. For example, in patch_toText(). It means that when
+		// calling patch_toText() with an object that has been JSON-stringified
+		// and JSON-parsed, it will not work.
+		//
+		// This is mostly fine for our purpose. It's only a problem in
+		// Revision.patchStats() because it was based on parsing the GNU diff
+		// as returned by patch_toText().
+		return JSON.stringify(dmp.patch_make(oldText, newText));
+	}
+
+	public static applyTextPatchLegacy(text: string, patch: string): string {
 		patch = dmp.patch_fromText(patch);
 		const result = dmp.patch_apply(patch, text);
 		if (!result || !result.length) throw new Error('Could not apply patch');
 		return result[0];
+	}
+
+	private static isLegacyPatch(patch: string): boolean {
+		return patch && patch.indexOf('@@') === 0;
+	}
+
+	private static isNewPatch(patch: string): boolean {
+		if (!patch) return true;
+		return patch.indexOf('[{') === 0;
+	}
+
+	public static applyTextPatch(text: string, patch: string): string {
+		if (this.isLegacyPatch(patch)) {
+			return this.applyTextPatchLegacy(text, patch);
+		} else {
+			// An empty patch should be '[]', but legacy data may be just "".
+			// However an empty string would make JSON.parse fail so we set it
+			// to '[]'.
+			const result = dmp.patch_apply(JSON.parse(patch ? patch : '[]'), text);
+			if (!result || !result.length) throw new Error('Could not apply patch');
+			return result[0];
+		}
+	}
+
+	public static isEmptyRevision(rev: RevisionEntity): boolean {
+		if (this.isLegacyPatch(rev.title_diff) && rev.title_diff) return false;
+		if (this.isLegacyPatch(rev.body_diff) && rev.body_diff) return false;
+
+		if (this.isNewPatch(rev.title_diff) && rev.title_diff && rev.title_diff !== '[]') return false;
+		if (this.isNewPatch(rev.body_diff) && rev.body_diff && rev.body_diff !== '[]') return false;
+
+		const md = rev.metadata_diff ? JSON.parse(rev.metadata_diff) : {};
+		if (md.new && Object.keys(md.new).length) return false;
+		if (md.deleted && Object.keys(md.deleted).length) return false;
+
+		return true;
 	}
 
 	static createObjectPatch(oldObject: any, newObject: any) {
@@ -65,8 +115,34 @@ export default class Revision extends BaseItem {
 		return output;
 	}
 
-	static patchStats(patch: string) {
+	// Turn a new-style patch into an approximation of a GNU diff format.
+	// Approximation, because the only goal is to put "+" or "-" before each
+	// line, so that it can be processed by patchStats().
+	private static newPatchToDiffFormat(patch: string): string {
+		const changeList: string[] = [];
+		const patchArray = JSON.parse(patch);
+		for (const patchItem of patchArray) {
+			for (const d of patchItem.diffs) {
+				if (d[0] !== 0) changeList.push(d[0] < 0 ? `-${d[1].replace(/[\n\r]/g, ' ')}` : `+${d[1].trim().replace(/[\n\r]/g, ' ')}`);
+			}
+		}
+		return changeList.join('\n');
+	}
+
+	public static patchStats(patch: string) {
 		if (typeof patch === 'object') throw new Error('Not implemented');
+
+		if (this.isNewPatch(patch)) {
+			try {
+				patch = this.newPatchToDiffFormat(patch);
+			} catch (error) {
+				// Normally it should work but if it doesn't we don't want it to
+				// crash the app since it's just presentational. But log an
+				// error so that it can eventually be fixed.
+				console.error('Could not generate diff:', error, patch);
+				return { added: 0, removed: 0 };
+			}
+		}
 
 		const countChars = (diffLine: string) => {
 			return unescape(diffLine).length - 1;

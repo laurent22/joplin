@@ -1,4 +1,4 @@
-import { Share, ShareType, ShareUserStatus } from '../../db';
+import { Share, ShareType, ShareUserStatus } from '../../services/database/types';
 import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, createItemTree } from '../../utils/testing/testUtils';
 import { postApi, getApi } from '../../utils/testing/apiUtils';
 import { shareWithUserAndAccept } from '../../utils/testing/shareApiUtils';

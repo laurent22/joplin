@@ -6,6 +6,7 @@ import { sortedIds, createNTestNotes, setupDatabaseAndSynchronizer, switchClient
 import Folder from './Folder';
 import Note from './Note';
 import Tag from './Tag';
+import ItemChange from './ItemChange';
 const ArrayUtils = require('../ArrayUtils.js');
 
 async function allItems() {
@@ -14,7 +15,7 @@ async function allItems() {
 	return folders.concat(notes);
 }
 
-describe('models_Note', function() {
+describe('models/Note', function() {
 	beforeEach(async (done) => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
@@ -284,8 +285,20 @@ describe('models_Note', function() {
 			expect(externalToInternal).toBe(input);
 		}
 
-		const result = await Note.replaceResourceExternalToInternalLinks(`[](joplin://${note1.id})`);
-		expect(result).toBe(`[](:/${note1.id})`);
+		{
+			const result = await Note.replaceResourceExternalToInternalLinks(`[](joplin://${note1.id})`);
+			expect(result).toBe(`[](:/${note1.id})`);
+		}
+
+		{
+			// This is a regular file path that contains the resourceDirName
+			// inside but it shouldn't be changed.
+			//
+			// https://github.com/laurent22/joplin/issues/5034
+			const noChangeInput = `[docs](file:///c:/foo/${resourceDirName}/docs)`;
+			const result = await Note.replaceResourceExternalToInternalLinks(noChangeInput, { useAbsolutePaths: false });
+			expect(result).toBe(noChangeInput);
+		}
 	}));
 
 	it('should perform natural sorting', (async () => {
@@ -330,6 +343,46 @@ describe('models_Note', function() {
 		expect(sortedNotes3[2].id).toBe(note0.id);
 		expect(sortedNotes3[3].id).toBe(note1.id);
 		expect(sortedNotes3[4].id).toBe(note2.id);
+	}));
+
+	it('should create a conflict note', async () => {
+		const folder = await Folder.save({ title: 'Source Folder' });
+		const origNote = await Note.save({ title: 'note', parent_id: folder.id });
+		const conflictedNote = await Note.createConflictNote(origNote, ItemChange.SOURCE_SYNC);
+
+		expect(conflictedNote.is_conflict).toBe(1);
+		expect(conflictedNote.conflict_original_id).toBe(origNote.id);
+		expect(conflictedNote.parent_id).toBe(folder.id);
+	});
+
+	it('should copy conflicted note to target folder and cancel conflict', (async () => {
+		const srcfolder = await Folder.save({ title: 'Source Folder' });
+		const targetfolder = await Folder.save({ title: 'Target Folder' });
+
+		const note1 = await Note.save({ title: 'note', parent_id: srcfolder.id });
+		const conflictedNote = await Note.createConflictNote(note1, ItemChange.SOURCE_SYNC);
+
+		const note2 = await Note.copyToFolder(conflictedNote.id, targetfolder.id);
+
+		expect(note2.id === conflictedNote.id).toBe(false);
+		expect(note2.title).toBe(conflictedNote.title);
+		expect(note2.is_conflict).toBe(0);
+		expect(note2.conflict_original_id).toBe('');
+		expect(note2.parent_id).toBe(targetfolder.id);
+	}));
+
+	it('should move conflicted note to target folder and cancel conflict', (async () => {
+		const srcFolder = await Folder.save({ title: 'Source Folder' });
+		const targetFolder = await Folder.save({ title: 'Target Folder' });
+		const note1 = await Note.save({ title: 'note', parent_id: srcFolder.id });
+
+		const conflictedNote = await Note.createConflictNote(note1, ItemChange.SOURCE_SYNC);
+
+		const movedNote = await Note.moveToFolder(conflictedNote.id, targetFolder.id);
+
+		expect(movedNote.parent_id).toBe(targetFolder.id);
+		expect(movedNote.is_conflict).toBe(0);
+		expect(movedNote.conflict_original_id).toBe('');
 	}));
 
 });

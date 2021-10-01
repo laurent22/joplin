@@ -1,14 +1,17 @@
 import { Knex } from 'knex';
-import { Change, ChangeType, Item, Uuid } from '../db';
+import { SqliteMaxVariableNum } from '../db';
+import { Change, ChangeType, Item, Uuid } from '../services/database/types';
 import { md5 } from '../utils/crypto';
 import { ErrorResyncRequired } from '../utils/errors';
 import BaseModel, { SaveOptions } from './BaseModel';
 import { PaginatedResults, Pagination, PaginationOrderDir } from './utils/pagination';
 
-export interface ChangeWithItem {
-	item: Item;
-	updated_time: number;
-	type: ChangeType;
+export interface DeltaChange extends Change {
+	jop_updated_time?: number;
+}
+
+export interface PaginatedDeltaChanges extends PaginatedResults {
+	items: DeltaChange[];
 }
 
 export interface PaginatedChanges extends PaginatedResults {
@@ -57,15 +60,21 @@ export default class ChangeModel extends BaseModel<Change> {
 		return `${this.baseUrl}/changes`;
 	}
 
-	public async allFromId(id: string): Promise<Change[]> {
+	public async allFromId(id: string, limit: number = SqliteMaxVariableNum): Promise<PaginatedChanges> {
 		const startChange: Change = id ? await this.load(id) : null;
 		const query = this.db(this.tableName).select(...this.defaultFields);
 		if (startChange) void query.where('counter', '>', startChange.counter);
-		void query.limit(1000);
-		let results = await query;
+		void query.limit(limit);
+		let results: Change[] = await query;
+		const hasMore = !!results.length;
+		const cursor = results.length ? results[results.length - 1].id : id;
 		results = await this.removeDeletedItems(results);
 		results = await this.compressChanges(results);
-		return results;
+		return {
+			items: results,
+			has_more: hasMore,
+			cursor,
+		};
 	}
 
 	private changesForUserQuery(userId: Uuid, count: boolean): Knex.QueryBuilder {
@@ -105,7 +114,7 @@ export default class ChangeModel extends BaseModel<Change> {
 		return query;
 	}
 
-	public async allByUser(userId: Uuid, pagination: Pagination = null): Promise<PaginatedChanges> {
+	public async allByUser(userId: Uuid, pagination: Pagination = null): Promise<PaginatedDeltaChanges> {
 		pagination = {
 			page: 1,
 			limit: 100,
@@ -134,7 +143,7 @@ export default class ChangeModel extends BaseModel<Change> {
 		};
 	}
 
-	public async delta(userId: Uuid, pagination: ChangePagination = null): Promise<PaginatedChanges> {
+	public async delta(userId: Uuid, pagination: ChangePagination = null): Promise<PaginatedDeltaChanges> {
 		pagination = {
 			...defaultDeltaPagination(),
 			...pagination,
@@ -158,9 +167,21 @@ export default class ChangeModel extends BaseModel<Change> {
 			.orderBy('counter', 'asc')
 			.limit(pagination.limit) as any[];
 
-		const changes = await query;
+		const changes: Change[] = await query;
 
-		const finalChanges = await this.removeDeletedItems(this.compressChanges(changes));
+		const items: Item[] = await this.db('items').select('id', 'jop_updated_time').whereIn('items.id', changes.map(c => c.item_id));
+
+		let processedChanges = this.compressChanges(changes);
+		processedChanges = await this.removeDeletedItems(processedChanges, items);
+
+		const finalChanges: DeltaChange[] = processedChanges.map(c => {
+			const item = items.find(item => item.id === c.item_id);
+			if (!item) return c;
+			return {
+				...c,
+				jop_updated_time: item.jop_updated_time,
+			};
+		});
 
 		return {
 			items: finalChanges,
@@ -171,14 +192,14 @@ export default class ChangeModel extends BaseModel<Change> {
 		};
 	}
 
-	private async removeDeletedItems(changes: Change[]): Promise<Change[]> {
+	private async removeDeletedItems(changes: Change[], items: Item[] = null): Promise<Change[]> {
 		const itemIds = changes.map(c => c.item_id);
 
 		// We skip permission check here because, when an item is shared, we need
 		// to fetch files that don't belong to the current user. This check
 		// would not be needed anyway because the change items are generated in
 		// a context where permissions have already been checked.
-		const items: Item[] = await this.db('items').select('id').whereIn('items.id', itemIds);
+		items = items === null ? await this.db('items').select('id').whereIn('items.id', itemIds) : items;
 
 		const output: Change[] = [];
 

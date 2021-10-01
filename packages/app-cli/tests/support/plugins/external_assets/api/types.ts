@@ -27,11 +27,12 @@ export interface Command {
 	execute(...args: any[]): Promise<any | void>;
 
 	/**
-	 * Defines whether the command should be enabled or disabled, which in turns affects
-	 * the enabled state of any associated button or menu item.
+	 * Defines whether the command should be enabled or disabled, which in turns
+	 * affects the enabled state of any associated button or menu item.
 	 *
-	 * The condition should be expressed as a "when-clause" (as in Visual Studio Code). It's a simple boolean expression that evaluates to
-	 * `true` or `false`. It supports the following operators:
+	 * The condition should be expressed as a "when-clause" (as in Visual Studio
+	 * Code). It's a simple boolean expression that evaluates to `true` or
+	 * `false`. It supports the following operators:
 	 *
 	 * Operator | Symbol | Example
 	 * -- | -- | --
@@ -40,7 +41,15 @@ export interface Command {
 	 * Or | \|\| | "noteIsTodo \|\| noteTodoCompleted"
 	 * And | && | "oneNoteSelected && !inConflictFolder"
 	 *
-	 * Currently the supported context variables aren't documented, but you can [find the list here](https://github.com/laurent22/joplin/blob/dev/packages/lib/services/commands/stateToWhenClauseContext.ts).
+	 * Joplin, unlike VSCode, also supports parenthesis, which allows creating
+	 * more complex expressions such as `cond1 || (cond2 && cond3)`. Only one
+	 * level of parenthesis is possible (nested ones aren't supported).
+	 *
+	 * Currently the supported context variables aren't documented, but you can
+	 * find the list below:
+	 *
+	 * - [Global When Clauses](https://github.com/laurent22/joplin/blob/dev/packages/lib/services/commands/stateToWhenClauseContext.ts)
+	 * - [Desktop app When Clauses](https://github.com/laurent22/joplin/blob/dev/packages/app-desktop/services/commands/stateToWhenClauseContext.ts)
 	 *
 	 * Note: Commands are enabled by default unless you use this property.
 	 */
@@ -325,6 +334,17 @@ export enum SettingItemType {
 	Button = 6,
 }
 
+export enum AppType {
+	Desktop = 'desktop',
+	Mobile = 'mobile',
+	Cli = 'cli',
+}
+
+export enum SettingStorage {
+	Database = 1,
+	File = 2,
+}
+
 // Redefine a simplified interface to mask internal details
 // and to remove function calls as they would have to be async.
 export interface SettingItem {
@@ -363,7 +383,7 @@ export interface SettingItem {
 	/**
 	 * Reserved property. Not used at the moment.
 	 */
-	appTypes?: string[];
+	appTypes?: AppType[];
 
 	/**
 	 * Set this to `true` to store secure data, such as passwords. Any such
@@ -384,6 +404,11 @@ export interface SettingItem {
 	minimum?: number;
 	maximum?: number;
 	step?: number;
+
+	/**
+	 * Either store the setting in the database or in settings.json. Defaults to database.
+	 */
+	storage?: SettingStorage;
 }
 
 export interface SettingSection {
@@ -410,7 +435,7 @@ export type Path = string[];
 // Content Script types
 // =================================================================
 
-export type PostMessageHandler = (id: string, message: any)=> Promise<any>;
+export type PostMessageHandler = (message: any)=> Promise<any>;
 
 /**
  * When a content script is initialised, it receives a `context` object.

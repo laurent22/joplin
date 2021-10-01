@@ -12,12 +12,13 @@
     "bootstrapServerOnly": "lerna bootstrap --force-local --no-ci --include-dependents --include-dependencies --scope @joplin/server",
     "build": "lerna run build && npm run tsc",
     "buildApiDoc": "npm start --prefix=packages/app-cli -- apidoc ../../readme/api/references/rest_api.md",
+    "buildCommandIndex": "gulp buildCommandIndex",
     "buildDoc": "./packages/tools/build-all.sh",
     "buildPluginDoc": "typedoc --name 'Joplin Plugin API Documentation' --mode file -theme './Assets/PluginDocTheme/' --readme './Assets/PluginDocTheme/index.md' --excludeNotExported --excludeExternals --excludePrivate --excludeProtected --out docs/api/references/plugin_api packages/lib/services/plugins/api/",
     "buildSettingJsonSchema": "npm start --prefix=packages/app-cli -- settingschema ../../docs/schema/settings.json",
     "buildTranslations": "npm run tsc && node packages/tools/build-translation.js",
     "buildTranslationsNoTsc": "node packages/tools/build-translation.js",
-    "buildWebsite": "npm run buildApiDoc && node ./packages/tools/build-website.js && npm run buildPluginDoc && npm run buildSettingJsonSchema",
+    "buildWebsite": "npm run buildApiDoc && node ./packages/tools/website/build.js && npm run buildPluginDoc && npm run buildSettingJsonSchema",
     "circularDependencyCheck": "madge --warning --circular --extensions js ./",
     "clean": "lerna clean -y && lerna run clean",
     "dependencyTree": "madge",
@@ -36,6 +37,8 @@
     "releaseIOS": "node packages/tools/release-ios.js",
     "releasePluginGenerator": "node packages/tools/release-plugin-generator.js",
     "releaseServer": "node packages/tools/release-server.js",
+    "tagServerLatest": "node packages/tools/tagServerLatest.js",
+    "buildServerDocker": "node packages/tools/buildServerDocker.js",
     "setupNewRelease": "node ./packages/tools/setupNewRelease",
     "test-ci": "lerna run test-ci --stream",
     "test": "lerna run test --stream",
@@ -43,7 +46,8 @@
     "updateIgnored": "gulp updateIgnoredTypeScriptBuild",
     "updatePluginTypes": "./packages/generator-joplin/updateTypes.sh",
     "watch": "lerna run watch --stream --parallel",
-    "i": "lerna add --no-bootstrap --scope"
+    "watchWebsite": "nodemon --verbose --watch Assets/WebsiteAssets --watch packages/tools/website/build.js --ext md,ts,js,mustache,css,tsx,gif,png,svg --exec \"node packages/tools/website/build.js && http-server --port 8077 docs -a localhost\"",
+    "i": "node packages/tools/lernaInstall"
   },
   "husky": {
     "hooks": {
@@ -67,5 +71,9 @@
     "madge": "^4.0.2",
     "typedoc": "^0.17.8",
     "typescript": "^4.0.5"
+  },
+  "dependencies": {
+    "http-server": "^0.12.3",
+    "nodemon": "^2.0.9"
   }
 }

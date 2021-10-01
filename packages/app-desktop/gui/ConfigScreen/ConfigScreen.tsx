@@ -4,16 +4,16 @@ import ButtonBar from './ButtonBar';
 import Button, { ButtonLevel } from '../Button/Button';
 import { _ } from '@joplin/lib/locale';
 import bridge from '../../services/bridge';
-import Setting, { SyncStartupOperation } from '@joplin/lib/models/Setting';
+import Setting, { AppType, SyncStartupOperation } from '@joplin/lib/models/Setting';
 import control_PluginsStates from './controls/plugins/PluginsStates';
+import EncryptionConfigScreen from '../EncryptionConfigScreen/EncryptionConfigScreen';
 
 const { connect } = require('react-redux');
 const { themeStyle } = require('@joplin/lib/theme');
 const pathUtils = require('@joplin/lib/path-utils');
-const SyncTargetRegistry = require('@joplin/lib/SyncTargetRegistry');
+import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 const shared = require('@joplin/lib/components/shared/config-shared.js');
-const { EncryptionConfigScreen } = require('../EncryptionConfigScreen.min');
-const { ClipperConfigScreen } = require('../ClipperConfigScreen.min');
+import ClipperConfigScreen from '../ClipperConfigScreen';
 const { KeymapConfigScreen } = require('../KeymapConfig/KeymapConfigScreen');
 
 const settingKeyToControl: any = {
@@ -42,9 +42,6 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 		this.sidebar_selectionChange = this.sidebar_selectionChange.bind(this);
 		this.checkSyncConfig_ = this.checkSyncConfig_.bind(this);
-		// this.checkNextcloudAppButton_click = this.checkNextcloudAppButton_click.bind(this);
-		this.showLogButton_click = this.showLogButton_click.bind(this);
-		this.nextcloudAppHelpLink_click = this.nextcloudAppHelpLink_click.bind(this);
 		this.onCancelClick = this.onCancelClick.bind(this);
 		this.onSaveClick = this.onSaveClick.bind(this);
 		this.onApplyClick = this.onApplyClick.bind(this);
@@ -56,19 +53,6 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 	async checkSyncConfig_() {
 		await shared.checkSyncConfig(this, this.state.settings);
-	}
-
-	// async checkNextcloudAppButton_click() {
-	// 	this.setState({ showNextcloudAppLog: true });
-	// 	await shared.checkNextcloudApp(this, this.state.settings);
-	// }
-
-	showLogButton_click() {
-		this.setState({ showNextcloudAppLog: true });
-	}
-
-	nextcloudAppHelpLink_click() {
-		bridge().openExternal('https://joplinapp.org/nextcloud_app');
 	}
 
 	UNSAFE_componentWillMount() {
@@ -94,6 +78,11 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			Setting.setValue('sync.startupOperation', SyncStartupOperation.ClearLocalData);
 			await Setting.saveAll();
 			bridge().restart();
+		} else if (key === 'sync.openSyncWizard') {
+			this.props.dispatch({
+				type: 'DIALOG_OPEN',
+				name: 'syncWizard',
+			});
 		} else {
 			throw new Error(`Unhandled key: ${key}`);
 		}
@@ -360,7 +349,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 		const md = Setting.settingMetadata(key);
 
-		const descriptionText = Setting.keyDescription(key, 'desktop');
+		const descriptionText = Setting.keyDescription(key, AppType.Desktop);
 		const descriptionComp = this.renderDescription(this.props.themeId, descriptionText);
 
 		if (settingKeyToControl[key]) {
@@ -606,11 +595,15 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				</div>
 			);
 		} else if (md.type === Setting.TYPE_BUTTON) {
+			const labelComp = md.hideLabel ? null : (
+				<div style={labelStyle}>
+					<label>{md.label()}</label>
+				</div>
+			);
+
 			return (
 				<div key={key} style={rowStyle}>
-					<div style={labelStyle}>
-						<label>{md.label()}</label>
-					</div>
+					{labelComp}
 					<Button level={ButtonLevel.Secondary} title={md.label()} onClick={md.onClick ? md.onClick : () => this.handleSettingButton(key)}/>
 					{descriptionComp}
 				</div>

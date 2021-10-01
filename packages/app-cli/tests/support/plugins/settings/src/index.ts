@@ -8,25 +8,46 @@ joplin.plugins.register({
 			iconName: 'fas fa-music',
 		});
 		
-		await joplin.settings.registerSetting('myCustomSetting', {
-			value: 123,
-			type: SettingItemType.Int,
-			section: 'myCustomSection',
-			public: true,
-			label: 'My Custom Setting',
-		});
+		await joplin.settings.registerSettings({
+			'myCustomSetting': {
+				value: 123,
+				type: SettingItemType.Int,
+				section: 'myCustomSection',
+				public: true,
+				label: 'My Custom Setting',
+			},
 
-		await joplin.settings.registerSetting('multiOptionTest', {
-			value: 'en',
-			type: SettingItemType.String,
-			section: 'myCustomSection',
-			isEnum: true,
-			public: true,
-			label: 'Multi-options test',
-			options: {
-				'en': 'English',
-				'fr': 'French',
-				'es': 'Spanish',
+			'multiOptionTest': {
+				value: 'en',
+				type: SettingItemType.String,
+				section: 'myCustomSection',
+				isEnum: true,
+				public: true,
+				label: 'Multi-options test',
+				options: {
+					'en': 'English',
+					'fr': 'French',
+					'es': 'Spanish',
+				},
+			},
+
+			'mySecureSetting': {
+				value: 'hunter2',
+				type: SettingItemType.String,
+				section: 'myCustomSection',
+				public: true,
+				secure: true,
+				label: 'My Secure Setting',
+			},
+
+			'myFileSetting': {
+				value: 'abcd',
+				type: SettingItemType.String,
+				section: 'myCustomSection',
+				public: true,
+				label: 'My file setting',
+				description: 'This setting will be saved to settings.json',
+				['storage' as any]: 2, // Should be `storage: SettingStorage.File`
 			},
 		});
 
@@ -47,7 +68,11 @@ joplin.plugins.register({
 			iconName: 'fas fa-drum',
 			execute: async () => {
 				const value = await joplin.settings.value('myCustomSetting');
-				alert('Current value is: ' + value);
+				console.info('Current value is: ' + value);
+				const secureValue = await joplin.settings.value('mySecureSetting');
+				console.info('Secure value is: ' + secureValue);
+				const fileValue = await joplin.settings.value('myFileSetting');
+				console.info('Setting in file is: ' + fileValue);
 			},
 		});
 
