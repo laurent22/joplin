@@ -62,8 +62,23 @@ const gunzipFile = function(source, destination) {
 	});
 };
 
-function shimInit(sharp = null, keytar = null, React = null, appVersion = null, electronBridge = null) {
-	keytar = (shim.isWindows() || shim.isMac()) && !shim.isPortable() ? keytar : null;
+// sharp = null, keytar = null, React = null, appVersion = null, electronBridge = null, nodeSqlite = null
+function shimInit(options = null) {
+	options = {
+		sharp: null,
+		keytar: null,
+		React: null,
+		appVersion: null,
+		electronBridge: null,
+		nodeSqlite: null,
+		...options,
+	};
+
+	const sharp = options.sharp;
+	const keytar = (shim.isWindows() || shim.isMac()) && !shim.isPortable() ? options.keytar : null;
+	const appVersion = options.appVersion;
+
+	shim.setNodeSqlite(options.nodeSqlite);
 
 	shim.fsDriver = () => {
 		throw new Error('Not implemented');
@@ -72,16 +87,16 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null, 
 	shim.Geolocation = GeolocationNode;
 	shim.FormData = require('form-data');
 	shim.sjclModule = require('./vendor/sjcl.js');
-	shim.electronBridge_ = electronBridge;
+	shim.electronBridge_ = options.electronBridge;
 
 	shim.fsDriver = () => {
 		if (!shim.fsDriver_) shim.fsDriver_ = new FsDriverNode();
 		return shim.fsDriver_;
 	};
 
-	if (React) {
+	if (options.React) {
 		shim.react = () => {
-			return React;
+			return options.React;
 		};
 	}
 

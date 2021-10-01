@@ -21,6 +21,7 @@ let isTestingEnv_ = false;
 //
 // https://stackoverflow.com/a/42816077/561309
 let react_: typeof React = null;
+let nodeSqlite_: any = null;
 
 const shim = {
 	Geolocation: null as any,
@@ -312,6 +313,15 @@ const shim = {
 
 	clearInterval: (_id: any) => {
 		throw new Error('Not implemented');
+	},
+
+	setNodeSqlite: (nodeSqlite: any) => {
+		nodeSqlite_ = nodeSqlite;
+	},
+
+	nodeSqlite: () => {
+		if (!nodeSqlite_) throw new Error('Trying to access nodeSqlite before it has been set!!!');
+		return nodeSqlite_;
 	},
 
 	setReact: (react: any) => {

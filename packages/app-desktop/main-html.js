@@ -28,6 +28,7 @@ const bridge = require('@electron/remote').require('./bridge').default;
 const EncryptionService = require('@joplin/lib/services/e2ee/EncryptionService').default;
 const { FileApiDriverLocal } = require('@joplin/lib/file-api-driver-local.js');
 const React = require('react');
+const nodeSqlite = require('sqlite3');
 
 if (bridge().env() === 'dev') {
 	const newConsole = function(oldConsole) {
@@ -92,7 +93,13 @@ function appVersion() {
 	return p.version;
 }
 
-shimInit(null, keytar, React, appVersion, bridge());
+shimInit({
+	keytar,
+	React,
+	appVersion,
+	electronBridge: bridge(),
+	nodeSqlite,
+});
 
 // Disable drag and drop of links inside application (which would
 // open it as if the whole app was a browser)

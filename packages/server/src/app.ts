@@ -20,10 +20,11 @@ import { credentialFile } from './utils/testing/testUtils';
 import apiVersionHandler from './middleware/apiVersionHandler';
 import clickJackingHandler from './middleware/clickJackingHandler';
 
+const nodeSqlite = require('sqlite3');
 const cors = require('@koa/cors');
 const nodeEnvFile = require('node-env-file');
 const { shimInit } = require('@joplin/lib/shim-init-node.js');
-shimInit();
+shimInit({ nodeSqlite });
 
 const env: Env = argv.env as Env || Env.Prod;
 

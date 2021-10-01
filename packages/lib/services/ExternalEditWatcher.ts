@@ -261,7 +261,7 @@ export default class ExternalEditWatcher {
 					if (subProcess && subProcess.pid) {
 						this.logger().debug(`Started editor with PID ${subProcess.pid}`);
 						shim.clearInterval(iid);
-						resolve();
+						resolve(null);
 					}
 				}, 100);
 

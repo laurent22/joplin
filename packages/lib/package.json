@@ -44,6 +44,7 @@
     "es6-promise-pool": "^2.5.0",
     "file-uri-to-path": "^1.0.0",
     "follow-redirects": "^1.2.4",
+    "sqlite3": "^5.0.2",
     "form-data": "^2.1.4",
     "fs-extra": "^5.0.0",
     "html-entities": "^1.2.1",

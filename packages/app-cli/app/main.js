@@ -29,6 +29,7 @@ const { _ } = require('@joplin/lib/locale');
 const { FileApiDriverLocal } = require('@joplin/lib/file-api-driver-local.js');
 const EncryptionService = require('@joplin/lib/services/e2ee/EncryptionService').default;
 const envFromArgs = require('@joplin/lib/envFromArgs');
+const nodeSqlite = require('sqlite3');
 
 const env = envFromArgs(process.argv);
 
@@ -64,7 +65,7 @@ function appVersion() {
 	return p.version;
 }
 
-shimInit(sharp, keytar, null, appVersion);
+shimInit({ sharp, keytar, appVersion, nodeSqlite });
 
 const application = app();
 

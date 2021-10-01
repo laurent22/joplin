@@ -162,7 +162,7 @@ const create = (win, options) => {
 			}),
 		};
 
-		const shouldShowInspectElement = typeof options.showInspectElement === 'boolean' ? options.showInspectElement : isDev;
+		const shouldShowInspectElement = typeof options.showInspectElement === 'boolean' ? options.showInspectElement : false;
 
 		let menuTemplate = [
 			defaultActions.separator(),
