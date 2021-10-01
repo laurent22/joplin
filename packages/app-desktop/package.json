@@ -112,6 +112,7 @@
     "gulp": "^4.0.2",
     "jest": "^26.6.3",
     "js-sha512": "^0.8.0",
+    "nan": "2.14.2",
     "react-test-renderer": "^16.14.0",
     "typescript": "^4.0.5"
   },
@@ -122,9 +123,9 @@
   },
   "dependencies": {
     "@electron/remote": "^2.0.1",
+    "@fortawesome/fontawesome-free": "^5.13.0",
     "@joplin/lib": "~2.5",
     "@joplin/renderer": "~2.5",
-    "@fortawesome/fontawesome-free": "^5.13.0",
     "async-mutex": "^0.1.3",
     "codemirror": "^5.56.0",
     "color": "^3.1.2",
@@ -156,6 +157,7 @@
     "reselect": "^4.0.0",
     "roboto-fontface": "^0.10.0",
     "smalltalk": "^2.5.1",
+    "sqlite3": "^5.0.2",
     "styled-components": "^5.1.1",
     "styled-system": "^5.1.5",
     "taboverride": "^4.0.3",
