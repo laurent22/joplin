@@ -2,9 +2,7 @@ import eventManager from '../eventManager';
 import { Notification } from '../models/Alarm';
 import shim from '../shim';
 import Setting from '../models/Setting';
-
 const notifier = require('node-notifier');
-const bridge = require('electron').remote.require('./bridge').default;
 
 interface Options {
 	appName: string;
@@ -48,7 +46,7 @@ export default class AlarmServiceDriverNode {
 		const o: any = {
 			appID: this.appName_,
 			title: notification.title,
-			icon: `${bridge().electronApp().buildDir()}/icons/512x512.png`,
+			icon: `${shim.electronBridge().electronApp().buildDir()}/icons/512x512.png`,
 		};
 		if ('body' in notification) o.message = notification.body;
 
