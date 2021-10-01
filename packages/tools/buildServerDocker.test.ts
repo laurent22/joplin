@@ -24,7 +24,7 @@ describe('buildServerDocker', function() {
 
 		const testCases: TestCase[] = [
 			['server-v1.1.2-beta', true],
-			['server-v1.1.2', false],
+			['server-v1.1.2', true], // For now, always returns true
 		];
 
 		for (const testCase of testCases) {
