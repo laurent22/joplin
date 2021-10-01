@@ -26,7 +26,7 @@ const { ResourceScreen } = require('./ResourceScreen.js');
 const { Navigator } = require('./Navigator.min.js');
 const WelcomeUtils = require('@joplin/lib/WelcomeUtils');
 const { ThemeProvider, StyleSheetManager, createGlobalStyle } = require('styled-components');
-const bridge = require('electron').remote.require('./bridge').default;
+const bridge = require('@electron/remote').require('./bridge').default;
 
 interface Props {
 	themeId: number;

@@ -86,6 +86,7 @@ export default class ElectronAppWrapper {
 			backgroundColor: '#fff', // required to enable sub pixel rendering, can't be in css
 			webPreferences: {
 				nodeIntegration: true,
+				contextIsolation: false,
 				spellcheck: true,
 				enableRemoteModule: true,
 			},
@@ -100,6 +101,8 @@ export default class ElectronAppWrapper {
 		if (shim.isLinux()) windowOptions.icon = path.join(__dirname, '..', 'build/icons/128x128.png');
 
 		this.win_ = new BrowserWindow(windowOptions);
+
+		require('@electron/remote/main').enable(this.win_.webContents);
 
 		if (!screen.getDisplayMatching(this.win_.getBounds())) {
 			const { width: windowWidth, height: windowHeight } = this.win_.getBounds();
