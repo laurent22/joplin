@@ -40,6 +40,7 @@ packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/supportedLocales.js
 packages/app-desktop/locales
 packages/app-desktop/node_modules
 packages/app-desktop/packageInfo.js
+packages/app-desktop/services/electron-context-menu.js
 packages/app-mobile/android
 packages/app-mobile/components/NoteEditor/CodeMirror.bundle.js
 packages/app-mobile/ios

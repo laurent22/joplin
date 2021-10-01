@@ -107,6 +107,8 @@ export default class PluginRunner extends BasePluginRunner {
 			},
 		});
 
+		require('@electron/remote/main').enable(pluginWindow.webContents);
+
 		bridge().electronApp().registerPluginWindow(plugin.id, pluginWindow);
 
 		pluginWindow.loadURL(`${require('url').format({

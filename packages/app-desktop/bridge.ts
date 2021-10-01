@@ -31,7 +31,7 @@ export class Bridge {
 	}
 
 	electronIsDev() {
-		return true; // this.electronApp().electronApp().isPackaged; // require('electron-is-dev');
+		return !this.electronApp().electronApp().isPackaged;
 	}
 
 	env() {

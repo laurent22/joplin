@@ -102,6 +102,8 @@ export default class ElectronAppWrapper {
 
 		this.win_ = new BrowserWindow(windowOptions);
 
+		require('@electron/remote/main').enable(this.win_.webContents);
+
 		if (!screen.getDisplayMatching(this.win_.getBounds())) {
 			const { width: windowWidth, height: windowHeight } = this.win_.getBounds();
 			const { width: primaryDisplayWidth, height: primaryDisplayHeight } = screen.getPrimaryDisplay().workArea;
