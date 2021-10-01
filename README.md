@@ -239,6 +239,10 @@ In the **terminal application**, you will need to set the `sync.target` config v
 
 If synchronisation does not work, please consult the logs in the app profile directory - it is often due to a misconfigured URL or password. The log should indicate what the exact issue is.
 
+If you are using 2FA in your nextcloud account, then you will need to generate a password from your account to use with joplin as your account password will not work.
+
+To generate a enw password go to Nextcoud settings > Security > Devices and Sessions, at the end of this list enter your app name and click Create new app password. This will generate a new password something like zzzd-dfvs-sdfv-sdfd which will sync your notes with your nextcloud account with 2FA on. Copy that password and save it since you can't see that again. and use that instead of your normal password for Nextcloud sync.
+
 ## WebDAV synchronisation
 
 Select the "WebDAV" synchronisation target and follow the same instructions as for Nextcloud above (for the **terminal application** you will need to select sync target 6 rather than 5)
