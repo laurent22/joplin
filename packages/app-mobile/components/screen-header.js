@@ -16,7 +16,6 @@ const { dialogs } = require('../utils/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
 const { localSyncInfoFromState } = require('@joplin/lib/services/synchronizer/syncInfoUtils');
 const { showMissingMasterKeyMessage } = require('@joplin/lib/services/e2ee/utils');
-const { substrWithEllipsis } = require('@joplin/lib/string-utils');
 
 Icon.loadFont();
 
@@ -187,14 +186,8 @@ class ScreenHeaderComponent extends React.PureComponent {
 		// it won't be visible within the header component.
 		const noteIds = this.props.selectedNoteIds;
 
-		let msg = '';
-		if (noteIds.length === 1) {
-			const note = await Note.load(noteIds[0]);
-			if (!note) return;
-			msg = _('Delete note "%s"?', substrWithEllipsis(note.title, 0, 32));
-		} else {
-			msg = _('Delete these %d notes?', noteIds.length);
-		}
+		const msg = await Note.deleteMessage(noteIds);
+		if (!msg) return;
 
 		const ok = await dialogs.confirm(this.props.parentComponent, msg);
 		if (!ok) return;
