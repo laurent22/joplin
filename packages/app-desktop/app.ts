@@ -191,40 +191,42 @@ class Application extends BaseApplication {
 	}
 
 	setupContextMenu() {
-		bridge().setupContextMenu((misspelledWord: string, dictionarySuggestions: string[]) => {
-			let output = SpellCheckerService.instance().contextMenuItems(misspelledWord, dictionarySuggestions);
-			console.info(misspelledWord, dictionarySuggestions);
-			console.info(output);
-			output = output.map(o => {
-				delete o.click;
-				return o;
-			});
-			return output;
-		});
-		// const MenuItem = bridge().MenuItem;
-
-		// // The context menu must be setup in renderer process because that's where
-		// // the spell checker service lives.
-		// require('electron-context-menu')({
-		// 	shouldShowMenu: (_event: any, params: any) => {
-		// 		// params.inputFieldType === 'none' when right-clicking the text editor. This is a bit of a hack to detect it because in this
-		// 		// case we don't want to use the built-in context menu but a custom one.
-		// 		return params.isEditable && params.inputFieldType !== 'none';
-		// 	},
-
-		// 	menu: (actions: any, props: any) => {
-		// 		const spellCheckerMenuItems = SpellCheckerService.instance().contextMenuItems(props.misspelledWord, props.dictionarySuggestions).map((item: any) => new MenuItem(item));
-
-		// 		const output = [
-		// 			actions.cut(),
-		// 			actions.copy(),
-		// 			actions.paste(),
-		// 			...spellCheckerMenuItems,
-		// 		];
-
-		// 		return output;
-		// 	},
+		// bridge().setupContextMenu((misspelledWord: string, dictionarySuggestions: string[]) => {
+		// 	let output = SpellCheckerService.instance().contextMenuItems(misspelledWord, dictionarySuggestions);
+		// 	console.info(misspelledWord, dictionarySuggestions);
+		// 	console.info(output);
+		// 	output = output.map(o => {
+		// 		delete o.click;
+		// 		return o;
+		// 	});
+		// 	return output;
 		// });
+
+
+		const MenuItem = bridge().MenuItem;
+
+		// The context menu must be setup in renderer process because that's where
+		// the spell checker service lives.
+		require('electron-context-menu')({
+			shouldShowMenu: (_event: any, params: any) => {
+				// params.inputFieldType === 'none' when right-clicking the text editor. This is a bit of a hack to detect it because in this
+				// case we don't want to use the built-in context menu but a custom one.
+				return params.isEditable && params.inputFieldType !== 'none';
+			},
+
+			menu: (actions: any, props: any) => {
+				const spellCheckerMenuItems = SpellCheckerService.instance().contextMenuItems(props.misspelledWord, props.dictionarySuggestions).map((item: any) => new MenuItem(item));
+
+				const output = [
+					actions.cut(),
+					actions.copy(),
+					actions.paste(),
+					...spellCheckerMenuItems,
+				];
+
+				return output;
+			},
+		});
 	}
 
 	async loadCustomCss(filePath: string) {

@@ -31,7 +31,7 @@ export class Bridge {
 	}
 
 	electronIsDev() {
-		return true; //this.electronApp().electronApp().isPackaged; // require('electron-is-dev');
+		return true; // this.electronApp().electronApp().isPackaged; // require('electron-is-dev');
 	}
 
 	env() {
@@ -42,32 +42,49 @@ export class Bridge {
 		return process.argv;
 	}
 
-	public setupContextMenu(spellCheckerMenuItemsHandler:Function) {
-		const MenuItem = this.MenuItem;
-
-		// The context menu must be setup in renderer process because that's where
-		// the spell checker service lives.
+	// Applies to electron-context-menu@3:
+	//
+	// For now we have to disable spell checking in non-editor text
+	// areas (such as the note title) because the context menu lives in
+	// the main process, and the spell checker service is in the
+	// renderer process. To get the word suggestions, we need to call
+	// the spellchecker service but that can only be done in an async
+	// way, and the menu is built synchronously.
+	//
+	// Moving the spellchecker to the main process would be hard because
+	// it depends on models and various other classes which are all in
+	// the renderer process.
+	//
+	// Perhaps the easiest would be to patch electron-context-menu to
+	// support the renderer process again. Or possibly revert to an old
+	// version of electron-context-menu.
+	public setupContextMenu(_spellCheckerMenuItemsHandler: Function) {
 		require('electron-context-menu')({
+			allWindows: [this.window()],
+
+			electronApp: this.electronApp(),
+
 			shouldShowMenu: (_event: any, params: any) => {
-				// params.inputFieldType === 'none' when right-clicking the text editor. This is a bit of a hack to detect it because in this
-				// case we don't want to use the built-in context menu but a custom one.
+				// params.inputFieldType === 'none' when right-clicking the text
+				// editor. This is a bit of a hack to detect it because in this
+				// case we don't want to use the built-in context menu but a
+				// custom one.
 				return params.isEditable && params.inputFieldType !== 'none';
 			},
 
-			menu: (actions: any, props: any) => {
-				const items = spellCheckerMenuItemsHandler(props.misspelledWord, props.dictionarySuggestions);
-				console.info('GOT ITEMS', items);
-				const spellCheckerMenuItems = items.map((item: any) => new MenuItem(item)); //SpellCheckerService.instance().contextMenuItems(props.misspelledWord, props.dictionarySuggestions).map((item: any) => new MenuItem(item));
+			// menu: (actions: any, props: any) => {
+			// 	const items = spellCheckerMenuItemsHandler(props.misspelledWord, props.dictionarySuggestions);
+			// 	const spellCheckerMenuItems = items.map((item: any) => new MenuItem(item)); //SpellCheckerService.instance().contextMenuItems(props.misspelledWord, props.dictionarySuggestions).map((item: any) => new MenuItem(item));
 
-				const output = [
-					actions.cut(),
-					actions.copy(),
-					actions.paste(),
-					...spellCheckerMenuItems,
-				];
+			// 	const output = [
+			// 		actions.cut(),
+			// 		actions.copy(),
+			// 		actions.paste(),
+			// 		...spellCheckerMenuItems,
+			// 	];
 
-				return output;
-			},
+			// 	return output;
+			// },
 		});
 	}
 
