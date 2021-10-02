@@ -70,7 +70,6 @@ function shimInit(options = null) {
 		appVersion: null,
 		electronBridge: null,
 		nodeSqlite: null,
-		RSA: null,
 		...options,
 	};
 
@@ -79,8 +78,6 @@ function shimInit(options = null) {
 	const appVersion = options.appVersion;
 
 	shim.setNodeSqlite(options.nodeSqlite);
-
-	shim.setRSA(options.RSA);
 
 	shim.fsDriver = () => {
 		throw new Error('Not implemented');

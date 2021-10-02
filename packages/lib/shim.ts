@@ -1,5 +1,4 @@
 import * as React from 'react';
-import * as NodeRSA from 'node-rsa';
 import { NoteEntity, ResourceEntity } from './services/database/types';
 
 let isTestingEnv_ = false;
@@ -23,8 +22,6 @@ let isTestingEnv_ = false;
 // https://stackoverflow.com/a/42816077/561309
 let react_: typeof React = null;
 let nodeSqlite_: any = null;
-
-let RSA_: typeof NodeRSA = null;
 
 const shim = {
 	Geolocation: null as any,
@@ -334,15 +331,6 @@ const shim = {
 	react: () => {
 		if (!react_) throw new Error('Trying to access React before it has been set!!!');
 		return react_;
-	},
-
-	setRSA: (RSA: any) => {
-		RSA_ = RSA;
-	},
-
-	RSA: () => {
-		if (!RSA_) throw new Error('Not implemented: RSA');
-		return RSA_;
 	},
 
 	platformSupportsKeyChain: () => {

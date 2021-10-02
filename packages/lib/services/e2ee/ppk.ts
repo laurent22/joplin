@@ -1,8 +1,6 @@
-import * as NodeRSA from 'node-rsa';
-import shim from '../../shim';
 import uuid from '../../uuid';
 import EncryptionService, { EncryptionCustomHandler, EncryptionMethod } from './EncryptionService';
-import { MasterKeyEntity } from './types';
+import { MasterKeyEntity, RSA, RSAKeyPair } from './types';
 
 interface PrivateKey {
 	encryptionMethod: EncryptionMethod;
@@ -18,10 +16,16 @@ export interface PublicPrivateKeyPair {
 	createdTime: number;
 }
 
-function newNodeRsa() {
-	const RSA = shim.RSA();
-	return new RSA();
-}
+let rsa_: RSA = null;
+
+export const setRSA = (rsa: RSA) => {
+	rsa_ = rsa;
+};
+
+const rsa = (): RSA => {
+	if (!rsa_) throw new Error('RSA handler has not been set!!');
+	return rsa_;
+};
 
 async function encryptPrivateKey(encryptionService: EncryptionService, password: string, plainText: string): Promise<PrivateKey> {
 	return {
@@ -34,27 +38,13 @@ export async function decryptPrivateKey(encryptionService: EncryptionService, en
 	return encryptionService.decrypt(encryptedKey.encryptionMethod, password, encryptedKey.ciphertext);
 }
 
-const nodeRSAEncryptionScheme = 'pkcs1_oaep';
-
-function nodeRSAOptions(): NodeRSA.Options {
-	return {
-		encryptionScheme: nodeRSAEncryptionScheme,
-	};
-}
-
 export async function generateKeyPair(encryptionService: EncryptionService, password: string): Promise<PublicPrivateKeyPair> {
-	const keys = newNodeRsa();
-	keys.setOptions(nodeRSAOptions());
-	keys.generateKeyPair(2048, 65537);
-
-	// Sanity check
-	if (!keys.isPrivate()) throw new Error('No private key was generated');
-	if (!keys.isPublic()) throw new Error('No public key was generated');
+	const keyPair = await rsa().generateKeyPair(2048);
 
 	return {
 		id: uuid.createNano(),
-		privateKey: await encryptPrivateKey(encryptionService, password, keys.exportKey('pkcs1-private-pem')),
-		publicKey: keys.exportKey('pkcs1-public-pem'),
+		privateKey: await encryptPrivateKey(encryptionService, password, rsa().privateKey(keyPair)),
+		publicKey: rsa().publicKey(keyPair),
 		createdTime: Date.now(),
 	};
 }
@@ -80,43 +70,41 @@ export async function ppkPasswordIsValid(service: EncryptionService, ppk: Public
 	return true;
 }
 
-async function loadPpk(service: EncryptionService, ppk: PublicPrivateKeyPair, password: string): Promise<NodeRSA> {
-	const keys = newNodeRsa();
-	keys.setOptions(nodeRSAOptions());
-	keys.importKey(ppk.publicKey, 'pkcs1-public-pem');
-	keys.importKey(await decryptPrivateKey(service, ppk.privateKey, password), 'pkcs1-private-pem');
-	return keys;
+async function loadPpk(service: EncryptionService, ppk: PublicPrivateKeyPair, password: string): Promise<RSAKeyPair> {
+	const privateKeyPlainText = await decryptPrivateKey(service, ppk.privateKey, password);
+	return rsa().loadKeys(ppk.publicKey, privateKeyPlainText);
 }
 
-async function loadPublicKey(publicKey: PublicKey): Promise<NodeRSA> {
-	const keys = newNodeRsa();
-	keys.setOptions(nodeRSAOptions());
-	keys.importKey(publicKey, 'pkcs1-public-pem');
-	return keys;
+async function loadPublicKey(publicKey: PublicKey): Promise<RSAKeyPair> {
+	return rsa().loadKeys(publicKey, '');
 }
 
-export function ppkEncryptionHandler(ppkId: string, nodeRSA: NodeRSA): EncryptionCustomHandler {
+function ppkEncryptionHandler(ppkId: string, rsaKeyPair: RSAKeyPair): EncryptionCustomHandler {
 	interface Context {
-		nodeRSA: NodeRSA;
+		rsaKeyPair: RSAKeyPair;
 		ppkId: string;
 	}
 
 	return {
 		context: {
-			nodeRSA,
+			rsaKeyPair,
 			ppkId,
 		},
 		encrypt: async (context: Context, hexaBytes: string, _password: string): Promise<string> => {
+			const base64String = Buffer.from(hexaBytes, 'hex').toString('base64');
+
 			return JSON.stringify({
 				ppkId: context.ppkId,
-				scheme: nodeRSAEncryptionScheme,
-				ciphertext: context.nodeRSA.encrypt(hexaBytes, 'hex'),
+				// scheme: nodeRSAEncryptionScheme,
+				ciphertext: await rsa().encrypt(base64String, context.rsaKeyPair),
 			});
 		},
 		decrypt: async (context: Context, ciphertext: string, _password: string): Promise<string> => {
 			const parsed = JSON.parse(ciphertext);
 			if (parsed.ppkId !== context.ppkId) throw new Error(`Needs private key ${parsed.ppkId} to decrypt, but using ${context.ppkId}`);
-			return context.nodeRSA.decrypt(Buffer.from(parsed.ciphertext, 'hex'), 'utf8');
+			const plaintextBase64 = await rsa().decrypt(parsed.ciphertext, context.rsaKeyPair);
+			return Buffer.from(plaintextBase64, 'base64').toString('hex');
+			// return context.nodeRSA.decrypt(Buffer.from(parsed.ciphertext, 'hex'), 'utf8');
 		},
 	};
 }

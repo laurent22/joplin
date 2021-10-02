@@ -690,6 +690,9 @@ packages/app-desktop/services/commands/stateToWhenClauseContext.js.map
 packages/app-desktop/services/commands/types.d.ts
 packages/app-desktop/services/commands/types.js
 packages/app-desktop/services/commands/types.js.map
+packages/app-desktop/services/e2ee.d.ts
+packages/app-desktop/services/e2ee.js
+packages/app-desktop/services/e2ee.js.map
 packages/app-desktop/services/plugins/PlatformImplementation.d.ts
 packages/app-desktop/services/plugins/PlatformImplementation.js
 packages/app-desktop/services/plugins/PlatformImplementation.js.map
@@ -1251,6 +1254,9 @@ packages/lib/services/e2ee/EncryptionService.js.map
 packages/lib/services/e2ee/EncryptionService.test.d.ts
 packages/lib/services/e2ee/EncryptionService.test.js
 packages/lib/services/e2ee/EncryptionService.test.js.map
+packages/lib/services/e2ee/RSA.node.d.ts
+packages/lib/services/e2ee/RSA.node.js
+packages/lib/services/e2ee/RSA.node.js.map
 packages/lib/services/e2ee/ppk.d.ts
 packages/lib/services/e2ee/ppk.js
 packages/lib/services/e2ee/ppk.js.map

@@ -28,7 +28,6 @@ const bridge = require('@electron/remote').require('./bridge').default;
 const EncryptionService = require('@joplin/lib/services/e2ee/EncryptionService').default;
 const { FileApiDriverLocal } = require('@joplin/lib/file-api-driver-local.js');
 const React = require('react');
-const NodeRSA = require('node-rsa');
 const nodeSqlite = require('sqlite3');
 
 if (bridge().env() === 'dev') {
@@ -98,7 +97,6 @@ shimInit({
 	keytar,
 	React,
 	appVersion,
-	RSA: NodeRSA,
 	electronBridge: bridge(),
 	nodeSqlite,
 });

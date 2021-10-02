@@ -198,6 +198,14 @@ module.exports = {
 						selector: 'interface',
 						format: ['StrictPascalCase'],
 					},
+					{
+						selector: 'interface',
+						format: null,
+						'filter': {
+							'regex': '^(RSA)$',
+							'match': true,
+						},
+					},
 				],
 			},
 		},
