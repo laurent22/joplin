@@ -43,6 +43,7 @@ import noteListControlsCommands from './gui/NoteListControls/commands/index';
 import sidebarCommands from './gui/Sidebar/commands/index';
 import appCommands from './commands/index';
 import libCommands from '@joplin/lib/commands/index';
+const electronContextMenu = require('./services/electron-context-menu');
 // import  populateDatabase from '@joplin/lib/services/debug/populateDatabase';
 
 const commands = mainScreenCommands
@@ -191,11 +192,23 @@ class Application extends BaseApplication {
 	}
 
 	setupContextMenu() {
+		// bridge().setupContextMenu((misspelledWord: string, dictionarySuggestions: string[]) => {
+		// 	let output = SpellCheckerService.instance().contextMenuItems(misspelledWord, dictionarySuggestions);
+		// 	console.info(misspelledWord, dictionarySuggestions);
+		// 	console.info(output);
+		// 	output = output.map(o => {
+		// 		delete o.click;
+		// 		return o;
+		// 	});
+		// 	return output;
+		// });
+
+
 		const MenuItem = bridge().MenuItem;
 
 		// The context menu must be setup in renderer process because that's where
 		// the spell checker service lives.
-		require('electron-context-menu')({
+		electronContextMenu({
 			shouldShowMenu: (_event: any, params: any) => {
 				// params.inputFieldType === 'none' when right-clicking the text editor. This is a bit of a hack to detect it because in this
 				// case we don't want to use the built-in context menu but a custom one.
@@ -325,11 +338,9 @@ class Application extends BaseApplication {
 	}
 
 	async start(argv: string[]): Promise<any> {
-		const electronIsDev = require('electron-is-dev');
-
 		// If running inside a package, the command line, instead of being "node.exe <path> <flags>" is "joplin.exe <flags>" so
 		// insert an extra argument so that they can be processed in a consistent way everywhere.
-		if (!electronIsDev) argv.splice(1, 0, '.');
+		if (!bridge().electronIsDev()) argv.splice(1, 0, '.');
 
 		argv = await super.start(argv);
 
@@ -494,7 +505,7 @@ class Application extends BaseApplication {
 		ExternalEditWatcher.instance().setLogger(reg.logger());
 		ExternalEditWatcher.instance().initialize(bridge, this.store().dispatch);
 
-		ResourceEditWatcher.instance().initialize(reg.logger(), (action: any) => { this.store().dispatch(action); });
+		ResourceEditWatcher.instance().initialize(reg.logger(), (action: any) => { this.store().dispatch(action); }, (path: string) => bridge().openItem(path));
 
 		RevisionService.instance().runInBackground();
 

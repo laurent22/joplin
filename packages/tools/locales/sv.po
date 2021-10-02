@@ -15,8 +15,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.4.2\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 
 #: packages/app-cli/app/app-gui.js:452
 msgid "To delete a tag, untag the associated notes."
@@ -815,11 +813,11 @@ msgstr "Standard: %s"
 msgid "Possible keys/values:"
 msgstr "Möjliga nycklar/värden:"
 
-#: packages/app-cli/app/main.js:92
+#: packages/app-cli/app/main.js:93
 msgid "Type `joplin help` for usage information."
 msgstr "Skriv `joplin help` för användningsinformation."
 
-#: packages/app-cli/app/main.js:94
+#: packages/app-cli/app/main.js:95
 msgid "Fatal error:"
 msgstr "Allvarligt fel:"
 
@@ -870,7 +868,7 @@ msgstr "OK"
 #: packages/app-desktop/gui/ResourceScreen.js:96
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:214
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:455
-#: packages/app-desktop/gui/utils/NoteListUtils.js:171
+#: packages/app-desktop/gui/utils/NoteListUtils.js:163
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:21
 #: packages/app-mobile/components/CameraView.js:161
 #: packages/app-mobile/components/ModalDialog.js:70
@@ -881,7 +879,7 @@ msgstr "OK"
 #: packages/app-mobile/components/side-menu-content.js:156
 #: packages/app-mobile/components/side-menu-content.js:165
 #: packages/app-mobile/components/side-menu-content.js:338
-#: packages/lib/shim-init-node.js:148
+#: packages/lib/shim-init-node.js:167
 msgid "Cancel"
 msgstr "Avbryt"
 
@@ -1128,8 +1126,8 @@ msgstr "Insticksmoduler"
 #: packages/app-desktop/gui/ResourceScreen.js:47
 #: packages/app-desktop/gui/ResourceScreen.js:96
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:193
-#: packages/app-desktop/gui/utils/NoteListUtils.js:140
-#: packages/app-desktop/gui/utils/NoteListUtils.js:171
+#: packages/app-desktop/gui/utils/NoteListUtils.js:139
+#: packages/app-desktop/gui/utils/NoteListUtils.js:163
 #: packages/app-mobile/components/screens/Note.js:860
 #: packages/app-mobile/components/side-menu-content.js:146
 msgid "Delete"
@@ -1559,7 +1557,7 @@ msgstr "Importera"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:122
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:258
-#: packages/app-desktop/gui/utils/NoteListUtils.js:136
+#: packages/app-desktop/gui/utils/NoteListUtils.js:135
 msgid "Export"
 msgstr "Exportera"
 
@@ -2658,41 +2656,31 @@ msgstr ""
 "Joplin kan synkronisera dina anteckningar med olika leverantörer. Välj en "
 "från listan nedan."
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:43
+#: packages/app-desktop/gui/utils/NoteListUtils.js:42
 msgid "Duplicate"
 msgstr "Duplicera"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:48
+#: packages/app-desktop/gui/utils/NoteListUtils.js:47
 #, javascript-format
 msgid "%s - Copy"
 msgstr "%s - Kopiera"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:59
+#: packages/app-desktop/gui/utils/NoteListUtils.js:58
 msgid "Switch between note and to-do type"
 msgstr "Växla mellan antecknings- och att-göra-typ"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:87
+#: packages/app-desktop/gui/utils/NoteListUtils.js:86
 msgid "Switch to note type"
 msgstr "Byt till anteckningstyp"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:93
+#: packages/app-desktop/gui/utils/NoteListUtils.js:92
 msgid "Switch to to-do type"
 msgstr "Byt till att-göra-typ"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:100
+#: packages/app-desktop/gui/utils/NoteListUtils.js:99
 #: packages/app-mobile/components/screens/Note.js:847
 msgid "Copy Markdown link"
 msgstr "Kopiera Markdown-länk"
-
-#: packages/app-desktop/gui/utils/NoteListUtils.js:165
-#, javascript-format
-msgid "Delete note \"%s\"?"
-msgstr "Ta bort anteckningen \"%s\"?"
-
-#: packages/app-desktop/gui/utils/NoteListUtils.js:168
-#, javascript-format
-msgid "Delete these %d notes?"
-msgstr "Ta bort dessa %d anteckningar?"
 
 #: packages/app-desktop/plugins/GotoAnything.js:474
 msgid ""
@@ -2710,13 +2698,13 @@ msgstr "Kommandopalett"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:22
 #: packages/app-mobile/components/screens/Note.js:530
-#: packages/lib/shim-init-node.js:148 packages/lib/versionInfo.js:27
+#: packages/lib/shim-init-node.js:167 packages/lib/versionInfo.js:27
 msgid "Yes"
 msgstr "Ja"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:23
 #: packages/app-mobile/components/screens/Note.js:531
-#: packages/lib/shim-init-node.js:148 packages/lib/versionInfo.js:27
+#: packages/lib/shim-init-node.js:167 packages/lib/versionInfo.js:27
 msgid "No"
 msgstr "Nej"
 
@@ -2937,7 +2925,7 @@ msgid "Permission needed"
 msgstr "Tillstånd behövs"
 
 #: packages/app-mobile/components/screens/Note.js:529
-#: packages/lib/shim-init-node.js:147
+#: packages/lib/shim-init-node.js:166
 #, javascript-format
 msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "
@@ -3257,15 +3245,15 @@ msgstr "Huvudnyckeln har framgångsrikt uppgraderats!"
 msgid "Could not upgrade master key: %s"
 msgstr "Lyckades inte uppgradera huvudnyckel: %s"
 
-#: packages/lib/components/shared/config-shared.js:50
+#: packages/lib/components/shared/config-shared.js:47
 msgid "Checking... Please wait."
 msgstr "Kontrollerar... vänta."
 
-#: packages/lib/components/shared/config-shared.js:52
+#: packages/lib/components/shared/config-shared.js:49
 msgid "Success! Synchronisation configuration appears to be correct."
 msgstr "Lyckades! Synkroniseringsinställningarna verkar vara korrekta."
 
-#: packages/lib/components/shared/config-shared.js:54
+#: packages/lib/components/shared/config-shared.js:51
 msgid ""
 "Error. Please check that URL, username, password, etc. are correct and that "
 "the sync target is accessible. The reported error was:"
@@ -3343,6 +3331,16 @@ msgstr "Kan inte kopiera anteckning till \"%s\" anteckningsbok"
 #, javascript-format
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "Kan inte flytta anteckning till \"%s\" anteckningsbok"
+
+#: packages/lib/models/Note.js:730
+#, javascript-format
+msgid "Delete note \"%s\"?"
+msgstr "Ta bort anteckningen \"%s\"?"
+
+#: packages/lib/models/Note.js:733
+#, javascript-format
+msgid "Delete these %d notes?"
+msgstr "Ta bort dessa %d anteckningar?"
 
 #: packages/lib/models/Resource.js:354
 msgid "Not downloaded"
@@ -4321,7 +4319,7 @@ msgstr "Använd stavningskontroll"
 msgid "Change language"
 msgstr "Ändra språk"
 
-#: packages/lib/shim-init-node.js:212
+#: packages/lib/shim-init-node.js:231
 #, javascript-format
 msgid "Cannot access %s"
 msgstr "Kan inte komma åt %s"

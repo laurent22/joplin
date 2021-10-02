@@ -3,7 +3,7 @@ import shim from '@joplin/lib/shim';
 import InteropServiceHelper from '../../../InteropServiceHelper';
 import { _ } from '@joplin/lib/locale';
 import Note from '@joplin/lib/models/Note';
-const bridge = require('electron').remote.require('./bridge').default;
+const bridge = require('@electron/remote').require('./bridge').default;
 
 export const declaration: CommandDeclaration = {
 	name: 'exportPdf',
