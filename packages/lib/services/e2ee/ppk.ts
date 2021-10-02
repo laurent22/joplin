@@ -11,6 +11,7 @@ export type PublicKey = string;
 
 export interface PublicPrivateKeyPair {
 	id: string;
+	keySize: number;
 	publicKey: PublicKey;
 	privateKey: PrivateKey;
 	createdTime: number;
@@ -39,10 +40,12 @@ export async function decryptPrivateKey(encryptionService: EncryptionService, en
 }
 
 export async function generateKeyPair(encryptionService: EncryptionService, password: string): Promise<PublicPrivateKeyPair> {
-	const keyPair = await rsa().generateKeyPair(2048);
+	const keySize = 2048;
+	const keyPair = await rsa().generateKeyPair(keySize);
 
 	return {
 		id: uuid.createNano(),
+		keySize,
 		privateKey: await encryptPrivateKey(encryptionService, password, rsa().privateKey(keyPair)),
 		publicKey: rsa().publicKey(keyPair),
 		createdTime: Date.now(),
