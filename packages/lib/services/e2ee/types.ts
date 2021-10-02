@@ -18,8 +18,8 @@ export type RSAKeyPair = any; // Depends on implementation
 export interface RSA {
 	generateKeyPair(keySize: number): Promise<RSAKeyPair>;
 	loadKeys(publicKey: string, privateKey: string): Promise<RSAKeyPair>;
-	encrypt(plaintextBase64: string, rsaKeyPair: RSAKeyPair): Promise<string>; // Returns Base64 encoded data
-	decrypt(ciphertextBase64: string, rsaKeyPair: RSAKeyPair): Promise<string>; // Returns Base64 encoded data
+	encrypt(plaintextUtf8: string, rsaKeyPair: RSAKeyPair): Promise<string>; // Returns Base64 encoded data
+	decrypt(ciphertextBase64: string, rsaKeyPair: RSAKeyPair): Promise<string>; // Returns UTF-8 encoded string
 	publicKey(rsaKeyPair: RSAKeyPair): string;
 	privateKey(rsaKeyPair: RSAKeyPair): string;
 }

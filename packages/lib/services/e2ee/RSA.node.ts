@@ -2,7 +2,10 @@ import { RSA, RSAKeyPair } from './types';
 import * as NodeRSA from 'node-rsa';
 
 const nodeRSAOptions: NodeRSA.Options = {
-	encryptionScheme: 'pkcs1_oaep',
+	// Must use pkcs1 otherwise any data encrypted with NodeRSA will crash the
+	// app when decrypted by RN-RSA.
+	// https://github.com/amitaymolko/react-native-rsa-native/issues/66#issuecomment-932768139
+	encryptionScheme: 'pkcs1',
 };
 
 const rsa: RSA = {
@@ -22,17 +25,19 @@ const rsa: RSA = {
 	loadKeys: async (publicKey: string, privateKey: string): Promise<RSAKeyPair> => {
 		const keys = new NodeRSA();
 		keys.setOptions(nodeRSAOptions);
-		keys.importKey(publicKey, 'pkcs1-public-pem');
-		if (privateKey) keys.importKey(privateKey, 'pkcs1-private-pem');
+		// Don't specify the import format, and let it auto-detect because
+		// react-native-rsa might not create a key in the expected format.
+		keys.importKey(publicKey);
+		if (privateKey) keys.importKey(privateKey);
 		return keys;
 	},
 
-	encrypt: async (plaintextBase64: string, rsaKeyPair: RSAKeyPair): Promise<string> => {
-		return rsaKeyPair.encrypt(plaintextBase64, 'base64', 'base64');
+	encrypt: async (plaintextUtf8: string, rsaKeyPair: RSAKeyPair): Promise<string> => {
+		return rsaKeyPair.encrypt(plaintextUtf8, 'base64', 'utf8');
 	},
 
 	decrypt: async (ciphertextBase64: string, rsaKeyPair: RSAKeyPair): Promise<string> => {
-		return rsaKeyPair.decrypt(ciphertextBase64, 'base64');
+		return rsaKeyPair.decrypt(ciphertextBase64, 'utf8');
 	},
 
 	publicKey: (rsaKeyPair: RSAKeyPair): string => {

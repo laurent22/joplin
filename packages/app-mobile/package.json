@@ -48,6 +48,7 @@
     "react-native-popup-dialog": "^0.9.41",
     "react-native-popup-menu": "^0.10.0",
     "react-native-quick-actions": "^0.3.13",
+    "react-native-rsa-native": "^2.0.4",
     "react-native-securerandom": "^1.0.0-rc.0",
     "react-native-share": "^5.1.5",
     "react-native-side-menu": "^1.1.3",
