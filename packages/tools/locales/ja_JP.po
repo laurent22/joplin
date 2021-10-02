@@ -15,8 +15,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.4.2\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 
 #: packages/app-cli/app/app-gui.js:452
 msgid "To delete a tag, untag the associated notes."
@@ -800,11 +798,11 @@ msgstr "既定値: %s"
 msgid "Possible keys/values:"
 msgstr "取り得るキー/値:"
 
-#: packages/app-cli/app/main.js:92
+#: packages/app-cli/app/main.js:93
 msgid "Type `joplin help` for usage information."
 msgstr "`joplin help`を実行して使い方を表示します。"
 
-#: packages/app-cli/app/main.js:94
+#: packages/app-cli/app/main.js:95
 msgid "Fatal error:"
 msgstr "致命的なエラー:"
 
@@ -856,7 +854,7 @@ msgstr "OK"
 #: packages/app-desktop/gui/ResourceScreen.js:96
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:214
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:455
-#: packages/app-desktop/gui/utils/NoteListUtils.js:171
+#: packages/app-desktop/gui/utils/NoteListUtils.js:163
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:21
 #: packages/app-mobile/components/CameraView.js:161
 #: packages/app-mobile/components/ModalDialog.js:70
@@ -867,7 +865,7 @@ msgstr "OK"
 #: packages/app-mobile/components/side-menu-content.js:156
 #: packages/app-mobile/components/side-menu-content.js:165
 #: packages/app-mobile/components/side-menu-content.js:338
-#: packages/lib/shim-init-node.js:148
+#: packages/lib/shim-init-node.js:167
 msgid "Cancel"
 msgstr "キャンセル"
 
@@ -1115,8 +1113,8 @@ msgstr "プラグイン"
 #: packages/app-desktop/gui/ResourceScreen.js:47
 #: packages/app-desktop/gui/ResourceScreen.js:96
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:193
-#: packages/app-desktop/gui/utils/NoteListUtils.js:140
-#: packages/app-desktop/gui/utils/NoteListUtils.js:171
+#: packages/app-desktop/gui/utils/NoteListUtils.js:139
+#: packages/app-desktop/gui/utils/NoteListUtils.js:163
 #: packages/app-mobile/components/screens/Note.js:860
 #: packages/app-mobile/components/side-menu-content.js:146
 msgid "Delete"
@@ -1543,7 +1541,7 @@ msgstr "インポート"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:122
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:258
-#: packages/app-desktop/gui/utils/NoteListUtils.js:136
+#: packages/app-desktop/gui/utils/NoteListUtils.js:135
 msgid "Export"
 msgstr "エクスポート"
 
@@ -2636,41 +2634,31 @@ msgstr ""
 "Joplinではノートの同期先としてさまざまなクラウドプロバイダーを利用できます。"
 "下の一覧から1つお選びください。"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:43
+#: packages/app-desktop/gui/utils/NoteListUtils.js:42
 msgid "Duplicate"
 msgstr "複製"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:48
+#: packages/app-desktop/gui/utils/NoteListUtils.js:47
 #, javascript-format
 msgid "%s - Copy"
 msgstr "%s - コピー"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:59
+#: packages/app-desktop/gui/utils/NoteListUtils.js:58
 msgid "Switch between note and to-do type"
 msgstr "ノートとToDoを切り替え"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:87
+#: packages/app-desktop/gui/utils/NoteListUtils.js:86
 msgid "Switch to note type"
 msgstr "ノートに切り替え"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:93
+#: packages/app-desktop/gui/utils/NoteListUtils.js:92
 msgid "Switch to to-do type"
 msgstr "ToDoに切り替え"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:100
+#: packages/app-desktop/gui/utils/NoteListUtils.js:99
 #: packages/app-mobile/components/screens/Note.js:847
 msgid "Copy Markdown link"
 msgstr "Markdownのリンクをコピー"
-
-#: packages/app-desktop/gui/utils/NoteListUtils.js:165
-#, javascript-format
-msgid "Delete note \"%s\"?"
-msgstr "ノート \"%s\" を削除しますか？"
-
-#: packages/app-desktop/gui/utils/NoteListUtils.js:168
-#, javascript-format
-msgid "Delete these %d notes?"
-msgstr "ノート \"%d\" を削除しますか？"
 
 #: packages/app-desktop/plugins/GotoAnything.js:474
 msgid ""
@@ -2688,13 +2676,13 @@ msgstr "コマンドパレット"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:22
 #: packages/app-mobile/components/screens/Note.js:530
-#: packages/lib/shim-init-node.js:148 packages/lib/versionInfo.js:27
+#: packages/lib/shim-init-node.js:167 packages/lib/versionInfo.js:27
 msgid "Yes"
 msgstr "Yes"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:23
 #: packages/app-mobile/components/screens/Note.js:531
-#: packages/lib/shim-init-node.js:148 packages/lib/versionInfo.js:27
+#: packages/lib/shim-init-node.js:167 packages/lib/versionInfo.js:27
 msgid "No"
 msgstr "No"
 
@@ -2905,7 +2893,7 @@ msgid "Permission needed"
 msgstr "許可が必要"
 
 #: packages/app-mobile/components/screens/Note.js:529
-#: packages/lib/shim-init-node.js:147
+#: packages/lib/shim-init-node.js:166
 #, javascript-format
 msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "
@@ -3227,15 +3215,15 @@ msgstr "マスターキーのアップグレードに成功しました!"
 msgid "Could not upgrade master key: %s"
 msgstr "マスターキーをアップグレードできませんでした: %s"
 
-#: packages/lib/components/shared/config-shared.js:50
+#: packages/lib/components/shared/config-shared.js:47
 msgid "Checking... Please wait."
 msgstr "確認中...お待ちください。"
 
-#: packages/lib/components/shared/config-shared.js:52
+#: packages/lib/components/shared/config-shared.js:49
 msgid "Success! Synchronisation configuration appears to be correct."
 msgstr "成功です！ 同期の設定は正しいようです。"
 
-#: packages/lib/components/shared/config-shared.js:54
+#: packages/lib/components/shared/config-shared.js:51
 msgid ""
 "Error. Please check that URL, username, password, etc. are correct and that "
 "the sync target is accessible. The reported error was:"
@@ -3314,6 +3302,16 @@ msgstr "ノートをノートブック \"%s\" にコピーできません"
 #, javascript-format
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "ノートをノートブック \"%s\" に移動できません"
+
+#: packages/lib/models/Note.js:730
+#, javascript-format
+msgid "Delete note \"%s\"?"
+msgstr "ノート \"%s\" を削除しますか？"
+
+#: packages/lib/models/Note.js:733
+#, javascript-format
+msgid "Delete these %d notes?"
+msgstr "ノート \"%d\" を削除しますか？"
 
 #: packages/lib/models/Resource.js:354
 msgid "Not downloaded"
@@ -4280,7 +4278,7 @@ msgstr "スペルチェッカーを使う"
 msgid "Change language"
 msgstr "言語の切り替え"
 
-#: packages/lib/shim-init-node.js:212
+#: packages/lib/shim-init-node.js:231
 #, javascript-format
 msgid "Cannot access %s"
 msgstr "%sにアクセスできません"

@@ -767,11 +767,11 @@ msgstr "預設：%s"
 msgid "Possible keys/values:"
 msgstr "可能的鍵/值："
 
-#: packages/app-cli/app/main.js:92
+#: packages/app-cli/app/main.js:93
 msgid "Type `joplin help` for usage information."
 msgstr "鍵入 `joplin help` 檢視使用說明。"
 
-#: packages/app-cli/app/main.js:94
+#: packages/app-cli/app/main.js:95
 msgid "Fatal error:"
 msgstr "嚴重錯誤："
 
@@ -822,7 +822,7 @@ msgstr "確定"
 #: packages/app-desktop/gui/ResourceScreen.js:96
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:214
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:455
-#: packages/app-desktop/gui/utils/NoteListUtils.js:171
+#: packages/app-desktop/gui/utils/NoteListUtils.js:163
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:21
 #: packages/app-mobile/components/CameraView.js:161
 #: packages/app-mobile/components/ModalDialog.js:70
@@ -833,7 +833,7 @@ msgstr "確定"
 #: packages/app-mobile/components/side-menu-content.js:156
 #: packages/app-mobile/components/side-menu-content.js:165
 #: packages/app-mobile/components/side-menu-content.js:338
-#: packages/lib/shim-init-node.js:148
+#: packages/lib/shim-init-node.js:167
 msgid "Cancel"
 msgstr "取消"
 
@@ -1073,8 +1073,8 @@ msgstr "延伸模組"
 #: packages/app-desktop/gui/ResourceScreen.js:47
 #: packages/app-desktop/gui/ResourceScreen.js:96
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:193
-#: packages/app-desktop/gui/utils/NoteListUtils.js:140
-#: packages/app-desktop/gui/utils/NoteListUtils.js:171
+#: packages/app-desktop/gui/utils/NoteListUtils.js:139
+#: packages/app-desktop/gui/utils/NoteListUtils.js:163
 #: packages/app-mobile/components/screens/Note.js:860
 #: packages/app-mobile/components/side-menu-content.js:146
 msgid "Delete"
@@ -1497,7 +1497,7 @@ msgstr "匯入"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:122
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:258
-#: packages/app-desktop/gui/utils/NoteListUtils.js:136
+#: packages/app-desktop/gui/utils/NoteListUtils.js:135
 msgid "Export"
 msgstr "匯出"
 
@@ -2564,41 +2564,31 @@ msgid ""
 "the list below."
 msgstr ""
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:43
+#: packages/app-desktop/gui/utils/NoteListUtils.js:42
 msgid "Duplicate"
 msgstr "新增複本"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:48
+#: packages/app-desktop/gui/utils/NoteListUtils.js:47
 #, javascript-format
 msgid "%s - Copy"
 msgstr "%s - 複本"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:59
+#: packages/app-desktop/gui/utils/NoteListUtils.js:58
 msgid "Switch between note and to-do type"
 msgstr "切換記事 / 待辦事項"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:87
+#: packages/app-desktop/gui/utils/NoteListUtils.js:86
 msgid "Switch to note type"
 msgstr "切換為記事"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:93
+#: packages/app-desktop/gui/utils/NoteListUtils.js:92
 msgid "Switch to to-do type"
 msgstr "切換為待辦事項"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:100
+#: packages/app-desktop/gui/utils/NoteListUtils.js:99
 #: packages/app-mobile/components/screens/Note.js:847
 msgid "Copy Markdown link"
 msgstr "複製 Markdown 連結"
-
-#: packages/app-desktop/gui/utils/NoteListUtils.js:165
-#, javascript-format
-msgid "Delete note \"%s\"?"
-msgstr "刪除此記事「%s」？"
-
-#: packages/app-desktop/gui/utils/NoteListUtils.js:168
-#, javascript-format
-msgid "Delete these %d notes?"
-msgstr "刪除這些記事 %d ？"
 
 #: packages/app-desktop/plugins/GotoAnything.js:474
 msgid ""
@@ -2615,13 +2605,13 @@ msgstr "命令模式"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:22
 #: packages/app-mobile/components/screens/Note.js:530
-#: packages/lib/shim-init-node.js:148 packages/lib/versionInfo.js:27
+#: packages/lib/shim-init-node.js:167 packages/lib/versionInfo.js:27
 msgid "Yes"
 msgstr "是"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:23
 #: packages/app-mobile/components/screens/Note.js:531
-#: packages/lib/shim-init-node.js:148 packages/lib/versionInfo.js:27
+#: packages/lib/shim-init-node.js:167 packages/lib/versionInfo.js:27
 msgid "No"
 msgstr "否"
 
@@ -2828,7 +2818,7 @@ msgid "Permission needed"
 msgstr "需要權限"
 
 #: packages/app-mobile/components/screens/Note.js:529
-#: packages/lib/shim-init-node.js:147
+#: packages/lib/shim-init-node.js:166
 #, javascript-format
 msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "
@@ -3143,15 +3133,15 @@ msgstr "主密鑰已成功升級!"
 msgid "Could not upgrade master key: %s"
 msgstr "無法升級主密鑰：%s"
 
-#: packages/lib/components/shared/config-shared.js:50
+#: packages/lib/components/shared/config-shared.js:47
 msgid "Checking... Please wait."
 msgstr "檢查中...請稍候。"
 
-#: packages/lib/components/shared/config-shared.js:52
+#: packages/lib/components/shared/config-shared.js:49
 msgid "Success! Synchronisation configuration appears to be correct."
 msgstr "成功！同步設定看起來正確。"
 
-#: packages/lib/components/shared/config-shared.js:54
+#: packages/lib/components/shared/config-shared.js:51
 msgid ""
 "Error. Please check that URL, username, password, etc. are correct and that "
 "the sync target is accessible. The reported error was:"
@@ -3228,6 +3218,16 @@ msgstr "無法將此記事複製到「%s」記事本"
 #, javascript-format
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "無法將此記事移動到「%s」記事本"
+
+#: packages/lib/models/Note.js:730
+#, javascript-format
+msgid "Delete note \"%s\"?"
+msgstr "刪除此記事「%s」？"
+
+#: packages/lib/models/Note.js:733
+#, javascript-format
+msgid "Delete these %d notes?"
+msgstr "刪除這些記事 %d ？"
 
 #: packages/lib/models/Resource.js:354
 msgid "Not downloaded"
@@ -4182,7 +4182,7 @@ msgstr "使用拼字檢查"
 msgid "Change language"
 msgstr "更換語言"
 
-#: packages/lib/shim-init-node.js:212
+#: packages/lib/shim-init-node.js:231
 #, javascript-format
 msgid "Cannot access %s"
 msgstr "無法存取 %s"
