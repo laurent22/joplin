@@ -49,5 +49,6 @@ export default function() {
 		'showShareFolderDialog',
 		'gotoAnything',
 		'commandPalette',
+		'openMasterPasswordDialog',
 	];
 }

@@ -2,6 +2,7 @@ import { FileApi } from '../../file-api';
 import JoplinDatabase from '../../JoplinDatabase';
 import Setting from '../../models/Setting';
 import { State } from '../../reducer';
+import { PublicPrivateKeyPair } from '../e2ee/ppk';
 import { MasterKeyEntity } from '../e2ee/types';
 
 export interface SyncInfoValueBoolean {
@@ -11,6 +12,11 @@ export interface SyncInfoValueBoolean {
 
 export interface SyncInfoValueString {
 	value: string;
+	updatedTime: number;
+}
+
+export interface SyncInfoValuePublicPrivateKeyPair {
+	value: PublicPrivateKeyPair;
 	updatedTime: number;
 }
 
@@ -88,6 +94,7 @@ export function mergeSyncInfos(s1: SyncInfo, s2: SyncInfo): SyncInfo {
 
 	output.setWithTimestamp(s1.keyTimestamp('e2ee') > s2.keyTimestamp('e2ee') ? s1 : s2, 'e2ee');
 	output.setWithTimestamp(s1.keyTimestamp('activeMasterKeyId') > s2.keyTimestamp('activeMasterKeyId') ? s1 : s2, 'activeMasterKeyId');
+	output.setWithTimestamp(s1.keyTimestamp('ppk') > s2.keyTimestamp('ppk') ? s1 : s2, 'ppk');
 	output.version = s1.version > s2.version ? s1.version : s2.version;
 
 	output.masterKeys = s1.masterKeys.slice();
@@ -115,10 +122,12 @@ export class SyncInfo {
 	private e2ee_: SyncInfoValueBoolean;
 	private activeMasterKeyId_: SyncInfoValueString;
 	private masterKeys_: MasterKeyEntity[] = [];
+	private ppk_: SyncInfoValuePublicPrivateKeyPair;
 
 	public constructor(serialized: string = null) {
 		this.e2ee_ = { value: false, updatedTime: 0 };
 		this.activeMasterKeyId_ = { value: '', updatedTime: 0 };
+		this.ppk_ = { value: null, updatedTime: 0 };
 
 		if (serialized) this.load(serialized);
 	}
@@ -129,6 +138,7 @@ export class SyncInfo {
 			e2ee: this.e2ee_,
 			activeMasterKeyId: this.activeMasterKeyId_,
 			masterKeys: this.masterKeys,
+			ppk: this.ppk_,
 		};
 	}
 
@@ -142,6 +152,7 @@ export class SyncInfo {
 		this.e2ee_ = 'e2ee' in s ? s.e2ee : { value: false, updatedTime: 0 };
 		this.activeMasterKeyId_ = 'activeMasterKeyId' in s ? s.activeMasterKeyId : { value: '', updatedTime: 0 };
 		this.masterKeys_ = 'masterKeys' in s ? s.masterKeys : [];
+		this.ppk_ = 'ppk' in s ? s.ppk : { value: null, updatedTime: 0 };
 	}
 
 	public setWithTimestamp(fromSyncInfo: SyncInfo, propName: string) {
@@ -159,6 +170,16 @@ export class SyncInfo {
 		if (v === this.version_) return;
 
 		this.version_ = v;
+	}
+
+	public get ppk() {
+		return this.ppk_.value;
+	}
+
+	public set ppk(v: PublicPrivateKeyPair) {
+		if (v === this.ppk_.value) return;
+
+		this.ppk_ = { value: v, updatedTime: Date.now() };
 	}
 
 	public get e2ee(): boolean {
@@ -256,4 +277,22 @@ export function setMasterKeyEnabled(mkId: string, enabled: boolean = true) {
 export function masterKeyEnabled(mk: MasterKeyEntity): boolean {
 	if ('enabled' in mk) return !!mk.enabled;
 	return true;
+}
+
+export function addMasterKey(syncInfo: SyncInfo, masterKey: MasterKeyEntity) {
+	// Sanity check - because shouldn't happen
+	if (syncInfo.masterKeys.find(mk => mk.id === masterKey.id)) throw new Error('Master key is already present');
+
+	syncInfo.masterKeys.push(masterKey);
+	saveLocalSyncInfo(syncInfo);
+}
+
+export function setPpk(ppk: PublicPrivateKeyPair) {
+	const syncInfo = localSyncInfo();
+	syncInfo.ppk = ppk;
+	saveLocalSyncInfo(syncInfo);
+}
+
+export function masterKeyById(id: string) {
+	return localSyncInfo().masterKeys.find(mk => mk.id === id);
 }

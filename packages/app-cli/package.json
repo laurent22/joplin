@@ -51,6 +51,7 @@
     "image-type": "^3.0.0",
     "keytar": "^7.0.0",
     "md5": "^2.2.1",
+    "node-rsa": "^1.1.1",
     "open": "^7.0.4",
     "proper-lockfile": "^2.0.1",
     "read-chunk": "^2.1.0",

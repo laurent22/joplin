@@ -27,10 +27,8 @@ import { setLocale, closestSupportedLocale, defaultLocale } from '@joplin/lib/lo
 import SyncTargetJoplinServer from '@joplin/lib/SyncTargetJoplinServer';
 import SyncTargetJoplinCloud from '@joplin/lib/SyncTargetJoplinCloud';
 import SyncTargetOneDrive from '@joplin/lib/SyncTargetOneDrive';
-
 const VersionInfo = require('react-native-version-info').default;
 const { AppState, Keyboard, NativeModules, BackHandler, Animated, View, StatusBar, Linking, Platform } = require('react-native');
-
 import NetInfo from '@react-native-community/netinfo';
 const DropdownAlert = require('react-native-dropdownalert').default;
 const AlarmServiceDriver = require('./services/AlarmServiceDriver').default;
@@ -77,7 +75,6 @@ import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 import SearchEngine from '@joplin/lib/services/searchengine/SearchEngine';
 const WelcomeUtils = require('@joplin/lib/WelcomeUtils');
 const { themeStyle } = require('./components/global-style.js');
-
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 const SyncTargetFilesystem = require('@joplin/lib/SyncTargetFilesystem.js');
 const SyncTargetNextcloud = require('@joplin/lib/SyncTargetNextcloud.js');
@@ -105,6 +102,9 @@ import ShareService from '@joplin/lib/services/share/ShareService';
 import setupNotifications from './utils/setupNotifications';
 import { loadMasterKeysFromSettings, migrateMasterPassword } from '@joplin/lib/services/e2ee/utils';
 import SyncTargetNone from '../lib/SyncTargetNone';
+import { setRSA } from '@joplin/lib/services/e2ee/ppk';
+import RSA from './services/e2ee/RSA.react-native';
+import { runIntegrationTests } from '@joplin/lib/services/e2ee/ppkTestUtils';
 
 let storeDispatch = function(_action: any) {};
 
@@ -470,6 +470,8 @@ async function initialize(dispatch: Function) {
 	AlarmService.setDriver(new AlarmServiceDriver(mainLogger));
 	AlarmService.setLogger(mainLogger);
 
+	setRSA(RSA);
+
 	try {
 		if (Setting.value('env') == 'prod') {
 			await db.open({ name: 'joplin.sqlite' });
@@ -636,6 +638,34 @@ async function initialize(dispatch: Function) {
 	// Collect revisions more frequently on mobile because it doesn't auto-save
 	// and it cannot collect anything when the app is not active.
 	RevisionService.instance().runInBackground(1000 * 30);
+
+	// ----------------------------------------------------------------------------
+	// Keep this below to test react-native-rsa-native
+	// ----------------------------------------------------------------------------
+
+	// const testData = await createTestData();
+	// await checkTestData(testData);
+
+	// const testData = {
+	// 	"publicKey": "-----BEGIN RSA PUBLIC KEY-----\nMIIBCgKCAQEAoMx9NBioka8DUjO3bKrWMn8uJ23LH1xySogQFR6yh6qbl6i5LKTw\nPgqvv55FUuQtYTMtUTVLggYQhdCBvwbBrD1OqO4xU6Ew7x5/TQKPV3MSgYaps3FF\nOdipC4FyA00jBe6Z1CIpL+ZaSnvjDbMUf5lW8bmfRuXfdBGAcdSBjqm9ttajOws+\n7BBSQ9nI5dnBnWRIVEUb7e9bulgANzM1LMUOE+gaef7T3uKzc+Cx3BhHgw1JdFbL\nZAndYtP52KI5N3oiFM4II26DxmDrO1tQokNM88l5xT0BXPhYiEl1CeBpo5VHZBY2\nRHr4MM/OyAXSUdulsDzbntpE+Y85zv7gpQIDAQAB\n-----END RSA PUBLIC KEY-----",
+	// 	"privateKey": "-----BEGIN RSA PRIVATE KEY-----\nMIIEpAIBAAKCAQEAoMx9NBioka8DUjO3bKrWMn8uJ23LH1xySogQFR6yh6qbl6i5\nLKTwPgqvv55FUuQtYTMtUTVLggYQhdCBvwbBrD1OqO4xU6Ew7x5/TQKPV3MSgYap\ns3FFOdipC4FyA00jBe6Z1CIpL+ZaSnvjDbMUf5lW8bmfRuXfdBGAcdSBjqm9ttaj\nOws+7BBSQ9nI5dnBnWRIVEUb7e9bulgANzM1LMUOE+gaef7T3uKzc+Cx3BhHgw1J\ndFbLZAndYtP52KI5N3oiFM4II26DxmDrO1tQokNM88l5xT0BXPhYiEl1CeBpo5VH\nZBY2RHr4MM/OyAXSUdulsDzbntpE+Y85zv7gpQIDAQABAoIBAEA0Zmm+ztAcyX6x\nF7RUImLXVV55AHntN9V6rrFAKJjzDl1oCUhCM4sSSUqBr7yBT31YKegbF6M7OK21\nq5jS4dIcSKQ7N4bk/dz8mGfvdby9Pc5qLqhvuex3DkiBzzxyOGHN+64wVbHCkJrd\nDLQTpUOtvoGWVHrCno6Bzn+lEnYbvdr0hqI5H4D0ubk6TYed1/4ZlJf0R/o/4jnl\nou0UG2hpJN4ur506cttkZJSTxLjzdO38JuQIAkCEglrMYVY61lBNPxC11Kr3ZN7o\ncm7gWZVyP26KoU27t/g+2FoiBGsWLqGYiuTaqT6dKZ2vHyJGjJIZZStv5ye2Ez8V\nKQwpjQECgYEA3xtwYu4n/G5UjEMumkXHNd/bDamelo1aQvvjkVvxKeASNBqV8cM0\n6Jb2FCuT9Y3mWbFTM0jpqXehpHUOCCnrPKGKnJ0ZS4/SRIrtw0iM6q17fTAqmuOt\nhX0pJ77Il8lVCtx4ItsW+LUGbm6CwotlYLVUuyluhKe0pGw2yafi2N0CgYEAuIFk\ng4p7x0i1LFAlIP0YQ07bJQ0E6FEWbCfMgrV3VjtbnT99EaqPOHhMasITCuoEFlh8\ncgyZ6oH7GEy4IRWrM+Mlm47S+NTrr6KgnTGf570ZAFuqnJac97oFB7BvlQsQot6F\n0L2JKM7dQKIMlvwA9DoXZdKX/9ykiqqIpawNxmkCgYEAuyJOwAw2ads4+3UWT7wb\nfarIF8ugA3OItAqHNFNEEvWpDx8FigVMCZMl0IFE14AwKCc+PBP6OXTolgLAxEQ0\n1WRB2V9D6kc1/Nvy1guydt0QaU7PTZ+O2hrDPF0f74Cl3jhSZBoUSIO+Yz46W2eE\nnvs5mMsFsirgr9E8myRAd9kCgYAGMCDE4KIiHugkolN8dcCYkU58QaGGgSG1YuhT\nAe8Mr1T1QynYq9W92RsHAZdN6GdWsIUL9iw7VzyqpfgO9AEX7mhWfUXKHqoA6/1j\nCEUKqqbqAikIs2x0SoLcrSgw4XwfWkM2qwSsn7N/9W9iqPUHO+OJALUkWawTEoEe\nvVSA8QKBgQCEYCPnxgeQSZkrv7x5soXzgF1YN5EZRa1mTUqPBubs564ZjIIY66mI\nCTaHl7U1cPAhx7mHkSzP/i5NjjLqPZZNOyawWDEEmOzxX69OIzKImb6mEQNyS3do\nI8jnpN5q9pw5TvuEIYSrGqQVnHeaEjSvcT48W9GuzjNVscGfw76fPg==\n-----END RSA PRIVATE KEY-----",
+	// 	"plaintext": "just testing",
+	// 	"ciphertext": "BfkKLdrmd2UX4sPf0bzhfqrg3rKwH5DS7dPAqdmoQuHlrvEBrYKqheekwpnWQgGggGcm/orlrsQRwlexLv7jfRbb0bMnElkySMu4w6wTxILB66RX9H3vXCz02SwHKFRcuGJxlzTPUC23ki6f/McYJ2n/2L8qYxBO8fncTKutIWV54jY19RS1wQ4IdVDBqzji8D0QsRxUhVlpRk4qxsVnyuoyg9AyDe91LOYKfRc6NdapFij996nKzjxFcKOdBqpis34fN3Cg7avcs2Dm5vi7zlRhyGqJJhORXTU3x6hVwOBkVAisgaB7xS3lHiYp6Fs5tP3hBd0kFwVVx8gALbHsgg=="
+	// };
+	// await checkTestData(testData);
+
+	// await printTestData();
+
+	// ----------------------------------------------------------------------------
+	// On desktop and CLI we run various tests to check that node-rsa is working
+	// as expected. On mobile however we cannot run test units directly on
+	// device, and that's what would be needed to automatically verify
+	// react-native-rsa-native. So instead we run the tests every time the
+	// mobile app is started in dev mode. If there's any regression the below
+	// call will throw an error, alerting us of the issue. Otherwise it will
+	// just print some messages in the console.
+	// ----------------------------------------------------------------------------
+	if (Setting.value('env') == 'dev') await runIntegrationTests();
 
 	reg.logger().info('Application initialized');
 }
@@ -879,7 +909,7 @@ const mapStateToProps = (state: any) => {
 const App = connect(mapStateToProps)(AppComponent);
 
 export default class Root extends React.Component {
-	render() {
+	public render() {
 		return (
 			<Provider store={store}>
 				<App/>
