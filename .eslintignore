@@ -1266,6 +1266,9 @@ packages/lib/services/e2ee/ppk.js.map
 packages/lib/services/e2ee/ppk.test.d.ts
 packages/lib/services/e2ee/ppk.test.js
 packages/lib/services/e2ee/ppk.test.js.map
+packages/lib/services/e2ee/ppkTestUtils.d.ts
+packages/lib/services/e2ee/ppkTestUtils.js
+packages/lib/services/e2ee/ppkTestUtils.js.map
 packages/lib/services/e2ee/types.d.ts
 packages/lib/services/e2ee/types.js
 packages/lib/services/e2ee/types.js.map

@@ -60,7 +60,7 @@ import editorCommandDeclarations from './gui/NoteEditor/editorCommandDeclaration
 import ShareService from '@joplin/lib/services/share/ShareService';
 import checkForUpdates from './checkForUpdates';
 import { AppState } from './app.reducer';
-// import { checkTestData, createTestData, printTestData } from '../lib/services/e2ee/ppk';
+// import { runIntegrationTests } from '@joplin/lib/services/e2ee/ppkTestUtils';
 
 const pluginClasses = [
 	require('./plugins/GotoAnything').default,
@@ -579,6 +579,8 @@ class Application extends BaseApplication {
 		// await checkTestData(testData);
 
 		// await printTestData();
+
+		// await runIntegrationTests();
 
 		return null;
 	}

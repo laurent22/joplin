@@ -104,6 +104,7 @@ import { loadMasterKeysFromSettings, migrateMasterPassword } from '@joplin/lib/s
 import SyncTargetNone from '../lib/SyncTargetNone';
 import { setRSA } from '@joplin/lib/services/e2ee/ppk';
 import RSA from './services/e2ee/RSA.react-native';
+import { runIntegrationTests } from '@joplin/lib/services/e2ee/ppkTestUtils';
 
 let storeDispatch = function(_action: any) {};
 
@@ -638,6 +639,10 @@ async function initialize(dispatch: Function) {
 	// and it cannot collect anything when the app is not active.
 	RevisionService.instance().runInBackground(1000 * 30);
 
+	// ----------------------------------------------------------------------------
+	// Keep this below to test react-native-rsa-native
+	// ----------------------------------------------------------------------------
+
 	// const testData = await createTestData();
 	// await checkTestData(testData);
 
@@ -650,6 +655,17 @@ async function initialize(dispatch: Function) {
 	// await checkTestData(testData);
 
 	// await printTestData();
+
+	// ----------------------------------------------------------------------------
+	// On desktop and CLI we run various tests to check that node-rsa is working
+	// as expected. On mobile however we cannot run test units directly on
+	// device, and that's what would be needed to automatically verify
+	// react-native-rsa-native. So instead we run the tests every time the
+	// mobile app is started in dev mode. If there's any regression the below
+	// call will throw an error, alerting us of the issue. Otherwise it will
+	// just print some messages in the console.
+	// ----------------------------------------------------------------------------
+	if (Setting.value('env') == 'dev') await runIntegrationTests();
 
 	reg.logger().info('Application initialized');
 }

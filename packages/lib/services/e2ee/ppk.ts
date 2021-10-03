@@ -23,7 +23,7 @@ export const setRSA = (rsa: RSA) => {
 	rsa_ = rsa;
 };
 
-const rsa = (): RSA => {
+export const rsa = (): RSA => {
 	if (!rsa_) throw new Error('RSA handler has not been set!!');
 	return rsa_;
 };
@@ -144,59 +144,4 @@ export async function mkReencryptFromPublicKeyToPassword(service: EncryptionServ
 	const newContent = await service.encryptMasterKeyContent(null, plainText, encryptionPassword);
 
 	return { ...masterKey, ...newContent };
-}
-
-interface TestData {
-	publicKey: string;
-	privateKey: string;
-	plaintext: string;
-	ciphertext: string;
-}
-
-// This is conveninent to quickly generate some data to verify for example that
-// react-native-rsa can decrypt data from node-rsa and vice-versa.
-export async function createTestData() {
-	const plaintext = 'just testing';
-	const keyPair = await rsa().generateKeyPair(2048);
-	const ciphertext = await rsa().encrypt(plaintext, keyPair);
-
-	return {
-		publicKey: rsa().publicKey(keyPair),
-		privateKey: rsa().privateKey(keyPair),
-		plaintext,
-		ciphertext,
-	};
-}
-
-export async function printTestData() {
-	console.info(JSON.stringify(await createTestData(), null, '\t'));
-}
-
-export async function checkTestData(data: TestData) {
-	// First verify that the data coming from the other app can be decrypted.
-
-	const keyPair = await rsa().loadKeys(data.publicKey, data.privateKey);
-	const decrypted = await rsa().decrypt(data.ciphertext, keyPair);
-	if (decrypted !== data.plaintext) {
-		console.warn('ERROR: Data could not be decrypted');
-		console.warn('EXPECTED:', data.plaintext);
-		console.warn('GOT:', decrypted);
-	} else {
-		console.warn('OK: Data could be decrypted');
-	}
-
-	// Then check that the public key can be used to encrypt new data, and then
-	// decrypt it with the private key.
-
-	{
-		const encrypted = await rsa().encrypt('something else', keyPair);
-		const decrypted = await rsa().decrypt(encrypted, keyPair);
-		if (decrypted !== 'something else') {
-			console.warn('ERROR: Data could not be encrypted, then decrypted');
-			console.warn('EXPECTED:', 'something else');
-			console.warn('GOT:', decrypted);
-		} else {
-			console.warn('OK: Data could be encrypted then decrypted');
-		}
-	}
 }
