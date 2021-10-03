@@ -2648,8 +2648,8 @@ msgid ""
 "Joplin can synchronise your notes using various providers. Select one from "
 "the list below."
 msgstr ""
-“Joplin može sinkronizirati tvoje bilješke koristeći razne pružatelje "
-"usluga. Odaberi pružatelja iz donjeg popisa.
+"Joplin može sinkronizirati tvoje bilješke koristeći razne pružatelje "
+"usluga. Odaberi pružatelja iz donjeg popisa."
 
 #: packages/app-desktop/gui/utils/NoteListUtils.js:42
 msgid "Duplicate"
