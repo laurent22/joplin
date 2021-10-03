@@ -83,7 +83,7 @@
           {
             "CFBundleURLSchemes": ["joplin"],
             "CFBundleTypeRole": "Editor",
-            "CFBundleURLName": "net.cozic.joplin-desktop"
+            "CFBundleURLName": "org.joplinapp.x-callback-url"
           }
         ]
       }

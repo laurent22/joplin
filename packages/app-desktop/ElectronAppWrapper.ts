@@ -369,8 +369,8 @@ export default class ElectronAppWrapper {
 			this.win_.show();
 		});
 
-		this.electronApp_.on('open-url', (_event: any, url: string) => {
-			_event.preventDefault();
+		this.electronApp_.on('open-url', (event: any, url: string) => {
+			event.preventDefault();
 			void this.openCallbackUrl(url);
 		});
 	}

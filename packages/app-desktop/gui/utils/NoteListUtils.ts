@@ -133,7 +133,7 @@ export default class NoteListUtils {
 				})
 			);
 
-			if (noteIds.length == 1) {
+			if (noteIds.length === 1) {
 				menu.append(
 					new MenuItem({
 						label: _('Copy external link'),
