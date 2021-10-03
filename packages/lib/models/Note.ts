@@ -10,7 +10,7 @@ import Tag from './Tag';
 
 const { sprintf } = require('sprintf-js');
 import Resource from './Resource';
-const { pregQuote } = require('../string-utils.js');
+const { pregQuote, substrWithEllipsis } = require('../string-utils.js');
 const { _ } = require('../locale');
 const ArrayUtils = require('../ArrayUtils.js');
 const lodash = require('lodash');
@@ -729,6 +729,18 @@ export default class Note extends BaseItem {
 				});
 			}
 		}
+	}
+
+	static async deleteMessage(noteIds: string[]): Promise<string|null> {
+		let msg = '';
+		if (noteIds.length === 1) {
+			const note = await Note.load(noteIds[0]);
+			if (!note) return null;
+			msg = _('Delete note "%s"?', substrWithEllipsis(note.title, 0, 32));
+		} else {
+			msg = _('Delete these %d notes?', noteIds.length);
+		}
+		return msg;
 	}
 
 	static dueNotes() {
