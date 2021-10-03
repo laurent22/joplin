@@ -2,7 +2,7 @@ const React = require('react');
 const Component = React.Component;
 const Setting = require('@joplin/lib/models/Setting').default;
 const { connect } = require('react-redux');
-const bridge = require('electron').remote.require('./bridge').default;
+const bridge = require('@electron/remote').require('./bridge').default;
 
 class NavigatorComponent extends Component {
 	UNSAFE_componentWillReceiveProps(newProps) {

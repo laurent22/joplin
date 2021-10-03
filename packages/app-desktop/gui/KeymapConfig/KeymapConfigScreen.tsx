@@ -9,7 +9,7 @@ import useCommandStatus from './utils/useCommandStatus';
 import styles_ from './styles';
 import { _ } from '@joplin/lib/locale';
 
-const bridge = require('electron').remote.require('./bridge').default;
+const bridge = require('@electron/remote').require('./bridge').default;
 import shim from '@joplin/lib/shim';
 
 const keymapService = KeymapService.instance();

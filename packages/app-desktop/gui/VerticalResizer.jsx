@@ -1,5 +1,5 @@
 const React = require('react');
-const bridge = require('electron').remote.require('./bridge').default;
+const bridge = require('@electron/remote').require('./bridge').default;
 
 class VerticalResizer extends React.PureComponent {
 	constructor() {
