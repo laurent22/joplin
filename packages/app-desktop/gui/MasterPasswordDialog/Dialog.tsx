@@ -8,8 +8,8 @@ import DialogTitle from '../DialogTitle';
 import StyledInput from '../style/StyledInput';
 import { getMasterPasswordStatus, getMasterPasswordStatusMessage, checkHasMasterPasswordEncryptedData, masterPasswordIsValid, MasterPasswordStatus, resetMasterPassword, updateMasterPassword } from '@joplin/lib/services/e2ee/utils';
 import { reg } from '@joplin/lib/registry';
-import EncryptionService from '../../../lib/services/e2ee/EncryptionService';
-import KvStore from '../../../lib/services/KvStore';
+import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
+import KvStore from '@joplin/lib/services/KvStore';
 
 interface Props {
 	themeId: number;
