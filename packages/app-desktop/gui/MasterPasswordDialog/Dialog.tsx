@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { useCallback, useState, useEffect } from 'react';
+import { useCallback, useState, useEffect, useMemo } from 'react';
 import { _ } from '@joplin/lib/locale';
 import useAsyncEffect, { AsyncEffectEvent } from '@joplin/lib/hooks/useAsyncEffect';
 import DialogButtonRow, { ClickEvent } from '../DialogButtonRow';
 import Dialog from '../Dialog';
 import DialogTitle from '../DialogTitle';
 import StyledInput from '../style/StyledInput';
-import { getMasterPasswordStatus, getMasterPasswordStatusMessage, masterPasswordIsValid, MasterPasswordStatus, resetMasterPassword, updateMasterPassword } from '@joplin/lib/services/e2ee/utils';
+import { getMasterPasswordStatus, getMasterPasswordStatusMessage, checkHasMasterPasswordEncryptedData, masterPasswordIsValid, MasterPasswordStatus, resetMasterPassword, updateMasterPassword } from '@joplin/lib/services/e2ee/utils';
 import { reg } from '@joplin/lib/registry';
 import EncryptionService from '../../../lib/services/e2ee/EncryptionService';
 import KvStore from '../../../lib/services/KvStore';
@@ -23,6 +23,7 @@ enum Mode {
 
 export default function(props: Props) {
 	const [status, setStatus] = useState(MasterPasswordStatus.NotSet);
+	const [hasMasterPasswordEncryptedData, setHasMasterPasswordEncryptedData] = useState(true);
 	const [currentPassword, setCurrentPassword] = useState('');
 	const [currentPasswordIsValid, setCurrentPasswordIsValid] = useState(false);
 	const [password1, setPassword1] = useState('');
@@ -41,8 +42,10 @@ export default function(props: Props) {
 
 	useAsyncEffect(async (event: AsyncEffectEvent) => {
 		const newStatus = await getMasterPasswordStatus();
+		const hasIt = await checkHasMasterPasswordEncryptedData();
 		if (event.cancelled) return;
 		setStatus(newStatus);
+		setHasMasterPasswordEncryptedData(hasIt);
 	}, []);
 
 	const onButtonRowClick = useCallback(async (event: ClickEvent) => {
@@ -72,6 +75,11 @@ export default function(props: Props) {
 		}
 	}, [currentPassword, password1, onClose, mode]);
 
+	const needToRepeatPassword = useMemo(() => {
+		if (mode === Mode.Reset) return true;
+		return !hasMasterPasswordEncryptedData;
+	}, [hasMasterPasswordEncryptedData, mode]);
+
 	const onCurrentPasswordChange = useCallback((event: any) => {
 		setCurrentPassword(event.target.value);
 	}, []);
@@ -98,8 +106,8 @@ export default function(props: Props) {
 	}, []);
 
 	useEffect(() => {
-		setSaveButtonDisabled(updatingPassword || (!password1 || password1 !== password2));
-	}, [password1, password2, updatingPassword]);
+		setSaveButtonDisabled(updatingPassword || (!password1 || (needToRepeatPassword && password1 !== password2)));
+	}, [password1, password2, updatingPassword, needToRepeatPassword]);
 
 	useEffect(() => {
 		setShowPasswordForm(status === MasterPasswordStatus.NotSet);
@@ -150,10 +158,12 @@ export default function(props: Props) {
 							<label>{'Enter password'}</label>
 							<StyledInput type="password" value={password1} onChange={onPasswordChange1}/>
 						</div>
-						<div className="form-input-group">
-							<label>{'Re-enter password'}</label>
-							<StyledInput type="password" value={password2} onChange={onPasswordChange2}/>
-						</div>
+						{needToRepeatPassword && (
+							<div className="form-input-group">
+								<label>{'Re-enter password'}</label>
+								<StyledInput type="password" value={password2} onChange={onPasswordChange2}/>
+							</div>
+						)}
 					</div>
 					<p className="bold">Please make sure you remember your password. For security reasons, it is not possible to recover it if it is lost.</p>
 					{renderResetMasterPasswordLink()}

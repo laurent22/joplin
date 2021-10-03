@@ -275,6 +275,11 @@ export async function getMasterPasswordStatus(password: string = null): Promise<
 	return isValid ? MasterPasswordStatus.Valid : MasterPasswordStatus.Invalid;
 }
 
+export async function checkHasMasterPasswordEncryptedData(syncInfo: SyncInfo = null): Promise<boolean> {
+	syncInfo = syncInfo ? syncInfo : localSyncInfo();
+	return !!syncInfo.ppk || !!syncInfo.masterKeys.length;
+}
+
 const masterPasswordStatusMessages = {
 	[MasterPasswordStatus.Unknown]: 'Checking...',
 	[MasterPasswordStatus.Loaded]: 'Loaded',
