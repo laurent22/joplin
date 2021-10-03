@@ -10,6 +10,11 @@ export enum ButtonLevel {
 	Recommended = 'recommended',
 }
 
+export enum ButtonSize {
+	Small = 1,
+	Normal = 2,
+}
+
 interface Props {
 	title?: string;
 	iconName?: string;
@@ -21,29 +26,38 @@ interface Props {
 	tooltip?: string;
 	disabled?: boolean;
 	style?: any;
+	size?: ButtonSize;
 }
 
 const StyledTitle = styled.span`
 
 `;
 
+// const buttonHeight = 32;
+
+const buttonHeight = (props: Props) => {
+	if (!props.size || props.size === ButtonSize.Normal) return 32;
+	if (props.size === ButtonSize.Small) return 26;
+	throw new Error(`Unknown size: ${props.size}`);
+};
+
 const StyledButtonBase = styled.button`
 	display: flex;
 	align-items: center;
 	flex-direction: row;
-	height: ${(props: any) => `${props.theme.toolbarHeight}px`};
-	min-height: ${(props: any) => `${props.theme.toolbarHeight}px`};
-	max-height: ${(props: any) => `${props.theme.toolbarHeight}px`};
-	width: ${(props: any) => props.iconOnly ? `${props.theme.toolbarHeight}px` : 'auto'};
-	${(props: any) => props.iconOnly ? `min-width: ${props.theme.toolbarHeight}px;` : ''}
+	height: ${(props: Props) => buttonHeight(props)}px;
+	min-height: ${(props: Props) => buttonHeight(props)}px;
+	max-height: ${(props: Props) => buttonHeight(props)}px;
+	width: ${(props: any) => props.iconOnly ? `${buttonHeight}px` : 'auto'};
+	${(props: any) => props.iconOnly ? `min-width: ${buttonHeight}px;` : ''}
 	${(props: any) => !props.iconOnly ? 'min-width: 100px;' : ''}
-	${(props: any) => props.iconOnly ? `max-width: ${props.theme.toolbarHeight}px;` : ''}
+	${(props: any) => props.iconOnly ? `max-width: ${buttonHeight}px;` : ''}
 	box-sizing: border-box;
 	border-radius: 3px;
 	border-style: solid;
 	border-width: 1px;
-	font-size: ${(props: any) => props.theme.fontSize}px;
-	padding: 0 ${(props: any) => props.iconOnly ? 4 : 8}px;
+	/*font-size: ${(props: any) => props.theme.fontSize}px; */
+	padding: 0 ${(props: any) => props.iconOnly ? 4 : 14}px;
 	justify-content: center;
 	opacity: ${(props: any) => props.disabled ? 0.5 : 1};
 	user-select: none;
@@ -207,7 +221,7 @@ function Button(props: Props) {
 	}
 
 	return (
-		<StyledButton style={props.style} disabled={props.disabled} title={props.tooltip} className={props.className} iconOnly={iconOnly} onClick={onClick}>
+		<StyledButton size={props.size} style={props.style} disabled={props.disabled} title={props.tooltip} className={props.className} iconOnly={iconOnly} onClick={onClick}>
 			{renderIcon()}
 			{renderTitle()}
 		</StyledButton>

@@ -5,7 +5,6 @@
     "type": "git",
     "url": "git+https://github.com/laurent22/joplin.git"
   },
-  "license": "MIT",
   "scripts": {
     "audit": "lerna-audit",
     "bootstrap": "lerna bootstrap --force-local --no-ci",

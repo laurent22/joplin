@@ -20,6 +20,7 @@ import DialogTitle from './DialogTitle';
 import DialogButtonRow, { ButtonSpec, ClickEvent, ClickEventHandler } from './DialogButtonRow';
 import Dialog from './Dialog';
 import SyncWizardDialog from './SyncWizard/Dialog';
+import MasterPasswordDialog from './MasterPasswordDialog/Dialog';
 import StyleSheetContainer from './StyleSheets/StyleSheetContainer';
 const { ImportScreen } = require('./ImportScreen.min.js');
 const { ResourceScreen } = require('./ResourceScreen.js');
@@ -59,6 +60,12 @@ const registeredDialogs: Record<string, RegisteredDialog> = {
 	syncWizard: {
 		render: (props: RegisteredDialogProps) => {
 			return <SyncWizardDialog key={props.key} dispatch={props.dispatch} themeId={props.themeId}/>;
+		},
+	},
+
+	masterPassword: {
+		render: (props: RegisteredDialogProps) => {
+			return <MasterPasswordDialog key={props.key} dispatch={props.dispatch} themeId={props.themeId}/>;
 		},
 	},
 };

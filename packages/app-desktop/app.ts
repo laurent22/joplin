@@ -60,6 +60,7 @@ import editorCommandDeclarations from './gui/NoteEditor/editorCommandDeclaration
 import ShareService from '@joplin/lib/services/share/ShareService';
 import checkForUpdates from './checkForUpdates';
 import { AppState } from './app.reducer';
+// import { runIntegrationTests } from '@joplin/lib/services/e2ee/ppkTestUtils';
 
 const pluginClasses = [
 	require('./plugins/GotoAnything').default,
@@ -74,24 +75,24 @@ class Application extends BaseApplication {
 
 	private checkAllPluginStartedIID_: any = null;
 
-	constructor() {
+	public constructor() {
 		super();
 
 		this.bridge_nativeThemeUpdated = this.bridge_nativeThemeUpdated.bind(this);
 	}
 
-	hasGui() {
+	public hasGui() {
 		return true;
 	}
 
-	reducer(state: AppState = appDefaultState, action: any) {
+	public reducer(state: AppState = appDefaultState, action: any) {
 		let newState = appReducer(state, action);
 		newState = resourceEditWatcherReducer(newState, action);
 		newState = super.reducer(newState, action);
 		return newState;
 	}
 
-	toggleDevTools(visible: boolean) {
+	public toggleDevTools(visible: boolean) {
 		if (visible) {
 			bridge().openDevTools();
 		} else {
@@ -99,7 +100,7 @@ class Application extends BaseApplication {
 		}
 	}
 
-	async generalMiddleware(store: any, next: any, action: any) {
+	protected async generalMiddleware(store: any, next: any, action: any) {
 		if (action.type == 'SETTING_UPDATE_ONE' && action.key == 'locale' || action.type == 'SETTING_UPDATE_ALL') {
 			setLocale(Setting.value('locale'));
 			// The bridge runs within the main process, with its own instance of locale.js
@@ -145,7 +146,7 @@ class Application extends BaseApplication {
 		return result;
 	}
 
-	handleThemeAutoDetect() {
+	public handleThemeAutoDetect() {
 		if (!Setting.value('themeAutoDetect')) return;
 
 		if (bridge().shouldUseDarkColors()) {
@@ -155,11 +156,11 @@ class Application extends BaseApplication {
 		}
 	}
 
-	bridge_nativeThemeUpdated() {
+	private bridge_nativeThemeUpdated() {
 		this.handleThemeAutoDetect();
 	}
 
-	updateTray() {
+	public updateTray() {
 		const app = bridge().electronApp();
 
 		if (app.trayShown() === Setting.value('showTrayIcon')) return;
@@ -176,7 +177,7 @@ class Application extends BaseApplication {
 		}
 	}
 
-	updateEditorFont() {
+	public updateEditorFont() {
 		const fontFamilies = [];
 		if (Setting.value('style.editor.fontFamily')) fontFamilies.push(`"${Setting.value('style.editor.fontFamily')}"`);
 		fontFamilies.push('Avenir, Arial, sans-serif');
@@ -191,7 +192,7 @@ class Application extends BaseApplication {
 		document.head.appendChild(styleTag);
 	}
 
-	setupContextMenu() {
+	public setupContextMenu() {
 		// bridge().setupContextMenu((misspelledWord: string, dictionarySuggestions: string[]) => {
 		// 	let output = SpellCheckerService.instance().contextMenuItems(misspelledWord, dictionarySuggestions);
 		// 	console.info(misspelledWord, dictionarySuggestions);
@@ -337,7 +338,7 @@ class Application extends BaseApplication {
 		}, 500);
 	}
 
-	async start(argv: string[]): Promise<any> {
+	public async start(argv: string[]): Promise<any> {
 		// If running inside a package, the command line, instead of being "node.exe <path> <flags>" is "joplin.exe <flags>" so
 		// insert an extra argument so that they can be processed in a consistent way everywhere.
 		if (!bridge().electronIsDev()) argv.splice(1, 0, '.');
@@ -549,7 +550,7 @@ class Application extends BaseApplication {
 		// setTimeout(() => {
 		// 	this.dispatch({
 		// 		type: 'DIALOG_OPEN',
-		// 		name: 'syncWizard',
+		// 		name: 'masterPassword',
 		// 	});
 		// }, 2000);
 
@@ -562,6 +563,24 @@ class Application extends BaseApplication {
 		// 		},
 		// 	});
 		// }, 2000);
+
+
+
+
+		// const testData = {
+		// 	"publicKey": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAmKpb4JiYiY16pGOabje7uMsFd7DcMnruGxJ9HSpOiOduj3ApKqRu0xWCkGyqpekyOjjooZ98wVkDPUFsyVjN+kG8yKFn2xXC5SeRyhIVbdytjYiGshr6x+T9XVI+HnJKQF3WbrcqSOejlDXJv6u7jKrLAlOT3tkqEb0ZefhcEIajq6kNkH51R0lwsFnzxDIK3MW1wNzmiOfM92f8PFxiOBmUtVIngGPlNgyld1FzKN7Ypz1uS6GOqAtRm325qyfE/+2Jgb7WaDFT7VB5pHnOiojj9+xi1DvQWCbbIYXoMi0XVi9i2ZQfM32aFwiHez5UL61IMWUcqQ0/gldh4HFlAQIDAQAB\n-----END PUBLIC KEY-----",
+		// 	"privateKey": "-----BEGIN RSA PRIVATE KEY-----\nMIIEpAIBAAKCAQEAmKpb4JiYiY16pGOabje7uMsFd7DcMnruGxJ9HSpOiOduj3ApKqRu0xWCkGyqpekyOjjooZ98wVkDPUFsyVjN+kG8yKFn2xXC5SeRyhIVbdytjYiGshr6x+T9XVI+HnJKQF3WbrcqSOejlDXJv6u7jKrLAlOT3tkqEb0ZefhcEIajq6kNkH51R0lwsFnzxDIK3MW1wNzmiOfM92f8PFxiOBmUtVIngGPlNgyld1FzKN7Ypz1uS6GOqAtRm325qyfE/+2Jgb7WaDFT7VB5pHnOiojj9+xi1DvQWCbbIYXoMi0XVi9i2ZQfM32aFwiHez5UL61IMWUcqQ0/gldh4HFlAQIDAQABAoIBADFFMffPZ9Nk7MLnPmz54cTnCPGzC63jDLuCAQ0LnWMDxiPW4AJaJUZMt+GioISBOWue+D1JOrsv3iLD3bcxyPBOjP33UYxcfpT0a1Ha+j2FriFygX4zxOIEnlyi8VdkLWCOqGj9BlGXKKzpmx4X76Sbbn9mt9+BGNm2vOUnaZcPTVuOI7K6xZynlzMRYSyhu7J0QdYVK44vZ/TjdD/4pgX+ezrGiwx7OCf/KctjvEoYtXYV2gkBOifOlqYOp0fMEC3mVAZfwpvDTbRchb7h0rxmxfKbWsjPtDblByXBLJZ3PGcKcmJlu4Qsfd2AgrY62r+DbNt3EhK072ZilYIfKD0CgYEAybcDbucr67dWMlFh5b79bvJugw6rj1V59Tp+RX9nKgzaiBUHLun6cK5hbgg9z3ejc2SWlX7D+eOyveVjhDlxUOCFURJLo2oPMRKwBBKJkOJhdtAjPzyceYI6Yj2lvtDeijcZfg8F9YqUTMfisDsEi1MbGnqawWwUerN9P5TjRBcCgYEAwcAfw8KTnQsvXPwWwh6Wabtz0bUAKzA/D6oWTR5IbkBfb3jNU8lmh9H66H0P18Nsa3vozA6buW2LDhHCFFkQ4PUTQVKok1qhAsvJBECxdwMqb5iAXk3Yk3qQYGhR23Zkp1u82wmpSaBLKGr+SL9/q5EamqiR3PQYx/aQTeIaFqcCgYAn/N/xXGKYl/++eeOuZ+5V0DmYQZBBGfDTbIUbweXxsBqiX4jNBBVhwTAPYBLgzhbZCVfQyxCOuVT10EOqMrkED35eVAIqoxvf3pSGOiaLUlV/+EMEhj9+1xI753y0FzQGsmWbV98WjiJYFkgaJ5j/BbqZxTRoo8RrjqmFsT5cgQKBgQCWTc4WlmbfSKMIloOtOf9jrMjvoWOtHXN+WmuMjfaQmR2wI13eJvqEWRA1tXdJ4c/FHk39p0OFOQbL9ljCYknmyhiS72XZUlBgE+kwhGNnuSv9gKftAKUH2+gO8j62awUwk8lRfxA2DsTfaQk1NGH9ncauviDR8QcccRmHYeTtNwKBgQCOvHiVaNw8XJIqt2r3j8pEJcr8LO+WNtLDU+h9NhM5a5NxfeRUlxdrqR0FXS4NkE6E3h9iLIRt2V+0bghzJMhKuwdjC0K6+jCb7ImV+Xcl9LNOQ1mPLBLS1jqdQnBS1ZPtcQpMrVi6dU9vVespylKEyGnQnUUtLgYrbO9OMrP1uQ==\n-----END RSA PRIVATE KEY-----",
+		// 	"plaintext": "just testing",
+		// 	"ciphertext": "LBicxglLvMyBin8uMpUnF5ARQ+KtAM563RViMepnOcyXa/NOJonNBixm+th+jX44\r\n/rie2ESbWg/FnlR4mHCEpTQJFXt12zpeXvtM8Hy1OQMud1B1Hc9hp1hhd1t6cuDz\r\n/Cs10n1+57V6zwHottYA6tn84cBn678SvPa/WTwgvb9lnBVZbesm3dVIr5uh2hk9\r\nNcVkmqyfi+ilkNQ3FIQfL+ciHvPFUIpljgIOipZhmufubdgMGW1HEUYlsmxLE7ce\r\ndpUQJoIbfKJ1x2dJRoeYsCjvcYFWdMUcg78HkXR+UcObP6zkK8cH33fb6PKKd8Z4\r\nToj4HROza8Dp7uCV5XyBTA=="
+		// };
+		// await checkTestData(testData);
+
+		// const testData = await createTestData();
+		// await checkTestData(testData);
+
+		// await printTestData();
+
+		// await runIntegrationTests();
 
 		return null;
 	}

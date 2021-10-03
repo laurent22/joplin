@@ -127,6 +127,7 @@ const EncryptionConfigScreen = (props: Props) => {
 	const renderPasswordPrompt = () => {
 		const theme = themeStyle(props.themeId);
 		const masterKey = getDefaultMasterKey();
+		const hasMasterPassword = !!props.masterPassword;
 
 		const onEnableClick = async () => {
 			try {
@@ -143,7 +144,7 @@ const EncryptionConfigScreen = (props: Props) => {
 			}
 		};
 
-		const messages = enableEncryptionConfirmationMessages(masterKey);
+		const messages = enableEncryptionConfirmationMessages(masterKey, hasMasterPassword);
 
 		const messageComps = messages.map((msg: string) => {
 			return <Text key={msg} style={{ fontSize: theme.fontSize, color: theme.color, marginBottom: 10 }}>{msg}</Text>;
