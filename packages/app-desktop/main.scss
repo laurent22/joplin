@@ -144,3 +144,103 @@ a {
 *:focus {
     outline: none;
 }
+
+/* =========================================================================================
+General classes
+========================================================================================= */
+
+body {
+	color: var(--joplin-color);
+	font-size: 16px;
+}
+
+h2 {
+	font-size: 24px;
+
+	&.-no-top-margin {
+		margin-top: 0;
+	}
+}
+
+
+.form {
+	display: flex;
+	flex-direction: column;
+}
+
+.form > .form-input-group {
+	display: flex;
+	flex-direction: column;
+}
+
+.form > .form-input-group > label {
+	margin-bottom: 10px;
+}
+
+.bold {
+	font-weight: bold;
+}
+
+p,
+div.form,
+.form > .form-input-group {
+	margin-top: 0;
+	margin-bottom: 20px;
+}
+
+.form > .form-input-group:last-child {
+	margin-bottom: 0;
+}
+
+button {
+	cursor: pointer;
+}
+
+button:disabled {
+	cursor: default;
+}
+
+a {
+	color: var(--joplin-url-color);
+}
+
+/* =========================================================================================
+Component-specific classes
+========================================================================================= */
+
+.config-screen .config-section {
+	border-bottom: 1px solid var(--joplin-divider-color);
+	padding-bottom: 20px;
+}
+
+
+
+.master-password-dialog .dialog-root {
+	min-width: 500px;
+	max-width: 600px;
+}
+
+.master-password-dialog .dialog-content {
+	background-color: var(--joplin-background-color3);
+	padding: 1em;
+	padding-bottom: 1px;
+}
+
+.master-password-dialog .current-password-wrapper {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+
+.master-password-dialog .current-password-wrapper input {
+	flex: 1;
+	margin-right: 10px;
+}
+
+.master-password-dialog .fa-check {
+	color: var(--joplin-color-correct);
+}
+
+.master-password-dialog .fa-times {
+	color: var(--joplin-color-error);
+}

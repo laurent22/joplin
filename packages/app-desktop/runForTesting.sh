@@ -3,6 +3,11 @@
 # Setup the sync parameters for user X and create a few folders and notes to
 # allow sharing. Also calls the API to create the test users and clear the data.
 
+# For example, to setup a user for sharing, and another as recipient with E2EE
+# enabled:
+
+# ./runForTesting.sh 1 createUsers,createData,reset,e2ee,sync && ./runForTesting.sh 2 reset,e2ee,sync && ./runForTesting.sh 1
+
 set -e
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
@@ -50,12 +55,21 @@ do
 		echo "config sync.target 10" >> "$CMD_FILE" 
 		# echo "config sync.10.path http://api.joplincloud.local:22300" >> "$CMD_FILE" 
 		echo "config sync.10.username $USER_EMAIL" >> "$CMD_FILE" 
-		echo "config sync.10.password hunter1hunter2hunter3" >> "$CMD_FILE" 
+		echo "config sync.10.password hunter1hunter2hunter3" >> "$CMD_FILE"
 	
 	elif [[ $CMD == "e2ee" ]]; then
 	
 		echo "e2ee enable --password 111111" >> "$CMD_FILE" 
+
+	elif [[ $CMD == "sync" ]]; then
 	
+		echo "sync" >> "$CMD_FILE" 
+
+	# elif [[ $CMD == "generatePpk" ]]; then
+	
+	# 	echo "e2ee generate-ppk --password 111111" >> "$CMD_FILE" 
+	# 	echo "sync" >> "$CMD_FILE" 
+
 	else
 	
 		echo "Unknown command: $CMD"

@@ -5,7 +5,7 @@ import { _ } from '@joplin/lib/locale';
 import styled from 'styled-components';
 import SearchPlugins from './SearchPlugins';
 import PluginBox, { ItemEvent, UpdateState } from './PluginBox';
-import Button, { ButtonLevel } from '../../../Button/Button';
+import Button, { ButtonLevel, ButtonSize } from '../../../Button/Button';
 import bridge from '../../../../services/bridge';
 import produce from 'immer';
 import { OnChangeEvent } from '../../../lib/SearchInput/SearchInput';
@@ -309,7 +309,7 @@ export default function(props: Props) {
 			<div>
 				{renderRepoApiError()}
 				<div style={{ display: 'flex', flexDirection: 'row', maxWidth }}>
-					<ToolsButton tooltip={_('Plugin tools')} iconName="fas fa-cog" level={ButtonLevel.Secondary} onClick={onToolsClick}/>
+					<ToolsButton size={ButtonSize.Small} tooltip={_('Plugin tools')} iconName="fas fa-cog" level={ButtonLevel.Secondary} onClick={onToolsClick}/>
 					<div style={{ display: 'flex', flex: 1 }}>
 						{props.renderHeader(props.themeId, _('Manage your plugins'))}
 					</div>

@@ -900,6 +900,11 @@ export default class JoplinDatabase extends Database {
 				queries.push('ALTER TABLE `notes` ADD COLUMN conflict_original_id TEXT NOT NULL DEFAULT ""');
 			}
 
+			// if (targetVersion == 40) {
+			// 	queries.push('ALTER TABLE `folders` ADD COLUMN master_key_id TEXT NOT NULL DEFAULT ""');
+			// 	queries.push('ALTER TABLE `notes` ADD COLUMN master_key_id TEXT NOT NULL DEFAULT ""');
+			// }
+
 			const updateVersionQuery = { sql: 'UPDATE version SET version = ?', params: [targetVersion] };
 
 			queries.push(updateVersionQuery);

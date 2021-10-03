@@ -227,6 +227,8 @@ PODS:
     - React-Core
   - react-native-netinfo (6.0.0):
     - React-Core
+  - react-native-rsa-native (2.0.4):
+    - React
   - react-native-slider (3.0.3):
     - React
   - react-native-sqlite-storage (5.0.0):
@@ -348,6 +350,7 @@ DEPENDENCIES:
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - react-native-image-resizer (from `../node_modules/react-native-image-resizer`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
+  - react-native-rsa-native (from `../node_modules/react-native-rsa-native`)
   - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
   - react-native-sqlite-storage (from `../node_modules/react-native-sqlite-storage`)
   - react-native-version-info (from `../node_modules/react-native-version-info`)
@@ -429,6 +432,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-image-resizer"
   react-native-netinfo:
     :path: "../node_modules/@react-native-community/netinfo"
+  react-native-rsa-native:
+    :path: "../node_modules/react-native-rsa-native"
   react-native-slider:
     :path: "../node_modules/@react-native-community/slider"
   react-native-sqlite-storage:
@@ -510,6 +515,7 @@ SPEC CHECKSUMS:
   react-native-image-picker: c6d75c4ab2cf46f9289f341242b219cb3c1180d3
   react-native-image-resizer: a79bcffdef1b52160ff91db0d6fa24816a4ff332
   react-native-netinfo: e849fc21ca2f4128a5726c801a82fc6f4a6db50d
+  react-native-rsa-native: 1f6bba06dd02f0e652a66a384c75c270f7a0062f
   react-native-slider: e99fc201cefe81270fc9d81714a7a0f5e566b168
   react-native-sqlite-storage: 418ef4afc5e6df6ce3574c4617e5f0b65cffde55
   react-native-version-info: 36490da17d2c6b5cc21321c70e433784dee7ed0b
