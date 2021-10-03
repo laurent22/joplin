@@ -34,6 +34,7 @@ const config = {
 		'main.user_flags': 'WithDates',
 		'main.user_items': 'WithDates',
 		'main.users': 'WithDates, WithUuid',
+		'main.events': 'WithUuid',
 	},
 };
 
@@ -55,6 +56,8 @@ const propertyTypes: Record<string, string> = {
 	'users.max_item_size': 'number | null',
 	'users.max_total_item_size': 'number | null',
 	'users.total_item_size': 'number',
+	'events.created_time': 'number',
+	'events.type': 'EventType',
 };
 
 function insertContentIntoFile(filePath: string, markerOpen: string, markerClose: string, contentToInsert: string): void {

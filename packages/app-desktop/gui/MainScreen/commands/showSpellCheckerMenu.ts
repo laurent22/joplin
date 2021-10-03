@@ -2,7 +2,7 @@ import { CommandContext, CommandDeclaration, CommandRuntime } from '@joplin/lib/
 import { _ } from '@joplin/lib/locale';
 import bridge from '../../../services/bridge';
 import SpellCheckerService from '@joplin/lib/services/spellChecker/SpellCheckerService';
-import { AppState } from '../../../app';
+import { AppState } from '../../../app.reducer';
 
 const Menu = bridge().Menu;
 

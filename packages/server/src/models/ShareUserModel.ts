@@ -1,5 +1,5 @@
 import { Item, Share, ShareType, ShareUser, ShareUserStatus, User, Uuid } from '../services/database/types';
-import { ErrorForbidden, ErrorNotFound } from '../utils/errors';
+import { ErrorBadRequest, ErrorForbidden, ErrorNotFound } from '../utils/errors';
 import BaseModel, { AclAction, DeleteOptions } from './BaseModel';
 import { getCanShareFolder } from './utils/user';
 
@@ -117,6 +117,8 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 		const shareUser = await this.byShareAndUserId(shareId, userId);
 		if (!shareUser) throw new ErrorNotFound(`Item has not been shared with this user: ${shareId} / ${userId}`);
 
+		if (shareUser.status === status) throw new ErrorBadRequest(`Share ${shareId} status is already ${status}`);
+
 		const share = await this.models().share().load(shareId);
 		if (!share) throw new ErrorNotFound(`No such share: ${shareId}`);
 
@@ -126,7 +128,7 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 			}
 
 			return this.save({ ...shareUser, status });
-		});
+		}, 'ShareUserModel::setStatus');
 	}
 
 	public async deleteByShare(share: Share): Promise<void> {
@@ -139,7 +141,7 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 
 		await this.withTransaction(async () => {
 			await this.delete(shareUsers.map(s => s.id));
-		}, 'ShareUserModel::delete');
+		}, 'ShareUserModel::deleteByShare');
 	}
 
 	public async delete(id: string | string[], _options: DeleteOptions = {}): Promise<void> {

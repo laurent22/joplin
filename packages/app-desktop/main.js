@@ -1,6 +1,7 @@
 // This is the basic initialization for the Electron MAIN process
 
 const electronApp = require('electron').app;
+require('@electron/remote/main').initialize();
 const ElectronAppWrapper = require('./ElectronAppWrapper').default;
 const { initBridge } = require('./bridge');
 const Logger = require('@joplin/lib/Logger').default;

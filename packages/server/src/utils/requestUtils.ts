@@ -70,3 +70,8 @@ export function contextSessionId(ctx: AppContext, throwIfNotFound = true): strin
 export function isApiRequest(ctx: AppContext): boolean {
 	return ctx.path.indexOf('/api/') === 0;
 }
+
+export function userIp(ctx: AppContext): string {
+	if (ctx.headers['x-real-ip']) return ctx.headers['x-real-ip'];
+	return ctx.ip;
+}

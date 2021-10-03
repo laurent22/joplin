@@ -1,5 +1,6 @@
 import { isUniqueConstraintError } from '../db';
-import { User, UserFlag, UserFlagType, Uuid } from '../services/database/types';
+import { User, UserFlag, UserFlagType, userFlagTypeToLabel, Uuid } from '../services/database/types';
+import { formatDateTime } from '../utils/time';
 import BaseModel from './BaseModel';
 
 interface AddRemoveOptions {
@@ -10,6 +11,10 @@ function defaultAddRemoveOptions(): AddRemoveOptions {
 	return {
 		updateUser: true,
 	};
+}
+
+export function userFlagToString(flag: UserFlag): string {
+	return `${userFlagTypeToLabel(flag.type)} on ${formatDateTime(flag.created_time)}`;
 }
 
 export default class UserFlagModels extends BaseModel<UserFlag> {
@@ -70,23 +75,25 @@ export default class UserFlagModels extends BaseModel<UserFlag> {
 				await this.add(userId, flagType, { updateUser: false });
 			}
 			await this.updateUserFromFlags(userId);
-		});
+		}, 'UserFlagModels::addMulti');
 	}
 
 	public async removeMulti(userId: Uuid, flagTypes: UserFlagType[]) {
+		if (!flagTypes.length) return;
+
 		await this.withTransaction(async () => {
 			for (const flagType of flagTypes) {
 				await this.remove(userId, flagType, { updateUser: false });
 			}
 			await this.updateUserFromFlags(userId);
-		});
+		}, 'UserFlagModels::removeMulti');
 	}
 
 	// As a general rule the `enabled` and  `can_upload` properties should not
 	// be set directly (except maybe in tests) - instead the appropriate user
 	// flags should be set, and this function will derive the enabled/can_upload
 	// properties from them.
-	private async updateUserFromFlags(userId: Uuid) {
+	public async updateUserFromFlags(userId: Uuid) {
 		const flags = await this.allByUserId(userId);
 		const user = await this.models().user().load(userId, { fields: ['id', 'can_upload', 'enabled'] });
 
@@ -95,17 +102,34 @@ export default class UserFlagModels extends BaseModel<UserFlag> {
 			enabled: 1,
 		};
 
-		if (flags.find(f => f.type === UserFlagType.AccountWithoutSubscription)) {
+		const accountWithoutSubscriptionFlag = flags.find(f => f.type === UserFlagType.AccountWithoutSubscription);
+		const accountOverLimitFlag = flags.find(f => f.type === UserFlagType.AccountOverLimit);
+		const failedPaymentWarningFlag = flags.find(f => f.type === UserFlagType.FailedPaymentWarning);
+		const failedPaymentFinalFlag = flags.find(f => f.type === UserFlagType.FailedPaymentFinal);
+		const subscriptionCancelledFlag = flags.find(f => f.type === UserFlagType.SubscriptionCancelled);
+		const manuallyDisabledFlag = flags.find(f => f.type === UserFlagType.ManuallyDisabled);
+
+		if (accountWithoutSubscriptionFlag) {
 			newProps.can_upload = 0;
-		} else if (flags.find(f => f.type === UserFlagType.AccountOverLimit)) {
+		}
+
+		if (accountOverLimitFlag) {
 			newProps.can_upload = 0;
-		} else if (flags.find(f => f.type === UserFlagType.FailedPaymentWarning)) {
+		}
+
+		if (failedPaymentWarningFlag) {
 			newProps.can_upload = 0;
-		} else if (flags.find(f => f.type === UserFlagType.FailedPaymentFinal)) {
+		}
+
+		if (failedPaymentFinalFlag) {
 			newProps.enabled = 0;
-		} else if (flags.find(f => f.type === UserFlagType.SubscriptionCancelled)) {
+		}
+
+		if (subscriptionCancelledFlag) {
 			newProps.enabled = 0;
-		} else if (flags.find(f => f.type === UserFlagType.ManuallyDisabled)) {
+		}
+
+		if (manuallyDisabledFlag) {
 			newProps.enabled = 0;
 		}
 

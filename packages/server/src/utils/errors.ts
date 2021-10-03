@@ -14,6 +14,12 @@ export class ApiError extends Error {
 	}
 }
 
+export class ErrorWithCode extends ApiError {
+	public constructor(message: string, code: string) {
+		super(message, null, code);
+	}
+}
+
 export class ErrorMethodNotAllowed extends ApiError {
 	public static httpCode: number = 400;
 
@@ -113,4 +119,18 @@ export function errorToString(error: Error): string {
 	msg.push(error.message ? error.message : 'Unknown error');
 	if (error.stack) msg.push(error.stack);
 	return msg.join(': ');
+}
+
+interface PlainObjectError {
+	httpCode?: number;
+	message?: string;
+	code?: string;
+}
+
+export function errorToPlainObject(error: any): PlainObjectError {
+	const output: PlainObjectError = {};
+	if ('httpCode' in error) output.httpCode = error.httpCode;
+	if ('code' in error) output.code = error.code;
+	if ('message' in error) output.message = error.message;
+	return output;
 }

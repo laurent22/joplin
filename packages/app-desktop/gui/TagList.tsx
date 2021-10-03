@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useMemo } from 'react';
-import { AppState } from '../app';
+import { AppState } from '../app.reducer';
 
 const { connect } = require('react-redux');
 const { themeStyle } = require('@joplin/lib/theme');

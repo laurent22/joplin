@@ -1,5 +1,16 @@
 # Joplin terminal app changelog
 
+## [cli-v2.4.1](https://github.com/laurent22/joplin/releases/tag/cli-v2.4.1) - 2021-09-29T15:28:01Z
+
+- New: Add a way to disable a master key (7faa58e)
+- New: Add support for single master password, to simplify handling of multiple encryption keys (ce89ee5)
+- New: Added "None" sync target to allow disabling synchronisation (f5f05e6)
+- Improved: Allow importing certain corrupted ENEX files (f144dae)
+- Improved: Improved sync locks so that they do not prevent upgrading a sync target (06ed58b)
+- Fixed: Fixed file paths when exporting as HTML (#5325)
+- Fixed: Misinterpreted search term after filter in quotation marks (#5445) (#5444 by [@JackGruber](https://github.com/JackGruber))
+- Fixed: Setting note contents using "set" command does not update note timestamp (#5435)
+
 ## [cli-v2.3.2](https://github.com/laurent22/joplin/releases/tag/cli-v2.3.2) - 2021-08-16T09:38:40Z
 
 - Improved: Improved E2EE usability by making its state a property of the sync target (#5276)

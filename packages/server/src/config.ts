@@ -10,6 +10,7 @@ export interface EnvVariables {
 	APP_BASE_URL?: string;
 	USER_CONTENT_BASE_URL?: string;
 	API_BASE_URL?: string;
+	JOPLINAPP_BASE_URL?: string;
 
 	APP_PORT?: string;
 	DB_CLIENT?: string;
@@ -48,12 +49,30 @@ export interface EnvVariables {
 	BUSINESS_EMAIL?: string;
 
 	COOKIES_SECURE?: string;
+
+	SLOW_QUERY_LOG_ENABLED?: string;
+	SLOW_QUERY_LOG_MIN_DURATION?: string; // ms
 }
 
 let runningInDocker_: boolean = false;
 
 export function runningInDocker(): boolean {
 	return runningInDocker_;
+}
+
+function envReadString(s: string, defaultValue: string = ''): string {
+	return s === undefined || s === null ? defaultValue : s;
+}
+
+function envReadBool(s: string): boolean {
+	return s === '1';
+}
+
+function envReadInt(s: string, defaultValue: number = null): number {
+	if (!s) return defaultValue === null ? 0 : defaultValue;
+	const output = Number(s);
+	if (isNaN(output)) throw new Error(`Invalid number: ${s}`);
+	return output;
 }
 
 function databaseHostFromEnv(runningInDocker: boolean, env: EnvVariables): string {
@@ -72,8 +91,16 @@ function databaseHostFromEnv(runningInDocker: boolean, env: EnvVariables): strin
 }
 
 function databaseConfigFromEnv(runningInDocker: boolean, env: EnvVariables): DatabaseConfig {
+	const baseConfig: DatabaseConfig = {
+		client: DatabaseConfigClient.Null,
+		name: '',
+		slowQueryLogEnabled: envReadBool(env.SLOW_QUERY_LOG_ENABLED),
+		slowQueryLogMinDuration: envReadInt(env.SLOW_QUERY_LOG_MIN_DURATION, 10000),
+	};
+
 	if (env.DB_CLIENT === 'pg') {
 		return {
+			...baseConfig,
 			client: DatabaseConfigClient.PostgreSQL,
 			name: env.POSTGRES_DATABASE || 'joplin',
 			user: env.POSTGRES_USER || 'joplin',
@@ -84,6 +111,7 @@ function databaseConfigFromEnv(runningInDocker: boolean, env: EnvVariables): Dat
 	}
 
 	return {
+		...baseConfig,
 		client: DatabaseConfigClient.SQLite,
 		name: env.SQLITE_DATABASE,
 		asyncStackTraces: true,
@@ -164,6 +192,7 @@ export async function initConfig(envType: Env, env: EnvVariables, overrides: any
 		showErrorStackTraces: (env.ERROR_STACK_TRACES === undefined && envType === Env.Dev) || env.ERROR_STACK_TRACES === '1',
 		apiBaseUrl,
 		userContentBaseUrl: env.USER_CONTENT_BASE_URL ? env.USER_CONTENT_BASE_URL : baseUrl,
+		joplinAppBaseUrl: envReadString(env.JOPLINAPP_BASE_URL, 'https://joplinapp.org'),
 		signupEnabled: env.SIGNUP_ENABLED === '1',
 		termsEnabled: env.TERMS_ENABLED === '1',
 		accountTypesEnabled: env.ACCOUNT_TYPES_ENABLED === '1',

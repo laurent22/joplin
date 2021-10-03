@@ -7,6 +7,17 @@ import { Models } from './factory';
 import * as EventEmitter from 'events';
 import { Config } from '../utils/types';
 import personalizedUserContentBaseUrl from '@joplin/lib/services/joplinServer/personalizedUserContentBaseUrl';
+import Logger from '@joplin/lib/Logger';
+import dbuuid from '../utils/dbuuid';
+
+const logger = Logger.create('BaseModel');
+
+type SavePoint = string;
+
+export enum UuidType {
+	NanoId = 1,
+	Native = 2,
+}
 
 export interface SaveOptions {
 	isNew?: boolean;
@@ -46,6 +57,7 @@ export default abstract class BaseModel<T> {
 	private modelFactory_: Function;
 	private static eventEmitter_: EventEmitter = null;
 	private config_: Config;
+	private savePoints_: SavePoint[] = [];
 
 	public constructor(db: DbConnection, modelFactory: Function, config: Config) {
 		this.db_ = db;
@@ -133,6 +145,10 @@ export default abstract class BaseModel<T> {
 		return true;
 	}
 
+	protected uuidType(): UuidType {
+		return UuidType.NanoId;
+	}
+
 	protected autoTimestampEnabled(): boolean {
 		return true;
 	}
@@ -163,36 +179,38 @@ export default abstract class BaseModel<T> {
 	//
 	// The `name` argument is only for debugging, so that any stuck transaction
 	// can be more easily identified.
-	protected async withTransaction<T>(fn: Function, name: string = null): Promise<T> {
-		const debugTransaction = false;
+	protected async withTransaction<T>(fn: Function, name: string): Promise<T> {
+		const debugSteps = false;
+		const debugTimeout = true;
+		const timeoutMs = 10000;
 
-		const debugTimerId = debugTransaction ? setTimeout(() => {
-			console.info('Transaction did not complete:', name, txIndex);
-		}, 5000) : null;
+		let txIndex = 0;
 
-		const txIndex = await this.transactionHandler_.start();
+		const debugTimerId = debugTimeout ? setTimeout(() => {
+			logger.error(`Transaction #${txIndex} did not complete:`, name);
+			logger.error('Transaction stack:');
+			logger.error(this.transactionHandler_.stackInfo);
+		}, timeoutMs) : null;
 
-		if (debugTransaction) console.info('START', name, txIndex);
+		txIndex = await this.transactionHandler_.start(name);
+
+		if (debugSteps) console.info('START', name, txIndex);
 
 		let output: T = null;
 
 		try {
 			output = await fn();
 		} catch (error) {
+			if (debugSteps) console.info('ROLLBACK', name, txIndex);
+
 			await this.transactionHandler_.rollback(txIndex);
 
-			if (debugTransaction) {
-				console.info('ROLLBACK', name, txIndex);
-				clearTimeout(debugTimerId);
-			}
-
 			throw error;
+		} finally {
+			if (debugTimerId) clearTimeout(debugTimerId);
 		}
 
-		if (debugTransaction) {
-			console.info('COMMIT', name, txIndex);
-			clearTimeout(debugTimerId);
-		}
+		if (debugSteps) console.info('COMMIT', name, txIndex);
 
 		await this.transactionHandler_.commit(txIndex);
 		return output;
@@ -201,6 +219,13 @@ export default abstract class BaseModel<T> {
 	public async all(options: LoadOptions = {}): Promise<T[]> {
 		const rows: any[] = await this.db(this.tableName).select(this.selectFields(options));
 		return rows as T[];
+	}
+
+	public async count(): Promise<number> {
+		const r = await this
+			.db(this.tableName)
+			.count('*', { as: 'item_count' });
+		return r[0].item_count;
 	}
 
 	public fromApiInput(object: T): T {
@@ -242,13 +267,12 @@ export default abstract class BaseModel<T> {
 
 	public async save(object: T, options: SaveOptions = {}): Promise<T> {
 		if (!object) throw new Error('Object cannot be empty');
-
 		const toSave = Object.assign({}, object);
 
 		const isNew = await this.isNew(object, options);
 
 		if (this.hasUuid() && isNew && !(toSave as WithUuid).id) {
-			(toSave as WithUuid).id = uuidgen();
+			(toSave as WithUuid).id = this.uuidType() === UuidType.NanoId ? uuidgen() : dbuuid();
 		}
 
 		if (this.autoTimestampEnabled()) {
@@ -284,6 +308,25 @@ export default abstract class BaseModel<T> {
 		return this.db(this.tableName).select(options.fields || this.defaultFields).whereIn('id', ids);
 	}
 
+	public async setSavePoint(): Promise<SavePoint> {
+		const name = `sp_${uuidgen()}`;
+		await this.db.raw(`SAVEPOINT ${name}`);
+		this.savePoints_.push(name);
+		return name;
+	}
+
+	public async rollbackSavePoint(savePoint: SavePoint) {
+		const last = this.savePoints_.pop();
+		if (last !== savePoint) throw new Error('Rollback save point does not match');
+		await this.db.raw(`ROLLBACK TO SAVEPOINT ${savePoint}`);
+	}
+
+	public async releaseSavePoint(savePoint: SavePoint) {
+		const last = this.savePoints_.pop();
+		if (last !== savePoint) throw new Error('Rollback save point does not match');
+		await this.db.raw(`RELEASE SAVEPOINT ${savePoint}`);
+	}
+
 	public async exists(id: string): Promise<boolean> {
 		const o = await this.load(id, { fields: ['id'] });
 		return !!o;
@@ -309,7 +352,7 @@ export default abstract class BaseModel<T> {
 			}
 
 			const deletedCount = await query.del();
-			if (!options.allowNoOp && deletedCount !== ids.length) throw new Error(`${ids.length} row(s) should have been deleted but ${deletedCount} row(s) were deleted`);
+			if (!options.allowNoOp && deletedCount !== ids.length) throw new Error(`${ids.length} row(s) should have been deleted but ${deletedCount} row(s) were deleted. ID: ${id}`);
 		}, 'BaseModel::delete');
 	}
 

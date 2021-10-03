@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
-import { AppState } from '../app';
+import { AppState } from '../app.reducer';
 import InteropService from '@joplin/lib/services/interop/InteropService';
 import { stateUtils } from '@joplin/lib/reducer';
 import CommandService from '@joplin/lib/services/CommandService';

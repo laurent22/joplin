@@ -10,7 +10,7 @@ import InteropServiceHelper from '../../InteropServiceHelper';
 import { _ } from '@joplin/lib/locale';
 import { PluginStates, utils as pluginUtils } from '@joplin/lib/services/plugins/reducer';
 import { MenuItemLocation } from '@joplin/lib/services/plugins/api/types';
-import { AppState } from '../../app';
+import { AppState } from '../../app.reducer';
 import { ModelType } from '@joplin/lib/BaseModel';
 import BaseModel from '@joplin/lib/BaseModel';
 import Folder from '@joplin/lib/models/Folder';
@@ -24,7 +24,7 @@ import { getFolderCallbackUrl, getTagCallbackUrl } from '@joplin/lib/callbackUrl
 const { connect } = require('react-redux');
 const shared = require('@joplin/lib/components/shared/side-menu-shared.js');
 const { themeStyle } = require('@joplin/lib/theme');
-const bridge = require('electron').remote.require('./bridge').default;
+const bridge = require('@electron/remote').require('./bridge').default;
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
 const { substrWithEllipsis } = require('@joplin/lib/string-utils');

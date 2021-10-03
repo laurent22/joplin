@@ -17,7 +17,7 @@ import { stateUtils } from '@joplin/lib/reducer';
 import InteropServiceHelper from '../../InteropServiceHelper';
 import { _ } from '@joplin/lib/locale';
 import NoteListWrapper from '../NoteListWrapper/NoteListWrapper';
-import { AppState } from '../../app';
+import { AppState } from '../../app.reducer';
 import { saveLayout, loadLayout } from '../ResizableLayout/utils/persist';
 import Setting from '@joplin/lib/models/Setting';
 import produce from 'immer';
@@ -39,6 +39,7 @@ import { localSyncInfoFromState } from '@joplin/lib/services/synchronizer/syncIn
 import { parseCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 import ElectronAppWrapper from '../../ElectronAppWrapper';
 import { showMissingMasterKeyMessage } from '@joplin/lib/services/e2ee/utils';
+import commands from './commands/index';
 
 const { connect } = require('react-redux');
 const { PromptDialog } = require('../PromptDialog.min.js');
@@ -76,6 +77,7 @@ interface Props {
 	shareInvitations: ShareInvitation[];
 	isSafeMode: boolean;
 	needApiAuth: boolean;
+	processingShareInvitationResponse: boolean;
 }
 
 interface ShareFolderDialogOptions {
@@ -111,39 +113,6 @@ const defaultLayout: LayoutItem = {
 		{ key: 'editor' },
 	],
 };
-
-const commands = [
-	require('./commands/editAlarm'),
-	require('./commands/exportPdf'),
-	require('./commands/gotoAnything'),
-	require('./commands/commandPalette'),
-	require('./commands/hideModalMessage'),
-	require('./commands/moveToFolder'),
-	require('./commands/newFolder'),
-	require('./commands/newNote'),
-	require('./commands/newSubFolder'),
-	require('./commands/newTodo'),
-	require('./commands/openFolder'),
-	require('./commands/openNote'),
-	require('./commands/openTag'),
-	require('./commands/print'),
-	require('./commands/renameFolder'),
-	require('./commands/renameTag'),
-	require('./commands/search'),
-	require('./commands/setTags'),
-	require('./commands/showModalMessage'),
-	require('./commands/showNoteContentProperties'),
-	require('./commands/showNoteProperties'),
-	require('./commands/showPrompt'),
-	require('./commands/showShareFolderDialog'),
-	require('./commands/showShareNoteDialog'),
-	require('./commands/showSpellCheckerMenu'),
-	require('./commands/toggleEditors'),
-	require('./commands/toggleLayoutMoveMode'),
-	require('./commands/toggleNoteList'),
-	require('./commands/toggleSideBar'),
-	require('./commands/toggleVisiblePanes'),
-];
 
 class MainScreenComponent extends React.Component<Props, State> {
 
@@ -248,6 +217,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 	}
 
 	private showShareInvitationNotification(props: Props): boolean {
+		if (props.processingShareInvitationResponse) return false;
 		return !!props.shareInvitations.find(i => i.status === 0);
 	}
 
@@ -597,8 +567,16 @@ class MainScreenComponent extends React.Component<Props, State> {
 		};
 
 		const onInvitationRespond = async (shareUserId: string, accept: boolean) => {
-			await ShareService.instance().respondInvitation(shareUserId, accept);
-			await ShareService.instance().refreshShareInvitations();
+			// The below functions can take a bit of time to complete so in the
+			// meantime we hide the notification so that the user doesn't click
+			// multiple times on the Accept link.
+			ShareService.instance().setProcessingShareInvitationResponse(true);
+			try {
+				await ShareService.instance().respondInvitation(shareUserId, accept);
+				await ShareService.instance().refreshShareInvitations();
+			} finally {
+				ShareService.instance().setProcessingShareInvitationResponse(false);
+			}
 			void reg.scheduleSync(1000);
 		};
 
@@ -904,6 +882,7 @@ const mapStateToProps = (state: AppState) => {
 		mainLayout: state.mainLayout,
 		startupPluginsLoaded: state.startupPluginsLoaded,
 		shareInvitations: state.shareService.shareInvitations,
+		processingShareInvitationResponse: state.shareService.processingShareInvitationResponse,
 		isSafeMode: state.settings.isSafeMode,
 		needApiAuth: state.needApiAuth,
 		showInstallTemplatesPlugin: state.hasLegacyTemplates && !state.pluginService.plugins['joplin.plugin.templates'],
