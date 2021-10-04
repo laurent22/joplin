@@ -78,6 +78,7 @@ describe('e2ee/utils', function() {
 		Setting.setValue('encryption.masterPassword', masterPassword1);
 		const mk1 = await MasterKey.save(await encryptionService().generateMasterKey(masterPassword1));
 		const mk2 = await MasterKey.save(await encryptionService().generateMasterKey(masterPassword1));
+
 		setPpk(await generateKeyPair(encryptionService(), masterPassword1));
 
 		await updateMasterPassword(masterPassword1, masterPassword2);
