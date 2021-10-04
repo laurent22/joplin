@@ -13,7 +13,7 @@ function useAppCloseHandler(upgradeResult: SyncTargetUpgradeResult) {
 			let canClose = true;
 
 			if (!upgradeResult.done) {
-				canClose = confirm('The synchronisation target upgrade is still running and it is recommanded to let it finish. Close the application anyway?');
+				canClose = confirm('The synchronisation target upgrade is still running and it is recommended to let it finish. Close the application anyway?');
 			}
 
 			if (canClose) {

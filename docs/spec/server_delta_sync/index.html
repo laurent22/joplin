@@ -303,7 +303,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/spec/server_delta_sync.md
 <h2>What is a change event<a name="what-is-a-change-event" href="#what-is-a-change-event" class="heading-anchor">🔗</a></h2>
 <p>An event can be &quot;create&quot;, &quot;update&quot; or &quot;detete&quot; and is associated with a given file. The client uses this info to apply the change locally - creating, updating or deleting the file as needed.</p>
 <p>Attached to the event, is also a copy of the file metadata, so the client doesn't need to a do a second request to fetch it.</p>
-<p>Internally, the event also stores the file name and parent ID. This is used when an item is deleted since in that case the item ID only would not be sufficient to know where the item was initally stored.</p>
+<p>Internally, the event also stores the file name and parent ID. This is used when an item is deleted since in that case the item ID only would not be sufficient to know where the item was initially stored.</p>
 <h2>Event compression<a name="event-compression" href="#event-compression" class="heading-anchor">🔗</a></h2>
 <p>To reduce the data being transferred, the API compresses the events by removing redundant ones. For example, multiple updates are compressed into one, since the client only need to know that the item has been updated at least once. The following rules are currently applied to compress the events:</p>
 <table class="table">
@@ -364,7 +364,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/spec/server_delta_sync.md
 </ul>
 </li>
 </ul>
-<p>It might seem we could derive the &quot;create&quot; events simply by looking at the files in the directory - all files that are there would implicitely have a &quot;create&quot; event. The issue however is that it's not possible to reliably iterate over the files in a folder, because they might change in the meantime. The change events on the other hand provide an ID that can be used reliably to iterate over changes, and to resume at any time.</p>
+<p>It might seem we could derive the &quot;create&quot; events simply by looking at the files in the directory - all files that are there would implicitly have a &quot;create&quot; event. The issue however is that it's not possible to reliably iterate over the files in a folder, because they might change in the meantime. The change events on the other hand provide an ID that can be used reliably to iterate over changes, and to resume at any time.</p>
 
 								<div class="bottom-links">
 									<a href="https://github.com/laurent22/joplin/blob/dev/readme/spec/server_delta_sync.md">

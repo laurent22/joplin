@@ -363,7 +363,7 @@ for (let portToTest = 41184; portToTest &lt;= 41194; portToTest++) {
 <p>Then you will resume fetching the results using this query:</p>
 <pre><code>curl http://localhost:41184/notes?order_by=updated_time&amp;order_dir=ASC&amp;limit=10&amp;page=2
 </code></pre>
-<p>Eventually you will get some results that do not contain an &quot;has_more&quot; paramater, at which point you will have retrieved all the results</p>
+<p>Eventually you will get some results that do not contain an &quot;has_more&quot; parameter, at which point you will have retrieved all the results</p>
 <p>As an example the pseudo-code below could be used to fetch all the notes:</p>
 <pre><code class="language-javascript">
 async function fetchJson(url) {
@@ -394,7 +394,7 @@ async function fetchAllNotes() {
 <p>For example, to retrieve the notebook named <code>recipes</code>: <strong>GET /search?query=recipes&amp;type=folder</strong></p>
 <p>To retrieve all the tags that start with <code>project-</code>: <strong>GET /search?query=project-*&amp;type=tag</strong></p>
 <h1>Item type IDs<a name="item-type-ids" href="#item-type-ids" class="heading-anchor">🔗</a></h1>
-<p>Item type IDs might be refered to in certain object you will retrieve from the API. This is the correspondance between name and ID:</p>
+<p>Item type IDs might be referred to in certain object you will retrieve from the API. This is the correspondance between name and ID:</p>
 <table class="table">
 <thead>
 <tr>

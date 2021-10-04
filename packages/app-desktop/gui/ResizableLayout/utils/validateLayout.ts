@@ -89,7 +89,7 @@ function itemShouldBeVisible(item: LayoutItem): boolean {
 }
 
 // If all children of a container are hidden, the container should be
-// hidden too. A container visiblity cannot be changed by the user.
+// hidden too. A container visibility cannot be changed by the user.
 function updateContainerVisibility(_itemIndex: number, itemDraft: LayoutItem, _parent: LayoutItem) {
 	if (itemDraft.children) {
 		itemDraft.visible = itemShouldBeVisible(itemDraft);

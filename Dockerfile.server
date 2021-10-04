@@ -36,7 +36,7 @@ RUN npm install --ignore-scripts
 # scripts, which means that for packages that have such scripts, we need to
 # copy all the files.
 #
-# We can't run boostrap with "--ignore-scripts" because that would
+# We can't run bootstrap with "--ignore-scripts" because that would
 # prevent certain sub-packages, such as sqlite3, from being built
 
 COPY --chown=$user:$user packages/fork-sax/package*.json ./packages/fork-sax/

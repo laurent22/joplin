@@ -4,7 +4,7 @@
 // empty invisible DIV), so it means it could be put anywhere and would have the
 // same effect.
 //
-// It's still reliable because the lifecyle of adding the CSS and removing on
+// It's still reliable because the lifecycle of adding the CSS and removing on
 // unmout is handled properly. There should only be one such component on the
 // page.
 

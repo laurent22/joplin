@@ -73,7 +73,7 @@ export default class JoplinCommands {
      * <span class="platform-desktop">desktop</span> Registers a new command.
      *
      * ```typescript
-     * // Register a new commmand called "testCommand1"
+     * // Register a new command called "testCommand1"
      *
      * await joplin.commands.register({
      *     name: 'testCommand1',
