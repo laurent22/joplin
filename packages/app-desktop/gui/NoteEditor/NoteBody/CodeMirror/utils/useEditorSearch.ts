@@ -49,7 +49,7 @@ export default function useEditorSearch(CodeMirror: any) {
 	}
 
 	// Highlights the currently active found work
-	// It's possible to get tricky with this fucntions and just use findNext/findPrev
+	// It's possible to get tricky with this functions and just use findNext/findPrev
 	// but this is fast enough and works more naturally with the current search logic
 	function highlightSearch(cm: any, searchTerm: RegExp, index: number, scrollTo: boolean) {
 		const cursor = cm.getSearchCursor(searchTerm);

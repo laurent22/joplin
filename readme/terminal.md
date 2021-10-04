@@ -292,7 +292,7 @@ The following commands are available in [command-line mode](#command-line-mode):
 	Possible keys/values:
 
 	    sync.target                    Synchronisation target.
-	                                   The target to synchonise to. Each sync
+	                                   The target to synchronise to. Each sync
 	                                   target may have additional parameters which
 	                                   are named as `sync.NUM.NAME` (all
 	                                   documented below).

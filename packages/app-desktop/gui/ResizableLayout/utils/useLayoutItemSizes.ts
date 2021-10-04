@@ -11,7 +11,7 @@ export interface LayoutItemSizes {
 }
 
 // Container always take the full space while the items within it need to
-// accomodate for the resize handle.
+// accommodate for the resize handle.
 export function itemSize(item: LayoutItem, parent: LayoutItem | null, sizes: LayoutItemSizes, isContainer: boolean): Size {
 	const parentResizableRight = !!parent && parent.resizableRight;
 	const parentResizableBottom = !!parent && parent.resizableBottom;

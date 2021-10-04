@@ -170,7 +170,7 @@ export interface ExportContext {
 	options: ExportOptions;
 
 	/**
-	 * You can attach your own custom data using this propery - it will then be passed to each event handler, allowing you to keep state from one event to the next.
+	 * You can attach your own custom data using this property - it will then be passed to each event handler, allowing you to keep state from one event to the next.
 	 */
 	userData?: any;
 }

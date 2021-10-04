@@ -866,7 +866,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		const output = [];
 
-		// The file attachement modules only work in Android >= 5 (Version 21)
+		// The file attachment modules only work in Android >= 5 (Version 21)
 		// https://github.com/react-community/react-native-image-picker/issues/606
 
 		// As of 2020-10-13, support for attaching images from the gallery is removed
@@ -889,7 +889,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 					// On iOS, it will show "local files", which means certain files saved from the browser
 					// and the iCloud files, but it doesn't include photos and images from the CameraRoll
 					//
-					// On Android, it will depend on the phone, but usually it will allow browing all files and photos.
+					// On Android, it will depend on the phone, but usually it will allow browsing all files and photos.
 					buttons.push({ text: _('Attach file'), id: 'attachFile' });
 
 					// Disabled on Android because it doesn't work due to permission issues, but enabled on iOS
