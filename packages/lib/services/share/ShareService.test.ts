@@ -3,12 +3,13 @@ import { encryptionService, msleep, setupDatabaseAndSynchronizer, switchClient }
 import ShareService from './ShareService';
 import reducer from '../../reducer';
 import { createStore } from 'redux';
-import { NoteEntity } from '../database/types';
+import { FolderEntity, NoteEntity } from '../database/types';
 import Folder from '../../models/Folder';
 import { setEncryptionEnabled, setPpk } from '../synchronizer/syncInfoUtils';
 import { generateKeyPair } from '../e2ee/ppk';
 import MasterKey from '../../models/MasterKey';
 import { MasterKeyEntity } from '../e2ee/types';
+import { updateMasterPassword } from '../e2ee/utils';
 
 function mockService(api: any) {
 	const service = new ShareService();
@@ -98,6 +99,7 @@ describe('ShareService', function() {
 
 	it('should share a folder - E2EE', async () => {
 		setEncryptionEnabled(true);
+		await updateMasterPassword('', '111111');
 		const ppk = await generateKeyPair(encryptionService(), '111111');
 		setPpk(ppk);
 
@@ -106,12 +108,13 @@ describe('ShareService', function() {
 		expect((await MasterKey.all()).length).toBe(1);
 
 		const mk = (await MasterKey.all())[0];
-		const content = JSON.parse(mk.content);
-		expect(content.ppkId).toBe(ppk.id);
+		const folder: FolderEntity = (await Folder.all())[0];
+		expect(folder.master_key_id).toBe(mk.id);
 	});
 
 	it('should add a recipient', async () => {
 		setEncryptionEnabled(true);
+		await updateMasterPassword('', '111111');
 		const ppk = await generateKeyPair(encryptionService(), '111111');
 		setPpk(ppk);
 		const recipientPpk = await generateKeyPair(encryptionService(), '222222');

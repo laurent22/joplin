@@ -92,6 +92,7 @@ export default class ShareService {
 			// Shouldn't happen
 			if (!syncInfo.ppk) throw new Error('Cannot share notebook because E2EE is enabled and no Public Private Key pair exists.');
 
+			// TODO: handle "undefinedMasterPassword" error - show master password dialog
 			folderMasterKey = await this.encryptionService_.generateMasterKey(getMasterPassword());
 			folderMasterKey = await MasterKey.save(folderMasterKey);
 

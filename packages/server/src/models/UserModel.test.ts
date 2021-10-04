@@ -377,7 +377,7 @@ describe('UserModel', function() {
 
 		expect((await models().user().publicPrivateKey(user1.id)).publicKey).toBe('PUBLIC_KEY_1');
 		expect((await models().user().publicPrivateKey(user2.id)).publicKey).toBe('PUBLIC_KEY_2');
-		expect((await models().user().publicPrivateKey(user3.id)).publicKey).toBe('');
+		expect((await models().user().publicPrivateKey(user3.id))).toBeFalsy();
 
 		await expectThrow(async () => models().user().publicPrivateKey(user4.id));
 	});
