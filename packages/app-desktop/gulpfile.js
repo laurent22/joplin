@@ -23,10 +23,10 @@ const tasks = {
 	buildCommandIndex: require('@joplin/tools/gulp/tasks/buildCommandIndex'),
 	compileSass: {
 		fn: async () => {
-			const guiDir = `${__dirname}/gui`;
-			await compileSass([
-				`${guiDir}/EncryptionConfigScreen/style.scss`,
-			], `${__dirname}/style.min.css`);
+			await compileSass(
+				`${__dirname}/style.scss`,
+				`${__dirname}/style.min.css`
+			);
 		},
 	},
 };

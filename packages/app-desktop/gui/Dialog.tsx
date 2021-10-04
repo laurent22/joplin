@@ -1,3 +1,4 @@
+import { useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 
 const DialogModalLayer = styled.div`
@@ -27,11 +28,27 @@ const DialogRoot = styled.div`
 
 interface Props {
 	renderContent: Function;
+	className?: string;
+	onClose?: Function;
 }
 
 export default function Dialog(props: Props) {
+	const onWindowKeydown = useCallback((event: any) => {
+		if (event.key === 'Escape') {
+			if (props.onClose) props.onClose();
+		}
+	}, [props.onClose]);
+
+	useEffect(() => {
+		window.addEventListener('keydown', onWindowKeydown);
+
+		return () => {
+			window.removeEventListener('keydown', onWindowKeydown);
+		};
+	}, [onWindowKeydown]);
+
 	return (
-		<DialogModalLayer>
+		<DialogModalLayer className={props.className}>
 			<DialogRoot>
 				{props.renderContent()}
 			</DialogRoot>
