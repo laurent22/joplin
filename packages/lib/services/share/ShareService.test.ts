@@ -5,8 +5,8 @@ import reducer from '../../reducer';
 import { createStore } from 'redux';
 import { NoteEntity } from '../database/types';
 import Folder from '../../models/Folder';
-import { localSyncInfo, setEncryptionEnabled } from '../synchronizer/syncInfoUtils';
-import { generateKeyPair, generateKeyPairAndSave } from '../e2ee/ppk';
+import { setEncryptionEnabled, setPpk } from '../synchronizer/syncInfoUtils';
+import { generateKeyPair } from '../e2ee/ppk';
 import MasterKey from '../../models/MasterKey';
 import { MasterKeyEntity } from '../e2ee/types';
 
@@ -98,7 +98,8 @@ describe('ShareService', function() {
 
 	it('should share a folder - E2EE', async () => {
 		setEncryptionEnabled(true);
-		const ppk = await generateKeyPairAndSave(encryptionService(), localSyncInfo(), '111111');
+		const ppk = await generateKeyPair(encryptionService(), '111111');
+		setPpk(ppk);
 
 		await testShareFolder(testShareFolderService());
 
@@ -111,7 +112,8 @@ describe('ShareService', function() {
 
 	it('should add a recipient', async () => {
 		setEncryptionEnabled(true);
-		const ppk = await generateKeyPairAndSave(encryptionService(), localSyncInfo(), '111111');
+		const ppk = await generateKeyPair(encryptionService(), '111111');
+		setPpk(ppk);
 		const recipientPpk = await generateKeyPair(encryptionService(), '222222');
 		expect(ppk.id).not.toBe(recipientPpk.id);
 

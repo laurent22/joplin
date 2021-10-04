@@ -375,11 +375,11 @@ describe('UserModel', function() {
 			name: 'info.json',
 		});
 
-		expect(await models().user().publicKey(user1.id)).toBe('PUBLIC_KEY_1');
-		expect(await models().user().publicKey(user2.id)).toBe('PUBLIC_KEY_2');
-		expect(await models().user().publicKey(user3.id)).toBe('');
+		expect((await models().user().publicPrivateKey(user1.id)).publicKey).toBe('PUBLIC_KEY_1');
+		expect((await models().user().publicPrivateKey(user2.id)).publicKey).toBe('PUBLIC_KEY_2');
+		expect((await models().user().publicPrivateKey(user3.id)).publicKey).toBe('');
 
-		await expectThrow(async () => models().user().publicKey(user4.id));
+		await expectThrow(async () => models().user().publicPrivateKey(user4.id));
 	});
 
 	test('should remove flag when account goes under the limit', async () => {
