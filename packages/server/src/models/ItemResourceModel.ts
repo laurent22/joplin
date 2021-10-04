@@ -34,7 +34,7 @@ export default class ItemResourceModel extends BaseModel<ItemResource> {
 					resource_id: resourceId,
 				});
 			}
-		});
+		}, 'ItemResourceModel::addResourceIds');
 	}
 
 	public async byItemId(itemId: Uuid): Promise<string[]> {

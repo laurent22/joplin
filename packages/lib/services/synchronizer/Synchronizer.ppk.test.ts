@@ -2,6 +2,7 @@ import { synchronizerStart, setupDatabaseAndSynchronizer, fileApi, switchClient,
 import Folder from '../../models/Folder';
 import { fetchSyncInfo, localSyncInfo, setEncryptionEnabled } from '../synchronizer/syncInfoUtils';
 import { EncryptionMethod } from '../e2ee/EncryptionService';
+import { updateMasterPassword } from '../e2ee/utils';
 
 describe('Synchronizer.ppk', function() {
 
@@ -22,6 +23,7 @@ describe('Synchronizer.ppk', function() {
 	});
 
 	it('should create a public private key pair if it does not exist', async () => {
+		await updateMasterPassword('', '111111');
 		setEncryptionEnabled(true);
 		await loadEncryptionMasterKey();
 
@@ -29,6 +31,7 @@ describe('Synchronizer.ppk', function() {
 
 		await Folder.save({});
 		expect(localSyncInfo().ppk).toBeFalsy();
+
 		await synchronizerStart();
 		const remoteInfo = await fetchSyncInfo(fileApi());
 		expect(localSyncInfo().ppk).toBeTruthy();

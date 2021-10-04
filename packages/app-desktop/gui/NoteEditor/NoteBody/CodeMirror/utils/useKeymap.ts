@@ -171,6 +171,7 @@ export default function useKeymap(CodeMirror: any) {
 				'Cmd-Right': 'goLineRightSmart',
 				'Alt-Backspace': 'delGroupBefore',
 				'Alt-Delete': 'delGroupAfter',
+				'Cmd-Backspace': 'delWrappedLineLeft',
 
 				'fallthrough': 'basic',
 			};

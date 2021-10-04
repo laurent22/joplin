@@ -2,6 +2,9 @@ import { routeResponseFormat, Response, RouteResponseFormat, execRequest } from 
 import { AppContext, Env } from '../utils/types';
 import { isView, View } from '../services/MustacheService';
 import config from '../config';
+import { userIp } from '../utils/requestUtils';
+import { createCsrfTag } from '../utils/csrf';
+import { getImpersonatorAdminSessionId } from '../routes/index/utils/users/impersonate';
 
 export default async function(ctx: AppContext) {
 	const requestStartTime = Date.now();
@@ -12,6 +15,8 @@ export default async function(ctx: AppContext) {
 		if (responseObject instanceof Response) {
 			ctx.response = responseObject.response;
 		} else if (isView(responseObject)) {
+			const impersonatorAdminSessionId = getImpersonatorAdminSessionId(ctx);
+
 			const view = responseObject as View;
 			ctx.response.status = view?.content?.error ? view?.content?.error?.httpCode || 500 : 200;
 			ctx.response.body = await ctx.joplin.services.mustache.renderView(view, {
@@ -19,6 +24,8 @@ export default async function(ctx: AppContext) {
 				hasNotifications: !!ctx.joplin.notifications && !!ctx.joplin.notifications.length,
 				owner: ctx.joplin.owner,
 				supportEmail: config().supportEmail,
+				impersonatorAdminSessionId,
+				csrfTag: impersonatorAdminSessionId ? await createCsrfTag(ctx, false) : null,
 			});
 		} else {
 			ctx.response.status = 200;
@@ -26,9 +33,9 @@ export default async function(ctx: AppContext) {
 		}
 	} catch (error) {
 		if (error.httpCode >= 400 && error.httpCode < 500) {
-			ctx.joplin.appLogger().error(`${error.httpCode}: ` + `${ctx.request.method} ${ctx.path}` + ` : ${error.message}`);
+			ctx.joplin.appLogger().error(`${error.httpCode}: ` + `${ctx.request.method} ${ctx.path}` + `: ${userIp(ctx)}: ${error.message}`);
 		} else {
-			ctx.joplin.appLogger().error(error);
+			ctx.joplin.appLogger().error(userIp(ctx), error);
 		}
 
 		// Uncomment this when getting HTML blobs as errors while running tests.

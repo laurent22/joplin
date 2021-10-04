@@ -30,6 +30,7 @@ export interface View {
 
 interface GlobalParams {
 	baseUrl?: string;
+	joplinAppBaseUrl?: string;
 	prefersDarkEnabled?: boolean;
 	notifications?: NotificationView[];
 	hasNotifications?: boolean;
@@ -42,6 +43,8 @@ interface GlobalParams {
 	userDisplayName?: string;
 	supportEmail?: string;
 	isJoplinCloud?: boolean;
+	impersonatorAdminSessionId?: string;
+	csrfTag?: string;
 }
 
 export function isView(o: any): boolean {
@@ -92,6 +95,7 @@ export default class MustacheService {
 	private get defaultLayoutOptions(): GlobalParams {
 		return {
 			baseUrl: config().baseUrl,
+			joplinAppBaseUrl: config().joplinAppBaseUrl,
 			prefersDarkEnabled: this.prefersDarkEnabled_,
 			appVersion: config().appVersion,
 			appName: config().appName,

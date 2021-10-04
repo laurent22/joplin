@@ -19,6 +19,11 @@ export const runtime = (): CommandRuntime => {
 				visible: !layoutItemProp(layout, 'noteList', 'visible'),
 			});
 
+			// Toggling the sidebar will affect the size of most other on-screen components.
+			// Dispatching a window resize event is a bit of a hack, but it ensures that any
+			// component that watches for resizes will be accurately notified
+			window.dispatchEvent(new Event('resize'));
+
 			context.dispatch({
 				type: 'MAIN_LAYOUT_SET',
 				value: newLayout,

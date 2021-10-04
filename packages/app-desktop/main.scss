@@ -149,8 +149,17 @@ a {
 General classes
 ========================================================================================= */
 
-* {
+body {
 	color: var(--joplin-color);
+	font-size: 16px;
+}
+
+h2 {
+	font-size: 24px;
+
+	&.-no-top-margin {
+		margin-top: 0;
+	}
 }
 
 .form {
@@ -197,6 +206,11 @@ a {
 /* =========================================================================================
 Component-specific classes
 ========================================================================================= */
+
+// .config-screen .config-section {
+// 	border-bottom: 1px solid var(--joplin-divider-color);
+// 	padding-bottom: 20px;
+// }
 
 .master-password-dialog .dialog-root {
 	min-width: 500px;

@@ -4,7 +4,7 @@ import { NotificationKey } from '../../models/NotificationModel';
 import { cookieGet } from '../../utils/cookies';
 import { ErrorForbidden } from '../../utils/errors';
 import { execRequest, execRequestC } from '../../utils/testing/apiUtils';
-import { beforeAllDb, afterAllTests, beforeEachDb, koaAppContext, createUserAndSession, models, parseHtml, checkContextError, expectHttpError } from '../../utils/testing/testUtils';
+import { beforeAllDb, afterAllTests, beforeEachDb, koaAppContext, createUserAndSession, models, parseHtml, checkContextError, expectHttpError, expectThrow } from '../../utils/testing/testUtils';
 import uuidgen from '../../utils/uuidgen';
 
 export async function postUser(sessionId: string, email: string, password: string = null, props: any = null): Promise<User> {
@@ -30,12 +30,12 @@ export async function postUser(sessionId: string, email: string, password: strin
 	return context.response.body;
 }
 
-export async function patchUser(sessionId: string, user: any): Promise<User> {
+export async function patchUser(sessionId: string, user: any, url: string = ''): Promise<User> {
 	const context = await koaAppContext({
 		sessionId: sessionId,
 		request: {
 			method: 'POST',
-			url: '/users',
+			url: url ? url : '/users',
 			body: {
 				...user,
 				post_button: true,
@@ -295,9 +295,9 @@ describe('index/users', function() {
 		});
 
 		const email = (await models().email().all()).find(e => e.recipient_id === user1.id);
-		const matches = email.body.match(/\/(users\/.*)(\?token=)(.{32})/);
-		const path = matches[1];
-		const token = matches[3];
+		const [, path, , token] = email.body.match(/\/(users\/.*)(\?token=)(.{32})/);
+		// const path = matches[1];
+		// const token = matches[3];
 
 		const context = await execRequestC('', 'GET', path, null, { query: { token } });
 
@@ -316,6 +316,33 @@ describe('index/users', function() {
 		// Check that a notification has been created
 		const notification = (await models().notification().all())[0];
 		expect(notification.key).toBe(NotificationKey.EmailConfirmed);
+	});
+
+	test('should allow changing an email', async function() {
+		const { user, session } = await createUserAndSession();
+
+		await patchUser(session.id, {
+			id: user.id,
+			email: 'changed@example.com',
+		}, '/users/me');
+
+		// It's not immediately changed
+		expect((await models().user().load(user.id)).email).toBe('user1@localhost');
+
+		// Grab the confirmation URL
+		const email = (await models().email().all()).find(e => e.recipient_id === user.id);
+		const [, path, , token] = email.body.match(/\/(users\/.*)(\?token=)(.{32})/);
+
+		await execRequest('', 'GET', path, null, { query: { token } });
+
+		// Now that it's confirmed, it should have been changed
+		expect((await models().user().load(user.id)).email).toBe('changed@example.com');
+
+		const keys = await models().keyValue().all();
+		expect(keys.length).toBe(1);
+		expect(keys[0].value).toBe('user1@localhost'); // The old email has been saved
+
+		await expectThrow(async () => execRequest('', 'GET', path, null, { query: { token } }));
 	});
 
 	test('should apply ACL', async function() {
@@ -356,7 +383,7 @@ describe('index/users', function() {
 		await expectHttpError(async () => patchUser(session1.id, { id: user1.id, can_share_folder: 1 }), ErrorForbidden.httpCode);
 
 		// non-admin cannot change non-whitelisted properties
-		await expectHttpError(async () => patchUser(session1.id, { id: user1.id, email: 'candothat@example.com' }), ErrorForbidden.httpCode);
+		await expectHttpError(async () => patchUser(session1.id, { id: user1.id, can_upload: 0 }), ErrorForbidden.httpCode);
 	});
 
 

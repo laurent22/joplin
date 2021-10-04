@@ -16,7 +16,7 @@
 		},
 		"sync.target": {
 			"type": "integer",
-			"default": 0,
+			"default": 7,
 			"description": "Synchronisation target",
 			"enum": [
 				0,

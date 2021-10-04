@@ -18,11 +18,13 @@ import { initializeJoplinUtils } from './utils/joplinUtils';
 import startServices from './utils/startServices';
 import { credentialFile } from './utils/testing/testUtils';
 import apiVersionHandler from './middleware/apiVersionHandler';
+import clickJackingHandler from './middleware/clickJackingHandler';
 
+const nodeSqlite = require('sqlite3');
 const cors = require('@koa/cors');
 const nodeEnvFile = require('node-env-file');
 const { shimInit } = require('@joplin/lib/shim-init-node.js');
-shimInit();
+shimInit({ nodeSqlite });
 
 const env: Env = argv.env as Env || Env.Prod;
 
@@ -89,14 +91,6 @@ async function main() {
 	};
 
 	const app = new Koa();
-
-	// app.use(async function responseTime(ctx:AppContext, next:Function) {
-	// 	const start = Date.now();
-	// 	await next();
-	// 	const ms = Date.now() - start;
-	// 	console.info('Response time', ms)
-	// 	//ctx.set('X-Response-Time', `${ms}ms`);
-	// });
 
 	// Note: the order of middlewares is important. For example, ownerHandler
 	// loads the user, which is then used by notificationHandler. And finally
@@ -179,6 +173,7 @@ async function main() {
 	app.use(apiVersionHandler);
 	app.use(ownerHandler);
 	app.use(notificationHandler);
+	app.use(clickJackingHandler);
 	app.use(routeHandler);
 
 	await initConfig(env, envVariables);

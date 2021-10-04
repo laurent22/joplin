@@ -24,10 +24,11 @@ const Logger = require('@joplin/lib/Logger').default;
 const FsDriverNode = require('@joplin/lib/fs-driver-node').default;
 const shim = require('@joplin/lib/shim').default;
 const { shimInit } = require('@joplin/lib/shim-init-node.js');
+const bridge = require('@electron/remote').require('./bridge').default;
 const EncryptionService = require('@joplin/lib/services/e2ee/EncryptionService').default;
-const bridge = require('electron').remote.require('./bridge').default;
 const { FileApiDriverLocal } = require('@joplin/lib/file-api-driver-local.js');
 const React = require('react');
+const nodeSqlite = require('sqlite3');
 
 if (bridge().env() === 'dev') {
 	const newConsole = function(oldConsole) {
@@ -92,7 +93,13 @@ function appVersion() {
 	return p.version;
 }
 
-shimInit(null, keytar, React, appVersion);
+shimInit({
+	keytar,
+	React,
+	appVersion,
+	electronBridge: bridge(),
+	nodeSqlite,
+});
 
 // Disable drag and drop of links inside application (which would
 // open it as if the whole app was a browser)

@@ -89,7 +89,7 @@ cliUtils.makeCommandArgs = function(cmd, argv) {
 		flags = cliUtils.parseFlags(flags);
 
 		if (!flags.arg) {
-			booleanFlags.push(flags.short);
+			if (flags.short) booleanFlags.push(flags.short);
 			if (flags.long) booleanFlags.push(flags.long);
 		}
 

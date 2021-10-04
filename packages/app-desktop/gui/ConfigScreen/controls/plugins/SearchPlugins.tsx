@@ -9,6 +9,7 @@ import PluginBox, { InstallState } from './PluginBox';
 import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import { _ } from '@joplin/lib/locale';
 import useOnInstallHandler from './useOnInstallHandler';
+import { themeStyle } from '@joplin/lib/theme';
 
 const Root = styled.div`
 `;
@@ -100,6 +101,13 @@ export default function(props: Props) {
 		}
 	}
 
+	const renderContentSourceInfo = () => {
+		if (props.repoApi().isUsingDefaultContentUrl) return null;
+		const theme = themeStyle(props.themeId);
+		const url = new URL(props.repoApi().contentBaseUrl);
+		return <div style={{ ...theme.textStyleMinor, marginTop: 5, fontSize: theme.fontSize }}>{_('Content provided by %s', url.hostname)}</div>;
+	};
+
 	return (
 		<Root>
 			<div style={{ marginBottom: 10, width: props.maxWidth }}>
@@ -112,6 +120,7 @@ export default function(props: Props) {
 					placeholder={props.disabled ? _('Please wait...') : _('Search for plugins...')}
 					disabled={props.disabled}
 				/>
+				{renderContentSourceInfo()}
 			</div>
 
 			<ResultsRoot>

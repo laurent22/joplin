@@ -5,7 +5,7 @@ import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
 import * as fs from 'fs-extra';
-import { ErrorForbidden, ErrorMethodNotAllowed, ErrorNotFound, ErrorPayloadTooLarge } from '../../utils/errors';
+import { ErrorForbidden, ErrorMethodNotAllowed, ErrorNotFound, ErrorPayloadTooLarge, errorToPlainObject } from '../../utils/errors';
 import ItemModel, { ItemSaveOption, SaveFromRawContentItem } from '../../models/ItemModel';
 import { requestDeltaPagination, requestPagination } from '../../models/utils/pagination';
 import { AclAction } from '../../models/BaseModel';
@@ -66,7 +66,9 @@ export async function putItemContents(path: SubPath, ctx: AppContext, isBatch: b
 	const output = await ctx.joplin.models.item().saveFromRawContent(ctx.joplin.owner, items, saveOptions);
 	for (const [name] of Object.entries(output)) {
 		if (output[name].item) output[name].item = ctx.joplin.models.item().toApiOutput(output[name].item) as Item;
+		if (output[name].error) output[name].error = errorToPlainObject(output[name].error);
 	}
+
 	return output;
 }
 

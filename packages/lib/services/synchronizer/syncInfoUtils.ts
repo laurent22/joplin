@@ -286,3 +286,13 @@ export function addMasterKey(syncInfo: SyncInfo, masterKey: MasterKeyEntity) {
 	syncInfo.masterKeys.push(masterKey);
 	saveLocalSyncInfo(syncInfo);
 }
+
+export function setPpk(ppk: PublicPrivateKeyPair) {
+	const syncInfo = localSyncInfo();
+	syncInfo.ppk = ppk;
+	saveLocalSyncInfo(syncInfo);
+}
+
+export function masterKeyById(id: string) {
+	return localSyncInfo().masterKeys.find(mk => mk.id === id);
+}

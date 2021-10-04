@@ -1,5 +1,6 @@
-import { afterAllCleanUp, encryptionService, expectThrow, setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
+import { afterAllCleanUp, encryptionService, expectNotThrow, expectThrow, setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
 import { decryptPrivateKey, generateKeyPair, ppkDecryptMasterKeyContent, ppkGenerateMasterKey, ppkPasswordIsValid, mkReencryptFromPasswordToPublicKey, mkReencryptFromPublicKeyToPassword } from './ppk';
+import { runIntegrationTests } from './ppkTestUtils';
 
 describe('e2ee/ppk', function() {
 
@@ -80,6 +81,10 @@ describe('e2ee/ppk', function() {
 		// We should make sure that the keys are also different when encrypted
 		// since they should be using different passwords.
 		expect(key1.content).not.toBe(key2.content);
+	}));
+
+	it('should decrypt and encrypt data from different devices', (async () => {
+		await expectNotThrow(async () => runIntegrationTests(true));
 	}));
 
 });

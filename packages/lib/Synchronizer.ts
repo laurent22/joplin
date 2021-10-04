@@ -22,9 +22,9 @@ import TaskQueue from './TaskQueue';
 import ItemUploader from './services/synchronizer/ItemUploader';
 import { FileApi } from './file-api';
 import JoplinDatabase from './JoplinDatabase';
-import { fetchSyncInfo, getActiveMasterKey, localSyncInfo, mergeSyncInfos, saveLocalSyncInfo, syncInfoEquals, uploadSyncInfo } from './services/synchronizer/syncInfoUtils';
-import { setupAndDisableEncryption, setupAndEnableEncryption } from './services/e2ee/utils';
-import { setPpkIfNotExist } from './services/e2ee/ppk';
+import { fetchSyncInfo, getActiveMasterKey, localSyncInfo, mergeSyncInfos, saveLocalSyncInfo, SyncInfo, syncInfoEquals, uploadSyncInfo } from './services/synchronizer/syncInfoUtils';
+import { getMasterPassword, setupAndDisableEncryption, setupAndEnableEncryption } from './services/e2ee/utils';
+import { generateKeyPair } from './services/e2ee/ppk';
 const { sprintf } = require('sprintf-js');
 const { Dirnames } = require('./services/synchronizer/utils/types');
 
@@ -322,6 +322,16 @@ export default class Synchronizer {
 		return '';
 	}
 
+	private async setPpkIfNotExist(localInfo: SyncInfo, remoteInfo: SyncInfo) {
+		if (localInfo.ppk || remoteInfo.ppk) return localInfo;
+
+		const password = getMasterPassword(false);
+		if (!password) return localInfo;
+
+		localInfo.ppk = await generateKeyPair(this.encryptionService(), password);
+		return localInfo;
+	}
+
 	private async apiCall(fnName: string, ...args: any[]) {
 		if (this.syncTargetIsLocked_) throw new JoplinError('Sync target is locked - aborting API call', 'lockError');
 
@@ -434,11 +444,11 @@ export default class Synchronizer {
 
 				await this.migrationHandler().checkCanSync(remoteInfo);
 
-				const localInfo = await localSyncInfo();
+				let localInfo = await localSyncInfo();
 
 				logger.info('Sync target local info:', localInfo);
 
-				await setPpkIfNotExist(this.encryptionService(), localInfo, remoteInfo);
+				localInfo = await this.setPpkIfNotExist(localInfo, remoteInfo);
 
 				// console.info('LOCAL', localInfo);
 				// console.info('REMOTE', remoteInfo);
@@ -482,6 +492,31 @@ export default class Synchronizer {
 				this.syncTargetIsLocked_ = true;
 				void this.cancel();
 			});
+
+			// ========================================================================
+			// 2. DELETE_REMOTE
+			// ------------------------------------------------------------------------
+			// Delete the remote items that have been deleted locally.
+			// ========================================================================
+
+			if (syncSteps.indexOf('delete_remote') >= 0) {
+				const deletedItems = await BaseItem.deletedItems(syncTargetId);
+				for (let i = 0; i < deletedItems.length; i++) {
+					if (this.cancelling()) break;
+
+					const item = deletedItems[i];
+					const path = BaseItem.systemPath(item.item_id);
+					this.logSyncOperation('deleteRemote', null, { id: item.item_id }, 'local has been deleted');
+					await this.apiCall('delete', path);
+
+					if (item.item_type === BaseModel.TYPE_RESOURCE) {
+						const remoteContentPath = resourceRemotePath(item.item_id);
+						await this.apiCall('delete', remoteContentPath);
+					}
+
+					await BaseItem.remoteDeletedItem(syncTargetId, item.item_id);
+				}
+			} // DELETE_REMOTE STEP
 
 			// ========================================================================
 			// 1. UPLOAD
@@ -766,31 +801,6 @@ export default class Synchronizer {
 					if (!result.hasMore) break;
 				}
 			} // UPLOAD STEP
-
-			// ========================================================================
-			// 2. DELETE_REMOTE
-			// ------------------------------------------------------------------------
-			// Delete the remote items that have been deleted locally.
-			// ========================================================================
-
-			if (syncSteps.indexOf('delete_remote') >= 0) {
-				const deletedItems = await BaseItem.deletedItems(syncTargetId);
-				for (let i = 0; i < deletedItems.length; i++) {
-					if (this.cancelling()) break;
-
-					const item = deletedItems[i];
-					const path = BaseItem.systemPath(item.item_id);
-					this.logSyncOperation('deleteRemote', null, { id: item.item_id }, 'local has been deleted');
-					await this.apiCall('delete', path);
-
-					if (item.item_type === BaseModel.TYPE_RESOURCE) {
-						const remoteContentPath = resourceRemotePath(item.item_id);
-						await this.apiCall('delete', remoteContentPath);
-					}
-
-					await BaseItem.remoteDeletedItem(syncTargetId, item.item_id);
-				}
-			} // DELETE_REMOTE STEP
 
 			// ------------------------------------------------------------------------
 			// 3. DELTA

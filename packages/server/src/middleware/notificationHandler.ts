@@ -4,10 +4,10 @@ import { NotificationLevel } from '../services/database/types';
 import { defaultAdminEmail, defaultAdminPassword } from '../db';
 import { _ } from '@joplin/lib/locale';
 import Logger from '@joplin/lib/Logger';
-import * as MarkdownIt from 'markdown-it';
-import config from '../config';
 import { NotificationKey } from '../models/NotificationModel';
-import { profileUrl } from '../utils/urlUtils';
+import { helpUrl, profileUrl } from '../utils/urlUtils';
+import { userFlagToString } from '../models/UserFlagModel';
+import renderMarkdown from '../utils/renderMarkdown';
 
 const logger = Logger.create('notificationHandler');
 
@@ -29,30 +29,63 @@ async function handleChangeAdminPasswordNotification(ctx: AppContext) {
 	}
 }
 
-async function handleSqliteInProdNotification(ctx: AppContext) {
-	if (!ctx.joplin.owner.is_admin) return;
+// Special notification that cannot be dismissed.
+async function handleUserFlags(ctx: AppContext): Promise<NotificationView> {
+	const user = ctx.joplin.owner;
 
-	const notificationModel = ctx.joplin.models.notification();
+	const flags = await ctx.joplin.models.userFlag().allByUserId(ctx.joplin.owner.id);
+	const flagStrings = flags.map(f => `- ${userFlagToString(f)}`).join('\n');
 
-	if (config().database.client === 'sqlite3' && ctx.joplin.env === 'prod') {
-		await notificationModel.add(
-			ctx.joplin.owner.id,
-			NotificationKey.UsingSqliteInProd
-		);
+	if (!user.enabled || !user.can_upload) {
+		return {
+			id: 'accountDisabled',
+			messageHtml: renderMarkdown(`Your account is disabled for the following reason(s):\n\n${flagStrings}\n\nPlease check the [help section](${helpUrl()}) for further information or contact support.`),
+			levelClassName: levelClassName(NotificationLevel.Error),
+			closeUrl: '',
+		};
+	} else if (flags.length) {
+		// Actually currently all flags result in either disabled upload or
+		// disabled account, but keeping that here anyway just in case.
+		return {
+			id: 'accountFlags',
+			messageHtml: renderMarkdown(`The following issues have been detected on your account:\n\n${flagStrings}\n\nPlease check the [help section](${helpUrl()}) for further information or contact support.`),
+			levelClassName: levelClassName(NotificationLevel.Important),
+			closeUrl: '',
+		};
 	}
+
+	return null;
+}
+
+// async function handleSqliteInProdNotification(ctx: AppContext) {
+// 	if (!ctx.joplin.owner.is_admin) return;
+
+// 	const notificationModel = ctx.joplin.models.notification();
+
+// 	if (config().database.client === 'sqlite3' && ctx.joplin.env === 'prod') {
+// 		await notificationModel.add(
+// 			ctx.joplin.owner.id,
+// 			NotificationKey.UsingSqliteInProd
+// 		);
+// 	}
+// }
+
+function levelClassName(level: NotificationLevel): string {
+	if (level === NotificationLevel.Important) return 'is-warning';
+	if (level === NotificationLevel.Normal) return 'is-info';
+	if (level === NotificationLevel.Error) return 'is-danger';
+	throw new Error(`Unknown level: ${level}`);
 }
 
 async function makeNotificationViews(ctx: AppContext): Promise<NotificationView[]> {
-	const markdownIt = new MarkdownIt();
-
 	const notificationModel = ctx.joplin.models.notification();
 	const notifications = await notificationModel.allUnreadByUserId(ctx.joplin.owner.id);
 	const views: NotificationView[] = [];
 	for (const n of notifications) {
 		views.push({
 			id: n.id,
-			messageHtml: markdownIt.render(n.message),
-			level: n.level === NotificationLevel.Important ? 'warning' : 'info',
+			messageHtml: renderMarkdown(n.message),
+			levelClassName: levelClassName(n.level),
 			closeUrl: notificationModel.closeUrl(n.id),
 		});
 	}
@@ -71,8 +104,13 @@ export default async function(ctx: AppContext, next: KoaNext): Promise<void> {
 		if (!ctx.joplin.owner) return next();
 
 		await handleChangeAdminPasswordNotification(ctx);
-		await handleSqliteInProdNotification(ctx);
-		ctx.joplin.notifications = await makeNotificationViews(ctx);
+		// await handleSqliteInProdNotification(ctx);
+		const notificationViews = await makeNotificationViews(ctx);
+
+		const userFlagView = await handleUserFlags(ctx);
+		if (userFlagView) notificationViews.push(userFlagView);
+
+		ctx.joplin.notifications = notificationViews;
 	} catch (error) {
 		logger.error(error);
 	}

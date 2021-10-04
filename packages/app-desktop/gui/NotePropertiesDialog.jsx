@@ -6,7 +6,7 @@ const DialogButtonRow = require('./DialogButtonRow').default;
 const Datetime = require('react-datetime');
 const Note = require('@joplin/lib/models/Note').default;
 const formatcoords = require('formatcoords');
-const bridge = require('electron').remote.require('./bridge').default;
+const bridge = require('@electron/remote').require('./bridge').default;
 const shim = require('@joplin/lib/shim').default;
 const { clipboard } = require('electron');
 

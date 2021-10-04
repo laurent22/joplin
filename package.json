@@ -5,7 +5,6 @@
     "type": "git",
     "url": "git+https://github.com/laurent22/joplin.git"
   },
-  "license": "MIT",
   "scripts": {
     "audit": "lerna-audit",
     "bootstrap": "lerna bootstrap --force-local --no-ci",
@@ -37,6 +36,7 @@
     "releaseIOS": "node packages/tools/release-ios.js",
     "releasePluginGenerator": "node packages/tools/release-plugin-generator.js",
     "releaseServer": "node packages/tools/release-server.js",
+    "tagServerLatest": "node packages/tools/tagServerLatest.js",
     "buildServerDocker": "node packages/tools/buildServerDocker.js",
     "setupNewRelease": "node ./packages/tools/setupNewRelease",
     "test-ci": "lerna run test-ci --stream",
@@ -46,7 +46,7 @@
     "updatePluginTypes": "./packages/generator-joplin/updateTypes.sh",
     "watch": "lerna run watch --stream --parallel",
     "watchWebsite": "nodemon --verbose --watch Assets/WebsiteAssets --watch packages/tools/website/build.js --ext md,ts,js,mustache,css,tsx,gif,png,svg --exec \"node packages/tools/website/build.js && http-server --port 8077 docs -a localhost\"",
-    "i": "lerna add --no-bootstrap --scope"
+    "i": "node packages/tools/lernaInstall"
   },
   "husky": {
     "hooks": {

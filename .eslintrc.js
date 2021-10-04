@@ -182,6 +182,14 @@ module.exports = {
 					// 	leadingUnderscore: 'allow',
 					// 	trailingUnderscore: 'allow',
 					// },
+
+					// Each rule below is made of two blocks: first the rule we
+					// actually want, and below exceptions to the rule.
+
+					// -----------------------------------
+					// ENUM
+					// -----------------------------------
+
 					{
 						selector: 'enumMember',
 						format: ['StrictPascalCase'],
@@ -194,9 +202,22 @@ module.exports = {
 							'match': true,
 						},
 					},
+
+					// -----------------------------------
+					// INTERFACE
+					// -----------------------------------
+
 					{
 						selector: 'interface',
 						format: ['StrictPascalCase'],
+					},
+					{
+						selector: 'interface',
+						format: null,
+						'filter': {
+							'regex': '^(RSA|RSAKeyPair)$',
+							'match': true,
+						},
 					},
 				],
 			},

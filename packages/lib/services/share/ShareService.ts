@@ -274,6 +274,13 @@ export default class ShareService {
 		return this.api().exec('GET', 'api/share_users');
 	}
 
+	public setProcessingShareInvitationResponse(v: boolean) {
+		this.store.dispatch({
+			type: 'SHARE_INVITATION_RESPONSE_PROCESSING',
+			value: v,
+		});
+	}
+
 	public async respondInvitation(shareUserId: string, masterKey: MasterKeyEntity, accept: boolean) {
 		logger.info('respondInvitation: ', shareUserId, accept);
 

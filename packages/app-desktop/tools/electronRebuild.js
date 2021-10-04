@@ -35,13 +35,19 @@ async function main() {
 
 	process.chdir(`${__dirname}/..`);
 
+	// We need to force the ABI because Electron Builder or node-abi picks the
+	// wrong one. However it means it will have to be manually upgraded for each
+	// new Electron release. Some ABI map there:
+	// https://github.com/electron/node-abi/tree/master/test
+	const forceAbiArgs = '--force-abi 89';
+
 	if (isWindows()) {
 		// Cannot run this in parallel, or the 64-bit version might end up
 		// with 32-bit files and vice-versa
-		console.info(await execCommand([`"${exePath}"`, '--arch ia32'].join(' ')));
-		console.info(await execCommand([`"${exePath}"`, '--arch x64'].join(' ')));
+		console.info(await execCommand([`"${exePath}"`, forceAbiArgs, '--arch ia32'].join(' ')));
+		console.info(await execCommand([`"${exePath}"`, forceAbiArgs, '--arch x64'].join(' ')));
 	} else {
-		console.info(await execCommand([`"${exePath}"`].join(' ')));
+		console.info(await execCommand([`"${exePath}"`, forceAbiArgs].join(' ')));
 	}
 }
 

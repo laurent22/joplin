@@ -57,9 +57,11 @@ import { loadKeychainServiceAndSettings } from '../services/SettingUtils';
 import { setActiveMasterKeyId, setEncryptionEnabled } from '../services/synchronizer/syncInfoUtils';
 import Synchronizer from '../Synchronizer';
 import SyncTargetNone from '../SyncTargetNone';
+import { setRSA } from '../services/e2ee/ppk';
 const md5 = require('md5');
 const S3 = require('aws-sdk/clients/s3');
 const { Dirnames } = require('../services/synchronizer/utils/types');
+import RSA from '../services/e2ee/RSA.node';
 
 // Each suite has its own separate data and temp directory so that multiple
 // suites can be run at the same time. suiteName is what is used to
@@ -435,6 +437,8 @@ async function setupDatabaseAndSynchronizer(id: number, options: any = null) {
 	resourceServices_[id] = new ResourceService();
 	resourceFetchers_[id] = new ResourceFetcher(() => { return synchronizers_[id].api(); });
 	kvStores_[id] = new KvStore();
+
+	setRSA(RSA);
 
 	await fileApi().initialize();
 	await fileApi().clearRoot();

@@ -1,13 +1,12 @@
 import * as React from 'react';
 import Sidebar from './Sidebar';
 import ButtonBar from './ButtonBar';
-import Button, { ButtonLevel } from '../Button/Button';
+import Button, { ButtonLevel, ButtonSize } from '../Button/Button';
 import { _ } from '@joplin/lib/locale';
 import bridge from '../../services/bridge';
 import Setting, { AppType, SyncStartupOperation } from '@joplin/lib/models/Setting';
 import control_PluginsStates from './controls/plugins/PluginsStates';
-import EncryptionConfigScreen from '../EncryptionConfigScreen';
-
+import EncryptionConfigScreen from '../EncryptionConfigScreen/EncryptionConfigScreen';
 const { connect } = require('react-redux');
 const { themeStyle } = require('@joplin/lib/theme');
 const pathUtils = require('@joplin/lib/path-utils');
@@ -42,9 +41,6 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 		this.sidebar_selectionChange = this.sidebar_selectionChange.bind(this);
 		this.checkSyncConfig_ = this.checkSyncConfig_.bind(this);
-		// this.checkNextcloudAppButton_click = this.checkNextcloudAppButton_click.bind(this);
-		this.showLogButton_click = this.showLogButton_click.bind(this);
-		this.nextcloudAppHelpLink_click = this.nextcloudAppHelpLink_click.bind(this);
 		this.onCancelClick = this.onCancelClick.bind(this);
 		this.onSaveClick = this.onSaveClick.bind(this);
 		this.onApplyClick = this.onApplyClick.bind(this);
@@ -56,19 +52,6 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 	async checkSyncConfig_() {
 		await shared.checkSyncConfig(this, this.state.settings);
-	}
-
-	// async checkNextcloudAppButton_click() {
-	// 	this.setState({ showNextcloudAppLog: true });
-	// 	await shared.checkNextcloudApp(this, this.state.settings);
-	// }
-
-	showLogButton_click() {
-		this.setState({ showNextcloudAppLog: true });
-	}
-
-	nextcloudAppHelpLink_click() {
-		bridge().openExternal('https://joplinapp.org/nextcloud_app');
 	}
 
 	UNSAFE_componentWillMount() {
@@ -531,6 +514,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 											level={ButtonLevel.Secondary}
 											title={_('Browse...')}
 											onClick={browseButtonClick}
+											size={ButtonSize.Small}
 										/>
 									</div>
 								</div>
@@ -699,7 +683,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		// screenComp is a custom config screen, such as the encryption config screen or keymap config screen.
 		// These screens handle their own loading/saving of settings and have bespoke rendering.
 		// When screenComp is null, it means we are viewing the regular settings.
-		const screenComp = this.state.screenName ? <div style={{ overflow: 'scroll', flex: 1 }}>{this.screenFromName(this.state.screenName)}</div> : null;
+		const screenComp = this.state.screenName ? <div className="config-screen-content-wrapper" style={{ overflow: 'scroll', flex: 1 }}>{this.screenFromName(this.state.screenName)}</div> : null;
 
 		if (screenComp) containerStyle.display = 'none';
 
@@ -716,7 +700,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		delete style.width;
 
 		return (
-			<div style={{ display: 'flex', flexDirection: 'row', height: this.props.style.height }}>
+			<div className="config-screen" style={{ display: 'flex', flexDirection: 'row', height: this.props.style.height }}>
 				<Sidebar
 					selection={this.state.selectedSectionName}
 					onSelectionChange={this.sidebar_selectionChange}
