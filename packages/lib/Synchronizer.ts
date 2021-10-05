@@ -405,9 +405,12 @@ export default class Synchronizer {
 			return `${Dirnames.Resources}/${resourceId}`;
 		};
 
-		// We index resources and apply the "is_shared" flag before syncing
-		// because it's going to affect what's sent encrypted, and what's sent
-		// plain text.
+		// We index resources before sync mostly to flag any potential orphan
+		// resource before it is being synced. That way, it can potentially be
+		// auto-deleted at a later time. Indexing resources is fast so it's fine
+		// to call it every time here.
+		//
+		// https://github.com/laurent22/joplin/issues/932#issuecomment-933736405
 		try {
 			if (this.resourceService()) {
 				logger.info('Indexing resources...');
