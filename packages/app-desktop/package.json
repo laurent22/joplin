@@ -75,7 +75,10 @@
     },
     "mac": {
       "icon": "../../Assets/macOs.icns",
-      "target": "dmg",
+      "target": {
+        "target": "default",
+        "arch": "universal"
+      },
       "hardenedRuntime": true,
       "entitlements": "./build-mac/entitlements.mac.inherit.plist"
     },
