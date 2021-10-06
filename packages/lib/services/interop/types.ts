@@ -119,7 +119,8 @@ export interface MdFrontMatterExport {
 }
 
 function moduleFullLabel(moduleSource: FileSystemItem = null): string {
-	const label = [`${this.format.toUpperCase()} - ${this.description}`];
+	const format = this.format.split('_')[0];
+	const label = [`${format.toUpperCase()} - ${this.description}`];
 	if (moduleSource && this.sources.length > 1) {
 		label.push(`(${moduleSource === 'file' ? _('File') : _('Directory')})`);
 	}
