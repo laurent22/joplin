@@ -34,14 +34,14 @@ describe('interop/InteropService_Exporter_Md_frontmatter', function() {
 
 	test('should export MD file with YAML header', (async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
-		await Note.save({ title: 'ma', user_updated_time: 1, user_created_time: 1, body: '**ma note**', parent_id: folder1.id });
+		await Note.save({ title: 'ma', latitude: 58.2222, user_updated_time: 1, user_created_time: 1, body: '**ma note**', parent_id: folder1.id });
 
 		const content = await exportAndLoad(`${exportDir()}/folder1/ma.md`);
 		expect(content.startsWith('---')).toBe(true);
 		expect(content).toContain('Title: ma');
 		expect(content).toContain('Updated:'); // Will be current time of test run
 		expect(content).toContain(`Created: ${time.formatMsToLocal(1)}`);
-		expect(content).toContain('Latitude: 0.00000000');
+		expect(content).toContain('Latitude: 58.22220000');
 		expect(content).toContain('Longitude: 0.00000000');
 		expect(content).toContain('Altitude: 0.0000');
 		expect(content).toContain('**ma note**');
@@ -57,7 +57,6 @@ describe('interop/InteropService_Exporter_Md_frontmatter', function() {
 
 		const content = await exportAndLoad(`${exportDir()}/folder1/-60.md`);
 		expect(content).toContain('Title: -60');
-		expect(content).toContain('Latitude: 0.00000000');
 	}));
 
 	test('should export tags', (async () => {
@@ -122,5 +121,14 @@ describe('interop/InteropService_Exporter_Md_frontmatter', function() {
 
 		const content = await exportAndLoad(`${exportDir()}/folder1/Source_title.md`);
 		expect(content).toContain('Title: |-\n  Source\n  title');
+	}));
+	test('should not export coordinates if they\'re not available', (async () => {
+		const folder1 = await Folder.save({ title: 'folder1' });
+		await Note.save({ title: 'Coordinates', body: '**ma note**', parent_id: folder1.id });
+
+		const content = await exportAndLoad(`${exportDir()}/folder1/Coordinates.md`);
+		expect(content).not.toContain('Latitude');
+		expect(content).not.toContain('Longitude');
+		expect(content).not.toContain('Altitude');
 	}));
 });

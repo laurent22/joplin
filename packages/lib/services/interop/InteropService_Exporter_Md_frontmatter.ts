@@ -23,8 +23,6 @@ function trimQuotes(rawOutput: string): string {
 		}
 		return line;
 	}).join('\n');
-
-
 }
 
 export const fieldOrder = ['Title', 'Updated', 'Created', 'Source', 'Author', 'Latitude', 'Longitude', 'Altitude', 'Completed?', 'Due', 'Tags'];
@@ -92,9 +90,11 @@ export default class InteropService_Exporter_Md_frontmatter extends InteropServi
 		if (note.author) { md['Author'] = note.author; }
 
 		// locations
-		if (note.latitude) { md['Latitude'] = note.latitude; }
-		if (note.longitude) { md['Longitude'] = note.longitude; }
-		if (note.altitude) { md['Altitude'] = note.altitude; }
+		if (note.latitude != 0 || note.longitude != 0 || note.altitude != 0) {
+			md['Latitude'] = note.latitude;
+			md['Longitude'] = note.longitude;
+			md['Altitude'] = note.altitude;
+		}
 
 		// todo
 		if (note.is_todo) {
