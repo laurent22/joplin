@@ -126,4 +126,10 @@ describe('InteropService_Importer_Md_frontmatter: importMetadata', function() {
 		expect(note.title).toBe('Distill for R Markdown');
 		expect(note.author).toBe('JJ Allaire');
 	});
+	it('should handle date formats with timezone information', async function() {
+		const note = await importNote(`${supportDir}/test_notes/yaml/utc.md`);
+
+		expect(note.user_updated_time).toBe(1556729640000);
+		expect(note.user_created_time).toBe(1556754840000);
+	});
 });
