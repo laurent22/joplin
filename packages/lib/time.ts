@@ -80,6 +80,15 @@ class Time {
 		);
 	}
 
+	public unixMsToRfc3339Sec(ms: number) {
+		return (
+			`${moment
+				.unix(ms / 1000)
+				.utc()
+				.format('YYYY-MM-DD HH:mm:ss')}Z`
+		);
+	}
+
 	public unixMsToLocalDateTime(ms: number) {
 		return moment.unix(ms / 1000).format('DD/MM/YYYY HH:mm');
 	}

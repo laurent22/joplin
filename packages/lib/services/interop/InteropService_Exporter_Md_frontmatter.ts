@@ -75,7 +75,7 @@ export default class InteropService_Exporter_Md_frontmatter extends InteropServi
 	}
 
 	private convertDate(datetime: number): string {
-		return time.formatMsToLocal(datetime);
+		return time.unixMsToRfc3339Sec(datetime);
 	}
 
 	private extractMetadata(note: NoteEntity) {

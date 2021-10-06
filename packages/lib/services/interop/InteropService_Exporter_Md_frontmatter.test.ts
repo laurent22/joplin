@@ -40,7 +40,7 @@ describe('interop/InteropService_Exporter_Md_frontmatter', function() {
 		expect(content.startsWith('---')).toBe(true);
 		expect(content).toContain('title: ma');
 		expect(content).toContain('updated:'); // Will be current time of test run
-		expect(content).toContain(`created: ${time.formatMsToLocal(1)}`);
+		expect(content).toContain(`created: ${time.unixMsToRfc3339Sec(1)}`);
 		expect(content).toContain('latitude: 58.22220000');
 		expect(content).toContain('longitude: 0.00000000');
 		expect(content).toContain('altitude: 0.0000');
@@ -75,7 +75,7 @@ describe('interop/InteropService_Exporter_Md_frontmatter', function() {
 		await Note.save({ title: 'Todo', is_todo: 1, todo_due: 1, body: '**ma note**', parent_id: folder1.id });
 
 		const content = await exportAndLoad(`${exportDir()}/folder1/Todo.md`);
-		expect(content).toContain(`due: ${time.formatMsToLocal(1)}`);
+		expect(content).toContain(`due: ${time.unixMsToRfc3339Sec(1)}`);
 		expect(content).toContain('completed?: No');
 	}));
 
