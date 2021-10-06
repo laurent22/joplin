@@ -203,6 +203,8 @@ async function renderNote(share: Share, note: NoteEntity, resourceInfos: Resourc
 		audioPlayerEnabled: false,
 		videoPlayerEnabled: false,
 		pdfViewerEnabled: false,
+
+		linkRenderingType: 2,
 	};
 
 	const result = await markupToHtml.render(note.markup_language, note.body, themeStyle(Setting.THEME_LIGHT), renderOptions);
