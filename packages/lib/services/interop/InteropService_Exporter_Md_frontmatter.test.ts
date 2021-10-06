@@ -38,17 +38,17 @@ describe('interop/InteropService_Exporter_Md_frontmatter', function() {
 
 		const content = await exportAndLoad(`${exportDir()}/folder1/ma.md`);
 		expect(content.startsWith('---')).toBe(true);
-		expect(content).toContain('Title: ma');
-		expect(content).toContain('Updated:'); // Will be current time of test run
-		expect(content).toContain(`Created: ${time.formatMsToLocal(1)}`);
-		expect(content).toContain('Latitude: 58.22220000');
-		expect(content).toContain('Longitude: 0.00000000');
-		expect(content).toContain('Altitude: 0.0000');
+		expect(content).toContain('title: ma');
+		expect(content).toContain('updated:'); // Will be current time of test run
+		expect(content).toContain(`created: ${time.formatMsToLocal(1)}`);
+		expect(content).toContain('latitude: 58.22220000');
+		expect(content).toContain('longitude: 0.00000000');
+		expect(content).toContain('altitude: 0.0000');
 		expect(content).toContain('**ma note**');
-		expect(content).not.toContain('Completed?');
-		expect(content).not.toContain('Author');
-		expect(content).not.toContain('Source');
-		expect(content).not.toContain('Due');
+		expect(content).not.toContain('completed?');
+		expect(content).not.toContain('author');
+		expect(content).not.toContain('source');
+		expect(content).not.toContain('due');
 	}));
 
 	test('should export without additional quotes', (async () => {
@@ -56,7 +56,7 @@ describe('interop/InteropService_Exporter_Md_frontmatter', function() {
 		await Note.save({ title: '-60', body: '**ma note**', parent_id: folder1.id });
 
 		const content = await exportAndLoad(`${exportDir()}/folder1/-60.md`);
-		expect(content).toContain('Title: -60');
+		expect(content).toContain('title: -60');
 	}));
 
 	test('should export tags', (async () => {
@@ -67,7 +67,7 @@ describe('interop/InteropService_Exporter_Md_frontmatter', function() {
 		await Tag.addNoteTagByTitle(note.id, 'godzilla');
 
 		const content = await exportAndLoad(`${exportDir()}/folder1/Title.md`);
-		expect(content).toContain('Tags:\n  - godzilla\n  - lamp\n  - moth');
+		expect(content).toContain('tags:\n  - godzilla\n  - lamp\n  - moth');
 	}));
 
 	test('should export todo', (async () => {
@@ -75,8 +75,8 @@ describe('interop/InteropService_Exporter_Md_frontmatter', function() {
 		await Note.save({ title: 'Todo', is_todo: 1, todo_due: 1, body: '**ma note**', parent_id: folder1.id });
 
 		const content = await exportAndLoad(`${exportDir()}/folder1/Todo.md`);
-		expect(content).toContain(`Due: ${time.formatMsToLocal(1)}`);
-		expect(content).toContain('Completed?: No');
+		expect(content).toContain(`due: ${time.formatMsToLocal(1)}`);
+		expect(content).toContain('completed?: No');
 	}));
 
 	test('should export author', (async () => {
@@ -84,7 +84,7 @@ describe('interop/InteropService_Exporter_Md_frontmatter', function() {
 		await Note.save({ title: 'Author', author: 'Scott Joplin', body: '**ma note**', parent_id: folder1.id });
 
 		const content = await exportAndLoad(`${exportDir()}/folder1/Author.md`);
-		expect(content).toContain('Author: Scott Joplin');
+		expect(content).toContain('author: Scott Joplin');
 	}));
 
 	test('should export source', (async () => {
@@ -92,7 +92,7 @@ describe('interop/InteropService_Exporter_Md_frontmatter', function() {
 		await Note.save({ title: 'Source', source_url: 'https://joplinapp.org', body: '**ma note**', parent_id: folder1.id });
 
 		const content = await exportAndLoad(`${exportDir()}/folder1/Source.md`);
-		expect(content).toContain('Source: https://joplinapp.org');
+		expect(content).toContain('source: https://joplinapp.org');
 	}));
 
 	test('should export fields in the correct order', (async () => {
@@ -120,15 +120,15 @@ describe('interop/InteropService_Exporter_Md_frontmatter', function() {
 		await Note.save({ title: 'Source\ntitle', body: '**ma note**', parent_id: folder1.id });
 
 		const content = await exportAndLoad(`${exportDir()}/folder1/Source_title.md`);
-		expect(content).toContain('Title: |-\n  Source\n  title');
+		expect(content).toContain('title: |-\n  Source\n  title');
 	}));
 	test('should not export coordinates if they\'re not available', (async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		await Note.save({ title: 'Coordinates', body: '**ma note**', parent_id: folder1.id });
 
 		const content = await exportAndLoad(`${exportDir()}/folder1/Coordinates.md`);
-		expect(content).not.toContain('Latitude');
-		expect(content).not.toContain('Longitude');
-		expect(content).not.toContain('Altitude');
+		expect(content).not.toContain('latitude');
+		expect(content).not.toContain('longitude');
+		expect(content).not.toContain('altitude');
 	}));
 });

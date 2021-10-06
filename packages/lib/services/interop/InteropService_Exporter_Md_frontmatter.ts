@@ -25,7 +25,7 @@ function trimQuotes(rawOutput: string): string {
 	}).join('\n');
 }
 
-export const fieldOrder = ['Title', 'Updated', 'Created', 'Source', 'Author', 'Latitude', 'Longitude', 'Altitude', 'Completed?', 'Due', 'Tags'];
+export const fieldOrder = ['title', 'updated', 'created', 'source', 'author', 'latitude', 'longitude', 'altitude', 'completed?', 'due', 'Tags'];
 
 export default class InteropService_Exporter_Md_frontmatter extends InteropService_Exporter_Md {
 
@@ -83,36 +83,36 @@ export default class InteropService_Exporter_Md_frontmatter extends InteropServi
 		// Every variable needs to be converted seperately, so they will be handles in groups
 		//
 		// title
-		if (note.title) { md['Title'] = note.title; }
+		if (note.title) { md['title'] = note.title; }
 
 		// source, author
-		if (note.source_url) { md['Source'] = note.source_url; }
-		if (note.author) { md['Author'] = note.author; }
+		if (note.source_url) { md['source'] = note.source_url; }
+		if (note.author) { md['author'] = note.author; }
 
 		// locations
 		if (note.latitude != 0 || note.longitude != 0 || note.altitude != 0) {
-			md['Latitude'] = note.latitude;
-			md['Longitude'] = note.longitude;
-			md['Altitude'] = note.altitude;
+			md['latitude'] = note.latitude;
+			md['longitude'] = note.longitude;
+			md['altitude'] = note.altitude;
 		}
 
 		// todo
 		if (note.is_todo) {
 			// boolean is not support by the yaml FAILSAFE_SCHEMA
-			md['Completed?'] = note.todo_completed ? 'Yes' : 'No';
+			md['completed?'] = note.todo_completed ? 'Yes' : 'No';
 		}
-		if (note.todo_due) { md['Due'] = this.convertDate(note.todo_due); }
+		if (note.todo_due) { md['due'] = this.convertDate(note.todo_due); }
 
 		// time
-		if (note.user_updated_time) { md['Updated'] = this.convertDate(note.user_updated_time); }
-		if (note.user_created_time) { md['Created'] = this.convertDate(note.user_created_time); }
+		if (note.user_updated_time) { md['updated'] = this.convertDate(note.user_updated_time); }
+		if (note.user_created_time) { md['created'] = this.convertDate(note.user_created_time); }
 
 		// tags
 		const context = this.context();
 		if (context.noteTags[note.id]) {
 			const tagIds = context.noteTags[note.id];
 			const tags = tagIds.map((id: string) => context.tagTitles[id]).sort();
-			md['Tags'] = tags;
+			md['tags'] = tags;
 		}
 
 		// This guarentees that fields will always be ordered the same way

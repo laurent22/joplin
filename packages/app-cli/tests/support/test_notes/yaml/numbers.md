@@ -1,5 +1,5 @@
 ---
-Title: 001
+title: 001
 ---
 
 note body

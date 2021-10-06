@@ -1,6 +1,6 @@
 ---
-Title: norm
-Tags:
+title: norm
+tags:
 		- tag1
 - tag2
  - tag3

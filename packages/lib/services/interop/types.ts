@@ -105,17 +105,17 @@ export interface ImportExportResult {
 
 // These are the fields that will be included in an exported Md+Front Matter note
 export interface MdFrontMatterExport {
-	'Title'?: string;
-	'Source'?: string;
-	'Author'?: string;
-	'Latitude'?: number;
-	'Longitude'?: number;
-	'Altitude'?: number;
-	'Completed?'?: string;
-	'Due'?: string;
-	'Updated'?: string;
-	'Created'?: string;
-	'Tags'?: string[];
+	'title'?: string;
+	'source'?: string;
+	'author'?: string;
+	'latitude'?: number;
+	'longitude'?: number;
+	'altitude'?: number;
+	'completed?'?: string;
+	'due'?: string;
+	'updated'?: string;
+	'created'?: string;
+	'tags'?: string[];
 }
 
 function moduleFullLabel(moduleSource: FileSystemItem = null): string {

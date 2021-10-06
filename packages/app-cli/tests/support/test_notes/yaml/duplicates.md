@@ -1,6 +1,6 @@
 ---
-Title: ddd
-Tags:
+title: ddd
+tags:
   - banana
   - banana
   - banana
