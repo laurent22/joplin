@@ -467,7 +467,8 @@ export default class MdToHtml {
 						hlCode = this.cachedHighlightedCode_[cacheKey];
 					} else {
 						if (lang && hljs.getLanguage(lang)) {
-							hlCode = hljs.highlight(lang, trimmedStr, true).value;
+							// hlCode = hljs.highlight(lang, trimmedStr, true).value;
+							hlCode = hljs.highlight(trimmedStr, { language: lang, ignoreIllegals: true }).value;
 						} else {
 							hlCode = hljs.highlightAuto(trimmedStr).value;
 						}

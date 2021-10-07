@@ -14,6 +14,7 @@ const theme: Theme = {
 	oddBackgroundColor: '#141517',
 	color: '#dddddd',
 	colorError: 'red',
+	colorCorrect: '#72b972',
 	colorWarn: '#9A5B00',
 	colorWarnUrl: '#ffff82',
 	colorFaded: '#999999', // For less important text

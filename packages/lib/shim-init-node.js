@@ -62,7 +62,6 @@ const gunzipFile = function(source, destination) {
 	});
 };
 
-// sharp = null, keytar = null, React = null, appVersion = null, electronBridge = null, nodeSqlite = null
 function shimInit(options = null) {
 	options = {
 		sharp: null,

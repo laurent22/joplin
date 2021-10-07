@@ -209,7 +209,7 @@ function addExtraStyles(style: any) {
 			backgroundColor: style.backgroundColor4,
 			borderColor: style.borderColor4,
 			userSelect: 'none',
-			cursor: 'pointer',
+			// cursor: 'pointer',
 		}
 	);
 

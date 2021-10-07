@@ -19,22 +19,42 @@ async function sassRender(options) {
 	});
 }
 
-module.exports = async function compileSass(inputPaths, outputPath) {
-	const promises = [];
-	for (const inputPath of inputPaths) {
-		console.info(`Compiling ${inputPath}...`);
+// module.exports = async function compileSass(inputPaths, outputPath) {
+// 	const promises = [];
+// 	for (const inputPath of inputPaths) {
+// 		console.info(`Compiling ${inputPath}...`);
 
-		promises.push(sassRender({
-			file: inputPath,
-			sourceMap: true,
-			outFile: outputPath,
-		}));
-	}
+// 		promises.push(sassRender({
+// 			file: inputPath,
+// 			sourceMap: true,
+// 			outFile: outputPath,
+// 		}));
+// 	}
 
-	const results = await Promise.all(promises);
+// 	const results = await Promise.all(promises);
 
-	const cssString = results.map(r => r.css.toString()).join('\n');
-	const mapString = results.map(r => r.map.toString()).join('\n');
+// 	const cssString = results.map(r => r.css.toString()).join('\n');
+// 	const mapString = results.map(r => r.map.toString()).join('\n');
+
+// 	await Promise.all([
+// 		fs.writeFile(outputPath, cssString, 'utf8'),
+// 		fs.writeFile(`${outputPath}.map`, mapString, 'utf8'),
+// 	]);
+
+// 	console.info(`Generated ${outputPath}`);
+// };
+
+module.exports = async function compileSass(inputPath, outputPath) {
+	const result = await sassRender({
+		file: inputPath,
+		sourceMap: true,
+		outFile: outputPath,
+		outputStyle: 'compressed',
+		indentType: 'tab',
+	});
+
+	const cssString = result.css.toString();
+	const mapString = result.map.toString();
 
 	await Promise.all([
 		fs.writeFile(outputPath, cssString, 'utf8'),

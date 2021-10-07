@@ -1,5 +1,12 @@
-.encryption-config-test {
-	& > .item {
-		font-weight: bold;
-	}
+.manage-password-section > .managebutton {
+	display: flex;
+}
+
+.manage-password-section > .status {
+	display: flex;
+	flex-direction: row;
+}
+
+.manage-password-section > .needpassword {
+	color: var(--joplin-color-warn);
 }

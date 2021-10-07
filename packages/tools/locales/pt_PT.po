@@ -814,11 +814,11 @@ msgstr "Pré-definido: %s"
 msgid "Possible keys/values:"
 msgstr "Chaves/valores possíveis:"
 
-#: packages/app-cli/app/main.js:92
+#: packages/app-cli/app/main.js:93
 msgid "Type `joplin help` for usage information."
 msgstr "Digite `joplin help` para mostrar informações de utilização."
 
-#: packages/app-cli/app/main.js:94
+#: packages/app-cli/app/main.js:95
 msgid "Fatal error:"
 msgstr "Erro fatal:"
 
@@ -869,7 +869,7 @@ msgstr "OK"
 #: packages/app-desktop/gui/ResourceScreen.js:96
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:214
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:455
-#: packages/app-desktop/gui/utils/NoteListUtils.js:171
+#: packages/app-desktop/gui/utils/NoteListUtils.js:163
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:21
 #: packages/app-mobile/components/CameraView.js:161
 #: packages/app-mobile/components/ModalDialog.js:70
@@ -880,7 +880,7 @@ msgstr "OK"
 #: packages/app-mobile/components/side-menu-content.js:156
 #: packages/app-mobile/components/side-menu-content.js:165
 #: packages/app-mobile/components/side-menu-content.js:338
-#: packages/lib/shim-init-node.js:148
+#: packages/lib/shim-init-node.js:167
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -1132,8 +1132,8 @@ msgstr "Plugins"
 #: packages/app-desktop/gui/ResourceScreen.js:47
 #: packages/app-desktop/gui/ResourceScreen.js:96
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:193
-#: packages/app-desktop/gui/utils/NoteListUtils.js:140
-#: packages/app-desktop/gui/utils/NoteListUtils.js:171
+#: packages/app-desktop/gui/utils/NoteListUtils.js:139
+#: packages/app-desktop/gui/utils/NoteListUtils.js:163
 #: packages/app-mobile/components/screens/Note.js:860
 #: packages/app-mobile/components/side-menu-content.js:146
 msgid "Delete"
@@ -1574,7 +1574,7 @@ msgstr "Importar"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:122
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:258
-#: packages/app-desktop/gui/utils/NoteListUtils.js:136
+#: packages/app-desktop/gui/utils/NoteListUtils.js:135
 msgid "Export"
 msgstr "Exportar"
 
@@ -2680,41 +2680,31 @@ msgid ""
 "the list below."
 msgstr ""
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:43
+#: packages/app-desktop/gui/utils/NoteListUtils.js:42
 msgid "Duplicate"
 msgstr "Duplicar"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:48
+#: packages/app-desktop/gui/utils/NoteListUtils.js:47
 #, javascript-format
 msgid "%s - Copy"
 msgstr "%s - Copiar"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:59
+#: packages/app-desktop/gui/utils/NoteListUtils.js:58
 msgid "Switch between note and to-do type"
 msgstr "Alternar entre nota e tarefa"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:87
+#: packages/app-desktop/gui/utils/NoteListUtils.js:86
 msgid "Switch to note type"
 msgstr "Alternar para nota"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:93
+#: packages/app-desktop/gui/utils/NoteListUtils.js:92
 msgid "Switch to to-do type"
 msgstr "Alternar para tarefa"
 
-#: packages/app-desktop/gui/utils/NoteListUtils.js:100
+#: packages/app-desktop/gui/utils/NoteListUtils.js:99
 #: packages/app-mobile/components/screens/Note.js:847
 msgid "Copy Markdown link"
 msgstr "Copiar ligação Markdown"
-
-#: packages/app-desktop/gui/utils/NoteListUtils.js:165
-#, javascript-format
-msgid "Delete note \"%s\"?"
-msgstr "Eliminar nota \"%s\"?"
-
-#: packages/app-desktop/gui/utils/NoteListUtils.js:168
-#, javascript-format
-msgid "Delete these %d notes?"
-msgstr "Eliminar estas %d notas?"
 
 #: packages/app-desktop/plugins/GotoAnything.js:474
 msgid ""
@@ -2732,13 +2722,13 @@ msgstr "Painel de comandos"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:22
 #: packages/app-mobile/components/screens/Note.js:530
-#: packages/lib/shim-init-node.js:148 packages/lib/versionInfo.js:27
+#: packages/lib/shim-init-node.js:167 packages/lib/versionInfo.js:27
 msgid "Yes"
 msgstr "Sim"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:23
 #: packages/app-mobile/components/screens/Note.js:531
-#: packages/lib/shim-init-node.js:148 packages/lib/versionInfo.js:27
+#: packages/lib/shim-init-node.js:167 packages/lib/versionInfo.js:27
 msgid "No"
 msgstr "Não"
 
@@ -2956,7 +2946,7 @@ msgid "Permission needed"
 msgstr "Permissão necessária"
 
 #: packages/app-mobile/components/screens/Note.js:529
-#: packages/lib/shim-init-node.js:147
+#: packages/lib/shim-init-node.js:166
 #, javascript-format
 msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "
@@ -3280,15 +3270,15 @@ msgstr "A chave mestra foi atualizada com sucesso!"
 msgid "Could not upgrade master key: %s"
 msgstr "Não foi possível atualizar a chave mestra: %s"
 
-#: packages/lib/components/shared/config-shared.js:50
+#: packages/lib/components/shared/config-shared.js:47
 msgid "Checking... Please wait."
 msgstr "A verificar… Por favor, aguarde."
 
-#: packages/lib/components/shared/config-shared.js:52
+#: packages/lib/components/shared/config-shared.js:49
 msgid "Success! Synchronisation configuration appears to be correct."
 msgstr "Sucesso! A configuração da sincronização parece estar correta."
 
-#: packages/lib/components/shared/config-shared.js:54
+#: packages/lib/components/shared/config-shared.js:51
 msgid ""
 "Error. Please check that URL, username, password, etc. are correct and that "
 "the sync target is accessible. The reported error was:"
@@ -3367,6 +3357,16 @@ msgstr "Não é possível copiar a nota para o caderno \"%s\""
 #, javascript-format
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "Não é possível mover a nota para o caderno \"%s\""
+
+#: packages/lib/models/Note.js:730
+#, javascript-format
+msgid "Delete note \"%s\"?"
+msgstr "Eliminar nota \"%s\"?"
+
+#: packages/lib/models/Note.js:733
+#, javascript-format
+msgid "Delete these %d notes?"
+msgstr "Eliminar estas %d notas?"
 
 #: packages/lib/models/Resource.js:354
 msgid "Not downloaded"
@@ -4351,7 +4351,7 @@ msgstr "Utilizar verificador ortográfico"
 msgid "Change language"
 msgstr "Mudar idioma"
 
-#: packages/lib/shim-init-node.js:212
+#: packages/lib/shim-init-node.js:231
 #, javascript-format
 msgid "Cannot access %s"
 msgstr "Não é possível aceder %s"
