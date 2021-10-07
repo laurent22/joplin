@@ -76,7 +76,7 @@ describe('interop/InteropService_Exporter_Md_frontmatter', function() {
 
 		const content = await exportAndLoad(`${exportDir()}/folder1/Todo.md`);
 		expect(content).toContain(`due: ${time.unixMsToRfc3339Sec(1)}`);
-		expect(content).toContain('completed?: No');
+		expect(content).toContain('completed?: no');
 	}));
 
 	test('should export author', (async () => {
