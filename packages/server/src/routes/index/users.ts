@@ -157,6 +157,10 @@ router.get('users/:id', async (path: SubPath, ctx: AppContext, user: User = null
 		};
 	});
 
+	userFlagViews.sort((a, b) => {
+		return a.created_time < b.created_time ? +1 : -1;
+	});
+
 	if (!owner.is_admin) userFlagViews = [];
 
 	const subscription = !isNew ? await ctx.joplin.models.subscription().byUserId(userId) : null;
