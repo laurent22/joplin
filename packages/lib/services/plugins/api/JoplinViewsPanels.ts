@@ -79,6 +79,14 @@ export default class JoplinViewsPanels {
 	}
 
 	/**
+	 * Sends a message to the webview.
+	 * The webview must have registered a listener using onMessage(), otherwise the message is ignored.
+	 */
+	public postMessage(handle: ViewHandle, message: any) {
+		return this.controller(handle).postMessage(message);
+	}
+
+	/**
 	 * Shows the panel
 	 */
 	public async show(handle: ViewHandle, show: boolean = true): Promise<void> {

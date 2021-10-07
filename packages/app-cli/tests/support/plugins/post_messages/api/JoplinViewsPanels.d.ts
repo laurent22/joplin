@@ -46,6 +46,13 @@ export default class JoplinViewsPanels {
      *
      */
     onMessage(handle: ViewHandle, callback: Function): Promise<void>;
+
+    /**
+	 * Sends a message to the webview.
+	 * The webview must have registered a listener using onMessage(), otherwise the message is ignored.
+	 */
+	public postMessage(handle: ViewHandle, message: any) : void;
+
     /**
      * Shows the panel
      */

@@ -2,6 +2,7 @@ import ViewController, { EmitMessageEvent } from './ViewController';
 import shim from '../../shim';
 import { ButtonSpec, DialogResult, ViewHandle } from './api/types';
 const { toSystemSlashes } = require('../../path-utils');
+import PostMessageService, { MessageParticipant } from '../PostMessageService';
 
 export enum ContainerType {
 	Panel = 'panel',
@@ -103,7 +104,24 @@ export default class WebviewController extends ViewController {
 		});
 	}
 
+	public postMessage(message: any) {
+
+		const messageId = `plugin_${Date.now()}${Math.random()}`;
+
+		void PostMessageService.instance().postMessage({
+			pluginId: this.pluginId,
+			viewId: this.handle,
+			contentScriptId: null,
+			from: MessageParticipant.Plugin,
+			to: MessageParticipant.UserWebview,
+			id: messageId,
+			content: message,
+		});
+
+	}
+
 	public async emitMessage(event: EmitMessageEvent): Promise<any> {
+
 		if (!this.messageListener_) return;
 		return this.messageListener_(event.message);
 	}

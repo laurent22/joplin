@@ -1,5 +1,6 @@
 // This is the API that JS files loaded from the webview can see
 const webviewApiPromises_ = {};
+let cb_ = () => {};
 
 // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
 const webviewApi = {
@@ -21,6 +22,13 @@ const webviewApi = {
 		});
 
 		return promise;
+	},
+
+	onMessage: function(cb) {
+		cb_ = cb;
+		window.postMessage({
+			target: 'postMessageService.registerCallback',
+		});
 	},
 };
 
@@ -127,8 +135,17 @@ const webviewApi = {
 					promise.resolve(message.response);
 				}
 			},
+
+			'postMessageService.plugin_message': (message) => {
+				if (!cb_) {
+					console.warn('postMessageService.plugin_message: could not find callback for message', message);
+					return;
+				}
+				cb_(message);
+			},
 		};
 
+		// respond to window.postMessage({})
 		window.addEventListener('message', ((event) => {
 			if (!event.data || event.data.target !== 'webview') return;
 

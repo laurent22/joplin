@@ -6,8 +6,8 @@ export interface EmitMessageEvent {
 
 export default class ViewController {
 
-	private handle_: ViewHandle;
-	private pluginId_: string;
+	protected handle_: ViewHandle;
+	protected pluginId_: string;
 	private store_: any;
 
 	public constructor(handle: ViewHandle, pluginId: string, store: any) {
@@ -42,6 +42,10 @@ export default class ViewController {
 
 	public async emitMessage(event: EmitMessageEvent): Promise<any> {
 		console.info('Calling ViewController.emitMessage - but not implemented', event);
+	}
+
+	public postMessage(message: any) {
+		console.log('Calling ViewController.postMessage - but not implemented', message);
 	}
 
 }
