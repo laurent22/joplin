@@ -13,12 +13,14 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.2\n"
+"X-Generator: Poedit 3.0\n"
 "X-Poedit-Basepath: .\n"
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n"
 "%100==4 ? 2 : 3);\n"
 "X-Poedit-SourceCharset: https://raw.githubusercontent.com/laurent22/joplin/"
 "master/CliClient/locales/joplin.pot\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-cli/app/app-gui.js:452
 msgid "To delete a tag, untag the associated notes."
@@ -26,7 +28,7 @@ msgstr "Za izbris dane oznake, odznačite beležke s to oznako."
 
 #: packages/app-cli/app/app-gui.js:462
 msgid "Please select the note or notebook to be deleted first."
-msgstr "Prosim izberite beležko ali zvezek, ki želite izbrisati."
+msgstr "Prosim izberite beležko ali zvezek, ki jo želite izbrisati."
 
 #: packages/app-cli/app/app-gui.js:750
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
@@ -47,7 +49,7 @@ msgstr "Noben zvezek ni bil naveden."
 
 #: packages/app-cli/app/app.js:138 packages/app-cli/app/cli-utils.js:161
 msgid "Y"
-msgstr "Y"
+msgstr "D"
 
 #: packages/app-cli/app/app.js:138 packages/app-cli/app/cli-utils.js:161
 msgid "n"
@@ -59,7 +61,7 @@ msgstr "N"
 
 #: packages/app-cli/app/app.js:138
 msgid "y"
-msgstr "y"
+msgstr "d"
 
 #: packages/app-cli/app/app.js:171
 msgid "Cancelling background synchronisation... Please wait."
@@ -77,7 +79,7 @@ msgstr "Ukaz \"%s\" je na voljo samo v GUI načinu"
 
 #: packages/app-cli/app/base-command.js:15
 msgid "Cannot change encrypted item"
-msgstr "Ni mogoče spremeniti enkriptiranega predmeta"
+msgstr "Ni mogoče spremeniti šifriranega predmeta"
 
 #: packages/app-cli/app/cli-utils.js:109
 #, javascript-format
@@ -137,6 +139,8 @@ msgid ""
 "Runs the commands contained in the text file. There should be one command "
 "per line."
 msgstr ""
+"Zažene ukaze ki se nahajajo v tekstovni datoteki. Datoteka naj vsebuje en "
+"ukaz na vrstico."
 
 #: packages/app-cli/app/command-cat.js:14
 msgid "Displays the given note."
@@ -175,8 +179,8 @@ msgid ""
 "Duplicates the notes matching <note> to [notebook]. If no notebook is "
 "specified the note is duplicated in the current notebook."
 msgstr ""
-"Podvoji beležke ustrezajoče <note> v [notebook]. Če nobena beležka ni "
-"specificirana je ta podvojena v trenutnem zvezku."
+"Podvoji beležke ustrezajoče <note> v [notebook]. Če noben zvezek ni določen "
+"bo beležka podvojena v trenutnem zvezku."
 
 #: packages/app-cli/app/command-done.js:14
 msgid "Marks a to-do as done."
@@ -185,7 +189,7 @@ msgstr "Označi seznam opravil kot končan."
 #: packages/app-cli/app/command-done.js:21
 #, javascript-format
 msgid "Note is not a to-do: \"%s\""
-msgstr "Beležka ni formata seznam opravil: \"%s\""
+msgstr "Beležka ni oblike seznam opravil: \"%s\""
 
 #: packages/app-cli/app/command-e2ee.js:29
 msgid ""
@@ -211,13 +215,13 @@ msgid ""
 "Starting decryption... Please wait as it may take several minutes depending "
 "on how much there is to decrypt."
 msgstr ""
-"Dekripcija se začenja... Prosim počakajte. Vse skupaj lahko vzame nekaj "
-"minut, glede na količino materiala, ki jo je potrebno dekriptirati."
+"Dešifriranje se začenja... Prosim počakajte. Vse skupaj lahko vzame nekaj "
+"minut, glede na količino materiala, ki jo je potrebno dešifrirati."
 
 #: packages/app-cli/app/command-e2ee.js:62
 #, javascript-format
 msgid "Decrypted items: %d"
-msgstr "Dekodirani predmeti: %d"
+msgstr "Dešifrirani predmeti: %d"
 
 #: packages/app-cli/app/command-e2ee.js:64
 #, javascript-format
@@ -228,7 +232,7 @@ msgstr ""
 
 #: packages/app-cli/app/command-e2ee.js:78
 msgid "Completed decryption."
-msgstr "Dekripcija končana."
+msgstr "Dešifriranje je končano."
 
 #: packages/app-cli/app/command-e2ee.js:91
 #: packages/app-mobile/components/screens/encryption-config.js:137
@@ -260,7 +264,7 @@ msgstr "Onemogočeno"
 #: packages/app-mobile/components/screens/encryption-config.js:221
 #, javascript-format
 msgid "Encryption is: %s"
-msgstr "Enkripcija je: %s"
+msgstr "Šifriranje je: %s"
 
 #: packages/app-cli/app/command-edit.js:17
 msgid "Edit note."
@@ -280,7 +284,7 @@ msgstr "Ni aktivnih zvezkov."
 #: packages/app-cli/app/command-edit.js:46
 #, javascript-format
 msgid "Note does not exist: \"%s\". Create it?"
-msgstr "Beležka ne obstaja: \"%s\". Bi jo radi ustvarili?"
+msgstr "Beležka ne obstaja: \"%s\". Jo ustvarim?"
 
 #: packages/app-cli/app/command-edit.js:75
 msgid "Starting to edit note. Close the editor to get back to the prompt."
@@ -546,7 +550,7 @@ msgid ""
 "Delete notebook? All notes and sub-notebooks within this notebook will also "
 "be deleted."
 msgstr ""
-"Želite izbrisati zvezek? Vse beležke znotraj zvzeka bodo hkrati izbrisane."
+"Želite izbrisati zvezek? Vse beležke znotraj zvezka bodo hkrati izbrisane."
 
 #: packages/app-cli/app/command-rmnote.js:13
 msgid "Deletes the notes matching <note-pattern>."
@@ -636,7 +640,7 @@ msgstr "Nadgradi sinhronizacijski cilj na najnovejšo verzijo."
 #: packages/app-desktop/gui/OneDriveLoginScreen.js:46
 msgid ""
 "Authentication was not completed (did not receive an authentication token)."
-msgstr "Avtentikacija ni bila uspešna (avtentikacijski token ni bil prejet)."
+msgstr "Avtentikacija ni bila uspešna (avtentikacijski žeton ni bil prejet)."
 
 #: packages/app-cli/app/command-sync.js:91
 #: packages/app-desktop/gui/DropboxLoginScreen.js:29
@@ -730,11 +734,10 @@ msgid ""
 "target is a regular note it will be converted to a to-do). Use \"clear\" to "
 "convert the to-do back to a regular note."
 msgstr ""
-"<todo-command> ima lahko funkcije ali \"spremeni\" or \"počisti\". Uporabi "
-"\"spremeni\" da spremeniš dani seznam opravil iz opravljeno v neopravljeno "
-"ali obratno. (Če je tarča navadna beležka, bo ta pretvorjena v seznam "
-"opravil). Uporabi \"počisti\" za pretvoriti seznam opravil nazaj v običajno "
-"beležko."
+"<todo-command> je lahko le \"spremeni\" ali \"počisti\". Uporabite \"spremeni"
+"\" da spremenite dani seznam opravil iz opravljeno v neopravljeno ali "
+"obratno. (Če je cilj navadna beležka, bo ta pretvorjena v seznam opravil). "
+"Uporabite \"počisti\" da povrnete seznam opravil nazaj v običajno beležko."
 
 #: packages/app-cli/app/command-undone.js:12
 msgid "Marks a to-do as non-completed."
@@ -765,7 +768,7 @@ msgid ""
 "\n"
 "For example, to create a notebook press `mb`; to create a note press `mn`."
 msgstr ""
-"Dobrodošli v Joplinu!\n"
+"Dobrodošli v Joplin!\n"
 "\n"
 "Vtipkajte `:help shortcuts` za seznam bližnjic na tipkovnici ali vtipkajte "
 "samo`:help` za informacije o uporabi.\n"
@@ -780,9 +783,9 @@ msgid ""
 "supplied the password, the encrypted items are being decrypted in the "
 "background and will be available soon."
 msgstr ""
-"En ali več predmetov je trenutno enkriptiranih in boste morda morali navesti "
+"En ali več predmetov je trenutno šifriranih in boste morda morali vnesti "
 "glavno geslo. Če želite to narediti, vtipkajte `e2ee decrypt`. Če ste že "
-"vnesli geslo, so enkriptirani predmeti v stanju dekripcije v ozadju in bodo "
+"vnesli geslo, so šifrirani predmeti v stanju dešifriranja v ozadju in bodo "
 "kmalu na voljo."
 
 #: packages/app-cli/app/gui/NoteWidget.js:50
@@ -854,7 +857,7 @@ msgstr "Izhod"
 #: packages/app-mobile/components/screens/ConfigScreen.js:154
 #: packages/app-mobile/components/side-menu-content.js:150
 msgid "OK"
-msgstr "OK"
+msgstr "Vredu"
 
 #: packages/app-desktop/bridge.js:110 packages/app-desktop/bridge.js:126
 #: packages/app-desktop/checkForUpdates.js:189
@@ -917,11 +920,11 @@ msgstr "Naloži"
 
 #: packages/app-desktop/checkForUpdates.js:189
 msgid "Skip this version"
-msgstr ""
+msgstr "Preskoči to verzijo"
 
 #: packages/app-desktop/checkForUpdates.js:189
 msgid "Full changelog"
-msgstr ""
+msgstr "Vse spremembe"
 
 #: packages/app-desktop/commands/copyDevCommand.js:18
 msgid "Copy dev mode command to clipboard"
@@ -929,7 +932,7 @@ msgstr "Kopiraj ukaz za razvijalski način v odložišče"
 
 #: packages/app-desktop/commands/openProfileDirectory.js:18
 msgid "Open profile directory"
-msgstr "Odpri profilno mapo"
+msgstr "Odpri mapo profila"
 
 #: packages/app-desktop/commands/startExternalEditing.js:20
 msgid "Edit in external editor"
@@ -948,19 +951,18 @@ msgid "Stop"
 msgstr "Ustavi"
 
 #: packages/app-desktop/commands/toggleSafeMode.js:18
-#, fuzzy
 msgid "Toggle safe mode"
-msgstr "Preklopi stransko vrstice"
+msgstr "Preklopi varni način"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.js:34
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:40
 msgid "Token has been copied to the clipboard!"
-msgstr "Token je bil kopiran v odložišče!"
+msgstr "Žeton je bil kopiran v odložišče!"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.js:37
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:44
 msgid "Are you sure you want to renew the authorisation token?"
-msgstr "Ali ste prepričani, da želite obnoviti avtorizacijski token?"
+msgstr "Ali ste prepričani, da želite obnoviti avtorizacijski žeton?"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.js:67
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:84
@@ -1043,12 +1045,12 @@ msgstr "Napredne možnosti"
 #: packages/app-desktop/gui/ClipperConfigScreen.js:103
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:194
 msgid "Authorisation token:"
-msgstr "Avtorizacijski token:"
+msgstr "Avtorizacijski žeton:"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.js:108
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:208
 msgid "Copy token"
-msgstr "Kopiraj token"
+msgstr "Kopiraj žeton"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.js:109
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:214
@@ -1056,13 +1058,13 @@ msgid ""
 "This authorisation token is only needed to allow third-party applications to "
 "access Joplin."
 msgstr ""
-"Avtorizacijski token je potreben samo za dovoljenje tujim aplikacijam, da "
+"Avtorizacijski žeton je potreben samo za dovoljenje tujim aplikacijam, da "
 "dostopajo do Joplin."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.js:111
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:222
 msgid "Renew token"
-msgstr "Obnovi token"
+msgstr "Obnovi žeton"
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.js:27
 msgid "Apply"
@@ -1169,6 +1171,8 @@ msgid ""
 "The Joplin team has vetted this plugin and it meets our standards for "
 "security and performance."
 msgstr ""
+"Joplin ekipa je temeljito preverila ta vtičnik in potrdila, da sklada našim "
+"standardom za varnost in zanesljivost."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:192
 #, javascript-format
@@ -1194,13 +1198,12 @@ msgid "You do not have any installed plugin."
 msgstr "Nimate nameščenih nobenih dodatkov."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:232
-#, fuzzy
 msgid "Could not connect to plugin repository."
-msgstr "Ni uspelo namestiti dodatka: %s"
+msgstr "Ni uspelo se povezat na repozitorij dodatka."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:236
 msgid "Try again"
-msgstr ""
+msgstr "Poizkusi znova"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:248
 msgid "Plugin tools"
@@ -1254,9 +1257,9 @@ msgid ""
 "recommended to upgrade them. The upgraded master key will still be able to "
 "decrypt and encrypt your data as usual."
 msgstr ""
-"Slednji glavni ključi uporabljajo zastarel enkripcijski algoritem in je "
+"Slednji glavni ključi uporabljajo zastarel šifrirni algoritem in je "
 "priporočeno, da jih nadgradite. Nadgrajeni glavni ključi bodo še vedno možni "
-"dekodirati in kodirati vaše podatke."
+"dešifrirati in šifrirati vaše podatke."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:164
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:309
@@ -1285,7 +1288,7 @@ msgid ""
 "The default encryption method has been changed to a more secure one and it "
 "is recommended that you apply it to your data."
 msgstr ""
-"Privzeta metoda za enkripcijo je bila spremenjena na bolj zavarovanega in je "
+"Privzeta metoda za šifriranje je bila spremenjena na bolj zavarovanega in je "
 "priporočljivo da se uveljavi na vaših podatkih."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:184
@@ -1294,9 +1297,9 @@ msgid ""
 "You may use the tool below to re-encrypt your data, for example if you know "
 "that some of your notes are encrypted with an obsolete encryption method."
 msgstr ""
-"Lahko uporabite orodje spodaj za ponovno enkriptiranje vaših podatkov, "
-"naprimer če veste da je nekaj vaših beležk enkriptiranih z zastarelo "
-"enkripcijsko metodo."
+"Lahko uporabite orodje spodaj za ponovno šifriranje vaših podatkov, na "
+"primer če veste da je nekaj vaših beležk šifriranih z zastarelo šifrirano "
+"metodo."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:186
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:76
@@ -1316,8 +1319,8 @@ msgid ""
 "\n"
 "Important: you only need to run this ONCE on one device."
 msgstr ""
-"Če želite to storiti, vaši celotni podatki bodo morali biti enkriptirani in "
-"sinhronizirani, zato da je najboljše da pustite teči čez noč.\n"
+"Če želite to storiti, vaši celotni podatki bodo morali biti šifrirani in "
+"sinhronizirani, zato da je najboljše, da pustite teči čez noč.\n"
 "\n"
 "Za začetek, prosim sledite naslednjim korakom:\n"
 "\n"
@@ -1333,7 +1336,7 @@ msgstr ""
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:198
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:81
 msgid "Re-encryption"
-msgstr "Ponovno enkripcija"
+msgstr "Ponovno šifriranje"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:213
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:85
@@ -1348,8 +1351,8 @@ msgid ""
 "re-synchronised and sent unencrypted to the sync target. Do you wish to "
 "continue?"
 msgstr ""
-"Onemogočanje enkripcije pomeni da bodo *vse* vaše beležke in priponke "
-"ponovno sinhronizirane in poslane neenkriptirane do ciljne sinhronizacijske "
+"Onemogočanje šifriranja pomeni, da bodo *vse* vaše beležke in priponke "
+"ponovno sinhronizirane in poslane nešifrirane do ciljne sinhronizacijske "
 "naprave. Ali želite nadaljevati?"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:246
@@ -1360,22 +1363,22 @@ msgid ""
 "password as, for security purposes, this will be the *only* way to decrypt "
 "the data! To enable encryption, please enter your password below."
 msgstr ""
-"Omogočanje enkripcije pomeni, da bodo *vse* vaše beležke in priponke ponovno "
-"sinhronizirane in poslane enkriptirane do ciljne sinhronizacijske naprave. "
+"Omogočanje šifriranja pomeni, da bodo *vse* vaše beležke in priponke ponovno "
+"sinhronizirane in poslane šifrirane do ciljne sinhronizacijske naprave. "
 "Obvezno si zapomnite geslo, saj bo zaradi varnostnih namenov to edini način, "
-"da dekriptirate vsebino zvezka. Da omogočite enkripcijo, vnesite geslo."
+"da dešifrirate vsebino zvezka. Da omogočite šifriranje, vnesite geslo."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:275
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:218
 #: packages/app-mobile/components/screens/encryption-config.js:210
 msgid "Disable encryption"
-msgstr "Onemogoči enkripcijo"
+msgstr "Onemogoči šifriranje"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:275
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:218
 #: packages/app-mobile/components/screens/encryption-config.js:210
 msgid "Enable encryption"
-msgstr "Omogoči enkripcijo"
+msgstr "Omogoči šifriranje"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:290
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:139
@@ -1411,10 +1414,10 @@ msgid ""
 "as \"active\"). Any of the keys might be used for decryption, depending on "
 "how the notes or notebooks were originally encrypted."
 msgstr ""
-"Opomnik: samo eno glavno geslo bo uporabljeno za enkripcijo(tisto, ki je "
+"Opomnik: samo eno glavno geslo bo uporabljeno za šifriranje(tisto, ki je "
 "označena kot ''aktiven''). Vsa izmed gesel se lahko morda uporabijo za "
-"dekripcijo, odvisno od načina, kako so bile beležke in zvezki prvotno "
-"enkriptirani."
+"dešifriranje, odvisno od načina, kako so bile beležke in zvezki prvotno "
+"šifrirani."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:371
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:232
@@ -1430,7 +1433,7 @@ msgid ""
 "however the application does not currently have access to them. It is likely "
 "they will eventually be downloaded via synchronisation."
 msgstr ""
-"Glavna gesla s sledečimi ID so uporabljena za enkripcijo nekaterih vaših "
+"Glavna gesla s sledečimi ID so uporabljena za šifriranje nekaterih vaših "
 "predmetov. Kakorkoli, aplikacija trenutno nima dostopa do njih. Verjetno je, "
 "da bodo sčasoma preneseni s sinhronizacijo."
 
@@ -1441,7 +1444,7 @@ msgid ""
 "For more information about End-To-End Encryption (E2EE) and advice on how to "
 "enable it please check the documentation:"
 msgstr ""
-"Za več informacij o End-To-End enkripciji (E2EE) in nasvet o tem kako "
+"Za več informacij o End-To-End šifriranju (E2EE) in nasvet o tem kako "
 "omogočite, prosimo preglejte dokumentacijo:"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:433
@@ -1454,33 +1457,28 @@ msgstr "Stanje"
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:438
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:251
 msgid "Encryption is:"
-msgstr "Enkripcija je:"
+msgstr "Šifriranje je:"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:103
 #: packages/app-mobile/components/screens/encryption-config.js:89
-#, fuzzy
 msgid "Master password"
-msgstr "Vnesite glavno geslo:"
+msgstr "Glavno geslo"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:118
-#, fuzzy
 msgid "Source: "
-msgstr "Vir"
+msgstr "Vir: "
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:121
-#, fuzzy
 msgid "Created: "
-msgstr "Ustvarjeno: %s"
+msgstr "Ustvarjeno: "
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:124
-#, fuzzy
 msgid "Updated: "
-msgstr "Posodobljeno: %s"
+msgstr "Posodobljeno: "
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:129
-#, fuzzy
 msgid "Disable"
-msgstr "Onemogočeno"
+msgstr "Onemogoči"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:129
 #: packages/app-mobile/components/screens/encryption-config.js:143
@@ -1489,42 +1487,37 @@ msgstr "Omogoči"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:139
 msgid "Hide disabled master keys"
-msgstr ""
+msgstr "Skrij onemogočene glavne kjuče"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:139
 msgid "Show disabled master keys"
-msgstr ""
+msgstr "Prikaži onemogočene glavne kjuče"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:146
 msgid "Date"
-msgstr ""
+msgstr "Datum"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:148
-#, fuzzy
 msgid "Valid"
-msgstr "Neveljavno"
+msgstr "Veljavno"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:149
-#, fuzzy
 msgid "Actions"
-msgstr "Akcija"
+msgstr "Akcije"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:166
 #: packages/app-mobile/components/screens/encryption-config.js:159
-#, fuzzy
 msgid "Master password:"
-msgstr "Vnesite glavno geslo:"
+msgstr "Glavno geslo:"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:170
 #: packages/app-mobile/components/screens/encryption-config.js:160
-#, fuzzy
 msgid "Loaded"
 msgstr "Naloženo"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:178
-#, fuzzy
 msgid "Enter your master password"
-msgstr "Vnesite glavno geslo:"
+msgstr "Vnesite glavno geslo"
 
 #: packages/app-desktop/gui/ExtensionBadge.min.js:10
 msgid "Firefox Extension"
@@ -1630,10 +1623,12 @@ msgid ""
 "Safe mode is currently active. Note rendering and all plugins are "
 "temporarily disabled."
 msgstr ""
+"Varni način je trenutno aktiven. Izris beležk ter vsi vtičniki so začasno "
+"onemogočeni."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:439
 msgid "Disable safe mode and restart"
-msgstr ""
+msgstr "Onemogoči varni način in ponovno zaženi"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:442
 msgid ""
@@ -1651,7 +1646,7 @@ msgstr "Ponovno zaženi in nadgradi"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:445
 msgid "Some items cannot be decrypted."
-msgstr "Nekateri predmeti ne morejo biti dekodirani."
+msgstr "Nekatere predmete ni možno dešifrirani."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:445
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:448
@@ -1668,7 +1663,7 @@ msgid ""
 "The default encryption method has been changed, you should re-encrypt your "
 "data."
 msgstr ""
-"Privzeta enkripcijska metoda je bila spremenjena, ponovno enkriptirajte vaše "
+"Privzeta šifrirna metoda je bila spremenjena, ponovno šifrirajte vaše "
 "podatke."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:451
@@ -1678,16 +1673,16 @@ msgstr "Več informacij"
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:456
 #, javascript-format
 msgid "%s (%s) would like to share a notebook with you."
-msgstr ""
+msgstr "%s (%s) bi želel deliti zvezek z vami."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:456
 msgid "Accept"
-msgstr ""
+msgstr "Sprejmi"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:456
 #: packages/app-desktop/gui/Root.js:122
 msgid "Reject"
-msgstr ""
+msgstr "Zavrni"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:459
 msgid "Some items cannot be synchronised."
@@ -1707,19 +1702,18 @@ msgstr ""
 "Uporabite puščice za razporeditev elementov. Pritisnite \"Escape\" za izhod."
 
 #: packages/app-desktop/gui/MainScreen/commands/commandPalette.js:18
-#, fuzzy
 msgid "Command palette..."
-msgstr "Paleta ukazov"
+msgstr "Nabor ukazov..."
 
 #: packages/app-desktop/gui/MainScreen/commands/editAlarm.js:20
 #: packages/app-mobile/components/SelectDateTimeDialog.js:84
 #: packages/app-mobile/components/screens/Note.js:819
 msgid "Set alarm"
-msgstr "Nastavi alarm"
+msgstr "Nastavi opomnik"
 
 #: packages/app-desktop/gui/MainScreen/commands/editAlarm.js:33
 msgid "Set alarm:"
-msgstr "Nastavi alarm:"
+msgstr "Nastavi opomnik:"
 
 #: packages/app-desktop/gui/MainScreen/commands/exportPdf.js:20
 #: packages/app-desktop/gui/MainScreen/commands/exportPdf.js:32
@@ -1807,14 +1801,12 @@ msgid "Note properties"
 msgstr "Lastnosti beležke"
 
 #: packages/app-desktop/gui/MainScreen/commands/showShareFolderDialog.js:16
-#, fuzzy
 msgid "Share notebook..."
-msgstr "Deli beležko..."
+msgstr "Deli zvezek..."
 
 #: packages/app-desktop/gui/MainScreen/commands/showShareNoteDialog.js:16
-#, fuzzy
 msgid "Publish note..."
-msgstr "Deli beležko..."
+msgstr "Objavi beležko..."
 
 #: packages/app-desktop/gui/MainScreen/commands/showSpellCheckerMenu.js:19
 #: packages/lib/services/spellChecker/SpellCheckerService.js:180
@@ -1926,9 +1918,8 @@ msgid "Focus"
 msgstr "Fokusiraj"
 
 #: packages/app-desktop/gui/MenuBar.js:585
-#, fuzzy
 msgid "Note&book"
-msgstr "Zvezki"
+msgstr "&Zvezek"
 
 #: packages/app-desktop/gui/MenuBar.js:591
 msgid "&Note"
@@ -2160,7 +2151,7 @@ msgstr "Ustvarjanje nove %s..."
 
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteBody.js:16
 msgid "Note body"
-msgstr "Telo beležke"
+msgstr "Besedilo beležke"
 
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteTitle.js:16
 msgid "Note title"
@@ -2208,16 +2199,15 @@ msgstr "Naslov"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.js:78
 msgid "Horizontal Rule"
-msgstr "Horizontalno pravilo"
+msgstr "Vodoravna črta"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.js:88
 msgid "Delete line"
 msgstr "Izbriši vrstico"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.js:92
-#, fuzzy
 msgid "Duplicate line"
-msgstr "Podvoji"
+msgstr "Podvoji vrstico"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.js:96
 msgid "Undo"
@@ -2412,18 +2402,16 @@ msgid "Warning: not all resources shown for performance reasons (limit: %s)."
 msgstr "Opozorilo: vsi viri niso prikazani zaradi učinkovitosti (omejitev: %s)"
 
 #: packages/app-desktop/gui/Root.js:107
-#, fuzzy
 msgid "Confirmation"
-msgstr "Nastavitve"
+msgstr "Potrditev"
 
 #: packages/app-desktop/gui/Root.js:120
 msgid "The Web Clipper needs your authorisation to access your data."
-msgstr ""
+msgstr "Web Clipper rabi vašo odobritev za dostop do vaših podatkov."
 
 #: packages/app-desktop/gui/Root.js:121
-#, fuzzy
 msgid "Grant authorisation"
-msgstr "Avtorizacijski token:"
+msgstr "Sprejmi odobritev"
 
 #: packages/app-desktop/gui/Root.js:161
 msgid "OneDrive Login"
@@ -2438,19 +2426,20 @@ msgid "Note attachments"
 msgstr "Priponke beležke"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:133
-#, fuzzy
 msgid "Unshare"
-msgstr "Deli"
+msgstr "Prekini deljenje"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:175
 msgid ""
 "Delete this invitation? The recipient will no longer have access to this "
 "shared notebook."
 msgstr ""
+"Izbrišem to povabilo? Prejemnik več ne bo imel dostopa do tega skupnega "
+"zvezka."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:189
 msgid "Add recipient:"
-msgstr ""
+msgstr "Dodaj prejemnika:"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:192
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:28
@@ -2460,45 +2449,43 @@ msgstr "Deli"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:201
 msgid "Recipient has not yet accepted the invitation"
-msgstr ""
+msgstr "Prejemnik še ni sprejel vabila"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:202
 msgid "Recipient has rejected the invitation"
-msgstr ""
+msgstr "Sprejemnik je zavrnil zabilo"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:203
 msgid "Recipient has accepted the invitation"
-msgstr ""
+msgstr "Sprejemnik je sprejel vabilo"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:213
 msgid "Recipients:"
-msgstr ""
+msgstr "Prejemniki:"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:225
-#, fuzzy
 msgid "Synchronizing..."
-msgstr "Sinhroniziranje..."
+msgstr "Sinhroniziram..."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:226
-#, fuzzy
 msgid "Sharing notebook..."
-msgstr "Deli beležko..."
+msgstr "Delim zvezek..."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:236
 msgid ""
 "Unshare this notebook? The recipients will no longer have access to its "
 "content."
 msgstr ""
+"Onemogoči skupno rabo zvezka? Prejemniki več ne bodo imeli dostopa do "
+"vsebine."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:246
-#, fuzzy
 msgid "Share Notebook"
-msgstr "Deli beležke"
+msgstr "Deli zvezek"
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:144
-#, fuzzy
 msgid "Unpublish note"
-msgstr "Deli"
+msgstr "Umakni objavo beležke"
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:171
 msgid "Synchronising..."
@@ -2527,7 +2514,7 @@ msgstr "Beležka: Ko je bila beležka deljena, ne bo več kodirana na strežniku
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:187
 msgid "Publish Notes"
-msgstr ""
+msgstr "Objavi Beležko"
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:189
 msgid "Copy Shareable Link"
@@ -2583,7 +2570,7 @@ msgstr "Zvezki"
 #: packages/app-mobile/components/side-menu-content.js:325
 #, javascript-format
 msgid "Decrypting items: %d/%d"
-msgstr "Dekriptirani predmeti: %d/%d"
+msgstr "Dešifrirani predmeti: %d/%d"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:507
 #: packages/app-mobile/components/side-menu-content.js:330
@@ -2610,32 +2597,28 @@ msgid "Retry"
 msgstr "Poskusi ponovno"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.js:137
-#, fuzzy
 msgid "Advanced tools"
 msgstr "Napredne možnosti"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.js:139
-#, fuzzy
 msgid "Export debug report"
 msgstr "Izvozi poročilo o napakah"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:157
-#, fuzzy
 msgid "Sync your notes"
-msgstr "Razporedi beležke po"
+msgstr "Sinhronizirajte vaše beležke"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:158
 msgid "Publish notes to the internet"
-msgstr ""
+msgstr "Objavi beležko na internetu"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:159
-#, fuzzy
 msgid "Collaborate on notebooks with others"
-msgstr "Najprej prosim ustvarite beležnico"
+msgstr "Sodelujte v zvezkih z drugimi"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:182
 msgid "Thank you! Your Joplin Cloud account is now setup and ready to use."
-msgstr ""
+msgstr "Hvala! Vaš Joplin račun je sedaj nastavljen in pripravljen za uporabo."
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:190
 #, javascript-format
@@ -2645,30 +2628,34 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"Prišlo je do napake pri nastavitvi vašega Joplin računa. Prosimo preverite "
+"vaš e-mail naslov ter geslo in poizkusite znova. Napaka je bila:\n"
+"\n"
+"%s"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:203
 msgid "Login below."
-msgstr ""
+msgstr "Prijavite se spodaj."
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:205
-#, fuzzy
 msgid "Or create an account."
-msgstr "Ustvari novo beležko."
+msgstr "Ali ustvarite račun."
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:210
 msgid "Login"
-msgstr ""
+msgstr "Prijava"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:231
-#, fuzzy
 msgid "Select"
-msgstr "Izberi vse"
+msgstr "Izberi"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:278
 msgid ""
 "Joplin can synchronise your notes using various providers. Select one from "
 "the list below."
 msgstr ""
+"Joplin lahko sinhronizira vaše beležke z uporabo različnih ponudnikov. "
+"Izberite enega iz seznama spodaj."
 
 #: packages/app-desktop/gui/utils/NoteListUtils.js:42
 msgid "Duplicate"
@@ -2685,7 +2672,7 @@ msgstr "Menjaj med beležko in seznamom opravil"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.js:86
 msgid "Switch to note type"
-msgstr "Menjaj vrsto beležke"
+msgstr "Spremeni v seznam opravil"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.js:92
 msgid "Switch to to-do type"
@@ -2703,7 +2690,7 @@ msgid ""
 "commands."
 msgstr ""
 "Vnesite naslov beležke ali samo del vsebine, da se premaknete do nje. "
-"Vnesite # in nato ime oznake, ali @ in nato ime beležke. Ali vnesite: "
+"Vnesite # in nato ime oznake, ali @ in nato ime zvezka. Ali vesite : da "
 "poiščite po ukazih."
 
 #: packages/app-desktop/plugins/GotoAnything.js:508
@@ -2736,15 +2723,15 @@ msgstr "Odpri"
 
 #: packages/app-mobile/components/SelectDateTimeDialog.js:78
 msgid "Clear alarm"
-msgstr "Odstrani alarm"
+msgstr "Odstrani opomnik"
 
 #: packages/app-mobile/components/SelectDateTimeDialog.js:80
 msgid "Save alarm"
-msgstr "Shrani alarm"
+msgstr "Shrani opomnik"
 
 #: packages/app-mobile/components/note-list.js:97
 msgid "You currently have no notebooks."
-msgstr "Ni aktivnih beležk."
+msgstr "Trenutno nimate nobenih zvezkov."
 
 #: packages/app-mobile/components/note-list.js:101
 msgid "Create a notebook"
@@ -2830,7 +2817,7 @@ msgstr "Samo za razhroščevalne namene: izvozi profil na zunanjo SD kartico."
 
 #: packages/app-mobile/components/screens/ConfigScreen.js:436
 msgid "Feature flags"
-msgstr ""
+msgstr "Zastavice opcij"
 
 #: packages/app-mobile/components/screens/ConfigScreen.js:439
 msgid "More information"
@@ -2872,12 +2859,12 @@ msgstr "Pravilnik o zasebnosti"
 #: packages/app-mobile/components/screens/ConfigScreen.js:468
 #, javascript-format
 msgid "Database v%s"
-msgstr ""
+msgstr "Podatkovna baza v%s"
 
 #: packages/app-mobile/components/screens/ConfigScreen.js:470
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "FTS enabled: %d"
-msgstr "Za izbris: %d"
+msgstr "FTS omogočen. %d"
 
 #: packages/app-mobile/components/screens/ConfigScreen.js:472
 #: packages/app-mobile/components/side-menu-content.js:316
@@ -3042,7 +3029,7 @@ msgstr "Ponovno geslo ne more biti prazno"
 #: packages/app-mobile/components/screens/folder.js:87
 #, javascript-format
 msgid "The notebook could not be saved: %s"
-msgstr "Beležka ne more biti shranjena: %s"
+msgstr "Zvezka ni bilo mogoče shraniti: %s"
 
 #: packages/app-mobile/components/screens/folder.js:109
 msgid "Edit notebook"
@@ -3072,7 +3059,7 @@ msgstr "Zvezki: %s"
 
 #: packages/app-mobile/components/side-menu-content.js:132
 msgid "Encrypted notebooks cannot be renamed"
-msgstr "Enkriptirani predmeti ne morejo biti preimenovani"
+msgstr "Šifrirane zvezke ni možno preimenovati"
 
 #: packages/app-mobile/components/side-menu-content.js:312
 msgid "New Notebook"
@@ -3119,15 +3106,17 @@ msgid "File system"
 msgstr "Sistem datotek"
 
 #: packages/lib/SyncTargetJoplinCloud.js:28
-#, fuzzy
 msgid "Joplin Cloud"
-msgstr "Joplin forum"
+msgstr "Joplin Cloud"
 
 #: packages/lib/SyncTargetJoplinCloud.js:31
 msgid ""
 "Joplin's own sync service. Also gives access to Joplin-specific features "
 "such as publishing notes or collaborating on notebooks with others."
 msgstr ""
+"Joplin lastna storitev sinhronizacije. Omogoči tudi dostop do Joplin "
+"specifičnih funkcij, kot so objava beležk ali skupna uporaba zvezkov z "
+"drugimi."
 
 #: packages/lib/SyncTargetJoplinServer.js:60
 msgid "Joplin Server"
@@ -3139,7 +3128,7 @@ msgstr "Nextcloud"
 
 #: packages/lib/SyncTargetNone.js:22
 msgid "(None)"
-msgstr ""
+msgstr "(Brez)"
 
 #: packages/lib/SyncTargetOneDrive.js:32
 msgid "OneDrive"
@@ -3189,9 +3178,9 @@ msgid "Cancelling..."
 msgstr "V preklicu..."
 
 #: packages/lib/Synchronizer.js:159
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Completed: %s (%s)"
-msgstr "Dokončano: %s"
+msgstr "Dokončano: %s (%s)"
 
 #: packages/lib/Synchronizer.js:161
 #, javascript-format
@@ -3219,22 +3208,22 @@ msgstr "Naprej"
 #: packages/lib/components/EncryptionConfigScreen/utils.js:47
 #, javascript-format
 msgid "Decrypted items: %s / %s"
-msgstr "Dekodirani predmeti: %s / %s"
+msgstr "Dešifrirani predmeti: %s / %s"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.js:53
 #, javascript-format
 msgid "Encryption will be enabled using the master key created on %s"
-msgstr ""
+msgstr "Šifriranje bo omogočeno z uporabo glavnega kjuča ustvarjenega %s"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.js:65
 msgid ""
 "Please confirm that you would like to re-encrypt your complete database."
 msgstr ""
-"Prosimo potrdite da želite ponovno enkriptirati vašo celotno podatkovno bazo."
+"Prosimo potrdite da želite ponovno šifrirati vašo celotno podatkovno bazo."
 
 #: packages/lib/components/EncryptionConfigScreen/utils.js:71
 msgid "Your data is going to be re-encrypted and synced again."
-msgstr "Vaši podatki bodo ponovni enkriptirani in sinhronizirani."
+msgstr "Vaši podatki bodo ponovni šifrirani in sinhronizirani."
 
 #: packages/lib/components/EncryptionConfigScreen/utils.js:147
 msgid ""
@@ -3281,7 +3270,7 @@ msgid ""
 "\n"
 "Please try again."
 msgstr ""
-"Ni bila možna avtentikacija:\n"
+"Avtorizacija aplikacije ni bila uspešna:\n"
 "\n"
 "%s\n"
 "\n"
@@ -3289,11 +3278,11 @@ msgstr ""
 
 #: packages/lib/models/BaseItem.js:721
 msgid "Encrypted"
-msgstr "Enkriptirano"
+msgstr "Šifrirano"
 
 #: packages/lib/models/BaseItem.js:782
 msgid "Encrypted items cannot be modified"
-msgstr "Enkriptirani predmeti ne morejo biti spremenjeni"
+msgstr "Šifrirane predmeti ni možno spreminjati"
 
 #: packages/lib/models/Folder.js:38 packages/lib/models/Note.js:36
 msgid "title"
@@ -3309,12 +3298,12 @@ msgstr "Konfikti"
 
 #: packages/lib/models/Folder.js:558
 msgid "Cannot move notebook to this location"
-msgstr "Ni mogoče premakniti beležke v to lokacijo"
+msgstr "Ni mogoče premakniti zvezka v to lokacijo"
 
 #: packages/lib/models/Folder.js:610
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
-msgstr "Beležka ne more biti imenovana \"%s\", ker je to rezerviran naslov."
+msgstr "Zvezek ne more biti imenovan \"%s\", ker je to rezervirano ime."
 
 #: packages/lib/models/Note.js:38
 msgid "created date"
@@ -3365,9 +3354,8 @@ msgid "Error"
 msgstr "Napaka"
 
 #: packages/lib/models/Resource.js:408
-#, fuzzy
 msgid "Conflicts (attachments)"
-msgstr "Priponke beležke"
+msgstr "Spori (priponke)"
 
 #: packages/lib/models/Resource.js:422
 #, javascript-format
@@ -3443,7 +3431,7 @@ msgstr "OLED temno"
 
 #: packages/lib/models/Setting.js:152
 msgid "Open Sync Wizard..."
-msgstr ""
+msgstr "Odpri čarovnik sinhronizacije...."
 
 #: packages/lib/models/Setting.js:162
 msgid "Synchronisation target"
@@ -3506,23 +3494,20 @@ msgid "Joplin Server URL"
 msgstr "Joplin strežnik URL"
 
 #: packages/lib/models/Setting.js:348
-#, fuzzy
 msgid "Joplin Server email"
-msgstr "Joplin strežnik"
+msgstr "Joplin strežnik e-pošta"
 
 #: packages/lib/models/Setting.js:359
 msgid "Joplin Server password"
 msgstr "Joplin strežnik geslo"
 
 #: packages/lib/models/Setting.js:386
-#, fuzzy
 msgid "Joplin Cloud email"
-msgstr "Joplin strežnik"
+msgstr "Joplin Cloud e-pošta"
 
 #: packages/lib/models/Setting.js:397
-#, fuzzy
 msgid "Joplin Cloud password"
-msgstr "Joplin strežnik geslo"
+msgstr "Joplin Cloud geslo"
 
 #: packages/lib/models/Setting.js:409
 msgid "Attachment download behaviour"
@@ -3534,8 +3519,8 @@ msgid ""
 "In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
 "the attachments are downloaded whether you open the note or not."
 msgstr ""
-"V \"Ročno\" načinu so priponke naložene samo ko kliknete na njih. V "
-"\"Avtomatsko\" so naložene ko jih odprete v beležki. V \"Vedno\" so vse "
+"V načinu \"Ročno\" načinu so priponke naložene samo, ko kliknete na njih. "
+"\"Avtomatsko\" so naložene ko jih odprete v beležki. \"Vedno\" so vse "
 "priponke naložene ne glede na to ali odprete beležko ali ne."
 
 #: packages/lib/models/Setting.js:413
@@ -3620,7 +3605,7 @@ msgstr "Obrni vrstni red"
 
 #: packages/lib/models/Setting.js:598
 msgid "Sort notebooks by"
-msgstr "Razporedi beležke po"
+msgstr "Razporedi zvezke po"
 
 #: packages/lib/models/Setting.js:611
 msgid "Save geo-location with notes"
@@ -3762,6 +3747,8 @@ msgid ""
 "Used for most text in the markdown editor. If not found, a generic "
 "proportional (variable width) font is used."
 msgstr ""
+"Uporabljen za večino besedila v markdown urejevalniku. Če ni najden se "
+"uporabi generična proporcionalna (spremenljiva širina) pisava."
 
 #: packages/lib/models/Setting.js:780
 msgid "Editor monospace font family"
@@ -3773,14 +3760,17 @@ msgid ""
 "tables, checkboxes, code). If not found, a generic monospace (fixed width) "
 "font is used."
 msgstr ""
+"Uporabljen kjer je za izpis potrebna pisava s fiksno širino. (npr: tabele, "
+"koda, potrditveno polje). Če ni najden, se uporabi generična "
+"monospace(fiksna širina) pisava."
 
 #: packages/lib/models/Setting.js:784
 msgid "Editor maximum width"
-msgstr ""
+msgstr "Največja širina urejevalnika"
 
 #: packages/lib/models/Setting.js:784
 msgid "Set it to 0 to make it take the complete available space."
-msgstr ""
+msgstr "Nastavite na 0, da zavzame ves prostor na voljo."
 
 #: packages/lib/models/Setting.js:803
 msgid "Custom stylesheet for rendered Markdown"
@@ -3792,11 +3782,12 @@ msgstr "Poljubna slogovna predloga za stil Joplin aplikacije"
 
 #: packages/lib/models/Setting.js:829
 msgid "Re-upload local data to sync target"
-msgstr ""
+msgstr "Ponovno naloži lokalne datoteke na sinhronizacijski cilj"
 
 #: packages/lib/models/Setting.js:839
 msgid "Delete local data and re-download from sync target"
 msgstr ""
+"Izbriši lokalne podatke in jih ponovno prenesi iz sinhronizacijskega cilja"
 
 #: packages/lib/models/Setting.js:844
 msgid "Automatically update the application"
@@ -3873,15 +3864,15 @@ msgstr "Tabloid"
 
 #: packages/lib/models/Setting.js:887
 msgid "Legal"
-msgstr "Zakonito"
+msgstr "Legal"
 
 #: packages/lib/models/Setting.js:890
 msgid "Page orientation for PDF export"
-msgstr "Orientacija strani za PDF izvoz"
+msgstr "Usmerjenost strani za PDF izvoz"
 
 #: packages/lib/models/Setting.js:892
 msgid "Portrait"
-msgstr "Stoječe"
+msgstr "Pokončno"
 
 #: packages/lib/models/Setting.js:893
 msgid "Landscape"
@@ -3910,9 +3901,9 @@ msgid ""
 "pem. Note that if you make changes to the TLS settings, you must save your "
 "changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
-"Comma-seperated seznami z potmi do map za nalaganje certifikatov, ali pot do "
-"posameznih certifikatnih datotek. Naprimer: /my/cert_dir, /other/custom.pem. "
-"Pomnite, da če naredite spremembo v vaših TLS nastavitvah, morate shraniti "
+"Z vejico ločeni seznami s potmi do map za nalaganje certifikatov, ali pot do "
+"posameznih certifikatnih datotek. Na primer: /my/cert_dir, /other/custom."
+"pem. Pozor! Če naredite spremembo v vaših TLS nastavitvah, morate shraniti "
 "vse spremembe preden kliknite na \"Preveri nastavitve sinhronizacije\"."
 
 #: packages/lib/models/Setting.js:958
@@ -3996,7 +3987,7 @@ msgstr "Sinhronizacija"
 
 #: packages/lib/models/Setting.js:1684
 msgid "Appearance"
-msgstr "Videz"
+msgstr "Izgled"
 
 #: packages/lib/models/Setting.js:1686
 msgid "Note"
@@ -4014,7 +4005,7 @@ msgstr "Aplikacija"
 
 #: packages/lib/models/Setting.js:1696
 msgid "Encryption"
-msgstr "Enkripcija"
+msgstr "Šifriranje"
 
 #: packages/lib/models/Setting.js:1698
 msgid "Web Clipper"
@@ -4022,7 +4013,7 @@ msgstr "Web Clipper"
 
 #: packages/lib/models/Setting.js:1700
 msgid "Keyboard Shortcuts"
-msgstr "Bližnjice tipkovnice"
+msgstr "Bližnjice na tipkovnici"
 
 #: packages/lib/models/Setting.js:1707
 msgid ""
@@ -4034,7 +4025,7 @@ msgid ""
 "formatting. It is indicated below which plugins are compatible or not with "
 "the WYSIWYG editor."
 msgstr ""
-"Te dodatki izboljšajo Markdown interpretiranje z dodatnimi posebnostimi. "
+"Ti dodatki izboljšajo Markdown interpretiranje z dodatnimi funkcijami. "
 "Prosim pomnite, da medtem ko so te posebnosti uporabne, niso standard "
 "Markdown in bodo zato delovale samo znotraj Joplin. Dodatno, nekatere izmed "
 "njih so *nekompatibilne* z WYSIWYG urejevalnikom. Če odprete beležko, ki "
@@ -4086,7 +4077,7 @@ msgid ""
 "Cannot refresh token: authentication data is missing. Starting the "
 "synchronisation again may fix the problem."
 msgstr ""
-"Ni možno osvežiti tokena: manjkajo podatki o avtentikaciji. Ponovno zaženite "
+"Ni možno osvežiti žetona: manjkajo podatki o avtentikaciji. Ponovno zaženite "
 "sinhronizacijo, da morda popravite težavo."
 
 #: packages/lib/services/KeymapService.js:273
@@ -4149,7 +4140,7 @@ msgstr "Predmeta \"%s\" ni bilo možno naložiti: %s"
 
 #: packages/lib/services/ReportService.js:179
 msgid "Items that cannot be decrypted"
-msgstr "Predmeti ne morejo biti dekodirani"
+msgstr "Predmeti ne morejo biti dešifrirani"
 
 #: packages/lib/services/ReportService.js:180
 msgid ""
@@ -4167,7 +4158,7 @@ msgstr "Priponke"
 
 #: packages/lib/services/ReportService.js:205
 msgid "Downloaded and decrypted"
-msgstr "Naloženo in dekodirano"
+msgstr "Naloženo in dešifrirano"
 
 #: packages/lib/services/ReportService.js:205
 #: packages/lib/services/ReportService.js:206
@@ -4179,7 +4170,7 @@ msgstr "%s: %d"
 
 #: packages/lib/services/ReportService.js:206
 msgid "Downloaded and encrypted"
-msgstr "Naloženo in enkriptirano"
+msgstr "Naloženo in šifrirano"
 
 #: packages/lib/services/ReportService.js:207
 msgid "Created locally"
@@ -4229,7 +4220,7 @@ msgstr "%s: %d beležke"
 
 #: packages/lib/services/ReportService.js:255
 msgid "Coming alarms"
-msgstr "Prihajajoči alarmi"
+msgstr "Prihajajoči opomniki"
 
 #: packages/lib/services/ReportService.js:259
 #, javascript-format
@@ -4364,14 +4355,13 @@ msgstr ""
 
 #: packages/server/dist/models/UserModel.js:199
 #: packages/server/dist/models/UserModel.js:208
-#, fuzzy
 msgid "attachment"
-msgstr "Priponke"
+msgstr "priponka"
 
 #: packages/server/dist/models/UserModel.js:199
 #, javascript-format
 msgid "Cannot save %s \"%s\" because it is larger than the allowed limit (%s)"
-msgstr ""
+msgstr "Ni mogoče shraniti %s \"%s\", ker je večje kot dovoljen limit (%s)"
 
 #: packages/server/dist/models/UserModel.js:208
 #, javascript-format
@@ -4379,6 +4369,8 @@ msgid ""
 "Cannot save %s \"%s\" because it would go over the total allowed size (%s) "
 "for this account"
 msgstr ""
+"Ni mogoče shraniti %s \"%s\", ker bi presegalo čez celotno dovoljeno "
+"velikost (%s) za ta račun"
 
 #, javascript-format
 #~ msgid "%s %s (%s)"
