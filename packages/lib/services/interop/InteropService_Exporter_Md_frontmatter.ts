@@ -25,7 +25,7 @@ function trimQuotes(rawOutput: string): string {
 	}).join('\n');
 }
 
-export const fieldOrder = ['title', 'updated', 'created', 'source', 'author', 'latitude', 'longitude', 'altitude', 'completed?', 'due', 'Tags'];
+export const fieldOrder = ['title', 'updated', 'created', 'source', 'author', 'latitude', 'longitude', 'altitude', 'completed?', 'due', 'tags'];
 
 export default class InteropService_Exporter_Md_frontmatter extends InteropService_Exporter_Md {
 
@@ -99,7 +99,7 @@ export default class InteropService_Exporter_Md_frontmatter extends InteropServi
 		// todo
 		if (note.is_todo) {
 			// boolean is not support by the yaml FAILSAFE_SCHEMA
-			md['completed?'] = note.todo_completed ? 'Yes' : 'No';
+			md['completed?'] = note.todo_completed ? 'yes' : 'no';
 		}
 		if (note.todo_due) { md['due'] = this.convertDate(note.todo_due); }
 
