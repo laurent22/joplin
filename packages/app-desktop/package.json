@@ -77,7 +77,10 @@
       "icon": "../../Assets/macOs.icns",
       "target": {
         "target": "default",
-        "arch": "universal"
+        "arch": [
+          "x64",
+          "arm64"
+        ]
       },
       "hardenedRuntime": true,
       "entitlements": "./build-mac/entitlements.mac.inherit.plist"
