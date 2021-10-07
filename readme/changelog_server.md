@@ -1,5 +1,11 @@
 # Joplin Server Changelog
 
+## [server-v2.5.2](https://github.com/laurent22/joplin/releases/tag/server-v2.5.2) - 2021-10-07T13:36:27Z
+
+- New: Add support for promotion codes (5b58811)
+- Improved: Sort flags by date (31efc9b)
+- Fixed: Fixed links in published notes (#5507)
+
 ## [server-v2.5.1](https://github.com/laurent22/joplin/releases/tag/server-v2.5.1) - 2021-09-29T15:52:34Z
 
 - New: Add support for events and use them to track background tasks (79d1ad7)
