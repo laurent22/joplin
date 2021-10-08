@@ -1,5 +1,9 @@
 # Joplin changelog
 
+## [v2.5.1](https://github.com/laurent22/joplin/releases/tag/v2.5.1) (Pre-release) - 2021-10-02T09:51:58Z
+
+- Improved: Upgrade Electron from v10 to v14 (4a7746b)
+
 ## [v2.4.9](https://github.com/laurent22/joplin/releases/tag/v2.4.9) - 2021-09-29T19:08:58Z
 
 - Improved: Allow importing certain corrupted ENEX files (f144dae)
