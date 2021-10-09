@@ -616,6 +616,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 			const result = await props.markupToHtml(props.contentMarkupLanguage, bodyToRender, markupRenderOptions({
 				resourceInfos: props.resourceInfos,
 				contentMaxWidth: props.contentMaxWidth,
+				mapsToLine: true,
 			}));
 
 			if (cancelled) return;

@@ -1,5 +1,8 @@
 export default {
-	plugin: (markdownIt: any) => {
+	plugin: (markdownIt: any, params: any) => {
+
+		if (!params.mapsToLine) return;
+
 		const allowed_levels = {
 			paragraph_open: 0,
 			heading_open: 0,

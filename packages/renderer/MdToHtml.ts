@@ -25,6 +25,7 @@ export interface RenderOptions {
 	pdfViewerEnabled?: boolean;
 	codeHighlightCacheKey?: string;
 	plainResourceRendering?: boolean;
+	mapsToLine?: boolean;
 }
 
 interface RendererRule {
