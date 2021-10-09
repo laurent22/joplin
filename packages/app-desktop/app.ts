@@ -56,10 +56,10 @@ const commands = mainScreenCommands
 const globalCommands = appCommands.concat(libCommands);
 
 import editorCommandDeclarations from './gui/NoteEditor/editorCommandDeclarations';
+import PerFolderSortOrderService from './services/sortOrder/PerFolderSortOrderService';
 import ShareService from '@joplin/lib/services/share/ShareService';
 import checkForUpdates from './checkForUpdates';
 import { AppState } from './app.reducer';
-import PerFolderSortOrderService from './services/sortOrder/PerFolderSortOrderService';
 
 const pluginClasses = [
 	require('./plugins/GotoAnything').default,
