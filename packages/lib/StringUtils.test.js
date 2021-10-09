@@ -53,4 +53,16 @@ describe('StringUtils', function() {
 		});
 	}));
 
+	it('should split the command batch by newlines not inside quotes', (async () => {
+		const commands = [
+			'command1 arg1 \'arg2\ncontinue\'',
+			'command2',
+			'command3 \'arg1\ncontinue\ncontinue\' arg2 arg3'];
+		const split = StringUtils.splitCommandBatch(commands.join('\n'));
+
+		for (const i in commands) {
+			expect(split[i]).toEqual(commands[i]);
+		}
+	}));
+
 });

@@ -9,7 +9,7 @@ const Tag = require('@joplin/lib/models/Tag').default;
 const Setting = require('@joplin/lib/models/Setting').default;
 const { reg } = require('@joplin/lib/registry.js');
 const { fileExtension } = require('@joplin/lib/path-utils');
-const { splitCommandString } = require('@joplin/lib/string-utils');
+const { splitCommandString, splitCommandBatch } = require('@joplin/lib/string-utils');
 const { _ } = require('@joplin/lib/locale');
 const fs = require('fs-extra');
 const { cliUtils } = require('./cli-utils.js');
@@ -390,26 +390,7 @@ class Application extends BaseApplication {
 	async commandList(argv) {
 		if (argv.length && argv[0] === 'batch') {
 			const commands = [];
-			let commandBatch = (await fs.readFile(argv[1], 'utf-8'));
-			let commandLines = [''];
-
-			const append = function(text1, text2) {
-				text1[text1.length - 1] = text1[text1.length - 1] + text2[0];
-				return text1.concat(text2.slice(1));
-			};
-			while (true) {
-				const regex = /((?<!\\)(?:\\\\)*')(.*?)((?<!\\)(?:\\\\)*')/s;
-				// Matches any string, starting and ending non-escaped single quote
-				// or double quote. (Containing newlines is allowed.)
-				const position = commandBatch.search(regex);
-				const quoted = commandBatch.match(regex);
-				if (position < 0) break;
-
-				commandLines = append(commandLines, commandBatch.slice(0, position).split('\n'));
-				commandLines = append(commandLines, quoted.slice(0, 1));
-				commandBatch = commandBatch.slice(position + quoted[0].length);
-			}
-			commandLines = append(commandLines, commandBatch.split('\n'));
+			const commandLines = splitCommandBatch(await fs.readFile(argv[1], 'utf-8'));
 
 			for (const commandLine of commandLines) {
 				if (!commandLine.trim()) continue;

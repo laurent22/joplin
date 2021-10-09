@@ -210,6 +210,42 @@ function splitCommandString(command, options = null) {
 	return args;
 }
 
+function splitCommandBatch(commandBatch) {
+	let remaining = commandBatch;
+	let commandLines = [''];
+
+	const append = function(text1, text2) {
+		text1[text1.length - 1] = text1[text1.length - 1] + text2[0];
+		return text1.concat(text2.slice(1));
+	};
+	const regex = /((?<!\\)(?:\\\\)*')(.*?)((?<!\\)(?:\\\\)*')|((?<!\\)(?:\\\\)*")(.*?)((?<!\\)(?:\\\\)*")/s;
+	// Matches any string, starting and ending with non-escaped single quotes
+	// or double quotes. (Newlines are allowed between two quotes.)
+	//		/
+	// 		((?<!\\)(?:\\\\)*') Matches any single quote, with even number of preceeding bashslashes if exists.
+	// 		(.*?)				Matches any string as short as possible.
+	// 		((?<!\\)(?:\\\\)*') Matches any single quote, with even number of preceeding bashslashes if exists.
+	//		|					OR
+	// 		((?<!\\)(?:\\\\)*") Matches any double quote, with even number of preceeding bashslashes if exists.
+	// 		(.*?)				Matches any string as short as possible.
+	// 		((?<!\\)(?:\\\\)*") Matches any double quote, with even number of preceeding bashslashes if exists.
+	//		/s					Flag s: Dot matches newline.
+
+	let nextQuotedStr = remaining.match(regex);
+	let position = remaining.search(regex);
+	while (position >= 0) {
+		commandLines = append(commandLines, remaining.slice(0, position).split('\n'));
+		commandLines = append(commandLines, [nextQuotedStr[0]]);
+		remaining = remaining.slice(position + nextQuotedStr[0].length);
+
+		nextQuotedStr = remaining.match(regex);
+		position = remaining.search(regex);
+	}
+	commandLines = append(commandLines, remaining.split('\n'));
+
+	return commandLines;
+}
+
 function padLeft(string, length, padString) {
 	if (!string) return '';
 
@@ -307,4 +343,4 @@ function scriptType(s) {
 	return 'en';
 }
 
-module.exports = Object.assign({ formatCssSize, camelCaseToDash, removeDiacritics, substrWithEllipsis, nextWhitespaceIndex, escapeFilename, wrap, splitCommandString, padLeft, toTitleCase, urlDecode, escapeHtml, surroundKeywords, scriptType, commandArgumentsToString }, stringUtilsCommon);
+module.exports = Object.assign({ formatCssSize, camelCaseToDash, removeDiacritics, substrWithEllipsis, nextWhitespaceIndex, escapeFilename, wrap, splitCommandString, splitCommandBatch, padLeft, toTitleCase, urlDecode, escapeHtml, surroundKeywords, scriptType, commandArgumentsToString }, stringUtilsCommon);
