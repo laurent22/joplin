@@ -1,8 +1,13 @@
 import { rtrimSlashes } from '@joplin/lib/path-utils';
 import { Config, DatabaseConfig, DatabaseConfigClient, Env, MailerConfig, RouteType, StripeConfig } from './utils/types';
 import * as pathUtils from 'path';
-import { readFile } from 'fs-extra';
 import { loadStripeConfig, StripePublicConfig } from '@joplin/lib/utils/joplinCloud';
+
+interface PackageJson {
+	version: string;
+}
+
+const packageJson: PackageJson = require(`${__dirname}/packageInfo.js`);
 
 export interface EnvVariables {
 	APP_NAME?: string;
@@ -148,25 +153,13 @@ function baseUrlFromEnv(env: any, appPort: number): string {
 	}
 }
 
-interface PackageJson {
-	version: string;
-}
-
-async function readPackageJson(filePath: string): Promise<PackageJson> {
-	const text = await readFile(filePath, 'utf8');
-	return JSON.parse(text);
-}
-
 let config_: Config = null;
 
 export async function initConfig(envType: Env, env: EnvVariables, overrides: any = null) {
 	runningInDocker_ = !!env.RUNNING_IN_DOCKER;
 
 	const rootDir = pathUtils.dirname(__dirname);
-
-	const packageJson = await readPackageJson(`${rootDir}/package.json`);
 	const stripePublicConfig = loadStripeConfig(envType === Env.BuildTypes ? Env.Dev : envType, `${rootDir}/stripeConfig.json`);
-
 	const appName = env.APP_NAME || 'Joplin Server';
 	const viewDir = `${rootDir}/src/views`;
 	const appPort = env.APP_PORT ? Number(env.APP_PORT) : 22300;

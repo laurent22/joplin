@@ -5,6 +5,8 @@
   "scripts": {
     "start-dev": "nodemon --config nodemon.json --ext ts,js,mustache,css,tsx dist/app.js --env dev",
     "start-dev-no-watch": "node dist/app.js --env dev",
+    "build": "gulp build",
+    "postinstall": "npm run build",
     "devCreateDb": "node dist/app.js --env dev --create-db",
     "devDropTables": "node dist/app.js --env dev --drop-tables",
     "devDropDb": "node dist/app.js --env dev --drop-db",
@@ -65,6 +67,7 @@
     "@types/nodemailer": "^6.4.1",
     "@types/yargs": "^13.0.2",
     "@types/zxcvbn": "^4.4.1",
+    "gulp": "^4.0.2",
     "jest": "^26.6.3",
     "jsdom": "^16.4.0",
     "node-mocks-http": "^1.10.0",
