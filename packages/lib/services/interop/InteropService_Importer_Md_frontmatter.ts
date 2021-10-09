@@ -6,6 +6,11 @@ import { NoteEntity } from '../database/types';
 
 import * as yaml from 'js-yaml';
 
+interface ParsedMeta {
+	metadata: NoteEntity;
+	tags: string[];
+}
+
 function isTruthy(str: string): boolean {
 	return str.toLowerCase() in ['true', 'yes'];
 }
@@ -70,21 +75,21 @@ export default class InteropService_Importer_Md_frontmatter extends InteropServi
 		return { header, body };
 	}
 
-	private toLowerCase(obj: any) {
-		const newObj: any = {};
-		for (const key in obj) {
+	private toLowerCase(obj: Record<string, any>): Record<string, any> {
+		const newObj: Record<string, any> = {};
+		for (const key of Object.keys(obj)) {
 			newObj[key.toLowerCase()] = obj[key];
 		}
 
 		return newObj;
 	}
 
-	private parseYamlNote(note: string) {
+	private parseYamlNote(note: string): ParsedMeta {
 		if (!note.startsWith('---')) return { metadata: { body: note }, tags: [] };
 
 		const { header, body } = this.getNoteHeader(note);
 
-		const md: any = this.toLowerCase(yaml.load(header, { schema: yaml.FAILSAFE_SCHEMA }));
+		const md: Record<string, any> = this.toLowerCase(yaml.load(header, { schema: yaml.FAILSAFE_SCHEMA }));
 		const metadata: NoteEntity = {
 			title: md['title'] || '',
 			source_url: md['source'] || '',

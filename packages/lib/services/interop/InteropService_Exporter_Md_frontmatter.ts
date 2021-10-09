@@ -9,6 +9,16 @@ import { MdFrontMatterExport } from './types';
 
 import * as yaml from 'js-yaml';
 
+interface NoteTagContext {
+	noteTags: Record<string, string[]>;
+}
+
+interface TagContext {
+	tagTitles: Record<string, string>;
+}
+
+interface FrontMatterContext extends NoteTagContext, TagContext {}
+
 // There is a special case (negative numbers) where the yaml library will force quotations
 // These need to be stripped
 function trimQuotes(rawOutput: string): string {
@@ -34,7 +44,7 @@ export default class InteropService_Exporter_Md_frontmatter extends InteropServi
 
 		if (itemType === BaseModel.TYPE_NOTE_TAG) {
 			// Get tag list for each note
-			const context: any = {
+			const context: NoteTagContext = {
 				noteTags: {},
 			};
 			for (let i = 0; i < itemsToExport.length; i++) {
@@ -54,7 +64,7 @@ export default class InteropService_Exporter_Md_frontmatter extends InteropServi
 			this.updateContext(context);
 		} else if (itemType === BaseModel.TYPE_TAG) {
 			// Map tag ID to title
-			const context: any = {
+			const context: TagContext = {
 				tagTitles: {},
 			};
 			for (let i = 0; i < itemsToExport.length; i++) {
@@ -90,6 +100,10 @@ export default class InteropService_Exporter_Md_frontmatter extends InteropServi
 		if (note.author) { md['author'] = note.author; }
 
 		// locations
+		// non-strict inequality is used here to interpret the location strings
+		// as numbers i.e 0.000000 is the same as 0.
+		// This is necessary because these fields are officially numbers, but often
+		// contain strings.
 		if (note.latitude != 0 || note.longitude != 0 || note.altitude != 0) {
 			md['latitude'] = note.latitude;
 			md['longitude'] = note.longitude;
@@ -108,7 +122,7 @@ export default class InteropService_Exporter_Md_frontmatter extends InteropServi
 		if (note.user_created_time) { md['created'] = this.convertDate(note.user_created_time); }
 
 		// tags
-		const context = this.context();
+		const context: FrontMatterContext = this.context();
 		if (context.noteTags[note.id]) {
 			const tagIds = context.noteTags[note.id];
 			const tags = tagIds.map((id: string) => context.tagTitles[id]).sort();
@@ -132,7 +146,7 @@ export default class InteropService_Exporter_Md_frontmatter extends InteropServi
 	}
 
 
-	public async getNoteExportContent_(modNote: NoteEntity) {
+	protected async getNoteExportContent_(modNote: NoteEntity) {
 		const noteContent = await Note.replaceResourceInternalToExternalLinks(await Note.serialize(modNote, ['body']));
 		const metadata = this.extractMetadata(modNote);
 		return `---\n${metadata}---\n\n${noteContent}`;
