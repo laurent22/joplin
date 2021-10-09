@@ -201,12 +201,12 @@
 					callback(cause, height, heightChanged);
 				}
 			};
-			// 'resized' means DOM Layout change and Window resize event
+			// 'resized' means DOM Layout change or Window resize event
 			let resizeObserver = new ResizeObserver(() => fn('resized'));
 			let mutationObserver = new MutationObserver(entries => {
 				const e = entries[0];
-				e.removedNodes.forEach(n => resizeObserver.unobserve(n));
-				e.addedNodes.forEach(n => resizeObserver.observe(n));
+				e.removedNodes.forEach(n => n instanceof Element && resizeObserver.unobserve(n));
+				e.addedNodes.forEach(n => n instanceof Element && resizeObserver.observe(n));
 				if (e.removedNodes.length + e.addedNodes.length) fn('dom-changed');
 			});
 			mutationObserver.observe(contentElement, { childList: true });

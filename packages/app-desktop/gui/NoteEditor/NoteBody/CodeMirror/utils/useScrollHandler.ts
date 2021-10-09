@@ -35,59 +35,15 @@ export default function useScrollHandler(editorRef: any, webviewRef: any, onScro
 		}
 	}, [scheduleOnScroll]);
 
-	const translateScrollPercent_ = (percent: number, editorToViewer: boolean) => {
-		// If the input is out of (0,1) or not number, it is not translated.
-		if (!(0 < percent && percent < 1)) return percent;
-		const map: SyncScrollMap = webviewRef.current?.wrappedInstance.getSyncScrollMap();
-		const cm = editorRef.current;
-		if (!map || map.line.length <= 2 || !cm) return percent; // No translation
-		const lineCount = cm.lineCount();
-		if (map.line[map.line.length - 2] >= lineCount) {
-			// Discarded a obsolete map and use no translation.
-			webviewRef.current.wrappedInstance.refreshSyncScrollMap();
-			return percent;
-		}
-		const info = cm.getScrollInfo();
-		const height = Math.max(1, info.height - info.clientHeight);
-		let values = map.percent, target = percent;
-		if (editorToViewer) {
-			const top = percent * height;
-			const line = cm.lineAtHeight(top, 'local');
-			values = map.line;
-			target = line;
-		}
-		// Binary search (rightmost): finds where map[r-1][field] <= target < map[r][field]
-		let l = 1, r = values.length - 1;
-		while (l < r) {
-			const m = Math.floor(l + (r - l) / 2);
-			if (target < values[m]) r = m; else l = m + 1;
-		}
-		const lineU = map.line[r - 1];
-		const lineL = Math.min(lineCount, map.line[r]);
-		const ePercentU = r == 1 ? 0 : Math.min(1, cm.heightAtLine(lineU, 'local') / height);
-		const ePercentL = Math.min(1, cm.heightAtLine(lineL, 'local') / height);
-		const vPercentU = map.percent[r - 1];
-		const vPercentL = ePercentL == 1 ? 1 : map.percent[r];
-		let result;
-		if (editorToViewer) {
-			const linInterp = (percent - ePercentU) / (ePercentL - ePercentU);
-			result = vPercentU + (vPercentL - vPercentU) * linInterp;
-		} else {
-			const linInterp = (percent - vPercentU) / (vPercentL - vPercentU);
-			result = ePercentU + (ePercentL - ePercentU) * linInterp;
-		}
-		return Math.max(0, Math.min(1, result));
-	};
-
-	const translateScrollPercentToEditor = (viewerPercent: number) => {
-		const editorPercent = translateScrollPercent_(viewerPercent, false);
+	const translateScrollPercentToEditor = useCallback((viewerPercent: number) => {
+		const editorPercent = translateScrollPercent_(editorRef, webviewRef, viewerPercent, false);
 		return editorPercent;
-	};
+	}, []);
 
-	const translateScrollPercentToViewer = (editorPercent: number) => {
-		const viewerPercent = translateScrollPercent_(editorPercent, true);
+	const translateScrollPercentToViewer = useCallback((editorPercent: number) => {
+		const viewerPercent = translateScrollPercent_(editorRef, webviewRef, editorPercent, true);
 		return viewerPercent;
-	};
+	}, []);
 
 	const editor_scroll = useCallback(() => {
 		if (ignoreNextEditorScrollEvent_.current) {
@@ -119,3 +75,47 @@ export default function useScrollHandler(editorRef: any, webviewRef: any, onScro
 		translateScrollPercentToEditor, translateScrollPercentToViewer,
 	};
 }
+
+const translateScrollPercent_ = (editorRef: any, webviewRef: any, percent: number, editorToViewer: boolean) => {
+	// If the input is out of (0,1) or not number, it is not translated.
+	if (!(0 < percent && percent < 1)) return percent;
+	const map: SyncScrollMap = webviewRef.current?.wrappedInstance.getSyncScrollMap();
+	const cm = editorRef.current;
+	if (!map || map.line.length <= 2 || !cm) return percent; // No translation
+	const lineCount = cm.lineCount();
+	if (map.line[map.line.length - 2] >= lineCount) {
+		// Discarded a obsolete map and use no translation.
+		webviewRef.current.wrappedInstance.refreshSyncScrollMap();
+		return percent;
+	}
+	const info = cm.getScrollInfo();
+	const height = Math.max(1, info.height - info.clientHeight);
+	let values = map.percent, target = percent;
+	if (editorToViewer) {
+		const top = percent * height;
+		const line = cm.lineAtHeight(top, 'local');
+		values = map.line;
+		target = line;
+	}
+	// Binary search (rightmost): finds where map[r-1][field] <= target < map[r][field]
+	let l = 1, r = values.length - 1;
+	while (l < r) {
+		const m = Math.floor(l + (r - l) / 2);
+		if (target < values[m]) r = m; else l = m + 1;
+	}
+	const lineU = map.line[r - 1];
+	const lineL = Math.min(lineCount, map.line[r]);
+	const ePercentU = r == 1 ? 0 : Math.min(1, cm.heightAtLine(lineU, 'local') / height);
+	const ePercentL = Math.min(1, cm.heightAtLine(lineL, 'local') / height);
+	const vPercentU = map.percent[r - 1];
+	const vPercentL = ePercentL == 1 ? 1 : map.percent[r];
+	let result;
+	if (editorToViewer) {
+		const linInterp = (percent - ePercentU) / (ePercentL - ePercentU);
+		result = vPercentU + (vPercentL - vPercentU) * linInterp;
+	} else {
+		const linInterp = (percent - vPercentU) / (vPercentL - vPercentU);
+		result = ePercentU + (ePercentL - ePercentU) * linInterp;
+	}
+	return Math.max(0, Math.min(1, result));
+};
