@@ -549,6 +549,22 @@ export default class ItemModel extends BaseModel<Item> {
 		}
 	}
 
+	public async makeTestItem(userId: Uuid, num: number) {
+		return this.saveForUser(userId, {
+			name: `${num.toString().padStart(32, '0')}.md`,
+		});
+	}
+
+	public async makeTestItems(userId: Uuid, count: number) {
+		await this.withTransaction(async () => {
+			for (let i = 1; i <= count; i++) {
+				await this.saveForUser(userId, {
+					name: `${i.toString().padStart(32, '0')}.md`,
+				});
+			}
+		}, 'ItemModel::makeTestItems');
+	}
+
 	public async saveForUser(userId: Uuid, item: Item, options: SaveOptions = {}): Promise<Item> {
 		if (!userId) throw new Error('userId is required');
 
