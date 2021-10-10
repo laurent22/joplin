@@ -77,6 +77,13 @@ fi
 if [ "$IS_PULL_REQUEST" == "1" ]; then
 	echo "Step: Running linter..."
 
+	# Need this because we're getting this error:
+	#
+	# @joplin/lib: FATAL ERROR: Ineffective mark-compacts near heap limit
+	# Allocation failed - JavaScript heap out of memory
+	#
+	# https://stackoverflow.com/questions/38558989
+	export NODE_OPTIONS="--max-old-space-size=4096"
 	npm run linter-ci ./
 	testResult=$?
 	if [ $testResult -ne 0 ]; then
