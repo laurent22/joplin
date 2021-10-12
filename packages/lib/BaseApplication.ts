@@ -54,6 +54,7 @@ import { loadMasterKeysFromSettings, migrateMasterPassword } from './services/e2
 import SyncTargetNone from './SyncTargetNone';
 import { setRSA } from './services/e2ee/ppk';
 import RSA from './services/e2ee/RSA.node';
+const { rotateLogFile } = require('./rotate-log-files');
 
 const appLogger: LoggerWrapper = Logger.create('App');
 
@@ -749,6 +750,7 @@ export default class BaseApplication {
 		const globalLogger = new Logger();
 		globalLogger.addTarget(TargetType.File, { path: `${profileDir}/log.txt` });
 		if (Setting.value('appType') === 'desktop') {
+			rotateLogFile(profileDir);
 			globalLogger.addTarget(TargetType.Console);
 		}
 		globalLogger.setLevel(initArgs.logLevel);
