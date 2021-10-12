@@ -1,6 +1,6 @@
 import { SubPath } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
-import { RouteType } from '../../utils/types';
+import { Env, RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
 import { bodyFields } from '../../utils/requestUtils';
 import globalConfig from '../../config';
@@ -197,32 +197,6 @@ export const postHandlers: PostHandlers = {
 
 		return { sessionId: session.id };
 	},
-
-	// # How to test the complete workflow locally
-	//
-	// - In website/build.ts, set the env to "dev", then build the website - `npm run watchWebsite`
-	// - Start the Stripe CLI tool: `stripe listen --forward-to http://joplincloud.local:22300/stripe/webhook`
-	// - Copy the webhook secret, and paste it in joplin-credentials/server.env (under STRIPE_WEBHOOK_SECRET)
-	// - Start the local Joplin Server, `npm run start-dev`, running under http://joplincloud.local:22300
-	// - Start the workflow from http://localhost:8077/plans/
-	// - The local website often is not configured to send email, but you can see them in the database, in the "emails" table.
-	//
-	// # Simplified workflow
-	//
-	// To test without running the main website, use http://joplincloud.local:22300/stripe/checkoutTest
-	//
-	// # Stripe config
-	//
-	// - The public config is under packages/server/stripeConfig.json
-	// - The private config is in the server .env file
-	//
-	// # Failed Stripe cli login
-	//
-	// If the tool show this error, with code "api_key_expired":
-	//
-	// > FATAL Error while authenticating with Stripe: Authorization failed
-	//
-	// Need to logout and login again to refresh the CLI token - `stripe logout && stripe login`
 
 	webhook: async (stripe: Stripe, _path: SubPath, ctx: AppContext, event: Stripe.Event = null, logErrors: boolean = true) => {
 		event = event ? event : await stripeEvent(stripe, ctx.req);
@@ -425,6 +399,8 @@ const getHandlers: Record<string, StripeRouteHandler> = {
 	},
 
 	checkoutTest: async (_stripe: Stripe, _path: SubPath, ctx: AppContext) => {
+		if (globalConfig().env === Env.Prod) throw new ErrorForbidden();
+
 		const basicPrice = findPrice(stripeConfig().prices, { accountType: 1, period: PricePeriod.Monthly });
 		const proPrice = findPrice(stripeConfig().prices, { accountType: 2, period: PricePeriod.Monthly });
 
