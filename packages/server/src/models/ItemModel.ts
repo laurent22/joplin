@@ -7,6 +7,10 @@ import { ApiError, ErrorForbidden, ErrorUnprocessableEntity } from '../utils/err
 import { Knex } from 'knex';
 import { ChangePreviousItem } from './ChangeModel';
 import { unique } from '../utils/array';
+import ContentDriverBase from './itemModel/ContentDriverBase';
+import { DbConnection } from '../db';
+import { Config } from '../utils/types';
+import { NewModelFactoryHandler } from './factory';
 
 const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
 
@@ -38,9 +42,22 @@ export interface ItemSaveOption extends SaveOptions {
 	shareId?: Uuid;
 }
 
+export interface ItemLoadOptions extends LoadOptions {
+	withContent?: boolean;
+}
+
 export default class ItemModel extends BaseModel<Item> {
 
 	private updatingTotalSizes_: boolean = false;
+	private contentDriver_: ContentDriverBase = null;
+
+	public constructor(db: DbConnection, modelFactory: NewModelFactoryHandler, contentDriver: ContentDriverBase, config: Config) {
+		super(db, modelFactory, config);
+
+		if (!contentDriver) throw new Error('contentDriver is required');
+
+		this.contentDriver_ = contentDriver;
+	}
 
 	protected get tableName(): string {
 		return 'items';
@@ -106,62 +123,83 @@ export default class ItemModel extends BaseModel<Item> {
 		return path.replace(extractNameRegex, '$1');
 	}
 
-	public byShareIdQuery(shareId: Uuid, options: LoadOptions = {}): Knex.QueryBuilder {
+	public byShareIdQuery(shareId: Uuid, options: ItemLoadOptions = {}): Knex.QueryBuilder {
 		return this
 			.db('items')
 			.select(this.selectFields(options, null, 'items'))
 			.where('jop_share_id', '=', shareId);
 	}
 
-	public async byShareId(shareId: Uuid, options: LoadOptions = {}): Promise<Item[]> {
+	public async byShareId(shareId: Uuid, options: ItemLoadOptions = {}): Promise<Item[]> {
 		const query = this.byShareIdQuery(shareId, options);
 		return await query;
 	}
 
-	public async loadByJopIds(userId: Uuid | Uuid[], jopIds: string[], options: LoadOptions = {}): Promise<Item[]> {
+	public async loadByJopIds(userId: Uuid | Uuid[], jopIds: string[], options: ItemLoadOptions = {}): Promise<Item[]> {
 		if (!jopIds.length) return [];
 
 		const userIds = Array.isArray(userId) ? userId : [userId];
 		if (!userIds.length) return [];
 
-		return this
+		const rows: Item[] = await this
 			.db('user_items')
 			.leftJoin('items', 'items.id', 'user_items.item_id')
 			.distinct(this.selectFields(options, null, 'items'))
 			.whereIn('user_items.user_id', userIds)
 			.whereIn('jop_id', jopIds);
+
+		if (options.withContent) {
+			for (const row of rows) {
+				row.content = await this.contentDriver_.read(row.id);
+			}
+		}
+
+		return rows;
 	}
 
-	public async loadByJopId(userId: Uuid, jopId: string, options: LoadOptions = {}): Promise<Item> {
+	public async loadByJopId(userId: Uuid, jopId: string, options: ItemLoadOptions = {}): Promise<Item> {
 		const items = await this.loadByJopIds(userId, [jopId], options);
 		return items.length ? items[0] : null;
 	}
 
-	public async loadByNames(userId: Uuid | Uuid[], names: string[], options: LoadOptions = {}): Promise<Item[]> {
+	public async loadByNames(userId: Uuid | Uuid[], names: string[], options: ItemLoadOptions = {}): Promise<Item[]> {
 		if (!names.length) return [];
 
 		const userIds = Array.isArray(userId) ? userId : [userId];
 
-		return this
+		const rows: Item[] = await this
 			.db('user_items')
 			.leftJoin('items', 'items.id', 'user_items.item_id')
 			.distinct(this.selectFields(options, null, 'items'))
 			.whereIn('user_items.user_id', userIds)
 			.whereIn('name', names);
+
+		if (options.withContent) {
+			for (const row of rows) {
+				row.content = await this.contentDriver_.read(row.id);
+			}
+		}
+
+		return rows;
 	}
 
-	public async loadByName(userId: Uuid, name: string, options: LoadOptions = {}): Promise<Item> {
+	public async loadByName(userId: Uuid, name: string, options: ItemLoadOptions = {}): Promise<Item> {
 		const items = await this.loadByNames(userId, [name], options);
 		return items.length ? items[0] : null;
 	}
 
-	public async loadWithContent(id: Uuid, options: LoadOptions = {}): Promise<Item> {
-		return this
-			.db('user_items')
-			.leftJoin('items', 'items.id', 'user_items.item_id')
-			.select(this.selectFields(options, ['*'], 'items'))
-			.where('items.id', '=', id)
-			.first();
+	public async loadWithContent(id: Uuid, options: ItemLoadOptions = {}): Promise<Item> {
+		const content = await this.contentDriver_.read(id);
+
+		return {
+			...await this
+				.db('user_items')
+				.leftJoin('items', 'items.id', 'user_items.item_id')
+				.select(this.selectFields(options, ['*'], 'items'))
+				.where('items.id', '=', id)
+				.first(),
+			content,
+		};
 	}
 
 	public async loadAsSerializedJoplinItem(id: Uuid): Promise<string> {
@@ -349,10 +387,17 @@ export default class ItemModel extends BaseModel<Item> {
 					continue;
 				}
 
-				const itemToSave = o.item;
+				const itemToSave = { ...o.item };
 
 				try {
+					const content = itemToSave.content;
+					delete itemToSave.content;
+
+					itemToSave.content_size = content ? content.byteLength : 0;
+
 					const savedItem = await this.saveForUser(user.id, itemToSave);
+
+					await this.contentDriver_.write(savedItem.id, content);
 
 					if (o.isNote) {
 						await this.models().itemResource().deleteByItemId(savedItem.id);
@@ -390,7 +435,7 @@ export default class ItemModel extends BaseModel<Item> {
 	}
 
 
-	private childrenQuery(userId: Uuid, pathQuery: string = '', count: boolean = false, options: LoadOptions = {}): Knex.QueryBuilder {
+	private childrenQuery(userId: Uuid, pathQuery: string = '', count: boolean = false, options: ItemLoadOptions = {}): Knex.QueryBuilder {
 		const query = this
 			.db('user_items')
 			.leftJoin('items', 'user_items.item_id', 'items.id')
@@ -420,7 +465,7 @@ export default class ItemModel extends BaseModel<Item> {
 		return `${this.baseUrl}/items/${itemId}/content`;
 	}
 
-	public async children(userId: Uuid, pathQuery: string = '', pagination: Pagination = null, options: LoadOptions = {}): Promise<PaginatedItems> {
+	public async children(userId: Uuid, pathQuery: string = '', pagination: Pagination = null, options: ItemLoadOptions = {}): Promise<PaginatedItems> {
 		pagination = pagination || defaultPagination();
 		const query = this.childrenQuery(userId, pathQuery, false, options);
 		return paginateDbQuery(query, pagination, 'items');
@@ -532,6 +577,7 @@ export default class ItemModel extends BaseModel<Item> {
 			await this.models().share().delete(shares.map(s => s.id));
 			await this.models().userItem().deleteByItemIds(ids);
 			await this.models().itemResource().deleteByItemIds(ids);
+			await this.contentDriver_.delete(ids);
 
 			await super.delete(ids, options);
 		}, 'ItemModel::delete');
@@ -570,10 +616,6 @@ export default class ItemModel extends BaseModel<Item> {
 
 		item = { ... item };
 		const isNew = await this.isNew(item, options);
-
-		if (item.content) {
-			item.content_size = item.content.byteLength;
-		}
 
 		let previousItem: ChangePreviousItem = null;
 

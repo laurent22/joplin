@@ -141,7 +141,7 @@ async function noteLinkedItemInfos(userId: Uuid, itemModel: ItemModel, note: Not
 	const output: LinkedItemInfos = {};
 
 	for (const jopId of jopIds) {
-		const item = await itemModel.loadByJopId(userId, jopId, { fields: ['*'] });
+		const item = await itemModel.loadByJopId(userId, jopId, { fields: ['*'], withContent: true });
 		if (!item) continue;
 
 		output[jopId] = {
@@ -265,7 +265,7 @@ export async function renderItem(userId: Uuid, item: Item, share: Share, query: 
 	};
 
 	if (query.resource_id) {
-		const resourceItem = await models_.item().loadByName(userId, resourceBlobPath(query.resource_id), { fields: ['*'] });
+		const resourceItem = await models_.item().loadByName(userId, resourceBlobPath(query.resource_id), { fields: ['*'], withContent: true });
 		fileToRender.item = resourceItem;
 		fileToRender.content = resourceItem.content;
 		fileToRender.jopItemId = query.resource_id;

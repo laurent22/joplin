@@ -23,6 +23,7 @@ import MustacheService from '../../services/MustacheService';
 import uuidgen from '../uuidgen';
 import { createCsrfToken } from '../csrf';
 import { cookieSet } from '../cookies';
+import ContentDriverMemory from '../../models/itemModel/ContentDriverMemory';
 
 // Takes into account the fact that this file will be inside the /dist directory
 // when it runs.
@@ -36,10 +37,14 @@ export function randomHash(): string {
 	return crypto.createHash('md5').update(`${Date.now()}-${Math.random()}`).digest('hex');
 }
 
+export function tempDirPath(): string {
+	return `${packageRootDir}/temp/${randomHash()}`;
+}
+
 let tempDir_: string = null;
 export async function tempDir(): Promise<string> {
 	if (tempDir_) return tempDir_;
-	tempDir_ = `${packageRootDir}/temp/${randomHash()}`;
+	tempDir_ = tempDirPath();
 	await fs.mkdirp(tempDir_);
 	return tempDir_;
 }
@@ -189,7 +194,7 @@ export async function koaAppContext(options: AppContextTestOptions = null): Prom
 
 	const appLogger = Logger.create('AppTest');
 
-	const baseAppContext = await setupAppContext({} as any, Env.Dev, db_, () => appLogger);
+	const baseAppContext = await setupAppContext({} as any, Env.Dev, db_, () => appLogger, { contentDriver: new ContentDriverMemory() });
 
 	// Set type to "any" because the Koa context has many properties and we
 	// don't need to mock all of them.
@@ -241,8 +246,10 @@ export function db() {
 // 	return 'http://localhost:22300';
 // }
 
+const contentDriverMemory = new ContentDriverMemory();
+
 export function models() {
-	return modelFactory(db(), config());
+	return modelFactory(db(), contentDriverMemory, config());
 }
 
 export function parseHtml(html: string): Document {

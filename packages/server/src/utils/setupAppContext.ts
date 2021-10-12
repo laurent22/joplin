@@ -9,6 +9,11 @@ import { Services } from '../services/types';
 import EmailService from '../services/EmailService';
 import MustacheService from '../services/MustacheService';
 import setupTaskService from './setupTaskService';
+import ContentDriverBase from '../models/itemModel/ContentDriverBase';
+
+interface Options {
+	contentDriver: ContentDriverBase;
+}
 
 async function setupServices(env: Env, models: Models, config: Config): Promise<Services> {
 	const output: Services = {
@@ -23,8 +28,8 @@ async function setupServices(env: Env, models: Models, config: Config): Promise<
 	return output;
 }
 
-export default async function(appContext: AppContext, env: Env, dbConnection: DbConnection, appLogger: ()=> LoggerWrapper): Promise<AppContext> {
-	const models = newModelFactory(dbConnection, config());
+export default async function(appContext: AppContext, env: Env, dbConnection: DbConnection, appLogger: ()=> LoggerWrapper, options: Options): Promise<AppContext> {
+	const models = newModelFactory(dbConnection, options.contentDriver, config());
 
 	// The joplinBase object is immutable because it is shared by all requests.
 	// Then a "joplin" context property is created from it per request, which
