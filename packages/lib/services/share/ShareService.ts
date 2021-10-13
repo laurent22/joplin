@@ -74,6 +74,8 @@ export default class ShareService {
 		return share;
 	}
 
+	// This allows the notebook owner to stop sharing it. For a recipient to
+	// leave the shared notebook, see the leaveSharedFolder command.
 	public async unshareFolder(folderId: string) {
 		const folder = await Folder.load(folderId);
 		if (!folder) throw new Error(`No such folder: ${folderId}`);

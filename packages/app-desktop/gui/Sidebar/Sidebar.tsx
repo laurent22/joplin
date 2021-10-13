@@ -314,8 +314,14 @@ class SidebarComponent extends React.Component<Props, State> {
 			// that are within a shared notebook. If user wants to do this,
 			// they'd have to move the notebook out of the shared notebook
 			// first.
-			if (CommandService.instance().isEnabled('showShareFolderDialog', stateToWhenClauseContext(state, { commandFolderId: itemId }))) {
+			const whenClause = stateToWhenClauseContext(state, { commandFolderId: itemId });
+
+			if (CommandService.instance().isEnabled('showShareFolderDialog', whenClause)) {
 				menu.append(new MenuItem(menuUtils.commandToStatefulMenuItem('showShareFolderDialog', itemId)));
+			}
+
+			if (CommandService.instance().isEnabled('leaveSharedFolder', whenClause)) {
+				menu.append(new MenuItem(menuUtils.commandToStatefulMenuItem('leaveSharedFolder', itemId)));
 			}
 
 			menu.append(
