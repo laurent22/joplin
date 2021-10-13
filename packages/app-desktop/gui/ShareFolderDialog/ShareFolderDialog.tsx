@@ -194,7 +194,13 @@ function ShareFolderDialog(props: Props) {
 	async function recipient_delete(event: RecipientDeleteEvent) {
 		if (!confirm(_('Delete this invitation? The recipient will no longer have access to this shared notebook.'))) return;
 
-		await ShareService.instance().deleteShareRecipient(event.shareUserId);
+		try {
+			await ShareService.instance().deleteShareRecipient(event.shareUserId);
+		} catch (error) {
+			logger.error(error);
+			alert(_('The recipient could not be removed from the list. Please try again.\n\nThe error was: "%s"', error.message));
+		}
+
 		await ShareService.instance().refreshShareUsers(share.id);
 	}
 
