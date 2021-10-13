@@ -1,6 +1,8 @@
 /* eslint-disable no-unused-vars */
 
+const { splitCommandBatch } = require('./string-utils');
 const StringUtils = require('./string-utils');
+const { EOL } = require('os');
 
 describe('StringUtils', function() {
 
@@ -54,15 +56,22 @@ describe('StringUtils', function() {
 	}));
 
 	it('should split the command batch by newlines not inside quotes', (async () => {
-		const commands = [
-			'command1 arg1 \'arg2\ncontinue\'',
-			'command2',
-			'command3 \'arg1\ncontinue\ncontinue\' arg2 arg3'];
-		const split = StringUtils.splitCommandBatch(commands.join('\n'));
+		const testCases = [
+			['',
+				['']],
+			['command1',
+				['command1']],
+			['command1 arg1 arg2 arg3',
+				['command1 arg1 arg2 arg3']],
+			[`command1 arg1 'arg2${EOL}continue' arg3`,
+				[`command1 arg1 'arg2${EOL}continue' arg3`]],
+			[`command1 arg1 'arg2${EOL}continue'${EOL}command2${EOL}command3 'arg1${EOL}continue${EOL}continue' arg2 arg3`,
+				[`command1 arg1 'arg2${EOL}continue'`, 'command2', `command3 'arg1${EOL}continue${EOL}continue' arg2 arg3`]],
+		];
 
-		for (const i in commands) {
-			expect(split[i]).toEqual(commands[i]);
-		}
+		testCases.forEach((t) => {
+			expect(splitCommandBatch(t[0])).toEqual(t[1]);
+		});
 	}));
 
 });
