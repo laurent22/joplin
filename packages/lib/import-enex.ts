@@ -301,28 +301,38 @@ interface NoteResourceRecognition {
 }
 
 const preProcessFile = async (filePath: string): Promise<string> => {
-	const content: string = await shim.fsDriver().readFile(filePath, 'utf8');
+	// Disabled pre-processing for now because it runs out of memory:
+	// https://github.com/laurent22/joplin/issues/5543
+	//
+	// It could be fixed by not loading the whole file in memory, but there are
+	// other issues because people import 1GB+ files so pre-processing
+	// everything means creating a new copy of that file, and that has its own
+	// problems.
 
-	// The note content in an ENEX file is wrapped in a CDATA block so it means
-	// that any "]]>" inside the note must be somehow escaped, or else the CDATA
-	// block would be closed at the wrong point.
-	//
-	// The problem is that Evernote appears to encode "]]>" as "]]<![CDATA[>]]>"
-	// instead of the more sensible "]]&gt;", or perhaps they have nothing in
-	// place to properly escape data imported from their web clipper. In any
-	// case it results in invalid XML that Evernote cannot even import back.
-	//
-	// Handling that invalid XML with SAX would also be very tricky, so instead
-	// we add a pre-processing step that converts this tags to just "&gt;". It
-	// should be safe to do so because such content can only be within the body
-	// of a note - and ">" or "&gt;" is equivalent.
-	//
-	// Ref: https://discourse.joplinapp.org/t/20470/4
-	const newContent = content.replace(/<!\[CDATA\[>\]\]>/g, '&gt;');
-	if (content === newContent) return filePath;
-	const newFilePath = `${Setting.value('tempDir')}/${md5(Date.now() + Math.random())}.enex`;
-	await shim.fsDriver().writeFile(newFilePath, newContent, 'utf8');
-	return newFilePath;
+	return filePath;
+
+	// const content: string = await shim.fsDriver().readFile(filePath, 'utf8');
+
+	// // The note content in an ENEX file is wrapped in a CDATA block so it means
+	// // that any "]]>" inside the note must be somehow escaped, or else the CDATA
+	// // block would be closed at the wrong point.
+	// //
+	// // The problem is that Evernote appears to encode "]]>" as "]]<![CDATA[>]]>"
+	// // instead of the more sensible "]]&gt;", or perhaps they have nothing in
+	// // place to properly escape data imported from their web clipper. In any
+	// // case it results in invalid XML that Evernote cannot even import back.
+	// //
+	// // Handling that invalid XML with SAX would also be very tricky, so instead
+	// // we add a pre-processing step that converts this tags to just "&gt;". It
+	// // should be safe to do so because such content can only be within the body
+	// // of a note - and ">" or "&gt;" is equivalent.
+	// //
+	// // Ref: https://discourse.joplinapp.org/t/20470/4
+	// const newContent = content.replace(/<!\[CDATA\[>\]\]>/g, '&gt;');
+	// if (content === newContent) return filePath;
+	// const newFilePath = `${Setting.value('tempDir')}/${md5(Date.now() + Math.random())}.enex`;
+	// await shim.fsDriver().writeFile(newFilePath, newContent, 'utf8');
+	// return newFilePath;
 };
 
 export default async function importEnex(parentFolderId: string, filePath: string, importOptions: ImportOptions = null) {
