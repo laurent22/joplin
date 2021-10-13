@@ -16,6 +16,16 @@ interface FolderEntityWithChildren extends FolderEntity {
 	children?: FolderEntity[];
 }
 
+export interface DeleteOptions {
+	deleteChildren?: boolean;
+}
+
+const defaultDeleteOptions = (): DeleteOptions => {
+	return {
+		deleteChildren: true,
+	};
+};
+
 export default class Folder extends BaseItem {
 	static tableName() {
 		return 'folders';
@@ -78,9 +88,9 @@ export default class Folder extends BaseItem {
 		return this.db().exec(query);
 	}
 
-	static async delete(folderId: string, options: any = null) {
+	public static async delete(folderId: string, options: DeleteOptions = null) {
 		options = {
-			deleteChildren: true,
+			...defaultDeleteOptions(),
 			...options,
 		};
 
