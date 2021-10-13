@@ -38,12 +38,14 @@ import removeKeylessItems from '../ResizableLayout/utils/removeKeylessItems';
 import { localSyncInfoFromState } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 import { showMissingMasterKeyMessage } from '@joplin/lib/services/e2ee/utils';
 import commands from './commands/index';
-
+import Logger from '@joplin/lib/Logger';
 const { connect } = require('react-redux');
 const { PromptDialog } = require('../PromptDialog.min.js');
 const NotePropertiesDialog = require('../NotePropertiesDialog.min.js');
 const PluginManager = require('@joplin/lib/services/PluginManager');
 const ipcRenderer = require('electron').ipcRenderer;
+
+const logger = Logger.create('MainScreen');
 
 interface LayerModalState {
 	visible: boolean;
@@ -552,12 +554,20 @@ class MainScreenComponent extends React.Component<Props, State> {
 			// meantime we hide the notification so that the user doesn't click
 			// multiple times on the Accept link.
 			ShareService.instance().setProcessingShareInvitationResponse(true);
+
 			try {
 				await ShareService.instance().respondInvitation(shareUserId, accept);
+			} catch (error) {
+				logger.error(error);
+				alert(_('Could not respond to the invitation. Please try again, or check with the notebook owner if they are still sharing it.\n\nThe error was: "%s"', error.message));
+			}
+
+			try {
 				await ShareService.instance().refreshShareInvitations();
 			} finally {
 				ShareService.instance().setProcessingShareInvitationResponse(false);
 			}
+
 			void reg.scheduleSync(1000);
 		};
 
