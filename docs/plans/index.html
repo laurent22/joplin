@@ -29,7 +29,7 @@ https://github.com/laurent22/joplin/blob/dev/
 			href="&#x2F;css/bootstrap5.0.2.min.css"
 			as="style"
 		/>
-		<link rel="stylesheet" href="&#x2F;css/fontawesome-all.min.css?t=1632942762182">
+		<link rel="stylesheet" href="&#x2F;css/fontawesome-all.min.css?t=1633686031235">
 		<link
 			href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
 			rel="stylesheet"
@@ -37,7 +37,7 @@ https://github.com/laurent22/joplin/blob/dev/
 			media="all"
 			onload="this.media='all'; this.onload = null"
 		/>
-		<link rel="stylesheet" href="&#x2F;css/site.css?t=1632942762182" as="style" />
+		<link rel="stylesheet" href="&#x2F;css/site.css?t=1633686031235" as="style" />
 		<title>Joplin Cloud Plans | Joplin</title>
 
 		<script
@@ -412,7 +412,7 @@ https://github.com/laurent22/joplin/blob/dev/
 	<script>
 		const urlQuery = new URLSearchParams(location.search);
 		let subscriptionPeriod = 'monthly';
-		var stripe = Stripe('pk_live_51IvkOPLx4fybOTqJow8RFsWs0eDznPeBlXMw6s8SIDQeCM8bAFNYlBdDsyonAwRcJgBCoSlvFzAbhJgLFxzzTu4r0006aw846C');
+		const stripe = Stripe('pk_live_51IvkOPLx4fybOTqJow8RFsWs0eDznPeBlXMw6s8SIDQeCM8bAFNYlBdDsyonAwRcJgBCoSlvFzAbhJgLFxzzTu4r0006aw846C');
 
 		let checkoutSessionUser = null;
 
@@ -435,9 +435,9 @@ https://github.com/laurent22/joplin/blob/dev/
 		}
 
 		var createCheckoutSession = function(priceId) {
-			const coupon = urlQuery.get('coupon') || '';
+			const promotionCode = urlQuery.get('promo') || '';
 
-			console.info('Creating Stripe session for price:', priceId, 'Coupon:', coupon);
+			console.info('Creating Stripe session for price:', priceId, 'Promotion code:', promotionCode);
 
 			return fetch("https://joplincloud.com/stripe/createCheckoutSession", {
 				method: "POST",
@@ -445,8 +445,8 @@ https://github.com/laurent22/joplin/blob/dev/
 					"Content-Type": "application/json"
 				},
 				body: JSON.stringify({
-					priceId: priceId,
-					coupon: coupon,
+					priceId,
+					promotionCode,
 					email: checkoutSessionUser ? checkoutSessionUser.email : '',
 				})
 			}).then(async function(result) {
@@ -506,7 +506,7 @@ https://github.com/laurent22/joplin/blob/dev/
 	</div>
 </footer>		</div>
 
-		<script src="&#x2F;js/script.js?t=1632942762182"></script>
+		<script src="&#x2F;js/script.js?t=1633686031235"></script>
 
 <script>
 	if (window.location.hostname !== 'localhost') {

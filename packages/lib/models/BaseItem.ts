@@ -603,6 +603,11 @@ export default class BaseItem extends BaseModel {
 		throw new Error('Unreachable');
 	}
 
+	public static async itemHasBeenSynced(itemId: string): Promise<boolean> {
+		const r = await this.db().selectOne('SELECT item_id FROM sync_items WHERE item_id = ?', [itemId]);
+		return !!r;
+	}
+
 	public static async itemsThatNeedSync(syncTarget: number, limit = 100): Promise<ItemsThatNeedSyncResult> {
 		// Although we keep the master keys in the database, we no longer sync them
 		const classNames = this.syncItemClassNames().filter(n => n !== 'MasterKey');

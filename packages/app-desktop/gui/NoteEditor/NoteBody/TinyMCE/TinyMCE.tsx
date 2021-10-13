@@ -393,6 +393,11 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
 			}
 
+			.tox .tox-dialog-wrap__backdrop {
+				background-color: ${theme.backgroundColor} !important;
+				opacity:0.7
+			}
+			
 			.tox .tox-editor-header {
 				border: none;
 			}
