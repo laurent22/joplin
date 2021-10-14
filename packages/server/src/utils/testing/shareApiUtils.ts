@@ -150,11 +150,15 @@ export async function shareWithUserAndAccept(sharerSessionId: string, shareeSess
 
 	shareUser = await models().shareUser().load(shareUser.id);
 
-	await patchApi(shareeSessionId, `share_users/${shareUser.id}`, { status: ShareUserStatus.Accepted });
+	await respondInvitation(shareeSessionId, shareUser.id, ShareUserStatus.Accepted);
 
 	await models().share().updateSharedItems3();
 
 	return { share, item, shareUser };
+}
+
+export async function respondInvitation(recipientSessionId: Uuid, shareUserId: Uuid, status: ShareUserStatus) {
+	await patchApi(recipientSessionId, `share_users/${shareUserId}`, { status });
 }
 
 export async function postShareContext(sessionId: string, shareType: ShareType, itemId: Uuid): Promise<AppContext> {
