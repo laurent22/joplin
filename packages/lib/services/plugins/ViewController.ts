@@ -6,8 +6,8 @@ export interface EmitMessageEvent {
 
 export default class ViewController {
 
-	protected handle_: ViewHandle;
-	protected pluginId_: string;
+	private handle_: ViewHandle;
+	private pluginId_: string;
 	private store_: any;
 
 	public constructor(handle: ViewHandle, pluginId: string, store: any) {
