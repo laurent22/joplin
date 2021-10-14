@@ -858,6 +858,10 @@ packages/app-mobile/utils/setupNotifications.js.map
 packages/app-mobile/utils/shareHandler.d.ts
 packages/app-mobile/utils/shareHandler.js
 packages/app-mobile/utils/shareHandler.js.map
+packages/app-mobile/utils/RecentsWidget.js
+packages/app-mobile/utils/RecentsWidget.js.map
+packages/app-mobile/utils/updateRecentsWidget.js
+packages/app-mobile/utils/updateRecentsWidget.js.map
 packages/fork-htmlparser2/src/CollectingHandler.d.ts
 packages/fork-htmlparser2/src/CollectingHandler.js
 packages/fork-htmlparser2/src/CollectingHandler.js.map

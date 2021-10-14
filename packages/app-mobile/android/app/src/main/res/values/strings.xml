@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Joplin</string>
     <string name="default_notification_channel_id">net.cozic.joplin.notification</string>
+    <string name="no_recent_notes_found">No recent notes found</string>
 </resources>

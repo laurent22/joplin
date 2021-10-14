@@ -20,6 +20,7 @@ import PoorManIntervals from '@joplin/lib/PoorManIntervals';
 import reducer from '@joplin/lib/reducer';
 import ShareExtension from './utils/ShareExtension';
 import handleShared from './utils/shareHandler';
+import updateRecentsWidget from './utils/updateRecentsWidget';
 import uuid from '@joplin/lib/uuid';
 import { loadKeychainServiceAndSettings } from '@joplin/lib/services/SettingUtils';
 import KeychainServiceDriverMobile from '@joplin/lib/services/keychain/KeychainServiceDriver.mobile';
@@ -698,6 +699,8 @@ class AppComponent extends React.Component {
 		this.handleOpenURL_ = (event: any) => {
 			if (event.url == ShareExtension.shareURL) {
 				void this.handleShareData();
+			} else {
+				void this.navigate(event.url);
 			}
 		};
 	}
@@ -752,6 +755,8 @@ class AppComponent extends React.Component {
 			});
 		}
 
+		Linking.getInitialURL().then((url: string) => this.navigate(url));
+
 		Linking.addEventListener('url', this.handleOpenURL_);
 
 		BackButtonService.initialize(this.backButtonHandler_);
@@ -769,6 +774,8 @@ class AppComponent extends React.Component {
 		setupQuickActions(this.props.dispatch, this.props.selectedFolderId);
 
 		await setupNotifications(this.props.dispatch);
+
+		await updateRecentsWidget();
 
 		// Setting.setValue('encryption.masterPassword', 'WRONG');
 		// setTimeout(() => NavService.go('EncryptionConfig'), 2000);
@@ -895,6 +902,37 @@ class AppComponent extends React.Component {
 				</SideMenu>
 			</View>
 		);
+	}
+
+	private async navigate(url: string) {
+		if (!url) return;
+		let parsedUrl;
+		try {
+			parsedUrl = new URL(url);
+		} catch (_) {
+			// invalid URL
+			return;
+		}
+		reg.logger().info(`navigate to ${url}`);
+
+		await this.props.dispatch({ type: 'NAV_BACK' });
+		await this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
+		const { pathname } = parsedUrl;
+		if (pathname.startsWith('//notes/')) {
+			const noteId = pathname.replace('//notes/', '');
+			await this.props.dispatch({
+				type: 'NAV_GO',
+				noteId,
+				routeName: 'Note',
+			});
+		} else if (pathname.startsWith('//folder/')) {
+			const folderId = pathname.replace('//folder/', '');
+			await this.props.dispatch({
+				type: 'NAV_GO',
+				folderId,
+				routeName: 'Folder',
+			});
+		}
 	}
 }
 

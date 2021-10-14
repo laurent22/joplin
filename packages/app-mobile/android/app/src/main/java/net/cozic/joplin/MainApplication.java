@@ -17,6 +17,7 @@ import com.facebook.soloader.SoLoader;
 import net.cozic.joplin.share.SharePackage;
 import net.cozic.joplin.ssl.SslPackage;
 import net.cozic.joplin.textinput.TextInputPackage;
+import net.cozic.joplin.widgets.WidgetDataPackage;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -46,6 +47,7 @@ public class MainApplication extends Application implements ReactApplication {
           packages.add(new SharePackage());
           packages.add(new SslPackage());
           packages.add(new TextInputPackage());
+          packages.add(new WidgetDataPackage());
           return packages;
         }
 

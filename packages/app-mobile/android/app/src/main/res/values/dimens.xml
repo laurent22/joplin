@@ -1,0 +1,4 @@
+<resources>
+    <dimen name="recents_title_text_size">16sp</dimen>
+    <dimen name="recents_title_padding">8dp</dimen>
+</resources>
