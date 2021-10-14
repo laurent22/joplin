@@ -1,5 +1,5 @@
 import { FolderEntity } from '../services/database/types';
-import BaseModel from '../BaseModel';
+import BaseModel, { DeleteOptions } from '../BaseModel';
 import time from '../time';
 import { _ } from '../locale';
 import Note from './Note';
@@ -15,16 +15,6 @@ const logger = Logger.create('models/Folder');
 interface FolderEntityWithChildren extends FolderEntity {
 	children?: FolderEntity[];
 }
-
-export interface DeleteOptions {
-	deleteChildren?: boolean;
-}
-
-const defaultDeleteOptions = (): DeleteOptions => {
-	return {
-		deleteChildren: true,
-	};
-};
 
 export default class Folder extends BaseItem {
 	static tableName() {
@@ -90,7 +80,7 @@ export default class Folder extends BaseItem {
 
 	public static async delete(folderId: string, options: DeleteOptions = null) {
 		options = {
-			...defaultDeleteOptions(),
+			deleteChildren: true,
 			...options,
 		};
 
