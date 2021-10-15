@@ -1,6 +1,6 @@
 // The sync debug log can be used to view from a single file a sequence of sync
 // related events. In particular, it logs notes and folders being saved, and the
-// relevant sync operations.
+// relevant sync operations. Enable it in app.ts
 
 import Logger, { TargetType } from '../../Logger';
 import { homedir } from 'os';
