@@ -20,7 +20,7 @@ import JoplinError from './JoplinError';
 import ShareService from './services/share/ShareService';
 import TaskQueue from './TaskQueue';
 import ItemUploader from './services/synchronizer/ItemUploader';
-import { FileApi } from './file-api';
+import { FileApi, RemoteItem } from './file-api';
 import JoplinDatabase from './JoplinDatabase';
 import { fetchSyncInfo, getActiveMasterKey, localSyncInfo, mergeSyncInfos, saveLocalSyncInfo, SyncInfo, syncInfoEquals, uploadSyncInfo } from './services/synchronizer/syncInfoUtils';
 import { getMasterPassword, setupAndDisableEncryption, setupAndEnableEncryption } from './services/e2ee/utils';
@@ -30,24 +30,6 @@ const { sprintf } = require('sprintf-js');
 const { Dirnames } = require('./services/synchronizer/utils/types');
 
 const logger = Logger.create('Synchronizer');
-
-interface RemoteItem {
-	id: string;
-	path?: string;
-	type_?: number;
-	isDeleted?: boolean;
-
-	// This the time when the file was created on the server. It is used for
-	// example for the locking mechanim or any file that's not an actual Joplin
-	// item.
-	updated_time?: number;
-
-	// This is the time that corresponds to the actual Joplin item updated_time
-	// value. A note is always uploaded with a delay so the server updated_time
-	// value will always be ahead. However for synchronising we need to know the
-	// exact Joplin item updated_time value.
-	jop_updated_time?: number;
-}
 
 function isCannotSyncError(error: any): boolean {
 	if (!error) return false;
@@ -550,7 +532,7 @@ export default class Synchronizer {
 						if (this.cancelling()) break;
 
 						let local = locals[i];
-						const ItemClass = BaseItem.itemClass(local);
+						const ItemClass: typeof BaseItem = BaseItem.itemClass(local);
 						const path = BaseItem.systemPath(local);
 
 						// Safety check to avoid infinite loops.
@@ -744,7 +726,10 @@ export default class Synchronizer {
 								const syncTimeQueries = BaseItem.updateSyncTimeQueries(syncTargetId, local, time.unixMs());
 								await ItemClass.save(local, { autoTimestamp: false, changeSource: ItemChange.SOURCE_SYNC, nextQueries: syncTimeQueries });
 							} else {
-								await ItemClass.delete(local.id, { changeSource: ItemChange.SOURCE_SYNC });
+								await ItemClass.delete(local.id, {
+									changeSource: ItemChange.SOURCE_SYNC,
+									trackDeleted: false,
+								});
 							}
 						} else if (action == 'noteConflict') {
 							// ------------------------------------------------------------------------------
@@ -797,7 +782,7 @@ export default class Synchronizer {
 								if (local.encryption_applied) this.dispatch({ type: 'SYNC_GOT_ENCRYPTED_ITEM' });
 							} else {
 								// Remote no longer exists (note deleted) so delete local one too
-								await ItemClass.delete(local.id, { changeSource: ItemChange.SOURCE_SYNC });
+								await ItemClass.delete(local.id, { changeSource: ItemChange.SOURCE_SYNC, trackDeleted: false });
 							}
 						}
 
