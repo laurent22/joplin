@@ -39,9 +39,6 @@ export default async function(shareUserId: string, folderId: string, accept: boo
 	// Leaving it as it is for now, as it's an unlikely scenario and it won't
 	// cause any data loss.
 
-	console.info('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA', shareUserId, folderId);
-	console.info('ALL', await Folder.all());
-
 	if (!accept) {
 		const existingFolder = await Folder.load(folderId);
 		if (existingFolder) {
