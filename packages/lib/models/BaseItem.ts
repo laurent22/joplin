@@ -236,7 +236,7 @@ export default class BaseItem extends BaseModel {
 		return ItemClass.delete(id);
 	}
 
-	static async delete(id: string, options: any = null) {
+	static async delete(id: string, options: DeleteOptions = null) {
 		return this.batchDelete([id], options);
 	}
 

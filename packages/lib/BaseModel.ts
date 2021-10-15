@@ -28,9 +28,15 @@ export enum ModelType {
 
 export interface DeleteOptions {
 	idFieldName?: string;
-	trackDeleted?: boolean;
 	changeSource?: number;
 	deleteChildren?: boolean;
+
+	// By default the application tracks item deletions, so that they can be
+	// applied to the remote items during synchronisation. However, in some
+	// cases, we don't want this. In particular when an item is deleted via
+	// sync, we don't need to track the deletion, because the operation doesn't
+	// need to applied again on next sync.
+	trackDeleted?: boolean;
 }
 
 class BaseModel {
