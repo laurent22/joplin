@@ -117,6 +117,20 @@ export default class ShareService {
 		await Folder.updateAllShareIds();
 	}
 
+	// This is when a share recipient decides to leave the shared folder.
+	//
+	// In that case, we should only delete the folder but none of its children.
+	// Deleting the folder tells the server that we want to leave the share. The
+	// server will then proceed to delete all associated user_items. So
+	// eventually all the notebook content will also be deleted for the current
+	// user.
+	//
+	// We don't delete the children here because that would delete them for the
+	// other share participants too.
+	public async leaveSharedFolder(folderId: string): Promise<void> {
+		await Folder.delete(folderId, { deleteChildren: false });
+	}
+
 	public async shareNote(noteId: string): Promise<StateShare> {
 		const note = await Note.load(noteId);
 		if (!note) throw new Error(`No such note: ${noteId}`);

@@ -715,6 +715,9 @@ packages/app-desktop/services/plugins/hooks/useViewIsReady.js.map
 packages/app-desktop/services/plugins/hooks/useWebviewToPluginMessages.d.ts
 packages/app-desktop/services/plugins/hooks/useWebviewToPluginMessages.js
 packages/app-desktop/services/plugins/hooks/useWebviewToPluginMessages.js.map
+packages/app-desktop/services/share/invitationRespond.d.ts
+packages/app-desktop/services/share/invitationRespond.js
+packages/app-desktop/services/share/invitationRespond.js.map
 packages/app-desktop/services/spellChecker/SpellCheckerServiceDriverNative.d.ts
 packages/app-desktop/services/spellChecker/SpellCheckerServiceDriverNative.js
 packages/app-desktop/services/spellChecker/SpellCheckerServiceDriverNative.js.map
