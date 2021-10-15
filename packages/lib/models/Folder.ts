@@ -8,6 +8,7 @@ import BaseItem from './BaseItem';
 import Resource from './Resource';
 import { isRootSharedFolder } from '../services/share/reducer';
 import Logger from '../Logger';
+import syncDebugLog from '../services/synchronizer/syncDebugLog';
 const { substrWithEllipsis } = require('../string-utils.js');
 
 const logger = Logger.create('models/Folder');
@@ -650,6 +651,8 @@ export default class Folder extends BaseItem {
 		if (options.reservedTitleCheck === true && o.title) {
 			if (o.title == Folder.conflictFolderTitle()) throw new Error(_('Notebooks cannot be named "%s", which is a reserved title.', o.title));
 		}
+
+		syncDebugLog.info('Folder Save:', o);
 
 		return super.save(o, options).then((folder: FolderEntity) => {
 			this.dispatch({
