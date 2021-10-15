@@ -9,7 +9,7 @@ import ShareService from '@joplin/lib/services/share/ShareService';
 import styled from 'styled-components';
 import StyledFormLabel from '../style/StyledFormLabel';
 import StyledInput from '../style/StyledInput';
-import Button from '../Button/Button';
+import Button, { ButtonSize } from '../Button/Button';
 import Logger from '@joplin/lib/Logger';
 import StyledMessage from '../style/StyledMessage';
 import { ShareUserStatus, StateShare, StateShareUser } from '@joplin/lib/services/share/reducer';
@@ -219,7 +219,7 @@ function ShareFolderDialog(props: Props) {
 				<StyledFormLabel>{_('Add recipient:')}</StyledFormLabel>
 				<StyledRecipientControls>
 					<StyledRecipientInput disabled={disabled} type="email" placeholder="example@domain.com" value={recipientEmail} onChange={recipientEmail_change} />
-					<Button disabled={disabled} title={_('Share')} onClick={shareRecipient_click}></Button>
+					<Button size={ButtonSize.Small} disabled={disabled} title={_('Share')} onClick={shareRecipient_click}></Button>
 				</StyledRecipientControls>
 			</StyledAddRecipient>
 		);
@@ -242,7 +242,7 @@ function ShareFolderDialog(props: Props) {
 			<StyledRecipient key={shareUser.user.email} index={index}>
 				<StyledRecipientName>{shareUser.user.email}</StyledRecipientName>
 				<StyledRecipientStatusIcon title={statusToMessage[shareUser.status]} className={statusToIcon[shareUser.status]}></StyledRecipientStatusIcon>
-				<Button iconName="far fa-times-circle" onClick={() => recipient_delete({ shareUserId: shareUser.id })}/>
+				<Button size={ButtonSize.Small} iconName="far fa-times-circle" onClick={() => recipient_delete({ shareUserId: shareUser.id })}/>
 			</StyledRecipient>
 		);
 	}
