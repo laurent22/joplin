@@ -1621,6 +1621,9 @@ packages/lib/services/synchronizer/migrations/2.js.map
 packages/lib/services/synchronizer/migrations/3.d.ts
 packages/lib/services/synchronizer/migrations/3.js
 packages/lib/services/synchronizer/migrations/3.js.map
+packages/lib/services/synchronizer/syncDebugLog.d.ts
+packages/lib/services/synchronizer/syncDebugLog.js
+packages/lib/services/synchronizer/syncDebugLog.js.map
 packages/lib/services/synchronizer/syncInfoUtils.d.ts
 packages/lib/services/synchronizer/syncInfoUtils.js
 packages/lib/services/synchronizer/syncInfoUtils.js.map
