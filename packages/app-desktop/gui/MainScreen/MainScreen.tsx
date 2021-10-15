@@ -32,20 +32,16 @@ import removeItem from '../ResizableLayout/utils/removeItem';
 import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
 import ShareFolderDialog from '../ShareFolderDialog/ShareFolderDialog';
 import { ShareInvitation } from '@joplin/lib/services/share/reducer';
-import ShareService from '@joplin/lib/services/share/ShareService';
-import { reg } from '@joplin/lib/registry';
 import removeKeylessItems from '../ResizableLayout/utils/removeKeylessItems';
 import { localSyncInfoFromState } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 import { showMissingMasterKeyMessage } from '@joplin/lib/services/e2ee/utils';
 import commands from './commands/index';
-import Logger from '@joplin/lib/Logger';
+import invitationRespond from '../../services/share/invitationRespond';
 const { connect } = require('react-redux');
 const { PromptDialog } = require('../PromptDialog.min.js');
 const NotePropertiesDialog = require('../NotePropertiesDialog.min.js');
 const PluginManager = require('@joplin/lib/services/PluginManager');
 const ipcRenderer = require('electron').ipcRenderer;
-
-const logger = Logger.create('MainScreen');
 
 interface LayerModalState {
 	visible: boolean;
@@ -549,26 +545,8 @@ class MainScreenComponent extends React.Component<Props, State> {
 			bridge().restart();
 		};
 
-		const onInvitationRespond = async (shareUserId: string, accept: boolean) => {
-			// The below functions can take a bit of time to complete so in the
-			// meantime we hide the notification so that the user doesn't click
-			// multiple times on the Accept link.
-			ShareService.instance().setProcessingShareInvitationResponse(true);
-
-			try {
-				await ShareService.instance().respondInvitation(shareUserId, accept);
-			} catch (error) {
-				logger.error(error);
-				alert(_('Could not respond to the invitation. Please try again, or check with the notebook owner if they are still sharing it.\n\nThe error was: "%s"', error.message));
-			}
-
-			try {
-				await ShareService.instance().refreshShareInvitations();
-			} finally {
-				ShareService.instance().setProcessingShareInvitationResponse(false);
-			}
-
-			void reg.scheduleSync(1000);
+		const onInvitationRespond = async (shareUserId: string, folderId: string, accept: boolean) => {
+			await invitationRespond(shareUserId, folderId, accept);
 		};
 
 		let msg = null;
@@ -613,9 +591,9 @@ class MainScreenComponent extends React.Component<Props, State> {
 			msg = this.renderNotificationMessage(
 				_('%s (%s) would like to share a notebook with you.', sharer.full_name, sharer.email),
 				_('Accept'),
-				() => onInvitationRespond(invitation.id, true),
+				() => onInvitationRespond(invitation.id, invitation.share.folder_id, true),
 				_('Reject'),
-				() => onInvitationRespond(invitation.id, false)
+				() => onInvitationRespond(invitation.id, invitation.share.folder_id, false)
 			);
 		} else if (this.props.hasDisabledSyncItems) {
 			msg = this.renderNotificationMessage(
