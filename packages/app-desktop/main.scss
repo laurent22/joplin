@@ -188,6 +188,12 @@ div.form,
 	margin-bottom: 20px;
 }
 
+p {
+	&.-small {
+		font-size: 13px;
+	}
+}
+
 .form > .form-input-group:last-child {
 	margin-bottom: 0;
 }
@@ -204,6 +210,11 @@ a {
 	color: var(--joplin-url-color);
 }
 
+p.info-text {
+	font-style: italic;
+	color: var(--joplin-color-faded);
+}
+
 /* =========================================================================================
 Component-specific classes
 ========================================================================================= */
@@ -212,8 +223,6 @@ Component-specific classes
 	border-bottom: 1px solid var(--joplin-divider-color);
 	padding-bottom: 20px;
 }
-
-
 
 .master-password-dialog .dialog-root {
 	min-width: 500px;

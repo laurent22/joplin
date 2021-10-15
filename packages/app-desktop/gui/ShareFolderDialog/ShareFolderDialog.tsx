@@ -64,7 +64,7 @@ const StyledRecipientStatusIcon = styled.i`
 `;
 
 const StyledRecipients = styled.div`
-	
+	margin-bottom: 10px;
 `;
 
 const StyledRecipientList = styled.div`
@@ -288,6 +288,14 @@ function ShareFolderDialog(props: Props) {
 		);
 	}
 
+	const renderInfo = () => {
+		return (
+			<p className="info-text -small">
+				{_('Please note that if it is a large notebook, it may take a few minutes for all the notes to show up on the recipient\'s device.')}
+			</p>
+		);
+	};
+
 	async function buttonRow_click(event: ClickEvent) {
 		if (event.buttonName === 'unshare') {
 			if (!confirm(_('Unshare this notebook? The recipients will no longer have access to its content.'))) return;
@@ -307,6 +315,7 @@ function ShareFolderDialog(props: Props) {
 				{renderShareState()}
 				{renderError()}
 				{renderRecipients()}
+				{renderInfo()}
 				<DialogButtonRow
 					themeId={props.themeId}
 					onClick={buttonRow_click}
