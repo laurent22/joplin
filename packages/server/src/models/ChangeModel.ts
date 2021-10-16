@@ -230,6 +230,7 @@ export default class ChangeModel extends BaseModel<Change> {
 	//     create - delete => NOOP
 	//     update - update => update
 	//     update - delete => delete
+	//     delete - create => create
 	//
 	// There's one exception for changes that include a "previous_item". This is
 	// used to save specific properties about the previous state of the item,
@@ -237,6 +238,13 @@ export default class ChangeModel extends BaseModel<Change> {
 	// to know if an item has been moved from one folder to another. In that
 	// case, we need to know about each individual change, so they are not
 	// compressed.
+	//
+	// The latest change, when an item goes from DELETE to CREATE seems odd but
+	// can happen because we are not checking for "item" changes but for
+	// "user_item" changes. When sharing is involved, an item can be shared
+	// (CREATED), then unshared (DELETED), then shared again (CREATED). When it
+	// happens, we want the user to get the item, thus we generate a CREATE
+	// event.
 	private compressChanges(changes: Change[]): Change[] {
 		const itemChanges: Record<Uuid, Change> = {};
 
@@ -266,6 +274,10 @@ export default class ChangeModel extends BaseModel<Change> {
 				}
 
 				if (previous.type === ChangeType.Update && change.type === ChangeType.Delete) {
+					itemChanges[itemId] = change;
+				}
+
+				if (previous.type === ChangeType.Delete && change.type === ChangeType.Create) {
 					itemChanges[itemId] = change;
 				}
 			} else {

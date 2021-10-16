@@ -60,6 +60,7 @@ import editorCommandDeclarations from './gui/NoteEditor/editorCommandDeclaration
 import ShareService from '@joplin/lib/services/share/ShareService';
 import checkForUpdates from './checkForUpdates';
 import { AppState } from './app.reducer';
+import syncDebugLog from '../lib/services/synchronizer/syncDebugLog';
 // import { runIntegrationTests } from '@joplin/lib/services/e2ee/ppkTestUtils';
 
 const pluginClasses = [
@@ -355,7 +356,14 @@ class Application extends BaseApplication {
 
 		reg.logger().info('app.start: doing regular boot');
 
-		const dir = Setting.value('profileDir');
+		const dir: string = Setting.value('profileDir');
+
+		syncDebugLog.enabled = false;
+
+		if (dir.endsWith('dev-desktop-2')) {
+			syncDebugLog.enabled = true;
+			syncDebugLog.info(`Profile dir: ${dir}`);
+		}
 
 		// Loads app-wide styles. (Markdown preview-specific styles loaded in app.js)
 		const filename = Setting.custom_css_files.JOPLIN_APP;

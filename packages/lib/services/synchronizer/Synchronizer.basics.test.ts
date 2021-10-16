@@ -394,4 +394,49 @@ describe('Synchronizer.basics', function() {
 		expect((await Note.all()).length).toBe(11);
 	}));
 
+	it('should not sync deletions that came via sync even when there is a conflict', (async () => {
+		// This test is mainly to simulate sharing, unsharing and sharing a note
+		// again. Previously, when doing so, the app would create deleted_items
+		// objects on the recipient when the owner unshares. It means that when
+		// sharing again, the recipient would apply the deletions and delete
+		// everything in the shared notebook.
+		//
+		// Specifically it was happening when a conflict was generated as a
+		// result of the items being deleted.
+		//
+		// - C1 creates a note and sync
+		// - C2 sync and get the note
+		// - C2 deletes the note and sync
+		// - C1 modify the note, and sync
+		//
+		// => A conflict is created. The note is deleted and a copy is created
+		// in the Conflict folder.
+		//
+		// After this, we recreate the note on the sync target (simulates the
+		// note being shared again), and we check that C2 doesn't attempt to
+		// delete that note.
+
+		const note = await Note.save({});
+		await synchronizerStart();
+		const noteSerialized = await fileApi().get(`${note.id}.md`);
+
+		await switchClient(2);
+
+		await synchronizerStart();
+		await Note.delete(note.id);
+		await synchronizerStart();
+
+		await switchClient(1);
+
+		await Note.save({ id: note.id });
+		await synchronizerStart();
+		expect((await Note.all())[0].is_conflict).toBe(1);
+		await fileApi().put(`${note.id}.md`, noteSerialized); // Recreate the note - simulate sharing again.
+		await synchronizerStart();
+
+		// Check that the client didn't delete the note
+		const remotes = (await fileApi().list()).items;
+		expect(remotes.find(r => r.path === `${note.id}.md`)).toBeTruthy();
+	}));
+
 });

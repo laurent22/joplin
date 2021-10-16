@@ -187,7 +187,7 @@ if command -v lsb_release &> /dev/null; then
   # Linux Mint 4 Debbie is based on Debian 10 and requires the same param handling.
   if [[ $DISTVER =~ Debian1. ]] || [ "$DISTVER" = "Linuxmint4" ] && [ "$DISTCODENAME" = "debbie" ] || [ "$DISTVER" = "CentOS" ] && [[ "$DISTMAJOR" =~ 6|7 ]]
   then
-    SANDBOXPARAM=" --no-sandbox"
+    SANDBOXPARAM="--no-sandbox"
   fi
 fi
 
@@ -206,7 +206,21 @@ then
 
     # On some systems this directory doesn't exist by default
     mkdir -p ~/.local/share/applications
-    echo -e "[Desktop Entry]\nEncoding=UTF-8\nName=Joplin\nComment=Joplin for Desktop\nExec=${HOME}/.joplin/Joplin.AppImage${SANDBOXPARAM}\nIcon=joplin\nStartupWMClass=Joplin\nType=Application\nCategories=Office;" >> ~/.local/share/applications/appimagekit-joplin.desktop
+    
+    # Tabs specifically, and not spaces, are needed for indentation with Bash heredocs
+    cat >> ~/.local/share/applications/appimagekit-joplin.desktop <<-EOF
+	[Desktop Entry]
+	Encoding=UTF-8
+	Name=Joplin
+	Comment=Joplin for Desktop
+	Exec=${HOME}/.joplin/Joplin.AppImage ${SANDBOXPARAM}
+	Icon=joplin
+	StartupWMClass=Joplin
+	Type=Application
+	Categories=Office;
+	MimeType=x-scheme-handler/joplin;
+	EOF
+    
     # Update application icons
     [[ `command -v update-desktop-database` ]] && update-desktop-database ~/.local/share/applications && update-desktop-database ~/.local/share/icons
     print "${COLOR_GREEN}OK${COLOR_RESET}"

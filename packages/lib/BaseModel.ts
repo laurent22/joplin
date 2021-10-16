@@ -26,6 +26,19 @@ export enum ModelType {
 	Command = 16,
 }
 
+export interface DeleteOptions {
+	idFieldName?: string;
+	changeSource?: number;
+	deleteChildren?: boolean;
+
+	// By default the application tracks item deletions, so that they can be
+	// applied to the remote items during synchronisation. However, in some
+	// cases, we don't want this. In particular when an item is deleted via
+	// sync, we don't need to track the deletion, because the operation doesn't
+	// need to applied again on next sync.
+	trackDeleted?: boolean;
+}
+
 class BaseModel {
 
 	// TODO: This ancient part of Joplin about model types is a bit of a
@@ -632,7 +645,7 @@ class BaseModel {
 		return this.db().exec(`DELETE FROM ${this.tableName()} WHERE id = ?`, [id]);
 	}
 
-	static async batchDelete(ids: string[], options: any = null) {
+	static async batchDelete(ids: string[], options: DeleteOptions = null) {
 		if (!ids.length) return;
 		options = this.modOptions(options);
 		const idFieldName = options.idFieldName ? options.idFieldName : 'id';

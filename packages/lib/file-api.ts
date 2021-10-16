@@ -16,6 +16,30 @@ export interface MultiPutItem {
 	body: string;
 }
 
+export interface RemoteItem {
+	id: string;
+	path?: string;
+	type_?: number;
+	isDeleted?: boolean;
+
+	// This the time when the file was created on the server. It is used for
+	// example for the locking mechanim or any file that's not an actual Joplin
+	// item.
+	updated_time?: number;
+
+	// This is the time that corresponds to the actual Joplin item updated_time
+	// value. A note is always uploaded with a delay so the server updated_time
+	// value will always be ahead. However for synchronising we need to know the
+	// exact Joplin item updated_time value.
+	jop_updated_time?: number;
+}
+
+export interface PaginatedList {
+	items: RemoteItem[];
+	hasMore: boolean;
+	context: any;
+}
+
 function requestCanBeRepeated(error: any) {
 	const errorCode = typeof error === 'object' && error.code ? error.code : null;
 
@@ -226,7 +250,7 @@ class FileApi {
 
 	// DRIVER MUST RETURN PATHS RELATIVE TO `path`
 	// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-	async list(path = '', options: any = null) {
+	public async list(path = '', options: any = null): Promise<PaginatedList> {
 		if (!options) options = {};
 		if (!('includeHidden' in options)) options.includeHidden = false;
 		if (!('context' in options)) options.context = null;
@@ -235,7 +259,7 @@ class FileApi {
 
 		logger.debug(`list ${this.baseDir()}`);
 
-		const result = await tryAndRepeat(() => this.driver_.list(this.fullPath(path), options), this.requestRepeatCount());
+		const result: PaginatedList = await tryAndRepeat(() => this.driver_.list(this.fullPath(path), options), this.requestRepeatCount());
 
 		if (!options.includeHidden) {
 			const temp = [];

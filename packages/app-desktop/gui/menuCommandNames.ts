@@ -47,6 +47,7 @@ export default function() {
 		'toggleSafeMode',
 		'showShareNoteDialog',
 		'showShareFolderDialog',
+		'leaveSharedFolder',
 		'gotoAnything',
 		'commandPalette',
 		'openMasterPasswordDialog',
