@@ -363,6 +363,7 @@
 			// in the layer of Electron/Chromium, as of 2021-09-23.
 			// To avoid this problem, prevent the upstream from calculating scrollTop and
 			// calculate by yourself by accumulating wheel events.
+			// https://github.com/laurent22/joplin/pull/5496
 			contentElement.scrollTop = Math.max(0, Math.min(maxScrollTop(), contentElement.scrollTop + e.deltaY));
 			e.preventDefault();
 		}));
