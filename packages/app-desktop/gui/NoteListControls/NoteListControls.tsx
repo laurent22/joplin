@@ -2,7 +2,7 @@ import { AppState } from '../../app.reducer';
 import * as React from 'react';
 import { useEffect, useRef } from 'react';
 import SearchBar from '../SearchBar/SearchBar';
-import Button, { ButtonLevel } from '../Button/Button';
+import Button, { ButtonLevel, ButtonSize } from '../Button/Button';
 import CommandService from '@joplin/lib/services/CommandService';
 import { runtime as focusSearchRuntime } from './commands/focusSearch';
 import Note from '@joplin/lib/models/Note';
@@ -30,24 +30,18 @@ const StyledRoot = styled.div`
 
 const StyledButton = styled(Button)`
 	margin-left: 8px;
-	width: 26px;
-	height: 26px;
-	min-width: 26px;
-	min-height: 26px;
 `;
 
 const StyledPairButtonL = styled(Button)`
 	margin-left: 8px;
 	border-radius: 5px 0 0 5px;
-	padding: 0 2px 0 4px;
 `;
 
 const StyledPairButtonR = styled(Button)`
+	min-width: 8px;
 	margin-left: 0px;
 	border-radius: 0 5px 5px 0;
 	border-width: 1px 1px 1px 0;
-	padding: 0 4px 0 2px;
-	min-width: 8px;
 	width: auto;
 `;
 
@@ -123,6 +117,7 @@ function NoteListControls(props: Props) {
 						tooltip={sortOrderFieldTooltip()}
 						iconName={sortOrderFieldIcon()}
 						level={ButtonLevel.Secondary}
+						size={ButtonSize.Small}
 						onClick={onSortOrderFieldButtonClick}
 					/>
 				}
@@ -132,6 +127,7 @@ function NoteListControls(props: Props) {
 						tooltip={CommandService.instance().label('toggleNotesSortOrderReverse')}
 						iconName={sortOrderReverseIcon()}
 						level={ButtonLevel.Secondary}
+						size={ButtonSize.Small}
 						onClick={onSortOrderReverseButtonClick}
 					/>
 				}
@@ -140,6 +136,7 @@ function NoteListControls(props: Props) {
 					tooltip={CommandService.instance().label('newTodo')}
 					iconName="far fa-check-square"
 					level={ButtonLevel.Primary}
+					size={ButtonSize.Small}
 					onClick={onNewTodoButtonClick}
 				/>
 				<StyledButton
@@ -147,6 +144,7 @@ function NoteListControls(props: Props) {
 					tooltip={CommandService.instance().label('newNote')}
 					iconName="icon-note"
 					level={ButtonLevel.Primary}
+					size={ButtonSize.Small}
 					onClick={onNewNoteButtonClick}
 				/>
 			</ButtonContainer>
