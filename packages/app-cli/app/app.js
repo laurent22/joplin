@@ -9,7 +9,7 @@ const Tag = require('@joplin/lib/models/Tag').default;
 const Setting = require('@joplin/lib/models/Setting').default;
 const { reg } = require('@joplin/lib/registry.js');
 const { fileExtension } = require('@joplin/lib/path-utils');
-const { splitCommandString } = require('@joplin/lib/string-utils');
+const { splitCommandString, splitCommandBatch } = require('@joplin/lib/string-utils');
 const { _ } = require('@joplin/lib/locale');
 const fs = require('fs-extra');
 const { cliUtils } = require('./cli-utils.js');
@@ -390,7 +390,8 @@ class Application extends BaseApplication {
 	async commandList(argv) {
 		if (argv.length && argv[0] === 'batch') {
 			const commands = [];
-			const commandLines = (await fs.readFile(argv[1], 'utf-8')).split('\n');
+			const commandLines = splitCommandBatch(await fs.readFile(argv[1], 'utf-8'));
+
 			for (const commandLine of commandLines) {
 				if (!commandLine.trim()) continue;
 				const splitted = splitCommandString(commandLine.trim());
