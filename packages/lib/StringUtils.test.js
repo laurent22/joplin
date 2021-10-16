@@ -67,6 +67,8 @@ describe('StringUtils', function() {
 				[`command1 arg1 'arg2${EOL}continue' arg3`]],
 			[`command1 arg1 'arg2${EOL}continue'${EOL}command2${EOL}command3 'arg1${EOL}continue${EOL}continue' arg2 arg3`,
 				[`command1 arg1 'arg2${EOL}continue'`, 'command2', `command3 'arg1${EOL}continue${EOL}continue' arg2 arg3`]],
+			[`command1 arg\\1 'arg2${EOL}continue\\'continue' arg3`,
+				[`command1 arg\\1 'arg2${EOL}continue\\'continue' arg3`]],
 		];
 
 		testCases.forEach((t) => {

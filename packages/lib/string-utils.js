@@ -211,37 +211,53 @@ function splitCommandString(command, options = null) {
 }
 
 function splitCommandBatch(commandBatch) {
-	let remaining = commandBatch;
-	let commandLines = [''];
+	const commandLines = [];
 
-	const append = function(text1, text2) {
-		text1[text1.length - 1] = text1[text1.length - 1] + text2[0];
-		return text1.concat(text2.slice(1));
-	};
-	const regex = /((?<!\\)(?:\\\\)*')(.*?)((?<!\\)(?:\\\\)*')|((?<!\\)(?:\\\\)*")(.*?)((?<!\\)(?:\\\\)*")/s;
-	// Matches any string, starting and ending with non-escaped single quotes
-	// or double quotes. (Newlines are allowed between two quotes.)
-	//		/
-	// 		((?<!\\)(?:\\\\)*') Matches any single quote, with even number of preceeding bashslashes if exists.
-	// 		(.*?)				Matches any string as short as possible.
-	// 		((?<!\\)(?:\\\\)*') Matches any single quote, with even number of preceeding bashslashes if exists.
-	//		|					OR
-	// 		((?<!\\)(?:\\\\)*") Matches any double quote, with even number of preceeding bashslashes if exists.
-	// 		(.*?)				Matches any string as short as possible.
-	// 		((?<!\\)(?:\\\\)*") Matches any double quote, with even number of preceeding bashslashes if exists.
-	//		/s					Flag s: Dot matches newline.
+	let state = 'command';
+	let current = '';
+	let quote = '';
+	for (let i = 0; i < commandBatch.length; i++) {
+		const c = commandBatch[i];
 
-	let nextQuotedStr = remaining.match(regex);
-	let position = remaining.search(regex);
-	while (position >= 0) {
-		commandLines = append(commandLines, remaining.slice(0, position).split('\n'));
-		commandLines = append(commandLines, [nextQuotedStr[0]]);
-		remaining = remaining.slice(position + nextQuotedStr[0].length);
-
-		nextQuotedStr = remaining.match(regex);
-		position = remaining.search(regex);
+		if (state == 'command') {
+			if (c == '\n') {
+				commandLines.push(current);
+				current = '';
+			} else if (c == '"' || c == '\'') {
+				quote = c;
+				current += c;
+				state = 'quoted';
+			} else if (c == '\\') {
+				current += c;
+				if (i + 1 < commandBatch.length) {
+					current += commandBatch[i + 1];
+					i++;
+				}
+			} else {
+				current += c;
+			}
+		} else if (state == 'quoted') {
+			if (c == quote) {
+				quote = '';
+				current += c;
+				state = 'command';
+			} else if (c == '\\') {
+				current += c;
+				if (i + 1 < commandBatch.length) {
+					current += commandBatch[i + 1];
+					i++;
+				}
+			} else {
+				current += c;
+			}
+		}
 	}
-	commandLines = append(commandLines, remaining.split('\n'));
+	if (current.length > 0) {
+		commandLines.push(current);
+	}
+	if (commandLines.length == 0) {
+		commandLines.push('');
+	}
 
 	return commandLines;
 }
