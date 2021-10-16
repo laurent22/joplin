@@ -1,6 +1,7 @@
 import Logger from '@joplin/lib/Logger';
 import { PluginMessage } from './services/plugins/PluginRunner';
 import shim from '@joplin/lib/shim';
+import { isCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 
 const { BrowserWindow, Tray, screen } = require('electron');
 const url = require('url');
@@ -30,12 +31,14 @@ export default class ElectronAppWrapper {
 	private buildDir_: string = null;
 	private rendererProcessQuitReply_: RendererProcessQuitReply = null;
 	private pluginWindows_: PluginWindows = {};
+	private initialCallbackUrl_: string = null;
 
-	constructor(electronApp: any, env: string, profilePath: string, isDebugMode: boolean) {
+	constructor(electronApp: any, env: string, profilePath: string, isDebugMode: boolean, initialCallbackUrl: string) {
 		this.electronApp_ = electronApp;
 		this.env_ = env;
 		this.isDebugMode_ = isDebugMode;
 		this.profilePath_ = profilePath;
+		this.initialCallbackUrl_ = initialCallbackUrl;
 	}
 
 	electronApp() {
@@ -56,6 +59,10 @@ export default class ElectronAppWrapper {
 
 	env() {
 		return this.env_;
+	}
+
+	initialCallbackUrl() {
+		return this.initialCallbackUrl_;
 	}
 
 	createWindow() {
@@ -236,7 +243,7 @@ export default class ElectronAppWrapper {
 	async waitForElectronAppReady() {
 		if (this.electronApp().isReady()) return Promise.resolve();
 
-		return new Promise((resolve) => {
+		return new Promise<void>((resolve) => {
 			const iid = setInterval(() => {
 				if (this.electronApp().isReady()) {
 					clearInterval(iid);
@@ -323,12 +330,18 @@ export default class ElectronAppWrapper {
 		}
 
 		// Someone tried to open a second instance - focus our window instead
-		this.electronApp_.on('second-instance', () => {
+		this.electronApp_.on('second-instance', (_e: any, argv: string[]) => {
 			const win = this.window();
 			if (!win) return;
 			if (win.isMinimized()) win.restore();
 			win.show();
 			win.focus();
+			if (process.platform !== 'darwin') {
+				const url = argv.find((arg) => isCallbackUrl(arg));
+				if (url) {
+					void this.openCallbackUrl(url);
+				}
+			}
 		});
 
 		return false;
@@ -354,6 +367,17 @@ export default class ElectronAppWrapper {
 
 		this.electronApp_.on('activate', () => {
 			this.win_.show();
+		});
+
+		this.electronApp_.on('open-url', (event: any, url: string) => {
+			event.preventDefault();
+			void this.openCallbackUrl(url);
+		});
+	}
+
+	async openCallbackUrl(url: string) {
+		this.win_.webContents.send('asynchronous-message', 'openCallbackUrl', {
+			url: url,
 		});
 	}
 

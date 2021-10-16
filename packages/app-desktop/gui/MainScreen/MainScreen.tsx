@@ -34,6 +34,8 @@ import ShareFolderDialog from '../ShareFolderDialog/ShareFolderDialog';
 import { ShareInvitation } from '@joplin/lib/services/share/reducer';
 import removeKeylessItems from '../ResizableLayout/utils/removeKeylessItems';
 import { localSyncInfoFromState } from '@joplin/lib/services/synchronizer/syncInfoUtils';
+import { parseCallbackUrl } from '@joplin/lib/callbackUrlUtils';
+import ElectronAppWrapper from '../../ElectronAppWrapper';
 import { showMissingMasterKeyMessage } from '@joplin/lib/services/e2ee/utils';
 import commands from './commands/index';
 import invitationRespond from '../../services/share/invitationRespond';
@@ -154,6 +156,23 @@ class MainScreenComponent extends React.Component<Props, State> {
 		this.layoutModeListenerKeyDown = this.layoutModeListenerKeyDown.bind(this);
 
 		window.addEventListener('resize', this.window_resize);
+
+		ipcRenderer.on('asynchronous-message', (_event: any, message: string, args: any) => {
+			if (message === 'openCallbackUrl') {
+				this.openCallbackUrl(args.url);
+			}
+		});
+
+		const initialCallbackUrl = (bridge().electronApp() as ElectronAppWrapper).initialCallbackUrl();
+		if (initialCallbackUrl) {
+			this.openCallbackUrl(initialCallbackUrl);
+		}
+	}
+
+	private openCallbackUrl(url: string) {
+		console.log(`openUrl ${url}`);
+		const { command, params } = parseCallbackUrl(url);
+		void CommandService.instance().execute(command.toString(), params.id);
 	}
 
 	private updateLayoutPluginViews(layout: LayoutItem, plugins: PluginStates) {
