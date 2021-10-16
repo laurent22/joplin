@@ -2,7 +2,6 @@
 
 const { splitCommandBatch } = require('./string-utils');
 const StringUtils = require('./string-utils');
-const { EOL } = require('os');
 
 describe('StringUtils', function() {
 
@@ -56,6 +55,7 @@ describe('StringUtils', function() {
 	}));
 
 	it('should split the command batch by newlines not inside quotes', (async () => {
+		const eol = '\n';
 		const testCases = [
 			['',
 				['']],
@@ -63,12 +63,12 @@ describe('StringUtils', function() {
 				['command1']],
 			['command1 arg1 arg2 arg3',
 				['command1 arg1 arg2 arg3']],
-			[`command1 arg1 'arg2${EOL}continue' arg3`,
-				[`command1 arg1 'arg2${EOL}continue' arg3`]],
-			[`command1 arg1 'arg2${EOL}continue'${EOL}command2${EOL}command3 'arg1${EOL}continue${EOL}continue' arg2 arg3`,
-				[`command1 arg1 'arg2${EOL}continue'`, 'command2', `command3 'arg1${EOL}continue${EOL}continue' arg2 arg3`]],
-			[`command1 arg\\1 'arg2${EOL}continue\\'continue' arg3`,
-				[`command1 arg\\1 'arg2${EOL}continue\\'continue' arg3`]],
+			[`command1 arg1 'arg2${eol}continue' arg3`,
+				[`command1 arg1 'arg2${eol}continue' arg3`]],
+			[`command1 arg1 'arg2${eol}continue'${eol}command2${eol}command3 'arg1${eol}continue${eol}continue' arg2 arg3`,
+				[`command1 arg1 'arg2${eol}continue'`, 'command2', `command3 'arg1${eol}continue${eol}continue' arg2 arg3`]],
+			[`command1 arg\\1 'arg2${eol}continue\\'continue' arg3`,
+				[`command1 arg\\1 'arg2${eol}continue\\'continue' arg3`]],
 		];
 
 		testCases.forEach((t) => {

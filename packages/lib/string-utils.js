@@ -212,6 +212,7 @@ function splitCommandString(command, options = null) {
 
 function splitCommandBatch(commandBatch) {
 	const commandLines = [];
+	const eol = '\n';
 
 	let state = 'command';
 	let current = '';
@@ -219,15 +220,15 @@ function splitCommandBatch(commandBatch) {
 	for (let i = 0; i < commandBatch.length; i++) {
 		const c = commandBatch[i];
 
-		if (state == 'command') {
-			if (c == '\n') {
+		if (state === 'command') {
+			if (c === eol) {
 				commandLines.push(current);
 				current = '';
-			} else if (c == '"' || c == '\'') {
+			} else if (c === '"' || c === '\'') {
 				quote = c;
 				current += c;
 				state = 'quoted';
-			} else if (c == '\\') {
+			} else if (c === '\\') {
 				current += c;
 				if (i + 1 < commandBatch.length) {
 					current += commandBatch[i + 1];
@@ -236,12 +237,12 @@ function splitCommandBatch(commandBatch) {
 			} else {
 				current += c;
 			}
-		} else if (state == 'quoted') {
-			if (c == quote) {
+		} else if (state === 'quoted') {
+			if (c === quote) {
 				quote = '';
 				current += c;
 				state = 'command';
-			} else if (c == '\\') {
+			} else if (c === '\\') {
 				current += c;
 				if (i + 1 < commandBatch.length) {
 					current += commandBatch[i + 1];
@@ -255,7 +256,7 @@ function splitCommandBatch(commandBatch) {
 	if (current.length > 0) {
 		commandLines.push(current);
 	}
-	if (commandLines.length == 0) {
+	if (commandLines.length === 0) {
 		commandLines.push('');
 	}
 
