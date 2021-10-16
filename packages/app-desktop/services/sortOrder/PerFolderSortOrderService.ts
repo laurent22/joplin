@@ -5,12 +5,28 @@ import { notesSortOrderFieldArray, setNotesSortOrder } from './notesSortOrderUti
 const SUFFIX_FIELD = '$field';
 const SUFFIX_REVERSE = '$reverse';
 
+export interface SortOrder {
+	field: string;
+	reverse: boolean;
+}
+
+interface FolderState {
+	notesParentType: string;
+	selectedFolderId: string;
+}
+
+interface SortOrderPool {
+	[key: string]: string | boolean;
+}
+
 export default class PerFolderSortOrderService {
 
 	private static previousFolderId: string = null;
-	private static folderState = { notesParentType: '', selectedFolderId: '' };
-	private static perFolderSortOrders: { [key: string]: any } = null;
-	private static sharedSortOrder: { [key: string]: any } = {
+	private static folderState: FolderState = { notesParentType: '', selectedFolderId: '' };
+	// Since perFolderSortOrders and sharedSortOrder is persisted using Setting,
+	// their structures are not nested.
+	private static perFolderSortOrders: SortOrderPool = null;
+	private static sharedSortOrder: SortOrder & SortOrderPool = {
 		field: 'user_updated_time',
 		reverse: true,
 		user_updated_time: true,
@@ -19,18 +35,18 @@ export default class PerFolderSortOrderService {
 		order: false,
 	};
 
-	static initialize() {
+	public static initialize() {
 		this.loadPerFolderSortOrders();
 		this.loadSharedSortOrder();
 		eventManager.appStateOn('notesParentType', this.onFolderSelectionMayChange.bind(this, 'notesParentType'));
 		eventManager.appStateOn('selectedFolderId', this.onFolderSelectionMayChange.bind(this, 'selectedFolderId'));
 	}
 
-	static isSet(folderId: string) {
+	public static isSet(folderId: string): boolean {
 		return folderId && this.perFolderSortOrders && this.perFolderSortOrders.hasOwnProperty(folderId + SUFFIX_FIELD);
 	}
 
-	static get(folderId: string) {
+	public static get(folderId: string): SortOrder {
 		if (folderId && this.perFolderSortOrders) {
 			const field = this.perFolderSortOrders[folderId + SUFFIX_FIELD] as string;
 			const reverse = this.perFolderSortOrders[folderId + SUFFIX_REVERSE] as boolean;
@@ -39,7 +55,7 @@ export default class PerFolderSortOrderService {
 		return undefined;
 	}
 
-	static set(folderId?: string, own?: boolean) {
+	public static set(folderId?: string, own?: boolean) {
 		let targetId = folderId;
 		const selectedId = this.getSelectedFolderId();
 		if (!targetId) {
@@ -48,7 +64,7 @@ export default class PerFolderSortOrderService {
 		}
 		const targetOwn = this.isSet(targetId);
 		let newOwn;
-		if (typeof own == 'undefined') {
+		if (typeof own === 'undefined') {
 			newOwn = !targetOwn; // default: toggling
 		} else {
 			newOwn = !!own;
@@ -62,7 +78,7 @@ export default class PerFolderSortOrderService {
 			} else {
 				field = this.sharedSortOrder.field;
 				if (Setting.value('notes.perFieldReversalEnabled')) {
-					reverse = this.sharedSortOrder[field];
+					reverse = this.sharedSortOrder[field] as boolean;
 				} else {
 					reverse = this.sharedSortOrder.reverse;
 				}
@@ -79,8 +95,8 @@ export default class PerFolderSortOrderService {
 		this.folderState[cause] = event.value;
 		const selectedId = this.getSelectedFolderId();
 		if (this.previousFolderId === selectedId) return;
-		const field = Setting.value('notes.sortOrder.field');
-		const reverse = Setting.value('notes.sortOrder.reverse');
+		const field: string = Setting.value('notes.sortOrder.field');
+		const reverse: boolean = Setting.value('notes.sortOrder.reverse');
 		let previousFolderHasPerFolderSortOrder = false;
 		if (this.previousFolderId !== null) {
 			previousFolderHasPerFolderSortOrder = this.isSet(this.previousFolderId);
@@ -91,7 +107,7 @@ export default class PerFolderSortOrderService {
 			}
 		}
 		this.previousFolderId = selectedId;
-		let next;
+		let next: SortOrder;
 		if (this.isSet(selectedId)) {
 			next = this.get(selectedId);
 		} else if (previousFolderHasPerFolderSortOrder) {
@@ -100,7 +116,7 @@ export default class PerFolderSortOrderService {
 			return;
 		}
 		if (Setting.value('notes.perFolderSortOrderEnabled')) {
-			if (next.field != field || next.reverse != reverse) {
+			if (next.field !== field || next.reverse !== reverse) {
 				setNotesSortOrder(next.field, next.reverse);
 			}
 		}

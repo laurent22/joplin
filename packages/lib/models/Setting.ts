@@ -777,14 +777,24 @@ class Setting extends BaseModel {
 			// NOTE: A setting whose name starts with 'notes.sortOrder' is special,
 			// which implies changing the setting automatically triggers the reflesh of notes.
 			// See lib/BaseApplication.ts/generalMiddleware() for details.
-			'notes.sortOrder.buttonsVisible': { value: true, type: SettingItemType.Bool, storage: SettingStorage.File, section: 'note', public: true, label: () => _('Show sort order buttons'), appTypes: [AppType.Desktop] },
+			'notes.sortOrder.buttonsVisible': {
+				value: true,
+				type: SettingItemType.Bool,
+				storage: SettingStorage.File,
+				section: 'appearance',
+				public: true,
+				label: () => _('Show sort order buttons'),
+				description: () => _('If true, sort order buttons (field + reverse) for notes are shown at the top of Note List.'),
+				appTypes: [AppType.Desktop]
+			},
 			'notes.perFieldReversalEnabled': {
 				value: true,
 				type: SettingItemType.Bool,
 				storage: SettingStorage.File,
 				section: 'note',
-				public: true,
+				public: false,
 				label: () => _('Enable per-field sort order reversal'),
+				description: () => _('If true, normal or reverse is kept for each sort order field for notes.'),
 				appTypes: [AppType.Cli, AppType.Desktop],
 			},
 			'notes.perFieldReverse': {
@@ -804,23 +814,24 @@ class Setting extends BaseModel {
 				value: true,
 				type: SettingItemType.Bool,
 				storage: SettingStorage.File,
-				section: 'note',
+				section: 'notebook',
 				public: true,
 				label: () => _('Enable per-notebook sort order'),
+				description: () => _('If true, some notebooks can have their own sort orders (field + reverse) for their notes inside. Any number of notebooks can be specified to have their own sort orders via context menu in the sidebar.'),
 				appTypes: [AppType.Cli, AppType.Desktop],
 			},
 			'notes.perFolderSortOrders': {
 				value: {},
 				type: SettingItemType.Object,
 				storage: SettingStorage.File,
-				section: 'note',
+				section: 'notebook',
 				public: false,
 				appTypes: [AppType.Cli, AppType.Desktop],
 			},
 			'notes.sharedSortOrder': {
 				value: {},
 				type: SettingItemType.Object,
-				section: 'note',
+				section: 'notebook',
 				public: false,
 				appTypes: [AppType.Cli, AppType.Desktop],
 			},
@@ -2004,6 +2015,7 @@ class Setting extends BaseModel {
 		if (name === 'sync') return _('Synchronisation');
 		if (name === 'appearance') return _('Appearance');
 		if (name === 'note') return _('Note');
+		if (name === 'notebook') return _('Notebook');
 		if (name === 'markdownPlugins') return _('Markdown');
 		if (name === 'plugins') return _('Plugins');
 		if (name === 'application') return _('Application');
@@ -2031,6 +2043,7 @@ class Setting extends BaseModel {
 		if (name === 'sync') return 'icon-sync';
 		if (name === 'appearance') return 'icon-appearance';
 		if (name === 'note') return 'icon-note';
+		if (name === 'notebook') return 'icon-notebooks';
 		if (name === 'plugins') return 'icon-plugins';
 		if (name === 'markdownPlugins') return 'fab fa-markdown';
 		if (name === 'application') return 'icon-application';

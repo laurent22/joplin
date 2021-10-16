@@ -33,17 +33,21 @@ const StyledButton = styled(Button)`
 `;
 
 const StyledPairButtonL = styled(Button)`
+	width: 26px;
+	height: 26px;
+	min-width: 26px;
+	min-height: 26px;
 	margin-left: 8px;
 	border-radius: 5px 0 0 5px;
-	padding: 0 2px 0 4px;
 `;
 
 const StyledPairButtonR = styled(Button)`
+	height: 26px;
+	min-width: 8px;
+	min-height: 26px;
 	margin-left: 0px;
 	border-radius: 0 5px 5px 0;
 	border-width: 1px 1px 1px 0;
-	padding: 0 4px 0 2px;
-	min-width: 8px;
 	width: auto;
 `;
 
