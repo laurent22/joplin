@@ -110,7 +110,7 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 		}
 	}
 
-	private async getNoteExportContent_(modNote: NoteEntity) {
+	protected async getNoteExportContent_(modNote: NoteEntity) {
 		return await Note.replaceResourceInternalToExternalLinks(await Note.serialize(modNote, ['body']));
 	}
 

@@ -1308,6 +1308,12 @@ packages/lib/services/interop/InteropService_Exporter_Jex.js.map
 packages/lib/services/interop/InteropService_Exporter_Md.d.ts
 packages/lib/services/interop/InteropService_Exporter_Md.js
 packages/lib/services/interop/InteropService_Exporter_Md.js.map
+packages/lib/services/interop/InteropService_Exporter_Md_frontmatter.d.ts
+packages/lib/services/interop/InteropService_Exporter_Md_frontmatter.js
+packages/lib/services/interop/InteropService_Exporter_Md_frontmatter.js.map
+packages/lib/services/interop/InteropService_Exporter_Md_frontmatter.test.d.ts
+packages/lib/services/interop/InteropService_Exporter_Md_frontmatter.test.js
+packages/lib/services/interop/InteropService_Exporter_Md_frontmatter.test.js.map
 packages/lib/services/interop/InteropService_Exporter_Raw.d.ts
 packages/lib/services/interop/InteropService_Exporter_Raw.js
 packages/lib/services/interop/InteropService_Exporter_Raw.js.map
@@ -1332,6 +1338,12 @@ packages/lib/services/interop/InteropService_Importer_Md.js.map
 packages/lib/services/interop/InteropService_Importer_Md.test.d.ts
 packages/lib/services/interop/InteropService_Importer_Md.test.js
 packages/lib/services/interop/InteropService_Importer_Md.test.js.map
+packages/lib/services/interop/InteropService_Importer_Md_frontmatter.d.ts
+packages/lib/services/interop/InteropService_Importer_Md_frontmatter.js
+packages/lib/services/interop/InteropService_Importer_Md_frontmatter.js.map
+packages/lib/services/interop/InteropService_Importer_Md_frontmatter.test.d.ts
+packages/lib/services/interop/InteropService_Importer_Md_frontmatter.test.js
+packages/lib/services/interop/InteropService_Importer_Md_frontmatter.test.js.map
 packages/lib/services/interop/InteropService_Importer_Raw.d.ts
 packages/lib/services/interop/InteropService_Importer_Raw.js
 packages/lib/services/interop/InteropService_Importer_Raw.js.map
