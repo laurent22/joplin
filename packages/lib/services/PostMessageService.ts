@@ -46,7 +46,7 @@ export interface MessageResponse {
 
 type MessageResponder = (message: MessageResponse)=> void;
 
-type Callback = (message: any)=> void;
+type ViewMessageHandler = (message: any)=> void;
 
 interface Message {
 	pluginId: string;
@@ -62,7 +62,7 @@ export default class PostMessageService {
 
 	private static instance_: PostMessageService;
 	private responders_: Record<string, MessageResponder> = {};
-	private callbacks_: Record<string, Callback> = {};
+	private viewMessageHandlers_: Record<string, ViewMessageHandler> = {};
 
 	public static instance(): PostMessageService {
 		if (this.instance_) return this.instance_;
@@ -76,7 +76,7 @@ export default class PostMessageService {
 		let error = null;
 
 		if (message.from === MessageParticipant.Plugin && message.to === MessageParticipant.UserWebview) {
-			this.callback(message);
+			this.viewMessageHandler(message);
 			return;
 		}
 
@@ -99,15 +99,15 @@ export default class PostMessageService {
 		this.sendResponse(message, response, error);
 	}
 
-	private callback(message: Message) {
+	private viewMessageHandler(message: Message) {
 
-		const callback = this.callbacks_[[ResponderComponentType.UserWebview, message.viewId].join(':')];
+		const viewMessageHandler = this.viewMessageHandlers_[[ResponderComponentType.UserWebview, message.viewId].join(':')];
 
-		if (!callback) {
-			logger.warn('Cannot receive message because no callback was found', message);
+		if (!viewMessageHandler) {
+			logger.warn('Cannot receive message because no viewMessageHandler was found', message);
+		} else {
+			viewMessageHandler(message.content);
 		}
-
-		callback(message.content);
 	}
 
 	private sendResponse(message: Message, responseContent: any, error: any) {
@@ -139,12 +139,12 @@ export default class PostMessageService {
 		this.responders_[[type, viewId].join(':')] = responder;
 	}
 
-	public registerCallback(type: ResponderComponentType, viewId: string, callback: Callback) {
-		this.callbacks_[[type, viewId].join(':')] = callback;
+	public registerViewMessageHandler(type: ResponderComponentType, viewId: string, callback: ViewMessageHandler) {
+		this.viewMessageHandlers_[[type, viewId].join(':')] = callback;
 	}
 
-	public unregisterCallback(type: ResponderComponentType, viewId: string) {
-		delete this.callbacks_[[type, viewId].join(':')];
+	public unregisterViewMessageHandler(type: ResponderComponentType, viewId: string) {
+		delete this.viewMessageHandlers_[[type, viewId].join(':')];
 	}
 
 	public unregisterResponder(type: ResponderComponentType, viewId: string) {

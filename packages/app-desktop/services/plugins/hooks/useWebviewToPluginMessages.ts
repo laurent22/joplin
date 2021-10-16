@@ -21,8 +21,8 @@ export default function(frameWindow: any, isReady: boolean, pluginId: string, vi
 				return;
 			}
 
-			if (event.data.target === 'postMessageService.registerCallback') {
-				PostMessageService.instance().registerCallback(ResponderComponentType.UserWebview, viewId, (message: MessageResponse) => {
+			if (event.data.target === 'postMessageService.registerViewMessageHandler') {
+				PostMessageService.instance().registerViewMessageHandler(ResponderComponentType.UserWebview, viewId, (message: MessageResponse) => {
 					postMessage('postMessageService.plugin_message', { message });
 				});
 			} else if (event.data.target === 'postMessageService.message') {

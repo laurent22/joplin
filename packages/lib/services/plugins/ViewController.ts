@@ -45,7 +45,7 @@ export default class ViewController {
 	}
 
 	public postMessage(message: any) {
-		console.log('Calling ViewController.postMessage - but not implemented', message);
+		console.info('Calling ViewController.postMessage - but not implemented', message);
 	}
 
 }
