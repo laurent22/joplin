@@ -36,7 +36,7 @@ export interface RemoteItem {
 
 export interface PaginatedList {
 	items: RemoteItem[];
-	hasMore: boolean;
+	has_more: boolean;
 	context: any;
 }
 
