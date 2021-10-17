@@ -285,6 +285,10 @@ export default class Folder extends BaseItem {
 		return this.db().selectAll('SELECT id, share_id FROM folders WHERE parent_id = "" AND share_id != ""');
 	}
 
+	public static async rootShareFoldersByKeyId(keyId: string): Promise<FolderEntity[]> {
+		return this.db().selectAll('SELECT id, share_id FROM folders WHERE master_key_id = ?', [keyId]);
+	}
+
 	public static async updateFolderShareIds(): Promise<void> {
 		// Get all the sub-folders of the shared folders, and set the share_id
 		// property.

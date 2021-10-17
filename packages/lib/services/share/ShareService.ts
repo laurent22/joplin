@@ -228,6 +228,18 @@ export default class ShareService {
 		return `${this.api().personalizedUserContentBaseUrl(userId)}/shares/${share.id}`;
 	}
 
+	public folderShare(folderId: string): StateShare {
+		return this.shares.find(s => s.folder_id === folderId);
+	}
+
+	public isSharedFolderOwner(folderId: string, userId: string = null): boolean {
+		if (userId === null) userId = this.userId;
+
+		const share = this.folderShare(folderId);
+		if (!share) throw new Error(`Cannot find share associated with folder: ${folderId}`);
+		return share.user.id === userId;
+	}
+
 	public get shares() {
 		return this.state.shares;
 	}

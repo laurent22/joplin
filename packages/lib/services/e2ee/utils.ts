@@ -8,6 +8,8 @@ import { getActiveMasterKey, getActiveMasterKeyId, localSyncInfo, masterKeyEnabl
 import JoplinError from '../../JoplinError';
 import { generateKeyPair, pkReencryptPrivateKey, ppkPasswordIsValid } from './ppk';
 import KvStore from '../KvStore';
+import Folder from '../../models/Folder';
+import ShareService from '../share/ShareService';
 
 const logger = Logger.create('e2ee/utils');
 
@@ -240,7 +242,30 @@ export async function updateMasterPassword(currentPassword: string, newPassword:
 	Setting.setValue('encryption.masterPassword', newPassword);
 }
 
-export async function resetMasterPassword(encryptionService: EncryptionService, kvStore: KvStore, newPassword: string) {
+const unshareEncryptedFolders = async (shareService: ShareService, masterKeyId: string) => {
+	const rootFolders = await Folder.rootShareFoldersByKeyId(masterKeyId);
+	for (const folder of rootFolders) {
+		const isOwner = shareService.isSharedFolderOwner(folder.id);
+		if (isOwner) {
+			await shareService.unshareFolder(folder.id);
+		} else {
+			await shareService.leaveSharedFolder(folder.id);
+		}
+	}
+};
+
+export async function resetMasterPassword(encryptionService: EncryptionService, kvStore: KvStore, shareService: ShareService, newPassword: string) {
+	// First thing we do is to unshare all shared folders. If that fails, which
+	// may happen in particular if no connection is available, then we don't
+	// proceed. `unshareEncryptedFolders` will throw if something cannot be
+	// done.
+	if (shareService) {
+		for (const mk of localSyncInfo().masterKeys) {
+			if (!masterKeyEnabled(mk)) continue;
+			await unshareEncryptedFolders(shareService, mk.id);
+		}
+	}
+
 	for (const mk of localSyncInfo().masterKeys) {
 		if (!masterKeyEnabled(mk)) continue;
 		mk.enabled = 0;
@@ -253,8 +278,6 @@ export async function resetMasterPassword(encryptionService: EncryptionService, 
 		syncInfo.ppk = await generateKeyPair(encryptionService, newPassword);
 		saveLocalSyncInfo(syncInfo);
 	}
-
-	// TODO: Unshare any folder associated with a disabled master key?
 
 	Setting.setValue('encryption.masterPassword', newPassword);
 }
