@@ -166,7 +166,7 @@ class NoteTextViewerComponent extends React.Component<Props, any> {
 
 	private syncScrollMapper_ = new SyncScrollMapper;
 
-	refreshSyncScrollMap(forced = false) {
+	refreshSyncScrollMap(forced: boolean) {
 		return this.syncScrollMapper_.refresh(forced);
 	}
 

@@ -190,7 +190,24 @@
 
 		let alreadyAllImagesLoaded = false;
 
-		// Observes the changes of contentElement's scrollTop and scrollHeight
+		// During a note is being rendered, its height is varying. To keep scroll
+		// consistency, observing the height of the content element and updating its
+		// scroll position is required. For the purpose, 'ResizeObserver' is used.
+		// ResizeObserver is standard and an element's counterpart to 'window.resize'
+		// event. It's overhead is cheaper than observation using an interval timer.
+		//
+		// To observe the scroll height of the content element, adding, removing and
+		// resizing of its children should be observed. So, the combination of
+		// ResizeObserver (used for resizing) and MutationObserver (used for ading
+		// and removing) is used.
+		//
+		// References:
+		// https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver
+		// https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver
+		//
+		// By using them, this observeRendering() function provides a efficient way
+		// to observe the changes of the scroll height of the content element
+		// using a callback approach.
 		function observeRendering(callback, compress = false) {
 			let previousHeight = 0;
 			const fn = (cause) => {
@@ -203,6 +220,8 @@
 			};
 			// 'resized' means DOM Layout change or Window resize event
 			let resizeObserver = new ResizeObserver(() => fn('resized'));
+			// An HTML document to be rendered is added and removed as a child of
+			// the content element for each setHtml() invocation.
 			let mutationObserver = new MutationObserver(entries => {
 				const e = entries[0];
 				e.removedNodes.forEach(n => n instanceof Element && resizeObserver.unobserve(n));
@@ -213,6 +232,7 @@
 			return { mutationObserver, resizeObserver };
 		};
 
+		// A callback anonymous function invoked when the scroll height changes.
 		const onRendering = observeRendering((cause, height, heightChanged) => {
 			if (!alreadyAllImagesLoaded) {
 				const loaded = allImagesLoaded();
@@ -224,6 +244,7 @@
 				}
 			}
 			if (heightChanged) {
+				// When the scroll height changes, sync is needed.
 				ipcProxySendToHost('syncViewerScrollWithEditor');
 			}
 		});
@@ -356,7 +377,6 @@
 		}
 
 		function currentPercentScroll() {
-		const el = document.getElementById('joplin-container-body');			
 			const m = maxScrollTop();
 			// As of 2021, if zoomFactor != 1, underlying Chrome returns scrollTop with 
 			// some numerical error. It can be more than maxScrollTop().

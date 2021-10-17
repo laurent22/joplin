@@ -7,7 +7,7 @@ import { commandAttachFileToBody, handlePasteEvent } from '../../utils/resourceH
 import { ScrollOptions, ScrollOptionTypes } from '../../utils/types';
 import { CommandValue } from '../../utils/types';
 import { usePrevious, cursorPositionToTextOffset } from './utils';
-import useScrollHandler from './utils/useScrollHandler';
+import useScrollHandler, { translateScrollPercentToEditor, translateScrollPercentToViewer } from './utils/useScrollHandler';
 import useElementSize from '@joplin/lib/hooks/useElementSize';
 import Toolbar from './Toolbar';
 import styles_ from './styles';
@@ -65,9 +65,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 
 	usePluginServiceRegistration(ref);
 
-	const { resetScroll, editor_scroll, setEditorPercentScroll, setViewerPercentScroll,
-		translateScrollPercentToEditor, translateScrollPercentToViewer,
-	} = useScrollHandler(editorRef, webviewRef, props.onScroll);
+	const { resetScroll, editor_scroll, setEditorPercentScroll, setViewerPercentScroll } = useScrollHandler(editorRef, webviewRef, props.onScroll);
 
 	const codeMirror_change = useCallback((newBody: string) => {
 		props_onChangeRef.current({ changeId: null, content: newBody });
@@ -119,7 +117,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				} else if (options.type === ScrollOptionTypes.Percent) {
 					const editorPercent = options.value as number;
 					setEditorPercentScroll(editorPercent);
-					const viewerPercent = translateScrollPercentToViewer(editorPercent);
+					const viewerPercent = translateScrollPercentToViewer(editorRef, webviewRef, editorPercent);
 					setViewerPercentScroll(viewerPercent);
 				} else {
 					throw new Error(`Unsupported scroll options: ${options.type}`);
@@ -582,14 +580,14 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 			}
 		} else if (msg === 'percentScroll') {
 			const viewerPercent = arg0;
-			const editorPercent = translateScrollPercentToEditor(viewerPercent);
+			const editorPercent = translateScrollPercentToEditor(editorRef, webviewRef, viewerPercent);
 			setEditorPercentScroll(editorPercent);
 		} else if (msg === 'syncViewerScrollWithEditor') {
 			const force = !!arg0;
 			webviewRef.current?.wrappedInstance?.refreshSyncScrollMap(force);
 			const editorPercent = Math.max(0, Math.min(1, editorRef.current?.getScrollPercent()));
 			if (!isNaN(editorPercent)) {
-				const viewerPercent = translateScrollPercentToViewer(editorPercent);
+				const viewerPercent = translateScrollPercentToViewer(editorRef, webviewRef, editorPercent);
 				setViewerPercentScroll(viewerPercent);
 			}
 		} else {
