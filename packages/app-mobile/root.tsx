@@ -476,7 +476,7 @@ async function initialize(dispatch: Function) {
 		if (Setting.value('env') == 'prod') {
 			await db.open({ name: 'joplin.sqlite' });
 		} else {
-			await db.open({ name: 'joplin-104.sqlite' });
+			await db.open({ name: 'joplin-107.sqlite' });
 
 			// await db.clearForTesting();
 		}
@@ -492,6 +492,10 @@ async function initialize(dispatch: Function) {
 			// Setting.setValue('sync.10.userContentPath', 'https://joplinusercontent.com');
 			Setting.setValue('sync.10.path', 'http://api.joplincloud.local:22300');
 			Setting.setValue('sync.10.userContentPath', 'http://joplinusercontent.local:22300');
+
+			Setting.setValue('sync.target', 10);
+			Setting.setValue('sync.10.username', 'user1@example.com');
+			Setting.setValue('sync.10.password', 'hunter1hunter2hunter3');
 		}
 
 		if (!Setting.value('clientId')) Setting.setValue('clientId', uuid.create());

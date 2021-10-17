@@ -1,6 +1,6 @@
 {
   "name": "@joplin/app-desktop",
-  "version": "2.5.1",
+  "version": "2.5.3",
   "description": "Joplin for Desktop",
   "main": "main.js",
   "private": true,
@@ -37,7 +37,7 @@
     "asar": true,
     "asarUnpack": "./node_modules/node-notifier/vendor/**",
     "win": {
-      "rfc3161TimeStampServer": "http://timestamp.comodoca.com/rfc3161",
+      "rfc3161TimeStampServer": "http://sha256timestamp.ws.symantec.com/sha256/timestamp",
       "icon": "../../Assets/ImageSources/Joplin.ico",
       "target": [
         {
@@ -77,13 +77,25 @@
       "icon": "../../Assets/macOs.icns",
       "target": "dmg",
       "hardenedRuntime": true,
-      "entitlements": "./build-mac/entitlements.mac.inherit.plist"
+      "entitlements": "./build-mac/entitlements.mac.inherit.plist",
+      "extendInfo": {
+        "CFBundleURLTypes": [
+          {
+            "CFBundleURLSchemes": [
+              "joplin"
+            ],
+            "CFBundleTypeRole": "Editor",
+            "CFBundleURLName": "org.joplinapp.x-callback-url"
+          }
+        ]
+      }
     },
     "linux": {
       "icon": "../../Assets/LinuxIcons",
       "category": "Office",
       "desktop": {
-        "Icon": "joplin"
+        "Icon": "joplin",
+        "MimeType": "x-scheme-handler/joplin;"
       },
       "target": "AppImage"
     },

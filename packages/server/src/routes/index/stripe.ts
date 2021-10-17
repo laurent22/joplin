@@ -1,10 +1,10 @@
 import { SubPath } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
-import { RouteType } from '../../utils/types';
+import { Env, RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
 import { bodyFields } from '../../utils/requestUtils';
 import globalConfig from '../../config';
-import { ErrorForbidden, ErrorNotFound } from '../../utils/errors';
+import { ErrorBadRequest, ErrorForbidden, ErrorNotFound } from '../../utils/errors';
 import { Stripe } from 'stripe';
 import Logger from '@joplin/lib/Logger';
 import getRawBody = require('raw-body');
@@ -35,6 +35,7 @@ async function stripeEvent(stripe: Stripe, req: any): Promise<Stripe.Event> {
 interface CreateCheckoutSessionFields {
 	priceId: string;
 	coupon: string;
+	promotionCode: string;
 	email: string;
 }
 
@@ -145,14 +146,29 @@ export const postHandlers: PostHandlers = {
 		};
 
 		if (fields.coupon) {
-			delete checkoutSession.allow_promotion_codes;
-
 			checkoutSession.discounts = [
 				{
 					coupon: fields.coupon.trim(),
 				},
 			];
+		} else if (fields.promotionCode) {
+			const p = await stripe.promotionCodes.list({ code: fields.promotionCode });
+			const codes = p.data;
+			if (!codes.length) throw new ErrorBadRequest(`Could not find promotion code: ${fields.promotionCode}`);
+
+			// Should not be possible in our setup since a unique code is
+			// created for each customer.
+			if (codes.length > 1) console.warn(`Found more than one promotion code: ${fields.promotionCode}`);
+
+			checkoutSession.discounts = [
+				{
+					promotion_code: codes[0].id,
+				},
+			];
 		}
+
+		// "You may only specify one of these parameters: allow_promotion_codes, discounts"
+		if (checkoutSession.discounts) delete checkoutSession.allow_promotion_codes;
 
 		if (fields.email) {
 			checkoutSession.customer_email = fields.email.trim();
@@ -181,32 +197,6 @@ export const postHandlers: PostHandlers = {
 
 		return { sessionId: session.id };
 	},
-
-	// # How to test the complete workflow locally
-	//
-	// - In website/build.ts, set the env to "dev", then build the website - `npm run watch-website`
-	// - Start the Stripe CLI tool: `stripe listen --forward-to http://joplincloud.local:22300/stripe/webhook`
-	// - Copy the webhook secret, and paste it in joplin-credentials/server.env (under STRIPE_WEBHOOK_SECRET)
-	// - Start the local Joplin Server, `npm run start-dev`, running under http://joplincloud.local:22300
-	// - Start the workflow from http://localhost:8077/plans/
-	// - The local website often is not configured to send email, but you can see them in the database, in the "emails" table.
-	//
-	// # Simplified workflow
-	//
-	// To test without running the main website, use http://joplincloud.local:22300/stripe/checkoutTest
-	//
-	// # Stripe config
-	//
-	// - The public config is under packages/server/stripeConfig.json
-	// - The private config is in the server .env file
-	//
-	// # Failed Stripe cli login
-	//
-	// If the tool show this error, with code "api_key_expired":
-	//
-	// > FATAL Error while authenticating with Stripe: Authorization failed
-	//
-	// Need to logout and login again to refresh the CLI token - `stripe logout && stripe login`
 
 	webhook: async (stripe: Stripe, _path: SubPath, ctx: AppContext, event: Stripe.Event = null, logErrors: boolean = true) => {
 		event = event ? event : await stripeEvent(stripe, ctx.req);
@@ -409,6 +399,8 @@ const getHandlers: Record<string, StripeRouteHandler> = {
 	},
 
 	checkoutTest: async (_stripe: Stripe, _path: SubPath, ctx: AppContext) => {
+		if (globalConfig().env === Env.Prod) throw new ErrorForbidden();
+
 		const basicPrice = findPrice(stripeConfig().prices, { accountType: 1, period: PricePeriod.Monthly });
 		const proPrice = findPrice(stripeConfig().prices, { accountType: 2, period: PricePeriod.Monthly });
 
@@ -422,14 +414,15 @@ const getHandlers: Record<string, StripeRouteHandler> = {
 				<script>
 					var stripe = Stripe(${JSON.stringify(stripeConfig().publishableKey)});
 
-					var createCheckoutSession = function(priceId) {
+					var createCheckoutSession = function(priceId, promotionCode) {
 						return fetch("/stripe/createCheckoutSession", {
 							method: "POST",
 							headers: {
 								"Content-Type": "application/json"
 							},
 							body: JSON.stringify({
-								priceId: priceId
+								priceId,
+								promotionCode,
 							})
 						}).then(function(result) {
 							return result.json();
@@ -438,6 +431,7 @@ const getHandlers: Record<string, StripeRouteHandler> = {
 				</script>
 			</head>
 			<body>
+				Promotion code: <input id="promotion_code" type="text"/> <br/>
 				<button id="checkout_basic">Subscribe Basic</button>
 				<button id="checkout_pro">Subscribe Pro</button>
 				<button id="checkout_custom">Subscribe Custom</button>
@@ -455,7 +449,9 @@ const getHandlers: Record<string, StripeRouteHandler> = {
 					}
 
 					function createSessionAndRedirect(priceId) {
-						createCheckoutSession(priceId).then(function(data) {
+						var promotionCode = document.getElementById('promotion_code').value;
+
+						createCheckoutSession(priceId, promotionCode).then(function(data) {
 							// Call Stripe.js method to redirect to the new Checkout page
 							stripe
 								.redirectToCheckout({

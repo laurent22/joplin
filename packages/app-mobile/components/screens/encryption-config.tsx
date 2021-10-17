@@ -106,7 +106,7 @@ const EncryptionConfigScreen = (props: Props) => {
 					<View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
 						<TextInput selectionColor={theme.textSelectionColor} keyboardAppearance={theme.keyboardAppearance} secureTextEntry={true} value={password} onChangeText={(text: string) => onInputPasswordChange(mk, text)} style={inputStyle}></TextInput>
 						<Text style={{ fontSize: theme.fontSize, marginRight: 10, color: theme.color }}>{passwordOk}</Text>
-						<Button title={_('Save')} onPress={() => onSavePasswordClick(mk, props.passwords)}></Button>
+						<Button title={_('Save')} onPress={() => onSavePasswordClick(mk, inputPasswords)}></Button>
 					</View>
 				);
 			}

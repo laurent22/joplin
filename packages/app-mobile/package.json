@@ -15,8 +15,8 @@
     "postinstall": "jetify && npm run build"
   },
   "dependencies": {
-    "@joplin/lib": "~2.4",
-    "@joplin/renderer": "~2.4",
+    "@joplin/lib": "~2.5",
+    "@joplin/renderer": "~2.5",
     "@react-native-community/clipboard": "^1.5.0",
     "@react-native-community/datetimepicker": "^3.0.3",
     "@react-native-community/geolocation": "^2.0.2",
@@ -73,7 +73,7 @@
     "@codemirror/lang-markdown": "^0.18.4",
     "@codemirror/state": "^0.18.7",
     "@codemirror/view": "^0.18.19",
-    "@joplin/tools": "~2.4",
+    "@joplin/tools": "~2.5",
     "@rollup/plugin-node-resolve": "^13.0.0",
     "@rollup/plugin-typescript": "^8.2.1",
     "@types/node": "^14.14.6",

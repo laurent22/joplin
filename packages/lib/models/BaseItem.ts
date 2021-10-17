@@ -1,4 +1,4 @@
-import { ModelType } from '../BaseModel';
+import { ModelType, DeleteOptions } from '../BaseModel';
 import { BaseItemEntity, NoteEntity } from '../services/database/types';
 import Setting from './Setting';
 import BaseModel from '../BaseModel';
@@ -237,11 +237,11 @@ export default class BaseItem extends BaseModel {
 		return ItemClass.delete(id);
 	}
 
-	static async delete(id: string, options: any = null) {
+	static async delete(id: string, options: DeleteOptions = null) {
 		return this.batchDelete([id], options);
 	}
 
-	static async batchDelete(ids: string[], options: any = null) {
+	static async batchDelete(ids: string[], options: DeleteOptions = null) {
 		if (!options) options = {};
 		let trackDeleted = true;
 		if (options && options.trackDeleted !== null && options.trackDeleted !== undefined) trackDeleted = options.trackDeleted;

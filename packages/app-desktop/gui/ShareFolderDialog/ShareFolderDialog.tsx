@@ -9,7 +9,7 @@ import ShareService from '@joplin/lib/services/share/ShareService';
 import styled from 'styled-components';
 import StyledFormLabel from '../style/StyledFormLabel';
 import StyledInput from '../style/StyledInput';
-import Button from '../Button/Button';
+import Button, { ButtonSize } from '../Button/Button';
 import Logger from '@joplin/lib/Logger';
 import StyledMessage from '../style/StyledMessage';
 import { ShareUserStatus, StateShare, StateShareUser } from '@joplin/lib/services/share/reducer';
@@ -64,7 +64,7 @@ const StyledRecipientStatusIcon = styled.i`
 `;
 
 const StyledRecipients = styled.div`
-	
+	margin-bottom: 10px;
 `;
 
 const StyledRecipientList = styled.div`
@@ -194,7 +194,13 @@ function ShareFolderDialog(props: Props) {
 	async function recipient_delete(event: RecipientDeleteEvent) {
 		if (!confirm(_('Delete this invitation? The recipient will no longer have access to this shared notebook.'))) return;
 
-		await ShareService.instance().deleteShareRecipient(event.shareUserId);
+		try {
+			await ShareService.instance().deleteShareRecipient(event.shareUserId);
+		} catch (error) {
+			logger.error(error);
+			alert(_('The recipient could not be removed from the list. Please try again.\n\nThe error was: "%s"', error.message));
+		}
+
 		await ShareService.instance().refreshShareUsers(share.id);
 	}
 
@@ -213,7 +219,7 @@ function ShareFolderDialog(props: Props) {
 				<StyledFormLabel>{_('Add recipient:')}</StyledFormLabel>
 				<StyledRecipientControls>
 					<StyledRecipientInput disabled={disabled} type="email" placeholder="example@domain.com" value={recipientEmail} onChange={recipientEmail_change} />
-					<Button disabled={disabled} title={_('Share')} onClick={shareRecipient_click}></Button>
+					<Button size={ButtonSize.Small} disabled={disabled} title={_('Share')} onClick={shareRecipient_click}></Button>
 				</StyledRecipientControls>
 			</StyledAddRecipient>
 		);
@@ -236,7 +242,7 @@ function ShareFolderDialog(props: Props) {
 			<StyledRecipient key={shareUser.user.email} index={index}>
 				<StyledRecipientName>{shareUser.user.email}</StyledRecipientName>
 				<StyledRecipientStatusIcon title={statusToMessage[shareUser.status]} className={statusToIcon[shareUser.status]}></StyledRecipientStatusIcon>
-				<Button iconName="far fa-times-circle" onClick={() => recipient_delete({ shareUserId: shareUser.id })}/>
+				<Button size={ButtonSize.Small} iconName="far fa-times-circle" onClick={() => recipient_delete({ shareUserId: shareUser.id })}/>
 			</StyledRecipient>
 		);
 	}
@@ -282,6 +288,14 @@ function ShareFolderDialog(props: Props) {
 		);
 	}
 
+	const renderInfo = () => {
+		return (
+			<p className="info-text -small">
+				{_('Please note that if it is a large notebook, it may take a few minutes for all the notes to show up on the recipient\'s device.')}
+			</p>
+		);
+	};
+
 	async function buttonRow_click(event: ClickEvent) {
 		if (event.buttonName === 'unshare') {
 			if (!confirm(_('Unshare this notebook? The recipients will no longer have access to its content.'))) return;
@@ -301,6 +315,7 @@ function ShareFolderDialog(props: Props) {
 				{renderShareState()}
 				{renderError()}
 				{renderRecipients()}
+				{renderInfo()}
 				<DialogButtonRow
 					themeId={props.themeId}
 					onClick={buttonRow_click}
