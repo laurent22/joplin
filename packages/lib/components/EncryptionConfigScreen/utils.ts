@@ -96,6 +96,13 @@ export const onSavePasswordClick = (mk: MasterKeyEntity, passwords: Record<strin
 	} else {
 		Setting.setObjectValue('encryption.passwordCache', mk.id, password);
 	}
+
+	// When setting a master key password, if the master password is not set, we
+	// assume that this password is the master password. If it turns out it's
+	// not, it's always possible to change it in the UI.
+	if (password && !Setting.value('encryption.masterPassword')) {
+		Setting.setValue('encryption.masterPassword', password);
+	}
 };
 
 export const onMasterPasswordSave = (masterPasswordInput: string) => {
@@ -141,6 +148,11 @@ export const useInputPasswords = (propsPasswords: Record<string, string>) => {
 
 export const usePasswordChecker = (masterKeys: MasterKeyEntity[], activeMasterKeyId: string, masterPassword: string, passwords: Record<string, string>) => {
 	const [passwordChecks, setPasswordChecks] = useState<PasswordChecks>({});
+
+	// "masterPasswordKeys" are the master key that can be decrypted with the
+	// master password. It should be all of them normally, but in previous
+	// versions it was possible to have different passwords for different keys,
+	// so we need this for backward compatibility.
 	const [masterPasswordKeys, setMasterPasswordKeys] = useState<PasswordChecks>({});
 	const [masterPasswordStatus, setMasterPasswordStatus] = useState<MasterPasswordStatus>(MasterPasswordStatus.Unknown);
 
@@ -167,7 +179,6 @@ export const usePasswordChecker = (masterKeys: MasterKeyEntity[], activeMasterKe
 
 		setMasterPasswordKeys(masterPasswordKeys => {
 			if (JSON.stringify(newMasterPasswordKeys) === JSON.stringify(masterPasswordKeys)) return masterPasswordKeys;
-			console.info('====', JSON.stringify(newMasterPasswordKeys), JSON.stringify(masterPasswordKeys));
 			return newMasterPasswordKeys;
 		});
 
