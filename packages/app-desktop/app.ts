@@ -43,6 +43,7 @@ import noteListControlsCommands from './gui/NoteListControls/commands/index';
 import sidebarCommands from './gui/Sidebar/commands/index';
 import appCommands from './commands/index';
 import libCommands from '@joplin/lib/commands/index';
+import { homedir } from 'os';
 const electronContextMenu = require('./services/electron-context-menu');
 // import  populateDatabase from '@joplin/lib/services/debug/populateDatabase';
 
@@ -361,6 +362,9 @@ class Application extends BaseApplication {
 		syncDebugLog.enabled = false;
 
 		if (dir.endsWith('dev-desktop-2')) {
+			syncDebugLog.addTarget(TargetType.File, {
+				path: `${homedir()}/synclog.txt`,
+			});
 			syncDebugLog.enabled = true;
 			syncDebugLog.info(`Profile dir: ${dir}`);
 		}

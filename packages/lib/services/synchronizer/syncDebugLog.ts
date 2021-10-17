@@ -2,12 +2,8 @@
 // related events. In particular, it logs notes and folders being saved, and the
 // relevant sync operations. Enable it in app.ts
 
-import Logger, { TargetType } from '../../Logger';
-import { homedir } from 'os';
+import Logger from '../../Logger';
 
 const syncDebugLog = new Logger();
-syncDebugLog.addTarget(TargetType.File, {
-	path: `${homedir()}/synclog.txt`,
-});
 
 export default syncDebugLog;
