@@ -1,3 +1,8 @@
 <th class="{{#classNames}}{{.}} {{/classNames}}">
-	<a href="{{sortLink}}" class="sort-button">{{label}} <i class="fas fa-caret-{{iconDir}}"></i></a>
+	{{#sortLink}}
+		<a href="{{sortLink}}" class="sort-button">{{label}} <i class="fas fa-caret-{{iconDir}}"></i></a>
+	{{/sortLink}}
+	{{^sortLink}}
+		{{label}}
+	{{/sortLink}}
 </th>

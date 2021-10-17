@@ -3,7 +3,7 @@ const Folder = require('../models/Folder').default;
 const Note = require('../models/Note').default;
 const Tag = require('../models/Tag').default;
 
-describe('models_Tag', function() {
+describe('models/Tag', function() {
 
 	beforeEach(async (done) => {
 		await setupDatabaseAndSynchronizer(1);

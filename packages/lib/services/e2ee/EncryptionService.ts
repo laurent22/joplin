@@ -25,15 +25,31 @@ interface DecryptedMasterKey {
 	plainText: string;
 }
 
+export interface EncryptionCustomHandler {
+	context?: any;
+	encrypt(context: any, hexaBytes: string, password: string): Promise<string>;
+	decrypt(context: any, hexaBytes: string, password: string): Promise<string>;
+}
+
+export enum EncryptionMethod {
+	SJCL = 1,
+	SJCL2 = 2,
+	SJCL3 = 3,
+	SJCL4 = 4,
+	SJCL1a = 5,
+	Custom = 6,
+}
+
+export interface EncryptOptions {
+	encryptionMethod?: EncryptionMethod;
+	onProgress?: Function;
+	encryptionHandler?: EncryptionCustomHandler;
+	masterKeyId?: string;
+}
+
 export default class EncryptionService {
 
 	public static instance_: EncryptionService = null;
-
-	public static METHOD_SJCL_2 = 2;
-	public static METHOD_SJCL_3 = 3;
-	public static METHOD_SJCL_4 = 4;
-	public static METHOD_SJCL_1A = 5;
-	public static METHOD_SJCL = 1;
 
 	public static fsDriver_: any = null;
 
@@ -52,8 +68,8 @@ export default class EncryptionService {
 	// changed easily since the chunk size is incorporated into the encrypted data.
 	private chunkSize_ = 5000;
 	private decryptedMasterKeys_: Record<string, DecryptedMasterKey> = {};
-	public defaultEncryptionMethod_ = EncryptionService.METHOD_SJCL_1A; // public because used in tests
-	private defaultMasterKeyEncryptionMethod_ = EncryptionService.METHOD_SJCL_4;
+	public defaultEncryptionMethod_ = EncryptionMethod.SJCL1a; // public because used in tests
+	private defaultMasterKeyEncryptionMethod_ = EncryptionMethod.SJCL4;
 
 	private headerTemplates_ = {
 		// Template version 1
@@ -79,8 +95,8 @@ export default class EncryptionService {
 		// changed easily since the chunk size is incorporated into the encrypted data.
 		this.chunkSize_ = 5000;
 		this.decryptedMasterKeys_ = {};
-		this.defaultEncryptionMethod_ = EncryptionService.METHOD_SJCL_1A;
-		this.defaultMasterKeyEncryptionMethod_ = EncryptionService.METHOD_SJCL_4;
+		this.defaultEncryptionMethod_ = EncryptionMethod.SJCL1a;
+		this.defaultMasterKeyEncryptionMethod_ = EncryptionMethod.SJCL4;
 
 		this.headerTemplates_ = {
 			// Template version 1
@@ -95,6 +111,10 @@ export default class EncryptionService {
 		if (this.instance_) return this.instance_;
 		this.instance_ = new EncryptionService();
 		return this.instance_;
+	}
+
+	public get defaultMasterKeyEncryptionMethod() {
+		return this.defaultMasterKeyEncryptionMethod_;
 	}
 
 	loadedMasterKeysCount() {
@@ -135,7 +155,7 @@ export default class EncryptionService {
 		logger.info(`Loading master key: ${model.id}. Make active:`, makeActive);
 
 		this.decryptedMasterKeys_[model.id] = {
-			plainText: await this.decryptMasterKey_(model, password),
+			plainText: await this.decryptMasterKeyContent(model, password),
 			updatedTime: model.updated_time,
 		};
 
@@ -175,7 +195,7 @@ export default class EncryptionService {
 		return await this.randomHexString(64);
 	}
 
-	async randomHexString(byteCount: number) {
+	private async randomHexString(byteCount: number) {
 		const bytes: any[] = await shim.randomBytes(byteCount);
 		return bytes
 			.map(a => {
@@ -184,32 +204,39 @@ export default class EncryptionService {
 			.join('');
 	}
 
-	masterKeysThatNeedUpgrading(masterKeys: MasterKeyEntity[]) {
-		const output = MasterKey.allWithoutEncryptionMethod(masterKeys, this.defaultMasterKeyEncryptionMethod_);
-		// Anything below 5 is a new encryption method and doesn't need an upgrade
-		return output.filter(mk => mk.encryption_method <= 5);
+	public masterKeysThatNeedUpgrading(masterKeys: MasterKeyEntity[]) {
+		return MasterKey.allWithoutEncryptionMethod(masterKeys, [this.defaultMasterKeyEncryptionMethod_, EncryptionMethod.Custom]);
 	}
 
-	async upgradeMasterKey(model: MasterKeyEntity, decryptionPassword: string) {
+	public async reencryptMasterKey(model: MasterKeyEntity, decryptionPassword: string, encryptionPassword: string, decryptOptions: EncryptOptions = null, encryptOptions: EncryptOptions = null): Promise<MasterKeyEntity> {
 		const newEncryptionMethod = this.defaultMasterKeyEncryptionMethod_;
-		const plainText = await this.decryptMasterKey_(model, decryptionPassword);
-		const newContent = await this.encryptMasterKeyContent_(newEncryptionMethod, plainText, decryptionPassword);
+		const plainText = await this.decryptMasterKeyContent(model, decryptionPassword, decryptOptions);
+		const newContent = await this.encryptMasterKeyContent(newEncryptionMethod, plainText, encryptionPassword, encryptOptions);
 		return { ...model, ...newContent };
 	}
 
-	async encryptMasterKeyContent_(encryptionMethod: number, hexaBytes: any, password: string): Promise<MasterKeyEntity> {
-		// Checksum is not necessary since decryption will already fail if data is invalid
-		const checksum = encryptionMethod === EncryptionService.METHOD_SJCL_2 ? this.sha256(hexaBytes) : '';
-		const cipherText = await this.encrypt(encryptionMethod, password, hexaBytes);
+	public async encryptMasterKeyContent(encryptionMethod: EncryptionMethod, hexaBytes: string, password: string, options: EncryptOptions = null): Promise<MasterKeyEntity> {
+		options = { ...options };
 
-		return {
-			checksum: checksum,
-			encryption_method: encryptionMethod,
-			content: cipherText,
-		};
+		if (encryptionMethod === null) encryptionMethod = this.defaultMasterKeyEncryptionMethod_;
+
+		if (options.encryptionHandler) {
+			return {
+				checksum: '',
+				encryption_method: EncryptionMethod.Custom,
+				content: await options.encryptionHandler.encrypt(options.encryptionHandler.context, hexaBytes, password),
+			};
+		} else {
+			return {
+				// Checksum is not necessary since decryption will already fail if data is invalid
+				checksum: encryptionMethod === EncryptionMethod.SJCL2 ? this.sha256(hexaBytes) : '',
+				encryption_method: encryptionMethod,
+				content: await this.encrypt(encryptionMethod, password, hexaBytes),
+			};
+		}
 	}
 
-	async generateMasterKeyContent_(password: string, options: any = null) {
+	private async generateMasterKeyContent_(password: string, options: EncryptOptions = null) {
 		options = Object.assign({}, {
 			encryptionMethod: this.defaultMasterKeyEncryptionMethod_,
 		}, options);
@@ -217,10 +244,10 @@ export default class EncryptionService {
 		const bytes: any[] = await shim.randomBytes(256);
 		const hexaBytes = bytes.map(a => hexPad(a.toString(16), 2)).join('');
 
-		return this.encryptMasterKeyContent_(options.encryptionMethod, hexaBytes, password);
+		return this.encryptMasterKeyContent(options.encryptionMethod, hexaBytes, password, options);
 	}
 
-	async generateMasterKey(password: string, options: any = null) {
+	public async generateMasterKey(password: string, options: EncryptOptions = null) {
 		const model = await this.generateMasterKeyContent_(password, options);
 
 		const now = Date.now();
@@ -231,9 +258,16 @@ export default class EncryptionService {
 		return model;
 	}
 
-	public async decryptMasterKey_(model: MasterKeyEntity, password: string): Promise<string> {
+	public async decryptMasterKeyContent(model: MasterKeyEntity, password: string, options: EncryptOptions = null): Promise<string> {
+		options = options || {};
+
+		if (model.encryption_method === EncryptionMethod.Custom) {
+			if (!options.encryptionHandler) throw new Error('Master key was encrypted using a custom method, but no encryptionHandler is provided');
+			return options.encryptionHandler.decrypt(options.encryptionHandler.context, model.content, password);
+		}
+
 		const plainText = await this.decrypt(model.encryption_method, password, model.content);
-		if (model.encryption_method === EncryptionService.METHOD_SJCL_2) {
+		if (model.encryption_method === EncryptionMethod.SJCL2) {
 			const checksum = this.sha256(plainText);
 			if (checksum !== model.checksum) throw new Error('Could not decrypt master key (checksum failed)');
 		}
@@ -243,7 +277,7 @@ export default class EncryptionService {
 
 	public async checkMasterKeyPassword(model: MasterKeyEntity, password: string) {
 		try {
-			await this.decryptMasterKey_(model, password);
+			await this.decryptMasterKeyContent(model, password);
 		} catch (error) {
 			return false;
 		}
@@ -257,14 +291,14 @@ export default class EncryptionService {
 		return error;
 	}
 
-	async encrypt(method: number, key: string, plainText: string) {
+	public async encrypt(method: EncryptionMethod, key: string, plainText: string): Promise<string> {
 		if (!method) throw new Error('Encryption method is required');
 		if (!key) throw new Error('Encryption key is required');
 
 		const sjcl = shim.sjclModule;
 
 		// 2020-01-23: Deprecated and no longer secure due to the use og OCB2 mode - do not use.
-		if (method === EncryptionService.METHOD_SJCL) {
+		if (method === EncryptionMethod.SJCL) {
 			try {
 				// Good demo to understand each parameter: https://bitwiseshiftleft.github.io/sjcl/demo/
 				return sjcl.json.encrypt(key, plainText, {
@@ -283,7 +317,7 @@ export default class EncryptionService {
 
 		// 2020-03-06: Added method to fix https://github.com/laurent22/joplin/issues/2591
 		//             Also took the opportunity to change number of key derivations, per Isaac Potoczny's suggestion
-		if (method === EncryptionService.METHOD_SJCL_1A) {
+		if (method === EncryptionMethod.SJCL1a) {
 			try {
 				// We need to escape the data because SJCL uses encodeURIComponent to process the data and it only
 				// accepts UTF-8 data, or else it throws an error. And the notes might occasionally contain
@@ -304,7 +338,7 @@ export default class EncryptionService {
 
 		// 2020-01-23: Deprectated - see above.
 		// Was used to encrypt master keys
-		if (method === EncryptionService.METHOD_SJCL_2) {
+		if (method === EncryptionMethod.SJCL2) {
 			try {
 				return sjcl.json.encrypt(key, plainText, {
 					v: 1,
@@ -319,7 +353,7 @@ export default class EncryptionService {
 			}
 		}
 
-		if (method === EncryptionService.METHOD_SJCL_3) {
+		if (method === EncryptionMethod.SJCL3) {
 			try {
 				// Good demo to understand each parameter: https://bitwiseshiftleft.github.io/sjcl/demo/
 				return sjcl.json.encrypt(key, plainText, {
@@ -337,7 +371,7 @@ export default class EncryptionService {
 		}
 
 		// Same as above but more secure (but slower) to encrypt master keys
-		if (method === EncryptionService.METHOD_SJCL_4) {
+		if (method === EncryptionMethod.SJCL4) {
 			try {
 				return sjcl.json.encrypt(key, plainText, {
 					v: 1,
@@ -355,7 +389,7 @@ export default class EncryptionService {
 		throw new Error(`Unknown encryption method: ${method}`);
 	}
 
-	async decrypt(method: number, key: string, cipherText: string) {
+	async decrypt(method: EncryptionMethod, key: string, cipherText: string) {
 		if (!method) throw new Error('Encryption method is required');
 		if (!key) throw new Error('Encryption key is required');
 
@@ -365,7 +399,7 @@ export default class EncryptionService {
 		try {
 			const output = sjcl.json.decrypt(key, cipherText);
 
-			if (method === EncryptionService.METHOD_SJCL_1A) {
+			if (method === EncryptionMethod.SJCL1a) {
 				return unescape(output);
 			} else {
 				return output;
@@ -376,13 +410,13 @@ export default class EncryptionService {
 		}
 	}
 
-	async encryptAbstract_(source: any, destination: any, options: any = null) {
+	async encryptAbstract_(source: any, destination: any, options: EncryptOptions = null) {
 		options = Object.assign({}, {
 			encryptionMethod: this.defaultEncryptionMethod(),
 		}, options);
 
 		const method = options.encryptionMethod;
-		const masterKeyId = this.activeMasterKeyId();
+		const masterKeyId = options.masterKeyId ? options.masterKeyId : this.activeMasterKeyId();
 		const masterKeyPlainText = this.loadedMasterKey(masterKeyId).plainText;
 
 		const header = {
@@ -412,7 +446,7 @@ export default class EncryptionService {
 		}
 	}
 
-	async decryptAbstract_(source: any, destination: any, options: any = null) {
+	async decryptAbstract_(source: any, destination: any, options: EncryptOptions = null) {
 		if (!options) options = {};
 
 		const header: any = await this.decodeHeaderSource_(source);
@@ -489,21 +523,21 @@ export default class EncryptionService {
 		};
 	}
 
-	async encryptString(plainText: any, options: any = null) {
+	public async encryptString(plainText: any, options: EncryptOptions = null): Promise<string> {
 		const source = this.stringReader_(plainText);
 		const destination = this.stringWriter_();
 		await this.encryptAbstract_(source, destination, options);
 		return destination.result();
 	}
 
-	async decryptString(cipherText: any, options: any = null) {
+	public async decryptString(cipherText: any, options: EncryptOptions = null): Promise<string> {
 		const source = this.stringReader_(cipherText);
 		const destination = this.stringWriter_();
 		await this.decryptAbstract_(source, destination, options);
 		return destination.data.join('');
 	}
 
-	async encryptFile(srcPath: string, destPath: string, options: any = null) {
+	async encryptFile(srcPath: string, destPath: string, options: EncryptOptions = null) {
 		let source = await this.fileReader_(srcPath, 'base64');
 		let destination = await this.fileWriter_(destPath, 'ascii');
 
@@ -528,7 +562,7 @@ export default class EncryptionService {
 		await cleanUp();
 	}
 
-	async decryptFile(srcPath: string, destPath: string, options: any = null) {
+	async decryptFile(srcPath: string, destPath: string, options: EncryptOptions = null) {
 		let source = await this.fileReader_(srcPath, 'ascii');
 		let destination = await this.fileWriter_(destPath, 'base64');
 
@@ -617,8 +651,8 @@ export default class EncryptionService {
 		return output;
 	}
 
-	isValidEncryptionMethod(method: number) {
-		return [EncryptionService.METHOD_SJCL, EncryptionService.METHOD_SJCL_1A, EncryptionService.METHOD_SJCL_2, EncryptionService.METHOD_SJCL_3, EncryptionService.METHOD_SJCL_4].indexOf(method) >= 0;
+	isValidEncryptionMethod(method: EncryptionMethod) {
+		return [EncryptionMethod.SJCL, EncryptionMethod.SJCL1a, EncryptionMethod.SJCL2, EncryptionMethod.SJCL3, EncryptionMethod.SJCL4].indexOf(method) >= 0;
 	}
 
 	async itemIsEncrypted(item: any) {

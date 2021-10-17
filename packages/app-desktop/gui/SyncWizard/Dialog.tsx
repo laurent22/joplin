@@ -138,9 +138,9 @@ const syncTargetNames: string[] = [
 
 
 const logosImageNames: Record<string, string> = {
-	'dropbox': 'Dropbox.svg',
-	'joplinCloud': 'JoplinCloud.svg',
-	'onedrive': 'OneDrive.svg',
+	'dropbox': 'SyncTarget_Dropbox.svg',
+	'joplinCloud': 'SyncTarget_JoplinCloud.svg',
+	'onedrive': 'SyncTarget_OneDrive.svg',
 };
 
 export default function(props: Props) {
@@ -274,7 +274,7 @@ export default function(props: Props) {
 		const height = info.name !== 'joplinCloud' ? descriptionHeight : null;
 
 		const logoImageName = logosImageNames[info.name];
-		const logoImageSrc = logoImageName ? `${bridge().buildDir()}/images/syncTargetLogos/${logoImageName}` : '';
+		const logoImageSrc = logoImageName ? `${bridge().buildDir()}/images/${logoImageName}` : '';
 		const logo = logoImageSrc ? <SyncTargetLogo src={logoImageSrc}/> : null;
 		const descriptionComp = <SyncTargetDescription height={height} ref={info.name === 'joplinCloud' ? joplinCloudDescriptionRef : null}>{info.description}</SyncTargetDescription>;
 		const featuresComp = showJoplinCloudForm && info.name === 'joplinCloud' ? null : renderFeatures(info.name);

@@ -28,8 +28,8 @@ export default class MasterKey extends BaseItem {
 		return output;
 	}
 
-	static allWithoutEncryptionMethod(masterKeys: MasterKeyEntity[], method: number) {
-		return masterKeys.filter(m => m.encryption_method !== method);
+	static allWithoutEncryptionMethod(masterKeys: MasterKeyEntity[], methods: number[]) {
+		return masterKeys.filter(m => !methods.includes(m.encryption_method));
 	}
 
 	public static async all(): Promise<MasterKeyEntity[]> {

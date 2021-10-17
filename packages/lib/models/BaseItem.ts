@@ -33,6 +33,11 @@ export interface ItemsThatNeedSyncResult {
 	neverSyncedItemIds: string[];
 }
 
+export interface EncryptedItemsStats {
+	encrypted: number;
+	total: number;
+}
+
 export default class BaseItem extends BaseModel {
 
 	public static encryptionService_: any = null;
@@ -513,7 +518,7 @@ export default class BaseItem extends BaseModel {
 		return output;
 	}
 
-	static async encryptedItemsStats() {
+	public static async encryptedItemsStats(): Promise<EncryptedItemsStats> {
 		const classNames = this.encryptableItemClassNames();
 		let encryptedCount = 0;
 		let totalCount = 0;
@@ -596,6 +601,11 @@ export default class BaseItem extends BaseModel {
 		}
 
 		throw new Error('Unreachable');
+	}
+
+	public static async itemHasBeenSynced(itemId: string): Promise<boolean> {
+		const r = await this.db().selectOne('SELECT item_id FROM sync_items WHERE item_id = ?', [itemId]);
+		return !!r;
 	}
 
 	public static async itemsThatNeedSync(syncTarget: number, limit = 100): Promise<ItemsThatNeedSyncResult> {

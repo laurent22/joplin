@@ -65,3 +65,36 @@ Enabling/disabling E2EE while two clients are in sync might have an unintuitive 
 - Although messy, Joplin supports having some clients send encrypted items and others unencrypted ones. The situation gets resolved once all the clients have the same E2EE settings.
 
 - Currently, there is no way to delete encryption keys if you do not need them anymore or if you disabled the encryption completely. You will get a persistant notification to provide a Master Key password on a new device, even if encryption is disabled. Entering the Master Key(s) password and still having the encryption disabled will get rid of the notification. See [Delete E2EE Master Keys](https://discourse.joplinapp.org/t/delete-e2ee-master-keys/906) for more info.
+
+## Types of keys
+
+There are two types of key:
+
+- **Data keys**, which are used to encrypt Joplin items, such as notes, notebooks, tags, etc. when E2EE is ernabled. A data key is generated when the user enables E2EE. Data keys are also dynamically generated when a user shares a notebook with another user. In this case, we create a separate key, so that the recipient can only decrypt this specific notebook.
+
+- **Public-private key pairs**, which are used to transfer secrets between users.
+
+## Master password
+
+The master password is used to encrypt E2EE data keys as well as the user's private key.
+
+**It is possible to change the master password** - in this case, all keys are reencrypted with the new passowrd. The data, notes, notebooks, etc. does not need to be reencrypted.
+
+If a master password is forgotten it's not possible to recover it. **It is however possible to reset it**. In that case, all associated keys are disabled, and the public-private key pair is regenerated. In practice it means that any content that was encrypted with the forgotten password can no longer be decrypted.
+
+## Public-private key pairs
+
+Public-private key pairs (PPK) are used to transfer secrets between users. Specifically, they are used when sharing a notebook while E2EE is enabled. The workflow is as follow:
+
+- Alice shares a notebook with Bob
+- Since the notebook is encrypted, Alice also sends the key to Bob, but it needs to be encrypted too.
+- To do so, she downloads Bob's public key and encrypt the key with it
+- When accepting the share, Bob receives this key
+- Bob decrypts it with his private key
+- Once decrypted, he reencrypts it with his master password
+
+At this point, both users have a copy of the key and can share notes over E2EE.
+
+A user can only have one PPK.
+
+PPKs are generated automatically when E2EE is enabled and when the user synchronises. They are then stored in info.json on the sync target. The key is genrated during sync because otherwise multiple clients could generate a PPK, and then there would be a conflict to decide which PPK should be kept. By doing it during sync, it ensures that only one PPK is generated because the synchronizer fetches first info.json - and only generates a PPK if none is already present.

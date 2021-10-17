@@ -386,6 +386,34 @@ describe('services_SearchFilter', function() {
 				expect(ids(rows).sort()).toEqual(ids(notes0).concat(ids(notes00).concat(ids(notes1))).sort());
 			}));
 
+			it('should support filtering and search term', (async () => {
+				const notebook1 = await Folder.save({ title: 'notebook1' });
+				const notebook2 = await Folder.save({ title: 'notebook2' });
+				const note1 = await Note.save({ title: 'note1', body: 'abcdefg', parent_id: notebook1.id });
+				await Note.save({ title: 'note2', body: 'body', parent_id: notebook1.id });
+				await Note.save({ title: 'note3', body: 'abcdefg', parent_id: notebook2.id });
+				await Note.save({ title: 'note4', body: 'body', parent_id: notebook2.id });
+
+				await engine.syncTables();
+
+				const testCases = [
+					{ searchQuery: 'notebook:notebook1 abcdefg' },
+					{ searchQuery: 'notebook:notebook1 "abcdefg"' },
+					{ searchQuery: 'notebook:"notebook1" abcdefg' },
+					{ searchQuery: 'notebook:"notebook1" "abcdefg"' },
+					{ searchQuery: 'notebook:"notebook1" -tag:* "abcdefg"' },
+					{ searchQuery: 'notebook:"notebook1" -tag:* abcdefg' },
+					{ searchQuery: 'notebook:"notebook1" -tag:"*" abcdefg' },
+					{ searchQuery: 'notebook:"notebook1" -tag:"*" "abcdefg"' },
+				];
+
+				for (const testCase of testCases) {
+					const rows = await engine.search(testCase.searchQuery, { searchType });
+					expect(rows.length).toBe(1);
+					expect(ids(rows)).toContain(note1.id);
+				}
+			}));
+
 			it('should support filtering by created date', (async () => {
 				let rows;
 				const n1 = await Note.save({ title: 'I made this on', body: 'May 20 2020', user_created_time: Date.parse('2020-05-20') });

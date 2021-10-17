@@ -7,7 +7,7 @@ import { AppContext } from '../../utils/types';
 import uuidgen from '../../utils/uuidgen';
 import { postHandlers } from './stripe';
 
-function mockStripe() {
+function mockStripe(overrides: any = null) {
 	return {
 		customers: {
 			retrieve: jest.fn(),
@@ -15,6 +15,7 @@ function mockStripe() {
 		subscriptions: {
 			del: jest.fn(),
 		},
+		...overrides,
 	};
 }
 
@@ -22,6 +23,7 @@ interface WebhookOptions {
 	stripe?: any;
 	eventId?: string;
 	subscriptionId?: string;
+	customerId?: string;
 	sessionId?: string;
 }
 
@@ -44,6 +46,7 @@ async function simulateWebhook(ctx: AppContext, type: string, object: any, optio
 async function createUserViaSubscription(ctx: AppContext, userEmail: string, options: WebhookOptions = {}) {
 	options = {
 		subscriptionId: `sub_${uuidgen()}`,
+		customerId: `cus_${uuidgen()}`,
 		...options,
 	};
 
@@ -53,7 +56,7 @@ async function createUserViaSubscription(ctx: AppContext, userEmail: string, opt
 
 	await simulateWebhook(ctx, 'checkout.session.completed', {
 		id: stripeSessionId,
-		customer: `cus_${uuidgen()}`,
+		customer: options.customerId,
 		subscription: options.subscriptionId,
 		customer_details: {
 			email: userEmail,
@@ -212,6 +215,94 @@ describe('index/stripe', function() {
 
 		expect(user.enabled).toBe(1);
 		expect(user.can_upload).toBe(1);
+	});
+
+	test('should attach new sub to existing user', async function() {
+		// Simulates:
+		// - User subscribes
+		// - Later the subscription is cancelled, either automatically by Stripe or manually
+		// - Then a new subscription is attached to the user on Stripe
+		// => In that case, the sub should be attached to the user on Joplin Server
+
+		const stripe = mockStripe({
+			customers: {
+				retrieve: async () => {
+					return {
+						name: 'Toto',
+						email: 'toto@example.com',
+					};
+				},
+			},
+		});
+
+		const ctx = await koaAppContext();
+
+		await createUserViaSubscription(ctx, 'toto@example.com', {
+			stripe,
+			subscriptionId: 'sub_1',
+			customerId: 'cus_toto',
+		});
+		await simulateWebhook(ctx, 'customer.subscription.deleted', { id: 'sub_1' });
+
+		const stripePrice = findPrice(stripeConfig().prices, { accountType: 1, period: PricePeriod.Monthly });
+
+		await simulateWebhook(ctx, 'customer.subscription.created', {
+			id: 'sub_new',
+			customer: 'cus_toto',
+			items: { data: [{ price: { id: stripePrice.id } }] },
+		}, { stripe });
+
+		const user = (await models().user().all())[0];
+		const sub = await models().subscription().byUserId(user.id);
+
+		expect(sub.stripe_user_id).toBe('cus_toto');
+		expect(sub.stripe_subscription_id).toBe('sub_new');
+	});
+
+	test('should not cancel a subscription as duplicate if it is already associated with a user', async function() {
+		// When user goes through a Stripe checkout, we get the following
+		// events:
+		//
+		// - checkout.session.completed
+		// - customer.subscription.created
+		//
+		// However we create the subscription as soon as we get
+		// "checkout.session.completed", because by then we already have all the
+		// necessary information. The problem is that Stripe is then going to
+		// send "customer.subscription.created", even though the sub is already
+		// created. Also we have some code to cancel duplicate subscriptions
+		// (when a user accidentally subscribe multiple times), and we don't
+		// want that newly, valid, subscription to be cancelled as a duplicate.
+
+		const stripe = mockStripe({
+			customers: {
+				retrieve: async () => {
+					return {
+						name: 'Toto',
+						email: 'toto@example.com',
+					};
+				},
+			},
+		});
+
+		const ctx = await koaAppContext();
+
+		await createUserViaSubscription(ctx, 'toto@example.com', {
+			stripe,
+			subscriptionId: 'sub_1',
+			customerId: 'cus_toto',
+		});
+
+		const stripePrice = findPrice(stripeConfig().prices, { accountType: 1, period: PricePeriod.Monthly });
+
+		await simulateWebhook(ctx, 'customer.subscription.created', {
+			id: 'sub_1',
+			customer: 'cus_toto',
+			items: { data: [{ price: { id: stripePrice.id } }] },
+		}, { stripe });
+
+		// Verify that we didn't try to delete that new subscription
+		expect(stripe.subscriptions.del).toHaveBeenCalledTimes(0);
 	});
 
 });

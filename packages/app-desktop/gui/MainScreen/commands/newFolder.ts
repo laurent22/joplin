@@ -1,7 +1,7 @@
 import { CommandContext, CommandDeclaration, CommandRuntime } from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
 import Folder from '@joplin/lib/models/Folder';
-const bridge = require('electron').remote.require('./bridge').default;
+const bridge = require('@electron/remote').require('./bridge').default;
 
 export const declaration: CommandDeclaration = {
 	name: 'newFolder',

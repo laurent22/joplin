@@ -17,7 +17,7 @@ export enum Env {
 export interface NotificationView {
 	id: Uuid;
 	messageHtml: string;
-	level: string;
+	levelClassName: string;
 	closeUrl: string;
 }
 
@@ -50,6 +50,7 @@ export interface AppContext extends Koa.Context {
 }
 
 export enum DatabaseConfigClient {
+	Null = 'null',
 	PostgreSQL = 'pg',
 	SQLite = 'sqlite3',
 }
@@ -64,6 +65,8 @@ export interface DatabaseConfig {
 	user?: string;
 	password?: string;
 	asyncStackTraces?: boolean;
+	slowQueryLogEnabled?: boolean;
+	slowQueryLogMinDuration?: number;
 }
 
 export interface MailerConfig {
@@ -98,6 +101,7 @@ export interface Config {
 	baseUrl: string;
 	apiBaseUrl: string;
 	userContentBaseUrl: string;
+	joplinAppBaseUrl: string;
 	signupEnabled: boolean;
 	termsEnabled: boolean;
 	accountTypesEnabled: boolean;

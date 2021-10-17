@@ -73,15 +73,17 @@ describe('services/ResourceService', function() {
 		expect(!!(await Resource.load(resource1.id))).toBe(true);
 	}));
 
-	it('should not delete a resource that has never been associated with any note, because it probably means the resource came via sync, and associated note has not arrived yet', (async () => {
-		const service = new ResourceService();
-		await shim.createResourceFromPath(`${supportDir}/photo.jpg`);
+	// This is now handled below by more correct tests
+	//
+	// it('should not delete a resource that has never been associated with any note, because it probably means the resource came via sync, and associated note has not arrived yet', (async () => {
+	// 	const service = new ResourceService();
+	// 	await shim.createResourceFromPath(`${supportDir}/photo.jpg`);
 
-		await service.indexNoteResources();
-		await service.deleteOrphanResources(0);
+	// 	await service.indexNoteResources();
+	// 	await service.deleteOrphanResources(0);
 
-		expect((await Resource.all()).length).toBe(1);
-	}));
+	// 	expect((await Resource.all()).length).toBe(1);
+	// }));
 
 	it('should not delete resource if it is used in an IMG tag', (async () => {
 		const service = new ResourceService();
@@ -185,6 +187,53 @@ describe('services/ResourceService', function() {
 		expect((await Resource.all()).length).toBe(1); // It should not have deleted the resource
 		const nr = (await NoteResource.all())[0];
 		expect(!!nr.is_associated).toBe(true); // And it should have fixed the situation by re-indexing the note content
+	}));
+
+	it('should delete a resource if it is not associated with any note and has never been synced', (async () => {
+		// - User creates a note and attaches a resource
+		// - User deletes the note
+		// - NoteResource service runs - the resource can be deleted
+		//
+		// This is because, since the resource didn't come via sync, it's
+		// guaranteed that it is orphaned, which means it can be safely deleted.
+		// See related test below to handle case where the resource actually
+		// comes via sync.
+
+		const note = await Note.save({});
+		await shim.attachFileToNote(note, `${supportDir}/photo.jpg`);
+		await Note.delete(note.id);
+		const resource = (await Resource.all())[0];
+
+		await resourceService().indexNoteResources();
+		await resourceService().deleteOrphanResources(-10);
+
+		expect(await Resource.load(resource.id)).toBeFalsy();
+	}));
+
+	it('should NOT delete a resource if it arrived via synced, even if it is not associated with any note', (async () => {
+		// - C1 creates Resource 1
+		// - C1 sync
+		// - C2 sync
+		// - NoteResource service runs - should find an orphan resource, but not
+		//   delete it because the associated note might come later from U1.
+		//
+		// At this point, C1 has the knowledge about Resource 1 so whether it's
+		// eventually deleted or not will come from there. If it's an orphaned
+		// resource, it will be deleted on C1 first, then the deletion will be
+		// synced to other clients.
+
+		const note = await Note.save({});
+		await shim.attachFileToNote(note, `${supportDir}/photo.jpg`);
+		await Note.delete(note.id);
+		const resource = (await Resource.all())[0];
+		await synchronizer().start();
+
+		await switchClient(2);
+
+		await synchronizer().start();
+		await resourceService().indexNoteResources();
+		await resourceService().deleteOrphanResources(0);
+		expect(await Resource.load(resource.id)).toBeTruthy();
 	}));
 
 	// it('should auto-delete resource even if the associated note was deleted immediately', (async () => {

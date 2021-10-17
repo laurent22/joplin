@@ -38,6 +38,7 @@ export interface State {
 	shares: StateShare[];
 	shareUsers: Record<string, StateShareUser>;
 	shareInvitations: ShareInvitation[];
+	processingShareInvitationResponse: boolean;
 }
 
 export const stateRootKey = 'shareService';
@@ -46,6 +47,7 @@ export const defaultState: State = {
 	shares: [],
 	shareUsers: {},
 	shareInvitations: [],
+	processingShareInvitationResponse: false,
 };
 
 export function isSharedFolderOwner(state: RootState, folderId: string): boolean {
@@ -80,6 +82,11 @@ const reducer = (draftRoot: Draft<RootState>, action: any) => {
 		case 'SHARE_INVITATION_SET':
 
 			draft.shareInvitations = action.shareInvitations;
+			break;
+
+		case 'SHARE_INVITATION_RESPONSE_PROCESSING':
+
+			draft.processingShareInvitationResponse = action.value;
 			break;
 
 		}

@@ -319,7 +319,7 @@ class Setting extends BaseModel {
 			},
 
 			'sync.target': {
-				value: 0,
+				value: 7, // Dropbox
 				type: SettingItemType.Int,
 				isEnum: true,
 				public: true,

@@ -14,7 +14,7 @@ import useMarkupToHtml from './utils/useMarkupToHtml';
 import useFormNote, { OnLoadEvent } from './utils/useFormNote';
 import useFolder from './utils/useFolder';
 import styles_ from './styles';
-import { NoteEditorProps, FormNote, ScrollOptions, ScrollOptionTypes, OnChangeEvent, NoteBodyEditorProps } from './utils/types';
+import { NoteEditorProps, FormNote, ScrollOptions, ScrollOptionTypes, OnChangeEvent, NoteBodyEditorProps, AllAssetsOptions } from './utils/types';
 import ResourceEditWatcher from '@joplin/lib/services/ResourceEditWatcher/index';
 import CommandService from '@joplin/lib/services/CommandService';
 import ToolbarButton from '../ToolbarButton/ToolbarButton';
@@ -37,7 +37,7 @@ const NoteSearchBar = require('../NoteSearchBar.min.js');
 import { reg } from '@joplin/lib/registry';
 import Note from '@joplin/lib/models/Note';
 import Folder from '@joplin/lib/models/Folder';
-const bridge = require('electron').remote.require('./bridge').default;
+const bridge = require('@electron/remote').require('./bridge').default;
 const NoteRevisionViewer = require('../NoteRevisionViewer.min');
 
 const commands = [
@@ -151,7 +151,12 @@ function NoteEditor(props: NoteEditorProps) {
 		plugins: props.plugins,
 	});
 
-	const allAssets = useCallback(async (markupLanguage: number): Promise<any[]> => {
+	const allAssets = useCallback(async (markupLanguage: number, options: AllAssetsOptions = null): Promise<any[]> => {
+		options = {
+			contentMaxWidthTarget: '',
+			...options,
+		};
+
 		const theme = themeStyle(props.themeId);
 
 		const markupToHtml = markupLanguageUtils.newMarkupToHtml({}, {
@@ -159,7 +164,10 @@ function NoteEditor(props: NoteEditorProps) {
 			customCss: props.customCss,
 		});
 
-		return markupToHtml.allAssets(markupLanguage, theme, { contentMaxWidth: props.contentMaxWidth });
+		return markupToHtml.allAssets(markupLanguage, theme, {
+			contentMaxWidth: props.contentMaxWidth,
+			contentMaxWidthTarget: options.contentMaxWidthTarget,
+		});
 	}, [props.themeId, props.customCss, props.contentMaxWidth]);
 
 	const handleProvisionalFlag = useCallback(() => {
