@@ -1,5 +1,5 @@
 import { FolderEntity } from '../services/database/types';
-import BaseModel from '../BaseModel';
+import BaseModel, { DeleteOptions } from '../BaseModel';
 import time from '../time';
 import { _ } from '../locale';
 import Note from './Note';
@@ -8,6 +8,7 @@ import BaseItem from './BaseItem';
 import Resource from './Resource';
 import { isRootSharedFolder } from '../services/share/reducer';
 import Logger from '../Logger';
+import syncDebugLog from '../services/synchronizer/syncDebugLog';
 const { substrWithEllipsis } = require('../string-utils.js');
 
 const logger = Logger.create('models/Folder');
@@ -78,7 +79,7 @@ export default class Folder extends BaseItem {
 		return this.db().exec(query);
 	}
 
-	static async delete(folderId: string, options: any = null) {
+	public static async delete(folderId: string, options: DeleteOptions = null) {
 		options = {
 			deleteChildren: true,
 			...options,
@@ -650,6 +651,8 @@ export default class Folder extends BaseItem {
 		if (options.reservedTitleCheck === true && o.title) {
 			if (o.title == Folder.conflictFolderTitle()) throw new Error(_('Notebooks cannot be named "%s", which is a reserved title.', o.title));
 		}
+
+		syncDebugLog.info('Folder Save:', o);
 
 		return super.save(o, options).then((folder: FolderEntity) => {
 			this.dispatch({

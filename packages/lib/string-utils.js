@@ -210,6 +210,59 @@ function splitCommandString(command, options = null) {
 	return args;
 }
 
+function splitCommandBatch(commandBatch) {
+	const commandLines = [];
+	const eol = '\n';
+
+	let state = 'command';
+	let current = '';
+	let quote = '';
+	for (let i = 0; i < commandBatch.length; i++) {
+		const c = commandBatch[i];
+
+		if (state === 'command') {
+			if (c === eol) {
+				commandLines.push(current);
+				current = '';
+			} else if (c === '"' || c === '\'') {
+				quote = c;
+				current += c;
+				state = 'quoted';
+			} else if (c === '\\') {
+				current += c;
+				if (i + 1 < commandBatch.length) {
+					current += commandBatch[i + 1];
+					i++;
+				}
+			} else {
+				current += c;
+			}
+		} else if (state === 'quoted') {
+			if (c === quote) {
+				quote = '';
+				current += c;
+				state = 'command';
+			} else if (c === '\\') {
+				current += c;
+				if (i + 1 < commandBatch.length) {
+					current += commandBatch[i + 1];
+					i++;
+				}
+			} else {
+				current += c;
+			}
+		}
+	}
+	if (current.length > 0) {
+		commandLines.push(current);
+	}
+	if (commandLines.length === 0) {
+		commandLines.push('');
+	}
+
+	return commandLines;
+}
+
 function padLeft(string, length, padString) {
 	if (!string) return '';
 
@@ -307,4 +360,4 @@ function scriptType(s) {
 	return 'en';
 }
 
-module.exports = Object.assign({ formatCssSize, camelCaseToDash, removeDiacritics, substrWithEllipsis, nextWhitespaceIndex, escapeFilename, wrap, splitCommandString, padLeft, toTitleCase, urlDecode, escapeHtml, surroundKeywords, scriptType, commandArgumentsToString }, stringUtilsCommon);
+module.exports = Object.assign({ formatCssSize, camelCaseToDash, removeDiacritics, substrWithEllipsis, nextWhitespaceIndex, escapeFilename, wrap, splitCommandString, splitCommandBatch, padLeft, toTitleCase, urlDecode, escapeHtml, surroundKeywords, scriptType, commandArgumentsToString }, stringUtilsCommon);

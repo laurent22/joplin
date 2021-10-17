@@ -2,7 +2,7 @@ import { ChangeType, Share, ShareType, ShareUser, ShareUserStatus } from '../../
 import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, createNote, createFolder, updateItem, createItemTree, makeNoteSerializedBody, updateNote, expectHttpError, createResource } from '../../utils/testing/testUtils';
 import { postApi, patchApi, getApi, deleteApi } from '../../utils/testing/apiUtils';
 import { PaginatedDeltaChanges } from '../../models/ChangeModel';
-import { shareFolderWithUser } from '../../utils/testing/shareApiUtils';
+import { inviteUserToShare, shareFolderWithUser } from '../../utils/testing/shareApiUtils';
 import { msleep } from '../../utils/time';
 import { ErrorForbidden } from '../../utils/errors';
 import { resourceBlobPath, serializeJoplinItem, unserializeJoplinItem } from '../../utils/joplinUtils';
@@ -858,6 +858,47 @@ describe('shares.folder', function() {
 			]),
 		ErrorForbidden.httpCode
 		);
+	});
+
+	test('should allow sharing, unsharing and sharing again', async function() {
+		// - U1 share a folder that contains a note
+		// - U2 accept
+		// - U2 syncs
+		// - U1 remove U2
+		// - U1 adds back U2
+		// - U2 accept
+		//
+		// => Previously, the notebook would be deleted fro U2 due to a quirk in
+		// delta sync, that doesn't handle user_items being deleted, then
+		// created again. Instead U2 should end up with both the folder and the
+		// note.
+		//
+		// Ref: https://discourse.joplinapp.org/t/20977
+
+		const { session: session1 } = await createUserAndSession(1);
+		const { user: user2, session: session2 } = await createUserAndSession(2);
+
+		const { shareUser: shareUserA, share } = await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F1', {
+			'000000000000000000000000000000F1': {
+				'00000000000000000000000000000001': null,
+			},
+		});
+
+		await models().share().updateSharedItems3();
+
+		await deleteApi(session1.id, `share_users/${shareUserA.id}`);
+
+		await models().share().updateSharedItems3();
+
+		await inviteUserToShare(share, session1.id, user2.email, true);
+
+		await models().share().updateSharedItems3();
+
+		const page = await getApi<PaginatedDeltaChanges>(session2.id, 'items/root/delta', { query: { cursor: '' } });
+
+		expect(page.items.length).toBe(2);
+		expect(page.items.find(it => it.item_name === '000000000000000000000000000000F1.md').type).toBe(ChangeType.Create);
+		expect(page.items.find(it => it.item_name === '00000000000000000000000000000001.md').type).toBe(ChangeType.Create);
 	});
 
 });

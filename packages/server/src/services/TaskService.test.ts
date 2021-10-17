@@ -55,7 +55,7 @@ describe('TaskService', function() {
 						clearInterval(iid);
 						taskHasRan = true;
 					}
-				}, 10);
+				}, 1);
 			},
 			schedule: '',
 		};
@@ -69,11 +69,11 @@ describe('TaskService', function() {
 		void service.runTask(taskId, RunType.Manual);
 		expect(service.taskState(taskId).running).toBe(true);
 
-		await msleep(10);
-		finishTask = true;
-		await msleep(10);
+		while (!taskHasRan) {
+			await msleep(1);
+			finishTask = true;
+		}
 
-		expect(taskHasRan).toBe(true);
 		expect(service.taskState(taskId).running).toBe(false);
 
 		const events = await service.taskLastEvents(taskId);

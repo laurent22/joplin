@@ -20,6 +20,7 @@ import Logger from '@joplin/lib/Logger';
 import { FolderEntity } from '@joplin/lib/services/database/types';
 import stateToWhenClauseContext from '../../services/commands/stateToWhenClauseContext';
 import { store } from '@joplin/lib/reducer';
+import { getFolderCallbackUrl, getTagCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 import PerFolderSortOrderService from '../../services/sortOrder/PerFolderSortOrderService';
 const { connect } = require('react-redux');
 const shared = require('@joplin/lib/components/shared/side-menu-shared.js');
@@ -29,6 +30,7 @@ const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
 const { substrWithEllipsis } = require('@joplin/lib/string-utils');
 const { ALL_NOTES_FILTER_ID } = require('@joplin/lib/reserved-ids');
+const { clipboard } = require('electron');
 
 const logger = Logger.create('Sidebar');
 
@@ -315,8 +317,14 @@ class SidebarComponent extends React.Component<Props, State> {
 			// that are within a shared notebook. If user wants to do this,
 			// they'd have to move the notebook out of the shared notebook
 			// first.
-			if (CommandService.instance().isEnabled('showShareFolderDialog', stateToWhenClauseContext(state, { commandFolderId: itemId }))) {
+			const whenClause = stateToWhenClauseContext(state, { commandFolderId: itemId });
+
+			if (CommandService.instance().isEnabled('showShareFolderDialog', whenClause)) {
 				menu.append(new MenuItem(menuUtils.commandToStatefulMenuItem('showShareFolderDialog', itemId)));
+			}
+
+			if (CommandService.instance().isEnabled('leaveSharedFolder', whenClause)) {
+				menu.append(new MenuItem(menuUtils.commandToStatefulMenuItem('leaveSharedFolder', itemId)));
 			}
 
 			menu.append(
@@ -334,10 +342,29 @@ class SidebarComponent extends React.Component<Props, State> {
 			}
 		}
 
+		if (itemType === BaseModel.TYPE_FOLDER) {
+			menu.append(
+				new MenuItem({
+					label: _('Copy external link'),
+					click: () => {
+						clipboard.writeText(getFolderCallbackUrl(itemId));
+					},
+				})
+			);
+		}
+
 		if (itemType === BaseModel.TYPE_TAG) {
 			menu.append(new MenuItem(
 				menuUtils.commandToStatefulMenuItem('renameTag', itemId)
 			));
+			menu.append(
+				new MenuItem({
+					label: _('Copy external link'),
+					click: () => {
+						clipboard.writeText(getTagCallbackUrl(itemId));
+					},
+				})
+			);
 		}
 
 		const pluginViews = pluginUtils.viewsByType(this.pluginsRef.current, 'menuItem');

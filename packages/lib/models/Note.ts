@@ -10,6 +10,7 @@ import Tag from './Tag';
 
 const { sprintf } = require('sprintf-js');
 import Resource from './Resource';
+import syncDebugLog from '../services/synchronizer/syncDebugLog';
 const { pregQuote, substrWithEllipsis } = require('../string-utils.js');
 const { _ } = require('../locale');
 const ArrayUtils = require('../ArrayUtils.js');
@@ -664,6 +665,8 @@ export default class Note extends BaseItem {
 		// Trying to fix: https://github.com/laurent22/joplin/issues/3893
 		const oldNote = !isNew && o.id ? await Note.load(o.id) : null;
 
+		syncDebugLog.info('Save Note: P:', oldNote);
+
 		let beforeNoteJson = null;
 		if (oldNote && this.revisionService().isOldNote(o.id)) {
 			beforeNoteJson = JSON.stringify(oldNote);
@@ -679,6 +682,8 @@ export default class Note extends BaseItem {
 				}
 			}
 		}
+
+		syncDebugLog.info('Save Note: N:', o);
 
 		const note = await super.save(o, options);
 

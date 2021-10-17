@@ -1,13 +1,16 @@
 const gulp = require('gulp');
 const utils = require('@joplin/tools/gulp/utils');
 const compileSass = require('@joplin/tools/compileSass');
+const compilePackageInfo = require('@joplin/tools/compilePackageInfo');
 
 const tasks = {
 	compileScripts: {
 		fn: require('./tools/compileScripts'),
 	},
 	compilePackageInfo: {
-		fn: require('./tools/compile-package-info.js'),
+		fn: async () => {
+			await compilePackageInfo(`${__dirname}/package.json`, `${__dirname}/packageInfo.js`);
+		},
 	},
 	copyPluginAssets: {
 		fn: require('./tools/copyPluginAssets.js'),

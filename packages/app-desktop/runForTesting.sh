@@ -8,6 +8,10 @@
 
 # ./runForTesting.sh 1 createUsers,createData,reset,e2ee,sync && ./runForTesting.sh 2 reset,e2ee,sync && ./runForTesting.sh 1
 
+# Without E2EE:
+
+# ./runForTesting.sh 1 createUsers,createData,reset,sync && ./runForTesting.sh 2 reset,sync && ./runForTesting.sh 1
+
 set -e
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
@@ -63,7 +67,7 @@ do
 
 	elif [[ $CMD == "sync" ]]; then
 	
-		echo "sync" >> "$CMD_FILE" 
+		echo "sync --use-lock 0" >> "$CMD_FILE" 
 
 	# elif [[ $CMD == "generatePpk" ]]; then
 	

@@ -1,5 +1,5 @@
 import { knex, Knex } from 'knex';
-import { DatabaseConfig } from './utils/types';
+import { DatabaseConfig, DatabaseConfigClient } from './utils/types';
 import * as pathUtils from 'path';
 import time from '@joplin/lib/time';
 import Logger from '@joplin/lib/Logger';
@@ -111,6 +111,23 @@ export async function waitForConnection(dbConfig: DatabaseConfig): Promise<Conne
 		await time.msleep(1000);
 	}
 }
+
+export const clientType = (db: DbConnection): DatabaseConfigClient => {
+	return db.client.config.client;
+};
+
+export const isPostgres = (db: DbConnection) => {
+	return clientType(db) === DatabaseConfigClient.PostgreSQL;
+};
+
+export const isSqlite = (db: DbConnection) => {
+	return clientType(db) === DatabaseConfigClient.SQLite;
+};
+
+export const setCollateC = async (db: DbConnection, tableName: string, columnName: string): Promise<void> => {
+	if (!isPostgres(db)) return;
+	await db.raw(`ALTER TABLE ${tableName} ALTER COLUMN ${columnName} SET DATA TYPE character varying(32) COLLATE "C"`);
+};
 
 function makeSlowQueryHandler(duration: number, connection: any, sql: string, bindings: any[]) {
 	return setTimeout(() => {

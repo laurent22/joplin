@@ -20,8 +20,7 @@ export enum LogLevel {
 	Debug = 40,
 }
 
-interface Target {
-	type: TargetType;
+interface TargetOptions {
 	level?: LogLevel;
 	database?: any;
 	console?: any;
@@ -34,6 +33,10 @@ interface Target {
 
 	// If specified, will use this as format if it's an info message
 	formatInfo?: string;
+}
+
+interface Target extends TargetOptions {
+	type: TargetType;
 }
 
 export interface LoggerWrapper {
@@ -103,11 +106,11 @@ class Logger {
 		return this.targets_;
 	}
 
-	addTarget(type: TargetType, options: any = null) {
+	addTarget(type: TargetType, options: TargetOptions = null) {
 		const target = { type: type };
 		for (const n in options) {
 			if (!options.hasOwnProperty(n)) continue;
-			(target as any)[n] = options[n];
+			(target as any)[n] = (options as any)[n];
 		}
 
 		this.targets_.push(target);
