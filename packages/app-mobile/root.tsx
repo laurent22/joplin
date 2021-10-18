@@ -487,6 +487,18 @@ async function initialize(dispatch: Function) {
 		await loadKeychainServiceAndSettings(KeychainServiceDriverMobile);
 		await migrateMasterPassword();
 
+		if (!Setting.value('clientId')) Setting.setValue('clientId', uuid.create());
+
+		if (Setting.value('firstStart')) {
+			let locale = NativeModules.I18nManager.localeIdentifier;
+			if (!locale) locale = defaultLocale();
+			Setting.setValue('locale', closestSupportedLocale(locale));
+			Setting.skipDefaultMigrations();
+			Setting.setValue('firstStart', 0);
+		} else {
+			Setting.applyDefaultMigrations();
+		}
+
 		if (Setting.value('env') === Env.Dev) {
 			// Setting.setValue('sync.10.path', 'https://api.joplincloud.com');
 			// Setting.setValue('sync.10.userContentPath', 'https://joplinusercontent.com');
@@ -496,16 +508,6 @@ async function initialize(dispatch: Function) {
 			Setting.setValue('sync.target', 10);
 			Setting.setValue('sync.10.username', 'user1@example.com');
 			Setting.setValue('sync.10.password', 'hunter1hunter2hunter3');
-		}
-
-		if (!Setting.value('clientId')) Setting.setValue('clientId', uuid.create());
-
-		if (Setting.value('firstStart')) {
-			let locale = NativeModules.I18nManager.localeIdentifier;
-			if (!locale) locale = defaultLocale();
-			Setting.setValue('locale', closestSupportedLocale(locale));
-			Setting.setValue('sync.target', 0);
-			Setting.setValue('firstStart', 0);
 		}
 
 		if (Setting.value('db.ftsEnabled') === -1) {
