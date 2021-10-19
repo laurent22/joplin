@@ -90,7 +90,7 @@ export default abstract class BaseModel<T> {
 		return this.config_.appName;
 	}
 
-	protected get db(): DbConnection {
+	public get db(): DbConnection {
 		if (this.transactionHandler_.activeTransaction) return this.transactionHandler_.activeTransaction;
 		return this.db_;
 	}

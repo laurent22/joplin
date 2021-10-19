@@ -24,6 +24,7 @@ import uuidgen from '../uuidgen';
 import { createCsrfToken } from '../csrf';
 import { cookieSet } from '../cookies';
 import ContentDriverMemory from '../../models/itemModel/ContentDriverMemory';
+import ContentDriverBase from '../../models/itemModel/ContentDriverBase';
 
 // Takes into account the fact that this file will be inside the /dist directory
 // when it runs.
@@ -246,10 +247,19 @@ export function db() {
 // 	return 'http://localhost:22300';
 // }
 
+interface ModelsOptions {
+	contentDriver?: ContentDriverBase;
+}
+
 const contentDriverMemory = new ContentDriverMemory();
 
-export function models() {
-	return modelFactory(db(), contentDriverMemory, config());
+export function models(options: ModelsOptions = null) {
+	options = {
+		contentDriver: contentDriverMemory,
+		...options,
+	};
+
+	return modelFactory(db(), options.contentDriver, config());
 }
 
 export function parseHtml(html: string): Document {
