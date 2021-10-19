@@ -5,7 +5,7 @@ import { _ } from '@joplin/lib/locale';
 import time from '@joplin/lib/time';
 import shim from '@joplin/lib/shim';
 import dialogs from '../dialogs';
-import { decryptedStatText, dontReencryptData, enableEncryptionConfirmationMessages, onSavePasswordClick, onToggleEnabledClick, reencryptData, upgradeMasterKey, useInputPasswords, usePasswordChecker, useStats, useToggleShowDisabledMasterKeys } from '@joplin/lib/components/EncryptionConfigScreen/utils';
+import { decryptedStatText, dontReencryptData, enableEncryptionConfirmationMessages, onSavePasswordClick, onToggleEnabledClick, reencryptData, upgradeMasterKey, useInputPasswords, useNeedMasterPassword, usePasswordChecker, useStats, useToggleShowDisabledMasterKeys } from '@joplin/lib/components/EncryptionConfigScreen/utils';
 import { MasterKeyEntity } from '@joplin/lib/services/e2ee/types';
 import { getEncryptionEnabled, masterKeyEnabled, SyncInfo } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 import { getDefaultMasterKey, getMasterPasswordStatusMessage, masterPasswordIsValid, toggleAndSetupEncryption } from '@joplin/lib/services/e2ee/utils';
@@ -39,6 +39,7 @@ const EncryptionConfigScreen = (props: Props) => {
 	const stats = useStats();
 	const { passwordChecks, masterPasswordKeys, masterPasswordStatus } = usePasswordChecker(props.masterKeys, props.activeMasterKeyId, props.masterPassword, props.passwords);
 	const { showDisabledMasterKeys, toggleShowDisabledMasterKeys } = useToggleShowDisabledMasterKeys();
+	const needMasterPassword = useNeedMasterPassword(passwordChecks, props.masterKeys);
 
 	const onUpgradeMasterKey = useCallback((mk: MasterKeyEntity) => {
 		void upgradeMasterKey(mk, passwordChecks, props.passwords);
@@ -263,9 +264,8 @@ const EncryptionConfigScreen = (props: Props) => {
 		};
 
 		const buttonTitle = CommandService.instance().label('openMasterPasswordDialog');
-		const needPassword = Object.values(passwordChecks).includes(false);
 
-		const needPasswordMessage = !needPassword ? null : (
+		const needPasswordMessage = !needMasterPassword ? null : (
 			<p className="needpassword">{_('Your master password is needed to decrypt some of your data.')}<br/>{_('Please click on "%s" to proceed', buttonTitle)}</p>
 		);
 
@@ -275,7 +275,7 @@ const EncryptionConfigScreen = (props: Props) => {
 					<h2>{_('Master password')}</h2>
 					<p className="status"><span>{_('Master password:')}</span>&nbsp;<span className="bold">{getMasterPasswordStatusMessage(masterPasswordStatus)}</span></p>
 					{needPasswordMessage}
-					<Button className="managebutton" level={needPassword ? ButtonLevel.Primary : ButtonLevel.Secondary} onClick={onManageMasterPassword} title={buttonTitle} />
+					<Button className="managebutton" level={needMasterPassword ? ButtonLevel.Primary : ButtonLevel.Secondary} onClick={onManageMasterPassword} title={buttonTitle} />
 				</div>
 			</div>
 		);

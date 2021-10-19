@@ -6,10 +6,13 @@ import Database from '../database';
 import SyncTargetRegistry from '../SyncTargetRegistry';
 import time from '../time';
 import FileHandler, { SettingValues } from './settings/FileHandler';
+import Logger from '../Logger';
 const { sprintf } = require('sprintf-js');
 const ObjectUtils = require('../ObjectUtils');
 const { toTitleCase } = require('../string-utils.js');
 const { rtrimSlashes, toSystemSlashes } = require('../path-utils');
+
+const logger = Logger.create('models/Setting');
 
 export enum SettingItemType {
 	Int = 1,
@@ -121,6 +124,54 @@ export interface Constants {
 interface SettingSections {
 	[key: string]: SettingSection;
 }
+
+// "Default migrations" are used to migrate previous setting defaults to new
+// values. If we simply change the default in the metadata, it might cause
+// problems if the user has never previously set the value.
+//
+// It happened for example when changing the "sync.target" from 7 (Dropbox) to 0
+// (None). Users who had never explicitly set the sync target and were using
+// Dropbox would suddenly have their sync target set to "none".
+//
+// So the technique is like this:
+//
+// - If the app has previously been executed, we run the migrations, which do
+//   something like this:
+//     - If the setting has never been set, set it to the previous default
+//       value. For example, for sync.target, it would set it to "7".
+//     - If the setting has been explicitly set, keep the current value.
+// - If the app runs for the first time, skip all the migrations. So
+//   "sync.target" would be set to 0.
+//
+// A default migration runs only once (or never, if it is skipped).
+//
+// The handlers to either apply or skip the migrations must be called from the
+// application, in the initialization code.
+
+interface DefaultMigration {
+	name: string;
+	previousDefault: any;
+}
+
+// To create a default migration:
+//
+// - Set the new default value in the setting metadata
+// - Add an entry below with the name of the setting and the **previous**
+//   default value.
+//
+// **Never** removes an item from this array, as the array index is essentially
+// the migration ID.
+
+const defaultMigrations: DefaultMigration[] = [
+	{
+		name: 'sync.target',
+		previousDefault: 7,
+	},
+	{
+		name: 'style.editor.contentMaxWidth',
+		previousDefault: 600,
+	},
+];
 
 class Setting extends BaseModel {
 
@@ -319,7 +370,7 @@ class Setting extends BaseModel {
 			},
 
 			'sync.target': {
-				value: 7, // Dropbox
+				value: 0,
 				type: SettingItemType.Int,
 				isEnum: true,
 				public: true,
@@ -985,7 +1036,7 @@ class Setting extends BaseModel {
 				storage: SettingStorage.File,
 			},
 
-			'style.editor.contentMaxWidth': { value: 600, type: SettingItemType.Int, public: true, storage: SettingStorage.File, appTypes: [AppType.Desktop], section: 'appearance', label: () => _('Editor maximum width'), description: () => _('Set it to 0 to make it take the complete available space.') },
+			'style.editor.contentMaxWidth': { value: 0, type: SettingItemType.Int, public: true, storage: SettingStorage.File, appTypes: [AppType.Desktop], section: 'appearance', label: () => _('Editor maximum width'), description: () => _('Set it to 0 to make it take the complete available space. Recommended width is 600.') },
 
 			'ui.layout': { value: {}, type: SettingItemType.Object, storage: SettingStorage.File, public: false, appTypes: [AppType.Desktop] },
 
@@ -1289,6 +1340,12 @@ class Setting extends BaseModel {
 				storage: SettingStorage.Database,
 			},
 
+			lastSettingDefaultMigration: {
+				value: -1,
+				type: SettingItemType.Int,
+				public: false,
+			},
+
 			// 'featureFlag.syncAccurateTimestamps': {
 			// 	value: false,
 			// 	type: SettingItemType.Bool,
@@ -1308,6 +1365,35 @@ class Setting extends BaseModel {
 		this.metadata_ = Object.assign(this.metadata_, this.customMetadata_);
 
 		return this.metadata_;
+	}
+
+	public static skipDefaultMigrations() {
+		logger.info('Skipping all default migrations...');
+
+		this.setValue('lastSettingDefaultMigration', defaultMigrations.length - 1);
+	}
+
+	public static applyDefaultMigrations() {
+		logger.info('Applying default migrations...');
+		const lastSettingDefaultMigration: number = this.value('lastSettingDefaultMigration');
+
+		for (let i = 0; i < defaultMigrations.length; i++) {
+			if (i <= lastSettingDefaultMigration) continue;
+
+			const migration = defaultMigrations[i];
+
+			logger.info(`Applying default migration: ${migration.name}`);
+
+			if (this.isSet(migration.name)) {
+				logger.info('Skipping because value is already set');
+				continue;
+			} else {
+				logger.info(`Applying previous default: ${migration.previousDefault}`);
+				this.setValue(migration.name, migration.previousDefault);
+			}
+		}
+
+		this.setValue('lastSettingDefaultMigration', defaultMigrations.length - 1);
 	}
 
 	public static featureFlagKeys(appType: AppType): string[] {
@@ -1368,6 +1454,10 @@ class Setting extends BaseModel {
 
 	public static keyExists(key: string) {
 		return key in this.metadata();
+	}
+
+	public static isSet(key: string) {
+		return key in this.cache_;
 	}
 
 	static keyDescription(key: string, appType: AppType = null) {
@@ -1545,7 +1635,7 @@ class Setting extends BaseModel {
 				this.changedKeys_.push(key);
 
 				// Don't log this to prevent sensitive info (passwords, auth tokens...) to end up in logs
-				// this.logger().info('Setting: ' + key + ' = ' + c.value + ' => ' + value);
+				// logger.info('Setting: ' + key + ' = ' + c.value + ' => ' + value);
 
 				if ('minimum' in md && value < md.minimum) value = md.minimum;
 				if ('maximum' in md && value > md.maximum) value = md.maximum;
@@ -1774,7 +1864,7 @@ class Setting extends BaseModel {
 	public static async saveAll() {
 		if (Setting.autoSaveEnabled && !this.saveTimeoutId_) return Promise.resolve();
 
-		this.logger().debug('Saving settings...');
+		logger.debug('Saving settings...');
 		shim.clearTimeout(this.saveTimeoutId_);
 		this.saveTimeoutId_ = null;
 
@@ -1814,7 +1904,7 @@ class Setting extends BaseModel {
 						continue;
 					}
 				} catch (error) {
-					this.logger().error(`Could not set setting on the keychain. Will be saved to database instead: ${s.key}:`, error);
+					logger.error(`Could not set setting on the keychain. Will be saved to database instead: ${s.key}:`, error);
 				}
 			}
 
@@ -1832,7 +1922,7 @@ class Setting extends BaseModel {
 
 		if (this.canUseFileStorage()) await this.fileHandler.save(valuesForFile);
 
-		this.logger().debug('Settings have been saved.');
+		logger.debug('Settings have been saved.');
 	}
 
 	static scheduleChangeEvent() {
@@ -1856,7 +1946,7 @@ class Setting extends BaseModel {
 
 		if (!this.changedKeys_.length) {
 			// Sanity check - shouldn't happen
-			this.logger().warn('Trying to dispatch a change event without any changed keys');
+			logger.warn('Trying to dispatch a change event without any changed keys');
 			return;
 		}
 
@@ -1874,7 +1964,7 @@ class Setting extends BaseModel {
 			try {
 				await this.saveAll();
 			} catch (error) {
-				this.logger().error('Could not save settings', error);
+				logger.error('Could not save settings', error);
 			}
 		}, 500);
 	}

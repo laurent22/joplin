@@ -146,6 +146,7 @@ export default function(props: Props) {
 
 		const renderResetMasterPasswordLink = () => {
 			if (mode === Mode.Reset) return null;
+			if (status === MasterPasswordStatus.Valid) return null;
 			return <p><a href="#" onClick={onToggleMode}>Reset master password</a></p>;
 		};
 

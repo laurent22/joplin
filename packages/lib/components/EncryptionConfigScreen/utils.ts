@@ -188,6 +188,16 @@ export const usePasswordChecker = (masterKeys: MasterKeyEntity[], activeMasterKe
 	return { passwordChecks, masterPasswordKeys, masterPasswordStatus };
 };
 
+export const useNeedMasterPassword = (passwordChecks: PasswordChecks, masterKeys: MasterKeyEntity[]) => {
+	for (const [mkId, valid] of Object.entries(passwordChecks)) {
+		const mk = masterKeys.find(mk => mk.id === mkId);
+		if (!mk) continue;
+		if (!masterKeyEnabled(mk)) continue;
+		if (!valid) return true;
+	}
+	return false;
+};
+
 export const upgradeMasterKey = async (masterKey: MasterKeyEntity, passwordChecks: PasswordChecks, passwords: Record<string, string>): Promise<string> => {
 	const passwordCheck = passwordChecks[masterKey.id];
 	if (!passwordCheck) {
