@@ -146,7 +146,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 					if (props.visiblePanes.indexOf('editor') >= 0) {
 						editorRef.current.focus();
 					} else {
-						webviewRef.current.wrappedInstance.focus();
+						webviewRef.current.wrappedInstance.send('doFocus');
 					}
 				} else {
 					commandProcessed = false;
