@@ -5,6 +5,7 @@
   "scripts": {
     "start-dev": "nodemon --config nodemon.json --ext ts,js,mustache,css,tsx dist/app.js --env dev",
     "start-dev-no-watch": "node dist/app.js --env dev",
+    "rebuild": "npm run clean && npm run build && npm run tsc",
     "build": "gulp build",
     "postinstall": "npm run build",
     "devCreateDb": "node dist/app.js --env dev --create-db",
