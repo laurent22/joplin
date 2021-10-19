@@ -357,6 +357,41 @@
 			return m ? contentElement.scrollTop / m : 0;
 		}
 
+		let zoomFactorIsNotOne = false;
+		let remainedScrollDy = 0, remainedScrollTimerId = null;
+
+		function resetSmoothScroll() { remainedScrollDy = 0; }
+
+		function customScroll(wheelEvent, smoothly) {
+			const linePixels = 100 / 3;
+			const pagePixels = Math.max(linePixels, contentElement.clientHeight);
+			let pixelsPerUnit = 1; // for WheelEvent.DOM_DELTA_PIXEL
+			if (wheelEvent.deltaMode === WheelEvent.DOM_DELTA_LINE) {
+				pixelsPerUnit = linePixels;
+			} else if (wheelEvent.deltaMode === WheelEvent.DOM_DELTA_PAGE) {
+				pixelsPerUnit = pagePixels;
+			}
+			if (!smoothly) {
+				const dy = wheelEvent.deltaY * pixelsPerUnit;
+				contentElement.scrollTop = Math.max(0, Math.min(maxScrollTop(), contentElement.scrollTop + dy));
+			} else {
+				if (Math.sign(remainedScrollDy) !== Math.sign(wheelEvent.deltaY)) remainedScrollDy = 0;
+				remainedScrollDy += wheelEvent.deltaY * pixelsPerUnit;
+				const maxDy = Math.max(8.5, Math.min(pagePixels, Math.abs(remainedScrollDy)) / 5);
+				const f = () => {
+					if (remainedScrollTimerId) {
+						clearTimeout(remainedScrollTimerId);
+						remainedScrollTimerId = null;
+					}
+					const dy = Math.max(-maxDy, Math.min(maxDy, remainedScrollDy));
+					remainedScrollDy -= dy;
+					contentElement.scrollTop = Math.max(0, Math.min(maxScrollTop(), contentElement.scrollTop + dy));
+					if (remainedScrollDy != 0) remainedScrollTimerId = setTimeout(f, 20);
+				};
+				f();
+			}
+		}
+
 		contentElement.addEventListener('wheel', webviewLib.logEnabledEventHandler(e => {
 			// When zoomFactor is not 1 (using an HD display is a typical case), 
 			// DOM element's scrollTop is incorrectly calculated after wheel scroll events 
@@ -364,8 +399,14 @@
 			// To avoid this problem, prevent the upstream from calculating scrollTop and
 			// calculate by yourself by accumulating wheel events.
 			// https://github.com/laurent22/joplin/pull/5496
-			contentElement.scrollTop = Math.max(0, Math.min(maxScrollTop(), contentElement.scrollTop + e.deltaY));
-			e.preventDefault();
+			// When the Electron/Chromium bug is fixed, remove this listener.
+
+			// If scrollTop ever has a fraction part, zoomFactor is not 1.
+			if (zoomFactorIsNotOne || !Number.isInteger(contentElement.scrollTop)) {
+				zoomFactorIsNotOne = true;
+				customScroll(e, true);
+				e.preventDefault();
+			}
 		}));
 
 		contentElement.addEventListener('scroll', webviewLib.logEnabledEventHandler(e => {
@@ -462,6 +503,9 @@
 
 		window.addEventListener('resize', webviewLib.logEnabledEventHandler(() => {
 			updateBodyHeight();
+			// When zoomFactor is changed, resize event happens.
+			zoomFactorIsNotOne = false;
+			resetSmoothScroll();
 		}));
 
 		// Prevent middle-click as that would open the URL in an Electron window
