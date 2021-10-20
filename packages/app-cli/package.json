@@ -56,7 +56,7 @@
     "proper-lockfile": "^2.0.1",
     "read-chunk": "^2.1.0",
     "server-destroy": "^1.0.1",
-    "sharp": "^0.26.2",
+    "sharp": "^0.29.1",
     "sprintf-js": "^1.1.2",
     "sqlite3": "^5.0.2",
     "string-padding": "^1.0.2",
