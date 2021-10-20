@@ -20,7 +20,6 @@ export default class ContentDriverDatabase extends ContentDriverBase {
 	}
 
 	public async write(itemId: string, content: Buffer, context: Context): Promise<void> {
-		// console.info('AAAAAAAAAAAAAAAAA', context);
 		const returningOption = this.handleReturnedRows_ ? ['id'] : undefined;
 
 		const updatedRows = await context.models.item().db('items').update({ content }, returningOption).where('id', '=', itemId);
@@ -50,5 +49,10 @@ export default class ContentDriverDatabase extends ContentDriverBase {
 		// noop because the calling code deletes the whole row, including the
 		// content.
 	}
+
+	// public async size(itemId:string, context: Context):Promise<number> {
+	// 	const content = await this.read(itemId, context);
+	// 	return content.byteLength;
+	// };
 
 }

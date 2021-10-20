@@ -10,10 +10,12 @@ export interface Context {
 
 export default class ContentDriverBase {
 
-	public async write(_itemId: string, _content: Buffer, _context: Context): Promise<void> {}
+	public async write(_itemId: string, _content: Buffer, _context: Context): Promise<void> { throw new Error('Not implemented'); }
 
-	public async read(_itemId: string, _context: Context): Promise<Buffer | null> { return null; }
+	public async read(_itemId: string, _context: Context): Promise<Buffer | null> { throw new Error('Not implemented'); }
 
-	public async delete(_itemId: string | string[], _context: Context): Promise<void> {}
+	public async delete(_itemId: string | string[], _context: Context): Promise<void> { throw new Error('Not implemented'); }
+
+	// public async size(_itemId:string, _context: Context):Promise<number> { throw new Error('Not implemented') };
 
 }

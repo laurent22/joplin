@@ -1,6 +1,7 @@
 import { pathExists, remove } from 'fs-extra';
-import { expectNotThrow, expectThrow, tempDirPath } from '../../utils/testing/testUtils';
+import { afterAllTests, beforeAllDb, beforeEachDb, expectNotThrow, expectThrow, tempDirPath } from '../../utils/testing/testUtils';
 import ContentDriverFs from './ContentDriverFs';
+import { shouldDeleteContent, shouldNotCreateItemIfContentNotSaved, shouldNotUpdateItemIfContentNotSaved, shouldWriteToContentAndReadItBack } from './testUtils';
 
 let basePath_: string = '';
 
@@ -10,13 +11,42 @@ const newDriver = () => {
 
 describe('ContentDriverFs', function() {
 
+	beforeAll(async () => {
+		await beforeAllDb('ContentDriverFs');
+	});
+
+	afterAll(async () => {
+		await afterAllTests();
+	});
+
 	beforeEach(async () => {
 		basePath_ = tempDirPath();
+		await beforeEachDb();
 	});
 
 	afterEach(async () => {
 		await remove(basePath_);
 		basePath_ = '';
+	});
+
+	test('should write to content and read it back', async function() {
+		const driver = newDriver();
+		await shouldWriteToContentAndReadItBack(driver);
+	});
+
+	test('should delete the content', async function() {
+		const driver = newDriver();
+		await shouldDeleteContent(driver);
+	});
+
+	test('should not create the item if the content cannot be saved', async function() {
+		const driver = newDriver();
+		await shouldNotCreateItemIfContentNotSaved(driver);
+	});
+
+	test('should not update the item if the content cannot be saved', async function() {
+		const driver = newDriver();
+		await shouldNotUpdateItemIfContentNotSaved(driver);
 	});
 
 	test('should write to a file and read it back', async function() {

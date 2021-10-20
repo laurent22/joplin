@@ -395,9 +395,25 @@ export default class ItemModel extends BaseModel<Item> {
 
 					itemToSave.content_size = content ? content.byteLength : 0;
 
+					// Here we save the item row and content, and we want to
+					// make sure that either both are saved or none of them.
+					// This is done by setting up a save point before saving the
+					// row, and rollbacking if the content cannot be saved.
+					//
+					// Normally, since we are in a transaction, throwing an
+					// error should work, but since we catch all errors within
+					// this block it doesn't work.
+
+					const savePoint = await this.setSavePoint();
 					const savedItem = await this.saveForUser(user.id, itemToSave);
 
-					await this.contentDriver_.write(savedItem.id, content, { models: this.models() });
+					try {
+						await this.contentDriver_.write(savedItem.id, content, { models: this.models() });
+						await this.releaseSavePoint(savePoint);
+					} catch (error) {
+						await this.rollbackSavePoint(savePoint);
+						throw error;
+					}
 
 					if (o.isNote) {
 						await this.models().itemResource().deleteByItemId(savedItem.id);
