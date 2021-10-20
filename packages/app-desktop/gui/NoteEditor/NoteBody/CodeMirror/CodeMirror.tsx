@@ -146,7 +146,9 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 					if (props.visiblePanes.indexOf('editor') >= 0) {
 						editorRef.current.focus();
 					} else {
-						webviewRef.current.wrappedInstance.send('doFocus');
+						// If we just call wrappedInstance.focus() then the iframe is focused,
+						// but not its content, such that scrolling up / down with arrow keys fails
+						webviewRef.current.wrappedInstance.send('focus');
 					}
 				} else {
 					commandProcessed = false;

@@ -197,10 +197,10 @@
 
 		let checkAllImageLoadedIID_ = null;
 
-		ipc.doFocus = (event) => {
+		ipc.focus = (event) => {
 			// JIT insert a dummy element to focus, if we haven't already
-			if (! document.getElementById('focus_dummy')) {
-				const focusDummy = "<div id='focus_dummy' style='width: 0; height: 0; overflow: hidden'><a href='#'>focus dummy</a></div>"
+			if (! document.getElementById('joplin-content-focus-dummy')) {
+				const focusDummy = "<div id='joplin-content-focus-dummy' style='width: 0; height: 0; overflow: hidden'><a href='#'>focus dummy</a></div>"
 				contentElement.insertAdjacentHTML("afterbegin", focusDummy);
 			}
 			contentElement.firstElementChild.firstElementChild.focus();
