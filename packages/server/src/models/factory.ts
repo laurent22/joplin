@@ -81,11 +81,13 @@ export class Models {
 	private db_: DbConnection;
 	private config_: Config;
 	private contentDriver_: ContentDriverBase;
+	private fallbackContentDriver_: ContentDriverBase;
 
-	public constructor(db: DbConnection, contentDriver: ContentDriverBase, config: Config) {
+	public constructor(db: DbConnection, contentDriver: ContentDriverBase, fallbackContentDriver: ContentDriverBase, config: Config) {
 		this.db_ = db;
 		this.config_ = config;
 		this.contentDriver_ = contentDriver;
+		this.fallbackContentDriver_ = fallbackContentDriver;
 
 		if (!contentDriver) throw new Error('contentDriver is required');
 
@@ -93,11 +95,11 @@ export class Models {
 	}
 
 	private newModelFactory(db: DbConnection) {
-		return new Models(db, this.contentDriver_, this.config_);
+		return new Models(db, this.contentDriver_, this.fallbackContentDriver_, this.config_);
 	}
 
 	public item() {
-		return new ItemModel(this.db_, this.newModelFactory, this.contentDriver_, this.config_);
+		return new ItemModel(this.db_, this.newModelFactory, this.contentDriver_, this.fallbackContentDriver_, this.config_);
 	}
 
 	public user() {
@@ -162,6 +164,6 @@ export class Models {
 
 }
 
-export default function newModelFactory(db: DbConnection, contentDriver: ContentDriverBase, config: Config): Models {
-	return new Models(db, contentDriver, config);
+export default function newModelFactory(db: DbConnection, contentDriver: ContentDriverBase, fallbackContentDriver: ContentDriverBase, config: Config): Models {
+	return new Models(db, contentDriver, fallbackContentDriver, config);
 }

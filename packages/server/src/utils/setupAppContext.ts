@@ -13,6 +13,7 @@ import ContentDriverBase from '../models/itemModel/ContentDriverBase';
 
 interface Options {
 	contentDriver: ContentDriverBase;
+	fallbackContentDriver?: ContentDriverBase;
 }
 
 async function setupServices(env: Env, models: Models, config: Config): Promise<Services> {
@@ -29,7 +30,7 @@ async function setupServices(env: Env, models: Models, config: Config): Promise<
 }
 
 export default async function(appContext: AppContext, env: Env, dbConnection: DbConnection, appLogger: ()=> LoggerWrapper, options: Options): Promise<AppContext> {
-	const models = newModelFactory(dbConnection, options.contentDriver, config());
+	const models = newModelFactory(dbConnection, options.contentDriver, options.fallbackContentDriver, config());
 
 	// The joplinBase object is immutable because it is shared by all requests.
 	// Then a "joplin" context property is created from it per request, which

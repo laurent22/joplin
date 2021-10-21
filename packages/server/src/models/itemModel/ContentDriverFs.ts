@@ -1,4 +1,4 @@
-import { mkdirp, readFile, remove, writeFile } from 'fs-extra';
+import { mkdirp, pathExists, readFile, remove, writeFile } from 'fs-extra';
 import ContentDriverBase from './ContentDriverBase';
 
 interface Options {
@@ -8,7 +8,7 @@ interface Options {
 export default class ContentDriverFs extends ContentDriverBase {
 
 	private options_: Options;
-	private basePathCreated_: boolean = false;
+	private pathCreated_: Record<string, boolean> = {};
 
 	public constructor(options: Options) {
 		super();
@@ -16,19 +16,24 @@ export default class ContentDriverFs extends ContentDriverBase {
 		this.options_ = options;
 	}
 
-	private async checkBasePath() {
-		if (this.basePathCreated_) return;
-		await mkdirp(this.options_.basePath);
-		this.basePathCreated_ = true;
+	private async createParentDirectories(path: string) {
+		const p = path.split('/');
+		p.pop();
+		const basename = p.join('/');
+
+		if (this.pathCreated_[basename]) return;
+		await mkdirp(basename);
+		this.pathCreated_[basename] = true;
 	}
 
 	private itemPath(itemId: string): string {
-		return `${this.options_.basePath}/${itemId}`;
+		return `${this.options_.basePath}/${itemId[0]}/${itemId[1]}/${itemId.substr(2)}`;
 	}
 
 	public async write(itemId: string, content: Buffer): Promise<void> {
-		await this.checkBasePath();
-		await writeFile(this.itemPath(itemId), content);
+		const itemPath = this.itemPath(itemId);
+		await this.createParentDirectories(itemPath);
+		await writeFile(itemPath, content);
 	}
 
 	public async read(itemId: string): Promise<Buffer | null> {
@@ -40,6 +45,10 @@ export default class ContentDriverFs extends ContentDriverBase {
 		for (const id of itemIds) {
 			await remove(this.itemPath(id));
 		}
+	}
+
+	public async exists(itemId: string): Promise<boolean> {
+		return pathExists(this.itemPath(itemId));
 	}
 
 }

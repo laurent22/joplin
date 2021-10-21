@@ -249,6 +249,7 @@ export function db() {
 
 interface ModelsOptions {
 	contentDriver?: ContentDriverBase;
+	fallbackContentDriver?: ContentDriverBase;
 }
 
 const contentDriverMemory = new ContentDriverMemory();
@@ -256,10 +257,11 @@ const contentDriverMemory = new ContentDriverMemory();
 export function models(options: ModelsOptions = null) {
 	options = {
 		contentDriver: contentDriverMemory,
+		fallbackContentDriver: null,
 		...options,
 	};
 
-	return modelFactory(db(), options.contentDriver, config());
+	return modelFactory(db(), options.contentDriver, options.fallbackContentDriver, config());
 }
 
 export function parseHtml(html: string): Document {

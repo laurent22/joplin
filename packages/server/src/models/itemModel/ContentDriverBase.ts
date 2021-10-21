@@ -16,6 +16,6 @@ export default class ContentDriverBase {
 
 	public async delete(_itemId: string | string[], _context: Context): Promise<void> { throw new Error('Not implemented'); }
 
-	// public async size(_itemId:string, _context: Context):Promise<number> { throw new Error('Not implemented') };
+	public async exists(_itemId: string, _context: Context): Promise<boolean> { throw new Error('Not implemented'); }
 
 }

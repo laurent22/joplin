@@ -7,7 +7,7 @@ import { ApiError, ErrorForbidden, ErrorUnprocessableEntity } from '../utils/err
 import { Knex } from 'knex';
 import { ChangePreviousItem } from './ChangeModel';
 import { unique } from '../utils/array';
-import ContentDriverBase from './itemModel/ContentDriverBase';
+import ContentDriverBase, { Context } from './itemModel/ContentDriverBase';
 import { DbConnection } from '../db';
 import { Config } from '../utils/types';
 import { NewModelFactoryHandler } from './factory';
@@ -50,13 +50,15 @@ export default class ItemModel extends BaseModel<Item> {
 
 	private updatingTotalSizes_: boolean = false;
 	private contentDriver_: ContentDriverBase = null;
+	private fallbackContentDriver_: ContentDriverBase = null;
 
-	public constructor(db: DbConnection, modelFactory: NewModelFactoryHandler, contentDriver: ContentDriverBase, config: Config) {
+	public constructor(db: DbConnection, modelFactory: NewModelFactoryHandler, contentDriver: ContentDriverBase, fallbackContentDriver: ContentDriverBase, config: Config) {
 		super(db, modelFactory, config);
 
 		if (!contentDriver) throw new Error('contentDriver is required');
 
 		this.contentDriver_ = contentDriver;
+		this.fallbackContentDriver_ = fallbackContentDriver;
 	}
 
 	protected get tableName(): string {
@@ -135,6 +137,15 @@ export default class ItemModel extends BaseModel<Item> {
 		return await query;
 	}
 
+	private async contentDriverRead(itemId: Uuid, context: Context) {
+		if (await this.contentDriver_.exists(itemId, context)) {
+			return this.contentDriver_.read(itemId, context);
+		} else {
+			if (!this.fallbackContentDriver_) throw new Error(`Content does not exist but fallback content driver is not defined: ${itemId}`);
+			return this.fallbackContentDriver_.read(itemId, context);
+		}
+	}
+
 	public async loadByJopIds(userId: Uuid | Uuid[], jopIds: string[], options: ItemLoadOptions = {}): Promise<Item[]> {
 		if (!jopIds.length) return [];
 
@@ -150,7 +161,7 @@ export default class ItemModel extends BaseModel<Item> {
 
 		if (options.withContent) {
 			for (const row of rows) {
-				row.content = await this.contentDriver_.read(row.id, { models: this.models() });
+				row.content = await this.contentDriverRead(row.id, { models: this.models() });
 			}
 		}
 
@@ -176,7 +187,7 @@ export default class ItemModel extends BaseModel<Item> {
 
 		if (options.withContent) {
 			for (const row of rows) {
-				row.content = await this.contentDriver_.read(row.id, { models: this.models() });
+				row.content = await this.contentDriverRead(row.id, { models: this.models() });
 			}
 		}
 
@@ -189,7 +200,7 @@ export default class ItemModel extends BaseModel<Item> {
 	}
 
 	public async loadWithContent(id: Uuid, options: ItemLoadOptions = {}): Promise<Item> {
-		const content = await this.contentDriver_.read(id, { models: this.models() });
+		const content = await this.contentDriverRead(id, { models: this.models() });
 
 		return {
 			...await this
@@ -409,6 +420,7 @@ export default class ItemModel extends BaseModel<Item> {
 
 					try {
 						await this.contentDriver_.write(savedItem.id, content, { models: this.models() });
+						if (this.fallbackContentDriver_) await this.fallbackContentDriver_.write(savedItem.id, Buffer.from(''), { models: this.models() });
 						await this.releaseSavePoint(savePoint);
 					} catch (error) {
 						await this.rollbackSavePoint(savePoint);
@@ -594,6 +606,7 @@ export default class ItemModel extends BaseModel<Item> {
 			await this.models().userItem().deleteByItemIds(ids);
 			await this.models().itemResource().deleteByItemIds(ids);
 			await this.contentDriver_.delete(ids, { models: this.models() });
+			if (this.fallbackContentDriver_) await this.fallbackContentDriver_.delete(ids, { models: this.models() });
 
 			await super.delete(ids, options);
 		}, 'ItemModel::delete');

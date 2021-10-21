@@ -50,9 +50,9 @@ export default class ContentDriverDatabase extends ContentDriverBase {
 		// content.
 	}
 
-	// public async size(itemId:string, context: Context):Promise<number> {
-	// 	const content = await this.read(itemId, context);
-	// 	return content.byteLength;
-	// };
+	public async exists(itemId: string, context: Context): Promise<boolean> {
+		const row = await context.models.item().db('items').select('content').where('id', '=', itemId).first();
+		return !!row && !!row.content;
+	}
 
 }

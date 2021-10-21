@@ -19,4 +19,8 @@ export default class ContentDriverMemory extends ContentDriverBase {
 		}
 	}
 
+	public async exists(itemId: string): Promise<boolean> {
+		return itemId in this.data_;
+	}
+
 }
