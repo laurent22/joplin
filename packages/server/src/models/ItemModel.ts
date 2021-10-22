@@ -415,6 +415,17 @@ export default class ItemModel extends BaseModel<Item> {
 					// error should work, but since we catch all errors within
 					// this block it doesn't work.
 
+					// TODO: When an item is uploaded multiple times
+					// simultaneously there could be a race condition, where the
+					// content would not match the db row (for example, the
+					// content_size would differ).
+					//
+					// Possible solutions:
+					//
+					// - Row-level lock on items.id, and release once the
+					//   content is saved.
+					// - Or external lock - eg. Redis.
+
 					const savePoint = await this.setSavePoint();
 					const savedItem = await this.saveForUser(user.id, itemToSave);
 
