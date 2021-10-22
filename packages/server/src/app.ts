@@ -7,7 +7,7 @@ import { argv } from 'yargs';
 import Logger, { LoggerWrapper, TargetType } from '@joplin/lib/Logger';
 import config, { initConfig, runningInDocker, EnvVariables } from './config';
 import { createDb, dropDb } from './tools/dbTools';
-import { dropTables, connectDb, disconnectDb, migrateLatest, waitForConnection, sqliteDefaultDir, migrateList, migrateUp, migrateDown } from './db';
+import { dropTables, connectDb, disconnectDb, migrateLatest, waitForConnection, sqliteDefaultDir, migrateList, migrateUp, migrateDown, clientType } from './db';
 import { AppContext, Env, KoaNext } from './utils/types';
 import FsDriverNode from '@joplin/lib/fs-driver-node';
 import routeHandler from './middleware/routeHandler';
@@ -19,6 +19,7 @@ import startServices from './utils/startServices';
 import { credentialFile } from './utils/testing/testUtils';
 import apiVersionHandler from './middleware/apiVersionHandler';
 import clickJackingHandler from './middleware/clickJackingHandler';
+import ContentDriverDatabase from './models/itemModel/ContentDriverDatabase';
 
 const nodeSqlite = require('sqlite3');
 const cors = require('@koa/cors');
@@ -245,7 +246,10 @@ async function main() {
 		appLogger().info('Connection check:', connectionCheckLogInfo);
 		const ctx = app.context as AppContext;
 
-		await setupAppContext(ctx, env, connectionCheck.connection, appLogger);
+		await setupAppContext(ctx, env, connectionCheck.connection, appLogger, {
+			contentDriver: new ContentDriverDatabase({ dbClientType: clientType(connectionCheck.connection) }),
+		});
+
 		await initializeJoplinUtils(config(), ctx.joplinBase.models, ctx.joplinBase.services.mustache);
 
 		appLogger().info('Migrating database...');

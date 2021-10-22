@@ -10,7 +10,7 @@ import { unique } from '../utils/array';
 import ContentDriverBase, { Context } from './itemModel/ContentDriverBase';
 import { DbConnection } from '../db';
 import { Config } from '../utils/types';
-import { NewModelFactoryHandler } from './factory';
+import { NewModelFactoryHandler, Options } from './factory';
 
 const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
 
@@ -52,13 +52,11 @@ export default class ItemModel extends BaseModel<Item> {
 	private contentDriver_: ContentDriverBase = null;
 	private fallbackContentDriver_: ContentDriverBase = null;
 
-	public constructor(db: DbConnection, modelFactory: NewModelFactoryHandler, contentDriver: ContentDriverBase, fallbackContentDriver: ContentDriverBase, config: Config) {
+	public constructor(db: DbConnection, modelFactory: NewModelFactoryHandler, config: Config, options: Options) {
 		super(db, modelFactory, config);
 
-		if (!contentDriver) throw new Error('contentDriver is required');
-
-		this.contentDriver_ = contentDriver;
-		this.fallbackContentDriver_ = fallbackContentDriver;
+		this.contentDriver_ = options.contentDriver;
+		this.fallbackContentDriver_ = options.fallbackContentDriver;
 	}
 
 	protected get tableName(): string {

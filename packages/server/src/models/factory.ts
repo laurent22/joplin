@@ -74,32 +74,35 @@ import EventModel from './EventModel';
 import { Config } from '../utils/types';
 import ContentDriverBase from './itemModel/ContentDriverBase';
 
+export interface Options {
+	contentDriver: ContentDriverBase;
+	fallbackContentDriver?: ContentDriverBase;
+}
+
 export type NewModelFactoryHandler = (db: DbConnection)=> Models;
 
 export class Models {
 
 	private db_: DbConnection;
 	private config_: Config;
-	private contentDriver_: ContentDriverBase;
-	private fallbackContentDriver_: ContentDriverBase;
+	private options_: Options;
 
-	public constructor(db: DbConnection, contentDriver: ContentDriverBase, fallbackContentDriver: ContentDriverBase, config: Config) {
+	public constructor(db: DbConnection, config: Config, options: Options) {
 		this.db_ = db;
 		this.config_ = config;
-		this.contentDriver_ = contentDriver;
-		this.fallbackContentDriver_ = fallbackContentDriver;
+		this.options_ = options;
 
-		if (!contentDriver) throw new Error('contentDriver is required');
+		if (!options.contentDriver) throw new Error('contentDriver is required');
 
 		this.newModelFactory = this.newModelFactory.bind(this);
 	}
 
 	private newModelFactory(db: DbConnection) {
-		return new Models(db, this.contentDriver_, this.fallbackContentDriver_, this.config_);
+		return new Models(db, this.config_, this.options_);
 	}
 
 	public item() {
-		return new ItemModel(this.db_, this.newModelFactory, this.contentDriver_, this.fallbackContentDriver_, this.config_);
+		return new ItemModel(this.db_, this.newModelFactory, this.config_, this.options_);
 	}
 
 	public user() {
@@ -164,6 +167,6 @@ export class Models {
 
 }
 
-export default function newModelFactory(db: DbConnection, contentDriver: ContentDriverBase, fallbackContentDriver: ContentDriverBase, config: Config): Models {
-	return new Models(db, contentDriver, fallbackContentDriver, config);
+export default function newModelFactory(db: DbConnection, config: Config, options: Options): Models {
+	return new Models(db, config, options);
 }

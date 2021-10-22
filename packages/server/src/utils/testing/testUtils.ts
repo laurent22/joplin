@@ -1,7 +1,7 @@
 import { DbConnection, connectDb, disconnectDb, truncateTables } from '../../db';
 import { User, Session, Item, Uuid } from '../../services/database/types';
 import { createDb, CreateDbOptions } from '../../tools/dbTools';
-import modelFactory from '../../models/factory';
+import modelFactory, { Options as ModelFactoryOptions } from '../../models/factory';
 import { AppContext, Env } from '../types';
 import config, { initConfig } from '../../config';
 import Logger from '@joplin/lib/Logger';
@@ -24,7 +24,6 @@ import uuidgen from '../uuidgen';
 import { createCsrfToken } from '../csrf';
 import { cookieSet } from '../cookies';
 import ContentDriverMemory from '../../models/itemModel/ContentDriverMemory';
-import ContentDriverBase from '../../models/itemModel/ContentDriverBase';
 
 // Takes into account the fact that this file will be inside the /dist directory
 // when it runs.
@@ -243,25 +242,16 @@ export function db() {
 	return db_;
 }
 
-// function baseUrl() {
-// 	return 'http://localhost:22300';
-// }
-
-interface ModelsOptions {
-	contentDriver?: ContentDriverBase;
-	fallbackContentDriver?: ContentDriverBase;
-}
-
 const contentDriverMemory = new ContentDriverMemory();
 
-export function models(options: ModelsOptions = null) {
+export function models(options: ModelFactoryOptions = null) {
 	options = {
 		contentDriver: contentDriverMemory,
 		fallbackContentDriver: null,
 		...options,
 	};
 
-	return modelFactory(db(), options.contentDriver, options.fallbackContentDriver, config());
+	return modelFactory(db(), config(), options);
 }
 
 export function parseHtml(html: string): Document {
