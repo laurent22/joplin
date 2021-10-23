@@ -4,7 +4,7 @@ import { SqliteMaxVariableNum } from '../db';
 import { Change, ChangeType, Item, Uuid } from '../services/database/types';
 import { md5 } from '../utils/crypto';
 import { ErrorResyncRequired } from '../utils/errors';
-import { Day } from '../utils/time';
+import { Day, formatDateTime } from '../utils/time';
 import BaseModel, { SaveOptions } from './BaseModel';
 import { PaginatedResults, Pagination, PaginationOrderDir } from './utils/pagination';
 
@@ -322,6 +322,8 @@ export default class ChangeModel extends BaseModel<Change> {
 
 		let error: Error = null;
 		let totalDeletedCount = 0;
+
+		logger.info(`deleteOldChanges: Processing changes older than: ${formatDateTime(cutOffDate)} (${cutOffDate})`);
 
 		while (true) {
 			const changeReport: ChangeReportItem[] = await this
