@@ -58,18 +58,18 @@ COPY --chown=$user:$user packages/fork-htmlparser2 ./packages/fork-htmlparser2
 RUN npm run bootstrap
 
 # We have a separate step for the server files because they are more likely to
-# change.
+# change. And we need all the server files because there is a postinstall
+# script.
 
-COPY --chown=$user:$user packages/server/package*.json ./packages/server/
+COPY --chown=$user:$user packages/server ./packages/server
 RUN npm run bootstrapServerOnly
 
-# Now copy the source files. Put lib and server last as they are more likely to change.
+# Now copy the source files. Put lib last as it's more likely to change.
 
 COPY --chown=$user:$user packages/fork-sax ./packages/fork-sax
 COPY --chown=$user:$user packages/renderer ./packages/renderer
 COPY --chown=$user:$user packages/tools ./packages/tools
 COPY --chown=$user:$user packages/lib ./packages/lib
-COPY --chown=$user:$user packages/server ./packages/server
 
 # Finally build everything, in particular the TypeScript files.
 
