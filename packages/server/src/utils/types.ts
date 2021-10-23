@@ -131,3 +131,7 @@ export enum RouteType {
 }
 
 export type KoaNext = ()=> Promise<void>;
+
+export interface CommandContext {
+	models: Models;
+}
