@@ -476,11 +476,11 @@ Please see the [donation page](https://github.com/laurent22/joplin/blob/dev/read
 Name | Description
 --- | ---
 [Support Forum](https://discourse.joplinapp.org/) | This is the main place for general discussion about Joplin, user support, software development questions, and to discuss new features. Also where the latest beta versions are released and discussed.
-[Sub-reddit](https://www.reddit.com/r/joplinapp/) | Also a good place to get help
-[Discord server](https://discordapp.com/invite/d2HMPwE) | Our chat server
-[Patreon page](https://www.patreon.com/joplin) |The latest news are often posted there
-[Mastodon feed](https://mastodon.social/@joplinapp) | Follow us on Mastodon
 [Twitter feed](https://twitter.com/joplinapp) | Follow us on Twitter
+[Mastodon feed](https://mastodon.social/@joplinapp) | Follow us on Mastodon
+[Patreon page](https://www.patreon.com/joplin) |The latest news are often posted there
+[Discord server](https://discordapp.com/invite/d2HMPwE) | Our chat server
+[Sub-reddit](https://www.reddit.com/r/joplinapp/) | Also a good place to get help
 
 # Contributing
 
