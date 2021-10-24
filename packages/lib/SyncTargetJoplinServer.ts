@@ -7,6 +7,8 @@ import BaseSyncTarget from './BaseSyncTarget';
 import { FileApi } from './file-api';
 import Logger from './Logger';
 
+const staticLogger = Logger.create('SyncTargetJoplinServer');
+
 interface FileApiOptions {
 	path(): string;
 	userContentPath(): string;
@@ -75,10 +77,42 @@ export default class SyncTargetJoplinServer extends BaseSyncTarget {
 
 		syncTargetId = syncTargetId === null ? SyncTargetJoplinServer.id() : syncTargetId;
 
+		let fileApi = null;
 		try {
-			const fileApi = await newFileApi(syncTargetId, options);
+			fileApi = await newFileApi(syncTargetId, options);
 			fileApi.requestRepeatCount_ = 0;
+		} catch (error) {
+			// If there's an error it's probably an application error, but we
+			// can't proceed anyway, so exit.
+			output.errorMessage = error.message;
+			if (error.code) output.errorMessage += ` (Code ${error.code})`;
+			return output;
+		}
 
+		// First we try to fetch info.json. It may not be present if it's a new
+		// sync target but otherwise, if it is, and it's valid, we know the
+		// credentials are valid. We do this test first because it will work
+		// even if account upload is disabled. And we need such account to
+		// successfully login so that they can fix it by deleting extraneous
+		// notes or resources.
+		try {
+			const r = await fileApi.get('info.json');
+			if (r) {
+				const parsed = JSON.parse(r);
+				if (parsed) {
+					output.ok = true;
+					return output;
+				}
+			}
+		} catch (error) {
+			// Ignore because we'll use the next test to check for sure if it
+			// works or not.
+			staticLogger.warn('Could not fetch or parse info.json:', error);
+		}
+
+		// This is a more generic test, which writes a file and tries to read it
+		// back.
+		try {
 			await fileApi.put('testing.txt', 'testing');
 			const result = await fileApi.get('testing.txt');
 			if (result !== 'testing') throw new Error(`Could not access data on server "${options.path()}"`);
