@@ -327,6 +327,11 @@ export default class ChangeModel extends BaseModel<Change> {
 		logger.info(`deleteOldChanges: Processing changes older than: ${formatDateTime(cutOffDate)} (${cutOffDate})`);
 
 		while (true) {
+			// First get all the UPDATE changes before the specified date, and
+			// order by the items that had the most changes. Also for each item
+			// get the most recent change date from within that time interval,
+			// as we need this below.
+
 			const changeReport: ChangeReportItem[] = await this
 				.db(this.tableName)
 
@@ -354,6 +359,9 @@ export default class ChangeModel extends BaseModel<Change> {
 						return;
 					}
 
+					// Still from within the specified interval, delete all
+					// UPDATE changes, except for the most recent one.
+
 					const deletedCount = await this
 						.db(this.tableName)
 						.where('type', '=', ChangeType.Update)
@@ -367,12 +375,12 @@ export default class ChangeModel extends BaseModel<Change> {
 				}
 			}, 'ChangeModel::deleteOldChanges');
 
-			logger.info(`deleteOldChanges: Processed: ${doneItemIds.length} items. Deleted: ${totalDeletedCount}`);
+			logger.info(`deleteOldChanges: Processed: ${doneItemIds.length} items. Deleted: ${totalDeletedCount} changes.`);
 
 			if (error) throw error;
 		}
 
-		logger.info(`deleteOldChanges: Finished processing. Done ${doneItemIds.length} items. Deleted: ${totalDeletedCount}`);
+		logger.info(`deleteOldChanges: Finished processing. Done ${doneItemIds.length} items. Deleted: ${totalDeletedCount} changes.`);
 	}
 
 	public async save(change: Change, options: SaveOptions = {}): Promise<Change> {
