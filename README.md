@@ -4,7 +4,7 @@
 
 * * *
 
-<img width="64" src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/LinuxIcons/256x256.png" align="left" /> **Joplin** is a free, open source note taking and to-do application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be copied, tagged and modified either from the applications directly or from your own text editor. The notes are in [Markdown format](#markdown).
+<img width="64" src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/LinuxIcons/256x256.png" style="float: left;margin:0 1rem 0 1rem" alt="Joplin logo"/> **Joplin** is a free, open source note taking and to-do application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be copied, tagged and modified either from the applications directly or from your own text editor. The notes are in [Markdown format](#markdown).
 
 Notes exported from Evernote via .enex files [can be imported](#importing) into Joplin, including the formatted content (which is converted to Markdown), resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.). Plain Markdown files can also be imported.
 
@@ -12,7 +12,7 @@ The notes can be [synchronised](#synchronisation) with various cloud services in
 
 The application is available for Windows, Linux, macOS, Android and iOS (the terminal app also works on FreeBSD). A [Web Clipper](https://github.com/laurent22/joplin/blob/dev/readme/clipper.md), to save web pages and screenshots from your browser, is also available for [Firefox](https://addons.mozilla.org/firefox/addon/joplin-web-clipper/) and [Chrome](https://chrome.google.com/webstore/detail/joplin-web-clipper/alofnhikmmkdbbbgpnglcpdollgjjfek?hl=en-GB).
 
-<div class="top-screenshot"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/home-top-img.png" style="max-width: 100%; max-height: 35em;"></div>
+<div class="top-screenshot"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/home-top-img.png" style="max-width: 100%; max-height: 35em;" alt="UI screenshot"></div>
 
 # Installation
 
@@ -81,7 +81,7 @@ The Web Clipper is a browser extension that allows you to save web pages and scr
 <!-- SPONSORS-GITHUB -->
 
 <!-- TOC -->
-# Table of contents
+# Documentation links
 
 - Applications
 
@@ -123,15 +123,16 @@ The Web Clipper is a browser extension that allows you to save web pages and scr
 
 - Development
 
-	- [How to build the apps](https://github.com/laurent22/joplin/blob/dev/BUILD.md)
-	- [End-to-end encryption spec](https://github.com/laurent22/joplin/blob/dev/readme/spec/e2ee.md)
-	- [Note History spec](https://github.com/laurent22/joplin/blob/dev/readme/spec/history.md)
-	- [Sync Lock spec](https://github.com/laurent22/joplin/blob/dev/readme/spec/sync_lock.md)
-	- [Plugin Architecture spec](https://github.com/laurent22/joplin/blob/dev/readme/spec/plugins.md)
-	- [Search Sorting spec](https://github.com/laurent22/joplin/blob/dev/readme/spec/search_sorting.md)
-	- [Server: File URL Format](https://github.com/laurent22/joplin/blob/dev/readme/spec/server_file_url_format.md)
-	- [Server: Delta Sync](https://github.com/laurent22/joplin/blob/dev/readme/spec/server_delta_sync.md)
-	- [Server: Sharing](https://github.com/laurent22/joplin/blob/dev/readme/spec/server_sharing.md)
+    - [Contributing](https://github.com/laurent22/joplin/blob/dev/CONTRIBUTING.md)
+    - [How to build the apps](https://github.com/laurent22/joplin/blob/dev/BUILD.md)
+    - [End-to-end encryption spec](https://github.com/laurent22/joplin/blob/dev/readme/spec/e2ee.md)
+    - [Note History spec](https://github.com/laurent22/joplin/blob/dev/readme/spec/history.md)
+    - [Sync Lock spec](https://github.com/laurent22/joplin/blob/dev/readme/spec/sync_lock.md)
+    - [Plugin Architecture spec](https://github.com/laurent22/joplin/blob/dev/readme/spec/plugins.md)
+    - [Search Sorting spec](https://github.com/laurent22/joplin/blob/dev/readme/spec/search_sorting.md)
+    - [Server: File URL Format](https://github.com/laurent22/joplin/blob/dev/readme/spec/server_file_url_format.md)
+    - [Server: Delta Sync](https://github.com/laurent22/joplin/blob/dev/readme/spec/server_delta_sync.md)
+    - [Server: Sharing](https://github.com/laurent22/joplin/blob/dev/readme/spec/server_sharing.md)
 
 - Google Summer of Code 2021
 
@@ -227,7 +228,7 @@ If the **terminal client** has been installed, it is possible to also synchronis
 
 ## Nextcloud synchronisation
 
-<img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/nextcloud-logo-background.png" width="100" align="left"> <a href="https://nextcloud.com/">Nextcloud</a> is a self-hosted, private cloud solution. It can store documents, images and videos but also calendars, passwords and countless other things and can sync them to your laptop or phone. As you can host your own Nextcloud server, you own both the data on your device and infrastructure used for synchronisation. As such it is a good fit for Joplin. The platform is also well supported and with a strong community, so it is likely to be around for a while - since it's open source anyway, it is not a service that can be closed, it can exist on a server for as long as one chooses.
+<img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/nextcloud-logo-background.png" width="100" style="float: left;margin:0 1rem 0 1rem"  alt="Nextcloud logo"> <a href="https://nextcloud.com/">Nextcloud</a> is a self-hosted, private cloud solution. It can store documents, images and videos but also calendars, passwords and countless other things and can sync them to your laptop or phone. As you can host your own Nextcloud server, you own both the data on your device and infrastructure used for synchronisation. As such it is a good fit for Joplin. The platform is also well supported and with a strong community, so it is likely to be around for a while - since it's open source anyway, it is not a service that can be closed, it can exist on a server for as long as one chooses.
 
 In the **desktop application** or **mobile application**, go to the [Configuration screen](https://github.com/laurent22/joplin/blob/dev/readme/config_screen.md) and select Nextcloud as the synchronisation target. Then input the WebDAV URL (to get it, click on Settings in the bottom left corner of the page, in Nextcloud), this is normally `https://example.com/nextcloud/remote.php/webdav/Joplin` (**make sure to create the "Joplin" directory in Nextcloud**), and set the username and password. If it does not work, please [see this explanation](https://github.com/laurent22/joplin/issues/61#issuecomment-373282608) for more details.
 
@@ -484,7 +485,7 @@ Name | Description
 
 # Contributing
 
-Please see the guide for information on how to contribute to the development of Joplin: https://github.com/laurent22/joplin/blob/dev/CONTRIBUTING.md
+Please see [this guide](https://github.com/laurent22/joplin/blob/dev/CONTRIBUTING.md) for information on how to contribute to the development of Joplin.
 
 # Localisation
 
