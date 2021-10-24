@@ -17,6 +17,7 @@ tools | Tools used to build the apps and other tasks
 There are also a few forks of existing packages under the "fork-*" name.
 
 ## Required dependencies
+Before running `npm install` in the root of the project, ensure that you have the required dependencies installed.
 
 - Install node 14+ - https://nodejs.org/en/
 - macOS: Install Cocoapods - `brew install cocoapods`
@@ -25,7 +26,7 @@ There are also a few forks of existing packages under the "fork-*" name.
 
 ## Building
 
-Before doing anything else, from the root of the project, run:
+Before starting any specific application, from the root of the project, run:
 
 	npm install
 
