@@ -1,35 +1,26 @@
 # Desktop application
 
 ## On Windows
-
-If `yarn dist` fails, it may need administrative rights.
-
-If you get an `error MSB8020: The build tools for v140 cannot be found.` try to run with a different toolset version, eg `npm install --toolset=v141` (See [here](https://github.com/mapbox/node-sqlite3/issues/1124) for more info). You may also try to install `npm --vs2015 install --global windows-build-tools` (the --vs2015 flag is to get toolkit "v140", which is what is used by default).
-
-There are various errors that can occur from an improper build environment (such as MSBUILD: error MSB3428). It is recommended to install `windows-build-tools` with the command `npm install --global windows-build-tools` (elevation required) and then using these two commands to set the environmental variables to the proper values:
-
+- `yarn dist` failure: it may need administrative rights.
+- `error MSB8020: The build tools for v140 cannot be found.` try to run with a different toolset version, eg `npm install --toolset=v141` (See [here](https://github.com/mapbox/node-sqlite3/issues/1124) for more info). You may also try to install `npm --vs2015 install --global windows-build-tools` (the --vs2015 flag is to get toolkit "v140", which is what is used by default).
+- Various errors that can occur from an improper build environment (such as `MSBUILD: error MSB3428`): It is recommended to install `windows-build-tools` with the command `npm install --global windows-build-tools` (elevation required) and then using these two commands to set the environmental variables to the proper values:
 ```batch
 call "C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\VC\Auxiliary\Build\vcvarsamd64_x86.bat" 
 set "PATH=C:\Program Files\nodejs;%PATH%"
 ```
 
 ## On Linux and macOS
-
-If there's an error `while loading shared libraries: libgconf-2.so.4: cannot open shared object file: No such file or directory`, run `sudo apt-get install libgconf-2-4`
-
-If you get a node-gyp related error, you might need to manually install it: `npm install -g node-gyp`.
-
-If you get unexpected `npm` dependency errors on a fresh git pull, try `npm run clean`
-
-If `npm i` gives you a fatal error like the following:
+- `while loading shared libraries: libgconf-2.so.4: cannot open shared object file: No such file or directory` error: run `sudo apt-get install libgconf-2-4`
+- node-gyp related error: you might need to manually install it: `npm install -g node-gyp`.
+- Unexpected `npm` dependency errors on a fresh git pull: try `npm run clean`
+- `libtool: unrecognized option '-static'` error: follow the instructions [in this post](https://stackoverflow.com/a/38552393/561309) to use the correct libtool version.
+- `npm i` gives you a fatal error like the following:
 ```
 node-pre-gyp WARN Tried to download(403): https://mapbox-node-binary.s3.amazonaws.com/sqlite3/v5.0.1/napi-v6-linux-x64.tar.gz 
 node-pre-gyp WARN Pre-built binaries not found for sqlite3@5.0.1 and node@14.15.4 (node-v83 ABI, glibc) (falling back to source compile with node-gyp)
 /bin/sh: 1: python: not found
 ```
 Try `sudo apt install python` (or the `apt` equivalent for your operating system) and then run `npm i` again.
-
-If you get the error `libtool: unrecognized option '-static'`, follow the instructions [in this post](https://stackoverflow.com/a/38552393/561309) to use the correct libtool version.
 
 ## Other issues
 
@@ -51,9 +42,10 @@ So everything should be done from a Windows Command prompt or Windows PowerShell
 # Mobile application
 
 ## iOS
+- `/joplin/packages/app-mobile/ios/Pods/Target Support Files/Pods-Joplin/Pods-Joplin.debug.xcconfig: unable to open file (in target "Joplin" in project "Joplin") (in target 'Joplin' from project 'Joplin')` error: run the following commands:
 
-If there is an error `/joplin/packages/app-mobile/ios/Pods/Target Support Files/Pods-Joplin/Pods-Joplin.debug.xcconfig: unable to open file (in target "Joplin" in project "Joplin") (in target 'Joplin' from project 'Joplin')` run the following commands:
+    `cd ios`
 
-    cd ios
-    pod deintegrate
-    pod install
+    `pod deintegrate`
+
+    `pod install`
