@@ -34,8 +34,10 @@ export default class SessionModel extends BaseModel<Session> {
 		await this.delete(sessionId);
 	}
 
-	public async deleteByUserId(userId: Uuid) {
-		await this.db(this.tableName).where('user_id', '=', userId).delete();
+	public async deleteByUserId(userId: Uuid, exceptSessionId: Uuid = '') {
+		const query = this.db(this.tableName).where('user_id', '=', userId);
+		if (exceptSessionId) query.where('id', '!=', exceptSessionId);
+		await query.delete();
 	}
 
 }
