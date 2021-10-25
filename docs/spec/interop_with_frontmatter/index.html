@@ -5,11 +5,11 @@
 
 !!! WARNING !!!
 
-This file was auto-generated from readme/blog/20180621-182112.md and any manual change
+This file was auto-generated from readme/spec/interop_with_frontmatter.md and any manual change
 made to it will be overwritten. To make a change to this file please modify
 the source Markdown file:
 
-https://github.com/laurent22/joplin/blob/dev/readme/blog/20180621-182112.md
+https://github.com/laurent22/joplin/blob/dev/readme/spec/interop_with_frontmatter.md
 
 -->
 
@@ -38,7 +38,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20180621-182112.md
 			onload="this.media='all'; this.onload = null"
 		/>
 		<link rel="stylesheet" href="&#x2F;css/site.css?t=1635175432192" as="style" />
-		<title>Web Clipper now available on Firefox and Chrome | Joplin</title>
+		<title>Markdown with Front Matter Exporter&#x2F;Importer | Joplin</title>
 
 		<script
 			src="&#x2F;js/jquery-3.6.0.min.js"
@@ -197,7 +197,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20180621-182112.md
 		</div>
 	</div>
 </div>
-			<div class="help-page-container page-20180621-182112">
+			<div class="help-page-container page-interop_with_frontmatter">
 				<div class="container">
 					<div class="row content-wrapper">
 						<div id="toc"><div><ul>
@@ -290,16 +290,96 @@ https://github.com/laurent22/joplin/blob/dev/readme/blog/20180621-182112.md
 							<div class="donate-links">
 <p><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=E8JMYD2LQ8MMA&amp;lc=GB&amp;item_name=Joplin+Development&amp;currency_code=EUR&amp;bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Donate-PayPal-green.svg" alt="Donate using PayPal"></a> <a href="https://github.com/sponsors/laurent22/"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/GitHub-Badge.svg" alt="Sponsor on GitHub"></a> <a href="https://www.patreon.com/joplin"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Patreon-Badge.svg" alt="Become a patron"></a> <a href="https://joplinapp.org/donate/#donations"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Donate-IBAN.svg" alt="Donate using IBAN"></a></p>
 </div>
-<h1>Web Clipper now available on Firefox and Chrome<a name="web-clipper-now-available-on-firefox-and-chrome" href="#web-clipper-now-available-on-firefox-and-chrome" class="heading-anchor">🔗</a></h1>
-<p><a href="https://github.com/laurent22/joplin/issues/135">One of the most requested feature</a>, the Web Clipper, is now available on the Firefox and Chrome store. It is possible to save a whole web page, or a simplified version of it, or a screenshot directly from the browser to Joplin. Like the rest of Joplin, the HTML page will be converted to Markdown, which means it can be easily edited and read even without a special viewer, and, since it's plain text, it also makes it easier to search and share the content.</p>
-<p>Have a look at the <a href="https://joplinapp.org/clipper/">Web Clipper documentation</a> for more information.</p>
-<p><img src="images/20180621-182112_0.png" alt=""></p>
-<hr>
-<p>url: <a href="https://www.patreon.com/posts/web-clipper-now-19589638">https://www.patreon.com/posts/web-clipper-now-19589638</a><br>
-published_at: 2018-06-21T17:21:12.000+00:00</p>
+<h1>Markdown with Front Matter Exporter/Importer<a name="markdown-with-front-matter-exporter-importer" href="#markdown-with-front-matter-exporter-importer" class="heading-anchor">🔗</a></h1>
+<p>This exporter/importer is built around the MD exporter/importer. It functions identically, but includes a block of YAML front matter that contains note metadata.</p>
+<p>YAML front matter is represented simply as a block of YAML between <code>---</code> delimiters. An illustrative example can be seen below.</p>
+<pre><code>---
+title: Joplin Interop
+created: 1970-01-01 00:00Z
+tags:
+  - export
+  - import
+---
+</code></pre>
+<h2>Supported Metadata Fields<a name="supported-metadata-fields" href="#supported-metadata-fields" class="heading-anchor">🔗</a></h2>
+<p>All of the below fields are supported by both the exporter and the importer.</p>
+<ul>
+<li><code>title</code>: Title of the note</li>
+<li><code>updated</code>: Time of last not update (corresponds to <code>user_updated_time</code>)</li>
+<li><code>created</code>: Creation time of note (corresponds to <code>user_created_time</code>)</li>
+<li><code>source</code>: The source URL for a note that comes from the web clipper</li>
+<li><code>author</code>: Author's name</li>
+<li><code>latitude</code>: Latitude where note was created</li>
+<li><code>longitude</code>: Longitude where note was created</li>
+<li><code>altitude</code>: Altitude where note was created</li>
+<li><code>completed?</code>: Exists if the note is a todo, indicates if the todo is completed</li>
+<li><code>due</code>: Exists if the note is a todo, due date (alarm time) of note</li>
+<li><code>tags</code>: List of all associated tag names</li>
+</ul>
+<h3>Exporter<a name="exporter" href="#exporter" class="heading-anchor">🔗</a></h3>
+<p>The exporter will export all the above fields that hold values in the database. So <code>due</code> and <code>completed?</code> will only be included for &quot;todo&quot; notesm <code>tags</code> will only exist for notes that include tags, etc.</p>
+<h3>Importer<a name="importer" href="#importer" class="heading-anchor">🔗</a></h3>
+<p>The importer will import the metadata corresponding to all of the above fields. Missing data will be filled in as if the note was just created. Extra fields will be ignored.</p>
+<p>There are other tools that use similar YAML front matter blocks, notably <a href="https://pandoc.org/MANUAL.html#extension-yaml_metadata_block">pandoc</a> and <a href="https://github.com/hao203/rmarkdown-YAML">r-markdown</a>. The importer attempts to provide compatibility with these formats where possible.</p>
+<h2>Dates<a name="dates" href="#dates" class="heading-anchor">🔗</a></h2>
+<h3>Exporter<a name="exporter-1" href="#exporter-1" class="heading-anchor">🔗</a></h3>
+<p>All dates are exported in the ISO 8601 format (substituting the 'T' for a space based on RFC 3339 for readability) in the UTC time zone.</p>
+<p>e.g. <code>1970-01-01 00:00:00Z</code></p>
+<h3>Importer<a name="importer-1" href="#importer-1" class="heading-anchor">🔗</a></h3>
+<p>The importer is more flexible with dates. It will handle ISO 8601 dates with or without a timezone, if no timezone is specified, local time will be used. If there is a timezone specified (Z notation or +00:00 notation) that timezone will be used. If the format is not ISO 8601, the importer will attempt to read based on the users configured date and time preferences (Tools -&gt; Options -&gt; General or Joplin -&gt; Preferences -&gt; General). The importer will fallback on the Javascript <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date">Date</a> functionality if the format can not be read.</p>
+<h2>Examples<a name="examples" href="#examples" class="heading-anchor">🔗</a></h2>
+<p>Below are a collection of examples that represent valid notes that may have been exported by the exporter, and can be imported by the importer.</p>
+<pre><code>---
+title: Frogs
+source: https://en.wikipedia.org/wiki/Frog
+created: 2021-05-01 16:40:00Z
+updated: 2021-05-01 16:40:00Z
+tags:
+  - Reference
+  - Cool
+---
+
+This article is about the group of amphibians. For other uses, see [Frog (disambiguation)](https://en.wikipedia.org/wiki/Frog_%28disambiguation%29 &quot;Frog (disambiguation)&quot;).
+...
+</code></pre>
+<pre><code>---
+title: Take Home Quiz
+created: 2021-05-01 16:40:00Z
+updated: 2021-06-17 23:59:00Z
+tags:
+  - school
+  - math
+  - homework
+completed?: no
+due: 2021-06-18 08:00:00Z
+---
+
+**Prove or give a counter-example of the following statement:**
+
+&gt; In three space dimensions and time, given an initial velocity field, there exists a vector velocity and a scalar pressure field, which are both smooth and globally defined, that solve the Navier–Stokes equations.
+</code></pre>
+<pre><code>---
+title: All Fields
+updated: 2019-05-01 16:54:00Z
+created: 2019-05-01 16:54:00Z
+source: https://joplinapp.org
+author: Joplin
+latitude: 37.084021
+longitude: -94.51350100
+altitude: 0.0000
+completed?: no
+due: 2021-08-22 00:00:00Z
+tags:
+  - joplin
+  - note
+  - pencil
+---
+
+All of this metadata is available to be imported/exported.
+</code></pre>
 
 								<div class="bottom-links">
-									<a href="https://github.com/laurent22/joplin/blob/dev/readme/blog/20180621-182112.md">
+									<a href="https://github.com/laurent22/joplin/blob/dev/readme/spec/interop_with_frontmatter.md">
 										<i class="fab fa-github"></i> Improve this doc
 									</a>
 								</div>

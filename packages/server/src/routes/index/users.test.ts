@@ -345,6 +345,27 @@ describe('index/users', function() {
 		await expectThrow(async () => execRequest('', 'GET', path, null, { query: { token } }));
 	});
 
+	test('should delete sessions when changing password', async function() {
+		const { user, session, password } = await createUserAndSession(1);
+
+		await models().session().authenticate(user.email, password);
+		await models().session().authenticate(user.email, password);
+		await models().session().authenticate(user.email, password);
+
+		expect(await models().session().count()).toBe(4);
+
+		await patchUser(session.id, {
+			id: user.id,
+			email: 'changed@example.com',
+			password: 'hunter11hunter22hunter33',
+			password2: 'hunter11hunter22hunter33',
+		}, '/users/me');
+
+		const sessions = await models().session().all();
+		expect(sessions.length).toBe(1);
+		expect(sessions[0].id).toBe(session.id);
+	});
+
 	test('should apply ACL', async function() {
 		const { user: admin, session: adminSession } = await createUserAndSession(1, true);
 		const { user: user1, session: session1 } = await createUserAndSession(2, false);
