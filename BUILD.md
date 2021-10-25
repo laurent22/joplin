@@ -17,7 +17,7 @@ tools | Tools used to build the apps and other tasks
 There are also a few forks of existing packages under the "fork-*" name.
 
 ## Required dependencies
-Before running `npm install` in the root of the project, ensure that you have the required dependencies installed.
+_**Before**_ running `npm install` in the root of the project, ensure that you have the required dependencies installed.
 
 ### All platforms
 Install Node 14+ - https://nodejs.org/en/
