@@ -257,6 +257,12 @@ export default class JoplinServerApi {
 				logger.warn(this.requestToCurl_(url, fetchOptions));
 				logger.warn(error);
 			}
+
+			if (error.code === 403) {
+				this.session_ = null;
+				error.message = 'Session has expired or is invalid, please try again.';
+			}
+
 			throw error;
 		}
 	}
