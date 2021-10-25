@@ -130,7 +130,7 @@ export default class JoplinServerApi {
 		return output.join(' ');
 	}
 
-	public async exec(method: string, path: string = '', query: Record<string, any> = null, body: any = null, headers: any = null, options: ExecOptions = null) {
+	private async exec_(method: string, path: string = '', query: Record<string, any> = null, body: any = null, headers: any = null, options: ExecOptions = null) {
 		if (headers === null) headers = {};
 		if (options === null) options = {};
 		if (!options.responseFormat) options.responseFormat = ExecOptionsResponseFormat.Json;
@@ -258,12 +258,24 @@ export default class JoplinServerApi {
 				logger.warn(error);
 			}
 
-			if (error.code === 403) {
-				this.session_ = null;
-				error.message = 'Session has expired or is invalid, please try again.';
-			}
-
 			throw error;
 		}
 	}
+
+	public async exec(method: string, path: string = '', query: Record<string, any> = null, body: any = null, headers: any = null, options: ExecOptions = null) {
+		for (let i = 0; i < 2; i++) {
+			try {
+				const response = await this.exec_(method, path, query, body, headers, options);
+				return response;
+			} catch (error) {
+				if (error.code === 403 && i === 0) {
+					logger.info('Session expired or invalid - trying to login again', error);
+					this.session_ = null; // By setting it to null, the service will try to login again
+				} else {
+					throw error;
+				}
+			}
+		}
+	}
+
 }
