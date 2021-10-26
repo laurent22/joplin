@@ -15,6 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.4.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-cli/app/app-gui.js:452
 msgid "To delete a tag, untag the associated notes."
@@ -772,9 +774,10 @@ msgid ""
 "supplied the password, the encrypted items are being decrypted in the "
 "background and will be available soon."
 msgstr ""
-"Et eller flere emner er krypteret og du skal evt. angive et hovedkodeord. "
-"For at gøre det; tast è2ee decrypt`. Har du allerede indtastet password, "
-"bliver emnerne i øjeblikket dekrypteret i bagrunden og vil snart være klar."
+"Et eller flere emner er krypteret og du skal evt. angive en "
+"hovedadgangskode. For at gøre dette skal du indtaste `e2ee decrypt`. Har du "
+"allerede indtastet adgangskoden, bliver emnerne i øjeblikket dekrypteret i "
+"bagrunden og vil snart være klar."
 
 #: packages/app-cli/app/gui/NoteWidget.js:50
 msgid "You may also type `status` for more information."
@@ -1157,6 +1160,8 @@ msgid ""
 "The Joplin team has vetted this plugin and it meets our standards for "
 "security and performance."
 msgstr ""
+"Joplin-teamet har kontrolleret dette plugin, og det opfylder vores "
+"standarder for sikkerhed og ydeevne."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:192
 #, javascript-format
@@ -1182,9 +1187,8 @@ msgid "You do not have any installed plugin."
 msgstr "Du har ikke installeret nogen udvidelser."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:232
-#, fuzzy
 msgid "Could not connect to plugin repository."
-msgstr "Kunne ikke forbinde til plugin-lager"
+msgstr "Kunne ikke forbinde til plugin-lager."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:236
 msgid "Try again"
@@ -1348,9 +1352,9 @@ msgid ""
 "the data! To enable encryption, please enter your password below."
 msgstr ""
 "Slås kryptering til, vil *alle* dine noter og vedhæftninger blive re-"
-"synkroniseret og sendt krypteret til synk-modtager. Glem ikke kodeordet, da "
-"det er *eneste* mulighed for dekryptering af data! For at slå kryptering "
-"til, skal du indtaste dit kodeord herunder."
+"synkroniseret og sendt krypteret til synk-modtager. Glem ikke adgangkoden, "
+"da det er *eneste* mulighed for dekryptering af data! For at slå kryptering "
+"til, skal du indtaste din adgangskode herunder."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:275
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:218
@@ -1386,11 +1390,11 @@ msgstr "Oprettet"
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:329
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:147
 msgid "Password"
-msgstr "Kodeord"
+msgstr "Adgangskode"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:334
 msgid "Password OK"
-msgstr "Kodeord OK"
+msgstr "Adgangskode OK"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:343
 msgid ""
@@ -1444,9 +1448,8 @@ msgstr "Kryptering er:"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:103
 #: packages/app-mobile/components/screens/encryption-config.js:89
-#, fuzzy
 msgid "Master password"
-msgstr "Indtast hovedkodeord:"
+msgstr "Hovedadgangskode"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:118
 msgid "Source: "
@@ -1491,20 +1494,17 @@ msgstr "Handlinger"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:166
 #: packages/app-mobile/components/screens/encryption-config.js:159
-#, fuzzy
 msgid "Master password:"
-msgstr "Indtast hovedkodeord:"
+msgstr "Indtast adgangskode:"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:170
 #: packages/app-mobile/components/screens/encryption-config.js:160
-#, fuzzy
 msgid "Loaded"
-msgstr "Downloadet"
+msgstr "Indlæst"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:178
-#, fuzzy
 msgid "Enter your master password"
-msgstr "Indtast hovedkodeord:"
+msgstr "Indtast din hovedadgangskode"
 
 #: packages/app-desktop/gui/ExtensionBadge.min.js:10
 msgid "Firefox Extension"
@@ -1676,11 +1676,11 @@ msgstr "Nogle emner kan ikke synkroniseres."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:462
 msgid "One or more master keys need a password."
-msgstr "En eller flere hovednøgler mangler et kodeord."
+msgstr "En eller flere hovednøgler mangler en adgangskode."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:462
 msgid "Set the password"
-msgstr "Indstil kodeordet"
+msgstr "Indstil adgangskoden"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:588
 msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
@@ -3011,15 +3011,15 @@ msgstr "Hovednøgle %s"
 #: packages/app-mobile/components/screens/encryption-config.js:103
 #: packages/app-mobile/components/screens/encryption-config.js:133
 msgid "Password:"
-msgstr "Kodeord:"
+msgstr "Adgangskode:"
 
 #: packages/app-mobile/components/screens/encryption-config.js:113
 msgid "Password cannot be empty"
-msgstr "Kodeord må ikke være tomt"
+msgstr "Adgangskode må ikke være tom"
 
 #: packages/app-mobile/components/screens/encryption-config.js:116
 msgid "Confirm password cannot be empty"
-msgstr "Bekræftelsen af kodeord må ikke være tom"
+msgstr "Bekræftelsen af adgangskode må ikke være tom"
 
 #: packages/app-mobile/components/screens/folder.js:87
 #, javascript-format
@@ -3224,7 +3224,8 @@ msgid ""
 "Please enter your password in the master key list below before upgrading the "
 "key."
 msgstr ""
-"Indtast dit kodeord i hovednøglelisten nedenfor før opgradering af nøglen."
+"Indtast din adgangskode i hovednøglelisten nedenfor før opgradering af "
+"nøglen."
 
 #: packages/lib/components/EncryptionConfigScreen/utils.js:154
 msgid "The master key has been upgraded successfully!"
@@ -3248,7 +3249,7 @@ msgid ""
 "Error. Please check that URL, username, password, etc. are correct and that "
 "the sync target is accessible. The reported error was:"
 msgstr ""
-"Fejl. Sørg for at URL, brugernavn, kodeord, osv. er korrekte og at "
+"Fejl. Sørg for at URL, brugernavn, adgangskode, osv. er korrekte og at "
 "synkroniseringsmålet er tilgængeligt. Den rapporterede fejl var:"
 
 #: packages/lib/components/shared/dropbox-login-shared.js:39
@@ -3453,7 +3454,7 @@ msgstr "Nextcloud brugernavn"
 
 #: packages/lib/models/Setting.js:232
 msgid "Nextcloud password"
-msgstr "Nextcloud kodeord"
+msgstr "Nextcloud adgangskode"
 
 #: packages/lib/models/Setting.js:243
 msgid "WebDAV URL"
@@ -3465,7 +3466,7 @@ msgstr "WebDAV brugernavn"
 
 #: packages/lib/models/Setting.js:266
 msgid "WebDAV password"
-msgstr "WebDAV kodeord"
+msgstr "WebDAV adgangskode"
 
 #: packages/lib/models/Setting.js:285
 msgid "AWS S3 bucket"
@@ -3493,7 +3494,7 @@ msgstr "Joplin server e-mail"
 
 #: packages/lib/models/Setting.js:359
 msgid "Joplin Server password"
-msgstr "Joplin Server kodeord"
+msgstr "Joplin Server adgangskode"
 
 #: packages/lib/models/Setting.js:386
 msgid "Joplin Cloud email"
@@ -4341,8 +4342,8 @@ msgid ""
 "The default admin password is insecure and has not been changed! [Change it "
 "now](%s)"
 msgstr ""
-"Standard-administratorkodeordet er svagt og er ikke blevet ændret! [Ændr det "
-"nu](%s)"
+"Standard-administratoradgangskoden er svag og er ikke blevet ændret! [Ændr "
+"det nu](%s)"
 
 #: packages/server/dist/models/UserModel.js:199
 #: packages/server/dist/models/UserModel.js:208
@@ -4350,7 +4351,7 @@ msgid "attachment"
 msgstr "vedhæftning"
 
 #: packages/server/dist/models/UserModel.js:199
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Cannot save %s \"%s\" because it is larger than the allowed limit (%s)"
 msgstr "Kan ikke gemme %s \"%s\" da den er større end den tilladte grænse (%s)"
 

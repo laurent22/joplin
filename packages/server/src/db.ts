@@ -338,7 +338,7 @@ export function isUniqueConstraintError(error: any): boolean {
 
 export async function latestMigration(db: DbConnection): Promise<any> {
 	try {
-		const result = await db('knex_migrations').select('name').orderBy('id', 'asc').first();
+		const result = await db('knex_migrations').select('name').orderBy('id', 'desc').first();
 		return result;
 	} catch (error) {
 		// If the database has never been initialized, we return null, so

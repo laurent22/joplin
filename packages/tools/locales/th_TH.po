@@ -14,7 +14,9 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Poedit 3.0\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-cli/app/app-gui.js:452
 msgid "To delete a tag, untag the associated notes."
@@ -85,8 +87,7 @@ msgstr "ไม่สามารถเปลี่ยนรายการกา
 msgid "Missing required argument: %s"
 msgstr ""
 
-#: packages/app-cli/app/cli-utils.js:140
-#: packages/lib/services/ReportService.js:185
+#: packages/app-cli/app/cli-utils.js:140 packages/lib/services/ReportService.js:185
 #, javascript-format
 msgid "%s: %s"
 msgstr "%s: %s"
@@ -106,39 +107,26 @@ msgstr ""
 msgid "Attaches the given file to the note."
 msgstr "แนบไฟล์ที่ถูกเลือกกับบันทึก"
 
-#: packages/app-cli/app/command-attach.js:21
-#: packages/app-cli/app/command-cat.js:25 packages/app-cli/app/command-cp.js:24
-#: packages/app-cli/app/command-cp.js:27
-#: packages/app-cli/app/command-done.js:20
-#: packages/app-cli/app/command-export.js:36
-#: packages/app-cli/app/command-export.js:40
-#: packages/app-cli/app/command-geoloc.js:20
-#: packages/app-cli/app/command-help.js:66
-#: packages/app-cli/app/command-import.js:34
+#: packages/app-cli/app/command-attach.js:21 packages/app-cli/app/command-cat.js:25
+#: packages/app-cli/app/command-cp.js:24 packages/app-cli/app/command-cp.js:27
+#: packages/app-cli/app/command-done.js:20 packages/app-cli/app/command-export.js:36
+#: packages/app-cli/app/command-export.js:40 packages/app-cli/app/command-geoloc.js:20
+#: packages/app-cli/app/command-help.js:66 packages/app-cli/app/command-import.js:34
 #: packages/app-cli/app/command-mv.js:22 packages/app-cli/app/command-mv.js:25
-#: packages/app-cli/app/command-ren.js:23
-#: packages/app-cli/app/command-rmbook.js:25
-#: packages/app-cli/app/command-rmnote.js:25
-#: packages/app-cli/app/command-search.js:27
-#: packages/app-cli/app/command-set.js:32
-#: packages/app-cli/app/command-tag.js:33
-#: packages/app-cli/app/command-tag.js:36
-#: packages/app-cli/app/command-tag.js:42
-#: packages/app-cli/app/command-tag.js:43
-#: packages/app-cli/app/command-tag.js:81
-#: packages/app-cli/app/command-tag.js:87
-#: packages/app-cli/app/command-todo.js:21
-#: packages/app-cli/app/command-use.js:21
-#: packages/lib/services/interop/InteropService.js:194
+#: packages/app-cli/app/command-ren.js:23 packages/app-cli/app/command-rmbook.js:25
+#: packages/app-cli/app/command-rmnote.js:25 packages/app-cli/app/command-search.js:27
+#: packages/app-cli/app/command-set.js:32 packages/app-cli/app/command-tag.js:33
+#: packages/app-cli/app/command-tag.js:36 packages/app-cli/app/command-tag.js:42
+#: packages/app-cli/app/command-tag.js:43 packages/app-cli/app/command-tag.js:81
+#: packages/app-cli/app/command-tag.js:87 packages/app-cli/app/command-todo.js:21
+#: packages/app-cli/app/command-use.js:21 packages/lib/services/interop/InteropService.js:194
 #: packages/lib/services/interop/InteropService.js:206
 #, javascript-format
 msgid "Cannot find \"%s\"."
 msgstr "ไม่พบ \"%s\""
 
 #: packages/app-cli/app/command-batch.js:10
-msgid ""
-"Runs the commands contained in the text file. There should be one command "
-"per line."
+msgid "Runs the commands contained in the text file. There should be one command per line."
 msgstr ""
 
 #: packages/app-cli/app/command-cat.js:14
@@ -151,9 +139,8 @@ msgstr "แสดงข้อมูลทั้งหมดของบันท
 
 #: packages/app-cli/app/command-config.js:13
 msgid ""
-"Gets or sets a config value. If [value] is not provided, it will show the "
-"value of [name]. If neither [name] nor [value] is provided, it will list the "
-"current configuration."
+"Gets or sets a config value. If [value] is not provided, it will show the value of [name]. "
+"If neither [name] nor [value] is provided, it will list the current configuration."
 msgstr ""
 
 #: packages/app-cli/app/command-config.js:18
@@ -172,8 +159,8 @@ msgstr "%s = %s"
 
 #: packages/app-cli/app/command-cp.js:13
 msgid ""
-"Duplicates the notes matching <note> to [notebook]. If no notebook is "
-"specified the note is duplicated in the current notebook."
+"Duplicates the notes matching <note> to [notebook]. If no notebook is specified the note is "
+"duplicated in the current notebook."
 msgstr ""
 
 #: packages/app-cli/app/command-done.js:14
@@ -187,19 +174,17 @@ msgstr ""
 
 #: packages/app-cli/app/command-e2ee.js:29
 msgid ""
-"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
-"`status`, `decrypt-file` and `target-status`."
+"Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, `status`, `decrypt-"
+"file` and `target-status`."
 msgstr ""
-"จัดการการตั้งค่า E2EE คำสั่งคือ `enable`, `disable`, `decrypt`, `status`, `decrypt-"
-"file` และ `target-status`"
+"จัดการการตั้งค่า E2EE คำสั่งคือ `enable`, `disable`, `decrypt`, `status`, `decrypt-file` และ "
+"`target-status`"
 
-#: packages/app-cli/app/command-e2ee.js:45
-#: packages/app-cli/app/command-e2ee.js:82
+#: packages/app-cli/app/command-e2ee.js:45 packages/app-cli/app/command-e2ee.js:82
 msgid "Enter master password:"
 msgstr ""
 
-#: packages/app-cli/app/command-e2ee.js:47
-#: packages/app-cli/app/command-e2ee.js:84
+#: packages/app-cli/app/command-e2ee.js:47 packages/app-cli/app/command-e2ee.js:84
 #: packages/app-cli/app/command-e2ee.js:93
 msgid "Operation cancelled"
 msgstr "ระบวนการถูกยกเลิก"
@@ -207,11 +192,9 @@ msgstr "ระบวนการถูกยกเลิก"
 #: packages/app-cli/app/command-e2ee.js:55
 #, fuzzy
 msgid ""
-"Starting decryption... Please wait as it may take several minutes depending "
-"on how much there is to decrypt."
-msgstr ""
-"เริ่มต้นการถอดรหัส... โปรดรอสักครู่ อาจจะใช้เวลาสองถึงสามนาที "
-"ขึ้นอยู่กับว่าปริมาณของไฟล์ต้องถอดรหัส"
+"Starting decryption... Please wait as it may take several minutes depending on how much "
+"there is to decrypt."
+msgstr "เริ่มต้นการถอดรหัส... โปรดรอสักครู่ อาจจะใช้เวลาสองถึงสามนาที ขึ้นอยู่กับว่าปริมาณของไฟล์ต้องถอดรหัส"
 
 #: packages/app-cli/app/command-e2ee.js:62
 #, fuzzy, javascript-format
@@ -264,8 +247,7 @@ msgid "Edit note."
 msgstr "แก้ไขบันทึก"
 
 #: packages/app-cli/app/command-edit.js:30
-msgid ""
-"No text editor is defined. Please set it using `config editor <editor-path>`"
+msgid "No text editor is defined. Please set it using `config editor <editor-path>`"
 msgstr ""
 
 #: packages/app-cli/app/command-edit.js:40
@@ -298,8 +280,8 @@ msgstr "ออกจากแอปพลิเคชั่น"
 
 #: packages/app-cli/app/command-export.js:13
 msgid ""
-"Exports Joplin data to the given path. By default, it will export the "
-"complete database including notebooks, notes, tags and resources."
+"Exports Joplin data to the given path. By default, it will export the complete database "
+"including notebooks, notes, tags and resources."
 msgstr ""
 
 #: packages/app-cli/app/command-export.js:23
@@ -336,11 +318,9 @@ msgstr "คีย์ลัดใช้ไม่ได้ในโหมด CLI"
 
 #: packages/app-cli/app/command-help.js:71
 msgid ""
-"Type `help [command]` for more information about a command; or type `help "
-"all` for the complete usage information."
-msgstr ""
-"พิมพ์ `help [คำสั่ง]` สำหรับข้อมูลเพิ่มเติมของคำสั่งนั้นๆ หรือพิมพ์ `help all` "
-"สำหรับข้อมูลการใช้งานทั้งหมด"
+"Type `help [command]` for more information about a command; or type `help all` for the "
+"complete usage information."
+msgstr "พิมพ์ `help [คำสั่ง]` สำหรับข้อมูลเพิ่มเติมของคำสั่งนั้นๆ หรือพิมพ์ `help all` สำหรับข้อมูลการใช้งานทั้งหมด"
 
 #: packages/app-cli/app/command-help.js:73
 msgid "The possible commands are:"
@@ -348,9 +328,9 @@ msgstr "คำสั่งที่เป็นไปได้คือ:"
 
 #: packages/app-cli/app/command-help.js:77
 msgid ""
-"In any command, a note or notebook can be referred to by title or ID, or "
-"using the shortcuts `$n` or `$b` for, respectively, the currently selected "
-"note or notebook. `$c` can be used to refer to the currently selected item."
+"In any command, a note or notebook can be referred to by title or ID, or using the shortcuts "
+"`$n` or `$b` for, respectively, the currently selected note or notebook. `$c` can be used to "
+"refer to the currently selected item."
 msgstr ""
 
 #: packages/app-cli/app/command-help.js:79
@@ -359,8 +339,7 @@ msgstr ""
 
 #: packages/app-cli/app/command-help.js:80
 msgid ""
-"Use the arrows and page up/down to scroll the lists and text areas "
-"(including this console)."
+"Use the arrows and page up/down to scroll the lists and text areas (including this console)."
 msgstr ""
 
 #: packages/app-cli/app/command-help.js:81
@@ -377,8 +356,7 @@ msgid "To exit command line mode, press ESCAPE"
 msgstr ""
 
 #: packages/app-cli/app/command-help.js:84
-msgid ""
-"For the list of keyboard shortcuts and config options, type `help keymap`"
+msgid "For the list of keyboard shortcuts and config options, type `help keymap`"
 msgstr "สำหรับรายการคีย์ลัดและตัวเลือกการตั้งค่า พิมพ์ `help keymap`"
 
 #: packages/app-cli/app/command-import.js:14
@@ -400,38 +378,32 @@ msgstr "อย่าถามให้ยืนยัน"
 msgid "Output format: %s"
 msgstr "ฟอร์แมตต้นฉบับ: %s"
 
-#: packages/app-cli/app/command-import.js:47
-#: packages/app-desktop/gui/ImportScreen.min.js:68
+#: packages/app-cli/app/command-import.js:47 packages/app-desktop/gui/ImportScreen.min.js:68
 #, javascript-format
 msgid "Found: %d."
 msgstr "พบ: %d"
 
-#: packages/app-cli/app/command-import.js:48
-#: packages/app-desktop/gui/ImportScreen.min.js:69
+#: packages/app-cli/app/command-import.js:48 packages/app-desktop/gui/ImportScreen.min.js:69
 #, javascript-format
 msgid "Created: %d."
 msgstr "สร้างเมื่อ: %d"
 
-#: packages/app-cli/app/command-import.js:49
-#: packages/app-desktop/gui/ImportScreen.min.js:70
+#: packages/app-cli/app/command-import.js:49 packages/app-desktop/gui/ImportScreen.min.js:70
 #, javascript-format
 msgid "Updated: %d."
 msgstr "แก้ไขเมื่อ: %d"
 
-#: packages/app-cli/app/command-import.js:50
-#: packages/app-desktop/gui/ImportScreen.min.js:71
+#: packages/app-cli/app/command-import.js:50 packages/app-desktop/gui/ImportScreen.min.js:71
 #, javascript-format
 msgid "Skipped: %d."
 msgstr "ข้าม: %d"
 
-#: packages/app-cli/app/command-import.js:51
-#: packages/app-desktop/gui/ImportScreen.min.js:72
+#: packages/app-cli/app/command-import.js:51 packages/app-desktop/gui/ImportScreen.min.js:72
 #, javascript-format
 msgid "Resources: %d."
 msgstr "ทรัพยากร: %d"
 
-#: packages/app-cli/app/command-import.js:52
-#: packages/app-desktop/gui/ImportScreen.min.js:73
+#: packages/app-cli/app/command-import.js:52 packages/app-desktop/gui/ImportScreen.min.js:73
 #, javascript-format
 msgid "Tagged: %d."
 msgstr "แท็ก: %d"
@@ -440,8 +412,7 @@ msgstr "แท็ก: %d"
 msgid "Importing notes..."
 msgstr "กำลังนำเข้าบันทึก..."
 
-#: packages/app-cli/app/command-import.js:70
-#: packages/app-desktop/gui/ImportScreen.min.js:88
+#: packages/app-cli/app/command-import.js:70 packages/app-desktop/gui/ImportScreen.min.js:88
 #, javascript-format
 msgid "The notes have been imported: %s"
 msgstr "บันทึกได้ถูกนำเข้าแล้ว: %s"
@@ -449,8 +420,7 @@ msgstr "บันทึกได้ถูกนำเข้าแล้ว: %s"
 #: packages/app-cli/app/command-ls.js:18
 #, fuzzy
 msgid ""
-"Displays the notes in the current notebook. Use `ls /` to display the list "
-"of notebooks."
+"Displays the notes in the current notebook. Use `ls /` to display the list of notebooks."
 msgstr "แสดงบันทึกในสมุดบันทึกปัจจุบัน ใช้ `ls /` เพื่อแสดงรายการสมุดบันทึก"
 
 #: packages/app-cli/app/command-ls.js:27
@@ -468,9 +438,9 @@ msgstr ""
 
 #: packages/app-cli/app/command-ls.js:30
 msgid ""
-"Displays only the items of the specific type(s). Can be `n` for notes, `t` "
-"for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the "
-"to-dos, while `-tnt` would display notes and to-dos."
+"Displays only the items of the specific type(s). Can be `n` for notes, `t` for to-dos, or "
+"`nt` for notes and to-dos (eg. `-tt` would display only the to-dos, while `-tnt` would "
+"display notes and to-dos."
 msgstr ""
 
 #: packages/app-cli/app/command-ls.js:31
@@ -480,8 +450,8 @@ msgstr "ไม่ “text” ก็ “json”"
 
 #: packages/app-cli/app/command-ls.js:32 packages/app-cli/app/command-tag.js:18
 msgid ""
-"Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, "
-"TODO_CHECKED (for to-dos), TITLE"
+"Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, TODO_CHECKED (for to-"
+"dos), TITLE"
 msgstr ""
 
 #: packages/app-cli/app/command-ls.js:63
@@ -496,8 +466,7 @@ msgstr "สร้างสมุดบันทึกใหม่"
 msgid "Creates a new note."
 msgstr "สร้างบันทึกใหม่"
 
-#: packages/app-cli/app/command-mknote.js:16
-#: packages/app-cli/app/command-mktodo.js:16
+#: packages/app-cli/app/command-mknote.js:16 packages/app-cli/app/command-mktodo.js:16
 msgid "Notes can only be created within a notebook."
 msgstr ""
 
@@ -523,10 +492,8 @@ msgstr "ลบสมุดบันทึกโดยไม่ต้องถา
 
 #: packages/app-cli/app/command-rmbook.js:26
 #: packages/app-mobile/components/screens/notes.js:154
-msgid ""
-"Delete notebook? All notes and sub-notebooks within this notebook will also "
-"be deleted."
-msgstr ""
+msgid "Delete notebook? All notes and sub-notebooks within this notebook will also be deleted."
+msgstr "ลบสมุดบันทึกหรือไม่ บันทึกและสมุดบันทึกย่อยทั้งหมดในสมุดบันทึกนี้จะถูกลบ"
 
 #: packages/app-cli/app/command-rmnote.js:13
 msgid "Deletes the notes matching <note-pattern>."
@@ -534,15 +501,14 @@ msgstr ""
 
 #: packages/app-cli/app/command-rmnote.js:17
 msgid "Deletes the notes without asking for confirmation."
-msgstr ""
+msgstr "ลบสมุดบันทึกโดยไม่ถามยืนยัน"
 
 #: packages/app-cli/app/command-rmnote.js:27
 #, javascript-format
 msgid "%d notes match this pattern. Delete them?"
 msgstr ""
 
-#: packages/app-cli/app/command-rmnote.js:27
-#: packages/app-mobile/components/screens/Note.js:475
+#: packages/app-cli/app/command-rmnote.js:27 packages/app-mobile/components/screens/Note.js:475
 msgid "Delete note?"
 msgstr "ลบบันทึก?"
 
@@ -553,8 +519,8 @@ msgstr ""
 #: packages/app-cli/app/command-server.js:14
 #, javascript-format
 msgid ""
-"Start, stop or check the API server. To specify on which port it should run, "
-"set the api.port config variable. Commands are (%s)."
+"Start, stop or check the API server. To specify on which port it should run, set the api."
+"port config variable. Commands are (%s)."
 msgstr ""
 
 #: packages/app-cli/app/command-server.js:38
@@ -567,8 +533,7 @@ msgstr "เซิร์ฟเวอร์กำลังทำงานอยู
 msgid "Server is running on port %d"
 msgstr "เซิร์ฟเวอร์กำลังทำงานที่พอร์ต %d"
 
-#: packages/app-cli/app/command-server.js:44
-#: packages/app-cli/app/command-server.js:47
+#: packages/app-cli/app/command-server.js:44 packages/app-cli/app/command-server.js:47
 #, fuzzy
 msgid "Server is not running."
 msgstr "เซิร์ฟเวอร์ไม่ทำงาน"
@@ -576,8 +541,7 @@ msgstr "เซิร์ฟเวอร์ไม่ทำงาน"
 #: packages/app-cli/app/command-set.js:22
 #, javascript-format
 msgid ""
-"Sets the property <name> of the given <note> to the given [value]. Possible "
-"properties are:\n"
+"Sets the property <name> of the given <note> to the given [value]. Possible properties are:\n"
 "\n"
 "%s"
 msgstr ""
@@ -587,8 +551,7 @@ msgid "Displays summary about the notes and notebooks."
 msgstr ""
 
 #: packages/app-cli/app/command-status.js:44
-msgid ""
-"To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`"
+msgid "To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`"
 msgstr ""
 
 #: packages/app-cli/app/command-sync.js:29
@@ -603,28 +566,22 @@ msgstr ""
 msgid "Upgrade the sync target to the latest version."
 msgstr ""
 
-#: packages/app-cli/app/command-sync.js:82
-#: packages/app-cli/app/command-sync.js:96
+#: packages/app-cli/app/command-sync.js:82 packages/app-cli/app/command-sync.js:96
 #: packages/app-desktop/gui/OneDriveLoginScreen.js:46
-msgid ""
-"Authentication was not completed (did not receive an authentication token)."
+msgid "Authentication was not completed (did not receive an authentication token)."
 msgstr "การขออนุมัติไม่สมบูรณ์ (ไม่ได้รับ Token เพื่อขออนุมัติ)"
 
-#: packages/app-cli/app/command-sync.js:91
-#: packages/app-desktop/gui/DropboxLoginScreen.js:29
+#: packages/app-cli/app/command-sync.js:91 packages/app-desktop/gui/DropboxLoginScreen.js:29
 #: packages/app-mobile/components/screens/dropbox-login.js:58
-msgid ""
-"To allow Joplin to synchronise with Dropbox, please follow the steps below:"
+msgid "To allow Joplin to synchronise with Dropbox, please follow the steps below:"
 msgstr ""
 
-#: packages/app-cli/app/command-sync.js:92
-#: packages/app-desktop/gui/DropboxLoginScreen.js:30
+#: packages/app-cli/app/command-sync.js:92 packages/app-desktop/gui/DropboxLoginScreen.js:30
 #: packages/app-mobile/components/screens/dropbox-login.js:59
 msgid "Step 1: Open this URL in your browser to authorise the application:"
 msgstr "ขั้นตอนที่ 1: เปิด URL นี้ในเว็บเบราว์เซอร์ เพื่อขออนุมัติแอปพลิเคชั่น"
 
-#: packages/app-cli/app/command-sync.js:94
-#: packages/app-desktop/gui/DropboxLoginScreen.js:32
+#: packages/app-cli/app/command-sync.js:94 packages/app-desktop/gui/DropboxLoginScreen.js:32
 #: packages/app-mobile/components/screens/dropbox-login.js:65
 msgid "Step 2: Enter the code provided by Dropbox:"
 msgstr "ขั้นตอนที่ 2: กรอกรหัสที่ได้มาจาก Dropbox:"
@@ -642,9 +599,8 @@ msgstr "การซิงโครไนซ์กำลังดำเนิน
 #: packages/app-cli/app/command-sync.js:137
 #, javascript-format
 msgid ""
-"Lock file is already being hold. If you know that no synchronisation is "
-"taking place, you may delete the lock file at \"%s\" and resume the "
-"operation."
+"Lock file is already being hold. If you know that no synchronisation is taking place, you "
+"may delete the lock file at \"%s\" and resume the operation."
 msgstr ""
 
 #: packages/app-cli/app/command-sync.js:180
@@ -676,10 +632,9 @@ msgstr "กำลังยกเลิก... โปรดรอสักคร�
 
 #: packages/app-cli/app/command-tag.js:14
 msgid ""
-"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to "
-"assign or remove [tag] from [note], to list notes associated with [tag], or "
-"to list tags associated with [note]. The command `tag list` can be used to "
-"list all the tags (use -l for long option)."
+"<tag-command> can be \"add\", \"remove\", \"list\", or \"notetags\" to assign or remove "
+"[tag] from [note], to list notes associated with [tag], or to list tags associated with "
+"[note]. The command `tag list` can be used to list all the tags (use -l for long option)."
 msgstr ""
 
 #: packages/app-cli/app/command-tag.js:90
@@ -689,10 +644,9 @@ msgstr "คำสั่งไม่ถูกต้อง: \"%s\""
 
 #: packages/app-cli/app/command-todo.js:14
 msgid ""
-"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to "
-"toggle the given to-do between completed and uncompleted state (If the "
-"target is a regular note it will be converted to a to-do). Use \"clear\" to "
-"convert the to-do back to a regular note."
+"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the given to-"
+"do between completed and uncompleted state (If the target is a regular note it will be "
+"converted to a to-do). Use \"clear\" to convert the to-do back to a regular note."
 msgstr ""
 
 #: packages/app-cli/app/command-undone.js:12
@@ -700,9 +654,7 @@ msgid "Marks a to-do as non-completed."
 msgstr ""
 
 #: packages/app-cli/app/command-use.js:12
-msgid ""
-"Switches to [notebook] - all further operations will happen within this "
-"notebook."
+msgid "Switches to [notebook] - all further operations will happen within this notebook."
 msgstr ""
 
 #: packages/app-cli/app/command-version.js:11
@@ -717,8 +669,8 @@ msgstr "ค้นหา:"
 msgid ""
 "Welcome to Joplin!\n"
 "\n"
-"Type `:help shortcuts` for the list of keyboard shortcuts, or just `:help` "
-"for usage information.\n"
+"Type `:help shortcuts` for the list of keyboard shortcuts, or just `:help` for usage "
+"information.\n"
 "\n"
 "For example, to create a notebook press `mb`; to create a note press `mn`."
 msgstr ""
@@ -730,10 +682,9 @@ msgstr ""
 
 #: packages/app-cli/app/gui/NoteWidget.js:48
 msgid ""
-"One or more items are currently encrypted and you may need to supply a "
-"master password. To do so please type `e2ee decrypt`. If you have already "
-"supplied the password, the encrypted items are being decrypted in the "
-"background and will be available soon."
+"One or more items are currently encrypted and you may need to supply a master password. To "
+"do so please type `e2ee decrypt`. If you have already supplied the password, the encrypted "
+"items are being decrypted in the background and will be available soon."
 msgstr ""
 
 #: packages/app-cli/app/gui/NoteWidget.js:50
@@ -787,8 +738,7 @@ msgstr ""
 msgid "Open %s"
 msgstr "เปิด %s"
 
-#: packages/app-desktop/app.js:160
-#: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:14
+#: packages/app-desktop/app.js:160 packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:14
 #: packages/app-desktop/gui/MenuBar.js:211
 msgid "Quit"
 msgstr "ออก"
@@ -797,8 +747,7 @@ msgstr "ออก"
 #: packages/app-desktop/bridge.js:126 packages/app-desktop/bridge.js:134
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.js:22
 #: packages/app-desktop/gui/DialogButtonRow.js:39
-#: packages/app-desktop/gui/DialogButtonRow.min.js:30
-#: packages/app-desktop/gui/MenuBar.js:343
+#: packages/app-desktop/gui/DialogButtonRow.min.js:30 packages/app-desktop/gui/MenuBar.js:343
 #: packages/app-desktop/gui/PromptDialog.min.js:235
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:20
 #: packages/app-mobile/components/CameraView.js:160
@@ -829,14 +778,12 @@ msgstr "ตกลง"
 #: packages/app-mobile/components/screens/encryption-config.js:147
 #: packages/app-mobile/components/side-menu-content.js:156
 #: packages/app-mobile/components/side-menu-content.js:165
-#: packages/app-mobile/components/side-menu-content.js:338
-#: packages/lib/shim-init-node.js:167
+#: packages/app-mobile/components/side-menu-content.js:338 packages/lib/shim-init-node.js:167
 msgid "Cancel"
 msgstr "ยกเลิก"
 
 #: packages/app-desktop/bridge.js:184
-msgid ""
-"The app is now going to close. Please relaunch it to complete the process."
+msgid "The app is now going to close. Please relaunch it to complete the process."
 msgstr ""
 
 #: packages/app-desktop/checkForUpdates.js:171
@@ -955,9 +902,7 @@ msgstr "เปิดใช้บริการ Web Clipper"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.js:89
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:137
-msgid ""
-"Joplin Web Clipper allows saving web pages and screenshots from your browser "
-"to Joplin."
+msgid "Joplin Web Clipper allows saving web pages and screenshots from your browser to Joplin."
 msgstr ""
 
 #: packages/app-desktop/gui/ClipperConfigScreen.js:90
@@ -974,9 +919,8 @@ msgstr "ขั้นตอนที่ 1: เปิดใช้บริกา�
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:155
 #, fuzzy
 msgid ""
-"This service allows the browser extension to communicate with Joplin. When "
-"enabling it your firewall may ask you to give permission to Joplin to listen "
-"to a particular port."
+"This service allows the browser extension to communicate with Joplin. When enabling it your "
+"firewall may ask you to give permission to Joplin to listen to a particular port."
 msgstr ""
 "บริการนี้จะอนุญาตให้เว็บเบราว์เซอร์ติดต่อกับ Joplin ได้ และเมื่อเปิดใช้งานแล้ว "
 "ไฟล์วอลล์ของคุณอาจจะต้องการให้คุณอนุญาตสิทธิ์ Joplin ในการเข้าถึงพอร์ตบางพอร์ต"
@@ -1009,8 +953,7 @@ msgstr "คัดลอก Token"
 #: packages/app-desktop/gui/ClipperConfigScreen.js:109
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:214
 msgid ""
-"This authorisation token is only needed to allow third-party applications to "
-"access Joplin."
+"This authorisation token is only needed to allow third-party applications to access Joplin."
 msgstr "Token สำหรับการขออนุมัตินี้ ใช้เพื่ออนุญาตแอปพลิเคชั่น third-party เพื่อเข้าถึง Joplin"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.js:111
@@ -1020,7 +963,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.js:27
 msgid "Apply"
-msgstr ""
+msgstr "ใช้"
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.js:30
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:528
@@ -1064,24 +1007,22 @@ msgstr ""
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:466
 #: packages/app-desktop/gui/NoteList/NoteList.js:164
 msgid "Do it now"
-msgstr ""
+msgstr "ทำตอนนี้"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:466
 msgid "Later"
-msgstr ""
+msgstr "ภายหลัง"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.js:519
 msgid "Restart now"
 msgstr ""
 
-#: packages/app-desktop/gui/ConfigScreen/Sidebar.js:89
-#: packages/lib/models/Setting.js:1690
+#: packages/app-desktop/gui/ConfigScreen/Sidebar.js:89 packages/lib/models/Setting.js:1690
 msgid "Plugins"
 msgstr "ปลั๊กอิน"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:141
-#: packages/app-desktop/gui/ResourceScreen.js:47
-#: packages/app-desktop/gui/ResourceScreen.js:96
+#: packages/app-desktop/gui/ResourceScreen.js:47 packages/app-desktop/gui/ResourceScreen.js:96
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:193
 #: packages/app-desktop/gui/utils/NoteListUtils.js:139
 #: packages/app-desktop/gui/utils/NoteListUtils.js:163
@@ -1092,16 +1033,15 @@ msgstr "ลบ"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:146
 msgid "Install"
-msgstr ""
+msgstr "ติตตั้ง"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:148
-#, fuzzy
 msgid "Installing..."
-msgstr "กำลังยกเลิก..."
+msgstr "กำลังติตตั้ง..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:150
 msgid "Installed"
-msgstr ""
+msgstr "ติตตั้งสำเร็จ"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:156
 #, fuzzy
@@ -1126,8 +1066,8 @@ msgstr ""
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:183
 msgid ""
-"The Joplin team has vetted this plugin and it meets our standards for "
-"security and performance."
+"The Joplin team has vetted this plugin and it meets our standards for security and "
+"performance."
 msgstr ""
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:192
@@ -1159,7 +1099,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:236
 msgid "Try again"
-msgstr ""
+msgstr "ลองอีกครั้ง"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:248
 #, fuzzy
@@ -1212,9 +1152,9 @@ msgstr ""
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:150
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:60
 msgid ""
-"The following master keys use an out-dated encryption algorithm and it is "
-"recommended to upgrade them. The upgraded master key will still be able to "
-"decrypt and encrypt your data as usual."
+"The following master keys use an out-dated encryption algorithm and it is recommended to "
+"upgrade them. The upgraded master key will still be able to decrypt and encrypt your data as "
+"usual."
 msgstr ""
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:164
@@ -1243,32 +1183,32 @@ msgstr "เลือกวันที่"
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:184
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:75
 msgid ""
-"The default encryption method has been changed to a more secure one and it "
-"is recommended that you apply it to your data."
+"The default encryption method has been changed to a more secure one and it is recommended "
+"that you apply it to your data."
 msgstr ""
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:184
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:75
 msgid ""
-"You may use the tool below to re-encrypt your data, for example if you know "
-"that some of your notes are encrypted with an obsolete encryption method."
+"You may use the tool below to re-encrypt your data, for example if you know that some of "
+"your notes are encrypted with an obsolete encryption method."
 msgstr ""
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:186
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:76
 #, javascript-format
 msgid ""
-"In order to do so, your entire data set will have to be encrypted and "
-"synchronised, so it is best to run it overnight.\n"
+"In order to do so, your entire data set will have to be encrypted and synchronised, so it is "
+"best to run it overnight.\n"
 "\n"
 "To start, please follow these instructions:\n"
 "\n"
 "1. Synchronise all your devices.\n"
 "2. Click \"%s\".\n"
-"3. Let it run to completion. While it runs, avoid changing any note on your "
-"other devices, to avoid conflicts.\n"
-"4. Once sync is done on this device, sync all your other devices and let it "
-"run to completion.\n"
+"3. Let it run to completion. While it runs, avoid changing any note on your other devices, "
+"to avoid conflicts.\n"
+"4. Once sync is done on this device, sync all your other devices and let it run to "
+"completion.\n"
 "\n"
 "Important: you only need to run this ONCE on one device."
 msgstr ""
@@ -1288,18 +1228,17 @@ msgstr ""
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:200
 #: packages/app-mobile/components/screens/encryption-config.js:179
 msgid ""
-"Disabling encryption means *all* your notes and attachments are going to be "
-"re-synchronised and sent unencrypted to the sync target. Do you wish to "
-"continue?"
+"Disabling encryption means *all* your notes and attachments are going to be re-synchronised "
+"and sent unencrypted to the sync target. Do you wish to continue?"
 msgstr ""
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:246
 #: packages/lib/components/EncryptionConfigScreen/utils.js:51
 msgid ""
-"Enabling encryption means *all* your notes and attachments are going to be "
-"re-synchronised and sent encrypted to the sync target. Do not lose the "
-"password as, for security purposes, this will be the *only* way to decrypt "
-"the data! To enable encryption, please enter your password below."
+"Enabling encryption means *all* your notes and attachments are going to be re-synchronised "
+"and sent encrypted to the sync target. Do not lose the password as, for security purposes, "
+"this will be the *only* way to decrypt the data! To enable encryption, please enter your "
+"password below."
 msgstr ""
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:275
@@ -1348,9 +1287,9 @@ msgstr "รหัสผ่าน"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:343
 msgid ""
-"Note: Only one master key is going to be used for encryption (the one marked "
-"as \"active\"). Any of the keys might be used for decryption, depending on "
-"how the notes or notebooks were originally encrypted."
+"Note: Only one master key is going to be used for encryption (the one marked as \"active\"). "
+"Any of the keys might be used for decryption, depending on how the notes or notebooks were "
+"originally encrypted."
 msgstr ""
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:371
@@ -1363,20 +1302,20 @@ msgstr ""
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:233
 #: packages/app-mobile/components/screens/encryption-config.js:205
 msgid ""
-"The master keys with these IDs are used to encrypt some of your items, "
-"however the application does not currently have access to them. It is likely "
-"they will eventually be downloaded via synchronisation."
+"The master keys with these IDs are used to encrypt some of your items, however the "
+"application does not currently have access to them. It is likely they will eventually be "
+"downloaded via synchronisation."
 msgstr ""
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:414
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:244
 #: packages/app-mobile/components/screens/encryption-config.js:215
 msgid ""
-"For more information about End-To-End Encryption (E2EE) and advice on how to "
-"enable it please check the documentation:"
+"For more information about End-To-End Encryption (E2EE) and advice on how to enable it "
+"please check the documentation:"
 msgstr ""
-"สำหรับข้อมูลเพิ่มเติมเกี่ยวกับการเข้ารหัสแบบ End-To-End Encryption (E2EE) "
-"และคำแนะนำในการเปิดใช้งาน โปรดอ่านคู่มือการใช้งาน:"
+"สำหรับข้อมูลเพิ่มเติมเกี่ยวกับการเข้ารหัสแบบ End-To-End Encryption (E2EE) และคำแนะนำในการเปิดใช้งาน "
+"โปรดอ่านคู่มือการใช้งาน:"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen.min.js:433
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:249
@@ -1474,8 +1413,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/ImportScreen.min.js:61
 #, javascript-format
-msgid ""
-"New notebook \"%s\" will be created and file \"%s\" will be imported into it"
+msgid "New notebook \"%s\" will be created and file \"%s\" will be imported into it"
 msgstr ""
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:63
@@ -1491,8 +1429,8 @@ msgid "Search..."
 msgstr "ค้นหา..."
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js:121
-#: packages/app-desktop/gui/MenuBar.js:392
-#: packages/app-desktop/gui/MenuBar.js:440 packages/app-desktop/gui/Root.js:163
+#: packages/app-desktop/gui/MenuBar.js:392 packages/app-desktop/gui/MenuBar.js:440
+#: packages/app-desktop/gui/Root.js:163
 msgid "Import"
 msgstr "นำเข้า"
 
@@ -1516,9 +1454,7 @@ msgid "Press the shortcut"
 msgstr ""
 
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:49
-msgid ""
-"Press the shortcut and then press ENTER. Or, press BACKSPACE to clear the "
-"shortcut."
+msgid "Press the shortcut and then press ENTER. Or, press BACKSPACE to clear the shortcut."
 msgstr ""
 
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.js:51
@@ -1549,7 +1485,7 @@ msgstr "ปิดหน้าต่าง"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:24
 msgid "Preferences"
-msgstr ""
+msgstr "การตั้งค่า"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.js:24
 #: packages/app-desktop/gui/MenuBar.js:310 packages/app-desktop/gui/Root.js:164
@@ -1562,9 +1498,7 @@ msgid "Invalid"
 msgstr "คำสั่งไม่ถูกต้อง: \"%s\""
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:439
-msgid ""
-"Safe mode is currently active. Note rendering and all plugins are "
-"temporarily disabled."
+msgid "Safe mode is currently active. Note rendering and all plugins are temporarily disabled."
 msgstr ""
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:439
@@ -1573,9 +1507,8 @@ msgstr ""
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:442
 msgid ""
-"The sync target needs to be upgraded before Joplin can sync. The operation "
-"may take a few minutes to complete and the app needs to be restarted. To "
-"proceed please click on the link."
+"The sync target needs to be upgraded before Joplin can sync. The operation may take a few "
+"minutes to complete and the app needs to be restarted. To proceed please click on the link."
 msgstr ""
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:442
@@ -1598,9 +1531,7 @@ msgid "One of your master keys use an obsolete encryption method."
 msgstr ""
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:451
-msgid ""
-"The default encryption method has been changed, you should re-encrypt your "
-"data."
+msgid "The default encryption method has been changed, you should re-encrypt your data."
 msgstr ""
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:451
@@ -1615,12 +1546,11 @@ msgstr ""
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:456
 msgid "Accept"
-msgstr ""
+msgstr "ยอมรับ"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.js:456
-#: packages/app-desktop/gui/Root.js:122
+#: packages/app-desktop/gui/MainScreen/MainScreen.js:456 packages/app-desktop/gui/Root.js:122
 msgid "Reject"
-msgstr ""
+msgstr "ปฏิเสธ"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.js:459
 #, fuzzy
@@ -1798,28 +1728,24 @@ msgstr "ไฟล์แนบ"
 msgid "Copy"
 msgstr "คัดลอก"
 
-#: packages/app-desktop/gui/MenuBar.js:354
-#: packages/app-desktop/gui/MenuBar.js:425
+#: packages/app-desktop/gui/MenuBar.js:354 packages/app-desktop/gui/MenuBar.js:425
 #: packages/app-desktop/gui/MenuBar.js:713
 msgid "&File"
 msgstr "&ไฟล์"
 
-#: packages/app-desktop/gui/MenuBar.js:360
-#: packages/app-desktop/gui/MenuBar.js:641
+#: packages/app-desktop/gui/MenuBar.js:360 packages/app-desktop/gui/MenuBar.js:641
 msgid "About Joplin"
 msgstr "เกี่ยวกับ Joplin"
 
 #: packages/app-desktop/gui/MenuBar.js:367
 msgid "Preferences..."
-msgstr ""
+msgstr "การตั้งค่า"
 
-#: packages/app-desktop/gui/MenuBar.js:377
-#: packages/app-desktop/gui/MenuBar.js:618
+#: packages/app-desktop/gui/MenuBar.js:377 packages/app-desktop/gui/MenuBar.js:618
 msgid "Check for updates..."
 msgstr "ตรวจสอบการอัพเดท..."
 
-#: packages/app-desktop/gui/MenuBar.js:396
-#: packages/app-desktop/gui/MenuBar.js:443
+#: packages/app-desktop/gui/MenuBar.js:396 packages/app-desktop/gui/MenuBar.js:443
 #, fuzzy
 msgid "Export all"
 msgstr "ส่งออก"
@@ -1829,8 +1755,7 @@ msgstr "ส่งออก"
 msgid "Hide %s"
 msgstr "ซ่อน %s"
 
-#: packages/app-desktop/gui/MenuBar.js:466
-#: packages/app-desktop/gui/MenuBar.js:717
+#: packages/app-desktop/gui/MenuBar.js:466 packages/app-desktop/gui/MenuBar.js:717
 msgid "&Edit"
 msgstr "&แก้ไข"
 
@@ -1842,8 +1767,7 @@ msgstr "&มุมมอง"
 msgid "Layout button sequence"
 msgstr ""
 
-#: packages/app-desktop/gui/MenuBar.js:551
-#: packages/app-desktop/gui/MenuBar.js:557
+#: packages/app-desktop/gui/MenuBar.js:551 packages/app-desktop/gui/MenuBar.js:557
 #, fuzzy
 msgid "Zoom In"
 msgstr "ซูมเข้า"
@@ -1931,7 +1855,7 @@ msgstr "Viewer"
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.js:105
 #, javascript-format
 msgid "Read time: %s min"
-msgstr ""
+msgstr "เวลาอ่าน: %s นาที"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.js:108
 #, fuzzy
@@ -1970,9 +1894,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:578
 #, javascript-format
-msgid ""
-"This note has no content. Click on \"%s\" to toggle the editor and edit the "
-"note."
+msgid "This note has no content. Click on \"%s\" to toggle the editor and edit the note."
 msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.js:699
@@ -2018,8 +1940,8 @@ msgstr "Code"
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.js:1008
 #, javascript-format
 msgid ""
-"Please wait for all attachments to be downloaded and decrypted. You may also "
-"switch to %s to edit the note."
+"Please wait for all attachments to be downloaded and decrypted. You may also switch to %s to "
+"edit the note."
 msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/plugins/lists.js:2151
@@ -2059,8 +1981,8 @@ msgstr "ตรวจสอบการอัพเดท..."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:342
 msgid ""
-"This Rich Text editor has a number of limitations and it is recommended to "
-"be aware of them before using it."
+"This Rich Text editor has a number of limitations and it is recommended to be aware of them "
+"before using it."
 msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:346
@@ -2076,9 +1998,7 @@ msgid "The following attachments are being watched for changes:"
 msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:390
-msgid ""
-"The attachments will no longer be watched when you switch to a different "
-"note."
+msgid "The attachments will no longer be watched when you switch to a different note."
 msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:396
@@ -2091,8 +2011,7 @@ msgid "to-do"
 msgstr "to-do"
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.js:79
-#: packages/server/dist/models/UserModel.js:199
-#: packages/server/dist/models/UserModel.js:208
+#: packages/server/dist/models/UserModel.js:199 packages/server/dist/models/UserModel.js:208
 msgid "note"
 msgstr "บันทึก"
 
@@ -2243,16 +2162,15 @@ msgstr ""
 msgid "View"
 msgstr "&มุมมอง"
 
-#: packages/app-desktop/gui/NoteList/NoteList.js:163
-#: packages/lib/models/Setting.js:570
+#: packages/app-desktop/gui/NoteList/NoteList.js:163 packages/lib/models/Setting.js:570
 msgid "Sort notes by"
 msgstr "จัดเรียงบันทึกโดย"
 
 #: packages/app-desktop/gui/NoteList/NoteList.js:163
 #, javascript-format
 msgid ""
-"To manually sort the notes, the sort order must be changed to \"%s\" in the "
-"menu \"%s\" > \"%s\""
+"To manually sort the notes, the sort order must be changed to \"%s\" in the menu \"%s\" > "
+"\"%s\""
 msgstr ""
 
 #: packages/app-desktop/gui/NoteList/NoteList.js:415
@@ -2260,8 +2178,7 @@ msgid "No notes in here. Create one by clicking on \"New note\"."
 msgstr ""
 
 #: packages/app-desktop/gui/NoteList/NoteList.js:415
-msgid ""
-"There is currently no notebook. Create one by clicking on \"New notebook\"."
+msgid "There is currently no notebook. Create one by clicking on \"New notebook\"."
 msgstr ""
 
 #: packages/app-desktop/gui/NoteList/commands/focusElementNoteList.js:17
@@ -2285,8 +2202,7 @@ msgstr "ตำแหน่ง"
 msgid "URL"
 msgstr "URL"
 
-#: packages/app-desktop/gui/NotePropertiesDialog.min.js:34
-#: packages/lib/models/Setting.js:1694
+#: packages/app-desktop/gui/NotePropertiesDialog.min.js:34 packages/lib/models/Setting.js:1694
 msgid "Note History"
 msgstr "ประวัติบันทึกย้อนหลัง"
 
@@ -2305,8 +2221,8 @@ msgstr "บันทึกนี้ไม่มีประวัติย้อ
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:178
 #, javascript-format
 msgid ""
-"Click \"%s\" to restore the note. It will be copied in the notebook named "
-"\"%s\". The current version of the note will not be replaced or modified."
+"Click \"%s\" to restore the note. It will be copied in the notebook named \"%s\". The "
+"current version of the note will not be replaced or modified."
 msgstr ""
 
 #: packages/app-desktop/gui/PromptDialog.min.js:249
@@ -2328,9 +2244,8 @@ msgstr "ขนาด"
 msgid "Action"
 msgstr "การกระทำ"
 
-#: packages/app-desktop/gui/ResourceScreen.js:43
-#: packages/lib/models/BaseItem.js:722 packages/lib/path-utils.js:90
-#: packages/lib/path-utils.js:131
+#: packages/app-desktop/gui/ResourceScreen.js:43 packages/lib/models/BaseItem.js:722
+#: packages/lib/path-utils.js:90 packages/lib/path-utils.js:131
 msgid "Untitled"
 msgstr "ไม่มีชื่อ"
 
@@ -2341,9 +2256,8 @@ msgstr "ลบบันทึก \"%s\"?"
 
 #: packages/app-desktop/gui/ResourceScreen.js:141
 msgid ""
-"This is an advanced tool to show the attachments that are linked to your "
-"notes. Please be careful when deleting one of them as they cannot be "
-"restored afterwards."
+"This is an advanced tool to show the attachments that are linked to your notes. Please be "
+"careful when deleting one of them as they cannot be restored afterwards."
 msgstr ""
 
 #: packages/app-desktop/gui/ResourceScreen.js:144
@@ -2389,8 +2303,7 @@ msgstr "แบ่งปัน"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:175
 msgid ""
-"Delete this invitation? The recipient will no longer have access to this "
-"shared notebook."
+"Delete this invitation? The recipient will no longer have access to this shared notebook."
 msgstr ""
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:189
@@ -2430,9 +2343,7 @@ msgid "Sharing notebook..."
 msgstr "แบ่งปันบันทึก..."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:236
-msgid ""
-"Unshare this notebook? The recipients will no longer have access to its "
-"content."
+msgid "Unshare this notebook? The recipients will no longer have access to its content."
 msgstr ""
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.js:246
@@ -2460,8 +2371,7 @@ msgid_plural "Links have been copied to clipboard!"
 msgstr[0] "ลิงก์ได้ถูกคัดลอกไปที่คลิปบอร์ดแล้ว"
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:182
-msgid ""
-"Note: When a note is shared, it will no longer be encrypted on the server."
+msgid "Note: When a note is shared, it will no longer be encrypted on the server."
 msgstr ""
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:187
@@ -2572,13 +2482,13 @@ msgstr "โปรดสร้างสมุดบันทึกก่อน"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:182
 msgid "Thank you! Your Joplin Cloud account is now setup and ready to use."
-msgstr ""
+msgstr "ขอบคุณ Joplin Cloud account ของคุณพร้อมใช้งานแล้ว"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:190
 #, javascript-format
 msgid ""
-"There was an error setting up your Joplin Cloud account. Please verify your "
-"email and password and try again. Error was:\n"
+"There was an error setting up your Joplin Cloud account. Please verify your email and "
+"password and try again. Error was:\n"
 "\n"
 "%s"
 msgstr ""
@@ -2594,7 +2504,7 @@ msgstr "สร้างบันทึกใหม่"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:210
 msgid "Login"
-msgstr ""
+msgstr "ลงชื่อเข้าใช้"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:231
 #, fuzzy
@@ -2603,8 +2513,7 @@ msgstr "เลือกทั้งหมด"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:278
 msgid ""
-"Joplin can synchronise your notes using various providers. Select one from "
-"the list below."
+"Joplin can synchronise your notes using various providers. Select one from the list below."
 msgstr ""
 
 #: packages/app-desktop/gui/utils/NoteListUtils.js:42
@@ -2638,9 +2547,8 @@ msgstr "คัดลอกลิงก์ Markdown"
 
 #: packages/app-desktop/plugins/GotoAnything.js:474
 msgid ""
-"Type a note title or part of its content to jump to it. Or type # followed "
-"by a tag name, or @ followed by a notebook name. Or type : to search for "
-"commands."
+"Type a note title or part of its content to jump to it. Or type # followed by a tag name, or "
+"@ followed by a notebook name. Or type : to search for commands."
 msgstr ""
 
 #: packages/app-desktop/plugins/GotoAnything.js:508
@@ -2648,14 +2556,14 @@ msgid "Command palette"
 msgstr ""
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:22
-#: packages/app-mobile/components/screens/Note.js:530
-#: packages/lib/shim-init-node.js:167 packages/lib/versionInfo.js:27
+#: packages/app-mobile/components/screens/Note.js:530 packages/lib/shim-init-node.js:167
+#: packages/lib/versionInfo.js:27
 msgid "Yes"
 msgstr "ใช่"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:23
-#: packages/app-mobile/components/screens/Note.js:531
-#: packages/lib/shim-init-node.js:167 packages/lib/versionInfo.js:27
+#: packages/app-mobile/components/screens/Note.js:531 packages/lib/shim-init-node.js:167
+#: packages/lib/versionInfo.js:27
 msgid "No"
 msgstr "ไม่"
 
@@ -2665,7 +2573,7 @@ msgstr "สิทธิ์การเข้าใช้งานกล้อง
 
 #: packages/app-mobile/components/CameraView.js:159
 msgid "Your permission to use your camera is required."
-msgstr ""
+msgstr "จำเป็นต้องมีสิทธ์การเข้าถึงกล้อง"
 
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.js:27
 #, fuzzy
@@ -2706,8 +2614,8 @@ msgstr "คำเตือน"
 #: packages/app-mobile/components/screens/ConfigScreen.js:60
 #: packages/app-mobile/components/screens/ConfigScreen.js:153
 msgid ""
-"In order to use file system synchronisation your permission to write to "
-"external storage is required."
+"In order to use file system synchronisation your permission to write to external storage is "
+"required."
 msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen.js:152
@@ -2749,8 +2657,8 @@ msgstr "ซ่อมดัชนีย์ค้นหา"
 
 #: packages/app-mobile/components/screens/ConfigScreen.js:423
 msgid ""
-"Use this to rebuild the search index if there is a problem with search. It "
-"may take a long time depending on the number of notes."
+"Use this to rebuild the search index if there is a problem with search. It may take a long "
+"time depending on the number of notes."
 msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen.js:425
@@ -2777,14 +2685,12 @@ msgstr "ข้อมูลเพิ่มเติม"
 
 #: packages/app-mobile/components/screens/ConfigScreen.js:445
 msgid ""
-"To work correctly, the app needs the following permissions. Please enable "
-"them in your phone settings, in Apps > Joplin > Permissions"
+"To work correctly, the app needs the following permissions. Please enable them in your phone "
+"settings, in Apps > Joplin > Permissions"
 msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen.js:446
-msgid ""
-"- Storage: to allow attaching files to notes and to enable filesystem "
-"synchronisation."
+msgid "- Storage: to allow attaching files to notes and to enable filesystem synchronisation."
 msgstr "- แหล่งเก็บข้อมูล: สำหรับการแนบไฟล์กับบันทึกและการเปิดใช้งานการซิงโครไนซ์กับไฟล์ระบบ"
 
 #: packages/app-mobile/components/screens/ConfigScreen.js:447
@@ -2852,8 +2758,8 @@ msgstr "ไม่รองรับลิงก์ที่ใช้โปรโ
 
 #: packages/app-mobile/components/screens/Note.js:368
 msgid ""
-"In order to associate a geo-location with the note, the app needs your "
-"permission to access your location.\n"
+"In order to associate a geo-location with the note, the app needs your permission to access "
+"your location.\n"
 "\n"
 "You may turn off this option at any time in the Configuration screen."
 msgstr ""
@@ -2863,12 +2769,11 @@ msgstr ""
 msgid "Permission needed"
 msgstr "สิทธิ์การเข้าใช้งานกล้อง"
 
-#: packages/app-mobile/components/screens/Note.js:529
-#: packages/lib/shim-init-node.js:166
+#: packages/app-mobile/components/screens/Note.js:529 packages/lib/shim-init-node.js:166
 #, javascript-format
 msgid ""
-"You are about to attach a large image (%dx%d pixels). Would you like to "
-"resize it down to %d pixels before attaching it?"
+"You are about to attach a large image (%dx%d pixels). Would you like to resize it down to %d "
+"pixels before attaching it?"
 msgstr ""
 
 #: packages/app-mobile/components/screens/Note.js:611
@@ -2910,7 +2815,7 @@ msgstr "ถ่ายรูป"
 
 #: packages/app-mobile/components/screens/Note.js:807
 msgid "Choose an option"
-msgstr ""
+msgstr "เลือก"
 
 #: packages/app-mobile/components/screens/Note.js:840
 msgid "Convert to note"
@@ -3030,8 +2935,8 @@ msgstr ""
 #: packages/lib/JoplinServerApi.js:73
 #, javascript-format
 msgid ""
-"Could not connect to Joplin Server. Please check the Synchronisation options "
-"in the config screen. Full error was:\n"
+"Could not connect to Joplin Server. Please check the Synchronisation options in the config "
+"screen. Full error was:\n"
 "\n"
 "%s"
 msgstr ""
@@ -3055,8 +2960,8 @@ msgstr "Joplin Forum"
 
 #: packages/lib/SyncTargetJoplinCloud.js:31
 msgid ""
-"Joplin's own sync service. Also gives access to Joplin-specific features "
-"such as publishing notes or collaborating on notebooks with others."
+"Joplin's own sync service. Also gives access to Joplin-specific features such as publishing "
+"notes or collaborating on notebooks with others."
 msgstr ""
 
 #: packages/lib/SyncTargetJoplinServer.js:60
@@ -3139,8 +3044,7 @@ msgid "In progress"
 msgstr "กำลังกำเนินการ"
 
 #: packages/lib/Synchronizer.js:984
-msgid ""
-"Unknown item type downloaded - please upgrade Joplin to the latest version"
+msgid "Unknown item type downloaded - please upgrade Joplin to the latest version"
 msgstr ""
 
 #: packages/lib/commands/historyForward.js:17
@@ -3158,8 +3062,7 @@ msgid "Encryption will be enabled using the master key created on %s"
 msgstr ""
 
 #: packages/lib/components/EncryptionConfigScreen/utils.js:65
-msgid ""
-"Please confirm that you would like to re-encrypt your complete database."
+msgid "Please confirm that you would like to re-encrypt your complete database."
 msgstr ""
 
 #: packages/lib/components/EncryptionConfigScreen/utils.js:71
@@ -3167,9 +3070,7 @@ msgid "Your data is going to be re-encrypted and synced again."
 msgstr ""
 
 #: packages/lib/components/EncryptionConfigScreen/utils.js:147
-msgid ""
-"Please enter your password in the master key list below before upgrading the "
-"key."
+msgid "Please enter your password in the master key list below before upgrading the key."
 msgstr ""
 
 #: packages/lib/components/EncryptionConfigScreen/utils.js:154
@@ -3192,8 +3093,8 @@ msgstr "สำเร็จ! การตั้งค่าการซิงโ�
 
 #: packages/lib/components/shared/config-shared.js:51
 msgid ""
-"Error. Please check that URL, username, password, etc. are correct and that "
-"the sync target is accessible. The reported error was:"
+"Error. Please check that URL, username, password, etc. are correct and that the sync target "
+"is accessible. The reported error was:"
 msgstr ""
 
 #: packages/lib/components/shared/dropbox-login-shared.js:39
@@ -3333,9 +3234,8 @@ msgstr "n"
 #: packages/lib/models/Setting.js:118
 #, javascript-format
 msgid ""
-"Attention: If you change this location, make sure you copy all your content "
-"to it before syncing, otherwise all files will be removed! See the FAQ for "
-"more details: %s"
+"Attention: If you change this location, make sure you copy all your content to it before "
+"syncing, otherwise all files will be removed! See the FAQ for more details: %s"
 msgstr ""
 
 #: packages/lib/models/Setting.js:124
@@ -3382,8 +3282,8 @@ msgstr "จุดหมายการซิงโครไนซ์"
 
 #: packages/lib/models/Setting.js:164
 msgid ""
-"The target to synchronise to. Each sync target may have additional "
-"parameters which are named as `sync.NUM.NAME` (all documented below)."
+"The target to synchronise to. Each sync target may have additional parameters which are "
+"named as `sync.NUM.NAME` (all documented below)."
 msgstr ""
 
 #: packages/lib/models/Setting.js:197
@@ -3460,9 +3360,9 @@ msgstr ""
 
 #: packages/lib/models/Setting.js:410
 msgid ""
-"In \"Manual\" mode, attachments are downloaded only when you click on them. "
-"In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
-"the attachments are downloaded whether you open the note or not."
+"In \"Manual\" mode, attachments are downloaded only when you click on them. In \"Auto\", "
+"they are downloaded when you open the note. In \"Always\", all the attachments are "
+"downloaded whether you open the note or not."
 msgstr ""
 
 #: packages/lib/models/Setting.js:413
@@ -3669,9 +3569,8 @@ msgstr "หมายเหตุ: ทำงานได้กับบาง Des
 
 #: packages/lib/models/Setting.js:713
 msgid ""
-"This will allow Joplin to run in the background. It is recommended to enable "
-"this setting so that your notes are constantly being synchronised, thus "
-"reducing the number of conflicts."
+"This will allow Joplin to run in the background. It is recommended to enable this setting so "
+"that your notes are constantly being synchronised, thus reducing the number of conflicts."
 msgstr ""
 
 #: packages/lib/models/Setting.js:717
@@ -3697,8 +3596,8 @@ msgstr "ตระกูลของแบบตัวอักษรของต
 
 #: packages/lib/models/Setting.js:771
 msgid ""
-"Used for most text in the markdown editor. If not found, a generic "
-"proportional (variable width) font is used."
+"Used for most text in the markdown editor. If not found, a generic proportional (variable "
+"width) font is used."
 msgstr ""
 
 #: packages/lib/models/Setting.js:780
@@ -3708,9 +3607,8 @@ msgstr "ตระกูลของแบบตัวอักษรของต
 
 #: packages/lib/models/Setting.js:781
 msgid ""
-"Used where a fixed width font is needed to lay out text legibly (e.g. "
-"tables, checkboxes, code). If not found, a generic monospace (fixed width) "
-"font is used."
+"Used where a fixed width font is needed to lay out text legibly (e.g. tables, checkboxes, "
+"code). If not found, a generic monospace (fixed width) font is used."
 msgstr ""
 
 #: packages/lib/models/Setting.js:784
@@ -3782,8 +3680,8 @@ msgstr ""
 
 #: packages/lib/models/Setting.js:879
 msgid ""
-"The editor command (may include arguments) that will be used to open a note. "
-"If none is provided it will try to auto-detect the default editor."
+"The editor command (may include arguments) that will be used to open a note. If none is "
+"provided it will try to auto-detect the default editor."
 msgstr ""
 
 #: packages/lib/models/Setting.js:880
@@ -3845,10 +3743,10 @@ msgstr "TLS certificate แบบกำหนดเอง"
 
 #: packages/lib/models/Setting.js:936
 msgid ""
-"Comma-separated list of paths to directories to load the certificates from, "
-"or path to individual cert files. For example: /my/cert_dir, /other/custom."
-"pem. Note that if you make changes to the TLS settings, you must save your "
-"changes before clicking on \"Check synchronisation configuration\"."
+"Comma-separated list of paths to directories to load the certificates from, or path to "
+"individual cert files. For example: /my/cert_dir, /other/custom.pem. Note that if you make "
+"changes to the TLS settings, you must save your changes before clicking on \"Check "
+"synchronisation configuration\"."
 msgstr ""
 
 #: packages/lib/models/Setting.js:958
@@ -3861,14 +3759,13 @@ msgstr ""
 
 #: packages/lib/models/Setting.js:968
 msgid ""
-"Fail-safe: Do not wipe out local data when sync target is empty (often the "
-"result of a misconfiguration or bug)"
+"Fail-safe: Do not wipe out local data when sync target is empty (often the result of a "
+"misconfiguration or bug)"
 msgstr ""
 
 #: packages/lib/models/Setting.js:972
 msgid ""
-"Specify the port that should be used by the API server. If not set, a "
-"default will be used."
+"Specify the port that should be used by the API server. If not set, a default will be used."
 msgstr "ระบุพอร์ตที่จะใช้โดยเซิร์ฟเวอร์ API ถ้าไม่ระบุ จะใช้ค่าเริ่มต้น"
 
 #: packages/lib/models/Setting.js:977
@@ -3896,10 +3793,9 @@ msgstr ""
 #: packages/lib/models/Setting.js:1017 packages/lib/models/Setting.js:1030
 #: packages/lib/models/Setting.js:1043
 msgid ""
-"The factor property sets how the item will grow or shrink to fit the "
-"available space in its container with respect to the other items. Thus an "
-"item with a factor of 2 will take twice as much space as an item with a "
-"factor of 1.Restart app to see changes."
+"The factor property sets how the item will grow or shrink to fit the available space in its "
+"container with respect to the other items. Thus an item with a factor of 2 will take twice "
+"as much space as an item with a factor of 1.Restart app to see changes."
 msgstr ""
 
 #: packages/lib/models/Setting.js:1029
@@ -3932,8 +3828,7 @@ msgstr "รูปร่างหน้าตา"
 msgid "Note"
 msgstr "บันทึก"
 
-#: packages/lib/models/Setting.js:1688
-#: packages/lib/services/interop/InteropService.js:49
+#: packages/lib/models/Setting.js:1688 packages/lib/services/interop/InteropService.js:49
 #: packages/lib/services/interop/InteropService.js:59
 msgid "Markdown"
 msgstr "Markdown"
@@ -3957,13 +3852,12 @@ msgstr "โหมดของคีย์บอร์ด"
 
 #: packages/lib/models/Setting.js:1707
 msgid ""
-"These plugins enhance the Markdown renderer with additional features. Please "
-"note that, while these features might be useful, they are not standard "
-"Markdown and thus most of them will only work in Joplin. Additionally, some "
-"of them are *incompatible* with the WYSIWYG editor. If you open a note that "
-"uses one of these plugins in that editor, you will lose the plugin "
-"formatting. It is indicated below which plugins are compatible or not with "
-"the WYSIWYG editor."
+"These plugins enhance the Markdown renderer with additional features. Please note that, "
+"while these features might be useful, they are not standard Markdown and thus most of them "
+"will only work in Joplin. Additionally, some of them are *incompatible* with the WYSIWYG "
+"editor. If you open a note that uses one of these plugins in that editor, you will lose the "
+"plugin formatting. It is indicated below which plugins are compatible or not with the "
+"WYSIWYG editor."
 msgstr ""
 
 #: packages/lib/models/Setting.js:1709
@@ -3982,8 +3876,7 @@ msgid "All potential ports are in use - please report the issue at %s"
 msgstr ""
 
 #: packages/lib/onedrive-api-node-utils.js:86
-msgid ""
-"The application has been authorised - you may now close this browser tab."
+msgid "The application has been authorised - you may now close this browser tab."
 msgstr "แอปพลิเคชั่นนี้ได้รับการอนุมัติแล้ว - คุณสามารถปิดแท็ปเว็บเบราว์เซอร์นี้ได้"
 
 #: packages/lib/onedrive-api-node-utils.js:88
@@ -3992,31 +3885,28 @@ msgstr "แอปพลิเคชั่นนี้ได้รับการ
 
 #: packages/lib/onedrive-api-node-utils.js:116
 msgid ""
-"Please open the following URL in your browser to authenticate the "
-"application. The application will create a directory in \"Apps/Joplin\" and "
-"will only read and write files in this directory. It will have no access to "
-"any files outside this directory nor to any other personal data. No data "
-"will be shared with any third party."
+"Please open the following URL in your browser to authenticate the application. The "
+"application will create a directory in \"Apps/Joplin\" and will only read and write files in "
+"this directory. It will have no access to any files outside this directory nor to any other "
+"personal data. No data will be shared with any third party."
 msgstr ""
 
 #: packages/lib/onedrive-api.js:405
 msgid ""
-"Cannot refresh token: authentication data is missing. Starting the "
-"synchronisation again may fix the problem."
+"Cannot refresh token: authentication data is missing. Starting the synchronisation again may "
+"fix the problem."
 msgstr ""
 
 #: packages/lib/services/KeymapService.js:273
 msgid "command"
 msgstr ""
 
-#: packages/lib/services/KeymapService.js:273
-#: packages/lib/services/KeymapService.js:278
+#: packages/lib/services/KeymapService.js:273 packages/lib/services/KeymapService.js:278
 #, javascript-format
 msgid "\"%s\" is missing the required \"%s\" property."
 msgstr ""
 
-#: packages/lib/services/KeymapService.js:278
-#: packages/lib/services/KeymapService.js:285
+#: packages/lib/services/KeymapService.js:278 packages/lib/services/KeymapService.js:285
 msgid "accelerator"
 msgstr ""
 
@@ -4028,8 +3918,8 @@ msgstr "คำสั่งไม่ถูกต้อง: \"%s\""
 #: packages/lib/services/KeymapService.js:303
 #, javascript-format
 msgid ""
-"Accelerator \"%s\" is used for \"%s\" and \"%s\" commands. This may lead to "
-"unexpected behaviour."
+"Accelerator \"%s\" is used for \"%s\" and \"%s\" commands. This may lead to unexpected "
+"behaviour."
 msgstr ""
 
 #: packages/lib/services/KeymapService.js:328
@@ -4043,9 +3933,9 @@ msgstr "รายการที่ไม่สามารถทำการซ
 
 #: packages/lib/services/ReportService.js:153
 msgid ""
-"These items will remain on the device but will not be uploaded to the sync "
-"target. In order to find these items, either search for the title or the ID "
-"(which is displayed in brackets above)."
+"These items will remain on the device but will not be uploaded to the sync target. In order "
+"to find these items, either search for the title or the ID (which is displayed in brackets "
+"above)."
 msgstr ""
 
 #: packages/lib/services/ReportService.js:159
@@ -4064,9 +3954,9 @@ msgstr "รายการที่ไม่สามารถทำการถ
 
 #: packages/lib/services/ReportService.js:180
 msgid ""
-"Joplin failed to decrypt these items multiple times, possibly because they "
-"are corrupted or too large. These items will remain on the device but Joplin "
-"will no longer attempt to decrypt them."
+"Joplin failed to decrypt these items multiple times, possibly because they are corrupted or "
+"too large. These items will remain on the device but Joplin will no longer attempt to "
+"decrypt them."
 msgstr ""
 
 #: packages/lib/services/ReportService.js:198
@@ -4078,10 +3968,8 @@ msgstr "ไฟล์แนบ"
 msgid "Downloaded and decrypted"
 msgstr "ดาวน์โหลดและถอดรหัสแล้ว"
 
-#: packages/lib/services/ReportService.js:205
-#: packages/lib/services/ReportService.js:206
-#: packages/lib/services/ReportService.js:207
-#: packages/lib/services/ReportService.js:211
+#: packages/lib/services/ReportService.js:205 packages/lib/services/ReportService.js:206
+#: packages/lib/services/ReportService.js:207 packages/lib/services/ReportService.js:211
 #, javascript-format
 msgid "%s: %d"
 msgstr "%s: %d"
@@ -4269,13 +4157,10 @@ msgstr ""
 
 #: packages/server/dist/middleware/notificationHandler.js:29
 #, javascript-format
-msgid ""
-"The default admin password is insecure and has not been changed! [Change it "
-"now](%s)"
+msgid "The default admin password is insecure and has not been changed! [Change it now](%s)"
 msgstr ""
 
-#: packages/server/dist/models/UserModel.js:199
-#: packages/server/dist/models/UserModel.js:208
+#: packages/server/dist/models/UserModel.js:199 packages/server/dist/models/UserModel.js:208
 #, fuzzy
 msgid "attachment"
 msgstr "ไฟล์แนบ"
@@ -4288,8 +4173,7 @@ msgstr ""
 #: packages/server/dist/models/UserModel.js:208
 #, javascript-format
 msgid ""
-"Cannot save %s \"%s\" because it would go over the total allowed size (%s) "
-"for this account"
+"Cannot save %s \"%s\" because it would go over the total allowed size (%s) for this account"
 msgstr ""
 
 #, javascript-format
@@ -4329,21 +4213,18 @@ msgstr ""
 #~ msgstr "Markup"
 
 #, fuzzy
-#~ msgid ""
-#~ "If the font is incorrect or empty, it will default to a generic monospace "
-#~ "font."
+#~ msgid "If the font is incorrect or empty, it will default to a generic monospace font."
 #~ msgstr ""
-#~ "เพื่อการแสดงผลที่ถูกต้อง จำเป็นต้องใช้ตัวอักษรแบบ *monospace* "
-#~ "ถ้าตัวอักษรไม่ถูกต้องหรือว่างเว้นไว้ จะใช้ตัวอักษรแบบ monospace ค่าเริ่มต้น"
+#~ "เพื่อการแสดงผลที่ถูกต้อง จำเป็นต้องใช้ตัวอักษรแบบ *monospace* ถ้าตัวอักษรไม่ถูกต้องหรือว่างเว้นไว้ "
+#~ "จะใช้ตัวอักษรแบบ monospace ค่าเริ่มต้น"
 
 #, fuzzy
 #~ msgid ""
-#~ "This should be a *monospace* font or some elements will render "
-#~ "incorrectly. If the font is incorrect or empty, it will default to a "
-#~ "generic monospace font."
+#~ "This should be a *monospace* font or some elements will render incorrectly. If the font "
+#~ "is incorrect or empty, it will default to a generic monospace font."
 #~ msgstr ""
-#~ "เพื่อการแสดงผลที่ถูกต้อง จำเป็นต้องใช้ตัวอักษรแบบ *monospace* "
-#~ "ถ้าตัวอักษรไม่ถูกต้องหรือว่างเว้นไว้ จะใช้ตัวอักษรแบบ monospace ค่าเริ่มต้น"
+#~ "เพื่อการแสดงผลที่ถูกต้อง จำเป็นต้องใช้ตัวอักษรแบบ *monospace* ถ้าตัวอักษรไม่ถูกต้องหรือว่างเว้นไว้ "
+#~ "จะใช้ตัวอักษรแบบ monospace ค่าเริ่มต้น"
 
 #, fuzzy
 #~ msgid "Unknown"

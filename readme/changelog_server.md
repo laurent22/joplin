@@ -1,5 +1,10 @@
 # Joplin Server Changelog
 
+## [server-v2.5.5](https://github.com/laurent22/joplin/releases/tag/server-v2.5.5) - 2021-10-23T20:58:37Z
+
+- New: Added tool to delete old changes (169b585)
+- Fixed: Fixed issue when a notebook is shared, then unshared, then shared again (47fc51e)
+
 ## [server-v2.5.2](https://github.com/laurent22/joplin/releases/tag/server-v2.5.2) - 2021-10-07T13:36:27Z
 
 - New: Add support for promotion codes (5b58811)
