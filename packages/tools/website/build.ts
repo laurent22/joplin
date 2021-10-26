@@ -2,15 +2,15 @@ import * as fs from 'fs-extra';
 import { insertContentIntoFile, rootDir } from '../tool-utils';
 import { pressCarouselItems } from './utils/pressCarousel';
 import { getMarkdownIt, loadMustachePartials, markdownToPageHtml, renderMustache } from './utils/render';
-import { Env, OrgSponsor, PlanPageParams, Sponsors, TemplateParams } from './utils/types';
+import { AssetUrls, Env, OrgSponsor, PlanPageParams, Sponsors, TemplateParams } from './utils/types';
 import { getPlans, loadStripeConfig } from '@joplin/lib/utils/joplinCloud';
 import { shuffle } from '@joplin/lib/array';
 const dirname = require('path').dirname;
 const glob = require('glob');
 const path = require('path');
+const md5File = require('md5-file/promise');
 
 const env = Env.Prod;
-const buildTime = Date.now();
 
 const websiteAssetDir = `${rootDir}/Assets/WebsiteAssets`;
 const mainTemplateHtml = fs.readFileSync(`${websiteAssetDir}/templates/main-new.mustache`, 'utf8');
@@ -58,15 +58,31 @@ function tocHtml() {
 	return tocHtml_;
 }
 
-function defaultTemplateParams(): TemplateParams {
-	const baseUrl = '';
+const baseUrl = '';
+const cssBasePath = `${websiteAssetDir}/css`;
+const cssBaseUrl = `${baseUrl}/css`;
+const jsBasePath = `${websiteAssetDir}/js`;
+const jsBaseUrl = `${baseUrl}/js`;
 
+async function getAssetUrls(): Promise<AssetUrls> {
+	return {
+		css: {
+			fontawesome: `${cssBaseUrl}/fontawesome-all.min.css?h=${await md5File(`${cssBasePath}/fontawesome-all.min.css`)}`,
+			site: `${cssBaseUrl}/site.css?h=${await md5File(`${cssBasePath}/site.css`)}`,
+		},
+		js: {
+			script: `${jsBaseUrl}/script.js?h=${await md5File(`${jsBasePath}/script.js`)}`,
+		},
+	};
+}
+
+function defaultTemplateParams(assetUrls: AssetUrls): TemplateParams {
 	return {
 		env,
-		baseUrl: baseUrl,
+		baseUrl,
 		imageBaseUrl: `${baseUrl}/images`,
-		cssBaseUrl: `${baseUrl}/css`,
-		jsBaseUrl: `${baseUrl}/js`,
+		cssBaseUrl,
+		jsBaseUrl,
 		tocHtml: tocHtml(),
 		yyyy: (new Date()).getFullYear().toString(),
 		templateHtml: mainTemplateHtml,
@@ -77,7 +93,7 @@ function defaultTemplateParams(): TemplateParams {
 		navbar: {
 			isFrontPage: false,
 		},
-		buildTime,
+		assetUrls,
 	};
 }
 
@@ -86,7 +102,7 @@ function renderPageToHtml(md: string, targetPath: string, templateParams: Templa
 	md = md.replace(/# Joplin\n/, '');
 
 	templateParams = {
-		...defaultTemplateParams(),
+		...defaultTemplateParams(templateParams.assetUrls),
 		...templateParams,
 	};
 
@@ -189,6 +205,7 @@ async function main() {
 
 	const sponsors = await loadSponsors();
 	const partials = await loadMustachePartials(partialDir);
+	const assetUrls = await getAssetUrls();
 
 	const readmeMd = makeHomePageMd();
 
@@ -199,7 +216,7 @@ async function main() {
 	// HELP PAGE
 	// =============================================================
 
-	renderPageToHtml(readmeMd, `${rootDir}/docs/help/index.html`, { sourceMarkdownFile: 'README.md', partials, sponsors });
+	renderPageToHtml(readmeMd, `${rootDir}/docs/help/index.html`, { sourceMarkdownFile: 'README.md', partials, sponsors, assetUrls });
 
 	// =============================================================
 	// FRONT PAGE
@@ -221,6 +238,7 @@ async function main() {
 			isFrontPage: true,
 		},
 		showToc: false,
+		assetUrls,
 	});
 
 	// =============================================================
@@ -231,7 +249,7 @@ async function main() {
 	const planPageFaqHtml = getMarkdownIt().render(planPageFaqMd, {});
 
 	const planPageParams: PlanPageParams = {
-		...defaultTemplateParams(),
+		...defaultTemplateParams(assetUrls),
 		partials,
 		templateHtml: plansTemplateHtml,
 		plans: getPlans(stripeConfig),
@@ -242,7 +260,7 @@ async function main() {
 	const planPageContentHtml = renderMustache('', planPageParams);
 
 	renderPageToHtml('', `${rootDir}/docs/plans/index.html`, {
-		...defaultTemplateParams(),
+		...defaultTemplateParams(assetUrls),
 		pageName: 'plans',
 		partials,
 		showToc: false,
@@ -277,6 +295,7 @@ async function main() {
 			...source[2],
 			templateHtml: mainTemplateHtml,
 			partials,
+			assetUrls,
 		});
 	}
 }
