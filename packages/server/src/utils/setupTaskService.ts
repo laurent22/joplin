@@ -29,6 +29,13 @@ export default function(env: Env, models: Models, config: Config): TaskService {
 			schedule: '0 */2 30 * *',
 			run: (models: Models) => models.user().handleOversizedAccounts(),
 		},
+
+		{
+			id: TaskId.DeleteExpiredSessions,
+			description: 'Delete expired sessions',
+			schedule: '0 */6 * * *',
+			run: (models: Models) => models.session().deleteExpiredSessions(),
+		},
 	];
 
 	if (config.isJoplinCloud) {

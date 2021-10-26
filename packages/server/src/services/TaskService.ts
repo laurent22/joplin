@@ -12,6 +12,7 @@ export enum TaskId {
 	HandleOversizedAccounts = 3,
 	HandleBetaUserEmails = 4,
 	HandleFailedPaymentSubscriptions = 5,
+	DeleteExpiredSessions = 6,
 }
 
 export enum RunType {
