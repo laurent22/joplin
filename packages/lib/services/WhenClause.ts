@@ -83,13 +83,15 @@ export default class WhenClause {
 		if (this.validate_) this.validate(context);
 
 		const subContext: any = {};
+		let hasSubContext = false;
 
 		for (const k in this.expression_.subExpressions) {
 			const subExp = this.expression_.subExpressions[k];
 			subContext[k] = this.rules(subExp).evaluate(this.createContext(context));
+			hasSubContext = true;
 		}
 
-		const fullContext = { ...context, ...subContext };
+		const fullContext = hasSubContext ? { ...context, ...subContext } : context;
 		return this.rules(this.expression_.compiledText).evaluate(this.createContext(fullContext));
 	}
 

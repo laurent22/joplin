@@ -874,7 +874,7 @@ const mapStateToProps = (state: AppState) => {
 		pluginMenus: stateUtils.selectArrayShallow({ array: pluginUtils.viewsByType(state.pluginService.plugins, 'menu') }, 'menuBar.pluginMenus'),
 		['spellChecker.language']: state.settings['spellChecker.language'],
 		['spellChecker.enabled']: state.settings['spellChecker.enabled'],
-		plugins: state.pluginService.plugins,
+		plugins: pluginUtils.menuProps(state.pluginService.plugins),
 		customCss: state.customCss,
 	};
 };

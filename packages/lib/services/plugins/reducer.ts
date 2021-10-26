@@ -1,4 +1,5 @@
 import { Draft } from 'immer';
+const { createSelectorCreator, defaultMemoize } = require('reselect');
 
 export interface ViewInfo {
 	view: any;
@@ -42,6 +43,20 @@ export const stateRootKey = 'pluginService';
 export const defaultState: State = {
 	plugins: {},
 };
+
+const filterOutHtml = (o: any) => {
+	const n: any = {};
+	for (const key in o) {
+		if (key === 'html') continue;
+		n[key] = o[key] instanceof Object ? filterOutHtml(o[key]) : o[key];
+	}
+	return n;
+};
+
+const deepMemoize: (o: any)=> any = createSelectorCreator(
+	defaultMemoize,
+	(cur: any, prev: any) => JSON.stringify(cur) === JSON.stringify(prev)
+)((s: any) => s, (s: any) => s);
 
 export const utils = {
 
@@ -112,6 +127,14 @@ export const utils = {
 		return infos
 			.filter((info: ViewInfo) => info.view.location === toolbarType)
 			.map((info: ViewInfo) => info.view.commandName);
+	},
+
+	menuProps: function(plugins: PluginStates): PluginStates {
+		// (1) To prevent MenuBar from updating by the changes of plugins' html contents,
+		// html properties are removed from plugin states.
+		// (2) To prevent MenuBar from updating by the change of reference of plugin states,
+		// it is memoized to return the same reference for the same value.
+		return deepMemoize(filterOutHtml(plugins));
 	},
 };
 
