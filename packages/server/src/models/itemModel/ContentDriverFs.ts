@@ -27,7 +27,7 @@ export default class ContentDriverFs extends ContentDriverBase {
 	}
 
 	private itemPath(itemId: string): string {
-		return `${this.options_.basePath}/${itemId[0]}/${itemId[1]}/${itemId.substr(2)}`;
+		return `${this.options_.basePath}/${itemId.substr(0, 2).toLowerCase()}/${itemId.substr(2, 2).toLowerCase()}/${itemId}`;
 	}
 
 	public async write(itemId: string, content: Buffer): Promise<void> {

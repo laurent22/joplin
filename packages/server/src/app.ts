@@ -7,7 +7,7 @@ import { argv as yargsArgv } from 'yargs';
 import Logger, { LoggerWrapper, TargetType } from '@joplin/lib/Logger';
 import config, { initConfig, runningInDocker, EnvVariables } from './config';
 import { createDb, dropDb } from './tools/dbTools';
-import { dropTables, connectDb, disconnectDb, migrateLatest, waitForConnection, sqliteDefaultDir, migrateList, migrateUp, migrateDown, clientType } from './db';
+import { dropTables, connectDb, disconnectDb, migrateLatest, waitForConnection, sqliteDefaultDir, migrateList, migrateUp, migrateDown, clientType, DbConnection } from './db';
 import { AppContext, Env, KoaNext } from './utils/types';
 import FsDriverNode from '@joplin/lib/fs-driver-node';
 import routeHandler from './middleware/routeHandler';
@@ -221,6 +221,13 @@ async function main() {
 		fs.writeFileSync(pidFile, `${process.pid}`);
 	}
 
+	const newModelFactoryOptions = (db: DbConnection) => {
+		return {
+			contentDriver: new ContentDriverDatabase({ dbClientType: clientType(db) }),
+			// contentDriver: new ContentDriverFs({ basePath: '/Users/laurent/Temp/TestContentDriverFs' }),
+		};
+	};
+
 	let runCommandAndExitApp = true;
 
 	if (argv.migrateLatest) {
@@ -253,9 +260,7 @@ async function main() {
 		//
 		// Also should use yargs command system.
 		const connectionCheck = await waitForConnection(config().database);
-		const models = newModelFactory(connectionCheck.connection, config(), {
-			contentDriver: new ContentDriverDatabase({ dbClientType: clientType(connectionCheck.connection) }),
-		});
+		const models = newModelFactory(connectionCheck.connection, config(), newModelFactoryOptions(connectionCheck.connection));
 
 		if (argv.deleteOldChanges90) {
 			await deleteOldChanges90({ models });
@@ -282,9 +287,7 @@ async function main() {
 		appLogger().info('Connection check:', connectionCheckLogInfo);
 		const ctx = app.context as AppContext;
 
-		await setupAppContext(ctx, env, connectionCheck.connection, appLogger, {
-			contentDriver: new ContentDriverDatabase({ dbClientType: clientType(connectionCheck.connection) }),
-		});
+		await setupAppContext(ctx, env, connectionCheck.connection, appLogger, newModelFactoryOptions(connectionCheck.connection));
 
 		await initializeJoplinUtils(config(), ctx.joplinBase.models, ctx.joplinBase.services.mustache);
 
