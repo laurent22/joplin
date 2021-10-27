@@ -1733,7 +1733,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/MainScreen/commands/commandPalette.js:18
 msgid "Command palette..."
-msgstr "Palatte perintah..."
+msgstr "Palette perintah..."
 
 #: packages/app-desktop/gui/MainScreen/commands/editAlarm.js:20
 #: packages/app-mobile/components/SelectDateTimeDialog.js:84
@@ -2722,7 +2722,7 @@ msgstr ""
 
 #: packages/app-desktop/plugins/GotoAnything.js:508
 msgid "Command palette"
-msgstr "Perintah pallete"
+msgstr "Pallete perintah"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:22
 #: packages/app-mobile/components/screens/Note.js:530
