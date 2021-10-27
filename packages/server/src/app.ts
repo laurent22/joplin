@@ -282,8 +282,12 @@ async function main() {
 		await setupAppContext(ctx, env, connectionCheck.connection, appLogger);
 		await initializeJoplinUtils(config(), ctx.joplinBase.models, ctx.joplinBase.services.mustache);
 
-		appLogger().info('Migrating database...');
-		await migrateLatest(ctx.joplinBase.db);
+		if (config().database.autoMigration) {
+			appLogger().info('Auto-migrating database...');
+			await migrateLatest(ctx.joplinBase.db);
+		} else {
+			appLogger().info('Skipped database auto-migration.');
+		}
 
 		appLogger().info('Starting services...');
 		await startServices(ctx.joplinBase.services);

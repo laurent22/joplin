@@ -67,6 +67,7 @@ export interface DatabaseConfig {
 	asyncStackTraces?: boolean;
 	slowQueryLogEnabled?: boolean;
 	slowQueryLogMinDuration?: number;
+	autoMigration?: boolean;
 }
 
 export interface MailerConfig {
