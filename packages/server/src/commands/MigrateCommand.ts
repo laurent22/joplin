@@ -15,6 +15,7 @@ enum ArgvCommand {
 
 interface Argv {
 	command: ArgvCommand;
+	disableTransactions?: boolean;
 }
 
 export default class MigrateCommand extends BaseCommand {
@@ -53,13 +54,13 @@ export default class MigrateCommand extends BaseCommand {
 	public async run(argv: Argv, runContext: RunContext): Promise<void> {
 		const commands: Record<ArgvCommand, Function> = {
 			up: async () => {
-				await migrateUp(runContext.db);
+				await migrateUp(runContext.db, argv.disableTransactions);
 			},
 			down: async () => {
-				await migrateDown(runContext.db);
+				await migrateDown(runContext.db, argv.disableTransactions);
 			},
 			latest: async () => {
-				await migrateLatest(runContext.db);
+				await migrateLatest(runContext.db, argv.disableTransactions);
 			},
 			list: async () => {
 				const s = (await migrateList(runContext.db)) as string;
