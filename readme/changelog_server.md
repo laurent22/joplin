@@ -1,5 +1,14 @@
 # Joplin Server Changelog
 
+## [server-v2.5.6](https://github.com/laurent22/joplin/releases/tag/server-v2.5.6) - 2021-10-27T15:20:53Z
+
+- New: Added item owner ID, and allow disabling db auto-migrations (b655f27)
+- Improved: Delete all sessions when a password is changed or reset (b497177)
+- Improved: Expire sessions after 12 hours (0ada1df)
+- Improved: Improved task service log entries (bc5a853)
+- Improved: Run oversized account task more frequently (2f09f88)
+- Fixed: Fixed display of latest migration in startup log (#5627 by [@KowalskiPiotr98](https://github.com/KowalskiPiotr98))
+
 ## [server-v2.5.5](https://github.com/laurent22/joplin/releases/tag/server-v2.5.5) - 2021-10-23T20:58:37Z
 
 - New: Added tool to delete old changes (169b585)
