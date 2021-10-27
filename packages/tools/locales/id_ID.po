@@ -15,6 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Poedit 3.0\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-cli/app/app-gui.js:452
 msgid "To delete a tag, untag the associated notes."
@@ -1186,6 +1188,8 @@ msgid ""
 "The Joplin team has vetted this plugin and it meets our standards for "
 "security and performance."
 msgstr ""
+"Tim Joplin telah memeriksa plugin ini dan ia memenuhi standar kami untuk "
+"keamanan dan performa."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:192
 #, javascript-format
@@ -1211,9 +1215,8 @@ msgid "You do not have any installed plugin."
 msgstr "Anda tidak punya plugin yang dipasang."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:232
-#, fuzzy
 msgid "Could not connect to plugin repository."
-msgstr "Tidak dapat terhubung ke repositori plugin"
+msgstr "Tidak dapat terhubung ke repositori plugin."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:236
 msgid "Try again"
@@ -1508,15 +1511,15 @@ msgstr "Aktifkan"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:139
 msgid "Hide disabled master keys"
-msgstr ""
+msgstr "Sembunyikan kunci master nonaktif"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:139
 msgid "Show disabled master keys"
-msgstr ""
+msgstr "Tunjukkan kunci master nonaktif"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:146
 msgid "Date"
-msgstr ""
+msgstr "Tanggal"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:148
 #, fuzzy
@@ -1541,9 +1544,8 @@ msgid "Loaded"
 msgstr "Terunduh"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:178
-#, fuzzy
 msgid "Enter your master password"
-msgstr "Masukkan kata sandi master:"
+msgstr "Masukkan kata sandi master"
 
 #: packages/app-desktop/gui/ExtensionBadge.min.js:10
 msgid "Firefox Extension"
@@ -1730,9 +1732,8 @@ msgstr ""
 "untuk keluar."
 
 #: packages/app-desktop/gui/MainScreen/commands/commandPalette.js:18
-#, fuzzy
 msgid "Command palette..."
-msgstr "Perintah pallete"
+msgstr "Palette perintah..."
 
 #: packages/app-desktop/gui/MainScreen/commands/editAlarm.js:20
 #: packages/app-mobile/components/SelectDateTimeDialog.js:84
@@ -2631,22 +2632,20 @@ msgid "Export debug report"
 msgstr "Ekspor Laporan Debug"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:157
-#, fuzzy
 msgid "Sync your notes"
-msgstr "Urutkan catatan berdasarkan"
+msgstr "Sinkronisasi catatan Anda"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:158
 msgid "Publish notes to the internet"
-msgstr ""
+msgstr "Publikasikan catatan ke internet"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:159
-#, fuzzy
 msgid "Collaborate on notebooks with others"
-msgstr "Silakan buat buku catatan dahulu"
+msgstr "Collaborasi buku catatan dengan orang lain"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:182
 msgid "Thank you! Your Joplin Cloud account is now setup and ready to use."
-msgstr ""
+msgstr "Terima kasih! Akun Joplin Cloud Anda sekarang siap digunakan."
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:190
 #, javascript-format
@@ -2656,30 +2655,34 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"Terdapat kendala dalam menyiapkan akun Joplin Cloud Anda. Tolong verifikasi "
+"email dan kata sandi anda dan coba lagi. Kendala tersebut:\n"
+"\n"
+"%s"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:203
 msgid "Login below."
 msgstr ""
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:205
-#, fuzzy
 msgid "Or create an account."
-msgstr "Membuat catatan baru."
+msgstr "Atau buat akun baru."
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:210
 msgid "Login"
-msgstr ""
+msgstr "Masuk"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:231
-#, fuzzy
 msgid "Select"
-msgstr "Pilih semua"
+msgstr "Pilih"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:278
 msgid ""
 "Joplin can synchronise your notes using various providers. Select one from "
 "the list below."
 msgstr ""
+"Joplin dapat mensinkronkan catatan Anda melalui berbagai penyedia. Pilih "
+"salah satu di bawah."
 
 #: packages/app-desktop/gui/utils/NoteListUtils.js:42
 msgid "Duplicate"
@@ -2719,7 +2722,7 @@ msgstr ""
 
 #: packages/app-desktop/plugins/GotoAnything.js:508
 msgid "Command palette"
-msgstr "Perintah pallete"
+msgstr "Palette perintah"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.js:22
 #: packages/app-mobile/components/screens/Note.js:530
@@ -3142,6 +3145,9 @@ msgid ""
 "Joplin's own sync service. Also gives access to Joplin-specific features "
 "such as publishing notes or collaborating on notebooks with others."
 msgstr ""
+"Layanan sinkronisasi Joplin. Juga memberika akses kepada fitur spesifik "
+"Joplin seperti publikasi catatan atau kollaborasi buku catatan dengan orang "
+"lain."
 
 #: packages/lib/SyncTargetJoplinServer.js:60
 msgid "Joplin Server"
@@ -3239,6 +3245,7 @@ msgstr "Item yang didekripsi: %s / %s"
 #, javascript-format
 msgid "Encryption will be enabled using the master key created on %s"
 msgstr ""
+"Enkripsi akan diaktifkan dengan kunci master yang dibuat pada tanggal %s"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.js:65
 msgid ""
@@ -3384,9 +3391,8 @@ msgid "Error"
 msgstr "Kesalahan"
 
 #: packages/lib/models/Resource.js:408
-#, fuzzy
 msgid "Conflicts (attachments)"
-msgstr "Lampiran catatan"
+msgstr "Konflik catatan"
 
 #: packages/lib/models/Resource.js:422
 #, javascript-format
@@ -3462,7 +3468,7 @@ msgstr "OLED Gelap"
 
 #: packages/lib/models/Setting.js:152
 msgid "Open Sync Wizard..."
-msgstr ""
+msgstr "Buka Sync Wizard..."
 
 #: packages/lib/models/Setting.js:162
 msgid "Synchronisation target"
@@ -4407,7 +4413,6 @@ msgstr ""
 "Tidak dapat menyimpan %s “%s” karena akan melebihi ukuran total yang "
 "diizinkan (%s) untuk akun ini"
 
-#, javascript-format
 #~ msgid "%s %s (%s)"
 #~ msgstr "%s %s (%s)"
 
