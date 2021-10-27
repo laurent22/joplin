@@ -2637,7 +2637,7 @@ msgstr "Sinkronisasi catatan Anda"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:158
 msgid "Publish notes to the internet"
-msgstr "Publikasi catatan "
+msgstr "Publikasikan catatan ke internet"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:159
 msgid "Collaborate on notebooks with others"
@@ -3147,7 +3147,7 @@ msgid ""
 msgstr ""
 "Layanan sinkronisasi Joplin. Juga memberika akses kepada fitur spesifik "
 "Joplin seperti publikasi catatan atau kollaborasi buku catatan dengan orang "
-"lain. "
+"lain."
 
 #: packages/lib/SyncTargetJoplinServer.js:60
 msgid "Joplin Server"
