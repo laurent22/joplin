@@ -1,5 +1,9 @@
 # Joplin Server Changelog
 
+## [server-v2.5.9](https://github.com/laurent22/joplin/releases/tag/server-v2.5.9) - 2021-10-28T19:43:41Z
+
+- Improved: Remove session expiration for now (4a2af32)
+
 ## [server-v2.5.8](https://github.com/laurent22/joplin/releases/tag/server-v2.5.8) - 2021-10-28T16:07:23Z
 
 - New: Added item owner ID, and allow disabling db auto-migrations (b655f27)
