@@ -1,5 +1,6 @@
 import { Knex } from 'knex';
 import { DbConnection } from '../db';
+import { msleep } from '../utils/time';
 
 export async function up(db: DbConnection): Promise<any> {
 	if (!(await db.schema.hasColumn('items', 'owner_id'))) {
@@ -22,7 +23,7 @@ export async function up(db: DbConnection): Promise<any> {
 		user_id: string;
 	}
 
-	const pageSize = 10000;
+	const pageSize = 1000;
 
 	const itemCount = (await db('items')
 		.count('id', { as: 'total' })
@@ -42,11 +43,15 @@ export async function up(db: DbConnection): Promise<any> {
 
 		console.info(`Processing items ${itemDone} / ${itemCount}`);
 
-		for (const item of items) {
-			await db('items').update({ owner_id: item.user_id }).where('id', '=', item.id);
-		}
+		await db.transaction(async trx => {
+			for (const item of items) {
+				await trx('items').update({ owner_id: item.user_id }).where('id', '=', item.id);
+			}
+		});
 
 		itemDone += items.length;
+
+		await msleep(10000);
 	}
 
 	await db.schema.alterTable('items', (table: Knex.CreateTableBuilder) => {
