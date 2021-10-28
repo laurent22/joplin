@@ -1,6 +1,6 @@
 # Joplin Server Changelog
 
-## [server-v2.5.7](https://github.com/laurent22/joplin/releases/tag/server-v2.5.7) - 2021-10-27T18:39:56Z
+## [server-v2.5.8](https://github.com/laurent22/joplin/releases/tag/server-v2.5.8) - 2021-10-28T16:07:23Z
 
 - New: Added item owner ID, and allow disabling db auto-migrations (b655f27)
 - Fixed: Fixed Stripe portal page redirection (9ba90b5)
