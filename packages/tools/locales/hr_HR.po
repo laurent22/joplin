@@ -17,6 +17,8 @@ msgstr ""
 "X-Generator: Poedit 3.0\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-cli/app/app-gui.js:452
 msgid "To delete a tag, untag the associated notes."
@@ -724,7 +726,7 @@ msgstr ""
 #: packages/app-cli/app/command-tag.js:90
 #, javascript-format
 msgid "Invalid command: \"%s\""
-msgstr "Neispravna naredba: \"%s\""
+msgstr "Neispravna naredba: „%s”"
 
 #: packages/app-cli/app/command-todo.js:14
 msgid ""
@@ -1171,6 +1173,8 @@ msgid ""
 "The Joplin team has vetted this plugin and it meets our standards for "
 "security and performance."
 msgstr ""
+"Joplin tim je provjerio ovaj dodatak i on zadovoljava naše standarde za "
+"sigurnost i performansu."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:192
 #, javascript-format
@@ -1196,9 +1200,8 @@ msgid "You do not have any installed plugin."
 msgstr "Nemaš nijedan instalirani dodatak."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:232
-#, fuzzy
 msgid "Could not connect to plugin repository."
-msgstr "Neuspjelo povezivanje s repozitorijem dodataka"
+msgstr "Neuspjelo povezivanje s repozitorijem dodataka."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:236
 msgid "Try again"
@@ -1459,29 +1462,24 @@ msgstr "Šifriranje je:"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:103
 #: packages/app-mobile/components/screens/encryption-config.js:89
-#, fuzzy
 msgid "Master password"
-msgstr "Upiši glavnu lozinku:"
+msgstr "Glavna lozinka"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:118
-#, fuzzy
 msgid "Source: "
-msgstr "Izvor"
+msgstr "Izvor: "
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:121
-#, fuzzy
 msgid "Created: "
-msgstr "Stvoreno: %s"
+msgstr "Stvoreno: "
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:124
-#, fuzzy
 msgid "Updated: "
-msgstr "Aktualizirano: %s"
+msgstr "Aktualizirano: "
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:129
-#, fuzzy
 msgid "Disable"
-msgstr "Deaktivirano"
+msgstr "Deaktiviraj"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:129
 #: packages/app-mobile/components/screens/encryption-config.js:143
@@ -1490,42 +1488,37 @@ msgstr "Aktiviraj"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:139
 msgid "Hide disabled master keys"
-msgstr ""
+msgstr "Sakrij deaktivirane glavne ključeve"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:139
 msgid "Show disabled master keys"
-msgstr ""
+msgstr "Prikaži deaktivirane glavne ključeve"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:146
 msgid "Date"
-msgstr ""
+msgstr "Datum"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:148
-#, fuzzy
 msgid "Valid"
-msgstr "Neispravno"
+msgstr "Ispravno"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:149
-#, fuzzy
 msgid "Actions"
-msgstr "Radnja"
+msgstr "Radnje"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:166
 #: packages/app-mobile/components/screens/encryption-config.js:159
-#, fuzzy
 msgid "Master password:"
-msgstr "Upiši glavnu lozinku:"
+msgstr "Glavna lozinka:"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:170
 #: packages/app-mobile/components/screens/encryption-config.js:160
-#, fuzzy
 msgid "Loaded"
-msgstr "Preuzeto"
+msgstr "Učitano"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:178
-#, fuzzy
 msgid "Enter your master password"
-msgstr "Upiši glavnu lozinku:"
+msgstr "Upiši glavnu lozinku"
 
 #: packages/app-desktop/gui/ExtensionBadge.min.js:10
 msgid "Firefox Extension"
@@ -1709,9 +1702,8 @@ msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
 msgstr "Promijeni raspored pomoću strelica. Zatvori pomoću tipke „Escape”."
 
 #: packages/app-desktop/gui/MainScreen/commands/commandPalette.js:18
-#, fuzzy
 msgid "Command palette..."
-msgstr "Paleta naredbi"
+msgstr "Paleta naredbi …"
 
 #: packages/app-desktop/gui/MainScreen/commands/editAlarm.js:20
 #: packages/app-mobile/components/SelectDateTimeDialog.js:84
@@ -1813,9 +1805,8 @@ msgid "Share notebook..."
 msgstr "Dijeli bilježnicu …"
 
 #: packages/app-desktop/gui/MainScreen/commands/showShareNoteDialog.js:16
-#, fuzzy
 msgid "Publish note..."
-msgstr "Dijeli bilješku …"
+msgstr "Objavi bilješku …"
 
 #: packages/app-desktop/gui/MainScreen/commands/showSpellCheckerMenu.js:19
 #: packages/lib/services/spellChecker/SpellCheckerService.js:180
@@ -2126,7 +2117,7 @@ msgstr "Saznaj više"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:351
 msgid "Dismiss"
-msgstr "Prekini"
+msgstr "Odbaci"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.js:387
 msgid "The following attachments are being watched for changes:"
@@ -2410,9 +2401,8 @@ msgstr ""
 "Upozorenje: za brže izvođenje, ne prikazuju se svi resursi (ograničenje: %s)."
 
 #: packages/app-desktop/gui/Root.js:107
-#, fuzzy
 msgid "Confirmation"
-msgstr "Konfiguracija"
+msgstr "Potvrda"
 
 #: packages/app-desktop/gui/Root.js:120
 msgid "The Web Clipper needs your authorisation to access your data."
@@ -2493,9 +2483,8 @@ msgid "Share Notebook"
 msgstr "Dijeli bilježnicu"
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:144
-#, fuzzy
 msgid "Unpublish note"
-msgstr "Prestani dijeliti bilješku"
+msgstr "Poništi objavljivanje bilješke"
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:171
 msgid "Synchronising..."
@@ -2523,14 +2512,14 @@ msgstr ""
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:187
 msgid "Publish Notes"
-msgstr ""
+msgstr "Objavi bilješke"
 
 #: packages/app-desktop/gui/ShareNoteDialog.js:189
 msgid "Copy Shareable Link"
 msgid_plural "Copy Shareable Links"
-msgstr[0] "Kopiraj poveznicu za dijeljenje"
-msgstr[1] "Kopiraj poveznice za dijeljenje"
-msgstr[2] "Kopiraj poveznice za dijeljenje"
+msgstr[0] "Kopiraj dijeljivu poveznicu"
+msgstr[1] "Kopiraj dijeljive poveznice"
+msgstr[2] "Kopiraj dijeljive poveznice"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:189
 msgid "Remove"
@@ -2613,22 +2602,21 @@ msgid "Export debug report"
 msgstr "Izvezi izvještaj o otklanjanju grešaka"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:157
-#, fuzzy
 msgid "Sync your notes"
-msgstr "Razvrstaj bilješke po"
+msgstr "Sinkroniziraj svoje bilješke"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:158
 msgid "Publish notes to the internet"
-msgstr ""
+msgstr "Objavi blješke na internetu"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:159
-#, fuzzy
 msgid "Collaborate on notebooks with others"
-msgstr "Prvo stvori bilježnicu"
+msgstr "Surađuj s drugima na bilježnicama"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:182
 msgid "Thank you! Your Joplin Cloud account is now setup and ready to use."
 msgstr ""
+"Hvala! Tvoj Joplin Cloud račun je sada postavljen i spreman za korištenje."
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:190
 #, javascript-format
@@ -2638,30 +2626,34 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"Dogodila se greška prilikom postavljanja tvog Joplin Cloud računa. Potvrdi "
+"svoju e-mail adresu i lozinku te pokušaj ponovo. Greška je bila:\n"
+"\n"
+"%s"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:203
 msgid "Login below."
-msgstr ""
+msgstr "Prijavi se ispod."
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:205
-#, fuzzy
 msgid "Or create an account."
-msgstr "Stvara novu bilješku."
+msgstr "Ili stvori novi račun."
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:210
 msgid "Login"
-msgstr ""
+msgstr "Prijava"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:231
-#, fuzzy
 msgid "Select"
-msgstr "Označi sve"
+msgstr "Označi"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:278
 msgid ""
 "Joplin can synchronise your notes using various providers. Select one from "
 "the list below."
 msgstr ""
+"Joplin može sinkronizirati tvoje bilješke koristeći različite davatelje "
+"usluga. Odaberi jednog iz donjeg popisa."
 
 #: packages/app-desktop/gui/utils/NoteListUtils.js:42
 msgid "Duplicate"
@@ -2878,7 +2870,7 @@ msgstr "Konfiguracija"
 
 #: packages/app-mobile/components/screens/Note.js:100
 msgid "This note has been modified:"
-msgstr "Bilješka je promijenjena:"
+msgstr "Ova je blješka promijenjena:"
 
 #: packages/app-mobile/components/screens/Note.js:100
 msgid "Save changes"
@@ -3122,6 +3114,9 @@ msgid ""
 "Joplin's own sync service. Also gives access to Joplin-specific features "
 "such as publishing notes or collaborating on notebooks with others."
 msgstr ""
+"Joplinova vlastita usluga sinkronizacije. Također daje pristup Joplinskim "
+"funkcijama kao što su objavljivanje bilježaka ili suradnja na bilježnicama s "
+"drugima."
 
 #: packages/lib/SyncTargetJoplinServer.js:60
 msgid "Joplin Server"
@@ -3133,7 +3128,7 @@ msgstr "Nextcloud"
 
 #: packages/lib/SyncTargetNone.js:22
 msgid "(None)"
-msgstr ""
+msgstr "(Ništa)"
 
 #: packages/lib/SyncTargetOneDrive.js:32
 msgid "OneDrive"
@@ -3218,7 +3213,7 @@ msgstr "Dešifrirani elementi: %s / %s"
 #: packages/lib/components/EncryptionConfigScreen/utils.js:53
 #, javascript-format
 msgid "Encryption will be enabled using the master key created on %s"
-msgstr ""
+msgstr "Šifriranje će se aktivirati pomoću glavnog ključa stvorenog %s"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.js:65
 msgid ""
@@ -3343,7 +3338,7 @@ msgstr "Izbrisati ove %d bilješke?"
 
 #: packages/lib/models/Resource.js:354
 msgid "Not downloaded"
-msgstr "Nije preuzeto"
+msgstr "Nepreuzeto"
 
 #: packages/lib/models/Resource.js:356
 msgid "Downloading"
@@ -3358,9 +3353,8 @@ msgid "Error"
 msgstr "Greška"
 
 #: packages/lib/models/Resource.js:408
-#, fuzzy
 msgid "Conflicts (attachments)"
-msgstr "Privici bilješke"
+msgstr "Konflikti (privici)"
 
 #: packages/lib/models/Resource.js:422
 #, javascript-format
@@ -3374,7 +3368,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Došlo je do konflikta [conflict](%s) s dolje navedenim privitkom.\n"
+"Došlo je do [konflikta](%s) s dolje navedenim privitkom.\n"
 "\n"
 "%s"
 
@@ -3436,7 +3430,7 @@ msgstr "OLED tamna"
 
 #: packages/lib/models/Setting.js:152
 msgid "Open Sync Wizard..."
-msgstr ""
+msgstr "Otvori programčić za sinkronizaciju …"
 
 #: packages/lib/models/Setting.js:162
 msgid "Synchronisation target"
@@ -3524,8 +3518,8 @@ msgid ""
 "In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
 "the attachments are downloaded whether you open the note or not."
 msgstr ""
-"Ručno: privici se preuzimaju samo kad ih pritisneš. Automatski: privici se "
-"preuzimaju kad otvoriš bilješku. Uvijek: preuzimaju se svi privici, bez "
+"„Ručno”: privici se preuzimaju samo kad ih pritisneš. „Automatski”: privici "
+"se preuzimaju kad otvoriš bilješku. „Uvijek”: preuzimaju se svi privici, bez "
 "obzira na to je li bilješku otvoriš ili ne."
 
 #: packages/lib/models/Setting.js:413
@@ -3770,11 +3764,11 @@ msgstr ""
 
 #: packages/lib/models/Setting.js:784
 msgid "Editor maximum width"
-msgstr ""
+msgstr "Maksimala širina uređivača"
 
 #: packages/lib/models/Setting.js:784
 msgid "Set it to 0 to make it take the complete available space."
-msgstr ""
+msgstr "Postavi na 0 kako bi zauzeo cijeli raspoloživi prostor."
 
 #: packages/lib/models/Setting.js:803
 msgid "Custom stylesheet for rendered Markdown"
@@ -4361,9 +4355,9 @@ msgid "attachment"
 msgstr "privitak"
 
 #: packages/server/dist/models/UserModel.js:199
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Cannot save %s \"%s\" because it is larger than the allowed limit (%s)"
-msgstr "Nije moguće spremiti %s \"%s\" jer je veći od dozvoljene granice (%s)"
+msgstr "Nije moguće spremiti %s „%s\\” jer je veći od dozvoljene granice (%s)"
 
 #: packages/server/dist/models/UserModel.js:208
 #, javascript-format
@@ -4371,8 +4365,8 @@ msgid ""
 "Cannot save %s \"%s\" because it would go over the total allowed size (%s) "
 "for this account"
 msgstr ""
-"Nije moguće spremiti %s \"%s\" jer bi se prekoračila dozvoljena veličina "
-"(%s) za ovaj račun"
+"Nije moguće spremiti %s „%s” jer bi se prekoračila ukupna dozvoljena "
+"veličina (%s) za ovaj račun"
 
 #, javascript-format
 #~ msgid "%s %s (%s)"

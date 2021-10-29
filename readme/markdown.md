@@ -70,7 +70,7 @@ You can create a link to a note by specifying its ID in the URL. For example:
 
 	[Link to my note](:/0b0d62d15e60409dac34f354b6e9e839)
 
-Since getting the ID of a note is not straightforward, each app provides a way to create such link. In the **desktop app**, right click on a note an select "Copy Markdown link". In the **mobile app**, open a note and, in the top right menu, select "Copy Markdown link". You can then paste this link anywhere in another note.
+Since getting the ID of a note is not straightforward, each app provides a way to create such link. In the **desktop app**, drag and drop a note into another note to create a link. Or right click on a note and select "Copy Markdown link". In the **mobile app**, open a note and, in the top right menu, select "Copy Markdown link". You can then paste this link anywhere in another note.
 
 ### Math notation
 

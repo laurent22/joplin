@@ -18,12 +18,24 @@ export default function(env: Env, models: Models, config: Config): TaskService {
 			schedule: '0 * * * *',
 			run: (models: Models) => models.item().updateTotalSizes(),
 		},
+
+		// Need to do it relatively frequently so that if the user fixes
+		// whatever was causing the oversized account, they can get it
+		// re-enabled quickly. Also it's done on minute 30 because it depends on
+		// the UpdateTotalSizes task being run.
 		{
 			id: TaskId.HandleOversizedAccounts,
 			description: 'Process oversized accounts',
-			schedule: '0 14 * * *',
+			schedule: '0 */2 30 * *',
 			run: (models: Models) => models.user().handleOversizedAccounts(),
 		},
+
+		// {
+		// 	id: TaskId.DeleteExpiredSessions,
+		// 	description: 'Delete expired sessions',
+		// 	schedule: '0 */6 * * *',
+		// 	run: (models: Models) => models.session().deleteExpiredSessions(),
+		// },
 	];
 
 	if (config.isJoplinCloud) {

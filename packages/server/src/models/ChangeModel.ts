@@ -1,10 +1,16 @@
 import { Knex } from 'knex';
+import Logger from '@joplin/lib/Logger';
 import { SqliteMaxVariableNum } from '../db';
 import { Change, ChangeType, Item, Uuid } from '../services/database/types';
 import { md5 } from '../utils/crypto';
 import { ErrorResyncRequired } from '../utils/errors';
+import { Day, formatDateTime } from '../utils/time';
 import BaseModel, { SaveOptions } from './BaseModel';
 import { PaginatedResults, Pagination, PaginationOrderDir } from './utils/pagination';
+
+const logger = Logger.create('ChangeModel');
+
+export const defaultChangeTtl = 180 * Day;
 
 export interface DeltaChange extends Change {
 	jop_updated_time?: number;
@@ -301,6 +307,80 @@ export default class ChangeModel extends BaseModel<Change> {
 		output.sort((a: Change, b: Change) => a.counter < b.counter ? -1 : +1);
 
 		return output;
+	}
+
+	public async deleteOldChanges(ttl: number = null) {
+		ttl = ttl === null ? defaultChangeTtl : ttl;
+		const cutOffDate = Date.now() - ttl;
+		const limit = 1000;
+		const doneItemIds: Uuid[] = [];
+
+		interface ChangeReportItem {
+			total: number;
+			max_created_time: number;
+			item_id: Uuid;
+		}
+
+		let error: Error = null;
+		let totalDeletedCount = 0;
+
+		logger.info(`deleteOldChanges: Processing changes older than: ${formatDateTime(cutOffDate)} (${cutOffDate})`);
+
+		while (true) {
+			// First get all the UPDATE changes before the specified date, and
+			// order by the items that had the most changes. Also for each item
+			// get the most recent change date from within that time interval,
+			// as we need this below.
+
+			const changeReport: ChangeReportItem[] = await this
+				.db(this.tableName)
+
+				.select(['item_id'])
+				.countDistinct('id', { as: 'total' })
+				.max('created_time', { as: 'max_created_time' })
+
+				.where('type', '=', ChangeType.Update)
+				.where('created_time', '<', cutOffDate)
+
+				.groupBy('item_id')
+				.havingRaw('count(id) > 1')
+				.orderBy('total', 'desc')
+				.limit(limit);
+
+			if (!changeReport.length) break;
+
+			await this.withTransaction(async () => {
+				for (const row of changeReport) {
+					if (doneItemIds.includes(row.item_id)) {
+						// We don't throw from within the transaction because
+						// that would rollback all other operations even though
+						// they are valid. So we save the error and exit.
+						error = new Error(`Trying to process an item that has already been done. Aborting. Row: ${JSON.stringify(row)}`);
+						return;
+					}
+
+					// Still from within the specified interval, delete all
+					// UPDATE changes, except for the most recent one.
+
+					const deletedCount = await this
+						.db(this.tableName)
+						.where('type', '=', ChangeType.Update)
+						.where('created_time', '<', cutOffDate)
+						.where('created_time', '!=', row.max_created_time)
+						.where('item_id', '=', row.item_id)
+						.delete();
+
+					totalDeletedCount += deletedCount;
+					doneItemIds.push(row.item_id);
+				}
+			}, 'ChangeModel::deleteOldChanges');
+
+			logger.info(`deleteOldChanges: Processed: ${doneItemIds.length} items. Deleted: ${totalDeletedCount} changes.`);
+
+			if (error) throw error;
+		}
+
+		logger.info(`deleteOldChanges: Finished processing. Done ${doneItemIds.length} items. Deleted: ${totalDeletedCount} changes.`);
 	}
 
 	public async save(change: Change, options: SaveOptions = {}): Promise<Change> {

@@ -226,6 +226,14 @@ describe('models/Setting', function() {
 		expect(Setting.value('style.editor.contentMaxWidth')).toBe(600); // Changed
 	}));
 
+	it('should skip values that are already set', (async () => {
+		await Setting.reset();
+
+		Setting.setValue('sync.target', 9);
+		Setting.applyDefaultMigrations();
+		expect(Setting.value('sync.target')).toBe(9); // Not changed
+	}));
+
 	it('should allow skipping default migrations', (async () => {
 		await Setting.reset();
 
