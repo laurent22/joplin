@@ -186,7 +186,8 @@ class NoteListComponent extends React.Component {
 
 		const targetNoteIndex = this.dragTargetNoteIndex_(event);
 		const noteIds = JSON.parse(dt.getData('text/x-jop-note-ids'));
-		await Note.insertNotesAt(this.props.selectedFolderId, noteIds, targetNoteIndex);
+
+		void Note.insertNotesAt(this.props.selectedFolderId, noteIds, targetNoteIndex);
 	}
 
 
@@ -470,6 +471,7 @@ class NoteListComponent extends React.Component {
 
 	renderItemList(style: any) {
 		if (!this.props.notes.length) return null;
+
 		return (
 			<ItemList
 				ref={this.itemListRef}

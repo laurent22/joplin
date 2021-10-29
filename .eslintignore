@@ -693,6 +693,9 @@ packages/app-desktop/services/commands/stateToWhenClauseContext.js.map
 packages/app-desktop/services/commands/types.d.ts
 packages/app-desktop/services/commands/types.js
 packages/app-desktop/services/commands/types.js.map
+packages/app-desktop/services/e2ee.d.ts
+packages/app-desktop/services/e2ee.js
+packages/app-desktop/services/e2ee.js.map
 packages/app-desktop/services/plugins/PlatformImplementation.d.ts
 packages/app-desktop/services/plugins/PlatformImplementation.js
 packages/app-desktop/services/plugins/PlatformImplementation.js.map

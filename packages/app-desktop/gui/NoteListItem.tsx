@@ -159,6 +159,7 @@ function NoteListItem(props: NoteListItemProps, ref: any) {
 	]
 		.filter(e => !!e)
 		.join(' ');
+
 	// Need to include "todo_completed" in key so that checkbox is updated when
 	// item is changed via sync.
 	return (
