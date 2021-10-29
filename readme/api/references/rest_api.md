@@ -81,7 +81,7 @@ Then you will resume fetching the results using this query:
 
 	curl http://localhost:41184/notes?order_by=updated_time&order_dir=ASC&limit=10&page=2
 
-Eventually you will get some results that do not contain an "has_more" paramater, at which point you will have retrieved all the results
+Eventually you will get some results that do not contain an "has_more" parameter, at which point you will have retrieved all the results
 
 As an example the pseudo-code below could be used to fetch all the notes:
 
@@ -126,7 +126,7 @@ To retrieve all the tags that start with `project-`: **GET /search?query=project
 
 # Item type IDs
 
-Item type IDs might be refered to in certain object you will retrieve from the API. This is the correspondance between name and ID:
+Item type IDs might be referred to in certain object you will retrieve from the API. This is the correspondence between name and ID:
 
 Name | Value
 ---- | -----

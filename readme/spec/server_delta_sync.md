@@ -12,11 +12,11 @@ The events are tied to a particular parent ID - in other words it's only possibl
 
 ## What is a change event
 
-An event can be "create", "update" or "detete" and is associated with a given file. The client uses this info to apply the change locally - creating, updating or deleting the file as needed.
+An event can be "create", "update" or "delete" and is associated with a given file. The client uses this info to apply the change locally - creating, updating or deleting the file as needed.
 
 Attached to the event, is also a copy of the file metadata, so the client doesn't need to a do a second request to fetch it.
 
-Internally, the event also stores the file name and parent ID. This is used when an item is deleted since in that case the item ID only would not be sufficient to know where the item was initally stored.
+Internally, the event also stores the file name and parent ID. This is used when an item is deleted since in that case the item ID only would not be sufficient to know where the item was initially stored.
 
 ## Event compression
 
@@ -88,4 +88,4 @@ The client would then follow this logic:
 	- If the file is present, delete it.
 	- If it is not, skip the event (not an error).
 
-It might seem we could derive the "create" events simply by looking at the files in the directory - all files that are there would implicitely have a "create" event. The issue however is that it's not possible to reliably iterate over the files in a folder, because they might change in the meantime. The change events on the other hand provide an ID that can be used reliably to iterate over changes, and to resume at any time.
+It might seem we could derive the "create" events simply by looking at the files in the directory - all files that are there would implicitly have a "create" event. The issue however is that it's not possible to reliably iterate over the files in a folder, because they might change in the meantime. The change events on the other hand provide an ID that can be used reliably to iterate over changes, and to resume at any time.
