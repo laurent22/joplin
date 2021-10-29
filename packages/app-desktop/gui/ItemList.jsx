@@ -122,7 +122,7 @@ class ItemList extends React.Component {
 		if (this.props.className) classes.push(this.props.className);
 
 		return (
-			<div ref={this.listRef} className={classes.join(' ')} style={style} onScroll={this.onScroll} onKeyDown={this.onKeyDown}>
+			<div ref={this.listRef} className={classes.join(' ')} style={style} onScroll={this.onScroll} onKeyDown={this.onKeyDown} onDrop={this.props.onNoteDrop}>
 				{itemComps}
 			</div>
 		);
