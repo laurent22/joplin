@@ -952,6 +952,9 @@ packages/lib/commands/synchronize.js.map
 packages/lib/components/EncryptionConfigScreen/utils.d.ts
 packages/lib/components/EncryptionConfigScreen/utils.js
 packages/lib/components/EncryptionConfigScreen/utils.js.map
+packages/lib/database-driver-better-sqlite.d.ts
+packages/lib/database-driver-better-sqlite.js
+packages/lib/database-driver-better-sqlite.js.map
 packages/lib/database.d.ts
 packages/lib/database.js
 packages/lib/database.js.map
