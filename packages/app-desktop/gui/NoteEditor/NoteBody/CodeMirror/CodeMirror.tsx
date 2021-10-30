@@ -812,6 +812,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 					onChange={codeMirror_change}
 					onScroll={editor_scroll}
 					onEditorPaste={onEditorPaste}
+					isSafeMode={props.isSafeMode}
 				/>
 			</div>
 		);

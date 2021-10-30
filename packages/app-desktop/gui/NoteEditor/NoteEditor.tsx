@@ -409,6 +409,7 @@ function NoteEditor(props: NoteEditorProps) {
 		plugins: props.plugins,
 		fontSize: Setting.value('style.editor.fontSize'),
 		contentMaxWidth: props.contentMaxWidth,
+		isSafeMode: props.isSafeMode,
 	};
 
 	let editor = null;
@@ -611,6 +612,7 @@ const mapStateToProps = (state: AppState) => {
 			'setTags',
 		], whenClauseContext)[0],
 		contentMaxWidth: state.settings['style.editor.contentMaxWidth'],
+		isSafeMode: state.settings.isSafeMode,
 	};
 };
 

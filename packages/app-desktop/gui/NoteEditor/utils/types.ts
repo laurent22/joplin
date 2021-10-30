@@ -43,6 +43,7 @@ export interface NoteEditorProps {
 	setTagsToolbarButtonInfo: ToolbarButtonInfo;
 	richTextBannerDismissed: boolean;
 	contentMaxWidth: number;
+	isSafeMode: boolean;
 }
 
 export interface NoteBodyEditorProps {
@@ -74,6 +75,7 @@ export interface NoteBodyEditorProps {
 	plugins: PluginStates;
 	fontSize: number;
 	contentMaxWidth: number;
+	isSafeMode: boolean;
 }
 
 export interface FormNote {
