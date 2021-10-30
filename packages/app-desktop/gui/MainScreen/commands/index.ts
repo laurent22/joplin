@@ -28,6 +28,9 @@ import * as showSpellCheckerMenu from './showSpellCheckerMenu';
 import * as toggleEditors from './toggleEditors';
 import * as toggleLayoutMoveMode from './toggleLayoutMoveMode';
 import * as toggleNoteList from './toggleNoteList';
+import * as toggleNotesSortOrderField from './toggleNotesSortOrderField';
+import * as toggleNotesSortOrderReverse from './toggleNotesSortOrderReverse';
+import * as togglePerFolderSortOrder from './togglePerFolderSortOrder';
 import * as toggleSideBar from './toggleSideBar';
 import * as toggleVisiblePanes from './toggleVisiblePanes';
 
@@ -61,6 +64,9 @@ const index:any[] = [
 	toggleEditors,
 	toggleLayoutMoveMode,
 	toggleNoteList,
+	toggleNotesSortOrderField,
+	toggleNotesSortOrderReverse,
+	togglePerFolderSortOrder,
 	toggleSideBar,
 	toggleVisiblePanes,
 ];
