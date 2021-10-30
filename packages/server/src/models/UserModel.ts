@@ -379,8 +379,12 @@ export default class UserModel extends BaseModel<User> {
 	public async resetPassword(token: string, fields: CheckRepeatPasswordInput) {
 		checkRepeatPassword(fields, true);
 		const user = await this.models().token().userFromToken(token);
-		await this.models().user().save({ id: user.id, password: fields.password });
-		await this.models().token().deleteByValue(user.id, token);
+
+		await this.withTransaction(async () => {
+			await this.models().user().save({ id: user.id, password: fields.password });
+			await this.models().session().deleteByUserId(user.id);
+			await this.models().token().deleteByValue(user.id, token);
+		}, 'UserModel::resetPassword');
 	}
 
 	public async handleBetaUserEmails() {

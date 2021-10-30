@@ -1457,7 +1457,7 @@ class Setting extends BaseModel {
 	}
 
 	public static isSet(key: string) {
-		return key in this.cache_;
+		return this.cache_.find(d => d.key === key);
 	}
 
 	static keyDescription(key: string, appType: AppType = null) {

@@ -3,11 +3,9 @@ require('source-map-support').install();
 
 import * as Koa from 'koa';
 import * as fs from 'fs-extra';
-import { argv } from 'yargs';
 import Logger, { LoggerWrapper, TargetType } from '@joplin/lib/Logger';
 import config, { initConfig, runningInDocker, EnvVariables } from './config';
-import { createDb, dropDb } from './tools/dbTools';
-import { dropTables, connectDb, disconnectDb, migrateLatest, waitForConnection, sqliteDefaultDir, migrateList, migrateUp, migrateDown } from './db';
+import { migrateLatest, waitForConnection, sqliteDefaultDir } from './db';
 import { AppContext, Env, KoaNext } from './utils/types';
 import FsDriverNode from '@joplin/lib/fs-driver-node';
 import routeHandler from './middleware/routeHandler';
@@ -19,14 +17,20 @@ import startServices from './utils/startServices';
 import { credentialFile } from './utils/testing/testUtils';
 import apiVersionHandler from './middleware/apiVersionHandler';
 import clickJackingHandler from './middleware/clickJackingHandler';
+import newModelFactory from './models/factory';
+import setupCommands from './utils/setupCommands';
+
+interface Argv {
+	env?: Env;
+	pidfile?: string;
+	envFile?: string;
+}
 
 const nodeSqlite = require('sqlite3');
 const cors = require('@koa/cors');
 const nodeEnvFile = require('node-env-file');
 const { shimInit } = require('@joplin/lib/shim-init-node.js');
 shimInit({ nodeSqlite });
-
-const env: Env = argv.env as Env || Env.Prod;
 
 const defaultEnvVariables: Record<Env, EnvVariables> = {
 	dev: {
@@ -79,6 +83,11 @@ async function getEnvFilePath(env: Env, argv: any): Promise<string> {
 }
 
 async function main() {
+	const { selectedCommand, argv: yargsArgv } = await setupCommands();
+
+	const argv: Argv = yargsArgv as any;
+	const env: Env = argv.env as Env || Env.Prod;
+
 	const envFilePath = await getEnvFilePath(env, argv);
 
 	if (envFilePath) nodeEnvFile(envFilePath);
@@ -202,29 +211,27 @@ async function main() {
 
 	let runCommandAndExitApp = true;
 
-	if (argv.migrateLatest) {
-		const db = await connectDb(config().database);
-		await migrateLatest(db);
-		await disconnectDb(db);
-	} else if (argv.migrateUp) {
-		const db = await connectDb(config().database);
-		await migrateUp(db);
-		await disconnectDb(db);
-	} else if (argv.migrateDown) {
-		const db = await connectDb(config().database);
-		await migrateDown(db);
-		await disconnectDb(db);
-	} else if (argv.migrateList) {
-		const db = await connectDb(config().database);
-		console.info(await migrateList(db));
-	} else if (argv.dropDb) {
-		await dropDb(config().database, { ignoreIfNotExists: true });
-	} else if (argv.dropTables) {
-		const db = await connectDb(config().database);
-		await dropTables(db);
-		await disconnectDb(db);
-	} else if (argv.createDb) {
-		await createDb(config().database);
+	if (selectedCommand) {
+		const commandArgv = {
+			...argv,
+			_: (argv as any)._.slice(),
+		};
+		commandArgv._.splice(0, 1);
+
+		if (selectedCommand.commandName() === 'db') {
+			await selectedCommand.run(commandArgv, {
+				db: null,
+				models: null,
+			});
+		} else {
+			const connectionCheck = await waitForConnection(config().database);
+			const models = newModelFactory(connectionCheck.connection, config());
+
+			await selectedCommand.run(commandArgv, {
+				db: connectionCheck.connection,
+				models,
+			});
+		}
 	} else {
 		runCommandAndExitApp = false;
 
@@ -248,8 +255,12 @@ async function main() {
 		await setupAppContext(ctx, env, connectionCheck.connection, appLogger);
 		await initializeJoplinUtils(config(), ctx.joplinBase.models, ctx.joplinBase.services.mustache);
 
-		appLogger().info('Migrating database...');
-		await migrateLatest(ctx.joplinBase.db);
+		if (config().database.autoMigration) {
+			appLogger().info('Auto-migrating database...');
+			await migrateLatest(ctx.joplinBase.db);
+		} else {
+			appLogger().info('Skipped database auto-migration.');
+		}
 
 		appLogger().info('Starting services...');
 		await startServices(ctx.joplinBase.services);

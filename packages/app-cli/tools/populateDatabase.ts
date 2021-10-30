@@ -90,12 +90,12 @@ const main = async () => {
 	// run the scripts (faster)
 	await execCommand2(['npm', 'run', 'build']);
 
-	const focusUserNum = 400;
+	const focusUserNum = 0;
 
 	while (true) {
 		let userNum = randomInt(minUserNum, maxUserNum);
 
-		if (Math.random() >= .7) userNum = focusUserNum;
+		if (focusUserNum && Math.random() >= .7) userNum = focusUserNum;
 
 		void processUser(userNum);
 		await waitForProcessing(10);

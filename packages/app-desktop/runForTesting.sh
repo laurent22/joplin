@@ -3,14 +3,25 @@
 # Setup the sync parameters for user X and create a few folders and notes to
 # allow sharing. Also calls the API to create the test users and clear the data.
 
+# ----------------------------------------------------------------------------------
 # For example, to setup a user for sharing, and another as recipient with E2EE
 # enabled:
+# ----------------------------------------------------------------------------------
 
 # ./runForTesting.sh 1 createUsers,createData,reset,e2ee,sync && ./runForTesting.sh 2 reset,e2ee,sync && ./runForTesting.sh 1
 
+# ----------------------------------------------------------------------------------
 # Without E2EE:
+# ----------------------------------------------------------------------------------
 
 # ./runForTesting.sh 1 createUsers,createData,reset,sync && ./runForTesting.sh 2 reset,sync && ./runForTesting.sh 1
+
+# ----------------------------------------------------------------------------------
+# To create two client profiles, in sync, both used by the same user:
+# ----------------------------------------------------------------------------------
+
+# ./runForTesting.sh 1 createUsers,createData,reset,sync && ./runForTesting.sh 1a reset,sync && ./runForTesting.sh 1
+# ./runForTesting.sh 1a
 
 set -e
 
@@ -23,10 +34,17 @@ if [ "$1" == "" ]; then
 fi
 
 USER_NUM=$1
-COMMANDS=($(echo $2 | tr "," "\n"))
-PROFILE_DIR=~/.config/joplindev-desktop-$USER_NUM
+USER_PROFILE_NUM=$USER_NUM
 
-CMD_FILE="$SCRIPT_DIR/runForTestingCommands-$USER_NUM.txt"
+if [ "$USER_NUM" = "1a" ]; then
+	USER_NUM=1
+	USER_PROFILE_NUM=1a
+fi
+
+COMMANDS=($(echo $2 | tr "," "\n"))
+PROFILE_DIR=~/.config/joplindev-desktop-$USER_PROFILE_NUM
+
+CMD_FILE="$SCRIPT_DIR/runForTestingCommands-$USER_PROFILE_NUM.txt"
 rm -f "$CMD_FILE"
 touch "$CMD_FILE"
 

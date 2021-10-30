@@ -195,22 +195,29 @@ export async function disconnectDb(db: DbConnection) {
 	await db.destroy();
 }
 
-export async function migrateLatest(db: DbConnection) {
+export async function migrateLatest(db: DbConnection, disableTransactions = false) {
 	await db.migrate.latest({
 		directory: migrationDir,
+		disableTransactions,
 	});
 }
 
-export async function migrateUp(db: DbConnection) {
+export async function migrateUp(db: DbConnection, disableTransactions = false) {
 	await db.migrate.up({
 		directory: migrationDir,
+		disableTransactions,
 	});
 }
 
-export async function migrateDown(db: DbConnection) {
+export async function migrateDown(db: DbConnection, disableTransactions = false) {
 	await db.migrate.down({
 		directory: migrationDir,
+		disableTransactions,
 	});
+}
+
+export async function migrateUnlock(db: DbConnection) {
+	await db.migrate.forceFreeMigrationsLock();
 }
 
 export async function migrateList(db: DbConnection, asString: boolean = true) {
@@ -338,7 +345,7 @@ export function isUniqueConstraintError(error: any): boolean {
 
 export async function latestMigration(db: DbConnection): Promise<any> {
 	try {
-		const result = await db('knex_migrations').select('name').orderBy('id', 'asc').first();
+		const result = await db('knex_migrations').select('name').orderBy('id', 'desc').first();
 		return result;
 	} catch (error) {
 		// If the database has never been initialized, we return null, so

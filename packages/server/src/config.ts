@@ -10,22 +10,49 @@ interface PackageJson {
 const packageJson: PackageJson = require(`${__dirname}/packageInfo.js`);
 
 export interface EnvVariables {
+	// ==================================================
+	// General config
+	// ==================================================
+
 	APP_NAME?: string;
+	APP_PORT?: string;
+	SIGNUP_ENABLED?: string;
+	TERMS_ENABLED?: string;
+	ACCOUNT_TYPES_ENABLED?: string;
+	ERROR_STACK_TRACES?: string;
+	COOKIES_SECURE?: string;
+	RUNNING_IN_DOCKER?: string;
+
+	// ==================================================
+	// URL config
+	// ==================================================
 
 	APP_BASE_URL?: string;
 	USER_CONTENT_BASE_URL?: string;
 	API_BASE_URL?: string;
 	JOPLINAPP_BASE_URL?: string;
 
-	APP_PORT?: string;
+	// ==================================================
+	// Database config
+	// ==================================================
+
 	DB_CLIENT?: string;
-	RUNNING_IN_DOCKER?: string;
+	DB_SLOW_QUERY_LOG_ENABLED?: string;
+	DB_SLOW_QUERY_LOG_MIN_DURATION?: string; // ms
+	DB_AUTO_MIGRATION?: string;
 
 	POSTGRES_PASSWORD?: string;
 	POSTGRES_DATABASE?: string;
 	POSTGRES_USER?: string;
 	POSTGRES_HOST?: string;
 	POSTGRES_PORT?: string;
+
+	// This must be the full path to the database file
+	SQLITE_DATABASE?: string;
+
+	// ==================================================
+	// Mailer config
+	// ==================================================
 
 	MAILER_ENABLED?: string;
 	MAILER_HOST?: string;
@@ -36,27 +63,16 @@ export interface EnvVariables {
 	MAILER_NOREPLY_NAME?: string;
 	MAILER_NOREPLY_EMAIL?: string;
 
-	// This must be the full path to the database file
-	SQLITE_DATABASE?: string;
+	SUPPORT_EMAIL?: string;
+	SUPPORT_NAME?: string;
+	BUSINESS_EMAIL?: string;
+
+	// ==================================================
+	// Stripe config
+	// ==================================================
 
 	STRIPE_SECRET_KEY?: string;
 	STRIPE_WEBHOOK_SECRET?: string;
-
-	SIGNUP_ENABLED?: string;
-	TERMS_ENABLED?: string;
-	ACCOUNT_TYPES_ENABLED?: string;
-
-	ERROR_STACK_TRACES?: string;
-
-	SUPPORT_EMAIL?: string;
-	SUPPORT_NAME?: string;
-
-	BUSINESS_EMAIL?: string;
-
-	COOKIES_SECURE?: string;
-
-	SLOW_QUERY_LOG_ENABLED?: string;
-	SLOW_QUERY_LOG_MIN_DURATION?: string; // ms
 }
 
 let runningInDocker_: boolean = false;
@@ -69,7 +85,8 @@ function envReadString(s: string, defaultValue: string = ''): string {
 	return s === undefined || s === null ? defaultValue : s;
 }
 
-function envReadBool(s: string): boolean {
+function envReadBool(s: string, defaultValue = false): boolean {
+	if (s === undefined || s === null) return defaultValue;
 	return s === '1';
 }
 
@@ -99,8 +116,9 @@ function databaseConfigFromEnv(runningInDocker: boolean, env: EnvVariables): Dat
 	const baseConfig: DatabaseConfig = {
 		client: DatabaseConfigClient.Null,
 		name: '',
-		slowQueryLogEnabled: envReadBool(env.SLOW_QUERY_LOG_ENABLED),
-		slowQueryLogMinDuration: envReadInt(env.SLOW_QUERY_LOG_MIN_DURATION, 10000),
+		slowQueryLogEnabled: envReadBool(env.DB_SLOW_QUERY_LOG_ENABLED),
+		slowQueryLogMinDuration: envReadInt(env.DB_SLOW_QUERY_LOG_MIN_DURATION, 10000),
+		autoMigration: envReadBool(env.DB_AUTO_MIGRATION, true),
 	};
 
 	if (env.DB_CLIENT === 'pg') {

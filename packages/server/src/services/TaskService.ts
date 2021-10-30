@@ -12,6 +12,7 @@ export enum TaskId {
 	HandleOversizedAccounts = 3,
 	HandleBetaUserEmails = 4,
 	HandleFailedPaymentSubscriptions = 5,
+	DeleteExpiredSessions = 6,
 }
 
 export enum RunType {
@@ -78,9 +79,20 @@ export default class TaskService extends BaseService {
 		};
 	}
 
+	private taskById(id: TaskId): Task {
+		if (!this.tasks_[id]) throw new Error(`No such task: ${id}`);
+		return this.tasks_[id];
+	}
+
+	private taskDisplayString(id: TaskId): string {
+		const task = this.taskById(id);
+		return `#${task.id} (${task.description})`;
+	}
+
 	public async runTask(id: TaskId, runType: RunType) {
+		const displayString = this.taskDisplayString(id);
 		const state = this.taskState(id);
-		if (state.running) throw new Error(`Task is already running: ${id}`);
+		if (state.running) throw new Error(`Already running: ${displayString}`);
 
 		const startTime = Date.now();
 
@@ -92,10 +104,10 @@ export default class TaskService extends BaseService {
 		await this.models.event().create(EventType.TaskStarted, id.toString());
 
 		try {
-			logger.info(`Running "${id}" (${runTypeToString(runType)})...`);
+			logger.info(`Running ${displayString} (${runTypeToString(runType)})...`);
 			await this.tasks_[id].run(this.models);
 		} catch (error) {
-			logger.error(`On task "${id}"`, error);
+			logger.error(`On ${displayString}`, error);
 		}
 
 		this.taskStates_[id] = {
@@ -105,14 +117,14 @@ export default class TaskService extends BaseService {
 
 		await this.models.event().create(EventType.TaskCompleted, id.toString());
 
-		logger.info(`Completed "${id}" in ${Date.now() - startTime}ms`);
+		logger.info(`Completed ${this.taskDisplayString(id)} in ${Date.now() - startTime}ms`);
 	}
 
 	public async runInBackground() {
 		for (const [taskId, task] of Object.entries(this.tasks_)) {
 			if (!task.schedule) continue;
 
-			logger.info(`Scheduling task #${taskId} (${task.description}): ${task.schedule}`);
+			logger.info(`Scheduling ${this.taskDisplayString(task.id)}: ${task.schedule}`);
 
 			cron.schedule(task.schedule, async () => {
 				await this.runTask(Number(taskId), RunType.Scheduled);
