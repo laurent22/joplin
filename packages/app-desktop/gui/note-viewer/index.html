@@ -197,6 +197,17 @@
 
 		let checkAllImageLoadedIID_ = null;
 
+		ipc.focus = (event) => {
+			const dummyID = 'joplin-content-focus-dummy';
+			if (! document.getElementById(dummyID)) {
+				const focusDummy = '<div style="width: 0; height: 0; overflow: hidden"><a id="' + dummyID + '" href="#">focus dummy</a></div>';
+				contentElement.insertAdjacentHTML("afterbegin", focusDummy);
+			}
+			const scrollTop = contentElement.scrollTop;
+			document.getElementById(dummyID).focus();
+			contentElement.scrollTop = scrollTop;
+		}
+
 		ipc.setHtml = (event) => {
 			const html = event.html;
 
