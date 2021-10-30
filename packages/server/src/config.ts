@@ -146,7 +146,7 @@ function mailerConfigFromEnv(env: EnvVariables): MailerConfig {
 		enabled: env.MAILER_ENABLED !== '0',
 		host: env.MAILER_HOST || '',
 		port: Number(env.MAILER_PORT || 587),
-		secure: !!Number(env.MAILER_SECURE) || true,
+		secure: env.MAILER_SECURE === '1',
 		authUser: env.MAILER_AUTH_USER || '',
 		authPassword: env.MAILER_AUTH_PASSWORD || '',
 		noReplyName: env.MAILER_NOREPLY_NAME || '',
