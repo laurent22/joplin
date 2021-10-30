@@ -2,7 +2,7 @@ import { AppState } from '../../app.reducer';
 import * as React from 'react';
 import { useEffect, useRef } from 'react';
 import SearchBar from '../SearchBar/SearchBar';
-import Button, { ButtonLevel, ButtonSize } from '../Button/Button';
+import Button, { ButtonLevel, ButtonSize, buttonSizePx } from '../Button/Button';
 import CommandService from '@joplin/lib/services/CommandService';
 import { runtime as focusSearchRuntime } from './commands/focusSearch';
 import Note from '@joplin/lib/models/Note';
@@ -35,6 +35,8 @@ const StyledButton = styled(Button)`
 const StyledPairButtonL = styled(Button)`
 	margin-left: 8px;
 	border-radius: 5px 0 0 5px;
+	min-width: ${(props: any) => buttonSizePx(props)}px;
+	max-width: ${(props: any) => buttonSizePx(props)}px;
 `;
 
 const StyledPairButtonR = styled(Button)`
