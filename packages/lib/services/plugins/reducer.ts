@@ -44,13 +44,17 @@ export const defaultState: State = {
 	plugins: {},
 };
 
-const filterOutHtml = (o: any) => {
-	const n: any = {};
-	for (const key in o) {
-		if (key === 'html') continue;
-		n[key] = o[key] instanceof Object ? filterOutHtml(o[key]) : o[key];
+const filterOutHtml = (o: any): any => {
+	if (o instanceof Array) {
+		return o.map(filterOutHtml);
+	} else if (o instanceof Object) {
+		const n = { ...o };
+		delete n.html;
+		for (const k of Object.keys(n)) n[k] = filterOutHtml(n[k]);
+		return n;
+	} else {
+		return o;
 	}
-	return n;
 };
 
 const deepMemoize: (o: any)=> any = createSelectorCreator(
