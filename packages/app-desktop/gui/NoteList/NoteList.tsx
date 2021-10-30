@@ -169,7 +169,7 @@ class NoteListComponent extends React.Component {
 		if (this.props.notesParentType !== 'Folder') return;
 
 		if (this.props.noteSortOrder !== 'order') {
-			const doIt = await bridge().showConfirmMessageBox(_('To manually sort the notes, the sort order must be changed to "%s" in the menu "%s" > "%s"', _('Custom order'), _('View'), _('Sort notes by')), {
+			const doIt = bridge().showConfirmMessageBox(_('To manually sort the notes, the sort order must be changed to "%s" in the menu "%s" > "%s"', _('Custom order'), _('View'), _('Sort notes by')), {
 				buttons: [_('Do it now'), _('Cancel')],
 			});
 			if (!doIt) return;
