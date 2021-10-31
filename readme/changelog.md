@@ -1,5 +1,22 @@
 # Joplin changelog
 
+## [v2.5.8](https://github.com/laurent22/joplin/releases/tag/v2.5.8) - 2021-10-31T11:38:03Z
+
+- Improved: Enable safe mode for Markdown editor too ([#5593](https://github.com/laurent22/joplin/issues/5593))
+- Fixed: Do not render very large code blocks to prevent app from freezing ([#5593](https://github.com/laurent22/joplin/issues/5593))
+
+## [v2.5.7](https://github.com/laurent22/joplin/releases/tag/v2.5.7) (Pre-release) - 2021-10-29T14:47:33Z
+
+- Improved: Upgrade to Electron 15.1.3 (9704b29)
+
+## [v2.5.6](https://github.com/laurent22/joplin/releases/tag/v2.5.6) (Pre-release) - 2021-10-28T22:03:09Z
+
+- New: Added mechanism to migrate default settings to new values (72db8e4)
+- Improved: Improved Joplin Server configuration check to better handle disabled accounts (72c1235)
+- Improved: Improved handling of expired sessions when using Joplin Server (ace1118)
+- Improved: Improved master password state handling in Encryption screen (7d62df8)
+- Fixed: Fixed Goto Anything scrolling for long lists (22e5c3a)
+
 ## [v2.5.4](https://github.com/laurent22/joplin/releases/tag/v2.5.4) (Pre-release) - 2021-10-19T10:10:54Z
 
 - New: Add support for public-private key pairs and improved master password support ([#5438](https://github.com/laurent22/joplin/issues/5438))
