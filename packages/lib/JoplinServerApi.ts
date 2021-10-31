@@ -65,7 +65,7 @@ export default class JoplinServerApi {
 		if (this.session_) return this.session_;
 
 		try {
-			this.session_ = await this.exec('POST', 'api/sessions', null, {
+			this.session_ = await this.exec_('POST', 'api/sessions', null, {
 				email: this.options_.username(),
 				password: this.options_.password(),
 			});
