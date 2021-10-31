@@ -393,7 +393,7 @@ export default class ItemModel extends BaseModel<Item> {
 	private childrenQuery(userId: Uuid, pathQuery: string = '', count: boolean = false, options: LoadOptions = {}): Knex.QueryBuilder {
 		const query = this
 			.db('user_items')
-			.leftJoin('items', 'user_items.item_id', 'items.id')
+			.innerJoin('items', 'user_items.item_id', 'items.id')
 			.where('user_items.user_id', '=', userId);
 
 		if (count) {
