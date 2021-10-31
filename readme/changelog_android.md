@@ -1,6 +1,6 @@
 # Joplin Android app changelog
 
-## [android-v2.5.4](https://github.com/laurent22/joplin/releases/tag/android-v2.5.4) (Pre-release) - 2021-10-31T10:24:30Z
+## [android-v2.5.5](https://github.com/laurent22/joplin/releases/tag/android-v2.5.5) (Pre-release) - 2021-10-31T11:03:16Z
 
 - New: Add padding around beta text editor (365e152)
 - Improved: Capitalise first word of sentence in beta editor (4128be9)
