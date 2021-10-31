@@ -1,5 +1,11 @@
 # Joplin Android app changelog
 
+## [android-v2.5.4](https://github.com/laurent22/joplin/releases/tag/android-v2.5.4) (Pre-release) - 2021-10-31T10:24:30Z
+
+- New: Add padding around beta text editor (365e152)
+- Improved: Capitalise first word of sentence in beta editor (4128be9)
+- Fixed: Do not render very large code blocks to prevent app from freezing (#5593)
+
 ## [android-v2.5.3](https://github.com/laurent22/joplin/releases/tag/android-v2.5.3) (Pre-release) - 2021-10-28T21:47:18Z
 
 - New: Add support for public-private key pairs and improved master password support (#5438)
