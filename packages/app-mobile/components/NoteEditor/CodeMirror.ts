@@ -145,6 +145,7 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 				drawSelection(),
 				highlightSpecialChars(),
 				EditorView.lineWrapping,
+				EditorView.contentAttributes.of({ autocapitalize: 'sentence' }),
 				defaultHighlightStyle.fallback,
 				EditorView.updateListener.of((viewUpdate: ViewUpdate) => {
 					if (viewUpdate.docChanged) {
