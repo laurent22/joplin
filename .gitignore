@@ -48,7 +48,7 @@ TODO.md
 packages/tools/commit_hook.txt
 packages/tools/github_oauth_token.txt
 lerna-debug.log
-.env
+/.env
 docs/**/*.mustache
 
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD

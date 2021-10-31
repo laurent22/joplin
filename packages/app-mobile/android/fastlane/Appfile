@@ -1,0 +1,2 @@
+json_key_file(ENV['PLAY_STORE_PRIVATE_KEY'])
+package_name("net.cozic.joplin")

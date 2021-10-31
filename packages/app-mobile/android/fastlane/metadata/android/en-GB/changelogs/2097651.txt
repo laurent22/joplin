@@ -1,0 +1,7 @@
+- Fixed: Misinterpreted search term after filter in quotation marks
+- Improved: Improved sync locks so that they do not prevent upgrading a sync target
+- Improved: Show the used tags first in the tagging dialog
+- Improved: Update Mermaid 8.10.2 -> 8.12.1 and fix gitGraph crash
+- New: Add a way to disable a master key
+- New: Add support for single master password, to simplify handling of multiple encryption keys
+- New: Added "None" sync target to allow disabling synchronisation

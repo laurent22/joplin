@@ -1,0 +1,7 @@
+Joplin is a free, open source note taking and to-do application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be copied, tagged and modified. The Android application supports markdown rendering.
+
+The notes can be synchronised with your other devices via Dropbox, OneDrive, Nextcloud or WebDAV. Joplin is also available for Windows, macOS and Linux and all can synchronise with each others so your notes can be available on your mobile phone, computer, tablet, etc. Please see the official website for the list of available applications: https://joplinapp.org/
+
+The desktop applications can be used to import notes from Evenote via .enex files, including the formatted content (which is converted to markdown), resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.). These imported notes can then be synchronised with the Android app.
+
+Getting support: To get support please use the forum at https://discourse.joplinapp.org/
