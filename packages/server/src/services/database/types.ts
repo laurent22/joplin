@@ -258,6 +258,16 @@ export interface Item extends WithDates, WithUuid {
 	owner_id?: Uuid;
 }
 
+export interface Lock {
+	id?: Uuid;
+	user_id?: Uuid;
+	type?: number;
+	client_type?: string;
+	client_id?: Uuid;
+	updated_time?: string;
+	created_time?: string;
+}
+
 export const databaseSchema: DatabaseTables = {
 	sessions: {
 		id: { type: 'string' },
@@ -429,6 +439,15 @@ export const databaseSchema: DatabaseTables = {
 		jop_encryption_applied: { type: 'number' },
 		jop_updated_time: { type: 'string' },
 		owner_id: { type: 'string' },
+	},
+	locks: {
+		id: { type: 'string' },
+		user_id: { type: 'string' },
+		type: { type: 'number' },
+		client_type: { type: 'string' },
+		client_id: { type: 'string' },
+		updated_time: { type: 'string' },
+		created_time: { type: 'string' },
 	},
 };
 // AUTO-GENERATED-TYPES

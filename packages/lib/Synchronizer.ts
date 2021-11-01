@@ -1,5 +1,5 @@
 import Logger from './Logger';
-import LockHandler, { LockType } from './services/synchronizer/LockHandler';
+import LockHandler, { hasActiveLock, LockType } from './services/synchronizer/LockHandler';
 import Setting from './models/Setting';
 import shim from './shim';
 import MigrationHandler from './services/synchronizer/MigrationHandler';
@@ -298,10 +298,13 @@ export default class Synchronizer {
 	}
 
 	async lockErrorStatus_() {
-		const hasActiveExclusiveLock = await this.lockHandler().hasActiveLock(LockType.Exclusive);
+		const locks = await this.lockHandler().locks();
+		const currentDate = await this.lockHandler().currentDate();
+
+		const hasActiveExclusiveLock = await hasActiveLock(locks, currentDate, this.lockHandler().lockTtl, LockType.Exclusive);
 		if (hasActiveExclusiveLock) return 'hasExclusiveLock';
 
-		const hasActiveSyncLock = await this.lockHandler().hasActiveLock(LockType.Sync, this.appType_, this.clientId_);
+		const hasActiveSyncLock = await hasActiveLock(locks, currentDate, this.lockHandler().lockTtl, LockType.Sync, this.appType_, this.clientId_);
 		if (!hasActiveSyncLock) return 'syncLockGone';
 
 		return '';

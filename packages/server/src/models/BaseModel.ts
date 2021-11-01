@@ -95,6 +95,10 @@ export default abstract class BaseModel<T> {
 		return this.db_;
 	}
 
+	protected get dbRead(): DbConnection {
+		return this.db;
+	}
+
 	protected get defaultFields(): string[] {
 		if (!this.defaultFields_.length) {
 			this.defaultFields_ = Object.keys(databaseSchema[this.tableName]);

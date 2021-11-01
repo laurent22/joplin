@@ -79,8 +79,8 @@ export class ErrorUnprocessableEntity extends ApiError {
 export class ErrorConflict extends ApiError {
 	public static httpCode: number = 409;
 
-	public constructor(message: string = 'Conflict') {
-		super(message, ErrorConflict.httpCode);
+	public constructor(message: string = 'Conflict', code: string = undefined) {
+		super(message, ErrorConflict.httpCode, code);
 		Object.setPrototypeOf(this, ErrorConflict.prototype);
 	}
 }
