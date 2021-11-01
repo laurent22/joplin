@@ -153,12 +153,12 @@ export default class InteropServiceHelper {
 
 		if (module.target === 'file') {
 			const noteId = options.sourceNoteIds && options.sourceNoteIds.length ? options.sourceNoteIds[0] : null;
-			path = bridge().showSaveDialog({
+			path = await bridge().showSaveDialog({
 				filters: [{ name: module.description, extensions: module.fileExtensions }],
 				defaultPath: await this.defaultFilename(noteId, module.fileExtensions[0]),
 			});
 		} else {
-			path = bridge().showOpenDialog({
+			path = await bridge().showOpenDialog({
 				properties: ['openDirectory', 'createDirectory'],
 			});
 		}

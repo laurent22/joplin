@@ -107,7 +107,7 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 			label: _('Save as...'),
 			onAction: async (options: ContextMenuOptions) => {
 				const { resourcePath, resource } = await resourceInfo(options);
-				const filePath = bridge().showSaveDialog({
+				const filePath = await bridge().showSaveDialog({
 					defaultPath: resource.filename ? resource.filename : resource.title,
 				});
 				if (!filePath) return;

@@ -65,7 +65,7 @@ export async function commandAttachFileToBody(body: string, filePaths: string[] 
 	};
 
 	if (!filePaths) {
-		filePaths = bridge().showOpenDialog({
+		filePaths = await bridge().showOpenDialog({
 			properties: ['openFile', 'createDirectory', 'multiSelections'],
 		});
 		if (!filePaths || !filePaths.length) return null;

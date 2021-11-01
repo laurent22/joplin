@@ -481,8 +481,8 @@ class ConfigScreenComponent extends React.Component<any, any> {
 					updateSettingValue(key, joinCmd(cmd));
 				};
 
-				const browseButtonClick = () => {
-					const paths = bridge().showOpenDialog();
+				const browseButtonClick = async () => {
+					const paths = await bridge().showOpenDialog();
 					if (!paths || !paths.length) return;
 					const cmd = splitCmd(this.state.settings[key]);
 					cmd[0] = paths[0];
