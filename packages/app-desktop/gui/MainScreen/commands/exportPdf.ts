@@ -20,12 +20,12 @@ export const runtime = (comp: any): CommandRuntime => {
 
 				let path = null;
 				if (noteIds.length === 1) {
-					path = bridge().showSaveDialog({
+					path = await bridge().showSaveDialog({
 						filters: [{ name: _('PDF File'), extensions: ['pdf'] }],
 						defaultPath: await InteropServiceHelper.defaultFilename(noteIds[0], 'pdf'),
 					});
 				} else {
-					path = bridge().showOpenDialog({
+					path = await bridge().showOpenDialog({
 						properties: ['openDirectory', 'createDirectory'],
 					});
 				}

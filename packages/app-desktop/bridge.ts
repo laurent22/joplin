@@ -125,25 +125,25 @@ export class Bridge {
 		return this.window().webContents.closeDevTools();
 	}
 
-	showSaveDialog(options: any) {
+	async showSaveDialog(options: any) {
 		const { dialog } = require('electron');
 		if (!options) options = {};
 		if (!('defaultPath' in options) && this.lastSelectedPaths_.file) options.defaultPath = this.lastSelectedPaths_.file;
-		const filePath = dialog.showSaveDialogSync(this.window(), options);
+		const { filePath } = await dialog.showSaveDialog(this.window(), options);
 		if (filePath) {
 			this.lastSelectedPaths_.file = filePath;
 		}
 		return filePath;
 	}
 
-	showOpenDialog(options: any = null) {
+	async showOpenDialog(options: any = null) {
 		const { dialog } = require('electron');
 		if (!options) options = {};
 		let fileType = 'file';
 		if (options.properties && options.properties.includes('openDirectory')) fileType = 'directory';
 		if (!('defaultPath' in options) && this.lastSelectedPaths_[fileType]) options.defaultPath = this.lastSelectedPaths_[fileType];
 		if (!('createDirectory' in options)) options.createDirectory = true;
-		const filePaths = dialog.showOpenDialogSync(this.window(), options);
+		const { filePaths } = await dialog.showOpenDialog(this.window(), options);
 		if (filePaths && filePaths.length) {
 			this.lastSelectedPaths_[fileType] = dirname(filePaths[0]);
 		}

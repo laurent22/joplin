@@ -181,7 +181,7 @@ export default function(props: Props) {
 	}, [pluginSettings, props.onChange]);
 
 	const onInstall = useCallback(async () => {
-		const result = bridge().showOpenDialog({
+		const result = await bridge().showOpenDialog({
 			filters: [{ name: 'Joplin Plugin Archive', extensions: ['jpl'] }],
 		});
 
