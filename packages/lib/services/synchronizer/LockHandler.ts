@@ -112,14 +112,14 @@ export interface LockHandlerOptions {
 	lockTtl?: number;
 }
 
-export const lockDefaultTtl = 1000 * 60 * 3;
+export const defaultLockTtl = 1000 * 60 * 3;
 
 export default class LockHandler {
 
 	private api_: FileApi = null;
 	private refreshTimers_: RefreshTimers = {};
 	private autoRefreshInterval_: number = 1000 * 60;
-	private lockTtl_: number = lockDefaultTtl;
+	private lockTtl_: number = defaultLockTtl;
 
 	public constructor(api: FileApi, options: LockHandlerOptions = null) {
 		if (!options) options = {};

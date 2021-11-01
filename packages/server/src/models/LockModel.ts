@@ -1,13 +1,13 @@
 import BaseModel, { UuidType } from './BaseModel';
 import { Uuid } from '../services/database/types';
-import { Lock, LockType, lockDefaultTtl, activeLock } from '@joplin/lib/services/synchronizer/LockHandler';
+import { Lock, LockType, defaultLockTtl, activeLock } from '@joplin/lib/services/synchronizer/LockHandler';
 import { Value } from './KeyValueModel';
 import { ErrorConflict } from '../utils/errors';
 import uuidgen from '../utils/uuidgen';
 
 export default class LockModel extends BaseModel<Lock> {
 
-	private lockTtl_: number = lockDefaultTtl;
+	private lockTtl_: number = defaultLockTtl;
 
 	protected get tableName(): string {
 		return 'locks';
@@ -18,8 +18,6 @@ export default class LockModel extends BaseModel<Lock> {
 	}
 
 	// TODO: validate lock when acquiring and releasing
-	// TODO: test "should allow exclusive lock if the sync locks have expired"
-	// TODO: test "should not allow exclusive lock if there are sync locks"
 
 	private get lockTtl() {
 		return this.lockTtl_;
