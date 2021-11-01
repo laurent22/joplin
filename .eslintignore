@@ -727,9 +727,15 @@ packages/app-desktop/services/plugins/hooks/useWebviewToPluginMessages.js.map
 packages/app-desktop/services/sortOrder/PerFolderSortOrderService.d.ts
 packages/app-desktop/services/sortOrder/PerFolderSortOrderService.js
 packages/app-desktop/services/sortOrder/PerFolderSortOrderService.js.map
+packages/app-desktop/services/sortOrder/PerFolderSortOrderService.test.d.ts
+packages/app-desktop/services/sortOrder/PerFolderSortOrderService.test.js
+packages/app-desktop/services/sortOrder/PerFolderSortOrderService.test.js.map
 packages/app-desktop/services/sortOrder/notesSortOrderUtils.d.ts
 packages/app-desktop/services/sortOrder/notesSortOrderUtils.js
 packages/app-desktop/services/sortOrder/notesSortOrderUtils.js.map
+packages/app-desktop/services/sortOrder/notesSortOrderUtils.test.d.ts
+packages/app-desktop/services/sortOrder/notesSortOrderUtils.test.js
+packages/app-desktop/services/sortOrder/notesSortOrderUtils.test.js.map
 packages/app-desktop/services/spellChecker/SpellCheckerServiceDriverNative.d.ts
 packages/app-desktop/services/spellChecker/SpellCheckerServiceDriverNative.js
 packages/app-desktop/services/spellChecker/SpellCheckerServiceDriverNative.js.map
