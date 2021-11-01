@@ -2,6 +2,7 @@ import { MultiPutItem } from './file-api';
 import JoplinError from './JoplinError';
 import JoplinServerApi from './JoplinServerApi';
 import { trimSlashes } from './path-utils';
+import { Lock, LockType } from './services/synchronizer/LockHandler';
 
 // All input paths should be in the format: "path/to/file". This is converted to
 // "root:/path/to/file:" when doing the API call.
@@ -37,6 +38,10 @@ export default class FileApiDriverJoplinServer {
 	}
 
 	public get supportsAccurateTimestamp() {
+		return true;
+	}
+
+	public get supportsLocks() {
 		return true;
 	}
 
@@ -196,12 +201,30 @@ export default class FileApiDriverJoplinServer {
 		throw new Error('Not supported');
 	}
 
+	public async acquireLock(type: LockType, clientType: string, clientId: string): Promise<Lock> {
+		return this.api().exec('POST', 'api/locks', null, {
+			type,
+			clientType: clientType,
+			clientId: clientId,
+		});
+	}
+
+	public async releaseLock(type: LockType, clientType: string, clientId: string) {
+		await this.api().exec('DELETE', `api/locks/${type}_${clientType}_${clientId}`);
+	}
+
+	public async listLocks() {
+		return this.api().exec('GET', 'api/locks');
+	}
+
 	public async clearRoot(path: string) {
 		const response = await this.list(path);
 
 		for (const item of response.items) {
 			await this.delete(item.path);
 		}
+
+		await this.api().exec('POST', 'api/debug', null, { action: 'clearKeyValues' });
 
 		if (response.has_more) throw new Error('has_more support not implemented');
 	}

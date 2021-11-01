@@ -2,9 +2,10 @@ import config from '../../config';
 import { clearDatabase, createTestUsers, CreateTestUsersOptions } from '../../tools/debugTools';
 import { bodyFields } from '../../utils/requestUtils';
 import Router from '../../utils/Router';
-import { RouteType } from '../../utils/types';
+import { Env, RouteType } from '../../utils/types';
 import { SubPath } from '../../utils/routeUtils';
 import { AppContext } from '../../utils/types';
+import { ErrorForbidden } from '../../utils/errors';
 
 const router = new Router(RouteType.Api);
 
@@ -17,7 +18,10 @@ interface Query {
 }
 
 router.post('api/debug', async (_path: SubPath, ctx: AppContext) => {
+	if (config().env !== Env.Dev) throw new ErrorForbidden();
+
 	const query: Query = (await bodyFields(ctx.req)) as Query;
+	const models = ctx.joplin.models;
 
 	console.info(`Action: ${query.action}`);
 
@@ -32,6 +36,10 @@ router.post('api/debug', async (_path: SubPath, ctx: AppContext) => {
 
 	if (query.action === 'clearDatabase') {
 		await clearDatabase(ctx.joplin.db);
+	}
+
+	if (query.action === 'clearKeyValues') {
+		await models.keyValue().deleteAll();
 	}
 });
 

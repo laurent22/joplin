@@ -72,6 +72,7 @@ import SubscriptionModel from './SubscriptionModel';
 import UserFlagModel from './UserFlagModel';
 import EventModel from './EventModel';
 import { Config } from '../utils/types';
+import LockModel from './LockModel';
 
 export class Models {
 
@@ -145,6 +146,10 @@ export class Models {
 
 	public event() {
 		return new EventModel(this.db_, newModelFactory, this.config_);
+	}
+
+	public lock() {
+		return new LockModel(this.db_, newModelFactory, this.config_);
 	}
 
 }

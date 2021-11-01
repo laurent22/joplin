@@ -12,7 +12,7 @@ export async function allNotesFolders() {
 
 async function remoteItemsByTypes(types: number[]) {
 	const list = await fileApi().list('', { includeDirs: false, syncItemsOnly: true });
-	if (list.has_more) throw new Error('Not implemented!!!');
+	if (list.hasMore) throw new Error('Not implemented!!!');
 	const files = list.items;
 
 	const output = [];
