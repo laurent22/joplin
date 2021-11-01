@@ -19,6 +19,7 @@ import apiVersionHandler from './middleware/apiVersionHandler';
 import clickJackingHandler from './middleware/clickJackingHandler';
 import newModelFactory from './models/factory';
 import setupCommands from './utils/setupCommands';
+import { RouteResponseFormat, routeResponseFormat } from './utils/routeUtils';
 
 interface Argv {
 	env?: Env;
@@ -139,17 +140,28 @@ async function main() {
 		} catch (error) {
 			ctx.status = error.httpCode || 500;
 
-			// Since this is a low level error, rendering a view might fail too,
-			// so catch this and default to rendering JSON.
-			try {
-				ctx.body = await ctx.joplin.services.mustache.renderView({
-					name: 'error',
-					title: 'Error',
-					path: 'index/error',
-					content: { error },
-				});
-			} catch (anotherError) {
-				ctx.body = { error: anotherError.message };
+			appLogger().error(`Middleware error on ${ctx.path}:`, error);
+
+			const responseFormat = routeResponseFormat(ctx);
+
+			if (responseFormat === RouteResponseFormat.Html) {
+				// Since this is a low level error, rendering a view might fail too,
+				// so catch this and default to rendering JSON.
+				try {
+					ctx.response.set('Content-Type', 'text/html');
+					ctx.body = await ctx.joplin.services.mustache.renderView({
+						name: 'error',
+						title: 'Error',
+						path: 'index/error',
+						content: { error },
+					});
+				} catch (anotherError) {
+					ctx.response.set('Content-Type', 'application/json');
+					ctx.body = JSON.stringify({ error: error.message });
+				}
+			} else {
+				ctx.response.set('Content-Type', 'application/json');
+				ctx.body = JSON.stringify({ error: error.message });
 			}
 		}
 	});
