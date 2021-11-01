@@ -1,6 +1,6 @@
-import { defaultLockTtl, LockType } from '@joplin/lib/services/synchronizer/LockHandler';
 import { ErrorConflict } from '../utils/errors';
 import { beforeAllDb, afterAllTests, beforeEachDb, models, createUserAndSession, expectHttpError } from '../utils/testing/testUtils';
+import { LockType, LockClientType, defaultLockTtl } from '@joplin/lib/services/synchronizer/LockHandler';
 
 describe('LockModel', function() {
 
@@ -24,18 +24,18 @@ describe('LockModel', function() {
 		const t1 = new Date('2020-01-01').getTime();
 		jest.setSystemTime(t1);
 
-		await models().lock().acquireLock(user.id, LockType.Sync, 'desktop', '1111');
-		await models().lock().acquireLock(user.id, LockType.Sync, 'desktop', '2222');
+		await models().lock().acquireLock(user.id, LockType.Sync, LockClientType.Desktop, '1111');
+		await models().lock().acquireLock(user.id, LockType.Sync, LockClientType.Desktop, '2222');
 
 		// First confirm that it's not possible to acquire an exclusive lock if
 		// there are sync locks.
-		await expectHttpError(async () => models().lock().acquireLock(user.id, LockType.Exclusive, 'desktop', '3333'), ErrorConflict.httpCode);
+		await expectHttpError(async () => models().lock().acquireLock(user.id, LockType.Exclusive, LockClientType.Desktop, '3333'), ErrorConflict.httpCode);
 
 		jest.setSystemTime(t1 + defaultLockTtl + 1);
 
 		// Now that the sync locks have expired check that it's possible to
 		// acquire a sync lock.
-		const exclusiveLock = await models().lock().acquireLock(user.id, LockType.Exclusive, 'desktop', '3333');
+		const exclusiveLock = await models().lock().acquireLock(user.id, LockType.Exclusive, LockClientType.Desktop, '3333');
 		expect(exclusiveLock).toBeTruthy();
 
 		jest.useRealTimers();
@@ -45,13 +45,13 @@ describe('LockModel', function() {
 		const { user: user1 } = await createUserAndSession(1);
 		const { user: user2 } = await createUserAndSession(2);
 
-		await models().lock().acquireLock(user1.id, LockType.Sync, 'desktop', '1111');
+		await models().lock().acquireLock(user1.id, LockType.Sync, LockClientType.Desktop, '1111');
 
 		// If user 1 tries to get an exclusive lock, it should fail
-		await expectHttpError(async () => models().lock().acquireLock(user1.id, LockType.Exclusive, 'desktop', '3333'), ErrorConflict.httpCode);
+		await expectHttpError(async () => models().lock().acquireLock(user1.id, LockType.Exclusive, LockClientType.Desktop, '3333'), ErrorConflict.httpCode);
 
 		// But it should work for user 2
-		const exclusiveLock = await models().lock().acquireLock(user2.id, LockType.Exclusive, 'desktop', '3333');
+		const exclusiveLock = await models().lock().acquireLock(user2.id, LockType.Exclusive, LockClientType.Desktop, '3333');
 		expect(exclusiveLock).toBeTruthy();
 	});
 

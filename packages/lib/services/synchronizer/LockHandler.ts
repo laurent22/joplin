@@ -1,21 +1,26 @@
 import { Dirnames } from './utils/types';
 import shim from '../../shim';
-
 import JoplinError from '../../JoplinError';
 import time from '../../time';
 import { FileApi } from '../../file-api';
 const { fileExtension, filename } = require('../../path-utils');
 
 export enum LockType {
-	None = '',
-	Sync = 'sync',
-	Exclusive = 'exclusive',
+	None = 0,
+	Sync = 1,
+	Exclusive = 2,
+}
+
+export enum LockClientType {
+	Desktop = 1,
+	Mobile = 2,
+	Cli = 3,
 }
 
 export interface Lock {
 	id?: string;
 	type: LockType;
-	clientType: string;
+	clientType: LockClientType;
 	clientId: string;
 	updatedTime?: number;
 }
@@ -27,15 +32,21 @@ function lockIsActive(lock: Lock, currentDate: Date, lockTtl: number): boolean {
 export function lockNameToObject(name: string, updatedTime: number = null): Lock {
 	const p = name.split('_');
 
-	return {
-		type: p[0] as LockType,
-		clientType: p[1],
+	const lock: Lock = {
+		id: null,
+		type: Number(p[0]) as LockType,
+		clientType: Number(p[1]) as LockClientType,
 		clientId: p[2],
-		updatedTime: updatedTime,
+		updatedTime,
 	};
+
+	if (isNaN(lock.clientType)) throw new Error(`Invalid lock client type: ${name}`);
+	if (isNaN(lock.type)) throw new Error(`Invalid lock type: ${name}`);
+
+	return lock;
 }
 
-export function hasActiveLock(locks: Lock[], currentDate: Date, lockTtl: number, lockType: LockType, clientType: string = null, clientId: string = null) {
+export function hasActiveLock(locks: Lock[], currentDate: Date, lockTtl: number, lockType: LockType, clientType: LockClientType = null, clientId: string = null) {
 	const lock = activeLock(locks, currentDate, lockTtl, lockType, clientType, clientId);
 	return !!lock;
 }
@@ -43,7 +54,7 @@ export function hasActiveLock(locks: Lock[], currentDate: Date, lockTtl: number,
 // Finds if there's an active lock for this clientType and clientId and returns it.
 // If clientType and clientId are not specified, returns the first active lock
 // of that type instead.
-export function activeLock(locks: Lock[], currentDate: Date, lockTtl: number, lockType: LockType, clientType: string = null, clientId: string = null) {
+export function activeLock(locks: Lock[], currentDate: Date, lockTtl: number, lockType: LockType, clientType: LockClientType = null, clientId: string = null) {
 	if (lockType === LockType.Exclusive) {
 		const activeLocks = locks
 			.slice()
@@ -150,8 +161,8 @@ export default class LockHandler {
 	private lockTypeFromFilename(name: string): LockType {
 		const ext = fileExtension(name);
 		if (ext !== 'json') return LockType.None;
-		if (name.indexOf(LockType.Sync) === 0) return LockType.Sync;
-		if (name.indexOf(LockType.Exclusive) === 0) return LockType.Exclusive;
+		if (name.indexOf(LockType.Sync.toString()) === 0) return LockType.Sync;
+		if (name.indexOf(LockType.Exclusive.toString()) === 0) return LockType.Exclusive;
 		return LockType.None;
 	}
 
@@ -193,7 +204,7 @@ export default class LockHandler {
 		return this.saveLock(lock);
 	}
 
-	private async acquireSyncLock(clientType: string, clientId: string): Promise<Lock> {
+	private async acquireSyncLock(clientType: LockClientType, clientId: string): Promise<Lock> {
 		if (this.useBuiltInLocks) return this.api_.acquireLock(LockType.Sync, clientType, clientId);
 
 		try {
@@ -242,7 +253,7 @@ export default class LockHandler {
 		return `(${lock.clientType} #${lock.clientId})`;
 	}
 
-	private async acquireExclusiveLock(clientType: string, clientId: string, options: AcquireLockOptions = null): Promise<Lock> {
+	private async acquireExclusiveLock(clientType: LockClientType, clientId: string, options: AcquireLockOptions = null): Promise<Lock> {
 		if (this.useBuiltInLocks) return this.api_.acquireLock(LockType.Exclusive, clientType, clientId);
 
 		// The logic to acquire an exclusive lock, while avoiding race conditions is as follow:
@@ -399,7 +410,7 @@ export default class LockHandler {
 		delete this.refreshTimers_[handle];
 	}
 
-	public async acquireLock(lockType: LockType, clientType: string, clientId: string, options: AcquireLockOptions = null): Promise<Lock> {
+	public async acquireLock(lockType: LockType, clientType: LockClientType, clientId: string, options: AcquireLockOptions = null): Promise<Lock> {
 		options = {
 			...defaultAcquireLockOptions(),
 			...options,
@@ -414,7 +425,7 @@ export default class LockHandler {
 		}
 	}
 
-	public async releaseLock(lockType: LockType, clientType: string, clientId: string) {
+	public async releaseLock(lockType: LockType, clientType: LockClientType, clientId: string) {
 		if (this.useBuiltInLocks) {
 			await this.api_.releaseLock(lockType, clientType, clientId);
 			return;

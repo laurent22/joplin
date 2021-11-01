@@ -5,7 +5,7 @@
 //
 // These tests work by a taking a sync target snapshot at a version n and upgrading it to n+1.
 
-import LockHandler from './LockHandler';
+import LockHandler, { LockClientType } from './LockHandler';
 import MigrationHandler from './MigrationHandler';
 import { Dirnames } from './utils/types';
 import { setSyncTargetName, fileApi, synchronizer, decryptionWorker, encryptionService, setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow, db } from '../../testing/test-utils';
@@ -28,7 +28,7 @@ function lockHandler(): LockHandler {
 
 function migrationHandler(clientId: string = 'abcd'): MigrationHandler {
 	if (migrationHandler_) return migrationHandler_;
-	migrationHandler_ = new MigrationHandler(fileApi(), db(), lockHandler(), 'desktop', clientId);
+	migrationHandler_ = new MigrationHandler(fileApi(), db(), lockHandler(), LockClientType.Desktop, clientId);
 	return migrationHandler_;
 }
 

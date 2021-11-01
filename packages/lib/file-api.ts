@@ -5,7 +5,7 @@ import time from './time';
 
 const { isHidden } = require('./path-utils');
 import JoplinError from './JoplinError';
-import { Lock, LockType } from './services/synchronizer/LockHandler';
+import { Lock, LockClientType, LockType } from './services/synchronizer/LockHandler';
 const ArrayUtils = require('./ArrayUtils');
 const { sprintf } = require('sprintf-js');
 const Mutex = require('async-mutex').Mutex;
@@ -355,12 +355,12 @@ class FileApi {
 		return tryAndRepeat(() => this.driver_.delta(this.fullPath(path), options), this.requestRepeatCount());
 	}
 
-	public async acquireLock(type: LockType, clientType: string, clientId: string): Promise<Lock> {
+	public async acquireLock(type: LockType, clientType: LockClientType, clientId: string): Promise<Lock> {
 		if (!this.supportsLocks) throw new Error('Sync target does not support built-in locks');
 		return tryAndRepeat(() => this.driver_.acquireLock(type, clientType, clientId), this.requestRepeatCount());
 	}
 
-	public async releaseLock(type: LockType, clientType: string, clientId: string) {
+	public async releaseLock(type: LockType, clientType: LockClientType, clientId: string) {
 		if (!this.supportsLocks) throw new Error('Sync target does not support built-in locks');
 		return tryAndRepeat(() => this.driver_.releaseLock(type, clientType, clientId), this.requestRepeatCount());
 	}

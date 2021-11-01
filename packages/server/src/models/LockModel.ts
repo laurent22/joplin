@@ -1,6 +1,6 @@
 import BaseModel, { UuidType } from './BaseModel';
 import { Uuid } from '../services/database/types';
-import { Lock, LockType, defaultLockTtl, activeLock } from '@joplin/lib/services/synchronizer/LockHandler';
+import { LockType, Lock, LockClientType, defaultLockTtl, activeLock } from '@joplin/lib/services/synchronizer/LockHandler';
 import { Value } from './KeyValueModel';
 import { ErrorConflict } from '../utils/errors';
 import uuidgen from '../utils/uuidgen';
@@ -17,8 +17,6 @@ export default class LockModel extends BaseModel<Lock> {
 		return UuidType.Native;
 	}
 
-	// TODO: validate lock when acquiring and releasing
-
 	private get lockTtl() {
 		return this.lockTtl_;
 	}
@@ -29,17 +27,17 @@ export default class LockModel extends BaseModel<Lock> {
 		return v ? JSON.parse(v) : [];
 	}
 
-	private async acquireSyncLock(userId: Uuid, clientType: string, clientId: string): Promise<Lock> {
+	private async acquireSyncLock(userId: Uuid, clientType: LockClientType, clientId: string): Promise<Lock> {
 		const userKey = `locks::${userId}`;
 		let output: Lock = null;
 
 		await this.models().keyValue().readThenWrite(userKey, async (value: Value) => {
 			let locks: Lock[] = value ? JSON.parse(value as string) : [];
 
-			const exclusiveLock = activeLock(locks, new Date(), this.lockTtl, LockType.Exclusive);
+			const libExclusiveLock = activeLock(locks, new Date(), this.lockTtl, LockType.Exclusive);
 
-			if (exclusiveLock) {
-				throw new ErrorConflict(`Cannot acquire lock because there is already an exclusive lock for client: ${exclusiveLock.clientType} #${exclusiveLock.clientId}`, 'hasExclusiveLock');
+			if (libExclusiveLock) {
+				throw new ErrorConflict(`Cannot acquire lock because there is already an exclusive lock for client: ${libExclusiveLock.clientType} #${libExclusiveLock.clientId}`, 'hasExclusiveLock');
 			}
 
 			const syncLock = activeLock(locks, new Date(), this.lockTtl, LockType.Sync, clientType, clientId);
@@ -69,7 +67,7 @@ export default class LockModel extends BaseModel<Lock> {
 		return output;
 	}
 
-	private async acquireExclusiveLock(userId: Uuid, clientType: string, clientId: string): Promise<Lock> {
+	private async acquireExclusiveLock(userId: Uuid, clientType: LockClientType, clientId: string): Promise<Lock> {
 		const userKey = `locks::${userId}`;
 		let output: Lock = null;
 
@@ -94,13 +92,13 @@ export default class LockModel extends BaseModel<Lock> {
 				}
 			}
 
-			const syncLock = activeLock(locks, new Date(), this.lockTtl, LockType.Sync);
+			const libSyncLock = activeLock(locks, new Date(), this.lockTtl, LockType.Sync);
 
-			if (syncLock) {
-				if (syncLock.clientId === clientId) {
-					locks = locks.filter(l => l.id !== syncLock.id);
+			if (libSyncLock) {
+				if (libSyncLock.clientId === clientId) {
+					locks = locks.filter(l => l.id !== libSyncLock.id);
 				} else {
-					throw new ErrorConflict(`Cannot acquire exclusive lock because there is an active sync lock for client: ${syncLock.clientType} #${syncLock.clientId}`, 'hasSyncLock');
+					throw new ErrorConflict(`Cannot acquire exclusive lock because there is an active sync lock for client: ${libSyncLock.clientType} #${libSyncLock.clientId}`, 'hasSyncLock');
 				}
 			}
 
@@ -120,7 +118,7 @@ export default class LockModel extends BaseModel<Lock> {
 		return output;
 	}
 
-	public async acquireLock(userId: Uuid, type: LockType, clientType: string, clientId: string): Promise<Lock> {
+	public async acquireLock(userId: Uuid, type: LockType, clientType: LockClientType, clientId: string): Promise<Lock> {
 		if (type === LockType.Sync) {
 			return this.acquireSyncLock(userId, clientType, clientId);
 		} else {
@@ -128,7 +126,7 @@ export default class LockModel extends BaseModel<Lock> {
 		}
 	}
 
-	public async releaseLock(userId: Uuid, lockType: LockType, clientType: string, clientId: string) {
+	public async releaseLock(userId: Uuid, lockType: LockType, clientType: LockClientType, clientId: string) {
 		const userKey = `locks::${userId}`;
 
 		await this.models().keyValue().readThenWrite(userKey, async (value: Value) => {

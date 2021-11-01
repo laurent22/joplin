@@ -1,4 +1,4 @@
-import LockHandler, { LockType } from './LockHandler';
+import LockHandler, { LockClientType, LockType } from './LockHandler';
 import { Dirnames } from './utils/types';
 import BaseService from '../BaseService';
 import migration1 from './migrations/1';
@@ -33,11 +33,11 @@ export default class MigrationHandler extends BaseService {
 
 	private api_: FileApi = null;
 	private lockHandler_: LockHandler = null;
-	private clientType_: string;
+	private clientType_: LockClientType;
 	private clientId_: string;
 	private db_: JoplinDatabase;
 
-	public constructor(api: FileApi, db: JoplinDatabase, lockHandler: LockHandler, clientType: string, clientId: string) {
+	public constructor(api: FileApi, db: JoplinDatabase, lockHandler: LockHandler, clientType: LockClientType, clientId: string) {
 		super();
 		this.api_ = api;
 		this.db_ = db;

@@ -1,4 +1,4 @@
-import { lockNameToObject, LockType } from '@joplin/lib/services/synchronizer/LockHandler';
+import { LockType, LockClientType, lockNameToObject } from '@joplin/lib/services/synchronizer/LockHandler';
 import { bodyFields } from '../../utils/requestUtils';
 import Router from '../../utils/Router';
 import { SubPath } from '../../utils/routeUtils';
@@ -8,7 +8,7 @@ const router = new Router(RouteType.Api);
 
 interface PostFields {
 	type: LockType;
-	clientType: string;
+	clientType: LockClientType;
 	clientId: string;
 }
 
