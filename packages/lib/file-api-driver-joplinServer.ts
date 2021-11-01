@@ -203,6 +203,8 @@ export default class FileApiDriverJoplinServer {
 			await this.delete(item.path);
 		}
 
+		await this.api().exec('POST', 'api/debug', null, { action: 'clearKeyValues' });
+
 		if (response.has_more) throw new Error('has_more support not implemented');
 	}
 }
