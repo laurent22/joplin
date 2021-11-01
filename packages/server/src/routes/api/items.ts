@@ -5,116 +5,17 @@ import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
 import * as fs from 'fs-extra';
-import { ErrorBadRequest, ErrorForbidden, ErrorMethodNotAllowed, ErrorNotFound, ErrorPayloadTooLarge, errorToPlainObject } from '../../utils/errors';
-import ItemModel, { ItemSaveOption, PaginatedItems, SaveFromRawContentItem } from '../../models/ItemModel';
+import { ErrorForbidden, ErrorMethodNotAllowed, ErrorNotFound, ErrorPayloadTooLarge, errorToPlainObject } from '../../utils/errors';
+import ItemModel, { ItemSaveOption, SaveFromRawContentItem } from '../../models/ItemModel';
 import { requestDeltaPagination, requestPagination } from '../../models/utils/pagination';
 import { AclAction } from '../../models/BaseModel';
 import { safeRemove } from '../../utils/fileUtils';
 import { formatBytes, MB } from '../../utils/bytes';
-import { Value } from '../../models/KeyValueModel';
+import lockHandler from './utils/items/lockHandler';
 
 const router = new Router(RouteType.Api);
 
 const batchMaxSize = 1 * MB;
-
-interface LockHandlerResult {
-	handled: boolean;
-	response: any;
-}
-
-const lockHandler = async (path: SubPath, ctx: AppContext, requestBody: Buffer = null): Promise<LockHandlerResult | null> => {
-	// return { handled: false, response: null };
-	if (!path.id || !path.id.startsWith('root:/locks/')) return { handled: false, response: null };
-
-	const ownerId = ctx.joplin.owner.id;
-	const models = ctx.joplin.models;
-
-	const userKey = `locks::${ownerId}`;
-
-	// PUT /api/items/root:/locks/exclusive_cli_12cb74fa9de644958b2ccbc772cb4e29.json:/content
-
-	if (ctx.method === 'PUT') {
-		const itemName = models.item().pathToName(path.id);
-		const now = Date.now();
-
-		await models.keyValue().readThenWrite(userKey, async (value: Value) => {
-			const output = value ? JSON.parse(value as string) : {};
-			output[itemName] = {
-				name: itemName,
-				updated_time: now,
-				jop_updated_time: now,
-				content: requestBody.toString(),
-			};
-			return JSON.stringify(output);
-		});
-
-		// {
-		// 	'locks/exclusive_cli_cc75ed109c0c40d5ac8707d222fe33bc.json': {
-		// 	  item: {
-		// 		name: 'locks/exclusive_cli_cc75ed109c0c40d5ac8707d222fe33bc.json',
-		// 		updated_time: 1635709007725,
-		// 		id: 'v9Yv5WSxAKF75ZW0dnv8nOQ8hzg5rUz1'
-		// 	  },
-		// 	  error: null
-		// 	}
-		//   }
-
-		return {
-			handled: true,
-			response: {
-				[itemName]: {
-					item: {
-						name: itemName,
-						updated_time: now,
-						id: null,
-					},
-					error: null,
-				},
-			},
-		};
-	}
-
-	// DELETE /api/items/root:/locks/exclusive_cli_12cb74fa9de644958b2ccbc772cb4e29.json:
-
-	if (ctx.method === 'DELETE') {
-		const itemName = models.item().pathToName(path.id);
-
-		await models.keyValue().readThenWrite(userKey, async (value: Value) => {
-			const output = value ? JSON.parse(value as string) : {};
-			delete output[itemName];
-			return JSON.stringify(output);
-		});
-
-		return {
-			handled: true,
-			response: null,
-		};
-	}
-
-	// GET /api/items/root:/locks/*:/children
-
-	if (ctx.method === 'GET' && path.id === 'root:/locks/*:') {
-		const result = await models.keyValue().value<string>(userKey);
-		const obj: Record<string, Item> = result ? JSON.parse(result) : {};
-
-		const items: Item[] = [];
-		for (const name of Object.keys(obj)) {
-			items.push(obj[name]);
-		}
-
-		const page: PaginatedItems = {
-			has_more: false,
-			items,
-		};
-
-		return {
-			handled: true,
-			response: page,
-		};
-	}
-
-	throw new ErrorBadRequest(`Unhandled lock path: ${path.id}`);
-};
 
 export async function putItemContents(path: SubPath, ctx: AppContext, isBatch: boolean) {
 	if (!ctx.joplin.owner.can_upload) throw new ErrorForbidden('Uploading content is disabled');

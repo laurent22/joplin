@@ -115,6 +115,7 @@ export interface Config {
 	businessEmail: string;
 	isJoplinCloud: boolean;
 	cookieSecure: boolean;
+	buildInLocksEnabled: boolean;
 }
 
 export enum HttpMethod {

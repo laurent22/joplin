@@ -22,6 +22,7 @@ export interface EnvVariables {
 	ERROR_STACK_TRACES?: string;
 	COOKIES_SECURE?: string;
 	RUNNING_IN_DOCKER?: string;
+	BUILTIN_LOCKS_ENABLED?: string;
 
 	// ==================================================
 	// URL config
@@ -211,6 +212,7 @@ export async function initConfig(envType: Env, env: EnvVariables, overrides: any
 		supportName: env.SUPPORT_NAME || appName,
 		businessEmail: env.BUSINESS_EMAIL || supportEmail,
 		cookieSecure: env.COOKIES_SECURE === '1',
+		buildInLocksEnabled: envReadBool(env.BUILTIN_LOCKS_ENABLED, false),
 		...overrides,
 	};
 }
