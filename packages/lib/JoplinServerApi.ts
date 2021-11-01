@@ -255,9 +255,8 @@ export default class JoplinServerApi {
 		} catch (error) {
 			// Don't print error info for file not found (handled by the
 			// driver), or lock-acquisition errors because it's handled by
-			// LockHandler
-
-			if ([404, 'hasExclusiveLock', 'hasSyncLock'].includes(error.code)) {
+			// LockHandler.
+			if (![404, 'hasExclusiveLock', 'hasSyncLock'].includes(error.code)) {
 				logger.warn(this.requestToCurl_(url, fetchOptions));
 				logger.warn('Code:', error.code);
 				logger.warn(error);
