@@ -116,6 +116,10 @@ export const clientType = (db: DbConnection): DatabaseConfigClient => {
 	return db.client.config.client;
 };
 
+export const returningSupported = (db: DbConnection) => {
+	return clientType(db) === DatabaseConfigClient.PostgreSQL;
+};
+
 export const isPostgres = (db: DbConnection) => {
 	return clientType(db) === DatabaseConfigClient.PostgreSQL;
 };

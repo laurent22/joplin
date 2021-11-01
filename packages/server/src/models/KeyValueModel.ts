@@ -1,3 +1,4 @@
+import { returningSupported } from '../db';
 import { KeyValue } from '../services/database/types';
 import { msleep } from '../utils/time';
 import BaseModel from './BaseModel';
@@ -61,11 +62,20 @@ export default class KeyValueModel extends BaseModel<KeyValue> {
 	}
 
 	public async readThenWrite(key: string, handler: ReadThenWriteHandler) {
-		let loopCount = 0;
+		if (!returningSupported(this.db)) {
+			// While inside a transaction SQlite should lock the whole database
+			// file, which should allow atomic read then write.
+			await this.withTransaction(async () => {
+				const value: any = await this.value(key);
+				const newValue = await handler(value);
+				await this.setValue(key, newValue);
+			}, 'KeyValueModel::readThenWrite');
+			return;
+		}
 
+		let loopCount = 0;
 		while (true) {
 			const row: KeyValue = await this.db(this.tableName).where('key', '=', key).first();
-
 			const newValue = await handler(row ? row.value : null);
 
 			let previousValue: Value = null;
@@ -81,6 +91,7 @@ export default class KeyValueModel extends BaseModel<KeyValue> {
 				.update({ value: newValue }, ['id'])
 				.where('key', '=', key)
 				.where('value', '=', previousValue);
+
 			if (updatedRows.length) return;
 
 			loopCount++;
