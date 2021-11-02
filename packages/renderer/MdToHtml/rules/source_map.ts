@@ -3,7 +3,7 @@ export default {
 
 		if (!params.mapsToLine) return;
 
-		const allowed_levels = {
+		const allowedLevels = {
 			paragraph_open: 0,
 			heading_open: 0,
 			// fence: 0, // fence uses custom rendering that doesn't propogate attr so it can't be used for now
@@ -16,17 +16,17 @@ export default {
 			math_block: 0,
 		};
 
-		for (const [key, allowed_level] of Object.entries(allowed_levels)) {
-			const precedent_rule = markdownIt.renderer.rules[key];
+		for (const [key, allowedLevel] of Object.entries(allowedLevels)) {
+			const precedentRule = markdownIt.renderer.rules[key];
 
 			markdownIt.renderer.rules[key] = (tokens: any[], idx: number, options: any, env: any, self: any) => {
-				if (!!tokens[idx].map && tokens[idx].level <= allowed_level) {
+				if (!!tokens[idx].map && tokens[idx].level <= allowedLevel) {
 					const line = tokens[idx].map[0];
 					tokens[idx].attrJoin('class', 'maps-to-line');
 					tokens[idx].attrSet('source-line', `${line}`);
 				}
-				if (precedent_rule) {
-					return precedent_rule(tokens, idx, options, env, self);
+				if (precedentRule) {
+					return precedentRule(tokens, idx, options, env, self);
 				} else {
 					return self.renderToken(tokens, idx, options);
 				}

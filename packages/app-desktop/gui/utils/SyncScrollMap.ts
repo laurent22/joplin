@@ -52,15 +52,17 @@ export class SyncScrollMapper {
 		// and a new map will be created at a next scroll event.
 		if (!doc) return null;
 		const contentElement = doc.getElementById('joplin-container-content');
+		if (!contentElement) return null;
 		const height = Math.max(1, contentElement.scrollHeight - contentElement.clientHeight);
 		if (this.map_) {
 			// check whether map_ is obsolete
-			if (this.map_.viewHeight == height) return this.map_;
+			if (this.map_.viewHeight === height) return this.map_;
 			this.map_ = null;
 		}
 		// Since getBoundingClientRect() returns a relative position,
 		// the offset of the origin is needed to get its aboslute position.
 		const offset = doc.getElementById('rendered-md').getBoundingClientRect().top;
+		if (!offset) return null;
 		// Mapping information between editor's lines and viewer's elements is
 		// embedded into elements by the renderer.
 		// See also renderer/MdToHtml/rules/source_map.ts.
