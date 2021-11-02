@@ -177,6 +177,12 @@ export default class Synchronizer {
 		return !!report && !!report.errors && !!report.errors.length;
 	}
 
+	private static completionTime(report: any): string {
+		const duration = report.completedTime - report.startTime;
+		if (duration > 1000) return `${Math.round(duration / 1000)}s`;
+		return `${duration}ms`;
+	}
+
 	static reportToLines(report: any) {
 		const lines = [];
 		if (report.createLocal) lines.push(_('Created local items: %d.', report.createLocal));
@@ -187,7 +193,7 @@ export default class Synchronizer {
 		if (report.deleteRemote) lines.push(_('Deleted remote items: %d.', report.deleteRemote));
 		if (report.fetchingTotal && report.fetchingProcessed) lines.push(_('Fetched items: %d/%d.', report.fetchingProcessed, report.fetchingTotal));
 		if (report.cancelling && !report.completedTime) lines.push(_('Cancelling...'));
-		if (report.completedTime) lines.push(_('Completed: %s (%s)', time.formatMsToLocal(report.completedTime), `${Math.round((report.completedTime - report.startTime) / 1000)}s`));
+		if (report.completedTime) lines.push(_('Completed: %s (%s)', time.formatMsToLocal(report.completedTime), this.completionTime(report)));
 		if (this.reportHasErrors(report)) lines.push(_('Last error: %s', report.errors[report.errors.length - 1].toString().substr(0, 500)));
 
 		return lines;
