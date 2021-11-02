@@ -34,18 +34,19 @@ class Command extends BaseCommand {
 		for (let i = 0; i < notes.length; i++) {
 			this.encryptionCheck(notes[i]);
 
+			const timestamp = Date.now();
+
 			const newNote = {
 				id: notes[i].id,
 				type_: notes[i].type_,
+				updated_time: timestamp,
 			};
 			newNote[propName] = propValue;
 
-			const timestamp = Date.now();
+			if (!newNote.id) newNote.created_time = timestamp;
 
 			await Note.save(newNote, {
 				autoTimestamp: false, // No auto-timestamp because user may have provided them
-				updated_time: timestamp,
-				created_time: timestamp,
 			});
 		}
 	}

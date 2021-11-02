@@ -1,5 +1,5 @@
 import { knex, Knex } from 'knex';
-import { DatabaseConfig } from './utils/types';
+import { DatabaseConfig, DatabaseConfigClient } from './utils/types';
 import * as pathUtils from 'path';
 import time from '@joplin/lib/time';
 import Logger from '@joplin/lib/Logger';
@@ -14,6 +14,14 @@ import { databaseSchema } from './services/database/types';
 require('pg').types.setTypeParser(20, function(val: any) {
 	return parseInt(val, 10);
 });
+
+// Also need this to get integers for count() queries.
+// https://knexjs.org/#Builder-count
+declare module 'knex/types/result' {
+    interface Registry {
+        Count: number;
+    }
+}
 
 const logger = Logger.create('db');
 
@@ -104,25 +112,80 @@ export async function waitForConnection(dbConfig: DatabaseConfig): Promise<Conne
 	}
 }
 
+export const clientType = (db: DbConnection): DatabaseConfigClient => {
+	return db.client.config.client;
+};
+
+export const isPostgres = (db: DbConnection) => {
+	return clientType(db) === DatabaseConfigClient.PostgreSQL;
+};
+
+export const isSqlite = (db: DbConnection) => {
+	return clientType(db) === DatabaseConfigClient.SQLite;
+};
+
+export const setCollateC = async (db: DbConnection, tableName: string, columnName: string): Promise<void> => {
+	if (!isPostgres(db)) return;
+	await db.raw(`ALTER TABLE ${tableName} ALTER COLUMN ${columnName} SET DATA TYPE character varying(32) COLLATE "C"`);
+};
+
+function makeSlowQueryHandler(duration: number, connection: any, sql: string, bindings: any[]) {
+	return setTimeout(() => {
+		try {
+			logger.warn(`Slow query (${duration}ms+):`, connection.raw(sql, bindings).toString());
+		} catch (error) {
+			logger.error('Could not log slow query', { sql, bindings }, error);
+		}
+	}, duration);
+}
+
+export function setupSlowQueryLog(connection: DbConnection, slowQueryLogMinDuration: number) {
+	interface QueryInfo {
+		timeoutId: any;
+		startTime: number;
+	}
+
+	const queryInfos: Record<any, QueryInfo> = {};
+
+	// These queries do not return a response, so "query-response" is not
+	// called.
+	const ignoredQueries = /^BEGIN|SAVEPOINT|RELEASE SAVEPOINT|COMMIT|ROLLBACK/gi;
+
+	connection.on('query', (data) => {
+		const sql: string = data.sql;
+
+		if (!sql || sql.match(ignoredQueries)) return;
+
+		const timeoutId = makeSlowQueryHandler(slowQueryLogMinDuration, connection, sql, data.bindings);
+
+		queryInfos[data.__knexQueryUid] = {
+			timeoutId,
+			startTime: Date.now(),
+		};
+	});
+
+	connection.on('query-response', (_response, data) => {
+		const q = queryInfos[data.__knexQueryUid];
+		if (q) {
+			clearTimeout(q.timeoutId);
+			delete queryInfos[data.__knexQueryUid];
+		}
+	});
+
+	connection.on('query-error', (_response, data) => {
+		const q = queryInfos[data.__knexQueryUid];
+		if (q) {
+			clearTimeout(q.timeoutId);
+			delete queryInfos[data.__knexQueryUid];
+		}
+	});
+}
+
 export async function connectDb(dbConfig: DatabaseConfig): Promise<DbConnection> {
 	const connection = knex(makeKnexConfig(dbConfig));
 
-	const debugSlowQueries = false;
-
-	if (debugSlowQueries) {
-		const startTimes: Record<string, number> = {};
-
-		const slowQueryDuration = 10;
-
-		connection.on('query', (data) => {
-			startTimes[data.__knexQueryUid] = Date.now();
-		});
-
-		connection.on('query-response', (_response, data) => {
-			const duration = Date.now() - startTimes[data.__knexQueryUid];
-			if (duration < slowQueryDuration) return;
-			console.info(`SQL: ${data.sql} (${duration}ms)`);
-		});
+	if (dbConfig.slowQueryLogEnabled) {
+		setupSlowQueryLog(connection, dbConfig.slowQueryLogMinDuration);
 	}
 
 	return connection;
@@ -132,22 +195,29 @@ export async function disconnectDb(db: DbConnection) {
 	await db.destroy();
 }
 
-export async function migrateLatest(db: DbConnection) {
+export async function migrateLatest(db: DbConnection, disableTransactions = false) {
 	await db.migrate.latest({
 		directory: migrationDir,
+		disableTransactions,
 	});
 }
 
-export async function migrateUp(db: DbConnection) {
+export async function migrateUp(db: DbConnection, disableTransactions = false) {
 	await db.migrate.up({
 		directory: migrationDir,
+		disableTransactions,
 	});
 }
 
-export async function migrateDown(db: DbConnection) {
+export async function migrateDown(db: DbConnection, disableTransactions = false) {
 	await db.migrate.down({
 		directory: migrationDir,
+		disableTransactions,
 	});
+}
+
+export async function migrateUnlock(db: DbConnection) {
+	await db.migrate.forceFreeMigrationsLock();
 }
 
 export async function migrateList(db: DbConnection, asString: boolean = true) {
@@ -275,7 +345,7 @@ export function isUniqueConstraintError(error: any): boolean {
 
 export async function latestMigration(db: DbConnection): Promise<any> {
 	try {
-		const result = await db('knex_migrations').select('name').orderBy('id', 'asc').first();
+		const result = await db('knex_migrations').select('name').orderBy('id', 'desc').first();
 		return result;
 	} catch (error) {
 		// If the database has never been initialized, we return null, so

@@ -5,7 +5,7 @@ import { ExportOptions, FileSystemItem, Module } from '@joplin/lib/services/inte
 
 import { _ } from '@joplin/lib/locale';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
-const bridge = require('electron').remote.require('./bridge').default;
+const bridge = require('@electron/remote').require('./bridge').default;
 import Setting from '@joplin/lib/models/Setting';
 import Note from '@joplin/lib/models/Note';
 const { friendlySafeFilename } = require('@joplin/lib/path-utils');
@@ -86,10 +86,18 @@ export default class InteropServiceHelper {
 								cleanup();
 							}
 						} else {
-							// TODO: it is crashing at this point :(
-							// Appears to be a Chromium bug: https://github.com/electron/electron/issues/19946
-							// Maybe can be fixed by doing everything from main process?
-							// i.e. creating a function `print()` that takes the `htmlFile` variable as input.
+							// TODO: it is crashing at this point :( Appears to
+							// be a Chromium bug:
+							// https://github.com/electron/electron/issues/19946
+							// Maybe can be fixed by doing everything from main
+							// process? i.e. creating a function `print()` that
+							// takes the `htmlFile` variable as input.
+							//
+							// 2021-10-01: This old bug is fixed, and has been
+							// replaced by a brand new bug:
+							// https://github.com/electron/electron/issues/28192
+							// Still doesn't work but at least it doesn't crash
+							// the app.
 
 							win.webContents.print(options, (success: boolean, reason: string) => {
 								// TODO: This is correct but broken in Electron 4. Need to upgrade to 5+
@@ -97,7 +105,7 @@ export default class InteropServiceHelper {
 
 								cleanup();
 								if (!success && reason !== 'cancelled') reject(new Error(`Could not print: ${reason}`));
-								resolve();
+								resolve(null);
 							});
 						}
 					}, 2000);
@@ -145,12 +153,12 @@ export default class InteropServiceHelper {
 
 		if (module.target === 'file') {
 			const noteId = options.sourceNoteIds && options.sourceNoteIds.length ? options.sourceNoteIds[0] : null;
-			path = bridge().showSaveDialog({
+			path = await bridge().showSaveDialog({
 				filters: [{ name: module.description, extensions: module.fileExtensions }],
 				defaultPath: await this.defaultFilename(noteId, module.fileExtensions[0]),
 			});
 		} else {
-			path = bridge().showOpenDialog({
+			path = await bridge().showOpenDialog({
 				properties: ['openDirectory', 'createDirectory'],
 			});
 		}

@@ -3,7 +3,7 @@ import { EmailSender, User, UserFlagType } from '../services/database/types';
 import { ErrorUnprocessableEntity } from '../utils/errors';
 import { betaUserDateRange, stripeConfig } from '../utils/stripe';
 import { accountByType, AccountType } from './UserModel';
-import { failedPaymentDisableUploadInterval } from './SubscriptionModel';
+import { failedPaymentFinalAccount, failedPaymentWarningInterval } from './SubscriptionModel';
 import { stripePortalUrl } from '../utils/urlUtils';
 
 describe('UserModel', function() {
@@ -20,7 +20,7 @@ describe('UserModel', function() {
 		await beforeEachDb();
 	});
 
-	test('should validate user objects', async function() {
+	test('should validate user objects', async () => {
 		const { user: user1 } = await createUserAndSession(2, false);
 		const { user: user2 } = await createUserAndSession(3, false);
 
@@ -51,7 +51,7 @@ describe('UserModel', function() {
 		expect(error instanceof ErrorUnprocessableEntity).toBe(true);
 	});
 
-	test('should delete a user', async function() {
+	test('should delete a user', async () => {
 		const { session: session1, user: user1 } = await createUserAndSession(2, false);
 
 		const userModel = models().user();
@@ -72,7 +72,7 @@ describe('UserModel', function() {
 		expect((await models().userItem().all()).length).toBe(0);
 	});
 
-	test('should push an email when creating a new user', async function() {
+	test('should push an email when creating a new user', async () => {
 		const { user: user1 } = await createUserAndSession(1);
 		const { user: user2 } = await createUserAndSession(2);
 
@@ -90,7 +90,7 @@ describe('UserModel', function() {
 		expect(email.error).toBe('');
 	});
 
-	test('should send a beta reminder email', async function() {
+	test('should send a beta reminder email', async () => {
 		stripeConfig().enabled = true;
 		const { user: user1 } = await createUserAndSession(1, false, { email: 'toto@example.com' });
 		const range = betaUserDateRange();
@@ -140,7 +140,7 @@ describe('UserModel', function() {
 		stripeConfig().enabled = false;
 	});
 
-	test('should disable beta account once expired', async function() {
+	test('should disable beta account once expired', async () => {
 		stripeConfig().enabled = true;
 		const { user: user1 } = await createUserAndSession(1, false, { email: 'toto@example.com' });
 		const range = betaUserDateRange();
@@ -163,9 +163,10 @@ describe('UserModel', function() {
 
 		const userFlag = await models().userFlag().byUserId(user1.id, UserFlagType.AccountWithoutSubscription);
 		expect(userFlag).toBeTruthy();
+		stripeConfig().enabled = false;
 	});
 
-	test('should disable upload and send an email if payment failed', async function() {
+	test('should disable upload and send an email if payment failed recently', async () => {
 		stripeConfig().enabled = true;
 
 		const { user: user1 } = await models().subscription().saveUserAndSubscription('toto@example.com', 'Toto', AccountType.Basic, 'usr_111', 'sub_111');
@@ -174,10 +175,10 @@ describe('UserModel', function() {
 		const sub = await models().subscription().byUserId(user1.id);
 
 		const now = Date.now();
-		const paymentFailedTime = now - failedPaymentDisableUploadInterval - 10;
+		const paymentFailedTime = now - failedPaymentWarningInterval - 10;
 		await models().subscription().save({
 			id: sub.id,
-			last_payment_time: now - failedPaymentDisableUploadInterval * 2,
+			last_payment_time: now - failedPaymentWarningInterval * 2,
 			last_payment_failed_time: paymentFailedTime,
 		});
 
@@ -190,6 +191,7 @@ describe('UserModel', function() {
 			const email = (await models().email().all()).pop();
 			expect(email.key).toBe(`payment_failed_upload_disabled_${paymentFailedTime}`);
 			expect(email.body).toContain(stripePortalUrl());
+			expect(email.body).toContain('14 days');
 		}
 
 		const beforeEmailCount = (await models().email().all()).length;
@@ -201,9 +203,40 @@ describe('UserModel', function() {
 			const user2 = await models().user().loadByEmail('tutu@example.com');
 			expect(user2.can_upload).toBe(1);
 		}
+
+		stripeConfig().enabled = false;
 	});
 
-	test('should send emails when the account is over the size limit', async function() {
+	test('should disable disable the account and send an email if payment failed for good', async () => {
+		stripeConfig().enabled = true;
+
+		const { user: user1 } = await models().subscription().saveUserAndSubscription('toto@example.com', 'Toto', AccountType.Basic, 'usr_111', 'sub_111');
+
+		const sub = await models().subscription().byUserId(user1.id);
+
+		const now = Date.now();
+		const paymentFailedTime = now - failedPaymentFinalAccount - 10;
+		await models().subscription().save({
+			id: sub.id,
+			last_payment_time: now - failedPaymentFinalAccount * 2,
+			last_payment_failed_time: paymentFailedTime,
+		});
+
+		await models().user().handleFailedPaymentSubscriptions();
+
+		{
+			const user1 = await models().user().loadByEmail('toto@example.com');
+			expect(user1.enabled).toBe(0);
+
+			const email = (await models().email().all()).pop();
+			expect(email.key).toBe(`payment_failed_account_disabled_${paymentFailedTime}`);
+			expect(email.body).toContain(stripePortalUrl());
+		}
+
+		stripeConfig().enabled = false;
+	});
+
+	test('should send emails and flag accounts when it is over the size limit', async () => {
 		const { user: user1 } = await createUserAndSession(1);
 		const { user: user2 } = await createUserAndSession(2);
 
@@ -254,6 +287,7 @@ describe('UserModel', function() {
 
 			// User upload should be disabled
 			expect((await models().user().load(user2.id)).can_upload).toBe(0);
+			expect(await models().userFlag().byUserId(user2.id, UserFlagType.AccountOverLimit)).toBeTruthy();
 
 			expect(emailAfterCount).toBe(emailBeforeCount + 1);
 			const email = (await models().email().all()).pop();
@@ -265,6 +299,27 @@ describe('UserModel', function() {
 			await models().user().handleOversizedAccounts();
 			expect((await models().email().all()).length).toBe(emailBeforeCount + 1);
 		}
+	});
+
+	test('should remove flag when account goes under the limit', async () => {
+		const { user: user1 } = await createUserAndSession(1);
+
+		await models().user().save({
+			id: user1.id,
+			account_type: AccountType.Basic,
+			total_item_size: Math.round(accountByType(AccountType.Basic).max_total_item_size * 1.1),
+		});
+
+		await models().user().handleOversizedAccounts();
+		expect(await models().userFlag().byUserId(user1.id, UserFlagType.AccountOverLimit)).toBeTruthy();
+
+		await models().user().save({
+			id: user1.id,
+			total_item_size: Math.round(accountByType(AccountType.Basic).max_total_item_size * 0.5),
+		});
+
+		await models().user().handleOversizedAccounts();
+		expect(await models().userFlag().byUserId(user1.id, UserFlagType.AccountOverLimit)).toBeFalsy();
 	});
 
 });

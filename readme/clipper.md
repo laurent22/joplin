@@ -31,7 +31,7 @@ To do so, first enable developer mode in [chrome://extensions/](chrome://extensi
 ## In Firefox
 
 - Open [about:debugging](about:debugging) in Firefox.
-- Make sure the checkox "Enable add-on debugging" is ticked.
+- Make sure the checkbox "Enable add-on debugging" is ticked.
 - Scroll down to the Joplin Web Clipper extension.
 - Click on "Debugging" - that should open a new console window.
 

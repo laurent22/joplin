@@ -6,7 +6,8 @@ import { EditorCommand, NoteBodyEditorProps } from '../../utils/types';
 import { commandAttachFileToBody, handlePasteEvent } from '../../utils/resourceHandling';
 import { ScrollOptions, ScrollOptionTypes } from '../../utils/types';
 import { CommandValue } from '../../utils/types';
-import { useScrollHandler, usePrevious, cursorPositionToTextOffset, useRootSize } from './utils';
+import { useScrollHandler, usePrevious, cursorPositionToTextOffset } from './utils';
+import useElementSize from '@joplin/lib/hooks/useElementSize';
 import Toolbar from './Toolbar';
 import styles_ from './styles';
 import { RenderedBody, defaultRenderedBody } from './utils/types';
@@ -59,7 +60,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 	const props_onChangeRef = useRef<Function>(null);
 	props_onChangeRef.current = props.onChange;
 
-	const rootSize = useRootSize({ rootRef });
+	const rootSize = useElementSize(rootRef);
 
 	usePluginServiceRegistration(ref);
 
@@ -146,7 +147,9 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 					if (props.visiblePanes.indexOf('editor') >= 0) {
 						editorRef.current.focus();
 					} else {
-						webviewRef.current.wrappedInstance.focus();
+						// If we just call wrappedInstance.focus() then the iframe is focused,
+						// but not its content, such that scrolling up / down with arrow keys fails
+						webviewRef.current.wrappedInstance.send('focus');
 					}
 				} else {
 					commandProcessed = false;
@@ -811,6 +814,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 					onChange={codeMirror_change}
 					onScroll={editor_scroll}
 					onEditorPaste={onEditorPaste}
+					isSafeMode={props.isSafeMode}
 				/>
 			</div>
 		);

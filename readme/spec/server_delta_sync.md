@@ -12,11 +12,11 @@ The events are tied to a particular parent ID - in other words it's only possibl
 
 ## What is a change event
 
-An event can be "create", "update" or "detete" and is associated with a given file. The client uses this info to apply the change locally - creating, updating or deleting the file as needed.
+An event can be "create", "update" or "delete" and is associated with a given file. The client uses this info to apply the change locally - creating, updating or deleting the file as needed.
 
 Attached to the event, is also a copy of the file metadata, so the client doesn't need to a do a second request to fetch it.
 
-Internally, the event also stores the file name and parent ID. This is used when an item is deleted since in that case the item ID only would not be sufficient to know where the item was initally stored.
+Internally, the event also stores the file name and parent ID. This is used when an item is deleted since in that case the item ID only would not be sufficient to know where the item was initially stored.
 
 ## Event compression
 
@@ -49,6 +49,32 @@ When syncing from the start, there will be many "create" events for files that a
 
 ## Regarding the deletion of old change events
 
+**2021-10-22**
+
+### Handling UPDATE events
+
+**Update events** older than x days (currently 180 days) will be automatically compressed, by deleting all events except the latest one. For example, if a note has been modified on July 2, July 7 and July 15, only the July 15 event will be kept.
+
+It means that a client that has not synced for more than 180 days is likely to get a "resyncRequired" error code if the sync cursor they had correspond to a change that has been deleted. When that happens a full sync will start from the beginning.
+
+This side effect is considered acceptable because:
+
+- It is unlikely that a client won't be synced for more than 180 days.
+- No data loss will occur.
+- The need to do a full sync again, while annoying, is not a major issue in most cases.
+
+### Handling CREATE and DELETE events
+
+Currently **Create** and **Delete** events are not automatically deleted. This is because clients build their data based on the Create/Update/Delete events so if we delete the CREATE events, certain notes will no longer be created on new clients.
+
+A possible solution would be to have this kind of logic client side: When a sync cursor is invalid, do a full sync, which will not rely on /delta but on the basicDelta() function as used for file system or webdav sync. It will simply compare what's on the server with what's on the client and do the sync like this. Once it's done, it can start using /delta again. Advantage if that it can be done using basicDelta(). Disadvantage is that it's not possible accurately enumerate the server content that way, since new items can be created or deleted during that basicDelta process.
+
+A possibly more reliable technique would be to delete all Create/Delete event pairs. Doing so won't affect new clients - which simply won't get any CREATE event, since the item has been deleted anyway. It will affect clients that did not sync for a long time because they won't be notified that an item has been deleted - but that's probably an acceptable side effect. The main trouble will be the shared notes and notebooks - we'd need to make sure that when we delete something from a user it doesn't incorrectly delete it from another user (I don't think it would, but that will need to be considered).
+
+**2021-01-01**
+
+**Obsolete**
+
 Keeping all change events permanently would represent a lot of data, however it might be necessary. Without it, it won't be possible for a client to know what file has been deleted and thus a client that has not synced for a long time will keep its files permanently.
 
 So most likely we'll always keep the change events. However, we could compress the old ones to just "create" and "delete" events. All "update" events are not needed. And for a file that has been deleted, we don't need to keep the "create" event.
@@ -62,4 +88,4 @@ The client would then follow this logic:
 	- If the file is present, delete it.
 	- If it is not, skip the event (not an error).
 
-It might seem we could derive the "create" events simply by looking at the files in the directory - all files that are there would implicitely have a "create" event. The issue however is that it's not possible to reliably iterate over the files in a folder, because they might change in the meantime. The change events on the other hand provide an ID that can be used reliably to iterate over changes, and to resume at any time.
+It might seem we could derive the "create" events simply by looking at the files in the directory - all files that are there would implicitly have a "create" event. The issue however is that it's not possible to reliably iterate over the files in a folder, because they might change in the meantime. The change events on the other hand provide an ID that can be used reliably to iterate over changes, and to resume at any time.

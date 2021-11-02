@@ -3,7 +3,7 @@ import ButtonBar from './ConfigScreen/ButtonBar';
 import { _ } from '@joplin/lib/locale';
 
 const { connect } = require('react-redux');
-const bridge = require('electron').remote.require('./bridge').default;
+const bridge = require('@electron/remote').require('./bridge').default;
 const { themeStyle } = require('@joplin/lib/theme');
 const Shared = require('@joplin/lib/components/shared/dropbox-login-shared');
 

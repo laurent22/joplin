@@ -18,7 +18,7 @@ There are also a few forks of existing packages under the "fork-*" name.
 
 ## Required dependencies
 
-- Install node 10+ - https://nodejs.org/en/
+- Install node 14+ - https://nodejs.org/en/
 - macOS: Install Cocoapods - `brew install cocoapods`
 - Windows: Install Windows Build Tools - `npm install -g windows-build-tools --vs2015`
 - Linux: Install dependencies - `sudo apt install libnss3 libsecret-1-dev python rsync`
@@ -45,7 +45,7 @@ You can also run it under WSL 2. To do so, [follow these instructions](https://w
 
 ## Testing the Mobile application
 
-First you need to setup React Native to build projects with native code. For this, follow the instructions on the [Get Started](https://facebook.github.io/react-native/docs/getting-started.html) tutorial, in the "React Native CLI Quickstart" tab.
+First you need to setup React Native to build projects with native code. For this, follow the instructions in the [Setting up the development environment](https://reactnative.dev/docs/environment-setup) tutorial, in the "React Native CLI Quickstart" tab.
 
 Then, for **Android**:
 

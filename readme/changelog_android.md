@@ -1,5 +1,32 @@
 # Joplin Android app changelog
 
+## [android-v2.5.5](https://github.com/laurent22/joplin/releases/tag/android-v2.5.5) (Pre-release) - 2021-10-31T11:03:16Z
+
+- New: Add padding around beta text editor (365e152)
+- Improved: Capitalise first word of sentence in beta editor (4128be9)
+- Fixed: Do not render very large code blocks to prevent app from freezing (#5593)
+
+## [android-v2.5.3](https://github.com/laurent22/joplin/releases/tag/android-v2.5.3) (Pre-release) - 2021-10-28T21:47:18Z
+
+- New: Add support for public-private key pairs and improved master password support (#5438)
+- New: Added mechanism to migrate default settings to new values (72db8e4)
+- Improved: Ensure that shared notebook children are not deleted when shared, unshared and shared again, and a conflict happens (ccf9882)
+- Improved: Improve delete dialog message (#5481) (#4701 by Helmut K. C. Tessarek)
+- Improved: Improved Joplin Server configuration check to better handle disabled accounts (72c1235)
+- Improved: Improved handling of expired sessions when using Joplin Server (33249ca)
+- Fixed: Certain attachments were not being automatically deleted (#932)
+- Fixed: Fixed logic of setting master password in Encryption screen (#5585)
+
+## [android-v2.4.3](https://github.com/laurent22/joplin/releases/tag/android-v2.4.3) - 2021-09-29T18:47:24Z
+
+- Fixed: Fix default sync target (4b39d30)
+
+## [android-v2.4.2](https://github.com/laurent22/joplin/releases/tag/android-v2.4.2) (Pre-release) - 2021-09-22T17:02:37Z
+
+- Improved: Allow disabling any master key, including default or active one (9407efd)
+- Improved: Update Mermaid 8.10.2 -&gt; 8.12.1 and fix gitGraph crash (#5448) (#5295 by Helmut K. C. Tessarek)
+- Fixed: Misinterpreted search term after filter in quotation marks (#5445) (#5444 by [@JackGruber](https://github.com/JackGruber))
+
 ## [android-v2.4.1](https://github.com/laurent22/joplin/releases/tag/android-v2.4.1) (Pre-release) - 2021-08-30T13:37:34Z
 
 - New: Add a way to disable a master key (7faa58e)

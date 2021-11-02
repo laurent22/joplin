@@ -1,5 +1,6 @@
 <div class="block">
 	<a class="button is-primary" href="{{{global.baseUrl}}}/users/new">Add user</a>
+	<a class="button is-link toggle-disabled-button hide-disabled" href="#">Hide disabled</a>
 </div>
 
 <table class="table">
@@ -12,24 +13,18 @@
 			<th>Total Size</th>
 			<th>Max Total Size</th>
 			<th>Can share</th>
-			<th>Is admin?</th>
-			<th>Enabled?</th>
-			<th>Actions</th>
 		</tr>
 	</thead>
 	<tbody>
 		{{#users}}
-			<tr>
-				<td>{{full_name}}</td>
+			<tr class="{{rowClassName}}">
+				<td><a href="{{{global.baseUrl}}}/users/{{id}}">{{displayName}}</a></td>
 				<td>{{email}}</td>
 				<td>{{formattedAccountType}}</td>
 				<td>{{formattedItemMaxSize}}</td>
 				<td class="{{totalSizeClass}}">{{formattedTotalSize}} ({{formattedTotalSizePercent}})</td>
 				<td>{{formattedMaxTotalSize}}</td>
 				<td>{{formattedCanShareFolder}}</td>
-				<td>{{is_admin}}</td>
-				<td>{{enabled}}</td>
-				<td><a href="{{{global.baseUrl}}}/users/{{id}}" class="button is-primary is-small">Edit</a></td>
 			</tr>
 		{{/users}}
 	</tbody>
@@ -37,4 +32,29 @@
 
 <div class="block">
 	<a class="button is-primary" href="{{{global.baseUrl}}}/users/new">Add user</a>
+	<a class="button is-link toggle-disabled-button hide-disabled" href="#">Hide disabled</a>
 </div>
+
+<script>
+$(() => {
+	function toggleDisabled() {
+		if ($('.hide-disabled').length) {
+			$('.hide-disabled').addClass('show-disabled');
+			$('.hide-disabled').removeClass('hide-disabled');
+			$('.show-disabled').text('Show disabled');
+			$('table tr.is-disabled').hide();
+		} else {
+			$('.show-disabled').addClass('hide-disabled');
+			$('.show-disabled').removeClass('show-disabled');
+			$('.hide-disabled').text('Hide disabled');
+			$('table tr.is-disabled').show();
+		}
+	}
+
+	toggleDisabled();
+
+	$('.toggle-disabled-button').click(() => {
+		toggleDisabled();
+	});
+});
+</script>

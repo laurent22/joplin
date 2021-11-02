@@ -6,7 +6,7 @@
 					Joplin Cloud <span class="frame-bg frame-bg-yellow">plans</span>
 				</h1>
 				<p class="text-center sub-title">
-					Joplin Cloud allows you to synchronise your notes across devices. It also lets you publish notes, and collaborate on notebooks with your friends, family or colleagues.
+					<a href="https://joplincloud.com">Joplin Cloud</a> allows you to synchronise your notes across devices. It also lets you publish notes, and collaborate on notebooks with your friends, family or colleagues.
 				</p>
 			</div>
 		</div>
@@ -45,6 +45,8 @@
 			{{#plans.business}}
 				{{> plan}}
 			{{/plans.business}}
+
+			<p class="joplin-cloud-login-info">Already have a Joplin Cloud account? <a href="https://joplincloud.com">Login now</a></p>
 		</div>
 
 		<div class="row">
@@ -57,7 +59,7 @@
 	<script>
 		const urlQuery = new URLSearchParams(location.search);
 		let subscriptionPeriod = 'monthly';
-		var stripe = Stripe('{{{stripeConfig.publishableKey}}}');
+		const stripe = Stripe('{{{stripeConfig.publishableKey}}}');
 
 		let checkoutSessionUser = null;
 
@@ -80,9 +82,9 @@
 		}
 
 		var createCheckoutSession = function(priceId) {
-			const coupon = urlQuery.get('coupon') || '';
+			const promotionCode = urlQuery.get('promo') || '';
 
-			console.info('Creating Stripe session for price:', priceId, 'Coupon:', coupon);
+			console.info('Creating Stripe session for price:', priceId, 'Promotion code:', promotionCode);
 
 			return fetch("{{{stripeConfig.webhookBaseUrl}}}/stripe/createCheckoutSession", {
 				method: "POST",
@@ -90,8 +92,8 @@
 					"Content-Type": "application/json"
 				},
 				body: JSON.stringify({
-					priceId: priceId,
-					coupon: coupon,
+					priceId,
+					promotionCode,
 					email: checkoutSessionUser ? checkoutSessionUser.email : '',
 				})
 			}).then(async function(result) {

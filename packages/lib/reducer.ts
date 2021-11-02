@@ -433,7 +433,7 @@ function updateSelectedNotesFromExistingNotes(draft: Draft<State>) {
 			}
 		}
 	}
-
+	if (JSON.stringify(draft.selectedNoteIds) === JSON.stringify(newSelectedNoteIds)) return;
 	draft.selectedNoteIds = newSelectedNoteIds;
 }
 

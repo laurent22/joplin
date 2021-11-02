@@ -10,7 +10,8 @@ import Tag from './Tag';
 
 const { sprintf } = require('sprintf-js');
 import Resource from './Resource';
-const { pregQuote } = require('../string-utils.js');
+import syncDebugLog from '../services/synchronizer/syncDebugLog';
+const { pregQuote, substrWithEllipsis } = require('../string-utils.js');
 const { _ } = require('../locale');
 const ArrayUtils = require('../ArrayUtils.js');
 const lodash = require('lodash');
@@ -664,6 +665,8 @@ export default class Note extends BaseItem {
 		// Trying to fix: https://github.com/laurent22/joplin/issues/3893
 		const oldNote = !isNew && o.id ? await Note.load(o.id) : null;
 
+		syncDebugLog.info('Save Note: P:', oldNote);
+
 		let beforeNoteJson = null;
 		if (oldNote && this.revisionService().isOldNote(o.id)) {
 			beforeNoteJson = JSON.stringify(oldNote);
@@ -679,6 +682,8 @@ export default class Note extends BaseItem {
 				}
 			}
 		}
+
+		syncDebugLog.info('Save Note: N:', o);
 
 		const note = await super.save(o, options);
 
@@ -729,6 +734,18 @@ export default class Note extends BaseItem {
 				});
 			}
 		}
+	}
+
+	static async deleteMessage(noteIds: string[]): Promise<string|null> {
+		let msg = '';
+		if (noteIds.length === 1) {
+			const note = await Note.load(noteIds[0]);
+			if (!note) return null;
+			msg = _('Delete note "%s"?', substrWithEllipsis(note.title, 0, 32));
+		} else {
+			msg = _('Delete these %d notes?', noteIds.length);
+		}
+		return msg;
 	}
 
 	static dueNotes() {

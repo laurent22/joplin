@@ -120,7 +120,7 @@ fi
 
 # Get the latest version to download
 if [[ "$INCLUDE_PRE_RELEASE" == true ]]; then
-  RELEASE_VERSION=$(wget -qO - "https://api.github.com/repos/laurent22/joplin/releases" | grep -Po '"tag_name": ?"v\K.*?(?=")' | head -1)
+  RELEASE_VERSION=$(wget -qO - "https://api.github.com/repos/laurent22/joplin/releases" | grep -Po '"tag_name": ?"v\K.*?(?=")' | sort -rV | head -1)
 else
   RELEASE_VERSION=$(wget -qO - "https://api.github.com/repos/laurent22/joplin/releases/latest" | grep -Po '"tag_name": ?"v\K.*?(?=")')
 fi
@@ -137,8 +137,8 @@ fi
 #-----------------------------------------------------
 print 'Downloading Joplin...'
 TEMP_DIR=$(mktemp -d)
-wget -O ${TEMP_DIR}/Joplin.AppImage https://github.com/laurent22/joplin/releases/download/v${RELEASE_VERSION}/Joplin-${RELEASE_VERSION}.AppImage
-wget -O ${TEMP_DIR}/joplin.png https://joplinapp.org/images/Icon512.png
+wget -O "${TEMP_DIR}/Joplin.AppImage" "https://github.com/laurent22/joplin/releases/download/v${RELEASE_VERSION}/Joplin-${RELEASE_VERSION}.AppImage"
+wget -O "${TEMP_DIR}/joplin.png" https://joplinapp.org/images/Icon512.png
 
 #-----------------------------------------------------
 print 'Installing Joplin...'
@@ -149,7 +149,7 @@ rm -f ~/.joplin/*.AppImage ~/.local/share/applications/joplin.desktop ~/.joplin/
 mkdir -p ~/.joplin/
 
 # Download the latest version
-mv ${TEMP_DIR}/Joplin.AppImage ~/.joplin/Joplin.AppImage
+mv "${TEMP_DIR}/Joplin.AppImage" ~/.joplin/Joplin.AppImage
 
 # Gives execution privileges
 chmod +x ~/.joplin/Joplin.AppImage
@@ -159,7 +159,7 @@ print "${COLOR_GREEN}OK${COLOR_RESET}"
 #-----------------------------------------------------
 print 'Installing icon...'
 mkdir -p ~/.local/share/icons/hicolor/512x512/apps
-mv ${TEMP_DIR}/joplin.png ~/.local/share/icons/hicolor/512x512/apps/joplin.png
+mv "${TEMP_DIR}/joplin.png" ~/.local/share/icons/hicolor/512x512/apps/joplin.png
 print "${COLOR_GREEN}OK${COLOR_RESET}"
 
 # Detect desktop environment
@@ -187,7 +187,7 @@ if command -v lsb_release &> /dev/null; then
   # Linux Mint 4 Debbie is based on Debian 10 and requires the same param handling.
   if [[ $DISTVER =~ Debian1. ]] || [ "$DISTVER" = "Linuxmint4" ] && [ "$DISTCODENAME" = "debbie" ] || [ "$DISTVER" = "CentOS" ] && [[ "$DISTMAJOR" =~ 6|7 ]]
   then
-    SANDBOXPARAM=" --no-sandbox"
+    SANDBOXPARAM="--no-sandbox"
   fi
 fi
 
@@ -206,7 +206,21 @@ then
 
     # On some systems this directory doesn't exist by default
     mkdir -p ~/.local/share/applications
-    echo -e "[Desktop Entry]\nEncoding=UTF-8\nName=Joplin\nComment=Joplin for Desktop\nExec=${HOME}/.joplin/Joplin.AppImage${SANDBOXPARAM}\nIcon=joplin\nStartupWMClass=Joplin\nType=Application\nCategories=Office;" >> ~/.local/share/applications/appimagekit-joplin.desktop
+    
+    # Tabs specifically, and not spaces, are needed for indentation with Bash heredocs
+    cat >> ~/.local/share/applications/appimagekit-joplin.desktop <<-EOF
+	[Desktop Entry]
+	Encoding=UTF-8
+	Name=Joplin
+	Comment=Joplin for Desktop
+	Exec=${HOME}/.joplin/Joplin.AppImage ${SANDBOXPARAM}
+	Icon=joplin
+	StartupWMClass=Joplin
+	Type=Application
+	Categories=Office;
+	MimeType=x-scheme-handler/joplin;
+	EOF
+    
     # Update application icons
     [[ `command -v update-desktop-database` ]] && update-desktop-database ~/.local/share/applications && update-desktop-database ~/.local/share/icons
     print "${COLOR_GREEN}OK${COLOR_RESET}"
@@ -222,7 +236,7 @@ fi
 print "${COLOR_GREEN}Joplin version${COLOR_RESET} ${RELEASE_VERSION} ${COLOR_GREEN}installed.${COLOR_RESET}"
 
 # Record version
-echo $RELEASE_VERSION > ~/.joplin/VERSION
+echo "$RELEASE_VERSION" > ~/.joplin/VERSION
 
 #-----------------------------------------------------
 if [[ "$SHOW_CHANGELOG" == true ]]; then
@@ -232,5 +246,5 @@ fi
 
 #-----------------------------------------------------
 print "Cleaning up..."
-rm -rf $TEMP_DIR
+rm -rf "$TEMP_DIR"
 print "${COLOR_GREEN}OK${COLOR_RESET}"

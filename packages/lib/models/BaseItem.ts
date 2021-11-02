@@ -1,4 +1,4 @@
-import { ModelType } from '../BaseModel';
+import { ModelType, DeleteOptions } from '../BaseModel';
 import { BaseItemEntity, NoteEntity } from '../services/database/types';
 import Setting from './Setting';
 import BaseModel from '../BaseModel';
@@ -31,6 +31,11 @@ export interface ItemsThatNeedSyncResult {
 	hasMore: boolean;
 	items: ItemThatNeedSync[];
 	neverSyncedItemIds: string[];
+}
+
+export interface EncryptedItemsStats {
+	encrypted: number;
+	total: number;
 }
 
 export default class BaseItem extends BaseModel {
@@ -231,11 +236,11 @@ export default class BaseItem extends BaseModel {
 		return ItemClass.delete(id);
 	}
 
-	static async delete(id: string, options: any = null) {
+	static async delete(id: string, options: DeleteOptions = null) {
 		return this.batchDelete([id], options);
 	}
 
-	static async batchDelete(ids: string[], options: any = null) {
+	static async batchDelete(ids: string[], options: DeleteOptions = null) {
 		if (!options) options = {};
 		let trackDeleted = true;
 		if (options && options.trackDeleted !== null && options.trackDeleted !== undefined) trackDeleted = options.trackDeleted;
@@ -513,7 +518,7 @@ export default class BaseItem extends BaseModel {
 		return output;
 	}
 
-	static async encryptedItemsStats() {
+	public static async encryptedItemsStats(): Promise<EncryptedItemsStats> {
 		const classNames = this.encryptableItemClassNames();
 		let encryptedCount = 0;
 		let totalCount = 0;
@@ -596,6 +601,11 @@ export default class BaseItem extends BaseModel {
 		}
 
 		throw new Error('Unreachable');
+	}
+
+	public static async itemHasBeenSynced(itemId: string): Promise<boolean> {
+		const r = await this.db().selectOne('SELECT item_id FROM sync_items WHERE item_id = ?', [itemId]);
+		return !!r;
 	}
 
 	public static async itemsThatNeedSync(syncTarget: number, limit = 100): Promise<ItemsThatNeedSyncResult> {

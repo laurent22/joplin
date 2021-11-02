@@ -11,7 +11,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="theme-color" content="#000000" />
 		<meta name="description" content="Joplin, the open source note-taking application" />
-		<link rel="stylesheet" href="{{cssBaseUrl}}/fontawesome-all.min.css?t={{buildTime}}">
+		<link rel="stylesheet" href="{{{assetUrls.css.fontawesome}}}">
 		<link
 			rel="stylesheet"
 			href="{{cssBaseUrl}}/bootstrap5.0.2.min.css"
@@ -29,7 +29,7 @@
 			rel="preload"
 			as="script"
 		></script>
-		<link rel="stylesheet" href="{{cssBaseUrl}}/site.css?t={{buildTime}}" as="style" />
+		<link rel="stylesheet" href="{{{assetUrls.css.site}}}" as="style" />
 		<title>Joplin</title>
 	</head>
 	<body class="front-page website-env-{{env}}">
@@ -368,40 +368,7 @@
 				</div>
 			</div>
 
-			<footer class="darkblue-bg">
-				<div class="container">
-					<div class="row">
-						<div class="col-3 d-none d-md-block">
-							<img src="{{imageBaseUrl}}/logo-text.svg" alt="" width="150" />
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-12">
-							<hr />
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-12 col-md-6">
-							<a href="{{baseUrl}}">
-								<img
-									src="{{imageBaseUrl}}/logo-text.svg"
-									width="120"
-									class="img-center d-block d-md-none"
-									alt=""
-								/>
-							</a>
-							<br class="d-block d-md-none" />
-							<p class="text-center-sm">Copyright &copy; 2016-{{yyyy}} Laurent Cozic</p>
-						</div>
-						<div class="col-12 col-md-6">
-							<p class="text-right text-center-sm right-links">
-								<a href="https://github.com/laurent22/joplin/" class="github-link"><i class="fab fa-github"></i> GitHub Repository</a>
-								<a href="{{baseUrl}}/privacy/">Privacy Policy</a>
-							</p>
-						</div>
-					</div>
-				</div>
-			</footer>
+			{{> footer}}
 		</div>
 
 		<script
@@ -409,7 +376,7 @@
 			rel="preload"
 			as="script"
 		></script>
-		<script src="{{jsBaseUrl}}/script.js?t={{buildTime}}"></script>
+		<script src="{{{assetUrls.js.script}}}"></script>
 		{{> analytics}}
 	</body>
 </html>

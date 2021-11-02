@@ -20,32 +20,16 @@ import JoplinError from './JoplinError';
 import ShareService from './services/share/ShareService';
 import TaskQueue from './TaskQueue';
 import ItemUploader from './services/synchronizer/ItemUploader';
-import { FileApi } from './file-api';
+import { FileApi, RemoteItem } from './file-api';
 import JoplinDatabase from './JoplinDatabase';
-import { fetchSyncInfo, getActiveMasterKey, localSyncInfo, mergeSyncInfos, saveLocalSyncInfo, syncInfoEquals, uploadSyncInfo } from './services/synchronizer/syncInfoUtils';
-import { setupAndDisableEncryption, setupAndEnableEncryption } from './services/e2ee/utils';
+import { fetchSyncInfo, getActiveMasterKey, localSyncInfo, mergeSyncInfos, saveLocalSyncInfo, SyncInfo, syncInfoEquals, uploadSyncInfo } from './services/synchronizer/syncInfoUtils';
+import { getMasterPassword, setupAndDisableEncryption, setupAndEnableEncryption } from './services/e2ee/utils';
+import { generateKeyPair } from './services/e2ee/ppk';
+import syncDebugLog from './services/synchronizer/syncDebugLog';
 const { sprintf } = require('sprintf-js');
 const { Dirnames } = require('./services/synchronizer/utils/types');
 
 const logger = Logger.create('Synchronizer');
-
-interface RemoteItem {
-	id: string;
-	path?: string;
-	type_?: number;
-	isDeleted?: boolean;
-
-	// This the time when the file was created on the server. It is used for
-	// example for the locking mechanim or any file that's not an actual Joplin
-	// item.
-	updated_time?: number;
-
-	// This is the time that corresponds to the actual Joplin item updated_time
-	// value. A note is always uploaded with a delay so the server updated_time
-	// value will always be ahead. However for synchronising we need to know the
-	// exact Joplin item updated_time value.
-	jop_updated_time?: number;
-}
 
 function isCannotSyncError(error: any): boolean {
 	if (!error) return false;
@@ -196,7 +180,7 @@ export default class Synchronizer {
 		return lines;
 	}
 
-	logSyncOperation(action: any, local: any = null, remote: RemoteItem = null, message: string = null, actionCount: number = 1) {
+	logSyncOperation(action: string, local: any = null, remote: RemoteItem = null, message: string = null, actionCount: number = 1) {
 		const line = ['Sync'];
 		line.push(action);
 		if (message) line.push(message);
@@ -223,6 +207,8 @@ export default class Synchronizer {
 		} else {
 			logger.debug(line.join(': '));
 		}
+
+		if (!['fetchingProcessed', 'fetchingTotal'].includes(action)) syncDebugLog.info(line.join(': '));
 
 		if (!this.progressReport_[action]) this.progressReport_[action] = 0;
 		this.progressReport_[action] += actionCount;
@@ -321,6 +307,16 @@ export default class Synchronizer {
 		return '';
 	}
 
+	private async setPpkIfNotExist(localInfo: SyncInfo, remoteInfo: SyncInfo) {
+		if (localInfo.ppk || remoteInfo.ppk) return localInfo;
+
+		const password = getMasterPassword(false);
+		if (!password) return localInfo;
+
+		localInfo.ppk = await generateKeyPair(this.encryptionService(), password);
+		return localInfo;
+	}
+
 	private async apiCall(fnName: string, ...args: any[]) {
 		if (this.syncTargetIsLocked_) throw new JoplinError('Sync target is locked - aborting API call', 'lockError');
 
@@ -394,9 +390,12 @@ export default class Synchronizer {
 			return `${Dirnames.Resources}/${resourceId}`;
 		};
 
-		// We index resources and apply the "is_shared" flag before syncing
-		// because it's going to affect what's sent encrypted, and what's sent
-		// plain text.
+		// We index resources before sync mostly to flag any potential orphan
+		// resource before it is being synced. That way, it can potentially be
+		// auto-deleted at a later time. Indexing resources is fast so it's fine
+		// to call it every time here.
+		//
+		// https://github.com/laurent22/joplin/issues/932#issuecomment-933736405
 		try {
 			if (this.resourceService()) {
 				logger.info('Indexing resources...');
@@ -420,49 +419,52 @@ export default class Synchronizer {
 			this.api().setTempDirName(Dirnames.Temp);
 
 			try {
-				const remoteInfo = await fetchSyncInfo(this.api());
+				let remoteInfo = await fetchSyncInfo(this.api());
 				logger.info('Sync target remote info:', remoteInfo);
 
 				if (!remoteInfo.version) {
 					logger.info('Sync target is new - setting it up...');
 					await this.migrationHandler().upgrade(Setting.value('syncVersion'));
-				} else {
-					logger.info('Sync target is already setup - checking it...');
+					remoteInfo = await fetchSyncInfo(this.api());
+				}
 
-					await this.migrationHandler().checkCanSync(remoteInfo);
+				logger.info('Sync target is already setup - checking it...');
 
-					const localInfo = await localSyncInfo();
+				await this.migrationHandler().checkCanSync(remoteInfo);
 
-					logger.info('Sync target local info:', localInfo);
+				let localInfo = await localSyncInfo();
 
-					// console.info('LOCAL', localInfo);
-					// console.info('REMOTE', remoteInfo);
+				logger.info('Sync target local info:', localInfo);
 
-					if (!syncInfoEquals(localInfo, remoteInfo)) {
-						const newInfo = mergeSyncInfos(localInfo, remoteInfo);
-						const previousE2EE = localInfo.e2ee;
-						logger.info('Sync target info differs between local and remote - merging infos: ', newInfo.toObject());
+				localInfo = await this.setPpkIfNotExist(localInfo, remoteInfo);
 
-						await this.lockHandler().acquireLock(LockType.Exclusive, this.appType_, this.clientId_, { clearExistingSyncLocksFromTheSameClient: true });
-						await uploadSyncInfo(this.api(), newInfo);
-						await saveLocalSyncInfo(newInfo);
-						await this.lockHandler().releaseLock(LockType.Exclusive, this.appType_, this.clientId_);
+				// console.info('LOCAL', localInfo);
+				// console.info('REMOTE', remoteInfo);
 
-						// console.info('NEW', newInfo);
+				if (!syncInfoEquals(localInfo, remoteInfo)) {
+					const newInfo = mergeSyncInfos(localInfo, remoteInfo);
+					const previousE2EE = localInfo.e2ee;
+					logger.info('Sync target info differs between local and remote - merging infos: ', newInfo.toObject());
 
-						if (newInfo.e2ee !== previousE2EE) {
-							if (newInfo.e2ee) {
-								const mk = getActiveMasterKey(newInfo);
-								await setupAndEnableEncryption(this.encryptionService(), mk);
-							} else {
-								await setupAndDisableEncryption(this.encryptionService());
-							}
+					await this.lockHandler().acquireLock(LockType.Exclusive, this.appType_, this.clientId_, { clearExistingSyncLocksFromTheSameClient: true });
+					await uploadSyncInfo(this.api(), newInfo);
+					await saveLocalSyncInfo(newInfo);
+					await this.lockHandler().releaseLock(LockType.Exclusive, this.appType_, this.clientId_);
+
+					// console.info('NEW', newInfo);
+
+					if (newInfo.e2ee !== previousE2EE) {
+						if (newInfo.e2ee) {
+							const mk = getActiveMasterKey(newInfo);
+							await setupAndEnableEncryption(this.encryptionService(), mk);
+						} else {
+							await setupAndDisableEncryption(this.encryptionService());
 						}
-					} else {
-						// Set it to remote anyway so that timestamps are the same
-						// Note: that's probably not needed anymore?
-						// await uploadSyncInfo(this.api(), remoteInfo);
 					}
+				} else {
+					// Set it to remote anyway so that timestamps are the same
+					// Note: that's probably not needed anymore?
+					// await uploadSyncInfo(this.api(), remoteInfo);
 				}
 			} catch (error) {
 				if (error.code === 'outdatedSyncTarget') {
@@ -478,6 +480,31 @@ export default class Synchronizer {
 				this.syncTargetIsLocked_ = true;
 				void this.cancel();
 			});
+
+			// ========================================================================
+			// 2. DELETE_REMOTE
+			// ------------------------------------------------------------------------
+			// Delete the remote items that have been deleted locally.
+			// ========================================================================
+
+			if (syncSteps.indexOf('delete_remote') >= 0) {
+				const deletedItems = await BaseItem.deletedItems(syncTargetId);
+				for (let i = 0; i < deletedItems.length; i++) {
+					if (this.cancelling()) break;
+
+					const item = deletedItems[i];
+					const path = BaseItem.systemPath(item.item_id);
+					this.logSyncOperation('deleteRemote', null, { id: item.item_id }, 'local has been deleted');
+					await this.apiCall('delete', path);
+
+					if (item.item_type === BaseModel.TYPE_RESOURCE) {
+						const remoteContentPath = resourceRemotePath(item.item_id);
+						await this.apiCall('delete', remoteContentPath);
+					}
+
+					await BaseItem.remoteDeletedItem(syncTargetId, item.item_id);
+				}
+			} // DELETE_REMOTE STEP
 
 			// ========================================================================
 			// 1. UPLOAD
@@ -505,7 +532,7 @@ export default class Synchronizer {
 						if (this.cancelling()) break;
 
 						let local = locals[i];
-						const ItemClass = BaseItem.itemClass(local);
+						const ItemClass: typeof BaseItem = BaseItem.itemClass(local);
 						const path = BaseItem.systemPath(local);
 
 						// Safety check to avoid infinite loops.
@@ -699,7 +726,10 @@ export default class Synchronizer {
 								const syncTimeQueries = BaseItem.updateSyncTimeQueries(syncTargetId, local, time.unixMs());
 								await ItemClass.save(local, { autoTimestamp: false, changeSource: ItemChange.SOURCE_SYNC, nextQueries: syncTimeQueries });
 							} else {
-								await ItemClass.delete(local.id, { changeSource: ItemChange.SOURCE_SYNC });
+								await ItemClass.delete(local.id, {
+									changeSource: ItemChange.SOURCE_SYNC,
+									trackDeleted: false,
+								});
 							}
 						} else if (action == 'noteConflict') {
 							// ------------------------------------------------------------------------------
@@ -752,7 +782,7 @@ export default class Synchronizer {
 								if (local.encryption_applied) this.dispatch({ type: 'SYNC_GOT_ENCRYPTED_ITEM' });
 							} else {
 								// Remote no longer exists (note deleted) so delete local one too
-								await ItemClass.delete(local.id, { changeSource: ItemChange.SOURCE_SYNC });
+								await ItemClass.delete(local.id, { changeSource: ItemChange.SOURCE_SYNC, trackDeleted: false });
 							}
 						}
 
@@ -762,31 +792,6 @@ export default class Synchronizer {
 					if (!result.hasMore) break;
 				}
 			} // UPLOAD STEP
-
-			// ========================================================================
-			// 2. DELETE_REMOTE
-			// ------------------------------------------------------------------------
-			// Delete the remote items that have been deleted locally.
-			// ========================================================================
-
-			if (syncSteps.indexOf('delete_remote') >= 0) {
-				const deletedItems = await BaseItem.deletedItems(syncTargetId);
-				for (let i = 0; i < deletedItems.length; i++) {
-					if (this.cancelling()) break;
-
-					const item = deletedItems[i];
-					const path = BaseItem.systemPath(item.item_id);
-					this.logSyncOperation('deleteRemote', null, { id: item.item_id }, 'local has been deleted');
-					await this.apiCall('delete', path);
-
-					if (item.item_type === BaseModel.TYPE_RESOURCE) {
-						const remoteContentPath = resourceRemotePath(item.item_id);
-						await this.apiCall('delete', remoteContentPath);
-					}
-
-					await BaseItem.remoteDeletedItem(syncTargetId, item.item_id);
-				}
-			} // DELETE_REMOTE STEP
 
 			// ------------------------------------------------------------------------
 			// 3. DELTA

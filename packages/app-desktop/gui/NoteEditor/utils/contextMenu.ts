@@ -2,7 +2,7 @@ import ResourceEditWatcher from '@joplin/lib/services/ResourceEditWatcher/index'
 import { _ } from '@joplin/lib/locale';
 import { copyHtmlToClipboard } from './clipboardUtils';
 
-const bridge = require('electron').remote.require('./bridge').default;
+const bridge = require('@electron/remote').require('./bridge').default;
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
 import Resource from '@joplin/lib/models/Resource';
@@ -107,7 +107,7 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 			label: _('Save as...'),
 			onAction: async (options: ContextMenuOptions) => {
 				const { resourcePath, resource } = await resourceInfo(options);
-				const filePath = bridge().showSaveDialog({
+				const filePath = await bridge().showSaveDialog({
 					defaultPath: resource.filename ? resource.filename : resource.title,
 				});
 				if (!filePath) return;

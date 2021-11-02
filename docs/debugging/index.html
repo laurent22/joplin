@@ -29,7 +29,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/debugging.md
 			href="&#x2F;css/bootstrap5.0.2.min.css"
 			as="style"
 		/>
-		<link rel="stylesheet" href="&#x2F;css/fontawesome-all.min.css?t=1629455871213">
+		<link rel="stylesheet" href="/css/fontawesome-all.min.css?h=ecd507b3125edc4d2a03aa6ae5d07da9">
 		<link
 			href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
 			rel="stylesheet"
@@ -37,7 +37,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/debugging.md
 			media="all"
 			onload="this.media='all'; this.onload = null"
 		/>
-		<link rel="stylesheet" href="&#x2F;css/site.css?t=1629455871213" as="style" />
+		<link rel="stylesheet" href="/css/site.css?h=f1e088235812805da9f78ebcd465d1ad" as="style" />
 		<title>How to enable debugging | Joplin</title>
 
 		<script
@@ -121,6 +121,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/debugging.md
 <li><a href="/conflict/">What is a conflict?</a></li>
 <li><a href="/debugging/">How to enable debug mode</a></li>
 <li><a href="/rich_text_editor/">About the Rich Text editor limitations</a></li>
+<li><a href="/external_links/">External links</a></li>
 <li><a href="/faq/">FAQ</a></li>
 </ul>
 </li>
@@ -218,6 +219,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/debugging.md
 <li><a href="/conflict/">What is a conflict?</a></li>
 <li><a href="/debugging/">How to enable debug mode</a></li>
 <li><a href="/rich_text_editor/">About the Rich Text editor limitations</a></li>
+<li><a href="/external_links/">External links</a></li>
 <li><a href="/faq/">FAQ</a></li>
 </ul>
 </li>
@@ -291,7 +293,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/debugging.md
 <h1>How to enable debugging<a name="how-to-enable-debugging" href="#how-to-enable-debugging" class="heading-anchor">🔗</a></h1>
 <p>It is possible to get the apps to display or log more information that might help debug various issues.</p>
 <h2>Desktop application<a name="desktop-application" href="#desktop-application" class="heading-anchor">🔗</a></h2>
-<p>If the application starts with a white screen, open <strong>View &gt; Toggle Developer Tools</strong> in the menu. Then check in the console if there is any error or warning and please let us know about it.</p>
+<p>If the application starts with a white screen, open <strong>Help &gt; Toggle Development Tools</strong> in the menu. Then check in the console if there is any error or warning and please let us know about it.</p>
 <p>Otherwise, follow these instructions:</p>
 <ul>
 <li>Click on menu <strong>Help &gt; Open Profile Directory</strong> and add a file named &quot;flags.txt&quot; in your directory with the following content: <code>--open-dev-tools --debug --log-level debug</code></li>
@@ -356,41 +358,36 @@ https://github.com/laurent22/joplin/blob/dev/readme/debugging.md
 				</div>
 			</div>
 
-			<footer class="darkblue-bg">
-				<div class="container">
-					<div class="row">
-						<div class="col-3 d-none d-md-block">
-							<img src="&#x2F;images/logo-text.svg" alt="" width="150" />
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-12">
-							<hr />
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-12 col-md-6">
-							<img
-								src="&#x2F;images/logo-text.svg"
-								width="120"
-								class="img-center d-block d-md-none"
-								alt=""
-							/>
-							<br class="d-block d-md-none" />
-							<p class="text-center-sm">Copyright &copy; 2016-2021 Laurent Cozic</p>
-						</div>
-						<div class="col-12 col-md-6 right-links">
-							<p class="text-right text-center-sm">
-								<a href="https://github.com/laurent22/joplin/" class="github-link"><i class="fab fa-github"></i> GitHub Repository</a>
-								<a href="/privacy/">Privacy Policy</a>
-							</p>
-						</div>
-					</div>
-				</div>
-			</footer>
+			
+<footer class="darkblue-bg">
+	<div class="container">
+		<div class="row">
+			<div class="col-12 col-md-12 social-links">
+				<a href="https://twitter.com/joplinapp" title="Joplin Twitter feed"><i class="fab fa-twitter"></i></a>
+				<a href="https://mastodon.social/@joplinapp" title="Joplin Mastodon feed"><i class="fab fa-mastodon"></i></a>
+				<a href="https://www.patreon.com/joplin" title="Joplin Patreon"><i class="fab fa-patreon"></i></a>
+				<a href="https://discordapp.com/invite/d2HMPwE" title="Joplin Discord chat"><i class="fab fa-discord"></i></a>
+				<a href="https://www.reddit.com/r/joplinapp/" title="Joplin Subreddit"><i class="fab fa-reddit"></i></a>
+				<a href="https://github.com/laurent22/joplin/" title="Joplin GitHub repository"><i class="fab fa-github"></i></a>
+			</div>
 		</div>
 
-		<script src="&#x2F;js/script.js?t=1629455871213"></script>
+		<div class="row bottom-links-row">
+			<div class="col-12 col-md-6">
+				<p class="text-center-sm">Copyright &copy; 2016-2021 Laurent Cozic</p>
+			</div>
+			<div class="col-12 col-md-6">
+				<p class="text-right text-center-sm right-links">
+					<span class="footer-right">
+						<a href="/privacy/">Privacy Policy</a>
+					</span>
+				</p>
+			</div>
+		</div>
+	</div>
+</footer>		</div>
+
+		<script src="/js/script.js?h=46b3b58d72c94591621551affbb8c6e3"></script>
 
 <script>
 	if (window.location.hostname !== 'localhost') {

@@ -3,7 +3,7 @@ import Setting from '@joplin/lib/models/Setting';
 import Note from '@joplin/lib/models/Note';
 import BaseModel from '@joplin/lib/BaseModel';
 import Resource from '@joplin/lib/models/Resource';
-const bridge = require('electron').remote.require('./bridge').default;
+const bridge = require('@electron/remote').require('./bridge').default;
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 import htmlUtils from '@joplin/lib/htmlUtils';
 import Logger from '@joplin/lib/Logger';
@@ -65,7 +65,7 @@ export async function commandAttachFileToBody(body: string, filePaths: string[] 
 	};
 
 	if (!filePaths) {
-		filePaths = bridge().showOpenDialog({
+		filePaths = await bridge().showOpenDialog({
 			properties: ['openFile', 'createDirectory', 'multiSelections'],
 		});
 		if (!filePaths || !filePaths.length) return null;

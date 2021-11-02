@@ -127,6 +127,7 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 				<html>
 					<head>
 						<meta charset="UTF-8">
+						<meta name="viewport" content="width=device-width, initial-scale=1" />
 						${assetsToHeaders(result.pluginAssets, { asHtml: true })}
 						<title>${escapeHtml(item.title)}</title>
 					</head>

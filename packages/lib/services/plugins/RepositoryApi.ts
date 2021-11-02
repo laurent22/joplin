@@ -16,6 +16,36 @@ interface Release {
 	assets: ReleaseAsset[];
 }
 
+const findWorkingGitHubUrl = async (defaultContentUrl: string): Promise<string> => {
+	// From: https://github.com/laurent22/joplin/issues/5161#issuecomment-921642721
+
+	const mirrorUrls = [
+		defaultContentUrl,
+		'https://cdn.staticaly.com/gh/joplin/plugins/master',
+		'https://ghproxy.com/https://raw.githubusercontent.com/joplin/plugins/master',
+		'https://cdn.jsdelivr.net/gh/joplin/plugins@master',
+		'https://raw.fastgit.org/joplin/plugins/master',
+	];
+
+	for (const mirrorUrl of mirrorUrls) {
+		try {
+			// We try to fetch .gitignore, which is smaller than the whole manifest
+			await fetch(`${mirrorUrl}/.gitignore`);
+		} catch (error) {
+			logger.info(`findWorkingMirror: Could not connect to ${mirrorUrl}:`, error);
+			continue;
+		}
+
+		logger.info(`findWorkingMirror: Using: ${mirrorUrl}`);
+
+		return mirrorUrl;
+	}
+
+	logger.info('findWorkingMirror: Could not find any working GitHub URL');
+
+	return defaultContentUrl;
+};
+
 export default class RepositoryApi {
 
 	// As a base URL, this class can support either a remote repository or a
@@ -29,6 +59,9 @@ export default class RepositoryApi {
 	private tempDir_: string;
 	private release_: Release = null;
 	private manifests_: PluginManifest[] = null;
+	private githubApiUrl_: string;
+	private contentBaseUrl_: string;
+	private isUsingDefaultContentUrl_: boolean = true;
 
 	public constructor(baseUrl: string, tempDir: string) {
 		this.baseUrl_ = baseUrl;
@@ -36,6 +69,14 @@ export default class RepositoryApi {
 	}
 
 	public async initialize() {
+		// https://github.com/joplin/plugins
+		// https://api.github.com/repos/joplin/plugins/releases
+		this.githubApiUrl_ = this.baseUrl_.replace(/^(https:\/\/)(github\.com\/)(.*)$/, '$1api.$2repos/$3');
+		const defaultContentBaseUrl = `${this.baseUrl_.replace(/github\.com/, 'raw.githubusercontent.com')}/master`;
+		this.contentBaseUrl_ = await findWorkingGitHubUrl(defaultContentBaseUrl);
+
+		this.isUsingDefaultContentUrl_ = this.contentBaseUrl_ === defaultContentBaseUrl;
+
 		await this.loadManifests();
 		await this.loadRelease();
 	}
@@ -45,18 +86,33 @@ export default class RepositoryApi {
 		try {
 			const manifests = JSON.parse(manifestsText);
 			if (!manifests) throw new Error('Invalid or missing JSON');
+
 			this.manifests_ = Object.keys(manifests).map(id => {
-				return manifests[id];
+				const m: PluginManifest = manifests[id];
+				// If we don't control the repository, we can't recommend
+				// anything on it since it could have been modified.
+				if (!this.isUsingDefaultContentUrl) m._recommended = false;
+				return m;
 			});
 		} catch (error) {
 			throw new Error(`Could not parse JSON: ${error.message}`);
 		}
 	}
 
+	public get isUsingDefaultContentUrl() {
+		return this.isUsingDefaultContentUrl_;
+	}
+
 	private get githubApiUrl(): string {
-		// https://github.com/joplin/plugins
-		// https://api.github.com/repos/joplin/plugins/releases
-		return this.baseUrl_.replace(/^(https:\/\/)(github\.com\/)(.*)$/, '$1api.$2repos/$3');
+		return this.githubApiUrl_;
+	}
+
+	public get contentBaseUrl(): string {
+		if (this.isLocalRepo) {
+			return this.baseUrl_;
+		} else {
+			return this.contentBaseUrl_;
+		}
 	}
 
 	private async loadRelease() {
@@ -76,14 +132,6 @@ export default class RepositoryApi {
 
 	private get isLocalRepo(): boolean {
 		return this.baseUrl_.indexOf('http') !== 0;
-	}
-
-	private get contentBaseUrl(): string {
-		if (this.isLocalRepo) {
-			return this.baseUrl_;
-		} else {
-			return `${this.baseUrl_.replace(/github\.com/, 'raw.githubusercontent.com')}/master`;
-		}
 	}
 
 	private assetFileUrl(pluginId: string): string {

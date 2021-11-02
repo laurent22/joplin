@@ -29,7 +29,7 @@ https://github.com/laurent22/joplin/blob/dev/{{{sourceMarkdownFile}}}
 			href="{{cssBaseUrl}}/bootstrap5.0.2.min.css"
 			as="style"
 		/>
-		<link rel="stylesheet" href="{{cssBaseUrl}}/fontawesome-all.min.css?t={{buildTime}}">
+		<link rel="stylesheet" href="{{{assetUrls.css.fontawesome}}}">
 		<link
 			href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
 			rel="stylesheet"
@@ -37,7 +37,7 @@ https://github.com/laurent22/joplin/blob/dev/{{{sourceMarkdownFile}}}
 			media="all"
 			onload="this.media='all'; this.onload = null"
 		/>
-		<link rel="stylesheet" href="{{cssBaseUrl}}/site.css?t={{buildTime}}" as="style" />
+		<link rel="stylesheet" href="{{{assetUrls.css.site}}}" as="style" />
 		<title>{{pageTitle}}</title>
 
 		<script
@@ -75,41 +75,11 @@ https://github.com/laurent22/joplin/blob/dev/{{{sourceMarkdownFile}}}
 				</div>
 			</div>
 
-			<footer class="darkblue-bg">
-				<div class="container">
-					<div class="row">
-						<div class="col-3 d-none d-md-block">
-							<img src="{{imageBaseUrl}}/logo-text.svg" alt="" width="150" />
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-12">
-							<hr />
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-12 col-md-6">
-							<img
-								src="{{imageBaseUrl}}/logo-text.svg"
-								width="120"
-								class="img-center d-block d-md-none"
-								alt=""
-							/>
-							<br class="d-block d-md-none" />
-							<p class="text-center-sm">Copyright &copy; 2016-{{yyyy}} Laurent Cozic</p>
-						</div>
-						<div class="col-12 col-md-6 right-links">
-							<p class="text-right text-center-sm">
-								<a href="https://github.com/laurent22/joplin/" class="github-link"><i class="fab fa-github"></i> GitHub Repository</a>
-								<a href="{{baseUrl}}/privacy/">Privacy Policy</a>
-							</p>
-						</div>
-					</div>
-				</div>
-			</footer>
+			
+			{{> footer}}
 		</div>
 
-		<script src="{{jsBaseUrl}}/script.js?t={{buildTime}}"></script>
+		<script src="{{{assetUrls.js.script}}}"></script>
 
 		{{> analytics}}
 	</body>
