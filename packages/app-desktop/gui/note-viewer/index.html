@@ -346,6 +346,10 @@
 			return Math.max(0, contentElement.scrollHeight - contentElement.clientHeight);
 		}
 
+		function maxScrollLeft() {
+			return Math.max(0, contentElement.scrollWidth - contentElement.clientWidth);
+		}
+
 		// The body element needs to have a fixed height for the content to be scrollable
 		function updateBodyHeight() {
 			document.getElementById('joplin-container-body').style.height = window.innerHeight + 'px';
@@ -358,35 +362,53 @@
 		}
 
 		let zoomFactorIsNotOne = false;
-		let remainedScrollDy = 0, remainedScrollTimerId = null;
+		let remainedScrollDx = 0, remainedScrollDy = 0, remainedScrollTimerId = null;
 
-		function resetSmoothScroll() { remainedScrollDy = 0; }
+		function resetSmoothScroll() { remainedScrollDx = 0; remainedScrollDy = 0; }
 
 		function customScroll(wheelEvent, smoothly) {
 			const linePixels = 100 / 3;
-			const pagePixels = Math.max(linePixels, contentElement.clientHeight);
-			let pixelsPerUnit = 1; // for WheelEvent.DOM_DELTA_PIXEL
+			const pagePixelsX = Math.max(linePixels, contentElement.clientWidth);
+			const pagePixelsY = Math.max(linePixels, contentElement.clientHeight);
+			let pixelsPerUnitX = 1, pixelsPerUnitY = 1; // for WheelEvent.DOM_DELTA_PIXEL
 			if (wheelEvent.deltaMode === WheelEvent.DOM_DELTA_LINE) {
-				pixelsPerUnit = linePixels;
+				pixelsPerUnitX = pixelsPerUnitY = linePixels;
 			} else if (wheelEvent.deltaMode === WheelEvent.DOM_DELTA_PAGE) {
-				pixelsPerUnit = pagePixels;
+				pixelsPerUnitX = pagePixelsX;
+				pixelsPerUnitY = pagePixelsY;
 			}
 			if (!smoothly) {
-				const dy = wheelEvent.deltaY * pixelsPerUnit;
-				contentElement.scrollTop = Math.max(0, Math.min(maxScrollTop(), contentElement.scrollTop + dy));
+				if (wheelEvent.deltaX) {
+					const dx = wheelEvent.deltaX * pixelsPerUnitX;
+					contentElement.scrollLeft = Math.max(0, Math.min(maxScrollLeft(), contentElement.scrollLeft + dx));
+				}
+				if (wheelEvent.deltaY) {
+					const dy = wheelEvent.deltaY * pixelsPerUnitY;
+					contentElement.scrollTop = Math.max(0, Math.min(maxScrollTop(), contentElement.scrollTop + dy));
+				}
 			} else {
+				if (Math.sign(remainedScrollDx) !== Math.sign(wheelEvent.deltaX)) remainedScrollDx = 0;
 				if (Math.sign(remainedScrollDy) !== Math.sign(wheelEvent.deltaY)) remainedScrollDy = 0;
-				remainedScrollDy += wheelEvent.deltaY * pixelsPerUnit;
-				const maxDy = Math.max(8.5, Math.min(pagePixels, Math.abs(remainedScrollDy)) / 5);
+				remainedScrollDx += wheelEvent.deltaX * pixelsPerUnitX;
+				remainedScrollDy += wheelEvent.deltaY * pixelsPerUnitY;
+				const maxDx = Math.max(8.5, Math.min(pagePixelsX, Math.abs(remainedScrollDx)) / 5);
+				const maxDy = Math.max(8.5, Math.min(pagePixelsY, Math.abs(remainedScrollDy)) / 5);
 				const f = () => {
 					if (remainedScrollTimerId) {
 						clearTimeout(remainedScrollTimerId);
 						remainedScrollTimerId = null;
 					}
-					const dy = Math.max(-maxDy, Math.min(maxDy, remainedScrollDy));
-					remainedScrollDy -= dy;
-					contentElement.scrollTop = Math.max(0, Math.min(maxScrollTop(), contentElement.scrollTop + dy));
-					if (remainedScrollDy != 0) remainedScrollTimerId = setTimeout(f, 20);
+					if (remainedScrollDx) {
+						const dx = Math.max(-maxDx, Math.min(maxDx, remainedScrollDx));
+						remainedScrollDx -= dx;
+						contentElement.scrollLeft = Math.max(0, Math.min(maxScrollLeft(), contentElement.scrollLeft + dx));
+					}
+					if (remainedScrollDy) {
+						const dy = Math.max(-maxDy, Math.min(maxDy, remainedScrollDy));
+						remainedScrollDy -= dy;
+						contentElement.scrollTop = Math.max(0, Math.min(maxScrollTop(), contentElement.scrollTop + dy));
+					}
+					if (remainedScrollDx || remainedScrollDy) remainedScrollTimerId = setTimeout(f, 20);
 				};
 				f();
 			}
