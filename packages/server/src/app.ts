@@ -4,7 +4,7 @@ require('source-map-support').install();
 import * as Koa from 'koa';
 import * as fs from 'fs-extra';
 import Logger, { LoggerWrapper, TargetType } from '@joplin/lib/Logger';
-import config, { initConfig, runningInDocker, EnvVariables } from './config';
+import config, { initConfig, runningInDocker } from './config';
 import { migrateLatest, waitForConnection, sqliteDefaultDir } from './db';
 import { AppContext, Env, KoaNext } from './utils/types';
 import FsDriverNode from '@joplin/lib/fs-driver-node';
@@ -20,6 +20,7 @@ import clickJackingHandler from './middleware/clickJackingHandler';
 import newModelFactory from './models/factory';
 import setupCommands from './utils/setupCommands';
 import { RouteResponseFormat, routeResponseFormat } from './utils/routeUtils';
+import { parseEnv } from './env';
 
 interface Argv {
 	env?: Env;
@@ -33,7 +34,7 @@ const nodeEnvFile = require('node-env-file');
 const { shimInit } = require('@joplin/lib/shim-init-node.js');
 shimInit({ nodeSqlite });
 
-const defaultEnvVariables: Record<Env, EnvVariables> = {
+const defaultEnvVariables: Record<Env, any> = {
 	dev: {
 		// To test with the Postgres database, uncomment DB_CLIENT below and
 		// comment out SQLITE_DATABASE. Then start the Postgres server using
@@ -95,10 +96,7 @@ async function main() {
 
 	if (!defaultEnvVariables[env]) throw new Error(`Invalid env: ${env}`);
 
-	const envVariables: EnvVariables = {
-		...defaultEnvVariables[env],
-		...process.env,
-	};
+	const envVariables = parseEnv(process.env, defaultEnvVariables[env]);
 
 	const app = new Koa();
 
@@ -254,6 +252,7 @@ async function main() {
 		appLogger().info('User content base URL:', config().userContentBaseUrl);
 		appLogger().info('Log dir:', config().logDir);
 		appLogger().info('DB Config:', markPasswords(config().database));
+		appLogger().info('Mailer Config:', markPasswords(config().mailer));
 
 		appLogger().info('Trying to connect to database...');
 		const connectionCheck = await waitForConnection(config().database);

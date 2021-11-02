@@ -86,7 +86,7 @@ export async function beforeAllDb(unitName: string, createDbOptions: CreateDbOpt
 	await initConfig(Env.Dev, {
 		SQLITE_DATABASE: createdDbPath_,
 		SUPPORT_EMAIL: 'testing@localhost',
-	}, {
+	} as any, {
 		tempDir: tempDir,
 	});
 
