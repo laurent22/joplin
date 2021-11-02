@@ -92,6 +92,7 @@ export interface EditorProps {
 	onChange: any;
 	onScroll: any;
 	onEditorPaste: any;
+	isSafeMode: boolean;
 }
 
 function Editor(props: EditorProps, ref: any) {
@@ -149,11 +150,13 @@ function Editor(props: EditorProps, ref: any) {
 	useEffect(() => {
 		if (!editorParent.current) return () => {};
 
-		// const userOptions = eventManager.filterEmit('codeMirrorOptions', {});
 		const userOptions = {};
 
-		const cmOptions = Object.assign({}, {
+		const safeOptions: Record<string, any> = {
 			value: props.value,
+		};
+
+		const unsafeOptions: Record<string, any> = {
 			screenReaderLabel: props.value,
 			theme: props.codeMirrorTheme,
 			mode: props.mode,
@@ -167,7 +170,17 @@ function Editor(props: EditorProps, ref: any) {
 			spellcheck: true,
 			allowDropFileTypes: [''], // disable codemirror drop handling
 			keyMap: props.keyMap ? props.keyMap : 'default',
-		}, userOptions);
+		};
+
+		let cmOptions: Record<string, any> = { ...safeOptions };
+
+		if (!props.isSafeMode) {
+			cmOptions = {
+				...cmOptions,
+				...unsafeOptions,
+				...userOptions,
+			};
+		}
 
 		const cm = CodeMirror(editorParent.current, cmOptions);
 		setEditor(cm);

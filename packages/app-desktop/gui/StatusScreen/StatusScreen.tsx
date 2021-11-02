@@ -25,7 +25,7 @@ const StyledAdvancedToolItem = styled.div`
 async function exportDebugReportClick() {
 	const filename = `syncReport-${new Date().getTime()}.csv`;
 
-	const filePath = bridge().showSaveDialog({
+	const filePath = await bridge().showSaveDialog({
 		title: _('Please select where the sync status should be exported to'),
 		defaultPath: filename,
 	});

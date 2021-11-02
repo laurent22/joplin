@@ -5,6 +5,7 @@ export function markdownBodyToPlainText(md: string): string {
 	return md.replace(/\[.*\]\((.*)\)/g, '$1');
 }
 
+// TODO: replace with renderMarkdown()
 export function markdownBodyToHtml(md: string): string {
 	const markdownIt = new MarkdownIt({
 		linkify: true,

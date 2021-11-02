@@ -40,6 +40,11 @@ interface NavBar {
 	isFrontPage: boolean;
 }
 
+export interface AssetUrls {
+	css: Record<string, string>;
+	js: Record<string, string>;
+}
+
 export interface TemplateParams {
 	env?: Env;
 	baseUrl?: string;
@@ -64,7 +69,7 @@ export interface TemplateParams {
 	contentHtml?: string;
 	navbar?: NavBar;
 	showJoplinCloudLinks?: boolean;
-	buildTime?: number;
+	assetUrls: AssetUrls;
 }
 
 export interface PlanPageParams extends TemplateParams {

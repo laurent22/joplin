@@ -32,6 +32,14 @@ function logMessage(...msg: any[]) {
 	postMessage('onLog', { value: msg });
 }
 
+// For an example on how to customize the theme, see:
+//
+// https://github.com/codemirror/theme-one-dark/blob/main/src/one-dark.ts
+//
+// Use Safari developer tools to view the content of the CodeMirror iframe while
+// the app is running. It seems that what appears as ".ͼ1" in the CSS is the
+// equivalent of "&" in the theme object. So to target ".ͼ1.cm-focused", you'd
+// use '&.cm-focused' in the theme.
 const createTheme = (theme: any): Extension => {
 	const baseTheme = EditorView.baseTheme({
 		'&': {
@@ -39,6 +47,10 @@ const createTheme = (theme: any): Extension => {
 			backgroundColor: theme.backgroundColor,
 			fontFamily: theme.fontFamily,
 			fontSize: `${theme.fontSize}px`,
+		},
+
+		'&.cm-focused': {
+			outline: 'none',
 		},
 	});
 
@@ -133,6 +145,7 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 				drawSelection(),
 				highlightSpecialChars(),
 				EditorView.lineWrapping,
+				EditorView.contentAttributes.of({ autocapitalize: 'sentence' }),
 				defaultHighlightStyle.fallback,
 				EditorView.updateListener.of((viewUpdate: ViewUpdate) => {
 					if (viewUpdate.docChanged) {

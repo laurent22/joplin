@@ -1,10 +1,11 @@
-import { baseUrl } from '../config';
-import { Item, ItemAddressingType, Uuid } from '../services/database/types';
+import config, { baseUrl } from '../config';
+import { Item, ItemAddressingType, User, Uuid } from '../services/database/types';
 import { ErrorBadRequest, ErrorForbidden, ErrorNotFound } from './errors';
 import Router from './Router';
 import { AppContext, HttpMethod, RouteType } from './types';
 import { URL } from 'url';
 import { csrfCheck } from './csrf';
+import { contextSessionId } from './requestUtils';
 
 const { ltrimSlashes, rtrimSlashes } = require('@joplin/lib/path-utils');
 
@@ -182,6 +183,12 @@ export function routeResponseFormat(context: AppContext): RouteResponseFormat {
 	return path.indexOf('api') === 0 || path.indexOf('/api') === 0 ? RouteResponseFormat.Json : RouteResponseFormat.Html;
 }
 
+function disabledAccountCheck(route: MatchedRoute, user: User) {
+	if (!user || user.enabled) return;
+
+	if (route.subPath.schema.startsWith('api/')) throw new ErrorForbidden(`This account is disabled. Please login to ${config().baseUrl} for more information.`);
+}
+
 export async function execRequest(routes: Routers, ctx: AppContext) {
 	const match = findMatchingRoute(ctx.path, routes);
 	if (!match) throw new ErrorNotFound();
@@ -194,9 +201,19 @@ export async function execRequest(routes: Routers, ctx: AppContext) {
 	// This is a generic catch-all for all private end points - if we
 	// couldn't get a valid session, we exit now. Individual end points
 	// might have additional permission checks depending on the action.
-	if (!isPublicRoute && !ctx.joplin.owner) throw new ErrorForbidden();
+	if (!isPublicRoute && !ctx.joplin.owner) {
+		if (contextSessionId(ctx, false)) {
+			// If we have a session but not a user it means the session was
+			// invalid or has expired, so display a special message, since this
+			// is also going to be displayed on the website.
+			throw new ErrorForbidden('Your session has expired. Please login again.');
+		} else {
+			throw new ErrorForbidden();
+		}
+	}
 
 	await csrfCheck(ctx, isPublicRoute);
+	disabledAccountCheck(match, ctx.joplin.owner);
 
 	return endPoint.handler(match.subPath, ctx);
 }
@@ -271,8 +288,13 @@ export enum UrlType {
 	Login = 'login',
 	Terms = 'terms',
 	Privacy = 'privacy',
+	Tasks = 'tasks',
 }
 
 export function makeUrl(urlType: UrlType): string {
-	return `${baseUrl(RouteType.Web)}/${urlType}`;
+	if (config().isJoplinCloud && urlType === UrlType.Signup) {
+		return `${config().joplinAppBaseUrl}/plans`;
+	} else {
+		return `${baseUrl(RouteType.Web)}/${urlType}`;
+	}
 }

@@ -18,7 +18,15 @@ describe('index/password', function() {
 	});
 
 	test('should queue an email to reset password', async function() {
-		const { user } = await createUserAndSession(1);
+		const { user, password } = await createUserAndSession(1);
+
+		// Create a few sessions, to verify that they are all deleted when the
+		// password is changed.
+		await models().session().authenticate(user.email, password);
+		await models().session().authenticate(user.email, password);
+		await models().session().authenticate(user.email, password);
+		expect(await models().session().count()).toBe(4);
+
 		await models().email().deleteAll();
 		await execRequest('', 'POST', 'password/forgot', { email: user.email });
 		const emails = await models().email().all();
@@ -34,6 +42,9 @@ describe('index/password', function() {
 
 		const loggedInUser = await models().user().login(user.email, newPassword);
 		expect(loggedInUser.id).toBe(user.id);
+
+		// Check that all sessions have been deleted
+		expect(await models().session().count()).toBe(0);
 	});
 
 	test('should not queue an email for non-existing emails', async function() {

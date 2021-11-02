@@ -146,6 +146,10 @@ class NoteTextViewerComponent extends React.Component<Props, any> {
 	send(channel: string, arg0: any = null, arg1: any = null) {
 		const win = this.webviewRef_.current.contentWindow;
 
+		if (channel === 'focus') {
+			win.postMessage({ target: 'webview', name: 'focus', data: {} }, '*');
+		}
+
 		if (channel === 'setHtml') {
 			win.postMessage({ target: 'webview', name: 'setHtml', data: { html: arg0, options: arg1 } }, '*');
 		}

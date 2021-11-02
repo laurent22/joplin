@@ -13,6 +13,7 @@ export default class ShareService {
 	private static instance_: ShareService;
 	private api_: JoplinServerApi = null;
 	private store_: Store<any> = null;
+	private initialized_ = false;
 
 	public static instance(): ShareService {
 		if (this.instance_) return this.instance_;
@@ -21,11 +22,13 @@ export default class ShareService {
 	}
 
 	public initialize(store: Store<any>, api: JoplinServerApi = null) {
+		this.initialized_ = true;
 		this.store_ = store;
 		this.api_ = api;
 	}
 
 	public get enabled(): boolean {
+		if (!this.initialized_) return false;
 		return [9, 10].includes(Setting.value('sync.target')); // Joplin Server, Joplin Cloud targets
 	}
 
@@ -74,6 +77,8 @@ export default class ShareService {
 		return share;
 	}
 
+	// This allows the notebook owner to stop sharing it. For a recipient to
+	// leave the shared notebook, see the leaveSharedFolder command.
 	public async unshareFolder(folderId: string) {
 		const folder = await Folder.load(folderId);
 		if (!folder) throw new Error(`No such folder: ${folderId}`);
@@ -113,6 +118,20 @@ export default class ShareService {
 		// It's ok if updateAllShareIds() doesn't run because it's executed on
 		// each sync too.
 		await Folder.updateAllShareIds();
+	}
+
+	// This is when a share recipient decides to leave the shared folder.
+	//
+	// In that case, we should only delete the folder but none of its children.
+	// Deleting the folder tells the server that we want to leave the share. The
+	// server will then proceed to delete all associated user_items. So
+	// eventually all the notebook content will also be deleted for the current
+	// user.
+	//
+	// We don't delete the children here because that would delete them for the
+	// other share participants too.
+	public async leaveSharedFolder(folderId: string): Promise<void> {
+		await Folder.delete(folderId, { deleteChildren: false });
 	}
 
 	public async shareNote(noteId: string): Promise<StateShare> {
@@ -198,6 +217,13 @@ export default class ShareService {
 
 	private async loadShareInvitations() {
 		return this.api().exec('GET', 'api/share_users');
+	}
+
+	public setProcessingShareInvitationResponse(v: boolean) {
+		this.store.dispatch({
+			type: 'SHARE_INVITATION_RESPONSE_PROCESSING',
+			value: v,
+		});
 	}
 
 	public async respondInvitation(shareUserId: string, accept: boolean) {

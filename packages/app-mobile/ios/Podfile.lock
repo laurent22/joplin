@@ -227,6 +227,8 @@ PODS:
     - React-Core
   - react-native-netinfo (6.0.0):
     - React-Core
+  - react-native-rsa-native (2.0.4):
+    - React
   - react-native-slider (3.0.3):
     - React
   - react-native-sqlite-storage (5.0.0):
@@ -348,6 +350,7 @@ DEPENDENCIES:
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - react-native-image-resizer (from `../node_modules/react-native-image-resizer`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
+  - react-native-rsa-native (from `../node_modules/react-native-rsa-native`)
   - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
   - react-native-sqlite-storage (from `../node_modules/react-native-sqlite-storage`)
   - react-native-version-info (from `../node_modules/react-native-version-info`)
@@ -429,6 +432,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-image-resizer"
   react-native-netinfo:
     :path: "../node_modules/@react-native-community/netinfo"
+  react-native-rsa-native:
+    :path: "../node_modules/react-native-rsa-native"
   react-native-slider:
     :path: "../node_modules/@react-native-community/slider"
   react-native-sqlite-storage:
@@ -488,7 +493,7 @@ SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   DoubleConversion: cf9b38bf0b2d048436d9a82ad2abe1404f11e7de
   FBLazyVector: e686045572151edef46010a6f819ade377dfeb4b
-  FBReactNativeSpec: d2f54de51f69366bd1f5c1fb9270698dce678f8d
+  FBReactNativeSpec: 009b310a5134a345e702b4402de70b5ee2bb4832
   glog: 73c2498ac6884b13ede40eda8228cb1eee9d9d62
   JoplinCommonShareExtension: 270b4f8eb4e22828eeda433a04ed689fc1fd09b5
   JoplinRNShareExtension: 7137e9787374e1b0797ecbef9103d1588d90e403
@@ -510,6 +515,7 @@ SPEC CHECKSUMS:
   react-native-image-picker: c6d75c4ab2cf46f9289f341242b219cb3c1180d3
   react-native-image-resizer: a79bcffdef1b52160ff91db0d6fa24816a4ff332
   react-native-netinfo: e849fc21ca2f4128a5726c801a82fc6f4a6db50d
+  react-native-rsa-native: 1f6bba06dd02f0e652a66a384c75c270f7a0062f
   react-native-slider: e99fc201cefe81270fc9d81714a7a0f5e566b168
   react-native-sqlite-storage: 418ef4afc5e6df6ce3574c4617e5f0b65cffde55
   react-native-version-info: 36490da17d2c6b5cc21321c70e433784dee7ed0b

@@ -6,7 +6,7 @@ const os = require('os');
 const { filename } = require('./path-utils');
 import { setupDatabaseAndSynchronizer, switchClient, expectNotThrow, supportDir } from './testing/test-utils';
 const { enexXmlToMd } = require('./import-enex-md-gen.js');
-const { importEnex } = require('./import-enex');
+import importEnex from './import-enex';
 import Note from './models/Note';
 import Tag from './models/Tag';
 import Resource from './models/Resource';

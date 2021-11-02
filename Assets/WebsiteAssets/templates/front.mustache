@@ -11,7 +11,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="theme-color" content="#000000" />
 		<meta name="description" content="Joplin, the open source note-taking application" />
-		<link rel="stylesheet" href="{{cssBaseUrl}}/fontawesome-all.min.css?t={{buildTime}}">
+		<link rel="stylesheet" href="{{{assetUrls.css.fontawesome}}}">
 		<link
 			rel="stylesheet"
 			href="{{cssBaseUrl}}/bootstrap5.0.2.min.css"
@@ -29,7 +29,7 @@
 			rel="preload"
 			as="script"
 		></script>
-		<link rel="stylesheet" href="{{cssBaseUrl}}/site.css?t={{buildTime}}" as="style" />
+		<link rel="stylesheet" href="{{{assetUrls.css.site}}}" as="style" />
 		<title>Joplin</title>
 	</head>
 	<body class="front-page website-env-{{env}}">
@@ -376,7 +376,7 @@
 			rel="preload"
 			as="script"
 		></script>
-		<script src="{{jsBaseUrl}}/script.js?t={{buildTime}}"></script>
+		<script src="{{{assetUrls.js.script}}}"></script>
 		{{> analytics}}
 	</body>
 </html>

@@ -10,6 +10,7 @@
     "test-ci": "jest --config=jest.config.js --forceExit",
     "build": "gulp build",
     "start": "gulp build -L && node \"build/main.js\" --stack-trace-enabled --log-level debug --env dev",
+    "start-no-build": "node \"build/main.js\" --stack-trace-enabled --log-level debug --env dev",
     "tsc": "node node_modules/typescript/bin/tsc --project tsconfig.json",
     "watch": "node node_modules/typescript/bin/tsc --watch --project tsconfig.json"
   },
@@ -32,7 +33,7 @@
     ],
     "owner": "Laurent Cozic"
   },
-  "version": "2.4.0",
+  "version": "2.5.0",
   "bin": {
     "joplin": "./main.js"
   },
@@ -40,8 +41,8 @@
     "node": ">=10.0.0"
   },
   "dependencies": {
-    "@joplin/lib": "~2.4",
-    "@joplin/renderer": "~2.4",
+    "@joplin/lib": "~2.5",
+    "@joplin/renderer": "~2.5",
     "aws-sdk": "^2.588.0",
     "chalk": "^4.1.0",
     "compare-version": "^0.1.2",
@@ -50,12 +51,14 @@
     "image-type": "^3.0.0",
     "keytar": "^7.0.0",
     "md5": "^2.2.1",
+    "node-rsa": "^1.1.1",
     "open": "^7.0.4",
     "proper-lockfile": "^2.0.1",
     "read-chunk": "^2.1.0",
     "server-destroy": "^1.0.1",
     "sharp": "^0.26.2",
     "sprintf-js": "^1.1.2",
+    "sqlite3": "^5.0.2",
     "string-padding": "^1.0.2",
     "strip-ansi": "^4.0.0",
     "terminal-kit": "^1.30.0",
@@ -65,7 +68,7 @@
     "yargs-parser": "^7.0.0"
   },
   "devDependencies": {
-    "@joplin/tools": "~2.4",
+    "@joplin/tools": "~2.5",
     "@types/fs-extra": "^9.0.6",
     "@types/jest": "^26.0.15",
     "@types/node": "^14.14.6",
