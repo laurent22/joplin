@@ -1,5 +1,10 @@
 # Joplin Server Changelog
 
+## [server-v2.5.10](https://github.com/laurent22/joplin/releases/tag/server-v2.5.10) - 2021-11-02T14:45:54Z
+
+- New: Add unique constraint on name and owner ID of items table (f7a18ba)
+- Fixed: Fixed issue that could cause server to return empty items in some rare cases (99ea4b7)
+
 ## [server-v2.5.9](https://github.com/laurent22/joplin/releases/tag/server-v2.5.9) - 2021-10-28T19:43:41Z
 
 - Improved: Remove session expiration for now (4a2af32)
