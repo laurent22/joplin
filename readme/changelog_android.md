@@ -1,5 +1,10 @@
 # Joplin Android app changelog
 
+## [android-v2.6.1](https://github.com/laurent22/joplin/releases/tag/android-v2.6.1) (Pre-release) - 2021-11-02T20:49:53Z
+
+- Improved: Upgraded React Native from 0.64 to 0.66 (66e79cc)
+- Fixed: Fixed potential infinite loop when Joplin Server session is invalid (c5569ef)
+
 ## [android-v2.5.5](https://github.com/laurent22/joplin/releases/tag/android-v2.5.5) (Pre-release) - 2021-10-31T11:03:16Z
 
 - New: Add padding around beta text editor (365e152)
