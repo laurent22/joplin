@@ -1,6 +1,6 @@
 {
   "name": "@joplin/server",
-  "version": "2.5.10",
+  "version": "2.6.0",
   "private": true,
   "scripts": {
     "start-dev": "npm run build && nodemon --config nodemon.json --ext ts,js,mustache,css,tsx dist/app.js --env dev",
@@ -22,8 +22,8 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.1",
-    "@joplin/lib": "~2.5",
-    "@joplin/renderer": "~2.5",
+    "@joplin/lib": "~2.6",
+    "@joplin/renderer": "~2.6",
     "@koa/cors": "^3.1.0",
     "@types/uuid": "^8.3.1",
     "bcryptjs": "^2.4.3",
@@ -56,7 +56,7 @@
     "zxcvbn": "^4.4.2"
   },
   "devDependencies": {
-    "@joplin/tools": "~2.5",
+    "@joplin/tools": "~2.6",
     "@rmp135/sql-ts": "^1.7.0",
     "@types/fs-extra": "^8.0.0",
     "@types/jest": "^26.0.15",
