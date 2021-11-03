@@ -1,6 +1,6 @@
 # Joplin Server Changelog
 
-## [server-v2.6.1](https://github.com/laurent22/joplin/releases/tag/server-v2.6.1) - 2021-11-03T12:27:13Z
+## [server-v2.6.2](https://github.com/laurent22/joplin/releases/tag/server-v2.6.2) - 2021-11-03T12:54:38Z
 
 - New: Add support for faster built-in sync locks (#5662)
 - Improved: Improved env variable handling to make it self documenting and enforce type checking (b5d792c)
