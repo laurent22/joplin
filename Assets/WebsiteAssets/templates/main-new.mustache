@@ -29,7 +29,7 @@ https://github.com/laurent22/joplin/blob/dev/{{{sourceMarkdownFile}}}
 			href="{{cssBaseUrl}}/bootstrap5.0.2.min.css"
 			as="style"
 		/>
-		<link rel="stylesheet" href="{{cssBaseUrl}}/fontawesome-all.min.css?t={{buildTime}}">
+		<link rel="stylesheet" href="{{{assetUrls.css.fontawesome}}}">
 		<link
 			href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
 			rel="stylesheet"
@@ -37,7 +37,7 @@ https://github.com/laurent22/joplin/blob/dev/{{{sourceMarkdownFile}}}
 			media="all"
 			onload="this.media='all'; this.onload = null"
 		/>
-		<link rel="stylesheet" href="{{cssBaseUrl}}/site.css?t={{buildTime}}" as="style" />
+		<link rel="stylesheet" href="{{{assetUrls.css.site}}}" as="style" />
 		<title>{{pageTitle}}</title>
 
 		<script
@@ -79,7 +79,7 @@ https://github.com/laurent22/joplin/blob/dev/{{{sourceMarkdownFile}}}
 			{{> footer}}
 		</div>
 
-		<script src="{{jsBaseUrl}}/script.js?t={{buildTime}}"></script>
+		<script src="{{{assetUrls.js.script}}}"></script>
 
 		{{> analytics}}
 	</body>

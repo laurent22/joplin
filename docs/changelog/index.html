@@ -29,7 +29,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog.md
 			href="&#x2F;css/bootstrap5.0.2.min.css"
 			as="style"
 		/>
-		<link rel="stylesheet" href="&#x2F;css/fontawesome-all.min.css?t=1633686031235">
+		<link rel="stylesheet" href="/css/fontawesome-all.min.css?h=ecd507b3125edc4d2a03aa6ae5d07da9">
 		<link
 			href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
 			rel="stylesheet"
@@ -37,7 +37,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog.md
 			media="all"
 			onload="this.media='all'; this.onload = null"
 		/>
-		<link rel="stylesheet" href="&#x2F;css/site.css?t=1633686031235" as="style" />
+		<link rel="stylesheet" href="/css/site.css?h=f1e088235812805da9f78ebcd465d1ad" as="style" />
 		<title>Joplin changelog | Joplin</title>
 
 		<script
@@ -121,6 +121,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog.md
 <li><a href="/conflict/">What is a conflict?</a></li>
 <li><a href="/debugging/">How to enable debug mode</a></li>
 <li><a href="/rich_text_editor/">About the Rich Text editor limitations</a></li>
+<li><a href="/external_links/">External links</a></li>
 <li><a href="/faq/">FAQ</a></li>
 </ul>
 </li>
@@ -218,6 +219,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog.md
 <li><a href="/conflict/">What is a conflict?</a></li>
 <li><a href="/debugging/">How to enable debug mode</a></li>
 <li><a href="/rich_text_editor/">About the Rich Text editor limitations</a></li>
+<li><a href="/external_links/">External links</a></li>
 <li><a href="/faq/">FAQ</a></li>
 </ul>
 </li>
@@ -289,6 +291,48 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog.md
 <p><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=E8JMYD2LQ8MMA&amp;lc=GB&amp;item_name=Joplin+Development&amp;currency_code=EUR&amp;bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Donate-PayPal-green.svg" alt="Donate using PayPal"></a> <a href="https://github.com/sponsors/laurent22/"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/GitHub-Badge.svg" alt="Sponsor on GitHub"></a> <a href="https://www.patreon.com/joplin"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Patreon-Badge.svg" alt="Become a patron"></a> <a href="https://joplinapp.org/donate/#donations"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Donate-IBAN.svg" alt="Donate using IBAN"></a></p>
 </div>
 <h1>Joplin changelog<a name="joplin-changelog" href="#joplin-changelog" class="heading-anchor">🔗</a></h1>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/v2.5.10">v2.5.10</a> - 2021-11-01T08:22:42Z<a name="v2-5-10-https-github-com-laurent22-joplin-releases-tag-v2-5-10-2021-11-01t08-22-42z" href="#v2-5-10-https-github-com-laurent22-joplin-releases-tag-v2-5-10-2021-11-01t08-22-42z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>Fixed: Fixed crash on certain Linux distributions when importing or exporting a file (6012783)</li>
+<li>Fixed: Fixed potential infinite loop when Joplin Server session is invalid (c5569ef)</li>
+</ul>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/v2.5.8">v2.5.8</a> - 2021-10-31T11:38:03Z<a name="v2-5-8-https-github-com-laurent22-joplin-releases-tag-v2-5-8-2021-10-31t11-38-03z" href="#v2-5-8-https-github-com-laurent22-joplin-releases-tag-v2-5-8-2021-10-31t11-38-03z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>Improved: Enable safe mode for Markdown editor too (<a href="https://github.com/laurent22/joplin/issues/5593">#5593</a>)</li>
+<li>Fixed: Do not render very large code blocks to prevent app from freezing (<a href="https://github.com/laurent22/joplin/issues/5593">#5593</a>)</li>
+</ul>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/v2.5.7">v2.5.7</a> (Pre-release) - 2021-10-29T14:47:33Z<a name="v2-5-7-https-github-com-laurent22-joplin-releases-tag-v2-5-7-pre-release-2021-10-29t14-47-33z" href="#v2-5-7-https-github-com-laurent22-joplin-releases-tag-v2-5-7-pre-release-2021-10-29t14-47-33z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>Improved: Upgrade to Electron 15.1.3 (9704b29)</li>
+</ul>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/v2.5.6">v2.5.6</a> (Pre-release) - 2021-10-28T22:03:09Z<a name="v2-5-6-https-github-com-laurent22-joplin-releases-tag-v2-5-6-pre-release-2021-10-28t22-03-09z" href="#v2-5-6-https-github-com-laurent22-joplin-releases-tag-v2-5-6-pre-release-2021-10-28t22-03-09z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>New: Added mechanism to migrate default settings to new values (72db8e4)</li>
+<li>Improved: Improved Joplin Server configuration check to better handle disabled accounts (72c1235)</li>
+<li>Improved: Improved handling of expired sessions when using Joplin Server (ace1118)</li>
+<li>Improved: Improved master password state handling in Encryption screen (7d62df8)</li>
+<li>Fixed: Fixed Goto Anything scrolling for long lists (22e5c3a)</li>
+</ul>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/v2.5.4">v2.5.4</a> (Pre-release) - 2021-10-19T10:10:54Z<a name="v2-5-4-https-github-com-laurent22-joplin-releases-tag-v2-5-4-pre-release-2021-10-19t10-10-54z" href="#v2-5-4-https-github-com-laurent22-joplin-releases-tag-v2-5-4-pre-release-2021-10-19t10-10-54z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>New: Add support for public-private key pairs and improved master password support (<a href="https://github.com/laurent22/joplin/issues/5438">#5438</a>)</li>
+<li>New: Add Markdown + Front Matter exporter/importer (<a href="https://github.com/laurent22/joplin/issues/5465">#5465</a>) (<a href="https://github.com/laurent22/joplin/issues/5224">#5224</a> by <a href="https://github.com/CalebJohn">@CalebJohn</a>)</li>
+<li>New: Add support for callback URLs (<a href="https://github.com/laurent22/joplin/issues/5416">#5416</a>) (<a href="https://github.com/laurent22/joplin/issues/5168">#5168</a> by Roman Musin)</li>
+<li>Improved: Allows a shared notebook recipient to leave the notebook (7354548)</li>
+<li>Improved: Ensure that shared notebook children are not deleted when shared, unshared and shared again, and a conflict happens (ccf9882)</li>
+<li>Improved: Improved share error handling (9bff2d1)</li>
+<li>Improved: Laggy scrolling in Markdown viewer (<a href="https://github.com/laurent22/joplin/issues/5496">#5496</a>) (<a href="https://github.com/laurent22/joplin/issues/4827">#4827</a> by Kenichi Kobayashi)</li>
+<li>Improved: Mentioned on share dialog that it may take a few minutes for all notes to appear on the recipient device (852c6f2)</li>
+<li>Fixed: Bright background around code block insertion dialog in dark mode (<a href="https://github.com/laurent22/joplin/issues/5491">#5491</a>) (<a href="https://github.com/laurent22/joplin/issues/5310">#5310</a> by <a href="https://github.com/Rishabhraghwendra18">@Rishabhraghwendra18</a>)</li>
+<li>Fixed: Certain attachments were not being automatically deleted (<a href="https://github.com/laurent22/joplin/issues/932">#932</a>)</li>
+<li>Fixed: Exclude disabled commands from Goto Anything (<a href="https://github.com/laurent22/joplin/issues/5421">#5421</a>)</li>
+<li>Fixed: Fixed running out of memory when importing large ENEX files (<a href="https://github.com/laurent22/joplin/issues/5543">#5543</a>)</li>
+<li>Fixed: Fixed share dialog button sizes (1fee83d)</li>
+</ul>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/v2.4.12">v2.4.12</a> - 2021-10-13T17:24:34Z<a name="v2-4-12-https-github-com-laurent22-joplin-releases-tag-v2-4-12-2021-10-13t17-24-34z" href="#v2-4-12-https-github-com-laurent22-joplin-releases-tag-v2-4-12-2021-10-13t17-24-34z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>Fixed: Fixed running out of memory when importing large ENEX files (<a href="https://github.com/laurent22/joplin/issues/5543">#5543</a>)</li>
+</ul>
 <h2><a href="https://github.com/laurent22/joplin/releases/tag/v2.5.1">v2.5.1</a> (Pre-release) - 2021-10-02T09:51:58Z<a name="v2-5-1-https-github-com-laurent22-joplin-releases-tag-v2-5-1-pre-release-2021-10-02t09-51-58z" href="#v2-5-1-https-github-com-laurent22-joplin-releases-tag-v2-5-1-pre-release-2021-10-02t09-51-58z" class="heading-anchor">🔗</a></h2>
 <ul>
 <li>Improved: Upgrade Electron from v10 to v14 (4a7746b)</li>
@@ -3584,11 +3628,12 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog.md
 	<div class="container">
 		<div class="row">
 			<div class="col-12 col-md-12 social-links">
-				<a href="https://twitter.com/joplinapp" title="Twitter feed"><i class="fab fa-twitter"></i></a>
-				<a href="https://github.com/laurent22/joplin/" title="GitHub repository"><i class="fab fa-github"></i></a>
-				<a href="https://www.patreon.com/joplin" title="Patreon blog"><i class="fab fa-patreon"></i></a>
-				<a href="https://discordapp.com/invite/d2HMPwE" title="Discord chat"><i class="fab fa-discord"></i></a>
-				<a href="https://www.reddit.com/r/joplinapp/" title="Subreddit"><i class="fab fa-reddit"></i></a>
+				<a href="https://twitter.com/joplinapp" title="Joplin Twitter feed"><i class="fab fa-twitter"></i></a>
+				<a href="https://mastodon.social/@joplinapp" title="Joplin Mastodon feed"><i class="fab fa-mastodon"></i></a>
+				<a href="https://www.patreon.com/joplin" title="Joplin Patreon"><i class="fab fa-patreon"></i></a>
+				<a href="https://discordapp.com/invite/d2HMPwE" title="Joplin Discord chat"><i class="fab fa-discord"></i></a>
+				<a href="https://www.reddit.com/r/joplinapp/" title="Joplin Subreddit"><i class="fab fa-reddit"></i></a>
+				<a href="https://github.com/laurent22/joplin/" title="Joplin GitHub repository"><i class="fab fa-github"></i></a>
 			</div>
 		</div>
 
@@ -3607,7 +3652,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog.md
 	</div>
 </footer>		</div>
 
-		<script src="&#x2F;js/script.js?t=1633686031235"></script>
+		<script src="/js/script.js?h=46b3b58d72c94591621551affbb8c6e3"></script>
 
 <script>
 	if (window.location.hostname !== 'localhost') {

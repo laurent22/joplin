@@ -13,7 +13,7 @@ The process to share is then:
 
 - First, the sharer calls `POST /api/shares` with the notebook ID that needs to be shared.
 - Then invitations can be sent by calling `POST /api/share_users` and providing the share ID and recipient email.
-- The recipient accept or reject the application by setting the status onn the `share_users` object (which corresponds to an invitation).
+- The recipient accept or reject the application by setting the status on the `share_users` object (which corresponds to an invitation).
 
 Once share is setup, the client recursively goes through all notes, sub-notebooks and resources within the shared notebook, and set their `share_id` property. Basically any item within the notebook should have this property set. Then all these items are synchronized.
 
@@ -21,7 +21,7 @@ On the server, a service is running at regular interval to check the `share_id` 
 
 ### Why is the share_id set on the client and not the server?
 
-Technically, the server would only need to know the root shared folder, and from that can be find out its children. This approach was tried but it makes the system much more complex because some information is lost after sync - in particular when notes or notebooks are moved out of folders, when resources are attached or removed, etc. Keeping track of all this is possible but complex and innefficient.
+Technically, the server would only need to know the root shared folder, and from that can be find out its children. This approach was tried but it makes the system much more complex because some information is lost after sync - in particular when notes or notebooks are moved out of folders, when resources are attached or removed, etc. Keeping track of all this is possible but complex and inefficient.
 
 On the other hand, all that information is present on the client. Whenever a notes is moved out a shared folder, or whenever a resources is attached, the changes are tracked, and that can be used to easily assign a `share_id` property. Once this is set, it makes the whole system more simple and reliable.
 

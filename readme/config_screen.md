@@ -24,4 +24,4 @@ Tap on the **burger icon ≡** in the top left corner, and select **Configuratio
 
 ## CLI
 
-Type `:help config` for information on how to set config values nad for the complete list of available options.
+Type `:help config` for information on how to set config values and for the complete list of available options.

@@ -29,7 +29,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog_android.md
 			href="&#x2F;css/bootstrap5.0.2.min.css"
 			as="style"
 		/>
-		<link rel="stylesheet" href="&#x2F;css/fontawesome-all.min.css?t=1633686031235">
+		<link rel="stylesheet" href="/css/fontawesome-all.min.css?h=ecd507b3125edc4d2a03aa6ae5d07da9">
 		<link
 			href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
 			rel="stylesheet"
@@ -37,7 +37,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog_android.md
 			media="all"
 			onload="this.media='all'; this.onload = null"
 		/>
-		<link rel="stylesheet" href="&#x2F;css/site.css?t=1633686031235" as="style" />
+		<link rel="stylesheet" href="/css/site.css?h=f1e088235812805da9f78ebcd465d1ad" as="style" />
 		<title>Joplin Android app changelog | Joplin</title>
 
 		<script
@@ -121,6 +121,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog_android.md
 <li><a href="/conflict/">What is a conflict?</a></li>
 <li><a href="/debugging/">How to enable debug mode</a></li>
 <li><a href="/rich_text_editor/">About the Rich Text editor limitations</a></li>
+<li><a href="/external_links/">External links</a></li>
 <li><a href="/faq/">FAQ</a></li>
 </ul>
 </li>
@@ -218,6 +219,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog_android.md
 <li><a href="/conflict/">What is a conflict?</a></li>
 <li><a href="/debugging/">How to enable debug mode</a></li>
 <li><a href="/rich_text_editor/">About the Rich Text editor limitations</a></li>
+<li><a href="/external_links/">External links</a></li>
 <li><a href="/faq/">FAQ</a></li>
 </ul>
 </li>
@@ -289,6 +291,28 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog_android.md
 <p><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=E8JMYD2LQ8MMA&amp;lc=GB&amp;item_name=Joplin+Development&amp;currency_code=EUR&amp;bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Donate-PayPal-green.svg" alt="Donate using PayPal"></a> <a href="https://github.com/sponsors/laurent22/"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/GitHub-Badge.svg" alt="Sponsor on GitHub"></a> <a href="https://www.patreon.com/joplin"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Patreon-Badge.svg" alt="Become a patron"></a> <a href="https://joplinapp.org/donate/#donations"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Donate-IBAN.svg" alt="Donate using IBAN"></a></p>
 </div>
 <h1>Joplin Android app changelog<a name="joplin-android-app-changelog" href="#joplin-android-app-changelog" class="heading-anchor">🔗</a></h1>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/android-v2.6.1">android-v2.6.1</a> (Pre-release) - 2021-11-02T20:49:53Z<a name="android-v2-6-1-https-github-com-laurent22-joplin-releases-tag-android-v2-6-1-pre-release-2021-11-02t20-49-53z" href="#android-v2-6-1-https-github-com-laurent22-joplin-releases-tag-android-v2-6-1-pre-release-2021-11-02t20-49-53z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>Improved: Upgraded React Native from 0.64 to 0.66 (66e79cc)</li>
+<li>Fixed: Fixed potential infinite loop when Joplin Server session is invalid (c5569ef)</li>
+</ul>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/android-v2.5.5">android-v2.5.5</a> (Pre-release) - 2021-10-31T11:03:16Z<a name="android-v2-5-5-https-github-com-laurent22-joplin-releases-tag-android-v2-5-5-pre-release-2021-10-31t11-03-16z" href="#android-v2-5-5-https-github-com-laurent22-joplin-releases-tag-android-v2-5-5-pre-release-2021-10-31t11-03-16z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>New: Add padding around beta text editor (365e152)</li>
+<li>Improved: Capitalise first word of sentence in beta editor (4128be9)</li>
+<li>Fixed: Do not render very large code blocks to prevent app from freezing (#5593)</li>
+</ul>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/android-v2.5.3">android-v2.5.3</a> (Pre-release) - 2021-10-28T21:47:18Z<a name="android-v2-5-3-https-github-com-laurent22-joplin-releases-tag-android-v2-5-3-pre-release-2021-10-28t21-47-18z" href="#android-v2-5-3-https-github-com-laurent22-joplin-releases-tag-android-v2-5-3-pre-release-2021-10-28t21-47-18z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>New: Add support for public-private key pairs and improved master password support (#5438)</li>
+<li>New: Added mechanism to migrate default settings to new values (72db8e4)</li>
+<li>Improved: Ensure that shared notebook children are not deleted when shared, unshared and shared again, and a conflict happens (ccf9882)</li>
+<li>Improved: Improve delete dialog message (#5481) (#4701 by Helmut K. C. Tessarek)</li>
+<li>Improved: Improved Joplin Server configuration check to better handle disabled accounts (72c1235)</li>
+<li>Improved: Improved handling of expired sessions when using Joplin Server (33249ca)</li>
+<li>Fixed: Certain attachments were not being automatically deleted (#932)</li>
+<li>Fixed: Fixed logic of setting master password in Encryption screen (#5585)</li>
+</ul>
 <h2><a href="https://github.com/laurent22/joplin/releases/tag/android-v2.4.3">android-v2.4.3</a> - 2021-09-29T18:47:24Z<a name="android-v2-4-3-https-github-com-laurent22-joplin-releases-tag-android-v2-4-3-2021-09-29t18-47-24z" href="#android-v2-4-3-https-github-com-laurent22-joplin-releases-tag-android-v2-4-3-2021-09-29t18-47-24z" class="heading-anchor">🔗</a></h2>
 <ul>
 <li>Fixed: Fix default sync target (4b39d30)</li>
@@ -404,11 +428,12 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog_android.md
 	<div class="container">
 		<div class="row">
 			<div class="col-12 col-md-12 social-links">
-				<a href="https://twitter.com/joplinapp" title="Twitter feed"><i class="fab fa-twitter"></i></a>
-				<a href="https://github.com/laurent22/joplin/" title="GitHub repository"><i class="fab fa-github"></i></a>
-				<a href="https://www.patreon.com/joplin" title="Patreon blog"><i class="fab fa-patreon"></i></a>
-				<a href="https://discordapp.com/invite/d2HMPwE" title="Discord chat"><i class="fab fa-discord"></i></a>
-				<a href="https://www.reddit.com/r/joplinapp/" title="Subreddit"><i class="fab fa-reddit"></i></a>
+				<a href="https://twitter.com/joplinapp" title="Joplin Twitter feed"><i class="fab fa-twitter"></i></a>
+				<a href="https://mastodon.social/@joplinapp" title="Joplin Mastodon feed"><i class="fab fa-mastodon"></i></a>
+				<a href="https://www.patreon.com/joplin" title="Joplin Patreon"><i class="fab fa-patreon"></i></a>
+				<a href="https://discordapp.com/invite/d2HMPwE" title="Joplin Discord chat"><i class="fab fa-discord"></i></a>
+				<a href="https://www.reddit.com/r/joplinapp/" title="Joplin Subreddit"><i class="fab fa-reddit"></i></a>
+				<a href="https://github.com/laurent22/joplin/" title="Joplin GitHub repository"><i class="fab fa-github"></i></a>
 			</div>
 		</div>
 
@@ -427,7 +452,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog_android.md
 	</div>
 </footer>		</div>
 
-		<script src="&#x2F;js/script.js?t=1633686031235"></script>
+		<script src="/js/script.js?h=46b3b58d72c94591621551affbb8c6e3"></script>
 
 <script>
 	if (window.location.hostname !== 'localhost') {

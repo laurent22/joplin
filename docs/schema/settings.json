@@ -16,7 +16,7 @@
 		},
 		"sync.target": {
 			"type": "integer",
-			"default": 7,
+			"default": 0,
 			"description": "Synchronisation target",
 			"enum": [
 				0,
@@ -671,8 +671,8 @@
 		},
 		"style.editor.contentMaxWidth": {
 			"type": "integer",
-			"default": 600,
-			"description": "Editor maximum width. Set it to 0 to make it take the complete available space."
+			"default": 0,
+			"description": "Editor maximum width. Set it to 0 to make it take the complete available space. Recommended width is 600."
 		},
 		"ui.layout": {
 			"type": "object",
@@ -901,6 +901,11 @@
 		"isSafeMode": {
 			"type": "boolean",
 			"default": false,
+			"$comment": "private"
+		},
+		"lastSettingDefaultMigration": {
+			"type": "integer",
+			"default": -1,
 			"$comment": "private"
 		}
 	}

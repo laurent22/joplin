@@ -151,6 +151,8 @@ class Dialog extends React.PureComponent<Props, State> {
 			inputHelpWrapper: { display: 'flex', flexDirection: 'row', alignItems: 'center' },
 		};
 
+		delete this.styles_[styleKey].dialogBox.maxHeight;
+
 		const rowTextStyle = {
 			fontSize: theme.fontSize,
 			color: theme.color,
@@ -559,12 +561,17 @@ class Dialog extends React.PureComponent<Props, State> {
 		}
 	}
 
+	private calculateMaxHeight(itemHeight: number) {
+		const maxItemCount = Math.floor((0.7 * window.innerHeight) / itemHeight);
+		return maxItemCount * itemHeight;
+	}
+
 	renderList() {
 		const style = this.style();
 
 		const itemListStyle = {
 			marginTop: 5,
-			height: Math.min(style.itemHeight * this.state.results.length, 10 * style.itemHeight),
+			height: Math.min(style.itemHeight * this.state.results.length, this.calculateMaxHeight(style.itemHeight)),
 		};
 
 		return (

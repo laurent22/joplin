@@ -1,22 +1,90 @@
 import { Dirnames } from './utils/types';
 import shim from '../../shim';
-
 import JoplinError from '../../JoplinError';
 import time from '../../time';
+import { FileApi } from '../../file-api';
 const { fileExtension, filename } = require('../../path-utils');
 
 export enum LockType {
-	None = '',
-	Sync = 'sync',
-	Exclusive = 'exclusive',
+	None = 0,
+	Sync = 1,
+	Exclusive = 2,
+}
+
+export enum LockClientType {
+	Desktop = 1,
+	Mobile = 2,
+	Cli = 3,
 }
 
 export interface Lock {
+	id?: string;
 	type: LockType;
-	clientType: string;
+	clientType: LockClientType;
 	clientId: string;
 	updatedTime?: number;
 }
+
+function lockIsActive(lock: Lock, currentDate: Date, lockTtl: number): boolean {
+	return currentDate.getTime() - lock.updatedTime < lockTtl;
+}
+
+export function lockNameToObject(name: string, updatedTime: number = null): Lock {
+	const p = name.split('_');
+
+	const lock: Lock = {
+		id: null,
+		type: Number(p[0]) as LockType,
+		clientType: Number(p[1]) as LockClientType,
+		clientId: p[2],
+		updatedTime,
+	};
+
+	if (isNaN(lock.clientType)) throw new Error(`Invalid lock client type: ${name}`);
+	if (isNaN(lock.type)) throw new Error(`Invalid lock type: ${name}`);
+
+	return lock;
+}
+
+export function hasActiveLock(locks: Lock[], currentDate: Date, lockTtl: number, lockType: LockType, clientType: LockClientType = null, clientId: string = null) {
+	const lock = activeLock(locks, currentDate, lockTtl, lockType, clientType, clientId);
+	return !!lock;
+}
+
+// Finds if there's an active lock for this clientType and clientId and returns it.
+// If clientType and clientId are not specified, returns the first active lock
+// of that type instead.
+export function activeLock(locks: Lock[], currentDate: Date, lockTtl: number, lockType: LockType, clientType: LockClientType = null, clientId: string = null) {
+	if (lockType === LockType.Exclusive) {
+		const activeLocks = locks
+			.slice()
+			.filter((lock: Lock) => lockIsActive(lock, currentDate, lockTtl) && lock.type === lockType)
+			.sort((a: Lock, b: Lock) => {
+				if (a.updatedTime === b.updatedTime) {
+					return a.clientId < b.clientId ? -1 : +1;
+				}
+				return a.updatedTime < b.updatedTime ? -1 : +1;
+			});
+
+		if (!activeLocks.length) return null;
+		const lock = activeLocks[0];
+
+		if (clientType && clientType !== lock.clientType) return null;
+		if (clientId && clientId !== lock.clientId) return null;
+		return lock;
+	} else if (lockType === LockType.Sync) {
+		for (const lock of locks) {
+			if (lock.type !== lockType) continue;
+			if (clientType && lock.clientType !== clientType) continue;
+			if (clientId && lock.clientId !== clientId) continue;
+			if (lockIsActive(lock, currentDate, lockTtl)) return lock;
+		}
+		return null;
+	}
+
+	throw new Error(`Unsupported lock type: ${lockType}`);
+}
+
 
 export interface AcquireLockOptions {
 	// In theory, a client that tries to acquire an exclusive lock shouldn't
@@ -55,14 +123,16 @@ export interface LockHandlerOptions {
 	lockTtl?: number;
 }
 
+export const defaultLockTtl = 1000 * 60 * 3;
+
 export default class LockHandler {
 
-	private api_: any = null;
+	private api_: FileApi = null;
 	private refreshTimers_: RefreshTimers = {};
 	private autoRefreshInterval_: number = 1000 * 60;
-	private lockTtl_: number = 1000 * 60 * 3;
+	private lockTtl_: number = defaultLockTtl;
 
-	constructor(api: any, options: LockHandlerOptions = null) {
+	public constructor(api: FileApi, options: LockHandlerOptions = null) {
 		if (!options) options = {};
 
 		this.api_ = api;
@@ -80,6 +150,10 @@ export default class LockHandler {
 		this.lockTtl_ = v;
 	}
 
+	public get useBuiltInLocks() {
+		return this.api_.supportsLocks;
+	}
+
 	private lockFilename(lock: Lock) {
 		return `${[lock.type, lock.clientType, lock.clientId].join('_')}.json`;
 	}
@@ -87,8 +161,8 @@ export default class LockHandler {
 	private lockTypeFromFilename(name: string): LockType {
 		const ext = fileExtension(name);
 		if (ext !== 'json') return LockType.None;
-		if (name.indexOf(LockType.Sync) === 0) return LockType.Sync;
-		if (name.indexOf(LockType.Exclusive) === 0) return LockType.Exclusive;
+		if (name.indexOf(LockType.Sync.toString()) === 0) return LockType.Sync;
+		if (name.indexOf(LockType.Exclusive.toString()) === 0) return LockType.Exclusive;
 		return LockType.None;
 	}
 
@@ -97,17 +171,15 @@ export default class LockHandler {
 	}
 
 	private lockFileToObject(file: any): Lock {
-		const p = filename(file.path).split('_');
-
-		return {
-			type: p[0],
-			clientType: p[1],
-			clientId: p[2],
-			updatedTime: file.updated_time,
-		};
+		return lockNameToObject(filename(file.path), file.updated_time);
 	}
 
 	async locks(lockType: LockType = null): Promise<Lock[]> {
+		if (this.useBuiltInLocks) {
+			const locks = (await this.api_.listLocks()).items;
+			return locks;
+		}
+
 		const result = await this.api_.list(Dirnames.Locks);
 		if (result.hasMore) throw new Error('hasMore not handled'); // Shouldn't happen anyway
 
@@ -123,51 +195,6 @@ export default class LockHandler {
 		return output;
 	}
 
-	private lockIsActive(lock: Lock, currentDate: Date): boolean {
-		return currentDate.getTime() - lock.updatedTime < this.lockTtl;
-	}
-
-	async hasActiveLock(lockType: LockType, clientType: string = null, clientId: string = null) {
-		const lock = await this.activeLock(lockType, clientType, clientId);
-		return !!lock;
-	}
-
-	// Finds if there's an active lock for this clientType and clientId and returns it.
-	// If clientType and clientId are not specified, returns the first active lock
-	// of that type instead.
-	async activeLock(lockType: LockType, clientType: string = null, clientId: string = null) {
-		const locks = await this.locks(lockType);
-		const currentDate = await this.api_.remoteDate();
-
-		if (lockType === LockType.Exclusive) {
-			const activeLocks = locks
-				.slice()
-				.filter((lock: Lock) => this.lockIsActive(lock, currentDate))
-				.sort((a: Lock, b: Lock) => {
-					if (a.updatedTime === b.updatedTime) {
-						return a.clientId < b.clientId ? -1 : +1;
-					}
-					return a.updatedTime < b.updatedTime ? -1 : +1;
-				});
-
-			if (!activeLocks.length) return null;
-			const activeLock = activeLocks[0];
-
-			if (clientType && clientType !== activeLock.clientType) return null;
-			if (clientId && clientId !== activeLock.clientId) return null;
-			return activeLock;
-		} else if (lockType === LockType.Sync) {
-			for (const lock of locks) {
-				if (clientType && lock.clientType !== clientType) continue;
-				if (clientId && lock.clientId !== clientId) continue;
-				if (this.lockIsActive(lock, currentDate)) return lock;
-			}
-			return null;
-		}
-
-		throw new Error(`Unsupported lock type: ${lockType}`);
-	}
-
 	private async saveLock(lock: Lock) {
 		await this.api_.put(this.lockFilePath(lock), JSON.stringify(lock));
 	}
@@ -177,13 +204,18 @@ export default class LockHandler {
 		return this.saveLock(lock);
 	}
 
-	private async acquireSyncLock(clientType: string, clientId: string): Promise<Lock> {
+	private async acquireSyncLock(clientType: LockClientType, clientId: string): Promise<Lock> {
+		if (this.useBuiltInLocks) return this.api_.acquireLock(LockType.Sync, clientType, clientId);
+
 		try {
 			let isFirstPass = true;
 			while (true) {
+				const locks = await this.locks();
+				const currentDate = await this.currentDate();
+
 				const [exclusiveLock, syncLock] = await Promise.all([
-					this.activeLock(LockType.Exclusive),
-					this.activeLock(LockType.Sync, clientType, clientId),
+					activeLock(locks, currentDate, this.lockTtl, LockType.Exclusive),
+					activeLock(locks, currentDate, this.lockTtl, LockType.Sync, clientType, clientId),
 				]);
 
 				if (exclusiveLock) {
@@ -221,7 +253,9 @@ export default class LockHandler {
 		return `(${lock.clientType} #${lock.clientId})`;
 	}
 
-	private async acquireExclusiveLock(clientType: string, clientId: string, options: AcquireLockOptions = null): Promise<Lock> {
+	private async acquireExclusiveLock(clientType: LockClientType, clientId: string, options: AcquireLockOptions = null): Promise<Lock> {
+		if (this.useBuiltInLocks) return this.api_.acquireLock(LockType.Exclusive, clientType, clientId);
+
 		// The logic to acquire an exclusive lock, while avoiding race conditions is as follow:
 		//
 		// - Check if there is a lock file present
@@ -252,9 +286,12 @@ export default class LockHandler {
 
 		try {
 			while (true) {
+				const locks = await this.locks();
+				const currentDate = await this.currentDate();
+
 				const [activeSyncLock, activeExclusiveLock] = await Promise.all([
-					this.activeLock(LockType.Sync),
-					this.activeLock(LockType.Exclusive),
+					activeLock(locks, currentDate, this.lockTtl, LockType.Sync),
+					activeLock(locks, currentDate, this.lockTtl, LockType.Exclusive),
 				]);
 
 				if (activeSyncLock) {
@@ -299,7 +336,11 @@ export default class LockHandler {
 		return [lock.type, lock.clientType, lock.clientId].join('_');
 	}
 
-	startAutoLockRefresh(lock: Lock, errorHandler: Function): string {
+	public async currentDate() {
+		return this.api_.remoteDate();
+	}
+
+	public startAutoLockRefresh(lock: Lock, errorHandler: Function): string {
 		const handle = this.autoLockRefreshHandle(lock);
 		if (this.refreshTimers_[handle]) {
 			throw new Error(`There is already a timer refreshing this lock: ${handle}`);
@@ -321,10 +362,11 @@ export default class LockHandler {
 			this.refreshTimers_[handle].inProgress = true;
 
 			let error = null;
-			const hasActiveLock = await this.hasActiveLock(lock.type, lock.clientType, lock.clientId);
 			if (!this.refreshTimers_[handle]) return defer(); // Timeout has been cleared
 
-			if (!hasActiveLock) {
+			const locks = await this.locks(lock.type);
+
+			if (!hasActiveLock(locks, await this.currentDate(), this.lockTtl, lock.type, lock.clientType, lock.clientId)) {
 				// If the previous lock has expired, we shouldn't try to acquire a new one. This is because other clients might have performed
 				// in the meantime operations that invalidates the current operation. For example, another client might have upgraded the
 				// sync target in the meantime, so any active operation should be cancelled here. Or if the current client was upgraded
@@ -368,7 +410,7 @@ export default class LockHandler {
 		delete this.refreshTimers_[handle];
 	}
 
-	public async acquireLock(lockType: LockType, clientType: string, clientId: string, options: AcquireLockOptions = null): Promise<Lock> {
+	public async acquireLock(lockType: LockType, clientType: LockClientType, clientId: string, options: AcquireLockOptions = null): Promise<Lock> {
 		options = {
 			...defaultAcquireLockOptions(),
 			...options,
@@ -383,7 +425,12 @@ export default class LockHandler {
 		}
 	}
 
-	public async releaseLock(lockType: LockType, clientType: string, clientId: string) {
+	public async releaseLock(lockType: LockType, clientType: LockClientType, clientId: string) {
+		if (this.useBuiltInLocks) {
+			await this.api_.releaseLock(lockType, clientType, clientId);
+			return;
+		}
+
 		await this.api_.delete(this.lockFilePath({
 			type: lockType,
 			clientType: clientType,

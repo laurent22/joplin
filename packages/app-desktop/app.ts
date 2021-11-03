@@ -61,7 +61,7 @@ import editorCommandDeclarations from './gui/NoteEditor/editorCommandDeclaration
 import ShareService from '@joplin/lib/services/share/ShareService';
 import checkForUpdates from './checkForUpdates';
 import { AppState } from './app.reducer';
-import syncDebugLog from '../lib/services/synchronizer/syncDebugLog';
+import syncDebugLog from '@joplin/lib/services/synchronizer/syncDebugLog';
 // import { runIntegrationTests } from '@joplin/lib/services/e2ee/ppkTestUtils';
 
 const pluginClasses = [

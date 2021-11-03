@@ -787,15 +787,17 @@ export default class BaseApplication {
 			const locale = shim.detectAndSetLocale(Setting);
 			reg.logger().info(`First start: detected locale as ${locale}`);
 
+			Setting.skipDefaultMigrations();
+
 			if (Setting.value('env') === 'dev') {
 				Setting.setValue('showTrayIcon', 0);
 				Setting.setValue('autoUpdateEnabled', 0);
 				Setting.setValue('sync.interval', 3600);
 			}
 
-			Setting.setValue('sync.target', 0);
 			Setting.setValue('firstStart', 0);
 		} else {
+			Setting.applyDefaultMigrations();
 			setLocale(Setting.value('locale'));
 		}
 

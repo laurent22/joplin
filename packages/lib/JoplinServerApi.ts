@@ -65,7 +65,7 @@ export default class JoplinServerApi {
 		if (this.session_) return this.session_;
 
 		try {
-			this.session_ = await this.exec('POST', 'api/sessions', null, {
+			this.session_ = await this.exec_('POST', 'api/sessions', null, {
 				email: this.options_.username(),
 				password: this.options_.password(),
 			});
@@ -130,7 +130,7 @@ export default class JoplinServerApi {
 		return output.join(' ');
 	}
 
-	public async exec(method: string, path: string = '', query: Record<string, any> = null, body: any = null, headers: any = null, options: ExecOptions = null) {
+	private async exec_(method: string, path: string = '', query: Record<string, any> = null, body: any = null, headers: any = null, options: ExecOptions = null) {
 		if (headers === null) headers = {};
 		if (options === null) options = {};
 		if (!options.responseFormat) options.responseFormat = ExecOptionsResponseFormat.Json;
@@ -142,7 +142,7 @@ export default class JoplinServerApi {
 		}
 
 		if (sessionId) headers['X-API-AUTH'] = sessionId;
-		headers['X-API-MIN-VERSION'] = '2.5.0';
+		headers['X-API-MIN-VERSION'] = '2.6.0'; // Need server 2.6 for new lock support
 
 		const fetchOptions: any = {};
 		fetchOptions.headers = headers;
@@ -253,11 +253,33 @@ export default class JoplinServerApi {
 			const output = await loadResponseJson();
 			return output;
 		} catch (error) {
-			if (error.code !== 404) {
+			// Don't print error info for file not found (handled by the
+			// driver), or lock-acquisition errors because it's handled by
+			// LockHandler.
+			if (![404, 'hasExclusiveLock', 'hasSyncLock'].includes(error.code)) {
 				logger.warn(this.requestToCurl_(url, fetchOptions));
+				logger.warn('Code:', error.code);
 				logger.warn(error);
 			}
+
 			throw error;
 		}
 	}
+
+	public async exec(method: string, path: string = '', query: Record<string, any> = null, body: any = null, headers: any = null, options: ExecOptions = null) {
+		for (let i = 0; i < 2; i++) {
+			try {
+				const response = await this.exec_(method, path, query, body, headers, options);
+				return response;
+			} catch (error) {
+				if (error.code === 403 && i === 0) {
+					logger.info('Session expired or invalid - trying to login again', error);
+					this.session_ = null; // By setting it to null, the service will try to login again
+				} else {
+					throw error;
+				}
+			}
+		}
+	}
+
 }

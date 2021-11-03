@@ -180,11 +180,11 @@ function useMenu(props: Props) {
 		let path = null;
 
 		if (moduleSource === 'file') {
-			path = bridge().showOpenDialog({
+			path = await bridge().showOpenDialog({
 				filters: [{ name: module.description, extensions: module.fileExtensions }],
 			});
 		} else {
-			path = bridge().showOpenDialog({
+			path = await bridge().showOpenDialog({
 				properties: ['openDirectory', 'createDirectory'],
 			});
 		}

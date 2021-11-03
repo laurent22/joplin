@@ -2,6 +2,7 @@ import { rtrimSlashes } from '@joplin/lib/path-utils';
 import { Config, DatabaseConfig, DatabaseConfigClient, Env, MailerConfig, RouteType, StripeConfig } from './utils/types';
 import * as pathUtils from 'path';
 import { loadStripeConfig, StripePublicConfig } from '@joplin/lib/utils/joplinCloud';
+import { EnvVariables } from './env';
 
 interface PackageJson {
 	version: string;
@@ -9,75 +10,10 @@ interface PackageJson {
 
 const packageJson: PackageJson = require(`${__dirname}/packageInfo.js`);
 
-export interface EnvVariables {
-	APP_NAME?: string;
-
-	APP_BASE_URL?: string;
-	USER_CONTENT_BASE_URL?: string;
-	API_BASE_URL?: string;
-	JOPLINAPP_BASE_URL?: string;
-
-	APP_PORT?: string;
-	DB_CLIENT?: string;
-	RUNNING_IN_DOCKER?: string;
-
-	POSTGRES_PASSWORD?: string;
-	POSTGRES_DATABASE?: string;
-	POSTGRES_USER?: string;
-	POSTGRES_HOST?: string;
-	POSTGRES_PORT?: string;
-
-	MAILER_ENABLED?: string;
-	MAILER_HOST?: string;
-	MAILER_PORT?: string;
-	MAILER_SECURE?: string;
-	MAILER_AUTH_USER?: string;
-	MAILER_AUTH_PASSWORD?: string;
-	MAILER_NOREPLY_NAME?: string;
-	MAILER_NOREPLY_EMAIL?: string;
-
-	// This must be the full path to the database file
-	SQLITE_DATABASE?: string;
-
-	STRIPE_SECRET_KEY?: string;
-	STRIPE_WEBHOOK_SECRET?: string;
-
-	SIGNUP_ENABLED?: string;
-	TERMS_ENABLED?: string;
-	ACCOUNT_TYPES_ENABLED?: string;
-
-	ERROR_STACK_TRACES?: string;
-
-	SUPPORT_EMAIL?: string;
-	SUPPORT_NAME?: string;
-
-	BUSINESS_EMAIL?: string;
-
-	COOKIES_SECURE?: string;
-
-	SLOW_QUERY_LOG_ENABLED?: string;
-	SLOW_QUERY_LOG_MIN_DURATION?: string; // ms
-}
-
 let runningInDocker_: boolean = false;
 
 export function runningInDocker(): boolean {
 	return runningInDocker_;
-}
-
-function envReadString(s: string, defaultValue: string = ''): string {
-	return s === undefined || s === null ? defaultValue : s;
-}
-
-function envReadBool(s: string): boolean {
-	return s === '1';
-}
-
-function envReadInt(s: string, defaultValue: number = null): number {
-	if (!s) return defaultValue === null ? 0 : defaultValue;
-	const output = Number(s);
-	if (isNaN(output)) throw new Error(`Invalid number: ${s}`);
-	return output;
 }
 
 function databaseHostFromEnv(runningInDocker: boolean, env: EnvVariables): string {
@@ -99,18 +35,19 @@ function databaseConfigFromEnv(runningInDocker: boolean, env: EnvVariables): Dat
 	const baseConfig: DatabaseConfig = {
 		client: DatabaseConfigClient.Null,
 		name: '',
-		slowQueryLogEnabled: envReadBool(env.SLOW_QUERY_LOG_ENABLED),
-		slowQueryLogMinDuration: envReadInt(env.SLOW_QUERY_LOG_MIN_DURATION, 10000),
+		slowQueryLogEnabled: env.DB_SLOW_QUERY_LOG_ENABLED,
+		slowQueryLogMinDuration: env.DB_SLOW_QUERY_LOG_MIN_DURATION,
+		autoMigration: env.DB_AUTO_MIGRATION,
 	};
 
 	if (env.DB_CLIENT === 'pg') {
 		return {
 			...baseConfig,
 			client: DatabaseConfigClient.PostgreSQL,
-			name: env.POSTGRES_DATABASE || 'joplin',
-			user: env.POSTGRES_USER || 'joplin',
-			password: env.POSTGRES_PASSWORD || 'joplin',
-			port: env.POSTGRES_PORT ? Number(env.POSTGRES_PORT) : 5432,
+			name: env.POSTGRES_DATABASE,
+			user: env.POSTGRES_USER,
+			password: env.POSTGRES_PASSWORD,
+			port: env.POSTGRES_PORT,
 			host: databaseHostFromEnv(runningInDocker, env) || 'localhost',
 		};
 	}
@@ -125,14 +62,14 @@ function databaseConfigFromEnv(runningInDocker: boolean, env: EnvVariables): Dat
 
 function mailerConfigFromEnv(env: EnvVariables): MailerConfig {
 	return {
-		enabled: env.MAILER_ENABLED !== '0',
-		host: env.MAILER_HOST || '',
-		port: Number(env.MAILER_PORT || 587),
-		secure: !!Number(env.MAILER_SECURE) || true,
-		authUser: env.MAILER_AUTH_USER || '',
-		authPassword: env.MAILER_AUTH_PASSWORD || '',
-		noReplyName: env.MAILER_NOREPLY_NAME || '',
-		noReplyEmail: env.MAILER_NOREPLY_EMAIL || '',
+		enabled: env.MAILER_ENABLED,
+		host: env.MAILER_HOST,
+		port: env.MAILER_PORT,
+		secure: env.MAILER_SECURE,
+		authUser: env.MAILER_AUTH_USER,
+		authPassword: env.MAILER_AUTH_PASSWORD,
+		noReplyName: env.MAILER_NOREPLY_NAME,
+		noReplyEmail: env.MAILER_NOREPLY_EMAIL,
 	};
 }
 
@@ -140,12 +77,12 @@ function stripeConfigFromEnv(publicConfig: StripePublicConfig, env: EnvVariables
 	return {
 		...publicConfig,
 		enabled: !!env.STRIPE_SECRET_KEY,
-		secretKey: env.STRIPE_SECRET_KEY || '',
-		webhookSecret: env.STRIPE_WEBHOOK_SECRET || '',
+		secretKey: env.STRIPE_SECRET_KEY,
+		webhookSecret: env.STRIPE_WEBHOOK_SECRET,
 	};
 }
 
-function baseUrlFromEnv(env: any, appPort: number): string {
+function baseUrlFromEnv(env: EnvVariables, appPort: number): string {
 	if (env.APP_BASE_URL) {
 		return rtrimSlashes(env.APP_BASE_URL);
 	} else {
@@ -160,12 +97,12 @@ export async function initConfig(envType: Env, env: EnvVariables, overrides: any
 
 	const rootDir = pathUtils.dirname(__dirname);
 	const stripePublicConfig = loadStripeConfig(envType === Env.BuildTypes ? Env.Dev : envType, `${rootDir}/stripeConfig.json`);
-	const appName = env.APP_NAME || 'Joplin Server';
+	const appName = env.APP_NAME;
 	const viewDir = `${rootDir}/src/views`;
-	const appPort = env.APP_PORT ? Number(env.APP_PORT) : 22300;
+	const appPort = env.APP_PORT;
 	const baseUrl = baseUrlFromEnv(env, appPort);
 	const apiBaseUrl = env.API_BASE_URL ? env.API_BASE_URL : baseUrl;
-	const supportEmail = env.SUPPORT_EMAIL || 'SUPPORT_EMAIL'; // Defaults to "SUPPORT_EMAIL" so that server admin knows they have to set it.
+	const supportEmail = env.SUPPORT_EMAIL;
 
 	config_ = {
 		appVersion: packageJson.version,
@@ -182,17 +119,17 @@ export async function initConfig(envType: Env, env: EnvVariables, overrides: any
 		stripe: stripeConfigFromEnv(stripePublicConfig, env),
 		port: appPort,
 		baseUrl,
-		showErrorStackTraces: (env.ERROR_STACK_TRACES === undefined && envType === Env.Dev) || env.ERROR_STACK_TRACES === '1',
+		showErrorStackTraces: env.ERROR_STACK_TRACES,
 		apiBaseUrl,
 		userContentBaseUrl: env.USER_CONTENT_BASE_URL ? env.USER_CONTENT_BASE_URL : baseUrl,
-		joplinAppBaseUrl: envReadString(env.JOPLINAPP_BASE_URL, 'https://joplinapp.org'),
-		signupEnabled: env.SIGNUP_ENABLED === '1',
-		termsEnabled: env.TERMS_ENABLED === '1',
-		accountTypesEnabled: env.ACCOUNT_TYPES_ENABLED === '1',
+		joplinAppBaseUrl: env.JOPLINAPP_BASE_URL,
+		signupEnabled: env.SIGNUP_ENABLED,
+		termsEnabled: env.TERMS_ENABLED,
+		accountTypesEnabled: env.ACCOUNT_TYPES_ENABLED,
 		supportEmail,
 		supportName: env.SUPPORT_NAME || appName,
 		businessEmail: env.BUSINESS_EMAIL || supportEmail,
-		cookieSecure: env.COOKIES_SECURE === '1',
+		cookieSecure: env.COOKIES_SECURE,
 		...overrides,
 	};
 }

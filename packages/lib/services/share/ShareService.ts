@@ -36,6 +36,7 @@ export default class ShareService {
 	private api_: JoplinServerApi = null;
 	private store_: Store<any> = null;
 	private encryptionService_: EncryptionService = null;
+	private initialized_ = false;
 
 	public static instance(): ShareService {
 		if (this.instance_) return this.instance_;
@@ -44,12 +45,14 @@ export default class ShareService {
 	}
 
 	public initialize(store: Store<any>, encryptionService: EncryptionService, api: JoplinServerApi = null) {
+		this.initialized_ = true;
 		this.store_ = store;
 		this.encryptionService_ = encryptionService;
 		this.api_ = api;
 	}
 
 	public get enabled(): boolean {
+		if (!this.initialized_) return false;
 		return [9, 10].includes(Setting.value('sync.target')); // Joplin Server, Joplin Cloud targets
 	}
 

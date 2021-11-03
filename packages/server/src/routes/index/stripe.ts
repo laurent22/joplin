@@ -389,7 +389,7 @@ const getHandlers: Record<string, StripeRouteHandler> = {
 		return `
 			<html>
 				<head>
-				<meta http-equiv = "refresh" content = "1; url = ${billingPortalSession.url};" />
+				<meta http-equiv = "refresh" content = "1; url = ${billingPortalSession.url}" />
 				<script>setTimeout(() => { window.location.href = ${JSON.stringify(billingPortalSession.url)}; }, 2000)</script>
 				</head>
 				<body>

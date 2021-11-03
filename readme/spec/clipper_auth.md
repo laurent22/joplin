@@ -12,7 +12,7 @@ The user can copy the token in the Clipper configuration page and provide it dir
 
 The token can also be requested programmatically, as is done for the web clipper extension. It works as below:
 
-- The client calls `POST /auth`. The server responds with `{ auth_token: "AUTH_TOKEN" }`. This `auth_token` is different from the regular token - it is just used to authentify the client.
+- The client calls `POST /auth`. The server responds with `{ auth_token: "AUTH_TOKEN" }`. This `auth_token` is different from the regular token - it is just used to authenticate the client.
 
 - The application displays a message asking the user to Accept or Reject the access request.
 

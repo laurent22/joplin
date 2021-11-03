@@ -2,6 +2,7 @@ import PostMessageService, { MessageResponse, ResponderComponentType } from '@jo
 import * as React from 'react';
 const { connect } = require('react-redux');
 import { reg } from '@joplin/lib/registry';
+import { SyncScrollMap, SyncScrollMapper } from './utils/SyncScrollMap';
 
 interface Props {
 	onDomReady: Function;
@@ -146,6 +147,10 @@ class NoteTextViewerComponent extends React.Component<Props, any> {
 	send(channel: string, arg0: any = null, arg1: any = null) {
 		const win = this.webviewRef_.current.contentWindow;
 
+		if (channel === 'focus') {
+			win.postMessage({ target: 'webview', name: 'focus', data: {} }, '*');
+		}
+
 		if (channel === 'setHtml') {
 			win.postMessage({ target: 'webview', name: 'setHtml', data: { html: arg0, options: arg1 } }, '*');
 		}
@@ -161,6 +166,17 @@ class NoteTextViewerComponent extends React.Component<Props, any> {
 		if (channel === 'setMarkers') {
 			win.postMessage({ target: 'webview', name: 'setMarkers', data: { keywords: arg0, options: arg1 } }, '*');
 		}
+	}
+
+	private syncScrollMapper_ = new SyncScrollMapper;
+
+	refreshSyncScrollMap(forced: boolean) {
+		return this.syncScrollMapper_.refresh(forced);
+	}
+
+	getSyncScrollMap(): SyncScrollMap {
+		const doc = this.webviewRef_.current?.contentWindow?.document;
+		return this.syncScrollMapper_.get(doc);
 	}
 
 	// ----------------------------------------------------------------

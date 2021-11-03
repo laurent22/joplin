@@ -116,6 +116,10 @@ export const clientType = (db: DbConnection): DatabaseConfigClient => {
 	return db.client.config.client;
 };
 
+export const returningSupported = (db: DbConnection) => {
+	return clientType(db) === DatabaseConfigClient.PostgreSQL;
+};
+
 export const isPostgres = (db: DbConnection) => {
 	return clientType(db) === DatabaseConfigClient.PostgreSQL;
 };
@@ -195,22 +199,29 @@ export async function disconnectDb(db: DbConnection) {
 	await db.destroy();
 }
 
-export async function migrateLatest(db: DbConnection) {
+export async function migrateLatest(db: DbConnection, disableTransactions = false) {
 	await db.migrate.latest({
 		directory: migrationDir,
+		disableTransactions,
 	});
 }
 
-export async function migrateUp(db: DbConnection) {
+export async function migrateUp(db: DbConnection, disableTransactions = false) {
 	await db.migrate.up({
 		directory: migrationDir,
+		disableTransactions,
 	});
 }
 
-export async function migrateDown(db: DbConnection) {
+export async function migrateDown(db: DbConnection, disableTransactions = false) {
 	await db.migrate.down({
 		directory: migrationDir,
+		disableTransactions,
 	});
+}
+
+export async function migrateUnlock(db: DbConnection) {
+	await db.migrate.forceFreeMigrationsLock();
 }
 
 export async function migrateList(db: DbConnection, asString: boolean = true) {
@@ -336,10 +347,10 @@ export function isUniqueConstraintError(error: any): boolean {
 	return false;
 }
 
-export async function latestMigration(db: DbConnection): Promise<any> {
+export async function latestMigration(db: DbConnection): Promise<Migration | null> {
 	try {
-		const result = await db('knex_migrations').select('name').orderBy('id', 'asc').first();
-		return result;
+		const result = await db('knex_migrations').select('name').orderBy('id', 'desc').first();
+		return { name: result.name, done: true };
 	} catch (error) {
 		// If the database has never been initialized, we return null, so
 		// for this we need to check the error code, which will be

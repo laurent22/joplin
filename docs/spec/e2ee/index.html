@@ -29,7 +29,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/spec/e2ee.md
 			href="&#x2F;css/bootstrap5.0.2.min.css"
 			as="style"
 		/>
-		<link rel="stylesheet" href="&#x2F;css/fontawesome-all.min.css?t=1633686031235">
+		<link rel="stylesheet" href="/css/fontawesome-all.min.css?h=ecd507b3125edc4d2a03aa6ae5d07da9">
 		<link
 			href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
 			rel="stylesheet"
@@ -37,7 +37,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/spec/e2ee.md
 			media="all"
 			onload="this.media='all'; this.onload = null"
 		/>
-		<link rel="stylesheet" href="&#x2F;css/site.css?t=1633686031235" as="style" />
+		<link rel="stylesheet" href="/css/site.css?h=f1e088235812805da9f78ebcd465d1ad" as="style" />
 		<title>Encryption | Joplin</title>
 
 		<script
@@ -121,6 +121,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/spec/e2ee.md
 <li><a href="/conflict/">What is a conflict?</a></li>
 <li><a href="/debugging/">How to enable debug mode</a></li>
 <li><a href="/rich_text_editor/">About the Rich Text editor limitations</a></li>
+<li><a href="/external_links/">External links</a></li>
 <li><a href="/faq/">FAQ</a></li>
 </ul>
 </li>
@@ -218,6 +219,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/spec/e2ee.md
 <li><a href="/conflict/">What is a conflict?</a></li>
 <li><a href="/debugging/">How to enable debug mode</a></li>
 <li><a href="/rich_text_editor/">About the Rich Text editor limitations</a></li>
+<li><a href="/external_links/">External links</a></li>
 <li><a href="/faq/">FAQ</a></li>
 </ul>
 </li>
@@ -381,14 +383,14 @@ https://github.com/laurent22/joplin/blob/dev/readme/spec/e2ee.md
 <p>Although messy, Joplin supports having some clients send encrypted items and others unencrypted ones. The situation gets resolved once all the clients have the same E2EE settings.</p>
 </li>
 <li>
-<p>Currently, there is no way to delete encryption keys if you do not need them anymore or if you disabled the encryption completely. You will get a persistant notification to provide a Master Key password on a new device, even if encryption is disabled. Entering the Master Key(s) password and still having the encryption disabled will get rid of the notification. See <a href="https://discourse.joplinapp.org/t/delete-e2ee-master-keys/906">Delete E2EE Master Keys</a> for more info.</p>
+<p>Currently, there is no way to delete encryption keys if you do not need them anymore or if you disabled the encryption completely. You will get a persistent notification to provide a Master Key password on a new device, even if encryption is disabled. Entering the Master Key(s) password and still having the encryption disabled will get rid of the notification. See <a href="https://discourse.joplinapp.org/t/delete-e2ee-master-keys/906">Delete E2EE Master Keys</a> for more info.</p>
 </li>
 </ul>
 <h2>Types of keys<a name="types-of-keys" href="#types-of-keys" class="heading-anchor">🔗</a></h2>
 <p>There are two types of key:</p>
 <ul>
 <li>
-<p><strong>Data keys</strong>, which are used to encrypt Joplin items, such as notes, notebooks, tags, etc. when E2EE is ernabled. A data key is generated when the user enables E2EE. Data keys are also dynamically generated when a user shares a notebook with another user. In this case, we create a separate key, so that the recipient can only decrypt this specific notebook.</p>
+<p><strong>Data keys</strong>, which are used to encrypt Joplin items, such as notes, notebooks, tags, etc. when E2EE is enabled. A data key is generated when the user enables E2EE. Data keys are also dynamically generated when a user shares a notebook with another user. In this case, we create a separate key, so that the recipient can only decrypt this specific notebook.</p>
 </li>
 <li>
 <p><strong>Public-private key pairs</strong>, which are used to transfer secrets between users.</p>
@@ -410,7 +412,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/spec/e2ee.md
 </ul>
 <p>At this point, both users have a copy of the key and can share notes over E2EE.</p>
 <p>A user can only have one PPK.</p>
-<p>PPKs are generated automatically when E2EE is enabled and when the user synchronises. They are then stored in info.json on the sync target. The key is genrated during sync because otherwise multiple clients could generate a PPK, and then there would be a conflict to decide which PPK should be kept. By doing it during sync, it ensures that only one PPK is generated because the synchronizer fetches first info.json - and only generates a PPK if none is already present.</p>
+<p>PPKs are generated automatically when E2EE is enabled and when the user synchronises. They are then stored in info.json on the sync target. The key is generated during sync because otherwise multiple clients could generate a PPK, and then there would be a conflict to decide which PPK should be kept. By doing it during sync, it ensures that only one PPK is generated because the synchronizer fetches first info.json - and only generates a PPK if none is already present.</p>
 
 								<div class="bottom-links">
 									<a href="https://github.com/laurent22/joplin/blob/dev/readme/spec/e2ee.md">
@@ -427,11 +429,12 @@ https://github.com/laurent22/joplin/blob/dev/readme/spec/e2ee.md
 	<div class="container">
 		<div class="row">
 			<div class="col-12 col-md-12 social-links">
-				<a href="https://twitter.com/joplinapp" title="Twitter feed"><i class="fab fa-twitter"></i></a>
-				<a href="https://github.com/laurent22/joplin/" title="GitHub repository"><i class="fab fa-github"></i></a>
-				<a href="https://www.patreon.com/joplin" title="Patreon blog"><i class="fab fa-patreon"></i></a>
-				<a href="https://discordapp.com/invite/d2HMPwE" title="Discord chat"><i class="fab fa-discord"></i></a>
-				<a href="https://www.reddit.com/r/joplinapp/" title="Subreddit"><i class="fab fa-reddit"></i></a>
+				<a href="https://twitter.com/joplinapp" title="Joplin Twitter feed"><i class="fab fa-twitter"></i></a>
+				<a href="https://mastodon.social/@joplinapp" title="Joplin Mastodon feed"><i class="fab fa-mastodon"></i></a>
+				<a href="https://www.patreon.com/joplin" title="Joplin Patreon"><i class="fab fa-patreon"></i></a>
+				<a href="https://discordapp.com/invite/d2HMPwE" title="Joplin Discord chat"><i class="fab fa-discord"></i></a>
+				<a href="https://www.reddit.com/r/joplinapp/" title="Joplin Subreddit"><i class="fab fa-reddit"></i></a>
+				<a href="https://github.com/laurent22/joplin/" title="Joplin GitHub repository"><i class="fab fa-github"></i></a>
 			</div>
 		</div>
 
@@ -450,7 +453,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/spec/e2ee.md
 	</div>
 </footer>		</div>
 
-		<script src="&#x2F;js/script.js?t=1633686031235"></script>
+		<script src="/js/script.js?h=46b3b58d72c94591621551affbb8c6e3"></script>
 
 <script>
 	if (window.location.hostname !== 'localhost') {

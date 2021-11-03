@@ -29,7 +29,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/markdown.md
 			href="&#x2F;css/bootstrap5.0.2.min.css"
 			as="style"
 		/>
-		<link rel="stylesheet" href="&#x2F;css/fontawesome-all.min.css?t=1633686031235">
+		<link rel="stylesheet" href="/css/fontawesome-all.min.css?h=ecd507b3125edc4d2a03aa6ae5d07da9">
 		<link
 			href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
 			rel="stylesheet"
@@ -37,7 +37,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/markdown.md
 			media="all"
 			onload="this.media='all'; this.onload = null"
 		/>
-		<link rel="stylesheet" href="&#x2F;css/site.css?t=1633686031235" as="style" />
+		<link rel="stylesheet" href="/css/site.css?h=f1e088235812805da9f78ebcd465d1ad" as="style" />
 		<title>Markdown Guide | Joplin</title>
 
 		<script
@@ -121,6 +121,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/markdown.md
 <li><a href="/conflict/">What is a conflict?</a></li>
 <li><a href="/debugging/">How to enable debug mode</a></li>
 <li><a href="/rich_text_editor/">About the Rich Text editor limitations</a></li>
+<li><a href="/external_links/">External links</a></li>
 <li><a href="/faq/">FAQ</a></li>
 </ul>
 </li>
@@ -218,6 +219,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/markdown.md
 <li><a href="/conflict/">What is a conflict?</a></li>
 <li><a href="/debugging/">How to enable debug mode</a></li>
 <li><a href="/rich_text_editor/">About the Rich Text editor limitations</a></li>
+<li><a href="/external_links/">External links</a></li>
 <li><a href="/faq/">FAQ</a></li>
 </ul>
 </li>
@@ -441,7 +443,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/markdown.md
 <p>You can create a link to a note by specifying its ID in the URL. For example:</p>
 <pre><code>[Link to my note](:/0b0d62d15e60409dac34f354b6e9e839)
 </code></pre>
-<p>Since getting the ID of a note is not straightforward, each app provides a way to create such link. In the <strong>desktop app</strong>, right click on a note an select &quot;Copy Markdown link&quot;. In the <strong>mobile app</strong>, open a note and, in the top right menu, select &quot;Copy Markdown link&quot;. You can then paste this link anywhere in another note.</p>
+<p>Since getting the ID of a note is not straightforward, each app provides a way to create such link. In the <strong>desktop app</strong>, drag and drop a note into another note to create a link. Or right click on a note and select &quot;Copy Markdown link&quot;. In the <strong>mobile app</strong>, open a note and, in the top right menu, select &quot;Copy Markdown link&quot;. You can then paste this link anywhere in another note.</p>
 <h3>Math notation<a name="math-notation" href="#math-notation" class="heading-anchor">🔗</a></h3>
 <p>Math expressions can be added using the <a href="https://khan.github.io/KaTeX/">KaTeX notation</a>. To add an inline equation, wrap the expression in <code>$EXPRESSION$</code>, eg. <code>$\sqrt{3x-1}+(1+x)^2$</code>. To create an expression block, wrap it as follow:</p>
 <pre><code>$$
@@ -630,11 +632,12 @@ graph TD;
 	<div class="container">
 		<div class="row">
 			<div class="col-12 col-md-12 social-links">
-				<a href="https://twitter.com/joplinapp" title="Twitter feed"><i class="fab fa-twitter"></i></a>
-				<a href="https://github.com/laurent22/joplin/" title="GitHub repository"><i class="fab fa-github"></i></a>
-				<a href="https://www.patreon.com/joplin" title="Patreon blog"><i class="fab fa-patreon"></i></a>
-				<a href="https://discordapp.com/invite/d2HMPwE" title="Discord chat"><i class="fab fa-discord"></i></a>
-				<a href="https://www.reddit.com/r/joplinapp/" title="Subreddit"><i class="fab fa-reddit"></i></a>
+				<a href="https://twitter.com/joplinapp" title="Joplin Twitter feed"><i class="fab fa-twitter"></i></a>
+				<a href="https://mastodon.social/@joplinapp" title="Joplin Mastodon feed"><i class="fab fa-mastodon"></i></a>
+				<a href="https://www.patreon.com/joplin" title="Joplin Patreon"><i class="fab fa-patreon"></i></a>
+				<a href="https://discordapp.com/invite/d2HMPwE" title="Joplin Discord chat"><i class="fab fa-discord"></i></a>
+				<a href="https://www.reddit.com/r/joplinapp/" title="Joplin Subreddit"><i class="fab fa-reddit"></i></a>
+				<a href="https://github.com/laurent22/joplin/" title="Joplin GitHub repository"><i class="fab fa-github"></i></a>
 			</div>
 		</div>
 
@@ -653,7 +656,7 @@ graph TD;
 	</div>
 </footer>		</div>
 
-		<script src="&#x2F;js/script.js?t=1633686031235"></script>
+		<script src="/js/script.js?h=46b3b58d72c94591621551affbb8c6e3"></script>
 
 <script>
 	if (window.location.hostname !== 'localhost') {

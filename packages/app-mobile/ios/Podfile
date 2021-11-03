@@ -3,7 +3,7 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 
 # Note: it was 13.4 to get @react-native-community/datetimepicker to work
 # but it's probably not necessary actually. Just needed to upgrade XCode.
-platform :ios, '10.0'
+platform :ios, '11.0'
 
 target 'Joplin' do
   config = use_native_modules!
@@ -24,6 +24,7 @@ target 'Joplin' do
   # use_flipper!()
   # post_install do |installer|
   #   react_native_post_install(installer)
+  #   __apply_Xcode_12_5_M1_post_install_workaround(installer)
   # end
 
   # RN 0.63:

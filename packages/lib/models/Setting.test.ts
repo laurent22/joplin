@@ -216,4 +216,44 @@ describe('models/Setting', function() {
 		expect(await fs.readFile(`${Setting.value('profileDir')}/${files[0]}`, 'utf8')).toBe(badContent);
 	}));
 
+	it('should allow applying default migrations', (async () => {
+		await Setting.reset();
+
+		expect(Setting.value('sync.target')).toBe(0);
+		expect(Setting.value('style.editor.contentMaxWidth')).toBe(0);
+		Setting.applyDefaultMigrations();
+		expect(Setting.value('sync.target')).toBe(7); // Changed
+		expect(Setting.value('style.editor.contentMaxWidth')).toBe(600); // Changed
+	}));
+
+	it('should skip values that are already set', (async () => {
+		await Setting.reset();
+
+		Setting.setValue('sync.target', 9);
+		Setting.applyDefaultMigrations();
+		expect(Setting.value('sync.target')).toBe(9); // Not changed
+	}));
+
+	it('should allow skipping default migrations', (async () => {
+		await Setting.reset();
+
+		expect(Setting.value('sync.target')).toBe(0);
+		expect(Setting.value('style.editor.contentMaxWidth')).toBe(0);
+		Setting.skipDefaultMigrations();
+		Setting.applyDefaultMigrations();
+		expect(Setting.value('sync.target')).toBe(0); // Not changed
+		expect(Setting.value('style.editor.contentMaxWidth')).toBe(0); // Not changed
+	}));
+
+	it('should not apply migrations that have already been applied', (async () => {
+		await Setting.reset();
+
+		Setting.setValue('lastSettingDefaultMigration', 0);
+		expect(Setting.value('sync.target')).toBe(0);
+		expect(Setting.value('style.editor.contentMaxWidth')).toBe(0);
+		Setting.applyDefaultMigrations();
+		expect(Setting.value('sync.target')).toBe(0); // Not changed
+		expect(Setting.value('style.editor.contentMaxWidth')).toBe(600); // Changed
+	}));
+
 });

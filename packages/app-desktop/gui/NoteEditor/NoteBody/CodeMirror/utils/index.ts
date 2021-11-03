@@ -1,5 +1,4 @@
-import { useEffect, useCallback, useRef } from 'react';
-import shim from '@joplin/lib/shim';
+import { useEffect, useRef } from 'react';
 
 export function cursorPositionToTextOffset(cursorPos: any, body: string) {
 	if (!body) return 0;
@@ -28,64 +27,3 @@ export function usePrevious(value: any): any {
 	});
 	return ref.current;
 }
-
-export function useScrollHandler(editorRef: any, webviewRef: any, onScroll: Function) {
-	const ignoreNextEditorScrollEvent_ = useRef(false);
-	const scrollTimeoutId_ = useRef<any>(null);
-
-	const scheduleOnScroll = useCallback((event: any) => {
-		if (scrollTimeoutId_.current) {
-			shim.clearTimeout(scrollTimeoutId_.current);
-			scrollTimeoutId_.current = null;
-		}
-
-		scrollTimeoutId_.current = shim.setTimeout(() => {
-			scrollTimeoutId_.current = null;
-			onScroll(event);
-		}, 10);
-	}, [onScroll]);
-
-	const setEditorPercentScroll = useCallback((p: number) => {
-		ignoreNextEditorScrollEvent_.current = true;
-
-		if (editorRef.current) {
-			editorRef.current.setScrollPercent(p);
-
-			scheduleOnScroll({ percent: p });
-		}
-	}, [scheduleOnScroll]);
-
-	const setViewerPercentScroll = useCallback((p: number) => {
-		if (webviewRef.current) {
-			webviewRef.current.wrappedInstance.send('setPercentScroll', p);
-			scheduleOnScroll({ percent: p });
-		}
-	}, [scheduleOnScroll]);
-
-	const editor_scroll = useCallback(() => {
-		if (ignoreNextEditorScrollEvent_.current) {
-			ignoreNextEditorScrollEvent_.current = false;
-			return;
-		}
-
-		if (editorRef.current) {
-			const percent = editorRef.current.getScrollPercent();
-			if (!isNaN(percent)) {
-				// when switching to another note, the percent can sometimes be NaN
-				// this is coming from `gui/NoteEditor/NoteBody/CodeMirror/utils/useScrollUtils.ts`
-				// when CodeMirror returns scroll info with heigth == clientHeigth
-				// https://github.com/laurent22/joplin/issues/4797
-				setViewerPercentScroll(percent);
-			}
-		}
-	}, [setViewerPercentScroll]);
-
-	const resetScroll = useCallback(() => {
-		if (editorRef.current) {
-			editorRef.current.setScrollPercent(0);
-		}
-	}, []);
-
-	return { resetScroll, setEditorPercentScroll, setViewerPercentScroll, editor_scroll };
-}
-

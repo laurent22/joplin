@@ -67,6 +67,7 @@ export interface DatabaseConfig {
 	asyncStackTraces?: boolean;
 	slowQueryLogEnabled?: boolean;
 	slowQueryLogMinDuration?: number;
+	autoMigration?: boolean;
 }
 
 export interface MailerConfig {
@@ -131,3 +132,7 @@ export enum RouteType {
 }
 
 export type KoaNext = ()=> Promise<void>;
+
+export interface CommandContext {
+	models: Models;
+}

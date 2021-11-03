@@ -29,7 +29,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog_server.md
 			href="&#x2F;css/bootstrap5.0.2.min.css"
 			as="style"
 		/>
-		<link rel="stylesheet" href="&#x2F;css/fontawesome-all.min.css?t=1633686031235">
+		<link rel="stylesheet" href="/css/fontawesome-all.min.css?h=ecd507b3125edc4d2a03aa6ae5d07da9">
 		<link
 			href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
 			rel="stylesheet"
@@ -37,7 +37,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog_server.md
 			media="all"
 			onload="this.media='all'; this.onload = null"
 		/>
-		<link rel="stylesheet" href="&#x2F;css/site.css?t=1633686031235" as="style" />
+		<link rel="stylesheet" href="/css/site.css?h=f1e088235812805da9f78ebcd465d1ad" as="style" />
 		<title>Joplin Server Changelog | Joplin</title>
 
 		<script
@@ -121,6 +121,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog_server.md
 <li><a href="/conflict/">What is a conflict?</a></li>
 <li><a href="/debugging/">How to enable debug mode</a></li>
 <li><a href="/rich_text_editor/">About the Rich Text editor limitations</a></li>
+<li><a href="/external_links/">External links</a></li>
 <li><a href="/faq/">FAQ</a></li>
 </ul>
 </li>
@@ -218,6 +219,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog_server.md
 <li><a href="/conflict/">What is a conflict?</a></li>
 <li><a href="/debugging/">How to enable debug mode</a></li>
 <li><a href="/rich_text_editor/">About the Rich Text editor limitations</a></li>
+<li><a href="/external_links/">External links</a></li>
 <li><a href="/faq/">FAQ</a></li>
 </ul>
 </li>
@@ -289,6 +291,32 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog_server.md
 <p><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=E8JMYD2LQ8MMA&amp;lc=GB&amp;item_name=Joplin+Development&amp;currency_code=EUR&amp;bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Donate-PayPal-green.svg" alt="Donate using PayPal"></a> <a href="https://github.com/sponsors/laurent22/"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/GitHub-Badge.svg" alt="Sponsor on GitHub"></a> <a href="https://www.patreon.com/joplin"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Patreon-Badge.svg" alt="Become a patron"></a> <a href="https://joplinapp.org/donate/#donations"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Donate-IBAN.svg" alt="Donate using IBAN"></a></p>
 </div>
 <h1>Joplin Server Changelog<a name="joplin-server-changelog" href="#joplin-server-changelog" class="heading-anchor">🔗</a></h1>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.5.10">server-v2.5.10</a> - 2021-11-02T14:45:54Z<a name="server-v2-5-10-https-github-com-laurent22-joplin-releases-tag-server-v2-5-10-2021-11-02t14-45-54z" href="#server-v2-5-10-https-github-com-laurent22-joplin-releases-tag-server-v2-5-10-2021-11-02t14-45-54z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>New: Add unique constraint on name and owner ID of items table (f7a18ba)</li>
+<li>Fixed: Fixed issue that could cause server to return empty items in some rare cases (99ea4b7)</li>
+</ul>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.5.9">server-v2.5.9</a> - 2021-10-28T19:43:41Z<a name="server-v2-5-9-https-github-com-laurent22-joplin-releases-tag-server-v2-5-9-2021-10-28t19-43-41z" href="#server-v2-5-9-https-github-com-laurent22-joplin-releases-tag-server-v2-5-9-2021-10-28t19-43-41z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>Improved: Remove session expiration for now (4a2af32)</li>
+</ul>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.5.8">server-v2.5.8</a> - 2021-10-28T16:07:23Z<a name="server-v2-5-8-https-github-com-laurent22-joplin-releases-tag-server-v2-5-8-2021-10-28t16-07-23z" href="#server-v2-5-8-https-github-com-laurent22-joplin-releases-tag-server-v2-5-8-2021-10-28t16-07-23z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>New: Added item owner ID, and allow disabling db auto-migrations (b655f27)</li>
+<li>Fixed: Fixed Stripe portal page redirection (9ba90b5)</li>
+<li>Fixed: Fixed items.owner_id migration (a753429)</li>
+<li>Fixed: Fixed display of latest migration in startup log (#5627 by <a href="https://github.com/KowalskiPiotr98">@KowalskiPiotr98</a>)</li>
+<li>Improved: Moved CLI commands to separate files (dca13b3)</li>
+<li>Improved: Delete all sessions when a password is changed or reset (b497177)</li>
+<li>Improved: Expire sessions after 12 hours (0ada1df)</li>
+<li>Improved: Improved task service log entries (bc5a853)</li>
+<li>Improved: Run oversized account task more frequently (2f09f88)</li>
+</ul>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.5.5">server-v2.5.5</a> - 2021-10-23T20:58:37Z<a name="server-v2-5-5-https-github-com-laurent22-joplin-releases-tag-server-v2-5-5-2021-10-23t20-58-37z" href="#server-v2-5-5-https-github-com-laurent22-joplin-releases-tag-server-v2-5-5-2021-10-23t20-58-37z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>New: Added tool to delete old changes (169b585)</li>
+<li>Fixed: Fixed issue when a notebook is shared, then unshared, then shared again (47fc51e)</li>
+</ul>
 <h2><a href="https://github.com/laurent22/joplin/releases/tag/server-v2.5.2">server-v2.5.2</a> - 2021-10-07T13:36:27Z<a name="server-v2-5-2-https-github-com-laurent22-joplin-releases-tag-server-v2-5-2-2021-10-07t13-36-27z" href="#server-v2-5-2-https-github-com-laurent22-joplin-releases-tag-server-v2-5-2-2021-10-07t13-36-27z" class="heading-anchor">🔗</a></h2>
 <ul>
 <li>New: Add support for promotion codes (5b58811)</li>
@@ -595,11 +623,12 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog_server.md
 	<div class="container">
 		<div class="row">
 			<div class="col-12 col-md-12 social-links">
-				<a href="https://twitter.com/joplinapp" title="Twitter feed"><i class="fab fa-twitter"></i></a>
-				<a href="https://github.com/laurent22/joplin/" title="GitHub repository"><i class="fab fa-github"></i></a>
-				<a href="https://www.patreon.com/joplin" title="Patreon blog"><i class="fab fa-patreon"></i></a>
-				<a href="https://discordapp.com/invite/d2HMPwE" title="Discord chat"><i class="fab fa-discord"></i></a>
-				<a href="https://www.reddit.com/r/joplinapp/" title="Subreddit"><i class="fab fa-reddit"></i></a>
+				<a href="https://twitter.com/joplinapp" title="Joplin Twitter feed"><i class="fab fa-twitter"></i></a>
+				<a href="https://mastodon.social/@joplinapp" title="Joplin Mastodon feed"><i class="fab fa-mastodon"></i></a>
+				<a href="https://www.patreon.com/joplin" title="Joplin Patreon"><i class="fab fa-patreon"></i></a>
+				<a href="https://discordapp.com/invite/d2HMPwE" title="Joplin Discord chat"><i class="fab fa-discord"></i></a>
+				<a href="https://www.reddit.com/r/joplinapp/" title="Joplin Subreddit"><i class="fab fa-reddit"></i></a>
+				<a href="https://github.com/laurent22/joplin/" title="Joplin GitHub repository"><i class="fab fa-github"></i></a>
 			</div>
 		</div>
 
@@ -618,7 +647,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog_server.md
 	</div>
 </footer>		</div>
 
-		<script src="&#x2F;js/script.js?t=1633686031235"></script>
+		<script src="/js/script.js?h=46b3b58d72c94591621551affbb8c6e3"></script>
 
 <script>
 	if (window.location.hostname !== 'localhost') {

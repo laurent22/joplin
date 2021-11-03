@@ -1,6 +1,6 @@
-import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, expectThrow, createFolder, createItemTree3, expectNotThrow } from '../utils/testing/testUtils';
+import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, expectThrow, createFolder, createItemTree3, expectNotThrow, createNote, updateNote } from '../utils/testing/testUtils';
 import { ChangeType } from '../services/database/types';
-import { msleep } from '../utils/time';
+import { Day, msleep } from '../utils/time';
 import { ChangePagination } from './ChangeModel';
 import { SqliteMaxVariableNum } from '../db';
 
@@ -176,6 +176,91 @@ describe('ChangeModel', function() {
 		});
 
 		expect(changeCount).toBe(SqliteMaxVariableNum);
+	});
+
+	test('should delete old changes', async function() {
+		// Create the following events:
+		//
+		// T1   2020-01-01    U1 Create
+		// T2   2020-01-10    U1 Update    U2 Create
+		// T3   2020-01-20    U1 Update
+		// T4   2020-01-30    U1 Update
+		// T5   2020-02-10                 U2 Update
+		// T6   2020-02-20                 U2 Update
+		//
+		// Use this to add days to a date:
+		//
+		// https://www.timeanddate.com/date/dateadd.html
+
+		const changeTtl = (180 + 1) * Day;
+
+		const { session: session1 } = await createUserAndSession(1);
+		const { session: session2 } = await createUserAndSession(2);
+
+		jest.useFakeTimers('modern');
+
+		const t1 = new Date('2020-01-01').getTime();
+		jest.setSystemTime(t1);
+		const note1 = await createNote(session1.id, {});
+
+		const t2 = new Date('2020-01-10').getTime();
+		jest.setSystemTime(t2);
+		const note2 = await createNote(session2.id, {});
+		await updateNote(session1.id, { id: note1.jop_id });
+
+		const t3 = new Date('2020-01-20').getTime();
+		jest.setSystemTime(t3);
+		await updateNote(session1.id, { id: note1.jop_id });
+
+		const t4 = new Date('2020-01-30').getTime();
+		jest.setSystemTime(t4);
+		await updateNote(session1.id, { id: note1.jop_id });
+
+		const t5 = new Date('2020-02-10').getTime();
+		jest.setSystemTime(t5);
+		await updateNote(session2.id, { id: note2.jop_id });
+
+		const t6 = new Date('2020-02-20').getTime();
+		jest.setSystemTime(t6);
+		await updateNote(session2.id, { id: note2.jop_id });
+
+		expect(await models().change().count()).toBe(7);
+
+		// Shouldn't do anything initially because it only deletes old changes.
+		await models().change().deleteOldChanges();
+		expect(await models().change().count()).toBe(7);
+
+		// 180 days after T4, it should delete all U1 updates events except for
+		// the last one
+		jest.setSystemTime(new Date(t4 + changeTtl).getTime());
+		await models().change().deleteOldChanges();
+		expect(await models().change().count()).toBe(5);
+		{
+			const updateChange = (await models().change().all()).find(c => c.item_id === note1.id && c.type === ChangeType.Update);
+			expect(updateChange.created_time >= t4 && updateChange.created_time < t5).toBe(true);
+		}
+		// None of the note 2 changes should have been deleted because they've
+		// been made later
+		expect((await models().change().all()).filter(c => c.item_id === note2.id).length).toBe(3);
+
+		// Between T5 and T6, 90 days later - nothing should happen because
+		// there's only one note 2 change that is older than 90 days at this
+		// point.
+		jest.setSystemTime(new Date(t5 + changeTtl).getTime());
+		await models().change().deleteOldChanges();
+		expect(await models().change().count()).toBe(5);
+
+		// After T6, more than 90 days later - now the change at T5 should be
+		// deleted, keeping only the change at T6.
+		jest.setSystemTime(new Date(t6 + changeTtl).getTime());
+		await models().change().deleteOldChanges();
+		expect(await models().change().count()).toBe(4);
+		{
+			const updateChange = (await models().change().all()).find(c => c.item_id === note2.id && c.type === ChangeType.Update);
+			expect(updateChange.created_time >= t6).toBe(true);
+		}
+
+		jest.useRealTimers();
 	});
 
 });

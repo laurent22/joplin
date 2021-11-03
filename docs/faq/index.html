@@ -29,7 +29,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/faq.md
 			href="&#x2F;css/bootstrap5.0.2.min.css"
 			as="style"
 		/>
-		<link rel="stylesheet" href="&#x2F;css/fontawesome-all.min.css?t=1633686031235">
+		<link rel="stylesheet" href="/css/fontawesome-all.min.css?h=ecd507b3125edc4d2a03aa6ae5d07da9">
 		<link
 			href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
 			rel="stylesheet"
@@ -37,7 +37,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/faq.md
 			media="all"
 			onload="this.media='all'; this.onload = null"
 		/>
-		<link rel="stylesheet" href="&#x2F;css/site.css?t=1633686031235" as="style" />
+		<link rel="stylesheet" href="/css/site.css?h=f1e088235812805da9f78ebcd465d1ad" as="style" />
 		<title>FAQ | Joplin</title>
 
 		<script
@@ -121,6 +121,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/faq.md
 <li><a href="/conflict/">What is a conflict?</a></li>
 <li><a href="/debugging/">How to enable debug mode</a></li>
 <li><a href="/rich_text_editor/">About the Rich Text editor limitations</a></li>
+<li><a href="/external_links/">External links</a></li>
 <li><a href="/faq/">FAQ</a></li>
 </ul>
 </li>
@@ -218,6 +219,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/faq.md
 <li><a href="/conflict/">What is a conflict?</a></li>
 <li><a href="/debugging/">How to enable debug mode</a></li>
 <li><a href="/rich_text_editor/">About the Rich Text editor limitations</a></li>
+<li><a href="/external_links/">External links</a></li>
 <li><a href="/faq/">FAQ</a></li>
 </ul>
 </li>
@@ -335,6 +337,11 @@ notepad++.exe --openSession   # Opens Notepad ++ in new window
 <li>Synchronise to verify that everything is working.</li>
 <li>Do step 5 and 6 for all the other Joplin clients you need to sync.</li>
 </ol>
+<h2>I deleted some notes by accident and don't have a backup<a name="i-deleted-some-notes-by-accident-and-don-t-have-a-backup" href="#i-deleted-some-notes-by-accident-and-don-t-have-a-backup" class="heading-anchor">🔗</a></h2>
+<p>If you know the <code>NOTE_ID</code> and have note history enabled you can run the command <code>restoreNoteRevision</code> from the command palette e.g. <code>restoreNoteRevision 66457326a6ba4adeb4be8ce05e37af0d</code>. Joplin will then confirm if the restore was successful and place the note in a &quot;Restored Note&quot; notebook.<br>
+If you do not know the <code>NOTE_ID</code> then you can find this within the Joplin sqlite database as the <code>item_id</code> within the <code>deleted_items</code> or <code>revisions</code> tables. It will require some manual checking of the <code>title_diff</code> and <code>body_diff</code> fields to check if the <code>ITEM/NOTE_ID</code> you are targeting is the correct one.<br>
+You should first take a copy of the database to avoid making any accidental changes in the live one.<br>
+For further information go <a href="https://discourse.joplinapp.org/t/restoring-deleted-notes/21304">here</a>.</p>
 <h2>How can I easily enter Markdown tags in Android?<a name="how-can-i-easily-enter-markdown-tags-in-android" href="#how-can-i-easily-enter-markdown-tags-in-android" class="heading-anchor">🔗</a></h2>
 <p>You may use a special keyboard such as <a href="https://play.google.com/store/apps/details?id=kl.ime.oh&amp;hl=en">Multiling O Keyboard</a>, which has shortcuts to create Markdown tags. <a href="https://discourse.joplinapp.org/t/android-create-new-list-item-with-enter/585/2?u=laurent">More information in this post</a>.</p>
 <h2>The initial sync is very slow, how can I speed it up?<a name="the-initial-sync-is-very-slow-how-can-i-speed-it-up" href="#the-initial-sync-is-very-slow-how-can-i-speed-it-up" class="heading-anchor">🔗</a></h2>
@@ -403,11 +410,12 @@ on this server.&lt;/p&gt;
 	<div class="container">
 		<div class="row">
 			<div class="col-12 col-md-12 social-links">
-				<a href="https://twitter.com/joplinapp" title="Twitter feed"><i class="fab fa-twitter"></i></a>
-				<a href="https://github.com/laurent22/joplin/" title="GitHub repository"><i class="fab fa-github"></i></a>
-				<a href="https://www.patreon.com/joplin" title="Patreon blog"><i class="fab fa-patreon"></i></a>
-				<a href="https://discordapp.com/invite/d2HMPwE" title="Discord chat"><i class="fab fa-discord"></i></a>
-				<a href="https://www.reddit.com/r/joplinapp/" title="Subreddit"><i class="fab fa-reddit"></i></a>
+				<a href="https://twitter.com/joplinapp" title="Joplin Twitter feed"><i class="fab fa-twitter"></i></a>
+				<a href="https://mastodon.social/@joplinapp" title="Joplin Mastodon feed"><i class="fab fa-mastodon"></i></a>
+				<a href="https://www.patreon.com/joplin" title="Joplin Patreon"><i class="fab fa-patreon"></i></a>
+				<a href="https://discordapp.com/invite/d2HMPwE" title="Joplin Discord chat"><i class="fab fa-discord"></i></a>
+				<a href="https://www.reddit.com/r/joplinapp/" title="Joplin Subreddit"><i class="fab fa-reddit"></i></a>
+				<a href="https://github.com/laurent22/joplin/" title="Joplin GitHub repository"><i class="fab fa-github"></i></a>
 			</div>
 		</div>
 
@@ -426,7 +434,7 @@ on this server.&lt;/p&gt;
 	</div>
 </footer>		</div>
 
-		<script src="&#x2F;js/script.js?t=1633686031235"></script>
+		<script src="/js/script.js?h=46b3b58d72c94591621551affbb8c6e3"></script>
 
 <script>
 	if (window.location.hostname !== 'localhost') {

@@ -1,5 +1,37 @@
 # Joplin Server Changelog
 
+## [server-v2.6.2](https://github.com/laurent22/joplin/releases/tag/server-v2.6.2) - 2021-11-03T12:54:38Z
+
+- New: Add support for faster built-in sync locks (#5662)
+- Improved: Improved env variable handling to make it self documenting and enforce type checking (b5d792c)
+- Improved: Improved logging and rendering of low level middleware errors (3704413)
+
+## [server-v2.5.10](https://github.com/laurent22/joplin/releases/tag/server-v2.5.10) - 2021-11-02T14:45:54Z
+
+- New: Add unique constraint on name and owner ID of items table (f7a18ba)
+- Fixed: Fixed issue that could cause server to return empty items in some rare cases (99ea4b7)
+
+## [server-v2.5.9](https://github.com/laurent22/joplin/releases/tag/server-v2.5.9) - 2021-10-28T19:43:41Z
+
+- Improved: Remove session expiration for now (4a2af32)
+
+## [server-v2.5.8](https://github.com/laurent22/joplin/releases/tag/server-v2.5.8) - 2021-10-28T16:07:23Z
+
+- New: Added item owner ID, and allow disabling db auto-migrations (b655f27)
+- Fixed: Fixed Stripe portal page redirection (9ba90b5)
+- Fixed: Fixed items.owner_id migration (a753429)
+- Fixed: Fixed display of latest migration in startup log (#5627 by [@KowalskiPiotr98](https://github.com/KowalskiPiotr98))
+- Improved: Moved CLI commands to separate files (dca13b3)
+- Improved: Delete all sessions when a password is changed or reset (b497177)
+- Improved: Expire sessions after 12 hours (0ada1df)
+- Improved: Improved task service log entries (bc5a853)
+- Improved: Run oversized account task more frequently (2f09f88)
+
+## [server-v2.5.5](https://github.com/laurent22/joplin/releases/tag/server-v2.5.5) - 2021-10-23T20:58:37Z
+
+- New: Added tool to delete old changes (169b585)
+- Fixed: Fixed issue when a notebook is shared, then unshared, then shared again (47fc51e)
+
 ## [server-v2.5.2](https://github.com/laurent22/joplin/releases/tag/server-v2.5.2) - 2021-10-07T13:36:27Z
 
 - New: Add support for promotion codes (5b58811)

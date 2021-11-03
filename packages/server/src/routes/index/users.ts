@@ -2,7 +2,7 @@ import { SubPath, redirect } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
 import { AppContext, HttpMethod } from '../../utils/types';
-import { bodyFields, formParse } from '../../utils/requestUtils';
+import { bodyFields, contextSessionId, formParse } from '../../utils/requestUtils';
 import { ErrorForbidden, ErrorUnprocessableEntity } from '../../utils/errors';
 import { User, UserFlag, UserFlagType, Uuid } from '../../services/database/types';
 import config from '../../config';
@@ -64,7 +64,6 @@ function makeUser(isNew: boolean, fields: any): User {
 	if ('can_share_folder' in fields) user.can_share_folder = boolOrDefaultToValue(fields, 'can_share_folder');
 	if ('can_upload' in fields) user.can_upload = intOrDefaultToValue(fields, 'can_upload');
 	if ('account_type' in fields) user.account_type = Number(fields.account_type);
-	if ('email' in fields) user.email = fields.email;
 
 	const password = checkRepeatPassword(fields, false);
 	if (password) user.password = password;
@@ -337,15 +336,12 @@ router.post('users', async (path: SubPath, ctx: AppContext) => {
 				}
 
 				await models.user().save(userToSave, { isNew: false });
-			}
-			// } else if (fields.user_cancel_subscription_button) {
-			// 	await cancelSubscriptionByUserId(models, userId);
-			// 	const sessionId = contextSessionId(ctx, false);
-			// 	if (sessionId) {
-			// 		await models.session().logout(sessionId);
-			// 		return redirect(ctx, config().baseUrl);
-			// 	}
 
+				// When changing the password, we also clear all session IDs for
+				// that user, except the current one (otherwise they would be
+				// logged out).
+				if (userToSave.password) await models.session().deleteByUserId(userToSave.id, contextSessionId(ctx));
+			}
 		} else if (fields.stop_impersonate_button) {
 			await stopImpersonating(ctx);
 			return redirect(ctx, config().baseUrl);
