@@ -5,7 +5,7 @@ import * as Koa from 'koa';
 import * as fs from 'fs-extra';
 import Logger, { LoggerWrapper, TargetType } from '@joplin/lib/Logger';
 import config, { initConfig, runningInDocker } from './config';
-import { migrateLatest, waitForConnection, sqliteDefaultDir } from './db';
+import { migrateLatest, waitForConnection, sqliteDefaultDir, latestMigration } from './db';
 import { AppContext, Env, KoaNext } from './utils/types';
 import FsDriverNode from '@joplin/lib/fs-driver-node';
 import routeHandler from './middleware/routeHandler';
@@ -269,6 +269,7 @@ async function main() {
 		if (config().database.autoMigration) {
 			appLogger().info('Auto-migrating database...');
 			await migrateLatest(ctx.joplinBase.db);
+			appLogger().info('Latest migration:', (await latestMigration(ctx.joplinBase.db)).name);
 		} else {
 			appLogger().info('Skipped database auto-migration.');
 		}

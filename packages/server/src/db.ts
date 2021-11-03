@@ -347,10 +347,10 @@ export function isUniqueConstraintError(error: any): boolean {
 	return false;
 }
 
-export async function latestMigration(db: DbConnection): Promise<any> {
+export async function latestMigration(db: DbConnection): Promise<Migration> {
 	try {
 		const result = await db('knex_migrations').select('name').orderBy('id', 'desc').first();
-		return result;
+		return { name: result.name, done: true };
 	} catch (error) {
 		// If the database has never been initialized, we return null, so
 		// for this we need to check the error code, which will be
