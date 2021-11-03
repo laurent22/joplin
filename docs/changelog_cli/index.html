@@ -291,6 +291,20 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog_cli.md
 <p><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=E8JMYD2LQ8MMA&amp;lc=GB&amp;item_name=Joplin+Development&amp;currency_code=EUR&amp;bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Donate-PayPal-green.svg" alt="Donate using PayPal"></a> <a href="https://github.com/sponsors/laurent22/"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/GitHub-Badge.svg" alt="Sponsor on GitHub"></a> <a href="https://www.patreon.com/joplin"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Patreon-Badge.svg" alt="Become a patron"></a> <a href="https://joplinapp.org/donate/#donations"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Donate-IBAN.svg" alt="Donate using IBAN"></a></p>
 </div>
 <h1>Joplin terminal app changelog<a name="joplin-terminal-app-changelog" href="#joplin-terminal-app-changelog" class="heading-anchor">🔗</a></h1>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/cli-v2.6.1">cli-v2.6.1</a> - 2021-11-03T11:33:18Z<a name="cli-v2-6-1-https-github-com-laurent22-joplin-releases-tag-cli-v2-6-1-2021-11-03t11-33-18z" href="#cli-v2-6-1-https-github-com-laurent22-joplin-releases-tag-cli-v2-6-1-2021-11-03t11-33-18z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>New: Add support for public-private key pairs and improved master password support (#5438)</li>
+<li>New: Added mechanism to migrate default settings to new values (72db8e4)</li>
+<li>Improved: Add Markdown + Front Matter exporter/importer (#5465) (#5224 by <a href="https://github.com/CalebJohn">@CalebJohn</a>)</li>
+<li>Improved: Ensure that shared notebook children are not deleted when shared, unshared and shared again, and a conflict happens (ccf9882)</li>
+<li>Improved: Improved Joplin Server configuration check to better handle disabled accounts (72c1235)</li>
+<li>Improved: Improved handling of expired sessions when using Joplin Server (33249ca) (ace1118)</li>
+<li>Fixed: Certain attachments were not being automatically deleted (#932)</li>
+<li>Fixed: Fix default sync target (4b39d30)</li>
+<li>Fixed: Fixed potential infinite loop when Joplin Server session is invalid (c5569ef)</li>
+<li>Fixed: Fixed running out of memory when importing large ENEX files (#5543)</li>
+<li>Fixed: Ignore newline between quotes while spliting batch (#5540) (#5341 by Kingsley Yung)</li>
+</ul>
 <h2><a href="https://github.com/laurent22/joplin/releases/tag/cli-v2.4.1">cli-v2.4.1</a> - 2021-09-29T15:28:01Z<a name="cli-v2-4-1-https-github-com-laurent22-joplin-releases-tag-cli-v2-4-1-2021-09-29t15-28-01z" href="#cli-v2-4-1-https-github-com-laurent22-joplin-releases-tag-cli-v2-4-1-2021-09-29t15-28-01z" class="heading-anchor">🔗</a></h2>
 <ul>
 <li>New: Add a way to disable a master key (7faa58e)</li>

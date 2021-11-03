@@ -1,5 +1,10 @@
 # Joplin changelog
 
+## [v2.5.10](https://github.com/laurent22/joplin/releases/tag/v2.5.10) - 2021-11-01T08:22:42Z
+
+- Fixed: Fixed crash on certain Linux distributions when importing or exporting a file (6012783)
+- Fixed: Fixed potential infinite loop when Joplin Server session is invalid (c5569ef)
+
 ## [v2.5.8](https://github.com/laurent22/joplin/releases/tag/v2.5.8) - 2021-10-31T11:38:03Z
 
 - Improved: Enable safe mode for Markdown editor too ([#5593](https://github.com/laurent22/joplin/issues/5593))
