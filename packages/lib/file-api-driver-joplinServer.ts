@@ -2,6 +2,7 @@ import { MultiPutItem } from './file-api';
 import JoplinError from './JoplinError';
 import JoplinServerApi from './JoplinServerApi';
 import { trimSlashes } from './path-utils';
+import { Lock, LockClientType, LockType } from './services/synchronizer/LockHandler';
 
 // All input paths should be in the format: "path/to/file". This is converted to
 // "root:/path/to/file:" when doing the API call.
@@ -37,6 +38,10 @@ export default class FileApiDriverJoplinServer {
 	}
 
 	public get supportsAccurateTimestamp() {
+		return true;
+	}
+
+	public get supportsLocks() {
 		return true;
 	}
 
@@ -196,12 +201,58 @@ export default class FileApiDriverJoplinServer {
 		throw new Error('Not supported');
 	}
 
+	// private lockClientTypeToId(clientType:AppType):number {
+	// 	if (clientType === AppType.Desktop) return 1;
+	// 	if (clientType === AppType.Mobile) return 2;
+	// 	if (clientType === AppType.Cli) return 3;
+	// 	throw new Error('Invalid client type: ' + clientType);
+	// }
+
+	// private lockTypeToId(lockType:LockType):number {
+	// 	if (lockType === LockType.None) return 0; // probably not possible?
+	// 	if (lockType === LockType.Sync) return 1;
+	// 	if (lockType === LockType.Exclusive) return 2;
+	// 	throw new Error('Invalid lock type: ' + lockType);
+	// }
+
+	// private lockClientIdTypeToType(clientType:number):AppType {
+	// 	if (clientType === 1) return AppType.Desktop;
+	// 	if (clientType === 2) return AppType.Mobile;
+	// 	if (clientType === 3) return AppType.Cli;
+	// 	throw new Error('Invalid client type: ' + clientType);
+	// }
+
+	// private lockIdToType(lockType:number):LockType {
+	// 	if (lockType === 0) return LockType.None; // probably not possible?
+	// 	if (lockType === 1) return LockType.Sync;
+	// 	if (lockType === 2) return LockType.Exclusive;
+	// 	throw new Error('Invalid lock type: ' + lockType);
+	// }
+
+	public async acquireLock(type: LockType, clientType: LockClientType, clientId: string): Promise<Lock> {
+		return this.api().exec('POST', 'api/locks', null, {
+			type,
+			clientType,
+			clientId: clientId,
+		});
+	}
+
+	public async releaseLock(type: LockType, clientType: LockClientType, clientId: string) {
+		await this.api().exec('DELETE', `api/locks/${type}_${clientType}_${clientId}`);
+	}
+
+	public async listLocks() {
+		return this.api().exec('GET', 'api/locks');
+	}
+
 	public async clearRoot(path: string) {
 		const response = await this.list(path);
 
 		for (const item of response.items) {
 			await this.delete(item.path);
 		}
+
+		await this.api().exec('POST', 'api/debug', null, { action: 'clearKeyValues' });
 
 		if (response.has_more) throw new Error('has_more support not implemented');
 	}

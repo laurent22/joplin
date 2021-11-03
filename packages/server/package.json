@@ -11,7 +11,7 @@
     "devDropTables": "node dist/app.js --env dev --drop-tables",
     "devDropDb": "node dist/app.js --env dev --drop-db",
     "start": "node dist/app.js",
-    "generateTypes": "rm -f db-buildTypes.sqlite && npm run start -- --migrate-latest --env buildTypes && node dist/tools/generateTypes.js && mv db-buildTypes.sqlite schema.sqlite",
+    "generateTypes": "rm -f db-buildTypes.sqlite && npm run start -- --env buildTypes migrate latest && node dist/tools/generateTypes.js && mv db-buildTypes.sqlite schema.sqlite",
     "tsc": "tsc --project tsconfig.json",
     "test": "jest --verbose=false",
     "test-ci": "npm run test",

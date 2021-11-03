@@ -1,6 +1,6 @@
 import Logger from './Logger';
-import LockHandler, { LockType } from './services/synchronizer/LockHandler';
-import Setting from './models/Setting';
+import LockHandler, { hasActiveLock, LockClientType, LockType } from './services/synchronizer/LockHandler';
+import Setting, { AppType } from './models/Setting';
 import shim from './shim';
 import MigrationHandler from './services/synchronizer/MigrationHandler';
 import eventManager from './eventManager';
@@ -66,6 +66,7 @@ export default class Synchronizer {
 	private resourceService_: ResourceService = null;
 	private syncTargetIsLocked_: boolean = false;
 	private shareService_: ShareService = null;
+	private lockClientType_: LockClientType = null;
 
 	// Debug flags are used to test certain hard-to-test conditions
 	// such as cancelling in the middle of a loop.
@@ -120,9 +121,21 @@ export default class Synchronizer {
 		return this.lockHandler_;
 	}
 
+	private lockClientType(): LockClientType {
+		if (this.lockClientType_) return this.lockClientType_;
+
+		if (this.appType_ === AppType.Desktop) this.lockClientType_ = LockClientType.Desktop;
+		if (this.appType_ === AppType.Mobile) this.lockClientType_ = LockClientType.Mobile;
+		if (this.appType_ === AppType.Cli) this.lockClientType_ = LockClientType.Cli;
+
+		if (!this.lockClientType_) throw new Error(`Invalid client type: ${this.appType_}`);
+
+		return this.lockClientType_;
+	}
+
 	migrationHandler() {
 		if (this.migrationHandler_) return this.migrationHandler_;
-		this.migrationHandler_ = new MigrationHandler(this.api(), this.db(), this.lockHandler(), this.appType_, this.clientId_);
+		this.migrationHandler_ = new MigrationHandler(this.api(), this.db(), this.lockHandler(), this.lockClientType(), this.clientId_);
 		return this.migrationHandler_;
 	}
 
@@ -164,6 +177,12 @@ export default class Synchronizer {
 		return !!report && !!report.errors && !!report.errors.length;
 	}
 
+	private static completionTime(report: any): string {
+		const duration = report.completedTime - report.startTime;
+		if (duration > 1000) return `${Math.round(duration / 1000)}s`;
+		return `${duration}ms`;
+	}
+
 	static reportToLines(report: any) {
 		const lines = [];
 		if (report.createLocal) lines.push(_('Created local items: %d.', report.createLocal));
@@ -174,7 +193,7 @@ export default class Synchronizer {
 		if (report.deleteRemote) lines.push(_('Deleted remote items: %d.', report.deleteRemote));
 		if (report.fetchingTotal && report.fetchingProcessed) lines.push(_('Fetched items: %d/%d.', report.fetchingProcessed, report.fetchingTotal));
 		if (report.cancelling && !report.completedTime) lines.push(_('Cancelling...'));
-		if (report.completedTime) lines.push(_('Completed: %s (%s)', time.formatMsToLocal(report.completedTime), `${Math.round((report.completedTime - report.startTime) / 1000)}s`));
+		if (report.completedTime) lines.push(_('Completed: %s (%s)', time.formatMsToLocal(report.completedTime), this.completionTime(report)));
 		if (this.reportHasErrors(report)) lines.push(_('Last error: %s', report.errors[report.errors.length - 1].toString().substr(0, 500)));
 
 		return lines;
@@ -298,10 +317,13 @@ export default class Synchronizer {
 	}
 
 	async lockErrorStatus_() {
-		const hasActiveExclusiveLock = await this.lockHandler().hasActiveLock(LockType.Exclusive);
+		const locks = await this.lockHandler().locks();
+		const currentDate = await this.lockHandler().currentDate();
+
+		const hasActiveExclusiveLock = await hasActiveLock(locks, currentDate, this.lockHandler().lockTtl, LockType.Exclusive);
 		if (hasActiveExclusiveLock) return 'hasExclusiveLock';
 
-		const hasActiveSyncLock = await this.lockHandler().hasActiveLock(LockType.Sync, this.appType_, this.clientId_);
+		const hasActiveSyncLock = await hasActiveLock(locks, currentDate, this.lockHandler().lockTtl, LockType.Sync, this.lockClientType(), this.clientId_);
 		if (!hasActiveSyncLock) return 'syncLockGone';
 
 		return '';
@@ -446,10 +468,10 @@ export default class Synchronizer {
 					const previousE2EE = localInfo.e2ee;
 					logger.info('Sync target info differs between local and remote - merging infos: ', newInfo.toObject());
 
-					await this.lockHandler().acquireLock(LockType.Exclusive, this.appType_, this.clientId_, { clearExistingSyncLocksFromTheSameClient: true });
+					await this.lockHandler().acquireLock(LockType.Exclusive, this.lockClientType(), this.clientId_, { clearExistingSyncLocksFromTheSameClient: true });
 					await uploadSyncInfo(this.api(), newInfo);
 					await saveLocalSyncInfo(newInfo);
-					await this.lockHandler().releaseLock(LockType.Exclusive, this.appType_, this.clientId_);
+					await this.lockHandler().releaseLock(LockType.Exclusive, this.lockClientType(), this.clientId_);
 
 					// console.info('NEW', newInfo);
 
@@ -473,7 +495,7 @@ export default class Synchronizer {
 				throw error;
 			}
 
-			syncLock = await this.lockHandler().acquireLock(LockType.Sync, this.appType_, this.clientId_);
+			syncLock = await this.lockHandler().acquireLock(LockType.Sync, this.lockClientType(), this.clientId_);
 
 			this.lockHandler().startAutoLockRefresh(syncLock, (error: any) => {
 				logger.warn('Could not refresh lock - cancelling sync. Error was:', error);
@@ -1084,7 +1106,7 @@ export default class Synchronizer {
 
 		if (syncLock) {
 			this.lockHandler().stopAutoLockRefresh(syncLock);
-			await this.lockHandler().releaseLock(LockType.Sync, this.appType_, this.clientId_);
+			await this.lockHandler().releaseLock(LockType.Sync, this.lockClientType(), this.clientId_);
 		}
 
 		this.syncTargetIsLocked_ = false;
