@@ -3,7 +3,12 @@ import { ModelType } from "../../BaseModel";
 export interface BaseItemEntity {
   id?: string;
   encryption_applied?: number;
+
+  // Means the item (note or resource) is published
   is_shared?: number;
+
+  // Means the item (note, folder or resource) is shared, as part of a shared
+  // notebook
   share_id?: string;
   type_?: ModelType;
   updated_time?: number;
