@@ -102,14 +102,7 @@
 		// images are being displayed then restored while images are being reloaded, the new scrollTop might be changed
 		// so that it is not greater than contentHeight. On the other hand, with percentScroll it is possible to restore
 		// it at any time knowing that it's not going to be changed because the content height has changed.
-		// To restore percentScroll the "checkScrollIID" interval is used. It constantly resets the scroll position during
-		// one second after the content has been updated.
-		//
-		// ignoreNextScroll is used to differentiate between scroll event from the users and those that are the result
-		// of programmatically changing scrollTop. We only want to respond to events initiated by the user.
-
 		let percentScroll_ = 0;
-		let checkScrollIID_ = null;
 
 		// This variable provides a	way to skip scroll events for a certain duration.
 		// In general, it should be set whenever the scroll value is set explicitely (programmatically)
@@ -195,7 +188,66 @@
 			return true;
 		}
 
-		let checkAllImageLoadedIID_ = null;
+		let alreadyAllImagesLoaded = false;
+
+		// During a note is being rendered, its height is varying. To keep scroll
+		// consistency, observing the height of the content element and updating its
+		// scroll position is required. For the purpose, 'ResizeObserver' is used.
+		// ResizeObserver is standard and an element's counterpart to 'window.resize'
+		// event. It's overhead is cheaper than observation using an interval timer.
+		//
+		// To observe the scroll height of the content element, adding, removing and
+		// resizing of its children should be observed. So, the combination of
+		// ResizeObserver (used for resizing) and MutationObserver (used for ading
+		// and removing) is used.
+		//
+		// References:
+		// https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver
+		// https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver
+		//
+		// By using them, this observeRendering() function provides a efficient way
+		// to observe the changes of the scroll height of the content element
+		// using a callback approach.
+		function observeRendering(callback, compress = false) {
+			let previousHeight = 0;
+			const fn = (cause) => {
+				const height = contentElement.scrollHeight;
+				const heightChanged = height != previousHeight;
+				if (!compress || heightChanged) {
+					previousHeight = height;
+					callback(cause, height, heightChanged);
+				}
+			};
+			// 'resized' means DOM Layout change or Window resize event
+			let resizeObserver = new ResizeObserver(() => fn('resized'));
+			// An HTML document to be rendered is added and removed as a child of
+			// the content element for each setHtml() invocation.
+			let mutationObserver = new MutationObserver(entries => {
+				const e = entries[0];
+				e.removedNodes.forEach(n => n instanceof Element && resizeObserver.unobserve(n));
+				e.addedNodes.forEach(n => n instanceof Element && resizeObserver.observe(n));
+				if (e.removedNodes.length + e.addedNodes.length) fn('dom-changed');
+			});
+			mutationObserver.observe(contentElement, { childList: true });
+			return { mutationObserver, resizeObserver };
+		};
+
+		// A callback anonymous function invoked when the scroll height changes.
+		const onRendering = observeRendering((cause, height, heightChanged) => {
+			if (!alreadyAllImagesLoaded) {
+				const loaded = allImagesLoaded();
+				if (loaded) {
+					alreadyAllImagesLoaded = true;
+					ipcProxySendToHost('syncViewerScrollWithEditor', true);
+					ipcProxySendToHost('noteRenderComplete');
+					return;
+				}
+			}
+			if (heightChanged) {
+				// When the scroll height changes, sync is needed.
+				ipcProxySendToHost('syncViewerScrollWithEditor');
+			}
+		});
 
 		ipc.focus = (event) => {
 			const dummyID = 'joplin-content-focus-dummy';
@@ -217,23 +269,10 @@
 
 			contentElement.innerHTML = html;
 
-			let previousContentHeight = contentElement.scrollHeight;
-			let startTime = Date.now();
-			restorePercentScroll();
+			restorePercentScroll(); // First, a quick treatment is applied.
+			ipcProxySendToHost('syncViewerScrollWithEditor');
 
-			if (!checkScrollIID_) {
-				checkScrollIID_ = setInterval(() => {
-					const h = contentElement.scrollHeight;
-					if (h !== previousContentHeight) {
-						previousContentHeight = h;
-						restorePercentScroll();
-					}
-					if (Date.now() - startTime >= 1000) {
-						clearInterval(checkScrollIID_);
-						checkScrollIID_ = null;
-					}
-				}, 1);
-			}
+			alreadyAllImagesLoaded = false;
 
 			addPluginAssets(event.options.pluginAssets);
 
@@ -242,25 +281,10 @@
 			}
 
 			document.dispatchEvent(new Event('joplin-noteDidUpdate'));
-
-			if (checkAllImageLoadedIID_) clearInterval(checkAllImageLoadedIID_);
-
-			checkAllImageLoadedIID_ = setInterval(() => {
-				if (!allImagesLoaded()) return;
-
-				clearInterval(checkAllImageLoadedIID_);
-				ipcProxySendToHost('noteRenderComplete');
-			}, 100);
 		}
 
 		ipc.setPercentScroll = (event) => {
 			const percent = event.percent;
-
-			if (checkScrollIID_) {
-				clearInterval(checkScrollIID_);
-				checkScrollIID_ = null;
-			}
-
 			lastScrollEventTime = Date.now();
 			setPercentScroll(percent);
 		}
@@ -365,7 +389,9 @@
 
 		function currentPercentScroll() {
 			const m = maxScrollTop();
-			return m ? contentElement.scrollTop / m : 0;
+			// As of 2021, if zoomFactor != 1, underlying Chrome returns scrollTop with 
+			// some numerical error. It can be more than maxScrollTop().
+			return m ? Math.min(1, contentElement.scrollTop / m) : 0;
 		}
 
 		contentElement.addEventListener('wheel', webviewLib.logEnabledEventHandler(e => {

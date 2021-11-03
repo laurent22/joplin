@@ -19,6 +19,7 @@ export interface MarkupToHtmlOptions {
 	contentMaxWidth?: number;
 	plugins?: Record<string, any>;
 	bodyOnly?: boolean;
+	mapsToLine?: boolean;
 }
 
 export default function useMarkupToHtml(deps: HookDependencies) {
