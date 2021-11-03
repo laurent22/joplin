@@ -1,5 +1,11 @@
 # Joplin Server Changelog
 
+## [server-v2.6.1](https://github.com/laurent22/joplin/releases/tag/server-v2.6.1) - 2021-11-03T12:27:13Z
+
+- New: Add support for faster built-in sync locks (#5662)
+- Improved: Improved env variable handling to make it self documenting and enforce type checking (b5d792c)
+- Improved: Improved logging and rendering of low level middleware errors (3704413)
+
 ## [server-v2.5.10](https://github.com/laurent22/joplin/releases/tag/server-v2.5.10) - 2021-11-02T14:45:54Z
 
 - New: Add unique constraint on name and owner ID of items table (f7a18ba)
