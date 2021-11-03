@@ -347,7 +347,7 @@ export function isUniqueConstraintError(error: any): boolean {
 	return false;
 }
 
-export async function latestMigration(db: DbConnection): Promise<Migration> {
+export async function latestMigration(db: DbConnection): Promise<Migration | null> {
 	try {
 		const result = await db('knex_migrations').select('name').orderBy('id', 'desc').first();
 		return { name: result.name, done: true };

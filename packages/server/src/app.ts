@@ -269,7 +269,7 @@ async function main() {
 		if (config().database.autoMigration) {
 			appLogger().info('Auto-migrating database...');
 			await migrateLatest(ctx.joplinBase.db);
-			appLogger().info('Latest migration:', (await latestMigration(ctx.joplinBase.db)).name);
+			appLogger().info('Latest migration:', await latestMigration(ctx.joplinBase.db));
 		} else {
 			appLogger().info('Skipped database auto-migration.');
 		}
