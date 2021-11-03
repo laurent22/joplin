@@ -3,12 +3,21 @@ import { ModelType } from "../../BaseModel";
 export interface BaseItemEntity {
   id?: string;
   encryption_applied?: number;
+
+  // Means the item (note or resource) is published
   is_shared?: number;
+
+  // Means the item (note, folder or resource) is shared, as part of a shared
+  // notebook
   share_id?: string;
   type_?: ModelType;
   updated_time?: number;
   created_time?: number;
 }
+
+
+
+
 
 
 
@@ -50,6 +59,7 @@ export interface FolderEntity {
   "parent_id"?: string 
   "is_shared"?: number 
   "share_id"?: string 
+  "master_key_id"?: string 
   "type_"?: number 
 }
 export interface ItemChangeEntity {
@@ -126,6 +136,7 @@ export interface NoteEntity {
   "is_shared"?: number 
   "share_id"?: string 
   "conflict_original_id"?: string 
+  "master_key_id"?: string 
   "type_"?: number 
 }
 export interface NotesNormalizedEntity {
@@ -167,6 +178,7 @@ export interface ResourceEntity {
   "size"?: number 
   "is_shared"?: number 
   "share_id"?: string 
+  "master_key_id"?: string 
   "type_"?: number 
 }
 export interface ResourcesToDownloadEntity {

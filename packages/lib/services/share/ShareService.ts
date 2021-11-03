@@ -1,18 +1,41 @@
 import { Store } from 'redux';
 import JoplinServerApi from '../../JoplinServerApi';
+import { _ } from '../../locale';
 import Logger from '../../Logger';
 import Folder from '../../models/Folder';
+import MasterKey from '../../models/MasterKey';
 import Note from '../../models/Note';
 import Setting from '../../models/Setting';
-import { State, stateRootKey, StateShare } from './reducer';
+import { FolderEntity } from '../database/types';
+import EncryptionService from '../e2ee/EncryptionService';
+import { PublicPrivateKeyPair, mkReencryptFromPasswordToPublicKey, mkReencryptFromPublicKeyToPassword } from '../e2ee/ppk';
+import { MasterKeyEntity } from '../e2ee/types';
+import { getMasterPassword } from '../e2ee/utils';
+import { addMasterKey, getEncryptionEnabled, localSyncInfo } from '../synchronizer/syncInfoUtils';
+import { ShareInvitation, State, stateRootKey, StateShare } from './reducer';
 
 const logger = Logger.create('ShareService');
+
+export interface ApiShare {
+	id: string;
+	master_key_id: string;
+}
+
+function formatShareInvitations(invitations: any[]): ShareInvitation[] {
+	return invitations.map(inv => {
+		return {
+			...inv,
+			master_key: inv.master_key ? JSON.parse(inv.master_key) : null,
+		};
+	});
+}
 
 export default class ShareService {
 
 	private static instance_: ShareService;
 	private api_: JoplinServerApi = null;
 	private store_: Store<any> = null;
+	private encryptionService_: EncryptionService = null;
 	private initialized_ = false;
 
 	public static instance(): ShareService {
@@ -21,9 +44,10 @@ export default class ShareService {
 		return this.instance_;
 	}
 
-	public initialize(store: Store<any>, api: JoplinServerApi = null) {
+	public initialize(store: Store<any>, encryptionService: EncryptionService, api: JoplinServerApi = null) {
 		this.initialized_ = true;
 		this.store_ = store;
+		this.encryptionService_ = encryptionService;
 		this.api_ = api;
 	}
 
@@ -59,15 +83,41 @@ export default class ShareService {
 		return this.api_;
 	}
 
-	public async shareFolder(folderId: string) {
+	public async shareFolder(folderId: string): Promise<ApiShare> {
 		const folder = await Folder.load(folderId);
 		if (!folder) throw new Error(`No such folder: ${folderId}`);
 
-		if (folder.parent_id) {
-			await Folder.save({ id: folder.id, parent_id: '' });
+		let folderMasterKey: MasterKeyEntity = null;
+
+		if (getEncryptionEnabled()) {
+			const syncInfo = localSyncInfo();
+
+			// Shouldn't happen
+			if (!syncInfo.ppk) throw new Error('Cannot share notebook because E2EE is enabled and no Public Private Key pair exists.');
+
+			// TODO: handle "undefinedMasterPassword" error - show master password dialog
+			folderMasterKey = await this.encryptionService_.generateMasterKey(getMasterPassword());
+			folderMasterKey = await MasterKey.save(folderMasterKey);
+
+			addMasterKey(syncInfo, folderMasterKey);
 		}
 
-		const share = await this.api().exec('POST', 'api/shares', {}, { folder_id: folderId });
+		const newFolderProps: FolderEntity = {};
+
+		if (folder.parent_id) newFolderProps.parent_id = '';
+		if (folderMasterKey) newFolderProps.master_key_id = folderMasterKey.id;
+
+		if (Object.keys(newFolderProps).length) {
+			await Folder.save({
+				id: folder.id,
+				...newFolderProps,
+			});
+		}
+
+		const share = await this.api().exec('POST', 'api/shares', {}, {
+			folder_id: folderId,
+			master_key_id: folderMasterKey ? folderMasterKey.id : '',
+		});
 
 		// Note: race condition if the share is created but the app crashes
 		// before setting share_id on the folder. See unshareFolder() for info.
@@ -181,6 +231,18 @@ export default class ShareService {
 		return `${this.api().personalizedUserContentBaseUrl(userId)}/shares/${share.id}`;
 	}
 
+	public folderShare(folderId: string): StateShare {
+		return this.shares.find(s => s.folder_id === folderId);
+	}
+
+	public isSharedFolderOwner(folderId: string, userId: string = null): boolean {
+		if (userId === null) userId = this.userId;
+
+		const share = this.folderShare(folderId);
+		if (!share) throw new Error(`Cannot find share associated with folder: ${folderId}`);
+		return share.user.id === userId;
+	}
+
 	public get shares() {
 		return this.state.shares;
 	}
@@ -193,9 +255,34 @@ export default class ShareService {
 		return this.state.shareInvitations;
 	}
 
-	public async addShareRecipient(shareId: string, recipientEmail: string) {
+	private async userPublicKey(userEmail: string): Promise<PublicPrivateKeyPair> {
+		return this.api().exec('GET', `api/users/${encodeURIComponent(userEmail)}/public_key`);
+	}
+
+	public async addShareRecipient(shareId: string, masterKeyId: string, recipientEmail: string) {
+		let recipientMasterKey: MasterKeyEntity = null;
+
+		if (getEncryptionEnabled()) {
+			const syncInfo = localSyncInfo();
+			const masterKey = syncInfo.masterKeys.find(m => m.id === masterKeyId);
+			if (!masterKey) throw new Error(`Cannot find master key with ID "${masterKeyId}"`);
+
+			const recipientPublicKey: PublicPrivateKeyPair = await this.userPublicKey(recipientEmail);
+			if (!recipientPublicKey) throw new Error(_('Cannot share notebook with recipient %s because they do not have a public key. Ask them to create one from the menu "%s"', recipientEmail, 'Tools > Generate Public-Private Key pair'));
+
+			logger.info('Reencrypting master key with recipient public key', recipientPublicKey);
+
+			recipientMasterKey = await mkReencryptFromPasswordToPublicKey(
+				this.encryptionService_,
+				masterKey,
+				getMasterPassword(),
+				recipientPublicKey
+			);
+		}
+
 		return this.api().exec('POST', `api/shares/${shareId}/users`, {}, {
 			email: recipientEmail,
+			master_key: JSON.stringify(recipientMasterKey),
 		});
 	}
 
@@ -226,8 +313,24 @@ export default class ShareService {
 		});
 	}
 
-	public async respondInvitation(shareUserId: string, accept: boolean) {
+	public async respondInvitation(shareUserId: string, masterKey: MasterKeyEntity, accept: boolean) {
+		logger.info('respondInvitation: ', shareUserId, accept);
+
 		if (accept) {
+			if (masterKey) {
+				const reencryptedMasterKey = await mkReencryptFromPublicKeyToPassword(
+					this.encryptionService_,
+					masterKey,
+					localSyncInfo().ppk,
+					getMasterPassword(),
+					getMasterPassword()
+				);
+
+				logger.info('respondInvitation: Key has been reencrypted using master password', reencryptedMasterKey);
+
+				await MasterKey.save(reencryptedMasterKey);
+			}
+
 			await this.api().exec('PATCH', `api/share_users/${shareUserId}`, null, { status: 1 });
 		} else {
 			await this.api().exec('PATCH', `api/share_users/${shareUserId}`, null, { status: 2 });
@@ -237,14 +340,56 @@ export default class ShareService {
 	public async refreshShareInvitations() {
 		const result = await this.loadShareInvitations();
 
+		const invitations = formatShareInvitations(result.items);
+		logger.info('Refresh share invitations:', invitations);
+
 		this.store.dispatch({
 			type: 'SHARE_INVITATION_SET',
-			shareInvitations: result.items,
+			shareInvitations: invitations,
 		});
+	}
+
+	public async shareById(id: string) {
+		const stateShare = this.state.shares.find(s => s.id === id);
+		if (stateShare) return stateShare;
+
+		const refreshedShares = await this.refreshShares();
+		const refreshedShare = refreshedShares.find(s => s.id === id);
+		if (!refreshedShare) throw new Error(`Could not find share with ID: ${id}`);
+		return refreshedShare;
+	}
+
+	// In most cases the share objects will already be part of the state, so
+	// this function checks there first. If the required share objects are not
+	// present, it refreshes them from the API.
+	public async sharesByIds(ids: string[]) {
+		const buildOutput = async (shares: StateShare[]) => {
+			const output: Record<string, StateShare> = {};
+			for (const share of shares) {
+				if (ids.includes(share.id)) output[share.id] = share;
+			}
+			return output;
+		};
+
+		let output = await buildOutput(this.state.shares);
+		if (Object.keys(output).length === ids.length) return output;
+
+		const refreshedShares = await this.refreshShares();
+		output = await buildOutput(refreshedShares);
+
+		if (Object.keys(output).length !== ids.length) {
+			logger.error('sharesByIds: Need:', ids);
+			logger.error('sharesByIds: Got:', Object.keys(refreshedShares));
+			throw new Error('Could not retrieve required share objects');
+		}
+
+		return output;
 	}
 
 	public async refreshShares(): Promise<StateShare[]> {
 		const result = await this.loadShares();
+
+		logger.info('Refreshed shares:', result);
 
 		this.store.dispatch({
 			type: 'SHARE_SET',
@@ -256,6 +401,8 @@ export default class ShareService {
 
 	public async refreshShareUsers(shareId: string) {
 		const result = await this.loadShareUsers(shareId);
+
+		logger.info('Refreshed share users:', result);
 
 		this.store.dispatch({
 			type: 'SHARE_USER_SET',

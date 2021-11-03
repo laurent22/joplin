@@ -10,7 +10,7 @@ import ItemChange from './ItemChange';
 import ShareService from '../services/share/ShareService';
 import itemCanBeEncrypted from './utils/itemCanBeEncrypted';
 import { getEncryptionEnabled } from '../services/synchronizer/syncInfoUtils';
-const JoplinError = require('../JoplinError.js');
+import JoplinError from '../JoplinError';
 const { sprintf } = require('sprintf-js');
 const moment = require('moment');
 
@@ -25,6 +25,7 @@ export interface ItemThatNeedSync {
 	type_: ModelType;
 	updated_time: number;
 	encryption_applied: number;
+	share_id: string;
 }
 
 export interface ItemsThatNeedSyncResult {
@@ -414,6 +415,7 @@ export default class BaseItem extends BaseModel {
 		const shownKeys = ItemClass.fieldNames();
 		shownKeys.push('type_');
 
+		const share = item.share_id ? await this.shareService().shareById(item.share_id) : null;
 		const serialized = await ItemClass.serialize(item, shownKeys);
 
 		if (!getEncryptionEnabled() || !ItemClass.encryptionSupported() || !itemCanBeEncrypted(item)) {
@@ -431,7 +433,9 @@ export default class BaseItem extends BaseModel {
 		let cipherText = null;
 
 		try {
-			cipherText = await this.encryptionService().encryptString(serialized);
+			cipherText = await this.encryptionService().encryptString(serialized, {
+				masterKeyId: share && share.master_key_id ? share.master_key_id : '',
+			});
 		} catch (error) {
 			const msg = [`Could not encrypt item ${item.id}`];
 			if (error && error.message) msg.push(error.message);
