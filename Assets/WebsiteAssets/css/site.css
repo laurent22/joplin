@@ -188,6 +188,11 @@ h2 {
 	padding-bottom: 0.5em;
 }
 
+h3 {
+	font-size: 1.3em;
+	margin-bottom: 0.8rem;
+}
+
 .front-page h1 {
 	font-size: 3em;
 }
