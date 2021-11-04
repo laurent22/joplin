@@ -13,8 +13,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.0\n"
+"X-Generator: Poedit 2.4.2\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-cli/app/app-gui.js:452
 msgid "To delete a tag, untag the associated notes."
@@ -1473,15 +1475,15 @@ msgstr "Mot de passe maître"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:118
 msgid "Source: "
-msgstr "Source :"
+msgstr "Source : "
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:121
 msgid "Created: "
-msgstr "Créé :"
+msgstr "Créé : "
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:124
 msgid "Updated: "
-msgstr "Mis à jour :"
+msgstr "Mis à jour : "
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:129
 msgid "Disable"

@@ -188,8 +188,8 @@ function useHtml(css: string): string {
 							${css}
 						</style>
 					</head>
-					<body style="margin:0; height:100vh; width:100vh; width:100vw; min-width:100vw;">
-						<div class="CodeMirror" style="height:100%;"></div>
+					<body style="margin:0; height:100vh; width:100vh; width:100vw; min-width:100vw; box-sizing: border-box; padding: 10px;">
+						<div class="CodeMirror" style="height:100%;" autocapitalize="on"></div>
 					</body>
 				</html>
 			`

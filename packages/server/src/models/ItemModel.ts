@@ -475,7 +475,7 @@ export default class ItemModel extends BaseModel<Item> {
 	private childrenQuery(userId: Uuid, pathQuery: string = '', count: boolean = false, options: ItemLoadOptions = {}): Knex.QueryBuilder {
 		const query = this
 			.db('user_items')
-			.leftJoin('items', 'user_items.item_id', 'items.id')
+			.innerJoin('items', 'user_items.item_id', 'items.id')
 			.where('user_items.user_id', '=', userId);
 
 		if (count) {
@@ -659,6 +659,7 @@ export default class ItemModel extends BaseModel<Item> {
 
 		if (isNew) {
 			if (!item.mime_type) item.mime_type = mimeUtils.fromFilename(item.name) || '';
+			if (!item.owner_id) item.owner_id = userId;
 		} else {
 			const beforeSaveItem = (await this.load(item.id, { fields: ['name', 'jop_type', 'jop_parent_id', 'jop_share_id'] }));
 			const resourceIds = beforeSaveItem.jop_type === ModelType.Note ? await this.models().itemResource().byItemId(item.id) : [];

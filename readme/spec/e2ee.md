@@ -64,13 +64,13 @@ Enabling/disabling E2EE while two clients are in sync might have an unintuitive 
 
 - Although messy, Joplin supports having some clients send encrypted items and others unencrypted ones. The situation gets resolved once all the clients have the same E2EE settings.
 
-- Currently, there is no way to delete encryption keys if you do not need them anymore or if you disabled the encryption completely. You will get a persistant notification to provide a Master Key password on a new device, even if encryption is disabled. Entering the Master Key(s) password and still having the encryption disabled will get rid of the notification. See [Delete E2EE Master Keys](https://discourse.joplinapp.org/t/delete-e2ee-master-keys/906) for more info.
+- Currently, there is no way to delete encryption keys if you do not need them anymore or if you disabled the encryption completely. You will get a persistent notification to provide a Master Key password on a new device, even if encryption is disabled. Entering the Master Key(s) password and still having the encryption disabled will get rid of the notification. See [Delete E2EE Master Keys](https://discourse.joplinapp.org/t/delete-e2ee-master-keys/906) for more info.
 
 ## Types of keys
 
 There are two types of key:
 
-- **Data keys**, which are used to encrypt Joplin items, such as notes, notebooks, tags, etc. when E2EE is ernabled. A data key is generated when the user enables E2EE. Data keys are also dynamically generated when a user shares a notebook with another user. In this case, we create a separate key, so that the recipient can only decrypt this specific notebook.
+- **Data keys**, which are used to encrypt Joplin items, such as notes, notebooks, tags, etc. when E2EE is enabled. A data key is generated when the user enables E2EE. Data keys are also dynamically generated when a user shares a notebook with another user. In this case, we create a separate key, so that the recipient can only decrypt this specific notebook.
 
 - **Public-private key pairs**, which are used to transfer secrets between users.
 
@@ -97,4 +97,4 @@ At this point, both users have a copy of the key and can share notes over E2EE.
 
 A user can only have one PPK.
 
-PPKs are generated automatically when E2EE is enabled and when the user synchronises. They are then stored in info.json on the sync target. The key is genrated during sync because otherwise multiple clients could generate a PPK, and then there would be a conflict to decide which PPK should be kept. By doing it during sync, it ensures that only one PPK is generated because the synchronizer fetches first info.json - and only generates a PPK if none is already present.
+PPKs are generated automatically when E2EE is enabled and when the user synchronises. They are then stored in info.json on the sync target. The key is generated during sync because otherwise multiple clients could generate a PPK, and then there would be a conflict to decide which PPK should be kept. By doing it during sync, it ensures that only one PPK is generated because the synchronizer fetches first info.json - and only generates a PPK if none is already present.

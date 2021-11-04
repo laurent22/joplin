@@ -3,17 +3,18 @@ import Logger from '@joplin/lib/Logger';
 import Folder from '@joplin/lib/models/Folder';
 import { reg } from '@joplin/lib/registry';
 import { _ } from '@joplin/lib/locale';
+import { MasterKeyEntity } from '@joplin/lib/services/e2ee/types';
 
 const logger = Logger.create('invitationRespond');
 
-export default async function(shareUserId: string, folderId: string, accept: boolean) {
+export default async function(shareUserId: string, folderId: string, masterKey: MasterKeyEntity, accept: boolean) {
 	// The below functions can take a bit of time to complete so in the
 	// meantime we hide the notification so that the user doesn't click
 	// multiple times on the Accept link.
 	ShareService.instance().setProcessingShareInvitationResponse(true);
 
 	try {
-		await ShareService.instance().respondInvitation(shareUserId, accept);
+		await ShareService.instance().respondInvitation(shareUserId, masterKey, accept);
 	} catch (error) {
 		logger.error(error);
 		alert(_('Could not respond to the invitation. Please try again, or check with the notebook owner if they are still sharing it.\n\nThe error was: "%s"', error.message));

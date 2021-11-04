@@ -134,7 +134,7 @@ export default class SubscriptionModel extends BaseModel<Subscription> {
 				account_type: accountType,
 				email,
 				full_name: fullName,
-				email_confirmed: 1,
+				email_confirmed: 0, // Email is not confirmed, because Stripe doesn't check this
 				password: uuidgen(),
 				must_set_password: 1,
 			});

@@ -49,6 +49,7 @@ describe('api_items', function() {
 		expect(item.jop_type).toBe(ModelType.Note);
 		expect(!item.content).toBe(true);
 		expect(item.content_size).toBeGreaterThan(0);
+		expect(item.owner_id).toBe(user.id);
 
 		{
 			const item: NoteEntity = await models().item().loadAsJoplinItem(itemId);

@@ -1,5 +1,4 @@
 import config from '../../config';
-import { NotificationKey } from '../../models/NotificationModel';
 import { AccountType } from '../../models/UserModel';
 import { getCanShareFolder, getMaxItemSize } from '../../models/utils/user';
 import { MB } from '../../utils/bytes';
@@ -53,11 +52,6 @@ describe('index_signup', function() {
 		// Check that the user is logged in
 		const session = await models().session().load(cookieGet(context, 'sessionId'));
 		expect(session.user_id).toBe(user.id);
-
-		// Check that the notification has been created
-		const notifications = await models().notification().allUnreadByUserId(user.id);
-		expect(notifications.length).toBe(1);
-		expect(notifications[0].key).toBe(NotificationKey.ConfirmEmail);
 	});
 
 });

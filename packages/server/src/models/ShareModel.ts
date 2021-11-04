@@ -63,6 +63,7 @@ export default class ShareModel extends BaseModel<Share> {
 		if (object.folder_id) output.folder_id = object.folder_id;
 		if (object.owner_id) output.owner_id = object.owner_id;
 		if (object.note_id) output.note_id = object.note_id;
+		if (object.master_key_id) output.master_key_id = object.master_key_id;
 
 		return output;
 	}
@@ -145,6 +146,20 @@ export default class ShareModel extends BaseModel<Share> {
 		const query = this.db(this.tableName)
 			.select(this.defaultFields)
 			.where('owner_id', '=', userId);
+
+		if (type) void query.andWhere('type', '=', type);
+
+		return query;
+	}
+
+	public async participatedSharesByUser(userId: Uuid, type: ShareType = null): Promise<Share[]> {
+		const query = this.db(this.tableName)
+			.select(this.defaultFields)
+			.whereIn('id', this.db('share_users')
+				.select('share_id')
+				.where('user_id', '=', userId)
+				.andWhere('status', '=', ShareUserStatus.Accepted
+				));
 
 		if (type) void query.andWhere('type', '=', type);
 
@@ -344,36 +359,38 @@ export default class ShareModel extends BaseModel<Share> {
 		await this.models().userItem().addMulti(userId, query);
 	}
 
-	public async shareFolder(owner: User, folderId: string): Promise<Share> {
+	public async shareFolder(owner: User, folderId: string, masterKeyId: string): Promise<Share> {
 		const folderItem = await this.models().item().loadByJopId(owner.id, folderId);
 		if (!folderItem) throw new ErrorNotFound(`No such folder: ${folderId}`);
 
 		const share = await this.models().share().byUserAndItemId(owner.id, folderItem.id);
 		if (share) return share;
 
-		const shareToSave = {
+		const shareToSave: Share = {
 			type: ShareType.Folder,
 			item_id: folderItem.id,
 			owner_id: owner.id,
 			folder_id: folderId,
+			master_key_id: masterKeyId,
 		};
 
 		await this.checkIfAllowed(owner, AclAction.Create, shareToSave);
 		return super.save(shareToSave);
 	}
 
-	public async shareNote(owner: User, noteId: string): Promise<Share> {
+	public async shareNote(owner: User, noteId: string, masterKeyId: string): Promise<Share> {
 		const noteItem = await this.models().item().loadByJopId(owner.id, noteId);
 		if (!noteItem) throw new ErrorNotFound(`No such note: ${noteId}`);
 
 		const existingShare = await this.byItemId(noteItem.id);
 		if (existingShare) return existingShare;
 
-		const shareToSave = {
+		const shareToSave: Share = {
 			type: ShareType.Note,
 			item_id: noteItem.id,
 			owner_id: owner.id,
 			note_id: noteId,
+			master_key_id: masterKeyId,
 		};
 
 		await this.checkIfAllowed(owner, AclAction.Create, shareToSave);

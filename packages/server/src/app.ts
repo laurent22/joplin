@@ -3,11 +3,9 @@ require('source-map-support').install();
 
 import * as Koa from 'koa';
 import * as fs from 'fs-extra';
-import { argv as yargsArgv } from 'yargs';
 import Logger, { LoggerWrapper, TargetType } from '@joplin/lib/Logger';
-import config, { initConfig, runningInDocker, EnvVariables } from './config';
-import { createDb, dropDb } from './tools/dbTools';
-import { dropTables, connectDb, disconnectDb, migrateLatest, waitForConnection, sqliteDefaultDir, migrateList, migrateUp, migrateDown, clientType, DbConnection } from './db';
+import config, { initConfig, runningInDocker } from './config';
+import { migrateLatest, waitForConnection, sqliteDefaultDir, latestMigration, DbConnection, clientType } from './db';
 import { AppContext, Env, KoaNext } from './utils/types';
 import FsDriverNode from '@joplin/lib/fs-driver-node';
 import routeHandler from './middleware/routeHandler';
@@ -20,26 +18,16 @@ import { credentialFile } from './utils/testing/testUtils';
 import apiVersionHandler from './middleware/apiVersionHandler';
 import clickJackingHandler from './middleware/clickJackingHandler';
 import ContentDriverDatabase from './models/itemModel/ContentDriverDatabase';
-import deleteOldChanges from './commands/deleteOldChanges';
 import newModelFactory from './models/factory';
-import deleteOldChanges90 from './commands/deleteOldChanges90';
+import setupCommands from './utils/setupCommands';
+import { RouteResponseFormat, routeResponseFormat } from './utils/routeUtils';
+import { parseEnv } from './env';
 
 interface Argv {
 	env?: Env;
-	migrateLatest?: boolean;
-	migrateUp?: boolean;
-	migrateDown?: boolean;
-	migrateList?: boolean;
-	dropDb?: boolean;
 	pidfile?: string;
-	dropTables?: boolean;
-	createDb?: boolean;
 	envFile?: string;
-	deleteOldChanges?: boolean;
-	deleteOldChanges90?: boolean;
 }
-
-const argv: Argv = yargsArgv as any;
 
 const nodeSqlite = require('sqlite3');
 const cors = require('@koa/cors');
@@ -47,9 +35,7 @@ const nodeEnvFile = require('node-env-file');
 const { shimInit } = require('@joplin/lib/shim-init-node.js');
 shimInit({ nodeSqlite });
 
-const env: Env = argv.env as Env || Env.Prod;
-
-const defaultEnvVariables: Record<Env, EnvVariables> = {
+const defaultEnvVariables: Record<Env, any> = {
 	dev: {
 		// To test with the Postgres database, uncomment DB_CLIENT below and
 		// comment out SQLITE_DATABASE. Then start the Postgres server using
@@ -100,16 +86,18 @@ async function getEnvFilePath(env: Env, argv: any): Promise<string> {
 }
 
 async function main() {
+	const { selectedCommand, argv: yargsArgv } = await setupCommands();
+
+	const argv: Argv = yargsArgv as any;
+	const env: Env = argv.env as Env || Env.Prod;
+
 	const envFilePath = await getEnvFilePath(env, argv);
 
 	if (envFilePath) nodeEnvFile(envFilePath);
 
 	if (!defaultEnvVariables[env]) throw new Error(`Invalid env: ${env}`);
 
-	const envVariables: EnvVariables = {
-		...defaultEnvVariables[env],
-		...process.env,
-	};
+	const envVariables = parseEnv(process.env, defaultEnvVariables[env]);
 
 	const app = new Koa();
 
@@ -151,17 +139,28 @@ async function main() {
 		} catch (error) {
 			ctx.status = error.httpCode || 500;
 
-			// Since this is a low level error, rendering a view might fail too,
-			// so catch this and default to rendering JSON.
-			try {
-				ctx.body = await ctx.joplin.services.mustache.renderView({
-					name: 'error',
-					title: 'Error',
-					path: 'index/error',
-					content: { error },
-				});
-			} catch (anotherError) {
-				ctx.body = { error: anotherError.message };
+			appLogger().error(`Middleware error on ${ctx.path}:`, error);
+
+			const responseFormat = routeResponseFormat(ctx);
+
+			if (responseFormat === RouteResponseFormat.Html) {
+				// Since this is a low level error, rendering a view might fail too,
+				// so catch this and default to rendering JSON.
+				try {
+					ctx.response.set('Content-Type', 'text/html');
+					ctx.body = await ctx.joplin.services.mustache.renderView({
+						name: 'error',
+						title: 'Error',
+						path: 'index/error',
+						content: { error },
+					});
+				} catch (anotherError) {
+					ctx.response.set('Content-Type', 'application/json');
+					ctx.body = JSON.stringify({ error: error.message });
+				}
+			} else {
+				ctx.response.set('Content-Type', 'application/json');
+				ctx.body = JSON.stringify({ error: error.message });
 			}
 		}
 	});
@@ -230,42 +229,26 @@ async function main() {
 
 	let runCommandAndExitApp = true;
 
-	if (argv.migrateLatest) {
-		const db = await connectDb(config().database);
-		await migrateLatest(db);
-		await disconnectDb(db);
-	} else if (argv.migrateUp) {
-		const db = await connectDb(config().database);
-		await migrateUp(db);
-		await disconnectDb(db);
-	} else if (argv.migrateDown) {
-		const db = await connectDb(config().database);
-		await migrateDown(db);
-		await disconnectDb(db);
-	} else if (argv.migrateList) {
-		const db = await connectDb(config().database);
-		console.info(await migrateList(db));
-	} else if (argv.dropDb) {
-		await dropDb(config().database, { ignoreIfNotExists: true });
-	} else if (argv.dropTables) {
-		const db = await connectDb(config().database);
-		await dropTables(db);
-		await disconnectDb(db);
-	} else if (argv.createDb) {
-		await createDb(config().database);
-	} else if (argv.deleteOldChanges || argv.deleteOldChanges90) {
-		// Eventually all commands should be started in a more generic way. All
-		// should go under /commands, and they will receive a context object
-		// with an intialized models property.
-		//
-		// Also should use yargs command system.
-		const connectionCheck = await waitForConnection(config().database);
-		const models = newModelFactory(connectionCheck.connection, config(), newModelFactoryOptions(connectionCheck.connection));
+	if (selectedCommand) {
+		const commandArgv = {
+			...argv,
+			_: (argv as any)._.slice(),
+		};
+		commandArgv._.splice(0, 1);
 
-		if (argv.deleteOldChanges90) {
-			await deleteOldChanges90({ models });
+		if (selectedCommand.commandName() === 'db') {
+			await selectedCommand.run(commandArgv, {
+				db: null,
+				models: null,
+			});
 		} else {
-			await deleteOldChanges({ models });
+			const connectionCheck = await waitForConnection(config().database);
+			const models = newModelFactory(connectionCheck.connection, config(), newModelFactoryOptions(connectionCheck.connection));
+
+			await selectedCommand.run(commandArgv, {
+				db: connectionCheck.connection,
+				models,
+			});
 		}
 	} else {
 		runCommandAndExitApp = false;
@@ -277,6 +260,7 @@ async function main() {
 		appLogger().info('User content base URL:', config().userContentBaseUrl);
 		appLogger().info('Log dir:', config().logDir);
 		appLogger().info('DB Config:', markPasswords(config().database));
+		appLogger().info('Mailer Config:', markPasswords(config().mailer));
 
 		appLogger().info('Trying to connect to database...');
 		const connectionCheck = await waitForConnection(config().database);
@@ -291,8 +275,13 @@ async function main() {
 
 		await initializeJoplinUtils(config(), ctx.joplinBase.models, ctx.joplinBase.services.mustache);
 
-		appLogger().info('Migrating database...');
-		await migrateLatest(ctx.joplinBase.db);
+		if (config().database.autoMigration) {
+			appLogger().info('Auto-migrating database...');
+			await migrateLatest(ctx.joplinBase.db);
+			appLogger().info('Latest migration:', await latestMigration(ctx.joplinBase.db));
+		} else {
+			appLogger().info('Skipped database auto-migration.');
+		}
 
 		appLogger().info('Starting services...');
 		await startServices(ctx.joplinBase.services);

@@ -50,7 +50,7 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 	};
 
 	const handleImport = async () => {
-		const filePath = bridge().showOpenDialog({
+		const filePath = await bridge().showOpenDialog({
 			properties: ['openFile'],
 			defaultPath: 'keymap-desktop',
 			filters: [{ name: 'Joplin Keymaps (keymap-desktop.json)', extensions: ['json'] }],
@@ -68,7 +68,7 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 	};
 
 	const handleExport = async () => {
-		const filePath = bridge().showSaveDialog({
+		const filePath = await bridge().showSaveDialog({
 			defaultPath: 'keymap-desktop',
 			filters: [{ name: 'Joplin Keymaps (keymap-desktop.json)', extensions: ['json'] }],
 		});

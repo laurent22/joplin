@@ -87,6 +87,7 @@ describe('index/stripe', function() {
 
 		const user = await models().user().loadByEmail('toto@example.com');
 		expect(user.account_type).toBe(AccountType.Pro);
+		expect(user.email_confirmed).toBe(0);
 
 		const sub = await models().subscription().byUserId(user.id);
 		expect(sub.stripe_subscription_id).toBe('sub_123');

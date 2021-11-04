@@ -1,4 +1,4 @@
-import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, checkThrowAsync, createItem } from '../utils/testing/testUtils';
+import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, checkThrowAsync, createItem, expectThrow } from '../utils/testing/testUtils';
 import { EmailSender, User, UserFlagType } from '../services/database/types';
 import { ErrorUnprocessableEntity } from '../utils/errors';
 import { betaUserDateRange, stripeConfig } from '../utils/stripe';
@@ -236,6 +236,35 @@ describe('UserModel', function() {
 		stripeConfig().enabled = false;
 	});
 
+	test('should disable disable the account and send an email if payment failed for good', async () => {
+		stripeConfig().enabled = true;
+
+		const { user: user1 } = await models().subscription().saveUserAndSubscription('toto@example.com', 'Toto', AccountType.Basic, 'usr_111', 'sub_111');
+
+		const sub = await models().subscription().byUserId(user1.id);
+
+		const now = Date.now();
+		const paymentFailedTime = now - failedPaymentFinalAccount - 10;
+		await models().subscription().save({
+			id: sub.id,
+			last_payment_time: now - failedPaymentFinalAccount * 2,
+			last_payment_failed_time: paymentFailedTime,
+		});
+
+		await models().user().handleFailedPaymentSubscriptions();
+
+		{
+			const user1 = await models().user().loadByEmail('toto@example.com');
+			expect(user1.enabled).toBe(0);
+
+			const email = (await models().email().all()).pop();
+			expect(email.key).toBe(`payment_failed_account_disabled_${paymentFailedTime}`);
+			expect(email.body).toContain(stripePortalUrl());
+		}
+
+		stripeConfig().enabled = false;
+	});
+
 	test('should send emails and flag accounts when it is over the size limit', async () => {
 		const { user: user1 } = await createUserAndSession(1);
 		const { user: user2 } = await createUserAndSession(2);
@@ -299,6 +328,58 @@ describe('UserModel', function() {
 			await models().user().handleOversizedAccounts();
 			expect((await models().email().all()).length).toBe(emailBeforeCount + 1);
 		}
+	});
+
+	test('should get the user public key', async function() {
+		const { user: user1 } = await createUserAndSession(1);
+		const { user: user2 } = await createUserAndSession(2);
+		const { user: user3 } = await createUserAndSession(3);
+		const { user: user4 } = await createUserAndSession(4);
+
+		const syncInfo1: any = {
+			'version': 3,
+			'e2ee': {
+				'value': false,
+				'updatedTime': 0,
+			},
+			'ppk': {
+				'value': {
+					publicKey: 'PUBLIC_KEY_1',
+					privateKey: {
+						encryptionMode: 4,
+						ciphertext: 'PRIVATE_KEY',
+					},
+				},
+				'updatedTime': 0,
+			},
+		};
+
+		const syncInfo2: any = JSON.parse(JSON.stringify(syncInfo1));
+		syncInfo2.ppk.value.publicKey = 'PUBLIC_KEY_2';
+
+		const syncInfo3: any = JSON.parse(JSON.stringify(syncInfo1));
+		delete syncInfo3.ppk;
+
+		await models().item().saveForUser(user1.id, {
+			content: Buffer.from(JSON.stringify(syncInfo1)),
+			name: 'info.json',
+		});
+
+		await models().item().saveForUser(user2.id, {
+			content: Buffer.from(JSON.stringify(syncInfo2)),
+			name: 'info.json',
+		});
+
+		await models().item().saveForUser(user3.id, {
+			content: Buffer.from(JSON.stringify(syncInfo3)),
+			name: 'info.json',
+		});
+
+		expect((await models().user().publicPrivateKey(user1.id)).publicKey).toBe('PUBLIC_KEY_1');
+		expect((await models().user().publicPrivateKey(user2.id)).publicKey).toBe('PUBLIC_KEY_2');
+		expect((await models().user().publicPrivateKey(user3.id))).toBeFalsy();
+
+		await expectThrow(async () => models().user().publicPrivateKey(user4.id));
 	});
 
 	test('should remove flag when account goes under the limit', async () => {

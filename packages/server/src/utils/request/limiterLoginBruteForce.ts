@@ -2,8 +2,8 @@ import { RateLimiterMemory, RateLimiterRes } from 'rate-limiter-flexible';
 import { ErrorTooManyRequests } from '../errors';
 
 const limiterSlowBruteByIP = new RateLimiterMemory({
-	points: 3, // Up to 3 requests per IP
-	duration: 30, // Per 30 seconds
+	points: 10, // Up to 10 requests per IP
+	duration: 60, // Per 60 seconds
 });
 
 export default async function(ip: string) {

@@ -29,7 +29,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/faq.md
 			href="&#x2F;css/bootstrap5.0.2.min.css"
 			as="style"
 		/>
-		<link rel="stylesheet" href="&#x2F;css/fontawesome-all.min.css?t=1635175432192">
+		<link rel="stylesheet" href="/css/fontawesome-all.min.css?h=ecd507b3125edc4d2a03aa6ae5d07da9">
 		<link
 			href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
 			rel="stylesheet"
@@ -37,7 +37,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/faq.md
 			media="all"
 			onload="this.media='all'; this.onload = null"
 		/>
-		<link rel="stylesheet" href="&#x2F;css/site.css?t=1635175432192" as="style" />
+		<link rel="stylesheet" href="/css/site.css?h=f1e088235812805da9f78ebcd465d1ad" as="style" />
 		<title>FAQ | Joplin</title>
 
 		<script
@@ -337,6 +337,11 @@ notepad++.exe --openSession   # Opens Notepad ++ in new window
 <li>Synchronise to verify that everything is working.</li>
 <li>Do step 5 and 6 for all the other Joplin clients you need to sync.</li>
 </ol>
+<h2>I deleted some notes by accident and don't have a backup<a name="i-deleted-some-notes-by-accident-and-don-t-have-a-backup" href="#i-deleted-some-notes-by-accident-and-don-t-have-a-backup" class="heading-anchor">🔗</a></h2>
+<p>If you know the <code>NOTE_ID</code> and have note history enabled you can run the command <code>restoreNoteRevision</code> from the command palette e.g. <code>restoreNoteRevision 66457326a6ba4adeb4be8ce05e37af0d</code>. Joplin will then confirm if the restore was successful and place the note in a &quot;Restored Note&quot; notebook.<br>
+If you do not know the <code>NOTE_ID</code> then you can find this within the Joplin sqlite database as the <code>item_id</code> within the <code>deleted_items</code> or <code>revisions</code> tables. It will require some manual checking of the <code>title_diff</code> and <code>body_diff</code> fields to check if the <code>ITEM/NOTE_ID</code> you are targeting is the correct one.<br>
+You should first take a copy of the database to avoid making any accidental changes in the live one.<br>
+For further information go <a href="https://discourse.joplinapp.org/t/restoring-deleted-notes/21304">here</a>.</p>
 <h2>How can I easily enter Markdown tags in Android?<a name="how-can-i-easily-enter-markdown-tags-in-android" href="#how-can-i-easily-enter-markdown-tags-in-android" class="heading-anchor">🔗</a></h2>
 <p>You may use a special keyboard such as <a href="https://play.google.com/store/apps/details?id=kl.ime.oh&amp;hl=en">Multiling O Keyboard</a>, which has shortcuts to create Markdown tags. <a href="https://discourse.joplinapp.org/t/android-create-new-list-item-with-enter/585/2?u=laurent">More information in this post</a>.</p>
 <h2>The initial sync is very slow, how can I speed it up?<a name="the-initial-sync-is-very-slow-how-can-i-speed-it-up" href="#the-initial-sync-is-very-slow-how-can-i-speed-it-up" class="heading-anchor">🔗</a></h2>
@@ -429,7 +434,7 @@ on this server.&lt;/p&gt;
 	</div>
 </footer>		</div>
 
-		<script src="&#x2F;js/script.js?t=1635175432192"></script>
+		<script src="/js/script.js?h=46b3b58d72c94591621551affbb8c6e3"></script>
 
 <script>
 	if (window.location.hostname !== 'localhost') {

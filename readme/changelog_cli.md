@@ -1,5 +1,19 @@
 # Joplin terminal app changelog
 
+## [cli-v2.6.1](https://github.com/laurent22/joplin/releases/tag/cli-v2.6.1) - 2021-11-03T11:33:18Z
+
+- New: Add support for public-private key pairs and improved master password support (#5438)
+- New: Added mechanism to migrate default settings to new values (72db8e4)
+- Improved: Add Markdown + Front Matter exporter/importer (#5465) (#5224 by [@CalebJohn](https://github.com/CalebJohn))
+- Improved: Ensure that shared notebook children are not deleted when shared, unshared and shared again, and a conflict happens (ccf9882)
+- Improved: Improved Joplin Server configuration check to better handle disabled accounts (72c1235)
+- Improved: Improved handling of expired sessions when using Joplin Server (33249ca) (ace1118)
+- Fixed: Certain attachments were not being automatically deleted (#932)
+- Fixed: Fix default sync target (4b39d30)
+- Fixed: Fixed potential infinite loop when Joplin Server session is invalid (c5569ef)
+- Fixed: Fixed running out of memory when importing large ENEX files (#5543)
+- Fixed: Ignore newline between quotes while spliting batch (#5540) (#5341 by Kingsley Yung)
+
 ## [cli-v2.4.1](https://github.com/laurent22/joplin/releases/tag/cli-v2.4.1) - 2021-09-29T15:28:01Z
 
 - New: Add a way to disable a master key (7faa58e)

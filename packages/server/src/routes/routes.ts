@@ -10,6 +10,7 @@ import apiSessions from './api/sessions';
 import apiShares from './api/shares';
 import apiShareUsers from './api/share_users';
 import apiUsers from './api/users';
+import apiLocks from './api/locks';
 
 import indexChanges from './index/changes';
 import indexHelp from './index/help';
@@ -41,6 +42,7 @@ const routes: Routers = {
 	'api/share_users': apiShareUsers,
 	'api/shares': apiShares,
 	'api/users': apiUsers,
+	'api/locks': apiLocks,
 
 	'changes': indexChanges,
 	'home': indexHome,

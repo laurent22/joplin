@@ -139,7 +139,7 @@ describe('e2ee/utils', function() {
 		setPpk(await generateKeyPair(encryptionService(), masterPassword1));
 
 		const previousPpk = localSyncInfo().ppk;
-		await resetMasterPassword(encryptionService(), kvStore(), masterPassword2);
+		await resetMasterPassword(encryptionService(), kvStore(), null, masterPassword2);
 
 		expect(masterKeyEnabled(masterKeyById(mk1.id))).toBe(false);
 		expect(masterKeyEnabled(masterKeyById(mk2.id))).toBe(false);

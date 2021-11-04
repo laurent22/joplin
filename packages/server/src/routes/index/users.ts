@@ -3,7 +3,7 @@ import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
 import { AppContext, HttpMethod } from '../../utils/types';
 import { bodyFields, contextSessionId, formParse } from '../../utils/requestUtils';
-import { ErrorForbidden, ErrorUnprocessableEntity } from '../../utils/errors';
+import { ErrorBadRequest, ErrorForbidden, ErrorNotFound, ErrorUnprocessableEntity } from '../../utils/errors';
 import { User, UserFlag, UserFlagType, Uuid } from '../../services/database/types';
 import config from '../../config';
 import { View } from '../../services/MustacheService';
@@ -214,26 +214,27 @@ router.get('users/:id/confirm', async (path: SubPath, ctx: AppContext, error: Er
 	const userId = path.id;
 	const token = ctx.query.token;
 
-	if (token) {
-		const beforeChangingEmailHandler = async (newEmail: string) => {
-			if (config().stripe.enabled) {
-				try {
-					await updateCustomerEmail(models, userId, newEmail);
-				} catch (error) {
-					if (['no_sub', 'no_stripe_sub'].includes(error.code)) {
-						// ok - the user just doesn't have a subscription
-					} else {
-						error.message = `Your Stripe subscription email could not be updated. As a result your account email has not been changed. Please try again or contact support. Error was: ${error.message}`;
-						throw error;
-					}
+	if (!token) throw new ErrorBadRequest('Missing token');
+
+	const beforeChangingEmailHandler = async (newEmail: string) => {
+		if (config().stripe.enabled) {
+			try {
+				await updateCustomerEmail(models, userId, newEmail);
+			} catch (error) {
+				if (['no_sub', 'no_stripe_sub'].includes(error.code)) {
+					// ok - the user just doesn't have a subscription
+				} else {
+					error.message = `Your Stripe subscription email could not be updated. As a result your account email has not been changed. Please try again or contact support. Error was: ${error.message}`;
+					throw error;
 				}
 			}
-		};
+		}
+	};
 
-		await models.user().processEmailConfirmation(userId, token, beforeChangingEmailHandler);
-	}
+	if (ctx.query.confirm_email !== '0') await models.user().processEmailConfirmation(userId, token, beforeChangingEmailHandler);
 
 	const user = await models.user().load(userId);
+	if (!user) throw new ErrorNotFound(`No such user: ${userId}`);
 
 	if (user.must_set_password) {
 		const view: View = {

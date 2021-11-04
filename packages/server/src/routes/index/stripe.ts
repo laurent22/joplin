@@ -1,4 +1,4 @@
-import { SubPath } from '../../utils/routeUtils';
+import { redirect, SubPath } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
 import { Env, RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
@@ -10,9 +10,11 @@ import Logger from '@joplin/lib/Logger';
 import getRawBody = require('raw-body');
 import { AccountType } from '../../models/UserModel';
 import { betaUserTrialPeriodDays, cancelSubscription, initStripe, isBetaUser, priceIdToAccountType, stripeConfig } from '../../utils/stripe';
-import { Subscription, UserFlagType } from '../../services/database/types';
+import { Subscription, User, UserFlagType } from '../../services/database/types';
 import { findPrice, PricePeriod } from '@joplin/lib/utils/joplinCloud';
 import { Models } from '../../models/factory';
+import { confirmUrl } from '../../utils/urlUtils';
+import { msleep } from '../../utils/time';
 
 const logger = Logger.create('/stripe');
 
@@ -114,6 +116,24 @@ export const handleSubscriptionCreated = async (stripe: Stripe, models: Models, 
 			stripeSubscriptionId
 		);
 	}
+};
+
+// For some reason, after checkout Stripe redirects to success_url immediately,
+// without waiting for the "checkout.session.completed" event to be completed.
+// It may be because they expect the webhook to immediately return code 200,
+// which is not how it's currently implemented here.
+// https://stripe.com/docs/payments/checkout/fulfill-orders#fulfill
+//
+// It means that by the time success_url is called, the user hasn't been created
+// yet. So here we wait for the user to be available and return it. It shouldn't
+// wait for more than 2-3 seconds.
+const waitForUserCreation = async (models: Models, userEmail: string): Promise<User | null> => {
+	for (let i = 0; i < 10; i++) {
+		const user = await models.user().loadByEmail(userEmail);
+		if (user) return user;
+		await msleep(1000);
+	}
+	return null;
 };
 
 export const postHandlers: PostHandlers = {
@@ -365,11 +385,24 @@ export const postHandlers: PostHandlers = {
 
 const getHandlers: Record<string, StripeRouteHandler> = {
 
-	success: async (_stripe: Stripe, _path: SubPath, _ctx: AppContext) => {
-		return `
-			<p>Thank you for signing up for ${globalConfig().appName}! You should receive an email shortly with instructions on how to connect to your account.</p>
-			<p><a href="https://joplinapp.org">Go back to JoplinApp.org</a></p>
-		`;
+	success: async (stripe: Stripe, _path: SubPath, ctx: AppContext) => {
+		try {
+			const models = ctx.joplin.models;
+			const checkoutSession = await stripe.checkout.sessions.retrieve(ctx.query.session_id);
+			const userEmail = checkoutSession.customer_details.email || checkoutSession.customer_email; // customer_email appears to be always null but fallback to it just in case
+			if (!userEmail) throw new Error(`Could not find email from checkout session: ${JSON.stringify(checkoutSession)}`);
+			const user = await waitForUserCreation(models, userEmail);
+			if (!user) throw new Error(`Could not find user from checkout session: ${JSON.stringify(checkoutSession)}`);
+			const validationToken = await ctx.joplin.models.token().generate(user.id);
+			const redirectUrl = encodeURI(confirmUrl(user.id, validationToken, false));
+			return redirect(ctx, redirectUrl);
+		} catch (error) {
+			logger.error('Could not automatically redirect user to account confirmation page. They will have to follow the link in the confirmation email. Error was:', error);
+			return `
+				<p>Thank you for signing up for ${globalConfig().appName}! You should receive an email shortly with instructions on how to connect to your account.</p>
+				<p><a href="https://joplinapp.org">Go back to JoplinApp.org</a></p>
+			`;
+		}
 	},
 
 	cancel: async (_stripe: Stripe, _path: SubPath, _ctx: AppContext) => {
@@ -389,7 +422,7 @@ const getHandlers: Record<string, StripeRouteHandler> = {
 		return `
 			<html>
 				<head>
-				<meta http-equiv = "refresh" content = "1; url = ${billingPortalSession.url};" />
+				<meta http-equiv = "refresh" content = "1; url = ${billingPortalSession.url}" />
 				<script>setTimeout(() => { window.location.href = ${JSON.stringify(billingPortalSession.url)}; }, 2000)</script>
 				</head>
 				<body>

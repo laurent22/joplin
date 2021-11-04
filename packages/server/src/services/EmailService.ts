@@ -20,17 +20,21 @@ export default class EmailService extends BaseService {
 
 	private async transport(): Promise<Mail> {
 		if (!this.transport_) {
-			this.transport_ = createTransport({
-				host: this.config.mailer.host,
-				port: this.config.mailer.port,
-				secure: this.config.mailer.secure,
-				auth: {
-					user: this.config.mailer.authUser,
-					pass: this.config.mailer.authPassword,
-				},
-			});
-
 			try {
+				if (!this.senderInfo(EmailSender.NoReply).email) {
+					throw new Error('No-reply email must be set for email service to work (Set env variable MAILER_NOREPLY_EMAIL)');
+				}
+
+				this.transport_ = createTransport({
+					host: this.config.mailer.host,
+					port: this.config.mailer.port,
+					secure: this.config.mailer.secure,
+					auth: {
+						user: this.config.mailer.authUser,
+						pass: this.config.mailer.authPassword,
+					},
+				});
+
 				await this.transport_.verify();
 				logger.info('Transporter is operational - service will be enabled');
 			} catch (error) {

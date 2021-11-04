@@ -1,14 +1,13 @@
 import time from '../../time';
 import shim from '../../shim';
 import Setting from '../../models/Setting';
-import { createFolderTree, syncTargetName, synchronizerStart, allSyncTargetItemsEncrypted, kvStore, supportDir, setupDatabaseAndSynchronizer, synchronizer, fileApi, switchClient, encryptionService, loadEncryptionMasterKey, decryptionWorker, checkThrowAsync } from '../../testing/test-utils';
+import { synchronizerStart, allSyncTargetItemsEncrypted, kvStore, supportDir, setupDatabaseAndSynchronizer, synchronizer, fileApi, switchClient, encryptionService, loadEncryptionMasterKey, decryptionWorker, checkThrowAsync } from '../../testing/test-utils';
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import Resource from '../../models/Resource';
 import ResourceFetcher from '../../services/ResourceFetcher';
 import MasterKey from '../../models/MasterKey';
 import BaseItem from '../../models/BaseItem';
-import { ResourceEntity } from '../database/types';
 import Synchronizer from '../../Synchronizer';
 import { getEncryptionEnabled, setEncryptionEnabled } from '../synchronizer/syncInfoUtils';
 import { loadMasterKeysFromSettings, setupAndDisableEncryption, setupAndEnableEncryption } from '../e2ee/utils';
@@ -366,153 +365,153 @@ describe('Synchronizer.e2ee', function() {
 		expect((await decryptionWorker().decryptionDisabledItems()).length).toBe(0);
 	}));
 
-	it('should not encrypt notes that are shared by link', (async () => {
-		setEncryptionEnabled(true);
-		await loadEncryptionMasterKey();
+	// it('should not encrypt notes that are shared by link', (async () => {
+	// 	setEncryptionEnabled(true);
+	// 	await loadEncryptionMasterKey();
 
-		await createFolderTree('', [
-			{
-				title: 'folder1',
-				children: [
-					{
-						title: 'un',
-					},
-					{
-						title: 'deux',
-					},
-				],
-			},
-		]);
+	// 	await createFolderTree('', [
+	// 		{
+	// 			title: 'folder1',
+	// 			children: [
+	// 				{
+	// 					title: 'un',
+	// 				},
+	// 				{
+	// 					title: 'deux',
+	// 				},
+	// 			],
+	// 		},
+	// 	]);
 
-		let note1 = await Note.loadByTitle('un');
-		let note2 = await Note.loadByTitle('deux');
-		await shim.attachFileToNote(note1, `${supportDir}/photo.jpg`);
-		await shim.attachFileToNote(note2, `${supportDir}/photo.jpg`);
-		note1 = await Note.loadByTitle('un');
-		note2 = await Note.loadByTitle('deux');
-		const resourceId1 = (await Note.linkedResourceIds(note1.body))[0];
-		const resourceId2 = (await Note.linkedResourceIds(note2.body))[0];
+	// 	let note1 = await Note.loadByTitle('un');
+	// 	let note2 = await Note.loadByTitle('deux');
+	// 	await shim.attachFileToNote(note1, `${supportDir}/photo.jpg`);
+	// 	await shim.attachFileToNote(note2, `${supportDir}/photo.jpg`);
+	// 	note1 = await Note.loadByTitle('un');
+	// 	note2 = await Note.loadByTitle('deux');
+	// 	const resourceId1 = (await Note.linkedResourceIds(note1.body))[0];
+	// 	const resourceId2 = (await Note.linkedResourceIds(note2.body))[0];
 
-		await synchronizerStart();
+	// 	await synchronizerStart();
 
-		await switchClient(2);
+	// 	await switchClient(2);
 
-		await synchronizerStart();
+	// 	await synchronizerStart();
 
-		await switchClient(1);
+	// 	await switchClient(1);
 
-		const origNote2 = Object.assign({}, note2);
-		await BaseItem.updateShareStatus(note2, true);
-		note2 = await Note.load(note2.id);
+	// 	const origNote2 = Object.assign({}, note2);
+	// 	await BaseItem.updateShareStatus(note2, true);
+	// 	note2 = await Note.load(note2.id);
 
-		// Sharing a note should not modify the timestamps
-		expect(note2.user_updated_time).toBe(origNote2.user_updated_time);
-		expect(note2.user_created_time).toBe(origNote2.user_created_time);
+	// 	// Sharing a note should not modify the timestamps
+	// 	expect(note2.user_updated_time).toBe(origNote2.user_updated_time);
+	// 	expect(note2.user_created_time).toBe(origNote2.user_created_time);
 
-		await synchronizerStart();
+	// 	await synchronizerStart();
 
-		await switchClient(2);
+	// 	await switchClient(2);
 
-		await synchronizerStart();
+	// 	await synchronizerStart();
 
-		// The shared note should be decrypted
-		const note2_2 = await Note.load(note2.id);
-		expect(note2_2.title).toBe('deux');
-		expect(note2_2.encryption_applied).toBe(0);
-		expect(note2_2.is_shared).toBe(1);
+	// 	// The shared note should be decrypted
+	// 	const note2_2 = await Note.load(note2.id);
+	// 	expect(note2_2.title).toBe('deux');
+	// 	expect(note2_2.encryption_applied).toBe(0);
+	// 	expect(note2_2.is_shared).toBe(1);
 
-		// The resource linked to the shared note should also be decrypted
-		const resource2: ResourceEntity = await Resource.load(resourceId2);
-		expect(resource2.is_shared).toBe(1);
-		expect(resource2.encryption_applied).toBe(0);
+	// 	// The resource linked to the shared note should also be decrypted
+	// 	const resource2: ResourceEntity = await Resource.load(resourceId2);
+	// 	expect(resource2.is_shared).toBe(1);
+	// 	expect(resource2.encryption_applied).toBe(0);
 
-		const fetcher = newResourceFetcher(synchronizer());
-		await fetcher.start();
-		await fetcher.waitForAllFinished();
+	// 	const fetcher = newResourceFetcher(synchronizer());
+	// 	await fetcher.start();
+	// 	await fetcher.waitForAllFinished();
 
-		// Because the resource is decrypted, the encrypted blob file should not
-		// exist, but the plain text one should.
-		expect(await shim.fsDriver().exists(Resource.fullPath(resource2, true))).toBe(false);
-		expect(await shim.fsDriver().exists(Resource.fullPath(resource2))).toBe(true);
+	// 	// Because the resource is decrypted, the encrypted blob file should not
+	// 	// exist, but the plain text one should.
+	// 	expect(await shim.fsDriver().exists(Resource.fullPath(resource2, true))).toBe(false);
+	// 	expect(await shim.fsDriver().exists(Resource.fullPath(resource2))).toBe(true);
 
-		// The non-shared note should be encrypted
-		const note1_2 = await Note.load(note1.id);
-		expect(note1_2.title).toBe('');
+	// 	// The non-shared note should be encrypted
+	// 	const note1_2 = await Note.load(note1.id);
+	// 	expect(note1_2.title).toBe('');
 
-		// The linked resource should also be encrypted
-		const resource1: ResourceEntity = await Resource.load(resourceId1);
-		expect(resource1.is_shared).toBe(0);
-		expect(resource1.encryption_applied).toBe(1);
+	// 	// The linked resource should also be encrypted
+	// 	const resource1: ResourceEntity = await Resource.load(resourceId1);
+	// 	expect(resource1.is_shared).toBe(0);
+	// 	expect(resource1.encryption_applied).toBe(1);
 
-		// And the plain text blob should not be present. The encrypted one
-		// shouldn't either because it can only be downloaded once the metadata
-		// has been decrypted.
-		expect(await shim.fsDriver().exists(Resource.fullPath(resource1, true))).toBe(false);
-		expect(await shim.fsDriver().exists(Resource.fullPath(resource1))).toBe(false);
-	}));
+	// 	// And the plain text blob should not be present. The encrypted one
+	// 	// shouldn't either because it can only be downloaded once the metadata
+	// 	// has been decrypted.
+	// 	expect(await shim.fsDriver().exists(Resource.fullPath(resource1, true))).toBe(false);
+	// 	expect(await shim.fsDriver().exists(Resource.fullPath(resource1))).toBe(false);
+	// }));
 
-	it('should not encrypt items that are shared by folder', (async () => {
-		// We skip this test for Joplin Server because it's going to check if
-		// the share_id refers to an existing share.
-		if (syncTargetName() === 'joplinServer') {
-			expect(true).toBe(true);
-			return;
-		}
+	// it('should not encrypt items that are shared by folder', (async () => {
+	// 	// We skip this test for Joplin Server because it's going to check if
+	// 	// the share_id refers to an existing share.
+	// 	if (syncTargetName() === 'joplinServer') {
+	// 		expect(true).toBe(true);
+	// 		return;
+	// 	}
 
-		setEncryptionEnabled(true);
-		await loadEncryptionMasterKey();
+	// 	setEncryptionEnabled(true);
+	// 	await loadEncryptionMasterKey();
 
-		const folder1 = await createFolderTree('', [
-			{
-				title: 'folder1',
-				children: [
-					{
-						title: 'note1',
-					},
-				],
-			},
-			{
-				title: 'folder2',
-				children: [
-					{
-						title: 'note2',
-					},
-				],
-			},
-		]);
+	// 	const folder1 = await createFolderTree('', [
+	// 		{
+	// 			title: 'folder1',
+	// 			children: [
+	// 				{
+	// 					title: 'note1',
+	// 				},
+	// 			],
+	// 		},
+	// 		{
+	// 			title: 'folder2',
+	// 			children: [
+	// 				{
+	// 					title: 'note2',
+	// 				},
+	// 			],
+	// 		},
+	// 	]);
 
-		await synchronizerStart();
+	// 	await synchronizerStart();
 
-		await switchClient(2);
+	// 	await switchClient(2);
 
-		await synchronizerStart();
+	// 	await synchronizerStart();
 
-		await switchClient(1);
+	// 	await switchClient(1);
 
-		// Simulate that the folder has been shared
-		await Folder.save({ id: folder1.id, share_id: 'abcd' });
+	// 	// Simulate that the folder has been shared
+	// 	await Folder.save({ id: folder1.id, share_id: 'abcd' });
 
-		await synchronizerStart();
+	// 	await synchronizerStart();
 
-		await switchClient(2);
+	// 	await switchClient(2);
 
-		await synchronizerStart();
+	// 	await synchronizerStart();
 
-		// The shared items should be decrypted
-		{
-			const folder1 = await Folder.loadByTitle('folder1');
-			const note1 = await Note.loadByTitle('note1');
-			expect(folder1.title).toBe('folder1');
-			expect(note1.title).toBe('note1');
-		}
+	// 	// The shared items should be decrypted
+	// 	{
+	// 		const folder1 = await Folder.loadByTitle('folder1');
+	// 		const note1 = await Note.loadByTitle('note1');
+	// 		expect(folder1.title).toBe('folder1');
+	// 		expect(note1.title).toBe('note1');
+	// 	}
 
-		// The non-shared items should be encrypted
-		{
-			const folder2 = await Folder.loadByTitle('folder2');
-			const note2 = await Note.loadByTitle('note2');
-			expect(folder2).toBeFalsy();
-			expect(note2).toBeFalsy();
-		}
-	}));
+	// 	// The non-shared items should be encrypted
+	// 	{
+	// 		const folder2 = await Folder.loadByTitle('folder2');
+	// 		const note2 = await Note.loadByTitle('note2');
+	// 		expect(folder2).toBeFalsy();
+	// 		expect(note2).toBeFalsy();
+	// 	}
+	// }));
 
 });

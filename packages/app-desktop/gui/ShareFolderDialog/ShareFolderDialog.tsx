@@ -171,7 +171,7 @@ function ShareFolderDialog(props: Props) {
 		try {
 			setLatestError(null);
 			const share = await ShareService.instance().shareFolder(props.folderId);
-			await ShareService.instance().addShareRecipient(share.id, recipientEmail);
+			await ShareService.instance().addShareRecipient(share.id, share.master_key_id, recipientEmail);
 			await Promise.all([
 				ShareService.instance().refreshShares(),
 				ShareService.instance().refreshShareUsers(share.id),

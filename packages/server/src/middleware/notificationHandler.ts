@@ -25,7 +25,7 @@ async function handleChangeAdminPasswordNotification(ctx: AppContext) {
 			_('The default admin password is insecure and has not been changed! [Change it now](%s)', profileUrl())
 		);
 	} else {
-		await notificationModel.markAsRead(ctx.joplin.owner.id, NotificationKey.ChangeAdminPassword);
+		await notificationModel.setRead(ctx.joplin.owner.id, NotificationKey.ChangeAdminPassword);
 	}
 }
 
@@ -56,6 +56,22 @@ async function handleUserFlags(ctx: AppContext): Promise<NotificationView> {
 
 	return null;
 }
+
+async function handleConfirmEmailNotification(ctx: AppContext): Promise<NotificationView> {
+	if (!ctx.joplin.owner) return null;
+
+	if (!ctx.joplin.owner.email_confirmed) {
+		return {
+			id: 'confirmEmail',
+			messageHtml: renderMarkdown('An email has been sent to you containing an activation link to complete your registration.\n\nMake sure you click it to secure your account and keep access to it.'),
+			levelClassName: levelClassName(NotificationLevel.Important),
+			closeUrl: '',
+		};
+	}
+
+	return null;
+}
+
 
 // async function handleSqliteInProdNotification(ctx: AppContext) {
 // 	if (!ctx.joplin.owner.is_admin) return;
@@ -104,11 +120,18 @@ export default async function(ctx: AppContext, next: KoaNext): Promise<void> {
 		if (!ctx.joplin.owner) return next();
 
 		await handleChangeAdminPasswordNotification(ctx);
+		await handleConfirmEmailNotification(ctx);
 		// await handleSqliteInProdNotification(ctx);
 		const notificationViews = await makeNotificationViews(ctx);
 
-		const userFlagView = await handleUserFlags(ctx);
-		if (userFlagView) notificationViews.push(userFlagView);
+		const nonDismisableViews = [
+			await handleUserFlags(ctx),
+			await handleConfirmEmailNotification(ctx),
+		];
+
+		for (const nonDismisableView of nonDismisableViews) {
+			if (nonDismisableView) notificationViews.push(nonDismisableView);
+		}
 
 		ctx.joplin.notifications = notificationViews;
 	} catch (error) {

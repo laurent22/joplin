@@ -136,12 +136,12 @@ export function parseSubPath(basePath: string, p: string, rawPath: string = null
 		if (colonIndex2 < 0) {
 			throw new ErrorBadRequest(`Invalid path format: ${p}`);
 		} else {
-			output.id = p.substr(0, colonIndex2 + 1);
+			output.id = decodeURIComponent(p.substr(0, colonIndex2 + 1));
 			output.link = ltrimSlashes(p.substr(colonIndex2 + 1));
 		}
 	} else {
 		const s = p.split('/');
-		if (s.length >= 1) output.id = s[0];
+		if (s.length >= 1) output.id = decodeURIComponent(s[0]);
 		if (s.length >= 2) output.link = s[1];
 	}
 

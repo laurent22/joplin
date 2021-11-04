@@ -24,6 +24,7 @@ import uuidgen from '../uuidgen';
 import { createCsrfToken } from '../csrf';
 import { cookieSet } from '../cookies';
 import ContentDriverMemory from '../../models/itemModel/ContentDriverMemory';
+import { parseEnv } from '../../env';
 
 // Takes into account the fact that this file will be inside the /dist directory
 // when it runs.
@@ -78,20 +79,20 @@ export async function beforeAllDb(unitName: string, createDbOptions: CreateDbOpt
 	//
 	// sudo docker compose -f docker-compose.db-dev.yml up
 
-	// await initConfig(Env.Dev, {
+	// await initConfig(Env.Dev, parseEnv({
 	// 	DB_CLIENT: 'pg',
 	// 	POSTGRES_DATABASE: unitName,
 	// 	POSTGRES_USER: 'joplin',
 	// 	POSTGRES_PASSWORD: 'joplin',
 	// 	SUPPORT_EMAIL: 'testing@localhost',
-	// }, {
+	// }), {
 	// 	tempDir: tempDir,
 	// });
 
-	await initConfig(Env.Dev, {
+	await initConfig(Env.Dev, parseEnv({
 		SQLITE_DATABASE: createdDbPath_,
 		SUPPORT_EMAIL: 'testing@localhost',
-	}, {
+	}), {
 		tempDir: tempDir,
 	});
 
@@ -516,6 +517,7 @@ markup_language: 1
 is_shared: 1
 share_id: ${note.share_id || ''}
 conflict_original_id: 
+master_key_id: 
 type_: 1`;
 }
 

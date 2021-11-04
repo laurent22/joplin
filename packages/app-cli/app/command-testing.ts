@@ -3,8 +3,8 @@ import { reg } from '@joplin/lib/registry';
 import Note from '@joplin/lib/models/Note';
 import uuid from '@joplin/lib/uuid';
 import populateDatabase from '@joplin/lib/services/debug/populateDatabase';
-import JoplinServerApi from '../../lib/JoplinServerApi';
-import { readCredentialFile } from '../../lib/utils/credentialFiles';
+import { readCredentialFile } from '@joplin/lib/utils/credentialFiles';
+import JoplinServerApi from '@joplin/lib/JoplinServerApi';
 
 function randomElement(array: any[]): any {
 	if (!array.length) return null;
@@ -104,11 +104,17 @@ class Command extends BaseCommand {
 				password: () => joplinServerAuth.password,
 			});
 
+			const apiPut = async () => {
+				await api.exec('PUT', 'api/items/root:/testing:/content', {}, randomContent(), {
+					'Content-Type': 'application/octet-stream',
+				});
+			};
+
+			await apiPut();
+
 			const promises = [];
 			for (let i = 0; i < 100; i++) {
-				promises.push(void api.exec('PUT', 'api/items/root:/testing:/content', {}, randomContent(), {
-					'Content-Type': 'application/octet-stream',
-				}));
+				promises.push(void apiPut());
 			}
 			await Promise.all(promises);
 

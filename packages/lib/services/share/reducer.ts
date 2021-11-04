@@ -1,6 +1,7 @@
 import { State as RootState } from '../../reducer';
 import { Draft } from 'immer';
 import { FolderEntity } from '../database/types';
+import { MasterKeyEntity } from '../e2ee/types';
 
 interface StateShareUserUser {
 	id: string;
@@ -25,11 +26,13 @@ export interface StateShare {
 	type: number;
 	folder_id: string;
 	note_id: string;
+	master_key_id: string;
 	user?: StateShareUserUser;
 }
 
 export interface ShareInvitation {
 	id: string;
+	master_key: MasterKeyEntity;
 	share: StateShare;
 	status: ShareUserStatus;
 }

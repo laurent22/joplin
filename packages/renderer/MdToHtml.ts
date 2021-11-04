@@ -25,6 +25,7 @@ export interface RenderOptions {
 	pdfViewerEnabled?: boolean;
 	codeHighlightCacheKey?: string;
 	plainResourceRendering?: boolean;
+	mapsToLine?: boolean;
 }
 
 interface RendererRule {
@@ -62,6 +63,7 @@ const rules: RendererRules = {
 	code_inline: require('./MdToHtml/rules/code_inline').default,
 	fountain: require('./MdToHtml/rules/fountain').default,
 	mermaid: require('./MdToHtml/rules/mermaid').default,
+	source_map: require('./MdToHtml/rules/source_map').default,
 };
 
 const hljs = require('highlight.js');
@@ -393,6 +395,24 @@ export default class MdToHtml {
 		this.cachedOutputs_ = {};
 	}
 
+	private removeLastNewLine(s: string): string {
+		if (s[s.length - 1] === '\n') {
+			return s.substr(0, s.length - 1);
+		} else {
+			return s;
+		}
+	}
+
+	// Rendering large code blocks can freeze the app so we disable it in
+	// certain cases:
+	// https://github.com/laurent22/joplin/issues/5593#issuecomment-947374218
+	private shouldSkipHighlighting(str: string, lang: string): boolean {
+		if (lang && !hljs.getLanguage(lang)) lang = '';
+		if (str.length >= 1000 && !lang) return true;
+		if (str.length >= 512000 && lang) return true;
+		return false;
+	}
+
 	// "theme" is the theme as returned by themeStyle()
 	public async render(body: string, theme: any = null, options: RenderOptions = null): Promise<RenderResult> {
 
@@ -455,29 +475,32 @@ export default class MdToHtml {
 
 				// The strings includes the last \n that is part of the fence,
 				// so we remove it because we need the exact code in the source block
-				const trimmedStr = str.replace(/(.*)\n$/, '$1');
+				const trimmedStr = this.removeLastNewLine(str);
 				const sourceBlockHtml = `<pre class="joplin-source" data-joplin-language="${lang}" data-joplin-source-open="\`\`\`${lang}&#10;" data-joplin-source-close="&#10;\`\`\`">${markdownIt.utils.escapeHtml(trimmedStr)}</pre>`;
 
-				try {
-					let hlCode = '';
-
-					const cacheKey = md5(`${str}_${lang}`);
-
-					if (options.codeHighlightCacheKey && this.cachedHighlightedCode_[cacheKey]) {
-						hlCode = this.cachedHighlightedCode_[cacheKey];
-					} else {
-						if (lang && hljs.getLanguage(lang)) {
-							// hlCode = hljs.highlight(lang, trimmedStr, true).value;
-							hlCode = hljs.highlight(trimmedStr, { language: lang, ignoreIllegals: true }).value;
-						} else {
-							hlCode = hljs.highlightAuto(trimmedStr).value;
-						}
-						this.cachedHighlightedCode_[cacheKey] = hlCode;
-					}
-
-					outputCodeHtml = hlCode;
-				} catch (error) {
+				if (this.shouldSkipHighlighting(trimmedStr, lang)) {
 					outputCodeHtml = markdownIt.utils.escapeHtml(trimmedStr);
+				} else {
+					try {
+						let hlCode = '';
+
+						const cacheKey = md5(`${str}_${lang}`);
+
+						if (options.codeHighlightCacheKey && this.cachedHighlightedCode_[cacheKey]) {
+							hlCode = this.cachedHighlightedCode_[cacheKey];
+						} else {
+							if (lang && hljs.getLanguage(lang)) {
+								hlCode = hljs.highlight(trimmedStr, { language: lang, ignoreIllegals: true }).value;
+							} else {
+								hlCode = hljs.highlightAuto(trimmedStr).value;
+							}
+							this.cachedHighlightedCode_[cacheKey] = hlCode;
+						}
+
+						outputCodeHtml = hlCode;
+					} catch (error) {
+						outputCodeHtml = markdownIt.utils.escapeHtml(trimmedStr);
+					}
 				}
 
 				const html = `<div class="joplin-editable">${sourceBlockHtml}<pre class="hljs"><code>${outputCodeHtml}</code></pre></div>`;

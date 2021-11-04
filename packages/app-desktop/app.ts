@@ -558,7 +558,6 @@ class Application extends BaseApplication {
 		// 	});
 		// }, 2000);
 
-
 		// setTimeout(() => {
 		// 	this.dispatch({
 		// 		type: 'DIALOG_OPEN',

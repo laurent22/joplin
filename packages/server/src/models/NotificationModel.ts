@@ -5,7 +5,7 @@ import BaseModel, { ValidateOptions } from './BaseModel';
 
 export enum NotificationKey {
 	Any = 'any',
-	ConfirmEmail = 'confirmEmail',
+	// ConfirmEmail = 'confirmEmail',
 	PasswordSet = 'passwordSet',
 	EmailConfirmed = 'emailConfirmed',
 	ChangeAdminPassword = 'change_admin_password',
@@ -31,10 +31,10 @@ export default class NotificationModel extends BaseModel<Notification> {
 
 	public async add(userId: Uuid, key: NotificationKey, level: NotificationLevel = null, message: string = null): Promise<Notification> {
 		const notificationTypes: Record<string, NotificationType> = {
-			[NotificationKey.ConfirmEmail]: {
-				level: NotificationLevel.Normal,
-				message: `Welcome to ${this.appName}! An email has been sent to you containing an activation link to complete your registration.`,
-			},
+			// [NotificationKey.ConfirmEmail]: {
+			// 	level: NotificationLevel.Normal,
+			// 	message: `Welcome to ${this.appName}! An email has been sent to you containing an activation link to complete your registration. Make sure you click it to secure your account and keep access to it.`,
+			// },
 			[NotificationKey.EmailConfirmed]: {
 				level: NotificationLevel.Normal,
 				message: 'Your email has been confirmed',
@@ -83,12 +83,12 @@ export default class NotificationModel extends BaseModel<Notification> {
 		return this.save({ key: actualKey, message, level, owner_id: userId });
 	}
 
-	public async markAsRead(userId: Uuid, key: NotificationKey): Promise<void> {
+	public async setRead(userId: Uuid, key: NotificationKey, read: boolean = true): Promise<void> {
 		const n = await this.loadByKey(userId, key);
 		if (!n) return;
 
 		await this.db(this.tableName)
-			.update({ read: 1 })
+			.update({ read: read ? 1 : 0 })
 			.where('key', '=', key)
 			.andWhere('owner_id', '=', userId);
 	}
