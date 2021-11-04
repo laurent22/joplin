@@ -593,7 +593,7 @@ export default class UserModel extends BaseModel<User> {
 
 	public async publicPrivateKey(userId: string): Promise<PublicPrivateKeyPair> {
 		const syncInfo = await this.syncInfo(userId);
-		return syncInfo.ppk?.value || null;// syncInfo.ppk?.value.publicKey || '';
+		return syncInfo.ppk?.value || null;
 	}
 
 	// Note that when the "password" property is provided, it is going to be

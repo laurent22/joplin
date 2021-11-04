@@ -1,4 +1,4 @@
-export type Uuid = any;
+export type Uuid = string;
 
 export enum ItemAddressingType {
 	Id = 1,

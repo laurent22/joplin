@@ -302,8 +302,10 @@ export default class ItemModel extends BaseModel<Item> {
 		return this.itemToJoplinItem(raw);
 	}
 
-	public async saveFromRawContent(user: User, rawContentItems: SaveFromRawContentItem[], options: ItemSaveOption = null): Promise<SaveFromRawContentResult> {
+	public async saveFromRawContent(user: User, rawContentItems: SaveFromRawContentItem[] | SaveFromRawContentItem, options: ItemSaveOption = null): Promise<SaveFromRawContentResult> {
 		options = options || {};
+
+		if (!Array.isArray(rawContentItems)) rawContentItems = [rawContentItems];
 
 		// In this function, first we process the input items, which may be
 		// serialized Joplin items or actual buffers (for resources) and convert

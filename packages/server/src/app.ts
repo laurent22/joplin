@@ -5,7 +5,7 @@ import * as Koa from 'koa';
 import * as fs from 'fs-extra';
 import Logger, { LoggerWrapper, TargetType } from '@joplin/lib/Logger';
 import config, { initConfig, runningInDocker } from './config';
-import { migrateLatest, waitForConnection, sqliteDefaultDir, latestMigration, DbConnection, clientType } from './db';
+import { migrateLatest, waitForConnection, sqliteDefaultDir, latestMigration, DbConnection } from './db';
 import { AppContext, Env, KoaNext } from './utils/types';
 import FsDriverNode from '@joplin/lib/fs-driver-node';
 import routeHandler from './middleware/routeHandler';
@@ -17,11 +17,11 @@ import startServices from './utils/startServices';
 import { credentialFile } from './utils/testing/testUtils';
 import apiVersionHandler from './middleware/apiVersionHandler';
 import clickJackingHandler from './middleware/clickJackingHandler';
-import ContentDriverDatabase from './models/itemModel/ContentDriverDatabase';
-import newModelFactory from './models/factory';
+import newModelFactory, { Options } from './models/factory';
 import setupCommands from './utils/setupCommands';
 import { RouteResponseFormat, routeResponseFormat } from './utils/routeUtils';
 import { parseEnv } from './env';
+import contentDriverFromConfig from './models/itemModel/contentDriverFromConfig';
 
 interface Argv {
 	env?: Env;
@@ -62,6 +62,8 @@ function appLogger(): LoggerWrapper {
 }
 
 function markPasswords(o: Record<string, any>): Record<string, any> {
+	if (!o) return o;
+
 	const output: Record<string, any> = {};
 
 	for (const k of Object.keys(o)) {
@@ -220,10 +222,10 @@ async function main() {
 		fs.writeFileSync(pidFile, `${process.pid}`);
 	}
 
-	const newModelFactoryOptions = (db: DbConnection) => {
+	const newModelFactoryOptions = (db: DbConnection): Options => {
 		return {
-			contentDriver: new ContentDriverDatabase({ dbClientType: clientType(db) }),
-			// contentDriver: new ContentDriverFs({ basePath: '/Users/laurent/Temp/TestContentDriverFs' }),
+			contentDriver: contentDriverFromConfig(config().contentDriver, db),
+			fallbackContentDriver: contentDriverFromConfig(config().fallbackContentDriver, db),
 		};
 	};
 
@@ -261,6 +263,8 @@ async function main() {
 		appLogger().info('Log dir:', config().logDir);
 		appLogger().info('DB Config:', markPasswords(config().database));
 		appLogger().info('Mailer Config:', markPasswords(config().mailer));
+		appLogger().info('Content driver:', markPasswords(config().contentDriver));
+		appLogger().info('Content driver (fallback):', markPasswords(config().fallbackContentDriver));
 
 		appLogger().info('Trying to connect to database...');
 		const connectionCheck = await waitForConnection(config().database);

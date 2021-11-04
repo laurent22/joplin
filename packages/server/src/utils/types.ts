@@ -87,6 +87,17 @@ export interface StripeConfig extends StripePublicConfig {
 	webhookSecret: string;
 }
 
+export enum ContentDriverConfigType {
+	Database = 1,
+	Filesystem = 2,
+	Memory = 3,
+}
+
+export interface ContentDriverConfig {
+	type: ContentDriverConfigType;
+	path: string;
+}
+
 export interface Config {
 	appVersion: string;
 	appName: string;
@@ -115,6 +126,8 @@ export interface Config {
 	businessEmail: string;
 	isJoplinCloud: boolean;
 	cookieSecure: boolean;
+	contentDriver: ContentDriverConfig;
+	fallbackContentDriver: ContentDriverConfig;
 }
 
 export enum HttpMethod {
