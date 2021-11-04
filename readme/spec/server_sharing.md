@@ -37,7 +37,7 @@ Any resource attached to the note is also shared - so for example images will be
 
 Any linked note will **not** be shared, due to the following reasons:
 
-- Privacy issue - you don't want to accidentally share a note just because it was linked to another note.
+- Privacy issue - you don't want to accidentally share a note just because it was linked from another note.
 
 - Even if the linked note has been shared separately, we still don't give access to it. We don't know who that link has been shared with - it could be a different recipient.
 
@@ -45,4 +45,4 @@ Any linked note will **not** be shared, due to the following reasons:
 
 It should be possible to have multiple share links for a given note. For example: I share a note with one person, then the same note with a different person. I revoke the share for one person, but I sill want the other person to access the note.
 
-So when a share link is created for a note, the API always return a new link.
+So when a share link is created for a note, the API always returns a new link.

@@ -3,7 +3,7 @@
   "version": "2.6.2",
   "private": true,
   "scripts": {
-    "start-dev": "npm run build && nodemon --config nodemon.json --ext ts,js,mustache,css,tsx dist/app.js --env dev",
+    "start-dev": "npm run build && JOPLIN_IS_TESTING=1 nodemon --config nodemon.json --ext ts,js,mustache,css,tsx dist/app.js --env dev",
     "start-dev-no-watch": "node dist/app.js --env dev",
     "rebuild": "npm run clean && npm run build && npm run tsc",
     "build": "gulp build",

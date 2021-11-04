@@ -73,6 +73,6 @@ export default async function(ctx: AppContext) {
 		// Technically this is not the total request duration because there are
 		// other middlewares but that should give a good approximation
 		const requestDuration = Date.now() - requestStartTime;
-		ctx.joplin.appLogger().info(`${ctx.request.method} ${ctx.path} (${requestDuration}ms)`);
+		ctx.joplin.appLogger().info(`${ctx.request.method} ${ctx.path} (${ctx.response.status}) (${requestDuration}ms)`);
 	}
 }

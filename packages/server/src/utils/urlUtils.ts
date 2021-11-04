@@ -30,8 +30,8 @@ export function helpUrl(): string {
 	return `${config().baseUrl}/help`;
 }
 
-export function confirmUrl(userId: Uuid, validationToken: string): string {
-	return `${config().baseUrl}/users/${userId}/confirm?token=${validationToken}`;
+export function confirmUrl(userId: Uuid, validationToken: string, autoConfirmEmail: boolean = true): string {
+	return `${config().baseUrl}/users/${userId}/confirm?token=${validationToken}${autoConfirmEmail ? '' : '&confirm_email=0'}`;
 }
 
 export function stripePortalUrl(): string {

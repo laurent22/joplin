@@ -286,6 +286,27 @@ describe('index/users', function() {
 		expect(notification.key).toBe('passwordSet');
 	});
 
+	test('should not confirm email if not requested', async function() {
+		let user1 = await models().user().save({
+			email: 'user1@localhost',
+			must_set_password: 1,
+			email_confirmed: 0,
+			password: uuidgen(),
+		});
+
+		const email = (await models().email().all()).find(e => e.recipient_id === user1.id);
+		const matches = email.body.match(/\/(users\/.*)(\?token=)(.{32})/);
+		const path = matches[1];
+		const token = matches[3];
+
+		await execRequest('', 'GET', path, null, { query: { token, confirm_email: '0' } });
+
+		// In this case, the email should not be confirmed, because
+		// "confirm_email" is set to 0.
+		user1 = await models().user().load(user1.id);
+		expect(user1.email_confirmed).toBe(0);
+	});
+
 	test('should allow user to verify their email', async function() {
 		let user1 = await models().user().save({
 			email: 'user1@localhost',
