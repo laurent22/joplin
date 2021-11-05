@@ -153,7 +153,7 @@ async function noteLinkedItemInfos(userId: Uuid, itemModel: ItemModel, note: Not
 	return output;
 }
 
-async function renderResource(userId: string, resourceId: string, item: Item, content: any): Promise<FileViewerResponse> {
+async function renderResource(userId: string, resourceId: string, item: Item, content: Buffer): Promise<FileViewerResponse> {
 	// The item passed to this function is the resource blob, which is
 	// sufficient to download the resource. However, if we want a more user
 	// friendly download, we need to know the resource original name and mime
@@ -170,7 +170,7 @@ async function renderResource(userId: string, resourceId: string, item: Item, co
 	return {
 		body: content,
 		mime: jopItem ? jopItem.mime : item.mime_type,
-		size: item.content_size,
+		size: content ? content.byteLength : 0,
 		filename: jopItem ? jopItem.title : '',
 	};
 }
