@@ -5,12 +5,13 @@
 # Updated by Renato Xavier da Silveira Rosa <renatoxsr@gmail.com>, 2018.
 # Updated by Sailon Bispo Nascimento (forshaw/forsh4w/forsh4w4) <sailonbr@gmail.com>, 2021.
 # Nicolas Suzuki <nicolas.suzuki@pm.me>, 2021.
+# Felipe Viggiano <felipeviggiano@gmail.com>, 2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Nicolas Suzuki <nicolas.suzuki@pm.me>\n"
+"Last-Translator: Felipe Viggiano <felipeviggiano@gmail.com>\n"
 "Language-Team: \n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
