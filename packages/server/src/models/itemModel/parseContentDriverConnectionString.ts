@@ -1,6 +1,6 @@
 // Type={Database,Filesystem,Memory,S3}; Path={/path/to/dir,https://s3bucket}
 
-import { ContentDriverConfig, ContentDriverConfigType } from '../../utils/types';
+import { ContentDriverConfig, ContentDriverMode, ContentDriverConfigType } from '../../utils/types';
 
 const parseType = (type: string): ContentDriverConfigType => {
 	if (type === 'Database') return ContentDriverConfigType.Database;
@@ -9,12 +9,19 @@ const parseType = (type: string): ContentDriverConfigType => {
 	throw new Error(`Invalid type: ${type}`);
 };
 
+const parseMode = (mode: string): ContentDriverMode => {
+	if (mode === 'rw') return ContentDriverMode.ReadWrite;
+	if (mode === 'r') return ContentDriverMode.ReadOnly;
+	throw new Error(`Invalid type: ${mode}`);
+};
+
 export default function(connectionString: string): ContentDriverConfig | null {
 	if (!connectionString) return null;
 
 	const output: ContentDriverConfig = {
 		type: ContentDriverConfigType.Database,
 		path: '',
+		mode: ContentDriverMode.ReadWrite,
 	};
 
 	const items = connectionString.split(';').map(i => i.trim());
@@ -26,6 +33,8 @@ export default function(connectionString: string): ContentDriverConfig | null {
 			output.type = parseType(value);
 		} else if (key === 'Path') {
 			output.path = value;
+		} else if (key === 'Mode') {
+			output.mode = parseMode(value);
 		} else {
 			throw new Error(`Invalid key: ${key}`);
 		}

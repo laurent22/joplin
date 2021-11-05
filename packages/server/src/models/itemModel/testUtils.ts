@@ -1,6 +1,7 @@
 import { Item } from '../../services/database/types';
 import { createUserAndSession, makeNoteSerializedBody, models } from '../../utils/testing/testUtils';
-import ContentDriverBase from './ContentDriverBase';
+import { ContentDriverMode } from '../../utils/types';
+import ContentDriverBase, { Context } from './ContentDriverBase';
 
 const testModels = (driver: ContentDriverBase) => {
 	return models({ contentDriver: driver });
@@ -118,5 +119,89 @@ export async function shouldNotUpdateItemIfContentNotSaved(driver: ContentDriver
 		expect(itemMod2.title).toBe('updated 1'); // Check it has not been updated
 	} finally {
 		driver.write = previousWrite;
+	}
+}
+
+export async function shouldSupportFallbackDriver(driver: ContentDriverBase, fallbackDriver: ContentDriverBase) {
+	const { user } = await createUserAndSession(1);
+
+	const output = await testModels(driver).item().saveFromRawContent(user, [{
+		name: '00000000000000000000000000000001.md',
+		body: Buffer.from(makeNoteSerializedBody({
+			id: '00000000000000000000000000000001',
+			title: 'testing',
+		})),
+	}]);
+
+	const itemId = output['00000000000000000000000000000001.md'].item.id;
+
+	let previousByteLength = 0;
+
+	{
+		const content = await driver.read(itemId, { models: models() });
+		expect(content.byteLength).toBeGreaterThan(10);
+		previousByteLength = content.byteLength;
+	}
+
+	const testModelWithFallback = models({
+		contentDriver: driver,
+		fallbackContentDriver: fallbackDriver,
+	});
+
+	// If the item content is not on the main content driver, it should get
+	// it from the fallback one.
+	const itemFromDb = await testModelWithFallback.item().loadWithContent(itemId);
+	expect(itemFromDb.content.byteLength).toBe(previousByteLength);
+
+	// When writing content, it should use the main content driver, and set
+	// the content for the fallback one to "".
+	await testModelWithFallback.item().saveFromRawContent(user, [{
+		name: '00000000000000000000000000000001.md',
+		body: Buffer.from(makeNoteSerializedBody({
+			id: '00000000000000000000000000000001',
+			title: 'testing1234',
+		})),
+	}]);
+
+	{
+		// Check that it has cleared the fallback driver content
+		const context: Context = { models: models() };
+		const fallbackContent = await fallbackDriver.read(itemId, context);
+		expect(fallbackContent.byteLength).toBe(0);
+
+		// Check that it has written to the main driver content
+		const mainContent = await driver.read(itemId, context);
+		expect(mainContent.byteLength).toBe(previousByteLength + 4);
+	}
+}
+
+export async function shouldSupportFallbackDriverInReadWriteMode(driver: ContentDriverBase, fallbackDriver: ContentDriverBase) {
+	if (fallbackDriver.mode !== ContentDriverMode.ReadWrite) throw new Error('Content driver must be configured in RW mode for this test');
+
+	const { user } = await createUserAndSession(1);
+
+	const testModelWithFallback = models({
+		contentDriver: driver,
+		fallbackContentDriver: fallbackDriver,
+	});
+
+	const output = await testModelWithFallback.item().saveFromRawContent(user, [{
+		name: '00000000000000000000000000000001.md',
+		body: Buffer.from(makeNoteSerializedBody({
+			id: '00000000000000000000000000000001',
+			title: 'testing',
+		})),
+	}]);
+
+	const itemId = output['00000000000000000000000000000001.md'].item.id;
+
+	{
+		// Check that it has written the content to both drivers
+		const context: Context = { models: models() };
+		const fallbackContent = await fallbackDriver.read(itemId, context);
+		expect(fallbackContent.byteLength).toBeGreaterThan(10);
+
+		const mainContent = await driver.read(itemId, context);
+		expect(mainContent.toString()).toBe(fallbackContent.toString());
 	}
 }

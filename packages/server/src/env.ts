@@ -50,7 +50,6 @@ const defaultEnvValues: EnvVariables = {
 
 	CONTENT_DRIVER: 'Type=Database',
 	CONTENT_DRIVER_FALLBACK: '',
-	CONTENT_DRIVER_FALLBACK_WRITE: false,
 
 	// ==================================================
 	// Mailer config
@@ -107,7 +106,6 @@ export interface EnvVariables {
 
 	CONTENT_DRIVER: string;
 	CONTENT_DRIVER_FALLBACK: string;
-	CONTENT_DRIVER_FALLBACK_WRITE: boolean;
 
 	MAILER_ENABLED: boolean;
 	MAILER_HOST: string;

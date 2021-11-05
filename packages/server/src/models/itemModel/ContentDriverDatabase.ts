@@ -3,9 +3,9 @@
 // stored in the same table as the items, as it originally was.
 
 import { DatabaseConfigClient } from '../../utils/types';
-import ContentDriverBase, { Context } from './ContentDriverBase';
+import ContentDriverBase, { Context, Options as BaseOptions } from './ContentDriverBase';
 
-interface Options {
+interface Options extends BaseOptions {
 	dbClientType: DatabaseConfigClient;
 }
 
@@ -14,7 +14,7 @@ export default class ContentDriverDatabase extends ContentDriverBase {
 	private handleReturnedRows_: boolean = null;
 
 	public constructor(options: Options) {
-		super();
+		super(options);
 
 		this.handleReturnedRows_ = options.dbClientType === DatabaseConfigClient.PostgreSQL;
 	}

@@ -1,3 +1,4 @@
+import { ContentDriverMode } from '../../utils/types';
 import { Models } from '../factory';
 
 // ItemModel passes the models object when calling any of the driver handler.
@@ -8,7 +9,26 @@ export interface Context {
 	models: Models;
 }
 
+export interface Options {
+	mode?: ContentDriverMode;
+}
+
 export default class ContentDriverBase {
+
+	private mode_: ContentDriverMode = ContentDriverMode.ReadOnly;
+
+	public constructor(options: Options = null) {
+		options = {
+			mode: ContentDriverMode.ReadOnly,
+			...options,
+		};
+
+		this.mode_ = options.mode;
+	}
+
+	public get mode(): ContentDriverMode {
+		return this.mode_;
+	}
 
 	public async write(_itemId: string, _content: Buffer, _context: Context): Promise<void> { throw new Error('Not implemented'); }
 

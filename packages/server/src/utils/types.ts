@@ -93,9 +93,35 @@ export enum ContentDriverConfigType {
 	Memory = 3,
 }
 
+// The driver mode is only used by fallback drivers. Regardless of the mode, the
+// fallback always work like this:
+//
+// When reading, first the app checks if the content exists on the main driver.
+// If it does it returns this. Otherwise it reads the content from the fallback
+// driver.
+//
+// When writing, the app writes to the main driver. Then the mode determines how
+// it writes to the fallback driver:
+//
+// - In read-only mode, it's going to clear the fallback driver content. This is
+//   used to migrate from one driver to another. It means that over time the old
+//   storage will be cleared and all content will be on the new storage.
+//
+// - In read/write mode, it's going to write the content to the fallback driver.
+//   This is purely for safey - it allows deploying the new storage (such as the
+//   filesystem or S3) but still keep the old content up-to-date. So if
+//   something goes wrong it's possible to go back to the old storage until the
+//   new one is working.
+
+export enum ContentDriverMode {
+	ReadWrite = 1,
+	ReadOnly = 2,
+}
+
 export interface ContentDriverConfig {
 	type: ContentDriverConfigType;
 	path: string;
+	mode: ContentDriverMode;
 }
 
 export interface Config {

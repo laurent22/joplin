@@ -9,7 +9,7 @@ import { ChangePreviousItem } from './ChangeModel';
 import { unique } from '../utils/array';
 import ContentDriverBase, { Context } from './itemModel/ContentDriverBase';
 import { DbConnection } from '../db';
-import { Config } from '../utils/types';
+import { Config, ContentDriverMode } from '../utils/types';
 import { NewModelFactoryHandler, Options } from './factory';
 
 const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
@@ -133,6 +133,20 @@ export default class ItemModel extends BaseModel<Item> {
 	public async byShareId(shareId: Uuid, options: ItemLoadOptions = {}): Promise<Item[]> {
 		const query = this.byShareIdQuery(shareId, options);
 		return await query;
+	}
+
+	private async contentDriverWrite(itemId: Uuid, content: Buffer, context: Context) {
+		await this.contentDriver_.write(itemId, content, context);
+
+		if (this.fallbackContentDriver_) {
+			if (this.fallbackContentDriver_.mode === ContentDriverMode.ReadWrite) {
+				await this.fallbackContentDriver_.write(itemId, content, context);
+			} else if (this.fallbackContentDriver_.mode === ContentDriverMode.ReadOnly) {
+				await this.fallbackContentDriver_.write(itemId, Buffer.from(''), context);
+			} else {
+				throw new Error(`Unsupported fallback mode: ${this.fallbackContentDriver_.mode}`);
+			}
+		}
 	}
 
 	private async contentDriverRead(itemId: Uuid, context: Context) {
@@ -430,8 +444,9 @@ export default class ItemModel extends BaseModel<Item> {
 					const savedItem = await this.saveForUser(user.id, itemToSave);
 
 					try {
-						await this.contentDriver_.write(savedItem.id, content, { models: this.models() });
-						if (this.fallbackContentDriver_) await this.fallbackContentDriver_.write(savedItem.id, Buffer.from(''), { models: this.models() });
+						await this.contentDriverWrite(savedItem.id, content, { models: this.models() });
+						// await this.contentDriver_.write(savedItem.id, content, { models: this.models() });
+						// if (this.fallbackContentDriver_) await this.fallbackContentDriver_.write(savedItem.id, Buffer.from(''), { models: this.models() });
 						await this.releaseSavePoint(savePoint);
 					} catch (error) {
 						await this.rollbackSavePoint(savePoint);
@@ -651,6 +666,9 @@ export default class ItemModel extends BaseModel<Item> {
 		}, 'ItemModel::makeTestItems');
 	}
 
+	// This method should be private because items should only be saved using
+	// saveFromRawContent, which is going to deal with the content driver. But
+	// since it's used in various test units, it's kept public for now.
 	public async saveForUser(userId: Uuid, item: Item, options: SaveOptions = {}): Promise<Item> {
 		if (!userId) throw new Error('userId is required');
 
