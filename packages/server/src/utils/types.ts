@@ -87,7 +87,7 @@ export interface StripeConfig extends StripePublicConfig {
 	webhookSecret: string;
 }
 
-export enum ContentDriverConfigType {
+export enum ContentDriverType {
 	Database = 1,
 	Filesystem = 2,
 	Memory = 3,
@@ -119,9 +119,9 @@ export enum ContentDriverMode {
 }
 
 export interface ContentDriverConfig {
-	type: ContentDriverConfigType;
-	path: string;
-	mode: ContentDriverMode;
+	type: ContentDriverType;
+	path?: string;
+	mode?: ContentDriverMode;
 }
 
 export interface Config {
