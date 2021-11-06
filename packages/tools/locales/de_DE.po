@@ -21,7 +21,8 @@ msgstr ""
 #: packages/app-cli/app/app-gui.js:452
 msgid "To delete a tag, untag the associated notes."
 msgstr ""
-"Um ein Tag zu löschen, entfernen Sie die Markierung der zugeordneten Notizen."
+"Um ein Schlagwort zu löschen, entferne es bei allen damit verbundenen "
+"Notizen."
 
 #: packages/app-cli/app/app-gui.js:462
 msgid "Please select the note or notebook to be deleted first."
@@ -1809,7 +1810,7 @@ msgstr "Notizbuch umbenennen:"
 
 #: packages/app-desktop/gui/MainScreen/commands/renameTag.js:30
 msgid "Rename tag:"
-msgstr "Tag umbenennen:"
+msgstr "Schlagwort umbenennen:"
 
 #: packages/app-desktop/gui/MainScreen/commands/setTags.js:17
 #: packages/app-desktop/gui/Sidebar/Sidebar.js:492
