@@ -140,7 +140,7 @@ export function parseEnv(rawEnv: any, defaultOverrides: any = null): EnvVariable
 			if (isNaN(v)) throw new Error(`Invalid number value for env variable ${key} = ${rawEnvValue}`);
 			(output as any)[key] = v;
 		} else if (typeof value === 'boolean') {
-			if (rawEnvValue !== '0' && rawEnvValue !== '1') throw new Error(`Invalid boolean for for env variable ${key}: ${rawEnvValue}`);
+			if (rawEnvValue !== '0' && rawEnvValue !== '1') throw new Error(`Invalid boolean value for env variable ${key}: ${rawEnvValue} (Should be either "0" or "1")`);
 			(output as any)[key] = rawEnvValue === '1';
 		} else if (typeof value === 'string') {
 			(output as any)[key] = `${rawEnvValue}`;
