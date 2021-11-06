@@ -3,7 +3,7 @@ import { Config, DatabaseConfig, DatabaseConfigClient, Env, MailerConfig, RouteT
 import * as pathUtils from 'path';
 import { loadStripeConfig, StripePublicConfig } from '@joplin/lib/utils/joplinCloud';
 import { EnvVariables } from './env';
-import parseContentDriverConnectionString from './models/itemModel/parseContentDriverConnectionString';
+import parseStorageDriverConnectionString from './models/itemModel/parseStorageDriverConnectionString';
 
 interface PackageJson {
 	version: string;
@@ -131,8 +131,8 @@ export async function initConfig(envType: Env, env: EnvVariables, overrides: any
 		supportName: env.SUPPORT_NAME || appName,
 		businessEmail: env.BUSINESS_EMAIL || supportEmail,
 		cookieSecure: env.COOKIES_SECURE,
-		contentDriver: parseContentDriverConnectionString(env.CONTENT_DRIVER),
-		fallbackContentDriver: parseContentDriverConnectionString(env.CONTENT_DRIVER_FALLBACK),
+		storageDriver: parseStorageDriverConnectionString(env.CONTENT_DRIVER),
+		storageDriverFallback: parseStorageDriverConnectionString(env.CONTENT_DRIVER_FALLBACK),
 		...overrides,
 	};
 }

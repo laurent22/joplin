@@ -1,6 +1,6 @@
-import ContentDriverBase from './ContentDriverBase';
+import StorageDriverBase from './StorageDriverBase';
 
-export default class ContentDriverMemory extends ContentDriverBase {
+export default class StorageDriverMemory extends StorageDriverBase {
 
 	private data_: Record<string, Buffer> = {};
 

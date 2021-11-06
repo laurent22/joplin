@@ -21,7 +21,7 @@ import newModelFactory, { Options } from './models/factory';
 import setupCommands from './utils/setupCommands';
 import { RouteResponseFormat, routeResponseFormat } from './utils/routeUtils';
 import { parseEnv } from './env';
-import contentDriverFromConfig from './models/itemModel/contentDriverFromConfig';
+import storageDriverFromConfig from './models/itemModel/storageDriverFromConfig';
 
 interface Argv {
 	env?: Env;
@@ -224,8 +224,8 @@ async function main() {
 
 	const newModelFactoryOptions = (db: DbConnection): Options => {
 		return {
-			contentDriver: contentDriverFromConfig(config().contentDriver, db),
-			fallbackContentDriver: contentDriverFromConfig(config().fallbackContentDriver, db),
+			storageDriver: storageDriverFromConfig(config().storageDriver, db),
+			storageDriverFallback: storageDriverFromConfig(config().storageDriverFallback, db),
 		};
 	};
 
@@ -263,8 +263,8 @@ async function main() {
 		appLogger().info('Log dir:', config().logDir);
 		appLogger().info('DB Config:', markPasswords(config().database));
 		appLogger().info('Mailer Config:', markPasswords(config().mailer));
-		appLogger().info('Content driver:', markPasswords(config().contentDriver));
-		appLogger().info('Content driver (fallback):', markPasswords(config().fallbackContentDriver));
+		appLogger().info('Content driver:', markPasswords(config().storageDriver));
+		appLogger().info('Content driver (fallback):', markPasswords(config().storageDriverFallback));
 
 		appLogger().info('Trying to connect to database...');
 		const connectionCheck = await waitForConnection(config().database);

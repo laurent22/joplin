@@ -72,12 +72,12 @@ import SubscriptionModel from './SubscriptionModel';
 import UserFlagModel from './UserFlagModel';
 import EventModel from './EventModel';
 import { Config } from '../utils/types';
-import ContentDriverBase from './itemModel/ContentDriverBase';
+import StorageDriverBase from './itemModel/StorageDriverBase';
 import LockModel from './LockModel';
 
 export interface Options {
-	contentDriver: ContentDriverBase;
-	fallbackContentDriver?: ContentDriverBase;
+	storageDriver: StorageDriverBase;
+	storageDriverFallback?: StorageDriverBase;
 }
 
 export type NewModelFactoryHandler = (db: DbConnection)=> Models;
@@ -93,7 +93,7 @@ export class Models {
 		this.config_ = config;
 		this.options_ = options;
 
-		if (!options.contentDriver) throw new Error('contentDriver is required');
+		if (!options.storageDriver) throw new Error('StorageDriver is required');
 
 		this.newModelFactory = this.newModelFactory.bind(this);
 	}

@@ -3,13 +3,13 @@
 // stored in the same table as the items, as it originally was.
 
 import { DatabaseConfigClient } from '../../utils/types';
-import ContentDriverBase, { Context, Options as BaseOptions } from './ContentDriverBase';
+import StorageDriverBase, { Context, Options as BaseOptions } from './StorageDriverBase';
 
 interface Options extends BaseOptions {
 	dbClientType: DatabaseConfigClient;
 }
 
-export default class ContentDriverDatabase extends ContentDriverBase {
+export default class StorageDatabase extends StorageDriverBase {
 
 	private handleReturnedRows_: boolean = null;
 

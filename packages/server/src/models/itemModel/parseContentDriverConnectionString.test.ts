@@ -1,41 +1,41 @@
-import { ContentDriverConfig, ContentDriverType } from '../../utils/types';
-import parseContentDriverConnectionString from './parseContentDriverConnectionString';
+import { StorageDriverConfig, StorageDriverType } from '../../utils/types';
+import parseStorageDriverConnectionString from './parseStorageDriverConnectionString';
 
-describe('parseContentDriverConnectionString', function() {
+describe('parseStorageDriverConnectionString', function() {
 
 	test('should parse a connection string', async function() {
-		const testCases: Record<string, ContentDriverConfig> = {
+		const testCases: Record<string, StorageDriverConfig> = {
 			'Type=Database': {
-				type: ContentDriverType.Database,
+				type: StorageDriverType.Database,
 			},
 			' Type = Database ': {
-				type: ContentDriverType.Database,
+				type: StorageDriverType.Database,
 			},
 			'Type=Filesystem; Path=/path/to/dir': {
-				type: ContentDriverType.Filesystem,
+				type: StorageDriverType.Filesystem,
 				path: '/path/to/dir',
 			},
 			' Type = Filesystem  ;  Path  = /path/to/dir ': {
-				type: ContentDriverType.Filesystem,
+				type: StorageDriverType.Filesystem,
 				path: '/path/to/dir',
 			},
 			'Type=Memory;': {
-				type: ContentDriverType.Memory,
+				type: StorageDriverType.Memory,
 			},
 			'': null,
 		};
 
 		for (const [connectionString, config] of Object.entries(testCases)) {
-			const actual = parseContentDriverConnectionString(connectionString);
+			const actual = parseStorageDriverConnectionString(connectionString);
 			expect(actual).toEqual(config);
 		}
 	});
 
 	test('should detect errors', async function() {
-		expect(() => parseContentDriverConnectionString('Type=')).toThrow();
-		expect(() => parseContentDriverConnectionString('Type;')).toThrow();
-		expect(() => parseContentDriverConnectionString('Type=DoesntExist')).toThrow();
-		expect(() => parseContentDriverConnectionString('Type=Filesystem')).toThrow();
+		expect(() => parseStorageDriverConnectionString('Type=')).toThrow();
+		expect(() => parseStorageDriverConnectionString('Type;')).toThrow();
+		expect(() => parseStorageDriverConnectionString('Type=DoesntExist')).toThrow();
+		expect(() => parseStorageDriverConnectionString('Type=Filesystem')).toThrow();
 	});
 
 });

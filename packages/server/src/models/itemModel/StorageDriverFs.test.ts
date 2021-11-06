@@ -1,18 +1,18 @@
 import { pathExists, remove } from 'fs-extra';
 import { afterAllTests, beforeAllDb, beforeEachDb, expectNotThrow, expectThrow, tempDirPath } from '../../utils/testing/testUtils';
-import ContentDriverFs from './ContentDriverFs';
+import StorageDriverFs from './StorageDriverFs';
 import { shouldDeleteContent, shouldNotCreateItemIfContentNotSaved, shouldNotUpdateItemIfContentNotSaved, shouldWriteToContentAndReadItBack } from './testUtils';
 
 let basePath_: string = '';
 
 const newDriver = () => {
-	return new ContentDriverFs({ basePath: basePath_ });
+	return new StorageDriverFs({ basePath: basePath_ });
 };
 
-describe('ContentDriverFs', function() {
+describe('StorageDriverFs', function() {
 
 	beforeAll(async () => {
-		await beforeAllDb('ContentDriverFs');
+		await beforeAllDb('StorageDriverFs');
 	});
 
 	afterAll(async () => {

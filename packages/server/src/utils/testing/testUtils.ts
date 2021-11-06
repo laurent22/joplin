@@ -23,7 +23,7 @@ import MustacheService from '../../services/MustacheService';
 import uuidgen from '../uuidgen';
 import { createCsrfToken } from '../csrf';
 import { cookieSet } from '../cookies';
-import ContentDriverMemory from '../../models/itemModel/ContentDriverMemory';
+import StorageDriverMemory from '../../models/itemModel/StorageDriverMemory';
 import { parseEnv } from '../../env';
 
 // Takes into account the fact that this file will be inside the /dist directory
@@ -195,7 +195,7 @@ export async function koaAppContext(options: AppContextTestOptions = null): Prom
 
 	const appLogger = Logger.create('AppTest');
 
-	const baseAppContext = await setupAppContext({} as any, Env.Dev, db_, () => appLogger, { contentDriver: new ContentDriverMemory() });
+	const baseAppContext = await setupAppContext({} as any, Env.Dev, db_, () => appLogger, { storageDriver: new StorageDriverMemory() });
 
 	// Set type to "any" because the Koa context has many properties and we
 	// don't need to mock all of them.
@@ -243,12 +243,12 @@ export function db() {
 	return db_;
 }
 
-const contentDriverMemory = new ContentDriverMemory();
+const storageDriverMemory = new StorageDriverMemory();
 
 export function models(options: ModelFactoryOptions = null) {
 	options = {
-		contentDriver: contentDriverMemory,
-		fallbackContentDriver: null,
+		storageDriver: storageDriverMemory,
+		storageDriverFallback: null,
 		...options,
 	};
 

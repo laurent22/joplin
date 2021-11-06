@@ -1,11 +1,11 @@
 import { mkdirp, pathExists, readFile, remove, writeFile } from 'fs-extra';
-import ContentDriverBase, { Options as BaseOptions } from './ContentDriverBase';
+import StorageDriverBase, { Options as BaseOptions } from './StorageDriverBase';
 
 interface Options extends BaseOptions {
 	basePath: string;
 }
 
-export default class ContentDriverFs extends ContentDriverBase {
+export default class StorageDriverFs extends StorageDriverBase {
 
 	private options_: Options;
 	private pathCreated_: Record<string, boolean> = {};

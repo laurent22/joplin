@@ -87,7 +87,7 @@ export interface StripeConfig extends StripePublicConfig {
 	webhookSecret: string;
 }
 
-export enum ContentDriverType {
+export enum StorageDriverType {
 	Database = 1,
 	Filesystem = 2,
 	Memory = 3,
@@ -113,15 +113,15 @@ export enum ContentDriverType {
 //   something goes wrong it's possible to go back to the old storage until the
 //   new one is working.
 
-export enum ContentDriverMode {
+export enum StorageDriverMode {
 	ReadWrite = 1,
 	ReadOnly = 2,
 }
 
-export interface ContentDriverConfig {
-	type: ContentDriverType;
+export interface StorageDriverConfig {
+	type: StorageDriverType;
 	path?: string;
-	mode?: ContentDriverMode;
+	mode?: StorageDriverMode;
 }
 
 export interface Config {
@@ -152,8 +152,8 @@ export interface Config {
 	businessEmail: string;
 	isJoplinCloud: boolean;
 	cookieSecure: boolean;
-	contentDriver: ContentDriverConfig;
-	fallbackContentDriver: ContentDriverConfig;
+	storageDriver: StorageDriverConfig;
+	storageDriverFallback: StorageDriverConfig;
 }
 
 export enum HttpMethod {

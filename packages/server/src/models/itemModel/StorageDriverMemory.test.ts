@@ -1,11 +1,11 @@
 import { afterAllTests, beforeAllDb, beforeEachDb } from '../../utils/testing/testUtils';
-import ContentDriverMemory from './ContentDriverMemory';
+import StorageDriverMemory from './StorageDriverMemory';
 import { shouldDeleteContent, shouldNotCreateItemIfContentNotSaved, shouldNotUpdateItemIfContentNotSaved, shouldWriteToContentAndReadItBack } from './testUtils';
 
-describe('ContentDriverMemory', function() {
+describe('StorageDriverMemory', function() {
 
 	beforeAll(async () => {
-		await beforeAllDb('ContentDriverMemory');
+		await beforeAllDb('StorageDriverMemory');
 	});
 
 	afterAll(async () => {
@@ -17,22 +17,22 @@ describe('ContentDriverMemory', function() {
 	});
 
 	test('should write to content and read it back', async function() {
-		const driver = new ContentDriverMemory();
+		const driver = new StorageDriverMemory();
 		await shouldWriteToContentAndReadItBack(driver);
 	});
 
 	test('should delete the content', async function() {
-		const driver = new ContentDriverMemory();
+		const driver = new StorageDriverMemory();
 		await shouldDeleteContent(driver);
 	});
 
 	test('should not create the item if the content cannot be saved', async function() {
-		const driver = new ContentDriverMemory();
+		const driver = new StorageDriverMemory();
 		await shouldNotCreateItemIfContentNotSaved(driver);
 	});
 
 	test('should not update the item if the content cannot be saved', async function() {
-		const driver = new ContentDriverMemory();
+		const driver = new StorageDriverMemory();
 		await shouldNotUpdateItemIfContentNotSaved(driver);
 	});
 

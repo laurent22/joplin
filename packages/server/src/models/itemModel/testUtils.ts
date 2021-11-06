@@ -1,13 +1,13 @@
 import { Item } from '../../services/database/types';
 import { createUserAndSession, makeNoteSerializedBody, models } from '../../utils/testing/testUtils';
-import { ContentDriverMode } from '../../utils/types';
-import ContentDriverBase, { Context } from './ContentDriverBase';
+import { StorageDriverMode } from '../../utils/types';
+import StorageDriverBase, { Context } from './StorageDriverBase';
 
-const testModels = (driver: ContentDriverBase) => {
-	return models({ contentDriver: driver });
+const testModels = (driver: StorageDriverBase) => {
+	return models({ storageDriver: driver });
 };
 
-export async function shouldWriteToContentAndReadItBack(driver: ContentDriverBase) {
+export async function shouldWriteToContentAndReadItBack(driver: StorageDriverBase) {
 	const { user } = await createUserAndSession(1);
 	const noteBody = makeNoteSerializedBody({
 		id: '00000000000000000000000000000001',
@@ -33,7 +33,7 @@ export async function shouldWriteToContentAndReadItBack(driver: ContentDriverBas
 	expect(jopItem.title).toBe('testing driver');
 }
 
-export async function shouldDeleteContent(driver: ContentDriverBase) {
+export async function shouldDeleteContent(driver: StorageDriverBase) {
 	const { user } = await createUserAndSession(1);
 	const noteBody = makeNoteSerializedBody({
 		id: '00000000000000000000000000000001',
@@ -52,7 +52,7 @@ export async function shouldDeleteContent(driver: ContentDriverBase) {
 	expect((await testModels(driver).item().all()).length).toBe(0);
 }
 
-export async function shouldNotCreateItemIfContentNotSaved(driver: ContentDriverBase) {
+export async function shouldNotCreateItemIfContentNotSaved(driver: StorageDriverBase) {
 	const previousWrite = driver.write;
 	driver.write = () => { throw new Error('not working!'); };
 
@@ -75,7 +75,7 @@ export async function shouldNotCreateItemIfContentNotSaved(driver: ContentDriver
 	}
 }
 
-export async function shouldNotUpdateItemIfContentNotSaved(driver: ContentDriverBase) {
+export async function shouldNotUpdateItemIfContentNotSaved(driver: StorageDriverBase) {
 	const { user } = await createUserAndSession(1);
 	const noteBody = makeNoteSerializedBody({
 		id: '00000000000000000000000000000001',
@@ -122,7 +122,7 @@ export async function shouldNotUpdateItemIfContentNotSaved(driver: ContentDriver
 	}
 }
 
-export async function shouldSupportFallbackDriver(driver: ContentDriverBase, fallbackDriver: ContentDriverBase) {
+export async function shouldSupportFallbackDriver(driver: StorageDriverBase, fallbackDriver: StorageDriverBase) {
 	const { user } = await createUserAndSession(1);
 
 	const output = await testModels(driver).item().saveFromRawContent(user, [{
@@ -144,8 +144,8 @@ export async function shouldSupportFallbackDriver(driver: ContentDriverBase, fal
 	}
 
 	const testModelWithFallback = models({
-		contentDriver: driver,
-		fallbackContentDriver: fallbackDriver,
+		storageDriver: driver,
+		storageDriverFallback: fallbackDriver,
 	});
 
 	// If the item content is not on the main content driver, it should get
@@ -175,14 +175,14 @@ export async function shouldSupportFallbackDriver(driver: ContentDriverBase, fal
 	}
 }
 
-export async function shouldSupportFallbackDriverInReadWriteMode(driver: ContentDriverBase, fallbackDriver: ContentDriverBase) {
-	if (fallbackDriver.mode !== ContentDriverMode.ReadWrite) throw new Error('Content driver must be configured in RW mode for this test');
+export async function shouldSupportFallbackDriverInReadWriteMode(driver: StorageDriverBase, fallbackDriver: StorageDriverBase) {
+	if (fallbackDriver.mode !== StorageDriverMode.ReadWrite) throw new Error('Content driver must be configured in RW mode for this test');
 
 	const { user } = await createUserAndSession(1);
 
 	const testModelWithFallback = models({
-		contentDriver: driver,
-		fallbackContentDriver: fallbackDriver,
+		storageDriver: driver,
+		storageDriverFallback: fallbackDriver,
 	});
 
 	const output = await testModelWithFallback.item().saveFromRawContent(user, [{

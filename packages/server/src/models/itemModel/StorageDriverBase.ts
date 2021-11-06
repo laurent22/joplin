@@ -1,32 +1,32 @@
-import { ContentDriverMode } from '../../utils/types';
+import { StorageDriverMode } from '../../utils/types';
 import { Models } from '../factory';
 
 // ItemModel passes the models object when calling any of the driver handler.
 // This is so that if there's an active transaction, the driver can use that (as
-// required for example by ContentDriverDatabase).
+// required for example by StorageDriverDatabase).
 
 export interface Context {
 	models: Models;
 }
 
 export interface Options {
-	mode?: ContentDriverMode;
+	mode?: StorageDriverMode;
 }
 
-export default class ContentDriverBase {
+export default class StorageDriverBase {
 
-	private mode_: ContentDriverMode = ContentDriverMode.ReadOnly;
+	private mode_: StorageDriverMode = StorageDriverMode.ReadOnly;
 
 	public constructor(options: Options = null) {
 		options = {
-			mode: ContentDriverMode.ReadOnly,
+			mode: StorageDriverMode.ReadOnly,
 			...options,
 		};
 
 		this.mode_ = options.mode;
 	}
 
-	public get mode(): ContentDriverMode {
+	public get mode(): StorageDriverMode {
 		return this.mode_;
 	}
 

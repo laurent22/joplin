@@ -7,9 +7,9 @@ import { ApiError, ErrorForbidden, ErrorUnprocessableEntity } from '../utils/err
 import { Knex } from 'knex';
 import { ChangePreviousItem } from './ChangeModel';
 import { unique } from '../utils/array';
-import ContentDriverBase, { Context } from './itemModel/ContentDriverBase';
+import StorageDriverBase, { Context } from './itemModel/StorageDriverBase';
 import { DbConnection } from '../db';
-import { Config, ContentDriverMode } from '../utils/types';
+import { Config, StorageDriverMode } from '../utils/types';
 import { NewModelFactoryHandler, Options } from './factory';
 
 const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
@@ -49,14 +49,14 @@ export interface ItemLoadOptions extends LoadOptions {
 export default class ItemModel extends BaseModel<Item> {
 
 	private updatingTotalSizes_: boolean = false;
-	private contentDriver_: ContentDriverBase = null;
-	private fallbackContentDriver_: ContentDriverBase = null;
+	private storageDriver_: StorageDriverBase = null;
+	private storageDriverFallback_: StorageDriverBase = null;
 
 	public constructor(db: DbConnection, modelFactory: NewModelFactoryHandler, config: Config, options: Options) {
 		super(db, modelFactory, config);
 
-		this.contentDriver_ = options.contentDriver;
-		this.fallbackContentDriver_ = options.fallbackContentDriver;
+		this.storageDriver_ = options.storageDriver;
+		this.storageDriverFallback_ = options.storageDriverFallback;
 	}
 
 	protected get tableName(): string {
@@ -135,26 +135,26 @@ export default class ItemModel extends BaseModel<Item> {
 		return await query;
 	}
 
-	private async contentDriverWrite(itemId: Uuid, content: Buffer, context: Context) {
-		await this.contentDriver_.write(itemId, content, context);
+	private async storageDriverWrite(itemId: Uuid, content: Buffer, context: Context) {
+		await this.storageDriver_.write(itemId, content, context);
 
-		if (this.fallbackContentDriver_) {
-			if (this.fallbackContentDriver_.mode === ContentDriverMode.ReadWrite) {
-				await this.fallbackContentDriver_.write(itemId, content, context);
-			} else if (this.fallbackContentDriver_.mode === ContentDriverMode.ReadOnly) {
-				await this.fallbackContentDriver_.write(itemId, Buffer.from(''), context);
+		if (this.storageDriverFallback_) {
+			if (this.storageDriverFallback_.mode === StorageDriverMode.ReadWrite) {
+				await this.storageDriverFallback_.write(itemId, content, context);
+			} else if (this.storageDriverFallback_.mode === StorageDriverMode.ReadOnly) {
+				await this.storageDriverFallback_.write(itemId, Buffer.from(''), context);
 			} else {
-				throw new Error(`Unsupported fallback mode: ${this.fallbackContentDriver_.mode}`);
+				throw new Error(`Unsupported fallback mode: ${this.storageDriverFallback_.mode}`);
 			}
 		}
 	}
 
-	private async contentDriverRead(itemId: Uuid, context: Context) {
-		if (await this.contentDriver_.exists(itemId, context)) {
-			return this.contentDriver_.read(itemId, context);
+	private async storageDriverRead(itemId: Uuid, context: Context) {
+		if (await this.storageDriver_.exists(itemId, context)) {
+			return this.storageDriver_.read(itemId, context);
 		} else {
-			if (!this.fallbackContentDriver_) throw new Error(`Content does not exist but fallback content driver is not defined: ${itemId}`);
-			return this.fallbackContentDriver_.read(itemId, context);
+			if (!this.storageDriverFallback_) throw new Error(`Content does not exist but fallback content driver is not defined: ${itemId}`);
+			return this.storageDriverFallback_.read(itemId, context);
 		}
 	}
 
@@ -173,7 +173,7 @@ export default class ItemModel extends BaseModel<Item> {
 
 		if (options.withContent) {
 			for (const row of rows) {
-				row.content = await this.contentDriverRead(row.id, { models: this.models() });
+				row.content = await this.storageDriverRead(row.id, { models: this.models() });
 			}
 		}
 
@@ -199,7 +199,7 @@ export default class ItemModel extends BaseModel<Item> {
 
 		if (options.withContent) {
 			for (const row of rows) {
-				row.content = await this.contentDriverRead(row.id, { models: this.models() });
+				row.content = await this.storageDriverRead(row.id, { models: this.models() });
 			}
 		}
 
@@ -212,7 +212,7 @@ export default class ItemModel extends BaseModel<Item> {
 	}
 
 	public async loadWithContent(id: Uuid, options: ItemLoadOptions = {}): Promise<Item> {
-		const content = await this.contentDriverRead(id, { models: this.models() });
+		const content = await this.storageDriverRead(id, { models: this.models() });
 
 		return {
 			...await this
@@ -444,9 +444,7 @@ export default class ItemModel extends BaseModel<Item> {
 					const savedItem = await this.saveForUser(user.id, itemToSave);
 
 					try {
-						await this.contentDriverWrite(savedItem.id, content, { models: this.models() });
-						// await this.contentDriver_.write(savedItem.id, content, { models: this.models() });
-						// if (this.fallbackContentDriver_) await this.fallbackContentDriver_.write(savedItem.id, Buffer.from(''), { models: this.models() });
+						await this.storageDriverWrite(savedItem.id, content, { models: this.models() });
 						await this.releaseSavePoint(savePoint);
 					} catch (error) {
 						await this.rollbackSavePoint(savePoint);
@@ -631,8 +629,8 @@ export default class ItemModel extends BaseModel<Item> {
 			await this.models().share().delete(shares.map(s => s.id));
 			await this.models().userItem().deleteByItemIds(ids);
 			await this.models().itemResource().deleteByItemIds(ids);
-			await this.contentDriver_.delete(ids, { models: this.models() });
-			if (this.fallbackContentDriver_) await this.fallbackContentDriver_.delete(ids, { models: this.models() });
+			await this.storageDriver_.delete(ids, { models: this.models() });
+			if (this.storageDriverFallback_) await this.storageDriverFallback_.delete(ids, { models: this.models() });
 
 			await super.delete(ids, options);
 		}, 'ItemModel::delete');
