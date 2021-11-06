@@ -21,7 +21,7 @@ import newModelFactory, { Options } from './models/factory';
 import setupCommands from './utils/setupCommands';
 import { RouteResponseFormat, routeResponseFormat } from './utils/routeUtils';
 import { parseEnv } from './env';
-import storageDriverFromConfig from './models/itemModel/storageDriverFromConfig';
+import storageDriverFromConfig from './models/items/storage/storageDriverFromConfig';
 
 interface Argv {
 	env?: Env;
@@ -222,10 +222,10 @@ async function main() {
 		fs.writeFileSync(pidFile, `${process.pid}`);
 	}
 
-	const newModelFactoryOptions = (db: DbConnection): Options => {
+	const newModelFactoryOptions = async (db: DbConnection): Promise<Options> => {
 		return {
-			storageDriver: storageDriverFromConfig(config().storageDriver, db),
-			storageDriverFallback: storageDriverFromConfig(config().storageDriverFallback, db),
+			storageDriver: await storageDriverFromConfig(config().storageDriver, db),
+			storageDriverFallback: await storageDriverFromConfig(config().storageDriverFallback, db),
 		};
 	};
 
@@ -245,7 +245,7 @@ async function main() {
 			});
 		} else {
 			const connectionCheck = await waitForConnection(config().database);
-			const models = newModelFactory(connectionCheck.connection, config(), newModelFactoryOptions(connectionCheck.connection));
+			const models = newModelFactory(connectionCheck.connection, config(), await newModelFactoryOptions(connectionCheck.connection));
 
 			await selectedCommand.run(commandArgv, {
 				db: connectionCheck.connection,
@@ -275,7 +275,7 @@ async function main() {
 		appLogger().info('Connection check:', connectionCheckLogInfo);
 		const ctx = app.context as AppContext;
 
-		await setupAppContext(ctx, env, connectionCheck.connection, appLogger, newModelFactoryOptions(connectionCheck.connection));
+		await setupAppContext(ctx, env, connectionCheck.connection, appLogger, await newModelFactoryOptions(connectionCheck.connection));
 
 		await initializeJoplinUtils(config(), ctx.joplinBase.models, ctx.joplinBase.services.mustache);
 

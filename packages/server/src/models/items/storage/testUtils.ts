@@ -1,6 +1,6 @@
-import { Item } from '../../services/database/types';
-import { createUserAndSession, makeNoteSerializedBody, models } from '../../utils/testing/testUtils';
-import { StorageDriverMode } from '../../utils/types';
+import { Item } from '../../../services/database/types';
+import { createUserAndSession, makeNoteSerializedBody, models } from '../../../utils/testing/testUtils';
+import { StorageDriverMode } from '../../../utils/types';
 import StorageDriverBase, { Context } from './StorageDriverBase';
 
 const testModels = (driver: StorageDriverBase) => {

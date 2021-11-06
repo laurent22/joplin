@@ -72,8 +72,9 @@ import SubscriptionModel from './SubscriptionModel';
 import UserFlagModel from './UserFlagModel';
 import EventModel from './EventModel';
 import { Config } from '../utils/types';
-import StorageDriverBase from './itemModel/StorageDriverBase';
+import StorageDriverBase from './items/storage/StorageDriverBase';
 import LockModel from './LockModel';
+import StorageModel from './StorageModel';
 
 export interface Options {
 	storageDriver: StorageDriverBase;
@@ -93,7 +94,7 @@ export class Models {
 		this.config_ = config;
 		this.options_ = options;
 
-		if (!options.storageDriver) throw new Error('StorageDriver is required');
+		// if (!options.storageDriver) throw new Error('StorageDriver is required');
 
 		this.newModelFactory = this.newModelFactory.bind(this);
 	}
@@ -168,6 +169,10 @@ export class Models {
 
 	public lock() {
 		return new LockModel(this.db_, this.newModelFactory, this.config_);
+	}
+
+	public storage() {
+		return new StorageModel(this.db_, this.newModelFactory, this.config_);
 	}
 
 }

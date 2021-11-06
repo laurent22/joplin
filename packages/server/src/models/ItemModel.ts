@@ -7,7 +7,7 @@ import { ApiError, ErrorForbidden, ErrorUnprocessableEntity } from '../utils/err
 import { Knex } from 'knex';
 import { ChangePreviousItem } from './ChangeModel';
 import { unique } from '../utils/array';
-import StorageDriverBase, { Context } from './itemModel/StorageDriverBase';
+import StorageDriverBase, { Context } from './items/storage/StorageDriverBase';
 import { DbConnection } from '../db';
 import { Config, StorageDriverMode } from '../utils/types';
 import { NewModelFactoryHandler, Options } from './factory';
@@ -417,6 +417,7 @@ export default class ItemModel extends BaseModel<Item> {
 				try {
 					const content = itemToSave.content;
 					delete itemToSave.content;
+					itemToSave.storage_id = this.storageDriver_.storageId;
 
 					itemToSave.content_size = content ? content.byteLength : 0;
 
@@ -651,6 +652,7 @@ export default class ItemModel extends BaseModel<Item> {
 	public async makeTestItem(userId: Uuid, num: number) {
 		return this.saveForUser(userId, {
 			name: `${num.toString().padStart(32, '0')}.md`,
+			content: Buffer.from(''),
 		});
 	}
 
@@ -659,6 +661,7 @@ export default class ItemModel extends BaseModel<Item> {
 			for (let i = 1; i <= count; i++) {
 				await this.saveForUser(userId, {
 					name: `${i.toString().padStart(32, '0')}.md`,
+					content: Buffer.from(''),
 				});
 			}
 		}, 'ItemModel::makeTestItems');
@@ -674,6 +677,10 @@ export default class ItemModel extends BaseModel<Item> {
 		const isNew = await this.isNew(item, options);
 
 		let previousItem: ChangePreviousItem = null;
+
+		if (item.content && !item.storage_id) {
+			item.storage_id = this.storageDriver_.storageId;
+		}
 
 		if (isNew) {
 			if (!item.mime_type) item.mime_type = mimeUtils.fromFilename(item.name) || '';

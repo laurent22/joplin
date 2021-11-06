@@ -1,5 +1,5 @@
-import { StorageDriverMode } from '../../utils/types';
-import { Models } from '../factory';
+import { StorageDriverConfig, StorageDriverMode } from '../../../utils/types';
+import { Models } from '../../factory';
 
 // ItemModel passes the models object when calling any of the driver handler.
 // This is so that if there's an active transaction, the driver can use that (as
@@ -9,25 +9,26 @@ export interface Context {
 	models: Models;
 }
 
-export interface Options {
-	mode?: StorageDriverMode;
-}
-
 export default class StorageDriverBase {
 
-	private mode_: StorageDriverMode = StorageDriverMode.ReadOnly;
+	private storageId_: number;
+	private config_: StorageDriverConfig;
 
-	public constructor(options: Options = null) {
-		options = {
-			mode: StorageDriverMode.ReadOnly,
-			...options,
-		};
+	public constructor(storageId: number, config: StorageDriverConfig) {
+		this.storageId_ = storageId;
+		this.config_ = config;
+	}
 
-		this.mode_ = options.mode;
+	public get storageId(): number {
+		return this.storageId_;
+	}
+
+	public get config(): StorageDriverConfig {
+		return this.config_;
 	}
 
 	public get mode(): StorageDriverMode {
-		return this.mode_;
+		return this.config.mode || StorageDriverMode.ReadOnly;
 	}
 
 	public async write(_itemId: string, _content: Buffer, _context: Context): Promise<void> { throw new Error('Not implemented'); }

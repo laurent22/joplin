@@ -1,12 +1,12 @@
-import { clientType } from '../../db';
-import { afterAllTests, beforeAllDb, beforeEachDb, db, expectNotThrow, expectThrow, models } from '../../utils/testing/testUtils';
-import { StorageDriverMode } from '../../utils/types';
-import StorageDatabase from './StorageDriverDatabase';
+import { clientType } from '../../../db';
+import { afterAllTests, beforeAllDb, beforeEachDb, db, expectNotThrow, expectThrow, models } from '../../../utils/testing/testUtils';
+import { StorageDriverMode } from '../../../utils/types';
+import StorageDriverDatabase from './StorageDriverDatabase';
 import StorageDriverMemory from './StorageDriverMemory';
 import { shouldDeleteContent, shouldNotCreateItemIfContentNotSaved, shouldNotUpdateItemIfContentNotSaved, shouldSupportFallbackDriver, shouldSupportFallbackDriverInReadWriteMode, shouldWriteToContentAndReadItBack } from './testUtils';
 
 const newDriver = () => {
-	return new StorageDatabase({
+	return new StorageDriverDatabase(1, {
 		dbClientType: clientType(db()),
 	});
 };
@@ -56,11 +56,11 @@ describe('StorageDriverDatabase', function() {
 	});
 
 	test('should support fallback content drivers', async function() {
-		await shouldSupportFallbackDriver(newDriver(), new StorageDriverMemory());
+		await shouldSupportFallbackDriver(newDriver(), new StorageDriverMemory(2));
 	});
 
 	test('should support fallback content drivers in rw mode', async function() {
-		await shouldSupportFallbackDriverInReadWriteMode(newDriver(), new StorageDriverMemory({ mode: StorageDriverMode.ReadWrite }));
+		await shouldSupportFallbackDriverInReadWriteMode(newDriver(), new StorageDriverMemory(2, { mode: StorageDriverMode.ReadWrite }));
 	});
 
 });

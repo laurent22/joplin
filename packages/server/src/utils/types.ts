@@ -119,7 +119,7 @@ export enum StorageDriverMode {
 }
 
 export interface StorageDriverConfig {
-	type: StorageDriverType;
+	type?: StorageDriverType;
 	path?: string;
 	mode?: StorageDriverMode;
 }

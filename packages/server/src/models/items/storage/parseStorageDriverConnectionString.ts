@@ -1,6 +1,6 @@
 // Type={Database,Filesystem,Memory,S3}; Path={/path/to/dir,https://s3bucket}
 
-import { StorageDriverConfig, StorageDriverMode, StorageDriverType } from '../../utils/types';
+import { StorageDriverConfig, StorageDriverMode, StorageDriverType } from '../../../utils/types';
 
 const parseType = (type: string): StorageDriverType => {
 	if (type === 'Database') return StorageDriverType.Database;

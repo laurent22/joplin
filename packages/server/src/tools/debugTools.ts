@@ -1,7 +1,7 @@
 import time from '@joplin/lib/time';
-import { clientType, DbConnection, dropTables, migrateLatest } from '../db';
+import { DbConnection, dropTables, migrateLatest } from '../db';
 import newModelFactory from '../models/factory';
-import StorageDatabase from '../models/itemModel/StorageDriverDatabase';
+import storageDriverFromConfig from '../models/items/storage/storageDriverFromConfig';
 import { AccountType } from '../models/UserModel';
 import { User, UserFlagType } from '../services/database/types';
 import { Config } from '../utils/types';
@@ -36,7 +36,8 @@ export async function createTestUsers(db: DbConnection, config: Config, options:
 	const password = 'hunter1hunter2hunter3';
 
 	const models = newModelFactory(db, config, {
-		storageDriver: new StorageDatabase({ dbClientType: clientType(db) }),
+		// storageDriver: new StorageDriverDatabase(1, { dbClientType: clientType(db) }),
+		storageDriver: await storageDriverFromConfig(config.storageDriver, db), // new StorageDriverDatabase(1, { dbClientType: clientType(db) }),
 	});
 
 	if (options.count) {

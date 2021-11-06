@@ -1,4 +1,4 @@
-import { StorageDriverConfig, StorageDriverType } from '../../utils/types';
+import { StorageDriverConfig, StorageDriverType } from '../../../utils/types';
 import parseStorageDriverConnectionString from './parseStorageDriverConnectionString';
 
 describe('parseStorageDriverConnectionString', function() {

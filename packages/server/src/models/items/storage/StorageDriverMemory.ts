@@ -1,8 +1,13 @@
+import { StorageDriverConfig, StorageDriverType } from '../../../utils/types';
 import StorageDriverBase from './StorageDriverBase';
 
 export default class StorageDriverMemory extends StorageDriverBase {
 
 	private data_: Record<string, Buffer> = {};
+
+	public constructor(id: number, config: StorageDriverConfig = null) {
+		super(id, { type: StorageDriverType.Memory, ...config });
+	}
 
 	public async write(itemId: string, content: Buffer): Promise<void> {
 		this.data_[itemId] = content;

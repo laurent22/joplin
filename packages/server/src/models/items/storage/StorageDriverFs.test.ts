@@ -1,12 +1,12 @@
 import { pathExists, remove } from 'fs-extra';
-import { afterAllTests, beforeAllDb, beforeEachDb, expectNotThrow, expectThrow, tempDirPath } from '../../utils/testing/testUtils';
+import { afterAllTests, beforeAllDb, beforeEachDb, expectNotThrow, expectThrow, tempDirPath } from '../../../utils/testing/testUtils';
 import StorageDriverFs from './StorageDriverFs';
 import { shouldDeleteContent, shouldNotCreateItemIfContentNotSaved, shouldNotUpdateItemIfContentNotSaved, shouldWriteToContentAndReadItBack } from './testUtils';
 
 let basePath_: string = '';
 
 const newDriver = () => {
-	return new StorageDriverFs({ basePath: basePath_ });
+	return new StorageDriverFs(1, { path: basePath_ });
 };
 
 describe('StorageDriverFs', function() {

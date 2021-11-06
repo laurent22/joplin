@@ -2,21 +2,21 @@
 // database (as a binary blob). For now the driver expects that the content is
 // stored in the same table as the items, as it originally was.
 
-import { DatabaseConfigClient } from '../../utils/types';
-import StorageDriverBase, { Context, Options as BaseOptions } from './StorageDriverBase';
+import { DatabaseConfigClient, StorageDriverConfig, StorageDriverType } from '../../../utils/types';
+import StorageDriverBase, { Context } from './StorageDriverBase';
 
-interface Options extends BaseOptions {
+interface StorageDriverDatabaseConfig extends StorageDriverConfig {
 	dbClientType: DatabaseConfigClient;
 }
 
-export default class StorageDatabase extends StorageDriverBase {
+export default class StorageDriverDatabase extends StorageDriverBase {
 
 	private handleReturnedRows_: boolean = null;
 
-	public constructor(options: Options) {
-		super(options);
+	public constructor(id: number, config: StorageDriverDatabaseConfig) {
+		super(id, { type: StorageDriverType.Database, ...config });
 
-		this.handleReturnedRows_ = options.dbClientType === DatabaseConfigClient.PostgreSQL;
+		this.handleReturnedRows_ = config.dbClientType === DatabaseConfigClient.PostgreSQL;
 	}
 
 	public async write(itemId: string, content: Buffer, context: Context): Promise<void> {

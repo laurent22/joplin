@@ -1,19 +1,13 @@
 import { mkdirp, pathExists, readFile, remove, writeFile } from 'fs-extra';
-import StorageDriverBase, { Options as BaseOptions } from './StorageDriverBase';
-
-interface Options extends BaseOptions {
-	basePath: string;
-}
+import { StorageDriverConfig, StorageDriverType } from '../../../utils/types';
+import StorageDriverBase from './StorageDriverBase';
 
 export default class StorageDriverFs extends StorageDriverBase {
 
-	private options_: Options;
 	private pathCreated_: Record<string, boolean> = {};
 
-	public constructor(options: Options) {
-		super(options);
-
-		this.options_ = options;
+	public constructor(id: number, config: StorageDriverConfig) {
+		super(id, { type: StorageDriverType.Filesystem, ...config });
 	}
 
 	private async createParentDirectories(path: string) {
@@ -27,7 +21,7 @@ export default class StorageDriverFs extends StorageDriverBase {
 	}
 
 	private itemPath(itemId: string): string {
-		return `${this.options_.basePath}/${itemId.substr(0, 2).toLowerCase()}/${itemId.substr(2, 2).toLowerCase()}/${itemId}`;
+		return `${this.config.path}/${itemId.substr(0, 2).toLowerCase()}/${itemId.substr(2, 2).toLowerCase()}/${itemId}`;
 	}
 
 	public async write(itemId: string, content: Buffer): Promise<void> {
