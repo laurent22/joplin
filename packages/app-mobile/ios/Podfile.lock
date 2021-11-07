@@ -324,7 +324,7 @@ PODS:
     - React
   - RNSecureRandom (1.0.0-rc.0):
     - React
-  - RNShare (5.1.5):
+  - RNShare (7.2.1):
     - React-Core
   - RNVectorIcons (7.1.0):
     - React
@@ -555,10 +555,10 @@ SPEC CHECKSUMS:
   RNFS: 2bd9eb49dc82fa9676382f0585b992c424cd59df
   RNQuickAction: 6d404a869dc872cde841ad3147416a670d13fa93
   RNSecureRandom: 1f19ad1492f7ed416b8fc79e92216a1f73f13a4c
-  RNShare: 9cdd23357981cf4dee275eb79239e860dccc0faf
+  RNShare: edd621a71124961e29a7ba43a84bd1c6f9980d88
   RNVectorIcons: bc69e6a278b14842063605de32bec61f0b251a59
   Yoga: 2b4a01651f42a32f82e6cef3830a3ba48088237f
 
-PODFILE CHECKSUM: 9f8b595b05d63f54759fc6d9b1d2c5838fff9626
+PODFILE CHECKSUM: 3ccf11f600ddb42a825b2bb9a341a19f5c891f2b
 
 COCOAPODS: 1.10.2
