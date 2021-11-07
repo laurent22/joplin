@@ -137,7 +137,7 @@ To initiate the synchronisation process, type `:sync`. You will be asked to foll
 
 ## Local filesystem synchronisation
 
-Local filesystem sync can be initiatd after starting the joplin terminal app by using the [command-line mode](#command-line-mode)
+Local filesystem sync can be initiated after starting the joplin terminal app by using the [command-line mode](#command-line-mode)
 
 	:config sync.target 2
 	:config sync.2.path <path to local sync dir>
