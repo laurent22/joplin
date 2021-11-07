@@ -11,6 +11,7 @@ async function updateCodeProjVersions(filePath: string) {
 	const originalContent = await fs.readFile(filePath, 'utf8');
 	let newContent = originalContent;
 	let newVersion = '';
+	let newVersionId = 0;
 
 	// MARKETING_VERSION = 10.1.0;
 	newContent = newContent.replace(/(MARKETING_VERSION = )(\d+\.\d+)\.(\d+)(.*)/g, function(_match, prefix, majorMinorVersion, buildNum, suffix) {
@@ -24,7 +25,8 @@ async function updateCodeProjVersions(filePath: string) {
 	newContent = newContent.replace(/(CURRENT_PROJECT_VERSION = )(\d+)(.*)/g, function(_match, prefix, projectVersion, suffix) {
 		const n = Number(projectVersion);
 		if (isNaN(n)) throw new Error(`Invalid version code: ${projectVersion}`);
-		return `${prefix}${n + 1}${suffix}`;
+		newVersionId = n + 1;
+		return `${prefix}${newVersionId}${suffix}`;
 	});
 
 	if (!newVersion) throw new Error('Could not determine new version');
@@ -32,7 +34,7 @@ async function updateCodeProjVersions(filePath: string) {
 
 	await fs.writeFile(filePath, newContent, 'utf8');
 
-	return newVersion;
+	return { newVersion, newVersionId };
 }
 
 async function main() {
@@ -40,10 +42,12 @@ async function main() {
 
 	console.info('Updating version numbers...');
 
-	const newVersion = await updateCodeProjVersions(`${mobileDir}/ios/Joplin.xcodeproj/project.pbxproj`);
-	console.info(`New version: ${newVersion}`);
+	const { newVersion, newVersionId } = await updateCodeProjVersions(`${mobileDir}/ios/Joplin.xcodeproj/project.pbxproj`);
+	console.info(`New version: ${newVersion} (${newVersionId})`);
 
 	const tagName = `ios-v${newVersion}`;
+	console.info(`Tag name: ${tagName}`);
+
 	await execCommand2('git add -A');
 	await execCommand2(`git commit -m "${tagName}"`);
 	await execCommand2(`git tag ${tagName}`);
