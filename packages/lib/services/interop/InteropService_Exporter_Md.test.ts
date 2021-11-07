@@ -1,15 +1,15 @@
-/* eslint-disable no-unused-vars */
-
-
-const fs = require('fs-extra');
-const { setupDatabaseAndSynchronizer, switchClient, exportDir, supportDir } = require('../../testing/test-utils.js');
-const InteropService_Exporter_Md = require('../../services/interop/InteropService_Exporter_Md').default;
-const BaseModel = require('../../BaseModel').default;
-const Folder = require('../../models/Folder').default;
-const Resource = require('../../models/Resource').default;
-const Note = require('../../models/Note').default;
-const shim = require('../../shim').default;
-const { MarkupToHtml } = require('@joplin/renderer');
+import * as fs from 'fs-extra';
+import { setupDatabaseAndSynchronizer, switchClient, exportDir, supportDir } from '../../testing/test-utils.js';
+import InteropService_Exporter_Md from '../../services/interop/InteropService_Exporter_Md';
+import BaseModel from '../../BaseModel';
+import Folder from '../../models/Folder';
+import Resource from '../../models/Resource';
+import Note from '../../models/Note';
+import shim from '../../shim';
+import { MarkupToHtml } from '@joplin/renderer';
+import { NoteEntity, ResourceEntity } from '../database/types.js';
+import InteropService from './InteropService.js';
+import { fileExtension } from '../../path-utils.js';
 
 describe('interop/InteropService_Exporter_Md', function() {
 
@@ -33,8 +33,8 @@ describe('interop/InteropService_Exporter_Md', function() {
 		const exporter = new InteropService_Exporter_Md();
 		await exporter.init(exportDir());
 
-		const itemsToExport = [];
-		const queueExportItem = (itemType, itemOrId) => {
+		const itemsToExport: any[] = [];
+		const queueExportItem = (itemType: number, itemOrId: any) => {
 			itemsToExport.push({
 				type: itemType,
 				itemOrId: itemOrId,
@@ -59,13 +59,13 @@ describe('interop/InteropService_Exporter_Md', function() {
 		queueExportItem(BaseModel.TYPE_NOTE, note3);
 		queueExportItem(BaseModel.TYPE_RESOURCE, (await Note.linkedResourceIds(note3.body))[0]);
 
-		expect(!exporter.context() && !(exporter.context().notePaths || Object.keys(exporter.context().notePaths).length)).toBe(false, 'Context should be empty before processing.');
+		expect(!exporter.context() && !(exporter.context().notePaths || Object.keys(exporter.context().notePaths).length)).toBe(false);
 
 		await exporter.processItem(Folder.modelType(), folder1);
 		await exporter.processItem(Folder.modelType(), folder2);
 		await exporter.prepareForProcessingItemType(BaseModel.TYPE_NOTE, itemsToExport);
 
-		expect(Object.keys(exporter.context().notePaths).length).toBe(3, 'There should be 3 note paths in the context.');
+		expect(Object.keys(exporter.context().notePaths).length).toBe(3);
 		expect(exporter.context().notePaths[note1.id]).toBe('folder1/note1.md');
 		expect(exporter.context().notePaths[note2.id]).toBe('folder1/note2.md');
 		expect(exporter.context().notePaths[note3.id]).toBe('folder2/note3.html');
@@ -75,8 +75,8 @@ describe('interop/InteropService_Exporter_Md', function() {
 		const exporter = new InteropService_Exporter_Md();
 		await exporter.init(exportDir());
 
-		const itemsToExport = [];
-		const queueExportItem = (itemType, itemOrId) => {
+		const itemsToExport: any[] = [];
+		const queueExportItem = (itemType: number, itemOrId: any) => {
 			itemsToExport.push({
 				type: itemType,
 				itemOrId: itemOrId,
@@ -110,9 +110,9 @@ describe('interop/InteropService_Exporter_Md', function() {
 		await exporter.processResource(resource1, Resource.fullPath(resource1));
 		await exporter.processResource(resource2, Resource.fullPath(resource2));
 
-		expect(!exporter.context() && !(exporter.context().destResourcePaths || Object.keys(exporter.context().destResourcePaths).length)).toBe(false, 'Context should be empty before processing.');
+		expect(!exporter.context() && !(exporter.context().destResourcePaths || Object.keys(exporter.context().destResourcePaths).length)).toBe(false);
 
-		expect(Object.keys(exporter.context().destResourcePaths).length).toBe(2, 'There should be 2 resource paths in the context.');
+		expect(Object.keys(exporter.context().destResourcePaths).length).toBe(2);
 		expect(exporter.context().destResourcePaths[resource1.id]).toBe(`${exportDir()}/_resources/photo.jpg`);
 		expect(exporter.context().destResourcePaths[resource2.id]).toBe(`${exportDir()}/_resources/photo-1.jpg`);
 	}));
@@ -121,8 +121,8 @@ describe('interop/InteropService_Exporter_Md', function() {
 		const exporter = new InteropService_Exporter_Md();
 		await exporter.init(exportDir());
 
-		const itemsToExport = [];
-		const queueExportItem = (itemType, itemOrId) => {
+		const itemsToExport: any[] = [];
+		const queueExportItem = (itemType: number, itemOrId: any) => {
 			itemsToExport.push({
 				type: itemType,
 				itemOrId: itemOrId,
@@ -139,7 +139,7 @@ describe('interop/InteropService_Exporter_Md', function() {
 		await exporter.processItem(Folder.modelType(), folder1);
 		await exporter.prepareForProcessingItemType(BaseModel.TYPE_NOTE, itemsToExport);
 
-		expect(Object.keys(exporter.context().notePaths).length).toBe(2, 'There should be 2 note paths in the context.');
+		expect(Object.keys(exporter.context().notePaths).length).toBe(2);
 		expect(exporter.context().notePaths[note1.id]).toBe('folder1/note1.md');
 		expect(exporter.context().notePaths[note1_2.id]).toBe('folder1/note1-1.md');
 	}));
@@ -148,8 +148,8 @@ describe('interop/InteropService_Exporter_Md', function() {
 		const exporter = new InteropService_Exporter_Md();
 		await exporter.init(exportDir());
 
-		const itemsToExport = [];
-		const queueExportItem = (itemType, itemOrId) => {
+		const itemsToExport: any[] = [];
+		const queueExportItem = (itemType: number, itemOrId: any) => {
 			itemsToExport.push({
 				type: itemType,
 				itemOrId: itemOrId,
@@ -167,7 +167,7 @@ describe('interop/InteropService_Exporter_Md', function() {
 
 		await exporter.prepareForProcessingItemType(BaseModel.TYPE_NOTE, itemsToExport);
 
-		expect(Object.keys(exporter.context().notePaths).length).toBe(1, 'There should be 1 note paths in the context.');
+		expect(Object.keys(exporter.context().notePaths).length).toBe(1);
 		expect(exporter.context().notePaths[note1.id]).toBe('folder1/note1-1.md');
 	}));
 
@@ -175,8 +175,8 @@ describe('interop/InteropService_Exporter_Md', function() {
 		const exporter = new InteropService_Exporter_Md();
 		await exporter.init(exportDir());
 
-		const itemsToExport = [];
-		const queueExportItem = (itemType, itemOrId) => {
+		const itemsToExport: any[] = [];
+		const queueExportItem = (itemType: number, itemOrId: any) => {
 			itemsToExport.push({
 				type: itemType,
 				itemOrId: itemOrId,
@@ -204,16 +204,16 @@ describe('interop/InteropService_Exporter_Md', function() {
 		await exporter.processResource(resource1, Resource.fullPath(resource1));
 		await exporter.processResource(resource2, Resource.fullPath(resource2));
 
-		expect(await shim.fsDriver().exists(`${exportDir()}/_resources/photo.jpg`)).toBe(true, 'Resource file should be copied to _resources directory.');
-		expect(await shim.fsDriver().exists(`${exportDir()}/_resources/photo-1.jpg`)).toBe(true, 'Resource file should be copied to _resources directory.');
+		expect(await shim.fsDriver().exists(`${exportDir()}/_resources/photo.jpg`)).toBe(true);
+		expect(await shim.fsDriver().exists(`${exportDir()}/_resources/photo-1.jpg`)).toBe(true);
 	}));
 
 	it('should create folders in fs', (async () => {
 		const exporter = new InteropService_Exporter_Md();
 		await exporter.init(exportDir());
 
-		const itemsToExport = [];
-		const queueExportItem = (itemType, itemOrId) => {
+		const itemsToExport: any[] = [];
+		const queueExportItem = (itemType: number, itemOrId: any) => {
 			itemsToExport.push({
 				type: itemType,
 				itemOrId: itemOrId,
@@ -234,17 +234,17 @@ describe('interop/InteropService_Exporter_Md', function() {
 		await exporter.prepareForProcessingItemType(BaseModel.TYPE_NOTE, itemsToExport);
 		await exporter.processItem(Note.modelType(), note2);
 
-		expect(await shim.fsDriver().exists(`${exportDir()}/folder1`)).toBe(true, 'Folder should be created in filesystem.');
-		expect(await shim.fsDriver().exists(`${exportDir()}/folder1/folder2`)).toBe(true, 'Folder should be created in filesystem.');
-		expect(await shim.fsDriver().exists(`${exportDir()}/folder1/folder3`)).toBe(true, 'Folder should be created in filesystem.');
+		expect(await shim.fsDriver().exists(`${exportDir()}/folder1`)).toBe(true);
+		expect(await shim.fsDriver().exists(`${exportDir()}/folder1/folder2`)).toBe(true);
+		expect(await shim.fsDriver().exists(`${exportDir()}/folder1/folder3`)).toBe(true);
 	}));
 
 	it('should save notes in fs', (async () => {
 		const exporter = new InteropService_Exporter_Md();
 		await exporter.init(exportDir());
 
-		const itemsToExport = [];
-		const queueExportItem = (itemType, itemOrId) => {
+		const itemsToExport: any[] = [];
+		const queueExportItem = (itemType: number, itemOrId: any) => {
 			itemsToExport.push({
 				type: itemType,
 				itemOrId: itemOrId,
@@ -271,17 +271,17 @@ describe('interop/InteropService_Exporter_Md', function() {
 		await exporter.processItem(Note.modelType(), note2);
 		await exporter.processItem(Note.modelType(), note3);
 
-		expect(await shim.fsDriver().exists(`${exportDir()}/${exporter.context().notePaths[note1.id]}`)).toBe(true, 'File should be saved in filesystem.');
-		expect(await shim.fsDriver().exists(`${exportDir()}/${exporter.context().notePaths[note2.id]}`)).toBe(true, 'File should be saved in filesystem.');
-		expect(await shim.fsDriver().exists(`${exportDir()}/${exporter.context().notePaths[note3.id]}`)).toBe(true, 'File should be saved in filesystem.');
+		expect(await shim.fsDriver().exists(`${exportDir()}/${exporter.context().notePaths[note1.id]}`)).toBe(true);
+		expect(await shim.fsDriver().exists(`${exportDir()}/${exporter.context().notePaths[note2.id]}`)).toBe(true);
+		expect(await shim.fsDriver().exists(`${exportDir()}/${exporter.context().notePaths[note3.id]}`)).toBe(true);
 	}));
 
 	it('should replace resource ids with relative paths', (async () => {
 		const exporter = new InteropService_Exporter_Md();
 		await exporter.init(exportDir());
 
-		const itemsToExport = [];
-		const queueExportItem = (itemType, itemOrId) => {
+		const itemsToExport: any[] = [];
+		const queueExportItem = (itemType: number, itemOrId: any) => {
 			itemsToExport.push({
 				type: itemType,
 				itemOrId: itemOrId,
@@ -325,7 +325,7 @@ describe('interop/InteropService_Exporter_Md', function() {
 		await exporter.processResource(resource2, Resource.fullPath(resource2));
 		await exporter.processResource(resource3, Resource.fullPath(resource3));
 		await exporter.processResource(resource4, Resource.fullPath(resource3));
-		const context = {
+		const context: any = {
 			resourcePaths: {},
 		};
 		context.resourcePaths[resource1.id] = 'resource1.jpg';
@@ -343,25 +343,25 @@ describe('interop/InteropService_Exporter_Md', function() {
 		const note3_body = await shim.fsDriver().readFile(`${exportDir()}/${exporter.context().notePaths[note3.id]}`);
 		const note4_body = await shim.fsDriver().readFile(`${exportDir()}/${exporter.context().notePaths[note4.id]}`);
 
-		expect(note1_body).toContain('](../_resources/photo.jpg)', 'Resource id should be replaced with a relative path.');
-		expect(note2_body).toContain('](../../_resources/photo-1.jpg)', 'Resource id should be replaced with a relative path.');
-		expect(note3_body).toContain('<img src="../../_resources/photo-2.jpg" alt="alt">', 'Resource id should be replaced with a relative path.');
-		expect(note4_body).toContain('](../../_resources/photo-3.jpg "title")', 'Resource id should be replaced with a relative path.');
+		expect(note1_body).toContain('](../_resources/photo.jpg)');
+		expect(note2_body).toContain('](../../_resources/photo-1.jpg)');
+		expect(note3_body).toContain('<img src="../../_resources/photo-2.jpg" alt="alt">');
+		expect(note4_body).toContain('](../../_resources/photo-3.jpg "title")');
 	}));
 
 	it('should replace note ids with relative paths', (async () => {
 		const exporter = new InteropService_Exporter_Md();
 		await exporter.init(exportDir());
 
-		const itemsToExport = [];
-		const queueExportItem = (itemType, itemOrId) => {
+		const itemsToExport: any[] = [];
+		const queueExportItem = (itemType: number, itemOrId: any) => {
 			itemsToExport.push({
 				type: itemType,
 				itemOrId: itemOrId,
 			});
 		};
 
-		const changeNoteBodyAndReload = async (note, newBody) => {
+		const changeNoteBodyAndReload = async (note: NoteEntity, newBody: string) => {
 			note.body = newBody;
 			await Note.save(note);
 			return await Note.load(note.id);
@@ -395,18 +395,18 @@ describe('interop/InteropService_Exporter_Md', function() {
 		const note2_body = await shim.fsDriver().readFile(`${exportDir()}/${exporter.context().notePaths[note2.id]}`);
 		const note3_body = await shim.fsDriver().readFile(`${exportDir()}/${exporter.context().notePaths[note3.id]}`);
 
-		expect(note1_body).toContain('](../folder3/note3.md)', 'Note id should be replaced with a relative path.');
-		expect(note2_body).toContain('](../../folder3/note3.md)', 'Resource id should be replaced with a relative path.');
-		expect(note2_body).toContain('](../../folder1/note1.md)', 'Resource id should be replaced with a relative path.');
-		expect(note3_body).toContain('](../folder1/folder2/note2.md)', 'Resource id should be replaced with a relative path.');
+		expect(note1_body).toContain('](../folder3/note3.md)');
+		expect(note2_body).toContain('](../../folder3/note3.md)');
+		expect(note2_body).toContain('](../../folder1/note1.md)');
+		expect(note3_body).toContain('](../folder1/folder2/note2.md)');
 	}));
 
 	it('should url encode relative note links', (async () => {
 		const exporter = new InteropService_Exporter_Md();
 		await exporter.init(exportDir());
 
-		const itemsToExport = [];
-		const queueExportItem = (itemType, itemOrId) => {
+		const itemsToExport: any[] = [];
+		const queueExportItem = (itemType: number, itemOrId: any) => {
 			itemsToExport.push({
 				type: itemType,
 				itemOrId: itemOrId,
@@ -425,6 +425,26 @@ describe('interop/InteropService_Exporter_Md', function() {
 		await exporter.processItem(Note.modelType(), note2);
 
 		const note2_body = await shim.fsDriver().readFile(`${exportDir()}/${exporter.context().notePaths[note2.id]}`);
-		expect(note2_body).toContain('[link](../folder%20with%20space1/note1%20name%20with%20space.md)', 'Whitespace in URL should be encoded');
+		expect(note2_body).toContain('[link](../folder%20with%20space1/note1%20name%20with%20space.md)');
 	}));
+
+	it('should preserve resource file extension', (async () => {
+		const folder = await Folder.save({ title: 'testing' });
+		const note = await Note.save({ title: 'mynote', parent_id: folder.id });
+		await shim.attachFileToNote(note, `${supportDir}/photo.jpg`);
+
+		const resource: ResourceEntity = (await Resource.all())[0];
+		await Resource.save({ id: resource.id, title: 'veryverylongtitleveryverylongtitleveryverylongtitleveryverylongtitleveryverylongtitleveryverylongtitleveryverylongtitleveryverylongtitleveryverylongtitleveryverylongtitleveryverylongtitleveryverylongtitleveryverylongtitleveryverylongtitleveryverylongtitleveryverylongtitleveryverylongtitleveryverylongtitle.jpg' });
+
+		const service = InteropService.instance();
+
+		await service.export({
+			path: exportDir(),
+			format: 'md',
+		});
+
+		const resourceFilename = (await fs.readdir(`${exportDir()}/_resources`))[0];
+		expect(fileExtension(resourceFilename)).toBe('jpg');
+	}));
+
 });
