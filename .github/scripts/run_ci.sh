@@ -110,6 +110,24 @@ if [ "$IS_PULL_REQUEST" == "1" ]; then
 fi
 
 # =============================================================================
+# Check that we didn't lose any string due to gettext not being able to parse
+# newly modified or added scripts. This is convenient to quickly view on GitHub
+# what commit may have broken translation building.
+# =============================================================================
+
+if [ "$IS_PULL_REQUEST" == "1" ]; then
+	if [ "$IS_LINUX" == "1" ]; then
+		echo "Step: Checking for lost translation strings..."
+
+		node packages/tools/build-translation.js --missing-strings-check-only
+		testResult=$?
+		if [ $testResult -ne 0 ]; then
+			exit $testResult
+		fi
+	fi
+fi
+
+# =============================================================================
 # Find out if we should run the build or not. Electron-builder gets stuck when
 # building PRs so we disable it in this case. The Linux build should provide
 # enough info if the app builds or not.
