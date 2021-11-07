@@ -115,7 +115,7 @@ fi
 # what commit may have broken translation building.
 # =============================================================================
 
-if [ "$IS_PULL_REQUEST" == "1" ]; then
+if [ "$IS_PULL_REQUEST" == "1" ] || [ "$IS_DEV_BRANCH" = "1" ]; then
 	if [ "$IS_LINUX" == "1" ]; then
 		echo "Step: Checking for lost translation strings..."
 
