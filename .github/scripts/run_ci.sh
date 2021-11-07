@@ -81,7 +81,7 @@ fi
 # release randomly fail.
 # =============================================================================
 
-if [ "$IS_PULL_REQUEST" == "1" ]; then
+if [ "$IS_PULL_REQUEST" == "1" ] || [ "$IS_DEV_BRANCH" = "1" ]; then
 	echo "Step: Running linter..."
 
 	npm run linter-ci ./
@@ -142,13 +142,12 @@ if [ "$IS_PULL_REQUEST" == "1" ]; then
 fi
 
 # =============================================================================
-# Prepare the Electron app and build it
+# Build the Electron app or Docker image depending on the current tag.
 #
 # If the current tag is a desktop release tag (starts with "v", such as
-# "v1.4.7"), we build and publish to github
-#
-# Otherwise we only build but don't publish to GitHub. It helps finding
-# out any issue in pull requests and dev branch.
+# "v1.4.7"), we build and publish to GitHub. Otherwise we only build but don't
+# publish to GitHub. It helps finding out any issue in pull requests and dev
+# branch.
 # =============================================================================
 
 cd "$ROOT_DIR/packages/app-desktop"
