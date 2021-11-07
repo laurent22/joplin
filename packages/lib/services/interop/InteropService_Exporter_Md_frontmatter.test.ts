@@ -122,6 +122,7 @@ describe('interop/InteropService_Exporter_Md_frontmatter', function() {
 		const content = await exportAndLoad(`${exportDir()}/folder1/Source_title.md`);
 		expect(content).toContain('title: |-\n  Source\n  title');
 	}));
+
 	test('should not export coordinates if they\'re not available', (async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		await Note.save({ title: 'Coordinates', body: '**ma note**', parent_id: folder1.id });

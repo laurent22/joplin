@@ -1303,6 +1303,9 @@ packages/lib/services/interop/InteropService_Exporter_Jex.js.map
 packages/lib/services/interop/InteropService_Exporter_Md.d.ts
 packages/lib/services/interop/InteropService_Exporter_Md.js
 packages/lib/services/interop/InteropService_Exporter_Md.js.map
+packages/lib/services/interop/InteropService_Exporter_Md.test.d.ts
+packages/lib/services/interop/InteropService_Exporter_Md.test.js
+packages/lib/services/interop/InteropService_Exporter_Md.test.js.map
 packages/lib/services/interop/InteropService_Exporter_Md_frontmatter.d.ts
 packages/lib/services/interop/InteropService_Exporter_Md_frontmatter.js
 packages/lib/services/interop/InteropService_Exporter_Md_frontmatter.js.map

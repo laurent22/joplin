@@ -22,7 +22,7 @@ async function renderItem(context: AppContext, item: Item, share: Share): Promis
 }
 
 function createContentDispositionHeader(filename: string) {
-	const encoded = encodeURIComponent(friendlySafeFilename(filename));
+	const encoded = encodeURIComponent(friendlySafeFilename(filename, null, true));
 	return `attachment; filename*=UTF-8''${encoded}; filename="${encoded}"`;
 }
 
