@@ -16,7 +16,7 @@ const gettextParser = require('gettext-parser');
 const localesDir = `${__dirname}/locales`;
 const libDir = `${rootDir}/packages/lib`;
 
-const { execCommand, isMac, insertContentIntoFile, filename, fileExtension } = require('./tool-utils.js');
+const { execCommand, isMac, insertContentIntoFile, filename, dirname, fileExtension } = require('./tool-utils.js');
 const { countryDisplayName, countryCodeOnly } = require('@joplin/lib/locale');
 
 function parsePoFile(filePath) {
@@ -113,20 +113,42 @@ async function createPotFile(potFilePath) {
 		'./readme/*',
 	];
 
-	const findCommand = `find . -iname '*.js' -not -path '${excludedDirs.join('\' -not -path \'')}'`;
+	// We get all the .ts and .js files, preferring the .ts file when it's
+	// available (because the .js file is a minified version and gettext might
+	// fail on it).
+	//
+	// As of 2021-11, gettext doesn't process .tsx files so we still need to use
+	// the .js for this.
 
+	const findCommand = `find . -type f \\( -iname \\*.js -o -iname \\*.ts \\) -not -path '${excludedDirs.join('\' -not -path \'')}'`;
 	process.chdir(rootDir);
 	let files = (await execCommand(findCommand)).split('\n');
 
-	files = files.filter(f => {
-		if (f.endsWith('CodeMirror.bundle.min.js')) return false;
-		if (f.endsWith('CodeMirror.bundle.js')) return false;
-		if (f.endsWith('.test.js')) return false;
-		if (f.endsWith('.eslintrc.js')) return false;
-		if (f.endsWith('jest.config.js')) return false;
-		if (f.endsWith('jest.setup.js')) return false;
-		return true;
-	});
+	const toProcess = {};
+
+	for (const file of files) {
+		if (!file) continue;
+
+		const nameNoExt = `${dirname(file)}/${filename(file)}`;
+
+		if (nameNoExt.endsWith('CodeMirror.bundle.min')) continue;
+		if (nameNoExt.endsWith('CodeMirror.bundle')) continue;
+		if (nameNoExt.endsWith('.test')) continue;
+		if (nameNoExt.endsWith('.eslintrc')) continue;
+		if (nameNoExt.endsWith('jest.config')) continue;
+		if (nameNoExt.endsWith('jest.setup')) continue;
+
+		if (toProcess[nameNoExt] && ['ts', 'tsx'].includes(fileExtension(toProcess[nameNoExt]))) {
+			continue;
+		}
+
+		toProcess[nameNoExt] = file;
+	}
+
+	files = [];
+	for (const key of Object.keys(toProcess)) {
+		files.push(toProcess[key]);
+	}
 
 	files.sort();
 
