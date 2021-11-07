@@ -8,22 +8,34 @@ import StorageDriverDatabase from './StorageDriverDatabase';
 import StorageDriverFs from './StorageDriverFs';
 import StorageDriverMemory from './StorageDriverMemory';
 
-export default async function(config: StorageDriverConfig, db: DbConnection): Promise<StorageDriverBase | null> {
+export interface Options {
+	assignDriverId?: boolean;
+}
+
+export default async function(config: StorageDriverConfig, db: DbConnection, options: Options = null): Promise<StorageDriverBase | null> {
 	if (!config) return null;
 
-	const models = newModelFactory(db, globalConfig(), { storageDriver: null });
+	options = {
+		assignDriverId: true,
+		...options,
+	};
 
-	const connectionString = serializeStorageConfig(config);
-	const existingStorage = await models.storage().byConnectionString(connectionString);
-	let storageId: number = null;
+	let storageId: number = 0;
 
-	if (existingStorage) {
-		storageId = existingStorage.id;
-	} else {
-		const storage = await models.storage().save({
-			connection_string: connectionString,
-		});
-		storageId = storage.id;
+	if (options.assignDriverId) {
+		const models = newModelFactory(db, globalConfig(), { storageDriver: null });
+
+		const connectionString = serializeStorageConfig(config);
+		const existingStorage = await models.storage().byConnectionString(connectionString);
+
+		if (existingStorage) {
+			storageId = existingStorage.id;
+		} else {
+			const storage = await models.storage().save({
+				connection_string: connectionString,
+			});
+			storageId = storage.id;
+		}
 	}
 
 	if (config.type === StorageDriverType.Database) {

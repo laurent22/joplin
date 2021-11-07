@@ -12,14 +12,14 @@ export async function up(db: DbConnection): Promise<any> {
 	});
 
 	// First we create the column and set a default so as to populate the
-	// storage_id field.
+	// content_storage_id field.
 	await db.schema.alterTable('items', (table: Knex.CreateTableBuilder) => {
-		table.integer('storage_id').defaultTo(1).notNullable();
+		table.integer('content_storage_id').defaultTo(1).notNullable();
 	});
 
 	// Once it's set, we remove the default as that should be explicitly set.
 	await db.schema.alterTable('items', (table: Knex.CreateTableBuilder) => {
-		table.integer('storage_id').notNullable().alter();
+		table.integer('content_storage_id').notNullable().alter();
 	});
 }
 
@@ -27,6 +27,6 @@ export async function down(db: DbConnection): Promise<any> {
 	await db.schema.dropTable('storages');
 
 	await db.schema.alterTable('items', (table: Knex.CreateTableBuilder) => {
-		table.dropColumn('storage_id');
+		table.dropColumn('content_storage_id');
 	});
 }

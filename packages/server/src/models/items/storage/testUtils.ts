@@ -24,6 +24,7 @@ export async function shouldWriteToContentAndReadItBack(driver: StorageDriverBas
 
 	const item = await testModels(driver).item().loadWithContent(result.item.id);
 	expect(item.content.byteLength).toBe(item.content_size);
+	expect(item.content_storage_id).toBe(driver.storageId);
 
 	const rawContent = await driver.read(item.id, { models: models() });
 	expect(rawContent.byteLength).toBe(item.content_size);
@@ -204,4 +205,41 @@ export async function shouldSupportFallbackDriverInReadWriteMode(driver: Storage
 		const mainContent = await driver.read(itemId, context);
 		expect(mainContent.toString()).toBe(fallbackContent.toString());
 	}
+}
+
+export async function shouldUpdateContentStorageIdAfterSwitchingDriver(oldDriver: StorageDriverBase, newDriver: StorageDriverBase) {
+	if (oldDriver.storageId === newDriver.storageId) throw new Error('Drivers must be different for this test');
+
+	const { user } = await createUserAndSession(1);
+
+	const oldDriverModel = models({
+		storageDriver: oldDriver,
+	});
+
+	const newDriverModel = models({
+		storageDriver: newDriver,
+	});
+
+	const output = await oldDriverModel.item().saveFromRawContent(user, [{
+		name: '00000000000000000000000000000001.md',
+		body: Buffer.from(makeNoteSerializedBody({
+			id: '00000000000000000000000000000001',
+			title: 'testing',
+		})),
+	}]);
+
+	const itemId = output['00000000000000000000000000000001.md'].item.id;
+
+	expect((await oldDriverModel.item().load(itemId)).content_storage_id).toBe(oldDriver.storageId);
+
+	await newDriverModel.item().saveFromRawContent(user, [{
+		name: '00000000000000000000000000000001.md',
+		body: Buffer.from(makeNoteSerializedBody({
+			id: '00000000000000000000000000000001',
+			title: 'testing',
+		})),
+	}]);
+
+	expect(await newDriverModel.item().count()).toBe(1);
+	expect((await oldDriverModel.item().load(itemId)).content_storage_id).toBe(newDriver.storageId);
 }

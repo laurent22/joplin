@@ -3,7 +3,7 @@ import { afterAllTests, beforeAllDb, beforeEachDb, db, expectNotThrow, expectThr
 import { StorageDriverMode } from '../../../utils/types';
 import StorageDriverDatabase from './StorageDriverDatabase';
 import StorageDriverMemory from './StorageDriverMemory';
-import { shouldDeleteContent, shouldNotCreateItemIfContentNotSaved, shouldNotUpdateItemIfContentNotSaved, shouldSupportFallbackDriver, shouldSupportFallbackDriverInReadWriteMode, shouldWriteToContentAndReadItBack } from './testUtils';
+import { shouldDeleteContent, shouldNotCreateItemIfContentNotSaved, shouldNotUpdateItemIfContentNotSaved, shouldSupportFallbackDriver, shouldSupportFallbackDriverInReadWriteMode, shouldUpdateContentStorageIdAfterSwitchingDriver, shouldWriteToContentAndReadItBack } from './testUtils';
 
 const newDriver = () => {
 	return new StorageDriverDatabase(1, {
@@ -61,6 +61,10 @@ describe('StorageDriverDatabase', function() {
 
 	test('should support fallback content drivers in rw mode', async function() {
 		await shouldSupportFallbackDriverInReadWriteMode(newDriver(), new StorageDriverMemory(2, { mode: StorageDriverMode.ReadWrite }));
+	});
+
+	test('should update content storage ID after switching driver', async function() {
+		await shouldUpdateContentStorageIdAfterSwitchingDriver(newDriver(), new StorageDriverMemory(2));
 	});
 
 });

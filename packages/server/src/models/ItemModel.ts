@@ -417,7 +417,7 @@ export default class ItemModel extends BaseModel<Item> {
 				try {
 					const content = itemToSave.content;
 					delete itemToSave.content;
-					itemToSave.storage_id = this.storageDriver_.storageId;
+					itemToSave.content_storage_id = this.storageDriver_.storageId;
 
 					itemToSave.content_size = content ? content.byteLength : 0;
 
@@ -678,8 +678,8 @@ export default class ItemModel extends BaseModel<Item> {
 
 		let previousItem: ChangePreviousItem = null;
 
-		if (item.content && !item.storage_id) {
-			item.storage_id = this.storageDriver_.storageId;
+		if (item.content && !item.content_storage_id) {
+			item.content_storage_id = this.storageDriver_.storageId;
 		}
 
 		if (isNew) {

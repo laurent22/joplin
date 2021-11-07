@@ -263,7 +263,7 @@ export interface Item extends WithDates, WithUuid {
 	jop_encryption_applied?: number;
 	jop_updated_time?: number;
 	owner_id?: Uuid;
-	storage_id?: number;
+	content_storage_id?: number;
 }
 
 export const databaseSchema: DatabaseTables = {
@@ -443,7 +443,7 @@ export const databaseSchema: DatabaseTables = {
 		jop_encryption_applied: { type: 'number' },
 		jop_updated_time: { type: 'string' },
 		owner_id: { type: 'string' },
-		storage_id: { type: 'number' },
+		content_storage_id: { type: 'number' },
 	},
 };
 // AUTO-GENERATED-TYPES

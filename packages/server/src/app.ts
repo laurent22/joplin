@@ -224,8 +224,8 @@ async function main() {
 
 	const newModelFactoryOptions = async (db: DbConnection): Promise<Options> => {
 		return {
-			storageDriver: await storageDriverFromConfig(config().storageDriver, db),
-			storageDriverFallback: await storageDriverFromConfig(config().storageDriverFallback, db),
+			storageDriver: await storageDriverFromConfig(config().storageDriver, db, { assignDriverId: env !== 'buildTypes' }),
+			storageDriverFallback: await storageDriverFromConfig(config().storageDriverFallback, db, { assignDriverId: env !== 'buildTypes' }),
 		};
 	};
 
