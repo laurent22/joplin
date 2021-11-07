@@ -143,7 +143,7 @@ export default class InteropService_Exporter_Md extends InteropService_Exporter_
 		if (resource.filename) {
 			fileName = resource.filename;
 		} else if (resource.title) {
-			fileName = friendlySafeFilename(resource.title);
+			fileName = friendlySafeFilename(resource.title, null, true);
 		}
 
 		// Fall back on the resource filename saved in the users resource folder
