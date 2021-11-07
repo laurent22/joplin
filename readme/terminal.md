@@ -135,6 +135,13 @@ When syncing with Dropbox, Joplin creates a sub-directory in Dropbox, in `/Apps/
 
 To initiate the synchronisation process, type `:sync`. You will be asked to follow a link to authorise the application.
 
+## Local filesystem synchronisation
+
+Local filesystem sync can be initiated after starting the joplin terminal app by using the [command-line mode](#command-line-mode)
+
+	:config sync.target 2
+	:config sync.2.path <path to local sync dir>
+
 ## OneDrive synchronisation
 
 When syncing with OneDrive, Joplin creates a sub-directory in OneDrive, in /Apps/Joplin and read/write the notes and notebooks from it. The application does not have access to anything outside this directory.
