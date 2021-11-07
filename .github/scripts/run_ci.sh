@@ -119,6 +119,8 @@ if [ "$IS_PULL_REQUEST" == "1" ] || [ "$IS_DEV_BRANCH" = "1" ]; then
 	if [ "$IS_LINUX" == "1" ]; then
 		echo "Step: Checking for lost translation strings..."
 
+		xgettext --version
+
 		node packages/tools/build-translation.js --missing-strings-check-only
 		testResult=$?
 		if [ $testResult -ne 0 ]; then
