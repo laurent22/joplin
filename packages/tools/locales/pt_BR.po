@@ -4,19 +4,23 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # Updated by Renato Xavier da Silveira Rosa <renatoxsr@gmail.com>, 2018.
 # Updated by Sailon Bispo Nascimento (forshaw/forsh4w/forsh4w4) <sailonbr@gmail.com>, 2021.
+# Nicolas Suzuki <nicolas.suzuki@pm.me>, 2021.
+# Felipe Viggiano <felipeviggiano@gmail.com>, 2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Nicolas Suzuki <nicolas.suzuki@pm.me>\n"
+"Last-Translator: Felipe Viggiano <felipeviggiano@gmail.com>\n"
 "Language-Team: \n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.0\n"
+"X-Generator: Gtranslator 40.0\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"PO-Revision-Date: 2021-11-05 16:31-0300\n"
+"POT-Creation-Date: \n"
 
 #: packages/app-cli/app/app-gui.js:452
 msgid "To delete a tag, untag the associated notes."
@@ -1168,6 +1172,8 @@ msgid ""
 "The Joplin team has vetted this plugin and it meets our standards for "
 "security and performance."
 msgstr ""
+"A equipe do Joplin aprovou este plugin e ele atende aos requisitos de "
+"segurança e performance"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js:192
 #, javascript-format
@@ -1193,9 +1199,8 @@ msgid "You do not have any installed plugin."
 msgstr "Você não tem nenhum plugin instalado."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:232
-#, fuzzy
 msgid "Could not connect to plugin repository."
-msgstr "Não foi possível conectar-se ao repositório do plugin"
+msgstr "Não foi possível conectar-se ao repositório do plugin."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.js:236
 msgid "Try again"
@@ -1457,29 +1462,24 @@ msgstr "Criptografia está:"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:103
 #: packages/app-mobile/components/screens/encryption-config.js:89
-#, fuzzy
 msgid "Master password"
-msgstr "Digite a senha mestra:"
+msgstr "Senha mestra"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:118
-#, fuzzy
 msgid "Source: "
-msgstr "Origem"
+msgstr "Origem:"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:121
-#, fuzzy
 msgid "Created: "
-msgstr "Criado: %s"
+msgstr "Criado:"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:124
-#, fuzzy
 msgid "Updated: "
-msgstr "Atualizado: %s"
+msgstr "Atualizado:"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:129
-#, fuzzy
 msgid "Disable"
-msgstr "Desabilitado"
+msgstr "Desabilitar"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:129
 #: packages/app-mobile/components/screens/encryption-config.js:143
@@ -1488,42 +1488,37 @@ msgstr "Habilitar"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:139
 msgid "Hide disabled master keys"
-msgstr ""
+msgstr "Esconder chaves mestras desabilitadas"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:139
 msgid "Show disabled master keys"
-msgstr ""
+msgstr "Mostrar chaves mestras desabilitadas"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:146
 msgid "Date"
-msgstr ""
+msgstr "Data"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:148
-#, fuzzy
 msgid "Valid"
-msgstr "Inválido"
+msgstr "Válido"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:149
-#, fuzzy
 msgid "Actions"
-msgstr "Ação"
+msgstr "Ações"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:166
 #: packages/app-mobile/components/screens/encryption-config.js:159
-#, fuzzy
 msgid "Master password:"
-msgstr "Digite a senha mestra:"
+msgstr "Senha mestra:"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:170
 #: packages/app-mobile/components/screens/encryption-config.js:160
-#, fuzzy
 msgid "Loaded"
-msgstr "Baixado"
+msgstr "Ativada"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js:178
-#, fuzzy
 msgid "Enter your master password"
-msgstr "Digite a senha mestra:"
+msgstr "Digite a senha mestra"
 
 #: packages/app-desktop/gui/ExtensionBadge.min.js:10
 msgid "Firefox Extension"
@@ -1710,9 +1705,8 @@ msgstr ""
 "Use as setas para mover os itens de layout. Tecle \"Escape\" para sair."
 
 #: packages/app-desktop/gui/MainScreen/commands/commandPalette.js:18
-#, fuzzy
 msgid "Command palette..."
-msgstr "Paleta de comandos"
+msgstr "Guia de comandos..."
 
 #: packages/app-desktop/gui/MainScreen/commands/editAlarm.js:20
 #: packages/app-mobile/components/SelectDateTimeDialog.js:84
@@ -2611,22 +2605,20 @@ msgid "Export debug report"
 msgstr "Exportar relatório de depuração"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:157
-#, fuzzy
 msgid "Sync your notes"
-msgstr "Classificar notas por"
+msgstr "Sincronizar suas notas"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:158
 msgid "Publish notes to the internet"
-msgstr ""
+msgstr "Publica as notas na internet"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:159
-#, fuzzy
 msgid "Collaborate on notebooks with others"
-msgstr "Primeiro, crie um caderno"
+msgstr "Edite cadernos de forma colaborativa"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:182
 msgid "Thank you! Your Joplin Cloud account is now setup and ready to use."
-msgstr ""
+msgstr "Obrigado! Sua conta Joplin Cloud está configurada e pronta para uso."
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:190
 #, javascript-format
@@ -2636,30 +2628,35 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"Ocorreu uma falha na configuração de sua conta Joplin Cloud. Verifique seu e-"
+"mail e sua senha e tente novamente.\n"
+"Erro:\n"
+"\n"
+"%s"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:203
 msgid "Login below."
-msgstr ""
+msgstr "Login abaixo."
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:205
-#, fuzzy
 msgid "Or create an account."
-msgstr "Cria uma nova nota."
+msgstr "Ou crie uma nova nota."
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:210
 msgid "Login"
-msgstr ""
+msgstr "Login"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:231
-#, fuzzy
 msgid "Select"
-msgstr "Selecionar tudo"
+msgstr "Selecionar"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.js:278
 msgid ""
 "Joplin can synchronise your notes using various providers. Select one from "
 "the list below."
 msgstr ""
+"O Joplin é capaz de sincronizar suas notas utilizando vários provedores. "
+"Selecione um na lista abaixo."
 
 #: packages/app-desktop/gui/utils/NoteListUtils.js:42
 msgid "Duplicate"
@@ -3120,6 +3117,9 @@ msgid ""
 "Joplin's own sync service. Also gives access to Joplin-specific features "
 "such as publishing notes or collaborating on notebooks with others."
 msgstr ""
+"Serviço de sincronização próprio do Joplin. Fornece acesso a fucionalidades "
+"específicas como publicação de notas e colaboração de cadernos de notas com "
+"outras pessoas."
 
 #: packages/lib/SyncTargetJoplinServer.js:60
 msgid "Joplin Server"
@@ -3131,7 +3131,7 @@ msgstr "Nextcloud"
 
 #: packages/lib/SyncTargetNone.js:22
 msgid "(None)"
-msgstr ""
+msgstr "(Nenhum)"
 
 #: packages/lib/SyncTargetOneDrive.js:32
 msgid "OneDrive"
@@ -3217,7 +3217,7 @@ msgstr "Itens descriptografados: %s / %s"
 #: packages/lib/components/EncryptionConfigScreen/utils.js:53
 #, javascript-format
 msgid "Encryption will be enabled using the master key created on %s"
-msgstr ""
+msgstr "A encriptação será habilitada utilizando a senha master criada em %s"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.js:65
 msgid ""
@@ -3361,9 +3361,8 @@ msgid "Error"
 msgstr "Erro"
 
 #: packages/lib/models/Resource.js:408
-#, fuzzy
 msgid "Conflicts (attachments)"
-msgstr "Anexos da nota"
+msgstr "Conflitos (anexos)"
 
 #: packages/lib/models/Resource.js:422
 #, javascript-format
@@ -3439,7 +3438,7 @@ msgstr "OLED Dark"
 
 #: packages/lib/models/Setting.js:152
 msgid "Open Sync Wizard..."
-msgstr ""
+msgstr "Abrir o assistente de sincronização"
 
 #: packages/lib/models/Setting.js:162
 msgid "Synchronisation target"
@@ -3774,11 +3773,11 @@ msgstr ""
 
 #: packages/lib/models/Setting.js:784
 msgid "Editor maximum width"
-msgstr ""
+msgstr "Largura máxima do editor"
 
 #: packages/lib/models/Setting.js:784
 msgid "Set it to 0 to make it take the complete available space."
-msgstr ""
+msgstr "Fixe em 0 para fazer com que ocupe todo o espaço disponível."
 
 #: packages/lib/models/Setting.js:803
 msgid "Custom stylesheet for rendered Markdown"
@@ -4374,9 +4373,11 @@ msgid "attachment"
 msgstr "anexo"
 
 #: packages/server/dist/models/UserModel.js:199
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "Cannot save %s \"%s\" because it is larger than the allowed limit (%s)"
-msgstr "Não pôde salvar %s \"%s\" porque é maior que o limite permitido (%s)"
+msgstr ""
+"Não foi possível salvar %s \"%s\" porque é maior do que o limite permitido "
+"(%s)"
 
 #: packages/server/dist/models/UserModel.js:208
 #, javascript-format
