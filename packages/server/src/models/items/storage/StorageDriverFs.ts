@@ -30,7 +30,7 @@ export default class StorageDriverFs extends StorageDriverBase {
 		await writeFile(itemPath, content);
 	}
 
-	public async read(itemId: string): Promise<Buffer | null> {
+	public async read(itemId: string): Promise<Buffer> {
 		return readFile(this.itemPath(itemId));
 	}
 

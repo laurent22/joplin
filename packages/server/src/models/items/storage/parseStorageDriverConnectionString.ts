@@ -41,6 +41,14 @@ export default function(connectionString: string): StorageDriverConfig | null {
 				output.path = value;
 			} else if (key === 'Mode') {
 				output.mode = parseMode(value);
+			} else if (key === 'Region') {
+				output.region = value;
+			} else if (key === 'AccessKeyId') {
+				output.accessKeyId = value;
+			} else if (key === 'SecretAccessKeyId') {
+				output.secretAccessKeyId = value;
+			} else if (key === 'Bucket') {
+				output.bucket = value;
 			} else {
 				throw new Error(`Invalid key: "${key}"`);
 			}

@@ -13,7 +13,8 @@ export default class StorageDriverMemory extends StorageDriverBase {
 		this.data_[itemId] = content;
 	}
 
-	public async read(itemId: string): Promise<Buffer | null> {
+	public async read(itemId: string): Promise<Buffer> {
+		if (!(itemId in this.data_)) throw new Error(`No such item: ${itemId}`);
 		return this.data_[itemId];
 	}
 

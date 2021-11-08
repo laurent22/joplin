@@ -91,6 +91,7 @@ export enum StorageDriverType {
 	Database = 1,
 	Filesystem = 2,
 	Memory = 3,
+	S3 = 4,
 }
 
 // The driver mode is only used by fallback drivers. Regardless of the mode, the
@@ -122,6 +123,10 @@ export interface StorageDriverConfig {
 	type?: StorageDriverType;
 	path?: string;
 	mode?: StorageDriverMode;
+	region?: string;
+	accessKeyId?: string;
+	secretAccessKeyId?: string;
+	bucket?: string;
 }
 
 export interface Config {

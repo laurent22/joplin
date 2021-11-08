@@ -35,7 +35,7 @@ export default class StorageDriverDatabase extends StorageDriverBase {
 		if (updatedRows[0].id !== itemId) throw new Error(`Did not update the right row. Expected: ${itemId}. Got: ${updatedRows[0].id}`);
 	}
 
-	public async read(itemId: string, context: Context): Promise<Buffer | null> {
+	public async read(itemId: string, context: Context): Promise<Buffer> {
 		const row = await context.models.item().db('items').select('content').where('id', '=', itemId).first();
 
 		// Calling code should only call this handler if the row exists, so if

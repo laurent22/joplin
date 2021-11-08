@@ -33,7 +33,7 @@ export default class StorageDriverBase {
 
 	public async write(_itemId: string, _content: Buffer, _context: Context): Promise<void> { throw new Error('Not implemented'); }
 
-	public async read(_itemId: string, _context: Context): Promise<Buffer | null> { throw new Error('Not implemented'); }
+	public async read(_itemId: string, _context: Context): Promise<Buffer> { throw new Error('Not implemented'); }
 
 	public async delete(_itemId: string | string[], _context: Context): Promise<void> { throw new Error('Not implemented'); }
 
