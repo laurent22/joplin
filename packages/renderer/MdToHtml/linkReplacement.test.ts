@@ -12,6 +12,13 @@ describe('linkReplacement', () => {
 		expect(r).toBe('<a data-from-md href=\'https://example.com/test\'>');
 	});
 
+	test('should handle non-resource links with single quotes in it', () => {
+		// Handles a link such as:
+		// [Google](https://www.goo'onclick=javascript:alert(/1/);f=')
+		const r = linkReplacement('https://www.goo\'onclick=javascript:alert(/1/);f=\'', { linkRenderingType: 1 }).html;
+		expect(r).toBe('<a data-from-md href=\'https://www.goo&apos;onclick=javascript:alert(/1/);f=&apos;\' onclick=\'postMessage("https://www.goo%27onclick=javascript:alert(/1/);f=%27", { resourceId: "" }); return false;\'>');
+	});
+
 	test('should handle resource links - downloaded status', () => {
 		const resourceId = 'f6afba55bdf74568ac94f8d1e3578d2c';
 
