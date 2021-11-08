@@ -201,7 +201,7 @@ export default function(props: Props) {
 		}
 	}
 
-	const dialogTitle = mode === Mode.Set ? _('Manager master password') : `⚠️ ${_('Reset master password')} ⚠️`;
+	const dialogTitle = mode === Mode.Set ? _('Manage master password') : `⚠️ ${_('Reset master password')} ⚠️`;
 	const okButtonLabel = mode === Mode.Set ? _('Save') : `⚠️ ${_('Reset master password')} ⚠️`;
 
 	function renderDialogWrapper() {
