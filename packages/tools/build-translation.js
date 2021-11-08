@@ -346,7 +346,18 @@ function deletedStrings(oldStrings, newStrings) {
 async function main() {
 	const argv = require('yargs').argv;
 
-	const potFilePath = `${localesDir}/joplin.pot`;
+	const missingStringsCheckOnly = !!argv['missing-strings-check-only'];
+
+	let potFilePath = `${localesDir}/joplin.pot`;
+
+	let tempPotFilePath = '';
+
+	if (missingStringsCheckOnly) {
+		tempPotFilePath = `${localesDir}/joplin-temp-${Math.floor(Math.random() * 10000000)}.pot`;
+		await fs.copy(potFilePath, tempPotFilePath);
+		potFilePath = tempPotFilePath;
+	}
+
 	const jsonLocalesDir = `${libDir}/locales`;
 	const defaultLocale = 'en_GB';
 
@@ -359,6 +370,8 @@ async function main() {
 	const newPotStatus = await translationStatus(false, potFilePath);
 
 	console.info(`Updated pot file. Total strings: ${oldPotStatus.untranslatedCount} => ${newPotStatus.untranslatedCount}`);
+
+	if (tempPotFilePath) await fs.remove(tempPotFilePath);
 
 	const deletedCount = oldPotStatus.untranslatedCount - newPotStatus.untranslatedCount;
 	if (deletedCount >= 5) {
@@ -373,6 +386,8 @@ async function main() {
 			throw new Error(msg.join('\n'));
 		}
 	}
+
+	if (missingStringsCheckOnly) return;
 
 	await execCommand(`cp "${potFilePath}" ` + `"${localesDir}/${defaultLocale}.po"`);
 

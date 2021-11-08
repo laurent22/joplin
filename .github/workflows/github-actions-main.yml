@@ -19,6 +19,14 @@ jobs:
           sudo apt-get update || true
           sudo apt-get install -y gettext
           sudo apt-get install -y libsecret-1-dev
+          sudo apt-get install -y translate-toolkit
+
+      - name: Install macOS dependencies
+        if: runner.os == 'macOS'
+        run: |
+          brew update
+          brew install gettext
+          brew install translate-toolkit
 
       - name: Install Docker Engine
         if: runner.os == 'Linux' && startsWith(github.ref, 'refs/tags/server-v')
