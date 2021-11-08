@@ -42,10 +42,6 @@ export default class StorageDriverS3 extends StorageDriverBase {
 		});
 	}
 
-	// protected itemPath(itemId: string): string {
-	// 	return `${this.config.path}/${super.itemPath(itemId)}`;
-	// }
-
 	public async write(itemId: string, content: Buffer): Promise<void> {
 		await this.client_.send(new PutObjectCommand({
 			Bucket: this.config.bucket,
@@ -72,7 +68,7 @@ export default class StorageDriverS3 extends StorageDriverBase {
 		const itemIds = Array.isArray(itemId) ? itemId : [itemId];
 
 		const objects: ObjectIdentifier[] = itemIds.map(id => {
-			return { Key: this.itemPath(id) };
+			return { Key: id };
 		});
 
 		await this.client_.send(new DeleteObjectsCommand({
