@@ -268,7 +268,7 @@ export default class ShareService {
 			if (!masterKey) throw new Error(`Cannot find master key with ID "${masterKeyId}"`);
 
 			const recipientPublicKey: PublicPrivateKeyPair = await this.userPublicKey(recipientEmail);
-			if (!recipientPublicKey) throw new Error(_('Cannot share notebook with recipient %s because they do not have a public key. Ask them to create one from the menu "%s"', recipientEmail, 'Tools > Generate Public-Private Key pair'));
+			if (!recipientPublicKey) throw new Error(_('Cannot share encrypted notebook with recipient %s because they have not enabled end-to-end encryption. They may do so from the screen Configuration > Encryption.', recipientEmail));
 
 			logger.info('Reencrypting master key with recipient public key', recipientPublicKey);
 
