@@ -32,6 +32,7 @@ describe('parseStorageDriverConnectionString', function() {
 	});
 
 	test('should detect errors', async function() {
+		expect(() => parseStorageDriverConnectionString('Path=/path/to/dir')).toThrow(); // Type is missing
 		expect(() => parseStorageDriverConnectionString('Type=')).toThrow();
 		expect(() => parseStorageDriverConnectionString('Type;')).toThrow();
 		expect(() => parseStorageDriverConnectionString('Type=DoesntExist')).toThrow();

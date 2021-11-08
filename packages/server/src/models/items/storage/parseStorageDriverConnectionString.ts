@@ -16,6 +16,7 @@ const parseMode = (mode: string): StorageDriverMode => {
 };
 
 const validate = (config: StorageDriverConfig) => {
+	if (!config.type) throw new Error('Type must be specified');
 	if (config.type === StorageDriverType.Filesystem && !config.path) throw new Error('Path must be set for filesystem driver');
 	return config;
 };
@@ -24,7 +25,7 @@ export default function(connectionString: string): StorageDriverConfig | null {
 	if (!connectionString) return null;
 
 	const output: StorageDriverConfig = {
-		type: StorageDriverType.Database,
+		type: null,
 	};
 
 	const items = connectionString.split(';').map(i => i.trim());

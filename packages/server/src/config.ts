@@ -131,8 +131,8 @@ export async function initConfig(envType: Env, env: EnvVariables, overrides: any
 		supportName: env.SUPPORT_NAME || appName,
 		businessEmail: env.BUSINESS_EMAIL || supportEmail,
 		cookieSecure: env.COOKIES_SECURE,
-		storageDriver: parseStorageDriverConnectionString(env.CONTENT_DRIVER),
-		storageDriverFallback: parseStorageDriverConnectionString(env.CONTENT_DRIVER_FALLBACK),
+		storageDriver: parseStorageDriverConnectionString(env.STORAGE_DRIVER),
+		storageDriverFallback: parseStorageDriverConnectionString(env.STORAGE_DRIVER_FALLBACK),
 		...overrides,
 	};
 }

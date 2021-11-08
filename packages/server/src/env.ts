@@ -48,8 +48,8 @@ const defaultEnvValues: EnvVariables = {
 	// Content driver config
 	// ==================================================
 
-	CONTENT_DRIVER: 'Type=Database',
-	CONTENT_DRIVER_FALLBACK: '',
+	STORAGE_DRIVER: 'Type=Database',
+	STORAGE_DRIVER_FALLBACK: '',
 
 	// ==================================================
 	// Mailer config
@@ -104,8 +104,8 @@ export interface EnvVariables {
 
 	SQLITE_DATABASE: string;
 
-	CONTENT_DRIVER: string;
-	CONTENT_DRIVER_FALLBACK: string;
+	STORAGE_DRIVER: string;
+	STORAGE_DRIVER_FALLBACK: string;
 
 	MAILER_ENABLED: boolean;
 	MAILER_HOST: string;
