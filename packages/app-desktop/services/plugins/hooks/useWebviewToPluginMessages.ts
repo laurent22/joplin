@@ -16,13 +16,22 @@ export default function(frameWindow: any, isReady: boolean, pluginId: string, vi
 		if (!frameWindow) return () => {};
 
 		function onMessage_(event: any) {
-			if (!event.data || event.data.target !== 'postMessageService.message') return;
 
-			void PostMessageService.instance().postMessage({
-				pluginId,
-				viewId,
-				...event.data.message,
-			});
+			if (!event.data || !event.data.target) {
+				return;
+			}
+
+			if (event.data.target === 'postMessageService.registerViewMessageHandler') {
+				PostMessageService.instance().registerViewMessageHandler(ResponderComponentType.UserWebview, viewId, (message: MessageResponse) => {
+					postMessage('postMessageService.plugin_message', { message });
+				});
+			} else if (event.data.target === 'postMessageService.message') {
+				void PostMessageService.instance().postMessage({
+					pluginId,
+					viewId,
+					...event.data.message,
+				});
+			}
 		}
 
 		frameWindow.addEventListener('message', onMessage_);

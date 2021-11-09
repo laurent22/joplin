@@ -50,6 +50,20 @@ async function setupWebviewPanel() {
 		console.info('PostMessagePlugin (Webview): Responding with:', response);
 		return response;
 	});
+
+	panels.show(view, true);
+
+	var intervalID = setInterval(
+		() => {
+			console.info('check if webview is ready...');
+			if(panels.visible(view)) {
+				console.info('plugin: sending message to webview. ');
+				panels.postMessage(view, 'testingPluginMessage');
+			}
+			clearInterval(intervalID);
+		}
+			, 500
+	);
 }
 
 joplin.plugins.register({
