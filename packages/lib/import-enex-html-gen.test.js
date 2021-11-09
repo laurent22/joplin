@@ -41,6 +41,11 @@ const beautifyHtml = (html) => {
  * `<content><![CDATA[...]]</content>`.
  */
 const compareOutputToExpected = (options) => {
+	options = {
+		resources: [],
+		...options,
+	};
+
 	const inputFile = fileWithPath(`${options.testName}.enex`);
 	const outputFile = fileWithPath(`${options.testName}.html`);
 	const testTitle = `should convert from Enex to Html: ${options.testName}`;
@@ -62,12 +67,10 @@ describe('EnexToHtml', function() {
 
 	compareOutputToExpected({
 		testName: 'checklist-list',
-		resources: [],
 	});
 
 	compareOutputToExpected({
 		testName: 'svg',
-		resources: [],
 	});
 
 	compareOutputToExpected({
@@ -94,6 +97,10 @@ describe('EnexToHtml', function() {
 			mime: 'application/pdf', // Any non-image/non-audio mime type will do
 			size: 1000,
 		}],
+	});
+
+	compareOutputToExpected({
+		testName: 'quoted-attributes',
 	});
 
 	// it('fails when not given a matching resource', (async () => {
