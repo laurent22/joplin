@@ -1,5 +1,13 @@
 # Joplin Server Changelog
 
+## [server-v2.6.3](https://github.com/laurent22/joplin/releases/tag/server-v2.6.3) - 2021-11-08T15:20:41Z
+
+- New: Add support for sharing notes when E2EE is enabled (#5529)
+- Improved: Disable mailer service if no-reply email is not set (ce5c5d6)
+- Improved: Display latest migration name after auto-migration (7ad73df)
+- Improved: Immediately ask user to set password after Stripe checkout (9e1cb9d)
+- Improved: Set resource content size when viewing published note (70d5c7a)
+
 ## [server-v2.6.2](https://github.com/laurent22/joplin/releases/tag/server-v2.6.2) - 2021-11-03T12:54:38Z
 
 - New: Add support for faster built-in sync locks (#5662)

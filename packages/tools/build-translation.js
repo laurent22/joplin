@@ -19,6 +19,9 @@ const libDir = `${rootDir}/packages/lib`;
 const { execCommand, isMac, insertContentIntoFile, filename, dirname, fileExtension } = require('./tool-utils.js');
 const { countryDisplayName, countryCodeOnly } = require('@joplin/lib/locale');
 
+const { GettextExtractor, JsExtractors } = require('gettext-extractor');
+
+
 function parsePoFile(filePath) {
 	const content = fs.readFileSync(filePath);
 	return gettextParser.po.parse(content);
@@ -26,22 +29,29 @@ function parsePoFile(filePath) {
 
 function serializeTranslation(translation) {
 	const output = {};
-	const translations = translation.translations[''];
-	for (const n in translations) {
-		if (!translations.hasOwnProperty(n)) continue;
-		if (n == '') continue;
-		const t = translations[n];
-		let translated = '';
-		if (t.comments && t.comments.flag && t.comments.flag.indexOf('fuzzy') >= 0) {
-			// Don't include fuzzy translations
-		} else {
-			translated = t['msgstr'][0];
-		}
 
-		if (translated) output[n] = translated;
+	// Translations are grouped by "msgctxt"
+
+	for (const msgctxt of Object.keys(translation.translations)) {
+		const translations = translation.translations[msgctxt];
+
+		for (const n in translations) {
+			if (!translations.hasOwnProperty(n)) continue;
+			if (n == '') continue;
+			const t = translations[n];
+			let translated = '';
+			if (t.comments && t.comments.flag && t.comments.flag.indexOf('fuzzy') >= 0) {
+				// Don't include fuzzy translations
+			} else {
+				translated = t['msgstr'][0];
+			}
+
+			if (translated) output[n] = translated;
+		}
 	}
 
-	return JSON.stringify(output);
+	// Sort the translations to make the diff easier to read.
+	return JSON.stringify(output, Object.keys(output).sort((a, b) => a.toLowerCase() < b.toLowerCase() ? -1 : +1), ' ');
 }
 
 function saveToFile(filePath, data) {
@@ -113,14 +123,7 @@ async function createPotFile(potFilePath) {
 		'./readme/*',
 	];
 
-	// We get all the .ts and .js files, preferring the .ts file when it's
-	// available (because the .js file is a minified version and gettext might
-	// fail on it).
-	//
-	// As of 2021-11, gettext doesn't process .tsx files so we still need to use
-	// the .js for this.
-
-	const findCommand = `find . -type f \\( -iname \\*.js -o -iname \\*.ts \\) -not -path '${excludedDirs.join('\' -not -path \'')}'`;
+	const findCommand = `find . -type f \\( -iname \\*.js -o -iname \\*.ts -o -iname \\*.tsx \\) -not -path '${excludedDirs.join('\' -not -path \'')}'`;
 	process.chdir(rootDir);
 	let files = (await execCommand(findCommand)).split('\n');
 
@@ -152,26 +155,59 @@ async function createPotFile(potFilePath) {
 
 	files.sort();
 
-	// Use this to get the list of files that are going to be processed. Useful
-	// to debug issues with files that shouldn't be in the list.
-	// console.info(files.join('\n'));
+	// Note: we previously used the xgettext utility, but it only partially
+	// supports TypeScript and doesn't support .tsx files at all. Besides; the
+	// TypeScript compiler now converts some `_('some string')` calls to
+	// `(0,locale1._)('some string')`, which cannot be detected by xgettext.
+	//
+	// So now we use this gettext-extractor utility, which seems to do the job.
+	// It supports .ts and .tsx files and appears to find the same strings as
+	// xgettext.
 
-	const baseArgs = [];
-	baseArgs.push('--from-code=utf-8');
-	baseArgs.push(`--output="${potFilePath}"`);
-	baseArgs.push('--language=JavaScript');
-	baseArgs.push('--copyright-holder="Laurent Cozic"');
-	baseArgs.push('--package-name=Joplin');
-	baseArgs.push('--package-version=1.0.0');
-	baseArgs.push('--keyword=_n:1,2');
+	const extractor = new GettextExtractor();
 
-	let args = baseArgs.slice();
-	args = args.concat(files);
-	let xgettextPath = 'xgettext';
-	if (isMac()) xgettextPath = executablePath('xgettext'); // Needs to have been installed with `brew install gettext`
-	const cmd = `${xgettextPath} ${args.join(' ')}`;
-	const result = await execCommand(cmd);
-	if (result && result.trim()) console.error(result.trim());
+	// In the following string:
+	//
+	//     _('Hello %s', 'Scott')
+	//
+	// "Hello %s" is the `text` (or "msgstr" in gettext parlance) , and "Scott"
+	// is the `context` ("msgctxt").
+	//
+	// gettext-extractor allows adding both the text and context to the pot
+	// file, however we should avoid this because a change in the context string
+	// would mark the associated string as fuzzy. We want to avoid this because
+	// the point of splitting into text and context is that even if the context
+	// changes we don't need to retranslate the text. We use this for URLs for
+	// instance.
+	//
+	// Because of this, below we don't set the "context" property.
+
+	const parser = extractor
+		.createJsParser([
+			JsExtractors.callExpression('_', {
+				arguments: {
+					text: 0,
+					// context: 1,
+				},
+			}),
+			JsExtractors.callExpression('_n', {
+				arguments: {
+					text: 0,
+					textPlural: 1,
+					// context: 2,
+				},
+			}),
+		]);
+
+	for (const file of files) {
+		parser.parseFile(file);
+	}
+
+	extractor.savePotFile(potFilePath, {
+		'Project-Id-Version': 'Joplin',
+		'Content-Type': 'text/plain; charset=UTF-8',
+	});
+
 	await removePoHeaderDate(potFilePath);
 }
 
@@ -346,7 +382,18 @@ function deletedStrings(oldStrings, newStrings) {
 async function main() {
 	const argv = require('yargs').argv;
 
-	const potFilePath = `${localesDir}/joplin.pot`;
+	const missingStringsCheckOnly = !!argv['missing-strings-check-only'];
+
+	let potFilePath = `${localesDir}/joplin.pot`;
+
+	let tempPotFilePath = '';
+
+	if (missingStringsCheckOnly) {
+		tempPotFilePath = `${localesDir}/joplin-temp-${Math.floor(Math.random() * 10000000)}.pot`;
+		await fs.copy(potFilePath, tempPotFilePath);
+		potFilePath = tempPotFilePath;
+	}
+
 	const jsonLocalesDir = `${libDir}/locales`;
 	const defaultLocale = 'en_GB';
 
@@ -359,6 +406,8 @@ async function main() {
 	const newPotStatus = await translationStatus(false, potFilePath);
 
 	console.info(`Updated pot file. Total strings: ${oldPotStatus.untranslatedCount} => ${newPotStatus.untranslatedCount}`);
+
+	if (tempPotFilePath) await fs.remove(tempPotFilePath);
 
 	const deletedCount = oldPotStatus.untranslatedCount - newPotStatus.untranslatedCount;
 	if (deletedCount >= 5) {
@@ -373,6 +422,8 @@ async function main() {
 			throw new Error(msg.join('\n'));
 		}
 	}
+
+	if (missingStringsCheckOnly) return;
 
 	await execCommand(`cp "${potFilePath}" ` + `"${localesDir}/${defaultLocale}.po"`);
 
