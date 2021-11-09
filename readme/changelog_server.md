@@ -1,5 +1,9 @@
 # Joplin Server Changelog
 
+## [server-v2.6.4](https://github.com/laurent22/joplin/releases/tag/server-v2.6.4) - 2021-11-09T16:12:09Z
+
+- Improved: Allow storing item content in database, filesystem or S3 (depending on config) (#5602)
+
 ## [server-v2.6.3](https://github.com/laurent22/joplin/releases/tag/server-v2.6.3) - 2021-11-08T15:20:41Z
 
 - New: Add support for sharing notes when E2EE is enabled (#5529)
