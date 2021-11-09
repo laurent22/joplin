@@ -299,16 +299,16 @@
 				const markJsHackMarker_ = ' ';
 				for (let i = 0; i < elements.length; i++) {
 					if (!type) {
-						elements[i].innerHTML = elements[i].innerHTML + markJsHackMarker_;
+						elements[i].insertAdjacentHTML('beforeend', markJsHackMarker_);
 					} else if (type === 'insertBefore') {
 						elements[i].insertAdjacentHTML('beforeBegin', markJsHackMarker_);
 					}
 				}
 			}
 
-			prepareElementsForMarkJs(document.getElementsByTagName('p'));
-			prepareElementsForMarkJs(document.getElementsByTagName('div'));
-			prepareElementsForMarkJs(document.getElementsByTagName('br'), 'insertBefore');
+			prepareElementsForMarkJs(contentElement.getElementsByTagName('p'));
+			prepareElementsForMarkJs(contentElement.getElementsByTagName('div'));
+			prepareElementsForMarkJs(contentElement.getElementsByTagName('br'), 'insertBefore');
 			markJsHackMarkerInserted_ = true;
 		}
 
