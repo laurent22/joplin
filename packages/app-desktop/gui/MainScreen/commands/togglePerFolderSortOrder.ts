@@ -4,7 +4,7 @@ import PerFolderSortOrderService from '../../../services/sortOrder/PerFolderSort
 
 export const declaration: CommandDeclaration = {
 	name: 'togglePerFolderSortOrder',
-	label: () => _('Toggle per-notebook sort order'),
+	label: () => _('Toggle own sort order'),
 };
 
 export const runtime = (): CommandRuntime => {
