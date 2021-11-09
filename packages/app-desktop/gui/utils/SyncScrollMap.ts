@@ -61,7 +61,7 @@ export class SyncScrollMapper {
 		}
 		// Since getBoundingClientRect() returns a relative position,
 		// the offset of the origin is needed to get its aboslute position.
-		const offset = doc.getElementById('rendered-md').getBoundingClientRect().top;
+		const offset = doc.getElementById('rendered-md')?.getBoundingClientRect().top;
 		if (!offset) return null;
 		// Mapping information between editor's lines and viewer's elements is
 		// embedded into elements by the renderer.
