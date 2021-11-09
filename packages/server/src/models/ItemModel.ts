@@ -7,6 +7,10 @@ import { ApiError, ErrorForbidden, ErrorUnprocessableEntity } from '../utils/err
 import { Knex } from 'knex';
 import { ChangePreviousItem } from './ChangeModel';
 import { unique } from '../utils/array';
+import StorageDriverBase, { Context } from './items/storage/StorageDriverBase';
+import { DbConnection } from '../db';
+import { Config, StorageDriverMode } from '../utils/types';
+import { NewModelFactoryHandler, Options } from './factory';
 
 const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
 
@@ -38,9 +42,22 @@ export interface ItemSaveOption extends SaveOptions {
 	shareId?: Uuid;
 }
 
+export interface ItemLoadOptions extends LoadOptions {
+	withContent?: boolean;
+}
+
 export default class ItemModel extends BaseModel<Item> {
 
 	private updatingTotalSizes_: boolean = false;
+	private storageDriver_: StorageDriverBase = null;
+	private storageDriverFallback_: StorageDriverBase = null;
+
+	public constructor(db: DbConnection, modelFactory: NewModelFactoryHandler, config: Config, options: Options) {
+		super(db, modelFactory, config);
+
+		this.storageDriver_ = options.storageDriver;
+		this.storageDriverFallback_ = options.storageDriverFallback;
+	}
 
 	protected get tableName(): string {
 		return 'items';
@@ -106,62 +123,106 @@ export default class ItemModel extends BaseModel<Item> {
 		return path.replace(extractNameRegex, '$1');
 	}
 
-	public byShareIdQuery(shareId: Uuid, options: LoadOptions = {}): Knex.QueryBuilder {
+	public byShareIdQuery(shareId: Uuid, options: ItemLoadOptions = {}): Knex.QueryBuilder {
 		return this
 			.db('items')
 			.select(this.selectFields(options, null, 'items'))
 			.where('jop_share_id', '=', shareId);
 	}
 
-	public async byShareId(shareId: Uuid, options: LoadOptions = {}): Promise<Item[]> {
+	public async byShareId(shareId: Uuid, options: ItemLoadOptions = {}): Promise<Item[]> {
 		const query = this.byShareIdQuery(shareId, options);
 		return await query;
 	}
 
-	public async loadByJopIds(userId: Uuid | Uuid[], jopIds: string[], options: LoadOptions = {}): Promise<Item[]> {
+	private async storageDriverWrite(itemId: Uuid, content: Buffer, context: Context) {
+		await this.storageDriver_.write(itemId, content, context);
+
+		if (this.storageDriverFallback_) {
+			if (this.storageDriverFallback_.mode === StorageDriverMode.ReadWrite) {
+				await this.storageDriverFallback_.write(itemId, content, context);
+			} else if (this.storageDriverFallback_.mode === StorageDriverMode.ReadOnly) {
+				await this.storageDriverFallback_.write(itemId, Buffer.from(''), context);
+			} else {
+				throw new Error(`Unsupported fallback mode: ${this.storageDriverFallback_.mode}`);
+			}
+		}
+	}
+
+	private async storageDriverRead(itemId: Uuid, context: Context) {
+		if (await this.storageDriver_.exists(itemId, context)) {
+			return this.storageDriver_.read(itemId, context);
+		} else {
+			if (!this.storageDriverFallback_) throw new Error(`Content does not exist but fallback content driver is not defined: ${itemId}`);
+			return this.storageDriverFallback_.read(itemId, context);
+		}
+	}
+
+	public async loadByJopIds(userId: Uuid | Uuid[], jopIds: string[], options: ItemLoadOptions = {}): Promise<Item[]> {
 		if (!jopIds.length) return [];
 
 		const userIds = Array.isArray(userId) ? userId : [userId];
 		if (!userIds.length) return [];
 
-		return this
+		const rows: Item[] = await this
 			.db('user_items')
 			.leftJoin('items', 'items.id', 'user_items.item_id')
 			.distinct(this.selectFields(options, null, 'items'))
 			.whereIn('user_items.user_id', userIds)
 			.whereIn('jop_id', jopIds);
+
+		if (options.withContent) {
+			for (const row of rows) {
+				row.content = await this.storageDriverRead(row.id, { models: this.models() });
+			}
+		}
+
+		return rows;
 	}
 
-	public async loadByJopId(userId: Uuid, jopId: string, options: LoadOptions = {}): Promise<Item> {
+	public async loadByJopId(userId: Uuid, jopId: string, options: ItemLoadOptions = {}): Promise<Item> {
 		const items = await this.loadByJopIds(userId, [jopId], options);
 		return items.length ? items[0] : null;
 	}
 
-	public async loadByNames(userId: Uuid | Uuid[], names: string[], options: LoadOptions = {}): Promise<Item[]> {
+	public async loadByNames(userId: Uuid | Uuid[], names: string[], options: ItemLoadOptions = {}): Promise<Item[]> {
 		if (!names.length) return [];
 
 		const userIds = Array.isArray(userId) ? userId : [userId];
 
-		return this
+		const rows: Item[] = await this
 			.db('user_items')
 			.leftJoin('items', 'items.id', 'user_items.item_id')
 			.distinct(this.selectFields(options, null, 'items'))
 			.whereIn('user_items.user_id', userIds)
 			.whereIn('name', names);
+
+		if (options.withContent) {
+			for (const row of rows) {
+				row.content = await this.storageDriverRead(row.id, { models: this.models() });
+			}
+		}
+
+		return rows;
 	}
 
-	public async loadByName(userId: Uuid, name: string, options: LoadOptions = {}): Promise<Item> {
+	public async loadByName(userId: Uuid, name: string, options: ItemLoadOptions = {}): Promise<Item> {
 		const items = await this.loadByNames(userId, [name], options);
 		return items.length ? items[0] : null;
 	}
 
-	public async loadWithContent(id: Uuid, options: LoadOptions = {}): Promise<Item> {
-		return this
-			.db('user_items')
-			.leftJoin('items', 'items.id', 'user_items.item_id')
-			.select(this.selectFields(options, ['*'], 'items'))
-			.where('items.id', '=', id)
-			.first();
+	public async loadWithContent(id: Uuid, options: ItemLoadOptions = {}): Promise<Item> {
+		const content = await this.storageDriverRead(id, { models: this.models() });
+
+		return {
+			...await this
+				.db('user_items')
+				.leftJoin('items', 'items.id', 'user_items.item_id')
+				.select(this.selectFields(options, ['*'], 'items'))
+				.where('items.id', '=', id)
+				.first(),
+			content,
+		};
 	}
 
 	public async loadAsSerializedJoplinItem(id: Uuid): Promise<string> {
@@ -255,8 +316,10 @@ export default class ItemModel extends BaseModel<Item> {
 		return this.itemToJoplinItem(raw);
 	}
 
-	public async saveFromRawContent(user: User, rawContentItems: SaveFromRawContentItem[], options: ItemSaveOption = null): Promise<SaveFromRawContentResult> {
+	public async saveFromRawContent(user: User, rawContentItems: SaveFromRawContentItem[] | SaveFromRawContentItem, options: ItemSaveOption = null): Promise<SaveFromRawContentResult> {
 		options = options || {};
+
+		if (!Array.isArray(rawContentItems)) rawContentItems = [rawContentItems];
 
 		// In this function, first we process the input items, which may be
 		// serialized Joplin items or actual buffers (for resources) and convert
@@ -349,10 +412,45 @@ export default class ItemModel extends BaseModel<Item> {
 					continue;
 				}
 
-				const itemToSave = o.item;
+				const itemToSave = { ...o.item };
 
 				try {
+					const content = itemToSave.content;
+					delete itemToSave.content;
+					itemToSave.content_storage_id = this.storageDriver_.storageId;
+
+					itemToSave.content_size = content ? content.byteLength : 0;
+
+					// Here we save the item row and content, and we want to
+					// make sure that either both are saved or none of them.
+					// This is done by setting up a save point before saving the
+					// row, and rollbacking if the content cannot be saved.
+					//
+					// Normally, since we are in a transaction, throwing an
+					// error should work, but since we catch all errors within
+					// this block it doesn't work.
+
+					// TODO: When an item is uploaded multiple times
+					// simultaneously there could be a race condition, where the
+					// content would not match the db row (for example, the
+					// content_size would differ).
+					//
+					// Possible solutions:
+					//
+					// - Row-level lock on items.id, and release once the
+					//   content is saved.
+					// - Or external lock - eg. Redis.
+
+					const savePoint = await this.setSavePoint();
 					const savedItem = await this.saveForUser(user.id, itemToSave);
+
+					try {
+						await this.storageDriverWrite(savedItem.id, content, { models: this.models() });
+						await this.releaseSavePoint(savePoint);
+					} catch (error) {
+						await this.rollbackSavePoint(savePoint);
+						throw error;
+					}
 
 					if (o.isNote) {
 						await this.models().itemResource().deleteByItemId(savedItem.id);
@@ -390,7 +488,7 @@ export default class ItemModel extends BaseModel<Item> {
 	}
 
 
-	private childrenQuery(userId: Uuid, pathQuery: string = '', count: boolean = false, options: LoadOptions = {}): Knex.QueryBuilder {
+	private childrenQuery(userId: Uuid, pathQuery: string = '', count: boolean = false, options: ItemLoadOptions = {}): Knex.QueryBuilder {
 		const query = this
 			.db('user_items')
 			.innerJoin('items', 'user_items.item_id', 'items.id')
@@ -420,7 +518,7 @@ export default class ItemModel extends BaseModel<Item> {
 		return `${this.baseUrl}/items/${itemId}/content`;
 	}
 
-	public async children(userId: Uuid, pathQuery: string = '', pagination: Pagination = null, options: LoadOptions = {}): Promise<PaginatedItems> {
+	public async children(userId: Uuid, pathQuery: string = '', pagination: Pagination = null, options: ItemLoadOptions = {}): Promise<PaginatedItems> {
 		pagination = pagination || defaultPagination();
 		const query = this.childrenQuery(userId, pathQuery, false, options);
 		return paginateDbQuery(query, pagination, 'items');
@@ -532,6 +630,8 @@ export default class ItemModel extends BaseModel<Item> {
 			await this.models().share().delete(shares.map(s => s.id));
 			await this.models().userItem().deleteByItemIds(ids);
 			await this.models().itemResource().deleteByItemIds(ids);
+			await this.storageDriver_.delete(ids, { models: this.models() });
+			if (this.storageDriverFallback_) await this.storageDriverFallback_.delete(ids, { models: this.models() });
 
 			await super.delete(ids, options);
 		}, 'ItemModel::delete');
@@ -552,6 +652,7 @@ export default class ItemModel extends BaseModel<Item> {
 	public async makeTestItem(userId: Uuid, num: number) {
 		return this.saveForUser(userId, {
 			name: `${num.toString().padStart(32, '0')}.md`,
+			content: Buffer.from(''),
 		});
 	}
 
@@ -560,22 +661,26 @@ export default class ItemModel extends BaseModel<Item> {
 			for (let i = 1; i <= count; i++) {
 				await this.saveForUser(userId, {
 					name: `${i.toString().padStart(32, '0')}.md`,
+					content: Buffer.from(''),
 				});
 			}
 		}, 'ItemModel::makeTestItems');
 	}
 
+	// This method should be private because items should only be saved using
+	// saveFromRawContent, which is going to deal with the content driver. But
+	// since it's used in various test units, it's kept public for now.
 	public async saveForUser(userId: Uuid, item: Item, options: SaveOptions = {}): Promise<Item> {
 		if (!userId) throw new Error('userId is required');
 
 		item = { ... item };
 		const isNew = await this.isNew(item, options);
 
-		if (item.content) {
-			item.content_size = item.content.byteLength;
-		}
-
 		let previousItem: ChangePreviousItem = null;
+
+		if (item.content && !item.content_storage_id) {
+			item.content_storage_id = this.storageDriver_.storageId;
+		}
 
 		if (isNew) {
 			if (!item.mime_type) item.mime_type = mimeUtils.fromFilename(item.name) || '';

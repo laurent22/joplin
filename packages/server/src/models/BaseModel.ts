@@ -3,7 +3,7 @@ import { DbConnection } from '../db';
 import TransactionHandler from '../utils/TransactionHandler';
 import uuidgen from '../utils/uuidgen';
 import { ErrorUnprocessableEntity, ErrorBadRequest } from '../utils/errors';
-import { Models } from './factory';
+import { Models, NewModelFactoryHandler } from './factory';
 import * as EventEmitter from 'events';
 import { Config } from '../utils/types';
 import personalizedUserContentBaseUrl from '@joplin/lib/services/joplinServer/personalizedUserContentBaseUrl';
@@ -54,12 +54,12 @@ export default abstract class BaseModel<T> {
 	private defaultFields_: string[] = [];
 	private db_: DbConnection;
 	private transactionHandler_: TransactionHandler;
-	private modelFactory_: Function;
+	private modelFactory_: NewModelFactoryHandler;
 	private static eventEmitter_: EventEmitter = null;
 	private config_: Config;
 	private savePoints_: SavePoint[] = [];
 
-	public constructor(db: DbConnection, modelFactory: Function, config: Config) {
+	public constructor(db: DbConnection, modelFactory: NewModelFactoryHandler, config: Config) {
 		this.db_ = db;
 		this.modelFactory_ = modelFactory;
 		this.config_ = config;
@@ -71,7 +71,7 @@ export default abstract class BaseModel<T> {
 	// connection is passed to it. That connection can be the regular db
 	// connection, or the active transaction.
 	protected models(db: DbConnection = null): Models {
-		return this.modelFactory_(db || this.db, this.config_);
+		return this.modelFactory_(db || this.db);
 	}
 
 	protected get baseUrl(): string {
@@ -90,7 +90,7 @@ export default abstract class BaseModel<T> {
 		return this.config_.appName;
 	}
 
-	protected get db(): DbConnection {
+	public get db(): DbConnection {
 		if (this.transactionHandler_.activeTransaction) return this.transactionHandler_.activeTransaction;
 		return this.db_;
 	}

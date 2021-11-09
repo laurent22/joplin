@@ -1,4 +1,4 @@
-export type Uuid = any;
+export type Uuid = string;
 
 export enum ItemAddressingType {
 	Id = 1,
@@ -246,6 +246,11 @@ export interface Event extends WithUuid {
 	created_time?: number;
 }
 
+export interface Storage {
+	id?: number;
+	connection_string?: string;
+}
+
 export interface Item extends WithDates, WithUuid {
 	name?: string;
 	mime_type?: string;
@@ -258,6 +263,7 @@ export interface Item extends WithDates, WithUuid {
 	jop_encryption_applied?: number;
 	jop_updated_time?: number;
 	owner_id?: Uuid;
+	content_storage_id?: number;
 }
 
 export const databaseSchema: DatabaseTables = {
@@ -418,6 +424,10 @@ export const databaseSchema: DatabaseTables = {
 		name: { type: 'string' },
 		created_time: { type: 'string' },
 	},
+	storages: {
+		id: { type: 'number' },
+		connection_string: { type: 'string' },
+	},
 	items: {
 		id: { type: 'string' },
 		name: { type: 'string' },
@@ -433,6 +443,7 @@ export const databaseSchema: DatabaseTables = {
 		jop_encryption_applied: { type: 'number' },
 		jop_updated_time: { type: 'string' },
 		owner_id: { type: 'string' },
+		content_storage_id: { type: 'number' },
 	},
 };
 // AUTO-GENERATED-TYPES

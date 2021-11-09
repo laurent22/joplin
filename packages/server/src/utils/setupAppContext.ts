@@ -1,7 +1,7 @@
 import { LoggerWrapper } from '@joplin/lib/Logger';
 import config from '../config';
 import { DbConnection } from '../db';
-import newModelFactory, { Models } from '../models/factory';
+import newModelFactory, { Models, Options as ModelFactoryOptions } from '../models/factory';
 import { AppContext, Config, Env } from './types';
 import routes from '../routes/routes';
 import ShareService from '../services/ShareService';
@@ -23,8 +23,8 @@ async function setupServices(env: Env, models: Models, config: Config): Promise<
 	return output;
 }
 
-export default async function(appContext: AppContext, env: Env, dbConnection: DbConnection, appLogger: ()=> LoggerWrapper): Promise<AppContext> {
-	const models = newModelFactory(dbConnection, config());
+export default async function(appContext: AppContext, env: Env, dbConnection: DbConnection, appLogger: ()=> LoggerWrapper, options: ModelFactoryOptions): Promise<AppContext> {
+	const models = newModelFactory(dbConnection, config(), options);
 
 	// The joplinBase object is immutable because it is shared by all requests.
 	// Then a "joplin" context property is created from it per request, which

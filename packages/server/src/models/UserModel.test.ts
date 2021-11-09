@@ -360,18 +360,18 @@ describe('UserModel', function() {
 		const syncInfo3: any = JSON.parse(JSON.stringify(syncInfo1));
 		delete syncInfo3.ppk;
 
-		await models().item().saveForUser(user1.id, {
-			content: Buffer.from(JSON.stringify(syncInfo1)),
+		await models().item().saveFromRawContent(user1, {
+			body: Buffer.from(JSON.stringify(syncInfo1)),
 			name: 'info.json',
 		});
 
-		await models().item().saveForUser(user2.id, {
-			content: Buffer.from(JSON.stringify(syncInfo2)),
+		await models().item().saveFromRawContent(user2, {
+			body: Buffer.from(JSON.stringify(syncInfo2)),
 			name: 'info.json',
 		});
 
-		await models().item().saveForUser(user3.id, {
-			content: Buffer.from(JSON.stringify(syncInfo3)),
+		await models().item().saveFromRawContent(user3, {
+			body: Buffer.from(JSON.stringify(syncInfo3)),
 			name: 'info.json',
 		});
 

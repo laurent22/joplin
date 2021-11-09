@@ -1,6 +1,7 @@
 import time from '@joplin/lib/time';
 import { DbConnection, dropTables, migrateLatest } from '../db';
 import newModelFactory from '../models/factory';
+import storageDriverFromConfig from '../models/items/storage/storageDriverFromConfig';
 import { AccountType } from '../models/UserModel';
 import { User, UserFlagType } from '../services/database/types';
 import { Config } from '../utils/types';
@@ -34,9 +35,12 @@ export async function createTestUsers(db: DbConnection, config: Config, options:
 
 	const password = 'hunter1hunter2hunter3';
 
-	if (options.count) {
-		const models = newModelFactory(db, config);
+	const models = newModelFactory(db, config, {
+		// storageDriver: new StorageDriverDatabase(1, { dbClientType: clientType(db) }),
+		storageDriver: await storageDriverFromConfig(config.storageDriver, db), // new StorageDriverDatabase(1, { dbClientType: clientType(db) }),
+	});
 
+	if (options.count) {
 		const users: User[] = [];
 
 		for (let i = 0; i < options.count; i++) {
@@ -52,7 +56,6 @@ export async function createTestUsers(db: DbConnection, config: Config, options:
 	} else {
 		await dropTables(db);
 		await migrateLatest(db);
-		const models = newModelFactory(db, config);
 
 		for (let userNum = 1; userNum <= 2; userNum++) {
 			await models.user().save({

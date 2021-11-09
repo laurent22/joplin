@@ -38,12 +38,12 @@ describe('ChangeModel', function() {
 		const changeModel = models().change();
 
 		await msleep(1); const item1 = await models().item().makeTestItem(user.id, 1); // [1] CREATE 1
-		await msleep(1); await itemModel.saveForUser(user.id, { id: item1.id, name: '0000000000000000000000000000001A.md' }); // [2] UPDATE 1a
-		await msleep(1); await itemModel.saveForUser(user.id, { id: item1.id, name: '0000000000000000000000000000001B.md' }); // [3] UPDATE 1b
+		await msleep(1); await itemModel.saveForUser(user.id, { id: item1.id, name: '0000000000000000000000000000001A.md', content: Buffer.from('') }); // [2] UPDATE 1a
+		await msleep(1); await itemModel.saveForUser(user.id, { id: item1.id, name: '0000000000000000000000000000001B.md', content: Buffer.from('') }); // [3] UPDATE 1b
 		await msleep(1); const item2 = await models().item().makeTestItem(user.id, 2); // [4] CREATE 2
-		await msleep(1); await itemModel.saveForUser(user.id, { id: item2.id, name: '0000000000000000000000000000002A.md' }); // [5] UPDATE 2a
+		await msleep(1); await itemModel.saveForUser(user.id, { id: item2.id, name: '0000000000000000000000000000002A.md', content: Buffer.from('') }); // [5] UPDATE 2a
 		await msleep(1); await itemModel.delete(item1.id); // [6] DELETE 1
-		await msleep(1); await itemModel.saveForUser(user.id, { id: item2.id, name: '0000000000000000000000000000002B.md' }); // [7] UPDATE 2b
+		await msleep(1); await itemModel.saveForUser(user.id, { id: item2.id, name: '0000000000000000000000000000002B.md', content: Buffer.from('') }); // [7] UPDATE 2b
 		await msleep(1); const item3 = await models().item().makeTestItem(user.id, 3); // [8] CREATE 3
 
 		// Check that the 8 changes were created
@@ -120,7 +120,7 @@ describe('ChangeModel', function() {
 
 		let i = 1;
 		await msleep(1); const item1 = await models().item().makeTestItem(user.id, 1); // CREATE 1
-		await msleep(1); await itemModel.saveForUser(user.id, { id: item1.id, name: `test_mod${i++}` }); // UPDATE 1
+		await msleep(1); await itemModel.saveForUser(user.id, { id: item1.id, name: `test_mod${i++}`, content: Buffer.from('') }); // UPDATE 1
 
 		await expectThrow(async () => changeModel.delta(user.id, { limit: 1, cursor: 'invalid' }), 'resyncRequired');
 	});

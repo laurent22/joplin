@@ -72,88 +72,111 @@ import SubscriptionModel from './SubscriptionModel';
 import UserFlagModel from './UserFlagModel';
 import EventModel from './EventModel';
 import { Config } from '../utils/types';
+import StorageDriverBase from './items/storage/StorageDriverBase';
 import LockModel from './LockModel';
+import StorageModel from './StorageModel';
+
+export interface Options {
+	storageDriver: StorageDriverBase;
+	storageDriverFallback?: StorageDriverBase;
+}
+
+export type NewModelFactoryHandler = (db: DbConnection)=> Models;
 
 export class Models {
 
 	private db_: DbConnection;
 	private config_: Config;
+	private options_: Options;
 
-	public constructor(db: DbConnection, config: Config) {
+	public constructor(db: DbConnection, config: Config, options: Options) {
 		this.db_ = db;
 		this.config_ = config;
+		this.options_ = options;
+
+		// if (!options.storageDriver) throw new Error('StorageDriver is required');
+
+		this.newModelFactory = this.newModelFactory.bind(this);
+	}
+
+	private newModelFactory(db: DbConnection) {
+		return new Models(db, this.config_, this.options_);
 	}
 
 	public item() {
-		return new ItemModel(this.db_, newModelFactory, this.config_);
+		return new ItemModel(this.db_, this.newModelFactory, this.config_, this.options_);
 	}
 
 	public user() {
-		return new UserModel(this.db_, newModelFactory, this.config_);
+		return new UserModel(this.db_, this.newModelFactory, this.config_);
 	}
 
 	public email() {
-		return new EmailModel(this.db_, newModelFactory, this.config_);
+		return new EmailModel(this.db_, this.newModelFactory, this.config_);
 	}
 
 	public userItem() {
-		return new UserItemModel(this.db_, newModelFactory, this.config_);
+		return new UserItemModel(this.db_, this.newModelFactory, this.config_);
 	}
 
 	public token() {
-		return new TokenModel(this.db_, newModelFactory, this.config_);
+		return new TokenModel(this.db_, this.newModelFactory, this.config_);
 	}
 
 	public itemResource() {
-		return new ItemResourceModel(this.db_, newModelFactory, this.config_);
+		return new ItemResourceModel(this.db_, this.newModelFactory, this.config_);
 	}
 
 	public apiClient() {
-		return new ApiClientModel(this.db_, newModelFactory, this.config_);
+		return new ApiClientModel(this.db_, this.newModelFactory, this.config_);
 	}
 
 	public session() {
-		return new SessionModel(this.db_, newModelFactory, this.config_);
+		return new SessionModel(this.db_, this.newModelFactory, this.config_);
 	}
 
 	public change() {
-		return new ChangeModel(this.db_, newModelFactory, this.config_);
+		return new ChangeModel(this.db_, this.newModelFactory, this.config_);
 	}
 
 	public notification() {
-		return new NotificationModel(this.db_, newModelFactory, this.config_);
+		return new NotificationModel(this.db_, this.newModelFactory, this.config_);
 	}
 
 	public share() {
-		return new ShareModel(this.db_, newModelFactory, this.config_);
+		return new ShareModel(this.db_, this.newModelFactory, this.config_);
 	}
 
 	public shareUser() {
-		return new ShareUserModel(this.db_, newModelFactory, this.config_);
+		return new ShareUserModel(this.db_, this.newModelFactory, this.config_);
 	}
 
 	public keyValue() {
-		return new KeyValueModel(this.db_, newModelFactory, this.config_);
+		return new KeyValueModel(this.db_, this.newModelFactory, this.config_);
 	}
 
 	public subscription() {
-		return new SubscriptionModel(this.db_, newModelFactory, this.config_);
+		return new SubscriptionModel(this.db_, this.newModelFactory, this.config_);
 	}
 
 	public userFlag() {
-		return new UserFlagModel(this.db_, newModelFactory, this.config_);
+		return new UserFlagModel(this.db_, this.newModelFactory, this.config_);
 	}
 
 	public event() {
-		return new EventModel(this.db_, newModelFactory, this.config_);
+		return new EventModel(this.db_, this.newModelFactory, this.config_);
 	}
 
 	public lock() {
-		return new LockModel(this.db_, newModelFactory, this.config_);
+		return new LockModel(this.db_, this.newModelFactory, this.config_);
+	}
+
+	public storage() {
+		return new StorageModel(this.db_, this.newModelFactory, this.config_);
 	}
 
 }
 
-export default function newModelFactory(db: DbConnection, config: Config): Models {
-	return new Models(db, config);
+export default function newModelFactory(db: DbConnection, config: Config, options: Options): Models {
+	return new Models(db, config, options);
 }
