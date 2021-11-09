@@ -166,19 +166,35 @@ async function createPotFile(potFilePath) {
 
 	const extractor = new GettextExtractor();
 
+	// In the following string:
+	//
+	//     _('Hello %s', 'Scott')
+	//
+	// "Hello %s" is the `text` (or "msgstr" in gettext parlance) , and "Scott"
+	// is the `context` ("msgctxt").
+	//
+	// gettext-extractor allows adding both the text and context to the pot
+	// file, however we should avoid this because a change in the context string
+	// would mark the associated string as fuzzy. We want to avoid this because
+	// the point of splitting into text and context is that even if the context
+	// changes we don't need to retranslate the text. We use this for URLs for
+	// instance.
+	//
+	// Because of this, below we don't set the "context" property.
+
 	const parser = extractor
 		.createJsParser([
 			JsExtractors.callExpression('_', {
 				arguments: {
 					text: 0,
-					context: 1,
+					// context: 1,
 				},
 			}),
 			JsExtractors.callExpression('_n', {
 				arguments: {
 					text: 0,
 					textPlural: 1,
-					context: 2,
+					// context: 2,
 				},
 			}),
 		]);
