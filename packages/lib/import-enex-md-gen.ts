@@ -426,14 +426,21 @@ function attributeToLowerCase(node: any) {
 	return output;
 }
 
-function cssValue(context: any, style: string, propName: string): string {
+function cssValue(context: any, style: string, propName: string | string[]): string {
 	if (!style) return null;
+
+	const propNames = Array.isArray(propName) ? propName : [propName];
 
 	try {
 		const o = cssParser.parse(`pre {${style}}`);
 		if (!o.stylesheet.rules.length) return null;
-		const prop = o.stylesheet.rules[0].declarations.find((d: any) => d.property.toLowerCase() === propName);
-		return prop && prop.value ? prop.value.trim().toLowerCase() : null;
+
+		for (const propName of propNames) {
+			const prop = o.stylesheet.rules[0].declarations.find((d: any) => d.property.toLowerCase() === propName);
+			if (prop && prop.value) return prop.value.trim().toLowerCase();
+		}
+
+		return null;
 	} catch (error) {
 		displaySaxWarning(context, error.message);
 		return null;
@@ -507,7 +514,13 @@ function isCodeBlock(context: any, nodeName: string, attributes: any) {
 		// Yes, this property sometimes appears as -en-codeblock, sometimes as
 		// --en-codeblock. Would be too easy to import ENEX data otherwise.
 		// https://github.com/laurent22/joplin/issues/4965
-		const enCodeBlock = cssValue(context, attributes.style, '-en-codeblock') || cssValue(context, attributes.style, '--en-codeblock');
+		const enCodeBlock = cssValue(context, attributes.style, [
+			'-en-codeblock',
+			'--en-codeblock',
+			'-evernote-codeblock',
+			'--evernote-codeblock',
+		]);
+
 		if (enCodeBlock && enCodeBlock.toLowerCase() === 'true') return true;
 	}
 	return false;
@@ -518,8 +531,19 @@ function isHighlight(context: any, _nodeName: string, attributes: any) {
 		// Evernote uses various inconsistent CSS prefixes: so far I've found
 		// "--en", "-en", "-evernote", so I'm guessing "--evernote" probably
 		// exists too.
-		const enHighlight = cssValue(context, attributes.style, '-evernote-highlight') || cssValue(context, attributes.style, '--evernote-highlight');
-		if (enHighlight && enHighlight.toLowerCase() === 'true') return true;
+
+		const enHighlight = cssValue(context, attributes.style, [
+			'-evernote-highlight',
+			'--evernote-highlight',
+			'-en-highlight',
+			'--en-highlight',
+		]);
+
+		// Value can be any colour or "true". I guess if it's set at all it
+		// should be highlighted but just in case handle case where it's
+		// "false".
+
+		if (enHighlight && enHighlight.toLowerCase() !== 'false') return true;
 	}
 	return false;
 }
