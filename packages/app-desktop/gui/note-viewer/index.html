@@ -361,11 +361,19 @@
 			return m ? contentElement.scrollTop / m : 0;
 		}
 
+		// If zoom factor is not 1, Electron/Chromium calculates scrollTop incorrectly.
+		// This is automatically set.
 		let zoomFactorIsNotOne = false;
+		// When custom smooth scrolling is ongoing, remainedScrollDx/Dy keep the remaining
+		// amount of scrolling.
 		let remainedScrollDx = 0, remainedScrollDy = 0, remainedScrollTimerId = null;
 
 		function resetSmoothScroll() { remainedScrollDx = 0; remainedScrollDy = 0; }
 
+		// To avoid Electron/Chromium's scrolling bug when zoom fator is not 1,
+		// Custom scrolling is implemented. This is used only when zoom factor is not 1.
+		// If smoothly argument is true, smooth scrolling is performed.
+		// See https://github.com/laurent22/joplin/pull/5606#issuecomment-964293459
 		function customScroll(wheelEvent, smoothly) {
 			const linePixels = 100 / 3;
 			const pagePixelsX = Math.max(linePixels, contentElement.clientWidth);
