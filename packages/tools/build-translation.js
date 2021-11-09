@@ -19,6 +19,9 @@ const libDir = `${rootDir}/packages/lib`;
 const { execCommand, isMac, insertContentIntoFile, filename, dirname, fileExtension } = require('./tool-utils.js');
 const { countryDisplayName, countryCodeOnly } = require('@joplin/lib/locale');
 
+const { GettextExtractor, JsExtractors } = require('gettext-extractor');
+
+
 function parsePoFile(filePath) {
 	const content = fs.readFileSync(filePath);
 	return gettextParser.po.parse(content);
@@ -113,14 +116,7 @@ async function createPotFile(potFilePath) {
 		'./readme/*',
 	];
 
-	// We get all the .ts and .js files, preferring the .ts file when it's
-	// available (because the .js file is a minified version and gettext might
-	// fail on it).
-	//
-	// As of 2021-11, gettext doesn't process .tsx files so we still need to use
-	// the .js for this.
-
-	const findCommand = `find . -type f \\( -iname \\*.js -o -iname \\*.ts \\) -not -path '${excludedDirs.join('\' -not -path \'')}'`;
+	const findCommand = `find . -type f \\( -iname \\*.js -o -iname \\*.ts -o -iname \\*.tsx \\) -not -path '${excludedDirs.join('\' -not -path \'')}'`;
 	process.chdir(rootDir);
 	let files = (await execCommand(findCommand)).split('\n');
 
@@ -152,26 +148,43 @@ async function createPotFile(potFilePath) {
 
 	files.sort();
 
-	// Use this to get the list of files that are going to be processed. Useful
-	// to debug issues with files that shouldn't be in the list.
-	// console.info(files.join('\n'));
+	// Note: we previously used the xgettext utility, but it only partially
+	// supports TypeScript and doesn't support .tsx files at all. Besides; the
+	// TypeScript compiler now converts some `_('some string')` calls to
+	// `(0,locale1._)('some string')`, which cannot be detected by xgettext.
+	//
+	// So now we use this gettext-extractor utility, which seems to do the job.
+	// It supports .ts and .tsx files and appears to find the same strings as
+	// xgettext.
 
-	const baseArgs = [];
-	baseArgs.push('--from-code=utf-8');
-	baseArgs.push(`--output="${potFilePath}"`);
-	baseArgs.push('--language=JavaScript');
-	baseArgs.push('--copyright-holder="Laurent Cozic"');
-	baseArgs.push('--package-name=Joplin');
-	baseArgs.push('--package-version=1.0.0');
-	baseArgs.push('--keyword=_n:1,2');
+	const extractor = new GettextExtractor();
 
-	let args = baseArgs.slice();
-	args = args.concat(files);
-	let xgettextPath = 'xgettext';
-	if (isMac()) xgettextPath = executablePath('xgettext'); // Needs to have been installed with `brew install gettext`
-	const cmd = `${xgettextPath} ${args.join(' ')}`;
-	const result = await execCommand(cmd);
-	if (result && result.trim()) console.error(result.trim());
+	const parser = extractor
+		.createJsParser([
+			JsExtractors.callExpression('_', {
+				arguments: {
+					text: 0,
+					context: 1,
+				},
+			}),
+			JsExtractors.callExpression('_n', {
+				arguments: {
+					text: 0,
+					textPlural: 1,
+					context: 2,
+				},
+			}),
+		]);
+
+	for (const file of files) {
+		parser.parseFile(file);
+	}
+
+	extractor.savePotFile(potFilePath, {
+		'Project-Id-Version': 'Joplin',
+		'Content-Type': 'text/plain; charset=UTF-8',
+	});
+
 	await removePoHeaderDate(potFilePath);
 }
 
