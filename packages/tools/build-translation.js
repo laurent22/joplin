@@ -29,22 +29,29 @@ function parsePoFile(filePath) {
 
 function serializeTranslation(translation) {
 	const output = {};
-	const translations = translation.translations[''];
-	for (const n in translations) {
-		if (!translations.hasOwnProperty(n)) continue;
-		if (n == '') continue;
-		const t = translations[n];
-		let translated = '';
-		if (t.comments && t.comments.flag && t.comments.flag.indexOf('fuzzy') >= 0) {
-			// Don't include fuzzy translations
-		} else {
-			translated = t['msgstr'][0];
-		}
 
-		if (translated) output[n] = translated;
+	// Translations are grouped by "msgctxt"
+
+	for (const msgctxt of Object.keys(translation.translations)) {
+		const translations = translation.translations[msgctxt];
+
+		for (const n in translations) {
+			if (!translations.hasOwnProperty(n)) continue;
+			if (n == '') continue;
+			const t = translations[n];
+			let translated = '';
+			if (t.comments && t.comments.flag && t.comments.flag.indexOf('fuzzy') >= 0) {
+				// Don't include fuzzy translations
+			} else {
+				translated = t['msgstr'][0];
+			}
+
+			if (translated) output[n] = translated;
+		}
 	}
 
-	return JSON.stringify(output);
+	// Sort the translations to make the diff easier to read.
+	return JSON.stringify(output, Object.keys(output).sort((a, b) => a.toLowerCase() < b.toLowerCase() ? -1 : +1), ' ');
 }
 
 function saveToFile(filePath, data) {
