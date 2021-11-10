@@ -249,6 +249,8 @@ export interface Event extends WithUuid {
 export interface Storage {
 	id?: number;
 	connection_string?: string;
+	updated_time?: string;
+	created_time?: string;
 }
 
 export interface Item extends WithDates, WithUuid {
@@ -427,6 +429,8 @@ export const databaseSchema: DatabaseTables = {
 	storages: {
 		id: { type: 'number' },
 		connection_string: { type: 'string' },
+		updated_time: { type: 'string' },
+		created_time: { type: 'string' },
 	},
 	items: {
 		id: { type: 'string' },

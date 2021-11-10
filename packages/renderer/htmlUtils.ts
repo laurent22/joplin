@@ -192,6 +192,15 @@ class HtmlUtils {
 					}
 				}
 
+				// For some reason, entire parts of HTML notes don't show up in
+				// the viewer when there's an anchor tag without an "href"
+				// attribute. It doesn't always happen and it seems to depend on
+				// what else is in the note but in any case adding the "href"
+				// fixes it. https://github.com/laurent22/joplin/issues/5687
+				if (name.toLowerCase() === 'a' && !attrs['href']) {
+					attrs['href'] = '#';
+				}
+
 				let attrHtml = this.attributesHtml(attrs);
 				if (attrHtml) attrHtml = ` ${attrHtml}`;
 				const closingSign = this.isSelfClosingTag(name) ? '/>' : '>';
