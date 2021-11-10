@@ -1,20 +1,30 @@
+import config from '../../../config';
 import { Item } from '../../../services/database/types';
-import { createUserAndSession, makeNoteSerializedBody, models } from '../../../utils/testing/testUtils';
-import { StorageDriverMode } from '../../../utils/types';
-import StorageDriverBase, { Context } from './StorageDriverBase';
+import { createUserAndSession, db, makeNoteSerializedBody, models } from '../../../utils/testing/testUtils';
+import { Config, StorageDriverConfig, StorageDriverMode } from '../../../utils/types';
+import newModelFactory from '../../factory';
+import { Context } from './StorageDriverBase';
 
-const testModels = (driver: StorageDriverBase) => {
-	return models({ storageDriver: driver });
+const newTestModels = (driverConfig: StorageDriverConfig, driverConfigFallback: StorageDriverConfig = null) => {
+	const newConfig: Config = {
+		...config(),
+		storageDriver: driverConfig,
+		storageDriverFallback: driverConfigFallback,
+	};
+	return newModelFactory(db(), newConfig);
 };
 
-export async function shouldWriteToContentAndReadItBack(driver: StorageDriverBase) {
+export async function shouldWriteToContentAndReadItBack(driverConfig: StorageDriverConfig) {
 	const { user } = await createUserAndSession(1);
 	const noteBody = makeNoteSerializedBody({
 		id: '00000000000000000000000000000001',
 		title: 'testing driver',
 	});
 
-	const output = await testModels(driver).item().saveFromRawContent(user, [{
+	const testModels = newTestModels(driverConfig);
+	const driver = await testModels.item().storageDriver();
+
+	const output = await testModels.item().saveFromRawContent(user, [{
 		name: '00000000000000000000000000000001.md',
 		body: Buffer.from(noteBody),
 	}]);
@@ -22,38 +32,43 @@ export async function shouldWriteToContentAndReadItBack(driver: StorageDriverBas
 	const result = output['00000000000000000000000000000001.md'];
 	expect(result.error).toBeFalsy();
 
-	const item = await testModels(driver).item().loadWithContent(result.item.id);
+	const item = await testModels.item().loadWithContent(result.item.id);
 	expect(item.content.byteLength).toBe(item.content_size);
 	expect(item.content_storage_id).toBe(driver.storageId);
 
 	const rawContent = await driver.read(item.id, { models: models() });
 	expect(rawContent.byteLength).toBe(item.content_size);
 
-	const jopItem = testModels(driver).item().itemToJoplinItem(item);
+	const jopItem = testModels.item().itemToJoplinItem(item);
 	expect(jopItem.id).toBe('00000000000000000000000000000001');
 	expect(jopItem.title).toBe('testing driver');
 }
 
-export async function shouldDeleteContent(driver: StorageDriverBase) {
+export async function shouldDeleteContent(driverConfig: StorageDriverConfig) {
 	const { user } = await createUserAndSession(1);
 	const noteBody = makeNoteSerializedBody({
 		id: '00000000000000000000000000000001',
 		title: 'testing driver',
 	});
 
-	const output = await testModels(driver).item().saveFromRawContent(user, [{
+	const testModels = newTestModels(driverConfig);
+
+	const output = await testModels.item().saveFromRawContent(user, [{
 		name: '00000000000000000000000000000001.md',
 		body: Buffer.from(noteBody),
 	}]);
 
 	const item: Item = output['00000000000000000000000000000001.md'].item;
 
-	expect((await testModels(driver).item().all()).length).toBe(1);
-	await testModels(driver).item().delete(item.id);
-	expect((await testModels(driver).item().all()).length).toBe(0);
+	expect((await testModels.item().all()).length).toBe(1);
+	await testModels.item().delete(item.id);
+	expect((await testModels.item().all()).length).toBe(0);
 }
 
-export async function shouldNotCreateItemIfContentNotSaved(driver: StorageDriverBase) {
+export async function shouldNotCreateItemIfContentNotSaved(driverConfig: StorageDriverConfig) {
+	const testModels = newTestModels(driverConfig);
+	const driver = await testModels.item().storageDriver();
+
 	const previousWrite = driver.write;
 	driver.write = () => { throw new Error('not working!'); };
 
@@ -64,26 +79,29 @@ export async function shouldNotCreateItemIfContentNotSaved(driver: StorageDriver
 			title: 'testing driver',
 		});
 
-		const output = await testModels(driver).item().saveFromRawContent(user, [{
+		const output = await testModels.item().saveFromRawContent(user, [{
 			name: '00000000000000000000000000000001.md',
 			body: Buffer.from(noteBody),
 		}]);
 
 		expect(output['00000000000000000000000000000001.md'].error.message).toBe('not working!');
-		expect((await testModels(driver).item().all()).length).toBe(0);
+		expect((await testModels.item().all()).length).toBe(0);
 	} finally {
 		driver.write = previousWrite;
 	}
 }
 
-export async function shouldNotUpdateItemIfContentNotSaved(driver: StorageDriverBase) {
+export async function shouldNotUpdateItemIfContentNotSaved(driverConfig: StorageDriverConfig) {
 	const { user } = await createUserAndSession(1);
 	const noteBody = makeNoteSerializedBody({
 		id: '00000000000000000000000000000001',
 		title: 'testing driver',
 	});
 
-	await testModels(driver).item().saveFromRawContent(user, [{
+	const testModels = newTestModels(driverConfig);
+	const driver = await testModels.item().storageDriver();
+
+	await testModels.item().saveFromRawContent(user, [{
 		name: '00000000000000000000000000000001.md',
 		body: Buffer.from(noteBody),
 	}]);
@@ -93,12 +111,12 @@ export async function shouldNotUpdateItemIfContentNotSaved(driver: StorageDriver
 		title: 'updated 1',
 	});
 
-	await testModels(driver).item().saveFromRawContent(user, [{
+	await testModels.item().saveFromRawContent(user, [{
 		name: '00000000000000000000000000000001.md',
 		body: Buffer.from(noteBodyMod1),
 	}]);
 
-	const itemMod1 = testModels(driver).item().itemToJoplinItem(await testModels(driver).item().loadByJopId(user.id, '00000000000000000000000000000001', { withContent: true }));
+	const itemMod1 = testModels.item().itemToJoplinItem(await testModels.item().loadByJopId(user.id, '00000000000000000000000000000001', { withContent: true }));
 	expect(itemMod1.title).toBe('updated 1');
 
 	const noteBodyMod2 = makeNoteSerializedBody({
@@ -110,23 +128,26 @@ export async function shouldNotUpdateItemIfContentNotSaved(driver: StorageDriver
 	driver.write = () => { throw new Error('not working!'); };
 
 	try {
-		const output = await testModels(driver).item().saveFromRawContent(user, [{
+		const output = await testModels.item().saveFromRawContent(user, [{
 			name: '00000000000000000000000000000001.md',
 			body: Buffer.from(noteBodyMod2),
 		}]);
 
 		expect(output['00000000000000000000000000000001.md'].error.message).toBe('not working!');
-		const itemMod2 = testModels(driver).item().itemToJoplinItem(await testModels(driver).item().loadByJopId(user.id, '00000000000000000000000000000001', { withContent: true }));
+		const itemMod2 = testModels.item().itemToJoplinItem(await testModels.item().loadByJopId(user.id, '00000000000000000000000000000001', { withContent: true }));
 		expect(itemMod2.title).toBe('updated 1'); // Check it has not been updated
 	} finally {
 		driver.write = previousWrite;
 	}
 }
 
-export async function shouldSupportFallbackDriver(driver: StorageDriverBase, fallbackDriver: StorageDriverBase) {
+export async function shouldSupportFallbackDriver(driverConfig: StorageDriverConfig, fallbackDriverConfig: StorageDriverConfig) {
 	const { user } = await createUserAndSession(1);
 
-	const output = await testModels(driver).item().saveFromRawContent(user, [{
+	const testModels = newTestModels(driverConfig);
+	const driver = await testModels.item().storageDriver();
+
+	const output = await testModels.item().saveFromRawContent(user, [{
 		name: '00000000000000000000000000000001.md',
 		body: Buffer.from(makeNoteSerializedBody({
 			id: '00000000000000000000000000000001',
@@ -144,10 +165,7 @@ export async function shouldSupportFallbackDriver(driver: StorageDriverBase, fal
 		previousByteLength = content.byteLength;
 	}
 
-	const testModelWithFallback = models({
-		storageDriver: driver,
-		storageDriverFallback: fallbackDriver,
-	});
+	const testModelWithFallback = newTestModels(driverConfig, fallbackDriverConfig);
 
 	// If the item content is not on the main content driver, it should get
 	// it from the fallback one.
@@ -165,6 +183,8 @@ export async function shouldSupportFallbackDriver(driver: StorageDriverBase, fal
 	}]);
 
 	{
+		const fallbackDriver = await testModelWithFallback.item().storageDriverFallback();
+
 		// Check that it has cleared the fallback driver content
 		const context: Context = { models: models() };
 		const fallbackContent = await fallbackDriver.read(itemId, context);
@@ -176,15 +196,12 @@ export async function shouldSupportFallbackDriver(driver: StorageDriverBase, fal
 	}
 }
 
-export async function shouldSupportFallbackDriverInReadWriteMode(driver: StorageDriverBase, fallbackDriver: StorageDriverBase) {
-	if (fallbackDriver.mode !== StorageDriverMode.ReadWrite) throw new Error('Content driver must be configured in RW mode for this test');
+export async function shouldSupportFallbackDriverInReadWriteMode(driverConfig: StorageDriverConfig, fallbackDriverConfig: StorageDriverConfig) {
+	if (fallbackDriverConfig.mode !== StorageDriverMode.ReadWrite) throw new Error('Content driver must be configured in RW mode for this test');
 
 	const { user } = await createUserAndSession(1);
 
-	const testModelWithFallback = models({
-		storageDriver: driver,
-		storageDriverFallback: fallbackDriver,
-	});
+	const testModelWithFallback = newTestModels(driverConfig, fallbackDriverConfig);
 
 	const output = await testModelWithFallback.item().saveFromRawContent(user, [{
 		name: '00000000000000000000000000000001.md',
@@ -197,6 +214,9 @@ export async function shouldSupportFallbackDriverInReadWriteMode(driver: Storage
 	const itemId = output['00000000000000000000000000000001.md'].item.id;
 
 	{
+		const driver = await testModelWithFallback.item().storageDriver();
+		const fallbackDriver = await testModelWithFallback.item().storageDriverFallback();
+
 		// Check that it has written the content to both drivers
 		const context: Context = { models: models() };
 		const fallbackContent = await fallbackDriver.read(itemId, context);
@@ -207,18 +227,15 @@ export async function shouldSupportFallbackDriverInReadWriteMode(driver: Storage
 	}
 }
 
-export async function shouldUpdateContentStorageIdAfterSwitchingDriver(oldDriver: StorageDriverBase, newDriver: StorageDriverBase) {
-	if (oldDriver.storageId === newDriver.storageId) throw new Error('Drivers must be different for this test');
+export async function shouldUpdateContentStorageIdAfterSwitchingDriver(oldDriverConfig: StorageDriverConfig, newDriverConfig: StorageDriverConfig) {
+	if (oldDriverConfig.type === newDriverConfig.type) throw new Error('Drivers must be different for this test');
 
 	const { user } = await createUserAndSession(1);
 
-	const oldDriverModel = models({
-		storageDriver: oldDriver,
-	});
-
-	const newDriverModel = models({
-		storageDriver: newDriver,
-	});
+	const oldDriverModel = newTestModels(oldDriverConfig);
+	const newDriverModel = newTestModels(newDriverConfig);
+	const oldDriver = await oldDriverModel.item().storageDriver();
+	const newDriver = await newDriverModel.item().storageDriver();
 
 	const output = await oldDriverModel.item().saveFromRawContent(user, [{
 		name: '00000000000000000000000000000001.md',

@@ -9,8 +9,9 @@ import { ChangePreviousItem } from './ChangeModel';
 import { unique } from '../utils/array';
 import StorageDriverBase, { Context } from './items/storage/StorageDriverBase';
 import { DbConnection } from '../db';
-import { Config, StorageDriverMode } from '../utils/types';
-import { NewModelFactoryHandler, Options } from './factory';
+import { Config, StorageDriverConfig, StorageDriverMode } from '../utils/types';
+import { NewModelFactoryHandler } from './factory';
+import storageDriverFromConfig from './items/storage/storageDriverFromConfig';
 
 const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
 
@@ -49,14 +50,16 @@ export interface ItemLoadOptions extends LoadOptions {
 export default class ItemModel extends BaseModel<Item> {
 
 	private updatingTotalSizes_: boolean = false;
-	private storageDriver_: StorageDriverBase = null;
-	private storageDriverFallback_: StorageDriverBase = null;
+	private storageDriverConfig_: StorageDriverConfig;
+	private storageDriverConfigFallback_: StorageDriverConfig;
 
-	public constructor(db: DbConnection, modelFactory: NewModelFactoryHandler, config: Config, options: Options) {
+	private static storageDrivers_: Map<StorageDriverConfig, StorageDriverBase> = new Map();
+
+	public constructor(db: DbConnection, modelFactory: NewModelFactoryHandler, config: Config) {
 		super(db, modelFactory, config);
 
-		this.storageDriver_ = options.storageDriver;
-		this.storageDriverFallback_ = options.storageDriverFallback;
+		this.storageDriverConfig_ = config.storageDriver;
+		this.storageDriverConfigFallback_ = config.storageDriverFallback;
 	}
 
 	protected get tableName(): string {
@@ -73,6 +76,26 @@ export default class ItemModel extends BaseModel<Item> {
 
 	protected get defaultFields(): string[] {
 		return Object.keys(databaseSchema[this.tableName]).filter(f => f !== 'content');
+	}
+
+	private async storageDriverFromConfig(config: StorageDriverConfig): Promise<StorageDriverBase> {
+		let driver = ItemModel.storageDrivers_.get(config);
+
+		if (!driver) {
+			driver = await storageDriverFromConfig(config, this.db);
+			ItemModel.storageDrivers_.set(config, driver);
+		}
+
+		return driver;
+	}
+
+	public async storageDriver(): Promise<StorageDriverBase> {
+		return this.storageDriverFromConfig(this.storageDriverConfig_);
+	}
+
+	public async storageDriverFallback(): Promise<StorageDriverBase> {
+		if (!this.storageDriverConfigFallback_) return null;
+		return this.storageDriverFromConfig(this.storageDriverConfigFallback_);
 	}
 
 	public async checkIfAllowed(user: User, action: AclAction, resource: Item = null): Promise<void> {
@@ -136,25 +159,31 @@ export default class ItemModel extends BaseModel<Item> {
 	}
 
 	private async storageDriverWrite(itemId: Uuid, content: Buffer, context: Context) {
-		await this.storageDriver_.write(itemId, content, context);
+		const storageDriver = await this.storageDriver();
+		const storageDriverFallback = await this.storageDriverFallback();
 
-		if (this.storageDriverFallback_) {
-			if (this.storageDriverFallback_.mode === StorageDriverMode.ReadWrite) {
-				await this.storageDriverFallback_.write(itemId, content, context);
-			} else if (this.storageDriverFallback_.mode === StorageDriverMode.ReadOnly) {
-				await this.storageDriverFallback_.write(itemId, Buffer.from(''), context);
+		await storageDriver.write(itemId, content, context);
+
+		if (storageDriverFallback) {
+			if (storageDriverFallback.mode === StorageDriverMode.ReadWrite) {
+				await storageDriverFallback.write(itemId, content, context);
+			} else if (storageDriverFallback.mode === StorageDriverMode.ReadOnly) {
+				await storageDriverFallback.write(itemId, Buffer.from(''), context);
 			} else {
-				throw new Error(`Unsupported fallback mode: ${this.storageDriverFallback_.mode}`);
+				throw new Error(`Unsupported fallback mode: ${storageDriverFallback.mode}`);
 			}
 		}
 	}
 
 	private async storageDriverRead(itemId: Uuid, context: Context) {
-		if (await this.storageDriver_.exists(itemId, context)) {
-			return this.storageDriver_.read(itemId, context);
+		const storageDriver = await this.storageDriver();
+		const storageDriverFallback = await this.storageDriverFallback();
+
+		if (await storageDriver.exists(itemId, context)) {
+			return storageDriver.read(itemId, context);
 		} else {
-			if (!this.storageDriverFallback_) throw new Error(`Content does not exist but fallback content driver is not defined: ${itemId}`);
-			return this.storageDriverFallback_.read(itemId, context);
+			if (!storageDriverFallback) throw new Error(`Content does not exist but fallback content driver is not defined: ${itemId}`);
+			return storageDriverFallback.read(itemId, context);
 		}
 	}
 
@@ -417,7 +446,8 @@ export default class ItemModel extends BaseModel<Item> {
 				try {
 					const content = itemToSave.content;
 					delete itemToSave.content;
-					itemToSave.content_storage_id = this.storageDriver_.storageId;
+
+					itemToSave.content_storage_id = (await this.storageDriver()).storageId;
 
 					itemToSave.content_size = content ? content.byteLength : 0;
 
@@ -624,14 +654,17 @@ export default class ItemModel extends BaseModel<Item> {
 		const ids = typeof id === 'string' ? [id] : id;
 		if (!ids.length) return;
 
+		const storageDriver = await this.storageDriver();
+		const storageDriverFallback = await this.storageDriverFallback();
+
 		const shares = await this.models().share().byItemIds(ids);
 
 		await this.withTransaction(async () => {
 			await this.models().share().delete(shares.map(s => s.id));
 			await this.models().userItem().deleteByItemIds(ids);
 			await this.models().itemResource().deleteByItemIds(ids);
-			await this.storageDriver_.delete(ids, { models: this.models() });
-			if (this.storageDriverFallback_) await this.storageDriverFallback_.delete(ids, { models: this.models() });
+			await storageDriver.delete(ids, { models: this.models() });
+			if (storageDriverFallback) await storageDriverFallback.delete(ids, { models: this.models() });
 
 			await super.delete(ids, options);
 		}, 'ItemModel::delete');
@@ -679,7 +712,7 @@ export default class ItemModel extends BaseModel<Item> {
 		let previousItem: ChangePreviousItem = null;
 
 		if (item.content && !item.content_storage_id) {
-			item.content_storage_id = this.storageDriver_.storageId;
+			item.content_storage_id = (await this.storageDriver()).storageId;
 		}
 
 		if (isNew) {

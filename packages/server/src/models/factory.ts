@@ -72,14 +72,8 @@ import SubscriptionModel from './SubscriptionModel';
 import UserFlagModel from './UserFlagModel';
 import EventModel from './EventModel';
 import { Config } from '../utils/types';
-import StorageDriverBase from './items/storage/StorageDriverBase';
 import LockModel from './LockModel';
 import StorageModel from './StorageModel';
-
-export interface Options {
-	storageDriver: StorageDriverBase;
-	storageDriverFallback?: StorageDriverBase;
-}
 
 export type NewModelFactoryHandler = (db: DbConnection)=> Models;
 
@@ -87,24 +81,20 @@ export class Models {
 
 	private db_: DbConnection;
 	private config_: Config;
-	private options_: Options;
 
-	public constructor(db: DbConnection, config: Config, options: Options) {
+	public constructor(db: DbConnection, config: Config) {
 		this.db_ = db;
 		this.config_ = config;
-		this.options_ = options;
-
-		// if (!options.storageDriver) throw new Error('StorageDriver is required');
 
 		this.newModelFactory = this.newModelFactory.bind(this);
 	}
 
 	private newModelFactory(db: DbConnection) {
-		return new Models(db, this.config_, this.options_);
+		return new Models(db, this.config_);
 	}
 
 	public item() {
-		return new ItemModel(this.db_, this.newModelFactory, this.config_, this.options_);
+		return new ItemModel(this.db_, this.newModelFactory, this.config_);
 	}
 
 	public user() {
@@ -177,6 +167,6 @@ export class Models {
 
 }
 
-export default function newModelFactory(db: DbConnection, config: Config, options: Options): Models {
-	return new Models(db, config, options);
+export default function newModelFactory(db: DbConnection, config: Config): Models {
+	return new Models(db, config);
 }

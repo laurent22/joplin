@@ -1,5 +1,6 @@
 import { pathExists, remove } from 'fs-extra';
 import { afterAllTests, beforeAllDb, beforeEachDb, expectNotThrow, expectThrow, tempDirPath } from '../../../utils/testing/testUtils';
+import { StorageDriverConfig, StorageDriverType } from '../../../utils/types';
 import StorageDriverFs from './StorageDriverFs';
 import { shouldDeleteContent, shouldNotCreateItemIfContentNotSaved, shouldNotUpdateItemIfContentNotSaved, shouldWriteToContentAndReadItBack } from './testUtils';
 
@@ -7,6 +8,13 @@ let basePath_: string = '';
 
 const newDriver = () => {
 	return new StorageDriverFs(1, { path: basePath_ });
+};
+
+const newConfig = (): StorageDriverConfig => {
+	return {
+		type: StorageDriverType.Filesystem,
+		path: basePath_,
+	};
 };
 
 describe('StorageDriverFs', function() {
@@ -30,23 +38,19 @@ describe('StorageDriverFs', function() {
 	});
 
 	test('should write to content and read it back', async function() {
-		const driver = newDriver();
-		await shouldWriteToContentAndReadItBack(driver);
+		await shouldWriteToContentAndReadItBack(newConfig());
 	});
 
 	test('should delete the content', async function() {
-		const driver = newDriver();
-		await shouldDeleteContent(driver);
+		await shouldDeleteContent(newConfig());
 	});
 
 	test('should not create the item if the content cannot be saved', async function() {
-		const driver = newDriver();
-		await shouldNotCreateItemIfContentNotSaved(driver);
+		await shouldNotCreateItemIfContentNotSaved(newConfig());
 	});
 
 	test('should not update the item if the content cannot be saved', async function() {
-		const driver = newDriver();
-		await shouldNotUpdateItemIfContentNotSaved(driver);
+		await shouldNotUpdateItemIfContentNotSaved(newConfig());
 	});
 
 	test('should write to a file and read it back', async function() {

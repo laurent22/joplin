@@ -1,7 +1,7 @@
 import { DbConnection, connectDb, disconnectDb, truncateTables } from '../../db';
 import { User, Session, Item, Uuid } from '../../services/database/types';
 import { createDb, CreateDbOptions } from '../../tools/dbTools';
-import modelFactory, { Options as ModelFactoryOptions } from '../../models/factory';
+import modelFactory from '../../models/factory';
 import { AppContext, Env } from '../types';
 import config, { initConfig } from '../../config';
 import Logger from '@joplin/lib/Logger';
@@ -23,7 +23,6 @@ import MustacheService from '../../services/MustacheService';
 import uuidgen from '../uuidgen';
 import { createCsrfToken } from '../csrf';
 import { cookieSet } from '../cookies';
-import StorageDriverMemory from '../../models/items/storage/StorageDriverMemory';
 import { parseEnv } from '../../env';
 
 // Takes into account the fact that this file will be inside the /dist directory
@@ -195,7 +194,7 @@ export async function koaAppContext(options: AppContextTestOptions = null): Prom
 
 	const appLogger = Logger.create('AppTest');
 
-	const baseAppContext = await setupAppContext({} as any, Env.Dev, db_, () => appLogger, { storageDriver: new StorageDriverMemory(1) });
+	const baseAppContext = await setupAppContext({} as any, Env.Dev, db_, () => appLogger);
 
 	// Set type to "any" because the Koa context has many properties and we
 	// don't need to mock all of them.
@@ -243,16 +242,8 @@ export function db() {
 	return db_;
 }
 
-const storageDriverMemory = new StorageDriverMemory(1);
-
-export function models(options: ModelFactoryOptions = null) {
-	options = {
-		storageDriver: storageDriverMemory,
-		storageDriverFallback: null,
-		...options,
-	};
-
-	return modelFactory(db(), config(), options);
+export function models() {
+	return modelFactory(db(), config());
 }
 
 export function parseHtml(html: string): Document {

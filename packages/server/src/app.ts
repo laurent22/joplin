@@ -5,7 +5,7 @@ import * as Koa from 'koa';
 import * as fs from 'fs-extra';
 import Logger, { LoggerWrapper, TargetType } from '@joplin/lib/Logger';
 import config, { initConfig, runningInDocker } from './config';
-import { migrateLatest, waitForConnection, sqliteDefaultDir, latestMigration, DbConnection } from './db';
+import { migrateLatest, waitForConnection, sqliteDefaultDir, latestMigration } from './db';
 import { AppContext, Env, KoaNext } from './utils/types';
 import FsDriverNode from '@joplin/lib/fs-driver-node';
 import routeHandler from './middleware/routeHandler';
@@ -17,11 +17,10 @@ import startServices from './utils/startServices';
 import { credentialFile } from './utils/testing/testUtils';
 import apiVersionHandler from './middleware/apiVersionHandler';
 import clickJackingHandler from './middleware/clickJackingHandler';
-import newModelFactory, { Options } from './models/factory';
+import newModelFactory from './models/factory';
 import setupCommands from './utils/setupCommands';
 import { RouteResponseFormat, routeResponseFormat } from './utils/routeUtils';
 import { parseEnv } from './env';
-import storageDriverFromConfig from './models/items/storage/storageDriverFromConfig';
 
 interface Argv {
 	env?: Env;
@@ -222,13 +221,6 @@ async function main() {
 		fs.writeFileSync(pidFile, `${process.pid}`);
 	}
 
-	const newModelFactoryOptions = async (db: DbConnection): Promise<Options> => {
-		return {
-			storageDriver: await storageDriverFromConfig(config().storageDriver, db, { assignDriverId: env !== 'buildTypes' }),
-			storageDriverFallback: await storageDriverFromConfig(config().storageDriverFallback, db, { assignDriverId: env !== 'buildTypes' }),
-		};
-	};
-
 	let runCommandAndExitApp = true;
 
 	if (selectedCommand) {
@@ -245,7 +237,7 @@ async function main() {
 			});
 		} else {
 			const connectionCheck = await waitForConnection(config().database);
-			const models = newModelFactory(connectionCheck.connection, config(), await newModelFactoryOptions(connectionCheck.connection));
+			const models = newModelFactory(connectionCheck.connection, config());
 
 			await selectedCommand.run(commandArgv, {
 				db: connectionCheck.connection,
@@ -275,7 +267,7 @@ async function main() {
 		appLogger().info('Connection check:', connectionCheckLogInfo);
 		const ctx = app.context as AppContext;
 
-		await setupAppContext(ctx, env, connectionCheck.connection, appLogger, await newModelFactoryOptions(connectionCheck.connection));
+		await setupAppContext(ctx, env, connectionCheck.connection, appLogger);
 
 		await initializeJoplinUtils(config(), ctx.joplinBase.models, ctx.joplinBase.services.mustache);
 

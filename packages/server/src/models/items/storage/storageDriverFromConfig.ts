@@ -23,19 +23,19 @@ export default async function(config: StorageDriverConfig, db: DbConnection, opt
 	let storageId: number = 0;
 
 	if (options.assignDriverId) {
-		const models = newModelFactory(db, globalConfig(), { storageDriver: null });
+		const models = newModelFactory(db, globalConfig());
 
 		const connectionString = serializeStorageConfig(config);
-		const existingStorage = await models.storage().byConnectionString(connectionString);
+		let storage = await models.storage().byConnectionString(connectionString);
 
-		if (existingStorage) {
-			storageId = existingStorage.id;
-		} else {
-			const storage = await models.storage().save({
+		if (!storage) {
+			await models.storage().save({
 				connection_string: connectionString,
 			});
-			storageId = storage.id;
+			storage = await models.storage().byConnectionString(connectionString);
 		}
+
+		storageId = storage.id;
 	}
 
 	if (config.type === StorageDriverType.Database) {
