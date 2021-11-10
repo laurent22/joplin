@@ -4,6 +4,7 @@ import Setting from '../../models/Setting';
 import { State } from '../../reducer';
 import { PublicPrivateKeyPair } from '../e2ee/ppk';
 import { MasterKeyEntity } from '../e2ee/types';
+const fastDeepEqual = require('fast-deep-equal');
 
 export interface SyncInfoValueBoolean {
 	value: boolean;
@@ -113,7 +114,7 @@ export function mergeSyncInfos(s1: SyncInfo, s2: SyncInfo): SyncInfo {
 }
 
 export function syncInfoEquals(s1: SyncInfo, s2: SyncInfo): boolean {
-	return s1.serialize() === s2.serialize();
+	return fastDeepEqual(s1.toObject(), s2.toObject());
 }
 
 export class SyncInfo {
