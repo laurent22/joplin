@@ -5,7 +5,7 @@ import { _ } from '@joplin/lib/locale';
 import time from '@joplin/lib/time';
 import shim from '@joplin/lib/shim';
 import dialogs from '../dialogs';
-import { decryptedStatText, dontReencryptData, enableEncryptionConfirmationMessages, onSavePasswordClick, onToggleEnabledClick, reencryptData, upgradeMasterKey, useInputPasswords, useNeedMasterPassword, usePasswordChecker, useStats, useToggleShowDisabledMasterKeys } from '@joplin/lib/components/EncryptionConfigScreen/utils';
+import { decryptedStatText, determineKeyPassword, dontReencryptData, enableEncryptionConfirmationMessages, onSavePasswordClick, onToggleEnabledClick, reencryptData, upgradeMasterKey, useInputPasswords, useNeedMasterPassword, usePasswordChecker, useStats, useToggleShowDisabledMasterKeys } from '@joplin/lib/components/EncryptionConfigScreen/utils';
 import { MasterKeyEntity } from '@joplin/lib/services/e2ee/types';
 import { getEncryptionEnabled, masterKeyEnabled, SyncInfo } from '@joplin/lib/services/synchronizer/syncInfoUtils';
 import { getDefaultMasterKey, getMasterPasswordStatusMessage, masterPasswordIsValid, toggleAndSetupEncryption } from '@joplin/lib/services/e2ee/utils';
@@ -41,9 +41,11 @@ const EncryptionConfigScreen = (props: Props) => {
 	const { showDisabledMasterKeys, toggleShowDisabledMasterKeys } = useToggleShowDisabledMasterKeys();
 	const needMasterPassword = useNeedMasterPassword(passwordChecks, props.masterKeys);
 
-	const onUpgradeMasterKey = useCallback((mk: MasterKeyEntity) => {
-		void upgradeMasterKey(mk, passwordChecks, props.passwords);
-	}, [passwordChecks, props.passwords]);
+	const onUpgradeMasterKey = useCallback(async (mk: MasterKeyEntity) => {
+		const password = determineKeyPassword(mk.id, masterPasswordKeys, props.masterPassword, props.passwords);
+		const result = await upgradeMasterKey(mk, password);
+		alert(result);
+	}, [props.passwords, masterPasswordKeys, props.masterPassword]);
 
 	const renderNeedUpgradeSection = () => {
 		if (!shim.isElectron()) return null;

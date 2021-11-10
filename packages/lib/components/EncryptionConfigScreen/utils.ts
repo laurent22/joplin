@@ -198,14 +198,19 @@ export const useNeedMasterPassword = (passwordChecks: PasswordChecks, masterKeys
 	return false;
 };
 
-export const upgradeMasterKey = async (masterKey: MasterKeyEntity, passwordChecks: PasswordChecks, passwords: Record<string, string>): Promise<string> => {
-	const passwordCheck = passwordChecks[masterKey.id];
-	if (!passwordCheck) {
+export const determineKeyPassword = (masterKeyId: string, masterPasswordKeys: PasswordChecks, masterPassword: string, passwords: Record<string, string>): string => {
+	if (masterPasswordKeys[masterKeyId]) return masterPassword;
+	return passwords[masterKeyId];
+};
+
+export const upgradeMasterKey = async (masterKey: MasterKeyEntity, password: string): Promise<string> => {
+	if (!password) {
 		return _('Please enter your password in the master key list below before upgrading the key.');
 	}
 
 	try {
-		const password = passwords[masterKey.id];
+		// Just re-encrypt the master key, but using the new encryption method
+		// (which would be the default).
 		const newMasterKey = await EncryptionService.instance().reencryptMasterKey(masterKey, password, password);
 		await MasterKey.save(newMasterKey);
 		void reg.waitForSyncFinishedThenSync();
