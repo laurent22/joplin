@@ -1,6 +1,6 @@
 # Joplin Server Changelog
 
-## [server-v2.6.4](https://github.com/laurent22/joplin/releases/tag/server-v2.6.4) - 2021-11-09T16:12:09Z
+## [server-v2.6.5](https://github.com/laurent22/joplin/releases/tag/server-v2.6.5) - 2021-11-10T12:07:50Z
 
 - Improved: Allow storing item content in database, filesystem or S3 (depending on config) (#5602)
 
