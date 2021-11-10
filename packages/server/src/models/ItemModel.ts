@@ -11,7 +11,7 @@ import StorageDriverBase, { Context } from './items/storage/StorageDriverBase';
 import { DbConnection } from '../db';
 import { Config, StorageDriverConfig, StorageDriverMode } from '../utils/types';
 import { NewModelFactoryHandler } from './factory';
-import storageDriverFromConfig from './items/storage/storageDriverFromConfig';
+import loadStorageDriver from './items/storage/loadStorageDriver';
 
 const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
 
@@ -78,11 +78,11 @@ export default class ItemModel extends BaseModel<Item> {
 		return Object.keys(databaseSchema[this.tableName]).filter(f => f !== 'content');
 	}
 
-	private async storageDriverFromConfig(config: StorageDriverConfig): Promise<StorageDriverBase> {
+	private async loadStorageDriver(config: StorageDriverConfig): Promise<StorageDriverBase> {
 		let driver = ItemModel.storageDrivers_.get(config);
 
 		if (!driver) {
-			driver = await storageDriverFromConfig(config, this.db);
+			driver = await loadStorageDriver(config, this.db);
 			ItemModel.storageDrivers_.set(config, driver);
 		}
 
@@ -90,12 +90,12 @@ export default class ItemModel extends BaseModel<Item> {
 	}
 
 	public async storageDriver(): Promise<StorageDriverBase> {
-		return this.storageDriverFromConfig(this.storageDriverConfig_);
+		return this.loadStorageDriver(this.storageDriverConfig_);
 	}
 
 	public async storageDriverFallback(): Promise<StorageDriverBase> {
 		if (!this.storageDriverConfigFallback_) return null;
-		return this.storageDriverFromConfig(this.storageDriverConfigFallback_);
+		return this.loadStorageDriver(this.storageDriverConfigFallback_);
 	}
 
 	public async checkIfAllowed(user: User, action: AclAction, resource: Item = null): Promise<void> {

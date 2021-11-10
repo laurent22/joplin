@@ -436,7 +436,7 @@ export async function expectThrow(asyncFn: Function, errorCode: any = undefined)
 
 	if (!hasThrown) {
 		expect('not throw').toBe('throw');
-	} else if (thrownError.code !== errorCode) {
+	} else if (errorCode !== undefined && thrownError.code !== errorCode) {
 		console.error(thrownError);
 		expect(`error code: ${thrownError.code}`).toBe(`error code: ${errorCode}`);
 	} else {
