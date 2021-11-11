@@ -1,7 +1,8 @@
 # Joplin Server Changelog
 
-## [server-v2.6.6](https://github.com/laurent22/joplin/releases/tag/server-v2.6.6) - 2021-11-11T14:06:08Z
+## [server-v2.6.7](https://github.com/laurent22/joplin/releases/tag/server-v2.6.7) - 2021-11-11T14:43:46Z
 
+- New: Added command to test a storage connection (c6dec0a)
 - New: Added command to migrate content to different storage (005f720)
 
 ## [server-v2.6.5](https://github.com/laurent22/joplin/releases/tag/server-v2.6.5) - 2021-11-10T12:07:50Z
