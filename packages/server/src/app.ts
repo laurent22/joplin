@@ -21,6 +21,7 @@ import newModelFactory from './models/factory';
 import setupCommands from './utils/setupCommands';
 import { RouteResponseFormat, routeResponseFormat } from './utils/routeUtils';
 import { parseEnv } from './env';
+import storageConnectionCheck from './utils/storageConnectionCheck';
 
 interface Argv {
 	env?: Env;
@@ -281,6 +282,14 @@ async function main() {
 
 		appLogger().info('Starting services...');
 		await startServices(ctx.joplinBase.services);
+
+		appLogger().info('Performing main storage check...');
+		appLogger().info(await storageConnectionCheck(config().storageDriver, ctx.joplinBase.db, ctx.joplinBase.models));
+
+		if (config().storageDriverFallback) {
+			appLogger().info('Performing fallback storage check...');
+			appLogger().info(await storageConnectionCheck(config().storageDriverFallback, ctx.joplinBase.db, ctx.joplinBase.models));
+		}
 
 		appLogger().info(`Call this for testing: \`curl ${config().apiBaseUrl}/api/ping\``);
 

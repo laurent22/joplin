@@ -8,6 +8,7 @@ import StorageDriverBase from './StorageDriverBase';
 import StorageDriverDatabase from './StorageDriverDatabase';
 import StorageDriverFs from './StorageDriverFs';
 import StorageDriverMemory from './StorageDriverMemory';
+import StorageDriverS3 from './StorageDriverS3';
 
 export interface Options {
 	assignDriverId?: boolean;
@@ -62,7 +63,7 @@ export default async function(config: StorageDriverConfig | number, db: DbConnec
 	}
 
 	if (config.type === StorageDriverType.S3) {
-		return new StorageDriverMemory(storageId, config);
+		return new StorageDriverS3(storageId, config);
 	}
 
 	throw new Error(`Invalid config type: ${JSON.stringify(config)}`);
