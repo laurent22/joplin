@@ -61,5 +61,9 @@ export default async function(config: StorageDriverConfig | number, db: DbConnec
 		return new StorageDriverMemory(storageId, config);
 	}
 
-	throw new Error(`Invalid config: ${JSON.stringify(config)}`);
+	if (config.type === StorageDriverType.S3) {
+		return new StorageDriverMemory(storageId, config);
+	}
+
+	throw new Error(`Invalid config type: ${JSON.stringify(config)}`);
 }
