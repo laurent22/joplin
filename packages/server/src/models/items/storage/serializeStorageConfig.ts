@@ -4,6 +4,7 @@ const serializeType = (type: StorageDriverType): string => {
 	if (type === StorageDriverType.Database) return 'Database';
 	if (type === StorageDriverType.Filesystem) return 'Filesystem';
 	if (type === StorageDriverType.Memory) return 'Memory';
+	if (type === StorageDriverType.S3) return 'S3';
 	throw new Error(`Invalid type: "${type}"`);
 };
 

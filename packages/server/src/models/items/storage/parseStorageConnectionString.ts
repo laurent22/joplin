@@ -6,6 +6,7 @@ const parseType = (type: string): StorageDriverType => {
 	if (type === 'Database') return StorageDriverType.Database;
 	if (type === 'Filesystem') return StorageDriverType.Filesystem;
 	if (type === 'Memory') return StorageDriverType.Memory;
+	if (type === 'S3') return StorageDriverType.S3;
 	throw new Error(`Invalid type: "${type}"`);
 };
 

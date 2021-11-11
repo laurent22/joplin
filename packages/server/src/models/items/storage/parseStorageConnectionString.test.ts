@@ -1,7 +1,7 @@
 import { StorageDriverConfig, StorageDriverType } from '../../../utils/types';
-import parseStorageDriverConnectionString from './parseStorageDriverConnectionString';
+import parseStorageConnectionString from './parseStorageConnectionString';
 
-describe('parseStorageDriverConnectionString', function() {
+describe('parseStorageConnectionString', function() {
 
 	test('should parse a connection string', async function() {
 		const testCases: Record<string, StorageDriverConfig> = {
@@ -26,17 +26,17 @@ describe('parseStorageDriverConnectionString', function() {
 		};
 
 		for (const [connectionString, config] of Object.entries(testCases)) {
-			const actual = parseStorageDriverConnectionString(connectionString);
+			const actual = parseStorageConnectionString(connectionString);
 			expect(actual).toEqual(config);
 		}
 	});
 
 	test('should detect errors', async function() {
-		expect(() => parseStorageDriverConnectionString('Path=/path/to/dir')).toThrow(); // Type is missing
-		expect(() => parseStorageDriverConnectionString('Type=')).toThrow();
-		expect(() => parseStorageDriverConnectionString('Type;')).toThrow();
-		expect(() => parseStorageDriverConnectionString('Type=DoesntExist')).toThrow();
-		expect(() => parseStorageDriverConnectionString('Type=Filesystem')).toThrow();
+		expect(() => parseStorageConnectionString('Path=/path/to/dir')).toThrow(); // Type is missing
+		expect(() => parseStorageConnectionString('Type=')).toThrow();
+		expect(() => parseStorageConnectionString('Type;')).toThrow();
+		expect(() => parseStorageConnectionString('Type=DoesntExist')).toThrow();
+		expect(() => parseStorageConnectionString('Type=Filesystem')).toThrow();
 	});
 
 });

@@ -15,4 +15,8 @@ export default class StorageModel extends BaseModel<Storage> {
 		return this.db(this.tableName).where('connection_string', connectionString).first();
 	}
 
+	public async byId(id: number): Promise<Storage> {
+		return this.db(this.tableName).where('id', id).first();
+	}
+
 }

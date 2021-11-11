@@ -42,11 +42,11 @@ export function tempDirPath(): string {
 }
 
 let tempDir_: string = null;
-export async function tempDir(): Promise<string> {
-	if (tempDir_) return tempDir_;
-	tempDir_ = tempDirPath();
-	await fs.mkdirp(tempDir_);
-	return tempDir_;
+export async function tempDir(subDir: string = null): Promise<string> {
+	if (!tempDir_) tempDir_ = tempDirPath();
+	const fullDir = tempDir_ + (subDir ? `/${subDir}` : '');
+	await fs.mkdirp(fullDir);
+	return fullDir;
 }
 
 export async function makeTempFileWithContent(content: string | Buffer): Promise<string> {

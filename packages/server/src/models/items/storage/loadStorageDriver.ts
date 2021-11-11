@@ -2,6 +2,7 @@ import globalConfig from '../../../config';
 import { clientType, DbConnection } from '../../../db';
 import { StorageDriverConfig, StorageDriverType } from '../../../utils/types';
 import newModelFactory from '../../factory';
+import parseStorageDriverConnectionString from './parseStorageConnectionString';
 import serializeStorageConfig from './serializeStorageConfig';
 import StorageDriverBase from './StorageDriverBase';
 import StorageDriverDatabase from './StorageDriverDatabase';
@@ -12,7 +13,7 @@ export interface Options {
 	assignDriverId?: boolean;
 }
 
-export default async function(config: StorageDriverConfig, db: DbConnection, options: Options = null): Promise<StorageDriverBase | null> {
+export default async function(config: StorageDriverConfig | number, db: DbConnection, options: Options = null): Promise<StorageDriverBase | null> {
 	if (!config) return null;
 
 	options = {
@@ -22,20 +23,30 @@ export default async function(config: StorageDriverConfig, db: DbConnection, opt
 
 	let storageId: number = 0;
 
-	if (options.assignDriverId) {
+	if (typeof config === 'number') {
+		storageId = config;
+
 		const models = newModelFactory(db, globalConfig());
+		const storage = await models.storage().byId(storageId);
+		if (!storage) throw new Error(`No such storage ID: ${storageId}`);
 
-		const connectionString = serializeStorageConfig(config);
-		let storage = await models.storage().byConnectionString(connectionString);
+		config = parseStorageDriverConnectionString(storage.connection_string);
+	} else {
+		if (options.assignDriverId) {
+			const models = newModelFactory(db, globalConfig());
 
-		if (!storage) {
-			await models.storage().save({
-				connection_string: connectionString,
-			});
-			storage = await models.storage().byConnectionString(connectionString);
+			const connectionString = serializeStorageConfig(config);
+			let storage = await models.storage().byConnectionString(connectionString);
+
+			if (!storage) {
+				await models.storage().save({
+					connection_string: connectionString,
+				});
+				storage = await models.storage().byConnectionString(connectionString);
+			}
+
+			storageId = storage.id;
 		}
-
-		storageId = storage.id;
 	}
 
 	if (config.type === StorageDriverType.Database) {

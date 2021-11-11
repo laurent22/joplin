@@ -1,6 +1,11 @@
-import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, createItem, createItemTree, createResource, createNote, createFolder, createItemTree3 } from '../utils/testing/testUtils';
+import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, createItem, createItemTree, createResource, createNote, createFolder, createItemTree3, db, tempDir } from '../utils/testing/testUtils';
 import { shareFolderWithUser } from '../utils/testing/shareApiUtils';
 import { resourceBlobPath } from '../utils/joplinUtils';
+import newModelFactory from './factory';
+import { StorageDriverType } from '../utils/types';
+import config from '../config';
+import { msleep } from '../utils/time';
+import loadStorageDriver from './items/storage/loadStorageDriver';
 
 describe('ItemModel', function() {
 
@@ -263,6 +268,73 @@ describe('ItemModel', function() {
 		expect((await models().user().load(user1.id)).total_item_size).toBe(expected1);
 		expect((await models().user().load(user2.id)).total_item_size).toBe(expected2);
 		expect((await models().user().load(user3.id)).total_item_size).toBe(expected3);
+	});
+
+	test('should allow importing content to item storage', async function() {
+		const { user: user1 } = await createUserAndSession(1);
+
+		const tempDir1 = await tempDir('storage1');
+		const tempDir2 = await tempDir('storage2');
+
+		const fromStorageConfig = {
+			type: StorageDriverType.Filesystem,
+			path: tempDir1,
+		};
+
+		const models = newModelFactory(db(), {
+			...config(),
+			storageDriver: fromStorageConfig,
+		});
+
+		await models.item().saveFromRawContent(user1, {
+			body: Buffer.from(JSON.stringify({ 'version': 1 })),
+			name: 'info.json',
+		});
+
+		const itemBefore = (await models.item().all())[0];
+
+		const fromDriver = await loadStorageDriver(fromStorageConfig, db());
+		const fromContent = await fromDriver.read(itemBefore.id, { models });
+
+		expect(fromContent.toString()).toBe('{"version":1}');
+
+		expect(itemBefore.content_storage_id).toBe(1);
+
+		await msleep(2);
+
+		const toStorageConfig = {
+			type: StorageDriverType.Filesystem,
+			path: tempDir2,
+		};
+
+		const toModels = newModelFactory(db(), {
+			...config(),
+			storageDriver: toStorageConfig,
+		});
+
+		const result = await toModels.item().saveFromRawContent(user1, {
+			body: Buffer.from(JSON.stringify({ 'version': 2 })),
+			name: 'info2.json',
+		});
+
+		const itemBefore2 = result['info2.json'].item;
+
+		await models.item().importContentToStorage(toStorageConfig);
+
+		const itemAfter = (await models.item().all()).find(it => it.id === itemBefore.id);
+		expect(itemAfter.content_storage_id).toBe(2);
+		expect(itemAfter.updated_time).toBe(itemBefore.updated_time);
+
+		// Just check the second item has not been processed since it was
+		// already on the right storage
+		const itemAfter2 = (await models.item().all()).find(it => it.id === itemBefore2.id);
+		expect(itemAfter2.content_storage_id).toBe(2);
+		expect(itemAfter2.updated_time).toBe(itemBefore2.updated_time);
+
+		const toDriver = await loadStorageDriver(toStorageConfig, db());
+		const toContent = await toDriver.read(itemAfter.id, { models });
+
+		expect(toContent.toString()).toBe(fromContent.toString());
 	});
 
 });

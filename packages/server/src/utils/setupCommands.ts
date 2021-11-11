@@ -2,6 +2,7 @@ import yargs = require('yargs');
 import BaseCommand from '../commands/BaseCommand';
 import DbCommand from '../commands/DbCommand';
 import DeleteOldChangesCommand from '../commands/DeleteOldChangesCommand';
+import ImportContentCommand from '../commands/ImportContentCommand';
 import MigrateCommand from '../commands/MigrateCommand';
 
 export interface Commands {
@@ -16,6 +17,7 @@ export default async function setupCommands(): Promise<Commands> {
 		new MigrateCommand(),
 		new DbCommand(),
 		new DeleteOldChangesCommand(),
+		new ImportContentCommand(),
 	];
 
 	for (const cmd of commands) {

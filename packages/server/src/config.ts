@@ -3,7 +3,7 @@ import { Config, DatabaseConfig, DatabaseConfigClient, Env, MailerConfig, RouteT
 import * as pathUtils from 'path';
 import { loadStripeConfig, StripePublicConfig } from '@joplin/lib/utils/joplinCloud';
 import { EnvVariables } from './env';
-import parseStorageDriverConnectionString from './models/items/storage/parseStorageDriverConnectionString';
+import parseStorageDriverConnectionString from './models/items/storage/parseStorageConnectionString';
 
 interface PackageJson {
 	version: string;

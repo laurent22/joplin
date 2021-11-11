@@ -8,15 +8,22 @@ import { Knex } from 'knex';
 import { ChangePreviousItem } from './ChangeModel';
 import { unique } from '../utils/array';
 import StorageDriverBase, { Context } from './items/storage/StorageDriverBase';
-import { DbConnection } from '../db';
+import { DbConnection, returningSupported } from '../db';
 import { Config, StorageDriverConfig, StorageDriverMode } from '../utils/types';
 import { NewModelFactoryHandler } from './factory';
 import loadStorageDriver from './items/storage/loadStorageDriver';
+import { msleep } from '../utils/time';
+import Logger from '@joplin/lib/Logger';
 
 const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
 
 // Converts "root:/myfile.txt:" to "myfile.txt"
 const extractNameRegex = /^root:\/(.*):$/;
+
+export interface ImportContentToStorageOptions {
+	batchSize?: number;
+	logger?: Logger;
+}
 
 export interface SaveFromRawContentItem {
 	name: string;
@@ -265,6 +272,73 @@ export default class ItemModel extends BaseModel<Item> {
 			return Buffer.from(await serializeJoplinItem(this.itemToJoplinItem(item)));
 		} else {
 			return item.content;
+		}
+	}
+
+	private async atomicMoveContent(item: Item, toDriver: StorageDriverBase, drivers: Record<number, StorageDriverBase>) {
+		for (let i = 0; i < 10; i++) {
+			let fromDriver: StorageDriverBase = drivers[item.content_storage_id];
+
+			if (!fromDriver) {
+				fromDriver = await loadStorageDriver(item.content_storage_id, this.db);
+				drivers[item.content_storage_id] = fromDriver;
+			}
+
+			const content = await fromDriver.read(item.id, { models: this.models() });
+			await toDriver.write(item.id, content, { models: this.models() });
+
+			const updatedRows = await this
+				.db(this.tableName)
+				.where('id', '=', item.id)
+				.where('updated_time', '=', item.updated_time) // Check that the row hasn't changed while we were transferring the content
+				.update({ content_storage_id: toDriver.storageId }, returningSupported(this.db) ? ['id'] : undefined);
+
+			if (!returningSupported(this.db) || updatedRows.length) return;
+
+			await msleep(1000 + 1000 * i);
+		}
+
+		throw new Error(`Could not atomically update content for item: ${JSON.stringify(item)}`);
+	}
+
+	// Loop throught the items in the database and import their content to the
+	// target storage. Only items not already in that storage will be processed.
+	public async importContentToStorage(toStorageConfig: StorageDriverConfig, options: ImportContentToStorageOptions = null) {
+		options = {
+			batchSize: 1000,
+			logger: new Logger(),
+			...options,
+		};
+
+		const toStorageDriver = await this.loadStorageDriver(toStorageConfig);
+		const fromDrivers: Record<number, StorageDriverBase> = {};
+
+		const itemCount = (await this.db(this.tableName)
+			.count('id', { as: 'total' })
+			.where('content_storage_id', '!=', toStorageDriver.storageId)
+			.first())['total'];
+
+		let totalDone = 0;
+
+		while (true) {
+			const items: Item[] = await this
+				.db(this.tableName)
+				.select(['id', 'content_storage_id', 'updated_time'])
+				.where('content_storage_id', '!=', toStorageDriver.storageId)
+				.limit(options.batchSize);
+
+			options.logger.info(`Processing items ${totalDone} / ${itemCount}`);
+
+			if (!items.length) {
+				options.logger.info(`All items have been processed. Total: ${totalDone}`);
+				return;
+			}
+
+			for (const item of items) {
+				await this.atomicMoveContent(item, toStorageDriver, fromDrivers);
+			}
+
+			totalDone += items.length;
 		}
 	}
 

@@ -9,7 +9,7 @@ interface Argv {
 export default class DeleteOldChangesCommand extends BaseCommand {
 
 	public command() {
-		return 'deleteOldChanges';
+		return 'delete-old-changes';
 	}
 
 	public description() {
