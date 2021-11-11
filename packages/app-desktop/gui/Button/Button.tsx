@@ -33,9 +33,9 @@ const StyledTitle = styled.span`
 
 `;
 
-// const buttonHeight = 32;
+// const buttonSizePx = 32;
 
-const buttonHeight = (props: Props) => {
+export const buttonSizePx = (props: Props) => {
 	if (!props.size || props.size === ButtonSize.Normal) return 32;
 	if (props.size === ButtonSize.Small) return 26;
 	throw new Error(`Unknown size: ${props.size}`);
@@ -45,13 +45,13 @@ const StyledButtonBase = styled.button`
 	display: flex;
 	align-items: center;
 	flex-direction: row;
-	height: ${(props: Props) => buttonHeight(props)}px;
-	min-height: ${(props: Props) => buttonHeight(props)}px;
-	max-height: ${(props: Props) => buttonHeight(props)}px;
-	width: ${(props: any) => props.iconOnly ? `${buttonHeight}px` : 'auto'};
-	${(props: any) => props.iconOnly ? `min-width: ${buttonHeight}px;` : ''}
+	height: ${(props: Props) => buttonSizePx(props)}px;
+	min-height: ${(props: Props) => buttonSizePx(props)}px;
+	max-height: ${(props: Props) => buttonSizePx(props)}px;
+	width: ${(props: any) => props.iconOnly ? `${buttonSizePx}px` : 'auto'};
+	${(props: any) => props.iconOnly ? `min-width: ${buttonSizePx}px;` : ''}
 	${(props: any) => !props.iconOnly ? 'min-width: 100px;' : ''}
-	${(props: any) => props.iconOnly ? `max-width: ${buttonHeight}px;` : ''}
+	${(props: any) => props.iconOnly ? `max-width: ${buttonSizePx}px;` : ''}
 	box-sizing: border-box;
 	border-radius: 3px;
 	border-style: solid;

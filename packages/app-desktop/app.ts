@@ -58,6 +58,7 @@ const commands = mainScreenCommands
 const globalCommands = appCommands.concat(libCommands);
 
 import editorCommandDeclarations from './gui/NoteEditor/editorCommandDeclarations';
+import PerFolderSortOrderService from './services/sortOrder/PerFolderSortOrderService';
 import ShareService from '@joplin/lib/services/share/ShareService';
 import checkForUpdates from './checkForUpdates';
 import { AppState } from './app.reducer';
@@ -387,6 +388,8 @@ class Application extends BaseApplication {
 		PluginManager.instance().register(pluginClasses);
 
 		this.initRedux();
+
+		PerFolderSortOrderService.initialize();
 
 		CommandService.instance().initialize(this.store(), Setting.value('env') == 'dev', stateToWhenClauseContext);
 

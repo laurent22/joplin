@@ -825,6 +825,63 @@ class Setting extends BaseModel {
 				storage: SettingStorage.File,
 			},
 			'notes.sortOrder.reverse': { value: true, type: SettingItemType.Bool, storage: SettingStorage.File, section: 'note', public: true, label: () => _('Reverse sort order'), appTypes: [AppType.Cli] },
+			// NOTE: A setting whose name starts with 'notes.sortOrder' is special,
+			// which implies changing the setting automatically triggers the reflesh of notes.
+			// See lib/BaseApplication.ts/generalMiddleware() for details.
+			'notes.sortOrder.buttonsVisible': {
+				value: true,
+				type: SettingItemType.Bool,
+				storage: SettingStorage.File,
+				section: 'appearance',
+				public: true,
+				label: () => _('Show sort order buttons'),
+				description: () => _('If true, sort order buttons (field + reverse) for notes are shown at the top of Note List.'),
+				appTypes: [AppType.Desktop],
+			},
+			'notes.perFieldReversalEnabled': {
+				value: true,
+				type: SettingItemType.Bool,
+				storage: SettingStorage.File,
+				section: 'note',
+				public: false,
+				appTypes: [AppType.Cli, AppType.Desktop],
+			},
+			'notes.perFieldReverse': {
+				value: {
+					user_updated_time: true,
+					user_created_time: true,
+					title: false,
+					order: false,
+				},
+				type: SettingItemType.Object,
+				storage: SettingStorage.File,
+				section: 'note',
+				public: false,
+				appTypes: [AppType.Cli, AppType.Desktop],
+			},
+			'notes.perFolderSortOrderEnabled': {
+				value: true,
+				type: SettingItemType.Bool,
+				storage: SettingStorage.File,
+				section: 'folder',
+				public: false,
+				appTypes: [AppType.Cli, AppType.Desktop],
+			},
+			'notes.perFolderSortOrders': {
+				value: {},
+				type: SettingItemType.Object,
+				storage: SettingStorage.File,
+				section: 'folder',
+				public: false,
+				appTypes: [AppType.Cli, AppType.Desktop],
+			},
+			'notes.sharedSortOrder': {
+				value: {},
+				type: SettingItemType.Object,
+				section: 'folder',
+				public: false,
+				appTypes: [AppType.Cli, AppType.Desktop],
+			},
 			'folders.sortOrder.field': {
 				value: 'title',
 				type: SettingItemType.String,
@@ -2044,6 +2101,7 @@ class Setting extends BaseModel {
 		if (name === 'sync') return _('Synchronisation');
 		if (name === 'appearance') return _('Appearance');
 		if (name === 'note') return _('Note');
+		if (name === 'folder') return _('Notebook');
 		if (name === 'markdownPlugins') return _('Markdown');
 		if (name === 'plugins') return _('Plugins');
 		if (name === 'application') return _('Application');
@@ -2071,6 +2129,7 @@ class Setting extends BaseModel {
 		if (name === 'sync') return 'icon-sync';
 		if (name === 'appearance') return 'icon-appearance';
 		if (name === 'note') return 'icon-note';
+		if (name === 'folder') return 'icon-notebooks';
 		if (name === 'plugins') return 'icon-plugins';
 		if (name === 'markdownPlugins') return 'fab fa-markdown';
 		if (name === 'application') return 'icon-application';

@@ -20,6 +20,7 @@ import Logger from '@joplin/lib/Logger';
 import { FolderEntity } from '@joplin/lib/services/database/types';
 import stateToWhenClauseContext from '../../services/commands/stateToWhenClauseContext';
 import { store } from '@joplin/lib/reducer';
+import PerFolderSortOrderService from '../../services/sortOrder/PerFolderSortOrderService';
 import { getFolderCallbackUrl, getTagCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 const { connect } = require('react-redux');
 const shared = require('@joplin/lib/components/shared/side-menu-shared.js');
@@ -332,6 +333,13 @@ class SidebarComponent extends React.Component<Props, State> {
 					submenu: exportMenu,
 				})
 			);
+			if (Setting.value('notes.perFolderSortOrderEnabled')) {
+				menu.append(new MenuItem({
+					...menuUtils.commandToStatefulMenuItem('togglePerFolderSortOrder', itemId),
+					type: 'checkbox',
+					checked: PerFolderSortOrderService.isSet(itemId),
+				}));
+			}
 		}
 
 		if (itemType === BaseModel.TYPE_FOLDER) {
