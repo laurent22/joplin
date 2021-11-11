@@ -29,6 +29,7 @@ export default function() {
 		'textLink',
 		'textPaste',
 		'textSelectAll',
+		'textBulletedList',
 		'toggleExternalEditing',
 		'toggleLayoutMoveMode',
 		'toggleNoteList',
