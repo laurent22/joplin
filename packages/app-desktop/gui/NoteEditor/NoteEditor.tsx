@@ -110,7 +110,7 @@ function NoteEditor(props: NoteEditorProps) {
 				const savedNote: any = await Note.save(note);
 
 				setFormNote((prev: FormNote) => {
-					return { ...prev, user_updated_time: savedNote.user_updated_time };
+					return { ...prev, user_updated_time: savedNote.user_updated_time, hasChanged: false };
 				});
 
 				void ExternalEditWatcher.instance().updateNoteFile(savedNote);
