@@ -22,6 +22,8 @@ export default function(config: StorageDriverConfig, locationOnly: boolean = tru
 	items.push(`Type=${serializeType(config.type)}`);
 
 	if (config.path) items.push(`Path=${config.path}`);
+	if (config.region) items.push(`Region=${config.region}`);
+	if (config.bucket) items.push(`Bucket=${config.bucket}`);
 
 	if (!locationOnly && config.mode) items.push(`Mode=${serializeMode(config.mode)}`);
 
