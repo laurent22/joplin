@@ -61,7 +61,7 @@ describe('StorageDriverDatabase', function() {
 	});
 
 	test('should support fallback content drivers in rw mode', async function() {
-		await shouldSupportFallbackDriverInReadWriteMode(newConfig(), { type: StorageDriverType.Memory, mode: StorageDriverMode.ReadWrite });
+		await shouldSupportFallbackDriverInReadWriteMode(newConfig(), { type: StorageDriverType.Memory, mode: StorageDriverMode.ReadAndWrite });
 	});
 
 	test('should update content storage ID after switching driver', async function() {

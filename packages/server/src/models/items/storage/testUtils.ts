@@ -197,7 +197,7 @@ export async function shouldSupportFallbackDriver(driverConfig: StorageDriverCon
 }
 
 export async function shouldSupportFallbackDriverInReadWriteMode(driverConfig: StorageDriverConfig, fallbackDriverConfig: StorageDriverConfig) {
-	if (fallbackDriverConfig.mode !== StorageDriverMode.ReadWrite) throw new Error('Content driver must be configured in RW mode for this test');
+	if (fallbackDriverConfig.mode !== StorageDriverMode.ReadAndWrite) throw new Error('Content driver must be configured in RW mode for this test');
 
 	const { user } = await createUserAndSession(1);
 

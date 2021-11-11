@@ -9,8 +9,8 @@ const serializeType = (type: StorageDriverType): string => {
 };
 
 const serializeMode = (mode: StorageDriverMode): string => {
-	if (mode === StorageDriverMode.ReadWrite) return 'rw';
-	if (mode === StorageDriverMode.ReadOnly) return 'r';
+	if (mode === StorageDriverMode.ReadAndWrite) return 'ReadAndWrite';
+	if (mode === StorageDriverMode.ReadAndClear) return 'ReadAndClear';
 	throw new Error(`Invalid type: "${mode}"`);
 };
 

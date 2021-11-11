@@ -172,9 +172,9 @@ export default class ItemModel extends BaseModel<Item> {
 		await storageDriver.write(itemId, content, context);
 
 		if (storageDriverFallback) {
-			if (storageDriverFallback.mode === StorageDriverMode.ReadWrite) {
+			if (storageDriverFallback.mode === StorageDriverMode.ReadAndWrite) {
 				await storageDriverFallback.write(itemId, content, context);
-			} else if (storageDriverFallback.mode === StorageDriverMode.ReadOnly) {
+			} else if (storageDriverFallback.mode === StorageDriverMode.ReadAndClear) {
 				await storageDriverFallback.write(itemId, Buffer.from(''), context);
 			} else {
 				throw new Error(`Unsupported fallback mode: ${storageDriverFallback.mode}`);
