@@ -1,7 +1,8 @@
 # Joplin Server Changelog
 
-## [server-v2.6.8](https://github.com/laurent22/joplin/releases/tag/server-v2.6.8) - 2021-11-11T15:24:05Z
+## [server-v2.6.9](https://github.com/laurent22/joplin/releases/tag/server-v2.6.9) - 2021-11-11T16:38:00Z
 
+- Improved: Hide more credentials from the log (73137cf)
 - New: Added command to test a storage connection (c6dec0a)
 - New: Added command to migrate content to different storage (005f720)
 
