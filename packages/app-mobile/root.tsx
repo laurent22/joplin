@@ -728,20 +728,26 @@ class AppComponent extends React.Component {
 				state: 'initializing',
 			});
 
-			try {
-				// This will be called right after adding the event listener
-				// so there's no need to check netinfo on startup
-				this.unsubscribeNetInfoHandler_ = NetInfo.addEventListener(({ type, details }) => {
-					const isMobile = details.isConnectionExpensive || type === 'cellular';
-					reg.setIsOnMobileData(isMobile);
-					this.props.dispatch({
-						type: 'MOBILE_DATA_WARNING_UPDATE',
-						isOnMobileData: isMobile,
+			if (Setting.value('sync.mobileWifiOnly')) {
+				try {
+					NetInfo.configure({
+						reachabilityUrl: Setting.value('sync.mobileWifiOnly.reachabilityUrl'),
+						reachabilityTest: async (response) => response.status === 200,
 					});
-				});
-			} catch (error) {
-				reg.logger().warn('Something went wrong while checking network info');
-				reg.logger().info(error);
+					// This will be called right after adding the event listener
+					// so there's no need to check netinfo on startup
+					this.unsubscribeNetInfoHandler_ = NetInfo.addEventListener(({ type, details }) => {
+						const isMobile = details.isConnectionExpensive || type === 'cellular';
+						reg.setIsOnMobileData(isMobile);
+						this.props.dispatch({
+							type: 'MOBILE_DATA_WARNING_UPDATE',
+							isOnMobileData: isMobile,
+						});
+					});
+				} catch (error) {
+					reg.logger().warn('Something went wrong while checking network info');
+					reg.logger().info(error);
+				}
 			}
 
 			await initialize(this.props.dispatch);
