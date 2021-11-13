@@ -58,6 +58,59 @@ Once Joplin Server is running, you will then need to expose it to the internet b
 - [Apache Reverse Proxy](https://httpd.apache.org/docs/current/mod/mod_proxy.html)
 - [Nginx Reverse Proxy](https://docs.nginx.com/nginx/admin-guide/web-server/reverse-proxy/)
 
+## Setup storage
+
+By default, the item contents (notes, tags, etc.) are stored in the database and you don't to do anything special to get that working.
+
+However since that content can be quite large, you also have the option to store it outside the database by setting the `STORAGE_DRIVER` environment variable.
+
+### Setting up storage on a new installation
+
+Again this is optional - by default items will simply be saved to the database. To save to the local filesystem instead, use:
+
+	STORAGE_DRIVER=Type=File; Path=/path/to/dir
+
+Then all item data will be saved under this `/path/to/dir` directory.
+
+### Migrating storage for an existing installation
+
+Migrating storage is a bit more complicated because the old content will have to be migrated to the new storage. This is done by providing a fallback driver, which tells the server where to look if a particular item is not yet available on the new storage. 
+
+To migrate from the database to the file system for example, you would set the environment variables like so:
+
+	STORAGE_DRIVER=Type=File; Path=/path/to/dir
+	STORAGE_DRIVER_FALLBACK=Type=Database; Mode=ReadAndWrite
+
+From then on, all new and updated content will be added to the filesystem storage. When reading an item, if the server cannot find it in the filesystem, it will look for it in the database.
+
+Fallback drivers have two write modes:
+
+- In **ReadAndClear** mode, it's going to clear the fallback driver content every time an item is moved to the main driver. It means that over time the old storage will be cleared and all content will be on the new storage.
+
+- In **ReadAndWrite** mode, it's going to write the content to the fallback driver too. This is purely for safey - it allows deploying the new storage (such as the filesystem or S3) but still keep the old storage up-to-date. So if something goes wrong it's possible to go back to the old storage until the new one is working.
+
+It's recommended to start with ReadAndWrite mode.
+
+This simple setup with main and fallback driver is sufficient to start using a new storage, however old content that never gets updated will stay on the database. To migrate this content too, you can use the `storage import` command. It takes a connection string and move all items from the old storage to the new one.
+
+For example, to move all content from the database to the filesytem:
+
+	docker exec -it CONTAINER_ID node packages/server/dist/app.js storage import --connection 'Type=File; Path=/path/to/dir'
+
+On the database, you can verify that all content has been migrated by running this query:
+
+```sql
+SELECT count(*), content_storage_id FROM items GROUP BY content_storage_id;
+```
+
+If everything went well, all items should have a `content_storage_id` > 1 ("1" being the database).
+
+### Other storage driver
+
+Besides the database and filesystem, it's also possible to use AWS S3 for storage using the same environment variable:
+
+	STORAGE_DRIVER=Type=S3; Region=YOUR_REGION_CODE; AccessKeyId=YOUR_ACCESS_KEY; SecretAccessKeyId=YOUR_SECRET_ACCESS_KEY; Bucket=YOUR_BUCKET
+
 ## Setup the website
 
 Once the server is exposed to the internet, you can open the admin UI and get it ready for synchronisation. For the following instructions, we'll assume that the Joplin server is running on `https://example.com/joplin`.
