@@ -2,33 +2,37 @@
 // defined in the below config file. If the credentials are missing, all the
 // tests are skipped.
 
-import { afterAllTests, beforeAllDb, beforeEachDb, expectNotThrow, expectThrow, readCredentialFile } from '../../../utils/testing/testUtils';
-import { StorageDriverType } from '../../../utils/types';
-import StorageDriverS3 from './StorageDriverS3';
-import { shouldDeleteContent, shouldNotCreateItemIfContentNotSaved, shouldNotUpdateItemIfContentNotSaved, shouldWriteToContentAndReadItBack } from './testUtils';
+import { afterAllTests, beforeAllDb, beforeEachDb, readCredentialFileSync } from '../../../utils/testing/testUtils';
+import { StorageDriverConfig, StorageDriverMode, StorageDriverType } from '../../../utils/types';
+import { shouldDeleteContent, shouldNotCreateItemIfContentNotSaved, shouldNotUpdateItemIfContentNotSaved, shouldSupportFallbackDriver, shouldSupportFallbackDriverInReadWriteMode, shouldThrowNotFoundIfNotExist, shouldUpdateContentStorageIdAfterSwitchingDriver, shouldWriteToContentAndReadItBack } from './testUtils';
 
-const s3Config = async () => {
-	const s = await readCredentialFile('server-s3-test-units.json', '');
-	if (!s) return null;
-	return JSON.parse(s);
-};
+let s3config_: StorageDriverConfig;
+const s = readCredentialFileSync('server-s3-test-units.json', '');
+if (s) {
+	const parse: any = JSON.parse(s);
+	if ('enabled' in parse && parse.enabled === false) {
+		// disable S3 tests
+	} else {
+		delete parse.enabled;
+		s3config_ = parse;
+	}
+}
 
-const newDriver = async () => {
-	return new StorageDriverS3(1, {
+const newConfig = (): StorageDriverConfig => {
+	return {
 		type: StorageDriverType.S3,
-		...await s3Config(),
-	});
+		...s3config_,
+	};
 };
 
-const configIsSet = async () => {
-	const c = await s3Config();
-	return !!c;
+const configIsSet = () => {
+	return !!s3config_;
 };
 
 describe('StorageDriverS3', function() {
 
 	beforeAll(async () => {
-		if (!(await configIsSet())) {
+		if (!(configIsSet())) {
 			return;
 		} else {
 			console.warn('Running S3 unit tests on live environment!');
@@ -37,49 +41,26 @@ describe('StorageDriverS3', function() {
 	});
 
 	afterAll(async () => {
-		if (!(await configIsSet())) return;
+		if (!(configIsSet())) return;
 		await afterAllTests();
 	});
 
 	beforeEach(async () => {
-		if (!(await configIsSet())) return;
+		if (!(configIsSet())) return;
 		await beforeEachDb();
 	});
 
-	test('should write to content and read it back', async function() {
-		if (!(await configIsSet())) return;
-		const driver = await newDriver();
-		await shouldWriteToContentAndReadItBack(driver);
-	});
-
-	test('should delete the content', async function() {
-		if (!(await configIsSet())) return;
-		const driver = await newDriver();
-		await shouldDeleteContent(driver);
-	});
-
-	test('should not create the item if the content cannot be saved', async function() {
-		if (!(await configIsSet())) return;
-		const driver = await newDriver();
-		await shouldNotCreateItemIfContentNotSaved(driver);
-	});
-
-	test('should not update the item if the content cannot be saved', async function() {
-		if (!(await configIsSet())) return;
-		const driver = await newDriver();
-		await shouldNotUpdateItemIfContentNotSaved(driver);
-	});
-
-	test('should fail if the item row does not exist', async function() {
-		if (!(await configIsSet())) return;
-		const driver = await newDriver();
-		await expectThrow(async () => driver.read('oops'));
-	});
-
-	test('should do nothing if deleting non-existing row', async function() {
-		if (!(await configIsSet())) return;
-		const driver = await newDriver();
-		await expectNotThrow(async () => driver.delete('oops'));
-	});
+	if (configIsSet()) {
+		shouldWriteToContentAndReadItBack(newConfig());
+		shouldDeleteContent(newConfig());
+		shouldNotCreateItemIfContentNotSaved(newConfig());
+		shouldNotUpdateItemIfContentNotSaved(newConfig());
+		shouldSupportFallbackDriver(newConfig(), { type: StorageDriverType.Memory });
+		shouldSupportFallbackDriverInReadWriteMode(newConfig(), { type: StorageDriverType.Memory, mode: StorageDriverMode.ReadAndWrite });
+		shouldUpdateContentStorageIdAfterSwitchingDriver(newConfig(), { type: StorageDriverType.Memory });
+		shouldThrowNotFoundIfNotExist(newConfig());
+	} else {
+		it('should pass', () => {});
+	}
 
 });

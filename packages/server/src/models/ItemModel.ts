@@ -3,7 +3,7 @@ import { ItemType, databaseSchema, Uuid, Item, ShareType, Share, ChangeType, Use
 import { defaultPagination, paginateDbQuery, PaginatedResults, Pagination } from './utils/pagination';
 import { isJoplinItemName, isJoplinResourceBlobPath, linkedResourceIds, serializeJoplinItem, unserializeJoplinItem } from '../utils/joplinUtils';
 import { ModelType } from '@joplin/lib/BaseModel';
-import { ApiError, ErrorForbidden, ErrorUnprocessableEntity } from '../utils/errors';
+import { ApiError, ErrorCode, ErrorForbidden, ErrorUnprocessableEntity } from '../utils/errors';
 import { Knex } from 'knex';
 import { ChangePreviousItem } from './ChangeModel';
 import { unique } from '../utils/array';
@@ -275,7 +275,7 @@ export default class ItemModel extends BaseModel<Item> {
 		}
 	}
 
-	private async atomicMoveContent(item: Item, toDriver: StorageDriverBase, drivers: Record<number, StorageDriverBase>) {
+	private async atomicMoveContent(item: Item, toDriver: StorageDriverBase, drivers: Record<number, StorageDriverBase>, logger: Logger) {
 		for (let i = 0; i < 10; i++) {
 			let fromDriver: StorageDriverBase = drivers[item.content_storage_id];
 
@@ -284,7 +284,18 @@ export default class ItemModel extends BaseModel<Item> {
 				drivers[item.content_storage_id] = fromDriver;
 			}
 
-			const content = await fromDriver.read(item.id, { models: this.models() });
+			let content = null;
+
+			try {
+				content = await fromDriver.read(item.id, { models: this.models() });
+			} catch (error) {
+				if (error.code === ErrorCode.NotFound) {
+					logger.info(`Could not process item, because content was deleted: ${item.id}`);
+					return;
+				}
+				throw error;
+			}
+
 			await toDriver.write(item.id, content, { models: this.models() });
 
 			const updatedRows = await this
@@ -293,7 +304,21 @@ export default class ItemModel extends BaseModel<Item> {
 				.where('updated_time', '=', item.updated_time) // Check that the row hasn't changed while we were transferring the content
 				.update({ content_storage_id: toDriver.storageId }, returningSupported(this.db) ? ['id'] : undefined);
 
+			// The item has been updated so we can return. Note that if the
+			// database does not support RETURNING statement (like SQLite) we
+			// have no way to check so we assume it's been done.
 			if (!returningSupported(this.db) || updatedRows.length) return;
+
+			// If the row hasn't been updated, check that the item still exists
+			// (that it didn't get deleted while we were uploading the content).
+			const reloadedItem = await this.load(item.id, { fields: ['id'] });
+			if (!reloadedItem) {
+				// Item was deleted so we remove the content we've just
+				// uploaded.
+				logger.info(`Could not process item, because it was deleted: ${item.id}`);
+				await toDriver.delete(item.id, { models: this.models() });
+				return;
+			}
 
 			await msleep(1000 + 1000 * i);
 		}
@@ -303,14 +328,14 @@ export default class ItemModel extends BaseModel<Item> {
 
 	// Loop throught the items in the database and import their content to the
 	// target storage. Only items not already in that storage will be processed.
-	public async importContentToStorage(toStorageConfig: StorageDriverConfig, options: ImportContentToStorageOptions = null) {
+	public async importContentToStorage(toStorageConfig: StorageDriverConfig | StorageDriverBase, options: ImportContentToStorageOptions = null) {
 		options = {
 			batchSize: 1000,
 			logger: new Logger(),
 			...options,
 		};
 
-		const toStorageDriver = await this.loadStorageDriver(toStorageConfig);
+		const toStorageDriver = toStorageConfig instanceof StorageDriverBase ? toStorageConfig : await this.loadStorageDriver(toStorageConfig);
 		const fromDrivers: Record<number, StorageDriverBase> = {};
 
 		const itemCount = (await this.db(this.tableName)
@@ -335,7 +360,11 @@ export default class ItemModel extends BaseModel<Item> {
 			}
 
 			for (const item of items) {
-				await this.atomicMoveContent(item, toStorageDriver, fromDrivers);
+				try {
+					await this.atomicMoveContent(item, toStorageDriver, fromDrivers, options.logger);
+				} catch (error) {
+					options.logger.error(error);
+				}
 			}
 
 			totalDone += items.length;

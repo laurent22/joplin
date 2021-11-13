@@ -1,4 +1,5 @@
 import { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectsCommand, ObjectIdentifier, HeadObjectCommand } from '@aws-sdk/client-s3';
+import { CustomError, ErrorCode } from '../../../utils/errors';
 import { StorageDriverConfig, StorageDriverType } from '../../../utils/types';
 import StorageDriverBase from './StorageDriverBase';
 
@@ -59,6 +60,7 @@ export default class StorageDriverS3 extends StorageDriverBase {
 
 			return stream2buffer(response.Body);
 		} catch (error) {
+			if (error?.$metadata?.httpStatusCode === 404) throw new CustomError(`No such item: ${itemId}`, ErrorCode.NotFound);
 			error.message = `Could not get item "${itemId}": ${error.message}`;
 			throw error;
 		}

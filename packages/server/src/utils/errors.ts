@@ -134,3 +134,16 @@ export function errorToPlainObject(error: any): PlainObjectError {
 	if ('message' in error) output.message = error.message;
 	return output;
 }
+
+export enum ErrorCode {
+	NotFound,
+}
+
+export class CustomError extends Error {
+	public code: ErrorCode;
+	public constructor(message: string, code: ErrorCode) {
+		super(message);
+		this.code = code;
+		Object.setPrototypeOf(this, CustomError.prototype);
+	}
+}

@@ -1,6 +1,9 @@
-import { afterAllTests, beforeAllDb, beforeEachDb } from '../../../utils/testing/testUtils';
-import { StorageDriverConfig, StorageDriverType } from '../../../utils/types';
-import { shouldDeleteContent, shouldNotCreateItemIfContentNotSaved, shouldNotUpdateItemIfContentNotSaved, shouldWriteToContentAndReadItBack } from './testUtils';
+import { mkdirp, remove } from 'fs-extra';
+import { afterAllTests, beforeAllDb, beforeEachDb, tempDirPath } from '../../../utils/testing/testUtils';
+import { StorageDriverConfig, StorageDriverMode, StorageDriverType } from '../../../utils/types';
+import { shouldDeleteContent, shouldNotCreateItemIfContentNotSaved, shouldNotUpdateItemIfContentNotSaved, shouldSupportFallbackDriver, shouldSupportFallbackDriverInReadWriteMode, shouldThrowNotFoundIfNotExist, shouldUpdateContentStorageIdAfterSwitchingDriver, shouldWriteToContentAndReadItBack } from './testUtils';
+
+const fsDriverPath_ = tempDirPath();
 
 const newConfig = (): StorageDriverConfig => {
 	return {
@@ -20,23 +23,20 @@ describe('StorageDriverMemory', function() {
 
 	beforeEach(async () => {
 		await beforeEachDb();
+		await mkdirp(fsDriverPath_);
 	});
 
-	test('should write to content and read it back', async function() {
-		await shouldWriteToContentAndReadItBack(newConfig());
+	afterEach(async () => {
+		await remove(fsDriverPath_);
 	});
 
-	test('should delete the content', async function() {
-		await shouldDeleteContent(newConfig());
-	});
-
-	test('should not create the item if the content cannot be saved', async function() {
-		await shouldNotCreateItemIfContentNotSaved(newConfig());
-	});
-
-	test('should not update the item if the content cannot be saved', async function() {
-		await shouldNotUpdateItemIfContentNotSaved(newConfig());
-	});
+	shouldWriteToContentAndReadItBack(newConfig());
+	shouldDeleteContent(newConfig());
+	shouldNotCreateItemIfContentNotSaved(newConfig());
+	shouldNotUpdateItemIfContentNotSaved(newConfig());
+	shouldSupportFallbackDriver(newConfig(), { type: StorageDriverType.Filesystem, path: fsDriverPath_ });
+	shouldSupportFallbackDriverInReadWriteMode(newConfig(), { type: StorageDriverType.Filesystem, path: fsDriverPath_, mode: StorageDriverMode.ReadAndWrite });
+	shouldUpdateContentStorageIdAfterSwitchingDriver(newConfig(), { type: StorageDriverType.Filesystem, path: fsDriverPath_ });
+	shouldThrowNotFoundIfNotExist(newConfig());
 
 });
-

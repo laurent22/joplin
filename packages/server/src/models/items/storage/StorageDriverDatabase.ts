@@ -2,6 +2,7 @@
 // database (as a binary blob). For now the driver expects that the content is
 // stored in the same table as the items, as it originally was.
 
+import { CustomError, ErrorCode } from '../../../utils/errors';
 import { DatabaseConfigClient, StorageDriverConfig, StorageDriverType } from '../../../utils/types';
 import StorageDriverBase, { Context } from './StorageDriverBase';
 
@@ -40,7 +41,7 @@ export default class StorageDriverDatabase extends StorageDriverBase {
 
 		// Calling code should only call this handler if the row exists, so if
 		// we find it doesn't, it's an error.
-		if (!row) throw new Error(`No such row: ${itemId}`);
+		if (!row) throw new CustomError(`No such row: ${itemId}`, ErrorCode.NotFound);
 
 		return row.content;
 	}
