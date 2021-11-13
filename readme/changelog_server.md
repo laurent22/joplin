@@ -1,5 +1,10 @@
 # Joplin Server Changelog
 
+## [server-v2.6.10](https://github.com/laurent22/joplin/releases/tag/server-v2.6.10) - 2021-11-13T12:47:53Z
+
+- Improved: Improved storage migration error handling, and improved storage test units (5a41d80)
+- Improved: Rename "ReadOnly" mode to "ReadAndClear" to avoid any confusion (5cd4537)
+
 ## [server-v2.6.9](https://github.com/laurent22/joplin/releases/tag/server-v2.6.9) - 2021-11-11T16:38:00Z
 
 - Improved: Hide more credentials from the log (73137cf)
