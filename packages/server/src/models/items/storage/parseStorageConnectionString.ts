@@ -11,8 +11,8 @@ const parseType = (type: string): StorageDriverType => {
 };
 
 const parseMode = (mode: string): StorageDriverMode => {
-	if (mode === 'rw') return StorageDriverMode.ReadWrite;
-	if (mode === 'r') return StorageDriverMode.ReadOnly;
+	if (mode === 'ReadAndWrite') return StorageDriverMode.ReadAndWrite;
+	if (mode === 'ReadAndClear') return StorageDriverMode.ReadAndClear;
 	throw new Error(`Invalid type: "${mode}"`);
 };
 

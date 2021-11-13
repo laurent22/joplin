@@ -28,7 +28,7 @@ export default class StorageDriverBase {
 	}
 
 	public get mode(): StorageDriverMode {
-		return this.config.mode || StorageDriverMode.ReadOnly;
+		return this.config.mode || StorageDriverMode.ReadAndClear;
 	}
 
 	public async write(_itemId: string, _content: Buffer, _context: Context): Promise<void> { throw new Error('Not implemented'); }

@@ -337,4 +337,68 @@ describe('ItemModel', function() {
 		expect(toContent.toString()).toBe(fromContent.toString());
 	});
 
+	// test('should stop importing item if it has been deleted', async function() {
+	// 	const { user: user1 } = await createUserAndSession(1);
+
+	// 	const tempDir1 = await tempDir('storage1');
+
+	// 	const driver = await loadStorageDriver({
+	// 		type: StorageDriverType.Filesystem,
+	// 		path: tempDir1,
+	// 	}, db());
+
+	// 	let waitWrite = false;
+	// 	const previousWrite = driver.write.bind(driver);
+	// 	driver.write = async (itemId:string, content:Buffer, context: Context) => {
+	// 		return new Promise((resolve) => {
+	// 			const iid = setInterval(async () => {
+	// 				if (waitWrite) return;
+	// 				clearInterval(iid);
+	// 				await previousWrite(itemId, content, context);
+	// 				resolve(null);
+	// 			}, 10);
+	// 		});
+	// 	}
+
+	// 	await models().item().saveFromRawContent(user1, {
+	// 		body: Buffer.from(JSON.stringify({ 'version': 1 })),
+	// 		name: 'info.json',
+	// 	});
+
+	// 	const item = (await models().item().all())[0];
+
+	// 	const promise = models().item().importContentToStorage(driver);
+	// 	waitWrite = false;
+	// 	await promise;
+
+	// 	expect(await driver.exists(item.id, { models: models() })).toBe(true);
+
+
+
+
+
+
+
+	// 	{
+	// 		const result = await models().item().saveFromRawContent(user1, {
+	// 			body: Buffer.from(JSON.stringify({ 'version': 2 })),
+	// 			name: 'info2.json',
+	// 		});
+
+	// 		const item2 = result['info2.json'].item;
+
+	// 		waitWrite = true;
+	// 		const promise = models().item().importContentToStorage(driver);
+
+	// 		await msleep(100);
+
+	// 		await models().item().delete(item2.id);
+
+	// 		waitWrite = false;
+	// 		await promise;
+
+	// 		expect(await driver.exists(item2.id, { models: models() })).toBe(false);
+	// 	}
+	// });
+
 });
