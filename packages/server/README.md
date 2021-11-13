@@ -60,7 +60,7 @@ Once Joplin Server is running, you will then need to expose it to the internet b
 
 ## Setup storage
 
-By default, the item contents (notes, tags, etc.) are stored in the database and you don't to do anything special to get that working.
+By default, the item contents (notes, tags, etc.) are stored in the database and you don't need to do anything special to get that working.
 
 However since that content can be quite large, you also have the option to store it outside the database by setting the `STORAGE_DRIVER` environment variable.
 
