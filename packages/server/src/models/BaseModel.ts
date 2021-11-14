@@ -90,6 +90,10 @@ export default abstract class BaseModel<T> {
 		return this.config_.appName;
 	}
 
+	protected get itemSizeHardLimit(): number {
+		return this.config_.itemSizeHardLimit;
+	}
+
 	public get db(): DbConnection {
 		if (this.transactionHandler_.activeTransaction) return this.transactionHandler_.activeTransaction;
 		return this.db_;
@@ -113,7 +117,7 @@ export default abstract class BaseModel<T> {
 		throw new Error('Must be overriden');
 	}
 
-	protected selectFields(options: LoadOptions, defaultFields: string[] = null, mainTable: string = ''): string[] {
+	protected selectFields(options: LoadOptions, defaultFields: string[] = null, mainTable: string = '', requiredFields: string[] = []): string[] {
 		let output: string[] = [];
 		if (options && options.fields) {
 			output = options.fields;
@@ -121,6 +125,12 @@ export default abstract class BaseModel<T> {
 			output = defaultFields;
 		} else {
 			output = this.defaultFields;
+		}
+
+		if (!output.includes('*')) {
+			for (const f of requiredFields) {
+				if (!output.includes(f)) output.push(f);
+			}
 		}
 
 		if (mainTable) {

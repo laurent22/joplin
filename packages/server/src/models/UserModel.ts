@@ -26,6 +26,7 @@ import paymentFailedAccountDisabledTemplate from '../views/emails/paymentFailedA
 import changeEmailConfirmationTemplate from '../views/emails/changeEmailConfirmationTemplate';
 import changeEmailNotificationTemplate from '../views/emails/changeEmailNotificationTemplate';
 import { NotificationKey } from './NotificationModel';
+import prettyBytes = require('pretty-bytes');
 
 const logger = Logger.create('UserModel');
 
@@ -197,6 +198,17 @@ export default class UserModel extends BaseModel<User> {
 
 		const maxItemSize = getMaxItemSize(user);
 		const maxSize = maxItemSize * (itemIsEncrypted(item) ? 2.2 : 1);
+
+		if (itemSize > 200000000) {
+			logger.info(`Trying to upload large item: ${JSON.stringify({
+				userId: user.id,
+				itemName: item.name,
+				itemSize,
+				maxItemSize,
+				maxSize,
+			}, null, '    ')}`);
+		}
+
 		if (maxSize && itemSize > maxSize) {
 			throw new ErrorPayloadTooLarge(_('Cannot save %s "%s" because it is larger than the allowed limit (%s)',
 				isNote ? _('note') : _('attachment'),
@@ -204,6 +216,8 @@ export default class UserModel extends BaseModel<User> {
 				formatBytes(maxItemSize)
 			));
 		}
+
+		if (itemSize > this.itemSizeHardLimit) throw new ErrorPayloadTooLarge(`Uploading items larger than ${prettyBytes(this.itemSizeHardLimit)} is currently disabled`);
 
 		// We allow lock files to go through so that sync can happen, which in
 		// turns allow user to fix oversized account by deleting items.

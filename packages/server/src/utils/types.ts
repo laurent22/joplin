@@ -159,6 +159,7 @@ export interface Config {
 	cookieSecure: boolean;
 	storageDriver: StorageDriverConfig;
 	storageDriverFallback: StorageDriverConfig;
+	itemSizeHardLimit: number;
 }
 
 export enum HttpMethod {

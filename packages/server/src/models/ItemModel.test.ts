@@ -1,4 +1,4 @@
-import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, createItem, createItemTree, createResource, createNote, createFolder, createItemTree3, db, tempDir } from '../utils/testing/testUtils';
+import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, createItem, createItemTree, createResource, createNote, createFolder, createItemTree3, db, tempDir, expectNotThrow, expectHttpError } from '../utils/testing/testUtils';
 import { shareFolderWithUser } from '../utils/testing/shareApiUtils';
 import { resourceBlobPath } from '../utils/joplinUtils';
 import newModelFactory from './factory';
@@ -6,6 +6,7 @@ import { StorageDriverType } from '../utils/types';
 import config from '../config';
 import { msleep } from '../utils/time';
 import loadStorageDriver from './items/storage/loadStorageDriver';
+import { ErrorPayloadTooLarge } from '../utils/errors';
 
 describe('ItemModel', function() {
 
@@ -268,6 +269,36 @@ describe('ItemModel', function() {
 		expect((await models().user().load(user1.id)).total_item_size).toBe(expected1);
 		expect((await models().user().load(user2.id)).total_item_size).toBe(expected2);
 		expect((await models().user().load(user3.id)).total_item_size).toBe(expected3);
+	});
+
+	test('should respect the hard item size limit', async function() {
+		const { user: user1 } = await createUserAndSession(1);
+
+		let models = newModelFactory(db(), config());
+
+		let result = await models.item().saveFromRawContent(user1, {
+			body: Buffer.from('1234'),
+			name: 'test1.txt',
+		});
+
+		const item = result['test1.txt'].item;
+
+		config().itemSizeHardLimit = 3;
+		models = newModelFactory(db(), config());
+
+		result = await models.item().saveFromRawContent(user1, {
+			body: Buffer.from('1234'),
+			name: 'test2.txt',
+		});
+
+		expect(result['test2.txt'].error.httpCode).toBe(ErrorPayloadTooLarge.httpCode);
+
+		await expectHttpError(async () => models.item().loadWithContent(item.id), ErrorPayloadTooLarge.httpCode);
+
+		config().itemSizeHardLimit = 1000;
+		models = newModelFactory(db(), config());
+
+		await expectNotThrow(async () => models.item().loadWithContent(item.id));
 	});
 
 	test('should allow importing content to item storage', async function() {

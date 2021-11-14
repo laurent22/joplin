@@ -3,7 +3,7 @@ import { ItemType, databaseSchema, Uuid, Item, ShareType, Share, ChangeType, Use
 import { defaultPagination, paginateDbQuery, PaginatedResults, Pagination } from './utils/pagination';
 import { isJoplinItemName, isJoplinResourceBlobPath, linkedResourceIds, serializeJoplinItem, unserializeJoplinItem } from '../utils/joplinUtils';
 import { ModelType } from '@joplin/lib/BaseModel';
-import { ApiError, ErrorCode, ErrorForbidden, ErrorUnprocessableEntity } from '../utils/errors';
+import { ApiError, ErrorCode, ErrorForbidden, ErrorPayloadTooLarge, ErrorUnprocessableEntity } from '../utils/errors';
 import { Knex } from 'knex';
 import { ChangePreviousItem } from './ChangeModel';
 import { unique } from '../utils/array';
@@ -14,6 +14,7 @@ import { NewModelFactoryHandler } from './factory';
 import loadStorageDriver from './items/storage/loadStorageDriver';
 import { msleep } from '../utils/time';
 import Logger from '@joplin/lib/Logger';
+import prettyBytes = require('pretty-bytes');
 
 const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
 
@@ -182,7 +183,11 @@ export default class ItemModel extends BaseModel<Item> {
 		}
 	}
 
-	private async storageDriverRead(itemId: Uuid, context: Context) {
+	private async storageDriverRead(itemId: Uuid, itemSize: number, context: Context) {
+		if (itemSize > this.itemSizeHardLimit) {
+			throw new ErrorPayloadTooLarge(`Downloading items larger than ${prettyBytes(this.itemSizeHardLimit)} is currently disabled`);
+		}
+
 		const storageDriver = await this.storageDriver();
 		const storageDriverFallback = await this.storageDriverFallback();
 
@@ -203,13 +208,13 @@ export default class ItemModel extends BaseModel<Item> {
 		const rows: Item[] = await this
 			.db('user_items')
 			.leftJoin('items', 'items.id', 'user_items.item_id')
-			.distinct(this.selectFields(options, null, 'items'))
+			.distinct(this.selectFields(options, null, 'items', ['items.content_size']))
 			.whereIn('user_items.user_id', userIds)
 			.whereIn('jop_id', jopIds);
 
 		if (options.withContent) {
 			for (const row of rows) {
-				row.content = await this.storageDriverRead(row.id, { models: this.models() });
+				row.content = await this.storageDriverRead(row.id, row.content_size, { models: this.models() });
 			}
 		}
 
@@ -229,13 +234,13 @@ export default class ItemModel extends BaseModel<Item> {
 		const rows: Item[] = await this
 			.db('user_items')
 			.leftJoin('items', 'items.id', 'user_items.item_id')
-			.distinct(this.selectFields(options, null, 'items'))
+			.distinct(this.selectFields(options, null, 'items', ['items.content_size']))
 			.whereIn('user_items.user_id', userIds)
 			.whereIn('name', names);
 
 		if (options.withContent) {
 			for (const row of rows) {
-				row.content = await this.storageDriverRead(row.id, { models: this.models() });
+				row.content = await this.storageDriverRead(row.id, row.content_size, { models: this.models() });
 			}
 		}
 
@@ -248,15 +253,17 @@ export default class ItemModel extends BaseModel<Item> {
 	}
 
 	public async loadWithContent(id: Uuid, options: ItemLoadOptions = {}): Promise<Item> {
-		const content = await this.storageDriverRead(id, { models: this.models() });
+		const item: Item = await this
+			.db('user_items')
+			.leftJoin('items', 'items.id', 'user_items.item_id')
+			.select(this.selectFields(options, ['*'], 'items', ['items.content_size']))
+			.where('items.id', '=', id)
+			.first();
+
+		const content = await this.storageDriverRead(id, item.content_size, { models: this.models() });
 
 		return {
-			...await this
-				.db('user_items')
-				.leftJoin('items', 'items.id', 'user_items.item_id')
-				.select(this.selectFields(options, ['*'], 'items'))
-				.where('items.id', '=', id)
-				.first(),
+			...item,
 			content,
 		};
 	}

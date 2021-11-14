@@ -133,6 +133,7 @@ export async function initConfig(envType: Env, env: EnvVariables, overrides: any
 		cookieSecure: env.COOKIES_SECURE,
 		storageDriver: parseStorageDriverConnectionString(env.STORAGE_DRIVER),
 		storageDriverFallback: parseStorageDriverConnectionString(env.STORAGE_DRIVER_FALLBACK),
+		itemSizeHardLimit: 250000000, // Beyond this the Postgres driver will crash the app
 		...overrides,
 	};
 }
