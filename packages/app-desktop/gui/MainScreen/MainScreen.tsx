@@ -605,7 +605,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 				onViewEncryptionConfigScreen
 			);
 		} else if (this.showShareInvitationNotification(this.props)) {
-			const invitation = this.props.shareInvitations[0];
+			const invitation = this.props.shareInvitations.find(inv => inv.status === 0);
 			const sharer = invitation.share.user;
 
 			msg = this.renderNotificationMessage(
