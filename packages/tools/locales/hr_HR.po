@@ -8,6 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin 1.7.11\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: \n"
 "Language: hr\n"
@@ -565,6 +567,9 @@ msgid ""
 "enabled end-to-end encryption. They may do so from the screen Configuration "
 "> Encryption."
 msgstr ""
+"Šifriranu bilježnicu nije moguće dijeliti s primateljem %s jer nije omogućio/"
+"la obostrano šifriranje. Primatelji to mogu učiniti putem Konfiguracija > "
+"Šifriranje."
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleLayoutMoveMode.ts:7
 msgid "Change application layout"
@@ -741,9 +746,8 @@ msgid "Conflicts (attachments)"
 msgstr "Konflikti (privici)"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.tsx:108
-#, fuzzy
 msgid "Content provided by %s"
-msgstr "Naslov bilježnice:"
+msgstr "Sadržaj pruža %s"
 
 #: packages/app-mobile/components/screens/Note.tsx:933
 msgid "Convert to note"
@@ -767,9 +771,8 @@ msgstr "Kopiraj programersku naredbu u međuspremnik"
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:340
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:354
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:139
-#, fuzzy
 msgid "Copy external link"
-msgstr "Prekini vanjsko uređivanje"
+msgstr "Kopiraj vanjsku poveznicu"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:164
 msgid "Copy Link Address"
@@ -842,6 +845,10 @@ msgid ""
 "\n"
 "The error was: \"%s\""
 msgstr ""
+"Nije bilo moguće odgovoriti na poziv. Pokušaj ponovo ili provjeri s "
+"vlasnikom prijenosnog računala ako ga još uvijek dijele.\n"
+"\n"
+"Greška je bila: „% s”"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:214
 msgid "Could not upgrade master key: %s"
@@ -1183,16 +1190,14 @@ msgid "Do not ask for confirmation."
 msgstr "Nemoj zatražiti potvrdu."
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:56
-#, fuzzy
 msgid ""
 "Do not lose the password as, for security purposes, this will be the *only* "
 "way to decrypt the data! To enable encryption, please enter your password "
 "below."
 msgstr ""
-"Aktiviranje šifriranja znači, da će se *sve* tvoje bilješke i privici ponovo "
-"sinkronizirati i poslati šifrirano u cilj sinkronizacije. Nemoj izgubiti "
-"lozinku, jer će to iz sigurnosnih razloga biti *jedini* način za "
-"dešifriranje podataka! Za aktiviranje šifriranja dolje upiši lozinku."
+"Nemoj izgubiti lozinku, jer će to iz sigurnosnih razloga biti *jedini* način "
+"za dešifriranje podataka! Za aktiviranje šifriranja dolje upiši svoju "
+"lozinku."
 
 #: packages/app-desktop/checkForUpdates.ts:199
 msgid "Download"
@@ -1414,14 +1419,12 @@ msgid "Enabled"
 msgstr "Aktivirano"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:51
-#, fuzzy
 msgid ""
 "Enabling encryption means *all* your notes and attachments are going to be "
 "re-synchronised and sent encrypted to the sync target."
 msgstr ""
-"Deaktiviranje šifriranja znači, da će se *sve* tvoje bilješke i privici "
-"ponovo sinkronizirati i poslati nešifrirano u cilj sinkronizacije. Želiš li "
-"nastaviti?"
+"Aktiviranje šifriranja znači, da će se *sve* tvoje bilješke i privici ponovo "
+"sinkronizirati i poslati šifrirano u cilj sinkronizacije."
 
 #: packages/lib/models/BaseItem.ts:808
 msgid "Encrypted"
@@ -1450,19 +1453,16 @@ msgid "Encryption is: %s"
 msgstr "Šifriranje je: %s"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:170
-#, fuzzy
 msgid "Encryption keys"
-msgstr "Šifriranje je:"
+msgstr "Ključevi šifriranja"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:247
-#, fuzzy
 msgid "Encryption:"
-msgstr "Šifriranje"
+msgstr "Šifriranje:"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:245
-#, fuzzy
 msgid "End-to-end encryption"
-msgstr "Aktiviraj šifriranje"
+msgstr "Obostrano šifriranje"
 
 #: packages/app-mobile/components/screens/dropbox-login.js:66
 msgid "Enter code here"
@@ -1504,9 +1504,8 @@ msgstr ""
 "dostupnost cilja sinkronizacije. Prijavljena greška bila je:"
 
 #: packages/app-mobile/components/screens/log.js:117
-#, fuzzy
 msgid "Errors only"
-msgstr "Greška"
+msgstr "Samo greške"
 
 #: packages/lib/services/interop/InteropService.ts:89
 msgid "Evernote Export File (as HTML)"
@@ -1679,9 +1678,8 @@ msgid "General"
 msgstr "Opće"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:250
-#, fuzzy
 msgid "Generated"
-msgstr "Opće"
+msgstr "Izrađeno"
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:207
 msgid "Generating link..."
@@ -1730,9 +1728,8 @@ msgid "Hide %s"
 msgstr "Sakrij %s"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:170
-#, fuzzy
 msgid "Hide disabled keys"
-msgstr "Sakrij deaktivirane glavne ključeve"
+msgstr "Sakrij deaktivirane ključeve"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:22
 msgid "Hide Joplin"
@@ -2066,9 +2063,8 @@ msgid "Keychain Supported: %s"
 msgstr "Podržani privjesak ključeva: %s"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:69
-#, fuzzy
 msgid "Keys that need upgrading"
-msgstr "Glavni ključevi koji se moraju nadograditi"
+msgstr "Ključevi koji se moraju nadograditi"
 
 #: packages/lib/models/Setting.ts:1156
 msgid "Landscape"
@@ -2095,9 +2091,8 @@ msgid "Layout button sequence"
 msgstr "Slijed gumbova rasporeda"
 
 #: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:7
-#, fuzzy
 msgid "Leave notebook..."
-msgstr "Dijeli bilježnicu …"
+msgstr "Napusti bilježnicu …"
 
 #: packages/lib/models/Setting.ts:1150
 msgid "Legal"
@@ -2177,14 +2172,12 @@ msgid "Make a donation"
 msgstr "Doniraj"
 
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:204
-#, fuzzy
 msgid "Manage master password"
-msgstr "Upiši glavnu lozinku:"
+msgstr "Upravjaj glavnom lozinkom"
 
 #: packages/lib/commands/openMasterPasswordDialog.ts:6
-#, fuzzy
 msgid "Manage master password..."
-msgstr "Upiši glavnu lozinku:"
+msgstr "Upravjaj glavnom lozinkom …"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:314
 msgid "Manage your plugins"
@@ -2192,15 +2185,13 @@ msgstr "Upravljaj dodacima"
 
 #. `generate-ppk`
 #: packages/app-cli/app/command-e2ee.ts:20
-#, fuzzy
 msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
 "`status`, `decrypt-file`, and `target-status`."
 msgstr ""
-"Upravlja konfiguracijom za obostrano šifriranje. Naredbe su `enable` "
-"(aktiviraj), `disable` (deaktiviraj), `decrypt` (dešifriraj), `status` "
-"(stanje), `decrypt-file` (dešifriraj datoteku) i `target-status` (stanje "
-"cilja)."
+"Upravlja E2EE konfiguracijom. Naredbe su `enable` (aktiviraj), `disable` "
+"(deaktiviraj), `decrypt` (dešifriraj), `status` (stanje), `decrypt-file` "
+"(dešifriraj datoteku) i `target-status` (stanje cilja)."
 
 #: packages/lib/models/Setting.ts:638
 msgid "Manual"
@@ -2215,7 +2206,7 @@ msgstr "Markdown"
 #: packages/lib/services/interop/InteropService.ts:120
 #: packages/lib/services/interop/InteropService.ts:67
 msgid "Markdown + Front Matter"
-msgstr ""
+msgstr "Markdown + Front Matter"
 
 #: packages/app-cli/app/command-done.js:14
 msgid "Marks a to-do as done."
@@ -2249,9 +2240,8 @@ msgid "Max concurrent connections"
 msgstr "Najviše istovremenih veza"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:322
-#, fuzzy
 msgid "Missing keys"
-msgstr "Nedostaje glavni ključ"
+msgstr "Nedostajući ključevi"
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:271
 msgid "Missing Master Keys"
@@ -2279,7 +2269,7 @@ msgstr "Više elemenata se poklapaju s „%s”. Ograniči pretragu."
 
 #: packages/app-mobile/components/screen-header.js:439
 msgid "Move %d notes to notebook \"%s\"?"
-msgstr "Premjesti %d bilješke u bilježnicu \"%s\"?"
+msgstr "Premjesti %d bilješke u bilježnicu „%s”?"
 
 #: packages/app-desktop/gui/MainScreen/commands/moveToFolder.ts:8
 msgid "Move to notebook"
@@ -2427,7 +2417,7 @@ msgstr "Nepreuzeto"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:250
 msgid "Not generated"
-msgstr ""
+msgstr "Nije izrađeno"
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.tsx:110
 #: packages/server/src/models/UserModel.ts:202
@@ -2466,11 +2456,11 @@ msgstr "Bilješka je spremljena."
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:34
 #: packages/lib/models/Setting.ts:2050
 msgid "Note History"
-msgstr "Povijest bilješke"
+msgstr "Povijest bilježaka"
 
 #: packages/app-cli/app/command-done.js:21
 msgid "Note is not a to-do: \"%s\""
-msgstr "Bilješka nije zadatak: \"%s\""
+msgstr "Bilješka nije zadatak: „%s”"
 
 #: packages/app-desktop/gui/NoteList/commands/focusElementNoteList.ts:7
 msgid "Note list"
@@ -2683,7 +2673,7 @@ msgstr "Dozvola za korištenje kamere"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:269
 msgid "Please click on \"%s\" to proceed"
-msgstr ""
+msgstr "Za nastavljanje pritisni „%s”"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:65
 msgid ""
@@ -2702,6 +2692,8 @@ msgid ""
 "Please note that if it is a large notebook, it may take a few minutes for "
 "all the notes to show up on the recipient's device."
 msgstr ""
+"Imaj na umu, da ako je velika bilježnica, može potrajati nekoliko minuta dok "
+"se sve bilješke pojave na uređaju primatelja."
 
 #: packages/lib/onedrive-api-node-utils.js:116
 msgid ""
@@ -2808,7 +2800,7 @@ msgstr ""
 
 #: packages/app-mobile/components/screen-header.js:457
 msgid "Press to set the decryption password."
-msgstr ""
+msgstr "Pritisni za postavljanje lozinke za dešifriranje."
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:307
 msgid "Previous versions of this note"
@@ -2832,7 +2824,7 @@ msgstr "Svojstva"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:250
 msgid "Public-private key pair:"
-msgstr ""
+msgstr "Javno-privatan par ključa:"
 
 #: packages/app-desktop/gui/MainScreen/commands/showShareNoteDialog.ts:6
 msgid "Publish note..."
@@ -2941,9 +2933,8 @@ msgstr "Obnovi ključ"
 
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:204
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:205
-#, fuzzy
 msgid "Reset master password"
-msgstr "Upiši glavnu lozinku:"
+msgstr "Obnovi glavnu lozinku"
 
 #: packages/app-cli/app/command-import.js:51
 #: packages/app-desktop/gui/ImportScreen.min.js:72
@@ -3099,11 +3090,12 @@ msgid "Set alarm:"
 msgstr "Postavi upozorenje:"
 
 #: packages/lib/models/Setting.ts:1039
-#, fuzzy
 msgid ""
 "Set it to 0 to make it take the complete available space. Recommended width "
 "is 600."
-msgstr "Postavi na 0 kako bi zauzeo cijeli raspoloživi prostor."
+msgstr ""
+"Postavi na 0 kako bi zauzeo cijeli raspoloživi prostor. Preporučena širina "
+"je 600."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:627
 msgid "Set the password"
@@ -3149,16 +3141,15 @@ msgstr "Prikaži napredne postavke"
 
 #: packages/app-mobile/components/screens/log.js:117
 msgid "Show all"
-msgstr ""
+msgstr "Prikaži sve"
 
 #: packages/lib/models/Setting.ts:798
 msgid "Show completed to-dos"
 msgstr "Prikaži završene zadatke"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:170
-#, fuzzy
 msgid "Show disabled keys"
-msgstr "Prikaži deaktivirane glavne ključeve"
+msgstr "Prikaži deaktivirane ključeve"
 
 #: packages/lib/models/Setting.ts:781
 msgid "Show note counts"
@@ -3208,9 +3199,9 @@ msgid "Some items cannot be synchronised."
 msgstr "Neki se elementi ne mogu sinkronizirati."
 
 #: packages/app-mobile/components/screen-header.js:458
-#, fuzzy
 msgid "Some items cannot be synchronised. Press for more info."
-msgstr "Neke stavke se ne mogu sinkronizirati."
+msgstr ""
+"Neki elementi se ne mogu sinkronizirati. Pritisni za daljnje inormacije."
 
 #: packages/lib/models/Setting.ts:834
 msgid "Sort notebooks by"
@@ -3583,14 +3574,13 @@ msgid "The following attachments are being watched for changes:"
 msgstr "Promjene se prate za sljedeće privitke:"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:70
-#, fuzzy
 msgid ""
 "The following keys use an out-dated encryption algorithm and it is "
 "recommended to upgrade them. The upgraded key will still be able to decrypt "
 "and encrypt your data as usual."
 msgstr ""
 "Sljedeći glavni ključevi koriste zastarjeli algoritam šifriranja i "
-"preporučujemo da ih nadogradiš. Nadograđen glavni ključ i dalje će moći "
+"preporučujemo da ih nadogradiš. Nadograđeni ključ će i nadalje moći "
 "dešifrirati i šifrirati tvoje podatke."
 
 #: packages/app-mobile/components/screens/Note.tsx:191
@@ -3608,15 +3598,14 @@ msgstr ""
 "sigurnost i performansu."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:323
-#, fuzzy
 msgid ""
 "The keys with these IDs are used to encrypt some of your items, however the "
 "application does not currently have access to them. It is likely they will "
 "eventually be downloaded via synchronisation."
 msgstr ""
-"Glavni ključevi s tim ID-ovima koriste se za šifriranje nekih tvojih "
-"elemenata, ali program im trenutačno ne može pristupiti. Vjerojatno će se na "
-"kraju preuzeti putem sinkronizacije."
+"Ključevi s ovim ID-ovima koriste se za šifriranje nekih tvojih elemenata, "
+"ali program im trenutačno ne može pristupiti. Vjerojatno će se na kraju "
+"preuzeti putem sinkronizacije."
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:212
 msgid "The master key has been upgraded successfully!"
@@ -3655,6 +3644,9 @@ msgid ""
 "\n"
 "The error was: \"%s\""
 msgstr ""
+"Primatelj/ica se ne može ukloniti s popisa. Pokušaj ponovo.\n"
+"\n"
+"Greška je bila: „% s”"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:585
 msgid ""
@@ -3667,9 +3659,10 @@ msgstr ""
 "program mora ponovo pokrenuti. Za nastavak pritisni poveznicu."
 
 #: packages/app-mobile/components/screen-header.js:459
-#, fuzzy
 msgid "The sync target needs to be upgraded. Press this banner to proceed."
-msgstr "Cilj sinkronizacije se mora nadograditi! Nastavi, pokretanjem `%s`."
+msgstr ""
+"Cilj sinkronizacije se mora nadograditi. Za nastavljanje, pritisni ovaj "
+"naslov."
 
 #: packages/lib/models/Tag.ts:204
 msgid "The tag \"%s\" already exists. Please choose a different name."
@@ -3852,13 +3845,12 @@ msgstr ""
 "Ovo će otvoriti novi prozor. Želiš li spremiti tvoje trenutačne promjene?"
 
 #: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:13
-#, fuzzy
 msgid ""
 "This will remove the notebook from your collection and you will no longer "
 "have access to its content. Do you wish to continue?"
 msgstr ""
-"Prestati dijeliti ovu bilježnicu? Primalac više neće imati pristup sadržaju "
-"bilježnice."
+"Ovime će se ukloniti bilježnica iz tvoje zbirke i više nećeš imati pristup "
+"sadržaju bilježnice. Želiš li nastaviti?"
 
 #: packages/lib/models/Setting.ts:709
 msgid "Time format"
@@ -3880,9 +3872,8 @@ msgid ""
 msgstr "Za sinkronizaciju Joplina s Dropboxom slijedi sljedeće korake:"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:54
-#, fuzzy
 msgid "To continue, please enter your master password below."
-msgstr "Upiši glavnu lozinku"
+msgstr "Za nastavljanje, dolje upiši glavnu lozinku."
 
 #: packages/app-cli/app/app-gui.js:452
 msgid "To delete a tag, untag the associated notes."
@@ -4319,6 +4310,7 @@ msgstr "Tvoji će se podaci ponovo šifrirati i sinkronizirati."
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:269
 msgid "Your master password is needed to decrypt some of your data."
 msgstr ""
+"Tvoja glavna lozinka je potrebna za dešifriranje nekih tvojih podataka."
 
 #: packages/app-mobile/components/CameraView.tsx:189
 msgid "Your permission to use your camera is required."
