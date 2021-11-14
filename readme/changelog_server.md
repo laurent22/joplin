@@ -1,5 +1,9 @@
 # Joplin Server Changelog
 
+## [server-v2.6.11](https://github.com/laurent22/joplin/releases/tag/server-v2.6.11) - 2021-11-14T17:14:51Z
+
+- Improved: Prevent large data blobs from crashing the application (5eb3a92)
+
 ## [server-v2.6.10](https://github.com/laurent22/joplin/releases/tag/server-v2.6.10) - 2021-11-13T12:47:53Z
 
 - Improved: Improved storage migration error handling, and improved storage test units (5a41d80)
