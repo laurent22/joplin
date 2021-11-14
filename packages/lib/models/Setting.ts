@@ -1561,82 +1561,92 @@ class Setting extends BaseModel {
 	}
 
 	// Low-level method to load a setting directly from the database. Should not be used in most cases.
-	public static async loadOne(key: string): Promise<CacheItem> {
+	public static async loadOne(key: string): Promise<CacheItem | null> {
 		if (this.keyStorage(key) === SettingStorage.File) {
 			const fromFile = await this.fileHandler.load();
 			return {
 				key,
 				value: fromFile[key],
 			};
-		} else if (this.settingMetadata(key).secure) {
+		}
+
+		// Always check in the database first, including for secure settings,
+		// because that's where they would be if the keychain is not enabled (or
+		// if writing to the keychain previously failed).
+		//
+		// https://github.com/laurent22/joplin/issues/5720
+		const row = await this.modelSelectOne('SELECT * FROM settings WHERE key = ?', [key]);
+		if (row) return row;
+
+		if (this.settingMetadata(key).secure) {
 			return {
 				key,
 				value: await this.keychainService().password(`setting.${key}`),
 			};
-		} else {
-			return this.modelSelectOne('SELECT * FROM settings WHERE key = ?', [key]);
 		}
+
+		return null;
 	}
 
-	static load() {
+	public static async load() {
 		this.cancelScheduleSave();
 		this.cancelScheduleChangeEvent();
 
 		this.cache_ = [];
-		return this.modelSelectAll('SELECT * FROM settings').then(async (rows: CacheItem[]) => {
-			this.cache_ = [];
+		const rows: CacheItem[] = await this.modelSelectAll('SELECT * FROM settings');
 
-			const pushItemsToCache = (items: CacheItem[]) => {
-				for (let i = 0; i < items.length; i++) {
-					const c = items[i];
+		this.cache_ = [];
 
-					if (!this.keyExists(c.key)) continue;
+		const pushItemsToCache = (items: CacheItem[]) => {
+			for (let i = 0; i < items.length; i++) {
+				const c = items[i];
 
-					c.value = this.formatValue(c.key, c.value);
-					c.value = this.filterValue(c.key, c.value);
+				if (!this.keyExists(c.key)) continue;
 
-					this.cache_.push(c);
-				}
-			};
+				c.value = this.formatValue(c.key, c.value);
+				c.value = this.filterValue(c.key, c.value);
 
-			// Keys in the database takes precedence over keys in the keychain because
-			// they are more likely to be up to date (saving to keychain can fail, but
-			// saving to database shouldn't). When the keychain works, the secure keys
-			// are deleted from the database and transfered to the keychain in saveAll().
-
-			const rowKeys = rows.map((r: any) => r.key);
-			const secureKeys = this.keys(false, null, { secureOnly: true });
-			const secureItems: CacheItem[] = [];
-			for (const key of secureKeys) {
-				if (rowKeys.includes(key)) continue;
-
-				const password = await this.keychainService().password(`setting.${key}`);
-				if (password) {
-					secureItems.push({
-						key: key,
-						value: password,
-					});
-				}
+				this.cache_.push(c);
 			}
+		};
 
-			const itemsFromFile: CacheItem[] = [];
+		// Keys in the database takes precedence over keys in the keychain because
+		// they are more likely to be up to date (saving to keychain can fail, but
+		// saving to database shouldn't). When the keychain works, the secure keys
+		// are deleted from the database and transfered to the keychain in saveAll().
 
-			if (this.canUseFileStorage()) {
-				const fromFile = await this.fileHandler.load();
-				for (const k of Object.keys(fromFile)) {
-					itemsFromFile.push({
-						key: k,
-						value: fromFile[k],
-					});
-				}
+		const rowKeys = rows.map((r: any) => r.key);
+		const secureKeys = this.keys(false, null, { secureOnly: true });
+		const secureItems: CacheItem[] = [];
+		for (const key of secureKeys) {
+			if (rowKeys.includes(key)) continue;
+
+			const password = await this.keychainService().password(`setting.${key}`);
+			if (password) {
+				secureItems.push({
+					key: key,
+					value: password,
+				});
 			}
+		}
 
-			pushItemsToCache(rows);
-			pushItemsToCache(secureItems);
-			pushItemsToCache(itemsFromFile);
+		const itemsFromFile: CacheItem[] = [];
 
-			this.dispatchUpdateAll();
-		});
+		if (this.canUseFileStorage()) {
+			const fromFile = await this.fileHandler.load();
+			for (const k of Object.keys(fromFile)) {
+				itemsFromFile.push({
+					key: k,
+					value: fromFile[k],
+				});
+			}
+		}
+
+		pushItemsToCache(rows);
+		pushItemsToCache(secureItems);
+		pushItemsToCache(itemsFromFile);
+
+		this.dispatchUpdateAll();
 	}
 
 	private static canUseFileStorage(): boolean {
