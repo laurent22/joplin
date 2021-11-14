@@ -218,7 +218,7 @@ export default class JoplinServerApi {
 			};
 
 			if (!response.ok) {
-				if (options.target === 'file') throw newError('fetchBlob error', response.status);
+				if (options.target === 'file') throw newError(`Cannot transfer file: ${await response.text()}`, response.status);
 
 				let json = null;
 				try {
