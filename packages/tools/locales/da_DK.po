@@ -15,6 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.4.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:565
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -564,6 +566,9 @@ msgid ""
 "enabled end-to-end encryption. They may do so from the screen Configuration "
 "> Encryption."
 msgstr ""
+"Kan ikke dele krypteret notebook med modtager %s, fordi de ikke har "
+"aktiveret end-to-end-kryptering. De kan gøre det i Indstillinger > "
+"Kryptering."
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleLayoutMoveMode.ts:7
 msgid "Change application layout"
@@ -742,9 +747,8 @@ msgid "Conflicts (attachments)"
 msgstr "Konflikter (vedhæftninger)"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.tsx:108
-#, fuzzy
 msgid "Content provided by %s"
-msgstr "Note egenskaber"
+msgstr "Indhold leveret af %s"
 
 #: packages/app-mobile/components/screens/Note.tsx:933
 msgid "Convert to note"
@@ -768,9 +772,8 @@ msgstr "Kopier udviklertilstand-kommando til udklipsholderen"
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:340
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:354
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:139
-#, fuzzy
 msgid "Copy external link"
-msgstr "Stop ekstern redigering"
+msgstr "Kopiér eksternt link"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:164
 msgid "Copy Link Address"
@@ -842,6 +845,10 @@ msgid ""
 "\n"
 "The error was: \"%s\""
 msgstr ""
+"Kunne ikke svare på invitationen. Prøv venligst igen, eller kontakt ejeren "
+"af notesbogen, hvis de stadig deler den\n"
+"\n"
+"Fejlen var: \"%s\""
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:214
 msgid "Could not upgrade master key: %s"
@@ -1182,16 +1189,14 @@ msgid "Do not ask for confirmation."
 msgstr "Spørg ikke om bekræftelse."
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:56
-#, fuzzy
 msgid ""
 "Do not lose the password as, for security purposes, this will be the *only* "
 "way to decrypt the data! To enable encryption, please enter your password "
 "below."
 msgstr ""
-"Slås kryptering til, vil *alle* dine noter og vedhæftninger blive re-"
-"synkroniseret og sendt krypteret til synk-modtager. Glem ikke adgangkoden, "
-"da det er *eneste* mulighed for dekryptering af data! For at slå kryptering "
-"til, skal du indtaste din adgangskode herunder."
+"Glem ikke adgangkoden, da den af sikkerhedshensyn er den *eneste* mulighed "
+"for dekryptering af data! For at aktivere kryptering til, skal du indtaste "
+"din adgangskode herunder."
 
 #: packages/app-desktop/checkForUpdates.ts:199
 msgid "Download"
@@ -1412,13 +1417,12 @@ msgid "Enabled"
 msgstr "Aktiveret"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:51
-#, fuzzy
 msgid ""
 "Enabling encryption means *all* your notes and attachments are going to be "
 "re-synchronised and sent encrypted to the sync target."
 msgstr ""
 "Slås kryptering fra vil *alle* dine noter og vedhæftninger blive re-"
-"synkroniseret og sendt ukrypteret til synk-modtageren. Vil du fortsætte?"
+"synkroniseret og sendt ukrypteret til synk-modtageren."
 
 #: packages/lib/models/BaseItem.ts:808
 msgid "Encrypted"
@@ -1447,19 +1451,16 @@ msgid "Encryption is: %s"
 msgstr "Kryptering er: %s"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:170
-#, fuzzy
 msgid "Encryption keys"
-msgstr "Kryptering er:"
+msgstr "Krypteringsnøgler"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:247
-#, fuzzy
 msgid "Encryption:"
-msgstr "Kryptering"
+msgstr "Kryptering:"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:245
-#, fuzzy
 msgid "End-to-end encryption"
-msgstr "Aktivér kryptering"
+msgstr "End-to-end kryptering"
 
 #: packages/app-mobile/components/screens/dropbox-login.js:66
 msgid "Enter code here"
@@ -1468,7 +1469,7 @@ msgstr "Skriv kode her"
 #: packages/app-cli/app/command-e2ee.ts:38
 #: packages/app-cli/app/command-e2ee.ts:77
 msgid "Enter master password:"
-msgstr "Indtast hovedkodeord:"
+msgstr "Indtast hovedadgangskode:"
 
 #: packages/app-mobile/components/screens/folder.js:110
 msgid "Enter notebook title"
@@ -1677,9 +1678,8 @@ msgid "General"
 msgstr "Generelt"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:250
-#, fuzzy
 msgid "Generated"
-msgstr "Generelt"
+msgstr "Oprettet"
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:207
 msgid "Generating link..."
@@ -1728,9 +1728,8 @@ msgid "Hide %s"
 msgstr "Skjul %s"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:170
-#, fuzzy
 msgid "Hide disabled keys"
-msgstr "Skjul deaktiverede hovednøgler"
+msgstr "Skjul deaktiverede nøgler"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:22
 msgid "Hide Joplin"
@@ -1978,7 +1977,7 @@ msgstr "Joplin Cloud e-mail"
 
 #: packages/lib/models/Setting.ts:619
 msgid "Joplin Cloud password"
-msgstr "Joplin Cloud adgangskode"
+msgstr "Joplin Cloud-adgangskode"
 
 #: packages/lib/services/interop/InteropService.ts:108
 #: packages/lib/services/interop/InteropService.ts:73
@@ -2014,7 +2013,7 @@ msgstr "Joplin server e-mail"
 
 #: packages/lib/models/Setting.ts:580
 msgid "Joplin Server password"
-msgstr "Joplin Server adgangskode"
+msgstr "Joplin Server-adgangskode"
 
 #: packages/lib/models/Setting.ts:551
 msgid "Joplin Server URL"
@@ -2062,9 +2061,8 @@ msgid "Keychain Supported: %s"
 msgstr "Keychain-understøttet: %s"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:69
-#, fuzzy
 msgid "Keys that need upgrading"
-msgstr "Hovednøgler der har brug for opgradering"
+msgstr "Nøgler der har brug for opgradering"
 
 #: packages/lib/models/Setting.ts:1156
 msgid "Landscape"
@@ -2091,9 +2089,8 @@ msgid "Layout button sequence"
 msgstr "Indstil knap-rækkefølge"
 
 #: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:7
-#, fuzzy
 msgid "Leave notebook..."
-msgstr "Del notesbog..."
+msgstr "Forlad notesbog..."
 
 #: packages/lib/models/Setting.ts:1150
 msgid "Legal"
@@ -2171,14 +2168,12 @@ msgid "Make a donation"
 msgstr "Giv en donation"
 
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:204
-#, fuzzy
 msgid "Manage master password"
-msgstr "Indtast hovedkodeord:"
+msgstr "Administrer hovedadgangskode"
 
 #: packages/lib/commands/openMasterPasswordDialog.ts:6
-#, fuzzy
 msgid "Manage master password..."
-msgstr "Indtast hovedkodeord:"
+msgstr "Administrer hovedadgangskode..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:314
 msgid "Manage your plugins"
@@ -2186,12 +2181,11 @@ msgstr "Administrer dine udvidelser"
 
 #. `generate-ppk`
 #: packages/app-cli/app/command-e2ee.ts:20
-#, fuzzy
 msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
 "`status`, `decrypt-file`, and `target-status`."
 msgstr ""
-"Håndterer E2EE konfiguration. Kommandoer er `enable`(aktiver), "
+"Administrer E2EE-konfiguration. Kommandoer er `enable`(aktiver), "
 "`disable`(sluk), `decrypt`(dekrypter), `status`, `decrypt-file`(dekrypter "
 "fil) og `target-status` (modtager-status)."
 
@@ -2208,7 +2202,7 @@ msgstr "Markdown"
 #: packages/lib/services/interop/InteropService.ts:120
 #: packages/lib/services/interop/InteropService.ts:67
 msgid "Markdown + Front Matter"
-msgstr ""
+msgstr "Markdown + Front Matter"
 
 #: packages/app-cli/app/command-done.js:14
 msgid "Marks a to-do as done."
@@ -2235,16 +2229,15 @@ msgstr "Hovedadgangskode"
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:276
 #: packages/app-mobile/components/screens/encryption-config.tsx:211
 msgid "Master password:"
-msgstr "Indtast adgangskode:"
+msgstr "Hovedadgangskode:"
 
 #: packages/lib/models/Setting.ts:661
 msgid "Max concurrent connections"
 msgstr "Maksimale samtidige forbindelser"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:322
-#, fuzzy
 msgid "Missing keys"
-msgstr "Manglende hovednøgler"
+msgstr "Manglende nøgler"
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:271
 msgid "Missing Master Keys"
@@ -2341,7 +2334,7 @@ msgstr "Nextcloud"
 
 #: packages/lib/models/Setting.ts:451
 msgid "Nextcloud password"
-msgstr "Nextcloud adgangskode"
+msgstr "Nextcloud-adgangskode"
 
 #: packages/lib/models/Setting.ts:440
 msgid "Nextcloud username"
@@ -2420,7 +2413,7 @@ msgstr "Ikke downloadet"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:250
 msgid "Not generated"
-msgstr ""
+msgstr "Ikke oprettet"
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.tsx:110
 #: packages/server/src/models/UserModel.ts:202
@@ -2677,7 +2670,7 @@ msgstr "Tilladelse til at bruge kameraet"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:269
 msgid "Please click on \"%s\" to proceed"
-msgstr ""
+msgstr "Klik på \"%s\" for at fortsætte"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:65
 msgid ""
@@ -2697,6 +2690,8 @@ msgid ""
 "Please note that if it is a large notebook, it may take a few minutes for "
 "all the notes to show up on the recipient's device."
 msgstr ""
+"Bemærk, at hvis der er tale om en stor notesbog, kan det tage et par "
+"minutter, før alle noter vises på modtagerens enhed."
 
 #: packages/lib/onedrive-api-node-utils.js:116
 msgid ""
@@ -2803,7 +2798,7 @@ msgstr ""
 
 #: packages/app-mobile/components/screen-header.js:457
 msgid "Press to set the decryption password."
-msgstr "Klik for at gemme dekrypterings kodeord."
+msgstr "Klik for at gemme dekrypterings-adgangskodeord."
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:307
 msgid "Previous versions of this note"
@@ -2827,7 +2822,7 @@ msgstr "Egenskaber"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:250
 msgid "Public-private key pair:"
-msgstr ""
+msgstr "Offentligt-privat nøglepar:"
 
 #: packages/app-desktop/gui/MainScreen/commands/showShareNoteDialog.ts:6
 msgid "Publish note..."
@@ -2935,9 +2930,8 @@ msgstr "Forny token"
 
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:204
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:205
-#, fuzzy
 msgid "Reset master password"
-msgstr "Indtast hovedkodeord:"
+msgstr "Nulstil hovedadgangskode"
 
 #: packages/app-cli/app/command-import.js:51
 #: packages/app-desktop/gui/ImportScreen.min.js:72
@@ -3092,11 +3086,12 @@ msgid "Set alarm:"
 msgstr "Indstil alarm:"
 
 #: packages/lib/models/Setting.ts:1039
-#, fuzzy
 msgid ""
 "Set it to 0 to make it take the complete available space. Recommended width "
 "is 600."
-msgstr "Indtil den til 0 for at bruge hele den tilgængelige plads."
+msgstr ""
+"Indtil den til 0 for at bruge hele den tilgængelige plads. Anbefalet bredde "
+"er 600."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:627
 msgid "Set the password"
@@ -3149,9 +3144,8 @@ msgid "Show completed to-dos"
 msgstr "Vis færdige opgaver"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:170
-#, fuzzy
 msgid "Show disabled keys"
-msgstr "Vis deaktiverede hovednøgler"
+msgstr "Vis deaktiverede nøgler"
 
 #: packages/lib/models/Setting.ts:781
 msgid "Show note counts"
@@ -3201,9 +3195,8 @@ msgid "Some items cannot be synchronised."
 msgstr "Nogle emner kan ikke synkroniseres."
 
 #: packages/app-mobile/components/screen-header.js:458
-#, fuzzy
 msgid "Some items cannot be synchronised. Press for more info."
-msgstr "Nogle emner kan ikke synkroniseres."
+msgstr "Nogle emner kan ikke synkroniseres. Tryk for mere info."
 
 #: packages/lib/models/Setting.ts:834
 msgid "Sort notebooks by"
@@ -3571,15 +3564,14 @@ msgid "The following attachments are being watched for changes:"
 msgstr "Følgende vedhæftninger overvåges for ændringer:"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:70
-#, fuzzy
 msgid ""
 "The following keys use an out-dated encryption algorithm and it is "
 "recommended to upgrade them. The upgraded key will still be able to decrypt "
 "and encrypt your data as usual."
 msgstr ""
-"Følgende hovednøgler bruger en forældet krypteringsalgoritme, og det "
-"anbefales at opgradere dem. De opgraderede hovednøgler vil stadig være i "
-"stand til at dekryptere og kryptere dine data som normalt."
+"Følgende nøgler bruger en forældet krypteringsalgoritme, og det anbefales at "
+"opgradere dem. Den opgraderet nøgler vil stadig kunne dekryptere og kryptere "
+"dine data som normalt."
 
 #: packages/app-mobile/components/screens/Note.tsx:191
 msgid "The Joplin mobile app does not currently support this type of link: %s"
@@ -3596,15 +3588,14 @@ msgstr ""
 "standarder for sikkerhed og ydeevne."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:323
-#, fuzzy
 msgid ""
 "The keys with these IDs are used to encrypt some of your items, however the "
 "application does not currently have access to them. It is likely they will "
 "eventually be downloaded via synchronisation."
 msgstr ""
-"Hovednøglerne til disse ID'er er brugt til at kryptere nogle af dine emner, "
-"men app'en har pt. ikke adgang til dem. Det er sandsynligt at de vil blive "
-"hentet via synkronisering."
+"Nøglerne til disse ID'er er brugt til at kryptere nogle af dine emner, men "
+"applikationen har i øjeblikket ikke adgang til dem. De vil sandsynligvis "
+"blive hentet i forbindelse med synkronisering."
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:212
 msgid "The master key has been upgraded successfully!"
@@ -3643,6 +3634,9 @@ msgid ""
 "\n"
 "The error was: \"%s\""
 msgstr ""
+"Modtageren kunne ikke fjernes fra listen. Prøv venligst igen.\n"
+"\n"
+"Fejlen var: \"%s\""
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:585
 msgid ""
@@ -3655,9 +3649,8 @@ msgstr ""
 "på linket for at fortsætte."
 
 #: packages/app-mobile/components/screen-header.js:459
-#, fuzzy
 msgid "The sync target needs to be upgraded. Press this banner to proceed."
-msgstr "Synk-mål skal opgraderes! Kør `%s` for at fortsætte."
+msgstr "Synk-mål skal opgraderes! Tryk på denne banner for at fortsætte."
 
 #: packages/lib/models/Tag.ts:204
 msgid "The tag \"%s\" already exists. Please choose a different name."
@@ -3839,13 +3832,12 @@ msgid "This will open a new screen. Save your current changes?"
 msgstr "Dette åbner i et nyt vindue. Vil du gemme dine ændringer?"
 
 #: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:13
-#, fuzzy
 msgid ""
 "This will remove the notebook from your collection and you will no longer "
 "have access to its content. Do you wish to continue?"
 msgstr ""
-"Del ikke længere denne notesbog? Modtagerne vil ikke længere have adgang til "
-"dens indhold."
+"Dette vil fjerne notesbogen fra din samling, og du vil ikke længere have "
+"adgang til dens indhold. Ønsker du at fortsætte?"
 
 #: packages/lib/models/Setting.ts:709
 msgid "Time format"
@@ -3869,9 +3861,8 @@ msgstr ""
 "nedenstående trin:"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:54
-#, fuzzy
 msgid "To continue, please enter your master password below."
-msgstr "Indtast din hovedadgangskode"
+msgstr "Indtast din hovedadgangskode nedenfor for at fortsætte."
 
 #: packages/app-cli/app/app-gui.js:452
 msgid "To delete a tag, untag the associated notes."
@@ -4209,7 +4200,7 @@ msgstr "WebDAV"
 
 #: packages/lib/models/Setting.ts:486
 msgid "WebDAV password"
-msgstr "WebDAV adgangskode"
+msgstr "WebDAV-adgangskode"
 
 #: packages/lib/models/Setting.ts:463
 msgid "WebDAV URL"
@@ -4313,6 +4304,7 @@ msgstr "Dine data bliver genkrypteret og synkroniseret igen."
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:269
 msgid "Your master password is needed to decrypt some of your data."
 msgstr ""
+"Din hovedadgangskode er nødvendig for at dekryptere nogle af dine data."
 
 #: packages/app-mobile/components/CameraView.tsx:189
 msgid "Your permission to use your camera is required."
