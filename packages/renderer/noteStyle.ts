@@ -49,9 +49,6 @@ export default function(theme: any, options: Options = null) {
 			padding-bottom: ${formatCssSize(theme.bodyPaddingBottom)};
 			padding-top: ${formatCssSize(theme.bodyPaddingTop)};
 		}
-		strong {
-			color: ${theme.colorBright};
-		}
 		kbd {
 			border: 1px solid ${theme.codeBorderColor};
 			box-shadow: inset 0 -1px 0 ${theme.codeBorderColor};
