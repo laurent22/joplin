@@ -68,7 +68,7 @@ However since that content can be quite large, you also have the option to store
 
 Again this is optional - by default items will simply be saved to the database. To save to the local filesystem instead, use:
 
-	STORAGE_DRIVER=Type=File; Path=/path/to/dir
+	STORAGE_DRIVER=Type=Filesystem; Path=/path/to/dir
 
 Then all item data will be saved under this `/path/to/dir` directory.
 
@@ -78,7 +78,7 @@ Migrating storage is a bit more complicated because the old content will have to
 
 To migrate from the database to the file system for example, you would set the environment variables like so:
 
-	STORAGE_DRIVER=Type=File; Path=/path/to/dir
+	STORAGE_DRIVER=Type=Filesystem; Path=/path/to/dir
 	STORAGE_DRIVER_FALLBACK=Type=Database; Mode=ReadAndWrite
 
 From then on, all new and updated content will be added to the filesystem storage. When reading an item, if the server cannot find it in the filesystem, it will look for it in the database.
@@ -95,7 +95,7 @@ This simple setup with main and fallback driver is sufficient to start using a n
 
 For example, to move all content from the database to the filesytem:
 
-	docker exec -it CONTAINER_ID node packages/server/dist/app.js storage import --connection 'Type=File; Path=/path/to/dir'
+	docker exec -it CONTAINER_ID node packages/server/dist/app.js storage import --connection 'Type=Filesystem; Path=/path/to/dir'
 
 On the database, you can verify that all content has been migrated by running this query:
 
