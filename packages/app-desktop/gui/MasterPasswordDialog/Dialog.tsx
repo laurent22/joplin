@@ -5,12 +5,12 @@ import useAsyncEffect, { AsyncEffectEvent } from '@joplin/lib/hooks/useAsyncEffe
 import DialogButtonRow, { ClickEvent } from '../DialogButtonRow';
 import Dialog from '../Dialog';
 import DialogTitle from '../DialogTitle';
-import StyledInput from '../style/StyledInput';
-import { getMasterPasswordStatus, getMasterPasswordStatusMessage, checkHasMasterPasswordEncryptedData, masterPasswordIsValid, MasterPasswordStatus, resetMasterPassword, updateMasterPassword } from '@joplin/lib/services/e2ee/utils';
+import { getMasterPasswordStatus, getMasterPasswordStatusMessage, checkHasMasterPasswordEncryptedData, masterPasswordIsValid, MasterPasswordStatus, resetMasterPassword, updateMasterPassword, getMasterPassword } from '@joplin/lib/services/e2ee/utils';
 import { reg } from '@joplin/lib/registry';
 import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
 import KvStore from '@joplin/lib/services/KvStore';
 import ShareService from '@joplin/lib/services/share/ShareService';
+import { PasswordInput } from '../PasswordInput/PasswordInput';
 
 interface Props {
 	themeId: number;
@@ -40,6 +40,10 @@ export default function(props: Props) {
 			name: 'masterPassword',
 		});
 	}, [props.dispatch]);
+
+	useEffect(() => {
+		setCurrentPassword(getMasterPassword(false) || '');
+	}, []);
 
 	useAsyncEffect(async (event: AsyncEffectEvent) => {
 		const newStatus = await getMasterPasswordStatus();
@@ -122,7 +126,7 @@ export default function(props: Props) {
 
 	function renderCurrentPasswordIcon() {
 		if (!currentPassword || status === MasterPasswordStatus.NotSet) return null;
-		return currentPasswordIsValid ? <i className="fas fa-check"></i> : <i className="fas fa-times"></i>;
+		return currentPasswordIsValid ? <i className="fas fa-check password-valid-icon"></i> : <i className="fas fa-times"></i>;
 	}
 
 	function renderPasswordForm() {
@@ -130,15 +134,17 @@ export default function(props: Props) {
 			if (status === MasterPasswordStatus.NotSet) return null;
 			if (mode === Mode.Reset) return null;
 
+			// If the master password is in the keychain we preload it into the
+			// field and allow displaying it. That way if the user has forgotten
+			// their password, they have a chance to recover it that way without
+			// having to reset the password (and lose access to any data that's
+			// been encrypted with it).
+
 			return (
 				<div className="form-input-group">
 					<label>{'Current password'}</label>
 					<div className="current-password-wrapper">
-						<StyledInput
-							type="password"
-							value={currentPassword}
-							onChange={onCurrentPasswordChange}
-						/>
+						<PasswordInput value={currentPassword} onChange={onCurrentPasswordChange}/>
 						{renderCurrentPasswordIcon()}
 					</div>
 				</div>
@@ -152,18 +158,20 @@ export default function(props: Props) {
 		};
 
 		if (showPasswordForm) {
+			const enterPasswordLabel = [MasterPasswordStatus.Loaded, MasterPasswordStatus.Valid].includes(status) ? 'Enter new password' : 'Enter password';
+
 			return (
 				<div>
 					<div className="form">
 						{renderCurrentPassword()}
 						<div className="form-input-group">
-							<label>{'Enter password'}</label>
-							<StyledInput type="password" value={password1} onChange={onPasswordChange1}/>
+							<label>{enterPasswordLabel}</label>
+							<PasswordInput value={password1} onChange={onPasswordChange1}/>
 						</div>
 						{needToRepeatPassword && (
 							<div className="form-input-group">
 								<label>{'Re-enter password'}</label>
-								<StyledInput type="password" value={password2} onChange={onPasswordChange2}/>
+								<PasswordInput value={password2} onChange={onPasswordChange2}/>
 							</div>
 						)}
 					</div>
