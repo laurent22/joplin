@@ -136,6 +136,7 @@
   "dependencies": {
     "@electron/remote": "^2.0.1",
     "@fortawesome/fontawesome-free": "^5.13.0",
+    "@joeattardi/emoji-button": "^4.6.0",
     "@joplin/lib": "~2.6",
     "@joplin/renderer": "~2.6",
     "async-mutex": "^0.1.3",

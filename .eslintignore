@@ -216,6 +216,12 @@ packages/app-desktop/gui/DialogTitle.js.map
 packages/app-desktop/gui/DropboxLoginScreen.d.ts
 packages/app-desktop/gui/DropboxLoginScreen.js
 packages/app-desktop/gui/DropboxLoginScreen.js.map
+packages/app-desktop/gui/EditFolderDialog/Dialog.d.ts
+packages/app-desktop/gui/EditFolderDialog/Dialog.js
+packages/app-desktop/gui/EditFolderDialog/Dialog.js.map
+packages/app-desktop/gui/EditFolderDialog/IconSelector.d.ts
+packages/app-desktop/gui/EditFolderDialog/IconSelector.js
+packages/app-desktop/gui/EditFolderDialog/IconSelector.js.map
 packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.d.ts
 packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js
 packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js.map
@@ -282,6 +288,9 @@ packages/app-desktop/gui/MainScreen/commands/newTodo.js.map
 packages/app-desktop/gui/MainScreen/commands/openFolder.d.ts
 packages/app-desktop/gui/MainScreen/commands/openFolder.js
 packages/app-desktop/gui/MainScreen/commands/openFolder.js.map
+packages/app-desktop/gui/MainScreen/commands/openFolderDialog.d.ts
+packages/app-desktop/gui/MainScreen/commands/openFolderDialog.js
+packages/app-desktop/gui/MainScreen/commands/openFolderDialog.js.map
 packages/app-desktop/gui/MainScreen/commands/openNote.d.ts
 packages/app-desktop/gui/MainScreen/commands/openNote.js
 packages/app-desktop/gui/MainScreen/commands/openNote.js.map
@@ -699,6 +708,9 @@ packages/app-desktop/gui/utils/SyncScrollMap.js.map
 packages/app-desktop/gui/utils/convertToScreenCoordinates.d.ts
 packages/app-desktop/gui/utils/convertToScreenCoordinates.js
 packages/app-desktop/gui/utils/convertToScreenCoordinates.js.map
+packages/app-desktop/gui/utils/loadScript.d.ts
+packages/app-desktop/gui/utils/loadScript.js
+packages/app-desktop/gui/utils/loadScript.js.map
 packages/app-desktop/plugins/GotoAnything.d.ts
 packages/app-desktop/plugins/GotoAnything.js
 packages/app-desktop/plugins/GotoAnything.js.map

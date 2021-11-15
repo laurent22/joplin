@@ -15,6 +15,14 @@ export interface BaseItemEntity {
   created_time?: number;
 }
 
+export interface FolderIcon {
+	emoji: string;
+	name: string;
+}
+
+
+
+
 
 
 
@@ -60,6 +68,7 @@ export interface FolderEntity {
   "is_shared"?: number 
   "share_id"?: string 
   "master_key_id"?: string 
+  "icon"?: string 
   "type_"?: number 
 }
 export interface ItemChangeEntity {

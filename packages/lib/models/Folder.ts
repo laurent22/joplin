@@ -1,4 +1,4 @@
-import { FolderEntity } from '../services/database/types';
+import { FolderEntity, FolderIcon } from '../services/database/types';
 import BaseModel, { DeleteOptions } from '../BaseModel';
 import time from '../time';
 import { _ } from '../locale';
@@ -666,4 +666,13 @@ export default class Folder extends BaseItem {
 			return folder;
 		});
 	}
+
+	public static serializeIcon(icon: FolderIcon): string {
+		return icon ? JSON.stringify(icon) : '';
+	}
+
+	public static unserializeIcon(icon: string): FolderIcon {
+		return icon ? JSON.parse(icon) : null;
+	}
+
 }

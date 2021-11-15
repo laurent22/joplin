@@ -46,7 +46,7 @@ export const StyledHeaderLabel = styled.span`
 
 export const StyledListItem = styled.div`
 	box-sizing: border-box;
-	height: 25px;
+	height: 30px;
 	display: flex;
 	flex-direction: row;
 	align-items: center;

@@ -252,6 +252,9 @@ class SideMenuContentComponent extends Component {
 			</TouchableOpacity>
 		);
 
+		const folderIcon = Folder.unserializeIcon(folder.icon);
+		const icon = folderIcon ? `${folderIcon.emoji} ` : '';
+
 		return (
 			<View key={folder.id} style={{ flex: 1, flexDirection: 'row' }}>
 				<TouchableOpacity
@@ -265,7 +268,7 @@ class SideMenuContentComponent extends Component {
 				>
 					<View style={folderButtonStyle}>
 						<Text numberOfLines={1} style={this.styles().folderButtonText}>
-							{Folder.displayTitle(folder)}
+							{icon + Folder.displayTitle(folder)}
 						</Text>
 					</View>
 				</TouchableOpacity>

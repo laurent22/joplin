@@ -385,7 +385,9 @@ class ScreenHeaderComponent extends React.PureComponent {
 
 					for (let i = 0; i < folders.length; i++) {
 						const f = folders[i];
-						pickerItems.push({ label: `${'      '.repeat(indent)} ${Folder.displayTitle(f)}`, value: f.id });
+						const icon = Folder.unserializeIcon(f.icon);
+						const iconString = icon ? `${icon.emoji} ` : '';
+						pickerItems.push({ label: `${'      '.repeat(indent)} ${iconString + Folder.displayTitle(f)}`, value: f.id });
 						pickerItems = addFolderChildren(f.children, pickerItems, indent + 1);
 					}
 

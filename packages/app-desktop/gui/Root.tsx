@@ -21,6 +21,7 @@ import DialogButtonRow, { ButtonSpec, ClickEvent, ClickEventHandler } from './Di
 import Dialog from './Dialog';
 import SyncWizardDialog from './SyncWizard/Dialog';
 import MasterPasswordDialog from './MasterPasswordDialog/Dialog';
+import EditFolderDialog from './EditFolderDialog/Dialog';
 import StyleSheetContainer from './StyleSheets/StyleSheetContainer';
 const { ImportScreen } = require('./ImportScreen.min.js');
 const { ResourceScreen } = require('./ResourceScreen.js');
@@ -36,7 +37,7 @@ interface Props {
 	size: Size;
 	zoomFactor: number;
 	needApiAuth: boolean;
-	dialogs: AppStateDialog;
+	dialogs: AppStateDialog[];
 }
 
 interface ModalDialogProps {
@@ -53,19 +54,25 @@ interface RegisteredDialogProps {
 }
 
 interface RegisteredDialog {
-	render: (props: RegisteredDialogProps)=> any;
+	render: (props: RegisteredDialogProps, customProps: any)=> any;
 }
 
 const registeredDialogs: Record<string, RegisteredDialog> = {
 	syncWizard: {
-		render: (props: RegisteredDialogProps) => {
-			return <SyncWizardDialog key={props.key} dispatch={props.dispatch} themeId={props.themeId}/>;
+		render: (props: RegisteredDialogProps, customProps: any) => {
+			return <SyncWizardDialog key={props.key} dispatch={props.dispatch} themeId={props.themeId} {...customProps}/>;
 		},
 	},
 
 	masterPassword: {
-		render: (props: RegisteredDialogProps) => {
-			return <MasterPasswordDialog key={props.key} dispatch={props.dispatch} themeId={props.themeId}/>;
+		render: (props: RegisteredDialogProps, customProps: any) => {
+			return <MasterPasswordDialog key={props.key} dispatch={props.dispatch} themeId={props.themeId} {...customProps}/>;
+		},
+	},
+
+	editFolder: {
+		render: (props: RegisteredDialogProps, customProps: any) => {
+			return <EditFolderDialog key={props.key} dispatch={props.dispatch} themeId={props.themeId} {...customProps}/>;
 		},
 	},
 };
@@ -180,17 +187,19 @@ class RootComponent extends React.Component<Props, any> {
 	}
 
 	private renderDialogs() {
-		if (!this.props.dialogs.length) return null;
+		const props: Props = this.props;
+
+		if (!props.dialogs.length) return null;
 
 		const output: any[] = [];
-		for (const dialog of this.props.dialogs) {
+		for (const dialog of props.dialogs) {
 			const md = registeredDialogs[dialog.name];
 			if (!md) throw new Error(`Unknown dialog: ${dialog.name}`);
 			output.push(md.render({
 				key: dialog.name,
-				themeId: this.props.themeId,
-				dispatch: this.props.dispatch,
-			}));
+				themeId: props.themeId,
+				dispatch: props.dispatch,
+			}, dialog.props));
 		}
 		return output;
 	}

@@ -22,6 +22,7 @@ import { plainTextToHtml } from '@joplin/lib/htmlUtils';
 import openEditDialog from './utils/openEditDialog';
 import { MarkupToHtmlOptions } from '../../utils/useMarkupToHtml';
 import { themeStyle } from '@joplin/lib/theme';
+import { loadScript } from '../../../utils/loadScript';
 const { clipboard } = require('electron');
 const supportedLocales = require('./supportedLocales');
 
@@ -286,32 +287,32 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 	// module would not load these extra files.
 	// -----------------------------------------------------------------------------------------
 
-	const loadScript = async (script: any) => {
-		return new Promise((resolve) => {
-			let element: any = document.createElement('script');
-			if (script.src.indexOf('.css') >= 0) {
-				element = document.createElement('link');
-				element.rel = 'stylesheet';
-				element.href = script.src;
-			} else {
-				element.src = script.src;
+	// const loadScript = async (script: any) => {
+	// 	return new Promise((resolve) => {
+	// 		let element: any = document.createElement('script');
+	// 		if (script.src.indexOf('.css') >= 0) {
+	// 			element = document.createElement('link');
+	// 			element.rel = 'stylesheet';
+	// 			element.href = script.src;
+	// 		} else {
+	// 			element.src = script.src;
 
-				if (script.attrs) {
-					for (const attr in script.attrs) {
-						element[attr] = script.attrs[attr];
-					}
-				}
-			}
+	// 			if (script.attrs) {
+	// 				for (const attr in script.attrs) {
+	// 					element[attr] = script.attrs[attr];
+	// 				}
+	// 			}
+	// 		}
 
-			element.id = script.id;
+	// 		element.id = script.id;
 
-			element.onload = () => {
-				resolve(null);
-			};
+	// 		element.onload = () => {
+	// 			resolve(null);
+	// 		};
 
-			document.getElementsByTagName('head')[0].appendChild(element);
-		});
-	};
+	// 		document.getElementsByTagName('head')[0].appendChild(element);
+	// 	});
+	// };
 
 	useEffect(() => {
 		let cancelled = false;

@@ -18,6 +18,7 @@ export enum AppStateDialogName {
 
 export interface AppStateDialog {
 	name: AppStateDialogName;
+	props: Record<string, any>;
 }
 
 export interface AppState extends State {
@@ -287,6 +288,7 @@ export default function(state: AppState, action: any) {
 
 					newDialogs.push({
 						name: action.name,
+						props: action.props || {},
 					});
 
 					newState.dialogs = newDialogs;
