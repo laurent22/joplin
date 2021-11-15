@@ -41,7 +41,10 @@ describe('app.reducer', function() {
 			name: 'setPassword',
 		});
 
-		expect(newState.dialogs).toEqual([{ name: 'syncWizard' }, { name: 'setPassword' }]);
+		expect(newState.dialogs).toEqual([
+			{ name: 'syncWizard', props: {} },
+			{ name: 'setPassword', props: {} },
+		]);
 	});
 
 });
