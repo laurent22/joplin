@@ -185,12 +185,40 @@ export function setupSlowQueryLog(connection: DbConnection, slowQueryLogMinDurat
 	});
 }
 
+const filterBindings = (bindings: any[]): Record<string, any> => {
+	const output: Record<string, any> = {};
+
+	for (let i = 0; i < bindings.length; i++) {
+		let value = bindings[i];
+		if (typeof value === 'string') value = value.substr(0, 200);
+		if (Buffer.isBuffer(value)) value = '<binary>';
+		output[`$${i + 1}`] = value;
+	}
+
+	return output;
+};
+
+interface KnexQueryErrorResponse {
+	message: string;
+}
+
+interface KnexQueryErrorData {
+	bindings: any[];
+}
+
 export async function connectDb(dbConfig: DatabaseConfig): Promise<DbConnection> {
 	const connection = knex(makeKnexConfig(dbConfig));
 
 	if (dbConfig.slowQueryLogEnabled) {
 		setupSlowQueryLog(connection, dbConfig.slowQueryLogMinDuration);
 	}
+
+	connection.on('query-error', (response: KnexQueryErrorResponse, data: KnexQueryErrorData) => {
+		const msg: string[] = [];
+		msg.push(response.message);
+		if (data.bindings && data.bindings.length) msg.push(JSON.stringify(filterBindings(data.bindings), null, '  '));
+		logger.error(...msg);
+	});
 
 	return connection;
 }
