@@ -751,9 +751,8 @@ msgstr "复制开发者模式命令到剪贴板"
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:340
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:354
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:139
-#, fuzzy
 msgid "Copy external link"
-msgstr "停止外部编辑"
+msgstr "拷贝外部访问地址"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:164
 msgid "Copy Link Address"
