@@ -28,7 +28,7 @@ export default class SessionModel extends BaseModel<Session> {
 
 	public async authenticate(email: string, password: string): Promise<Session> {
 		const user = await this.models().user().login(email, password);
-		if (!user) throw new ErrorForbidden('Invalid username or password');
+		if (!user) throw new ErrorForbidden('Invalid username or password', { details: { email } });
 		return this.createUserSession(user.id);
 	}
 
