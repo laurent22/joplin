@@ -756,7 +756,7 @@ msgstr "Konflikter (bilagor)"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.tsx:108
 msgid "Content provided by %s"
-msgstr "Innehåll som tillhandahålls av %s"
+msgstr "Innehåll tillhandahålls av %s"
 
 #: packages/app-mobile/components/screens/Note.tsx:933
 msgid "Convert to note"
