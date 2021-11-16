@@ -218,6 +218,12 @@ android {
 }
 
 dependencies {
+    // This removes proprietary bits to enable inclusion in F-Droid
+    // https://gitlab.com/fdroid/rfp/-/issues/434#note_443458711
+    implementation (project(':react-native-camera')){
+        exclude group: 'com.google.android.gms', module: 'play-services-vision'
+    }
+
     implementation fileTree(dir: "libs", include: ["*.jar"])
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
