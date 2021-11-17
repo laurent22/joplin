@@ -26,7 +26,7 @@ export default function(env: Env, models: Models, config: Config): TaskService {
 		{
 			id: TaskId.HandleOversizedAccounts,
 			description: 'Process oversized accounts',
-			schedule: '0 */2 30 * *',
+			schedule: '30 */2 * * *',
 			run: (models: Models) => models.user().handleOversizedAccounts(),
 		},
 
