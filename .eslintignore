@@ -1176,9 +1176,9 @@ packages/lib/models/utils/paginationToSql.js.map
 packages/lib/models/utils/types.d.ts
 packages/lib/models/utils/types.js
 packages/lib/models/utils/types.js.map
-packages/lib/ntpDate.d.ts
-packages/lib/ntpDate.js
-packages/lib/ntpDate.js.map
+packages/lib/ntp.d.ts
+packages/lib/ntp.js
+packages/lib/ntp.js.map
 packages/lib/onedrive-api.d.ts
 packages/lib/onedrive-api.js
 packages/lib/onedrive-api.js.map

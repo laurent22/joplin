@@ -160,6 +160,7 @@ export interface Config {
 	storageDriver: StorageDriverConfig;
 	storageDriverFallback: StorageDriverConfig;
 	itemSizeHardLimit: number;
+	maxTimeDrift: number;
 }
 
 export enum HttpMethod {

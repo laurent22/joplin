@@ -16,6 +16,7 @@ const defaultEnvValues: EnvVariables = {
 	ERROR_STACK_TRACES: false,
 	COOKIES_SECURE: false,
 	RUNNING_IN_DOCKER: false,
+	MAX_TIME_DRIFT: 10,
 
 	// ==================================================
 	// URL config
@@ -85,6 +86,7 @@ export interface EnvVariables {
 	ERROR_STACK_TRACES: boolean;
 	COOKIES_SECURE: boolean;
 	RUNNING_IN_DOCKER: boolean;
+	MAX_TIME_DRIFT: number;
 
 	APP_BASE_URL: string;
 	USER_CONTENT_BASE_URL: string;

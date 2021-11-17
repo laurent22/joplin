@@ -333,6 +333,10 @@ const shim = {
 		return react_;
 	},
 
+	dgram: () => {
+		throw new Error('Not implemented');
+	},
+
 	platformSupportsKeyChain: () => {
 		// keytar throws an error when system keychain is not present; even
 		// when keytar itself is installed. try/catch to ensure system

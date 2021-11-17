@@ -16,6 +16,7 @@ const https = require('https');
 const toRelative = require('relative');
 const timers = require('timers');
 const zlib = require('zlib');
+const dgram = require('dgram');
 
 function fileExists(filePath) {
 	try {
@@ -91,6 +92,10 @@ function shimInit(options = null) {
 	shim.fsDriver = () => {
 		if (!shim.fsDriver_) shim.fsDriver_ = new FsDriverNode();
 		return shim.fsDriver_;
+	};
+
+	shim.dgram = () => {
+		return dgram;
 	};
 
 	if (options.React) {
