@@ -384,6 +384,10 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				background-color: ${theme.backgroundColor} !important;
 			}
 
+			.tox .tox-dialog__body-content {
+				color: ${theme.color};
+			}
+
 			/*
 			When creating dialogs, TinyMCE doesn't seem to offer a way to style the components or to assign classes to them.
 			We want the code dialog box text area to be monospace, and since we can't target this precisely, we apply the style
