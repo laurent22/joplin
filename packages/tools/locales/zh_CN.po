@@ -6,6 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: 南宫小骏 <jackytsu@vip.qq.com>\n"
 "Language-Team: zh_CN <jackytsu.vip.qq.com>\n"
 "Language: zh_CN\n"
@@ -550,6 +552,8 @@ msgid ""
 "enabled end-to-end encryption. They may do so from the screen Configuration "
 "> Encryption."
 msgstr ""
+"无法与收件人%s共享加密的笔记本，因为他们没有启用端到端加密。他们可以通过“配"
+"置”>“加密”界面来启用。"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleLayoutMoveMode.ts:7
 msgid "Change application layout"
@@ -725,9 +729,8 @@ msgid "Conflicts (attachments)"
 msgstr "冲突（附件）"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.tsx:108
-#, fuzzy
 msgid "Content provided by %s"
-msgstr "内容属性"
+msgstr "内容由%s提供"
 
 #: packages/app-mobile/components/screens/Note.tsx:933
 msgid "Convert to note"
@@ -751,9 +754,8 @@ msgstr "复制开发者模式命令到剪贴板"
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:340
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:354
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:139
-#, fuzzy
 msgid "Copy external link"
-msgstr "停止外部编辑"
+msgstr "拷贝外部访问地址"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:164
 msgid "Copy Link Address"
@@ -822,6 +824,9 @@ msgid ""
 "\n"
 "The error was: \"%s\""
 msgstr ""
+"无法对邀请作出回应。请再试一次，或向笔记本所有者核实他们是否仍在共享它。\n"
+"\n"
+"错误是：“%s”"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:214
 msgid "Could not upgrade master key: %s"
@@ -1156,15 +1161,13 @@ msgid "Do not ask for confirmation."
 msgstr "不再要求确认。"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:56
-#, fuzzy
 msgid ""
 "Do not lose the password as, for security purposes, this will be the *only* "
 "way to decrypt the data! To enable encryption, please enter your password "
 "below."
 msgstr ""
-"启用加密会导致 *所有* 笔记与附件重新同步，并以加密数据的形式发送到同步目标。"
-"请勿丢失该密码！为了安全目的，此密码是您解密数据的 *唯一方式* ！若确认启动加"
-"密，请在下方输入您的密码。"
+"不要丢失密码，因为出于安全考虑，这将是解密数据的*唯一*方式！要启用加密功能，"
+"请在下面输入密码。"
 
 #: packages/app-desktop/checkForUpdates.ts:199
 msgid "Download"
@@ -1385,13 +1388,11 @@ msgid "Enabled"
 msgstr "已启用"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:51
-#, fuzzy
 msgid ""
 "Enabling encryption means *all* your notes and attachments are going to be "
 "re-synchronised and sent encrypted to the sync target."
 msgstr ""
-"禁用加密会导致 *所有笔记与附件* 重新同步，并以非加密的数据形式发送到同步目"
-"标。确定继续吗？"
+"启用加密意味着您的*所有*笔记与附件都将被重新同步，并被加密发送到同步目标。"
 
 #: packages/lib/models/BaseItem.ts:808
 msgid "Encrypted"
@@ -1420,19 +1421,16 @@ msgid "Encryption is: %s"
 msgstr "加密状态: %s"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:170
-#, fuzzy
 msgid "Encryption keys"
-msgstr "加密状态："
+msgstr "加密密钥"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:247
-#, fuzzy
 msgid "Encryption:"
-msgstr "加密"
+msgstr "加密："
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:245
-#, fuzzy
 msgid "End-to-end encryption"
-msgstr "启用加密"
+msgstr "端到端加密"
 
 #: packages/app-mobile/components/screens/dropbox-login.js:66
 msgid "Enter code here"
@@ -1647,9 +1645,8 @@ msgid "General"
 msgstr "通用选项"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:250
-#, fuzzy
 msgid "Generated"
-msgstr "通用选项"
+msgstr "已生成"
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:207
 msgid "Generating link..."
@@ -1695,7 +1692,6 @@ msgid "Hide %s"
 msgstr "隐藏 %s"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:170
-#, fuzzy
 msgid "Hide disabled keys"
 msgstr "隐藏禁用的密钥"
 
@@ -2016,9 +2012,8 @@ msgid "Keychain Supported: %s"
 msgstr "支持的密钥链: %s"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:69
-#, fuzzy
 msgid "Keys that need upgrading"
-msgstr "需要升级的主密钥"
+msgstr "需要升级的密钥"
 
 #: packages/lib/models/Setting.ts:1156
 msgid "Landscape"
@@ -2045,9 +2040,8 @@ msgid "Layout button sequence"
 msgstr "布局按钮序列"
 
 #: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:7
-#, fuzzy
 msgid "Leave notebook..."
-msgstr "分享笔记本..."
+msgstr "离开笔记本..."
 
 #: packages/lib/models/Setting.ts:1150
 msgid "Legal"
@@ -2124,14 +2118,12 @@ msgid "Make a donation"
 msgstr "捐助"
 
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:204
-#, fuzzy
 msgid "Manage master password"
-msgstr "输入主密码："
+msgstr "管理主密码"
 
 #: packages/lib/commands/openMasterPasswordDialog.ts:6
-#, fuzzy
 msgid "Manage master password..."
-msgstr "输入主密码："
+msgstr "管理主密码……"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:314
 msgid "Manage your plugins"
@@ -2139,7 +2131,6 @@ msgstr "管理您的插件"
 
 #. `generate-ppk`
 #: packages/app-cli/app/command-e2ee.ts:20
-#, fuzzy
 msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
 "`status`, `decrypt-file`, and `target-status`."
@@ -2160,7 +2151,7 @@ msgstr "Markdown"
 #: packages/lib/services/interop/InteropService.ts:120
 #: packages/lib/services/interop/InteropService.ts:67
 msgid "Markdown + Front Matter"
-msgstr ""
+msgstr "Markdown + 文章前言"
 
 #: packages/app-cli/app/command-done.js:14
 msgid "Marks a to-do as done."
@@ -2194,13 +2185,12 @@ msgid "Max concurrent connections"
 msgstr "最大并发连接数"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:322
-#, fuzzy
 msgid "Missing keys"
-msgstr "缺少主密码"
+msgstr "缺少密钥"
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:271
 msgid "Missing Master Keys"
-msgstr "缺少主密码"
+msgstr "缺少主密钥"
 
 #: packages/app-cli/app/cli-utils.js:109
 msgid "Missing required argument: %s"
@@ -2368,7 +2358,7 @@ msgstr "未下载"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:250
 msgid "Not generated"
-msgstr ""
+msgstr "未生成"
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.tsx:110
 #: packages/server/src/models/UserModel.ts:202
@@ -2621,7 +2611,7 @@ msgstr "使用相机的权限"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:269
 msgid "Please click on \"%s\" to proceed"
-msgstr ""
+msgstr "请点击“%s”继续"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:65
 msgid ""
@@ -2639,6 +2629,8 @@ msgid ""
 "Please note that if it is a large notebook, it may take a few minutes for "
 "all the notes to show up on the recipient's device."
 msgstr ""
+"请注意，如果是大型笔记本，可能需要几分钟时间才能在收件人的设备上显示出所有的"
+"笔记。"
 
 #: packages/lib/onedrive-api-node-utils.js:116
 msgid ""
@@ -2764,7 +2756,7 @@ msgstr "笔记属性"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:250
 msgid "Public-private key pair:"
-msgstr ""
+msgstr "公、私密钥对："
 
 #: packages/app-desktop/gui/MainScreen/commands/showShareNoteDialog.ts:6
 msgid "Publish note..."
@@ -2872,9 +2864,8 @@ msgstr "更新令牌"
 
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:204
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:205
-#, fuzzy
 msgid "Reset master password"
-msgstr "输入主密码："
+msgstr "重置主密码"
 
 #: packages/app-cli/app/command-import.js:51
 #: packages/app-desktop/gui/ImportScreen.min.js:72
@@ -3026,11 +3017,10 @@ msgid "Set alarm:"
 msgstr "设置提醒："
 
 #: packages/lib/models/Setting.ts:1039
-#, fuzzy
 msgid ""
 "Set it to 0 to make it take the complete available space. Recommended width "
 "is 600."
-msgstr "设置为 0 则占用全部可用空间。"
+msgstr "设置为 0 则占用全部可用空间。建议宽度为600。"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:627
 msgid "Set the password"
@@ -3082,7 +3072,6 @@ msgid "Show completed to-dos"
 msgstr "显示已完成待办事项"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:170
-#, fuzzy
 msgid "Show disabled keys"
 msgstr "显示禁用的密钥"
 
@@ -3485,14 +3474,13 @@ msgid "The following attachments are being watched for changes:"
 msgstr "下列附件将被监控变化："
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:70
-#, fuzzy
 msgid ""
 "The following keys use an out-dated encryption algorithm and it is "
 "recommended to upgrade them. The upgraded key will still be able to decrypt "
 "and encrypt your data as usual."
 msgstr ""
-"以下主密钥使用了过时的加密算法，建议对其进行升级。 升级后的主密钥仍将能够照常"
-"解密和加密您的数据。"
+"以下密钥使用了过时的加密算法，建议对其进行升级。 升级后的密钥仍将能够照常解密"
+"和加密您的数据。"
 
 #: packages/app-mobile/components/screens/Note.tsx:191
 msgid "The Joplin mobile app does not currently support this type of link: %s"
@@ -3505,14 +3493,13 @@ msgid ""
 msgstr "Joplin 团队已经通过了该插件的审查，它符合我们对于安全和性能的要求。"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:323
-#, fuzzy
 msgid ""
 "The keys with these IDs are used to encrypt some of your items, however the "
 "application does not currently have access to them. It is likely they will "
 "eventually be downloaded via synchronisation."
 msgstr ""
-"具有这些 ID 的主密钥用于加密某些项，但应用程序目前无法访问它们。最终它们很可"
-"能通过同步下载。"
+"具有这些 ID 的密钥用于加密你的部分项目，但应用程序目前无法访问它们。它们很可"
+"能最终会通过同步下载。"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:212
 msgid "The master key has been upgraded successfully!"
@@ -3550,6 +3537,9 @@ msgid ""
 "\n"
 "The error was: \"%s\""
 msgstr ""
+"收件人无法从列表中删除。请再试一次。\n"
+"\n"
+"错误：“%s”"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:585
 msgid ""
@@ -3561,9 +3551,8 @@ msgstr ""
 "重启。单击链接以继续。"
 
 #: packages/app-mobile/components/screen-header.js:459
-#, fuzzy
 msgid "The sync target needs to be upgraded. Press this banner to proceed."
-msgstr "需要升级同步目标！运行 `%s` 以继续。"
+msgstr "同步目标需要升级。按这个横幅继续。"
 
 #: packages/lib/models/Tag.ts:204
 msgid "The tag \"%s\" already exists. Please choose a different name."
@@ -3730,11 +3719,10 @@ msgid "This will open a new screen. Save your current changes?"
 msgstr "这将打开一个新页面。是否保存当前更改？"
 
 #: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:13
-#, fuzzy
 msgid ""
 "This will remove the notebook from your collection and you will no longer "
 "have access to its content. Do you wish to continue?"
-msgstr "取消分享这个笔记本？接受者将无法再访问到它的内容。"
+msgstr "这将从您的收藏中删除该笔记本，您将不再有机会访问其内容。您希望继续吗？"
 
 #: packages/lib/models/Setting.ts:709
 msgid "Time format"
@@ -3756,9 +3744,8 @@ msgid ""
 msgstr "要让 Joplin 与 Dropbox 同步，请按下列步骤操作："
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:54
-#, fuzzy
 msgid "To continue, please enter your master password below."
-msgstr "请输入主密码"
+msgstr "若要继续，请在下面输入您的主密码。"
 
 #: packages/app-cli/app/app-gui.js:452
 msgid "To delete a tag, untag the associated notes."
@@ -4177,7 +4164,7 @@ msgstr "您的数据将被重新加密并再次同步。"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:269
 msgid "Your master password is needed to decrypt some of your data."
-msgstr ""
+msgstr "要解密您的某些数据，必须使用您的主密码。"
 
 #: packages/app-mobile/components/CameraView.tsx:189
 msgid "Your permission to use your camera is required."
