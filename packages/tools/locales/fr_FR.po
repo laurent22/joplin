@@ -718,7 +718,7 @@ msgstr "Déchiffrement complété."
 
 #: packages/lib/Synchronizer.ts:196
 msgid "Completed: %s (%s)"
-msgstr "Terminé : %s (%s)"
+msgstr "Fait le : %s (%s)"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:637
 #: packages/app-mobile/components/side-menu-content.js:316
@@ -869,7 +869,7 @@ msgstr "date de création"
 
 #: packages/lib/Synchronizer.ts:188
 msgid "Created local items: %d."
-msgstr "Objets créés localement : %d."
+msgstr "Objets local créés : %d."
 
 #: packages/lib/services/ReportService.ts:244
 msgid "Created locally"
@@ -1058,7 +1058,7 @@ msgstr ""
 
 #: packages/lib/Synchronizer.ts:192
 msgid "Deleted local items: %d."
-msgstr "Objets supprimés localement : %d."
+msgstr "Objets local supprimés : %d."
 
 #: packages/lib/Synchronizer.ts:193
 msgid "Deleted remote items: %d."
@@ -4113,7 +4113,7 @@ msgstr "date de modification"
 
 #: packages/lib/Synchronizer.ts:189
 msgid "Updated local items: %d."
-msgstr "Objets mis à jour localement : %d."
+msgstr "Objets local mis-à-jour : %d."
 
 #: packages/lib/Synchronizer.ts:191
 msgid "Updated remote items: %d."
