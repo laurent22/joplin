@@ -9,6 +9,7 @@ import { MarkupToHtml } from '@joplin/renderer';
 import { ResourceEntity } from '../database/types';
 import { contentScriptsToRendererRules } from '../plugins/utils/loadContentScripts';
 import { basename, friendlySafeFilename, rtrimSlashes, dirname } from '../../path-utils';
+import htmlpack from '@joplin/htmlpack';
 const { themeStyle } = require('../../theme');
 const { escapeHtml } = require('../../string-utils.js');
 const { assetsToHeaders } = require('@joplin/renderer');
@@ -23,6 +24,7 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 	private markupToHtml_: MarkupToHtml;
 	private resources_: ResourceEntity[] = [];
 	private style_: any;
+	private packIntoSingleFile_: boolean = false;
 
 	async init(path: string, options: any = {}) {
 		this.customCss_ = options.customCss ? options.customCss : '';
@@ -30,6 +32,7 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 		if (this.metadata().target === 'file') {
 			this.destDir_ = dirname(path);
 			this.filePath_ = path;
+			this.packIntoSingleFile_ = true;
 		} else {
 			this.destDir_ = path;
 			this.filePath_ = null;
@@ -118,7 +121,9 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 				const asset = result.pluginAssets[i];
 				const filePath = asset.pathIsAbsolute ? asset.path : `${libRootPath}/node_modules/@joplin/renderer/assets/${asset.name}`;
 				const destPath = `${dirname(noteFilePath)}/pluginAssets/${asset.name}`;
-				await shim.fsDriver().mkdir(dirname(destPath));
+				const dir = dirname(destPath);
+				await shim.fsDriver().mkdir(dir);
+				this.createdDirs_.push(dir);
 				await shim.fsDriver().copy(filePath, destPath);
 			}
 
@@ -147,5 +152,20 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 		this.resources_.push(resource);
 	}
 
-	async close() {}
+	public async close() {
+		if (this.packIntoSingleFile_) {
+			const tempFilePath = `${this.filePath_}.tmp`;
+			await shim.fsDriver().move(this.filePath_, tempFilePath);
+			await htmlpack(tempFilePath, this.filePath_);
+			await shim.fsDriver().remove(tempFilePath);
+
+			for (const d of this.createdDirs_) {
+				await shim.fsDriver().remove(d);
+			}
+
+			await shim.fsDriver().remove(this.resourceDir_);
+			await shim.fsDriver().remove(`${this.destDir_}/pluginAssets`);
+		}
+	}
+
 }

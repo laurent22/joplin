@@ -1,9 +1,12 @@
 {
   "name": "@joplin/htmlpack",
-  "version": "1.0.1",
+  "version": "2.6.0",
   "description": "Pack an HTML file and all its linked resources into a single HTML file",
   "main": "dist/index.js",
-  "private": true,
+  "types": "src/index.ts",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "tsc": "tsc --project tsconfig.json",
     "watch": "tsc --watch --project tsconfig.json"
