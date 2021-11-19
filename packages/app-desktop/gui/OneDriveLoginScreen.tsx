@@ -70,7 +70,7 @@ class OneDriveLoginScreenComponent extends React.Component<any, any> {
 
 		return (
 			<div style={{ display: 'flex', flexDirection: 'column', height: '100%', backgroundColor: theme.backgroundColor }}>
-				<div style={{ padding: theme.configScreenPadding, flex: 1, color: theme.color }}>
+				<div style={{ padding: theme.configScreenPadding, flex: 1, color: theme.color, width: '100vw' }}>
 					{logComps}
 				</div>
 				<ButtonBar
