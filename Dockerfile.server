@@ -56,6 +56,7 @@ COPY --chown=$user:$user tsconfig.json .
 COPY --chown=$user:$user packages/turndown ./packages/turndown
 COPY --chown=$user:$user packages/turndown-plugin-gfm ./packages/turndown-plugin-gfm
 COPY --chown=$user:$user packages/fork-htmlparser2 ./packages/fork-htmlparser2
+COPY --chown=$user:$user packages/htmlpack ./packages/htmlpack
 
 # Then bootstrap only, without compiling the TypeScript files
 
