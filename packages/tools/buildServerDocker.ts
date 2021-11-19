@@ -21,6 +21,7 @@ async function main() {
 
 	const pushImages = !!argv.pushImages;
 	const tagName = argv.tagName;
+	const target = (argv.buildDev ? 'joplin-server-dev' : 'joplin-server');
 	const isPreRelease = getIsPreRelease(tagName);
 	const imageVersion = getVersionFromTag(tagName, isPreRelease);
 	const buildDate = moment(new Date().getTime()).format('YYYY-MM-DDTHH:mm:ssZ');
@@ -42,12 +43,13 @@ async function main() {
 	console.info(`Running from: ${process.cwd()}`);
 
 	console.info('tagName:', tagName);
+	console.info('target:', target);
 	console.info('pushImages:', pushImages);
 	console.info('imageVersion:', imageVersion);
 	console.info('isPreRelease:', isPreRelease);
 	console.info('Docker tags:', dockerTags.join(', '));
 
-	await execCommand2(`docker build -t "joplin/server:${imageVersion}" ${buildArgs} -f Dockerfile.server .`);
+	await execCommand2(`docker build -t "joplin/server:${imageVersion}" ${buildArgs} -f Dockerfile.server --target ${target} .`);
 	for (const tag of dockerTags) {
 		await execCommand2(`docker tag "joplin/server:${imageVersion}" "joplin/server:${tag}"`);
 		if (pushImages) await execCommand2(`docker push joplin/server:${tag}`);
