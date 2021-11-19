@@ -8,7 +8,7 @@ const HtmlToMd = require('@joplin/lib/HtmlToMd').default;
 const { dirname, filename, basename } = require('@joplin/lib/path-utils');
 const markdownUtils = require('@joplin/lib/markdownUtils').default;
 const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
-const { netUtils } = require('@joplin/lib/net-utils');
+const { mimeTypeFromHeaders } = require('@joplin/lib/net-utils');
 const shim = require('@joplin/lib/shim').default;
 const moment = require('moment');
 const { pregQuote } = require('@joplin/lib/string-utils');
@@ -62,7 +62,7 @@ async function createPostFile(post, filePath) {
 		const imagePath = `${tempDir}/${imageFilename}`;
 		const response = await shim.fetchBlob(imageUrl, { path: imagePath, maxRetry: 1 });
 
-		const mimeType = netUtils.mimeTypeFromHeaders(response.headers);
+		const mimeType = mimeTypeFromHeaders(response.headers);
 		let ext = 'jpg';
 		if (mimeType) {
 			const newExt = mimeUtils.toFileExtension(mimeType);

@@ -23,7 +23,7 @@ const md5 = require('md5');
 import HtmlToMd from '../../../HtmlToMd';
 const urlUtils = require('../../../urlUtils.js');
 const ArrayUtils = require('../../../ArrayUtils.js');
-const { netUtils } = require('../../../net-utils');
+const { mimeTypeFromHeaders } = require('../../../net-utils');
 const { fileExtension, safeFileExtension, safeFilename, filename } = require('../../../path-utils');
 const uri2path = require('file-uri-to-path');
 const { MarkupToHtml } = require('@joplin/renderer');
@@ -144,7 +144,7 @@ async function buildNoteStyleSheet(stylesheets: any[]) {
 }
 
 async function tryToGuessImageExtFromMimeType(response: any, imagePath: string) {
-	const mimeType = netUtils.mimeTypeFromHeaders(response.headers);
+	const mimeType = mimeTypeFromHeaders(response.headers);
 	if (!mimeType) return imagePath;
 
 	const newExt = mimeUtils.toFileExtension(mimeType);
