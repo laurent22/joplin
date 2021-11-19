@@ -7,7 +7,7 @@ import { commandAttachFileToBody, handlePasteEvent } from '../../utils/resourceH
 import { ScrollOptions, ScrollOptionTypes } from '../../utils/types';
 import { CommandValue } from '../../utils/types';
 import { usePrevious, cursorPositionToTextOffset } from './utils';
-import useScrollHandler, { translateScrollPercentToEditor, translateScrollPercentToViewer } from './utils/useScrollHandler';
+import useScrollHandler from './utils/useScrollHandler';
 import useElementSize from '@joplin/lib/hooks/useElementSize';
 import Toolbar from './Toolbar';
 import styles_ from './styles';
@@ -65,7 +65,8 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 
 	usePluginServiceRegistration(ref);
 
-	const { resetScroll, editor_scroll, setEditorPercentScroll, setViewerPercentScroll } = useScrollHandler(editorRef, webviewRef, props.onScroll);
+	const { resetScroll, editor_scroll, setEditorPercentScroll, setViewerPercentScroll, editor_resize,
+	} = useScrollHandler(editorRef, webviewRef, props.onScroll);
 
 	const codeMirror_change = useCallback((newBody: string) => {
 		props_onChangeRef.current({ changeId: null, content: newBody });
@@ -115,10 +116,9 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 					if (!webviewRef.current) return;
 					webviewRef.current.wrappedInstance.send('scrollToHash', options.value as string);
 				} else if (options.type === ScrollOptionTypes.Percent) {
-					const editorPercent = options.value as number;
-					setEditorPercentScroll(editorPercent);
-					const viewerPercent = translateScrollPercentToViewer(editorRef, webviewRef, editorPercent);
-					setViewerPercentScroll(viewerPercent);
+					const percent = options.value as number;
+					setEditorPercentScroll(percent);
+					setViewerPercentScroll(percent);
 				} else {
 					throw new Error(`Unsupported scroll options: ${options.type}`);
 				}
@@ -581,17 +581,8 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				editorRef.current.updateBody(newBody);
 			}
 		} else if (msg === 'percentScroll') {
-			const viewerPercent = arg0;
-			const editorPercent = translateScrollPercentToEditor(editorRef, webviewRef, viewerPercent);
-			setEditorPercentScroll(editorPercent);
-		} else if (msg === 'syncViewerScrollWithEditor') {
-			const force = !!arg0;
-			webviewRef.current?.wrappedInstance?.refreshSyncScrollMap(force);
-			const editorPercent = Math.max(0, Math.min(1, editorRef.current?.getScrollPercent()));
-			if (!isNaN(editorPercent)) {
-				const viewerPercent = translateScrollPercentToViewer(editorRef, webviewRef, editorPercent);
-				setViewerPercentScroll(viewerPercent);
-			}
+			const percent = arg0;
+			setEditorPercentScroll(percent);
 		} else {
 			props.onMessage(event);
 		}
@@ -644,6 +635,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		const options: any = {
 			pluginAssets: renderedBody.pluginAssets,
 			downloadResources: Setting.value('sync.resourceDownloadMode'),
+			markupLineCount: editorRef.current?.lineCount() || 0,
 		};
 
 		// It seems when there's an error immediately when the component is
@@ -652,7 +644,6 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		// Since we can't do much about it we just print an error.
 		if (webviewRef.current && webviewRef.current.wrappedInstance) {
 			webviewRef.current.wrappedInstance.send('setHtml', renderedBody.html, options);
-			webviewRef.current.wrappedInstance.refreshSyncScrollMap(true);
 		} else {
 			console.error('Trying to set HTML on an undefined webview ref');
 		}
@@ -829,6 +820,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 					onScroll={editor_scroll}
 					onEditorPaste={onEditorPaste}
 					isSafeMode={props.isSafeMode}
+					onResize={editor_resize}
 				/>
 			</div>
 		);

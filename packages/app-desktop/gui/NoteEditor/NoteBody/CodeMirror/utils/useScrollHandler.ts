@@ -1,10 +1,34 @@
 import { useCallback, useRef } from 'react';
 import shim from '@joplin/lib/shim';
-import { SyncScrollMap } from '../../../../utils/SyncScrollMap';
 
 export default function useScrollHandler(editorRef: any, webviewRef: any, onScroll: Function) {
-	const ignoreNextEditorScrollEvent_ = useRef(false);
 	const scrollTimeoutId_ = useRef<any>(null);
+	const scrollPercent_ = useRef(0);
+	const ignoreNextEditorScrollTime_ = useRef(Date.now());
+	const ignoreNextEditorScrollEventCount_ = useRef(0);
+	const delayedSetEditorPercentScrollTimeoutID_ = useRef(null);
+
+	// Ignores one next scroll event for a short time.
+	const ignoreNextEditorScrollEvent = () => {
+		const now = Date.now();
+		if (now >= ignoreNextEditorScrollTime_.current) ignoreNextEditorScrollEventCount_.current = 0;
+		if (ignoreNextEditorScrollEventCount_.current < 10) { // for safety
+			ignoreNextEditorScrollTime_.current = now + 200;
+			ignoreNextEditorScrollEventCount_.current += 1;
+		}
+	};
+
+	// Tests the next scroll event should be ignored and then decrements the count.
+	const isNextEditorScrollEventIgnored = () => {
+		if (ignoreNextEditorScrollEventCount_.current) {
+			if (Date.now() < ignoreNextEditorScrollTime_.current) {
+				ignoreNextEditorScrollEventCount_.current -= 1;
+				return true;
+			}
+			ignoreNextEditorScrollEventCount_.current = 0;
+		}
+		return false;
+	};
 
 	const scheduleOnScroll = useCallback((event: any) => {
 		if (scrollTimeoutId_.current) {
@@ -18,108 +42,128 @@ export default function useScrollHandler(editorRef: any, webviewRef: any, onScro
 		}, 10);
 	}, [onScroll]);
 
-	const setEditorPercentScroll = useCallback((p: number) => {
-		ignoreNextEditorScrollEvent_.current = true;
+	const setEditorPercentScrollInternal = (percent: number) => {
+		scrollPercent_.current = percent;
+		let retry = 0;
+		const fn = () => {
+			if (delayedSetEditorPercentScrollTimeoutID_.current) {
+				shim.clearInterval(delayedSetEditorPercentScrollTimeoutID_.current);
+				delayedSetEditorPercentScrollTimeoutID_.current = null;
+			}
+			const cm = editorRef.current;
+			if (isCodeMirrorReady(cm)) {
+				// calculates editor's GUI-dependent pixel-based raw percent
+				const newEditorPercent = translateScrollPercentL2E(cm, scrollPercent_.current);
+				const oldEditorPercent = cm.getScrollPercent();
+				if (!(Math.abs(newEditorPercent - oldEditorPercent) < 1e-8)) {
+					ignoreNextEditorScrollEvent();
+					cm.setScrollPercent(newEditorPercent);
+				}
+			} else {
+				retry += 1;
+				if (retry <= 10) {
+					delayedSetEditorPercentScrollTimeoutID_.current = shim.setTimeout(fn, 50);
+				}
+			}
+		};
+		fn();
+	};
 
+	const restoreEditorPercentScroll = () => {
+		if (isCodeMirrorReady(editorRef.current)) {
+			setEditorPercentScrollInternal(scrollPercent_.current);
+		}
+	};
+
+	const setEditorPercentScroll = useCallback((percent: number) => {
+		setEditorPercentScrollInternal(percent);
 		if (editorRef.current) {
-			editorRef.current.setScrollPercent(p);
-
-			scheduleOnScroll({ percent: p });
+			scheduleOnScroll({ percent });
 		}
 	}, [scheduleOnScroll]);
 
-	const setViewerPercentScroll = useCallback((p: number) => {
+	const setViewerPercentScroll = useCallback((percent: number) => {
 		if (webviewRef.current) {
-			webviewRef.current.wrappedInstance.send('setPercentScroll', p);
-			scheduleOnScroll({ percent: p });
+			webviewRef.current.wrappedInstance.send('setPercentScroll', percent);
+			scheduleOnScroll({ percent });
 		}
 	}, [scheduleOnScroll]);
 
 	const editor_scroll = useCallback(() => {
-		if (ignoreNextEditorScrollEvent_.current) {
-			ignoreNextEditorScrollEvent_.current = false;
-			return;
-		}
+		if (isNextEditorScrollEventIgnored()) return;
 
-		if (editorRef.current) {
-			const editorPercent = Math.max(0, Math.min(1, editorRef.current.getScrollPercent()));
+		const cm = editorRef.current;
+		if (isCodeMirrorReady(cm)) {
+			const editorPercent = Math.max(0, Math.min(1, cm.getScrollPercent()));
 			if (!isNaN(editorPercent)) {
 				// when switching to another note, the percent can sometimes be NaN
 				// this is coming from `gui/NoteEditor/NoteBody/CodeMirror/utils/useScrollUtils.ts`
 				// when CodeMirror returns scroll info with heigth == clientHeigth
 				// https://github.com/laurent22/joplin/issues/4797
-				const viewerPercent = translateScrollPercentToViewer(editorRef, webviewRef, editorPercent);
-				setViewerPercentScroll(viewerPercent);
+
+				// calculates GUI-independent line-based percent
+				const percent = translateScrollPercentE2L(cm, editorPercent);
+				scrollPercent_.current = percent;
+				setViewerPercentScroll(percent);
 			}
 		}
 	}, [setViewerPercentScroll]);
 
 	const resetScroll = useCallback(() => {
+		scrollPercent_.current = 0;
 		if (editorRef.current) {
 			editorRef.current.setScrollPercent(0);
 		}
 	}, []);
 
-	return { resetScroll, setEditorPercentScroll, setViewerPercentScroll, editor_scroll };
+	const editor_resize = useCallback((cm) => {
+		if (cm) {
+			restoreEditorPercentScroll();
+		}
+	}, []);
+
+	return {
+		resetScroll, setEditorPercentScroll, setViewerPercentScroll, editor_scroll, editor_resize,
+	};
 }
 
-const translateScrollPercent_ = (editorRef: any, webviewRef: any, percent: number, editorToViewer: boolean) => {
+const translateLE_ = (codeMirror: any, percent: number, l2e: boolean) => {
 	// If the input is out of (0,1) or not number, it is not translated.
 	if (!(0 < percent && percent < 1)) return percent;
-	const map: SyncScrollMap = webviewRef.current?.wrappedInstance.getSyncScrollMap();
-	const cm = editorRef.current;
-	if (!map || map.line.length <= 2 || !cm) return percent; // No translation
-	const lineCount = cm.lineCount();
-	if (map.line[map.line.length - 2] >= lineCount) {
-		// Discarded a obsolete map and use no translation.
-		webviewRef.current.wrappedInstance.refreshSyncScrollMap(false);
-		return percent;
-	}
-	const info = cm.getScrollInfo();
-	const height = Math.max(1, info.height - info.clientHeight);
-	let values = map.percent, target = percent;
-	if (editorToViewer) {
-		const top = percent * height;
-		const line = cm.lineAtHeight(top, 'local');
-		values = map.line;
-		target = line;
-	}
-	// Binary search (rightmost): finds where map[r-1][field] <= target < map[r][field]
-	let l = 1, r = values.length - 1;
-	while (l < r) {
-		const m = Math.floor(l + (r - l) / 2);
-		if (target < values[m]) r = m; else l = m + 1;
-	}
-	const lineU = map.line[r - 1];
-	const lineL = Math.min(lineCount, map.line[r]);
-	const ePercentU = r == 1 ? 0 : Math.min(1, cm.heightAtLine(lineU, 'local') / height);
-	const ePercentL = Math.min(1, cm.heightAtLine(lineL, 'local') / height);
-	const vPercentU = map.percent[r - 1];
-	const vPercentL = ePercentL == 1 ? 1 : map.percent[r];
-	let result;
-	if (editorToViewer) {
-		const linInterp = (percent - ePercentU) / (ePercentL - ePercentU);
-		result = vPercentU + (vPercentL - vPercentU) * linInterp;
-	} else {
-		const linInterp = (percent - vPercentU) / (vPercentL - vPercentU);
+	if (!codeMirror) return percent; // No translation
+	const info = codeMirror.getScrollInfo();
+	const height = info.height - info.clientHeight;
+	if (height <= 1) return percent; // No translation for non-displayed CodeMirror.
+	const lineCount = codeMirror.lineCount();
+	let lineU = l2e ? Math.floor(percent * lineCount) : codeMirror.lineAtHeight(percent * height, 'local');
+	lineU = Math.max(0, Math.min(lineCount - 1, lineU));
+	const ePercentU = codeMirror.heightAtLine(lineU, 'local') / height;
+	const ePercentL = codeMirror.heightAtLine(lineU + 1, 'local') / height;
+	let linInterp, result;
+	if (l2e) {
+		linInterp = percent * lineCount - lineU;
 		result = ePercentU + (ePercentL - ePercentU) * linInterp;
+	} else {
+		linInterp = Math.max(0, Math.min(1, (percent - ePercentU) / (ePercentL - ePercentU))) || 0;
+		result = (lineU + linInterp) / lineCount;
 	}
 	return Math.max(0, Math.min(1, result));
 };
 
-// translateScrollPercentToEditor() and translateScrollPercentToViewer() are
-// the translation functions between Editor's scroll percent and Viewer's scroll
+// translateScrollPercentL2E() and translateScrollPercentE2L() are
+// the translation functions between Editor's scroll percent and line-based scroll
 // percent. They are used for synchronous scrolling between Editor and Viewer.
-// They use a SyncScrollMap provided by Viewer for its translation.
 // To see the detail of synchronous scrolling, refer the following design document.
-// https://github.com/laurent22/joplin/pull/5512#issuecomment-931277022
-
-export const translateScrollPercentToEditor = (editorRef: any, webviewRef: any, viewerPercent: number) => {
-	const editorPercent = translateScrollPercent_(editorRef, webviewRef, viewerPercent, false);
-	return editorPercent;
+// <s> Replace me! https://github.com/laurent22/joplin/pull/5512#issuecomment-931277022</s>
+const translateScrollPercentL2E = (cm: any, lPercent: number) => {
+	return translateLE_(cm, lPercent, true);
 };
 
-export const translateScrollPercentToViewer = (editorRef: any, webviewRef: any, editorPercent: number) => {
-	const viewerPercent = translateScrollPercent_(editorRef, webviewRef, editorPercent, true);
-	return viewerPercent;
+const translateScrollPercentE2L = (cm: any, ePercent: number) => {
+	return translateLE_(cm, ePercent, false);
 };
+
+function isCodeMirrorReady(cm: any) {
+	const info = cm?.getScrollInfo();
+	return info && info.height - info.clientHeight > 0;
+}
