@@ -1,6 +1,13 @@
-# https://versatile.nl/blog/deploying-lerna-web-apps-with-docker
+ARG user=joplin
 
-FROM node:16-bullseye
+# https://versatile.nl/blog/deploying-lerna-web-apps-with-docker
+# https://docs.docker.com/develop/develop-images/multistage-build/
+
+##########################################################################################
+# builder image
+# Builds joplin server in /home/$user 
+########################################################################################## 
+FROM node:16-bullseye as builder
 
 RUN apt-get update \
     && apt-get install -y \
@@ -14,12 +21,9 @@ ARG user=joplin
 
 RUN useradd --create-home --shell /bin/bash $user
 USER $user
-
-ENV NODE_ENV development
-
 WORKDIR /home/$user
 
-RUN mkdir /home/$user/logs
+ENV NODE_ENV development
 
 # Install the root scripts but don't run postinstall (which would bootstrap
 # and build TypeScript files, but we don't have the TypeScript files at
@@ -75,10 +79,91 @@ COPY --chown=$user:$user packages/server ./packages/server
 
 RUN npm run build
 
+##########################################################################################
+# joplin-server-dev image, uses builder as base
+########################################################################################## 
+From builder as joplin-server-dev
+
+ARG user
+USER $user:$user
+WORKDIR /home/$user
+
+RUN mkdir /home/$user/logs
+
 ENV RUNNING_IN_DOCKER=1
+ENV NODE_ENV development
 EXPOSE ${APP_PORT}
 
 CMD [ "npm", "--prefix", "packages/server", "start" ]
+
+# Build-time metadata
+# https://github.com/opencontainers/image-spec/blob/master/annotations.md
+ARG BUILD_DATE
+ARG REVISION
+ARG VERSION
+LABEL org.opencontainers.image.created="$BUILD_DATE" \
+      org.opencontainers.image.title="Joplin Server DEV" \
+      org.opencontainers.image.description="Docker image for development Joplin Server" \
+      org.opencontainers.image.url="https://joplinapp.org/" \
+      org.opencontainers.image.revision="$REVISION" \
+      org.opencontainers.image.source="https://github.com/laurent22/joplin.git" \
+      org.opencontainers.image.version="${VERSION}"
+
+##########################################################################################
+# small-image-builder, uses builder as base
+# Constructs a smaller directory structure in /tmp/home/$user
+########################################################################################## 
+from builder as small-image-builder
+
+ARG user
+
+# Now prepair a smaller joplin server installation in /home/$user
+USER $user
+RUN mkdir -p /tmp/home/$user && \
+    cp -r /home/joplin/packages/server/* /tmp/home/$user/ 
+
+USER $user:$user
+WORKDIR /tmp/home/$user
+RUN npm install --omit dev
+
+# remove all generated .test.js and .test.js.map files, which are not needed
+
+RUN find dist -name "*.test.js*" -type f -exec rm {} \;
+
+
+##########################################################################################
+# joplin-server image, uses node:16-bullseye-slima as base
+# and copies the required files from small-image-builder
+########################################################################################## 
+FROM node:16-bullseye-slim as joplin-server
+
+# create the user account and required folders
+ARG user
+RUN useradd --create-home --shell /bin/bash $user && \
+    mkdir -p /home/$user/logs && \
+    mkdir -p /home/$user/src/views && \
+    chown -R $user:$user /home/$user
+
+# switch to user $user
+USER $user:$user
+WORKDIR /home/$user
+
+# copy only all required files from the 'builder' image
+COPY --from=small-image-builder /tmp/home/$user/dist /home/$user/dist
+COPY --from=small-image-builder /tmp/home/$user/node_modules /home/$user/node_modules
+COPY --from=small-image-builder /tmp/home/$user/public /home/$user/public
+COPY --from=small-image-builder /tmp/home/$user/stripeConfig.json /home/$user/stripeConfig.json
+COPY --from=small-image-builder /tmp/home/$user/src/views /home/$user/src/views
+
+# set some environment variables
+ENV RUNNING_IN_DOCKER=1
+ENV NODE_ENV=production
+
+# expose the application port
+EXPOSE ${APP_PORT}
+
+# start the node server directly from dist/app.js
+CMD [ "node", "dist/app.js" ]
 
 # Build-time metadata
 # https://github.com/opencontainers/image-spec/blob/master/annotations.md
