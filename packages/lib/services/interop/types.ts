@@ -97,6 +97,7 @@ export interface ExportOptions {
 	includeConflicts?: boolean;
 	plugins?: PluginStates;
 	customCss?: string;
+	packIntoSingleFile?: boolean;
 }
 
 export interface ImportExportResult {

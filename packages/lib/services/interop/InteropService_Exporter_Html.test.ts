@@ -106,6 +106,7 @@ describe('interop/InteropService_Exporter_Html', function() {
 		await service.export({
 			path: filePath,
 			format: 'html',
+			packIntoSingleFile: false,
 			plugins,
 		});
 

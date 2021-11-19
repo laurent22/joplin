@@ -32,7 +32,7 @@ export default class InteropService_Exporter_Html extends InteropService_Exporte
 		if (this.metadata().target === 'file') {
 			this.destDir_ = dirname(path);
 			this.filePath_ = path;
-			this.packIntoSingleFile_ = true;
+			this.packIntoSingleFile_ = 'packIntoSingleFile' in options ? options.packIntoSingleFile : true;
 		} else {
 			this.destDir_ = path;
 			this.filePath_ = null;
