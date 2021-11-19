@@ -15,7 +15,7 @@ import ownerHandler from './middleware/ownerHandler';
 import setupAppContext from './utils/setupAppContext';
 import { initializeJoplinUtils } from './utils/joplinUtils';
 import startServices from './utils/startServices';
-import { credentialFile } from './utils/testing/testUtils';
+import { credentialFile } from './utils/testing/credentialUtils';
 import apiVersionHandler from './middleware/apiVersionHandler';
 import clickJackingHandler from './middleware/clickJackingHandler';
 import newModelFactory from './models/factory';
