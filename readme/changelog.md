@@ -1,5 +1,34 @@
 # Joplin changelog
 
+## [v2.6.2](https://github.com/laurent22/joplin/releases/tag/v2.6.2) (Pre-release) - 2021-11-18T12:19:12Z
+
+- New: Sort Order Buttons and Per-Notebook Sort Order ([#5437](https://github.com/laurent22/joplin/issues/5437) by Kenichi Kobayashi)
+- New: Added support for notebook icons (e97bb78)
+- New: Implements Sync-Scroll for Markdown Editor and Viewer ([#5512](https://github.com/laurent22/joplin/issues/5512)) ([#2242](https://github.com/laurent22/joplin/issues/2242) by Kenichi Kobayashi)
+- New: Add support for encrypted notebooks via Joplin Server ([#5529](https://github.com/laurent22/joplin/issues/5529))
+- New: Add shortcut for bulleted list ([#5698](https://github.com/laurent22/joplin/issues/5698) by Helmut K. C. Tessarek)
+- New: Add support for faster Joplin Server built-in sync locks ([#5662](https://github.com/laurent22/joplin/issues/5662))
+- New: Add support for more style of highlighted texts when importing ENEX files (89179c2)
+- Improved: Allow showing passwords in Master Password dialog (79d97f2)
+- Improved: Fixed and improve laggy scroll in text editor ([#5606](https://github.com/laurent22/joplin/issues/5606)) ([#4827](https://github.com/laurent22/joplin/issues/4827) by Kenichi Kobayashi)
+- Improved: Improved error message when a file cannot be uploaded or downloaded (567ba06)
+- Improved: Make code blocks horizontally scrollable on note viewer ([#5740](https://github.com/laurent22/joplin/issues/5740))
+- Improved: Plugins: Allow posting messages from plugin to webview ([#5569](https://github.com/laurent22/joplin/issues/5569) by [@agerardin](https://github.com/agerardin))
+- Fixed: Currently opened note is not updated after sync (5582) ([#5711](https://github.com/laurent22/joplin/issues/5711)) ([#5582](https://github.com/laurent22/joplin/issues/5582) by Kenichi Kobayashi)
+- Fixed: Fixed button to upgrade a master key (725c79d)
+- Fixed: Fixed issue that could cause application to needlessly lock the sync target (0de6e9e)
+- Fixed: Fixed issue with parts of HTML notes not being displayed in some cases ([#5687](https://github.com/laurent22/joplin/issues/5687))
+- Fixed: Long resource filenames were being incorrectly cut ([#5653](https://github.com/laurent22/joplin/issues/5653))
+- Fixed: Message in search box dialog was not readable in dark mode ([#5666](https://github.com/laurent22/joplin/issues/5666))
+- Fixed: OneDrive login screen was not readable in dark mode ([#5726](https://github.com/laurent22/joplin/issues/5726))
+- Fixed: Plugin secure settings would be lost if keychain is not enabled ([#5720](https://github.com/laurent22/joplin/issues/5720))
+- Fixed: Sharing multiple notebooks via Joplin Server with the same user results in an error ([#5721](https://github.com/laurent22/joplin/issues/5721))
+- Fixed: Text was unreadable in dark mode when dropping a note on Rich Text editor ([#5710](https://github.com/laurent22/joplin/issues/5710))
+
+## [v2.5.12](https://github.com/laurent22/joplin/releases/tag/v2.5.12) - 2021-11-08T11:07:11Z
+
+- Fixed regression: Long resource filenames were being incorrectly cut when exporting as Markdown ([#5653](https://github.com/laurent22/joplin/issues/5653))
+
 ## [v2.5.10](https://github.com/laurent22/joplin/releases/tag/v2.5.10) - 2021-11-01T08:22:42Z
 
 - Fixed: Fixed crash on certain Linux distributions when importing or exporting a file (6012783)

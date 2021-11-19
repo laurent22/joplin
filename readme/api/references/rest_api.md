@@ -180,6 +180,7 @@ command | 16
 | is_shared | int   |       |
 | share_id | text  |       |
 | conflict_original_id | text  |       |
+| master_key_id | text  |       |
 | body_html | text  | Note body, in HTML format |
 | base_url | text  | If `body_html` is provided and contains relative URLs, provide the `base_url` parameter too so that all the URLs can be converted to absolute ones. The base URL is basically where the HTML was fetched from, minus the query (everything after the '?'). For example if the original page was `https://stackoverflow.com/search?q=%5Bjava%5D+test`, the base URL is `https://stackoverflow.com/search`. |
 | image_data_url | text  | An image to attach to the note, in [Data URL](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs) format. |
@@ -254,6 +255,8 @@ This is actually a notebook. Internally notebooks are called "folders".
 | parent_id | text  |       |
 | is_shared | int   |       |
 | share_id | text  |       |
+| master_key_id | text  |       |
+| icon  | text  |       |
 
 ## GET /folders
 
@@ -302,6 +305,7 @@ Deletes the folder with ID :id
 | size  | int   |       |
 | is_shared | int   |       |
 | share_id | text  |       |
+| master_key_id | text  |       |
 
 ## GET /resources
 

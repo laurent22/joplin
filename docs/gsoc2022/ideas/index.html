@@ -5,11 +5,11 @@
 
 !!! WARNING !!!
 
-This file was auto-generated from readme/config_screen.md and any manual change
+This file was auto-generated from readme/gsoc2022/ideas.md and any manual change
 made to it will be overwritten. To make a change to this file please modify
 the source Markdown file:
 
-https://github.com/laurent22/joplin/blob/dev/readme/config_screen.md
+https://github.com/laurent22/joplin/blob/dev/readme/gsoc2022/ideas.md
 
 -->
 
@@ -41,7 +41,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/config_screen.md
 			onload="this.media='all'; this.onload = null"
 		/>
 		<link rel="stylesheet" href="/css/site.css?h=7ac82e1f40a384f69c644263acc99fc8" as="style" />
-		<title>Configuration screen | Joplin</title>
+		<title>GSoC 2022 Ideas | Joplin</title>
 
 		<script
 			src="&#x2F;js/jquery-3.6.0.min.js"
@@ -200,7 +200,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/config_screen.md
 		</div>
 	</div>
 </div>
-			<div class="help-page-container page-config_screen">
+			<div class="help-page-container page-ideas">
 				<div class="container">
 					<div class="row content-wrapper">
 						<div id="toc"><div><ul>
@@ -293,23 +293,49 @@ https://github.com/laurent22/joplin/blob/dev/readme/config_screen.md
 							<div class="donate-links">
 <p><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=E8JMYD2LQ8MMA&amp;lc=GB&amp;item_name=Joplin+Development&amp;currency_code=EUR&amp;bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Donate-PayPal-green.svg" alt="Donate using PayPal"></a> <a href="https://github.com/sponsors/laurent22/"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/GitHub-Badge.svg" alt="Sponsor on GitHub"></a> <a href="https://www.patreon.com/joplin"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Patreon-Badge.svg" alt="Become a patron"></a> <a href="https://joplinapp.org/donate/#donations"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Donate-IBAN.svg" alt="Donate using IBAN"></a></p>
 </div>
-<h1>Configuration screen<a name="configuration-screen" href="#configuration-screen" class="heading-anchor">🔗</a></h1>
-<p>Opening the configuration screen depends on the application and sometimes operating system your are using.</p>
-<h2>Desktop application<a name="desktop-application" href="#desktop-application" class="heading-anchor">🔗</a></h2>
-<p>As a shortcut you can press <kbd>Ctrl</kbd>+<kbd>,</kbd> on Windows and Linux, or <kbd>Cmd</kbd>+<kbd>,</kbd> on macOS.</p>
-<h3>Windows and Linux<a name="windows-and-linux" href="#windows-and-linux" class="heading-anchor">🔗</a></h3>
-<p>In the menu, click on <strong>Tools &gt; Options</strong>.</p>
-<p>Or press <kbd>Ctrl</kbd>+<kbd>,</kbd>.</p>
-<h3>macOS<a name="macos" href="#macos" class="heading-anchor">🔗</a></h3>
-<p>In the menu, click on <strong>Joplin &gt; Preferences</strong></p>
-<p>Or press <kbd>Cmd</kbd>+<kbd>,</kbd>.</p>
-<h2>Mobile application<a name="mobile-application" href="#mobile-application" class="heading-anchor">🔗</a></h2>
-<p>Tap on the <strong>burger icon ≡</strong> in the top left corner, and select <strong>Configuration</strong>.</p>
-<h2>CLI<a name="cli" href="#cli" class="heading-anchor">🔗</a></h2>
-<p>Type <code>:help config</code> for information on how to set config values and for the complete list of available options.</p>
+<h1>GSoC 2022 Ideas<a name="gsoc-2022-ideas" href="#gsoc-2022-ideas" class="heading-anchor">🔗</a></h1>
+<p>2022 is Joplin second round at Google Summer of Code. Detailed information on how to get involved and apply are given in the <a href="https://joplinapp.org/gsoc2022/index/">general Summer of Code introduction</a></p>
+<p><strong>These are all proposals! We are open to new ideas you might have!!</strong> Do you have an awesome idea you want to work on with Joplin but that is not among the ideas below? That's cool. We love that! But please do us a favour: Get in touch with a mentor early on and make sure your project is realistic and within the scope of Joplin. Just make sure your idea is within this year's theme:</p>
+<ul>
+<li><strong>Plugin development</strong> - implementing new features using Joplin's plugin system.</li>
+<li><strong>External desktop applications</strong> - build external Joplin applications by retrieving, creating or modifying notes via the Data API.</li>
+<li><strong>External server applications</strong> - leverage the Joplin Server API to provide online features to Joplin users.</li>
+</ul>
+<h1>Information for Students<a name="information-for-students" href="#information-for-students" class="heading-anchor">🔗</a></h1>
+<p>These ideas were contributed by our developers and users. They are sometimes vague or incomplete. If you wish to submit a proposal based on these ideas, you are urged to contact the developers and find out more about the particular suggestion you're looking at.</p>
+<p>Becoming accepted as a Google Summer of Code student is quite competitive. Accepted students typically have thoroughly researched the technologies of their proposed project and have been in frequent contact with potential mentors. <strong>Simply copying and pasting an idea here will not work.</strong> On the other hand, creating a completely new idea without first consulting potential mentors rarely works.</p>
+<h1>List of ideas<a name="list-of-ideas" href="#list-of-ideas" class="heading-anchor">🔗</a></h1>
+<h2>1. Plugin system on mobile<a name="1-plugin-system-on-mobile" href="#1-plugin-system-on-mobile" class="heading-anchor">🔗</a></h2>
+<p>The plugin system is currently available on desktop and CLI. We believe it could work on mobile too although some work will have to be done to make the plugin API compatible, as well as add a mechanism to load plugins.</p>
+<p>Expected Outcome: Allow loading and running plugins on mobile</p>
+<p>Difficulty Level: High</p>
+<p>Skills Required: TypeScript, React Native</p>
+<p>Potential Mentor(s): <a href="https://discourse.joplinapp.org/u/PackElend">PackElend</a>, <a href="https://discourse.joplinapp.org/u/roman_r_m">roman_r_m</a>, <a href="https://github.com/laurent22/">laurent22</a></p>
+<h2>2. Seamless desktop application updates<a name="2-seamless-desktop-application-updates" href="#2-seamless-desktop-application-updates" class="heading-anchor">🔗</a></h2>
+<p>The desktop application currently supports automatic updates, however the process is not particularly smooth: the user is presented with a modal dialog, where they need to click &quot;Download&quot; and that opens the default browser to download the file. Then they need to run this file and go through the installer.</p>
+<p>We would like to make this process smoother:</p>
+<ul>
+<li>The installer should be automatically downloaded in the background</li>
+<li>It should then install the app automatically when the next time the app is started</li>
+<li>And this should work at least on Windows and macOS (Linux may be special due to the different distribution methods)</li>
+</ul>
+<p>Difficulty Level: Medium</p>
+<p>Skills Required: TypeScript, React. Some knowledge of Electron and electron-builder.</p>
+<h2>3. Refactor the project documentation<a name="3-refactor-the-project-documentation" href="#3-refactor-the-project-documentation" class="heading-anchor">🔗</a></h2>
+<p>The current documentation (under <a href="https://joplinapp.org/help">joplinapp.org/help</a>) is mainly a giant <a href="http://README.md">README.md</a> file and various smaller Markdown files under /readme. All this is then built into the HTML website by a script.</p>
+<p>We would like to improve this by splitting the main readme into smaller sections, have a new menu that would reorganise the help into various topics, and of course the build script will need to be updated.</p>
+<p>A good part of this project will be about researching how other projects organise their documentation, proposing a way that would work well for Joplin, and discussing your ideas with the mentors and users. This is still a technical project though since you will need to deal with TypeScript, Markdown, HTML and CSS (and any other technology that might help) to build the new documentation.</p>
+<p>Difficulty Level: High</p>
+<p>Skills Required: TypeScript, JavaScript, CSS, HTML, Markdown rendering.</p>
+<h1>More info<a name="more-info" href="#more-info" class="heading-anchor">🔗</a></h1>
+<ul>
+<li>Make sure you read the <a href="https://joplinapp.org/gsoc2022/index/">Joplin Google Summer of Code Introduction</a></li>
+<li>To build the application, please read <a href="https://github.com/laurent22/joplin/blob/dev/BUILD.md">BUILD.md</a></li>
+<li>And before creating a pull request, please read the <a href="https://joplinapp.org/gsoc2022/pull_request_guidelines/">pull request guidelines</a></li>
+</ul>
 
 								<div class="bottom-links">
-									<a href="https://github.com/laurent22/joplin/blob/dev/readme/config_screen.md">
+									<a href="https://github.com/laurent22/joplin/blob/dev/readme/gsoc2022/ideas.md">
 										<i class="fab fa-github"></i> Improve this doc
 									</a>
 								</div>

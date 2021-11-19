@@ -15,7 +15,10 @@ https://github.com/laurent22/joplin/blob/dev/readme/privacy.md
 
 	<head>
 <!-- Donate button A/B testing -->
-<script async src="https://www.googleoptimize.com/optimize.js?id=OPT-PW3ZPK3"></script>		<meta
+
+<!--
+<script async src="https://www.googleoptimize.com/optimize.js?id=OPT-PW3ZPK3"></script>
+-->		<meta
 			charset="utf-8"
 			http-equiv="X-UA-Compatible"
 			content="IE=edge,chrome=1"
@@ -37,7 +40,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/privacy.md
 			media="all"
 			onload="this.media='all'; this.onload = null"
 		/>
-		<link rel="stylesheet" href="/css/site.css?h=f1e088235812805da9f78ebcd465d1ad" as="style" />
+		<link rel="stylesheet" href="/css/site.css?h=7ac82e1f40a384f69c644263acc99fc8" as="style" />
 		<title>Joplin Privacy Policy | Joplin</title>
 
 		<script
@@ -293,6 +296,44 @@ https://github.com/laurent22/joplin/blob/dev/readme/privacy.md
 <h1>Joplin Privacy Policy<a name="joplin-privacy-policy" href="#joplin-privacy-policy" class="heading-anchor">🔗</a></h1>
 <p>The Joplin applications, including the Android, iOS, Windows, macOS and Linux applications, do not send any data to any service without your authorisation. Any data that Joplin saves, such as notes or images, are saved to your own device and you are free to delete this data at any time.</p>
 <p>If you choose to synchronise with a third-party, such as OneDrive or Dropbox, the notes will be sent to that account, in which case the third-party privacy policy applies.</p>
+<p>In order to provide certain features, Joplin may need to connect to third-party services. You can disable most of these features in the application settings:</p>
+<table class="table">
+<thead>
+<tr>
+<th>Feature</th>
+<th>Description</th>
+<th>Default</th>
+<th>Can be disabled</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Auto-update</td>
+<td>Joplin periodically connects to GitHub to check for new releases.</td>
+<td>Enabled</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Geo-location</td>
+<td>Joplin saves geo-location information in note properties when you create a note.</td>
+<td>Enabled</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Synchronisation</td>
+<td>Joplin supports synchronisation of your notes across multiple devices. If you choose to synchronise with a third-party, such as OneDrive, the notes will be sent to your OneDrive account, in which case the third-party privacy policy applies.</td>
+<td>Disabled</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Wifi connection check</td>
+<td>On mobile, Joplin checks for Wifi connectivity to give the option to synchronise data only when Wifi is enabled.</td>
+<td>Enabled</td>
+<td>No <sup>(1)</sup></td>
+</tr>
+</tbody>
+</table>
+<p>(1) <a href="https://github.com/laurent22/joplin/issues/5705">https://github.com/laurent22/joplin/issues/5705</a></p>
 <p>For any question about Joplin privacy policy, please leave a message <a href="https://discourse.joplinapp.org/">on the forum</a>.</p>
 
 								<div class="bottom-links">
