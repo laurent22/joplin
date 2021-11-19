@@ -31,7 +31,7 @@ const React = require('react');
 const nodeSqlite = require('sqlite3');
 
 if (bridge().env() === 'dev') {
-	const newConsole = function(oldConsole) {
+	const newConsole = (function(oldConsole) {
 		const output = {};
 		const fnNames = ['assert', 'clear', 'context', 'count', 'countReset', 'debug', 'dir', 'dirxml', 'error', 'group', 'groupCollapsed', 'groupEnd', 'info', 'log', 'memory', 'profile', 'profileEnd', 'table', 'time', 'timeEnd', 'timeLog', 'timeStamp', 'trace', 'warn'];
 		for (const fnName of fnNames) {
@@ -51,7 +51,7 @@ if (bridge().env() === 'dev') {
 			}
 		}
 		return output;
-	}(window.console);
+	}(window.console));
 
 	window.console = newConsole;
 }

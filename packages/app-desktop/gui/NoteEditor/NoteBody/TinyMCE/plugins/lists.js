@@ -32,7 +32,7 @@
     var none = function () {
       return NONE;
     };
-    var NONE = function () {
+   var NONE = (function () {
       var eq = function (o) {
         return o.isNone();
       };
@@ -75,7 +75,7 @@
         Object.freeze(me);
       }
       return me;
-    }();
+    }());
     var some = function (a) {
       var constant_a = constant(a);
       var self = function () {
