@@ -44,13 +44,18 @@
 
 		2020-10-08: Changed back again to "singleTop" as it has worked so far. The multiple instance bug was "fixed" in a different way
 					See packages/app-mobile/root.js for more info about the bug.
+
+		2021-11-20: Changed to "singleTask" to ensure deep linking doesn't cause multiple instances.
+					This is recommended in the React docs: https://reactnavigation.org/docs/deep-linking. In practice, "singleTask" and "singleTop" are
+					largely similar, but "singleTask" is more strict in preventing multiple instances of the app from being created if another app
+					explicitly requests it.
 		-->
 
 		<activity
 			android:name=".MainActivity"
 			android:label="@string/app_name"
 			android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
-			android:launchMode="singleTop"
+			android:launchMode="singleTask"
 				android:windowSoftInputMode="adjustResize">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
