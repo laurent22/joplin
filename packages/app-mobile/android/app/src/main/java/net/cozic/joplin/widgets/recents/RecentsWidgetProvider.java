@@ -20,7 +20,7 @@ public class RecentsWidgetProvider extends AppWidgetProvider {
     private static final int listViewId = R.id.list_view;
 
     private void handleClick(Context context, String noteId) {
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("joplin://notes/" + noteId));
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("joplin://x-callback-url/openNote?id=" + noteId));
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
