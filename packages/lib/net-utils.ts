@@ -10,9 +10,7 @@ export async function ip() {
 	return ip.ip;
 }
 
-export async function findAvailablePort(possiblePorts: number[], extraRandomPortsToTry = 20) {
-	const tcpPortUsed = require('tcp-port-used');
-
+export async function findAvailablePort(tcpPortUsed: any, possiblePorts: number[], extraRandomPortsToTry = 20) {
 	for (let i = 0; i < extraRandomPortsToTry; i++) {
 		possiblePorts.push(Math.floor(8000 + Math.random() * 2000));
 	}
