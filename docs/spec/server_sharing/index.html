@@ -15,7 +15,10 @@ https://github.com/laurent22/joplin/blob/dev/readme/spec/server_sharing.md
 
 	<head>
 <!-- Donate button A/B testing -->
-<script async src="https://www.googleoptimize.com/optimize.js?id=OPT-PW3ZPK3"></script>		<meta
+
+<!--
+<script async src="https://www.googleoptimize.com/optimize.js?id=OPT-PW3ZPK3"></script>
+-->		<meta
 			charset="utf-8"
 			http-equiv="X-UA-Compatible"
 			content="IE=edge,chrome=1"
@@ -37,7 +40,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/spec/server_sharing.md
 			media="all"
 			onload="this.media='all'; this.onload = null"
 		/>
-		<link rel="stylesheet" href="/css/site.css?h=f1e088235812805da9f78ebcd465d1ad" as="style" />
+		<link rel="stylesheet" href="/css/site.css?h=7ac82e1f40a384f69c644263acc99fc8" as="style" />
 		<title>Joplin Server sharing feature | Joplin</title>
 
 		<script
@@ -318,7 +321,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/spec/server_sharing.md
 <p>Any linked note will <strong>not</strong> be shared, due to the following reasons:</p>
 <ul>
 <li>
-<p>Privacy issue - you don't want to accidentally share a note just because it was linked to another note.</p>
+<p>Privacy issue - you don't want to accidentally share a note just because it was linked from another note.</p>
 </li>
 <li>
 <p>Even if the linked note has been shared separately, we still don't give access to it. We don't know who that link has been shared with - it could be a different recipient.</p>
@@ -326,7 +329,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/spec/server_sharing.md
 </ul>
 <h3>Multiple share links for a given note<a name="multiple-share-links-for-a-given-note" href="#multiple-share-links-for-a-given-note" class="heading-anchor">🔗</a></h3>
 <p>It should be possible to have multiple share links for a given note. For example: I share a note with one person, then the same note with a different person. I revoke the share for one person, but I sill want the other person to access the note.</p>
-<p>So when a share link is created for a note, the API always return a new link.</p>
+<p>So when a share link is created for a note, the API always returns a new link.</p>
 
 								<div class="bottom-links">
 									<a href="https://github.com/laurent22/joplin/blob/dev/readme/spec/server_sharing.md">

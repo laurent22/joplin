@@ -19,6 +19,7 @@ describe('dateFormats', function() {
 		// DATE_FORMAT_6 = 'DD.MM.YYYY';
 		// DATE_FORMAT_7 = 'YYYY.MM.DD';
 		// DATE_FORMAT_8 = 'YYMMDD';
+		// DATE_FORMAT_9 = 'YYYY/MM/DD';
 
 		expect(time.formatMsToLocal(now, Setting.DATE_FORMAT_1)).toBe('30/01/2017');
 		expect(time.formatMsToLocal(now, Setting.DATE_FORMAT_2)).toBe('30/01/17');
@@ -28,6 +29,7 @@ describe('dateFormats', function() {
 		expect(time.formatMsToLocal(now, Setting.DATE_FORMAT_6)).toBe('30.01.2017');
 		expect(time.formatMsToLocal(now, Setting.DATE_FORMAT_7)).toBe('2017.01.30');
 		expect(time.formatMsToLocal(now, Setting.DATE_FORMAT_8)).toBe('170130');
+		expect(time.formatMsToLocal(now, Setting.DATE_FORMAT_9)).toBe('2017/01/30');
 
 	}));
 

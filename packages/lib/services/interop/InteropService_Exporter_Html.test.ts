@@ -32,6 +32,7 @@ describe('interop/InteropService_Exporter_Html', function() {
 		await service.export({
 			path: filePath,
 			format: 'html',
+			packIntoSingleFile: false,
 		});
 
 		const content = await fs.readFile(filePath, 'utf8');
@@ -106,6 +107,7 @@ describe('interop/InteropService_Exporter_Html', function() {
 		await service.export({
 			path: filePath,
 			format: 'html',
+			packIntoSingleFile: false,
 			plugins,
 		});
 

@@ -15,7 +15,10 @@ https://github.com/laurent22/joplin/blob/dev/readme/api/references/rest_api.md
 
 	<head>
 <!-- Donate button A/B testing -->
-<script async src="https://www.googleoptimize.com/optimize.js?id=OPT-PW3ZPK3"></script>		<meta
+
+<!--
+<script async src="https://www.googleoptimize.com/optimize.js?id=OPT-PW3ZPK3"></script>
+-->		<meta
 			charset="utf-8"
 			http-equiv="X-UA-Compatible"
 			content="IE=edge,chrome=1"
@@ -37,7 +40,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/api/references/rest_api.md
 			media="all"
 			onload="this.media='all'; this.onload = null"
 		/>
-		<link rel="stylesheet" href="/css/site.css?h=f1e088235812805da9f78ebcd465d1ad" as="style" />
+		<link rel="stylesheet" href="/css/site.css?h=7ac82e1f40a384f69c644263acc99fc8" as="style" />
 		<title>Joplin Data API | Joplin</title>
 
 		<script
@@ -618,6 +621,11 @@ async function fetchAllNotes() {
 <td></td>
 </tr>
 <tr>
+<td>master_key_id</td>
+<td>text</td>
+<td></td>
+</tr>
+<tr>
 <td>body_html</td>
 <td>text</td>
 <td>Note body, in HTML format</td>
@@ -743,6 +751,16 @@ async function fetchAllNotes() {
 <td>text</td>
 <td></td>
 </tr>
+<tr>
+<td>master_key_id</td>
+<td>text</td>
+<td></td>
+</tr>
+<tr>
+<td>icon</td>
+<td>text</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h2>GET /folders<a name="get-folders" href="#get-folders" class="heading-anchor">🔗</a></h2>
@@ -841,6 +859,11 @@ async function fetchAllNotes() {
 </tr>
 <tr>
 <td>share_id</td>
+<td>text</td>
+<td></td>
+</tr>
+<tr>
+<td>master_key_id</td>
 <td>text</td>
 <td></td>
 </tr>

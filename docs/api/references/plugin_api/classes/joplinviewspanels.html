@@ -101,6 +101,7 @@
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="joplinviewspanels.html#create" class="tsd-kind-icon">create</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="joplinviewspanels.html#hide" class="tsd-kind-icon">hide</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="joplinviewspanels.html#onmessage" class="tsd-kind-icon">on<wbr>Message</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="joplinviewspanels.html#postmessage" class="tsd-kind-icon">post<wbr>Message</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="joplinviewspanels.html#sethtml" class="tsd-kind-icon">set<wbr>Html</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="joplinviewspanels.html#show" class="tsd-kind-icon">show</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="joplinviewspanels.html#visible" class="tsd-kind-icon">visible</a></li>
@@ -246,6 +247,46 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="postmessage" class="tsd-anchor"></a>
+					<h3>post<wbr>Message</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">post<wbr>Message<span class="tsd-signature-symbol">(</span>handle<span class="tsd-signature-symbol">: </span><a href="../globals.html#viewhandle" class="tsd-signature-type">ViewHandle</a>, message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Sends a message to the webview.</p>
+								</div>
+								<p>The webview must have registered a message handler prior, otherwise the message is ignored. Use;</p>
+								<pre><code class="language-javascript">webviewApi.onMessage(<span class="hljs-function">(<span class="hljs-params">message</span>) =&gt;</span> { ... });</code></pre>
+								<ul>
+									<li><code>message</code> can be any JavaScript object, string or number</li>
+								</ul>
+								<p>The view API may have only one onMessage handler defined.
+								This method is fire and forget so no response is returned.</p>
+								<p>It is particularly useful when the webview needs to react to events emitted by the plugin or the joplin api.</p>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>handle: <a href="../globals.html#viewhandle" class="tsd-signature-type">ViewHandle</a></h5>
+								</li>
+								<li>
+									<h5>message: <span class="tsd-signature-type">any</span></h5>
+								</li>
+							</ul>
+							<!-- JOPLINCHANGE
+    <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+
+
+-->
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="sethtml" class="tsd-anchor"></a>
 					<h3>set<wbr>Html</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
@@ -371,6 +412,9 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="joplinviewspanels.html#onmessage" class="tsd-kind-icon">on<wbr>Message</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="joplinviewspanels.html#postmessage" class="tsd-kind-icon">post<wbr>Message</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="joplinviewspanels.html#sethtml" class="tsd-kind-icon">set<wbr>Html</a>

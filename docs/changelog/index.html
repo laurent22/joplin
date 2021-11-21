@@ -15,7 +15,10 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog.md
 
 	<head>
 <!-- Donate button A/B testing -->
-<script async src="https://www.googleoptimize.com/optimize.js?id=OPT-PW3ZPK3"></script>		<meta
+
+<!--
+<script async src="https://www.googleoptimize.com/optimize.js?id=OPT-PW3ZPK3"></script>
+-->		<meta
 			charset="utf-8"
 			http-equiv="X-UA-Compatible"
 			content="IE=edge,chrome=1"
@@ -37,7 +40,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog.md
 			media="all"
 			onload="this.media='all'; this.onload = null"
 		/>
-		<link rel="stylesheet" href="/css/site.css?h=f1e088235812805da9f78ebcd465d1ad" as="style" />
+		<link rel="stylesheet" href="/css/site.css?h=7ac82e1f40a384f69c644263acc99fc8" as="style" />
 		<title>Joplin changelog | Joplin</title>
 
 		<script
@@ -291,6 +294,35 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog.md
 <p><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=E8JMYD2LQ8MMA&amp;lc=GB&amp;item_name=Joplin+Development&amp;currency_code=EUR&amp;bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Donate-PayPal-green.svg" alt="Donate using PayPal"></a> <a href="https://github.com/sponsors/laurent22/"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/GitHub-Badge.svg" alt="Sponsor on GitHub"></a> <a href="https://www.patreon.com/joplin"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Patreon-Badge.svg" alt="Become a patron"></a> <a href="https://joplinapp.org/donate/#donations"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Donate-IBAN.svg" alt="Donate using IBAN"></a></p>
 </div>
 <h1>Joplin changelog<a name="joplin-changelog" href="#joplin-changelog" class="heading-anchor">🔗</a></h1>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/v2.6.2">v2.6.2</a> (Pre-release) - 2021-11-18T12:19:12Z<a name="v2-6-2-https-github-com-laurent22-joplin-releases-tag-v2-6-2-pre-release-2021-11-18t12-19-12z" href="#v2-6-2-https-github-com-laurent22-joplin-releases-tag-v2-6-2-pre-release-2021-11-18t12-19-12z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>New: Sort Order Buttons and Per-Notebook Sort Order (<a href="https://github.com/laurent22/joplin/issues/5437">#5437</a> by Kenichi Kobayashi)</li>
+<li>New: Added support for notebook icons (e97bb78)</li>
+<li>New: Implements Sync-Scroll for Markdown Editor and Viewer (<a href="https://github.com/laurent22/joplin/issues/5512">#5512</a>) (<a href="https://github.com/laurent22/joplin/issues/2242">#2242</a> by Kenichi Kobayashi)</li>
+<li>New: Add support for encrypted notebooks via Joplin Server (<a href="https://github.com/laurent22/joplin/issues/5529">#5529</a>)</li>
+<li>New: Add shortcut for bulleted list (<a href="https://github.com/laurent22/joplin/issues/5698">#5698</a> by Helmut K. C. Tessarek)</li>
+<li>New: Add support for faster Joplin Server built-in sync locks (<a href="https://github.com/laurent22/joplin/issues/5662">#5662</a>)</li>
+<li>New: Add support for more style of highlighted texts when importing ENEX files (89179c2)</li>
+<li>Improved: Allow showing passwords in Master Password dialog (79d97f2)</li>
+<li>Improved: Fixed and improve laggy scroll in text editor (<a href="https://github.com/laurent22/joplin/issues/5606">#5606</a>) (<a href="https://github.com/laurent22/joplin/issues/4827">#4827</a> by Kenichi Kobayashi)</li>
+<li>Improved: Improved error message when a file cannot be uploaded or downloaded (567ba06)</li>
+<li>Improved: Make code blocks horizontally scrollable on note viewer (<a href="https://github.com/laurent22/joplin/issues/5740">#5740</a>)</li>
+<li>Improved: Plugins: Allow posting messages from plugin to webview (<a href="https://github.com/laurent22/joplin/issues/5569">#5569</a> by <a href="https://github.com/agerardin">@agerardin</a>)</li>
+<li>Fixed: Currently opened note is not updated after sync (5582) (<a href="https://github.com/laurent22/joplin/issues/5711">#5711</a>) (<a href="https://github.com/laurent22/joplin/issues/5582">#5582</a> by Kenichi Kobayashi)</li>
+<li>Fixed: Fixed button to upgrade a master key (725c79d)</li>
+<li>Fixed: Fixed issue that could cause application to needlessly lock the sync target (0de6e9e)</li>
+<li>Fixed: Fixed issue with parts of HTML notes not being displayed in some cases (<a href="https://github.com/laurent22/joplin/issues/5687">#5687</a>)</li>
+<li>Fixed: Long resource filenames were being incorrectly cut (<a href="https://github.com/laurent22/joplin/issues/5653">#5653</a>)</li>
+<li>Fixed: Message in search box dialog was not readable in dark mode (<a href="https://github.com/laurent22/joplin/issues/5666">#5666</a>)</li>
+<li>Fixed: OneDrive login screen was not readable in dark mode (<a href="https://github.com/laurent22/joplin/issues/5726">#5726</a>)</li>
+<li>Fixed: Plugin secure settings would be lost if keychain is not enabled (<a href="https://github.com/laurent22/joplin/issues/5720">#5720</a>)</li>
+<li>Fixed: Sharing multiple notebooks via Joplin Server with the same user results in an error (<a href="https://github.com/laurent22/joplin/issues/5721">#5721</a>)</li>
+<li>Fixed: Text was unreadable in dark mode when dropping a note on Rich Text editor (<a href="https://github.com/laurent22/joplin/issues/5710">#5710</a>)</li>
+</ul>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/v2.5.12">v2.5.12</a> - 2021-11-08T11:07:11Z<a name="v2-5-12-https-github-com-laurent22-joplin-releases-tag-v2-5-12-2021-11-08t11-07-11z" href="#v2-5-12-https-github-com-laurent22-joplin-releases-tag-v2-5-12-2021-11-08t11-07-11z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>Fixed regression: Long resource filenames were being incorrectly cut when exporting as Markdown (<a href="https://github.com/laurent22/joplin/issues/5653">#5653</a>)</li>
+</ul>
 <h2><a href="https://github.com/laurent22/joplin/releases/tag/v2.5.10">v2.5.10</a> - 2021-11-01T08:22:42Z<a name="v2-5-10-https-github-com-laurent22-joplin-releases-tag-v2-5-10-2021-11-01t08-22-42z" href="#v2-5-10-https-github-com-laurent22-joplin-releases-tag-v2-5-10-2021-11-01t08-22-42z" class="heading-anchor">🔗</a></h2>
 <ul>
 <li>Fixed: Fixed crash on certain Linux distributions when importing or exporting a file (6012783)</li>

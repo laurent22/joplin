@@ -15,7 +15,10 @@ https://github.com/laurent22/joplin/blob/dev/readme/welcome/5_privacy.md
 
 	<head>
 <!-- Donate button A/B testing -->
-<script async src="https://www.googleoptimize.com/optimize.js?id=OPT-PW3ZPK3"></script>		<meta
+
+<!--
+<script async src="https://www.googleoptimize.com/optimize.js?id=OPT-PW3ZPK3"></script>
+-->		<meta
 			charset="utf-8"
 			http-equiv="X-UA-Compatible"
 			content="IE=edge,chrome=1"
@@ -37,8 +40,8 @@ https://github.com/laurent22/joplin/blob/dev/readme/welcome/5_privacy.md
 			media="all"
 			onload="this.media='all'; this.onload = null"
 		/>
-		<link rel="stylesheet" href="/css/site.css?h=f1e088235812805da9f78ebcd465d1ad" as="style" />
-		<title>Privacy | Joplin</title>
+		<link rel="stylesheet" href="/css/site.css?h=7ac82e1f40a384f69c644263acc99fc8" as="style" />
+		<title>Privacy policy | Joplin</title>
 
 		<script
 			src="&#x2F;js/jquery-3.6.0.min.js"
@@ -290,16 +293,17 @@ https://github.com/laurent22/joplin/blob/dev/readme/welcome/5_privacy.md
 							<div class="donate-links">
 <p><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=E8JMYD2LQ8MMA&amp;lc=GB&amp;item_name=Joplin+Development&amp;currency_code=EUR&amp;bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Donate-PayPal-green.svg" alt="Donate using PayPal"></a> <a href="https://github.com/sponsors/laurent22/"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/GitHub-Badge.svg" alt="Sponsor on GitHub"></a> <a href="https://www.patreon.com/joplin"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Patreon-Badge.svg" alt="Become a patron"></a> <a href="https://joplinapp.org/donate/#donations"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Donate-IBAN.svg" alt="Donate using IBAN"></a></p>
 </div>
-<h1>Privacy<a name="privacy" href="#privacy" class="heading-anchor">🔗</a></h1>
+<h1>Privacy policy<a name="privacy-policy" href="#privacy-policy" class="heading-anchor">🔗</a></h1>
 <p>Joplin values your privacy by giving you complete control over your information and digital footprint.</p>
 <p>Joplin applications do not send any data to any service without your authorisation. Any data that Joplin saves, such as notes or images, are saved to your own device and you are free to delete this data at any time.</p>
-<p>Joplin has many modern features, some of which use third-party services. You can disable any or all of these features in the application settings. These features are:</p>
+<p>Joplin has many modern features, some of which use third-party services. You can disable most of these features in the application settings. These features are:</p>
 <table class="table">
 <thead>
 <tr>
 <th>Feature</th>
 <th>Description</th>
 <th>Default</th>
+<th>Can be disabled</th>
 </tr>
 </thead>
 <tbody>
@@ -307,19 +311,29 @@ https://github.com/laurent22/joplin/blob/dev/readme/welcome/5_privacy.md
 <td>Auto-update</td>
 <td>Joplin periodically connects to GitHub to check for new releases.</td>
 <td>Enabled</td>
+<td>Yes</td>
 </tr>
 <tr>
 <td>Geo-location</td>
 <td>Joplin saves geo-location information in note properties when you create a note.</td>
 <td>Enabled</td>
+<td>Yes</td>
 </tr>
 <tr>
 <td>Synchronisation</td>
 <td>Joplin supports synchronisation of your notes across multiple devices. If you choose to synchronise with a third-party, such as OneDrive, the notes will be sent to your OneDrive account, in which case the third-party privacy policy applies.</td>
 <td>Disabled</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Wifi connection check</td>
+<td>On mobile, Joplin checks for Wifi connectivity to give the option to synchronise data only when Wifi is enabled.</td>
+<td>Enabled</td>
+<td>No <sup>(1)</sup></td>
 </tr>
 </tbody>
 </table>
+<p>(1) <a href="https://github.com/laurent22/joplin/issues/5705">https://github.com/laurent22/joplin/issues/5705</a></p>
 <p>Joplin is developed as an open-source application and the source code is freely available online to inspect.</p>
 <p>For any question about Joplin privacy, please leave a message on the <a href="https://discourse.joplinapp.org/">Joplin Forum</a>.</p>
 

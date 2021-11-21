@@ -118,13 +118,14 @@ async function main() {
 
 	if (!options.updateDependenciesVersion && !options.updateVersion) throw new Error('Nothing to do!');
 
-	await updatePackageVersion(`${rootDir}/packages/app-desktop/package.json`, majorMinorVersion, options);
 	await updatePackageVersion(`${rootDir}/packages/app-cli/package.json`, majorMinorVersion, options);
+	await updatePackageVersion(`${rootDir}/packages/app-desktop/package.json`, majorMinorVersion, options);
 	await updatePackageVersion(`${rootDir}/packages/generator-joplin/package.json`, majorMinorVersion, options);
-	await updatePackageVersion(`${rootDir}/packages/server/package.json`, majorMinorVersion, options);
-	await updatePackageVersion(`${rootDir}/packages/plugin-repo-cli/package.json`, majorMinorVersion, options);
+	await updatePackageVersion(`${rootDir}/packages/htmlpack/package.json`, majorMinorVersion, options);
 	await updatePackageVersion(`${rootDir}/packages/lib/package.json`, majorMinorVersion, options);
+	await updatePackageVersion(`${rootDir}/packages/plugin-repo-cli/package.json`, majorMinorVersion, options);
 	await updatePackageVersion(`${rootDir}/packages/renderer/package.json`, majorMinorVersion, options);
+	await updatePackageVersion(`${rootDir}/packages/server/package.json`, majorMinorVersion, options);
 	await updatePackageVersion(`${rootDir}/packages/tools/package.json`, majorMinorVersion, options);
 
 	if (options.updateVersion) {

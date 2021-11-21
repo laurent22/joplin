@@ -4,7 +4,7 @@ import styled from 'styled-components';
 const DialogModalLayer = styled.div`
 	z-index: 9999;
 	display: flex;
-	position: absolute;
+	position: fixed;
 	top: 0;
 	left: 0;
 	width: 100%;

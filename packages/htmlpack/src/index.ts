@@ -137,7 +137,7 @@ function dirname(path: string) {
 	return s.join('/');
 }
 
-export default async function htmlpack(inputFile: string, outputFile: string) {
+export default async function htmlpack(inputFile: string, outputFile: string): Promise<void> {
 	const inputHtml = await fs.readFile(inputFile, 'utf8');
 	const baseDir = dirname(inputFile);
 

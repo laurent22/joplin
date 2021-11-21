@@ -5,6 +5,7 @@ import JoplinError from './JoplinError';
 import { Env } from './models/Setting';
 import Logger from './Logger';
 import personalizedUserContentBaseUrl from './services/joplinServer/personalizedUserContentBaseUrl';
+import { getHttpStatusMessage } from './net-utils';
 const { stringify } = require('query-string');
 
 const logger = Logger.create('JoplinServerApi');
@@ -245,7 +246,7 @@ export default class JoplinServerApi {
 				//         <hr><center>nginx/1.18.0 (Ubuntu)</center>
 				//     </body>
 				// </html>
-				throw newError(`Unknown error: ${shortResponseText()}`, response.status);
+				throw newError(`Error ${response.status} ${getHttpStatusMessage(response.status)}: ${shortResponseText()}`, response.status);
 			}
 
 			if (options.responseFormat === 'text') return responseText;

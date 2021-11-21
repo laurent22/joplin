@@ -131,6 +131,10 @@ For WebDAV-compatible services that are known to work with Joplin see [WebDAV sy
 
 ## Dropbox synchronisation
 
+You will need to set the `sync.target` config variable from the command line mode using:
+
+	:config sync.target 7
+
 When syncing with Dropbox, Joplin creates a sub-directory in Dropbox, in `/Apps/Joplin` and read/write the notes and notebooks from it. The application does not have access to anything outside this directory.
 
 To initiate the synchronisation process, type `:sync`. You will be asked to follow a link to authorise the application.

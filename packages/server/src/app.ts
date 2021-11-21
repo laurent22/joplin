@@ -288,9 +288,6 @@ async function main() {
 			appLogger().info('Skipped database auto-migration.');
 		}
 
-		appLogger().info('Starting services...');
-		await startServices(ctx.joplinBase.services);
-
 		appLogger().info('Performing main storage check...');
 		appLogger().info(await storageConnectionCheck(config().storageDriver, ctx.joplinBase.db, ctx.joplinBase.models));
 
@@ -298,6 +295,9 @@ async function main() {
 			appLogger().info('Performing fallback storage check...');
 			appLogger().info(await storageConnectionCheck(config().storageDriverFallback, ctx.joplinBase.db, ctx.joplinBase.models));
 		}
+
+		appLogger().info('Starting services...');
+		await startServices(ctx.joplinBase.services);
 
 		appLogger().info(`Call this for testing: \`curl ${config().apiBaseUrl}/api/ping\``);
 

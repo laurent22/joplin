@@ -427,6 +427,41 @@
 			"default": true,
 			"description": "Reverse sort order"
 		},
+		"notes.sortOrder.buttonsVisible": {
+			"type": "boolean",
+			"default": true,
+			"description": "Show sort order buttons. If true, sort order buttons (field + reverse) for notes are shown at the top of Note List."
+		},
+		"notes.perFieldReversalEnabled": {
+			"type": "boolean",
+			"default": true,
+			"$comment": "private"
+		},
+		"notes.perFieldReverse": {
+			"type": "object",
+			"default": {
+				"user_updated_time": true,
+				"user_created_time": true,
+				"title": false,
+				"order": false
+			},
+			"$comment": "private"
+		},
+		"notes.perFolderSortOrderEnabled": {
+			"type": "boolean",
+			"default": true,
+			"$comment": "private"
+		},
+		"notes.perFolderSortOrders": {
+			"type": "object",
+			"default": {},
+			"$comment": "private"
+		},
+		"notes.sharedSortOrder": {
+			"type": "object",
+			"default": {},
+			"$comment": "private"
+		},
 		"folders.sortOrder.field": {
 			"type": "string",
 			"default": "title",

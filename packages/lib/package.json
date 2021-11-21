@@ -4,7 +4,7 @@
   "description": "Joplin Core library",
   "author": "Laurent Cozic",
   "homepage": "",
-  "license": "ISC",
+  "license": "MIT",
   "publishConfig": {
     "access": "public"
   },
@@ -30,7 +30,8 @@
   "dependencies": {
     "@joplin/fork-htmlparser2": "^4.1.38",
     "@joplin/fork-sax": "^1.2.42",
-    "@joplin/renderer": "^2.6.2",
+    "@joplin/renderer": "~2.6",
+    "@joplin/htmlpack": "~2.6",
     "@joplin/turndown": "^4.0.60",
     "@joplin/turndown-plugin-gfm": "^1.0.42",
     "async-mutex": "^0.1.3",
