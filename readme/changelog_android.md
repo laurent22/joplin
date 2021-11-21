@@ -1,5 +1,18 @@
 # Joplin Android app changelog
 
+## [android-v2.6.3](https://github.com/laurent22/joplin/releases/tag/android-v2.6.3) (Pre-release) - 2021-11-21T16:59:46Z
+
+- New: Add date format YYYY/MM/DD (#5759 by Helmut K. C. Tessarek)
+- New: Add support for faster built-in sync locks (#5662)
+- New: Add support for sharing notes when E2EE is enabled (#5529)
+- New: Added support for notebook icons (e97bb78)
+- Improved: Improved error message when synchronising with Joplin Server (#5754)
+- Improved: Makes it impossible to have multiple instances of the app open (#5587 by Filip Stanis)
+- Improved: Remove non-OSS dependencies (#5735 by [@muelli](https://github.com/muelli))
+- Fixed: Fixed issue that could cause application to needlessly lock the sync target (0de6e9e)
+- Fixed: Fixed issue with parts of HTML notes not being displayed in some cases (#5687)
+- Fixed: Sharing multiple notebooks via Joplin Server with the same user results in an error (#5721)
+
 ## [android-v2.6.1](https://github.com/laurent22/joplin/releases/tag/android-v2.6.1) (Pre-release) - 2021-11-02T20:49:53Z
 
 - Improved: Upgraded React Native from 0.64 to 0.66 (66e79cc)
