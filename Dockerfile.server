@@ -5,8 +5,8 @@ ARG user=joplin
 
 ##########################################################################################
 # builder image
-# Builds joplin server in /home/$user 
-########################################################################################## 
+# Builds joplin server in /home/$user
+##########################################################################################
 FROM node:16-bullseye as builder
 
 RUN apt-get update \
@@ -82,7 +82,7 @@ RUN npm run build
 
 ##########################################################################################
 # joplin-server-dev image, uses builder as base
-########################################################################################## 
+##########################################################################################
 From builder as joplin-server-dev
 
 ARG user
@@ -113,29 +113,43 @@ LABEL org.opencontainers.image.created="$BUILD_DATE" \
 ##########################################################################################
 # small-image-builder, uses builder as base
 # Constructs a smaller directory structure in /tmp/home/$user
-########################################################################################## 
+##########################################################################################
 from builder as small-image-builder
 
 ARG user
 
-# Now prepair a smaller joplin server installation in /home/$user
-USER $user
-RUN mkdir -p /tmp/home/$user && \
-    cp -r /home/joplin/packages/server/* /tmp/home/$user/ 
-
+# Now prepare a smaller joplin server installation in /home/$user
 USER $user:$user
+RUN mkdir -p /tmp/home/$user && \
+    cp -r /home/joplin/packages/server/* /tmp/home/$user/
+
 WORKDIR /tmp/home/$user
-RUN npm install --omit dev
+
+# pack tarballs from all packages except server
+RUN rm -fR node_modules/@joplin/* && \
+    for package in /home/joplin/packages/*; do \
+        package_name=$(basename "${package}"); \
+        if [ "${package_name}" = 'server' ]; then \
+            continue;  \
+        fi; \
+        cd ${package}; \
+        echo "Packing package ${package_name}"; \
+        npm pack --pack-destination /tmp/home/$user/; \
+    done
+
+# install the packed packages
+RUN npm install --audit=false --fund=false *.tgz
+
+# prune the dependencies
+RUN npm install --omit dev --audit=false --fund=false
 
 # remove all generated .test.js and .test.js.map files, which are not needed
-
-RUN find dist -name "*.test.js*" -type f -exec rm {} \;
-
+RUN find . -name "*.test.js*" -type f -exec rm {} \;
 
 ##########################################################################################
-# joplin-server image, uses node:16-bullseye-slima as base
+# joplin-server image, uses node:16-bullseye-slim as base
 # and copies the required files from small-image-builder
-########################################################################################## 
+##########################################################################################
 FROM node:16-bullseye-slim as joplin-server
 
 # create the user account and required folders
