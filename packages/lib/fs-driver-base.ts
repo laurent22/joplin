@@ -143,7 +143,7 @@ export default class FsDriverBase {
 	// or assign to option using .bind(fsDriver())
 	public async cacheCssToFile(cssStrings: string[]) {
 		const cssString = Array.isArray(cssStrings) ? cssStrings.join('\n') : cssStrings;
-		const cssFilePath = `${Setting.value('tempDir')}/${md5(escape(cssString))}.css`;
+		const cssFilePath = `${Setting.value('tempDir')}/${md5(cssString)}.css`;
 		if (!(await this.exists(cssFilePath))) {
 			await this.writeFile(cssFilePath, cssString, 'utf8');
 		}

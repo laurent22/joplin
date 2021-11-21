@@ -390,7 +390,7 @@ function NoteEditor(props: NoteEditorProps) {
 		content: formNote.body,
 		contentMarkupLanguage: formNote.markup_language,
 		contentOriginalCss: formNote.originalCss,
-		resourceInfos: resourceInfos,
+		resourceInfos: resourceInfos.current,
 		htmlToMarkdown: htmlToMarkdown,
 		markupToHtml: markupToHtml,
 		allAssets: allAssets,

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { FormNote, defaultFormNote, ResourceInfos } from './types';
 import { clearResourceCache, attachedResources } from './resourceHandling';
 import AsyncActionQueue from '@joplin/lib/AsyncActionQueue';
@@ -65,7 +65,17 @@ export default function useFormNote(dependencies: HookDependencies) {
 	const [isNewNote, setIsNewNote] = useState(false);
 	const prevSyncStarted = usePrevious(syncStarted);
 	const previousNoteId = usePrevious(formNote.id);
-	const [resourceInfos, setResourceInfos] = useState<ResourceInfos>({});
+	const resourceInfos = useRef<ResourceInfos>({});
+
+	// Only when a new value is different from the old value,
+	// resourceInfos is updated. Note that resourceInfos does not often
+	// change when a note is switched, because it is often the case
+	// that a note's resourceInfos is {}.
+	const updateResourceInfos = (newResourceInfos: ResourceInfos) => {
+		if (resourceInfosChanged(resourceInfos.current, newResourceInfos)) {
+			resourceInfos.current = newResourceInfos;
+		}
+	};
 
 	async function initNoteState(n: any) {
 		let originalCss = '';
@@ -92,11 +102,15 @@ export default function useFormNote(dependencies: HookDependencies) {
 			encryption_applied: n.encryption_applied,
 		};
 
-		// Note that for performance reason,the call to setResourceInfos should
-		// be first because it loads the resource infos in an async way. If we
-		// swap them, the formNote will be updated first and rendered, then the
-		// the resources will load, and the note will be re-rendered.
-		setResourceInfos(await attachedResources(n.body));
+		// Note that for performance reason, attachedResource(), the assignment
+		// to resourceInfos, and setFormNote() are arranged in this order.
+		// Because attachedResource() loads the resource infos in an async way,
+		// it should be performed before the update of formNote.
+		// And to simultaneously update props of downstream (i.e. CodeMirror and
+		// TinyMCE), resourceInfos should be createdy by not useState() but useRef(),
+		// and the update of resourceInfos should be performed before the update
+		// of formNote. If the order is not kept, unnecessary re-rendering may happen.
+		updateResourceInfos(await attachedResources(n.body));
 		setFormNote(newFormNote);
 
 		await handleResourceDownloadMode(n.body);
@@ -194,7 +208,7 @@ export default function useFormNote(dependencies: HookDependencies) {
 		const resourceIds = await Note.linkedResourceIds(formNote.body);
 		if (!event || resourceIds.indexOf(event.id) >= 0) {
 			clearResourceCache();
-			setResourceInfos(await attachedResources(formNote.body));
+			updateResourceInfos(await attachedResources(formNote.body));
 		}
 	}, [formNote.body]);
 
@@ -217,9 +231,7 @@ export default function useFormNote(dependencies: HookDependencies) {
 		async function runEffect() {
 			const r = await attachedResources(formNote.body);
 			if (cancelled) return;
-			setResourceInfos((previous: ResourceInfos) => {
-				return resourceInfosChanged(previous, r) ? r : previous;
-			});
+			updateResourceInfos(r);
 		}
 
 		void runEffect();

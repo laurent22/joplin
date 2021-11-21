@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useState, useEffect, useRef, forwardRef, useCallback, useImperativeHandle, useMemo } from 'react';
 
 // eslint-disable-next-line no-unused-vars
-import { EditorCommand, NoteBodyEditorProps } from '../../utils/types';
+import { EditorCommand, NoteBodyEditorProps, ResourceInfos } from '../../utils/types';
 import { commandAttachFileToBody, handlePasteEvent } from '../../utils/resourceHandling';
 import { ScrollOptions, ScrollOptionTypes } from '../../utils/types';
 import { CommandValue } from '../../utils/types';
@@ -47,7 +47,8 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 	const styles = styles_(props);
 
 	const [renderedBody, setRenderedBody] = useState<RenderedBody>(defaultRenderedBody()); // Viewer content
-	const [renderedBodyContentKey, setRenderedBodyContentKey] = useState<string>(null);
+	const renderedContentKey = useRef('');
+	const renderedResourceInfos = useRef<ResourceInfos>({});
 
 	const [webviewReady, setWebviewReady] = useState(false);
 
@@ -603,7 +604,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		// When a new note is loaded (contentKey is different), we want the note to be displayed
 		// right away. However once that's done, we put a small delay so that the view is not
 		// being constantly updated while the user changes the note.
-		const interval = renderedBodyContentKey !== props.contentKey ? 0 : 500;
+		const interval = renderedContentKey.current !== props.contentKey ? 0 : 500;
 
 		const timeoutId = shim.setTimeout(async () => {
 			let bodyToRender = props.content;
@@ -620,23 +621,16 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 			}));
 
 			if (cancelled) return;
-
+			renderedContentKey.current = props.contentKey;
+			renderedResourceInfos.current = props.resourceInfos;
 			setRenderedBody(result);
-
-			// Since we set `renderedBodyContentKey` here, it means this effect is going to
-			// be triggered again, but that's hard to avoid and the second call would be cheap
-			// anyway since the renderered markdown is cached by MdToHtml. We could use a ref
-			// to avoid this, but a second rendering might still happens anyway to render images,
-			// resources, or for other reasons. So it's best to focus on making any second call
-			// to this effect as cheap as possible with caching, etc.
-			setRenderedBodyContentKey(props.contentKey);
 		}, interval);
 
 		return () => {
 			cancelled = true;
 			shim.clearTimeout(timeoutId);
 		};
-	}, [props.content, props.contentKey, renderedBodyContentKey, props.contentMarkupLanguage, props.visiblePanes, props.resourceInfos, props.markupToHtml]);
+	}, [props.content, props.contentKey, props.contentMarkupLanguage, props.visiblePanes, props.resourceInfos, props.markupToHtml]);
 
 	useEffect(() => {
 		if (!webviewReady) return;
