@@ -5,7 +5,7 @@ import { _ } from '@joplin/lib/locale';
 import { useEffect, useState } from 'react';
 import { FolderEntity } from '@joplin/lib/services/database/types';
 import Folder from '@joplin/lib/models/Folder';
-import ShareService from '@joplin/lib/services/share/ShareService';
+import ShareService, { ApiShare } from '@joplin/lib/services/share/ShareService';
 import styled from 'styled-components';
 import StyledFormLabel from '../style/StyledFormLabel';
 import StyledInput from '../style/StyledInput';
@@ -167,11 +167,38 @@ function ShareFolderDialog(props: Props) {
 
 	async function shareRecipient_click() {
 		setShareState(ShareState.Creating);
+		setLatestError(null);
+
+		let errorSet = false;
+
+		const handleError = (error: any) => {
+			if (!errorSet) setLatestError(error);
+			errorSet = true;
+			logger.error(error);
+		};
+
+		const defer = (error: any) => {
+			if (error) handleError(error);
+			setShareState(ShareState.Idle);
+		};
+
+		let share: ApiShare = null;
 
 		try {
-			setLatestError(null);
-			const share = await ShareService.instance().shareFolder(props.folderId);
+			share = await ShareService.instance().shareFolder(props.folderId);
+		} catch (error) {
+			return defer(error);
+		}
+
+		try {
 			await ShareService.instance().addShareRecipient(share.id, share.master_key_id, recipientEmail);
+		} catch (error) {
+			// Handle the error but continue the process because we need to at
+			// least refresh the shares since one has been created above.
+			handleError(error);
+		}
+
+		try {
 			await Promise.all([
 				ShareService.instance().refreshShares(),
 				ShareService.instance().refreshShareUsers(share.id),
@@ -180,10 +207,9 @@ function ShareFolderDialog(props: Props) {
 
 			await synchronize();
 		} catch (error) {
-			logger.error(error);
-			setLatestError(error);
+			handleError(error);
 		} finally {
-			setShareState(ShareState.Idle);
+			defer(null);
 		}
 	}
 
