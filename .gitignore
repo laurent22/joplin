@@ -61,6 +61,9 @@ packages/app-cli/app/command-e2ee.js.map
 packages/app-cli/app/command-settingschema.d.ts
 packages/app-cli/app/command-settingschema.js
 packages/app-cli/app/command-settingschema.js.map
+packages/app-cli/app/command-sync.d.ts
+packages/app-cli/app/command-sync.js
+packages/app-cli/app/command-sync.js.map
 packages/app-cli/app/command-testing.d.ts
 packages/app-cli/app/command-testing.js
 packages/app-cli/app/command-testing.js.map

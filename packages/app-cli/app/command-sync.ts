@@ -1,25 +1,24 @@
+import { _ } from '@joplin/lib/locale';
+import Setting from '@joplin/lib/models/Setting';
+import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
+import MigrationHandler from '@joplin/lib/services/synchronizer/MigrationHandler';
+import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
+import Synchronizer from '@joplin/lib/Synchronizer';
+import { masterKeysWithoutPassword } from '@joplin/lib/services/e2ee/utils';
 const { BaseCommand } = require('./base-command.js');
 const { app } = require('./app.js');
-const { _ } = require('@joplin/lib/locale');
 const { OneDriveApiNodeUtils } = require('@joplin/lib/onedrive-api-node-utils.js');
-const Setting = require('@joplin/lib/models/Setting').default;
-const ResourceFetcher = require('@joplin/lib/services/ResourceFetcher').default;
-const Synchronizer = require('@joplin/lib/Synchronizer').default;
 const { reg } = require('@joplin/lib/registry.js');
 const { cliUtils } = require('./cli-utils.js');
 const md5 = require('md5');
 const locker = require('proper-lockfile');
 const fs = require('fs-extra');
-const SyncTargetRegistry = require('@joplin/lib/SyncTargetRegistry').default;
-const MigrationHandler = require('@joplin/lib/services/synchronizer/MigrationHandler').default;
 
 class Command extends BaseCommand {
-	constructor() {
-		super();
-		this.syncTargetId_ = null;
-		this.releaseLockFn_ = null;
-		this.oneDriveApiUtils_ = null;
-	}
+
+	private syncTargetId_: number = null;
+	private releaseLockFn_: Function = null;
+	private oneDriveApiUtils_: any = null;
 
 	usage() {
 		return 'sync';
@@ -37,9 +36,9 @@ class Command extends BaseCommand {
 		];
 	}
 
-	static lockFile(filePath) {
+	static lockFile(filePath: string): Promise<Function> {
 		return new Promise((resolve, reject) => {
-			locker.lock(filePath, { stale: 1000 * 60 * 5 }, (error, release) => {
+			locker.lock(filePath, { stale: 1000 * 60 * 5 }, (error: any, release: any) => {
 				if (error) {
 					reject(error);
 					return;
@@ -50,9 +49,9 @@ class Command extends BaseCommand {
 		});
 	}
 
-	static isLocked(filePath) {
+	static isLocked(filePath: string) {
 		return new Promise((resolve, reject) => {
-			locker.check(filePath, (error, isLocked) => {
+			locker.check(filePath, (error: any, isLocked: boolean) => {
 				if (error) {
 					reject(error);
 					return;
@@ -71,7 +70,7 @@ class Command extends BaseCommand {
 			// OneDrive
 			this.oneDriveApiUtils_ = new OneDriveApiNodeUtils(syncTarget.api());
 			const auth = await this.oneDriveApiUtils_.oauthDance({
-				log: (...s) => {
+				log: (...s: any[]) => {
 					return this.stdout(...s);
 				},
 			});
@@ -118,7 +117,7 @@ class Command extends BaseCommand {
 		return !!this.oneDriveApiUtils_;
 	}
 
-	async action(args) {
+	async action(args: any) {
 		this.releaseLockFn_ = null;
 
 		// Lock is unique per profile/database
@@ -166,12 +165,12 @@ class Command extends BaseCommand {
 
 			const sync = await syncTarget.synchronizer();
 
-			const options = {
-				onProgress: report => {
+			const options: any = {
+				onProgress: (report: any) => {
 					const lines = Synchronizer.reportToLines(report);
 					if (lines.length) cliUtils.redraw(lines.join(' '));
 				},
-				onMessage: msg => {
+				onMessage: (msg: string) => {
 					cliUtils.redrawDone();
 					this.stdout(msg);
 				},
@@ -237,6 +236,9 @@ class Command extends BaseCommand {
 				await ResourceFetcher.instance().fetchAll();
 				await ResourceFetcher.instance().waitForAllFinished();
 			}
+
+			const noPasswordMkIds = await masterKeysWithoutPassword();
+			if (noPasswordMkIds.length) this.stdout(`/!\\ ${_('Your password is needed to decrypt some of your data. Type `:e2ee decrypt` to set it.')}`);
 
 			await app().refreshCurrentFolder();
 		} catch (error) {

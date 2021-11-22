@@ -340,3 +340,17 @@ export async function masterPasswordIsValid(masterPassword: string, activeMaster
 	// compare to whatever they've entered earlier.
 	return Setting.value('encryption.masterPassword') === masterPassword;
 }
+
+export async function masterKeysWithoutPassword(): Promise<string[]> {
+	const syncInfo = localSyncInfo();
+	const passwordCache = Setting.value('encryption.passwordCache');
+
+	const output: string[] = [];
+	for (const mk of syncInfo.masterKeys) {
+		if (!masterKeyEnabled(mk)) continue;
+		const password = await findMasterKeyPassword(EncryptionService.instance(), mk, passwordCache);
+		if (!password) output.push(mk.id);
+	}
+
+	return output;
+}

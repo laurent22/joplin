@@ -6,8 +6,8 @@ import BaseItem from '@joplin/lib/models/BaseItem';
 import Setting from '@joplin/lib/models/Setting';
 import shim from '@joplin/lib/shim';
 import * as pathUtils from '@joplin/lib/path-utils';
-import { getEncryptionEnabled } from '@joplin/lib/services/synchronizer/syncInfoUtils';
-import { generateMasterKeyAndEnableEncryption, loadMasterKeysFromSettings, setupAndDisableEncryption } from '@joplin/lib/services/e2ee/utils';
+import { getEncryptionEnabled, localSyncInfo } from '@joplin/lib/services/synchronizer/syncInfoUtils';
+import { generateMasterKeyAndEnableEncryption, loadMasterKeysFromSettings, masterPasswordIsValid, setupAndDisableEncryption } from '@joplin/lib/services/e2ee/utils';
 const imageType = require('image-type');
 const readChunk = require('read-chunk');
 
@@ -40,6 +40,13 @@ class Command extends BaseCommand {
 				this.stdout(_('Operation cancelled'));
 				return false;
 			}
+
+			const masterKey = localSyncInfo().masterKeys.find(mk => mk.id === masterKeyId);
+			if (!(await masterPasswordIsValid(password, masterKey))) {
+				this.stdout(_('Invalid password'));
+				return false;
+			}
+
 			Setting.setObjectValue('encryption.passwordCache', masterKeyId, password);
 			await loadMasterKeysFromSettings(EncryptionService.instance());
 			return true;
