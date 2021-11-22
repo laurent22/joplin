@@ -36,7 +36,7 @@ const StyledButton = styled(Button)`
 
 const StyledPairButtonL = styled(Button)`
 	margin-left: 8px;
-	border-radius: 5px 0 0 5px;
+	border-radius: 3px 0 0 3px;
 	min-width: ${(props: any) => buttonSizePx(props)}px;
 	max-width: ${(props: any) => buttonSizePx(props)}px;
 `;
@@ -44,7 +44,7 @@ const StyledPairButtonL = styled(Button)`
 const StyledPairButtonR = styled(Button)`
 	min-width: 8px;
 	margin-left: 0px;
-	border-radius: 0 5px 5px 0;
+	border-radius: 0 3px 3px 0;
 	border-width: 1px 1px 1px 0;
 	width: auto;
 `;
