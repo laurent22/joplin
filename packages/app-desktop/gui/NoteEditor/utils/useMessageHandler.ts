@@ -4,12 +4,12 @@ import contextMenu, { openItemById } from './contextMenu';
 import { _ } from '@joplin/lib/locale';
 import CommandService from '@joplin/lib/services/CommandService';
 import PostMessageService from '@joplin/lib/services/PostMessageService';
+import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
+import { reg } from '@joplin/lib/registry';
 const bridge = require('@electron/remote').require('./bridge').default;
 const { urlDecode } = require('@joplin/lib/string-utils');
 const urlUtils = require('@joplin/lib/urlUtils');
-import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
-import { reg } from '@joplin/lib/registry';
-const uri2path = require('file-uri-to-path');
+const { fileUriToPath } = require('@joplin/lib/urlUtils');
 
 export default function useMessageHandler(scrollWhenReady: any, setScrollWhenReady: Function, editorRef: any, setLocalSearchResultCount: Function, dispatch: Function, formNote: FormNote) {
 	return useCallback(async (event: any) => {
@@ -17,7 +17,7 @@ export default function useMessageHandler(scrollWhenReady: any, setScrollWhenRea
 		const args = event.args;
 		const arg0 = args && args.length >= 1 ? args[0] : null;
 
-		// if (msg !== 'percentScroll') console.info(`Got ipc-message: ${msg}`, arg0);
+		if (msg !== 'percentScroll') console.info(`Got ipc-message: ${msg}`, arg0);
 
 		if (msg.indexOf('error:') === 0) {
 			const s = msg.split(':');
@@ -58,7 +58,7 @@ export default function useMessageHandler(scrollWhenReady: any, setScrollWhenRea
 				// shell.openPath seems to work with file:// urls on Windows,
 				// but doesn't on macOS, so we need to convert it to a path
 				// before passing it to openPath.
-				const decodedPath = uri2path(urlDecode(msg));
+				const decodedPath = fileUriToPath(urlDecode(msg));
 				require('electron').shell.openPath(decodedPath);
 			} else {
 				require('electron').shell.openExternal(msg);

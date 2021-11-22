@@ -71,4 +71,13 @@ describe('urlUtils', function() {
 		}
 	}));
 
+	it('should convert a file URI to a file path', (async () => {
+		// This function is a wrapper around the file-uri-to-path module,
+		// with a fix for the Windows paths. We assume that the wrapped
+		// function works so we don't test everything, only the cases
+		// specific to our wrapper.
+		expect(urlUtils.fileUriToPath('file://c:/not/quite/right')).toBe('c:\\not\\quite\\right');
+		expect(urlUtils.fileUriToPath('file:///d:/better')).toBe('d:\\better');
+	}));
+
 });

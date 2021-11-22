@@ -1,5 +1,6 @@
 const { rtrimSlashes } = require('./path-utils');
 const { urlDecode } = require('./string-utils');
+const fileUriToPath = require('file-uri-to-path');
 
 const urlUtils = {};
 
@@ -103,6 +104,36 @@ urlUtils.objectToQueryString = function(query) {
 	queryString = s.join('&');
 
 	return queryString;
+};
+
+urlUtils.fileUriToPath = (path) => {
+	const output = fileUriToPath(path);
+
+	// The file-uri-to-path module converts Windows path such as
+	//
+	// file://c:/autoexec.bat => \\c:\autoexec.bat
+	//
+	// Probably because a file:// that starts with only two slashes is not
+	// quite valid. If we use three slashes, it works:
+	//
+	// file:///c:/autoexec.bat => c:\autoexec.bat
+	//
+	// However there are various places in the app where we can find
+	// paths with only two slashes because paths are often constructed
+	// as `file://${resourcePath}` - which works in all OSes except
+	// Windows.
+	//
+	// So here we introduce a special case - if we detect that we have
+	// an invalid Windows path that starts with \\x:, we just remove
+	// the first two backslashes.
+	//
+	// https://github.com/laurent22/joplin/issues/5693
+
+	if (output.match(/^\\\\[a-zA-Z]:/)) {
+		return output.substr(2);
+	}
+
+	return output;
 };
 
 module.exports = urlUtils;

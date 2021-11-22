@@ -25,7 +25,7 @@ const urlUtils = require('../../../urlUtils.js');
 const ArrayUtils = require('../../../ArrayUtils.js');
 const { mimeTypeFromHeaders } = require('../../../net-utils');
 const { fileExtension, safeFileExtension, safeFilename, filename } = require('../../../path-utils');
-const uri2path = require('file-uri-to-path');
+const { fileUriToPath } = require('../../../urlUtils');
 const { MarkupToHtml } = require('@joplin/renderer');
 const { ErrorNotFound } = require('../utils/errors');
 
@@ -178,7 +178,7 @@ async function downloadImage(url: string /* , allowFileProtocolImages */) {
 		} else if (urlUtils.urlProtocol(url).toLowerCase() === 'file:') {
 			// Can't think of any reason to disallow this at this point
 			// if (!allowFileProtocolImages) throw new Error('For security reasons, this URL with file:// protocol cannot be downloaded');
-			const localPath = uri2path(url);
+			const localPath = fileUriToPath(url);
 			await shim.fsDriver().copy(localPath, imagePath);
 		} else {
 			const response = await shim.fetchBlob(url, { path: imagePath, maxRetry: 1 });
