@@ -223,6 +223,7 @@
 			"packages/app-cli/tests/support/plugins/toc/**/dist/": true,
 			"packages/app-cli/tests/sync/": true,
 			"packages/app-cli/tests/tmp/": true,
+			"packages/htmlpack/dist/": true,
 			"packages/app-clipper/**/dist/": true,
 			"packages/app-clipper/content_scripts/**/*.bundle.js": true,
 			"packages/app-clipper/dist/": true,
