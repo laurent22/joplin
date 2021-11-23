@@ -40,6 +40,7 @@ RUN npm install --ignore-scripts
 # prevent certain sub-packages, such as sqlite3, from being built
 
 COPY --chown=$user:$user packages/fork-sax/package*.json ./packages/fork-sax/
+COPY --chown=$user:$user packages/htmlpack/package*.json ./packages/htmlpack/
 COPY --chown=$user:$user packages/renderer/package*.json ./packages/renderer/
 COPY --chown=$user:$user packages/tools/package*.json ./packages/tools/
 COPY --chown=$user:$user packages/lib/package*.json ./packages/lib/
@@ -66,6 +67,7 @@ RUN npm run bootstrapServerOnly
 # Now copy the source files. Put lib and server last as they are more likely to change.
 
 COPY --chown=$user:$user packages/fork-sax ./packages/fork-sax
+COPY --chown=$user:$user packages/htmlpack ./packages/htmlpack
 COPY --chown=$user:$user packages/renderer ./packages/renderer
 COPY --chown=$user:$user packages/tools ./packages/tools
 COPY --chown=$user:$user packages/lib ./packages/lib

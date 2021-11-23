@@ -11,7 +11,7 @@
     "tsc": "tsc --project tsconfig.json",
     "watch": "tsc --watch --project tsconfig.json"
   },
-  "author": "Laurent Czoic",
+  "author": "Laurent Cozic",
   "license": "MIT",
   "dependencies": {
     "@joplin/fork-htmlparser2": "^4.1.35",
