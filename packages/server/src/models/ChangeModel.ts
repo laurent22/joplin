@@ -309,7 +309,9 @@ export default class ChangeModel extends BaseModel<Change> {
 		return output;
 	}
 
-	public async deleteOldChanges(ttl: number = null) {
+	// See spec for complete documentation:
+	// https://joplinapp.org/spec/server_delta_sync/#regarding-the-deletion-of-old-change-events
+	public async compressOldChanges(ttl: number = null) {
 		ttl = ttl === null ? defaultChangeTtl : ttl;
 		const cutOffDate = Date.now() - ttl;
 		const limit = 1000;
@@ -324,7 +326,7 @@ export default class ChangeModel extends BaseModel<Change> {
 		let error: Error = null;
 		let totalDeletedCount = 0;
 
-		logger.info(`deleteOldChanges: Processing changes older than: ${formatDateTime(cutOffDate)} (${cutOffDate})`);
+		logger.info(`compressOldChanges: Processing changes older than: ${formatDateTime(cutOffDate)} (${cutOffDate})`);
 
 		while (true) {
 			// First get all the UPDATE changes before the specified date, and
@@ -373,14 +375,14 @@ export default class ChangeModel extends BaseModel<Change> {
 					totalDeletedCount += deletedCount;
 					doneItemIds.push(row.item_id);
 				}
-			}, 'ChangeModel::deleteOldChanges');
+			}, 'ChangeModel::compressOldChanges');
 
-			logger.info(`deleteOldChanges: Processed: ${doneItemIds.length} items. Deleted: ${totalDeletedCount} changes.`);
+			logger.info(`compressOldChanges: Processed: ${doneItemIds.length} items. Deleted: ${totalDeletedCount} changes.`);
 
 			if (error) throw error;
 		}
 
-		logger.info(`deleteOldChanges: Finished processing. Done ${doneItemIds.length} items. Deleted: ${totalDeletedCount} changes.`);
+		logger.info(`compressOldChanges: Finished processing. Done ${doneItemIds.length} items. Deleted: ${totalDeletedCount} changes.`);
 	}
 
 	public async save(change: Change, options: SaveOptions = {}): Promise<Change> {

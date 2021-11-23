@@ -6,14 +6,14 @@ interface Argv {
 	ttl: number;
 }
 
-export default class DeleteOldChangesCommand extends BaseCommand {
+export default class CompressOldChangesCommand extends BaseCommand {
 
 	public command() {
-		return 'delete-old-changes';
+		return 'compress-old-changes';
 	}
 
 	public description() {
-		return 'deletes old changes';
+		return 'compresses old changes by discarding consecutive updates';
 	}
 
 	public options(): Record<string, Options> {
@@ -26,7 +26,7 @@ export default class DeleteOldChangesCommand extends BaseCommand {
 	}
 
 	public async run(argv: Argv, runContext: RunContext): Promise<void> {
-		await runContext.models.change().deleteOldChanges(argv.ttl ? argv.ttl * Day : null);
+		await runContext.models.change().compressOldChanges(argv.ttl ? argv.ttl * Day : null);
 	}
 
 }

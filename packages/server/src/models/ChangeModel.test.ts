@@ -227,13 +227,13 @@ describe('ChangeModel', function() {
 		expect(await models().change().count()).toBe(7);
 
 		// Shouldn't do anything initially because it only deletes old changes.
-		await models().change().deleteOldChanges();
+		await models().change().compressOldChanges();
 		expect(await models().change().count()).toBe(7);
 
 		// 180 days after T4, it should delete all U1 updates events except for
 		// the last one
 		jest.setSystemTime(new Date(t4 + changeTtl).getTime());
-		await models().change().deleteOldChanges();
+		await models().change().compressOldChanges();
 		expect(await models().change().count()).toBe(5);
 		{
 			const updateChange = (await models().change().all()).find(c => c.item_id === note1.id && c.type === ChangeType.Update);
@@ -247,13 +247,13 @@ describe('ChangeModel', function() {
 		// there's only one note 2 change that is older than 90 days at this
 		// point.
 		jest.setSystemTime(new Date(t5 + changeTtl).getTime());
-		await models().change().deleteOldChanges();
+		await models().change().compressOldChanges();
 		expect(await models().change().count()).toBe(5);
 
 		// After T6, more than 90 days later - now the change at T5 should be
 		// deleted, keeping only the change at T6.
 		jest.setSystemTime(new Date(t6 + changeTtl).getTime());
-		await models().change().deleteOldChanges();
+		await models().change().compressOldChanges();
 		expect(await models().change().count()).toBe(4);
 		{
 			const updateChange = (await models().change().all()).find(c => c.item_id === note2.id && c.type === ChangeType.Update);
