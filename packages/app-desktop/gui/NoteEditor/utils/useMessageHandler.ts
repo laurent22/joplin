@@ -6,6 +6,7 @@ import CommandService from '@joplin/lib/services/CommandService';
 import PostMessageService from '@joplin/lib/services/PostMessageService';
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 import { reg } from '@joplin/lib/registry';
+import shim from '@joplin/lib/shim';
 const bridge = require('@electron/remote').require('./bridge').default;
 const { urlDecode } = require('@joplin/lib/string-utils');
 const urlUtils = require('@joplin/lib/urlUtils');
@@ -58,7 +59,7 @@ export default function useMessageHandler(scrollWhenReady: any, setScrollWhenRea
 				// shell.openPath seems to work with file:// urls on Windows,
 				// but doesn't on macOS, so we need to convert it to a path
 				// before passing it to openPath.
-				const decodedPath = fileUriToPath(urlDecode(msg));
+				const decodedPath = fileUriToPath(urlDecode(msg), shim.platformName());
 				require('electron').shell.openPath(decodedPath);
 			} else {
 				require('electron').shell.openExternal(msg);
