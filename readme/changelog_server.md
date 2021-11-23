@@ -1,5 +1,15 @@
 # Joplin Server Changelog
 
+## [server-v2.6.12](https://github.com/laurent22/joplin/releases/tag/server-v2.6.12) - 2021-11-23T16:30:27Z
+
+- New: Added task to compress changes older than 6 months (75f7296)
+- Improved: Allow specifying a max content size when importing content to new storage (080c3cc)
+- Improved: Check for time drift when the server starts (#5738)
+- Improved: Display more debug info in error log (3716972)
+- Improved: Display more detailed error messages on SQL query errors (42a4edb)
+- Improved: Perform storage checks before starting services (16d5047)
+- Fixed: Fixed HandleOversizedAccounts task interval (fc419d9)
+
 ## [server-v2.6.11](https://github.com/laurent22/joplin/releases/tag/server-v2.6.11) - 2021-11-14T17:14:51Z
 
 - Improved: Prevent large data blobs from crashing the application (5eb3a92)
