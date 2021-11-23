@@ -13,7 +13,7 @@ import { Config, StorageDriverConfig, StorageDriverMode } from '../utils/types';
 import { NewModelFactoryHandler } from './factory';
 import loadStorageDriver from './items/storage/loadStorageDriver';
 import { msleep } from '../utils/time';
-import Logger from '@joplin/lib/Logger';
+import Logger, { LoggerWrapper } from '@joplin/lib/Logger';
 import prettyBytes = require('pretty-bytes');
 
 const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
@@ -23,7 +23,8 @@ const extractNameRegex = /^root:\/(.*):$/;
 
 export interface ImportContentToStorageOptions {
 	batchSize?: number;
-	logger?: Logger;
+	maxContentSize?: number;
+	logger?: Logger | LoggerWrapper;
 }
 
 export interface SaveFromRawContentItem {
@@ -282,7 +283,7 @@ export default class ItemModel extends BaseModel<Item> {
 		}
 	}
 
-	private async atomicMoveContent(item: Item, toDriver: StorageDriverBase, drivers: Record<number, StorageDriverBase>, logger: Logger) {
+	private async atomicMoveContent(item: Item, toDriver: StorageDriverBase, drivers: Record<number, StorageDriverBase>, logger: Logger | LoggerWrapper) {
 		for (let i = 0; i < 10; i++) {
 			let fromDriver: StorageDriverBase = drivers[item.content_storage_id];
 
@@ -338,6 +339,7 @@ export default class ItemModel extends BaseModel<Item> {
 	public async importContentToStorage(toStorageConfig: StorageDriverConfig | StorageDriverBase, options: ImportContentToStorageOptions = null) {
 		options = {
 			batchSize: 1000,
+			maxContentSize: 200000000,
 			logger: new Logger(),
 			...options,
 		};
@@ -350,23 +352,37 @@ export default class ItemModel extends BaseModel<Item> {
 			.where('content_storage_id', '!=', toStorageDriver.storageId)
 			.first())['total'];
 
+		const skippedItemIds: Uuid[] = [];
+
 		let totalDone = 0;
 
 		while (true) {
-			const items: Item[] = await this
+			const query = this
 				.db(this.tableName)
-				.select(['id', 'content_storage_id', 'updated_time'])
-				.where('content_storage_id', '!=', toStorageDriver.storageId)
-				.limit(options.batchSize);
+				.select(['id', 'content_storage_id', 'content_size', 'updated_time'])
+				.where('content_storage_id', '!=', toStorageDriver.storageId);
+
+			if (skippedItemIds.length) void query.whereNotIn('id', skippedItemIds);
+
+			void query.limit(options.batchSize);
+
+			const items: Item[] = await query;
 
 			options.logger.info(`Processing items ${totalDone} / ${itemCount}`);
 
 			if (!items.length) {
 				options.logger.info(`All items have been processed. Total: ${totalDone}`);
+				options.logger.info(`Skipped items: ${skippedItemIds.join(', ')}`);
 				return;
 			}
 
 			for (const item of items) {
+				if (item.content_size > options.maxContentSize) {
+					options.logger.warn(`Skipped item "${item.id}" (Size: ${prettyBytes(item.content_size)}) because it is over the size limit (${prettyBytes(options.maxContentSize)})`);
+					skippedItemIds.push(item.id);
+					continue;
+				}
+
 				try {
 					await this.atomicMoveContent(item, toStorageDriver, fromDrivers, options.logger);
 				} catch (error) {

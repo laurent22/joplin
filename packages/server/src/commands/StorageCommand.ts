@@ -15,6 +15,7 @@ interface Argv {
 	command: ArgvCommand;
 	connection: string;
 	batchSize?: number;
+	maxContentSize?: number;
 }
 
 export default class StorageCommand extends BaseCommand {
@@ -45,6 +46,10 @@ export default class StorageCommand extends BaseCommand {
 				type: 'number',
 				description: 'Item batch size',
 			},
+			'max-content-size': {
+				type: 'number',
+				description: 'Max content size',
+			},
 			'connection': {
 				description: 'storage connection string',
 				type: 'string',
@@ -59,13 +64,16 @@ export default class StorageCommand extends BaseCommand {
 
 				const toStorageConfig = parseStorageConnectionString(argv.connection);
 				const batchSize = argv.batchSize || 1000;
+				const maxContentSize = argv.maxContentSize || 200000000;
 
 				logger.info('Importing to storage:', toStorageConfig);
 				logger.info(`Batch size: ${batchSize}`);
+				logger.info(`Max content size: ${maxContentSize}`);
 
 				await runContext.models.item().importContentToStorage(toStorageConfig, {
-					batchSize: batchSize || 1000,
-					logger: logger as Logger,
+					batchSize,
+					maxContentSize,
+					logger,
 				});
 			},
 

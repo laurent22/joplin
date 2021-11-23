@@ -301,9 +301,7 @@ describe('ItemModel', function() {
 		await expectNotThrow(async () => models.item().loadWithContent(item.id));
 	});
 
-	test('should allow importing content to item storage', async function() {
-		const { user: user1 } = await createUserAndSession(1);
-
+	const setupImportContentTest = async () => {
 		const tempDir1 = await tempDir('storage1');
 		const tempDir2 = await tempDir('storage2');
 
@@ -312,31 +310,58 @@ describe('ItemModel', function() {
 			path: tempDir1,
 		};
 
-		const models = newModelFactory(db(), {
+		const toStorageConfig = {
+			type: StorageDriverType.Filesystem,
+			path: tempDir2,
+		};
+
+		const fromModels = newModelFactory(db(), {
 			...config(),
 			storageDriver: fromStorageConfig,
 		});
 
-		await models.item().saveFromRawContent(user1, {
+		const toModels = newModelFactory(db(), {
+			...config(),
+			storageDriver: toStorageConfig,
+		});
+
+		const fromDriver = await loadStorageDriver(fromStorageConfig, db());
+		const toDriver = await loadStorageDriver(toStorageConfig, db());
+
+		return {
+			fromStorageConfig,
+			toStorageConfig,
+			fromModels,
+			toModels,
+			fromDriver,
+			toDriver,
+		};
+	};
+
+	test('should allow importing content to item storage', async function() {
+		const { user: user1 } = await createUserAndSession(1);
+
+		const {
+			toStorageConfig,
+			fromModels,
+			fromDriver,
+			toDriver,
+		} = await setupImportContentTest();
+
+		await fromModels.item().saveFromRawContent(user1, {
 			body: Buffer.from(JSON.stringify({ 'version': 1 })),
 			name: 'info.json',
 		});
 
-		const itemBefore = (await models.item().all())[0];
+		const itemBefore = (await fromModels.item().all())[0];
 
-		const fromDriver = await loadStorageDriver(fromStorageConfig, db());
-		const fromContent = await fromDriver.read(itemBefore.id, { models });
+		const fromContent = await fromDriver.read(itemBefore.id, { models: fromModels });
 
 		expect(fromContent.toString()).toBe('{"version":1}');
 
 		expect(itemBefore.content_storage_id).toBe(1);
 
 		await msleep(2);
-
-		const toStorageConfig = {
-			type: StorageDriverType.Filesystem,
-			path: tempDir2,
-		};
 
 		const toModels = newModelFactory(db(), {
 			...config(),
@@ -350,22 +375,53 @@ describe('ItemModel', function() {
 
 		const itemBefore2 = result['info2.json'].item;
 
-		await models.item().importContentToStorage(toStorageConfig);
+		await fromModels.item().importContentToStorage(toStorageConfig);
 
-		const itemAfter = (await models.item().all()).find(it => it.id === itemBefore.id);
+		const itemAfter = (await fromModels.item().all()).find(it => it.id === itemBefore.id);
 		expect(itemAfter.content_storage_id).toBe(2);
 		expect(itemAfter.updated_time).toBe(itemBefore.updated_time);
 
 		// Just check the second item has not been processed since it was
 		// already on the right storage
-		const itemAfter2 = (await models.item().all()).find(it => it.id === itemBefore2.id);
+		const itemAfter2 = (await fromModels.item().all()).find(it => it.id === itemBefore2.id);
 		expect(itemAfter2.content_storage_id).toBe(2);
 		expect(itemAfter2.updated_time).toBe(itemBefore2.updated_time);
 
-		const toDriver = await loadStorageDriver(toStorageConfig, db());
-		const toContent = await toDriver.read(itemAfter.id, { models });
+		const toContent = await toDriver.read(itemAfter.id, { models: fromModels });
 
 		expect(toContent.toString()).toBe(fromContent.toString());
+	});
+
+	test('should skip large items when importing content to item storage', async function() {
+		const { user: user1 } = await createUserAndSession(1);
+
+		const {
+			toStorageConfig,
+			fromModels,
+			fromDriver,
+			toDriver,
+		} = await setupImportContentTest();
+
+		const result = await fromModels.item().saveFromRawContent(user1, {
+			body: Buffer.from(JSON.stringify({ 'version': 1 })),
+			name: 'info.json',
+		});
+
+		const itemId = result['info.json'].item.id;
+
+		expect(await fromDriver.exists(itemId, { models: fromModels })).toBe(true);
+
+		await fromModels.item().importContentToStorage(toStorageConfig, {
+			maxContentSize: 1,
+		});
+
+		expect(await toDriver.exists(itemId, { models: fromModels })).toBe(false);
+
+		await fromModels.item().importContentToStorage(toStorageConfig, {
+			maxContentSize: 999999,
+		});
+
+		expect(await toDriver.exists(itemId, { models: fromModels })).toBe(true);
 	});
 
 	// test('should stop importing item if it has been deleted', async function() {
