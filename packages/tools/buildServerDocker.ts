@@ -47,6 +47,7 @@ async function main() {
 		'linux/arm64',
 	];
 
+
 	console.info('tagName:', tagName);
 	console.info('pushImages:', pushImages);
 	console.info('imageVersion:', imageVersion);
