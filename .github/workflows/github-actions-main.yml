@@ -33,7 +33,7 @@ jobs:
       # tags to Docker Hub. We only do that if we're on a tag "server-vX.Y.Z".
 
       - name: Install Docker Engine
-        if: runner.os == 'Linux' && (startsWith(github.ref, 'refs/tags/server-v') || github.event.label.name == 'docker')
+        if: runner.os == 'Linux' && (startsWith(github.ref, 'refs/tags/server-v') || contains(github.event.pull_request.labels.*.name, 'docker'))
         run: |
           sudo apt-get install -y apt-transport-https
           sudo apt-get install -y ca-certificates
