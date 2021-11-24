@@ -44,7 +44,7 @@ async function checkPluginRepository(dirPath: string, dryRun: boolean) {
 async function extractPluginFilesFromPackage(existingManifests: any, workDir: string, packageName: string, destDir: string): Promise<any> {
 	const previousDir = chdir(workDir);
 
-	await execCommand2(`npm install ${packageName} --save --ignore-scripts`, { showOutput: false });
+	await execCommand2(`npm install ${packageName} --save --ignore-scripts`, { showStdout: false });
 
 	const pluginDir = resolveRelativePathWithinDir(workDir, 'node_modules', packageName, 'publish');
 
@@ -192,8 +192,8 @@ async function processNpmPackage(npmPackage: NpmPackage, repoDir: string, dryRun
 
 	if (!dryRun) {
 		if (!(await gitRepoClean())) {
-			await execCommand2('git add -A', { showOutput: false });
-			await execCommand2(['git', 'commit', '-m', commitMessage(actionType, manifest, previousManifest, npmPackage, error)], { showOutput: false });
+			await execCommand2('git add -A', { showStdout: false });
+			await execCommand2(['git', 'commit', '-m', commitMessage(actionType, manifest, previousManifest, npmPackage, error)], { showStdout: false });
 		} else {
 			console.info('Nothing to commit');
 		}
@@ -219,14 +219,14 @@ async function commandBuild(args: CommandBuildArgs) {
 	if (!dryRun) {
 		if (!(await gitRepoClean())) {
 			console.info('Updating README...');
-			await execCommand2('git add -A', { showOutput: true });
-			await execCommand2('git commit -m "Update README"', { showOutput: true });
+			await execCommand2('git add -A', { showStdout: true });
+			await execCommand2('git commit -m "Update README"', { showStdout: true });
 		}
 	}
 
 	chdir(previousDir);
 
-	const searchResults = (await execCommand2('npm search joplin-plugin --searchlimit 5000 --json', { showOutput: false })).trim();
+	const searchResults = (await execCommand2('npm search joplin-plugin --searchlimit 5000 --json', { showStdout: false })).trim();
 	const npmPackages = pluginInfoFromSearchResults(JSON.parse(searchResults));
 
 	for (const npmPackage of npmPackages) {
@@ -237,8 +237,8 @@ async function commandBuild(args: CommandBuildArgs) {
 		await commandUpdateRelease(args);
 
 		if (!(await gitRepoClean())) {
-			await execCommand2('git add -A', { showOutput: true });
-			await execCommand2('git commit -m "Update stats"', { showOutput: true });
+			await execCommand2('git add -A', { showStdout: true });
+			await execCommand2('git commit -m "Update stats"', { showStdout: true });
 		}
 
 		await execCommand2('git push');

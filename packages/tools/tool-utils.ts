@@ -146,7 +146,8 @@ export function execCommandVerbose(commandName: string, args: string[] = []) {
 
 interface ExecCommandOptions {
 	showInput?: boolean;
-	showOutput?: boolean;
+	showStdout?: boolean;
+	showStderr?: boolean;
 	quiet?: boolean;
 }
 
@@ -159,14 +160,16 @@ interface ExecCommandOptions {
 export async function execCommand2(command: string | string[], options: ExecCommandOptions = null): Promise<string> {
 	options = {
 		showInput: true,
-		showOutput: true,
+		showStdout: true,
+		showStderr: true,
 		quiet: false,
 		...options,
 	};
 
 	if (options.quiet) {
 		options.showInput = false;
-		options.showOutput = false;
+		options.showStdout = false;
+		options.showStderr = false;
 	}
 
 	if (options.showInput) {
@@ -181,7 +184,8 @@ export async function execCommand2(command: string | string[], options: ExecComm
 	const executableName = args[0];
 	args.splice(0, 1);
 	const promise = execa(executableName, args);
-	if (options.showOutput) promise.stdout.pipe(process.stdout);
+	if (options.showStdout) promise.stdout.pipe(process.stdout);
+	if (options.showStderr) promise.stdout.pipe(process.stderr);
 	const result = await promise;
 	return result.stdout.trim();
 }
