@@ -34,7 +34,7 @@ fi
 
 echo "GITHUB_WORKFLOW=$GITHUB_WORKFLOW"
 echo "GITHUB_EVENT_NAME=$GITHUB_EVENT_NAME"
-echo "GITHUB_LABEL=$GITHUB_LABEL"
+echo "HAS_DOCKER_LABEL=$HAS_DOCKER_LABEL"
 echo "GITHUB_REF=$GITHUB_REF"
 echo "RUNNER_OS=$RUNNER_OS"
 echo "GIT_TAG_NAME=$GIT_TAG_NAME"
@@ -156,7 +156,7 @@ fi
 
 cd "$ROOT_DIR/packages/app-desktop"
 
-if [[ $GITHUB_LABEL = docker ]] && [[ $IS_LINUX = 1 ]] && [[ $IS_PULL_REQUEST = 1 ]]; then
+if [[ $HAS_DOCKER_LABEL = 1 ]] && [[ $IS_LINUX = 1 ]] && [[ $IS_PULL_REQUEST = 1 ]]; then
 	echo "Step: Building Docker image for testing only (no publishing)"
 	cd "$ROOT_DIR"
 	npm run buildServerDocker -- --tag-name server-v0.0.0

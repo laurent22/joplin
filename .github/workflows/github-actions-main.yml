@@ -81,6 +81,7 @@ jobs:
           CSC_LINK: ${{ secrets.APPLE_CSC_LINK }}
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           IS_CONTINUOUS_INTEGRATION: 1
+          HAS_DOCKER_LABEL: ${{ contains(github.event.pull_request.labels.*.name, 'docker') && '1' }}
         run: |
           "${GITHUB_WORKSPACE}/.github/scripts/run_ci.sh"
 
@@ -91,7 +92,6 @@ jobs:
           CSC_LINK: ${{ secrets.WINDOWS_CSC_LINK }}
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           IS_CONTINUOUS_INTEGRATION: 1
-          GITHUB_LABEL: ${{ github.event.label.name }}
         run: |
           npm install
           cd packages/app-desktop
