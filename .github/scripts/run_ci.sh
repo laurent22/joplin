@@ -34,6 +34,7 @@ fi
 
 echo "GITHUB_WORKFLOW=$GITHUB_WORKFLOW"
 echo "GITHUB_EVENT_NAME=$GITHUB_EVENT_NAME"
+echo "GITHUB_LABEL=$GITHUB_LABEL"
 echo "GITHUB_REF=$GITHUB_REF"
 echo "RUNNER_OS=$RUNNER_OS"
 echo "GIT_TAG_NAME=$GIT_TAG_NAME"
@@ -155,11 +156,15 @@ fi
 
 cd "$ROOT_DIR/packages/app-desktop"
 
-if [[ $GIT_TAG_NAME = v* ]]; then
+if [[ $GITHUB_LABEL = docker ]] && [[ $IS_LINUX = 1 ]] && [[ $IS_PULL_REQUEST = 1 ]]; then
+	echo "Step: Building Docker image for testing only (no publishing)"
+	cd "$ROOT_DIR"
+	npm run buildServerDocker -- --tag-name server-v0.0.0
+elif [[ $GIT_TAG_NAME = v* ]]; then
 	echo "Step: Building and publishing desktop application..."
 	USE_HARD_LINKS=false npm run dist
 elif [[ $GIT_TAG_NAME = server-v* ]] && [[ $IS_LINUX = 1 ]]; then
-	echo "Step: Building Docker Image..."
+	echo "Step: Building and publishing Docker image..."
 	cd "$ROOT_DIR"
 	npm run buildServerDocker -- --tag-name $GIT_TAG_NAME --push-images
 else

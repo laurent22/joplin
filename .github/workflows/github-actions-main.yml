@@ -28,8 +28,12 @@ jobs:
           brew install gettext
           brew install translate-toolkit
 
+      # If a pull request is tagged with the "docker" label, we build the image
+      # so that it's possible to check that it works. However we don't push the
+      # tags to Docker Hub. We only do that if we're on a tag "server-vX.Y.Z".
+
       - name: Install Docker Engine
-        if: runner.os == 'Linux' && startsWith(github.ref, 'refs/tags/server-v')
+        if: runner.os == 'Linux' && (startsWith(github.ref, 'refs/tags/server-v') || github.event.label.name == 'docker')
         run: |
           sudo apt-get install -y apt-transport-https
           sudo apt-get install -y ca-certificates
@@ -42,6 +46,15 @@ jobs:
               $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
           sudo apt-get update || true
           sudo apt-get install -y docker-ce docker-ce-cli containerd.io
+
+          # Enables support for ARM64 architecture
+          # https://hub.docker.com/r/tonistiigi/binfmt
+          docker run --privileged --rm tonistiigi/binfmt --install arm64,arm
+
+          # Need to create and switch to a different driver because
+          # multiple platforms feature may not be enabled on the
+          # default driver.
+          docker buildx create --name crossplatformbuild --use
 
       - uses: actions/checkout@v2
       - uses: olegtarasov/get-tag@v2.1
@@ -78,6 +91,7 @@ jobs:
           CSC_LINK: ${{ secrets.WINDOWS_CSC_LINK }}
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           IS_CONTINUOUS_INTEGRATION: 1
+          GITHUB_LABEL: ${{ github.event.label.name }}
         run: |
           npm install
           cd packages/app-desktop
