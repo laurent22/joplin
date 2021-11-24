@@ -54,7 +54,7 @@ async function main() {
 	console.info('Platforms:', platforms.join(', '));
 	console.info('Docker tags:', dockerTags.join(', '));
 
-	await execCommand2(`docker buildx build --platform ${platforms.join(',')} -t "joplin/server:${imageVersion}" ${buildArgs} -f Dockerfile.server .`);
+	await execCommand2(`docker buildx build --progress=plain --platform ${platforms.join(',')} -t "joplin/server:${imageVersion}" ${buildArgs} -f Dockerfile.server .`);
 	for (const tag of dockerTags) {
 		await execCommand2(`docker tag "joplin/server:${imageVersion}" "joplin/server:${tag}"`);
 		if (pushImages) await execCommand2(`docker push joplin/server:${tag}`);
