@@ -16,7 +16,15 @@ const defaultEnvValues: EnvVariables = {
 	ERROR_STACK_TRACES: false,
 	COOKIES_SECURE: false,
 	RUNNING_IN_DOCKER: false,
-	MAX_TIME_DRIFT: 10,
+
+	// Maxiumm allowed drift between NTP time and server time. A few
+	// milliseconds is normally not an issue unless many clients are modifying
+	// the same note at the exact same time. But past a certain limit, it might
+	// mean the server clock is incorrect and should be fixed, as that could
+	// result in clients generating many conflicts.
+	// https://github.com/laurent22/joplin/issues/5738
+
+	MAX_TIME_DRIFT: 100,
 
 	// ==================================================
 	// URL config
