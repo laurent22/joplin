@@ -340,7 +340,7 @@ https://github.com/laurent22/joplin/blob/dev/README.md
 <tr>
 <td>Android</td>
 <td><a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="40px" src='/images/BadgeAndroid.png'/></a></td>
-<td>or download the APK file: <a href="https://github.com/laurent22/joplin-android/releases/download/android-v1.8.5/joplin-v1.8.5.apk">64-bit</a> <a href="https://github.com/laurent22/joplin-android/releases/download/android-v1.8.5/joplin-v1.8.5-32bit.apk">32-bit</a></td>
+<td>or download the APK file: <a href="https://github.com/laurent22/joplin-android/releases/download/android-v2.6.3/joplin-v2.6.3.apk">64-bit</a> <a href="https://github.com/laurent22/joplin-android/releases/download/android-v2.6.3/joplin-v2.6.3-32bit.apk">32-bit</a></td>
 </tr>
 <tr>
 <td>iOS</td>
@@ -386,7 +386,7 @@ https://github.com/laurent22/joplin/blob/dev/README.md
 <p>The Web Clipper is a browser extension that allows you to save web pages and screenshots from your browser. For more information on how to install and use it, see the <a href="/clipper/">Web Clipper Help Page</a>.</p>
 <h1>Sponsors<a name="sponsors" href="#sponsors" class="heading-anchor">🔗</a></h1>
 <!-- SPONSORS-ORG -->
-<p><a href="https://www.hosting.de/nextcloud/?mtm_campaign=managed-nextcloud&amp;mtm_kwd=joplinapp&amp;mtm_source=joplinapp-github&amp;mtm_medium=banner"><img title="Hosting.de" width="256" src="https://joplinapp.org/images/sponsors/HostingDe.png"/></a> <a href="https://tranio.com/italy/"><img title="Tranio" width="256" src="https://joplinapp.org/images/sponsors/Tranio.png"/></a> <a href="https://seirei.ne.jp"><img title="Serei Network" width="256" src="https://joplinapp.org/images/sponsors/SeireiNetwork.png"/></a> <a href="https://usrigging.com/"><img title="U.S. Ringing Supply" width="256" src="https://joplinapp.org/images/sponsors/RingingSupply.svg"/></a></p>
+<p><a href="https://seirei.ne.jp"><img title="Serei Network" width="256" src="https://joplinapp.org/images/sponsors/SeireiNetwork.png"/></a> <a href="https://www.hosting.de/nextcloud/?mtm_campaign=managed-nextcloud&amp;mtm_kwd=joplinapp&amp;mtm_source=joplinapp-github&amp;mtm_medium=banner"><img title="Hosting.de" width="256" src="https://joplinapp.org/images/sponsors/HostingDe.png"/></a> <a href="https://tranio.com/italy/"><img title="Tranio" width="256" src="https://joplinapp.org/images/sponsors/Tranio.png"/></a> <a href="https://usrigging.com/"><img title="U.S. Ringing Supply" width="256" src="https://joplinapp.org/images/sponsors/RingingSupply.svg"/></a></p>
 <!-- SPONSORS-ORG -->
 <hr>
 <!-- SPONSORS-GITHUB -->
@@ -539,14 +539,17 @@ Joplin is also capable of exporting to a number of other formats including HTML 
 <p>When syncing with OneDrive, Joplin creates a sub-directory in OneDrive, in /Apps/Joplin and read/write the notes and notebooks from it. The application does not have access to anything outside this directory.</p>
 <p>In the <strong>desktop application</strong> or <strong>mobile application</strong>, select &quot;OneDrive&quot; as the synchronisation target in the <a href="/config_screen/">Configuration screen</a>. Then, to initiate the synchronisation process, click on the &quot;Synchronise&quot; button in the sidebar and follow the instructions.</p>
 <p>In the <strong>terminal application</strong>, to initiate the synchronisation process, type <code>:sync</code>. You will be asked to follow a link to authorise the application (simply input your Microsoft credentials - you do not need to register with OneDrive).</p>
-<h2>AWS S3 synchronisation<a name="aws-s3-synchronisation" href="#aws-s3-synchronisation" class="heading-anchor">🔗</a></h2>
-<p>In the <strong>desktop application</strong> or <strong>mobile application</strong>, select &quot;AWS S3 (Beta)&quot; as the synchronisation target in the <a href="/config_screen/">Configuration screen</a>.</p>
+<h2>S3 synchronisation<a name="s3-synchronisation" href="#s3-synchronisation" class="heading-anchor">🔗</a></h2>
+<p>As of Joplin 2.x.x, Joplin supports multiple S3 providers. We expose some options that will need to be configured depending on your provider of choice. We have tested with UpCloud, AWS, and Linode. others should work as well.</p>
+<p>In the <strong>desktop application</strong> or <strong>mobile application</strong>, select &quot;S3 (Beta)&quot; as the synchronisation target in the <a href="/config_screen/">Configuration screen</a>.</p>
 <ul>
-<li><strong>AWS S3 Bucket:</strong> The name of your Bucket, such as <code>joplin-bucket</code></li>
-<li><strong>AWS S3 URL:</strong> Fully qualified URL; By default this should be <code>https://s3.amazonaws.com/</code></li>
-<li><strong>AWS key &amp; AWS secret:</strong>  IAM user's programmatic access key.  To create a new key &amp; secret, visit <a href="https://console.aws.amazon.com/iam/home#/security_credentials">IAM Security Credentials</a>.</li>
+<li><strong>S3 Bucket:</strong> The name of your Bucket, such as <code>joplin-bucket</code></li>
+<li><strong>S3 URL:</strong> Fully qualified URL; For AWS this should be <code>https://s3.amazonaws.com/</code></li>
+<li><strong>S3 Access Key &amp; S3 Secret Key:</strong>  The User's programmatic access key.  To create a new key &amp; secret on AWS, visit <a href="https://console.aws.amazon.com/iam/home#/security_credentials">IAM Security Credentials</a>. For other providers follow their documentation.</li>
+<li><strong>S3 Region:</strong> Some providers require you to provide the region of your bucket. This is usually in the form of &quot;eu-west1&quot; or something similar depending on your region. For providers that do not require a region, you can leave it blank.</li>
+<li><strong>Force Path Style</strong>: This setting enables Joplin to talk to S3 providers using an older style S3 Path. Depending on your provider you may need to try with this on and off.</li>
 </ul>
-<p>While creating a new Bucket for Joplin, disable <strong>Bucket Versioning</strong>, enable <strong>Block all public access</strong> and enable <strong>Default encryption</strong> with <code>Amazon S3 key (SSE-S3)</code>.</p>
+<p>While creating a new Bucket for Joplin, disable <strong>Bucket Versioning</strong>, enable <strong>Block all public access</strong> and enable <strong>Default encryption</strong> with <code>Amazon S3 key (SSE-S3)</code>. Some providers do not expose these options, and it could create a syncing problem. Do attempt and report back so we can update the documentation appropriately.</p>
 <p>To add a <strong>Bucket Policy</strong> from the AWS S3 Web Console, navigate to the <strong>Permissions</strong> tab. Temporarily disable <strong>Block all public access</strong>  to edit the Bucket policy, something along the lines of:</p>
 <pre><code>{
     &quot;Version&quot;: &quot;2012-10-17&quot;,
@@ -570,6 +573,27 @@ Joplin is also capable of exporting to a number of other formats including HTML 
     ]
 }
 </code></pre>
+<h3>Configuration settings for tested providers<a name="configuration-settings-for-tested-providers" href="#configuration-settings-for-tested-providers" class="heading-anchor">🔗</a></h3>
+<p>All providers will require a bucket, Access Key, and Secret Key.</p>
+<p>If you provide a configuration and you receive &quot;success!&quot; on the &quot;check config&quot; then your S3 sync should work for your provider. If you do not receive success, you may need to adjust your settings, or save them, restart the app, and attempt a sync. This may reveal more clear error messaging that will help you deduce the problem.</p>
+<h3>AWS<a name="aws" href="#aws" class="heading-anchor">🔗</a></h3>
+<ul>
+<li>URL: <a href="https://s3.amazonaws.com">https://s3.amazonaws.com</a></li>
+<li>Region: required</li>
+<li>Force Path Style: unchecked</li>
+</ul>
+<h3>Linode<a name="linode" href="#linode" class="heading-anchor">🔗</a></h3>
+<ul>
+<li>URL: https://<region>.linodeobjects.com</li>
+<li>Region: empty</li>
+<li>Force Path Style: unchecked</li>
+</ul>
+<h3>UpCloud<a name="upcloud" href="#upcloud" class="heading-anchor">🔗</a></h3>
+<ul>
+<li>URL: https://<account>.<region>.upcloudobjects.com (They will provide you with multiple URLs, the one that follows this pattern should work.)</li>
+<li>Region: required</li>
+<li>Force Path Style: unchecked</li>
+</ul>
 <h1>Encryption<a name="encryption" href="#encryption" class="heading-anchor">🔗</a></h1>
 <p>Joplin supports end-to-end encryption (E2EE) on all the applications. E2EE is a system where only the owner of the notes, notebooks, tags or resources can read them. It prevents potential eavesdroppers - including telecom providers, internet providers, and even the developers of Joplin from being able to access the data. Please see the <a href="/e2ee/">End-To-End Encryption Tutorial</a> for more information about this feature and how to enable it.</p>
 <p>For a more technical description, mostly relevant for development or to review the method being used, please see the <a href="/spec/e2ee/">Encryption specification</a>.</p>

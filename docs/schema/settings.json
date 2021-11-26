@@ -80,23 +80,33 @@
 		"sync.8.path": {
 			"type": "string",
 			"default": "",
-			"description": "AWS S3 bucket. Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: https://joplinapp.org/faq/"
+			"description": "S3 bucket. Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: https://joplinapp.org/faq/"
 		},
 		"sync.8.url": {
 			"type": "string",
 			"default": "https://s3.amazonaws.com/",
-			"description": "AWS S3 URL"
+			"description": "S3 URL"
+		},
+		"sync.8.region": {
+			"type": "string",
+			"default": "",
+			"description": "Region"
 		},
 		"sync.8.username": {
 			"type": "string",
 			"default": "",
-			"description": "AWS key"
+			"description": "Access Key"
 		},
 		"sync.8.password": {
 			"type": "string",
 			"default": "",
-			"description": "AWS secret",
+			"description": "Secret Key",
 			"$comment": "private"
+		},
+		"sync.8.forcePathStyle": {
+			"type": "boolean",
+			"default": false,
+			"description": "Force Path Style"
 		},
 		"sync.9.path": {
 			"type": "string",
@@ -312,7 +322,8 @@
 				"YYYY-MM-DD",
 				"DD.MM.YYYY",
 				"YYYY.MM.DD",
-				"YYMMDD"
+				"YYMMDD",
+				"YYYY/MM/DD"
 			]
 		},
 		"timeFormat": {
