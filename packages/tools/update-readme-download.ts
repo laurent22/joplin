@@ -118,8 +118,12 @@ async function main(argv: any) {
 	if (winPortableUrl) content = content.replace(/(https:\/\/github.com\/laurent22\/joplin\/releases\/download\/v\d+\.\d+\.\d+\/JoplinPortable.exe)/, winPortableUrl);
 	if (macOsUrl) content = content.replace(/(https:\/\/github.com\/laurent22\/joplin\/releases\/download\/v\d+\.\d+\.\d+\/Joplin-.*?\.dmg)/, macOsUrl);
 	if (linuxUrl) content = content.replace(/(https:\/\/github.com\/laurent22\/joplin\/releases\/download\/v\d+\.\d+\.\d+\/Joplin-.*?\.AppImage)/, linuxUrl);
-	if (androidUrl) content = content.replace(/(https:\/\/github.com\/laurent22\/joplin-android\/releases\/download\/android-v\d+\.\d+\.\d+\/joplin-v\d+\.\d+\.\d+\.apk)/, androidUrl);
-	if (android32Url) content = content.replace(/(https:\/\/github.com\/laurent22\/joplin-android\/releases\/download\/android-v\d+\.\d+\.\d+\/joplin-v\d+\.\d+\.\d+-32bit\.apk)/, android32Url);
+
+	// Disable for now due to broken /latest API end point, which returns a
+	// version from 6 months ago.
+
+	// if (androidUrl) content = content.replace(/(https:\/\/github.com\/laurent22\/joplin-android\/releases\/download\/android-v\d+\.\d+\.\d+\/joplin-v\d+\.\d+\.\d+\.apk)/, androidUrl);
+	// if (android32Url) content = content.replace(/(https:\/\/github.com\/laurent22\/joplin-android\/releases\/download\/android-v\d+\.\d+\.\d+\/joplin-v\d+\.\d+\.\d+-32bit\.apk)/, android32Url);
 
 	setReadmeContent(content);
 
