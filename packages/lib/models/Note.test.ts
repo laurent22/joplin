@@ -7,6 +7,8 @@ import Folder from './Folder';
 import Note from './Note';
 import Tag from './Tag';
 import ItemChange from './ItemChange';
+import Resource from './Resource';
+import { ResourceEntity } from '../services/database/types';
 const ArrayUtils = require('../ArrayUtils.js');
 
 async function allItems() {
@@ -141,6 +143,27 @@ describe('models/Note', function() {
 		expect(duplicatedNoteTags.find(o => o.id === tag1.id)).toBeDefined();
 		expect(duplicatedNoteTags.find(o => o.id === tag2.id)).toBeDefined();
 		expect(duplicatedNoteTags.length).toBe(2);
+	}));
+
+	it('should also duplicate resources when duplicating a note', (async () => {
+		const folder = await Folder.save({ title: 'folder' });
+		let note = await Note.save({ title: 'note', parent_id: folder.id });
+		await shim.attachFileToNote(note, `${supportDir}/photo.jpg`);
+
+		const resource = (await Resource.all())[0];
+		expect((await Resource.all()).length).toBe(1);
+
+		const duplicatedNote = await Note.duplicate(note.id);
+
+		const resources: ResourceEntity[] = await Resource.all();
+		expect(resources.length).toBe(2);
+
+		const duplicatedResource = resources.find(r => r.id !== resource.id);
+
+		note = await Note.load(note.id);
+
+		expect(note.body).toContain(resource.id);
+		expect(duplicatedNote.body).toContain(duplicatedResource.id);
 	}));
 
 	it('should delete a set of notes', (async () => {

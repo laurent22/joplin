@@ -364,7 +364,7 @@ export default class Resource extends BaseItem {
 		return await this.fsDriver().readFile(Resource.fullPath(resource), encoding);
 	}
 
-	static async duplicateResource(resourceId: string) {
+	public static async duplicateResource(resourceId: string): Promise<ResourceEntity> {
 		const resource = await Resource.load(resourceId);
 		const localState = await Resource.localState(resource);
 

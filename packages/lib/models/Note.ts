@@ -595,29 +595,44 @@ export default class Note extends BaseItem {
 		}
 	}
 
-	static async duplicate(noteId: string, options: any = null) {
+	private static async duplicateNoteResources(noteBody: string): Promise<string> {
+		const resourceIds = await this.linkedResourceIds(noteBody);
+		let newBody: string = noteBody;
+
+		for (const resourceId of resourceIds) {
+			const newResource = await Resource.duplicateResource(resourceId);
+			const regex = new RegExp(resourceId, 'gi');
+			newBody = newBody.replace(regex, newResource.id);
+		}
+
+		return newBody;
+	}
+
+	public static async duplicate(noteId: string, options: any = null) {
 		const changes = options && options.changes;
 		const uniqueTitle = options && options.uniqueTitle;
 
-		const originalNote = await Note.load(noteId);
+		const originalNote: NoteEntity = await Note.load(noteId);
 		if (!originalNote) throw new Error(`Unknown note: ${noteId}`);
 
 		const newNote = Object.assign({}, originalNote);
 		const fieldsToReset = ['id', 'created_time', 'updated_time', 'user_created_time', 'user_updated_time'];
 
 		for (const field of fieldsToReset) {
-			delete newNote[field];
+			delete (newNote as any)[field];
 		}
 
 		for (const n in changes) {
 			if (!changes.hasOwnProperty(n)) continue;
-			newNote[n] = changes[n];
+			(newNote as any)[n] = changes[n];
 		}
 
 		if (uniqueTitle) {
 			const title = await Note.findUniqueItemTitle(uniqueTitle);
 			newNote.title = title;
 		}
+
+		newNote.body = await this.duplicateNoteResources(newNote.body);
 
 		const newNoteSaved = await this.save(newNote);
 		const originalTags = await Tag.tagsByNoteId(noteId);
