@@ -6,7 +6,7 @@ version: '3'
 
 services:
     db:
-        image: postgres:13.1
+        image: postgres:13
         command: postgres -c work_mem=100000
         ports:
             - "5432:5432"
@@ -14,7 +14,7 @@ services:
             - POSTGRES_PASSWORD=joplin
             - POSTGRES_USER=joplin
             - POSTGRES_DB=joplin
-        
+     
         # Use this to specify additional Postgres
         # config parameters:
         #

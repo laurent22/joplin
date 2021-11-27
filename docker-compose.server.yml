@@ -8,7 +8,7 @@ version: '3'
 
 services:
     db:
-        image: postgres:13.1
+        image: postgres:13
         volumes:
             - ./data/postgres:/var/lib/postgresql/data
         ports:
