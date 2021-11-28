@@ -1,6 +1,7 @@
 import Logger from '@joplin/lib/Logger';
 import BaseService from './BaseService';
 import Mail = require('nodemailer/lib/mailer');
+import SMTPTransport = require('nodemailer/lib/smtp-transport');
 import { createTransport } from 'nodemailer';
 import { Email, EmailSender } from '../services/database/types';
 import { errorToString } from '../utils/errors';
@@ -24,16 +25,18 @@ export default class EmailService extends BaseService {
 				if (!this.senderInfo(EmailSender.NoReply).email) {
 					throw new Error('No-reply email must be set for email service to work (Set env variable MAILER_NOREPLY_EMAIL)');
 				}
-
-				this.transport_ = createTransport({
+				const options: SMTPTransport.Options = {
 					host: this.config.mailer.host,
 					port: this.config.mailer.port,
 					secure: this.config.mailer.secure,
-					auth: {
+				};
+				if (this.config.mailer.authUser || this.config.mailer.authPassword) {
+					options.auth = {
 						user: this.config.mailer.authUser,
 						pass: this.config.mailer.authPassword,
-					},
-				});
+					};
+				}
+				this.transport_ = createTransport(options);
 
 				await this.transport_.verify();
 				logger.info('Transporter is operational - service will be enabled');
