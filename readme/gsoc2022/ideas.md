@@ -54,6 +54,14 @@ Difficulty Level: High
 
 Skills Required: TypeScript, JavaScript, CSS, HTML, Markdown rendering.
 
+## 4. Implement default plugins on desktop application
+
+We would like to bundle certain plugins with the desktop application, such as the Backup or Rich Markdown plugin. Some process needs to be implemented so that they are bundled and updated automatically. You'll have to consider how it will work on CI, and across platform. The process should be fault tolerant and retry when something fails.
+
+Difficulty Level: High
+
+Skills Required: TypeScript, JavaScript, knowledge of Electron and GitHub Actions.
+
 # More info
 
 - Make sure you read the [Joplin Google Summer of Code Introduction](https://joplinapp.org/gsoc2022/index/)
