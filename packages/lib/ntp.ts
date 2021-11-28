@@ -1,4 +1,5 @@
 import shim from './shim';
+import time from './time';
 const ntpClient_ = require('./vendor/ntp-client');
 
 const server = {
@@ -25,12 +26,24 @@ export async function getNetworkTime(): Promise<Date> {
 }
 
 export async function getDeviceTimeDrift(): Promise<number> {
+	const maxTries = 3;
+	let tryCount = 0;
+
 	let ntpTime: Date = null;
-	try {
-		ntpTime = await getNetworkTime();
-	} catch (error) {
-		error.message = `Cannot retrieve the network time: ${error.message}`;
-		throw error;
+
+	while (true) {
+		tryCount++;
+		try {
+			ntpTime = await getNetworkTime();
+			break;
+		} catch (error) {
+			if (tryCount >= maxTries) {
+				error.message = `Cannot retrieve the network time: ${error.message}`;
+				throw error;
+			} else {
+				await time.msleep(tryCount * 1000);
+			}
+		}
 	}
 
 	return ntpTime.getTime() - Date.now();
