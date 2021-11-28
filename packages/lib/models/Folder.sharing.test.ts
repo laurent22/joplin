@@ -1,4 +1,4 @@
-import { setupDatabaseAndSynchronizer, switchClient, createFolderTree, supportDir, msleep } from '../testing/test-utils';
+import { setupDatabaseAndSynchronizer, switchClient, createFolderTree, supportDir, msleep, resourceService } from '../testing/test-utils';
 import Folder from '../models/Folder';
 import { allNotesFolders } from '../testing/test-utils-synchronizer';
 import Note from '../models/Note';
@@ -41,7 +41,7 @@ describe('models/Folder.sharing', function() {
 		]);
 
 		await Folder.save({ id: folder.id, share_id: 'abcd1234' });
-		await Folder.updateAllShareIds();
+		await Folder.updateAllShareIds(resourceService());
 
 		const allItems = await allNotesFolders();
 		for (const item of allItems) {
@@ -87,7 +87,7 @@ describe('models/Folder.sharing', function() {
 
 		await Folder.save({ id: folder1.id, share_id: 'abcd1234' });
 
-		await Folder.updateAllShareIds();
+		await Folder.updateAllShareIds(resourceService());
 
 		folder1 = await Folder.loadByTitle('folder 1');
 		const folder2 = await Folder.loadByTitle('folder 2');
@@ -121,7 +121,7 @@ describe('models/Folder.sharing', function() {
 
 		await Folder.save({ id: folder1.id, share_id: 'abcd1234' });
 
-		await Folder.updateAllShareIds();
+		await Folder.updateAllShareIds(resourceService());
 
 		folder1 = await Folder.loadByTitle('folder 1');
 		let folder2 = await Folder.loadByTitle('folder 2');
@@ -133,7 +133,7 @@ describe('models/Folder.sharing', function() {
 		// Move the folder outside the shared folder
 
 		await Folder.save({ id: folder2.id, parent_id: folder3.id });
-		await Folder.updateAllShareIds();
+		await Folder.updateAllShareIds(resourceService());
 		folder2 = await Folder.loadByTitle('folder 2');
 		expect(folder2.share_id).toBe('');
 
@@ -141,7 +141,7 @@ describe('models/Folder.sharing', function() {
 
 		{
 			await Folder.save({ id: folder2.id, parent_id: folder1.id });
-			await Folder.updateAllShareIds();
+			await Folder.updateAllShareIds(resourceService());
 			folder2 = await Folder.loadByTitle('folder 2');
 			expect(folder2.share_id).toBe('abcd1234');
 		}
@@ -180,7 +180,7 @@ describe('models/Folder.sharing', function() {
 
 		await Folder.save({ id: folder1.id, share_id: 'abcd1234' });
 
-		await Folder.updateAllShareIds();
+		await Folder.updateAllShareIds(resourceService());
 
 		const note1: NoteEntity = await Note.loadByTitle('note 1');
 		const note2: NoteEntity = await Note.loadByTitle('note 2');
@@ -210,7 +210,7 @@ describe('models/Folder.sharing', function() {
 		]);
 
 		await Folder.save({ id: folder1.id, share_id: 'abcd1234' });
-		await Folder.updateAllShareIds();
+		await Folder.updateAllShareIds(resourceService());
 		const note1: NoteEntity = await Note.loadByTitle('note 1');
 		const folder2: FolderEntity = await Folder.loadByTitle('folder 2');
 		expect(note1.share_id).toBe('abcd1234');
@@ -218,7 +218,7 @@ describe('models/Folder.sharing', function() {
 		// Move the note outside of the shared folder
 
 		await Note.save({ id: note1.id, parent_id: folder2.id });
-		await Folder.updateAllShareIds();
+		await Folder.updateAllShareIds(resourceService());
 
 		{
 			const note1: NoteEntity = await Note.loadByTitle('note 1');
@@ -228,7 +228,7 @@ describe('models/Folder.sharing', function() {
 		// Move the note back inside the shared folder
 
 		await Note.save({ id: note1.id, parent_id: folder1.id });
-		await Folder.updateAllShareIds();
+		await Folder.updateAllShareIds(resourceService());
 
 		{
 			const note1: NoteEntity = await Note.loadByTitle('note 1');
@@ -256,7 +256,7 @@ describe('models/Folder.sharing', function() {
 		]);
 
 		await Folder.save({ id: folder1.id, share_id: 'abcd1234' });
-		await Folder.updateAllShareIds();
+		await Folder.updateAllShareIds(resourceService());
 
 		let note1: NoteEntity = await Note.loadByTitle('note 1');
 		let note2: NoteEntity = await Note.loadByTitle('note 2');
@@ -266,7 +266,7 @@ describe('models/Folder.sharing', function() {
 		expect(note2.share_id).toBe('abcd1234');
 
 		await Note.save({ id: note1.id, parent_id: folder2.id });
-		await Folder.updateAllShareIds();
+		await Folder.updateAllShareIds(resourceService());
 
 		note1 = await Note.loadByTitle('note 1');
 		note2 = await Note.loadByTitle('note 2');
@@ -296,7 +296,7 @@ describe('models/Folder.sharing', function() {
 		]);
 
 		await Folder.save({ id: folder.id, share_id: 'abcd1234' });
-		await Folder.updateAllShareIds();
+		await Folder.updateAllShareIds(resourceService);
 
 		const folder2: FolderEntity = await Folder.loadByTitle('folder 2');
 		const note1: NoteEntity = await Note.loadByTitle('note 1');
@@ -312,9 +312,7 @@ describe('models/Folder.sharing', function() {
 			expect(resource.share_id).toBe('');
 		}
 
-		await Folder.updateAllShareIds();
-
-		// await NoteResource.updateResourceShareIds();
+		await Folder.updateAllShareIds(resourceService);
 
 		{
 			const resource: ResourceEntity = await Resource.load(resourceId);
@@ -324,12 +322,114 @@ describe('models/Folder.sharing', function() {
 		await Note.save({ id: note1.id, parent_id: folder2.id });
 		await resourceService.indexNoteResources();
 
-		await Folder.updateAllShareIds();
+		await Folder.updateAllShareIds(resourceService);
 
 		{
 			const resource: ResourceEntity = await Resource.load(resourceId);
 			expect(resource.share_id).toBe('');
 		}
+	});
+
+	it('should automatically duplicate resources when they are shared', async () => {
+		const resourceService = new ResourceService();
+
+		const folder1 = await createFolderTree('', [
+			{
+				title: 'folder 1', // SHARE 1
+				children: [
+					{
+						title: 'note 1',
+					},
+					{
+						title: 'note 2',
+					},
+				],
+			},
+			{
+				title: 'folder 2', // SHARE 2
+				children: [
+					{
+						title: 'note 3',
+					},
+				],
+			},
+			{
+				title: 'folder 3', // (not shared)
+				children: [
+					{
+						title: 'note 4',
+					},
+				],
+			},
+		]);
+
+		const folder2: FolderEntity = await Folder.loadByTitle('folder 2');
+		// await Folder.loadByTitle('folder 3');
+		let note1: NoteEntity = await Note.loadByTitle('note 1');
+		let note2: NoteEntity = await Note.loadByTitle('note 2');
+		let note3: NoteEntity = await Note.loadByTitle('note 3');
+		let note4: NoteEntity = await Note.loadByTitle('note 4');
+
+		await Folder.save({ id: folder1.id, share_id: 'share1' });
+		await Folder.save({ id: folder2.id, share_id: 'share2' });
+
+		note1 = await shim.attachFileToNote(note1, testImagePath);
+		note2 = await shim.attachFileToNote(note2, testImagePath);
+		note3 = await Note.save({ id: note3.id, body: note1.body });
+		note4 = await Note.save({ id: note4.id, body: note1.body });
+
+		const userUpdatedTimes: Record<string, number> = {
+			[note1.id]: note1.user_updated_time,
+			[note2.id]: note2.user_updated_time,
+			[note3.id]: note3.user_updated_time,
+			[note4.id]: note4.user_updated_time,
+		};
+
+		await msleep(1);
+
+		// We need to index the resources to populate the note_resources table
+
+		await resourceService.indexNoteResources();
+		await Folder.updateAllShareIds(resourceService);
+
+		// BEFORE:
+		//
+		// - Note 1 has resource 1 (share1)
+		// - Note 2 has resource 2 (share1)
+		// - Note 3 has resource 1 (share2)
+		// - Note 4 has resource 1 (not shared)
+
+		// AFTER:
+		//
+		// - Note 1 has resource 1 (share1)
+		// - Note 2 has resource 2 (share1)
+		// - Note 3 has resource 3 (share2)
+		// - Note 4 has resource 4 (not shared)
+
+		const resources = await Resource.all();
+		expect(resources.length).toBe(4);
+
+		note1 = await Note.load(note1.id);
+		note2 = await Note.load(note2.id);
+		note3 = await Note.load(note3.id);
+		note4 = await Note.load(note4.id);
+
+		console.info(note1.body);
+		console.info(note2.body);
+		console.info(note3.body);
+		console.info(note4.body);
+
+		expect(note1.body).not.toBe(note2.body);
+		expect(note1.body).not.toBe(note3.body);
+		expect(note1.body).not.toBe(note4.body);
+		expect(note2.body).not.toBe(note3.body);
+		expect(note2.body).not.toBe(note4.body);
+		expect(note3.body).not.toBe(note4.body);
+
+		expect(note1.user_updated_time).toBe(userUpdatedTimes[note1.id]);
+		expect(note2.user_updated_time).toBe(userUpdatedTimes[note2.id]);
+		expect(note3.user_updated_time).toBe(userUpdatedTimes[note3.id]);
+		expect(note4.user_updated_time).toBe(userUpdatedTimes[note4.id]);
 	});
 
 	it('should unshare items that are no longer part of an existing share', async () => {
@@ -367,7 +467,7 @@ describe('models/Folder.sharing', function() {
 
 		await resourceService.indexNoteResources();
 
-		await Folder.updateAllShareIds();
+		await Folder.updateAllShareIds(resourceService);
 
 		await Folder.updateNoLongerSharedItems(['1']);
 

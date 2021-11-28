@@ -1,4 +1,4 @@
-import { FolderEntity, FolderIcon } from '../services/database/types';
+import { FolderEntity, FolderIcon, NoteEntity } from '../services/database/types';
 import BaseModel, { DeleteOptions } from '../BaseModel';
 import time from '../time';
 import { _ } from '../locale';
@@ -9,6 +9,7 @@ import Resource from './Resource';
 import { isRootSharedFolder } from '../services/share/reducer';
 import Logger from '../Logger';
 import syncDebugLog from '../services/synchronizer/syncDebugLog';
+import ResourceService from '../services/ResourceService';
 const { substrWithEllipsis } = require('../string-utils.js');
 
 const logger = Logger.create('models/Folder');
@@ -368,36 +369,130 @@ export default class Folder extends BaseItem {
 		}
 	}
 
-	public static async updateResourceShareIds() {
-		// Find all resources where share_id is different from parent note
-		// share_id. Then update share_id on all these resources. Essentially it
-		// makes it match the resource share_id to the note share_id. At the
-		// same time we also process the is_shared property.
-		const rows = await this.db().selectAll(`
-			SELECT r.id, n.share_id, n.is_shared
-			FROM note_resources nr
-			LEFT JOIN resources r ON nr.resource_id = r.id
-			LEFT JOIN notes n ON nr.note_id = n.id
-			WHERE n.share_id != r.share_id
-			OR n.is_shared != r.is_shared
-		`);
+	public static async updateResourceShareIds(resourceService: ResourceService) {
+		// Updating the share_id property of the resources is complex because:
+		//
+		// The resource association to the note is done indirectly via the
+		// ResourceService
+		//
+		// And a given resource can appear inside multiple notes. However, for
+		// sharing we make the assumption that a resource can be part of only
+		// one share (one-to-one relationship because "share_id" is part of the
+		// "resources" table), which is usually the case. By copying and pasting
+		// note content from one note to another it's however possible to have
+		// the same resource in multiple shares (or in a non-shared and a shared
+		// folder).
+		//
+		// So in this function we take this into account - if a shared resource
+		// is part of multiple notes, we duplicate that resource so that each
+		// note has its own instance. When such duplication happens, we need to
+		// resume the process from the start (thus the loop) so that we deal
+		// with the right note/resource associations.
 
-		logger.debug('updateResourceShareIds: resources to update:', rows.length);
+		for (let i = 0; i < 5; i++) {
+			// Find all resources where share_id is different from parent note
+			// share_id. Then update share_id on all these resources. Essentially it
+			// makes it match the resource share_id to the note share_id. At the
+			// same time we also process the is_shared property.
 
-		for (const row of rows) {
-			await Resource.save({
-				id: row.id,
-				share_id: row.share_id || '',
-				is_shared: row.is_shared,
-				updated_time: Date.now(),
-			}, { autoTimestamp: false });
+			const rows = await this.db().selectAll(`
+				SELECT r.id, n.share_id, n.is_shared
+				FROM note_resources nr
+				LEFT JOIN resources r ON nr.resource_id = r.id
+				LEFT JOIN notes n ON nr.note_id = n.id
+				WHERE (
+					n.share_id != r.share_id
+					OR n.is_shared != r.is_shared
+				) AND nr.is_associated = 1
+			`);
+
+			if (!rows.length) return;
+
+			logger.debug('updateResourceShareIds: resources to update:', rows.length);
+
+			const resourceIds = rows.map(r => r.id);
+
+			interface Row {
+				resource_id: string;
+				note_id: string;
+				share_id: string;
+			}
+
+			// Now we check, for each resource, that it is associated with only
+			// one note. If it is not, we create duplicate resources so that
+			// each note has its own separate resource.
+
+			const noteResourceAssociations = await this.db().selectAll(`
+				SELECT resource_id, note_id, notes.share_id
+				FROM note_resources
+				LEFT JOIN notes ON notes.id = note_resources.note_id
+				WHERE resource_id IN ('${resourceIds.join('\',\'')}')
+				AND is_associated = 1
+			`) as Row[];
+
+			const resourceIdToNotes: Record<string, Row[]> = {};
+
+			for (const r of noteResourceAssociations) {
+				if (!resourceIdToNotes[r.resource_id]) resourceIdToNotes[r.resource_id] = [];
+				resourceIdToNotes[r.resource_id].push(r);
+			}
+
+			let hasCreatedResources = false;
+
+			for (const [resourceId, rows] of Object.entries(resourceIdToNotes)) {
+				if (rows.length <= 1) continue;
+
+				for (let i = 0; i < rows.length - 1; i++) {
+					const row = rows[i];
+					const note: NoteEntity = await Note.load(row.note_id);
+					if (!note) continue; // probably got deleted in the meantime?
+					const newResource = await Resource.duplicateResource(resourceId);
+					logger.info(`updateResourceShareIds: Automatically created resource "${newResource.id}" to replace resource "${resourceId}" because it is shared and duplicate across notes:`, row);
+					const regex = new RegExp(resourceId, 'gi');
+					const newBody = note.body.replace(regex, newResource.id);
+					await Note.save({
+						id: note.id,
+						body: newBody,
+						parent_id: note.parent_id,
+						updated_time: Date.now(),
+					}, {
+						autoTimestamp: false,
+					});
+					hasCreatedResources = true;
+				}
+			}
+
+			// If we have created resources, we refresh the note/resource
+			// associations using ResourceService and we resume the process.
+			// Normally, if the user didn't create any new notes or resources in
+			// the meantime, the second loop should find that each shared
+			// resource is associated with only one note.
+
+			if (hasCreatedResources) {
+				await resourceService.indexNoteResources();
+				continue;
+			} else {
+				// If all is good, we can set the share_id and is_shared
+				// property of the resource.
+				for (const row of rows) {
+					await Resource.save({
+						id: row.id,
+						share_id: row.share_id || '',
+						is_shared: row.is_shared,
+						updated_time: Date.now(),
+					}, { autoTimestamp: false });
+				}
+				return;
+			}
 		}
+
+		throw new Error('Failed to update resource share IDs');
 	}
 
-	public static async updateAllShareIds() {
+	public static async updateAllShareIds(resourceService: ResourceService) {
 		await this.updateFolderShareIds();
 		await this.updateNoteShareIds();
-		await this.updateResourceShareIds();
+		await this.updateResourceShareIds(resourceService);
 	}
 
 	// Clear the "share_id" property for the items that are associated with a

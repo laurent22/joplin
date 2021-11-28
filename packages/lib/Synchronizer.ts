@@ -429,7 +429,7 @@ export default class Synchronizer {
 
 		// Before synchronising make sure all share_id properties are set
 		// correctly so as to share/unshare the right items.
-		await Folder.updateAllShareIds();
+		await Folder.updateAllShareIds(this.resourceService());
 
 		const itemUploader = new ItemUploader(this.api(), this.apiCall);
 

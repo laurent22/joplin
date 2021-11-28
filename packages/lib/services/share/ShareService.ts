@@ -11,6 +11,7 @@ import EncryptionService from '../e2ee/EncryptionService';
 import { PublicPrivateKeyPair, mkReencryptFromPasswordToPublicKey, mkReencryptFromPublicKeyToPassword } from '../e2ee/ppk';
 import { MasterKeyEntity } from '../e2ee/types';
 import { getMasterPassword } from '../e2ee/utils';
+import ResourceService from '../ResourceService';
 import { addMasterKey, getEncryptionEnabled, localSyncInfo } from '../synchronizer/syncInfoUtils';
 import { ShareInvitation, State, stateRootKey, StateShare } from './reducer';
 
@@ -122,7 +123,7 @@ export default class ShareService {
 		// Note: race condition if the share is created but the app crashes
 		// before setting share_id on the folder. See unshareFolder() for info.
 		await Folder.save({ id: folder.id, share_id: share.id });
-		await Folder.updateAllShareIds();
+		await Folder.updateAllShareIds(ResourceService.instance());
 
 		return share;
 	}
@@ -167,7 +168,7 @@ export default class ShareService {
 
 		// It's ok if updateAllShareIds() doesn't run because it's executed on
 		// each sync too.
-		await Folder.updateAllShareIds();
+		await Folder.updateAllShareIds(ResourceService.instance());
 	}
 
 	// This is when a share recipient decides to leave the shared folder.
