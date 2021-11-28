@@ -179,7 +179,7 @@ export default class ShareModel extends BaseModel<Share> {
 
 		const addUserItem = async (shareUserId: Uuid, itemId: Uuid) => {
 			try {
-				await this.models().userItem().add(shareUserId, itemId);
+				await this.models().userItem().add(shareUserId, itemId, { queryContext: { uniqueConstraintErrorLoggingDisabled: true } });
 			} catch (error) {
 				if (!isUniqueConstraintError(error)) throw error;
 			}
@@ -322,7 +322,7 @@ export default class ShareModel extends BaseModel<Share> {
 		for (const resourceItem of resourceItems) {
 			if (doShare) {
 				try {
-					await this.models().userItem().add(toUserId, resourceItem.id);
+					await this.models().userItem().add(toUserId, resourceItem.id, { queryContext: { uniqueConstraintErrorLoggingDisabled: true } });
 				} catch (error) {
 					if (isUniqueConstraintError(error)) {
 						continue;
@@ -337,7 +337,7 @@ export default class ShareModel extends BaseModel<Share> {
 		for (const resourceBlobItem of resourceBlobItems) {
 			if (doShare) {
 				try {
-					await this.models().userItem().add(toUserId, resourceBlobItem.id);
+					await this.models().userItem().add(toUserId, resourceBlobItem.id, { queryContext: { uniqueConstraintErrorLoggingDisabled: true } });
 				} catch (error) {
 					if (isUniqueConstraintError(error)) {
 						continue;

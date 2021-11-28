@@ -37,7 +37,7 @@ export default class UserFlagModels extends BaseModel<UserFlag> {
 			await this.save({
 				user_id: userId,
 				type,
-			});
+			}, { queryContext: { uniqueConstraintErrorLoggingDisabled: true } });
 		} catch (error) {
 			if (!isUniqueConstraintError(error)) {
 				throw error;

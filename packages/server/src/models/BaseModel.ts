@@ -1,5 +1,5 @@
 import { WithDates, WithUuid, databaseSchema, ItemType, Uuid, User } from '../services/database/types';
-import { DbConnection } from '../db';
+import { DbConnection, QueryContext } from '../db';
 import TransactionHandler from '../utils/TransactionHandler';
 import uuidgen from '../utils/uuidgen';
 import { ErrorUnprocessableEntity, ErrorBadRequest } from '../utils/errors';
@@ -24,6 +24,7 @@ export interface SaveOptions {
 	skipValidation?: boolean;
 	validationRules?: any;
 	previousItem?: any;
+	queryContext?: QueryContext;
 }
 
 export interface LoadOptions {
@@ -297,12 +298,12 @@ export default abstract class BaseModel<T> {
 
 		await this.withTransaction(async () => {
 			if (isNew) {
-				await this.db(this.tableName).insert(toSave);
+				await this.db(this.tableName).insert(toSave).queryContext(options.queryContext || {});
 			} else {
 				const objectId: string = (toSave as WithUuid).id;
 				if (!objectId) throw new Error('Missing "id" property');
 				delete (toSave as WithUuid).id;
-				const updatedCount: number = await this.db(this.tableName).update(toSave).where({ id: objectId });
+				const updatedCount: number = await this.db(this.tableName).update(toSave).where({ id: objectId }).queryContext(options.queryContext || {});
 				(toSave as WithUuid).id = objectId;
 
 				// Sanity check:

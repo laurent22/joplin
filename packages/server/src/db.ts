@@ -47,6 +47,10 @@ export interface DbConfigConnection {
 	password?: string;
 }
 
+export interface QueryContext {
+	uniqueConstraintErrorLoggingDisabled?: boolean;
+}
+
 export interface KnexDatabaseConfig {
 	client: string;
 	connection: DbConfigConnection;
@@ -204,6 +208,7 @@ interface KnexQueryErrorResponse {
 
 interface KnexQueryErrorData {
 	bindings: any[];
+	queryContext: QueryContext;
 }
 
 export async function connectDb(dbConfig: DatabaseConfig): Promise<DbConnection> {
@@ -214,6 +219,16 @@ export async function connectDb(dbConfig: DatabaseConfig): Promise<DbConnection>
 	}
 
 	connection.on('query-error', (response: KnexQueryErrorResponse, data: KnexQueryErrorData) => {
+		// It is possible to set certain properties on the query context to
+		// disable this handler. This is useful for example for constraint
+		// errors which are often already handled application side.
+
+		if (data.queryContext) {
+			if (data.queryContext.uniqueConstraintErrorLoggingDisabled && isUniqueConstraintError(response)) {
+				return;
+			}
+		}
+
 		const msg: string[] = [];
 		msg.push(response.message);
 		if (data.bindings && data.bindings.length) msg.push(JSON.stringify(filterBindings(data.bindings), null, '  '));
