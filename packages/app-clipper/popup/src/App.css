@@ -134,6 +134,7 @@ body {
 
 .App .Folders select {
 	flex: 1;
+	width: 100%;
 }
 
 .App .Tags input {
