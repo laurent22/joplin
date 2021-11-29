@@ -7,6 +7,7 @@ import config from '../config';
 import { msleep } from '../utils/time';
 import loadStorageDriver from './items/storage/loadStorageDriver';
 import { ErrorPayloadTooLarge } from '../utils/errors';
+import { isSqlite } from '../db';
 
 describe('ItemModel', function() {
 
@@ -422,6 +423,43 @@ describe('ItemModel', function() {
 		});
 
 		expect(await toDriver.exists(itemId, { models: fromModels })).toBe(true);
+	});
+
+	test('should delete the database item content', async function() {
+		if (isSqlite(db())) {
+			expect(1).toBe(1);
+			return;
+		}
+
+		const { user: user1 } = await createUserAndSession(1);
+
+		await createItemTree3(user1.id, '', '', [
+			{
+				id: '000000000000000000000000000000F1',
+				children: [
+					{ id: '00000000000000000000000000000001' },
+				],
+			},
+		]);
+
+		const folder1 = await models().item().loadByName(user1.id, '000000000000000000000000000000F1.md');
+		const note1 = await models().item().loadByName(user1.id, '00000000000000000000000000000001.md');
+
+		await msleep(1);
+
+		expect(await models().item().dbContent(folder1.id)).not.toEqual(Buffer.from(''));
+		expect(await models().item().dbContent(note1.id)).not.toEqual(Buffer.from(''));
+
+		await models().item().deleteDatabaseContentColumn({ batchSize: 1 });
+
+		const folder1_v2 = await models().item().loadByName(user1.id, '000000000000000000000000000000F1.md');
+		const note1_v2 = await models().item().loadByName(user1.id, '00000000000000000000000000000001.md');
+
+		expect(folder1.updated_time).toBe(folder1_v2.updated_time);
+		expect(note1.updated_time).toBe(note1_v2.updated_time);
+
+		expect(await models().item().dbContent(folder1.id)).toEqual(Buffer.from(''));
+		expect(await models().item().dbContent(note1.id)).toEqual(Buffer.from(''));
 	});
 
 	// test('should stop importing item if it has been deleted', async function() {

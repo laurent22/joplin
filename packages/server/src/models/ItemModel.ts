@@ -399,7 +399,9 @@ export default class ItemModel extends BaseModel<Item> {
 		}
 	}
 
-	public async deleteDatabaseContentColumn(options: DeleteDatabaseContentOptions) {
+	public async deleteDatabaseContentColumn(options: DeleteDatabaseContentOptions = null) {
+		if (!returningSupported(this.db)) throw new Error('Not supported by this database driver');
+
 		options = {
 			batchSize: 1000,
 			logger: new Logger(),
@@ -436,6 +438,11 @@ export default class ItemModel extends BaseModel<Item> {
 
 			await msleep(1000);
 		}
+	}
+
+	public async dbContent(itemId: Uuid): Promise<Buffer> {
+		const row: Item = await this.db(this.tableName).select(['content']).where('id', itemId).first();
+		return row.content;
 	}
 
 	public async sharedFolderChildrenItems(shareUserIds: Uuid[], folderId: string, includeResources: boolean = true): Promise<Item[]> {
