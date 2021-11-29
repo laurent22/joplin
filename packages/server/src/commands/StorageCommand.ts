@@ -9,6 +9,7 @@ const logger = Logger.create('ImportContentCommand');
 enum ArgvCommand {
 	Import = 'import',
 	CheckConnection = 'check-connection',
+	DeleteDatabaseContentColumn = 'delete-database-content-col',
 }
 
 interface Argv {
@@ -35,6 +36,7 @@ export default class StorageCommand extends BaseCommand {
 				choices: [
 					ArgvCommand.Import,
 					ArgvCommand.CheckConnection,
+					ArgvCommand.DeleteDatabaseContentColumn,
 				],
 			},
 		};
@@ -58,12 +60,13 @@ export default class StorageCommand extends BaseCommand {
 	}
 
 	public async run(argv: Argv, runContext: RunContext): Promise<void> {
+		const batchSize = argv.batchSize || 1000;
+
 		const commands: Record<ArgvCommand, Function> = {
 			[ArgvCommand.Import]: async () => {
 				if (!argv.connection) throw new Error('--connection option is required');
 
 				const toStorageConfig = parseStorageConnectionString(argv.connection);
-				const batchSize = argv.batchSize || 1000;
 				const maxContentSize = argv.maxContentSize || 200000000;
 
 				logger.info('Importing to storage:', toStorageConfig);
@@ -79,6 +82,15 @@ export default class StorageCommand extends BaseCommand {
 
 			[ArgvCommand.CheckConnection]: async () => {
 				logger.info(await storageConnectionCheck(argv.connection, runContext.db, runContext.models));
+			},
+
+			[ArgvCommand.DeleteDatabaseContentColumn]: async () => {
+				logger.info(`Batch size: ${batchSize}`);
+
+				await runContext.models.item().deleteDatabaseContentColumn({
+					batchSize,
+					logger,
+				});
 			},
 		};
 

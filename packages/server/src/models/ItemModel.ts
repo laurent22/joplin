@@ -27,6 +27,11 @@ export interface ImportContentToStorageOptions {
 	logger?: Logger | LoggerWrapper;
 }
 
+export interface DeleteDatabaseContentOptions {
+	batchSize?: number;
+	logger?: Logger | LoggerWrapper;
+}
+
 export interface SaveFromRawContentItem {
 	name: string;
 	body: Buffer;
@@ -391,6 +396,45 @@ export default class ItemModel extends BaseModel<Item> {
 			}
 
 			totalDone += items.length;
+		}
+	}
+
+	public async deleteDatabaseContentColumn(options: DeleteDatabaseContentOptions) {
+		options = {
+			batchSize: 1000,
+			logger: new Logger(),
+			...options,
+		};
+
+		const itemCount = (await this.db(this.tableName)
+			.count('id', { as: 'total' })
+			.where('content', '!=', Buffer.from(''))
+			.first())['total'];
+
+		let totalDone = 0;
+
+		// UPDATE items SET content = '\x' WHERE id IN (SELECT id FROM items WHERE content != '\x' LIMIT 5000);
+
+		while (true) {
+			options.logger.info(`Processing items ${totalDone} / ${itemCount}`);
+
+			const updatedRows = await this
+				.db(this.tableName)
+				.update({ content: Buffer.from('') }, ['id'])
+				.whereIn('id', this.db(this.tableName)
+					.select(['id'])
+					.where('content', '!=', Buffer.from(''))
+					.limit(options.batchSize)
+				);
+
+			totalDone += updatedRows.length;
+
+			if (!updatedRows.length) {
+				options.logger.info(`All items have been processed. Total: ${totalDone}`);
+				return;
+			}
+
+			await msleep(1000);
 		}
 	}
 
