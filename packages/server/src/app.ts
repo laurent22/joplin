@@ -251,12 +251,14 @@ async function main() {
 
 		appLogger().info(`Starting server v${config().appVersion} (${env}) on port ${config().port} and PID ${process.pid}...`);
 
-		const timeDrift = await getDeviceTimeDrift();
-		if (Math.abs(timeDrift) > config().maxTimeDrift) {
-			throw new Error(`The device time drift is ${timeDrift}ms (Max allowed: ${config().maxTimeDrift}ms) - cannot continue as it could cause data loss and conflicts on the sync clients. You may increase env var MAX_TIME_DRIFT to pass the check.`);
+		if (config().maxTimeDrift) {
+			const timeDrift = await getDeviceTimeDrift();
+			if (Math.abs(timeDrift) > config().maxTimeDrift) {
+				throw new Error(`The device time drift is ${timeDrift}ms (Max allowed: ${config().maxTimeDrift}ms) - cannot continue as it could cause data loss and conflicts on the sync clients. You may increase env var MAX_TIME_DRIFT to pass the check.`);
+			}
+			appLogger().info(`NTP time offset: ${timeDrift}ms`);
 		}
 
-		appLogger().info(`NTP time offset: ${timeDrift}ms`);
 		appLogger().info('Running in Docker:', runningInDocker());
 		appLogger().info('Public base URL:', config().baseUrl);
 		appLogger().info('API base URL:', config().apiBaseUrl);
