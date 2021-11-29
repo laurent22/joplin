@@ -197,11 +197,15 @@ export default class ItemModel extends BaseModel<Item> {
 		const storageDriver = await this.storageDriver();
 		const storageDriverFallback = await this.storageDriverFallback();
 
-		if (await storageDriver.exists(itemId, context)) {
+		if (!storageDriverFallback) {
 			return storageDriver.read(itemId, context);
 		} else {
-			if (!storageDriverFallback) throw new Error(`Content does not exist but fallback content driver is not defined: ${itemId}`);
-			return storageDriverFallback.read(itemId, context);
+			if (await storageDriver.exists(itemId, context)) {
+				return storageDriver.read(itemId, context);
+			} else {
+				if (!storageDriverFallback) throw new Error(`Content does not exist but fallback content driver is not defined: ${itemId}`);
+				return storageDriverFallback.read(itemId, context);
+			}
 		}
 	}
 
