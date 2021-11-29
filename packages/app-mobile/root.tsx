@@ -476,7 +476,7 @@ async function initialize(dispatch: Function) {
 		if (Setting.value('env') == 'prod') {
 			await db.open({ name: 'joplin.sqlite' });
 		} else {
-			await db.open({ name: 'joplin-107.sqlite' });
+			await db.open({ name: 'joplin-1.sqlite' });
 
 			// await db.clearForTesting();
 		}
@@ -729,6 +729,11 @@ class AppComponent extends React.Component {
 			});
 
 			try {
+				NetInfo.configure({
+					reachabilityUrl: 'https://joplinapp.org/connection_check/',
+					reachabilityTest: async (response) => response.status === 200,
+				});
+
 				// This will be called right after adding the event listener
 				// so there's no need to check netinfo on startup
 				this.unsubscribeNetInfoHandler_ = NetInfo.addEventListener(({ type, details }) => {
