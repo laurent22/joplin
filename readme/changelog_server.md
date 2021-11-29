@@ -1,5 +1,15 @@
 # Joplin Server Changelog
 
+## [server-v2.6.13](https://github.com/laurent22/joplin/releases/tag/server-v2.6.13) - 2021-11-29T18:41:28Z
+
+- New: Added command to delete database item content (01048f5)
+- Improved: Allow disabling NTP time drift check (dc67eac)
+- Improved: Do not set the SMTP auth option when user or password are not set (#5791 by [@MovingEarth](https://github.com/MovingEarth))
+- Improved: Increase default MAX_TIME_DRIFT to 100ms (8e54a65)
+- Improved: Optimise reading from external storage when fallback driver is not present (4fecb08)
+- Improved: Remove unique constraint errors from the log when they are already handled by the application (a6884a2)
+- Improved: Retry NTP request up to three times when it fails (7eb1d89)
+
 ## [server-v2.6.12](https://github.com/laurent22/joplin/releases/tag/server-v2.6.12) - 2021-11-23T16:30:27Z
 
 - New: Added task to compress changes older than 6 months (75f7296)
