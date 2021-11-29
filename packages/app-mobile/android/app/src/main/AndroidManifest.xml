@@ -13,6 +13,15 @@
 	<uses-feature android:name="android.hardware.camera" android:required="false" />
 	<uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
 
+	<!-- Need this block to support viewing files in with Android API 30 -->
+	<!-- https://github.com/vinzscam/react-native-file-viewer/issues/94#issuecomment-767743365 -->
+	<queries>
+		<intent>
+			<action android:name="android.intent.action.VIEW" />
+			<data android:mimeType="*/*" />
+		</intent>
+	</queries>
+
 	<!--
 		android:requestLegacyExternalStorage: Android 10 introduced new "scoped storage" mechanism.
 		Apps targeting Android 10 (sdk 29) can no longer freely access arbitrary paths on the shared storage.

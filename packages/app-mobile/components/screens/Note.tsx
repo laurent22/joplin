@@ -44,9 +44,12 @@ import SelectDateTimeDialog from '../SelectDateTimeDialog';
 import ShareExtension from '../../utils/ShareExtension.js';
 import CameraView from '../CameraView';
 import { NoteEntity } from '@joplin/lib/services/database/types';
+import Logger from '@joplin/lib/Logger';
 const urlUtils = require('@joplin/lib/urlUtils');
 
 const emptyArray: any[] = [];
+
+const logger = Logger.create('screens/Note');
 
 class NoteScreenComponent extends BaseScreenComponent {
 	static navigationOptions(): any {
@@ -186,6 +189,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 					} else if (item.type_ === BaseModel.TYPE_RESOURCE) {
 						if (!(await Resource.isReady(item))) throw new Error(_('This attachment is not downloaded or not decrypted yet.'));
 						const resourcePath = Resource.fullPath(item);
+
+						logger.info(`Opening resource: ${resourcePath}`);
 						await FileViewer.open(resourcePath);
 					} else {
 						throw new Error(_('The Joplin mobile app does not currently support this type of link: %s', BaseModel.modelTypeToName(item.type_)));
