@@ -420,8 +420,8 @@ class AppComponent extends Component {
 				<div className="Controls">
 					<ul>
 						<li><a className="Button" href="#" onClick={this.clipSimplified_click} title={simplifiedPageButtonTooltip}>{simplifiedPageButtonLabel}</a></li>
-						<li><a className="Button" href="#" onClick={this.clipComplete_click}>Clip complete page</a></li>
-						<li><a className="Button" href="#" onClick={this.clipCompleteHtml_click}>Clip complete page (HTML) (Beta)</a></li>
+						<li><a className="Button" href="#" onClick={this.clipComplete_click}>Clip complete page (Markdown)</a></li>
+						<li><a className="Button" href="#" onClick={this.clipCompleteHtml_click}>Clip complete page (HTML)</a></li>
 						<li><a className="Button" href="#" onClick={this.clipSelection_click}>Clip selection</a></li>
 						<li><a className="Button" href="#" onClick={this.clipScreenshot_click}>Clip screenshot</a></li>
 						<li><a className="Button" href="#" onClick={this.clipUrl_click}>Clip URL</a></li>
