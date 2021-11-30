@@ -62,6 +62,8 @@ npm install
 if [ "$IS_PULL_REQUEST" == "1" ] || [ "$IS_DEV_BRANCH" = "1" ]; then
 	echo "Step: Running tests..."
 
+	sudo docker-compose --file docker-compose.server-dev.yml up -d
+
 	# Need this because we're getting this error:
 	#
 	# @joplin/lib: FATAL ERROR: Ineffective mark-compacts near heap limit

@@ -39,7 +39,7 @@
     "tagServerLatest": "node packages/tools/tagServerLatest.js",
     "buildServerDocker": "node packages/tools/buildServerDocker.js",
     "setupNewRelease": "node ./packages/tools/setupNewRelease",
-    "test-ci": "lerna run test-ci --stream",
+    "test-ci": "JOPLIN_TESTS_SERVER_DB=pg lerna run test-ci --stream",
     "test": "lerna run test --stream",
     "tsc": "lerna run tsc --stream --parallel",
     "updateIgnored": "gulp updateIgnoredTypeScriptBuild",
