@@ -414,11 +414,6 @@ describe('models/Folder.sharing', function() {
 		note3 = await Note.load(note3.id);
 		note4 = await Note.load(note4.id);
 
-		console.info(note1.body);
-		console.info(note2.body);
-		console.info(note3.body);
-		console.info(note4.body);
-
 		expect(note1.body).not.toBe(note2.body);
 		expect(note1.body).not.toBe(note3.body);
 		expect(note1.body).not.toBe(note4.body);

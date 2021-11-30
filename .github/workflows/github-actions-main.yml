@@ -29,7 +29,8 @@ jobs:
           brew install translate-toolkit
 
       - name: Install Docker Engine
-        if: runner.os == 'Linux' && startsWith(github.ref, 'refs/tags/server-v')
+        # if: runner.os == 'Linux' && startsWith(github.ref, 'refs/tags/server-v')
+        if: runner.os == 'Linux'
         run: |
           sudo apt-get install -y apt-transport-https
           sudo apt-get install -y ca-certificates

@@ -78,22 +78,24 @@ export async function beforeAllDb(unitName: string, createDbOptions: CreateDbOpt
 	//
 	// sudo docker compose -f docker-compose.db-dev.yml up
 
-	// await initConfig(Env.Dev, parseEnv({
-	// 	DB_CLIENT: 'pg',
-	// 	POSTGRES_DATABASE: unitName,
-	// 	POSTGRES_USER: 'joplin',
-	// 	POSTGRES_PASSWORD: 'joplin',
-	// 	SUPPORT_EMAIL: 'testing@localhost',
-	// }), {
-	// 	tempDir: tempDir,
-	// });
-
-	await initConfig(Env.Dev, parseEnv({
-		SQLITE_DATABASE: createdDbPath_,
-		SUPPORT_EMAIL: 'testing@localhost',
-	}), {
-		tempDir: tempDir,
-	});
+	if (process.env.JOPLIN_TESTS_SERVER_DB === 'pg') {
+		await initConfig(Env.Dev, parseEnv({
+			DB_CLIENT: 'pg',
+			POSTGRES_DATABASE: unitName,
+			POSTGRES_USER: 'joplin',
+			POSTGRES_PASSWORD: 'joplin',
+			SUPPORT_EMAIL: 'testing@localhost',
+		}), {
+			tempDir: tempDir,
+		});
+	} else {
+		await initConfig(Env.Dev, parseEnv({
+			SQLITE_DATABASE: createdDbPath_,
+			SUPPORT_EMAIL: 'testing@localhost',
+		}), {
+			tempDir: tempDir,
+		});
+	}
 
 	initGlobalLogger();
 
