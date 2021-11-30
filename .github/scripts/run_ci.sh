@@ -62,7 +62,14 @@ npm install
 if [ "$IS_PULL_REQUEST" == "1" ] || [ "$IS_DEV_BRANCH" = "1" ]; then
 	echo "Step: Running tests..."
 
-	sudo docker-compose --file docker-compose.db-dev.yml up -d
+	# On Linux, we run the Joplin Server tests using PostgreSQL
+	if [ "$IS_LINUX" == "1" ]; then
+		echo "Running Joplin Server tests using PostgreSQL..."
+		sudo docker-compose --file docker-compose.db-dev.yml up -d
+		export JOPLIN_TESTS_SERVER_DB=pg
+	else
+		echo "Running Joplin Server tests using SQLite..."
+	fi
 
 	# Need this because we're getting this error:
 	#
