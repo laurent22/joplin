@@ -5,7 +5,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-latest, ubuntu-latest, windows-2016]
+        os: [macos-latest, ubuntu-latest, windows-latest]
     steps:
 
       # Silence apt-get update errors (for example when a module doesn't
