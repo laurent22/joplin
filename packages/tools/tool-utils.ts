@@ -6,6 +6,20 @@ const execa = require('execa');
 const { splitCommandString } = require('@joplin/lib/string-utils');
 const moment = require('moment');
 
+export interface GitHubReleaseAsset {
+	name: string;
+	browser_download_url: string;
+}
+
+export interface GitHubRelease {
+	assets: GitHubReleaseAsset[];
+	tag_name: string;
+	upload_url: string;
+	html_url: string;
+	prerelease: boolean;
+	draft: boolean;
+}
+
 function quotePath(path: string) {
 	if (!path) return '';
 	if (path.indexOf('"') < 0 && path.indexOf(' ') < 0) return path;
@@ -364,7 +378,39 @@ export function githubOauthToken() {
 	return readCredentialFile('github_oauth_token.txt');
 }
 
-export async function githubRelease(project: string, tagName: string, options: any = null) {
+// Note that the GitHub API releases/latest is broken on the joplin-android repo
+// as of Nov 2021 (last working on 3 November 2021, first broken on 19
+// November). It used to return the latest **published** release but now it
+// retuns... some release, always the same one, but not the latest one. GitHub
+// says that nothing has changed on the API, although it used to work. So since
+// we can't use /latest anymore, we need to fetch all the releases to find the
+// latest published one.
+export async function gitHubLatestRelease(repoName: string): Promise<GitHubRelease> {
+	let pageNum = 1;
+
+	while (true) {
+		const response: any = await fetch(`https://api.github.com/repos/laurent22/${repoName}/releases?page=${pageNum}`, {
+			headers: {
+				'Content-Type': 'application/json',
+				'User-Agent': 'Joplin Readme Updater',
+			},
+		});
+
+		if (!response.ok) throw new Error(`Cannot fetch releases: ${response.statusText}`);
+
+		const releases = await response.json();
+		if (!releases.length) throw new Error('Cannot find latest release');
+
+		for (const release of releases) {
+			if (release.prerelease || release.draft) continue;
+			return release;
+		}
+
+		pageNum++;
+	}
+}
+
+export async function githubRelease(project: string, tagName: string, options: any = null): Promise<GitHubRelease> {
 	options = Object.assign({}, {
 		isDraft: false,
 		isPreRelease: false,
