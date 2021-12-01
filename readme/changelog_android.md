@@ -1,5 +1,14 @@
 # Joplin Android app changelog
 
+## [android-v2.6.4](https://github.com/laurent22/joplin/releases/tag/android-v2.6.4) (Pre-release) - 2021-12-01T11:38:49Z
+
+- Improved: Also duplicate resources when duplicating a note (c0a8c33)
+- Improved: Improved S3 sync error handling and reliability, and upgraded S3 SDK (#5312 by Lee Matos)
+- Fixed: Alarm setting buttons were no longer visible (#5777)
+- Fixed: Alarms were not being triggered in some cases (#5798) (#5216 by Roman Musin)
+- Fixed: Fixed opening attachments (6950c40)
+- Fixed: Handle duplicate attachments when the parent notebook is shared (#5796)
+
 ## [android-v2.6.3](https://github.com/laurent22/joplin/releases/tag/android-v2.6.3) (Pre-release) - 2021-11-21T16:59:46Z
 
 - New: Add date format YYYY/MM/DD (#5759 by Helmut K. C. Tessarek)
