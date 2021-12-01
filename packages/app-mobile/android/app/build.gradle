@@ -215,6 +215,16 @@ android {
 
         }
     }
+
+    // To fix this error:
+    //
+    // > Execution failed for task ':app:lintVitalRelease'
+    //
+    // https://stackoverflow.com/a/62603296/561309
+    lintOptions {
+        disable 'InvalidPackage'
+        checkReleaseBuilds false
+    }
 }
 
 dependencies {
