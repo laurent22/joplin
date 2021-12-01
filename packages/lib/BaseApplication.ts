@@ -258,6 +258,20 @@ export default class BaseApplication {
 				continue;
 			}
 
+			if (arg.indexOf('--enable-features=') === 0) {
+				// Electron-specific flag - ignore it
+				// Allows users to run the app on native wayland
+				argv.splice(0, 1);
+				continue;
+			}
+
+			if (arg.indexOf('--ozone-platform=') === 0) {
+				// Electron-specific flag - ignore it
+				// Allows users to run the app on native wayland
+				argv.splice(0, 1);
+				continue;
+			}
+
 			if (arg.length && arg[0] == '-') {
 				throw new JoplinError(_('Unknown flag: %s', arg), 'flagError');
 			} else {
