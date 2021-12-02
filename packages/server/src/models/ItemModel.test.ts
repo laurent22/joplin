@@ -462,6 +462,41 @@ describe('ItemModel', function() {
 		expect(await models().item().dbContent(note1.id)).toEqual(Buffer.from(''));
 	});
 
+	test('should delete the database item content - maxProcessedItems handling', async function() {
+		if (isSqlite(db())) {
+			expect(1).toBe(1);
+			return;
+		}
+
+		const { user: user1 } = await createUserAndSession(1);
+
+		await createItemTree3(user1.id, '', '', [
+			{
+				id: '000000000000000000000000000000F1',
+				children: [
+					{ id: '00000000000000000000000000000001' },
+					{ id: '00000000000000000000000000000002' },
+					{ id: '00000000000000000000000000000003' },
+					{ id: '00000000000000000000000000000004' },
+				],
+			},
+		]);
+
+		await models().item().deleteDatabaseContentColumn({ batchSize: 2, maxProcessedItems: 4 });
+
+		const itemIds = (await models().item().all()).map(it => it.id);
+		const contents = await Promise.all([
+			models().item().dbContent(itemIds[0]),
+			models().item().dbContent(itemIds[1]),
+			models().item().dbContent(itemIds[2]),
+			models().item().dbContent(itemIds[3]),
+			models().item().dbContent(itemIds[4]),
+		]);
+
+		const emptyOnes = contents.filter(c => c.toString() === '');
+		expect(emptyOnes.length).toBe(4);
+	});
+
 	// test('should stop importing item if it has been deleted', async function() {
 	// 	const { user: user1 } = await createUserAndSession(1);
 

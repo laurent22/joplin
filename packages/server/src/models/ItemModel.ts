@@ -30,6 +30,7 @@ export interface ImportContentToStorageOptions {
 export interface DeleteDatabaseContentOptions {
 	batchSize?: number;
 	logger?: Logger | LoggerWrapper;
+	maxProcessedItems?: number;
 }
 
 export interface SaveFromRawContentItem {
@@ -409,20 +410,21 @@ export default class ItemModel extends BaseModel<Item> {
 		options = {
 			batchSize: 1000,
 			logger: new Logger(),
+			maxProcessedItems: 0,
 			...options,
 		};
 
-		const itemCount = (await this.db(this.tableName)
-			.count('id', { as: 'total' })
-			.where('content', '!=', Buffer.from(''))
-			.first())['total'];
+		// const itemCount = (await this.db(this.tableName)
+		// 	.count('id', { as: 'total' })
+		// 	.where('content', '!=', Buffer.from(''))
+		// 	.first())['total'];
 
 		let totalDone = 0;
 
 		// UPDATE items SET content = '\x' WHERE id IN (SELECT id FROM items WHERE content != '\x' LIMIT 5000);
 
 		while (true) {
-			options.logger.info(`Processing items ${totalDone} / ${itemCount}`);
+			options.logger.info(`Processing items ${totalDone}`);
 
 			const updatedRows = await this
 				.db(this.tableName)
@@ -437,6 +439,11 @@ export default class ItemModel extends BaseModel<Item> {
 
 			if (!updatedRows.length) {
 				options.logger.info(`All items have been processed. Total: ${totalDone}`);
+				return;
+			}
+
+			if (options.maxProcessedItems && totalDone + options.batchSize > options.maxProcessedItems) {
+				options.logger.info(`Processed ${totalDone} items out of requested ${options.maxProcessedItems}`);
 				return;
 			}
 

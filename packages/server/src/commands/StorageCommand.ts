@@ -14,9 +14,10 @@ enum ArgvCommand {
 
 interface Argv {
 	command: ArgvCommand;
-	connection: string;
+	connection?: string;
 	batchSize?: number;
 	maxContentSize?: number;
+	maxProcessedItems?: number;
 }
 
 export default class StorageCommand extends BaseCommand {
@@ -52,6 +53,10 @@ export default class StorageCommand extends BaseCommand {
 				type: 'number',
 				description: 'Max content size',
 			},
+			'max-processed-items': {
+				type: 'number',
+				description: 'Max number of items to process before stopping',
+			},
 			'connection': {
 				description: 'storage connection string',
 				type: 'string',
@@ -85,11 +90,14 @@ export default class StorageCommand extends BaseCommand {
 			},
 
 			[ArgvCommand.DeleteDatabaseContentColumn]: async () => {
+				const maxProcessedItems = argv.maxProcessedItems;
+
 				logger.info(`Batch size: ${batchSize}`);
 
 				await runContext.models.item().deleteDatabaseContentColumn({
 					batchSize,
 					logger,
+					maxProcessedItems,
 				});
 			},
 		};
