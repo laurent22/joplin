@@ -356,8 +356,6 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 	}, []);
 
 	useEffect(() => {
-		if (!editorReady) return () => {};
-
 		const theme = themeStyle(props.themeId);
 
 		const element = document.createElement('style');
@@ -491,11 +489,28 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				padding-top: ${theme.toolbarPadding}px;
 				padding-bottom: ${theme.toolbarPadding}px;
 			}
+
+			.joplin-tinymce .tox .tox-edit-area__iframe {
+				background-color: ${theme.backgroundColor} !important;
+			}
+
+			.joplin-tinymce .tox .tox-toolbar__primary {
+				/* This component sets an empty svg with a white background as the background
+				 * which needs to be cleared to prevent it from flashing white in dark themes */
+				background: none;
+				background-color: ${theme.backgroundColor3} !important;
+			}
 		`));
 
 		return () => {
 			document.head.removeChild(element);
 		};
+		// editorReady is here because TinyMCE starts by initializing a blank iframe, which needs to be
+		// styled by us, otherwise users in dark mode get a bright white flash. During initialization
+		// our styling is overwritten which causes some elements to have the wrong styling. Removing the
+		// style and re-applying it on editorReady gives our styles precedence and prevents any flashing
+		//
+		// tl;dr: editorReady is used here because the css needs to be re-applied after TinyMCE init
 	}, [editorReady, props.themeId]);
 
 	// -----------------------------------------------------------------------------------------
