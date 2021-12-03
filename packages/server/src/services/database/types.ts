@@ -40,6 +40,7 @@ export enum UserFlagType {
 	AccountWithoutSubscription = 4,
 	SubscriptionCancelled = 5,
 	ManuallyDisabled = 6,
+	UserDeletionInProgress = 7,
 }
 
 export function userFlagTypeToLabel(t: UserFlagType): string {
@@ -50,6 +51,7 @@ export function userFlagTypeToLabel(t: UserFlagType): string {
 		[UserFlagType.AccountWithoutSubscription]: 'Account Without Subscription',
 		[UserFlagType.SubscriptionCancelled]: 'Subscription Cancelled',
 		[UserFlagType.ManuallyDisabled]: 'Manually Disabled',
+		[UserFlagType.UserDeletionInProgress]: 'User deletion in progress',
 	};
 
 	if (!s[t]) throw new Error(`Unknown flag type: ${t}`);

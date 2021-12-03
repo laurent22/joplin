@@ -108,6 +108,7 @@ export default class UserFlagModels extends BaseModel<UserFlag> {
 		const failedPaymentFinalFlag = flags.find(f => f.type === UserFlagType.FailedPaymentFinal);
 		const subscriptionCancelledFlag = flags.find(f => f.type === UserFlagType.SubscriptionCancelled);
 		const manuallyDisabledFlag = flags.find(f => f.type === UserFlagType.ManuallyDisabled);
+		const userDeletionInProgress = flags.find(f => f.type === UserFlagType.UserDeletionInProgress);
 
 		if (accountWithoutSubscriptionFlag) {
 			newProps.can_upload = 0;
@@ -130,6 +131,10 @@ export default class UserFlagModels extends BaseModel<UserFlag> {
 		}
 
 		if (manuallyDisabledFlag) {
+			newProps.enabled = 0;
+		}
+
+		if (userDeletionInProgress) {
 			newProps.enabled = 0;
 		}
 

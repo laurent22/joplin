@@ -1,4 +1,4 @@
-import BaseModel, { SaveOptions, LoadOptions, DeleteOptions, ValidateOptions, AclAction } from './BaseModel';
+import BaseModel, { SaveOptions, LoadOptions, DeleteOptions as BaseDeleteOptions, ValidateOptions, AclAction } from './BaseModel';
 import { ItemType, databaseSchema, Uuid, Item, ShareType, Share, ChangeType, User, UserItem } from '../services/database/types';
 import { defaultPagination, paginateDbQuery, PaginatedResults, Pagination } from './utils/pagination';
 import { isJoplinItemName, isJoplinResourceBlobPath, linkedResourceIds, serializeJoplinItem, unserializeJoplinItem } from '../utils/joplinUtils';
@@ -20,6 +20,10 @@ const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
 
 // Converts "root:/myfile.txt:" to "myfile.txt"
 const extractNameRegex = /^root:\/(.*):$/;
+
+export interface DeleteOptions extends BaseDeleteOptions {
+	deleteChanges?: boolean;
+}
 
 export interface ImportContentToStorageOptions {
 	batchSize?: number;
@@ -839,6 +843,11 @@ export default class ItemModel extends BaseModel<Item> {
 	}
 
 	public async delete(id: string | string[], options: DeleteOptions = {}): Promise<void> {
+		options = {
+			deleteChanges: false,
+			...options,
+		};
+
 		const ids = typeof id === 'string' ? [id] : id;
 		if (!ids.length) return;
 
@@ -849,12 +858,14 @@ export default class ItemModel extends BaseModel<Item> {
 
 		await this.withTransaction(async () => {
 			await this.models().share().delete(shares.map(s => s.id));
-			await this.models().userItem().deleteByItemIds(ids);
+			await this.models().userItem().deleteByItemIds(ids, { recordChanges: !options.deleteChanges });
 			await this.models().itemResource().deleteByItemIds(ids);
 			await storageDriver.delete(ids, { models: this.models() });
 			if (storageDriverFallback) await storageDriverFallback.delete(ids, { models: this.models() });
 
 			await super.delete(ids, options);
+
+			if (options.deleteChanges) await this.models().change().deleteByItemIds(ids);
 		}, 'ItemModel::delete');
 	}
 

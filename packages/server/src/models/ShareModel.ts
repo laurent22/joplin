@@ -411,6 +411,16 @@ export default class ShareModel extends BaseModel<Share> {
 		}, 'ShareModel::delete');
 	}
 
+	public async deleteByUserId(userId: Uuid) {
+		const shares = await this.sharesByUser(userId);
+
+		await this.withTransaction(async () => {
+			for (const share of shares) {
+				await this.delete(share.id);
+			}
+		}, 'ShareModel::deleteByUserId');
+	}
+
 	public async itemCountByShareId(shareId: Uuid): Promise<number> {
 		const r = await this
 			.db('items')

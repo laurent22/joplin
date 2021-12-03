@@ -391,4 +391,12 @@ export default class ChangeModel extends BaseModel<Change> {
 		return savedChange;
 	}
 
+	public async deleteByItemIds(itemIds: Uuid[]) {
+		if (!itemIds.length) return;
+
+		await this.db(this.tableName)
+			.whereIn('item_id', itemIds)
+			.delete();
+	}
+
 }
