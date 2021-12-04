@@ -6,6 +6,7 @@ import validateLinks from './MdToHtml/validateLinks';
 import { ItemIdToUrlHandler } from './utils';
 import { RenderResult, RenderResultPluginAsset } from './MarkupToHtml';
 import { Options as NoteStyleOptions } from './noteStyle';
+import { Buffer } from 'buffer';
 
 const MarkdownIt = require('markdown-it');
 const md5 = require('md5');
@@ -448,7 +449,7 @@ export default class MdToHtml {
 			this.lastCodeHighlightCacheKey_ = options.codeHighlightCacheKey;
 		}
 
-		const cacheKey = md5(body + this.customCss_ + JSON.stringify(options));
+		const cacheKey = md5(Buffer.from(body + this.customCss_ + JSON.stringify(options)));
 		const cachedOutput = this.cachedOutputs_[cacheKey];
 		if (cachedOutput) return cachedOutput;
 
