@@ -343,7 +343,7 @@ export default abstract class BaseModel<T> {
 		return !!o;
 	}
 
-	public async load(id: string, options: LoadOptions = {}): Promise<T> {
+	public async load(id: Uuid | number, options: LoadOptions = {}): Promise<T> {
 		if (!id) throw new Error('id cannot be empty');
 
 		return this.db(this.tableName).select(options.fields || this.defaultFields).where({ id: id }).first();

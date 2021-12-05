@@ -157,4 +157,8 @@ export default class UserFlagModels extends BaseModel<UserFlag> {
 		return this.db(this.tableName).where('user_id', '=', userId);
 	}
 
+	public async deleteByUserId(userId: Uuid) {
+		await this.db(this.tableName).where('user_id', '=', userId).delete();
+	}
+
 }

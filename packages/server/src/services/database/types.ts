@@ -270,6 +270,16 @@ export interface Item extends WithDates, WithUuid {
 	content_storage_id?: number;
 }
 
+export interface UserDeletion extends WithDates {
+	id?: number;
+	user_id?: Uuid;
+	scheduled_time?: number;
+	start_time?: number;
+	end_time?: number;
+	success?: number;
+	error?: string;
+}
+
 export const databaseSchema: DatabaseTables = {
 	sessions: {
 		id: { type: 'string' },
@@ -450,6 +460,17 @@ export const databaseSchema: DatabaseTables = {
 		jop_updated_time: { type: 'string' },
 		owner_id: { type: 'string' },
 		content_storage_id: { type: 'number' },
+	},
+	user_deletions: {
+		id: { type: 'number' },
+		user_id: { type: 'string' },
+		scheduled_time: { type: 'string' },
+		start_time: { type: 'string' },
+		end_time: { type: 'string' },
+		success: { type: 'number' },
+		error: { type: 'string' },
+		updated_time: { type: 'string' },
+		created_time: { type: 'string' },
 	},
 };
 // AUTO-GENERATED-TYPES

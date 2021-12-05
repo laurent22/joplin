@@ -60,22 +60,18 @@ export default class UserDeletionService extends BaseService {
 	}
 
 	public async deleteUserAccount(userId: Uuid, _options: DeleteUserDataOptions = null) {
+		await this.models.userFlag().add(userId, UserFlagType.UserDeletionInProgress);
+
 		await this.models.session().deleteByUserId(userId);
 		await this.models.notification().deleteByUserId(userId);
+		await this.models.user().delete(userId);
+		await this.models.userFlag().deleteByUserId(userId);
 	}
 
-	// protected async maintenance() {
-	// 	logger.info('Starting maintenance...');
-	// 	const startTime = Date.now();
-
-	// 	try {
-	// 		//await this.models.share().updateSharedItems3();
-	// 	} catch (error) {
-	// 		logger.error('Could not update share items:', error);
-	// 	}
-
-	// 	logger.info(`Maintenance completed in ${Date.now() - startTime}ms`);
-	// }
+	protected async maintenance() {
+		const deletion = await this.models.userDeletion().next();
+		if (!deletion) return;
+	}
 
 	// public async runInBackground() {
 	// 	ChangeModel.eventEmitter.on('saved', this.scheduleMaintenance);
