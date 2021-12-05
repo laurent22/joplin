@@ -62,6 +62,14 @@ Difficulty Level: High
 
 Skills Required: TypeScript, JavaScript, knowledge of Electron and GitHub Actions.
 
+## 5. Convert the monorepo to use npm or yarn workspaces
+
+The current monorepo is managed using Lerna. As this tool has various performance issues we would like to migrate to npm or yarn workspaces. This is a good opportunity to get indepth knownledge about many parts of the JS building process, as you'll probably need to update various building scripts and dependencies, and ensure that all the applications and packages still work correctly on all the target platforms.
+
+Difficulty Level: High
+
+Skills Required: TypeScript, JavaScript, npm or yarn.
+
 # More info
 
 - Make sure you read the [Joplin Google Summer of Code Introduction](https://joplinapp.org/gsoc2022/index/)
