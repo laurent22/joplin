@@ -320,7 +320,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		async function loadScripts() {
 			const scriptsToLoad: any[] = [
 				{
-					src: 'node_modules/tinymce/tinymce.min.js',
+					src: 'build/lib/tinymce/tinymce.min.js',
 					id: 'tinyMceScript',
 					loaded: false,
 				},
@@ -571,7 +571,8 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				statusbar: false,
 				target_list: false,
 				table_resize_bars: false,
-				language: ['en_US', 'en_GB'].includes(language) ? undefined : language,
+				language_url: `build/lib/tinymce/langs/${['en_US', 'en_GB'].includes(language)}` ? undefined : language,
+				// language: ['en_US', 'en_GB'].includes(language) ? undefined : language,
 				toolbar: toolbar.join(' '),
 				localization_function: _,
 				contextmenu: false,
@@ -708,7 +709,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		}
 
 		const cssFiles = [
-			'node_modules/@fortawesome/fontawesome-free/css/all.min.css',
+			'build/lib/@fortawesome/fontawesome-free/css/all.min.css',
 			`gui/note-viewer/pluginAssets/highlight.js/${theme.codeThemeCss}`,
 		].concat(
 			pluginAssets

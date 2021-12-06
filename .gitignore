@@ -51,6 +51,17 @@ lerna-debug.log
 .env
 docs/**/*.mustache
 
+# Yarn stuff
+# https://yarnpkg.com/getting-started/qa#which-files-should-be-gitignored
+
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
 packages/app-cli/app/LinkSelector.d.ts
 packages/app-cli/app/LinkSelector.js

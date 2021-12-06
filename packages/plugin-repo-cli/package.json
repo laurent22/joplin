@@ -3,9 +3,7 @@
   "version": "2.6.2",
   "description": "",
   "main": "index.js",
-  "bin": {
-    "plugin-repo-cli": "./index.js"
-  },
+  "bin": "./index.js",
   "publishConfig": {
     "access": "public"
   },

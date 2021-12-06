@@ -1,6 +1,9 @@
 {
   "name": "root",
   "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/laurent22/joplin.git"
@@ -26,7 +29,7 @@
     "linter-ci": "eslint --resolve-plugins-relative-to . --quiet --ext .js --ext .jsx --ext .ts --ext .tsx",
     "linter-precommit": "eslint --resolve-plugins-relative-to . --fix --ext .js --ext .jsx --ext .ts --ext .tsx",
     "linter": "eslint --resolve-plugins-relative-to . --fix --quiet --ext .js --ext .jsx --ext .ts --ext .tsx",
-    "postinstall": "npm run bootstrap --no-ci && npm run build",
+    "__postinstall": "npm run bootstrap --no-ci && npm run build",
     "publishAll": "git pull && npm run build && lerna version --yes --no-private --no-git-tag-version && gulp completePublishAll",
     "releaseAndroid": "npm run build && export PATH=\"/usr/local/opt/openjdk@11/bin:$PATH\" && node packages/tools/release-android.js",
     "releaseAndroidClean": "node packages/tools/release-android.js",
@@ -73,6 +76,8 @@
   },
   "dependencies": {
     "http-server": "^0.12.3",
+    "node-gyp": "^8.4.1",
     "nodemon": "^2.0.9"
-  }
+  },
+  "packageManager": "yarn@3.1.1"
 }

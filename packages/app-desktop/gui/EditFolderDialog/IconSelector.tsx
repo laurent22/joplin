@@ -29,7 +29,7 @@ export const IconSelector = (props: Props) => {
 
 			await loadScript({
 				id: 'emoji-button-lib',
-				src: 'node_modules/@joeattardi/emoji-button/dist/index.js',
+				src: 'build/lib/@joeattardi/emoji-button/dist/index.js',
 				attrs: {
 					type: 'module',
 				},

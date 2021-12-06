@@ -9,8 +9,8 @@
     "build": "gulp build",
     "postinstall": "npm run build",
     "electronRebuild": "gulp electronRebuild",
-    "tsc": "node node_modules/typescript/bin/tsc --project tsconfig.json",
-    "watch": "node node_modules/typescript/bin/tsc --watch --project tsconfig.json",
+    "tsc": "tsc --project tsconfig.json",
+    "watch": "tsc --watch --project tsconfig.json",
     "start": "gulp build && electron . --env dev --log-level debug --no-welcome --open-dev-tools",
     "test": "jest",
     "test-ci": "npm run test"
@@ -31,7 +31,8 @@
     "afterSign": "./tools/notarizeMacApp.js",
     "extraResources": [
       "build/icons/*",
-      "build/images/*"
+      "build/images/*",
+      "build/tinymce/langs/*"
     ],
     "afterAllArtifactBuild": "./generateSha512.js",
     "asar": true,
@@ -116,7 +117,7 @@
     "app-builder-bin": "^1.9.11",
     "babel-cli": "^6.26.0",
     "babel-preset-react": "^6.24.1",
-    "electron": "^14.1.0",
+    "electron": "14.1.0",
     "electron-builder": "^22.11.7",
     "electron-notarize": "^1.0.0",
     "electron-rebuild": "^3.2.3",

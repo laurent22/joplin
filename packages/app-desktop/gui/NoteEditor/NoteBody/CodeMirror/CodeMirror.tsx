@@ -336,7 +336,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		async function loadScripts() {
 			const scriptsToLoad: {src: string; id: string; loaded: boolean}[] = [
 				{
-					src: 'node_modules/codemirror/addon/dialog/dialog.css',
+					src: 'build/lib/codemirror/addon/dialog/dialog.css',
 					id: 'codemirrorDialogStyle',
 					loaded: false,
 				},
@@ -351,7 +351,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				if (theme.indexOf('solarized') >= 0) theme = 'solarized';
 
 				scriptsToLoad.push({
-					src: `node_modules/codemirror/theme/${theme}.css`,
+					src: `build/lib/codemirror/theme/${theme}.css`,
 					id: `codemirrorTheme${theme}`,
 					loaded: false,
 				});

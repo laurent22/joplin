@@ -82,11 +82,11 @@ const GlobalStyle = createGlobalStyle`
 		box-sizing: border-box;
 	}
 
+	/*
 	div, span, a {
-		/*color: ${(props: any) => props.theme.color};*/
-		/*font-size: ${(props: any) => props.theme.fontSize}px;*/
 		font-family: ${(props: any) => props.theme.fontFamily};
 	}
+	*/
 `;
 
 let wcsTimeoutId_: any = null;
