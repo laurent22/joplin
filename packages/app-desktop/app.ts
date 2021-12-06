@@ -463,20 +463,18 @@ class Application extends BaseApplication {
 
 		await this.checkForLegacyTemplates();
 
-		// Note: Auto-update currently doesn't work in Linux: it downloads the update
-		// but then doesn't install it on exit.
-		if (shim.isWindows() || shim.isMac()) {
-			const runAutoUpdateCheck = () => {
-				if (Setting.value('autoUpdateEnabled')) {
-					void checkForUpdates(true, bridge().window(), { includePreReleases: Setting.value('autoUpdate.includePreReleases') });
-				}
-			};
+		// Note: Auto-update is a misnomer in the code.
+		// The code below only checks, if a new version is available.
+		const runAutoUpdateCheck = () => {
+			if (Setting.value('autoUpdateEnabled')) {
+				void checkForUpdates(true, bridge().window(), { includePreReleases: Setting.value('autoUpdate.includePreReleases') });
+			}
+		};
 
-			// Initial check on startup
-			shim.setTimeout(() => { runAutoUpdateCheck(); }, 5000);
-			// Then every x hours
-			shim.setInterval(() => { runAutoUpdateCheck(); }, 12 * 60 * 60 * 1000);
-		}
+		// Initial check on startup
+		shim.setTimeout(() => { runAutoUpdateCheck(); }, 5000);
+		// Then every x hours
+		shim.setInterval(() => { runAutoUpdateCheck(); }, 12 * 60 * 60 * 1000);
 
 		this.updateTray();
 
