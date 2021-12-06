@@ -104,6 +104,7 @@ document.addEventListener('click', function(event) {
 		if (webviewLib.handleInternalLink(event, anchor)) return;
 		event.preventDefault();
 		if (anchor.getAttribute('href')) webviewLib.options_.postMessage(anchor.getAttribute('href'));
+		if (anchor.getAttribute('xlink:href')) webviewLib.options_.postMessage(anchor.getAttribute('xlink:href'));
 		return;
 	}
 
