@@ -9,7 +9,7 @@
     "build": "gulp build",
     "tsc": "node node_modules/typescript/bin/tsc --project tsconfig.json",
     "watch": "node node_modules/typescript/bin/tsc --watch --project tsconfig.json",
-    "clean": "node tools/clean.js",
+    "__clean": "node tools/clean.js",
     "buildInjectedJs": "gulp buildInjectedJs",
     "watchInjectedJs": "nodemon --verbose --watch components/NoteEditor/CodeMirror.ts --exec \"npm run buildInjectedJs\"",
     "postinstall": "jetify && npm run build"
