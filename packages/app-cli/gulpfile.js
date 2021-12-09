@@ -14,7 +14,7 @@ tasks.prepareBuild = {
 		await utils.copyFile(`${__dirname}/package.json`, `${buildDir}/package.json`);
 		await utils.setPackagePrivateField(`${buildDir}/package.json`, false);
 
-		await utils.copyFile(`${__dirname}/package-lock.json`, `${buildDir}/package-lock.json`);
+		// await utils.copyFile(`${__dirname}/package-lock.json`, `${buildDir}/package-lock.json`);
 		await utils.copyFile(`${__dirname}/gulpfile.js`, `${buildDir}/gulpfile.js`);
 
 		fs.chmodSync(`${buildDir}/main.js`, 0o755);

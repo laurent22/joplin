@@ -97,7 +97,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 	}
 
 	screenFromName(screenName: string) {
-		if (screenName === 'encryption') return <EncryptionConfigScreen themeId={this.props.themeId}/>;
+		if (screenName === 'encryption') return <EncryptionConfigScreen/>;
 		if (screenName === 'server') return <ClipperConfigScreen themeId={this.props.themeId}/>;
 		if (screenName === 'keymap') return <KeymapConfigScreen themeId={this.props.themeId}/>;
 
