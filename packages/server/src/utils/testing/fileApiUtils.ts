@@ -120,7 +120,7 @@ export async function getDirectoryChildrenContext(sessionId: string, path: strin
 export async function getDirectoryChildren(sessionId: string, path: string, pagination: Pagination = null): Promise<PaginatedResults> {
 	const context = await getDirectoryChildrenContext(sessionId, path, pagination);
 	checkContextError(context);
-	return context.response.body;
+	return context.response.body as PaginatedResults;
 }
 
 export async function putFileContentContext(sessionId: string, path: string, filePath: string): Promise<AppContext> {
@@ -159,7 +159,7 @@ export async function getFileContentContext(sessionId: string, path: string): Pr
 export async function getFileContent(sessionId: string, path: string): Promise<Buffer> {
 	const context = await getFileContentContext(sessionId, path);
 	checkContextError(context);
-	return context.response.body;
+	return context.response.body as Buffer;
 }
 
 export async function patchFileContext(sessionId: string, path: string, file: File): Promise<AppContext> {
@@ -197,5 +197,5 @@ export async function getDeltaContext(sessionId: string, path: string, paginatio
 export async function getDelta(sessionId: string, path: string, pagination: Pagination): Promise<PaginatedResults> {
 	const context = await getDeltaContext(sessionId, path, pagination);
 	checkContextError(context);
-	return context.response.body;
+	return context.response.body as PaginatedResults;
 }
