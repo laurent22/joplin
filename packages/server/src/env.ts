@@ -24,7 +24,7 @@ const defaultEnvValues: EnvVariables = {
 	// result in clients generating many conflicts. Set to 0 to disable the
 	// check. https://github.com/laurent22/joplin/issues/5738
 
-	MAX_TIME_DRIFT: 100,
+	MAX_TIME_DRIFT: 2000,
 
 	// ==================================================
 	// URL config
