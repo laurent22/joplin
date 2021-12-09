@@ -2,8 +2,9 @@ const fs = require('fs-extra');
 const glob = require('glob');
 const { copyDir, dirname, copyFile, mkdir } = require('@joplin/tools/gulp/utils');
 
-const rootDir = `${__dirname}/../../..`;
-const nodeModulesDir = `${rootDir}/node_modules`;
+// const rootDir = `${__dirname}/../../..`;
+// const nodeModulesDir = `${rootDir}/node_modules`;
+const nodeModulesDir = `${__dirname}/../node_modules`;
 
 async function main() {
 	const langSourceDir = `${__dirname}/../../../Assets/TinyMCE/langs`;

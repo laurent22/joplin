@@ -6,6 +6,7 @@ import validateLinks from './MdToHtml/validateLinks';
 import { ItemIdToUrlHandler } from './utils';
 import { RenderResult, RenderResultPluginAsset } from './MarkupToHtml';
 import { Options as NoteStyleOptions } from './noteStyle';
+import hljs from 'highlight.js';
 
 const MarkdownIt = require('markdown-it');
 const md5 = require('md5');
@@ -66,7 +67,6 @@ const rules: RendererRules = {
 	source_map: require('./MdToHtml/rules/source_map').default,
 };
 
-const hljs = require('highlight.js');
 const uslug = require('uslug');
 const markdownItAnchor = require('markdown-it-anchor');
 
