@@ -22,7 +22,7 @@
     "buildTranslationsNoTsc": "node packages/tools/build-translation.js",
     "buildWebsite": "npm run buildApiDoc && node ./packages/tools/website/build.js && npm run buildPluginDoc && npm run buildSettingJsonSchema",
     "circularDependencyCheck": "madge --warning --circular --extensions js ./",
-    "clean": "lerna clean -y && yarn cache clean && lerna run clean && rm -rf node_modules",
+    "clean": "npm run clean --workspaces --if-present && node packages/tools/clean && yarn cache clean",
     "dependencyTree": "madge",
     "generateDatabaseTypes": "node packages/tools/generate-database-types",
     "linkChecker": "linkchecker https://joplinapp.org",
