@@ -7,8 +7,12 @@ RUN apt-get update \
     python \
     && rm -rf /var/lib/apt/lists/*
 
+# Enables Yarn
+RUN corepack enable
+
 RUN echo "Node: $(node --version)"
 RUN echo "Npm: $(npm --version)"
+RUN echo "Yarn: $(yarn --version)"
 
 ARG user=joplin
 

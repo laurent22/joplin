@@ -49,6 +49,11 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '16'
+
+      - name: Install Yarn
+        run: |
+          # https://yarnpkg.com/getting-started/install
+          corepack enable
       
       # Login to Docker only if we're on a server release tag. If we run this on
       # a pull request it will fail because the PR doesn't have access to
@@ -80,6 +85,6 @@ jobs:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           IS_CONTINUOUS_INTEGRATION: 1
         run: |
-          npm install
+          yarn install
           cd packages/app-desktop
-          npm run dist
+          yarn run dist

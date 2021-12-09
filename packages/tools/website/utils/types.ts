@@ -57,7 +57,7 @@ export interface TemplateParams {
 	title?: string;
 	donateLinksMd?: string;
 	pageTitle?: string;
-	yyyy? : string;
+	yyyy?: string;
 	templateHtml?: string;
 	partials?: Record<string, string>;
 	forumUrl?: string;

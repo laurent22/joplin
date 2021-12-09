@@ -5,6 +5,7 @@ _releases/
 *.min.js
 **/commands/index.ts
 **/node_modules/
+.yarn/
 Assets/
 docs/
 highlight.pack.js
@@ -12,6 +13,8 @@ Modules/TinyMCE/IconPack/postinstall.js
 Modules/TinyMCE/JoplinLists/
 Modules/TinyMCE/langs/
 node_modules/
+packages/app-desktop/build/
+packages/app-cli/tests/test data/
 packages/app-cli/build
 packages/app-cli/build/
 packages/app-cli/locales
