@@ -3071,6 +3071,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@joplin/fork-uslug@^1.0.4, @joplin/fork-uslug@workspace:packages/fork-uslug":
+  version: 0.0.0-use.local
+  resolution: "@joplin/fork-uslug@workspace:packages/fork-uslug"
+  dependencies:
+    node-emoji: 1.11.0
+    should: ">= 0.2.1"
+    unorm: ">= 1.0.0"
+  languageName: unknown
+  linkType: soft
+
 "@joplin/htmlpack@workspace:packages/htmlpack, @joplin/htmlpack@~2.6":
   version: 0.0.0-use.local
   resolution: "@joplin/htmlpack@workspace:packages/htmlpack"
@@ -3092,6 +3102,7 @@ __metadata:
     "@aws-sdk/s3-request-presigner": ^3.34.0
     "@joplin/fork-htmlparser2": ^4.1.38
     "@joplin/fork-sax": ^1.2.42
+    "@joplin/fork-uslug": ^1.0.4
     "@joplin/htmlpack": ~2.6
     "@joplin/renderer": ~2.6
     "@joplin/turndown": ^4.0.60
@@ -3156,7 +3167,6 @@ __metadata:
     typescript: ^4.0.5
     uglifycss: 0.0.29
     url-parse: ^1.4.7
-    uslug: "git+https://github.com/laurent22/uslug.git#emoji-support"
     uuid: ^3.0.1
     valid-url: ^1.0.9
     word-wrap: ^1.2.3
@@ -3195,6 +3205,7 @@ __metadata:
   resolution: "@joplin/renderer@workspace:packages/renderer"
   dependencies:
     "@joplin/fork-htmlparser2": ^4.1.38
+    "@joplin/fork-uslug": ^1.0.4
     "@types/jest": ^26.0.15
     "@types/node": ^14.14.6
     font-awesome-filetypes: ^2.1.0
@@ -3220,7 +3231,6 @@ __metadata:
     md5: ^2.2.1
     mermaid: ^8.12.1
     typescript: ^4.0.5
-    uslug: "git+https://github.com/laurent22/uslug.git#emoji-support"
   languageName: unknown
   linkType: soft
 
@@ -21395,7 +21405,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-emoji@npm:^1.10.0":
+"node-emoji@npm:1.11.0":
   version: 1.11.0
   resolution: "node-emoji@npm:1.11.0"
   dependencies:
@@ -26334,6 +26344,62 @@ __metadata:
   languageName: node
   linkType: hard
 
+"should-equal@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "should-equal@npm:2.0.0"
+  dependencies:
+    should-type: ^1.4.0
+  checksum: 3f3580a223bf76f9309a4d957d2dcbd6059bda816f2e6656e822b7518218ef653c25e9271b2f5765ca6f5a72a217105ad343a8ceea831d15aff44dd691cc1dcd
+  languageName: node
+  linkType: hard
+
+"should-format@npm:^3.0.3":
+  version: 3.0.3
+  resolution: "should-format@npm:3.0.3"
+  dependencies:
+    should-type: ^1.3.0
+    should-type-adaptors: ^1.0.1
+  checksum: 5304e89b4d4c42078c7f66232d13cca1d6a1c00c173f500f64160f57d4ecd7522a25106b313fe8f8694547e8a1ce4d975f1f09a3d1618f1dc054db48c0683d87
+  languageName: node
+  linkType: hard
+
+"should-type-adaptors@npm:^1.0.1":
+  version: 1.1.0
+  resolution: "should-type-adaptors@npm:1.1.0"
+  dependencies:
+    should-type: ^1.3.0
+    should-util: ^1.0.0
+  checksum: 94dd1d225c8f2590278f46689258a1df684ca1f26262459c4e2d64a09d06935ec1410a24fe7b5f98b9429093e48afef2ed1b370634e0444b930547df4943f70d
+  languageName: node
+  linkType: hard
+
+"should-type@npm:^1.3.0, should-type@npm:^1.4.0":
+  version: 1.4.0
+  resolution: "should-type@npm:1.4.0"
+  checksum: 88d9324c6c0c2f94e71d2f8b11c84e44de81f16eeb6fafcba47f4af430c65e46bad18eb472827526cad22b4fe693aba8b022739d1c453672faf28860df223491
+  languageName: node
+  linkType: hard
+
+"should-util@npm:^1.0.0":
+  version: 1.0.1
+  resolution: "should-util@npm:1.0.1"
+  checksum: c3be15e0fdc851f8338676b3f8b590d330bbea94ec41c1343cc9983dea295915073f69a215795454b6adda6579ec8927c7c0ab178b83f9f11a0247ccdba53381
+  languageName: node
+  linkType: hard
+
+"should@npm:>= 0.2.1":
+  version: 13.2.3
+  resolution: "should@npm:13.2.3"
+  dependencies:
+    should-equal: ^2.0.0
+    should-format: ^3.0.3
+    should-type: ^1.4.0
+    should-type-adaptors: ^1.0.1
+    should-util: ^1.0.0
+  checksum: 74bcc0eb85e0a63a88e501ff9ca3b53dbc6d1ee47823c029a18a4b14b3ef4e2561733e161033df720599d2153283470e9647fdcb1bbc78903960ffb0363239c4
+  languageName: node
+  linkType: hard
+
 "side-channel@npm:^1.0.4":
   version: 1.0.4
   resolution: "side-channel@npm:1.0.4"
@@ -29486,16 +29552,6 @@ __metadata:
   dependencies:
     os-homedir: ^1.0.0
   checksum: a3329faa959fcd9e3e01a03347ca974f7f6b8896e6a634f29c61d8d5b61557d853c6fc5a6dff1a28e2da85b400d0e4490368a28de452ba8c41a2bf3a92cb110a
-  languageName: node
-  linkType: hard
-
-"uslug@git+https://github.com/laurent22/uslug.git#emoji-support":
-  version: 1.0.4
-  resolution: "uslug@https://github.com/laurent22/uslug.git#commit=ba2834d79beb0435318709958b2f5e817d96674d"
-  dependencies:
-    node-emoji: ^1.10.0
-    unorm: ">= 1.0.0"
-  checksum: 78c6d041758b87d17c5a169c5a6590d81e1699c19e5404e86d53896b5de3e286dd525d3399f7e561bb8060f0f18e06098fb0e802043ebf4672e0d67949771793
   languageName: node
   linkType: hard
 
