@@ -123,5 +123,6 @@ jobs:
 
       - name: Build Docker Image
         run: |
+          yarn install
           yarn run buildServerDocker -- --tag-name 0.0.0
           
