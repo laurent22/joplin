@@ -12,7 +12,7 @@
     "node": ">=16"
   },
   "scripts": {
-    "build": "yarn workspaces foreach run build && yarn run tsc",
+    "build": "yarn workspaces foreach --verbose --interlaced --parallel run build && yarn run tsc",
     "buildApiDoc": "yarn workspace joplin start -- apidoc ../../readme/api/references/rest_api.md",
     "buildCommandIndex": "gulp buildCommandIndex",
     "buildDoc": "./packages/tools/build-all.sh",

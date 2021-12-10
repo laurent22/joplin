@@ -28,7 +28,11 @@ RUN mkdir /home/$user/logs
 # this point)
 
 COPY --chown=$user:$user package*.json ./
-RUN yarn install --mode=skip-build
+COPY --chown=$user:$user .yarn ./.yarn
+COPY --chown=$user:$user .yarnrc.yml .
+COPY --chown=$user:$user yarn.lock .
+
+RUN yarn install --inline-builds --mode=skip-build
 
 # To take advantage of the Docker cache, we first copy all the package.json
 # and package-lock.json files, as they rarely change, and then bootstrap
@@ -59,7 +63,7 @@ COPY --chown=$user:$user packages/server/package*.json ./packages/server/
 
 # Then bootstrap only, without compiling the TypeScript files
 
-RUN yarn install --mode=skip-build
+RUN yarn install --inline-builds --mode=skip-build
 
 # Now copy the source files. Put lib and server last as they are more likely to change.
 
