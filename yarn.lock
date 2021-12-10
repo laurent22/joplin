@@ -18064,7 +18064,7 @@ __metadata:
     tcp-port-used: ^1.0.2
     temp: ^0.9.1
     terminal-kit: ^1.30.0
-    tkwidgets: ^0.5.26
+    tkwidgets: 0.5.27
     typescript: ^4.0.5
     url-parse: ^1.4.7
     word-wrap: ^1.2.3
@@ -19360,13 +19360,6 @@ __metadata:
   version: 4.1.1
   resolution: "lodash.throttle@npm:4.1.1"
   checksum: 129c0a28cee48b348aef146f638ef8a8b197944d4e9ec26c1890c19d9bf5a5690fe11b655c77a4551268819b32d27f4206343e30c78961f60b561b8608c8c805
-  languageName: node
-  linkType: hard
-
-"lodash.toarray@npm:^4.4.0":
-  version: 4.4.0
-  resolution: "lodash.toarray@npm:4.4.0"
-  checksum: 2eebcbe75734223b2526018b1c66f7f5e3e5e21e2caffde1553e3453393a676347f2adb7ecbf08364521c188dbf280bd88053604ea159a95121d44453916c31f
   languageName: node
   linkType: hard
 
@@ -21382,15 +21375,6 @@ __metadata:
   dependencies:
     minimatch: ^3.0.2
   checksum: 29de9560e52cdac8d3f794d38d782f6799e13d4d11aaf96d3da8c28458e1c5e33bb5f8edfb42dc34172ec5516c50c5b8850c9e1526542616757a969267263328
-  languageName: node
-  linkType: hard
-
-"node-emoji@git+https://github.com/laurent22/node-emoji.git":
-  version: 1.8.1
-  resolution: "node-emoji@https://github.com/laurent22/node-emoji.git#commit=ef775119be3527cea88a1e51603458098de18d71"
-  dependencies:
-    lodash.toarray: ^4.4.0
-  checksum: 6d24e4d02ee12669627aebf388eaffb83db2f8a3e34063e2dfd7d2264413aff3e0e9145980c72b94da232da361085e151183636e3e3169af9f0916056379a85d
   languageName: node
   linkType: hard
 
@@ -28298,18 +28282,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tkwidgets@npm:^0.5.26":
-  version: 0.5.26
-  resolution: "tkwidgets@npm:0.5.26"
+"tkwidgets@npm:0.5.27":
+  version: 0.5.27
+  resolution: "tkwidgets@npm:0.5.27"
   dependencies:
     chalk: ^2.1.0
     emphasize: ^1.5.0
-    node-emoji: "git+https://github.com/laurent22/node-emoji.git"
+    node-emoji: 1.11.0
     slice-ansi: ^1.0.0
     string-width: ^2.1.1
     terminal-kit: ^1.13.11
     wrap-ansi: ^3.0.1
-  checksum: d38e1f6078e7644e6bb5742efac7a820e093d38ddfb6d7a11df6fb999f64272ca8cb0194997577af34ec0ada9339fec57cd5f220fb5cb12a79102731d8df23ac
+  checksum: 2201898c08ce5ae7c8565fc20bb49ce8113fe1114531b9f5a28ad517f21a8fbe71bfd8ea72bbd65622bcf32ba620054030921915193e17fb4df198984f9dc51f
   languageName: node
   linkType: hard
 
