@@ -29,7 +29,7 @@ async function main() {
 		'codemirror/addon/dialog/dialog.css',
 		'@joeattardi/emoji-button/dist/index.js',
 		'mark.js/dist/mark.min.js',
-		'@joplin/lib/services/plugins/sandboxProxy.js',
+		'../../lib/services/plugins/sandboxProxy.js',
 	];
 
 	for (const dir of dirs) {
