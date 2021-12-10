@@ -1,13 +1,13 @@
 const fs = require('fs-extra');
 const glob = require('glob');
+const { resolve } = require('path');
 const { copyDir, dirname, copyFile, mkdir } = require('@joplin/tools/gulp/utils');
 
-// const rootDir = `${__dirname}/../../..`;
-// const nodeModulesDir = `${rootDir}/node_modules`;
-const nodeModulesDir = `${__dirname}/../node_modules`;
+const nodeModulesDir = resolve(__dirname, '../node_modules');
 
 async function main() {
-	const langSourceDir = `${__dirname}/../../../Assets/TinyMCE/langs`;
+	const langSourceDir = resolve(__dirname, '../../../Assets/TinyMCE/langs');
+	const buildLibDir = resolve(__dirname, '../build/lib');
 
 	const dirs = [
 		'tinymce',
@@ -16,7 +16,7 @@ async function main() {
 		'codemirror/theme',
 		{
 			src: langSourceDir,
-			dest: `${__dirname}/../build/lib/tinymce/langs`,
+			dest: `${buildLibDir}/tinymce/langs`,
 		},
 	];
 
@@ -29,7 +29,10 @@ async function main() {
 		'codemirror/addon/dialog/dialog.css',
 		'@joeattardi/emoji-button/dist/index.js',
 		'mark.js/dist/mark.min.js',
-		'../../lib/services/plugins/sandboxProxy.js',
+		{
+			src: resolve(__dirname, '../../lib/services/plugins/sandboxProxy.js'),
+			dest: `${buildLibDir}/@joplin/lib/services/plugins/sandboxProxy.js`,
+		},
 	];
 
 	for (const dir of dirs) {
@@ -40,7 +43,7 @@ async function main() {
 			destDir = dir.dest;
 		} else {
 			sourceDir = `${nodeModulesDir}/${dir}`;
-			destDir = `${__dirname}/../build/lib/${dir}`;
+			destDir = `${buildLibDir}/${dir}`;
 		}
 
 		console.info(`Copying ${sourceDir} => ${destDir}`);
@@ -49,19 +52,20 @@ async function main() {
 	}
 
 	for (const file of files) {
-		let sourceDir, destDir;
+		let sourceFile, destFile;
 
-		if (Array.isArray(file)) {
-			throw new Error('TODO');
+		if (typeof file !== 'string') {
+			sourceFile = file.src;
+			destFile = file.dest;
 		} else {
-			sourceDir = `${nodeModulesDir}/${file}`;
-			destDir = `${__dirname}/../build/lib/${file}`;
+			sourceFile = `${nodeModulesDir}/${file}`;
+			destFile = `${buildLibDir}/${file}`;
 		}
 
-		await mkdir(dirname(destDir));
+		await mkdir(dirname(destFile));
 
-		console.info(`Copying ${sourceDir} => ${destDir}`);
-		await copyFile(sourceDir, destDir);
+		console.info(`Copying ${sourceFile} => ${destFile}`);
+		await copyFile(sourceFile, destFile);
 	}
 
 	const supportedLocales = glob.sync(`${langSourceDir}/*.js`).map(s => {
