@@ -32,7 +32,7 @@
     "extraResources": [
       "build/icons/*",
       "build/images/*",
-      "build/tinymce/langs/*"
+      "build/lib/*"
     ],
     "afterAllArtifactBuild": "./generateSha512.js",
     "asar": true,
