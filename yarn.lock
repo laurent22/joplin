@@ -18903,17 +18903,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lerna-audit@npm:^1.3.2":
-  version: 1.3.3
-  resolution: "lerna-audit@npm:1.3.3"
-  dependencies:
-    yargs: ^15.4.1
-  bin:
-    lerna-audit: main.js
-  checksum: 5f96610b86c63133284fa6b0553566f8ebcccd319a742eec18fd835967bdf3f987131887d16df825eaecf2781f72445b2e0eaab361cc17db909d5d8ae3ee6322
-  languageName: node
-  linkType: hard
-
 "lerna@npm:^3.22.1":
   version: 3.22.1
   resolution: "lerna@npm:3.22.1"
@@ -25730,7 +25719,6 @@ __metadata:
     http-server: ^0.12.3
     husky: ^3.0.2
     lerna: ^3.22.1
-    lerna-audit: ^1.3.2
     lint-staged: ^9.2.1
     madge: ^4.0.2
     node-gyp: ^8.4.1

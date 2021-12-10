@@ -5,15 +5,15 @@
   "main": "main.js",
   "private": true,
   "scripts": {
-    "dist": "npm run electronRebuild && npx electron-builder",
+    "dist": "yarn run electronRebuild && npx electron-builder",
     "build": "gulp build",
-    "postinstall": "npm run build",
+    "postinstall": "yarn run build",
     "electronRebuild": "gulp electronRebuild",
     "tsc": "tsc --project tsconfig.json",
     "watch": "tsc --watch --project tsconfig.json",
     "start": "gulp build && electron . --env dev --log-level debug --no-welcome --open-dev-tools",
     "test": "jest",
-    "test-ci": "npm run test"
+    "test-ci": "yarn run test"
   },
   "repository": {
     "type": "git",

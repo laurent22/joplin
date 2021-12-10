@@ -11,7 +11,7 @@
     "tsc": "tsc --project tsconfig.json",
     "watch": "tsc --watch --project tsconfig.json",
     "test": "jest",
-    "test-ci": "npm run test",
+    "test-ci": "yarn run test",
     "start": "node index.js"
   },
   "author": "",

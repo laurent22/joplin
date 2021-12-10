@@ -118,7 +118,7 @@ async function checkSourceZip(sourceZip, compiledZip) {
 	console.info(await execCommand(`cp "${sourceZip}" .`));
 	console.info(await execCommand(`unzip "${sourceZip}"`));
 	process.chdir(`${sourceDir}/Clipper-source/popup`);
-	console.info(await execCommand('npm install'));
+	console.info(await execCommand('yarn install'));
 
 	process.chdir(compiledDir);
 	console.info(await execCommand(`cp "${compiledZip}" .`));
@@ -143,7 +143,7 @@ async function main() {
 	// installed by CRA and 6.1.0 by us. It doesn't affect anything though, and the behaviour of the preflight
 	// check is buggy so we can ignore it.
 	console.info(await execCommand(`rm -rf ${clipperDir}/popup/build`));
-	console.info(await execCommand('npm run build'));
+	console.info(await execCommand('yarn run build'));
 
 	const dists = {
 		chrome: {

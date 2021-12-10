@@ -27,9 +27,9 @@ node "$ROOT_DIR/update-readme-sponsors.js"
 
 cd "$ROOT_DIR/.."
 echo "---------------------------------------------------"
-echo "npm run buildWebsite..."
+echo "yarn run buildWebsite..."
 echo "---------------------------------------------------"
-npm run buildWebsite
+yarn run buildWebsite
 
 echo "---------------------------------------------------"
 echo "Commit changes..."

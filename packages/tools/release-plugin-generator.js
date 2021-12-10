@@ -11,14 +11,14 @@ async function main() {
 
 	await gitPullTry();
 
-	const version = (await execCommand('npm version patch')).trim();
+	const version = (await execCommand('yarn version patch')).trim();
 	const tagName = `plugin-generator-${version}`;
 
 	console.info(`New version number: ${version}`);
 
 	await setPackagePrivateField(packageFilePath, false);
 	try {
-		await execCommandVerbose('npm', ['publish']);
+		await execCommandVerbose('yarn', ['publish']);
 	} finally {
 		await setPackagePrivateField(packageFilePath, true);
 	}

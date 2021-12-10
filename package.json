@@ -8,19 +8,19 @@
     "type": "git",
     "url": "git+https://github.com/laurent22/joplin.git"
   },
+  "engines": {
+    "node": ">=16"
+  },
   "scripts": {
-    "audit": "lerna-audit",
-    "bootstrap": "lerna bootstrap --force-local --no-ci",
-    "bootstrapServerOnly": "lerna bootstrap --force-local --no-ci --include-dependents --include-dependencies --scope @joplin/server",
-    "build": "yarn workspaces foreach run build && npm run tsc",
-    "buildApiDoc": "npm start --prefix=packages/app-cli -- apidoc ../../readme/api/references/rest_api.md",
+    "build": "yarn workspaces foreach run build && yarn run tsc",
+    "buildApiDoc": "yarn workspace joplin start -- apidoc ../../readme/api/references/rest_api.md",
     "buildCommandIndex": "gulp buildCommandIndex",
     "buildDoc": "./packages/tools/build-all.sh",
     "buildPluginDoc": "typedoc --name 'Joplin Plugin API Documentation' --mode file -theme './Assets/PluginDocTheme/' --readme './Assets/PluginDocTheme/index.md' --excludeNotExported --excludeExternals --excludePrivate --excludeProtected --out docs/api/references/plugin_api packages/lib/services/plugins/api/",
-    "buildSettingJsonSchema": "npm start --prefix=packages/app-cli -- settingschema ../../docs/schema/settings.json",
-    "buildTranslations": "npm run tsc && node packages/tools/build-translation.js",
+    "buildSettingJsonSchema": "yarn workspace joplin start -- settingschema ../../docs/schema/settings.json",
+    "buildTranslations": "yarn run tsc && node packages/tools/build-translation.js",
     "buildTranslationsNoTsc": "node packages/tools/build-translation.js",
-    "buildWebsite": "npm run buildApiDoc && node ./packages/tools/website/build.js && npm run buildPluginDoc && npm run buildSettingJsonSchema",
+    "buildWebsite": "yarn run buildApiDoc && node ./packages/tools/website/build.js && yarn run buildPluginDoc && yarn run buildSettingJsonSchema",
     "circularDependencyCheck": "madge --warning --circular --extensions js ./",
     "clean": "npm run clean --workspaces --if-present && node packages/tools/clean && yarn cache clean",
     "dependencyTree": "madge",
@@ -30,8 +30,8 @@
     "linter-precommit": "eslint --resolve-plugins-relative-to . --fix --ext .js --ext .jsx --ext .ts --ext .tsx",
     "linter": "eslint --resolve-plugins-relative-to . --fix --quiet --ext .js --ext .jsx --ext .ts --ext .tsx",
     "postinstall": "yarn run build",
-    "publishAll": "git pull && npm run build && lerna version --yes --no-private --no-git-tag-version && gulp completePublishAll",
-    "releaseAndroid": "npm run build && export PATH=\"/usr/local/opt/openjdk@11/bin:$PATH\" && node packages/tools/release-android.js",
+    "publishAll": "git pull && yarn run build && lerna version --yes --no-private --no-git-tag-version && gulp completePublishAll",
+    "releaseAndroid": "yarn run build && export PATH=\"/usr/local/opt/openjdk@11/bin:$PATH\" && node packages/tools/release-android.js",
     "releaseAndroidClean": "node packages/tools/release-android.js",
     "releaseCli": "node packages/tools/release-cli.js",
     "releaseClipper": "node packages/tools/release-clipper.js",
@@ -44,12 +44,11 @@
     "setupNewRelease": "node ./packages/tools/setupNewRelease",
     "test-ci": "yarn workspaces foreach --parallel --verbose --interlaced run test-ci",
     "test": "yarn workspaces foreach --parallel --verbose --interlaced run test",
-    "tsc": "lerna run tsc --stream --parallel",
+    "tsc": "yarn workspaces foreach --parallel --verbose --interlaced run tsc",
     "updateIgnored": "gulp updateIgnoredTypeScriptBuild",
     "updatePluginTypes": "./packages/generator-joplin/updateTypes.sh",
-    "watch": "lerna run watch --stream --parallel",
-    "watchWebsite": "nodemon --verbose --watch Assets/WebsiteAssets --watch packages/tools/website/build.js --ext md,ts,js,mustache,css,tsx,gif,png,svg --exec \"node packages/tools/website/build.js && http-server --port 8077 docs -a localhost\"",
-    "i": "node packages/tools/lernaInstall"
+    "watch": "yarn workspaces foreach --parallel --verbose --interlaced run watch",
+    "watchWebsite": "nodemon --verbose --watch Assets/WebsiteAssets --watch packages/tools/website/build.js --ext md,ts,js,mustache,css,tsx,gif,png,svg --exec \"node packages/tools/website/build.js && http-server --port 8077 docs -a localhost\""
   },
   "husky": {
     "hooks": {
@@ -68,7 +67,6 @@
     "gulp": "^4.0.2",
     "husky": "^3.0.2",
     "lerna": "^3.22.1",
-    "lerna-audit": "^1.3.2",
     "lint-staged": "^9.2.1",
     "madge": "^4.0.2",
     "typedoc": "^0.17.8",

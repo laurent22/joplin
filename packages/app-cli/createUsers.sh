@@ -2,7 +2,7 @@
 
 # Start the server with:
 #
-# JOPLIN_IS_TESTING=1 npm run start-dev
+# JOPLIN_IS_TESTING=1 yarn run start-dev
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
@@ -48,5 +48,5 @@ while [ "$NUM" -lt 400 ]; do
 	echo "config sync.10.password hunter1hunter2hunter3" >> "$CMD_FILE"
 	echo "sync" >> "$CMD_FILE"
 
-	npm start -- --profile "$PROFILE_DIR" batch "$CMD_FILE"
+	yarn start -- --profile "$PROFILE_DIR" batch "$CMD_FILE"
 done
