@@ -1,4 +1,4 @@
-import sandboxProxy, { Target } from '@joplin/lib/services/plugins/sandboxProxy';
+const sandboxProxy = require('@joplin/lib/services/plugins/sandboxProxy');
 import { setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
 
 describe('services_plugins_sandboxProxy', function() {
@@ -17,7 +17,7 @@ describe('services_plugins_sandboxProxy', function() {
 
 		const results: Result[] = [];
 
-		const target: Target = (path: string, args: any[]) => {
+		const target: any = (path: string, args: any[]) => {
 			results.push({ path, args });
 		};
 
@@ -40,7 +40,7 @@ describe('services_plugins_sandboxProxy', function() {
 
 		const results: Result[] = [];
 
-		const target: Target = (path: string, args: any[]) => {
+		const target: any = (path: string, args: any[]) => {
 			results.push({ path, args });
 		};
 
