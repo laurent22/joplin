@@ -44,6 +44,7 @@ async function main() {
 		}
 
 		console.info(`Copying ${sourceDir} => ${destDir}`);
+		await mkdir(destDir);
 		await copyDir(sourceDir, destDir);
 	}
 
