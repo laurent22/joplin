@@ -74,7 +74,8 @@ Skills Required: TypeScript, JavaScript, React Native, React Hooks. You'll also 
 
 Joplin offers a richtext/WYSIWYG typing experience alongside the Markdown editor but there are a number of areas that could do with improvement when it comes to integration with Joplin as a whole.
 
-Areas for consideration include increasing compatibility with Joplin-wide keybindings (many are currently static), limiting features of the editor not compatible with markdown formatting, reducing the impact of data changes caused by swapping between editors
+Areas for consideration include increasing compatibility with Joplin-wide keybindings (many are currently static), limiting features of the editor not compatible with markdown formatting, reducing the impact of data changes caused by swapping between editors.
+Also read the document about limitations of the editor: [https://joplinapp.org/rich_text_editor/](https://joplinapp.org/rich_text_editor/)
 
 Difficulty level: High
 
