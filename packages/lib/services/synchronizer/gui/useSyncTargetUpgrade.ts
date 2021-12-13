@@ -2,6 +2,7 @@ import shim from '../../../shim';
 import MigrationHandler from '../MigrationHandler';
 import Setting from '../../../models/Setting';
 import { reg } from '../../../registry';
+import { appTypeToLockType } from '../LockHandler';
 const { useEffect, useState } = shim.react();
 
 export interface SyncTargetUpgradeResult {
@@ -28,7 +29,7 @@ export default function useSyncTargetUpgrade(): SyncTargetUpgradeResult {
 				synchronizer.api(),
 				reg.db(),
 				synchronizer.lockHandler(),
-				Setting.value('appType'),
+				appTypeToLockType(Setting.value('appType')),
 				Setting.value('clientId')
 			);
 
