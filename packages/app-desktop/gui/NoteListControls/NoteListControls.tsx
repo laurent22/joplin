@@ -5,6 +5,8 @@ import SearchBar from '../SearchBar/SearchBar';
 import Button, { ButtonLevel, ButtonSize, buttonSizePx } from '../Button/Button';
 import CommandService from '@joplin/lib/services/CommandService';
 import { runtime as focusSearchRuntime } from './commands/focusSearch';
+import Note from '@joplin/lib/models/Note';
+import { notesSortOrderNextField } from '../../services/sortOrder/notesSortOrderUtils';
 const { connect } = require('react-redux');
 const styled = require('styled-components').default;
 
@@ -81,6 +83,14 @@ function NoteListControls(props: Props) {
 		void CommandService.instance().execute('toggleNotesSortOrderReverse');
 	}
 
+	function sortOrderFieldTooltip() {
+		const term1 = CommandService.instance().label('toggleNotesSortOrderField');
+		const field = props.sortOrderField;
+		const term2 = Note.fieldToLabel(field);
+		const term3 = Note.fieldToLabel(notesSortOrderNextField(field));
+		return `${term1}:\n ${term2} -> ${term3}`;
+	}
+
 	function sortOrderFieldIcon() {
 		const field = props.sortOrderField;
 		const iconMap: any = {
@@ -110,7 +120,7 @@ function NoteListControls(props: Props) {
 				{showsSortOrderButtons() &&
 					<StyledPairButtonL
 						className="sort-order-field-button"
-						tooltip={CommandService.instance().label('toggleNotesSortOrderField')}
+						tooltip={sortOrderFieldTooltip()}
 						iconName={sortOrderFieldIcon()}
 						level={ButtonLevel.Secondary}
 						size={ButtonSize.Small}
