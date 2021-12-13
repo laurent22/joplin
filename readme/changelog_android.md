@@ -1,5 +1,10 @@
 # Joplin Android app changelog
 
+## [android-v2.6.6](https://github.com/laurent22/joplin/releases/tag/android-v2.6.6) (Pre-release) - 2021-12-13T10:59:30Z
+
+- Improved: Update Mermaid: 8.12.1 -&gt; 8.13.5 (#5831 by Helmut K. C. Tessarek)
+- Fixed: Links in flowchart Mermaid diagrams (#5830) (#5801 by Helmut K. C. Tessarek)
+
 ## [android-v2.6.5](https://github.com/laurent22/joplin/releases/tag/android-v2.6.5) (Pre-release) - 2021-12-13T09:41:18Z
 
 - Fixed: Fixed "Invalid lock client type" error when migrating sync target (e0e93c4)
