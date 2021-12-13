@@ -1,5 +1,9 @@
 # Joplin Android app changelog
 
+## [android-v2.6.5](https://github.com/laurent22/joplin/releases/tag/android-v2.6.5) (Pre-release) - 2021-12-13T09:41:18Z
+
+- Fixed: Fixed "Invalid lock client type" error when migrating sync target (e0e93c4)
+
 ## [android-v2.6.4](https://github.com/laurent22/joplin/releases/tag/android-v2.6.4) (Pre-release) - 2021-12-01T11:38:49Z
 
 - Improved: Also duplicate resources when duplicating a note (c0a8c33)
