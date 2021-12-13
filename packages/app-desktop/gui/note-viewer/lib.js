@@ -202,6 +202,8 @@ document.addEventListener('click', function(event) {
 		if (webviewLib.handleInternalLink(event, anchor)) return;
 		event.preventDefault();
 		if (anchor.getAttribute('href')) webviewLib.options_.postMessage(anchor.getAttribute('href'));
+		// Depending on the chart type, the generated SVG contains an anchor element with xlink:href attribute.
+		if (anchor.getAttribute('xlink:href')) webviewLib.options_.postMessage(anchor.getAttribute('xlink:href'));
 		return;
 	}
 
