@@ -502,7 +502,7 @@ Name | Description
 [Twitter feed](https://twitter.com/joplinapp) | Follow us on Twitter
 [Mastodon feed](https://mastodon.social/@joplinapp) | Follow us on Mastodon
 [Patreon page](https://www.patreon.com/joplin) |The latest news are often posted there
-[Discord server](https://discordapp.com/invite/d2HMPwE) | Our chat server
+[Discord server](https://discord.gg/VSj7AFHvpq) | Our chat server
 [Sub-reddit](https://www.reddit.com/r/joplinapp/) | Also a good place to get help
 
 # Contributing
