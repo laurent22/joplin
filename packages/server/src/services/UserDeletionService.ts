@@ -14,7 +14,7 @@ export default class UserDeletionService extends BaseService {
 
 	protected name_: string = 'UserDeletionService';
 
-	public async deleteUserData(userId: Uuid, options: DeleteUserDataOptions = null) {
+	private async deleteUserData(userId: Uuid, options: DeleteUserDataOptions = null) {
 		options = {
 			sleepBetweenOperations: 5000,
 			...options,
@@ -61,7 +61,7 @@ export default class UserDeletionService extends BaseService {
 		}
 	}
 
-	public async deleteUserAccount(userId: Uuid, _options: DeleteUserDataOptions = null) {
+	private async deleteUserAccount(userId: Uuid, _options: DeleteUserDataOptions = null) {
 		logger.info(`Deleting user account: ${userId}`);
 
 		await this.models.userFlag().add(userId, UserFlagType.UserDeletionInProgress);
@@ -80,12 +80,11 @@ export default class UserDeletionService extends BaseService {
 
 		try {
 			await this.models.userDeletion().start(deletion.id);
-			if (deletion.process_account) await this.deleteUserData(deletion.user_id);
-			if (deletion.process_data) await this.deleteUserAccount(deletion.user_id);
+			if (deletion.process_data) await this.deleteUserData(deletion.user_id);
+			if (deletion.process_account) await this.deleteUserAccount(deletion.user_id);
 		} catch (e) {
 			error = e;
 			success = false;
-
 			logger.error(`Processing deletion ${deletion.id}:`, error);
 		}
 

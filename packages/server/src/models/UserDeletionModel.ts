@@ -21,7 +21,7 @@ export default class UserDeletionModel extends BaseModel<UserDeletion> {
 		return this.db(this.tableName).where('user_id', '=', userId).first();
 	}
 
-	public async add(userId: Uuid, scheduledTime: number, options: AddOptions = null) {
+	public async add(userId: Uuid, scheduledTime: number, options: AddOptions = null): Promise<UserDeletion> {
 		options = {
 			processAccount: true,
 			processData: true,
@@ -40,6 +40,8 @@ export default class UserDeletionModel extends BaseModel<UserDeletion> {
 		};
 
 		await this.db(this.tableName).insert(o);
+
+		return this.byUserId(userId);
 	}
 
 	public async next(): Promise<UserDeletion> {

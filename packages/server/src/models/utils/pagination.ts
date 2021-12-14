@@ -221,7 +221,13 @@ export function createPaginationLinks(page: number, pageCount: number, urlTempla
 // 	return output;
 // }
 
+
 export async function paginateDbQuery(query: Knex.QueryBuilder, pagination: Pagination, mainTable: string = ''): Promise<PaginatedResults> {
+	pagination = {
+		...defaultPagination(),
+		...pagination,
+	};
+
 	pagination = processCursor(pagination);
 
 	const orderSql: any[] = pagination.order.map(o => {
