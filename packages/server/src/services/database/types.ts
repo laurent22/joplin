@@ -273,6 +273,8 @@ export interface Item extends WithDates, WithUuid {
 export interface UserDeletion extends WithDates {
 	id?: number;
 	user_id?: Uuid;
+	process_data?: number;
+	process_account?: number;
 	scheduled_time?: number;
 	start_time?: number;
 	end_time?: number;
@@ -464,6 +466,8 @@ export const databaseSchema: DatabaseTables = {
 	user_deletions: {
 		id: { type: 'number' },
 		user_id: { type: 'string' },
+		process_data: { type: 'number' },
+		process_account: { type: 'number' },
 		scheduled_time: { type: 'string' },
 		start_time: { type: 'string' },
 		end_time: { type: 'string' },

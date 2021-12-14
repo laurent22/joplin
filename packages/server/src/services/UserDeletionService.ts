@@ -2,7 +2,7 @@ import Logger from '@joplin/lib/Logger';
 import { Pagination } from '../models/utils/pagination';
 import { msleep } from '../utils/time';
 import BaseService from './BaseService';
-import { UserFlagType, Uuid } from './database/types';
+import { UserDeletion, UserFlagType, Uuid } from './database/types';
 
 const logger = Logger.create('UserDeletionService');
 
@@ -11,6 +11,8 @@ export interface DeleteUserDataOptions {
 }
 
 export default class UserDeletionService extends BaseService {
+
+	protected name_: string = 'UserDeletionService';
 
 	public async deleteUserData(userId: Uuid, options: DeleteUserDataOptions = null) {
 		options = {
@@ -60,6 +62,8 @@ export default class UserDeletionService extends BaseService {
 	}
 
 	public async deleteUserAccount(userId: Uuid, _options: DeleteUserDataOptions = null) {
+		logger.info(`Deleting user account: ${userId}`);
+
 		await this.models.userFlag().add(userId, UserFlagType.UserDeletionInProgress);
 
 		await this.models.session().deleteByUserId(userId);
@@ -68,14 +72,32 @@ export default class UserDeletionService extends BaseService {
 		await this.models.userFlag().deleteByUserId(userId);
 	}
 
+	public async processDeletionJob(deletion: UserDeletion) {
+		logger.info('Starting user deletion: ', deletion);
+
+		let error: any = null;
+		let success: boolean = true;
+
+		try {
+			await this.models.userDeletion().start(deletion.id);
+			if (deletion.process_account) await this.deleteUserData(deletion.user_id);
+			if (deletion.process_data) await this.deleteUserAccount(deletion.user_id);
+		} catch (e) {
+			error = e;
+			success = false;
+
+			logger.error(`Processing deletion ${deletion.id}:`, error);
+		}
+
+		await this.models.userDeletion().end(deletion.id, success, error);
+
+		logger.info('Completed user deletion: ', deletion.id);
+	}
+
 	protected async maintenance() {
 		const deletion = await this.models.userDeletion().next();
 		if (!deletion) return;
+		await this.processDeletionJob(deletion);
 	}
-
-	// public async runInBackground() {
-	// 	ChangeModel.eventEmitter.on('saved', this.scheduleMaintenance);
-	// 	await super.runInBackground();
-	// }
 
 }

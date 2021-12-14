@@ -5,6 +5,8 @@ export async function up(db: DbConnection): Promise<any> {
 	await db.schema.createTable('user_deletions', (table: Knex.CreateTableBuilder) => {
 		table.increments('id').unique().primary().notNullable();
 		table.string('user_id', 32).notNullable();
+		table.specificType('process_data', 'smallint').defaultTo(0).notNullable();
+		table.specificType('process_account', 'smallint').defaultTo(0).notNullable();
 		table.bigInteger('scheduled_time').notNullable();
 		table.bigInteger('start_time').defaultTo(0).notNullable();
 		table.bigInteger('end_time').defaultTo(0).notNullable();
