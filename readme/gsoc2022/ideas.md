@@ -70,6 +70,25 @@ Difficulty Level: High
 
 Skills Required: TypeScript, JavaScript, npm or yarn.
 
+## 6. Implement a toolbar for the mobile beta code editor
+
+We would like the Beta code editor to eventually become the main editor, and for that a number of changes need to be made. The main one would be the addition of a toolbar to it, to set the various styles, such as Bold, Bullet list, Header, etc. Additionally there are number of bugs that will have to be fixed to get the editor ready for production - you will find them in the list of issues (under the "high" and "mobile" label).
+
+Difficulty Level: High
+
+Skills Required: TypeScript, JavaScript, React Native, React Hooks. You'll also need to learn about CodeMirror 6 if you're not already familiar with it.
+
+## 7. Improve integration of the richtext/WYSIWYG editor
+
+Joplin offers a richtext/WYSIWYG typing experience alongside the Markdown editor but there are a number of areas that could do with improvement when it comes to integration with Joplin as a whole.
+
+Areas for consideration include increasing compatibility with Joplin-wide keybindings (many are currently static), limiting features of the editor not compatible with markdown formatting, reducing the impact of data changes caused by swapping between editors.
+Also read the document about limitations of the editor: [https://joplinapp.org/rich_text_editor/](https://joplinapp.org/rich_text_editor/)
+
+Difficulty level: High
+
+Skills Required: Typescript, Javascript, CSS, HTML, Markdown rendering. You will also need to learn about TinyMCE if you're not already familiar with it.
+
 # More info
 
 - Make sure you read the [Joplin Google Summer of Code Introduction](https://joplinapp.org/gsoc2022/index/)

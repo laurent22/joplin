@@ -1,5 +1,9 @@
 # Joplin Server Changelog
 
+## [server-v2.6.14](https://github.com/laurent22/joplin/releases/tag/server-v2.6.14) - 2021-12-02T16:29:54Z
+
+- Improved: Improved storage command (122afd6)
+
 ## [server-v2.6.13](https://github.com/laurent22/joplin/releases/tag/server-v2.6.13) - 2021-11-29T18:41:28Z
 
 - New: Added command to delete database item content (01048f5)

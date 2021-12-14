@@ -1058,11 +1058,11 @@ msgstr ""
 
 #: packages/lib/Synchronizer.ts:192
 msgid "Deleted local items: %d."
-msgstr "Objets supprimés localement : %d."
+msgstr "Objets suppr. localement : %d."
 
 #: packages/lib/Synchronizer.ts:193
 msgid "Deleted remote items: %d."
-msgstr "Objets distants supprimés : %d."
+msgstr "Objets distants suppr. : %d."
 
 #: packages/app-cli/app/command-rmbook.js:13
 msgid "Deletes the given notebook."
@@ -4113,11 +4113,11 @@ msgstr "date de modification"
 
 #: packages/lib/Synchronizer.ts:189
 msgid "Updated local items: %d."
-msgstr "Objets mis à jour localement : %d."
+msgstr "Objets màj localement : %d."
 
 #: packages/lib/Synchronizer.ts:191
 msgid "Updated remote items: %d."
-msgstr "Objets distants mis à jour : %d."
+msgstr "Objets distants màj : %d."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:150
 msgid "Updated: "
