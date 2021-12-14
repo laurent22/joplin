@@ -33,8 +33,8 @@ msgstr ""
 "- Opslag: om bestanden bij notities te mogen voegen en synchronisatie in te "
 "schakelen."
 
-#: packages/lib/services/KeymapService.ts:306
-#: packages/lib/services/KeymapService.ts:312
+#: packages/lib/services/KeymapService.ts:308
+#: packages/lib/services/KeymapService.ts:314
 msgid "\"%s\" is missing the required \"%s\" property."
 msgstr "\"%s\" mist de vereiste \"%s\" eigenschap."
 
@@ -46,55 +46,55 @@ msgstr "(%s)"
 msgid "(None)"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:325 packages/lib/models/Setting.ts:326
+#: packages/lib/models/Setting.ts:326 packages/lib/models/Setting.ts:327
 msgid "(wysiwyg: %s)"
 msgstr "(wuziwuk: %s)"
 
-#: packages/app-desktop/gui/MenuBar.tsx:545
-#: packages/app-desktop/gui/MenuBar.tsx:801
+#: packages/app-desktop/gui/MenuBar.tsx:557
+#: packages/app-desktop/gui/MenuBar.tsx:813
 msgid "&Edit"
 msgstr "Be&werken"
 
-#: packages/app-desktop/gui/MenuBar.tsx:423
-#: packages/app-desktop/gui/MenuBar.tsx:501
-#: packages/app-desktop/gui/MenuBar.tsx:797
+#: packages/app-desktop/gui/MenuBar.tsx:435
+#: packages/app-desktop/gui/MenuBar.tsx:513
+#: packages/app-desktop/gui/MenuBar.tsx:809
 msgid "&File"
 msgstr "&Bestand"
 
-#: packages/app-desktop/gui/MenuBar.tsx:651
+#: packages/app-desktop/gui/MenuBar.tsx:663
 msgid "&Go"
 msgstr "&Gaan"
 
-#: packages/app-desktop/gui/MenuBar.tsx:683
+#: packages/app-desktop/gui/MenuBar.tsx:695
 msgid "&Help"
 msgstr "&Help"
 
-#: packages/app-desktop/gui/MenuBar.tsx:669
+#: packages/app-desktop/gui/MenuBar.tsx:681
 msgid "&Note"
 msgstr "&Notitie"
 
-#: packages/app-desktop/gui/MenuBar.tsx:679
+#: packages/app-desktop/gui/MenuBar.tsx:691
 msgid "&Tools"
 msgstr "E&xtra"
 
-#: packages/app-desktop/gui/MenuBar.tsx:577
+#: packages/app-desktop/gui/MenuBar.tsx:589
 msgid "&View"
 msgstr "Beel&d"
 
-#: packages/lib/models/Setting.ts:1258
+#: packages/lib/models/Setting.ts:1344
 msgid "%d days"
 msgstr "%d dagen"
 
-#: packages/lib/models/Setting.ts:1123
+#: packages/lib/models/Setting.ts:1209
 msgid "%d hour"
 msgstr "%d uur"
 
-#: packages/lib/models/Setting.ts:1124 packages/lib/models/Setting.ts:1125
+#: packages/lib/models/Setting.ts:1210 packages/lib/models/Setting.ts:1211
 msgid "%d hours"
 msgstr "%d uur"
 
-#: packages/lib/models/Setting.ts:1120 packages/lib/models/Setting.ts:1121
-#: packages/lib/models/Setting.ts:1122
+#: packages/lib/models/Setting.ts:1206 packages/lib/models/Setting.ts:1207
+#: packages/lib/models/Setting.ts:1208
 msgid "%d minutes"
 msgstr "%d minuten"
 
@@ -122,12 +122,12 @@ msgstr "%s (%s): %s"
 msgid "%s (pre-release)"
 msgstr "%s (pre-release)"
 
-#: packages/lib/models/Setting.ts:791 packages/lib/models/Setting.ts:792
-#: packages/lib/models/Setting.ts:793
+#: packages/lib/models/Setting.ts:820 packages/lib/models/Setting.ts:821
+#: packages/lib/models/Setting.ts:822
 msgid "%s / %s"
 msgstr "%s / %s"
 
-#: packages/lib/models/Setting.ts:790
+#: packages/lib/models/Setting.ts:819
 msgid "%s / %s / %s"
 msgstr "%s / %s / %s"
 
@@ -187,33 +187,33 @@ msgstr ""
 "het doel een reguliere notitie is, dan wordt deze omgezet in een taak). "
 "Gebruik \"clear\" om de taak weer om te zetten naar een reguliere notitie."
 
-#: packages/lib/models/Setting.ts:1147
+#: packages/lib/models/Setting.ts:1233
 msgid "A3"
 msgstr "A3"
 
-#: packages/lib/models/Setting.ts:1145
+#: packages/lib/models/Setting.ts:1231
 msgid "A4"
 msgstr "A4"
 
-#: packages/lib/models/Setting.ts:1148
+#: packages/lib/models/Setting.ts:1234
 msgid "A5"
 msgstr "A5"
 
-#: packages/app-desktop/gui/MenuBar.tsx:429
-#: packages/app-desktop/gui/MenuBar.tsx:721
+#: packages/app-desktop/gui/MenuBar.tsx:441
+#: packages/app-desktop/gui/MenuBar.tsx:733
 msgid "About Joplin"
 msgstr "Over Joplin"
 
-#: packages/lib/services/KeymapService.ts:312
-#: packages/lib/services/KeymapService.ts:317
+#: packages/lib/services/KeymapService.ts:314
+#: packages/lib/services/KeymapService.ts:319
 msgid "accelerator"
 msgstr "versneller"
 
-#: packages/lib/services/KeymapService.ts:369
+#: packages/lib/services/KeymapService.ts:371
 msgid "Accelerator \"%s\" is not valid."
 msgstr "Versneller \"%s\" is niet geldig."
 
-#: packages/lib/services/KeymapService.ts:338
+#: packages/lib/services/KeymapService.ts:340
 msgid ""
 "Accelerator \"%s\" is used for \"%s\" and \"%s\" commands. This may lead to "
 "unexpected behaviour."
@@ -225,25 +225,29 @@ msgstr ""
 msgid "Accept"
 msgstr ""
 
+#: packages/lib/models/Setting.ts:546
+msgid "Access Key"
+msgstr ""
+
 #: packages/app-desktop/gui/ResourceScreen.tsx:95
 msgid "Action"
 msgstr "Actie"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:181
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:183
 #, fuzzy
 msgid "Actions"
 msgstr "Actie"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:176
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:178
 msgid "Active"
 msgstr "Actief"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:18
-#: packages/app-desktop/gui/MenuBar.tsx:619
+#: packages/app-desktop/gui/MenuBar.tsx:631
 msgid "Actual Size"
 msgstr "Ware Grootte"
 
-#: packages/app-mobile/components/screens/Note.tsx:1123
+#: packages/app-mobile/components/screens/Note.tsx:1128
 msgid "Add body"
 msgstr "Inhoud toevoegen"
 
@@ -251,11 +255,11 @@ msgstr "Inhoud toevoegen"
 msgid "Add or remove tags:"
 msgstr "Labels toevoegen of verwijderen:"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:219
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:245
 msgid "Add recipient:"
 msgstr ""
 
-#: packages/app-mobile/components/screens/Note.tsx:1186
+#: packages/app-mobile/components/screens/Note.tsx:1191
 msgid "Add title"
 msgstr "Toevoegen titel"
 
@@ -273,9 +277,9 @@ msgstr "Geavanceerde opties"
 msgid "Advanced tools"
 msgstr "Geavanceerde opties"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:435
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:445
 #: packages/app-mobile/components/screens/notes.js:188
-#: packages/app-mobile/components/side-menu-content.js:368
+#: packages/app-mobile/components/side-menu-content.js:371
 msgid "All notes"
 msgstr "Alle notities"
 
@@ -287,7 +291,7 @@ msgstr "Alle potentiële poorten zijn in gebruik - Meld het probleem op %s"
 msgid "Also displays unset and hidden config variables."
 msgstr "Toont ook niet-ingestelde en verborgen configuratiewaarden."
 
-#: packages/lib/models/Setting.ts:637
+#: packages/lib/models/Setting.ts:665
 msgid "Always"
 msgstr "Altijd"
 
@@ -295,11 +299,11 @@ msgstr "Altijd"
 msgid "An update is available, do you want to download it now?"
 msgstr "Er is een update beschikbaar. Wilt u deze nu downloaden?"
 
-#: packages/lib/models/Setting.ts:2045
+#: packages/lib/models/Setting.ts:2141
 msgid "Appearance"
 msgstr "Weergave"
 
-#: packages/lib/models/Setting.ts:2049
+#: packages/lib/models/Setting.ts:2146
 msgid "Application"
 msgstr "Applicatie"
 
@@ -316,21 +320,21 @@ msgstr "Weet u zeker dat u het autorisatietoken wilt vernieuwen?"
 msgid "Arguments:"
 msgstr "Argumenten:"
 
-#: packages/lib/models/Setting.ts:343
+#: packages/lib/models/Setting.ts:344
 msgid "Aritim Dark"
 msgstr "Aritim Dark"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:53
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:568
-#: packages/app-mobile/components/screens/Note.tsx:893
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:588
+#: packages/app-mobile/components/screens/Note.tsx:898
 msgid "Attach file"
 msgstr "Bestand bijvoegen"
 
-#: packages/app-mobile/components/screens/Note.tsx:897
+#: packages/app-mobile/components/screens/Note.tsx:902
 msgid "Attach photo"
 msgstr "Foto bijvoegen"
 
-#: packages/app-mobile/components/screens/Note.tsx:880
+#: packages/app-mobile/components/screens/Note.tsx:885
 msgid "Attach..."
 msgstr "Bijvoegen..."
 
@@ -338,17 +342,17 @@ msgstr "Bijvoegen..."
 msgid "Attaches the given file to the note."
 msgstr "Voegt het opgegeven bestand bij de notitie."
 
-#: packages/server/src/models/UserModel.ts:202
-#: packages/server/src/models/UserModel.ts:217
+#: packages/server/src/models/UserModel.ts:214
+#: packages/server/src/models/UserModel.ts:231
 #, fuzzy
 msgid "attachment"
 msgstr "Bijlagen"
 
-#: packages/lib/models/Resource.ts:415
+#: packages/lib/models/Resource.ts:411
 msgid "Attachment conflict: \"%s\""
 msgstr "Conflict in bijlage: \"%s\""
 
-#: packages/lib/models/Setting.ts:633
+#: packages/lib/models/Setting.ts:661
 msgid "Attachment download behaviour"
 msgstr "Bijlage downloadgedrag"
 
@@ -360,7 +364,7 @@ msgstr "Bijlagen"
 msgid "Attachments that could not be downloaded"
 msgstr "Bijlagen die niet konden worden gedownload"
 
-#: packages/lib/models/Setting.ts:329
+#: packages/lib/models/Setting.ts:330
 msgid ""
 "Attention: If you change this location, make sure you copy all your content "
 "to it before syncing, otherwise all files will be removed! See the FAQ for "
@@ -370,8 +374,8 @@ msgstr ""
 "naartoe kopieert voor synchronisatie. Anders worden alle bestanden "
 "verwijderd! Zie de FAQ voor meer details: %s"
 
-#: packages/app-cli/app/command-sync.js:82
-#: packages/app-cli/app/command-sync.js:96
+#: packages/app-cli/app/command-sync.ts:82
+#: packages/app-cli/app/command-sync.ts:96
 #: packages/app-desktop/gui/OneDriveLoginScreen.tsx:45
 msgid ""
 "Authentication was not completed (did not receive an authentication token)."
@@ -382,41 +386,21 @@ msgstr "Authenticatie is niet voltooid (geen authenticatiesleutel ontvangen)."
 msgid "Authorisation token:"
 msgstr "Autorisatie-token:"
 
-#: packages/lib/models/Setting.ts:639
+#: packages/lib/models/Setting.ts:667
 msgid "Auto"
 msgstr "Auto"
 
-#: packages/lib/models/Setting.ts:824
+#: packages/lib/models/Setting.ts:853
 msgid "Auto-pair braces, parenthesis, quotations, etc."
 msgstr "Auto-paar accolades, haakjes, citaten, enz."
 
-#: packages/lib/models/Setting.ts:741
+#: packages/lib/models/Setting.ts:770
 msgid "Automatically switch theme to match system theme"
 msgstr "Automatisch omschakelen thema op basis van systeemthema"
 
-#: packages/lib/models/Setting.ts:1107
+#: packages/lib/models/Setting.ts:1193
 msgid "Automatically update the application"
 msgstr "Applicatie automatisch bijwerken"
-
-#: packages/lib/models/Setting.ts:528
-msgid "AWS key"
-msgstr "AWS key"
-
-#: packages/lib/SyncTargetAmazonS3.js:28
-msgid "AWS S3"
-msgstr "AWS S3"
-
-#: packages/lib/models/Setting.ts:505
-msgid "AWS S3 bucket"
-msgstr "AWS S3 bucket"
-
-#: packages/lib/models/Setting.ts:517
-msgid "AWS S3 URL"
-msgstr "AWS S3 URL"
-
-#: packages/lib/models/Setting.ts:539
-msgid "AWS secret"
-msgstr "AWS secret"
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:42
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:715
@@ -451,20 +435,20 @@ msgstr "Opsommingslijst"
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:173
 #: packages/app-desktop/gui/PromptDialog.min.js:242
 #: packages/app-desktop/gui/ResourceScreen.tsx:170
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:274
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:642
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:277
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:653
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:222
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:27
 #: packages/app-mobile/components/CameraView.tsx:191
 #: packages/app-mobile/components/ModalDialog.js:70
 #: packages/app-mobile/components/screens/encryption-config.tsx:190
-#: packages/app-mobile/components/screens/Note.tsx:104
-#: packages/app-mobile/components/screens/Note.tsx:588
-#: packages/app-mobile/components/SelectDateTimeDialog.tsx:108
+#: packages/app-mobile/components/screens/Note.tsx:107
+#: packages/app-mobile/components/screens/Note.tsx:593
+#: packages/app-mobile/components/SelectDateTimeDialog.tsx:152
 #: packages/app-mobile/components/side-menu-content.js:156
 #: packages/app-mobile/components/side-menu-content.js:165
-#: packages/app-mobile/components/side-menu-content.js:338
-#: packages/lib/shim-init-node.js:166
+#: packages/app-mobile/components/side-menu-content.js:341
+#: packages/lib/shim-init-node.js:171
 msgid "Cancel"
 msgstr "Annuleren"
 
@@ -472,15 +456,15 @@ msgstr "Annuleren"
 msgid "Cancelling background synchronisation... Please wait."
 msgstr "Bezig met annuleren van achtergrondsynchronisatie... even geduld."
 
-#: packages/lib/Synchronizer.ts:195
+#: packages/lib/Synchronizer.ts:189
 msgid "Cancelling..."
 msgstr "Bezig met annuleren..."
 
-#: packages/app-cli/app/command-sync.js:266
+#: packages/app-cli/app/command-sync.ts:269
 msgid "Cancelling... Please wait."
 msgstr "Bezig met annuleren... Een ogenblik geduld."
 
-#: packages/lib/shim-init-node.js:230
+#: packages/lib/shim-init-node.js:235
 msgid "Cannot access %s"
 msgstr "Geen toegang tot %s"
 
@@ -520,7 +504,7 @@ msgstr "Kan notitie niet kopiëren naar notitieboek \"%s\""
 msgid "Cannot find \"%s\"."
 msgstr "Kan \"%s\" niet vinden."
 
-#: packages/app-cli/app/command-sync.js:182
+#: packages/app-cli/app/command-sync.ts:182
 msgid "Cannot initialise synchroniser."
 msgstr "Synchronisatie kan niet worden geïnitaliseerd."
 
@@ -536,7 +520,7 @@ msgstr "Kan module \"%s\" niet laden voor formaat \"%s\" en uitvoer \"%s\""
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "Kan notitie niet verplaatsen naar notitieboek \"%s\""
 
-#: packages/lib/models/Folder.ts:604
+#: packages/lib/models/Folder.ts:699
 msgid "Cannot move notebook to this location"
 msgstr "Kan notitieboek niet verplaatsen naar deze locatie"
 
@@ -548,17 +532,17 @@ msgstr ""
 "Kan toegangssleutel niet verversen: de authenticatiegegevens ontbreken. "
 "Probeer de synchronisatie opnieuw te starten."
 
-#: packages/server/src/models/UserModel.ts:201
+#: packages/server/src/models/UserModel.ts:213
 msgid "Cannot save %s \"%s\" because it is larger than the allowed limit (%s)"
 msgstr ""
 
-#: packages/server/src/models/UserModel.ts:216
+#: packages/server/src/models/UserModel.ts:230
 msgid ""
 "Cannot save %s \"%s\" because it would go over the total allowed size (%s) "
 "for this account"
 msgstr ""
 
-#: packages/lib/services/share/ShareService.ts:271
+#: packages/lib/services/share/ShareService.ts:272
 msgid ""
 "Cannot share encrypted notebook with recipient %s because they have not "
 "enabled end-to-end encryption. They may do so from the screen Configuration "
@@ -581,8 +565,8 @@ msgstr "Karakters"
 msgid "Characters excluding spaces"
 msgstr "Karakters zonder spaties"
 
-#: packages/app-desktop/gui/MenuBar.tsx:446
-#: packages/app-desktop/gui/MenuBar.tsx:696
+#: packages/app-desktop/gui/MenuBar.tsx:458
+#: packages/app-desktop/gui/MenuBar.tsx:708
 msgid "Check for updates..."
 msgstr "Controleren op updates..."
 
@@ -603,7 +587,7 @@ msgstr "Checkboxlijst"
 msgid "Checking... Please wait."
 msgstr "Controleren... Even geduld."
 
-#: packages/app-mobile/components/screens/Note.tsx:900
+#: packages/app-mobile/components/screens/Note.tsx:905
 msgid "Choose an option"
 msgstr "Kies een optie"
 
@@ -611,12 +595,12 @@ msgstr "Kies een optie"
 msgid "Chrome Web Store"
 msgstr "Chrome Web Store"
 
+#: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:83
 #: packages/app-desktop/gui/PromptDialog.min.js:249
 msgid "Clear"
 msgstr "Wissen"
 
-#. For unknown reasons, this particular string doesn't get translated if it's directly in the text property below
-#: packages/app-mobile/components/SelectDateTimeDialog.tsx:103
+#: packages/app-mobile/components/SelectDateTimeDialog.tsx:149
 msgid "Clear alarm"
 msgstr "Alarm wissen"
 
@@ -638,7 +622,7 @@ msgid "Client ID: %s"
 msgstr "Client ID: %s"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:170
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:323
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:349
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:229
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:334
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:30
@@ -646,7 +630,7 @@ msgid "Close"
 msgstr "Sluiten"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:24
-#: packages/app-desktop/gui/MenuBar.tsx:509
+#: packages/app-desktop/gui/MenuBar.tsx:521
 msgid "Close Window"
 msgstr "Venster afsluiten"
 
@@ -654,11 +638,11 @@ msgstr "Venster afsluiten"
 msgid "Code"
 msgstr "Code"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:578
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:598
 msgid "Code Block"
 msgstr "Code Blok"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1143
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1163
 msgid "Code View"
 msgstr "Codeweergave"
 
@@ -671,7 +655,7 @@ msgstr "Creëer eerst een notitieboek"
 msgid "Coming alarms"
 msgstr "Aankomende alarmen"
 
-#: packages/lib/models/Setting.ts:1202
+#: packages/lib/models/Setting.ts:1288
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
 "or path to individual cert files. For example: /my/cert_dir, /other/custom."
@@ -684,7 +668,7 @@ msgstr ""
 "moet u ze opslaan voordat u klik op \"Synchronisatie-configuratie "
 "controleren."
 
-#: packages/lib/services/KeymapService.ts:306
+#: packages/lib/services/KeymapService.ts:308
 msgid "command"
 msgstr "commando"
 
@@ -705,17 +689,17 @@ msgstr "Opdrachtpalet"
 msgid "Completed"
 msgstr "Voltooid"
 
-#: packages/app-cli/app/command-e2ee.ts:72
+#: packages/app-cli/app/command-e2ee.ts:79
 msgid "Completed decryption."
 msgstr "Decryptie voltooid."
 
-#: packages/lib/Synchronizer.ts:196
+#: packages/lib/Synchronizer.ts:190
 #, fuzzy
 msgid "Completed: %s (%s)"
 msgstr "Voltooid: %s"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:637
-#: packages/app-mobile/components/side-menu-content.js:316
+#: packages/app-mobile/components/side-menu-content.js:319
 msgid "Configuration"
 msgstr "Configuratie"
 
@@ -723,12 +707,12 @@ msgstr "Configuratie"
 msgid "Confirm password cannot be empty"
 msgstr "Wachtwoord bevestigen mag niet blanco zijn"
 
-#: packages/app-cli/app/command-e2ee.ts:87
+#: packages/app-cli/app/command-e2ee.ts:94
 #: packages/app-mobile/components/screens/encryption-config.tsx:168
 msgid "Confirm password:"
 msgstr "Bevestig wachtwoord:"
 
-#: packages/app-desktop/gui/Root.tsx:140
+#: packages/app-desktop/gui/Root.tsx:147
 #, fuzzy
 msgid "Confirmation"
 msgstr "Configuratie"
@@ -737,11 +721,11 @@ msgstr "Configuratie"
 msgid "Conflicted: %d"
 msgstr "Conflicten: %d"
 
-#: packages/lib/models/Folder.ts:110
+#: packages/lib/models/Folder.ts:111
 msgid "Conflicts"
 msgstr "Conflicten"
 
-#: packages/lib/models/Resource.ts:399
+#: packages/lib/models/Resource.ts:395
 #, fuzzy
 msgid "Conflicts (attachments)"
 msgstr "Notitiebijlagen"
@@ -751,15 +735,15 @@ msgstr "Notitiebijlagen"
 msgid "Content provided by %s"
 msgstr "Eigenschappen van notitie"
 
-#: packages/app-mobile/components/screens/Note.tsx:933
+#: packages/app-mobile/components/screens/Note.tsx:938
 msgid "Convert to note"
 msgstr "Omzetten naar notitie"
 
-#: packages/app-mobile/components/screens/Note.tsx:933
+#: packages/app-mobile/components/screens/Note.tsx:938
 msgid "Convert to todo"
 msgstr "Omzetten naar taak"
 
-#: packages/app-desktop/gui/MenuBar.tsx:410
+#: packages/app-desktop/gui/MenuBar.tsx:422
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:13
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:764
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:143
@@ -770,8 +754,8 @@ msgstr "Kopiëren"
 msgid "Copy dev mode command to clipboard"
 msgstr "Ontwikkelaarsmodus commando kopiëren naar klembord"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:340
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:354
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:350
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:364
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:139
 #, fuzzy
 msgid "Copy external link"
@@ -782,7 +766,7 @@ msgid "Copy Link Address"
 msgstr "Linkadres kopiëren"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:124
-#: packages/app-mobile/components/screens/Note.tsx:940
+#: packages/app-mobile/components/screens/Note.tsx:945
 msgid "Copy Markdown link"
 msgstr "Markdownlink kopiëren"
 
@@ -815,7 +799,7 @@ msgstr ""
 "\n"
 "Probeer opnieuw."
 
-#: packages/lib/JoplinServerApi.ts:91
+#: packages/lib/JoplinServerApi.ts:92
 msgid ""
 "Could not connect to Joplin Server. Please check the Synchronisation options "
 "in the config screen. Full error was:\n"
@@ -848,9 +832,15 @@ msgid ""
 "The error was: \"%s\""
 msgstr ""
 
-#: packages/lib/components/EncryptionConfigScreen/utils.ts:214
+#: packages/lib/components/EncryptionConfigScreen/utils.ts:219
 msgid "Could not upgrade master key: %s"
 msgstr "Kon hoofdsleutel niet bijwerken: %s"
+
+#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:27
+msgid ""
+"Could not verify the share status of this notebook - aborting. Please try "
+"again when you are connected to the internet."
+msgstr ""
 
 #: packages/app-mobile/components/note-list.js:101
 msgid "Create a notebook"
@@ -864,7 +854,7 @@ msgstr "Gecreëerd"
 msgid "created date"
 msgstr "gecreëerd op"
 
-#: packages/lib/Synchronizer.ts:188
+#: packages/lib/Synchronizer.ts:182
 msgid "Created local items: %d."
 msgstr "Lokale items gecreëerd: %d."
 
@@ -872,11 +862,11 @@ msgstr "Lokale items gecreëerd: %d."
 msgid "Created locally"
 msgstr "Lokale items gecreëerd"
 
-#: packages/lib/Synchronizer.ts:190
+#: packages/lib/Synchronizer.ts:184
 msgid "Created remote items: %d."
 msgstr "Externe items gecreëerd: %d."
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:150
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:152
 #, fuzzy
 msgid "Created: "
 msgstr "Gecreëerd op: %s"
@@ -887,7 +877,7 @@ msgid "Created: %d."
 msgstr "Gecreëerd: %d."
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:118
-#: packages/app-mobile/components/screens/Note.tsx:835
+#: packages/app-mobile/components/screens/Note.tsx:840
 msgid "Created: %s"
 msgstr "Gecreëerd op: %s"
 
@@ -923,16 +913,16 @@ msgstr "aangepaste volgorde"
 msgid "Custom order"
 msgstr "Aangepaste volgorde"
 
-#: packages/lib/models/Setting.ts:1078
+#: packages/lib/models/Setting.ts:1164
 msgid "Custom stylesheet for Joplin-wide app styles"
 msgstr "Aangepaste stylesheet voor Joplin-brede app-stijlen"
 
-#: packages/lib/models/Setting.ts:1061
+#: packages/lib/models/Setting.ts:1147
 #, fuzzy
 msgid "Custom stylesheet for rendered Markdown"
 msgstr "Aangepaste stylesheet voor Joplin-brede app-stijlen"
 
-#: packages/lib/models/Setting.ts:1201
+#: packages/lib/models/Setting.ts:1287
 msgid "Custom TLS certificates"
 msgstr "Aangepaste TLS-certificaten"
 
@@ -942,7 +932,7 @@ msgstr "Aangepaste TLS-certificaten"
 msgid "Cut"
 msgstr "Knippen"
 
-#: packages/lib/models/Setting.ts:338
+#: packages/lib/models/Setting.ts:339
 msgid "Dark"
 msgstr "Donker"
 
@@ -950,19 +940,19 @@ msgstr "Donker"
 msgid "Database v%s"
 msgstr "Database v%s"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:178
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:180
 msgid "Date"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:688
+#: packages/lib/models/Setting.ts:716
 msgid "Date format"
 msgstr "Datumopmaak"
 
-#: packages/lib/models/Setting.ts:1258
+#: packages/lib/models/Setting.ts:1344
 msgid "days"
 msgstr "dagen"
 
-#: packages/app-cli/app/command-e2ee.ts:57
+#: packages/app-cli/app/command-e2ee.ts:64
 msgid "Decrypted items: %d"
 msgstr "Ontsleutelde items: %d"
 
@@ -970,13 +960,13 @@ msgstr "Ontsleutelde items: %d"
 msgid "Decrypted items: %s / %s"
 msgstr "Ontsleutelde items: %s / %s"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:728
-#: packages/app-mobile/components/side-menu-content.js:325
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:739
+#: packages/app-mobile/components/side-menu-content.js:328
 msgid "Decrypting items: %d/%d"
 msgstr "Bezig met ontsleutelen van items: %d/%d"
 
-#: packages/lib/models/Setting.ts:1004 packages/lib/models/Setting.ts:1011
-#: packages/lib/models/Setting.ts:1170
+#: packages/lib/models/Setting.ts:1090 packages/lib/models/Setting.ts:1097
+#: packages/lib/models/Setting.ts:1256
 msgid "Default"
 msgstr "Standaard"
 
@@ -987,11 +977,11 @@ msgstr "Standaard: %s"
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:185
 #: packages/app-desktop/gui/ResourceScreen.tsx:111
 #: packages/app-desktop/gui/ResourceScreen.tsx:170
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:248
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:251
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:192
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:222
 #: packages/app-mobile/components/screen-header.js:362
-#: packages/app-mobile/components/screens/Note.tsx:953
+#: packages/app-mobile/components/screens/Note.tsx:958
 #: packages/app-mobile/components/side-menu-content.js:146
 msgid "Delete"
 msgstr "Verwijderen"
@@ -1004,20 +994,20 @@ msgstr "Bijlage “%s” verwijderen?"
 msgid "Delete line"
 msgstr "Regel verwijderen"
 
-#: packages/lib/models/Setting.ts:1100
+#: packages/lib/models/Setting.ts:1186
 msgid "Delete local data and re-download from sync target"
 msgstr ""
 
-#: packages/lib/models/Note.ts:744
+#: packages/lib/models/Note.ts:759
 msgid "Delete note \"%s\"?"
 msgstr "Notitie “%s” verwijderen?"
 
 #: packages/app-cli/app/command-rmnote.js:27
-#: packages/app-mobile/components/screens/Note.tsx:525
+#: packages/app-mobile/components/screens/Note.tsx:530
 msgid "Delete note?"
 msgstr "Notitie verwijderen?"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:247
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:250
 #: packages/app-mobile/components/side-menu-content.js:148
 msgid ""
 "Delete notebook \"%s\"?\n"
@@ -1042,21 +1032,21 @@ msgstr ""
 msgid "Delete plugin \"%s\"?"
 msgstr "Plugin “%s” verwijderen?"
 
-#: packages/lib/models/Note.ts:746
+#: packages/lib/models/Note.ts:761
 msgid "Delete these %d notes?"
 msgstr "Deze %d notities verwijderen?"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:195
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:221
 msgid ""
 "Delete this invitation? The recipient will no longer have access to this "
 "shared notebook."
 msgstr ""
 
-#: packages/lib/Synchronizer.ts:192
+#: packages/lib/Synchronizer.ts:186
 msgid "Deleted local items: %d."
 msgstr "Lokale items verwijderd: %d."
 
-#: packages/lib/Synchronizer.ts:193
+#: packages/lib/Synchronizer.ts:187
 msgid "Deleted remote items: %d."
 msgstr "Externe items verwijderd: %d."
 
@@ -1080,20 +1070,20 @@ msgstr "Verwijdert de notities zonder te vragen om bevestiging."
 msgid "Destination format: %s"
 msgstr "Bestemmingsformaat: %s"
 
-#: packages/lib/services/interop/types.ts:125
+#: packages/lib/services/interop/types.ts:126
 msgid "Directory"
 msgstr "Map"
 
-#: packages/lib/models/Setting.ts:415
+#: packages/lib/models/Setting.ts:416
 msgid "Directory to synchronise with (absolute path)"
 msgstr "Map waarnaar gesynchroniseerd moet worden (absoluut pad)"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:154
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:156
 #, fuzzy
 msgid "Disable"
 msgstr "Uitgeschakeld"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:235
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:237
 #: packages/app-mobile/components/screens/encryption-config.tsx:281
 msgid "Disable encryption"
 msgstr "Encryptie uitschakelen"
@@ -1107,15 +1097,15 @@ msgstr ""
 msgid "Disable Web Clipper Service"
 msgstr "Webclipper-dienst uitschakelen"
 
-#: packages/app-cli/app/command-e2ee.ts:120
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:247
+#: packages/app-cli/app/command-e2ee.ts:127
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:249
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:138
 #: packages/app-mobile/components/screens/encryption-config.tsx:303
-#: packages/lib/models/Setting.ts:1119
+#: packages/lib/models/Setting.ts:1205
 msgid "Disabled"
 msgstr "Uitgeschakeld"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:209
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:211
 #: packages/app-mobile/components/screens/encryption-config.tsx:240
 msgid ""
 "Disabling encryption means *all* your notes and attachments are going to be "
@@ -1125,7 +1115,7 @@ msgstr ""
 "Door encryptie uit te schakelen worden *alle* notities en bijlagen opnieuw "
 "gesynchroniseerd, maar dan onversleuteld. Wilt u doorgaan?"
 
-#: packages/app-mobile/components/screens/Note.tsx:104
+#: packages/app-mobile/components/screens/Note.tsx:107
 msgid "Discard changes"
 msgstr "Wijzigingen verwerpen"
 
@@ -1210,7 +1200,7 @@ msgstr "Downloaden"
 msgid "Download and install the relevant extension for your browser:"
 msgstr "Download en installeer de bijbehorende extensie in uw browser:"
 
-#: packages/lib/models/Resource.ts:347
+#: packages/lib/models/Resource.ts:343
 msgid "Downloaded"
 msgstr "Gedownload"
 
@@ -1222,19 +1212,19 @@ msgstr "Gedownload en ontsleuteld"
 msgid "Downloaded and encrypted"
 msgstr "Gedownload en versleuteld"
 
-#: packages/lib/models/Resource.ts:346
+#: packages/lib/models/Resource.ts:342
 msgid "Downloading"
 msgstr "Bezig met downloaden"
 
-#: packages/app-cli/app/command-sync.js:236
+#: packages/app-cli/app/command-sync.ts:236
 msgid "Downloading resources..."
 msgstr "Bronnen downloaden..."
 
-#: packages/lib/models/Setting.ts:339
+#: packages/lib/models/Setting.ts:340
 msgid "Dracula"
 msgstr "Dracula"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1143
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1163
 msgid "Drop notes or files here"
 msgstr "Notities bestanden hier neerzetten"
 
@@ -1242,7 +1232,7 @@ msgstr "Notities bestanden hier neerzetten"
 msgid "Dropbox"
 msgstr "Dropbox"
 
-#: packages/app-desktop/gui/Root.tsx:209
+#: packages/app-desktop/gui/Root.tsx:218
 msgid "Dropbox Login"
 msgstr "Inloggen op Dropbox"
 
@@ -1265,8 +1255,9 @@ msgstr ""
 "notitieboek wordt opgegeven, dan wordt de notitie gedupliceerd in het "
 "huidige notitieboek."
 
+#: packages/app-desktop/gui/MainScreen/commands/openFolderDialog.ts:6
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/openEditDialog.ts:83
-#: packages/app-mobile/components/screens/Note.tsx:1146
+#: packages/app-mobile/components/screens/Note.tsx:1151
 msgid "Edit"
 msgstr "Bewerken"
 
@@ -1278,33 +1269,34 @@ msgstr "Bewerken in externe editor"
 msgid "Edit note."
 msgstr "Notitie bewerken."
 
+#: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:102
 #: packages/app-mobile/components/screens/folder.js:109
 msgid "Edit notebook"
 msgstr "Notitieboek bewerken"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:138
-#: packages/lib/models/Setting.ts:790 packages/lib/models/Setting.ts:791
-#: packages/lib/models/Setting.ts:792
+#: packages/lib/models/Setting.ts:819 packages/lib/models/Setting.ts:820
+#: packages/lib/models/Setting.ts:821
 msgid "Editor"
 msgstr "Editor"
 
-#: packages/lib/models/Setting.ts:997
+#: packages/lib/models/Setting.ts:1083
 msgid "Editor font"
 msgstr "Lettertype van editor"
 
-#: packages/lib/models/Setting.ts:1022
+#: packages/lib/models/Setting.ts:1108
 msgid "Editor font family"
 msgstr "Lettertype van editor"
 
-#: packages/lib/models/Setting.ts:989
+#: packages/lib/models/Setting.ts:1075
 msgid "Editor font size"
 msgstr "Lettergrootte van editor"
 
-#: packages/lib/models/Setting.ts:1039
+#: packages/lib/models/Setting.ts:1125
 msgid "Editor maximum width"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1033
+#: packages/lib/models/Setting.ts:1119
 #, fuzzy
 msgid "Editor monospace font family"
 msgstr "Editor monospace lettertypefamilie"
@@ -1313,7 +1305,7 @@ msgstr "Editor monospace lettertypefamilie"
 msgid "Either \"text\" or \"json\""
 msgstr "\"text\" of \"json\""
 
-#: packages/lib/models/Setting.ts:1171
+#: packages/lib/models/Setting.ts:1257
 msgid "Emacs"
 msgstr "Emacs"
 
@@ -1321,93 +1313,93 @@ msgstr "Emacs"
 msgid "emphasised text"
 msgstr "benadrukte tekst"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:154
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:156
 #: packages/app-mobile/components/screens/encryption-config.tsx:182
 msgid "Enable"
 msgstr "Inschakelen"
 
-#: packages/lib/models/Setting.ts:939
+#: packages/lib/models/Setting.ts:1025
 msgid "Enable ^sup^ syntax"
 msgstr "^sup^ syntaxis inschakelen"
 
-#: packages/lib/models/Setting.ts:943
+#: packages/lib/models/Setting.ts:1029
 msgid "Enable ++insert++ syntax"
 msgstr "++insert++ syntaxis inschakelen"
 
-#: packages/lib/models/Setting.ts:935
+#: packages/lib/models/Setting.ts:1021
 msgid "Enable ==mark== syntax"
 msgstr "==mark== syntaxis inschakelen"
 
-#: packages/lib/models/Setting.ts:938
+#: packages/lib/models/Setting.ts:1024
 msgid "Enable ~sub~ syntax"
 msgstr "~sub~ syntaxis inschakelen"
 
-#: packages/lib/models/Setting.ts:941
+#: packages/lib/models/Setting.ts:1027
 msgid "Enable abbreviation syntax"
 msgstr "Afkortingen syntaxis inschakelen"
 
-#: packages/lib/models/Setting.ts:932
+#: packages/lib/models/Setting.ts:1018
 msgid "Enable audio player"
 msgstr "Ondersteuning voor muziekspeler inschakelen"
 
-#: packages/lib/models/Setting.ts:940
+#: packages/lib/models/Setting.ts:1026
 msgid "Enable deflist syntax"
 msgstr "Deflist syntaxis inschakelen"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:235
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:237
 #: packages/app-mobile/components/screens/encryption-config.tsx:281
 msgid "Enable encryption"
 msgstr "Encryptie inschakelen"
 
-#: packages/lib/models/Setting.ts:936
+#: packages/lib/models/Setting.ts:1022
 msgid "Enable footnotes"
 msgstr "Voetnoten inschakelen"
 
-#: packages/lib/models/Setting.ts:929
+#: packages/lib/models/Setting.ts:1015
 msgid "Enable Fountain syntax support"
 msgstr "Ondersteuning voor Fountain syntaxis inschakelen"
 
-#: packages/lib/models/Setting.ts:926
+#: packages/lib/models/Setting.ts:1012
 msgid "Enable Linkify"
 msgstr "Ondersteuning voor Linkify inschakelen"
 
-#: packages/lib/models/Setting.ts:942
+#: packages/lib/models/Setting.ts:1028
 msgid "Enable markdown emoji"
 msgstr "Markdown emoji inschakelen"
 
-#: packages/lib/models/Setting.ts:928
+#: packages/lib/models/Setting.ts:1014
 msgid "Enable math expressions"
 msgstr "Ondersteuning voor wiskundige expressies inschakelen"
 
-#: packages/lib/models/Setting.ts:930
+#: packages/lib/models/Setting.ts:1016
 msgid "Enable Mermaid diagrams support"
 msgstr "Ondersteuning voor Mermaid diagrammen Inschakelen"
 
-#: packages/lib/models/Setting.ts:944
+#: packages/lib/models/Setting.ts:1030
 msgid "Enable multimarkdown table extension"
 msgstr "Multimarkdown tabel extensie inschakelen"
 
-#: packages/lib/models/Setting.ts:1248
+#: packages/lib/models/Setting.ts:1334
 msgid "Enable note history"
 msgstr "Inschakelen geschiedenis van notities"
 
-#: packages/lib/models/Setting.ts:934
+#: packages/lib/models/Setting.ts:1020
 msgid "Enable PDF viewer"
 msgstr "Ondersteuning voor PDF weergave inschakelen"
 
-#: packages/lib/models/Setting.ts:924
+#: packages/lib/models/Setting.ts:1010
 msgid "Enable soft breaks"
 msgstr "Inschakelen zacht afbreken"
 
-#: packages/lib/models/Setting.ts:937
+#: packages/lib/models/Setting.ts:1023
 msgid "Enable table of contents extension"
 msgstr "Inhoudsopgave inschakelen"
 
-#: packages/lib/models/Setting.ts:925
+#: packages/lib/models/Setting.ts:1011
 msgid "Enable typographer support"
 msgstr "Ondersteuning voor typografie inschakelen"
 
-#: packages/lib/models/Setting.ts:933
+#: packages/lib/models/Setting.ts:1019
 msgid "Enable video player"
 msgstr "Ondersteuning voor videospeler inschakelen"
 
@@ -1416,8 +1408,8 @@ msgstr "Ondersteuning voor videospeler inschakelen"
 msgid "Enable Web Clipper Service"
 msgstr "Webclipper-dienst inschakelen"
 
-#: packages/app-cli/app/command-e2ee.ts:120
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:247
+#: packages/app-cli/app/command-e2ee.ts:127
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:249
 #: packages/app-mobile/components/screens/encryption-config.tsx:303
 msgid "Enabled"
 msgstr "Ingeschakeld"
@@ -1443,7 +1435,7 @@ msgstr "Versleutelde items kunnen niet worden bewerkt"
 msgid "Encrypted notebooks cannot be renamed"
 msgstr "Versleutelde notitieboeken kunnen niet worden hernoemd"
 
-#: packages/lib/models/Setting.ts:2051
+#: packages/lib/models/Setting.ts:2148
 msgid "Encryption"
 msgstr "Encryptie"
 
@@ -1452,22 +1444,22 @@ msgstr "Encryptie"
 msgid "Encryption Config"
 msgstr "Encryptie-configuratie"
 
-#: packages/app-cli/app/command-e2ee.ts:120
+#: packages/app-cli/app/command-e2ee.ts:127
 #: packages/app-mobile/components/screens/encryption-config.tsx:303
 msgid "Encryption is: %s"
 msgstr "Gebruikte encryptie: %s"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:170
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:172
 #, fuzzy
 msgid "Encryption keys"
 msgstr "Gebruikte encryptie:"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:247
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:249
 #, fuzzy
 msgid "Encryption:"
 msgstr "Encryptie"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:245
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:247
 #, fuzzy
 msgid "End-to-end encryption"
 msgstr "Encryptie inschakelen"
@@ -1477,7 +1469,7 @@ msgid "Enter code here"
 msgstr "Code hier invoeren"
 
 #: packages/app-cli/app/command-e2ee.ts:38
-#: packages/app-cli/app/command-e2ee.ts:77
+#: packages/app-cli/app/command-e2ee.ts:84
 msgid "Enter master password:"
 msgstr "Voer het hoofdwachtwoord in:"
 
@@ -1489,7 +1481,7 @@ msgstr "Invoeren titel notitieboek"
 msgid "Enum"
 msgstr "Enum"
 
-#: packages/lib/models/Resource.ts:348
+#: packages/lib/models/Resource.ts:344
 msgid "Error"
 msgstr "Fout"
 
@@ -1499,7 +1491,8 @@ msgid "Error opening note in editor: %s"
 msgstr "Fout bij openen van notitie in editor: %s"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:65
-#: packages/lib/services/KeymapService.ts:195
+#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:35
+#: packages/lib/services/KeymapService.ts:197
 msgid "Error: %s"
 msgstr "Fout: %s"
 
@@ -1528,13 +1521,13 @@ msgid "Exits the application."
 msgstr "Sluit de applicatie af."
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:171
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:331
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:334
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:185
 msgid "Export"
 msgstr "Exporteren"
 
-#: packages/app-desktop/gui/MenuBar.tsx:465
-#: packages/app-desktop/gui/MenuBar.tsx:519
+#: packages/app-desktop/gui/MenuBar.tsx:477
+#: packages/app-desktop/gui/MenuBar.tsx:531
 msgid "Export all"
 msgstr "Alles exporteren"
 
@@ -1575,11 +1568,11 @@ msgstr "Exporteert alleen de opgegeven notitie."
 msgid "Exports only the given notebook."
 msgstr "Exporteert alleen het opgegeven notitieboek."
 
-#: packages/lib/models/Setting.ts:1234
+#: packages/lib/models/Setting.ts:1320
 msgid "Fail-safe"
 msgstr "Faalveilig"
 
-#: packages/lib/models/Setting.ts:1235
+#: packages/lib/models/Setting.ts:1321
 msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
@@ -1595,16 +1588,16 @@ msgstr "Fatale fout:"
 msgid "Feature flags"
 msgstr ""
 
-#: packages/lib/Synchronizer.ts:194
+#: packages/lib/Synchronizer.ts:188
 msgid "Fetched items: %d/%d."
 msgstr "Items opgehaald: %d/%d."
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:733
-#: packages/app-mobile/components/side-menu-content.js:330
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:744
+#: packages/app-mobile/components/side-menu-content.js:333
 msgid "Fetching resources: %d/%d"
 msgstr "Bronnen ophalen: %d/%d"
 
-#: packages/lib/services/interop/types.ts:125
+#: packages/lib/services/interop/types.ts:126
 msgid "File"
 msgstr "Bestand"
 
@@ -1624,7 +1617,7 @@ msgstr "Zoekindex repareren"
 msgid "Fixing search index..."
 msgstr "Zoekindex repareren..."
 
-#: packages/app-desktop/gui/MenuBar.tsx:657
+#: packages/app-desktop/gui/MenuBar.tsx:669
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteBody.ts:7
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteTitle.ts:7
 #: packages/app-desktop/gui/NoteList/commands/focusElementNoteList.ts:8
@@ -1632,11 +1625,11 @@ msgstr "Zoekindex repareren..."
 msgid "Focus"
 msgstr "Focus"
 
-#: packages/lib/models/Setting.ts:875 packages/lib/models/Setting.ts:891
+#: packages/lib/models/Setting.ts:961 packages/lib/models/Setting.ts:977
 msgid "Focus body"
 msgstr "Inhoud focussen"
 
-#: packages/lib/models/Setting.ts:874 packages/lib/models/Setting.ts:890
+#: packages/lib/models/Setting.ts:960 packages/lib/models/Setting.ts:976
 msgid "Focus title"
 msgstr "Titel focussen"
 
@@ -1667,6 +1660,10 @@ msgstr ""
 "Typ `help keymap` om de lijst met sneltoetsen en configuratie-opties te "
 "bekijken"
 
+#: packages/lib/models/Setting.ts:568
+msgid "Force Path Style"
+msgstr ""
+
 #: packages/lib/commands/historyForward.ts:6
 msgid "Forward"
 msgstr "Vooruit"
@@ -1684,11 +1681,11 @@ msgstr "FTS ingeschakeld: %d"
 msgid "Full changelog"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:2043
+#: packages/lib/models/Setting.ts:2139
 msgid "General"
 msgstr "Algemeen"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:250
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:252
 #, fuzzy
 msgid "Generated"
 msgstr "Algemeen"
@@ -1703,7 +1700,7 @@ msgstr[1] "Nieuwe links genereren..."
 msgid "Get it now:"
 msgstr "Download nu:"
 
-#: packages/lib/models/Setting.ts:1108
+#: packages/lib/models/Setting.ts:1194
 msgid "Get pre-releases when checking for updates"
 msgstr "Verkrijg pre-releases bij controleren op updates"
 
@@ -1717,7 +1714,7 @@ msgstr ""
 "dan wordt de waarde van [name] getoond. Als zowel [name] als [value] niet "
 "zijn opgegeven, dan wordt de huidige configuratie getoond."
 
-#: packages/app-mobile/components/screens/Note.tsx:847
+#: packages/app-mobile/components/screens/Note.tsx:852
 msgid "Go to source URL"
 msgstr "Ga naar bron-URL"
 
@@ -1726,7 +1723,7 @@ msgstr "Ga naar bron-URL"
 msgid "Goto Anything..."
 msgstr "Ga naar Alles..."
 
-#: packages/app-desktop/gui/Root.tsx:165
+#: packages/app-desktop/gui/Root.tsx:172
 #, fuzzy
 msgid "Grant authorisation"
 msgstr "Autorisatie-token:"
@@ -1735,11 +1732,11 @@ msgstr "Autorisatie-token:"
 msgid "Heading"
 msgstr "Kop"
 
-#: packages/app-desktop/gui/MenuBar.tsx:480
+#: packages/app-desktop/gui/MenuBar.tsx:492
 msgid "Hide %s"
 msgstr "%s verbergen"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:170
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:172
 msgid "Hide disabled keys"
 msgstr ""
 
@@ -1767,34 +1764,44 @@ msgstr "HTML-bestand"
 msgid "Hyperlink"
 msgstr "Hyperlink"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:177
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:327
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:74
+#: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:77
+msgid "Icon"
+msgstr "Icoon"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:179
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:329
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:76
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:28
 #: packages/app-desktop/gui/ResourceScreen.tsx:94
 msgid "ID"
 msgstr "ID"
 
-#: packages/lib/Synchronizer.ts:310
+#: packages/lib/Synchronizer.ts:304
 msgid "Idle"
 msgstr "Inactief"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:107
+#: packages/lib/models/Setting.ts:867
+msgid ""
+"If true, sort order buttons (field + reverse) for notes are shown at the top "
+"of Note List."
+msgstr ""
+
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:109
 msgid "Ignore"
 msgstr "Negeren"
 
-#: packages/lib/models/Setting.ts:1224
+#: packages/lib/models/Setting.ts:1310
 msgid "Ignore TLS certificate errors"
 msgstr "TLS-certificaatfouten negeren"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:170
-#: packages/app-desktop/gui/MenuBar.tsx:461
-#: packages/app-desktop/gui/MenuBar.tsx:516
-#: packages/app-desktop/gui/Root.tsx:210
+#: packages/app-desktop/gui/MenuBar.tsx:473
+#: packages/app-desktop/gui/MenuBar.tsx:528
+#: packages/app-desktop/gui/Root.tsx:219
 msgid "Import"
 msgstr "Importeren"
 
-#: packages/app-desktop/gui/MenuBar.tsx:196
+#: packages/app-desktop/gui/MenuBar.tsx:197
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr ""
 "Bezig met importeren van \"%s\" in het formaat \"%s\". Een ogenblik geduld..."
@@ -1807,7 +1814,7 @@ msgstr "Notities importeren..."
 msgid "Imports data into Joplin."
 msgstr "Importeert gegeven naar Joplin."
 
-#: packages/lib/models/Setting.ts:634
+#: packages/lib/models/Setting.ts:662
 msgid ""
 "In \"Manual\" mode, attachments are downloaded only when you click on them. "
 "In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
@@ -1828,7 +1835,7 @@ msgstr ""
 "respectievelijk de huidige geselecteerde notitie of het notitieboek. `$c` "
 "kan worden gebruikt om te verwijzen naar het huidige geselecteerde item."
 
-#: packages/app-mobile/components/screens/Note.tsx:402
+#: packages/app-mobile/components/screens/Note.tsx:407
 msgid ""
 "In order to associate a geo-location with the note, the app needs your "
 "permission to access your location.\n"
@@ -1840,7 +1847,7 @@ msgstr ""
 "\n"
 "U kunt deze optie op elk moment uitschakelen in het 'Configuratie'-scherm."
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:93
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:95
 msgid ""
 "In order to do so, your entire data set will have to be encrypted and "
 "synchronised, so it is best to run it overnight.\n"
@@ -1883,7 +1890,7 @@ msgid "In order to use the web clipper, you need to do the following:"
 msgstr ""
 "Als u de webclipper wilt gebruiken, dan moet u de volgende stappen volgen:"
 
-#: packages/lib/Synchronizer.ts:311
+#: packages/lib/Synchronizer.ts:305
 msgid "In progress"
 msgstr "Bezig"
 
@@ -1903,7 +1910,7 @@ msgstr "Meer inspringen"
 msgid "Information"
 msgstr "Informatie"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:586
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:606
 msgid "Inline Code"
 msgstr "Inline-code"
 
@@ -1912,7 +1919,7 @@ msgid "Insert"
 msgstr "Invoegen"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:83
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:602
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:622
 msgid "Insert Date Time"
 msgstr "Datum en tijd invoegen"
 
@@ -1940,7 +1947,7 @@ msgstr "Installeren…"
 msgid "Invalid"
 msgstr "Ongeldig"
 
-#: packages/lib/services/KeymapService.ts:317
+#: packages/lib/services/KeymapService.ts:319
 msgid "Invalid %s: %s."
 msgstr "Ongeldig %s: %s."
 
@@ -1952,9 +1959,14 @@ msgstr "Ongeldig antwoord: %s"
 msgid "Invalid command: \"%s\""
 msgstr "Ongeldige opdracht: \"%s\""
 
-#: packages/lib/models/Setting.ts:1629
+#: packages/lib/models/Setting.ts:1725
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Ongeldige optie: \"%s\". Geldige waarden zijn: %s."
+
+#: packages/app-cli/app/command-e2ee.ts:46
+#, fuzzy
+msgid "Invalid password"
+msgstr "Ongeldig antwoord: %s"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:38
 msgid "Italic"
@@ -1983,12 +1995,12 @@ msgstr ""
 msgid "Joplin Cloud"
 msgstr "Joplin-forum"
 
-#: packages/lib/models/Setting.ts:608
+#: packages/lib/models/Setting.ts:636
 #, fuzzy
 msgid "Joplin Cloud email"
 msgstr "Joplin Server"
 
-#: packages/lib/models/Setting.ts:619
+#: packages/lib/models/Setting.ts:647
 #, fuzzy
 msgid "Joplin Cloud password"
 msgstr "Joplin Server Wachtwoord"
@@ -2013,7 +2025,7 @@ msgstr ""
 "beschadigd of te groot zijn. Deze items blijven op het apparaat, maar Joplin "
 "zal niet langer proberen ze te ontsleutelen."
 
-#: packages/app-desktop/gui/MenuBar.tsx:690
+#: packages/app-desktop/gui/MenuBar.tsx:702
 msgid "Joplin Forum"
 msgstr "Joplin-forum"
 
@@ -2021,16 +2033,16 @@ msgstr "Joplin-forum"
 msgid "Joplin Server"
 msgstr "Joplin Server"
 
-#: packages/lib/models/Setting.ts:569
+#: packages/lib/models/Setting.ts:597
 #, fuzzy
 msgid "Joplin Server email"
 msgstr "Joplin Server"
 
-#: packages/lib/models/Setting.ts:580
+#: packages/lib/models/Setting.ts:608
 msgid "Joplin Server password"
 msgstr "Joplin Server Wachtwoord"
 
-#: packages/lib/models/Setting.ts:551
+#: packages/lib/models/Setting.ts:579
 msgid "Joplin Server URL"
 msgstr "Joplin Server URL"
 
@@ -2053,11 +2065,11 @@ msgid ""
 "such as publishing notes or collaborating on notebooks with others."
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1260
+#: packages/lib/models/Setting.ts:1346
 msgid "Keep note history for"
 msgstr "Bewaar geschiedenis van notities voor"
 
-#: packages/lib/models/Setting.ts:1167
+#: packages/lib/models/Setting.ts:1253
 msgid "Keyboard Mode"
 msgstr "Toetsenbordmodus"
 
@@ -2065,7 +2077,7 @@ msgstr "Toetsenbordmodus"
 msgid "Keyboard Shortcut"
 msgstr "Sneltoets"
 
-#: packages/lib/models/Setting.ts:2053
+#: packages/lib/models/Setting.ts:2150
 msgid "Keyboard Shortcuts"
 msgstr "Sneltoetsen"
 
@@ -2073,20 +2085,20 @@ msgstr "Sneltoetsen"
 msgid "Keychain Supported: %s"
 msgstr "Ondersteunde Sleutelhanger: %s"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:69
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:71
 #, fuzzy
 msgid "Keys that need upgrading"
 msgstr "Hoofdsleutels die moeten worden bijgewerkt"
 
-#: packages/lib/models/Setting.ts:1156
+#: packages/lib/models/Setting.ts:1242
 msgid "Landscape"
 msgstr "Landschap"
 
-#: packages/lib/models/Setting.ts:677
+#: packages/lib/models/Setting.ts:705
 msgid "Language"
 msgstr "Taal"
 
-#: packages/lib/Synchronizer.ts:197
+#: packages/lib/Synchronizer.ts:191
 msgid "Last error: %s"
 msgstr "Laatst gemelde fout: %s"
 
@@ -2098,24 +2110,24 @@ msgstr "Later"
 msgid "Layout"
 msgstr "Indeling"
 
-#: packages/app-desktop/gui/MenuBar.tsx:585
+#: packages/app-desktop/gui/MenuBar.tsx:597
 msgid "Layout button sequence"
 msgstr "Knopindelingreeks"
 
-#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:7
+#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:11
 #, fuzzy
 msgid "Leave notebook..."
 msgstr "Deel notitie..."
 
-#: packages/lib/models/Setting.ts:1150
+#: packages/lib/models/Setting.ts:1236
 msgid "Legal"
 msgstr "Wettelijk"
 
-#: packages/lib/models/Setting.ts:1146
+#: packages/lib/models/Setting.ts:1232
 msgid "Letter"
 msgstr "Brief"
 
-#: packages/lib/models/Setting.ts:337
+#: packages/lib/models/Setting.ts:338
 msgid "Light"
 msgstr "Licht"
 
@@ -2129,7 +2141,7 @@ msgid_plural "Links have been copied to clipboard!"
 msgstr[0] "De link is naar het klembord gekopieerd!"
 msgstr[1] "De links zijn naar het klembord gekopieerd!"
 
-#: packages/app-mobile/components/screens/Note.tsx:195
+#: packages/app-mobile/components/screens/Note.tsx:200
 msgid "Links with protocol \"%s\" are not supported"
 msgstr "Links met protocol “%s” worden niet ondersteund"
 
@@ -2148,7 +2160,7 @@ msgstr "Gedownload"
 msgid "Location"
 msgstr "Locatie"
 
-#: packages/app-cli/app/command-sync.js:137
+#: packages/app-cli/app/command-sync.ts:137
 msgid ""
 "Lock file is already being hold. If you know that no synchronisation is "
 "taking place, you may delete the lock file at \"%s\" and resume the "
@@ -2179,12 +2191,12 @@ msgstr "Inloggen met Dropbox"
 msgid "Login with OneDrive"
 msgstr "Inloggen met OneDrive"
 
-#: packages/app-desktop/gui/MenuBar.tsx:693
+#: packages/app-desktop/gui/MenuBar.tsx:705
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:583
 msgid "Make a donation"
 msgstr "Doneren"
 
-#: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:204
+#: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:212
 #, fuzzy
 msgid "Manage master password"
 msgstr "Voer het hoofdwachtwoord in:"
@@ -2208,11 +2220,11 @@ msgstr ""
 "Beheert de E2EE-configuratie. Opdrachten zijn: `enable`, `disable`, "
 "`decrypt`, `status`, `decrypt-file` en `target-status`."
 
-#: packages/lib/models/Setting.ts:638
+#: packages/lib/models/Setting.ts:666
 msgid "Manual"
 msgstr "Handmatig"
 
-#: packages/lib/models/Setting.ts:2047
+#: packages/lib/models/Setting.ts:2144
 #: packages/lib/services/interop/InteropService.ts:114
 #: packages/lib/services/interop/InteropService.ts:59
 msgid "Markdown"
@@ -2239,24 +2251,24 @@ msgstr "Opmaak"
 msgid "Master Key %s"
 msgstr "Hoofdsleutel %s"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:131
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:275
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:133
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:277
 #: packages/app-mobile/components/screens/encryption-config.tsx:102
 #, fuzzy
 msgid "Master password"
 msgstr "Voer het hoofdwachtwoord in:"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:276
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:278
 #: packages/app-mobile/components/screens/encryption-config.tsx:211
 #, fuzzy
 msgid "Master password:"
 msgstr "Voer het hoofdwachtwoord in:"
 
-#: packages/lib/models/Setting.ts:661
+#: packages/lib/models/Setting.ts:689
 msgid "Max concurrent connections"
 msgstr "Max gelijktijdige verbindingen"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:322
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:324
 #, fuzzy
 msgid "Missing keys"
 msgstr "Ontbrekende hoofdsleutels"
@@ -2269,7 +2281,7 @@ msgstr "Ontbrekende hoofdsleutels"
 msgid "Missing required argument: %s"
 msgstr "Vereist argument ontbreekt: %s"
 
-#: packages/app-mobile/components/side-menu-content.js:351
+#: packages/app-mobile/components/side-menu-content.js:354
 msgid "Mobile data - auto-sync disabled"
 msgstr "Mobiele data - automatische synchronisatie uitgeschakeld"
 
@@ -2285,7 +2297,7 @@ msgstr "Meer informatie"
 msgid "More than one item match \"%s\". Please narrow down your query."
 msgstr "Meer dan één overeenkomst voor \"%s\". Verfijn uw zoekopdracht."
 
-#: packages/app-mobile/components/screen-header.js:439
+#: packages/app-mobile/components/screen-header.js:441
 msgid "Move %d notes to notebook \"%s\"?"
 msgstr "%d notities verplaatsen naar notitieboek \"%s\"?"
 
@@ -2297,7 +2309,7 @@ msgstr "Verplaatsen naar notitieboek"
 msgid "Move to notebook:"
 msgstr "Verplaatsen naar notitieboek:"
 
-#: packages/app-mobile/components/screen-header.js:398
+#: packages/app-mobile/components/screen-header.js:400
 msgid "Move to notebook..."
 msgstr "Verplaatsen naar notitieboek..."
 
@@ -2323,7 +2335,7 @@ msgstr "Nieuwe notitie"
 msgid "New notebook"
 msgstr "Nieuw notitieboek"
 
-#: packages/app-mobile/components/side-menu-content.js:312
+#: packages/app-mobile/components/side-menu-content.js:315
 msgid "New Notebook"
 msgstr "Nieuw notitieboek"
 
@@ -2356,25 +2368,25 @@ msgstr "Nieuwe versie: %s"
 msgid "Nextcloud"
 msgstr "Nextcloud"
 
-#: packages/lib/models/Setting.ts:451
+#: packages/lib/models/Setting.ts:452
 msgid "Nextcloud password"
 msgstr "Nextcloud-wachtwoord"
 
-#: packages/lib/models/Setting.ts:440
+#: packages/lib/models/Setting.ts:441
 msgid "Nextcloud username"
 msgstr "Nextcloud-gebruikersnaam"
 
-#: packages/lib/models/Setting.ts:428
+#: packages/lib/models/Setting.ts:429
 msgid "Nextcloud WebDAV URL"
 msgstr "Nextcloud WebDAV-URL"
 
-#: packages/lib/models/Setting.ts:326
+#: packages/lib/models/Setting.ts:327
 msgid "no"
 msgstr "nee"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:29
-#: packages/app-mobile/components/screens/Note.tsx:587
-#: packages/lib/shim-init-node.js:166 packages/lib/versionInfo.ts:27
+#: packages/app-mobile/components/screens/Note.tsx:592
+#: packages/lib/shim-init-node.js:171 packages/lib/versionInfo.ts:27
 msgid "No"
 msgstr "Nee"
 
@@ -2382,7 +2394,7 @@ msgstr "Nee"
 msgid "No active notebook."
 msgstr "Geen actief notitieboek."
 
-#: packages/app-mobile/components/screens/Note.tsx:168
+#: packages/app-mobile/components/screens/Note.tsx:171
 msgid "No item with ID %s"
 msgstr "Geen item met ID %s"
 
@@ -2423,41 +2435,41 @@ msgstr ""
 "Geen teksteditor opgegeven. Stel deze in via `config editor <pad-naar-"
 "editor>`"
 
-#: packages/lib/models/Setting.ts:342
+#: packages/lib/models/Setting.ts:343
 msgid "Nord"
 msgstr "Nord"
 
-#: packages/app-cli/app/command-sync.js:106
+#: packages/app-cli/app/command-sync.ts:106
 msgid "Not authentified with %s. Please provide any missing credentials."
 msgstr "Niet geauthenticeerd met %s. Voer ontbrekende inloggegevens in."
 
-#: packages/lib/models/Resource.ts:345
+#: packages/lib/models/Resource.ts:341
 msgid "Not downloaded"
 msgstr "Niet gedownload"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:250
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:252
 msgid "Not generated"
 msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.tsx:110
-#: packages/server/src/models/UserModel.ts:202
-#: packages/server/src/models/UserModel.ts:217
+#: packages/server/src/models/UserModel.ts:214
+#: packages/server/src/models/UserModel.ts:231
 msgid "note"
 msgstr "notitie"
 
-#: packages/lib/models/Setting.ts:2046
+#: packages/lib/models/Setting.ts:2142
 msgid "Note"
 msgstr "Notitie"
 
-#: packages/lib/models/Setting.ts:1320
+#: packages/lib/models/Setting.ts:1406
 msgid "Note area growth factor"
 msgstr "Notitiegebied groeifactor"
 
-#: packages/app-desktop/gui/Root.tsx:212
+#: packages/app-desktop/gui/Root.tsx:221
 msgid "Note attachments"
 msgstr "Notitiebijlagen"
 
-#: packages/app-desktop/gui/MenuBar.tsx:385
+#: packages/app-desktop/gui/MenuBar.tsx:397
 msgid "Note attachments..."
 msgstr "Bijlagen bij notitie..."
 
@@ -2474,7 +2486,7 @@ msgid "Note has been saved."
 msgstr "Notitie is opgeslagen."
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:34
-#: packages/lib/models/Setting.ts:2050
+#: packages/lib/models/Setting.ts:2147
 msgid "Note History"
 msgstr "Notitiegeschiedenis"
 
@@ -2486,7 +2498,7 @@ msgstr "Notitie is geen taak: \"%s\""
 msgid "Note list"
 msgstr "Notitielijst"
 
-#: packages/lib/models/Setting.ts:1306
+#: packages/lib/models/Setting.ts:1392
 msgid "Note list growth factor"
 msgstr "Notitielijst groeifactor"
 
@@ -2499,7 +2511,7 @@ msgstr "Eigenschappen van notitie"
 msgid "Note title"
 msgstr "Titel van notitie"
 
-#: packages/lib/models/Setting.ts:958
+#: packages/lib/models/Setting.ts:1044
 msgid "Note: Does not work in all desktop environments."
 msgstr "Let op: dit werkt niet in alle desktop-omgevingen."
 
@@ -2510,12 +2522,17 @@ msgstr ""
 "Let op: wanneer een notitie wordt gedeeld, zal deze niet langer versleuteld "
 "zijn."
 
-#: packages/app-desktop/gui/MenuBar.tsx:663
+#: packages/app-desktop/gui/MenuBar.tsx:675
 #, fuzzy
 msgid "Note&book"
 msgstr "Notitieboeken"
 
-#: packages/lib/models/Setting.ts:1292
+#: packages/lib/models/Setting.ts:2143
+#, fuzzy
+msgid "Notebook"
+msgstr "Notitieboeken"
+
+#: packages/lib/models/Setting.ts:1378
 msgid "Notebook list growth factor"
 msgstr "Notitieboeklijst groeifactor"
 
@@ -2527,16 +2544,22 @@ msgstr "Titel van notitieboek:"
 msgid "Notebook: %s"
 msgstr "Notitieboek: %s"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:685
-#: packages/app-mobile/components/side-menu-content.js:372
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:696
+#: packages/app-mobile/components/side-menu-content.js:375
 msgid "Notebooks"
 msgstr "Notitieboeken"
 
-#: packages/lib/models/Folder.ts:656
+#: packages/lib/models/Folder.ts:751
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr "Notitieboeken mogen niet \"%s\" heten; dit is een gereserveerde titel."
 
-#: packages/lib/models/Setting.ts:2062
+#: packages/app-desktop/gui/MainScreen/commands/toggleNotesSortOrderField.ts:8
+#: packages/app-desktop/gui/MainScreen/commands/toggleNotesSortOrderReverse.ts:9
+#, fuzzy
+msgid "Notes"
+msgstr "Notitie"
+
+#: packages/lib/models/Setting.ts:2159
 msgid "Notes and settings are stored in: %s"
 msgstr "Notities en instellingen worden opgeslagen in: %s"
 
@@ -2554,7 +2577,7 @@ msgstr "Genummerde lijst"
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:28
 #: packages/app-desktop/gui/DialogButtonRow.min.js:30
 #: packages/app-desktop/gui/DialogButtonRow.tsx:75
-#: packages/app-desktop/gui/MenuBar.tsx:410
+#: packages/app-desktop/gui/MenuBar.tsx:422
 #: packages/app-desktop/gui/PromptDialog.min.js:235
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:26
 #: packages/app-mobile/components/CameraView.tsx:190
@@ -2564,7 +2587,7 @@ msgstr "Genummerde lijst"
 msgid "OK"
 msgstr "Oké"
 
-#: packages/lib/models/Setting.ts:344
+#: packages/lib/models/Setting.ts:345
 msgid "OLED Dark"
 msgstr "OLED Donker"
 
@@ -2596,7 +2619,7 @@ msgstr "Een of meer hoofdsleutels vereist een wachtwoord."
 msgid "OneDrive"
 msgstr "OneDrive"
 
-#: packages/app-desktop/gui/Root.tsx:208
+#: packages/app-desktop/gui/Root.tsx:217
 msgid "OneDrive Login"
 msgstr "Inloggen op OneDrive"
 
@@ -2608,7 +2631,7 @@ msgstr "Slechts één notitie kan gelijktijdig worden afgedrukt."
 msgid "Open"
 msgstr "Openen"
 
-#: packages/app-desktop/app.ts:174
+#: packages/app-desktop/app.ts:175
 msgid "Open %s"
 msgstr "Open %s"
 
@@ -2616,7 +2639,7 @@ msgstr "Open %s"
 msgid "Open profile directory"
 msgstr "Open profiel map"
 
-#: packages/lib/models/Setting.ts:367
+#: packages/lib/models/Setting.ts:368
 msgid "Open Sync Wizard..."
 msgstr ""
 
@@ -2625,14 +2648,14 @@ msgid "Open..."
 msgstr "Openen..."
 
 #: packages/app-cli/app/command-e2ee.ts:40
-#: packages/app-cli/app/command-e2ee.ts:79
-#: packages/app-cli/app/command-e2ee.ts:89
+#: packages/app-cli/app/command-e2ee.ts:86
+#: packages/app-cli/app/command-e2ee.ts:96
 msgid "Operation cancelled"
 msgstr "Actie geannuleerd"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:26
-#: packages/app-desktop/gui/MenuBar.tsx:371
-#: packages/app-desktop/gui/Root.tsx:211
+#: packages/app-desktop/gui/MenuBar.tsx:383
+#: packages/app-desktop/gui/Root.tsx:220
 msgid "Options"
 msgstr "Opties"
 
@@ -2645,15 +2668,15 @@ msgstr "Creëert een nieuwe notitie."
 msgid "Output format: %s"
 msgstr "Uitvoerformaat: %s"
 
-#: packages/lib/models/Setting.ts:1153
+#: packages/lib/models/Setting.ts:1239
 msgid "Page orientation for PDF export"
 msgstr "Pagina-oriëntatie voor PDF-export"
 
-#: packages/lib/models/Setting.ts:1143
+#: packages/lib/models/Setting.ts:1229
 msgid "Page size for PDF export"
 msgstr "Paginaformaat voor PDF-export"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:179
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:181
 msgid "Password"
 msgstr "Wachtwoord"
 
@@ -2666,7 +2689,7 @@ msgstr "Wachtwoord mag niet blanco zijn"
 msgid "Password:"
 msgstr "Wachtwoord:"
 
-#: packages/app-cli/app/command-e2ee.ts:93
+#: packages/app-cli/app/command-e2ee.ts:100
 #: packages/app-mobile/components/screens/encryption-config.tsx:138
 msgid "Passwords do not match!"
 msgstr "Wachtwoorden komen niet overeen!"
@@ -2686,7 +2709,7 @@ msgstr "Pad:"
 msgid "PDF File"
 msgstr "PDF-bestand"
 
-#: packages/app-mobile/components/screens/Note.tsx:403
+#: packages/app-mobile/components/screens/Note.tsx:408
 msgid "Permission needed"
 msgstr "Toestemming vereist"
 
@@ -2694,7 +2717,7 @@ msgstr "Toestemming vereist"
 msgid "Permission to use camera"
 msgstr "Toestemming om de camera te gebruiken"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:269
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:271
 msgid "Please click on \"%s\" to proceed"
 msgstr ""
 
@@ -2703,7 +2726,7 @@ msgid ""
 "Please confirm that you would like to re-encrypt your complete database."
 msgstr "Bevestig dat u uw complete database opnieuw wilt versleutelen."
 
-#: packages/lib/components/EncryptionConfigScreen/utils.ts:204
+#: packages/lib/components/EncryptionConfigScreen/utils.ts:208
 msgid ""
 "Please enter your password in the master key list below before upgrading the "
 "key."
@@ -2711,7 +2734,7 @@ msgstr ""
 "Voer uw wachtwoord in onderstaande hoofdsleutellijst voorafgaand aan "
 "bijwerken van de sleutel."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:294
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:320
 msgid ""
 "Please note that if it is a large notebook, it may take a few minutes for "
 "all the notes to show up on the recipient's device."
@@ -2756,7 +2779,7 @@ msgstr ""
 msgid "Please upgrade Joplin to use this plugin"
 msgstr "Upgrade Joplin om deze plug-in te gebruiken"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1143
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1163
 msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
 "switch to %s to edit the note."
@@ -2775,11 +2798,11 @@ msgid "Plugin tools"
 msgstr "Plugin tools"
 
 #: packages/app-desktop/gui/ConfigScreen/Sidebar.tsx:105
-#: packages/lib/models/Setting.ts:2048
+#: packages/lib/models/Setting.ts:2145
 msgid "Plugins"
 msgstr "Plugins"
 
-#: packages/lib/models/Setting.ts:1155
+#: packages/lib/models/Setting.ts:1241
 msgid "Portrait"
 msgstr "Portret"
 
@@ -2795,15 +2818,15 @@ msgstr "Mogelijk waarden: %s."
 msgid "Preferences"
 msgstr "Voorkeuren"
 
-#: packages/app-desktop/gui/MenuBar.tsx:436
+#: packages/app-desktop/gui/MenuBar.tsx:448
 msgid "Preferences..."
 msgstr "Voorkeuren..."
 
-#: packages/lib/models/Setting.ts:769
+#: packages/lib/models/Setting.ts:798
 msgid "Preferred dark theme"
 msgstr "Voorkeur donker thema"
 
-#: packages/lib/models/Setting.ts:754
+#: packages/lib/models/Setting.ts:783
 msgid "Preferred light theme"
 msgstr "Voorkeur licht thema"
 
@@ -2823,7 +2846,7 @@ msgstr ""
 "Druk op de sneltoetsen en dan op ENTER. Of, druk op backspace om de "
 "sneltoets te wissen."
 
-#: packages/app-mobile/components/screen-header.js:457
+#: packages/app-mobile/components/screen-header.js:459
 msgid "Press to set the decryption password."
 msgstr "Druk om het decryptie-wachtwoord in te stellen."
 
@@ -2843,11 +2866,11 @@ msgstr "Privacy Policy"
 msgid "Profile Version: %s"
 msgstr "Profiel versie: %s"
 
-#: packages/app-mobile/components/screens/Note.tsx:947
+#: packages/app-mobile/components/screens/Note.tsx:952
 msgid "Properties"
 msgstr "Eigenschappen"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:250
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:252
 msgid "Public-private key pair:"
 msgstr ""
 
@@ -2864,22 +2887,22 @@ msgstr ""
 msgid "Publish notes to the internet"
 msgstr ""
 
-#: packages/app-desktop/app.ts:176
+#: packages/app-desktop/app.ts:177
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:16
-#: packages/app-desktop/gui/MenuBar.tsx:254
+#: packages/app-desktop/gui/MenuBar.tsx:255
 msgid "Quit"
 msgstr "Afsluiten"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:89
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:91
 msgid "Re-encrypt data"
 msgstr "Data opnieuw versleutelen"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:101
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:103
 #, fuzzy
 msgid "Re-encryption"
 msgstr "Opnieuw versleutelen"
 
-#: packages/lib/models/Setting.ts:1089
+#: packages/lib/models/Setting.ts:1175
 msgid "Re-upload local data to sync target"
 msgstr ""
 
@@ -2891,19 +2914,19 @@ msgstr "Lees meer"
 msgid "Read time: %s min"
 msgstr "Leestijd: %s min"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:238
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:264
 msgid "Recipient has accepted the invitation"
 msgstr ""
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:236
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:262
 msgid "Recipient has not yet accepted the invitation"
 msgstr ""
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:237
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:263
 msgid "Recipient has rejected the invitation"
 msgstr ""
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:255
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:281
 msgid "Recipients:"
 msgstr ""
 
@@ -2917,20 +2940,24 @@ msgstr "Herhalen"
 msgid "Refresh"
 msgstr "Verversen"
 
+#: packages/lib/models/Setting.ts:535
+msgid "Region"
+msgstr ""
+
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:615
-#: packages/app-desktop/gui/Root.tsx:166
+#: packages/app-desktop/gui/Root.tsx:173
 msgid "Reject"
 msgstr ""
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:244
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:247
 msgid "Remove"
 msgstr "Verwijderen"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:251
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:254
 msgid "Remove tag \"%s\" from all notes?"
 msgstr "Label “%s” verwijderen van alle notities?"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:253
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:256
 msgid "Remove this search from the sidebar?"
 msgstr "Deze zoekopdracht verwijderen uit de zijbalk?"
 
@@ -2958,8 +2985,8 @@ msgstr ""
 msgid "Renew token"
 msgstr "Vernieuw token"
 
-#: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:204
-#: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:205
+#: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:212
+#: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:213
 #, fuzzy
 msgid "Reset master password"
 msgstr "Voer het hoofdwachtwoord in:"
@@ -3000,7 +3027,8 @@ msgstr "Alles opnieuw proberen"
 msgid "Reveal file in folder"
 msgstr "Bestand in map onthullen"
 
-#: packages/lib/models/Setting.ts:827 packages/lib/models/Setting.ts:846
+#: packages/app-desktop/gui/MainScreen/commands/toggleNotesSortOrderReverse.ts:8
+#: packages/lib/models/Setting.ts:856 packages/lib/models/Setting.ts:932
 msgid "Reverse sort order"
 msgstr "Sorteervolgorde omdraaien"
 
@@ -3018,21 +3046,35 @@ msgid ""
 "per line."
 msgstr ""
 
+#: packages/lib/SyncTargetAmazonS3.js:28
+msgid "S3"
+msgstr ""
+
+#: packages/lib/models/Setting.ts:506
+#, fuzzy
+msgid "S3 bucket"
+msgstr "AWS S3 bucket"
+
+#: packages/lib/models/Setting.ts:521
+#, fuzzy
+msgid "S3 URL"
+msgstr "AWS S3 URL"
+
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:579
 msgid ""
 "Safe mode is currently active. Note rendering and all plugins are "
 "temporarily disabled."
 msgstr ""
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:139
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:141
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:75
-#: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:205
+#: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:213
 #: packages/app-mobile/components/screens/encryption-config.tsx:109
 #: packages/app-mobile/components/screens/encryption-config.tsx:221
 msgid "Save"
 msgstr "Opslaan"
 
-#: packages/app-mobile/components/SelectDateTimeDialog.tsx:106
+#: packages/app-mobile/components/SelectDateTimeDialog.tsx:146
 msgid "Save alarm"
 msgstr "Alarm opslaan"
 
@@ -3040,11 +3082,11 @@ msgstr "Alarm opslaan"
 msgid "Save as..."
 msgstr "Opslaan als..."
 
-#: packages/app-mobile/components/screens/Note.tsx:104
+#: packages/app-mobile/components/screens/Note.tsx:107
 msgid "Save changes"
 msgstr "Wijzigingen opslaan"
 
-#: packages/lib/models/Setting.ts:847
+#: packages/lib/models/Setting.ts:933
 msgid "Save geo-location with notes"
 msgstr "Locatie opslaan in notities"
 
@@ -3078,7 +3120,12 @@ msgstr "Zoeken..."
 msgid "Searches for the given <pattern> in all the notes."
 msgstr "Doorzoekt alle notities op het opgegeven <pattern>."
 
-#: packages/lib/models/Setting.ts:1108
+#: packages/lib/models/Setting.ts:557
+#, fuzzy
+msgid "Secret Key"
+msgstr "AWS secret"
+
+#: packages/lib/models/Setting.ts:1194
 msgid "See the pre-release page for more details: %s"
 msgstr "Zie de pre-release pagina voor meer details: %s"
 
@@ -3105,8 +3152,8 @@ msgid "Server is running on port %d"
 msgstr "Server wordt uitgevoerd op poort %d"
 
 #: packages/app-desktop/gui/MainScreen/commands/editAlarm.ts:10
-#: packages/app-mobile/components/screens/Note.tsx:911
-#: packages/app-mobile/components/SelectDateTimeDialog.tsx:114
+#: packages/app-mobile/components/screens/Note.tsx:916
+#: packages/app-mobile/components/SelectDateTimeDialog.tsx:141
 msgid "Set alarm"
 msgstr "Alarm instellen"
 
@@ -3114,7 +3161,7 @@ msgstr "Alarm instellen"
 msgid "Set alarm:"
 msgstr "Alarm instellen:"
 
-#: packages/lib/models/Setting.ts:1039
+#: packages/lib/models/Setting.ts:1125
 msgid ""
 "Set it to 0 to make it take the complete available space. Recommended width "
 "is 600."
@@ -3136,13 +3183,13 @@ msgstr ""
 "\n"
 "%s"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:222
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:248
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.ts:20
-#: packages/app-mobile/components/screens/Note.tsx:919
+#: packages/app-mobile/components/screens/Note.tsx:924
 msgid "Share"
 msgstr "Delen"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:312
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:338
 #, fuzzy
 msgid "Share Notebook"
 msgstr "Deel Notities"
@@ -3152,7 +3199,7 @@ msgstr "Deel Notities"
 msgid "Share notebook..."
 msgstr "Deel notitie..."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:278
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:304
 #, fuzzy
 msgid "Sharing notebook..."
 msgstr "Deel notitie..."
@@ -3169,20 +3216,25 @@ msgstr "Geavanceerde opties"
 msgid "Show all"
 msgstr "Alles tonen"
 
-#: packages/lib/models/Setting.ts:798
+#: packages/lib/models/Setting.ts:827
 msgid "Show completed to-dos"
 msgstr "Afgeronde taken tonen"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:170
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:172
 #, fuzzy
 msgid "Show disabled keys"
 msgstr "Geavanceerde opties"
 
-#: packages/lib/models/Setting.ts:781
+#: packages/lib/models/Setting.ts:810
 msgid "Show note counts"
 msgstr "Toon notitietellingen"
 
-#: packages/lib/models/Setting.ts:956
+#: packages/lib/models/Setting.ts:866
+#, fuzzy
+msgid "Show sort order buttons"
+msgstr "Toon notitietellingen"
+
+#: packages/lib/models/Setting.ts:1042
 msgid "Show tray icon"
 msgstr "Systeemvakpictogram tonen"
 
@@ -3198,7 +3250,7 @@ msgstr "Grootte"
 msgid "Skip this version"
 msgstr ""
 
-#: packages/app-cli/app/command-e2ee.ts:58
+#: packages/app-cli/app/command-e2ee.ts:65
 msgid "Skipped items: %d (use --retry-failed-items to retry decrypting them)"
 msgstr ""
 "Overgeslagen items: %d (gebruik --retry-failed-items om ze opnieuw te "
@@ -3209,11 +3261,11 @@ msgstr ""
 msgid "Skipped: %d."
 msgstr "Overgeslagen: %d."
 
-#: packages/lib/models/Setting.ts:341
+#: packages/lib/models/Setting.ts:342
 msgid "Solarised Dark"
 msgstr "Solarised Dark"
 
-#: packages/lib/models/Setting.ts:340
+#: packages/lib/models/Setting.ts:341
 msgid "Solarised Light"
 msgstr "Solarised Light"
 
@@ -3225,17 +3277,17 @@ msgstr "Sommige items kunnen niet worden ontsleuteled."
 msgid "Some items cannot be synchronised."
 msgstr "Sommige items kunnen niet worden gesynchroniseerd."
 
-#: packages/app-mobile/components/screen-header.js:458
+#: packages/app-mobile/components/screen-header.js:460
 msgid "Some items cannot be synchronised. Press for more info."
 msgstr ""
 "Sommige items kunnen niet worden gesynchroniseerd. Klik voor meer informatie."
 
-#: packages/lib/models/Setting.ts:834
+#: packages/lib/models/Setting.ts:920
 msgid "Sort notebooks by"
 msgstr "Notitieboeken sorteren op"
 
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:172
-#: packages/lib/models/Setting.ts:806
+#: packages/lib/models/Setting.ts:835
 msgid "Sort notes by"
 msgstr "Notities sorteren op"
 
@@ -3252,12 +3304,12 @@ msgstr ""
 msgid "Source format: %s"
 msgstr "Bronformaat: %s"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:149
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:151
 #, fuzzy
 msgid "Source: "
 msgstr "Bron"
 
-#: packages/lib/models/Setting.ts:1240
+#: packages/lib/models/Setting.ts:1326
 msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
@@ -3270,12 +3322,12 @@ msgstr ""
 msgid "Spell checker"
 msgstr "Spellingscontrole"
 
-#: packages/lib/models/Setting.ts:790 packages/lib/models/Setting.ts:792
-#: packages/lib/models/Setting.ts:793
+#: packages/lib/models/Setting.ts:819 packages/lib/models/Setting.ts:821
+#: packages/lib/models/Setting.ts:822
 msgid "Split View"
 msgstr "Gesplitste Weergave"
 
-#: packages/lib/models/Setting.ts:963
+#: packages/lib/models/Setting.ts:1049
 msgid "Start application minimised in the tray icon"
 msgstr "Start applicatie geminimaliseerd in het systeemvak"
 
@@ -3288,7 +3340,7 @@ msgstr ""
 "configuratievariabele in om te specificeren op welke poort deze draait. "
 "Commando's zijn (%s)."
 
-#: packages/app-cli/app/command-e2ee.ts:49
+#: packages/app-cli/app/command-e2ee.ts:56
 msgid ""
 "Starting decryption... Please wait as it may take several minutes depending "
 "on how much there is to decrypt."
@@ -3296,7 +3348,7 @@ msgstr ""
 "Decryptie starten... Een ogenblik geduld, het kan enkele minuten duren, "
 "afhankelijk van hoeveel er gedecodeerd moet worden."
 
-#: packages/app-cli/app/command-sync.js:213
+#: packages/app-cli/app/command-sync.ts:213
 msgid "Starting synchronisation..."
 msgstr "Synchronisatie starten..."
 
@@ -3333,13 +3385,13 @@ msgstr "Status: gestart op poort %d"
 msgid "Step 1: Enable the clipper service"
 msgstr "Stap 1: Schakel de webclipper-dienst in"
 
-#: packages/app-cli/app/command-sync.js:92
+#: packages/app-cli/app/command-sync.ts:92
 #: packages/app-desktop/gui/DropboxLoginScreen.tsx:44
 #: packages/app-mobile/components/screens/dropbox-login.js:59
 msgid "Step 1: Open this URL in your browser to authorise the application:"
 msgstr "Stap 1: Open deze URL in uw browser om de applicatie te autoriseren:"
 
-#: packages/app-cli/app/command-sync.js:94
+#: packages/app-cli/app/command-sync.ts:94
 #: packages/app-desktop/gui/DropboxLoginScreen.tsx:48
 #: packages/app-mobile/components/screens/dropbox-login.js:65
 msgid "Step 2: Enter the code provided by Dropbox:"
@@ -3420,7 +3472,7 @@ msgid "Sync status (synced items / total items)"
 msgstr ""
 "Synchronisatiestatus (aantal gesynchroniseerde items / totaal aantal items)"
 
-#: packages/app-cli/app/command-sync.js:248
+#: packages/app-cli/app/command-sync.ts:251
 msgid "Sync target must be upgraded! Run `%s` to proceed."
 msgstr ""
 "Het synchronisatiedoel moet worden geüpgraded! Voer `% s` uit om door te "
@@ -3431,7 +3483,7 @@ msgstr ""
 msgid "Sync Target Upgrade"
 msgstr "Sync target update"
 
-#: packages/app-cli/app/command-sync.js:34
+#: packages/app-cli/app/command-sync.ts:34
 msgid "Sync to provided target (defaults to sync.target config value)"
 msgstr "Synchroniseren naar opgegeven doel (standaard is dit sync.target)"
 
@@ -3444,42 +3496,42 @@ msgstr "Synchronisatieversie: %s"
 msgid "Sync your notes"
 msgstr "Notities sorteren op"
 
-#: packages/lib/models/Setting.ts:2044
+#: packages/lib/models/Setting.ts:2140
 msgid "Synchronisation"
 msgstr "Synchronisatie"
 
-#: packages/lib/models/Setting.ts:1116
+#: packages/lib/models/Setting.ts:1202
 msgid "Synchronisation interval"
 msgstr "Synchronisatie-interval"
 
-#: packages/app-cli/app/command-sync.js:132
+#: packages/app-cli/app/command-sync.ts:132
 msgid "Synchronisation is already in progress."
 msgstr "Synchronisatie is al bezig."
 
-#: packages/app-desktop/gui/MenuBar.tsx:345
-#: packages/app-desktop/gui/Root.tsx:213
+#: packages/app-desktop/gui/MenuBar.tsx:357
+#: packages/app-desktop/gui/Root.tsx:222
 msgid "Synchronisation Status"
 msgstr "Synchronisatiestatus"
 
-#: packages/lib/models/Setting.ts:378
+#: packages/lib/models/Setting.ts:379
 msgid "Synchronisation target"
 msgstr "Synchronisatiedoel"
 
-#: packages/app-cli/app/command-sync.js:180
+#: packages/app-cli/app/command-sync.ts:180
 msgid "Synchronisation target: %s (%s)"
 msgstr "Synchronisatiedoel: %s (%s)"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:642
-#: packages/app-mobile/components/side-menu-content.js:338
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:653
+#: packages/app-mobile/components/side-menu-content.js:341
 #: packages/lib/commands/synchronize.ts:8
 msgid "Synchronise"
 msgstr "Synchroniseren"
 
-#: packages/lib/models/Setting.ts:1135
+#: packages/lib/models/Setting.ts:1221
 msgid "Synchronise only over WiFi connection"
 msgstr "Synchroniseer alleen via wifi-verbinding"
 
-#: packages/app-cli/app/command-sync.js:29
+#: packages/app-cli/app/command-sync.ts:29
 msgid "Synchronises with remote storage."
 msgstr "Synchroniseert met cloudopslag."
 
@@ -3487,12 +3539,12 @@ msgstr "Synchroniseert met cloudopslag."
 msgid "Synchronising..."
 msgstr "Synchroniseren..."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:277
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:303
 #, fuzzy
 msgid "Synchronizing..."
 msgstr "Synchroniseren..."
 
-#: packages/lib/models/Setting.ts:1149
+#: packages/lib/models/Setting.ts:1235
 msgid "Tabloid"
 msgstr "Tabloid"
 
@@ -3502,18 +3554,18 @@ msgid "Tagged: %d."
 msgstr "Gelabeld: %d."
 
 #: packages/app-desktop/gui/MainScreen/commands/setTags.ts:7
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:709
-#: packages/app-mobile/components/screens/Note.tsx:926
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:720
+#: packages/app-mobile/components/screens/Note.tsx:931
 #: packages/app-mobile/components/screens/tags.js:101
-#: packages/app-mobile/components/side-menu-content.js:314
+#: packages/app-mobile/components/side-menu-content.js:317
 msgid "Tags"
 msgstr "Labels"
 
-#: packages/app-mobile/components/screens/Note.tsx:898
+#: packages/app-mobile/components/screens/Note.tsx:903
 msgid "Take photo"
 msgstr "Foto maken"
 
-#: packages/lib/models/Setting.ts:1142
+#: packages/lib/models/Setting.ts:1228
 msgid "Text editor command"
 msgstr "Tekst editor commando"
 
@@ -3566,7 +3618,7 @@ msgstr ""
 "Het standaard admin-wachtwoord is onveilig en is niet gewijzigd! [Nu "
 "wijzigen] (% s)"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:91
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:93
 msgid ""
 "The default encryption method has been changed to a more secure one and it "
 "is recommended that you apply it to your data."
@@ -3582,7 +3634,7 @@ msgstr ""
 "De standaard versleutelmethode is gewijzigd, je moet je data opnieuw "
 "versleutelen."
 
-#: packages/lib/models/Setting.ts:1142
+#: packages/lib/models/Setting.ts:1228
 msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
@@ -3591,8 +3643,8 @@ msgstr ""
 "het openen van notities. Als er geen wordt opgegeven, dan wordt getracht de "
 "standaard editor te achterhalen."
 
-#: packages/lib/models/Setting.ts:1294 packages/lib/models/Setting.ts:1308
-#: packages/lib/models/Setting.ts:1322
+#: packages/lib/models/Setting.ts:1380 packages/lib/models/Setting.ts:1394
+#: packages/lib/models/Setting.ts:1408
 msgid ""
 "The factor property sets how the item will grow or shrink to fit the "
 "available space in its container with respect to the other items. Thus an "
@@ -3608,7 +3660,7 @@ msgstr ""
 msgid "The following attachments are being watched for changes:"
 msgstr "De volgende bijlagen worden gecontroleerd op wijzigingen:"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:70
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:72
 #, fuzzy
 msgid ""
 "The following keys use an out-dated encryption algorithm and it is "
@@ -3619,7 +3671,7 @@ msgstr ""
 "is aanbevolen deze bij te werken. De bijgewerkte hoofdsleutel is nog steeds "
 "in staat uw gegevens te ont- en versleutelen zoals gebruikelijk."
 
-#: packages/app-mobile/components/screens/Note.tsx:191
+#: packages/app-mobile/components/screens/Note.tsx:196
 msgid "The Joplin mobile app does not currently support this type of link: %s"
 msgstr "De mobiele Joplin-app ondersteunt momenteel niet dit soort links: %s"
 
@@ -3629,7 +3681,7 @@ msgid ""
 "security and performance."
 msgstr ""
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:323
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:325
 #, fuzzy
 msgid ""
 "The keys with these IDs are used to encrypt some of your items, however the "
@@ -3640,7 +3692,7 @@ msgstr ""
 "versleutelen, maar de applicatie heeft momenteel geen toegang tot deze "
 "items. Waarschijnlijk worden ze uiteindelijk gedownload via synchronisatie."
 
-#: packages/lib/components/EncryptionConfigScreen/utils.ts:212
+#: packages/lib/components/EncryptionConfigScreen/utils.ts:217
 msgid "The master key has been upgraded successfully!"
 msgstr "The hoofdsleutel is succesvol bijgewerkt!"
 
@@ -3671,7 +3723,7 @@ msgstr "De notities zijn geïmporteerd: %s"
 msgid "The possible commands are:"
 msgstr "De beschikbare opdrachten zijn:"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:201
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:227
 msgid ""
 "The recipient could not be removed from the list. Please try again.\n"
 "\n"
@@ -3688,7 +3740,7 @@ msgstr ""
 "kan een paar minuten duren en de app moet opnieuw opgestart worden. Om door "
 "te gaan, klik op de link."
 
-#: packages/app-mobile/components/screen-header.js:459
+#: packages/app-mobile/components/screen-header.js:461
 #, fuzzy
 msgid "The sync target needs to be upgraded. Press this banner to proceed."
 msgstr ""
@@ -3699,7 +3751,7 @@ msgstr ""
 msgid "The tag \"%s\" already exists. Please choose a different name."
 msgstr "Het label “%s” bestaat al. Kies een andere naam."
 
-#: packages/lib/models/Setting.ts:380
+#: packages/lib/models/Setting.ts:381
 msgid ""
 "The target to synchronise to. Each sync target may have additional "
 "parameters which are named as `sync.NUM.NAME` (all documented below)."
@@ -3708,7 +3760,7 @@ msgstr ""
 "argumenten bevatten, welke `sync.NUM.NAME` worden genoemd (wordt hieronder "
 "uitgelegd)."
 
-#: packages/app-desktop/gui/Root.tsx:164
+#: packages/app-desktop/gui/Root.tsx:171
 msgid "The Web Clipper needs your authorisation to access your data."
 msgstr ""
 
@@ -3722,7 +3774,7 @@ msgstr "De webclipper-dienst is ingeschakeld en wordt automatisch opgestart."
 msgid "The web clipper service is not enabled."
 msgstr "De webclipper-dienst is niet ingeschakeld."
 
-#: packages/lib/models/Setting.ts:729
+#: packages/lib/models/Setting.ts:758
 msgid "Theme"
 msgstr "Thema"
 
@@ -3743,7 +3795,7 @@ msgstr ""
 msgid "There is no data to export."
 msgstr "Er zijn geen te exporteren gegevens."
 
-#: packages/lib/models/Resource.ts:416
+#: packages/lib/models/Resource.ts:412
 msgid ""
 "There was a [conflict](%s) on the attachment below.\n"
 "\n"
@@ -3775,7 +3827,7 @@ msgstr ""
 "synchronisatiedoel. Als u deze items wilt vinden, moet u zoeken naar de "
 "titel of ID ervan (welke hierboven tussen haakjes wordt getoond)."
 
-#: packages/lib/models/Setting.ts:2061
+#: packages/lib/models/Setting.ts:2158
 msgid ""
 "These plugins enhance the Markdown renderer with additional features. Please "
 "note that, while these features might be useful, they are not standard "
@@ -3798,7 +3850,7 @@ msgstr ""
 msgid "This attachment is not downloaded or not decrypted yet"
 msgstr "Deze bijlage is niet gedownload of nog niet ontsleuteld"
 
-#: packages/app-mobile/components/screens/Note.tsx:187
+#: packages/app-mobile/components/screens/Note.tsx:190
 msgid "This attachment is not downloaded or not decrypted yet."
 msgstr "Deze bijlage is niet gedownload of nog niet ontsleuteld."
 
@@ -3825,7 +3877,7 @@ msgstr ""
 msgid "This note does not have geolocation information."
 msgstr "Deze notitie bevat geen geolocatie-informatie."
 
-#: packages/app-mobile/components/screens/Note.tsx:104
+#: packages/app-mobile/components/screens/Note.tsx:107
 msgid "This note has been modified:"
 msgstr "Deze notitie is bewerkt:"
 
@@ -3860,7 +3912,7 @@ msgstr ""
 "Na het inschakelen kan uw firewall om toestemming vragen voor het uitvoeren "
 "van Joplin op een specifieke poort."
 
-#: packages/lib/models/Setting.ts:958
+#: packages/lib/models/Setting.ts:1044
 msgid ""
 "This will allow Joplin to run in the background. It is recommended to enable "
 "this setting so that your notes are constantly being synchronised, thus "
@@ -3874,25 +3926,26 @@ msgstr ""
 msgid "This will open a new screen. Save your current changes?"
 msgstr "Dit opent een nieuw scherm. Wijzigingen opslaan?"
 
-#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:13
+#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:17
 msgid ""
 "This will remove the notebook from your collection and you will no longer "
 "have access to its content. Do you wish to continue?"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:709
+#: packages/lib/models/Setting.ts:738
 msgid "Time format"
 msgstr "Tijdopmaak"
 
-#: packages/lib/models/Folder.ts:38 packages/lib/models/Note.ts:36
+#: packages/lib/models/Folder.ts:39 packages/lib/models/Note.ts:36
 msgid "title"
 msgstr "titel"
 
+#: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:72
 #: packages/app-desktop/gui/ResourceScreen.tsx:92
 msgid "Title"
 msgstr "Titel"
 
-#: packages/app-cli/app/command-sync.js:91
+#: packages/app-cli/app/command-sync.ts:91
 #: packages/app-desktop/gui/DropboxLoginScreen.tsx:43
 #: packages/app-mobile/components/screens/dropbox-login.js:58
 msgid ""
@@ -3962,7 +4015,7 @@ msgstr "taak"
 msgid "Toggle comment"
 msgstr "Notitielijst tonen/verbergen"
 
-#: packages/app-desktop/gui/MenuBar.tsx:705
+#: packages/app-desktop/gui/MenuBar.tsx:717
 msgid "Toggle development tools"
 msgstr "Wissel ontwikkelhulpmiddelen"
 
@@ -3982,6 +4035,11 @@ msgstr "Extern bewerken in- of uitschakelen"
 msgid "Toggle note list"
 msgstr "Notitielijst tonen/verbergen"
 
+#: packages/app-desktop/gui/MainScreen/commands/togglePerFolderSortOrder.ts:7
+#, fuzzy
+msgid "Toggle own sort order"
+msgstr "Zijbalk tonen/verbergen"
+
 #: packages/app-desktop/commands/toggleSafeMode.ts:8
 #, fuzzy
 msgid "Toggle safe mode"
@@ -3989,6 +4047,11 @@ msgstr "Zijbalk tonen/verbergen"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleSideBar.ts:9
 msgid "Toggle sidebar"
+msgstr "Zijbalk tonen/verbergen"
+
+#: packages/app-desktop/gui/MainScreen/commands/toggleNotesSortOrderField.ts:7
+#, fuzzy
+msgid "Toggle sort order field"
 msgstr "Zijbalk tonen/verbergen"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:40
@@ -4038,7 +4101,7 @@ msgstr "Typ nieuwe labels of kies ze uit de lijst"
 msgid "Type: %s."
 msgstr "Type: %s."
 
-#: packages/lib/models/Setting.ts:797
+#: packages/lib/models/Setting.ts:826
 msgid "Uncompleted to-dos on top"
 msgstr "Niet-afgeronde taken bovenaan"
 
@@ -4046,11 +4109,11 @@ msgstr "Niet-afgeronde taken bovenaan"
 msgid "Undo"
 msgstr "Ongedaan maken"
 
-#: packages/lib/BaseApplication.ts:262
+#: packages/lib/BaseApplication.ts:276
 msgid "Unknown flag: %s"
 msgstr "Onbekend argument: %s"
 
-#: packages/lib/Synchronizer.ts:1093
+#: packages/lib/Synchronizer.ts:1087
 msgid ""
 "Unknown item type downloaded - please upgrade Joplin to the latest version"
 msgstr ""
@@ -4066,17 +4129,17 @@ msgstr "Delen"
 msgid "Unshare"
 msgstr "Delen"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:301
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:327
 msgid ""
 "Unshare this notebook? The recipients will no longer have access to its "
 "content."
 msgstr ""
 
-#: packages/app-mobile/components/screens/Note.tsx:680
+#: packages/app-mobile/components/screens/Note.tsx:685
 msgid "Unsupported image type: %s"
 msgstr "Niet-ondersteunde afbeeldingssoort: %s"
 
-#: packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.ts:75
+#: packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.ts:76
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:142
 msgid "Unsupported link or message: %s"
 msgstr "Niet-ondersteunde link of bericht: %s"
@@ -4097,19 +4160,19 @@ msgstr "Bijgewerkt"
 msgid "Updated"
 msgstr "Bijgewerkt"
 
-#: packages/lib/models/Folder.ts:39 packages/lib/models/Note.ts:37
+#: packages/lib/models/Folder.ts:40 packages/lib/models/Note.ts:37
 msgid "updated date"
 msgstr "bijgewerkt op"
 
-#: packages/lib/Synchronizer.ts:189
+#: packages/lib/Synchronizer.ts:183
 msgid "Updated local items: %d."
 msgstr "Lokale items bijgewerkt: %d."
 
-#: packages/lib/Synchronizer.ts:191
+#: packages/lib/Synchronizer.ts:185
 msgid "Updated remote items: %d."
 msgstr "Externe items bijgewerkt: %d."
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:150
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:152
 #, fuzzy
 msgid "Updated: "
 msgstr "Bijgewerkt: %s"
@@ -4119,7 +4182,7 @@ msgstr "Bijgewerkt: %s"
 msgid "Updated: %d."
 msgstr "Bijgewerkt: %d."
 
-#: packages/app-mobile/components/screens/Note.tsx:836
+#: packages/app-mobile/components/screens/Note.tsx:841
 msgid "Updated: %s"
 msgstr "Bijgewerkt: %s"
 
@@ -4127,11 +4190,11 @@ msgstr "Bijgewerkt: %s"
 msgid "Updating..."
 msgstr "Bezig met updaten…"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:75
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:77
 msgid "Upgrade"
 msgstr "Bijwerken"
 
-#: packages/app-cli/app/command-sync.js:35
+#: packages/app-cli/app/command-sync.ts:35
 msgid "Upgrade the sync target to the latest version."
 msgstr "Upgrade het synchronisatiedoel naar de nieuwste versie."
 
@@ -4178,20 +4241,20 @@ msgstr ""
 "Gebruik dit om de zoekindex opnieuw op te bouwen als er een probleem is met "
 "zoeken: Het kan lang duren afhankelijk van het aantal notities."
 
-#: packages/lib/models/Setting.ts:1024
+#: packages/lib/models/Setting.ts:1110
 msgid ""
 "Used for most text in the markdown editor. If not found, a generic "
 "proportional (variable width) font is used."
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1035
+#: packages/lib/models/Setting.ts:1121
 msgid ""
 "Used where a fixed width font is needed to lay out text legibly (e.g. "
 "tables, checkboxes, code). If not found, a generic monospace (fixed width) "
 "font is used."
 msgstr ""
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:180
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:182
 #, fuzzy
 msgid "Valid"
 msgstr "Ongeldig"
@@ -4200,7 +4263,7 @@ msgstr "Ongeldig"
 msgid "View"
 msgstr "Beeld"
 
-#: packages/app-mobile/components/screens/Note.tsx:840
+#: packages/app-mobile/components/screens/Note.tsx:845
 msgid "View on map"
 msgstr "Tonen op kaart"
 
@@ -4211,12 +4274,12 @@ msgid "View them now"
 msgstr "Items tonen"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:139
-#: packages/lib/models/Setting.ts:790 packages/lib/models/Setting.ts:791
-#: packages/lib/models/Setting.ts:793
+#: packages/lib/models/Setting.ts:819 packages/lib/models/Setting.ts:820
+#: packages/lib/models/Setting.ts:822
 msgid "Viewer"
 msgstr "Viewer"
 
-#: packages/lib/models/Setting.ts:1172
+#: packages/lib/models/Setting.ts:1258
 msgid "Vim"
 msgstr "Vim"
 
@@ -4230,7 +4293,7 @@ msgstr ""
 "Waarschuwing: niet alle resources getoond om redenen van performance "
 "(limiet: %s)."
 
-#: packages/lib/models/Setting.ts:2052
+#: packages/lib/models/Setting.ts:2149
 msgid "Web Clipper"
 msgstr "Webclipper"
 
@@ -4238,20 +4301,20 @@ msgstr "Webclipper"
 msgid "WebDAV"
 msgstr "WebDAV"
 
-#: packages/lib/models/Setting.ts:486
+#: packages/lib/models/Setting.ts:487
 msgid "WebDAV password"
 msgstr "WebDAV-wachtwoord"
 
-#: packages/lib/models/Setting.ts:463
+#: packages/lib/models/Setting.ts:464
 msgid "WebDAV URL"
 msgstr "WebDAV-URL"
 
-#: packages/lib/models/Setting.ts:475
+#: packages/lib/models/Setting.ts:476
 msgid "WebDAV username"
 msgstr "WebDAV-gebruikersnaam"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:20
-#: packages/app-desktop/gui/MenuBar.tsx:686
+#: packages/app-desktop/gui/MenuBar.tsx:698
 msgid "Website and documentation"
 msgstr "Website en documentatie"
 
@@ -4272,11 +4335,11 @@ msgstr ""
 "Voorbeeld: om een notitieboek te creëren, drukt u op `mb`; om een notitie te "
 "creëren, drukt u op `mn`."
 
-#: packages/lib/models/Setting.ts:887
+#: packages/lib/models/Setting.ts:973
 msgid "When creating a new note:"
 msgstr "Bij het creëren van een nieuwe notitie:"
 
-#: packages/lib/models/Setting.ts:871
+#: packages/lib/models/Setting.ts:957
 msgid "When creating a new to-do:"
 msgstr "Bij het creëren van een nieuwe taak:"
 
@@ -4292,18 +4355,18 @@ msgstr "j"
 msgid "Y"
 msgstr "J"
 
-#: packages/lib/models/Setting.ts:325
+#: packages/lib/models/Setting.ts:326
 msgid "yes"
 msgstr "ja"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:28
-#: packages/app-mobile/components/screens/Note.tsx:586
-#: packages/lib/shim-init-node.js:166 packages/lib/versionInfo.ts:27
+#: packages/app-mobile/components/screens/Note.tsx:591
+#: packages/lib/shim-init-node.js:171 packages/lib/versionInfo.ts:27
 msgid "Yes"
 msgstr "Ja"
 
-#: packages/app-mobile/components/screens/Note.tsx:585
-#: packages/lib/shim-init-node.js:165
+#: packages/app-mobile/components/screens/Note.tsx:590
+#: packages/lib/shim-init-node.js:170
 msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "
 "resize it down to %d pixels before attaching it?"
@@ -4323,7 +4386,7 @@ msgstr "U heeft geen geïnstalleerde plugins."
 msgid "You may also type `status` for more information."
 msgstr "U kunt ook `status` typen voor meer informatie."
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:91
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:93
 msgid ""
 "You may use the tool below to re-encrypt your data, for example if you know "
 "that some of your notes are encrypted with an obsolete encryption method."
@@ -4340,8 +4403,14 @@ msgstr "Jouw keuze: "
 msgid "Your data is going to be re-encrypted and synced again."
 msgstr "Uw data wordt opnieuw versleuteld en gesynchroniseerd."
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:269
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:271
 msgid "Your master password is needed to decrypt some of your data."
+msgstr ""
+
+#: packages/app-cli/app/command-sync.ts:242
+msgid ""
+"Your password is needed to decrypt some of your data. Type `:e2ee decrypt` "
+"to set it."
 msgstr ""
 
 #: packages/app-mobile/components/CameraView.tsx:189
@@ -4352,14 +4421,20 @@ msgstr "Uw toestemming om de camera te gebruiken is vereist."
 msgid "Your version: %s"
 msgstr "Uw versie: %s"
 
-#: packages/app-desktop/gui/MenuBar.tsx:630
-#: packages/app-desktop/gui/MenuBar.tsx:636
+#: packages/app-desktop/gui/MenuBar.tsx:642
+#: packages/app-desktop/gui/MenuBar.tsx:648
 msgid "Zoom In"
 msgstr "Inzoemen"
 
-#: packages/app-desktop/gui/MenuBar.tsx:643
+#: packages/app-desktop/gui/MenuBar.tsx:655
 msgid "Zoom Out"
 msgstr "Uitzoemen"
+
+#~ msgid "AWS key"
+#~ msgstr "AWS key"
+
+#~ msgid "AWS S3"
+#~ msgstr "AWS S3"
 
 #~ msgid "Master keys that need upgrading"
 #~ msgstr "Hoofdsleutels die moeten worden bijgewerkt"
@@ -4509,9 +4584,6 @@ msgstr "Uitzoemen"
 
 #~ msgid "Name"
 #~ msgstr "Naam"
-
-#~ msgid "Icon"
-#~ msgstr "Icoon"
 
 #~ msgid "Notebook properties"
 #~ msgstr "Eigenschappen van notitieboek"

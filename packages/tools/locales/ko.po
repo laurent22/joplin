@@ -34,8 +34,8 @@ msgstr ""
 "- 저장소: 노트에 파일을 첨부하고 파일 시스템 동기화를 활성화하기 위해 필요합"
 "니다."
 
-#: packages/lib/services/KeymapService.ts:306
-#: packages/lib/services/KeymapService.ts:312
+#: packages/lib/services/KeymapService.ts:308
+#: packages/lib/services/KeymapService.ts:314
 msgid "\"%s\" is missing the required \"%s\" property."
 msgstr "\"%s\"에 \"%s\" 필수 속성이 없습니다."
 
@@ -47,55 +47,55 @@ msgstr "(%s)"
 msgid "(None)"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:325 packages/lib/models/Setting.ts:326
+#: packages/lib/models/Setting.ts:326 packages/lib/models/Setting.ts:327
 msgid "(wysiwyg: %s)"
 msgstr "(위지윅: %s)"
 
-#: packages/app-desktop/gui/MenuBar.tsx:545
-#: packages/app-desktop/gui/MenuBar.tsx:801
+#: packages/app-desktop/gui/MenuBar.tsx:557
+#: packages/app-desktop/gui/MenuBar.tsx:813
 msgid "&Edit"
 msgstr "편집(&E)"
 
-#: packages/app-desktop/gui/MenuBar.tsx:423
-#: packages/app-desktop/gui/MenuBar.tsx:501
-#: packages/app-desktop/gui/MenuBar.tsx:797
+#: packages/app-desktop/gui/MenuBar.tsx:435
+#: packages/app-desktop/gui/MenuBar.tsx:513
+#: packages/app-desktop/gui/MenuBar.tsx:809
 msgid "&File"
 msgstr "파일(&F)"
 
-#: packages/app-desktop/gui/MenuBar.tsx:651
+#: packages/app-desktop/gui/MenuBar.tsx:663
 msgid "&Go"
 msgstr "이동(&G)"
 
-#: packages/app-desktop/gui/MenuBar.tsx:683
+#: packages/app-desktop/gui/MenuBar.tsx:695
 msgid "&Help"
 msgstr "도움말(&H)"
 
-#: packages/app-desktop/gui/MenuBar.tsx:669
+#: packages/app-desktop/gui/MenuBar.tsx:681
 msgid "&Note"
 msgstr "노트(&N)"
 
-#: packages/app-desktop/gui/MenuBar.tsx:679
+#: packages/app-desktop/gui/MenuBar.tsx:691
 msgid "&Tools"
 msgstr "도구(&T)"
 
-#: packages/app-desktop/gui/MenuBar.tsx:577
+#: packages/app-desktop/gui/MenuBar.tsx:589
 msgid "&View"
 msgstr "보기(&V)"
 
-#: packages/lib/models/Setting.ts:1258
+#: packages/lib/models/Setting.ts:1344
 msgid "%d days"
 msgstr "%d 일"
 
-#: packages/lib/models/Setting.ts:1123
+#: packages/lib/models/Setting.ts:1209
 msgid "%d hour"
 msgstr "%d 시간"
 
-#: packages/lib/models/Setting.ts:1124 packages/lib/models/Setting.ts:1125
+#: packages/lib/models/Setting.ts:1210 packages/lib/models/Setting.ts:1211
 msgid "%d hours"
 msgstr "%d 시간"
 
-#: packages/lib/models/Setting.ts:1120 packages/lib/models/Setting.ts:1121
-#: packages/lib/models/Setting.ts:1122
+#: packages/lib/models/Setting.ts:1206 packages/lib/models/Setting.ts:1207
+#: packages/lib/models/Setting.ts:1208
 msgid "%d minutes"
 msgstr "%d 분"
 
@@ -123,12 +123,12 @@ msgstr "%s (%s): %s"
 msgid "%s (pre-release)"
 msgstr "%s (사전 출시)"
 
-#: packages/lib/models/Setting.ts:791 packages/lib/models/Setting.ts:792
-#: packages/lib/models/Setting.ts:793
+#: packages/lib/models/Setting.ts:820 packages/lib/models/Setting.ts:821
+#: packages/lib/models/Setting.ts:822
 msgid "%s / %s"
 msgstr "%s / %s"
 
-#: packages/lib/models/Setting.ts:790
+#: packages/lib/models/Setting.ts:819
 msgid "%s / %s / %s"
 msgstr "%s / %s / %s"
 
@@ -188,33 +188,33 @@ msgstr ""
 "됩니다 (만약 대상이 일반적인 노트일 경우에는 '할 일'로 전환됩니다). \"clear"
 "\"는 '할 일'을 일반적인 노트로 변환하는 데 사용됩니다."
 
-#: packages/lib/models/Setting.ts:1147
+#: packages/lib/models/Setting.ts:1233
 msgid "A3"
 msgstr "A3"
 
-#: packages/lib/models/Setting.ts:1145
+#: packages/lib/models/Setting.ts:1231
 msgid "A4"
 msgstr "A4"
 
-#: packages/lib/models/Setting.ts:1148
+#: packages/lib/models/Setting.ts:1234
 msgid "A5"
 msgstr "A5"
 
-#: packages/app-desktop/gui/MenuBar.tsx:429
-#: packages/app-desktop/gui/MenuBar.tsx:721
+#: packages/app-desktop/gui/MenuBar.tsx:441
+#: packages/app-desktop/gui/MenuBar.tsx:733
 msgid "About Joplin"
 msgstr "Joplin에 대해서"
 
-#: packages/lib/services/KeymapService.ts:312
-#: packages/lib/services/KeymapService.ts:317
+#: packages/lib/services/KeymapService.ts:314
+#: packages/lib/services/KeymapService.ts:319
 msgid "accelerator"
 msgstr "단축키"
 
-#: packages/lib/services/KeymapService.ts:369
+#: packages/lib/services/KeymapService.ts:371
 msgid "Accelerator \"%s\" is not valid."
 msgstr "단축키 \"%s\"는 유효하지 않습니다."
 
-#: packages/lib/services/KeymapService.ts:338
+#: packages/lib/services/KeymapService.ts:340
 msgid ""
 "Accelerator \"%s\" is used for \"%s\" and \"%s\" commands. This may lead to "
 "unexpected behaviour."
@@ -226,25 +226,29 @@ msgstr ""
 msgid "Accept"
 msgstr "확인"
 
+#: packages/lib/models/Setting.ts:546
+msgid "Access Key"
+msgstr ""
+
 #: packages/app-desktop/gui/ResourceScreen.tsx:95
 msgid "Action"
 msgstr "동작"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:181
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:183
 #, fuzzy
 msgid "Actions"
 msgstr "동작"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:176
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:178
 msgid "Active"
 msgstr "활성"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:18
-#: packages/app-desktop/gui/MenuBar.tsx:619
+#: packages/app-desktop/gui/MenuBar.tsx:631
 msgid "Actual Size"
 msgstr "실제 크기"
 
-#: packages/app-mobile/components/screens/Note.tsx:1123
+#: packages/app-mobile/components/screens/Note.tsx:1128
 msgid "Add body"
 msgstr "내용 추가"
 
@@ -252,11 +256,11 @@ msgstr "내용 추가"
 msgid "Add or remove tags:"
 msgstr "태그 추가 및 제거:"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:219
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:245
 msgid "Add recipient:"
 msgstr "받는 사람 추가:"
 
-#: packages/app-mobile/components/screens/Note.tsx:1186
+#: packages/app-mobile/components/screens/Note.tsx:1191
 msgid "Add title"
 msgstr "제목 추가"
 
@@ -273,9 +277,9 @@ msgstr "고급 옵션"
 msgid "Advanced tools"
 msgstr "고급 도구"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:435
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:445
 #: packages/app-mobile/components/screens/notes.js:188
-#: packages/app-mobile/components/side-menu-content.js:368
+#: packages/app-mobile/components/side-menu-content.js:371
 msgid "All notes"
 msgstr "모든 노트"
 
@@ -287,7 +291,7 @@ msgstr "모든 포트들이 사용 중입니다 - %s에 문제를 공유해주�
 msgid "Also displays unset and hidden config variables."
 msgstr "또한 설정하지 않았거나 숨겨진 설정 변수를 표시합니다."
 
-#: packages/lib/models/Setting.ts:637
+#: packages/lib/models/Setting.ts:665
 msgid "Always"
 msgstr "항상"
 
@@ -295,11 +299,11 @@ msgstr "항상"
 msgid "An update is available, do you want to download it now?"
 msgstr "업데이트가 있습니다. 지금 내려 받을까요?"
 
-#: packages/lib/models/Setting.ts:2045
+#: packages/lib/models/Setting.ts:2141
 msgid "Appearance"
 msgstr "보기"
 
-#: packages/lib/models/Setting.ts:2049
+#: packages/lib/models/Setting.ts:2146
 msgid "Application"
 msgstr "애플리케이션"
 
@@ -316,21 +320,21 @@ msgstr "정말로 인증 토큰을 새로 고치시겠습니까?"
 msgid "Arguments:"
 msgstr "전달할 인수:"
 
-#: packages/lib/models/Setting.ts:343
+#: packages/lib/models/Setting.ts:344
 msgid "Aritim Dark"
 msgstr "Aritim Dark"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:53
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:568
-#: packages/app-mobile/components/screens/Note.tsx:893
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:588
+#: packages/app-mobile/components/screens/Note.tsx:898
 msgid "Attach file"
 msgstr "파일 첨부"
 
-#: packages/app-mobile/components/screens/Note.tsx:897
+#: packages/app-mobile/components/screens/Note.tsx:902
 msgid "Attach photo"
 msgstr "사진 첨부"
 
-#: packages/app-mobile/components/screens/Note.tsx:880
+#: packages/app-mobile/components/screens/Note.tsx:885
 msgid "Attach..."
 msgstr "첨부..."
 
@@ -338,17 +342,17 @@ msgstr "첨부..."
 msgid "Attaches the given file to the note."
 msgstr "주어진 파일을 노트에 첨부합니다."
 
-#: packages/server/src/models/UserModel.ts:202
-#: packages/server/src/models/UserModel.ts:217
+#: packages/server/src/models/UserModel.ts:214
+#: packages/server/src/models/UserModel.ts:231
 #, fuzzy
 msgid "attachment"
 msgstr "첨부"
 
-#: packages/lib/models/Resource.ts:415
+#: packages/lib/models/Resource.ts:411
 msgid "Attachment conflict: \"%s\""
 msgstr "첨부 충돌: \"%s\""
 
-#: packages/lib/models/Setting.ts:633
+#: packages/lib/models/Setting.ts:661
 msgid "Attachment download behaviour"
 msgstr "첨부파일 다운로드 방식"
 
@@ -360,7 +364,7 @@ msgstr "첨부"
 msgid "Attachments that could not be downloaded"
 msgstr "첨부 파일을 다운로드할 수 없습니다: %s"
 
-#: packages/lib/models/Setting.ts:329
+#: packages/lib/models/Setting.ts:330
 msgid ""
 "Attention: If you change this location, make sure you copy all your content "
 "to it before syncing, otherwise all files will be removed! See the FAQ for "
@@ -369,8 +373,8 @@ msgstr ""
 "주의: 이 위치를 변경하시려면, 동기화 전에 모든 내용들을 복사하였는지 확인해주"
 "세요. 변경 중에 모든 파일이 삭제 됩니다! 자세한 정보는 FAQ를 참조해주세요: %s"
 
-#: packages/app-cli/app/command-sync.js:82
-#: packages/app-cli/app/command-sync.js:96
+#: packages/app-cli/app/command-sync.ts:82
+#: packages/app-cli/app/command-sync.ts:96
 #: packages/app-desktop/gui/OneDriveLoginScreen.tsx:45
 msgid ""
 "Authentication was not completed (did not receive an authentication token)."
@@ -381,41 +385,21 @@ msgstr "인증이 완료되지 않았습니다 (인증 토큰을 받을 수 없�
 msgid "Authorisation token:"
 msgstr "인증 토큰:"
 
-#: packages/lib/models/Setting.ts:639
+#: packages/lib/models/Setting.ts:667
 msgid "Auto"
 msgstr "자동"
 
-#: packages/lib/models/Setting.ts:824
+#: packages/lib/models/Setting.ts:853
 msgid "Auto-pair braces, parenthesis, quotations, etc."
 msgstr "괄호, 중괄호, 인용 부호 등의 자동 완성."
 
-#: packages/lib/models/Setting.ts:741
+#: packages/lib/models/Setting.ts:770
 msgid "Automatically switch theme to match system theme"
 msgstr "시스템 테마에 적합한 테마로 자동으로 변경"
 
-#: packages/lib/models/Setting.ts:1107
+#: packages/lib/models/Setting.ts:1193
 msgid "Automatically update the application"
 msgstr "자동으로 업데이트하기"
-
-#: packages/lib/models/Setting.ts:528
-msgid "AWS key"
-msgstr "AWS 키"
-
-#: packages/lib/SyncTargetAmazonS3.js:28
-msgid "AWS S3"
-msgstr "AWS S3"
-
-#: packages/lib/models/Setting.ts:505
-msgid "AWS S3 bucket"
-msgstr "AWS S3 버킷"
-
-#: packages/lib/models/Setting.ts:517
-msgid "AWS S3 URL"
-msgstr "AWS S3 URL"
-
-#: packages/lib/models/Setting.ts:539
-msgid "AWS secret"
-msgstr "AWS 보안 암호"
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:42
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:715
@@ -450,20 +434,20 @@ msgstr "글머리 기호 목록"
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:173
 #: packages/app-desktop/gui/PromptDialog.min.js:242
 #: packages/app-desktop/gui/ResourceScreen.tsx:170
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:274
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:642
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:277
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:653
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:222
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:27
 #: packages/app-mobile/components/CameraView.tsx:191
 #: packages/app-mobile/components/ModalDialog.js:70
 #: packages/app-mobile/components/screens/encryption-config.tsx:190
-#: packages/app-mobile/components/screens/Note.tsx:104
-#: packages/app-mobile/components/screens/Note.tsx:588
-#: packages/app-mobile/components/SelectDateTimeDialog.tsx:108
+#: packages/app-mobile/components/screens/Note.tsx:107
+#: packages/app-mobile/components/screens/Note.tsx:593
+#: packages/app-mobile/components/SelectDateTimeDialog.tsx:152
 #: packages/app-mobile/components/side-menu-content.js:156
 #: packages/app-mobile/components/side-menu-content.js:165
-#: packages/app-mobile/components/side-menu-content.js:338
-#: packages/lib/shim-init-node.js:166
+#: packages/app-mobile/components/side-menu-content.js:341
+#: packages/lib/shim-init-node.js:171
 msgid "Cancel"
 msgstr "취소"
 
@@ -471,15 +455,15 @@ msgstr "취소"
 msgid "Cancelling background synchronisation... Please wait."
 msgstr "백그라운드 동기화를 취소하는 중입니다... 잠시만 기다려주세요."
 
-#: packages/lib/Synchronizer.ts:195
+#: packages/lib/Synchronizer.ts:189
 msgid "Cancelling..."
 msgstr "취소하는 중..."
 
-#: packages/app-cli/app/command-sync.js:266
+#: packages/app-cli/app/command-sync.ts:269
 msgid "Cancelling... Please wait."
 msgstr "취소하는 중입니다... 잠시만 기다리세요."
 
-#: packages/lib/shim-init-node.js:230
+#: packages/lib/shim-init-node.js:235
 msgid "Cannot access %s"
 msgstr "%s에 접근할 수 없음"
 
@@ -519,7 +503,7 @@ msgstr "노트를 \"%s\" 노트북으로 복사할 수 없습니다"
 msgid "Cannot find \"%s\"."
 msgstr "\"%s\"를 찾을 수 없습니다."
 
-#: packages/app-cli/app/command-sync.js:182
+#: packages/app-cli/app/command-sync.ts:182
 msgid "Cannot initialise synchroniser."
 msgstr "동기화를 시작할 수 없습니다."
 
@@ -535,7 +519,7 @@ msgstr "\"%s\" 모듈(\"%s\" 포맷과 \"%s\" 대상을 위한)을 불러올 수
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "노트를 \"%s\" 노트북으로 옮길 수 없습니다"
 
-#: packages/lib/models/Folder.ts:604
+#: packages/lib/models/Folder.ts:699
 msgid "Cannot move notebook to this location"
 msgstr "노트북을 이 위치로 옮길 수 없습니다"
 
@@ -547,17 +531,17 @@ msgstr ""
 "인증 데이터를 찾을 수 없어서 토큰을 새로고침 할 수 없습니다. 동기화를 다시 시"
 "도하면 문제가 해결될 수 있습니다."
 
-#: packages/server/src/models/UserModel.ts:201
+#: packages/server/src/models/UserModel.ts:213
 msgid "Cannot save %s \"%s\" because it is larger than the allowed limit (%s)"
 msgstr ""
 
-#: packages/server/src/models/UserModel.ts:216
+#: packages/server/src/models/UserModel.ts:230
 msgid ""
 "Cannot save %s \"%s\" because it would go over the total allowed size (%s) "
 "for this account"
 msgstr ""
 
-#: packages/lib/services/share/ShareService.ts:271
+#: packages/lib/services/share/ShareService.ts:272
 msgid ""
 "Cannot share encrypted notebook with recipient %s because they have not "
 "enabled end-to-end encryption. They may do so from the screen Configuration "
@@ -580,8 +564,8 @@ msgstr "문자"
 msgid "Characters excluding spaces"
 msgstr "공백을 제외한 문자"
 
-#: packages/app-desktop/gui/MenuBar.tsx:446
-#: packages/app-desktop/gui/MenuBar.tsx:696
+#: packages/app-desktop/gui/MenuBar.tsx:458
+#: packages/app-desktop/gui/MenuBar.tsx:708
 msgid "Check for updates..."
 msgstr "업데이트 확인..."
 
@@ -602,7 +586,7 @@ msgstr "선택상자 목록"
 msgid "Checking... Please wait."
 msgstr "확인 중입니다... 잠시만 기다리세요."
 
-#: packages/app-mobile/components/screens/Note.tsx:900
+#: packages/app-mobile/components/screens/Note.tsx:905
 msgid "Choose an option"
 msgstr "옵션 선택"
 
@@ -610,12 +594,12 @@ msgstr "옵션 선택"
 msgid "Chrome Web Store"
 msgstr "Chrome 웹 스토어"
 
+#: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:83
 #: packages/app-desktop/gui/PromptDialog.min.js:249
 msgid "Clear"
 msgstr "지우기"
 
-#. For unknown reasons, this particular string doesn't get translated if it's directly in the text property below
-#: packages/app-mobile/components/SelectDateTimeDialog.tsx:103
+#: packages/app-mobile/components/SelectDateTimeDialog.tsx:149
 msgid "Clear alarm"
 msgstr "알람 취소"
 
@@ -636,7 +620,7 @@ msgid "Client ID: %s"
 msgstr "클라이언트 식별자: %s"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:170
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:323
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:349
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:229
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:334
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:30
@@ -644,7 +628,7 @@ msgid "Close"
 msgstr "닫기"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:24
-#: packages/app-desktop/gui/MenuBar.tsx:509
+#: packages/app-desktop/gui/MenuBar.tsx:521
 msgid "Close Window"
 msgstr "창 닫기"
 
@@ -652,11 +636,11 @@ msgstr "창 닫기"
 msgid "Code"
 msgstr "코드"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:578
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:598
 msgid "Code Block"
 msgstr "코드 블록"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1143
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1163
 msgid "Code View"
 msgstr "코드 보기"
 
@@ -669,7 +653,7 @@ msgstr "먼저 노트북을 만들어야 합니다"
 msgid "Coming alarms"
 msgstr "예정된 알람"
 
-#: packages/lib/models/Setting.ts:1202
+#: packages/lib/models/Setting.ts:1288
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
 "or path to individual cert files. For example: /my/cert_dir, /other/custom."
@@ -681,7 +665,7 @@ msgstr ""
 "custom.pem. 참고사항: 만약 TLS 설정을 변경했다면 \"동기화 설정 확인\"을 진행"
 "하기 전에 반드시 변경 사항을 저장해야 합니다."
 
-#: packages/lib/services/KeymapService.ts:306
+#: packages/lib/services/KeymapService.ts:308
 msgid "command"
 msgstr "명령"
 
@@ -702,16 +686,16 @@ msgstr "명령 팔레트"
 msgid "Completed"
 msgstr "완료됨"
 
-#: packages/app-cli/app/command-e2ee.ts:72
+#: packages/app-cli/app/command-e2ee.ts:79
 msgid "Completed decryption."
 msgstr "복호화가 완료되었습니다."
 
-#: packages/lib/Synchronizer.ts:196
+#: packages/lib/Synchronizer.ts:190
 msgid "Completed: %s (%s)"
 msgstr "완료됨: %s (%s)"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:637
-#: packages/app-mobile/components/side-menu-content.js:316
+#: packages/app-mobile/components/side-menu-content.js:319
 msgid "Configuration"
 msgstr "설정"
 
@@ -719,12 +703,12 @@ msgstr "설정"
 msgid "Confirm password cannot be empty"
 msgstr "비밀번호 확인칸은 비어져 있으면 안됩니다"
 
-#: packages/app-cli/app/command-e2ee.ts:87
+#: packages/app-cli/app/command-e2ee.ts:94
 #: packages/app-mobile/components/screens/encryption-config.tsx:168
 msgid "Confirm password:"
 msgstr "비밀번호 확인:"
 
-#: packages/app-desktop/gui/Root.tsx:140
+#: packages/app-desktop/gui/Root.tsx:147
 #, fuzzy
 msgid "Confirmation"
 msgstr "설정"
@@ -733,11 +717,11 @@ msgstr "설정"
 msgid "Conflicted: %d"
 msgstr "충돌됨: %d"
 
-#: packages/lib/models/Folder.ts:110
+#: packages/lib/models/Folder.ts:111
 msgid "Conflicts"
 msgstr "충돌"
 
-#: packages/lib/models/Resource.ts:399
+#: packages/lib/models/Resource.ts:395
 #, fuzzy
 msgid "Conflicts (attachments)"
 msgstr "노트 첨부"
@@ -747,15 +731,15 @@ msgstr "노트 첨부"
 msgid "Content provided by %s"
 msgstr "노트 속성"
 
-#: packages/app-mobile/components/screens/Note.tsx:933
+#: packages/app-mobile/components/screens/Note.tsx:938
 msgid "Convert to note"
 msgstr "노트로 변환"
 
-#: packages/app-mobile/components/screens/Note.tsx:933
+#: packages/app-mobile/components/screens/Note.tsx:938
 msgid "Convert to todo"
 msgstr "'할 일'로 변환"
 
-#: packages/app-desktop/gui/MenuBar.tsx:410
+#: packages/app-desktop/gui/MenuBar.tsx:422
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:13
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:764
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:143
@@ -766,8 +750,8 @@ msgstr "복사"
 msgid "Copy dev mode command to clipboard"
 msgstr "개발자 모드 명령을 클립보드에 복사"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:340
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:354
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:350
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:364
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:139
 #, fuzzy
 msgid "Copy external link"
@@ -778,7 +762,7 @@ msgid "Copy Link Address"
 msgstr "링크 주소 복사"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:124
-#: packages/app-mobile/components/screens/Note.tsx:940
+#: packages/app-mobile/components/screens/Note.tsx:945
 msgid "Copy Markdown link"
 msgstr "마크다운 링크 복사"
 
@@ -810,7 +794,7 @@ msgstr ""
 "\n"
 "다시 시도해 주세요."
 
-#: packages/lib/JoplinServerApi.ts:91
+#: packages/lib/JoplinServerApi.ts:92
 msgid ""
 "Could not connect to Joplin Server. Please check the Synchronisation options "
 "in the config screen. Full error was:\n"
@@ -843,9 +827,15 @@ msgid ""
 "The error was: \"%s\""
 msgstr ""
 
-#: packages/lib/components/EncryptionConfigScreen/utils.ts:214
+#: packages/lib/components/EncryptionConfigScreen/utils.ts:219
 msgid "Could not upgrade master key: %s"
 msgstr "마스터 키를 업그레이드할 수 없습니다: %s"
+
+#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:27
+msgid ""
+"Could not verify the share status of this notebook - aborting. Please try "
+"again when you are connected to the internet."
+msgstr ""
 
 #: packages/app-mobile/components/note-list.js:101
 msgid "Create a notebook"
@@ -859,7 +849,7 @@ msgstr "생성됨"
 msgid "created date"
 msgstr "만든 날짜"
 
-#: packages/lib/Synchronizer.ts:188
+#: packages/lib/Synchronizer.ts:182
 msgid "Created local items: %d."
 msgstr "로컬 항목 생성됨: %d."
 
@@ -867,11 +857,11 @@ msgstr "로컬 항목 생성됨: %d."
 msgid "Created locally"
 msgstr "로컬에서 생성됨"
 
-#: packages/lib/Synchronizer.ts:190
+#: packages/lib/Synchronizer.ts:184
 msgid "Created remote items: %d."
 msgstr "원격 항목 생성됨: %d."
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:150
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:152
 #, fuzzy
 msgid "Created: "
 msgstr "생성됨: %s"
@@ -882,7 +872,7 @@ msgid "Created: %d."
 msgstr "생성됨: %d."
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:118
-#: packages/app-mobile/components/screens/Note.tsx:835
+#: packages/app-mobile/components/screens/Note.tsx:840
 msgid "Created: %s"
 msgstr "생성됨: %s"
 
@@ -918,15 +908,15 @@ msgstr "사용자 정의"
 msgid "Custom order"
 msgstr "사용자 정의"
 
-#: packages/lib/models/Setting.ts:1078
+#: packages/lib/models/Setting.ts:1164
 msgid "Custom stylesheet for Joplin-wide app styles"
 msgstr "Joplin 앱에 전역적으로 적용되는 사용자 정의 스타일시트"
 
-#: packages/lib/models/Setting.ts:1061
+#: packages/lib/models/Setting.ts:1147
 msgid "Custom stylesheet for rendered Markdown"
 msgstr "렌더링된 마크다운에 적용할 사용자 정의 스타일시트"
 
-#: packages/lib/models/Setting.ts:1201
+#: packages/lib/models/Setting.ts:1287
 msgid "Custom TLS certificates"
 msgstr "사용자 TLS 인증서"
 
@@ -936,7 +926,7 @@ msgstr "사용자 TLS 인증서"
 msgid "Cut"
 msgstr "잘라내기"
 
-#: packages/lib/models/Setting.ts:338
+#: packages/lib/models/Setting.ts:339
 msgid "Dark"
 msgstr "Dark"
 
@@ -944,19 +934,19 @@ msgstr "Dark"
 msgid "Database v%s"
 msgstr "데이터베이스 v%s"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:178
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:180
 msgid "Date"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:688
+#: packages/lib/models/Setting.ts:716
 msgid "Date format"
 msgstr "날짜 형식"
 
-#: packages/lib/models/Setting.ts:1258
+#: packages/lib/models/Setting.ts:1344
 msgid "days"
 msgstr "일"
 
-#: packages/app-cli/app/command-e2ee.ts:57
+#: packages/app-cli/app/command-e2ee.ts:64
 msgid "Decrypted items: %d"
 msgstr "복호화된 항목: %d"
 
@@ -964,13 +954,13 @@ msgstr "복호화된 항목: %d"
 msgid "Decrypted items: %s / %s"
 msgstr "복호화된 항목: %s / %s"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:728
-#: packages/app-mobile/components/side-menu-content.js:325
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:739
+#: packages/app-mobile/components/side-menu-content.js:328
 msgid "Decrypting items: %d/%d"
 msgstr "복호화 항목: %d/%d"
 
-#: packages/lib/models/Setting.ts:1004 packages/lib/models/Setting.ts:1011
-#: packages/lib/models/Setting.ts:1170
+#: packages/lib/models/Setting.ts:1090 packages/lib/models/Setting.ts:1097
+#: packages/lib/models/Setting.ts:1256
 msgid "Default"
 msgstr "기본값"
 
@@ -981,11 +971,11 @@ msgstr "기본값:  %s"
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:185
 #: packages/app-desktop/gui/ResourceScreen.tsx:111
 #: packages/app-desktop/gui/ResourceScreen.tsx:170
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:248
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:251
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:192
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:222
 #: packages/app-mobile/components/screen-header.js:362
-#: packages/app-mobile/components/screens/Note.tsx:953
+#: packages/app-mobile/components/screens/Note.tsx:958
 #: packages/app-mobile/components/side-menu-content.js:146
 msgid "Delete"
 msgstr "삭제"
@@ -998,20 +988,20 @@ msgstr "첨부된 \"%s\"를 삭제할까요?"
 msgid "Delete line"
 msgstr "줄 삭제"
 
-#: packages/lib/models/Setting.ts:1100
+#: packages/lib/models/Setting.ts:1186
 msgid "Delete local data and re-download from sync target"
 msgstr "로컬 데이터를 지우고 동기화 서버의 데이터를 받아오기"
 
-#: packages/lib/models/Note.ts:744
+#: packages/lib/models/Note.ts:759
 msgid "Delete note \"%s\"?"
 msgstr "\"%s\" 노트를 삭제할까요?"
 
 #: packages/app-cli/app/command-rmnote.js:27
-#: packages/app-mobile/components/screens/Note.tsx:525
+#: packages/app-mobile/components/screens/Note.tsx:530
 msgid "Delete note?"
 msgstr "이 노트를 삭제할까요?"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:247
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:250
 #: packages/app-mobile/components/side-menu-content.js:148
 msgid ""
 "Delete notebook \"%s\"?\n"
@@ -1035,11 +1025,11 @@ msgstr ""
 msgid "Delete plugin \"%s\"?"
 msgstr "\"%s\" 플러그인을 삭제할까요?"
 
-#: packages/lib/models/Note.ts:746
+#: packages/lib/models/Note.ts:761
 msgid "Delete these %d notes?"
 msgstr "%d 개의 노트들을 삭제할까요?"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:195
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:221
 msgid ""
 "Delete this invitation? The recipient will no longer have access to this "
 "shared notebook."
@@ -1047,11 +1037,11 @@ msgstr ""
 "초대하신 분을 제거하시겠습니까? 제거하게 된다면 더 이상 공유 노트북에 접근할"
 "수 없게 됩니다."
 
-#: packages/lib/Synchronizer.ts:192
+#: packages/lib/Synchronizer.ts:186
 msgid "Deleted local items: %d."
 msgstr "로컬 항목 삭제됨: %d."
 
-#: packages/lib/Synchronizer.ts:193
+#: packages/lib/Synchronizer.ts:187
 msgid "Deleted remote items: %d."
 msgstr "원격 항목 삭제됨: %d."
 
@@ -1075,20 +1065,20 @@ msgstr "확인을 거치지 않고 노트를 삭제합니다."
 msgid "Destination format: %s"
 msgstr "목표 포맷: %s"
 
-#: packages/lib/services/interop/types.ts:125
+#: packages/lib/services/interop/types.ts:126
 msgid "Directory"
 msgstr "폴더"
 
-#: packages/lib/models/Setting.ts:415
+#: packages/lib/models/Setting.ts:416
 msgid "Directory to synchronise with (absolute path)"
 msgstr "동기화를 할 폴더 (절대 경로)"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:154
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:156
 #, fuzzy
 msgid "Disable"
 msgstr "사용하지 않음"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:235
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:237
 #: packages/app-mobile/components/screens/encryption-config.tsx:281
 msgid "Disable encryption"
 msgstr "암호화 해제"
@@ -1102,15 +1092,15 @@ msgstr "안전 모드를 끄고 다시 시작"
 msgid "Disable Web Clipper Service"
 msgstr "웹 수집기 서비스 사용 안함"
 
-#: packages/app-cli/app/command-e2ee.ts:120
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:247
+#: packages/app-cli/app/command-e2ee.ts:127
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:249
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:138
 #: packages/app-mobile/components/screens/encryption-config.tsx:303
-#: packages/lib/models/Setting.ts:1119
+#: packages/lib/models/Setting.ts:1205
 msgid "Disabled"
 msgstr "사용하지 않음"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:209
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:211
 #: packages/app-mobile/components/screens/encryption-config.tsx:240
 msgid ""
 "Disabling encryption means *all* your notes and attachments are going to be "
@@ -1120,7 +1110,7 @@ msgstr ""
 "암호화를 해제하게 되면 모든 노트와 첨부 파일이 다시 동기화되며, 암호화 되지 "
 "않은 상태로 동기화 대상에게 전달됩니다. 계속 진행할까요?"
 
-#: packages/app-mobile/components/screens/Note.tsx:104
+#: packages/app-mobile/components/screens/Note.tsx:107
 msgid "Discard changes"
 msgstr "변경 사항 버리기"
 
@@ -1203,7 +1193,7 @@ msgstr "다운로드"
 msgid "Download and install the relevant extension for your browser:"
 msgstr "브라우저에 맞는 확장 기능을 다운로드 및 설치하세요:"
 
-#: packages/lib/models/Resource.ts:347
+#: packages/lib/models/Resource.ts:343
 msgid "Downloaded"
 msgstr "다운로드됨"
 
@@ -1215,19 +1205,19 @@ msgstr "다운로드 및 복호화됨"
 msgid "Downloaded and encrypted"
 msgstr "다운로드 및 암호화됨"
 
-#: packages/lib/models/Resource.ts:346
+#: packages/lib/models/Resource.ts:342
 msgid "Downloading"
 msgstr "다운로드 중"
 
-#: packages/app-cli/app/command-sync.js:236
+#: packages/app-cli/app/command-sync.ts:236
 msgid "Downloading resources..."
 msgstr "리소스 다운로드 중..."
 
-#: packages/lib/models/Setting.ts:339
+#: packages/lib/models/Setting.ts:340
 msgid "Dracula"
 msgstr "Dracula"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1143
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1163
 msgid "Drop notes or files here"
 msgstr "노트나 파일을 여기에 끌어놓습니다"
 
@@ -1235,7 +1225,7 @@ msgstr "노트나 파일을 여기에 끌어놓습니다"
 msgid "Dropbox"
 msgstr "Dropbox"
 
-#: packages/app-desktop/gui/Root.tsx:209
+#: packages/app-desktop/gui/Root.tsx:218
 msgid "Dropbox Login"
 msgstr "Dropbox 로그인"
 
@@ -1256,8 +1246,9 @@ msgstr ""
 "<note>와 일치하는 노트를 [노트북]에 복제합니다. 노트북이 특정되지 않았다면 노"
 "트는 현재의 노트북에 복제됩니다."
 
+#: packages/app-desktop/gui/MainScreen/commands/openFolderDialog.ts:6
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/openEditDialog.ts:83
-#: packages/app-mobile/components/screens/Note.tsx:1146
+#: packages/app-mobile/components/screens/Note.tsx:1151
 msgid "Edit"
 msgstr "편집"
 
@@ -1269,33 +1260,34 @@ msgstr "외부 편집기에서 편집하기"
 msgid "Edit note."
 msgstr "노트를 편집합니다."
 
+#: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:102
 #: packages/app-mobile/components/screens/folder.js:109
 msgid "Edit notebook"
 msgstr "노트북 편집"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:138
-#: packages/lib/models/Setting.ts:790 packages/lib/models/Setting.ts:791
-#: packages/lib/models/Setting.ts:792
+#: packages/lib/models/Setting.ts:819 packages/lib/models/Setting.ts:820
+#: packages/lib/models/Setting.ts:821
 msgid "Editor"
 msgstr "편집"
 
-#: packages/lib/models/Setting.ts:997
+#: packages/lib/models/Setting.ts:1083
 msgid "Editor font"
 msgstr "편집기 글꼴"
 
-#: packages/lib/models/Setting.ts:1022
+#: packages/lib/models/Setting.ts:1108
 msgid "Editor font family"
 msgstr "편집기 글꼴 모음"
 
-#: packages/lib/models/Setting.ts:989
+#: packages/lib/models/Setting.ts:1075
 msgid "Editor font size"
 msgstr "편집기 글꼴 크기"
 
-#: packages/lib/models/Setting.ts:1039
+#: packages/lib/models/Setting.ts:1125
 msgid "Editor maximum width"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1033
+#: packages/lib/models/Setting.ts:1119
 msgid "Editor monospace font family"
 msgstr "편집기 모노스페이스 글꼴 모음"
 
@@ -1303,7 +1295,7 @@ msgstr "편집기 모노스페이스 글꼴 모음"
 msgid "Either \"text\" or \"json\""
 msgstr "\"text\" 또는 \"json\""
 
-#: packages/lib/models/Setting.ts:1171
+#: packages/lib/models/Setting.ts:1257
 msgid "Emacs"
 msgstr "Emacs"
 
@@ -1311,93 +1303,93 @@ msgstr "Emacs"
 msgid "emphasised text"
 msgstr "강조"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:154
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:156
 #: packages/app-mobile/components/screens/encryption-config.tsx:182
 msgid "Enable"
 msgstr "활성화"
 
-#: packages/lib/models/Setting.ts:939
+#: packages/lib/models/Setting.ts:1025
 msgid "Enable ^sup^ syntax"
 msgstr "^sup^ 구문 활성화"
 
-#: packages/lib/models/Setting.ts:943
+#: packages/lib/models/Setting.ts:1029
 msgid "Enable ++insert++ syntax"
 msgstr "++insert++ 확장 활성화"
 
-#: packages/lib/models/Setting.ts:935
+#: packages/lib/models/Setting.ts:1021
 msgid "Enable ==mark== syntax"
 msgstr "==mark== 구문 활성화"
 
-#: packages/lib/models/Setting.ts:938
+#: packages/lib/models/Setting.ts:1024
 msgid "Enable ~sub~ syntax"
 msgstr "~sub~ 구문 활성화"
 
-#: packages/lib/models/Setting.ts:941
+#: packages/lib/models/Setting.ts:1027
 msgid "Enable abbreviation syntax"
 msgstr "약어 구문 활성화"
 
-#: packages/lib/models/Setting.ts:932
+#: packages/lib/models/Setting.ts:1018
 msgid "Enable audio player"
 msgstr "음성 재생 활성화"
 
-#: packages/lib/models/Setting.ts:940
+#: packages/lib/models/Setting.ts:1026
 msgid "Enable deflist syntax"
 msgstr "정의 목록 구문 활성화"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:235
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:237
 #: packages/app-mobile/components/screens/encryption-config.tsx:281
 msgid "Enable encryption"
 msgstr "암호화 사용"
 
-#: packages/lib/models/Setting.ts:936
+#: packages/lib/models/Setting.ts:1022
 msgid "Enable footnotes"
 msgstr "각주 활성화"
 
-#: packages/lib/models/Setting.ts:929
+#: packages/lib/models/Setting.ts:1015
 msgid "Enable Fountain syntax support"
 msgstr "Fountain 구문 지원 활성화"
 
-#: packages/lib/models/Setting.ts:926
+#: packages/lib/models/Setting.ts:1012
 msgid "Enable Linkify"
 msgstr "링크 자동 감지 활성화"
 
-#: packages/lib/models/Setting.ts:942
+#: packages/lib/models/Setting.ts:1028
 msgid "Enable markdown emoji"
 msgstr "마크다운 이모지 활성화"
 
-#: packages/lib/models/Setting.ts:928
+#: packages/lib/models/Setting.ts:1014
 msgid "Enable math expressions"
 msgstr "수식 표현 활성화"
 
-#: packages/lib/models/Setting.ts:930
+#: packages/lib/models/Setting.ts:1016
 msgid "Enable Mermaid diagrams support"
 msgstr "Mermaid 다이어그램 지원 활성화"
 
-#: packages/lib/models/Setting.ts:944
+#: packages/lib/models/Setting.ts:1030
 msgid "Enable multimarkdown table extension"
 msgstr "MultiMarkdown 테이블 확장 활성화"
 
-#: packages/lib/models/Setting.ts:1248
+#: packages/lib/models/Setting.ts:1334
 msgid "Enable note history"
 msgstr "노트 변경 이력 활성화"
 
-#: packages/lib/models/Setting.ts:934
+#: packages/lib/models/Setting.ts:1020
 msgid "Enable PDF viewer"
 msgstr "PDF 보기 활성화"
 
-#: packages/lib/models/Setting.ts:924
+#: packages/lib/models/Setting.ts:1010
 msgid "Enable soft breaks"
 msgstr "소프트 브레이크 활성화"
 
-#: packages/lib/models/Setting.ts:937
+#: packages/lib/models/Setting.ts:1023
 msgid "Enable table of contents extension"
 msgstr "목차 확장 활성화"
 
-#: packages/lib/models/Setting.ts:925
+#: packages/lib/models/Setting.ts:1011
 msgid "Enable typographer support"
 msgstr "조판 부호 지원 활성화"
 
-#: packages/lib/models/Setting.ts:933
+#: packages/lib/models/Setting.ts:1019
 msgid "Enable video player"
 msgstr "비디오 재생 활성화"
 
@@ -1406,8 +1398,8 @@ msgstr "비디오 재생 활성화"
 msgid "Enable Web Clipper Service"
 msgstr "웹 수집기 서비스 사용"
 
-#: packages/app-cli/app/command-e2ee.ts:120
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:247
+#: packages/app-cli/app/command-e2ee.ts:127
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:249
 #: packages/app-mobile/components/screens/encryption-config.tsx:303
 msgid "Enabled"
 msgstr "사용함"
@@ -1433,7 +1425,7 @@ msgstr "암호화된 항목은 변경될 수 없습니다"
 msgid "Encrypted notebooks cannot be renamed"
 msgstr "암호화된 노트북은 이름을 변경할 수 없습니다"
 
-#: packages/lib/models/Setting.ts:2051
+#: packages/lib/models/Setting.ts:2148
 msgid "Encryption"
 msgstr "암호화"
 
@@ -1442,22 +1434,22 @@ msgstr "암호화"
 msgid "Encryption Config"
 msgstr "암호화 설정"
 
-#: packages/app-cli/app/command-e2ee.ts:120
+#: packages/app-cli/app/command-e2ee.ts:127
 #: packages/app-mobile/components/screens/encryption-config.tsx:303
 msgid "Encryption is: %s"
 msgstr "암호화: %s"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:170
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:172
 #, fuzzy
 msgid "Encryption keys"
 msgstr "암호화는 다음과 같습니다:"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:247
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:249
 #, fuzzy
 msgid "Encryption:"
 msgstr "암호화"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:245
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:247
 #, fuzzy
 msgid "End-to-end encryption"
 msgstr "암호화 사용"
@@ -1467,7 +1459,7 @@ msgid "Enter code here"
 msgstr "코드를 입력하세요"
 
 #: packages/app-cli/app/command-e2ee.ts:38
-#: packages/app-cli/app/command-e2ee.ts:77
+#: packages/app-cli/app/command-e2ee.ts:84
 msgid "Enter master password:"
 msgstr "마스터 키를 넣어주세요:"
 
@@ -1479,7 +1471,7 @@ msgstr "노트북 제목을 입력해주세요"
 msgid "Enum"
 msgstr "열거"
 
-#: packages/lib/models/Resource.ts:348
+#: packages/lib/models/Resource.ts:344
 msgid "Error"
 msgstr "오류"
 
@@ -1489,7 +1481,8 @@ msgid "Error opening note in editor: %s"
 msgstr "편집기에서 노트를 열 수 없는 오류가 발생하였습니다: %s"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:65
-#: packages/lib/services/KeymapService.ts:195
+#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:35
+#: packages/lib/services/KeymapService.ts:197
 msgid "Error: %s"
 msgstr "오류: %s"
 
@@ -1518,13 +1511,13 @@ msgid "Exits the application."
 msgstr "애플리케이션을 종료합니다."
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:171
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:331
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:334
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:185
 msgid "Export"
 msgstr "내보내기"
 
-#: packages/app-desktop/gui/MenuBar.tsx:465
-#: packages/app-desktop/gui/MenuBar.tsx:519
+#: packages/app-desktop/gui/MenuBar.tsx:477
+#: packages/app-desktop/gui/MenuBar.tsx:531
 msgid "Export all"
 msgstr "모두 내보내기"
 
@@ -1564,11 +1557,11 @@ msgstr "특정 노트를 내보냅니다."
 msgid "Exports only the given notebook."
 msgstr "특정 노트북을 내보냅니다."
 
-#: packages/lib/models/Setting.ts:1234
+#: packages/lib/models/Setting.ts:1320
 msgid "Fail-safe"
 msgstr "안전 장치"
 
-#: packages/lib/models/Setting.ts:1235
+#: packages/lib/models/Setting.ts:1321
 msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
@@ -1584,16 +1577,16 @@ msgstr "치명적인 오류:"
 msgid "Feature flags"
 msgstr ""
 
-#: packages/lib/Synchronizer.ts:194
+#: packages/lib/Synchronizer.ts:188
 msgid "Fetched items: %d/%d."
 msgstr "가져온 항목: %d/%d."
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:733
-#: packages/app-mobile/components/side-menu-content.js:330
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:744
+#: packages/app-mobile/components/side-menu-content.js:333
 msgid "Fetching resources: %d/%d"
 msgstr "리소스 가져오는 중: %d/%d"
 
-#: packages/lib/services/interop/types.ts:125
+#: packages/lib/services/interop/types.ts:126
 msgid "File"
 msgstr "파일"
 
@@ -1613,7 +1606,7 @@ msgstr "검색 색인 수정"
 msgid "Fixing search index..."
 msgstr "검색 색인을 수정하는 중..."
 
-#: packages/app-desktop/gui/MenuBar.tsx:657
+#: packages/app-desktop/gui/MenuBar.tsx:669
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteBody.ts:7
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteTitle.ts:7
 #: packages/app-desktop/gui/NoteList/commands/focusElementNoteList.ts:8
@@ -1621,11 +1614,11 @@ msgstr "검색 색인을 수정하는 중..."
 msgid "Focus"
 msgstr "강조"
 
-#: packages/lib/models/Setting.ts:875 packages/lib/models/Setting.ts:891
+#: packages/lib/models/Setting.ts:961 packages/lib/models/Setting.ts:977
 msgid "Focus body"
 msgstr "내용에 포커스"
 
-#: packages/lib/models/Setting.ts:874 packages/lib/models/Setting.ts:890
+#: packages/lib/models/Setting.ts:960 packages/lib/models/Setting.ts:976
 msgid "Focus title"
 msgstr "제목에 포커스"
 
@@ -1653,6 +1646,10 @@ msgid ""
 "For the list of keyboard shortcuts and config options, type `help keymap`"
 msgstr "키보드 단축키 및 설정 옵션을 변경하려면 `help keymap`을 입력해주세요"
 
+#: packages/lib/models/Setting.ts:568
+msgid "Force Path Style"
+msgstr ""
+
 #: packages/lib/commands/historyForward.ts:6
 msgid "Forward"
 msgstr "앞으로 가기"
@@ -1670,11 +1667,11 @@ msgstr "FTS 활성됨: %d"
 msgid "Full changelog"
 msgstr "바뀐 내용을 모두 보기"
 
-#: packages/lib/models/Setting.ts:2043
+#: packages/lib/models/Setting.ts:2139
 msgid "General"
 msgstr "일반"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:250
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:252
 #, fuzzy
 msgid "Generated"
 msgstr "일반"
@@ -1688,7 +1685,7 @@ msgstr[0] "링크를 만드는 중..."
 msgid "Get it now:"
 msgstr "설치하기:"
 
-#: packages/lib/models/Setting.ts:1108
+#: packages/lib/models/Setting.ts:1194
 msgid "Get pre-releases when checking for updates"
 msgstr "사전-출시 버전일 경우에도 업데이트"
 
@@ -1702,7 +1699,7 @@ msgstr ""
 "값을 표시할 것입니다. [name] 과 [value] 모두 제공되지 않았다면, 현재 설정을 "
 "표시할 것입니다."
 
-#: packages/app-mobile/components/screens/Note.tsx:847
+#: packages/app-mobile/components/screens/Note.tsx:852
 msgid "Go to source URL"
 msgstr "소스 URL로 이동"
 
@@ -1711,7 +1708,7 @@ msgstr "소스 URL로 이동"
 msgid "Goto Anything..."
 msgstr "가고자 하는 곳으로 이동..."
 
-#: packages/app-desktop/gui/Root.tsx:165
+#: packages/app-desktop/gui/Root.tsx:172
 #, fuzzy
 msgid "Grant authorisation"
 msgstr "인증 토큰:"
@@ -1720,11 +1717,11 @@ msgstr "인증 토큰:"
 msgid "Heading"
 msgstr "표제"
 
-#: packages/app-desktop/gui/MenuBar.tsx:480
+#: packages/app-desktop/gui/MenuBar.tsx:492
 msgid "Hide %s"
 msgstr "%s 숨기기"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:170
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:172
 msgid "Hide disabled keys"
 msgstr ""
 
@@ -1752,34 +1749,44 @@ msgstr "HTML 파일"
 msgid "Hyperlink"
 msgstr "하이퍼링크"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:177
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:327
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:74
+#: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:77
+msgid "Icon"
+msgstr "Icon"
+
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:179
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:329
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:76
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:28
 #: packages/app-desktop/gui/ResourceScreen.tsx:94
 msgid "ID"
 msgstr "식별자"
 
-#: packages/lib/Synchronizer.ts:310
+#: packages/lib/Synchronizer.ts:304
 msgid "Idle"
 msgstr "대기"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:107
+#: packages/lib/models/Setting.ts:867
+msgid ""
+"If true, sort order buttons (field + reverse) for notes are shown at the top "
+"of Note List."
+msgstr ""
+
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:109
 msgid "Ignore"
 msgstr "무시하기"
 
-#: packages/lib/models/Setting.ts:1224
+#: packages/lib/models/Setting.ts:1310
 msgid "Ignore TLS certificate errors"
 msgstr "TLS 인증서 오류 무시"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:170
-#: packages/app-desktop/gui/MenuBar.tsx:461
-#: packages/app-desktop/gui/MenuBar.tsx:516
-#: packages/app-desktop/gui/Root.tsx:210
+#: packages/app-desktop/gui/MenuBar.tsx:473
+#: packages/app-desktop/gui/MenuBar.tsx:528
+#: packages/app-desktop/gui/Root.tsx:219
 msgid "Import"
 msgstr "가져오기"
 
-#: packages/app-desktop/gui/MenuBar.tsx:196
+#: packages/app-desktop/gui/MenuBar.tsx:197
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr "\"%s\"에서 \"%s\" 포맷으로 가져오는 중입니다. 잠시만 기다려주세요..."
 
@@ -1791,7 +1798,7 @@ msgstr "노트를 가져오는 중..."
 msgid "Imports data into Joplin."
 msgstr "데이터를 Joplin으로 가져옵니다."
 
-#: packages/lib/models/Setting.ts:634
+#: packages/lib/models/Setting.ts:662
 msgid ""
 "In \"Manual\" mode, attachments are downloaded only when you click on them. "
 "In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
@@ -1811,7 +1818,7 @@ msgstr ""
 "다. 현재 선택된 노트 또는 노트북의 경우 `$n` 이나 `$b`같은 바로가기로, 현재 "
 "선택된 항목의 경우 `$c`로 참조할 수 있습니다."
 
-#: packages/app-mobile/components/screens/Note.tsx:402
+#: packages/app-mobile/components/screens/Note.tsx:407
 msgid ""
 "In order to associate a geo-location with the note, the app needs your "
 "permission to access your location.\n"
@@ -1823,7 +1830,7 @@ msgstr ""
 "\n"
 "설정 화면에서 언제든지 이 설정을 끌 수 있습니다."
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:93
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:95
 msgid ""
 "In order to do so, your entire data set will have to be encrypted and "
 "synchronised, so it is best to run it overnight.\n"
@@ -1864,7 +1871,7 @@ msgstr "파일 시스템 동기화는 외부 저장소 쓰기 권한을 필요�
 msgid "In order to use the web clipper, you need to do the following:"
 msgstr "웹 수집기를 사용하려면 다음 절차를 따라주세요:"
 
-#: packages/lib/Synchronizer.ts:311
+#: packages/lib/Synchronizer.ts:305
 msgid "In progress"
 msgstr "진행 중"
 
@@ -1884,7 +1891,7 @@ msgstr "들여쓰기 추가"
 msgid "Information"
 msgstr "정보"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:586
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:606
 msgid "Inline Code"
 msgstr "인라인 코드"
 
@@ -1893,7 +1900,7 @@ msgid "Insert"
 msgstr "삽입"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:83
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:602
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:622
 msgid "Insert Date Time"
 msgstr "날짜와 시간 입력"
 
@@ -1921,7 +1928,7 @@ msgstr "설치 중..."
 msgid "Invalid"
 msgstr "유효하지 않음"
 
-#: packages/lib/services/KeymapService.ts:317
+#: packages/lib/services/KeymapService.ts:319
 msgid "Invalid %s: %s."
 msgstr "유효하지 않은 %s: %s."
 
@@ -1933,9 +1940,14 @@ msgstr "잘못된 응답: %s"
 msgid "Invalid command: \"%s\""
 msgstr "올바르지 않은 명령어: \"%s\""
 
-#: packages/lib/models/Setting.ts:1629
+#: packages/lib/models/Setting.ts:1725
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "올바르지 않은 옵션 값: \"%s\". 가능한 값은 다음과 같습니다: %s."
+
+#: packages/app-cli/app/command-e2ee.ts:46
+#, fuzzy
+msgid "Invalid password"
+msgstr "잘못된 응답: %s"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:38
 msgid "Italic"
@@ -1963,11 +1975,11 @@ msgstr ""
 msgid "Joplin Cloud"
 msgstr "Joplin 클라우드"
 
-#: packages/lib/models/Setting.ts:608
+#: packages/lib/models/Setting.ts:636
 msgid "Joplin Cloud email"
 msgstr "Joplin 클라우드 email"
 
-#: packages/lib/models/Setting.ts:619
+#: packages/lib/models/Setting.ts:647
 msgid "Joplin Cloud password"
 msgstr "Joplin 클라우드 암호"
 
@@ -1991,7 +2003,7 @@ msgstr ""
 "상되었기 때문일 것입니다. 이 파일들은 기기에 남지만, Joplin은 더이상 이 항목"
 "들을 복호화 할 수 없습니다."
 
-#: packages/app-desktop/gui/MenuBar.tsx:690
+#: packages/app-desktop/gui/MenuBar.tsx:702
 msgid "Joplin Forum"
 msgstr "Joplin 포럼"
 
@@ -1999,15 +2011,15 @@ msgstr "Joplin 포럼"
 msgid "Joplin Server"
 msgstr "Joplin 서버"
 
-#: packages/lib/models/Setting.ts:569
+#: packages/lib/models/Setting.ts:597
 msgid "Joplin Server email"
 msgstr "Joplin 서버 email"
 
-#: packages/lib/models/Setting.ts:580
+#: packages/lib/models/Setting.ts:608
 msgid "Joplin Server password"
 msgstr "Joplin 서버 암호"
 
-#: packages/lib/models/Setting.ts:551
+#: packages/lib/models/Setting.ts:579
 msgid "Joplin Server URL"
 msgstr "Joplin 서버 URL"
 
@@ -2030,11 +2042,11 @@ msgid ""
 "such as publishing notes or collaborating on notebooks with others."
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1260
+#: packages/lib/models/Setting.ts:1346
 msgid "Keep note history for"
 msgstr "다음과 같이 노트 변경 이력을 유지"
 
-#: packages/lib/models/Setting.ts:1167
+#: packages/lib/models/Setting.ts:1253
 msgid "Keyboard Mode"
 msgstr "키보드 모드"
 
@@ -2042,7 +2054,7 @@ msgstr "키보드 모드"
 msgid "Keyboard Shortcut"
 msgstr "키보드 바로가기"
 
-#: packages/lib/models/Setting.ts:2053
+#: packages/lib/models/Setting.ts:2150
 msgid "Keyboard Shortcuts"
 msgstr "키보드 바로가기"
 
@@ -2050,20 +2062,20 @@ msgstr "키보드 바로가기"
 msgid "Keychain Supported: %s"
 msgstr "키체인 지원: %s"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:69
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:71
 #, fuzzy
 msgid "Keys that need upgrading"
 msgstr "마스터키 업그레이드가 필요합니다"
 
-#: packages/lib/models/Setting.ts:1156
+#: packages/lib/models/Setting.ts:1242
 msgid "Landscape"
 msgstr "가로 방향"
 
-#: packages/lib/models/Setting.ts:677
+#: packages/lib/models/Setting.ts:705
 msgid "Language"
 msgstr "언어"
 
-#: packages/lib/Synchronizer.ts:197
+#: packages/lib/Synchronizer.ts:191
 msgid "Last error: %s"
 msgstr "최근 오류: %s"
 
@@ -2075,24 +2087,24 @@ msgstr "나중에"
 msgid "Layout"
 msgstr "배치"
 
-#: packages/app-desktop/gui/MenuBar.tsx:585
+#: packages/app-desktop/gui/MenuBar.tsx:597
 msgid "Layout button sequence"
 msgstr "레이아웃 버튼 순서"
 
-#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:7
+#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:11
 #, fuzzy
 msgid "Leave notebook..."
 msgstr "노트북 공유..."
 
-#: packages/lib/models/Setting.ts:1150
+#: packages/lib/models/Setting.ts:1236
 msgid "Legal"
 msgstr "Legal"
 
-#: packages/lib/models/Setting.ts:1146
+#: packages/lib/models/Setting.ts:1232
 msgid "Letter"
 msgstr "Letter"
 
-#: packages/lib/models/Setting.ts:337
+#: packages/lib/models/Setting.ts:338
 msgid "Light"
 msgstr "Light"
 
@@ -2105,7 +2117,7 @@ msgid "Link has been copied to clipboard!"
 msgid_plural "Links have been copied to clipboard!"
 msgstr[0] "링크가 클립보드로 복사되었습니다!"
 
-#: packages/app-mobile/components/screens/Note.tsx:195
+#: packages/app-mobile/components/screens/Note.tsx:200
 msgid "Links with protocol \"%s\" are not supported"
 msgstr "링크를 위한 프로토콜 “%s”는 지원하지 않습니다"
 
@@ -2124,7 +2136,7 @@ msgstr "다운로드됨"
 msgid "Location"
 msgstr "위치"
 
-#: packages/app-cli/app/command-sync.js:137
+#: packages/app-cli/app/command-sync.ts:137
 msgid ""
 "Lock file is already being hold. If you know that no synchronisation is "
 "taking place, you may delete the lock file at \"%s\" and resume the "
@@ -2154,12 +2166,12 @@ msgstr "Dropbox로 로그인"
 msgid "Login with OneDrive"
 msgstr "OneDrive 로그인"
 
-#: packages/app-desktop/gui/MenuBar.tsx:693
+#: packages/app-desktop/gui/MenuBar.tsx:705
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:583
 msgid "Make a donation"
 msgstr "기부하기"
 
-#: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:204
+#: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:212
 #, fuzzy
 msgid "Manage master password"
 msgstr "마스터 키를 넣어주세요:"
@@ -2183,11 +2195,11 @@ msgstr ""
 "E2EE(종단간 암호화) 설정을 관리합니다. `enable`, `disable`, `decrypt`, "
 "`status`, `target-status`와 같은 명령들이 있습니다."
 
-#: packages/lib/models/Setting.ts:638
+#: packages/lib/models/Setting.ts:666
 msgid "Manual"
 msgstr "수동"
 
-#: packages/lib/models/Setting.ts:2047
+#: packages/lib/models/Setting.ts:2144
 #: packages/lib/services/interop/InteropService.ts:114
 #: packages/lib/services/interop/InteropService.ts:59
 msgid "Markdown"
@@ -2214,24 +2226,24 @@ msgstr "마크업"
 msgid "Master Key %s"
 msgstr "마스터 키 %s"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:131
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:275
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:133
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:277
 #: packages/app-mobile/components/screens/encryption-config.tsx:102
 #, fuzzy
 msgid "Master password"
 msgstr "마스터 키를 넣어주세요:"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:276
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:278
 #: packages/app-mobile/components/screens/encryption-config.tsx:211
 #, fuzzy
 msgid "Master password:"
 msgstr "마스터 키를 넣어주세요:"
 
-#: packages/lib/models/Setting.ts:661
+#: packages/lib/models/Setting.ts:689
 msgid "Max concurrent connections"
 msgstr "최대 동시 연결수"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:322
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:324
 #, fuzzy
 msgid "Missing keys"
 msgstr "마스터 키를 찾을 수 없음"
@@ -2244,7 +2256,7 @@ msgstr "마스터 키를 찾을 수 없음"
 msgid "Missing required argument: %s"
 msgstr "필요한 인자가 없습니다: %s"
 
-#: packages/app-mobile/components/side-menu-content.js:351
+#: packages/app-mobile/components/side-menu-content.js:354
 msgid "Mobile data - auto-sync disabled"
 msgstr "모바일 데이터 - 자동 동기화 비활성화"
 
@@ -2261,7 +2273,7 @@ msgid "More than one item match \"%s\". Please narrow down your query."
 msgstr ""
 "\"%s\"에 대한 하나 이상의 항목이 일치합니다. 검색 범위를 한번 좁혀보세요."
 
-#: packages/app-mobile/components/screen-header.js:439
+#: packages/app-mobile/components/screen-header.js:441
 msgid "Move %d notes to notebook \"%s\"?"
 msgstr "%d개의 노트를 \"%s\" 노트북으로 옮길까요?"
 
@@ -2273,7 +2285,7 @@ msgstr "노트북으로 옮기기"
 msgid "Move to notebook:"
 msgstr "노트북으로 옮기기:"
 
-#: packages/app-mobile/components/screen-header.js:398
+#: packages/app-mobile/components/screen-header.js:400
 msgid "Move to notebook..."
 msgstr "노트북으로 옮기기..."
 
@@ -2299,7 +2311,7 @@ msgstr "새 노트"
 msgid "New notebook"
 msgstr "새 노트북"
 
-#: packages/app-mobile/components/side-menu-content.js:312
+#: packages/app-mobile/components/side-menu-content.js:315
 msgid "New Notebook"
 msgstr "새 노트북"
 
@@ -2330,25 +2342,25 @@ msgstr "새 버전: %s"
 msgid "Nextcloud"
 msgstr "Nextcloud"
 
-#: packages/lib/models/Setting.ts:451
+#: packages/lib/models/Setting.ts:452
 msgid "Nextcloud password"
 msgstr "Nextcloud 암호"
 
-#: packages/lib/models/Setting.ts:440
+#: packages/lib/models/Setting.ts:441
 msgid "Nextcloud username"
 msgstr "Nextcloud 사용자 이름"
 
-#: packages/lib/models/Setting.ts:428
+#: packages/lib/models/Setting.ts:429
 msgid "Nextcloud WebDAV URL"
 msgstr "Nextcloud WebDAV URL"
 
-#: packages/lib/models/Setting.ts:326
+#: packages/lib/models/Setting.ts:327
 msgid "no"
 msgstr "아니오"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:29
-#: packages/app-mobile/components/screens/Note.tsx:587
-#: packages/lib/shim-init-node.js:166 packages/lib/versionInfo.ts:27
+#: packages/app-mobile/components/screens/Note.tsx:592
+#: packages/lib/shim-init-node.js:171 packages/lib/versionInfo.ts:27
 msgid "No"
 msgstr "아니오"
 
@@ -2356,7 +2368,7 @@ msgstr "아니오"
 msgid "No active notebook."
 msgstr "활성화된 노트북이 없습니다."
 
-#: packages/app-mobile/components/screens/Note.tsx:168
+#: packages/app-mobile/components/screens/Note.tsx:171
 msgid "No item with ID %s"
 msgstr "식별자 %s에 해당하는 항목이 없습니다"
 
@@ -2395,41 +2407,41 @@ msgstr ""
 "텍스트 편집기가 지정되지 않았습니다. `config editor <editor-path>` 명령어로 "
 "지정해주세요"
 
-#: packages/lib/models/Setting.ts:342
+#: packages/lib/models/Setting.ts:343
 msgid "Nord"
 msgstr "Nord"
 
-#: packages/app-cli/app/command-sync.js:106
+#: packages/app-cli/app/command-sync.ts:106
 msgid "Not authentified with %s. Please provide any missing credentials."
 msgstr "%s과 인증되지 않았습니다. 증명서를 제공해주세요."
 
-#: packages/lib/models/Resource.ts:345
+#: packages/lib/models/Resource.ts:341
 msgid "Not downloaded"
 msgstr "다운로드 안됨"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:250
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:252
 msgid "Not generated"
 msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.tsx:110
-#: packages/server/src/models/UserModel.ts:202
-#: packages/server/src/models/UserModel.ts:217
+#: packages/server/src/models/UserModel.ts:214
+#: packages/server/src/models/UserModel.ts:231
 msgid "note"
 msgstr "노트"
 
-#: packages/lib/models/Setting.ts:2046
+#: packages/lib/models/Setting.ts:2142
 msgid "Note"
 msgstr "노트"
 
-#: packages/lib/models/Setting.ts:1320
+#: packages/lib/models/Setting.ts:1406
 msgid "Note area growth factor"
 msgstr "노트 영역 증가 인수"
 
-#: packages/app-desktop/gui/Root.tsx:212
+#: packages/app-desktop/gui/Root.tsx:221
 msgid "Note attachments"
 msgstr "노트 첨부"
 
-#: packages/app-desktop/gui/MenuBar.tsx:385
+#: packages/app-desktop/gui/MenuBar.tsx:397
 msgid "Note attachments..."
 msgstr "첨부파일..."
 
@@ -2446,7 +2458,7 @@ msgid "Note has been saved."
 msgstr "노트가 저장되었습니다."
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:34
-#: packages/lib/models/Setting.ts:2050
+#: packages/lib/models/Setting.ts:2147
 msgid "Note History"
 msgstr "노트 역사"
 
@@ -2458,7 +2470,7 @@ msgstr "노트는 '할 일' 항목이 아닙니다: \"%s\""
 msgid "Note list"
 msgstr "노트 목록"
 
-#: packages/lib/models/Setting.ts:1306
+#: packages/lib/models/Setting.ts:1392
 msgid "Note list growth factor"
 msgstr "노트 목록 증가 인수"
 
@@ -2471,7 +2483,7 @@ msgstr "노트 속성"
 msgid "Note title"
 msgstr "노트 제목"
 
-#: packages/lib/models/Setting.ts:958
+#: packages/lib/models/Setting.ts:1044
 msgid "Note: Does not work in all desktop environments."
 msgstr "참고: 모든 데스크탑 환경에서 작동하는 것은 아닙니다."
 
@@ -2480,11 +2492,16 @@ msgid ""
 "Note: When a note is shared, it will no longer be encrypted on the server."
 msgstr "참고: 공유된 노트는 서버에서 암호화될 수 없습니다."
 
-#: packages/app-desktop/gui/MenuBar.tsx:663
+#: packages/app-desktop/gui/MenuBar.tsx:675
 msgid "Note&book"
 msgstr "노트북(&B)"
 
-#: packages/lib/models/Setting.ts:1292
+#: packages/lib/models/Setting.ts:2143
+#, fuzzy
+msgid "Notebook"
+msgstr "노트북"
+
+#: packages/lib/models/Setting.ts:1378
 msgid "Notebook list growth factor"
 msgstr "노트북 목록 증가 인수"
 
@@ -2496,16 +2513,22 @@ msgstr "노트북 제목:"
 msgid "Notebook: %s"
 msgstr "노트북: %s"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:685
-#: packages/app-mobile/components/side-menu-content.js:372
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:696
+#: packages/app-mobile/components/side-menu-content.js:375
 msgid "Notebooks"
 msgstr "노트북"
 
-#: packages/lib/models/Folder.ts:656
+#: packages/lib/models/Folder.ts:751
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr "노트북 제목을 \"%s\" 으로 정할 수 없습니다. 이미 예약 중입니다."
 
-#: packages/lib/models/Setting.ts:2062
+#: packages/app-desktop/gui/MainScreen/commands/toggleNotesSortOrderField.ts:8
+#: packages/app-desktop/gui/MainScreen/commands/toggleNotesSortOrderReverse.ts:9
+#, fuzzy
+msgid "Notes"
+msgstr "노트"
+
+#: packages/lib/models/Setting.ts:2159
 msgid "Notes and settings are stored in: %s"
 msgstr "노트와 설정값이 다음에 저장되었습니다: %s"
 
@@ -2523,7 +2546,7 @@ msgstr "번호 매기기 목록"
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:28
 #: packages/app-desktop/gui/DialogButtonRow.min.js:30
 #: packages/app-desktop/gui/DialogButtonRow.tsx:75
-#: packages/app-desktop/gui/MenuBar.tsx:410
+#: packages/app-desktop/gui/MenuBar.tsx:422
 #: packages/app-desktop/gui/PromptDialog.min.js:235
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:26
 #: packages/app-mobile/components/CameraView.tsx:190
@@ -2533,7 +2556,7 @@ msgstr "번호 매기기 목록"
 msgid "OK"
 msgstr "확인"
 
-#: packages/lib/models/Setting.ts:344
+#: packages/lib/models/Setting.ts:345
 msgid "OLED Dark"
 msgstr "OLED Dark"
 
@@ -2564,7 +2587,7 @@ msgstr "하나 혹은 그 이상의 마스터 키 비밀번호가 필요합니�
 msgid "OneDrive"
 msgstr "OneDrive"
 
-#: packages/app-desktop/gui/Root.tsx:208
+#: packages/app-desktop/gui/Root.tsx:217
 msgid "OneDrive Login"
 msgstr "OneDrive 로그인"
 
@@ -2576,7 +2599,7 @@ msgstr "한 번에 하나의 노트만 출력할 수 있습니다."
 msgid "Open"
 msgstr "열기"
 
-#: packages/app-desktop/app.ts:174
+#: packages/app-desktop/app.ts:175
 msgid "Open %s"
 msgstr "%s 열기"
 
@@ -2584,7 +2607,7 @@ msgstr "%s 열기"
 msgid "Open profile directory"
 msgstr "프로필 디렉터리 열기"
 
-#: packages/lib/models/Setting.ts:367
+#: packages/lib/models/Setting.ts:368
 msgid "Open Sync Wizard..."
 msgstr ""
 
@@ -2593,14 +2616,14 @@ msgid "Open..."
 msgstr "열기..."
 
 #: packages/app-cli/app/command-e2ee.ts:40
-#: packages/app-cli/app/command-e2ee.ts:79
-#: packages/app-cli/app/command-e2ee.ts:89
+#: packages/app-cli/app/command-e2ee.ts:86
+#: packages/app-cli/app/command-e2ee.ts:96
 msgid "Operation cancelled"
 msgstr "작업이 중지되었습니다"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:26
-#: packages/app-desktop/gui/MenuBar.tsx:371
-#: packages/app-desktop/gui/Root.tsx:211
+#: packages/app-desktop/gui/MenuBar.tsx:383
+#: packages/app-desktop/gui/Root.tsx:220
 msgid "Options"
 msgstr "옵션"
 
@@ -2613,15 +2636,15 @@ msgstr "새 노트를 만듭니다."
 msgid "Output format: %s"
 msgstr "출력 포맷: %s"
 
-#: packages/lib/models/Setting.ts:1153
+#: packages/lib/models/Setting.ts:1239
 msgid "Page orientation for PDF export"
 msgstr "PDF를 내보낼 때의 페이지 방향"
 
-#: packages/lib/models/Setting.ts:1143
+#: packages/lib/models/Setting.ts:1229
 msgid "Page size for PDF export"
 msgstr "PDF로 내보낼때 페이지 크기"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:179
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:181
 msgid "Password"
 msgstr "비밀번호"
 
@@ -2634,7 +2657,7 @@ msgstr "암호가 비어져 있으면 안됩니다"
 msgid "Password:"
 msgstr "암호:"
 
-#: packages/app-cli/app/command-e2ee.ts:93
+#: packages/app-cli/app/command-e2ee.ts:100
 #: packages/app-mobile/components/screens/encryption-config.tsx:138
 msgid "Passwords do not match!"
 msgstr "비밀번호가 맞지 않습니다!"
@@ -2654,7 +2677,7 @@ msgstr "경로:"
 msgid "PDF File"
 msgstr "PDF 파일"
 
-#: packages/app-mobile/components/screens/Note.tsx:403
+#: packages/app-mobile/components/screens/Note.tsx:408
 msgid "Permission needed"
 msgstr "권한 요구"
 
@@ -2662,7 +2685,7 @@ msgstr "권한 요구"
 msgid "Permission to use camera"
 msgstr "카메라 사용 허가"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:269
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:271
 msgid "Please click on \"%s\" to proceed"
 msgstr ""
 
@@ -2671,14 +2694,14 @@ msgid ""
 "Please confirm that you would like to re-encrypt your complete database."
 msgstr "전체 데이터베이스를 다시 암호화 할것입니다."
 
-#: packages/lib/components/EncryptionConfigScreen/utils.ts:204
+#: packages/lib/components/EncryptionConfigScreen/utils.ts:208
 msgid ""
 "Please enter your password in the master key list below before upgrading the "
 "key."
 msgstr ""
 "키를 업그레이드하기 전에 마스터 키 목록에 있는 비밀번호를 입력하십시오."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:294
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:320
 msgid ""
 "Please note that if it is a large notebook, it may take a few minutes for "
 "all the notes to show up on the recipient's device."
@@ -2721,7 +2744,7 @@ msgstr "노트를 가져와서 저장할 노트북을 지정해주세요."
 msgid "Please upgrade Joplin to use this plugin"
 msgstr "이 플러그인을 사용하기 위해서는 Joplin을 업그레이드해야 합니다"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1143
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1163
 msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
 "switch to %s to edit the note."
@@ -2739,11 +2762,11 @@ msgid "Plugin tools"
 msgstr "플러그인 도구"
 
 #: packages/app-desktop/gui/ConfigScreen/Sidebar.tsx:105
-#: packages/lib/models/Setting.ts:2048
+#: packages/lib/models/Setting.ts:2145
 msgid "Plugins"
 msgstr "플러그인"
 
-#: packages/lib/models/Setting.ts:1155
+#: packages/lib/models/Setting.ts:1241
 msgid "Portrait"
 msgstr "세로 방향"
 
@@ -2759,15 +2782,15 @@ msgstr "가능한 값: %s."
 msgid "Preferences"
 msgstr "설정"
 
-#: packages/app-desktop/gui/MenuBar.tsx:436
+#: packages/app-desktop/gui/MenuBar.tsx:448
 msgid "Preferences..."
 msgstr "설정..."
 
-#: packages/lib/models/Setting.ts:769
+#: packages/lib/models/Setting.ts:798
 msgid "Preferred dark theme"
 msgstr "선호하는 어두운 테마"
 
-#: packages/lib/models/Setting.ts:754
+#: packages/lib/models/Setting.ts:783
 msgid "Preferred light theme"
 msgstr "선호하는 밝은 테마"
 
@@ -2787,7 +2810,7 @@ msgstr ""
 "바로가기를 입력한 후 엔터 키를 누르세요. 바로가기를 지우려면 백스페이스 키를 "
 "누릅니다."
 
-#: packages/app-mobile/components/screen-header.js:457
+#: packages/app-mobile/components/screen-header.js:459
 msgid "Press to set the decryption password."
 msgstr "복호화 암호를 설정하려면 누르세요."
 
@@ -2807,11 +2830,11 @@ msgstr "개인 정보 보호 정책"
 msgid "Profile Version: %s"
 msgstr "프로파일 버전: %s"
 
-#: packages/app-mobile/components/screens/Note.tsx:947
+#: packages/app-mobile/components/screens/Note.tsx:952
 msgid "Properties"
 msgstr "속성"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:250
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:252
 msgid "Public-private key pair:"
 msgstr ""
 
@@ -2828,21 +2851,21 @@ msgstr ""
 msgid "Publish notes to the internet"
 msgstr ""
 
-#: packages/app-desktop/app.ts:176
+#: packages/app-desktop/app.ts:177
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:16
-#: packages/app-desktop/gui/MenuBar.tsx:254
+#: packages/app-desktop/gui/MenuBar.tsx:255
 msgid "Quit"
 msgstr "종료"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:89
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:91
 msgid "Re-encrypt data"
 msgstr "데이터를 다시 암호화"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:101
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:103
 msgid "Re-encryption"
 msgstr "다시 암호화"
 
-#: packages/lib/models/Setting.ts:1089
+#: packages/lib/models/Setting.ts:1175
 msgid "Re-upload local data to sync target"
 msgstr "동기화 서버에 로컬 데이터 재 업로드"
 
@@ -2854,19 +2877,19 @@ msgstr "더 자세히 알아보기"
 msgid "Read time: %s min"
 msgstr "읽기 시간: %s 분"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:238
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:264
 msgid "Recipient has accepted the invitation"
 msgstr "공유 수신자가 초대를 승락하였습니다"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:236
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:262
 msgid "Recipient has not yet accepted the invitation"
 msgstr "공유 수신자가 아직 초대를 수락하지 않았습니다"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:237
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:263
 msgid "Recipient has rejected the invitation"
 msgstr "공유 수신자가 초대를 거부했습니다"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:255
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:281
 msgid "Recipients:"
 msgstr "공유 수신자:"
 
@@ -2880,20 +2903,24 @@ msgstr "다시 실행"
 msgid "Refresh"
 msgstr "새로고침"
 
+#: packages/lib/models/Setting.ts:535
+msgid "Region"
+msgstr ""
+
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:615
-#: packages/app-desktop/gui/Root.tsx:166
+#: packages/app-desktop/gui/Root.tsx:173
 msgid "Reject"
 msgstr "거절"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:244
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:247
 msgid "Remove"
 msgstr "삭제"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:251
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:254
 msgid "Remove tag \"%s\" from all notes?"
 msgstr "모든 노트에서 “%s” 태그를 제거할까요?"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:253
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:256
 msgid "Remove this search from the sidebar?"
 msgstr "사이드바에서 이 검색 항목을 제거할까요?"
 
@@ -2920,8 +2947,8 @@ msgstr "해당 <item> (노트 또는 노트북)의 이름을 <name>로 바꿉니
 msgid "Renew token"
 msgstr "인증 토큰 새로 고침"
 
-#: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:204
-#: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:205
+#: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:212
+#: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:213
 #, fuzzy
 msgid "Reset master password"
 msgstr "마스터 키를 넣어주세요:"
@@ -2962,7 +2989,8 @@ msgstr "전부 재시도"
 msgid "Reveal file in folder"
 msgstr "폴더에 있는 파일 표시"
 
-#: packages/lib/models/Setting.ts:827 packages/lib/models/Setting.ts:846
+#: packages/app-desktop/gui/MainScreen/commands/toggleNotesSortOrderReverse.ts:8
+#: packages/lib/models/Setting.ts:856 packages/lib/models/Setting.ts:932
 msgid "Reverse sort order"
 msgstr "정렬 순서 반전"
 
@@ -2981,6 +3009,20 @@ msgid ""
 msgstr ""
 "텍스트 파일에 포함된 명령들을 실행합니다. 한 줄에 하나씩 명령이 실행됩니다."
 
+#: packages/lib/SyncTargetAmazonS3.js:28
+msgid "S3"
+msgstr ""
+
+#: packages/lib/models/Setting.ts:506
+#, fuzzy
+msgid "S3 bucket"
+msgstr "AWS S3 버킷"
+
+#: packages/lib/models/Setting.ts:521
+#, fuzzy
+msgid "S3 URL"
+msgstr "AWS S3 URL"
+
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:579
 msgid ""
 "Safe mode is currently active. Note rendering and all plugins are "
@@ -2989,15 +3031,15 @@ msgstr ""
 "안전 모드가 현재 활성화되어 있습니다. 노트 렌더링과 더불어 모든 플러그인이 일"
 "시적으로 비활성화됩니다."
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:139
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:141
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:75
-#: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:205
+#: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:213
 #: packages/app-mobile/components/screens/encryption-config.tsx:109
 #: packages/app-mobile/components/screens/encryption-config.tsx:221
 msgid "Save"
 msgstr "저장"
 
-#: packages/app-mobile/components/SelectDateTimeDialog.tsx:106
+#: packages/app-mobile/components/SelectDateTimeDialog.tsx:146
 msgid "Save alarm"
 msgstr "알람 저장"
 
@@ -3005,11 +3047,11 @@ msgstr "알람 저장"
 msgid "Save as..."
 msgstr "다른 이름으로 저장..."
 
-#: packages/app-mobile/components/screens/Note.tsx:104
+#: packages/app-mobile/components/screens/Note.tsx:107
 msgid "Save changes"
 msgstr "변경 사항 저장"
 
-#: packages/lib/models/Setting.ts:847
+#: packages/lib/models/Setting.ts:933
 msgid "Save geo-location with notes"
 msgstr "노트에 지리적 위치 정보 포함시키기"
 
@@ -3043,7 +3085,12 @@ msgstr "찾기..."
 msgid "Searches for the given <pattern> in all the notes."
 msgstr "주어진 <pattern>을 모든 노트에서 검색합니다."
 
-#: packages/lib/models/Setting.ts:1108
+#: packages/lib/models/Setting.ts:557
+#, fuzzy
+msgid "Secret Key"
+msgstr "AWS 보안 암호"
+
+#: packages/lib/models/Setting.ts:1194
 msgid "See the pre-release page for more details: %s"
 msgstr "자세한 내용은 사전-출시 페이지를 참조해주세요: %s"
 
@@ -3070,8 +3117,8 @@ msgid "Server is running on port %d"
 msgstr "서버가 %d 포트에서 동작하고 있습니다"
 
 #: packages/app-desktop/gui/MainScreen/commands/editAlarm.ts:10
-#: packages/app-mobile/components/screens/Note.tsx:911
-#: packages/app-mobile/components/SelectDateTimeDialog.tsx:114
+#: packages/app-mobile/components/screens/Note.tsx:916
+#: packages/app-mobile/components/SelectDateTimeDialog.tsx:141
 msgid "Set alarm"
 msgstr "알람 설정"
 
@@ -3079,7 +3126,7 @@ msgstr "알람 설정"
 msgid "Set alarm:"
 msgstr "알람 설정:"
 
-#: packages/lib/models/Setting.ts:1039
+#: packages/lib/models/Setting.ts:1125
 msgid ""
 "Set it to 0 to make it take the complete available space. Recommended width "
 "is 600."
@@ -3101,13 +3148,13 @@ msgstr ""
 "\n"
 "%s"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:222
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:248
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.ts:20
-#: packages/app-mobile/components/screens/Note.tsx:919
+#: packages/app-mobile/components/screens/Note.tsx:924
 msgid "Share"
 msgstr "공유"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:312
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:338
 msgid "Share Notebook"
 msgstr "노트북 공유"
 
@@ -3115,7 +3162,7 @@ msgstr "노트북 공유"
 msgid "Share notebook..."
 msgstr "노트북 공유..."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:278
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:304
 msgid "Sharing notebook..."
 msgstr "노트북을 공유하는 중..."
 
@@ -3131,20 +3178,25 @@ msgstr "고급 옵션"
 msgid "Show all"
 msgstr "모두 표시"
 
-#: packages/lib/models/Setting.ts:798
+#: packages/lib/models/Setting.ts:827
 msgid "Show completed to-dos"
 msgstr "완료된 '할 일'을 표시"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:170
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:172
 #, fuzzy
 msgid "Show disabled keys"
 msgstr "고급 옵션"
 
-#: packages/lib/models/Setting.ts:781
+#: packages/lib/models/Setting.ts:810
 msgid "Show note counts"
 msgstr "노트 수 보이기"
 
-#: packages/lib/models/Setting.ts:956
+#: packages/lib/models/Setting.ts:866
+#, fuzzy
+msgid "Show sort order buttons"
+msgstr "노트 수 보이기"
+
+#: packages/lib/models/Setting.ts:1042
 msgid "Show tray icon"
 msgstr "트레이 아이콘 표시"
 
@@ -3160,7 +3212,7 @@ msgstr "크기"
 msgid "Skip this version"
 msgstr "이 버전 넘기기"
 
-#: packages/app-cli/app/command-e2ee.ts:58
+#: packages/app-cli/app/command-e2ee.ts:65
 msgid "Skipped items: %d (use --retry-failed-items to retry decrypting them)"
 msgstr "건너뛴 항목: %d (복호화를 다시 시도하려면 --retry-failed-items를 사용)"
 
@@ -3169,11 +3221,11 @@ msgstr "건너뛴 항목: %d (복호화를 다시 시도하려면 --retry-failed
 msgid "Skipped: %d."
 msgstr "넘겨짐: %d."
 
-#: packages/lib/models/Setting.ts:341
+#: packages/lib/models/Setting.ts:342
 msgid "Solarised Dark"
 msgstr "Solarized Dark"
 
-#: packages/lib/models/Setting.ts:340
+#: packages/lib/models/Setting.ts:341
 msgid "Solarised Light"
 msgstr "Solarized Light"
 
@@ -3185,16 +3237,16 @@ msgstr "일부 항목들은 암호화할 수 없습니다."
 msgid "Some items cannot be synchronised."
 msgstr "일부 항목들은 동기화할 수 없습니다."
 
-#: packages/app-mobile/components/screen-header.js:458
+#: packages/app-mobile/components/screen-header.js:460
 msgid "Some items cannot be synchronised. Press for more info."
 msgstr "일부 항목들을 동기화할 수 없습니다. 자세한 정보를 보려면 누르세요."
 
-#: packages/lib/models/Setting.ts:834
+#: packages/lib/models/Setting.ts:920
 msgid "Sort notebooks by"
 msgstr "노트북을 다음 기준으로 정렬"
 
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:172
-#: packages/lib/models/Setting.ts:806
+#: packages/lib/models/Setting.ts:835
 msgid "Sort notes by"
 msgstr "노트를 다음 기준으로 정렬"
 
@@ -3211,12 +3263,12 @@ msgstr ""
 msgid "Source format: %s"
 msgstr "원본 포맷: %s"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:149
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:151
 #, fuzzy
 msgid "Source: "
 msgstr "원본"
 
-#: packages/lib/models/Setting.ts:1240
+#: packages/lib/models/Setting.ts:1326
 msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
@@ -3229,12 +3281,12 @@ msgstr ""
 msgid "Spell checker"
 msgstr "맞춤법 검사기"
 
-#: packages/lib/models/Setting.ts:790 packages/lib/models/Setting.ts:792
-#: packages/lib/models/Setting.ts:793
+#: packages/lib/models/Setting.ts:819 packages/lib/models/Setting.ts:821
+#: packages/lib/models/Setting.ts:822
 msgid "Split View"
 msgstr "화면 나누기"
 
-#: packages/lib/models/Setting.ts:963
+#: packages/lib/models/Setting.ts:1049
 msgid "Start application minimised in the tray icon"
 msgstr "Joplin을 최소화된 상태로 트레이 아이콘에서 시작"
 
@@ -3246,7 +3298,7 @@ msgstr ""
 "API 서버를 시작, 중지 혹은 확인할수 있습니다. 실행할 포트를 지정하실려면, "
 "api.port 변수 설정을 변경해주세요. 명령어는 (%s) 입니다."
 
-#: packages/app-cli/app/command-e2ee.ts:49
+#: packages/app-cli/app/command-e2ee.ts:56
 msgid ""
 "Starting decryption... Please wait as it may take several minutes depending "
 "on how much there is to decrypt."
@@ -3254,7 +3306,7 @@ msgstr ""
 "복호화를 시작합니다... 복호화 양에 따라서 몇 분 정도 걸릴수 있으니 잠시 기다"
 "러주세요."
 
-#: packages/app-cli/app/command-sync.js:213
+#: packages/app-cli/app/command-sync.ts:213
 msgid "Starting synchronisation..."
 msgstr "동기화를 시작합니다..."
 
@@ -3290,13 +3342,13 @@ msgstr "상태: %d 포트 열림"
 msgid "Step 1: Enable the clipper service"
 msgstr "1단계: 웹 수집기 서비스 활성화"
 
-#: packages/app-cli/app/command-sync.js:92
+#: packages/app-cli/app/command-sync.ts:92
 #: packages/app-desktop/gui/DropboxLoginScreen.tsx:44
 #: packages/app-mobile/components/screens/dropbox-login.js:59
 msgid "Step 1: Open this URL in your browser to authorise the application:"
 msgstr "1단계: 브라우저에서 이 URL에 접근하여 애플리케이션을 허가합니다:"
 
-#: packages/app-cli/app/command-sync.js:94
+#: packages/app-cli/app/command-sync.ts:94
 #: packages/app-desktop/gui/DropboxLoginScreen.tsx:48
 #: packages/app-mobile/components/screens/dropbox-login.js:65
 msgid "Step 2: Enter the code provided by Dropbox:"
@@ -3375,7 +3427,7 @@ msgstr "동기화 상태"
 msgid "Sync status (synced items / total items)"
 msgstr "동기화 상태 (동기화 완료 항목 / 전체 항목)"
 
-#: packages/app-cli/app/command-sync.js:248
+#: packages/app-cli/app/command-sync.ts:251
 msgid "Sync target must be upgraded! Run `%s` to proceed."
 msgstr "동기화 대상의 업그레이드가 필요합니다! 처리를 위해 `%s` 누르세요."
 
@@ -3383,7 +3435,7 @@ msgstr "동기화 대상의 업그레이드가 필요합니다! 처리를 위해
 msgid "Sync Target Upgrade"
 msgstr "동기화 대상 업그레이드"
 
-#: packages/app-cli/app/command-sync.js:34
+#: packages/app-cli/app/command-sync.ts:34
 msgid "Sync to provided target (defaults to sync.target config value)"
 msgstr "지정된 대상으로 동기화 합니다 (기본값은 sync.target config value)"
 
@@ -3396,42 +3448,42 @@ msgstr "동기화 버전: %s"
 msgid "Sync your notes"
 msgstr "노트를 다음 기준으로 정렬"
 
-#: packages/lib/models/Setting.ts:2044
+#: packages/lib/models/Setting.ts:2140
 msgid "Synchronisation"
 msgstr "동기화"
 
-#: packages/lib/models/Setting.ts:1116
+#: packages/lib/models/Setting.ts:1202
 msgid "Synchronisation interval"
 msgstr "동기화 간격"
 
-#: packages/app-cli/app/command-sync.js:132
+#: packages/app-cli/app/command-sync.ts:132
 msgid "Synchronisation is already in progress."
 msgstr "이미 동기화가 진행중입니다."
 
-#: packages/app-desktop/gui/MenuBar.tsx:345
-#: packages/app-desktop/gui/Root.tsx:213
+#: packages/app-desktop/gui/MenuBar.tsx:357
+#: packages/app-desktop/gui/Root.tsx:222
 msgid "Synchronisation Status"
 msgstr "동기화 상태"
 
-#: packages/lib/models/Setting.ts:378
+#: packages/lib/models/Setting.ts:379
 msgid "Synchronisation target"
 msgstr "동기화 대상"
 
-#: packages/app-cli/app/command-sync.js:180
+#: packages/app-cli/app/command-sync.ts:180
 msgid "Synchronisation target: %s (%s)"
 msgstr "동기화 대상: %s (%s)"
 
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:642
-#: packages/app-mobile/components/side-menu-content.js:338
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:653
+#: packages/app-mobile/components/side-menu-content.js:341
 #: packages/lib/commands/synchronize.ts:8
 msgid "Synchronise"
 msgstr "동기화"
 
-#: packages/lib/models/Setting.ts:1135
+#: packages/lib/models/Setting.ts:1221
 msgid "Synchronise only over WiFi connection"
 msgstr "WiFi 상에서만 동기화"
 
-#: packages/app-cli/app/command-sync.js:29
+#: packages/app-cli/app/command-sync.ts:29
 msgid "Synchronises with remote storage."
 msgstr "원격 저장소와 동기화 합니다."
 
@@ -3439,11 +3491,11 @@ msgstr "원격 저장소와 동기화 합니다."
 msgid "Synchronising..."
 msgstr "동기화 중..."
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:277
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:303
 msgid "Synchronizing..."
 msgstr "동기화 중..."
 
-#: packages/lib/models/Setting.ts:1149
+#: packages/lib/models/Setting.ts:1235
 msgid "Tabloid"
 msgstr "Tabloid"
 
@@ -3453,18 +3505,18 @@ msgid "Tagged: %d."
 msgstr "태그됨: %d."
 
 #: packages/app-desktop/gui/MainScreen/commands/setTags.ts:7
-#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:709
-#: packages/app-mobile/components/screens/Note.tsx:926
+#: packages/app-desktop/gui/Sidebar/Sidebar.tsx:720
+#: packages/app-mobile/components/screens/Note.tsx:931
 #: packages/app-mobile/components/screens/tags.js:101
-#: packages/app-mobile/components/side-menu-content.js:314
+#: packages/app-mobile/components/side-menu-content.js:317
 msgid "Tags"
 msgstr "태그"
 
-#: packages/app-mobile/components/screens/Note.tsx:898
+#: packages/app-mobile/components/screens/Note.tsx:903
 msgid "Take photo"
 msgstr "사진 찍기"
 
-#: packages/lib/models/Setting.ts:1142
+#: packages/lib/models/Setting.ts:1228
 msgid "Text editor command"
 msgstr "텍스트 편집기 명령어"
 
@@ -3512,7 +3564,7 @@ msgstr ""
 "기본 관리자 암호가 변경되지 않았으며, 이는 보안상 안전하지 않습니다! [지금 바"
 "꾸기](%s)"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:91
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:93
 msgid ""
 "The default encryption method has been changed to a more secure one and it "
 "is recommended that you apply it to your data."
@@ -3524,7 +3576,7 @@ msgid ""
 "data."
 msgstr "기본 암호 방법이 변경되었습니다. 데이터를 다시 암호화해야 합니다."
 
-#: packages/lib/models/Setting.ts:1142
+#: packages/lib/models/Setting.ts:1228
 msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
@@ -3532,8 +3584,8 @@ msgstr ""
 "노트를 여는데 사용할 텍스트 편집기 명령어(인자를 포함할 수 있습니다)를 지정합"
 "니다. 주어진 명령어가 없을 시 기본 편집기를 자동으로 찾을 것입니다."
 
-#: packages/lib/models/Setting.ts:1294 packages/lib/models/Setting.ts:1308
-#: packages/lib/models/Setting.ts:1322
+#: packages/lib/models/Setting.ts:1380 packages/lib/models/Setting.ts:1394
+#: packages/lib/models/Setting.ts:1408
 msgid ""
 "The factor property sets how the item will grow or shrink to fit the "
 "available space in its container with respect to the other items. Thus an "
@@ -3549,7 +3601,7 @@ msgstr ""
 msgid "The following attachments are being watched for changes:"
 msgstr "다음 첨부 파일들이 변경되었는지 감시하고 있습니다:"
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:70
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:72
 #, fuzzy
 msgid ""
 "The following keys use an out-dated encryption algorithm and it is "
@@ -3560,7 +3612,7 @@ msgstr ""
 "를 권장합니다. 업그레이드된 마스터 키는 기존 데이터의 암호화 및 복호화에 그대"
 "로 사용될 수 있습니다."
 
-#: packages/app-mobile/components/screens/Note.tsx:191
+#: packages/app-mobile/components/screens/Note.tsx:196
 msgid "The Joplin mobile app does not currently support this type of link: %s"
 msgstr "Joplin 모바일 앱에서는 현재 해당 형식의 링크를 지원하지 않습니다: %s"
 
@@ -3570,7 +3622,7 @@ msgid ""
 "security and performance."
 msgstr ""
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:323
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:325
 #, fuzzy
 msgid ""
 "The keys with these IDs are used to encrypt some of your items, however the "
@@ -3581,7 +3633,7 @@ msgstr ""
 "리케이션이 해당 키에 접근할 수 없습니다. 이는 추후에 동기화를 통해 다운로드"
 "될 가능성이 있습니다."
 
-#: packages/lib/components/EncryptionConfigScreen/utils.ts:212
+#: packages/lib/components/EncryptionConfigScreen/utils.ts:217
 msgid "The master key has been upgraded successfully!"
 msgstr "마스터 키가 성공적으로 업그레이드되었습니다!"
 
@@ -3612,7 +3664,7 @@ msgstr "노트를 가져왔습니다: %s"
 msgid "The possible commands are:"
 msgstr "가능한 명령어는 다음과 같습니다:"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:201
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:227
 msgid ""
 "The recipient could not be removed from the list. Please try again.\n"
 "\n"
@@ -3629,7 +3681,7 @@ msgstr ""
 "완료되기 위해서 몇 분 정도 걸릴 수 있으며, 앱을 다시 시작해야 합니다. 계속하"
 "려면 링크를 눌러주세요."
 
-#: packages/app-mobile/components/screen-header.js:459
+#: packages/app-mobile/components/screen-header.js:461
 #, fuzzy
 msgid "The sync target needs to be upgraded. Press this banner to proceed."
 msgstr "동기화 대상의 업그레이드가 필요합니다! 처리를 위해 `%s` 누르세요."
@@ -3638,7 +3690,7 @@ msgstr "동기화 대상의 업그레이드가 필요합니다! 처리를 위해
 msgid "The tag \"%s\" already exists. Please choose a different name."
 msgstr "태그 \"%s\"(이)가 이미 존재합니다. 다른 이름을 선택해 주세요."
 
-#: packages/lib/models/Setting.ts:380
+#: packages/lib/models/Setting.ts:381
 msgid ""
 "The target to synchronise to. Each sync target may have additional "
 "parameters which are named as `sync.NUM.NAME` (all documented below)."
@@ -3646,7 +3698,7 @@ msgstr ""
 "동기화를 할 대상을 선택합니다. 각각의 동기화 대상은 `sync.NUM.NAME` 형식으로 "
 "된 추가적인 매개 변수를 포함할 수 있습니다. (아래에 문서화되어 있습니다)."
 
-#: packages/app-desktop/gui/Root.tsx:164
+#: packages/app-desktop/gui/Root.tsx:171
 msgid "The Web Clipper needs your authorisation to access your data."
 msgstr ""
 
@@ -3660,7 +3712,7 @@ msgstr "웹 수집기 서비스가 활성화되었고 자동으로 시작하도�
 msgid "The web clipper service is not enabled."
 msgstr "웹 수집기 서비스가 비활성화 되었습니다."
 
-#: packages/lib/models/Setting.ts:729
+#: packages/lib/models/Setting.ts:758
 msgid "Theme"
 msgstr "테마"
 
@@ -3677,7 +3729,7 @@ msgstr "노트북이 없습니다. \"새 노트북\"을 선택해서 노트북�
 msgid "There is no data to export."
 msgstr "내보낼 데이터가 없습니다."
 
-#: packages/lib/models/Resource.ts:416
+#: packages/lib/models/Resource.ts:412
 msgid ""
 "There was a [conflict](%s) on the attachment below.\n"
 "\n"
@@ -3709,7 +3761,7 @@ msgstr ""
 "런 항목을 찾길 원하신다면 제목 또는 ID로 검색하세요. (상단 괄호 안에 표시되"
 "어 있습니다)"
 
-#: packages/lib/models/Setting.ts:2061
+#: packages/lib/models/Setting.ts:2158
 msgid ""
 "These plugins enhance the Markdown renderer with additional features. Please "
 "note that, while these features might be useful, they are not standard "
@@ -3731,7 +3783,7 @@ msgstr ""
 msgid "This attachment is not downloaded or not decrypted yet"
 msgstr "이 첨부 파일은 아직 다운로드 또는 복호화되지 않았습니다"
 
-#: packages/app-mobile/components/screens/Note.tsx:187
+#: packages/app-mobile/components/screens/Note.tsx:190
 msgid "This attachment is not downloaded or not decrypted yet."
 msgstr "이 첨부는 아직 다운로드 또는 복호화되지 않았습니다."
 
@@ -3756,7 +3808,7 @@ msgstr ""
 msgid "This note does not have geolocation information."
 msgstr "이 노트는 위치 정보를 포함하고 있지 않습니다."
 
-#: packages/app-mobile/components/screens/Note.tsx:104
+#: packages/app-mobile/components/screens/Note.tsx:107
 msgid "This note has been modified:"
 msgstr "노트가 변경되었습니다:"
 
@@ -3790,7 +3842,7 @@ msgstr ""
 "이 서비스는 브라우저 확장 기능이 Joplin과 연결하도록 해줍니다. 서비스를 활성"
 "화시 방화벽에서 Joplin에게 특정 포트 접근을 허가할 것인지 물어볼 수 있습니다."
 
-#: packages/lib/models/Setting.ts:958
+#: packages/lib/models/Setting.ts:1044
 msgid ""
 "This will allow Joplin to run in the background. It is recommended to enable "
 "this setting so that your notes are constantly being synchronised, thus "
@@ -3804,7 +3856,7 @@ msgid "This will open a new screen. Save your current changes?"
 msgstr ""
 "새로운 화면으로 전환됩니다. 현재 화면의 변경 사항들을 저장하시겠습니까?"
 
-#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:13
+#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:17
 #, fuzzy
 msgid ""
 "This will remove the notebook from your collection and you will no longer "
@@ -3813,19 +3865,20 @@ msgstr ""
 "현재 노트북을 공유하지 많으시겠습니까? 공유자는 더 이상 해당 노트북에 접근이 "
 "불가능합니다."
 
-#: packages/lib/models/Setting.ts:709
+#: packages/lib/models/Setting.ts:738
 msgid "Time format"
 msgstr "시간 형식"
 
-#: packages/lib/models/Folder.ts:38 packages/lib/models/Note.ts:36
+#: packages/lib/models/Folder.ts:39 packages/lib/models/Note.ts:36
 msgid "title"
 msgstr "제목"
 
+#: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:72
 #: packages/app-desktop/gui/ResourceScreen.tsx:92
 msgid "Title"
 msgstr "제목"
 
-#: packages/app-cli/app/command-sync.js:91
+#: packages/app-cli/app/command-sync.ts:91
 #: packages/app-desktop/gui/DropboxLoginScreen.tsx:43
 #: packages/app-mobile/components/screens/dropbox-login.js:58
 msgid ""
@@ -3891,7 +3944,7 @@ msgstr "할 일"
 msgid "Toggle comment"
 msgstr "주석 전환"
 
-#: packages/app-desktop/gui/MenuBar.tsx:705
+#: packages/app-desktop/gui/MenuBar.tsx:717
 msgid "Toggle development tools"
 msgstr "개발자 도구 띄우기"
 
@@ -3911,6 +3964,11 @@ msgstr "외부 편집 전환"
 msgid "Toggle note list"
 msgstr "노트 목록 전환"
 
+#: packages/app-desktop/gui/MainScreen/commands/togglePerFolderSortOrder.ts:7
+#, fuzzy
+msgid "Toggle own sort order"
+msgstr "안전 모드 전환"
+
 #: packages/app-desktop/commands/toggleSafeMode.ts:8
 msgid "Toggle safe mode"
 msgstr "안전 모드 전환"
@@ -3918,6 +3976,11 @@ msgstr "안전 모드 전환"
 #: packages/app-desktop/gui/MainScreen/commands/toggleSideBar.ts:9
 msgid "Toggle sidebar"
 msgstr "사이드바 표시 전환"
+
+#: packages/app-desktop/gui/MainScreen/commands/toggleNotesSortOrderField.ts:7
+#, fuzzy
+msgid "Toggle sort order field"
+msgstr "안전 모드 전환"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:40
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:41
@@ -3966,7 +4029,7 @@ msgstr "새 태그를 입력하거나 목록에서 선택하세요"
 msgid "Type: %s."
 msgstr "형태: %s."
 
-#: packages/lib/models/Setting.ts:797
+#: packages/lib/models/Setting.ts:826
 msgid "Uncompleted to-dos on top"
 msgstr "완료되지 않은 '할 일'을 맨 위에"
 
@@ -3974,11 +4037,11 @@ msgstr "완료되지 않은 '할 일'을 맨 위에"
 msgid "Undo"
 msgstr "실행 취소"
 
-#: packages/lib/BaseApplication.ts:262
+#: packages/lib/BaseApplication.ts:276
 msgid "Unknown flag: %s"
 msgstr "알 수 없는 플래그: %s"
 
-#: packages/lib/Synchronizer.ts:1093
+#: packages/lib/Synchronizer.ts:1087
 msgid ""
 "Unknown item type downloaded - please upgrade Joplin to the latest version"
 msgstr ""
@@ -3994,7 +4057,7 @@ msgstr "공유하지 않기"
 msgid "Unshare"
 msgstr "공유하지 않기"
 
-#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:301
+#: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:327
 msgid ""
 "Unshare this notebook? The recipients will no longer have access to its "
 "content."
@@ -4002,11 +4065,11 @@ msgstr ""
 "현재 노트북을 공유하지 많으시겠습니까? 공유자는 더 이상 해당 노트북에 접근이 "
 "불가능합니다."
 
-#: packages/app-mobile/components/screens/Note.tsx:680
+#: packages/app-mobile/components/screens/Note.tsx:685
 msgid "Unsupported image type: %s"
 msgstr "지원하지 않는 이미지 형식: %s"
 
-#: packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.ts:75
+#: packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.ts:76
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:142
 msgid "Unsupported link or message: %s"
 msgstr "지원하지 않는 링크 또는 메시지: %s"
@@ -4027,19 +4090,19 @@ msgstr "업데이트"
 msgid "Updated"
 msgstr "갱신됨"
 
-#: packages/lib/models/Folder.ts:39 packages/lib/models/Note.ts:37
+#: packages/lib/models/Folder.ts:40 packages/lib/models/Note.ts:37
 msgid "updated date"
 msgstr "수정 날짜"
 
-#: packages/lib/Synchronizer.ts:189
+#: packages/lib/Synchronizer.ts:183
 msgid "Updated local items: %d."
 msgstr "로컬 항목 업데이트됨: %d."
 
-#: packages/lib/Synchronizer.ts:191
+#: packages/lib/Synchronizer.ts:185
 msgid "Updated remote items: %d."
 msgstr "원격 항목 업데이트됨: %d."
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:150
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:152
 #, fuzzy
 msgid "Updated: "
 msgstr "업데이트됨: %s"
@@ -4049,7 +4112,7 @@ msgstr "업데이트됨: %s"
 msgid "Updated: %d."
 msgstr "갱신됨: %d."
 
-#: packages/app-mobile/components/screens/Note.tsx:836
+#: packages/app-mobile/components/screens/Note.tsx:841
 msgid "Updated: %s"
 msgstr "업데이트됨: %s"
 
@@ -4057,11 +4120,11 @@ msgstr "업데이트됨: %s"
 msgid "Updating..."
 msgstr "업데이트 중..."
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:75
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:77
 msgid "Upgrade"
 msgstr "업그레이드"
 
-#: packages/app-cli/app/command-sync.js:35
+#: packages/app-cli/app/command-sync.ts:35
 msgid "Upgrade the sync target to the latest version."
 msgstr "동기화 대상을 최신 버전으로 업그레이드합니다."
 
@@ -4107,7 +4170,7 @@ msgstr ""
 "검색에 오류가 있는 경우, 이를 이용하여 검색 색인을 다시 만들 수 있습니다. 이"
 "는 노트의 수에 따라 시간이 오래 걸릴수 있습니다."
 
-#: packages/lib/models/Setting.ts:1024
+#: packages/lib/models/Setting.ts:1110
 msgid ""
 "Used for most text in the markdown editor. If not found, a generic "
 "proportional (variable width) font is used."
@@ -4115,7 +4178,7 @@ msgstr ""
 "마크다운 편집기에서 대부분의 텍스트에 사용할 글꼴입니다. 찾지 못한 경우 일반"
 "적으로 균형잡힌 (가변폭) 글꼴이 사용됩니다."
 
-#: packages/lib/models/Setting.ts:1035
+#: packages/lib/models/Setting.ts:1121
 msgid ""
 "Used where a fixed width font is needed to lay out text legibly (e.g. "
 "tables, checkboxes, code). If not found, a generic monospace (fixed width) "
@@ -4124,7 +4187,7 @@ msgstr ""
 "텍스트를 읽기 쉽게 폭이 변경될 글꼴을 선택합니다 (표, 체크박스, 코드 등). 글"
 "꼴을 찾지 못할 경우, 기본 모노스페이스 (폭이 변경된) 글꼴이 사용됩니다."
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:180
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:182
 #, fuzzy
 msgid "Valid"
 msgstr "유효하지 않음"
@@ -4133,7 +4196,7 @@ msgstr "유효하지 않음"
 msgid "View"
 msgstr "보기"
 
-#: packages/app-mobile/components/screens/Note.tsx:840
+#: packages/app-mobile/components/screens/Note.tsx:845
 msgid "View on map"
 msgstr "지도에 표시"
 
@@ -4144,12 +4207,12 @@ msgid "View them now"
 msgstr "지금 나타내기"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:139
-#: packages/lib/models/Setting.ts:790 packages/lib/models/Setting.ts:791
-#: packages/lib/models/Setting.ts:793
+#: packages/lib/models/Setting.ts:819 packages/lib/models/Setting.ts:820
+#: packages/lib/models/Setting.ts:822
 msgid "Viewer"
 msgstr "뷰어"
 
-#: packages/lib/models/Setting.ts:1172
+#: packages/lib/models/Setting.ts:1258
 msgid "Vim"
 msgstr "Vim"
 
@@ -4161,7 +4224,7 @@ msgstr "경고"
 msgid "Warning: not all resources shown for performance reasons (limit: %s)."
 msgstr "경고: 성능상의 문제로 모든 리소스를 표시하지 않습니다 (제한: %s)."
 
-#: packages/lib/models/Setting.ts:2052
+#: packages/lib/models/Setting.ts:2149
 msgid "Web Clipper"
 msgstr "웹 수집기"
 
@@ -4169,20 +4232,20 @@ msgstr "웹 수집기"
 msgid "WebDAV"
 msgstr "WebDAV"
 
-#: packages/lib/models/Setting.ts:486
+#: packages/lib/models/Setting.ts:487
 msgid "WebDAV password"
 msgstr "WebDAV 암호"
 
-#: packages/lib/models/Setting.ts:463
+#: packages/lib/models/Setting.ts:464
 msgid "WebDAV URL"
 msgstr "WebDAV URL"
 
-#: packages/lib/models/Setting.ts:475
+#: packages/lib/models/Setting.ts:476
 msgid "WebDAV username"
 msgstr "WebDAV 사용자 이름"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:20
-#: packages/app-desktop/gui/MenuBar.tsx:686
+#: packages/app-desktop/gui/MenuBar.tsx:698
 msgid "Website and documentation"
 msgstr "웹사이트 및 참고 문서"
 
@@ -4203,11 +4266,11 @@ msgstr ""
 "예를 들어 새 노트북을 만들려면 `mb`를, 새 노트를 만들려면 `mn`을 입력해보세"
 "요."
 
-#: packages/lib/models/Setting.ts:887
+#: packages/lib/models/Setting.ts:973
 msgid "When creating a new note:"
 msgstr "새 노트를 만들 때:"
 
-#: packages/lib/models/Setting.ts:871
+#: packages/lib/models/Setting.ts:957
 msgid "When creating a new to-do:"
 msgstr "새로운 '할 일'을 만들 때:"
 
@@ -4223,18 +4286,18 @@ msgstr "예"
 msgid "Y"
 msgstr "예"
 
-#: packages/lib/models/Setting.ts:325
+#: packages/lib/models/Setting.ts:326
 msgid "yes"
 msgstr "예"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:28
-#: packages/app-mobile/components/screens/Note.tsx:586
-#: packages/lib/shim-init-node.js:166 packages/lib/versionInfo.ts:27
+#: packages/app-mobile/components/screens/Note.tsx:591
+#: packages/lib/shim-init-node.js:171 packages/lib/versionInfo.ts:27
 msgid "Yes"
 msgstr "예"
 
-#: packages/app-mobile/components/screens/Note.tsx:585
-#: packages/lib/shim-init-node.js:165
+#: packages/app-mobile/components/screens/Note.tsx:590
+#: packages/lib/shim-init-node.js:170
 msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "
 "resize it down to %d pixels before attaching it?"
@@ -4254,7 +4317,7 @@ msgstr "설치된 플러그인이 없습니다."
 msgid "You may also type `status` for more information."
 msgstr "자세한 내용을 확인하기 위해 status를 입력할 수도 있습니다."
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:91
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:93
 msgid ""
 "You may use the tool below to re-encrypt your data, for example if you know "
 "that some of your notes are encrypted with an obsolete encryption method."
@@ -4270,8 +4333,14 @@ msgstr "선택한 항목: "
 msgid "Your data is going to be re-encrypted and synced again."
 msgstr "데이터가 재 암호화 되고, 다시 동기화 될 것입니다."
 
-#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:269
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:271
 msgid "Your master password is needed to decrypt some of your data."
+msgstr ""
+
+#: packages/app-cli/app/command-sync.ts:242
+msgid ""
+"Your password is needed to decrypt some of your data. Type `:e2ee decrypt` "
+"to set it."
 msgstr ""
 
 #: packages/app-mobile/components/CameraView.tsx:189
@@ -4282,14 +4351,20 @@ msgstr "카메라 사용 허가가 필요합니다."
 msgid "Your version: %s"
 msgstr "현재 버전: %s"
 
-#: packages/app-desktop/gui/MenuBar.tsx:630
-#: packages/app-desktop/gui/MenuBar.tsx:636
+#: packages/app-desktop/gui/MenuBar.tsx:642
+#: packages/app-desktop/gui/MenuBar.tsx:648
 msgid "Zoom In"
 msgstr "확대"
 
-#: packages/app-desktop/gui/MenuBar.tsx:643
+#: packages/app-desktop/gui/MenuBar.tsx:655
 msgid "Zoom Out"
 msgstr "축소"
+
+#~ msgid "AWS key"
+#~ msgstr "AWS 키"
+
+#~ msgid "AWS S3"
+#~ msgstr "AWS S3"
 
 #~ msgid "Master keys that need upgrading"
 #~ msgstr "마스터키 업그레이드가 필요합니다"
@@ -4435,9 +4510,6 @@ msgstr "축소"
 
 #~ msgid "Name"
 #~ msgstr "Name"
-
-#~ msgid "Icon"
-#~ msgstr "Icon"
 
 #~ msgid "Notebook properties"
 #~ msgstr "노트북 속성"
