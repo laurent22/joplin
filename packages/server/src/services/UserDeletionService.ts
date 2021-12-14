@@ -6,7 +6,7 @@ import { UserDeletion, UserFlagType, Uuid } from './database/types';
 
 const logger = Logger.create('UserDeletionService');
 
-export interface DeleteUserDataOptions {
+export interface DeletionJobOptions {
 	sleepBetweenOperations?: number;
 }
 
@@ -14,12 +14,7 @@ export default class UserDeletionService extends BaseService {
 
 	protected name_: string = 'UserDeletionService';
 
-	private async deleteUserData(userId: Uuid, options: DeleteUserDataOptions = null) {
-		options = {
-			sleepBetweenOperations: 5000,
-			...options,
-		};
-
+	private async deleteUserData(userId: Uuid, options: DeletionJobOptions) {
 		// While the "UserDeletionInProgress" flag is on, the account is
 		// disabled so that no new items or other changes can happen.
 		await this.models.userFlag().add(userId, UserFlagType.UserDeletionInProgress);
@@ -61,7 +56,7 @@ export default class UserDeletionService extends BaseService {
 		}
 	}
 
-	private async deleteUserAccount(userId: Uuid, _options: DeleteUserDataOptions = null) {
+	private async deleteUserAccount(userId: Uuid, _options: DeletionJobOptions = null) {
 		logger.info(`Deleting user account: ${userId}`);
 
 		await this.models.userFlag().add(userId, UserFlagType.UserDeletionInProgress);
@@ -72,7 +67,12 @@ export default class UserDeletionService extends BaseService {
 		await this.models.userFlag().deleteByUserId(userId);
 	}
 
-	public async processDeletionJob(deletion: UserDeletion) {
+	public async processDeletionJob(deletion: UserDeletion, options: DeletionJobOptions = null) {
+		options = {
+			sleepBetweenOperations: 5000,
+			...options,
+		};
+
 		logger.info('Starting user deletion: ', deletion);
 
 		let error: any = null;
@@ -80,8 +80,8 @@ export default class UserDeletionService extends BaseService {
 
 		try {
 			await this.models.userDeletion().start(deletion.id);
-			if (deletion.process_data) await this.deleteUserData(deletion.user_id);
-			if (deletion.process_account) await this.deleteUserAccount(deletion.user_id);
+			if (deletion.process_data) await this.deleteUserData(deletion.user_id, options);
+			if (deletion.process_account) await this.deleteUserAccount(deletion.user_id, options);
 		} catch (e) {
 			error = e;
 			success = false;

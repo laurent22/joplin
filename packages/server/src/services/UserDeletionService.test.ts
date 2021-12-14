@@ -39,7 +39,7 @@ describe('UserDeletionService', function() {
 		expect(await models().change().count()).toBe(2);
 
 		const service = newService();
-		await service.processDeletionJob(job);
+		await service.processDeletionJob(job, { sleepBetweenOperations: 0 });
 
 		job = await models().userDeletion().load(job.id);
 
