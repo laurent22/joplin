@@ -2,7 +2,6 @@ import PostMessageService, { MessageResponse, ResponderComponentType } from '@jo
 import * as React from 'react';
 const { connect } = require('react-redux');
 import { reg } from '@joplin/lib/registry';
-import { SyncScrollMap, SyncScrollMapper } from './utils/SyncScrollMap';
 
 interface Props {
 	onDomReady: Function;
@@ -166,17 +165,6 @@ class NoteTextViewerComponent extends React.Component<Props, any> {
 		if (channel === 'setMarkers') {
 			win.postMessage({ target: 'webview', name: 'setMarkers', data: { keywords: arg0, options: arg1 } }, '*');
 		}
-	}
-
-	private syncScrollMapper_ = new SyncScrollMapper;
-
-	refreshSyncScrollMap(forced: boolean) {
-		return this.syncScrollMapper_.refresh(forced);
-	}
-
-	getSyncScrollMap(): SyncScrollMap {
-		const doc = this.webviewRef_.current?.contentWindow?.document;
-		return this.syncScrollMapper_.get(doc);
 	}
 
 	// ----------------------------------------------------------------

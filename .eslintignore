@@ -705,9 +705,6 @@ packages/app-desktop/gui/style/StyledTextInput.js.map
 packages/app-desktop/gui/utils/NoteListUtils.d.ts
 packages/app-desktop/gui/utils/NoteListUtils.js
 packages/app-desktop/gui/utils/NoteListUtils.js.map
-packages/app-desktop/gui/utils/SyncScrollMap.d.ts
-packages/app-desktop/gui/utils/SyncScrollMap.js
-packages/app-desktop/gui/utils/SyncScrollMap.js.map
 packages/app-desktop/gui/utils/convertToScreenCoordinates.d.ts
 packages/app-desktop/gui/utils/convertToScreenCoordinates.js
 packages/app-desktop/gui/utils/convertToScreenCoordinates.js.map
