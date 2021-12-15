@@ -117,7 +117,7 @@ export async function getDirectoryChildrenContext(sessionId: string, path: strin
 	return context;
 }
 
-export async function getDirectoryChildren(sessionId: string, path: string, pagination: Pagination = null): Promise<PaginatedResults> {
+export async function getDirectoryChildren(sessionId: string, path: string, pagination: Pagination = null): Promise<PaginatedResults<any>> {
 	const context = await getDirectoryChildrenContext(sessionId, path, pagination);
 	checkContextError(context);
 	return context.response.body;
@@ -194,7 +194,7 @@ export async function getDeltaContext(sessionId: string, path: string, paginatio
 	return context;
 }
 
-export async function getDelta(sessionId: string, path: string, pagination: Pagination): Promise<PaginatedResults> {
+export async function getDelta(sessionId: string, path: string, pagination: Pagination): Promise<PaginatedResults<any>> {
 	const context = await getDeltaContext(sessionId, path, pagination);
 	checkContextError(context);
 	return context.response.body;

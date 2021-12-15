@@ -104,6 +104,8 @@ export function makeTableView(table: Table): TableView {
 	let pagination: Pagination = null;
 
 	if (table.pageCount) {
+		if (!table.baseUrl || !table.requestQuery) throw new Error('Table.baseUrl and Table.requestQuery are required for pagination when there is more than one page');
+
 		baseUrlQuery = filterPaginationQueryParams(table.requestQuery);
 		pagination = table.pagination;
 		paginationLinks = createPaginationLinks(pagination.page, table.pageCount, setQueryParameters(table.baseUrl, { ...baseUrlQuery, 'page': 'PAGE_NUMBER' }));

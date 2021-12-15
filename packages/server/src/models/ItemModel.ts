@@ -49,9 +49,7 @@ export interface SaveFromRawContentResultItem {
 
 export type SaveFromRawContentResult = Record<string, SaveFromRawContentResultItem>;
 
-export interface PaginatedItems extends PaginatedResults {
-	items: Item[];
-}
+export type PaginatedItems = PaginatedResults<Item>;
 
 export interface SharedRootInfo {
 	item: Item;

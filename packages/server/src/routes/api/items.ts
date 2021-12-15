@@ -7,10 +7,11 @@ import { AppContext } from '../../utils/types';
 import * as fs from 'fs-extra';
 import { ErrorForbidden, ErrorMethodNotAllowed, ErrorNotFound, ErrorPayloadTooLarge, errorToPlainObject } from '../../utils/errors';
 import ItemModel, { ItemSaveOption, SaveFromRawContentItem } from '../../models/ItemModel';
-import { requestDeltaPagination, requestPagination } from '../../models/utils/pagination';
+import { requestPagination } from '../../models/utils/pagination';
 import { AclAction } from '../../models/BaseModel';
 import { safeRemove } from '../../utils/fileUtils';
 import { formatBytes, MB } from '../../utils/bytes';
+import { requestDeltaPagination } from '../../models/ChangeModel';
 
 const router = new Router(RouteType.Api);
 

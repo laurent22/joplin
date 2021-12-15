@@ -83,6 +83,10 @@ export default class NotificationModel extends BaseModel<Notification> {
 		return this.save({ key: actualKey, message, level, owner_id: userId });
 	}
 
+	public async addAny(userId: Uuid, message: string) {
+		return this.add(userId, NotificationKey.Any, NotificationLevel.Normal, message);
+	}
+
 	public async setRead(userId: Uuid, key: NotificationKey, read: boolean = true): Promise<void> {
 		const n = await this.loadByKey(userId, key);
 		if (!n) return;

@@ -32,7 +32,7 @@ describe('share_users', function() {
 		const { share: share1 } = await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.Folder, folderItem1);
 		const { share: share2 } = await shareWithUserAndAccept(session1.id, session2.id, user2, ShareType.Folder, folderItem2);
 
-		const shareUsers = await getApi<PaginatedResults>(session2.id, 'share_users');
+		const shareUsers = await getApi<PaginatedResults<any>>(session2.id, 'share_users');
 		expect(shareUsers.items.length).toBe(2);
 		expect(shareUsers.items.find(su => su.share.id === share1.id)).toBeTruthy();
 		expect(shareUsers.items.find(su => su.share.id === share2.id)).toBeTruthy();
