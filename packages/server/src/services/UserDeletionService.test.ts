@@ -1,4 +1,5 @@
 import config from '../config';
+import { shareFolderWithUser } from '../utils/testing/shareApiUtils';
 import { afterAllTests, beforeAllDb, beforeEachDb, createNote, createUserAndSession, models } from '../utils/testing/testUtils';
 import { Env } from '../utils/types';
 import UserDeletionService from './UserDeletionService';
@@ -77,6 +78,60 @@ describe('UserDeletionService', function() {
 
 		const user = (await models().user().all())[0];
 		expect(user.id).toBe(user2.id);
+	});
+
+	test('should not delete notebooks that are not owned', async function() {
+		const { session: session1 } = await createUserAndSession(1);
+		const { user: user2, session: session2 } = await createUserAndSession(2);
+
+		await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F2', [
+			{
+				id: '000000000000000000000000000000F2',
+				children: [
+					{
+						id: '00000000000000000000000000000001',
+					},
+				],
+			},
+		]);
+
+		expect(await models().share().count()).toBe(1);
+		expect(await models().shareUser().count()).toBe(1);
+
+		const job = await models().userDeletion().add(user2.id, Date.now());
+		const service = newService();
+		await service.processDeletionJob(job, { sleepBetweenOperations: 0 });
+
+		expect(await models().share().count()).toBe(1); // The share object has not (and should not) been deleted
+		expect(await models().shareUser().count()).toBe(0); // However all the invitations are gone
+		expect(await models().item().count()).toBe(2);
+	});
+
+	test('should not delete notebooks that are owned', async function() {
+		const { user: user1, session: session1 } = await createUserAndSession(1);
+		const { session: session2 } = await createUserAndSession(2);
+
+		await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F2', [
+			{
+				id: '000000000000000000000000000000F2',
+				children: [
+					{
+						id: '00000000000000000000000000000001',
+					},
+				],
+			},
+		]);
+
+		expect(await models().share().count()).toBe(1);
+		expect(await models().shareUser().count()).toBe(1);
+
+		const job = await models().userDeletion().add(user1.id, Date.now());
+		const service = newService();
+		await service.processDeletionJob(job, { sleepBetweenOperations: 0 });
+
+		expect(await models().share().count()).toBe(0);
+		expect(await models().shareUser().count()).toBe(0);
+		expect(await models().item().count()).toBe(0);
 	});
 
 });
