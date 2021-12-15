@@ -1,9 +1,10 @@
 import { Models } from '../models/factory';
 import TaskService, { Task, TaskId } from '../services/TaskService';
+import { Services } from '../services/types';
 import { Config, Env } from './types';
 
-export default function(env: Env, models: Models, config: Config): TaskService {
-	const taskService = new TaskService(env, models, config);
+export default function(env: Env, models: Models, config: Config, services: Services): TaskService {
+	const taskService = new TaskService(env, models, config, services);
 
 	let tasks: Task[] = [
 		{
@@ -25,6 +26,13 @@ export default function(env: Env, models: Models, config: Config): TaskService {
 			description: 'Compress old changes',
 			schedule: '0 0 */2 * *',
 			run: (models: Models) => models.change().compressOldChanges(),
+		},
+
+		{
+			id: TaskId.ProcessUserDeletions,
+			description: 'Process user deletions',
+			schedule: '0 */6 * * *',
+			run: (_models: Models, services: Services) => services.userDeletion.runMaintenance(),
 		},
 
 		// Need to do it relatively frequently so that if the user fixes

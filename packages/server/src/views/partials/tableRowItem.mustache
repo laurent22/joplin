@@ -3,6 +3,6 @@
 		<input type="checkbox" name="{{value}}"/>
 	{{/checkbox}}
 	{{^checkbox}}
-		{{#url}}<a href="{{.}}"></span>{{/url}}{{value}}</a>
+		{{#url}}<a href="{{.}}"></span>{{/url}}{{#hint}}<abbr title="{{.}}">{{/hint}}{{value}}</a>{{#hint}}</abbr>{{/hint}}
 	{{/checkbox}}
 </td>

@@ -1,14 +1,16 @@
-import { SubPath } from '../../utils/routeUtils';
+import { makeUrl, redirect, SubPath, UrlType } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
-import { ErrorForbidden, ErrorMethodNotAllowed } from '../../utils/errors';
+import { ErrorBadRequest, ErrorForbidden, ErrorMethodNotAllowed } from '../../utils/errors';
 import defaultView from '../../utils/defaultView';
 import { yesOrNo } from '../../utils/strings';
 import { makeTablePagination, makeTableView, Row, Table } from '../../utils/views/table';
 import { PaginationOrderDir } from '../../models/utils/pagination';
 import { formatDateTime } from '../../utils/time';
 import { userDeletionsUrl, userUrl } from '../../utils/urlUtils';
+import { createCsrfTag } from '../../utils/csrf';
+import { bodyFields } from '../../utils/requestUtils';
 
 const router: Router = new Router(RouteType.Web);
 
@@ -29,6 +31,11 @@ router.get('user_deletions', async (_path: SubPath, ctx: AppContext) => {
 			pageCount: page.page_count,
 			pagination,
 			headers: [
+				{
+					name: 'select',
+					label: '',
+					canSort: false,
+				},
 				{
 					name: 'email',
 					label: 'Email',
@@ -68,6 +75,10 @@ router.get('user_deletions', async (_path: SubPath, ctx: AppContext) => {
 
 				const row: Row = [
 					{
+						value: `checkbox_${d.id}`,
+						checkbox: true,
+					},
+					{
 						value: isDone ? d.user_id : users.find(u => u.id === d.user_id).email,
 						stretch: true,
 						url: isDone ? '' : userUrl(d.user_id),
@@ -102,6 +113,8 @@ router.get('user_deletions', async (_path: SubPath, ctx: AppContext) => {
 		const view = defaultView('user_deletions', 'User deletions');
 		view.content = {
 			userDeletionTable: makeTableView(table),
+			postUrl: makeUrl(UrlType.UserDeletions),
+			csrfTag: await createCsrfTag(ctx),
 		};
 		view.cssFiles = ['index/user_deletions'];
 
@@ -109,6 +122,29 @@ router.get('user_deletions', async (_path: SubPath, ctx: AppContext) => {
 	}
 
 	throw new ErrorMethodNotAllowed();
+});
+
+router.post('user_deletions', async (_path: SubPath, ctx: AppContext) => {
+	const user = ctx.joplin.owner;
+	if (!user.is_admin) throw new ErrorForbidden();
+
+	interface PostFields {
+		removeButton: string;
+	}
+
+	const models = ctx.joplin.models;
+
+	const fields: PostFields = await bodyFields<PostFields>(ctx.req);
+
+	if (fields.removeButton) {
+		const jobIds = Object.keys(fields).filter(f => f.startsWith('checkbox_')).map(f => Number(f.substr(9)));
+		for (const jobId of jobIds) await models.userDeletion().remove(jobId);
+		await models.notification().addInfo(user.id, `${jobIds.length} job(s) have been removed`);
+	} else {
+		throw new ErrorBadRequest('Invalid action');
+	}
+
+	return redirect(ctx, makeUrl(UrlType.UserDeletions));
 });
 
 export default router;

@@ -80,7 +80,7 @@ export default class BaseService {
 		}
 	}
 
-	private async runMaintenance() {
+	public async runMaintenance() {
 		if (this.maintenanceInProgress_) {
 			logger.warn(`${this.name}: Skipping maintenance because it is already in progress`);
 			return;

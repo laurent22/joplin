@@ -166,6 +166,7 @@ router.get('users/:id', async (path: SubPath, ctx: AppContext, user: User = null
 	if (!owner.is_admin) userFlagViews = [];
 
 	const subscription = !isNew ? await ctx.joplin.models.subscription().byUserId(userId) : null;
+	const isScheduledForDeletion = await ctx.joplin.models.userDeletion().isScheduledForDeletion(userId);
 
 	const view: View = defaultView('user', 'Profile');
 	view.content.user = user;
@@ -189,7 +190,7 @@ router.get('users/:id', async (path: SubPath, ctx: AppContext, user: User = null
 
 	view.content.showImpersonateButton = !isNew && !!owner.is_admin && user.enabled && user.id !== owner.id;
 	view.content.showRestoreButton = !isNew && !!owner.is_admin && !user.enabled;
-	view.content.showScheduleDeletionButton = !isNew && !!owner.is_admin;
+	view.content.showScheduleDeletionButton = !isNew && !!owner.is_admin && !isScheduledForDeletion;
 	view.content.showResetPasswordButton = !isNew && owner.is_admin && user.enabled;
 	view.content.canShareFolderOptions = yesNoDefaultOptions(user, 'can_share_folder');
 	view.content.canUploadOptions = yesNoOptions(user, 'can_upload');
@@ -377,7 +378,7 @@ router.post('users', async (path: SubPath, ctx: AppContext) => {
 					processData: true,
 				});
 
-				await models.notification().addAny(owner.id, `User ${user.email} has been scheduled for deletion on ${formatDateTime(deletionDate)}. [View deletion list](${userDeletionsUrl()})`);
+				await models.notification().addInfo(owner.id, `User ${user.email} has been scheduled for deletion on ${formatDateTime(deletionDate)}. [View deletion list](${userDeletionsUrl()})`);
 			} else if (fields.delete_user_flags) {
 				const userFlagTypes: UserFlagType[] = [];
 				for (const key of Object.keys(fields)) {

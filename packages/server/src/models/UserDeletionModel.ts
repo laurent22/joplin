@@ -21,6 +21,11 @@ export default class UserDeletionModel extends BaseModel<UserDeletion> {
 		return this.db(this.tableName).where('user_id', '=', userId).first();
 	}
 
+	public async isScheduledForDeletion(userId: Uuid) {
+		const r = await this.db(this.tableName).select(['id']).where('user_id', '=', userId).first();
+		return !!r;
+	}
+
 	public async add(userId: Uuid, scheduledTime: number, options: AddOptions = null): Promise<UserDeletion> {
 		options = {
 			processAccount: true,
@@ -42,6 +47,10 @@ export default class UserDeletionModel extends BaseModel<UserDeletion> {
 		await this.db(this.tableName).insert(o);
 
 		return this.byUserId(userId);
+	}
+
+	public async remove(jobId: number) {
+		await this.db(this.tableName).where('id', '=', jobId).delete();
 	}
 
 	public async next(): Promise<UserDeletion> {

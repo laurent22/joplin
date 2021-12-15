@@ -88,3 +88,8 @@ h5:hover a.heading-anchor,
 h6:hover a.heading-anchor {
 	opacity: 1;
 }
+
+abbr[title] {
+	text-underline-offset: 2px;
+	text-decoration: underline dotted;
+}

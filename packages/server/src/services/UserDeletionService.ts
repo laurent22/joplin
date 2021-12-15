@@ -93,10 +93,14 @@ export default class UserDeletionService extends BaseService {
 		logger.info('Completed user deletion: ', deletion.id);
 	}
 
-	protected async maintenance() {
+	public async processNextDeletionJob() {
 		const deletion = await this.models.userDeletion().next();
 		if (!deletion) return;
 		await this.processDeletionJob(deletion);
+	}
+
+	protected async maintenance() {
+		await this.processNextDeletionJob();
 	}
 
 }

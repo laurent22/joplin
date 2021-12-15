@@ -57,8 +57,13 @@ export default class NotificationModel extends BaseModel<Notification> {
 			},
 		};
 
-		const n: Notification = await this.loadUnreadByKey(userId, key);
-		if (n) return n;
+		const n: Notification = await this.loadByKey(userId, key);
+
+		if (n) {
+			if (!n.read) return n;
+			await this.save({ id: n.id, read: 0 });
+			return { ...n, read: 0 };
+		}
 
 		const type = notificationTypes[key];
 
@@ -83,8 +88,12 @@ export default class NotificationModel extends BaseModel<Notification> {
 		return this.save({ key: actualKey, message, level, owner_id: userId });
 	}
 
-	public async addAny(userId: Uuid, message: string) {
+	public async addInfo(userId: Uuid, message: string) {
 		return this.add(userId, NotificationKey.Any, NotificationLevel.Normal, message);
+	}
+
+	public async addError(userId: Uuid, message: string) {
+		return this.add(userId, NotificationKey.Any, NotificationLevel.Error, message);
 	}
 
 	public async setRead(userId: Uuid, key: NotificationKey, read: boolean = true): Promise<void> {
