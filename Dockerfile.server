@@ -79,6 +79,7 @@ RUN npm run build
 
 ENV RUNNING_IN_DOCKER=1
 EXPOSE ${APP_PORT}
+HEALTHCHECK CMD curl -f http://localhost:${APP_PORT}/api/ping
 
 CMD [ "npm", "--prefix", "packages/server", "start" ]
 
