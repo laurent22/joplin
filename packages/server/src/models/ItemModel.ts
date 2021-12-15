@@ -815,22 +815,22 @@ export default class ItemModel extends BaseModel<Item> {
 	// Returns the item IDs that are owned only by the given user. In other
 	// words, the items that are not shared with anyone else. Such items
 	// can be safely deleted when the user is deleted.
-	public async exclusivelyOwnedItemIds(userId: Uuid): Promise<Uuid[]> {
-		const query = this
-			.db('items')
-			.select(this.db.raw('items.id, count(user_items.item_id) as user_item_count'))
-			.leftJoin('user_items', 'user_items.item_id', 'items.id')
-			.whereIn('items.id', this.db('user_items').select('user_items.item_id').where('user_id', '=', userId))
-			.groupBy('items.id');
+	// public async exclusivelyOwnedItemIds(userId: Uuid): Promise<Uuid[]> {
+	// 	const query = this
+	// 		.db('items')
+	// 		.select(this.db.raw('items.id, count(user_items.item_id) as user_item_count'))
+	// 		.leftJoin('user_items', 'user_items.item_id', 'items.id')
+	// 		.whereIn('items.id', this.db('user_items').select('user_items.item_id').where('user_id', '=', userId))
+	// 		.groupBy('items.id');
 
-		const rows: any[] = await query;
-		return rows.filter(r => r.user_item_count === 1).map(r => r.id);
-	}
+	// 	const rows: any[] = await query;
+	// 	return rows.filter(r => r.user_item_count === 1).map(r => r.id);
+	// }
 
-	public async deleteExclusivelyOwnedItems(userId: Uuid) {
-		const itemIds = await this.exclusivelyOwnedItemIds(userId);
-		await this.delete(itemIds);
-	}
+	// public async deleteExclusivelyOwnedItems(userId: Uuid) {
+	// 	const itemIds = await this.exclusivelyOwnedItemIds(userId);
+	// 	await this.delete(itemIds);
+	// }
 
 	public async deleteAll(userId: Uuid): Promise<void> {
 		while (true) {

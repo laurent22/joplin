@@ -1,5 +1,5 @@
-import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, checkThrowAsync, createItem, expectThrow } from '../utils/testing/testUtils';
-import { EmailSender, User, UserFlagType } from '../services/database/types';
+import { createUserAndSession, beforeAllDb, afterAllTests, beforeEachDb, models, checkThrowAsync, expectThrow } from '../utils/testing/testUtils';
+import { EmailSender, UserFlagType } from '../services/database/types';
 import { ErrorUnprocessableEntity } from '../utils/errors';
 import { betaUserDateRange, stripeConfig } from '../utils/stripe';
 import { accountByType, AccountType } from './UserModel';
@@ -51,26 +51,26 @@ describe('UserModel', function() {
 		expect(error instanceof ErrorUnprocessableEntity).toBe(true);
 	});
 
-	test('should delete a user', async () => {
-		const { session: session1, user: user1 } = await createUserAndSession(2, false);
+	// test('should delete a user', async () => {
+	// 	const { session: session1, user: user1 } = await createUserAndSession(2, false);
 
-		const userModel = models().user();
+	// 	const userModel = models().user();
 
-		const allUsers: User[] = await userModel.all();
-		const beforeCount: number = allUsers.length;
+	// 	const allUsers: User[] = await userModel.all();
+	// 	const beforeCount: number = allUsers.length;
 
-		await createItem(session1.id, 'root:/test.txt:', 'testing');
+	// 	await createItem(session1.id, 'root:/test.txt:', 'testing');
 
-		// Admin can delete any user
-		expect(!!(await models().session().load(session1.id))).toBe(true);
-		expect((await models().item().all()).length).toBe(1);
-		expect((await models().userItem().all()).length).toBe(1);
-		await models().user().delete(user1.id);
-		expect((await userModel.all()).length).toBe(beforeCount - 1);
-		expect(!!(await models().session().load(session1.id))).toBe(false);
-		expect((await models().item().all()).length).toBe(0);
-		expect((await models().userItem().all()).length).toBe(0);
-	});
+	// 	// Admin can delete any user
+	// 	expect(!!(await models().session().load(session1.id))).toBe(true);
+	// 	expect((await models().item().all()).length).toBe(1);
+	// 	expect((await models().userItem().all()).length).toBe(1);
+	// 	await models().user().delete(user1.id);
+	// 	expect((await userModel.all()).length).toBe(beforeCount - 1);
+	// 	expect(!!(await models().session().load(session1.id))).toBe(false);
+	// 	expect((await models().item().all()).length).toBe(0);
+	// 	expect((await models().userItem().all()).length).toBe(0);
+	// });
 
 	test('should push an email when creating a new user', async () => {
 		const { user: user1 } = await createUserAndSession(1);
