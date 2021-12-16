@@ -38,8 +38,9 @@ export async function getDeviceTimeDrift(): Promise<number> {
 			break;
 		} catch (error) {
 			if (tryCount >= maxTries) {
-				error.message = `Cannot retrieve the network time: ${error.message}`;
-				throw error;
+				const newError = typeof error === 'string' ? new Error(error) : error;
+				newError.message = `Cannot retrieve the network time from ${server.domain}:${server.port}: ${newError.message}`;
+				throw newError;
 			} else {
 				await time.msleep(tryCount * 1000);
 			}

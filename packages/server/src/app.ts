@@ -254,9 +254,11 @@ async function main() {
 		if (config().maxTimeDrift) {
 			const timeDrift = await getDeviceTimeDrift();
 			if (Math.abs(timeDrift) > config().maxTimeDrift) {
-				throw new Error(`The device time drift is ${timeDrift}ms (Max allowed: ${config().maxTimeDrift}ms) - cannot continue as it could cause data loss and conflicts on the sync clients. You may increase env var MAX_TIME_DRIFT to pass the check.`);
+				throw new Error(`The device time drift is ${timeDrift}ms (Max allowed: ${config().maxTimeDrift}ms) - cannot continue as it could cause data loss and conflicts on the sync clients. You may increase env var MAX_TIME_DRIFT to pass the check, or set to 0 to disabled the check.`);
 			}
 			appLogger().info(`NTP time offset: ${timeDrift}ms`);
+		} else {
+			appLogger().info('Skipping NTP time check because MAX_TIME_DRIFT is 0.');
 		}
 
 		appLogger().info('Running in Docker:', runningInDocker());
