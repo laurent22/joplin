@@ -23,6 +23,7 @@ import setupCommands from './utils/setupCommands';
 import { RouteResponseFormat, routeResponseFormat } from './utils/routeUtils';
 import { parseEnv } from './env';
 import storageConnectionCheck from './utils/storageConnectionCheck';
+import { setLocale } from '@joplin/lib/locale';
 
 interface Argv {
 	env?: Env;
@@ -260,6 +261,8 @@ async function main() {
 		} else {
 			appLogger().info('Skipping NTP time check because MAX_TIME_DRIFT is 0.');
 		}
+
+		setLocale('en_GB');
 
 		appLogger().info('Running in Docker:', runningInDocker());
 		appLogger().info('Public base URL:', config().baseUrl);
