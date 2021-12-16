@@ -154,7 +154,7 @@ const translateLE_ = (codeMirror: any, percent: number, l2e: boolean) => {
 // the translation functions between Editor's scroll percent and line-based scroll
 // percent. They are used for synchronous scrolling between Editor and Viewer.
 // To see the detail of synchronous scrolling, refer the following design document.
-// <s> Replace me! https://github.com/laurent22/joplin/pull/5512#issuecomment-931277022</s>
+// https://github.com/laurent22/joplin/pull/5826#issuecomment-986032165
 const translateScrollPercentL2E = (cm: any, lPercent: number) => {
 	return translateLE_(cm, lPercent, true);
 };
