@@ -213,7 +213,7 @@ PODS:
   - React-jsinspector (0.66.1)
   - React-logger (0.66.1):
     - glog
-  - react-native-alarm-notification (1.0.3):
+  - react-native-alarm-notification (1.0.5):
     - React
   - react-native-camera (3.40.0):
     - React-Core
@@ -509,11 +509,11 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   boost: a7c83b31436843459a1961bfd74b96033dc77234
-  DoubleConversion: 831926d9b8bf8166fd87886c4abab286c2422662
+  DoubleConversion: cf9b38bf0b2d048436d9a82ad2abe1404f11e7de
   FBLazyVector: 500821d196c3d1bd10e7e828bc93ce075234080f
   FBReactNativeSpec: 74c869e2cffa2ffec685cd1bac6788c021da6005
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
-  glog: 5337263514dd6f09803962437687240c5dc39aa4
+  glog: 73c2498ac6884b13ede40eda8228cb1eee9d9d62
   JoplinCommonShareExtension: 270b4f8eb4e22828eeda433a04ed689fc1fd09b5
   JoplinRNShareExtension: cb790ce4c0692367acd1a06c56330c9a440f8b58
   RCT-Folly: a21c126816d8025b547704b777a2ba552f3d9fa9
@@ -528,7 +528,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: db2f6e22a534d466fc0e34e622df47d9d20bab2f
   React-jsinspector: 8c0517dee5e8c70cd6c3066f20213ff7ce54f176
   React-logger: bfddd3418dc1d45b77b822958f3e31422e2c179b
-  react-native-alarm-notification: 466e4ad56fbd948ecac26e657f292dca8bf483d5
+  react-native-alarm-notification: 4817a2a0d7cc2ed2acc97337ebcdf9ae2a69c9d5
   react-native-camera: 35854c4f764a4a6cf61c1c3525888b92f0fe4b31
   react-native-document-picker: 0bba80cc56caab1f67dbaa81ff557e3a9b7f2b9f
   react-native-geolocation: c956aeb136625c23e0dce0467664af2c437888c9
