@@ -1,5 +1,5 @@
 import * as fs from 'fs-extra';
-import { execCommand2, rootDir, gitPullTry } from './tool-utils';
+import { rootDir, gitPullTry, completeReleaseWithChangelog } from './tool-utils';
 const { unique } = require('@joplin/lib/ArrayUtils');
 
 const mobileDir = `${rootDir}/packages/app-mobile`;
@@ -72,13 +72,8 @@ async function main() {
 	const tagName = `ios-v${newVersion}`;
 	console.info(`Tag name: ${tagName}`);
 
-	await execCommand2('git add -A');
-	await execCommand2(`git commit -m "${tagName}"`);
-	await execCommand2(`git tag ${tagName}`);
-	await execCommand2('git push');
-	await execCommand2('git push --tags');
-
-	console.info(`To create changelog: node packages/tools/git-changelog.js ${tagName}`);
+	const changelogPath = `${rootDir}/readme/changelog_ios.md`;
+	await completeReleaseWithChangelog(changelogPath, newVersion, tagName, 'iOS', false);
 }
 
 main().catch((error) => {
