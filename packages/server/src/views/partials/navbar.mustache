@@ -14,8 +14,12 @@
 						{{#global.owner.is_admin}}
 							<a class="navbar-item" href="{{{global.baseUrl}}}/users">{{s.users}}</a>
 						{{/global.owner.is_admin}}
-						<a class="navbar-item" href="{{{global.baseUrl}}}/items">{{s.items}}</a>
-						<a class="navbar-item" href="{{{global.baseUrl}}}/changes">{{s.log}}</a>
+						{{#global.owner.is_admin}}
+							<a class="navbar-item" href="{{{global.baseUrl}}}/items">{{s.items}}</a>
+						{{/global.owner.is_admin}}
+						{{#global.owner.is_admin}}
+							<a class="navbar-item" href="{{{global.baseUrl}}}/changes">{{s.log}}</a>
+						{{/global.owner.is_admin}}
 						{{#global.owner.is_admin}}
 							<a class="navbar-item" href="{{{global.baseUrl}}}/tasks">{{s.tasks}}</a>
 						{{/global.owner.is_admin}}
