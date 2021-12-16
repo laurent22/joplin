@@ -229,10 +229,6 @@ msgstr ""
 msgid "Accept"
 msgstr "Aceitar"
 
-#: packages/lib/models/Setting.ts:546
-msgid "Access Key"
-msgstr ""
-
 #: packages/app-desktop/gui/ResourceScreen.tsx:95
 msgid "Action"
 msgstr "Ação"
@@ -405,6 +401,30 @@ msgstr "Automaticamente alterar o tema para o tema do sistema"
 #: packages/lib/models/Setting.ts:1193
 msgid "Automatically update the application"
 msgstr "Atualizar automaticamente o aplicativo"
+
+#: packages/lib/models/Setting.ts:546
+#, fuzzy
+msgid "AWS access key"
+msgstr "AWS key"
+
+#: packages/lib/models/Setting.ts:535
+msgid "AWS region"
+msgstr ""
+
+#: packages/lib/models/Setting.ts:506
+#, fuzzy
+msgid "AWS S3 bucket"
+msgstr "AWS S3 bucket"
+
+#: packages/lib/models/Setting.ts:521
+#, fuzzy
+msgid "AWS S3 URL"
+msgstr "AWS S3 URL"
+
+#: packages/lib/models/Setting.ts:557
+#, fuzzy
+msgid "AWS secret key"
+msgstr "AWS secret"
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:42
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:715
@@ -622,7 +642,7 @@ msgstr ""
 "Pressione \"%s\" para restaurar a nota. Ela será copiada no caderno com nome "
 "\"%s\". A versão atual da nota não será substituída ou modificada."
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:373
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:376
 msgid "Click to add tags..."
 msgstr "Pressione para adicionar tags..."
 
@@ -749,7 +769,7 @@ msgstr "Converter para tarefa"
 
 #: packages/app-desktop/gui/MenuBar.tsx:422
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:13
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:764
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:755
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:143
 msgid "Copy"
 msgstr "Copiar"
@@ -929,7 +949,7 @@ msgid "Custom TLS certificates"
 msgstr "Certificados TLS customizados"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:18
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:754
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:745
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:135
 msgid "Cut"
 msgstr "Cortar"
@@ -1121,7 +1141,7 @@ msgstr ""
 msgid "Discard changes"
 msgstr "Descartar alterações"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:437
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:440
 msgid "Dismiss"
 msgstr "Dispensar"
 
@@ -1659,7 +1679,7 @@ msgstr ""
 "Para a lista completa de atalhos de teclado disponíveis, digite `help keymap`"
 
 #: packages/lib/models/Setting.ts:568
-msgid "Force Path Style"
+msgid "Force path style"
 msgstr ""
 
 #: packages/lib/commands/historyForward.ts:6
@@ -1729,6 +1749,10 @@ msgstr "Conceder autorização"
 msgid "Heading"
 msgstr "Cabeçalho"
 
+#: packages/server/src/services/MustacheService.ts:201
+msgid "Help"
+msgstr "Ajuda"
+
 #: packages/app-desktop/gui/MenuBar.tsx:492
 msgid "Hide %s"
 msgstr "Ocultar %s"
@@ -1745,6 +1769,10 @@ msgstr "Esconder o Joplin"
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:14
 msgid "Highlight"
 msgstr "Realçar"
+
+#: packages/server/src/services/MustacheService.ts:196
+msgid "Home"
+msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:78
 msgid "Horizontal Rule"
@@ -1892,7 +1920,7 @@ msgstr "Para usar o web clipper, você precisa fazer o seguinte:"
 msgid "In progress"
 msgstr "Em andamento"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:521
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:524
 msgid "In: %s"
 msgstr "Em: %s"
 
@@ -1973,6 +2001,10 @@ msgstr "Itálico"
 #: packages/lib/services/ReportService.ts:185
 msgid "Item \"%s\" could not be downloaded: %s"
 msgstr "O item \"%s\" não pôde ser baixado: %s"
+
+#: packages/server/src/services/MustacheService.ts:198
+msgid "Items"
+msgstr ""
 
 #: packages/lib/services/ReportService.ts:208
 msgid "Items that cannot be decrypted"
@@ -2106,7 +2138,7 @@ msgstr "Último erro: %s"
 msgid "Later"
 msgstr "Mais tarde"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:613
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:604
 msgid "Layout"
 msgstr "Layout"
 
@@ -2171,6 +2203,7 @@ msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:521
 #: packages/app-mobile/components/screens/log.js:100
+#: packages/server/src/services/MustacheService.ts:199
 msgid "Log"
 msgstr "Log"
 
@@ -2189,6 +2222,10 @@ msgstr "Login com Dropbox"
 #: packages/app-mobile/components/screens/onedrive-login.js:110
 msgid "Login with OneDrive"
 msgstr "Login com OneDrive"
+
+#: packages/server/src/services/MustacheService.ts:202
+msgid "Logout"
+msgstr ""
 
 #: packages/app-desktop/gui/MenuBar.tsx:705
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:583
@@ -2689,7 +2726,7 @@ msgid "Passwords do not match!"
 msgstr "As senhas não coincidem!"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:23
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:774
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:765
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:150
 msgid "Paste"
 msgstr "Colar"
@@ -2901,7 +2938,7 @@ msgstr "Recriptografar"
 msgid "Re-upload local data to sync target"
 msgstr "Reenviar os dados locais para sincronizar o alvo"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:436
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:439
 msgid "Read more about it"
 msgstr "Leia mais sobre isso"
 
@@ -2934,10 +2971,6 @@ msgstr "Refazer"
 #: packages/app-mobile/components/screens/status.js:144
 msgid "Refresh"
 msgstr "Recarregar"
-
-#: packages/lib/models/Setting.ts:535
-msgid "Region"
-msgstr ""
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:615
 #: packages/app-desktop/gui/Root.tsx:173
@@ -3046,16 +3079,6 @@ msgstr ""
 msgid "S3"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:506
-#, fuzzy
-msgid "S3 bucket"
-msgstr "AWS S3 bucket"
-
-#: packages/lib/models/Setting.ts:521
-#, fuzzy
-msgid "S3 URL"
-msgstr "AWS S3 URL"
-
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:579
 msgid ""
 "Safe mode is currently active. Note rendering and all plugins are "
@@ -3117,11 +3140,6 @@ msgstr "Pesquisar..."
 #: packages/app-cli/app/command-search.js:13
 msgid "Searches for the given <pattern> in all the notes."
 msgstr "Pesquisa o padrão <pattern> em todas as notas."
-
-#: packages/lib/models/Setting.ts:557
-#, fuzzy
-msgid "Secret Key"
-msgstr "AWS secret"
 
 #: packages/lib/models/Setting.ts:1194
 msgid "See the pre-release page for more details: %s"
@@ -3554,6 +3572,10 @@ msgstr "Tags"
 msgid "Take photo"
 msgstr "Tirar foto"
 
+#: packages/server/src/services/MustacheService.ts:200
+msgid "Tasks"
+msgstr ""
+
 #: packages/lib/models/Setting.ts:1228
 msgid "Text editor command"
 msgstr "Comando do editor de texto"
@@ -3586,7 +3608,7 @@ msgstr "O aplicativo foi autorizado com sucesso."
 msgid "The application must be restarted for these changes to take effect."
 msgstr "A aplicação deve ser reiniciada para essas alterações tomarem efeito."
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:508
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:511
 msgid ""
 "The attachments will no longer be watched when you switch to a different "
 "note."
@@ -3643,7 +3665,7 @@ msgstr ""
 "espaço do que um item com fator 1. Reinicialize a aplicação para aplicar a "
 "mudança."
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:507
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:510
 msgid "The following attachments are being watched for changes:"
 msgstr "Os seguintes anexos estão sendo observados para alterações:"
 
@@ -3870,7 +3892,7 @@ msgstr "Esta nota não possui informações de geolocalização."
 msgid "This note has been modified:"
 msgstr "Esta nota foi modificada:"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:613
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:604
 msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
 "note."
@@ -3882,7 +3904,7 @@ msgstr ""
 msgid "This note has no history"
 msgstr "Esta nota não tem histórico"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:435
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:438
 msgid ""
 "This Rich Text editor has a number of limitations and it is recommended to "
 "be aware of them before using it."
@@ -4249,6 +4271,10 @@ msgstr ""
 "forma legível (e.g. tabelas, caixas de seleção, código). Se não for "
 "encontrada, uma fonte monoespaçada genérica (largura fixa) é usada."
 
+#: packages/server/src/services/MustacheService.ts:197
+msgid "Users"
+msgstr ""
+
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:182
 msgid "Valid"
 msgstr "Válido"
@@ -4424,9 +4450,6 @@ msgstr "Mais zoom"
 msgid "Zoom Out"
 msgstr "Menos zoom"
 
-#~ msgid "AWS key"
-#~ msgstr "AWS key"
-
 #~ msgid "AWS S3"
 #~ msgstr "AWS S3"
 
@@ -4569,9 +4592,6 @@ msgstr "Menos zoom"
 
 #~ msgid "Check Status"
 #~ msgstr "Verificar Status"
-
-#~ msgid "Help"
-#~ msgstr "Ajuda"
 
 #~ msgid "OneDrive Dev (For testing only)"
 #~ msgstr "OneDrive Dev (apenas para testes)"

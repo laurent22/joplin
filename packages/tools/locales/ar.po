@@ -224,10 +224,6 @@ msgstr ""
 msgid "Accept"
 msgstr "قبول"
 
-#: packages/lib/models/Setting.ts:546
-msgid "Access Key"
-msgstr ""
-
 #: packages/app-desktop/gui/ResourceScreen.tsx:95
 msgid "Action"
 msgstr "عمل"
@@ -396,6 +392,30 @@ msgstr "التبديل تلقائيا للتنسيق لمطابقة تنسيق �
 #: packages/lib/models/Setting.ts:1193
 msgid "Automatically update the application"
 msgstr "تحديث التطبيق آلياً"
+
+#: packages/lib/models/Setting.ts:546
+#, fuzzy
+msgid "AWS access key"
+msgstr "مفتاح AWS"
+
+#: packages/lib/models/Setting.ts:535
+msgid "AWS region"
+msgstr ""
+
+#: packages/lib/models/Setting.ts:506
+#, fuzzy
+msgid "AWS S3 bucket"
+msgstr "حاوية AWS S3"
+
+#: packages/lib/models/Setting.ts:521
+#, fuzzy
+msgid "AWS S3 URL"
+msgstr "عنوان URL ل AWS S3"
+
+#: packages/lib/models/Setting.ts:557
+#, fuzzy
+msgid "AWS secret key"
+msgstr "سر AWS"
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:42
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:715
@@ -608,7 +628,7 @@ msgstr ""
 "انقر \"%s\" لاستعادة الملاحظة. سيتم نسخه في دفتر الملاحظات المسمى \"%s\". لن "
 "يتم استبدال أو تعديل الإصدار الحالي من الملاحظة."
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:373
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:376
 msgid "Click to add tags..."
 msgstr "اضغط لإدراج سمات..."
 
@@ -734,7 +754,7 @@ msgstr "تحويل إلى قائمة مهام"
 
 #: packages/app-desktop/gui/MenuBar.tsx:422
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:13
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:764
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:755
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:143
 msgid "Copy"
 msgstr "نسخ"
@@ -916,7 +936,7 @@ msgid "Custom TLS certificates"
 msgstr "شهادات TLS خاصة"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:18
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:754
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:745
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:135
 msgid "Cut"
 msgstr "قص"
@@ -1108,7 +1128,7 @@ msgstr ""
 msgid "Discard changes"
 msgstr "تجاهل التغييرات"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:437
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:440
 msgid "Dismiss"
 msgstr "صرف"
 
@@ -1645,7 +1665,7 @@ msgstr ""
 "أكتب `help keymap` للحصول على قائمة اختصارات لوحة المفاتيح و خيارات الإعداد"
 
 #: packages/lib/models/Setting.ts:568
-msgid "Force Path Style"
+msgid "Force path style"
 msgstr ""
 
 #: packages/lib/commands/historyForward.ts:6
@@ -1719,6 +1739,10 @@ msgstr "منح ال"
 msgid "Heading"
 msgstr "ترويسة"
 
+#: packages/server/src/services/MustacheService.ts:201
+msgid "Help"
+msgstr "مساعدة"
+
 #: packages/app-desktop/gui/MenuBar.tsx:492
 msgid "Hide %s"
 msgstr "أخف %s"
@@ -1735,6 +1759,10 @@ msgstr "إخفي Joplin"
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:14
 msgid "Highlight"
 msgstr "تَمييز النَص"
+
+#: packages/server/src/services/MustacheService.ts:196
+msgid "Home"
+msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:78
 msgid "Horizontal Rule"
@@ -1881,7 +1909,7 @@ msgstr "تحتاج لفعل الخطوات التالية للتمكن من اس
 msgid "In progress"
 msgstr "قيد التقدم"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:521
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:524
 msgid "In: %s"
 msgstr "في: %s"
 
@@ -1962,6 +1990,10 @@ msgstr "مائل"
 #: packages/lib/services/ReportService.ts:185
 msgid "Item \"%s\" could not be downloaded: %s"
 msgstr "العنصر \"%s\" لم يتم الإمكان من تحميله: %s"
+
+#: packages/server/src/services/MustacheService.ts:198
+msgid "Items"
+msgstr ""
 
 #: packages/lib/services/ReportService.ts:208
 msgid "Items that cannot be decrypted"
@@ -2091,7 +2123,7 @@ msgstr "آخر خطأ: %s"
 msgid "Later"
 msgstr "لاحقا"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:613
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:604
 msgid "Layout"
 msgstr "تخطيط"
 
@@ -2160,6 +2192,7 @@ msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:521
 #: packages/app-mobile/components/screens/log.js:100
+#: packages/server/src/services/MustacheService.ts:199
 msgid "Log"
 msgstr "السجل"
 
@@ -2178,6 +2211,10 @@ msgstr "تسجيل الدخول عبر Dropbox"
 #: packages/app-mobile/components/screens/onedrive-login.js:110
 msgid "Login with OneDrive"
 msgstr "تسجيل الدخول عبر OneDrive"
+
+#: packages/server/src/services/MustacheService.ts:202
+msgid "Logout"
+msgstr ""
 
 #: packages/app-desktop/gui/MenuBar.tsx:705
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:583
@@ -2674,7 +2711,7 @@ msgid "Passwords do not match!"
 msgstr "كلمات المرور غير متطابقة!"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:23
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:774
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:765
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:150
 msgid "Paste"
 msgstr "لصق"
@@ -2880,7 +2917,7 @@ msgstr "اعادة التشفير"
 msgid "Re-upload local data to sync target"
 msgstr "إعادة رفع البيانات المحليّة إلى وجهة المزامنة"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:436
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:439
 msgid "Read more about it"
 msgstr "إقرأ المزيد عن هذا"
 
@@ -2913,10 +2950,6 @@ msgstr "إعادة التحميل"
 #: packages/app-mobile/components/screens/status.js:144
 msgid "Refresh"
 msgstr "تحديث"
-
-#: packages/lib/models/Setting.ts:535
-msgid "Region"
-msgstr ""
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:615
 #: packages/app-desktop/gui/Root.tsx:173
@@ -3025,16 +3058,6 @@ msgstr ""
 msgid "S3"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:506
-#, fuzzy
-msgid "S3 bucket"
-msgstr "حاوية AWS S3"
-
-#: packages/lib/models/Setting.ts:521
-#, fuzzy
-msgid "S3 URL"
-msgstr "عنوان URL ل AWS S3"
-
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:579
 msgid ""
 "Safe mode is currently active. Note rendering and all plugins are "
@@ -3095,11 +3118,6 @@ msgstr "بحث..."
 #: packages/app-cli/app/command-search.js:13
 msgid "Searches for the given <pattern> in all the notes."
 msgstr "يبحث عن الـ <pattern> (نمط) المعطى في كل الملاحظات."
-
-#: packages/lib/models/Setting.ts:557
-#, fuzzy
-msgid "Secret Key"
-msgstr "سر AWS"
 
 #: packages/lib/models/Setting.ts:1194
 msgid "See the pre-release page for more details: %s"
@@ -3527,6 +3545,10 @@ msgstr "وسوم"
 msgid "Take photo"
 msgstr "التقاط صورة"
 
+#: packages/server/src/services/MustacheService.ts:200
+msgid "Tasks"
+msgstr ""
+
 #: packages/lib/models/Setting.ts:1228
 msgid "Text editor command"
 msgstr "أمر محرر النصوص"
@@ -3557,7 +3579,7 @@ msgstr "جرى التصريح للتطبيق بنجاح."
 msgid "The application must be restarted for these changes to take effect."
 msgstr "يجب إعادة تشغيل التطبيق حتى تصبح هذه التغييرات سارية المفعول."
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:508
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:511
 msgid ""
 "The attachments will no longer be watched when you switch to a different "
 "note."
@@ -3609,7 +3631,7 @@ msgstr ""
 "ينضرب مع العامل 2 سيأخذ ضِعف مساحة العنصر بمعامل 1. أعد تشغيل التطبيق لمشاهدة "
 "التغييرات."
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:507
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:510
 msgid "The following attachments are being watched for changes:"
 msgstr "تتم مراقبة المرفقات التالية للتغييرات:"
 
@@ -3829,7 +3851,7 @@ msgstr "ليس لدى هذه الملاحظة معلومة موقع جغرافي
 msgid "This note has been modified:"
 msgstr "جرى تعديل هذه الملاحظة:"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:613
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:604
 msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
 "note."
@@ -3840,7 +3862,7 @@ msgstr ""
 msgid "This note has no history"
 msgstr "هذه المذكرة ليس لها تاريخ"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:435
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:438
 msgid ""
 "This Rich Text editor has a number of limitations and it is recommended to "
 "be aware of them before using it."
@@ -4196,6 +4218,10 @@ msgstr ""
 "الجداول وخانات الاختيار والشفرة البرمجية مثلاً). عندما لا يُعثر عليه سيتم "
 "استخدام خط عامّ أحادي المسافة (ثابت العرض)."
 
+#: packages/server/src/services/MustacheService.ts:197
+msgid "Users"
+msgstr ""
+
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:182
 msgid "Valid"
 msgstr "صحيح"
@@ -4367,9 +4393,6 @@ msgstr "تكبير"
 msgid "Zoom Out"
 msgstr "تصغير"
 
-#~ msgid "AWS key"
-#~ msgstr "مفتاح AWS"
-
 #~ msgid "AWS S3"
 #~ msgstr "أمازون إس 3"
 
@@ -4508,9 +4531,6 @@ msgstr "تصغير"
 
 #~ msgid "Check Status"
 #~ msgstr "تحقق من الحالة"
-
-#~ msgid "Help"
-#~ msgstr "مساعدة"
 
 #~ msgid "OneDrive Dev (For testing only)"
 #~ msgstr "OneDrive Dev (للاختبار فقط)"

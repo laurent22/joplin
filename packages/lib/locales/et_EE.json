@@ -195,6 +195,7 @@
  "Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": "Saab või seab seadistusväärtuse. Kui väärtust [value] ei ole esitatud, näitab see [name] väärtust. Kui ei ole esitatud [name] ega [value], loetatakse praegune konfiguratsioon.",
  "Go to source URL": "Mine Allika URL-ile",
  "Heading": "Pealkiri",
+ "Help": "Abi",
  "Hide %s": "Peida %s",
  "HTML Directory": "HTML-kataloog",
  "HTML File": "HTML-fail",

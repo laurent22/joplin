@@ -217,10 +217,6 @@ msgstr "加速键“%s”被用于“%s”和“%s”命令。这可能导致未
 msgid "Accept"
 msgstr "接受"
 
-#: packages/lib/models/Setting.ts:546
-msgid "Access Key"
-msgstr ""
-
 #: packages/app-desktop/gui/ResourceScreen.tsx:95
 msgid "Action"
 msgstr "动作"
@@ -389,6 +385,30 @@ msgstr "根据系统主题自动切换"
 #: packages/lib/models/Setting.ts:1193
 msgid "Automatically update the application"
 msgstr "自动更新应用"
+
+#: packages/lib/models/Setting.ts:546
+#, fuzzy
+msgid "AWS access key"
+msgstr "AWS 密钥"
+
+#: packages/lib/models/Setting.ts:535
+msgid "AWS region"
+msgstr ""
+
+#: packages/lib/models/Setting.ts:506
+#, fuzzy
+msgid "AWS S3 bucket"
+msgstr "AWS S3 存储桶"
+
+#: packages/lib/models/Setting.ts:521
+#, fuzzy
+msgid "AWS S3 URL"
+msgstr "AWS S3 URL"
+
+#: packages/lib/models/Setting.ts:557
+#, fuzzy
+msgid "AWS secret key"
+msgstr "AWS 密码"
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:42
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:715
@@ -600,7 +620,7 @@ msgstr ""
 "单击“%s”以恢复笔记。它将会被复制到名为“%s”的笔记本中。笔记的当前版本不会被替"
 "换或修改。"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:373
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:376
 msgid "Click to add tags..."
 msgstr "单击以添加标签..."
 
@@ -724,7 +744,7 @@ msgstr "转换为待办事项"
 
 #: packages/app-desktop/gui/MenuBar.tsx:422
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:13
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:764
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:755
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:143
 msgid "Copy"
 msgstr "复制"
@@ -903,7 +923,7 @@ msgid "Custom TLS certificates"
 msgstr "自定义 TLS 证书"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:18
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:754
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:745
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:135
 msgid "Cut"
 msgstr "剪切"
@@ -1091,7 +1111,7 @@ msgstr ""
 msgid "Discard changes"
 msgstr "放弃更改"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:437
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:440
 msgid "Dismiss"
 msgstr "忽略"
 
@@ -1615,7 +1635,7 @@ msgid ""
 msgstr "输入 `help keymap` 来获取完整的键盘快捷键列表"
 
 #: packages/lib/models/Setting.ts:568
-msgid "Force Path Style"
+msgid "Force path style"
 msgstr ""
 
 #: packages/lib/commands/historyForward.ts:6
@@ -1682,6 +1702,10 @@ msgstr "授权令牌"
 msgid "Heading"
 msgstr "标题"
 
+#: packages/server/src/services/MustacheService.ts:201
+msgid "Help"
+msgstr "帮助"
+
 #: packages/app-desktop/gui/MenuBar.tsx:492
 msgid "Hide %s"
 msgstr "隐藏 %s"
@@ -1697,6 +1721,10 @@ msgstr "隐藏 Joplin"
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:14
 msgid "Highlight"
 msgstr "突出显示"
+
+#: packages/server/src/services/MustacheService.ts:196
+msgid "Home"
+msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:78
 msgid "Horizontal Rule"
@@ -1835,7 +1863,7 @@ msgstr "要使用网页剪辑器，你需要执行以下步骤："
 msgid "In progress"
 msgstr "正在进行"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:521
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:524
 msgid "In: %s"
 msgstr "位于：%s"
 
@@ -1916,6 +1944,10 @@ msgstr "斜体"
 #: packages/lib/services/ReportService.ts:185
 msgid "Item \"%s\" could not be downloaded: %s"
 msgstr "条目 \"%s\" 无法下载：%s"
+
+#: packages/server/src/services/MustacheService.ts:198
+msgid "Items"
+msgstr ""
 
 #: packages/lib/services/ReportService.ts:208
 msgid "Items that cannot be decrypted"
@@ -2041,7 +2073,7 @@ msgstr "最后错误: %s"
 msgid "Later"
 msgstr "稍后"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:613
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:604
 msgid "Layout"
 msgstr "布局"
 
@@ -2103,6 +2135,7 @@ msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:521
 #: packages/app-mobile/components/screens/log.js:100
+#: packages/server/src/services/MustacheService.ts:199
 msgid "Log"
 msgstr "日志"
 
@@ -2121,6 +2154,10 @@ msgstr "通过 Dropbox 登录"
 #: packages/app-mobile/components/screens/onedrive-login.js:110
 msgid "Login with OneDrive"
 msgstr "通过 OneDrive 登录"
+
+#: packages/server/src/services/MustacheService.ts:202
+msgid "Logout"
+msgstr ""
 
 #: packages/app-desktop/gui/MenuBar.tsx:705
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:583
@@ -2608,7 +2645,7 @@ msgid "Passwords do not match!"
 msgstr "密码不匹配！"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:23
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:774
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:765
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:150
 msgid "Paste"
 msgstr "粘贴"
@@ -2809,7 +2846,7 @@ msgstr "重新加密"
 msgid "Re-upload local data to sync target"
 msgstr "重新上传本地数据到同步目标"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:436
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:439
 msgid "Read more about it"
 msgstr "进一步了解"
 
@@ -2842,10 +2879,6 @@ msgstr "恢复"
 #: packages/app-mobile/components/screens/status.js:144
 msgid "Refresh"
 msgstr "刷新"
-
-#: packages/lib/models/Setting.ts:535
-msgid "Region"
-msgstr ""
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:615
 #: packages/app-desktop/gui/Root.tsx:173
@@ -2951,16 +2984,6 @@ msgstr "执行文本文件中包含的命令。每个命令占一行。"
 msgid "S3"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:506
-#, fuzzy
-msgid "S3 bucket"
-msgstr "AWS S3 存储桶"
-
-#: packages/lib/models/Setting.ts:521
-#, fuzzy
-msgid "S3 URL"
-msgstr "AWS S3 URL"
-
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:579
 msgid ""
 "Safe mode is currently active. Note rendering and all plugins are "
@@ -3020,11 +3043,6 @@ msgstr "搜索..."
 #: packages/app-cli/app/command-search.js:13
 msgid "Searches for the given <pattern> in all the notes."
 msgstr "在所有笔记内搜索给定的 <pattern>。"
-
-#: packages/lib/models/Setting.ts:557
-#, fuzzy
-msgid "Secret Key"
-msgstr "AWS 密码"
 
 #: packages/lib/models/Setting.ts:1194
 msgid "See the pre-release page for more details: %s"
@@ -3442,6 +3460,10 @@ msgstr "标签"
 msgid "Take photo"
 msgstr "拍照"
 
+#: packages/server/src/services/MustacheService.ts:200
+msgid "Tasks"
+msgstr ""
+
 #: packages/lib/models/Setting.ts:1228
 msgid "Text editor command"
 msgstr "文本编辑器命令"
@@ -3472,7 +3494,7 @@ msgstr "已成功授予本应用程序权限。"
 msgid "The application must be restarted for these changes to take effect."
 msgstr "必须重新启动应用程序才能使这些更改生效。"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:508
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:511
 msgid ""
 "The attachments will no longer be watched when you switch to a different "
 "note."
@@ -3519,7 +3541,7 @@ msgstr ""
 "因子属性决定了列表上的一项如何增长或缩小，以适应其容器中相对于其他项目的可用"
 "空间。因此因子为 2 的项是因数为 1 的项占用空间的两倍。重启软件以查看变化。"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:507
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:510
 msgid "The following attachments are being watched for changes:"
 msgstr "下列附件将被监控变化："
 
@@ -3729,7 +3751,7 @@ msgstr "该笔记不含地理位置信息。"
 msgid "This note has been modified:"
 msgstr "该笔记已被修改："
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:613
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:604
 msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
 "note."
@@ -3739,7 +3761,7 @@ msgstr "该笔记没有任何内容。点击 \"%s\" 切换到编辑器并编辑�
 msgid "This note has no history"
 msgstr "此笔记没有历史记录"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:435
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:438
 msgid ""
 "This Rich Text editor has a number of limitations and it is recommended to "
 "be aware of them before using it."
@@ -4081,6 +4103,10 @@ msgstr ""
 "用于那些需要使用固定宽度的字体来清晰地布局文本的场景（例如：表格、多选框和代"
 "码块）。如果没有找到，会使用默认（等宽）字体。"
 
+#: packages/server/src/services/MustacheService.ts:197
+msgid "Users"
+msgstr ""
+
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:182
 msgid "Valid"
 msgstr "有效"
@@ -4251,9 +4277,6 @@ msgstr "放大"
 msgid "Zoom Out"
 msgstr "缩小"
 
-#~ msgid "AWS key"
-#~ msgstr "AWS 密钥"
-
 #~ msgid "AWS S3"
 #~ msgstr "AWS S3"
 
@@ -4386,9 +4409,6 @@ msgstr "缩小"
 
 #~ msgid "Check Status"
 #~ msgstr "检查状态"
-
-#~ msgid "Help"
-#~ msgstr "帮助"
 
 #~ msgid "OneDrive Dev (For testing only)"
 #~ msgstr "OneDrive 开发版 (仅供测试)"
