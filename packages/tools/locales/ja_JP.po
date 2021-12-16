@@ -15,6 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.4.2\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:565
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -226,7 +228,7 @@ msgstr "承諾"
 
 #: packages/lib/models/Setting.ts:546
 msgid "Access Key"
-msgstr ""
+msgstr "アクセスキー"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:95
 msgid "Action"
@@ -546,6 +548,8 @@ msgid ""
 "enabled end-to-end encryption. They may do so from the screen Configuration "
 "> Encryption."
 msgstr ""
+"暗号化されたノートブックはエンドツーエンド暗号化を有効にしていない受信者 %s "
+"とは共有できません。エンドツーエンド暗号化は設定画面から有効にできます。"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleLayoutMoveMode.ts:7
 msgid "Change application layout"
@@ -722,9 +726,8 @@ msgid "Conflicts (attachments)"
 msgstr "衝突 (添付ファイル)"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.tsx:108
-#, fuzzy
 msgid "Content provided by %s"
-msgstr "ノート内容のプロパティ"
+msgstr "%s によって提供されたコンテンツ"
 
 #: packages/app-mobile/components/screens/Note.tsx:938
 msgid "Convert to note"
@@ -748,9 +751,8 @@ msgstr "開発モードコマンドをクリップボードにコピー"
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:350
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:364
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:139
-#, fuzzy
 msgid "Copy external link"
-msgstr "外部エディターでの編集を終了"
+msgstr "外部リンクをコピー"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:164
 msgid "Copy Link Address"
@@ -820,6 +822,10 @@ msgid ""
 "\n"
 "The error was: \"%s\""
 msgstr ""
+"招待に応じることができませんでした。もう一度お試しいただくか、ノートブックの"
+"所有者に今でも共有を続けているかご確認ください。\n"
+"\n"
+"エラーの内容: \"%s\""
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:219
 msgid "Could not upgrade master key: %s"
@@ -830,6 +836,8 @@ msgid ""
 "Could not verify the share status of this notebook - aborting. Please try "
 "again when you are connected to the internet."
 msgstr ""
+"このノートブックの共有状態を確認できなかったため処理を中断します。インター"
+"ネット接続を確認してから再度お試しください。"
 
 #: packages/app-mobile/components/note-list.js:101
 msgid "Create a notebook"
@@ -1166,16 +1174,14 @@ msgid "Do not ask for confirmation."
 msgstr "確認を行ないません。"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:56
-#, fuzzy
 msgid ""
 "Do not lose the password as, for security purposes, this will be the *only* "
 "way to decrypt the data! To enable encryption, please enter your password "
 "below."
 msgstr ""
-"暗号化を有効にするとは、*すべて*のノートや添付ファイルを再同期し、同期先に暗"
-"号化した状態で送ることを意味します。パスワードはなくさないようにしてくださ"
-"い。セキュリティ上、このパスワードがデータを復号する*唯一*の方法になるためで"
-"す！ 暗号化を有効にするには、下にパスワードを入力してください。"
+"パスワードはなくさないようにしてください。セキュリティ上、このパスワードが"
+"データを復号する*唯一*の方法になるためです！ 暗号化を有効にするには、下にパス"
+"ワードを入力してください。"
 
 #: packages/app-desktop/checkForUpdates.ts:199
 msgid "Download"
@@ -1398,13 +1404,12 @@ msgid "Enabled"
 msgstr "有効"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:51
-#, fuzzy
 msgid ""
 "Enabling encryption means *all* your notes and attachments are going to be "
 "re-synchronised and sent encrypted to the sync target."
 msgstr ""
-"暗号化を無効にするとは、*すべて*のノートや添付ファイルを再同期し、同期ター"
-"ゲットに暗号化を解除した状態で送ることを意味します。本当に継続しますか？"
+"暗号化を有効にするとは、*すべて*のノートや添付ファイルを再同期し、同期先に暗"
+"号化した状態で送ることを意味します。"
 
 #: packages/lib/models/BaseItem.ts:808
 msgid "Encrypted"
@@ -1433,19 +1438,16 @@ msgid "Encryption is: %s"
 msgstr "暗号化: %s"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:172
-#, fuzzy
 msgid "Encryption keys"
-msgstr "暗号化の状態:"
+msgstr "暗号キー"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:249
-#, fuzzy
 msgid "Encryption:"
-msgstr "暗号化"
+msgstr "暗号化:"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:247
-#, fuzzy
 msgid "End-to-end encryption"
-msgstr "暗号化を有効にする"
+msgstr "エンドツーエンド暗号化"
 
 #: packages/app-mobile/components/screens/dropbox-login.js:66
 msgid "Enter code here"
@@ -1645,7 +1647,7 @@ msgstr ""
 
 #: packages/lib/models/Setting.ts:568
 msgid "Force Path Style"
-msgstr ""
+msgstr "Path Styleを強制する"
 
 #: packages/lib/commands/historyForward.ts:6
 msgid "Forward"
@@ -1669,9 +1671,8 @@ msgid "General"
 msgstr "全般"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:252
-#, fuzzy
 msgid "Generated"
-msgstr "全般"
+msgstr "生成済み"
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:207
 msgid "Generating link..."
@@ -1717,9 +1718,8 @@ msgid "Hide %s"
 msgstr "%s を隠す"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:172
-#, fuzzy
 msgid "Hide disabled keys"
-msgstr "無効化したマスターキーを表示しない"
+msgstr "無効化したキーを表示しない"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:22
 msgid "Hide Joplin"
@@ -1766,6 +1766,8 @@ msgid ""
 "If true, sort order buttons (field + reverse) for notes are shown at the top "
 "of Note List."
 msgstr ""
+"ノートのソート方法（対象フィールドと昇順降順）を切り替えるためのボタンをノー"
+"ト一覧の上部に表示します。"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:109
 msgid "Ignore"
@@ -1942,9 +1944,8 @@ msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "無効な設定値: \"%s\"。有効な値は: %sです。"
 
 #: packages/app-cli/app/command-e2ee.ts:46
-#, fuzzy
 msgid "Invalid password"
-msgstr "無効な入力：%s"
+msgstr "無効なパスワード"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:38
 msgid "Italic"
@@ -2064,9 +2065,8 @@ msgid "Keychain Supported: %s"
 msgstr "キーチェーンのサポート: %s"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:71
-#, fuzzy
 msgid "Keys that need upgrading"
-msgstr "アップグレードが必要なマスターキー"
+msgstr "アップグレードが必要なキー"
 
 #: packages/lib/models/Setting.ts:1242
 msgid "Landscape"
@@ -2093,9 +2093,8 @@ msgid "Layout button sequence"
 msgstr "レイアウトボタンによる切り替え順"
 
 #: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:11
-#, fuzzy
 msgid "Leave notebook..."
-msgstr "ノートブックを共有..."
+msgstr "ノートブックを離れる..."
 
 #: packages/lib/models/Setting.ts:1236
 msgid "Legal"
@@ -2172,14 +2171,12 @@ msgid "Make a donation"
 msgstr "寄付する"
 
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:212
-#, fuzzy
 msgid "Manage master password"
-msgstr "マスターパスワードを入力してください:"
+msgstr "マスターパスワードの管理"
 
 #: packages/lib/commands/openMasterPasswordDialog.ts:6
-#, fuzzy
 msgid "Manage master password..."
-msgstr "マスターパスワードを入力してください:"
+msgstr "マスターパスワードの管理..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:314
 msgid "Manage your plugins"
@@ -2187,13 +2184,12 @@ msgstr "プラグインを管理"
 
 #. `generate-ppk`
 #: packages/app-cli/app/command-e2ee.ts:20
-#, fuzzy
 msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
 "`status`, `decrypt-file`, and `target-status`."
 msgstr ""
-"エンドツーエンド暗号化(E2EE)の設定コマンドです。<command>には `enable`, "
-"`disable`, `decrypt`, `status`, `target-status` があります。"
+"エンドツーエンド暗号化(E2EE)の設定コマンドです。`enable`, `disable`, "
+"`decrypt`, `status`, `decrypt-file`, `target-status` があります。"
 
 #: packages/lib/models/Setting.ts:666
 msgid "Manual"
@@ -2208,7 +2204,7 @@ msgstr "Markdown"
 #: packages/lib/services/interop/InteropService.ts:120
 #: packages/lib/services/interop/InteropService.ts:67
 msgid "Markdown + Front Matter"
-msgstr ""
+msgstr "Markdown + Front Matter"
 
 #: packages/app-cli/app/command-done.js:14
 msgid "Marks a to-do as done."
@@ -2242,9 +2238,8 @@ msgid "Max concurrent connections"
 msgstr "最大同時接続数"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:324
-#, fuzzy
 msgid "Missing keys"
-msgstr "マスターキーがありません"
+msgstr "キーがありません"
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:271
 msgid "Missing Master Keys"
@@ -2421,7 +2416,7 @@ msgstr "未ダウンロード"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:252
 msgid "Not generated"
-msgstr ""
+msgstr "生成されていません"
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.tsx:110
 #: packages/server/src/models/UserModel.ts:214
@@ -2498,7 +2493,6 @@ msgid "Note&book"
 msgstr "ノートブック(&B)"
 
 #: packages/lib/models/Setting.ts:2143
-#, fuzzy
 msgid "Notebook"
 msgstr "ノートブック"
 
@@ -2527,7 +2521,6 @@ msgstr ""
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleNotesSortOrderField.ts:8
 #: packages/app-desktop/gui/MainScreen/commands/toggleNotesSortOrderReverse.ts:9
-#, fuzzy
 msgid "Notes"
 msgstr "ノート"
 
@@ -2690,7 +2683,7 @@ msgstr "カメラ使用の許可"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:271
 msgid "Please click on \"%s\" to proceed"
-msgstr ""
+msgstr "続行するには \"%s\" をクリックしてください"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:65
 msgid ""
@@ -2710,6 +2703,8 @@ msgid ""
 "Please note that if it is a large notebook, it may take a few minutes for "
 "all the notes to show up on the recipient's device."
 msgstr ""
+"ノートブックに大量のノートが含まれる場合、受信者側にすべてのノートが見えるよ"
+"うになるまで数分かかることがあります。"
 
 #: packages/lib/onedrive-api-node-utils.js:116
 msgid ""
@@ -2840,7 +2835,7 @@ msgstr "プロパティ"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:252
 msgid "Public-private key pair:"
-msgstr ""
+msgstr "公開鍵・秘密鍵ペア:"
 
 #: packages/app-desktop/gui/MainScreen/commands/showShareNoteDialog.ts:6
 msgid "Publish note..."
@@ -2908,7 +2903,7 @@ msgstr "更新"
 
 #: packages/lib/models/Setting.ts:535
 msgid "Region"
-msgstr ""
+msgstr "リージョン"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:615
 #: packages/app-desktop/gui/Root.tsx:173
@@ -2952,9 +2947,8 @@ msgstr "トークンを更新する"
 
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:212
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:213
-#, fuzzy
 msgid "Reset master password"
-msgstr "マスターパスワードを入力してください:"
+msgstr "マスターパスワードをリセット"
 
 #: packages/app-cli/app/command-import.js:51
 #: packages/app-desktop/gui/ImportScreen.min.js:72
@@ -3015,17 +3009,15 @@ msgstr ""
 
 #: packages/lib/SyncTargetAmazonS3.js:28
 msgid "S3"
-msgstr ""
+msgstr "S3"
 
 #: packages/lib/models/Setting.ts:506
-#, fuzzy
 msgid "S3 bucket"
-msgstr "AWS S3 バケット"
+msgstr "S3 バケット"
 
 #: packages/lib/models/Setting.ts:521
-#, fuzzy
 msgid "S3 URL"
-msgstr "AWS S3 URL"
+msgstr "S3 URL"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:579
 msgid ""
@@ -3090,9 +3082,8 @@ msgid "Searches for the given <pattern> in all the notes."
 msgstr "指定された<pattern>をすべてのノートから検索する。"
 
 #: packages/lib/models/Setting.ts:557
-#, fuzzy
 msgid "Secret Key"
-msgstr "AWS シークレットアクセスキー"
+msgstr "シークレットアクセスキー"
 
 #: packages/lib/models/Setting.ts:1194
 msgid "See the pre-release page for more details: %s"
@@ -3130,11 +3121,11 @@ msgid "Set alarm:"
 msgstr "アラームをセット："
 
 #: packages/lib/models/Setting.ts:1125
-#, fuzzy
 msgid ""
 "Set it to 0 to make it take the complete available space. Recommended width "
 "is 600."
-msgstr "幅いっぱいに表示させたいときは 0 に設定してください。"
+msgstr ""
+"幅いっぱいに表示させたいときは 0 に設定してください。推奨設定は 600 です。"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:627
 msgid "Set the password"
@@ -3187,18 +3178,16 @@ msgid "Show completed to-dos"
 msgstr "完了したToDoを表示"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:172
-#, fuzzy
 msgid "Show disabled keys"
-msgstr "無効化したマスターキーを表示する"
+msgstr "無効化したキーを表示する"
 
 #: packages/lib/models/Setting.ts:810
 msgid "Show note counts"
 msgstr "ノートの数を表示"
 
 #: packages/lib/models/Setting.ts:866
-#, fuzzy
 msgid "Show sort order buttons"
-msgstr "ノートの数を表示"
+msgstr "ソート方法切り替えボタンを表示"
 
 #: packages/lib/models/Setting.ts:1042
 msgid "Show tray icon"
@@ -3616,15 +3605,14 @@ msgid "The following attachments are being watched for changes:"
 msgstr "下記の添付ファイルが変更されたかどうかを監視中です:"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:72
-#, fuzzy
 msgid ""
 "The following keys use an out-dated encryption algorithm and it is "
 "recommended to upgrade them. The upgraded key will still be able to decrypt "
 "and encrypt your data as usual."
 msgstr ""
-"以下のマスターキーは旧式の暗号化アルゴリズムを使用しているため、アップグレー"
-"ドをおすすめします。マスターキーをアップグレードしても既存データはこれまでど"
-"おり復号化/暗号化が可能です。"
+"以下のキーは旧式の暗号化アルゴリズムを使用しているため、アップグレードをおす"
+"すめします。キーをアップグレードしても既存データはこれまでどおり復号化/暗号化"
+"が可能です。"
 
 #: packages/app-mobile/components/screens/Note.tsx:196
 msgid "The Joplin mobile app does not currently support this type of link: %s"
@@ -3639,15 +3627,14 @@ msgstr ""
 "基準を満たしています。"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:325
-#, fuzzy
 msgid ""
 "The keys with these IDs are used to encrypt some of your items, however the "
 "application does not currently have access to them. It is likely they will "
 "eventually be downloaded via synchronisation."
 msgstr ""
-"これらのIDを持つマスターキーはアイテムを暗号化するのに使われていますが、現在"
-"このキーで暗号化されたアイテムにはアクセスできません。おそらくこれらのアイテ"
-"ムはまだ同期（ダウンロード）されていないものと考えられます。"
+"これらのIDを持つキーはアイテムを暗号化するのに使われていますが、現在このキー"
+"で暗号化されたアイテムにはアクセスできません。おそらくこれらのアイテムはまだ"
+"同期（ダウンロード）されていないものと考えられます。"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:217
 msgid "The master key has been upgraded successfully!"
@@ -3686,6 +3673,9 @@ msgid ""
 "\n"
 "The error was: \"%s\""
 msgstr ""
+"リストから受信者を削除できませんでした。もう一度お試しください。\n"
+"\n"
+"エラーの内容: \"%s\""
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:585
 msgid ""
@@ -3698,10 +3688,10 @@ msgstr ""
 "するにはリンクをクリックしてください。"
 
 #: packages/app-mobile/components/screen-header.js:461
-#, fuzzy
 msgid "The sync target needs to be upgraded. Press this banner to proceed."
 msgstr ""
-"同期先のアップグレードが必要です。続行するには `%s` を実行してください。"
+"同期先のアップグレードが必要です。続行するにはこのバナーをクリックしてくださ"
+"い。"
 
 #: packages/lib/models/Tag.ts:204
 msgid "The tag \"%s\" already exists. Please choose a different name."
@@ -3880,13 +3870,12 @@ msgid "This will open a new screen. Save your current changes?"
 msgstr "新しい画面を開きます。変更を保存しますか?"
 
 #: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:17
-#, fuzzy
 msgid ""
 "This will remove the notebook from your collection and you will no longer "
 "have access to its content. Do you wish to continue?"
 msgstr ""
-"このノートブックの共有を解除しますか? 解除後は招待の受信者がノートブックにア"
-"クセスできなくなります。"
+"ノートブックをあなたのコレクションから削除しようとしています。今後そのコンテ"
+"ンツにアクセスできなくなりますが、続行しますか?"
 
 #: packages/lib/models/Setting.ts:738
 msgid "Time format"
@@ -3909,9 +3898,8 @@ msgid ""
 msgstr "DropboxでJoplinを同期する場合は、次のステップを実行してください:"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:54
-#, fuzzy
 msgid "To continue, please enter your master password below."
-msgstr "マスターパスワードを入力してください"
+msgstr "続行するには、マスターパスワードを入力してください"
 
 #: packages/app-cli/app/app-gui.js:452
 msgid "To delete a tag, untag the associated notes."
@@ -3989,9 +3977,8 @@ msgid "Toggle note list"
 msgstr "ノート一覧の表示切り替え"
 
 #: packages/app-desktop/gui/MainScreen/commands/togglePerFolderSortOrder.ts:7
-#, fuzzy
 msgid "Toggle own sort order"
-msgstr "セーフモードのオンオフを切り替える"
+msgstr "ノートブック固有のソート設定をオンオフする"
 
 #: packages/app-desktop/commands/toggleSafeMode.ts:8
 msgid "Toggle safe mode"
@@ -4002,9 +3989,8 @@ msgid "Toggle sidebar"
 msgstr "サイドバーの表示切り替え"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleNotesSortOrderField.ts:7
-#, fuzzy
 msgid "Toggle sort order field"
-msgstr "セーフモードのオンオフを切り替える"
+msgstr "ソート対象フィールドを切り替える"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:40
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:41
@@ -4354,13 +4340,15 @@ msgstr "既存データを暗号化しなおし、再同期します。"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:271
 msgid "Your master password is needed to decrypt some of your data."
-msgstr ""
+msgstr "一部のデータを復号化するためにあなたのマスターパスワードが必要です。"
 
 #: packages/app-cli/app/command-sync.ts:242
 msgid ""
 "Your password is needed to decrypt some of your data. Type `:e2ee decrypt` "
 "to set it."
 msgstr ""
+"一部のデータを復号化するためにあなたのパスワードが必要です。`:e2ee decrypt`と"
+"入力し設定してください。"
 
 #: packages/app-mobile/components/CameraView.tsx:189
 msgid "Your permission to use your camera is required."
