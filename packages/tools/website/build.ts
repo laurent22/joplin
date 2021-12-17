@@ -345,7 +345,7 @@ async function main() {
 
 	await makeNewsFrontPage(newsFilePaths, `${rootDir}/docs/news/index.html`, {
 		...defaultTemplateParams(assetUrls),
-		pageName: 'plans',
+		pageName: 'news',
 		partials,
 		showToc: false,
 		showImproveThisDoc: false,
