@@ -37,7 +37,7 @@
     "asar": true,
     "asarUnpack": "./node_modules/node-notifier/vendor/**",
     "win": {
-      "rfc3161TimeStampServer": "http://sha256timestamp.ws.symantec.com/sha256/timestamp",
+      "rfc3161TimeStampServer": "http://timestamp.digicert.com",
       "icon": "../../Assets/ImageSources/Joplin.ico",
       "target": [
         {
