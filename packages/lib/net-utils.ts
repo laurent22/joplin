@@ -26,7 +26,7 @@ export async function findAvailablePort(tcpPortUsed: any, possiblePorts: number[
 	return port;
 }
 
-export async function mimeTypeFromHeaders(headers: Record<string, any>) {
+export function mimeTypeFromHeaders(headers: Record<string, any>) {
 	if (!headers || !headers['content-type']) return null;
 
 	const splitted = headers['content-type'].split(';');

@@ -16,9 +16,9 @@ const { shimInit } = require('@joplin/lib/shim-init-node.js');
 
 shimInit();
 
-const blogDir = `${dirname(__dirname)}/readme/blog`;
+const blogDir = `${dirname(dirname(__dirname))}/readme/blog`;
 const tempDir = `${__dirname}/temp`;
-const imageDir = `${dirname(__dirname)}/readme/blog/images`;
+const imageDir = `${blogDir}/images`;
 
 const htmlToMd = new HtmlToMd();
 
@@ -60,7 +60,19 @@ async function createPostFile(post, filePath) {
 		const imageUrl = imageUrls[i];
 		const imageFilename = `${filename(filePath)}_${i}`;
 		const imagePath = `${tempDir}/${imageFilename}`;
-		const response = await shim.fetchBlob(imageUrl, { path: imagePath, maxRetry: 1 });
+
+		let response = null;
+		try {
+			response = await shim.fetchBlob(imageUrl, { path: imagePath, maxRetry: 1 });
+		} catch (error) {
+			console.warn(`Could not fetch image: ${imageUrl}`);
+			continue;
+		}
+
+		if (!response.ok) {
+			console.warn(`Could not fetch image: ${imageUrl}`);
+			continue;
+		}
 
 		const mimeType = mimeTypeFromHeaders(response.headers);
 		let ext = 'jpg';
@@ -93,7 +105,7 @@ async function createPostFile(post, filePath) {
 
 async function createPostFiles(posts) {
 	for (const post of posts) {
-		const filename = `${moment(post.published_at).format('YYYYMMDD-HHmmss')}.md`;
+		const filename = `${moment(post.published_at).utc().format('YYYYMMDD-HHmmss')}.md`;
 		await createPostFile(post, `${blogDir}/${filename}`);
 	}
 }
