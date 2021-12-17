@@ -864,7 +864,7 @@ class Setting extends BaseModel {
 				section: 'appearance',
 				public: true,
 				label: () => _('Show sort order buttons'),
-				description: () => _('If true, sort order buttons (field + reverse) for notes are shown at the top of Note List.'),
+				// description: () => _('If true, sort order buttons (field + reverse) for notes are shown at the top of Note List.'),
 				appTypes: [AppType.Desktop],
 			},
 			'notes.perFieldReversalEnabled': {
