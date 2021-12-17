@@ -230,10 +230,6 @@ msgstr ""
 msgid "Accept"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:546
-msgid "Access Key"
-msgstr ""
-
 #: packages/app-desktop/gui/ResourceScreen.tsx:95
 #, fuzzy
 msgid "Action"
@@ -412,6 +408,26 @@ msgstr ""
 #: packages/lib/models/Setting.ts:1193
 msgid "Automatically update the application"
 msgstr "Automatikoki eguneratu aplikazioa"
+
+#: packages/lib/models/Setting.ts:546
+msgid "AWS access key"
+msgstr ""
+
+#: packages/lib/models/Setting.ts:535
+msgid "AWS region"
+msgstr ""
+
+#: packages/lib/models/Setting.ts:506
+msgid "AWS S3 bucket"
+msgstr ""
+
+#: packages/lib/models/Setting.ts:521
+msgid "AWS S3 URL"
+msgstr ""
+
+#: packages/lib/models/Setting.ts:557
+msgid "AWS secret key"
+msgstr ""
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:42
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:715
@@ -628,7 +644,7 @@ msgid ""
 "\"%s\". The current version of the note will not be replaced or modified."
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:373
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:376
 msgid "Click to add tags..."
 msgstr ""
 
@@ -758,7 +774,7 @@ msgstr "Zeregina bihurtu"
 
 #: packages/app-desktop/gui/MenuBar.tsx:422
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:13
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:764
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:755
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:143
 msgid "Copy"
 msgstr "Kopiatu"
@@ -934,7 +950,7 @@ msgid "Custom TLS certificates"
 msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:18
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:754
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:745
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:135
 msgid "Cut"
 msgstr "Moztu"
@@ -1133,7 +1149,7 @@ msgstr ""
 msgid "Discard changes"
 msgstr "Bertan behera utzi aldaketak"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:437
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:440
 msgid "Dismiss"
 msgstr ""
 
@@ -1686,7 +1702,7 @@ msgid ""
 msgstr "Laster bideen zerrenda osoa ikusteko, idatzi `help shortcuts`"
 
 #: packages/lib/models/Setting.ts:568
-msgid "Force Path Style"
+msgid "Force path style"
 msgstr ""
 
 #: packages/lib/commands/historyForward.ts:6
@@ -1759,6 +1775,11 @@ msgstr ""
 msgid "Heading"
 msgstr ""
 
+#: packages/server/src/services/MustacheService.ts:201
+#, fuzzy
+msgid "Help"
+msgstr "Laguntza"
+
 #: packages/app-desktop/gui/MenuBar.tsx:492
 msgid "Hide %s"
 msgstr ""
@@ -1774,6 +1795,10 @@ msgstr "Joplin-i buruz"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:14
 msgid "Highlight"
+msgstr ""
+
+#: packages/server/src/services/MustacheService.ts:196
+msgid "Home"
 msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:78
@@ -1807,12 +1832,6 @@ msgstr "ID"
 
 #: packages/lib/Synchronizer.ts:304
 msgid "Idle"
-msgstr ""
-
-#: packages/lib/models/Setting.ts:867
-msgid ""
-"If true, sort order buttons (field + reverse) for notes are shown at the top "
-"of Note List."
 msgstr ""
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:109
@@ -1901,7 +1920,7 @@ msgstr ""
 msgid "In progress"
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:521
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:524
 #, fuzzy
 msgid "In: %s"
 msgstr "%s: %s"
@@ -1988,6 +2007,10 @@ msgstr ""
 #, fuzzy
 msgid "Item \"%s\" could not be downloaded: %s"
 msgstr "Koadernoa ezin gorde daiteke: %s"
+
+#: packages/server/src/services/MustacheService.ts:198
+msgid "Items"
+msgstr ""
 
 #: packages/lib/services/ReportService.ts:208
 #, fuzzy
@@ -2119,7 +2142,7 @@ msgstr "Aio! Agur! :_( "
 msgid "Later"
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:613
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:604
 msgid "Layout"
 msgstr "Diseinua"
 
@@ -2184,6 +2207,7 @@ msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:521
 #: packages/app-mobile/components/screens/log.js:100
+#: packages/server/src/services/MustacheService.ts:199
 msgid "Log"
 msgstr "Egunkaria"
 
@@ -2203,6 +2227,10 @@ msgstr "Login with OneDrive"
 #: packages/app-mobile/components/screens/onedrive-login.js:110
 msgid "Login with OneDrive"
 msgstr "Login with OneDrive"
+
+#: packages/server/src/services/MustacheService.ts:202
+msgid "Logout"
+msgstr ""
 
 #: packages/app-desktop/gui/MenuBar.tsx:705
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:583
@@ -2738,7 +2766,7 @@ msgid "Passwords do not match!"
 msgstr "Pasahitza ezin utz daiteke hutsik"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:23
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:774
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:765
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:150
 msgid "Paste"
 msgstr "Itsatsi"
@@ -2947,7 +2975,7 @@ msgstr "Zifratua  da:"
 msgid "Re-upload local data to sync target"
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:436
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:439
 msgid "Read more about it"
 msgstr ""
 
@@ -2981,10 +3009,6 @@ msgstr ""
 #, fuzzy
 msgid "Refresh"
 msgstr "Freskatu"
-
-#: packages/lib/models/Setting.ts:535
-msgid "Region"
-msgstr ""
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:615
 #: packages/app-desktop/gui/Root.tsx:173
@@ -3097,14 +3121,6 @@ msgstr ""
 msgid "S3"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:506
-msgid "S3 bucket"
-msgstr ""
-
-#: packages/lib/models/Setting.ts:521
-msgid "S3 URL"
-msgstr ""
-
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:579
 msgid ""
 "Safe mode is currently active. Note rendering and all plugins are "
@@ -3169,10 +3185,6 @@ msgstr "Bilatu"
 #: packages/app-cli/app/command-search.js:13
 msgid "Searches for the given <pattern> in all the notes."
 msgstr "Emandako <pattern> bilatzen du ohar guztietan."
-
-#: packages/lib/models/Setting.ts:557
-msgid "Secret Key"
-msgstr ""
 
 #: packages/lib/models/Setting.ts:1194
 msgid "See the pre-release page for more details: %s"
@@ -3619,6 +3631,10 @@ msgstr "Etiketak"
 msgid "Take photo"
 msgstr "Argazkia erantsi"
 
+#: packages/server/src/services/MustacheService.ts:200
+msgid "Tasks"
+msgstr ""
+
 #: packages/lib/models/Setting.ts:1228
 #, fuzzy
 msgid "Text editor command"
@@ -3651,7 +3667,7 @@ msgstr "Aplikazioak baimena hartu du."
 msgid "The application must be restarted for these changes to take effect."
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:508
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:511
 msgid ""
 "The attachments will no longer be watched when you switch to a different "
 "note."
@@ -3697,7 +3713,7 @@ msgid ""
 "factor of 1.Restart app to see changes."
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:507
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:510
 msgid "The following attachments are being watched for changes:"
 msgstr ""
 
@@ -3885,7 +3901,7 @@ msgstr "Ohar honek ez du geokokapen informaziorik."
 msgid "This note has been modified:"
 msgstr "Ohar hau mugitua izan da:"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:613
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:604
 msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
 "note."
@@ -3896,7 +3912,7 @@ msgstr ""
 msgid "This note has no history"
 msgstr "Ohar hau mugitua izan da:"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:435
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:438
 msgid ""
 "This Rich Text editor has a number of limitations and it is recommended to "
 "be aware of them before using it."
@@ -4248,6 +4264,10 @@ msgid ""
 "font is used."
 msgstr ""
 
+#: packages/server/src/services/MustacheService.ts:197
+msgid "Users"
+msgstr ""
+
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:182
 #, fuzzy
 msgid "Valid"
@@ -4487,10 +4507,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Check Status"
 #~ msgstr "Egoera"
-
-#, fuzzy
-#~ msgid "Help"
-#~ msgstr "Laguntza"
 
 #~ msgid "OneDrive Dev (For testing only)"
 #~ msgstr "OneDrive Dev (aprobetarako soilik)"

@@ -204,6 +204,7 @@
  "Gets or sets a config value. If [value] is not provided, it will show the value of [name]. If neither [name] nor [value] is provided, it will list the current configuration.": "Obține sau setează o valoare de configurare. Dacă [valoare] nu este furnizată, va afișa valoarea [nume]. Dacă nu este furnizat nici [nume], nici [valoare], va afișa configurația curentă.",
  "Goto Anything...": "Mergeți la...",
  "Heading": "Titlu",
+ "Help": "Ajutor",
  "Hide %s": "Ascundeți %s",
  "Horizontal Rule": "Linie orizontală",
  "HTML Directory": "Directoriu HTML",

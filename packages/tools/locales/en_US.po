@@ -214,10 +214,6 @@ msgstr ""
 msgid "Accept"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:546
-msgid "Access Key"
-msgstr ""
-
 #: packages/app-desktop/gui/ResourceScreen.tsx:95
 msgid "Action"
 msgstr ""
@@ -383,6 +379,26 @@ msgstr ""
 
 #: packages/lib/models/Setting.ts:1193
 msgid "Automatically update the application"
+msgstr ""
+
+#: packages/lib/models/Setting.ts:546
+msgid "AWS access key"
+msgstr ""
+
+#: packages/lib/models/Setting.ts:535
+msgid "AWS region"
+msgstr ""
+
+#: packages/lib/models/Setting.ts:506
+msgid "AWS S3 bucket"
+msgstr ""
+
+#: packages/lib/models/Setting.ts:521
+msgid "AWS S3 URL"
+msgstr ""
+
+#: packages/lib/models/Setting.ts:557
+msgid "AWS secret key"
 msgstr ""
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:42
@@ -593,7 +609,7 @@ msgid ""
 "\"%s\". The current version of the note will not be replaced or modified."
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:373
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:376
 msgid "Click to add tags..."
 msgstr ""
 
@@ -718,7 +734,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/MenuBar.tsx:422
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:13
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:764
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:755
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:143
 msgid "Copy"
 msgstr ""
@@ -896,7 +912,7 @@ msgid "Custom TLS certificates"
 msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:18
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:754
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:745
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:135
 msgid "Cut"
 msgstr ""
@@ -1082,7 +1098,7 @@ msgstr ""
 msgid "Discard changes"
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:437
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:440
 msgid "Dismiss"
 msgstr ""
 
@@ -1596,7 +1612,7 @@ msgid ""
 msgstr ""
 
 #: packages/lib/models/Setting.ts:568
-msgid "Force Path Style"
+msgid "Force path style"
 msgstr ""
 
 #: packages/lib/commands/historyForward.ts:6
@@ -1662,6 +1678,10 @@ msgstr "Grant authorization"
 msgid "Heading"
 msgstr ""
 
+#: packages/server/src/services/MustacheService.ts:201
+msgid "Help"
+msgstr ""
+
 #: packages/app-desktop/gui/MenuBar.tsx:492
 msgid "Hide %s"
 msgstr ""
@@ -1676,6 +1696,10 @@ msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:14
 msgid "Highlight"
+msgstr ""
+
+#: packages/server/src/services/MustacheService.ts:196
+msgid "Home"
 msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:78
@@ -1708,12 +1732,6 @@ msgstr ""
 
 #: packages/lib/Synchronizer.ts:304
 msgid "Idle"
-msgstr ""
-
-#: packages/lib/models/Setting.ts:867
-msgid ""
-"If true, sort order buttons (field + reverse) for notes are shown at the top "
-"of Note List."
 msgstr ""
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:109
@@ -1813,7 +1831,7 @@ msgstr ""
 msgid "In progress"
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:521
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:524
 msgid "In: %s"
 msgstr ""
 
@@ -1892,6 +1910,10 @@ msgstr ""
 
 #: packages/lib/services/ReportService.ts:185
 msgid "Item \"%s\" could not be downloaded: %s"
+msgstr ""
+
+#: packages/server/src/services/MustacheService.ts:198
+msgid "Items"
 msgstr ""
 
 #: packages/lib/services/ReportService.ts:208
@@ -2016,7 +2038,7 @@ msgstr ""
 msgid "Later"
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:613
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:604
 msgid "Layout"
 msgstr ""
 
@@ -2080,6 +2102,7 @@ msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:521
 #: packages/app-mobile/components/screens/log.js:100
+#: packages/server/src/services/MustacheService.ts:199
 msgid "Log"
 msgstr ""
 
@@ -2097,6 +2120,10 @@ msgstr ""
 
 #: packages/app-mobile/components/screens/onedrive-login.js:110
 msgid "Login with OneDrive"
+msgstr ""
+
+#: packages/server/src/services/MustacheService.ts:202
+msgid "Logout"
 msgstr ""
 
 #: packages/app-desktop/gui/MenuBar.tsx:705
@@ -2579,7 +2606,7 @@ msgid "Passwords do not match!"
 msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:23
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:774
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:765
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:150
 msgid "Paste"
 msgstr ""
@@ -2775,7 +2802,7 @@ msgstr ""
 msgid "Re-upload local data to sync target"
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:436
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:439
 msgid "Read more about it"
 msgstr ""
 
@@ -2807,10 +2834,6 @@ msgstr ""
 #: packages/app-mobile/components/screens/onedrive-login.js:121
 #: packages/app-mobile/components/screens/status.js:144
 msgid "Refresh"
-msgstr ""
-
-#: packages/lib/models/Setting.ts:535
-msgid "Region"
 msgstr ""
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:615
@@ -2917,14 +2940,6 @@ msgstr ""
 msgid "S3"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:506
-msgid "S3 bucket"
-msgstr ""
-
-#: packages/lib/models/Setting.ts:521
-msgid "S3 URL"
-msgstr ""
-
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:579
 msgid ""
 "Safe mode is currently active. Note rendering and all plugins are "
@@ -2983,10 +2998,6 @@ msgstr ""
 
 #: packages/app-cli/app/command-search.js:13
 msgid "Searches for the given <pattern> in all the notes."
-msgstr ""
-
-#: packages/lib/models/Setting.ts:557
-msgid "Secret Key"
 msgstr ""
 
 #: packages/lib/models/Setting.ts:1194
@@ -3398,6 +3409,10 @@ msgstr ""
 msgid "Take photo"
 msgstr ""
 
+#: packages/server/src/services/MustacheService.ts:200
+msgid "Tasks"
+msgstr ""
+
 #: packages/lib/models/Setting.ts:1228
 msgid "Text editor command"
 msgstr ""
@@ -3429,7 +3444,7 @@ msgstr "The application has been successfully authorized."
 msgid "The application must be restarted for these changes to take effect."
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:508
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:511
 msgid ""
 "The attachments will no longer be watched when you switch to a different "
 "note."
@@ -3472,7 +3487,7 @@ msgid ""
 "factor of 1.Restart app to see changes."
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:507
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:510
 msgid "The following attachments are being watched for changes:"
 msgstr ""
 
@@ -3665,7 +3680,7 @@ msgstr ""
 msgid "This note has been modified:"
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:613
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:604
 msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
 "note."
@@ -3675,7 +3690,7 @@ msgstr ""
 msgid "This note has no history"
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:435
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:438
 msgid ""
 "This Rich Text editor has a number of limitations and it is recommended to "
 "be aware of them before using it."
@@ -4000,6 +4015,10 @@ msgid ""
 "Used where a fixed width font is needed to lay out text legibly (e.g. "
 "tables, checkboxes, code). If not found, a generic monospace (fixed width) "
 "font is used."
+msgstr ""
+
+#: packages/server/src/services/MustacheService.ts:197
+msgid "Users"
 msgstr ""
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:182
