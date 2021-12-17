@@ -1789,14 +1789,6 @@ msgstr "ID"
 msgid "Idle"
 msgstr "待機中"
 
-#: packages/lib/models/Setting.ts:867
-msgid ""
-"If true, sort order buttons (field + reverse) for notes are shown at the top "
-"of Note List."
-msgstr ""
-"ノートのソート方法（対象フィールドと昇順降順）を切り替えるためのボタンをノー"
-"ト一覧の上部に表示します。"
-
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:109
 msgid "Ignore"
 msgstr "無視"
@@ -4395,6 +4387,13 @@ msgstr "ズームイン"
 #: packages/app-desktop/gui/MenuBar.tsx:655
 msgid "Zoom Out"
 msgstr "ズームアウト"
+
+#~ msgid ""
+#~ "If true, sort order buttons (field + reverse) for notes are shown at the "
+#~ "top of Note List."
+#~ msgstr ""
+#~ "ノートのソート方法（対象フィールドと昇順降順）を切り替えるためのボタンを"
+#~ "ノート一覧の上部に表示します。"
 
 #~ msgid "AWS key"
 #~ msgstr "AWS アクセスキーID"

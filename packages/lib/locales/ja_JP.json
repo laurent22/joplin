@@ -358,7 +358,6 @@
  "Icon": "アイコン",
  "ID": "ID",
  "Idle": "待機中",
- "If true, sort order buttons (field + reverse) for notes are shown at the top of Note List.": "ノートのソート方法（対象フィールドと昇順降順）を切り替えるためのボタンをノート一覧の上部に表示します。",
  "Ignore": "無視",
  "Ignore TLS certificate errors": "TLS証明書のエラーを無視",
  "Import": "インポート",

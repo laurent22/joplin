@@ -1806,12 +1806,6 @@ msgstr "ไอดี"
 msgid "Idle"
 msgstr "ว่าง"
 
-#: packages/lib/models/Setting.ts:867
-msgid ""
-"If true, sort order buttons (field + reverse) for notes are shown at the top "
-"of Note List."
-msgstr ""
-
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:109
 msgid "Ignore"
 msgstr ""
