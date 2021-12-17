@@ -1,6 +1,6 @@
 # Joplin Android app changelog
 
-## [android-v2.6.7](https://github.com/laurent22/joplin/releases/tag/android-v2.6.7) - 2021-12-16T09:48:05Z
+## [android-v2.6.8](https://github.com/laurent22/joplin/releases/tag/android-v2.6.8) - 2021-12-17T10:15:00Z
 
 - Improved: Update Mermaid: 8.12.1 -&gt; 8.13.5 (#5831 by Helmut K. C. Tessarek)
 - Fixed: Links in flowchart Mermaid diagrams (#5830) (#5801 by Helmut K. C. Tessarek)
