@@ -16,9 +16,10 @@ const { shimInit } = require('@joplin/lib/shim-init-node.js');
 
 shimInit();
 
-const blogDir = `${dirname(dirname(__dirname))}/readme/blog`;
+const rootDir = dirname(dirname(__dirname));
+const blogDir = `${rootDir}/readme/news`;
 const tempDir = `${__dirname}/temp`;
-const imageDir = `${blogDir}/images`;
+const imageDir = `${rootDir}/Assets/WebsiteAssets/images/news`;
 
 const htmlToMd = new HtmlToMd();
 
@@ -88,18 +89,20 @@ async function createPostFile(post, filePath) {
 	}
 
 	for (const imageUrl in imageUrlsToFiles) {
-		const r = `images/${basename(imageUrlsToFiles[imageUrl])}`;
+		const r = `https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/${basename(imageUrlsToFiles[imageUrl])}`;
 		contentMd = contentMd.replace(new RegExp(pregQuote(imageUrl), 'g'), r);
 	}
 
-	const fileMd = [`# ${post.title}`];
+	const fileMd = [];
+	fileMd.push('---');
+	fileMd.push(`created: ${post.published_at}`);
+	fileMd.push(`source_url: https://www.patreon.com${post.url}`);
+	fileMd.push('---');
+	fileMd.push('');
+	fileMd.push(`# ${post.title}`);
 	fileMd.push('');
 	fileMd.push(contentMd);
-	fileMd.push('');
-	fileMd.push('* * *');
-	fileMd.push('');
-	fileMd.push(`url: https://www.patreon.com${post.url}`);
-	fileMd.push(`published_at: ${post.published_at}`);
+
 	await fs.writeFile(filePath, fileMd.join('\n'));
 }
 

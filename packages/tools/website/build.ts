@@ -1,10 +1,13 @@
-import * as fs from 'fs-extra';
+import { readFileSync, readFile, mkdirpSync, writeFileSync, remove, copy } from 'fs-extra';
 import { insertContentIntoFile, rootDir } from '../tool-utils';
 import { pressCarouselItems } from './utils/pressCarousel';
 import { getMarkdownIt, loadMustachePartials, markdownToPageHtml, renderMustache } from './utils/render';
 import { AssetUrls, Env, OrgSponsor, PlanPageParams, Sponsors, TemplateParams } from './utils/types';
 import { getPlans, loadStripeConfig } from '@joplin/lib/utils/joplinCloud';
 import { shuffle } from '@joplin/lib/array';
+import { stripOffFrontMatter } from './utils/frontMatter';
+const moment = require('moment');
+
 const dirname = require('path').dirname;
 const glob = require('glob');
 const path = require('path');
@@ -13,9 +16,9 @@ const md5File = require('md5-file/promise');
 const env = Env.Prod;
 
 const websiteAssetDir = `${rootDir}/Assets/WebsiteAssets`;
-const mainTemplateHtml = fs.readFileSync(`${websiteAssetDir}/templates/main-new.mustache`, 'utf8');
-const frontTemplateHtml = fs.readFileSync(`${websiteAssetDir}/templates/front.mustache`, 'utf8');
-const plansTemplateHtml = fs.readFileSync(`${websiteAssetDir}/templates/plans.mustache`, 'utf8');
+const mainTemplateHtml = readFileSync(`${websiteAssetDir}/templates/main-new.mustache`, 'utf8');
+const frontTemplateHtml = readFileSync(`${websiteAssetDir}/templates/front.mustache`, 'utf8');
+const plansTemplateHtml = readFileSync(`${websiteAssetDir}/templates/plans.mustache`, 'utf8');
 const stripeConfig = loadStripeConfig(env, `${rootDir}/packages/server/stripeConfig.json`);
 const partialDir = `${websiteAssetDir}/templates/partials`;
 
@@ -24,7 +27,7 @@ let tocHtml_: string = null;
 const tocRegex_ = /<!-- TOC -->([^]*)<!-- TOC -->/;
 function tocMd() {
 	if (tocMd_) return tocMd_;
-	const md = fs.readFileSync(`${rootDir}/README.md`, 'utf8');
+	const md = readFileSync(`${rootDir}/README.md`, 'utf8');
 	const toc = md.match(tocRegex_);
 	tocMd_ = toc[1];
 	return tocMd_;
@@ -32,7 +35,7 @@ function tocMd() {
 
 const donateLinksRegex_ = /<!-- DONATELINKS -->([^]*)<!-- DONATELINKS -->/;
 async function getDonateLinks() {
-	const md = await fs.readFile(`${rootDir}/README.md`, 'utf8');
+	const md = await readFile(`${rootDir}/README.md`, 'utf8');
 	const matches = md.match(donateLinksRegex_);
 
 	if (!matches) throw new Error('Cannot fetch donate links');
@@ -125,13 +128,13 @@ function renderPageToHtml(md: string, targetPath: string, templateParams: Templa
 	const html = templateParams.contentHtml ? renderMustache(templateParams.contentHtml, templateParams) : markdownToPageHtml(md, templateParams);
 
 	const folderPath = dirname(targetPath);
-	fs.mkdirpSync(folderPath);
+	mkdirpSync(folderPath);
 
-	fs.writeFileSync(targetPath, html);
+	writeFileSync(targetPath, html);
 }
 
 async function readmeFileTitle(sourcePath: string) {
-	const md = await fs.readFile(sourcePath, 'utf8');
+	const md = await readFile(sourcePath, 'utf8');
 	const r = md.match(/(^|\n)# (.*)/);
 
 	if (!r) {
@@ -142,12 +145,13 @@ async function readmeFileTitle(sourcePath: string) {
 }
 
 function renderFileToHtml(sourcePath: string, targetPath: string, templateParams: TemplateParams) {
-	const md = fs.readFileSync(sourcePath, 'utf8');
+	let md = readFileSync(sourcePath, 'utf8');
+	md = stripOffFrontMatter(md).doc;
 	return renderPageToHtml(md, targetPath, templateParams);
 }
 
 function makeHomePageMd() {
-	let md = fs.readFileSync(`${rootDir}/README.md`, 'utf8');
+	let md = readFileSync(`${rootDir}/README.md`, 'utf8');
 	md = md.replace(tocRegex_, '');
 
 	// HACK: GitHub needs the \| or the inline code won't be displayed correctly inside the table,
@@ -190,7 +194,7 @@ async function updateDownloadPage(downloadButtonsHtml: Record<string, string>) {
 
 async function loadSponsors(): Promise<Sponsors> {
 	const sponsorsPath = `${rootDir}/packages/tools/sponsors.json`;
-	const output: Sponsors = JSON.parse(await fs.readFile(sponsorsPath, 'utf8'));
+	const output: Sponsors = JSON.parse(await readFile(sponsorsPath, 'utf8'));
 	output.orgs = shuffle<OrgSponsor>(output.orgs.map(o => {
 		if (o.urlWebsite) o.url = o.urlWebsite;
 		return o;
@@ -199,9 +203,31 @@ async function loadSponsors(): Promise<Sponsors> {
 	return output;
 }
 
+const makeNewsFrontPage = async (sourceFilePaths: string[], targetFilePath: string, templateParams: TemplateParams) => {
+	const maxNewsPerPage = 20;
+
+	const frontPageMd: string[] = [];
+
+	for (const mdFilePath of sourceFilePaths) {
+		let md = await readFile(mdFilePath, 'utf8');
+		const info = stripOffFrontMatter(md);
+		md = info.doc;
+		const dateString = moment(info.created).format('D MMM YYYY');
+		md = md.replace(/^# (.*)/, `# [$1](https://github.com/laurent22/joplin/blob/dev/readme/news/${path.basename(mdFilePath)})\n\n*Published on **${dateString}***\n\n`);
+		frontPageMd.push(md);
+		if (frontPageMd.length >= maxNewsPerPage) break;
+	}
+
+	renderPageToHtml(frontPageMd.join('\n\n* * *\n\n'), targetFilePath, templateParams);
+};
+
+const isNewsFile = (filePath: string): boolean => {
+	return filePath.includes('readme/news/');
+};
+
 async function main() {
-	await fs.remove(`${rootDir}/docs`);
-	await fs.copy(websiteAssetDir, `${rootDir}/docs`);
+	await remove(`${rootDir}/docs`);
+	await copy(websiteAssetDir, `${rootDir}/docs`);
 
 	const sponsors = await loadSponsors();
 	const partials = await loadMustachePartials(partialDir);
@@ -245,7 +271,7 @@ async function main() {
 	// PLANS PAGE
 	// =============================================================
 
-	const planPageFaqMd = await fs.readFile(`${rootDir}/readme/faq_joplin_cloud.md`, 'utf8');
+	const planPageFaqMd = await readFile(`${rootDir}/readme/faq_joplin_cloud.md`, 'utf8');
 	const planPageFaqHtml = getMarkdownIt().render(planPageFaqMd, {});
 
 	const planPageParams: PlanPageParams = {
@@ -278,13 +304,27 @@ async function main() {
 	const sources = [];
 	const donateLinksMd = await getDonateLinks();
 
+	const makeTargetFilePath = (input: string): string => {
+		if (isNewsFile(input)) {
+			return `${input.replace(/\.md/, '').replace(/readme\/news\//, 'docs/news/')}/index.html`;
+		} else {
+			return `${input.replace(/\.md/, '').replace(/readme\//, 'docs/')}/index.html`;
+		}
+	};
+
+	const newsFilePaths: string[] = [];
+
 	for (const mdFile of mdFiles) {
 		const title = await readmeFileTitle(`${rootDir}/${mdFile}`);
-		const targetFilePath = `${mdFile.replace(/\.md/, '').replace(/readme\//, 'docs/')}/index.html`;
+		const targetFilePath = makeTargetFilePath(mdFile);
+
+		const isNews = isNewsFile(mdFile);
+		if (isNews) newsFilePaths.push(mdFile);
+
 		sources.push([mdFile, targetFilePath, {
 			title: title,
 			donateLinksMd: mdFile === 'readme/donate.md' ? '' : donateLinksMd,
-			showToc: mdFile !== 'readme/download.md',
+			showToc: mdFile !== 'readme/download.md' && !isNews,
 		}]);
 	}
 
@@ -298,6 +338,19 @@ async function main() {
 			assetUrls,
 		});
 	}
+
+	newsFilePaths.sort((a, b) => {
+		return a.toLowerCase() > b.toLowerCase() ? -1 : +1;
+	});
+
+	await makeNewsFrontPage(newsFilePaths, `${rootDir}/docs/news/index.html`, {
+		...defaultTemplateParams(assetUrls),
+		pageName: 'plans',
+		partials,
+		showToc: false,
+		showImproveThisDoc: false,
+		donateLinksMd,
+	});
 }
 
 main().catch((error) => {
