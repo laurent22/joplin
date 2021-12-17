@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!--
+
+!!! WARNING !!!
+
+This file was auto-generated from readme/markdown.md and any manual change
+made to it will be overwritten. To make a change to this file please modify
+the source Markdown file:
+
+https://github.com/laurent22/joplin/blob/dev/readme/markdown.md
+
+-->
+
+	<head>
+<!-- Donate button A/B testing -->
+
+<!--
+<script async src="https://www.googleoptimize.com/optimize.js?id=OPT-PW3ZPK3"></script>
+-->		<meta
+			charset="utf-8"
+			http-equiv="X-UA-Compatible"
+			content="IE=edge,chrome=1"
+		/>
+		<link rel="icon" href="&#x2F;images/favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="theme-color" content="#000000" />
+		<meta name="description" content="Joplin, the open source note-taking application" />
+		<link
+			rel="stylesheet"
+			href="&#x2F;css/bootstrap5.0.2.min.css"
+			as="style"
+		/>
+		<link rel="stylesheet" href="/css/fontawesome-all.min.css?h=ecd507b3125edc4d2a03aa6ae5d07da9">
+		<link
+			href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+			as="style"
+			media="all"
+			onload="this.media='all'; this.onload = null"
+		/>
+		<link rel="stylesheet" href="/css/site.css?h=7ac82e1f40a384f69c644263acc99fc8" as="style" />
+		<title>Markdown Guide | Joplin</title>
+
+		<script
+			src="&#x2F;js/jquery-3.6.0.min.js"
+			rel="preload"
+			as="script"
+		></script>
+	</head>
+	<body class="website-env-prod">
+		<div class="container-fluid generic-template -page" id="main-container">
+
+<div class=" navbar-main white-bg" id="nav-section">
+	<div class="container">
+		<div class="row">
+			<div class="col-3">
+				<a href="/">
+					<img
+						src="&#x2F;images/logo-text-blue.svg"
+						alt=""
+						id="top-logo"
+						width="180"
+					/>
+				</a>
+			</div>
+			<div class="col-9 text-right d-none d-md-block">
+				<a href="/help/" class="fw500">Help</a>
+				<a href="https:&#x2F;&#x2F;discourse.joplinapp.org&#x2F;" class="fw500">Forum</a>
+<a href="/plans/" class="button-link btn-trans plans-button">Joplin Cloud</a><a class="button-link btn-blue sponsor-button" href="/donate">
+	<i class="fas fa-heart heart-full"></i><i class="far fa-heart heart-line"></i>&nbsp;Support us
+</a>			</div>
+			<div class="col-9 text-right d-block d-md-none navbar-mobile-content">
+<a class="button-link btn-blue sponsor-button" href="/donate">
+	<i class="fas fa-heart heart-full"></i><i class="far fa-heart heart-line"></i>&nbsp;Support us
+</a>
+				<span class="pointer"
+					><img
+						src="&#x2F;images/mobile-menu-black-open-icon.png"
+						id="open-menu-mobile"
+						alt=""
+				/></span>
+				&nbsp;&nbsp;
+
+				<div id="menu-mobile">
+					<div>
+						<div class="text-right">
+							<img
+								src="&#x2F;images/close-icon.png"
+								alt=""
+								class="pointer"
+								id="close-menu-mobile"
+							/>
+						</div>
+
+						<div class="text-center menu-mobile-top">
+							<a href="https:&#x2F;&#x2F;discourse.joplinapp.org&#x2F;" class="fw500 mobile-menu-link">Forum</a>
+							<a href="/help/" class="fw500 mobile-menu-link">Help</a>
+						</div>
+
+						<div class="menu-mobile-buttons">
+<a href="/plans/" class="button-link btn-trans plans-button">Joplin Cloud</a><a class="button-link btn-blue sponsor-button" href="/donate">
+	<i class="fas fa-heart heart-full"></i><i class="far fa-heart heart-line"></i>&nbsp;Support us
+</a>						</div>
+					</div>
+
+						<div id="toc-mobile"><div><ul>
+<li>
+<p>Applications</p>
+<ul>
+<li><a href="/desktop/">Desktop application</a></li>
+<li><a href="/mobile/">Mobile applications</a></li>
+<li><a href="/terminal/">Terminal application</a></li>
+<li><a href="/clipper/">Web Clipper</a></li>
+</ul>
+</li>
+<li>
+<p>Support</p>
+<ul>
+<li><a href="https://discourse.joplinapp.org">Joplin Forum</a></li>
+<li><a href="/markdown/">Markdown Guide</a></li>
+<li><a href="/e2ee/">How to enable end-to-end encryption</a></li>
+<li><a href="/conflict/">What is a conflict?</a></li>
+<li><a href="/debugging/">How to enable debug mode</a></li>
+<li><a href="/rich_text_editor/">About the Rich Text editor limitations</a></li>
+<li><a href="/external_links/">External links</a></li>
+<li><a href="/faq/">FAQ</a></li>
+</ul>
+</li>
+<li>
+<p>Joplin Cloud</p>
+<ul>
+<li><a href="/share_notebook/">Sharing a notebook</a></li>
+<li><a href="/publish_note/">Publishing a note</a></li>
+</ul>
+</li>
+<li>
+<p>Joplin API - Get Started</p>
+<ul>
+<li><a href="/api/overview/">Joplin API Overview</a></li>
+<li><a href="/api/get_started/plugins/">Plugin development</a></li>
+<li><a href="/api/tutorials/toc_plugin/">Plugin tutorial</a></li>
+</ul>
+</li>
+<li>
+<p>Joplin API - References</p>
+<ul>
+<li><a href="https://joplinapp.org/api/references/plugin_api/classes/joplin.html">Plugin API</a></li>
+<li><a href="/api/references/rest_api/">Data API</a></li>
+<li><a href="/api/references/plugin_manifest/">Plugin manifest</a></li>
+<li><a href="/api/references/plugin_loading_rules/">Plugin loading rules</a></li>
+<li><a href="/api/references/plugin_theming/">Plugin theming</a></li>
+</ul>
+</li>
+<li>
+<p>Development</p>
+<ul>
+<li><a href="https://github.com/laurent22/joplin/blob/dev/BUILD.md">How to build the apps</a></li>
+<li><a href="/spec/e2ee/">End-to-end encryption spec</a></li>
+<li><a href="/spec/history/">Note History spec</a></li>
+<li><a href="/spec/sync_lock/">Sync Lock spec</a></li>
+<li><a href="/spec/plugins/">Plugin Architecture spec</a></li>
+<li><a href="/spec/search_sorting/">Search Sorting spec</a></li>
+<li><a href="/spec/server_file_url_format/">Server: File URL Format</a></li>
+<li><a href="/spec/server_delta_sync/">Server: Delta Sync</a></li>
+<li><a href="/spec/server_sharing/">Server: Sharing</a></li>
+</ul>
+</li>
+<li>
+<p>Google Summer of Code 2021</p>
+<ul>
+<li><a href="/gsoc2021/index/">Google Summer of Code 2021</a></li>
+<li><a href="/gsoc2021/pull_request_guidelines/">How to submit a GSoC pull request</a></li>
+<li><a href="/gsoc2021/ideas/">Project Ideas</a></li>
+</ul>
+</li>
+<li>
+<p>About</p>
+<ul>
+<li><a href="/changelog/">Changelog (Desktop App)</a></li>
+<li><a href="/changelog_cli/">Changelog (CLI App)</a></li>
+<li><a href="/changelog_server/">Changelog (Server)</a></li>
+<li><a href="/stats/">Stats</a></li>
+<li><a href="/donate/">Donate</a></li>
+</ul>
+</li>
+</ul>
+</div></div>
+					
+					<div>
+						<p class="light-blue mobile-menu-link-bottom text-center">
+							Copyright &copy; 2016-2021 Laurent&nbsp;Cozic
+							<br/>
+							<a href="/privacy/" class="fw500">Privacy Policy</a>
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+			<div class="help-page-container page-markdown">
+				<div class="container">
+					<div class="row content-wrapper">
+						<div id="toc"><div><ul>
+<li>
+<p>Applications</p>
+<ul>
+<li><a href="/desktop/">Desktop application</a></li>
+<li><a href="/mobile/">Mobile applications</a></li>
+<li><a href="/terminal/">Terminal application</a></li>
+<li><a href="/clipper/">Web Clipper</a></li>
+</ul>
+</li>
+<li>
+<p>Support</p>
+<ul>
+<li><a href="https://discourse.joplinapp.org">Joplin Forum</a></li>
+<li><a href="/markdown/">Markdown Guide</a></li>
+<li><a href="/e2ee/">How to enable end-to-end encryption</a></li>
+<li><a href="/conflict/">What is a conflict?</a></li>
+<li><a href="/debugging/">How to enable debug mode</a></li>
+<li><a href="/rich_text_editor/">About the Rich Text editor limitations</a></li>
+<li><a href="/external_links/">External links</a></li>
+<li><a href="/faq/">FAQ</a></li>
+</ul>
+</li>
+<li>
+<p>Joplin Cloud</p>
+<ul>
+<li><a href="/share_notebook/">Sharing a notebook</a></li>
+<li><a href="/publish_note/">Publishing a note</a></li>
+</ul>
+</li>
+<li>
+<p>Joplin API - Get Started</p>
+<ul>
+<li><a href="/api/overview/">Joplin API Overview</a></li>
+<li><a href="/api/get_started/plugins/">Plugin development</a></li>
+<li><a href="/api/tutorials/toc_plugin/">Plugin tutorial</a></li>
+</ul>
+</li>
+<li>
+<p>Joplin API - References</p>
+<ul>
+<li><a href="https://joplinapp.org/api/references/plugin_api/classes/joplin.html">Plugin API</a></li>
+<li><a href="/api/references/rest_api/">Data API</a></li>
+<li><a href="/api/references/plugin_manifest/">Plugin manifest</a></li>
+<li><a href="/api/references/plugin_loading_rules/">Plugin loading rules</a></li>
+<li><a href="/api/references/plugin_theming/">Plugin theming</a></li>
+</ul>
+</li>
+<li>
+<p>Development</p>
+<ul>
+<li><a href="https://github.com/laurent22/joplin/blob/dev/BUILD.md">How to build the apps</a></li>
+<li><a href="/spec/e2ee/">End-to-end encryption spec</a></li>
+<li><a href="/spec/history/">Note History spec</a></li>
+<li><a href="/spec/sync_lock/">Sync Lock spec</a></li>
+<li><a href="/spec/plugins/">Plugin Architecture spec</a></li>
+<li><a href="/spec/search_sorting/">Search Sorting spec</a></li>
+<li><a href="/spec/server_file_url_format/">Server: File URL Format</a></li>
+<li><a href="/spec/server_delta_sync/">Server: Delta Sync</a></li>
+<li><a href="/spec/server_sharing/">Server: Sharing</a></li>
+</ul>
+</li>
+<li>
+<p>Google Summer of Code 2021</p>
+<ul>
+<li><a href="/gsoc2021/index/">Google Summer of Code 2021</a></li>
+<li><a href="/gsoc2021/pull_request_guidelines/">How to submit a GSoC pull request</a></li>
+<li><a href="/gsoc2021/ideas/">Project Ideas</a></li>
+</ul>
+</li>
+<li>
+<p>About</p>
+<ul>
+<li><a href="/changelog/">Changelog (Desktop App)</a></li>
+<li><a href="/changelog_cli/">Changelog (CLI App)</a></li>
+<li><a href="/changelog_server/">Changelog (Server)</a></li>
+<li><a href="/stats/">Stats</a></li>
+<li><a href="/donate/">Donate</a></li>
+</ul>
+</li>
+</ul>
+</div></div>
+
+						<div class="main-content">
+							<div class="alert alert-danger alert-env-dev" role="alert">
+								Running in prod mode!
+							</div>
+							<div class="donate-links">
+<p><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=E8JMYD2LQ8MMA&amp;lc=GB&amp;item_name=Joplin+Development&amp;currency_code=EUR&amp;bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Donate-PayPal-green.svg" alt="Donate using PayPal"></a> <a href="https://github.com/sponsors/laurent22/"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/GitHub-Badge.svg" alt="Sponsor on GitHub"></a> <a href="https://www.patreon.com/joplin"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Patreon-Badge.svg" alt="Become a patron"></a> <a href="https://joplinapp.org/donate/#donations"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Donate-IBAN.svg" alt="Donate using IBAN"></a></p>
+</div>
+<h1>Markdown Guide<a name="markdown-guide" href="#markdown-guide" class="heading-anchor">🔗</a></h1>
+<p>Markdown is a simple way to format text that looks great on any device. It doesn't do anything fancy like change the font size, color, or type — just the essentials, using keyboard symbols you already know. Since it is plain text, it is an easy way to author notes and documents and when needed it can be converted to a rich text HTML document.</p>
+<p>Joplin desktop and mobile applications can display both the Markdown text and the rendered rich text document.</p>
+<p>Joplin follows the <a href="https://spec.commonmark.org/">CommonMark</a> specification, with additional features added via plugins.</p>
+<h2>Cheat Sheet<a name="cheat-sheet" href="#cheat-sheet" class="heading-anchor">🔗</a></h2>
+<p>This is a quick summary of the Markdown syntax.</p>
+<table class="table">
+<thead>
+<tr>
+<th></th>
+<th>Markdown</th>
+<th>Rendered Output</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Heading 1</strong></td>
+<td><pre># Heading 1</pre></td>
+<td><h1>Heading 1</h1></td>
+</tr>
+<tr>
+<td><strong>Heading 2</strong></td>
+<td><pre>## Heading 2</pre></td>
+<td><h2>Heading 2</h2></td>
+</tr>
+<tr>
+<td><strong>Heading 3</strong></td>
+<td><pre>### Heading 3</pre></td>
+<td><h3>Heading 3</h3></td>
+</tr>
+<tr>
+<td><strong>Bold</strong></td>
+<td><pre>This is some <code>**bold text**</code></pre></td>
+<td>This is some <strong>bold text</strong></td>
+</tr>
+<tr>
+<td><strong>Italic</strong></td>
+<td><pre>This is some <code>*italic text*</code></pre></td>
+<td>This is some <i>italic text</i></td>
+</tr>
+<tr>
+<td><strong>Blockquotes</strong></td>
+<td><pre>&gt; Kent.<br/>&gt; Where's the king?<br/><br/>&gt; Gent.<br/>&gt; Contending with the<br/>&gt; fretful elements</pre></td>
+<td><blockquote>Kent.<br/>Where's the king?<br/><br/>Gent.<br/>Contending with<br/>the fretful elements</blockquote></td>
+</tr>
+<tr>
+<td><strong>List</strong></td>
+<td><pre>* Milk<br/>* Eggs<br/>* Beers<br/>    * Desperados<br/>    * Heineken<br/>* Ham</pre></td>
+<td><ul><li>Milk</li><li>Eggs</li><li>Beers<ul><li>Desperados</li><li>Heineken</li></ul></li><li>Ham</li></ul></td>
+</tr>
+<tr>
+<td><strong>Ordered list</strong></td>
+<td><pre>1. Introduction<br/>2. Main topic<br/>    1. First sub-topic<br/>    2. Second sub-topic<br/>3. Conclusion</pre></td>
+<td><ol><li>Introduction</li><li>Main topic<ol><li>First sub-topic</li><li>Second sub-topic</li></ol></li><li>Conclusion</li></ol></td>
+</tr>
+<tr>
+<td><strong>Inline code</strong></td>
+<td><pre>This is `someJavaScript()`</pre></td>
+<td>This is <code>someJavaScript()</code></td>
+</tr>
+<tr>
+<td><strong>Code block</strong></td>
+<td><pre>Here's some JavaScript code:<br><br>```<br>function hello() {<br>    alert('hello');<br>}<br>```<br><br>Language is normally auto-detected,<br>but it can also be specified:<br><br>```sql<br>SELECT * FROM users;<br>DELETE FROM sessions;<br>```</pre></td>
+<td>Here's some JavaScript code:<br><br><pre>function hello() {<br>    alert('hello');<br>}</pre><br>Language is normally auto-detected, but it can also be specified:<br><br><pre>SELECT * FROM users;<br>DELETE FROM sessions;</pre></td>
+</tr>
+<tr>
+<td><strong>Unformatted text</strong></td>
+<td><pre>Indent with a tab or 4 spaces<br>for unformatted text.<br/><br/>    This text will not be formatted:<br><br>    Robert'); DROP TABLE students;--</pre></td>
+<td>Indent with a tab or 4 spaces for unformatted text.<br><br><pre>This text will not be formatted:<br><br>Robert'); DROP TABLE students;--</pre></td>
+</tr>
+<tr>
+<td><strong>Link</strong></td>
+<td><pre>This is detected as a link:<br><br><code>https://joplinapp.org</code><br><br>And this is a link anchoring text content:<br><br><code>[Joplin](https://joplinapp.org)</code><br><br>And this is a link, with a title,<br>anchoring text content:<br><br><code>[Joplin](https://joplinapp.org &quot;Joplin project page&quot;)</code></pre></td>
+<td>This is detected as a link:<br><br><a href="https://joplinapp.org">https://joplinapp.org</a><br><br>And this is a link anchoring text content:<br><br><a href="https://joplinapp.org">Joplin</a><br><br>And this is a link, with a title,<br>anchoring text content:<br><br><a href="https://joplinapp.org" title="Joplin project page">Joplin</a> (<em>hint: hover over the link</em>)</td>
+</tr>
+<tr>
+<td><strong>Images</strong></td>
+<td><pre><code>![Joplin icon](https://git.io/JenGk)</code></pre></td>
+<td><img src="https://git.io/JenGk" alt="Here's Joplin icon"></td>
+</tr>
+<tr>
+<td><strong>Horizontal Rule</strong></td>
+<td><pre>One rule:<br>***<br>Another rule:<br>---</pre></td>
+<td>One rule:<hr><br>Another rule:<br><hr></td>
+</tr>
+<tr>
+<td><strong>Tables</strong></td>
+<td><a href="#tables">See below</a></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3>Tables<a name="tables" href="#tables" class="heading-anchor">🔗</a></h3>
+<p>Tables are created using pipes <code>|</code> and and hyphens <code>-</code>. This is a Markdown table:</p>
+<pre><code>| First Header  | Second Header |
+| ------------- | ------------- |
+| Content Cell  | Content Cell  |
+| Content Cell  | Content Cell  |
+</code></pre>
+<p>Which is rendered as:</p>
+<table class="table">
+<thead>
+<tr>
+<th>First Header</th>
+<th>Second Header</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Content Cell</td>
+<td>Content Cell</td>
+</tr>
+<tr>
+<td>Content Cell</td>
+<td>Content Cell</td>
+</tr>
+</tbody>
+</table>
+<p>Note that there must be at least 3 dashes separating each header cell.</p>
+<p>Colons can be used to align columns:</p>
+<pre><code>| Tables        | Are           | Cool  |
+| ------------- |:-------------:| -----:|
+| col 3 is      | right-aligned | $1600 |
+| col 2 is      | centered      |   $12 |
+</code></pre>
+<p>Which is rendered as:</p>
+<table class="table">
+<thead>
+<tr>
+<th>Tables</th>
+<th style="text-align:center">Are</th>
+<th style="text-align:right">Cool</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>col 3 is</td>
+<td style="text-align:center">right-aligned</td>
+<td style="text-align:right">$1600</td>
+</tr>
+<tr>
+<td>col 2 is</td>
+<td style="text-align:center">centered</td>
+<td style="text-align:right">$12</td>
+</tr>
+</tbody>
+</table>
+<h2>Joplin Extras<a name="joplin-extras" href="#joplin-extras" class="heading-anchor">🔗</a></h2>
+<p>Besides the standard Markdown syntax, Joplin supports several additional features.</p>
+<h3>Links to other notes<a name="links-to-other-notes" href="#links-to-other-notes" class="heading-anchor">🔗</a></h3>
+<p>You can create a link to a note by specifying its ID in the URL. For example:</p>
+<pre><code>[Link to my note](:/0b0d62d15e60409dac34f354b6e9e839)
+</code></pre>
+<p>Since getting the ID of a note is not straightforward, each app provides a way to create such link. In the <strong>desktop app</strong>, drag and drop a note into another note to create a link. Or right click on a note and select &quot;Copy Markdown link&quot;. In the <strong>mobile app</strong>, open a note and, in the top right menu, select &quot;Copy Markdown link&quot;. You can then paste this link anywhere in another note.</p>
+<h3>Math notation<a name="math-notation" href="#math-notation" class="heading-anchor">🔗</a></h3>
+<p>Math expressions can be added using the <a href="https://khan.github.io/KaTeX/">KaTeX notation</a>. To add an inline equation, wrap the expression in <code>$EXPRESSION$</code>, eg. <code>$\sqrt{3x-1}+(1+x)^2$</code>. To create an expression block, wrap it as follow:</p>
+<pre><code>$$
+EXPRESSION
+$$
+</code></pre>
+<p>For example:</p>
+<pre><code>$$
+f(x) = \int_{-\infty}^\infty
+	\hat f(\xi)\,e^{2 \pi i \xi x}
+	\,d\xi
+$$
+</code></pre>
+<p>Here is an example with the Markdown and rendered result side by side:</p>
+<img src="/images/Katex.png" height="345px">
+<h3>Chemical equations<a name="chemical-equations" href="#chemical-equations" class="heading-anchor">🔗</a></h3>
+<p>Joplin supports chemical equations via the mhchem plugin for KaTeX. This plugin is automatically enabled if you enable math notation. See the <a href="https://mhchem.github.io/MathJax-mhchem/">mhchem documentation</a> for the syntax.</p>
+<img src="/images/Katex_mhchem.png" height="196px">
+<h3>Diagrams<a name="diagrams" href="#diagrams" class="heading-anchor">🔗</a></h3>
+<p>You can create diagrams in Joplin using the <a href="https://mermaidjs.github.io/">Mermaid syntax</a>. To add such a graph, wrap the Mermaid script inside a &quot;```mermaid&quot; code block like this:</p>
+<pre><code>```mermaid
+graph TD;
+    A--&gt;B;
+    A--&gt;C;
+    B--&gt;D;
+    C--&gt;D;
+```
+</code></pre>
+<p>This is how it would look with the Markdown on the left, and rendered graph on the right:</p>
+<p><img src="/images/Mermaid.png" alt="Mermaid support in Joplin"></p>
+<p>Note that Mermaid graphs are always rendered on a white background regardless of the current theme. This is because they can contain various colours that may not be compatible with the current theme.</p>
+<h3>Checkboxes<a name="checkboxes" href="#checkboxes" class="heading-anchor">🔗</a></h3>
+<p>Checkboxes can be added like so:</p>
+<pre><code>- [ ] Milk
+- [x] Rice
+- [ ] Eggs
+</code></pre>
+<p>Which would turn into:</p>
+<p><img src="/images/Markdown_checkbox.jpg" alt="Checkbox support in Joplin"></p>
+<p>The checkboxes can then be ticked in the mobile and desktop applications.</p>
+<h3>HTML support<a name="html-support" href="#html-support" class="heading-anchor">🔗</a></h3>
+<p>It is generally recommended to enter the notes as Markdown as it makes the notes easier to edit. However for cases where certain features aren't supported (such as strikethrough or to highlight text), you can also use HTML code directly. For example this would be a valid note:</p>
+<pre><code>This is &lt;s&gt;strikethrough text&lt;/s&gt; mixed with regular **Markdown**.
+</code></pre>
+<h3>Plugins<a name="plugins" href="#plugins" class="heading-anchor">🔗</a></h3>
+<p>Joplin supports a number of plugins that can be toggled on/off to enable/disable markdown features on top of the standard Markdown features you would expect. These plugins are listed below. Note: not all of the plugins are enabled by default, if the enable field is 'no' below, then open the option screen to enable the plugin. Plugins can be disabled in the same manner.</p>
+<p>Note that the functionality added by these plugins is not part of the CommonMark spec so, while they will all work within Joplin, it is not guaranteed that they will work in other Markdown readers. Often this is not an issue but keep it in mind if you require compatibility with other Markdown applications.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Plugin</th>
+<th>Syntax</th>
+<th>Description</th>
+<th>Enabled</th>
+<th>Screenshot</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Soft breaks</td>
+<td>See <a href="https://markdown-it.github.io/#md3=%7B%22source%22%3A%22This%20is%20line1%5CnThis%20is%20line2%5Cn%5CnThis%20is%20a%20line%20with%202%20trailing%20spaces%20%20%5CnNext%20line%5Cn%5CnClick%20the%20%60breaks%60%20checkbox%20above%20to%20see%20the%20difference.%5CnJoplin%27s%20default%20is%20hard%20breaks%20%28checked%20%60breaks%60%20checkbox%29.%22%2C%22defaults%22%3A%7B%22html%22%3Afalse%2C%22xhtmlOut%22%3Afalse%2C%22breaks%22%3Afalse%2C%22langPrefix%22%3A%22language-%22%2C%22linkify%22%3Afalse%2C%22typographer%22%3Afalse%2C%22_highlight%22%3Afalse%2C%22_strict%22%3Afalse%2C%22_view%22%3A%22html%22%7D%7D">breaks</a> markdown-it demo</td>
+<td>Joplin uses hard breaks by default, which means that a line break is rendered as <code>&lt;br&gt;</code>. Enable soft breaks for traditional markdown line-break behaviour.</td>
+<td>no</td>
+<td><a href="/images/md_plugins/softbreaks_plugin.jpg">View</a></td>
+</tr>
+<tr>
+<td>Typographer</td>
+<td>See <a href="https://markdown-it.github.io/#md3=%7B%22source%22%3A%22%23%20Typographic%20replacements%5Cn%5Cn%28c%29%20%28C%29%20%28r%29%20%28R%29%20%28tm%29%20%28TM%29%20%28p%29%20%28P%29%20%2B-%5Cn%5Cntest..%20test...%20test.....%20test%3F.....%20test!....%5Cn%5Cn!!!!!!%20%3F%3F%3F%3F%20%2C%2C%20%20--%20---%5Cn%5Cn%5C%22Smartypants%2C%20double%20quotes%5C%22%20and%20%27single%20quotes%27%5Cn%22%2C%22defaults%22%3A%7B%22html%22%3Afalse%2C%22xhtmlOut%22%3Afalse%2C%22breaks%22%3Afalse%2C%22langPrefix%22%3A%22language-%22%2C%22linkify%22%3Atrue%2C%22typographer%22%3Atrue%2C%22_highlight%22%3Atrue%2C%22_strict%22%3Afalse%2C%22_view%22%3A%22html%22%7D%7D">typographer</a> markdown-it demo</td>
+<td>Does typographic replacements, (c) -&gt; © and so on</td>
+<td>no</td>
+<td><a href="/images/md_plugins/typographer_plugin.jpg">View</a></td>
+</tr>
+<tr>
+<td>Linkify</td>
+<td>See <a href="https://markdown-it.github.io/#md3=%7B%22source%22%3A%22Use%20the%20Linkify%20checkbox%20to%20switch%20link-detection%20on%20and%20off.%5Cn%5Cn%2A%2AThese%20links%20are%20auto-detected%3A%2A%2A%5Cn%5Cnhttps%3A%2F%2Fexample.com%5Cn%5Cnexample.com%5Cn%5Cntest%40example.com%5Cn%5Cn%2A%2AThese%20are%20always%20links%3A%2A%2A%5Cn%5Cn%5Blink%5D%28https%3A%2F%2Fjoplinapp.org%29%5Cn%5Cn%3Chttps%3A%2F%2Fexample.com%3E%22%2C%22defaults%22%3A%7B%22html%22%3Afalse%2C%22xhtmlOut%22%3Afalse%2C%22breaks%22%3Afalse%2C%22langPrefix%22%3A%22language-%22%2C%22linkify%22%3Atrue%2C%22typographer%22%3Atrue%2C%22_highlight%22%3Atrue%2C%22_strict%22%3Afalse%2C%22_view%22%3A%22html%22%7D%7D">linkify</a> markdown-it demo</td>
+<td>Auto-detects URLs and convert them to clickable links</td>
+<td>yes</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://katex.org">Katex</a></td>
+<td><code>$$math expr$$</code> or <code>$math$</code></td>
+<td><a href="#math-notation">See above</a></td>
+<td>yes</td>
+<td><a href="/images/md_plugins/katex_plugin.jpg">View</a></td>
+</tr>
+<tr>
+<td><a href="https://fountain.io">Fountain</a></td>
+<td><code>```fountain</code><br/>Your screenplay...<br/><code>```</code></td>
+<td>Adds support for the Fountain markup language, a plain text markup language for screenwriting</td>
+<td>no</td>
+<td><a href="/images/md_plugins/fountain_plugin.jpg">View</a></td>
+</tr>
+<tr>
+<td><a href="https://mermaid-js.github.io/mermaid/">Mermaid</a></td>
+<td><code>```mermaid</code><br/>mermaid syntax...<br/><code>```</code></td>
+<td>See <a href="https://mermaid-js.github.io/mermaid/#/examples">plugin page</a> for full description</td>
+<td>yes</td>
+<td><a href="/images/md_plugins/mermaid.jpg">View</a></td>
+</tr>
+<tr>
+<td><a href="https://github.com/markdown-it/markdown-it-mark">Mark</a></td>
+<td><code>==marked==</code></td>
+<td>Transforms into <code>&lt;mark&gt;marked&lt;/mark&gt;</code> (highlighted)</td>
+<td>yes</td>
+<td><a href="/images/md_plugins/mark_plugin.jpg">View</a></td>
+</tr>
+<tr>
+<td><a href="https://github.com/markdown-it/markdown-it-footnote">Footnote</a></td>
+<td><code>Simples inline footnote ^[I'm inline!]</code></td>
+<td>See <a href="https://github.com/markdown-it/markdown-it-footnote">plugin page</a> for full description</td>
+<td>yes</td>
+<td><a href="/images/md_plugins/footnote_plugin.jpg">View</a></td>
+</tr>
+<tr>
+<td><a href="https://github.com/nagaozen/markdown-it-toc-done-right">TOC</a></td>
+<td>Any of <code>${toc}, [[toc]], [toc], [[_toc_]]</code></td>
+<td>Adds a table of contents to the location of the toc page. Based on headings and sub-headings</td>
+<td>yes</td>
+<td><a href="/images/md_plugins/toc_plugin.jpg">View</a></td>
+</tr>
+<tr>
+<td><a href="https://github.com/markdown-it/markdown-it-sub">Sub</a></td>
+<td><code>X~1~</code></td>
+<td>Transforms into X<sub>1</sub></td>
+<td>no</td>
+<td><a href="/images/md_plugins/sub_plugin.jpg">View</a></td>
+</tr>
+<tr>
+<td><a href="https://github.com/markdown-it/markdown-it-sup">Sup</a></td>
+<td><code>X^2^</code></td>
+<td>Transforms into X<sup>2</sup></td>
+<td>no</td>
+<td><a href="/images/md_plugins/sup_plugin.jpg">View</a></td>
+</tr>
+<tr>
+<td><a href="https://github.com/markdown-it/markdown-it-deflist">Deflist</a></td>
+<td>See <a href="http://johnmacfarlane.net/pandoc/README.html#definition-lists">pandoc</a> page for syntax</td>
+<td>Adds the html <code>&lt;dl&gt;</code> tag accessible through markdown</td>
+<td>no</td>
+<td><a href="/images/md_plugins/deflist_plugin.jpg">View</a></td>
+</tr>
+<tr>
+<td><a href="https://github.com/markdown-it/markdown-it-abbr">Abbr</a></td>
+<td>*[HTML]: Hyper Text Markup Language<br/>The HTML specification</td>
+<td>Allows definition of abbreviations that can be hovered over later for a full expansion</td>
+<td>no</td>
+<td><a href="/images/md_plugins/abbr_plugin.jpg">View</a></td>
+</tr>
+<tr>
+<td><a href="https://github.com/markdown-it/markdown-it-emoji">Emoji</a></td>
+<td><code>:smile:</code></td>
+<td>Transforms into 😄. See <a href="https://gist.github.com/rxaviers/7360908">this list</a> for more emojis</td>
+<td>no</td>
+<td><a href="/images/md_plugins/emoji_plugin.jpg">View</a></td>
+</tr>
+<tr>
+<td><a href="https://github.com/markdown-it/markdown-it-ins">Insert</a></td>
+<td><code>++inserted++</code></td>
+<td>Transforms into <code>&lt;ins&gt;inserted&lt;/ins&gt;</code> (<ins>inserted</ins>)</td>
+<td>no</td>
+<td><a href="/images/md_plugins/insert_plugin.jpg">View</a></td>
+</tr>
+<tr>
+<td><a href="https://github.com/RedBug312/markdown-it-multimd-table">Multitable</a></td>
+<td>See <a href="https://fletcher.github.io/MultiMarkdown-6/syntax/tables.html">MultiMarkdown</a> page</td>
+<td>Adds more power and customization to markdown tables</td>
+<td>no</td>
+<td><a href="/images/md_plugins/multitable_plugin.jpg">View</a></td>
+</tr>
+</tbody>
+</table>
+
+								<div class="bottom-links">
+									<a href="https://github.com/laurent22/joplin/blob/dev/readme/markdown.md">
+										<i class="fab fa-github"></i> Improve this doc
+									</a>
+								</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			
+<footer class="darkblue-bg">
+	<div class="container">
+		<div class="row">
+			<div class="col-12 col-md-12 social-links">
+				<a href="https://twitter.com/joplinapp" title="Joplin Twitter feed"><i class="fab fa-twitter"></i></a>
+				<a href="https://mastodon.social/@joplinapp" title="Joplin Mastodon feed"><i class="fab fa-mastodon"></i></a>
+				<a href="https://www.patreon.com/joplin" title="Joplin Patreon"><i class="fab fa-patreon"></i></a>
+				<a href="https://discord.gg/VSj7AFHvpq" title="Joplin Discord chat"><i class="fab fa-discord"></i></a>
+				<a href="https://www.reddit.com/r/joplinapp/" title="Joplin Subreddit"><i class="fab fa-reddit"></i></a>
+				<a href="https://github.com/laurent22/joplin/" title="Joplin GitHub repository"><i class="fab fa-github"></i></a>
+			</div>
+		</div>
+
+		<div class="row bottom-links-row">
+			<div class="col-12 col-md-6">
+				<p class="text-center-sm">Copyright &copy; 2016-2021 Laurent Cozic</p>
+			</div>
+			<div class="col-12 col-md-6">
+				<p class="text-right text-center-sm right-links">
+					<span class="footer-right">
+						<a href="/privacy/">Privacy Policy</a>
+					</span>
+				</p>
+			</div>
+		</div>
+	</div>
+</footer>		</div>
+
+		<script src="/js/script.js?h=46b3b58d72c94591621551affbb8c6e3"></script>
+
+<script>
+	if (window.location.hostname !== 'localhost') {
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+		ga('create', 'UA-103586105-1', 'auto');
+		ga('send', 'pageview');
+	}
+</script>	</body>
+</html>

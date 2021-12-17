@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!--
+
+!!! WARNING !!!
+
+This file was auto-generated from readme/spec/e2ee.md and any manual change
+made to it will be overwritten. To make a change to this file please modify
+the source Markdown file:
+
+https://github.com/laurent22/joplin/blob/dev/readme/spec/e2ee.md
+
+-->
+
+	<head>
+<!-- Donate button A/B testing -->
+
+<!--
+<script async src="https://www.googleoptimize.com/optimize.js?id=OPT-PW3ZPK3"></script>
+-->		<meta
+			charset="utf-8"
+			http-equiv="X-UA-Compatible"
+			content="IE=edge,chrome=1"
+		/>
+		<link rel="icon" href="&#x2F;images/favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="theme-color" content="#000000" />
+		<meta name="description" content="Joplin, the open source note-taking application" />
+		<link
+			rel="stylesheet"
+			href="&#x2F;css/bootstrap5.0.2.min.css"
+			as="style"
+		/>
+		<link rel="stylesheet" href="/css/fontawesome-all.min.css?h=ecd507b3125edc4d2a03aa6ae5d07da9">
+		<link
+			href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+			as="style"
+			media="all"
+			onload="this.media='all'; this.onload = null"
+		/>
+		<link rel="stylesheet" href="/css/site.css?h=7ac82e1f40a384f69c644263acc99fc8" as="style" />
+		<title>Encryption | Joplin</title>
+
+		<script
+			src="&#x2F;js/jquery-3.6.0.min.js"
+			rel="preload"
+			as="script"
+		></script>
+	</head>
+	<body class="website-env-prod">
+		<div class="container-fluid generic-template -page" id="main-container">
+
+<div class=" navbar-main white-bg" id="nav-section">
+	<div class="container">
+		<div class="row">
+			<div class="col-3">
+				<a href="/">
+					<img
+						src="&#x2F;images/logo-text-blue.svg"
+						alt=""
+						id="top-logo"
+						width="180"
+					/>
+				</a>
+			</div>
+			<div class="col-9 text-right d-none d-md-block">
+				<a href="/help/" class="fw500">Help</a>
+				<a href="https:&#x2F;&#x2F;discourse.joplinapp.org&#x2F;" class="fw500">Forum</a>
+<a href="/plans/" class="button-link btn-trans plans-button">Joplin Cloud</a><a class="button-link btn-blue sponsor-button" href="/donate">
+	<i class="fas fa-heart heart-full"></i><i class="far fa-heart heart-line"></i>&nbsp;Support us
+</a>			</div>
+			<div class="col-9 text-right d-block d-md-none navbar-mobile-content">
+<a class="button-link btn-blue sponsor-button" href="/donate">
+	<i class="fas fa-heart heart-full"></i><i class="far fa-heart heart-line"></i>&nbsp;Support us
+</a>
+				<span class="pointer"
+					><img
+						src="&#x2F;images/mobile-menu-black-open-icon.png"
+						id="open-menu-mobile"
+						alt=""
+				/></span>
+				&nbsp;&nbsp;
+
+				<div id="menu-mobile">
+					<div>
+						<div class="text-right">
+							<img
+								src="&#x2F;images/close-icon.png"
+								alt=""
+								class="pointer"
+								id="close-menu-mobile"
+							/>
+						</div>
+
+						<div class="text-center menu-mobile-top">
+							<a href="https:&#x2F;&#x2F;discourse.joplinapp.org&#x2F;" class="fw500 mobile-menu-link">Forum</a>
+							<a href="/help/" class="fw500 mobile-menu-link">Help</a>
+						</div>
+
+						<div class="menu-mobile-buttons">
+<a href="/plans/" class="button-link btn-trans plans-button">Joplin Cloud</a><a class="button-link btn-blue sponsor-button" href="/donate">
+	<i class="fas fa-heart heart-full"></i><i class="far fa-heart heart-line"></i>&nbsp;Support us
+</a>						</div>
+					</div>
+
+						<div id="toc-mobile"><div><ul>
+<li>
+<p>Applications</p>
+<ul>
+<li><a href="/desktop/">Desktop application</a></li>
+<li><a href="/mobile/">Mobile applications</a></li>
+<li><a href="/terminal/">Terminal application</a></li>
+<li><a href="/clipper/">Web Clipper</a></li>
+</ul>
+</li>
+<li>
+<p>Support</p>
+<ul>
+<li><a href="https://discourse.joplinapp.org">Joplin Forum</a></li>
+<li><a href="/markdown/">Markdown Guide</a></li>
+<li><a href="/e2ee/">How to enable end-to-end encryption</a></li>
+<li><a href="/conflict/">What is a conflict?</a></li>
+<li><a href="/debugging/">How to enable debug mode</a></li>
+<li><a href="/rich_text_editor/">About the Rich Text editor limitations</a></li>
+<li><a href="/external_links/">External links</a></li>
+<li><a href="/faq/">FAQ</a></li>
+</ul>
+</li>
+<li>
+<p>Joplin Cloud</p>
+<ul>
+<li><a href="/share_notebook/">Sharing a notebook</a></li>
+<li><a href="/publish_note/">Publishing a note</a></li>
+</ul>
+</li>
+<li>
+<p>Joplin API - Get Started</p>
+<ul>
+<li><a href="/api/overview/">Joplin API Overview</a></li>
+<li><a href="/api/get_started/plugins/">Plugin development</a></li>
+<li><a href="/api/tutorials/toc_plugin/">Plugin tutorial</a></li>
+</ul>
+</li>
+<li>
+<p>Joplin API - References</p>
+<ul>
+<li><a href="https://joplinapp.org/api/references/plugin_api/classes/joplin.html">Plugin API</a></li>
+<li><a href="/api/references/rest_api/">Data API</a></li>
+<li><a href="/api/references/plugin_manifest/">Plugin manifest</a></li>
+<li><a href="/api/references/plugin_loading_rules/">Plugin loading rules</a></li>
+<li><a href="/api/references/plugin_theming/">Plugin theming</a></li>
+</ul>
+</li>
+<li>
+<p>Development</p>
+<ul>
+<li><a href="https://github.com/laurent22/joplin/blob/dev/BUILD.md">How to build the apps</a></li>
+<li><a href="/spec/e2ee/">End-to-end encryption spec</a></li>
+<li><a href="/spec/history/">Note History spec</a></li>
+<li><a href="/spec/sync_lock/">Sync Lock spec</a></li>
+<li><a href="/spec/plugins/">Plugin Architecture spec</a></li>
+<li><a href="/spec/search_sorting/">Search Sorting spec</a></li>
+<li><a href="/spec/server_file_url_format/">Server: File URL Format</a></li>
+<li><a href="/spec/server_delta_sync/">Server: Delta Sync</a></li>
+<li><a href="/spec/server_sharing/">Server: Sharing</a></li>
+</ul>
+</li>
+<li>
+<p>Google Summer of Code 2021</p>
+<ul>
+<li><a href="/gsoc2021/index/">Google Summer of Code 2021</a></li>
+<li><a href="/gsoc2021/pull_request_guidelines/">How to submit a GSoC pull request</a></li>
+<li><a href="/gsoc2021/ideas/">Project Ideas</a></li>
+</ul>
+</li>
+<li>
+<p>About</p>
+<ul>
+<li><a href="/changelog/">Changelog (Desktop App)</a></li>
+<li><a href="/changelog_cli/">Changelog (CLI App)</a></li>
+<li><a href="/changelog_server/">Changelog (Server)</a></li>
+<li><a href="/stats/">Stats</a></li>
+<li><a href="/donate/">Donate</a></li>
+</ul>
+</li>
+</ul>
+</div></div>
+					
+					<div>
+						<p class="light-blue mobile-menu-link-bottom text-center">
+							Copyright &copy; 2016-2021 Laurent&nbsp;Cozic
+							<br/>
+							<a href="/privacy/" class="fw500">Privacy Policy</a>
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+			<div class="help-page-container page-e2ee">
+				<div class="container">
+					<div class="row content-wrapper">
+						<div id="toc"><div><ul>
+<li>
+<p>Applications</p>
+<ul>
+<li><a href="/desktop/">Desktop application</a></li>
+<li><a href="/mobile/">Mobile applications</a></li>
+<li><a href="/terminal/">Terminal application</a></li>
+<li><a href="/clipper/">Web Clipper</a></li>
+</ul>
+</li>
+<li>
+<p>Support</p>
+<ul>
+<li><a href="https://discourse.joplinapp.org">Joplin Forum</a></li>
+<li><a href="/markdown/">Markdown Guide</a></li>
+<li><a href="/e2ee/">How to enable end-to-end encryption</a></li>
+<li><a href="/conflict/">What is a conflict?</a></li>
+<li><a href="/debugging/">How to enable debug mode</a></li>
+<li><a href="/rich_text_editor/">About the Rich Text editor limitations</a></li>
+<li><a href="/external_links/">External links</a></li>
+<li><a href="/faq/">FAQ</a></li>
+</ul>
+</li>
+<li>
+<p>Joplin Cloud</p>
+<ul>
+<li><a href="/share_notebook/">Sharing a notebook</a></li>
+<li><a href="/publish_note/">Publishing a note</a></li>
+</ul>
+</li>
+<li>
+<p>Joplin API - Get Started</p>
+<ul>
+<li><a href="/api/overview/">Joplin API Overview</a></li>
+<li><a href="/api/get_started/plugins/">Plugin development</a></li>
+<li><a href="/api/tutorials/toc_plugin/">Plugin tutorial</a></li>
+</ul>
+</li>
+<li>
+<p>Joplin API - References</p>
+<ul>
+<li><a href="https://joplinapp.org/api/references/plugin_api/classes/joplin.html">Plugin API</a></li>
+<li><a href="/api/references/rest_api/">Data API</a></li>
+<li><a href="/api/references/plugin_manifest/">Plugin manifest</a></li>
+<li><a href="/api/references/plugin_loading_rules/">Plugin loading rules</a></li>
+<li><a href="/api/references/plugin_theming/">Plugin theming</a></li>
+</ul>
+</li>
+<li>
+<p>Development</p>
+<ul>
+<li><a href="https://github.com/laurent22/joplin/blob/dev/BUILD.md">How to build the apps</a></li>
+<li><a href="/spec/e2ee/">End-to-end encryption spec</a></li>
+<li><a href="/spec/history/">Note History spec</a></li>
+<li><a href="/spec/sync_lock/">Sync Lock spec</a></li>
+<li><a href="/spec/plugins/">Plugin Architecture spec</a></li>
+<li><a href="/spec/search_sorting/">Search Sorting spec</a></li>
+<li><a href="/spec/server_file_url_format/">Server: File URL Format</a></li>
+<li><a href="/spec/server_delta_sync/">Server: Delta Sync</a></li>
+<li><a href="/spec/server_sharing/">Server: Sharing</a></li>
+</ul>
+</li>
+<li>
+<p>Google Summer of Code 2021</p>
+<ul>
+<li><a href="/gsoc2021/index/">Google Summer of Code 2021</a></li>
+<li><a href="/gsoc2021/pull_request_guidelines/">How to submit a GSoC pull request</a></li>
+<li><a href="/gsoc2021/ideas/">Project Ideas</a></li>
+</ul>
+</li>
+<li>
+<p>About</p>
+<ul>
+<li><a href="/changelog/">Changelog (Desktop App)</a></li>
+<li><a href="/changelog_cli/">Changelog (CLI App)</a></li>
+<li><a href="/changelog_server/">Changelog (Server)</a></li>
+<li><a href="/stats/">Stats</a></li>
+<li><a href="/donate/">Donate</a></li>
+</ul>
+</li>
+</ul>
+</div></div>
+
+						<div class="main-content">
+							<div class="alert alert-danger alert-env-dev" role="alert">
+								Running in prod mode!
+							</div>
+							<div class="donate-links">
+<p><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=E8JMYD2LQ8MMA&amp;lc=GB&amp;item_name=Joplin+Development&amp;currency_code=EUR&amp;bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Donate-PayPal-green.svg" alt="Donate using PayPal"></a> <a href="https://github.com/sponsors/laurent22/"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/GitHub-Badge.svg" alt="Sponsor on GitHub"></a> <a href="https://www.patreon.com/joplin"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Patreon-Badge.svg" alt="Become a patron"></a> <a href="https://joplinapp.org/donate/#donations"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Donate-IBAN.svg" alt="Donate using IBAN"></a></p>
+</div>
+<h1>Encryption<a name="encryption" href="#encryption" class="heading-anchor">🔗</a></h1>
+<p>Encrypted data is encoded to ASCII because encryption/decryption functions in React Native can only deal with strings. So for compatibility with all the apps we need to use the lowest common denominator.</p>
+<h2>Encrypted data format<a name="encrypted-data-format" href="#encrypted-data-format" class="heading-anchor">🔗</a></h2>
+<h3>Header<a name="header" href="#header" class="heading-anchor">🔗</a></h3>
+<table class="table">
+<thead>
+<tr>
+<th>Name</th>
+<th>Size</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Identifier</td>
+<td>3 chars (&quot;JED&quot;)</td>
+</tr>
+<tr>
+<td>Version number</td>
+<td>2 chars (Hexa string)</td>
+</tr>
+</tbody>
+</table>
+<p>This is followed by the encryption metadata:</p>
+<table class="table">
+<thead>
+<tr>
+<th>Name</th>
+<th>Size</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Length</td>
+<td>6 chars (Hexa string)</td>
+</tr>
+<tr>
+<td>Encryption method</td>
+<td>2 chars (Hexa string)</td>
+</tr>
+<tr>
+<td>Master key ID</td>
+<td>32 chars (Hexa string)</td>
+</tr>
+</tbody>
+</table>
+<p>See <code>lib/services/EncryptionService.js</code> for the list of available encryption methods.</p>
+<h3>Data chunk<a name="data-chunk" href="#data-chunk" class="heading-anchor">🔗</a></h3>
+<p>The data is encoded in one or more chunks for performance reasons. That way it is possible to take a block of data from one file and encrypt it to another block in another file. Encrypting/decrypting the whole file in one go would not work (on mobile especially).</p>
+<table class="table">
+<thead>
+<tr>
+<th>Name</th>
+<th>Size</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Length</td>
+<td>6 chars (Hexa string)</td>
+</tr>
+<tr>
+<td>Data</td>
+<td>(&quot;Length&quot; bytes) (ASCII)</td>
+</tr>
+</tbody>
+</table>
+<h2>Master Keys<a name="master-keys" href="#master-keys" class="heading-anchor">🔗</a></h2>
+<p>The master keys are used to encrypt and decrypt data. They can be generated from the Encryption Service and are saved to the database. They are themselves encrypted via a user password using a <a href="https://github.com/laurent22/joplin/blob/f21199a7f38b43d1f350ee81f84d4f335cb285b3/packages/lib/services/EncryptionService.js#L374">strong encryption method</a>.</p>
+<p>These encrypted master keys are transmitted with the sync data so that they can be available to each client. Each client will need to supply the user password to decrypt each key.</p>
+<p>The application supports multiple master keys in order to handle cases where one offline client starts encrypting notes, then another offline client starts encrypting notes too, and later both sync. Both master keys will have to be decrypted separately with the user password.</p>
+<p>Only one master key can be active for encryption purposes. For decryption, the algorithm will check the Master Key ID in the header, then check if it's available to the current app and, if so, use this for decryption.</p>
+<h2>Encryption Service<a name="encryption-service" href="#encryption-service" class="heading-anchor">🔗</a></h2>
+<p>The applications make use of the <code>EncryptionService</code> class to handle encryption and decryption. Before it can be used, a least one master key must be loaded into it and be marked as &quot;active&quot;.</p>
+<h2>Encryption workflow<a name="encryption-workflow" href="#encryption-workflow" class="heading-anchor">🔗</a></h2>
+<p>Items are encrypted only during synchronisation, when they are serialised (via <code>BaseItem.serializeForSync</code>), so before being sent to the sync target.</p>
+<p>They are decrypted by DecryptionWorker in the background.</p>
+<p>The apps handle displaying both decrypted and encrypted items, so that user is aware that these items are there even if not yet decrypted. Encrypted items are mostly read-only to the user, except that they can be deleted.</p>
+<h2>Enabling and disabling encryption<a name="enabling-and-disabling-encryption" href="#enabling-and-disabling-encryption" class="heading-anchor">🔗</a></h2>
+<p>Enabling/disabling E2EE while two clients are in sync might have an unintuitive behaviour (although that behaviour might be correct), so below some scenarios are explained:</p>
+<ul>
+<li>
+<p>If client 1 enables E2EE, all items will be synced to target and will appear encrypted on target. Although all items have been re-uploaded to the target, their timestamps did <em>not</em> change (because the item data itself has not changed, only its representation). Because of this, client 2 will not re-download the items - it does not need to do so anyway since it has already the item data.</p>
+</li>
+<li>
+<p>When a client sync and download a master key for the first time, encryption will be automatically enabled (user will need to supply the master key password). In that case, all items that are not encrypted will be re-synced. Uploading only non-encrypted items is an optimisation since if an item is already encrypted locally it means it's encrypted on target too.</p>
+</li>
+<li>
+<p>If both clients are in sync with E2EE enabled: if client 1 disable E2EE, it's going to re-upload all the items unencrypted. Client 2 again will not re-download the items for the same reason as above (data did not change, only representation). Note that user <em>must</em> manually disable E2EE on all clients otherwise some will continue to upload encrypted items. Since synchronisation is stateless, clients do not know whether other clients use E2EE or not so this step has to be manual.</p>
+</li>
+<li>
+<p>Although messy, Joplin supports having some clients send encrypted items and others unencrypted ones. The situation gets resolved once all the clients have the same E2EE settings.</p>
+</li>
+<li>
+<p>Currently, there is no way to delete encryption keys if you do not need them anymore or if you disabled the encryption completely. You will get a persistent notification to provide a Master Key password on a new device, even if encryption is disabled. Entering the Master Key(s) password and still having the encryption disabled will get rid of the notification. See <a href="https://discourse.joplinapp.org/t/delete-e2ee-master-keys/906">Delete E2EE Master Keys</a> for more info.</p>
+</li>
+</ul>
+<h2>Types of keys<a name="types-of-keys" href="#types-of-keys" class="heading-anchor">🔗</a></h2>
+<p>There are two types of key:</p>
+<ul>
+<li>
+<p><strong>Data keys</strong>, which are used to encrypt Joplin items, such as notes, notebooks, tags, etc. when E2EE is enabled. A data key is generated when the user enables E2EE. Data keys are also dynamically generated when a user shares a notebook with another user. In this case, we create a separate key, so that the recipient can only decrypt this specific notebook.</p>
+</li>
+<li>
+<p><strong>Public-private key pairs</strong>, which are used to transfer secrets between users.</p>
+</li>
+</ul>
+<h2>Master password<a name="master-password" href="#master-password" class="heading-anchor">🔗</a></h2>
+<p>The master password is used to encrypt E2EE data keys as well as the user's private key.</p>
+<p><strong>It is possible to change the master password</strong> - in this case, all keys are reencrypted with the new passowrd. The data, notes, notebooks, etc. does not need to be reencrypted.</p>
+<p>If a master password is forgotten it's not possible to recover it. <strong>It is however possible to reset it</strong>. In that case, all associated keys are disabled, and the public-private key pair is regenerated. In practice it means that any content that was encrypted with the forgotten password can no longer be decrypted.</p>
+<h2>Public-private key pairs<a name="public-private-key-pairs" href="#public-private-key-pairs" class="heading-anchor">🔗</a></h2>
+<p>Public-private key pairs (PPK) are used to transfer secrets between users. Specifically, they are used when sharing a notebook while E2EE is enabled. The workflow is as follow:</p>
+<ul>
+<li>Alice shares a notebook with Bob</li>
+<li>Since the notebook is encrypted, Alice also sends the key to Bob, but it needs to be encrypted too.</li>
+<li>To do so, she downloads Bob's public key and encrypt the key with it</li>
+<li>When accepting the share, Bob receives this key</li>
+<li>Bob decrypts it with his private key</li>
+<li>Once decrypted, he reencrypts it with his master password</li>
+</ul>
+<p>At this point, both users have a copy of the key and can share notes over E2EE.</p>
+<p>A user can only have one PPK.</p>
+<p>PPKs are generated automatically when E2EE is enabled and when the user synchronises. They are then stored in info.json on the sync target. The key is generated during sync because otherwise multiple clients could generate a PPK, and then there would be a conflict to decide which PPK should be kept. By doing it during sync, it ensures that only one PPK is generated because the synchronizer fetches first info.json - and only generates a PPK if none is already present.</p>
+
+								<div class="bottom-links">
+									<a href="https://github.com/laurent22/joplin/blob/dev/readme/spec/e2ee.md">
+										<i class="fab fa-github"></i> Improve this doc
+									</a>
+								</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			
+<footer class="darkblue-bg">
+	<div class="container">
+		<div class="row">
+			<div class="col-12 col-md-12 social-links">
+				<a href="https://twitter.com/joplinapp" title="Joplin Twitter feed"><i class="fab fa-twitter"></i></a>
+				<a href="https://mastodon.social/@joplinapp" title="Joplin Mastodon feed"><i class="fab fa-mastodon"></i></a>
+				<a href="https://www.patreon.com/joplin" title="Joplin Patreon"><i class="fab fa-patreon"></i></a>
+				<a href="https://discord.gg/VSj7AFHvpq" title="Joplin Discord chat"><i class="fab fa-discord"></i></a>
+				<a href="https://www.reddit.com/r/joplinapp/" title="Joplin Subreddit"><i class="fab fa-reddit"></i></a>
+				<a href="https://github.com/laurent22/joplin/" title="Joplin GitHub repository"><i class="fab fa-github"></i></a>
+			</div>
+		</div>
+
+		<div class="row bottom-links-row">
+			<div class="col-12 col-md-6">
+				<p class="text-center-sm">Copyright &copy; 2016-2021 Laurent Cozic</p>
+			</div>
+			<div class="col-12 col-md-6">
+				<p class="text-right text-center-sm right-links">
+					<span class="footer-right">
+						<a href="/privacy/">Privacy Policy</a>
+					</span>
+				</p>
+			</div>
+		</div>
+	</div>
+</footer>		</div>
+
+		<script src="/js/script.js?h=46b3b58d72c94591621551affbb8c6e3"></script>
+
+<script>
+	if (window.location.hostname !== 'localhost') {
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+		ga('create', 'UA-103586105-1', 'auto');
+		ga('send', 'pageview');
+	}
+</script>	</body>
+</html>

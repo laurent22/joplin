@@ -64,7 +64,7 @@ The Web Clipper is a browser extension that allows you to save web pages and scr
 # Sponsors
 
 <!-- SPONSORS-ORG -->
-<a href="https://seirei.ne.jp"><img title="Serei Network" width="256" src="https://joplinapp.org/images/sponsors/SeireiNetwork.png"/></a> <a href="https://www.hosting.de/nextcloud/?mtm_campaign=managed-nextcloud&amp;mtm_kwd=joplinapp&amp;mtm_source=joplinapp-github&amp;mtm_medium=banner"><img title="Hosting.de" width="256" src="https://joplinapp.org/images/sponsors/HostingDe.png"/></a> <a href="https://usrigging.com/"><img title="U.S. Ringing Supply" width="256" src="https://joplinapp.org/images/sponsors/RingingSupply.svg"/></a>
+<a href="https://www.hosting.de/nextcloud/?mtm_campaign=managed-nextcloud&amp;mtm_kwd=joplinapp&amp;mtm_source=joplinapp-github&amp;mtm_medium=banner"><img title="Hosting.de" width="256" src="https://joplinapp.org/images/sponsors/HostingDe.png"/></a> <a href="https://usrigging.com/"><img title="U.S. Ringing Supply" width="256" src="https://joplinapp.org/images/sponsors/RingingSupply.svg"/></a> <a href="https://seirei.ne.jp"><img title="Serei Network" width="256" src="https://joplinapp.org/images/sponsors/SeireiNetwork.png"/></a>
 <!-- SPONSORS-ORG -->
 
 * * *
