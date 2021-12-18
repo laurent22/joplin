@@ -656,7 +656,8 @@ footer .bottom-links-row p {
  WHAT'S NEW PAGE
 *****************************************************************/
 
-.news-page .container > .content-wrapper {
+.news-page      .container > .content-wrapper,
+.news-item-page .container > .content-wrapper {
 	/* Set the line width so that there's no more than 75 characters per line */
 	/* https://baymard.com/blog/line-length-readability */
 	max-width: 650px;
@@ -664,7 +665,8 @@ footer .bottom-links-row p {
     margin-right: auto;
 }
 
-.news-page img {
+.news-page     img,
+.news-item-page img {
 	max-width: 650px;
 }
 

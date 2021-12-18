@@ -331,9 +331,13 @@ async function main() {
 	for (const source of sources) {
 		source[2].sourceMarkdownFile = source[0];
 		source[2].sourceMarkdownName = path.basename(source[0], path.extname(source[0]));
-		renderFileToHtml(`${rootDir}/${source[0]}`, `${rootDir}/${source[1]}`, {
+
+		const sourceFilePath = `${rootDir}/${source[0]}`;
+
+		renderFileToHtml(sourceFilePath, `${rootDir}/${source[1]}`, {
 			...source[2],
 			templateHtml: mainTemplateHtml,
+			pageName: isNewsFile(sourceFilePath) ? 'news-item' : '',
 			partials,
 			assetUrls,
 		});
