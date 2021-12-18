@@ -50,7 +50,7 @@ const attributesHtml = (attr: any) => {
 
 const attrValue = (attrs: any, name: string): string => {
 	if (!attrs[name]) return '';
-	return attrs[name].toLowerCase();
+	return attrs[name];
 };
 
 const isSelfClosingTag = (tagName: string) => {
