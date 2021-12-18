@@ -13,6 +13,7 @@
     "buildApiDoc": "npm start --prefix=packages/app-cli -- apidoc ../../readme/api/references/rest_api.md",
     "buildCommandIndex": "gulp buildCommandIndex",
     "buildDoc": "./packages/tools/build-all.sh",
+    "updateMarkdownDoc": "node ./packages/tools/updateMarkdownDoc",
     "buildPluginDoc": "typedoc --name 'Joplin Plugin API Documentation' --mode file -theme './Assets/PluginDocTheme/' --readme './Assets/PluginDocTheme/index.md' --excludeNotExported --excludeExternals --excludePrivate --excludeProtected --out docs/api/references/plugin_api packages/lib/services/plugins/api/",
     "buildSettingJsonSchema": "npm start --prefix=packages/app-cli -- settingschema ../../docs/schema/settings.json",
     "buildTranslations": "npm run tsc && node packages/tools/build-translation.js",

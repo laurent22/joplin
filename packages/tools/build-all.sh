@@ -5,10 +5,10 @@ ROOT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 git pull
 
-echo "---------------------------------------------------"
-echo "$ROOT_DIR/update-readme-download.js..."
-echo "---------------------------------------------------"
-node "$ROOT_DIR/update-readme-download.js"
+# echo "---------------------------------------------------"
+# echo "$ROOT_DIR/update-readme-download.js..."
+# echo "---------------------------------------------------"
+# node "$ROOT_DIR/update-readme-download.js"
 
 echo "---------------------------------------------------"
 echo "$ROOT_DIR/build-release-stats.js..."
