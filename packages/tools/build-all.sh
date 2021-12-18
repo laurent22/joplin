@@ -10,20 +10,22 @@ git pull
 # echo "---------------------------------------------------"
 # node "$ROOT_DIR/update-readme-download.js"
 
-echo "---------------------------------------------------"
-echo "$ROOT_DIR/build-release-stats.js..."
-echo "---------------------------------------------------"
-node "$ROOT_DIR/build-release-stats.js"
+# echo "---------------------------------------------------"
+# echo "$ROOT_DIR/build-release-stats.js..."
+# echo "---------------------------------------------------"
+# node "$ROOT_DIR/build-release-stats.js"
 
-echo "---------------------------------------------------"
-echo "$ROOT_DIR/build-welcome.js..."
-echo "---------------------------------------------------"
-node "$ROOT_DIR/build-welcome.js"
+# TODO: Update stats
 
-echo "---------------------------------------------------"
-echo "$ROOT_DIR/update-readme-sponsors.js..."
-echo "---------------------------------------------------"
-node "$ROOT_DIR/update-readme-sponsors.js"
+# echo "---------------------------------------------------"
+# echo "$ROOT_DIR/build-welcome.js..."
+# echo "---------------------------------------------------"
+# node "$ROOT_DIR/build-welcome.js"
+
+# echo "---------------------------------------------------"
+# echo "$ROOT_DIR/update-readme-sponsors.js..."
+# echo "---------------------------------------------------"
+# node "$ROOT_DIR/update-readme-sponsors.js"
 
 cd "$ROOT_DIR/.."
 echo "---------------------------------------------------"
