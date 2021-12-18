@@ -22,6 +22,8 @@ const plansTemplateHtml = readFileSync(`${websiteAssetDir}/templates/plans.musta
 const stripeConfig = loadStripeConfig(env, `${rootDir}/packages/server/stripeConfig.json`);
 const partialDir = `${websiteAssetDir}/templates/partials`;
 
+const discussLink = 'https://discourse.joplinapp.org/c/news/9';
+
 let tocMd_: string = null;
 let tocHtml_: string = null;
 const tocRegex_ = /<!-- TOC -->([^]*)<!-- TOC -->/;
@@ -108,6 +110,8 @@ function renderPageToHtml(md: string, targetPath: string, templateParams: Templa
 		...defaultTemplateParams(templateParams.assetUrls),
 		...templateParams,
 	};
+
+	templateParams.showBottomLinks = templateParams.showImproveThisDoc || !!templateParams.discussOnForumLink;
 
 	const title = [];
 
@@ -211,9 +215,10 @@ const makeNewsFrontPage = async (sourceFilePaths: string[], targetFilePath: stri
 	for (const mdFilePath of sourceFilePaths) {
 		let md = await readFile(mdFilePath, 'utf8');
 		const info = stripOffFrontMatter(md);
-		md = info.doc;
+		md = info.doc.trim();
 		const dateString = moment(info.created).format('D MMM YYYY');
 		md = md.replace(/^# (.*)/, `# [$1](https://github.com/laurent22/joplin/blob/dev/readme/news/${path.basename(mdFilePath)})\n\n*Published on **${dateString}***\n\n`);
+		md += `\n\n* * *\n\n[<i class="fab fa-discourse"></i> Discuss on the forum](${discussLink})`;
 		frontPageMd.push(md);
 		if (frontPageMd.length >= maxNewsPerPage) break;
 	}
@@ -333,11 +338,14 @@ async function main() {
 		source[2].sourceMarkdownName = path.basename(source[0], path.extname(source[0]));
 
 		const sourceFilePath = `${rootDir}/${source[0]}`;
+		const isNews = isNewsFile(sourceFilePath);
 
 		renderFileToHtml(sourceFilePath, `${rootDir}/${source[1]}`, {
 			...source[2],
 			templateHtml: mainTemplateHtml,
-			pageName: isNewsFile(sourceFilePath) ? 'news-item' : '',
+			pageName: isNews ? 'news-item' : '',
+			discussOnForumLink: isNews ? discussLink : '',
+			showImproveThisDoc: !isNews,
 			partials,
 			assetUrls,
 		});

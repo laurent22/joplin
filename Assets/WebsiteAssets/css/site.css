@@ -523,10 +523,15 @@ div.navbar-mobile-content a.sponsor-button {
 
 .bottom-links {
 	display: flex;
+	flex-direction: row;
 	justify-content: center;
 	border-top: 1px solid #d4d4d4;
 	margin-top: 30px;
 	padding-top: 25px;
+}
+
+.bottom-links .bottom-link {
+	margin-right: 20px;
 }
 
 /* TOC */
