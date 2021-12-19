@@ -50,7 +50,8 @@ packages/tools/github_oauth_token.txt
 lerna-debug.log
 .env
 docs/**/*.mustache
-
+/docs/**
+!/docs/README.md
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
 packages/app-cli/app/LinkSelector.d.ts
 packages/app-cli/app/LinkSelector.js
