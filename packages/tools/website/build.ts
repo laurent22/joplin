@@ -1,19 +1,23 @@
-import { readFileSync, readFile, mkdirpSync, writeFileSync, remove, copy } from 'fs-extra';
-import { insertContentIntoFile, rootDir } from '../tool-utils';
+import { readFileSync, readFile, mkdirpSync, writeFileSync, remove, copy, pathExistsSync } from 'fs-extra';
+import { rootDir } from '../tool-utils';
 import { pressCarouselItems } from './utils/pressCarousel';
 import { getMarkdownIt, loadMustachePartials, markdownToPageHtml, renderMustache } from './utils/render';
 import { AssetUrls, Env, OrgSponsor, PlanPageParams, Sponsors, TemplateParams } from './utils/types';
 import { getPlans, loadStripeConfig } from '@joplin/lib/utils/joplinCloud';
 import { shuffle } from '@joplin/lib/array';
 import { stripOffFrontMatter } from './utils/frontMatter';
+import { dirname, basename } from 'path';
 const moment = require('moment');
 
-const dirname = require('path').dirname;
 const glob = require('glob');
 const path = require('path');
 const md5File = require('md5-file/promise');
 
 const env = Env.Prod;
+
+const docDir = `${dirname(dirname(dirname(dirname(__dirname))))}/joplin-website/docs`;
+
+if (!pathExistsSync(docDir)) throw new Error(`Doc directory does not exist: ${docDir}`);
 
 const websiteAssetDir = `${rootDir}/Assets/WebsiteAssets`;
 const mainTemplateHtml = readFileSync(`${websiteAssetDir}/templates/main-new.mustache`, 'utf8');
@@ -165,37 +169,6 @@ function makeHomePageMd() {
 	return md;
 }
 
-async function createDownloadButtonsHtml(readmeMd: string): Promise<Record<string, string>> {
-	const output: Record<string, string> = {};
-	output['windows'] = readmeMd.match(/(<a href=.*?Joplin-Setup-.*?<\/a>)/)[0];
-	output['macOs'] = readmeMd.match(/(<a href=.*?Joplin-.*\.dmg.*?<\/a>)/)[0];
-	output['linux'] = readmeMd.match(/(<a href=.*?Joplin-.*\.AppImage.*?<\/a>)/)[0];
-	output['android'] = readmeMd.match(/(<a href='https:\/\/play.google.com\/store\/apps\/details\?id=net\.cozic\.joplin.*?<\/a>)/)[0];
-	output['ios'] = readmeMd.match(/(<a href='https:\/\/itunes\.apple\.com\/us\/app\/joplin\/id1315599797.*?<\/a>)/)[0];
-
-	for (const [k, v] of Object.entries(output)) {
-		if (!v) throw new Error(`Could not get download element for: ${k}`);
-	}
-
-	return output;
-}
-
-async function updateDownloadPage(downloadButtonsHtml: Record<string, string>) {
-	const desktopButtonsHtml = [
-		downloadButtonsHtml['windows'],
-		downloadButtonsHtml['macOs'],
-		downloadButtonsHtml['linux'],
-	];
-
-	const mobileButtonsHtml = [
-		downloadButtonsHtml['android'],
-		downloadButtonsHtml['ios'],
-	];
-
-	await insertContentIntoFile(`${rootDir}/readme/download.md`, '<!-- DESKTOP-DOWNLOAD-LINKS -->', '<!-- DESKTOP-DOWNLOAD-LINKS -->', desktopButtonsHtml.join(' '));
-	await insertContentIntoFile(`${rootDir}/readme/download.md`, '<!-- MOBILE-DOWNLOAD-LINKS -->', '<!-- MOBILE-DOWNLOAD-LINKS -->', mobileButtonsHtml.join(' '));
-}
-
 async function loadSponsors(): Promise<Sponsors> {
 	const sponsorsPath = `${rootDir}/packages/tools/sponsors.json`;
 	const output: Sponsors = JSON.parse(await readFile(sponsorsPath, 'utf8'));
@@ -231,8 +204,8 @@ const isNewsFile = (filePath: string): boolean => {
 };
 
 async function main() {
-	await remove(`${rootDir}/docs`);
-	await copy(websiteAssetDir, `${rootDir}/docs`);
+	await remove(`${docDir}`);
+	await copy(websiteAssetDir, `${docDir}`);
 
 	const sponsors = await loadSponsors();
 	const partials = await loadMustachePartials(partialDir);
@@ -240,20 +213,19 @@ async function main() {
 
 	const readmeMd = makeHomePageMd();
 
-	const downloadButtonsHtml = await createDownloadButtonsHtml(readmeMd);
-	await updateDownloadPage(downloadButtonsHtml);
+	// await updateDownloadPage(readmeMd);
 
 	// =============================================================
 	// HELP PAGE
 	// =============================================================
 
-	renderPageToHtml(readmeMd, `${rootDir}/docs/help/index.html`, { sourceMarkdownFile: 'README.md', partials, sponsors, assetUrls });
+	renderPageToHtml(readmeMd, `${docDir}/help/index.html`, { sourceMarkdownFile: 'README.md', partials, sponsors, assetUrls });
 
 	// =============================================================
 	// FRONT PAGE
 	// =============================================================
 
-	renderPageToHtml('', `${rootDir}/docs/index.html`, {
+	renderPageToHtml('', `${docDir}/index.html`, {
 		templateHtml: frontTemplateHtml,
 		partials,
 		pressCarouselRegular: {
@@ -290,7 +262,7 @@ async function main() {
 
 	const planPageContentHtml = renderMustache('', planPageParams);
 
-	renderPageToHtml('', `${rootDir}/docs/plans/index.html`, {
+	renderPageToHtml('', `${docDir}/plans/index.html`, {
 		...defaultTemplateParams(assetUrls),
 		pageName: 'plans',
 		partials,
@@ -310,10 +282,12 @@ async function main() {
 	const donateLinksMd = await getDonateLinks();
 
 	const makeTargetFilePath = (input: string): string => {
+		const filenameNoExt = basename(input, '.md');
+
 		if (isNewsFile(input)) {
-			return `${input.replace(/\.md/, '').replace(/readme\/news\//, 'docs/news/')}/index.html`;
+			return `${docDir}/news/${filenameNoExt}/index.html`; // `${input.replace(/\.md/, '').replace(/readme\/news\//, 'docs/news/')}/index.html`;
 		} else {
-			return `${input.replace(/\.md/, '').replace(/readme\//, 'docs/')}/index.html`;
+			return `${docDir}/${filenameNoExt}/index.html`;
 		}
 	};
 
@@ -338,9 +312,10 @@ async function main() {
 		source[2].sourceMarkdownName = path.basename(source[0], path.extname(source[0]));
 
 		const sourceFilePath = `${rootDir}/${source[0]}`;
+		const targetFilePath = source[1];
 		const isNews = isNewsFile(sourceFilePath);
 
-		renderFileToHtml(sourceFilePath, `${rootDir}/${source[1]}`, {
+		renderFileToHtml(sourceFilePath, targetFilePath, {
 			...source[2],
 			templateHtml: mainTemplateHtml,
 			pageName: isNews ? 'news-item' : '',
@@ -355,7 +330,7 @@ async function main() {
 		return a.toLowerCase() > b.toLowerCase() ? -1 : +1;
 	});
 
-	await makeNewsFrontPage(newsFilePaths, `${rootDir}/docs/news/index.html`, {
+	await makeNewsFrontPage(newsFilePaths, `${docDir}/news/index.html`, {
 		...defaultTemplateParams(assetUrls),
 		pageName: 'news',
 		partials,

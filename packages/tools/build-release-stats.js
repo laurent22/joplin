@@ -4,6 +4,7 @@ const fetch = require('node-fetch');
 const fs = require('fs-extra');
 const { dirname } = require('@joplin/lib/path-utils');
 const markdownUtils = require('@joplin/lib/markdownUtils').default;
+const yargParser = require('yargs-parser');
 
 const rootDir = dirname(dirname(__dirname));
 
@@ -55,6 +56,11 @@ function createChangeLog(releases) {
 }
 
 async function main() {
+	const argv = yargParser(process.argv);
+	const types = argv.types ? argv.types.split(',') : ['stats', 'changelog'];
+
+	console.info(`Building docs: ${types.join(', ')}`);
+
 	const rows = [];
 
 	const totals = {
@@ -99,8 +105,15 @@ async function main() {
 		pageNum++;
 	}
 
-	const changelogText = createChangeLog(rows);
-	await fs.writeFile(`${rootDir}/readme/changelog.md`, changelogText);
+	if (types.includes('changelog')) {
+		console.info('Build stats: Updating changelog...');
+		const changelogText = createChangeLog(rows);
+		await fs.writeFile(`${rootDir}/readme/changelog.md`, changelogText);
+	}
+
+	if (!types.includes('stats')) return;
+
+	console.info('Build stats: Updating stats...');
 
 	const grandTotal = totals.windows_count + totals.mac_count + totals.linux_count;
 	totals.windows_percent = totals.windows_count / grandTotal;
