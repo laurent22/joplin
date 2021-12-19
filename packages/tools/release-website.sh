@@ -18,7 +18,7 @@ if [[ "$IS_CONTINUOUS_INTEGRATION" == "1" ]]; then
 	echo "Running on CI - setting up Git username and email"
 	git config --global user.email "$GIT_USER_EMAIL"
 	git config --global user.name "$GIT_USER_NAME"
-elif
+else
 	echo "*Not* running on CI - using the global Git username and email"
 fi
 
