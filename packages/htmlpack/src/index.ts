@@ -87,6 +87,7 @@ const processLinkTag = (baseDir: string, _name: string, attrs: any): string => {
 	if (!href) return null;
 
 	const filePath = `${baseDir}/${href}`;
+
 	const content = fs.readFileSync(filePath, 'utf8');
 	return `<style>${processCssContent(dirname(filePath), content)}</style>`;
 };
@@ -95,8 +96,26 @@ const processScriptTag = (baseDir: string, _name: string, attrs: any): string =>
 	const src = attrValue(attrs, 'src');
 	if (!src) return null;
 
-	const content = fs.readFileSync(`${baseDir}/${src}`, 'utf8');
-	return `<script>${htmlentities(content)}</script>`;
+	const scriptFilePath = `${baseDir}/${src}`;
+	let content = fs.readFileSync(scriptFilePath, 'utf8');
+
+	// There's no simple way to insert arbitrary content in <script> tags.
+	// Encoding HTML entities doesn't work because the JS parser will not decode
+	// them before parsing. We also can't put the code verbatim since it may
+	// contain strings such as `</script>` or `<!--` which would break the HTML
+	// file.
+	//
+	// So it seems the only way is to escape these specific sequences with a
+	// backslash. It shouldn't break the JS code and should allow the HTML
+	// parser to work as expected.
+	//
+	// https://stackoverflow.com/a/41302266/561309
+
+	content = content.replace(/<script>/g, '<\\script>');
+	content = content.replace(/<\/script>/g, '<\\/script>');
+	content = content.replace(/<!--/g, '<\\!--');
+
+	return `<script>${content}</script>`;
 };
 
 const processImgTag = (baseDir: string, _name: string, attrs: any): string => {
