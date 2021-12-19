@@ -17,7 +17,7 @@
     "buildSettingJsonSchema": "npm start --prefix=packages/app-cli -- settingschema ../../../joplin-website/docs/schema/settings.json",
     "buildTranslations": "npm run tsc && node packages/tools/build-translation.js",
     "buildTranslationsNoTsc": "node packages/tools/build-translation.js",
-    "buildWebsite": "npm run buildApiDoc && node ./packages/tools/website/build.js && npm run buildPluginDoc && npm run buildSettingJsonSchema",
+    "buildWebsite": "node ./packages/tools/website/build.js && npm run buildPluginDoc && npm run buildSettingJsonSchema",
     "circularDependencyCheck": "madge --warning --circular --extensions js ./",
     "clean": "lerna clean -y && lerna run clean",
     "dependencyTree": "madge",
