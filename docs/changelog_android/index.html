@@ -40,7 +40,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog_android.md
 			media="all"
 			onload="this.media='all'; this.onload = null"
 		/>
-		<link rel="stylesheet" href="/css/site.css?h=7ac82e1f40a384f69c644263acc99fc8" as="style" />
+		<link rel="stylesheet" href="/css/site.css?h=679184ffd12e4ab841f24c0858c6ed45" as="style" />
 		<title>Joplin Android app changelog | Joplin</title>
 
 		<script
@@ -66,6 +66,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog_android.md
 				</a>
 			</div>
 			<div class="col-9 text-right d-none d-md-block">
+				<a href="/news/" class="fw500">What's New</a>
 				<a href="/help/" class="fw500">Help</a>
 				<a href="https:&#x2F;&#x2F;discourse.joplinapp.org&#x2F;" class="fw500">Forum</a>
 <a href="/plans/" class="button-link btn-trans plans-button">Joplin Cloud</a><a class="button-link btn-blue sponsor-button" href="/donate">
@@ -95,8 +96,9 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog_android.md
 						</div>
 
 						<div class="text-center menu-mobile-top">
-							<a href="https:&#x2F;&#x2F;discourse.joplinapp.org&#x2F;" class="fw500 mobile-menu-link">Forum</a>
+							<a href="/news/" class="fw500 mobile-menu-link">What's New</a>
 							<a href="/help/" class="fw500 mobile-menu-link">Help</a>
+							<a href="https:&#x2F;&#x2F;discourse.joplinapp.org&#x2F;" class="fw500 mobile-menu-link">Forum</a>
 						</div>
 
 						<div class="menu-mobile-buttons">
@@ -294,6 +296,24 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog_android.md
 <p><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=E8JMYD2LQ8MMA&amp;lc=GB&amp;item_name=Joplin+Development&amp;currency_code=EUR&amp;bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Donate-PayPal-green.svg" alt="Donate using PayPal"></a> <a href="https://github.com/sponsors/laurent22/"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/GitHub-Badge.svg" alt="Sponsor on GitHub"></a> <a href="https://www.patreon.com/joplin"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Patreon-Badge.svg" alt="Become a patron"></a> <a href="https://joplinapp.org/donate/#donations"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Donate-IBAN.svg" alt="Donate using IBAN"></a></p>
 </div>
 <h1>Joplin Android app changelog<a name="joplin-android-app-changelog" href="#joplin-android-app-changelog" class="heading-anchor">🔗</a></h1>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/android-v2.6.8">android-v2.6.8</a> - 2021-12-17T10:15:00Z<a name="android-v2-6-8-https-github-com-laurent22-joplin-releases-tag-android-v2-6-8-2021-12-17t10-15-00z" href="#android-v2-6-8-https-github-com-laurent22-joplin-releases-tag-android-v2-6-8-2021-12-17t10-15-00z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>Improved: Update Mermaid: 8.12.1 -&gt; 8.13.5 (#5831 by Helmut K. C. Tessarek)</li>
+<li>Fixed: Links in flowchart Mermaid diagrams (#5830) (#5801 by Helmut K. C. Tessarek)</li>
+</ul>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/android-v2.6.5">android-v2.6.5</a> (Pre-release) - 2021-12-13T09:41:18Z<a name="android-v2-6-5-https-github-com-laurent22-joplin-releases-tag-android-v2-6-5-pre-release-2021-12-13t09-41-18z" href="#android-v2-6-5-https-github-com-laurent22-joplin-releases-tag-android-v2-6-5-pre-release-2021-12-13t09-41-18z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>Fixed: Fixed &quot;Invalid lock client type&quot; error when migrating sync target (e0e93c4)</li>
+</ul>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/android-v2.6.4">android-v2.6.4</a> (Pre-release) - 2021-12-01T11:38:49Z<a name="android-v2-6-4-https-github-com-laurent22-joplin-releases-tag-android-v2-6-4-pre-release-2021-12-01t11-38-49z" href="#android-v2-6-4-https-github-com-laurent22-joplin-releases-tag-android-v2-6-4-pre-release-2021-12-01t11-38-49z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>Improved: Also duplicate resources when duplicating a note (c0a8c33)</li>
+<li>Improved: Improved S3 sync error handling and reliability, and upgraded S3 SDK (#5312 by Lee Matos)</li>
+<li>Fixed: Alarm setting buttons were no longer visible (#5777)</li>
+<li>Fixed: Alarms were not being triggered in some cases (#5798) (#5216 by Roman Musin)</li>
+<li>Fixed: Fixed opening attachments (6950c40)</li>
+<li>Fixed: Handle duplicate attachments when the parent notebook is shared (#5796)</li>
+</ul>
 <h2><a href="https://github.com/laurent22/joplin/releases/tag/android-v2.6.3">android-v2.6.3</a> (Pre-release) - 2021-11-21T16:59:46Z<a name="android-v2-6-3-https-github-com-laurent22-joplin-releases-tag-android-v2-6-3-pre-release-2021-11-21t16-59-46z" href="#android-v2-6-3-https-github-com-laurent22-joplin-releases-tag-android-v2-6-3-pre-release-2021-11-21t16-59-46z" class="heading-anchor">🔗</a></h2>
 <ul>
 <li>New: Add date format YYYY/MM/DD (#5759 by Helmut K. C. Tessarek)</li>
@@ -447,7 +467,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog_android.md
 				<a href="https://twitter.com/joplinapp" title="Joplin Twitter feed"><i class="fab fa-twitter"></i></a>
 				<a href="https://mastodon.social/@joplinapp" title="Joplin Mastodon feed"><i class="fab fa-mastodon"></i></a>
 				<a href="https://www.patreon.com/joplin" title="Joplin Patreon"><i class="fab fa-patreon"></i></a>
-				<a href="https://discordapp.com/invite/d2HMPwE" title="Joplin Discord chat"><i class="fab fa-discord"></i></a>
+				<a href="https://discord.gg/VSj7AFHvpq" title="Joplin Discord chat"><i class="fab fa-discord"></i></a>
 				<a href="https://www.reddit.com/r/joplinapp/" title="Joplin Subreddit"><i class="fab fa-reddit"></i></a>
 				<a href="https://github.com/laurent22/joplin/" title="Joplin GitHub repository"><i class="fab fa-github"></i></a>
 			</div>

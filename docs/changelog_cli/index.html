@@ -40,7 +40,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog_cli.md
 			media="all"
 			onload="this.media='all'; this.onload = null"
 		/>
-		<link rel="stylesheet" href="/css/site.css?h=7ac82e1f40a384f69c644263acc99fc8" as="style" />
+		<link rel="stylesheet" href="/css/site.css?h=679184ffd12e4ab841f24c0858c6ed45" as="style" />
 		<title>Joplin terminal app changelog | Joplin</title>
 
 		<script
@@ -66,6 +66,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog_cli.md
 				</a>
 			</div>
 			<div class="col-9 text-right d-none d-md-block">
+				<a href="/news/" class="fw500">What's New</a>
 				<a href="/help/" class="fw500">Help</a>
 				<a href="https:&#x2F;&#x2F;discourse.joplinapp.org&#x2F;" class="fw500">Forum</a>
 <a href="/plans/" class="button-link btn-trans plans-button">Joplin Cloud</a><a class="button-link btn-blue sponsor-button" href="/donate">
@@ -95,8 +96,9 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog_cli.md
 						</div>
 
 						<div class="text-center menu-mobile-top">
-							<a href="https:&#x2F;&#x2F;discourse.joplinapp.org&#x2F;" class="fw500 mobile-menu-link">Forum</a>
+							<a href="/news/" class="fw500 mobile-menu-link">What's New</a>
 							<a href="/help/" class="fw500 mobile-menu-link">Help</a>
+							<a href="https:&#x2F;&#x2F;discourse.joplinapp.org&#x2F;" class="fw500 mobile-menu-link">Forum</a>
 						</div>
 
 						<div class="menu-mobile-buttons">
@@ -294,6 +296,25 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog_cli.md
 <p><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=E8JMYD2LQ8MMA&amp;lc=GB&amp;item_name=Joplin+Development&amp;currency_code=EUR&amp;bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Donate-PayPal-green.svg" alt="Donate using PayPal"></a> <a href="https://github.com/sponsors/laurent22/"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/GitHub-Badge.svg" alt="Sponsor on GitHub"></a> <a href="https://www.patreon.com/joplin"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Patreon-Badge.svg" alt="Become a patron"></a> <a href="https://joplinapp.org/donate/#donations"><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/badges/Donate-IBAN.svg" alt="Donate using IBAN"></a></p>
 </div>
 <h1>Joplin terminal app changelog<a name="joplin-terminal-app-changelog" href="#joplin-terminal-app-changelog" class="heading-anchor">🔗</a></h1>
+<h2><a href="https://github.com/laurent22/joplin/releases/tag/cli-v2.6.2">cli-v2.6.2</a> - 2021-12-17T11:19:45Z<a name="cli-v2-6-2-https-github-com-laurent22-joplin-releases-tag-cli-v2-6-2-2021-12-17t11-19-45z" href="#cli-v2-6-2-https-github-com-laurent22-joplin-releases-tag-cli-v2-6-2-2021-12-17t11-19-45z" class="heading-anchor">🔗</a></h2>
+<ul>
+<li>New: Add date format YYYY/MM/DD (#5759 by Helmut K. C. Tessarek)</li>
+<li>New: Add support for faster built-in sync locks (#5662)</li>
+<li>New: Add support for more style of highlighted texts when importing ENEX files (89179c2)</li>
+<li>New: Add support for sharing notes when E2EE is enabled (#5529)</li>
+<li>Improved: Also duplicate resources when duplicating a note (c0a8c33)</li>
+<li>Improved: Ask for master password when encryption or decryption fails (c19e59f)</li>
+<li>Improved: Improved S3 sync error handling and reliability, and upgraded S3 SDK (#5312 by Lee Matos)</li>
+<li>Improved: Improved error message when synchronising with Joplin Server (#5754)</li>
+<li>Improved: Update Mermaid: 8.12.1 -&gt; 8.13.5 (#5831 by Helmut K. C. Tessarek)</li>
+<li>Improved: When exporting as HTML, pack all images, styles and scripts inside the HTML file (98ed2be)</li>
+<li>Fixed: Fixed &quot;Invalid lock client type&quot; error when migrating sync target (e0e93c4)</li>
+<li>Fixed: Fixed issue that could cause application to needlessly lock the sync target (0de6e9e)</li>
+<li>Fixed: Handle duplicate attachments when the parent notebook is shared (#5796)</li>
+<li>Fixed: Links in flowchart Mermaid diagrams (#5830) (#5801 by Helmut K. C. Tessarek)</li>
+<li>Fixed: Long resource filenames were being incorrectly cut (#5653)</li>
+<li>Fixed: Sharing multiple notebooks via Joplin Server with the same user results in an error (#5721)</li>
+</ul>
 <h2><a href="https://github.com/laurent22/joplin/releases/tag/cli-v2.6.1">cli-v2.6.1</a> - 2021-11-03T11:33:18Z<a name="cli-v2-6-1-https-github-com-laurent22-joplin-releases-tag-cli-v2-6-1-2021-11-03t11-33-18z" href="#cli-v2-6-1-https-github-com-laurent22-joplin-releases-tag-cli-v2-6-1-2021-11-03t11-33-18z" class="heading-anchor">🔗</a></h2>
 <ul>
 <li>New: Add support for public-private key pairs and improved master password support (#5438)</li>
@@ -677,7 +698,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/changelog_cli.md
 				<a href="https://twitter.com/joplinapp" title="Joplin Twitter feed"><i class="fab fa-twitter"></i></a>
 				<a href="https://mastodon.social/@joplinapp" title="Joplin Mastodon feed"><i class="fab fa-mastodon"></i></a>
 				<a href="https://www.patreon.com/joplin" title="Joplin Patreon"><i class="fab fa-patreon"></i></a>
-				<a href="https://discordapp.com/invite/d2HMPwE" title="Joplin Discord chat"><i class="fab fa-discord"></i></a>
+				<a href="https://discord.gg/VSj7AFHvpq" title="Joplin Discord chat"><i class="fab fa-discord"></i></a>
 				<a href="https://www.reddit.com/r/joplinapp/" title="Joplin Subreddit"><i class="fab fa-reddit"></i></a>
 				<a href="https://github.com/laurent22/joplin/" title="Joplin GitHub repository"><i class="fab fa-github"></i></a>
 			</div>

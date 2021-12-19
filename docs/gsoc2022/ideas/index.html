@@ -40,7 +40,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/gsoc2022/ideas.md
 			media="all"
 			onload="this.media='all'; this.onload = null"
 		/>
-		<link rel="stylesheet" href="/css/site.css?h=7ac82e1f40a384f69c644263acc99fc8" as="style" />
+		<link rel="stylesheet" href="/css/site.css?h=679184ffd12e4ab841f24c0858c6ed45" as="style" />
 		<title>GSoC 2022 Ideas | Joplin</title>
 
 		<script
@@ -66,6 +66,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/gsoc2022/ideas.md
 				</a>
 			</div>
 			<div class="col-9 text-right d-none d-md-block">
+				<a href="/news/" class="fw500">What's New</a>
 				<a href="/help/" class="fw500">Help</a>
 				<a href="https:&#x2F;&#x2F;discourse.joplinapp.org&#x2F;" class="fw500">Forum</a>
 <a href="/plans/" class="button-link btn-trans plans-button">Joplin Cloud</a><a class="button-link btn-blue sponsor-button" href="/donate">
@@ -95,8 +96,9 @@ https://github.com/laurent22/joplin/blob/dev/readme/gsoc2022/ideas.md
 						</div>
 
 						<div class="text-center menu-mobile-top">
-							<a href="https:&#x2F;&#x2F;discourse.joplinapp.org&#x2F;" class="fw500 mobile-menu-link">Forum</a>
+							<a href="/news/" class="fw500 mobile-menu-link">What's New</a>
 							<a href="/help/" class="fw500 mobile-menu-link">Help</a>
+							<a href="https:&#x2F;&#x2F;discourse.joplinapp.org&#x2F;" class="fw500 mobile-menu-link">Forum</a>
 						</div>
 
 						<div class="menu-mobile-buttons">
@@ -327,6 +329,20 @@ https://github.com/laurent22/joplin/blob/dev/readme/gsoc2022/ideas.md
 <p>A good part of this project will be about researching how other projects organise their documentation, proposing a way that would work well for Joplin, and discussing your ideas with the mentors and users. This is still a technical project though since you will need to deal with TypeScript, Markdown, HTML and CSS (and any other technology that might help) to build the new documentation.</p>
 <p>Difficulty Level: High</p>
 <p>Skills Required: TypeScript, JavaScript, CSS, HTML, Markdown rendering.</p>
+<h2>4. Implement default plugins on desktop application<a name="4-implement-default-plugins-on-desktop-application" href="#4-implement-default-plugins-on-desktop-application" class="heading-anchor">🔗</a></h2>
+<p>We would like to bundle certain plugins with the desktop application, such as the Backup or Rich Markdown plugin. Some process needs to be implemented so that they are bundled and updated automatically. You'll have to consider how it will work on CI, and across platform. The process should be fault tolerant and retry when something fails.</p>
+<p>Difficulty Level: High</p>
+<p>Skills Required: TypeScript, JavaScript, knowledge of Electron and GitHub Actions.</p>
+<h2>5. Implement a toolbar for the mobile beta code editor<a name="5-implement-a-toolbar-for-the-mobile-beta-code-editor" href="#5-implement-a-toolbar-for-the-mobile-beta-code-editor" class="heading-anchor">🔗</a></h2>
+<p>We would like the Beta code editor to eventually become the main editor, and for that a number of changes need to be made. The main one would be the addition of a toolbar to it, to set the various styles, such as Bold, Bullet list, Header, etc. Additionally there are number of bugs that will have to be fixed to get the editor ready for production - you will find them in the list of issues (under the &quot;high&quot; and &quot;mobile&quot; label).</p>
+<p>Difficulty Level: High</p>
+<p>Skills Required: TypeScript, JavaScript, React Native, React Hooks. You'll also need to learn about CodeMirror 6 if you're not already familiar with it.</p>
+<h2>6. Improve integration of the richtext/WYSIWYG editor<a name="6-improve-integration-of-the-richtext-wysiwyg-editor" href="#6-improve-integration-of-the-richtext-wysiwyg-editor" class="heading-anchor">🔗</a></h2>
+<p>Joplin offers a richtext/WYSIWYG typing experience alongside the Markdown editor but there are a number of areas that could do with improvement when it comes to integration with Joplin as a whole.</p>
+<p>Areas for consideration include increasing compatibility with Joplin-wide keybindings (many are currently static), limiting features of the editor not compatible with markdown formatting, reducing the impact of data changes caused by swapping between editors.<br>
+Also read the document about limitations of the editor: <a href="https://joplinapp.org/rich_text_editor/">https://joplinapp.org/rich_text_editor/</a></p>
+<p>Difficulty level: High</p>
+<p>Skills Required: Typescript, Javascript, CSS, HTML, Markdown rendering. You will also need to learn about TinyMCE if you're not already familiar with it.</p>
 <h1>More info<a name="more-info" href="#more-info" class="heading-anchor">🔗</a></h1>
 <ul>
 <li>Make sure you read the <a href="https://joplinapp.org/gsoc2022/index/">Joplin Google Summer of Code Introduction</a></li>
@@ -352,7 +368,7 @@ https://github.com/laurent22/joplin/blob/dev/readme/gsoc2022/ideas.md
 				<a href="https://twitter.com/joplinapp" title="Joplin Twitter feed"><i class="fab fa-twitter"></i></a>
 				<a href="https://mastodon.social/@joplinapp" title="Joplin Mastodon feed"><i class="fab fa-mastodon"></i></a>
 				<a href="https://www.patreon.com/joplin" title="Joplin Patreon"><i class="fab fa-patreon"></i></a>
-				<a href="https://discordapp.com/invite/d2HMPwE" title="Joplin Discord chat"><i class="fab fa-discord"></i></a>
+				<a href="https://discord.gg/VSj7AFHvpq" title="Joplin Discord chat"><i class="fab fa-discord"></i></a>
 				<a href="https://www.reddit.com/r/joplinapp/" title="Joplin Subreddit"><i class="fab fa-reddit"></i></a>
 				<a href="https://github.com/laurent22/joplin/" title="Joplin GitHub repository"><i class="fab fa-github"></i></a>
 			</div>

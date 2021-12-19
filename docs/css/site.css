@@ -653,6 +653,22 @@ footer .bottom-links-row p {
 }
 
 /*****************************************************************
+ WHAT'S NEW PAGE
+*****************************************************************/
+
+.news-page .container > .content-wrapper {
+	/* Set the line width so that there's no more than 75 characters per line */
+	/* https://baymard.com/blog/line-length-readability */
+	max-width: 650px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.news-page img {
+	max-width: 650px;
+}
+
+/*****************************************************************
  IN THE PRESS
  The "In the press" section height needs to be adjusted as the
  window is changed so that the content is fully visible.

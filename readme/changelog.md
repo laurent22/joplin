@@ -1,5 +1,38 @@
 # Joplin changelog
 
+## [v2.6.9](https://github.com/laurent22/joplin/releases/tag/v2.6.9) - 2021-12-17T11:57:32Z
+
+- Update translations
+
+## [v2.6.7](https://github.com/laurent22/joplin/releases/tag/v2.6.7) (Pre-release) - 2021-12-16T10:47:23Z
+
+- New: Added detailed tooltip for 'Toggle Sort Order Field' button ([#5854](https://github.com/laurent22/joplin/issues/5854) by Kenichi Kobayashi)
+- Fixed (Regression): Scroll positions are preserved ([#5826](https://github.com/laurent22/joplin/issues/5826)) ([#5708](https://github.com/laurent22/joplin/issues/5708) by Kenichi Kobayashi)
+
+## [v2.6.6](https://github.com/laurent22/joplin/releases/tag/v2.6.6) (Pre-release) - 2021-12-13T12:31:43Z
+
+- Improved: Changed note sort buttons to 3px radius ([#5771](https://github.com/laurent22/joplin/issues/5771) by [@Daeraxa](https://github.com/Daeraxa))
+- Improved: Update Mermaid: 8.12.1 -&gt; 8.13.5 ([#5831](https://github.com/laurent22/joplin/issues/5831) by Helmut K. C. Tessarek)
+- Fixed: Links in flowchart Mermaid diagrams ([#5830](https://github.com/laurent22/joplin/issues/5830)) ([#5801](https://github.com/laurent22/joplin/issues/5801) by Helmut K. C. Tessarek)
+
+## [v2.6.5](https://github.com/laurent22/joplin/releases/tag/v2.6.5) (Pre-release) - 2021-12-13T10:07:04Z
+
+- Fixed: Fixed "Invalid lock client type" error when migrating sync target (e0e93c4)
+
+## [v2.6.4](https://github.com/laurent22/joplin/releases/tag/v2.6.4) (Pre-release) - 2021-12-09T19:53:43Z
+
+- New: Add date format YYYY/MM/DD ([#5759](https://github.com/laurent22/joplin/issues/5759) by Helmut K. C. Tessarek)
+- Improved: Allow flags for native wayland ([#5804](https://github.com/laurent22/joplin/issues/5804) by [@stephanoskomnenos](https://github.com/stephanoskomnenos))
+- Improved: Also duplicate resources when duplicating a note (c0a8c33)
+- Improved: Improved S3 sync error handling and reliability, and upgraded S3 SDK ([#5312](https://github.com/laurent22/joplin/issues/5312) by Lee Matos)
+- Improved: Improved error message when synchronising with Joplin Server ([#5754](https://github.com/laurent22/joplin/issues/5754))
+- Improved: When exporting as HTML, pack all images, styles and scripts inside the HTML file (98ed2be)
+- Fixed: Fixed sharing notebook when recipient is not allowed to share (1bb7bbb)
+- Fixed: Handle duplicate attachments when the parent notebook is shared ([#5796](https://github.com/laurent22/joplin/issues/5796))
+- Fixed: Opening a file with ctrl and click leads to an error in the Rich Text editor ([#5693](https://github.com/laurent22/joplin/issues/5693))
+- Fixed: Rich text editor flashing white when switching notes/editor ([#5793](https://github.com/laurent22/joplin/issues/5793)) ([#5311](https://github.com/laurent22/joplin/issues/5311) by [@CalebJohn](https://github.com/CalebJohn))
+- Fixed: Sync wizard is displayed incorrectly in dev mode ([#5749](https://github.com/laurent22/joplin/issues/5749)) ([#5373](https://github.com/laurent22/joplin/issues/5373) by [@Rishabhraghwendra18](https://github.com/Rishabhraghwendra18))
+
 ## [v2.6.2](https://github.com/laurent22/joplin/releases/tag/v2.6.2) (Pre-release) - 2021-11-18T12:19:12Z
 
 - New: Sort Order Buttons and Per-Notebook Sort Order ([#5437](https://github.com/laurent22/joplin/issues/5437) by Kenichi Kobayashi)

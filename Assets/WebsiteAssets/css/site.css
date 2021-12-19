@@ -523,10 +523,15 @@ div.navbar-mobile-content a.sponsor-button {
 
 .bottom-links {
 	display: flex;
+	flex-direction: row;
 	justify-content: center;
 	border-top: 1px solid #d4d4d4;
 	margin-top: 30px;
 	padding-top: 25px;
+}
+
+.bottom-links .bottom-link {
+	margin-right: 20px;
 }
 
 /* TOC */
@@ -650,6 +655,24 @@ footer .bottom-links-row {
 
 footer .bottom-links-row p {
 	font-size: 1.1em;
+}
+
+/*****************************************************************
+ WHAT'S NEW PAGE
+*****************************************************************/
+
+.news-page      .container > .content-wrapper,
+.news-item-page .container > .content-wrapper {
+	/* Set the line width so that there's no more than 75 characters per line */
+	/* https://baymard.com/blog/line-length-readability */
+	max-width: 650px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.news-page     img,
+.news-item-page img {
+	max-width: 650px;
 }
 
 /*****************************************************************

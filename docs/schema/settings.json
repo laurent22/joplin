@@ -80,33 +80,33 @@
 		"sync.8.path": {
 			"type": "string",
 			"default": "",
-			"description": "S3 bucket. Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: https://joplinapp.org/faq/"
+			"description": "AWS S3 bucket. Attention: If you change this location, make sure you copy all your content to it before syncing, otherwise all files will be removed! See the FAQ for more details: https://joplinapp.org/faq/"
 		},
 		"sync.8.url": {
 			"type": "string",
 			"default": "https://s3.amazonaws.com/",
-			"description": "S3 URL"
+			"description": "AWS S3 URL"
 		},
 		"sync.8.region": {
 			"type": "string",
 			"default": "",
-			"description": "Region"
+			"description": "AWS region"
 		},
 		"sync.8.username": {
 			"type": "string",
 			"default": "",
-			"description": "Access Key"
+			"description": "AWS access key"
 		},
 		"sync.8.password": {
 			"type": "string",
 			"default": "",
-			"description": "Secret Key",
+			"description": "AWS secret key",
 			"$comment": "private"
 		},
 		"sync.8.forcePathStyle": {
 			"type": "boolean",
 			"default": false,
-			"description": "Force Path Style"
+			"description": "Force path style"
 		},
 		"sync.9.path": {
 			"type": "string",
@@ -441,7 +441,7 @@
 		"notes.sortOrder.buttonsVisible": {
 			"type": "boolean",
 			"default": true,
-			"description": "Show sort order buttons. If true, sort order buttons (field + reverse) for notes are shown at the top of Note List."
+			"description": "Show sort order buttons"
 		},
 		"notes.perFieldReversalEnabled": {
 			"type": "boolean",
