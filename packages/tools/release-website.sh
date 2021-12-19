@@ -30,6 +30,7 @@ fi
 cd "$JOPLIN_ROOT_DIR"
 
 # Will fail if there's any local change in the repo, which is what we want
+git checkout dev
 git pull --rebase
 
 npm install
@@ -56,6 +57,7 @@ git push
 # ------------------------------------------------------------------------------
 
 cd "$JOPLIN_WEBSITE_ROOT_DIR"
+git checkout master
 git pull --rebase
 
 cd "$JOPLIN_ROOT_DIR"
