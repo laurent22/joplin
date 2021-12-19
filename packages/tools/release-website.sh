@@ -11,6 +11,17 @@ SCRIPT_NAME=`basename "$0"`
 JOPLIN_ROOT_DIR="$SCRIPT_DIR/../.."
 JOPLIN_WEBSITE_ROOT_DIR="$JOPLIN_ROOT_DIR/../joplin-website"
 
+echo "IS_CONTINUOUS_INTEGRATION=$IS_CONTINUOUS_INTEGRATION"
+echo "GIT_USER_NAME=$GIT_USER_NAME"
+
+if [[ "$IS_CONTINUOUS_INTEGRATION" == "1" ]]; then
+	echo "Running on CI - setting up Git username and email"
+	git config --global user.email "$GIT_USER_EMAIL"
+	git config --global user.name "$GIT_USER_NAME"
+elif
+	echo "*Not* running on CI - using the global Git username and email"
+fi
+
 # ------------------------------------------------------------------------------
 # Update the Markdown files inside the Joplin directory. This is for example the
 # download links README.md or the desktop app changelog.
