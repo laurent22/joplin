@@ -1,5 +1,11 @@
 # Joplin changelog
 
+## [v2.6.10](https://github.com/laurent22/joplin/releases/tag/v2.6.10) - 2021-12-19T11:31:16Z
+
+- Fixed: Fixed export of HTML files on Linux ([#5873](https://github.com/laurent22/joplin/issues/5873))
+- Fixed: Fixed exporting notes that contain Mermaid diagrams as PDF or HTML ([#5879](https://github.com/laurent22/joplin/issues/5879))
+- Fixed: Markdown search no longer scrolls to result ([#5876](https://github.com/laurent22/joplin/issues/5876)) ([#5872](https://github.com/laurent22/joplin/issues/5872) by Kenichi Kobayashi)
+
 ## [v2.6.9](https://github.com/laurent22/joplin/releases/tag/v2.6.9) - 2021-12-17T11:57:32Z
 
 - Update translations
