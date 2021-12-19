@@ -42,5 +42,7 @@ npm run buildWebsite
 
 cd "$JOPLIN_WEBSITE_ROOT_DIR"
 git add -A
-git commit -m "Updated website"
+git commit -m "Updated website
+
+Auto-updated using $SCRIPT_NAME"
 git push
