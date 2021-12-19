@@ -142,7 +142,8 @@ function renderPageToHtml(md: string, targetPath: string, templateParams: Templa
 }
 
 async function readmeFileTitle(sourcePath: string) {
-	const md = await readFile(sourcePath, 'utf8');
+	let md = await readFile(sourcePath, 'utf8');
+	md = stripOffFrontMatter(md).doc;
 	const r = md.match(/(^|\n)# (.*)/);
 
 	if (!r) {

@@ -12,6 +12,7 @@ async function main() {
 
 	await execCommand2(['node', `${rootDir}/packages/tools/update-readme-download.js`]);
 	await execCommand2(['node', `${rootDir}/packages/tools/build-release-stats.js`, '--types=changelog']);
+	await execCommand2(['node', `${rootDir}/packages/tools/build-release-stats.js`, '--types=stats', '--update-interval=30']);
 	await execCommand2(['node', `${rootDir}/packages/tools/update-readme-sponsors.js`]);
 	await execCommand2(['node', `${rootDir}/packages/tools/build-welcome.js`]);
 	chdir(rootDir);

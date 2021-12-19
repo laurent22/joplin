@@ -3,6 +3,7 @@ const moment = require('moment');
 export interface MarkdownAndFrontMatter {
 	doc: string;
 	created?: Date;
+	updated?: Date;
 	source_url?: string;
 }
 
@@ -57,6 +58,7 @@ export const stripOffFrontMatter = (md: string): MarkdownAndFrontMatter => {
 	output.doc = docLines.join('\n');
 
 	if (output.created) output.created = moment(output.created).toDate();
+	if (output.updated) output.updated = moment(output.updated).toDate();
 
 	return output;
 };
