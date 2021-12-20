@@ -1,7 +1,7 @@
 import Note from '../../models/Note';
 import { encryptionService, msleep, setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
 import ShareService from './ShareService';
-import reducer from '../../reducer';
+import reducer, { defaultState } from '../../reducer';
 import { createStore } from 'redux';
 import { FolderEntity, NoteEntity } from '../database/types';
 import Folder from '../../models/Folder';
@@ -10,10 +10,15 @@ import { generateKeyPair } from '../e2ee/ppk';
 import MasterKey from '../../models/MasterKey';
 import { MasterKeyEntity } from '../e2ee/types';
 import { updateMasterPassword } from '../e2ee/utils';
+import Logger, { LogLevel } from '../../Logger';
+
+const testReducer = (state: any = defaultState, action: any) => {
+	return reducer(state, action);
+};
 
 function mockService(api: any) {
 	const service = new ShareService();
-	const store = createStore(reducer as any);
+	const store = createStore(testReducer as any);
 	service.initialize(store, encryptionService(), api);
 	return service;
 }
@@ -148,5 +153,27 @@ describe('ShareService', function() {
 		const content = JSON.parse(uploadedMasterKey.content);
 		expect(content.ppkId).toBe(recipientPpk.id);
 	});
+
+	it('should leave folders that are no longer with the user', async () => {
+		// `checkShareConsistency` will emit a warning so we need to silent it
+		// in tests.
+		const previousLogLevel = Logger.globalLogger.setLevel(LogLevel.Error);
+
+		const service = testShareFolderService({
+			'GET api/shares': async (_query: Record<string, any>, _body: any): Promise<any> => {
+				return {
+					items: [],
+					has_more: false,
+				};
+			},
+		});
+
+		const folder = await Folder.save({ share_id: 'nolongershared' });
+		await service.checkShareConsistency();
+		expect(await Folder.load(folder.id)).toBeFalsy();
+
+		Logger.globalLogger.setLevel(previousLogLevel);
+	});
+
 
 });
