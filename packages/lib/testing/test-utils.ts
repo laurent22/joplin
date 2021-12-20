@@ -428,6 +428,12 @@ async function setupDatabaseAndSynchronizer(id: number, options: any = null) {
 		syncTarget.setFileApi(fileApi());
 		syncTarget.setLogger(logger);
 		synchronizers_[id] = await syncTarget.synchronizer();
+
+		// For now unset the share service as it's not properly initialised.
+		// Share service tests are in ShareService.test.ts normally, and if it
+		// becomes necessary to test integration with the synchroniser we can
+		// initialize it here.
+		synchronizers_[id].setShareService(null);
 	}
 
 	encryptionServices_[id] = new EncryptionService();
