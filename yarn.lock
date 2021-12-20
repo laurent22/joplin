@@ -3040,7 +3040,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/fork-htmlparser2@^4.1.35, @joplin/fork-htmlparser2@^4.1.38, @joplin/fork-htmlparser2@workspace:packages/fork-htmlparser2":
+"@joplin/fork-htmlparser2@^4.1.39, @joplin/fork-htmlparser2@workspace:packages/fork-htmlparser2":
   version: 0.0.0-use.local
   resolution: "@joplin/fork-htmlparser2@workspace:packages/fork-htmlparser2"
   dependencies:
@@ -3062,7 +3062,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/fork-sax@^1.2.42, @joplin/fork-sax@workspace:packages/fork-sax":
+"@joplin/fork-sax@^1.2.43, @joplin/fork-sax@workspace:packages/fork-sax":
   version: 0.0.0-use.local
   resolution: "@joplin/fork-sax@workspace:packages/fork-sax"
   dependencies:
@@ -3085,7 +3085,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@joplin/htmlpack@workspace:packages/htmlpack"
   dependencies:
-    "@joplin/fork-htmlparser2": ^4.1.35
+    "@joplin/fork-htmlparser2": ^4.1.39
     "@types/fs-extra": ^9.0.6
     css: ^3.0.0
     datauri: ^4.1.0
@@ -3094,19 +3094,19 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/lib@workspace:packages/lib, @joplin/lib@~2.6":
+"@joplin/lib@^2.6.3, @joplin/lib@workspace:packages/lib, @joplin/lib@~2.6":
   version: 0.0.0-use.local
   resolution: "@joplin/lib@workspace:packages/lib"
   dependencies:
     "@aws-sdk/client-s3": ^3.34.0
     "@aws-sdk/s3-request-presigner": ^3.34.0
-    "@joplin/fork-htmlparser2": ^4.1.38
-    "@joplin/fork-sax": ^1.2.42
+    "@joplin/fork-htmlparser2": ^4.1.39
+    "@joplin/fork-sax": ^1.2.43
     "@joplin/fork-uslug": ^1.0.4
     "@joplin/htmlpack": ~2.6
     "@joplin/renderer": ~2.6
-    "@joplin/turndown": ^4.0.60
-    "@joplin/turndown-plugin-gfm": ^1.0.42
+    "@joplin/turndown": ^4.0.61
+    "@joplin/turndown-plugin-gfm": ^1.0.43
     "@types/fs-extra": ^9.0.6
     "@types/jest": ^26.0.15
     "@types/js-yaml": ^4.0.2
@@ -3178,8 +3178,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@joplin/plugin-repo-cli@workspace:packages/plugin-repo-cli"
   dependencies:
-    "@joplin/lib": ~2.6
-    "@joplin/tools": ~2.6
+    "@joplin/lib": ^2.6.3
+    "@joplin/tools": ^2.6.3
     "@types/fs-extra": ^9.0.6
     "@types/jest": ^26.0.15
     "@types/node": ^14.14.6
@@ -3200,11 +3200,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/renderer@workspace:packages/renderer, @joplin/renderer@~2.6":
+"@joplin/renderer@^2.6.3, @joplin/renderer@workspace:packages/renderer, @joplin/renderer@~2.6":
   version: 0.0.0-use.local
   resolution: "@joplin/renderer@workspace:packages/renderer"
   dependencies:
-    "@joplin/fork-htmlparser2": ^4.1.38
+    "@joplin/fork-htmlparser2": ^4.1.39
     "@joplin/fork-uslug": ^1.0.4
     "@types/jest": ^26.0.15
     "@types/node": ^14.14.6
@@ -3229,7 +3229,7 @@ __metadata:
     markdown-it-sup: ^1.0.0
     markdown-it-toc-done-right: ^4.1.0
     md5: ^2.2.1
-    mermaid: ^8.12.1
+    mermaid: ^8.13.5
     typescript: ^4.0.5
   languageName: unknown
   linkType: soft
@@ -3292,17 +3292,18 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/tools@workspace:packages/tools, @joplin/tools@~2.6":
+"@joplin/tools@^2.6.3, @joplin/tools@workspace:packages/tools, @joplin/tools@~2.6":
   version: 0.0.0-use.local
   resolution: "@joplin/tools@workspace:packages/tools"
   dependencies:
-    "@joplin/lib": ~2.6
-    "@joplin/renderer": ~2.6
+    "@joplin/lib": ^2.6.3
+    "@joplin/renderer": ^2.6.3
     "@rmp135/sql-ts": ^1.6.0
     "@types/fs-extra": ^9.0.6
     "@types/jest": ^26.0.15
     "@types/mustache": ^0.8.32
     "@types/node": ^14.14.6
+    dayjs: ^1.10.7
     execa: ^4.1.0
     fs-extra: ^4.0.3
     gettext-extractor: ^3.5.3
@@ -3327,7 +3328,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/turndown-plugin-gfm@^1.0.42, @joplin/turndown-plugin-gfm@workspace:packages/turndown-plugin-gfm":
+"@joplin/turndown-plugin-gfm@^1.0.43, @joplin/turndown-plugin-gfm@workspace:packages/turndown-plugin-gfm":
   version: 0.0.0-use.local
   resolution: "@joplin/turndown-plugin-gfm@workspace:packages/turndown-plugin-gfm"
   dependencies:
@@ -3339,7 +3340,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/turndown@^4.0.60, @joplin/turndown@workspace:packages/turndown":
+"@joplin/turndown@^4.0.61, @joplin/turndown@workspace:packages/turndown":
   version: 0.0.0-use.local
   resolution: "@joplin/turndown@workspace:packages/turndown"
   dependencies:
@@ -10823,7 +10824,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dayjs@npm:^1.8.15, dayjs@npm:^1.9.8":
+"dayjs@npm:^1.10.7, dayjs@npm:^1.8.15, dayjs@npm:^1.9.8":
   version: 1.10.7
   resolution: "dayjs@npm:1.10.7"
   checksum: a0a4ca95abaa03d0702161dc2c35d16121188e342f5052b9c61cdf784dab68af766f477c04f87f71c6af666fd4d13db9b9853b87265850d6093b7b04e1bb1cd7
@@ -11707,10 +11708,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dompurify@npm:2.3.3":
-  version: 2.3.3
-  resolution: "dompurify@npm:2.3.3"
-  checksum: 947e3661681bd183aae1cd08f991b14c6aa41fd188f6c801c5e916c2dc4575bbefbaa121ed06dbe0cb0f595545527d588a44b53bfc35d1cbb898c214dc0d7930
+"dompurify@npm:2.3.4":
+  version: 2.3.4
+  resolution: "dompurify@npm:2.3.4"
+  checksum: 65d50e62b7c5da611b3562d71a1fbcf0a951ea47844daf17c097acb209ea4d039a602ee0be37c314b998102e4ab09223b0fe3f4575eeda7240b01aeabf212415
   languageName: node
   linkType: hard
 
@@ -20213,20 +20214,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mermaid@npm:^8.12.1":
-  version: 8.13.4
-  resolution: "mermaid@npm:8.13.4"
+"mermaid@npm:^8.13.5":
+  version: 8.13.6
+  resolution: "mermaid@npm:8.13.6"
   dependencies:
     "@braintree/sanitize-url": ^3.1.0
     d3: ^7.0.0
     dagre: ^0.8.5
     dagre-d3: ^0.6.4
-    dompurify: 2.3.3
+    dompurify: 2.3.4
     graphlib: ^2.1.8
     khroma: ^1.4.1
     moment-mini: ^2.24.0
     stylis: ^4.0.10
-  checksum: 00f4359bebc6b9daad9d358a776299fbf399b32ba26e297c83cfc0c4906237a888d61ecbfd401ccdc23ed1c73e737779785666d95e7034da50b90b396c85257b
+  checksum: 70c75c236b04d8e430de58129bd9afa5305f0879c7a60c1d4e44f636181adcc2dcdf6a2fc467ac9e76a008958a8701480dd4cb211729b0be785b650bdd55a408
   languageName: node
   linkType: hard
 

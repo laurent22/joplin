@@ -30,11 +30,11 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.34.0",
     "@aws-sdk/s3-request-presigner": "^3.34.0",
+    "@joplin/fork-htmlparser2": "^4.1.39",
+    "@joplin/fork-sax": "^1.2.43",
     "@joplin/fork-uslug": "^1.0.4",
     "@joplin/htmlpack": "~2.6",
     "@joplin/renderer": "~2.6",
-    "@joplin/fork-htmlparser2": "^4.1.39",
-    "@joplin/fork-sax": "^1.2.43",
     "@joplin/turndown": "^4.0.61",
     "@joplin/turndown-plugin-gfm": "^1.0.43",
     "async-mutex": "^0.1.3",
