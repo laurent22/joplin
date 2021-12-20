@@ -94,8 +94,10 @@ class Logger {
 		};
 	}
 
-	setLevel(level: LogLevel) {
+	public setLevel(level: LogLevel) {
+		const previous = this.level_;
 		this.level_ = level;
+		return previous;
 	}
 
 	level() {

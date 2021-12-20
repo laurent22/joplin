@@ -1,7 +1,6 @@
 import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
 import ShareService from '@joplin/lib/services/share/ShareService';
-import Setting from '@joplin/lib/models/Setting';
 import Logger from '@joplin/lib/Logger';
 
 const logger = Logger.create('leaveSharedFolder');
@@ -26,10 +25,7 @@ export const runtime = (): CommandRuntime => {
 				const share = shares.find(s => s.folder_id === folderId);
 				if (!share) throw new Error(_('Could not verify the share status of this notebook - aborting. Please try again when you are connected to the internet.'));
 
-				const userId = Setting.value('sync.userId');
-				if (share.user.id === userId) throw new Error('Cannot leave own notebook');
-
-				await ShareService.instance().leaveSharedFolder(folderId);
+				await ShareService.instance().leaveSharedFolder(folderId, share.user.id);
 			} catch (error) {
 				logger.error(error);
 				alert(_('Error: %s', error.message));

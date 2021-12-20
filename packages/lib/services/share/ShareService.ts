@@ -181,8 +181,51 @@ export default class ShareService {
 	//
 	// We don't delete the children here because that would delete them for the
 	// other share participants too.
-	public async leaveSharedFolder(folderId: string): Promise<void> {
+	//
+	// If `folderShareUserId` is provided, the function will check that the user
+	// does not own the share. It would be an error to leave such a folder
+	// (instead "unshareFolder" should be called).
+	public async leaveSharedFolder(folderId: string, folderShareUserId: string = null): Promise<void> {
+		if (folderShareUserId !== null) {
+			const userId = Setting.value('sync.userId');
+			if (folderShareUserId === userId) throw new Error('Cannot leave own notebook');
+		}
+
 		await Folder.delete(folderId, { deleteChildren: false });
+	}
+
+	// Finds any folder that is associated with a share, but the user no longer
+	// has access to the share, and remove these folders. This check is
+	// necessary otherwise sync will try to update items that are not longer
+	// accessible and will throw the error "Could not find share with ID: xxxx")
+	public async checkShareConsistency() {
+		const rootSharedFolders = await Folder.rootSharedFolders();
+		let hasRefreshedShares = false;
+		let shares = this.shares;
+
+		for (const folder of rootSharedFolders) {
+			let share = shares.find(s => s.id === folder.share_id);
+
+			if (!share && !hasRefreshedShares) {
+				shares = await this.refreshShares();
+				share = shares.find(s => s.id === folder.share_id);
+				hasRefreshedShares = true;
+			}
+
+			if (!share) {
+				// This folder is a associated with a share, but the user no
+				// longer has access to this share. It can happen for two
+				// reasons:
+				//
+				// - It no longer exists
+				// - Or the user rejected that share from a different device,
+				//   and the folder was not deleted as it should have been.
+				//
+				// In that case we need to leave the notebook.
+				logger.warn(`Found a folder that was associated with a share, but the user not longer has access to the share - leaving the folder. Folder: ${folder.title} (${folder.id}). Share: ${folder.share_id}`);
+				await this.leaveSharedFolder(folder.id);
+			}
+		}
 	}
 
 	public async shareNote(noteId: string): Promise<StateShare> {
