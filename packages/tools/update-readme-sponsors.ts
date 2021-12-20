@@ -1,9 +1,8 @@
 import { readFile } from 'fs-extra';
 import { insertContentIntoFile, rootDir } from './tool-utils';
 import markdownUtils, { MarkdownTableHeader, MarkdownTableJustify, MarkdownTableRow } from '@joplin/lib/markdownUtils';
-const ArrayUtils = require('@joplin/lib/ArrayUtils');
-const { escapeHtml } = require('@joplin/lib/string-utils');
 import { GithubSponsor, OrgSponsor, Sponsors } from './website/utils/types';
+const { escapeHtml } = require('@joplin/lib/string-utils');
 
 const readmePath = `${rootDir}/README.md`;
 const sponsorsPath = `${rootDir}/packages/tools/sponsors.json`;
@@ -51,7 +50,7 @@ async function createGitHubSponsorTable(sponsors: GithubSponsor[]): Promise<stri
 }
 
 async function createOrgSponsorTable(sponsors: OrgSponsor[]): Promise<string> {
-	sponsors = ArrayUtils.shuffle(sponsors);
+	// sponsors = ArrayUtils.shuffle(sponsors);
 
 	const output: string[] = [];
 

@@ -1,5 +1,24 @@
 # Joplin terminal app changelog
 
+## [cli-v2.6.2](https://github.com/laurent22/joplin/releases/tag/cli-v2.6.2) - 2021-12-17T11:19:45Z
+
+- New: Add date format YYYY/MM/DD (#5759 by Helmut K. C. Tessarek)
+- New: Add support for faster built-in sync locks (#5662)
+- New: Add support for more style of highlighted texts when importing ENEX files (89179c2)
+- New: Add support for sharing notes when E2EE is enabled (#5529)
+- Improved: Also duplicate resources when duplicating a note (c0a8c33)
+- Improved: Ask for master password when encryption or decryption fails (c19e59f)
+- Improved: Improved S3 sync error handling and reliability, and upgraded S3 SDK (#5312 by Lee Matos)
+- Improved: Improved error message when synchronising with Joplin Server (#5754)
+- Improved: Update Mermaid: 8.12.1 -&gt; 8.13.5 (#5831 by Helmut K. C. Tessarek)
+- Improved: When exporting as HTML, pack all images, styles and scripts inside the HTML file (98ed2be)
+- Fixed: Fixed "Invalid lock client type" error when migrating sync target (e0e93c4)
+- Fixed: Fixed issue that could cause application to needlessly lock the sync target (0de6e9e)
+- Fixed: Handle duplicate attachments when the parent notebook is shared (#5796)
+- Fixed: Links in flowchart Mermaid diagrams (#5830) (#5801 by Helmut K. C. Tessarek)
+- Fixed: Long resource filenames were being incorrectly cut (#5653)
+- Fixed: Sharing multiple notebooks via Joplin Server with the same user results in an error (#5721)
+
 ## [cli-v2.6.1](https://github.com/laurent22/joplin/releases/tag/cli-v2.6.1) - 2021-11-03T11:33:18Z
 
 - New: Add support for public-private key pairs and improved master password support (#5438)

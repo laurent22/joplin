@@ -3,6 +3,7 @@ import shim from '../../shim';
 import JoplinError from '../../JoplinError';
 import time from '../../time';
 import { FileApi } from '../../file-api';
+import { AppType } from '../../models/Setting';
 const { fileExtension, filename } = require('../../path-utils');
 
 export enum LockType {
@@ -44,6 +45,13 @@ export function lockNameToObject(name: string, updatedTime: number = null): Lock
 	if (isNaN(lock.type)) throw new Error(`Invalid lock type: ${name}`);
 
 	return lock;
+}
+
+export function appTypeToLockType(appType: AppType): LockClientType {
+	if (appType === AppType.Desktop) return LockClientType.Desktop;
+	if (appType === AppType.Mobile) return LockClientType.Mobile;
+	if (appType === AppType.Cli) return LockClientType.Cli;
+	throw new Error(`Invalid app type: ${appType}`);
 }
 
 export function hasActiveLock(locks: Lock[], currentDate: Date, lockTtl: number, lockType: LockType, clientType: LockClientType = null, clientId: string = null) {

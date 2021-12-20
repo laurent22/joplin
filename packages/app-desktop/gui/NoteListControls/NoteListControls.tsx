@@ -5,6 +5,8 @@ import SearchBar from '../SearchBar/SearchBar';
 import Button, { ButtonLevel, ButtonSize, buttonSizePx } from '../Button/Button';
 import CommandService from '@joplin/lib/services/CommandService';
 import { runtime as focusSearchRuntime } from './commands/focusSearch';
+import Note from '@joplin/lib/models/Note';
+import { notesSortOrderNextField } from '../../services/sortOrder/notesSortOrderUtils';
 const { connect } = require('react-redux');
 const styled = require('styled-components').default;
 
@@ -36,7 +38,7 @@ const StyledButton = styled(Button)`
 
 const StyledPairButtonL = styled(Button)`
 	margin-left: 8px;
-	border-radius: 5px 0 0 5px;
+	border-radius: 3px 0 0 3px;
 	min-width: ${(props: any) => buttonSizePx(props)}px;
 	max-width: ${(props: any) => buttonSizePx(props)}px;
 `;
@@ -44,7 +46,7 @@ const StyledPairButtonL = styled(Button)`
 const StyledPairButtonR = styled(Button)`
 	min-width: 8px;
 	margin-left: 0px;
-	border-radius: 0 5px 5px 0;
+	border-radius: 0 3px 3px 0;
 	border-width: 1px 1px 1px 0;
 	width: auto;
 `;
@@ -81,6 +83,14 @@ function NoteListControls(props: Props) {
 		void CommandService.instance().execute('toggleNotesSortOrderReverse');
 	}
 
+	function sortOrderFieldTooltip() {
+		const term1 = CommandService.instance().label('toggleNotesSortOrderField');
+		const field = props.sortOrderField;
+		const term2 = Note.fieldToLabel(field);
+		const term3 = Note.fieldToLabel(notesSortOrderNextField(field));
+		return `${term1}:\n ${term2} -> ${term3}`;
+	}
+
 	function sortOrderFieldIcon() {
 		const field = props.sortOrderField;
 		const iconMap: any = {
@@ -110,7 +120,7 @@ function NoteListControls(props: Props) {
 				{showsSortOrderButtons() &&
 					<StyledPairButtonL
 						className="sort-order-field-button"
-						tooltip={CommandService.instance().label('toggleNotesSortOrderField')}
+						tooltip={sortOrderFieldTooltip()}
 						iconName={sortOrderFieldIcon()}
 						level={ButtonLevel.Secondary}
 						size={ButtonSize.Small}

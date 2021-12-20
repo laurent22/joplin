@@ -70,6 +70,8 @@ export interface TemplateParams {
 	navbar?: NavBar;
 	showJoplinCloudLinks?: boolean;
 	assetUrls: AssetUrls;
+	discussOnForumLink?: string;
+	showBottomLinks?: boolean;
 }
 
 export interface PlanPageParams extends TemplateParams {

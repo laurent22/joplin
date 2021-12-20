@@ -1,5 +1,5 @@
 import Logger from './Logger';
-import LockHandler, { hasActiveLock, LockClientType, LockType } from './services/synchronizer/LockHandler';
+import LockHandler, { appTypeToLockType, hasActiveLock, LockClientType, LockType } from './services/synchronizer/LockHandler';
 import Setting, { AppType } from './models/Setting';
 import shim from './shim';
 import MigrationHandler from './services/synchronizer/MigrationHandler';
@@ -53,7 +53,7 @@ export default class Synchronizer {
 
 	private db_: JoplinDatabase;
 	private api_: FileApi;
-	private appType_: string;
+	private appType_: AppType;
 	private logger_: Logger = new Logger();
 	private state_: string = 'idle';
 	private cancelling_: boolean = false;
@@ -77,7 +77,7 @@ export default class Synchronizer {
 
 	public dispatch: Function;
 
-	public constructor(db: JoplinDatabase, api: FileApi, appType: string) {
+	public constructor(db: JoplinDatabase, api: FileApi, appType: AppType) {
 		this.db_ = db;
 		this.api_ = api;
 		this.appType_ = appType;
@@ -123,13 +123,7 @@ export default class Synchronizer {
 
 	private lockClientType(): LockClientType {
 		if (this.lockClientType_) return this.lockClientType_;
-
-		if (this.appType_ === AppType.Desktop) this.lockClientType_ = LockClientType.Desktop;
-		if (this.appType_ === AppType.Mobile) this.lockClientType_ = LockClientType.Mobile;
-		if (this.appType_ === AppType.Cli) this.lockClientType_ = LockClientType.Cli;
-
-		if (!this.lockClientType_) throw new Error(`Invalid client type: ${this.appType_}`);
-
+		this.lockClientType_ = appTypeToLockType(this.appType_);
 		return this.lockClientType_;
 	}
 
@@ -141,7 +135,7 @@ export default class Synchronizer {
 
 	maxResourceSize() {
 		if (this.maxResourceSize_ !== null) return this.maxResourceSize_;
-		return this.appType_ === 'mobile' ? 100 * 1000 * 1000 : Infinity;
+		return this.appType_ === AppType.Mobile ? 100 * 1000 * 1000 : Infinity;
 	}
 
 	public setShareService(v: ShareService) {

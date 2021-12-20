@@ -1,5 +1,6 @@
 import * as fs from 'fs-extra';
-import { execCommand2, rootDir, gitPullTry } from './tool-utils';
+import { rootDir, gitPullTry, completeReleaseWithChangelog } from './tool-utils';
+const { unique } = require('@joplin/lib/ArrayUtils');
 
 const mobileDir = `${rootDir}/packages/app-mobile`;
 
@@ -37,24 +38,42 @@ async function updateCodeProjVersions(filePath: string) {
 	return { newVersion, newVersionId };
 }
 
+// Check that deployment targets of all projects match
+// IPHONEOS_DEPLOYMENT_TARGET
+// If they don't we get this kind of error:
+// https://github.com/laurent22/joplin/issues/4945#issuecomment-995802706
+async function checkDeploymentTargets(filePath: string) {
+	const content = await fs.readFile(filePath, 'utf8');
+	const re = /IPHONEOS_DEPLOYMENT_TARGET = ([0-9.]+)/g;
+	let match = re.exec(content);
+	let versions: string[] = [];
+	while (match) {
+		versions.push(match[1]);
+		match = re.exec(content);
+	}
+
+	versions = unique(versions);
+
+	if (versions.length > 1) throw new Error(`Detected mismatched IPHONEOS_DEPLOYMENT_TARGET: ${versions.join(', ')}. Set them all to the same target. In ${filePath}`);
+	if (!versions.length) throw new Error(`Could not find IPHONEOS_DEPLOYMENT_TARGET in ${filePath}`);
+}
+
 async function main() {
 	await gitPullTry();
 
+	const pbxprojFilePath = `${mobileDir}/ios/Joplin.xcodeproj/project.pbxproj`;
+	await checkDeploymentTargets(pbxprojFilePath);
+
 	console.info('Updating version numbers...');
 
-	const { newVersion, newVersionId } = await updateCodeProjVersions(`${mobileDir}/ios/Joplin.xcodeproj/project.pbxproj`);
+	const { newVersion, newVersionId } = await updateCodeProjVersions(pbxprojFilePath);
 	console.info(`New version: ${newVersion} (${newVersionId})`);
 
 	const tagName = `ios-v${newVersion}`;
 	console.info(`Tag name: ${tagName}`);
 
-	await execCommand2('git add -A');
-	await execCommand2(`git commit -m "${tagName}"`);
-	await execCommand2(`git tag ${tagName}`);
-	await execCommand2('git push');
-	await execCommand2('git push --tags');
-
-	console.info(`To create changelog: node packages/tools/git-changelog.js ${tagName}`);
+	const changelogPath = `${rootDir}/readme/changelog_ios.md`;
+	await completeReleaseWithChangelog(changelogPath, newVersion, tagName, 'iOS', false);
 }
 
 main().catch((error) => {
