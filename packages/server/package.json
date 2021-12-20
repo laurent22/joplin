@@ -16,7 +16,7 @@
     "test": "jest --verbose=false",
     "test-ci": "yarn test",
     "test-debug": "node --inspect node_modules/.bin/jest -- --verbose=false",
-    "clean": "rm -rf dist/",
+    "clean": "gulp clean",
     "stripeListen": "stripe listen --forward-to http://joplincloud.local:22300/stripe/webhook",
     "watch": "tsc --watch --project tsconfig.json"
   },
