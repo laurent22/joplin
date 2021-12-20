@@ -13,7 +13,7 @@
     "watch": "tsc --watch --project tsconfig.json",
     "start": "gulp build && electron . --env dev --log-level debug --no-welcome --open-dev-tools",
     "test": "jest",
-    "test-ci": "yarn run test"
+    "test-ci": "yarn test"
   },
   "repository": {
     "type": "git",

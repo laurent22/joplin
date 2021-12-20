@@ -9,7 +9,7 @@
   },
   "scripts": {
     "test": "jest",
-    "test-ci": "yarn run test"
+    "test-ci": "yarn test"
   },
   "files": [
     "generators"
