@@ -12,7 +12,7 @@ CLI_DIR="$SCRIPT_DIR/../app-cli"
 LIB_DIR="$SCRIPT_DIR/../lib"
 
 cd "$LIB_DIR"
-npm run generatePluginTypes
+yarn run generatePluginTypes
 
 cd "$SCRIPT_DIR"
 rsync -a --delete "$LIB_DIR/plugin_types/services/plugins/api/" "$SCRIPT_DIR/generators/app/templates/api/"
@@ -20,7 +20,7 @@ cp "$LIB_DIR/services/plugins/api/types.ts" "$SCRIPT_DIR/generators/app/template
 cp "$SCRIPT_DIR/generators/app/templates/api_index.ts" "$SCRIPT_DIR/generators/app/templates/api/index.ts"
 rm -f "$SCRIPT_DIR/generators/app/templates/api/types.d.ts"
 
-npm link
+yarn link
 
 "$CLI_DIR/tests/support/plugins/updatePlugins.sh"
 

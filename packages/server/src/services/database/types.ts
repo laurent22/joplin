@@ -102,7 +102,7 @@ interface DatabaseTables {
 }
 
 // AUTO-GENERATED-TYPES
-// Auto-generated using `npm run generate-types`
+// Auto-generated using `yarn run generate-types`
 export interface Session extends WithDates, WithUuid {
 	user_id?: Uuid;
 	auth_code?: string;

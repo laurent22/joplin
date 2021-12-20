@@ -5,15 +5,15 @@
   "main": "main.js",
   "private": true,
   "scripts": {
-    "dist": "npm run electronRebuild && npx electron-builder",
+    "dist": "yarn run electronRebuild && npx electron-builder",
     "build": "gulp build",
-    "postinstall": "npm run build",
+    "postinstall": "yarn run build",
     "electronRebuild": "gulp electronRebuild",
-    "tsc": "node node_modules/typescript/bin/tsc --project tsconfig.json",
-    "watch": "node node_modules/typescript/bin/tsc --watch --project tsconfig.json",
+    "tsc": "tsc --project tsconfig.json",
+    "watch": "tsc --watch --project tsconfig.json",
     "start": "gulp build && electron . --env dev --log-level debug --no-welcome --open-dev-tools",
     "test": "jest",
-    "test-ci": "npm run test"
+    "test-ci": "yarn test"
   },
   "repository": {
     "type": "git",
@@ -31,7 +31,8 @@
     "afterSign": "./tools/notarizeMacApp.js",
     "extraResources": [
       "build/icons/*",
-      "build/images/*"
+      "build/images/*",
+      "build/lib/*"
     ],
     "afterAllArtifactBuild": "./generateSha512.js",
     "asar": true,
@@ -110,13 +111,13 @@
     "@types/jest": "^26.0.15",
     "@types/node": "^14.14.6",
     "@types/react": "16.9.55",
-    "@types/react-redux": "^7.1.9",
-    "@types/styled-components": "^5.1.4",
+    "@types/react-redux": "7.1.9",
+    "@types/styled-components": "5.1.4",
     "ajv": "^6.5.0",
     "app-builder-bin": "^1.9.11",
     "babel-cli": "^6.26.0",
     "babel-preset-react": "^6.24.1",
-    "electron": "^14.1.0",
+    "electron": "14.1.0",
     "electron-builder": "^22.11.7",
     "electron-notarize": "^1.0.0",
     "electron-rebuild": "^3.2.3",
@@ -126,7 +127,7 @@
     "js-sha512": "^0.8.0",
     "nan": "2.14.2",
     "react-test-renderer": "^16.14.0",
-    "typescript": "^4.0.5"
+    "typescript": "4.0.5"
   },
   "optionalDependencies": {
     "7zip-bin-linux": "^1.0.1",
@@ -162,17 +163,17 @@
     "react": "16.13.1",
     "react-datetime": "^2.14.0",
     "react-dom": "16.9.0",
-    "react-redux": "^5.0.7",
+    "react-redux": "5.0.7",
     "react-select": "^2.4.3",
     "react-toggle-button": "^2.2.0",
     "react-tooltip": "^3.10.0",
-    "redux": "^3.7.2",
+    "redux": "3.7.2",
     "reselect": "^4.0.0",
     "roboto-fontface": "^0.10.0",
     "smalltalk": "^2.5.1",
     "sqlite3": "^5.0.2",
-    "styled-components": "^5.1.1",
-    "styled-system": "^5.1.5",
+    "styled-components": "5.1.1",
+    "styled-system": "5.1.5",
     "taboverride": "^4.0.3",
     "tinymce": "^5.2.0"
   }

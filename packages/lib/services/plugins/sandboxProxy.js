@@ -1,9 +1,7 @@
-export type Target = (name: string, args: any[])=> any;
+const handler = {};
 
-const handler: any = {};
-
-handler.get = function(target: Target, prop: string) {
-	let t = target as any;
+handler.get = function(target, prop) {
+	let t = target;
 
 	// There's probably a cleaner way to do this but not sure how. The idea is to keep
 	// track of the calling chain current state. So if the user call `joplin.something.test("bla")`
@@ -19,7 +17,7 @@ handler.get = function(target: Target, prop: string) {
 	// and attach a custom "__joplinNamespace" property to it.
 	if (!t.__joplinNamespace) {
 		const originalTarget = t;
-		const newTarget: any = (name: string, args: any[]) => {
+		const newTarget = (name, args) => {
 			return originalTarget(name, args);
 		};
 		newTarget.__joplinNamespace = [prop];
@@ -31,12 +29,12 @@ handler.get = function(target: Target, prop: string) {
 	return new Proxy(t, handler);
 };
 
-handler.apply = function(target: Target, _thisArg: any, argumentsList: any[]) {
-	const path = (target as any).__joplinNamespace.join('.');
-	(target as any).__joplinNamespace.pop();
+handler.apply = function(target, _thisArg, argumentsList) {
+	const path = target.__joplinNamespace.join('.');
+	target.__joplinNamespace.pop();
 	return target(path, argumentsList);
 };
 
-export default function sandboxProxy(target: Target): any {
+module.exports = function sandboxProxy(target) {
 	return new Proxy(target, handler);
-}
+};

@@ -12,7 +12,7 @@ async function main() {
 	await gitPullTry();
 
 	process.chdir(serverDir);
-	const version = (await execCommand2('npm version patch')).trim();
+	const version = (await execCommand2('yarn version patch')).trim();
 	const versionSuffix = ''; // isPreRelease ? '-beta' : '';
 	const tagName = `server-${version}${versionSuffix}`;
 

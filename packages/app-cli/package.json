@@ -11,8 +11,8 @@
     "build": "gulp build",
     "start": "gulp build -L && node \"build/main.js\" --stack-trace-enabled --log-level debug --env dev",
     "start-no-build": "node \"build/main.js\" --stack-trace-enabled --log-level debug --env dev",
-    "tsc": "node node_modules/typescript/bin/tsc --project tsconfig.json",
-    "watch": "node node_modules/typescript/bin/tsc --watch --project tsconfig.json"
+    "tsc": "tsc --project tsconfig.json",
+    "watch": "tsc --watch --project tsconfig.json"
   },
   "bugs": {
     "url": "https://github.com/laurent22/joplin/issues"
@@ -34,9 +34,7 @@
     "owner": "Laurent Cozic"
   },
   "version": "2.6.2",
-  "bin": {
-    "joplin": "./main.js"
-  },
+  "bin": "./main.js",
   "engines": {
     "node": ">=10.0.0"
   },
@@ -61,9 +59,9 @@
     "sqlite3": "^5.0.2",
     "string-padding": "^1.0.2",
     "strip-ansi": "^4.0.0",
-    "tcp-port-used": "^0.1.2",
+    "tcp-port-used": "^1.0.2",
     "terminal-kit": "^1.30.0",
-    "tkwidgets": "^0.5.26",
+    "tkwidgets": "0.5.27",
     "url-parse": "^1.4.7",
     "word-wrap": "^1.2.3",
     "yargs-parser": "^7.0.0"

@@ -1,5 +1,5 @@
 # For development this compose file starts the database only. The app can then
-# be started using `npm run start-dev`, which is useful for development, because
+# be started using `yarn run start-dev`, which is useful for development, because
 # it means the app Docker file doesn't have to be rebuilt on each change.
 
 version: '3'

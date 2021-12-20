@@ -135,7 +135,7 @@ async function main() {
 		await updatePluginGeneratorTemplateVersion(`${rootDir}/packages/generator-joplin/generators/app/templates/src/manifest.json`, majorMinorVersion);
 	}
 
-	console.info('Version numbers have been updated. Consider running `npm i` to update the lock files');
+	console.info('Version numbers have been updated. Consider running `yarn i` to update the lock files');
 }
 
 main().catch((error) => {

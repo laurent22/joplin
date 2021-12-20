@@ -430,7 +430,7 @@
 					setMarkers(markLoader_.whenDone.keywords, markLoader_.whenDone.options);
 				};
 
-				script.src = '../../node_modules/mark.js/dist/mark.min.js';
+				script.src = '../../build/lib/mark.js/dist/mark.min.js';
 				document.getElementById('joplin-container-markScriptContainer').appendChild(script);
 			} else if (markLoader_.state === 'ready') {
 				setMarkers(keywords, options);

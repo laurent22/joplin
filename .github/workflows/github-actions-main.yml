@@ -49,6 +49,11 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '16'
+
+      - name: Install Yarn
+        run: |
+          # https://yarnpkg.com/getting-started/install
+          corepack enable
       
       # Login to Docker only if we're on a server release tag. If we run this on
       # a pull request it will fail because the PR doesn't have access to
@@ -80,6 +85,44 @@ jobs:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           IS_CONTINUOUS_INTEGRATION: 1
         run: |
-          npm install
+          yarn install
           cd packages/app-desktop
-          npm run dist
+          yarn run dist
+
+  ServerDockerImage:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+    steps:
+
+      - name: Install Docker Engine
+        run: |
+          sudo apt-get install -y apt-transport-https
+          sudo apt-get install -y ca-certificates
+          sudo apt-get install -y curl
+          sudo apt-get install -y gnupg
+          sudo apt-get install -y lsb-release
+          curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+          echo \
+              "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+              $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+          sudo apt-get update || true
+          sudo apt-get install -y docker-ce docker-ce-cli containerd.io
+
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: Install Yarn
+        run: |
+          # https://yarnpkg.com/getting-started/install
+          corepack enable
+
+      - name: Build Docker Image
+        run: |
+          yarn install
+          yarn run buildServerDocker --tag-name server-v0.0.0
+          

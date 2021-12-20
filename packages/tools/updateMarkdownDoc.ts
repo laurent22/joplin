@@ -16,7 +16,7 @@ async function main() {
 	await execCommand2(['node', `${rootDir}/packages/tools/update-readme-sponsors.js`]);
 	await execCommand2(['node', `${rootDir}/packages/tools/build-welcome.js`]);
 	chdir(rootDir);
-	await execCommand2(['npm', 'run', 'buildApiDoc']);
+	await execCommand2(['yarn', 'run', 'buildApiDoc']);
 	await updateDownloadPage();
 
 	if (doGitOperations) {

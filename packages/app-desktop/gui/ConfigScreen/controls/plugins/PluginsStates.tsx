@@ -27,7 +27,7 @@ const Root = styled.div`
 	flex-direction: column;
 `;
 
-const UserPluginsRoot = styled.div`
+const UserPluginsRoot = styled.div<any>`
 	${space}
 	display: flex;
 	flex-wrap: wrap;
@@ -37,7 +37,7 @@ const ToolsButton = styled(Button)`
 	margin-right: 6px;
 `;
 
-const RepoApiErrorMessage = styled(StyledMessage)`
+const RepoApiErrorMessage = styled(StyledMessage)<any>`
 	max-width: ${props => props.maxWidth}px;
 	margin-bottom: 10px;
 `;

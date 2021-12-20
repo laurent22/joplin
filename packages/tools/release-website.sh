@@ -33,12 +33,14 @@ cd "$JOPLIN_ROOT_DIR"
 git checkout dev
 git pull --rebase
 
-npm install
+yarn install
 
-# Clean up npm's mess
+# Historically, that was to clean npm's package-lock mess, but it should no
+# longer be necessary for Yarn. Leaving it anyway since we don't want anything
+# to change after installation.
 git reset --hard
 
-npm run updateMarkdownDoc
+yarn run updateMarkdownDoc
 
 # We commit and push the change. It will be a noop if nothing was actually
 # changed
@@ -61,7 +63,7 @@ git checkout master
 git pull --rebase
 
 cd "$JOPLIN_ROOT_DIR"
-npm run buildWebsite
+yarn run buildWebsite
 
 cd "$JOPLIN_WEBSITE_ROOT_DIR"
 git add -A

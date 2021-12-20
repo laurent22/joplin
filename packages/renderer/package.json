@@ -10,10 +10,10 @@
   },
   "scripts": {
     "buildAssets": "node Tools/buildAssets.js",
-    "tsc": "node node_modules/typescript/bin/tsc --project tsconfig.json",
-    "watch": "node node_modules/typescript/bin/tsc --watch --project tsconfig.json",
+    "tsc": "tsc --project tsconfig.json",
+    "watch": "tsc --watch --project tsconfig.json",
     "test": "jest",
-    "test-ci": "npm run test"
+    "test-ci": "yarn test"
   },
   "author": "",
   "license": "MIT",
@@ -25,9 +25,10 @@
   },
   "dependencies": {
     "@joplin/fork-htmlparser2": "^4.1.39",
+    "@joplin/fork-uslug": "^1.0.4",
     "font-awesome-filetypes": "^2.1.0",
     "fs-extra": "^8.1.0",
-    "highlight.js": "^11.2.0",
+    "highlight.js": "11.1.0",
     "html-entities": "^1.2.1",
     "json-stringify-safe": "^5.0.1",
     "katex": "^0.13.3",
@@ -45,8 +46,7 @@
     "markdown-it-sup": "^1.0.0",
     "markdown-it-toc-done-right": "^4.1.0",
     "md5": "^2.2.1",
-    "mermaid": "^8.13.5",
-    "uslug": "git+https://github.com/laurent22/uslug.git#emoji-support"
+    "mermaid": "^8.13.5"
   },
   "gitHead": "eb4b0e64eab40a51b0895d3a40a9d8c3cb7b1b14"
 }

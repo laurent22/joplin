@@ -1,5 +1,3 @@
-# https://versatile.nl/blog/deploying-lerna-web-apps-with-docker
-
 FROM node:16-bullseye
 
 RUN apt-get update \
@@ -7,8 +5,12 @@ RUN apt-get update \
     python \
     && rm -rf /var/lib/apt/lists/*
 
+# Enables Yarn
+RUN corepack enable
+
 RUN echo "Node: $(node --version)"
 RUN echo "Npm: $(npm --version)"
+RUN echo "Yarn: $(yarn --version)"
 
 ARG user=joplin
 
@@ -26,7 +28,11 @@ RUN mkdir /home/$user/logs
 # this point)
 
 COPY --chown=$user:$user package*.json ./
-RUN npm install --ignore-scripts
+COPY --chown=$user:$user .yarn ./.yarn
+COPY --chown=$user:$user .yarnrc.yml .
+COPY --chown=$user:$user yarn.lock .
+
+RUN yarn install --inline-builds --mode=skip-build
 
 # To take advantage of the Docker cache, we first copy all the package.json
 # and package-lock.json files, as they rarely change, and then bootstrap
@@ -40,11 +46,11 @@ RUN npm install --ignore-scripts
 # prevent certain sub-packages, such as sqlite3, from being built
 
 COPY --chown=$user:$user packages/fork-sax/package*.json ./packages/fork-sax/
+COPY --chown=$user:$user packages/fork-uslug/package*.json ./packages/fork-uslug/
 COPY --chown=$user:$user packages/htmlpack/package*.json ./packages/htmlpack/
 COPY --chown=$user:$user packages/renderer/package*.json ./packages/renderer/
 COPY --chown=$user:$user packages/tools/package*.json ./packages/tools/
 COPY --chown=$user:$user packages/lib/package*.json ./packages/lib/
-COPY --chown=$user:$user lerna.json .
 COPY --chown=$user:$user tsconfig.json .
 
 # The following have postinstall scripts so we need to copy all the files.
@@ -53,20 +59,16 @@ COPY --chown=$user:$user tsconfig.json .
 COPY --chown=$user:$user packages/turndown ./packages/turndown
 COPY --chown=$user:$user packages/turndown-plugin-gfm ./packages/turndown-plugin-gfm
 COPY --chown=$user:$user packages/fork-htmlparser2 ./packages/fork-htmlparser2
+COPY --chown=$user:$user packages/server/package*.json ./packages/server/
 
 # Then bootstrap only, without compiling the TypeScript files
 
-RUN npm run bootstrap
-
-# We have a separate step for the server files because they are more likely to
-# change.
-
-COPY --chown=$user:$user packages/server/package*.json ./packages/server/
-RUN npm run bootstrapServerOnly
+RUN yarn install --inline-builds --mode=skip-build
 
 # Now copy the source files. Put lib and server last as they are more likely to change.
 
 COPY --chown=$user:$user packages/fork-sax ./packages/fork-sax
+COPY --chown=$user:$user packages/fork-uslug ./packages/fork-uslug
 COPY --chown=$user:$user packages/htmlpack ./packages/htmlpack
 COPY --chown=$user:$user packages/renderer ./packages/renderer
 COPY --chown=$user:$user packages/tools ./packages/tools
@@ -75,12 +77,12 @@ COPY --chown=$user:$user packages/server ./packages/server
 
 # Finally build everything, in particular the TypeScript files.
 
-RUN npm run build
+RUN yarn run build
 
 ENV RUNNING_IN_DOCKER=1
 EXPOSE ${APP_PORT}
 
-CMD [ "npm", "--prefix", "packages/server", "start" ]
+CMD [ "yarn", "--prefix", "packages/server", "start" ]
 
 # Build-time metadata
 # https://github.com/opencontainers/image-spec/blob/master/annotations.md

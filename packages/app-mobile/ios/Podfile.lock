@@ -215,15 +215,15 @@ PODS:
     - glog
   - react-native-alarm-notification (1.0.5):
     - React
-  - react-native-camera (3.40.0):
+  - react-native-camera (3.44.3):
     - React-Core
-    - react-native-camera/RCT (= 3.40.0)
-    - react-native-camera/RN (= 3.40.0)
-  - react-native-camera/RCT (3.40.0):
+    - react-native-camera/RCT (= 3.44.3)
+    - react-native-camera/RN (= 3.44.3)
+  - react-native-camera/RCT (3.44.3):
     - React-Core
-  - react-native-camera/RN (3.40.0):
+  - react-native-camera/RN (3.44.3):
     - React-Core
-  - react-native-document-picker (4.0.0):
+  - react-native-document-picker (4.3.0):
     - React-Core
   - react-native-geolocation (2.0.2):
     - React
@@ -231,9 +231,9 @@ PODS:
     - React-Core
   - react-native-image-picker (2.3.4):
     - React-Core
-  - react-native-image-resizer (1.3.0):
+  - react-native-image-resizer (1.4.5):
     - React-Core
-  - react-native-netinfo (6.0.0):
+  - react-native-netinfo (6.2.1):
     - React-Core
   - react-native-rsa-native (2.0.4):
     - React
@@ -241,9 +241,9 @@ PODS:
     - React
   - react-native-sqlite-storage (5.0.0):
     - React
-  - react-native-version-info (1.1.0):
+  - react-native-version-info (1.1.1):
     - React-Core
-  - react-native-webview (10.9.2):
+  - react-native-webview (10.10.2):
     - React-Core
   - React-perflogger (0.66.1)
   - React-RCTActionSheet (0.66.1):
@@ -312,21 +312,21 @@ PODS:
     - React-perflogger (= 0.66.1)
   - rn-fetch-blob (0.12.0):
     - React-Core
-  - RNCClipboard (1.5.0):
+  - RNCClipboard (1.5.1):
     - React-Core
-  - RNCPushNotificationIOS (1.6.0):
+  - RNCPushNotificationIOS (1.10.1):
     - React-Core
-  - RNDateTimePicker (3.0.3):
+  - RNDateTimePicker (3.5.2):
     - React-Core
   - RNFileViewer (2.1.4):
     - React-Core
-  - RNFS (2.16.6):
+  - RNFS (2.18.0):
     - React
   - RNQuickAction (0.3.13):
     - React
-  - RNSecureRandom (1.0.0-rc.0):
+  - RNSecureRandom (1.0.0):
     - React
-  - RNShare (7.2.1):
+  - RNShare (7.3.2):
     - React-Core
   - RNVectorIcons (7.1.0):
     - React
@@ -529,18 +529,18 @@ SPEC CHECKSUMS:
   React-jsinspector: 8c0517dee5e8c70cd6c3066f20213ff7ce54f176
   React-logger: bfddd3418dc1d45b77b822958f3e31422e2c179b
   react-native-alarm-notification: 4817a2a0d7cc2ed2acc97337ebcdf9ae2a69c9d5
-  react-native-camera: 35854c4f764a4a6cf61c1c3525888b92f0fe4b31
-  react-native-document-picker: 0bba80cc56caab1f67dbaa81ff557e3a9b7f2b9f
+  react-native-camera: b8cc03e2feec0c04403d0998e37cf519d8fd4c6f
+  react-native-document-picker: 20f652c2402d3ddc81f396d8167c3bd978add4a2
   react-native-geolocation: c956aeb136625c23e0dce0467664af2c437888c9
   react-native-get-random-values: 2c4ff6b44cb71291dabe9a8ae87d3877dcf387da
   react-native-image-picker: c6d75c4ab2cf46f9289f341242b219cb3c1180d3
-  react-native-image-resizer: a79bcffdef1b52160ff91db0d6fa24816a4ff332
-  react-native-netinfo: e849fc21ca2f4128a5726c801a82fc6f4a6db50d
+  react-native-image-resizer: d9fb629a867335bdc13230ac2a58702bb8c8828f
+  react-native-netinfo: 3d3769f0d65de15c83a9bf1346f8be71de5a24bf
   react-native-rsa-native: 1f6bba06dd02f0e652a66a384c75c270f7a0062f
   react-native-slider: e99fc201cefe81270fc9d81714a7a0f5e566b168
   react-native-sqlite-storage: 418ef4afc5e6df6ce3574c4617e5f0b65cffde55
-  react-native-version-info: 36490da17d2c6b5cc21321c70e433784dee7ed0b
-  react-native-webview: 4e96d493f9f90ba4f03b28933f30b2964df07e39
+  react-native-version-info: a106f23009ac0db4ee00de39574eb546682579b9
+  react-native-webview: 0aa2cde4ee7e3e1c5fffdf64dbce9c709aa18155
   React-perflogger: fcac6090a80e3d967791b4c7f1b1a017f9d4a398
   React-RCTActionSheet: caf5913d9f9e605f5467206cf9d1caa6d47d7ad6
   React-RCTAnimation: 6539e3bf594f6a529cd861985ba6548286ae1ead
@@ -554,14 +554,14 @@ SPEC CHECKSUMS:
   React-runtimeexecutor: 33a949a51bec5f8a3c9e8d8092deb259600d761e
   ReactCommon: 620442811dc6f707b4bf5e3b27d4f19c12d5a821
   rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
-  RNCClipboard: c7abea1baea58adca5c1f29e56dd5261837b4892
-  RNCPushNotificationIOS: ec7ffe65c7b5097f8d287fd627e1c1674ea69cef
-  RNDateTimePicker: 6f62fd42ac8b58bcc30c43ac3620e5097e8a227f
+  RNCClipboard: 41d8d918092ae8e676f18adada19104fa3e68495
+  RNCPushNotificationIOS: 87b8d16d3ede4532745e05b03c42cff33a36cc45
+  RNDateTimePicker: 7658208086d86d09e1627b5c34ba0cf237c60140
   RNFileViewer: 83cc066ad795b1f986791d03b56fe0ee14b6a69f
-  RNFS: 2bd9eb49dc82fa9676382f0585b992c424cd59df
+  RNFS: 3ab21fa6c56d65566d1fb26c2228e2b6132e5e32
   RNQuickAction: 6d404a869dc872cde841ad3147416a670d13fa93
-  RNSecureRandom: 1f19ad1492f7ed416b8fc79e92216a1f73f13a4c
-  RNShare: edd621a71124961e29a7ba43a84bd1c6f9980d88
+  RNSecureRandom: 0dcee021fdb3d50cd5cee5db0ebf583c42f5af0e
+  RNShare: d76b8c9c6e6ffb38fc18f40b4338c9d867592ed3
   RNVectorIcons: bc69e6a278b14842063605de32bec61f0b251a59
   Yoga: 2b4a01651f42a32f82e6cef3830a3ba48088237f
 
