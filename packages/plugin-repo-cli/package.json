@@ -13,7 +13,8 @@
     "test": "jest",
     "test-ci": "yarn test",
     "start": "node index.js",
-    "dist": "webpack --config webpack.config.js"
+    "dist": "webpack --config webpack.config.js",
+    "publish": "yarn run tsc && npm version patch && yarn run dist && npm run publish"
   },
   "author": "",
   "license": "MIT",

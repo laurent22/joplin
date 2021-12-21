@@ -1,4 +1,6 @@
 const path = require('path');
+const webpack = require('webpack');
+
 const distDir = path.resolve(__dirname, 'dist');
 
 module.exports = {
@@ -9,4 +11,10 @@ module.exports = {
 		filename: 'index.js',
 		path: distDir,
 	},
+	plugins: [
+		new webpack.BannerPlugin({
+			banner: '#!/usr/bin/env node\n',
+			raw: true,
+		}),
+	],
 };

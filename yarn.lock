@@ -3199,7 +3199,7 @@ __metadata:
     webpack-cli: ^4.9.1
     yargs: ^16.0.3
   bin:
-    plugin-repo-cli: ./index.js
+    plugin-repo-cli: ./dist/index.js
   languageName: unknown
   linkType: soft
 
