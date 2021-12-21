@@ -74,4 +74,6 @@ First the types should generally be updated, using `./updateTypes.sh`. Then run:
 
 ## Plugin Repo Cli
 
-Since it has dependencies to the `@joplin` packages, it is released when running `yarn run publishAll`
+This tool is packaged using Webpack so it can be released with a single command:
+
+	yarn run releasePluginRepoCli
