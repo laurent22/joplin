@@ -397,30 +397,6 @@ msgstr "시스템 테마에 적합한 테마로 자동으로 변경"
 msgid "Automatically update the application"
 msgstr "자동으로 업데이트하기"
 
-#: packages/lib/models/Setting.ts:546
-#, fuzzy
-msgid "AWS access key"
-msgstr "AWS 키"
-
-#: packages/lib/models/Setting.ts:535
-msgid "AWS region"
-msgstr ""
-
-#: packages/lib/models/Setting.ts:506
-#, fuzzy
-msgid "AWS S3 bucket"
-msgstr "AWS S3 버킷"
-
-#: packages/lib/models/Setting.ts:521
-#, fuzzy
-msgid "AWS S3 URL"
-msgstr "AWS S3 URL"
-
-#: packages/lib/models/Setting.ts:557
-#, fuzzy
-msgid "AWS secret key"
-msgstr "AWS 보안 암호"
-
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:42
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:715
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:187
@@ -561,7 +537,7 @@ msgid ""
 "for this account"
 msgstr ""
 
-#: packages/lib/services/share/ShareService.ts:272
+#: packages/lib/services/share/ShareService.ts:315
 msgid ""
 "Cannot share encrypted notebook with recipient %s because they have not "
 "enabled end-to-end encryption. They may do so from the screen Configuration "
@@ -851,7 +827,7 @@ msgstr ""
 msgid "Could not upgrade master key: %s"
 msgstr "마스터 키를 업그레이드할 수 없습니다: %s"
 
-#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:27
+#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:26
 msgid ""
 "Could not verify the share status of this notebook - aborting. Please try "
 "again when you are connected to the internet."
@@ -1012,7 +988,7 @@ msgstr "줄 삭제"
 msgid "Delete local data and re-download from sync target"
 msgstr "로컬 데이터를 지우고 동기화 서버의 데이터를 받아오기"
 
-#: packages/lib/models/Note.ts:759
+#: packages/lib/models/Note.ts:760
 msgid "Delete note \"%s\"?"
 msgstr "\"%s\" 노트를 삭제할까요?"
 
@@ -1045,7 +1021,7 @@ msgstr ""
 msgid "Delete plugin \"%s\"?"
 msgstr "\"%s\" 플러그인을 삭제할까요?"
 
-#: packages/lib/models/Note.ts:761
+#: packages/lib/models/Note.ts:762
 msgid "Delete these %d notes?"
 msgstr "%d 개의 노트들을 삭제할까요?"
 
@@ -1501,7 +1477,7 @@ msgid "Error opening note in editor: %s"
 msgstr "편집기에서 노트를 열 수 없는 오류가 발생하였습니다: %s"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:65
-#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:35
+#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:31
 #: packages/lib/services/KeymapService.ts:197
 msgid "Error: %s"
 msgstr "오류: %s"
@@ -2117,7 +2093,7 @@ msgstr "배치"
 msgid "Layout button sequence"
 msgstr "레이아웃 버튼 순서"
 
-#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:11
+#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:10
 #, fuzzy
 msgid "Leave notebook..."
 msgstr "노트북 공유..."
@@ -3040,6 +3016,30 @@ msgstr ""
 msgid "S3"
 msgstr ""
 
+#: packages/lib/models/Setting.ts:546
+#, fuzzy
+msgid "S3 access key"
+msgstr "AWS 키"
+
+#: packages/lib/models/Setting.ts:506
+#, fuzzy
+msgid "S3 bucket"
+msgstr "AWS S3 버킷"
+
+#: packages/lib/models/Setting.ts:535
+msgid "S3 region"
+msgstr ""
+
+#: packages/lib/models/Setting.ts:557
+#, fuzzy
+msgid "S3 secret key"
+msgstr "AWS 보안 암호"
+
+#: packages/lib/models/Setting.ts:521
+#, fuzzy
+msgid "S3 URL"
+msgstr "AWS S3 URL"
+
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:579
 msgid ""
 "Safe mode is currently active. Note rendering and all plugins are "
@@ -3872,7 +3872,7 @@ msgid "This will open a new screen. Save your current changes?"
 msgstr ""
 "새로운 화면으로 전환됩니다. 현재 화면의 변경 사항들을 저장하시겠습니까?"
 
-#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:17
+#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:16
 #, fuzzy
 msgid ""
 "This will remove the notebook from your collection and you will no longer "
@@ -4057,7 +4057,7 @@ msgstr "실행 취소"
 msgid "Unknown flag: %s"
 msgstr "알 수 없는 플래그: %s"
 
-#: packages/lib/Synchronizer.ts:1087
+#: packages/lib/Synchronizer.ts:1088
 msgid ""
 "Unknown item type downloaded - please upgrade Joplin to the latest version"
 msgstr ""

@@ -7,8 +7,6 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 "Last-Translator: MrKanister <s.robin@tutanota.de>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -412,26 +410,6 @@ msgstr "Automatisch das Design ändern, um es dem System-Design anzupassen"
 msgid "Automatically update the application"
 msgstr "Die Anwendung automatisch aktualisieren"
 
-#: packages/lib/models/Setting.ts:546
-msgid "AWS access key"
-msgstr "AWS Zugriffsschlüssel-ID"
-
-#: packages/lib/models/Setting.ts:535
-msgid "AWS region"
-msgstr "AWS Region"
-
-#: packages/lib/models/Setting.ts:506
-msgid "AWS S3 bucket"
-msgstr "Amazon S3 Bucket"
-
-#: packages/lib/models/Setting.ts:521
-msgid "AWS S3 URL"
-msgstr "Amazon S3 URL"
-
-#: packages/lib/models/Setting.ts:557
-msgid "AWS secret key"
-msgstr "AWS geheimer Zugriffsschlüssel"
-
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:42
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:715
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:187
@@ -579,7 +557,7 @@ msgstr ""
 "Kann %s \"%s\" nicht speichern, da es die zulässige Gesamtgröße (%s) für "
 "dieses Konto überschreiten würde"
 
-#: packages/lib/services/share/ShareService.ts:272
+#: packages/lib/services/share/ShareService.ts:315
 msgid ""
 "Cannot share encrypted notebook with recipient %s because they have not "
 "enabled end-to-end encryption. They may do so from the screen Configuration "
@@ -873,7 +851,7 @@ msgstr ""
 msgid "Could not upgrade master key: %s"
 msgstr "Konnte Hauptschlüssel nicht aktualisieren: %s"
 
-#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:27
+#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:26
 msgid ""
 "Could not verify the share status of this notebook - aborting. Please try "
 "again when you are connected to the internet."
@@ -1037,7 +1015,7 @@ msgstr "Zeile löschen"
 msgid "Delete local data and re-download from sync target"
 msgstr "Lösche lokale Daten und lade Daten erneut vom Synchronisierungsziel"
 
-#: packages/lib/models/Note.ts:759
+#: packages/lib/models/Note.ts:760
 msgid "Delete note \"%s\"?"
 msgstr "Notiz „%s“ löschen?"
 
@@ -1071,7 +1049,7 @@ msgstr ""
 msgid "Delete plugin \"%s\"?"
 msgstr "Erweiterung „%s“ löschen?"
 
-#: packages/lib/models/Note.ts:761
+#: packages/lib/models/Note.ts:762
 msgid "Delete these %d notes?"
 msgstr "Sollen diese %d Notizen gelöscht werden?"
 
@@ -1527,7 +1505,7 @@ msgid "Error opening note in editor: %s"
 msgstr "Fehler beim Öffnen der Notiz im Editor: %s"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:65
-#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:35
+#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:31
 #: packages/lib/services/KeymapService.ts:197
 msgid "Error: %s"
 msgstr "Fehler: %s"
@@ -2158,7 +2136,7 @@ msgstr "Layout"
 msgid "Layout button sequence"
 msgstr "Layout-Reihenfolge"
 
-#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:11
+#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:10
 msgid "Leave notebook..."
 msgstr "Verlasse Notizbuch..."
 
@@ -3099,6 +3077,31 @@ msgstr ""
 msgid "S3"
 msgstr "S3"
 
+#: packages/lib/models/Setting.ts:546
+#, fuzzy
+msgid "S3 access key"
+msgstr "AWS Zugriffsschlüssel-ID"
+
+#: packages/lib/models/Setting.ts:506
+#, fuzzy
+msgid "S3 bucket"
+msgstr "Amazon S3 Bucket"
+
+#: packages/lib/models/Setting.ts:535
+#, fuzzy
+msgid "S3 region"
+msgstr "AWS Region"
+
+#: packages/lib/models/Setting.ts:557
+#, fuzzy
+msgid "S3 secret key"
+msgstr "AWS geheimer Zugriffsschlüssel"
+
+#: packages/lib/models/Setting.ts:521
+#, fuzzy
+msgid "S3 URL"
+msgstr "Amazon S3 URL"
+
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:579
 msgid ""
 "Safe mode is currently active. Note rendering and all plugins are "
@@ -3984,7 +3987,7 @@ msgid "This will open a new screen. Save your current changes?"
 msgstr ""
 "Diese Aktion wird ein neues Fenster öffnen. Aktuelle Änderungen speichern?"
 
-#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:17
+#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:16
 msgid ""
 "This will remove the notebook from your collection and you will no longer "
 "have access to its content. Do you wish to continue?"
@@ -4174,7 +4177,7 @@ msgstr "Rückgängig"
 msgid "Unknown flag: %s"
 msgstr "Unbekanntes Argument: %s"
 
-#: packages/lib/Synchronizer.ts:1087
+#: packages/lib/Synchronizer.ts:1088
 msgid ""
 "Unknown item type downloaded - please upgrade Joplin to the latest version"
 msgstr "Unbekannter Eintrags-Typ heruntergeladen - bitte aktualisiere Joplin"

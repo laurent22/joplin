@@ -403,30 +403,6 @@ msgstr "Beralih tema secara otomatis untuk menyesuaikannya dengan tema sistem"
 msgid "Automatically update the application"
 msgstr "Perbarui aplikasi secara otomatis"
 
-#: packages/lib/models/Setting.ts:546
-#, fuzzy
-msgid "AWS access key"
-msgstr "AWS key"
-
-#: packages/lib/models/Setting.ts:535
-msgid "AWS region"
-msgstr ""
-
-#: packages/lib/models/Setting.ts:506
-#, fuzzy
-msgid "AWS S3 bucket"
-msgstr "AWS S3 bucket"
-
-#: packages/lib/models/Setting.ts:521
-#, fuzzy
-msgid "AWS S3 URL"
-msgstr "AWS S3 URL"
-
-#: packages/lib/models/Setting.ts:557
-#, fuzzy
-msgid "AWS secret key"
-msgstr "AWS secret"
-
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:42
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:715
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:187
@@ -572,7 +548,7 @@ msgstr ""
 "Tidak dapat menyimpan %s “%s” karena akan melebihi ukuran total yang "
 "diizinkan (%s) untuk akun ini"
 
-#: packages/lib/services/share/ShareService.ts:272
+#: packages/lib/services/share/ShareService.ts:315
 msgid ""
 "Cannot share encrypted notebook with recipient %s because they have not "
 "enabled end-to-end encryption. They may do so from the screen Configuration "
@@ -859,7 +835,7 @@ msgstr ""
 msgid "Could not upgrade master key: %s"
 msgstr "Tidak dapat mengupgrade kunci master: %s"
 
-#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:27
+#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:26
 msgid ""
 "Could not verify the share status of this notebook - aborting. Please try "
 "again when you are connected to the internet."
@@ -1020,7 +996,7 @@ msgstr "Hapus baris"
 msgid "Delete local data and re-download from sync target"
 msgstr "Hapus data lokal dan unduh ulang dari target sinkronisasi"
 
-#: packages/lib/models/Note.ts:759
+#: packages/lib/models/Note.ts:760
 msgid "Delete note \"%s\"?"
 msgstr "Hapus catatan \"%s\"?"
 
@@ -1053,7 +1029,7 @@ msgstr ""
 msgid "Delete plugin \"%s\"?"
 msgstr "Hapus plugin \"%s\"?"
 
-#: packages/lib/models/Note.ts:761
+#: packages/lib/models/Note.ts:762
 msgid "Delete these %d notes?"
 msgstr "Hapus %d catatan ini?"
 
@@ -1515,7 +1491,7 @@ msgid "Error opening note in editor: %s"
 msgstr "Terjadi kesalahan saat membuka catatan di editor: %s"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:65
-#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:35
+#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:31
 #: packages/lib/services/KeymapService.ts:197
 msgid "Error: %s"
 msgstr "Terjadi kesalahan: %s"
@@ -2150,7 +2126,7 @@ msgstr "Tata letak"
 msgid "Layout button sequence"
 msgstr "Urutan tombol tata letak"
 
-#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:11
+#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:10
 #, fuzzy
 msgid "Leave notebook..."
 msgstr "Bagikan buku catatan…"
@@ -3092,6 +3068,30 @@ msgstr ""
 msgid "S3"
 msgstr ""
 
+#: packages/lib/models/Setting.ts:546
+#, fuzzy
+msgid "S3 access key"
+msgstr "AWS key"
+
+#: packages/lib/models/Setting.ts:506
+#, fuzzy
+msgid "S3 bucket"
+msgstr "AWS S3 bucket"
+
+#: packages/lib/models/Setting.ts:535
+msgid "S3 region"
+msgstr ""
+
+#: packages/lib/models/Setting.ts:557
+#, fuzzy
+msgid "S3 secret key"
+msgstr "AWS secret"
+
+#: packages/lib/models/Setting.ts:521
+#, fuzzy
+msgid "S3 URL"
+msgstr "AWS S3 URL"
+
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:579
 msgid ""
 "Safe mode is currently active. Note rendering and all plugins are "
@@ -3950,7 +3950,7 @@ msgstr ""
 msgid "This will open a new screen. Save your current changes?"
 msgstr "Ini akan membuka layar baru. Simpan perubahan Anda saat ini?"
 
-#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:17
+#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:16
 #, fuzzy
 msgid ""
 "This will remove the notebook from your collection and you will no longer "
@@ -4140,7 +4140,7 @@ msgstr "Urungkan"
 msgid "Unknown flag: %s"
 msgstr "Tanda tidak diketahui: %s"
 
-#: packages/lib/Synchronizer.ts:1087
+#: packages/lib/Synchronizer.ts:1088
 msgid ""
 "Unknown item type downloaded - please upgrade Joplin to the latest version"
 msgstr ""

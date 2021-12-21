@@ -388,30 +388,6 @@ msgstr "自動切換以配合系統主題"
 msgid "Automatically update the application"
 msgstr "自動更新應用程式"
 
-#: packages/lib/models/Setting.ts:546
-#, fuzzy
-msgid "AWS access key"
-msgstr "AWS 金鑰"
-
-#: packages/lib/models/Setting.ts:535
-msgid "AWS region"
-msgstr ""
-
-#: packages/lib/models/Setting.ts:506
-#, fuzzy
-msgid "AWS S3 bucket"
-msgstr "AWS S3 bucket"
-
-#: packages/lib/models/Setting.ts:521
-#, fuzzy
-msgid "AWS S3 URL"
-msgstr "AWS S3 網址"
-
-#: packages/lib/models/Setting.ts:557
-#, fuzzy
-msgid "AWS secret key"
-msgstr "AWS secret"
-
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:42
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:715
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:187
@@ -550,7 +526,7 @@ msgid ""
 "for this account"
 msgstr ""
 
-#: packages/lib/services/share/ShareService.ts:272
+#: packages/lib/services/share/ShareService.ts:315
 msgid ""
 "Cannot share encrypted notebook with recipient %s because they have not "
 "enabled end-to-end encryption. They may do so from the screen Configuration "
@@ -838,7 +814,7 @@ msgstr ""
 msgid "Could not upgrade master key: %s"
 msgstr "無法升級主密鑰：%s"
 
-#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:27
+#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:26
 msgid ""
 "Could not verify the share status of this notebook - aborting. Please try "
 "again when you are connected to the internet."
@@ -999,7 +975,7 @@ msgstr "刪除整行"
 msgid "Delete local data and re-download from sync target"
 msgstr "刪除本地資料，自同步目標重新下載所有檔案"
 
-#: packages/lib/models/Note.ts:759
+#: packages/lib/models/Note.ts:760
 msgid "Delete note \"%s\"?"
 msgstr "刪除此記事「%s」？"
 
@@ -1030,7 +1006,7 @@ msgstr "刪除記事本時，其中的所有記事和子記事本也將被刪除
 msgid "Delete plugin \"%s\"?"
 msgstr "刪除延伸模組「%s」？"
 
-#: packages/lib/models/Note.ts:761
+#: packages/lib/models/Note.ts:762
 msgid "Delete these %d notes?"
 msgstr "刪除這些記事 %d ？"
 
@@ -1481,7 +1457,7 @@ msgid "Error opening note in editor: %s"
 msgstr "在編輯器中開啟記事時出錯：%s"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:65
-#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:35
+#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:31
 #: packages/lib/services/KeymapService.ts:197
 msgid "Error: %s"
 msgstr "錯誤：%s"
@@ -2091,7 +2067,7 @@ msgstr "頁面佈局"
 msgid "Layout button sequence"
 msgstr "頁面佈局"
 
-#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:11
+#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:10
 #, fuzzy
 msgid "Leave notebook..."
 msgstr "分享記事..."
@@ -3001,6 +2977,30 @@ msgstr "執行文字檔中的命令，每條命令各佔一行。"
 msgid "S3"
 msgstr ""
 
+#: packages/lib/models/Setting.ts:546
+#, fuzzy
+msgid "S3 access key"
+msgstr "AWS 金鑰"
+
+#: packages/lib/models/Setting.ts:506
+#, fuzzy
+msgid "S3 bucket"
+msgstr "AWS S3 bucket"
+
+#: packages/lib/models/Setting.ts:535
+msgid "S3 region"
+msgstr ""
+
+#: packages/lib/models/Setting.ts:557
+#, fuzzy
+msgid "S3 secret key"
+msgstr "AWS secret"
+
+#: packages/lib/models/Setting.ts:521
+#, fuzzy
+msgid "S3 URL"
+msgstr "AWS S3 網址"
+
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:579
 msgid ""
 "Safe mode is currently active. Note rendering and all plugins are "
@@ -3806,7 +3806,7 @@ msgstr ""
 msgid "This will open a new screen. Save your current changes?"
 msgstr "這將會開啟新視窗。儲存您目前的變更嗎？"
 
-#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:17
+#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:16
 #, fuzzy
 msgid ""
 "This will remove the notebook from your collection and you will no longer "
@@ -3984,7 +3984,7 @@ msgstr "復原"
 msgid "Unknown flag: %s"
 msgstr "未知的標誌：%s"
 
-#: packages/lib/Synchronizer.ts:1087
+#: packages/lib/Synchronizer.ts:1088
 msgid ""
 "Unknown item type downloaded - please upgrade Joplin to the latest version"
 msgstr "已下載項目為未知類型，請將 Joplin 升級至最新版本"

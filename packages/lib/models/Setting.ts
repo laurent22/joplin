@@ -503,7 +503,7 @@ class Setting extends BaseModel {
 					return value ? rtrimSlashes(value) : '';
 				},
 				public: true,
-				label: () => _('AWS S3 bucket'),
+				label: () => _('S3 bucket'),
 				description: () => emptyDirWarning,
 				storage: SettingStorage.File,
 			},
@@ -518,7 +518,7 @@ class Setting extends BaseModel {
 					return value ? value.trim() : '';
 				},
 				public: true,
-				label: () => _('AWS S3 URL'),
+				label: () => _('S3 URL'),
 				storage: SettingStorage.File,
 			},
 			'sync.8.region': {
@@ -532,7 +532,7 @@ class Setting extends BaseModel {
 					return value ? value.trim() : '';
 				},
 				public: true,
-				label: () => _('AWS region'),
+				label: () => _('S3 region'),
 				storage: SettingStorage.File,
 			},
 			'sync.8.username': {
@@ -543,7 +543,7 @@ class Setting extends BaseModel {
 					return settings['sync.target'] == SyncTargetRegistry.nameToId('amazon_s3');
 				},
 				public: true,
-				label: () => _('AWS access key'),
+				label: () => _('S3 access key'),
 				storage: SettingStorage.File,
 			},
 			'sync.8.password': {
@@ -554,7 +554,7 @@ class Setting extends BaseModel {
 					return settings['sync.target'] == SyncTargetRegistry.nameToId('amazon_s3');
 				},
 				public: true,
-				label: () => _('AWS secret key'),
+				label: () => _('S3 secret key'),
 				secure: true,
 			},
 			'sync.8.forcePathStyle': {

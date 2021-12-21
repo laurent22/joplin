@@ -396,30 +396,6 @@ msgstr "Vaihda teema automaattisesti vastaamaan järjestelmän teemaa"
 msgid "Automatically update the application"
 msgstr "Päivitä sovellus automaattisesti"
 
-#: packages/lib/models/Setting.ts:546
-#, fuzzy
-msgid "AWS access key"
-msgstr "AWS key"
-
-#: packages/lib/models/Setting.ts:535
-msgid "AWS region"
-msgstr ""
-
-#: packages/lib/models/Setting.ts:506
-#, fuzzy
-msgid "AWS S3 bucket"
-msgstr "AWS S3 bucket"
-
-#: packages/lib/models/Setting.ts:521
-#, fuzzy
-msgid "AWS S3 URL"
-msgstr "AWS S3 osoite (URL)"
-
-#: packages/lib/models/Setting.ts:557
-#, fuzzy
-msgid "AWS secret key"
-msgstr "AWS secret"
-
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:42
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:715
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:187
@@ -563,7 +539,7 @@ msgstr ""
 "Kohdetta %s \"%s\" ei voida tallentaa, koska se ylittäisi tämän tilin "
 "sallitun kokonaiskoon (%s)"
 
-#: packages/lib/services/share/ShareService.ts:272
+#: packages/lib/services/share/ShareService.ts:315
 msgid ""
 "Cannot share encrypted notebook with recipient %s because they have not "
 "enabled end-to-end encryption. They may do so from the screen Configuration "
@@ -851,7 +827,7 @@ msgstr ""
 msgid "Could not upgrade master key: %s"
 msgstr "Pääavainta ei voitu päivittää: %s"
 
-#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:27
+#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:26
 msgid ""
 "Could not verify the share status of this notebook - aborting. Please try "
 "again when you are connected to the internet."
@@ -1011,7 +987,7 @@ msgstr "Poista rivi"
 msgid "Delete local data and re-download from sync target"
 msgstr "Poista paikalliset tiedot ja lataa uudelleen synkronointikohteesta"
 
-#: packages/lib/models/Note.ts:759
+#: packages/lib/models/Note.ts:760
 msgid "Delete note \"%s\"?"
 msgstr "Poista muistiinpano \"%s\"?"
 
@@ -1044,7 +1020,7 @@ msgstr ""
 msgid "Delete plugin \"%s\"?"
 msgstr "Poista laajennus \"%s\"?"
 
-#: packages/lib/models/Note.ts:761
+#: packages/lib/models/Note.ts:762
 msgid "Delete these %d notes?"
 msgstr "Poistetaanko nämä %d muistiinpanot?"
 
@@ -1504,7 +1480,7 @@ msgid "Error opening note in editor: %s"
 msgstr "Virhe avattaessa muistiinpanoa editorissa: %s"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:65
-#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:35
+#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:31
 #: packages/lib/services/KeymapService.ts:197
 msgid "Error: %s"
 msgstr "Virhe: %s"
@@ -2132,7 +2108,7 @@ msgstr "Ulkoasu"
 msgid "Layout button sequence"
 msgstr "Aseta painike järjestys"
 
-#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:11
+#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:10
 #, fuzzy
 msgid "Leave notebook..."
 msgstr "Muistikirjan jakaminen..."
@@ -3057,6 +3033,30 @@ msgstr ""
 msgid "S3"
 msgstr ""
 
+#: packages/lib/models/Setting.ts:546
+#, fuzzy
+msgid "S3 access key"
+msgstr "AWS key"
+
+#: packages/lib/models/Setting.ts:506
+#, fuzzy
+msgid "S3 bucket"
+msgstr "AWS S3 bucket"
+
+#: packages/lib/models/Setting.ts:535
+msgid "S3 region"
+msgstr ""
+
+#: packages/lib/models/Setting.ts:557
+#, fuzzy
+msgid "S3 secret key"
+msgstr "AWS secret"
+
+#: packages/lib/models/Setting.ts:521
+#, fuzzy
+msgid "S3 URL"
+msgstr "AWS S3 osoite (URL)"
+
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:579
 msgid ""
 "Safe mode is currently active. Note rendering and all plugins are "
@@ -3915,7 +3915,7 @@ msgstr ""
 msgid "This will open a new screen. Save your current changes?"
 msgstr "Tämä avaa uuden ikkunan. Tallennetaanko nykyiset muutokset?"
 
-#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:17
+#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:16
 #, fuzzy
 msgid ""
 "This will remove the notebook from your collection and you will no longer "
@@ -4103,7 +4103,7 @@ msgstr "Kumoa"
 msgid "Unknown flag: %s"
 msgstr "Tuntematon merkintä: %s"
 
-#: packages/lib/Synchronizer.ts:1087
+#: packages/lib/Synchronizer.ts:1088
 msgid ""
 "Unknown item type downloaded - please upgrade Joplin to the latest version"
 msgstr "Tuntematon kohdetyyppi ladattu - päivitä Joplin uusimpaan versioon"
