@@ -248,8 +248,22 @@ async function commandBuild(args: CommandBuildArgs) {
 }
 
 async function commandVersion() {
-	const p = await readJsonFile(path.resolve(__dirname, 'package.json'));
-	console.info(`Version ${p.version}`);
+	const paths = [
+		path.resolve(__dirname, 'package.json'),
+		path.resolve(__dirname, '..', 'package.json'),
+	];
+
+	for (const p of paths) {
+		try {
+			const info = await readJsonFile(p);
+			console.info(`Version ${info.version}`);
+			return;
+		} catch (error) {
+			// Try the next path
+		}
+	}
+
+	throw new Error(`Cannot find package.json in any of these paths: ${JSON.stringify(paths)}`);
 }
 
 async function main() {
