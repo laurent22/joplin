@@ -4,6 +4,7 @@ import * as fs from 'fs-extra';
 import * as path from 'path';
 import * as process from 'process';
 import validatePluginId from '@joplin/lib/services/plugins/utils/validatePluginId';
+import validatePluginVersion from '@joplin/lib/services/plugins/utils/validatePluginVersion';
 import { execCommand2, resolveRelativePathWithinDir, gitPullTry, gitRepoCleanTry, gitRepoClean } from '@joplin/tools/tool-utils.js';
 import checkIfPluginCanBeAdded from './lib/checkIfPluginCanBeAdded';
 import updateReadme from './lib/updateReadme';
@@ -61,6 +62,7 @@ async function extractPluginFilesFromPackage(existingManifests: any, workDir: st
 	// manifest properties are checked when the plugin is loaded into the app.
 	const manifest = await readJsonFile(manifestFilePath);
 	validatePluginId(manifest.id);
+	validatePluginVersion(manifest.version);
 
 	manifest._npm_package_name = packageName;
 
