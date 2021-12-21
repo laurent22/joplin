@@ -101,11 +101,11 @@ do
 done
 
 cd "$ROOT_DIR/packages/app-cli"
-yarn start -- --profile "$PROFILE_DIR" batch "$CMD_FILE"
+yarn start --profile "$PROFILE_DIR" batch "$CMD_FILE"
 
 if [[ $COMMANDS != "" ]]; then
 	exit 0
 fi
 
 cd "$ROOT_DIR/packages/app-desktop"
-yarn start -- --profile "$PROFILE_DIR"
+yarn start --profile "$PROFILE_DIR"

@@ -75,7 +75,7 @@ Running `yarn run tsc` would have the same effect, but without watching.
 
 You can specify additional parameters when running the desktop or CLI application. To do so, add `--` to the `yarn start` command, followed by your flags. For example:
 
-	yarn start -- --debug
+	yarn start --debug
 
 ## TypeScript
 

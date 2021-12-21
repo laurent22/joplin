@@ -48,5 +48,5 @@ while [ "$NUM" -lt 400 ]; do
 	echo "config sync.10.password hunter1hunter2hunter3" >> "$CMD_FILE"
 	echo "sync" >> "$CMD_FILE"
 
-	yarn start -- --profile "$PROFILE_DIR" batch "$CMD_FILE"
+	yarn start --profile "$PROFILE_DIR" batch "$CMD_FILE"
 done

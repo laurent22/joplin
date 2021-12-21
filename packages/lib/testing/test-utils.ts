@@ -542,7 +542,7 @@ async function loadEncryptionMasterKey(id: number = null, useExisting = false) {
 
 function mustRunInBand() {
 	if (!process.argv.includes('--runInBand')) {
-		throw new Error('Tests must be run sequentially for this sync target, with the --runInBand arg. eg `npm test -- --runInBand`');
+		throw new Error('Tests must be run sequentially for this sync target, with the --runInBand arg. eg `yarn test --runInBand`');
 	}
 }
 

@@ -20,7 +20,7 @@ The desktop application is built for Windows, macOS and Linux via continuous int
 
 The app is built and upload to GitHub using:
 
-	yarn run releaseAndroid -- --type=prerelease
+	yarn run releaseAndroid --type=prerelease
 
 The "type" parameter can be either "release" or "prerelease"
 

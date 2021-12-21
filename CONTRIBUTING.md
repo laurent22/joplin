@@ -74,13 +74,13 @@ yarn test
 To run just one particular file:
 
 ```sh
-yarn test -- --filter=markdownUtils # Don't add the .js extension
+yarn test --filter=markdownUtils # Don't add the .js extension
 ```
 
 To filter tests. For example, to run all the test units that contain "should handle conflict" in their description:
 
 ```sh
-yarn test -- --filter="should handle conflict"
+yarn test --filter="should handle conflict"
 ```
 
 ## About abandoned pull requests
