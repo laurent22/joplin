@@ -22,10 +22,15 @@ export default class BackOffHandler {
 
 	private backOffIntervals_ = Array(100).fill(0).concat([0, 1, 1, 2, 3, 5, 8]);
 	private lastRequestTime_ = 0;
+	private pluginId_: string;
 	private resetBackOffInterval_ = (this.backOffIntervals_[this.backOffIntervals_.length - 1] + 1) * 1000;
 	private backOffIndex_ = 0;
 	private waitCount_ = 0;
 	private maxWaitCount_ = 100;
+
+	public constructor(pluginId: string) {
+		this.pluginId_ = pluginId;
+	}
 
 	private backOffInterval() {
 		const now = Date.now();
@@ -47,9 +52,9 @@ export default class BackOffHandler {
 
 		this.waitCount_++;
 
-		logger.warn(`Applying a backoff of ${interval} seconds due to frequent plugin API calls. Consider reducing the number of calls, caching the data, or requesting more data per call. API call was: `, path, args, `[Wait count: ${this.waitCount_}]`);
+		logger.warn(`Plugin ${this.pluginId_}: Applying a backoff of ${interval} seconds due to frequent plugin API calls. Consider reducing the number of calls, caching the data, or requesting more data per call. API call was: `, path, args, `[Wait count: ${this.waitCount_}]`);
 
-		if (this.waitCount_ > this.maxWaitCount_) throw new Error(`More than ${this.maxWaitCount_} API alls are waiting - aborting. Please consider queuing the API calls in your plugins to reduce the load on the application.`);
+		if (this.waitCount_ > this.maxWaitCount_) throw new Error(`Plugin ${this.pluginId_}: More than ${this.maxWaitCount_} API alls are waiting - aborting. Please consider queuing the API calls in your plugins to reduce the load on the application.`);
 
 		await time.sleep(interval);
 

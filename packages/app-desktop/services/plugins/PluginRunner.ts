@@ -99,7 +99,7 @@ export default class PluginRunner extends BasePluginRunner {
 
 	private backOffHandler(pluginId: string): BackOffHandler {
 		if (!this.backOffHandlers_[pluginId]) {
-			this.backOffHandlers_[pluginId] = new BackOffHandler();
+			this.backOffHandlers_[pluginId] = new BackOffHandler(pluginId);
 		}
 		return this.backOffHandlers_[pluginId];
 	}
