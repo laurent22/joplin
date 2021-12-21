@@ -15,7 +15,7 @@ async function main() {
 	const newVersion = (await execCommand2('npm version patch')).trim();
 
 	console.info(`New version: ${newVersion}`);
-	const tagName = `plugin-repo-cli-v${newVersion}`;
+	const tagName = `plugin-repo-cli-${newVersion}`;
 	console.info(`Tag name: ${tagName}`);
 
 	await execCommand2('npm publish');
