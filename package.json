@@ -47,7 +47,7 @@
     "tsc": "yarn workspaces foreach --parallel --verbose --interlaced run tsc",
     "updateIgnored": "gulp updateIgnoredTypeScriptBuild",
     "updatePluginTypes": "./packages/generator-joplin/updateTypes.sh",
-    "watch": "yarn workspaces foreach --parallel --verbose --interlaced run watch",
+    "watch": "yarn workspaces foreach --parallel --verbose --interlaced --jobs 999 run watch",
     "watchWebsite": "nodemon --verbose --watch Assets/WebsiteAssets --watch packages/tools/website/build.js --ext md,ts,js,mustache,css,tsx,gif,png,svg --exec \"node packages/tools/website/build.js && http-server --port 8077 ../joplin-website/docs -a localhost\""
   },
   "husky": {

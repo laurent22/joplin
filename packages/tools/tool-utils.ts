@@ -78,13 +78,7 @@ async function insertChangelog(tag: string, changelogPath: string, changelog: st
 	return output.join('\n');
 }
 
-export async function completeReleaseWithChangelog(changelogPath: string, newVersion: string, newTag: string, appName: string, isPreRelease: boolean) {
-	const changelog = (await execCommand2(`node ${rootDir}/packages/tools/git-changelog ${newTag} --publish-format full`, { })).trim();
-
-	const newChangelog = await insertChangelog(newTag, changelogPath, changelog, isPreRelease);
-
-	await fs.writeFile(changelogPath, newChangelog);
-
+export function releaseFinalGitCommands(appName: string, newVersion: string, newTag: string): string {
 	const finalCmds = [
 		'git pull',
 		'git add -A',
@@ -94,6 +88,16 @@ export async function completeReleaseWithChangelog(changelogPath: string, newVer
 		'git push --tags',
 	];
 
+	return finalCmds.join(' && ');
+}
+
+export async function completeReleaseWithChangelog(changelogPath: string, newVersion: string, newTag: string, appName: string, isPreRelease: boolean) {
+	const changelog = (await execCommand2(`node ${rootDir}/packages/tools/git-changelog ${newTag} --publish-format full`, { })).trim();
+
+	const newChangelog = await insertChangelog(newTag, changelogPath, changelog, isPreRelease);
+
+	await fs.writeFile(changelogPath, newChangelog);
+
 	console.info('');
 	console.info('Verify that the changelog is correct:');
 	console.info('');
@@ -101,7 +105,7 @@ export async function completeReleaseWithChangelog(changelogPath: string, newVer
 	console.info('');
 	console.info('Then run these commands:');
 	console.info('');
-	console.info(finalCmds.join(' && '));
+	console.info(releaseFinalGitCommands(appName, newVersion, newTag));
 }
 
 async function loadGitHubUsernameCache() {
