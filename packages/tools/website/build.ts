@@ -19,6 +19,7 @@ const docDir = `${dirname(dirname(dirname(dirname(__dirname))))}/joplin-website/
 if (!pathExistsSync(docDir)) throw new Error(`Doc directory does not exist: ${docDir}`);
 
 const websiteAssetDir = `${rootDir}/Assets/WebsiteAssets`;
+const readmeDir = `${rootDir}/readme`;
 const mainTemplateHtml = readFileSync(`${websiteAssetDir}/templates/main-new.mustache`, 'utf8');
 const frontTemplateHtml = readFileSync(`${websiteAssetDir}/templates/front.mustache`, 'utf8');
 const plansTemplateHtml = readFileSync(`${websiteAssetDir}/templates/plans.mustache`, 'utf8');
@@ -247,7 +248,7 @@ async function main() {
 	// PLANS PAGE
 	// =============================================================
 
-	const planPageFaqMd = await readFile(`${rootDir}/readme/faq_joplin_cloud.md`, 'utf8');
+	const planPageFaqMd = await readFile(`${readmeDir}/faq_joplin_cloud.md`, 'utf8');
 	const planPageFaqHtml = getMarkdownIt().render(planPageFaqMd, {});
 
 	const planPageParams: PlanPageParams = {
@@ -276,17 +277,21 @@ async function main() {
 	// Markdown files under /readme
 	// =============================================================
 
-	const mdFiles = glob.sync(`${rootDir}/readme/**/*.md`).map((f: string) => f.substr(rootDir.length + 1));
+	const mdFiles = glob.sync(`${readmeDir}/**/*.md`).map((f: string) => f.substr(rootDir.length + 1));
 	const sources = [];
 	const donateLinksMd = await getDonateLinks();
 
 	const makeTargetFilePath = (input: string): string => {
-		const filenameNoExt = basename(input, '.md');
-
 		if (isNewsFile(input)) {
-			return `${docDir}/news/${filenameNoExt}/index.html`; // `${input.replace(/\.md/, '').replace(/readme\/news\//, 'docs/news/')}/index.html`;
+			const filenameNoExt = basename(input, '.md');
+			return `${docDir}/news/${filenameNoExt}/index.html`;
 		} else {
-			return `${docDir}/${filenameNoExt}/index.html`;
+			// Input is for example "readme/spec/interop_with_frontmatter.md",
+			// and we need to convert it to
+			// "docs/spec/interop_with_frontmatter/index.html" and prefix it
+			// with the website repo full path.
+
+			return `${docDir}/${input.replace(/\.md/, '/index.html').replace(/readme\//, '')}`;
 		}
 	};
 
