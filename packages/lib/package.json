@@ -10,7 +10,7 @@
   },
   "scripts": {
     "tsc": "tsc --project tsconfig.json",
-    "watch": "tsc --watch --project tsconfig.json",
+    "watch": "tsc --watch --preserveWatchOutput --project tsconfig.json",
     "generatePluginTypes": "rm -rf ./plugin_types && yarn run tsc --declaration --declarationDir ./plugin_types --project tsconfig.json",
     "test": "jest --verbose=false",
     "test-ci": "yarn test"

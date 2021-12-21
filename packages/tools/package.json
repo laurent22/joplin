@@ -7,7 +7,7 @@
   "scripts": {
     "updateIgnored": "gulp updateIgnoredTypeScriptBuild",
     "tsc": "tsc --project tsconfig.json",
-    "watch": "tsc --watch --project tsconfig.json",
+    "watch": "tsc --watch --preserveWatchOutput --project tsconfig.json",
     "test": "jest --verbose=false",
     "test-ci": "yarn test"
   },

@@ -11,7 +11,7 @@
   "scripts": {
     "buildAssets": "node Tools/buildAssets.js",
     "tsc": "tsc --project tsconfig.json",
-    "watch": "tsc --watch --project tsconfig.json",
+    "watch": "tsc --watch --preserveWatchOutput --project tsconfig.json",
     "test": "jest",
     "test-ci": "yarn test"
   },

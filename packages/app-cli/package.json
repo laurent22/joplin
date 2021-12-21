@@ -12,7 +12,7 @@
     "start": "gulp build -L && node \"build/main.js\" --stack-trace-enabled --log-level debug --env dev",
     "start-no-build": "node \"build/main.js\" --stack-trace-enabled --log-level debug --env dev",
     "tsc": "tsc --project tsconfig.json",
-    "watch": "tsc --watch --project tsconfig.json"
+    "watch": "tsc --watch --preserveWatchOutput --project tsconfig.json"
   },
   "bugs": {
     "url": "https://github.com/laurent22/joplin/issues"
