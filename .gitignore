@@ -1950,6 +1950,9 @@ packages/tools/release-electron.js.map
 packages/tools/release-ios.d.ts
 packages/tools/release-ios.js
 packages/tools/release-ios.js.map
+packages/tools/release-plugin-repo-cli.d.ts
+packages/tools/release-plugin-repo-cli.js
+packages/tools/release-plugin-repo-cli.js.map
 packages/tools/release-server.d.ts
 packages/tools/release-server.js
 packages/tools/release-server.js.map

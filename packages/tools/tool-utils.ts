@@ -78,13 +78,7 @@ async function insertChangelog(tag: string, changelogPath: string, changelog: st
 	return output.join('\n');
 }
 
-export async function completeReleaseWithChangelog(changelogPath: string, newVersion: string, newTag: string, appName: string, isPreRelease: boolean) {
-	const changelog = (await execCommand2(`node ${rootDir}/packages/tools/git-changelog ${newTag} --publish-format full`, { })).trim();
-
-	const newChangelog = await insertChangelog(newTag, changelogPath, changelog, isPreRelease);
-
-	await fs.writeFile(changelogPath, newChangelog);
-
+export function releaseFinalGitCommands(appName: string, newVersion: string, newTag: string): string {
 	const finalCmds = [
 		'git pull',
 		'git add -A',
@@ -94,6 +88,16 @@ export async function completeReleaseWithChangelog(changelogPath: string, newVer
 		'git push --tags',
 	];
 
+	return finalCmds.join(' && ');
+}
+
+export async function completeReleaseWithChangelog(changelogPath: string, newVersion: string, newTag: string, appName: string, isPreRelease: boolean) {
+	const changelog = (await execCommand2(`node ${rootDir}/packages/tools/git-changelog ${newTag} --publish-format full`, { })).trim();
+
+	const newChangelog = await insertChangelog(newTag, changelogPath, changelog, isPreRelease);
+
+	await fs.writeFile(changelogPath, newChangelog);
+
 	console.info('');
 	console.info('Verify that the changelog is correct:');
 	console.info('');
@@ -101,7 +105,7 @@ export async function completeReleaseWithChangelog(changelogPath: string, newVer
 	console.info('');
 	console.info('Then run these commands:');
 	console.info('');
-	console.info(finalCmds.join(' && '));
+	console.info(releaseFinalGitCommands(appName, newVersion, newTag));
 }
 
 async function loadGitHubUsernameCache() {
@@ -160,7 +164,8 @@ export function execCommandVerbose(commandName: string, args: string[] = []) {
 
 interface ExecCommandOptions {
 	showInput?: boolean;
-	showOutput?: boolean;
+	showStdout?: boolean;
+	showStderr?: boolean;
 	quiet?: boolean;
 }
 
@@ -173,14 +178,16 @@ interface ExecCommandOptions {
 export async function execCommand2(command: string | string[], options: ExecCommandOptions = null): Promise<string> {
 	options = {
 		showInput: true,
-		showOutput: true,
+		showStdout: true,
+		showStderr: true,
 		quiet: false,
 		...options,
 	};
 
 	if (options.quiet) {
 		options.showInput = false;
-		options.showOutput = false;
+		options.showStdout = false;
+		options.showStderr = false;
 	}
 
 	if (options.showInput) {
@@ -195,7 +202,8 @@ export async function execCommand2(command: string | string[], options: ExecComm
 	const executableName = args[0];
 	args.splice(0, 1);
 	const promise = execa(executableName, args);
-	if (options.showOutput) promise.stdout.pipe(process.stdout);
+	if (options.showStdout) promise.stdout.pipe(process.stdout);
+	if (options.showStderr) promise.stdout.pipe(process.stderr);
 	const result = await promise;
 	return result.stdout.trim();
 }

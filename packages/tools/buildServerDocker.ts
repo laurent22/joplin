@@ -26,7 +26,7 @@ async function main() {
 	const buildDate = moment(new Date().getTime()).format('YYYY-MM-DDTHH:mm:ssZ');
 	let revision = '';
 	try {
-		revision = await execCommand2('git rev-parse --short HEAD', { showOutput: false });
+		revision = await execCommand2('git rev-parse --short HEAD', { showStdout: false });
 	} catch (error) {
 		console.info('Could not get git commit: metadata revision field will be empty');
 	}
