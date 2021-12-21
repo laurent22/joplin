@@ -153,7 +153,7 @@ describe('models/Note', function() {
 		const resource = (await Resource.all())[0];
 		expect((await Resource.all()).length).toBe(1);
 
-		const duplicatedNote = await Note.duplicate(note.id);
+		const duplicatedNote = await Note.duplicate(note.id, { duplicateResources: true });
 
 		const resources: ResourceEntity[] = await Resource.all();
 		expect(resources.length).toBe(2);
