@@ -45,7 +45,7 @@ async function checkPluginRepository(dirPath: string, dryRun: boolean) {
 async function extractPluginFilesFromPackage(existingManifests: any, workDir: string, packageName: string, destDir: string): Promise<any> {
 	const previousDir = chdir(workDir);
 
-	await execCommand2(`npm install ${packageName} --save --ignore-scripts`, { showStdout: false });
+	await execCommand2(`npm install ${packageName} --save --ignore-scripts`, { showStderr: false, showStdout: false });
 
 	const pluginDir = resolveRelativePathWithinDir(workDir, 'node_modules', packageName, 'publish');
 
@@ -228,7 +228,7 @@ async function commandBuild(args: CommandBuildArgs) {
 
 	chdir(previousDir);
 
-	const searchResults = (await execCommand2('npm search joplin-plugin --searchlimit 5000 --json', { showStdout: false })).trim();
+	const searchResults = (await execCommand2('npm search joplin-plugin --searchlimit 5000 --json', { showStdout: false, showStderr: false })).trim();
 	const npmPackages = pluginInfoFromSearchResults(JSON.parse(searchResults));
 
 	for (const npmPackage of npmPackages) {
