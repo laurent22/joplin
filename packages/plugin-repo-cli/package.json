@@ -1,6 +1,6 @@
 {
   "name": "@joplin/plugin-repo-cli",
-  "version": "2.6.8",
+  "version": "2.6.9",
   "description": "",
   "main": "index.js",
   "bin": "./dist/index.js",
