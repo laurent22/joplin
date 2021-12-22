@@ -1,7 +1,11 @@
 import { githubOauthToken } from '@joplin/tools/tool-utils';
 import { pathExists, readdir, readFile, stat, writeFile } from 'fs-extra';
+
+// We need to require `.default` due to this issue:
+// https://github.com/node-fetch/node-fetch/issues/450#issuecomment-387045223
+const fetch = require('node-fetch').default;
+
 const ghReleaseAssets = require('gh-release-assets');
-const fetch = require('node-fetch');
 
 const apiBaseUrl = 'https://api.github.com/repos/joplin/plugins';
 
@@ -25,6 +29,7 @@ interface ReleaseAsset {
 
 interface Release {
 	upload_url: string;
+	html_url: string;
 	assets: ReleaseAsset[];
 }
 
@@ -123,6 +128,8 @@ async function saveStats(statFilePath: string, stats: any) {
 
 export default async function(args: Args) {
 	const release = await getRelease();
+	console.info(`Got release with ${release.assets.length} assets from ${release.html_url}`);
+
 	const statFilePath = `${args.pluginRepoDir}/stats.json`;
 	const stats = await createStats(statFilePath, release);
 
