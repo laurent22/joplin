@@ -214,10 +214,6 @@ msgstr ""
 msgid "Accept"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:546
-msgid "Access Key"
-msgstr ""
-
 #: packages/app-desktop/gui/ResourceScreen.tsx:95
 msgid "Action"
 msgstr "عمل"
@@ -529,7 +525,7 @@ msgid ""
 "for this account"
 msgstr ""
 
-#: packages/lib/services/share/ShareService.ts:272
+#: packages/lib/services/share/ShareService.ts:315
 msgid ""
 "Cannot share encrypted notebook with recipient %s because they have not "
 "enabled end-to-end encryption. They may do so from the screen Configuration "
@@ -600,7 +596,7 @@ msgstr ""
 "برای بازیابی یادداشت بر روی «%s» کلیک کنید. یادداشت در دفترچه‌ای به نام «%s» "
 "کپی می‌شود. این نسخه از یادداشت جایگزین یا تغییر داده نمی‌شود."
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:373
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:376
 #, fuzzy
 msgid "Click to add tags..."
 msgstr "بررسی برای ارتقا..."
@@ -730,7 +726,7 @@ msgstr "تبدیل به فهرست کارها"
 
 #: packages/app-desktop/gui/MenuBar.tsx:422
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:13
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:764
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:755
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:143
 msgid "Copy"
 msgstr "کپی"
@@ -819,7 +815,7 @@ msgstr ""
 msgid "Could not upgrade master key: %s"
 msgstr "کلید اصلی ارتقا نیافت: %s"
 
-#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:27
+#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:26
 msgid ""
 "Could not verify the share status of this notebook - aborting. Please try "
 "again when you are connected to the internet."
@@ -910,7 +906,7 @@ msgid "Custom TLS certificates"
 msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:18
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:754
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:745
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:135
 msgid "Cut"
 msgstr "بریدن"
@@ -982,7 +978,7 @@ msgstr "یادداشت حذف شود؟"
 msgid "Delete local data and re-download from sync target"
 msgstr ""
 
-#: packages/lib/models/Note.ts:759
+#: packages/lib/models/Note.ts:760
 msgid "Delete note \"%s\"?"
 msgstr "یادداشت «%s» حذف شود؟"
 
@@ -1016,7 +1012,7 @@ msgstr ""
 msgid "Delete plugin \"%s\"?"
 msgstr "یادداشت «%s» حذف شود؟"
 
-#: packages/lib/models/Note.ts:761
+#: packages/lib/models/Note.ts:762
 msgid "Delete these %d notes?"
 msgstr "تعداد %d یادداشت حذف شود؟"
 
@@ -1101,7 +1097,7 @@ msgstr ""
 msgid "Discard changes"
 msgstr "لغو تغییرات"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:437
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:440
 msgid "Dismiss"
 msgstr ""
 
@@ -1467,7 +1463,7 @@ msgid "Error opening note in editor: %s"
 msgstr "خطا در بازکردن یادداشت در ویرایشگر: %s"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:65
-#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:35
+#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:31
 #: packages/lib/services/KeymapService.ts:197
 #, fuzzy
 msgid "Error: %s"
@@ -1634,7 +1630,7 @@ msgid ""
 msgstr ""
 
 #: packages/lib/models/Setting.ts:568
-msgid "Force Path Style"
+msgid "Force path style"
 msgstr ""
 
 #: packages/lib/commands/historyForward.ts:6
@@ -1706,6 +1702,10 @@ msgstr "توکن مجوز:"
 msgid "Heading"
 msgstr "عنوان"
 
+#: packages/server/src/services/MustacheService.ts:201
+msgid "Help"
+msgstr "کمک"
+
 #: packages/app-desktop/gui/MenuBar.tsx:492
 msgid "Hide %s"
 msgstr "پنهان کردن %s"
@@ -1720,6 +1720,10 @@ msgstr "Joplin را مخفی کنید"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:14
 msgid "Highlight"
+msgstr ""
+
+#: packages/server/src/services/MustacheService.ts:196
+msgid "Home"
 msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:78
@@ -1753,12 +1757,6 @@ msgstr "شناسه"
 #: packages/lib/Synchronizer.ts:304
 msgid "Idle"
 msgstr "بیکار"
-
-#: packages/lib/models/Setting.ts:867
-msgid ""
-"If true, sort order buttons (field + reverse) for notes are shown at the top "
-"of Note List."
-msgstr ""
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:109
 msgid "Ignore"
@@ -1842,7 +1840,7 @@ msgstr ""
 msgid "In progress"
 msgstr "درحال انجام"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:521
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:524
 msgid "In: %s"
 msgstr "در: %s"
 
@@ -1927,6 +1925,10 @@ msgstr "مورب"
 #: packages/lib/services/ReportService.ts:185
 msgid "Item \"%s\" could not be downloaded: %s"
 msgstr "مورد «%s» بارگیری نشد: %s"
+
+#: packages/server/src/services/MustacheService.ts:198
+msgid "Items"
+msgstr ""
 
 #: packages/lib/services/ReportService.ts:208
 msgid "Items that cannot be decrypted"
@@ -2058,7 +2060,7 @@ msgstr "آخرین خطا: %s"
 msgid "Later"
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:613
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:604
 msgid "Layout"
 msgstr "قالب"
 
@@ -2066,7 +2068,7 @@ msgstr "قالب"
 msgid "Layout button sequence"
 msgstr "توالی دکمه قالب"
 
-#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:11
+#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:10
 #, fuzzy
 msgid "Leave notebook..."
 msgstr "به اشتراک گذاری یادداشت..."
@@ -2121,6 +2123,7 @@ msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:521
 #: packages/app-mobile/components/screens/log.js:100
+#: packages/server/src/services/MustacheService.ts:199
 msgid "Log"
 msgstr "لاگ"
 
@@ -2139,6 +2142,10 @@ msgstr "ورود با Dropbox"
 #: packages/app-mobile/components/screens/onedrive-login.js:110
 msgid "Login with OneDrive"
 msgstr "ورود با OneDrive"
+
+#: packages/server/src/services/MustacheService.ts:202
+msgid "Logout"
+msgstr ""
 
 #: packages/app-desktop/gui/MenuBar.tsx:705
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:583
@@ -2641,7 +2648,7 @@ msgid "Passwords do not match!"
 msgstr "گذرواژه‌ها با یکدیگر مطابق نیستند!"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:23
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:774
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:765
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:150
 msgid "Paste"
 msgstr "چسباندن"
@@ -2849,7 +2856,7 @@ msgstr "رمزنگاری"
 msgid "Re-upload local data to sync target"
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:436
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:439
 msgid "Read more about it"
 msgstr ""
 
@@ -2882,10 +2889,6 @@ msgstr ""
 #: packages/app-mobile/components/screens/status.js:144
 msgid "Refresh"
 msgstr "تازه‌‌سازی"
-
-#: packages/lib/models/Setting.ts:535
-msgid "Region"
-msgstr ""
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:615
 #: packages/app-desktop/gui/Root.tsx:173
@@ -2995,8 +2998,21 @@ msgstr ""
 msgid "S3"
 msgstr ""
 
+#: packages/lib/models/Setting.ts:546
+msgid "S3 access key"
+msgstr ""
+
 #: packages/lib/models/Setting.ts:506
+#, fuzzy
 msgid "S3 bucket"
+msgstr "AWS S3"
+
+#: packages/lib/models/Setting.ts:535
+msgid "S3 region"
+msgstr ""
+
+#: packages/lib/models/Setting.ts:557
+msgid "S3 secret key"
 msgstr ""
 
 #: packages/lib/models/Setting.ts:521
@@ -3064,10 +3080,6 @@ msgstr "جستجو..."
 #: packages/app-cli/app/command-search.js:13
 msgid "Searches for the given <pattern> in all the notes."
 msgstr "برای <pattern> داده شده در همه یادداشت‌ها جستجو می‌کند."
-
-#: packages/lib/models/Setting.ts:557
-msgid "Secret Key"
-msgstr ""
 
 #: packages/lib/models/Setting.ts:1194
 msgid "See the pre-release page for more details: %s"
@@ -3500,6 +3512,10 @@ msgstr "برچسب‌ها"
 msgid "Take photo"
 msgstr "گرفتن عکس"
 
+#: packages/server/src/services/MustacheService.ts:200
+msgid "Tasks"
+msgstr ""
+
 #: packages/lib/models/Setting.ts:1228
 msgid "Text editor command"
 msgstr "دستور ویرایشگر متن"
@@ -3532,7 +3548,7 @@ msgstr ""
 msgid "The application must be restarted for these changes to take effect."
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:508
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:511
 #, fuzzy
 msgid ""
 "The attachments will no longer be watched when you switch to a different "
@@ -3580,7 +3596,7 @@ msgid ""
 "factor of 1.Restart app to see changes."
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:507
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:510
 #, fuzzy
 msgid "The following attachments are being watched for changes:"
 msgstr "پیوست های زیر برای تغییر تحت نظر هستند:"
@@ -3789,7 +3805,7 @@ msgstr "این یادداشت اطلاعات ژئولوکیشن ندارد."
 msgid "This note has been modified:"
 msgstr "این یادداشت تغییر یافته است:"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:613
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:604
 msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
 "note."
@@ -3801,7 +3817,7 @@ msgstr ""
 msgid "This note has no history"
 msgstr "این یادداشت هیچ تاریخچه ای ندارد"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:435
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:438
 msgid ""
 "This Rich Text editor has a number of limitations and it is recommended to "
 "be aware of them before using it."
@@ -3826,7 +3842,7 @@ msgstr ""
 msgid "This will open a new screen. Save your current changes?"
 msgstr "این یک صفحه جدید باز می‌کند. تغییرات فعلی ذخیره شوند؟"
 
-#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:17
+#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:16
 msgid ""
 "This will remove the notebook from your collection and you will no longer "
 "have access to its content. Do you wish to continue?"
@@ -4014,7 +4030,7 @@ msgstr ""
 msgid "Unknown flag: %s"
 msgstr "پرچم ناشناخته: %s"
 
-#: packages/lib/Synchronizer.ts:1087
+#: packages/lib/Synchronizer.ts:1088
 msgid ""
 "Unknown item type downloaded - please upgrade Joplin to the latest version"
 msgstr ""
@@ -4153,6 +4169,10 @@ msgid ""
 "Used where a fixed width font is needed to lay out text legibly (e.g. "
 "tables, checkboxes, code). If not found, a generic monospace (fixed width) "
 "font is used."
+msgstr ""
+
+#: packages/server/src/services/MustacheService.ts:197
+msgid "Users"
 msgstr ""
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:182
@@ -4329,9 +4349,6 @@ msgstr "بزرگنمایی"
 msgid "Zoom Out"
 msgstr "کوچک نمایی"
 
-#~ msgid "AWS S3"
-#~ msgstr "AWS S3"
-
 #~ msgid "Master keys that need upgrading"
 #~ msgstr "کلید‌های اصلی به ارتقا نیاز دارند"
 
@@ -4415,9 +4432,6 @@ msgstr "کوچک نمایی"
 
 #~ msgid "Check Status"
 #~ msgstr "بررسی وضعیت"
-
-#~ msgid "Help"
-#~ msgstr "کمک"
 
 #~ msgid ""
 #~ "Type a note title or part of its content to jump to it. Or type # "

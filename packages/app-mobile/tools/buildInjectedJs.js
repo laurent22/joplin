@@ -26,7 +26,8 @@ async function buildCodeMirrorBundle() {
 	const sourceFile = `${mobileDir}/components/NoteEditor/CodeMirror.ts`;
 	const fullBundleFile = `${mobileDir}/components/NoteEditor/CodeMirror.bundle.js`;
 
-	await execa('./node_modules/rollup/dist/bin/rollup', [
+	await execa('yarn', [
+		'run', 'rollup',
 		sourceFile,
 		'--name', 'codeMirrorBundle',
 		'-f', 'iife',
@@ -35,7 +36,9 @@ async function buildCodeMirrorBundle() {
 		'-p', '@rollup/plugin-typescript',
 	]);
 
-	await execa('./node_modules/uglify-js/bin/uglifyjs', [
+	// await execa('./node_modules/uglify-js/bin/uglifyjs', [
+	await execa('yarn', [
+		'run', 'uglifyjs',
 		'--compress',
 		'-o', codeMirrorBundleFile,
 		fullBundleFile,
@@ -45,7 +48,7 @@ async function buildCodeMirrorBundle() {
 async function main() {
 	await fs.mkdirp(outputDir);
 	await buildCodeMirrorBundle();
-	await copyJs('webviewLib', `${mobileDir}/node_modules/@joplin/lib/renderers/webviewLib.js`);
+	await copyJs('webviewLib', `${mobileDir}/../lib/renderers/webviewLib.js`);
 	await copyJs('CodeMirror.bundle', `${mobileDir}/components/NoteEditor/CodeMirror.bundle.min.js`);
 }
 

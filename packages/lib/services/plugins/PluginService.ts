@@ -10,7 +10,7 @@ import Logger from '../../Logger';
 import RepositoryApi from './RepositoryApi';
 import produce from 'immer';
 const compareVersions = require('compare-versions');
-const uslug = require('uslug');
+const uslug = require('@joplin/fork-uslug');
 
 const logger = Logger.create('PluginService');
 

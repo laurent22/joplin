@@ -227,10 +227,6 @@ msgstr ""
 msgid "Accept"
 msgstr "Принять"
 
-#: packages/lib/models/Setting.ts:546
-msgid "Access Key"
-msgstr ""
-
 #: packages/app-desktop/gui/ResourceScreen.tsx:95
 msgid "Action"
 msgstr "Действие"
@@ -546,7 +542,7 @@ msgstr ""
 "Невозможно сохранить %s \"%s\" из-за превышения допустимого размера (%s) для "
 "этой учетной записи"
 
-#: packages/lib/services/share/ShareService.ts:272
+#: packages/lib/services/share/ShareService.ts:315
 msgid ""
 "Cannot share encrypted notebook with recipient %s because they have not "
 "enabled end-to-end encryption. They may do so from the screen Configuration "
@@ -616,7 +612,7 @@ msgstr ""
 "Нажмите “%s”, чтобы восстановить заметку. Она будет скопирована в блокнот "
 "“%s”. Текущая версия заметки не будет заменена или изменена."
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:373
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:376
 msgid "Click to add tags..."
 msgstr "Щелкните для добавления тегов..."
 
@@ -743,7 +739,7 @@ msgstr "Преобразовать в задачу"
 
 #: packages/app-desktop/gui/MenuBar.tsx:422
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:13
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:764
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:755
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:143
 msgid "Copy"
 msgstr "Копировать"
@@ -833,7 +829,7 @@ msgstr ""
 msgid "Could not upgrade master key: %s"
 msgstr "Не удалось обновить мастер-ключ: %s"
 
-#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:27
+#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:26
 msgid ""
 "Could not verify the share status of this notebook - aborting. Please try "
 "again when you are connected to the internet."
@@ -922,7 +918,7 @@ msgid "Custom TLS certificates"
 msgstr "Пользовательские сертификаты TLS"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:18
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:754
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:745
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:135
 msgid "Cut"
 msgstr "Вырезать"
@@ -993,7 +989,7 @@ msgstr "Удалить строку"
 msgid "Delete local data and re-download from sync target"
 msgstr "Удалить локальные данные и перегрузить данные с цели синхронизации"
 
-#: packages/lib/models/Note.ts:759
+#: packages/lib/models/Note.ts:760
 msgid "Delete note \"%s\"?"
 msgstr "Удалить заметку \"%s\"?"
 
@@ -1026,7 +1022,7 @@ msgstr ""
 msgid "Delete plugin \"%s\"?"
 msgstr "Удалить плагин \"%s\"?"
 
-#: packages/lib/models/Note.ts:761
+#: packages/lib/models/Note.ts:762
 msgid "Delete these %d notes?"
 msgstr "Удалить эти %d заметки?"
 
@@ -1115,7 +1111,7 @@ msgstr ""
 msgid "Discard changes"
 msgstr "Отменить изменения"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:437
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:440
 msgid "Dismiss"
 msgstr "Отклонить"
 
@@ -1485,7 +1481,7 @@ msgid "Error opening note in editor: %s"
 msgstr "Ошибка при открытии заметки в редакторе: %s"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:65
-#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:35
+#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:31
 #: packages/lib/services/KeymapService.ts:197
 msgid "Error: %s"
 msgstr "Ошибка: %s"
@@ -1654,7 +1650,7 @@ msgstr ""
 "`help keymap`"
 
 #: packages/lib/models/Setting.ts:568
-msgid "Force Path Style"
+msgid "Force path style"
 msgstr ""
 
 #: packages/lib/commands/historyForward.ts:6
@@ -1725,6 +1721,10 @@ msgstr "Одобрить авторизацию"
 msgid "Heading"
 msgstr "Заголовок"
 
+#: packages/server/src/services/MustacheService.ts:201
+msgid "Help"
+msgstr "Помощь"
+
 #: packages/app-desktop/gui/MenuBar.tsx:492
 msgid "Hide %s"
 msgstr "Скрыть %s"
@@ -1741,6 +1741,10 @@ msgstr "Скрыть Joplin"
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:14
 msgid "Highlight"
 msgstr "Выделение"
+
+#: packages/server/src/services/MustacheService.ts:196
+msgid "Home"
+msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:78
 msgid "Horizontal Rule"
@@ -1773,12 +1777,6 @@ msgstr "ID"
 #: packages/lib/Synchronizer.ts:304
 msgid "Idle"
 msgstr "Простой"
-
-#: packages/lib/models/Setting.ts:867
-msgid ""
-"If true, sort order buttons (field + reverse) for notes are shown at the top "
-"of Note List."
-msgstr ""
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:109
 msgid "Ignore"
@@ -1889,7 +1887,7 @@ msgstr "Для использования веб-клиппера сделайт
 msgid "In progress"
 msgstr "Выполнение"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:521
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:524
 msgid "In: %s"
 msgstr "В: %s"
 
@@ -1970,6 +1968,10 @@ msgstr "Курсивный"
 #: packages/lib/services/ReportService.ts:185
 msgid "Item \"%s\" could not be downloaded: %s"
 msgstr "Не удается загрузить файл “%s”: %s"
+
+#: packages/server/src/services/MustacheService.ts:198
+msgid "Items"
+msgstr ""
 
 #: packages/lib/services/ReportService.ts:208
 msgid "Items that cannot be decrypted"
@@ -2102,7 +2104,7 @@ msgstr "Последняя ошибка: %s"
 msgid "Later"
 msgstr "Позже"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:613
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:604
 msgid "Layout"
 msgstr "Вид редактора"
 
@@ -2110,7 +2112,7 @@ msgstr "Вид редактора"
 msgid "Layout button sequence"
 msgstr "Порядок переключения вида"
 
-#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:11
+#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:10
 #, fuzzy
 msgid "Leave notebook..."
 msgstr "Поделиться блокнотом..."
@@ -2168,6 +2170,7 @@ msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:521
 #: packages/app-mobile/components/screens/log.js:100
+#: packages/server/src/services/MustacheService.ts:199
 msgid "Log"
 msgstr "Журнал"
 
@@ -2186,6 +2189,10 @@ msgstr "Войти с Dropbox"
 #: packages/app-mobile/components/screens/onedrive-login.js:110
 msgid "Login with OneDrive"
 msgstr "Войти с OneDrive"
+
+#: packages/server/src/services/MustacheService.ts:202
+msgid "Logout"
+msgstr ""
 
 #: packages/app-desktop/gui/MenuBar.tsx:705
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:583
@@ -2690,7 +2697,7 @@ msgid "Passwords do not match!"
 msgstr "Пароли не совпадают!"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:23
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:774
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:765
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:150
 msgid "Paste"
 msgstr "Вставить"
@@ -2901,7 +2908,7 @@ msgstr "Зашифровать заново"
 msgid "Re-upload local data to sync target"
 msgstr "Перегрузка локальных данных в цель синхронизации"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:436
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:439
 msgid "Read more about it"
 msgstr "Узнать подробнее"
 
@@ -2934,10 +2941,6 @@ msgstr "Повторить"
 #: packages/app-mobile/components/screens/status.js:144
 msgid "Refresh"
 msgstr "Обновить"
-
-#: packages/lib/models/Setting.ts:535
-msgid "Region"
-msgstr ""
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:615
 #: packages/app-desktop/gui/Root.tsx:173
@@ -3045,10 +3048,24 @@ msgstr ""
 msgid "S3"
 msgstr ""
 
+#: packages/lib/models/Setting.ts:546
+#, fuzzy
+msgid "S3 access key"
+msgstr "Ключ AWS"
+
 #: packages/lib/models/Setting.ts:506
 #, fuzzy
 msgid "S3 bucket"
 msgstr "AWS S3 bucket"
+
+#: packages/lib/models/Setting.ts:535
+msgid "S3 region"
+msgstr ""
+
+#: packages/lib/models/Setting.ts:557
+#, fuzzy
+msgid "S3 secret key"
+msgstr "Секрет AWS"
 
 #: packages/lib/models/Setting.ts:521
 #, fuzzy
@@ -3116,11 +3133,6 @@ msgstr "Поиск..."
 #: packages/app-cli/app/command-search.js:13
 msgid "Searches for the given <pattern> in all the notes."
 msgstr "Осуществляет поиск по шаблону <pattern> во всех заметках."
-
-#: packages/lib/models/Setting.ts:557
-#, fuzzy
-msgid "Secret Key"
-msgstr "Секрет AWS"
 
 #: packages/lib/models/Setting.ts:1194
 msgid "See the pre-release page for more details: %s"
@@ -3559,6 +3571,10 @@ msgstr "Метки"
 msgid "Take photo"
 msgstr "Сделать фото"
 
+#: packages/server/src/services/MustacheService.ts:200
+msgid "Tasks"
+msgstr ""
+
 #: packages/lib/models/Setting.ts:1228
 msgid "Text editor command"
 msgstr "Команда текстового редактора"
@@ -3592,7 +3608,7 @@ msgstr "Приложение успешно авторизовано."
 msgid "The application must be restarted for these changes to take effect."
 msgstr "Необходимо перезапустить приложение, чтобы применились изменения."
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:508
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:511
 msgid ""
 "The attachments will no longer be watched when you switch to a different "
 "note."
@@ -3648,7 +3664,7 @@ msgstr ""
 "займёт в 2 раза больше места, чем элемент с фактором 1. Перезапустите "
 "приложение, чтобы изменения вступили в силу."
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:507
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:510
 msgid "The following attachments are being watched for changes:"
 msgstr "Отслеживаются изменения следующих вложений:"
 
@@ -3874,7 +3890,7 @@ msgstr "Эта заметка не содержит информации о ге
 msgid "This note has been modified:"
 msgstr "Эта заметка была изменена:"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:613
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:604
 msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
 "note."
@@ -3886,7 +3902,7 @@ msgstr ""
 msgid "This note has no history"
 msgstr "Эта заметка не имеет предыдущих версий"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:435
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:438
 msgid ""
 "This Rich Text editor has a number of limitations and it is recommended to "
 "be aware of them before using it."
@@ -3919,7 +3935,7 @@ msgstr ""
 msgid "This will open a new screen. Save your current changes?"
 msgstr "Будет открыто новое окно. Сохранить текущие изменения?"
 
-#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:17
+#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:16
 #, fuzzy
 msgid ""
 "This will remove the notebook from your collection and you will no longer "
@@ -4106,7 +4122,7 @@ msgstr "Отменить"
 msgid "Unknown flag: %s"
 msgstr "Неизвестный флаг: %s"
 
-#: packages/lib/Synchronizer.ts:1087
+#: packages/lib/Synchronizer.ts:1088
 msgid ""
 "Unknown item type downloaded - please upgrade Joplin to the latest version"
 msgstr ""
@@ -4252,6 +4268,10 @@ msgstr ""
 "Применяется там, где нужен шрифт фиксированной ширины для лучшего "
 "отображения текста (таблицы, отметки, код). Если не найден - используется "
 "подменный моноширинный шрифт."
+
+#: packages/server/src/services/MustacheService.ts:197
+msgid "Users"
+msgstr ""
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:182
 msgid "Valid"
@@ -4427,9 +4447,6 @@ msgstr "Приблизить"
 msgid "Zoom Out"
 msgstr "Отдалить"
 
-#~ msgid "AWS key"
-#~ msgstr "Ключ AWS"
-
 #~ msgid "AWS S3"
 #~ msgstr "AWS S3"
 
@@ -4569,9 +4586,6 @@ msgstr "Отдалить"
 
 #~ msgid "Check Status"
 #~ msgstr "Проверить статус"
-
-#~ msgid "Help"
-#~ msgstr "Помощь"
 
 #~ msgid "OneDrive Dev (For testing only)"
 #~ msgstr "OneDrive Dev (только для тестирования)"

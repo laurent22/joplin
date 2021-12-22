@@ -1,9 +1,12 @@
 #!/usr/bin/env node
 
+require('source-map-support').install();
+
 import * as fs from 'fs-extra';
 import * as path from 'path';
 import * as process from 'process';
 import validatePluginId from '@joplin/lib/services/plugins/utils/validatePluginId';
+import validatePluginVersion from '@joplin/lib/services/plugins/utils/validatePluginVersion';
 import { execCommand2, resolveRelativePathWithinDir, gitPullTry, gitRepoCleanTry, gitRepoClean } from '@joplin/tools/tool-utils.js';
 import checkIfPluginCanBeAdded from './lib/checkIfPluginCanBeAdded';
 import updateReadme from './lib/updateReadme';
@@ -44,7 +47,7 @@ async function checkPluginRepository(dirPath: string, dryRun: boolean) {
 async function extractPluginFilesFromPackage(existingManifests: any, workDir: string, packageName: string, destDir: string): Promise<any> {
 	const previousDir = chdir(workDir);
 
-	await execCommand2(`npm install ${packageName} --save --ignore-scripts`, { showOutput: false });
+	await execCommand2(`npm install ${packageName} --save --ignore-scripts`, { showStderr: false, showStdout: false });
 
 	const pluginDir = resolveRelativePathWithinDir(workDir, 'node_modules', packageName, 'publish');
 
@@ -61,6 +64,7 @@ async function extractPluginFilesFromPackage(existingManifests: any, workDir: st
 	// manifest properties are checked when the plugin is loaded into the app.
 	const manifest = await readJsonFile(manifestFilePath);
 	validatePluginId(manifest.id);
+	validatePluginVersion(manifest.version);
 
 	manifest._npm_package_name = packageName;
 
@@ -192,8 +196,8 @@ async function processNpmPackage(npmPackage: NpmPackage, repoDir: string, dryRun
 
 	if (!dryRun) {
 		if (!(await gitRepoClean())) {
-			await execCommand2('git add -A', { showOutput: false });
-			await execCommand2(['git', 'commit', '-m', commitMessage(actionType, manifest, previousManifest, npmPackage, error)], { showOutput: false });
+			await execCommand2('git add -A', { showStdout: false });
+			await execCommand2(['git', 'commit', '-m', commitMessage(actionType, manifest, previousManifest, npmPackage, error)], { showStdout: false });
 		} else {
 			console.info('Nothing to commit');
 		}
@@ -219,14 +223,14 @@ async function commandBuild(args: CommandBuildArgs) {
 	if (!dryRun) {
 		if (!(await gitRepoClean())) {
 			console.info('Updating README...');
-			await execCommand2('git add -A', { showOutput: true });
-			await execCommand2('git commit -m "Update README"', { showOutput: true });
+			await execCommand2('git add -A');
+			await execCommand2('git commit -m "Update README"');
 		}
 	}
 
 	chdir(previousDir);
 
-	const searchResults = (await execCommand2('npm search joplin-plugin --searchlimit 5000 --json', { showOutput: false })).trim();
+	const searchResults = (await execCommand2('npm search joplin-plugin --searchlimit 5000 --json', { showStdout: false, showStderr: false })).trim();
 	const npmPackages = pluginInfoFromSearchResults(JSON.parse(searchResults));
 
 	for (const npmPackage of npmPackages) {
@@ -237,8 +241,8 @@ async function commandBuild(args: CommandBuildArgs) {
 		await commandUpdateRelease(args);
 
 		if (!(await gitRepoClean())) {
-			await execCommand2('git add -A', { showOutput: true });
-			await execCommand2('git commit -m "Update stats"', { showOutput: true });
+			await execCommand2('git add -A');
+			await execCommand2('git commit -m "Update stats"');
 		}
 
 		await execCommand2('git push');
@@ -246,8 +250,22 @@ async function commandBuild(args: CommandBuildArgs) {
 }
 
 async function commandVersion() {
-	const p = await readJsonFile(path.resolve(__dirname, 'package.json'));
-	console.info(`Version ${p.version}`);
+	const paths = [
+		path.resolve(__dirname, 'package.json'),
+		path.resolve(__dirname, '..', 'package.json'),
+	];
+
+	for (const p of paths) {
+		try {
+			const info = await readJsonFile(p);
+			console.info(`Version ${info.version}`);
+			return;
+		} catch (error) {
+			// Try the next path
+		}
+	}
+
+	throw new Error(`Cannot find package.json in any of these paths: ${JSON.stringify(paths)}`);
 }
 
 async function main() {

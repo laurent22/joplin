@@ -46,7 +46,7 @@ const StyledAddRecipient = styled.div`
 	margin-bottom: 1em;
 `;
 
-const StyledRecipient = styled(StyledMessage)`
+const StyledRecipient = styled(StyledMessage)<any>`
 	display: flex;
 	flex-direction: row;
 	padding: .6em 1em;
@@ -80,7 +80,7 @@ const StyledError = styled(StyledMessage)`
 	margin-bottom: 1em;
 `;
 
-const StyledShareState = styled(StyledMessage)`
+const StyledShareState = styled(StyledMessage)<any>`
 	word-break: break-all;
 	margin-bottom: 1em;
 `;

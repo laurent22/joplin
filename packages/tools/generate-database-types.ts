@@ -6,7 +6,7 @@ const fs = require('fs-extra');
 async function main() {
 	// Run the CLI app once so as to generate the database file
 	process.chdir(`${rootDir}/packages/app-cli`);
-	await execCommand2('npm start -- version');
+	await execCommand2('yarn start -- version');
 
 	const sqlTsConfig = {
 		'client': 'sqlite3',

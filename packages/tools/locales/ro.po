@@ -226,10 +226,6 @@ msgstr ""
 msgid "Accept"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:546
-msgid "Access Key"
-msgstr ""
-
 #: packages/app-desktop/gui/ResourceScreen.tsx:95
 msgid "Action"
 msgstr "Acțiune"
@@ -546,7 +542,7 @@ msgid ""
 "for this account"
 msgstr ""
 
-#: packages/lib/services/share/ShareService.ts:272
+#: packages/lib/services/share/ShareService.ts:315
 msgid ""
 "Cannot share encrypted notebook with recipient %s because they have not "
 "enabled end-to-end encryption. They may do so from the screen Configuration "
@@ -618,7 +614,7 @@ msgstr ""
 "Faceți clic pe \"%s\" pentru a restabili nota. Va fi copiat în agenda numită "
 "\"% s\". Versiunea actuală a notei nu va fi înlocuită sau modificată."
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:373
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:376
 #, fuzzy
 msgid "Click to add tags..."
 msgstr "Verificați actualizările..."
@@ -746,7 +742,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/MenuBar.tsx:422
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:13
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:764
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:755
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:143
 msgid "Copy"
 msgstr "Copiați"
@@ -836,7 +832,7 @@ msgstr ""
 msgid "Could not upgrade master key: %s"
 msgstr "Nu s-a putut actualiza cheia master:% s"
 
-#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:27
+#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:26
 msgid ""
 "Could not verify the share status of this notebook - aborting. Please try "
 "again when you are connected to the internet."
@@ -927,7 +923,7 @@ msgid "Custom TLS certificates"
 msgstr "Certificate TLS cusomizate"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:18
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:754
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:745
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:135
 msgid "Cut"
 msgstr "Tăiați"
@@ -1001,7 +997,7 @@ msgstr "Ștergeți notița?"
 msgid "Delete local data and re-download from sync target"
 msgstr ""
 
-#: packages/lib/models/Note.ts:759
+#: packages/lib/models/Note.ts:760
 msgid "Delete note \"%s\"?"
 msgstr "Ștergeți notițele \"%s\"?"
 
@@ -1035,7 +1031,7 @@ msgstr ""
 msgid "Delete plugin \"%s\"?"
 msgstr "Ștergeți notițele \"%s\"?"
 
-#: packages/lib/models/Note.ts:761
+#: packages/lib/models/Note.ts:762
 msgid "Delete these %d notes?"
 msgstr "Ștergeți aceste %d notițe?"
 
@@ -1120,7 +1116,7 @@ msgstr ""
 msgid "Discard changes"
 msgstr "Renunțați la schimbări"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:437
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:440
 msgid "Dismiss"
 msgstr ""
 
@@ -1489,7 +1485,7 @@ msgid "Error opening note in editor: %s"
 msgstr "Eroare deschidere notiță în editor: %s"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:65
-#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:35
+#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:31
 #: packages/lib/services/KeymapService.ts:197
 #, fuzzy
 msgid "Error: %s"
@@ -1658,7 +1654,7 @@ msgstr ""
 "tastați `help keymap`"
 
 #: packages/lib/models/Setting.ts:568
-msgid "Force Path Style"
+msgid "Force path style"
 msgstr ""
 
 #: packages/lib/commands/historyForward.ts:6
@@ -1731,6 +1727,10 @@ msgstr "Token autorizare:"
 msgid "Heading"
 msgstr "Titlu"
 
+#: packages/server/src/services/MustacheService.ts:201
+msgid "Help"
+msgstr "Ajutor"
+
 #: packages/app-desktop/gui/MenuBar.tsx:492
 msgid "Hide %s"
 msgstr "Ascundeți %s"
@@ -1746,6 +1746,10 @@ msgstr "Despre Joplin"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:14
 msgid "Highlight"
+msgstr ""
+
+#: packages/server/src/services/MustacheService.ts:196
+msgid "Home"
 msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:78
@@ -1778,12 +1782,6 @@ msgstr "ID"
 
 #: packages/lib/Synchronizer.ts:304
 msgid "Idle"
-msgstr ""
-
-#: packages/lib/models/Setting.ts:867
-msgid ""
-"If true, sort order buttons (field + reverse) for notes are shown at the top "
-"of Note List."
 msgstr ""
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:109
@@ -1874,7 +1872,7 @@ msgstr "Pentru a utiliza web clipper, trebuie să faceți următoarele:"
 msgid "In progress"
 msgstr "În progres"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:521
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:524
 msgid "In: %s"
 msgstr "În: %s"
 
@@ -1960,6 +1958,10 @@ msgstr "Italic"
 #, fuzzy
 msgid "Item \"%s\" could not be downloaded: %s"
 msgstr "Acest fișier nu a putut fi deschis: %s"
+
+#: packages/server/src/services/MustacheService.ts:198
+msgid "Items"
+msgstr ""
 
 #: packages/lib/services/ReportService.ts:208
 #, fuzzy
@@ -2093,7 +2095,7 @@ msgstr "Ultima eroare: %s"
 msgid "Later"
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:613
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:604
 msgid "Layout"
 msgstr "Layout"
 
@@ -2101,7 +2103,7 @@ msgstr "Layout"
 msgid "Layout button sequence"
 msgstr "Secvența butoanelor de aspect"
 
-#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:11
+#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:10
 #, fuzzy
 msgid "Leave notebook..."
 msgstr "Distribuie notiță.."
@@ -2160,6 +2162,7 @@ msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:521
 #: packages/app-mobile/components/screens/log.js:100
+#: packages/server/src/services/MustacheService.ts:199
 msgid "Log"
 msgstr "Log"
 
@@ -2179,6 +2182,10 @@ msgstr "Autentificați-vă cu Dropbox"
 #: packages/app-mobile/components/screens/onedrive-login.js:110
 msgid "Login with OneDrive"
 msgstr "Autentificare prin OneDrive"
+
+#: packages/server/src/services/MustacheService.ts:202
+msgid "Logout"
+msgstr ""
 
 #: packages/app-desktop/gui/MenuBar.tsx:705
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:583
@@ -2692,7 +2699,7 @@ msgid "Passwords do not match!"
 msgstr "Parolele nu se potrivesc!"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:23
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:774
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:765
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:150
 msgid "Paste"
 msgstr "Lipește"
@@ -2903,7 +2910,7 @@ msgstr "Criptare"
 msgid "Re-upload local data to sync target"
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:436
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:439
 msgid "Read more about it"
 msgstr ""
 
@@ -2936,10 +2943,6 @@ msgstr ""
 #: packages/app-mobile/components/screens/status.js:144
 msgid "Refresh"
 msgstr "Reîncărcați"
-
-#: packages/lib/models/Setting.ts:535
-msgid "Region"
-msgstr ""
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:615
 #: packages/app-desktop/gui/Root.tsx:173
@@ -3048,10 +3051,24 @@ msgstr ""
 msgid "S3"
 msgstr ""
 
+#: packages/lib/models/Setting.ts:546
+#, fuzzy
+msgid "S3 access key"
+msgstr "AWS key"
+
 #: packages/lib/models/Setting.ts:506
 #, fuzzy
 msgid "S3 bucket"
 msgstr "AWS S3 bucket"
+
+#: packages/lib/models/Setting.ts:535
+msgid "S3 region"
+msgstr ""
+
+#: packages/lib/models/Setting.ts:557
+#, fuzzy
+msgid "S3 secret key"
+msgstr "AWS secret"
 
 #: packages/lib/models/Setting.ts:521
 #, fuzzy
@@ -3118,11 +3135,6 @@ msgstr "Caută..."
 #: packages/app-cli/app/command-search.js:13
 msgid "Searches for the given <pattern> in all the notes."
 msgstr "Caută <pattern> dat în toate notițele."
-
-#: packages/lib/models/Setting.ts:557
-#, fuzzy
-msgid "Secret Key"
-msgstr "AWS secret"
 
 #: packages/lib/models/Setting.ts:1194
 msgid "See the pre-release page for more details: %s"
@@ -3565,6 +3577,10 @@ msgstr "Etichete"
 msgid "Take photo"
 msgstr ""
 
+#: packages/server/src/services/MustacheService.ts:200
+msgid "Tasks"
+msgstr ""
+
 #: packages/lib/models/Setting.ts:1228
 msgid "Text editor command"
 msgstr "Comandă editor de text"
@@ -3597,7 +3613,7 @@ msgstr "Aplicația a fost autorizată cu succes."
 msgid "The application must be restarted for these changes to take effect."
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:508
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:511
 msgid ""
 "The attachments will no longer be watched when you switch to a different "
 "note."
@@ -3644,7 +3660,7 @@ msgid ""
 "factor of 1.Restart app to see changes."
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:507
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:510
 msgid "The following attachments are being watched for changes:"
 msgstr ""
 
@@ -3839,7 +3855,7 @@ msgstr "Această notă nu conține informații despre geolocalizare."
 msgid "This note has been modified:"
 msgstr "Această notiță a fost modificată:"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:613
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:604
 msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
 "note."
@@ -3851,7 +3867,7 @@ msgstr ""
 msgid "This note has no history"
 msgstr "Această notă nu are istoric"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:435
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:438
 msgid ""
 "This Rich Text editor has a number of limitations and it is recommended to "
 "be aware of them before using it."
@@ -3881,7 +3897,7 @@ msgstr ""
 "Se va deschide un nou ecran. Doriți să salvați modificările dumnevoastră "
 "actuale?"
 
-#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:17
+#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:16
 msgid ""
 "This will remove the notebook from your collection and you will no longer "
 "have access to its content. Do you wish to continue?"
@@ -4072,7 +4088,7 @@ msgstr ""
 msgid "Unknown flag: %s"
 msgstr ""
 
-#: packages/lib/Synchronizer.ts:1087
+#: packages/lib/Synchronizer.ts:1088
 msgid ""
 "Unknown item type downloaded - please upgrade Joplin to the latest version"
 msgstr ""
@@ -4208,6 +4224,10 @@ msgid ""
 "Used where a fixed width font is needed to lay out text legibly (e.g. "
 "tables, checkboxes, code). If not found, a generic monospace (fixed width) "
 "font is used."
+msgstr ""
+
+#: packages/server/src/services/MustacheService.ts:197
+msgid "Users"
 msgstr ""
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:182
@@ -4387,9 +4407,6 @@ msgstr "Măriți"
 msgid "Zoom Out"
 msgstr "Micșorați"
 
-#~ msgid "AWS key"
-#~ msgstr "AWS key"
-
 #~ msgid "AWS S3"
 #~ msgstr "AWS S3"
 
@@ -4485,9 +4502,6 @@ msgstr "Micșorați"
 
 #~ msgid "Check Status"
 #~ msgstr "Verificare Status"
-
-#~ msgid "Help"
-#~ msgstr "Ajutor"
 
 #~ msgid "OneDrive Dev (For testing only)"
 #~ msgstr "OneDrive Dev (Doar pentru teste)"

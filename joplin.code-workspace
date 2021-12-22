@@ -6,6 +6,7 @@
 	],
 	"settings": {
 		"files.exclude": {
+			".yarn": true,
 			"lerna-debug.log": true,
 			"_mydocs/mdtest/": true,
 			"./packages/lib/plugin_types": true,

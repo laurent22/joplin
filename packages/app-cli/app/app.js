@@ -418,6 +418,8 @@ class Application extends BaseApplication {
 			return this.stdout(object);
 		});
 
+		this.initRedux();
+
 		// If we have some arguments left at this point, it's a command
 		// so execute it.
 		if (argv.length) {
@@ -448,8 +450,6 @@ class Application extends BaseApplication {
 			process.exit(0);
 		} else {
 			// Otherwise open the GUI
-			this.initRedux();
-
 			const keymap = await this.loadKeymaps();
 
 			const AppGui = require('./app-gui.js');

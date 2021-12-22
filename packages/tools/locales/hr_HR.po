@@ -227,10 +227,6 @@ msgstr ""
 msgid "Accept"
 msgstr "Prihvati"
 
-#: packages/lib/models/Setting.ts:546
-msgid "Access Key"
-msgstr ""
-
 #: packages/app-desktop/gui/ResourceScreen.tsx:95
 msgid "Action"
 msgstr "Radnja"
@@ -543,7 +539,7 @@ msgstr ""
 "Nije moguće spremiti %s „%s” jer bi se prekoračila ukupna dozvoljena "
 "veličina (%s) za ovaj račun"
 
-#: packages/lib/services/share/ShareService.ts:272
+#: packages/lib/services/share/ShareService.ts:315
 msgid ""
 "Cannot share encrypted notebook with recipient %s because they have not "
 "enabled end-to-end encryption. They may do so from the screen Configuration "
@@ -616,7 +612,7 @@ msgstr ""
 "Za obnavljanje bilješke pritisni „%s”. Kopirat će se u bilježnicu „%s”. "
 "Trenutačna verzija bilješke neće se zamijeniti niti promijeniti."
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:373
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:376
 msgid "Click to add tags..."
 msgstr "Pritisni za dodavanje oznaka …"
 
@@ -741,7 +737,7 @@ msgstr "Pretvori u zadatak"
 
 #: packages/app-desktop/gui/MenuBar.tsx:422
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:13
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:764
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:755
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:143
 msgid "Copy"
 msgstr "Kopiraj"
@@ -836,7 +832,7 @@ msgstr ""
 msgid "Could not upgrade master key: %s"
 msgstr "Neuspjela nadogradnja glavnog ključa: %s"
 
-#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:27
+#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:26
 msgid ""
 "Could not verify the share status of this notebook - aborting. Please try "
 "again when you are connected to the internet."
@@ -925,7 +921,7 @@ msgid "Custom TLS certificates"
 msgstr "Prilagođeni TLS certifikati"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:18
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:754
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:745
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:135
 msgid "Cut"
 msgstr "Izreži"
@@ -996,7 +992,7 @@ msgstr "Izbriši redak"
 msgid "Delete local data and re-download from sync target"
 msgstr "Izbriši lokalne podatke i ponovo preuzmi iz izvora sinronizacije"
 
-#: packages/lib/models/Note.ts:759
+#: packages/lib/models/Note.ts:760
 msgid "Delete note \"%s\"?"
 msgstr "Izbrisati bilješku „%s”?"
 
@@ -1029,7 +1025,7 @@ msgstr ""
 msgid "Delete plugin \"%s\"?"
 msgstr "Izbrisati dodatak „%s”?"
 
-#: packages/lib/models/Note.ts:761
+#: packages/lib/models/Note.ts:762
 msgid "Delete these %d notes?"
 msgstr "Izbrisati ove %d bilješke?"
 
@@ -1118,7 +1114,7 @@ msgstr ""
 msgid "Discard changes"
 msgstr "Odbaci promjene"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:437
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:440
 msgid "Dismiss"
 msgstr "Odbaci"
 
@@ -1481,7 +1477,7 @@ msgid "Error opening note in editor: %s"
 msgstr "Greška prilikom otvaranja bilješke u uređivaču: %s"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:65
-#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:35
+#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:31
 #: packages/lib/services/KeymapService.ts:197
 msgid "Error: %s"
 msgstr "Greška: %s"
@@ -1648,7 +1644,7 @@ msgid ""
 msgstr "Za popis tipkovnih prečaca i opcija konfiguracije, upiši `help keymap`"
 
 #: packages/lib/models/Setting.ts:568
-msgid "Force Path Style"
+msgid "Force path style"
 msgstr ""
 
 #: packages/lib/commands/historyForward.ts:6
@@ -1718,6 +1714,11 @@ msgstr "Odobri autorizaciju"
 msgid "Heading"
 msgstr "Naslov"
 
+#: packages/server/src/services/MustacheService.ts:201
+#, fuzzy
+msgid "Help"
+msgstr "Pomoć"
+
 #: packages/app-desktop/gui/MenuBar.tsx:492
 msgid "Hide %s"
 msgstr "Sakrij %s"
@@ -1733,6 +1734,10 @@ msgstr "Sakrij Joplin"
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:14
 msgid "Highlight"
 msgstr "Istaknuto"
+
+#: packages/server/src/services/MustacheService.ts:196
+msgid "Home"
+msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:78
 msgid "Horizontal Rule"
@@ -1765,12 +1770,6 @@ msgstr "ID"
 #: packages/lib/Synchronizer.ts:304
 msgid "Idle"
 msgstr "Bez aktivnosti"
-
-#: packages/lib/models/Setting.ts:867
-msgid ""
-"If true, sort order buttons (field + reverse) for notes are shown at the top "
-"of Note List."
-msgstr ""
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:109
 msgid "Ignore"
@@ -1880,7 +1879,7 @@ msgstr "Za korištenje Web Clippera obavi sljedeće korake:"
 msgid "In progress"
 msgstr "U tijeku"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:521
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:524
 msgid "In: %s"
 msgstr "U: %s"
 
@@ -1961,6 +1960,10 @@ msgstr "Kurziv"
 #: packages/lib/services/ReportService.ts:185
 msgid "Item \"%s\" could not be downloaded: %s"
 msgstr "Nije bilo moguće preuzeti element „%s”: %s"
+
+#: packages/server/src/services/MustacheService.ts:198
+msgid "Items"
+msgstr ""
 
 #: packages/lib/services/ReportService.ts:208
 msgid "Items that cannot be decrypted"
@@ -2092,7 +2095,7 @@ msgstr "Zadnja greška: %s"
 msgid "Later"
 msgstr "Kasnije"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:613
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:604
 msgid "Layout"
 msgstr "Raspored"
 
@@ -2100,7 +2103,7 @@ msgstr "Raspored"
 msgid "Layout button sequence"
 msgstr "Slijed gumbova rasporeda"
 
-#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:11
+#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:10
 msgid "Leave notebook..."
 msgstr "Napusti bilježnicu …"
 
@@ -2157,6 +2160,7 @@ msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:521
 #: packages/app-mobile/components/screens/log.js:100
+#: packages/server/src/services/MustacheService.ts:199
 msgid "Log"
 msgstr "Dnevnik"
 
@@ -2175,6 +2179,10 @@ msgstr "Prijavi se s Dropbox"
 #: packages/app-mobile/components/screens/onedrive-login.js:110
 msgid "Login with OneDrive"
 msgstr "Prijavi se s OneDrive"
+
+#: packages/server/src/services/MustacheService.ts:202
+msgid "Logout"
+msgstr ""
 
 #: packages/app-desktop/gui/MenuBar.tsx:705
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:583
@@ -2670,7 +2678,7 @@ msgid "Passwords do not match!"
 msgstr "Lozinke se ne poklapaju!"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:23
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:774
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:765
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:150
 msgid "Paste"
 msgstr "Umetni"
@@ -2877,7 +2885,7 @@ msgstr "Ponovno šifriranje"
 msgid "Re-upload local data to sync target"
 msgstr "Ponovo učitaj lokalne podatke u izvor sinronizacije"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:436
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:439
 msgid "Read more about it"
 msgstr "Saznaj više"
 
@@ -2910,10 +2918,6 @@ msgstr "Ponovi"
 #: packages/app-mobile/components/screens/status.js:144
 msgid "Refresh"
 msgstr "Osvježi"
-
-#: packages/lib/models/Setting.ts:535
-msgid "Region"
-msgstr ""
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:615
 #: packages/app-desktop/gui/Root.tsx:173
@@ -3022,10 +3026,24 @@ msgstr ""
 msgid "S3"
 msgstr ""
 
+#: packages/lib/models/Setting.ts:546
+#, fuzzy
+msgid "S3 access key"
+msgstr "AWS ključ"
+
 #: packages/lib/models/Setting.ts:506
 #, fuzzy
 msgid "S3 bucket"
 msgstr "AWS S3 bucket"
+
+#: packages/lib/models/Setting.ts:535
+msgid "S3 region"
+msgstr ""
+
+#: packages/lib/models/Setting.ts:557
+#, fuzzy
+msgid "S3 secret key"
+msgstr "AWS tajna"
 
 #: packages/lib/models/Setting.ts:521
 #, fuzzy
@@ -3093,11 +3111,6 @@ msgstr "Traži …"
 #: packages/app-cli/app/command-search.js:13
 msgid "Searches for the given <pattern> in all the notes."
 msgstr "Pretražuje zadani uzorak <pattern> u svim bilješkama."
-
-#: packages/lib/models/Setting.ts:557
-#, fuzzy
-msgid "Secret Key"
-msgstr "AWS tajna"
 
 #: packages/lib/models/Setting.ts:1194
 msgid "See the pre-release page for more details: %s"
@@ -3531,6 +3544,10 @@ msgstr "Oznake"
 msgid "Take photo"
 msgstr "Snimi sliku"
 
+#: packages/server/src/services/MustacheService.ts:200
+msgid "Tasks"
+msgstr ""
+
 #: packages/lib/models/Setting.ts:1228
 msgid "Text editor command"
 msgstr "Naredba za uređivača teksta"
@@ -3563,7 +3580,7 @@ msgstr "Program je uspješno autoriziran."
 msgid "The application must be restarted for these changes to take effect."
 msgstr "Za primjenu promjena, program se mora ponovo pokrenuti."
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:508
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:511
 msgid ""
 "The attachments will no longer be watched when you switch to a different "
 "note."
@@ -3619,7 +3636,7 @@ msgstr ""
 "element s faktorom 2 zauzeti dvostruko više prostora od elementa s faktorom "
 "1. Za prikaz promjena ponovo pokreni program."
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:507
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:510
 msgid "The following attachments are being watched for changes:"
 msgstr "Promjene se prate za sljedeće privitke:"
 
@@ -3848,7 +3865,7 @@ msgstr "Ova bilješka nema geografske podatke mjesta."
 msgid "This note has been modified:"
 msgstr "Ova je blješka promijenjena:"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:613
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:604
 msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
 "note."
@@ -3860,7 +3877,7 @@ msgstr ""
 msgid "This note has no history"
 msgstr "Ova bilješka nema povijest"
 
-#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:435
+#: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:438
 msgid ""
 "This Rich Text editor has a number of limitations and it is recommended to "
 "be aware of them before using it."
@@ -3894,7 +3911,7 @@ msgid "This will open a new screen. Save your current changes?"
 msgstr ""
 "Ovo će otvoriti novi prozor. Želiš li spremiti tvoje trenutačne promjene?"
 
-#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:17
+#: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:16
 msgid ""
 "This will remove the notebook from your collection and you will no longer "
 "have access to its content. Do you wish to continue?"
@@ -4078,7 +4095,7 @@ msgstr "Poništi"
 msgid "Unknown flag: %s"
 msgstr "Nepoznata zastavica: %s"
 
-#: packages/lib/Synchronizer.ts:1087
+#: packages/lib/Synchronizer.ts:1088
 msgid ""
 "Unknown item type downloaded - please upgrade Joplin to the latest version"
 msgstr ""
@@ -4220,6 +4237,10 @@ msgid ""
 msgstr ""
 "Koristi se za tekst fiksne širine (npr. tablice, potvrdni okivi, programski "
 "kod). Ako se ne pronađe, koristi se generički font fiksne širine."
+
+#: packages/server/src/services/MustacheService.ts:197
+msgid "Users"
+msgstr ""
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:182
 msgid "Valid"
@@ -4398,9 +4419,6 @@ msgstr "Uvećaj"
 msgid "Zoom Out"
 msgstr "Umanji"
 
-#~ msgid "AWS key"
-#~ msgstr "AWS ključ"
-
 #~ msgid "AWS S3"
 #~ msgstr "AWS S3"
 
@@ -4527,10 +4545,6 @@ msgstr "Umanji"
 #, fuzzy
 #~ msgid "Check Status"
 #~ msgstr "Status"
-
-#, fuzzy
-#~ msgid "Help"
-#~ msgstr "Pomoć"
 
 #~ msgid "OneDrive Dev (For testing only)"
 #~ msgstr "OneDrive Dev (Samo za testiranje)"

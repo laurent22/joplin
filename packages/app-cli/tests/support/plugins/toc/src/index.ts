@@ -1,7 +1,7 @@
 import joplin from 'api';
 import { ToolbarButtonLocation } from 'api/types';
 
-const uslug = require('uslug');
+const uslug = require('@joplin/fork-uslug');
 
 // From https://stackoverflow.com/a/6234804/561309
 function escapeHtml(unsafe:string) {
