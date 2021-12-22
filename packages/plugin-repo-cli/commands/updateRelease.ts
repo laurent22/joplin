@@ -41,6 +41,8 @@ async function getPluginInfos(pluginRepoDir: string): Promise<PluginInfo[]> {
 
 	for (const pluginDir of pluginDirs) {
 		const basePath = `${pluginRepoDir}/plugins/${pluginDir}`;
+		if (!(await stat(basePath)).isDirectory()) continue;
+
 		const manifest = JSON.parse(await readFile(`${basePath}/manifest.json`, 'utf8'));
 		output.push({
 			id: manifest.id,
