@@ -1,7 +1,7 @@
-const fs = require('fs-extra');
+const { writeFile, copy, mkdirp, remove } = require('fs-extra');
 const glob = require('glob');
 const { resolve } = require('path');
-const { copyDir, dirname, copyFile, mkdir } = require('@joplin/tools/gulp/utils');
+const { dirname } = require('@joplin/tools/gulp/utils');
 
 const nodeModulesDir = resolve(__dirname, '../node_modules');
 
@@ -35,20 +35,28 @@ async function main() {
 		},
 	];
 
-	for (const dir of dirs) {
-		let sourceDir, destDir;
+	// First we delete all the destination directories, then we copy the files.
+	// It seems there's a race condition if we delete then copy right away.
+	for (const action of ['delete', 'copy']) {
+		for (const dir of dirs) {
+			let sourceDir, destDir;
 
-		if (typeof dir !== 'string') {
-			sourceDir = dir.src;
-			destDir = dir.dest;
-		} else {
-			sourceDir = `${nodeModulesDir}/${dir}`;
-			destDir = `${buildLibDir}/${dir}`;
+			if (typeof dir !== 'string') {
+				sourceDir = dir.src;
+				destDir = dir.dest;
+			} else {
+				sourceDir = `${nodeModulesDir}/${dir}`;
+				destDir = `${buildLibDir}/${dir}`;
+			}
+
+			if (action === 'delete') {
+				await remove(destDir);
+			} else {
+				console.info(`Copying ${sourceDir} => ${destDir}`);
+				await mkdirp(destDir);
+				await copy(sourceDir, destDir, { overwrite: true });
+			}
 		}
-
-		console.info(`Copying ${sourceDir} => ${destDir}`);
-		await mkdir(destDir);
-		await copyDir(sourceDir, destDir);
 	}
 
 	for (const file of files) {
@@ -62,10 +70,10 @@ async function main() {
 			destFile = `${buildLibDir}/${file}`;
 		}
 
-		await mkdir(dirname(destFile));
+		await mkdirp(dirname(destFile));
 
 		console.info(`Copying ${sourceFile} => ${destFile}`);
-		await copyFile(sourceFile, destFile);
+		await copy(sourceFile, destFile, { overwrite: true });
 	}
 
 	const supportedLocales = glob.sync(`${langSourceDir}/*.js`).map(s => {
@@ -77,7 +85,7 @@ async function main() {
 
 	const content = `module.exports = ${JSON.stringify(supportedLocales, null, 2)}`;
 
-	await fs.writeFile(`${__dirname}/../gui/NoteEditor/NoteBody/TinyMCE/supportedLocales.js`, content, 'utf8');
+	await writeFile(`${__dirname}/../gui/NoteEditor/NoteBody/TinyMCE/supportedLocales.js`, content, 'utf8');
 }
 
 module.exports = main;
