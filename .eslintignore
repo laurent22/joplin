@@ -2,10 +2,10 @@ _mydocs/
 _releases/
 .git/
 .github/
+.yarn/
 *.min.js
 **/commands/index.ts
 **/node_modules/
-.yarn/
 Assets/
 docs/
 highlight.pack.js
@@ -13,8 +13,6 @@ Modules/TinyMCE/IconPack/postinstall.js
 Modules/TinyMCE/JoplinLists/
 Modules/TinyMCE/langs/
 node_modules/
-packages/app-desktop/build/
-packages/app-cli/tests/test data/
 packages/app-cli/build
 packages/app-cli/build/
 packages/app-cli/locales
@@ -26,6 +24,7 @@ packages/app-cli/tests/html_to_md
 packages/app-cli/tests/logs
 packages/app-cli/tests/support
 packages/app-cli/tests/sync
+packages/app-cli/tests/test data/
 packages/app-cli/tests/tmp
 packages/app-clipper/content_scripts/JSDOMParser.js
 packages/app-clipper/content_scripts/Readability-readerable.js
@@ -37,6 +36,7 @@ packages/app-clipper/popup/config/webpack_config_at_eject_time.js
 packages/app-clipper/popup/config/webpack.config.js
 packages/app-clipper/popup/node_modules
 packages/app-clipper/popup/scripts/build.js
+packages/app-desktop/build/
 packages/app-desktop/dist
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/plugins/lists.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/supportedLocales.js
@@ -44,6 +44,7 @@ packages/app-desktop/locales
 packages/app-desktop/node_modules
 packages/app-desktop/packageInfo.js
 packages/app-desktop/services/electron-context-menu.js
+packages/app-desktop/vendor/lib/
 packages/app-mobile/android
 packages/app-mobile/components/NoteEditor/CodeMirror.bundle.js
 packages/app-mobile/ios
