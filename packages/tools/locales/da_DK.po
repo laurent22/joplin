@@ -15,6 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.4.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:565
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -837,6 +839,8 @@ msgid ""
 "Could not verify the share status of this notebook - aborting. Please try "
 "again when you are connected to the internet."
 msgstr ""
+"Kunne ikke verificere denne notesbogs status for deling - afbryder. Prøv "
+"venligst igen, når du har forbindelse til internettet."
 
 #: packages/app-mobile/components/note-list.js:101
 msgid "Create a notebook"
@@ -1645,7 +1649,7 @@ msgstr ""
 
 #: packages/lib/models/Setting.ts:568
 msgid "Force path style"
-msgstr ""
+msgstr "Gennemtving sti-stil"
 
 #: packages/lib/commands/historyForward.ts:6
 msgid "Forward"
@@ -1715,9 +1719,8 @@ msgid "Heading"
 msgstr "Overskrift"
 
 #: packages/server/src/services/MustacheService.ts:201
-#, fuzzy
 msgid "Help"
-msgstr "&Hjælp"
+msgstr "Hjælp"
 
 #: packages/app-desktop/gui/MenuBar.tsx:492
 msgid "Hide %s"
@@ -1737,7 +1740,7 @@ msgstr "Fremhæv"
 
 #: packages/server/src/services/MustacheService.ts:196
 msgid "Home"
-msgstr ""
+msgstr "Hjem"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:78
 msgid "Horizontal Rule"
@@ -1757,7 +1760,7 @@ msgstr "Hyperlink"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:77
 msgid "Icon"
-msgstr ""
+msgstr "Ikon"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:179
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:329
@@ -1948,9 +1951,8 @@ msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Ulovlig indstillingsværdi: \"%s\".  Mulige valg er: %s."
 
 #: packages/app-cli/app/command-e2ee.ts:46
-#, fuzzy
 msgid "Invalid password"
-msgstr "Forkert svar: %s"
+msgstr "Ugyldig adgangskode"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:38
 msgid "Italic"
@@ -1962,7 +1964,7 @@ msgstr "Emnet \"%s\" kunne ikke downloades: %s"
 
 #: packages/server/src/services/MustacheService.ts:198
 msgid "Items"
-msgstr ""
+msgstr "Emner"
 
 #: packages/lib/services/ReportService.ts:208
 msgid "Items that cannot be decrypted"
@@ -2178,7 +2180,7 @@ msgstr "Log på med OneDrive"
 
 #: packages/server/src/services/MustacheService.ts:202
 msgid "Logout"
-msgstr ""
+msgstr "Log ud"
 
 #: packages/app-desktop/gui/MenuBar.tsx:705
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:583
@@ -2509,9 +2511,8 @@ msgid "Note&book"
 msgstr "Note&bog"
 
 #: packages/lib/models/Setting.ts:2143
-#, fuzzy
 msgid "Notebook"
-msgstr "Notesbøger"
+msgstr "Notesbog"
 
 #: packages/lib/models/Setting.ts:1378
 msgid "Notebook list growth factor"
@@ -2536,9 +2537,8 @@ msgstr "Notesbøger kan ikke navngives \"%s\", da det er en reserveret titel."
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleNotesSortOrderField.ts:8
 #: packages/app-desktop/gui/MainScreen/commands/toggleNotesSortOrderReverse.ts:9
-#, fuzzy
 msgid "Notes"
-msgstr "Note"
+msgstr "Noter"
 
 #: packages/lib/models/Setting.ts:2159
 msgid "Notes and settings are stored in: %s"
@@ -3020,31 +3020,27 @@ msgstr ""
 
 #: packages/lib/SyncTargetAmazonS3.js:28
 msgid "S3"
-msgstr ""
+msgstr "S3"
 
 #: packages/lib/models/Setting.ts:546
-#, fuzzy
 msgid "S3 access key"
-msgstr "AWS nøgle"
+msgstr "S3-adgangsnøgle"
 
 #: packages/lib/models/Setting.ts:506
-#, fuzzy
 msgid "S3 bucket"
-msgstr "AWS S3 bucket"
+msgstr "S3 bucket"
 
 #: packages/lib/models/Setting.ts:535
 msgid "S3 region"
-msgstr ""
+msgstr "S3-region"
 
 #: packages/lib/models/Setting.ts:557
-#, fuzzy
 msgid "S3 secret key"
-msgstr "AWS hemmelighed"
+msgstr "S3 hemmelig nøgle"
 
 #: packages/lib/models/Setting.ts:521
-#, fuzzy
 msgid "S3 URL"
-msgstr "AWS S3 URL"
+msgstr "S3 URL"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:579
 msgid ""
@@ -3210,9 +3206,8 @@ msgid "Show note counts"
 msgstr "Vis noteantal"
 
 #: packages/lib/models/Setting.ts:866
-#, fuzzy
 msgid "Show sort order buttons"
-msgstr "Vis noteantal"
+msgstr "Vis knapper til sorteringsrækkefølge"
 
 #: packages/lib/models/Setting.ts:1042
 msgid "Show tray icon"
@@ -3537,7 +3532,7 @@ msgstr "Tag et foto"
 
 #: packages/server/src/services/MustacheService.ts:200
 msgid "Tasks"
-msgstr ""
+msgstr "Opgaver"
 
 #: packages/lib/models/Setting.ts:1228
 msgid "Text editor command"
@@ -4008,9 +4003,8 @@ msgid "Toggle note list"
 msgstr "Slå noteliste til eller fra"
 
 #: packages/app-desktop/gui/MainScreen/commands/togglePerFolderSortOrder.ts:7
-#, fuzzy
 msgid "Toggle own sort order"
-msgstr "Slå fejlsikret tilstand til eller fra"
+msgstr "Slå egen sorteringsrækkefølge til eller fra"
 
 #: packages/app-desktop/commands/toggleSafeMode.ts:8
 msgid "Toggle safe mode"
@@ -4021,9 +4015,8 @@ msgid "Toggle sidebar"
 msgstr "Slå sidebar til eller fra"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleNotesSortOrderField.ts:7
-#, fuzzy
 msgid "Toggle sort order field"
-msgstr "Slå fejlsikret tilstand til eller fra"
+msgstr "Slå felt for sorteringsrækkefølge til eller fra"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:40
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:41
@@ -4232,7 +4225,7 @@ msgstr ""
 
 #: packages/server/src/services/MustacheService.ts:197
 msgid "Users"
-msgstr ""
+msgstr "Brugere"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:182
 msgid "Valid"
@@ -4389,12 +4382,12 @@ msgstr ""
 "Din hovedadgangskode er nødvendig for at dekryptere nogle af dine data."
 
 #: packages/app-cli/app/command-sync.ts:242
-#, fuzzy
 msgid ""
 "Your password is needed to decrypt some of your data. Type `:e2ee decrypt` "
 "to set it."
 msgstr ""
-"Din hovedadgangskode er nødvendig for at dekryptere nogle af dine data."
+"Din adgangskode er nødvendig for at dekryptere nogle af dine data. Tast `:"
+"e2ee decrypt` for at indstille den."
 
 #: packages/app-mobile/components/CameraView.tsx:189
 msgid "Your permission to use your camera is required."
