@@ -12,3 +12,5 @@ runForSharingCommands-*
 runForTestingCommands-*
 style.min.css
 build/lib/
+vendor/
+!vendor/loadEmojiLib.js

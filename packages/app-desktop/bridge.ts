@@ -34,6 +34,29 @@ export class Bridge {
 		return !this.electronApp().electronApp().isPackaged;
 	}
 
+	// The build directory contains additional external files that are going to
+	// be packaged by Electron Builder. This is for files that need to be
+	// accessed outside of the Electron app (for example the application icon).
+	//
+	// Any static file that's accessed from within the app such as CSS or fonts
+	// should go in /vendor.
+	//
+	// The build folder location is dynamic, depending on whether we're running
+	// in dev or prod, which makes it hard to access it from static files (for
+	// example from plain HTML files that load CSS or JS files). For this reason
+	// it should be avoided as much as possible.
+	public buildDir() {
+		return this.electronApp().buildDir();
+	}
+
+	// The vendor directory and its content is dynamically created from other
+	// dir (usually by pulling files from node_modules). It can also be accessed
+	// using a relative path such as "../../vendor/lib/file.js" because it will
+	// be at the same location in both prod and dev mode (unlike the build dir).
+	public vendorDir() {
+		return `${__dirname}/vendor`;
+	}
+
 	env() {
 		return this.electronWrapper_.env();
 	}
@@ -221,10 +244,6 @@ export class Bridge {
 
 	async openItem(fullPath: string) {
 		return require('electron').shell.openPath(fullPath);
-	}
-
-	buildDir() {
-		return this.electronApp().buildDir();
 	}
 
 	screen() {

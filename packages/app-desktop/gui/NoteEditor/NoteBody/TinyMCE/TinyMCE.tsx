@@ -23,6 +23,7 @@ import openEditDialog from './utils/openEditDialog';
 import { MarkupToHtmlOptions } from '../../utils/useMarkupToHtml';
 import { themeStyle } from '@joplin/lib/theme';
 import { loadScript } from '../../../utils/loadScript';
+import bridge from '../../../../services/bridge';
 const { clipboard } = require('electron');
 const supportedLocales = require('./supportedLocales');
 
@@ -320,7 +321,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		async function loadScripts() {
 			const scriptsToLoad: any[] = [
 				{
-					src: 'build/lib/tinymce/tinymce.min.js',
+					src: `${bridge().vendorDir()}/lib/tinymce/tinymce.min.js`,
 					id: 'tinyMceScript',
 					loaded: false,
 				},
@@ -571,7 +572,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				statusbar: false,
 				target_list: false,
 				table_resize_bars: false,
-				language_url: ['en_US', 'en_GB'].includes(language) ? undefined : `build/lib/tinymce/langs/${language}`,
+				language_url: ['en_US', 'en_GB'].includes(language) ? undefined : `${bridge().vendorDir()}/lib/tinymce/langs/${language}`,
 				toolbar: toolbar.join(' '),
 				localization_function: _,
 				contextmenu: false,
@@ -708,7 +709,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		}
 
 		const cssFiles = [
-			'build/lib/@fortawesome/fontawesome-free/css/all.min.css',
+			`${bridge().vendorDir()}/lib/@fortawesome/fontawesome-free/css/all.min.css`,
 			`gui/note-viewer/pluginAssets/highlight.js/${theme.codeThemeCss}`,
 		].concat(
 			pluginAssets

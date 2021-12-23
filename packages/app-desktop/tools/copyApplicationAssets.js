@@ -7,7 +7,7 @@ const nodeModulesDir = resolve(__dirname, '../node_modules');
 
 async function main() {
 	const langSourceDir = resolve(__dirname, '../../../Assets/TinyMCE/langs');
-	const buildLibDir = resolve(__dirname, '../build/lib');
+	const buildLibDir = resolve(__dirname, '../vendor/lib');
 
 	const dirs = [
 		'tinymce',

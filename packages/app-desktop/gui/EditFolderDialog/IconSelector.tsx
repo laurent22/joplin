@@ -4,6 +4,7 @@ import useAsyncEffect, { AsyncEffectEvent } from '@joplin/lib/hooks/useAsyncEffe
 import { loadScript } from '../utils/loadScript';
 import Button from '../Button/Button';
 import { FolderIcon } from '@joplin/lib/services/database/types';
+import bridge from '../../services/bridge';
 
 export interface ChangeEvent {
 	value: FolderIcon;
@@ -29,7 +30,7 @@ export const IconSelector = (props: Props) => {
 
 			await loadScript({
 				id: 'emoji-button-lib',
-				src: 'build/lib/@joeattardi/emoji-button/dist/index.js',
+				src: `${bridge().vendorDir()}/lib/@joeattardi/emoji-button/dist/index.js`,
 				attrs: {
 					type: 'module',
 				},
@@ -39,7 +40,7 @@ export const IconSelector = (props: Props) => {
 
 			await loadScript({
 				id: 'emoji-button-lib-loader',
-				src: 'gui/EditFolderDialog/loadEmojiLib.js',
+				src: `${bridge().vendorDir()}/loadEmojiLib.js`,
 				attrs: {
 					type: 'module',
 				},

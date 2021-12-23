@@ -30,9 +30,8 @@
     "npmRebuild": false,
     "afterSign": "./tools/notarizeMacApp.js",
     "extraResources": [
-      "build/icons/*",
-      "build/images/*",
-      "build/lib/*"
+      "build/icons/**",
+      "build/images/**"
     ],
     "afterAllArtifactBuild": "./generateSha512.js",
     "asar": true,
