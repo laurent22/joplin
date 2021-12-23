@@ -126,7 +126,8 @@ In this case, [make sure you enter the correct WebDAV URL](https://github.com/la
 
 ### The following WebDAV hosts are not supported
 
-- Jianguoyun.com (see [Github issue](https://github.com/laurent22/joplin/issues/4294))
+- Jianguoyun (see [Github issue](https://github.com/laurent22/joplin/issues/4294))
+- pCloud (see [Forum thread](https://discourse.joplinapp.org/t/feature-request-pcloud-synchronisation/3530/51))
 
 ### Nextcloud sync is not working
 
