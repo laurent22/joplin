@@ -565,6 +565,9 @@ export default class BaseApplication {
 		// https://github.com/laurent22/joplin/issues/3754
 		if (['TAG_SELECT', 'TAG_DELETE', 'TAG_UPDATE_ONE', 'NOTE_TAG_REMOVE'].includes(action.type)) {
 			refreshNotes = true;
+			if (newState.notesParentType === 'SmartFilter') {
+				refreshNotesUseSelectedNoteId = true;
+			}
 		}
 
 		if (action.type == 'SEARCH_SELECT' || action.type === 'SEARCH_DELETE') {

@@ -590,6 +590,45 @@ describe('reducer', function() {
 		expect(state.selectedNoteIds[0]).toEqual(notes[1].id);
 	});
 
+	it('should record last selected notes when all notes filter is on', async () => {
+		const folders = await createNTestFolders(2);
+		const notes = [];
+		for (let i = 0; i < folders.length; i++) {
+			notes.push(...await createNTestNotes(2, folders[i]));
+		}
+
+		// Initialize state with selected note at 0 index
+		let state = initTestState(folders, [0], notes.slice(), [0]);
+
+		// Turn on 'All Notes' filter
+		state = reducer(state, { type: 'SMART_FILTER_SELECT', id: ALL_NOTES_FILTER_ID });
+
+		// Building the history to test HISTORY_BACKWARD and HISTORY_FORWARD when All Notes filter is on.
+		state = goToNote(notes, [3], state);
+		state = goToNote(notes, [1], state);
+		state = goToNote(notes, [2], state);
+
+		expect(state.selectedNoteIds[0]).toEqual(notes[2].id);
+
+		state = goBackWard(state);
+		expect(state.selectedNoteIds[0]).toEqual(notes[1].id);
+
+		state = goBackWard(state);
+		expect(state.selectedNoteIds[0]).toEqual(notes[3].id);
+
+		state = goBackWard(state);
+		expect(state.selectedNoteIds[0]).toEqual(notes[0].id);
+
+		state = goForward(state);
+		expect(state.selectedNoteIds[0]).toEqual(notes[3].id);
+
+		state = goForward(state);
+		expect(state.selectedNoteIds[0]).toEqual(notes[1].id);
+
+		state = goForward(state);
+		expect(state.selectedNoteIds[0]).toEqual(notes[2].id);
+	});
+
 	// tests for NOTE_UPDATE_ALL about issue #5447
 	it('should not change selectedNoteIds object when selections are not changed', async () => {
 		const folders = await createNTestFolders(1);
