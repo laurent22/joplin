@@ -56,6 +56,7 @@ There are other ways to install the terminal application. However, they are not 
 Operating system | Method
 -----------------|----------------
 Arch Linux       | An Arch Linux package is available [here](https://aur.archlinux.org/packages/joplin/). To install it, use an AUR wrapper such as yay: `yay -S joplin`. Both the CLI tool (type `joplin`) and desktop app (type `joplin-desktop`) are packaged. You can also install a compiled version with the [chaotic-aur](https://wiki.archlinux.org/index.php/Unofficial_user_repositories#chaotic-aur) repository. For support, please go to the [GitHub repo](https://github.com/masterkorp/joplin-pkgbuild). If you are interested in [pre-release](https://joplinapp.org/prereleases/) you have [joplin-beta](https://aur.archlinux.org/packages/joplin-beta).
+Flatpak          | A Flatpak is available on [Flathub](https://flathub.org/apps/details/net.cozic.joplin_desktop). To install it, run `flatpak install net.cozic.joplin_desktop` after [setting up Flathub](https://flatpak.org/setup/). GUI software managers on most distros support Flatpak installation.
 
 ## Web Clipper
 
