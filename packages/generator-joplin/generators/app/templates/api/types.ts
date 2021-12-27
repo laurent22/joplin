@@ -1,3 +1,5 @@
+export { ModelType } from '../../../BaseModel';
+
 // =================================================================
 // Command API types
 // =================================================================
@@ -268,6 +270,17 @@ export interface MenuItem {
 	 * have a command associated with them unless they are a sub-menu.
 	 */
 	commandName?: string;
+
+	/**
+	 * Arguments that should be passed to the command. They will be as rest
+	 * parameters.
+	 */
+	commandArgs?: any[];
+
+	/**
+	 * Set to "separator" to create a divider line
+	 */
+	type?: string;
 
 	/**
 	 * Accelerator associated with the menu item

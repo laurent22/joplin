@@ -61,8 +61,7 @@ export default class JoplinViewsDialogs {
     open(handle: ViewHandle): Promise<DialogResult>;
     /**
      * Toggle on whether to fit the dialog size to the content or not.
-     * When set to false, the dialog stretches to fill the application
-     * window.
+     * When set to false, the dialog is set to 90vw and 80vh
      * @default true
      */
     setFitToContent(handle: ViewHandle, status: boolean): Promise<boolean>;
