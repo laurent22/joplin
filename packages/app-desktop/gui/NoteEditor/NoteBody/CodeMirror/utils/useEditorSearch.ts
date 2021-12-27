@@ -107,7 +107,9 @@ export default function useEditorSearch(CodeMirror: any) {
 			const searchTerm = getSearchTerm(keyword);
 
 			// We only want to scroll the first keyword into view in the case of a multi keyword search
-			const scrollTo = i === 0 && (previousKeywordValue !== keyword.value || previousIndex !== options.selectedIndex);
+			const scrollTo = i === 0 && (previousKeywordValue !== keyword.value || previousIndex !== options.selectedIndex ||
+				// If there is only one choice, scrollTo should be true. The below is a dummy of nMatches === 1.
+				options.selectedIndex === 0);
 
 			const match = highlightSearch(this, searchTerm, options.selectedIndex, scrollTo);
 			if (match) marks.push(match);
