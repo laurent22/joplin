@@ -18,7 +18,7 @@ async function main() {
 
 	await setPackagePrivateField(packageFilePath, false);
 	try {
-		await execCommandVerbose('yarn', ['publish']);
+		await execCommandVerbose('npm', ['publish']);
 	} finally {
 		await setPackagePrivateField(packageFilePath, true);
 	}

@@ -20,7 +20,7 @@ async function main() {
 
 	process.chdir(`${appDir}/build`);
 
-	await execCommand2('yarn publish');
+	await execCommand2('npm publish');
 
 	await completeReleaseWithChangelog(changelogPath, newVersion, newTag, 'CLI', false);
 }
