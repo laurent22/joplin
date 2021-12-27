@@ -1,4 +1,4 @@
-const utils = require('@joplin/tools/gulp/utils');
+const { copy, mkdirp, remove } = require('fs-extra');
 
 async function main() {
 	const rootDir = `${__dirname}/..`;
@@ -9,9 +9,16 @@ async function main() {
 		`${rootDir}/pluginAssets`,
 	];
 
-	for (const destDir of destDirs) {
-		console.info(`Copying to ${destDir}`);
-		await utils.copyDir(sourceDir, destDir);
+	for (const action of ['delete', 'copy']) {
+		for (const destDir of destDirs) {
+			if (action === 'delete') {
+				await remove(destDir);
+			} else {
+				console.info(`Copying to ${destDir}`);
+				await mkdirp(destDir);
+				await copy(sourceDir, destDir, { overwrite: true });
+			}
+		}
 	}
 }
 
