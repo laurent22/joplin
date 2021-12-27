@@ -36,6 +36,8 @@ const MenuItem = bridge().MenuItem;
 import { reg } from '@joplin/lib/registry';
 import ErrorBoundary from '../../../ErrorBoundary';
 import { MarkupToHtmlOptions } from '../../utils/useMarkupToHtml';
+import eventManager from '@joplin/lib/eventManager';
+import { EditContextMenuFilterObject } from '@joplin/lib/services/plugins/api/JoplinWorkspace';
 
 const menuUtils = new MenuUtils(CommandService.instance());
 
@@ -733,7 +735,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 			return rect.x < x && rect.y < y && rect.right > x && rect.bottom > y;
 		}
 
-		function onContextMenu(_event: any, params: any) {
+		async function onContextMenu(_event: any, params: any) {
 			if (!pointerInsideEditor(params.x, params.y)) return;
 
 			const menu = new Menu();
@@ -785,6 +787,23 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 			// to the contextmenu selection
 			if (editorRef.current && spellCheckerMenuItems.length > 0) {
 				editorRef.current.alignSelection(params);
+			}
+
+			let filterObject: EditContextMenuFilterObject = {
+				items: [],
+			};
+
+			filterObject = await eventManager.filterEmit('editorContextMenu', filterObject);
+
+			for (const item of filterObject.items) {
+				menu.append(new MenuItem({
+					label: item.label,
+					click: async () => {
+						const args = item.commandArgs || [];
+						void CommandService.instance().execute(item.commandName, ...args);
+					},
+					type: item.type,
+				}));
 			}
 
 			menuUtils.pluginContextMenuItems(props.plugins, MenuItemLocation.EditorContextMenu).forEach((item: any) => {

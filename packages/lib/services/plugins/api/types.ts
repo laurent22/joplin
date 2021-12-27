@@ -270,6 +270,17 @@ export interface MenuItem {
 	commandName?: string;
 
 	/**
+	 * Arguments that should be passed to the command. They will be as rest
+	 * parameters.
+	 */
+	commandArgs?: any[];
+
+	/**
+	 * Set to "separator" to create a divider line
+	 */
+	type?: string;
+
+	/**
 	 * Accelerator associated with the menu item
 	 */
 	accelerator?: string;

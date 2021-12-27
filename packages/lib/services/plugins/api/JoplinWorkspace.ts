@@ -3,7 +3,7 @@ import eventManager from '../../../eventManager';
 import Setting from '../../../models/Setting';
 import { FolderEntity } from '../../database/types';
 import makeListener from '../utils/makeListener';
-import { Disposable } from './types';
+import { Disposable, MenuItem } from './types';
 
 /**
  * @ignore
@@ -14,6 +14,12 @@ import Note from '../../../models/Note';
  * @ignore
  */
 import Folder from '../../../models/Folder';
+
+export interface EditContextMenuFilterObject {
+	items: MenuItem[];
+}
+
+type FilterHandler<T> = (object: T)=> Promise<void>;
 
 enum ItemChangeEventType {
 	Create = 1,
@@ -114,6 +120,14 @@ export default class JoplinWorkspace {
 	}
 
 	/**
+	 * Called just before the editor context menu is about to open. Allows
+	 * adding items to it.
+	 */
+	public filterEditorContextMenu(handler: FilterHandler<EditContextMenuFilterObject>) {
+		eventManager.filterOn('editorContextMenu', handler);
+	}
+
+	/**
 	 * Gets the currently selected note
 	 */
 	public async selectedNote(): Promise<any> {
@@ -139,4 +153,5 @@ export default class JoplinWorkspace {
 	public async selectedNoteIds(): Promise<string[]> {
 		return this.store.getState().selectedNoteIds.slice();
 	}
+
 }
