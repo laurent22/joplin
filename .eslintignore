@@ -313,6 +313,9 @@ packages/app-desktop/gui/MainScreen/commands/renameFolder.js.map
 packages/app-desktop/gui/MainScreen/commands/renameTag.d.ts
 packages/app-desktop/gui/MainScreen/commands/renameTag.js
 packages/app-desktop/gui/MainScreen/commands/renameTag.js.map
+packages/app-desktop/gui/MainScreen/commands/revealResourceFile.d.ts
+packages/app-desktop/gui/MainScreen/commands/revealResourceFile.js
+packages/app-desktop/gui/MainScreen/commands/revealResourceFile.js.map
 packages/app-desktop/gui/MainScreen/commands/search.d.ts
 packages/app-desktop/gui/MainScreen/commands/search.js
 packages/app-desktop/gui/MainScreen/commands/search.js.map
