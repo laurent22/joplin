@@ -71,7 +71,7 @@ export default function useNoteSearchBar() {
 	const onClose = useCallback(() => {
 		setShowLocalSearch(false);
 		setLocalSearch(defaultLocalSearch());
-		void CommandService.instance().execute('focusElementNoteBody');		
+		void CommandService.instance().execute('focusElementNoteBody');
 	}, []);
 
 	const setResultCount = useCallback((count: number) => {
