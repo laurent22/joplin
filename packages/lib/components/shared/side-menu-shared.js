@@ -105,7 +105,7 @@ shared.synchronize_press = async function(comp) {
 			return 'auth';
 		}
 
-		reg.logger().info('Not authentified with sync target - please check your credential.');
+		reg.logger().error('Not authentified with sync target - please check your credential.');
 		return 'error';
 	}
 
@@ -113,8 +113,8 @@ shared.synchronize_press = async function(comp) {
 	try {
 		sync = await reg.syncTarget().synchronizer();
 	} catch (error) {
-		reg.logger().info('Could not acquire synchroniser:');
-		reg.logger().info(error);
+		reg.logger().error('Could not acquire synchroniser:');
+		reg.logger().error(error);
 		comp.props.dispatch({
 			type: 'SYNC_REPORT_UPDATE',
 			report: { errors: [error] },
