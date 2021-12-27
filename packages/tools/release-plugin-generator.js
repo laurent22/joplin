@@ -16,6 +16,8 @@ async function main() {
 
 	console.info(`New version number: ${version}`);
 
+	await execCommandVerbose('updateTypes.sh');
+
 	await setPackagePrivateField(packageFilePath, false);
 	try {
 		await execCommandVerbose('npm', ['publish']);
