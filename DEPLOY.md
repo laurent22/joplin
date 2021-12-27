@@ -6,7 +6,7 @@ Various scripts are provided to deploy the Joplin applications, scripts and tool
 
 Before new releases are created, all version numbers must be updated. This is done using the `setupNewRelease` script and passing it the new major.minor version number. For example:
 
-	yarn run setupNewRelease -- 1.8
+	yarn run setupNewRelease 1.8
 
 Patch numbers are going to be incremented automatically when releasing each individual package.
 

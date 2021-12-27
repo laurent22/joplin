@@ -1,6 +1,6 @@
 {
   "name": "@joplin/tools",
-  "version": "2.6.3",
+  "version": "2.7.0",
   "description": "Various tools for Joplin",
   "main": "index.js",
   "author": "Laurent Cozic",
@@ -20,8 +20,8 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@joplin/lib": "^2.6.3",
-    "@joplin/renderer": "^2.6.3",
+    "@joplin/lib": "~2.7",
+    "@joplin/renderer": "~2.7",
     "dayjs": "^1.10.7",
     "execa": "^4.1.0",
     "fs-extra": "^4.0.3",
@@ -37,7 +37,7 @@
     "sharp": "^0.25.2",
     "source-map-support": "^0.5.19",
     "uri-template": "^1.0.1",
-    "yargs": "^16.0.3"
+    "yargs": "16.0.3"
   },
   "devDependencies": {
     "@rmp135/sql-ts": "^1.6.0",

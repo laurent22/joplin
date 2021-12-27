@@ -111,6 +111,8 @@ async function main() {
 
 	const majorMinorVersion = argv._[0];
 
+	console.info(`New version: ${majorMinorVersion}`);
+
 	const options: Options = {
 		updateVersion: argv.updateVersion !== '0',
 		updateDependenciesVersion: argv.updateDependenciesVersion !== '0',

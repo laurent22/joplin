@@ -1,6 +1,6 @@
 {
   "name": "@joplin/lib",
-  "version": "2.6.3",
+  "version": "2.7.0",
   "description": "Joplin Core library",
   "author": "Laurent Cozic",
   "homepage": "",
@@ -33,8 +33,8 @@
     "@joplin/fork-htmlparser2": "^4.1.39",
     "@joplin/fork-sax": "^1.2.43",
     "@joplin/fork-uslug": "^1.0.4",
-    "@joplin/htmlpack": "~2.6",
-    "@joplin/renderer": "~2.6",
+    "@joplin/htmlpack": "~2.7",
+    "@joplin/renderer": "~2.7",
     "@joplin/turndown": "^4.0.61",
     "@joplin/turndown-plugin-gfm": "^1.0.43",
     "async-mutex": "^0.1.3",
