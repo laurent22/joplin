@@ -19,6 +19,7 @@ There are also a few forks of existing packages under the "fork-*" name.
 ## Required dependencies
 
 - Install node 16+ - https://nodejs.org/en/
+  - [Enable yarn](https://yarnpkg.com/getting-started/install): `corepack enable`
 - macOS: Install Cocoapods - `brew install cocoapods`
 - Windows: Install Windows Build Tools - `yarn install -g windows-build-tools --vs2015`
 - Linux: Install dependencies - `sudo apt install build-essential libnss3 libsecret-1-dev python rsync`
