@@ -16,7 +16,7 @@ async function main() {
 
 	console.info(`New version number: ${version}`);
 
-	await execCommandVerbose('updateTypes.sh');
+	await execCommandVerbose('bash', ['updateTypes.sh']);
 
 	await setPackagePrivateField(packageFilePath, false);
 	try {
