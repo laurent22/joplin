@@ -11,7 +11,7 @@ async function main() {
 
 	console.info(`Running from: ${process.cwd()}`);
 
-	const version = (await execCommand2('yarn version patch')).trim();
+	const version = (await execCommand2('npm version patch')).trim();
 	const tagName = version;
 
 	console.info(`New version number: ${version}`);
