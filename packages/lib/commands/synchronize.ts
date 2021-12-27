@@ -45,6 +45,10 @@ export const runtime = (): CommandRuntime => {
 			} catch (error) {
 				reg.logger().info('Could not acquire synchroniser:');
 				reg.logger().info(error);
+				utils.store.dispatch({
+					type: 'SYNC_REPORT_UPDATE',
+					report: { errors: [error] },
+				});
 				return 'error';
 			}
 
