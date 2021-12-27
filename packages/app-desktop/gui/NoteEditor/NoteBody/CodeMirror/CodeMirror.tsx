@@ -236,9 +236,11 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 							if (!('args' in value)) value.args = [];
 
 							if (editorRef.current[value.name]) {
-								editorRef.current[value.name](...value.args);
+								const result = editorRef.current[value.name](...value.args);
+								return result;
 							} else if (editorRef.current.commandExists(value.name)) {
-								editorRef.current.execCommand(value.name);
+								const result = editorRef.current.execCommand(value.name);
+								return result;
 							} else {
 								reg.logger().warn('CodeMirror execCommand: unsupported command: ', value.name);
 							}

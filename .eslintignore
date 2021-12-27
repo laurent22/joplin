@@ -298,6 +298,9 @@ packages/app-desktop/gui/MainScreen/commands/openFolder.js.map
 packages/app-desktop/gui/MainScreen/commands/openFolderDialog.d.ts
 packages/app-desktop/gui/MainScreen/commands/openFolderDialog.js
 packages/app-desktop/gui/MainScreen/commands/openFolderDialog.js.map
+packages/app-desktop/gui/MainScreen/commands/openItem.d.ts
+packages/app-desktop/gui/MainScreen/commands/openItem.js
+packages/app-desktop/gui/MainScreen/commands/openItem.js.map
 packages/app-desktop/gui/MainScreen/commands/openNote.d.ts
 packages/app-desktop/gui/MainScreen/commands/openNote.js
 packages/app-desktop/gui/MainScreen/commands/openNote.js.map

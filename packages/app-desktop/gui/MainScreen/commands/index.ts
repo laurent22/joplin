@@ -12,6 +12,7 @@ import * as newSubFolder from './newSubFolder';
 import * as newTodo from './newTodo';
 import * as openFolder from './openFolder';
 import * as openFolderDialog from './openFolderDialog';
+import * as openItem from './openItem';
 import * as openNote from './openNote';
 import * as openTag from './openTag';
 import * as print from './print';
@@ -50,6 +51,7 @@ const index:any[] = [
 	newTodo,
 	openFolder,
 	openFolderDialog,
+	openItem,
 	openNote,
 	openTag,
 	print,
