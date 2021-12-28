@@ -1,4 +1,4 @@
-const { writeFile, copySync, mkdirpSync, removeSync } = require('fs-extra');
+const { writeFile, copy, mkdirp, remove } = require('fs-extra');
 const glob = require('glob');
 const { resolve } = require('path');
 const { dirname } = require('@joplin/tools/gulp/utils');
@@ -10,6 +10,28 @@ function stripOffRootDir(path) {
 	if (path.startsWith(rootDir)) return path.substr(rootDir.length + 1);
 	return path;
 }
+
+const msleep = async (ms) => {
+	return new Promise((resolve) => {
+		setTimeout(() => {
+			resolve();
+		}, ms);
+	});
+};
+
+const withRetry = async (fn) => {
+	for (let i = 0; i < 5; i++) {
+		try {
+			await fn();
+			return;
+		} catch (error) {
+			console.warn(`withRetry: Failed calling function - will retry (${i})`, error);
+			await msleep(1000 + i * 1000);
+		}
+	}
+
+	throw new Error('withRetry: Could not run function after multiple attempts');
+};
 
 async function main() {
 	const langSourceDir = resolve(__dirname, '../../../Assets/TinyMCE/langs');
@@ -56,11 +78,11 @@ async function main() {
 			}
 
 			if (action === 'delete') {
-				removeSync(destDir);
+				await withRetry(() => remove(destDir));
 			} else {
 				console.info(`Copying ${stripOffRootDir(sourceDir)} => ${stripOffRootDir(destDir)}`);
-				mkdirpSync(destDir);
-				copySync(sourceDir, destDir, { overwrite: true });
+				await withRetry(() => mkdirp(destDir));
+				await withRetry(() => copy(sourceDir, destDir, { overwrite: true }));
 			}
 		}
 	}
@@ -76,10 +98,10 @@ async function main() {
 			destFile = `${buildLibDir}/${file}`;
 		}
 
-		mkdirpSync(dirname(destFile));
+		await withRetry(() => mkdirp(dirname(destFile)));
 
 		console.info(`Copying ${stripOffRootDir(sourceFile)} => ${stripOffRootDir(destFile)}`);
-		copySync(sourceFile, destFile, { overwrite: true });
+		await withRetry(() => copy(sourceFile, destFile, { overwrite: true }));
 	}
 
 	const supportedLocales = glob.sync(`${langSourceDir}/*.js`).map(s => {
