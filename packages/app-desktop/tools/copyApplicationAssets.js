@@ -1,4 +1,4 @@
-const { writeFile, copy, mkdirp, remove } = require('fs-extra');
+const { writeFile, copySync, mkdirpSync, removeSync } = require('fs-extra');
 const glob = require('glob');
 const { resolve } = require('path');
 const { dirname } = require('@joplin/tools/gulp/utils');
@@ -50,11 +50,11 @@ async function main() {
 			}
 
 			if (action === 'delete') {
-				await remove(destDir);
+				removeSync(destDir);
 			} else {
 				console.info(`Copying ${sourceDir} => ${destDir}`);
-				await mkdirp(destDir);
-				await copy(sourceDir, destDir, { overwrite: true });
+				mkdirpSync(destDir);
+				copySync(sourceDir, destDir, { overwrite: true });
 			}
 		}
 	}
@@ -70,10 +70,10 @@ async function main() {
 			destFile = `${buildLibDir}/${file}`;
 		}
 
-		await mkdirp(dirname(destFile));
+		mkdirpSync(dirname(destFile));
 
 		console.info(`Copying ${sourceFile} => ${destFile}`);
-		await copy(sourceFile, destFile, { overwrite: true });
+		copySync(sourceFile, destFile, { overwrite: true });
 	}
 
 	const supportedLocales = glob.sync(`${langSourceDir}/*.js`).map(s => {
