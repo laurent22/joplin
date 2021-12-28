@@ -105,7 +105,7 @@ shared.synchronize_press = async function(comp) {
 			return 'auth';
 		}
 
-		reg.logger().error('Not authentified with sync target - please check your credential.');
+		reg.logger().error('Not authenticated with sync target - please check your credentials.');
 		return 'error';
 	}
 
