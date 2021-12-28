@@ -3,7 +3,13 @@ const glob = require('glob');
 const { resolve } = require('path');
 const { dirname } = require('@joplin/tools/gulp/utils');
 
+const rootDir = resolve(__dirname, '../../..');
 const nodeModulesDir = resolve(__dirname, '../node_modules');
+
+function stripOffRootDir(path) {
+	if (path.startsWith(rootDir)) return path.substr(rootDir.length + 1);
+	return path;
+}
 
 async function main() {
 	const langSourceDir = resolve(__dirname, '../../../Assets/TinyMCE/langs');
@@ -52,7 +58,7 @@ async function main() {
 			if (action === 'delete') {
 				removeSync(destDir);
 			} else {
-				console.info(`Copying ${sourceDir} => ${destDir}`);
+				console.info(`Copying ${stripOffRootDir(sourceDir)} => ${stripOffRootDir(destDir)}`);
 				mkdirpSync(destDir);
 				copySync(sourceDir, destDir, { overwrite: true });
 			}
@@ -72,7 +78,7 @@ async function main() {
 
 		mkdirpSync(dirname(destFile));
 
-		console.info(`Copying ${sourceFile} => ${destFile}`);
+		console.info(`Copying ${stripOffRootDir(sourceFile)} => ${stripOffRootDir(destFile)}`);
 		copySync(sourceFile, destFile, { overwrite: true });
 	}
 
