@@ -120,7 +120,7 @@ export default class PluginRunner extends BasePluginRunner {
 
 		bridge().electronApp().registerPluginWindow(plugin.id, pluginWindow);
 
-		pluginWindow.loadURL(`${require('url').format({
+		void pluginWindow.loadURL(`${require('url').format({
 			pathname: require('path').join(__dirname, 'plugin_index.html'),
 			protocol: 'file:',
 			slashes: true,

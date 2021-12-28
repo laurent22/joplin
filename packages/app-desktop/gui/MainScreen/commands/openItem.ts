@@ -27,9 +27,9 @@ export const runtime = (): CommandRuntime => {
 					// but doesn't on macOS, so we need to convert it to a path
 					// before passing it to openPath.
 					const decodedPath = fileUriToPath(urlDecode(link), shim.platformName());
-					require('electron').shell.openPath(decodedPath);
+					void require('electron').shell.openPath(decodedPath);
 				} else {
-					require('electron').shell.openExternal(link);
+					void require('electron').shell.openExternal(link);
 				}
 			} else {
 				bridge().showErrorMessageBox(_('Unsupported link or message: %s', link));

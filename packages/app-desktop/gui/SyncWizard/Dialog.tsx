@@ -224,7 +224,7 @@ export default function(props: Props) {
 	}, [joplinCloudEmail, joplinCloudPassword, props.dispatch]);
 
 	const onJoplinCloudCreateAccountClick = useCallback(() => {
-		bridge().openExternal('https://joplinapp.org/plans/');
+		void bridge().openExternal('https://joplinapp.org/plans/');
 	}, []);
 
 	function renderJoplinCloudLoginForm() {

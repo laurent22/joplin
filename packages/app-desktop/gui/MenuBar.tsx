@@ -697,13 +697,13 @@ function useMenu(props: Props) {
 					submenu: [{
 						label: _('Website and documentation'),
 						accelerator: keymapService.getAccelerator('help'),
-						click() { bridge().openExternal('https://joplinapp.org'); },
+						click() { void bridge().openExternal('https://joplinapp.org'); },
 					}, {
 						label: _('Joplin Forum'),
-						click() { bridge().openExternal('https://discourse.joplinapp.org'); },
+						click() { void bridge().openExternal('https://discourse.joplinapp.org'); },
 					}, {
 						label: _('Make a donation'),
-						click() { bridge().openExternal('https://joplinapp.org/donate/'); },
+						click() { void bridge().openExternal('https://joplinapp.org/donate/'); },
 					}, {
 						label: _('Check for updates...'),
 						visible: shim.isMac() ? false : true,
@@ -816,7 +816,7 @@ function useMenu(props: Props) {
 							menuItemDic.textCut,
 							menuItemDic.textPaste,
 							menuItemDic.textSelectAll,
-						],
+						] as any,
 					},
 				]));
 			} else {

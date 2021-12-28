@@ -198,7 +198,7 @@ export default function(props: Props) {
 	}, [pluginSettings, props.onChange]);
 
 	const onBrowsePlugins = useCallback(() => {
-		bridge().openExternal('https://github.com/joplin/plugins/blob/master/README.md#plugins');
+		void bridge().openExternal('https://github.com/joplin/plugins/blob/master/README.md#plugins');
 	}, []);
 
 	const onPluginSettingsChange = useCallback((event: OnPluginSettingChangeEvent) => {

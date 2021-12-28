@@ -201,11 +201,11 @@ export default async function checkForUpdates(inBackground: boolean, parentWindo
 				});
 
 				if (buttonIndex === 0) {
-					bridge().openExternal(release.downloadUrl ? release.downloadUrl : release.pageUrl);
+					void bridge().openExternal(release.downloadUrl ? release.downloadUrl : release.pageUrl);
 				} else if (buttonIndex === 1) {
 					await addSkippedVersion(release.version);
 				} else if (buttonIndex === 2) {
-					bridge().openExternal('https://joplinapp.org/changelog/');
+					void bridge().openExternal('https://joplinapp.org/changelog/');
 				}
 			}
 		}

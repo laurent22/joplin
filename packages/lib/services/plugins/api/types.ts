@@ -297,7 +297,7 @@ export interface MenuItem {
 	/**
 	 * Set to "separator" to create a divider line
 	 */
-	type?: string;
+	type?: ('normal' | 'separator' | 'submenu' | 'checkbox' | 'radio');
 
 	/**
 	 * Accelerator associated with the menu item
