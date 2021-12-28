@@ -4420,3 +4420,325 @@ msgstr "Ampliar"
 #: packages/app-desktop/gui/MenuBar.tsx:655
 msgid "Zoom Out"
 msgstr "Allunyar"
+
+#~ msgid "AWS S3"
+#~ msgstr "AWS S3"
+
+#~ msgid "Master keys that need upgrading"
+#~ msgstr "Claus mestres que necessiten actualització"
+
+#~ msgid ""
+#~ "The following master keys use an out-dated encryption algorithm and it is "
+#~ "recommended to upgrade them. The upgraded master key will still be able "
+#~ "to decrypt and encrypt your data as usual."
+#~ msgstr ""
+#~ "Les claus mestres següents utilitzen un algoritme de xifratge obsolet i "
+#~ "és recomanable d'actualitzar-les. La clau mestra actualitzada també podrà "
+#~ "xifrar i desxifrar les vostres dades com fins ara."
+
+#~ msgid ""
+#~ "Enabling encryption means *all* your notes and attachments are going to "
+#~ "be re-synchronised and sent encrypted to the sync target. Do not lose the "
+#~ "password as, for security purposes, this will be the *only* way to "
+#~ "decrypt the data! To enable encryption, please enter your password below."
+#~ msgstr ""
+#~ "Activar el xifratge significa que *tots* els adjunts i les notes es "
+#~ "tornaran a sincronitzar i a enviar xifrats a la destinació de "
+#~ "sincronització. No perdeu la contrasenya perquè, per motius de seguretat, "
+#~ "serà l'*única* manera desxifrar les dades! Per a activar el xifratge, "
+#~ "introduïu la contrasenya a sota."
+
+#~ msgid "Master Keys"
+#~ msgstr "Claus mestres"
+
+#~ msgid "Source"
+#~ msgstr "Font"
+
+#~ msgid "Password OK"
+#~ msgstr "La contrasenya és correcta"
+
+#~ msgid ""
+#~ "Note: Only one master key is going to be used for encryption (the one "
+#~ "marked as \"active\"). Any of the keys might be used for decryption, "
+#~ "depending on how the notes or notebooks were originally encrypted."
+#~ msgstr ""
+#~ "Nota: només s'usarà una clau mestra per al xifratge (la marcada com a "
+#~ "«activa»). Qualsevol de les claus es podrien usar per a desxifrar, "
+#~ "depenent de com es van xifrar originalment les notes o blocs de notes."
+
+#~ msgid "Encryption is:"
+#~ msgstr "El xifratge és:"
+
+#~ msgid "Delete these notes?"
+#~ msgstr "Voleu suprimir aquestes notes?"
+
+#, javascript-format
+#~ msgid "Encryption will be enabled using the master key created on %s"
+#~ msgstr "El xifrat s'habilitarà utilitzant la clau mestra creada a %s"
+
+#~ msgid "Do not resize images"
+#~ msgstr "No canvies la mida de les imatges"
+
+#, javascript-format
+#~ msgid "%s %s (%s)"
+#~ msgstr "%s %s (%s)"
+
+#~ msgid "Insert template"
+#~ msgstr "Insereix plantilla"
+
+#~ msgid "Template file:"
+#~ msgstr "Fitxer de plantilla:"
+
+#~ msgid "Create note from template"
+#~ msgstr "Crea nota des d'una plantilla"
+
+#~ msgid "Create to-do from template"
+#~ msgstr "Crea tasques pendents des d'una plantilla"
+
+#~ msgid "Open template directory"
+#~ msgstr "Obre carpeta de plantilles"
+
+#~ msgid "Refresh templates"
+#~ msgstr "Refresca plantilles"
+
+#~ msgid "Templates"
+#~ msgstr "Plantilles"
+
+#~ msgid "Share Notes"
+#~ msgstr "Comparteix notes"
+
+#, fuzzy
+#~ msgid "Joplin Server Directory"
+#~ msgstr "Directori d'exportació del Joplin"
+
+#, fuzzy
+#~ msgid "marked text"
+#~ msgstr "text amb èmfasi"
+
+#, fuzzy
+#~ msgid "Mark"
+#~ msgstr "Marcatge"
+
+#~ msgid "Full Release Notes"
+#~ msgstr "Notes completes de la versió"
+
+#, fuzzy
+#~ msgid ""
+#~ "If the font is incorrect or empty, it will default to a generic monospace "
+#~ "font."
+#~ msgstr ""
+#~ "Cal que sigui un tipus de lletra *monoespacial* o no funcionarà "
+#~ "correctament. Si el tipus de lletra no és correcte o és buit, s'establirà "
+#~ "per defecte a un tipus de lletra monoespacial genèric."
+
+#~ msgid ""
+#~ "This should be a *monospace* font or some elements will render "
+#~ "incorrectly. If the font is incorrect or empty, it will default to a "
+#~ "generic monospace font."
+#~ msgstr ""
+#~ "Cal que sigui un tipus de lletra *monoespacial* o no funcionarà "
+#~ "correctament. Si el tipus de lletra no és correcte o és buit, s'establirà "
+#~ "per defecte a un tipus de lletra monoespacial genèric."
+
+#~ msgid "Unknown"
+#~ msgstr "Desconegut"
+
+#~ msgid "Checking..."
+#~ msgstr "Verificant..."
+
+#~ msgid ""
+#~ "The Joplin Nextcloud App is either not installed or misconfigured. Please "
+#~ "see the full error message below:"
+#~ msgstr ""
+#~ "L'aplicació Joplin Nextcloud no està instal·lada, o està mal configurada. "
+#~ "Llegiu el missatge d'error complet a continuació:"
+
+#~ msgid "Show Log"
+#~ msgstr "Mostra el registre"
+
+#~ msgid "Joplin Nextcloud App status:"
+#~ msgstr "Estat de l'aplicació Joplin Nextcloud:"
+
+#~ msgid "Check Status"
+#~ msgstr "Verifica l'estat"
+
+#~ msgid "OneDrive Dev (For testing only)"
+#~ msgstr "OneDrive Dev (només proves)"
+
+#~ msgid ""
+#~ "Type a note title or part of its content to jump to it. Or type # "
+#~ "followed by a tag name, or @ followed by a notebook name."
+#~ msgstr ""
+#~ "Escriviu un títol de nota o part del seu contingut per saltar a la nota. "
+#~ "O escriviu # seguit d'un nom d'etiqueta, o @ seguit d'un nom de bloc de "
+#~ "notes."
+
+#~ msgid "Name"
+#~ msgstr "Nom"
+
+#~ msgid "Notebook properties"
+#~ msgstr "Propietats del bloc de notes"
+
+#, javascript-format
+#~ msgid "This file could not be opened: %s"
+#~ msgstr "Aquest fitxer no s'ha pogut obrir: %s"
+
+#~ msgid "emphasized text"
+#~ msgstr "text ressaltat"
+
+#~ msgid "Click to stop external editing"
+#~ msgstr "Feu-hi clic per a aturar l'edició externa"
+
+#~ msgid "Content Properties"
+#~ msgstr "Propietats del contingut"
+
+#~ msgid "Please create a notebook first."
+#~ msgstr "Primer heu de crear un bloc de notes."
+
+#~ msgid "Usage"
+#~ msgstr "Ús"
+
+#~ msgid "Exit"
+#~ msgstr "Surt"
+
+#~ msgid "Select date"
+#~ msgstr "Seleccioneu una data"
+
+#~ msgid "Confirm"
+#~ msgstr "Confirmació"
+
+#~ msgid "Attach any file"
+#~ msgstr "Adjunta un fitxer"
+
+#~ msgid "Remove tag \"%s\" and its descendant tags from all notes?"
+#~ msgstr ""
+#~ "Voleu suprimir l'etiqueta «%s» i les seves descendents de totes les notes?"
+
+#~ msgid ""
+#~ "Could not synchronise with OneDrive.\n"
+#~ "\n"
+#~ "This error often happens when using OneDrive for Business, which "
+#~ "unfortunately cannot be supported.\n"
+#~ "\n"
+#~ "Please consider using a regular OneDrive account."
+#~ msgstr ""
+#~ "No s'ha pogut sincronitzar amb OneDrive.\n"
+#~ "\n"
+#~ "Aquest error habitualment apareix si s'usa OneDriver for Business, que "
+#~ "malauradament no està suportat.\n"
+#~ "\n"
+#~ "Considereu usar un compte OneDrive personal."
+
+#~ msgid "Unknown log level: %s"
+#~ msgstr "Nivell de registre desconegut: %s"
+
+#~ msgid "Unknown level ID: %s"
+#~ msgstr "ID de nivell desconeguda: %s"
+
+#~ msgid "Use CodeMirror as the code editor (WARNING: BETA)."
+#~ msgstr "Utilitzeu CodeMirror com a editor de codi (AVÍS: BETA)."
+
+#~ msgid "Cannot move tag to this location."
+#~ msgstr "No es pot moure l'etiqueta a aquesta ubicació."
+
+#~ msgid "Tag name cannot start or end with a `/`."
+#~ msgstr "El nom de l'etiqueta no pot començar o acabar amb '/'."
+
+#~ msgid "Tag name cannot contain `//`."
+#~ msgstr "El nom de l'etiqueta no pot tenir '//'."
+
+#~ msgid "Synchronize"
+#~ msgstr "Sincronitza"
+
+#~ msgid "Json Export Directory"
+#~ msgstr "Directori d'exportació de JSON"
+
+#~ msgid ""
+#~ "This item is currently encrypted: %s \"%s\". Please wait for all items to "
+#~ "be decrypted and try again."
+#~ msgstr ""
+#~ "L'element ara mateix és xifrat: %s «%s». Espereu que es desxifrin tots "
+#~ "els elements i torneu-ho a intentar."
+
+#~ msgid "Add or remove tags"
+#~ msgstr "Afegeix o suprimeix etiquetes"
+
+#, fuzzy
+#~ msgid "Resources"
+#~ msgstr "Recursos: %d."
+
+#~ msgid "Global zoom percentage"
+#~ msgstr "Percentatge de zoom global"
+
+#~ msgid "Synchronisation is already in progress. State: %s"
+#~ msgstr "La sincronització ja és en procés. Estat: %s"
+
+#, fuzzy
+#~ msgid "Confirm master password:"
+#~ msgstr "Introduïu una contrasenya mestra:"
+
+#, fuzzy
+#~ msgid "Confirm password"
+#~ msgstr "Introduïu una contrasenya mestra:"
+
+#, fuzzy
+#~ msgid "Missing required argument: note"
+#~ msgstr "Manca un argument requerit: %s"
+
+#~ msgid "Synchronisation status"
+#~ msgstr "Estat de la sincronització"
+
+#~ msgid "General Options"
+#~ msgstr "Opcions generals"
+
+#~ msgid "Encryption options"
+#~ msgstr "Opcions del xifratge"
+
+#~ msgid "Encryption Options"
+#~ msgstr "Opcions de xifratge"
+
+#~ msgid "Clipper Options"
+#~ msgstr "Opcions del desa-retalls"
+
+#~ msgid "Separate each tag by a comma."
+#~ msgstr "Separeu les etiquetes amb comes."
+
+#~ msgid "State: %s."
+#~ msgstr "Estat: %s."
+
+#~ msgid "A notebook with this title already exists: \"%s\""
+#~ msgstr "Ja existeix un bloc de notes amb aquest títol: «%s»"
+
+#~ msgid ""
+#~ "The path to synchronise with when file system synchronisation is enabled. "
+#~ "See `sync.target`."
+#~ msgstr ""
+#~ "El camí on sincronitzar en activar la sincronització del sistema. Vegeu "
+#~ "«sync.target»."
+
+#~ msgid "Cancel synchronisation"
+#~ msgstr "Cancel·la la sincronització"
+
+#~ msgid "Hide metadata"
+#~ msgstr "Amaga les metadades"
+
+#~ msgid "Show metadata"
+#~ msgstr "Mostra les metadades"
+
+#~ msgid "Delete notebook"
+#~ msgstr "Suprimeix el bloc de notes"
+
+#~ msgid ""
+#~ "Click on the (+) button to create a new note or notebook. Click on the "
+#~ "side menu to access your existing notebooks."
+#~ msgstr ""
+#~ "Feu clic en el botó (+) per a crear una nota o bloc de notes. Feu clic en "
+#~ "el menú lateral per a accedir als blocs de notes existents."
+
+#~ msgid ""
+#~ "You currently have no notebook. Create one by clicking on (+) button."
+#~ msgstr ""
+#~ "Ara mateix no teniu cap bloc de notes. Creeu-ne un fent clic al botó (+)."
+
+#~ msgid "Welcome"
+#~ msgstr "Benvingut"
