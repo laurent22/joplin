@@ -115,6 +115,7 @@ shared.synchronize_press = async function(comp) {
 	} catch (error) {
 		reg.logger().error('Could not acquire synchroniser:');
 		reg.logger().error(error);
+		error.message = `Could not acquire synchronizer: ${error.message}`;
 		comp.props.dispatch({
 			type: 'SYNC_REPORT_UPDATE',
 			report: { errors: [error] },

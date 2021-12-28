@@ -43,8 +43,9 @@ export const runtime = (): CommandRuntime => {
 			try {
 				sync = await reg.syncTarget().synchronizer();
 			} catch (error) {
-				reg.logger().error('Could not acquire synchroniser:');
+				reg.logger().error('Could not acquire synchronizer:');
 				reg.logger().error(error);
+				error.message = `Could not acquire synchronizer: ${error.message}`;
 				utils.store.dispatch({
 					type: 'SYNC_REPORT_UPDATE',
 					report: { errors: [error] },
