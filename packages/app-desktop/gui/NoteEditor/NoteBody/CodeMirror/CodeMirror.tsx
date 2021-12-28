@@ -502,10 +502,6 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				padding-left: .2em;
 			}
 
-			div.CodeMirror span.cm-strong {
-				color: ${theme.colorBright};
-			}
-
 			div.CodeMirror span.cm-hr {
 				color: ${theme.dividerColor};
 			}
