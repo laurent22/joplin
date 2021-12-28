@@ -1,22 +1,18 @@
 import ElectronAppWrapper from './ElectronAppWrapper';
 import shim from '@joplin/lib/shim';
 import { _, setLocale } from '@joplin/lib/locale';
+import { BrowserWindow, nativeTheme, nativeImage } from 'electron';
 const { dirname, toSystemSlashes } = require('@joplin/lib/path-utils');
-const { BrowserWindow, nativeTheme } = require('electron');
 
 interface LastSelectedPath {
 	file: string;
 	directory: string;
 }
 
-interface LastSelectedPaths {
-	[key: string]: LastSelectedPath;
-}
-
 export class Bridge {
 
 	private electronWrapper_: ElectronAppWrapper;
-	private lastSelectedPaths_: LastSelectedPaths;
+	private lastSelectedPaths_: LastSelectedPath;
 
 	constructor(electronWrapper: ElectronAppWrapper) {
 		this.electronWrapper_ = electronWrapper;
@@ -164,11 +160,11 @@ export class Bridge {
 		if (!options) options = {};
 		let fileType = 'file';
 		if (options.properties && options.properties.includes('openDirectory')) fileType = 'directory';
-		if (!('defaultPath' in options) && this.lastSelectedPaths_[fileType]) options.defaultPath = this.lastSelectedPaths_[fileType];
+		if (!('defaultPath' in options) && (this.lastSelectedPaths_ as any)[fileType]) options.defaultPath = (this.lastSelectedPaths_ as any)[fileType];
 		if (!('createDirectory' in options)) options.createDirectory = true;
 		const { filePaths } = await dialog.showOpenDialog(this.window(), options);
 		if (filePaths && filePaths.length) {
-			this.lastSelectedPaths_[fileType] = dirname(filePaths[0]);
+			(this.lastSelectedPaths_ as any)[fileType] = dirname(filePaths[0]);
 		}
 		return filePaths;
 	}
@@ -280,6 +276,10 @@ export class Bridge {
 		}
 
 		app.exit();
+	}
+
+	public createImageFromPath(path: string) {
+		return nativeImage.createFromPath(path);
 	}
 
 }
