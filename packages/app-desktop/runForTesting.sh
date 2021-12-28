@@ -54,6 +54,10 @@ do
 
 		curl --data '{"action": "createTestUsers"}' -H 'Content-Type: application/json' http://api.joplincloud.local:22300/api/debug
 
+	elif [[ $CMD == "createUserDeletions" ]]; then
+
+		curl --data '{"action": "createUserDeletions"}' -H 'Content-Type: application/json' http://api.joplincloud.local:22300/api/debug
+
 	elif [[ $CMD == "createData" ]]; then
 		
 		echo 'mkbook "shared"' >> "$CMD_FILE"

@@ -1,7 +1,9 @@
 import Logger from '@joplin/lib/Logger';
 import { Models } from '../models/factory';
+import { Config, Env } from '../utils/types';
 import BaseService from './BaseService';
 import { Event, EventType } from './database/types';
+import { Services } from './types';
 const cron = require('node-cron');
 
 const logger = Logger.create('TaskService');
@@ -14,6 +16,7 @@ export enum TaskId {
 	HandleFailedPaymentSubscriptions = 5,
 	DeleteExpiredSessions = 6,
 	CompressOldChanges = 7,
+	ProcessUserDeletions = 8,
 }
 
 export enum RunType {
@@ -31,7 +34,7 @@ export interface Task {
 	id: TaskId;
 	description: string;
 	schedule: string;
-	run(models: Models): void;
+	run(models: Models, services: Services): void;
 }
 
 export type Tasks = Record<number, Task>;
@@ -53,6 +56,12 @@ export default class TaskService extends BaseService {
 
 	private tasks_: Tasks = {};
 	private taskStates_: Record<number, TaskState> = {};
+	private services_: Services;
+
+	public constructor(env: Env, models: Models, config: Config, services: Services) {
+		super(env, models, config);
+		this.services_ = services;
+	}
 
 	public registerTask(task: Task) {
 		if (this.tasks_[task.id]) throw new Error(`Already a task with this ID: ${task.id}`);
@@ -106,7 +115,7 @@ export default class TaskService extends BaseService {
 
 		try {
 			logger.info(`Running ${displayString} (${runTypeToString(runType)})...`);
-			await this.tasks_[id].run(this.models);
+			await this.tasks_[id].run(this.models, this.services_);
 		} catch (error) {
 			logger.error(`On ${displayString}`, error);
 		}

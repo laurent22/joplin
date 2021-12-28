@@ -103,25 +103,25 @@ export async function postDirectory(sessionId: string, parentPath: string, name:
 	return context.response.body;
 }
 
-export async function getDirectoryChildrenContext(sessionId: string, path: string, pagination: Pagination = null): Promise<AppContext> {
-	const context = await koaAppContext({
-		sessionId: sessionId,
-		request: {
-			method: 'GET',
-			url: `/api/files/${path}/children`,
-			query: paginationToQueryParams(pagination),
-		},
-	});
+// export async function getDirectoryChildrenContext(sessionId: string, path: string, pagination: Pagination = null): Promise<AppContext> {
+// 	const context = await koaAppContext({
+// 		sessionId: sessionId,
+// 		request: {
+// 			method: 'GET',
+// 			url: `/api/files/${path}/children`,
+// 			query: paginationToQueryParams(pagination),
+// 		},
+// 	});
 
-	await routeHandler(context);
-	return context;
-}
+// 	await routeHandler(context);
+// 	return context;
+// }
 
-export async function getDirectoryChildren(sessionId: string, path: string, pagination: Pagination = null): Promise<PaginatedResults> {
-	const context = await getDirectoryChildrenContext(sessionId, path, pagination);
-	checkContextError(context);
-	return context.response.body as PaginatedResults;
-}
+// export async function getDirectoryChildren(sessionId: string, path: string, pagination: Pagination = null): Promise<PaginatedResults<any>> {
+// 	const context = await getDirectoryChildrenContext(sessionId, path, pagination);
+// 	checkContextError(context);
+// 	return context.response.body as PaginatedResults;
+// }
 
 export async function putFileContentContext(sessionId: string, path: string, filePath: string): Promise<AppContext> {
 	const context = await koaAppContext({
@@ -194,8 +194,8 @@ export async function getDeltaContext(sessionId: string, path: string, paginatio
 	return context;
 }
 
-export async function getDelta(sessionId: string, path: string, pagination: Pagination): Promise<PaginatedResults> {
+export async function getDelta(sessionId: string, path: string, pagination: Pagination): Promise<PaginatedResults<any>> {
 	const context = await getDeltaContext(sessionId, path, pagination);
 	checkContextError(context);
-	return context.response.body as PaginatedResults;
+	return context.response.body as PaginatedResults<any>;
 }

@@ -12,6 +12,7 @@ import { createCsrfTag } from '../../utils/csrf';
 import { RunType } from '../../services/TaskService';
 import { NotificationKey } from '../../models/NotificationModel';
 import { NotificationLevel } from '../../services/database/types';
+const prettyCron = require('prettycron');
 
 const router: Router = new Router(RouteType.Web);
 
@@ -76,6 +77,7 @@ router.get('tasks', async (_path: SubPath, ctx: AppContext) => {
 			},
 			{
 				value: task.schedule,
+				hint: prettyCron.toString(task.schedule),
 			},
 			{
 				value: yesOrNo(state.running),

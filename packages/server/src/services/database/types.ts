@@ -40,6 +40,7 @@ export enum UserFlagType {
 	AccountWithoutSubscription = 4,
 	SubscriptionCancelled = 5,
 	ManuallyDisabled = 6,
+	UserDeletionInProgress = 7,
 }
 
 export function userFlagTypeToLabel(t: UserFlagType): string {
@@ -50,6 +51,7 @@ export function userFlagTypeToLabel(t: UserFlagType): string {
 		[UserFlagType.AccountWithoutSubscription]: 'Account Without Subscription',
 		[UserFlagType.SubscriptionCancelled]: 'Subscription Cancelled',
 		[UserFlagType.ManuallyDisabled]: 'Manually Disabled',
+		[UserFlagType.UserDeletionInProgress]: 'User deletion in progress',
 	};
 
 	if (!s[t]) throw new Error(`Unknown flag type: ${t}`);
@@ -268,6 +270,18 @@ export interface Item extends WithDates, WithUuid {
 	content_storage_id?: number;
 }
 
+export interface UserDeletion extends WithDates {
+	id?: number;
+	user_id?: Uuid;
+	process_data?: number;
+	process_account?: number;
+	scheduled_time?: number;
+	start_time?: number;
+	end_time?: number;
+	success?: number;
+	error?: string;
+}
+
 export const databaseSchema: DatabaseTables = {
 	sessions: {
 		id: { type: 'string' },
@@ -448,6 +462,19 @@ export const databaseSchema: DatabaseTables = {
 		jop_updated_time: { type: 'string' },
 		owner_id: { type: 'string' },
 		content_storage_id: { type: 'number' },
+	},
+	user_deletions: {
+		id: { type: 'number' },
+		user_id: { type: 'string' },
+		process_data: { type: 'number' },
+		process_account: { type: 'number' },
+		scheduled_time: { type: 'string' },
+		start_time: { type: 'string' },
+		end_time: { type: 'string' },
+		success: { type: 'number' },
+		error: { type: 'string' },
+		updated_time: { type: 'string' },
+		created_time: { type: 'string' },
 	},
 };
 // AUTO-GENERATED-TYPES

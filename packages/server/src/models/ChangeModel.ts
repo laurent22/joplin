@@ -16,13 +16,9 @@ export interface DeltaChange extends Change {
 	jop_updated_time?: number;
 }
 
-export interface PaginatedDeltaChanges extends PaginatedResults {
-	items: DeltaChange[];
-}
+export type PaginatedDeltaChanges = PaginatedResults<DeltaChange>;
 
-export interface PaginatedChanges extends PaginatedResults {
-	items: Change[];
-}
+export type PaginatedChanges = PaginatedResults<Change>;
 
 export interface ChangePagination {
 	limit?: number;
@@ -41,6 +37,15 @@ export function defaultDeltaPagination(): ChangePagination {
 		limit: 100,
 		cursor: '',
 	};
+}
+
+export function requestDeltaPagination(query: any): ChangePagination {
+	if (!query) return defaultDeltaPagination();
+
+	const output: ChangePagination = {};
+	if ('limit' in query) output.limit = query.limit;
+	if ('cursor' in query) output.cursor = query.cursor;
+	return output;
 }
 
 export default class ChangeModel extends BaseModel<Change> {
@@ -389,6 +394,14 @@ export default class ChangeModel extends BaseModel<Change> {
 		const savedChange = await super.save(change, options);
 		ChangeModel.eventEmitter.emit('saved');
 		return savedChange;
+	}
+
+	public async deleteByItemIds(itemIds: Uuid[]) {
+		if (!itemIds.length) return;
+
+		await this.db(this.tableName)
+			.whereIn('item_id', itemIds)
+			.delete();
 	}
 
 }

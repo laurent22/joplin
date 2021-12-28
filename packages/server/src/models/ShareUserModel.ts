@@ -145,6 +145,16 @@ export default class ShareUserModel extends BaseModel<ShareUser> {
 		}, 'ShareUserModel::deleteByShare');
 	}
 
+	public async deleteByUserId(userId: Uuid) {
+		const shareUsers = await this.byUserId(userId);
+
+		await this.withTransaction(async () => {
+			for (const shareUser of shareUsers) {
+				await this.delete(shareUser.id);
+			}
+		}, 'UserShareModel::deleteByUserId');
+	}
+
 	public async delete(id: string | string[], _options: DeleteOptions = {}): Promise<void> {
 		const ids = typeof id === 'string' ? [id] : id;
 		if (!ids.length) throw new Error('no id provided');

@@ -28,6 +28,7 @@ import indexTasks from './index/tasks';
 import indexTerms from './index/terms';
 import indexUpgrade from './index/upgrade';
 import indexUsers from './index/users';
+import indexUserDeletions from './index/user_deletions';
 
 import defaultRoute from './default';
 
@@ -60,6 +61,7 @@ const routes: Routers = {
 	'upgrade': indexUpgrade,
 	'help': indexHelp,
 	'tasks': indexTasks,
+	'user_deletions': indexUserDeletions,
 
 	'': defaultRoute,
 };

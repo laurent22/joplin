@@ -9,14 +9,18 @@ import { Services } from '../services/types';
 import EmailService from '../services/EmailService';
 import MustacheService from '../services/MustacheService';
 import setupTaskService from './setupTaskService';
+import UserDeletionService from '../services/UserDeletionService';
 
 async function setupServices(env: Env, models: Models, config: Config): Promise<Services> {
 	const output: Services = {
 		share: new ShareService(env, models, config),
 		email: new EmailService(env, models, config),
 		mustache: new MustacheService(config.viewDir, config.baseUrl),
-		tasks: setupTaskService(env, models, config),
+		userDeletion: new UserDeletionService(env, models, config),
+		tasks: null,
 	};
+
+	output.tasks = setupTaskService(env, models, config, output),
 
 	await output.mustache.loadPartials();
 

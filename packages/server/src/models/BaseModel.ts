@@ -9,6 +9,7 @@ import { Config } from '../utils/types';
 import personalizedUserContentBaseUrl from '@joplin/lib/services/joplinServer/personalizedUserContentBaseUrl';
 import Logger from '@joplin/lib/Logger';
 import dbuuid from '../utils/dbuuid';
+import { defaultPagination, PaginatedResults, Pagination } from './utils/pagination';
 
 const logger = Logger.create('BaseModel');
 
@@ -232,6 +233,28 @@ export default abstract class BaseModel<T> {
 		return rows as T[];
 	}
 
+	public async allPaginated(pagination: Pagination, options: LoadOptions = {}): Promise<PaginatedResults<T>> {
+		pagination = {
+			...defaultPagination(),
+			...pagination,
+		};
+
+		const itemCount = await this.count();
+
+		const items = await this
+			.db(this.tableName)
+			.select(this.selectFields(options))
+			.orderBy(pagination.order[0].by, pagination.order[0].dir)
+			.offset((pagination.page - 1) * pagination.limit)
+			.limit(pagination.limit) as T[];
+
+		return {
+			items,
+			page_count: Math.ceil(itemCount / pagination.limit),
+			has_more: items.length >= pagination.limit,
+		};
+	}
+
 	public async count(): Promise<number> {
 		const r = await this
 			.db(this.tableName)
@@ -343,7 +366,7 @@ export default abstract class BaseModel<T> {
 		return !!o;
 	}
 
-	public async load(id: string, options: LoadOptions = {}): Promise<T> {
+	public async load(id: Uuid | number, options: LoadOptions = {}): Promise<T> {
 		if (!id) throw new Error('id cannot be empty');
 
 		return this.db(this.tableName).select(options.fields || this.defaultFields).where({ id: id }).first();

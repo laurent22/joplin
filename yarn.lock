@@ -3391,6 +3391,7 @@ __metadata:
     nodemon: ^2.0.6
     pg: ^8.5.1
     pretty-bytes: ^5.6.0
+    prettycron: ^0.10.0
     query-string: ^6.8.3
     rate-limiter-flexible: ^2.2.4
     raw-body: ^2.4.1
@@ -19299,6 +19300,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"later@npm:^1.1.6":
+  version: 1.2.0
+  resolution: "later@npm:1.2.0"
+  checksum: 49dda2d5b3acda7a190a756c1cecc959853e8cbd1cc4c4a3b8dc0a3ec3859ec031adafe5e9659e2ad3ee13fb06288cc72d894fb8ce7bca17c0155666fdf6211b
+  languageName: node
+  linkType: hard
+
 "latest-version@npm:^5.1.0":
   version: 5.1.0
   resolution: "latest-version@npm:5.1.0"
@@ -21469,7 +21477,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"moment@npm:>= 2.9.0, moment@npm:^2.15.1, moment@npm:^2.22.2, moment@npm:^2.24.0, moment@npm:^2.29.1":
+"moment@npm:>= 2.9.0, moment@npm:^2.15.1, moment@npm:^2.22.2, moment@npm:^2.24.0, moment@npm:^2.29.1, moment@npm:^2.8.4":
   version: 2.29.1
   resolution: "moment@npm:2.29.1"
   checksum: 1e14d5f422a2687996be11dd2d50c8de3bd577c4a4ca79ba5d02c397242a933e5b941655de6c8cb90ac18f01cc4127e55b4a12ae3c527a6c0a274e455979345e
@@ -24059,6 +24067,16 @@ __metadata:
   dependencies:
     parse-ms: ^2.1.0
   checksum: d76c4920283b48be91f1d3797a2ce4bd51187d58d2a609ae993c028f73c92d16439449d857af57ccad91ae3a38b30c87307f5589749a056102ebb494c686957e
+  languageName: node
+  linkType: hard
+
+"prettycron@npm:^0.10.0":
+  version: 0.10.0
+  resolution: "prettycron@npm:0.10.0"
+  dependencies:
+    later: ^1.1.6
+    moment: ^2.8.4
+  checksum: a8e9b6e1e59f0b5b5293b21b1ebaea8f043328db9046695d0bca498d1337314ed151ad4b6df0a957513c2b59a5c777e8c2e190fb805a452c18fd2cecb7492c85
   languageName: node
   linkType: hard
 
