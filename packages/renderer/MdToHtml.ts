@@ -5,8 +5,8 @@ import setupLinkify from './MdToHtml/setupLinkify';
 import validateLinks from './MdToHtml/validateLinks';
 import { ItemIdToUrlHandler } from './utils';
 import { RenderResult, RenderResultPluginAsset } from './MarkupToHtml';
-import { Options as NoteStyleOptions } from './noteStyle';
 import { Buffer } from 'buffer';
+import { Options as NoteStyleOptions } from './noteStyle';
 
 const MarkdownIt = require('markdown-it');
 const md5 = require('md5');
