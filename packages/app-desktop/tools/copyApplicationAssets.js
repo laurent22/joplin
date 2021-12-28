@@ -19,6 +19,32 @@ const msleep = async (ms) => {
 	});
 };
 
+// Running this script on CI is very unreliable. It fails with errors that don't
+// make much sense, such as:
+//
+//     [Error: ENOENT: no such file or directory, copyfile
+//     '/home/runner/work/joplin/joplin/Assets/TinyMCE/langs/ro_RO.js' ->
+//     '/home/runner/work/joplin/joplin/packages/app-desktop/vendor/lib/tinymce/langs/ro_RO.js']
+//
+// (but "Assets/TinyMCE/langs/ro_RO.js" exists, since it's in the repo, and it's
+// normal that "tinymce/langs/ro_RO.js" doesn't exist since we want to create
+// it...)
+//
+// Another one, when trying to delete a directory:
+//
+//     ENOTEMPTY: directory not empty
+//
+// (also makes no sense since the point of calling `remove()` is to remove a
+// directory that is not empty)
+//
+// Those errors are random - they may or may not happen on a CI run, and always
+// on different files. Since they don't make sense and are seemingly impossible
+// to fix, we instead implement a retry mechanism with exponential backoff. The
+// failures are relatively rare so 5 attempts should be enough to ensure all CI
+// runs succeed.
+//
+// It's possible the same technique should be added to copyPluginAssets too.
+
 const withRetry = async (fn) => {
 	for (let i = 0; i < 5; i++) {
 		try {
