@@ -82,7 +82,9 @@ RUN yarn run build
 ENV RUNNING_IN_DOCKER=1
 EXPOSE ${APP_PORT}
 
-CMD [ "yarn", "--prefix", "packages/server", "start" ]
+# Not clear what's the equivalent of "--prefix" in Yarn 3, so keep using npm for
+# now.
+CMD [ "npm", "--prefix", "packages/server", "start" ]
 
 # Build-time metadata
 # https://github.com/opencontainers/image-spec/blob/master/annotations.md
