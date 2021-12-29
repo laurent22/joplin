@@ -1,6 +1,6 @@
 # Joplin Server Changelog
 
-## [server-v2.7.1](https://github.com/laurent22/joplin/releases/tag/server-v2.7.1) - 2021-12-29T09:50:46Z
+## [server-v2.7.2](https://github.com/laurent22/joplin/releases/tag/server-v2.7.2) - 2021-12-29T11:21:04Z
 
 - Improved: Allow deleting complete user data (#5824)
 - Improved: Changed ID length from 32 to 22 characters (e9ce3d1)
