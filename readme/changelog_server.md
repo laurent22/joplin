@@ -1,5 +1,14 @@
 # Joplin Server Changelog
 
+## [server-v2.7.1](https://github.com/laurent22/joplin/releases/tag/server-v2.7.1) - 2021-12-29T09:50:46Z
+
+- Improved: Allow deleting complete user data (#5824)
+- Improved: Changed ID length from 32 to 22 characters (e9ce3d1)
+- Improved: Disable logs and items pages for end-user (83a46e5)
+- Improved: Display NTP server domain and port when there is an error, and display message when NTP check is skipped (4a1bc07)
+- Improved: Increase default MAX_TIME_DRIFT to 2000 (35f684a)
+- Improved: Setup localisation (aa42ceb)
+
 ## [server-v2.6.14](https://github.com/laurent22/joplin/releases/tag/server-v2.6.14) - 2021-12-02T16:29:54Z
 
 - Improved: Improved storage command (122afd6)
