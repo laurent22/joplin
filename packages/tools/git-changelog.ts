@@ -18,6 +18,7 @@ enum Platform {
 	Server = 'server',
 	Cli = 'cli',
 	PluginGenerator = 'plugin-generator',
+	PluginRepoCli = 'plugin-repo-cli',
 }
 
 enum PublishFormat {
@@ -84,6 +85,7 @@ function platformFromTag(tagName: string): Platform {
 	if (tagName.indexOf('cli') === 0) return Platform.Cli;
 	if (tagName.indexOf('server') === 0) return Platform.Server;
 	if (tagName.indexOf('plugin-generator') === 0) return Platform.PluginGenerator;
+	if (tagName.indexOf('plugin-repo-cli') === 0) return Platform.PluginRepoCli;
 	throw new Error(`Could not determine platform from tag: "${tagName}"`);
 }
 
