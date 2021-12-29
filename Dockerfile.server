@@ -75,9 +75,14 @@ COPY --chown=$user:$user packages/tools ./packages/tools
 COPY --chown=$user:$user packages/lib ./packages/lib
 COPY --chown=$user:$user packages/server ./packages/server
 
-# Finally build everything, in particular the TypeScript files.
+# Finally build everything, in particular the TypeScript files. We can't just
+# run `yarn run build` because that wouldn't run the postinstall scripts in
+# dependencies (for example the sqlite3 native module would not be built). So
+# instead we run `yarn install`, which is going to install again all the
+# packages (but because it's already done it should be fast), and then run the
+# postinstall scripts, as well as build scripts.
 
-RUN yarn run build
+RUN yarn install
 
 ENV RUNNING_IN_DOCKER=1
 EXPOSE ${APP_PORT}
