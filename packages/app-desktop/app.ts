@@ -24,7 +24,6 @@ import ExternalEditWatcher from '@joplin/lib/services/ExternalEditWatcher';
 import appReducer, { createAppDefaultState } from './app.reducer';
 const { FoldersScreenUtils } = require('@joplin/lib/folders-screen-utils.js');
 import Folder from '@joplin/lib/models/Folder';
-const fs = require('fs-extra');
 import Tag from '@joplin/lib/models/Tag';
 import { reg } from '@joplin/lib/registry';
 const packageInfo = require('./packageInfo.js');
@@ -233,23 +232,6 @@ class Application extends BaseApplication {
 				return output;
 			},
 		});
-	}
-
-	public async loadCustomCss(filePath: string) {
-		let cssString = '';
-		if (await fs.pathExists(filePath)) {
-			try {
-				cssString = await fs.readFile(filePath, 'utf-8');
-
-			} catch (error) {
-				let msg = error.message ? error.message : '';
-				msg = `Could not load custom css from ${filePath}\n${msg}`;
-				error.message = msg;
-				throw error;
-			}
-		}
-
-		return cssString;
 	}
 
 	private async checkForLegacyTemplates() {
