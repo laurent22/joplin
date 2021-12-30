@@ -38,8 +38,13 @@ interface SyncStartEvent {
 	withErrors: boolean;
 }
 
+interface ResourceChangeEvent {
+	id: string;
+}
+
 type ItemChangeHandler = (event: ItemChangeEvent)=> void;
 type SyncStartHandler = (event: SyncStartEvent)=> void;
+type ResourceChangeHandler = (event: ResourceChangeEvent)=> void;
 
 /**
  * The workspace service provides access to all the parts of Joplin that
@@ -54,7 +59,7 @@ export default class JoplinWorkspace {
 
 	private store: any;
 
-	constructor(store: any) {
+	public constructor(store: any) {
 		this.store = store;
 	}
 
@@ -96,6 +101,14 @@ export default class JoplinWorkspace {
 		};
 
 		return makeListener(eventManager, 'itemChange', wrapperHandler);
+	}
+
+	/**
+	 * Called when a resource is changed. Currently this handled will not be
+	 * called when a resource is added or deleted.
+	 */
+	public async onResourceChange(handler: ResourceChangeHandler): Promise<void> {
+		makeListener(eventManager, 'resourceChange', handler);
 	}
 
 	/**

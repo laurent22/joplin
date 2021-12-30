@@ -63,6 +63,7 @@ import ShareService from '@joplin/lib/services/share/ShareService';
 import checkForUpdates from './checkForUpdates';
 import { AppState } from './app.reducer';
 import syncDebugLog from '@joplin/lib/services/synchronizer/syncDebugLog';
+import eventManager from '../lib/eventManager';
 // import { runIntegrationTests } from '@joplin/lib/services/e2ee/ppkTestUtils';
 
 const pluginClasses = [
@@ -234,7 +235,7 @@ class Application extends BaseApplication {
 		});
 	}
 
-	async loadCustomCss(filePath: string) {
+	public async loadCustomCss(filePath: string) {
 		let cssString = '';
 		if (await fs.pathExists(filePath)) {
 			try {
@@ -522,6 +523,12 @@ class Application extends BaseApplication {
 		ExternalEditWatcher.instance().initialize(bridge, this.store().dispatch);
 
 		ResourceEditWatcher.instance().initialize(reg.logger(), (action: any) => { this.store().dispatch(action); }, (path: string) => bridge().openItem(path));
+
+		// Forwards the local event to the global event manager, so that it can
+		// be picked up by the plugin manager.
+		ResourceEditWatcher.instance().on('resourceChange', (event: any) => {
+			eventManager.emit('resourceChange', event);
+		});
 
 		RevisionService.instance().runInBackground();
 
