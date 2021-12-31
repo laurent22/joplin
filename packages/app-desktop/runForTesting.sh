@@ -41,6 +41,11 @@ if [ "$USER_NUM" = "1a" ]; then
 	USER_PROFILE_NUM=1a
 fi
 
+if [ "$USER_NUM" = "1b" ]; then
+	USER_NUM=1
+	USER_PROFILE_NUM=1b
+fi
+
 COMMANDS=($(echo $2 | tr "," "\n"))
 PROFILE_DIR=~/.config/joplindev-desktop-$USER_PROFILE_NUM
 
