@@ -8,25 +8,31 @@ import StyledInput from '../style/StyledInput';
 import { IconSelector, ChangeEvent } from './IconSelector';
 import useAsyncEffect, { AsyncEffectEvent } from '@joplin/lib/hooks/useAsyncEffect';
 import Folder from '@joplin/lib/models/Folder';
-import { FolderIcon } from '@joplin/lib/services/database/types';
+import { FolderEntity, FolderIcon } from '@joplin/lib/services/database/types';
 import Button from '../Button/Button';
+import bridge from '../../services/bridge';
 
 interface Props {
 	themeId: number;
 	dispatch: Function;
 	folderId: string;
+	parentId: string;
 }
 
 export default function(props: Props) {
 	const [folderTitle, setFolderTitle] = useState('');
 	const [folderIcon, setFolderIcon] = useState<FolderIcon>();
 
+	const isNew = !props.folderId;
+
 	useAsyncEffect(async (event: AsyncEffectEvent) => {
+		if (isNew) return;
+
 		const folder = await Folder.load(props.folderId);
 		if (event.cancelled) return;
 		setFolderTitle(folder.title);
 		setFolderIcon(Folder.unserializeIcon(folder.icon));
-	}, [props.folderId]);
+	}, [props.folderId, isNew]);
 
 	const onClose = useCallback(() => {
 		props.dispatch({
@@ -42,15 +48,29 @@ export default function(props: Props) {
 		}
 
 		if (event.buttonName === 'ok') {
-			await Folder.save({
-				id: props.folderId,
+			const folder: FolderEntity = {
 				title: folderTitle,
 				icon: Folder.serializeIcon(folderIcon),
-			});
-			onClose();
+			};
+
+			if (!isNew) folder.id = props.folderId;
+			if (props.parentId) folder.parent_id = props.parentId;
+
+			try {
+				const savedFolder = await Folder.save(folder, { userSideValidation: true });
+				onClose();
+
+				props.dispatch({
+					type: 'FOLDER_SELECT',
+					id: savedFolder.id,
+				});
+			} catch (error) {
+				bridge().showErrorMessageBox(error.message);
+			}
+
 			return;
 		}
-	}, [onClose, folderTitle, folderIcon, props.folderId]);
+	}, [onClose, folderTitle, folderIcon, props.folderId, props.parentId]);
 
 	const onFolderTitleChange = useCallback((event: any) => {
 		setFolderTitle(event.target.value);
@@ -96,10 +116,12 @@ export default function(props: Props) {
 		);
 	}
 
+	const dialogTitle = isNew ? _('Create notebook') : _('Edit notebook');
+
 	function renderDialogWrapper() {
 		return (
 			<div className="dialog-root">
-				<DialogTitle title={_('Edit notebook')}/>
+				<DialogTitle title={dialogTitle}/>
 				{renderContent()}
 				<DialogButtonRow
 					themeId={props.themeId}
