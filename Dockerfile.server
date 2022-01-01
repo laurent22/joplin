@@ -82,7 +82,7 @@ COPY --chown=$user:$user packages/server ./packages/server
 # packages (but because it's already done it should be fast), and then run the
 # postinstall scripts, as well as build scripts.
 
-RUN yarn install
+RUN BUILD_SEQUENCIAL=1 yarn install
 
 ENV RUNNING_IN_DOCKER=1
 EXPOSE ${APP_PORT}
