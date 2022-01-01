@@ -29,7 +29,7 @@ const tasks = {
 			// sequencially. Locally we run it in parallel, which is much
 			// faster, especially when having to rebuild after adding a
 			// dependency.
-			if (process.env.IS_CONTINUOUS_INTEGRATION === '1') {
+			if (process.env.BUILD_SEQUENCIAL === '1') {
 				await utils.execCommandVerbose('yarn', ['run', 'buildSequential']);
 			} else {
 				await utils.execCommandVerbose('yarn', ['run', 'buildParallel']);
