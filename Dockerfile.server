@@ -31,6 +31,7 @@ COPY --chown=$user:$user package*.json ./
 COPY --chown=$user:$user .yarn ./.yarn
 COPY --chown=$user:$user .yarnrc.yml .
 COPY --chown=$user:$user yarn.lock .
+COPY --chown=$user:$user gulpfile.js .
 
 RUN yarn install --inline-builds --mode=skip-build
 
