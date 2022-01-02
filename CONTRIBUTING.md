@@ -31,7 +31,7 @@ Joplin is available in multiple languages thanks to the help of its users. You c
 
 If you want to start contributing to the project's code, please follow these guidelines before creating a pull request: 
 
-- Explain WHY you want to add this change. Explain it inside the pull request and you may link to an issue for additional information, but the PR should gives a clear overview of why you want to add this.
+- Explain WHY you want to add this change. Explain it inside the pull request and you may link to an issue for additional information, but the PR should give a clear overview of why you want to add this.
 - Bug fixes are always welcome. Start by reviewing the [list of bugs](https://github.com/laurent22/joplin/issues?q=is%3Aissue+is%3Aopen+label%3Abug)
 - A good way to easily start contributing is to pick and work on a [good first issue](https://github.com/laurent22/joplin/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22). We try to make these issues as clear as possible and provide basic info on how the code should be changed, and if something is unclear feel free to ask for more information on the issue.
 - Before adding a new feature, ask about it in the [Github Issue Tracker](https://github.com/laurent22/joplin/issues?utf8=%E2%9C%93&q=is%3Aissue) or the [Joplin Forum](https://discourse.joplinapp.org/), or check if existing discussions exist to make sure the new functionality is desired.
