@@ -31,6 +31,7 @@ COPY --chown=$user:$user package*.json ./
 COPY --chown=$user:$user .yarn ./.yarn
 COPY --chown=$user:$user .yarnrc.yml .
 COPY --chown=$user:$user yarn.lock .
+COPY --chown=$user:$user gulpfile.js .
 
 RUN yarn install --inline-builds --mode=skip-build
 
@@ -82,7 +83,7 @@ COPY --chown=$user:$user packages/server ./packages/server
 # packages (but because it's already done it should be fast), and then run the
 # postinstall scripts, as well as build scripts.
 
-RUN BUILD_SEQUENCIAL=1 yarn install
+RUN BUILD_SEQUENCIAL=1 yarn install --inline-builds
 
 ENV RUNNING_IN_DOCKER=1
 EXPOSE ${APP_PORT}
