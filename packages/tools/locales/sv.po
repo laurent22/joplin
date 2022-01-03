@@ -3221,7 +3221,7 @@ msgstr "Visa anteckningsantal"
 
 #: packages/lib/models/Setting.ts:866
 msgid "Show sort order buttons"
-msgstr "Visa sorteringsknappar"
+msgstr "Visa sorteringsordningsknappar"
 
 #: packages/lib/models/Setting.ts:1042
 msgid "Show tray icon"
