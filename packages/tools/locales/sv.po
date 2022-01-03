@@ -15,6 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.4.2\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:565
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -33,8 +35,8 @@ msgid ""
 "- Storage: to allow attaching files to notes and to enable filesystem "
 "synchronisation."
 msgstr ""
-"- Lagring: för att tillåta att du bifoga filer till anteckningar och för att "
-"aktivera filsystemsynkronisering."
+"- Lagring: för att tillåta att du bifogar filer till anteckningar och för "
+"att aktivera filsystemsynkronisering."
 
 #: packages/lib/services/KeymapService.ts:308
 #: packages/lib/services/KeymapService.ts:314
@@ -844,6 +846,8 @@ msgid ""
 "Could not verify the share status of this notebook - aborting. Please try "
 "again when you are connected to the internet."
 msgstr ""
+"Det gick inte att verifiera delningsstatusen för den här anteckningsboken - "
+"avbryter. Vänligen försök igen när du är ansluten till internet."
 
 #: packages/app-mobile/components/note-list.js:101
 msgid "Create a notebook"
@@ -1536,7 +1540,7 @@ msgstr "Exportera felsökningsrapport"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:528
 msgid "Export profile"
-msgstr "Exportera profilen"
+msgstr "Exportera profil"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:528
 msgid "Exporting profile..."
@@ -1657,7 +1661,7 @@ msgstr ""
 
 #: packages/lib/models/Setting.ts:568
 msgid "Force path style"
-msgstr ""
+msgstr "Tvinga sökvägsstil"
 
 #: packages/lib/commands/historyForward.ts:6
 msgid "Forward"
@@ -1726,7 +1730,6 @@ msgid "Heading"
 msgstr "Rubrik"
 
 #: packages/server/src/services/MustacheService.ts:201
-#, fuzzy
 msgid "Help"
 msgstr "Hjälp"
 
@@ -1748,7 +1751,7 @@ msgstr "Markera"
 
 #: packages/server/src/services/MustacheService.ts:196
 msgid "Home"
-msgstr ""
+msgstr "Hem"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:78
 msgid "Horizontal Rule"
@@ -1961,9 +1964,8 @@ msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Ogiltigt inställningsvärde: \"%s\". Möjliga värden är: %s."
 
 #: packages/app-cli/app/command-e2ee.ts:46
-#, fuzzy
 msgid "Invalid password"
-msgstr "Ogiltigt svar: %s"
+msgstr "Ogiltigt lösenord"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:38
 msgid "Italic"
@@ -2192,7 +2194,7 @@ msgstr "Logga in med OneDrive"
 
 #: packages/server/src/services/MustacheService.ts:202
 msgid "Logout"
-msgstr ""
+msgstr "Logga ut"
 
 #: packages/app-desktop/gui/MenuBar.tsx:705
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:583
@@ -2521,9 +2523,8 @@ msgid "Note&book"
 msgstr "Antecknings&bok"
 
 #: packages/lib/models/Setting.ts:2143
-#, fuzzy
 msgid "Notebook"
-msgstr "Anteckningsböcker"
+msgstr "Anteckningsbok"
 
 #: packages/lib/models/Setting.ts:1378
 msgid "Notebook list growth factor"
@@ -2549,9 +2550,8 @@ msgstr ""
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleNotesSortOrderField.ts:8
 #: packages/app-desktop/gui/MainScreen/commands/toggleNotesSortOrderReverse.ts:9
-#, fuzzy
 msgid "Notes"
-msgstr "Anteckning"
+msgstr "Anteckningar"
 
 #: packages/lib/models/Setting.ts:2159
 msgid "Notes and settings are stored in: %s"
@@ -3034,31 +3034,27 @@ msgstr "Kör kommandona i textfilen. Det ska finnas ett kommando per rad."
 
 #: packages/lib/SyncTargetAmazonS3.js:28
 msgid "S3"
-msgstr ""
+msgstr "S3"
 
 #: packages/lib/models/Setting.ts:546
-#, fuzzy
 msgid "S3 access key"
-msgstr "AWS-nyckel"
+msgstr "S3 åtkomstnyckel"
 
 #: packages/lib/models/Setting.ts:506
-#, fuzzy
 msgid "S3 bucket"
-msgstr "AWS S3"
+msgstr "S3 bucket"
 
 #: packages/lib/models/Setting.ts:535
 msgid "S3 region"
 msgstr ""
 
 #: packages/lib/models/Setting.ts:557
-#, fuzzy
 msgid "S3 secret key"
-msgstr "AWS-hemlighet"
+msgstr "S3 hemlig nyckel"
 
 #: packages/lib/models/Setting.ts:521
-#, fuzzy
 msgid "S3 URL"
-msgstr "AWS S3 URL"
+msgstr "S3 URL"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:579
 msgid ""
@@ -3224,9 +3220,8 @@ msgid "Show note counts"
 msgstr "Visa anteckningsantal"
 
 #: packages/lib/models/Setting.ts:866
-#, fuzzy
 msgid "Show sort order buttons"
-msgstr "Visa anteckningsantal"
+msgstr "Visa sorteringsordningsknappar"
 
 #: packages/lib/models/Setting.ts:1042
 msgid "Show tray icon"
@@ -3557,7 +3552,7 @@ msgstr "Ta ett foto"
 
 #: packages/server/src/services/MustacheService.ts:200
 msgid "Tasks"
-msgstr ""
+msgstr "Uppgifter"
 
 #: packages/lib/models/Setting.ts:1228
 msgid "Text editor command"
@@ -4035,9 +4030,8 @@ msgid "Toggle note list"
 msgstr "Växla anteckningslista"
 
 #: packages/app-desktop/gui/MainScreen/commands/togglePerFolderSortOrder.ts:7
-#, fuzzy
 msgid "Toggle own sort order"
-msgstr "Växla säkert läge"
+msgstr "Växla egen sorteringsordning"
 
 #: packages/app-desktop/commands/toggleSafeMode.ts:8
 msgid "Toggle safe mode"
@@ -4048,9 +4042,8 @@ msgid "Toggle sidebar"
 msgstr "Växla sidofältet"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleNotesSortOrderField.ts:7
-#, fuzzy
 msgid "Toggle sort order field"
-msgstr "Växla säkert läge"
+msgstr "Växla sorteringsordningsfält"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:40
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:41
@@ -4257,7 +4250,7 @@ msgstr ""
 
 #: packages/server/src/services/MustacheService.ts:197
 msgid "Users"
-msgstr ""
+msgstr "Användare"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:182
 msgid "Valid"
@@ -4411,11 +4404,12 @@ msgid "Your master password is needed to decrypt some of your data."
 msgstr "Ditt huvudlösenord behövs för att dekryptera några av dina data."
 
 #: packages/app-cli/app/command-sync.ts:242
-#, fuzzy
 msgid ""
 "Your password is needed to decrypt some of your data. Type `:e2ee decrypt` "
 "to set it."
-msgstr "Ditt huvudlösenord behövs för att dekryptera några av dina data."
+msgstr ""
+"Ditt lösenord behövs för att dekryptera en del av dina data. Skriv `:e2ee "
+"decrypt` för att ställa in det."
 
 #: packages/app-mobile/components/CameraView.tsx:189
 msgid "Your permission to use your camera is required."
