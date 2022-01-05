@@ -304,6 +304,7 @@ To add a **Bucket Policy** from the AWS S3 Web Console, navigate to the **Permis
             "Action": [
                   "s3:ListBucket",
                   "s3:GetBucketLocation",
+                  "s3:GetObject",
                   "s3:DeleteObject",
                   "s3:DeleteObjectVersion",
                   "s3:PutObject"
