@@ -7,7 +7,7 @@ class TagItemComponent extends React.Component {
 	render() {
 		const theme = themeStyle(this.props.themeId);
 		const style = Object.assign({}, theme.tagStyle);
-		const {title, id} = this.props;
+		const { title, id } = this.props;
 
 		return <button style={style} onClick={() => CommandService.instance().execute('openTag', id)}>{title}</button>;
 	}
