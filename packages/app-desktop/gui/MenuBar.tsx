@@ -726,6 +726,13 @@ function useMenu(props: Props) {
 							});
 						},
 					},
+					{
+						id: 'help:toggleTaskList',
+						label: _('Open plugin task list'),
+						click: () => {
+							bridge().openProcessManager();
+						},
+					},
 
 					menuItemDic.toggleSafeMode,
 					menuItemDic.openProfileDirectory,

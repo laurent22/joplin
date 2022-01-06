@@ -134,9 +134,10 @@
     "7zip-bin-win": "^2.1.1"
   },
   "dependencies": {
-    "@electron/remote": "^2.0.1",
+    "@electron/remote": "2.0.1",
     "@fortawesome/fontawesome-free": "^5.13.0",
     "@joeattardi/emoji-button": "^4.6.0",
+    "@joplin/electron-process-manager": "workspace:^",
     "@joplin/lib": "~2.7",
     "@joplin/renderer": "~2.7",
     "async-mutex": "^0.1.3",

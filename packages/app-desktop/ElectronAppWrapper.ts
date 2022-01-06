@@ -9,6 +9,7 @@ const path = require('path');
 const { dirname } = require('@joplin/lib/path-utils');
 const fs = require('fs-extra');
 const { ipcMain } = require('electron');
+const { openProcessManager } = require('@joplin/electron-process-manager');
 
 interface RendererProcessQuitReply {
 	canClose: boolean;
@@ -39,6 +40,10 @@ export default class ElectronAppWrapper {
 		this.isDebugMode_ = isDebugMode;
 		this.profilePath_ = profilePath;
 		this.initialCallbackUrl_ = initialCallbackUrl;
+	}
+
+	public openProcessManager() {
+		openProcessManager(require('@electron/remote/main'));
 	}
 
 	electronApp() {

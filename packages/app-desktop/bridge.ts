@@ -30,6 +30,10 @@ export class Bridge {
 		return !this.electronApp().electronApp().isPackaged;
 	}
 
+	public openProcessManager() {
+		this.electronApp().openProcessManager();
+	}
+
 	// The build directory contains additional external files that are going to
 	// be packaged by Electron Builder. This is for files that need to be
 	// accessed outside of the Electron app (for example the application icon).

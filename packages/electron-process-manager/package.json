@@ -1,0 +1,37 @@
+{
+  "name": "@joplin/electron-process-manager",
+  "version": "2.0.1",
+  "description": "Process manager UI for Electron applications - Fork with support for @electron/remote",
+  "main": "src/index.js",
+  "private": true,
+  "scripts": {
+    "build": "webpack"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.0.0",
+    "@babel/plugin-proposal-class-properties": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.0",
+    "bluebird": "^3.7.1",
+    "bluebird-extra": "^2.0.0",
+    "electron": "^10.4.7",
+    "electron-default-menu": "1.0.1",
+    "filesize": "^5.0.3",
+    "format-number": "^3.0.0",
+    "object-path": "^0.11.4",
+    "prop-types": "^15.5.10",
+    "react": "^16.11.0",
+    "react-dom": "^16.11.0",
+    "spectron": "^12.0.0",
+    "webpack": "^2.5.1"
+  },
+  "peerDependencies": {
+    "electron": ">= 10"
+  },
+  "dependencies": {
+    "electron-process-reporter": "^1.4.0"
+  }
+}
