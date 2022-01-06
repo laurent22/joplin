@@ -203,7 +203,7 @@ export async function execCommand2(command: string | string[], options: ExecComm
 	args.splice(0, 1);
 	const promise = execa(executableName, args);
 	if (options.showStdout) promise.stdout.pipe(process.stdout);
-	if (options.showStderr) promise.stdout.pipe(process.stderr);
+	if (options.showStderr) promise.stderr.pipe(process.stderr);
 	const result = await promise;
 	return result.stdout.trim();
 }
