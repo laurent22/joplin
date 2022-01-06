@@ -16,9 +16,12 @@ class ProcessManager extends EventEmitter {
 	}
 
 	// in case this isn't already done in the app.
-	initializeElectronRemote() {
-		return require('@electron/remote/main').initialize();
-	}
+	//
+	// No longer needed because caller should setup electron/remote
+	//
+	// initializeElectronRemote() {
+	// 	return require('@electron/remote/main').initialize();
+	// }
 
 	// We pass the electron/remote/main instance to the manager to ensure it's
 	// using the same as the main application.
@@ -51,7 +54,6 @@ class ProcessManager extends EventEmitter {
 		this.emit('will-open-dev-tools', webContentsId, this.window);
 
 		const wc = webContents.fromId(webContentsId);
-		require('@electron/remote/main').enable(wc);
 		wc.openDevTools({ mode: 'detach' });
 
 		this.emit('did-open-dev-tools', webContentsId, this.window);

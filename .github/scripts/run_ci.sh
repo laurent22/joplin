@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# We want the script to stop as soon as an error is found. Otherwise if there's
+# an error during `yarn install` for example, it's also going to throw millions
+# of errors in test units, which makes debugging difficult.
+set -e
+
 # =============================================================================
 # Setup environment variables
 # =============================================================================
