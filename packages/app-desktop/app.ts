@@ -62,7 +62,7 @@ import ShareService from '@joplin/lib/services/share/ShareService';
 import checkForUpdates from './checkForUpdates';
 import { AppState } from './app.reducer';
 import syncDebugLog from '@joplin/lib/services/synchronizer/syncDebugLog';
-import eventManager from '../lib/eventManager';
+import eventManager from '@joplin/lib/eventManager';
 // import { runIntegrationTests } from '@joplin/lib/services/e2ee/ppkTestUtils';
 
 const pluginClasses = [
