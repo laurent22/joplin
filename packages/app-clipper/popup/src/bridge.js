@@ -428,6 +428,9 @@ class Bridge {
 		}
 
 		const json = await response.json();
+
+		console.info('Popup: Response:', json);
+
 		return json;
 	}
 

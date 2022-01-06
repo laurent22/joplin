@@ -175,3 +175,11 @@ body {
 .App .StatusBar .ServerStatus .Help {
 	margin-left: 5px;
 }
+
+.App .tagAutoComplete {
+	padding: 4px 8px;
+	height: auto;
+	border-radius: 0;
+	color: black;
+	border-color: gray;
+}

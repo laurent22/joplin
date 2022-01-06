@@ -16,6 +16,7 @@ const defaultState = {
 	},
 	folders: [],
 	tags: [],
+	tagsLoaded: false,
 	selectedFolderId: null,
 	env: 'prod',
 	isProbablyReaderable: true,
@@ -76,6 +77,7 @@ function reducer(state = defaultState, action) {
 
 		newState = Object.assign({}, state);
 		newState.tags = action.tags;
+		newState.tagsLoaded = true;
 
 	} else if (action.type === 'SELECTED_FOLDER_SET') {
 

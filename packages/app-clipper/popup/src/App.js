@@ -3,6 +3,8 @@ import './App.css';
 import led_red from './led_red.png';
 import led_green from './led_green.png';
 import led_orange from './led_orange.png';
+import autoComplete from '@tarekraafat/autocomplete.js';
+import '@tarekraafat/autocomplete.js/dist/css/autoComplete.css';
 
 const { connect } = require('react-redux');
 const { bridge } = require('./bridge');
@@ -183,6 +185,31 @@ class AppComponent extends Component {
 		await bridge().tabsExecuteScript({ file: '/content_scripts/index.js' });
 	}
 
+	initTagAutoComplete() {
+		const waitForTagElementIID = setInterval(() => {
+			if (!document.getElementsByClassName('tagAutoComplete').length) return;
+			if (!this.props.tagsLoaded) return;
+
+			clearInterval(waitForTagElementIID);
+
+			const config = {
+				// Doesn't work - it will only apply it to one of the field
+				selector: '.tagAutoComplete',
+				placeHolder: 'Enter tag...',
+				data: {
+					src: this.props.tags.map(t => t.title),
+				},
+				resultItem: {
+					highlight: {
+						render: true,
+					},
+				},
+			};
+
+			new autoComplete(config);
+		}, 100);
+	}
+
 	async componentDidMount() {
 		bridge().onReactAppStarts();
 
@@ -219,6 +246,8 @@ class AppComponent extends Component {
 		}
 
 		bridge().sendCommandToActiveTab({ name: 'isProbablyReaderable' });
+
+		this.initTagAutoComplete();
 	}
 
 	componentDidUpdate() {
@@ -434,6 +463,13 @@ class AppComponent extends Component {
 					<datalist id="tags">
 						{tagDataListOptions}
 					</datalist>
+
+					<input class="tagAutoComplete" type="search" dir="ltr" spellCheck="false" autoCorrect="off" autoComplete="off" autoCapitalize="off" maxLength="2048" tabIndex="1" />
+
+					<br/>
+
+					<input class="tagAutoComplete" type="search" dir="ltr" spellCheck="false" autoCorrect="off" autoComplete="off" autoCapitalize="off" maxLength="2048" tabIndex="1" />
+
 				</div>
 				{ warningComponent }
 				{ previewComponent }
@@ -452,6 +488,7 @@ const mapStateToProps = (state) => {
 		clipperServer: state.clipperServer,
 		folders: state.folders,
 		tags: state.tags,
+		tagsLoaded: state.tagsLoaded,
 		selectedFolderId: state.selectedFolderId,
 		isProbablyReaderable: state.isProbablyReaderable,
 		authStatus: state.authStatus,
