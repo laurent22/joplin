@@ -83,14 +83,14 @@ Skills Required: Typescript, Javascript, CSS, HTML, Markdown rendering. You will
 
 ## 7. Improve PDF export
 
-Joplin uses Chrome's built-in print to PDF function which is very limited. This can be improved by using a 3rd party library to convert notes to PDF.
+Joplin uses Chrome's built-in print to PDF function which is very limited. This can be improved by using a 3rd party library to convert notes to PDF. Applies to desktop and CLI versions.
 
 Potential benefits:
 * Export multiple notes as a single PDF
 * Embedding attachments (see https://github.com/laurent22/joplin/issues/5943)
 * Delay export until the note is fully rendered (https://discourse.joplinapp.org/t/ability-to-delay-pdf-export-to-allow-plugins-to-render/22159)
 
-Difficulty level: High
+Difficulty level: Medium
 
 Skills Required: Typescript, Javascript.
 
@@ -101,7 +101,7 @@ Just like with export, Joplin relies on the built-in PDF renderer to show PDF at
 * It may be possible to link to a specific page or even a location within a PDF document.
 * Annotate PDF documents from Joplin
 
-Difficulty level: High
+Difficulty level: Medium
 
 Skills Required: Typescript, Javascript.
 
