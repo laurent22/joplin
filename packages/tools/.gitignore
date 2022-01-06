@@ -4,3 +4,6 @@ patreon_oauth_token.txt
 *.po~
 *.mo
 *.mo~
+
+/helpers.js
+/helpers.test.js
