@@ -52,6 +52,7 @@ packages/app-mobile/lib/rnInjectedJs/
 packages/app-mobile/locales
 packages/app-mobile/node_modules
 packages/app-mobile/pluginAssets/
+packages/electron-process-manager/dist/
 packages/electron-process-manager/src/ui/
 packages/fork-*
 packages/htmlpack/dist/
