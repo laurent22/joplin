@@ -21,7 +21,3 @@ If you exceed the storage space, you will not be able to upload new notes. You m
 We offer a 50% Education Discount for students and teachers. To claim it, please [contact us](mailto:support@joplincloud.com) from your university or school email address. You will then receive a URL you can use to subscribe to Joplin Cloud while benefiting from the 50% discount. This is valid for a whole year and can be renewed for as long as you are in education by contacting us again.
 
 We may also offer bulk discounts for companies, associations and nonprofit organisations. Please [contact us](mailto:support@joplincloud.com) for more details.
-
-## Can I get a refund for my subscription?
-
-Unless you were accidentally charged due to an error, your subscription cannot be refunded. You can cancel it at any time however, which will stop any further charges. We also give a 14 days trial when the subscription starts so that you can evaluate the service and potentially change your mind - if you cancel during that period you will not be charged.
