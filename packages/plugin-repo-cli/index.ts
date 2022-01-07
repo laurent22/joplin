@@ -51,6 +51,8 @@ async function extractPluginFilesFromPackage(existingManifests: any, workDir: st
 
 	const pluginDir = resolveRelativePathWithinDir(workDir, 'node_modules', packageName, 'publish');
 
+	if (!(await fs.pathExists(pluginDir))) throw new Error(`Could not find publish directory at ${pluginDir}`);
+
 	const files = await fs.readdir(pluginDir);
 	const manifestFilePath = path.resolve(pluginDir, files.find((f: any) => path.extname(f) === '.json'));
 	const pluginFilePath = path.resolve(pluginDir, files.find((f: any) => path.extname(f) === '.jpl'));
