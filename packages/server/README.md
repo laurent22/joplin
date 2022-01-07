@@ -44,7 +44,7 @@ POSTGRES_PORT=5432
 POSTGRES_HOST=localhost
 ```
 
-Make sure that the provided database and user exist as the server will not create them.
+Make sure that the provided database and user exist as the server will not create them. When running on macOS or Windows through Docker Desktop, a mapping of localhost is made automatically. On Linux, you can add `--net=host --add-host=host.docker.internal:127.0.0.1` to the `docker run` command line to make the mapping happen. Any other `POSTGRES_HOST` than localhost or 127.0.0.1 should work as expected without further action.
 
 ### Using docker-compose
 
@@ -157,10 +157,4 @@ From `packages/server`, run `npm run start-dev`
 
 # License
 
-Copyright (c) 2017-2021 Laurent Cozic
-
-Personal Use License
-
-Joplin Server is available for personal use only. For example you may host the software on your own server for non-commercial activity.
-
-To obtain a license for commercial purposes, please contact us.
+See LICENSE.md in this directory

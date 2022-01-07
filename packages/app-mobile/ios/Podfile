@@ -6,7 +6,10 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 #
 # 2021-11-04: Set to 13.0 because it crashes with 12.x
 # https://github.com/laurent22/joplin/issues/5671
-platform :ios, '13.0'
+#
+# 2021-12-17: Changed back to 11.0 because after the fix it works with at least
+# 12.x, and probably 11.0 too, which is the version supported by React Native.
+platform :ios, '11.0'
 
 target 'Joplin' do
   config = use_native_modules!

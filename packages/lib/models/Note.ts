@@ -611,6 +611,7 @@ export default class Note extends BaseItem {
 	public static async duplicate(noteId: string, options: any = null) {
 		const changes = options && options.changes;
 		const uniqueTitle = options && options.uniqueTitle;
+		const duplicateResources = options && !!options.duplicateResources;
 
 		const originalNote: NoteEntity = await Note.load(noteId);
 		if (!originalNote) throw new Error(`Unknown note: ${noteId}`);
@@ -632,7 +633,7 @@ export default class Note extends BaseItem {
 			newNote.title = title;
 		}
 
-		newNote.body = await this.duplicateNoteResources(newNote.body);
+		if (duplicateResources) newNote.body = await this.duplicateNoteResources(newNote.body);
 
 		const newNoteSaved = await this.save(newNote);
 		const originalTags = await Tag.tagsByNoteId(noteId);

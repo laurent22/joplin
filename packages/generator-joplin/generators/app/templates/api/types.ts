@@ -202,6 +202,25 @@ export interface Disposable {
 	// dispose():void;
 }
 
+export enum ModelType {
+	Note = 1,
+	Folder = 2,
+	Setting = 3,
+	Resource = 4,
+	Tag = 5,
+	NoteTag = 6,
+	Search = 7,
+	Alarm = 8,
+	MasterKey = 9,
+	ItemChange = 10,
+	NoteResource = 11,
+	ResourceLocalState = 12,
+	Revision = 13,
+	Migration = 14,
+	SmartFilter = 15,
+	Command = 16,
+}
+
 // =================================================================
 // Menu types
 // =================================================================
@@ -268,6 +287,17 @@ export interface MenuItem {
 	 * have a command associated with them unless they are a sub-menu.
 	 */
 	commandName?: string;
+
+	/**
+	 * Arguments that should be passed to the command. They will be as rest
+	 * parameters.
+	 */
+	commandArgs?: any[];
+
+	/**
+	 * Set to "separator" to create a divider line
+	 */
+	type?: string;
 
 	/**
 	 * Accelerator associated with the menu item

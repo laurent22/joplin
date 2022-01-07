@@ -7,12 +7,12 @@
   "scripts": {
     "start": "react-native start --reset-cache",
     "build": "gulp build",
-    "tsc": "node node_modules/typescript/bin/tsc --project tsconfig.json",
-    "watch": "node node_modules/typescript/bin/tsc --watch --project tsconfig.json",
+    "tsc": "tsc --project tsconfig.json",
+    "watch": "tsc --watch --preserveWatchOutput --project tsconfig.json",
     "clean": "node tools/clean.js",
     "buildInjectedJs": "gulp buildInjectedJs",
-    "watchInjectedJs": "nodemon --verbose --watch components/NoteEditor/CodeMirror.ts --exec \"npm run buildInjectedJs\"",
-    "postinstall": "jetify && npm run build"
+    "watchInjectedJs": "nodemon --verbose --watch components/NoteEditor/CodeMirror.ts --exec \"yarn run buildInjectedJs\"",
+    "postinstall": "jetify && yarn run build"
   },
   "dependencies": {
     "@joplin/lib": "~2.6",

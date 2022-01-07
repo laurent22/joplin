@@ -15,8 +15,8 @@ const tasks = {
 	copyPluginAssets: {
 		fn: require('./tools/copyPluginAssets.js'),
 	},
-	copyTinyMceLangs: {
-		fn: require('./tools/copyTinyMceLangs.js'),
+	copyApplicationAssets: {
+		fn: require('./tools/copyApplicationAssets.js'),
 	},
 	electronRebuild: {
 		fn: require('./tools/electronRebuild.js'),
@@ -40,7 +40,7 @@ const buildParallel = [
 	'compileScripts',
 	'compilePackageInfo',
 	'copyPluginAssets',
-	'copyTinyMceLangs',
+	'copyApplicationAssets',
 	'updateIgnoredTypeScriptBuild',
 	'buildCommandIndex',
 	'compileSass',

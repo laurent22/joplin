@@ -282,7 +282,7 @@ export default class Folder extends BaseItem {
 		return this.db().selectAll(sql, [folderId]);
 	}
 
-	private static async rootSharedFolders(): Promise<FolderEntity[]> {
+	public static async rootSharedFolders(): Promise<FolderEntity[]> {
 		return this.db().selectAll('SELECT id, share_id FROM folders WHERE parent_id = "" AND share_id != ""');
 	}
 

@@ -15,10 +15,10 @@ import uuidgen from '../../utils/uuidgen';
 import { formatMaxItemSize, formatMaxTotalSize, formatTotalSize, formatTotalSizePercent, yesOrNo } from '../../utils/strings';
 import { getCanShareFolder, totalSizeClass } from '../../models/utils/user';
 import { yesNoDefaultOptions, yesNoOptions } from '../../utils/views/select';
-import { confirmUrl, stripePortalUrl } from '../../utils/urlUtils';
+import { confirmUrl, stripePortalUrl, userDeletionsUrl } from '../../utils/urlUtils';
 import { cancelSubscriptionByUserId, updateCustomerEmail, updateSubscriptionType } from '../../utils/stripe';
 import { createCsrfTag } from '../../utils/csrf';
-import { formatDateTime } from '../../utils/time';
+import { formatDateTime, Hour } from '../../utils/time';
 import { cookieSet } from '../../utils/cookies';
 import { startImpersonating, stopImpersonating } from './utils/users/impersonate';
 import { userFlagToString } from '../../models/UserFlagModel';
@@ -106,20 +106,23 @@ router.get('users', async (_path: SubPath, ctx: AppContext) => {
 	});
 
 	const view: View = defaultView('users', 'Users');
-	view.content.users = users.map(user => {
-		return {
-			...user,
-			displayName: user.full_name ? user.full_name : '(not set)',
-			formattedItemMaxSize: formatMaxItemSize(user),
-			formattedTotalSize: formatTotalSize(user),
-			formattedMaxTotalSize: formatMaxTotalSize(user),
-			formattedTotalSizePercent: formatTotalSizePercent(user),
-			totalSizeClass: totalSizeClass(user),
-			formattedAccountType: accountTypeToString(user.account_type),
-			formattedCanShareFolder: yesOrNo(getCanShareFolder(user)),
-			rowClassName: user.enabled ? '' : 'is-disabled',
-		};
-	});
+	view.content = {
+		users: users.map(user => {
+			return {
+				...user,
+				displayName: user.full_name ? user.full_name : '(not set)',
+				formattedItemMaxSize: formatMaxItemSize(user),
+				formattedTotalSize: formatTotalSize(user),
+				formattedMaxTotalSize: formatMaxTotalSize(user),
+				formattedTotalSizePercent: formatTotalSizePercent(user),
+				totalSizeClass: totalSizeClass(user),
+				formattedAccountType: accountTypeToString(user.account_type),
+				formattedCanShareFolder: yesOrNo(getCanShareFolder(user)),
+				rowClassName: user.enabled ? '' : 'is-disabled',
+			};
+		}),
+		userDeletionUrl: userDeletionsUrl(),
+	};
 	return view;
 });
 
@@ -163,6 +166,7 @@ router.get('users/:id', async (path: SubPath, ctx: AppContext, user: User = null
 	if (!owner.is_admin) userFlagViews = [];
 
 	const subscription = !isNew ? await ctx.joplin.models.subscription().byUserId(userId) : null;
+	const isScheduledForDeletion = await ctx.joplin.models.userDeletion().isScheduledForDeletion(userId);
 
 	const view: View = defaultView('user', 'Profile');
 	view.content.user = user;
@@ -186,6 +190,7 @@ router.get('users/:id', async (path: SubPath, ctx: AppContext, user: User = null
 
 	view.content.showImpersonateButton = !isNew && !!owner.is_admin && user.enabled && user.id !== owner.id;
 	view.content.showRestoreButton = !isNew && !!owner.is_admin && !user.enabled;
+	view.content.showScheduleDeletionButton = !isNew && !!owner.is_admin && !isScheduledForDeletion;
 	view.content.showResetPasswordButton = !isNew && owner.is_admin && user.enabled;
 	view.content.canShareFolderOptions = yesNoDefaultOptions(user, 'can_share_folder');
 	view.content.canUploadOptions = yesNoOptions(user, 'can_upload');
@@ -308,6 +313,7 @@ interface FormFields {
 	impersonate_button: string;
 	stop_impersonate_button: string;
 	delete_user_flags: string;
+	schedule_deletion_button: string;
 }
 
 router.post('users', async (path: SubPath, ctx: AppContext) => {
@@ -364,6 +370,15 @@ router.post('users', async (path: SubPath, ctx: AppContext) => {
 				await updateSubscriptionType(models, userId, AccountType.Basic);
 			} else if (fields.update_subscription_pro_button) {
 				await updateSubscriptionType(models, userId, AccountType.Pro);
+			} else if (fields.schedule_deletion_button) {
+				const deletionDate = Date.now() + 24 * Hour;
+
+				await models.userDeletion().add(userId, deletionDate, {
+					processAccount: true,
+					processData: true,
+				});
+
+				await models.notification().addInfo(owner.id, `User ${user.email} has been scheduled for deletion on ${formatDateTime(deletionDate)}. [View deletion list](${userDeletionsUrl()})`);
 			} else if (fields.delete_user_flags) {
 				const userFlagTypes: UserFlagType[] = [];
 				for (const key of Object.keys(fields)) {

@@ -2,6 +2,7 @@ _mydocs/
 _releases/
 .git/
 .github/
+.yarn/
 *.min.js
 **/commands/index.ts
 **/node_modules/
@@ -23,6 +24,7 @@ packages/app-cli/tests/html_to_md
 packages/app-cli/tests/logs
 packages/app-cli/tests/support
 packages/app-cli/tests/sync
+packages/app-cli/tests/test data/
 packages/app-cli/tests/tmp
 packages/app-clipper/content_scripts/JSDOMParser.js
 packages/app-clipper/content_scripts/Readability-readerable.js
@@ -34,6 +36,7 @@ packages/app-clipper/popup/config/webpack_config_at_eject_time.js
 packages/app-clipper/popup/config/webpack.config.js
 packages/app-clipper/popup/node_modules
 packages/app-clipper/popup/scripts/build.js
+packages/app-desktop/build/
 packages/app-desktop/dist
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/plugins/lists.js
 packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/supportedLocales.js
@@ -41,6 +44,7 @@ packages/app-desktop/locales
 packages/app-desktop/node_modules
 packages/app-desktop/packageInfo.js
 packages/app-desktop/services/electron-context-menu.js
+packages/app-desktop/vendor/lib/
 packages/app-mobile/android
 packages/app-mobile/components/NoteEditor/CodeMirror.bundle.js
 packages/app-mobile/ios
@@ -294,6 +298,9 @@ packages/app-desktop/gui/MainScreen/commands/openFolder.js.map
 packages/app-desktop/gui/MainScreen/commands/openFolderDialog.d.ts
 packages/app-desktop/gui/MainScreen/commands/openFolderDialog.js
 packages/app-desktop/gui/MainScreen/commands/openFolderDialog.js.map
+packages/app-desktop/gui/MainScreen/commands/openItem.d.ts
+packages/app-desktop/gui/MainScreen/commands/openItem.js
+packages/app-desktop/gui/MainScreen/commands/openItem.js.map
 packages/app-desktop/gui/MainScreen/commands/openNote.d.ts
 packages/app-desktop/gui/MainScreen/commands/openNote.js
 packages/app-desktop/gui/MainScreen/commands/openNote.js.map
@@ -309,6 +316,9 @@ packages/app-desktop/gui/MainScreen/commands/renameFolder.js.map
 packages/app-desktop/gui/MainScreen/commands/renameTag.d.ts
 packages/app-desktop/gui/MainScreen/commands/renameTag.js
 packages/app-desktop/gui/MainScreen/commands/renameTag.js.map
+packages/app-desktop/gui/MainScreen/commands/revealResourceFile.d.ts
+packages/app-desktop/gui/MainScreen/commands/revealResourceFile.js
+packages/app-desktop/gui/MainScreen/commands/revealResourceFile.js.map
 packages/app-desktop/gui/MainScreen/commands/search.d.ts
 packages/app-desktop/gui/MainScreen/commands/search.js
 packages/app-desktop/gui/MainScreen/commands/search.js.map
@@ -705,9 +715,6 @@ packages/app-desktop/gui/style/StyledTextInput.js.map
 packages/app-desktop/gui/utils/NoteListUtils.d.ts
 packages/app-desktop/gui/utils/NoteListUtils.js
 packages/app-desktop/gui/utils/NoteListUtils.js.map
-packages/app-desktop/gui/utils/SyncScrollMap.d.ts
-packages/app-desktop/gui/utils/SyncScrollMap.js
-packages/app-desktop/gui/utils/SyncScrollMap.js.map
 packages/app-desktop/gui/utils/convertToScreenCoordinates.d.ts
 packages/app-desktop/gui/utils/convertToScreenCoordinates.js
 packages/app-desktop/gui/utils/convertToScreenCoordinates.js.map
@@ -726,6 +733,9 @@ packages/app-desktop/services/commands/stateToWhenClauseContext.js.map
 packages/app-desktop/services/commands/types.d.ts
 packages/app-desktop/services/commands/types.js
 packages/app-desktop/services/commands/types.js.map
+packages/app-desktop/services/plugins/BackOffHandler.d.ts
+packages/app-desktop/services/plugins/BackOffHandler.js
+packages/app-desktop/services/plugins/BackOffHandler.js.map
 packages/app-desktop/services/plugins/PlatformImplementation.d.ts
 packages/app-desktop/services/plugins/PlatformImplementation.js
 packages/app-desktop/services/plugins/PlatformImplementation.js.map
@@ -1512,9 +1522,6 @@ packages/lib/services/plugins/api/types.js.map
 packages/lib/services/plugins/reducer.d.ts
 packages/lib/services/plugins/reducer.js
 packages/lib/services/plugins/reducer.js.map
-packages/lib/services/plugins/sandboxProxy.d.ts
-packages/lib/services/plugins/sandboxProxy.js
-packages/lib/services/plugins/sandboxProxy.js.map
 packages/lib/services/plugins/utils/createViewHandle.d.ts
 packages/lib/services/plugins/utils/createViewHandle.js
 packages/lib/services/plugins/utils/createViewHandle.js.map
@@ -1542,6 +1549,12 @@ packages/lib/services/plugins/utils/validatePluginId.js.map
 packages/lib/services/plugins/utils/validatePluginId.test.d.ts
 packages/lib/services/plugins/utils/validatePluginId.test.js
 packages/lib/services/plugins/utils/validatePluginId.test.js.map
+packages/lib/services/plugins/utils/validatePluginVersion.d.ts
+packages/lib/services/plugins/utils/validatePluginVersion.js
+packages/lib/services/plugins/utils/validatePluginVersion.js.map
+packages/lib/services/plugins/utils/validatePluginVersion.test.d.ts
+packages/lib/services/plugins/utils/validatePluginVersion.test.js
+packages/lib/services/plugins/utils/validatePluginVersion.test.js.map
 packages/lib/services/rest/Api.d.ts
 packages/lib/services/rest/Api.js
 packages/lib/services/rest/Api.js.map
@@ -1944,9 +1957,6 @@ packages/tools/generate-images.js.map
 packages/tools/git-changelog.d.ts
 packages/tools/git-changelog.js
 packages/tools/git-changelog.js.map
-packages/tools/lerna-add.d.ts
-packages/tools/lerna-add.js
-packages/tools/lerna-add.js.map
 packages/tools/release-android.d.ts
 packages/tools/release-android.js
 packages/tools/release-android.js.map
@@ -1959,6 +1969,9 @@ packages/tools/release-electron.js.map
 packages/tools/release-ios.d.ts
 packages/tools/release-ios.js
 packages/tools/release-ios.js.map
+packages/tools/release-plugin-repo-cli.d.ts
+packages/tools/release-plugin-repo-cli.js
+packages/tools/release-plugin-repo-cli.js.map
 packages/tools/release-server.d.ts
 packages/tools/release-server.js
 packages/tools/release-server.js.map
@@ -1977,9 +1990,18 @@ packages/tools/update-readme-download.js.map
 packages/tools/update-readme-sponsors.d.ts
 packages/tools/update-readme-sponsors.js
 packages/tools/update-readme-sponsors.js.map
+packages/tools/updateMarkdownDoc.d.ts
+packages/tools/updateMarkdownDoc.js
+packages/tools/updateMarkdownDoc.js.map
 packages/tools/website/build.d.ts
 packages/tools/website/build.js
 packages/tools/website/build.js.map
+packages/tools/website/updateDownloadPage.d.ts
+packages/tools/website/updateDownloadPage.js
+packages/tools/website/updateDownloadPage.js.map
+packages/tools/website/utils/frontMatter.d.ts
+packages/tools/website/utils/frontMatter.js
+packages/tools/website/utils/frontMatter.js.map
 packages/tools/website/utils/pressCarousel.d.ts
 packages/tools/website/utils/pressCarousel.js
 packages/tools/website/utils/pressCarousel.js.map

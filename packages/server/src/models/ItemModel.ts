@@ -1,4 +1,4 @@
-import BaseModel, { SaveOptions, LoadOptions, DeleteOptions, ValidateOptions, AclAction } from './BaseModel';
+import BaseModel, { SaveOptions, LoadOptions, DeleteOptions as BaseDeleteOptions, ValidateOptions, AclAction } from './BaseModel';
 import { ItemType, databaseSchema, Uuid, Item, ShareType, Share, ChangeType, User, UserItem } from '../services/database/types';
 import { defaultPagination, paginateDbQuery, PaginatedResults, Pagination } from './utils/pagination';
 import { isJoplinItemName, isJoplinResourceBlobPath, linkedResourceIds, serializeJoplinItem, unserializeJoplinItem } from '../utils/joplinUtils';
@@ -21,6 +21,10 @@ const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
 // Converts "root:/myfile.txt:" to "myfile.txt"
 const extractNameRegex = /^root:\/(.*):$/;
 
+export interface DeleteOptions extends BaseDeleteOptions {
+	deleteChanges?: boolean;
+}
+
 export interface ImportContentToStorageOptions {
 	batchSize?: number;
 	maxContentSize?: number;
@@ -30,6 +34,7 @@ export interface ImportContentToStorageOptions {
 export interface DeleteDatabaseContentOptions {
 	batchSize?: number;
 	logger?: Logger | LoggerWrapper;
+	maxProcessedItems?: number;
 }
 
 export interface SaveFromRawContentItem {
@@ -44,9 +49,7 @@ export interface SaveFromRawContentResultItem {
 
 export type SaveFromRawContentResult = Record<string, SaveFromRawContentResultItem>;
 
-export interface PaginatedItems extends PaginatedResults {
-	items: Item[];
-}
+export type PaginatedItems = PaginatedResults<Item>;
 
 export interface SharedRootInfo {
 	item: Item;
@@ -409,20 +412,21 @@ export default class ItemModel extends BaseModel<Item> {
 		options = {
 			batchSize: 1000,
 			logger: new Logger(),
+			maxProcessedItems: 0,
 			...options,
 		};
 
-		const itemCount = (await this.db(this.tableName)
-			.count('id', { as: 'total' })
-			.where('content', '!=', Buffer.from(''))
-			.first())['total'];
+		// const itemCount = (await this.db(this.tableName)
+		// 	.count('id', { as: 'total' })
+		// 	.where('content', '!=', Buffer.from(''))
+		// 	.first())['total'];
 
 		let totalDone = 0;
 
 		// UPDATE items SET content = '\x' WHERE id IN (SELECT id FROM items WHERE content != '\x' LIMIT 5000);
 
 		while (true) {
-			options.logger.info(`Processing items ${totalDone} / ${itemCount}`);
+			options.logger.info(`Processing items ${totalDone}`);
 
 			const updatedRows = await this
 				.db(this.tableName)
@@ -437,6 +441,11 @@ export default class ItemModel extends BaseModel<Item> {
 
 			if (!updatedRows.length) {
 				options.logger.info(`All items have been processed. Total: ${totalDone}`);
+				return;
+			}
+
+			if (options.maxProcessedItems && totalDone + options.batchSize > options.maxProcessedItems) {
+				options.logger.info(`Processed ${totalDone} items out of requested ${options.maxProcessedItems}`);
 				return;
 			}
 
@@ -806,22 +815,22 @@ export default class ItemModel extends BaseModel<Item> {
 	// Returns the item IDs that are owned only by the given user. In other
 	// words, the items that are not shared with anyone else. Such items
 	// can be safely deleted when the user is deleted.
-	public async exclusivelyOwnedItemIds(userId: Uuid): Promise<Uuid[]> {
-		const query = this
-			.db('items')
-			.select(this.db.raw('items.id, count(user_items.item_id) as user_item_count'))
-			.leftJoin('user_items', 'user_items.item_id', 'items.id')
-			.whereIn('items.id', this.db('user_items').select('user_items.item_id').where('user_id', '=', userId))
-			.groupBy('items.id');
+	// public async exclusivelyOwnedItemIds(userId: Uuid): Promise<Uuid[]> {
+	// 	const query = this
+	// 		.db('items')
+	// 		.select(this.db.raw('items.id, count(user_items.item_id) as user_item_count'))
+	// 		.leftJoin('user_items', 'user_items.item_id', 'items.id')
+	// 		.whereIn('items.id', this.db('user_items').select('user_items.item_id').where('user_id', '=', userId))
+	// 		.groupBy('items.id');
 
-		const rows: any[] = await query;
-		return rows.filter(r => r.user_item_count === 1).map(r => r.id);
-	}
+	// 	const rows: any[] = await query;
+	// 	return rows.filter(r => r.user_item_count === 1).map(r => r.id);
+	// }
 
-	public async deleteExclusivelyOwnedItems(userId: Uuid) {
-		const itemIds = await this.exclusivelyOwnedItemIds(userId);
-		await this.delete(itemIds);
-	}
+	// public async deleteExclusivelyOwnedItems(userId: Uuid) {
+	// 	const itemIds = await this.exclusivelyOwnedItemIds(userId);
+	// 	await this.delete(itemIds);
+	// }
 
 	public async deleteAll(userId: Uuid): Promise<void> {
 		while (true) {
@@ -832,6 +841,11 @@ export default class ItemModel extends BaseModel<Item> {
 	}
 
 	public async delete(id: string | string[], options: DeleteOptions = {}): Promise<void> {
+		options = {
+			deleteChanges: false,
+			...options,
+		};
+
 		const ids = typeof id === 'string' ? [id] : id;
 		if (!ids.length) return;
 
@@ -842,12 +856,14 @@ export default class ItemModel extends BaseModel<Item> {
 
 		await this.withTransaction(async () => {
 			await this.models().share().delete(shares.map(s => s.id));
-			await this.models().userItem().deleteByItemIds(ids);
+			await this.models().userItem().deleteByItemIds(ids, { recordChanges: !options.deleteChanges });
 			await this.models().itemResource().deleteByItemIds(ids);
 			await storageDriver.delete(ids, { models: this.models() });
 			if (storageDriverFallback) await storageDriverFallback.delete(ids, { models: this.models() });
 
 			await super.delete(ids, options);
+
+			if (options.deleteChanges) await this.models().change().deleteByItemIds(ids);
 		}, 'ItemModel::delete');
 	}
 

@@ -10,6 +10,8 @@ export interface Script {
 
 export const loadScript = async (script: Script) => {
 	return new Promise((resolve) => {
+		console.info('Loading script:', script);
+
 		let element: any = document.getElementById(script.id);
 
 		if (element) {

@@ -35,6 +35,7 @@ const config = {
 		'main.user_items': 'WithDates',
 		'main.users': 'WithDates, WithUuid',
 		'main.events': 'WithUuid',
+		'main.user_deletions': 'WithDates',
 	},
 };
 
@@ -58,6 +59,9 @@ const propertyTypes: Record<string, string> = {
 	'users.total_item_size': 'number',
 	'events.created_time': 'number',
 	'events.type': 'EventType',
+	'user_deletions.start_time': 'number',
+	'user_deletions.end_time': 'number',
+	'user_deletions.scheduled_time': 'number',
 };
 
 function insertContentIntoFile(filePath: string, markerOpen: string, markerClose: string, contentToInsert: string): void {
@@ -142,7 +146,7 @@ async function main() {
 		tableStrings.push(createRuntimeObject(table));
 	}
 
-	let content = `// Auto-generated using \`npm run generate-types\`\n${typeStrings.join('\n\n')}`;
+	let content = `// Auto-generated using \`yarn run generate-types\`\n${typeStrings.join('\n\n')}`;
 	content += '\n\n';
 	content += `export const databaseSchema: DatabaseTables = {\n${tableStrings.join('\n')}\n};`;
 

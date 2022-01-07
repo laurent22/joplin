@@ -1,3 +1,5 @@
+const fastDeepEqual = require('fast-deep-equal');
+
 const events = require('events');
 
 export class EventManager {
@@ -43,21 +45,22 @@ export class EventManager {
 		return this.removeListener(`filter:${filterName}`, callback);
 	}
 
-	filterEmit(filterName: string, object: any) {
-		// We freeze the object we pass to the listeners so that they
-		// don't modify it directly. Instead they must return a
-		// modified copy (or the input itself).
-		let output = Object.freeze(object);
+	public async filterEmit(filterName: string, object: any) {
+		let output = object;
 		const listeners = this.emitter_.listeners(`filter:${filterName}`);
 		for (const listener of listeners) {
-			const newOutput = listener(output);
+			// When we pass the object to the plugin, it is always going to be
+			// modified since it is serialized/unserialized. So we need to use a
+			// deep equality check to see if it's been changed. Normally the
+			// filter objects should be relatively small so there shouldn't be
+			// much of a performance hit.
+			const newOutput = await listener(output);
 
-			if (newOutput === undefined) {
-				throw new Error(`Filter "${filterName}": Filter must return a value or the unmodified input. Returning nothing or "undefined" is not supported.`);
-			}
+			// Plugin didn't return anything - so we leave the object as it is.
+			if (newOutput === undefined) continue;
 
-			if (newOutput !== output) {
-				output = Object.freeze(newOutput);
+			if (!fastDeepEqual(newOutput, output)) {
+				output = newOutput;
 			}
 		}
 

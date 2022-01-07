@@ -19,7 +19,7 @@ export const runtime = (): CommandRuntime => {
 			useSpellChecker = useSpellChecker === null ? context.state.settings['spellChecker.enabled'] : useSpellChecker;
 
 			const menuItems = SpellCheckerService.instance().spellCheckerConfigMenuItems(selectedLanguage, useSpellChecker);
-			const menu = Menu.buildFromTemplate(menuItems);
+			const menu = Menu.buildFromTemplate(menuItems as any);
 			menu.popup(bridge().window());
 		},
 

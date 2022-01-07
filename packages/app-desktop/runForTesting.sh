@@ -41,6 +41,11 @@ if [ "$USER_NUM" = "1a" ]; then
 	USER_PROFILE_NUM=1a
 fi
 
+if [ "$USER_NUM" = "1b" ]; then
+	USER_NUM=1
+	USER_PROFILE_NUM=1b
+fi
+
 COMMANDS=($(echo $2 | tr "," "\n"))
 PROFILE_DIR=~/.config/joplindev-desktop-$USER_PROFILE_NUM
 
@@ -53,6 +58,10 @@ do
     if [[ $CMD == "createUsers" ]]; then
 
 		curl --data '{"action": "createTestUsers"}' -H 'Content-Type: application/json' http://api.joplincloud.local:22300/api/debug
+
+	elif [[ $CMD == "createUserDeletions" ]]; then
+
+		curl --data '{"action": "createUserDeletions"}' -H 'Content-Type: application/json' http://api.joplincloud.local:22300/api/debug
 
 	elif [[ $CMD == "createData" ]]; then
 		
@@ -101,11 +110,11 @@ do
 done
 
 cd "$ROOT_DIR/packages/app-cli"
-npm start -- --profile "$PROFILE_DIR" batch "$CMD_FILE"
+yarn start --profile "$PROFILE_DIR" batch "$CMD_FILE"
 
 if [[ $COMMANDS != "" ]]; then
 	exit 0
 fi
 
 cd "$ROOT_DIR/packages/app-desktop"
-npm start -- --profile "$PROFILE_DIR"
+yarn start --profile "$PROFILE_DIR"

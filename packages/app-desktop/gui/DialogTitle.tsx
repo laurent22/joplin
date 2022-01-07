@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const Root = styled.div`
+const Root = styled.div<any>`
 	display: flex;
 	justify-content: ${props => props.justifyContent ? props.justifyContent : 'center'};
 	font-family: ${props => props.theme.fontFamily};

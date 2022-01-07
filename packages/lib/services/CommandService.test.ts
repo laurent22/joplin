@@ -163,6 +163,7 @@ describe('services_CommandService', function() {
 	it('should create menu items from commands', (async () => {
 		const service = newService();
 		const utils = new MenuUtils(service);
+		const locale = 'fr_FR';
 
 		registerCommand(service, createCommand('test1', {
 			execute: () => {},
@@ -178,7 +179,7 @@ describe('services_CommandService', function() {
 			clickedCommands.push(commandName);
 		};
 
-		const menuItems = utils.commandsToMenuItems(['test1', 'test2'], onClick);
+		const menuItems = utils.commandsToMenuItems(['test1', 'test2'], onClick, locale);
 
 		menuItems.test1.click();
 		menuItems.test2.click();
@@ -186,7 +187,10 @@ describe('services_CommandService', function() {
 		expect(clickedCommands.join('_')).toBe('test1_test2');
 
 		// Also check that the same commands always return strictly the same menu
-		expect(utils.commandsToMenuItems(['test1', 'test2'], onClick)).toBe(utils.commandsToMenuItems(['test1', 'test2'], onClick));
+		expect(utils.commandsToMenuItems(['test1', 'test2'], onClick, locale)).toBe(utils.commandsToMenuItems(['test1', 'test2'], onClick, locale));
+
+		// And check that if the locale changes, new menu items are returned
+		expect(utils.commandsToMenuItems(['test1', 'test2'], onClick, locale)).not.toBe(utils.commandsToMenuItems(['test1', 'test2'], onClick, 'en_GB'));
 	}));
 
 	it('should give menu item props from state', (async () => {

@@ -219,6 +219,7 @@ then
 	Type=Application
 	Categories=Office;
 	MimeType=x-scheme-handler/joplin;
+	X-GNOME-SingleWindow=true
 	EOF
     
     # Update application icons

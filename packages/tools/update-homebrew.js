@@ -6,7 +6,7 @@ const rootDir = `${__dirname}/..`;
 const { execCommand, downloadFile, fileSha256, unlinkForce } = require('./tool-utils.js');
 
 async function main() {
-	const url = await execCommand('npm view joplin dist.tarball');
+	const url = await execCommand('yarn view joplin dist.tarball');
 	const targetPath = `${rootDir}/latest-cli.tar.gz`;
 	await unlinkForce(targetPath);
 	await downloadFile(url, targetPath);

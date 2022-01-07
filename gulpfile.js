@@ -20,6 +20,22 @@ const tasks = {
 			await utils.execCommandVerbose('git', ['push']);
 		},
 	},
+	build: {
+		fn: async () => {
+			// Building everything in parallel seems to be unreliable on CI as
+			// certain scripts randomly fail with missing files or folder, or
+			// cannot delete certain directories (eg. copyPluginAssets or
+			// copyApplicationAssets). Because of this, on CI, we run the build
+			// sequencially. Locally we run it in parallel, which is much
+			// faster, especially when having to rebuild after adding a
+			// dependency.
+			if (process.env.BUILD_SEQUENCIAL === '1') {
+				await utils.execCommandVerbose('yarn', ['run', 'buildSequential']);
+			} else {
+				await utils.execCommandVerbose('yarn', ['run', 'buildParallel']);
+			}
+		},
+	},
 };
 
 utils.registerGulpTasks(gulp, tasks);

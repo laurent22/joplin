@@ -5,7 +5,13 @@ import { Env } from '../utils/types';
 import TaskService, { RunType, Task } from './TaskService';
 
 const newService = () => {
-	return new TaskService(Env.Dev, models(), config());
+	return new TaskService(Env.Dev, models(), config(), {
+		share: null,
+		email: null,
+		mustache: null,
+		tasks: null,
+		userDeletion: null,
+	});
 };
 
 describe('TaskService', function() {

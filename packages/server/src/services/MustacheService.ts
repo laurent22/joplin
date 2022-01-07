@@ -8,6 +8,7 @@ import { User } from '../services/database/types';
 import { makeUrl, UrlType } from '../utils/routeUtils';
 import MarkdownIt = require('markdown-it');
 import { headerAnchor } from '@joplin/renderer';
+import { _ } from '@joplin/lib/locale';
 
 export interface RenderOptions {
 	partials?: any;
@@ -191,6 +192,15 @@ export default class MustacheService {
 
 		const layoutView: any = {
 			global: globalParams,
+			s: {
+				home: _('Home'),
+				users: _('Users'),
+				items: _('Items'),
+				log: _('Log'),
+				tasks: _('Tasks'),
+				help: _('Help'),
+				logout: _('Logout'),
+			},
 			pageName: view.name,
 			pageTitle: view.titleOverride ? view.title : `${config().appName} - ${view.title}`,
 			contentHtml: contentHtml,

@@ -9,10 +9,13 @@ import defaultView from '../../utils/defaultView';
 import { View } from '../../services/MustacheService';
 import { makeTablePagination, Table, Row, makeTableView } from '../../utils/views/table';
 import config, { showItemUrls } from '../../config';
+import { ErrorForbidden } from '../../utils/errors';
 
 const router = new Router(RouteType.Web);
 
 router.get('changes', async (_path: SubPath, ctx: AppContext) => {
+	if (!ctx.joplin.owner.is_admin) throw new ErrorForbidden();
+
 	const pagination = makeTablePagination(ctx.query, 'updated_time', PaginationOrderDir.DESC);
 	const paginatedChanges = await ctx.joplin.models.change().allByUser(ctx.joplin.owner.id, pagination);
 	const items = await ctx.joplin.models.item().loadByIds(paginatedChanges.items.map(i => i.item_id), { fields: ['id'] });

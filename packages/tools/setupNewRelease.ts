@@ -111,6 +111,8 @@ async function main() {
 
 	const majorMinorVersion = argv._[0];
 
+	console.info(`New version: ${majorMinorVersion}`);
+
 	const options: Options = {
 		updateVersion: argv.updateVersion !== '0',
 		updateDependenciesVersion: argv.updateDependenciesVersion !== '0',
@@ -135,7 +137,7 @@ async function main() {
 		await updatePluginGeneratorTemplateVersion(`${rootDir}/packages/generator-joplin/generators/app/templates/src/manifest.json`, majorMinorVersion);
 	}
 
-	console.info('Version numbers have been updated. Consider running `npm i` to update the lock files');
+	console.info('Version numbers have been updated. Consider running `yarn i` to update the lock files');
 }
 
 main().catch((error) => {

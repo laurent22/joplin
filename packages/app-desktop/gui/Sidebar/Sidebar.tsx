@@ -294,7 +294,7 @@ class SidebarComponent extends React.Component<Props, State> {
 		);
 
 		if (itemType === BaseModel.TYPE_FOLDER && !item.encryption_applied) {
-			menu.append(new MenuItem(menuUtils.commandToStatefulMenuItem('openFolderDialog', itemId)));
+			menu.append(new MenuItem(menuUtils.commandToStatefulMenuItem('openFolderDialog', { folderId: itemId })));
 
 			menu.append(new MenuItem({ type: 'separator' }));
 

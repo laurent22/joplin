@@ -37,6 +37,7 @@ echo "GITHUB_EVENT_NAME=$GITHUB_EVENT_NAME"
 echo "GITHUB_REF=$GITHUB_REF"
 echo "RUNNER_OS=$RUNNER_OS"
 echo "GIT_TAG_NAME=$GIT_TAG_NAME"
+echo "BUILD_SEQUENCIAL=$BUILD_SEQUENCIAL"
 
 echo "IS_CONTINUOUS_INTEGRATION=$IS_CONTINUOUS_INTEGRATION"
 echo "IS_PULL_REQUEST=$IS_PULL_REQUEST"
@@ -46,13 +47,14 @@ echo "IS_MACOS=$IS_MACOS"
 
 echo "Node $( node -v )"
 echo "Npm $( npm -v )"
+echo "Yarn $( yarn -v )"
 
 # =============================================================================
 # Install packages
 # =============================================================================
 
 cd "$ROOT_DIR"
-npm install
+yarn install
 
 # =============================================================================
 # Run test units. Only do it for pull requests and dev branch because we don't
@@ -78,7 +80,7 @@ if [ "$IS_PULL_REQUEST" == "1" ] || [ "$IS_DEV_BRANCH" = "1" ]; then
 	#
 	# https://stackoverflow.com/questions/38558989
 	export NODE_OPTIONS="--max-old-space-size=4096"
-	npm run test-ci
+	yarn run test-ci
 	testResult=$?
 	if [ $testResult -ne 0 ]; then
 		exit $testResult
@@ -93,7 +95,7 @@ fi
 if [ "$IS_PULL_REQUEST" == "1" ] || [ "$IS_DEV_BRANCH" = "1" ]; then
 	echo "Step: Running linter..."
 
-	npm run linter-ci ./
+	yarn run linter-ci ./
 	testResult=$?
 	if [ $testResult -ne 0 ]; then
 		exit $testResult
@@ -166,12 +168,12 @@ cd "$ROOT_DIR/packages/app-desktop"
 
 if [[ $GIT_TAG_NAME = v* ]]; then
 	echo "Step: Building and publishing desktop application..."
-	USE_HARD_LINKS=false npm run dist
+	USE_HARD_LINKS=false yarn run dist
 elif [[ $GIT_TAG_NAME = server-v* ]] && [[ $IS_LINUX = 1 ]]; then
 	echo "Step: Building Docker Image..."
 	cd "$ROOT_DIR"
-	npm run buildServerDocker -- --tag-name $GIT_TAG_NAME --push-images
+	yarn run buildServerDocker --tag-name $GIT_TAG_NAME --push-images
 else
 	echo "Step: Building but *not* publishing desktop application..."
-	USE_HARD_LINKS=false npm run dist -- --publish=never
+	USE_HARD_LINKS=false yarn run dist --publish=never
 fi

@@ -55,7 +55,7 @@ export interface PluginItem {
 	hasBeenUpdated: boolean;
 }
 
-const CellRoot = styled.div`
+const CellRoot = styled.div<{isCompatible: boolean}>`
 	display: flex;
 	box-sizing: border-box;
 	background-color: ${props => props.theme.backgroundColor};
@@ -104,7 +104,7 @@ const DevModeLabel = styled.div`
 	color: ${props => props.theme.color};
 `;
 
-const StyledNameAndVersion = styled.div`
+const StyledNameAndVersion = styled.div<{mb: any}>`
 	font-family: ${props => props.theme.fontFamily};
 	color: ${props => props.theme.color};
 	font-size: ${props => props.theme.fontSize}px;
@@ -155,11 +155,11 @@ export default function(props: Props) {
 	const onNameClick = useCallback(() => {
 		const manifest = item.manifest;
 		if (!manifest.homepage_url) return;
-		bridge().openExternal(manifest.homepage_url);
+		void bridge().openExternal(manifest.homepage_url);
 	}, [item]);
 
 	const onRecommendedClick = useCallback(() => {
-		bridge().openExternal('https://github.com/joplin/plugins/blob/master/readme/recommended.md#recommended-plugins');
+		void bridge().openExternal('https://github.com/joplin/plugins/blob/master/readme/recommended.md#recommended-plugins');
 	}, []);
 
 	// For plugins in dev mode things like enabling/disabling or

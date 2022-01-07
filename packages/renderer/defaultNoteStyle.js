@@ -4,7 +4,6 @@ module.exports = {
 	lineHeight: '1.6em',
 	backgroundColor: 'white',
 	paddingBottom: 3,
-	colorBright: '#000000', // For important text
 	codeBorderColor: 'rgb(220, 220, 220)',
 	codeBackgroundColor: 'rgb(243, 243, 243)',
 	dividerColor: 'rgb(230,230,230)',

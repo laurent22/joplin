@@ -19,7 +19,7 @@ Length             |  6 chars (Hexa string)
 Encryption method  |  2 chars (Hexa string)
 Master key ID      |  32 chars (Hexa string)
 
-See `lib/services/EncryptionService.js` for the list of available encryption methods.
+See `lib/services/e2ee/EncryptionService.ts` for the list of available encryption methods.
 
 ### Data chunk
 
@@ -32,7 +32,7 @@ Data    |  ("Length" bytes) (ASCII)
 
 ## Master Keys
 
-The master keys are used to encrypt and decrypt data. They can be generated from the Encryption Service and are saved to the database. They are themselves encrypted via a user password using a [strong encryption method](https://github.com/laurent22/joplin/blob/f21199a7f38b43d1f350ee81f84d4f335cb285b3/packages/lib/services/EncryptionService.js#L374).
+The master keys are used to encrypt and decrypt data. They can be generated from the Encryption Service and are saved to the database. They are themselves encrypted via a user password using a [strong encryption method](https://github.com/laurent22/joplin/blob/b5b02d8d7bce2c07c89fef50103e1399d792b75e/packages/lib/services/e2ee/EncryptionService.ts#L373).
 
 These encrypted master keys are transmitted with the sync data so that they can be available to each client. Each client will need to supply the user password to decrypt each key.
 

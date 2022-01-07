@@ -26,7 +26,7 @@ async function main() {
 	const buildDate = moment(new Date().getTime()).format('YYYY-MM-DDTHH:mm:ssZ');
 	let revision = '';
 	try {
-		revision = await execCommand2('git rev-parse --short HEAD', { showOutput: false });
+		revision = await execCommand2('git rev-parse --short HEAD', { showStdout: false });
 	} catch (error) {
 		console.info('Could not get git commit: metadata revision field will be empty');
 	}
@@ -47,7 +47,8 @@ async function main() {
 	console.info('isPreRelease:', isPreRelease);
 	console.info('Docker tags:', dockerTags.join(', '));
 
-	await execCommand2(`docker build -t "joplin/server:${imageVersion}" ${buildArgs} -f Dockerfile.server .`);
+	await execCommand2(`docker build --progress=plain -t "joplin/server:${imageVersion}" ${buildArgs} -f Dockerfile.server .`);
+
 	for (const tag of dockerTags) {
 		await execCommand2(`docker tag "joplin/server:${imageVersion}" "joplin/server:${tag}"`);
 		if (pushImages) await execCommand2(`docker push joplin/server:${tag}`);

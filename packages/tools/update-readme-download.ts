@@ -1,42 +1,13 @@
 import * as fs from 'fs-extra';
 import { fileExtension } from '@joplin/lib/path-utils';
-const request = require('request');
+import { gitHubLatestRelease, GitHubRelease } from './tool-utils';
 const readmePath = `${__dirname}/../../README.md`;
-
-interface GitHubReleaseAsset {
-	name: string;
-	browser_download_url: string;
-}
-
-interface GitHubRelease {
-	assets: GitHubReleaseAsset[];
-	tag_name: string;
-}
 
 async function msleep(ms: number) {
 	return new Promise((resolve) => {
 		setTimeout(() => {
 			resolve(null);
 		}, ms);
-	});
-}
-
-async function gitHubLatestRelease(repoName: string): Promise<GitHubRelease> {
-	return new Promise((resolve, reject) => {
-		request.get({
-			url: `https://api.github.com/repos/laurent22/${repoName}/releases/latest`,
-			json: true,
-			headers: { 'User-Agent': 'Joplin Readme Updater' },
-		}, (error: any, response: any, data: any) => {
-			if (error) {
-				reject(error);
-			} else if (response.statusCode !== 200) {
-				console.warn(data);
-				reject(new Error(`Error HTTP ${response.statusCode}`));
-			} else {
-				resolve(data);
-			}
-		});
 	});
 }
 
@@ -122,8 +93,8 @@ async function main(argv: any) {
 	// Disable for now due to broken /latest API end point, which returns a
 	// version from 6 months ago.
 
-	// if (androidUrl) content = content.replace(/(https:\/\/github.com\/laurent22\/joplin-android\/releases\/download\/android-v\d+\.\d+\.\d+\/joplin-v\d+\.\d+\.\d+\.apk)/, androidUrl);
-	// if (android32Url) content = content.replace(/(https:\/\/github.com\/laurent22\/joplin-android\/releases\/download\/android-v\d+\.\d+\.\d+\/joplin-v\d+\.\d+\.\d+-32bit\.apk)/, android32Url);
+	if (androidUrl) content = content.replace(/(https:\/\/github.com\/laurent22\/joplin-android\/releases\/download\/android-v\d+\.\d+\.\d+\/joplin-v\d+\.\d+\.\d+\.apk)/, androidUrl);
+	if (android32Url) content = content.replace(/(https:\/\/github.com\/laurent22\/joplin-android\/releases\/download\/android-v\d+\.\d+\.\d+\/joplin-v\d+\.\d+\.\d+-32bit\.apk)/, android32Url);
 
 	setReadmeContent(content);
 

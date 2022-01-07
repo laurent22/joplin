@@ -275,18 +275,18 @@ export default class UserModel extends BaseModel<User> {
 		return !!s[0].length && !!s[1].length;
 	}
 
-	public async delete(id: string): Promise<void> {
-		const shares = await this.models().share().sharesByUser(id);
+	// public async delete(id: string): Promise<void> {
+	// 	const shares = await this.models().share().sharesByUser(id);
 
-		await this.withTransaction(async () => {
-			await this.models().item().deleteExclusivelyOwnedItems(id);
-			await this.models().share().delete(shares.map(s => s.id));
-			await this.models().userItem().deleteByUserId(id);
-			await this.models().session().deleteByUserId(id);
-			await this.models().notification().deleteByUserId(id);
-			await super.delete(id);
-		}, 'UserModel::delete');
-	}
+	// 	await this.withTransaction(async () => {
+	// 		await this.models().item().deleteExclusivelyOwnedItems(id);
+	// 		await this.models().share().delete(shares.map(s => s.id));
+	// 		await this.models().userItem().deleteByUserId(id);
+	// 		await this.models().session().deleteByUserId(id);
+	// 		await this.models().notification().deleteByUserId(id);
+	// 		await super.delete(id);
+	// 	}, 'UserModel::delete');
+	// }
 
 	private async confirmEmail(user: User) {
 		await this.save({ id: user.id, email_confirmed: 1 });

@@ -1,5 +1,9 @@
 import { FolderEntity } from '../../database/types';
-import { Disposable } from './types';
+import { Disposable, MenuItem } from './types';
+export interface EditContextMenuFilterObject {
+    items: MenuItem[];
+}
+declare type FilterHandler<T> = (object: T)=> Promise<void>;
 declare enum ItemChangeEventType {
     Create = 1,
     Update = 2,
@@ -50,6 +54,11 @@ export default class JoplinWorkspace {
      * Called when the synchronisation process has finished.
      */
     onSyncComplete(callback: Function): Promise<Disposable>;
+    /**
+     * Called just before the editor context menu is about to open. Allows
+     * adding items to it.
+     */
+    filterEditorContextMenu(handler: FilterHandler<EditContextMenuFilterObject>): void;
     /**
      * Gets the currently selected note
      */

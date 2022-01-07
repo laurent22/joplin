@@ -31,12 +31,12 @@ Joplin is available in multiple languages thanks to the help of its users. You c
 
 If you want to start contributing to the project's code, please follow these guidelines before creating a pull request: 
 
-- Explain WHY you want to add this change. Explain it inside the pull request and you may link to an issue for additional information, but the PR should gives a clear overview of why you want to add this.
+- Explain WHY you want to add this change. Explain it inside the pull request and you may link to an issue for additional information, but the PR should give a clear overview of why you want to add this.
 - Bug fixes are always welcome. Start by reviewing the [list of bugs](https://github.com/laurent22/joplin/issues?q=is%3Aissue+is%3Aopen+label%3Abug)
 - A good way to easily start contributing is to pick and work on a [good first issue](https://github.com/laurent22/joplin/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22). We try to make these issues as clear as possible and provide basic info on how the code should be changed, and if something is unclear feel free to ask for more information on the issue.
 - Before adding a new feature, ask about it in the [Github Issue Tracker](https://github.com/laurent22/joplin/issues?utf8=%E2%9C%93&q=is%3Aissue) or the [Joplin Forum](https://discourse.joplinapp.org/), or check if existing discussions exist to make sure the new functionality is desired.
-- **Changes that will consist in more than 50 lines of code should be discussed the [Joplin Forum](https://discourse.joplinapp.org/)**, so that you don't spend too much time implementing something that might not be accepted.
-- All the applications share the same backend (database, synchronisation, settings, models, business logic, etc.) so if you change something in the backend in one app, makes sure it still work in the other apps. Usually it does, but keep this in mind.
+- **Changes that will consist of more than 50 lines of code should be discussed on the [Joplin Forum](https://discourse.joplinapp.org/)**, so that you don't spend too much time implementing something that might not be accepted.
+- All the applications share the same backend (database, synchronisation, settings, models, business logic, etc.) so if you change something in the backend in one app, make sure it still works in the other apps. Usually it does, but keep this in mind.
 - Pull requests that make many changes using an automated tool, like for spell fixing, styling, etc. will not be accepted. An exception would be if the changes have been discussed in the forum and someone has agreed to review **and test** the pull request.
 - Pull requests that make address multiple issues will most likely stall and eventually be closed. This is because we might be fine with one of the changes but not with others and untangling that kind of pull request is too much hassle both for maintainers and the person who submitted it. So most of the time someone gives up and the PR gets closed. So please keep the pull request focused on one issue.
 
@@ -44,7 +44,7 @@ Building the apps is relatively easy - please [see the build instructions](https
 
 ## Coding style
 
-Coding style is enforced by a pre-commit hook that runs eslint. This hook is installed whenever running `npm install` on any of the application directory. If for some reason the pre-commit hook didn't get installed, you can manually install it by running `npm install` at the root of the repository.
+Coding style is enforced by a pre-commit hook that runs eslint. This hook is installed whenever running `yarn install` on any of the application directory. If for some reason the pre-commit hook didn't get installed, you can manually install it by running `yarn install` at the root of the repository.
 
 For new React components, please use [React Hooks](https://reactjs.org/docs/hooks-intro.html). For new code in general, please use TypeScript. Even if you are modifying a file that was originally in JavaScript you should ideally convert it first to TypeScript before modifying it. Doing so is relatively easy and it helps maintain code quality.
 
@@ -61,26 +61,26 @@ When submitting a pull request for a new feature or a bug fix, please add automa
 The tests are under packages/app-cli/tests. To get them running, you first need to build the CLI app:
 
 ```sh
-npm install
+yarn install
 cd packages/app-cli
 ```
 
 To run all the test units:
 
 ```sh
-npm test
+yarn test
 ```
 
 To run just one particular file:
 
 ```sh
-npm test -- --filter=markdownUtils # Don't add the .js extension
+yarn test --filter=markdownUtils # Don't add the .js extension
 ```
 
 To filter tests. For example, to run all the test units that contain "should handle conflict" in their description:
 
 ```sh
-npm test -- --filter="should handle conflict"
+yarn test --filter="should handle conflict"
 ```
 
 ## About abandoned pull requests

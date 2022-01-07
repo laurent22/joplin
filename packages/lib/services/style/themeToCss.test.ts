@@ -15,7 +15,6 @@ const input: Theme = {
 	colorWarn: 'rgb(228,86,0)',
 	colorWarnUrl: '#155BDA',
 	colorFaded: '#7C8B9E', // For less important text
-	colorBright: '#000000', // For important text
 	dividerColor: '#dddddd',
 	selectedColor: '#e5e5e5',
 	urlColor: '#155BDA',
@@ -69,7 +68,6 @@ const expected = `
 	--joplin-color-warn: rgb(228,86,0);
 	--joplin-color-warn-url: #155BDA;
 	--joplin-color-faded: #7C8B9E;
-	--joplin-color-bright: #000000;
 	--joplin-divider-color: #dddddd;
 	--joplin-selected-color: #e5e5e5;
 	--joplin-url-color: #155BDA;

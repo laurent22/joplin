@@ -11,3 +11,6 @@ gui/NoteEditor/NoteBody/TinyMCE/supportedLocales.js
 runForSharingCommands-*
 runForTestingCommands-*
 style.min.css
+build/lib/
+vendor/*
+!vendor/loadEmojiLib.js

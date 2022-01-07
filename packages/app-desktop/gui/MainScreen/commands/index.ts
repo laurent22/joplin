@@ -12,11 +12,13 @@ import * as newSubFolder from './newSubFolder';
 import * as newTodo from './newTodo';
 import * as openFolder from './openFolder';
 import * as openFolderDialog from './openFolderDialog';
+import * as openItem from './openItem';
 import * as openNote from './openNote';
 import * as openTag from './openTag';
 import * as print from './print';
 import * as renameFolder from './renameFolder';
 import * as renameTag from './renameTag';
+import * as revealResourceFile from './revealResourceFile';
 import * as search from './search';
 import * as setTags from './setTags';
 import * as showModalMessage from './showModalMessage';
@@ -49,11 +51,13 @@ const index:any[] = [
 	newTodo,
 	openFolder,
 	openFolderDialog,
+	openItem,
 	openNote,
 	openTag,
 	print,
 	renameFolder,
 	renameTag,
+	revealResourceFile,
 	search,
 	setTags,
 	showModalMessage,

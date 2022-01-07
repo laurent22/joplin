@@ -23,6 +23,7 @@ import openEditDialog from './utils/openEditDialog';
 import { MarkupToHtmlOptions } from '../../utils/useMarkupToHtml';
 import { themeStyle } from '@joplin/lib/theme';
 import { loadScript } from '../../../utils/loadScript';
+import bridge from '../../../../services/bridge';
 const { clipboard } = require('electron');
 const supportedLocales = require('./supportedLocales');
 
@@ -320,7 +321,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		async function loadScripts() {
 			const scriptsToLoad: any[] = [
 				{
-					src: 'node_modules/tinymce/tinymce.min.js',
+					src: `${bridge().vendorDir()}/lib/tinymce/tinymce.min.js`,
 					id: 'tinyMceScript',
 					loaded: false,
 				},
@@ -356,8 +357,6 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 	}, []);
 
 	useEffect(() => {
-		if (!editorReady) return () => {};
-
 		const theme = themeStyle(props.themeId);
 
 		const element = document.createElement('style');
@@ -491,11 +490,28 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				padding-top: ${theme.toolbarPadding}px;
 				padding-bottom: ${theme.toolbarPadding}px;
 			}
+
+			.joplin-tinymce .tox .tox-edit-area__iframe {
+				background-color: ${theme.backgroundColor} !important;
+			}
+
+			.joplin-tinymce .tox .tox-toolbar__primary {
+				/* This component sets an empty svg with a white background as the background
+				 * which needs to be cleared to prevent it from flashing white in dark themes */
+				background: none;
+				background-color: ${theme.backgroundColor3} !important;
+			}
 		`));
 
 		return () => {
 			document.head.removeChild(element);
 		};
+		// editorReady is here because TinyMCE starts by initializing a blank iframe, which needs to be
+		// styled by us, otherwise users in dark mode get a bright white flash. During initialization
+		// our styling is overwritten which causes some elements to have the wrong styling. Removing the
+		// style and re-applying it on editorReady gives our styles precedence and prevents any flashing
+		//
+		// tl;dr: editorReady is used here because the css needs to be re-applied after TinyMCE init
 	}, [editorReady, props.themeId]);
 
 	// -----------------------------------------------------------------------------------------
@@ -556,7 +572,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				statusbar: false,
 				target_list: false,
 				table_resize_bars: false,
-				language: ['en_US', 'en_GB'].includes(language) ? undefined : language,
+				language_url: ['en_US', 'en_GB'].includes(language) ? undefined : `${bridge().vendorDir()}/lib/tinymce/langs/${language}`,
 				toolbar: toolbar.join(' '),
 				localization_function: _,
 				contextmenu: false,
@@ -693,7 +709,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 		}
 
 		const cssFiles = [
-			'node_modules/@fortawesome/fontawesome-free/css/all.min.css',
+			`${bridge().vendorDir()}/lib/@fortawesome/fontawesome-free/css/all.min.css`,
 			`gui/note-viewer/pluginAssets/highlight.js/${theme.codeThemeCss}`,
 		].concat(
 			pluginAssets

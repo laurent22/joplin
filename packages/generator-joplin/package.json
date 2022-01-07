@@ -1,6 +1,6 @@
 {
   "name": "generator-joplin",
-  "version": "2.6.0",
+  "version": "2.7.3",
   "description": "Scaffolds out a new Joplin plugin",
   "homepage": "https://github.com/laurent22/joplin/tree/dev/packages/generator-joplin",
   "author": {
@@ -9,7 +9,7 @@
   },
   "scripts": {
     "test": "jest",
-    "test-ci": "npm run test"
+    "test-ci": "yarn test"
   },
   "files": [
     "generators"

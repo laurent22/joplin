@@ -344,7 +344,10 @@ function NoteEditor(props: NoteEditorProps) {
 	const onScroll = useCallback((event: any) => {
 		props.dispatch({
 			type: 'EDITOR_SCROLL_PERCENT_SET',
-			noteId: formNote.id,
+			// In callbacks of setTimeout()/setInterval(), props/state cannot be used
+			// to refer the current value, since they would be one or more generations old.
+			// For the purpose, useRef value should be used.
+			noteId: formNoteRef.current.id,
 			percent: event.percent,
 		});
 	}, [props.dispatch, formNote]);

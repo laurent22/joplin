@@ -6,6 +6,20 @@ const execa = require('execa');
 const { splitCommandString } = require('@joplin/lib/string-utils');
 const moment = require('moment');
 
+export interface GitHubReleaseAsset {
+	name: string;
+	browser_download_url: string;
+}
+
+export interface GitHubRelease {
+	assets: GitHubReleaseAsset[];
+	tag_name: string;
+	upload_url: string;
+	html_url: string;
+	prerelease: boolean;
+	draft: boolean;
+}
+
 function quotePath(path: string) {
 	if (!path) return '';
 	if (path.indexOf('"') < 0 && path.indexOf(' ') < 0) return path;
@@ -64,13 +78,7 @@ async function insertChangelog(tag: string, changelogPath: string, changelog: st
 	return output.join('\n');
 }
 
-export async function completeReleaseWithChangelog(changelogPath: string, newVersion: string, newTag: string, appName: string, isPreRelease: boolean) {
-	const changelog = (await execCommand2(`node ${rootDir}/packages/tools/git-changelog ${newTag} --publish-format full`, { })).trim();
-
-	const newChangelog = await insertChangelog(newTag, changelogPath, changelog, isPreRelease);
-
-	await fs.writeFile(changelogPath, newChangelog);
-
+export function releaseFinalGitCommands(appName: string, newVersion: string, newTag: string): string {
 	const finalCmds = [
 		'git pull',
 		'git add -A',
@@ -80,6 +88,16 @@ export async function completeReleaseWithChangelog(changelogPath: string, newVer
 		'git push --tags',
 	];
 
+	return finalCmds.join(' && ');
+}
+
+export async function completeReleaseWithChangelog(changelogPath: string, newVersion: string, newTag: string, appName: string, isPreRelease: boolean) {
+	const changelog = (await execCommand2(`node ${rootDir}/packages/tools/git-changelog ${newTag} --publish-format full`, { })).trim();
+
+	const newChangelog = await insertChangelog(newTag, changelogPath, changelog, isPreRelease);
+
+	await fs.writeFile(changelogPath, newChangelog);
+
 	console.info('');
 	console.info('Verify that the changelog is correct:');
 	console.info('');
@@ -87,7 +105,7 @@ export async function completeReleaseWithChangelog(changelogPath: string, newVer
 	console.info('');
 	console.info('Then run these commands:');
 	console.info('');
-	console.info(finalCmds.join(' && '));
+	console.info(releaseFinalGitCommands(appName, newVersion, newTag));
 }
 
 async function loadGitHubUsernameCache() {
@@ -146,7 +164,8 @@ export function execCommandVerbose(commandName: string, args: string[] = []) {
 
 interface ExecCommandOptions {
 	showInput?: boolean;
-	showOutput?: boolean;
+	showStdout?: boolean;
+	showStderr?: boolean;
 	quiet?: boolean;
 }
 
@@ -159,14 +178,16 @@ interface ExecCommandOptions {
 export async function execCommand2(command: string | string[], options: ExecCommandOptions = null): Promise<string> {
 	options = {
 		showInput: true,
-		showOutput: true,
+		showStdout: true,
+		showStderr: true,
 		quiet: false,
 		...options,
 	};
 
 	if (options.quiet) {
 		options.showInput = false;
-		options.showOutput = false;
+		options.showStdout = false;
+		options.showStderr = false;
 	}
 
 	if (options.showInput) {
@@ -181,7 +202,8 @@ export async function execCommand2(command: string | string[], options: ExecComm
 	const executableName = args[0];
 	args.splice(0, 1);
 	const promise = execa(executableName, args);
-	if (options.showOutput) promise.stdout.pipe(process.stdout);
+	if (options.showStdout) promise.stdout.pipe(process.stdout);
+	if (options.showStderr) promise.stdout.pipe(process.stderr);
 	const result = await promise;
 	return result.stdout.trim();
 }
@@ -364,7 +386,39 @@ export function githubOauthToken() {
 	return readCredentialFile('github_oauth_token.txt');
 }
 
-export async function githubRelease(project: string, tagName: string, options: any = null) {
+// Note that the GitHub API releases/latest is broken on the joplin-android repo
+// as of Nov 2021 (last working on 3 November 2021, first broken on 19
+// November). It used to return the latest **published** release but now it
+// retuns... some release, always the same one, but not the latest one. GitHub
+// says that nothing has changed on the API, although it used to work. So since
+// we can't use /latest anymore, we need to fetch all the releases to find the
+// latest published one.
+export async function gitHubLatestRelease(repoName: string): Promise<GitHubRelease> {
+	let pageNum = 1;
+
+	while (true) {
+		const response: any = await fetch(`https://api.github.com/repos/laurent22/${repoName}/releases?page=${pageNum}`, {
+			headers: {
+				'Content-Type': 'application/json',
+				'User-Agent': 'Joplin Readme Updater',
+			},
+		});
+
+		if (!response.ok) throw new Error(`Cannot fetch releases: ${response.statusText}`);
+
+		const releases = await response.json();
+		if (!releases.length) throw new Error('Cannot find latest release');
+
+		for (const release of releases) {
+			if (release.prerelease || release.draft) continue;
+			return release;
+		}
+
+		pageNum++;
+	}
+}
+
+export async function githubRelease(project: string, tagName: string, options: any = null): Promise<GitHubRelease> {
 	options = Object.assign({}, {
 		isDraft: false,
 		isPreRelease: false,

@@ -1,8 +1,7 @@
 import ResourceEditWatcher from '@joplin/lib/services/ResourceEditWatcher/index';
 import { _ } from '@joplin/lib/locale';
 import { copyHtmlToClipboard } from './clipboardUtils';
-
-const bridge = require('@electron/remote').require('./bridge').default;
+import bridge from '../../../services/bridge';
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
 import Resource from '@joplin/lib/models/Resource';
@@ -130,6 +129,15 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 				clipboard.writeText(toSystemSlashes(resourcePath));
 			},
 			isActive: (itemType: ContextMenuItemType) => itemType === ContextMenuItemType.Image || itemType === ContextMenuItemType.Resource,
+		},
+		copyImage: {
+			label: _('Copy image'),
+			onAction: async (options: ContextMenuOptions) => {
+				const { resourcePath } = await resourceInfo(options);
+				const image = bridge().createImageFromPath(resourcePath);
+				clipboard.writeImage(image);
+			},
+			isActive: (itemType: ContextMenuItemType) => itemType === ContextMenuItemType.Image,
 		},
 		cut: {
 			label: _('Cut'),

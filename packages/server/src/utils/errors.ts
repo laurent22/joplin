@@ -130,23 +130,29 @@ export class ErrorTooManyRequests extends ApiError {
 }
 
 export function errorToString(error: Error): string {
-	const msg: string[] = [];
-	msg.push(error.message ? error.message : 'Unknown error');
-	if (error.stack) msg.push(error.stack);
-	return msg.join(': ');
+	// const msg: string[] = [];
+	// msg.push(error.message ? error.message : 'Unknown error');
+	// if (error.stack) msg.push(error.stack);
+	// return msg.join(': ');
+
+	return JSON.stringify(errorToPlainObject(error));
 }
 
 interface PlainObjectError {
 	httpCode?: number;
 	message?: string;
 	code?: string;
+	stack?: string;
 }
 
 export function errorToPlainObject(error: any): PlainObjectError {
+	if (typeof error === 'string') return { message: error };
+
 	const output: PlainObjectError = {};
 	if ('httpCode' in error) output.httpCode = error.httpCode;
 	if ('code' in error) output.code = error.code;
 	if ('message' in error) output.message = error.message;
+	if ('stack' in error) output.stack = error.stack;
 	return output;
 }
 

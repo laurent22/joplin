@@ -6,7 +6,7 @@
 // - Run the Postgres database -- `sudo docker-compose --file docker-compose.db-dev.yml up`
 // - Update the DB parameters in ~/joplin-credentials/server.env to use the dev
 //   database
-// - Run the server - `JOPLIN_IS_TESTING=1 npm run start-dev`
+// - Run the server - `JOPLIN_IS_TESTING=1 yarn run start-dev`
 // - Then run this script - `node populateDatabase.js`
 //
 // Currently it doesn't actually create the users, so that should be done using:
@@ -64,7 +64,7 @@ const processUser = async (userNum: number) => {
 
 		await chdir(cliDir);
 
-		await execCommand2(['npm', 'run', 'start-no-build', '--', '--profile', profileDir, 'batch', commandFile]);
+		await execCommand2(['yarn', 'run', 'start-no-build', '--', '--profile', profileDir, 'batch', commandFile]);
 	} catch (error) {
 		console.error(`Could not process user ${userNum}:`, error);
 	} finally {
@@ -88,7 +88,7 @@ const main = async () => {
 
 	// Build the app once before starting, because we'll use start-no-build to
 	// run the scripts (faster)
-	await execCommand2(['npm', 'run', 'build']);
+	await execCommand2(['yarn', 'run', 'build']);
 
 	const focusUserNum = 0;
 

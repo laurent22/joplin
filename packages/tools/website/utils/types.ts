@@ -57,7 +57,7 @@ export interface TemplateParams {
 	title?: string;
 	donateLinksMd?: string;
 	pageTitle?: string;
-	yyyy? : string;
+	yyyy?: string;
 	templateHtml?: string;
 	partials?: Record<string, string>;
 	forumUrl?: string;
@@ -70,6 +70,8 @@ export interface TemplateParams {
 	navbar?: NavBar;
 	showJoplinCloudLinks?: boolean;
 	assetUrls: AssetUrls;
+	discussOnForumLink?: string;
+	showBottomLinks?: boolean;
 }
 
 export interface PlanPageParams extends TemplateParams {

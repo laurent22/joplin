@@ -7,6 +7,7 @@ import BaseModel from '@joplin/lib/BaseModel';
 import uuid from '@joplin/lib/uuid';
 const { connect } = require('react-redux');
 import Note from '@joplin/lib/models/Note';
+import { AppState } from '../../app.reducer';
 const debounce = require('debounce');
 const styled = require('styled-components').default;
 
@@ -21,6 +22,7 @@ interface Props {
 	notesParentType: string;
 	dispatch?: Function;
 	selectedNoteId: string;
+	isFocused?: boolean;
 }
 
 function SearchBar(props: Props) {
@@ -116,8 +118,19 @@ function SearchBar(props: Props) {
 	}, [onExitSearch]);
 
 	const onSearchButtonClick = useCallback(() => {
-		void onExitSearch();
-	}, [onExitSearch]);
+		console.info('isFocused', props.isFocused);
+
+		if (props.isFocused) {
+			void onExitSearch();
+		} else {
+			setSearchStarted(true);
+			props.inputRef.current.focus();
+			props.dispatch({
+				type: 'FOCUS_SET',
+				field: 'globalSearch',
+			});
+		}
+	}, [onExitSearch, props.isFocused]);
 
 	useEffect(() => {
 		if (props.notesParentType !== 'Search') {
@@ -141,10 +154,11 @@ function SearchBar(props: Props) {
 	);
 }
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: AppState) => {
 	return {
 		notesParentType: state.notesParentType,
 		selectedNoteId: stateUtils.selectedNoteId(state),
+		isFocused: state.focusedField === 'globalSearch',
 	};
 };
 

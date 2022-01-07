@@ -11,7 +11,6 @@ const theme: Theme = {
 	colorError: '#dc322f',
 	colorWarn: '#cb4b16',
 	colorFaded: '#839496', // For less important text;
-	colorBright: '#073642', // For important text;
 	dividerColor: '#eee8d5',
 	selectedColor: '#eee8d5',
 	urlColor: '#268bd2',

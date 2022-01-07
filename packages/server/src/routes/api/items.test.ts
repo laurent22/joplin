@@ -154,7 +154,7 @@ describe('api_items', function() {
 	test('should batch upload items', async function() {
 		const { session: session1 } = await createUserAndSession(1, false);
 
-		const result: PaginatedResults = await putApi(session1.id, 'batch_items', {
+		const result: PaginatedResults<any> = await putApi(session1.id, 'batch_items', {
 			items: [
 				{
 					name: '00000000000000000000000000000001.md',
@@ -177,7 +177,7 @@ describe('api_items', function() {
 		const note1 = makeNoteSerializedBody({ id: '00000000000000000000000000000001' });
 		await models().user().save({ id: user1.id, max_item_size: note1.length });
 
-		const result: PaginatedResults = await putApi(session1.id, 'batch_items', {
+		const result: PaginatedResults<any> = await putApi(session1.id, 'batch_items', {
 			items: [
 				{
 					name: '00000000000000000000000000000001.md',

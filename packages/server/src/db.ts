@@ -49,6 +49,7 @@ export interface DbConfigConnection {
 
 export interface QueryContext {
 	uniqueConstraintErrorLoggingDisabled?: boolean;
+	noSuchTableErrorLoggingDisabled?: boolean;
 }
 
 export interface KnexDatabaseConfig {
@@ -227,6 +228,10 @@ export async function connectDb(dbConfig: DatabaseConfig): Promise<DbConnection>
 			if (data.queryContext.uniqueConstraintErrorLoggingDisabled && isUniqueConstraintError(response)) {
 				return;
 			}
+
+			if (data.queryContext.noSuchTableErrorLoggingDisabled && isNoSuchTableError(response)) {
+				return;
+			}
 		}
 
 		const msg: string[] = [];
@@ -392,7 +397,8 @@ export function isUniqueConstraintError(error: any): boolean {
 
 export async function latestMigration(db: DbConnection): Promise<Migration | null> {
 	try {
-		const result = await db('knex_migrations').select('name').orderBy('id', 'desc').first();
+		const context: QueryContext = { noSuchTableErrorLoggingDisabled: true };
+		const result = await db('knex_migrations').queryContext(context).select('name').orderBy('id', 'desc').first();
 		return { name: result.name, done: true };
 	} catch (error) {
 		// If the database has never been initialized, we return null, so
