@@ -49,6 +49,7 @@ RUN yarn install --inline-builds --mode=skip-build
 COPY --chown=$user:$user packages/fork-sax/package*.json ./packages/fork-sax/
 COPY --chown=$user:$user packages/fork-uslug/package*.json ./packages/fork-uslug/
 COPY --chown=$user:$user packages/htmlpack/package*.json ./packages/htmlpack/
+COPY --chown=$user:$user packages/renderer/package*.json ./packages/renderer/
 COPY --chown=$user:$user packages/tools/package*.json ./packages/tools/
 COPY --chown=$user:$user packages/lib/package*.json ./packages/lib/
 COPY --chown=$user:$user tsconfig.json .
@@ -59,7 +60,6 @@ COPY --chown=$user:$user tsconfig.json .
 COPY --chown=$user:$user packages/turndown ./packages/turndown
 COPY --chown=$user:$user packages/turndown-plugin-gfm ./packages/turndown-plugin-gfm
 COPY --chown=$user:$user packages/fork-htmlparser2 ./packages/fork-htmlparser2
-COPY --chown=$user:$user packages/renderer ./packages/renderer
 COPY --chown=$user:$user packages/server/package*.json ./packages/server/
 
 # Then bootstrap only, without compiling the TypeScript files
@@ -71,6 +71,7 @@ RUN yarn install --inline-builds --mode=skip-build
 COPY --chown=$user:$user packages/fork-sax ./packages/fork-sax
 COPY --chown=$user:$user packages/fork-uslug ./packages/fork-uslug
 COPY --chown=$user:$user packages/htmlpack ./packages/htmlpack
+COPY --chown=$user:$user packages/renderer ./packages/renderer
 COPY --chown=$user:$user packages/tools ./packages/tools
 COPY --chown=$user:$user packages/lib ./packages/lib
 COPY --chown=$user:$user packages/server ./packages/server
