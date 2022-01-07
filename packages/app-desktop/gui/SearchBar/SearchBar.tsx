@@ -15,6 +15,7 @@ export const Root = styled.div`
 	position: relative;
 	display: flex;
 	width: 100%;
+	min-width: 30px;
 `;
 
 interface Props {
