@@ -300,7 +300,6 @@ To add a **Bucket Policy** from the AWS S3 Web Console, navigate to the **Permis
         {
             "Sid": "VisualEditor0",
             "Effect": "Allow",
-            "Principal": "*",
             "Action": [
                   "s3:ListBucket",
                   "s3:GetBucketLocation",
