@@ -1,7 +1,7 @@
 name: 'Close stale issues'
 on:
   schedule:
-    - cron: '0 16 * * *'
+    - cron: '0 */6 * * *'
 permissions:
   issues: write
 jobs:
@@ -15,6 +15,7 @@ jobs:
           stale-issue-message: "Hey there, it looks like there has been no activity on this issue recently. Has the issue been fixed, or does it still require the community's attention? This issue may be closed if no further activity occurs. You may comment on the issue and I will leave it open. Thank you for your contributions."
           days-before-stale: 30
           days-before-close: 7
+          operations-per-run: 1000
           exempt-issue-labels: 'good first issue,upstream,backlog,high,medium,spec,cannot reproduce'
           stale-issue-label: 'stale'
           close-issue-message: 'Closing this issue after a prolonged period of inactivity. If this issue is still present in the latest release, feel free to create a new issue with up-to-date information.'
