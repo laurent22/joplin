@@ -576,13 +576,13 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		const arg0 = args && args.length >= 1 ? args[0] : null;
 
 		if (msg.indexOf('checkboxclick:') === 0) {
-			const newBody = shared.toggleCheckbox(msg, props.content);
+			const { line, from, to } = shared.toggleCheckboxRange(msg, props.content);
 			if (editorRef.current) {
 				// To cancel CodeMirror's layout drift, the scroll position
-				// is recorded before updateBody(), and then it is restored.
+				// is recorded before updated, and then it is restored.
 				// Ref. https://github.com/laurent22/joplin/issues/5890
 				const percent = getLineScrollPercent();
-				editorRef.current.updateBody(newBody);
+				editorRef.current.replaceRange(line, from, to);
 				setEditorPercentScroll(percent);
 			}
 		} else if (msg === 'percentScroll') {
