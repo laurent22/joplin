@@ -1,7 +1,8 @@
 name: 'Close stale issues'
-on:
-  schedule:
-    - cron: '30 * * * *'
+on: [push]
+# on:
+#   schedule:
+#     - cron: '30 * * * *'
 permissions:
   issues: write
 jobs:
