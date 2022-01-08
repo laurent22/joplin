@@ -10,7 +10,7 @@ users; it does not change your rights to use your own Contributions for any
 other purpose.
 
 Please complete and sign this Agreement, and then email a copy to
-license@joplincloud.com only (do not copy any other persons or lists). Read this
+cla@joplinapp.org only (do not copy any other persons or lists). Read this
 document carefully before signing and keep a copy for your records.
 
 - Full name: **FULL NAME**
