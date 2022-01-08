@@ -23,6 +23,7 @@ interface Props {
 	dispatch?: Function;
 	selectedNoteId: string;
 	isFocused?: boolean;
+	searches?: any[];
 }
 
 function SearchBar(props: Props) {
@@ -138,6 +139,20 @@ function SearchBar(props: Props) {
 		}
 	}, [props.notesParentType, onExitSearch]);
 
+
+	useEffect(() => {
+		if (props.notesParentType === 'Search' || props.isFocused) {
+			// console.warn("search bar just mounted but search active isFocused:",props.isFocused,"searches:",props.searches,'parentType:',props.notesParentType);
+			if (props.isFocused) {
+				props.dispatch({
+					type: 'FOCUS_CLEAR',
+					field: 'globalSearch',
+				});
+			}
+			void onExitSearch(true);
+		}
+	}, []);
+
 	return (
 		<Root className="search-bar">
 			<SearchInput
@@ -159,6 +174,7 @@ const mapStateToProps = (state: AppState) => {
 		notesParentType: state.notesParentType,
 		selectedNoteId: stateUtils.selectedNoteId(state),
 		isFocused: state.focusedField === 'globalSearch',
+		searches: state.searches,
 	};
 };
 
