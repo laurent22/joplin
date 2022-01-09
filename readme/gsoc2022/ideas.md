@@ -121,6 +121,20 @@ Difficulty Level: Medium
 
 Skills Required: React, Typescript, CSS.
 
+## 11. Improve plugin search and discoverability
+
+As there are more and more plugins it would be good to improve how they are discovered, and to improve search - in particular improve search relevance. We are open to hear ideas about this, but a few things that could be done, for example are:
+
+- Improve the [page that lists all the plugin](https://github.com/joplin/plugins#readme) by adding a download count (based on stats.json) and make the list sortable by download count.
+- In the app, use the info from stats.json to order the plugin - those with more downloads going on top for example
+- Create a dynamically generated page (using GitHub Actions) under joplinapp.org that shows some recommended plugins, trending plugins, etc. similar to [Add-ons for Firefox](https://addons.mozilla.org/en-GB/firefox/)
+
+Those are just ideas and we're open to hearing more from you.
+
+Difficulty Level: Medium
+
+Skills Required: Typescript, CSS, GitHub Actions.
+
 # More info
 
 - Make sure you read the [Joplin Google Summer of Code Introduction](https://joplinapp.org/gsoc2022/index/)
