@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useRef, useEffect } from 'react';
 import { _ } from '@joplin/lib/locale';
 import DialogButtonRow, { ClickEvent } from '../DialogButtonRow';
 import Dialog from '../Dialog';
@@ -22,6 +22,7 @@ interface Props {
 export default function(props: Props) {
 	const [folderTitle, setFolderTitle] = useState('');
 	const [folderIcon, setFolderIcon] = useState<FolderIcon>();
+	const titleInputRef = useRef(null);
 
 	const isNew = !props.folderId;
 
@@ -40,6 +41,14 @@ export default function(props: Props) {
 			name: 'editFolder',
 		});
 	}, [props.dispatch]);
+
+	useEffect(() => {
+		titleInputRef.current.focus();
+
+		setTimeout(() => {
+			titleInputRef.current.select();
+		}, 100);
+	}, []);
 
 	const onButtonRowClick = useCallback(async (event: ClickEvent) => {
 		if (event.buttonName === 'cancel') {
@@ -90,7 +99,7 @@ export default function(props: Props) {
 				<div className="form">
 					<div className="form-input-group">
 						<label>{_('Title')}</label>
-						<StyledInput type="text" value={folderTitle} onChange={onFolderTitleChange}/>
+						<StyledInput type="text" ref={titleInputRef} value={folderTitle} onChange={onFolderTitleChange}/>
 					</div>
 
 					<div className="form-input-group">
