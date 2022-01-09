@@ -151,7 +151,7 @@ General classes
 
 body, button {
 	color: var(--joplin-color);
-	font-size: 16px;
+	font-size: 13px;
 }
 
 div, span, a {
@@ -159,7 +159,7 @@ div, span, a {
 }
 
 h2 {
-	font-size: 24px;
+	font-size: 20px;
 
 	&.-no-top-margin {
 		margin-top: 0;
@@ -193,7 +193,7 @@ div.form,
 
 p {
 	&.-small {
-		font-size: 13px;
+		font-size: 11px;
 	}
 }
 

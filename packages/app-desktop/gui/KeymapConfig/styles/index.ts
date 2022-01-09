@@ -5,7 +5,7 @@ export default function styles(themeId: number) {
 		return {
 			container: {
 				...theme.containerStyle,
-				padding: theme.configScreenPadding,
+				// padding: theme.configScreenPadding,
 				backgroundColor: theme.backgroundColor3,
 			},
 			actionsContainer: {
