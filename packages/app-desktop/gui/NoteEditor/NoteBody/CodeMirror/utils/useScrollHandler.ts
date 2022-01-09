@@ -130,8 +130,18 @@ export default function useScrollHandler(editorRef: any, webviewRef: any, onScro
 		}
 	}, []);
 
+	const getLineScrollPercent = useCallback(() => {
+		const cm = editorRef.current;
+		if (isCodeMirrorReady(cm)) {
+			const ePercent = cm.getScrollPercent();
+			return translateScrollPercentE2L(cm, ePercent);
+		} else {
+			return scrollPercent_.current;
+		}
+	}, []);
+
 	return {
-		resetScroll, setEditorPercentScroll, setViewerPercentScroll, editor_scroll, editor_resize,
+		resetScroll, setEditorPercentScroll, setViewerPercentScroll, editor_scroll, editor_resize, getLineScrollPercent,
 	};
 }
 
