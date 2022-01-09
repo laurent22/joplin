@@ -305,7 +305,7 @@ msgstr "Utseende"
 
 #: packages/lib/models/Setting.ts:2146
 msgid "Application"
-msgstr "Avslutar programmet"
+msgstr "Program"
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:33
 msgid "Apply"
@@ -560,7 +560,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleLayoutMoveMode.ts:7
 msgid "Change application layout"
-msgstr "Ändra applikationslayout"
+msgstr "Ändra programmets layout"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.ts:189
 msgid "Change language"
@@ -1001,7 +1001,7 @@ msgstr "Ta bort rad"
 
 #: packages/lib/models/Setting.ts:1186
 msgid "Delete local data and re-download from sync target"
-msgstr "Ta bort lokal data och hämta igen från synkroniseringsmålet"
+msgstr "Ta bort lokala data och hämta igen från synkroniseringsmålet"
 
 #: packages/lib/models/Note.ts:760
 msgid "Delete note \"%s\"?"
@@ -1576,7 +1576,7 @@ msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
 msgstr ""
-"Felsäkert: Rensa inte lokal data när synkroniseringsmålet är tomt (beror "
+"Felsäkert: Rensa inte lokala data när synkroniseringsmålet är tomt (beror "
 "oftast på felkonfigurering eller en bugg)"
 
 #: packages/app-cli/app/main.js:95
@@ -1888,7 +1888,7 @@ msgstr ""
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:142
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:129
 msgid "In order to use the web clipper, you need to do the following:"
-msgstr "För att kunna använda web Clipper måste du göra följande:"
+msgstr "För att kunna använda Web Clipper måste du göra följande:"
 
 #: packages/lib/Synchronizer.ts:305
 msgid "In progress"
@@ -2894,7 +2894,7 @@ msgstr "Omkryptering"
 
 #: packages/lib/models/Setting.ts:1175
 msgid "Re-upload local data to sync target"
-msgstr "Ladda upp lokal data igen för synkroniseringsmålet"
+msgstr "Ladda upp lokala data igen till synkroniseringsmålet"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:439
 msgid "Read more about it"
@@ -3584,7 +3584,7 @@ msgstr "Programmet har godkänts."
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:619
 msgid "The application must be restarted for these changes to take effect."
 msgstr ""
-"Applikationen måste startas om för att dessa ändringar ska träda i kraft."
+"Programmet måste startas om för att dessa ändringar ska träda i kraft."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:511
 msgid ""
@@ -3611,13 +3611,13 @@ msgid ""
 "is recommended that you apply it to your data."
 msgstr ""
 "Standard krypteringsmetod har ändrats till en säkrare och det är "
-"rekommenderat att du tillämpar den på din data."
+"rekommenderat att du tillämpar den på dina data."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:603
 msgid ""
 "The default encryption method has been changed, you should re-encrypt your "
 "data."
-msgstr "Standardkrypteringsmetoden har ändrats, du bör omkryptera din data."
+msgstr "Standardkrypteringsmetoden har ändrats, du bör omkryptera dina data."
 
 #: packages/lib/models/Setting.ts:1228
 msgid ""
@@ -3756,7 +3756,7 @@ msgstr "Web Clipper behöver din behörighet för att få åtkomst till dina dat
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:84
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:83
 msgid "The web clipper service is enabled and set to auto-start."
-msgstr "Web clipper-tjänsten är aktiverad och inställd för automatisk start."
+msgstr "Web Clipper-tjänsten är aktiverad och inställd för automatisk start."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:109
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:107
@@ -3782,7 +3782,7 @@ msgstr ""
 
 #: packages/lib/services/interop/InteropService_Exporter_Jex.ts:35
 msgid "There is no data to export."
-msgstr "Det finns ingen data att exportera."
+msgstr "Det finns inga data att exportera."
 
 #: packages/lib/models/Resource.ts:412
 msgid ""
@@ -4387,7 +4387,7 @@ msgid ""
 "You may use the tool below to re-encrypt your data, for example if you know "
 "that some of your notes are encrypted with an obsolete encryption method."
 msgstr ""
-"Du kan använda verktyget nedan för att omkryptera din data, exempelvis om du "
+"Du kan använda verktyget nedan för att omkryptera dina data, exempelvis om du "
 "vill veta om vissa av dina anteckningar är krypterade med en gammal "
 "krypteringsmetod."
 
@@ -4397,7 +4397,7 @@ msgstr "Ditt val: "
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:71
 msgid "Your data is going to be re-encrypted and synced again."
-msgstr "Din data kommer att omkrypteras och synkroniseras igen."
+msgstr "Dina data kommer att omkrypteras och synkroniseras igen."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:271
 msgid "Your master password is needed to decrypt some of your data."
