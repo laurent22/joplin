@@ -2894,7 +2894,7 @@ msgstr "Omkryptering"
 
 #: packages/lib/models/Setting.ts:1175
 msgid "Re-upload local data to sync target"
-msgstr "Ladda upp lokala data igen för synkroniseringsmålet"
+msgstr "Ladda upp lokala data igen till synkroniseringsmålet"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:439
 msgid "Read more about it"
