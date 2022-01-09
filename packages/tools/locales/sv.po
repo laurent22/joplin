@@ -560,7 +560,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleLayoutMoveMode.ts:7
 msgid "Change application layout"
-msgstr "Ändra applikationslayout"
+msgstr "Ändra programmets layout"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.ts:189
 msgid "Change language"
@@ -3584,7 +3584,7 @@ msgstr "Programmet har godkänts."
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:619
 msgid "The application must be restarted for these changes to take effect."
 msgstr ""
-"Applikationen måste startas om för att dessa ändringar ska träda i kraft."
+"Programmet måste startas om för att dessa ändringar ska träda i kraft."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:511
 msgid ""
