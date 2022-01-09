@@ -34,6 +34,7 @@ router.get('api/users/:id/public_key', async (path: SubPath, ctx: AppContext) =>
 	if (!user) return ''; // Don't throw an error to prevent polling the end point
 
 	const ppk = await ctx.joplin.models.user().publicPrivateKey(user.id);
+	if (!ppk) return '';
 
 	return {
 		id: ppk.id,

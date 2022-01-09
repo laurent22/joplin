@@ -11,6 +11,12 @@
 # ./runForTesting.sh 1 createUsers,createData,reset,e2ee,sync && ./runForTesting.sh 2 reset,e2ee,sync && ./runForTesting.sh 1
 
 # ----------------------------------------------------------------------------------
+# First user has E2EE, but second one doesn't:
+# ----------------------------------------------------------------------------------
+
+# ./runForTesting.sh 1 createUsers,createData,reset,e2ee,sync && ./runForTesting.sh 2 reset,sync && ./runForTesting.sh 1
+
+# ----------------------------------------------------------------------------------
 # Without E2EE:
 # ----------------------------------------------------------------------------------
 
