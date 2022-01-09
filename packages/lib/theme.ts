@@ -227,6 +227,7 @@ function addExtraStyles(style: any) {
 		justifyContent: 'center',
 		marginRight: 8,
 		borderRadius: 100,
+		borderWidth: 0,
 	};
 
 	style.toolbarStyle = {
