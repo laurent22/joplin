@@ -78,5 +78,8 @@
     "node-gyp": "^8.4.1",
     "nodemon": "^2.0.9"
   },
-  "packageManager": "yarn@3.1.1"
+  "packageManager": "yarn@3.1.1",
+  "resolutions": {
+    "markdown-it-multimd-table@4.1.1": "patch:markdown-it-multimd-table@npm:4.1.1#.yarn/patches/markdown-it-multimd-table-npm-4.1.1-47e334d4bd"
+  }
 }
