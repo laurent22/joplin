@@ -132,7 +132,7 @@ router.get('tasks', async (_path: SubPath, ctx: AppContext) => {
 			postUrl: makeUrl(UrlType.Tasks),
 			csrfTag: await createCsrfTag(ctx),
 		},
-		cssFiles: ['index/tasks'],
+		// cssFiles: ['index/tasks'],
 	};
 });
 
