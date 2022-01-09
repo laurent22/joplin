@@ -88,9 +88,10 @@ RUN BUILD_SEQUENCIAL=1 yarn install --inline-builds
 ENV RUNNING_IN_DOCKER=1
 EXPOSE ${APP_PORT}
 
-# Not clear what's the equivalent of "--prefix" in Yarn 3, so keep using npm for
-# now.
-CMD [ "npm", "--prefix", "packages/server", "start" ]
+# Call the command directly, without going via npm:
+# https://github.com/nodejs/docker-node/blob/main/docs/BestPractices.md#cmd
+WORKDIR "/home/$user/packages/server"
+CMD [ "node", "dist/app.js" ]
 
 # Build-time metadata
 # https://github.com/opencontainers/image-spec/blob/master/annotations.md
