@@ -66,7 +66,7 @@ function mailerConfigFromEnv(env: EnvVariables): MailerConfig {
 		enabled: env.MAILER_ENABLED,
 		host: env.MAILER_HOST,
 		port: env.MAILER_PORT,
-		secure: env.MAILER_SECURE,
+		security: env.MAILER_SECURITY,
 		authUser: env.MAILER_AUTH_USER,
 		authPassword: env.MAILER_AUTH_PASSWORD,
 		noReplyName: env.MAILER_NOREPLY_NAME,

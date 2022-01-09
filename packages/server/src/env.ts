@@ -3,6 +3,12 @@
 // The env variables can be of type string, integer or boolean. When the type is
 // boolean, set the variable to "0" or "1" in your env file.
 
+export enum MailerSecurity {
+	None = 'none',
+	Tls = 'tls',
+	Starttls = 'starttls',
+}
+
 const defaultEnvValues: EnvVariables = {
 	// ==================================================
 	// General config
@@ -66,8 +72,8 @@ const defaultEnvValues: EnvVariables = {
 
 	MAILER_ENABLED: false,
 	MAILER_HOST: '',
-	MAILER_PORT: 587,
-	MAILER_SECURE: true,
+	MAILER_PORT: 465,
+	MAILER_SECURITY: MailerSecurity.Tls,
 	MAILER_AUTH_USER: '',
 	MAILER_AUTH_PASSWORD: '',
 	MAILER_NOREPLY_NAME: '',
@@ -120,7 +126,7 @@ export interface EnvVariables {
 	MAILER_ENABLED: boolean;
 	MAILER_HOST: string;
 	MAILER_PORT: number;
-	MAILER_SECURE: boolean;
+	MAILER_SECURITY: MailerSecurity;
 	MAILER_AUTH_USER: string;
 	MAILER_AUTH_PASSWORD: string;
 	MAILER_NOREPLY_NAME: string;
