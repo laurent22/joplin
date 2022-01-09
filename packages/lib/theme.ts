@@ -256,6 +256,7 @@ function addExtraStyles(style: any) {
 
 	style.clickableTextStyle = Object.assign({}, style.textStyle, {
 		userSelect: 'none',
+		cursor: 'pointer',
 	});
 
 	style.textStyle2 = Object.assign({}, style.textStyle,

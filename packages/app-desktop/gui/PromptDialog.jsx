@@ -56,7 +56,7 @@ class PromptDialog extends React.Component {
 			top: 0,
 			left: 0,
 			width: width,
-			height: height - paddingTop,
+			height: height,
 			backgroundColor: 'rgba(0,0,0,0.6)',
 			display: visible ? 'flex' : 'none',
 			alignItems: 'flex-start',
@@ -109,6 +109,8 @@ class PromptDialog extends React.Component {
 			input: provided =>
 				Object.assign(provided, {
 					minWidth: '20px',
+					maxWidth: width * 0.45,
+					overflow: 'scroll',
 					color: theme.color,
 				}),
 			menu: provided =>
