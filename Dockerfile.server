@@ -17,7 +17,7 @@ ARG user=joplin
 RUN useradd --create-home --shell /bin/bash $user
 USER $user
 
-ENV NODE_ENV development
+ENV NODE_ENV production
 
 WORKDIR /home/$user
 
