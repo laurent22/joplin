@@ -47,6 +47,7 @@ export default function ToolbarButton(props: Props) {
 	return (
 		<StyledRoot
 			className={classes.join(' ')}
+			style={{ cursor: 'pointer' }}
 			disabled={!isEnabled}
 			title={tooltip}
 			href="#"
