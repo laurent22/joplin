@@ -36,6 +36,7 @@ const config = {
 		'main.users': 'WithDates, WithUuid',
 		'main.events': 'WithUuid',
 		'main.user_deletions': 'WithDates',
+		'main.organizations': 'WithUuid, WithDates',
 	},
 };
 

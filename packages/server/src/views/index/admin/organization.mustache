@@ -1,0 +1,30 @@
+<h1 class="title">Organization</h1>
+
+<form id="organization_form" action="{{{postUrl}}}" method="POST" class="block">
+
+	<div class="block">
+		{{> errorBanner}}
+		{{{csrfTag}}}
+		<input type="hidden" name="id" value="{{fields.id}}"/>
+		<input type="hidden" name="is_new" value="{{isNew}}"/>
+
+		<div class="field">
+			<label class="label">Name</label>
+			<div class="control">
+				<input class="input" type="text" name="name" value="{{fields.name}}"/>
+			</div>
+		</div>
+
+		<div class="field">
+			<label class="label">Owner email</label>
+			<div class="control">
+				<input class="input" type="text" name="owner_email" value="{{fields.owner_email}}"/>
+			</div>
+			<p class="help">{{s.ownerEmailMustExist}}</p>
+		</div>
+		
+		<div class="control block">
+			<input type="submit" name="post_button" class="button is-primary" value="{{buttonTitle}}" />
+		</div>
+	</div>
+</form>

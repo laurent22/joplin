@@ -282,6 +282,23 @@ export interface UserDeletion extends WithDates {
 	error?: string;
 }
 
+export interface Organization extends WithUuid, WithDates {
+	name?: string;
+	owner_id?: Uuid;
+	max_users?: number;
+}
+
+export interface OrganizationUser {
+	id?: Uuid;
+	organization_id?: Uuid;
+	user_id?: Uuid;
+	invitation_email?: string;
+	invitation_status?: number;
+	is_admin?: number;
+	updated_time?: string;
+	created_time?: string;
+}
+
 export const databaseSchema: DatabaseTables = {
 	sessions: {
 		id: { type: 'string' },
@@ -473,6 +490,24 @@ export const databaseSchema: DatabaseTables = {
 		end_time: { type: 'string' },
 		success: { type: 'number' },
 		error: { type: 'string' },
+		updated_time: { type: 'string' },
+		created_time: { type: 'string' },
+	},
+	organizations: {
+		id: { type: 'string' },
+		name: { type: 'string' },
+		owner_id: { type: 'string' },
+		max_users: { type: 'number' },
+		updated_time: { type: 'string' },
+		created_time: { type: 'string' },
+	},
+	organization_users: {
+		id: { type: 'string' },
+		organization_id: { type: 'string' },
+		user_id: { type: 'string' },
+		invitation_email: { type: 'string' },
+		invitation_status: { type: 'number' },
+		is_admin: { type: 'number' },
 		updated_time: { type: 'string' },
 		created_time: { type: 'string' },
 	},

@@ -27,6 +27,7 @@ export interface View {
 	partials?: string[];
 	cssFiles?: string[];
 	jsFiles?: string[];
+	strings?: Record<string, string>; // List of translatable strings
 }
 
 interface GlobalParams {
@@ -46,6 +47,7 @@ interface GlobalParams {
 	isJoplinCloud?: boolean;
 	impersonatorAdminSessionId?: string;
 	csrfTag?: string;
+	s?: Record<string, string>; // List of translatable strings
 }
 
 export function isView(o: any): boolean {
@@ -186,12 +188,6 @@ export default class MustacheService {
 			...this.defaultLayoutOptions,
 			...globalParams,
 			userDisplayName: this.userDisplayName(globalParams ? globalParams.owner : null),
-		};
-
-		const contentHtml = await this.renderFileContent(filePath, view, globalParams);
-
-		const layoutView: any = {
-			global: globalParams,
 			s: {
 				home: _('Home'),
 				users: _('Users'),
@@ -201,6 +197,12 @@ export default class MustacheService {
 				help: _('Help'),
 				logout: _('Logout'),
 			},
+		};
+
+		const contentHtml = await this.renderFileContent(filePath, view, globalParams);
+
+		const layoutView: any = {
+			global: globalParams,
 			pageName: view.name,
 			pageTitle: view.titleOverride ? view.title : `${config().appName} - ${view.title}`,
 			contentHtml: contentHtml,

@@ -53,3 +53,11 @@ export function userDeletionsUrl(): string {
 export function userUrl(userId: Uuid): string {
 	return `${config().baseUrl}/users/${userId}`;
 }
+
+export function adminOrganizationUrl(id: string): string {
+	return `${config().baseUrl}/admin/organizations/${id}`;
+}
+
+export function adminOrganizationsUrl(): string {
+	return `${config().baseUrl}/admin/organizations`;
+}
