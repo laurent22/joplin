@@ -12,6 +12,8 @@ import apiShareUsers from './api/share_users';
 import apiUsers from './api/users';
 import apiLocks from './api/locks';
 
+import adminOrganizations from './index/admin/organizations';
+
 import indexChanges from './index/changes';
 import indexHelp from './index/help';
 import indexHome from './index/home';
@@ -44,6 +46,8 @@ const routes: Routers = {
 	'api/shares': apiShares,
 	'api/users': apiUsers,
 	'api/locks': apiLocks,
+
+	'admin/organizations': adminOrganizations,
 
 	'changes': indexChanges,
 	'home': indexHome,
