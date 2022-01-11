@@ -38,6 +38,12 @@ async function main() {
 	dockerTags.push(`${versionPart[0]}.${versionPart[1]}${isPreRelease ? '-beta' : ''}`);
 	dockerTags.push(imageVersion);
 
+	const platforms = [
+		'linux/amd64',
+		// 'linux/arm64',
+		'linux/arm/v7',
+	];
+
 	process.chdir(rootDir);
 	console.info(`Running from: ${process.cwd()}`);
 
@@ -47,11 +53,29 @@ async function main() {
 	console.info('isPreRelease:', isPreRelease);
 	console.info('Docker tags:', dockerTags.join(', '));
 
-	await execCommand2(`docker build --progress=plain -t "joplin/server:${imageVersion}" ${buildArgs} -f Dockerfile.server .`);
+	for (const platform of platforms) {
+		const normalizedPlatform = platform.replace(/\//g, '-');
+		const platformArgs = `--platform ${platform}`;
+		const tag = `${imageVersion}-${normalizedPlatform}`;
+		await execCommand2(`docker build --progress plain -t "joplin/server:${tag}" ${platformArgs} ${buildArgs} -f Dockerfile.server .`);
 
-	for (const tag of dockerTags) {
-		await execCommand2(`docker tag "joplin/server:${imageVersion}" "joplin/server:${tag}"`);
-		if (pushImages) await execCommand2(`docker push joplin/server:${tag}`);
+		if (pushImages) {
+			await execCommand2(['docker', 'push', `joplin/server:${tag}`]);
+		}
+	}
+
+	// now we have to create the right manifests and push them
+	// manifests are how multi-arch builds work, they combine pre-built images from multiple architectures
+	// into a single "tag" that will pull the right image based on the supported architectures on the client
+	if (pushImages) {
+		for (const tag of dockerTags) {
+			// manifest create requires the tags being amended in to exist on the remote, so this all can only happen if pushImages is true
+			await execCommand2([
+				'docker', 'manifest', 'create', `joplin/server:${tag}`,
+				...([].concat(...platforms.map((platform) => ['--amend', `joplin/server:${imageVersion}-${platform.replace(/\//g, '-')}`]))),
+			]);
+			await execCommand2(['docker', 'manifest', 'push', `joplin/server:${tag}`]);
+		}
 	}
 }
 
