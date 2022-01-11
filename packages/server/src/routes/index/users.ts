@@ -15,7 +15,7 @@ import uuidgen from '../../utils/uuidgen';
 import { formatMaxItemSize, formatMaxTotalSize, formatTotalSize, formatTotalSizePercent, yesOrNo } from '../../utils/strings';
 import { getCanShareFolder, totalSizeClass } from '../../models/utils/user';
 import { yesNoDefaultOptions, yesNoOptions } from '../../utils/views/select';
-import { confirmUrl, stripePortalUrl, userDeletionsUrl } from '../../utils/urlUtils';
+import { confirmUrl, stripePortalUrl, adminUserDeletionsUrl } from '../../utils/urlUtils';
 import { cancelSubscriptionByUserId, updateCustomerEmail, updateSubscriptionType } from '../../utils/stripe';
 import { createCsrfTag } from '../../utils/csrf';
 import { formatDateTime, Hour } from '../../utils/time';
@@ -121,7 +121,7 @@ router.get('users', async (_path: SubPath, ctx: AppContext) => {
 				rowClassName: user.enabled ? '' : 'is-disabled',
 			};
 		}),
-		userDeletionUrl: userDeletionsUrl(),
+		userDeletionUrl: adminUserDeletionsUrl(),
 	};
 	return view;
 });
@@ -378,7 +378,7 @@ router.post('users', async (path: SubPath, ctx: AppContext) => {
 					processData: true,
 				});
 
-				await models.notification().addInfo(owner.id, `User ${user.email} has been scheduled for deletion on ${formatDateTime(deletionDate)}. [View deletion list](${userDeletionsUrl()})`);
+				await models.notification().addInfo(owner.id, `User ${user.email} has been scheduled for deletion on ${formatDateTime(deletionDate)}. [View deletion list](${adminUserDeletionsUrl()})`);
 			} else if (fields.delete_user_flags) {
 				const userFlagTypes: UserFlagType[] = [];
 				for (const key of Object.keys(fields)) {

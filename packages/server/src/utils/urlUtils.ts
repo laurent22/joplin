@@ -46,8 +46,8 @@ export function loginUrl(): string {
 	return `${config().baseUrl}/login`;
 }
 
-export function userDeletionsUrl(): string {
-	return `${config().baseUrl}/user_deletions`;
+export function adminUserDeletionsUrl(): string {
+	return `${config().adminBaseUrl}/user_deletions`;
 }
 
 export function userUrl(userId: Uuid): string {
