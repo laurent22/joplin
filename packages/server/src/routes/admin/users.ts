@@ -15,11 +15,12 @@ import uuidgen from '../../utils/uuidgen';
 import { formatMaxItemSize, formatMaxTotalSize, formatTotalSize, formatTotalSizePercent, yesOrNo } from '../../utils/strings';
 import { getCanShareFolder, totalSizeClass } from '../../models/utils/user';
 import { yesNoDefaultOptions, yesNoOptions } from '../../utils/views/select';
-import { confirmUrl, stripePortalUrl, adminUserDeletionsUrl } from '../../utils/urlUtils';
+import { confirmUrl, stripePortalUrl, adminUserDeletionsUrl, adminUserUrl } from '../../utils/urlUtils';
 import { cancelSubscriptionByUserId, updateCustomerEmail, updateSubscriptionType } from '../../utils/stripe';
 import { createCsrfTag } from '../../utils/csrf';
 import { formatDateTime, Hour } from '../../utils/time';
 import { cookieSet } from '../../utils/cookies';
+import { startImpersonating, stopImpersonating } from './utils/users/impersonate';
 import { userFlagToString } from '../../models/UserFlagModel';
 
 export interface CheckRepeatPasswordInput {
@@ -91,7 +92,7 @@ function userIsMe(path: SubPath): boolean {
 
 const router = new Router(RouteType.Web);
 
-router.get('users', async (_path: SubPath, ctx: AppContext) => {
+router.get('admin/users', async (_path: SubPath, ctx: AppContext) => {
 	const userModel = ctx.joplin.models.user();
 	await userModel.checkIfAllowed(ctx.joplin.owner, AclAction.List);
 
@@ -104,11 +105,12 @@ router.get('users', async (_path: SubPath, ctx: AppContext) => {
 		return u1.email.toLowerCase() < u2.email.toLowerCase() ? -1 : +1;
 	});
 
-	const view: View = defaultView('users', 'Users');
+	const view: View = defaultView('admin/users', 'Users');
 	view.content = {
 		users: users.map(user => {
 			return {
 				...user,
+				url: adminUserUrl(user.id),
 				displayName: user.full_name ? user.full_name : '(not set)',
 				formattedItemMaxSize: formatMaxItemSize(user),
 				formattedTotalSize: formatTotalSize(user),
@@ -120,12 +122,11 @@ router.get('users', async (_path: SubPath, ctx: AppContext) => {
 				rowClassName: user.enabled ? '' : 'is-disabled',
 			};
 		}),
-		userDeletionUrl: adminUserDeletionsUrl(),
 	};
 	return view;
 });
 
-router.get('users/:id', async (path: SubPath, ctx: AppContext, user: User = null, error: any = null) => {
+router.get('admin/users/:id', async (path: SubPath, ctx: AppContext, user: User = null, error: any = null) => {
 	const owner = ctx.joplin.owner;
 	const isMe = userIsMe(path);
 	const isNew = userIsNew(path);
@@ -167,7 +168,7 @@ router.get('users/:id', async (path: SubPath, ctx: AppContext, user: User = null
 	const subscription = !isNew ? await ctx.joplin.models.subscription().byUserId(userId) : null;
 	const isScheduledForDeletion = await ctx.joplin.models.userDeletion().isScheduledForDeletion(userId);
 
-	const view: View = defaultView('user', 'Profile');
+	const view: View = defaultView('admin/user', 'Profile');
 	view.content.user = user;
 	view.content.isNew = isNew;
 	view.content.buttonTitle = isNew ? 'Create user' : 'Update profile';
@@ -187,7 +188,7 @@ router.get('users/:id', async (path: SubPath, ctx: AppContext, user: User = null
 		view.content.subLastPaymentDate = formatDateTime(lastPaymentAttempt.time);
 	}
 
-	// view.content.showImpersonateButton = !isNew && !!owner.is_admin && user.enabled && user.id !== owner.id;
+	view.content.showImpersonateButton = !isNew && !!owner.is_admin && user.enabled && user.id !== owner.id;
 	view.content.showRestoreButton = !isNew && !!owner.is_admin && !user.enabled;
 	view.content.showScheduleDeletionButton = !isNew && !!owner.is_admin && !isScheduledForDeletion;
 	view.content.showResetPasswordButton = !isNew && owner.is_admin && user.enabled;
@@ -211,9 +212,9 @@ router.get('users/:id', async (path: SubPath, ctx: AppContext, user: User = null
 	return view;
 });
 
-router.publicSchemas.push('users/:id/confirm');
+router.publicSchemas.push('admin/users/:id/confirm');
 
-router.get('users/:id/confirm', async (path: SubPath, ctx: AppContext, error: Error = null) => {
+router.get('admin/users/:id/confirm', async (path: SubPath, ctx: AppContext, error: Error = null) => {
 	const models = ctx.joplin.models;
 	const userId = path.id;
 	const token = ctx.query.token;
@@ -242,7 +243,7 @@ router.get('users/:id/confirm', async (path: SubPath, ctx: AppContext, error: Er
 
 	if (user.must_set_password) {
 		const view: View = {
-			...defaultView('users/confirm', 'Confirmation'),
+			...defaultView('admin/users/confirm', 'Confirmation'),
 			content: {
 				user,
 				error,
@@ -273,7 +274,7 @@ interface SetPasswordFormData {
 	password2: string;
 }
 
-router.post('users/:id/confirm', async (path: SubPath, ctx: AppContext) => {
+router.post('admin/users/:id/confirm', async (path: SubPath, ctx: AppContext) => {
 	const userId = path.id;
 
 	try {
@@ -297,7 +298,7 @@ router.post('users/:id/confirm', async (path: SubPath, ctx: AppContext) => {
 	}
 });
 
-router.alias(HttpMethod.POST, 'users/:id', 'users');
+router.alias(HttpMethod.POST, 'admin/users/:id', 'admin/users');
 
 interface FormFields {
 	id: Uuid;
@@ -309,13 +310,13 @@ interface FormFields {
 	update_subscription_basic_button: string;
 	update_subscription_pro_button: string;
 	// user_cancel_subscription_button: string;
-	// impersonate_button: string;
-	// stop_impersonate_button: string;
+	impersonate_button: string;
+	stop_impersonate_button: string;
 	delete_user_flags: string;
 	schedule_deletion_button: string;
 }
 
-router.post('users', async (path: SubPath, ctx: AppContext) => {
+router.post('admin/users', async (path: SubPath, ctx: AppContext) => {
 	let user: User = {};
 	const owner = ctx.joplin.owner;
 	const userId = userIsMe(path) ? owner.id : path.id;
@@ -348,9 +349,9 @@ router.post('users', async (path: SubPath, ctx: AppContext) => {
 				// logged out).
 				if (userToSave.password) await models.session().deleteByUserId(userToSave.id, contextSessionId(ctx));
 			}
-		// } else if (fields.stop_impersonate_button) {
-		// 	await stopImpersonating(ctx);
-		// 	return redirect(ctx, config().baseUrl);
+		} else if (fields.stop_impersonate_button) {
+			await stopImpersonating(ctx);
+			return redirect(ctx, config().baseUrl);
 		} else if (owner.is_admin) {
 			if (fields.disable_button || fields.restore_button) {
 				const user = await models.user().load(path.id);
@@ -360,9 +361,9 @@ router.post('users', async (path: SubPath, ctx: AppContext) => {
 				const user = await models.user().load(path.id);
 				await models.user().save({ id: user.id, must_set_password: 1 });
 				await models.user().sendAccountConfirmationEmail(user);
-			// } else if (fields.impersonate_button) {
-			// 	await startImpersonating(ctx, userId);
-			// 	return redirect(ctx, config().baseUrl);
+			} else if (fields.impersonate_button) {
+				await startImpersonating(ctx, userId);
+				return redirect(ctx, config().baseUrl);
 			} else if (fields.cancel_subscription_button) {
 				await cancelSubscriptionByUserId(models, userId);
 			} else if (fields.update_subscription_basic_button) {

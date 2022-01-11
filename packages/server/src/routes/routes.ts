@@ -15,6 +15,7 @@ import apiUsers from './api/users';
 import adminDashboard from './admin/dashboard';
 import adminTasks from './admin/tasks';
 import adminUserDeletions from './admin/user_deletions';
+import adminUsers from './admin/users';
 
 import indexChanges from './index/changes';
 import indexHelp from './index/help';
@@ -50,6 +51,7 @@ const routes: Routers = {
 	'admin/dashboard': adminDashboard,
 	'admin/tasks': adminTasks,
 	'admin/user_deletions': adminUserDeletions,
+	'admin/users': adminUsers,
 
 	'changes': indexChanges,
 	'help': indexHelp,

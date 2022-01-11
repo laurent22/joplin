@@ -9,7 +9,8 @@ import { makeUrl, UrlType } from '../utils/routeUtils';
 import MarkdownIt = require('markdown-it');
 import { headerAnchor } from '@joplin/renderer';
 import { _ } from '@joplin/lib/locale';
-import { adminDashboardUrl, adminTasksUrl, adminUserDeletionsUrl } from '../utils/urlUtils';
+import { adminDashboardUrl, adminTasksUrl, adminUserDeletionsUrl, adminUsersUrl, stripOffQueryParameters } from '../utils/urlUtils';
+import { URL } from 'url';
 
 export interface AdminMenuItem {
 	title: string;
@@ -58,6 +59,7 @@ interface GlobalParams {
 	s?: Record<string, string>; // List of translatable strings
 	isAdminPage?: boolean;
 	adminMenu?: AdminMenuItem[];
+	currentUrl?: URL;
 }
 
 export function isView(o: any): boolean {
@@ -105,7 +107,7 @@ export default class MustacheService {
 		return `${config().layoutDir}/${name}.mustache`;
 	}
 
-	private makeAdminMenu(selectedPath: string): AdminMenuItem[] {
+	private makeAdminMenu(selectedUrl: URL): AdminMenuItem[] {
 		const output: AdminMenuItem[] = [
 			{
 				title: _('General'),
@@ -115,22 +117,28 @@ export default class MustacheService {
 						url: adminDashboardUrl(),
 					},
 					{
-						title: _('Tasks'),
-						url: adminTasksUrl(),
+						title: _('Users'),
+						url: adminUsersUrl(),
 					},
 					{
 						title: _('User deletions'),
 						url: adminUserDeletionsUrl(),
 					},
+					{
+						title: _('Tasks'),
+						url: adminTasksUrl(),
+					},
 				],
 			},
 		];
+
+		const url = stripOffQueryParameters(selectedUrl.href);
 
 		const setSelected = (menuItems: AdminMenuItem[]) => {
 			if (!menuItems) return;
 
 			for (const menuItem of menuItems) {
-				if (menuItem.url) menuItem.selected = menuItem.url.includes(selectedPath);
+				if (menuItem.url) menuItem.selected = url === menuItem.url;
 				setSelected(menuItem.children);
 			}
 		};
@@ -232,7 +240,7 @@ export default class MustacheService {
 		globalParams = {
 			...this.defaultLayoutOptions,
 			...globalParams,
-			adminMenu: this.makeAdminMenu(view.path),
+			adminMenu: this.makeAdminMenu(globalParams.currentUrl),
 			userDisplayName: this.userDisplayName(globalParams ? globalParams.owner : null),
 			isAdminPage: view.path.startsWith('/admin/'),
 			s: {

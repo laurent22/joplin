@@ -14,6 +14,14 @@ export function setQueryParameters(url: string, query: any): string {
 	return u.toString();
 }
 
+export function stripOffQueryParameters(url: string): string {
+	const s = url.split('?');
+	if (s.length <= 1) return url;
+
+	s.pop();
+	return s.join('?');
+}
+
 export function resetPasswordUrl(token: string): string {
 	return `${config().baseUrl}/password/reset${token ? `?token=${token}` : ''}`;
 }
@@ -60,6 +68,10 @@ export function adminDashboardUrl(): string {
 
 export function adminUsersUrl() {
 	return `${config().adminBaseUrl}/users`;
+}
+
+export function adminUserUrl(userId: string) {
+	return `${config().adminBaseUrl}/users/${userId}`;
 }
 
 export function adminTasksUrl() {
