@@ -140,7 +140,13 @@ export interface EnvVariables {
 	STRIPE_WEBHOOK_SECRET: string;
 }
 
-export function parseEnv(rawEnv: any, defaultOverrides: any = null): EnvVariables {
+const parseBoolean = (s: string): boolean => {
+	if (s === 'true' || s === '1') return true;
+	if (s === 'false' || s === '0') return false;
+	throw new Error(`Invalid boolean value: "${s}" (Must be one of "true", "false", "0, "1")`);
+};
+
+export function parseEnv(rawEnv: Record<string, string>, defaultOverrides: any = null): EnvVariables {
 	const output: EnvVariables = {
 		...defaultEnvValues,
 		...defaultOverrides,
@@ -151,17 +157,21 @@ export function parseEnv(rawEnv: any, defaultOverrides: any = null): EnvVariable
 
 		if (rawEnvValue === undefined) continue;
 
-		if (typeof value === 'number') {
-			const v = Number(rawEnvValue);
-			if (isNaN(v)) throw new Error(`Invalid number value for env variable ${key} = ${rawEnvValue}`);
-			(output as any)[key] = v;
-		} else if (typeof value === 'boolean') {
-			if (rawEnvValue !== '0' && rawEnvValue !== '1') throw new Error(`Invalid boolean value for env variable ${key}: ${rawEnvValue} (Should be either "0" or "1")`);
-			(output as any)[key] = rawEnvValue === '1';
-		} else if (typeof value === 'string') {
-			(output as any)[key] = `${rawEnvValue}`;
-		} else {
-			throw new Error(`Invalid env default value type: ${typeof value}`);
+		try {
+			if (typeof value === 'number') {
+				const v = Number(rawEnvValue);
+				if (isNaN(v)) throw new Error(`Invalid number value "${rawEnvValue}"`);
+				(output as any)[key] = v;
+			} else if (typeof value === 'boolean') {
+				(output as any)[key] = parseBoolean(rawEnvValue);
+			} else if (typeof value === 'string') {
+				(output as any)[key] = `${rawEnvValue}`;
+			} else {
+				throw new Error(`Invalid env default value type: ${typeof value}`);
+			}
+		} catch (error) {
+			error.message = `Could not parse key "${key}": ${error.message}`;
+			throw error;
 		}
 	}
 
