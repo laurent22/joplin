@@ -112,6 +112,13 @@ jobs:
           sudo apt-get update || true
           sudo apt-get install -y docker-ce docker-ce-cli containerd.io
 
+          # the next line installs the emulators for arm and arm64 so we can cross-compile for them on the default x64 CI instances
+          sudo docker run --privileged --rm tonistiigi/binfmt -install arm,arm64
+
+          # this just prints the info about what platforms are supported in the builder (can help debugging if something isn't working right)
+          # and also proves the above worked properly
+          sudo docker buildx ls
+
       - uses: actions/checkout@v2
 
       - uses: actions/setup-node@v2
@@ -129,4 +136,3 @@ jobs:
         run: |
           yarn install
           yarn run buildServerDocker --tag-name server-v0.0.0
-          
