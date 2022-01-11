@@ -133,6 +133,7 @@ jobs:
       - name: Build Docker Image
         env:
           BUILD_SEQUENCIAL: 1
+          DOCKER_BUILDKIT: 1
         run: |
           yarn install
           yarn run buildServerDocker --tag-name server-v0.0.0
