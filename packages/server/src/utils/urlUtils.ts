@@ -53,3 +53,15 @@ export function userDeletionsUrl(): string {
 export function userUrl(userId: Uuid): string {
 	return `${config().baseUrl}/users/${userId}`;
 }
+
+export function adminDashboardUrl(): string {
+	return `${config().adminBaseUrl}/dashboard`;
+}
+
+export function adminUsersUrl() {
+	return `${config().adminBaseUrl}/users`;
+}
+
+export function adminTasksUrl() {
+	return `${config().adminBaseUrl}/tasks`;
+}

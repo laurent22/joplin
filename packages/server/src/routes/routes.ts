@@ -12,6 +12,9 @@ import apiShareUsers from './api/share_users';
 import apiUsers from './api/users';
 import apiLocks from './api/locks';
 
+import adminDashboard from './admin/dashboard';
+import adminTasks from './admin/tasks';
+
 import indexChanges from './index/changes';
 import indexHelp from './index/help';
 import indexHome from './index/home';
@@ -24,7 +27,6 @@ import indexPrivacy from './index/privacy';
 import indexShares from './index/shares';
 import indexSignup from './index/signup';
 import indexStripe from './index/stripe';
-import indexTasks from './index/tasks';
 import indexTerms from './index/terms';
 import indexUpgrade from './index/upgrade';
 import indexUsers from './index/users';
@@ -45,6 +47,9 @@ const routes: Routers = {
 	'api/users': apiUsers,
 	'api/locks': apiLocks,
 
+	'admin/dashboard': adminDashboard,
+	'admin/tasks': adminTasks,
+
 	'changes': indexChanges,
 	'home': indexHome,
 	'items': indexItems,
@@ -60,7 +65,6 @@ const routes: Routers = {
 	'privacy': indexPrivacy,
 	'upgrade': indexUpgrade,
 	'help': indexHelp,
-	'tasks': indexTasks,
 	'user_deletions': indexUserDeletions,
 
 	'': defaultRoute,

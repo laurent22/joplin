@@ -9,6 +9,14 @@ import { makeUrl, UrlType } from '../utils/routeUtils';
 import MarkdownIt = require('markdown-it');
 import { headerAnchor } from '@joplin/renderer';
 import { _ } from '@joplin/lib/locale';
+import { adminDashboardUrl, adminTasksUrl } from '../utils/urlUtils';
+
+export interface AdminMenuItem {
+	title: string;
+	url?: string;
+	children?: AdminMenuItem[];
+	selected?: boolean;
+}
 
 export interface RenderOptions {
 	partials?: any;
@@ -48,6 +56,8 @@ interface GlobalParams {
 	impersonatorAdminSessionId?: string;
 	csrfTag?: string;
 	s?: Record<string, string>; // List of translatable strings
+	isAdminPage?: boolean;
+	adminMenu?: AdminMenuItem[];
 }
 
 export function isView(o: any): boolean {
@@ -93,6 +103,37 @@ export default class MustacheService {
 	private layoutPath(name: string): string {
 		if (!name) name = 'default';
 		return `${config().layoutDir}/${name}.mustache`;
+	}
+
+	private makeAdminMenu(selectedPath: string): AdminMenuItem[] {
+		const output: AdminMenuItem[] = [
+			{
+				title: _('General'),
+				children: [
+					{
+						title: _('Dashboard'),
+						url: adminDashboardUrl(),
+					},
+					{
+						title: _('Tasks'),
+						url: adminTasksUrl(),
+					},
+				],
+			},
+		];
+
+		const setSelected = (menuItems: AdminMenuItem[]) => {
+			if (!menuItems) return;
+
+			for (const menuItem of menuItems) {
+				if (menuItem.url) menuItem.selected = menuItem.url.includes(selectedPath);
+				setSelected(menuItem.children);
+			}
+		};
+
+		setSelected(output);
+
+		return output;
 	}
 
 	private get defaultLayoutOptions(): GlobalParams {
@@ -187,7 +228,9 @@ export default class MustacheService {
 		globalParams = {
 			...this.defaultLayoutOptions,
 			...globalParams,
+			adminMenu: this.makeAdminMenu(view.path),
 			userDisplayName: this.userDisplayName(globalParams ? globalParams.owner : null),
+			isAdminPage: view.path.startsWith('/admin/'),
 			s: {
 				home: _('Home'),
 				users: _('Users'),
