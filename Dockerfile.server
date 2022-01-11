@@ -1,8 +1,10 @@
-FROM node:16-bullseye
+# syntax=docker/dockerfile:1.3
 
+FROM node:16-bullseye
 RUN apt-get update \
     && apt-get install -y \
     python \
+    libsqlite3-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Enables Yarn
@@ -14,7 +16,10 @@ RUN echo "Yarn: $(yarn --version)"
 
 ARG user=joplin
 
-RUN useradd --create-home --shell /bin/bash $user
+# also force the user's UID (we need it layer for mounting the caches, they need a numeric uid)
+ARG uid=1001
+
+RUN useradd --create-home --shell /bin/bash --uid $uid $user
 USER $user
 
 ENV NODE_ENV production
@@ -33,7 +38,17 @@ COPY --chown=$user:$user .yarnrc.yml .
 COPY --chown=$user:$user yarn.lock .
 COPY --chown=$user:$user gulpfile.js .
 
-RUN yarn install --inline-builds --mode=skip-build
+# clean up yarn's output a bit, there is a lot of spam about not finding each package in cache, that's a bit silly
+ENV YARN_PREFER_AGGREGATE_CACHE_INFO=true
+
+# force all yarn coloring off for cleaner logs
+ENV FORCE_COLOR=0
+
+# see: https://docs.docker.com/engine/reference/builder/#automatic-platform-args-in-the-global-scope
+ARG TARGETPLATFORM
+
+RUN --mount=type=cache,id=yarn-$TARGETPLATFORM,target=/tmp/yarn-cache,uid=$uid,sharing=locked YARN_CACHE_FOLDER=/tmp/yarn-cache \
+    yarn install --inline-builds --mode=skip-build
 
 # To take advantage of the Docker cache, we first copy all the package.json
 # and package-lock.json files, as they rarely change, and then bootstrap
@@ -64,7 +79,8 @@ COPY --chown=$user:$user packages/server/package*.json ./packages/server/
 
 # Then bootstrap only, without compiling the TypeScript files
 
-RUN yarn install --inline-builds --mode=skip-build
+RUN --mount=type=cache,id=yarn-$TARGETPLATFORM,target=/tmp/yarn-cache,uid=$uid,sharing=locked YARN_CACHE_FOLDER=/tmp/yarn-cache \
+    yarn install --inline-builds --mode=skip-build
 
 # Now copy the source files. Put lib and server last as they are more likely to change.
 
@@ -83,7 +99,12 @@ COPY --chown=$user:$user packages/server ./packages/server
 # packages (but because it's already done it should be fast), and then run the
 # postinstall scripts, as well as build scripts.
 
-RUN BUILD_SEQUENCIAL=1 yarn install --inline-builds
+# Force some arguments to sqlite to use the system installed sqlite and avoid having to build the whole thing
+ENV npm_config_build_from_source=true
+ENV npm_config_sqlite=/usr
+
+RUN --mount=type=cache,id=yarn-$TARGETPLATFORM,target=/tmp/yarn-cache,uid=$uid,sharing=locked YARN_CACHE_FOLDER=/tmp/yarn-cache \
+    BUILD_SEQUENCIAL=1 yarn install --inline-builds
 
 ENV RUNNING_IN_DOCKER=1
 EXPOSE ${APP_PORT}
