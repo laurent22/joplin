@@ -59,6 +59,7 @@ export async function createTestUsers(db: DbConnection, config: Config, options:
 				email: `user${userNum}@example.com`,
 				password,
 				full_name: `User ${userNum}`,
+				account_type: userNum % 2 === 0 ? AccountType.Pro : AccountType.Basic,
 			});
 		}
 

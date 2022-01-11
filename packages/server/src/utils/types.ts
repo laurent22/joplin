@@ -162,6 +162,7 @@ export interface Config {
 	storageDriverFallback: StorageDriverConfig;
 	itemSizeHardLimit: number;
 	maxTimeDrift: number;
+	organizationEnabled: boolean;
 }
 
 export enum HttpMethod {

@@ -1,7 +1,7 @@
 // The possible env variables and their defaults are listed below.
 //
 // The env variables can be of type string, integer or boolean. When the type is
-// boolean, set the variable to "0" or "1" in your env file.
+// boolean, set the variable to "true", "false", "0" or "1" in your env file.
 
 export enum MailerSecurity {
 	None = 'none',
@@ -89,6 +89,12 @@ const defaultEnvValues: EnvVariables = {
 
 	STRIPE_SECRET_KEY: '',
 	STRIPE_WEBHOOK_SECRET: '',
+
+	// ==================================================
+	// Organization config
+	// ==================================================
+
+	ORGANIZATION_ENABLED: false,
 };
 
 export interface EnvVariables {
@@ -138,6 +144,8 @@ export interface EnvVariables {
 
 	STRIPE_SECRET_KEY: string;
 	STRIPE_WEBHOOK_SECRET: string;
+
+	ORGANIZATION_ENABLED: boolean;
 }
 
 export function parseEnv(rawEnv: any, defaultOverrides: any = null): EnvVariables {
