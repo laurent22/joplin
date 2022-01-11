@@ -2,7 +2,7 @@ import * as fs from 'fs-extra';
 import { readCredentialFile } from '@joplin/lib/utils/credentialFiles';
 
 const fetch = require('node-fetch');
-const execa = require('execa');
+import * as execa from 'execa';
 const { splitCommandString } = require('@joplin/lib/string-utils');
 const moment = require('moment');
 
