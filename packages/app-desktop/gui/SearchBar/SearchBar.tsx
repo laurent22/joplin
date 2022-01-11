@@ -138,7 +138,8 @@ function SearchBar(props: Props) {
 		}
 	}, [props.notesParentType, onExitSearch]);
 
-
+	// When the searchbar is remounted, exit the search if it was previously open
+	// or else other buttons stay hidden (e.g. when opening Layout Editor and closing it)
 	useEffect(() => {
 		if (props.notesParentType === 'Search' || props.isFocused) {
 			if (props.isFocused) {
