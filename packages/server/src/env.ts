@@ -1,7 +1,7 @@
 // The possible env variables and their defaults are listed below.
 //
 // The env variables can be of type string, integer or boolean. When the type is
-// boolean, set the variable to "0" or "1" in your env file.
+// boolean, set the variable to "true", "false", "0" or "1" in your env file.
 
 export enum MailerSecurity {
 	None = 'none',
