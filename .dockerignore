@@ -10,3 +10,4 @@ packages/generator-joplin
 packages/plugin-repo-cli
 packages/server/db-*.sqlite
 packages/server/temp
+.yarn/cache
