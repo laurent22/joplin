@@ -52,7 +52,8 @@ COPY --chown=$user:$user packages/server ./packages/server
 # `nodeLinker: node-modules`. If we ever implement Zero Install, we'll need to
 # keep the cache.
 #
-# Note that because NODE_ENV=production, Yarn will not install dev dependencies.
+# Note that `yarn install` ignores `NODE_ENV=production` and will install dev
+# dependencies too, but this is fine because we need them to build the app.
 
 RUN BUILD_SEQUENCIAL=1 yarn install --inline-builds \
     && yarn cache clean \
