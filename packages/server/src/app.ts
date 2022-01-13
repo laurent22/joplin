@@ -161,7 +161,7 @@ async function main() {
 					});
 				} catch (anotherError) {
 					ctx.response.set('Content-Type', 'application/json');
-					ctx.body = JSON.stringify({ error: error.message });
+					ctx.body = JSON.stringify({ error: `${error.message} (Check the server log for more information)` });
 				}
 			} else {
 				ctx.response.set('Content-Type', 'application/json');

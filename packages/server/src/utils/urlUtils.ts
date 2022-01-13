@@ -50,6 +50,14 @@ export function homeUrl(): string {
 	return `${config().baseUrl}/home`;
 }
 
+export function itemsUrl(): string {
+	return `${config().baseUrl}/items`;
+}
+
+export function changesUrl(): string {
+	return `${config().baseUrl}/changes`;
+}
+
 export function loginUrl(): string {
 	return `${config().baseUrl}/login`;
 }

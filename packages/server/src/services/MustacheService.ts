@@ -9,14 +9,18 @@ import { makeUrl, UrlType } from '../utils/routeUtils';
 import MarkdownIt = require('markdown-it');
 import { headerAnchor } from '@joplin/renderer';
 import { _ } from '@joplin/lib/locale';
-import { adminDashboardUrl, adminTasksUrl, adminUserDeletionsUrl, adminUsersUrl, stripOffQueryParameters } from '../utils/urlUtils';
+import { adminDashboardUrl, adminTasksUrl, adminUserDeletionsUrl, adminUsersUrl, changesUrl, homeUrl, itemsUrl, stripOffQueryParameters } from '../utils/urlUtils';
 import { URL } from 'url';
 
-export interface AdminMenuItem {
+type MenuItemSelectedCondition = (selectedUrl: URL)=> boolean;
+
+export interface MenuItem {
 	title: string;
 	url?: string;
-	children?: AdminMenuItem[];
+	children?: MenuItem[];
 	selected?: boolean;
+	icon?: string;
+	selectedCondition?: MenuItemSelectedCondition;
 }
 
 export interface RenderOptions {
@@ -58,7 +62,8 @@ interface GlobalParams {
 	csrfTag?: string;
 	s?: Record<string, string>; // List of translatable strings
 	isAdminPage?: boolean;
-	adminMenu?: AdminMenuItem[];
+	adminMenu?: MenuItem[];
+	navbarMenu?: MenuItem[];
 	currentUrl?: URL;
 }
 
@@ -107,8 +112,26 @@ export default class MustacheService {
 		return `${config().layoutDir}/${name}.mustache`;
 	}
 
-	private makeAdminMenu(selectedUrl: URL): AdminMenuItem[] {
-		const output: AdminMenuItem[] = [
+	private setSelectedMenu(selectedUrl: URL, menuItems: MenuItem[]) {
+		if (!selectedUrl) return;
+		if (!menuItems) return;
+
+		const url = stripOffQueryParameters(selectedUrl.href);
+
+		for (const menuItem of menuItems) {
+			if (menuItem.url) {
+				if (menuItem.selectedCondition) {
+					menuItem.selected = menuItem.selectedCondition(selectedUrl);
+				} else {
+					menuItem.selected = url === menuItem.url;
+				}
+			}
+			this.setSelectedMenu(selectedUrl, menuItem.children);
+		}
+	}
+
+	private makeAdminMenu(selectedUrl: URL): MenuItem[] {
+		const output: MenuItem[] = [
 			{
 				title: _('General'),
 				children: [
@@ -132,20 +155,41 @@ export default class MustacheService {
 			},
 		];
 
-		if (selectedUrl) {
-			const url = stripOffQueryParameters(selectedUrl.href);
+		this.setSelectedMenu(selectedUrl, output);
 
-			const setSelected = (menuItems: AdminMenuItem[]) => {
-				if (!menuItems) return;
+		return output;
+	}
 
-				for (const menuItem of menuItems) {
-					if (menuItem.url) menuItem.selected = url === menuItem.url;
-					setSelected(menuItem.children);
-				}
-			};
+	private makeNavbar(selectedUrl: URL, isAdmin: boolean): MenuItem[] {
+		let output: MenuItem[] = [
+			{
+				title: _('Home'),
+				url: homeUrl(),
+			},
+		];
 
-			setSelected(output);
+		if (isAdmin) {
+			output = output.concat([
+				{
+					title: _('Items'),
+					url: itemsUrl(),
+				},
+				{
+					title: _('Logs'),
+					url: changesUrl(),
+				},
+				{
+					title: _('Admin'),
+					url: adminDashboardUrl(),
+					icon: 'fas fa-hammer',
+					selectedCondition: (selectedUrl: URL) => {
+						return selectedUrl.pathname.startsWith('/admin/') || selectedUrl.pathname === '/admin';
+					},
+				},
+			]);
 		}
+
+		this.setSelectedMenu(selectedUrl, output);
 
 		return output;
 	}
@@ -243,6 +287,7 @@ export default class MustacheService {
 			...this.defaultLayoutOptions,
 			...globalParams,
 			adminMenu: globalParams ? this.makeAdminMenu(globalParams.currentUrl) : null,
+			navbarMenu: this.makeNavbar(globalParams?.currentUrl, globalParams?.owner ? !!globalParams.owner.is_admin : false),
 			userDisplayName: this.userDisplayName(globalParams ? globalParams.owner : null),
 			isAdminPage: view.path.startsWith('/admin/'),
 			s: {
@@ -253,6 +298,7 @@ export default class MustacheService {
 				tasks: _('Tasks'),
 				help: _('Help'),
 				logout: _('Logout'),
+				admin: _('Admin'),
 			},
 		};
 
