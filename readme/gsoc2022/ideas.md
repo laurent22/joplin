@@ -135,6 +135,21 @@ Difficulty Level: Medium
 
 Skills Required: Typescript, CSS, GitHub Actions.
 
+
+## 12. Email plugin
+
+Create a plugin to fetch mail via IMAP and convert messages to notes (including attachments). The plugin should be able to filter what messages it donwloads, e.g. based on the folder.
+
+Additional features to consider:
+- support more than one account
+- convert HTML to Markdown
+- delete/move received emails
+
+Difficulty Level: Medium
+
+Skills Required: TypeScript, JavaScript.
+
+
 # More info
 
 - Make sure you read the [Joplin Google Summer of Code Introduction](https://joplinapp.org/gsoc2022/index/)
