@@ -138,7 +138,7 @@ It is generally recommended to enter the notes as Markdown as it makes the notes
 
 ### Markdown Plugins
 
-Joplin supports a number of markdown plugins that can be toggled on/off to enable/disable markdown features on top of the standard Markdown features you would expect. These markdown plugins are listed below. Note: not all of the markdown plugins are enabled by default, if the enable field is 'no' below, then open the option screen to enable the markdown plugin (`options/Markdown`, just below `options/Plugins`). Plugins can be disabled in the same manner.
+Joplin supports a number of plugins that can be toggled on/off to enable/disable markdown features on top of the standard Markdown features you would expect. These plugins are listed below. Unlike regular plugins, markdown plugins must be enabled in the markdown section of the options screen. Note: not all of the plugins are enabled by default, if the enable field is 'no' below, then open the option screen to enable the plugin. Plugins can be disabled in the same manner.
 
 Note that the functionality added by these plugins is not part of the CommonMark spec so, while they will all work within Joplin, it is not guaranteed that they will work in other Markdown readers. Often this is not an issue but keep it in mind if you require compatibility with other Markdown applications.
 
