@@ -132,18 +132,20 @@ export default class MustacheService {
 			},
 		];
 
-		const url = stripOffQueryParameters(selectedUrl.href);
+		if (selectedUrl) {
+			const url = stripOffQueryParameters(selectedUrl.href);
 
-		const setSelected = (menuItems: AdminMenuItem[]) => {
-			if (!menuItems) return;
+			const setSelected = (menuItems: AdminMenuItem[]) => {
+				if (!menuItems) return;
 
-			for (const menuItem of menuItems) {
-				if (menuItem.url) menuItem.selected = url === menuItem.url;
-				setSelected(menuItem.children);
-			}
-		};
+				for (const menuItem of menuItems) {
+					if (menuItem.url) menuItem.selected = url === menuItem.url;
+					setSelected(menuItem.children);
+				}
+			};
 
-		setSelected(output);
+			setSelected(output);
+		}
 
 		return output;
 	}
@@ -240,7 +242,7 @@ export default class MustacheService {
 		globalParams = {
 			...this.defaultLayoutOptions,
 			...globalParams,
-			adminMenu: this.makeAdminMenu(globalParams.currentUrl),
+			adminMenu: globalParams ? this.makeAdminMenu(globalParams.currentUrl) : null,
 			userDisplayName: this.userDisplayName(globalParams ? globalParams.owner : null),
 			isAdminPage: view.path.startsWith('/admin/'),
 			s: {

@@ -2,26 +2,25 @@ import { SubPath, redirect } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
 import { AppContext, HttpMethod } from '../../utils/types';
-import { bodyFields, contextSessionId, formParse } from '../../utils/requestUtils';
-import { ErrorBadRequest, ErrorForbidden, ErrorNotFound, ErrorUnprocessableEntity } from '../../utils/errors';
+import { contextSessionId, formParse } from '../../utils/requestUtils';
+import { ErrorForbidden, ErrorUnprocessableEntity } from '../../utils/errors';
 import { User, UserFlag, UserFlagType, Uuid } from '../../services/database/types';
 import config from '../../config';
 import { View } from '../../services/MustacheService';
 import defaultView from '../../utils/defaultView';
 import { AclAction } from '../../models/BaseModel';
-import { NotificationKey } from '../../models/NotificationModel';
 import { AccountType, accountTypeOptions, accountTypeToString } from '../../models/UserModel';
 import uuidgen from '../../utils/uuidgen';
 import { formatMaxItemSize, formatMaxTotalSize, formatTotalSize, formatTotalSizePercent, yesOrNo } from '../../utils/strings';
 import { getCanShareFolder, totalSizeClass } from '../../models/utils/user';
 import { yesNoDefaultOptions, yesNoOptions } from '../../utils/views/select';
-import { confirmUrl, stripePortalUrl, adminUserDeletionsUrl, adminUserUrl } from '../../utils/urlUtils';
-import { cancelSubscriptionByUserId, updateCustomerEmail, updateSubscriptionType } from '../../utils/stripe';
+import { stripePortalUrl, adminUserDeletionsUrl, adminUserUrl } from '../../utils/urlUtils';
+import { cancelSubscriptionByUserId, updateSubscriptionType } from '../../utils/stripe';
 import { createCsrfTag } from '../../utils/csrf';
 import { formatDateTime, Hour } from '../../utils/time';
-import { cookieSet } from '../../utils/cookies';
 import { startImpersonating, stopImpersonating } from './utils/users/impersonate';
 import { userFlagToString } from '../../models/UserFlagModel';
+import { _ } from '@joplin/lib/locale';
 
 export interface CheckRepeatPasswordInput {
 	password: string;
@@ -105,7 +104,7 @@ router.get('admin/users', async (_path: SubPath, ctx: AppContext) => {
 		return u1.email.toLowerCase() < u2.email.toLowerCase() ? -1 : +1;
 	});
 
-	const view: View = defaultView('admin/users', 'Users');
+	const view: View = defaultView('admin/users', _('Users'));
 	view.content = {
 		users: users.map(user => {
 			return {
@@ -133,7 +132,7 @@ router.get('admin/users/:id', async (path: SubPath, ctx: AppContext, user: User 
 	const models = ctx.joplin.models;
 	const userId = userIsMe(path) ? owner.id : path.id;
 
-	user = !isNew ? user || await models.user().load(userId) : null;
+	user = !isNew ? user || await models.user().load(userId) : user;
 	if (isNew && !user) user = defaultUser();
 
 	await models.user().checkIfAllowed(ctx.joplin.owner, AclAction.Read, user);
@@ -141,18 +140,18 @@ router.get('admin/users/:id', async (path: SubPath, ctx: AppContext, user: User 
 	let postUrl = '';
 
 	if (isNew) {
-		postUrl = `${config().baseUrl}/users/new`;
+		postUrl = adminUserUrl('new');
 	} else if (isMe) {
-		postUrl = `${config().baseUrl}/users/me`;
+		postUrl = adminUserUrl('me');
 	} else {
-		postUrl = `${config().baseUrl}/users/${user.id}`;
+		postUrl = adminUserUrl(user.id);
 	}
 
 	interface UserFlagView extends UserFlag {
 		message: string;
 	}
 
-	let userFlagViews: UserFlagView[] = isNew ? [] : (await models.userFlag().allByUserId(user.id)).map(f => {
+	const userFlagViews: UserFlagView[] = isNew ? [] : (await models.userFlag().allByUserId(user.id)).map(f => {
 		return {
 			...f,
 			message: userFlagToString(f),
@@ -163,18 +162,16 @@ router.get('admin/users/:id', async (path: SubPath, ctx: AppContext, user: User 
 		return a.created_time < b.created_time ? +1 : -1;
 	});
 
-	if (!owner.is_admin) userFlagViews = [];
-
 	const subscription = !isNew ? await ctx.joplin.models.subscription().byUserId(userId) : null;
 	const isScheduledForDeletion = await ctx.joplin.models.userDeletion().isScheduledForDeletion(userId);
 
-	const view: View = defaultView('admin/user', 'Profile');
+	const view: View = defaultView('admin/user', _('Profile'));
 	view.content.user = user;
 	view.content.isNew = isNew;
-	view.content.buttonTitle = isNew ? 'Create user' : 'Update profile';
+	view.content.buttonTitle = isNew ? _('Create user') : _('Update profile');
 	view.content.error = error;
 	view.content.postUrl = postUrl;
-	view.content.showDisableButton = !isNew && !!owner.is_admin && owner.id !== user.id && user.enabled;
+	view.content.showDisableButton = !isNew && owner.id !== user.id && user.enabled;
 	view.content.csrfTag = await createCsrfTag(ctx);
 
 	if (subscription) {
@@ -182,21 +179,22 @@ router.get('admin/users/:id', async (path: SubPath, ctx: AppContext, user: User 
 
 		view.content.subscription = subscription;
 		view.content.showManageSubscription = !isNew;
-		view.content.showUpdateSubscriptionBasic = !isNew && !!owner.is_admin && user.account_type !== AccountType.Basic;
+		view.content.showUpdateSubscriptionBasic = !isNew && user.account_type !== AccountType.Basic;
 		view.content.showUpdateSubscriptionPro = !isNew && user.account_type !== AccountType.Pro;
 		view.content.subLastPaymentStatus = lastPaymentAttempt.status;
 		view.content.subLastPaymentDate = formatDateTime(lastPaymentAttempt.time);
 	}
 
-	view.content.showImpersonateButton = !isNew && !!owner.is_admin && user.enabled && user.id !== owner.id;
-	view.content.showRestoreButton = !isNew && !!owner.is_admin && !user.enabled;
-	view.content.showScheduleDeletionButton = !isNew && !!owner.is_admin && !isScheduledForDeletion;
-	view.content.showResetPasswordButton = !isNew && owner.is_admin && user.enabled;
+	view.content.showImpersonateButton = !isNew && user.enabled && user.id !== owner.id;
+	view.content.showRestoreButton = !isNew && !user.enabled;
+	view.content.showScheduleDeletionButton = !isNew && !isScheduledForDeletion;
+	view.content.showResetPasswordButton = !isNew && user.enabled;
 	view.content.canShareFolderOptions = yesNoDefaultOptions(user, 'can_share_folder');
 	view.content.canUploadOptions = yesNoOptions(user, 'can_upload');
 	view.content.hasFlags = !!userFlagViews.length;
 	view.content.userFlagViews = userFlagViews;
 	view.content.stripePortalUrl = stripePortalUrl();
+	view.content.pageTitle = view.content.buttonTitle;
 
 	view.jsFiles.push('zxcvbn');
 	view.cssFiles.push('index/user');
@@ -212,92 +210,6 @@ router.get('admin/users/:id', async (path: SubPath, ctx: AppContext, user: User 
 	return view;
 });
 
-router.publicSchemas.push('admin/users/:id/confirm');
-
-router.get('admin/users/:id/confirm', async (path: SubPath, ctx: AppContext, error: Error = null) => {
-	const models = ctx.joplin.models;
-	const userId = path.id;
-	const token = ctx.query.token;
-
-	if (!token) throw new ErrorBadRequest('Missing token');
-
-	const beforeChangingEmailHandler = async (newEmail: string) => {
-		if (config().stripe.enabled) {
-			try {
-				await updateCustomerEmail(models, userId, newEmail);
-			} catch (error) {
-				if (['no_sub', 'no_stripe_sub'].includes(error.code)) {
-					// ok - the user just doesn't have a subscription
-				} else {
-					error.message = `Your Stripe subscription email could not be updated. As a result your account email has not been changed. Please try again or contact support. Error was: ${error.message}`;
-					throw error;
-				}
-			}
-		}
-	};
-
-	if (ctx.query.confirm_email !== '0') await models.user().processEmailConfirmation(userId, token, beforeChangingEmailHandler);
-
-	const user = await models.user().load(userId);
-	if (!user) throw new ErrorNotFound(`No such user: ${userId}`);
-
-	if (user.must_set_password) {
-		const view: View = {
-			...defaultView('admin/users/confirm', 'Confirmation'),
-			content: {
-				user,
-				error,
-				token,
-				postUrl: confirmUrl(userId, token),
-			},
-			navbar: false,
-		};
-
-		view.jsFiles.push('zxcvbn');
-
-		return view;
-	} else {
-		await models.token().deleteByValue(userId, token);
-		await models.notification().add(userId, NotificationKey.EmailConfirmed);
-
-		if (ctx.joplin.owner) {
-			return redirect(ctx, `${config().baseUrl}/home`);
-		} else {
-			return redirect(ctx, `${config().baseUrl}/login`);
-		}
-	}
-});
-
-interface SetPasswordFormData {
-	token: string;
-	password: string;
-	password2: string;
-}
-
-router.post('admin/users/:id/confirm', async (path: SubPath, ctx: AppContext) => {
-	const userId = path.id;
-
-	try {
-		const fields = await bodyFields<SetPasswordFormData>(ctx.req);
-		await ctx.joplin.models.token().checkToken(userId, fields.token);
-
-		const password = checkRepeatPassword(fields, true);
-
-		await ctx.joplin.models.user().save({ id: userId, password, must_set_password: 0 });
-		await ctx.joplin.models.token().deleteByValue(userId, fields.token);
-
-		const session = await ctx.joplin.models.session().createUserSession(userId);
-		cookieSet(ctx, 'sessionId', session.id);
-
-		await ctx.joplin.models.notification().add(userId, NotificationKey.PasswordSet);
-
-		return redirect(ctx, `${config().baseUrl}/home`);
-	} catch (error) {
-		const endPoint = router.findEndPoint(HttpMethod.GET, 'users/:id/confirm');
-		return endPoint.handler(path, ctx, error);
-	}
-});
-
 router.alias(HttpMethod.POST, 'admin/users/:id', 'admin/users');
 
 interface FormFields {
@@ -309,7 +221,6 @@ interface FormFields {
 	send_account_confirmation_email: string;
 	update_subscription_basic_button: string;
 	update_subscription_pro_button: string;
-	// user_cancel_subscription_button: string;
 	impersonate_button: string;
 	stop_impersonate_button: string;
 	delete_user_flags: string;
@@ -319,7 +230,7 @@ interface FormFields {
 router.post('admin/users', async (path: SubPath, ctx: AppContext) => {
 	let user: User = {};
 	const owner = ctx.joplin.owner;
-	const userId = userIsMe(path) ? owner.id : path.id;
+	let userId = userIsMe(path) ? owner.id : path.id;
 
 	try {
 		const body = await formParse(ctx.req);
@@ -335,13 +246,9 @@ router.post('admin/users', async (path: SubPath, ctx: AppContext) => {
 			await models.user().checkIfAllowed(owner, isNew ? AclAction.Create : AclAction.Update, userToSave);
 
 			if (isNew) {
-				await models.user().save(userToSave);
+				const savedUser = await models.user().save(userToSave);
+				userId = savedUser.id;
 			} else {
-				if (userToSave.email && !owner.is_admin) {
-					await models.user().initiateEmailChange(userId, userToSave.email);
-					delete userToSave.email;
-				}
-
 				await models.user().save(userToSave, { isNew: false });
 
 				// When changing the password, we also clear all session IDs for
@@ -352,53 +259,51 @@ router.post('admin/users', async (path: SubPath, ctx: AppContext) => {
 		} else if (fields.stop_impersonate_button) {
 			await stopImpersonating(ctx);
 			return redirect(ctx, config().baseUrl);
-		} else if (owner.is_admin) {
-			if (fields.disable_button || fields.restore_button) {
-				const user = await models.user().load(path.id);
-				await models.user().checkIfAllowed(owner, AclAction.Delete, user);
-				await models.userFlag().toggle(user.id, UserFlagType.ManuallyDisabled, !fields.restore_button);
-			} else if (fields.send_account_confirmation_email) {
-				const user = await models.user().load(path.id);
-				await models.user().save({ id: user.id, must_set_password: 1 });
-				await models.user().sendAccountConfirmationEmail(user);
-			} else if (fields.impersonate_button) {
-				await startImpersonating(ctx, userId);
-				return redirect(ctx, config().baseUrl);
-			} else if (fields.cancel_subscription_button) {
-				await cancelSubscriptionByUserId(models, userId);
-			} else if (fields.update_subscription_basic_button) {
-				await updateSubscriptionType(models, userId, AccountType.Basic);
-			} else if (fields.update_subscription_pro_button) {
-				await updateSubscriptionType(models, userId, AccountType.Pro);
-			} else if (fields.schedule_deletion_button) {
-				const deletionDate = Date.now() + 24 * Hour;
+		} else if (fields.disable_button || fields.restore_button) {
+			const user = await models.user().load(path.id);
+			await models.user().checkIfAllowed(owner, AclAction.Delete, user);
+			await models.userFlag().toggle(user.id, UserFlagType.ManuallyDisabled, !fields.restore_button);
+		} else if (fields.send_account_confirmation_email) {
+			const user = await models.user().load(path.id);
+			await models.user().save({ id: user.id, must_set_password: 1 });
+			await models.user().sendAccountConfirmationEmail(user);
+		} else if (fields.impersonate_button) {
+			await startImpersonating(ctx, userId);
+			return redirect(ctx, config().baseUrl);
+		} else if (fields.cancel_subscription_button) {
+			await cancelSubscriptionByUserId(models, userId);
+		} else if (fields.update_subscription_basic_button) {
+			await updateSubscriptionType(models, userId, AccountType.Basic);
+		} else if (fields.update_subscription_pro_button) {
+			await updateSubscriptionType(models, userId, AccountType.Pro);
+		} else if (fields.schedule_deletion_button) {
+			const deletionDate = Date.now() + 24 * Hour;
 
-				await models.userDeletion().add(userId, deletionDate, {
-					processAccount: true,
-					processData: true,
-				});
+			await models.userDeletion().add(userId, deletionDate, {
+				processAccount: true,
+				processData: true,
+			});
 
-				await models.notification().addInfo(owner.id, `User ${user.email} has been scheduled for deletion on ${formatDateTime(deletionDate)}. [View deletion list](${adminUserDeletionsUrl()})`);
-			} else if (fields.delete_user_flags) {
-				const userFlagTypes: UserFlagType[] = [];
-				for (const key of Object.keys(fields)) {
-					if (key.startsWith('user_flag_')) {
-						const type = Number(key.substr(10));
-						userFlagTypes.push(type);
-					}
+			await models.notification().addInfo(owner.id, `User ${user.email} has been scheduled for deletion on ${formatDateTime(deletionDate)}. [View deletion list](${adminUserDeletionsUrl()})`);
+		} else if (fields.delete_user_flags) {
+			const userFlagTypes: UserFlagType[] = [];
+			for (const key of Object.keys(fields)) {
+				if (key.startsWith('user_flag_')) {
+					const type = Number(key.substr(10));
+					userFlagTypes.push(type);
 				}
-
-				await models.userFlag().removeMulti(userId, userFlagTypes);
-			} else {
-				throw new Error('Invalid form button');
 			}
+
+			await models.userFlag().removeMulti(userId, userFlagTypes);
+		} else {
+			throw new Error('Invalid form button');
 		}
 
-		return redirect(ctx, `${config().baseUrl}/users${userIsMe(path) ? '/me' : `/${userId}`}`);
+		return redirect(ctx, adminUserUrl(userIsMe(path) ? '/me' : `/${userId}`));
 	} catch (error) {
 		error.message = `Error: Your changes were not saved: ${error.message}`;
 		if (error instanceof ErrorForbidden) throw error;
-		const endPoint = router.findEndPoint(HttpMethod.GET, 'users/:id');
+		const endPoint = router.findEndPoint(HttpMethod.GET, 'admin/users/:id');
 		return endPoint.handler(path, ctx, user, error);
 	}
 });

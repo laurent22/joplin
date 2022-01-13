@@ -24,6 +24,7 @@ import uuidgen from '../uuidgen';
 import { createCsrfToken } from '../csrf';
 import { cookieSet } from '../cookies';
 import { parseEnv } from '../../env';
+import { URL } from 'url';
 
 // Takes into account the fact that this file will be inside the /dist directory
 // when it runs.
@@ -218,7 +219,7 @@ export async function koaAppContext(options: AppContextTestOptions = null): Prom
 		query: req.query,
 		method: req.method,
 		redirect: () => {},
-		URL: { origin: config().baseUrl },
+		URL: new URL(config().baseUrl), // origin
 	};
 
 	if (options.sessionId) {
