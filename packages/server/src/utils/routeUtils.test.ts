@@ -1,6 +1,7 @@
 import { findMatchingRoute, isValidOrigin, parseSubPath, splitItemPath } from './routeUtils';
 import { ItemAddressingType } from '../services/database/types';
 import { RouteType } from './types';
+import { expectThrow } from './testing/testUtils';
 
 describe('routeUtils', function() {
 
@@ -76,6 +77,9 @@ describe('routeUtils', function() {
 			const actual = findMatchingRoute(path, routes);
 			expect(actual).toEqual(expected);
 		}
+
+		await expectThrow(async () => findMatchingRoute('help', routes));
+		await expectThrow(async () => findMatchingRoute('api/users/123', routes));
 	});
 
 	it('should split an item path', async function() {

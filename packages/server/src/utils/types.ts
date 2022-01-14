@@ -144,6 +144,7 @@ export interface Config {
 	tempDir: string;
 	baseUrl: string;
 	apiBaseUrl: string;
+	adminBaseUrl: string;
 	userContentBaseUrl: string;
 	joplinAppBaseUrl: string;
 	signupEnabled: boolean;

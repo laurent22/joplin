@@ -1,0 +1,20 @@
+<div style="display: flex; flex-direction: row;">
+	<div style="display: flex; margin-right: 3rem; background-color: #f5f5f5; padding: 1.5rem;">
+		<aside class="menu">
+			{{#global.adminMenu}}
+				<p class="menu-label">{{title}}</p>
+				<ul class="menu-list">
+					{{#children}}
+						<li><a href="{{{url}}}" class="{{#selected}}is-active{{/selected}}">{{title}}</a></li>
+					{{/children}}
+				</ul>
+			{{/global.adminMenu}}
+		</aside>
+	</div>
+
+	<div style="display: flex; flex: 1;">		
+		<div>
+			{{{contentHtml}}}
+		</div>
+	</div>
+</div>
