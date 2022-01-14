@@ -24,7 +24,14 @@
 		<main class="main">
 			<div class="container">
 				{{> notifications}}
-				{{{contentHtml}}}
+
+				{{#global.isAdminPage}}
+					{{> adminLayout}}
+				{{/global.isAdminPage}}
+
+				{{^global.isAdminPage}}
+					{{{contentHtml}}}
+				{{/global.isAdminPage}}
 			</div>
 		</main>
 		{{> footer}}

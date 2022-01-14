@@ -120,6 +120,7 @@ export async function initConfig(envType: Env, env: EnvVariables, overrides: any
 		stripe: stripeConfigFromEnv(stripePublicConfig, env),
 		port: appPort,
 		baseUrl,
+		adminBaseUrl: `${baseUrl}/admin`,
 		showErrorStackTraces: env.ERROR_STACK_TRACES,
 		apiBaseUrl,
 		userContentBaseUrl: env.USER_CONTENT_BASE_URL ? env.USER_CONTENT_BASE_URL : baseUrl,

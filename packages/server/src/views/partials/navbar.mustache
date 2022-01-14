@@ -10,19 +10,9 @@
 			{{#global.owner}}
 				<div class="navbar-menu is-active">
 					<div class="navbar-start">
-						<a class="navbar-item" href="{{{global.baseUrl}}}/home">{{global.s.home}}</a>
-						{{#global.owner.is_admin}}
-							<a class="navbar-item" href="{{{global.baseUrl}}}/users">{{global.s.users}}</a>
-						{{/global.owner.is_admin}}
-						{{#global.owner.is_admin}}
-							<a class="navbar-item" href="{{{global.baseUrl}}}/items">{{global.s.items}}</a>
-						{{/global.owner.is_admin}}
-						{{#global.owner.is_admin}}
-							<a class="navbar-item" href="{{{global.baseUrl}}}/changes">{{global.s.log}}</a>
-						{{/global.owner.is_admin}}
-						{{#global.owner.is_admin}}
-							<a class="navbar-item" href="{{{global.baseUrl}}}/tasks">{{global.s.tasks}}</a>
-						{{/global.owner.is_admin}}
+						{{#global.navbarMenu}}
+							<a class="navbar-item {{#selected}}is-active{{/selected}}" href="{{{url}}}">{{#icon}}<i class="{{.}}"></i>&nbsp;&nbsp;{{/icon}}{{title}}</a>
+						{{/global.navbarMenu}}
 					</div>
 					<div class="navbar-end">
 						{{#global.isJoplinCloud}}
