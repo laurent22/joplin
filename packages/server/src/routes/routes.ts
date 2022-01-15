@@ -13,11 +13,10 @@ import apiShareUsers from './api/share_users';
 import apiUsers from './api/users';
 
 import adminDashboard from './admin/dashboard';
+import adminOrganizations from './admin/organizations';
 import adminTasks from './admin/tasks';
 import adminUserDeletions from './admin/user_deletions';
 import adminUsers from './admin/users';
-
-import adminOrganizations from './index/admin/organizations';
 
 import indexChanges from './index/changes';
 import indexHelp from './index/help';
@@ -51,11 +50,10 @@ const routes: Routers = {
 	'api/users': apiUsers,
 
 	'admin/dashboard': adminDashboard,
+	'admin/organizations': adminOrganizations,
 	'admin/tasks': adminTasks,
 	'admin/user_deletions': adminUserDeletions,
 	'admin/users': adminUsers,
-
-	'admin/organizations': adminOrganizations,
 
 	'changes': indexChanges,
 	'help': indexHelp,

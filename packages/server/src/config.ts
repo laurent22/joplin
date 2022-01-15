@@ -136,7 +136,7 @@ export async function initConfig(envType: Env, env: EnvVariables, overrides: any
 		storageDriverFallback: parseStorageDriverConnectionString(env.STORAGE_DRIVER_FALLBACK),
 		itemSizeHardLimit: 250000000, // Beyond this the Postgres driver will crash the app
 		maxTimeDrift: env.MAX_TIME_DRIFT,
-		organizationEnabled: env.ORGANIZATION_ENABLED,
+		organizationEnabled: env.ORGANIZATIONS_ENABLED,
 		...overrides,
 	};
 }

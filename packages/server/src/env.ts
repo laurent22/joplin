@@ -94,7 +94,7 @@ const defaultEnvValues: EnvVariables = {
 	// Organization config
 	// ==================================================
 
-	ORGANIZATION_ENABLED: false,
+	ORGANIZATIONS_ENABLED: false,
 };
 
 export interface EnvVariables {
@@ -145,7 +145,7 @@ export interface EnvVariables {
 	STRIPE_SECRET_KEY: string;
 	STRIPE_WEBHOOK_SECRET: string;
 
-	ORGANIZATION_ENABLED: boolean;
+	ORGANIZATIONS_ENABLED: boolean;
 }
 
 const parseBoolean = (s: string): boolean => {

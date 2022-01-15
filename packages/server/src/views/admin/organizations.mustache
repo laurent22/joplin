@@ -1,0 +1,15 @@
+<div class="block">
+	<a class="button is-primary" href="{{{global.baseUrl}}}/admin/organizations/new">Add organization</a>
+</div>
+
+<form method='POST' action="{{postUrl}}">
+	{{{csrfTag}}}
+		
+	{{#organizationTable}}
+		{{>table}}
+	{{/organizationTable}}
+
+	{{! <div class="block">
+		<input class="button is-link" type="submit" value="Remove selected jobs" name="removeButton"/>
+	</div> }}
+</form>

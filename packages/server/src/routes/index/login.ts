@@ -8,6 +8,7 @@ import defaultView from '../../utils/defaultView';
 import { View } from '../../services/MustacheService';
 import limiterLoginBruteForce from '../../utils/request/limiterLoginBruteForce';
 import { cookieSet } from '../../utils/cookies';
+import { adminDashboardUrl, homeUrl } from '../../utils/urlUtils';
 
 function makeView(error: any = null): View {
 	const view = defaultView('login', 'Login');
@@ -34,7 +35,13 @@ router.post('login', async (_path: SubPath, ctx: AppContext) => {
 
 		const session = await ctx.joplin.models.session().authenticate(body.fields.email, body.fields.password);
 		cookieSet(ctx, 'sessionId', session.id);
-		return redirect(ctx, `${config().baseUrl}/home`);
+		const owner = await ctx.joplin.models.user().load(session.user_id, { fields: ['id', 'is_admin'] });
+
+		if (owner.is_admin) {
+			return redirect(ctx, adminDashboardUrl());
+		} else {
+			return redirect(ctx, homeUrl());
+		}
 	} catch (error) {
 		return makeView(error);
 	}
