@@ -109,6 +109,7 @@ async function createPotFile(potFilePath) {
 		'./packages/app-desktop/lib/*',
 		'./packages/app-desktop/pluginAssets/*',
 		'./packages/app-desktop/tools/*',
+		'./packages/app-desktop/vendor/*',
 		'./packages/app-mobile/android/*',
 		'./packages/app-mobile/ios/*',
 		'./packages/app-mobile/pluginAssets/*',
