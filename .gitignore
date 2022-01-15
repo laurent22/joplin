@@ -1917,6 +1917,9 @@ packages/renderer/headerAnchor.js.map
 packages/renderer/htmlUtils.d.ts
 packages/renderer/htmlUtils.js
 packages/renderer/htmlUtils.js.map
+packages/renderer/htmlUtils.test.d.ts
+packages/renderer/htmlUtils.test.js
+packages/renderer/htmlUtils.test.js.map
 packages/renderer/index.d.ts
 packages/renderer/index.js
 packages/renderer/index.js.map
