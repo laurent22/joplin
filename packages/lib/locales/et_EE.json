@@ -280,7 +280,6 @@
  "Note is not a to-do: \"%s\"": "Märkus ei ole ülesannete loetelu: %s",
  "Note properties": "Märkme atribuudid",
  "Note: Does not work in all desktop environments.": "Märkus: ei tööta kõigil töölaua keskkondades.",
- "Notebook title:": "Märkmiku tiitel:",
  "Notebook: %s": "Märkmik: %s",
  "Notebooks": "Sülearvutid",
  "Notebooks cannot be named \"%s\", which is a reserved title.": "Märkmikke ei saa nimega \"%s\", mis on reserveeritud tiitel.",
