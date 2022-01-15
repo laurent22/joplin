@@ -7,14 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: MrKanister <s.robin@tutanota.de>\n"
+"Last-Translator: Benjamin Weis <benjamin.weis@gmx.com>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.0\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:565
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -267,11 +269,11 @@ msgstr "Zum Wörterbuch hinzufügen"
 #: packages/server/src/services/MustacheService.ts:182
 #: packages/server/src/services/MustacheService.ts:301
 msgid "Admin"
-msgstr ""
+msgstr "Admin"
 
 #: packages/server/src/routes/admin/dashboard.ts:10
 msgid "Admin dashboard"
-msgstr ""
+msgstr "Admin-Übersichtsseite"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:189
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:147
@@ -408,9 +410,8 @@ msgstr ""
 "Anführungszeichen usw."
 
 #: packages/lib/models/Setting.ts:1193
-#, fuzzy
 msgid "Automatically check for updates"
-msgstr "Auf Aktualisierungen prüfen ..."
+msgstr "Automatisch auf Aktualisierungen prüfen"
 
 # Thema vs Theme
 # Not sure what other applications use. I don't have any German apps thus I can't say.
@@ -783,9 +784,8 @@ msgid "Copy external link"
 msgstr "Externen Link kopieren"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:134
-#, fuzzy
 msgid "Copy image"
-msgstr "Token kopieren"
+msgstr "Bild kopieren"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:172
 msgid "Copy Link Address"
@@ -880,14 +880,12 @@ msgid "Create a notebook"
 msgstr "Notizbuch erstellen"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:128
-#, fuzzy
 msgid "Create notebook"
 msgstr "Notizbuch erstellen"
 
 #: packages/server/src/routes/admin/users.ts:171
-#, fuzzy
 msgid "Create user"
-msgstr "Erstellt: %s"
+msgstr "Benutzer erstellen"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:29
 msgid "Created"
@@ -938,7 +936,7 @@ msgstr "Erstellt eine neue Aufgabe."
 # Could also be „neues“ or „neuen“
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.tsx:110
 msgid "Creating new %s..."
-msgstr "Neue(s) %s wird erstellt ..."
+msgstr "Neue(s) %s erstellen ..."
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:523
 msgid "Creating report..."
@@ -980,7 +978,7 @@ msgstr "Dunkel"
 
 #: packages/server/src/services/MustacheService.ts:139
 msgid "Dashboard"
-msgstr ""
+msgstr "Übersichtsseite"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:625
 msgid "Database v%s"
@@ -2251,7 +2249,7 @@ msgstr "Abmelden"
 
 #: packages/server/src/services/MustacheService.ts:178
 msgid "Logs"
-msgstr ""
+msgstr "Protokolle"
 
 #: packages/app-desktop/gui/MenuBar.tsx:710
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:583
@@ -2929,7 +2927,7 @@ msgstr "Datenschutzrichtlinie"
 
 #: packages/server/src/routes/admin/users.ts:168
 msgid "Profile"
-msgstr ""
+msgstr "Profil"
 
 #: packages/lib/versionInfo.ts:26
 msgid "Profile Version: %s"
@@ -3115,29 +3113,24 @@ msgid "S3"
 msgstr "S3"
 
 #: packages/lib/models/Setting.ts:546
-#, fuzzy
 msgid "S3 access key"
-msgstr "AWS Zugriffsschlüssel-ID"
+msgstr "S3-Zugriffsschlüssel"
 
 #: packages/lib/models/Setting.ts:506
-#, fuzzy
 msgid "S3 bucket"
-msgstr "Amazon S3 Bucket"
+msgstr "S3 Bucket"
 
 #: packages/lib/models/Setting.ts:535
-#, fuzzy
 msgid "S3 region"
-msgstr "AWS Region"
+msgstr "S3-Region"
 
 #: packages/lib/models/Setting.ts:557
-#, fuzzy
 msgid "S3 secret key"
-msgstr "AWS geheimer Zugriffsschlüssel"
+msgstr "S3 geheimer Sschlüssel"
 
 #: packages/lib/models/Setting.ts:521
-#, fuzzy
 msgid "S3 URL"
-msgstr "Amazon S3 URL"
+msgstr "S3 URL"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:579
 msgid ""
@@ -4257,9 +4250,8 @@ msgstr "Aktualisieren"
 
 #: packages/server/src/routes/admin/users.ts:171
 #: packages/server/src/routes/index/users.ts:89
-#, fuzzy
 msgid "Update profile"
-msgstr "Profil exportieren"
+msgstr "Profil aktualisieren"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:208
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:209
@@ -4368,7 +4360,7 @@ msgstr ""
 
 #: packages/server/src/services/MustacheService.ts:147
 msgid "User deletions"
-msgstr ""
+msgstr "Benutzer-Löschungen"
 
 #: packages/server/src/routes/admin/users.ts:107
 #: packages/server/src/services/MustacheService.ts:143
@@ -4616,7 +4608,6 @@ msgstr "Herauszoomen"
 #~ msgid "Delete these notes?"
 #~ msgstr "Sollen diese Notizen gelöscht werden?"
 
-#, javascript-format
 #~ msgid "Encryption will be enabled using the master key created on %s"
 #~ msgstr ""
 #~ "Die Verschlüsselung wird mit dem Hauptschlüssel aktiviert, der am %s "
