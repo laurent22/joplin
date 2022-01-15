@@ -30,7 +30,7 @@ Click on the [Profile button](#how-can-i-change-my-details), then scroll down an
 
 ## Further information
 
-- [Joplin Offical Website](https://joplinapp.org)
+- [Joplin Official Website](https://joplinapp.org)
 - [Joplin Support Forum](https://discourse.joplinapp.org/)
 - [Joplin Cloud Privacy Policy](/privacy)
 - [Joplin Cloud Terms & Conditions](/terms)

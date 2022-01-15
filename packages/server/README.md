@@ -93,7 +93,7 @@ It's recommended to start with ReadAndWrite mode.
 
 This simple setup with main and fallback driver is sufficient to start using a new storage, however old content that never gets updated will stay on the database. To migrate this content too, you can use the `storage import` command. It takes a connection string and move all items from the old storage to the new one.
 
-For example, to move all content from the database to the filesytem:
+For example, to move all content from the database to the filesystem:
 
 	docker exec -it CONTAINER_ID node packages/server/dist/app.js storage import --connection 'Type=Filesystem; Path=/path/to/dir'
 

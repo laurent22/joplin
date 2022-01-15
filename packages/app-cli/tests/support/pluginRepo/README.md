@@ -15,7 +15,7 @@ This repository contains the following plugins:
 --- | --- | --- | --- | ---
 [🏠](https://discourse.joplinapp.org/t/insert-referencing-notes-backlinks-plugin/13632) | Backlinks to note | 1.0.4 | Creates backlinks to opened note | a  
 [🏠](https://github.com/JackGruber/joplin-plugin-combine-notes) | Combine notes | 0.2.1 | Combine one or more notes | JackGruber
-[🏠](https://github.com/JackGruber/joplin-plugin-copytags) | Copy Tags | 0.3.2 | Plugin to extend the Joplin tagging menu with a coppy all tags and tagging list with more control. | JackGruber
+[🏠](https://github.com/JackGruber/joplin-plugin-copytags) | Copy Tags | 0.3.2 | Plugin to extend the Joplin tagging menu with a copy all tags and tagging list with more control. | JackGruber
 [🏠](https://discourse.joplinapp.org/t/go-to-note-tag-or-notebook-via-highlighting-text-in-editor/12731) | Create and go to #tags and @notebooks | 1.3.4 | Go to tag,notebook or note via links or via text | a  
 [🏠](https://github.com/benji300/joplin-favorites) | Favorites | 1.0.0 | Save any notebook, note, to-do, tag, or search as favorite in an extra panel view for quick access. (v1.0.0) | Benji300
 [🏠](https://github.com/laurent22/joplin/tree/dev/packages/plugins/ToggleSidebars) | Note list and side bar toggle buttons | 1.0.2 | Adds buttons to toggle note list and sidebar | Laurent Cozic
