@@ -167,8 +167,8 @@ class NoteSearchBarComponent extends React.Component {
 						type="text"
 						style={{ width: 200, marginRight: 5, backgroundColor: this.backgroundColor, color: theme.color }}
 					/>
-					{allowScrolling ? nextButton : null}
 					{allowScrolling ? previousButton : null}
+					{allowScrolling ? nextButton : null}
 					{allowScrolling ? matchesFoundString : null}
 					{!allowScrolling ? viewerWarning : null}
 				</div>
