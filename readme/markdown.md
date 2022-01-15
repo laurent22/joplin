@@ -136,11 +136,11 @@ It is generally recommended to enter the notes as Markdown as it makes the notes
 
 	This is <s>strikethrough text</s> mixed with regular **Markdown**.
 
-### Plugins
+### Markdown Plugins
 
-Joplin supports a number of plugins that can be toggled on/off to enable/disable markdown features on top of the standard Markdown features you would expect. These plugins are listed below. Note: not all of the plugins are enabled by default, if the enable field is 'no' below, then open the option screen to enable the plugin. Plugins can be disabled in the same manner.
+Joplin supports a number of plugins that can be toggled on/off to enable/disable markdown features on top of the standard Markdown features you would expect. These plugins are listed below. Unlike regular plugins, Markdown plugins must be enabled in the markdown section of the [Configuration screen](https://github.com/laurent22/joplin/blob/dev/readme/config_screen.md). Not all of the plugins are enabled by default, if the "enabled" field is 'no' below, then open the option screen to enable the plugin. Plugins can be disabled in the same manner.
 
-Note that the functionality added by these plugins is not part of the CommonMark spec so, while they will all work within Joplin, it is not guaranteed that they will work in other Markdown readers. Often this is not an issue but keep it in mind if you require compatibility with other Markdown applications.
+The functionality added by these plugins is not part of the CommonMark spec so, while they will all work within Joplin, it is not guaranteed that they will work in other Markdown readers. Often this is not an issue but keep it in mind if you require compatibility with other Markdown applications.
 
 | Plugin | Syntax | Description | Enabled | Screenshot |
 |--------|--------|-------------|---------|------------|

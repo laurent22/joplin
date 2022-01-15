@@ -7,6 +7,7 @@ import { Email, EmailSender } from '../services/database/types';
 import { errorToString } from '../utils/errors';
 import EmailModel from '../models/EmailModel';
 import { markdownBodyToHtml, markdownBodyToPlainText } from './email/utils';
+import { MailerSecurity } from '../env';
 
 const logger = Logger.create('EmailService');
 
@@ -25,10 +26,16 @@ export default class EmailService extends BaseService {
 				if (!this.senderInfo(EmailSender.NoReply).email) {
 					throw new Error('No-reply email must be set for email service to work (Set env variable MAILER_NOREPLY_EMAIL)');
 				}
+
+				// NodeMailer's TLS options are weird:
+				// https://nodemailer.com/smtp/#tls-options
+
 				const options: SMTPTransport.Options = {
 					host: this.config.mailer.host,
 					port: this.config.mailer.port,
-					secure: this.config.mailer.secure,
+					secure: this.config.mailer.security === MailerSecurity.Tls,
+					ignoreTLS: this.config.mailer.security === MailerSecurity.None,
+					requireTLS: this.config.mailer.security === MailerSecurity.Starttls,
 				};
 				if (this.config.mailer.authUser || this.config.mailer.authPassword) {
 					options.auth = {

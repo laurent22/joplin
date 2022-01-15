@@ -1,6 +1,6 @@
 # GSoC 2022 Ideas
 
-2022 is Joplin second round at Google Summer of Code. Detailed information on how to get involved and apply are given in the [general Summer of Code introduction](https://joplinapp.org/gsoc2022/index/)
+2022 is Joplin third round at Google Summer of Code. Detailed information on how to get involved and apply are given in the [general Summer of Code introduction](https://joplinapp.org/gsoc2022/index/)
 
 **These are all proposals! We are open to new ideas you might have!!** Do you have an awesome idea you want to work on with Joplin but that is not among the ideas below? That's cool. We love that! But please do us a favour: Get in touch with a mentor early on and make sure your project is realistic and within the scope of Joplin. Just make sure your idea is within this year's theme:
 
@@ -80,6 +80,75 @@ Also read the document about limitations of the editor: [https://joplinapp.org/r
 Difficulty level: High
 
 Skills Required: Typescript, Javascript, CSS, HTML, Markdown rendering. You will also need to learn about TinyMCE if you're not already familiar with it.
+
+## 7. Improve PDF export
+
+Joplin uses Chrome's built-in print to PDF function which is very limited. This can be improved by using a 3rd party library to convert notes to PDF. Applies to desktop and CLI versions.
+
+Potential benefits:
+* Export multiple notes as a single PDF
+* Embedding attachments (see https://github.com/laurent22/joplin/issues/5943)
+* Delay export until the note is fully rendered (https://discourse.joplinapp.org/t/ability-to-delay-pdf-export-to-allow-plugins-to-render/22159)
+
+Difficulty level: Medium
+
+Skills Required: Typescript, Javascript.
+
+## 8. Replace built-in PDF renderer with a library
+
+Just like with export, Joplin relies on the built-in PDF renderer to show PDF attachments. Replacing it with a 3rd-party library has a number of advantages:
+* Joplin can preserve PDF viewer state when a note is re-rendered. For instance currently after opening and closing settings, PDF are reset to the 1st page.
+* It may be possible to link to a specific page or even a location within a PDF document.
+* Annotate PDF documents from Joplin
+
+Difficulty level: Medium
+
+Skills Required: Typescript, Javascript.
+
+## 9. Rebuild file system sync on Android
+
+A recent update broke file system synchronization on Android, as applications are now required to use a new API to access storage. Currently there are no libraries that would proxy this API for React Native. If we want to get file system sync working again it has to be written from scratch.
+
+Difficulty level: High
+
+Skills Required: Android, Java/Kotlin, Typescript.
+
+## 10. Tablet layout
+
+On wide screens devices like tables Joplin could use a different layout, e.g. with note list always showing, or have both editor and viewer visible at the same time.
+
+Difficulty Level: Medium
+
+Skills Required: React, Typescript, CSS.
+
+## 11. Improve plugin search and discoverability
+
+As there are more and more plugins it would be good to improve how they are discovered, and to improve search - in particular improve search relevance. We are open to hear ideas about this, but a few things that could be done, for example are:
+
+- Improve the [page that lists all the plugin](https://github.com/joplin/plugins#readme) by adding a download count (based on stats.json) and make the list sortable by download count.
+- In the app, use the info from stats.json to order the plugin - those with more downloads going on top for example
+- Create a dynamically generated page (using GitHub Actions) under joplinapp.org that shows some recommended plugins, trending plugins, etc. similar to [Add-ons for Firefox](https://addons.mozilla.org/en-GB/firefox/)
+
+Those are just ideas and we're open to hearing more from you.
+
+Difficulty Level: Medium
+
+Skills Required: Typescript, CSS, GitHub Actions.
+
+
+## 12. Email plugin
+
+Create a plugin to fetch mail via IMAP and convert messages to notes (including attachments). The plugin should be able to filter what messages it donwloads, e.g. based on the folder.
+
+Additional features to consider:
+- support more than one account
+- convert HTML to Markdown
+- delete/move received emails
+
+Difficulty Level: Medium
+
+Skills Required: TypeScript, JavaScript.
+
 
 # More info
 

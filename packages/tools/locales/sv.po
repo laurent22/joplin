@@ -33,8 +33,8 @@ msgid ""
 "- Storage: to allow attaching files to notes and to enable filesystem "
 "synchronisation."
 msgstr ""
-"- Lagring: för att tillåta att du bifoga filer till anteckningar och för att "
-"aktivera filsystemsynkronisering."
+"- Lagring: för att tillåta att du bifogar filer till anteckningar och för "
+"att aktivera filsystemsynkronisering."
 
 #: packages/lib/services/KeymapService.ts:308
 #: packages/lib/services/KeymapService.ts:314
@@ -53,34 +53,34 @@ msgstr "(Ingen)"
 msgid "(wysiwyg: %s)"
 msgstr "(wysiwyg: %s)"
 
-#: packages/app-desktop/gui/MenuBar.tsx:557
-#: packages/app-desktop/gui/MenuBar.tsx:813
+#: packages/app-desktop/gui/MenuBar.tsx:562
+#: packages/app-desktop/gui/MenuBar.tsx:818
 msgid "&Edit"
 msgstr "&Redigera"
 
-#: packages/app-desktop/gui/MenuBar.tsx:435
-#: packages/app-desktop/gui/MenuBar.tsx:513
-#: packages/app-desktop/gui/MenuBar.tsx:809
+#: packages/app-desktop/gui/MenuBar.tsx:440
+#: packages/app-desktop/gui/MenuBar.tsx:518
+#: packages/app-desktop/gui/MenuBar.tsx:814
 msgid "&File"
 msgstr "&Arkiv"
 
-#: packages/app-desktop/gui/MenuBar.tsx:663
+#: packages/app-desktop/gui/MenuBar.tsx:668
 msgid "&Go"
 msgstr "&Gå"
 
-#: packages/app-desktop/gui/MenuBar.tsx:695
+#: packages/app-desktop/gui/MenuBar.tsx:700
 msgid "&Help"
 msgstr "&Hjälp"
 
-#: packages/app-desktop/gui/MenuBar.tsx:681
+#: packages/app-desktop/gui/MenuBar.tsx:686
 msgid "&Note"
 msgstr "&Anteckning"
 
-#: packages/app-desktop/gui/MenuBar.tsx:691
+#: packages/app-desktop/gui/MenuBar.tsx:696
 msgid "&Tools"
 msgstr "&Verktyg"
 
-#: packages/app-desktop/gui/MenuBar.tsx:589
+#: packages/app-desktop/gui/MenuBar.tsx:594
 msgid "&View"
 msgstr "&Visa"
 
@@ -203,8 +203,8 @@ msgstr "A4"
 msgid "A5"
 msgstr "A5"
 
-#: packages/app-desktop/gui/MenuBar.tsx:441
-#: packages/app-desktop/gui/MenuBar.tsx:733
+#: packages/app-desktop/gui/MenuBar.tsx:446
+#: packages/app-desktop/gui/MenuBar.tsx:738
 msgid "About Joplin"
 msgstr "Om Joplin"
 
@@ -242,7 +242,7 @@ msgid "Active"
 msgstr "Aktiv"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:18
-#: packages/app-desktop/gui/MenuBar.tsx:631
+#: packages/app-desktop/gui/MenuBar.tsx:636
 msgid "Actual Size"
 msgstr "Faktiskt storlek"
 
@@ -265,6 +265,15 @@ msgstr "Lägg till titel"
 #: packages/lib/services/spellChecker/SpellCheckerService.ts:116
 msgid "Add to dictionary"
 msgstr "Lägg till i ordlistan"
+
+#: packages/server/src/services/MustacheService.ts:182
+#: packages/server/src/services/MustacheService.ts:301
+msgid "Admin"
+msgstr ""
+
+#: packages/server/src/routes/admin/dashboard.ts:10
+msgid "Admin dashboard"
+msgstr ""
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:189
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:147
@@ -303,7 +312,7 @@ msgstr "Utseende"
 
 #: packages/lib/models/Setting.ts:2146
 msgid "Application"
-msgstr "Avslutar programmet"
+msgstr "Program"
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:33
 msgid "Apply"
@@ -323,7 +332,7 @@ msgid "Aritim Dark"
 msgstr "Aritim mörkt"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:53
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:588
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:589
 #: packages/app-mobile/components/screens/Note.tsx:898
 msgid "Attach file"
 msgstr "Bifoga fil"
@@ -391,13 +400,14 @@ msgstr "Automatiskt"
 msgid "Auto-pair braces, parenthesis, quotations, etc."
 msgstr "Para automatiskt hakparenteser, paranteser, situationstecken, etc."
 
+#: packages/lib/models/Setting.ts:1193
+#, fuzzy
+msgid "Automatically check for updates"
+msgstr "Sök efter uppdateringar..."
+
 #: packages/lib/models/Setting.ts:770
 msgid "Automatically switch theme to match system theme"
 msgstr "Växla automatiskt tema för att matcha systemtema"
-
-#: packages/lib/models/Setting.ts:1193
-msgid "Automatically update the application"
-msgstr "Uppdatera programmet automatiskt"
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:42
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:715
@@ -423,7 +433,7 @@ msgstr "Bläddra..."
 msgid "Bulleted List"
 msgstr "Punktlista"
 
-#: packages/app-desktop/bridge.ts:170 packages/app-desktop/bridge.ts:191
+#: packages/app-desktop/bridge.ts:189 packages/app-desktop/bridge.ts:210
 #: packages/app-desktop/checkForUpdates.ts:199
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:715
 #: packages/app-desktop/gui/DialogButtonRow.min.js:38
@@ -524,7 +534,7 @@ msgstr "Det går inte att flytta anteckningen till \"%s\" anteckningsbok"
 msgid "Cannot move notebook to this location"
 msgstr "Det går inte att flytta anteckningsboken till den här platsen"
 
-#: packages/lib/onedrive-api.ts:407
+#: packages/lib/onedrive-api.ts:408
 msgid ""
 "Cannot refresh token: authentication data is missing. Starting the "
 "synchronisation again may fix the problem."
@@ -558,7 +568,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleLayoutMoveMode.ts:7
 msgid "Change application layout"
-msgstr "Ändra applikationslayout"
+msgstr "Ändra programmets layout"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.ts:189
 msgid "Change language"
@@ -572,8 +582,8 @@ msgstr "Tecken"
 msgid "Characters excluding spaces"
 msgstr "Tecken exklusive mellanslag"
 
-#: packages/app-desktop/gui/MenuBar.tsx:458
-#: packages/app-desktop/gui/MenuBar.tsx:708
+#: packages/app-desktop/gui/MenuBar.tsx:463
+#: packages/app-desktop/gui/MenuBar.tsx:713
 msgid "Check for updates..."
 msgstr "Sök efter uppdateringar..."
 
@@ -602,7 +612,7 @@ msgstr "Välj ett alternativ"
 msgid "Chrome Web Store"
 msgstr "Chrome-webbutik"
 
-#: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:83
+#: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:112
 #: packages/app-desktop/gui/PromptDialog.min.js:249
 msgid "Clear"
 msgstr "Rensa"
@@ -637,7 +647,7 @@ msgid "Close"
 msgstr "Stäng"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:24
-#: packages/app-desktop/gui/MenuBar.tsx:521
+#: packages/app-desktop/gui/MenuBar.tsx:526
 msgid "Close Window"
 msgstr "Stäng fönster"
 
@@ -645,11 +655,11 @@ msgstr "Stäng fönster"
 msgid "Code"
 msgstr "Kod"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:598
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:599
 msgid "Code Block"
 msgstr "Kodblockering"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1163
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1164
 msgid "Code View"
 msgstr "Kodvy"
 
@@ -682,7 +692,7 @@ msgstr "kommando"
 msgid "Command"
 msgstr "Kommando"
 
-#: packages/app-desktop/plugins/GotoAnything.tsx:636
+#: packages/app-desktop/plugins/GotoAnything.tsx:637
 msgid "Command palette"
 msgstr "Kommandopalett"
 
@@ -744,10 +754,10 @@ msgstr "Konvertera till anteckning"
 msgid "Convert to todo"
 msgstr "Konvertera till att-göra"
 
-#: packages/app-desktop/gui/MenuBar.tsx:422
+#: packages/app-desktop/gui/MenuBar.tsx:427
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:13
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:755
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:143
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:760
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:151
 msgid "Copy"
 msgstr "Kopiera"
 
@@ -761,7 +771,12 @@ msgstr "Kopiera kommandot för dev-läget till urklipp"
 msgid "Copy external link"
 msgstr "Kopiera extern länk"
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:164
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:134
+#, fuzzy
+msgid "Copy image"
+msgstr "Kopiera token"
+
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:172
 msgid "Copy Link Address"
 msgstr "Kopiera länkadress"
 
@@ -770,7 +785,7 @@ msgstr "Kopiera länkadress"
 msgid "Copy Markdown link"
 msgstr "Kopiera Markdown-länk"
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:127
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:126
 msgid "Copy path to clipboard"
 msgstr "Kopiera sökväg till urklipp"
 
@@ -844,10 +859,22 @@ msgid ""
 "Could not verify the share status of this notebook - aborting. Please try "
 "again when you are connected to the internet."
 msgstr ""
+"Det gick inte att verifiera delningsstatusen för den här anteckningsboken - "
+"avbryter. Vänligen försök igen när du är ansluten till internet."
 
 #: packages/app-mobile/components/note-list.js:101
 msgid "Create a notebook"
 msgstr "Skapar en anteckningsbok"
+
+#: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:128
+#, fuzzy
+msgid "Create notebook"
+msgstr "Skapar en anteckningsbok"
+
+#: packages/server/src/routes/admin/users.ts:171
+#, fuzzy
+msgid "Create user"
+msgstr "Skapad: %s"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:29
 msgid "Created"
@@ -928,14 +955,18 @@ msgid "Custom TLS certificates"
 msgstr "Anpassade TLS-certifikat"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:18
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:745
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:135
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:750
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:143
 msgid "Cut"
 msgstr "Klipp ut"
 
 #: packages/lib/models/Setting.ts:339
 msgid "Dark"
 msgstr "Mörkt"
+
+#: packages/server/src/services/MustacheService.ts:139
+msgid "Dashboard"
+msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:625
 msgid "Database v%s"
@@ -997,7 +1028,7 @@ msgstr "Ta bort rad"
 
 #: packages/lib/models/Setting.ts:1186
 msgid "Delete local data and re-download from sync target"
-msgstr "Ta bort lokal data och hämta igen från synkroniseringsmålet"
+msgstr "Ta bort lokala data och hämta igen från synkroniseringsmålet"
 
 #: packages/lib/models/Note.ts:760
 msgid "Delete note \"%s\"?"
@@ -1225,7 +1256,7 @@ msgstr "Hämtar resurser..."
 msgid "Dracula"
 msgstr "Dracula"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1163
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1164
 msgid "Drop notes or files here"
 msgstr "Släpp anteckningar eller filer här"
 
@@ -1255,7 +1286,7 @@ msgstr ""
 "anteckningsbok är angiven kopieras anteckningen i den aktuella "
 "anteckningsboken."
 
-#: packages/app-desktop/gui/MainScreen/commands/openFolderDialog.ts:6
+#: packages/app-desktop/gui/MainScreen/commands/openFolderDialog.ts:12
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/openEditDialog.ts:83
 #: packages/app-mobile/components/screens/Note.tsx:1151
 msgid "Edit"
@@ -1269,7 +1300,7 @@ msgstr "Redigera i extern redigerare"
 msgid "Edit note."
 msgstr "Redigera anteckning."
 
-#: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:102
+#: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:128
 #: packages/app-mobile/components/screens/folder.js:109
 msgid "Edit notebook"
 msgstr "Redigera anteckningsbok"
@@ -1308,7 +1339,7 @@ msgstr "Antingen \"text\" eller \"json\""
 msgid "Emacs"
 msgstr "Emacs"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:192
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:194
 msgid "emphasised text"
 msgstr "betonad text"
 
@@ -1521,8 +1552,8 @@ msgstr "Avslutar programmet."
 msgid "Export"
 msgstr "Exportera"
 
-#: packages/app-desktop/gui/MenuBar.tsx:477
-#: packages/app-desktop/gui/MenuBar.tsx:531
+#: packages/app-desktop/gui/MenuBar.tsx:482
+#: packages/app-desktop/gui/MenuBar.tsx:536
 msgid "Export all"
 msgstr "Exportera alla"
 
@@ -1536,7 +1567,7 @@ msgstr "Exportera felsökningsrapport"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:528
 msgid "Export profile"
-msgstr "Exportera profilen"
+msgstr "Exportera profil"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:528
 msgid "Exporting profile..."
@@ -1572,7 +1603,7 @@ msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
 msgstr ""
-"Felsäkert: Rensa inte lokal data när synkroniseringsmålet är tomt (beror "
+"Felsäkert: Rensa inte lokala data när synkroniseringsmålet är tomt (beror "
 "oftast på felkonfigurering eller en bugg)"
 
 #: packages/app-cli/app/main.js:95
@@ -1612,7 +1643,7 @@ msgstr "Åtgärda sökindex"
 msgid "Fixing search index..."
 msgstr "Åtgärdar sökindex..."
 
-#: packages/app-desktop/gui/MenuBar.tsx:669
+#: packages/app-desktop/gui/MenuBar.tsx:674
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteBody.ts:7
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteTitle.ts:7
 #: packages/app-desktop/gui/NoteList/commands/focusElementNoteList.ts:8
@@ -1657,7 +1688,7 @@ msgstr ""
 
 #: packages/lib/models/Setting.ts:568
 msgid "Force path style"
-msgstr ""
+msgstr "Tvinga sökvägsstil"
 
 #: packages/lib/commands/historyForward.ts:6
 msgid "Forward"
@@ -1677,6 +1708,7 @@ msgid "Full changelog"
 msgstr "Fullständig ändringslogg"
 
 #: packages/lib/models/Setting.ts:2139
+#: packages/server/src/services/MustacheService.ts:136
 msgid "General"
 msgstr "Allmänt"
 
@@ -1713,7 +1745,7 @@ msgid "Go to source URL"
 msgstr "Gå till källans URL"
 
 #: packages/app-desktop/gui/MainScreen/commands/gotoAnything.ts:13
-#: packages/app-desktop/plugins/GotoAnything.tsx:628
+#: packages/app-desktop/plugins/GotoAnything.tsx:629
 msgid "Goto Anything..."
 msgstr "Gå till något..."
 
@@ -1725,12 +1757,11 @@ msgstr "Bevilja auktorisation"
 msgid "Heading"
 msgstr "Rubrik"
 
-#: packages/server/src/services/MustacheService.ts:201
-#, fuzzy
+#: packages/server/src/services/MustacheService.ts:299
 msgid "Help"
 msgstr "Hjälp"
 
-#: packages/app-desktop/gui/MenuBar.tsx:492
+#: packages/app-desktop/gui/MenuBar.tsx:497
 msgid "Hide %s"
 msgstr "Dölj %s"
 
@@ -1746,9 +1777,10 @@ msgstr "Dölj Joplin"
 msgid "Highlight"
 msgstr "Markera"
 
-#: packages/server/src/services/MustacheService.ts:196
+#: packages/server/src/services/MustacheService.ts:166
+#: packages/server/src/services/MustacheService.ts:294
 msgid "Home"
-msgstr ""
+msgstr "Hem"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:78
 msgid "Horizontal Rule"
@@ -1766,7 +1798,7 @@ msgstr "HTML-fil"
 msgid "Hyperlink"
 msgstr "Hyperlänk"
 
-#: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:77
+#: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:106
 msgid "Icon"
 msgstr "Icon"
 
@@ -1791,13 +1823,13 @@ msgid "Ignore TLS certificate errors"
 msgstr "Ignorera TLS-certifikatfel"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:170
-#: packages/app-desktop/gui/MenuBar.tsx:473
-#: packages/app-desktop/gui/MenuBar.tsx:528
+#: packages/app-desktop/gui/MenuBar.tsx:478
+#: packages/app-desktop/gui/MenuBar.tsx:533
 #: packages/app-desktop/gui/Root.tsx:219
 msgid "Import"
 msgstr "Importera"
 
-#: packages/app-desktop/gui/MenuBar.tsx:197
+#: packages/app-desktop/gui/MenuBar.tsx:198
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr "Importerar från \"%s\" som \"%s\" format. Vänta..."
 
@@ -1885,7 +1917,7 @@ msgstr ""
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:142
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:129
 msgid "In order to use the web clipper, you need to do the following:"
-msgstr "För att kunna använda web Clipper måste du göra följande:"
+msgstr "För att kunna använda Web Clipper måste du göra följande:"
 
 #: packages/lib/Synchronizer.ts:305
 msgid "In progress"
@@ -1907,7 +1939,7 @@ msgstr "Mer indrag"
 msgid "Information"
 msgstr "Information"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:606
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:607
 msgid "Inline Code"
 msgstr "Infoga kod"
 
@@ -1916,11 +1948,11 @@ msgid "Insert"
 msgstr "Infoga"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:83
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:622
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:623
 msgid "Insert Date Time"
 msgstr "Infoga datumtid"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:194
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:196
 msgid "Insert Hyperlink"
 msgstr "Infoga hyperlänk"
 
@@ -1961,9 +1993,8 @@ msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Ogiltigt inställningsvärde: \"%s\". Möjliga värden är: %s."
 
 #: packages/app-cli/app/command-e2ee.ts:46
-#, fuzzy
 msgid "Invalid password"
-msgstr "Ogiltigt svar: %s"
+msgstr "Ogiltigt lösenord"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:38
 msgid "Italic"
@@ -1973,7 +2004,8 @@ msgstr "Kursiv"
 msgid "Item \"%s\" could not be downloaded: %s"
 msgstr "Objektet \"%s\" kunde inte hämtas: %s"
 
-#: packages/server/src/services/MustacheService.ts:198
+#: packages/server/src/services/MustacheService.ts:174
+#: packages/server/src/services/MustacheService.ts:296
 msgid "Items"
 msgstr ""
 
@@ -2025,7 +2057,7 @@ msgstr ""
 "att de är korrupta eller för stora. Dessa objekt kommer finnas kvar på "
 "enheten men Joplin kommer inte längre försöka dekryptera dem."
 
-#: packages/app-desktop/gui/MenuBar.tsx:702
+#: packages/app-desktop/gui/MenuBar.tsx:707
 msgid "Joplin Forum"
 msgstr "Joplin-forum"
 
@@ -2107,11 +2139,11 @@ msgstr "Senaste fel: %s"
 msgid "Later"
 msgstr "Senare"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:604
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:609
 msgid "Layout"
 msgstr "Layout"
 
-#: packages/app-desktop/gui/MenuBar.tsx:597
+#: packages/app-desktop/gui/MenuBar.tsx:602
 msgid "Layout button sequence"
 msgstr "Knappordning"
 
@@ -2145,9 +2177,9 @@ msgstr[1] "Länkarna har kopierats till urklipp!"
 msgid "Links with protocol \"%s\" are not supported"
 msgstr "Länkar med protokoll \"%s\" stöds ej"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:227
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:229
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:230
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:231
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:232
 msgid "List item"
 msgstr "Listobjekt"
 
@@ -2170,7 +2202,7 @@ msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:521
 #: packages/app-mobile/components/screens/log.js:100
-#: packages/server/src/services/MustacheService.ts:199
+#: packages/server/src/services/MustacheService.ts:297
 msgid "Log"
 msgstr "Logg"
 
@@ -2190,11 +2222,15 @@ msgstr "Logga in med Dropbox"
 msgid "Login with OneDrive"
 msgstr "Logga in med OneDrive"
 
-#: packages/server/src/services/MustacheService.ts:202
+#: packages/server/src/services/MustacheService.ts:300
 msgid "Logout"
+msgstr "Logga ut"
+
+#: packages/server/src/services/MustacheService.ts:178
+msgid "Logs"
 msgstr ""
 
-#: packages/app-desktop/gui/MenuBar.tsx:705
+#: packages/app-desktop/gui/MenuBar.tsx:710
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:583
 msgid "Make a donation"
 msgstr "Gör en donation"
@@ -2328,7 +2364,7 @@ msgstr "N"
 msgid "New note"
 msgstr "Ny anteckning"
 
-#: packages/app-desktop/gui/MainScreen/commands/newFolder.ts:8
+#: packages/app-desktop/gui/MainScreen/commands/newFolder.ts:7
 msgid "New notebook"
 msgstr "Ny anteckningsbok"
 
@@ -2464,7 +2500,7 @@ msgstr "Anteckningsområdets tillväxtfaktor"
 msgid "Note attachments"
 msgstr "Anteckningsbilagor"
 
-#: packages/app-desktop/gui/MenuBar.tsx:397
+#: packages/app-desktop/gui/MenuBar.tsx:402
 msgid "Note attachments..."
 msgstr "Anteckningsbilagor..."
 
@@ -2516,22 +2552,17 @@ msgid ""
 msgstr ""
 "Notera: När en anteckning delas kan den inte längre krypteras på servern."
 
-#: packages/app-desktop/gui/MenuBar.tsx:675
+#: packages/app-desktop/gui/MenuBar.tsx:680
 msgid "Note&book"
 msgstr "Antecknings&bok"
 
 #: packages/lib/models/Setting.ts:2143
-#, fuzzy
 msgid "Notebook"
-msgstr "Anteckningsböcker"
+msgstr "Anteckningsbok"
 
 #: packages/lib/models/Setting.ts:1378
 msgid "Notebook list growth factor"
 msgstr "Anteckningsbokens tillväxtfaktor"
-
-#: packages/app-desktop/gui/MainScreen/commands/newFolder.ts:17
-msgid "Notebook title:"
-msgstr "Titel på anteckningsbok:"
 
 #: packages/app-mobile/components/side-menu-content.js:126
 msgid "Notebook: %s"
@@ -2549,9 +2580,8 @@ msgstr ""
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleNotesSortOrderField.ts:8
 #: packages/app-desktop/gui/MainScreen/commands/toggleNotesSortOrderReverse.ts:9
-#, fuzzy
 msgid "Notes"
-msgstr "Anteckning"
+msgstr "Anteckningar"
 
 #: packages/lib/models/Setting.ts:2159
 msgid "Notes and settings are stored in: %s"
@@ -2566,12 +2596,12 @@ msgstr "Anteckningar kan bara skapas i en anteckningsbok."
 msgid "Numbered List"
 msgstr "Numrerad lista"
 
-#: packages/app-desktop/bridge.ts:164 packages/app-desktop/bridge.ts:170
-#: packages/app-desktop/bridge.ts:191 packages/app-desktop/bridge.ts:201
+#: packages/app-desktop/bridge.ts:183 packages/app-desktop/bridge.ts:189
+#: packages/app-desktop/bridge.ts:210 packages/app-desktop/bridge.ts:220
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:28
 #: packages/app-desktop/gui/DialogButtonRow.min.js:30
 #: packages/app-desktop/gui/DialogButtonRow.tsx:75
-#: packages/app-desktop/gui/MenuBar.tsx:422
+#: packages/app-desktop/gui/MenuBar.tsx:427
 #: packages/app-desktop/gui/PromptDialog.min.js:235
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:26
 #: packages/app-mobile/components/CameraView.tsx:190
@@ -2637,7 +2667,7 @@ msgstr "Öppna profilmappen"
 msgid "Open Sync Wizard..."
 msgstr "Öppna synkroniseringsguiden..."
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:100
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:99
 msgid "Open..."
 msgstr "Öppna..."
 
@@ -2648,7 +2678,7 @@ msgid "Operation cancelled"
 msgstr "Operation avbruten"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:26
-#: packages/app-desktop/gui/MenuBar.tsx:383
+#: packages/app-desktop/gui/MenuBar.tsx:388
 #: packages/app-desktop/gui/Root.tsx:220
 msgid "Options"
 msgstr "Inställningar"
@@ -2688,8 +2718,8 @@ msgid "Passwords do not match!"
 msgstr "Lösenorden matchar inte!"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:23
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:765
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:150
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:770
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:158
 msgid "Paste"
 msgstr "Klistra in"
 
@@ -2772,7 +2802,7 @@ msgstr "Ange anteckningsboken som anteckningarna ska importeras till."
 msgid "Please upgrade Joplin to use this plugin"
 msgstr "Vänligen uppgradera Joplin för att använda denna insticksmodul"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1163
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1164
 msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
 "switch to %s to edit the note."
@@ -2810,7 +2840,7 @@ msgstr "Möjliga värden: %s."
 msgid "Preferences"
 msgstr "Inställningar"
 
-#: packages/app-desktop/gui/MenuBar.tsx:448
+#: packages/app-desktop/gui/MenuBar.tsx:453
 msgid "Preferences..."
 msgstr "Inställningar..."
 
@@ -2854,6 +2884,10 @@ msgstr "Skriv ut"
 msgid "Privacy Policy"
 msgstr "Integritetspolicy"
 
+#: packages/server/src/routes/admin/users.ts:168
+msgid "Profile"
+msgstr ""
+
 #: packages/lib/versionInfo.ts:26
 msgid "Profile Version: %s"
 msgstr "Profilversion: %s"
@@ -2880,7 +2914,7 @@ msgstr "Publicera anteckningar till internet"
 
 #: packages/app-desktop/app.ts:177
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:16
-#: packages/app-desktop/gui/MenuBar.tsx:255
+#: packages/app-desktop/gui/MenuBar.tsx:260
 msgid "Quit"
 msgstr "Avsluta"
 
@@ -2894,7 +2928,7 @@ msgstr "Omkryptering"
 
 #: packages/lib/models/Setting.ts:1175
 msgid "Re-upload local data to sync target"
-msgstr "Ladda upp lokal data igen för synkroniseringsmålet"
+msgstr "Ladda upp lokala data igen till synkroniseringsmålet"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:439
 msgid "Read more about it"
@@ -3009,7 +3043,8 @@ msgstr "Försök igen"
 msgid "Retry All"
 msgstr "Försök igen alla"
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:119
+#: packages/app-desktop/gui/MainScreen/commands/revealResourceFile.ts:8
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:118
 msgid "Reveal file in folder"
 msgstr "Avslöja filen i mappen"
 
@@ -3034,31 +3069,27 @@ msgstr "Kör kommandona i textfilen. Det ska finnas ett kommando per rad."
 
 #: packages/lib/SyncTargetAmazonS3.js:28
 msgid "S3"
-msgstr ""
+msgstr "S3"
 
 #: packages/lib/models/Setting.ts:546
-#, fuzzy
 msgid "S3 access key"
-msgstr "AWS-nyckel"
+msgstr "S3 åtkomstnyckel"
 
 #: packages/lib/models/Setting.ts:506
-#, fuzzy
 msgid "S3 bucket"
-msgstr "AWS S3"
+msgstr "S3 bucket"
 
 #: packages/lib/models/Setting.ts:535
 msgid "S3 region"
 msgstr ""
 
 #: packages/lib/models/Setting.ts:557
-#, fuzzy
 msgid "S3 secret key"
-msgstr "AWS-hemlighet"
+msgstr "S3 hemlig nyckel"
 
 #: packages/lib/models/Setting.ts:521
-#, fuzzy
 msgid "S3 URL"
-msgstr "AWS S3 URL"
+msgstr "S3 URL"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:579
 msgid ""
@@ -3080,7 +3111,7 @@ msgstr "Spara"
 msgid "Save alarm"
 msgstr "Spara alarm"
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:107
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:106
 msgid "Save as..."
 msgstr "Spara som..."
 
@@ -3224,9 +3255,8 @@ msgid "Show note counts"
 msgstr "Visa anteckningsantal"
 
 #: packages/lib/models/Setting.ts:866
-#, fuzzy
 msgid "Show sort order buttons"
-msgstr "Visa anteckningsantal"
+msgstr "Visa sorteringsordningsknappar"
 
 #: packages/lib/models/Setting.ts:1042
 msgid "Show tray icon"
@@ -3408,7 +3438,7 @@ msgstr "Stoppa extern redigering"
 msgid "Strikethrough"
 msgstr "Genomstryk"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:191
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:193
 msgid "strong text"
 msgstr "stark text"
 
@@ -3499,7 +3529,7 @@ msgstr "Synkroniseringsintervall"
 msgid "Synchronisation is already in progress."
 msgstr "Synkronisering pågår redan."
 
-#: packages/app-desktop/gui/MenuBar.tsx:357
+#: packages/app-desktop/gui/MenuBar.tsx:362
 #: packages/app-desktop/gui/Root.tsx:222
 msgid "Synchronisation Status"
 msgstr "Synkroniseringstillstånd"
@@ -3555,9 +3585,10 @@ msgstr "Taggar"
 msgid "Take photo"
 msgstr "Ta ett foto"
 
-#: packages/server/src/services/MustacheService.ts:200
+#: packages/server/src/services/MustacheService.ts:151
+#: packages/server/src/services/MustacheService.ts:298
 msgid "Tasks"
-msgstr ""
+msgstr "Uppgifter"
 
 #: packages/lib/models/Setting.ts:1228
 msgid "Text editor command"
@@ -3568,7 +3599,7 @@ msgid "Thank you! Your Joplin Cloud account is now setup and ready to use."
 msgstr ""
 "Tack! Ditt Joplin Cloud-konto är nu konfigurerat och klart att använda."
 
-#: packages/app-desktop/bridge.ts:258
+#: packages/app-desktop/bridge.ts:273
 msgid ""
 "The app is now going to close. Please relaunch it to complete the process."
 msgstr "Appen kommer nu att stängas. Starta om den för att slutföra processen."
@@ -3588,8 +3619,7 @@ msgstr "Programmet har godkänts."
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:619
 msgid "The application must be restarted for these changes to take effect."
-msgstr ""
-"Applikationen måste startas om för att dessa ändringar ska träda i kraft."
+msgstr "Programmet måste startas om för att dessa ändringar ska träda i kraft."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:511
 msgid ""
@@ -3616,13 +3646,13 @@ msgid ""
 "is recommended that you apply it to your data."
 msgstr ""
 "Standard krypteringsmetod har ändrats till en säkrare och det är "
-"rekommenderat att du tillämpar den på din data."
+"rekommenderat att du tillämpar den på dina data."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:603
 msgid ""
 "The default encryption method has been changed, you should re-encrypt your "
 "data."
-msgstr "Standardkrypteringsmetoden har ändrats, du bör omkryptera din data."
+msgstr "Standardkrypteringsmetoden har ändrats, du bör omkryptera dina data."
 
 #: packages/lib/models/Setting.ts:1228
 msgid ""
@@ -3761,7 +3791,7 @@ msgstr "Web Clipper behöver din behörighet för att få åtkomst till dina dat
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:84
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:83
 msgid "The web clipper service is enabled and set to auto-start."
-msgstr "Web clipper-tjänsten är aktiverad och inställd för automatisk start."
+msgstr "Web Clipper-tjänsten är aktiverad och inställd för automatisk start."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:109
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:107
@@ -3787,7 +3817,7 @@ msgstr ""
 
 #: packages/lib/services/interop/InteropService_Exporter_Jex.ts:35
 msgid "There is no data to export."
-msgstr "Det finns ingen data att exportera."
+msgstr "Det finns inga data att exportera."
 
 #: packages/lib/models/Resource.ts:412
 msgid ""
@@ -3799,7 +3829,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:70
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:69
 msgid "There was an error downloading this attachment:"
 msgstr "Ett fel uppstod vid hämtningen av denna bilaga:"
 
@@ -3843,7 +3873,7 @@ msgstr ""
 "redigeraren förlorar du insticksmodulsformateringen. Det anges nedan vilka "
 "insticksmoduler som är kompatibla eller inte med WYSIWYG-redigeraren."
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:72
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:71
 #: packages/lib/services/ResourceEditWatcher/index.ts:231
 msgid "This attachment is not downloaded or not decrypted yet"
 msgstr "Denna bilaga är inte hämtad eller inte dekrypterad ännu"
@@ -3879,7 +3909,7 @@ msgstr "Denna anteckning har inte geolokaliseringsinformation."
 msgid "This note has been modified:"
 msgstr "Denna anteckning har ändrats:"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:604
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:609
 msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
 "note."
@@ -3941,7 +3971,7 @@ msgstr "Tidsformat"
 msgid "title"
 msgstr "titel"
 
-#: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:72
+#: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:101
 #: packages/app-desktop/gui/ResourceScreen.tsx:92
 msgid "Title"
 msgstr "Titel"
@@ -4014,7 +4044,7 @@ msgstr "att-göra"
 msgid "Toggle comment"
 msgstr "Växla kommentar"
 
-#: packages/app-desktop/gui/MenuBar.tsx:717
+#: packages/app-desktop/gui/MenuBar.tsx:722
 msgid "Toggle development tools"
 msgstr "Växla utvecklingsverktyg"
 
@@ -4035,9 +4065,8 @@ msgid "Toggle note list"
 msgstr "Växla anteckningslista"
 
 #: packages/app-desktop/gui/MainScreen/commands/togglePerFolderSortOrder.ts:7
-#, fuzzy
 msgid "Toggle own sort order"
-msgstr "Växla säkert läge"
+msgstr "Växla egen sorteringsordning"
 
 #: packages/app-desktop/commands/toggleSafeMode.ts:8
 msgid "Toggle safe mode"
@@ -4048,9 +4077,8 @@ msgid "Toggle sidebar"
 msgstr "Växla sidofältet"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleNotesSortOrderField.ts:7
-#, fuzzy
 msgid "Toggle sort order field"
-msgstr "Växla säkert läge"
+msgstr "Växla sorteringsordningsfält"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:40
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:41
@@ -4081,7 +4109,7 @@ msgstr ""
 msgid "Type `joplin help` for usage information."
 msgstr "Skriv `joplin help` för användningsinformation."
 
-#: packages/app-desktop/plugins/GotoAnything.tsx:591
+#: packages/app-desktop/plugins/GotoAnything.tsx:592
 msgid ""
 "Type a note title or part of its content to jump to it. Or type # followed "
 "by a tag name, or @ followed by a notebook name. Or type : to search for "
@@ -4136,7 +4164,7 @@ msgstr ""
 msgid "Unsupported image type: %s"
 msgstr "Bildstorlek som inte stöds: %s"
 
-#: packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.ts:76
+#: packages/app-desktop/gui/MainScreen/commands/openItem.ts:35
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:142
 msgid "Unsupported link or message: %s"
 msgstr "Länk eller meddelande stöds inte: %s"
@@ -4150,6 +4178,12 @@ msgstr "Utan titel"
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:206
 msgid "Update"
 msgstr "Uppdatera"
+
+#: packages/server/src/routes/admin/users.ts:171
+#: packages/server/src/routes/index/users.ts:89
+#, fuzzy
+msgid "Update profile"
+msgstr "Exportera profil"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:208
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:209
@@ -4255,9 +4289,15 @@ msgstr ""
 "läsbart (t.ex. tabeller, kryssrutor, kod). Om det inte hittas används ett "
 "generiskt teckensnitt med monospace (fast bredd)."
 
-#: packages/server/src/services/MustacheService.ts:197
-msgid "Users"
+#: packages/server/src/services/MustacheService.ts:147
+msgid "User deletions"
 msgstr ""
+
+#: packages/server/src/routes/admin/users.ts:107
+#: packages/server/src/services/MustacheService.ts:143
+#: packages/server/src/services/MustacheService.ts:295
+msgid "Users"
+msgstr "Användare"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:182
 msgid "Valid"
@@ -4317,7 +4357,7 @@ msgid "WebDAV username"
 msgstr "WebDAV-användarnamn"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:20
-#: packages/app-desktop/gui/MenuBar.tsx:698
+#: packages/app-desktop/gui/MenuBar.tsx:703
 msgid "Website and documentation"
 msgstr "Webbplats och dokumentation"
 
@@ -4394,8 +4434,8 @@ msgid ""
 "You may use the tool below to re-encrypt your data, for example if you know "
 "that some of your notes are encrypted with an obsolete encryption method."
 msgstr ""
-"Du kan använda verktyget nedan för att omkryptera din data, exempelvis om du "
-"vill veta om vissa av dina anteckningar är krypterade med en gammal "
+"Du kan använda verktyget nedan för att omkryptera dina data, exempelvis om "
+"du vill veta om vissa av dina anteckningar är krypterade med en gammal "
 "krypteringsmetod."
 
 #: packages/app-cli/app/cli-utils.js:144
@@ -4404,18 +4444,19 @@ msgstr "Ditt val: "
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:71
 msgid "Your data is going to be re-encrypted and synced again."
-msgstr "Din data kommer att omkrypteras och synkroniseras igen."
+msgstr "Dina data kommer att omkrypteras och synkroniseras igen."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:271
 msgid "Your master password is needed to decrypt some of your data."
 msgstr "Ditt huvudlösenord behövs för att dekryptera några av dina data."
 
 #: packages/app-cli/app/command-sync.ts:242
-#, fuzzy
 msgid ""
 "Your password is needed to decrypt some of your data. Type `:e2ee decrypt` "
 "to set it."
-msgstr "Ditt huvudlösenord behövs för att dekryptera några av dina data."
+msgstr ""
+"Ditt lösenord behövs för att dekryptera en del av dina data. Skriv `:e2ee "
+"decrypt` för att ställa in det."
 
 #: packages/app-mobile/components/CameraView.tsx:189
 msgid "Your permission to use your camera is required."
@@ -4425,14 +4466,20 @@ msgstr "Du måste ge tillåtelse att använda kameran."
 msgid "Your version: %s"
 msgstr "Din version: %s"
 
-#: packages/app-desktop/gui/MenuBar.tsx:642
-#: packages/app-desktop/gui/MenuBar.tsx:648
+#: packages/app-desktop/gui/MenuBar.tsx:647
+#: packages/app-desktop/gui/MenuBar.tsx:653
 msgid "Zoom In"
 msgstr "Zooma in"
 
-#: packages/app-desktop/gui/MenuBar.tsx:655
+#: packages/app-desktop/gui/MenuBar.tsx:660
 msgid "Zoom Out"
 msgstr "Zooma ut"
+
+#~ msgid "Automatically update the application"
+#~ msgstr "Uppdatera programmet automatiskt"
+
+#~ msgid "Notebook title:"
+#~ msgstr "Titel på anteckningsbok:"
 
 #~ msgid "Master keys that need upgrading"
 #~ msgstr "Huvudnycklar behöver upgraderas"

@@ -1,6 +1,7 @@
-import { isValidOrigin, parseSubPath, splitItemPath } from './routeUtils';
+import { findMatchingRoute, isValidOrigin, parseSubPath, splitItemPath } from './routeUtils';
 import { ItemAddressingType } from '../services/database/types';
 import { RouteType } from './types';
+import { expectThrow } from './testing/testUtils';
 
 describe('routeUtils', function() {
 
@@ -24,6 +25,61 @@ describe('routeUtils', function() {
 			expect(parsed.link).toBe(link);
 			expect(parsed.addressingType).toBe(addressingType);
 		}
+	});
+
+	it('should find a matching route', async function() {
+		const testCases: any[] = [
+			['/admin/organizations', {
+				route: 1,
+				basePath: 'admin/organizations',
+				subPath: {
+					id: '',
+					link: '',
+					addressingType: 1,
+					raw: '',
+					schema: 'admin/organizations',
+				},
+			}],
+
+			['/api/users/123', {
+				route: 2,
+				basePath: 'api/users',
+				subPath: {
+					id: '123',
+					link: '',
+					addressingType: 1,
+					raw: '123',
+					schema: 'api/users/:id',
+				},
+			}],
+
+			['/help', {
+				route: 3,
+				basePath: 'help',
+				subPath: {
+					id: '',
+					link: '',
+					addressingType: 1,
+					raw: '',
+					schema: 'help',
+				},
+			}],
+		];
+
+		const routes: Record<string, any> = {
+			'admin/organizations': 1,
+			'api/users': 2,
+			'help': 3,
+		};
+
+		for (const testCase of testCases) {
+			const [path, expected] = testCase;
+			const actual = findMatchingRoute(path, routes);
+			expect(actual).toEqual(expected);
+		}
+
+		await expectThrow(async () => findMatchingRoute('help', routes));
+		await expectThrow(async () => findMatchingRoute('api/users/123', routes));
 	});
 
 	it('should split an item path', async function() {

@@ -157,10 +157,4 @@ From `packages/server`, run `npm run start-dev`
 
 # License
 
-Copyright (c) 2017-2021 Laurent Cozic
-
-Personal Use License
-
-Joplin Server is available for personal use only. For example you may host the software on your own server for non-commercial activity.
-
-To obtain a license for commercial purposes, please contact us.
+See LICENSE.md in this directory

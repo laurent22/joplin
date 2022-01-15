@@ -51,34 +51,34 @@ msgstr ""
 msgid "(wysiwyg: %s)"
 msgstr "(wysiwyg: %s)"
 
-#: packages/app-desktop/gui/MenuBar.tsx:557
-#: packages/app-desktop/gui/MenuBar.tsx:813
+#: packages/app-desktop/gui/MenuBar.tsx:562
+#: packages/app-desktop/gui/MenuBar.tsx:818
 msgid "&Edit"
 msgstr "&Редактувати"
 
-#: packages/app-desktop/gui/MenuBar.tsx:435
-#: packages/app-desktop/gui/MenuBar.tsx:513
-#: packages/app-desktop/gui/MenuBar.tsx:809
+#: packages/app-desktop/gui/MenuBar.tsx:440
+#: packages/app-desktop/gui/MenuBar.tsx:518
+#: packages/app-desktop/gui/MenuBar.tsx:814
 msgid "&File"
 msgstr "&Файл"
 
-#: packages/app-desktop/gui/MenuBar.tsx:663
+#: packages/app-desktop/gui/MenuBar.tsx:668
 msgid "&Go"
 msgstr "&Перейти"
 
-#: packages/app-desktop/gui/MenuBar.tsx:695
+#: packages/app-desktop/gui/MenuBar.tsx:700
 msgid "&Help"
 msgstr "&Допомога"
 
-#: packages/app-desktop/gui/MenuBar.tsx:681
+#: packages/app-desktop/gui/MenuBar.tsx:686
 msgid "&Note"
 msgstr "&Нотатка"
 
-#: packages/app-desktop/gui/MenuBar.tsx:691
+#: packages/app-desktop/gui/MenuBar.tsx:696
 msgid "&Tools"
 msgstr "&Інструменти"
 
-#: packages/app-desktop/gui/MenuBar.tsx:589
+#: packages/app-desktop/gui/MenuBar.tsx:594
 msgid "&View"
 msgstr "&Перегляд"
 
@@ -201,8 +201,8 @@ msgstr "A4"
 msgid "A5"
 msgstr "A5"
 
-#: packages/app-desktop/gui/MenuBar.tsx:441
-#: packages/app-desktop/gui/MenuBar.tsx:733
+#: packages/app-desktop/gui/MenuBar.tsx:446
+#: packages/app-desktop/gui/MenuBar.tsx:738
 msgid "About Joplin"
 msgstr "Про Joplin"
 
@@ -241,7 +241,7 @@ msgid "Active"
 msgstr "Активний"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:18
-#: packages/app-desktop/gui/MenuBar.tsx:631
+#: packages/app-desktop/gui/MenuBar.tsx:636
 msgid "Actual Size"
 msgstr "Фактичний розмір"
 
@@ -264,6 +264,15 @@ msgstr "Додати заголовок"
 #: packages/lib/services/spellChecker/SpellCheckerService.ts:116
 msgid "Add to dictionary"
 msgstr "Додати до словника"
+
+#: packages/server/src/services/MustacheService.ts:182
+#: packages/server/src/services/MustacheService.ts:301
+msgid "Admin"
+msgstr ""
+
+#: packages/server/src/routes/admin/dashboard.ts:10
+msgid "Admin dashboard"
+msgstr ""
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:189
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:147
@@ -323,7 +332,7 @@ msgid "Aritim Dark"
 msgstr "Aritim Dark"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:53
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:588
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:589
 #: packages/app-mobile/components/screens/Note.tsx:898
 msgid "Attach file"
 msgstr "Прикріпити файл"
@@ -392,13 +401,14 @@ msgstr "Авто"
 msgid "Auto-pair braces, parenthesis, quotations, etc."
 msgstr "Автоматичне закриття дужок, лапок тощо."
 
+#: packages/lib/models/Setting.ts:1193
+#, fuzzy
+msgid "Automatically check for updates"
+msgstr "Перевірити наявність оновлень…"
+
 #: packages/lib/models/Setting.ts:770
 msgid "Automatically switch theme to match system theme"
 msgstr "Автоматично перемикати тему на відповідність системній темі"
-
-#: packages/lib/models/Setting.ts:1193
-msgid "Automatically update the application"
-msgstr "Автоматично оновлювати програму"
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:42
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:715
@@ -424,7 +434,7 @@ msgstr "Переглянути…"
 msgid "Bulleted List"
 msgstr "Маркований список"
 
-#: packages/app-desktop/bridge.ts:170 packages/app-desktop/bridge.ts:191
+#: packages/app-desktop/bridge.ts:189 packages/app-desktop/bridge.ts:210
 #: packages/app-desktop/checkForUpdates.ts:199
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:715
 #: packages/app-desktop/gui/DialogButtonRow.min.js:38
@@ -522,7 +532,7 @@ msgstr "Не можливо перемістити нотатку до “%s” 
 msgid "Cannot move notebook to this location"
 msgstr "Не можливо перемістити блокнот в дану локацію"
 
-#: packages/lib/onedrive-api.ts:407
+#: packages/lib/onedrive-api.ts:408
 msgid ""
 "Cannot refresh token: authentication data is missing. Starting the "
 "synchronisation again may fix the problem."
@@ -563,8 +573,8 @@ msgstr "Символи"
 msgid "Characters excluding spaces"
 msgstr "Символи виключаючи пробіли"
 
-#: packages/app-desktop/gui/MenuBar.tsx:458
-#: packages/app-desktop/gui/MenuBar.tsx:708
+#: packages/app-desktop/gui/MenuBar.tsx:463
+#: packages/app-desktop/gui/MenuBar.tsx:713
 msgid "Check for updates..."
 msgstr "Перевірити наявність оновлень…"
 
@@ -593,7 +603,7 @@ msgstr "Виберіть варіант"
 msgid "Chrome Web Store"
 msgstr "Chrome Web Store"
 
-#: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:83
+#: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:112
 #: packages/app-desktop/gui/PromptDialog.min.js:249
 msgid "Clear"
 msgstr "Очистити"
@@ -627,7 +637,7 @@ msgid "Close"
 msgstr "Закрити"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:24
-#: packages/app-desktop/gui/MenuBar.tsx:521
+#: packages/app-desktop/gui/MenuBar.tsx:526
 msgid "Close Window"
 msgstr "Закрити вікно"
 
@@ -635,11 +645,11 @@ msgstr "Закрити вікно"
 msgid "Code"
 msgstr "Код"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:598
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:599
 msgid "Code Block"
 msgstr "Блок коду"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1163
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1164
 msgid "Code View"
 msgstr "Вбудований код"
 
@@ -672,7 +682,7 @@ msgstr "команда"
 msgid "Command"
 msgstr "Команда"
 
-#: packages/app-desktop/plugins/GotoAnything.tsx:636
+#: packages/app-desktop/plugins/GotoAnything.tsx:637
 msgid "Command palette"
 msgstr "Командна палітра"
 
@@ -738,10 +748,10 @@ msgstr "Перетворити на нотатку"
 msgid "Convert to todo"
 msgstr "Перетворити на список справ"
 
-#: packages/app-desktop/gui/MenuBar.tsx:422
+#: packages/app-desktop/gui/MenuBar.tsx:427
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:13
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:755
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:143
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:760
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:151
 msgid "Copy"
 msgstr "Копіювати"
 
@@ -756,7 +766,12 @@ msgstr "Скопіюйте команду режиму розробника в �
 msgid "Copy external link"
 msgstr "Зупинити зовнішнє редагування"
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:164
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:134
+#, fuzzy
+msgid "Copy image"
+msgstr "Скопіювати токен"
+
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:172
 msgid "Copy Link Address"
 msgstr "Копіювати адресу посилання"
 
@@ -765,7 +780,7 @@ msgstr "Копіювати адресу посилання"
 msgid "Copy Markdown link"
 msgstr "Скопіювати Markdown посилання"
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:127
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:126
 msgid "Copy path to clipboard"
 msgstr "Копіювати шлях до буфера обміну"
 
@@ -841,6 +856,16 @@ msgstr ""
 #: packages/app-mobile/components/note-list.js:101
 msgid "Create a notebook"
 msgstr "Створити блокнот"
+
+#: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:128
+#, fuzzy
+msgid "Create notebook"
+msgstr "Створити блокнот"
+
+#: packages/server/src/routes/admin/users.ts:171
+#, fuzzy
+msgid "Create user"
+msgstr "Створено: %s"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:29
 msgid "Created"
@@ -922,14 +947,18 @@ msgid "Custom TLS certificates"
 msgstr "Спеціальні сертифікати TLS"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:18
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:745
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:135
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:750
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:143
 msgid "Cut"
 msgstr "Вирізати"
 
 #: packages/lib/models/Setting.ts:339
 msgid "Dark"
 msgstr "Dark"
+
+#: packages/server/src/services/MustacheService.ts:139
+msgid "Dashboard"
+msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:625
 msgid "Database v%s"
@@ -1218,7 +1247,7 @@ msgstr "Завантаження ресурсів…"
 msgid "Dracula"
 msgstr "Dracula"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1163
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1164
 msgid "Drop notes or files here"
 msgstr "Перетягніть сюди нотатки або файли"
 
@@ -1248,7 +1277,7 @@ msgstr ""
 "Дублює нотатки, що відповідають <note> на [notebook]. Якщо блокнот не "
 "вказаний, нотатка дублюється в поточному блокноті."
 
-#: packages/app-desktop/gui/MainScreen/commands/openFolderDialog.ts:6
+#: packages/app-desktop/gui/MainScreen/commands/openFolderDialog.ts:12
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/openEditDialog.ts:83
 #: packages/app-mobile/components/screens/Note.tsx:1151
 msgid "Edit"
@@ -1262,7 +1291,7 @@ msgstr "Радктувати в зовнішньому редакторі"
 msgid "Edit note."
 msgstr "Редагувати примітку."
 
-#: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:102
+#: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:128
 #: packages/app-mobile/components/screens/folder.js:109
 msgid "Edit notebook"
 msgstr "Редагувати блокнот"
@@ -1302,7 +1331,7 @@ msgstr "Або “текст”, або “json”"
 msgid "Emacs"
 msgstr "Emacs"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:192
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:194
 msgid "emphasised text"
 msgstr "підкреслення"
 
@@ -1521,8 +1550,8 @@ msgstr "Вийти із програми."
 msgid "Export"
 msgstr "Експорт"
 
-#: packages/app-desktop/gui/MenuBar.tsx:477
-#: packages/app-desktop/gui/MenuBar.tsx:531
+#: packages/app-desktop/gui/MenuBar.tsx:482
+#: packages/app-desktop/gui/MenuBar.tsx:536
 msgid "Export all"
 msgstr "Експортувати все"
 
@@ -1612,7 +1641,7 @@ msgstr "Виправлення індексу пошуку"
 msgid "Fixing search index..."
 msgstr "Виправлення індексу пошуку…"
 
-#: packages/app-desktop/gui/MenuBar.tsx:669
+#: packages/app-desktop/gui/MenuBar.tsx:674
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteBody.ts:7
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteTitle.ts:7
 #: packages/app-desktop/gui/NoteList/commands/focusElementNoteList.ts:8
@@ -1680,6 +1709,7 @@ msgid "Full changelog"
 msgstr ""
 
 #: packages/lib/models/Setting.ts:2139
+#: packages/server/src/services/MustacheService.ts:136
 msgid "General"
 msgstr "Загальні"
 
@@ -1718,7 +1748,7 @@ msgid "Go to source URL"
 msgstr "Перейти до посилання"
 
 #: packages/app-desktop/gui/MainScreen/commands/gotoAnything.ts:13
-#: packages/app-desktop/plugins/GotoAnything.tsx:628
+#: packages/app-desktop/plugins/GotoAnything.tsx:629
 msgid "Goto Anything..."
 msgstr "Перейти будь-куди…"
 
@@ -1731,12 +1761,12 @@ msgstr "Токен авторизації:"
 msgid "Heading"
 msgstr "Заголовок"
 
-#: packages/server/src/services/MustacheService.ts:201
+#: packages/server/src/services/MustacheService.ts:299
 #, fuzzy
 msgid "Help"
 msgstr "&Допомога"
 
-#: packages/app-desktop/gui/MenuBar.tsx:492
+#: packages/app-desktop/gui/MenuBar.tsx:497
 msgid "Hide %s"
 msgstr "Сховати %s"
 
@@ -1752,7 +1782,8 @@ msgstr "Сховати Joplin"
 msgid "Highlight"
 msgstr ""
 
-#: packages/server/src/services/MustacheService.ts:196
+#: packages/server/src/services/MustacheService.ts:166
+#: packages/server/src/services/MustacheService.ts:294
 msgid "Home"
 msgstr ""
 
@@ -1772,7 +1803,7 @@ msgstr "HTML File"
 msgid "Hyperlink"
 msgstr "Посилання"
 
-#: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:77
+#: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:106
 msgid "Icon"
 msgstr ""
 
@@ -1797,13 +1828,13 @@ msgid "Ignore TLS certificate errors"
 msgstr "Ігнорувати помилки сертифіката TLS"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:170
-#: packages/app-desktop/gui/MenuBar.tsx:473
-#: packages/app-desktop/gui/MenuBar.tsx:528
+#: packages/app-desktop/gui/MenuBar.tsx:478
+#: packages/app-desktop/gui/MenuBar.tsx:533
 #: packages/app-desktop/gui/Root.tsx:219
 msgid "Import"
 msgstr "Імпорт"
 
-#: packages/app-desktop/gui/MenuBar.tsx:197
+#: packages/app-desktop/gui/MenuBar.tsx:198
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr "Імпортування з “%s” в форматі “%s”. Будь ласка, зачекайте…"
 
@@ -1914,7 +1945,7 @@ msgstr "Збільшити відступ"
 msgid "Information"
 msgstr "Інформація"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:606
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:607
 msgid "Inline Code"
 msgstr "Вбудований код"
 
@@ -1923,11 +1954,11 @@ msgid "Insert"
 msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:83
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:622
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:623
 msgid "Insert Date Time"
 msgstr "Вставити дату"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:194
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:196
 msgid "Insert Hyperlink"
 msgstr "Вставити Посилання"
 
@@ -1980,7 +2011,8 @@ msgstr "Курсив"
 msgid "Item \"%s\" could not be downloaded: %s"
 msgstr "Не вдалося завантажити елемент “%s”: %s"
 
-#: packages/server/src/services/MustacheService.ts:198
+#: packages/server/src/services/MustacheService.ts:174
+#: packages/server/src/services/MustacheService.ts:296
 msgid "Items"
 msgstr ""
 
@@ -2033,7 +2065,7 @@ msgstr ""
 "пошкоджені або занадто великі. Ці елементи залишаться на пристрої, але "
 "Joplin більше не намагатиметься їх розшифрувати."
 
-#: packages/app-desktop/gui/MenuBar.tsx:702
+#: packages/app-desktop/gui/MenuBar.tsx:707
 msgid "Joplin Forum"
 msgstr "Форум Joplin"
 
@@ -2114,11 +2146,11 @@ msgstr "Остання помилка: %s"
 msgid "Later"
 msgstr "Пізніше"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:604
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:609
 msgid "Layout"
 msgstr "Макет"
 
-#: packages/app-desktop/gui/MenuBar.tsx:597
+#: packages/app-desktop/gui/MenuBar.tsx:602
 msgid "Layout button sequence"
 msgstr "Послідовність кнопок макета"
 
@@ -2154,9 +2186,9 @@ msgstr[2] "Посилання скопійовані в буфер обміну!
 msgid "Links with protocol \"%s\" are not supported"
 msgstr "Посилання з протоколом “%s” не підтримуються"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:227
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:229
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:230
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:231
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:232
 msgid "List item"
 msgstr "Елемент списку"
 
@@ -2180,7 +2212,7 @@ msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:521
 #: packages/app-mobile/components/screens/log.js:100
-#: packages/server/src/services/MustacheService.ts:199
+#: packages/server/src/services/MustacheService.ts:297
 msgid "Log"
 msgstr "Логи"
 
@@ -2200,11 +2232,15 @@ msgstr "Ввійти з Dropbox"
 msgid "Login with OneDrive"
 msgstr "Ввійти з OneDrive"
 
-#: packages/server/src/services/MustacheService.ts:202
+#: packages/server/src/services/MustacheService.ts:300
 msgid "Logout"
 msgstr ""
 
-#: packages/app-desktop/gui/MenuBar.tsx:705
+#: packages/server/src/services/MustacheService.ts:178
+msgid "Logs"
+msgstr ""
+
+#: packages/app-desktop/gui/MenuBar.tsx:710
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:583
 msgid "Make a donation"
 msgstr "Зробити пожертву"
@@ -2347,7 +2383,7 @@ msgstr "Ні"
 msgid "New note"
 msgstr "Нова нотатка"
 
-#: packages/app-desktop/gui/MainScreen/commands/newFolder.ts:8
+#: packages/app-desktop/gui/MainScreen/commands/newFolder.ts:7
 msgid "New notebook"
 msgstr "Новий блокнот"
 
@@ -2482,7 +2518,7 @@ msgstr "Фатор зростання зони нотаток"
 msgid "Note attachments"
 msgstr "Вкладення нотатки"
 
-#: packages/app-desktop/gui/MenuBar.tsx:397
+#: packages/app-desktop/gui/MenuBar.tsx:402
 msgid "Note attachments..."
 msgstr "Вкладення нотаток…"
 
@@ -2535,7 +2571,7 @@ msgstr ""
 "Примітка. Коли нотатка надається спільно, вона більше не буде зашифрована на "
 "сервері."
 
-#: packages/app-desktop/gui/MenuBar.tsx:675
+#: packages/app-desktop/gui/MenuBar.tsx:680
 #, fuzzy
 msgid "Note&book"
 msgstr "Блокноти"
@@ -2548,10 +2584,6 @@ msgstr "Блокноти"
 #: packages/lib/models/Setting.ts:1378
 msgid "Notebook list growth factor"
 msgstr "Фактор зростання списку блокнотів"
-
-#: packages/app-desktop/gui/MainScreen/commands/newFolder.ts:17
-msgid "Notebook title:"
-msgstr "Заголовок блокнота:"
 
 #: packages/app-mobile/components/side-menu-content.js:126
 msgid "Notebook: %s"
@@ -2585,12 +2617,12 @@ msgstr "Нотатки можна створювати лише в блокно�
 msgid "Numbered List"
 msgstr "Нумерований список"
 
-#: packages/app-desktop/bridge.ts:164 packages/app-desktop/bridge.ts:170
-#: packages/app-desktop/bridge.ts:191 packages/app-desktop/bridge.ts:201
+#: packages/app-desktop/bridge.ts:183 packages/app-desktop/bridge.ts:189
+#: packages/app-desktop/bridge.ts:210 packages/app-desktop/bridge.ts:220
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:28
 #: packages/app-desktop/gui/DialogButtonRow.min.js:30
 #: packages/app-desktop/gui/DialogButtonRow.tsx:75
-#: packages/app-desktop/gui/MenuBar.tsx:422
+#: packages/app-desktop/gui/MenuBar.tsx:427
 #: packages/app-desktop/gui/PromptDialog.min.js:235
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:26
 #: packages/app-mobile/components/CameraView.tsx:190
@@ -2656,7 +2688,7 @@ msgstr "Відкрити каталог профілю"
 msgid "Open Sync Wizard..."
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:100
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:99
 msgid "Open..."
 msgstr "Відкрити..."
 
@@ -2667,7 +2699,7 @@ msgid "Operation cancelled"
 msgstr "Операцію скасовано"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:26
-#: packages/app-desktop/gui/MenuBar.tsx:383
+#: packages/app-desktop/gui/MenuBar.tsx:388
 #: packages/app-desktop/gui/Root.tsx:220
 msgid "Options"
 msgstr "Властивості"
@@ -2708,8 +2740,8 @@ msgid "Passwords do not match!"
 msgstr "Паролі не співпадають!"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:23
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:765
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:150
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:770
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:158
 msgid "Paste"
 msgstr "Вставити"
 
@@ -2792,7 +2824,7 @@ msgstr "Будь ласка, вкажіть блокнот, куди слід і
 msgid "Please upgrade Joplin to use this plugin"
 msgstr "Будь ласка, оновіть Joplin для використання даного рощширення"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1163
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1164
 msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
 "switch to %s to edit the note."
@@ -2830,7 +2862,7 @@ msgstr "Можливі значення: %s."
 msgid "Preferences"
 msgstr "Налаштування"
 
-#: packages/app-desktop/gui/MenuBar.tsx:448
+#: packages/app-desktop/gui/MenuBar.tsx:453
 msgid "Preferences..."
 msgstr "Налаштування…"
 
@@ -2874,6 +2906,10 @@ msgstr "Друкувати"
 msgid "Privacy Policy"
 msgstr "Політика конфіденційності"
 
+#: packages/server/src/routes/admin/users.ts:168
+msgid "Profile"
+msgstr ""
+
 #: packages/lib/versionInfo.ts:26
 msgid "Profile Version: %s"
 msgstr "Версія профайлу: %s"
@@ -2901,7 +2937,7 @@ msgstr ""
 
 #: packages/app-desktop/app.ts:177
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:16
-#: packages/app-desktop/gui/MenuBar.tsx:255
+#: packages/app-desktop/gui/MenuBar.tsx:260
 msgid "Quit"
 msgstr "Вихід"
 
@@ -3029,7 +3065,8 @@ msgstr "Повторити"
 msgid "Retry All"
 msgstr "Повторити всі"
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:119
+#: packages/app-desktop/gui/MainScreen/commands/revealResourceFile.ts:8
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:118
 msgid "Reveal file in folder"
 msgstr "Показати файл у папці"
 
@@ -3098,7 +3135,7 @@ msgstr "Зберегти"
 msgid "Save alarm"
 msgstr "Зберегти будильник"
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:107
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:106
 msgid "Save as..."
 msgstr "Зберегти як..."
 
@@ -3432,7 +3469,7 @@ msgstr "Зупинити зовнішнє редагування"
 msgid "Strikethrough"
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:191
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:193
 msgid "strong text"
 msgstr "жирний текст"
 
@@ -3524,7 +3561,7 @@ msgstr "Інтервал синхронізації"
 msgid "Synchronisation is already in progress."
 msgstr "Синхронізація вже триває."
 
-#: packages/app-desktop/gui/MenuBar.tsx:357
+#: packages/app-desktop/gui/MenuBar.tsx:362
 #: packages/app-desktop/gui/Root.tsx:222
 msgid "Synchronisation Status"
 msgstr "Статус синхронізації"
@@ -3581,7 +3618,8 @@ msgstr "Теги"
 msgid "Take photo"
 msgstr "Зробити фото"
 
-#: packages/server/src/services/MustacheService.ts:200
+#: packages/server/src/services/MustacheService.ts:151
+#: packages/server/src/services/MustacheService.ts:298
 msgid "Tasks"
 msgstr ""
 
@@ -3593,7 +3631,7 @@ msgstr "Команда текстового редактора"
 msgid "Thank you! Your Joplin Cloud account is now setup and ready to use."
 msgstr ""
 
-#: packages/app-desktop/bridge.ts:258
+#: packages/app-desktop/bridge.ts:273
 msgid ""
 "The app is now going to close. Please relaunch it to complete the process."
 msgstr ""
@@ -3816,7 +3854,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:70
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:69
 msgid "There was an error downloading this attachment:"
 msgstr "Під час завантаження цього вкладення сталася помилка:"
 
@@ -3856,7 +3894,7 @@ msgstr ""
 "форматування плагіна. Внизу вказано, які плагіни сумісні чи ні з редактором "
 "WYSIWYG."
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:72
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:71
 #: packages/lib/services/ResourceEditWatcher/index.ts:231
 msgid "This attachment is not downloaded or not decrypted yet"
 msgstr "Це вкладення ще не завантажено або ще не розшифроване"
@@ -3892,7 +3930,7 @@ msgstr "Ця нотатка не містить інформації про ге
 msgid "This note has been modified:"
 msgstr "Ця нотатка була модифікована:"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:604
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:609
 msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
 "note."
@@ -3951,7 +3989,7 @@ msgstr "Формат часу"
 msgid "title"
 msgstr "заголовок"
 
-#: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:72
+#: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:101
 #: packages/app-desktop/gui/ResourceScreen.tsx:92
 msgid "Title"
 msgstr "Заголовок"
@@ -4025,7 +4063,7 @@ msgstr "справи"
 msgid "Toggle comment"
 msgstr "Переключити коментар"
 
-#: packages/app-desktop/gui/MenuBar.tsx:717
+#: packages/app-desktop/gui/MenuBar.tsx:722
 msgid "Toggle development tools"
 msgstr "Перемикач інструментів розробника"
 
@@ -4093,7 +4131,7 @@ msgstr ""
 msgid "Type `joplin help` for usage information."
 msgstr "Введіть `joplin help` для отримання інформації про використання."
 
-#: packages/app-desktop/plugins/GotoAnything.tsx:591
+#: packages/app-desktop/plugins/GotoAnything.tsx:592
 msgid ""
 "Type a note title or part of its content to jump to it. Or type # followed "
 "by a tag name, or @ followed by a notebook name. Or type : to search for "
@@ -4149,7 +4187,7 @@ msgstr ""
 msgid "Unsupported image type: %s"
 msgstr "Непідтримуваний тип зображення: %s"
 
-#: packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.ts:76
+#: packages/app-desktop/gui/MainScreen/commands/openItem.ts:35
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:142
 msgid "Unsupported link or message: %s"
 msgstr "Непідтримуване посилання або повідомлення: %s"
@@ -4163,6 +4201,12 @@ msgstr "Без назви"
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:206
 msgid "Update"
 msgstr "Оновити"
+
+#: packages/server/src/routes/admin/users.ts:171
+#: packages/server/src/routes/index/users.ts:89
+#, fuzzy
+msgid "Update profile"
+msgstr "Експорт профілю"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:208
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:209
@@ -4264,7 +4308,13 @@ msgid ""
 "font is used."
 msgstr ""
 
-#: packages/server/src/services/MustacheService.ts:197
+#: packages/server/src/services/MustacheService.ts:147
+msgid "User deletions"
+msgstr ""
+
+#: packages/server/src/routes/admin/users.ts:107
+#: packages/server/src/services/MustacheService.ts:143
+#: packages/server/src/services/MustacheService.ts:295
 msgid "Users"
 msgstr ""
 
@@ -4328,7 +4378,7 @@ msgid "WebDAV username"
 msgstr "WebDAV користувач"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:20
-#: packages/app-desktop/gui/MenuBar.tsx:698
+#: packages/app-desktop/gui/MenuBar.tsx:703
 msgid "Website and documentation"
 msgstr "Вебсайт та документація"
 
@@ -4435,14 +4485,20 @@ msgstr "Ваш дозвіл на використання камери є обо
 msgid "Your version: %s"
 msgstr "Ваша версія: %s"
 
-#: packages/app-desktop/gui/MenuBar.tsx:642
-#: packages/app-desktop/gui/MenuBar.tsx:648
+#: packages/app-desktop/gui/MenuBar.tsx:647
+#: packages/app-desktop/gui/MenuBar.tsx:653
 msgid "Zoom In"
 msgstr "Збільшити"
 
-#: packages/app-desktop/gui/MenuBar.tsx:655
+#: packages/app-desktop/gui/MenuBar.tsx:660
 msgid "Zoom Out"
 msgstr "Зменшити"
+
+#~ msgid "Automatically update the application"
+#~ msgstr "Автоматично оновлювати програму"
+
+#~ msgid "Notebook title:"
+#~ msgstr "Заголовок блокнота:"
 
 #~ msgid "AWS S3"
 #~ msgstr "AWS S3"

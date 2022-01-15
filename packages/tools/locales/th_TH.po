@@ -47,35 +47,35 @@ msgstr ""
 msgid "(wysiwyg: %s)"
 msgstr ""
 
-#: packages/app-desktop/gui/MenuBar.tsx:557
-#: packages/app-desktop/gui/MenuBar.tsx:813
+#: packages/app-desktop/gui/MenuBar.tsx:562
+#: packages/app-desktop/gui/MenuBar.tsx:818
 msgid "&Edit"
 msgstr "&แก้ไข"
 
-#: packages/app-desktop/gui/MenuBar.tsx:435
-#: packages/app-desktop/gui/MenuBar.tsx:513
-#: packages/app-desktop/gui/MenuBar.tsx:809
+#: packages/app-desktop/gui/MenuBar.tsx:440
+#: packages/app-desktop/gui/MenuBar.tsx:518
+#: packages/app-desktop/gui/MenuBar.tsx:814
 msgid "&File"
 msgstr "&ไฟล์"
 
-#: packages/app-desktop/gui/MenuBar.tsx:663
+#: packages/app-desktop/gui/MenuBar.tsx:668
 msgid "&Go"
 msgstr ""
 
-#: packages/app-desktop/gui/MenuBar.tsx:695
+#: packages/app-desktop/gui/MenuBar.tsx:700
 msgid "&Help"
 msgstr "&ช่วยเหลือ"
 
-#: packages/app-desktop/gui/MenuBar.tsx:681
+#: packages/app-desktop/gui/MenuBar.tsx:686
 #, fuzzy
 msgid "&Note"
 msgstr "บันทึก"
 
-#: packages/app-desktop/gui/MenuBar.tsx:691
+#: packages/app-desktop/gui/MenuBar.tsx:696
 msgid "&Tools"
 msgstr "&เครื่องมือ"
 
-#: packages/app-desktop/gui/MenuBar.tsx:589
+#: packages/app-desktop/gui/MenuBar.tsx:594
 msgid "&View"
 msgstr "&มุมมอง"
 
@@ -192,8 +192,8 @@ msgstr "A4"
 msgid "A5"
 msgstr "A5"
 
-#: packages/app-desktop/gui/MenuBar.tsx:441
-#: packages/app-desktop/gui/MenuBar.tsx:733
+#: packages/app-desktop/gui/MenuBar.tsx:446
+#: packages/app-desktop/gui/MenuBar.tsx:738
 msgid "About Joplin"
 msgstr "เกี่ยวกับ Joplin"
 
@@ -232,7 +232,7 @@ msgid "Active"
 msgstr "การกระทำ"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:18
-#: packages/app-desktop/gui/MenuBar.tsx:631
+#: packages/app-desktop/gui/MenuBar.tsx:636
 #, fuzzy
 msgid "Actual Size"
 msgstr "ขนาดจริง"
@@ -255,6 +255,15 @@ msgstr "เพิ่มชื่อเรื่อง"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.ts:116
 msgid "Add to dictionary"
+msgstr ""
+
+#: packages/server/src/services/MustacheService.ts:182
+#: packages/server/src/services/MustacheService.ts:301
+msgid "Admin"
+msgstr ""
+
+#: packages/server/src/routes/admin/dashboard.ts:10
+msgid "Admin dashboard"
 msgstr ""
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:189
@@ -318,7 +327,7 @@ msgid "Aritim Dark"
 msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:53
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:588
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:589
 #: packages/app-mobile/components/screens/Note.tsx:898
 msgid "Attach file"
 msgstr "แนบไฟล์"
@@ -388,13 +397,14 @@ msgstr "อัตโนมัติ"
 msgid "Auto-pair braces, parenthesis, quotations, etc."
 msgstr "จับคู่อัตโนมัติ {}, (), \"\", ฯลฯ"
 
+#: packages/lib/models/Setting.ts:1193
+#, fuzzy
+msgid "Automatically check for updates"
+msgstr "ตรวจสอบการอัพเดท..."
+
 #: packages/lib/models/Setting.ts:770
 msgid "Automatically switch theme to match system theme"
 msgstr ""
-
-#: packages/lib/models/Setting.ts:1193
-msgid "Automatically update the application"
-msgstr "อัพเดทแอปพลิเคชั่นอัตโนมัติ"
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:42
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:715
@@ -423,7 +433,7 @@ msgstr "เปิด..."
 msgid "Bulleted List"
 msgstr "รายการ"
 
-#: packages/app-desktop/bridge.ts:170 packages/app-desktop/bridge.ts:191
+#: packages/app-desktop/bridge.ts:189 packages/app-desktop/bridge.ts:210
 #: packages/app-desktop/checkForUpdates.ts:199
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:715
 #: packages/app-desktop/gui/DialogButtonRow.min.js:38
@@ -527,7 +537,7 @@ msgstr "ไม่สามารถย้ายบันทึกไปที่
 msgid "Cannot move notebook to this location"
 msgstr "ไม่สามารถย้ายสมุดบันทึกมาที่ตำแหน่งนี้"
 
-#: packages/lib/onedrive-api.ts:407
+#: packages/lib/onedrive-api.ts:408
 msgid ""
 "Cannot refresh token: authentication data is missing. Starting the "
 "synchronisation again may fix the problem."
@@ -567,8 +577,8 @@ msgstr "ตัวอักษร"
 msgid "Characters excluding spaces"
 msgstr "ตัวอักษรไม่รวมวรรค"
 
-#: packages/app-desktop/gui/MenuBar.tsx:458
-#: packages/app-desktop/gui/MenuBar.tsx:708
+#: packages/app-desktop/gui/MenuBar.tsx:463
+#: packages/app-desktop/gui/MenuBar.tsx:713
 msgid "Check for updates..."
 msgstr "ตรวจสอบการอัพเดท..."
 
@@ -598,7 +608,7 @@ msgstr "เลือก"
 msgid "Chrome Web Store"
 msgstr "Chrome Web Store"
 
-#: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:83
+#: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:112
 #: packages/app-desktop/gui/PromptDialog.min.js:249
 #, fuzzy
 msgid "Clear"
@@ -632,7 +642,7 @@ msgid "Close"
 msgstr "ปิด"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:24
-#: packages/app-desktop/gui/MenuBar.tsx:521
+#: packages/app-desktop/gui/MenuBar.tsx:526
 msgid "Close Window"
 msgstr "ปิดหน้าต่าง"
 
@@ -640,11 +650,11 @@ msgstr "ปิดหน้าต่าง"
 msgid "Code"
 msgstr "Code"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:598
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:599
 msgid "Code Block"
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1163
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1164
 #, fuzzy
 msgid "Code View"
 msgstr "Code"
@@ -674,7 +684,7 @@ msgstr ""
 msgid "Command"
 msgstr ""
 
-#: packages/app-desktop/plugins/GotoAnything.tsx:636
+#: packages/app-desktop/plugins/GotoAnything.tsx:637
 msgid "Command palette"
 msgstr ""
 
@@ -740,10 +750,10 @@ msgstr "แปลงเป็นบันทึก"
 msgid "Convert to todo"
 msgstr "แปลงเป็น to-do"
 
-#: packages/app-desktop/gui/MenuBar.tsx:422
+#: packages/app-desktop/gui/MenuBar.tsx:427
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:13
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:755
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:143
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:760
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:151
 msgid "Copy"
 msgstr "คัดลอก"
 
@@ -759,7 +769,12 @@ msgstr "คัดลอกที่อยู่ (path) ไปที่คลิ�
 msgid "Copy external link"
 msgstr "หยุดการแก้ไขภายนอก"
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:164
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:134
+#, fuzzy
+msgid "Copy image"
+msgstr "คัดลอก Token"
+
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:172
 msgid "Copy Link Address"
 msgstr "คัดลอกที่อยู่ลิงก์"
 
@@ -768,7 +783,7 @@ msgstr "คัดลอกที่อยู่ลิงก์"
 msgid "Copy Markdown link"
 msgstr "คัดลอกลิงก์ Markdown"
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:127
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:126
 msgid "Copy path to clipboard"
 msgstr "คัดลอกที่อยู่ (path) ไปที่คลิปบอร์ด"
 
@@ -837,6 +852,16 @@ msgstr ""
 #: packages/app-mobile/components/note-list.js:101
 msgid "Create a notebook"
 msgstr "สร้างสมุดบันทึก"
+
+#: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:128
+#, fuzzy
+msgid "Create notebook"
+msgstr "สร้างสมุดบันทึก"
+
+#: packages/server/src/routes/admin/users.ts:171
+#, fuzzy
+msgid "Create user"
+msgstr "สร้างเมื่อ: %s"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:29
 msgid "Created"
@@ -923,8 +948,8 @@ msgid "Custom TLS certificates"
 msgstr "TLS certificate แบบกำหนดเอง"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:18
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:745
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:135
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:750
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:143
 msgid "Cut"
 msgstr "ตัด"
 
@@ -932,6 +957,10 @@ msgstr "ตัด"
 #, fuzzy
 msgid "Dark"
 msgstr "มืด"
+
+#: packages/server/src/services/MustacheService.ts:139
+msgid "Dashboard"
+msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:625
 #, fuzzy
@@ -1218,7 +1247,7 @@ msgstr "กำลังดาวน์โหลดทรัพยากร..."
 msgid "Dracula"
 msgstr "Dracula"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1163
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1164
 msgid "Drop notes or files here"
 msgstr ""
 
@@ -1246,7 +1275,7 @@ msgid ""
 "specified the note is duplicated in the current notebook."
 msgstr ""
 
-#: packages/app-desktop/gui/MainScreen/commands/openFolderDialog.ts:6
+#: packages/app-desktop/gui/MainScreen/commands/openFolderDialog.ts:12
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/openEditDialog.ts:83
 #: packages/app-mobile/components/screens/Note.tsx:1151
 msgid "Edit"
@@ -1261,7 +1290,7 @@ msgstr "แก้ไขด้วยโปรแกรมภายนอก"
 msgid "Edit note."
 msgstr "แก้ไขบันทึก"
 
-#: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:102
+#: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:128
 #: packages/app-mobile/components/screens/folder.js:109
 msgid "Edit notebook"
 msgstr "แก้ไขสมุดบันทึก"
@@ -1302,7 +1331,7 @@ msgstr "ไม่ “text” ก็ “json”"
 msgid "Emacs"
 msgstr "Emacs"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:192
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:194
 msgid "emphasised text"
 msgstr ""
 
@@ -1522,8 +1551,8 @@ msgstr "ออกจากแอปพลิเคชั่น"
 msgid "Export"
 msgstr "ส่งออก"
 
-#: packages/app-desktop/gui/MenuBar.tsx:477
-#: packages/app-desktop/gui/MenuBar.tsx:531
+#: packages/app-desktop/gui/MenuBar.tsx:482
+#: packages/app-desktop/gui/MenuBar.tsx:536
 #, fuzzy
 msgid "Export all"
 msgstr "ส่งออก"
@@ -1613,7 +1642,7 @@ msgstr "ซ่อมดัชนีย์ค้นหา"
 msgid "Fixing search index..."
 msgstr "กำลังซ่อมดัชนีค้นหา..."
 
-#: packages/app-desktop/gui/MenuBar.tsx:669
+#: packages/app-desktop/gui/MenuBar.tsx:674
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteBody.ts:7
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteTitle.ts:7
 #: packages/app-desktop/gui/NoteList/commands/focusElementNoteList.ts:8
@@ -1680,6 +1709,7 @@ msgid "Full changelog"
 msgstr ""
 
 #: packages/lib/models/Setting.ts:2139
+#: packages/server/src/services/MustacheService.ts:136
 msgid "General"
 msgstr "ทั่วไป"
 
@@ -1713,7 +1743,7 @@ msgid "Go to source URL"
 msgstr "ไปที่ URL แหล่งที่มา"
 
 #: packages/app-desktop/gui/MainScreen/commands/gotoAnything.ts:13
-#: packages/app-desktop/plugins/GotoAnything.tsx:628
+#: packages/app-desktop/plugins/GotoAnything.tsx:629
 msgid "Goto Anything..."
 msgstr ""
 
@@ -1726,11 +1756,11 @@ msgstr "Token สำหรับการขออนุมัติ:"
 msgid "Heading"
 msgstr "หัวข้อ"
 
-#: packages/server/src/services/MustacheService.ts:201
+#: packages/server/src/services/MustacheService.ts:299
 msgid "Help"
 msgstr "ช่วยเหลือ"
 
-#: packages/app-desktop/gui/MenuBar.tsx:492
+#: packages/app-desktop/gui/MenuBar.tsx:497
 msgid "Hide %s"
 msgstr "ซ่อน %s"
 
@@ -1747,7 +1777,8 @@ msgstr "เกี่ยวกับ Joplin"
 msgid "Highlight"
 msgstr ""
 
-#: packages/server/src/services/MustacheService.ts:196
+#: packages/server/src/services/MustacheService.ts:166
+#: packages/server/src/services/MustacheService.ts:294
 msgid "Home"
 msgstr ""
 
@@ -1768,7 +1799,7 @@ msgstr "ไฟล์ HTML"
 msgid "Hyperlink"
 msgstr "ไฮเปอร์ลิงก์"
 
-#: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:77
+#: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:106
 msgid "Icon"
 msgstr "ไอคอน"
 
@@ -1795,13 +1826,13 @@ msgid "Ignore TLS certificate errors"
 msgstr "เพิกเฉยข้อผิดพลาด TLS certificate"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:170
-#: packages/app-desktop/gui/MenuBar.tsx:473
-#: packages/app-desktop/gui/MenuBar.tsx:528
+#: packages/app-desktop/gui/MenuBar.tsx:478
+#: packages/app-desktop/gui/MenuBar.tsx:533
 #: packages/app-desktop/gui/Root.tsx:219
 msgid "Import"
 msgstr "นำเข้า"
 
-#: packages/app-desktop/gui/MenuBar.tsx:197
+#: packages/app-desktop/gui/MenuBar.tsx:198
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr "กำลังนำเข้าจาก “%s” ไปเป็นฟอร์แมต “%s” โปรดรอสักครู่..."
 
@@ -1884,7 +1915,7 @@ msgstr ""
 msgid "Information"
 msgstr "ข้อมูล"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:606
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:607
 msgid "Inline Code"
 msgstr ""
 
@@ -1893,11 +1924,11 @@ msgid "Insert"
 msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:83
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:622
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:623
 msgid "Insert Date Time"
 msgstr "แทรก วันที่และเวลา"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:194
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:196
 msgid "Insert Hyperlink"
 msgstr "แทรกไฮเปอร์ลิงก์"
 
@@ -1954,7 +1985,8 @@ msgstr "ตัวเอียง"
 msgid "Item \"%s\" could not be downloaded: %s"
 msgstr "รายการ “%s” ไม่สามารถดาวน์โหลด: %s"
 
-#: packages/server/src/services/MustacheService.ts:198
+#: packages/server/src/services/MustacheService.ts:174
+#: packages/server/src/services/MustacheService.ts:296
 msgid "Items"
 msgstr ""
 
@@ -2004,7 +2036,7 @@ msgid ""
 "will no longer attempt to decrypt them."
 msgstr ""
 
-#: packages/app-desktop/gui/MenuBar.tsx:702
+#: packages/app-desktop/gui/MenuBar.tsx:707
 #, fuzzy
 msgid "Joplin Forum"
 msgstr "Joplin Forum"
@@ -2088,11 +2120,11 @@ msgstr "ข้อผิดพลาดล่าสุด: %s"
 msgid "Later"
 msgstr "ภายหลัง"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:604
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:609
 msgid "Layout"
 msgstr ""
 
-#: packages/app-desktop/gui/MenuBar.tsx:597
+#: packages/app-desktop/gui/MenuBar.tsx:602
 msgid "Layout button sequence"
 msgstr ""
 
@@ -2127,9 +2159,9 @@ msgstr[0] "ลิงก์ได้ถูกคัดลอกไปที่ค
 msgid "Links with protocol \"%s\" are not supported"
 msgstr "ไม่รองรับลิงก์ที่ใช้โปรโตคอลนี้ “%s”"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:227
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:229
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:230
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:231
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:232
 msgid "List item"
 msgstr ""
 
@@ -2152,7 +2184,7 @@ msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:521
 #: packages/app-mobile/components/screens/log.js:100
-#: packages/server/src/services/MustacheService.ts:199
+#: packages/server/src/services/MustacheService.ts:297
 msgid "Log"
 msgstr ""
 
@@ -2172,11 +2204,15 @@ msgstr "เข้าสู่ระบบด้วย Dropbox"
 msgid "Login with OneDrive"
 msgstr "เข้าสู่ระบบด้วย OneDrive"
 
-#: packages/server/src/services/MustacheService.ts:202
+#: packages/server/src/services/MustacheService.ts:300
 msgid "Logout"
 msgstr ""
 
-#: packages/app-desktop/gui/MenuBar.tsx:705
+#: packages/server/src/services/MustacheService.ts:178
+msgid "Logs"
+msgstr ""
+
+#: packages/app-desktop/gui/MenuBar.tsx:710
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:583
 #, fuzzy
 msgid "Make a donation"
@@ -2319,7 +2355,7 @@ msgstr "N"
 msgid "New note"
 msgstr "สร้างบันทึกใหม่"
 
-#: packages/app-desktop/gui/MainScreen/commands/newFolder.ts:8
+#: packages/app-desktop/gui/MainScreen/commands/newFolder.ts:7
 msgid "New notebook"
 msgstr "สร้างสมุดบันทึกใหม่"
 
@@ -2457,7 +2493,7 @@ msgstr ""
 msgid "Note attachments"
 msgstr "ไฟล์แนบ"
 
-#: packages/app-desktop/gui/MenuBar.tsx:397
+#: packages/app-desktop/gui/MenuBar.tsx:402
 #, fuzzy
 msgid "Note attachments..."
 msgstr "ไฟล์แนบ"
@@ -2512,7 +2548,7 @@ msgid ""
 "Note: When a note is shared, it will no longer be encrypted on the server."
 msgstr ""
 
-#: packages/app-desktop/gui/MenuBar.tsx:675
+#: packages/app-desktop/gui/MenuBar.tsx:680
 #, fuzzy
 msgid "Note&book"
 msgstr "สมุดบันทึก"
@@ -2525,10 +2561,6 @@ msgstr "สมุดบันทึก"
 #: packages/lib/models/Setting.ts:1378
 msgid "Notebook list growth factor"
 msgstr ""
-
-#: packages/app-desktop/gui/MainScreen/commands/newFolder.ts:17
-msgid "Notebook title:"
-msgstr "ชื่อสมุดบันทึก:"
 
 #: packages/app-mobile/components/side-menu-content.js:126
 msgid "Notebook: %s"
@@ -2564,12 +2596,12 @@ msgstr ""
 msgid "Numbered List"
 msgstr "รายการแบบตัวเลข"
 
-#: packages/app-desktop/bridge.ts:164 packages/app-desktop/bridge.ts:170
-#: packages/app-desktop/bridge.ts:191 packages/app-desktop/bridge.ts:201
+#: packages/app-desktop/bridge.ts:183 packages/app-desktop/bridge.ts:189
+#: packages/app-desktop/bridge.ts:210 packages/app-desktop/bridge.ts:220
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:28
 #: packages/app-desktop/gui/DialogButtonRow.min.js:30
 #: packages/app-desktop/gui/DialogButtonRow.tsx:75
-#: packages/app-desktop/gui/MenuBar.tsx:422
+#: packages/app-desktop/gui/MenuBar.tsx:427
 #: packages/app-desktop/gui/PromptDialog.min.js:235
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:26
 #: packages/app-mobile/components/CameraView.tsx:190
@@ -2634,7 +2666,7 @@ msgstr "เปิดไดเรกทอรี่เทมเพลต"
 msgid "Open Sync Wizard..."
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:100
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:99
 msgid "Open..."
 msgstr "เปิด..."
 
@@ -2645,7 +2677,7 @@ msgid "Operation cancelled"
 msgstr "ระบวนการถูกยกเลิก"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:26
-#: packages/app-desktop/gui/MenuBar.tsx:383
+#: packages/app-desktop/gui/MenuBar.tsx:388
 #: packages/app-desktop/gui/Root.tsx:220
 msgid "Options"
 msgstr "ตัวเลือก"
@@ -2689,8 +2721,8 @@ msgid "Passwords do not match!"
 msgstr "รหัสผ่านไม่เหมือนกัน!"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:23
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:765
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:150
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:770
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:158
 msgid "Paste"
 msgstr "วาง"
 
@@ -2768,7 +2800,7 @@ msgstr "โปรดระบุสมุดบันทึกสำหรับ
 msgid "Please upgrade Joplin to use this plugin"
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1163
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1164
 msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
 "switch to %s to edit the note."
@@ -2805,7 +2837,7 @@ msgstr "ค่าที่เป็นไปได้: %s"
 msgid "Preferences"
 msgstr "การตั้งค่า"
 
-#: packages/app-desktop/gui/MenuBar.tsx:448
+#: packages/app-desktop/gui/MenuBar.tsx:453
 msgid "Preferences..."
 msgstr "การตั้งค่า"
 
@@ -2847,6 +2879,10 @@ msgstr "พิมพ์"
 msgid "Privacy Policy"
 msgstr ""
 
+#: packages/server/src/routes/admin/users.ts:168
+msgid "Profile"
+msgstr ""
+
 #: packages/lib/versionInfo.ts:26
 msgid "Profile Version: %s"
 msgstr "เวอร์ชั่นโปรไฟล์: %s"
@@ -2874,7 +2910,7 @@ msgstr ""
 
 #: packages/app-desktop/app.ts:177
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:16
-#: packages/app-desktop/gui/MenuBar.tsx:255
+#: packages/app-desktop/gui/MenuBar.tsx:260
 msgid "Quit"
 msgstr "ออก"
 
@@ -3007,7 +3043,8 @@ msgstr "ลองอีกครั้ง"
 msgid "Retry All"
 msgstr "ลองอีกครั้ง"
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:119
+#: packages/app-desktop/gui/MainScreen/commands/revealResourceFile.ts:8
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:118
 msgid "Reveal file in folder"
 msgstr ""
 
@@ -3075,7 +3112,7 @@ msgstr "บันทึก"
 msgid "Save alarm"
 msgstr "บันทึกแจ้งเตือน"
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:107
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:106
 msgid "Save as..."
 msgstr "บันทึกเป็น..."
 
@@ -3405,7 +3442,7 @@ msgstr "หยุดการแก้ไขภายนอก"
 msgid "Strikethrough"
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:191
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:193
 msgid "strong text"
 msgstr ""
 
@@ -3498,7 +3535,7 @@ msgstr "ความถี่ในการซิงโครไนซ์"
 msgid "Synchronisation is already in progress."
 msgstr "การซิงโครไนซ์กำลังดำเนินการอยู่"
 
-#: packages/app-desktop/gui/MenuBar.tsx:357
+#: packages/app-desktop/gui/MenuBar.tsx:362
 #: packages/app-desktop/gui/Root.tsx:222
 msgid "Synchronisation Status"
 msgstr "สถานะการซิงโครไนซ์"
@@ -3556,7 +3593,8 @@ msgstr "แท็ก"
 msgid "Take photo"
 msgstr "ถ่ายรูป"
 
-#: packages/server/src/services/MustacheService.ts:200
+#: packages/server/src/services/MustacheService.ts:151
+#: packages/server/src/services/MustacheService.ts:298
 msgid "Tasks"
 msgstr ""
 
@@ -3568,7 +3606,7 @@ msgstr ""
 msgid "Thank you! Your Joplin Cloud account is now setup and ready to use."
 msgstr "ขอบคุณ Joplin Cloud account ของคุณพร้อมใช้งานแล้ว"
 
-#: packages/app-desktop/bridge.ts:258
+#: packages/app-desktop/bridge.ts:273
 msgid ""
 "The app is now going to close. Please relaunch it to complete the process."
 msgstr ""
@@ -3756,7 +3794,7 @@ msgid ""
 "%s"
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:70
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:69
 msgid "There was an error downloading this attachment:"
 msgstr ""
 
@@ -3786,7 +3824,7 @@ msgid ""
 "the WYSIWYG editor."
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:72
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:71
 #: packages/lib/services/ResourceEditWatcher/index.ts:231
 msgid "This attachment is not downloaded or not decrypted yet"
 msgstr ""
@@ -3818,7 +3856,7 @@ msgstr "บันทึกนี้ไม่มีตำแหน่งภูม
 msgid "This note has been modified:"
 msgstr "บันทึกนี้ได้ถูกแก้ไขเมื่อ:"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:604
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:609
 msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
 "note."
@@ -3871,7 +3909,7 @@ msgstr "รูปแบบเวลา"
 msgid "title"
 msgstr "ชื่อเรื่อง"
 
-#: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:72
+#: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:101
 #: packages/app-desktop/gui/ResourceScreen.tsx:92
 #, fuzzy
 msgid "Title"
@@ -3940,7 +3978,7 @@ msgstr "to-do"
 msgid "Toggle comment"
 msgstr "สลับรายการบันทึก"
 
-#: packages/app-desktop/gui/MenuBar.tsx:717
+#: packages/app-desktop/gui/MenuBar.tsx:722
 #, fuzzy
 msgid "Toggle development tools"
 msgstr "สลับเครื่องมือนักพัฒนา"
@@ -4012,7 +4050,7 @@ msgstr ""
 msgid "Type `joplin help` for usage information."
 msgstr "พิมพ์ `joplin help` สำหรับข้อมูลการใช้งาน"
 
-#: packages/app-desktop/plugins/GotoAnything.tsx:591
+#: packages/app-desktop/plugins/GotoAnything.tsx:592
 msgid ""
 "Type a note title or part of its content to jump to it. Or type # followed "
 "by a tag name, or @ followed by a notebook name. Or type : to search for "
@@ -4068,7 +4106,7 @@ msgstr ""
 msgid "Unsupported image type: %s"
 msgstr "ไม่รองรับภาพนี้ประเภทนี้: %s"
 
-#: packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.ts:76
+#: packages/app-desktop/gui/MainScreen/commands/openItem.ts:35
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:142
 msgid "Unsupported link or message: %s"
 msgstr ""
@@ -4083,6 +4121,12 @@ msgstr "ไม่มีชื่อ"
 #, fuzzy
 msgid "Update"
 msgstr "แก้ไขเมื่อ"
+
+#: packages/server/src/routes/admin/users.ts:171
+#: packages/server/src/routes/index/users.ts:89
+#, fuzzy
+msgid "Update profile"
+msgstr "ส่งออกโปรไฟล์"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:208
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:209
@@ -4179,7 +4223,13 @@ msgid ""
 "font is used."
 msgstr ""
 
-#: packages/server/src/services/MustacheService.ts:197
+#: packages/server/src/services/MustacheService.ts:147
+msgid "User deletions"
+msgstr ""
+
+#: packages/server/src/routes/admin/users.ts:107
+#: packages/server/src/services/MustacheService.ts:143
+#: packages/server/src/services/MustacheService.ts:295
 msgid "Users"
 msgstr ""
 
@@ -4245,7 +4295,7 @@ msgid "WebDAV username"
 msgstr "ชื่อผู้ใช้ WebDAV"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:20
-#: packages/app-desktop/gui/MenuBar.tsx:698
+#: packages/app-desktop/gui/MenuBar.tsx:703
 msgid "Website and documentation"
 msgstr "เว็บไซต์และเอกสารต่างๆ"
 
@@ -4350,16 +4400,22 @@ msgstr "จำเป็นต้องมีสิทธ์การเข้า
 msgid "Your version: %s"
 msgstr "เวอร์ชั่นของคุณ: %s"
 
-#: packages/app-desktop/gui/MenuBar.tsx:642
-#: packages/app-desktop/gui/MenuBar.tsx:648
+#: packages/app-desktop/gui/MenuBar.tsx:647
+#: packages/app-desktop/gui/MenuBar.tsx:653
 #, fuzzy
 msgid "Zoom In"
 msgstr "ซูมเข้า"
 
-#: packages/app-desktop/gui/MenuBar.tsx:655
+#: packages/app-desktop/gui/MenuBar.tsx:660
 #, fuzzy
 msgid "Zoom Out"
 msgstr "ซูมออก"
+
+#~ msgid "Automatically update the application"
+#~ msgstr "อัพเดทแอปพลิเคชั่นอัตโนมัติ"
+
+#~ msgid "Notebook title:"
+#~ msgstr "ชื่อสมุดบันทึก:"
 
 #~ msgid "Master Keys"
 #~ msgstr "มาสเตอร์คีย์"

@@ -7,6 +7,7 @@ export default function useScrollHandler(editorRef: any, webviewRef: any, onScro
 	const ignoreNextEditorScrollTime_ = useRef(Date.now());
 	const ignoreNextEditorScrollEventCount_ = useRef(0);
 	const delayedSetEditorPercentScrollTimeoutID_ = useRef(null);
+	const lastResizeHeight_ = useRef(NaN);
 
 	// Ignores one next scroll event for a short time.
 	const ignoreNextEditorScrollEvent = () => {
@@ -90,8 +91,7 @@ export default function useScrollHandler(editorRef: any, webviewRef: any, onScro
 	}, [scheduleOnScroll]);
 
 	const editor_scroll = useCallback(() => {
-		if (isNextEditorScrollEventIgnored()) return;
-
+		const ignored = isNextEditorScrollEventIgnored();
 		const cm = editorRef.current;
 		if (isCodeMirrorReady(cm)) {
 			const editorPercent = Math.max(0, Math.min(1, cm.getScrollPercent()));
@@ -104,7 +104,9 @@ export default function useScrollHandler(editorRef: any, webviewRef: any, onScro
 				// calculates GUI-independent line-based percent
 				const percent = translateScrollPercentE2L(cm, editorPercent);
 				scrollPercent_.current = percent;
-				setViewerPercentScroll(percent);
+				if (!ignored) {
+					setViewerPercentScroll(percent);
+				}
 			}
 		}
 	}, [setViewerPercentScroll]);
@@ -117,13 +119,29 @@ export default function useScrollHandler(editorRef: any, webviewRef: any, onScro
 	}, []);
 
 	const editor_resize = useCallback((cm) => {
-		if (cm) {
-			restoreEditorPercentScroll();
+		if (isCodeMirrorReady(cm)) {
+			// Only when resized, the scroll position is restored.
+			const info = cm.getScrollInfo();
+			const height = info.height - info.clientHeight;
+			if (height !== lastResizeHeight_.current) {
+				restoreEditorPercentScroll();
+				lastResizeHeight_.current = height;
+			}
+		}
+	}, []);
+
+	const getLineScrollPercent = useCallback(() => {
+		const cm = editorRef.current;
+		if (isCodeMirrorReady(cm)) {
+			const ePercent = cm.getScrollPercent();
+			return translateScrollPercentE2L(cm, ePercent);
+		} else {
+			return scrollPercent_.current;
 		}
 	}, []);
 
 	return {
-		resetScroll, setEditorPercentScroll, setViewerPercentScroll, editor_scroll, editor_resize,
+		resetScroll, setEditorPercentScroll, setViewerPercentScroll, editor_scroll, editor_resize, getLineScrollPercent,
 	};
 }
 

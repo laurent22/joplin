@@ -10,27 +10,17 @@
 			{{#global.owner}}
 				<div class="navbar-menu is-active">
 					<div class="navbar-start">
-						<a class="navbar-item" href="{{{global.baseUrl}}}/home">{{s.home}}</a>
-						{{#global.owner.is_admin}}
-							<a class="navbar-item" href="{{{global.baseUrl}}}/users">{{s.users}}</a>
-						{{/global.owner.is_admin}}
-						{{#global.owner.is_admin}}
-							<a class="navbar-item" href="{{{global.baseUrl}}}/items">{{s.items}}</a>
-						{{/global.owner.is_admin}}
-						{{#global.owner.is_admin}}
-							<a class="navbar-item" href="{{{global.baseUrl}}}/changes">{{s.log}}</a>
-						{{/global.owner.is_admin}}
-						{{#global.owner.is_admin}}
-							<a class="navbar-item" href="{{{global.baseUrl}}}/tasks">{{s.tasks}}</a>
-						{{/global.owner.is_admin}}
+						{{#global.navbarMenu}}
+							<a class="navbar-item {{#selected}}is-active{{/selected}}" href="{{{url}}}">{{#icon}}<i class="{{.}}"></i>&nbsp;&nbsp;{{/icon}}{{title}}</a>
+						{{/global.navbarMenu}}
 					</div>
 					<div class="navbar-end">
 						{{#global.isJoplinCloud}}
-							<a class="navbar-item" href="{{{global.baseUrl}}}/help">{{s.help}}</a>
+							<a class="navbar-item" href="{{{global.baseUrl}}}/help">{{global.s.help}}</a>
 						{{/global.isJoplinCloud}}
 						<div class="navbar-item">
 							<form method="post" action="{{{global.baseUrl}}}/logout">
-								<button class="button is-dark">{{s.logout}}</button>
+								<button class="button is-dark">{{global.s.logout}}</button>
 							</form>
 						</div>
 						<div class="navbar-item">

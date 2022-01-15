@@ -74,6 +74,7 @@ jobs:
           CSC_LINK: ${{ secrets.APPLE_CSC_LINK }}
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           IS_CONTINUOUS_INTEGRATION: 1
+          BUILD_SEQUENCIAL: 1
         run: |
           "${GITHUB_WORKSPACE}/.github/scripts/run_ci.sh"
 
@@ -84,6 +85,7 @@ jobs:
           CSC_LINK: ${{ secrets.WINDOWS_CSC_LINK }}
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           IS_CONTINUOUS_INTEGRATION: 1
+          BUILD_SEQUENCIAL: 1
         run: |
           yarn install
           cd packages/app-desktop
@@ -122,6 +124,8 @@ jobs:
           corepack enable
 
       - name: Build Docker Image
+        env:
+          BUILD_SEQUENCIAL: 1
         run: |
           yarn install
           yarn run buildServerDocker --tag-name server-v0.0.0

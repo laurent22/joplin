@@ -20,7 +20,7 @@ There are also a few forks of existing packages under the "fork-*" name.
 
 - Install node 16+ - https://nodejs.org/en/
   - [Enable yarn](https://yarnpkg.com/getting-started/install): `corepack enable`
-- macOS: Install Cocoapods - `brew install cocoapods`
+- macOS: Install Cocoapods - `brew install cocoapods`. Apple Silicon [may require libvips](https://github.com/laurent22/joplin/pull/5966#issuecomment-1007158597) - `brew install vips`.
 - Windows: Install Windows Build Tools - `yarn install -g windows-build-tools --vs2015`
 - Linux: Install dependencies - `sudo apt install build-essential libnss3 libsecret-1-dev python rsync`
 
@@ -60,7 +60,7 @@ Normally the **bundler** should start automatically with the application. If it 
 ## Building the clipper
 
 	cd packages/app-clipper/popup
-	yarn run watch # To watch for changes
+	npm run watch # To watch for changes
 
 To test the extension please refer to the relevant pages for each browser: [Firefox](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Your_first_WebExtension#Trying_it_out) / [Chrome](https://developer.chrome.com/docs/extensions/mv3/getstarted/). Please note that the extension in dev mode will only connect to a dev instance of the desktop app (and vice-versa).
 

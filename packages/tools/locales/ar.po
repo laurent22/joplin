@@ -49,34 +49,34 @@ msgstr "(لاشيء)"
 msgid "(wysiwyg: %s)"
 msgstr "(wysiwyg: %s)"
 
-#: packages/app-desktop/gui/MenuBar.tsx:557
-#: packages/app-desktop/gui/MenuBar.tsx:813
+#: packages/app-desktop/gui/MenuBar.tsx:562
+#: packages/app-desktop/gui/MenuBar.tsx:818
 msgid "&Edit"
 msgstr "&تعديل"
 
-#: packages/app-desktop/gui/MenuBar.tsx:435
-#: packages/app-desktop/gui/MenuBar.tsx:513
-#: packages/app-desktop/gui/MenuBar.tsx:809
+#: packages/app-desktop/gui/MenuBar.tsx:440
+#: packages/app-desktop/gui/MenuBar.tsx:518
+#: packages/app-desktop/gui/MenuBar.tsx:814
 msgid "&File"
 msgstr "&ملف"
 
-#: packages/app-desktop/gui/MenuBar.tsx:663
+#: packages/app-desktop/gui/MenuBar.tsx:668
 msgid "&Go"
 msgstr "&اذهب"
 
-#: packages/app-desktop/gui/MenuBar.tsx:695
+#: packages/app-desktop/gui/MenuBar.tsx:700
 msgid "&Help"
 msgstr "&مساعدة"
 
-#: packages/app-desktop/gui/MenuBar.tsx:681
+#: packages/app-desktop/gui/MenuBar.tsx:686
 msgid "&Note"
 msgstr "&ملاحظة"
 
-#: packages/app-desktop/gui/MenuBar.tsx:691
+#: packages/app-desktop/gui/MenuBar.tsx:696
 msgid "&Tools"
 msgstr "&أدوات"
 
-#: packages/app-desktop/gui/MenuBar.tsx:589
+#: packages/app-desktop/gui/MenuBar.tsx:594
 msgid "&View"
 msgstr "&عرض"
 
@@ -198,8 +198,8 @@ msgstr "A4"
 msgid "A5"
 msgstr "A5"
 
-#: packages/app-desktop/gui/MenuBar.tsx:441
-#: packages/app-desktop/gui/MenuBar.tsx:733
+#: packages/app-desktop/gui/MenuBar.tsx:446
+#: packages/app-desktop/gui/MenuBar.tsx:738
 msgid "About Joplin"
 msgstr "حول Joplin"
 
@@ -237,7 +237,7 @@ msgid "Active"
 msgstr "نشط"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:18
-#: packages/app-desktop/gui/MenuBar.tsx:631
+#: packages/app-desktop/gui/MenuBar.tsx:636
 msgid "Actual Size"
 msgstr "الحجم الفعلي"
 
@@ -260,6 +260,15 @@ msgstr "أضف العنوان"
 #: packages/lib/services/spellChecker/SpellCheckerService.ts:116
 msgid "Add to dictionary"
 msgstr "أضف إلى القاموس"
+
+#: packages/server/src/services/MustacheService.ts:182
+#: packages/server/src/services/MustacheService.ts:301
+msgid "Admin"
+msgstr ""
+
+#: packages/server/src/routes/admin/dashboard.ts:10
+msgid "Admin dashboard"
+msgstr ""
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:189
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:147
@@ -318,7 +327,7 @@ msgid "Aritim Dark"
 msgstr "Aritim Dark"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:53
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:588
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:589
 #: packages/app-mobile/components/screens/Note.tsx:898
 msgid "Attach file"
 msgstr "إرفاق ملف"
@@ -385,13 +394,14 @@ msgstr "تلقائي"
 msgid "Auto-pair braces, parenthesis, quotations, etc."
 msgstr "ادراج النصف الآخر للأقواس و علامات الإقتباس."
 
+#: packages/lib/models/Setting.ts:1193
+#, fuzzy
+msgid "Automatically check for updates"
+msgstr "البحث جارٍ عن تحديثات..."
+
 #: packages/lib/models/Setting.ts:770
 msgid "Automatically switch theme to match system theme"
 msgstr "التبديل تلقائيا للتنسيق لمطابقة تنسيق النضام"
-
-#: packages/lib/models/Setting.ts:1193
-msgid "Automatically update the application"
-msgstr "تحديث التطبيق آلياً"
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:42
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:715
@@ -417,7 +427,7 @@ msgstr "استعراض..."
 msgid "Bulleted List"
 msgstr "قائمة تعداد نقطي"
 
-#: packages/app-desktop/bridge.ts:170 packages/app-desktop/bridge.ts:191
+#: packages/app-desktop/bridge.ts:189 packages/app-desktop/bridge.ts:210
 #: packages/app-desktop/checkForUpdates.ts:199
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:715
 #: packages/app-desktop/gui/DialogButtonRow.min.js:38
@@ -515,7 +525,7 @@ msgstr "لا يمكن نقل الملاحظة إلى دفتر الملاحظات
 msgid "Cannot move notebook to this location"
 msgstr "لا يمكن نقل دفتر الملاحظات إلى هذا المكان"
 
-#: packages/lib/onedrive-api.ts:407
+#: packages/lib/onedrive-api.ts:408
 msgid ""
 "Cannot refresh token: authentication data is missing. Starting the "
 "synchronisation again may fix the problem."
@@ -557,8 +567,8 @@ msgstr "أحرف"
 msgid "Characters excluding spaces"
 msgstr "الأحرف بإستثناء المسافات"
 
-#: packages/app-desktop/gui/MenuBar.tsx:458
-#: packages/app-desktop/gui/MenuBar.tsx:708
+#: packages/app-desktop/gui/MenuBar.tsx:463
+#: packages/app-desktop/gui/MenuBar.tsx:713
 msgid "Check for updates..."
 msgstr "البحث جارٍ عن تحديثات..."
 
@@ -587,7 +597,7 @@ msgstr "إختر خيار"
 msgid "Chrome Web Store"
 msgstr "متجر كروم الالكتروني"
 
-#: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:83
+#: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:112
 #: packages/app-desktop/gui/PromptDialog.min.js:249
 msgid "Clear"
 msgstr "مسح"
@@ -621,7 +631,7 @@ msgid "Close"
 msgstr "إغلاق"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:24
-#: packages/app-desktop/gui/MenuBar.tsx:521
+#: packages/app-desktop/gui/MenuBar.tsx:526
 msgid "Close Window"
 msgstr "إغلاق النافذة"
 
@@ -629,11 +639,11 @@ msgstr "إغلاق النافذة"
 msgid "Code"
 msgstr "رمز"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:598
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:599
 msgid "Code Block"
 msgstr "كتلة للغة البرمجة"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1163
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1164
 msgid "Code View"
 msgstr "عرض بلغة البرمجة"
 
@@ -665,7 +675,7 @@ msgstr "أمر"
 msgid "Command"
 msgstr "أمر"
 
-#: packages/app-desktop/plugins/GotoAnything.tsx:636
+#: packages/app-desktop/plugins/GotoAnything.tsx:637
 msgid "Command palette"
 msgstr "لوحة الأوامر"
 
@@ -728,10 +738,10 @@ msgstr "تحويل إلى ملاحظة"
 msgid "Convert to todo"
 msgstr "تحويل إلى قائمة مهام"
 
-#: packages/app-desktop/gui/MenuBar.tsx:422
+#: packages/app-desktop/gui/MenuBar.tsx:427
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:13
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:755
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:143
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:760
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:151
 msgid "Copy"
 msgstr "نسخ"
 
@@ -746,7 +756,12 @@ msgstr "نسخ أمر وضع المبرمج إلى الحافظة"
 msgid "Copy external link"
 msgstr "إيقاف التحرير خارج التطبيق"
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:164
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:134
+#, fuzzy
+msgid "Copy image"
+msgstr "نسخ الرمز المميز"
+
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:172
 msgid "Copy Link Address"
 msgstr "نسخ عنوان الرابط"
 
@@ -755,7 +770,7 @@ msgstr "نسخ عنوان الرابط"
 msgid "Copy Markdown link"
 msgstr "نسخ رابط Markdown"
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:127
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:126
 msgid "Copy path to clipboard"
 msgstr "نسخ المسار إلى الحافظة"
 
@@ -832,6 +847,16 @@ msgstr ""
 #: packages/app-mobile/components/note-list.js:101
 msgid "Create a notebook"
 msgstr "إنشاء دفتر ملاحظات"
+
+#: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:128
+#, fuzzy
+msgid "Create notebook"
+msgstr "إنشاء دفتر ملاحظات"
+
+#: packages/server/src/routes/admin/users.ts:171
+#, fuzzy
+msgid "Create user"
+msgstr "الإنشاء في: %s"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:29
 msgid "Created"
@@ -912,14 +937,18 @@ msgid "Custom TLS certificates"
 msgstr "شهادات TLS خاصة"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:18
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:745
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:135
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:750
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:143
 msgid "Cut"
 msgstr "قص"
 
 #: packages/lib/models/Setting.ts:339
 msgid "Dark"
 msgstr "غامقة"
+
+#: packages/server/src/services/MustacheService.ts:139
+msgid "Dashboard"
+msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:625
 msgid "Database v%s"
@@ -1207,7 +1236,7 @@ msgstr "يجري تنزيل الموارد..."
 msgid "Dracula"
 msgstr "Dracula"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1163
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1164
 msgid "Drop notes or files here"
 msgstr "قم بإسقاط الملاحظات أو الملفات هنا"
 
@@ -1236,7 +1265,7 @@ msgstr ""
 "ينشئ نسخة من الملاحظات المطابقة لـ <note> (ملاحظة) في [notebook] (دفتر "
 "ملاحظات). إذا لم يحدد دفتر ملاحظات فستنسخ الملاحظة في دفتر الملاحظات الحالي."
 
-#: packages/app-desktop/gui/MainScreen/commands/openFolderDialog.ts:6
+#: packages/app-desktop/gui/MainScreen/commands/openFolderDialog.ts:12
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/openEditDialog.ts:83
 #: packages/app-mobile/components/screens/Note.tsx:1151
 msgid "Edit"
@@ -1250,7 +1279,7 @@ msgstr "التحرير في محرر خارجي"
 msgid "Edit note."
 msgstr "تحرير الملاحظة."
 
-#: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:102
+#: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:128
 #: packages/app-mobile/components/screens/folder.js:109
 msgid "Edit notebook"
 msgstr "تحرير دفتر الملاحظات"
@@ -1289,7 +1318,7 @@ msgstr "إما \"text\" أو \"json\""
 msgid "Emacs"
 msgstr "Emacs"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:192
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:194
 msgid "emphasised text"
 msgstr "نص مشدَّد علية"
 
@@ -1506,8 +1535,8 @@ msgstr "الخروج من التطبيق."
 msgid "Export"
 msgstr "تصدير"
 
-#: packages/app-desktop/gui/MenuBar.tsx:477
-#: packages/app-desktop/gui/MenuBar.tsx:531
+#: packages/app-desktop/gui/MenuBar.tsx:482
+#: packages/app-desktop/gui/MenuBar.tsx:536
 msgid "Export all"
 msgstr "تصدير الجميع"
 
@@ -1596,7 +1625,7 @@ msgstr "إصلاح فهرس البحث"
 msgid "Fixing search index..."
 msgstr "جارٍ إصلاح فهرس البحث ..."
 
-#: packages/app-desktop/gui/MenuBar.tsx:669
+#: packages/app-desktop/gui/MenuBar.tsx:674
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteBody.ts:7
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteTitle.ts:7
 #: packages/app-desktop/gui/NoteList/commands/focusElementNoteList.ts:8
@@ -1662,6 +1691,7 @@ msgid "Full changelog"
 msgstr "سجل التغيير بكامله"
 
 #: packages/lib/models/Setting.ts:2139
+#: packages/server/src/services/MustacheService.ts:136
 msgid "General"
 msgstr "عام"
 
@@ -1703,7 +1733,7 @@ msgid "Go to source URL"
 msgstr "الذهاب إلى عنوان URL المصدر"
 
 #: packages/app-desktop/gui/MainScreen/commands/gotoAnything.ts:13
-#: packages/app-desktop/plugins/GotoAnything.tsx:628
+#: packages/app-desktop/plugins/GotoAnything.tsx:629
 msgid "Goto Anything..."
 msgstr "اذهب إلى أي شيء..."
 
@@ -1715,11 +1745,11 @@ msgstr "منح ال"
 msgid "Heading"
 msgstr "ترويسة"
 
-#: packages/server/src/services/MustacheService.ts:201
+#: packages/server/src/services/MustacheService.ts:299
 msgid "Help"
 msgstr "مساعدة"
 
-#: packages/app-desktop/gui/MenuBar.tsx:492
+#: packages/app-desktop/gui/MenuBar.tsx:497
 msgid "Hide %s"
 msgstr "أخف %s"
 
@@ -1736,7 +1766,8 @@ msgstr "إخفي Joplin"
 msgid "Highlight"
 msgstr "تَمييز النَص"
 
-#: packages/server/src/services/MustacheService.ts:196
+#: packages/server/src/services/MustacheService.ts:166
+#: packages/server/src/services/MustacheService.ts:294
 msgid "Home"
 msgstr ""
 
@@ -1756,7 +1787,7 @@ msgstr "ملف HTML"
 msgid "Hyperlink"
 msgstr "ارتباط تشعبي"
 
-#: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:77
+#: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:106
 msgid "Icon"
 msgstr ""
 
@@ -1781,13 +1812,13 @@ msgid "Ignore TLS certificate errors"
 msgstr "تجاهل أخطاء شهادات TLS"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:170
-#: packages/app-desktop/gui/MenuBar.tsx:473
-#: packages/app-desktop/gui/MenuBar.tsx:528
+#: packages/app-desktop/gui/MenuBar.tsx:478
+#: packages/app-desktop/gui/MenuBar.tsx:533
 #: packages/app-desktop/gui/Root.tsx:219
 msgid "Import"
 msgstr "استيراد"
 
-#: packages/app-desktop/gui/MenuBar.tsx:197
+#: packages/app-desktop/gui/MenuBar.tsx:198
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr "الاستيراد من \"%s\" بتنسيق \"%s\". فضلاً انتظر..."
 
@@ -1895,7 +1926,7 @@ msgstr "مسافة بادئة أكثر"
 msgid "Information"
 msgstr "معلومات"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:606
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:607
 msgid "Inline Code"
 msgstr "نص لغة برمجة في النسق"
 
@@ -1904,11 +1935,11 @@ msgid "Insert"
 msgstr "إدخال"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:83
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:622
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:623
 msgid "Insert Date Time"
 msgstr "إدراج التاريخ والوقت"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:194
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:196
 msgid "Insert Hyperlink"
 msgstr "إدراج ارتباط تشعبي"
 
@@ -1961,7 +1992,8 @@ msgstr "مائل"
 msgid "Item \"%s\" could not be downloaded: %s"
 msgstr "العنصر \"%s\" لم يتم الإمكان من تحميله: %s"
 
-#: packages/server/src/services/MustacheService.ts:198
+#: packages/server/src/services/MustacheService.ts:174
+#: packages/server/src/services/MustacheService.ts:296
 msgid "Items"
 msgstr ""
 
@@ -2012,7 +2044,7 @@ msgstr ""
 "فشل Joplin في فك تشفير هذه العناصر عدة مرات، ربما لأنها تالفة أو كبيرة جدًا. "
 "ستبقى هذه العناصر على الجهاز ولكن Joplin لن تحاول فك تشفيرها."
 
-#: packages/app-desktop/gui/MenuBar.tsx:702
+#: packages/app-desktop/gui/MenuBar.tsx:707
 msgid "Joplin Forum"
 msgstr "منتدى Joplin"
 
@@ -2093,11 +2125,11 @@ msgstr "آخر خطأ: %s"
 msgid "Later"
 msgstr "لاحقا"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:604
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:609
 msgid "Layout"
 msgstr "تخطيط"
 
-#: packages/app-desktop/gui/MenuBar.tsx:597
+#: packages/app-desktop/gui/MenuBar.tsx:602
 msgid "Layout button sequence"
 msgstr "نسق زر التسلسل"
 
@@ -2136,9 +2168,9 @@ msgstr[5] "تم نسخ الروابط إلى الحافظة!"
 msgid "Links with protocol \"%s\" are not supported"
 msgstr "الروابط مع البروتوكول \"%s\" غير مدعومة"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:227
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:229
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:230
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:231
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:232
 msgid "List item"
 msgstr "عنصر قائمة"
 
@@ -2162,7 +2194,7 @@ msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:521
 #: packages/app-mobile/components/screens/log.js:100
-#: packages/server/src/services/MustacheService.ts:199
+#: packages/server/src/services/MustacheService.ts:297
 msgid "Log"
 msgstr "السجل"
 
@@ -2182,11 +2214,15 @@ msgstr "تسجيل الدخول عبر Dropbox"
 msgid "Login with OneDrive"
 msgstr "تسجيل الدخول عبر OneDrive"
 
-#: packages/server/src/services/MustacheService.ts:202
+#: packages/server/src/services/MustacheService.ts:300
 msgid "Logout"
 msgstr ""
 
-#: packages/app-desktop/gui/MenuBar.tsx:705
+#: packages/server/src/services/MustacheService.ts:178
+msgid "Logs"
+msgstr ""
+
+#: packages/app-desktop/gui/MenuBar.tsx:710
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:583
 msgid "Make a donation"
 msgstr "تبرَّع"
@@ -2326,7 +2362,7 @@ msgstr "لا"
 msgid "New note"
 msgstr "ملاحظة جديدة"
 
-#: packages/app-desktop/gui/MainScreen/commands/newFolder.ts:8
+#: packages/app-desktop/gui/MainScreen/commands/newFolder.ts:7
 msgid "New notebook"
 msgstr "دفتر ملاحظات جديد"
 
@@ -2460,7 +2496,7 @@ msgstr "عامل نمو منطقة الملاحظة"
 msgid "Note attachments"
 msgstr "مرفقات الملاحظات"
 
-#: packages/app-desktop/gui/MenuBar.tsx:397
+#: packages/app-desktop/gui/MenuBar.tsx:402
 msgid "Note attachments..."
 msgstr "مرفقات الملاحظات..."
 
@@ -2511,7 +2547,7 @@ msgid ""
 "Note: When a note is shared, it will no longer be encrypted on the server."
 msgstr "ملاحظة: عند مشاركة ملاحظة ، لن يتم تشفيرها على الخادم."
 
-#: packages/app-desktop/gui/MenuBar.tsx:675
+#: packages/app-desktop/gui/MenuBar.tsx:680
 msgid "Note&book"
 msgstr "دفتر &ملاحظات"
 
@@ -2523,10 +2559,6 @@ msgstr "دفاتر ملاحظات"
 #: packages/lib/models/Setting.ts:1378
 msgid "Notebook list growth factor"
 msgstr "عامل نمو قائمة المفكرة"
-
-#: packages/app-desktop/gui/MainScreen/commands/newFolder.ts:17
-msgid "Notebook title:"
-msgstr "عنوان دفتر الملاحظات:"
 
 #: packages/app-mobile/components/side-menu-content.js:126
 msgid "Notebook: %s"
@@ -2560,12 +2592,12 @@ msgstr "يمكن إنشاء الملاحظات فقط ضمن دفتر ملاحظ
 msgid "Numbered List"
 msgstr "قائمة مرقّمة"
 
-#: packages/app-desktop/bridge.ts:164 packages/app-desktop/bridge.ts:170
-#: packages/app-desktop/bridge.ts:191 packages/app-desktop/bridge.ts:201
+#: packages/app-desktop/bridge.ts:183 packages/app-desktop/bridge.ts:189
+#: packages/app-desktop/bridge.ts:210 packages/app-desktop/bridge.ts:220
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:28
 #: packages/app-desktop/gui/DialogButtonRow.min.js:30
 #: packages/app-desktop/gui/DialogButtonRow.tsx:75
-#: packages/app-desktop/gui/MenuBar.tsx:422
+#: packages/app-desktop/gui/MenuBar.tsx:427
 #: packages/app-desktop/gui/PromptDialog.min.js:235
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:26
 #: packages/app-mobile/components/CameraView.tsx:190
@@ -2630,7 +2662,7 @@ msgstr "فتح مجلّد ملف التعريف"
 msgid "Open Sync Wizard..."
 msgstr "فتح معالج المزامنة..."
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:100
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:99
 msgid "Open..."
 msgstr "فتح..."
 
@@ -2641,7 +2673,7 @@ msgid "Operation cancelled"
 msgstr "ألغيت العملية"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:26
-#: packages/app-desktop/gui/MenuBar.tsx:383
+#: packages/app-desktop/gui/MenuBar.tsx:388
 #: packages/app-desktop/gui/Root.tsx:220
 msgid "Options"
 msgstr "خيارات"
@@ -2681,8 +2713,8 @@ msgid "Passwords do not match!"
 msgstr "كلمات المرور غير متطابقة!"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:23
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:765
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:150
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:770
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:158
 msgid "Paste"
 msgstr "لصق"
 
@@ -2763,7 +2795,7 @@ msgstr "فضلاً حدّد دفتر الملاحظات الذي ترغب است
 msgid "Please upgrade Joplin to use this plugin"
 msgstr "يرجى تحديث Joplin لإستخدام هذا البرنامج الإضافي"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1163
+#: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1164
 msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
 "switch to %s to edit the note."
@@ -2801,7 +2833,7 @@ msgstr "القيم الممكنة : %s."
 msgid "Preferences"
 msgstr "التفضيلات"
 
-#: packages/app-desktop/gui/MenuBar.tsx:448
+#: packages/app-desktop/gui/MenuBar.tsx:453
 msgid "Preferences..."
 msgstr "تفضيلات..."
 
@@ -2845,6 +2877,10 @@ msgstr "اطبع"
 msgid "Privacy Policy"
 msgstr "سياسة الخصوصية"
 
+#: packages/server/src/routes/admin/users.ts:168
+msgid "Profile"
+msgstr ""
+
 #: packages/lib/versionInfo.ts:26
 msgid "Profile Version: %s"
 msgstr "نسخة الملف الشخصي: %s"
@@ -2871,7 +2907,7 @@ msgstr "أنشر الملاحظات على الإنترنت"
 
 #: packages/app-desktop/app.ts:177
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:16
-#: packages/app-desktop/gui/MenuBar.tsx:255
+#: packages/app-desktop/gui/MenuBar.tsx:260
 msgid "Quit"
 msgstr "إغلاق"
 
@@ -3000,7 +3036,8 @@ msgstr "إعادة المحاولة"
 msgid "Retry All"
 msgstr "إعادة محاولة الجميع"
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:119
+#: packages/app-desktop/gui/MainScreen/commands/revealResourceFile.ts:8
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:118
 msgid "Reveal file in folder"
 msgstr "اضهار الملف في المجلد"
 
@@ -3071,7 +3108,7 @@ msgstr "حفظ"
 msgid "Save alarm"
 msgstr "حفظ المنبّه"
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:107
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:106
 msgid "Save as..."
 msgstr "حفظ باسم..."
 
@@ -3396,7 +3433,7 @@ msgstr "إيقاف التحرير خارج التطبيق"
 msgid "Strikethrough"
 msgstr "توسيط خط في النص"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:191
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:193
 msgid "strong text"
 msgstr "نص مشدَّد"
 
@@ -3483,7 +3520,7 @@ msgstr "مهلة المزامنة"
 msgid "Synchronisation is already in progress."
 msgstr "المزامنة قيد التقدم بالفعل."
 
-#: packages/app-desktop/gui/MenuBar.tsx:357
+#: packages/app-desktop/gui/MenuBar.tsx:362
 #: packages/app-desktop/gui/Root.tsx:222
 msgid "Synchronisation Status"
 msgstr "حالة المزامنة"
@@ -3539,7 +3576,8 @@ msgstr "وسوم"
 msgid "Take photo"
 msgstr "التقاط صورة"
 
-#: packages/server/src/services/MustacheService.ts:200
+#: packages/server/src/services/MustacheService.ts:151
+#: packages/server/src/services/MustacheService.ts:298
 msgid "Tasks"
 msgstr ""
 
@@ -3551,7 +3589,7 @@ msgstr "أمر محرر النصوص"
 msgid "Thank you! Your Joplin Cloud account is now setup and ready to use."
 msgstr "شكراً لك! تم إعداد حساب Joplin Cloud الخاص بك وهو جاهز للاستخدام."
 
-#: packages/app-desktop/bridge.ts:258
+#: packages/app-desktop/bridge.ts:273
 msgid ""
 "The app is now going to close. Please relaunch it to complete the process."
 msgstr "سيتم إغلاق التطبيق الآن. يرجى إعادة تشغيله لإكمال العملية."
@@ -3767,7 +3805,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:70
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:69
 msgid "There was an error downloading this attachment:"
 msgstr "حدث خطأ أثناء تنزيل هذا المرفق:"
 
@@ -3810,7 +3848,7 @@ msgstr ""
 "ذلك المحرر، فستفقد تنسيق المكون الإضافي. تمت الإشارة أدناه إلى المكونات "
 "الإضافية المتوافقة مع محرر WYSIWYG و الغير متوافقة."
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:72
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:71
 #: packages/lib/services/ResourceEditWatcher/index.ts:231
 msgid "This attachment is not downloaded or not decrypted yet"
 msgstr "لم يجر تنزيل هذا المرفق أو فك تشفيره حتى الآن"
@@ -3845,7 +3883,7 @@ msgstr "ليس لدى هذه الملاحظة معلومة موقع جغرافي
 msgid "This note has been modified:"
 msgstr "جرى تعديل هذه الملاحظة:"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:604
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:609
 msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
 "note."
@@ -3903,7 +3941,7 @@ msgstr "تنسيق الوقت"
 msgid "title"
 msgstr "العنوان"
 
-#: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:72
+#: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:101
 #: packages/app-desktop/gui/ResourceScreen.tsx:92
 msgid "Title"
 msgstr "العنوان"
@@ -3974,7 +4012,7 @@ msgstr "قائمة مهام"
 msgid "Toggle comment"
 msgstr "تبديل قائمة الملاحظات"
 
-#: packages/app-desktop/gui/MenuBar.tsx:717
+#: packages/app-desktop/gui/MenuBar.tsx:722
 msgid "Toggle development tools"
 msgstr "تبديل أدوات التطوير"
 
@@ -4041,7 +4079,7 @@ msgstr ""
 msgid "Type `joplin help` for usage information."
 msgstr "أكتب `joplin help` لمعلومات الاستخدام."
 
-#: packages/app-desktop/plugins/GotoAnything.tsx:591
+#: packages/app-desktop/plugins/GotoAnything.tsx:592
 msgid ""
 "Type a note title or part of its content to jump to it. Or type # followed "
 "by a tag name, or @ followed by a notebook name. Or type : to search for "
@@ -4094,7 +4132,7 @@ msgstr ""
 msgid "Unsupported image type: %s"
 msgstr "نوع صورة غير مدعوم: %s"
 
-#: packages/app-desktop/gui/NoteEditor/utils/useMessageHandler.ts:76
+#: packages/app-desktop/gui/MainScreen/commands/openItem.ts:35
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:142
 msgid "Unsupported link or message: %s"
 msgstr "رابط أو رسالة غير مدعومان: %s"
@@ -4108,6 +4146,12 @@ msgstr "بدون اسم"
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:206
 msgid "Update"
 msgstr "تحديث"
+
+#: packages/server/src/routes/admin/users.ts:171
+#: packages/server/src/routes/index/users.ts:89
+#, fuzzy
+msgid "Update profile"
+msgstr "تصديرملف التعريف"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:208
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:209
@@ -4212,7 +4256,13 @@ msgstr ""
 "الجداول وخانات الاختيار والشفرة البرمجية مثلاً). عندما لا يُعثر عليه سيتم "
 "استخدام خط عامّ أحادي المسافة (ثابت العرض)."
 
-#: packages/server/src/services/MustacheService.ts:197
+#: packages/server/src/services/MustacheService.ts:147
+msgid "User deletions"
+msgstr ""
+
+#: packages/server/src/routes/admin/users.ts:107
+#: packages/server/src/services/MustacheService.ts:143
+#: packages/server/src/services/MustacheService.ts:295
 msgid "Users"
 msgstr ""
 
@@ -4273,7 +4323,7 @@ msgid "WebDAV username"
 msgstr "اسم مستخدم WebDAV"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:20
-#: packages/app-desktop/gui/MenuBar.tsx:698
+#: packages/app-desktop/gui/MenuBar.tsx:703
 msgid "Website and documentation"
 msgstr "موقع الويب و التوثيق"
 
@@ -4378,14 +4428,20 @@ msgstr "إذنك باستخدام كاميرا الجوال مطلوب."
 msgid "Your version: %s"
 msgstr "النسخة لديك: %s"
 
-#: packages/app-desktop/gui/MenuBar.tsx:642
-#: packages/app-desktop/gui/MenuBar.tsx:648
+#: packages/app-desktop/gui/MenuBar.tsx:647
+#: packages/app-desktop/gui/MenuBar.tsx:653
 msgid "Zoom In"
 msgstr "تكبير"
 
-#: packages/app-desktop/gui/MenuBar.tsx:655
+#: packages/app-desktop/gui/MenuBar.tsx:660
 msgid "Zoom Out"
 msgstr "تصغير"
+
+#~ msgid "Automatically update the application"
+#~ msgstr "تحديث التطبيق آلياً"
+
+#~ msgid "Notebook title:"
+#~ msgstr "عنوان دفتر الملاحظات:"
 
 #~ msgid "AWS S3"
 #~ msgstr "أمازون إس 3"

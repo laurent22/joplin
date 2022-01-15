@@ -56,7 +56,7 @@ class ClipperConfigScreenComponent extends React.Component {
 
 		const containerStyle = Object.assign({}, theme.containerStyle, {
 			overflowY: 'scroll',
-			padding: theme.configScreenPadding,
+			// padding: theme.configScreenPadding,
 			backgroundColor: theme.backgroundColor3,
 		});
 

@@ -24,7 +24,6 @@ import ExternalEditWatcher from '@joplin/lib/services/ExternalEditWatcher';
 import appReducer, { createAppDefaultState } from './app.reducer';
 const { FoldersScreenUtils } = require('@joplin/lib/folders-screen-utils.js');
 import Folder from '@joplin/lib/models/Folder';
-const fs = require('fs-extra');
 import Tag from '@joplin/lib/models/Tag';
 import { reg } from '@joplin/lib/registry';
 const packageInfo = require('./packageInfo.js');
@@ -63,6 +62,7 @@ import ShareService from '@joplin/lib/services/share/ShareService';
 import checkForUpdates from './checkForUpdates';
 import { AppState } from './app.reducer';
 import syncDebugLog from '@joplin/lib/services/synchronizer/syncDebugLog';
+import eventManager from '@joplin/lib/eventManager';
 // import { runIntegrationTests } from '@joplin/lib/services/e2ee/ppkTestUtils';
 
 const pluginClasses = [
@@ -232,23 +232,6 @@ class Application extends BaseApplication {
 				return output;
 			},
 		});
-	}
-
-	async loadCustomCss(filePath: string) {
-		let cssString = '';
-		if (await fs.pathExists(filePath)) {
-			try {
-				cssString = await fs.readFile(filePath, 'utf-8');
-
-			} catch (error) {
-				let msg = error.message ? error.message : '';
-				msg = `Could not load custom css from ${filePath}\n${msg}`;
-				error.message = msg;
-				throw error;
-			}
-		}
-
-		return cssString;
 	}
 
 	private async checkForLegacyTemplates() {
@@ -463,8 +446,9 @@ class Application extends BaseApplication {
 
 		await this.checkForLegacyTemplates();
 
-		// Note: Auto-update currently doesn't work in Linux: it downloads the update
-		// but then doesn't install it on exit.
+		// Note: Auto-update is a misnomer in the code.
+		// The code below only checks, if a new version is available.
+		// We only allow Windows and macOS users to automatically check for updates
 		if (shim.isWindows() || shim.isMac()) {
 			const runAutoUpdateCheck = () => {
 				if (Setting.value('autoUpdateEnabled')) {
@@ -522,6 +506,12 @@ class Application extends BaseApplication {
 		ExternalEditWatcher.instance().initialize(bridge, this.store().dispatch);
 
 		ResourceEditWatcher.instance().initialize(reg.logger(), (action: any) => { this.store().dispatch(action); }, (path: string) => bridge().openItem(path));
+
+		// Forwards the local event to the global event manager, so that it can
+		// be picked up by the plugin manager.
+		ResourceEditWatcher.instance().on('resourceChange', (event: any) => {
+			eventManager.emit('resourceChange', event);
+		});
 
 		RevisionService.instance().runInBackground();
 

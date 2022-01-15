@@ -12,7 +12,8 @@
     "node": ">=16"
   },
   "scripts": {
-    "build": "yarn workspaces foreach --verbose --interlaced --parallel run build && yarn run tsc",
+    "buildParallel": "yarn workspaces foreach --verbose --interlaced --parallel --jobs 2 run build && yarn run tsc",
+    "buildSequential": "yarn workspaces foreach --verbose --interlaced run build && yarn run tsc",
     "buildApiDoc": "yarn workspace joplin start apidoc ../../readme/api/references/rest_api.md",
     "buildCommandIndex": "gulp buildCommandIndex",
     "buildPluginDoc": "typedoc --name 'Joplin Plugin API Documentation' --mode file -theme './Assets/PluginDocTheme/' --readme './Assets/PluginDocTheme/index.md' --excludeNotExported --excludeExternals --excludePrivate --excludeProtected --out ../joplin-website/docs/api/references/plugin_api packages/lib/services/plugins/api/",
@@ -28,9 +29,9 @@
     "linter-ci": "eslint --resolve-plugins-relative-to . --quiet --ext .js --ext .jsx --ext .ts --ext .tsx",
     "linter-precommit": "eslint --resolve-plugins-relative-to . --fix --ext .js --ext .jsx --ext .ts --ext .tsx",
     "linter": "eslint --resolve-plugins-relative-to . --fix --quiet --ext .js --ext .jsx --ext .ts --ext .tsx",
-    "postinstall": "yarn run build",
-    "publishAll": "git pull && yarn run build && lerna version --yes --no-private --no-git-tag-version && gulp completePublishAll",
-    "releaseAndroid": "yarn run build && export PATH=\"/usr/local/opt/openjdk@11/bin:$PATH\" && node packages/tools/release-android.js",
+    "postinstall": "gulp build",
+    "publishAll": "git pull && yarn run buildParallel && lerna version --yes --no-private --no-git-tag-version && gulp completePublishAll",
+    "releaseAndroid": "yarn run buildParallel && export PATH=\"/usr/local/opt/openjdk@11/bin:$PATH\" && node packages/tools/release-android.js",
     "releaseAndroidClean": "node packages/tools/release-android.js",
     "releaseCli": "node packages/tools/release-cli.js",
     "releaseClipper": "node packages/tools/release-clipper.js",
@@ -77,5 +78,8 @@
     "node-gyp": "^8.4.1",
     "nodemon": "^2.0.9"
   },
-  "packageManager": "yarn@3.1.1"
+  "packageManager": "yarn@3.1.1",
+  "resolutions": {
+    "markdown-it-multimd-table@4.1.1": "patch:markdown-it-multimd-table@npm:4.1.1#.yarn/patches/markdown-it-multimd-table-npm-4.1.1-47e334d4bd"
+  }
 }

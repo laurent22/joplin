@@ -223,6 +223,10 @@ export async function execRequest(routes: Routers, ctx: AppContext) {
 // - The ID: "SOME_ID"
 // - The link: "content"
 export function findMatchingRoute(path: string, routes: Routers): MatchedRoute {
+	// Enforce that path starts with "/" because if it doesn't, the function
+	// will return strange but valid results.
+	if (path.length && path[0] !== '/') throw new Error(`Expected path to start with "/": ${path}`);
+
 	const splittedPath = path.split('/');
 
 	// Because the path starts with "/", we remove the first element, which is

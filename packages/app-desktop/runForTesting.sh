@@ -11,6 +11,12 @@
 # ./runForTesting.sh 1 createUsers,createData,reset,e2ee,sync && ./runForTesting.sh 2 reset,e2ee,sync && ./runForTesting.sh 1
 
 # ----------------------------------------------------------------------------------
+# First user has E2EE, but second one doesn't:
+# ----------------------------------------------------------------------------------
+
+# ./runForTesting.sh 1 createUsers,createData,reset,e2ee,sync && ./runForTesting.sh 2 reset,sync && ./runForTesting.sh 1
+
+# ----------------------------------------------------------------------------------
 # Without E2EE:
 # ----------------------------------------------------------------------------------
 
@@ -39,6 +45,11 @@ USER_PROFILE_NUM=$USER_NUM
 if [ "$USER_NUM" = "1a" ]; then
 	USER_NUM=1
 	USER_PROFILE_NUM=1a
+fi
+
+if [ "$USER_NUM" = "1b" ]; then
+	USER_NUM=1
+	USER_PROFILE_NUM=1b
 fi
 
 COMMANDS=($(echo $2 | tr "," "\n"))

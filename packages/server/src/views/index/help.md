@@ -20,6 +20,10 @@ To switch between yearly and monthly payments, or to change from a Basic to Pro 
 
 Note that if you downgrade from Pro to Basic, new limitations will apply so for example you may have to delete some notes so that your account is below the required limit.
 
+## Can my subscription be refunded?
+
+We offer a 14 days trial when the subscription starts so that you can evaluate the service and potentially change your mind - if you cancel during that period you will not be charged. After 14 days your card will be charged and it will not be possible to issue a refund.
+
 ## How can I cancel my account?
 
 Click on the [Profile button](#how-can-i-change-my-details), then scroll down and click on "Manage subscription".

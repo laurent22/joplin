@@ -9,6 +9,19 @@ import { makeUrl, UrlType } from '../utils/routeUtils';
 import MarkdownIt = require('markdown-it');
 import { headerAnchor } from '@joplin/renderer';
 import { _ } from '@joplin/lib/locale';
+import { adminDashboardUrl, adminTasksUrl, adminUserDeletionsUrl, adminUsersUrl, changesUrl, homeUrl, itemsUrl, stripOffQueryParameters } from '../utils/urlUtils';
+import { URL } from 'url';
+
+type MenuItemSelectedCondition = (selectedUrl: URL)=> boolean;
+
+export interface MenuItem {
+	title: string;
+	url?: string;
+	children?: MenuItem[];
+	selected?: boolean;
+	icon?: string;
+	selectedCondition?: MenuItemSelectedCondition;
+}
 
 export interface RenderOptions {
 	partials?: any;
@@ -27,6 +40,7 @@ export interface View {
 	partials?: string[];
 	cssFiles?: string[];
 	jsFiles?: string[];
+	strings?: Record<string, string>; // List of translatable strings
 }
 
 interface GlobalParams {
@@ -46,6 +60,11 @@ interface GlobalParams {
 	isJoplinCloud?: boolean;
 	impersonatorAdminSessionId?: string;
 	csrfTag?: string;
+	s?: Record<string, string>; // List of translatable strings
+	isAdminPage?: boolean;
+	adminMenu?: MenuItem[];
+	navbarMenu?: MenuItem[];
+	currentUrl?: URL;
 }
 
 export function isView(o: any): boolean {
@@ -91,6 +110,88 @@ export default class MustacheService {
 	private layoutPath(name: string): string {
 		if (!name) name = 'default';
 		return `${config().layoutDir}/${name}.mustache`;
+	}
+
+	private setSelectedMenu(selectedUrl: URL, menuItems: MenuItem[]) {
+		if (!selectedUrl) return;
+		if (!menuItems) return;
+
+		const url = stripOffQueryParameters(selectedUrl.href);
+
+		for (const menuItem of menuItems) {
+			if (menuItem.url) {
+				if (menuItem.selectedCondition) {
+					menuItem.selected = menuItem.selectedCondition(selectedUrl);
+				} else {
+					menuItem.selected = url === menuItem.url;
+				}
+			}
+			this.setSelectedMenu(selectedUrl, menuItem.children);
+		}
+	}
+
+	private makeAdminMenu(selectedUrl: URL): MenuItem[] {
+		const output: MenuItem[] = [
+			{
+				title: _('General'),
+				children: [
+					{
+						title: _('Dashboard'),
+						url: adminDashboardUrl(),
+					},
+					{
+						title: _('Users'),
+						url: adminUsersUrl(),
+					},
+					{
+						title: _('User deletions'),
+						url: adminUserDeletionsUrl(),
+					},
+					{
+						title: _('Tasks'),
+						url: adminTasksUrl(),
+					},
+				],
+			},
+		];
+
+		this.setSelectedMenu(selectedUrl, output);
+
+		return output;
+	}
+
+	private makeNavbar(selectedUrl: URL, isAdmin: boolean): MenuItem[] {
+		let output: MenuItem[] = [
+			{
+				title: _('Home'),
+				url: homeUrl(),
+			},
+		];
+
+		if (isAdmin) {
+			output = output.concat([
+				{
+					title: _('Items'),
+					url: itemsUrl(),
+				},
+				{
+					title: _('Logs'),
+					url: changesUrl(),
+				},
+				{
+					title: _('Admin'),
+					url: adminDashboardUrl(),
+					icon: 'fas fa-hammer',
+					selectedCondition: (selectedUrl: URL) => {
+						return selectedUrl.pathname.startsWith('/admin/') || selectedUrl.pathname === '/admin';
+					},
+				},
+			]);
+		}
+
+		this.setSelectedMenu(selectedUrl, output);
+
+		return output;
 	}
 
 	private get defaultLayoutOptions(): GlobalParams {
@@ -185,13 +286,10 @@ export default class MustacheService {
 		globalParams = {
 			...this.defaultLayoutOptions,
 			...globalParams,
+			adminMenu: globalParams ? this.makeAdminMenu(globalParams.currentUrl) : null,
+			navbarMenu: this.makeNavbar(globalParams?.currentUrl, globalParams?.owner ? !!globalParams.owner.is_admin : false),
 			userDisplayName: this.userDisplayName(globalParams ? globalParams.owner : null),
-		};
-
-		const contentHtml = await this.renderFileContent(filePath, view, globalParams);
-
-		const layoutView: any = {
-			global: globalParams,
+			isAdminPage: view.path.startsWith('/admin/'),
 			s: {
 				home: _('Home'),
 				users: _('Users'),
@@ -200,7 +298,14 @@ export default class MustacheService {
 				tasks: _('Tasks'),
 				help: _('Help'),
 				logout: _('Logout'),
+				admin: _('Admin'),
 			},
+		};
+
+		const contentHtml = await this.renderFileContent(filePath, view, globalParams);
+
+		const layoutView: any = {
+			global: globalParams,
 			pageName: view.name,
 			pageTitle: view.titleOverride ? view.title : `${config().appName} - ${view.title}`,
 			contentHtml: contentHtml,
