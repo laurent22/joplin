@@ -40,6 +40,7 @@ export default class PerFolderSortOrderService {
 		this.loadSharedSortOrder();
 		eventManager.appStateOn('notesParentType', this.onFolderSelectionMayChange.bind(this, 'notesParentType'));
 		eventManager.appStateOn('selectedFolderId', this.onFolderSelectionMayChange.bind(this, 'selectedFolderId'));
+		this.previousFolderId = Setting.value('activeFolderId');
 	}
 
 	public static isSet(folderId: string): boolean {
