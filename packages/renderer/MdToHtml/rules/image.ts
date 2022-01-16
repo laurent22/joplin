@@ -11,9 +11,9 @@ function plugin(markdownIt: any, ruleOptions: RuleOptions) {
 		const token = tokens[idx];
 		const src = utils.getAttr(token.attrs, 'src');
 		const title = utils.getAttr(token.attrs, 'title');
-		const alt = token.content;
 
 		if (!Resource.isResourceUrl(src) || ruleOptions.plainResourceRendering) return defaultRender(tokens, idx, options, env, self);
+
 		const r = utils.imageReplacement(ruleOptions.ResourceModel, src, ruleOptions.resources, ruleOptions.resourceBaseUrl, ruleOptions.itemIdToUrl);
 		if (typeof r === 'string') return r;
 		if (r) {
@@ -29,7 +29,7 @@ function plugin(markdownIt: any, ruleOptions: RuleOptions) {
 
 				js = ` ontouchstart="${touchStart}" ontouchend="${cancel}" ontouchcancel="${cancel}" ontouchmove="${cancel}"`;
 			}
-			return `<img data-from-md ${htmlUtils.attributesHtml(Object.assign({}, r, { title: title, alt: alt }))}${js}/>`;
+			return `<img data-from-md ${htmlUtils.attributesHtml(Object.assign({}, r, { title: title, alt: token.content }))}${js}/>`;
 		}
 		return defaultRender(tokens, idx, options, env, self);
 	};
