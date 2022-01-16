@@ -20,6 +20,7 @@ export interface OnLoadEvent {
 
 interface HookDependencies {
 	syncStarted: boolean;
+	notes: any[];
 	noteId: string;
 	isProvisional: boolean;
 	titleInputRef: any;
@@ -58,12 +59,15 @@ function resourceInfosChanged(a: ResourceInfos, b: ResourceInfos): boolean {
 	return false;
 }
 
+const getCompareKey = (a: FormNote) => `${a.body}|${a.id}|${a.title}|${a.parent_id}|${a.is_todo}`;
+const isNoteEqual = (a: FormNote, b: FormNote) => getCompareKey(a) === getCompareKey(b);
+const isNewer = (a: FormNote, b: any) => a.user_updated_time > b.update_time;
+
 export default function useFormNote(dependencies: HookDependencies) {
-	const { syncStarted, noteId, isProvisional, titleInputRef, editorRef, onBeforeLoad, onAfterLoad } = dependencies;
+	const { syncStarted, notes, noteId, isProvisional, titleInputRef, editorRef, onBeforeLoad, onAfterLoad } = dependencies;
 
 	const [formNote, setFormNote] = useState<FormNote>(defaultFormNote());
 	const [isNewNote, setIsNewNote] = useState(false);
-	const prevSyncStarted = usePrevious(syncStarted);
 	const previousNoteId = usePrevious(formNote.id);
 	const [resourceInfos, setResourceInfos] = useState<ResourceInfos>({});
 
@@ -105,23 +109,31 @@ export default function useFormNote(dependencies: HookDependencies) {
 	}
 
 	useEffect(() => {
-		// Check that synchronisation has just finished - and
+		// Check for updates on notes i.e. via API Updates (fix #5955)
+		// Check for sync finished - and
 		// if the note has never been changed, we reload it.
 		// If the note has already been changed, it's a conflict
 		// that's already been handled by the synchronizer.
 
-		if (!prevSyncStarted) return () => {};
-		if (syncStarted) return () => {};
-		if (formNote.hasChanged) return () => {};
+		if (syncStarted || formNote.hasChanged) return () => {};
 
-		reg.logger().debug('Sync has finished and note has never been changed - reloading it');
+		reg.logger().debug('Note has never been changed and there seem to be updates - trying to reload it');
 
 		let cancelled = false;
 
 		const loadNote = async () => {
 			const n = await Note.load(noteId);
 			if (cancelled) return;
-
+			// compare the note to the current formNote to see if there are even changes
+			if (isNoteEqual(formNote, n)) {
+				reg.logger().warn('Trying to reload a note that has no updates:', noteId);
+				return;
+			}
+			// compare the note to the current formNote to see if the changes are newer
+			if (isNewer(formNote, n)) {
+				reg.logger().warn('Trying to reload a note that is older than current:', noteId);
+				return;
+			}
 			// Normally should not happened because if the note has been deleted via sync
 			// it would not have been loaded in the editor (due to note selection changing
 			// on delete)
@@ -132,13 +144,12 @@ export default function useFormNote(dependencies: HookDependencies) {
 
 			await initNoteState(n);
 		};
-
 		void loadNote();
 
 		return () => {
 			cancelled = true;
 		};
-	}, [prevSyncStarted, syncStarted, formNote]);
+	}, [syncStarted, notes]);
 
 	useEffect(() => {
 		if (!noteId) {
