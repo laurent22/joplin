@@ -293,6 +293,8 @@
 			const restoreAndRefresh = () => {
 				scrollmap.refresh();
 				restorePercentScroll();
+				// To ensures Editor's scroll position is synced with Viewer's
+				ipcProxySendToHost('percentScroll', percentScroll_);
 			};
 			const now = Date.now();
 			if (now < restoreAndRefreshTimeout_) {

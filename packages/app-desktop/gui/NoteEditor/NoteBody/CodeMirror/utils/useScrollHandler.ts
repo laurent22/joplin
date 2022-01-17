@@ -7,7 +7,10 @@ export default function useScrollHandler(editorRef: any, webviewRef: any, onScro
 	const ignoreNextEditorScrollTime_ = useRef(Date.now());
 	const ignoreNextEditorScrollEventCount_ = useRef(0);
 	const delayedSetEditorPercentScrollTimeoutID_ = useRef(null);
+	const scrollTopIsUncertain_ = useRef(true);
 	const lastResizeHeight_ = useRef(NaN);
+	const lastLinesHeight_ = useRef(NaN);
+	const restoreEditorPercentScrollTimeoutId_ = useRef<any>(null);
 
 	// Ignores one next scroll event for a short time.
 	const ignoreNextEditorScrollEvent = () => {
@@ -55,23 +58,33 @@ export default function useScrollHandler(editorRef: any, webviewRef: any, onScro
 			if (isCodeMirrorReady(cm)) {
 				// calculates editor's GUI-dependent pixel-based raw percent
 				const newEditorPercent = translateScrollPercentL2E(cm, scrollPercent_.current);
-				const oldEditorPercent = cm.getScrollPercent();
+				const oldEditorPercent = scrollTopIsUncertain_.current ? NaN : cm.getScrollPercent();
 				if (!(Math.abs(newEditorPercent - oldEditorPercent) < 1e-8)) {
 					ignoreNextEditorScrollEvent();
 					cm.setScrollPercent(newEditorPercent);
 				}
+				scrollTopIsUncertain_.current = false;
 			} else {
 				retry += 1;
-				if (retry <= 10) {
+				if (retry <= 3) {
 					delayedSetEditorPercentScrollTimeoutID_.current = shim.setTimeout(fn, 50);
 				}
+				scrollTopIsUncertain_.current = true;
+				lastResizeHeight_.current = NaN;
+				lastLinesHeight_.current = NaN;
 			}
 		};
 		fn();
 	};
 
 	const restoreEditorPercentScroll = () => {
-		if (isCodeMirrorReady(editorRef.current)) {
+		if (restoreEditorPercentScrollTimeoutId_.current) {
+			shim.clearTimeout(restoreEditorPercentScrollTimeoutId_.current);
+			restoreEditorPercentScrollTimeoutId_.current = null;
+		}
+		const cm = editorRef.current;
+		if (isCodeMirrorReady(cm)) {
+			lastLinesHeight_.current = cm.heightAtLine(cm.lineCount()) - cm.heightAtLine(0);
 			setEditorPercentScrollInternal(scrollPercent_.current);
 		}
 	};
@@ -94,20 +107,24 @@ export default function useScrollHandler(editorRef: any, webviewRef: any, onScro
 		const ignored = isNextEditorScrollEventIgnored();
 		const cm = editorRef.current;
 		if (isCodeMirrorReady(cm)) {
+			if (scrollTopIsUncertain_.current) return;
 			const editorPercent = Math.max(0, Math.min(1, cm.getScrollPercent()));
 			if (!isNaN(editorPercent)) {
 				// when switching to another note, the percent can sometimes be NaN
 				// this is coming from `gui/NoteEditor/NoteBody/CodeMirror/utils/useScrollUtils.ts`
 				// when CodeMirror returns scroll info with heigth == clientHeigth
 				// https://github.com/laurent22/joplin/issues/4797
-
-				// calculates GUI-independent line-based percent
-				const percent = translateScrollPercentE2L(cm, editorPercent);
-				scrollPercent_.current = percent;
 				if (!ignored) {
+					// calculates GUI-independent line-based percent
+					const percent = translateScrollPercentE2L(cm, editorPercent);
+					scrollPercent_.current = percent;
 					setViewerPercentScroll(percent);
 				}
 			}
+		} else {
+			scrollTopIsUncertain_.current = true;
+			lastResizeHeight_.current = NaN;
+			lastLinesHeight_.current = NaN;
 		}
 	}, [setViewerPercentScroll]);
 
@@ -115,18 +132,45 @@ export default function useScrollHandler(editorRef: any, webviewRef: any, onScro
 		scrollPercent_.current = 0;
 		if (editorRef.current) {
 			editorRef.current.setScrollPercent(0);
+			scrollTopIsUncertain_.current = false;
 		}
 	}, []);
 
 	const editor_resize = useCallback((cm) => {
 		if (isCodeMirrorReady(cm)) {
+			// This handler is called when resized and refreshed.
 			// Only when resized, the scroll position is restored.
 			const info = cm.getScrollInfo();
 			const height = info.height - info.clientHeight;
 			if (height !== lastResizeHeight_.current) {
+				// When resized, restoring is performed immediately.
 				restoreEditorPercentScroll();
 				lastResizeHeight_.current = height;
 			}
+		} else {
+			scrollTopIsUncertain_.current = true;
+			lastResizeHeight_.current = NaN;
+			lastLinesHeight_.current = NaN;
+		}
+	}, []);
+
+	// When heights of lines are updated in CodeMirror, 'update' events are raised.
+	// If such an update event is raised, scroll position should be restored.
+	// See https://github.com/laurent22/joplin/issues/5981
+	const editor_update = useCallback((cm) => {
+		if (isCodeMirrorReady(cm)) {
+			const linesHeight = cm.heightAtLine(cm.lineCount()) - cm.heightAtLine(0);
+			if (lastLinesHeight_.current !== linesHeight) {
+				// To avoid cancelling intentional scroll position changes,
+				// restoring is performed in a timeout handler.
+				if (!restoreEditorPercentScrollTimeoutId_.current) {
+					restoreEditorPercentScrollTimeoutId_.current = shim.setTimeout(restoreEditorPercentScroll, 10);
+				}
+			}
+		} else {
+			scrollTopIsUncertain_.current = true;
+			lastResizeHeight_.current = NaN;
+			lastLinesHeight_.current = NaN;
 		}
 	}, []);
 
@@ -141,7 +185,7 @@ export default function useScrollHandler(editorRef: any, webviewRef: any, onScro
 	}, []);
 
 	return {
-		resetScroll, setEditorPercentScroll, setViewerPercentScroll, editor_scroll, editor_resize, getLineScrollPercent,
+		resetScroll, setEditorPercentScroll, setViewerPercentScroll, editor_scroll, editor_resize, editor_update, getLineScrollPercent,
 	};
 }
 
