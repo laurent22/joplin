@@ -63,6 +63,7 @@ const propertyTypes: Record<string, string> = {
 	'user_deletions.start_time': 'number',
 	'user_deletions.end_time': 'number',
 	'user_deletions.scheduled_time': 'number',
+	'organization_users.invitation_status': 'OrganizationUserInvitationStatus',
 };
 
 function insertContentIntoFile(filePath: string, markerOpen: string, markerClose: string, contentToInsert: string): void {

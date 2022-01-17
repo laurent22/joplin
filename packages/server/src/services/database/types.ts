@@ -43,6 +43,13 @@ export enum UserFlagType {
 	UserDeletionInProgress = 7,
 }
 
+export enum OrganizationUserInvitationStatus {
+	None = 0,
+	Sent = 1,
+	Accepted = 2,
+	Rejected = 3,
+}
+
 export function userFlagTypeToLabel(t: UserFlagType): string {
 	const s: Record<UserFlagType, string> = {
 		[UserFlagType.FailedPaymentWarning]: 'Failed Payment (Warning)',
@@ -293,7 +300,7 @@ export interface OrganizationUser {
 	organization_id?: Uuid;
 	user_id?: Uuid;
 	invitation_email?: string;
-	invitation_status?: number;
+	invitation_status?: OrganizationUserInvitationStatus;
 	is_admin?: number;
 	updated_time?: string;
 	created_time?: string;

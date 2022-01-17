@@ -8,8 +8,7 @@ import { createCsrfTag } from '../../utils/csrf';
 import { adminOrganizationsUrl, adminOrganizationUrl, adminUserUrl } from '../../utils/urlUtils';
 import { bodyFields } from '../../utils/requestUtils';
 import { Organization } from '../../services/database/types';
-import { ErrorBadRequest } from '../../utils/errors';
-import { AccountType } from '../../models/UserModel';
+import { ErrorBadRequest, ErrorNotFound } from '../../utils/errors';
 import { makeTablePagination, makeTableView, Row, Table } from '../../utils/views/table';
 import { PaginationOrderDir } from '../../models/utils/pagination';
 import { formatDateTime } from '../../utils/time';
@@ -61,6 +60,7 @@ router.get('admin/organizations', async (_path: SubPath, ctx: AppContext) => {
 				},
 				{
 					value: d.name,
+					url: adminOrganizationUrl(d.id),
 				},
 				{
 					value: owners.find(o => o.id === d.owner_id)?.email,
@@ -95,7 +95,6 @@ router.post('admin/organizations/:id', async (path: SubPath, ctx: AppContext) =>
 	try {
 		const orgOwner = await models.user().loadByEmail(fields.owner_email);
 		if (!orgOwner) throw new ErrorBadRequest(_('No such user: %s', fields.owner_email));
-		if (orgOwner.account_type !== AccountType.Pro) throw new Error('Owner must be a Pro account');
 
 		const org: Organization = {
 			name: fields.name,
@@ -118,7 +117,24 @@ router.post('admin/organizations/:id', async (path: SubPath, ctx: AppContext) =>
 });
 
 router.get('admin/organizations/:id', async (path: SubPath, ctx: AppContext, fields: FormFields = null, error: any = null) => {
+	const models = ctx.joplin.models;
 	const isNew = path.id === 'new';
+
+	if (!fields && !isNew) {
+		const org = await models.organizations().load(path.id);
+		if (!org) throw new ErrorNotFound();
+
+		const orgOwner = await models.user().load(org.owner_id);
+
+		if (!orgOwner) await models.notification().addError(ctx.joplin.owner.id, `Cannot find organisation owner: ${orgOwner.id}`);
+
+		fields = {
+			id: org.id,
+			is_new: '0',
+			name: org.name,
+			owner_email: orgOwner ? orgOwner.email : '',
+		};
+	}
 
 	const view: View = {
 		...defaultView('admin/organization', _('Organization')),

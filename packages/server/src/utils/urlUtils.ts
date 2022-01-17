@@ -70,6 +70,10 @@ export function userUrl(userId: Uuid): string {
 	return `${config().baseUrl}/users/${userId}`;
 }
 
+export function organizationInvitationConfirmUrl(orgUserId: string): string {
+	return `${config().baseUrl}/organization_users/${orgUserId}/confirm`;
+}
+
 export function adminOrganizationUrl(id: string): string {
 	return `${config().baseUrl}/admin/organizations/${id}`;
 }

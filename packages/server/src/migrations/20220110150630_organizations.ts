@@ -14,7 +14,7 @@ export async function up(db: DbConnection): Promise<any> {
 	await db.schema.createTable('organization_users', (table: Knex.CreateTableBuilder) => {
 		table.uuid('id').unique().notNullable();
 		table.uuid('organization_id').notNullable();
-		table.string('user_id', 32).notNullable();
+		table.string('user_id', 32).defaultTo('').notNullable();
 		table.text('invitation_email', 'mediumtext').defaultTo('').notNullable();
 		table.integer('invitation_status').defaultTo(0).notNullable();
 		table.specificType('is_admin', 'smallint').defaultTo(0).nullable();

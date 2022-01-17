@@ -2,7 +2,7 @@ import { Uuid, Email, EmailSender } from '../services/database/types';
 import BaseModel from './BaseModel';
 
 export interface EmailToSend {
-	sender_id: EmailSender;
+	sender_id?: EmailSender;
 	recipient_email: string;
 	subject: string;
 	body: string;
@@ -28,6 +28,11 @@ export default class EmailModel extends BaseModel<Email> {
 	}
 
 	public async push(email: EmailToSend): Promise<Email | null> {
+		email = {
+			sender_id: EmailSender.NoReply,
+			...email,
+		};
+
 		if (email.key) {
 			const existingEmail = await this.byRecipientAndKey(email.recipient_email, email.key);
 			if (existingEmail) return null; // noop - the email has already been sent
