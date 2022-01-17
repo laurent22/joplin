@@ -86,10 +86,20 @@ jobs:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           IS_CONTINUOUS_INTEGRATION: 1
           BUILD_SEQUENCIAL: 1
+        # To ensure that the operations stop on failure, all commands
+        # should be on one line with "&&" in between.
         run: |
-          yarn install
-          cd packages/app-desktop
-          yarn run dist
+          yarn install && cd packages/app-desktop && yarn run dist
+
+      # Build and package the Windows app, without publishing it, just to
+      # verify that the build process hasn't been broken.
+      - name: Build Windows app (no publishing)
+        if: runner.os == 'Windows' && !startsWith(github.ref, 'refs/tags/v')
+        env:
+          IS_CONTINUOUS_INTEGRATION: 1
+          BUILD_SEQUENCIAL: 1
+        run: |
+          yarn install && cd packages/app-desktop && yarn run dist --publish=never
 
   ServerDockerImage:
     runs-on: ${{ matrix.os }}
