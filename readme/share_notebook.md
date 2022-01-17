@@ -34,15 +34,13 @@ On mobile and CLI, you cannot currently share notebooks, but you can view or mod
 
 Currently they have full access to the data, including reading, writing and deleting notebooks or notes. In a future version, access control might be implemented. For example, to only give read-only access to the shared notebook.
 
-### What can actually be shared?
+### What is actually shared?
 
 All the sub-notebooks, notes and resources within the shared notebook are shared.
 
 ### Does it work with End-To-End-Encryption?
 
-Yes and no. It is possible to use the share notebook feature even with E2EE enabled, however any shared notebook or note will not be encrypted, otherwise you would have had to give your master key password to the people you share with, which you'd probably not want to do.
-
-In a future version, this might be supported. For example by automatically creating a new master key for the shared notebook. You would then provide the recipients with that master key password.
+Yes it does. Both sharer and recipient need to have E2EE enabled for it to work.
 
 ### What can it be used for?
 

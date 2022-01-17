@@ -67,7 +67,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 
 	usePluginServiceRegistration(ref);
 
-	const { resetScroll, editor_scroll, setEditorPercentScroll, setViewerPercentScroll, editor_resize, getLineScrollPercent,
+	const { resetScroll, editor_scroll, setEditorPercentScroll, setViewerPercentScroll, editor_resize, editor_update, getLineScrollPercent,
 	} = useScrollHandler(editorRef, webviewRef, props.onScroll);
 
 	const codeMirror_change = useCallback((newBody: string) => {
@@ -843,6 +843,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 					onEditorPaste={onEditorPaste}
 					isSafeMode={props.isSafeMode}
 					onResize={editor_resize}
+					onUpdate={editor_update}
 				/>
 			</div>
 		);
