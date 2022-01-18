@@ -191,7 +191,7 @@ export default abstract class BaseModel<T> {
 	//
 	// The `name` argument is only for debugging, so that any stuck transaction
 	// can be more easily identified.
-	protected async withTransaction<T>(fn: Function, name: string): Promise<T> {
+	protected async withTransaction<T>(fn: Function, name: string = ''): Promise<T> {
 		const debugSteps = false;
 		const debugTimeout = true;
 		const timeoutMs = 10000;
