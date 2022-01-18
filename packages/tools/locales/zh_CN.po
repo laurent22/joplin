@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: 南宫小骏 <jackytsu@vip.qq.com>\n"
+"Last-Translator: horaceyoung <yonghaoharry@gmail.com>\n"
 "Language-Team: zh_CN <jackytsu.vip.qq.com>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.0\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.0.1\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:565
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -257,11 +257,11 @@ msgstr "添加到字典"
 #: packages/server/src/services/MustacheService.ts:182
 #: packages/server/src/services/MustacheService.ts:301
 msgid "Admin"
-msgstr ""
+msgstr "管理员"
 
 #: packages/server/src/routes/admin/dashboard.ts:10
 msgid "Admin dashboard"
-msgstr ""
+msgstr "管理员面板"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:189
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:147
@@ -388,9 +388,8 @@ msgid "Auto-pair braces, parenthesis, quotations, etc."
 msgstr "自动配对花括号、圆括号、引号等。"
 
 #: packages/lib/models/Setting.ts:1193
-#, fuzzy
 msgid "Automatically check for updates"
-msgstr "检查更新..."
+msgstr "自动检查更新"
 
 #: packages/lib/models/Setting.ts:770
 msgid "Automatically switch theme to match system theme"
@@ -746,9 +745,8 @@ msgid "Copy external link"
 msgstr "拷贝外部访问地址"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:134
-#, fuzzy
 msgid "Copy image"
-msgstr "复制令牌"
+msgstr "复制图片"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:172
 msgid "Copy Link Address"
@@ -829,21 +827,19 @@ msgstr "无法升级主密钥：%s"
 msgid ""
 "Could not verify the share status of this notebook - aborting. Please try "
 "again when you are connected to the internet."
-msgstr ""
+msgstr "无法验证此笔记的分享状态 - 终止。 请在连接到互联网后再次尝试。"
 
 #: packages/app-mobile/components/note-list.js:101
 msgid "Create a notebook"
-msgstr "新建笔记本"
+msgstr "新建一个笔记本"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:128
-#, fuzzy
 msgid "Create notebook"
 msgstr "新建笔记本"
 
 #: packages/server/src/routes/admin/users.ts:171
-#, fuzzy
 msgid "Create user"
-msgstr "创建于：%s"
+msgstr "创建用户"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:29
 msgid "Created"
@@ -935,7 +931,7 @@ msgstr "暗黑"
 
 #: packages/server/src/services/MustacheService.ts:139
 msgid "Dashboard"
-msgstr ""
+msgstr "面板"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:625
 msgid "Database v%s"
@@ -1641,7 +1637,7 @@ msgstr "输入 `help keymap` 来获取完整的键盘快捷键列表"
 
 #: packages/lib/models/Setting.ts:568
 msgid "Force path style"
-msgstr ""
+msgstr "强制路径风格"
 
 #: packages/lib/commands/historyForward.ts:6
 msgid "Forward"
@@ -1731,7 +1727,7 @@ msgstr "突出显示"
 #: packages/server/src/services/MustacheService.ts:166
 #: packages/server/src/services/MustacheService.ts:294
 msgid "Home"
-msgstr ""
+msgstr "主页"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:78
 msgid "Horizontal Rule"
@@ -1934,9 +1930,8 @@ msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "无效的选项值: \"%s\" 。可用值有: %s。"
 
 #: packages/app-cli/app/command-e2ee.ts:46
-#, fuzzy
 msgid "Invalid password"
-msgstr "答案无效：%s"
+msgstr "无效密码"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:38
 msgid "Italic"
@@ -1949,7 +1944,7 @@ msgstr "条目 \"%s\" 无法下载：%s"
 #: packages/server/src/services/MustacheService.ts:174
 #: packages/server/src/services/MustacheService.ts:296
 msgid "Items"
-msgstr ""
+msgstr "条目"
 
 #: packages/lib/services/ReportService.ts:208
 msgid "Items that cannot be decrypted"
@@ -2089,11 +2084,11 @@ msgstr "离开笔记本..."
 
 #: packages/lib/models/Setting.ts:1236
 msgid "Legal"
-msgstr "法律专用纸 (Legal)"
+msgstr "法律专用纸"
 
 #: packages/lib/models/Setting.ts:1232
 msgid "Letter"
-msgstr "信函 (Letter)"
+msgstr "信函"
 
 #: packages/lib/models/Setting.ts:338
 msgid "Light"
@@ -2159,11 +2154,11 @@ msgstr "通过 OneDrive 登录"
 
 #: packages/server/src/services/MustacheService.ts:300
 msgid "Logout"
-msgstr ""
+msgstr "登出"
 
 #: packages/server/src/services/MustacheService.ts:178
 msgid "Logs"
-msgstr ""
+msgstr "日志"
 
 #: packages/app-desktop/gui/MenuBar.tsx:710
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:583
@@ -2484,10 +2479,9 @@ msgstr "注意: 笔记分享后，便不再在服务器上加密。"
 
 #: packages/app-desktop/gui/MenuBar.tsx:680
 msgid "Note&book"
-msgstr "笔记本 (&B)"
+msgstr "笔记&笔记本"
 
 #: packages/lib/models/Setting.ts:2143
-#, fuzzy
 msgid "Notebook"
 msgstr "笔记本"
 
@@ -2510,7 +2504,6 @@ msgstr "笔记本无法被命名为 \"%s\" ，该标题已被留作他用。"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleNotesSortOrderField.ts:8
 #: packages/app-desktop/gui/MainScreen/commands/toggleNotesSortOrderReverse.ts:9
-#, fuzzy
 msgid "Notes"
 msgstr "笔记"
 
@@ -2808,7 +2801,7 @@ msgstr "隐私政策"
 
 #: packages/server/src/routes/admin/users.ts:168
 msgid "Profile"
-msgstr ""
+msgstr "资料"
 
 #: packages/lib/versionInfo.ts:26
 msgid "Profile Version: %s"
@@ -2989,31 +2982,27 @@ msgstr "执行文本文件中包含的命令。每个命令占一行。"
 
 #: packages/lib/SyncTargetAmazonS3.js:28
 msgid "S3"
-msgstr ""
+msgstr "S3"
 
 #: packages/lib/models/Setting.ts:546
-#, fuzzy
 msgid "S3 access key"
-msgstr "AWS 密钥"
+msgstr "S3 访问密钥"
 
 #: packages/lib/models/Setting.ts:506
-#, fuzzy
 msgid "S3 bucket"
-msgstr "AWS S3 存储桶"
+msgstr "S3 存储桶"
 
 #: packages/lib/models/Setting.ts:535
 msgid "S3 region"
-msgstr ""
+msgstr "S3 地区"
 
 #: packages/lib/models/Setting.ts:557
-#, fuzzy
 msgid "S3 secret key"
-msgstr "AWS 密码"
+msgstr "S3 密钥"
 
 #: packages/lib/models/Setting.ts:521
-#, fuzzy
 msgid "S3 URL"
-msgstr "AWS S3 URL"
+msgstr "S3 URL"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:579
 msgid ""
@@ -3174,9 +3163,8 @@ msgid "Show note counts"
 msgstr "显示笔记数"
 
 #: packages/lib/models/Setting.ts:866
-#, fuzzy
 msgid "Show sort order buttons"
-msgstr "显示笔记数"
+msgstr "显示排序方法按钮"
 
 #: packages/lib/models/Setting.ts:1042
 msgid "Show tray icon"
@@ -3494,7 +3482,7 @@ msgstr "拍照"
 #: packages/server/src/services/MustacheService.ts:151
 #: packages/server/src/services/MustacheService.ts:298
 msgid "Tasks"
-msgstr ""
+msgstr "任务"
 
 #: packages/lib/models/Setting.ts:1228
 msgid "Text editor command"
@@ -3925,9 +3913,8 @@ msgid "Toggle note list"
 msgstr "切换笔记列表"
 
 #: packages/app-desktop/gui/MainScreen/commands/togglePerFolderSortOrder.ts:7
-#, fuzzy
 msgid "Toggle own sort order"
-msgstr "切换安全模式"
+msgstr "切换自有排序顺序"
 
 #: packages/app-desktop/commands/toggleSafeMode.ts:8
 msgid "Toggle safe mode"
@@ -3938,9 +3925,8 @@ msgid "Toggle sidebar"
 msgstr "切换边栏"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleNotesSortOrderField.ts:7
-#, fuzzy
 msgid "Toggle sort order field"
-msgstr "切换安全模式"
+msgstr "切换排序顺序字段"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:40
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:41
@@ -4040,15 +4026,14 @@ msgstr "更新"
 
 #: packages/server/src/routes/admin/users.ts:171
 #: packages/server/src/routes/index/users.ts:89
-#, fuzzy
 msgid "Update profile"
-msgstr "导出配置文件"
+msgstr "更新资料"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:208
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:209
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:30
 msgid "Updated"
-msgstr "更新日期"
+msgstr "已更新"
 
 #: packages/lib/models/Folder.ts:40 packages/lib/models/Note.ts:37
 msgid "updated date"
@@ -4143,13 +4128,13 @@ msgstr ""
 
 #: packages/server/src/services/MustacheService.ts:147
 msgid "User deletions"
-msgstr ""
+msgstr "用户删除"
 
 #: packages/server/src/routes/admin/users.ts:107
 #: packages/server/src/services/MustacheService.ts:143
 #: packages/server/src/services/MustacheService.ts:295
 msgid "Users"
-msgstr ""
+msgstr "用户"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:182
 msgid "Valid"
@@ -4298,11 +4283,10 @@ msgid "Your master password is needed to decrypt some of your data."
 msgstr "要解密您的某些数据，必须使用您的主密码。"
 
 #: packages/app-cli/app/command-sync.ts:242
-#, fuzzy
 msgid ""
 "Your password is needed to decrypt some of your data. Type `:e2ee decrypt` "
 "to set it."
-msgstr "要解密您的某些数据，必须使用您的主密码。"
+msgstr "要解密您的某些数据，需要使用您的密码。输入`:e2ee decrypt`来设置。"
 
 #: packages/app-mobile/components/CameraView.tsx:189
 msgid "Your permission to use your camera is required."
