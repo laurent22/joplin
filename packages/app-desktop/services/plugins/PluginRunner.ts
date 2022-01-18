@@ -160,8 +160,10 @@ export default class PluginRunner extends BasePluginRunner {
 				try {
 					await this.backOffHandler(plugin.id).wait(fullPath, debugMappedArgs);
 				} catch (error) {
+					// For now, we don't disable the plugin, but still print the
+					// errors so that any issue can be investigated easily.
 					logger.error(error);
-					return;
+					// return;
 				}
 
 				let result: any = null;
