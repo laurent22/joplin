@@ -75,9 +75,13 @@ export async function beforeAllDb(unitName: string, createDbOptions: CreateDbOpt
 	const tempDir = `${packageRootDir}/temp/test-${unitName}`;
 	await fs.mkdirp(tempDir);
 
-	// Uncomment the code below to run the test units with Postgres. Run this:
+	// To run the tests with Postgres, first run this:
 	//
-	// sudo docker compose -f docker-compose.db-dev.yml up
+	//     sudo docker compose -f docker-compose.db-dev.yml up
+	//
+	// Then this:
+	//
+	//     JOPLIN_TESTS_SERVER_DB=pg yarn test
 
 	if (process.env.JOPLIN_TESTS_SERVER_DB === 'pg') {
 		await initConfig(Env.Dev, parseEnv({

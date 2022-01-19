@@ -54,9 +54,10 @@ export default class OrganizationModel extends BaseModel<Organization> {
 		if (!org) throw new Error(`No such organisation: ${orgId}`);
 
 		return this.withTransaction<OrganizationUser>(async () => {
-			// This means we take a lock on the organization row, which ensures
-			// no other routine is going to send any other invitation for this
-			// org while this transaction is active.
+			// The `forUpdate` statement below means we take a lock on the
+			// organization row, which ensures no other routine is going to send
+			// any other invitation for this org while this transaction is
+			// active.
 			//
 			// Otherwise there would be a race condition that would allow going
 			// over max_users if multiple invitations are sent at the same time.
