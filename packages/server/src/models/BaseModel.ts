@@ -10,6 +10,7 @@ import personalizedUserContentBaseUrl from '@joplin/lib/services/joplinServer/pe
 import Logger from '@joplin/lib/Logger';
 import dbuuid from '../utils/dbuuid';
 import { defaultPagination, PaginatedResults, Pagination } from './utils/pagination';
+import { Knex } from 'knex';
 
 const logger = Logger.create('BaseModel');
 
@@ -30,6 +31,10 @@ export interface SaveOptions {
 
 export interface LoadOptions {
 	fields?: string[];
+}
+
+export interface AllPaginatedOptions extends LoadOptions {
+	queryCallback?: (query: Knex.QueryBuilder)=> Knex.QueryBuilder;
 }
 
 export interface DeleteOptions {
@@ -237,7 +242,7 @@ export default abstract class BaseModel<T> {
 		return rows as T[];
 	}
 
-	public async allPaginated(pagination: Pagination, options: LoadOptions = {}): Promise<PaginatedResults<T>> {
+	public async allPaginated(pagination: Pagination, options: AllPaginatedOptions = {}): Promise<PaginatedResults<T>> {
 		pagination = {
 			...defaultPagination(),
 			...pagination,
@@ -245,12 +250,18 @@ export default abstract class BaseModel<T> {
 
 		const itemCount = await this.count();
 
-		const items = await this
+		let query = this
 			.db(this.tableName)
-			.select(this.selectFields(options))
+			.select(this.selectFields(options));
+
+		if (options.queryCallback) query = options.queryCallback(query);
+
+		query
 			.orderBy(pagination.order[0].by, pagination.order[0].dir)
 			.offset((pagination.page - 1) * pagination.limit)
-			.limit(pagination.limit) as T[];
+			.limit(pagination.limit);
+
+		const items = (await query) as T[];
 
 		return {
 			items,

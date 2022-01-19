@@ -79,6 +79,11 @@ export function redirect(ctx: AppContext, url: string): Response {
 	return new Response(ResponseType.KoaResponse, ctx.response);
 }
 
+export function internalRedirect(path: SubPath, ctx: AppContext, router: Router, urlSchema: string, ...args: any[]) {
+	const endPoint = router.findEndPoint(HttpMethod.GET, urlSchema);
+	return endPoint.handler(path, ctx, ...args);
+}
+
 export function filePathInfo(path: string): PathInfo {
 	return {
 		basename: removeTrailingColon(basename(path)),

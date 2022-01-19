@@ -4,12 +4,12 @@ import { extname } from 'path';
 import config from '../config';
 import { filename } from '@joplin/lib/path-utils';
 import { Config, NotificationView } from '../utils/types';
-import { User } from '../services/database/types';
+import { Organization, User } from '../services/database/types';
 import { makeUrl, UrlType } from '../utils/routeUtils';
 import MarkdownIt = require('markdown-it');
 import { headerAnchor } from '@joplin/renderer';
 import { _ } from '@joplin/lib/locale';
-import { adminDashboardUrl, adminOrganizationsUrl, adminTasksUrl, adminUserDeletionsUrl, adminUsersUrl, changesUrl, homeUrl, itemsUrl, stripOffQueryParameters } from '../utils/urlUtils';
+import { adminDashboardUrl, adminOrganizationsUrl, adminTasksUrl, adminUserDeletionsUrl, adminUsersUrl, changesUrl, homeUrl, itemsUrl, organizationUrl, stripOffQueryParameters } from '../utils/urlUtils';
 import { URL } from 'url';
 
 type MenuItemSelectedCondition = (selectedUrl: URL)=> boolean;
@@ -50,6 +50,7 @@ interface GlobalParams {
 	notifications?: NotificationView[];
 	hasNotifications?: boolean;
 	owner?: User;
+	organization?: Organization;
 	appVersion?: string;
 	appName?: string;
 	termsUrl?: string;
@@ -168,13 +169,20 @@ export default class MustacheService {
 		return output;
 	}
 
-	private makeNavbar(selectedUrl: URL, isAdmin: boolean): MenuItem[] {
+	private makeNavbar(selectedUrl: URL, isAdmin: boolean, hasOrganization: boolean): MenuItem[] {
 		let output: MenuItem[] = [
 			{
 				title: _('Home'),
 				url: homeUrl(),
 			},
 		];
+
+		if (hasOrganization) {
+			output.push({
+				title: _('Organization'),
+				url: organizationUrl('me'),
+			});
+		}
 
 		if (isAdmin) {
 			output = output.concat([
@@ -295,10 +303,14 @@ export default class MustacheService {
 			...this.defaultLayoutOptions,
 			...globalParams,
 			adminMenu: globalParams ? this.makeAdminMenu(globalParams.currentUrl) : null,
-			navbarMenu: this.makeNavbar(globalParams?.currentUrl, globalParams?.owner ? !!globalParams.owner.is_admin : false),
+			navbarMenu: this.makeNavbar(
+				globalParams?.currentUrl,
+				globalParams?.owner ? !!globalParams.owner.is_admin : false,
+				!!globalParams?.organization
+			),
 			userDisplayName: this.userDisplayName(globalParams ? globalParams.owner : null),
 			isAdminPage: view.path.startsWith('/admin/'),
-			config: config(),
+			// config: config(),
 			s: {
 				home: _('Home'),
 				users: _('Users'),

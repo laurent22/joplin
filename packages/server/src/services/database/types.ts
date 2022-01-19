@@ -50,6 +50,19 @@ export enum OrganizationUserInvitationStatus {
 	Rejected = 3,
 }
 
+export const organizationUserInvitationStatusToLabel = (status: OrganizationUserInvitationStatus) => {
+	const s: Record<OrganizationUserInvitationStatus, string> = {
+		[OrganizationUserInvitationStatus.None]: 'None',
+		[OrganizationUserInvitationStatus.Sent]: 'Sent',
+		[OrganizationUserInvitationStatus.Accepted]: 'Accepted',
+		[OrganizationUserInvitationStatus.Rejected]: 'Rejected',
+	};
+
+	if (!s[status]) throw new Error(`Unknown status: ${status}`);
+
+	return s[status];
+};
+
 export function userFlagTypeToLabel(t: UserFlagType): string {
 	const s: Record<UserFlagType, string> = {
 		[UserFlagType.FailedPaymentWarning]: 'Failed Payment (Warning)',
@@ -295,15 +308,12 @@ export interface Organization extends WithUuid, WithDates {
 	max_users?: number;
 }
 
-export interface OrganizationUser {
-	id?: Uuid;
+export interface OrganizationUser extends WithUuid, WithDates {
 	organization_id?: Uuid;
 	user_id?: Uuid;
 	invitation_email?: string;
 	invitation_status?: OrganizationUserInvitationStatus;
 	is_admin?: number;
-	updated_time?: string;
-	created_time?: string;
 }
 
 export const databaseSchema: DatabaseTables = {

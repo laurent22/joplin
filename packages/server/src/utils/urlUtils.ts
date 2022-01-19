@@ -62,6 +62,14 @@ export function loginUrl(): string {
 	return `${config().baseUrl}/login`;
 }
 
+export function organizationUrl(id: string): string {
+	return `${config().baseUrl}/organizations/${id}`;
+}
+
+export function organizationUserUrl(id: string): string {
+	return `${config().baseUrl}/organizations/${id}/users`;
+}
+
 export function adminUserDeletionsUrl(): string {
 	return `${config().adminBaseUrl}/user_deletions`;
 }

@@ -1,0 +1,20 @@
+<h1 class="title">Organization</h1>
+
+<form id="organization_form" action="{{{postUrl}}}" method="POST" class="block">
+
+	<div class="block">
+		{{> errorBanner}}
+		{{{csrfTag}}}
+
+		<div class="field">
+			<label class="label">Name</label>
+			<div class="control">
+				<input class="input" type="text" name="name" value="{{fields.name}}"/>
+			</div>
+		</div>
+		
+		<div class="control block">
+			<input type="submit" name="post_button" class="button is-primary" value="Update" />
+		</div>
+	</div>
+</form>

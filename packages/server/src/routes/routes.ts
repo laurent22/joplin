@@ -25,6 +25,7 @@ import indexItems from './index/items';
 import indexLogin from './index/login';
 import indexLogout from './index/logout';
 import indexNotifications from './index/notifications';
+import indexOrganizations from './index/organizations';
 import indexPassword from './index/password';
 import indexPrivacy from './index/privacy';
 import indexShares from './index/shares';
@@ -62,6 +63,7 @@ const routes: Routers = {
 	'login': indexLogin,
 	'logout': indexLogout,
 	'notifications': indexNotifications,
+	'organizations': indexOrganizations,
 	'password': indexPassword,
 	'privacy': indexPrivacy,
 	'shares': indexShares,

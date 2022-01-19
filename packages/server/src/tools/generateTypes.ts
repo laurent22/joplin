@@ -37,6 +37,7 @@ const config = {
 		'main.events': 'WithUuid',
 		'main.user_deletions': 'WithDates',
 		'main.organizations': 'WithUuid, WithDates',
+		'main.organization_users': 'WithUuid, WithDates',
 	},
 };
 
@@ -107,6 +108,7 @@ function createTypeString(table: any) {
 
 	const header = ['export interface'];
 	header.push(table.interfaceName);
+
 	if (table.extends) header.push(`extends ${table.extends}`);
 
 	return `${header.join(' ')} {\n${colStrings.join('\n')}\n}`;

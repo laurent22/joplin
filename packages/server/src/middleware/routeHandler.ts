@@ -24,6 +24,7 @@ export default async function(ctx: AppContext) {
 				notifications: ctx.joplin.notifications || [],
 				hasNotifications: !!ctx.joplin.notifications && !!ctx.joplin.notifications.length,
 				owner: ctx.joplin.owner,
+				organization: ctx.joplin.organization,
 				supportEmail: config().supportEmail,
 				impersonatorAdminSessionId,
 				csrfTag: impersonatorAdminSessionId ? await createCsrfTag(ctx, false) : null,

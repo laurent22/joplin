@@ -27,6 +27,7 @@ import changeEmailConfirmationTemplate from '../views/emails/changeEmailConfirma
 import changeEmailNotificationTemplate from '../views/emails/changeEmailNotificationTemplate';
 import { NotificationKey } from './NotificationModel';
 import prettyBytes = require('pretty-bytes');
+import { validateEmail } from '../utils/validation';
 
 const logger = Logger.create('UserModel');
 
@@ -263,16 +264,10 @@ export default class UserModel extends BaseModel<User> {
 		if ('email' in user) {
 			const existingUser = await this.loadByEmail(user.email);
 			if (existingUser && existingUser.id !== user.id) throw new ErrorUnprocessableEntity(`there is already a user with this email: ${user.email}`);
-			if (!this.validateEmail(user.email)) throw new ErrorUnprocessableEntity(`Invalid email: ${user.email}`);
+			validateEmail(user.email);
 		}
 
 		return super.validate(user, options);
-	}
-
-	private validateEmail(email: string): boolean {
-		const s = email.split('@');
-		if (s.length !== 2) return false;
-		return !!s[0].length && !!s[1].length;
 	}
 
 	// public async delete(id: string): Promise<void> {

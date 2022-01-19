@@ -1,0 +1,20 @@
+<form method='POST' action="{{postUrl}}">
+	{{> errorBanner}}
+	{{{csrfTag}}}
+
+	<div class="field">
+		<label class="label">Invite users:</label>
+		<div class="control">
+			<input class="input" type="text" name="emails" value="{{fields.emails}}"/>
+		</div>
+		<p class="help">To invite new users, enter their emails separated by a comma.</p>
+	</div>
+
+	<div class="control block">
+			<input type="submit" name="invite_users_button" class="button is-primary" value="Invite users" />
+		</div>
+		
+	{{#organizationUserTable}}
+		{{>table}}
+	{{/organizationUserTable}}
+</form>
