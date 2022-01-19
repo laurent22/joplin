@@ -8,6 +8,7 @@ export default function useEditorSearch(CodeMirror: any) {
 	const [scrollbarMarks, setScrollbarMarks] = useState(null);
 	const [previousKeywordValue, setPreviousKeywordValue] = useState(null);
 	const [previousIndex, setPreviousIndex] = useState(null);
+	const [previousSearchTimestamp, setPreviousSearchTimestamp] = useState(0);
 	const [overlayTimeout, setOverlayTimeout] = useState(null);
 	const overlayTimeoutRef = useRef(null);
 	overlayTimeoutRef.current = overlayTimeout;
@@ -90,7 +91,7 @@ export default function useEditorSearch(CodeMirror: any) {
 
 	CodeMirror.defineExtension('setMarkers', function(keywords: any, options: any) {
 		if (!options) {
-			options = { selectedIndex: 0 };
+			options = { selectedIndex: 0, searchTimestamp: 0 };
 		}
 
 		clearMarkers();
@@ -107,9 +108,7 @@ export default function useEditorSearch(CodeMirror: any) {
 			const searchTerm = getSearchTerm(keyword);
 
 			// We only want to scroll the first keyword into view in the case of a multi keyword search
-			const scrollTo = i === 0 && (previousKeywordValue !== keyword.value || previousIndex !== options.selectedIndex ||
-				// If there is only one choice, scrollTo should be true. The below is a dummy of nMatches === 1.
-				options.selectedIndex === 0);
+			const scrollTo = i === 0 && (previousKeywordValue !== keyword.value || previousIndex !== options.selectedIndex || options.searchTimestamp !== previousSearchTimestamp);
 
 			const match = highlightSearch(this, searchTerm, options.selectedIndex, scrollTo);
 			if (match) marks.push(match);
@@ -117,6 +116,7 @@ export default function useEditorSearch(CodeMirror: any) {
 
 		setMarkers(marks);
 		setPreviousIndex(options.selectedIndex);
+		setPreviousSearchTimestamp(options.searchTimestamp);
 
 		// SEARCHOVERLAY
 		// We only want to highlight all matches when there is only 1 search term
