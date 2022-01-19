@@ -1,5 +1,15 @@
 # Joplin changelog
 
+## [v2.7.8](https://github.com/laurent22/joplin/releases/tag/v2.7.8) (Pre-release) - 2022-01-19T09:35:27Z
+
+- Improved: Disable plugin throttling for now (6bb0318)
+- Fixed [#6035](https://github.com/laurent22/joplin/issues/6035): Revert "Desktop: Fixes [#5850](https://github.com/laurent22/joplin/issues/5850): Editor loses cursor focus when Ctrl+F search is closed ([#5919](https://github.com/laurent22/joplin/issues/5919))"
+
+## [v2.7.7](https://github.com/laurent22/joplin/releases/tag/v2.7.7) (Pre-release) - 2022-01-18T14:05:07Z
+
+- Improved: Disable plugin throttling mechanism for now (c6b6712)
+- Fixed: Fixes alt text not appearing in html ([#6017](https://github.com/laurent22/joplin/issues/6017)) ([#5803](https://github.com/laurent22/joplin/issues/5803) by Mayank Bondre)
+
 ## [v2.7.6](https://github.com/laurent22/joplin/releases/tag/v2.7.6) (Pre-release) - 2022-01-17T17:08:28Z
 
 - New: Plugins: Add support for joplin.workspace.filterEditorContextMenu to allow dynamically setting editor menu items depending on context (960863f)
