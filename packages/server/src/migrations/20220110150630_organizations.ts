@@ -22,8 +22,13 @@ export async function up(db: DbConnection): Promise<any> {
 		table.bigInteger('created_time').notNullable();
 	});
 
+	await db.schema.alterTable('organizations', (table: Knex.CreateTableBuilder) => {
+		table.index(['owner_id']);
+	});
+
 	await db.schema.alterTable('organization_users', (table: Knex.CreateTableBuilder) => {
 		table.unique(['user_id']);
+		table.index(['organization_id']);
 	});
 }
 

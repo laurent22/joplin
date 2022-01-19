@@ -3,7 +3,7 @@ import * as fs from 'fs-extra';
 import { extname } from 'path';
 import config from '../config';
 import { filename } from '@joplin/lib/path-utils';
-import { NotificationView } from '../utils/types';
+import { Config, NotificationView } from '../utils/types';
 import { User } from '../services/database/types';
 import { makeUrl, UrlType } from '../utils/routeUtils';
 import MarkdownIt = require('markdown-it');
@@ -65,6 +65,7 @@ interface GlobalParams {
 	adminMenu?: MenuItem[];
 	navbarMenu?: MenuItem[];
 	currentUrl?: URL;
+	config?: Config;
 }
 
 export function isView(o: any): boolean {
@@ -155,7 +156,7 @@ export default class MustacheService {
 			},
 		];
 
-		if (config().organizationEnabled) {
+		if (config().organizationsEnabled) {
 			output[0].children.push({
 				title: _('Organizations'),
 				url: adminOrganizationsUrl(),
@@ -297,6 +298,7 @@ export default class MustacheService {
 			navbarMenu: this.makeNavbar(globalParams?.currentUrl, globalParams?.owner ? !!globalParams.owner.is_admin : false),
 			userDisplayName: this.userDisplayName(globalParams ? globalParams.owner : null),
 			isAdminPage: view.path.startsWith('/admin/'),
+			config: config(),
 			s: {
 				home: _('Home'),
 				users: _('Users'),

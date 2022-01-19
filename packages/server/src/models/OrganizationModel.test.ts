@@ -108,6 +108,33 @@ describe('OrganizationModel', function() {
 		await expectHttpError(async () => models().organizations().respondInvitation(orgUser.id, OrganizationUserInvitationStatus.Rejected), ErrorBadRequest.httpCode);
 	});
 
+	test('should retrieve the user associated organisations', async () => {
+		const org = await createOrg();
+		const owner = await models().user().load(org.owner_id);
+
+		{
+			const o = await models().organizations().userAssociatedOrganization(owner.id);
+			expect(o.id).toBe(org.id);
+		}
+
+		const randomUser = await createUser(1);
+
+		{
+
+			const o = await models().organizations().userAssociatedOrganization(randomUser.id);
+			expect(o).toBeFalsy();
+		}
+
+		const orgUser = await models().organizations().inviteUser(org.id, 'test@example.com');
+		await models().organizations().respondInvitation(orgUser.id, OrganizationUserInvitationStatus.Accepted);
+
+		{
+			const u = await models().user().loadByEmail('test@example.com');
+			const o = await models().organizations().userAssociatedOrganization(u.id);
+			expect(o.id).toBe(org.id);
+		}
+	});
+
 	test('should not have a race condition when inviting users', async () => {
 		const org = await createOrg({ max_users: 10 });
 

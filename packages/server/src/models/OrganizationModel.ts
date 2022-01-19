@@ -17,6 +17,19 @@ export default class OrganizationModel extends BaseModel<Organization> {
 		return UuidType.Native;
 	}
 
+	public async userAssociatedOrganization(userId: Uuid): Promise<Organization | null> {
+		const org = await this.db(this.tableName).where('owner_id', '=', userId).first();
+		if (org) return org;
+
+		return this
+			.db('organization_users')
+			.leftJoin('organizations', 'organizations.id', 'organization_users.organization_id')
+			.select(this.defaultFieldsWithPrefix)
+			.where('organization_users.user_id', '=', userId)
+			.where('organization_users.invitation_status', '=', OrganizationUserInvitationStatus.Accepted)
+			.first();
+	}
+
 	protected async validate(object: Organization, options: ValidateOptions = {}): Promise<Organization> {
 		const org: Organization = await super.validate(object, options);
 

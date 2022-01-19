@@ -1,7 +1,7 @@
 import { LoggerWrapper } from '@joplin/lib/Logger';
 import { StripePublicConfig } from '@joplin/lib/utils/joplinCloud';
 import * as Koa from 'koa';
-import { User, Uuid } from '../services/database/types';
+import { Organization, User, Uuid } from '../services/database/types';
 import { Models } from '../models/factory';
 import { Account } from '../models/UserModel';
 import { Services } from '../services/types';
@@ -29,6 +29,7 @@ interface AppContextJoplin {
 	appLogger(): LoggerWrapper;
 	notifications: NotificationView[];
 	owner: User;
+	organization: Organization;
 	account: Account;
 	routes: Routers;
 	services: Services;
@@ -163,7 +164,7 @@ export interface Config {
 	storageDriverFallback: StorageDriverConfig;
 	itemSizeHardLimit: number;
 	maxTimeDrift: number;
-	organizationEnabled: boolean;
+	organizationsEnabled: boolean;
 }
 
 export enum HttpMethod {

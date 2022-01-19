@@ -108,6 +108,10 @@ export default abstract class BaseModel<T> {
 		return this.defaultFields_.slice();
 	}
 
+	protected get defaultFieldsWithPrefix(): string[] {
+		return this.defaultFields.map(f => `${this.tableName}.${f}`);
+	}
+
 	public static get eventEmitter(): EventEmitter {
 		if (!this.eventEmitter_) {
 			this.eventEmitter_ = new EventEmitter();
