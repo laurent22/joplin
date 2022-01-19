@@ -92,6 +92,7 @@ export default function useNoteSearchBar() {
 				selectedIndex: localSearch.selectedIndex,
 				separateWordSearch: false,
 				searchTimestamp: localSearch.timestamp,
+				withSelection: true,
 			},
 			keywords: [
 				{

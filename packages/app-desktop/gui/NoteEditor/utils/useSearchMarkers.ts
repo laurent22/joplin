@@ -4,6 +4,7 @@ interface SearchMarkersOptions {
 	searchTimestamp: number;
 	selectedIndex: number;
 	separateWordSearch: boolean;
+	withSelection?: boolean;
 }
 
 export interface SearchMarkers {

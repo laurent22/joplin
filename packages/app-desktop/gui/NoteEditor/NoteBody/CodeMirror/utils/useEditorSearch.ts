@@ -51,7 +51,7 @@ export default function useEditorSearch(CodeMirror: any) {
 	// Highlights the currently active found work
 	// It's possible to get tricky with this fucntions and just use findNext/findPrev
 	// but this is fast enough and works more naturally with the current search logic
-	function highlightSearch(cm: any, searchTerm: RegExp, index: number, scrollTo: boolean) {
+	function highlightSearch(cm: any, searchTerm: RegExp, index: number, scrollTo: boolean, withSelection: boolean) {
 		const cursor = cm.getSearchCursor(searchTerm);
 
 		let match: any = null;
@@ -64,7 +64,13 @@ export default function useEditorSearch(CodeMirror: any) {
 		}
 
 		if (match) {
-			if (scrollTo) cm.setSelection(match.from, match.to);
+			if (scrollTo) {
+				if (withSelection) {
+					cm.setSelection(match.from, match.to);
+				} else {
+					cm.scrollTo(match);
+				}
+			}
 			return cm.markText(match.from, match.to, { className: 'cm-search-marker-selected' });
 		}
 
@@ -111,7 +117,7 @@ export default function useEditorSearch(CodeMirror: any) {
 				// If there is only one choice, scrollTo should be true. The below is a dummy of nMatches === 1.
 				options.selectedIndex === 0);
 
-			const match = highlightSearch(this, searchTerm, options.selectedIndex, scrollTo);
+			const match = highlightSearch(this, searchTerm, options.selectedIndex, scrollTo, !!options.withSelection);
 			if (match) marks.push(match);
 		}
 
