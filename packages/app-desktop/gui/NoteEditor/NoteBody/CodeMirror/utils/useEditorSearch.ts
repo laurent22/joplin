@@ -64,7 +64,7 @@ export default function useEditorSearch(CodeMirror: any) {
 		}
 
 		if (match) {
-			if (scrollTo) cm.setSelection(match.from, match.to);
+			if (scrollTo) cm.scrollIntoView(match);
 			return cm.markText(match.from, match.to, { className: 'cm-search-marker-selected' });
 		}
 

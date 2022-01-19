@@ -1,7 +1,6 @@
 import { useState, useCallback } from 'react';
 import Logger from '@joplin/lib/Logger';
 import { SearchMarkers } from './useSearchMarkers';
-const CommandService = require('@joplin/lib/services/CommandService').default;
 
 const logger = Logger.create('useNoteSearchBar');
 
@@ -71,7 +70,6 @@ export default function useNoteSearchBar() {
 	const onClose = useCallback(() => {
 		setShowLocalSearch(false);
 		setLocalSearch(defaultLocalSearch());
-		void CommandService.instance().execute('focusElementNoteBody');
 	}, []);
 
 	const setResultCount = useCallback((count: number) => {
