@@ -15,6 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.4.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:565
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -266,11 +268,11 @@ msgstr "Tilføj til ordbog"
 #: packages/server/src/services/MustacheService.ts:182
 #: packages/server/src/services/MustacheService.ts:301
 msgid "Admin"
-msgstr ""
+msgstr "Admin"
 
 #: packages/server/src/routes/admin/dashboard.ts:10
 msgid "Admin dashboard"
-msgstr ""
+msgstr "Kontrolpanel til administration"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:189
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:147
@@ -398,9 +400,8 @@ msgid "Auto-pair braces, parenthesis, quotations, etc."
 msgstr "Auto-par klammer, parenteser, citater, etc."
 
 #: packages/lib/models/Setting.ts:1193
-#, fuzzy
 msgid "Automatically check for updates"
-msgstr "Tjek om der er opdateringer.."
+msgstr "Tjek automatisk efter opdateringer"
 
 #: packages/lib/models/Setting.ts:770
 msgid "Automatically switch theme to match system theme"
@@ -764,9 +765,8 @@ msgid "Copy external link"
 msgstr "Kopiér eksternt link"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:134
-#, fuzzy
 msgid "Copy image"
-msgstr "Kopier token"
+msgstr "Kopier billede"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:172
 msgid "Copy Link Address"
@@ -860,14 +860,12 @@ msgid "Create a notebook"
 msgstr "Opret en notesbog"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:128
-#, fuzzy
 msgid "Create notebook"
-msgstr "Opret en notesbog"
+msgstr "Opret notesbog"
 
 #: packages/server/src/routes/admin/users.ts:171
-#, fuzzy
 msgid "Create user"
-msgstr "Oprettet: %s"
+msgstr "Opret bruger"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:29
 msgid "Created"
@@ -959,7 +957,7 @@ msgstr "Mørkt"
 
 #: packages/server/src/services/MustacheService.ts:139
 msgid "Dashboard"
-msgstr ""
+msgstr "Kontrolpanel"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:625
 msgid "Database v%s"
@@ -2214,7 +2212,7 @@ msgstr "Log ud"
 
 #: packages/server/src/services/MustacheService.ts:178
 msgid "Logs"
-msgstr ""
+msgstr "Logfiler"
 
 #: packages/app-desktop/gui/MenuBar.tsx:710
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:583
@@ -2873,7 +2871,7 @@ msgstr "Privatlivspolitik"
 
 #: packages/server/src/routes/admin/users.ts:168
 msgid "Profile"
-msgstr ""
+msgstr "Profil"
 
 #: packages/lib/versionInfo.ts:26
 msgid "Profile Version: %s"
@@ -4157,9 +4155,8 @@ msgstr "Opdater"
 
 #: packages/server/src/routes/admin/users.ts:171
 #: packages/server/src/routes/index/users.ts:89
-#, fuzzy
 msgid "Update profile"
-msgstr "Eksporter profil"
+msgstr "Opdater profil"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:208
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:209
@@ -4267,7 +4264,7 @@ msgstr ""
 
 #: packages/server/src/services/MustacheService.ts:147
 msgid "User deletions"
-msgstr ""
+msgstr "Brugersletninger"
 
 #: packages/server/src/routes/admin/users.ts:107
 #: packages/server/src/services/MustacheService.ts:143
