@@ -3310,7 +3310,7 @@ __metadata:
     markdown-it-sup: ^1.0.0
     markdown-it-toc-done-right: ^4.1.0
     md5: ^2.2.1
-    mermaid: ^8.13.5
+    mermaid: ^8.13.9
     typescript: ^4.0.5
   languageName: unknown
   linkType: soft
@@ -20781,6 +20781,23 @@ __metadata:
     moment-mini: ^2.24.0
     stylis: ^4.0.10
   checksum: 70c75c236b04d8e430de58129bd9afa5305f0879c7a60c1d4e44f636181adcc2dcdf6a2fc467ac9e76a008958a8701480dd4cb211729b0be785b650bdd55a408
+  languageName: node
+  linkType: hard
+
+"mermaid@npm:^8.13.9":
+  version: 8.13.9
+  resolution: "mermaid@npm:8.13.9"
+  dependencies:
+    "@braintree/sanitize-url": ^3.1.0
+    d3: ^7.0.0
+    dagre: ^0.8.5
+    dagre-d3: ^0.6.4
+    dompurify: 2.3.4
+    graphlib: ^2.1.8
+    khroma: ^1.4.1
+    moment-mini: ^2.24.0
+    stylis: ^4.0.10
+  checksum: 9b05ce16413ee7d76e5b921ee57b9cdff5738221c72593ac5b7daf7c93d5025ff8e4248b2a5cbabd5af44285d4e849d832246a89c214aeb7c8b811f92d967102
   languageName: node
   linkType: hard
 
