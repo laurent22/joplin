@@ -44,7 +44,7 @@ export default class OrganizationModel extends BaseModel<Organization> {
 		}
 
 		if ('max_users' in org) {
-			if (org.max_users < 2) throw new ErrorUnprocessableEntity('Organisation must have at least 2 users');
+			if (isNaN(org.max_users) || org.max_users < 2) throw new ErrorUnprocessableEntity('Organisation must have at least 2 users');
 		}
 
 		return org;

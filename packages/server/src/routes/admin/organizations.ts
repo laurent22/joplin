@@ -12,13 +12,23 @@ import { ErrorBadRequest, ErrorNotFound } from '../../utils/errors';
 import { makeTablePagination, makeTableView, Row, Table } from '../../utils/views/table';
 import { PaginationOrderDir } from '../../models/utils/pagination';
 import { formatDateTime } from '../../utils/time';
+import { organizationDefaultValues } from '../../services/database/defaultValues';
 
 interface FormFields {
 	id: string;
 	name: string;
 	owner_email: string;
 	is_new: string;
+	max_users: string;
 }
+
+const defaultFields: FormFields = {
+	id: '',
+	name: '',
+	owner_email: '',
+	is_new: '0',
+	max_users: organizationDefaultValues().max_users.toString(),
+};
 
 const router: Router = new Router(RouteType.Web);
 
@@ -48,6 +58,10 @@ router.get('admin/organizations', async (_path: SubPath, ctx: AppContext) => {
 				label: _('Owner'),
 			},
 			{
+				name: 'max_users',
+				label: _('Users'),
+			},
+			{
 				name: 'created_time',
 				label: _('Created'),
 			},
@@ -65,6 +79,9 @@ router.get('admin/organizations', async (_path: SubPath, ctx: AppContext) => {
 				{
 					value: owners.find(o => o.id === d.owner_id)?.email,
 					url: adminUserUrl(d.owner_id),
+				},
+				{
+					value: d.max_users.toString(),
 				},
 				{
 					value: formatDateTime(d.created_time),
@@ -99,6 +116,7 @@ router.post('admin/organizations/:id', async (path: SubPath, ctx: AppContext) =>
 		const org: Organization = {
 			name: fields.name,
 			owner_id: orgOwner.id,
+			max_users: Number(fields.max_users),
 		};
 
 		if (!isNew) {
@@ -129,10 +147,17 @@ router.get('admin/organizations/:id', async (path: SubPath, ctx: AppContext, fie
 		if (!orgOwner) await models.notification().addError(ctx.joplin.owner.id, `Cannot find organisation owner: ${orgOwner.id}`);
 
 		fields = {
+			...defaultFields,
 			id: org.id,
-			is_new: '0',
 			name: org.name,
 			owner_email: orgOwner ? orgOwner.email : '',
+			max_users: org.max_users.toString(),
+		};
+	}
+
+	if (!fields && isNew) {
+		fields = {
+			...defaultFields,
 		};
 	}
 

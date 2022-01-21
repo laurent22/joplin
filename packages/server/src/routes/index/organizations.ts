@@ -158,6 +158,8 @@ router.post('organizations/:id/users', async (path: SubPath, ctx: AppContext) =>
 		for (const email of emails) {
 			await models.organizations().inviteUser(org.id, email);
 		}
+
+		return redirect(ctx, organizationUserUrl('me'));
 	} catch (error) {
 		return internalRedirect(path, ctx, router, 'organizations/:id/users', fields, error);
 	}
