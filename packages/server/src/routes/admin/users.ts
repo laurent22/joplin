@@ -18,7 +18,7 @@ import { stripePortalUrl, adminUserDeletionsUrl, adminUserUrl } from '../../util
 import { cancelSubscriptionByUserId, updateSubscriptionType } from '../../utils/stripe';
 import { createCsrfTag } from '../../utils/csrf';
 import { formatDateTime, Hour } from '../../utils/time';
-import { startImpersonating, stopImpersonating } from './utils/users/impersonate';
+import { startImpersonating } from './utils/users/impersonate';
 import { userFlagToString } from '../../models/UserFlagModel';
 import { _ } from '@joplin/lib/locale';
 
@@ -222,7 +222,7 @@ interface FormFields {
 	update_subscription_basic_button: string;
 	update_subscription_pro_button: string;
 	impersonate_button: string;
-	stop_impersonate_button: string;
+	// stop_impersonate_button: string;
 	delete_user_flags: string;
 	schedule_deletion_button: string;
 }
@@ -231,6 +231,8 @@ router.post('admin/users', async (path: SubPath, ctx: AppContext) => {
 	let user: User = {};
 	const owner = ctx.joplin.owner;
 	let userId = userIsMe(path) ? owner.id : path.id;
+
+	console.info('AAAAAAAAAAAAAAAAAAAAAAAAAAAA', ctx.URL);
 
 	try {
 		const body = await formParse(ctx.req);
@@ -256,9 +258,9 @@ router.post('admin/users', async (path: SubPath, ctx: AppContext) => {
 				// logged out).
 				if (userToSave.password) await models.session().deleteByUserId(userToSave.id, contextSessionId(ctx));
 			}
-		} else if (fields.stop_impersonate_button) {
-			await stopImpersonating(ctx);
-			return redirect(ctx, config().baseUrl);
+		// } else if (fields.stop_impersonate_button) {
+		// 	await stopImpersonating(ctx);
+		// 	return redirect(ctx, config().baseUrl);
 		} else if (fields.disable_button || fields.restore_button) {
 			const user = await models.user().load(path.id);
 			await models.user().checkIfAllowed(owner, AclAction.Delete, user);
@@ -268,7 +270,7 @@ router.post('admin/users', async (path: SubPath, ctx: AppContext) => {
 			await models.user().save({ id: user.id, must_set_password: 1 });
 			await models.user().sendAccountConfirmationEmail(user);
 		} else if (fields.impersonate_button) {
-			await startImpersonating(ctx, userId);
+			await startImpersonating(ctx, userId, ctx.URL.href);
 			return redirect(ctx, config().baseUrl);
 		} else if (fields.cancel_subscription_button) {
 			await cancelSubscriptionByUserId(models, userId);

@@ -1,5 +1,5 @@
 import config from '../../config';
-import { clearDatabase, createTestUsers, CreateTestUsersOptions, createUserDeletions } from '../../tools/debugTools';
+import { clearDatabase, createOrganizations, createTestUsers, CreateTestUsersOptions, createUserDeletions } from '../../tools/debugTools';
 import { bodyFields } from '../../utils/requestUtils';
 import Router from '../../utils/Router';
 import { Env, RouteType } from '../../utils/types';
@@ -32,6 +32,10 @@ router.post('api/debug', async (_path: SubPath, ctx: AppContext) => {
 		if ('fromNum' in query) options.fromNum = query.fromNum;
 
 		await createTestUsers(ctx.joplin.db, config(), options);
+	}
+
+	if (query.action === 'createOrgs') {
+		await createOrganizations(ctx.joplin.db, config());
 	}
 
 	if (query.action === 'createUserDeletions') {

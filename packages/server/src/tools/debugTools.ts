@@ -2,9 +2,11 @@ import time from '@joplin/lib/time';
 import { DbConnection, dropTables, migrateLatest } from '../db';
 import newModelFactory from '../models/factory';
 import { AccountType } from '../models/UserModel';
-import { User, UserFlagType } from '../services/database/types';
+import { OrganizationUserInvitationStatus, User, UserFlagType } from '../services/database/types';
 import { Minute, Second } from '../utils/time';
 import { Config } from '../utils/types';
+
+const password = 'hunter1hunter2hunter3';
 
 export interface CreateTestUsersOptions {
 	count?: number;
@@ -32,8 +34,6 @@ export async function createTestUsers(db: DbConnection, config: Config, options:
 		fromNum: 1,
 		...options,
 	};
-
-	const password = 'hunter1hunter2hunter3';
 
 	const models = newModelFactory(db, config);
 
@@ -112,4 +112,30 @@ export async function createUserDeletions(db: DbConnection, config: Config) {
 		if (users[i].is_admin) continue;
 		await models.userDeletion().add(users[i].id, Date.now() + 60 * Second + (i * 10 * Minute));
 	}
+}
+
+export async function createOrganizations(db: DbConnection, config: Config) {
+	const models = newModelFactory(db, config);
+
+	for (let orgNum = 1; orgNum <= 3; orgNum++) {
+		const owner = await models.user().save({
+			email: `orgowner${orgNum}@example.com`,
+			password,
+			full_name: `Org Owner ${orgNum}`,
+			account_type: AccountType.Pro,
+		});
+
+		const org = await models.organizations().save({
+			max_users: 10,
+			owner_id: owner.id,
+			name: `Org ${orgNum}`,
+		});
+
+		for (let userNum = 1; userNum <= 5; userNum++) {
+			const userEmail = `orguser${orgNum}-${userNum}@example.com`;
+			const orgUser = await models.organizations().inviteUser(org.id, userEmail);
+			await models.organizations().respondInvitation(orgUser.id, OrganizationUserInvitationStatus.Accepted);
+		}
+	}
+
 }

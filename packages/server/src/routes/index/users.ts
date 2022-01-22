@@ -247,8 +247,8 @@ router.post('users', async (path: SubPath, ctx: AppContext) => {
 			// logged out).
 			if (userToSave.password) await models.session().deleteByUserId(userToSave.id, contextSessionId(ctx));
 		} else if (fields.stop_impersonate_button) {
-			await stopImpersonating(ctx);
-			return redirect(ctx, config().baseUrl);
+			const returnUrl = await stopImpersonating(ctx);
+			return redirect(ctx, returnUrl ? returnUrl : config().baseUrl);
 		} else {
 			throw new Error('Invalid form button');
 		}
