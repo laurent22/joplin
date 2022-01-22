@@ -1981,7 +1981,7 @@ msgstr "Zainstaluj z pliku"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:193
 msgid "Installed"
-msgstr "Zainstwalony"
+msgstr "Zainstalowany"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:192
 msgid "Installing..."
