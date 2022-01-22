@@ -85,3 +85,11 @@ export function adminUserUrl(userId: string) {
 export function adminTasksUrl() {
 	return `${config().adminBaseUrl}/tasks`;
 }
+
+export function adminEmailsUrl() {
+	return `${config().adminBaseUrl}/emails`;
+}
+
+export function adminEmailUrl(id: number) {
+	return `${config().adminBaseUrl}/emails/${id}`;
+}

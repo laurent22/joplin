@@ -9,7 +9,7 @@ import { makeUrl, UrlType } from '../utils/routeUtils';
 import MarkdownIt = require('markdown-it');
 import { headerAnchor } from '@joplin/renderer';
 import { _ } from '@joplin/lib/locale';
-import { adminDashboardUrl, adminTasksUrl, adminUserDeletionsUrl, adminUsersUrl, changesUrl, homeUrl, itemsUrl, stripOffQueryParameters } from '../utils/urlUtils';
+import { adminDashboardUrl, adminEmailsUrl, adminTasksUrl, adminUserDeletionsUrl, adminUsersUrl, changesUrl, homeUrl, itemsUrl, stripOffQueryParameters } from '../utils/urlUtils';
 import { URL } from 'url';
 
 type MenuItemSelectedCondition = (selectedUrl: URL)=> boolean;
@@ -150,6 +150,10 @@ export default class MustacheService {
 					{
 						title: _('Tasks'),
 						url: adminTasksUrl(),
+					},
+					{
+						title: _('Emails'),
+						url: adminEmailsUrl(),
 					},
 				],
 			},

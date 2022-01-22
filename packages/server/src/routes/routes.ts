@@ -13,6 +13,7 @@ import apiShareUsers from './api/share_users';
 import apiUsers from './api/users';
 
 import adminDashboard from './admin/dashboard';
+import adminEmails from './admin/emails';
 import adminTasks from './admin/tasks';
 import adminUserDeletions from './admin/user_deletions';
 import adminUsers from './admin/users';
@@ -49,6 +50,7 @@ const routes: Routers = {
 	'api/users': apiUsers,
 
 	'admin/dashboard': adminDashboard,
+	'admin/emails': adminEmails,
 	'admin/tasks': adminTasks,
 	'admin/user_deletions': adminUserDeletions,
 	'admin/users': adminUsers,

@@ -3,7 +3,16 @@
 }
 
 html {
-	font-size: 100%;
+	font-size: 14px;
+}
+
+div.main-container,
+div.navbar-container {
+	max-width: none !important;
+}
+
+div.navbar-container {
+	padding: 0 3rem;
 }
 
 input.form-control {
