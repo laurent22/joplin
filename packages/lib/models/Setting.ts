@@ -943,8 +943,8 @@ class Setting extends BaseModel {
 				section: 'note',
 				public: true,
 				appTypes: [AppType.Mobile],
-				label: () => 'Opt-in to the editor beta',
-				description: () => 'This beta adds list continuation and syntax highlighting. If you find bugs, please report them in the Discourse forum.',
+				label: () => _('Opt-in to the editor beta'),
+				description: () => _('This beta adds list continuation and syntax highlighting. If you find bugs, please report them in the Discourse forum.'),
 			},
 
 			newTodoFocus: {
@@ -997,8 +997,8 @@ class Setting extends BaseModel {
 				public: true,
 				advanced: true,
 				appTypes: [AppType.Desktop],
-				label: () => 'Development plugins',
-				description: () => 'You may add multiple plugin paths, each separated by a comma. You will need to restart the application for the changes to take effect.',
+				label: () => _('Development plugins'),
+				description: () => _('You may add multiple plugin paths, each separated by a comma. You will need to restart the application for the changes to take effect.'),
 				storage: SettingStorage.File,
 			},
 
@@ -1164,7 +1164,7 @@ class Setting extends BaseModel {
 				label: () => _('Custom stylesheet for Joplin-wide app styles'),
 				section: 'appearance',
 				advanced: true,
-				description: () => 'CSS file support is provided for your convenience, but they are advanced settings, and styles you define may break from one version to the next. If you want to use them, please know that it might require regular development work from you to keep them working. The Joplin team cannot make a commitment to keep the application HTML structure stable.',
+				description: () => _('CSS file support is provided for your convenience, but they are advanced settings, and styles you define may break from one version to the next. If you want to use them, please know that it might require regular development work from you to keep them working. The Joplin team cannot make a commitment to keep the application HTML structure stable.'),
 			},
 
 			'sync.clearLocalSyncStateButton': {
@@ -1175,7 +1175,7 @@ class Setting extends BaseModel {
 				label: () => _('Re-upload local data to sync target'),
 				section: 'sync',
 				advanced: true,
-				description: () => 'If the data on the sync target is incorrect or empty, you can use this button to force a re-upload of your data to the sync target. Application will have to be restarted',
+				description: () => _('If the data on the sync target is incorrect or empty, you can use this button to force a re-upload of your data to the sync target. Application will have to be restarted'),
 			},
 
 			'sync.clearLocalDataButton': {
@@ -1186,7 +1186,7 @@ class Setting extends BaseModel {
 				label: () => _('Delete local data and re-download from sync target'),
 				section: 'sync',
 				advanced: true,
-				description: () => 'If the data on the sync target is correct but your local data is not, you can use this button to clear your local data and force re-downloading everything from the sync target. As your local data will be deleted first, it is recommended to export your data as JEX first. Application will have to be restarted',
+				description: () => _('If the data on the sync target is correct but your local data is not, you can use this button to clear your local data and force re-downloading everything from the sync target. As your local data will be deleted first, it is recommended to export your data as JEX first. Application will have to be restarted'),
 			},
 
 
@@ -1266,8 +1266,8 @@ class Setting extends BaseModel {
 				type: SettingItemType.Bool,
 				public: true,
 				appTypes: [AppType.Desktop],
-				label: () => 'Enable spell checking in Markdown editor? (WARNING BETA feature)',
-				description: () => 'Spell checker in the Markdown editor was previously unstable (cursor location was not stable, sometimes edits would not be saved or reflected in the viewer, etc.) however it appears to be more reliable now. If you notice any issue, please report it on GitHub or the Joplin Forum (Help -> Joplin Forum)',
+				label: () => _('Enable spell checking in Markdown editor? (WARNING BETA feature)'),
+				description: () => _('Spell checker in the Markdown editor was previously unstable (cursor location was not stable, sometimes edits would not be saved or reflected in the viewer, etc.) however it appears to be more reliable now. If you notice any issue, please report it on GitHub or the Joplin Forum (Help -> Joplin Forum)'),
 			},
 
 			'net.customCertificates': {

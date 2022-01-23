@@ -154,11 +154,11 @@ export default function(props: Props) {
 		const renderResetMasterPasswordLink = () => {
 			if (mode === Mode.Reset) return null;
 			if (status === MasterPasswordStatus.Valid) return null;
-			return <p><a href="#" onClick={onToggleMode}>Reset master password</a></p>;
+			return <p><a href="#" onClick={onToggleMode}>{_('Reset master password')}</a></p>;
 		};
 
 		if (showPasswordForm) {
-			const enterPasswordLabel = [MasterPasswordStatus.Loaded, MasterPasswordStatus.Valid].includes(status) ? 'Enter new password' : 'Enter password';
+			const enterPasswordLabel = [MasterPasswordStatus.Loaded, MasterPasswordStatus.Valid].includes(status) ? _('Enter new password') : _('Enter password');
 
 			return (
 				<div>
@@ -175,14 +175,14 @@ export default function(props: Props) {
 							</div>
 						)}
 					</div>
-					<p className="bold">Please make sure you remember your password. For security reasons, it is not possible to recover it if it is lost.</p>
+					<p className="bold">{_('Please make sure you remember your password. For security reasons, it is not possible to recover it if it is lost.')}</p>
 					{renderResetMasterPasswordLink()}
 				</div>
 			);
 		} else {
 			return (
 				<p>
-					<a onClick={onShowPasswordForm} href="#">Change master password</a>
+					<a onClick={onShowPasswordForm} href="#">{_('Change master password')}</a>
 				</p>
 			);
 		}
@@ -192,16 +192,17 @@ export default function(props: Props) {
 		if (mode === Mode.Reset) {
 			return (
 				<div className="dialog-content">
-					<p>Attention: After resetting your password it will no longer be possible to decrypt any data encrypted with your current password. All encrypted shared notebooks will also be unshared, so please ask the notebook owner to share it again with you.</p>
+					<p>{_('Attention: After resetting your password it will no longer be possible to decrypt any data encrypted with your current password. All encrypted shared notebooks will also be unshared, so please ask the notebook owner to share it again with you.')}</p>
 					{renderPasswordForm()}
 				</div>
 			);
 		} else {
 			return (
 				<div className="dialog-content">
-					<p>Your master password is used to protect sensitive information. In particular, it is used to encrypt your notes when end-to-end encryption (E2EE) is enabled, or to share and encrypt notes with someone who has E2EE enabled.</p>
+					<p>{_('Your master password is used to protect sensitive information. In particular, it is used to encrypt your notes when end-to-end encryption (E2EE) is enabled, or to share and encrypt notes with someone who has E2EE enabled.')}</p>
 					<p>
-						<span>{'Master password status:'}</span> <span className="bold">{getMasterPasswordStatusMessage(status)}</span>
+						<span>{_('Master password status:')}</span>
+						<span className="bold">{getMasterPasswordStatusMessage(status)}</span>
 					</p>
 					{renderPasswordForm()}
 				</div>

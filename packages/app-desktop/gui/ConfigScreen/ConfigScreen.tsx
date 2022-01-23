@@ -68,12 +68,12 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 	private async handleSettingButton(key: string) {
 		if (key === 'sync.clearLocalSyncStateButton') {
-			if (!confirm('This cannot be undone. Do you want to continue?')) return;
+			if (!confirm(_('This cannot be undone. Do you want to continue?'))) return;
 			Setting.setValue('sync.startupOperation', SyncStartupOperation.ClearLocalSyncState);
 			await Setting.saveAll();
 			bridge().restart();
 		} else if (key === 'sync.clearLocalDataButton') {
-			if (!confirm('This cannot be undone. Do you want to continue?')) return;
+			if (!confirm(_('This cannot be undone. Do you want to continue?'))) return;
 			Setting.setValue('sync.startupOperation', SyncStartupOperation.ClearLocalData);
 			await Setting.saveAll();
 			bridge().restart();
