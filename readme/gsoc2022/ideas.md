@@ -135,7 +135,6 @@ Difficulty Level: Medium
 
 Skills Required: Typescript, CSS, GitHub Actions.
 
-
 ## 12. Email plugin
 
 Create a plugin to fetch mail via IMAP and convert messages to notes (including attachments). The plugin should be able to filter what messages it donwloads, e.g. based on the folder.
@@ -149,6 +148,13 @@ Difficulty Level: Medium
 
 Skills Required: TypeScript, JavaScript.
 
+## 13. Desktop application integration testing
+
+The desktop app front end has a few unit tests to verify things like React hooks and certain utility functions. However we currently have no integration testing to verify for example that a change in one component didn't break something in another component. This project would be about setting up this integration testing for the desktop app. You would do the setup and probably also write a few tests to demonstrate that it's working as expected. More info at https://www.electronjs.org/docs/latest/tutorial/automated-testing
+
+Difficulty Level: High
+
+Skills Required: TypeScript, JavaScript, Electron.
 
 # More info
 
