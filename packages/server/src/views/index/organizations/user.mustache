@@ -1,0 +1,11 @@
+<div class="block">
+	<strong>Full name:</strong> {{user.full_name}}<br/>
+	<strong>Email:</strong> <a href="mailto:{{user.email}}">{{user.email}}</a>
+</div>
+
+<form>
+	{{{csrfTag}}}
+	<div class="control block">
+		<input type="submit" name="remove_user_button" class="button is-danger" value="Remove user" />
+	</div>
+</form>

@@ -8,7 +8,7 @@ import { _ } from '@joplin/lib/locale';
 import { ErrorNotFound } from '../../utils/errors';
 import { bodyFields } from '../../utils/requestUtils';
 import { createCsrfTag } from '../../utils/csrf';
-import { organizationUrl, organizationUserUrl } from '../../utils/urlUtils';
+import { organizationUrl, organizationUsersUrl, organizationUserUrl } from '../../utils/urlUtils';
 import { makeTablePagination, makeTableView, Row, Table } from '../../utils/views/table';
 import { PaginationOrderDir } from '../../models/utils/pagination';
 import { Knex } from 'knex';
@@ -84,7 +84,7 @@ router.get('organizations/:id/users', async (path: SubPath, ctx: AppContext, fie
 			},
 			{
 				name: 'user_id',
-				label: _('Email'),
+				label: _('User'),
 			},
 			{
 				name: 'invitation_email',
@@ -104,13 +104,16 @@ router.get('organizations/:id/users', async (path: SubPath, ctx: AppContext, fie
 			},
 		],
 		rows: page.items.map(d => {
+			const user = users.find(u => u.id === d.user_id);
+
 			const row: Row = [
 				{
 					value: `checkbox_${d.id}`,
 					checkbox: true,
 				},
 				{
-					value: users.find(u => u.id === d.user_id)?.email,
+					value: user?.full_name || user?.email,
+					url: organizationUserUrl(d.id),
 				},
 				{
 					value: d.invitation_email,
@@ -134,7 +137,7 @@ router.get('organizations/:id/users', async (path: SubPath, ctx: AppContext, fie
 		...defaultView('organizations/users', _('Organisation users')),
 		content: {
 			organizationUserTable: makeTableView(table),
-			postUrl: organizationUserUrl('me'),
+			postUrl: organizationUsersUrl('me'),
 			fields,
 			error,
 			csrfTag: await createCsrfTag(ctx),
@@ -159,7 +162,7 @@ router.post('organizations/:id/users', async (path: SubPath, ctx: AppContext) =>
 			await models.organizations().inviteUser(org.id, email);
 		}
 
-		return redirect(ctx, organizationUserUrl('me'));
+		return redirect(ctx, organizationUsersUrl('me'));
 	} catch (error) {
 		return internalRedirect(path, ctx, router, 'organizations/:id/users', fields, error);
 	}
