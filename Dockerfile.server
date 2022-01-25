@@ -57,7 +57,8 @@ FROM node:16-bullseye-slim
 
 ARG user=joplin
 RUN useradd --create-home --shell /bin/bash $user
-RUN userdel -r node
+RUN usermod -d /home/joplin -l joplin node
+
 USER $user
 
 COPY --chown=$user:$user --from=builder /build/packages /home/$user/packages
