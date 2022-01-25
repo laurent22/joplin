@@ -25,12 +25,13 @@ describe('db', function() {
 		const ignoreAllBefore = '20210819165350_user_flags';
 
 		// Some migrations produce no changes visible to sql-ts, in particular
-		// when the migration only adds a constraint or an index. In this case
-		// we skip the migration. Ideally we should test these too but for now
-		// that will do.
+		// when the migration only adds a constraint or an index, or when a
+		// default is changed. In this case we skip the migration. Ideally we
+		// should test these too but for now that will do.
 		const doNoCheckUpgrade = [
 			'20211030103016_item_owner_name_unique',
 			'20211111134329_storage_index',
+			'20220121172409_email_recipient_default',
 		];
 
 		let startProcessing = false;

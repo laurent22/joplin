@@ -1,50 +1,43 @@
-FROM node:16-bullseye
+### Build stage
+FROM node:16-bullseye AS builder
 
 RUN apt-get update \
     && apt-get install -y \
     python \
     && rm -rf /var/lib/apt/lists/*
 
+# Download the init tool Tini and make it executable for use in the final image
+ADD https://github.com/krallin/tini/releases/download/v0.19.0/tini-static /tini
+RUN chmod u+x /tini
+
 # Enables Yarn
 RUN corepack enable
 
-RUN echo "Node: $(node --version)" \
-    && echo "Npm: $(npm --version)" \
-    && echo "Yarn: $(yarn --version)"
+RUN echo "Node: $(node --version)"
+RUN echo "Npm: $(npm --version)"
+RUN echo "Yarn: $(yarn --version)"
 
-ARG user=joplin
+WORKDIR /build
 
-RUN useradd --create-home --shell /bin/bash $user
-USER $user
-
-ENV NODE_ENV production
-ENV RUNNING_IN_DOCKER 1
-EXPOSE ${APP_PORT}
-
-WORKDIR /home/$user
-
-RUN mkdir /home/$user/logs \
-    && mkdir /home/$user/.yarn
-
-COPY --chown=$user:$user .yarn/patches ./.yarn/patches
-COPY --chown=$user:$user .yarn/plugins ./.yarn/plugins
-COPY --chown=$user:$user .yarn/releases ./.yarn/releases
-COPY --chown=$user:$user package.json .
-COPY --chown=$user:$user .yarnrc.yml .
-COPY --chown=$user:$user yarn.lock .
-COPY --chown=$user:$user gulpfile.js .
-COPY --chown=$user:$user tsconfig.json .
-COPY --chown=$user:$user packages/turndown ./packages/turndown
-COPY --chown=$user:$user packages/turndown-plugin-gfm ./packages/turndown-plugin-gfm
-COPY --chown=$user:$user packages/fork-htmlparser2 ./packages/fork-htmlparser2
-COPY --chown=$user:$user packages/server/package*.json ./packages/server/
-COPY --chown=$user:$user packages/fork-sax ./packages/fork-sax
-COPY --chown=$user:$user packages/fork-uslug ./packages/fork-uslug
-COPY --chown=$user:$user packages/htmlpack ./packages/htmlpack
-COPY --chown=$user:$user packages/renderer ./packages/renderer
-COPY --chown=$user:$user packages/tools ./packages/tools
-COPY --chown=$user:$user packages/lib ./packages/lib
-COPY --chown=$user:$user packages/server ./packages/server
+COPY .yarn/patches ./.yarn/patches
+COPY .yarn/plugins ./.yarn/plugins
+COPY .yarn/releases ./.yarn/releases
+COPY package.json .
+COPY .yarnrc.yml .
+COPY yarn.lock .
+COPY gulpfile.js .
+COPY tsconfig.json .
+COPY packages/turndown ./packages/turndown
+COPY packages/turndown-plugin-gfm ./packages/turndown-plugin-gfm
+COPY packages/fork-htmlparser2 ./packages/fork-htmlparser2
+COPY packages/server/package*.json ./packages/server/
+COPY packages/fork-sax ./packages/fork-sax
+COPY packages/fork-uslug ./packages/fork-uslug
+COPY packages/htmlpack ./packages/htmlpack
+COPY packages/renderer ./packages/renderer
+COPY packages/tools ./packages/tools
+COPY packages/lib ./packages/lib
+COPY packages/server ./packages/server
 
 # For some reason there's both a .yarn/cache and .yarn/berry/cache that are
 # being generated, and both have the same content. Not clear why it does this
@@ -59,10 +52,26 @@ RUN BUILD_SEQUENCIAL=1 yarn install --inline-builds \
     && yarn cache clean \
     && rm -rf .yarn/berry
 
-# Call the command directly, without going via npm:
-# https://github.com/nodejs/docker-node/blob/main/docs/BestPractices.md#cmd
-WORKDIR "/home/$user/packages/server"
-CMD [ "node", "dist/app.js" ]
+### Final image
+FROM node:16-bullseye-slim
+
+ARG user=joplin
+RUN useradd --create-home --shell /bin/bash $user
+
+USER $user
+
+COPY --chown=$user:$user --from=builder /build/packages /home/$user/packages
+COPY --chown=$user:$user --from=builder /tini /usr/local/bin/tini
+
+ENV NODE_ENV=production
+ENV RUNNING_IN_DOCKER=1
+EXPOSE ${APP_PORT}
+
+# Use Tini to start Joplin Server:
+# https://github.com/nodejs/docker-node/blob/main/docs/BestPractices.md#handling-kernel-signals
+WORKDIR /home/$user/packages/server
+ENTRYPOINT ["tini", "--"]
+CMD ["node", "dist/app.js"]
 
 # Build-time metadata
 # https://github.com/opencontainers/image-spec/blob/master/annotations.md

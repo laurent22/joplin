@@ -277,6 +277,9 @@
 		let restoreAndRefreshTimeoutID_ = null;
 		let restoreAndRefreshTimeout_ = Date.now();
 
+		// If 'noteRenderComplete' message is ongoing, resizing should not trigger a 'percentScroll' messsage.
+		let noteRenderCompleteMessageIsOngoing_ = false;
+
 		// A callback anonymous function invoked when the scroll height changes.
 		const onRendering = observeRendering((cause, height, heightChanged) => {
 			if (!alreadyAllImagesLoaded && !scrollmap.isPresent()) {
@@ -285,6 +288,7 @@
 					alreadyAllImagesLoaded = true;
 					scrollmap.refresh();
 					restorePercentScroll();
+					noteRenderCompleteMessageIsOngoing_ = true;
 					ipcProxySendToHost('noteRenderComplete');
 					return;
 				}
@@ -294,7 +298,7 @@
 				scrollmap.refresh();
 				restorePercentScroll();
 				// To ensures Editor's scroll position is synced with Viewer's
-				ipcProxySendToHost('percentScroll', percentScroll_);
+				if (!noteRenderCompleteMessageIsOngoing_) ipcProxySendToHost('percentScroll', percentScroll_);
 			};
 			const now = Date.now();
 			if (now < restoreAndRefreshTimeout_) {
@@ -345,11 +349,13 @@
 
 			if (scrollmap.isPresent()) {
 				// Now, ready to receive scrollToHash/setPercentScroll from Editor.
+				noteRenderCompleteMessageIsOngoing_ = true;
 				ipcProxySendToHost('noteRenderComplete');
 			}
 		}
 
 		ipc.setPercentScroll = (event) => {
+			noteRenderCompleteMessageIsOngoing_ = false;
 			setPercentScroll(event.percent);
 		}
 

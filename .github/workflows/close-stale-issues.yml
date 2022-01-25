@@ -16,7 +16,7 @@ jobs:
           days-before-stale: 30
           days-before-close: 7
           operations-per-run: 1000
-          exempt-issue-labels: 'good first issue,upstream,backlog,high,medium,spec,cannot reproduce'
+          exempt-issue-labels: 'good first issue,upstream,backlog,high,medium,spec,cannot reproduce,enhancement'
           stale-issue-label: 'stale'
           close-issue-message: 'Closing this issue after a prolonged period of inactivity. If this issue is still present in the latest release, feel free to create a new issue with up-to-date information.'
           # Don't process pull requests at all
