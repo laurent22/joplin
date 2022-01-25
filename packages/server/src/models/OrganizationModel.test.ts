@@ -1,11 +1,11 @@
-import { Organization, OrganizationUserInvitationStatus } from '../services/database/types';
-import { ErrorBadRequest, ErrorUnprocessableEntity } from '../utils/errors';
+import { Organization, OrganizationUserInvitationStatus, UserFlagType, Uuid } from '../services/database/types';
+import { ErrorBadRequest, ErrorForbidden, ErrorUnprocessableEntity } from '../utils/errors';
 import { beforeAllDb, afterAllTests, beforeEachDb, models, createUser, expectHttpError } from '../utils/testing/testUtils';
 import { organizationInvitationConfirmUrl } from '../utils/urlUtils';
 import { AccountType } from './UserModel';
 
-const createOrg = async (props: Organization = null) => {
-	const orgOwner = await createUser(1000);
+const createOrg = async (props: Organization = null, orgNum: number = 1) => {
+	const orgOwner = await createUser(1000 + orgNum);
 
 	await models().user().save({
 		id: orgOwner.id,
@@ -19,7 +19,14 @@ const createOrg = async (props: Organization = null) => {
 		...props,
 	});
 
-	return (await models().organizations().all())[0];
+	return models().organizations().userAssociatedOrganization(orgOwner.id);
+};
+
+const addUsers = async (orgId: Uuid, orgNum: number = 1) => {
+	await models().organizations().addUsers(orgId, [
+		`orguser${orgNum}-1@example.com`,
+		`orguser${orgNum}-2@example.com`,
+	]);
 };
 
 describe('OrganizationModel', function() {
@@ -150,6 +157,42 @@ describe('OrganizationModel', function() {
 		}
 
 		expect(await models().organizations().activeInvitationCount(org.id)).toBe(10);
+	});
+
+	test('should remove users', async () => {
+		const org = await createOrg({ max_users: 10 });
+		await addUsers(org.id);
+
+		expect((await models().organizationUsers().orgUsers(org.id)).length).toBe(2);
+
+		const orgUser = await models().organizationUsers().orgUserByEmail(org.id, 'orguser1-2@example.com');
+		await models().organizations().removeUser(org.id, orgUser.id);
+
+		expect((await models().organizationUsers().orgUsers(org.id)).length).toBe(1);
+
+		const removedUser = await models().user().load(orgUser.user_id);
+		expect(removedUser.enabled).toBe(0);
+
+		const flags = await models().userFlag().allByUserId(removedUser.id);
+		expect(flags.length).toBe(1);
+		expect(flags[0].type).toBe(UserFlagType.RemovedFromOrganization);
+	});
+
+	test('should check permissions where removing users', async () => {
+		const org1 = await createOrg({ max_users: 10 }, 1);
+		await addUsers(org1.id, 1);
+
+		const org2 = await createOrg({ max_users: 10 }, 2);
+		await addUsers(org2.id, 2);
+
+		{
+			const orgUser = await models().organizationUsers().orgUserByEmail(org1.id, 'orguser1-2@example.com');
+			await expectHttpError(async () => models().organizations().removeUser(org2.id, orgUser.id), ErrorForbidden.httpCode);
+		}
+
+		{
+			await expectHttpError(async () => models().organizations().removeUser(org2.id, 'notfound'), ErrorForbidden.httpCode);
+		}
 	});
 
 });

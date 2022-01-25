@@ -8,6 +8,7 @@ import { _ } from '@joplin/lib/locale';
 import { ErrorNotFound } from '../../utils/errors';
 import { AclAction } from '../../models/BaseModel';
 import { createCsrfTag } from '../../utils/csrf';
+import { organizationUsersUrl } from '../../utils/urlUtils';
 
 const router = new Router(RouteType.Web);
 
@@ -31,9 +32,10 @@ router.get('organization_users/:id', async (path: SubPath, ctx: AppContext) => {
 	const view: View = {
 		...defaultView('organizations/user', _('Organisation user')),
 		content: {
-			csrfTag: createCsrfTag(ctx),
+			csrfTag: await createCsrfTag(ctx),
 			user,
-			// postUrl: 
+			orgUser,
+			postUrl: organizationUsersUrl('me'),
 		},
 	};
 

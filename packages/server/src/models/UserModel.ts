@@ -1,4 +1,4 @@
-import BaseModel, { AclAction, SaveOptions, ValidateOptions } from './BaseModel';
+import BaseModel, { AclAction, LoadOptions, SaveOptions, ValidateOptions } from './BaseModel';
 import { EmailSender, Item, NotificationLevel, Subscription, User, UserFlagType, Uuid } from '../services/database/types';
 import * as auth from '../utils/auth';
 import { ErrorUnprocessableEntity, ErrorForbidden, ErrorPayloadTooLarge, ErrorNotFound } from '../utils/errors';
@@ -113,9 +113,11 @@ export default class UserModel extends BaseModel<User> {
 		return 'users';
 	}
 
-	public async loadByEmail(email: string): Promise<User> {
-		const user: User = this.formatValues({ email: email });
-		return this.db<User>(this.tableName).where(user).first();
+	public async loadByEmail(email: string, options: LoadOptions = {}): Promise<User> {
+		return this.db(this.tableName)
+			.select(this.selectFields(options))
+			.where(this.formatValues({ email: email }))
+			.first();
 	}
 
 	public async login(email: string, password: string): Promise<User> {

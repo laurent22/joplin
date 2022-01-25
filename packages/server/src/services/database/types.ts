@@ -41,6 +41,7 @@ export enum UserFlagType {
 	SubscriptionCancelled = 5,
 	ManuallyDisabled = 6,
 	UserDeletionInProgress = 7,
+	RemovedFromOrganization = 8,
 }
 
 export enum OrganizationUserInvitationStatus {
@@ -72,6 +73,7 @@ export function userFlagTypeToLabel(t: UserFlagType): string {
 		[UserFlagType.SubscriptionCancelled]: 'Subscription Cancelled',
 		[UserFlagType.ManuallyDisabled]: 'Manually Disabled',
 		[UserFlagType.UserDeletionInProgress]: 'User deletion in progress',
+		[UserFlagType.RemovedFromOrganization]: 'Removed from organization',
 	};
 
 	if (!s[t]) throw new Error(`Unknown flag type: ${t}`);

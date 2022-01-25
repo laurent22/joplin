@@ -5,7 +5,7 @@ import { AppContext } from '../../utils/types';
 import defaultView from '../../utils/defaultView';
 import { View } from '../../services/MustacheService';
 import { _ } from '@joplin/lib/locale';
-import { ErrorNotFound } from '../../utils/errors';
+import { ErrorBadRequest, ErrorNotFound } from '../../utils/errors';
 import { bodyFields } from '../../utils/requestUtils';
 import { createCsrfTag } from '../../utils/csrf';
 import { organizationUrl, organizationUsersUrl, organizationUserUrl } from '../../utils/urlUtils';
@@ -25,9 +25,14 @@ interface OrganizationFormFields {
 }
 
 interface OrganizationUserFormFields {
-	emails: string;
+	emails?: string;
+	remove_user_button?: string;
+	invite_users_button?: string;
+	organization_user_id?: string;
 }
 
+// This method returns the organisation associated with the logged in user. It
+// will throw an error if the user doesn't have one.
 const getOrganization = async (path: SubPath, ctx: AppContext) => {
 	if (path.id !== 'me') throw new ErrorNotFound();
 	const org = ctx.joplin.organization;
@@ -155,11 +160,19 @@ router.post('organizations/:id/users', async (path: SubPath, ctx: AppContext) =>
 	const fields = await bodyFields<OrganizationUserFormFields>(ctx.req);
 
 	try {
-		const emails = fields.emails.split(',').map(email => email.trim().toLowerCase());
-		emails.forEach(email => validateEmail(email));
+		if (fields.invite_users_button) {
+			const emails = fields.emails.split(',').map(email => email.trim().toLowerCase());
+			emails.forEach(email => validateEmail(email));
 
-		for (const email of emails) {
-			await models.organizations().inviteUser(org.id, email);
+			for (const email of emails) {
+				await models.organizations().inviteUser(org.id, email);
+			}
+		} else if (fields.remove_user_button) {
+			const orgUser = await models.organizationUsers().load(fields.organization_user_id);
+			await models.organizationUsers().checkIfAllowed(ctx.joplin.owner, AclAction.Delete, orgUser, org);
+
+		} else {
+			throw new ErrorBadRequest('No action provided');
 		}
 
 		return redirect(ctx, organizationUsersUrl('me'));

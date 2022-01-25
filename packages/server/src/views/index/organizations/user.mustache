@@ -1,10 +1,12 @@
-<div class="block">
-	<strong>Full name:</strong> {{user.full_name}}<br/>
-	<strong>Email:</strong> <a href="mailto:{{user.email}}">{{user.email}}</a>
-</div>
-
-<form>
+<form method="post" action="{{{postUrl}}}">
 	{{{csrfTag}}}
+	<input type="hidden" name="organization_user_id" value="{{orgUser.id}}"/>
+
+	<div class="block">
+		<strong>Full name:</strong> {{user.full_name}}<br/>
+		<strong>Email:</strong> <a href="mailto:{{user.email}}">{{user.email}}</a>
+	</div>
+
 	<div class="control block">
 		<input type="submit" name="remove_user_button" class="button is-danger" value="Remove user" />
 	</div>

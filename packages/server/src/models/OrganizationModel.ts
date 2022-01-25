@@ -1,5 +1,5 @@
-import { Organization, OrganizationUser, OrganizationUserInvitationStatus, Uuid } from '../services/database/types';
-import { ErrorBadRequest, ErrorUnprocessableEntity } from '../utils/errors';
+import { Organization, OrganizationUser, OrganizationUserInvitationStatus, UserFlagType, Uuid } from '../services/database/types';
+import { ErrorBadRequest, ErrorForbidden, ErrorUnprocessableEntity } from '../utils/errors';
 import { organizationInvitationConfirmUrl } from '../utils/urlUtils';
 import uuidgen from '../utils/uuidgen';
 import orgInviteUserTemplate from '../views/emails/orgInviteUserTemplate';
@@ -57,6 +57,15 @@ export default class OrganizationModel extends BaseModel<Organization> {
 			.where('organization_id', '=', orgId)
 			.where('invitation_status', '!=', OrganizationUserInvitationStatus.Rejected);
 		return r[0].item_count;
+	}
+
+	public async addUsers(orgId: Uuid, emails: string[]): Promise<void> {
+		await this.withTransaction(async () => {
+			for (const email of emails) {
+				const orgUser = await this.inviteUser(orgId, email);
+				await this.respondInvitation(orgUser.id, OrganizationUserInvitationStatus.Accepted);
+			}
+		});
 	}
 
 	public async inviteUser(orgId: Uuid, email: string) {
@@ -127,6 +136,28 @@ export default class OrganizationModel extends BaseModel<Organization> {
 			}
 
 			await this.models().organizationUsers().save(newOrgUser);
+		});
+	}
+
+	public async removeUser(orgId: Uuid, orgUserId: Uuid) {
+		return this.removeUsers(orgId, [orgUserId]);
+	}
+
+	public async removeUsers(orgId: Uuid, orgUserIds: Uuid[]) {
+		const org = await this.load(orgId, { fields: ['id'] });
+		if (!org) throw new ErrorBadRequest(`No such org: ${orgId}`);
+
+		const orgUsers = await this.models().organizationUsers().loadByIds(orgUserIds, { fields: ['id', 'user_id', 'organization_id'] });
+		if (orgUsers.length !== orgUserIds.length) throw new ErrorForbidden('One or more users does not belong to the organization');
+
+		console.info('UUUUUUUUUU', orgId, orgUsers);
+
+		await this.withTransaction(async () => {
+			for (const orgUser of orgUsers) {
+				if (orgUser.organization_id !== org.id) throw new ErrorForbidden(`User ${orgUser.user_id} does not belong to organization ${org.id}`);
+				await this.models().organizationUsers().delete(orgUser.id);
+				await this.models().userFlag().add(orgUser.user_id, UserFlagType.RemovedFromOrganization);
+			}
 		});
 	}
 
