@@ -56,13 +56,12 @@ RUN BUILD_SEQUENCIAL=1 yarn install --inline-builds \
 FROM node:16-bullseye-slim
 
 ARG user=joplin
-RUN useradd --create-home --shell /bin/bash $user
 RUN usermod -d /home/joplin -l joplin node
 
 USER $user
 
-COPY --chown=$user:$user --from=builder /build/packages /home/$user/packages
-COPY --chown=$user:$user --from=builder /tini /usr/local/bin/tini
+COPY --chown=$user:node --from=builder /build/packages /home/$user/packages
+COPY --chown=$user:node --from=builder /tini /usr/local/bin/tini
 
 ENV NODE_ENV=production
 ENV RUNNING_IN_DOCKER=1
