@@ -52,6 +52,7 @@ RUN BUILD_SEQUENCIAL=1 yarn install --inline-builds \
 FROM node:16-bullseye-slim
 
 ARG user=joplin
+RUN usermod -d /home/joplin -l joplin node
 RUN userdel -r node
 
 USER $user
