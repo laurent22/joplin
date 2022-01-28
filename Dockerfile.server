@@ -6,10 +6,6 @@ RUN apt-get update \
     python \
     && rm -rf /var/lib/apt/lists/*
 
-# Download the init tool Tini and make it executable for use in the final image
-ADD https://github.com/krallin/tini/releases/download/v0.19.0/tini-static /tini
-RUN chmod u+x /tini
-
 # Enables Yarn
 RUN corepack enable
 
@@ -56,12 +52,15 @@ RUN BUILD_SEQUENCIAL=1 yarn install --inline-builds \
 FROM node:16-bullseye-slim
 
 ARG user=joplin
-RUN usermod -d /home/joplin -l joplin node
+RUN userdel -r node
 
 USER $user
 
-COPY --chown=$user:node --from=builder /build/packages /home/$user/packages
-COPY --chown=$user:node --from=builder /tini /usr/local/bin/tini
+COPY --chown=$user:$user --from=builder /build/packages /home/$user/packages
+
+# Download the init tool Tini and make it executable for use in the final image
+ADD https://github.com/krallin/tini/releases/download/v0.19.0/tini-static /tini
+RUN chmod u+x /tini
 
 ENV NODE_ENV=production
 ENV RUNNING_IN_DOCKER=1
