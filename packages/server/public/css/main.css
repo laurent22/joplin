@@ -23,6 +23,10 @@ input.form-control {
 	align-items: center;
 }
 
+.navbar .logo-container .navbar-appname {
+	margin-left: 15px;
+}
+
 .navbar .logo-text {
 	font-size: 2.2em;
 	font-weight: bold;
