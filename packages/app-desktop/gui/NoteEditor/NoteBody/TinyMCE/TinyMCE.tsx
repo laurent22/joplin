@@ -24,7 +24,7 @@ import { MarkupToHtmlOptions } from '../../utils/useMarkupToHtml';
 import { themeStyle } from '@joplin/lib/theme';
 import { loadScript } from '../../../utils/loadScript';
 import bridge from '../../../../services/bridge';
-import isUrl = require('is-url');
+const urlUtils = require('@joplin/lib/urlUtils');
 const { clipboard } = require('electron');
 const supportedLocales = require('./supportedLocales');
 
@@ -999,7 +999,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 				editor.insertContent(result.html);
 			} else {
 				const pastedText = event.clipboardData.getData('text/plain');
-				if (BaseItem.isMarkdownTag(pastedText) || isUrl(pastedText)) { // Paste a link to a note
+				if (BaseItem.isMarkdownTag(pastedText) || urlUtils.urlProtocol(pastedText) !== null) { // Paste a link to a note
 					const result = await markupToHtml.current(MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN, pastedText, markupRenderOptions({ bodyOnly: true }));
 					editor.insertContent(result.html);
 				} else { // Paste regular text

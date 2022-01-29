@@ -2900,7 +2900,6 @@ __metadata:
     "@joplin/renderer": ~2.7
     "@joplin/tools": ~2.7
     "@testing-library/react-hooks": ^3.4.2
-    "@types/is-url": ^1.2.30
     "@types/jest": ^26.0.15
     "@types/node": ^14.14.6
     "@types/react": 16.9.55
@@ -2927,7 +2926,6 @@ __metadata:
     gulp: ^4.0.2
     highlight.js: ^10.2.1
     immer: ^7.0.5
-    is-url: ^1.2.4
     jest: ^26.6.3
     js-sha512: ^0.8.0
     keytar: ^7.0.0
@@ -5334,13 +5332,6 @@ __metadata:
   version: 1.8.1
   resolution: "@types/http-errors@npm:1.8.1"
   checksum: f0710ea284a7eb5584c5e324b1dc810bc971e1adc94deff63a0c434a8a75adc020487e3e6d511cd82cef101bbcf090b8f56995c143d123e0c374dc0f61be3a61
-  languageName: node
-  linkType: hard
-
-"@types/is-url@npm:^1.2.30":
-  version: 1.2.30
-  resolution: "@types/is-url@npm:1.2.30"
-  checksum: 81f337a7442f56d160ec0f63b2847cff368c5701f46a32c3c4fff5a1424b6afb4ad3eb7206febd26760a869680d61b7626e41f0ad652003f5783bcfda5b41d9e
   languageName: node
   linkType: hard
 
