@@ -6,8 +6,8 @@ html {
 	font-size: 14px;
 }
 
-div.main-container,
-div.navbar-container {
+.is-admin-page div.main-container,
+.is-admin-page div.navbar-container {
 	max-width: none !important;
 }
 
@@ -28,11 +28,6 @@ input.form-control {
 	font-weight: bold;
 	margin-left: 0.5em;
 }
-
-/* 
-.navbar .logo {
-	height: 50px;
-} */
 
 .navbar .navbar-item img {
 	max-height: 3em;
