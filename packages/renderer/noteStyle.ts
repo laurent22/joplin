@@ -126,6 +126,7 @@ export default function(theme: any, options: Options = null) {
 		}
 		h3 {
 			font-size: 1.1em;
+			font-weight: bold;
 		}
 		h4, h5, h6 {
 			font-size: 1em;
