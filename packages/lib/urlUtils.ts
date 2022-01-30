@@ -1,40 +1,70 @@
 const { rtrimSlashes } = require('./path-utils');
 const { urlDecode } = require('./string-utils');
 
-const urlUtils = {};
+interface UrlUtils {
+	hash: (url: string)=> string;
+	urlWithoutPath: (url: string)=> string;
+	urlProtocol: (url: string)=> string;
+	isUri: (url: string)=> boolean;
+	prependBaseUrl: (url: string, baseUrl: string)=> string;
+	isResourceUrl: (url: string)=> boolean;
+	parseResourceUrl: (url: string)=> {
+		itemId: string;
+		hash: string;
+	};
+	extractResourceUrls: (text: string)=> {
+		itemId: string;
+		hash: string;
+	}[];
+	objectToQueryString: (query: {
+		[key: string]: string | number | boolean;
+	})=> string;
+	fileUriToPath: (path: string, platform?: string)=> string;
+}
 
-urlUtils.hash = function(url) {
+const hash = (url: string) => {
 	const s = url.split('#');
 	if (s.length <= 1) return '';
 	return s[s.length - 1];
 };
 
-urlUtils.urlWithoutPath = function(url) {
+const urlWithoutPath = (url: string) => {
 	const parsed = require('url').parse(url, true);
 	return `${parsed.protocol}//${parsed.host}`;
 };
 
-urlUtils.urlProtocol = function(url) {
+const urlProtocol = (url: string): string => {
 	if (!url) return '';
 	const parsed = require('url').parse(url, true);
 	return parsed.protocol;
 };
 
-urlUtils.prependBaseUrl = function(url, baseUrl) {
+const isUri = (url: string) => {
+	if (!url) return false;
+	const { URL } = require('url');
+	try {
+		new URL(url);
+		return true;
+	} catch (e) {
+		return false;
+	}
+};
+
+const prependBaseUrl = (url: string, baseUrl: string) => {
 	baseUrl = rtrimSlashes(baseUrl).trim(); // All the code below assumes that the baseUrl does not end up with a slash
 	url = url.trim();
 
 	if (!url) url = '';
 	if (!baseUrl) return url;
 	if (url.indexOf('#') === 0) return url; // Don't prepend if it's a local anchor
-	if (urlUtils.urlProtocol(url)) return url; // Don't prepend the base URL if the URL already has a scheme
+	if (urlProtocol(url)) return url; // Don't prepend the base URL if the URL already has a scheme
 
 	if (url.length >= 2 && url.indexOf('//') === 0) {
 		// If it starts with // it's a protcol-relative URL
-		return urlUtils.urlProtocol(baseUrl) + url;
+		return urlProtocol(baseUrl) + url;
 	} else if (url && url[0] === '/') {
 		// If it starts with a slash, it's an absolute URL so it should be relative to the domain (and not to the full baseUrl)
-		return urlUtils.urlWithoutPath(baseUrl) + url;
+		return urlWithoutPath(baseUrl) + url;
 	} else {
 		return baseUrl + (url ? `/${url}` : '');
 	}
@@ -42,15 +72,12 @@ urlUtils.prependBaseUrl = function(url, baseUrl) {
 
 const resourceRegex = /^(joplin:\/\/|:\/)([0-9a-zA-Z]{32})(|#[^\s]*)(|\s".*?")$/;
 
-urlUtils.isResourceUrl = function(url) {
-	return !!url.match(resourceRegex);
-};
+const isResourceUrl = (url: string) => !!url.match(resourceRegex);
 
-urlUtils.parseResourceUrl = function(url) {
-	if (!urlUtils.isResourceUrl(url)) return null;
+const parseResourceUrl = (url: string) => {
+	if (!isResourceUrl(url)) return null;
 
 	const match = url.match(resourceRegex);
-
 	const itemId = match[2];
 	let hash = match[3].trim();
 
@@ -65,13 +92,13 @@ urlUtils.parseResourceUrl = function(url) {
 	};
 };
 
-urlUtils.extractResourceUrls = function(text) {
+const extractResourceUrls = (text: string) => {
 	const markdownLinksRE = /\]\((.*?)\)/g;
 	const output = [];
 	let result = null;
 
 	while ((result = markdownLinksRE.exec(text)) !== null) {
-		const resourceUrlInfo = urlUtils.parseResourceUrl(result[1]);
+		const resourceUrlInfo = parseResourceUrl(result[1]);
 		if (resourceUrlInfo) output.push(resourceUrlInfo);
 	}
 
@@ -91,7 +118,9 @@ urlUtils.extractResourceUrls = function(text) {
 	return output;
 };
 
-urlUtils.objectToQueryString = function(query) {
+const objectToQueryString = (query: {
+	[key: string]: string | number | boolean;
+}) => {
 	if (!query) return '';
 
 	let queryString = '';
@@ -114,7 +143,7 @@ urlUtils.objectToQueryString = function(query) {
 //   properly everywhere.
 //
 // - Adds the "platform" parameter to optionall return paths with "\" for win32
-function fileUriToPath_(uri, platform) {
+const fileUriToPath_ = (uri: string, platform: string) => {
 	const sep = '/';
 
 	if (
@@ -170,9 +199,9 @@ function fileUriToPath_(uri, platform) {
 	} else {
 		return host + path;
 	}
-}
+};
 
-urlUtils.fileUriToPath = (path, platform = 'linux') => {
+const fileUriToPath = (path: string, platform = 'linux') => {
 	const output = fileUriToPath_(path, platform);
 
 	// The file-uri-to-path module converts Windows path such as
@@ -200,6 +229,19 @@ urlUtils.fileUriToPath = (path, platform = 'linux') => {
 	}
 
 	return output;
+};
+
+const urlUtils: UrlUtils = {
+	hash,
+	urlWithoutPath,
+	urlProtocol,
+	isUri,
+	prependBaseUrl,
+	isResourceUrl,
+	parseResourceUrl,
+	extractResourceUrls,
+	objectToQueryString,
+	fileUriToPath,
 };
 
 module.exports = urlUtils;
