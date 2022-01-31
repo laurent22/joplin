@@ -138,6 +138,10 @@ export default class UserFlagModels extends BaseModel<UserFlag> {
 			newProps.enabled = 0;
 		}
 
+		if (user.enabled !== newProps.enabled) {
+			newProps.disabled_time = !newProps.enabled ? Date.now() : 0;
+		}
+
 		if (user.can_upload !== newProps.can_upload || user.enabled !== newProps.enabled) {
 			await this.models().user().save({
 				id: userId,
