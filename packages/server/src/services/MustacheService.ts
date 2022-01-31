@@ -298,10 +298,15 @@ export default class MustacheService {
 		throw new Error(`Unsupported view extension: ${ext}`);
 	}
 
+	private formatPageName(name: string): string {
+		return name.replace(/[/\\]/g, '-');
+	}
+
 	public async renderView(view: View, globalParams: GlobalParams = null): Promise<string> {
 		const cssFiles = this.resolvesFilePaths('css', view.cssFiles || []);
 		const jsFiles = this.resolvesFilePaths('js', view.jsFiles || []);
 		const filePath = await this.viewFilePath(view.path);
+		const isAdminPage = view.path.startsWith('/admin/');
 
 		globalParams = {
 			...this.defaultLayoutOptions,
@@ -313,8 +318,7 @@ export default class MustacheService {
 				!!globalParams?.organization
 			),
 			userDisplayName: this.userDisplayName(globalParams ? globalParams.owner : null),
-			isAdminPage: view.path.startsWith('/admin/'),
-			// config: config(),
+			isAdminPage,
 			s: {
 				home: _('Home'),
 				users: _('Users'),
@@ -331,7 +335,7 @@ export default class MustacheService {
 
 		const layoutView: any = {
 			global: globalParams,
-			pageName: view.name,
+			pageName: this.formatPageName(view.name),
 			pageTitle: view.titleOverride ? view.title : `${config().appName} - ${view.title}`,
 			contentHtml: contentHtml,
 			cssFiles: cssFiles,

@@ -19,7 +19,6 @@ RUN echo "Yarn: $(yarn --version)"
 
 WORKDIR /build
 
-COPY .yarn/patches ./.yarn/patches
 COPY .yarn/plugins ./.yarn/plugins
 COPY .yarn/releases ./.yarn/releases
 COPY package.json .
