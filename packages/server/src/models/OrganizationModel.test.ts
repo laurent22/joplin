@@ -178,7 +178,7 @@ describe('OrganizationModel', function() {
 		expect(flags[0].type).toBe(UserFlagType.RemovedFromOrganization);
 	});
 
-	test('should check permissions where removing users', async () => {
+	test('should check permissions when removing users', async () => {
 		const org1 = await createOrg({ max_users: 10 }, 1);
 		await addUsers(org1.id, 1);
 

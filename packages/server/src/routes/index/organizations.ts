@@ -154,9 +154,8 @@ router.get('organizations/:id/users', async (path: SubPath, ctx: AppContext, fie
 
 router.post('organizations/:id/users', async (path: SubPath, ctx: AppContext) => {
 	const org = await getOrganization(path, ctx);
-
 	const models = ctx.joplin.models;
-
+	const owner = ctx.joplin.owner;
 	const fields = await bodyFields<OrganizationUserFormFields>(ctx.req);
 
 	try {
@@ -169,8 +168,9 @@ router.post('organizations/:id/users', async (path: SubPath, ctx: AppContext) =>
 			}
 		} else if (fields.remove_user_button) {
 			const orgUser = await models.organizationUsers().load(fields.organization_user_id);
-			await models.organizationUsers().checkIfAllowed(ctx.joplin.owner, AclAction.Delete, orgUser, org);
-
+			await models.organizationUsers().checkIfAllowed(owner, AclAction.Delete, orgUser, org);
+			await models.organizations().removeUser(org.id, orgUser.id);
+			await models.notification().addInfo(owner.id, _('User was successfully removed from the organisation'));
 		} else {
 			throw new ErrorBadRequest('No action provided');
 		}

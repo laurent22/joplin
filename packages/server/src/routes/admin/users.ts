@@ -185,7 +185,7 @@ router.get('admin/users/:id', async (path: SubPath, ctx: AppContext, user: User 
 		view.content.subLastPaymentDate = formatDateTime(lastPaymentAttempt.time);
 	}
 
-	view.content.showImpersonateButton = !isNew && user.enabled && user.id !== owner.id;
+	view.content.showImpersonateButton = !isNew && user.id !== owner.id;
 	view.content.showRestoreButton = !isNew && !user.enabled;
 	view.content.showScheduleDeletionButton = !isNew && !isScheduledForDeletion;
 	view.content.showResetPasswordButton = !isNew && user.enabled;
