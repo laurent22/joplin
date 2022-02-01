@@ -33,6 +33,10 @@ export enum EventType {
 	TaskCompleted = 2,
 }
 
+export enum BackupItemType {
+	UserAccount = 1,
+}
+
 export enum UserFlagType {
 	FailedPaymentWarning = 1,
 	FailedPaymentFinal = 2,
@@ -84,6 +88,10 @@ export enum ShareUserStatus {
 
 export interface WithDates {
 	updated_time?: number;
+	created_time?: number;
+}
+
+export interface WithCreatedDate {
 	created_time?: number;
 }
 
@@ -283,6 +291,14 @@ export interface Email extends WithDates {
 	key?: string;
 }
 
+export interface BackupItem extends WithCreatedDate {
+	id?: number;
+	type?: number;
+	key?: string;
+	user_id?: Uuid;
+	content?: Buffer;
+}
+
 export const databaseSchema: DatabaseTables = {
 	sessions: {
 		id: { type: 'string' },
@@ -477,6 +493,14 @@ export const databaseSchema: DatabaseTables = {
 		updated_time: { type: 'string' },
 		created_time: { type: 'string' },
 		key: { type: 'string' },
+	},
+	backup_items: {
+		id: { type: 'number' },
+		type: { type: 'number' },
+		key: { type: 'string' },
+		user_id: { type: 'string' },
+		content: { type: 'any' },
+		created_time: { type: 'string' },
 	},
 };
 // AUTO-GENERATED-TYPES

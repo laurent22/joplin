@@ -166,6 +166,10 @@ export default abstract class BaseModel<T> {
 		return true;
 	}
 
+	protected hasUpdatedTime(): boolean {
+		return this.autoTimestampEnabled();
+	}
+
 	protected get hasParentId(): boolean {
 		return false;
 	}
@@ -315,7 +319,7 @@ export default abstract class BaseModel<T> {
 			if (isNew) {
 				(toSave as WithDates).created_time = timestamp;
 			}
-			(toSave as WithDates).updated_time = timestamp;
+			if (this.hasUpdatedTime()) (toSave as WithDates).updated_time = timestamp;
 		}
 
 		if (options.skipValidation !== true) object = await this.validate(object, { isNew: isNew, rules: options.validationRules ? options.validationRules : {} });
