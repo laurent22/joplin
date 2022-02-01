@@ -106,6 +106,7 @@ export async function initConfig(envType: Env, env: EnvVariables, overrides: any
 	const supportEmail = env.SUPPORT_EMAIL;
 
 	config_ = {
+		...env,
 		appVersion: packageJson.version,
 		appName,
 		isJoplinCloud: apiBaseUrl.includes('.joplincloud.com') || apiBaseUrl.includes('.joplincloud.local'),
