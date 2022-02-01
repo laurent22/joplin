@@ -46,12 +46,12 @@ export default function(env: Env, models: Models, config: Config, services: Serv
 			run: (models: Models) => models.user().handleOversizedAccounts(),
 		},
 
-		// {
-		// 	id: TaskId.DeleteExpiredSessions,
-		// 	description: taskIdToLabel(TaskId.DeleteExpiredSessions),
-		// 	schedule: '0 */6 * * *',
-		// 	run: (models: Models) => models.session().deleteExpiredSessions(),
-		// },
+		{
+			id: TaskId.DeleteExpiredSessions,
+			description: taskIdToLabel(TaskId.DeleteExpiredSessions),
+			schedule: '0 */6 * * *',
+			run: (models: Models) => models.session().deleteExpiredSessions(),
+		},
 	];
 
 	if (config.USER_DATA_AUTO_DELETE_ENABLED) {
