@@ -46,12 +46,17 @@ export default function(env: Env, models: Models, config: Config, services: Serv
 			run: (models: Models) => models.user().handleOversizedAccounts(),
 		},
 
-		{
-			id: TaskId.DeleteExpiredSessions,
-			description: taskIdToLabel(TaskId.DeleteExpiredSessions),
-			schedule: '0 */6 * * *',
-			run: (models: Models) => models.session().deleteExpiredSessions(),
-		},
+		// This should be enabled eventually. As of version 2.5
+		// (2021-11-08T11:07:11Z) all Joplin clients support handling of expired
+		// sessions, however we don't know how many people have Joplin 2.5+ so
+		// be safe we don't enable it just yet.
+
+		// {
+		// 	id: TaskId.DeleteExpiredSessions,
+		// 	description: taskIdToLabel(TaskId.DeleteExpiredSessions),
+		// 	schedule: '0 */6 * * *',
+		// 	run: (models: Models) => models.session().deleteExpiredSessions(),
+		// },
 	];
 
 	if (config.USER_DATA_AUTO_DELETE_ENABLED) {
