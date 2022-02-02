@@ -15,8 +15,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.4.2\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:565
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -265,8 +263,8 @@ msgstr "Ajoutez le titre"
 msgid "Add to dictionary"
 msgstr "Ajouter au dictionnaire"
 
-#: packages/server/src/services/MustacheService.ts:182
-#: packages/server/src/services/MustacheService.ts:301
+#: packages/server/src/services/MustacheService.ts:186
+#: packages/server/src/services/MustacheService.ts:310
 msgid "Admin"
 msgstr "Admin"
 
@@ -397,6 +395,10 @@ msgstr "Code d'authentification :"
 #: packages/lib/models/Setting.ts:667
 msgid "Auto"
 msgstr "Auto"
+
+#: packages/server/src/services/TaskService.ts:39
+msgid "Auto-add disabled accounts for deletion"
+msgstr ""
 
 #: packages/lib/models/Setting.ts:853
 msgid "Auto-pair braces, parenthesis, quotations, etc."
@@ -714,6 +716,10 @@ msgstr "Déchiffrement complété."
 msgid "Completed: %s (%s)"
 msgstr "Terminé : %s (%s)"
 
+#: packages/server/src/services/TaskService.ts:37
+msgid "Compress old changes"
+msgstr ""
+
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:637
 #: packages/app-mobile/components/side-menu-content.js:319
 msgid "Configuration"
@@ -1020,6 +1026,16 @@ msgstr "Supprimer"
 #: packages/app-desktop/gui/ResourceScreen.tsx:169
 msgid "Delete attachment \"%s\"?"
 msgstr "Supprimer fichier joint \"%s\" ?"
+
+#: packages/server/src/services/TaskService.ts:36
+#, fuzzy
+msgid "Delete expired sessions"
+msgstr "Activer les expressions mathématiques"
+
+#: packages/server/src/services/TaskService.ts:31
+#, fuzzy
+msgid "Delete expired tokens"
+msgstr "Supprimer ces %d notes ?"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:88
 msgid "Delete line"
@@ -1338,6 +1354,15 @@ msgstr "Soit \"text\" soit \"json\""
 #: packages/lib/models/Setting.ts:1257
 msgid "Emacs"
 msgstr "Emacs"
+
+#: packages/server/src/routes/admin/emails.ts:125
+msgid "Email"
+msgstr ""
+
+#: packages/server/src/routes/admin/emails.ts:109
+#: packages/server/src/services/MustacheService.ts:155
+msgid "Emails"
+msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:194
 msgid "emphasised text"
@@ -1758,7 +1783,7 @@ msgstr "Autoriser"
 msgid "Heading"
 msgstr "Titre"
 
-#: packages/server/src/services/MustacheService.ts:299
+#: packages/server/src/services/MustacheService.ts:308
 msgid "Help"
 msgstr "Aide"
 
@@ -1778,8 +1803,8 @@ msgstr "Cacher Joplin"
 msgid "Highlight"
 msgstr "Surligner"
 
-#: packages/server/src/services/MustacheService.ts:166
-#: packages/server/src/services/MustacheService.ts:294
+#: packages/server/src/services/MustacheService.ts:170
+#: packages/server/src/services/MustacheService.ts:303
 msgid "Home"
 msgstr "Accueil"
 
@@ -2007,8 +2032,8 @@ msgstr "Italique"
 msgid "Item \"%s\" could not be downloaded: %s"
 msgstr "L'objet \"%s\" n'a pas pu être téléchargé : %s"
 
-#: packages/server/src/services/MustacheService.ts:174
-#: packages/server/src/services/MustacheService.ts:296
+#: packages/server/src/services/MustacheService.ts:178
+#: packages/server/src/services/MustacheService.ts:305
 msgid "Items"
 msgstr "Objets"
 
@@ -2206,7 +2231,7 @@ msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:521
 #: packages/app-mobile/components/screens/log.js:100
-#: packages/server/src/services/MustacheService.ts:297
+#: packages/server/src/services/MustacheService.ts:306
 msgid "Log"
 msgstr "Journal"
 
@@ -2226,11 +2251,11 @@ msgstr "Se connecter à Dropbox"
 msgid "Login with OneDrive"
 msgstr "Se connecter à OneDrive"
 
-#: packages/server/src/services/MustacheService.ts:300
+#: packages/server/src/services/MustacheService.ts:309
 msgid "Logout"
 msgstr "Se déconnecter"
 
-#: packages/server/src/services/MustacheService.ts:178
+#: packages/server/src/services/MustacheService.ts:182
 msgid "Logs"
 msgstr "Journal"
 
@@ -2897,6 +2922,19 @@ msgstr "Imprimer"
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:611
 msgid "Privacy Policy"
 msgstr "Politique de confidentialité"
+
+#: packages/server/src/services/TaskService.ts:35
+msgid "Process failed payment subscriptions"
+msgstr ""
+
+#: packages/server/src/services/TaskService.ts:33
+msgid "Process oversized accounts"
+msgstr ""
+
+#: packages/server/src/services/TaskService.ts:38
+#, fuzzy
+msgid "Process user deletions"
+msgstr "Suppressions d'utilisateurs"
 
 #: packages/server/src/routes/admin/users.ts:168
 msgid "Profile"
@@ -3602,7 +3640,7 @@ msgid "Take photo"
 msgstr "Prendre une photo"
 
 #: packages/server/src/services/MustacheService.ts:151
-#: packages/server/src/services/MustacheService.ts:298
+#: packages/server/src/services/MustacheService.ts:307
 msgid "Tasks"
 msgstr "Tâches"
 
@@ -4204,6 +4242,11 @@ msgstr "Mettre à jour"
 msgid "Update profile"
 msgstr "Mettre à jour le profil"
 
+#: packages/server/src/services/TaskService.ts:32
+#, fuzzy
+msgid "Update total sizes"
+msgstr "Objets màj localement : %d."
+
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:208
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:209
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:30
@@ -4313,7 +4356,7 @@ msgstr "Suppressions d'utilisateurs"
 
 #: packages/server/src/routes/admin/users.ts:107
 #: packages/server/src/services/MustacheService.ts:143
-#: packages/server/src/services/MustacheService.ts:295
+#: packages/server/src/services/MustacheService.ts:304
 msgid "Users"
 msgstr "Utilisateurs"
 
