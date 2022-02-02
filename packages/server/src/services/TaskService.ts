@@ -4,6 +4,7 @@ import { Config, Env } from '../utils/types';
 import BaseService from './BaseService';
 import { Event, EventType } from './database/types';
 import { Services } from './types';
+import { _ } from '@joplin/lib/locale';
 const cron = require('node-cron');
 
 const logger = Logger.create('TaskService');
@@ -17,12 +18,32 @@ export enum TaskId {
 	DeleteExpiredSessions = 6,
 	CompressOldChanges = 7,
 	ProcessUserDeletions = 8,
+	AutoAddDisabledAccountsForDeletion = 9,
 }
 
 export enum RunType {
 	Scheduled = 1,
 	Manual = 2,
 }
+
+export const taskIdToLabel = (taskId: TaskId): string => {
+	const strings: Record<TaskId, string> = {
+		[TaskId.DeleteExpiredTokens]: _('Delete expired tokens'),
+		[TaskId.UpdateTotalSizes]: _('Update total sizes'),
+		[TaskId.HandleOversizedAccounts]: _('Process oversized accounts'),
+		[TaskId.HandleBetaUserEmails]: 'Process beta user emails',
+		[TaskId.HandleFailedPaymentSubscriptions]: _('Process failed payment subscriptions'),
+		[TaskId.DeleteExpiredSessions]: _('Delete expired sessions'),
+		[TaskId.CompressOldChanges]: _('Compress old changes'),
+		[TaskId.ProcessUserDeletions]: _('Process user deletions'),
+		[TaskId.AutoAddDisabledAccountsForDeletion]: _('Auto-add disabled accounts for deletion'),
+	};
+
+	const s = strings[taskId];
+	if (!s) throw new Error(`No such task: ${taskId}`);
+
+	return s;
+};
 
 const runTypeToString = (runType: RunType) => {
 	if (runType === RunType.Scheduled) return 'scheduled';

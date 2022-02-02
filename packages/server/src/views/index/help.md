@@ -26,7 +26,7 @@ We offer a 14 days trial when the subscription starts so that you can evaluate t
 
 ## How can I cancel my account?
 
-Click on the [Profile button](#how-can-i-change-my-details), then scroll down and click on "Manage subscription". We do not cancel accounts over email as we cannot verify your identity.
+Click on the [Profile button](#how-can-i-change-my-details), then scroll down and click on "Manage subscription". Your subscription will be cancelled and you will not be charged on what would have been the next billing period. Please note that we do not cancel accounts over email as we cannot verify your identity, however we can provide assistance if there is an issue.
 
 ## Further information
 

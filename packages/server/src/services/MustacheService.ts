@@ -9,7 +9,7 @@ import { makeUrl, UrlType } from '../utils/routeUtils';
 import MarkdownIt = require('markdown-it');
 import { headerAnchor } from '@joplin/renderer';
 import { _ } from '@joplin/lib/locale';
-import { adminDashboardUrl, adminTasksUrl, adminUserDeletionsUrl, adminUsersUrl, changesUrl, homeUrl, itemsUrl, stripOffQueryParameters } from '../utils/urlUtils';
+import { adminDashboardUrl, adminEmailsUrl, adminTasksUrl, adminUserDeletionsUrl, adminUsersUrl, changesUrl, homeUrl, itemsUrl, stripOffQueryParameters } from '../utils/urlUtils';
 import { URL } from 'url';
 
 type MenuItemSelectedCondition = (selectedUrl: URL)=> boolean;
@@ -151,6 +151,10 @@ export default class MustacheService {
 						title: _('Tasks'),
 						url: adminTasksUrl(),
 					},
+					{
+						title: _('Emails'),
+						url: adminEmailsUrl(),
+					},
 				],
 			},
 		];
@@ -278,10 +282,15 @@ export default class MustacheService {
 		throw new Error(`Unsupported view extension: ${ext}`);
 	}
 
+	private formatPageName(name: string): string {
+		return name.replace(/[/\\]/g, '-');
+	}
+
 	public async renderView(view: View, globalParams: GlobalParams = null): Promise<string> {
 		const cssFiles = this.resolvesFilePaths('css', view.cssFiles || []);
 		const jsFiles = this.resolvesFilePaths('js', view.jsFiles || []);
 		const filePath = await this.viewFilePath(view.path);
+		const isAdminPage = view.path.startsWith('/admin/');
 
 		globalParams = {
 			...this.defaultLayoutOptions,
@@ -289,7 +298,7 @@ export default class MustacheService {
 			adminMenu: globalParams ? this.makeAdminMenu(globalParams.currentUrl) : null,
 			navbarMenu: this.makeNavbar(globalParams?.currentUrl, globalParams?.owner ? !!globalParams.owner.is_admin : false),
 			userDisplayName: this.userDisplayName(globalParams ? globalParams.owner : null),
-			isAdminPage: view.path.startsWith('/admin/'),
+			isAdminPage,
 			s: {
 				home: _('Home'),
 				users: _('Users'),
@@ -306,7 +315,7 @@ export default class MustacheService {
 
 		const layoutView: any = {
 			global: globalParams,
-			pageName: view.name,
+			pageName: this.formatPageName(view.name),
 			pageTitle: view.titleOverride ? view.title : `${config().appName} - ${view.title}`,
 			contentHtml: contentHtml,
 			cssFiles: cssFiles,

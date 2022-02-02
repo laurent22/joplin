@@ -1,23 +1,29 @@
 {{#navbar}}
 	<nav class="navbar is-dark" role="navigation" aria-label="main navigation">
-		<div class="container">
+		<div class="container navbar-container">
 			<div class="navbar-brand logo-container">
 				<a class="navbar-item" href="{{{global.baseUrl}}}">
 					<img class="logo" src="{{{global.baseUrl}}}/images/Logo.png"/>
+					{{^global.owner}}
+						<span class="navbar-appname">{{global.appName}}</span>
+					{{/global.owner}}
 				</a>
 			</div>
 
-			{{#global.owner}}
-				<div class="navbar-menu is-active">
+			<div class="navbar-menu is-active">
+				{{#global.owner}}
 					<div class="navbar-start">
 						{{#global.navbarMenu}}
 							<a class="navbar-item {{#selected}}is-active{{/selected}}" href="{{{url}}}">{{#icon}}<i class="{{.}}"></i>&nbsp;&nbsp;{{/icon}}{{title}}</a>
 						{{/global.navbarMenu}}
 					</div>
-					<div class="navbar-end">
-						{{#global.isJoplinCloud}}
-							<a class="navbar-item" href="{{{global.baseUrl}}}/help">{{global.s.help}}</a>
-						{{/global.isJoplinCloud}}
+				{{/global.owner}}
+
+				<div class="navbar-end">
+					{{#global.isJoplinCloud}}
+						<a class="navbar-item" href="{{{global.baseUrl}}}/help">{{global.s.help}}</a>
+					{{/global.isJoplinCloud}}
+					{{#global.owner}}
 						<div class="navbar-item">
 							<form method="post" action="{{{global.baseUrl}}}/logout">
 								<button class="button is-dark">{{global.s.logout}}</button>
@@ -34,17 +40,9 @@
 								</form>
 							</div>
 						{{/global.impersonatorAdminSessionId}}
-					</div>
+					{{/global.owner}}
 				</div>
-			{{/global.owner}}
-
-			{{^global.owner}}
-				<div class="navbar-menu is-active">
-					<div class="navbar-start">
-						<span class="navbar-item">{{global.appName}}</span>
-					</div>
-				</div>
-			{{/global.owner}}
+			</div>
 		</div>
 	</nav>
 {{/navbar}}

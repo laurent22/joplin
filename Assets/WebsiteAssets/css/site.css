@@ -672,7 +672,7 @@ footer .bottom-links-row p {
 
 .news-page     img,
 .news-item-page img {
-	max-width: 650px;
+	max-width: 100%;
 }
 
 /*****************************************************************

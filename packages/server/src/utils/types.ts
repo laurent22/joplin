@@ -7,7 +7,7 @@ import { Account } from '../models/UserModel';
 import { Services } from '../services/types';
 import { Routers } from './routeUtils';
 import { DbConnection } from '../db';
-import { MailerSecurity } from '../env';
+import { EnvVariables, MailerSecurity } from '../env';
 
 export enum Env {
 	Dev = 'dev',
@@ -130,7 +130,7 @@ export interface StorageDriverConfig {
 	bucket?: string;
 }
 
-export interface Config {
+export interface Config extends EnvVariables {
 	appVersion: string;
 	appName: string;
 	env: Env;

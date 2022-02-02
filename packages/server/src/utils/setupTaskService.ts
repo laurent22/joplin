@@ -1,5 +1,5 @@
 import { Models } from '../models/factory';
-import TaskService, { Task, TaskId } from '../services/TaskService';
+import TaskService, { Task, TaskId, taskIdToLabel } from '../services/TaskService';
 import { Services } from '../services/types';
 import { Config, Env } from './types';
 
@@ -9,28 +9,28 @@ export default function(env: Env, models: Models, config: Config, services: Serv
 	let tasks: Task[] = [
 		{
 			id: TaskId.DeleteExpiredTokens,
-			description: 'Delete expired tokens',
+			description: taskIdToLabel(TaskId.DeleteExpiredTokens),
 			schedule: '0 */6 * * *',
 			run: (models: Models) => models.token().deleteExpiredTokens(),
 		},
 
 		{
 			id: TaskId.UpdateTotalSizes,
-			description: 'Update total sizes',
+			description: taskIdToLabel(TaskId.UpdateTotalSizes),
 			schedule: '0 * * * *',
 			run: (models: Models) => models.item().updateTotalSizes(),
 		},
 
 		{
 			id: TaskId.CompressOldChanges,
-			description: 'Compress old changes',
+			description: taskIdToLabel(TaskId.CompressOldChanges),
 			schedule: '0 0 */2 * *',
 			run: (models: Models) => models.change().compressOldChanges(),
 		},
 
 		{
 			id: TaskId.ProcessUserDeletions,
-			description: 'Process user deletions',
+			description: taskIdToLabel(TaskId.ProcessUserDeletions),
 			schedule: '0 */6 * * *',
 			run: (_models: Models, services: Services) => services.userDeletion.runMaintenance(),
 		},
@@ -41,30 +41,44 @@ export default function(env: Env, models: Models, config: Config, services: Serv
 		// the UpdateTotalSizes task being run.
 		{
 			id: TaskId.HandleOversizedAccounts,
-			description: 'Process oversized accounts',
+			description: taskIdToLabel(TaskId.HandleOversizedAccounts),
 			schedule: '30 */2 * * *',
 			run: (models: Models) => models.user().handleOversizedAccounts(),
 		},
 
+		// This should be enabled eventually. As of version 2.5
+		// (2021-11-08T11:07:11Z) all Joplin clients support handling of expired
+		// sessions, however we don't know how many people have Joplin 2.5+ so
+		// be safe we don't enable it just yet.
+
 		// {
 		// 	id: TaskId.DeleteExpiredSessions,
-		// 	description: 'Delete expired sessions',
+		// 	description: taskIdToLabel(TaskId.DeleteExpiredSessions),
 		// 	schedule: '0 */6 * * *',
 		// 	run: (models: Models) => models.session().deleteExpiredSessions(),
 		// },
 	];
 
+	if (config.USER_DATA_AUTO_DELETE_ENABLED) {
+		tasks.push({
+			id: TaskId.AutoAddDisabledAccountsForDeletion,
+			description: taskIdToLabel(TaskId.AutoAddDisabledAccountsForDeletion),
+			schedule: '0 14 * * *',
+			run: (_models: Models, services: Services) => services.userDeletion.autoAddForDeletion(),
+		});
+	}
+
 	if (config.isJoplinCloud) {
 		tasks = tasks.concat([
 			{
 				id: TaskId.HandleBetaUserEmails,
-				description: 'Process beta user emails',
+				description: taskIdToLabel(TaskId.HandleBetaUserEmails),
 				schedule: '0 12 * * *',
 				run: (models: Models) => models.user().handleBetaUserEmails(),
 			},
 			{
 				id: TaskId.HandleFailedPaymentSubscriptions,
-				description: 'Process failed payment subscriptions',
+				description: taskIdToLabel(TaskId.HandleFailedPaymentSubscriptions),
 				schedule: '0 13 * * *',
 				run: (models: Models) => models.user().handleFailedPaymentSubscriptions(),
 			},

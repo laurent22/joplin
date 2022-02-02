@@ -23,8 +23,6 @@ router.get('admin/user_deletions', async (_path: SubPath, ctx: AppContext) => {
 		const page = await ctx.joplin.models.userDeletion().allPaginated(pagination);
 		const users = await ctx.joplin.models.user().loadByIds(page.items.map(d => d.user_id), { fields: ['id', 'email'] });
 
-		console.info(page);
-
 		const table: Table = {
 			baseUrl: adminUserDeletionsUrl(),
 			requestQuery: ctx.query,

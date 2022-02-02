@@ -3,7 +3,16 @@
 }
 
 html {
-	font-size: 100%;
+	font-size: 14px;
+}
+
+.is-admin-page div.main-container,
+.is-admin-page div.navbar-container {
+	max-width: none !important;
+}
+
+div.navbar-container {
+	padding: 0 3rem;
 }
 
 input.form-control {
@@ -14,16 +23,15 @@ input.form-control {
 	align-items: center;
 }
 
+.navbar .logo-container .navbar-appname {
+	margin-left: 15px;
+}
+
 .navbar .logo-text {
 	font-size: 2.2em;
 	font-weight: bold;
 	margin-left: 0.5em;
 }
-
-/* 
-.navbar .logo {
-	height: 50px;
-} */
 
 .navbar .navbar-item img {
 	max-height: 3em;

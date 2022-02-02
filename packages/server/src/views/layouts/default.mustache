@@ -19,10 +19,10 @@
 		<script src="{{{.}}}"></script>
 	{{/jsFiles}}
 </head>
-	<body class="page-{{{pageName}}}">
+	<body class="page-{{{pageName}}} {{#global.isAdminPage}}is-admin-page{{/global.isAdminPage}}">
 		{{> navbar}}
 		<main class="main">
-			<div class="container">
+			<div class="container main-container">
 				{{> notifications}}
 
 				{{#global.isAdminPage}}

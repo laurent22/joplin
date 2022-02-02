@@ -75,6 +75,7 @@ import { Config } from '../utils/types';
 import LockModel from './LockModel';
 import StorageModel from './StorageModel';
 import UserDeletionModel from './UserDeletionModel';
+import BackupItemModel from './BackupItemModel';
 
 export type NewModelFactoryHandler = (db: DbConnection)=> Models;
 
@@ -168,6 +169,10 @@ export class Models {
 
 	public userDeletion() {
 		return new UserDeletionModel(this.db_, this.newModelFactory, this.config_);
+	}
+
+	public backupItem() {
+		return new BackupItemModel(this.db_, this.newModelFactory, this.config_);
 	}
 
 }
