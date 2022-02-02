@@ -217,6 +217,7 @@ class Setting extends BaseModel {
 
 	public static TIME_FORMAT_1 = 'HH:mm';
 	public static TIME_FORMAT_2 = 'h:mm A';
+	public static TIME_FORMAT_3 = 'HH.mm';
 
 	public static SHOULD_REENCRYPT_NO = 0; // Data doesn't need to be re-encrypted
 	public static SHOULD_REENCRYPT_YES = 1; // Data should be re-encrypted
@@ -741,6 +742,7 @@ class Setting extends BaseModel {
 					const now = new Date('2017-01-30T20:30:00').getTime();
 					options[Setting.TIME_FORMAT_1] = time.formatMsToLocal(now, Setting.TIME_FORMAT_1);
 					options[Setting.TIME_FORMAT_2] = time.formatMsToLocal(now, Setting.TIME_FORMAT_2);
+					options[Setting.TIME_FORMAT_3] = time.formatMsToLocal(now, Setting.TIME_FORMAT_3);
 					return options;
 				},
 				storage: SettingStorage.File,
