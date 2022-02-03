@@ -1,4 +1,7 @@
-### Build stage
+# =============================================================================
+# Build stage
+# =============================================================================
+
 FROM node:16-bullseye AS builder
 
 RUN apt-get update \
@@ -12,10 +15,6 @@ RUN chmod u+x /tini
 
 # Enables Yarn
 RUN corepack enable
-
-RUN echo "Node: $(node --version)"
-RUN echo "Npm: $(npm --version)"
-RUN echo "Yarn: $(yarn --version)"
 
 WORKDIR /build
 
@@ -51,7 +50,11 @@ RUN BUILD_SEQUENCIAL=1 yarn install --inline-builds \
     && yarn cache clean \
     && rm -rf .yarn/berry
 
-### Final image
+# =============================================================================
+# Final stage - we copy only the relevant files from the build stage and start
+# from a smaller base image.
+# =============================================================================
+
 FROM node:16-bullseye-slim
 
 ARG user=joplin
