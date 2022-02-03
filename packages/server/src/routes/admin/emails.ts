@@ -12,6 +12,7 @@ import { senderInfo } from '../../models/utils/email';
 import { _ } from '@joplin/lib/locale';
 import { View } from '../../services/MustacheService';
 import { markdownBodyToHtml } from '../../services/email/utils';
+const { substrWithEllipsis } = require('@joplin/lib/string-utils');
 
 const router: Router = new Router(RouteType.Web);
 
@@ -19,7 +20,6 @@ router.get('admin/emails', async (_path: SubPath, ctx: AppContext) => {
 	const models = ctx.joplin.models;
 	const pagination = makeTablePagination(ctx.query, 'created_time', PaginationOrderDir.DESC);
 	const page = await models.email().allPaginated(pagination);
-	const users = await models.user().loadByIds(page.items.map(e => e.recipient_name));
 
 	const table: Table = {
 		baseUrl: adminEmailsUrl(),
@@ -82,11 +82,14 @@ router.get('admin/emails', async (_path: SubPath, ctx: AppContext) => {
 					url: `mailto:${escape(d.recipient_email)}`,
 				},
 				{
-					value: d.recipient_id ? (users.find(u => u.id === d.recipient_id)?.email || '(not set)') : '-',
+					value: d.recipient_id,
 					url: d.recipient_id ? adminUserUrl(d.recipient_id) : '',
+					render: (): string => {
+						return '<i class="fas fa-user-alt"></i>';
+					},
 				},
 				{
-					value: d.subject,
+					value: substrWithEllipsis(d.subject, 0, 32),
 					url: adminEmailUrl(d.id),
 				},
 				{
@@ -125,6 +128,7 @@ router.get('admin/emails/:id', async (path: SubPath, ctx: AppContext) => {
 		...defaultView('admin/email', _('Email')),
 		content: {
 			email,
+			emailSentTime: email.sent_time ? formatDateTime(email.sent_time) : null,
 			sender: senderInfo(email.sender_id),
 			bodyHtml: markdownBodyToHtml(email.body),
 		},
