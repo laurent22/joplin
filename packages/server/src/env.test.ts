@@ -1,4 +1,4 @@
-import { afterAllTests, beforeAllDb, beforeEachDb, expectThrow } from './utils/testing/testUtils';
+import { afterAllTests, beforeAllDb, beforeEachDb, expectThrow, makeTempFileWithContent } from './utils/testing/testUtils';
 import { parseEnv } from './env';
 
 describe('env', function() {
@@ -16,7 +16,7 @@ describe('env', function() {
 	});
 
 	it('should parse env values', async function() {
-		const result = parseEnv({
+		const result = await parseEnv({
 			DB_CLIENT: 'pg',
 			POSTGRES_PORT: '123',
 			MAILER_ENABLED: 'true',
@@ -34,13 +34,20 @@ describe('env', function() {
 	});
 
 	it('should overrides default values', async function() {
-		expect(parseEnv({}).POSTGRES_USER).toBe('joplin');
-		expect(parseEnv({}, { POSTGRES_USER: 'other' }).POSTGRES_USER).toBe('other');
+		expect(parseEnv({})).resolves.toHaveProperty('POSTGRES_USER', 'joplin');
+		expect(parseEnv({}, { POSTGRES_USER: 'other' }))
+			.resolves.toHaveProperty('POSTGRES_USER', 'other');
 	});
 
 	it('should validate values', async function() {
-		await expectThrow(async () => parseEnv({ POSTGRES_PORT: 'notanumber' }));
-		await expectThrow(async () => parseEnv({ MAILER_ENABLED: 'TRUE' }));
+		await expectThrow(async () => await parseEnv({ POSTGRES_PORT: 'notanumber' }));
+		await expectThrow(async () => await parseEnv({ MAILER_ENABLED: 'TRUE' }));
+	});
+
+	it('should load from files', async function() {
+		const testPath = await makeTempFileWithContent('other');
+		expect(parseEnv({ POSTGRES_USER_FILE: testPath }))
+			.resolves.toHaveProperty('POSTGRES_USER', 'other');
 	});
 
 });

@@ -1,3 +1,4 @@
+import { promises as fs, constants as fsConstants } from 'fs-extra';
 // The possible env variables and their defaults are listed below.
 //
 // The env variables can be of type string, integer or boolean. When the type is
@@ -156,14 +157,28 @@ const parseBoolean = (s: string): boolean => {
 	throw new Error(`Invalid boolean value: "${s}" (Must be one of "true", "false", "0, "1")`);
 };
 
-export function parseEnv(rawEnv: Record<string, string>, defaultOverrides: any = null): EnvVariables {
+export async function parseEnv(rawEnv: Record<string, string>, defaultOverrides: any = null): Promise<EnvVariables> {
 	const output: EnvVariables = {
 		...defaultEnvValues,
 		...defaultOverrides,
 	};
 
 	for (const [key, value] of Object.entries(defaultEnvValues)) {
-		const rawEnvValue = rawEnv[key];
+		let rawEnvValue = rawEnv[key];
+
+		const rawEnvFileLocation = rawEnv[`${key}_FILE`];
+		if (!rawEnvValue && rawEnvFileLocation) {
+			try {
+				await fs.access(rawEnvFileLocation, fsConstants.R_OK);
+				const rawEnvFileValue = await fs.readFile(rawEnvFileLocation, { encoding: 'utf-8' });
+				if (rawEnvFileValue) {
+					rawEnvValue = rawEnvFileValue;
+				}
+			} catch (error) {
+				error.message = `Could not load value from path "${rawEnvFileLocation}: ${error.message}`;
+				throw error;
+			}
+		}
 
 		if (rawEnvValue === undefined) continue;
 

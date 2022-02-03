@@ -102,7 +102,7 @@ async function main() {
 
 	if (!defaultEnvVariables[env]) throw new Error(`Invalid env: ${env}`);
 
-	const envVariables = parseEnv(process.env, defaultEnvVariables[env]);
+	const envVariables = await parseEnv(process.env, defaultEnvVariables[env]);
 
 	const app = new Koa();
 
