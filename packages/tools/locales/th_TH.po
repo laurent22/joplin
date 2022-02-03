@@ -257,8 +257,8 @@ msgstr "เพิ่มชื่อเรื่อง"
 msgid "Add to dictionary"
 msgstr ""
 
-#: packages/server/src/services/MustacheService.ts:182
-#: packages/server/src/services/MustacheService.ts:301
+#: packages/server/src/services/MustacheService.ts:186
+#: packages/server/src/services/MustacheService.ts:310
 msgid "Admin"
 msgstr ""
 
@@ -391,6 +391,10 @@ msgstr "Token สำหรับการขออนุมัติ:"
 #: packages/lib/models/Setting.ts:667
 msgid "Auto"
 msgstr "อัตโนมัติ"
+
+#: packages/server/src/services/TaskService.ts:39
+msgid "Auto-add disabled accounts for deletion"
+msgstr ""
 
 #: packages/lib/models/Setting.ts:853
 #, fuzzy
@@ -704,6 +708,10 @@ msgstr "ถอดรหัสเรียบร้อยแล้ว"
 #, fuzzy
 msgid "Completed: %s (%s)"
 msgstr "เสร็จสิ้นเมื่อ: %s"
+
+#: packages/server/src/services/TaskService.ts:37
+msgid "Compress old changes"
+msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:637
 #: packages/app-mobile/components/side-menu-content.js:319
@@ -1019,6 +1027,16 @@ msgstr "ลบ"
 msgid "Delete attachment \"%s\"?"
 msgstr "ลบบันทึก \"%s\"?"
 
+#: packages/server/src/services/TaskService.ts:36
+#, fuzzy
+msgid "Delete expired sessions"
+msgstr "เปิดใช้งาน Math Expressions"
+
+#: packages/server/src/services/TaskService.ts:31
+#, fuzzy
+msgid "Delete expired tokens"
+msgstr "ลบบันทึก %d เหล่านี้?"
+
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:88
 #, fuzzy
 msgid "Delete line"
@@ -1330,6 +1348,15 @@ msgstr "ไม่ “text” ก็ “json”"
 #: packages/lib/models/Setting.ts:1257
 msgid "Emacs"
 msgstr "Emacs"
+
+#: packages/server/src/routes/admin/emails.ts:125
+msgid "Email"
+msgstr ""
+
+#: packages/server/src/routes/admin/emails.ts:109
+#: packages/server/src/services/MustacheService.ts:155
+msgid "Emails"
+msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:194
 msgid "emphasised text"
@@ -1756,7 +1783,7 @@ msgstr "Token สำหรับการขออนุมัติ:"
 msgid "Heading"
 msgstr "หัวข้อ"
 
-#: packages/server/src/services/MustacheService.ts:299
+#: packages/server/src/services/MustacheService.ts:308
 msgid "Help"
 msgstr "ช่วยเหลือ"
 
@@ -1777,8 +1804,8 @@ msgstr "เกี่ยวกับ Joplin"
 msgid "Highlight"
 msgstr ""
 
-#: packages/server/src/services/MustacheService.ts:166
-#: packages/server/src/services/MustacheService.ts:294
+#: packages/server/src/services/MustacheService.ts:170
+#: packages/server/src/services/MustacheService.ts:303
 msgid "Home"
 msgstr ""
 
@@ -1985,8 +2012,8 @@ msgstr "ตัวเอียง"
 msgid "Item \"%s\" could not be downloaded: %s"
 msgstr "รายการ “%s” ไม่สามารถดาวน์โหลด: %s"
 
-#: packages/server/src/services/MustacheService.ts:174
-#: packages/server/src/services/MustacheService.ts:296
+#: packages/server/src/services/MustacheService.ts:178
+#: packages/server/src/services/MustacheService.ts:305
 msgid "Items"
 msgstr ""
 
@@ -2184,7 +2211,7 @@ msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:521
 #: packages/app-mobile/components/screens/log.js:100
-#: packages/server/src/services/MustacheService.ts:297
+#: packages/server/src/services/MustacheService.ts:306
 msgid "Log"
 msgstr ""
 
@@ -2204,11 +2231,11 @@ msgstr "เข้าสู่ระบบด้วย Dropbox"
 msgid "Login with OneDrive"
 msgstr "เข้าสู่ระบบด้วย OneDrive"
 
-#: packages/server/src/services/MustacheService.ts:300
+#: packages/server/src/services/MustacheService.ts:309
 msgid "Logout"
 msgstr ""
 
-#: packages/server/src/services/MustacheService.ts:178
+#: packages/server/src/services/MustacheService.ts:182
 msgid "Logs"
 msgstr ""
 
@@ -2877,6 +2904,18 @@ msgstr "พิมพ์"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:611
 msgid "Privacy Policy"
+msgstr ""
+
+#: packages/server/src/services/TaskService.ts:35
+msgid "Process failed payment subscriptions"
+msgstr ""
+
+#: packages/server/src/services/TaskService.ts:33
+msgid "Process oversized accounts"
+msgstr ""
+
+#: packages/server/src/services/TaskService.ts:38
+msgid "Process user deletions"
 msgstr ""
 
 #: packages/server/src/routes/admin/users.ts:168
@@ -3594,7 +3633,7 @@ msgid "Take photo"
 msgstr "ถ่ายรูป"
 
 #: packages/server/src/services/MustacheService.ts:151
-#: packages/server/src/services/MustacheService.ts:298
+#: packages/server/src/services/MustacheService.ts:307
 msgid "Tasks"
 msgstr ""
 
@@ -4128,6 +4167,11 @@ msgstr "แก้ไขเมื่อ"
 msgid "Update profile"
 msgstr "ส่งออกโปรไฟล์"
 
+#: packages/server/src/services/TaskService.ts:32
+#, fuzzy
+msgid "Update total sizes"
+msgstr "ส่งออกโปรไฟล์"
+
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:208
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:209
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:30
@@ -4229,7 +4273,7 @@ msgstr ""
 
 #: packages/server/src/routes/admin/users.ts:107
 #: packages/server/src/services/MustacheService.ts:143
-#: packages/server/src/services/MustacheService.ts:295
+#: packages/server/src/services/MustacheService.ts:304
 msgid "Users"
 msgstr ""
 

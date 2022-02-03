@@ -1,4 +1,4 @@
-import { UserDeletion, Uuid } from '../services/database/types';
+import { User, UserDeletion, Uuid } from '../services/database/types';
 import { errorToString } from '../utils/errors';
 import BaseModel from './BaseModel';
 
@@ -6,6 +6,14 @@ export interface AddOptions {
 	processData?: boolean;
 	processAccount?: boolean;
 }
+
+const defaultAddOptions = () => {
+	const d: AddOptions = {
+		processAccount: true,
+		processData: true,
+	};
+	return d;
+};
 
 export default class UserDeletionModel extends BaseModel<UserDeletion> {
 
@@ -28,8 +36,7 @@ export default class UserDeletionModel extends BaseModel<UserDeletion> {
 
 	public async add(userId: Uuid, scheduledTime: number, options: AddOptions = null): Promise<UserDeletion> {
 		options = {
-			processAccount: true,
-			processData: true,
+			...defaultAddOptions(),
 			...options,
 		};
 
@@ -89,6 +96,28 @@ export default class UserDeletionModel extends BaseModel<UserDeletion> {
 			.db(this.tableName)
 			.update(o)
 			.where('id', deletionId);
+	}
+
+	public async autoAdd(maxAutoAddedAccounts: number, ttl: number, scheduledTime: number, options: AddOptions = null): Promise<Uuid[]> {
+		const cutOffTime = Date.now() - ttl;
+
+		const disabledUsers: User[] = await this.db('users')
+			.select(['users.id'])
+			.leftJoin('user_deletions', 'users.id', 'user_deletions.user_id')
+			.where('users.enabled', '=', 0)
+			.where('users.disabled_time', '<', cutOffTime)
+			.whereNull('user_deletions.user_id') // Only add users not already in the user_deletions table
+			.limit(maxAutoAddedAccounts);
+
+		const userIds = disabledUsers.map(d => d.id);
+
+		await this.withTransaction(async () => {
+			for (const userId of userIds) {
+				await this.add(userId, scheduledTime, options);
+			}
+		}, 'UserDeletionModel::autoAdd');
+
+		return userIds;
 	}
 
 }

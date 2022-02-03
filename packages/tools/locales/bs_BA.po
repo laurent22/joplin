@@ -271,8 +271,8 @@ msgstr "Dodaj naziv"
 msgid "Add to dictionary"
 msgstr ""
 
-#: packages/server/src/services/MustacheService.ts:182
-#: packages/server/src/services/MustacheService.ts:301
+#: packages/server/src/services/MustacheService.ts:186
+#: packages/server/src/services/MustacheService.ts:310
 msgid "Admin"
 msgstr ""
 
@@ -405,6 +405,10 @@ msgstr "Token za ovjeru:"
 #: packages/lib/models/Setting.ts:667
 msgid "Auto"
 msgstr "Automatski"
+
+#: packages/server/src/services/TaskService.ts:39
+msgid "Auto-add disabled accounts for deletion"
+msgstr ""
 
 #: packages/lib/models/Setting.ts:853
 msgid "Auto-pair braces, parenthesis, quotations, etc."
@@ -721,6 +725,10 @@ msgstr "Dešifrovanje završeno."
 #, fuzzy
 msgid "Completed: %s (%s)"
 msgstr "Završeno: %s"
+
+#: packages/server/src/services/TaskService.ts:37
+msgid "Compress old changes"
+msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:637
 #: packages/app-mobile/components/side-menu-content.js:319
@@ -1046,6 +1054,16 @@ msgstr "Izbriši"
 msgid "Delete attachment \"%s\"?"
 msgstr "Izbrisati prilog \"%s\"?"
 
+#: packages/server/src/services/TaskService.ts:36
+#, fuzzy
+msgid "Delete expired sessions"
+msgstr "Omogući pisanje matematskih izraza"
+
+#: packages/server/src/services/TaskService.ts:31
+#, fuzzy
+msgid "Delete expired tokens"
+msgstr "Izbrisati ovih %d bilješki?"
+
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:88
 #, fuzzy
 msgid "Delete line"
@@ -1368,6 +1386,15 @@ msgstr "Ili \"text\" ili \"json\""
 #: packages/lib/models/Setting.ts:1257
 msgid "Emacs"
 msgstr "Emacs"
+
+#: packages/server/src/routes/admin/emails.ts:125
+msgid "Email"
+msgstr ""
+
+#: packages/server/src/routes/admin/emails.ts:109
+#: packages/server/src/services/MustacheService.ts:155
+msgid "Emails"
+msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:194
 #, fuzzy
@@ -1804,7 +1831,7 @@ msgstr "Token za ovjeru:"
 msgid "Heading"
 msgstr "Naslov"
 
-#: packages/server/src/services/MustacheService.ts:299
+#: packages/server/src/services/MustacheService.ts:308
 #, fuzzy
 msgid "Help"
 msgstr "Pomoć"
@@ -1826,8 +1853,8 @@ msgstr "O Joplinu"
 msgid "Highlight"
 msgstr "Oznaci"
 
-#: packages/server/src/services/MustacheService.ts:166
-#: packages/server/src/services/MustacheService.ts:294
+#: packages/server/src/services/MustacheService.ts:170
+#: packages/server/src/services/MustacheService.ts:303
 msgid "Home"
 msgstr ""
 
@@ -2061,8 +2088,8 @@ msgstr "Kurziv"
 msgid "Item \"%s\" could not be downloaded: %s"
 msgstr "Stavka \"%s\" nije mogla biti preuzeta: %s"
 
-#: packages/server/src/services/MustacheService.ts:174
-#: packages/server/src/services/MustacheService.ts:296
+#: packages/server/src/services/MustacheService.ts:178
+#: packages/server/src/services/MustacheService.ts:305
 msgid "Items"
 msgstr ""
 
@@ -2268,7 +2295,7 @@ msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:521
 #: packages/app-mobile/components/screens/log.js:100
-#: packages/server/src/services/MustacheService.ts:297
+#: packages/server/src/services/MustacheService.ts:306
 msgid "Log"
 msgstr "Radni dnevnik"
 
@@ -2288,11 +2315,11 @@ msgstr "Prijavite se preko Dropboxa"
 msgid "Login with OneDrive"
 msgstr "Prijavite se preko OneDrivea"
 
-#: packages/server/src/services/MustacheService.ts:300
+#: packages/server/src/services/MustacheService.ts:309
 msgid "Logout"
 msgstr ""
 
-#: packages/server/src/services/MustacheService.ts:178
+#: packages/server/src/services/MustacheService.ts:182
 msgid "Logs"
 msgstr ""
 
@@ -2980,6 +3007,18 @@ msgstr "Štampaj"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:611
 msgid "Privacy Policy"
+msgstr ""
+
+#: packages/server/src/services/TaskService.ts:35
+msgid "Process failed payment subscriptions"
+msgstr ""
+
+#: packages/server/src/services/TaskService.ts:33
+msgid "Process oversized accounts"
+msgstr ""
+
+#: packages/server/src/services/TaskService.ts:38
+msgid "Process user deletions"
 msgstr ""
 
 #: packages/server/src/routes/admin/users.ts:168
@@ -3703,7 +3742,7 @@ msgid "Take photo"
 msgstr "Uslikaj"
 
 #: packages/server/src/services/MustacheService.ts:151
-#: packages/server/src/services/MustacheService.ts:298
+#: packages/server/src/services/MustacheService.ts:307
 msgid "Tasks"
 msgstr ""
 
@@ -4295,6 +4334,11 @@ msgstr "Ažurirano"
 msgid "Update profile"
 msgstr "Prenesi profil"
 
+#: packages/server/src/services/TaskService.ts:32
+#, fuzzy
+msgid "Update total sizes"
+msgstr "Ažurirano lokalnih stavki: %d."
+
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:208
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:209
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:30
@@ -4401,7 +4445,7 @@ msgstr ""
 
 #: packages/server/src/routes/admin/users.ts:107
 #: packages/server/src/services/MustacheService.ts:143
-#: packages/server/src/services/MustacheService.ts:295
+#: packages/server/src/services/MustacheService.ts:304
 msgid "Users"
 msgstr ""
 

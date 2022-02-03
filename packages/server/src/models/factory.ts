@@ -77,6 +77,7 @@ import StorageModel from './StorageModel';
 import UserDeletionModel from './UserDeletionModel';
 import OrganizationModel from './OrganizationModel';
 import OrganizationUserModel from './OrganizationUserModel';
+import BackupItemModel from './BackupItemModel';
 
 export type NewModelFactoryHandler = (db: DbConnection)=> Models;
 
@@ -178,6 +179,10 @@ export class Models {
 
 	public organizationUsers() {
 		return new OrganizationUserModel(this.db_, this.newModelFactory, this.config_);
+	}
+
+	public backupItem() {
+		return new BackupItemModel(this.db_, this.newModelFactory, this.config_);
 	}
 
 }

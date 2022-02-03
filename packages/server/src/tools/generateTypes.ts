@@ -23,48 +23,51 @@ const config = {
 	'filename': './db',
 	'extends': {
 		'main.api_clients': 'WithDates, WithUuid',
+		'main.backup_items': 'WithCreatedDate',
 		'main.changes': 'WithDates, WithUuid',
 		'main.emails': 'WithDates',
+		'main.events': 'WithUuid',
 		'main.items': 'WithDates, WithUuid',
 		'main.notifications': 'WithDates, WithUuid',
+		'main.organization_users': 'WithUuid, WithDates',
+		'main.organizations': 'WithUuid, WithDates',
 		'main.sessions': 'WithDates, WithUuid',
 		'main.share_users': 'WithDates, WithUuid',
 		'main.shares': 'WithDates, WithUuid',
 		'main.tokens': 'WithDates',
+		'main.user_deletions': 'WithDates',
 		'main.user_flags': 'WithDates',
 		'main.user_items': 'WithDates',
 		'main.users': 'WithDates, WithUuid',
-		'main.events': 'WithUuid',
-		'main.user_deletions': 'WithDates',
-		'main.organizations': 'WithUuid, WithDates',
-		'main.organization_users': 'WithUuid, WithDates',
 	},
 };
 
 const propertyTypes: Record<string, string> = {
 	'*.item_type': 'ItemType',
+	'backup_items.content': 'Buffer',
 	'changes.type': 'ChangeType',
 	'emails.sender_id': 'EmailSender',
 	'emails.sent_time': 'number',
+	'events.created_time': 'number',
+	'events.type': 'EventType',
 	'items.content': 'Buffer',
 	'items.jop_updated_time': 'number',
 	'notifications.level': 'NotificationLevel',
+	'organization_users.invitation_status': 'OrganizationUserInvitationStatus',
 	'share_users.status': 'ShareUserStatus',
 	'shares.type': 'ShareType',
 	'subscriptions.last_payment_failed_time': 'number',
 	'subscriptions.last_payment_time': 'number',
+	'user_deletions.end_time': 'number',
+	'user_deletions.scheduled_time': 'number',
+	'user_deletions.start_time': 'number',
 	'user_flags.type': 'UserFlagType',
 	'users.can_share_folder': 'number | null',
 	'users.can_share_note': 'number | null',
+	'users.disabled_time': 'number',
 	'users.max_item_size': 'number | null',
 	'users.max_total_item_size': 'number | null',
 	'users.total_item_size': 'number',
-	'events.created_time': 'number',
-	'events.type': 'EventType',
-	'user_deletions.start_time': 'number',
-	'user_deletions.end_time': 'number',
-	'user_deletions.scheduled_time': 'number',
-	'organization_users.invitation_status': 'OrganizationUserInvitationStatus',
 };
 
 function insertContentIntoFile(filePath: string, markerOpen: string, markerClose: string, contentToInsert: string): void {
@@ -93,6 +96,10 @@ function createTypeString(table: any) {
 
 		if (table.extends && table.extends.indexOf('WithDates') >= 0) {
 			if (['created_time', 'updated_time'].includes(name)) continue;
+		}
+
+		if (table.extends && table.extends.indexOf('WithCreatedDate') >= 0) {
+			if (['created_time'].includes(name)) continue;
 		}
 
 		if (table.extends && table.extends.indexOf('WithUuid') >= 0) {

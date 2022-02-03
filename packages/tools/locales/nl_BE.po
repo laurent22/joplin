@@ -270,8 +270,8 @@ msgstr "Titel toevoegen"
 msgid "Add to dictionary"
 msgstr "Toevoegen aan woordenboek"
 
-#: packages/server/src/services/MustacheService.ts:182
-#: packages/server/src/services/MustacheService.ts:301
+#: packages/server/src/services/MustacheService.ts:186
+#: packages/server/src/services/MustacheService.ts:310
 msgid "Admin"
 msgstr ""
 
@@ -402,6 +402,10 @@ msgstr "Autorisatietoken:"
 #: packages/lib/models/Setting.ts:667
 msgid "Auto"
 msgstr "Auto"
+
+#: packages/server/src/services/TaskService.ts:39
+msgid "Auto-add disabled accounts for deletion"
+msgstr ""
 
 # The "." at the end of the original text is not the period at the end of a sentence but merely the period to indicate that etc. is an abbreviation (of etcetera).
 #: packages/lib/models/Setting.ts:853
@@ -724,6 +728,10 @@ msgstr "Decryptie voltooid."
 msgid "Completed: %s (%s)"
 msgstr "Voltooid: %s"
 
+#: packages/server/src/services/TaskService.ts:37
+msgid "Compress old changes"
+msgstr ""
+
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:637
 #: packages/app-mobile/components/side-menu-content.js:319
 msgid "Configuration"
@@ -1044,6 +1052,16 @@ msgstr "Verwijderen"
 #: packages/app-desktop/gui/ResourceScreen.tsx:169
 msgid "Delete attachment \"%s\"?"
 msgstr "Bijlage \"%s\" verwijderen?"
+
+#: packages/server/src/services/TaskService.ts:36
+#, fuzzy
+msgid "Delete expired sessions"
+msgstr "Schakel wiskundige formules in"
+
+#: packages/server/src/services/TaskService.ts:31
+#, fuzzy
+msgid "Delete expired tokens"
+msgstr "Deze notities %d verwijderen?"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:88
 msgid "Delete line"
@@ -1369,6 +1387,15 @@ msgstr "Of \"text\" of \"json\""
 #: packages/lib/models/Setting.ts:1257
 msgid "Emacs"
 msgstr "Emacs"
+
+#: packages/server/src/routes/admin/emails.ts:125
+msgid "Email"
+msgstr ""
+
+#: packages/server/src/routes/admin/emails.ts:109
+#: packages/server/src/services/MustacheService.ts:155
+msgid "Emails"
+msgstr ""
 
 # Unclear to me what 'emphasised' means. Bold? And what is the difference with 'strong'?
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:194
@@ -1804,7 +1831,7 @@ msgstr "Autorisatietoken:"
 msgid "Heading"
 msgstr "Hoofding"
 
-#: packages/server/src/services/MustacheService.ts:299
+#: packages/server/src/services/MustacheService.ts:308
 #, fuzzy
 msgid "Help"
 msgstr "Help"
@@ -1825,8 +1852,8 @@ msgstr "Verberg Joplin"
 msgid "Highlight"
 msgstr "Markeren"
 
-#: packages/server/src/services/MustacheService.ts:166
-#: packages/server/src/services/MustacheService.ts:294
+#: packages/server/src/services/MustacheService.ts:170
+#: packages/server/src/services/MustacheService.ts:303
 msgid "Home"
 msgstr "Thuis"
 
@@ -2054,8 +2081,8 @@ msgstr "Cursief"
 msgid "Item \"%s\" could not be downloaded: %s"
 msgstr "Item \"%s\" kon niet opgehaald worden: %s"
 
-#: packages/server/src/services/MustacheService.ts:174
-#: packages/server/src/services/MustacheService.ts:296
+#: packages/server/src/services/MustacheService.ts:178
+#: packages/server/src/services/MustacheService.ts:305
 msgid "Items"
 msgstr "Items"
 
@@ -2263,7 +2290,7 @@ msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:521
 #: packages/app-mobile/components/screens/log.js:100
-#: packages/server/src/services/MustacheService.ts:297
+#: packages/server/src/services/MustacheService.ts:306
 msgid "Log"
 msgstr "Log"
 
@@ -2283,11 +2310,11 @@ msgstr "Login with Dropbox"
 msgid "Login with OneDrive"
 msgstr "Log in met OneDrive"
 
-#: packages/server/src/services/MustacheService.ts:300
+#: packages/server/src/services/MustacheService.ts:309
 msgid "Logout"
 msgstr "Afmelden"
 
-#: packages/server/src/services/MustacheService.ts:178
+#: packages/server/src/services/MustacheService.ts:182
 msgid "Logs"
 msgstr ""
 
@@ -2963,6 +2990,18 @@ msgstr "Afdrukken"
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:611
 msgid "Privacy Policy"
 msgstr "Privacybeleid"
+
+#: packages/server/src/services/TaskService.ts:35
+msgid "Process failed payment subscriptions"
+msgstr ""
+
+#: packages/server/src/services/TaskService.ts:33
+msgid "Process oversized accounts"
+msgstr ""
+
+#: packages/server/src/services/TaskService.ts:38
+msgid "Process user deletions"
+msgstr ""
 
 #: packages/server/src/routes/admin/users.ts:168
 msgid "Profile"
@@ -3682,7 +3721,7 @@ msgid "Take photo"
 msgstr "Maak en foto"
 
 #: packages/server/src/services/MustacheService.ts:151
-#: packages/server/src/services/MustacheService.ts:298
+#: packages/server/src/services/MustacheService.ts:307
 msgid "Tasks"
 msgstr "Taken"
 
@@ -4305,6 +4344,11 @@ msgstr "Bijwerken"
 msgid "Update profile"
 msgstr "Exporteer profiel"
 
+#: packages/server/src/services/TaskService.ts:32
+#, fuzzy
+msgid "Update total sizes"
+msgstr "Bijgewerkte lokale items: %d."
+
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:208
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:209
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:30
@@ -4419,7 +4463,7 @@ msgstr ""
 
 #: packages/server/src/routes/admin/users.ts:107
 #: packages/server/src/services/MustacheService.ts:143
-#: packages/server/src/services/MustacheService.ts:295
+#: packages/server/src/services/MustacheService.ts:304
 msgid "Users"
 msgstr "Gebruikers"
 

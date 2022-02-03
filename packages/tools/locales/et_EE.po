@@ -267,8 +267,8 @@ msgstr "Pealkirja lisamine"
 msgid "Add to dictionary"
 msgstr ""
 
-#: packages/server/src/services/MustacheService.ts:182
-#: packages/server/src/services/MustacheService.ts:301
+#: packages/server/src/services/MustacheService.ts:186
+#: packages/server/src/services/MustacheService.ts:310
 msgid "Admin"
 msgstr ""
 
@@ -401,6 +401,10 @@ msgstr "Autoriseerimis token:"
 #: packages/lib/models/Setting.ts:667
 msgid "Auto"
 msgstr "Automaatne"
+
+#: packages/server/src/services/TaskService.ts:39
+msgid "Auto-add disabled accounts for deletion"
+msgstr ""
 
 #: packages/lib/models/Setting.ts:853
 msgid "Auto-pair braces, parenthesis, quotations, etc."
@@ -723,6 +727,10 @@ msgstr "Dekrüpteerimine on lõpetatud."
 msgid "Completed: %s (%s)"
 msgstr "Lõpule viidud: %s"
 
+#: packages/server/src/services/TaskService.ts:37
+msgid "Compress old changes"
+msgstr ""
+
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:637
 #: packages/app-mobile/components/side-menu-content.js:319
 msgid "Configuration"
@@ -1039,6 +1047,16 @@ msgstr "Kustuta"
 #, fuzzy
 msgid "Delete attachment \"%s\"?"
 msgstr "Kas kustutada märge \"%s\"?"
+
+#: packages/server/src/services/TaskService.ts:36
+#, fuzzy
+msgid "Delete expired sessions"
+msgstr "Luba matemaatika avaldised"
+
+#: packages/server/src/services/TaskService.ts:31
+#, fuzzy
+msgid "Delete expired tokens"
+msgstr "Kas kustutada %d märkmed?"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:88
 #, fuzzy
@@ -1365,6 +1383,15 @@ msgstr "Kas \"tekst\" või \"JSON\""
 #: packages/lib/models/Setting.ts:1257
 msgid "Emacs"
 msgstr "Emacs"
+
+#: packages/server/src/routes/admin/emails.ts:125
+msgid "Email"
+msgstr ""
+
+#: packages/server/src/routes/admin/emails.ts:109
+#: packages/server/src/services/MustacheService.ts:155
+msgid "Emails"
+msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:194
 #, fuzzy
@@ -1827,7 +1854,7 @@ msgstr "Autoriseerimis token:"
 msgid "Heading"
 msgstr "Pealkiri"
 
-#: packages/server/src/services/MustacheService.ts:299
+#: packages/server/src/services/MustacheService.ts:308
 msgid "Help"
 msgstr "Abi"
 
@@ -1848,8 +1875,8 @@ msgstr "Teave kasutaja Joplin kohta"
 msgid "Highlight"
 msgstr ""
 
-#: packages/server/src/services/MustacheService.ts:166
-#: packages/server/src/services/MustacheService.ts:294
+#: packages/server/src/services/MustacheService.ts:170
+#: packages/server/src/services/MustacheService.ts:303
 msgid "Home"
 msgstr ""
 
@@ -2062,8 +2089,8 @@ msgstr "Kald"
 msgid "Item \"%s\" could not be downloaded: %s"
 msgstr "Üksust %s ei saanud alla laadida: %s"
 
-#: packages/server/src/services/MustacheService.ts:174
-#: packages/server/src/services/MustacheService.ts:296
+#: packages/server/src/services/MustacheService.ts:178
+#: packages/server/src/services/MustacheService.ts:305
 msgid "Items"
 msgstr ""
 
@@ -2271,7 +2298,7 @@ msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:521
 #: packages/app-mobile/components/screens/log.js:100
-#: packages/server/src/services/MustacheService.ts:297
+#: packages/server/src/services/MustacheService.ts:306
 msgid "Log"
 msgstr "Logi"
 
@@ -2291,11 +2318,11 @@ msgstr "Logi sisse Dropbox"
 msgid "Login with OneDrive"
 msgstr "Logi sisse OneDrive ' iga"
 
-#: packages/server/src/services/MustacheService.ts:300
+#: packages/server/src/services/MustacheService.ts:309
 msgid "Logout"
 msgstr ""
 
-#: packages/server/src/services/MustacheService.ts:178
+#: packages/server/src/services/MustacheService.ts:182
 msgid "Logs"
 msgstr ""
 
@@ -2981,6 +3008,18 @@ msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:611
 msgid "Privacy Policy"
+msgstr ""
+
+#: packages/server/src/services/TaskService.ts:35
+msgid "Process failed payment subscriptions"
+msgstr ""
+
+#: packages/server/src/services/TaskService.ts:33
+msgid "Process oversized accounts"
+msgstr ""
+
+#: packages/server/src/services/TaskService.ts:38
+msgid "Process user deletions"
 msgstr ""
 
 #: packages/server/src/routes/admin/users.ts:168
@@ -3708,7 +3747,7 @@ msgid "Take photo"
 msgstr "Pildista"
 
 #: packages/server/src/services/MustacheService.ts:151
-#: packages/server/src/services/MustacheService.ts:298
+#: packages/server/src/services/MustacheService.ts:307
 msgid "Tasks"
 msgstr ""
 
@@ -4270,6 +4309,11 @@ msgstr "Uuendatud"
 msgid "Update profile"
 msgstr "Ekspordi profiil"
 
+#: packages/server/src/services/TaskService.ts:32
+#, fuzzy
+msgid "Update total sizes"
+msgstr "Värskendatud kohalikud üksused: %d."
+
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:208
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:209
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:30
@@ -4377,7 +4421,7 @@ msgstr ""
 
 #: packages/server/src/routes/admin/users.ts:107
 #: packages/server/src/services/MustacheService.ts:143
-#: packages/server/src/services/MustacheService.ts:295
+#: packages/server/src/services/MustacheService.ts:304
 msgid "Users"
 msgstr ""
 

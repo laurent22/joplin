@@ -95,6 +95,13 @@ const defaultEnvValues: EnvVariables = {
 	// ==================================================
 
 	ORGANIZATIONS_ENABLED: false,
+
+	// ==================================================
+	// User data deletion
+	// ==================================================
+
+	USER_DATA_AUTO_DELETE_ENABLED: false,
+	USER_DATA_AUTO_DELETE_AFTER_DAYS: 90,
 };
 
 export interface EnvVariables {
@@ -146,6 +153,9 @@ export interface EnvVariables {
 	STRIPE_WEBHOOK_SECRET: string;
 
 	ORGANIZATIONS_ENABLED: boolean;
+
+	USER_DATA_AUTO_DELETE_ENABLED: boolean;
+	USER_DATA_AUTO_DELETE_AFTER_DAYS: number;
 }
 
 const parseBoolean = (s: string): boolean => {
