@@ -15,6 +15,7 @@ import { findPrice, PricePeriod } from '@joplin/lib/utils/joplinCloud';
 import { Models } from '../../models/factory';
 import { confirmUrl } from '../../utils/urlUtils';
 import { msleep } from '../../utils/time';
+import { organizationMaxUsers, organizationMinUsers } from '../../models/OrganizationModel';
 
 const logger = Logger.create('/stripe');
 
@@ -141,6 +142,7 @@ export const postHandlers: PostHandlers = {
 	createCheckoutSession: async (stripe: Stripe, __path: SubPath, ctx: AppContext) => {
 		const fields = await bodyFields<CreateCheckoutSessionFields>(ctx.req);
 		const priceId = fields.priceId;
+		const accountType = priceIdToAccountType(priceId);
 
 		const checkoutSession: Stripe.Checkout.SessionCreateParams = {
 			mode: 'subscription',
@@ -164,6 +166,18 @@ export const postHandlers: PostHandlers = {
 			success_url: `${globalConfig().baseUrl}/stripe/success?session_id={CHECKOUT_SESSION_ID}`,
 			cancel_url: `${globalConfig().baseUrl}/stripe/cancel`,
 		};
+
+		if (accountType === AccountType.Org) {
+			checkoutSession.line_items[0] = {
+				...checkoutSession.line_items[0],
+				adjustable_quantity: {
+					enabled: true,
+					minimum: organizationMinUsers,
+					maximum: organizationMaxUsers,
+				},
+				quantity: organizationMinUsers,
+			};
+		}
 
 		if (fields.coupon) {
 			checkoutSession.discounts = [
@@ -233,7 +247,9 @@ export const postHandlers: PostHandlers = {
 		}
 		await models.keyValue().setValue(eventDoneKey, 1);
 
-		const hooks: any = {
+		// console.info('EVENT', JSON.stringify(event, null, 4));
+
+		const hooks: Record<string, Function> = {
 
 			'checkout.session.completed': async () => {
 				// Payment is successful and the subscription is created.
@@ -436,6 +452,7 @@ const getHandlers: Record<string, StripeRouteHandler> = {
 
 		const basicPrice = findPrice(stripeConfig().prices, { accountType: 1, period: PricePeriod.Monthly });
 		const proPrice = findPrice(stripeConfig().prices, { accountType: 2, period: PricePeriod.Monthly });
+		const orgPrice = findPrice(stripeConfig().prices, { accountType: 3, period: PricePeriod.Monthly });
 
 		const customPriceId = ctx.request.query.price_id;
 
@@ -467,10 +484,12 @@ const getHandlers: Record<string, StripeRouteHandler> = {
 				Promotion code: <input id="promotion_code" type="text"/> <br/>
 				<button id="checkout_basic">Subscribe Basic</button>
 				<button id="checkout_pro">Subscribe Pro</button>
+				<button id="checkout_org">Subscribe Org</button>
 				<button id="checkout_custom">Subscribe Custom</button>
 				<script>
 					var BASIC_PRICE_ID = ${JSON.stringify(basicPrice.id)};
 					var PRO_PRICE_ID = ${JSON.stringify(proPrice.id)};
+					var ORG_PRICE_ID = ${JSON.stringify(orgPrice.id)};
 					var CUSTOM_PRICE_ID = ${JSON.stringify(customPriceId)};
 
 					if (!CUSTOM_PRICE_ID) {
@@ -502,6 +521,11 @@ const getHandlers: Record<string, StripeRouteHandler> = {
 					document.getElementById("checkout_pro").addEventListener("click", function(evt) {
 						evt.preventDefault();
 						createSessionAndRedirect(PRO_PRICE_ID);
+					});
+
+					document.getElementById("checkout_org").addEventListener("click", function(evt) {
+						evt.preventDefault();
+						createSessionAndRedirect(ORG_PRICE_ID);
 					});
 
 					document.getElementById("checkout_custom").addEventListener("click", function(evt) {

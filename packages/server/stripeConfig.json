@@ -30,6 +30,20 @@
 				"period": "yearly",
 				"amount": "57.48",
 				"currency": "EUR"
+			},
+			{
+				"accountType": 3,
+				"id": "price_1KP3puLx4fybOTqJQ72hmD9B",
+				"period": "monthly",
+				"amount": "5.99",
+				"currency": "EUR"
+			},
+			{
+				"accountType": 3,
+				"id": "price_1KP3puLx4fybOTqJQ72hmD9B",
+				"period": "yearly",
+				"amount": "57.48",
+				"currency": "EUR"
 			}
 		]		
 	},

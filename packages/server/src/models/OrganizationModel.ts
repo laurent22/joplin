@@ -6,6 +6,8 @@ import orgInviteUserTemplate from '../views/emails/orgInviteUserTemplate';
 import BaseModel, { UuidType, ValidateOptions } from './BaseModel';
 import { AccountType } from './UserModel';
 
+export const organizationMinUsers = 2;
+export const organizationMaxUsers = 100;
 
 export default class OrganizationModel extends BaseModel<Organization> {
 

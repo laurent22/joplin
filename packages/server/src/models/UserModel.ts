@@ -42,6 +42,7 @@ export enum AccountType {
 	Default = 0,
 	Basic = 1,
 	Pro = 2,
+	Org = 3,
 }
 
 export interface Account {
@@ -51,34 +52,40 @@ export interface Account {
 	max_total_item_size: number;
 }
 
+const accountMetadata: Record<AccountType, Account> = {
+	[AccountType.Default]: {
+		account_type: AccountType.Default,
+		can_share_folder: 1,
+		max_item_size: 0,
+		max_total_item_size: 0,
+	},
+	[AccountType.Basic]: {
+		account_type: AccountType.Basic,
+		can_share_folder: 0,
+		max_item_size: 10 * MB,
+		max_total_item_size: 1 * GB,
+	},
+	[AccountType.Pro]: {
+		account_type: AccountType.Pro,
+		can_share_folder: 1,
+		max_item_size: 200 * MB,
+		max_total_item_size: 10 * GB,
+	},
+	[AccountType.Org]: {
+		account_type: AccountType.Org,
+		can_share_folder: 1,
+		max_item_size: 200 * MB,
+		max_total_item_size: 10 * GB,
+	},
+};
+
 interface AccountTypeSelectOptions {
 	value: number;
 	label: string;
 }
 
 export function accountByType(accountType: AccountType): Account {
-	const types: Account[] = [
-		{
-			account_type: AccountType.Default,
-			can_share_folder: 1,
-			max_item_size: 0,
-			max_total_item_size: 0,
-		},
-		{
-			account_type: AccountType.Basic,
-			can_share_folder: 0,
-			max_item_size: 10 * MB,
-			max_total_item_size: 1 * GB,
-		},
-		{
-			account_type: AccountType.Pro,
-			can_share_folder: 1,
-			max_item_size: 200 * MB,
-			max_total_item_size: 10 * GB,
-		},
-	];
-
-	const type = types.find(a => a.account_type === accountType);
+	const type = accountMetadata[accountType];
 	if (!type) throw new Error(`Invalid account type: ${accountType}`);
 	return type;
 }
