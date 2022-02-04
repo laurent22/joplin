@@ -7,14 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: Benjamin Weis <benjamin.weis@gmx.com>\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: MrKanister <pthrp_bnsrv@aleeas.com>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0\n"
+"X-Generator: Poedit 3.0.1\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:565
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -402,8 +404,9 @@ msgid "Auto"
 msgstr "Automatisch"
 
 #: packages/server/src/services/TaskService.ts:39
+#, fuzzy
 msgid "Auto-add disabled accounts for deletion"
-msgstr ""
+msgstr "Automatisches Hinzufügen deaktivierter Accounts zur Löschliste"
 
 #: packages/lib/models/Setting.ts:853
 msgid "Auto-pair braces, parenthesis, quotations, etc."
@@ -728,7 +731,7 @@ msgstr "Abgeschlossen: %s (%s)"
 
 #: packages/server/src/services/TaskService.ts:37
 msgid "Compress old changes"
-msgstr ""
+msgstr "Komprimiere alte Änderungen"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:637
 #: packages/app-mobile/components/side-menu-content.js:319
@@ -1041,14 +1044,12 @@ msgid "Delete attachment \"%s\"?"
 msgstr "Anhang „%s“ löschen?"
 
 #: packages/server/src/services/TaskService.ts:36
-#, fuzzy
 msgid "Delete expired sessions"
-msgstr "Mathematische Ausdrücke aktivieren"
+msgstr "Lösche abgelaufene Sitzungen"
 
 #: packages/server/src/services/TaskService.ts:31
-#, fuzzy
 msgid "Delete expired tokens"
-msgstr "Sollen diese %d Notizen gelöscht werden?"
+msgstr "Lösche abgelaufene Tokens"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:88
 msgid "Delete line"
@@ -1372,12 +1373,12 @@ msgstr "Emacs"
 
 #: packages/server/src/routes/admin/emails.ts:125
 msgid "Email"
-msgstr ""
+msgstr "E-Mail"
 
 #: packages/server/src/routes/admin/emails.ts:109
 #: packages/server/src/services/MustacheService.ts:155
 msgid "Emails"
-msgstr ""
+msgstr "E-Mails"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:194
 msgid "emphasised text"
@@ -2952,16 +2953,15 @@ msgstr "Datenschutzrichtlinie"
 
 #: packages/server/src/services/TaskService.ts:35
 msgid "Process failed payment subscriptions"
-msgstr ""
+msgstr "Verarbeite fehlgeschlagene Zahlungsabonnements"
 
 #: packages/server/src/services/TaskService.ts:33
 msgid "Process oversized accounts"
-msgstr ""
+msgstr "Verarbeite zu große Konten"
 
 #: packages/server/src/services/TaskService.ts:38
-#, fuzzy
 msgid "Process user deletions"
-msgstr "Benutzer-Löschungen"
+msgstr "Verarbeite Benutzerlöschungen"
 
 #: packages/server/src/routes/admin/users.ts:168
 msgid "Profile"
@@ -4292,9 +4292,8 @@ msgid "Update profile"
 msgstr "Profil aktualisieren"
 
 #: packages/server/src/services/TaskService.ts:32
-#, fuzzy
 msgid "Update total sizes"
-msgstr "Lokale Elemente aktualisiert: %d."
+msgstr "Aktualisiere Gesamtgrößen"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:208
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:209
