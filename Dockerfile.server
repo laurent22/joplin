@@ -79,7 +79,7 @@ VOLUME /home/$user/data
 # Use Tini to start Joplin Server:
 # https://github.com/nodejs/docker-node/blob/main/docs/BestPractices.md#handling-kernel-signals
 WORKDIR /home/$user/packages/server
-ENTRYPOINT ["tini", "--"]
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 CMD ["node", "dist/app.js"]
 
 # Build-time metadata
