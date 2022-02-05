@@ -69,6 +69,9 @@ ENV NODE_ENV=production
 ENV RUNNING_IN_DOCKER=1
 EXPOSE ${APP_PORT}
 
+# Volume
+VOLUME /home/$user/data
+
 # Use Tini to start Joplin Server:
 # https://github.com/nodejs/docker-node/blob/main/docs/BestPractices.md#handling-kernel-signals
 WORKDIR /home/$user/packages/server
