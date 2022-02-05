@@ -32,6 +32,8 @@ const packageJsonPath = `${rootDir}/package.json`;
 const manifest = readManifest(manifestPath);
 const pluginArchiveFilePath = path.resolve(publishDir, `${manifest.id}.jpl`);
 const pluginInfoFilePath = path.resolve(publishDir, `${manifest.id}.json`);
+const allPossibleCategories = ['administration', 'developer', 'editor', 'export', 'import', 'integration', 'interface', 'linking',
+	'markdown enhancements', 'note management', 'rendering', 'tagging', 'theme', 'todo', 'search', 'other'];
 
 function validatePackageJson() {
 	const content = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
@@ -67,10 +69,19 @@ function currentGitInfo() {
 	}
 }
 
+function validateCategories(categories) {
+	if (!(categories.length === new Set(categories).size)) throw new Error('Repeated categories are not allowed');
+	categories.forEach(category => {
+		if (!allPossibleCategories.includes(category)) throw new Error(`${category} is not a valid category. Valid Categories are: \n${allPossibleCategories}\n`);
+	});
+	if (categories.length > 3) throw new Error('Plugin cannot have more than 3 categories');
+}
+
 function readManifest(manifestPath) {
 	const content = fs.readFileSync(manifestPath, 'utf8');
 	const output = JSON.parse(content);
 	if (!output.id) throw new Error(`Manifest plugin ID is not set in ${manifestPath}`);
+	validateCategories(output.categories);
 	return output;
 }
 
