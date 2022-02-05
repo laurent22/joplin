@@ -1,4 +1,9 @@
 .icon-selector-row {
 	display: flex;
 	flex-direction: row;
+	align-items: center;
+}
+
+.icon-selector-row > .foldericon {
+	margin-right: 5px;
 }
