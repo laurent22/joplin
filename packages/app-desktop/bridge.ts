@@ -13,6 +13,7 @@ interface OpenDialogOptions {
 	properties?: string[];
 	defaultPath?: string;
 	createDirectory?: boolean;
+	filters?: any[];
 }
 
 export class Bridge {
