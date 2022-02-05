@@ -162,13 +162,13 @@ router.get('admin/organizations/:id', async (path: SubPath, ctx: AppContext, fie
 	}
 
 	const view: View = {
-		...defaultView('admin/organization', _('Organization')),
+		...defaultView('admin/organization', _('Organisation')),
 		content: {
 			error,
 			fields,
 			csrfTag: await createCsrfTag(ctx),
 			organization: fields,
-			buttonTitle: isNew ? _('Create organization') : _('Update organization'),
+			buttonTitle: isNew ? _('Create organisation') : _('Update organisation'),
 			postUrl: adminOrganizationUrl(path.id),
 			s: {
 				ownerEmailMustExist: _('Owner must exist in the system and must be a Pro account'),

@@ -19,6 +19,10 @@ export default class OrganizationModel extends BaseModel<Organization> {
 		return UuidType.Native;
 	}
 
+	public async byOwnerId(ownerId: Uuid): Promise<Organization | null> {
+		return this.db(this.tableName).where('owner_id', '=', ownerId).first();
+	}
+
 	public async userAssociatedOrganization(userId: Uuid): Promise<Organization | null> {
 		const org = await this.db(this.tableName).where('owner_id', '=', userId).first();
 		if (org) return org;
@@ -151,8 +155,6 @@ export default class OrganizationModel extends BaseModel<Organization> {
 
 		const orgUsers = await this.models().organizationUsers().loadByIds(orgUserIds, { fields: ['id', 'user_id', 'organization_id'] });
 		if (orgUsers.length !== orgUserIds.length) throw new ErrorForbidden('One or more users does not belong to the organization');
-
-		console.info('UUUUUUUUUU', orgId, orgUsers);
 
 		await this.withTransaction(async () => {
 			for (const orgUser of orgUsers) {

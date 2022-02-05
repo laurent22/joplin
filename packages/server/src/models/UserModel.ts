@@ -28,6 +28,7 @@ import changeEmailNotificationTemplate from '../views/emails/changeEmailNotifica
 import { NotificationKey } from './NotificationModel';
 import prettyBytes = require('pretty-bytes');
 import { validateEmail } from '../utils/validation';
+import { Env } from '../utils/types';
 
 const logger = Logger.create('UserModel');
 
@@ -247,6 +248,8 @@ export default class UserModel extends BaseModel<User> {
 	}
 
 	private validatePassword(password: string) {
+		if (this.env === Env.Dev) return;
+
 		const result = zxcvbn(password);
 		if (result.score < 3) {
 			let msg: string[] = [result.feedback.warning];

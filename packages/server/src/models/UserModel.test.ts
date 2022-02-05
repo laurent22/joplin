@@ -169,8 +169,8 @@ describe('UserModel', function() {
 	test('should disable upload and send an email if payment failed recently', async () => {
 		stripeConfig().enabled = true;
 
-		const { user: user1 } = await models().subscription().saveUserAndSubscription('toto@example.com', 'Toto', AccountType.Basic, 'usr_111', 'sub_111');
-		await models().subscription().saveUserAndSubscription('tutu@example.com', 'Tutu', AccountType.Basic, 'usr_222', 'sub_222');
+		const { user: user1 } = await models().subscription().saveUserAndSubscription('toto@example.com', 'Toto', AccountType.Basic, 'usr_111', 'sub_111', 1);
+		await models().subscription().saveUserAndSubscription('tutu@example.com', 'Tutu', AccountType.Basic, 'usr_222', 'sub_222', 1);
 
 		const sub = await models().subscription().byUserId(user1.id);
 
@@ -210,7 +210,7 @@ describe('UserModel', function() {
 	test('should disable disable the account and send an email if payment failed for good', async () => {
 		stripeConfig().enabled = true;
 
-		const { user: user1 } = await models().subscription().saveUserAndSubscription('toto@example.com', 'Toto', AccountType.Basic, 'usr_111', 'sub_111');
+		const { user: user1 } = await models().subscription().saveUserAndSubscription('toto@example.com', 'Toto', AccountType.Basic, 'usr_111', 'sub_111', 1);
 
 		const sub = await models().subscription().byUserId(user1.id);
 
@@ -239,7 +239,7 @@ describe('UserModel', function() {
 	test('should disable disable the account and send an email if payment failed for good', async () => {
 		stripeConfig().enabled = true;
 
-		const { user: user1 } = await models().subscription().saveUserAndSubscription('toto@example.com', 'Toto', AccountType.Basic, 'usr_111', 'sub_111');
+		const { user: user1 } = await models().subscription().saveUserAndSubscription('toto@example.com', 'Toto', AccountType.Basic, 'usr_111', 'sub_111', 1);
 
 		const sub = await models().subscription().byUserId(user1.id);
 

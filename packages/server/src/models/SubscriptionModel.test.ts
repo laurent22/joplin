@@ -23,7 +23,8 @@ describe('SubscriptionModel', function() {
 			'Toto',
 			AccountType.Pro,
 			'STRIPE_USER_ID',
-			'STRIPE_SUB_ID'
+			'STRIPE_SUB_ID',
+			1
 		);
 
 		const user = await models().user().loadByEmail('toto@example.com');
@@ -40,13 +41,40 @@ describe('SubscriptionModel', function() {
 		expect(sub.user_id).toBe(user.id);
 	});
 
+	test('should also create an organization', async function() {
+		await models().subscription().saveUserAndSubscription(
+			'toto@example.com',
+			'Toto',
+			AccountType.Org,
+			'STRIPE_USER_ID',
+			'STRIPE_SUB_ID',
+			10
+		);
+
+		const user = await models().user().loadByEmail('toto@example.com');
+		const sub = await models().subscription().byStripeSubscriptionId('STRIPE_SUB_ID');
+		const org = await models().organizations().byOwnerId(user.id);
+
+		expect(user.account_type).toBe(AccountType.Pro);
+		expect(user.email).toBe('toto@example.com');
+
+		expect(sub.stripe_subscription_id).toBe('STRIPE_SUB_ID');
+		expect(sub.stripe_user_id).toBe('STRIPE_USER_ID');
+		expect(sub.user_id).toBe(user.id);
+
+		expect(org).toBeTruthy();
+		expect(org.owner_id).toBe(user.id);
+		expect(org.max_users).toBe(10);
+	});
+
 	test('should enable and allow the user to upload if a payment is successful', async function() {
 		let { user } = await models().subscription().saveUserAndSubscription(
 			'toto@example.com',
 			'Toto',
 			AccountType.Pro,
 			'STRIPE_USER_ID',
-			'STRIPE_SUB_ID'
+			'STRIPE_SUB_ID',
+			1
 		);
 
 		await models().user().save({

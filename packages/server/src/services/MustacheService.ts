@@ -163,7 +163,7 @@ export default class MustacheService {
 
 		if (config().organizationsEnabled) {
 			output[0].children.push({
-				title: _('Organizations'),
+				title: _('Organisations'),
 				url: adminOrganizationsUrl(),
 			});
 		}
@@ -183,7 +183,7 @@ export default class MustacheService {
 
 		if (hasOrganization) {
 			output.push({
-				title: _('Organization'),
+				title: _('Organisation'),
 				url: organizationUrl('me'),
 			});
 		}

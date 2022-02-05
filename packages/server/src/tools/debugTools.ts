@@ -70,7 +70,8 @@ export async function createTestUsers(db: DbConnection, config: Config, options:
 				'With Sub',
 				AccountType.Basic,
 				'usr_111',
-				'sub_111'
+				'sub_111',
+				1
 			);
 			await models.user().save({ id: user.id, password });
 		}
@@ -81,7 +82,8 @@ export async function createTestUsers(db: DbConnection, config: Config, options:
 				'Failed Payment',
 				AccountType.Basic,
 				'usr_222',
-				'sub_222'
+				'sub_222',
+				1
 			);
 			await models.user().save({ id: user.id, password });
 			await models.subscription().handlePayment(subscription.stripe_subscription_id, false);

@@ -61,10 +61,18 @@ async function getSubscriptionInfo(event: Stripe.Event, ctx: AppContext): Promis
 	return { sub, stripeSub };
 }
 
-export const handleSubscriptionCreated = async (stripe: Stripe, models: Models, customerName: string, userEmail: string, accountType: AccountType, stripeUserId: string, stripeSubscriptionId: string) => {
+export const handleSubscriptionCreated = async (stripe: Stripe, models: Models, customerName: string, userEmail: string, accountType: AccountType, stripeUserId: string, stripeSubscriptionId: string, quantity: number) => {
 	const existingUser = await models.user().loadByEmail(userEmail);
 
 	if (existingUser) {
+		if (accountType === AccountType.Org) {
+			// For now this is not supported. To review once Stripe
+			// auto-cancellation of subscriptions is disabled.
+			logger.info(`Cannot create an org with email ${existingUser.email} because the user already exist`);
+			await cancelSubscription(stripe, stripeSubscriptionId);
+			return;
+		}
+
 		const sub = await models.subscription().byUserId(existingUser.id);
 
 		if (!sub) {
@@ -107,14 +115,15 @@ export const handleSubscriptionCreated = async (stripe: Stripe, models: Models, 
 			}
 		}
 	} else {
-		logger.info(`Creating subscription for new user: ${customerName} (${userEmail})`);
+		logger.info(`Creating subscription for new user: ${customerName} (${userEmail}), Account type: ${accountType}`);
 
 		await models.subscription().saveUserAndSubscription(
 			userEmail,
 			customerName,
 			accountType,
 			stripeUserId,
-			stripeSubscriptionId
+			stripeSubscriptionId,
+			quantity
 		);
 	}
 };
@@ -344,7 +353,8 @@ export const postHandlers: PostHandlers = {
 					customer.email,
 					accountType,
 					stripeUserId,
-					stripeSubscriptionId
+					stripeSubscriptionId,
+					stripeSub.items.data[0].quantity
 				);
 			},
 

@@ -1,11 +1,12 @@
 import { Knex } from 'knex';
-import { EmailSender, Subscription, User, UserFlagType, Uuid } from '../services/database/types';
+import { EmailSender, Organization, Subscription, User, UserFlagType, Uuid } from '../services/database/types';
 import { ErrorNotFound } from '../utils/errors';
 import { Day } from '../utils/time';
 import uuidgen from '../utils/uuidgen';
 import paymentFailedTemplate from '../views/emails/paymentFailedTemplate';
 import BaseModel from './BaseModel';
 import { AccountType } from './UserModel';
+import { _ } from '@joplin/lib/locale';
 
 export const failedPaymentWarningInterval = 7 * Day;
 export const failedPaymentFinalAccount = 14 * Day;
@@ -128,10 +129,10 @@ export default class SubscriptionModel extends BaseModel<Subscription> {
 		return this.db(this.tableName).select(this.defaultFields).where('user_id', '=', userId).where('is_deleted', '=', 0).first();
 	}
 
-	public async saveUserAndSubscription(email: string, fullName: string, accountType: AccountType, stripeUserId: string, stripeSubscriptionId: string) {
+	public async saveUserAndSubscription(email: string, fullName: string, accountType: AccountType, stripeUserId: string, stripeSubscriptionId: string, quantity: number) {
 		return this.withTransaction<UserAndSubscription>(async () => {
 			const user = await this.models().user().save({
-				account_type: accountType,
+				account_type: accountType === AccountType.Org ? AccountType.Pro : accountType,
 				email,
 				full_name: fullName,
 				email_confirmed: 0, // Email is not confirmed, because Stripe doesn't check this
@@ -146,7 +147,17 @@ export default class SubscriptionModel extends BaseModel<Subscription> {
 				last_payment_time: Date.now(),
 			});
 
-			return { user, subscription };
+			let organization: Organization = null;
+
+			if (accountType === AccountType.Org) {
+				organization = await this.models().organizations().save({
+					name: _('New organisation'),
+					max_users: quantity,
+					owner_id: user.id,
+				});
+			}
+
+			return { user, subscription, organization };
 		}, 'SubscriptionModel::saveUserAndSubscription');
 	}
 
