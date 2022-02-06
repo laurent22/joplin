@@ -81,7 +81,7 @@ function ExpandLink(props: any) {
 const renderFolderIcon = (folderIcon: FolderIcon) => {
 	if (!folderIcon) return null;
 
-	return <div style={{ marginRight: 5 }}><FolderIconBox folderIcon={folderIcon}/></div>;
+	return <div style={{ marginRight: 5, display: 'flex' }}><FolderIconBox folderIcon={folderIcon}/></div>;
 };
 
 function FolderItem(props: any) {

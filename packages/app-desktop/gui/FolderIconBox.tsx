@@ -10,7 +10,7 @@ export default function(props: Props) {
 	if (folderIcon.type === FolderIconType.Emoji) {
 		return <span style={{ fontSize: 20 }}>{folderIcon.emoji}</span>;
 	} else if (folderIcon.type === FolderIconType.DataUrl) {
-		return <img style={{ width: 22, height: 22 }} src={folderIcon.dataUrl} />;
+		return <img style={{ width: 20, height: 20 }} src={folderIcon.dataUrl} />;
 	} else {
 		throw new Error(`Unsupported folder icon type: ${folderIcon.type}`);
 	}
