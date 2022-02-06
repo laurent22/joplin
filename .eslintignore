@@ -852,6 +852,9 @@ packages/app-mobile/utils/checkPermissions.js.map
 packages/app-mobile/utils/fs-driver-rn.d.ts
 packages/app-mobile/utils/fs-driver-rn.js
 packages/app-mobile/utils/fs-driver-rn.js.map
+packages/app-mobile/utils/openCallbackUrl.d.ts
+packages/app-mobile/utils/openCallbackUrl.js
+packages/app-mobile/utils/openCallbackUrl.js.map
 packages/app-mobile/utils/setupNotifications.d.ts
 packages/app-mobile/utils/setupNotifications.js
 packages/app-mobile/utils/setupNotifications.js.map

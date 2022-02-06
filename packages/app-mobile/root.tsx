@@ -20,6 +20,7 @@ import PoorManIntervals from '@joplin/lib/PoorManIntervals';
 import reducer from '@joplin/lib/reducer';
 import ShareExtension from './utils/ShareExtension';
 import handleShared from './utils/shareHandler';
+import openCallbackUrl from './utils/openCallbackUrl';
 import uuid from '@joplin/lib/uuid';
 import { loadKeychainServiceAndSettings } from '@joplin/lib/services/SettingUtils';
 import KeychainServiceDriverMobile from '@joplin/lib/services/keychain/KeychainServiceDriver.mobile';
@@ -27,7 +28,6 @@ import { setLocale, closestSupportedLocale, defaultLocale } from '@joplin/lib/lo
 import SyncTargetJoplinServer from '@joplin/lib/SyncTargetJoplinServer';
 import SyncTargetJoplinCloud from '@joplin/lib/SyncTargetJoplinCloud';
 import SyncTargetOneDrive from '@joplin/lib/SyncTargetOneDrive';
-import { isCallbackUrl, parseCallbackUrl, CallbackUrlCommand } from '@joplin/lib/callbackUrlUtils';
 const VersionInfo = require('react-native-version-info').default;
 const { AppState, Keyboard, NativeModules, BackHandler, Animated, View, StatusBar, Linking, Platform } = require('react-native');
 import NetInfo from '@react-native-community/netinfo';
@@ -700,7 +700,7 @@ class AppComponent extends React.Component {
 			if (event.url == ShareExtension.shareURL) {
 				void this.handleShareData();
 			} else {
-				void this.openCallbackUrl(event.url);
+				void this.openUrl(event.url);
 			}
 		};
 	}
@@ -756,7 +756,7 @@ class AppComponent extends React.Component {
 		}
 
 		Linking.addEventListener('url', this.handleOpenURL_);
-		Linking.getInitialURL().then((url: string) => this.openCallbackUrl(url));
+		Linking.getInitialURL().then((url: string) => this.openUrl(url));
 
 		BackButtonService.initialize(this.backButtonHandler_);
 
@@ -826,58 +826,9 @@ class AppComponent extends React.Component {
 		}
 	}
 
-	private async openCallbackUrl(url: string) {
-		if (!isCallbackUrl(url)) {
-			return;
-		}
+	private async openUrl(url: string) {
 		reg.logger().info(`openUrl ${url}`);
-
-		const { command, params } = parseCallbackUrl(url);
-		switch (command) {
-		case CallbackUrlCommand.OpenNote:
-			if (!await Note.load(params.id)) {
-				reg.logger().error(`note ${params.id} doesn't exist`);
-				return;
-			}
-			await this.prepareToNavigate();
-			await this.props.dispatch({
-				type: 'NAV_GO',
-				noteId: params.id,
-				routeName: 'Note',
-			});
-			break;
-		case CallbackUrlCommand.OpenFolder:
-			if (!await Folder.load(params.id)) {
-				reg.logger().error(`folder ${params.id} doesn't exist`);
-				return;
-			}
-			await this.prepareToNavigate();
-			await this.props.dispatch({
-				type: 'NAV_GO',
-				folderId: params.id,
-				routeName: 'Folder',
-			});
-			break;
-		case CallbackUrlCommand.OpenTag:
-			if (!await Tag.load(params.id)) {
-				reg.logger().error(`tag ${params.id} doesn't exist`);
-				return;
-			}
-			await this.prepareToNavigate();
-			await this.props.dispatch({
-				type: 'NAV_GO',
-				tagId: params.id,
-				routeName: 'Tag',
-			});
-			break;
-		default:
-			reg.logger().warn(`${url} isn't in a recognized format`);
-		}
-	}
-
-	private async prepareToNavigate() {
-		await this.props.dispatch({ type: 'NAV_BACK' });
-		void this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
+		await openCallbackUrl(this.props.dispatch, url);
 	}
 
 	public UNSAFE_componentWillReceiveProps(newProps: any) {
