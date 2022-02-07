@@ -607,7 +607,6 @@
 
 			if (element && !element.getAttribute('data-resource-id')) element = element.parentElement;
 
-
 			if (element && element.getAttribute('data-resource-id')) {
 				ipcProxySendToHost('contextMenu', {
 					type: element.getAttribute('src') ? 'image' : 'resource',
