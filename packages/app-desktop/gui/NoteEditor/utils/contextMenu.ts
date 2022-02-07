@@ -24,6 +24,9 @@ export enum ContextMenuItemType {
 export interface ContextMenuOptions {
 	itemType: ContextMenuItemType;
 	resourceId: string;
+	resourceContent: string;
+	resourceFilename: string;
+	resourceURL: string;
 	linkToCopy: string;
 	textToCopy: string;
 	htmlToCopy: string;
@@ -100,17 +103,28 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 			onAction: async (options: ContextMenuOptions) => {
 				await openItemById(options.resourceId, dispatch);
 			},
-			isActive: (itemType: ContextMenuItemType) => itemType === ContextMenuItemType.Image || itemType === ContextMenuItemType.Resource,
+			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => itemType === ContextMenuItemType.Image || (itemType === ContextMenuItemType.Resource && options.resourceId),
 		},
 		saveAs: {
 			label: _('Save as...'),
 			onAction: async (options: ContextMenuOptions) => {
-				const { resourcePath, resource } = await resourceInfo(options);
-				const filePath = await bridge().showSaveDialog({
-					defaultPath: resource.filename ? resource.filename : resource.title,
-				});
+				let defaultPath = '';
+				let resourcePath = null;
+				let resourceData = null;
+				if (options.resourceFilename) { defaultPath = options.resourceFilename; }
+				if (options.resourceContent) {
+					resourceData = options.resourceContent;
+				} else {
+					const info = await resourceInfo(options);
+					resourcePath = info.resourcePath;
+					const resource = info.resource;
+					if (!defaultPath) { defaultPath = resource.filename ? resource.filename : resource.title; }
+				}
+				const filePath = await bridge().showSaveDialog({ defaultPath });
 				if (!filePath) return;
-				await fs.copy(resourcePath, filePath);
+				if (resourceData) {
+					await fs.outputFile(filePath, resourceData);
+				} else { await fs.copy(resourcePath, filePath); }
 			},
 			isActive: (itemType: ContextMenuItemType) => itemType === ContextMenuItemType.Image || itemType === ContextMenuItemType.Resource,
 		},
@@ -120,12 +134,15 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 				const { resourcePath } = await resourceInfo(options);
 				bridge().showItemInFolder(resourcePath);
 			},
-			isActive: (itemType: ContextMenuItemType) => itemType === ContextMenuItemType.Image || itemType === ContextMenuItemType.Resource,
+			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => itemType === ContextMenuItemType.Image || (itemType === ContextMenuItemType.Resource && options.resourceId),
 		},
 		copyPathToClipboard: {
 			label: _('Copy path to clipboard'),
 			onAction: async (options: ContextMenuOptions) => {
-				const { resourcePath } = await resourceInfo(options);
+				let resourcePath = null;
+				if (options.resourceURL) {
+					resourcePath = options.resourceURL;
+				} else { resourcePath = (await resourceInfo(options)).resourcePath; }
 				clipboard.writeText(toSystemSlashes(resourcePath));
 			},
 			isActive: (itemType: ContextMenuItemType) => itemType === ContextMenuItemType.Image || itemType === ContextMenuItemType.Resource,
