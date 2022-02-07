@@ -589,15 +589,14 @@
 			let element = event.target;
 
 			// To handle right clicks on resource icons
-			if (element && !element.getAttribute('data-resource-id')) element = element.parentElement;
-
-			if(element.classList.contains('mermaid')) {
-				var svgString = new XMLSerializer().serializeToString(element);
+			let mermaidElement = element.closest('.mermaid');
+			if(mermaidElement) {
+				const svgString = new XMLSerializer().serializeToString(mermaidElement);
 				// Remove any characters outside the Latin1 range
-				var decoded = unescape(encodeURIComponent(svgString));
+				const decoded = unescape(encodeURIComponent(svgString));
 				// Now we can use btoa to convert the svg to base64
-				var base64 = btoa(decoded);
-				var dataUrl = `data:image/svg+xml;base64,${base64}`;
+				const base64 = btoa(decoded);
+				const dataUrl = `data:image/svg+xml;base64,${base64}`;
 				ipcProxySendToHost('contextMenu', {
 						type: 'resource',
 						resourceContent: svgString,
@@ -605,6 +604,9 @@
 						resourceFilename: 'Mermaid export.svg',
 					});
 			}
+
+			if (element && !element.getAttribute('data-resource-id')) element = element.parentElement;
+
 
 			if (element && element.getAttribute('data-resource-id')) {
 				ipcProxySendToHost('contextMenu', {
