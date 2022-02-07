@@ -27,12 +27,12 @@ msgstr "- 定位：允许将地理位置信息附加到一条笔记中。"
 msgid ""
 "- Storage: to allow attaching files to notes and to enable filesystem "
 "synchronisation."
-msgstr "- 存储：允许将文件附加到笔记中和启用文件系统同步。"
+msgstr "- 存储：允许将文件附加到笔记中并启用文件系统同步。"
 
 #: packages/lib/services/KeymapService.ts:308
 #: packages/lib/services/KeymapService.ts:314
 msgid "\"%s\" is missing the required \"%s\" property."
-msgstr "“%s”缺少必须的属性“%s”。"
+msgstr "“%s”缺少必须的属性\"%s”。"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:252
 msgid "(%s)"
@@ -108,7 +108,7 @@ msgstr "%s (%s) 无法上传：%s"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:612
 msgid "%s (%s) would like to share a notebook with you."
-msgstr "%s (%s) 想要分享笔记本给你。"
+msgstr "%s (%s) 想要分享笔记本给您。"
 
 #: packages/lib/services/ReportService.ts:262
 msgid "%s (%s): %s"
@@ -211,7 +211,7 @@ msgstr "加速键“%s”无效。"
 msgid ""
 "Accelerator \"%s\" is used for \"%s\" and \"%s\" commands. This may lead to "
 "unexpected behaviour."
-msgstr "加速键“%s”被用于“%s”和“%s”命令。这可能导致未期待的行为。"
+msgstr "加速键“%s”被用于“%s”和“%s”命令。这可能导致意外的表现。"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:613
 msgid "Accept"
@@ -244,7 +244,7 @@ msgstr "添加或删除标签："
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:245
 msgid "Add recipient:"
-msgstr "添加接受者："
+msgstr "添加收件人："
 
 #: packages/app-mobile/components/screens/Note.tsx:1191
 msgid "Add title"
@@ -385,7 +385,7 @@ msgstr "自动"
 
 #: packages/server/src/services/TaskService.ts:39
 msgid "Auto-add disabled accounts for deletion"
-msgstr ""
+msgstr "自动添加已禁用的账户以便删除"
 
 #: packages/lib/models/Setting.ts:853
 msgid "Auto-pair braces, parenthesis, quotations, etc."
@@ -421,7 +421,7 @@ msgstr "浏览..."
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:63
 msgid "Bulleted List"
-msgstr "项目符号列表"
+msgstr "无序列表"
 
 #: packages/app-desktop/bridge.ts:189 packages/app-desktop/bridge.ts:210
 #: packages/app-desktop/checkForUpdates.ts:199
@@ -503,7 +503,7 @@ msgstr "无法找到“%s”。"
 
 #: packages/app-cli/app/command-sync.ts:182
 msgid "Cannot initialise synchroniser."
-msgstr "无法初始化同步。"
+msgstr "无法启动同步。"
 
 #: packages/lib/services/interop/InteropService.ts:209
 msgid "Cannot load \"%s\" module for format \"%s\" and output \"%s\""
@@ -691,7 +691,7 @@ msgstr "已完成: %s（%s）"
 
 #: packages/server/src/services/TaskService.ts:37
 msgid "Compress old changes"
-msgstr ""
+msgstr "压缩旧的更改"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:637
 #: packages/app-mobile/components/side-menu-content.js:319
@@ -700,7 +700,7 @@ msgstr "配置"
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:137
 msgid "Confirm password cannot be empty"
-msgstr "确保密码不可为空"
+msgstr "确认密码不可为空"
 
 #: packages/app-cli/app/command-e2ee.ts:94
 #: packages/app-mobile/components/screens/encryption-config.tsx:168
@@ -750,7 +750,7 @@ msgstr "复制开发者模式命令到剪贴板"
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:364
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:139
 msgid "Copy external link"
-msgstr "拷贝外部访问地址"
+msgstr "复制外部链接地址"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:134
 msgid "Copy image"
@@ -835,7 +835,7 @@ msgstr "无法升级主密钥：%s"
 msgid ""
 "Could not verify the share status of this notebook - aborting. Please try "
 "again when you are connected to the internet."
-msgstr "无法验证此笔记的分享状态 - 终止。 请在连接到互联网后再次尝试。"
+msgstr "无法验证此笔记的分享状态 - 正在终止。 请在连接到互联网后再次尝试。"
 
 #: packages/app-mobile/components/note-list.js:101
 msgid "Create a notebook"
@@ -959,7 +959,7 @@ msgstr "天"
 
 #: packages/app-cli/app/command-e2ee.ts:64
 msgid "Decrypted items: %d"
-msgstr "解密条目: %d"
+msgstr "已解密条目: %d"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:46
 msgid "Decrypted items: %s / %s"
@@ -996,14 +996,12 @@ msgid "Delete attachment \"%s\"?"
 msgstr "是否删除附件“%s”？"
 
 #: packages/server/src/services/TaskService.ts:36
-#, fuzzy
 msgid "Delete expired sessions"
-msgstr "启用数学表达式"
+msgstr "删除过期的会话"
 
 #: packages/server/src/services/TaskService.ts:31
-#, fuzzy
 msgid "Delete expired tokens"
-msgstr "是否删除这 %d 条笔记？"
+msgstr "删除过期的令牌"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:88
 msgid "Delete line"
@@ -1038,11 +1036,11 @@ msgstr ""
 msgid ""
 "Delete notebook? All notes and sub-notebooks within this notebook will also "
 "be deleted."
-msgstr "是否删除笔记本？所有在该笔记本内的笔记也将同时被删除。"
+msgstr "是否删除笔记本？所有在该笔记本内的笔记和子笔记本也将同时被删除。"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:161
 msgid "Delete plugin \"%s\"?"
-msgstr "删除插件“%s”吗？"
+msgstr "是否删除插件“%s”？"
 
 #: packages/lib/models/Note.ts:762
 msgid "Delete these %d notes?"
@@ -1052,7 +1050,7 @@ msgstr "是否删除这 %d 条笔记？"
 msgid ""
 "Delete this invitation? The recipient will no longer have access to this "
 "shared notebook."
-msgstr "删除这个邀请？接受者将无法再访问到这个共享的笔记本。"
+msgstr "是否删除该邀请？收件人将无法再次访问此共享笔记本。"
 
 #: packages/lib/Synchronizer.ts:186
 msgid "Deleted local items: %d."
@@ -1106,7 +1104,7 @@ msgstr "禁用安全模式并重启"
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:103
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:101
 msgid "Disable Web Clipper Service"
-msgstr "禁用网页剪辑服务"
+msgstr "禁用网页剪辑器"
 
 #: packages/app-cli/app/command-e2ee.ts:127
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:249
@@ -1158,7 +1156,7 @@ msgstr "显示关于笔记与笔记本的概况。"
 
 #: packages/app-cli/app/command-cat.js:18
 msgid "Displays the complete information about note."
-msgstr "显示有关笔记的完整信息。"
+msgstr "显示关于笔记的完整信息。"
 
 #: packages/app-cli/app/command-cat.js:14
 msgid "Displays the given note."
@@ -1181,7 +1179,7 @@ msgstr "显示版本信息"
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:630
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:173
 msgid "Do it now"
-msgstr "现在完成"
+msgstr "立即执行"
 
 #: packages/app-cli/app/command-import.js:26
 msgid "Do not ask for confirmation."
@@ -1203,7 +1201,7 @@ msgstr "下载"
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:174
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:139
 msgid "Download and install the relevant extension for your browser:"
-msgstr "为您的浏览器下载并安装相关的扩展："
+msgstr "为您的浏览器下载并安装相关的扩展插件："
 
 #: packages/lib/models/Resource.ts:343
 msgid "Downloaded"
@@ -1313,12 +1311,12 @@ msgstr "Emacs"
 
 #: packages/server/src/routes/admin/emails.ts:125
 msgid "Email"
-msgstr ""
+msgstr "邮箱"
 
 #: packages/server/src/routes/admin/emails.ts:109
 #: packages/server/src/services/MustacheService.ts:155
 msgid "Emails"
-msgstr ""
+msgstr "邮箱"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:194
 msgid "emphasised text"
@@ -1355,7 +1353,7 @@ msgstr "启用音频播放器"
 
 #: packages/lib/models/Setting.ts:1026
 msgid "Enable deflist syntax"
-msgstr "启用清单语法"
+msgstr "启用 deflist 语法"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:237
 #: packages/app-mobile/components/screens/encryption-config.tsx:281
@@ -1400,11 +1398,11 @@ msgstr "启用 PDF 查看器"
 
 #: packages/lib/models/Setting.ts:1010
 msgid "Enable soft breaks"
-msgstr "启动软换行"
+msgstr "启用软换行"
 
 #: packages/lib/models/Setting.ts:1023
 msgid "Enable table of contents extension"
-msgstr "启用目录扩展"
+msgstr "启用目录扩展 （[TOC]）"
 
 #: packages/lib/models/Setting.ts:1011
 msgid "Enable typographer support"
@@ -1417,7 +1415,7 @@ msgstr "启用视频播放器"
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:114
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:112
 msgid "Enable Web Clipper Service"
-msgstr "启用网页剪辑服务"
+msgstr "启用网页剪辑器"
 
 #: packages/app-cli/app/command-e2ee.ts:127
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:249
@@ -1489,18 +1487,18 @@ msgstr "枚举"
 
 #: packages/lib/models/Resource.ts:344
 msgid "Error"
-msgstr "错误"
+msgstr "发生错误"
 
 #: packages/app-cli/app/command-edit.js:82
 #: packages/app-desktop/commands/startExternalEditing.ts:23
 msgid "Error opening note in editor: %s"
-msgstr "在编辑器中打开笔记出错：%s"
+msgstr "在编辑器中打开笔记时出现错误：%s"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:65
 #: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:31
 #: packages/lib/services/KeymapService.ts:197
 msgid "Error: %s"
-msgstr "错误：%s"
+msgstr "发生错误：%s"
 
 #: packages/lib/components/shared/config-shared.js:51
 msgid ""
@@ -1535,7 +1533,7 @@ msgstr "导出"
 #: packages/app-desktop/gui/MenuBar.tsx:482
 #: packages/app-desktop/gui/MenuBar.tsx:536
 msgid "Export all"
-msgstr "导出全部"
+msgstr "全部导出"
 
 #: packages/app-desktop/gui/StatusScreen/StatusScreen.tsx:178
 msgid "Export debug report"
@@ -1562,7 +1560,7 @@ msgid ""
 "Exports Joplin data to the given path. By default, it will export the "
 "complete database including notebooks, notes, tags and resources."
 msgstr ""
-"导出 Joplin 数据到选定路径。默认将导出包含笔记本、笔记、标签与资源等完整的数"
+"导出 Joplin 数据到选定路径。默认将导出包含笔记本、笔记、标签与资源等的完整数"
 "据库。"
 
 #: packages/app-cli/app/command-export.js:23
@@ -1575,7 +1573,7 @@ msgstr "仅导出选定笔记本。"
 
 #: packages/lib/models/Setting.ts:1320
 msgid "Fail-safe"
-msgstr "故障保护"
+msgstr "故障保护 (Fail-safe)"
 
 #: packages/lib/models/Setting.ts:1321
 msgid ""
@@ -1612,7 +1610,7 @@ msgstr "文件系统"
 
 #: packages/app-desktop/gui/ExtensionBadge.min.js:10
 msgid "Firefox Extension"
-msgstr "Firefox 扩展"
+msgstr "Firefox 扩展插件"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:525
 msgid "Fix search index"
@@ -1648,7 +1646,7 @@ msgstr "仅用于调试目的：将您的配置文件导出到外部 SD 卡。"
 
 #: packages/app-cli/app/command-help.js:36
 msgid "For information on how to customise the shortcuts please visit %s"
-msgstr "有关如何自定义快捷键，请访问 %s"
+msgstr "若想了解有关如何自定义快捷键的信息，请访问 %s"
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:291
 msgid ""
@@ -1695,7 +1693,7 @@ msgstr "已生成"
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:207
 msgid "Generating link..."
 msgid_plural "Generating links..."
-msgstr[0] "生成链接..."
+msgstr[0] "生成链接中..."
 
 #: packages/app-desktop/gui/ExtensionBadge.min.js:44
 msgid "Get it now:"
@@ -1725,7 +1723,7 @@ msgstr "跳转到任意内容..."
 
 #: packages/app-desktop/gui/Root.tsx:172
 msgid "Grant authorisation"
-msgstr "授权令牌"
+msgstr "批准授权"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:73
 msgid "Heading"
@@ -1821,8 +1819,8 @@ msgid ""
 "In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
 "the attachments are downloaded whether you open the note or not."
 msgstr ""
-"在“手动”模式下，只有单击附件时才会下载它们。在“自动”中，当你打开笔记时，它们"
-"就会被下载下来。在 “总是”中，无论你是否打开笔记，所有的附件都会被下载。"
+"“手动”模式下，仅在单击附件时才会下载。“自动”模式下，打开笔记，其中的附件就会"
+"被全部下载。 “总是”模式下，无论是否打开笔记，所有的附件均会被下载。"
 
 #: packages/app-cli/app/command-help.js:77
 msgid ""
@@ -1840,7 +1838,7 @@ msgid ""
 "\n"
 "You may turn off this option at any time in the Configuration screen."
 msgstr ""
-"为了将地理位置与笔记关联，本应用需要您的授权以访问您的位置。\n"
+"为了将地理位置与笔记关联，本应用需要获取您的位置的权限。\n"
 "\n"
 "您可以在“配置”页面中随时关闭此选项。"
 
@@ -1860,14 +1858,14 @@ msgid ""
 "\n"
 "Important: you only need to run this ONCE on one device."
 msgstr ""
-"为此，必须对整个数据集进行加密和同步，因此最好在夜间休息时分彻夜运行。\n"
+"为此，必须对整个数据集进行加密和同步，因此最好在夜间休息时分运行。\n"
 "\n"
 "首先，请按照以下说明进行操作: \n"
 "\n"
 "1.同步您的所有设备。\n"
 "2.单击“%s”。\n"
-"3.让它运行完成。 在运行时，请避免在其他设备上更改任何笔记，以免发生冲突。\n"
-"4.在此设备上完成同步后，同步其他所有设备，并使其同步完成。\n"
+"3.让其完成运行。 在运行时，请不要在其他设备上更改任何笔记，以免发生冲突。\n"
+"4.在此设备上完成同步后，同步其他所有设备，并运行至同步完成。\n"
 "\n"
 "重要提醒: 在一台设备上只需要运行一次。"
 
@@ -1876,12 +1874,12 @@ msgstr ""
 msgid ""
 "In order to use file system synchronisation your permission to write to "
 "external storage is required."
-msgstr "要使用文件系统同步，您需要写入外部存储的权限。"
+msgstr "为使用文件系统同步，需要获取写入外部存储的权限。"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:142
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:129
 msgid "In order to use the web clipper, you need to do the following:"
-msgstr "要使用网页剪辑器，你需要执行以下步骤："
+msgstr "要使用网页剪辑器，您需要执行以下步骤："
 
 #: packages/lib/Synchronizer.ts:305
 msgid "In progress"
@@ -1946,7 +1944,7 @@ msgstr "无效的%s：%s。"
 
 #: packages/app-cli/app/cli-utils.js:151
 msgid "Invalid answer: %s"
-msgstr "答案无效：%s"
+msgstr "无效答案：%s"
 
 #: packages/app-cli/app/command-tag.js:90
 msgid "Invalid command: \"%s\""
@@ -1985,19 +1983,19 @@ msgstr "无法同步的条目"
 msgid ""
 "Joplin can synchronise your notes using various providers. Select one from "
 "the list below."
-msgstr "Joplin 可以使用多种途径来同步你的笔记。可以从下列选项中选择一种方式。"
+msgstr "Joplin 可以使用多种途径来同步您的笔记。可以从下列选项中选择一种方式。"
 
 #: packages/lib/SyncTargetJoplinCloud.ts:30
 msgid "Joplin Cloud"
-msgstr "Joplin 论坛"
+msgstr "Joplin Cloud"
 
 #: packages/lib/models/Setting.ts:636
 msgid "Joplin Cloud email"
-msgstr "Joplin 论坛邮箱"
+msgstr "Joplin Cloud 邮箱"
 
 #: packages/lib/models/Setting.ts:647
 msgid "Joplin Cloud password"
-msgstr "Joplin 论坛密码"
+msgstr "Joplin Cloud 密码"
 
 #: packages/lib/services/interop/InteropService.ts:108
 #: packages/lib/services/interop/InteropService.ts:73
@@ -2028,7 +2026,7 @@ msgstr "Joplin 服务器"
 
 #: packages/lib/models/Setting.ts:597
 msgid "Joplin Server email"
-msgstr "Joplin Server 邮箱"
+msgstr "Joplin 服务器邮箱"
 
 #: packages/lib/models/Setting.ts:608
 msgid "Joplin Server password"
@@ -2043,7 +2041,7 @@ msgstr "Joplin 服务器 URL"
 msgid ""
 "Joplin Web Clipper allows saving web pages and screenshots from your browser "
 "to Joplin."
-msgstr "Joplin 网页剪辑器可以让你将浏览器中的网页和屏幕截图保存到 Joplin。"
+msgstr "Joplin 网页剪辑器可以让您将浏览器中的网页和屏幕截图保存到 Joplin。"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:597
 msgid "Joplin website"
@@ -2054,7 +2052,7 @@ msgid ""
 "Joplin's own sync service. Also gives access to Joplin-specific features "
 "such as publishing notes or collaborating on notebooks with others."
 msgstr ""
-"Joplin 自己的同步服务。同时也提供 Joplin 的一些特性，比如发布笔记或者与他人协"
+"Joplin 自己的同步服务。还可以访问 Joplin 的特定功能，比如发布笔记或者与他人协"
 "作笔记本。"
 
 #: packages/lib/models/Setting.ts:1346
@@ -2091,7 +2089,7 @@ msgstr "语言"
 
 #: packages/lib/Synchronizer.ts:191
 msgid "Last error: %s"
-msgstr "最后错误: %s"
+msgstr "最后的错误: %s"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:630
 msgid "Later"
@@ -2111,11 +2109,11 @@ msgstr "离开笔记本..."
 
 #: packages/lib/models/Setting.ts:1236
 msgid "Legal"
-msgstr "法律专用纸"
+msgstr "法律专用纸 (Legal)"
 
 #: packages/lib/models/Setting.ts:1232
 msgid "Letter"
-msgstr "信函"
+msgstr "信函 (Letter)"
 
 #: packages/lib/models/Setting.ts:338
 msgid "Light"
@@ -2154,8 +2152,8 @@ msgid ""
 "taking place, you may delete the lock file at \"%s\" and resume the "
 "operation."
 msgstr ""
-"锁定文件已被保存。如果您确认当前未在进行任何同步，可删除锁定文件 \"%s\" 后继"
-"续上一部操作。"
+"锁定文件已被占用。如果您确认当前未在进行任何同步，可在删除锁定文件 \"%s\" 后"
+"继续上一步操作。"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:521
 #: packages/app-mobile/components/screens/log.js:100
@@ -2273,7 +2271,7 @@ msgstr "缺失必选参数：%s"
 
 #: packages/app-mobile/components/side-menu-content.js:354
 msgid "Mobile data - auto-sync disabled"
-msgstr "手机数据自动同步被禁用"
+msgstr "移动数据自动同步被禁用"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:604
 msgid "More info"
@@ -2350,7 +2348,7 @@ msgstr "新建待办事项"
 
 #: packages/app-desktop/checkForUpdates.ts:198
 msgid "New version: %s"
-msgstr "最新版本：%s"
+msgstr "新版本：%s"
 
 #: packages/lib/SyncTargetNextcloud.js:25
 msgid "Nextcloud"
@@ -2380,7 +2378,7 @@ msgstr "否"
 
 #: packages/app-cli/app/command-edit.js:40
 msgid "No active notebook."
-msgstr "无活动笔记本。"
+msgstr "无有效的笔记本。"
 
 #: packages/app-mobile/components/screens/Note.tsx:171
 msgid "No item with ID %s"
@@ -2545,7 +2543,7 @@ msgstr "笔记只能在笔记本内创建。"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:58
 msgid "Numbered List"
-msgstr "编号列表"
+msgstr "有序列表"
 
 #: packages/app-desktop/bridge.ts:183 packages/app-desktop/bridge.ts:189
 #: packages/app-desktop/bridge.ts:210 packages/app-desktop/bridge.ts:220
@@ -2683,7 +2681,7 @@ msgstr "PDF 文件"
 
 #: packages/app-mobile/components/screens/Note.tsx:408
 msgid "Permission needed"
-msgstr "需要的权限"
+msgstr "需要权限"
 
 #: packages/app-mobile/components/CameraView.tsx:188
 msgid "Permission to use camera"
@@ -2828,20 +2826,19 @@ msgstr "隐私政策"
 
 #: packages/server/src/services/TaskService.ts:35
 msgid "Process failed payment subscriptions"
-msgstr ""
+msgstr "处理失败的付费订阅"
 
 #: packages/server/src/services/TaskService.ts:33
 msgid "Process oversized accounts"
-msgstr ""
+msgstr "处理超容量的账户"
 
 #: packages/server/src/services/TaskService.ts:38
-#, fuzzy
 msgid "Process user deletions"
-msgstr "用户删除"
+msgstr "处理用户删除"
 
 #: packages/server/src/routes/admin/users.ts:168
 msgid "Profile"
-msgstr "资料"
+msgstr "配置文件"
 
 #: packages/lib/versionInfo.ts:26
 msgid "Profile Version: %s"
@@ -2895,19 +2892,19 @@ msgstr "阅读时间：%s 分钟"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:264
 msgid "Recipient has accepted the invitation"
-msgstr "接受者接受了邀请"
+msgstr "收件人接受了邀请"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:262
 msgid "Recipient has not yet accepted the invitation"
-msgstr "接受者还没有接受邀请"
+msgstr "收件人还没有接受邀请"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:263
 msgid "Recipient has rejected the invitation"
-msgstr "接受者拒绝了邀请"
+msgstr "收件人拒绝了邀请"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:281
 msgid "Recipients:"
-msgstr "接受者："
+msgstr "收件人："
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:100
 msgid "Redo"
@@ -2926,7 +2923,7 @@ msgstr "拒绝"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:247
 msgid "Remove"
-msgstr "移除"
+msgstr "删除"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:254
 msgid "Remove tag \"%s\" from all notes?"
@@ -3008,7 +3005,7 @@ msgstr "倒序"
 
 #: packages/app-cli/app/command-ls.js:29
 msgid "Reverses the sorting order."
-msgstr "反转排序顺序。"
+msgstr "倒序。"
 
 #: packages/lib/versionInfo.ts:9
 msgid "Revision: %s (%s)"
@@ -3176,7 +3173,7 @@ msgstr "分享笔记本..."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:304
 msgid "Sharing notebook..."
-msgstr "分享笔记本..."
+msgstr "分享笔记本中..."
 
 #: packages/app-cli/app/command-help.js:44
 msgid "Shortcuts are not available in CLI mode."
@@ -3224,7 +3221,7 @@ msgstr "跳过该版本"
 
 #: packages/app-cli/app/command-e2ee.ts:65
 msgid "Skipped items: %d (use --retry-failed-items to retry decrypting them)"
-msgstr "跳过条目: %d (使用 —retry-failed-items 来尝试重新解密)"
+msgstr "已跳过条目: %d (使用 --retry-failed-items 来尝试重新解密)"
 
 #: packages/app-cli/app/command-import.js:50
 #: packages/app-desktop/gui/ImportScreen.min.js:71
@@ -3241,15 +3238,15 @@ msgstr "日光亮 (Solarised)"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:591
 msgid "Some items cannot be decrypted."
-msgstr "一些项目无法被解密。"
+msgstr "某些项目无法被解密。"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:620
 msgid "Some items cannot be synchronised."
-msgstr "一些条目无法被同步。"
+msgstr "某些条目无法被同步。"
 
 #: packages/app-mobile/components/screen-header.js:460
 msgid "Some items cannot be synchronised. Press for more info."
-msgstr "某些条目无法同步。点按以获取更多信息。"
+msgstr "某些条目无法被同步。点按以获取更多信息。"
 
 #: packages/lib/models/Setting.ts:920
 msgid "Sort notebooks by"
@@ -3308,8 +3305,7 @@ msgstr ""
 msgid ""
 "Starting decryption... Please wait as it may take several minutes depending "
 "on how much there is to decrypt."
-msgstr ""
-"开始解密，请稍候... 取决于需解密的文件数量，解密环节可能需要等待几分钟。"
+msgstr "开始解密，请稍候... 取决于需解密的文件数量，该环节可能需要几分钟。"
 
 #: packages/app-cli/app/command-sync.ts:213
 msgid "Starting synchronisation..."
@@ -3345,7 +3341,7 @@ msgstr "状态：在 %d 端口运行"
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:150
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:132
 msgid "Step 1: Enable the clipper service"
-msgstr "步骤一: 启用网页剪辑服务"
+msgstr "步骤一: 启用网页剪辑器"
 
 #: packages/app-cli/app/command-sync.ts:92
 #: packages/app-desktop/gui/DropboxLoginScreen.tsx:44
@@ -3530,7 +3526,7 @@ msgstr "文本编辑器命令"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:210
 msgid "Thank you! Your Joplin Cloud account is now setup and ready to use."
-msgstr "感谢！你的 Joplin Cloud 帐号已经设置完毕。"
+msgstr "感谢！您的 Joplin Cloud 帐号已经设置完毕。"
 
 #: packages/app-desktop/bridge.ts:273
 msgid ""
@@ -3587,7 +3583,7 @@ msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
 msgstr ""
-"该文本编辑器命令 (可包括参数) 将会被用于打开笔记。若未提供将尝试自动检测默认"
+"该文本编辑器命令 (可包含参数) 将会被用于打开笔记。若未提供将尝试自动检测默认"
 "编辑器。"
 
 #: packages/lib/models/Setting.ts:1380 packages/lib/models/Setting.ts:1394
@@ -3598,12 +3594,12 @@ msgid ""
 "item with a factor of 2 will take twice as much space as an item with a "
 "factor of 1.Restart app to see changes."
 msgstr ""
-"因子属性决定了列表上的一项如何增长或缩小，以适应其容器中相对于其他项目的可用"
-"空间。因此因子为 2 的项是因数为 1 的项占用空间的两倍。重启软件以查看变化。"
+"拉伸系数属性用于指定项目之间的容量比例。如，因子为 2 的项目所占容量是因子为 "
+"1 的项目的两倍。该更改在软件重启后生效。"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:510
 msgid "The following attachments are being watched for changes:"
-msgstr "下列附件将被监控变化："
+msgstr "下列附件发生的改动正在被监控："
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:72
 msgid ""
@@ -3622,7 +3618,7 @@ msgstr "Joplin 移动应用目前不支持这种类型的链接：%s"
 msgid ""
 "The Joplin team has vetted this plugin and it meets our standards for "
 "security and performance."
-msgstr "Joplin 团队已经通过了该插件的审查，它符合我们对于安全和性能的要求。"
+msgstr "Joplin 团队已经核准了该插件，它符合我们对于安全和性能的要求。"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:325
 msgid ""
@@ -3630,8 +3626,8 @@ msgid ""
 "application does not currently have access to them. It is likely they will "
 "eventually be downloaded via synchronisation."
 msgstr ""
-"具有这些 ID 的密钥用于加密你的部分项目，但应用程序目前无法访问它们。它们很可"
-"能最终会通过同步下载。"
+"具有这些 ID 的密钥正被用于加密您的某些项，但应用程序目前无法访问它们。项目最"
+"终会通过同步获取，但目前可能仍未被同步。"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:217
 msgid "The master key has been upgraded successfully!"
@@ -3643,8 +3639,8 @@ msgid ""
 "however the application does not currently have access to them. It is likely "
 "they will eventually be downloaded via synchronisation."
 msgstr ""
-"具有这些 ID 的主密钥用于加密某些项，但应用程序目前无法访问它们。最终它们很可"
-"能通过同步下载。"
+"具有这些 ID 的主密钥正被用于加密某些项，但应用程序目前无法访问它们。项目最终"
+"会通过同步获取，但目前可能仍未被同步。"
 
 #: packages/lib/services/RevisionService.ts:245
 msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
@@ -3700,12 +3696,12 @@ msgstr ""
 
 #: packages/app-desktop/gui/Root.tsx:171
 msgid "The Web Clipper needs your authorisation to access your data."
-msgstr "Web Clipper 需要你的授权才能访问你的数据。"
+msgstr "网页剪辑器需要您的授权才能访问您的数据。"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:84
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:83
 msgid "The web clipper service is enabled and set to auto-start."
-msgstr "网页剪辑服务已启用且将自动启动。"
+msgstr "网页剪辑器已启用并已设置为自动启动。"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:109
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:107
@@ -3750,7 +3746,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"设置你的 Joplin Cloud 帐号时发生了一个错误。请确认你的邮箱和密码是否正确，然"
+"设置您的 Joplin Cloud 帐号时发生了一个错误。请确认您的邮箱和密码是否正确，然"
 "后再试一次。错误是：\n"
 "\n"
 "%s"
@@ -3774,10 +3770,10 @@ msgid ""
 "formatting. It is indicated below which plugins are compatible or not with "
 "the WYSIWYG editor."
 msgstr ""
-"这些插件为 Markdown 渲染器提供额外特性。请注意，尽管这些额外特性可能是可用"
-"的，但它们并非标准 Markdown 语法，因此许多功能只能在 Joplin 内运行。此外，其"
-"中的一些功能与所见即所得 (WYSIWYG) 编辑器 *不兼容*。如果您在上述编辑器中打开"
-"使用了这些插件的笔记，就将会丢失插件的格式。下面已表明插件与所见即所得 "
+"这些插件为 Markdown 渲染器提供额外特性。请注意，尽管这些额外特性可能有用，但"
+"它们并非标准 Markdown 语法，因此许多功能只能在 Joplin 内运行。此外，其中的一"
+"些功能与所见即所得 (WYSIWYG) 编辑器 *不兼容*。如果您在上述 (WYSIWYG) 编辑器中"
+"打开使用了这些插件的笔记，就会丢失插件的格式。下已注明插件与所见即所得 "
 "(WYSIWYG) 编辑器兼容与否。"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:71
@@ -3825,7 +3821,7 @@ msgstr "此笔记没有历史记录"
 msgid ""
 "This Rich Text editor has a number of limitations and it is recommended to "
 "be aware of them before using it."
-msgstr "此富文本编辑器有许多限制，建议在使用它之前注意它们。"
+msgstr "此富文本编辑器有许多限制，建议在使用之前留意。"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:155
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:133
@@ -3834,7 +3830,7 @@ msgid ""
 "enabling it your firewall may ask you to give permission to Joplin to listen "
 "to a particular port."
 msgstr ""
-"该服务允许浏览器扩展与 Joplin 通信。当启用它时，你的防火墙可能会要求你允许 "
+"该服务允许浏览器扩展插件与 Joplin 通信。当启用它时，您的防火墙可能会请求允许 "
 "Joplin 监听一个特定的端口。"
 
 #: packages/lib/models/Setting.ts:1044
@@ -3843,7 +3839,7 @@ msgid ""
 "this setting so that your notes are constantly being synchronised, thus "
 "reducing the number of conflicts."
 msgstr ""
-"这将允许 Joplin 在后台运行，如果你经常修改和同步笔记，推荐启用该设置来减少可"
+"这将允许 Joplin 在后台运行，如果您经常修改和同步笔记，推荐启用该设置来减少可"
 "能的冲突。"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:114
@@ -3966,7 +3962,7 @@ msgstr "切换边栏"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleNotesSortOrderField.ts:7
 msgid "Toggle sort order field"
-msgstr "切换排序顺序字段"
+msgstr "切换排序字段"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:40
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:41
@@ -4043,7 +4039,7 @@ msgstr "取消分享"
 msgid ""
 "Unshare this notebook? The recipients will no longer have access to its "
 "content."
-msgstr "取消分享这个笔记本？接受者将无法再访问到它的内容。"
+msgstr "取消分享这个笔记本？收件人将无法再访问到它的内容。"
 
 #: packages/app-mobile/components/screens/Note.tsx:685
 msgid "Unsupported image type: %s"
@@ -4067,12 +4063,11 @@ msgstr "更新"
 #: packages/server/src/routes/admin/users.ts:171
 #: packages/server/src/routes/index/users.ts:89
 msgid "Update profile"
-msgstr "更新资料"
+msgstr "更新配置文件"
 
 #: packages/server/src/services/TaskService.ts:32
-#, fuzzy
 msgid "Update total sizes"
-msgstr "已更新本地项目: %d。"
+msgstr "更新总大小"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:208
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:209
@@ -4312,8 +4307,8 @@ msgid ""
 "You may use the tool below to re-encrypt your data, for example if you know "
 "that some of your notes are encrypted with an obsolete encryption method."
 msgstr ""
-"您可以使用下面的工具重新加密您的数据。例如，在当您知道某些笔记使用了过时的加"
-"密方法时。"
+"您可以使用下面的工具重新加密您的数据。例如当您知道某些笔记使用了过时的加密方"
+"法时，可使用该项目。"
 
 #: packages/app-cli/app/cli-utils.js:144
 msgid "Your choice: "

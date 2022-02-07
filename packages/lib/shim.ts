@@ -228,6 +228,10 @@ const shim = {
 		throw new Error('Not implemented');
 	},
 
+	imageToDataUrl: async (_filePath: string, _maxSize: number = 0): Promise<string> => {
+		throw new Error('Not implemented');
+	},
+
 	imageFromDataUrl: async (_imageDataUrl: string, _filePath: string, _options: any = null) => {
 		throw new Error('Not implemented');
 	},

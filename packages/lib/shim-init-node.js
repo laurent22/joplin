@@ -330,6 +330,23 @@ function shimInit(options = null) {
 		return Note.save(newNote);
 	};
 
+	shim.imageToDataUrl = async (filePath, maxSize) => {
+		if (shim.isElectron()) {
+			const nativeImage = require('electron').nativeImage;
+			const image = nativeImage.createFromPath(filePath);
+			if (!image) throw new Error(`Could not load image: ${filePath}`);
+
+			if (maxSize) {
+				const size = image.getSize();
+				if (size.width > maxSize || size.height > maxSize) throw new Error(`Image cannot be larger than ${maxSize}x${maxSize} pixels`);
+			}
+
+			return image.toDataURL();
+		} else {
+			throw new Error('Unsupported method');
+		}
+	},
+
 	shim.imageFromDataUrl = async function(imageDataUrl, filePath, options = null) {
 		if (options === null) options = {};
 
