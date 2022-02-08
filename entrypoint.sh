@@ -7,11 +7,11 @@ if [[ "$*" == node*dist/app.js* ]] && [ "$(id -u)" = '0' ]; then
 	Current_id=$(id -u)
 	Current_group_id=$(id -g)
 	if [ "$USER_UID" != "$Current_id" ]; then
-		groupmod -o -g "$USER_UID" openldap
+		groupmod -o -g "$USER_UID" joplin
 		echo 'user uid is changed'
 	fi
 	if [ "$USER_UID" != "$Current_group_id" ]; then
-		groupmod -o -g "$USER_UID" openldap
+		groupmod -o -g "$USER_UID" joplin
 		echo 'user gid is changed'
 	fi
 	find $Path \! -user USER -exec chown USER '{}' +
