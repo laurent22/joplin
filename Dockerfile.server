@@ -67,8 +67,6 @@ COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN sed "s/USER/$user/g" -i /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
-RUN gosu $user:$user mkdir -p /home/$user/data
-
 ENV NODE_ENV=production
 ENV RUNNING_IN_DOCKER=1
 EXPOSE ${APP_PORT}
