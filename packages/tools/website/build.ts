@@ -51,6 +51,7 @@ async function getDonateLinks() {
 
 function replaceGitHubByWebsiteLinks(md: string) {
 	return md
+		.replace(/https:\/\/github.com\/laurent22\/joplin\/blob\/dev\/readme\/(.*?)\/index\.md(#[^\s)]+|)/g, '/$1/$2')
 		.replace(/https:\/\/github.com\/laurent22\/joplin\/blob\/dev\/readme\/(.*?)\.md(#[^\s)]+|)/g, '/$1/$2')
 		.replace(/https:\/\/github.com\/laurent22\/joplin\/blob\/dev\/README\.md(#[^\s)]+|)/g, '/help/$1')
 		.replace(/https:\/\/raw.githubusercontent.com\/laurent22\/joplin\/dev\/Assets\/WebsiteAssets\/(.*?)/g, '/$1');
@@ -299,7 +300,20 @@ async function main() {
 			// "docs/spec/interop_with_frontmatter/index.html" and prefix it
 			// with the website repo full path.
 
-			return `${docDir}/${input.replace(/\.md/, '/index.html').replace(/readme\//, '')}`;
+			console.info('input', input);
+
+			let s = `${docDir}/${input}`;
+			if (s.endsWith('index.md')) {
+				s = s.replace(/index\.md/, 'index.html');
+			} else {
+				s = s.replace(/\.md/, '/index.html');
+			}
+
+			s = s.replace(/readme\//, '');
+
+			console.info('OUTPUT', s);
+
+			return s;
 		}
 	};
 
