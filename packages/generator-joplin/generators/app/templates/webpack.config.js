@@ -32,8 +32,9 @@ const packageJsonPath = `${rootDir}/package.json`;
 const manifest = readManifest(manifestPath);
 const pluginArchiveFilePath = path.resolve(publishDir, `${manifest.id}.jpl`);
 const pluginInfoFilePath = path.resolve(publishDir, `${manifest.id}.json`);
-const allPossibleCategories = ['administration', 'developer', 'editor', 'export', 'import', 'integration', 'interface', 'linking',
-	'markdown enhancements', 'note management', 'rendering', 'tagging', 'theme', 'todo', 'search', 'other'];
+const allPossibleCategories = ["Recommended", "Appearance"," Developer tools", "Productivity", "Themes",
+								"Templates", "Integrations", "Todos", "Note Management", "Linking", "Education",
+								"Search Tools", "Tags", "Files and Backup", "Editor Enhancer", "Customization", "Import/Export"]
 
 function validatePackageJson() {
 	const content = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
