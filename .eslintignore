@@ -1150,6 +1150,9 @@ packages/lib/models/NoteTag.js.map
 packages/lib/models/Resource.d.ts
 packages/lib/models/Resource.js
 packages/lib/models/Resource.js.map
+packages/lib/models/Resource.test.d.ts
+packages/lib/models/Resource.test.js
+packages/lib/models/Resource.test.js.map
 packages/lib/models/ResourceLocalState.d.ts
 packages/lib/models/ResourceLocalState.js
 packages/lib/models/ResourceLocalState.js.map
