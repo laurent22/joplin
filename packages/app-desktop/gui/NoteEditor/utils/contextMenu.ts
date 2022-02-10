@@ -24,14 +24,17 @@ export enum ContextMenuItemType {
 export interface ContextMenuOptions {
 	itemType: ContextMenuItemType;
 	resourceId: string;
-	resourceContent: string;
-	resourceFilename: string;
-	resourceURL: string;
+	tempResource: {
+		data: any; // string or Uint8Array
+		mime: string;
+		filename: string;
+	};
 	linkToCopy: string;
 	textToCopy: string;
 	htmlToCopy: string;
 	insertContent: Function;
 	isReadOnly?: boolean;
+	isTemp?: boolean;
 }
 
 interface ContextMenuItem {
@@ -46,8 +49,15 @@ interface ContextMenuItems {
 
 async function resourceInfo(options: ContextMenuOptions): Promise<any> {
 	const resource = options.resourceId ? await Resource.load(options.resourceId) : null;
-	const resourcePath = resource ? Resource.fullPath(resource) : '';
-	return { resource, resourcePath };
+	const filePath = resource ? Resource.fullPath(resource) : null;
+	const filename = resource ? (resource.filename ? resource.filename : resource.title) : options.tempResource && options.tempResource.filename ? options.tempResource.filename : '';
+	const getCopyPath = () => {
+		if (options.tempResource) {
+			return tempResourceToDataUri(options.tempResource);
+		}
+		return filePath;
+	};
+	return { resource, filePath, isTemp: !!options.tempResource, filename, getCopyPath };
 }
 
 function handleCopyToClipboard(options: ContextMenuOptions) {
@@ -56,6 +66,52 @@ function handleCopyToClipboard(options: ContextMenuOptions) {
 	} else if (options.htmlToCopy) {
 		copyHtmlToClipboard(options.htmlToCopy);
 	}
+}
+
+function tempResourceToDataUri(tempResource: ContextMenuOptions['tempResource']): string {
+	const mime = tempResource.mime;
+	if (mime.startsWith('image/svg')) {
+		const uri = `data:image/svg+xml;base64,${Buffer.from(tempResource.data).toString('base64')}`;
+		return uri;
+	}
+	return null;
+}
+
+async function saveResource(options: ContextMenuOptions) {
+	const { filename, filePath } = await resourceInfo(options);
+	const newFilePath = await bridge().showSaveDialog({ defaultPath: filename });
+	if (!newFilePath) return;
+	if (options.isTemp) {
+		await fs.outputFile(newFilePath, options.tempResource.data);
+	} else { await fs.copy(filePath, newFilePath); }
+}
+
+function svgToPng(svg: string, cb: Function) {
+	let canvas: HTMLCanvasElement;
+	let ctx;
+	const img = new Image();
+	img.onload = function() {
+		canvas = document.createElement('canvas');
+		canvas.width = img.width;
+		canvas.height = img.height;
+		ctx = canvas.getContext('2d');
+		ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, img.width, img.height);
+		const pngUri = canvas.toDataURL('image/png');
+		const pngBase64 = pngUri.split(',')[1];
+		const byteString = atob(pngBase64);
+		// write the bytes of the string to a typed array
+		const buff = new Uint8Array(byteString.length);
+		for (let i = 0; i < byteString.length; i++) {
+			buff[i] = byteString.charCodeAt(i);
+		}
+		cb(buff);
+	};
+	img.src = svg;
+	setTimeout(() => {
+		// Cleanup the elements
+		if (img) img.remove();
+		if (canvas) canvas.remove();
+	},3000);
 }
 
 export async function openItemById(itemId: string, dispatch: Function, hash: string = '') {
@@ -103,30 +159,36 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 			onAction: async (options: ContextMenuOptions) => {
 				await openItemById(options.resourceId, dispatch);
 			},
-			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => itemType === ContextMenuItemType.Image || (itemType === ContextMenuItemType.Resource && options.resourceId),
+			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => !options.isTemp && itemType === ContextMenuItemType.Image || itemType === ContextMenuItemType.Resource,
 		},
 		saveAs: {
 			label: _('Save as...'),
 			onAction: async (options: ContextMenuOptions) => {
-				let defaultPath = '';
-				let resourcePath = null;
-				let resourceData = null;
-				if (options.resourceFilename) { defaultPath = options.resourceFilename; }
-				if (options.resourceContent) {
-					resourceData = options.resourceContent;
-				} else {
-					const info = await resourceInfo(options);
-					resourcePath = info.resourcePath;
-					const resource = info.resource;
-					if (!defaultPath) { defaultPath = resource.filename ? resource.filename : resource.title; }
-				}
-				const filePath = await bridge().showSaveDialog({ defaultPath });
-				if (!filePath) return;
-				if (resourceData) {
-					await fs.outputFile(filePath, resourceData);
-				} else { await fs.copy(resourcePath, filePath); }
+				await saveResource(options);
 			},
-			isActive: (itemType: ContextMenuItemType) => itemType === ContextMenuItemType.Image || itemType === ContextMenuItemType.Resource,
+			// We handle svg seperately as it can be saved in multiple formats
+			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => itemType === (ContextMenuItemType.Image || itemType === ContextMenuItemType.Resource) && (!options.isTemp || !options.tempResource.mime.startsWith('image/svg')),
+		},
+		saveAsSvg: {
+			label: _('Save as SVG'),
+			onAction: async (options: ContextMenuOptions) => {
+				await saveResource(options);
+			},
+			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => options.isTemp && itemType === ContextMenuItemType.Image && options.tempResource.mime.startsWith('image/svg'),
+		},
+		saveAsPng: {
+			label: _('Save as PNG'),
+			onAction: async (options: ContextMenuOptions) => {
+				// First convert it to png then save
+				const dataUri = tempResourceToDataUri(options.tempResource);
+				svgToPng(dataUri, async (png: Uint8Array)=>{
+					options.tempResource.data = png;
+					options.tempResource.mime = 'image/png';
+					options.tempResource.filename = options.tempResource.filename.replace('.svg', '.png');
+					await saveResource(options);
+				});
+			},
+			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => options.isTemp && itemType === ContextMenuItemType.Image && options.tempResource.mime.startsWith('image/svg'),
 		},
 		revealInFolder: {
 			label: _('Reveal file in folder'),
@@ -134,16 +196,13 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 				const { resourcePath } = await resourceInfo(options);
 				bridge().showItemInFolder(resourcePath);
 			},
-			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => itemType === ContextMenuItemType.Image || (itemType === ContextMenuItemType.Resource && options.resourceId),
+			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => !options.isTemp && itemType === ContextMenuItemType.Image || itemType === ContextMenuItemType.Resource,
 		},
 		copyPathToClipboard: {
 			label: _('Copy path to clipboard'),
 			onAction: async (options: ContextMenuOptions) => {
-				let resourcePath = null;
-				if (options.resourceURL) {
-					resourcePath = options.resourceURL;
-				} else { resourcePath = (await resourceInfo(options)).resourcePath; }
-				clipboard.writeText(toSystemSlashes(resourcePath));
+				const { getCopyPath } = await resourceInfo(options);
+				clipboard.writeText(toSystemSlashes(getCopyPath()));
 			},
 			isActive: (itemType: ContextMenuItemType) => itemType === ContextMenuItemType.Image || itemType === ContextMenuItemType.Resource,
 		},
@@ -154,7 +213,7 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 				const image = bridge().createImageFromPath(resourcePath);
 				clipboard.writeImage(image);
 			},
-			isActive: (itemType: ContextMenuItemType) => itemType === ContextMenuItemType.Image,
+			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => !options.isTemp && itemType === ContextMenuItemType.Image, //
 		},
 		cut: {
 			label: _('Cut'),
@@ -201,7 +260,8 @@ export default async function contextMenu(options: ContextMenuOptions, dispatch:
 	const items = menuItems(dispatch);
 
 	if (!('readyOnly' in options)) options.isReadOnly = true;
-
+	options.isTemp = !!options.tempResource;
+	console.log('options', options);
 	for (const itemKey in items) {
 		const item = items[itemKey];
 
