@@ -589,17 +589,20 @@
 			let element = event.target;
 
 			// To handle right clicks on resource icons
-			let mermaidElement = element.closest("[id^='mermaid']");
+			let mermaidElement = element.closest("[id^='mermaid']") || ((element.firstChild && element.firstChild.id?.startsWith('mermaid')) ? element.firstChild : null);
 			if(mermaidElement) {
 				const svgString = new XMLSerializer().serializeToString(mermaidElement);
 				ipcProxySendToHost('contextMenu', {
-						type: 'image',
-						tempResource: {
-							data: svgString,
-							mime: 'image/svg+xml',
-							filename: 'Mermaid export.svg',
-						}
-					});
+					type: 'image',
+					tempResource: {
+						data: svgString,
+						mime: 'image/svg+xml',
+						filename: mermaidElement.id + '.svg',
+					}
+				});
+			}
+			else{
+				console.log('mermaid element not found',mermaidElement);
 			}
 
 			if (element && !element.getAttribute('data-resource-id')) element = element.parentElement;
