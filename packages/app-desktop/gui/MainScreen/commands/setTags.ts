@@ -1,4 +1,8 @@
-import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
+import {
+	CommandRuntime,
+	CommandDeclaration,
+	CommandContext,
+} from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
 import Tag from '@joplin/lib/models/Tag';
 
@@ -19,18 +23,15 @@ export const runtime = (comp: any): CommandRuntime => {
 					return { value: a.id, label: a.title };
 				})
 				.sort((a: any, b: any) => {
-					// sensitivity accent will treat accented characters as differemt
-					// but treats caps as equal
-					return a.label.localeCompare(b.label, undefined, { sensitivity: 'accent' });
+					return a.label.toLowerCase() < b.label.toLowerCase() ? -1 : +1;
 				});
 			const allTags = await Tag.allWithNotes();
-			const tagSuggestions = allTags.map((a: any) => {
-				return { value: a.id, label: a.title };
-			})
+			const tagSuggestions = allTags
+				.map((a: any) => {
+					return { value: a.id, label: a.title };
+				})
 				.sort((a: any, b: any) => {
-				// sensitivity accent will treat accented characters as differemt
-				// but treats caps as equal
-					return a.label.localeCompare(b.label, undefined, { sensitivity: 'accent' });
+					return a.label.toLowerCase() < b.label.toLowerCase() ? -1 : +1;
 				});
 
 			comp.setState({
@@ -41,22 +42,32 @@ export const runtime = (comp: any): CommandRuntime => {
 					autocomplete: tagSuggestions,
 					onClose: async (answer: any[]) => {
 						if (answer !== null) {
-							const endTagTitles = answer.map(a => {
+							const endTagTitles = answer.map((a) => {
 								return a.label.trim();
 							});
 							if (noteIds.length === 1) {
 								await Tag.setNoteTagsByTitles(noteIds[0], endTagTitles);
 							} else {
-								const startTagTitles = startTags.map((a: any) => { return a.label.trim(); });
-								const addTags = endTagTitles.filter((value: string) => !startTagTitles.includes(value));
-								const delTags = startTagTitles.filter((value: string) => !endTagTitles.includes(value));
+								const startTagTitles = startTags.map((a: any) => {
+									return a.label.trim();
+								});
+								const addTags = endTagTitles.filter(
+									(value: string) => !startTagTitles.includes(value)
+								);
+								const delTags = startTagTitles.filter(
+									(value: string) => !endTagTitles.includes(value)
+								);
 
 								// apply the tag additions and deletions to each selected note
 								for (let i = 0; i < noteIds.length; i++) {
 									const tags = await Tag.tagsByNoteId(noteIds[i]);
-									let tagTitles = tags.map((a: any) => { return a.title; });
+									let tagTitles = tags.map((a: any) => {
+										return a.title;
+									});
 									tagTitles = tagTitles.concat(addTags);
-									tagTitles = tagTitles.filter((value: string) => !delTags.includes(value));
+									tagTitles = tagTitles.filter(
+										(value: string) => !delTags.includes(value)
+									);
 									await Tag.setNoteTagsByTitles(noteIds[i], tagTitles);
 								}
 							}

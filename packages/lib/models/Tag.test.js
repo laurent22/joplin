@@ -1,17 +1,20 @@
-const { setupDatabaseAndSynchronizer, switchClient, checkThrowAsync } = require('../testing/test-utils.js');
+const {
+	setupDatabaseAndSynchronizer,
+	switchClient,
+	checkThrowAsync,
+} = require('../testing/test-utils.js');
 const Folder = require('../models/Folder').default;
 const Note = require('../models/Note').default;
 const Tag = require('../models/Tag').default;
 
 describe('models/Tag', function() {
-
 	beforeEach(async (done) => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
 		done();
 	});
 
-	it('should add tags by title', (async () => {
+	it('should add tags by title', async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 
@@ -19,21 +22,27 @@ describe('models/Tag', function() {
 
 		const noteTags = await Tag.tagsByNoteId(note1.id);
 		expect(noteTags.length).toBe(2);
-	}));
+	});
 
-	it('should not allow renaming tag to existing tag names', (async () => {
+	it('should not allow renaming tag to existing tag names', async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 
 		await Tag.setNoteTagsByTitles(note1.id, ['un', 'deux']);
 
 		const tagUn = await Tag.loadByTitle('un');
-		const hasThrown = await checkThrowAsync(async () => await Tag.save({ id: tagUn.id, title: 'deux' }, { userSideValidation: true }));
+		const hasThrown = await checkThrowAsync(
+			async () =>
+				await Tag.save(
+					{ id: tagUn.id, title: 'deux' },
+					{ userSideValidation: true }
+				)
+		);
 
 		expect(hasThrown).toBe(true);
-	}));
+	});
 
-	it('should not return tags without notes', (async () => {
+	it('should not return tags without notes', async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
 		await Tag.setNoteTagsByTitles(note1.id, ['un']);
@@ -45,13 +54,21 @@ describe('models/Tag', function() {
 
 		tags = await Tag.allWithNotes();
 		expect(tags.length).toBe(0);
-	}));
+	});
 
-	it('should return tags with note counts', (async () => {
+	it('should return tags with note counts', async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
-		const note2 = await Note.save({ title: 'ma 2nd note', parent_id: folder1.id });
-		const todo1 = await Note.save({ title: 'todo 1', parent_id: folder1.id, is_todo: 1, todo_completed: 1590085027710 });
+		const note2 = await Note.save({
+			title: 'ma 2nd note',
+			parent_id: folder1.id,
+		});
+		const todo1 = await Note.save({
+			title: 'todo 1',
+			parent_id: folder1.id,
+			is_todo: 1,
+			todo_completed: 1590085027710,
+		});
 		await Tag.setNoteTagsByTitles(note1.id, ['un']);
 		await Tag.setNoteTagsByTitles(note2.id, ['un']);
 		await Tag.setNoteTagsByTitles(todo1.id, ['un']);
@@ -77,14 +94,26 @@ describe('models/Tag', function() {
 
 		tags = await Tag.allWithNotes();
 		expect(tags.length).toBe(0);
-	}));
+	});
 
-	it('should load individual tags with note count', (async () => {
+	it('should load individual tags with note count', async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
-		const note2 = await Note.save({ title: 'ma 2nd note', parent_id: folder1.id });
-		const todo1 = await Note.save({ title: 'todo 2', parent_id: folder1.id, is_todo: 1, todo_completed: 1590085027710 });
-		const todo2 = await Note.save({ title: 'todo 2', parent_id: folder1.id, is_todo: 1 });
+		const note2 = await Note.save({
+			title: 'ma 2nd note',
+			parent_id: folder1.id,
+		});
+		const todo1 = await Note.save({
+			title: 'todo 2',
+			parent_id: folder1.id,
+			is_todo: 1,
+			todo_completed: 1590085027710,
+		});
+		const todo2 = await Note.save({
+			title: 'todo 2',
+			parent_id: folder1.id,
+			is_todo: 1,
+		});
 		const tag = await Tag.save({ title: 'mytag' });
 		await Tag.addNote(tag.id, note1.id);
 
@@ -100,19 +129,31 @@ describe('models/Tag', function() {
 		tagWithCount = await Tag.loadWithCount(tag.id);
 		expect(tagWithCount.note_count).toBe(4);
 		expect(tagWithCount.todo_completed_count).toBe(1);
-	}));
+	});
 
-	it('should get common tags for set of notes', (async () => {
+	it('should get common tags for set of notes', async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const taga = await Tag.save({ title: 'mytaga' });
 		const tagb = await Tag.save({ title: 'mytagb' });
 		const tagc = await Tag.save({ title: 'mytagc' });
 		await Tag.save({ title: 'mytagd' });
 
-		const note0 = await Note.save({ title: 'ma note 0', parent_id: folder1.id });
-		const note1 = await Note.save({ title: 'ma note 1', parent_id: folder1.id });
-		const note2 = await Note.save({ title: 'ma note 2', parent_id: folder1.id });
-		const note3 = await Note.save({ title: 'ma note 3', parent_id: folder1.id });
+		const note0 = await Note.save({
+			title: 'ma note 0',
+			parent_id: folder1.id,
+		});
+		const note1 = await Note.save({
+			title: 'ma note 1',
+			parent_id: folder1.id,
+		});
+		const note2 = await Note.save({
+			title: 'ma note 2',
+			parent_id: folder1.id,
+		});
+		const note3 = await Note.save({
+			title: 'ma note 3',
+			parent_id: folder1.id,
+		});
 
 		await Tag.addNote(taga.id, note1.id);
 
@@ -132,28 +173,109 @@ describe('models/Tag', function() {
 		commonTags = await Tag.commonTagsByNoteIds([]);
 		expect(commonTags.length).toBe(0);
 
-		commonTags = await Tag.commonTagsByNoteIds([note0.id, note1.id, note2.id, note3.id]);
-		let commonTagIds = commonTags.map(t => t.id);
+		commonTags = await Tag.commonTagsByNoteIds([
+			note0.id,
+			note1.id,
+			note2.id,
+			note3.id,
+		]);
+		let commonTagIds = commonTags.map((t) => t.id);
 		expect(commonTagIds.length).toBe(0);
 
 		commonTags = await Tag.commonTagsByNoteIds([note1.id, note2.id, note3.id]);
-		commonTagIds = commonTags.map(t => t.id);
+		commonTagIds = commonTags.map((t) => t.id);
 		expect(commonTagIds.length).toBe(1);
 		expect(commonTagIds.includes(taga.id)).toBe(true);
 
 		commonTags = await Tag.commonTagsByNoteIds([note2.id, note3.id]);
-		commonTagIds = commonTags.map(t => t.id);
+		commonTagIds = commonTags.map((t) => t.id);
 		expect(commonTagIds.length).toBe(2);
 		expect(commonTagIds.includes(taga.id)).toBe(true);
 		expect(commonTagIds.includes(tagb.id)).toBe(true);
 
 		commonTags = await Tag.commonTagsByNoteIds([note3.id]);
 
-		commonTagIds = commonTags.map(t => t.id);
+		commonTagIds = commonTags.map((t) => t.id);
 		expect(commonTags.length).toBe(3);
 		expect(commonTagIds.includes(taga.id)).toBe(true);
 		expect(commonTagIds.includes(tagb.id)).toBe(true);
 		expect(commonTagIds.includes(tagc.id)).toBe(true);
-	}));
+	});
 
+	it('should sort tags in promptDialog', async () => {
+		const folder1 = await Folder.save({ title: 'folder1' });
+		const note1 = await Note.save({
+			title: 'ma note 0',
+			parent_id: folder1.id,
+		});
+
+		// original/sorted order
+		const tag1 = await Tag.save({ title: '#coding' });
+		const tag2 = await Tag.save({ title: '#house' });
+		const tag3 = await Tag.save({ title: '#wait' });
+		const tag4 = await Tag.save({ title: '@⏲15 min' });
+		const tag5 = await Tag.save({ title: '@⏲30 min' });
+		const tag6 = await Tag.save({ title: '@⏲60 min' });
+
+		await Tag.addNote(tag4.id, note1.id);
+		await Tag.addNote(tag2.id, note1.id);
+		await Tag.addNote(tag1.id, note1.id);
+		await Tag.addNote(tag6.id, note1.id);
+		await Tag.addNote(tag3.id, note1.id);
+		await Tag.addNote(tag5.id, note1.id);
+
+		const commonTags = await Tag.commonTagsByNoteIds([note1.id]); // commonTags has unsorted tags
+		// sortDefaultTags are shown as default values when the promptDialog is opened
+		const sortDefaultTagsTitles = commonTags
+			.map((a) => {
+				return { value: a.id, label: a.title };
+			})
+			.sort((a, b) => {
+				return a.label.toLowerCase() < b.label.toLowerCase() ? -1 : +1;
+			})
+			.map((a) => a.label);
+		expect(sortDefaultTagsTitles).toEqual([
+			'#coding',
+			'#house',
+			'#wait',
+			'@⏲15 min',
+			'@⏲30 min',
+			'@⏲60 min',
+		]);
+		expect(sortDefaultTagsTitles).not.toEqual([
+			'@⏲15 min',
+			'#house',
+			'#coding',
+			'@⏲60 min',
+			'#wait',
+			'@⏲30 min',
+		]);
+
+		const allTags = await Tag.allWithNotes(); // allTags has unsorted tags
+		// sortTagSuggestions are shown in the dropdown menu of promptDialog
+		const sortTagSuggestionsTitles = allTags
+			.map((a) => {
+				return { value: a.id, label: a.title };
+			})
+			.sort((a, b) => {
+				return a.label.toLowerCase() < b.label.toLowerCase() ? -1 : +1;
+			})
+			.map((a) => a.label);
+		expect(sortTagSuggestionsTitles).toEqual([
+			'#coding',
+			'#house',
+			'#wait',
+			'@⏲15 min',
+			'@⏲30 min',
+			'@⏲60 min',
+		]);
+		expect(sortTagSuggestionsTitles).not.toEqual([
+			'@⏲15 min',
+			'#house',
+			'#coding',
+			'@⏲60 min',
+			'#wait',
+			'@⏲30 min',
+		]);
+	});
 });
