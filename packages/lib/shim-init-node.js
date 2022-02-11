@@ -18,7 +18,6 @@ const timers = require('timers');
 const zlib = require('zlib');
 const dgram = require('dgram');
 const { basename, fileExtension, safeFileExtension } = require('./path-utils');
-const nativeImage = require('electron').nativeImage;
 
 function fileExists(filePath) {
 	try {
@@ -160,6 +159,7 @@ function shimInit(options = null) {
 
 		if (shim.isElectron()) {
 			// For Electron
+			const nativeImage = require('electron').nativeImage;
 			let image = nativeImage.createFromPath(filePath);
 			if (image.isEmpty()) throw new Error(`Image is invalid or does not exist: ${filePath}`);
 
@@ -332,6 +332,7 @@ function shimInit(options = null) {
 
 	shim.imageToDataUrl = async (filePath, maxSize) => {
 		if (shim.isElectron()) {
+			const nativeImage = require('electron').nativeImage;
 			let image = nativeImage.createFromPath(filePath);
 			if (!image) throw new Error(`Could not load image: ${filePath}`);
 
@@ -365,6 +366,7 @@ function shimInit(options = null) {
 		if (options === null) options = {};
 
 		if (shim.isElectron()) {
+			const nativeImage = require('electron').nativeImage;
 			let image = nativeImage.createFromDataURL(imageDataUrl);
 			if (image.isEmpty()) throw new Error('Could not convert data URL to image - perhaps the format is not supported (eg. image/gif)'); // Would throw for example if the image format is no supported (eg. image/gif)
 			if (options.cropRect) {
