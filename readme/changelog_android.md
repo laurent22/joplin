@@ -1,9 +1,9 @@
 # Joplin Android app changelog
 
-## [android-v2.7.1](https://github.com/laurent22/joplin/releases/tag/android-v2.7.1) (Pre-release) - 2022-02-11T18:16:28Z
+## [android-v2.7.2](https://github.com/laurent22/joplin/releases/tag/android-v2.7.2) (Pre-release) - 2022-02-12T12:51:29Z
 
 - New: Add additional time format HH.mm (#6086 by [@vincentjocodes](https://github.com/vincentjocodes))
-- Improved: Do no duplicate resources when duplicating a note (721d008)
+- Improved: Do not duplicate resources when duplicating a note (721d008)
 - Improved: Make heading 4, 5 and 6 styling more consistent (fca5875)
 - Improved: Show login prompt for OneDrive (#5933 by Jonathan Heard)
 - Improved: Update Mermaid 8.13.5 -&gt; 8.13.9 and Katex dependencies (#6039 by Helmut K. C. Tessarek)
