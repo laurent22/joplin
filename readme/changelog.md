@@ -1,5 +1,10 @@
 # Joplin changelog
 
+## [v2.7.11](https://github.com/laurent22/joplin/releases/tag/v2.7.11) (Pre-release) - 2022-02-12T13:00:02Z
+
+- Improved: Resize custom icon down to 256px when it is too large (064891d)
+- Updated translations
+
 ## [v2.7.10](https://github.com/laurent22/joplin/releases/tag/v2.7.10) (Pre-release) - 2022-02-11T18:19:09Z
 
 Important: If you use custom notebook icons and sync with the mobile app, make sure also install the latest 2.7 mobile app.
