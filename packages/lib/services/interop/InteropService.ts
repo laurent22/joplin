@@ -9,7 +9,6 @@ import Resource from '../../models/Resource';
 import Folder from '../../models/Folder';
 import NoteTag from '../../models/NoteTag';
 import Note from '../../models/Note';
-import { NoteEntity } from '../database/types';
 const ArrayUtils = require('../../ArrayUtils');
 const { sprintf } = require('sprintf-js');
 const { fileExtension } = require('../../path-utils');
@@ -320,12 +319,16 @@ export default class InteropService {
 		return result;
 	}
 
-	private normalizeItemForExport(itemType: ModelType, item: any): any {
-		if (itemType === ModelType.Note) {
-			const output: NoteEntity = { ...item };
-			output.is_shared = 0;
-			output.share_id = '';
-			return output;
+	private normalizeItemForExport(_itemType: ModelType, item: any): any {
+		const override: any = {};
+		if ('is_shared' in item) override.is_shared = 0;
+		if ('share_id' in item) override.share_id = '';
+
+		if (Object.keys(override).length) {
+			return {
+				...item,
+				...override,
+			};
 		} else {
 			return item;
 		}
