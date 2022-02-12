@@ -545,8 +545,6 @@ describe('services_InteropService', function() {
 		const exportedResource = (result.items.find(i => i.type === ModelType.Resource)).object as ResourceEntity;
 		expect(exportedResource.share_id).toBe('');
 		expect(exportedResource.is_shared).toBe(0);
-
-		console.info(result.items);
 	}));
 
 	it('should allow registering new import modules', (async () => {
