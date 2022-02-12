@@ -1106,6 +1106,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 						autoCapitalize="sentences"
 						style={this.styles().bodyTextInput}
 						ref="noteBodyTextField"
+						multiline={true}
 						value={note.body}
 						onChangeText={(text: string) => this.body_changeText(text)}
 						onSelectionChange={this.body_selectionChange}
