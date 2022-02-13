@@ -689,7 +689,8 @@ export default class BaseApplication {
 		} else if (process && process.env && process.env.PORTABLE_EXECUTABLE_DIR) {
 			output = `${process.env.PORTABLE_EXECUTABLE_DIR}/JoplinProfile`;
 		} else {
-			output = `${os.homedir()}/.config/${Setting.value('appName')}`;
+			const configFolder = process.env.XDG_CONFIG_HOME || `${os.homedir()}/.config`;
+			output = `${configFolder}/${Setting.value('appName')}`;
 		}
 
 		return toSystemSlashes(output, 'linux');
