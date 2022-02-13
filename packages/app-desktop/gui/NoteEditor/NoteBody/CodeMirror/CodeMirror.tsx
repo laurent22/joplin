@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useState, useEffect, useRef, forwardRef, useCallback, useImperativeHandle, useMemo } from 'react';
 
 // eslint-disable-next-line no-unused-vars
-import { EditorCommand, NoteBodyEditorProps, ResourceInfos } from '../../utils/types';
+import { EditorCommand, NoteBodyEditorProps } from '../../utils/types';
 import { commandAttachFileToBody, handlePasteEvent } from '../../utils/resourceHandling';
 import { ScrollOptions, ScrollOptionTypes } from '../../utils/types';
 import { CommandValue } from '../../utils/types';
@@ -48,7 +48,6 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 
 	const [renderedBody, setRenderedBody] = useState<RenderedBody>(defaultRenderedBody()); // Viewer content
 	const renderedContentKey = useRef('');
-	const renderedResourceInfos = useRef<ResourceInfos>({});
 
 	const [webviewReady, setWebviewReady] = useState(false);
 
@@ -622,7 +621,6 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 
 			if (cancelled) return;
 			renderedContentKey.current = props.contentKey;
-			renderedResourceInfos.current = props.resourceInfos;
 			setRenderedBody(result);
 		}, interval);
 
