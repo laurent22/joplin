@@ -57,11 +57,11 @@ The Web Clipper is a browser extension that allows you to save web pages and scr
 
 ## Unofficial Alternative Distributions
 
-There are a number of unofficial alternative Joplin distributions that people may want to use rather than the officially supported ones. If you do not want to or cannot use appimages or any of the other officially supported releases then you may wish to consider these.
+There are a number of unofficial alternative Joplin distributions. If you do not want to or cannot use appimages or any of the other officially supported releases then you may wish to consider these.
 
-However these do come with a caveat in that they are not officially supported nor endorsed so any specific issues relating to that distribution may not supportable by the main project, rather support requests, bug reports and general advice would need to go to the maintainers of these distributions directly.
+However these come with a caveat in that they are not officially supported so certain issues may not be supportable by the main project. Rather support requests, bug reports and general advice would need to go to the maintainers of these distributions.
 
-A community maintained list of these distributions can be found [here](https://discourse.joplinapp.org/t/unofficial-alternative-joplin-distributions/23703).
+A community maintained list of these distributions can be found here: [Unofficial Joplin distributions](https://discourse.joplinapp.org/t/unofficial-alternative-joplin-distributions/23703)
 
 # Sponsors
 
