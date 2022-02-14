@@ -225,6 +225,9 @@ packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js.map
 packages/app-desktop/gui/ErrorBoundary.d.ts
 packages/app-desktop/gui/ErrorBoundary.js
 packages/app-desktop/gui/ErrorBoundary.js.map
+packages/app-desktop/gui/FolderIconBox.d.ts
+packages/app-desktop/gui/FolderIconBox.js
+packages/app-desktop/gui/FolderIconBox.js.map
 packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.d.ts
 packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js
 packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js.map
@@ -1137,6 +1140,9 @@ packages/lib/models/NoteTag.js.map
 packages/lib/models/Resource.d.ts
 packages/lib/models/Resource.js
 packages/lib/models/Resource.js.map
+packages/lib/models/Resource.test.d.ts
+packages/lib/models/Resource.test.js
+packages/lib/models/Resource.test.js.map
 packages/lib/models/ResourceLocalState.d.ts
 packages/lib/models/ResourceLocalState.js
 packages/lib/models/ResourceLocalState.js.map

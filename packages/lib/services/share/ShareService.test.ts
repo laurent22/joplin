@@ -1,16 +1,26 @@
 import Note from '../../models/Note';
-import { encryptionService, msleep, setupDatabaseAndSynchronizer, switchClient } from '../../testing/test-utils';
+import { encryptionService, loadEncryptionMasterKey, msleep, resourceService, setupDatabaseAndSynchronizer, supportDir, switchClient } from '../../testing/test-utils';
 import ShareService from './ShareService';
 import reducer, { defaultState } from '../../reducer';
 import { createStore } from 'redux';
-import { FolderEntity, NoteEntity } from '../database/types';
+import { NoteEntity } from '../database/types';
 import Folder from '../../models/Folder';
 import { setEncryptionEnabled, setPpk } from '../synchronizer/syncInfoUtils';
 import { generateKeyPair } from '../e2ee/ppk';
 import MasterKey from '../../models/MasterKey';
 import { MasterKeyEntity } from '../e2ee/types';
-import { updateMasterPassword } from '../e2ee/utils';
+import { loadMasterKeysFromSettings, setupAndEnableEncryption, updateMasterPassword } from '../e2ee/utils';
 import Logger, { LogLevel } from '../../Logger';
+import shim from '../../shim';
+import Resource from '../../models/Resource';
+import { readFile } from 'fs-extra';
+import BaseItem from '../../models/BaseItem';
+
+interface TestShareFolderServiceOptions {
+	master_key_id?: string;
+}
+
+const testImagePath = `${supportDir}/photo.jpg`;
 
 const testReducer = (state: any = defaultState, action: any) => {
 	return reducer(state, action);
@@ -70,10 +80,21 @@ describe('ShareService', function() {
 		}
 	});
 
-	function testShareFolderService(extraExecHandlers: Record<string, Function> = {}) {
+	function testShareFolderService(extraExecHandlers: Record<string, Function> = {}, options: TestShareFolderServiceOptions = {}) {
 		return mockService({
 			exec: async (method: string, path: string, query: Record<string, any>, body: any) => {
 				if (extraExecHandlers[`${method} ${path}`]) return extraExecHandlers[`${method} ${path}`](query, body);
+
+				if (method === 'GET' && path === 'api/shares') {
+					return {
+						items: [
+							{
+								id: 'share_1',
+								master_key_id: options.master_key_id,
+							},
+						],
+					};
+				}
 
 				if (method === 'POST' && path === 'api/shares') {
 					return {
@@ -88,14 +109,20 @@ describe('ShareService', function() {
 
 	async function testShareFolder(service: ShareService) {
 		const folder = await Folder.save({});
-		const note = await Note.save({ parent_id: folder.id });
+		let note = await Note.save({ parent_id: folder.id });
+		note = await shim.attachFileToNote(note, testImagePath);
+		const resourceId = (await Note.linkedResourceIds(note.body))[0];
+		const resource = await Resource.load(resourceId);
+
+		await resourceService().indexNoteResources();
 
 		const share = await service.shareFolder(folder.id);
 		expect(share.id).toBe('share_1');
 		expect((await Folder.load(folder.id)).share_id).toBe('share_1');
 		expect((await Note.load(note.id)).share_id).toBe('share_1');
+		expect((await Resource.load(resource.id)).share_id).toBe('share_1');
 
-		return share;
+		return { share, folder, note, resource };
 	}
 
 	it('should share a folder', async () => {
@@ -103,18 +130,54 @@ describe('ShareService', function() {
 	});
 
 	it('should share a folder - E2EE', async () => {
-		setEncryptionEnabled(true);
-		await updateMasterPassword('', '111111');
+		const masterKey = await loadEncryptionMasterKey();
+		await setupAndEnableEncryption(encryptionService(), masterKey, '111111');
 		const ppk = await generateKeyPair(encryptionService(), '111111');
 		setPpk(ppk);
 
-		await testShareFolder(testShareFolderService());
+		let shareService = testShareFolderService();
 
-		expect((await MasterKey.all()).length).toBe(1);
+		expect(await MasterKey.count()).toBe(1);
 
-		const mk = (await MasterKey.all())[0];
-		const folder: FolderEntity = (await Folder.all())[0];
-		expect(folder.master_key_id).toBe(mk.id);
+		let { folder, note, resource } = await testShareFolder(shareService);
+
+		// The share service should automatically create a new encryption key
+		// specifically for that shared folder
+		expect(await MasterKey.count()).toBe(2);
+
+		folder = await Folder.load(folder.id);
+		note = await Note.load(note.id);
+		resource = await Resource.load(resource.id);
+
+		// The key that is not the master key is the folder key
+		const folderKey = (await MasterKey.all()).find(mk => mk.id !== masterKey.id);
+
+		// Double-check that it's going to encrypt the folder using the shared
+		// key (and not the user's own master key)
+		expect(folderKey.id).not.toBe(masterKey.id);
+		expect(folder.master_key_id).toBe(folderKey.id);
+
+		await loadMasterKeysFromSettings(encryptionService());
+
+		// Reload the service so that the mocked calls use the newly created key
+		shareService = testShareFolderService({}, { master_key_id: folderKey.id });
+
+		BaseItem.shareService_ = shareService;
+		Resource.shareService_ = shareService;
+
+		try {
+			const serializedNote = await Note.serializeForSync(note);
+			expect(serializedNote).toContain(folderKey.id);
+
+			// The resource should be encrypted using the above key (if it is,
+			// the key ID will be in the header).
+			const result = await Resource.fullPathForSyncUpload(resource);
+			const content = await readFile(result.path, 'utf8');
+			expect(content).toContain(folderKey.id);
+		} finally {
+			BaseItem.shareService_ = shareService;
+			Resource.shareService_ = null;
+		}
 	});
 
 	it('should add a recipient', async () => {
@@ -144,7 +207,7 @@ describe('ShareService', function() {
 			},
 		});
 
-		const share = await testShareFolder(service);
+		const { share } = await testShareFolder(service);
 
 		await service.addShareRecipient(share.id, share.master_key_id, 'toto@example.com');
 
