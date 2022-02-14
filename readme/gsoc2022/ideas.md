@@ -156,6 +156,15 @@ Difficulty Level: High
 
 Skills Required: TypeScript, JavaScript, Electron.
 
+## 14. Client settings sync
+
+Whenever settings are changed on one client these are not replicated to other clients connected to the same sync target.
+This project would be about creating synchronisation between clients to allow a single configuration rather than having to set them up separately on each e.g. keyboard shortcuts, installed plugins, Markdown plugins, note history etc.
+
+Difficulty Level: High
+
+Skills Required: TypeScript, JavaScript
+
 # More info
 
 - Make sure you read the [Joplin Google Summer of Code Introduction](https://joplinapp.org/gsoc2022/index/)
