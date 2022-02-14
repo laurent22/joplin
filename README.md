@@ -51,18 +51,17 @@ To start it, type `joplin`.
 
 For usage information, please refer to the full [Joplin Terminal Application Documentation](https://joplinapp.org/terminal/).
 
-### Unsupported methods
-
-There are other ways to install the terminal application. However, they are not supported and problems must be reported to the upstream projects.
-
-Operating system | Method
------------------|----------------
-Arch Linux       | An Arch Linux package is available [here](https://aur.archlinux.org/packages/joplin/). To install it, use an AUR wrapper such as yay: `yay -S joplin`. Both the CLI tool (type `joplin`) and desktop app (type `joplin-desktop`) are packaged. You can also install a compiled version with the [chaotic-aur](https://wiki.archlinux.org/index.php/Unofficial_user_repositories#chaotic-aur) repository. For support, please go to the [GitHub repo](https://github.com/masterkorp/joplin-pkgbuild). If you are interested in [pre-release](https://joplinapp.org/prereleases/) you have [joplin-beta](https://aur.archlinux.org/packages/joplin-beta).
-Flatpak          | A Flatpak is available on [Flathub](https://flathub.org/apps/details/net.cozic.joplin_desktop). To install it, run `flatpak install net.cozic.joplin_desktop` after [setting up Flathub](https://flatpak.org/setup/). GUI software managers on most distros support Flatpak installation.
-
 ## Web Clipper
 
 The Web Clipper is a browser extension that allows you to save web pages and screenshots from your browser. For more information on how to install and use it, see the [Web Clipper Help Page](https://github.com/laurent22/joplin/blob/dev/readme/clipper.md).
+
+## Unofficial Alternative Distributions
+
+There are a number of unofficial alternative Joplin distributions. If you do not want to or cannot use appimages or any of the other officially supported releases then you may wish to consider these.
+
+However these come with a caveat in that they are not officially supported so certain issues may not be supportable by the main project. Rather support requests, bug reports and general advice would need to go to the maintainers of these distributions.
+
+A community maintained list of these distributions can be found here: [Unofficial Joplin distributions](https://discourse.joplinapp.org/t/unofficial-alternative-joplin-distributions/23703)
 
 # Sponsors
 
