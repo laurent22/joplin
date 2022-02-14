@@ -1,6 +1,7 @@
 import { URL } from 'url';
 import config from '../config';
 import { Uuid } from '../services/database/types';
+import { longToShort } from './uuid';
 
 export function setQueryParameters(url: string, query: any): string {
 	if (!query) return url;
@@ -63,15 +64,15 @@ export function loginUrl(): string {
 }
 
 export function organizationUrl(id: string): string {
-	return `${config().baseUrl}/organizations/${id}`;
+	return `${config().baseUrl}/organizations/${longToShort(id)}`;
 }
 
 export function organizationUsersUrl(id: string): string {
-	return `${config().baseUrl}/organizations/${id}/users`;
+	return `${config().baseUrl}/organizations/${longToShort(id)}/users`;
 }
 
 export function organizationUserUrl(orgUserId: string): string {
-	return `${config().baseUrl}/organization_users/${orgUserId}`;
+	return `${config().baseUrl}/organization_users/${longToShort(orgUserId)}`;
 }
 
 export function adminUserDeletionsUrl(): string {
@@ -82,12 +83,12 @@ export function userUrl(userId: Uuid): string {
 	return `${config().baseUrl}/users/${userId}`;
 }
 
-export function organizationInvitationConfirmUrl(orgUserId: string): string {
-	return `${config().baseUrl}/organization_users/${orgUserId}/confirm`;
+export function organizationInvitationConfirmUrl(orgUserId: string, token: string): string {
+	return `${config().baseUrl}/organization_users/${orgUserId}/confirm?token=${token}`;
 }
 
 export function adminOrganizationUrl(id: string): string {
-	return `${config().baseUrl}/admin/organizations/${id}`;
+	return `${config().baseUrl}/admin/organizations/${longToShort(id)}`;
 }
 
 export function adminOrganizationsUrl(): string {

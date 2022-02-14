@@ -42,4 +42,25 @@ router.get('organization_users/:id', async (path: SubPath, ctx: AppContext) => {
 	return view;
 });
 
+// router.get('organization_users/:id/confirm', async (path: SubPath, ctx: AppContext) => {
+// 	const models = ctx.joplin.models;
+
+// 	const orgUser = await getOrgUser(path, ctx);
+// 	const user = await models.user().load(orgUser.user_id);
+
+// 	// TODO: move organizationUsersUrl to organization_users
+
+// 	const view: View = {
+// 		...defaultView('organizations/user', _('Organisation user')),
+// 		content: {
+// 			csrfTag: await createCsrfTag(ctx),
+// 			user,
+// 			orgUser,
+// 			postUrl: organizationUsersUrl('me'),
+// 		},
+// 	};
+
+// 	return view;
+// });
+
 export default router;

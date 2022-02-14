@@ -1,6 +1,6 @@
 import { Notification, NotificationLevel, Uuid } from '../services/database/types';
 import { ErrorUnprocessableEntity } from '../utils/errors';
-import uuidgen from '../utils/uuidgen';
+import { uuidgen } from '../utils/uuid';
 import BaseModel, { ValidateOptions } from './BaseModel';
 
 export enum NotificationKey {

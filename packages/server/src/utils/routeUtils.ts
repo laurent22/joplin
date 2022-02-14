@@ -6,6 +6,7 @@ import { AppContext, HttpMethod, RouteType } from './types';
 import { URL } from 'url';
 import { csrfCheck } from './csrf';
 import { contextSessionId } from './requestUtils';
+import { shortToLong } from './uuid';
 
 const { ltrimSlashes, rtrimSlashes } = require('@joplin/lib/path-utils');
 
@@ -194,6 +195,24 @@ function disabledAccountCheck(route: MatchedRoute, user: User) {
 	if (route.subPath.schema.startsWith('api/')) throw new ErrorForbidden(`This account is disabled. Please login to ${config().baseUrl} for more information.`);
 }
 
+const needsConvertedId = (path: SubPath): boolean => {
+	const { schema } = path;
+	if (schema.startsWith('admin/organizations/:id')) return true;
+	if (schema.startsWith('admin/organization_users/:id')) return true;
+	return false;
+};
+
+const convertPathId = (path: SubPath): SubPath => {
+	if (needsConvertedId(path)) {
+		return {
+			...path,
+			id: shortToLong(path.id),
+		};
+	}
+
+	return path;
+};
+
 export async function execRequest(routes: Routers, ctx: AppContext) {
 	const match = findMatchingRoute(ctx.path, routes);
 	if (!match) throw new ErrorNotFound();
@@ -220,7 +239,8 @@ export async function execRequest(routes: Routers, ctx: AppContext) {
 	await csrfCheck(ctx, isPublicRoute);
 	disabledAccountCheck(match, ctx.joplin.owner);
 
-	return endPoint.handler(match.subPath, ctx);
+	const convertedPath = convertPathId(match.subPath);
+	return endPoint.handler(convertedPath, ctx);
 }
 
 // In a path such as "/api/files/SOME_ID/content" we want to find:

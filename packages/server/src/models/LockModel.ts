@@ -3,7 +3,7 @@ import { Uuid } from '../services/database/types';
 import { LockType, Lock, LockClientType, defaultLockTtl, activeLock } from '@joplin/lib/services/synchronizer/LockHandler';
 import { Value } from './KeyValueModel';
 import { ErrorConflict, ErrorUnprocessableEntity } from '../utils/errors';
-import uuidgen from '../utils/uuidgen';
+import { uuidgen } from '../utils/uuid';
 
 export default class LockModel extends BaseModel<Lock> {
 

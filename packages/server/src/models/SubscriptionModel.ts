@@ -2,7 +2,7 @@ import { Knex } from 'knex';
 import { EmailSender, Organization, Subscription, User, UserFlagType, Uuid } from '../services/database/types';
 import { ErrorNotFound } from '../utils/errors';
 import { Day } from '../utils/time';
-import uuidgen from '../utils/uuidgen';
+import { uuidgen } from '../utils/uuid';
 import paymentFailedTemplate from '../views/emails/paymentFailedTemplate';
 import BaseModel from './BaseModel';
 import { AccountType } from './UserModel';

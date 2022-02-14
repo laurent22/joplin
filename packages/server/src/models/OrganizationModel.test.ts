@@ -74,7 +74,7 @@ describe('OrganizationModel', function() {
 		const email = (await models().email().all())[0];
 		expect(email.subject).toContain('testorg');
 		expect(email.recipient_email).toContain('test@example.com');
-		expect(email.body).toContain(organizationInvitationConfirmUrl(orgUser.id));
+		expect(email.body).toContain(organizationInvitationConfirmUrl(orgUser.id, ''));
 	});
 
 	test('should accept an invitation', async () => {

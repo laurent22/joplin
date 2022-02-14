@@ -1,6 +1,6 @@
 import { Token, User, Uuid } from '../services/database/types';
 import { ErrorForbidden, ErrorNotFound } from '../utils/errors';
-import uuidgen from '../utils/uuidgen';
+import { uuidgen } from '../utils/uuid';
 import BaseModel from './BaseModel';
 
 export default class TokenModel extends BaseModel<Token> {
@@ -19,6 +19,15 @@ export default class TokenModel extends BaseModel<Token> {
 		const token = await this.save({
 			value: uuidgen(32),
 			user_id: userId,
+		});
+
+		return token.value;
+	}
+
+	public async generateAnonymous(): Promise<string> {
+		const token = await this.save({
+			value: uuidgen(32),
+			user_id: '',
 		});
 
 		return token.value;

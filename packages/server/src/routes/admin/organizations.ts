@@ -43,11 +43,11 @@ router.get('admin/organizations', async (_path: SubPath, ctx: AppContext) => {
 		pageCount: page.page_count,
 		pagination,
 		headers: [
-			{
-				name: 'select',
-				label: '',
-				canSort: false,
-			},
+			// {
+			// 	name: 'select',
+			// 	label: '',
+			// 	canSort: false,
+			// },
 			{
 				name: 'name',
 				label: _('Name'),
@@ -68,10 +68,10 @@ router.get('admin/organizations', async (_path: SubPath, ctx: AppContext) => {
 		],
 		rows: page.items.map(d => {
 			const row: Row = [
-				{
-					value: `checkbox_${d.id}`,
-					checkbox: true,
-				},
+				// {
+				// 	value: `checkbox_${d.id}`,
+				// 	checkbox: true,
+				// },
 				{
 					value: d.name,
 					url: adminOrganizationUrl(d.id),

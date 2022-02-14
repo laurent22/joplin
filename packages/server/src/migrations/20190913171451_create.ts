@@ -1,7 +1,7 @@
 import { Knex } from 'knex';
 import { DbConnection, defaultAdminEmail, defaultAdminPassword } from '../db';
 import { hashPassword } from '../utils/auth';
-import uuidgen from '../utils/uuidgen';
+import { uuidgen } from '../utils/uuid';
 
 export async function up(db: DbConnection): Promise<any> {
 	await db.schema.createTable('users', function(table: Knex.CreateTableBuilder) {

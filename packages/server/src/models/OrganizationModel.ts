@@ -1,7 +1,7 @@
 import { Organization, OrganizationUser, OrganizationUserInvitationStatus, UserFlagType, Uuid } from '../services/database/types';
 import { ErrorBadRequest, ErrorForbidden, ErrorUnprocessableEntity } from '../utils/errors';
 import { organizationInvitationConfirmUrl } from '../utils/urlUtils';
-import uuidgen from '../utils/uuidgen';
+import { uuidgen } from '../utils/uuid';
 import orgInviteUserTemplate from '../views/emails/orgInviteUserTemplate';
 import BaseModel, { UuidType, ValidateOptions } from './BaseModel';
 import { AccountType } from './UserModel';
@@ -108,7 +108,7 @@ export default class OrganizationModel extends BaseModel<Organization> {
 			await this.models().email().push({
 				...orgInviteUserTemplate({
 					organizationName: org.name,
-					url: organizationInvitationConfirmUrl(orgUser.id),
+					url: organizationInvitationConfirmUrl(orgUser.id, await this.models().token().generateAnonymous()),
 				}),
 				recipient_email: email,
 			});
