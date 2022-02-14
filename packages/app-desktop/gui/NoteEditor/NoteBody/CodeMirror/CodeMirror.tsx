@@ -731,18 +731,6 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 	// It might be buggy, refer to the below issue
 	// https://github.com/laurent22/joplin/pull/3974#issuecomment-718936703
 	useEffect(() => {
-		let touched = false;
-
-		function touchedEditor(event: any) {
-
-			if (event.target.closest('.codeMirrorEditor') !== null) {
-				touched = true;
-			} else {
-				touched = false;
-			}
-		}
-		document.addEventListener('contextmenu', touchedEditor);
-
 		function pointerInsideEditor(x: number, y: number) {
 			const elements = document.getElementsByClassName('codeMirrorEditor');
 			if (!elements.length) return null;
@@ -751,8 +739,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		}
 
 		async function onContextMenu(_event: any, params: any) {
-			if (!pointerInsideEditor(params.x, params.y) || !touched) return;
-
+			if (!pointerInsideEditor(params.x, params.y) || !params.isEditable || params.inputFieldType !== 'none') return;
 			const menu = new Menu();
 
 			const hasSelectedText = editorRef.current && !!editorRef.current.getSelection() ;
@@ -831,7 +818,6 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		bridge().window().webContents.on('context-menu', onContextMenu);
 
 		return () => {
-			document.removeEventListener('contextmenu', touchedEditor);
 			bridge().window().webContents.off('context-menu', onContextMenu);
 		};
 	}, [props.plugins]);
