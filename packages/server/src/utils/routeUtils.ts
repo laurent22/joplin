@@ -195,10 +195,10 @@ function disabledAccountCheck(route: MatchedRoute, user: User) {
 	if (route.subPath.schema.startsWith('api/')) throw new ErrorForbidden(`This account is disabled. Please login to ${config().baseUrl} for more information.`);
 }
 
-const needsConvertedId = (path: SubPath): boolean => {
-	const { schema } = path;
-	if (schema.startsWith('admin/organizations/:id')) return true;
-	if (schema.startsWith('admin/organization_users/:id')) return true;
+const needsConvertedId = (_path: SubPath): boolean => {
+	// const { schema } = path;
+	// if (schema.startsWith('admin/organizations/:id')) return true;
+	// if (schema.startsWith('admin/organization_users/:id')) return true;
 	return false;
 };
 

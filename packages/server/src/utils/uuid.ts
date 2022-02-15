@@ -5,7 +5,7 @@ const charSet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
 
 let shortUuidTranslator_: shortUuid.Translator = null;
 
-const shortUuidTranslator = () => {
+export const shortUuidTranslator = () => {
 	if (!shortUuidTranslator_) shortUuidTranslator_ = shortUuid(charSet);
 	return shortUuidTranslator_;
 };
@@ -19,16 +19,18 @@ export const uuidgen = (length: number = 22): string => {
 	return generate(charSet, length);
 };
 
-const isReservedId = (s: string): boolean => {
+export const isReservedId = (s: string): boolean => {
 	return ['me', 'new'].includes(s);
 };
 
 export const shortToLong = (shortId: string): string => {
-	if (isReservedId(shortId)) return shortId;
-	return shortUuidTranslator().toUUID(shortId);
+	return shortId;
+	// if (isReservedId(shortId)) return shortId;
+	// return shortUuidTranslator().toUUID(shortId);
 };
 
 export const longToShort = (longId: string): string => {
-	if (isReservedId(longId)) return longId;
-	return shortUuidTranslator().fromUUID(longId);
+	return longId;
+	// if (isReservedId(longId)) return longId;
+	// return shortUuidTranslator().fromUUID(longId);
 };
