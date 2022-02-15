@@ -17,11 +17,14 @@ import { yesOrNo } from '../../utils/strings';
 import { formatDateTime } from '../../utils/time';
 import { organizationUserInvitationStatusToLabel } from '../../services/database/types';
 import { validateEmail } from '../../utils/validation';
+import { updateOrganizationCapacity } from '../../utils/stripe';
+import config from '../../config';
 
 const router = new Router(RouteType.Web);
 
 interface OrganizationFormFields {
 	name: string;
+	max_users: string;
 }
 
 interface OrganizationUserFormFields {
@@ -45,6 +48,7 @@ router.get('organizations/:id', async (path: SubPath, ctx: AppContext) => {
 
 	const fields: OrganizationFormFields = {
 		name: org.name,
+		max_users: org.max_users.toString(),
 	};
 
 	const view: View = {
@@ -143,6 +147,8 @@ router.get('organizations/:id/users', async (path: SubPath, ctx: AppContext, fie
 		content: {
 			organizationUserTable: makeTableView(table),
 			postUrl: organizationUsersUrl('me'),
+			updateCapacityUrl: organizationUrl('me'),
+			remainingInvitationCount: Math.max(org.max_users - await models.organizations().activeInvitationCount(org.id), 0),
 			fields,
 			error,
 			csrfTag: await createCsrfTag(ctx),
@@ -187,10 +193,18 @@ router.post('organizations/:id', async (path: SubPath, ctx: AppContext) => {
 	const models = ctx.joplin.models;
 
 	const fields = await bodyFields<OrganizationFormFields>(ctx.req);
+	const maxUsers = Number(fields.max_users);
+
+	if (config().isJoplinCloud) {
+		if (org.max_users !== maxUsers) {
+			await updateOrganizationCapacity(models, org.id, maxUsers);
+		}
+	}
 
 	await models.organizations().save({
 		id: org.id,
 		name: fields.name,
+		max_users: maxUsers,
 	});
 
 	return redirect(ctx, organizationUrl('me'));

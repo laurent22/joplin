@@ -6,6 +6,7 @@ import { Models } from '../models/factory';
 import { AccountType } from '../models/UserModel';
 import { findPrice, PricePeriod } from '@joplin/lib/utils/joplinCloud';
 import { ErrorWithCode } from './errors';
+import { validateOrganizationMaxUsers } from './validation';
 const stripeLib = require('stripe');
 
 export interface SubscriptionInfo {
@@ -149,3 +150,17 @@ export async function updateCustomerEmail(models: Models, userId: Uuid, newEmail
 		email: newEmail,
 	});
 }
+
+export const updateOrganizationCapacity = async (models: Models, orgId: Uuid, newCapacity: number) => {
+	validateOrganizationMaxUsers(newCapacity);
+
+	const org = await models.organizations().load(orgId);
+	const subInfo = await subscriptionInfoByUserId(models, org.owner_id);
+	const stripe = initStripe();
+
+	const currentItem = subInfo.stripeSub.items.data[0];
+
+	await stripe.subscriptionItems.update(currentItem.id, {
+		quantity: newCapacity,
+	});
+};

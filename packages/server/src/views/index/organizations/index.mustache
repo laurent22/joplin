@@ -12,6 +12,16 @@
 				<input class="input" type="text" name="name" value="{{fields.name}}"/>
 			</div>
 		</div>
+
+		<div class="field">
+			<label class="label">User capacity</label>
+			<div class="control">
+				<input type="number" name="max_users" value="{{fields.max_users}}"/>
+				{{#global.isJoplinCloud}}
+					<p class="help">When increasing capacity, billing will be updated accordingly.</p>
+				{{/global.isJoplinCloud}}
+			</div>
+		</div>
 		
 		<div class="control block">
 			<input type="submit" name="post_button" class="button is-primary" value="Update" />

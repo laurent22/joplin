@@ -15,7 +15,7 @@ import { findPrice, PricePeriod } from '@joplin/lib/utils/joplinCloud';
 import { Models } from '../../models/factory';
 import { confirmUrl } from '../../utils/urlUtils';
 import { msleep } from '../../utils/time';
-import { organizationMaxUsers, organizationMinUsers } from '../../models/OrganizationModel';
+import { organizationMaxUsers, organizationMinUsers } from '../../utils/validation';
 
 const logger = Logger.create('/stripe');
 
@@ -404,8 +404,24 @@ export const postHandlers: PostHandlers = {
 				const user = await models.user().load(sub.user_id, { fields: ['id'] });
 				if (!user) throw new Error(`No such user: ${user.id}`);
 
-				logger.info(`Updating subscription of user ${user.id} to ${newAccountType}`);
-				await models.user().save({ id: user.id, account_type: newAccountType });
+				// If it's the owner of an organization, any change applies to
+				// the organization, not the user.
+				const org = await models.organizations().byOwnerId(user.id);
+
+				if (org) {
+					const newQuantity = stripeSub.items.data[0].quantity;
+					logger.info(`Updating subscription of organization ${org.id}. New quantity: ${newQuantity}`);
+					await models.organizations().save({
+						id: org.id,
+						max_users: newQuantity,
+					});
+				} else {
+					logger.info(`Updating subscription of user ${user.id} to ${newAccountType}`);
+					await models.user().save({
+						id: user.id,
+						account_type: newAccountType,
+					});
+				}
 			},
 
 		};

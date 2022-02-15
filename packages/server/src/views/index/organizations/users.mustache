@@ -5,9 +5,14 @@
 	<div class="field">
 		<label class="label">Invite users:</label>
 		<div class="control">
-			<input class="input" type="text" name="emails" value="{{fields.emails}}"/>
+			<input {{^remainingInvitationCount}}disabled{{/remainingInvitationCount}} class="input" type="text" name="emails" value="{{fields.emails}}"/>
 		</div>
-		<p class="help">To invite new users, enter their emails separated by a comma.</p>
+		{{#remainingInvitationCount}}
+			<p class="help">To invite new users, enter their emails separated by a comma. You may invite {{remainingInvitationCount}} more user(s).</p>
+		{{/remainingInvitationCount}}
+		{{^remainingInvitationCount}}
+			<p class="help">No more users can be invited to join this organisation. You may <a href="{{{updateCapacityUrl}}}">increase the organisation capacity</a>.</p>
+		{{/remainingInvitationCount}}
 	</div>
 
 	<div class="control block">

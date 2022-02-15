@@ -2,12 +2,10 @@ import { Organization, OrganizationUser, OrganizationUserInvitationStatus, UserF
 import { ErrorBadRequest, ErrorForbidden, ErrorUnprocessableEntity } from '../utils/errors';
 import { organizationInvitationConfirmUrl } from '../utils/urlUtils';
 import { uuidgen } from '../utils/uuid';
+import { validateOrganizationMaxUsers } from '../utils/validation';
 import orgInviteUserTemplate from '../views/emails/orgInviteUserTemplate';
 import BaseModel, { UuidType, ValidateOptions } from './BaseModel';
 import { AccountType } from './UserModel';
-
-export const organizationMinUsers = 2;
-export const organizationMaxUsers = 100;
 
 export default class OrganizationModel extends BaseModel<Organization> {
 
@@ -50,7 +48,7 @@ export default class OrganizationModel extends BaseModel<Organization> {
 		}
 
 		if ('max_users' in org) {
-			if (isNaN(org.max_users) || org.max_users < 2) throw new ErrorUnprocessableEntity('Organisation must have at least 2 users');
+			validateOrganizationMaxUsers(org.max_users);
 		}
 
 		return org;
@@ -96,7 +94,7 @@ export default class OrganizationModel extends BaseModel<Organization> {
 
 			await this.db(this.tableName).forUpdate().where('id', '=', orgId);
 
-			if (await this.activeInvitationCount(org.id) >= org.max_users) throw new ErrorBadRequest(`Cannot add any more than ${org.max_users} users to this organisation.`);
+			if (await this.activeInvitationCount(org.id) >= org.max_users) throw new ErrorBadRequest(`Cannot add more than ${org.max_users} users to this organisation.`);
 
 			const orgUser = await this.models().organizationUsers().save({
 				organization_id: orgId,
