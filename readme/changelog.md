@@ -1,5 +1,9 @@
 # Joplin changelog
 
+## [v2.7.12](https://github.com/laurent22/joplin/releases/tag/v2.7.12) (Pre-release) - 2022-02-14T15:06:14Z
+
+- Fixed: Exported JEX notebook should not contain share metadata ([#6129](https://github.com/laurent22/joplin/issues/6129))
+
 ## [v2.7.11](https://github.com/laurent22/joplin/releases/tag/v2.7.11) (Pre-release) - 2022-02-12T13:00:02Z
 
 - Improved: Resize custom icon down to 256px when it is too large (064891d)
