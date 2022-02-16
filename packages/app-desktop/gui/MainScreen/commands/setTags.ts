@@ -34,32 +34,22 @@ export const runtime = (comp: any): CommandRuntime => {
 					autocomplete: sortedTagSuggestions,
 					onClose: async (answer: any[]) => {
 						if (answer !== null) {
-							const endTagTitles = answer.map((a) => {
+							const endTagTitles = answer.map(a => {
 								return a.label.trim();
 							});
 							if (noteIds.length === 1) {
 								await Tag.setNoteTagsByTitles(noteIds[0], endTagTitles);
 							} else {
-								const startTagTitles = sortedStartTags.map((a: any) => {
-									return a.label.trim();
-								});
-								const addTags = endTagTitles.filter(
-									(value: string) => !startTagTitles.includes(value)
-								);
-								const delTags = startTagTitles.filter(
-									(value: string) => !endTagTitles.includes(value)
-								);
+								const startTagTitles = sortedStartTags.map((a: any) => { return a.label.trim(); });
+								const addTags = endTagTitles.filter((value: string) => !startTagTitles.includes(value));
+								const delTags = startTagTitles.filter((value: string) => !endTagTitles.includes(value));
 
 								// apply the tag additions and deletions to each selected note
 								for (let i = 0; i < noteIds.length; i++) {
 									const tags = await Tag.tagsByNoteId(noteIds[i]);
-									let tagTitles = tags.map((a: any) => {
-										return a.title;
-									});
+									let tagTitles = tags.map((a: any) => { return a.title; });
 									tagTitles = tagTitles.concat(addTags);
-									tagTitles = tagTitles.filter(
-										(value: string) => !delTags.includes(value)
-									);
+									tagTitles = tagTitles.filter((value: string) => !delTags.includes(value));
 									await Tag.setNoteTagsByTitles(noteIds[i], tagTitles);
 								}
 							}
