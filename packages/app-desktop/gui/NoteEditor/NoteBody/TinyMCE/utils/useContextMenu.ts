@@ -68,7 +68,8 @@ export default function(editor: any, plugins: PluginStates, dispatch: Function) 
 			contextMenuActionOptions.current = {
 				itemType,
 				resourceId,
-				tempResource: null,
+				filename: null,
+				mime: null,
 				linkToCopy,
 				textToCopy: null,
 				htmlToCopy: editor.selection ? editor.selection.getContent() : '',

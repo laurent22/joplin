@@ -177,32 +177,3 @@ export async function processPastedHtml(html: string) {
 		return mappedResources[src];
 	});
 }
-
-export const svgUriToPng = (svg: string) => new Promise((resolve, reject) => {
-	let canvas: HTMLCanvasElement;
-	let ctx;
-	const img = new Image();
-	img.onload = function() {
-		canvas = document.createElement('canvas');
-		canvas.width = img.width;
-		canvas.height = img.height;
-		ctx = canvas.getContext('2d');
-		ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, img.width, img.height);
-		const pngUri = canvas.toDataURL('image/png');
-		const pngBase64 = pngUri.split(',')[1];
-		const byteString = atob(pngBase64);
-		// write the bytes of the string to a typed array
-		const buff = new Uint8Array(byteString.length);
-		for (let i = 0; i < byteString.length; i++) {
-			buff[i] = byteString.charCodeAt(i);
-		}
-		resolve(buff);
-	};
-	img.onerror = reject;
-	img.src = svg;
-	setTimeout(() => {
-		// Cleanup the elements
-		if (img) img.remove();
-		if (canvas) canvas.remove();
-	},3000);
-});

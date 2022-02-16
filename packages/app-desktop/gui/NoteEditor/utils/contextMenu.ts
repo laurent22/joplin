@@ -1,9 +1,8 @@
 import ResourceEditWatcher from '@joplin/lib/services/ResourceEditWatcher/index';
 import { _ } from '@joplin/lib/locale';
 import { copyHtmlToClipboard } from './clipboardUtils';
-import { svgUriToPng } from './resourceHandling';
 import bridge from '../../../services/bridge';
-import { ContextMenuItemType, ContextMenuOptions, ContextMenuItems, resourceInfo, tempResourceToDataUri } from './contextMenuUtils';
+import { ContextMenuItemType, ContextMenuOptions, ContextMenuItems, resourceInfo, textToDataUri, svgUriToPng } from './contextMenuUtils';
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
 import Resource from '@joplin/lib/models/Resource';
@@ -23,13 +22,10 @@ function handleCopyToClipboard(options: ContextMenuOptions) {
 	}
 }
 
-async function saveResource(options: ContextMenuOptions) {
-	const { filename, filePath } = await resourceInfo(options);
+async function saveFileData(data: any, filename: string) {
 	const newFilePath = await bridge().showSaveDialog({ defaultPath: filename });
 	if (!newFilePath) return;
-	if (options.isTemp) {
-		await fs.outputFile(newFilePath, options.tempResource.data);
-	} else { await fs.copy(filePath, newFilePath); }
+	await fs.outputFile(newFilePath, data);
 }
 
 export async function openItemById(itemId: string, dispatch: Function, hash: string = '') {
@@ -77,35 +73,38 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 			onAction: async (options: ContextMenuOptions) => {
 				await openItemById(options.resourceId, dispatch);
 			},
-			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => !options.isTemp && itemType === ContextMenuItemType.Image || itemType === ContextMenuItemType.Resource,
+			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => !options.textToCopy && (itemType === ContextMenuItemType.Image || itemType === ContextMenuItemType.Resource),
 		},
 		saveAs: {
 			label: _('Save as...'),
 			onAction: async (options: ContextMenuOptions) => {
-				await saveResource(options);
+				const { resourcePath, resource } = await resourceInfo(options);
+				const filePath = await bridge().showSaveDialog({
+					defaultPath: resource.filename ? resource.filename : resource.title,
+				});
+				if (!filePath) return;
+				await fs.copy(resourcePath, filePath);
 			},
-			// We handle svg seperately as it can be saved in multiple formats
-			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => itemType === (ContextMenuItemType.Image || itemType === ContextMenuItemType.Resource) && (!options.isTemp || !options.tempResource.mime?.startsWith('image/svg')),
+			// We handle images received as text seperately as it can be saved in multiple formats
+			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => (itemType === ContextMenuItemType.Image || itemType === ContextMenuItemType.Resource) && !options.textToCopy,
 		},
 		saveAsSvg: {
 			label: _('Save as SVG'),
 			onAction: async (options: ContextMenuOptions) => {
-				await saveResource(options);
+				await saveFileData(options.textToCopy, options.filename);
 			},
-			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => options.isTemp && itemType === ContextMenuItemType.Image && options.tempResource.mime?.startsWith('image/svg'),
+			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => !!options.textToCopy && itemType === ContextMenuItemType.Image && options.mime?.startsWith('image/svg'),
 		},
 		saveAsPng: {
 			label: _('Save as PNG'),
 			onAction: async (options: ContextMenuOptions) => {
 				// First convert it to png then save
-				const dataUri = tempResourceToDataUri(options.tempResource);
-				const png = await svgUriToPng(dataUri);
-				options.tempResource.data = png;
-				options.tempResource.mime = 'image/png';
-				options.tempResource.filename = options.tempResource.filename.replace('.svg', '.png');
-				await saveResource(options);
+				const dataUri = textToDataUri(options.textToCopy, options.mime);
+				const png = await svgUriToPng(document, dataUri);
+				const filename = options.filename?.replace('.svg', '.png');
+				await saveFileData(png, filename);
 			},
-			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => options.isTemp && itemType === ContextMenuItemType.Image && options.tempResource.mime?.startsWith('image/svg'),
+			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => !!options.textToCopy && itemType === ContextMenuItemType.Image && options.mime?.startsWith('image/svg'),
 		},
 		revealInFolder: {
 			label: _('Reveal file in folder'),
@@ -113,7 +112,7 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 				const { resourcePath } = await resourceInfo(options);
 				bridge().showItemInFolder(resourcePath);
 			},
-			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => !options.isTemp && itemType === ContextMenuItemType.Image || itemType === ContextMenuItemType.Resource,
+			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => !options.textToCopy && itemType === ContextMenuItemType.Image || itemType === ContextMenuItemType.Resource,
 		},
 		copyPathToClipboard: {
 			label: _('Copy path to clipboard'),
@@ -130,7 +129,7 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 				const image = bridge().createImageFromPath(resourcePath);
 				clipboard.writeImage(image);
 			},
-			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => !options.isTemp && itemType === ContextMenuItemType.Image,
+			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => !options.textToCopy && itemType === ContextMenuItemType.Image,
 		},
 		cut: {
 			label: _('Cut'),
@@ -138,14 +137,14 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 				handleCopyToClipboard(options);
 				options.insertContent('');
 			},
-			isActive: (_itemType: ContextMenuItemType, options: ContextMenuOptions) => !options.isReadOnly && (!!options.textToCopy || !!options.htmlToCopy),
+			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => itemType != ContextMenuItemType.Image && (!options.isReadOnly && (!!options.textToCopy || !!options.htmlToCopy)),
 		},
 		copy: {
 			label: _('Copy'),
 			onAction: async (options: ContextMenuOptions) => {
 				handleCopyToClipboard(options);
 			},
-			isActive: (_itemType: ContextMenuItemType, options: ContextMenuOptions) => !!options.textToCopy || !!options.htmlToCopy,
+			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => itemType != ContextMenuItemType.Image && (!!options.textToCopy || !!options.htmlToCopy),
 		},
 		paste: {
 			label: _('Paste'),
@@ -177,8 +176,7 @@ export default async function contextMenu(options: ContextMenuOptions, dispatch:
 	const items = menuItems(dispatch);
 
 	if (!('readyOnly' in options)) options.isReadOnly = true;
-	options.isTemp = !!options.tempResource;
-	console.log('options', options);
+	console.log('options', options);//
 	for (const itemKey in items) {
 		const item = items[itemKey];
 

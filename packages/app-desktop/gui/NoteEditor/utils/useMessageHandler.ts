@@ -35,7 +35,8 @@ export default function useMessageHandler(scrollWhenReady: any, setScrollWhenRea
 			const menu = await contextMenu({
 				itemType: arg0 && arg0.type,
 				resourceId: arg0.resourceId,
-				tempResource: arg0.tempResource,
+				filename: arg0.filename,
+				mime: arg0.mime,
 				textToCopy: arg0.textToCopy,
 				linkToCopy: arg0.linkToCopy || null,
 				htmlToCopy: '',
