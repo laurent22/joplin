@@ -1,8 +1,4 @@
-import {
-	CommandRuntime,
-	CommandDeclaration,
-	CommandContext,
-} from '@joplin/lib/services/CommandService';
+import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
 import Tag from '@joplin/lib/models/Tag';
 
@@ -21,25 +17,21 @@ export const runtime = (comp: any): CommandRuntime => {
 			const startTags = tags
 				.map((a: any) => {
 					return { value: a.id, label: a.title };
-				})
-				.sort((a: any, b: any) => {
-					return a.label.toLowerCase() < b.label.toLowerCase() ? -1 : +1;
 				});
+			const sortedStartTags = Tag.sortTags(startTags);
 			const allTags = await Tag.allWithNotes();
 			const tagSuggestions = allTags
 				.map((a: any) => {
 					return { value: a.id, label: a.title };
-				})
-				.sort((a: any, b: any) => {
-					return a.label.toLowerCase() < b.label.toLowerCase() ? -1 : +1;
 				});
+			const sortedTagSuggestions = Tag.sortTags(tagSuggestions);
 
 			comp.setState({
 				promptOptions: {
 					label: _('Add or remove tags:'),
 					inputType: 'tags',
-					value: startTags,
-					autocomplete: tagSuggestions,
+					value: sortedStartTags,
+					autocomplete: sortedTagSuggestions,
 					onClose: async (answer: any[]) => {
 						if (answer !== null) {
 							const endTagTitles = answer.map((a) => {
@@ -48,7 +40,7 @@ export const runtime = (comp: any): CommandRuntime => {
 							if (noteIds.length === 1) {
 								await Tag.setNoteTagsByTitles(noteIds[0], endTagTitles);
 							} else {
-								const startTagTitles = startTags.map((a: any) => {
+								const startTagTitles = sortedStartTags.map((a: any) => {
 									return a.label.trim();
 								});
 								const addTags = endTagTitles.filter(
