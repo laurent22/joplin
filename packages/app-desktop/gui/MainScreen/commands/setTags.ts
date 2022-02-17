@@ -14,24 +14,24 @@ export const runtime = (comp: any): CommandRuntime => {
 			noteIds = noteIds || context.state.selectedNoteIds;
 
 			const tags = await Tag.commonTagsByNoteIds(noteIds);
-			const startTags = tags
+			const sortedTags = Tag.sortTags(tags);
+			const startTags = sortedTags
 				.map((a: any) => {
 					return { value: a.id, label: a.title };
 				});
-			const sortedStartTags = Tag.sortTags(startTags);
 			const allTags = await Tag.allWithNotes();
-			const tagSuggestions = allTags
+			const sortedAllTags = Tag.sortTags(allTags);
+			const tagSuggestions = sortedAllTags
 				.map((a: any) => {
 					return { value: a.id, label: a.title };
 				});
-			const sortedTagSuggestions = Tag.sortTags(tagSuggestions);
 
 			comp.setState({
 				promptOptions: {
 					label: _('Add or remove tags:'),
 					inputType: 'tags',
-					value: sortedStartTags,
-					autocomplete: sortedTagSuggestions,
+					value: startTags,
+					autocomplete: tagSuggestions,
 					onClose: async (answer: any[]) => {
 						if (answer !== null) {
 							const endTagTitles = answer.map(a => {
@@ -40,7 +40,7 @@ export const runtime = (comp: any): CommandRuntime => {
 							if (noteIds.length === 1) {
 								await Tag.setNoteTagsByTitles(noteIds[0], endTagTitles);
 							} else {
-								const startTagTitles = sortedStartTags.map((a: any) => { return a.label.trim(); });
+								const startTagTitles = startTags.map((a: any) => { return a.label.trim(); });
 								const addTags = endTagTitles.filter((value: string) => !startTagTitles.includes(value));
 								const delTags = startTagTitles.filter((value: string) => !endTagTitles.includes(value));
 

@@ -217,7 +217,7 @@ export default class Tag extends BaseItem {
 		});
 	}
 
-	static sortTags(tags: any) {
+	static sortTags(tags: TagEntity[]) {
 		if (tags[0].title) {
 			return tags.sort((a: any,b: any)=>{
 				// It seems title can sometimes be undefined (perhaps when syncing and before tag has been decrypted?). It would be best to find the root cause but for now that will do.
@@ -228,13 +228,6 @@ export default class Tag extends BaseItem {
 				// imported tags might be any case, so we need to do case-insensitive
 				// sort.
 				return a.title.localeCompare(b.title, undefined, { sensitivity: 'accent' });
-			});
-		}
-
-		if (tags[0].label) {
-			return tags.sort((a: any, b: any) => {
-				if (!a || !a.label || !b || !b.label) return 0;
-				return a.label.localeCompare(b.label, undefined, { sensitivity: 'accent' });
 			});
 		}
 	}
