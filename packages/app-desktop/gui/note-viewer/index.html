@@ -586,9 +586,9 @@
 		}));
 
 		document.addEventListener('contextmenu', webviewLib.logEnabledEventHandler(event => {
-			let element = event.target;
-
 			// To handle right clicks on resource icons
+			let element = event.target;
+			
 			// Mermaid svgs are wrapped inside a <pre> with class "mermaid"
 			let mermaidElement = element.closest(".mermaid")?.children[0];
 			if(mermaidElement) {

@@ -47,7 +47,7 @@ export function textToDataUri(text: string, mime: string): string {
 	return `data:${mime};base64,${Buffer.from(text).toString('base64')}`;
 }
 
-export const svgUriToPng = (document: Document, svg: string) => new Promise((resolve, reject) => {
+export const svgUriToPng = (document: Document, svg: string) => new Promise<Uint8Array>((resolve, reject) => {
 	let canvas: HTMLCanvasElement;
 	let ctx;
 	const img = document.createElement('img');
@@ -65,6 +65,7 @@ export const svgUriToPng = (document: Document, svg: string) => new Promise((res
 		canvas.width = img.width;
 		canvas.height = img.height;
 		ctx = canvas.getContext('2d');
+		if (!ctx) return cleanUpAndReject();
 		ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, img.width, img.height);
 		const pngUri = canvas.toDataURL('image/png');
 		if (!pngUri) return cleanUpAndReject();

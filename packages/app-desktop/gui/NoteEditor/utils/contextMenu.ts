@@ -86,7 +86,7 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 				await fs.copy(resourcePath, filePath);
 			},
 			// We handle images received as text seperately as it can be saved in multiple formats
-			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => (itemType === ContextMenuItemType.Image || itemType === ContextMenuItemType.Resource) && !options.textToCopy,
+			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => !options.textToCopy && (itemType === ContextMenuItemType.Image || itemType === ContextMenuItemType.Resource),
 		},
 		saveAsSvg: {
 			label: _('Save as SVG'),
@@ -176,7 +176,6 @@ export default async function contextMenu(options: ContextMenuOptions, dispatch:
 	const items = menuItems(dispatch);
 
 	if (!('readyOnly' in options)) options.isReadOnly = true;
-	console.log('options', options);//
 	for (const itemKey in items) {
 		const item = items[itemKey];
 
