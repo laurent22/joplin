@@ -36,15 +36,16 @@ interface OrganizationUserFormFields {
 
 // This method returns the organisation associated with the logged in user. It
 // will throw an error if the user doesn't have one.
-const getOrganization = async (path: SubPath, ctx: AppContext) => {
+const getOrganizationIfAllowed = async (path: SubPath, ctx: AppContext) => {
 	if (path.id !== 'me') throw new ErrorNotFound();
 	const org = ctx.joplin.organization;
 	if (!org) throw new ErrorNotFound();
+	await ctx.joplin.models.organizations().checkIfAllowed(ctx.joplin.owner, AclAction.Read, org);
 	return org;
 };
 
 router.get('organizations/:id', async (path: SubPath, ctx: AppContext) => {
-	const org = await getOrganization(path, ctx);
+	const org = await getOrganizationIfAllowed(path, ctx);
 
 	const fields: OrganizationFormFields = {
 		name: org.name,
@@ -64,7 +65,7 @@ router.get('organizations/:id', async (path: SubPath, ctx: AppContext) => {
 });
 
 router.get('organizations/:id/users', async (path: SubPath, ctx: AppContext, fields: OrganizationUserFormFields = null, error: any = null) => {
-	const org = await getOrganization(path, ctx);
+	const org = await getOrganizationIfAllowed(path, ctx);
 
 	const models = ctx.joplin.models;
 
@@ -159,7 +160,7 @@ router.get('organizations/:id/users', async (path: SubPath, ctx: AppContext, fie
 });
 
 router.post('organizations/:id/users', async (path: SubPath, ctx: AppContext) => {
-	const org = await getOrganization(path, ctx);
+	const org = await getOrganizationIfAllowed(path, ctx);
 	const models = ctx.joplin.models;
 	const owner = ctx.joplin.owner;
 	const fields = await bodyFields<OrganizationUserFormFields>(ctx.req);
@@ -188,7 +189,7 @@ router.post('organizations/:id/users', async (path: SubPath, ctx: AppContext) =>
 });
 
 router.post('organizations/:id', async (path: SubPath, ctx: AppContext) => {
-	const org = await getOrganization(path, ctx);
+	const org = await getOrganizationIfAllowed(path, ctx);
 
 	const models = ctx.joplin.models;
 

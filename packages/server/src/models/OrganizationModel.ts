@@ -1,10 +1,10 @@
-import { Organization, OrganizationUser, OrganizationUserInvitationStatus, UserFlagType, Uuid } from '../services/database/types';
+import { Organization, OrganizationUser, OrganizationUserInvitationStatus, User, UserFlagType, Uuid } from '../services/database/types';
 import { ErrorBadRequest, ErrorForbidden, ErrorUnprocessableEntity } from '../utils/errors';
 import { organizationInvitationConfirmUrl } from '../utils/urlUtils';
 import { uuidgen } from '../utils/uuid';
 import { validateOrganizationMaxUsers } from '../utils/validation';
 import orgInviteUserTemplate from '../views/emails/orgInviteUserTemplate';
-import BaseModel, { UuidType, ValidateOptions } from './BaseModel';
+import BaseModel, { AclAction, UuidType, ValidateOptions } from './BaseModel';
 import { AccountType } from './UserModel';
 
 export default class OrganizationModel extends BaseModel<Organization> {
@@ -15,6 +15,11 @@ export default class OrganizationModel extends BaseModel<Organization> {
 
 	protected uuidType(): UuidType {
 		return UuidType.Native;
+	}
+
+	public async checkIfAllowed(user: User, _action: AclAction, resource: Organization = null): Promise<void> {
+		if (user.is_admin) return;
+		if (resource.owner_id !== user.id) throw new ErrorForbidden();
 	}
 
 	public async byOwnerId(ownerId: Uuid): Promise<Organization | null> {
@@ -115,31 +120,35 @@ export default class OrganizationModel extends BaseModel<Organization> {
 		});
 	}
 
-	public async respondInvitation(orgUserId: Uuid, status: OrganizationUserInvitationStatus) {
+	public async respondInvitation(orgUserId: Uuid, status: OrganizationUserInvitationStatus, password: string = null): Promise<User | null> {
 		const orgUser = await this.models().organizationUsers().load(orgUserId);
 		if (!orgUser) throw new ErrorBadRequest(`No such invitation: ${orgUserId}`);
 		if (![OrganizationUserInvitationStatus.Accepted, OrganizationUserInvitationStatus.Rejected].includes(status)) throw new ErrorBadRequest('Status can only be "accepted" or "rejected"');
 		if (orgUser.invitation_status !== OrganizationUserInvitationStatus.Sent) throw new ErrorBadRequest('Invitation status cannot be changed');
 
-		await this.withTransaction(async () => {
+		return this.withTransaction(async () => {
 			const newOrgUser: OrganizationUser = {
 				id: orgUserId,
 				invitation_status: status,
 			};
 
+			let createdUser: User = null;
+
 			if (status === OrganizationUserInvitationStatus.Accepted) {
-				const user = await this.models().user().save({
+				createdUser = await this.models().user().save({
 					account_type: AccountType.Pro,
 					email: orgUser.invitation_email,
 					email_confirmed: 1,
 					must_set_password: 1,
-					password: uuidgen(),
+					password: password || uuidgen(),
 				});
 
-				newOrgUser.user_id = user.id;
+				newOrgUser.user_id = createdUser.id;
 			}
 
 			await this.models().organizationUsers().save(newOrgUser);
+
+			return createdUser;
 		});
 	}
 

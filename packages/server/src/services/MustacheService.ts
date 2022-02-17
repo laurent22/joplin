@@ -173,7 +173,7 @@ export default class MustacheService {
 		return output;
 	}
 
-	private makeNavbar(selectedUrl: URL, isAdmin: boolean, hasOrganization: boolean): MenuItem[] {
+	private makeNavbar(selectedUrl: URL, isAdmin: boolean, ownOrganization: boolean): MenuItem[] {
 		let output: MenuItem[] = [
 			{
 				title: _('Home'),
@@ -181,7 +181,7 @@ export default class MustacheService {
 			},
 		];
 
-		if (hasOrganization) {
+		if (ownOrganization) {
 			output.push({
 				title: _('Organisation'),
 				url: organizationUrl('me'),
@@ -307,6 +307,7 @@ export default class MustacheService {
 		const jsFiles = this.resolvesFilePaths('js', view.jsFiles || []);
 		const filePath = await this.viewFilePath(view.path);
 		const isAdminPage = view.path.startsWith('/admin/');
+		const ownOrganization = globalParams?.organization?.owner_id === globalParams?.owner?.id;
 
 		globalParams = {
 			...this.defaultLayoutOptions,
@@ -315,7 +316,7 @@ export default class MustacheService {
 			navbarMenu: this.makeNavbar(
 				globalParams?.currentUrl,
 				globalParams?.owner ? !!globalParams.owner.is_admin : false,
-				!!globalParams?.organization
+				ownOrganization
 			),
 			userDisplayName: this.userDisplayName(globalParams ? globalParams.owner : null),
 			isAdminPage,
