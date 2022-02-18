@@ -7,15 +7,15 @@ if [[ "$*" == node*dist/app.js* ]] && [ "$(id -u)" = '0' ]; then
 	Current_id=$(id -u)
 	Current_group_id=$(id -g)
 	if [ "$USER_UID" != "$Current_id" ]; then
-		groupmod -o -g "$USER_UID" joplinUSER
+		usermod -o -u "$USER_UID" joplinUSER
 		echo 'user uid is changed'
 	fi
 	if [ "$USER_UID" != "$Current_group_id" ]; then
 		groupmod -o -g "$USER_UID" joplinUSER
 		echo 'user gid is changed'
 	fi
-	find $Path \! -user USER -exec chown joplinUSER '{}' +
-	exec /usr/bin/tini -- /usr/sbin/gosu joplinUSER:joplinyUSER "$@"
+	find $Path \! -user joplinUSER -exec chown joplinUSER '{}' +
+	exec /usr/bin/tini -- /usr/sbin/gosu joplinUSER:joplinUSER "$@"
 fi
 
 if [[ "$*" == node*dist/app.js* ]]; then
