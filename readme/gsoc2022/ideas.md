@@ -48,7 +48,9 @@ The current documentation (under [joplinapp.org/help](https://joplinapp.org/help
 
 We would like to improve this by splitting the main readme into smaller sections, have a new menu that would reorganise the help into various topics, and of course the build script will need to be updated.
 
-A good part of this project will be about researching how other projects organise their documentation, proposing a way that would work well for Joplin, and discussing your ideas with the mentors and users. This is still a technical project though since you will need to deal with TypeScript, Markdown, HTML and CSS (and any other technology that might help) to build the new documentation.
+A good part of this project will be about researching how other projects organise their documentation, proposing a way that would work well for Joplin, and discussing your ideas with the mentors and users. You will need to be proactive and propose your own solution on how to structure the documentation - which sections and sub-sections should be created, how to split the existing README into smaller parts, etc.
+
+This is still a technical project though since you will need to deal with TypeScript, Markdown, HTML and CSS (and any other technology that might help) to build the new documentation.
 
 Difficulty Level: High
 
