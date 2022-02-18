@@ -64,7 +64,7 @@ RUN userdel -r node
 
 COPY --chown=$user:$user --from=builder /build/packages /home/$user/packages
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
-RUN sed "s/joplinUSER/$user/g" -i /usr/local/bin/entrypoint.sh
+RUN sed "s/joplinUSER/$user/g; s/1002/$(id -u $user)/g" -i /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
 ENV NODE_ENV=production
