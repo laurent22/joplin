@@ -1,6 +1,7 @@
 import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
 import Tag from '@joplin/lib/models/Tag';
+import { TagEntity } from '@joplin/lib/services/database/types';
 
 export const declaration: CommandDeclaration = {
 	name: 'setTags',
@@ -16,13 +17,13 @@ export const runtime = (comp: any): CommandRuntime => {
 			const tags = await Tag.commonTagsByNoteIds(noteIds);
 			const sortedTags = Tag.sortTags(tags);
 			const startTags = sortedTags
-				.map((a: any) => {
+				.map((a: TagEntity) => {
 					return { value: a.id, label: a.title };
 				});
 			const allTags = await Tag.allWithNotes();
 			const sortedAllTags = Tag.sortTags(allTags);
 			const tagSuggestions = sortedAllTags
-				.map((a: any) => {
+				.map((a: TagEntity) => {
 					return { value: a.id, label: a.title };
 				});
 

@@ -218,7 +218,7 @@ export default class Tag extends BaseItem {
 	}
 
 	static sortTags(tags: TagEntity[]) {
-		return tags.sort((a: any,b: any)=>{
+		return tags.sort((a: TagEntity,b: TagEntity) => {
 			// It seems title can sometimes be undefined (perhaps when syncing and before tag has been decrypted?). It would be best to find the root cause but for now that will do.
 			// Fixes https://github.com/laurent22/joplin/issues/4051
 			if (!a || !a.title || !b || !b.title) return 0;

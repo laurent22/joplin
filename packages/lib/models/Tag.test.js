@@ -156,38 +156,24 @@ describe('models/Tag', function() {
 		expect(commonTagIds.includes(tagc.id)).toBe(true);
 	}));
 
-	it('should sort tags for setTags, Sidebar and TagList', (async () => {
-		const folder1 = await Folder.save({ title: 'folder1' });
-		const note1 = await Note.save({ title: 'ma note 0', parent_id: folder1.id });
+	it('should sort tags', (async () => {
+		// test for tags with titles
+		const unsortedTags = [{ title: '@⏲15 min' },{ title: '#house' },{ title: '#coding' }, { title: '@⏲60 min' }, { title: '#wait' }, { title: '@⏲30 min' }];
+		const sortedTags = Tag.sortTags(unsortedTags);
+		expect(sortedTags).toEqual([{ title: '@⏲15 min' }, { title: '@⏲30 min' }, { title: '@⏲60 min' }, { title: '#coding' }, { title: '#house' }, { title: '#wait' }]);
 
-		// original/sorted order
-		const tag1 = await Tag.save({ title: '#coding' });
-		const tag2 = await Tag.save({ title: '#house' });
-		const tag3 = await Tag.save({ title: '#wait' });
-		const tag4 = await Tag.save({ title: '@⏲15 min' });
-		const tag5 = await Tag.save({ title: '@⏲30 min' });
-		const tag6 = await Tag.save({ title: '@⏲60 min' });
+		// test for tags without titles
+		const unsortedTags2 = [{ id: '40' } , { id: '50' }, { id: '10' }, { id: '30' }, { id: '20' }];
+		const sortedTags2 = Tag.sortTags(unsortedTags2);
+		expect(sortedTags2).toEqual([{ id: '40' } , { id: '50' }, { id: '10' }, { id: '30' }, { id: '20' }]);
 
-		await Tag.addNote(tag4.id, note1.id);
-		await Tag.addNote(tag2.id, note1.id);
-		await Tag.addNote(tag1.id, note1.id);
-		await Tag.addNote(tag6.id, note1.id);
-		await Tag.addNote(tag3.id, note1.id);
-		await Tag.addNote(tag5.id, note1.id);
+		// test for tags with titles, without titles and empty tags
+		const unsortedTags3 = [{ id: '1' }, { id: '2', title: 'two' }, {}, { id: '3' }, { id: '4', title: 'four' }, { id: '5',title: 'five' }];
+		const sortedTags3 = Tag.sortTags(unsortedTags3);
+		expect(sortedTags3).toEqual([{ id: '1' }, { id: '2', title: 'two' }, {}, { id: '3' }, { id: '5', title: 'five' }, { id: '4', title: 'four' }]);
 
-		// This test checks the sorting functionality for tags in all three files(setTags, Sidebar and TagList)
-		// commonTags contains unsortedTags
-		const commonTags = await Tag.commonTagsByNoteIds([note1.id]);
-
-		// defaultTags contains only the id and title of all the unsorted tags
-		const defaultTags = commonTags.map(a => {
-			return { value: a.id, label: a.title };
-		});
-
-		// sortedTagsTitles contains the titles of all the sorted tags
-		const sortedTagsTitles = Tag.sortTags(defaultTags).map(a => a.label);
-
-		expect(sortedTagsTitles).toEqual(['@⏲15 min', '@⏲30 min', '@⏲60 min', '#coding', '#house', '#wait']);
-		expect(sortedTagsTitles).not.toEqual(['@⏲15 min', '#house','#coding', '@⏲60 min', '#wait', '@⏲30 min']);
+		// test for empty list
+		const emptyListSort = Tag.sortTags([]);
+		expect(emptyListSort).toEqual([]);
 	}));
 });
