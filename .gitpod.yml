@@ -1,0 +1,9 @@
+tasks:
+  - init: sudo apt install build-essential libnss3 libsecret-1-dev python rsync &&
+          sudo apt-get update &&
+          sudo apt-get install libgbm-dev &&
+          yarn install 
+image:
+  file: Dockerfile
+ports:
+  - port: 6080
