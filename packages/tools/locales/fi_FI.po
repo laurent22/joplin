@@ -7,8 +7,6 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 "Last-Translator: miucci\n"
 "Language-Team: \n"
 "Language: fi_FI\n"
@@ -2580,7 +2578,7 @@ msgstr "&Muistikirjat"
 
 #: packages/lib/models/Setting.ts:2145
 msgid "Notebook"
-msgstr "Luo muistikirja"
+msgstr "Muistikirja"
 
 #: packages/lib/models/Setting.ts:1380
 msgid "Notebook list growth factor"
