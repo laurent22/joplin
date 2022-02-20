@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: mrkaato\n"
+"Last-Translator: miucci\n"
 "Language-Team: \n"
 "Language: fi_FI\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0\n"
+"X-Generator: Poedit 3.0.1\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:565
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -340,7 +340,7 @@ msgstr "Liitä valokuva"
 
 #: packages/app-mobile/components/screens/Note.tsx:885
 msgid "Attach..."
-msgstr "Liittää..."
+msgstr "Liitä..."
 
 #: packages/app-cli/app/command-attach.js:13
 msgid "Attaches the given file to the note."
@@ -402,9 +402,8 @@ msgid "Auto-pair braces, parenthesis, quotations, etc."
 msgstr "Yhdistä sulut, sulkeet, lainaukset jne."
 
 #: packages/lib/models/Setting.ts:1195
-#, fuzzy
 msgid "Automatically check for updates"
-msgstr "Tarkista päivitykset..."
+msgstr "Tarkista päivitykset automaattisesti"
 
 #: packages/lib/models/Setting.ts:772
 msgid "Automatically switch theme to match system theme"
@@ -771,9 +770,8 @@ msgid "Copy external link"
 msgstr "Lopeta ulkoinen muokkaus"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:134
-#, fuzzy
 msgid "Copy image"
-msgstr "Kopioi tunnus"
+msgstr "Kopioi kuva"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:172
 msgid "Copy Link Address"
@@ -861,14 +859,12 @@ msgid "Create a notebook"
 msgstr "Luo muistikirja"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:161
-#, fuzzy
 msgid "Create notebook"
 msgstr "Luo muistikirja"
 
 #: packages/server/src/routes/admin/users.ts:171
-#, fuzzy
 msgid "Create user"
-msgstr "Luotu: %s"
+msgstr "Luo käyttäjä"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:29
 msgid "Created"
@@ -1347,12 +1343,12 @@ msgstr "Emacs"
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:236
 #: packages/server/src/routes/admin/emails.ts:128
 msgid "Email"
-msgstr ""
+msgstr "Sähköposti"
 
 #: packages/server/src/routes/admin/emails.ts:112
 #: packages/server/src/services/MustacheService.ts:155
 msgid "Emails"
-msgstr ""
+msgstr "Sähköpostit"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:194
 msgid "emphasised text"
@@ -1496,14 +1492,12 @@ msgid "Encryption is: %s"
 msgstr "Salaus on: %s"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:172
-#, fuzzy
 msgid "Encryption keys"
-msgstr "Salaus on:"
+msgstr "Salausavaimet"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:249
-#, fuzzy
 msgid "Encryption:"
-msgstr "Salaus"
+msgstr "Salaus:"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:247
 #, fuzzy
@@ -1844,7 +1838,7 @@ msgstr "Ohita TLS varmenteen virheet"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:102
 msgid "Images"
-msgstr ""
+msgstr "Kuvat"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:170
 #: packages/app-desktop/gui/MenuBar.tsx:484
@@ -2016,9 +2010,8 @@ msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Virheellinen asetusarvo: \"%s\". Mahdolliset arvot ovat: %s."
 
 #: packages/app-cli/app/command-e2ee.ts:46
-#, fuzzy
 msgid "Invalid password"
-msgstr "Virheellinen vastaus: %s"
+msgstr "Virheellinen salasana"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:38
 msgid "Italic"
@@ -2263,14 +2256,12 @@ msgid "Make a donation"
 msgstr "Tee lahjoitus"
 
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:212
-#, fuzzy
 msgid "Manage master password"
-msgstr "Syötä pääsalasana:"
+msgstr "Pääsalasanan hallinta"
 
 #: packages/lib/commands/openMasterPasswordDialog.ts:6
-#, fuzzy
 msgid "Manage master password..."
-msgstr "Syötä pääsalasana:"
+msgstr "Pääsalasanan hallinta..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:314
 msgid "Manage your plugins"
@@ -2320,15 +2311,13 @@ msgstr "Pääavain %s"
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:133
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:277
 #: packages/app-mobile/components/screens/encryption-config.tsx:102
-#, fuzzy
 msgid "Master password"
-msgstr "Syötä pääsalasana:"
+msgstr "Pääsalasana"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:278
 #: packages/app-mobile/components/screens/encryption-config.tsx:211
-#, fuzzy
 msgid "Master password:"
-msgstr "Syötä pääsalasana:"
+msgstr "Pääsalasana:"
 
 #: packages/lib/models/Setting.ts:690
 msgid "Max concurrent connections"
@@ -2550,7 +2539,7 @@ msgstr "Huomautus on tallennettu."
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:34
 #: packages/lib/models/Setting.ts:2149
 msgid "Note History"
-msgstr "Muistiinpano historia"
+msgstr "Muistiinpanohistoria"
 
 #: packages/app-cli/app/command-done.js:21
 msgid "Note is not a to-do: \"%s\""
@@ -2588,9 +2577,8 @@ msgid "Note&book"
 msgstr "&Muistikirjat"
 
 #: packages/lib/models/Setting.ts:2145
-#, fuzzy
 msgid "Notebook"
-msgstr "Muistikirjat"
+msgstr "Muistikirja"
 
 #: packages/lib/models/Setting.ts:1380
 msgid "Notebook list growth factor"
@@ -2611,9 +2599,8 @@ msgstr "Muistikirjoja ei voi nimetä \"%s\", joka on varattu otsikko."
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleNotesSortOrderField.ts:8
 #: packages/app-desktop/gui/MainScreen/commands/toggleNotesSortOrderReverse.ts:9
-#, fuzzy
 msgid "Notes"
-msgstr "Huomautus"
+msgstr "Muistiinpanot"
 
 #: packages/lib/models/Setting.ts:2161
 msgid "Notes and settings are stored in: %s"
@@ -3223,9 +3210,8 @@ msgid "Select emoji..."
 msgstr ""
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:144
-#, fuzzy
 msgid "Select file..."
-msgstr "Valitse kaikki"
+msgstr "Valitse tiedosto..."
 
 #: packages/app-cli/app/command-server.js:38
 msgid "Server is already running on port %d"
@@ -4361,7 +4347,7 @@ msgstr ""
 #: packages/server/src/services/MustacheService.ts:143
 #: packages/server/src/services/MustacheService.ts:304
 msgid "Users"
-msgstr ""
+msgstr "Käyttäjät"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:182
 msgid "Valid"
