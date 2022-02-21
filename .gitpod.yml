@@ -2,7 +2,8 @@ tasks:
   - init: sudo apt install build-essential libnss3 libsecret-1-dev python rsync -y &&
           sudo apt-get update -y &&
           sudo apt-get install libgbm-dev -y &&
-          yarn install 
+          yarn install
+    command: yarn run tsc
 image:
   file: Dockerfile
 ports:
