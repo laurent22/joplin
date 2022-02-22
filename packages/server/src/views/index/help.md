@@ -4,17 +4,17 @@
 
 ### How can I change my details?
 
-Most of your details can be found in your Profile page. To open it, click on the Profile button - this is the button in the top right corner, with your name or email on it.
+Most of your details can be found in your [Profile](/users/me) page. To open it, click on the Profile button - this is the button in the top right corner, with your name or email on it.
 
 ### How can I get more space?
 
-If you are on a Basic account, you may upgrade to a Pro account to get more space. Click on the [Profile button](#how-can-i-change-my-details), then scroll down and select "Upgrade to Pro".
+If you are on a Basic account, you may upgrade to a Pro account to get more space. Open your [profile](/users/me), then scroll down and select "Upgrade to Pro".
 
 If you are already on a Pro account, and you need more space for specific reasons, please contact us as we may increase the cap in some cases.
 
 ### How can I switch to a different billing cycle or plan?
 
-To switch between yearly and monthly payments, or to change from a Basic to Pro plan or vice versa, please click on the [Profile button](#how-can-i-change-my-details), then scroll down and click on "Manage subscription". From the Subscription page, click on Update Plan to choose your new billing cycle or to change your plan.
+To switch between yearly and monthly payments, or to change from a Basic to Pro plan or vice versa, please open your [profile](/users/me), then scroll down and click on "[Manage subscription](/stripe/portal)". From the Subscription page, click on Update Plan to choose your new billing cycle or to change your plan.
 
 Note that if you downgrade from Pro to Basic, new limitations will apply so for example you may have to delete some notes so that your account is below the required limit.
 
@@ -22,7 +22,7 @@ Note that if you downgrade from Pro to Basic, new limitations will apply so for 
 
 ### How can I manage my payment details?
 
-To update your card or other payment details, click on the [Profile button](#how-can-i-change-my-details), then scroll down and click on "Manage subscription".
+To update your card or other payment details, open your [profile](/users/me), then scroll down and click on "[Manage subscription](/stripe/portal)".
 
 ### If a payment has failed
 
@@ -34,7 +34,7 @@ When a payment has failed, Stripe will retry again a few times, a few days later
 
 In case of a failed payment, Stripe will retry automatically. However you may also manually pay the invoice by following these steps:
 
-Click on the [Profile button](#how-can-i-change-my-details), then click on "Manage subscription". This will open your Joplin Cloud subscription page. Scroll down and, under "Invoice history", click on the invoice that has a failed payment. This will open a new page where you can pay the invoice.
+Open your [profile](/users/me), then click on "[Manage subscription](/stripe/portal)". This will open your Joplin Cloud subscription page. Scroll down and, under "Invoice history", click on the invoice that has a failed payment. This will open a new page where you can pay the invoice.
 
 ## Cancellation policy
 
@@ -44,7 +44,7 @@ We offer a 14 days trial when the subscription starts so that you can evaluate t
 
 ### How can I cancel my account?
 
-Click on the [Profile button](#how-can-i-change-my-details), then scroll down and click on "Manage subscription". Your subscription will be cancelled and you will not be charged on what would have been the next billing period. Please note that we do not cancel accounts over email as we cannot verify your identity, however we can provide assistance if there is an issue.
+Open your [profile](/users/me), then scroll down and click on "[Manage subscription](/stripe/portal)". Your subscription will be cancelled and you will not be charged on what would have been the next billing period. Please note that we do not cancel accounts over email as we cannot verify your identity, however we can provide assistance if there is an issue.
 
 ## Further information
 
