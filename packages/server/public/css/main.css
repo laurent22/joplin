@@ -11,7 +11,7 @@ html {
 	max-width: none !important;
 }
 
-div.navbar-container {
+.is-admin-page div.navbar-container {
 	padding: 0 3rem;
 }
 
