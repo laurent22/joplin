@@ -1,7 +1,7 @@
 name: Joplin Cloud
 on: [push, pull_request]
 jobs:
-  Main:
+  JoplinCloudDockerImage:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
