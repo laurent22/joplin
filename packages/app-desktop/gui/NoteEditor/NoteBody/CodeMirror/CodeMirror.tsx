@@ -731,15 +731,23 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 	// It might be buggy, refer to the below issue
 	// https://github.com/laurent22/joplin/pull/3974#issuecomment-718936703
 	useEffect(() => {
-		function pointerInsideEditor(x: number, y: number) {
+		function pointerInsideEditor(params: any) {
+			const x = params.x, y = params.y, isEditable = params.isEditable, inputFieldType = params.inputFieldType;
 			const elements = document.getElementsByClassName('codeMirrorEditor');
-			if (!elements.length) return null;
+
+			// To check if codeMirrorEditor doesn't exist. --OR--
+			// If isEditable is false which means there is a blur layout on codeMirrorEditor (e.g. add hyperlink)
+			// or mouse cursor is out of codeMirrorEditor. --OR--
+			// If the context menu was invoked on an input field (isEditable: true) and the input field on codeMirrorEditor,
+			// to avoid context-menu flickering (two context-menu) by checking if is an input field or not by using inputFieldType (e.g plainText, password).
+			if (!elements.length || !isEditable || inputFieldType !== 'none') return null;
 			const rect = convertToScreenCoordinates(Setting.value('windowContentZoomFactor'), elements[0].getBoundingClientRect());
 			return rect.x < x && rect.y < y && rect.right > x && rect.bottom > y;
 		}
 
 		async function onContextMenu(_event: any, params: any) {
-			if (!pointerInsideEditor(params.x, params.y) || !params.isEditable || params.inputFieldType !== 'none') return;
+			if (!pointerInsideEditor(params)) return;
+
 			const menu = new Menu();
 
 			const hasSelectedText = editorRef.current && !!editorRef.current.getSelection() ;
