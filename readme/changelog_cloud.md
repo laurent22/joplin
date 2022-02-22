@@ -1,6 +1,6 @@
 # Joplin Cloud Changelog
 
-## [cloud-v2.7.6](https://github.com/laurent22/joplin-private/releases/tag/cloud-v2.7.6) - 2022-02-22T12:13:05Z
+## [cloud-v2.7.7](https://github.com/laurent22/joplin-private/releases/tag/cloud-v2.7.7) - 2022-02-22T12:31:26Z
 
 - Fixed: Fixed navbar alignment (b4fa6a0)
 
