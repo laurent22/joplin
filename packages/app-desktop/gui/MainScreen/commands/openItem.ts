@@ -26,7 +26,13 @@ export const runtime = (): CommandRuntime => {
 					// shell.openPath seems to work with file:// urls on Windows,
 					// but doesn't on macOS, so we need to convert it to a path
 					// before passing it to openPath.
-					const decodedPath = fileUriToPath(urlDecode(link), shim.platformName());
+					let decodedPath = fileUriToPath(urlDecode(link), shim.platformName());
+					
+					if(decodedPath.indexOf('\\') === 0)
+					{
+						decodedPath = decodedPath.substring(2);
+					}
+
 					void require('electron').shell.openPath(decodedPath);
 				} else {
 					void require('electron').shell.openExternal(link);
