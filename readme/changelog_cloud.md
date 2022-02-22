@@ -1,5 +1,9 @@
 # Joplin Cloud Changelog
 
+## [cloud-v2.7.6](https://github.com/laurent22/joplin-private/releases/tag/cloud-v2.7.6) - 2022-02-22T12:13:05Z
+
+- Fixed: Fixed navbar alignment (b4fa6a0)
+
 ## [server-v2.7.4](https://github.com/laurent22/joplin/releases/tag/server-v2.7.4) - 2022-02-02T19:23:34Z
 
 - New: Add task to automate deletion of disabled accounts (1afcb27)
