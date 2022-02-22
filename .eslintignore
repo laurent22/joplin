@@ -1972,6 +1972,9 @@ packages/tools/release-android.js.map
 packages/tools/release-cli.d.ts
 packages/tools/release-cli.js
 packages/tools/release-cli.js.map
+packages/tools/release-cloud.d.ts
+packages/tools/release-cloud.js
+packages/tools/release-cloud.js.map
 packages/tools/release-electron.d.ts
 packages/tools/release-electron.js
 packages/tools/release-electron.js.map
