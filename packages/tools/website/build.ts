@@ -300,8 +300,6 @@ async function main() {
 			// "docs/spec/interop_with_frontmatter/index.html" and prefix it
 			// with the website repo full path.
 
-			console.info('input', input);
-
 			let s = `${docDir}/${input}`;
 			if (s.endsWith('index.md')) {
 				s = s.replace(/index\.md/, 'index.html');
@@ -310,8 +308,6 @@ async function main() {
 			}
 
 			s = s.replace(/readme\//, '');
-
-			console.info('OUTPUT', s);
 
 			return s;
 		}
