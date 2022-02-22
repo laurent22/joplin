@@ -56,7 +56,6 @@ jobs:
 
       - name: Run tests, build and publish Linux and macOS apps
         env:
-          BUILD_SERVER: 1
           IS_CONTINUOUS_INTEGRATION: 1
           BUILD_SEQUENCIAL: 1
           SERVER_REPOSITORY: laurent22/joplin-cloud

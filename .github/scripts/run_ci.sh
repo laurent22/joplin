@@ -38,7 +38,6 @@ echo "GITHUB_REF=$GITHUB_REF"
 echo "RUNNER_OS=$RUNNER_OS"
 echo "GIT_TAG_NAME=$GIT_TAG_NAME"
 echo "BUILD_SEQUENCIAL=$BUILD_SEQUENCIAL"
-echo "BUILD_SERVER=$BUILD_SERVER"
 echo "SERVER_REPOSITORY=$SERVER_REPOSITORY"
 echo "SERVER_TAG_PREFIX=$SERVER_TAG_PREFIX"
 
@@ -172,7 +171,7 @@ cd "$ROOT_DIR/packages/app-desktop"
 if [[ $GIT_TAG_NAME = v* ]]; then
 	echo "Step: Building and publishing desktop application..."
 	USE_HARD_LINKS=false yarn run dist
-elif [[ $IS_LINUX = 1 ]] && ([[ $GIT_TAG_NAME = $SERVER_TAG_PREFIX-* ]] || [[ $BUILD_SERVER = 1 ]]); then
+elif [[ $IS_LINUX = 1 ]] && [[ $GIT_TAG_NAME = $SERVER_TAG_PREFIX-* ]]; then
 	echo "Step: Building Docker Image..."
 	cd "$ROOT_DIR"
 	yarn run buildServerDocker --tag-name $GIT_TAG_NAME --push-images --repository $SERVER_REPOSITORY
