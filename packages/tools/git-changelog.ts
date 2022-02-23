@@ -126,7 +126,7 @@ function filterLogs(logs: LogEntry[], platform: Platform) {
 		if (platform === 'cli' && prefix.indexOf('cli') >= 0) addIt = true;
 		if (platform === 'clipper' && prefix.indexOf('clipper') >= 0) addIt = true;
 		if (platform === 'server' && prefix.indexOf('server') >= 0) addIt = true;
-		if (platform === 'cloud' && prefix.indexOf('cloud') >= 0) addIt = true;
+		if (platform === 'cloud' && (prefix.indexOf('cloud') >= 0 || prefix.indexOf('server'))) addIt = true;
 
 		// Translation updates often comes in format "Translation: Update pt_PT.po"
 		// but that's not useful in a changelog especially since most people

@@ -94,7 +94,7 @@ export function releaseFinalGitCommands(appName: string, newVersion: string, new
 }
 
 export async function completeReleaseWithChangelog(changelogPath: string, newVersion: string, newTag: string, appName: string, isPreRelease: boolean, repoTagUrl = '') {
-	const changelog = (await execCommand2(`node ${rootDir}/packages/tools/git-changelog ${newTag} --publish-format full`, { })).trim();
+	const changelog = (await execCommand2(`node ${rootDir}/packages/tools/git-changelog ${newTag} --publish-format full`, { showStdout: false })).trim();
 
 	const newChangelog = await insertChangelog(newTag, changelogPath, changelog, isPreRelease, repoTagUrl);
 
