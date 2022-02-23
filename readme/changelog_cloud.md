@@ -1,5 +1,13 @@
 # Joplin Cloud Changelog
 
+## [cloud-v2.7.8](https://github.com/laurent22/joplin-private/releases/tag/cloud-v2.7.8) - 2022-02-23T14:15:14Z
+
+- Improved: Improve Help page (6a32935)
+- Improved: Only build image on tag (b81ef62)
+- Improved: Updated help file (2bd79f0)
+- Fixed user deletion schedule
+- Fixed sidebar menu selection
+
 ## [cloud-v2.7.7](https://github.com/laurent22/joplin-private/releases/tag/cloud-v2.7.7) - 2022-02-22T12:31:26Z
 
 - Fixed: Fixed navbar alignment (b4fa6a0)
