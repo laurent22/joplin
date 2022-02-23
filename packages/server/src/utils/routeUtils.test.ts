@@ -1,4 +1,4 @@
-import { findMatchingRoute, isValidOrigin, parseSubPath, splitItemPath } from './routeUtils';
+import { findMatchingRoute, isValidOrigin, parseSubPath, splitItemPath, urlMatchesSchema } from './routeUtils';
 import { ItemAddressingType } from '../services/database/types';
 import { RouteType } from './types';
 import { expectThrow } from './testing/testUtils';
@@ -99,7 +99,7 @@ describe('routeUtils', function() {
 	});
 
 	it('should check the request origin for API URLs', async function() {
-		const testCases: any[] = [
+		const testCases: [string, string, boolean][] = [
 			[
 				'https://example.com', // Request origin
 				'https://example.com', // Config base URL
@@ -141,7 +141,7 @@ describe('routeUtils', function() {
 	});
 
 	it('should check the request origin for User Content URLs', async function() {
-		const testCases: any[] = [
+		const testCases: [string, string, boolean][] = [
 			[
 				'https://usercontent.local', // Request origin
 				'https://usercontent.local', // Config base URL
@@ -167,6 +167,42 @@ describe('routeUtils', function() {
 		for (const testCase of testCases) {
 			const [requestOrigin, configBaseUrl, expected] = testCase;
 			expect(isValidOrigin(requestOrigin, configBaseUrl, RouteType.UserContent)).toBe(expected);
+		}
+	});
+
+	it('should check if a URL matches a schema', async function() {
+		const testCases: [string, string, boolean][] = [
+			[
+				'https://test.com/items/123/children',
+				'items/:id/children',
+				true,
+			],
+			[
+				'https://test.com/items/123',
+				'items/:id',
+				true,
+			],
+			[
+				'https://test.com/items',
+				'items',
+				true,
+			],
+			[
+				'https://test.com/items/123/children',
+				'items/:id',
+				false,
+			],
+			[
+				'',
+				'items/:id',
+				false,
+			],
+		];
+
+		for (const testCase of testCases) {
+			const [url, schema, expected] = testCase;
+			const actual = urlMatchesSchema(url, schema);
+			expect(actual).toBe(expected);
 		}
 	});
 
