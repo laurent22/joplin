@@ -1,13 +1,13 @@
 # Google Summer of Code 2022
 
-Joplin has a young but well proven history. All students and Joplin users and developers are welcome to participate in the hopefully third year Summer of Code program with Joplin. This year the main themes will be:
+Joplin has a young but well proven history. All contributors, Joplin users and developers are welcome to participate in the hopefully third year Summer of Code program with Joplin. This year the main themes will be:
 
 - **Plugin development** - implementing new features using Joplin's plugin system.
 - **External desktop applications** - build external Joplin applications by retrieving, creating or modifying notes via the Data API.
 - **External server applications** - leverage the Joplin Server API to provide online features to Joplin users.
 - And you are welcome to suggest your own ideas.
 
-Mentors, administrators and students: read [Summer of Code](https://developers.google.com/open-source/gsoc) occasionally. Also read the [Summer of Code FAQ](https://developers.google.com/open-source/gsoc/faq).
+Mentors, administrators and contributors: read [Summer of Code](https://developers.google.com/open-source/gsoc) occasionally. Also read the [Summer of Code FAQ](https://developers.google.com/open-source/gsoc/faq).
 
 **Please read this page carefully as most likely it will have all the answers to the questions you might have, such as how to build the app, how to contribute and what are the rules for submitting a pull request.**
 
@@ -36,19 +36,19 @@ The mobile app is done using React Native.
 
 Submissions and ideas for projects in any other language should specifically mention the choice.
 
-## Instructions for students
+## Instructions for contributors
 
-Students wishing to participate in Summer of Code must realize, that this is an important professional opportunity. You will be required to produce applicable and readable code for Joplin in 3 months. Your mentors, will dedicate a portion of their time to mentoring you. Therefore, we seek candidates who are committed to helping Joplin and its community long-term and are willing to both do quality work, and be proactive in communicating with your mentor(s).
+Contributors wishing to participate in Summer of Code must realize, that this is an important professional opportunity. You will be required to produce applicable and readable code for Joplin in 3 months. Your mentors, will dedicate a portion of their time to mentoring you. Therefore, we seek candidates who are committed to helping Joplin and its community long-term and are willing to both do quality work, and be proactive in communicating with your mentor(s).
 
 You don't have to be a proven developer - in fact, this whole program is meant to facilitate joining Joplin and other Open Source communities. However, experience in coding and/or experience with the above mentioned programming languages and the applications is welcome.
 
 You should start learning the components that you plan on working on before the start date. Support can be found in the forum and on our dedicated discourse channel. You should plan to communicate with your team several times per week, and formally report progress and plans weekly. You are free to choose the format, it can be a sophisticated online document or simple continuous blog on GitHub.
 
-Students who neglect active communication will be failed!
+Contributors who neglect active communication will be failed!
 
 ## How to create your first pull request
 
-Before you can be accepted as a student we expect you to write some code and link that work on your proposal. As a first pull request, we suggest one of the following:
+Before you can be accepted as a contributor we expect you to write some code and link that work on your proposal. As a first pull request, we suggest one of the following:
 
 - Fix a [high priority](https://github.com/laurent22/joplin/issues?utf8=%E2%9C%93&q=is:open+is:issue+label:bug+label:high) or [medium priority](https://github.com/laurent22/joplin/issues?utf8=%E2%9C%93&q=is:open+is:issue+label:bug+label:medium) bug. This is something we highly value and is a good way to get a deep understanding of certain parts of the codebase.
 
@@ -67,7 +67,7 @@ First of all, please read the above referenced resources and the [GSoC FAQ](http
 ## Recommended steps
 
 1. Join the [Joplin Forum](https://discourse.joplinapp.org), introduce yourself in a structured manner, share your GitHub username, and meet your fellow developers in the [GSoC category](https://discourse.joplinapp.org/c/gsoc). The subject of the topic shall contain your username, e.g. _Introducing \<username>_.
-2. Read Student proposal guidelines and the [GSoC Student Manual](https://developers.google.com/open-source/gsoc/resources/manual#student_manual)
+2. Read Contributor proposal guidelines and the [GSoC Contributor/Student Guide](https://google.github.io/gsocguides/student/)
 3. Take a look at the [list of ideas](https://joplinapp.org/gsoc2022/ideas/). You can have you own idea added by posting it in the [Features category](https://discourse.joplinapp.org/c/features)
 4. Come up with project that you're interested in and discuss it in [Features category](https://discourse.joplinapp.org/c/features)
 5. Write a first draft and get someone to review it
@@ -78,11 +78,11 @@ First of all, please read the above referenced resources and the [GSoC FAQ](http
 
 Coming up with an interesting idea is probably the most difficult part. It should be something interesting for Joplin, for Open Source in general and for you. And it must be something that you can realistically achieve in the time available to you.
 
-A good start is finding out what the most pressing issues are in the projects in which you are interested. Join the forum and subscribe to GitHub repository for that project or go into its discourse channel: meet developers and your potential mentor, as well as start learning the code-base. We recommend strongly getting involved in advance of the beginning of GSoC, and we will look favourably on applications from students who have already started to act like Open Source developers.
+A good start is finding out what the most pressing issues are in the projects in which you are interested. Join the forum and subscribe to GitHub repository for that project or go into its discourse channel: meet developers and your potential mentor, as well as start learning the code-base. We recommend strongly getting involved in advance of the beginning of GSoC, and we will look favourably on applications from contributors who have already started to act like Open Source developers.
 
-## Student proposal guidelines
+## Contributor proposal guidelines
 
-A project proposal is what you will be judged upon. Write a clear proposal on what you plan to do, the scope of your project, and why we should choose you to do it. Proposals are the basis of the GSoC projects and therefore one of the most important things to do well. The proposal is not only the basis of our decision of which student to choose, it has also an effect on Google's decision as to how many student slots are assigned to Joplin.
+A project proposal is what you will be judged upon. Write a clear proposal on what you plan to do, the scope of your project, and why we should choose you to do it. Proposals are the basis of the GSoC projects and therefore one of the most important things to do well. The proposal is not only the basis of our decision of which contributor to choose, it has also an effect on Google's decision as to how many contributor slots are assigned to Joplin.
 
 Below is the application template:
 
@@ -133,11 +133,11 @@ There could be exceptional reason to accept proposal what cannot be finished ove
 
 **Aim wide**: submit more than one proposal. You are allowed to submit to another organisation as well. If you do submit more than one proposal, tell us that and which proposal you would choose, if both were selected. Former students would advise you to do one or two kick-ass proposals rather than trying to do three.
 
-## Accepted Students
+## Accepted Contributors
 
 Your primary responsibility is finishing your project under the guidance of your mentors. To do that, you must submit code regularly and stay in frequent and effective communication with your mentors and team. To pass the evaluations, you must do both the communication **and** the coding plus documentation.
 
-All students will create a report page by tool up to their choice. Keep this up-to-date, as this is one of our primary evaluation tools.
+All contributors will create a report page by tool up to their choice. Keep this up-to-date, as this is one of our primary evaluation tools.
 
 ## Instructions for mentors
 
@@ -147,17 +147,17 @@ If you're a Joplin developer or motivated user and you wish to participate in Su
 
 If you wish to mentor, please read the [GSoC Mentor Guide](https://google.github.io/gsocguides/mentor/org-application) and the [Summer of Code FAQ](https://developers.google.com/open-source/gsoc/faq#general). Also, please contact the [staff](https://discourse.joplinapp.org/g/staff) and get the go-ahead from them before editing the ideas page, adding your idea.
 
-Your idea proposal should be a brief description of what the project is, what the desired goals would be, what the student should know and an email address for contact. Students are not required to follow your idea to the letter, so regard your proposal as inspiration for the students.
+Your idea proposal should be a brief description of what the project is, what the desired goals would be, what the contributor should know and an email address for contact. Contributors are not required to follow your idea to the letter, so regard your proposal as inspiration for them.
 
 ### Mentoring
 
-Anyone developer can be a mentor if you meet the GSoC eligibility requirements. We will potentially assign a student to you who has never worked on such a large project and will need some help. Make sure you're up for the task. Mentoring takes time, and lots and lots of communication.
+Anyone developer can be a mentor if you meet the GSoC eligibility requirements. We will potentially assign a contributor to you who has never worked on such a large project and will need some help. Make sure you're up for the task. Mentoring takes time, and lots and lots of communication.
 
-Before subscribing yourself as a mentor, please make sure that  the [staff](https://discourse.joplinapp.org/g/staff) is aware of that. Ask them to send the Summer of Code  Administrators an email confirming your involvement in the team. This is just a formality to make sure you are a real person we can trust; the administrators cannot know all active developers by their Google account ID. Then drop us a message in the forum.
+Before subscribing yourself as a mentor, please make sure that  the [staff](https://discourse.joplinapp.org/g/staff) is aware of that. Ask them to send the Summer of Code Administrators an email confirming your involvement in the team. This is just a formality to make sure you are a real person we can trust; the administrators cannot know all active developers by their Google account ID. Then drop us a message in the forum.
 
 Prospective mentors should read the [mentoring guide](http://www.booki.cc/gsoc-mentoring). Also, Federico Mena-Quintero has written some helpful information based on his experiences in previous years. [His HOWTO](https://people.gnome.org/~federico/docs/summer-of-code-mentoring-howto/index.html) has some useful suggestions for anyone planning to mentor this year.
 
-You will subscribe to the relevant tags in the forum to discuss ideas. You will need to read the proposals as they come in, and vote on the proposals. Daily communication is required with your student during the Community Bonding period, and multiple times per week during the coding period.
+You will subscribe to the relevant tags in the forum to discuss ideas. You will need to read the proposals as they come in, and vote on the proposals. Daily communication is required with your contributor during the Community Bonding period, and multiple times per week during the coding period.
 
 Finally, know that we will never assign you to a project you do not want to work on. We will not assign you more projects than you can/want to take on either. And you will have a backup mentor, just in case something unforeseen takes place.
 
