@@ -13,8 +13,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.3\n"
+"X-Generator: Poedit 2.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:565
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -395,7 +397,7 @@ msgstr "Auto"
 
 #: packages/server/src/services/TaskService.ts:39
 msgid "Auto-add disabled accounts for deletion"
-msgstr ""
+msgstr "Føj automatisk deaktiverede konti til sletning"
 
 #: packages/lib/models/Setting.ts:855
 msgid "Auto-pair braces, parenthesis, quotations, etc."
@@ -709,7 +711,7 @@ msgstr "Fuldført: %s (%s)"
 
 #: packages/server/src/services/TaskService.ts:37
 msgid "Compress old changes"
-msgstr ""
+msgstr "Komprimér gamle ændringer"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:637
 #: packages/app-mobile/components/side-menu-content.js:332
@@ -1020,14 +1022,12 @@ msgid "Delete attachment \"%s\"?"
 msgstr "Slet venhæftning \"%s\"?"
 
 #: packages/server/src/services/TaskService.ts:36
-#, fuzzy
 msgid "Delete expired sessions"
-msgstr "Slå matematiske udtryk til"
+msgstr "Slet udløbne sessioner"
 
 #: packages/server/src/services/TaskService.ts:31
-#, fuzzy
 msgid "Delete expired tokens"
-msgstr "Slet disse %d noter?"
+msgstr "Slet udløbne tokens"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:88
 msgid "Delete line"
@@ -1345,12 +1345,12 @@ msgstr "Emacs"
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:236
 #: packages/server/src/routes/admin/emails.ts:128
 msgid "Email"
-msgstr ""
+msgstr "E-mail"
 
 #: packages/server/src/routes/admin/emails.ts:112
 #: packages/server/src/services/MustacheService.ts:152
 msgid "Emails"
-msgstr ""
+msgstr "E-mails"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:194
 msgid "emphasised text"
@@ -1837,7 +1837,7 @@ msgstr "Ignorer TLS certifikat-fejl"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:102
 msgid "Images"
-msgstr ""
+msgstr "Billeder"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:170
 #: packages/app-desktop/gui/MenuBar.tsx:484
@@ -2703,9 +2703,8 @@ msgid "Or create an account."
 msgstr "Eller opret en konto."
 
 #: packages/app-desktop/gui/MenuBar.tsx:352
-#, fuzzy
 msgid "Other applications..."
-msgstr "Lukker programmet."
+msgstr "Andre applikationer..."
 
 #: packages/app-cli/app/command-import.js:27
 msgid "Output format: %s"
@@ -2907,16 +2906,15 @@ msgstr "Privatlivspolitik"
 
 #: packages/server/src/services/TaskService.ts:35
 msgid "Process failed payment subscriptions"
-msgstr ""
+msgstr "Behandl mislykkede betalingsabonnementer"
 
 #: packages/server/src/services/TaskService.ts:33
 msgid "Process oversized accounts"
-msgstr ""
+msgstr "Behandl for store konti"
 
 #: packages/server/src/services/TaskService.ts:38
-#, fuzzy
 msgid "Process user deletions"
-msgstr "Brugersletninger"
+msgstr "Behandl brugersletninger"
 
 #: packages/server/src/routes/admin/users.ts:168
 msgid "Profile"
@@ -3199,14 +3197,12 @@ msgid "Select all"
 msgstr "Vælg alt"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:140
-#, fuzzy
 msgid "Select emoji..."
-msgstr "Vælg dato"
+msgstr "Vælg emoji..."
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:144
-#, fuzzy
 msgid "Select file..."
-msgstr "Vælg alt"
+msgstr "Vælg fil..."
 
 #: packages/app-cli/app/command-server.js:38
 msgid "Server is already running on port %d"
@@ -4218,9 +4214,8 @@ msgid "Update profile"
 msgstr "Opdater profil"
 
 #: packages/server/src/services/TaskService.ts:32
-#, fuzzy
 msgid "Update total sizes"
-msgstr "Opdaterede lokale emner: %d."
+msgstr "Opdater samlede størrelser"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:208
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:209
@@ -4572,11 +4567,9 @@ msgstr "Zoom ud"
 #~ msgid "Delete these notes?"
 #~ msgstr "Slet disse noter?"
 
-#, javascript-format
 #~ msgid "Encryption will be enabled using the master key created on %s"
 #~ msgstr "Kryptering vil aktiveres med hovednøglen oprettet den %s"
 
-#, javascript-format
 #~ msgid "%s %s (%s)"
 #~ msgstr "%s %s (%s)"
 
