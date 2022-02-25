@@ -6,6 +6,8 @@ import CommandService from '@joplin/lib/services/CommandService';
 import MenuUtils from '@joplin/lib/services/commands/MenuUtils';
 import KeymapService from '@joplin/lib/services/KeymapService';
 import { PluginStates, utils as pluginUtils } from '@joplin/lib/services/plugins/reducer';
+import { PluginManifest } from '@joplin/lib/services/plugins/utils/types';
+import PluginService, { Plugins } from '@joplin/lib/services/plugins/PluginService';
 import shim from '@joplin/lib/shim';
 import Setting from '@joplin/lib/models/Setting';
 import versionInfo from '@joplin/lib/versionInfo';
@@ -90,6 +92,26 @@ interface Props {
 	plugins: PluginStates;
 	customCss: string;
 	locale: string;
+}
+
+interface PluginItem {
+	manifest: PluginManifest;
+	devMode: boolean;
+}
+
+function useInstalledPlugins(plugins: Plugins): PluginItem[] {
+	const output: PluginItem[] = [];
+	for (const pluginId in plugins) {
+		const plugin = plugins[pluginId];
+		output.push({
+			manifest: plugin.manifest,
+			devMode: plugin.devMode,
+		});
+	}
+	output.sort((a: PluginItem, b: PluginItem) => {
+		return a.manifest.name < b.manifest.name ? -1 : +1;
+	});
+	return output;
 }
 
 const commandNames: string[] = menuCommandNames();
@@ -241,6 +263,10 @@ function useMenu(props: Props) {
 	const onImportModuleClickRef = useRef(null);
 	onImportModuleClickRef.current = onImportModuleClick;
 
+	const pluginService = PluginService.instance();
+	const pluginItems = useInstalledPlugins(pluginService.plugins);
+
+
 	useEffect(() => {
 		let timeoutId: any = null;
 
@@ -373,6 +399,20 @@ function useMenu(props: Props) {
 					type: 'separator',
 				};
 			};
+
+			const pluginsInstalled = [];
+			if (pluginItems.length) {
+				for (let i = 0; i < pluginItems.length; i++) {
+					const item = pluginItems[i];
+					pluginsInstalled.push({
+						label: item.manifest.name ,
+					});
+				}
+			} else {
+				pluginsInstalled.push({
+					label: _('Zero plugins installed'),
+				});
+			}
 
 			const newNoteItem = menuItemDic.newNote;
 			const newTodoItem = menuItemDic.newTodo;
@@ -717,6 +757,11 @@ function useMenu(props: Props) {
 					separator(),
 					syncStatusItem,
 					separator(),
+					{
+						label: _('Plugins available'),
+						visible: shim.isMac() ? false : true,
+						submenu: pluginsInstalled,
+					},
 					{
 						id: 'help:toggleDevTools',
 						label: _('Toggle development tools'),
