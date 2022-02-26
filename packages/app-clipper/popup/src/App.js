@@ -63,6 +63,7 @@ class AppComponent extends Component {
 			contentScriptLoaded: false,
 			selectedTags: [],
 			contentScriptError: '',
+			scrollToBottom: false,
 		});
 
 		this.confirm_click = () => {
@@ -77,12 +78,14 @@ class AppComponent extends Component {
 				type: 'CLIPPED_CONTENT_TITLE_SET',
 				text: event.currentTarget.value,
 			});
+			this.setState({ scrollToBottom: true });
 		};
 
 		this.clipSimplified_click = () => {
 			bridge().sendCommandToActiveTab({
 				name: 'simplifiedPageHtml',
 			});
+			this.setState({ scrollToBottom: true });
 		};
 
 		this.clipComplete_click = () => {
@@ -90,6 +93,7 @@ class AppComponent extends Component {
 				name: 'completePageHtml',
 				preProcessFor: 'markdown',
 			});
+			this.setState({ scrollToBottom: true });
 		};
 
 		this.clipCompleteHtml_click = () => {
@@ -97,18 +101,21 @@ class AppComponent extends Component {
 				name: 'completePageHtml',
 				preProcessFor: 'html',
 			});
+			this.setState({ scrollToBottom: true });
 		};
 
 		this.clipSelection_click = () => {
 			bridge().sendCommandToActiveTab({
 				name: 'selectedHtml',
 			});
+			this.setState({ scrollToBottom: true });
 		};
 
 		this.clipUrl_click = () => {
 			bridge().sendCommandToActiveTab({
 				name: 'pageUrl',
 			});
+			this.setState({ scrollToBottom: true });
 		};
 
 		this.clipScreenshot_click = async () => {
@@ -231,6 +238,9 @@ class AppComponent extends Component {
 				lastRef = ref;
 			}
 			if (lastRef) lastRef.focus();
+		}
+		if (this.state.scrollToBottom) {
+			window.scrollTo({ left: 0, top: document.body.scrollHeight, behavior: 'smooth' });
 		}
 	}
 
