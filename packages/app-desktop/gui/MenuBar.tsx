@@ -6,8 +6,7 @@ import CommandService from '@joplin/lib/services/CommandService';
 import MenuUtils from '@joplin/lib/services/commands/MenuUtils';
 import KeymapService from '@joplin/lib/services/KeymapService';
 import { PluginStates, utils as pluginUtils } from '@joplin/lib/services/plugins/reducer';
-import { PluginManifest } from '@joplin/lib/services/plugins/utils/types';
-import PluginService, { Plugins } from '@joplin/lib/services/plugins/PluginService';
+import PluginService from '@joplin/lib/services/plugins/PluginService';
 import shim from '@joplin/lib/shim';
 import Setting from '@joplin/lib/models/Setting';
 import versionInfo from '@joplin/lib/versionInfo';
@@ -92,26 +91,6 @@ interface Props {
 	plugins: PluginStates;
 	customCss: string;
 	locale: string;
-}
-
-interface PluginItem {
-	manifest: PluginManifest;
-	devMode: boolean;
-}
-
-function useInstalledPlugins(plugins: Plugins): PluginItem[] {
-	const output: PluginItem[] = [];
-	for (const pluginId in plugins) {
-		const plugin = plugins[pluginId];
-		output.push({
-			manifest: plugin.manifest,
-			devMode: plugin.devMode,
-		});
-	}
-	output.sort((a: PluginItem, b: PluginItem) => {
-		return a.manifest.name < b.manifest.name ? -1 : +1;
-	});
-	return output;
 }
 
 const commandNames: string[] = menuCommandNames();
@@ -443,16 +422,29 @@ function useMenu(props: Props) {
 
 			function _showAbout() {
 				const v = versionInfo(packageInfo);
-				const pluginService = PluginService.instance();
-				const pluginItems = useInstalledPlugins(pluginService.plugins);
-				function random(pluginItems: PluginItem[]): string {
+				const pluginService = PluginService.instance().plugins;
+				function dialogInfo(pluginService: any): string {
 					let content = v.message.concat('\n');
-					for (const item of pluginItems) {
-						content = content.concat(`\n${item.manifest.name}: ${item.manifest.version}`);
+					const items = [];
+					for (const plugins in pluginService) {
+						const plugin = pluginService[plugins];
+						items.push({
+							name: plugin.manifest.name,
+							version: plugin.manifest.version,
+						});
+						items.sort((a: any, b: any) => {
+							return a.name < b.name ? -1 : +1;
+						});
 					}
+					if (items) {
+						for (const item of items) {
+							content = content.concat(`\n${item.name}: ${item.version}`);
+						}
+					}
+
 					return content;
 				}
-				const message = random(pluginItems);
+				const message = dialogInfo(pluginService);
 
 				const copyToClipboard = bridge().showMessageBox(message, {
 					icon: `${bridge().electronApp().buildDir()}/icons/128x128.png`,
