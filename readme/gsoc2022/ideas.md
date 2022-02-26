@@ -28,7 +28,7 @@ Skills Required: TypeScript, React Native
 
 Potential Mentor(s): [PackElend](https://discourse.joplinapp.org/u/PackElend), [Roman](https://discourse.joplinapp.org/u/roman_r_m), [Laurent](https://github.com/laurent22/)
 
-Expected size of project: 
+Expected size of project: 350 hours
 
 ## 2. Seamless desktop application updates
 
@@ -70,7 +70,7 @@ Skills Required: TypeScript, JavaScript, CSS, HTML, Markdown rendering.
 
 Potential Mentor(s): [Daeraxa](https://discourse.joplinapp.org/u/Daeraxa), [Laurent](https://github.com/laurent22/)
 
-Expected size of project: 
+Expected size of project: 350 hours
 
 ## 4. Implement default plugins on desktop application
 
