@@ -263,10 +263,6 @@ function useMenu(props: Props) {
 	const onImportModuleClickRef = useRef(null);
 	onImportModuleClickRef.current = onImportModuleClick;
 
-	const pluginService = PluginService.instance();
-	const pluginItems = useInstalledPlugins(pluginService.plugins);
-
-
 	useEffect(() => {
 		let timeoutId: any = null;
 
@@ -400,20 +396,6 @@ function useMenu(props: Props) {
 				};
 			};
 
-			const pluginsInstalled = [];
-			if (pluginItems.length) {
-				for (let i = 0; i < pluginItems.length; i++) {
-					const item = pluginItems[i];
-					pluginsInstalled.push({
-						label: item.manifest.name ,
-					});
-				}
-			} else {
-				pluginsInstalled.push({
-					label: _('Zero plugins installed'),
-				});
-			}
-
 			const newNoteItem = menuItemDic.newNote;
 			const newTodoItem = menuItemDic.newTodo;
 			const newFolderItem = menuItemDic.newFolder;
@@ -461,8 +443,18 @@ function useMenu(props: Props) {
 
 			function _showAbout() {
 				const v = versionInfo(packageInfo);
+				const pluginService = PluginService.instance();
+				const pluginItems = useInstalledPlugins(pluginService.plugins);
+				function random(pluginItems: PluginItem[]): string {
+					let content = v.message.concat('\n');
+					for (const item of pluginItems) {
+						content = content.concat(`\n${item.manifest.name}: ${item.manifest.version}`);
+					}
+					return content;
+				}
+				const message = random(pluginItems);
 
-				const copyToClipboard = bridge().showMessageBox(v.message, {
+				const copyToClipboard = bridge().showMessageBox(message, {
 					icon: `${bridge().electronApp().buildDir()}/icons/128x128.png`,
 					buttons: [_('Copy'), _('OK')],
 					cancelId: 1,
@@ -679,11 +671,11 @@ function useMenu(props: Props) {
 							},
 							accelerator: 'CommandOrControl+0',
 						}, {
-						// There are 2 shortcuts for the action 'zoom in', mainly to increase the user experience.
-						// Most applications handle this the same way. These applications indicate Ctrl +, but actually mean Ctrl =.
-						// In fact they allow both: + and =. On the English keyboard layout - and = are used without the shift key.
-						// So to use Ctrl + would mean to use the shift key, but this is not the case in any of the apps that show Ctrl +.
-						// Additionally it allows the use of the plus key on the numpad.
+							// There are 2 shortcuts for the action 'zoom in', mainly to increase the user experience.
+							// Most applications handle this the same way. These applications indicate Ctrl +, but actually mean Ctrl =.
+							// In fact they allow both: + and =. On the English keyboard layout - and = are used without the shift key.
+							// So to use Ctrl + would mean to use the shift key, but this is not the case in any of the apps that show Ctrl +.
+							// Additionally it allows the use of the plus key on the numpad.
 							label: _('Zoom In'),
 							click: () => {
 								Setting.incValue('windowContentZoomFactor', 10);
@@ -757,11 +749,6 @@ function useMenu(props: Props) {
 					separator(),
 					syncStatusItem,
 					separator(),
-					{
-						label: _('Plugins available'),
-						visible: shim.isMac() ? false : true,
-						submenu: pluginsInstalled,
-					},
 					{
 						id: 'help:toggleDevTools',
 						label: _('Toggle development tools'),
