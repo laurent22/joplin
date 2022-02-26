@@ -78,7 +78,7 @@ export default class Revision extends BaseItem {
 		return true;
 	}
 
-	static createObjectPatch(oldObject: any, newObject: any) {
+	public static createObjectPatch(oldObject: any, newObject: any) {
 		if (!oldObject) oldObject = {};
 
 		const output: any = {
@@ -237,7 +237,7 @@ export default class Revision extends BaseItem {
 	}
 
 	// Note: revs must be sorted by update_time ASC (as returned by allByType)
-	static async mergeDiffs(revision: RevisionEntity, revs: RevisionEntity[] = null) {
+	public static async mergeDiffs(revision: RevisionEntity, revs: RevisionEntity[] = null) {
 		if (!('encryption_applied' in revision) || !!revision.encryption_applied) throw new JoplinError('Target revision is encrypted', 'revision_encrypted');
 
 		if (!revs) {
@@ -273,7 +273,12 @@ export default class Revision extends BaseItem {
 			if (rev.encryption_applied) throw new JoplinError(sprintf('Revision "%s" is encrypted', rev.id), 'revision_encrypted');
 			output.title = this.applyTextPatch(output.title, rev.title_diff);
 			output.body = this.applyTextPatch(output.body, rev.body_diff);
-			output.metadata = this.applyObjectPatch(output.metadata, rev.metadata_diff);
+			try {
+				output.metadata = this.applyObjectPatch(output.metadata, rev.metadata_diff);
+			} catch (error) {
+				error.message = `Revision ${rev.id}: Could not apply patch: ${error.message}: ${rev.metadata_diff}`;
+				throw error;
+			}
 		}
 
 		return output;
