@@ -413,9 +413,9 @@ export default class InteropService {
 
 				const ItemClass = BaseItem.getClassByItemType(itemType);
 				const itemOrId = itemsToExport[i].itemOrId;
-				const item = this.normalizeItemForExport(itemType, typeof itemOrId === 'object' ? itemOrId : await ItemClass.load(itemOrId));
+				const rawItem = typeof itemOrId === 'object' ? itemOrId : await ItemClass.load(itemOrId);
 
-				if (!item) {
+				if (!rawItem) {
 					if (itemType === BaseModel.TYPE_RESOURCE) {
 						result.warnings.push(sprintf('A resource that does not exist is referenced in a note. The resource was skipped. Resource ID: %s', itemOrId));
 					} else {
@@ -423,6 +423,8 @@ export default class InteropService {
 					}
 					continue;
 				}
+
+				const item = this.normalizeItemForExport(itemType, rawItem);
 
 				if (item.encryption_applied || item.encryption_blob_encrypted) {
 					result.warnings.push(sprintf('This item is currently encrypted: %s "%s" (%s) and was not exported. You may wait for it to be decrypted and try again.', BaseModel.modelTypeToName(itemType), item.title ? item.title : item.id, item.id));
