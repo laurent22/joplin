@@ -236,7 +236,7 @@ msgstr "Aktiva"
 msgid "Actual Size"
 msgstr ""
 
-#: packages/app-mobile/components/screens/Note.tsx:1128
+#: packages/app-mobile/components/screens/Note.tsx:1116
 msgid "Add body"
 msgstr "Aldoni korpon"
 
@@ -248,7 +248,7 @@ msgstr "Aldoni aŭ forigi etikedojn:"
 msgid "Add recipient:"
 msgstr ""
 
-#: packages/app-mobile/components/screens/Note.tsx:1191
+#: packages/app-mobile/components/screens/Note.tsx:1177
 msgid "Add title"
 msgstr "Aldoni titolon"
 
@@ -256,8 +256,8 @@ msgstr "Aldoni titolon"
 msgid "Add to dictionary"
 msgstr ""
 
-#: packages/server/src/services/MustacheService.ts:186
-#: packages/server/src/services/MustacheService.ts:310
+#: packages/server/src/services/MustacheService.ts:183
+#: packages/server/src/services/MustacheService.ts:307
 msgid "Admin"
 msgstr ""
 
@@ -324,15 +324,15 @@ msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:53
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:589
-#: packages/app-mobile/components/screens/Note.tsx:898
+#: packages/app-mobile/components/screens/Note.tsx:893
 msgid "Attach file"
 msgstr "Aldoni dosieron"
 
-#: packages/app-mobile/components/screens/Note.tsx:902
+#: packages/app-mobile/components/screens/Note.tsx:897
 msgid "Attach photo"
 msgstr "Aldoni foton"
 
-#: packages/app-mobile/components/screens/Note.tsx:885
+#: packages/app-mobile/components/screens/Note.tsx:880
 msgid "Attach..."
 msgstr "Aldoni..."
 
@@ -444,8 +444,8 @@ msgstr ""
 #: packages/app-mobile/components/CameraView.tsx:191
 #: packages/app-mobile/components/ModalDialog.js:70
 #: packages/app-mobile/components/screens/encryption-config.tsx:190
-#: packages/app-mobile/components/screens/Note.tsx:107
-#: packages/app-mobile/components/screens/Note.tsx:593
+#: packages/app-mobile/components/screens/Note.tsx:104
+#: packages/app-mobile/components/screens/Note.tsx:588
 #: packages/app-mobile/components/SelectDateTimeDialog.tsx:152
 #: packages/app-mobile/components/side-menu-content.js:156
 #: packages/app-mobile/components/side-menu-content.js:165
@@ -502,8 +502,8 @@ msgstr ""
 #: packages/app-cli/app/command-tag.js:87
 #: packages/app-cli/app/command-todo.js:21
 #: packages/app-cli/app/command-use.js:21
-#: packages/lib/services/interop/InteropService.ts:290
-#: packages/lib/services/interop/InteropService.ts:308
+#: packages/lib/services/interop/InteropService.ts:266
+#: packages/lib/services/interop/InteropService.ts:284
 msgid "Cannot find \"%s\"."
 msgstr "Ne eblas trovi \"%s\"."
 
@@ -511,11 +511,11 @@ msgstr "Ne eblas trovi \"%s\"."
 msgid "Cannot initialise synchroniser."
 msgstr ""
 
-#: packages/lib/services/interop/InteropService.ts:209
+#: packages/lib/services/interop/InteropService.ts:208
 msgid "Cannot load \"%s\" module for format \"%s\" and output \"%s\""
 msgstr ""
 
-#: packages/lib/services/interop/InteropService.ts:235
+#: packages/lib/services/interop/InteropService.ts:234
 msgid "Cannot load \"%s\" module for format \"%s\" and target \"%s\""
 msgstr ""
 
@@ -591,7 +591,7 @@ msgstr "Markobutono"
 msgid "Checking... Please wait."
 msgstr "Kontrolante... Atendu."
 
-#: packages/app-mobile/components/screens/Note.tsx:905
+#: packages/app-mobile/components/screens/Note.tsx:900
 msgid "Choose an option"
 msgstr "Elekti opcion"
 
@@ -738,17 +738,17 @@ msgstr "Aldoni dosieron"
 msgid "Content provided by %s"
 msgstr "Notaj atributoj"
 
-#: packages/app-mobile/components/screens/Note.tsx:938
+#: packages/app-mobile/components/screens/Note.tsx:933
 msgid "Convert to note"
 msgstr "Konverti al noto"
 
-#: packages/app-mobile/components/screens/Note.tsx:938
+#: packages/app-mobile/components/screens/Note.tsx:933
 msgid "Convert to todo"
 msgstr "Konverti al tasko"
 
 #: packages/app-desktop/gui/MenuBar.tsx:433
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:13
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:760
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:761
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:151
 msgid "Copy"
 msgstr "Kopii"
@@ -774,7 +774,7 @@ msgid "Copy Link Address"
 msgstr ""
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:124
-#: packages/app-mobile/components/screens/Note.tsx:945
+#: packages/app-mobile/components/screens/Note.tsx:940
 msgid "Copy Markdown link"
 msgstr ""
 
@@ -887,7 +887,7 @@ msgid "Created: %d."
 msgstr "Kreita: %d."
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:118
-#: packages/app-mobile/components/screens/Note.tsx:840
+#: packages/app-mobile/components/screens/Note.tsx:835
 msgid "Created: %s"
 msgstr "Kreita: %s"
 
@@ -936,7 +936,7 @@ msgid "Custom TLS certificates"
 msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:18
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:750
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:751
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:143
 msgid "Cut"
 msgstr "Eltondi"
@@ -945,7 +945,7 @@ msgstr "Eltondi"
 msgid "Dark"
 msgstr "Malhela"
 
-#: packages/server/src/services/MustacheService.ts:139
+#: packages/server/src/services/MustacheService.ts:136
 msgid "Dashboard"
 msgstr ""
 
@@ -995,7 +995,7 @@ msgstr "Defaŭlto: %s"
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:192
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:222
 #: packages/app-mobile/components/screen-header.js:362
-#: packages/app-mobile/components/screens/Note.tsx:958
+#: packages/app-mobile/components/screens/Note.tsx:953
 #: packages/app-mobile/components/side-menu-content.js:146
 msgid "Delete"
 msgstr "Forigi"
@@ -1028,7 +1028,7 @@ msgid "Delete note \"%s\"?"
 msgstr "Forigi noton \"%s\"?"
 
 #: packages/app-cli/app/command-rmnote.js:27
-#: packages/app-mobile/components/screens/Note.tsx:530
+#: packages/app-mobile/components/screens/Note.tsx:525
 msgid "Delete note?"
 msgstr "Ĉu forigi noton?"
 
@@ -1137,7 +1137,7 @@ msgid ""
 "continue?"
 msgstr ""
 
-#: packages/app-mobile/components/screens/Note.tsx:107
+#: packages/app-mobile/components/screens/Note.tsx:104
 msgid "Discard changes"
 msgstr ""
 
@@ -1268,7 +1268,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/MainScreen/commands/openFolderDialog.ts:12
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/openEditDialog.ts:83
-#: packages/app-mobile/components/screens/Note.tsx:1151
+#: packages/app-mobile/components/screens/Note.tsx:1139
 msgid "Edit"
 msgstr "Redakti"
 
@@ -1326,7 +1326,7 @@ msgid "Email"
 msgstr ""
 
 #: packages/server/src/routes/admin/emails.ts:112
-#: packages/server/src/services/MustacheService.ts:155
+#: packages/server/src/services/MustacheService.ts:152
 msgid "Emails"
 msgstr ""
 
@@ -1527,11 +1527,11 @@ msgstr ""
 msgid "Errors only"
 msgstr "Nur eraroj"
 
-#: packages/lib/services/interop/InteropService.ts:89
+#: packages/lib/services/interop/InteropService.ts:88
 msgid "Evernote Export File (as HTML)"
 msgstr ""
 
-#: packages/lib/services/interop/InteropService.ts:80
+#: packages/lib/services/interop/InteropService.ts:79
 msgid "Evernote Export File (as Markdown)"
 msgstr ""
 
@@ -1696,7 +1696,7 @@ msgid "Full changelog"
 msgstr ""
 
 #: packages/lib/models/Setting.ts:2141
-#: packages/server/src/services/MustacheService.ts:136
+#: packages/server/src/services/MustacheService.ts:133
 msgid "General"
 msgstr "Ĝenerala"
 
@@ -1727,7 +1727,7 @@ msgid ""
 "current configuration."
 msgstr ""
 
-#: packages/app-mobile/components/screens/Note.tsx:852
+#: packages/app-mobile/components/screens/Note.tsx:847
 msgid "Go to source URL"
 msgstr "Iri al URL-fonto"
 
@@ -1744,7 +1744,7 @@ msgstr ""
 msgid "Heading"
 msgstr ""
 
-#: packages/server/src/services/MustacheService.ts:308
+#: packages/server/src/services/MustacheService.ts:305
 #, fuzzy
 msgid "Help"
 msgstr "&Helpo"
@@ -1766,8 +1766,8 @@ msgstr "Pri Joplin"
 msgid "Highlight"
 msgstr ""
 
-#: packages/server/src/services/MustacheService.ts:170
-#: packages/server/src/services/MustacheService.ts:303
+#: packages/server/src/services/MustacheService.ts:167
+#: packages/server/src/services/MustacheService.ts:300
 msgid "Home"
 msgstr ""
 
@@ -1775,12 +1775,12 @@ msgstr ""
 msgid "Horizontal Rule"
 msgstr ""
 
-#: packages/lib/services/interop/InteropService.ts:134
+#: packages/lib/services/interop/InteropService.ts:133
 #, fuzzy
 msgid "HTML Directory"
 msgstr "Dosierujo"
 
-#: packages/lib/services/interop/InteropService.ts:128
+#: packages/lib/services/interop/InteropService.ts:127
 #, fuzzy
 msgid "HTML File"
 msgstr "Dosiero"
@@ -1850,7 +1850,7 @@ msgid ""
 "note or notebook. `$c` can be used to refer to the currently selected item."
 msgstr ""
 
-#: packages/app-mobile/components/screens/Note.tsx:407
+#: packages/app-mobile/components/screens/Note.tsx:402
 msgid ""
 "In order to associate a geo-location with the note, the app needs your "
 "permission to access your location.\n"
@@ -1978,8 +1978,8 @@ msgstr "Kursiva"
 msgid "Item \"%s\" could not be downloaded: %s"
 msgstr ""
 
-#: packages/server/src/services/MustacheService.ts:178
-#: packages/server/src/services/MustacheService.ts:305
+#: packages/server/src/services/MustacheService.ts:175
+#: packages/server/src/services/MustacheService.ts:302
 msgid "Items"
 msgstr ""
 
@@ -2012,13 +2012,13 @@ msgstr "Joplin-retejo"
 msgid "Joplin Cloud password"
 msgstr "Entajpu ĉefan pasvorton:"
 
-#: packages/lib/services/interop/InteropService.ts:108
-#: packages/lib/services/interop/InteropService.ts:73
+#: packages/lib/services/interop/InteropService.ts:107
+#: packages/lib/services/interop/InteropService.ts:72
 msgid "Joplin Export Directory"
 msgstr ""
 
-#: packages/lib/services/interop/InteropService.ts:102
-#: packages/lib/services/interop/InteropService.ts:51
+#: packages/lib/services/interop/InteropService.ts:101
+#: packages/lib/services/interop/InteropService.ts:50
 msgid "Joplin Export File"
 msgstr ""
 
@@ -2109,7 +2109,7 @@ msgstr "Lasta eraro: %s"
 msgid "Later"
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:609
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:610
 msgid "Layout"
 msgstr "Aspektigo"
 
@@ -2144,7 +2144,7 @@ msgid_plural "Links have been copied to clipboard!"
 msgstr[0] ""
 msgstr[1] ""
 
-#: packages/app-mobile/components/screens/Note.tsx:200
+#: packages/app-mobile/components/screens/Note.tsx:197
 msgid "Links with protocol \"%s\" are not supported"
 msgstr ""
 
@@ -2171,7 +2171,7 @@ msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:521
 #: packages/app-mobile/components/screens/log.js:100
-#: packages/server/src/services/MustacheService.ts:306
+#: packages/server/src/services/MustacheService.ts:303
 msgid "Log"
 msgstr "Protokolo"
 
@@ -2191,11 +2191,11 @@ msgstr "Ensaluti per Dropbox"
 msgid "Login with OneDrive"
 msgstr "Ensaluti per OneDrive"
 
-#: packages/server/src/services/MustacheService.ts:309
+#: packages/server/src/services/MustacheService.ts:306
 msgid "Logout"
 msgstr ""
 
-#: packages/server/src/services/MustacheService.ts:182
+#: packages/server/src/services/MustacheService.ts:179
 msgid "Logs"
 msgstr ""
 
@@ -2230,13 +2230,13 @@ msgid "Manual"
 msgstr ""
 
 #: packages/lib/models/Setting.ts:2146
-#: packages/lib/services/interop/InteropService.ts:114
-#: packages/lib/services/interop/InteropService.ts:59
+#: packages/lib/services/interop/InteropService.ts:113
+#: packages/lib/services/interop/InteropService.ts:58
 msgid "Markdown"
 msgstr ""
 
-#: packages/lib/services/interop/InteropService.ts:120
-#: packages/lib/services/interop/InteropService.ts:67
+#: packages/lib/services/interop/InteropService.ts:119
+#: packages/lib/services/interop/InteropService.ts:66
 msgid "Markdown + Front Matter"
 msgstr ""
 
@@ -2392,7 +2392,7 @@ msgid "no"
 msgstr "n"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:29
-#: packages/app-mobile/components/screens/Note.tsx:592
+#: packages/app-mobile/components/screens/Note.tsx:587
 #: packages/lib/shim-init-node.js:172 packages/lib/versionInfo.ts:27
 msgid "No"
 msgstr "Ne"
@@ -2401,7 +2401,7 @@ msgstr "Ne"
 msgid "No active notebook."
 msgstr "Ne estas aktiva notlibro."
 
-#: packages/app-mobile/components/screens/Note.tsx:171
+#: packages/app-mobile/components/screens/Note.tsx:168
 msgid "No item with ID %s"
 msgstr ""
 
@@ -2705,7 +2705,7 @@ msgid "Passwords do not match!"
 msgstr "Pasvorto ne kongruas!"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:23
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:770
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:771
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:158
 msgid "Paste"
 msgstr "Alglui"
@@ -2719,7 +2719,7 @@ msgstr ""
 msgid "PDF File"
 msgstr "PDF-dosiero"
 
-#: packages/app-mobile/components/screens/Note.tsx:408
+#: packages/app-mobile/components/screens/Note.tsx:403
 #, fuzzy
 msgid "Permission needed"
 msgstr "Permeso por uzi kameraon"
@@ -2771,7 +2771,7 @@ msgstr "Bonvolu elekti noton unue."
 msgid "Please select where the sync status should be exported to"
 msgstr ""
 
-#: packages/lib/services/interop/InteropService.ts:301
+#: packages/lib/services/interop/InteropService.ts:277
 msgid "Please specify import format for %s"
 msgstr ""
 
@@ -2885,7 +2885,7 @@ msgstr ""
 msgid "Profile Version: %s"
 msgstr "Nova versio: %s"
 
-#: packages/app-mobile/components/screens/Note.tsx:952
+#: packages/app-mobile/components/screens/Note.tsx:947
 msgid "Properties"
 msgstr "Atributoj"
 
@@ -3111,7 +3111,7 @@ msgstr "Konservi alarmon"
 msgid "Save as..."
 msgstr "Konservi kiel..."
 
-#: packages/app-mobile/components/screens/Note.tsx:107
+#: packages/app-mobile/components/screens/Note.tsx:104
 msgid "Save changes"
 msgstr "Konservi la ŝanĝojn"
 
@@ -3187,7 +3187,7 @@ msgid "Server is running on port %d"
 msgstr ""
 
 #: packages/app-desktop/gui/MainScreen/commands/editAlarm.ts:10
-#: packages/app-mobile/components/screens/Note.tsx:916
+#: packages/app-mobile/components/screens/Note.tsx:911
 #: packages/app-mobile/components/SelectDateTimeDialog.tsx:141
 #, fuzzy
 msgid "Set alarm"
@@ -3217,7 +3217,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:248
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.ts:20
-#: packages/app-mobile/components/screens/Note.tsx:924
+#: packages/app-mobile/components/screens/Note.tsx:919
 msgid "Share"
 msgstr "Konigi"
 
@@ -3573,18 +3573,18 @@ msgstr ""
 
 #: packages/app-desktop/gui/MainScreen/commands/setTags.ts:7
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:725
-#: packages/app-mobile/components/screens/Note.tsx:931
+#: packages/app-mobile/components/screens/Note.tsx:926
 #: packages/app-mobile/components/screens/tags.js:101
 #: packages/app-mobile/components/side-menu-content.js:330
 msgid "Tags"
 msgstr "Etikedoj"
 
-#: packages/app-mobile/components/screens/Note.tsx:903
+#: packages/app-mobile/components/screens/Note.tsx:898
 msgid "Take photo"
 msgstr "Foti"
 
-#: packages/server/src/services/MustacheService.ts:151
-#: packages/server/src/services/MustacheService.ts:307
+#: packages/server/src/services/MustacheService.ts:148
+#: packages/server/src/services/MustacheService.ts:304
 msgid "Tasks"
 msgstr ""
 
@@ -3672,7 +3672,7 @@ msgid ""
 "and encrypt your data as usual."
 msgstr ""
 
-#: packages/app-mobile/components/screens/Note.tsx:196
+#: packages/app-mobile/components/screens/Note.tsx:193
 msgid "The Joplin mobile app does not currently support this type of link: %s"
 msgstr ""
 
@@ -3819,7 +3819,7 @@ msgstr ""
 msgid "This attachment is not downloaded or not decrypted yet"
 msgstr ""
 
-#: packages/app-mobile/components/screens/Note.tsx:190
+#: packages/app-mobile/components/screens/Note.tsx:187
 msgid "This attachment is not downloaded or not decrypted yet."
 msgstr ""
 
@@ -3841,11 +3841,11 @@ msgstr ""
 msgid "This note does not have geolocation information."
 msgstr ""
 
-#: packages/app-mobile/components/screens/Note.tsx:107
+#: packages/app-mobile/components/screens/Note.tsx:104
 msgid "This note has been modified:"
 msgstr "Tiu noto estis ŝanĝita:"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:609
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:610
 msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
 "note."
@@ -4081,7 +4081,7 @@ msgid ""
 "content."
 msgstr ""
 
-#: packages/app-mobile/components/screens/Note.tsx:685
+#: packages/app-mobile/components/screens/Note.tsx:680
 msgid "Unsupported image type: %s"
 msgstr "Nesubtenata bilda tipo: %s"
 
@@ -4141,7 +4141,7 @@ msgstr "Ĝisdatigita: %s"
 msgid "Updated: %d."
 msgstr "Ĝisdatigita: %d."
 
-#: packages/app-mobile/components/screens/Note.tsx:841
+#: packages/app-mobile/components/screens/Note.tsx:836
 msgid "Updated: %s"
 msgstr "Ĝisdatigita: %s"
 
@@ -4206,13 +4206,13 @@ msgid ""
 "font is used."
 msgstr ""
 
-#: packages/server/src/services/MustacheService.ts:147
+#: packages/server/src/services/MustacheService.ts:144
 msgid "User deletions"
 msgstr ""
 
 #: packages/server/src/routes/admin/users.ts:107
-#: packages/server/src/services/MustacheService.ts:143
-#: packages/server/src/services/MustacheService.ts:304
+#: packages/server/src/services/MustacheService.ts:140
+#: packages/server/src/services/MustacheService.ts:301
 msgid "Users"
 msgstr ""
 
@@ -4226,7 +4226,7 @@ msgstr "Malvalida respondo: %s"
 msgid "View"
 msgstr "&Monti"
 
-#: packages/app-mobile/components/screens/Note.tsx:845
+#: packages/app-mobile/components/screens/Note.tsx:840
 msgid "View on map"
 msgstr "Vidi en mapo"
 
@@ -4316,12 +4316,12 @@ msgid "yes"
 msgstr "Jes"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:28
-#: packages/app-mobile/components/screens/Note.tsx:591
+#: packages/app-mobile/components/screens/Note.tsx:586
 #: packages/lib/shim-init-node.js:172 packages/lib/versionInfo.ts:27
 msgid "Yes"
 msgstr "Jes"
 
-#: packages/app-mobile/components/screens/Note.tsx:590
+#: packages/app-mobile/components/screens/Note.tsx:585
 #: packages/lib/shim-init-node.js:171
 msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "

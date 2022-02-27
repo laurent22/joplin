@@ -24,11 +24,11 @@ Three types of applications are available: for **desktop** (Windows, macOS and L
 
 Operating System | Download
 ---|---
-Windows (32 and 64-bit) | <a href='https://github.com/laurent22/joplin/releases/download/v2.6.10/Joplin-Setup-2.6.10.exe'><img alt='Get it on Windows' width="134px" src='https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/BadgeWindows.png'/></a>
-macOS | <a href='https://github.com/laurent22/joplin/releases/download/v2.6.10/Joplin-2.6.10.dmg'><img alt='Get it on macOS' width="134px" src='https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/BadgeMacOS.png'/></a>
-Linux | <a href='https://github.com/laurent22/joplin/releases/download/v2.6.10/Joplin-2.6.10.AppImage'><img alt='Get it on Linux' width="134px" src='https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/BadgeLinux.png'/></a>
+Windows (32 and 64-bit) | <a href='https://github.com/laurent22/joplin/releases/download/v2.7.13/Joplin-Setup-2.7.13.exe'><img alt='Get it on Windows' width="134px" src='https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/BadgeWindows.png'/></a>
+macOS | <a href='https://github.com/laurent22/joplin/releases/download/v2.7.13/Joplin-2.7.13.dmg'><img alt='Get it on macOS' width="134px" src='https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/BadgeMacOS.png'/></a>
+Linux | <a href='https://github.com/laurent22/joplin/releases/download/v2.7.13/Joplin-2.7.13.AppImage'><img alt='Get it on Linux' width="134px" src='https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/BadgeLinux.png'/></a>
 
-**On Windows**, you may also use the <a href='https://github.com/laurent22/joplin/releases/download/v2.6.10/JoplinPortable.exe'>Portable version</a>. The [portable application](https://en.wikipedia.org/wiki/Portable_application) allows installing the software on a portable device such as a USB key. Simply copy the file JoplinPortable.exe in any directory on that USB key ; the application will then create a directory called "JoplinProfile" next to the executable file.
+**On Windows**, you may also use the <a href='https://github.com/laurent22/joplin/releases/download/v2.7.13/JoplinPortable.exe'>Portable version</a>. The [portable application](https://en.wikipedia.org/wiki/Portable_application) allows installing the software on a portable device such as a USB key. Simply copy the file JoplinPortable.exe in any directory on that USB key ; the application will then create a directory called "JoplinProfile" next to the executable file.
 
 **On Linux**, the recommended way is to use the following installation script as it will handle the desktop icon too:
 
@@ -38,7 +38,7 @@ Linux | <a href='https://github.com/laurent22/joplin/releases/download/v2.6.10/J
 
 Operating System | Download | Alt. Download
 ---|---|---
-Android | <a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/BadgeAndroid.png'/></a> | or download the APK file: [64-bit](https://github.com/laurent22/joplin-android/releases/download/android-v2.6.9/joplin-v2.6.9.apk) [32-bit](https://github.com/laurent22/joplin-android/releases/download/android-v2.6.9/joplin-v2.6.9-32bit.apk)
+Android | <a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/BadgeAndroid.png'/></a> | or download the APK file: [64-bit](https://github.com/laurent22/joplin-android/releases/download/android-v2.7.2/joplin-v2.7.2.apk) [32-bit](https://github.com/laurent22/joplin-android/releases/download/android-v2.7.2/joplin-v2.7.2-32bit.apk)
 iOS | <a href='https://itunes.apple.com/us/app/joplin/id1315599797'><img alt='Get it on the App Store' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/BadgeIOS.png'/></a> | -
 
 ## Terminal application
@@ -529,7 +529,7 @@ Current translations:
 <img src="https://joplinapp.org/images/flags/country-4x3/us.png" width="16px"/>  |  English (United States of America)  |  [en_US](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/en_US.po)  |    |  100%
 <img src="https://joplinapp.org/images/flags/country-4x3/es.png" width="16px"/>  |  Español (España)  |  [es_ES](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/es_ES.po)  |  [Francisco Mora](mailto:francisco.m.collao@gmail.com)  |  96%
 <img src="https://joplinapp.org/images/flags/esperanto.png" width="16px"/>  |  Esperanto  |  [eo](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/eo.po)  |  Marton Paulo  |  29%
-<img src="https://joplinapp.org/images/flags/country-4x3/fi.png" width="16px"/>  |  Finnish (Suomi)  |  [fi_FI](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/fi_FI.po)  |  mrkaato  |  91%
+<img src="https://joplinapp.org/images/flags/country-4x3/fi.png" width="16px"/>  |  Finnish (Suomi)  |  [fi_FI](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/fi_FI.po)  |  miucci  |  92%
 <img src="https://joplinapp.org/images/flags/country-4x3/fr.png" width="16px"/>  |  Français (France)  |  [fr_FR](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/fr_FR.po)  |  Laurent Cozic  |  100%
 <img src="https://joplinapp.org/images/flags/es/galicia.png" width="16px"/>  |  Galician (España)  |  [gl_ES](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/gl_ES.po)  |  [Marcos Lans](mailto:marcoslansgarza@gmail.com)  |  33%
 <img src="https://joplinapp.org/images/flags/country-4x3/id.png" width="16px"/>  |  Indonesian (Indonesia)  |  [id_ID](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/id_ID.po)  |  [eresytter](mailto:42007357+eresytter@users.noreply.github.com)  |  90%

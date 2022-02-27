@@ -1,5 +1,10 @@
 # Joplin changelog
 
+## [v2.7.13](https://github.com/laurent22/joplin/releases/tag/v2.7.13) - 2022-02-24T17:42:12Z
+
+- Fixed: Fixed search marker background color in Markdown editor (440618e)
+- Updated translations
+
 ## [v2.7.12](https://github.com/laurent22/joplin/releases/tag/v2.7.12) (Pre-release) - 2022-02-14T15:06:14Z
 
 - Fixed: Exported JEX notebook should not contain share metadata ([#6129](https://github.com/laurent22/joplin/issues/6129))
