@@ -182,6 +182,10 @@ describe('models/Revision', function() {
  %0A%0A# `,
 				expected: [-(19 + 27 + 2), 17 + 67 + 4],
 			},
+			{
+				patch: '',
+				expected: [-0, +0],
+			},
 		];
 
 		for (const test of tests) {

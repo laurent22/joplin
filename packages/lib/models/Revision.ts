@@ -48,7 +48,7 @@ export default class Revision extends BaseItem {
 
 	private static isNewPatch(patch: string): boolean {
 		if (!patch) return true;
-		return patch.indexOf('[{') === 0;
+		return patch.indexOf('[{') === 0 || patch === '[]';
 	}
 
 	public static applyTextPatch(text: string, patch: string): string {
@@ -58,7 +58,7 @@ export default class Revision extends BaseItem {
 			// An empty patch should be '[]', but legacy data may be just "".
 			// However an empty string would make JSON.parse fail so we set it
 			// to '[]'.
-			const result = dmp.patch_apply(JSON.parse(patch ? patch : '[]'), text);
+			const result = dmp.patch_apply(this.parsePatch(patch), text);
 			if (!result || !result.length) throw new Error('Could not apply patch');
 			return result[0];
 		}
@@ -120,7 +120,7 @@ export default class Revision extends BaseItem {
 	// line, so that it can be processed by patchStats().
 	private static newPatchToDiffFormat(patch: string): string {
 		const changeList: string[] = [];
-		const patchArray = JSON.parse(patch);
+		const patchArray = this.parsePatch(patch);
 		for (const patchItem of patchArray) {
 			for (const d of patchItem.diffs) {
 				if (d[0] !== 0) changeList.push(d[0] < 0 ? `-${d[1].replace(/[\n\r]/g, ' ')}` : `+${d[1].trim().replace(/[\n\r]/g, ' ')}`);
@@ -335,4 +335,9 @@ export default class Revision extends BaseItem {
 		const existingRev = await Revision.latestRevision(itemType, itemId);
 		return existingRev && existingRev.item_updated_time === updatedTime;
 	}
+
+	private static parsePatch(patch: any): any[] {
+		return patch ? JSON.parse(patch) : [];
+	}
+
 }
