@@ -1,5 +1,11 @@
 # Joplin changelog
 
+## [v2.7.14](https://github.com/laurent22/joplin/releases/tag/v2.7.14) (Pre-release) - 2022-02-27T11:30:53Z
+
+- Improved: Improve error message when revision metadata cannot be decoded, to improve debugging (a325bf6)
+- Fixed: Prevent certain errors from stopping the revision service ([#5531](https://github.com/laurent22/joplin/issues/5531))
+- Fixed: Note export could fail in some cases (regression) ([#6203](https://github.com/laurent22/joplin/issues/6203))
+
 ## [v2.7.13](https://github.com/laurent22/joplin/releases/tag/v2.7.13) - 2022-02-24T17:42:12Z
 
 - Fixed: Fixed search marker background color in Markdown editor (440618e)
