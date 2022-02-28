@@ -467,7 +467,7 @@ class Bridge {
 
 			this.dispatch({ type: 'CONTENT_UPLOAD', operation: { uploading: false, success: true } });
 
-			return response.id;
+			return response;
 		} catch (error) {
 			if (error.message === '{"error":"Duplicate Nounce"}') {
 				this.dispatch({ type: 'CONTENT_UPLOAD', operation: { uploading: false, success: true } });

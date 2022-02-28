@@ -70,8 +70,8 @@ class AppComponent extends Component {
 			const content = Object.assign({}, this.props.clippedContent);
 			content.tags = this.state.selectedTags.join(',');
 			content.parent_id = this.props.selectedFolderId;
-			const newNoteId = await bridge().sendContentToJoplin(content);
-			this.setState({ newNoteId });
+			const response = await bridge().sendContentToJoplin(content);
+			this.setState({ newNoteId: response.id });
 		};
 
 		this.contentTitle_change = (event) => {
@@ -406,13 +406,18 @@ class AppComponent extends Component {
 
 		const openNewNoteButton = () => {
 
-			if (this.state.newNoteId === null) {
-				return undefined;
-			} else {
+			if (!this.state.newNoteId) { return null; } else {
 				return (
-					// The jopin:// link must be opened in a new tab. When it's opened for  the first time, a system popup will ask for the user's permission.
-					// The popup is too small to show the permission and the user will not be able to see the buttons.
-					<a className="Button" href={`joplin://x-callback-url/openNote?id=${this.state.newNoteId}`} target="_blank"> Open newly created note</a>
+					// The jopin:// link must be opened in a new tab. When it's opened for the first time, a system dialog will ask for the user's permission.
+					// The system diaglog is too big to fit into the popup so user will not be able to see the dialog buttons and get stuck.
+					<a
+						className="Button"
+						href={`joplin://x-callback-url/openNote?id=${encodeURIComponent(this.state.newNoteId)}`}
+						target="_blank"
+						onClick={() => this.setState({ newNoteId: null })}
+					>
+          Open newly created note
+					</a>
 				);
 			}
 		};
