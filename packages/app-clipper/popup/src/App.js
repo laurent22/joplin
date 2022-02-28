@@ -409,7 +409,7 @@ class AppComponent extends Component {
 			if (!this.state.newNoteId) { return null; } else {
 				return (
 					// The jopin:// link must be opened in a new tab. When it's opened for the first time, a system dialog will ask for the user's permission.
-					// The system diaglog is too big to fit into the popup so user will not be able to see the dialog buttons and get stuck.
+					// The system dialog is too big to fit into the popup so the user will not be able to see the dialog buttons and get stuck.
 					<a
 						className="Button"
 						href={`joplin://x-callback-url/openNote?id=${encodeURIComponent(this.state.newNoteId)}`}
