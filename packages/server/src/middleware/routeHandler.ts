@@ -4,13 +4,13 @@ import { isView, View } from '../services/MustacheService';
 import config from '../config';
 import { userIp } from '../utils/requestUtils';
 import { createCsrfTag } from '../utils/csrf';
-import { getImpersonatorAdminSessionId } from '../routes/index/utils/users/impersonate';
+import { getImpersonatorAdminSessionId } from '../routes/admin/utils/users/impersonate';
 
 export default async function(ctx: AppContext) {
 	const requestStartTime = Date.now();
 
 	try {
-		const responseObject = await execRequest(ctx.joplin.routes, ctx);
+		const { response: responseObject, path } = await execRequest(ctx.joplin.routes, ctx);
 
 		if (responseObject instanceof Response) {
 			ctx.response = responseObject.response;
@@ -20,6 +20,7 @@ export default async function(ctx: AppContext) {
 			const view = responseObject as View;
 			ctx.response.status = view?.content?.error ? view?.content?.error?.httpCode || 500 : 200;
 			ctx.response.body = await ctx.joplin.services.mustache.renderView(view, {
+				currentPath: path,
 				notifications: ctx.joplin.notifications || [],
 				hasNotifications: !!ctx.joplin.notifications && !!ctx.joplin.notifications.length,
 				owner: ctx.joplin.owner,

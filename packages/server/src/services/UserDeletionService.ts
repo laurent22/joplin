@@ -1,8 +1,8 @@
 import Logger from '@joplin/lib/Logger';
 import { Pagination } from '../models/utils/pagination';
-import { msleep } from '../utils/time';
+import { Day, msleep } from '../utils/time';
 import BaseService from './BaseService';
-import { UserDeletion, UserFlagType, Uuid } from './database/types';
+import { BackupItemType, UserDeletion, UserFlagType, Uuid } from './database/types';
 
 const logger = Logger.create('UserDeletionService');
 
@@ -59,6 +59,21 @@ export default class UserDeletionService extends BaseService {
 	private async deleteUserAccount(userId: Uuid, _options: DeletionJobOptions = null) {
 		logger.info(`Deleting user account: ${userId}`);
 
+		const user = await this.models.user().load(userId);
+		if (!user) throw new Error(`No such user: ${userId}`);
+
+		const flags = await this.models.userFlag().allByUserId(userId);
+
+		await this.models.backupItem().add(
+			BackupItemType.UserAccount,
+			user.email,
+			JSON.stringify({
+				user,
+				flags,
+			}),
+			userId
+		);
+
 		await this.models.userFlag().add(userId, UserFlagType.UserDeletionInProgress);
 
 		await this.models.session().deleteByUserId(userId);
@@ -91,6 +106,24 @@ export default class UserDeletionService extends BaseService {
 		await this.models.userDeletion().end(deletion.id, success, error);
 
 		logger.info('Completed user deletion: ', deletion.id);
+	}
+
+	public async autoAddForDeletion() {
+		const addedUserIds = await this.models.userDeletion().autoAdd(
+			10,
+			this.config.USER_DATA_AUTO_DELETE_AFTER_DAYS * Day,
+			Date.now() + 3 * Day,
+			{
+				processAccount: true,
+				processData: true,
+			}
+		);
+
+		if (addedUserIds.length) {
+			logger.info(`autoAddForDeletion: Queued ${addedUserIds.length} users for deletions: ${addedUserIds.join(', ')}`);
+		} else {
+			logger.info('autoAddForDeletion: No users were queued for deletion');
+		}
 	}
 
 	public async processNextDeletionJob() {

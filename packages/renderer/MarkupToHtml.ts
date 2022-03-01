@@ -7,6 +7,7 @@ const MarkdownIt = require('markdown-it');
 export enum MarkupLanguage {
 	Markdown = 1,
 	Html = 2,
+	Any = 3,
 }
 
 export interface RenderResultPluginAsset {

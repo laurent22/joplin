@@ -14,6 +14,14 @@ export function setQueryParameters(url: string, query: any): string {
 	return u.toString();
 }
 
+export function stripOffQueryParameters(url: string): string {
+	const s = url.split('?');
+	if (s.length <= 1) return url;
+
+	s.pop();
+	return s.join('?');
+}
+
 export function resetPasswordUrl(token: string): string {
 	return `${config().baseUrl}/password/reset${token ? `?token=${token}` : ''}`;
 }
@@ -42,14 +50,46 @@ export function homeUrl(): string {
 	return `${config().baseUrl}/home`;
 }
 
+export function itemsUrl(): string {
+	return `${config().baseUrl}/items`;
+}
+
+export function changesUrl(): string {
+	return `${config().baseUrl}/changes`;
+}
+
 export function loginUrl(): string {
 	return `${config().baseUrl}/login`;
 }
 
-export function userDeletionsUrl(): string {
-	return `${config().baseUrl}/user_deletions`;
+export function adminUserDeletionsUrl(): string {
+	return `${config().adminBaseUrl}/user_deletions`;
 }
 
 export function userUrl(userId: Uuid): string {
 	return `${config().baseUrl}/users/${userId}`;
+}
+
+export function adminDashboardUrl(): string {
+	return `${config().adminBaseUrl}/dashboard`;
+}
+
+export function adminUsersUrl() {
+	return `${config().adminBaseUrl}/users`;
+}
+
+export function adminUserUrl(userId: string) {
+	return `${config().adminBaseUrl}/users/${userId}`;
+}
+
+export function adminTasksUrl() {
+	return `${config().adminBaseUrl}/tasks`;
+}
+
+export function adminEmailsUrl() {
+	return `${config().adminBaseUrl}/emails`;
+}
+
+export function adminEmailUrl(id: number) {
+	return `${config().adminBaseUrl}/emails/${id}`;
 }

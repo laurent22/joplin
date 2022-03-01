@@ -1,10 +1,10 @@
 import routeHandler from '../../middleware/routeHandler';
 import { beforeAllDb, afterAllTests, beforeEachDb, koaAppContext, createUserAndSession } from '../../utils/testing/testUtils';
 
-describe('index_home', function() {
+describe('index/home', function() {
 
 	beforeAll(async () => {
-		await beforeAllDb('index_home');
+		await beforeAllDb('index/home');
 	});
 
 	afterAll(async () => {

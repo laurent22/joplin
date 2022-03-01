@@ -8,9 +8,11 @@ import StyledInput from '../style/StyledInput';
 import { IconSelector, ChangeEvent } from './IconSelector';
 import useAsyncEffect, { AsyncEffectEvent } from '@joplin/lib/hooks/useAsyncEffect';
 import Folder from '@joplin/lib/models/Folder';
-import { FolderEntity, FolderIcon } from '@joplin/lib/services/database/types';
+import { FolderEntity, FolderIcon, FolderIconType } from '@joplin/lib/services/database/types';
 import Button from '../Button/Button';
 import bridge from '../../services/bridge';
+import shim from '@joplin/lib/shim';
+import FolderIconBox from '../FolderIconBox';
 
 interface Props {
 	themeId: number;
@@ -93,6 +95,34 @@ export default function(props: Props) {
 		setFolderIcon(null);
 	}, []);
 
+	const onBrowseClick = useCallback(async () => {
+		const filePaths = await bridge().showOpenDialog({
+			filters: [
+				{
+					name: _('Images'),
+					extensions: ['jpg', 'jpeg', 'png'],
+				},
+			],
+		});
+		if (filePaths.length !== 1) return;
+		const filePath = filePaths[0];
+
+		try {
+			const dataUrl = await shim.imageToDataUrl(filePath, 256);
+			setFolderIcon(icon => {
+				return {
+					...icon,
+					emoji: '',
+					name: '',
+					type: FolderIconType.DataUrl,
+					dataUrl,
+				};
+			});
+		} catch (error) {
+			await bridge().showErrorMessageBox(error.message);
+		}
+	}, []);
+
 	function renderForm() {
 		return (
 			<div>
@@ -105,11 +135,14 @@ export default function(props: Props) {
 					<div className="form-input-group">
 						<label>{_('Icon')}</label>
 						<div className="icon-selector-row">
+							{ folderIcon && <div className="foldericon"><FolderIconBox folderIcon={folderIcon} /></div> }
 							<IconSelector
+								title={_('Select emoji...')}
 								icon={folderIcon}
 								onChange={onFolderIconChange}
 							/>
-							<Button ml={1} title={_('Clear')} onClick={onClearClick}/>
+							<Button ml={1} title={_('Select file...')} onClick={onBrowseClick}/>
+							{ folderIcon && <Button ml={1} title={_('Clear')} onClick={onClearClick}/> }
 						</div>
 					</div>
 				</div>

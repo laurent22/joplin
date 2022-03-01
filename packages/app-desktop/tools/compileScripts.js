@@ -30,7 +30,10 @@ function convertJsx(path) {
 
 		if (fileIsNewerThan(jsxPath, jsPath)) {
 			console.info(`Compiling ${jsxPath}...`);
-			const result = spawnSync('yarn', ['run', 'babel', '--presets', 'react', '--out-file', jsPath, jsxPath]);
+
+			// { shell: true } is needed to get it working on Windows:
+			// https://discourse.joplinapp.org/t/attempting-to-build-on-windows/22559/12
+			const result = spawnSync('yarn', ['run', 'babel', '--presets', 'react', '--out-file', jsPath, jsxPath], { shell: true });
 			if (result.status !== 0) {
 				const msg = [];
 				if (result.stdout) msg.push(result.stdout.toString());

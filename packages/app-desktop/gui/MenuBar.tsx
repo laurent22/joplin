@@ -347,6 +347,12 @@ function useMenu(props: Props) {
 				}
 			}
 
+			importItems.push({ type: 'separator' });
+			importItems.push({
+				label: _('Other applications...'),
+				click: () => { void bridge().openExternal('https://discourse.joplinapp.org/t/importing-notes-from-other-notebook-applications/22425'); },
+			});
+
 			exportItems.push(
 				menuItemDic.exportPdf
 			);

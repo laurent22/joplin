@@ -1,6 +1,28 @@
 # Joplin Server Changelog
 
-## [server-v2.7.2](https://github.com/laurent22/joplin/releases/tag/server-v2.7.2) - 2021-12-29T11:21:04Z
+## [server-v2.7.4](https://github.com/laurent22/joplin/releases/tag/server-v2.7.4) - 2022-02-02T19:23:34Z
+
+- New: Add task to automate deletion of disabled accounts (1afcb27)
+- Improved: Always display Help link even when not logged in (00163f5)
+- Improved: Call server start command directly, without going through npm (c185f00)
+- Improved: Disable session expiration logic for now (4c11bbf)
+- Improved: Enabled task to automatically delete sessions every 6 hours (69170dd)
+- Improved: Fixed handling of mailer security settings, and changed env variable name MAILER_SECURE =&gt; MAILER_SECURITY, and default port 587 =&gt; 465 (Breaking change) (#5222)
+- Improved: Improved env variable validation and support true-false as boolean values (fd322ed)
+- Improved: Improved string localization in views (98bfb65)
+- Improved: Make page wider only when displaying admin pages (df9c460)
+- Improved: Move admin pages under /admin (#6006)
+- Improved: Put admin pages under /admin (09cbe3c)
+- Improved: Remove uneeded CSS file (9dbf5e0)
+- Improved: Set NODE_ENV to "production" in Docker image (ed0f0fa)
+- Improved: Set a timestamp when disabling a user (2f7ab7e)
+- Improved: Simplify Docker image (#6010)
+- Improved: Temporarily save user info before deleting account (68469bc)
+- Improved: View sent emails from admin dashboard (f5f7981)
+- Fixed: Fixed sharing notebook with a user that does not have E2EE enabled (#5958)
+- Fixed: Use multi-stage builds and smaller base image (#6048) (#5397 by [@aaron](https://github.com/aaron))
+
+## [server-v2.7.3](https://github.com/laurent22/joplin/releases/tag/server-v2.7.3) - 2021-12-29T13:35:12Z
 
 - Improved: Allow deleting complete user data (#5824)
 - Improved: Changed ID length from 32 to 22 characters (e9ce3d1)

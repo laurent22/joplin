@@ -3305,12 +3305,12 @@ __metadata:
     markdown-it-footnote: ^3.0.2
     markdown-it-ins: ^3.0.0
     markdown-it-mark: ^3.0.0
-    markdown-it-multimd-table: ^4.0.1
+    markdown-it-multimd-table: ^4.1.2
     markdown-it-sub: ^1.0.0
     markdown-it-sup: ^1.0.0
     markdown-it-toc-done-right: ^4.1.0
     md5: ^2.2.1
-    mermaid: ^8.13.5
+    mermaid: ^8.13.9
     typescript: ^4.0.5
   languageName: unknown
   linkType: soft
@@ -20420,6 +20420,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"markdown-it-multimd-table@npm:^4.1.2":
+  version: 4.1.2
+  resolution: "markdown-it-multimd-table@npm:4.1.2"
+  dependencies:
+    markdown-it: ^12.3.2
+  checksum: 8f4bff21c085732502803509d61dcb6035dde01670487c2033aa55941156013bdf126e923c11bc5c5eeba1d49dfa6a72bbbedd13bdb7a9df7ee2f0bc1a025e45
+  languageName: node
+  linkType: hard
+
 "markdown-it-sub@npm:^1.0.0":
   version: 1.0.0
   resolution: "markdown-it-sub@npm:1.0.0"
@@ -20483,6 +20492,21 @@ __metadata:
   bin:
     markdown-it: bin/markdown-it.js
   checksum: 8e3d6646edf8e7ef19ed707c59d16741bd40804f1e7567407efd2f346ae0f7ddcdeada83e7affebd21b9d7d947b27fc60fd795a970461785030a4e52e750122b
+  languageName: node
+  linkType: hard
+
+"markdown-it@npm:^12.3.2":
+  version: 12.3.2
+  resolution: "markdown-it@npm:12.3.2"
+  dependencies:
+    argparse: ^2.0.1
+    entities: ~2.1.0
+    linkify-it: ^3.0.1
+    mdurl: ^1.0.1
+    uc.micro: ^1.0.5
+  bin:
+    markdown-it: bin/markdown-it.js
+  checksum: 890555711c1c00fa03b936ca2b213001a3b9b37dea140d8445ae4130ce16628392aad24b12e2a0a9935336ca5951f2957a38f4e5309a2e38eab44e25ff32a41e
   languageName: node
   linkType: hard
 
@@ -20781,6 +20805,23 @@ __metadata:
     moment-mini: ^2.24.0
     stylis: ^4.0.10
   checksum: 70c75c236b04d8e430de58129bd9afa5305f0879c7a60c1d4e44f636181adcc2dcdf6a2fc467ac9e76a008958a8701480dd4cb211729b0be785b650bdd55a408
+  languageName: node
+  linkType: hard
+
+"mermaid@npm:^8.13.9":
+  version: 8.13.9
+  resolution: "mermaid@npm:8.13.9"
+  dependencies:
+    "@braintree/sanitize-url": ^3.1.0
+    d3: ^7.0.0
+    dagre: ^0.8.5
+    dagre-d3: ^0.6.4
+    dompurify: 2.3.4
+    graphlib: ^2.1.8
+    khroma: ^1.4.1
+    moment-mini: ^2.24.0
+    stylis: ^4.0.10
+  checksum: 9b05ce16413ee7d76e5b921ee57b9cdff5738221c72593ac5b7daf7c93d5025ff8e4248b2a5cbabd5af44285d4e849d832246a89c214aeb7c8b811f92d967102
   languageName: node
   linkType: hard
 

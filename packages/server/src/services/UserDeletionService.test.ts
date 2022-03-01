@@ -2,6 +2,7 @@ import config from '../config';
 import { shareFolderWithUser } from '../utils/testing/shareApiUtils';
 import { afterAllTests, beforeAllDb, beforeEachDb, createNote, createUserAndSession, models } from '../utils/testing/testUtils';
 import { Env } from '../utils/types';
+import { BackupItemType } from './database/types';
 import UserDeletionService from './UserDeletionService';
 
 const newService = () => {
@@ -70,6 +71,8 @@ describe('UserDeletionService', function() {
 		expect(await models().user().count()).toBe(2);
 		expect(await models().session().count()).toBe(2);
 
+		const beforeTime = Date.now();
+
 		const service = newService();
 		await service.processDeletionJob(job, { sleepBetweenOperations: 0 });
 
@@ -78,6 +81,18 @@ describe('UserDeletionService', function() {
 
 		const user = (await models().user().all())[0];
 		expect(user.id).toBe(user2.id);
+
+		const backupItems = await models().backupItem().all();
+		expect(backupItems.length).toBe(1);
+		const backupItem = backupItems[0];
+		expect(backupItem.key).toBe(user1.email);
+		expect(backupItem.type).toBe(BackupItemType.UserAccount);
+		expect(backupItem.created_time).toBeGreaterThanOrEqual(beforeTime);
+
+		const content = JSON.parse(backupItem.content.toString());
+		expect(content.user.id).toBe(user1.id);
+		expect(content.user.email).toBe(user1.email);
+		expect(content.flags.length).toBe(0);
 	});
 
 	test('should not delete notebooks that are not owned', async function() {

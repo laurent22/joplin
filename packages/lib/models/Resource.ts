@@ -14,6 +14,7 @@ const { FsDriverDummy } = require('../fs-driver-dummy.js');
 import JoplinError from '../JoplinError';
 import itemCanBeEncrypted from './utils/itemCanBeEncrypted';
 import { getEncryptionEnabled } from '../services/synchronizer/syncInfoUtils';
+import ShareService from '../services/share/ShareService';
 
 export default class Resource extends BaseItem {
 
@@ -23,6 +24,8 @@ export default class Resource extends BaseItem {
 	public static FETCH_STATUS_STARTED = 1;
 	public static FETCH_STATUS_DONE = 2;
 	public static FETCH_STATUS_ERROR = 3;
+
+	public static shareService_: ShareService = null;
 
 	public static fsDriver_: any;
 
@@ -37,6 +40,11 @@ export default class Resource extends BaseItem {
 	static encryptionService() {
 		if (!this.encryptionService_) throw new Error('Resource.encryptionService_ is not set!!');
 		return this.encryptionService_;
+	}
+
+	protected static shareService() {
+		if (!this.shareService_) throw new Error('Resource.shareService_ is not set!!');
+		return this.shareService_;
 	}
 
 	static isSupportedImageMimeType(type: string) {
@@ -197,6 +205,8 @@ export default class Resource extends BaseItem {
 	public static async fullPathForSyncUpload(resource: ResourceEntity) {
 		const plainTextPath = this.fullPath(resource);
 
+		const share = resource.share_id ? await this.shareService().shareById(resource.share_id) : null;
+
 		if (!getEncryptionEnabled() || !itemCanBeEncrypted(resource as any)) {
 			// Normally not possible since itemsThatNeedSync should only return decrypted items
 			if (resource.encryption_blob_encrypted) throw new Error('Trying to access encrypted resource but encryption is currently disabled');
@@ -207,7 +217,9 @@ export default class Resource extends BaseItem {
 		if (resource.encryption_blob_encrypted) return { path: encryptedPath, resource: resource };
 
 		try {
-			await this.encryptionService().encryptFile(plainTextPath, encryptedPath);
+			await this.encryptionService().encryptFile(plainTextPath, encryptedPath, {
+				masterKeyId: share && share.master_key_id ? share.master_key_id : '',
+			});
 		} catch (error) {
 			if (error.code === 'ENOENT') throw new JoplinError(`File not found:${error.toString()}`, 'fileNotFound');
 			throw error;

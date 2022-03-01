@@ -24,6 +24,7 @@ import { RouteResponseFormat, routeResponseFormat } from './utils/routeUtils';
 import { parseEnv } from './env';
 import storageConnectionCheck from './utils/storageConnectionCheck';
 import { setLocale } from '@joplin/lib/locale';
+import checkAdminHandler from './middleware/checkAdminHandler';
 
 interface Argv {
 	env?: Env;
@@ -160,7 +161,7 @@ async function main() {
 					});
 				} catch (anotherError) {
 					ctx.response.set('Content-Type', 'application/json');
-					ctx.body = JSON.stringify({ error: error.message });
+					ctx.body = JSON.stringify({ error: `${error.message} (Check the server log for more information)` });
 				}
 			} else {
 				ctx.response.set('Content-Type', 'application/json');
@@ -196,6 +197,7 @@ async function main() {
 
 	app.use(apiVersionHandler);
 	app.use(ownerHandler);
+	app.use(checkAdminHandler);
 	app.use(notificationHandler);
 	app.use(clickJackingHandler);
 	app.use(routeHandler);

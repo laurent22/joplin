@@ -56,7 +56,7 @@ class PromptDialog extends React.Component {
 			top: 0,
 			left: 0,
 			width: width,
-			height: height - paddingTop,
+			height: height,
 			backgroundColor: 'rgba(0,0,0,0.6)',
 			display: visible ? 'flex' : 'none',
 			alignItems: 'flex-start',

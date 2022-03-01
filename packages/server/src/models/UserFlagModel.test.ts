@@ -39,4 +39,17 @@ describe('UserFlagModel', function() {
 		expect(flag.id).not.toBe(differentFlag.id);
 	});
 
+	test('should set the timestamp when disabling an account', async function() {
+		const { user } = await createUserAndSession(1);
+
+		const beforeTime = Date.now();
+		await models().userFlag().add(user.id, UserFlagType.FailedPaymentFinal);
+
+		expect((await models().user().load(user.id)).disabled_time).toBeGreaterThanOrEqual(beforeTime);
+
+		await models().userFlag().remove(user.id, UserFlagType.FailedPaymentFinal);
+
+		expect((await models().user().load(user.id)).disabled_time).toBe(0);
+	});
+
 });

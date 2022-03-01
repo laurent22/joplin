@@ -1,7 +1,6 @@
 const urlUtils = require('./urlUtils.js');
 const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = new Entities().encode;
-const htmlparser2 = require('@joplin/fork-htmlparser2');
 const { escapeHtml } = require('./string-utils.js');
 
 // [\s\S] instead of . for multiline matching
@@ -138,40 +137,6 @@ class HtmlUtils {
 		return output.join(' ');
 	}
 
-	public stripHtml(html: string) {
-		const output: string[] = [];
-
-		const tagStack: any[] = [];
-
-		const currentTag = () => {
-			if (!tagStack.length) return '';
-			return tagStack[tagStack.length - 1];
-		};
-
-		const disallowedTags = ['script', 'style', 'head', 'iframe', 'frameset', 'frame', 'object', 'base'];
-
-		const parser = new htmlparser2.Parser({
-
-			onopentag: (name: string) => {
-				tagStack.push(name.toLowerCase());
-			},
-
-			ontext: (decodedText: string) => {
-				if (disallowedTags.includes(currentTag())) return;
-				output.push(decodedText);
-			},
-
-			onclosetag: (name: string) => {
-				if (currentTag() === name.toLowerCase()) tagStack.pop();
-			},
-
-		}, { decodeEntities: true });
-
-		parser.write(html);
-		parser.end();
-
-		return output.join('').replace(/\s+/g, ' ');
-	}
 }
 
 export default new HtmlUtils();

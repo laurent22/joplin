@@ -71,6 +71,10 @@ export function isApiRequest(ctx: AppContext): boolean {
 	return ctx.path.indexOf('/api/') === 0;
 }
 
+export function isAdminRequest(ctx: AppContext): boolean {
+	return ctx.path.indexOf('/admin/') === 0;
+}
+
 export function userIp(ctx: AppContext): string {
 	if (ctx.headers['x-real-ip']) return ctx.headers['x-real-ip'];
 	return ctx.ip;

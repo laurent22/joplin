@@ -1,4 +1,4 @@
-import { FolderEntity, FolderIcon, NoteEntity } from '../services/database/types';
+import { defaultFolderIcon, FolderEntity, FolderIcon, NoteEntity } from '../services/database/types';
 import BaseModel, { DeleteOptions } from '../BaseModel';
 import time from '../time';
 import { _ } from '../locale';
@@ -767,7 +767,11 @@ export default class Folder extends BaseItem {
 	}
 
 	public static unserializeIcon(icon: string): FolderIcon {
-		return icon ? JSON.parse(icon) : null;
+		if (!icon) return null;
+		return {
+			...defaultFolderIcon(),
+			...JSON.parse(icon),
+		};
 	}
 
 }

@@ -31,7 +31,7 @@
     "linter": "eslint --resolve-plugins-relative-to . --fix --quiet --ext .js --ext .jsx --ext .ts --ext .tsx",
     "postinstall": "gulp build",
     "publishAll": "git pull && yarn run buildParallel && lerna version --yes --no-private --no-git-tag-version && gulp completePublishAll",
-    "releaseAndroid": "yarn run buildParallel && export PATH=\"/usr/local/opt/openjdk@11/bin:$PATH\" && node packages/tools/release-android.js",
+    "releaseAndroid": "PATH=\"/usr/local/opt/openjdk@11/bin:$PATH\" node packages/tools/release-android.js",
     "releaseAndroidClean": "node packages/tools/release-android.js",
     "releaseCli": "node packages/tools/release-cli.js",
     "releaseClipper": "node packages/tools/release-clipper.js",
@@ -78,8 +78,5 @@
     "node-gyp": "^8.4.1",
     "nodemon": "^2.0.9"
   },
-  "packageManager": "yarn@3.1.1",
-  "resolutions": {
-    "markdown-it-multimd-table@4.1.1": "patch:markdown-it-multimd-table@npm:4.1.1#.yarn/patches/markdown-it-multimd-table-npm-4.1.1-47e334d4bd"
-  }
+  "packageManager": "yarn@3.1.1"
 }

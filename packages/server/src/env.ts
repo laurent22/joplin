@@ -1,7 +1,7 @@
 // The possible env variables and their defaults are listed below.
 //
 // The env variables can be of type string, integer or boolean. When the type is
-// boolean, set the variable to "0" or "1" in your env file.
+// boolean, set the variable to "true", "false", "0" or "1" in your env file.
 
 export enum MailerSecurity {
 	None = 'none',
@@ -89,6 +89,13 @@ const defaultEnvValues: EnvVariables = {
 
 	STRIPE_SECRET_KEY: '',
 	STRIPE_WEBHOOK_SECRET: '',
+
+	// ==================================================
+	// User data deletion
+	// ==================================================
+
+	USER_DATA_AUTO_DELETE_ENABLED: false,
+	USER_DATA_AUTO_DELETE_AFTER_DAYS: 90,
 };
 
 export interface EnvVariables {
@@ -138,9 +145,18 @@ export interface EnvVariables {
 
 	STRIPE_SECRET_KEY: string;
 	STRIPE_WEBHOOK_SECRET: string;
+
+	USER_DATA_AUTO_DELETE_ENABLED: boolean;
+	USER_DATA_AUTO_DELETE_AFTER_DAYS: number;
 }
 
-export function parseEnv(rawEnv: any, defaultOverrides: any = null): EnvVariables {
+const parseBoolean = (s: string): boolean => {
+	if (s === 'true' || s === '1') return true;
+	if (s === 'false' || s === '0') return false;
+	throw new Error(`Invalid boolean value: "${s}" (Must be one of "true", "false", "0, "1")`);
+};
+
+export function parseEnv(rawEnv: Record<string, string>, defaultOverrides: any = null): EnvVariables {
 	const output: EnvVariables = {
 		...defaultEnvValues,
 		...defaultOverrides,
@@ -151,17 +167,21 @@ export function parseEnv(rawEnv: any, defaultOverrides: any = null): EnvVariable
 
 		if (rawEnvValue === undefined) continue;
 
-		if (typeof value === 'number') {
-			const v = Number(rawEnvValue);
-			if (isNaN(v)) throw new Error(`Invalid number value for env variable ${key} = ${rawEnvValue}`);
-			(output as any)[key] = v;
-		} else if (typeof value === 'boolean') {
-			if (rawEnvValue !== '0' && rawEnvValue !== '1') throw new Error(`Invalid boolean value for env variable ${key}: ${rawEnvValue} (Should be either "0" or "1")`);
-			(output as any)[key] = rawEnvValue === '1';
-		} else if (typeof value === 'string') {
-			(output as any)[key] = `${rawEnvValue}`;
-		} else {
-			throw new Error(`Invalid env default value type: ${typeof value}`);
+		try {
+			if (typeof value === 'number') {
+				const v = Number(rawEnvValue);
+				if (isNaN(v)) throw new Error(`Invalid number value "${rawEnvValue}"`);
+				(output as any)[key] = v;
+			} else if (typeof value === 'boolean') {
+				(output as any)[key] = parseBoolean(rawEnvValue);
+			} else if (typeof value === 'string') {
+				(output as any)[key] = `${rawEnvValue}`;
+			} else {
+				throw new Error(`Invalid env default value type: ${typeof value}`);
+			}
+		} catch (error) {
+			error.message = `Could not parse key "${key}": ${error.message}`;
+			throw error;
 		}
 	}
 

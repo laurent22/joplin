@@ -1,97 +1,75 @@
-FROM node:16-bullseye
+# =============================================================================
+# Build stage
+# =============================================================================
+
+FROM node:16-bullseye AS builder
 
 RUN apt-get update \
     && apt-get install -y \
-    python \
+    python tini \
     && rm -rf /var/lib/apt/lists/*
 
 # Enables Yarn
 RUN corepack enable
 
-RUN echo "Node: $(node --version)"
-RUN echo "Npm: $(npm --version)"
-RUN echo "Yarn: $(yarn --version)"
+WORKDIR /build
+
+COPY .yarn/plugins ./.yarn/plugins
+COPY .yarn/releases ./.yarn/releases
+COPY package.json .
+COPY .yarnrc.yml .
+COPY yarn.lock .
+COPY gulpfile.js .
+COPY tsconfig.json .
+COPY packages/turndown ./packages/turndown
+COPY packages/turndown-plugin-gfm ./packages/turndown-plugin-gfm
+COPY packages/fork-htmlparser2 ./packages/fork-htmlparser2
+COPY packages/server/package*.json ./packages/server/
+COPY packages/fork-sax ./packages/fork-sax
+COPY packages/fork-uslug ./packages/fork-uslug
+COPY packages/htmlpack ./packages/htmlpack
+COPY packages/renderer ./packages/renderer
+COPY packages/tools ./packages/tools
+COPY packages/lib ./packages/lib
+COPY packages/server ./packages/server
+
+# For some reason there's both a .yarn/cache and .yarn/berry/cache that are
+# being generated, and both have the same content. Not clear why it does this
+# but we can delete it anyway. We can delete the cache because we use
+# `nodeLinker: node-modules`. If we ever implement Zero Install, we'll need to
+# keep the cache.
+#
+# Note that `yarn install` ignores `NODE_ENV=production` and will install dev
+# dependencies too, but this is fine because we need them to build the app.
+
+RUN BUILD_SEQUENCIAL=1 yarn install --inline-builds \
+    && yarn cache clean \
+    && rm -rf .yarn/berry
+
+# =============================================================================
+# Final stage - we copy only the relevant files from the build stage and start
+# from a smaller base image.
+# =============================================================================
+
+FROM node:16-bullseye-slim
 
 ARG user=joplin
-
 RUN useradd --create-home --shell /bin/bash $user
+
 USER $user
 
-ENV NODE_ENV production
+COPY --chown=$user:$user --from=builder /build/packages /home/$user/packages
+COPY --chown=$user:$user --from=builder /usr/bin/tini /usr/local/bin/tini
 
-WORKDIR /home/$user
-
-RUN mkdir /home/$user/logs
-
-# Install the root scripts but don't run postinstall (which would bootstrap
-# and build TypeScript files, but we don't have the TypeScript files at
-# this point)
-
-COPY --chown=$user:$user package*.json ./
-COPY --chown=$user:$user .yarn ./.yarn
-COPY --chown=$user:$user .yarnrc.yml .
-COPY --chown=$user:$user yarn.lock .
-COPY --chown=$user:$user gulpfile.js .
-
-RUN yarn install --inline-builds --mode=skip-build
-
-# To take advantage of the Docker cache, we first copy all the package.json
-# and package-lock.json files, as they rarely change, and then bootstrap
-# all the packages.
-#
-# Note that bootstrapping the packages will run all the postinstall
-# scripts, which means that for packages that have such scripts, we need to
-# copy all the files.
-#
-# We can't run boostrap with "--ignore-scripts" because that would
-# prevent certain sub-packages, such as sqlite3, from being built
-
-COPY --chown=$user:$user packages/fork-sax/package*.json ./packages/fork-sax/
-COPY --chown=$user:$user packages/fork-uslug/package*.json ./packages/fork-uslug/
-COPY --chown=$user:$user packages/htmlpack/package*.json ./packages/htmlpack/
-COPY --chown=$user:$user packages/renderer/package*.json ./packages/renderer/
-COPY --chown=$user:$user packages/tools/package*.json ./packages/tools/
-COPY --chown=$user:$user packages/lib/package*.json ./packages/lib/
-COPY --chown=$user:$user tsconfig.json .
-
-# The following have postinstall scripts so we need to copy all the files.
-# Since they should rarely change this is not an issue
-
-COPY --chown=$user:$user packages/turndown ./packages/turndown
-COPY --chown=$user:$user packages/turndown-plugin-gfm ./packages/turndown-plugin-gfm
-COPY --chown=$user:$user packages/fork-htmlparser2 ./packages/fork-htmlparser2
-COPY --chown=$user:$user packages/server/package*.json ./packages/server/
-
-# Then bootstrap only, without compiling the TypeScript files
-
-RUN yarn install --inline-builds --mode=skip-build
-
-# Now copy the source files. Put lib and server last as they are more likely to change.
-
-COPY --chown=$user:$user packages/fork-sax ./packages/fork-sax
-COPY --chown=$user:$user packages/fork-uslug ./packages/fork-uslug
-COPY --chown=$user:$user packages/htmlpack ./packages/htmlpack
-COPY --chown=$user:$user packages/renderer ./packages/renderer
-COPY --chown=$user:$user packages/tools ./packages/tools
-COPY --chown=$user:$user packages/lib ./packages/lib
-COPY --chown=$user:$user packages/server ./packages/server
-
-# Finally build everything, in particular the TypeScript files. We can't just
-# run `yarn run build` because that wouldn't run the postinstall scripts in
-# dependencies (for example the sqlite3 native module would not be built). So
-# instead we run `yarn install`, which is going to install again all the
-# packages (but because it's already done it should be fast), and then run the
-# postinstall scripts, as well as build scripts.
-
-RUN BUILD_SEQUENCIAL=1 yarn install --inline-builds
-
+ENV NODE_ENV=production
 ENV RUNNING_IN_DOCKER=1
 EXPOSE ${APP_PORT}
 
-# Call the command directly, without going via npm:
-# https://github.com/nodejs/docker-node/blob/main/docs/BestPractices.md#cmd
-WORKDIR "/home/$user/packages/server"
-CMD [ "node", "dist/app.js" ]
+# Use Tini to start Joplin Server:
+# https://github.com/nodejs/docker-node/blob/main/docs/BestPractices.md#handling-kernel-signals
+WORKDIR /home/$user/packages/server
+ENTRYPOINT ["tini", "--"]
+CMD ["node", "dist/app.js"]
 
 # Build-time metadata
 # https://github.com/opencontainers/image-spec/blob/master/annotations.md

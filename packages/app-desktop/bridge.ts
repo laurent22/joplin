@@ -9,6 +9,13 @@ interface LastSelectedPath {
 	directory: string;
 }
 
+interface OpenDialogOptions {
+	properties?: string[];
+	defaultPath?: string;
+	createDirectory?: boolean;
+	filters?: any[];
+}
+
 export class Bridge {
 
 	private electronWrapper_: ElectronAppWrapper;
@@ -155,14 +162,14 @@ export class Bridge {
 		return filePath;
 	}
 
-	async showOpenDialog(options: any = null) {
+	async showOpenDialog(options: OpenDialogOptions = null) {
 		const { dialog } = require('electron');
 		if (!options) options = {};
 		let fileType = 'file';
 		if (options.properties && options.properties.includes('openDirectory')) fileType = 'directory';
 		if (!('defaultPath' in options) && (this.lastSelectedPaths_ as any)[fileType]) options.defaultPath = (this.lastSelectedPaths_ as any)[fileType];
 		if (!('createDirectory' in options)) options.createDirectory = true;
-		const { filePaths } = await dialog.showOpenDialog(this.window(), options);
+		const { filePaths } = await dialog.showOpenDialog(this.window(), options as any);
 		if (filePaths && filePaths.length) {
 			(this.lastSelectedPaths_ as any)[fileType] = dirname(filePaths[0]);
 		}

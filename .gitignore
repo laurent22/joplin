@@ -225,6 +225,9 @@ packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.js.map
 packages/app-desktop/gui/ErrorBoundary.d.ts
 packages/app-desktop/gui/ErrorBoundary.js
 packages/app-desktop/gui/ErrorBoundary.js.map
+packages/app-desktop/gui/FolderIconBox.d.ts
+packages/app-desktop/gui/FolderIconBox.js
+packages/app-desktop/gui/FolderIconBox.js.map
 packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.d.ts
 packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js
 packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.js.map
@@ -1137,6 +1140,9 @@ packages/lib/models/NoteTag.js.map
 packages/lib/models/Resource.d.ts
 packages/lib/models/Resource.js
 packages/lib/models/Resource.js.map
+packages/lib/models/Resource.test.d.ts
+packages/lib/models/Resource.test.js
+packages/lib/models/Resource.test.js.map
 packages/lib/models/ResourceLocalState.d.ts
 packages/lib/models/ResourceLocalState.js
 packages/lib/models/ResourceLocalState.js.map
@@ -1917,6 +1923,9 @@ packages/renderer/headerAnchor.js.map
 packages/renderer/htmlUtils.d.ts
 packages/renderer/htmlUtils.js
 packages/renderer/htmlUtils.js.map
+packages/renderer/htmlUtils.test.d.ts
+packages/renderer/htmlUtils.test.js
+packages/renderer/htmlUtils.test.js.map
 packages/renderer/index.d.ts
 packages/renderer/index.js
 packages/renderer/index.js.map
@@ -1992,6 +2001,15 @@ packages/tools/website/updateDownloadPage.js.map
 packages/tools/website/utils/frontMatter.d.ts
 packages/tools/website/utils/frontMatter.js
 packages/tools/website/utils/frontMatter.js.map
+packages/tools/website/utils/openGraph.d.ts
+packages/tools/website/utils/openGraph.js
+packages/tools/website/utils/openGraph.js.map
+packages/tools/website/utils/openGraph.test.d.ts
+packages/tools/website/utils/openGraph.test.js
+packages/tools/website/utils/openGraph.test.js.map
+packages/tools/website/utils/parser.d.ts
+packages/tools/website/utils/parser.js
+packages/tools/website/utils/parser.js.map
 packages/tools/website/utils/pressCarousel.d.ts
 packages/tools/website/utils/pressCarousel.js
 packages/tools/website/utils/pressCarousel.js.map

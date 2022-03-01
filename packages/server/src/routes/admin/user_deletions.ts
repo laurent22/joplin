@@ -8,13 +8,13 @@ import { yesOrNo } from '../../utils/strings';
 import { makeTablePagination, makeTableView, Row, Table } from '../../utils/views/table';
 import { PaginationOrderDir } from '../../models/utils/pagination';
 import { formatDateTime } from '../../utils/time';
-import { userDeletionsUrl, userUrl } from '../../utils/urlUtils';
+import { adminUserDeletionsUrl, userUrl } from '../../utils/urlUtils';
 import { createCsrfTag } from '../../utils/csrf';
 import { bodyFields } from '../../utils/requestUtils';
 
 const router: Router = new Router(RouteType.Web);
 
-router.get('user_deletions', async (_path: SubPath, ctx: AppContext) => {
+router.get('admin/user_deletions', async (_path: SubPath, ctx: AppContext) => {
 	const user = ctx.joplin.owner;
 	if (!user.is_admin) throw new ErrorForbidden();
 
@@ -23,10 +23,8 @@ router.get('user_deletions', async (_path: SubPath, ctx: AppContext) => {
 		const page = await ctx.joplin.models.userDeletion().allPaginated(pagination);
 		const users = await ctx.joplin.models.user().loadByIds(page.items.map(d => d.user_id), { fields: ['id', 'email'] });
 
-		console.info(page);
-
 		const table: Table = {
-			baseUrl: userDeletionsUrl(),
+			baseUrl: adminUserDeletionsUrl(),
 			requestQuery: ctx.query,
 			pageCount: page.page_count,
 			pagination,
@@ -110,7 +108,7 @@ router.get('user_deletions', async (_path: SubPath, ctx: AppContext) => {
 			}),
 		};
 
-		const view = defaultView('user_deletions', 'User deletions');
+		const view = defaultView('admin/user_deletions', 'User deletions');
 		view.content = {
 			userDeletionTable: makeTableView(table),
 			postUrl: makeUrl(UrlType.UserDeletions),
@@ -124,7 +122,7 @@ router.get('user_deletions', async (_path: SubPath, ctx: AppContext) => {
 	throw new ErrorMethodNotAllowed();
 });
 
-router.post('user_deletions', async (_path: SubPath, ctx: AppContext) => {
+router.post('admin/user_deletions', async (_path: SubPath, ctx: AppContext) => {
 	const user = ctx.joplin.owner;
 	if (!user.is_admin) throw new ErrorForbidden();
 

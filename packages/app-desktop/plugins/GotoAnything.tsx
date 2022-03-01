@@ -19,6 +19,7 @@ const { mergeOverlappingIntervals } = require('@joplin/lib/ArrayUtils.js');
 import markupLanguageUtils from '../utils/markupLanguageUtils';
 import focusEditorIfEditorCommand from '@joplin/lib/services/commands/focusEditorIfEditorCommand';
 import Logger from '@joplin/lib/Logger';
+import { MarkupToHtml } from '@joplin/renderer';
 
 const logger = Logger.create('GotoAnything');
 
@@ -81,7 +82,7 @@ class Dialog extends React.PureComponent<Props, State> {
 	private inputRef: any;
 	private itemListRef: any;
 	private listUpdateIID_: any;
-	private markupToHtml_: any;
+	private markupToHtml_: MarkupToHtml;
 	private userCallback_: any = null;
 
 	constructor(props: Props) {

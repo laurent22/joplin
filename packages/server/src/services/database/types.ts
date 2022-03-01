@@ -33,6 +33,10 @@ export enum EventType {
 	TaskCompleted = 2,
 }
 
+export enum BackupItemType {
+	UserAccount = 1,
+}
+
 export enum UserFlagType {
 	FailedPaymentWarning = 1,
 	FailedPaymentFinal = 2,
@@ -84,6 +88,10 @@ export enum ShareUserStatus {
 
 export interface WithDates {
 	updated_time?: number;
+	created_time?: number;
+}
+
+export interface WithCreatedDate {
 	created_time?: number;
 }
 
@@ -186,20 +194,6 @@ export interface Change extends WithDates, WithUuid {
 	user_id?: Uuid;
 }
 
-export interface Email extends WithDates {
-	id?: number;
-	recipient_name?: string;
-	recipient_email?: string;
-	recipient_id?: Uuid;
-	sender_id?: EmailSender;
-	subject?: string;
-	body?: string;
-	sent_time?: number;
-	sent_success?: number;
-	error?: string;
-	key?: string;
-}
-
 export interface Token extends WithDates {
 	id?: number;
 	value?: string;
@@ -233,6 +227,7 @@ export interface User extends WithDates, WithUuid {
 	max_total_item_size?: number | null;
 	total_item_size?: number;
 	enabled?: number;
+	disabled_time?: number;
 }
 
 export interface UserFlag extends WithDates {
@@ -280,6 +275,28 @@ export interface UserDeletion extends WithDates {
 	end_time?: number;
 	success?: number;
 	error?: string;
+}
+
+export interface Email extends WithDates {
+	id?: number;
+	recipient_name?: string;
+	recipient_email?: string;
+	recipient_id?: Uuid;
+	sender_id?: EmailSender;
+	subject?: string;
+	body?: string;
+	sent_time?: number;
+	sent_success?: number;
+	error?: string;
+	key?: string;
+}
+
+export interface BackupItem extends WithCreatedDate {
+	id?: number;
+	type?: number;
+	key?: string;
+	user_id?: Uuid;
+	content?: Buffer;
 }
 
 export const databaseSchema: DatabaseTables = {
@@ -374,21 +391,6 @@ export const databaseSchema: DatabaseTables = {
 		previous_item: { type: 'string' },
 		user_id: { type: 'string' },
 	},
-	emails: {
-		id: { type: 'number' },
-		recipient_name: { type: 'string' },
-		recipient_email: { type: 'string' },
-		recipient_id: { type: 'string' },
-		sender_id: { type: 'number' },
-		subject: { type: 'string' },
-		body: { type: 'string' },
-		sent_time: { type: 'string' },
-		sent_success: { type: 'number' },
-		error: { type: 'string' },
-		updated_time: { type: 'string' },
-		created_time: { type: 'string' },
-		key: { type: 'string' },
-	},
 	tokens: {
 		id: { type: 'number' },
 		value: { type: 'string' },
@@ -425,6 +427,7 @@ export const databaseSchema: DatabaseTables = {
 		max_total_item_size: { type: 'string' },
 		total_item_size: { type: 'string' },
 		enabled: { type: 'number' },
+		disabled_time: { type: 'string' },
 	},
 	user_flags: {
 		id: { type: 'number' },
@@ -474,6 +477,29 @@ export const databaseSchema: DatabaseTables = {
 		success: { type: 'number' },
 		error: { type: 'string' },
 		updated_time: { type: 'string' },
+		created_time: { type: 'string' },
+	},
+	emails: {
+		id: { type: 'number' },
+		recipient_name: { type: 'string' },
+		recipient_email: { type: 'string' },
+		recipient_id: { type: 'string' },
+		sender_id: { type: 'number' },
+		subject: { type: 'string' },
+		body: { type: 'string' },
+		sent_time: { type: 'string' },
+		sent_success: { type: 'number' },
+		error: { type: 'string' },
+		updated_time: { type: 'string' },
+		created_time: { type: 'string' },
+		key: { type: 'string' },
+	},
+	backup_items: {
+		id: { type: 'number' },
+		type: { type: 'number' },
+		key: { type: 'string' },
+		user_id: { type: 'string' },
+		content: { type: 'any' },
 		created_time: { type: 'string' },
 	},
 };
