@@ -771,7 +771,7 @@ msgstr "Скопировать команду режима разработчи�
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:139
 #, fuzzy
 msgid "Copy external link"
-msgstr "Выйти из внешнего редактора"
+msgstr "Скопировать внешнюю ссылку"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:134
 #, fuzzy
