@@ -176,7 +176,7 @@ class NoteTagsDialogComponent extends React.Component {
 							this.setState({ newTags: value });
 						}}
 						style={this.styles().tagBoxInput}
-						placeholder="e.g. foo,bar"
+						placeholder={_('tag1,tag2,...')}
 					/>
 				</View>
 				<View style={this.styles().tagBox}>
@@ -187,7 +187,7 @@ class NoteTagsDialogComponent extends React.Component {
 						onChangeText={value => {
 							this.setState({ tagFilter: value });
 						}}
-						placeholder="Filter tags"
+						placeholder={_('Filter tags')}
 						style={this.styles().tagBoxInput}
 					/>
 				</View>
