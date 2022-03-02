@@ -210,7 +210,7 @@ class CameraView extends Component {
 						<View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-end' }}>
 							<View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginBottom: 20 }}>
 								{ reverseCameraButton }
-								<TouchableOpacity onPress={this.photo_onPress}>
+								<TouchableOpacity onPress={this.photo_onPress} disabled={this.state.snapping}>
 									<View style={{ flexDirection: 'row', borderRadius: 90, width: 90, height: 90, backgroundColor: '#ffffffaa', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
 										<Icon
 											name={photoIcon}
