@@ -3,7 +3,7 @@ import * as React from 'react';
 import NoteListUtils from './utils/NoteListUtils';
 
 const { buildStyle } = require('@joplin/lib/theme');
-const bridge = require('electron').remote.require('./bridge').default;
+const bridge = require('@electron/remote').require('./bridge').default;
 
 interface MultiNoteActionsProps {
 	themeId: number;
@@ -13,6 +13,7 @@ interface MultiNoteActionsProps {
 	watchedNoteFiles: string[];
 	plugins: PluginStates;
 	inConflictFolder: boolean;
+	customCss: string;
 }
 
 function styles_(props: MultiNoteActionsProps) {
@@ -53,6 +54,7 @@ export default function MultiNoteActions(props: MultiNoteActionsProps) {
 		watchedNoteFiles: props.watchedNoteFiles,
 		plugins: props.plugins,
 		inConflictFolder: props.inConflictFolder,
+		customCss: props.customCss,
 	});
 
 	const itemComps = [];

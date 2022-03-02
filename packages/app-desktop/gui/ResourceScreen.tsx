@@ -4,7 +4,7 @@ import { _ } from '@joplin/lib/locale';
 
 const { connect } = require('react-redux');
 const { themeStyle } = require('@joplin/lib/theme');
-const bridge = require('electron').remote.require('./bridge').default;
+const bridge = require('@electron/remote').require('./bridge').default;
 const prettyBytes = require('pretty-bytes');
 import Resource from '@joplin/lib/models/Resource';
 

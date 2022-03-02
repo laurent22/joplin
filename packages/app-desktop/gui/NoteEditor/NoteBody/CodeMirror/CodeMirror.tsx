@@ -6,7 +6,9 @@ import { EditorCommand, NoteBodyEditorProps } from '../../utils/types';
 import { commandAttachFileToBody, handlePasteEvent } from '../../utils/resourceHandling';
 import { ScrollOptions, ScrollOptionTypes } from '../../utils/types';
 import { CommandValue } from '../../utils/types';
-import { useScrollHandler, usePrevious, cursorPositionToTextOffset, useRootSize } from './utils';
+import { usePrevious, cursorPositionToTextOffset } from './utils';
+import useScrollHandler from './utils/useScrollHandler';
+import useElementSize from '@joplin/lib/hooks/useElementSize';
 import Toolbar from './Toolbar';
 import styles_ from './styles';
 import { RenderedBody, defaultRenderedBody } from './utils/types';
@@ -32,10 +34,14 @@ const shared = require('@joplin/lib/components/shared/note-screen-shared.js');
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
 import { reg } from '@joplin/lib/registry';
+import ErrorBoundary from '../../../ErrorBoundary';
+import { MarkupToHtmlOptions } from '../../utils/useMarkupToHtml';
+import eventManager from '@joplin/lib/eventManager';
+import { EditContextMenuFilterObject } from '@joplin/lib/services/plugins/api/JoplinWorkspace';
 
 const menuUtils = new MenuUtils(CommandService.instance());
 
-function markupRenderOptions(override: any = null) {
+function markupRenderOptions(override: MarkupToHtmlOptions = null): MarkupToHtmlOptions {
 	return { ...override };
 }
 
@@ -57,11 +63,12 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 	const props_onChangeRef = useRef<Function>(null);
 	props_onChangeRef.current = props.onChange;
 
-	const rootSize = useRootSize({ rootRef });
+	const rootSize = useElementSize(rootRef);
 
 	usePluginServiceRegistration(ref);
 
-	const { resetScroll, editor_scroll, setEditorPercentScroll, setViewerPercentScroll } = useScrollHandler(editorRef, webviewRef, props.onScroll);
+	const { resetScroll, editor_scroll, setEditorPercentScroll, setViewerPercentScroll, editor_resize, editor_update, getLineScrollPercent,
+	} = useScrollHandler(editorRef, webviewRef, props.onScroll);
 
 	const codeMirror_change = useCallback((newBody: string) => {
 		props_onChangeRef.current({ changeId: null, content: newBody });
@@ -111,9 +118,9 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 					if (!webviewRef.current) return;
 					webviewRef.current.wrappedInstance.send('scrollToHash', options.value as string);
 				} else if (options.type === ScrollOptionTypes.Percent) {
-					const p = options.value as number;
-					setEditorPercentScroll(p);
-					setViewerPercentScroll(p);
+					const percent = options.value as number;
+					setEditorPercentScroll(percent);
+					setViewerPercentScroll(percent);
 				} else {
 					throw new Error(`Unsupported scroll options: ${options.type}`);
 				}
@@ -144,7 +151,9 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 					if (props.visiblePanes.indexOf('editor') >= 0) {
 						editorRef.current.focus();
 					} else {
-						webviewRef.current.wrappedInstance.focus();
+						// If we just call wrappedInstance.focus() then the iframe is focused,
+						// but not its content, such that scrolling up / down with arrow keys fails
+						webviewRef.current.wrappedInstance.send('focus');
 					}
 				} else {
 					commandProcessed = false;
@@ -224,10 +233,14 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 						textHeading: () => addListItem('## ', ''),
 						textHorizontalRule: () => addListItem('* * *'),
 						'editor.execCommand': (value: CommandValue) => {
-							if (editorRef.current[value.name]) {
-								if (!('args' in value)) value.args = [];
+							if (!('args' in value)) value.args = [];
 
-								editorRef.current[value.name](...value.args);
+							if (editorRef.current[value.name]) {
+								const result = editorRef.current[value.name](...value.args);
+								return result;
+							} else if (editorRef.current.commandExists(value.name)) {
+								const result = editorRef.current.execCommand(value.name);
+								return result;
 							} else {
 								reg.logger().warn('CodeMirror execCommand: unsupported command: ', value.name);
 							}
@@ -327,7 +340,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		async function loadScripts() {
 			const scriptsToLoad: {src: string; id: string; loaded: boolean}[] = [
 				{
-					src: 'node_modules/codemirror/addon/dialog/dialog.css',
+					src: `${bridge().vendorDir()}/lib/codemirror/addon/dialog/dialog.css`,
 					id: 'codemirrorDialogStyle',
 					loaded: false,
 				},
@@ -342,7 +355,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				if (theme.indexOf('solarized') >= 0) theme = 'solarized';
 
 				scriptsToLoad.push({
-					src: `node_modules/codemirror/theme/${theme}.css`,
+					src: `${bridge().vendorDir()}/lib/codemirror/theme/${theme}.css`,
 					id: `codemirrorTheme${theme}`,
 					loaded: false,
 				});
@@ -377,9 +390,18 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 			`.CodeMirror-selected {
 				background: #6b6b6b !important;
 			}` : '';
+		// Vim mode draws a fat cursor in the background, we don't want to add background colors
+		// to the inline code in this case (it would hide the cursor)
+		const codeBackgroundColor = Setting.value('editor.keyboardMode') !== 'vim' ? theme.codeBackgroundColor : 'inherit';
 		const monospaceFonts = [];
 		if (Setting.value('style.editor.monospaceFontFamily')) monospaceFonts.push(`"${Setting.value('style.editor.monospaceFontFamily')}"`);
 		monospaceFonts.push('monospace');
+
+		const maxWidthCss = props.contentMaxWidth ? `
+			margin-right: auto !important;
+			margin-left: auto !important;
+			max-width: ${props.contentMaxWidth}px !important;	
+		` : '';
 
 		const element = document.createElement('style');
 		element.setAttribute('id', 'codemirrorStyle');
@@ -394,7 +416,9 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				color: inherit !important;
 				background-color: inherit !important;
 				position: absolute !important;
-				-webkit-box-shadow: none !important; // Some themes add a box shadow for some reason
+				/* Some themes add a box shadow for some reason */
+				-webkit-box-shadow: none !important;
+				line-height: ${theme.lineHeight} !important;
 			}
 
 			.CodeMirror-lines {
@@ -413,6 +437,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				/* Add a fixed right padding to account for the appearance (and disappearance) */
 				/* of the sidebar */
 				padding-right: 10px !important;
+				${maxWidthCss}
 			}
 
 			/* This enforces monospace for certain elements (code, tables, etc.) */
@@ -420,20 +445,65 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				font-family: ${monospaceFonts.join(', ')} !important;
 			}
 
-			.cm-header-1 {
+			div.CodeMirror span.cm-header-1 {
 				font-size: 1.5em;
+				color: ${theme.color};
 			}
 
-			.cm-header-2 {
+			div.CodeMirror span.cm-header-2 {
 				font-size: 1.3em;
+				color: ${theme.color};
 			}
 
-			.cm-header-3 {
+			div.CodeMirror span.cm-header-3 {
 				font-size: 1.1em;
+				color: ${theme.color};
 			}
 
-			.cm-header-4, .cm-header-5, .cm-header-6 {
+			div.CodeMirror span.cm-header-4, div.CodeMirror span.cm-header-5, div.CodeMirror span.cm-header-6 {
 				font-size: 1em;
+				color: ${theme.color};
+			}
+
+			div.CodeMirror span.cm-quote {
+				color: ${theme.color};
+				opacity: ${theme.blockQuoteOpacity};
+			}
+
+			div.CodeMirror span.cm-link-text {
+				color: ${theme.urlColor};
+			}
+
+			div.CodeMirror span.cm-url {
+				color: ${theme.urlColor};
+				opacity: 0.5;
+			}
+
+			div.CodeMirror span.cm-variable-2, div.CodeMirror span.cm-variable-3, div.CodeMirror span.cm-keyword {
+				color: ${theme.color};
+			}
+
+			div.CodeMirror span.cm-comment {
+				color: ${theme.codeColor};
+			}
+
+			/* Negative margins are needed to componsate for the border */
+			div.CodeMirror span.cm-comment.cm-jn-inline-code:not(.cm-search-marker):not(.cm-fat-cursor-mark):not(.cm-search-marker-selected):not(.CodeMirror-selectedtext) {
+				border: 1px solid ${theme.codeBorderColor};
+				background-color: ${codeBackgroundColor};
+				margin-left: -1px;
+				margin-right: -1px;
+				border-radius: .25em;
+			}
+
+			div.CodeMirror div.cm-jn-code-block-background {
+				background-color: ${theme.codeBackgroundColor};
+				padding-right: .2em;
+				padding-left: .2em;
+			}
+
+			div.CodeMirror span.cm-hr {
+				color: ${theme.dividerColor};
 			}
 
 			.cm-header-1, .cm-header-2, .cm-header-3, .cm-header-4, .cm-header-5, .cm-header-6 {
@@ -445,8 +515,9 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				color: ${theme.searchMarkerColor} !important;
 			}
 
+			/* We need !important because the search marker is overridden by CodeMirror's own text selection marker */
 			.cm-search-marker-selected {
-				background: ${theme.selectedColor2};
+				background: ${theme.selectedColor2} !important;
 				color: ${theme.color2} !important;
 			}
 
@@ -465,6 +536,8 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 			}
 
 			/* The default dark theme colors don't have enough contrast with the background */
+
+			/*
 			.cm-s-nord span.cm-comment {
 				color: #9aa4b6 !important;
 			}
@@ -484,6 +557,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 			.cm-s-solarized.cm-s-dark span.cm-comment {
 				color: #8ba1a7 !important;
 			}
+			*/
 
 			${selectionColorCss}
 		`));
@@ -491,7 +565,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		return () => {
 			document.head.removeChild(element);
 		};
-	}, [props.themeId]);
+	}, [props.themeId, props.contentMaxWidth]);
 
 	const webview_domReady = useCallback(() => {
 		setWebviewReady(true);
@@ -503,12 +577,18 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		const arg0 = args && args.length >= 1 ? args[0] : null;
 
 		if (msg.indexOf('checkboxclick:') === 0) {
-			const newBody = shared.toggleCheckbox(msg, props.content);
+			const { line, from, to } = shared.toggleCheckboxRange(msg, props.content);
 			if (editorRef.current) {
-				editorRef.current.updateBody(newBody);
+				// To cancel CodeMirror's layout drift, the scroll position
+				// is recorded before updated, and then it is restored.
+				// Ref. https://github.com/laurent22/joplin/issues/5890
+				const percent = getLineScrollPercent();
+				editorRef.current.replaceRange(line, from, to);
+				setEditorPercentScroll(percent);
 			}
 		} else if (msg === 'percentScroll') {
-			setEditorPercentScroll(arg0);
+			const percent = arg0;
+			setEditorPercentScroll(percent);
 		} else {
 			props.onMessage(event);
 		}
@@ -530,7 +610,11 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				bodyToRender = `<i>${_('This note has no content. Click on "%s" to toggle the editor and edit the note.', _('Layout'))}</i>`;
 			}
 
-			const result = await props.markupToHtml(props.contentMarkupLanguage, bodyToRender, markupRenderOptions({ resourceInfos: props.resourceInfos }));
+			const result = await props.markupToHtml(props.contentMarkupLanguage, bodyToRender, markupRenderOptions({
+				resourceInfos: props.resourceInfos,
+				contentMaxWidth: props.contentMaxWidth,
+				mapsToLine: true,
+			}));
 
 			if (cancelled) return;
 
@@ -557,8 +641,18 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		const options: any = {
 			pluginAssets: renderedBody.pluginAssets,
 			downloadResources: Setting.value('sync.resourceDownloadMode'),
+			markupLineCount: editorRef.current?.lineCount() || 0,
 		};
-		webviewRef.current.wrappedInstance.send('setHtml', renderedBody.html, options);
+
+		// It seems when there's an error immediately when the component is
+		// mounted, webviewReady might be true, but webviewRef.current will be
+		// undefined. Maybe due to the error boundary that unmount components.
+		// Since we can't do much about it we just print an error.
+		if (webviewRef.current && webviewRef.current.wrappedInstance) {
+			webviewRef.current.wrappedInstance.send('setHtml', renderedBody.html, options);
+		} else {
+			console.error('Trying to set HTML on an undefined webview ref');
+		}
 	}, [renderedBody, webviewReady]);
 
 	useEffect(() => {
@@ -645,7 +739,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 			return rect.x < x && rect.y < y && rect.right > x && rect.bottom > y;
 		}
 
-		function onContextMenu(_event: any, params: any) {
+		async function onContextMenu(_event: any, params: any) {
 			if (!pointerInsideEditor(params.x, params.y)) return;
 
 			const menu = new Menu();
@@ -699,6 +793,23 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				editorRef.current.alignSelection(params);
 			}
 
+			let filterObject: EditContextMenuFilterObject = {
+				items: [],
+			};
+
+			filterObject = await eventManager.filterEmit('editorContextMenu', filterObject);
+
+			for (const item of filterObject.items) {
+				menu.append(new MenuItem({
+					label: item.label,
+					click: async () => {
+						const args = item.commandArgs || [];
+						void CommandService.instance().execute(item.commandName, ...args);
+					},
+					type: item.type,
+				}));
+			}
+
 			menuUtils.pluginContextMenuItems(props.plugins, MenuItemLocation.EditorContextMenu).forEach((item: any) => {
 				menu.append(new MenuItem(item));
 			});
@@ -731,6 +842,9 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 					onChange={codeMirror_change}
 					onScroll={editor_scroll}
 					onEditorPaste={onEditorPaste}
+					isSafeMode={props.isSafeMode}
+					onResize={editor_resize}
+					onUpdate={editor_update}
 				/>
 			</div>
 		);
@@ -744,22 +858,25 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 					viewerStyle={styles.viewer}
 					onIpcMessage={webview_ipcMessage}
 					onDomReady={webview_domReady}
+					contentMaxWidth={props.contentMaxWidth}
 				/>
 			</div>
 		);
 	}
 
 	return (
-		<div style={styles.root} ref={rootRef}>
-			<div style={styles.rowToolbar}>
-				<Toolbar themeId={props.themeId} />
-				{props.noteToolbar}
+		<ErrorBoundary message="The text editor encountered a fatal error and could not continue. The error might be due to a plugin, so please try to disable some of them and try again.">
+			<div style={styles.root} ref={rootRef}>
+				<div style={styles.rowToolbar}>
+					<Toolbar themeId={props.themeId} />
+					{props.noteToolbar}
+				</div>
+				<div style={styles.rowEditorViewer}>
+					{renderEditor()}
+					{renderViewer()}
+				</div>
 			</div>
-			<div style={styles.rowEditorViewer}>
-				{renderEditor()}
-				{renderViewer()}
-			</div>
-		</div>
+		</ErrorBoundary>
 	);
 }
 

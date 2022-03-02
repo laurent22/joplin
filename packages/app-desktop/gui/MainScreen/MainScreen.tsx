@@ -17,7 +17,7 @@ import { stateUtils } from '@joplin/lib/reducer';
 import InteropServiceHelper from '../../InteropServiceHelper';
 import { _ } from '@joplin/lib/locale';
 import NoteListWrapper from '../NoteListWrapper/NoteListWrapper';
-import { AppState } from '../../app';
+import { AppState } from '../../app.reducer';
 import { saveLayout, loadLayout } from '../ResizableLayout/utils/persist';
 import Setting from '@joplin/lib/models/Setting';
 import produce from 'immer';
@@ -29,12 +29,17 @@ import { themeStyle } from '@joplin/lib/theme';
 import validateLayout from '../ResizableLayout/utils/validateLayout';
 import iterateItems from '../ResizableLayout/utils/iterateItems';
 import removeItem from '../ResizableLayout/utils/removeItem';
-import EncryptionService from '@joplin/lib/services/EncryptionService';
+import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
 import ShareFolderDialog from '../ShareFolderDialog/ShareFolderDialog';
 import { ShareInvitation } from '@joplin/lib/services/share/reducer';
-import ShareService from '@joplin/lib/services/share/ShareService';
-import { reg } from '@joplin/lib/registry';
-
+import removeKeylessItems from '../ResizableLayout/utils/removeKeylessItems';
+import { localSyncInfoFromState } from '@joplin/lib/services/synchronizer/syncInfoUtils';
+import { parseCallbackUrl } from '@joplin/lib/callbackUrlUtils';
+import ElectronAppWrapper from '../../ElectronAppWrapper';
+import { showMissingMasterKeyMessage } from '@joplin/lib/services/e2ee/utils';
+import { MasterKeyEntity } from '../../../lib/services/e2ee/types';
+import commands from './commands/index';
+import invitationRespond from '../../services/share/invitationRespond';
 const { connect } = require('react-redux');
 const { PromptDialog } = require('../PromptDialog.min.js');
 const NotePropertiesDialog = require('../NotePropertiesDialog.min.js');
@@ -62,6 +67,7 @@ interface Props {
 	showMissingMasterKeyMessage: boolean;
 	showNeedUpgradingMasterKeyMessage: boolean;
 	showShouldReencryptMessage: boolean;
+	showInstallTemplatesPlugin: boolean;
 	focusedField: string;
 	themeId: number;
 	settingEditorCodeView: boolean;
@@ -69,6 +75,8 @@ interface Props {
 	startupPluginsLoaded: boolean;
 	shareInvitations: ShareInvitation[];
 	isSafeMode: boolean;
+	needApiAuth: boolean;
+	processingShareInvitationResponse: boolean;
 }
 
 interface ShareFolderDialogOptions {
@@ -104,37 +112,6 @@ const defaultLayout: LayoutItem = {
 		{ key: 'editor' },
 	],
 };
-
-const commands = [
-	require('./commands/editAlarm'),
-	require('./commands/exportPdf'),
-	require('./commands/hideModalMessage'),
-	require('./commands/moveToFolder'),
-	require('./commands/newNote'),
-	require('./commands/newFolder'),
-	require('./commands/newSubFolder'),
-	require('./commands/newTodo'),
-	require('./commands/print'),
-	require('./commands/renameFolder'),
-	require('./commands/showShareFolderDialog'),
-	require('./commands/renameTag'),
-	require('./commands/search'),
-	require('./commands/selectTemplate'),
-	require('./commands/setTags'),
-	require('./commands/showModalMessage'),
-	require('./commands/showNoteContentProperties'),
-	require('./commands/showNoteProperties'),
-	require('./commands/showShareNoteDialog'),
-	require('./commands/showSpellCheckerMenu'),
-	require('./commands/toggleEditors'),
-	require('./commands/toggleNoteList'),
-	require('./commands/toggleSideBar'),
-	require('./commands/toggleVisiblePanes'),
-	require('./commands/toggleLayoutMoveMode'),
-	require('./commands/openNote'),
-	require('./commands/openFolder'),
-	require('./commands/openTag'),
-];
 
 class MainScreenComponent extends React.Component<Props, State> {
 
@@ -180,6 +157,23 @@ class MainScreenComponent extends React.Component<Props, State> {
 		this.layoutModeListenerKeyDown = this.layoutModeListenerKeyDown.bind(this);
 
 		window.addEventListener('resize', this.window_resize);
+
+		ipcRenderer.on('asynchronous-message', (_event: any, message: string, args: any) => {
+			if (message === 'openCallbackUrl') {
+				this.openCallbackUrl(args.url);
+			}
+		});
+
+		const initialCallbackUrl = (bridge().electronApp() as ElectronAppWrapper).initialCallbackUrl();
+		if (initialCallbackUrl) {
+			this.openCallbackUrl(initialCallbackUrl);
+		}
+	}
+
+	private openCallbackUrl(url: string) {
+		console.log(`openUrl ${url}`);
+		const { command, params } = parseCallbackUrl(url);
+		void CommandService.instance().execute(command.toString(), params.id);
 	}
 
 	private updateLayoutPluginViews(layout: LayoutItem, plugins: PluginStates) {
@@ -222,6 +216,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 	}
 
 	private showShareInvitationNotification(props: Props): boolean {
+		if (props.processingShareInvitationResponse) return false;
 		return !!props.shareInvitations.find(i => i.status === 0);
 	}
 
@@ -233,6 +228,14 @@ class MainScreenComponent extends React.Component<Props, State> {
 
 		try {
 			output = loadLayout(Object.keys(userLayout).length ? userLayout : null, defaultLayout, rootLayoutSize);
+
+			// For unclear reasons, layout items sometimes end up witout a key.
+			// In that case, we can't do anything with them, so remove them
+			// here. It could be due to the deprecated plugin API, which allowed
+			// creating panel without a key, although in this case it should
+			// have been set automatically.
+			// https://github.com/laurent22/joplin/issues/4926
+			output = removeKeylessItems(output);
 
 			if (!findItemByKey(output, 'sideBar') || !findItemByKey(output, 'noteList') || !findItemByKey(output, 'editor')) {
 				throw new Error('"sideBar", "noteList" and "editor" must be present in the layout');
@@ -496,6 +499,30 @@ class MainScreenComponent extends React.Component<Props, State> {
 		return this.styles_;
 	}
 
+	private renderNotificationMessage(message: string, callForAction: string, callForActionHandler: Function, callForAction2: string = null, callForActionHandler2: Function = null) {
+		const theme = themeStyle(this.props.themeId);
+		const urlStyle: any = { color: theme.colorWarnUrl, textDecoration: 'underline' };
+
+		const cfa = (
+			<a href="#" style={urlStyle} onClick={() => callForActionHandler()}>
+				{callForAction}
+			</a>
+		);
+
+		const cfa2 = !callForAction2 ? null : (
+			<a href="#" style={urlStyle} onClick={() => callForActionHandler2()}>
+				{callForAction2}
+			</a>
+		);
+
+		return (
+			<span>
+				{message}{callForAction ? ' ' : ''}
+				{cfa}{callForAction2 ? ' / ' : ''}{cfa2}
+			</span>
+		);
+	}
+
 	renderNotification(theme: any, styles: any) {
 		if (!this.messageBoxVisible()) return null;
 
@@ -516,6 +543,16 @@ class MainScreenComponent extends React.Component<Props, State> {
 			});
 		};
 
+		const onViewPluginScreen = () => {
+			this.props.dispatch({
+				type: 'NAV_GO',
+				routeName: 'Config',
+				props: {
+					defaultSection: 'plugins',
+				},
+			});
+		};
+
 		const onRestartAndUpgrade = async () => {
 			Setting.setValue('sync.upgradeState', Setting.SYNC_UPGRADE_STATE_MUST_DO);
 			await Setting.saveAll();
@@ -528,92 +565,73 @@ class MainScreenComponent extends React.Component<Props, State> {
 			bridge().restart();
 		};
 
-		const onInvitationRespond = async (shareUserId: string, accept: boolean) => {
-			await ShareService.instance().respondInvitation(shareUserId, accept);
-			await ShareService.instance().refreshShareInvitations();
-			void reg.scheduleSync(1000);
+		const onInvitationRespond = async (shareUserId: string, folderId: string, masterKey: MasterKeyEntity, accept: boolean) => {
+			await invitationRespond(shareUserId, folderId, masterKey, accept);
 		};
 
 		let msg = null;
 
+		// When adding something here, don't forget to update the condition in
+		// this.messageBoxVisible()
+
 		if (this.props.isSafeMode) {
-			msg = (
-				<span>
-					{_('Safe mode is currently active. Note rendering and all plugins are temporarily disabled.')}{' '}
-					<a href="#" onClick={() => onDisableSafeModeAndRestart()}>
-						{_('Disable safe mode and restart')}
-					</a>
-				</span>
+			msg = this.renderNotificationMessage(
+				_('Safe mode is currently active. Note rendering and all plugins are temporarily disabled.'),
+				_('Disable safe mode and restart'),
+				onDisableSafeModeAndRestart
 			);
 		} else if (this.props.shouldUpgradeSyncTarget) {
-			msg = (
-				<span>
-					{_('The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.')}{' '}
-					<a href="#" onClick={() => onRestartAndUpgrade()}>
-						{_('Restart and upgrade')}
-					</a>
-				</span>
+			msg = this.renderNotificationMessage(
+				_('The sync target needs to be upgraded before Joplin can sync. The operation may take a few minutes to complete and the app needs to be restarted. To proceed please click on the link.'),
+				_('Restart and upgrade'),
+				onRestartAndUpgrade
 			);
 		} else if (this.props.hasDisabledEncryptionItems) {
-			msg = (
-				<span>
-					{_('Some items cannot be decrypted.')}{' '}
-					<a href="#" onClick={() => onViewStatusScreen()}>
-						{_('View them now')}
-					</a>
-				</span>
+			msg = this.renderNotificationMessage(
+				_('Some items cannot be decrypted.'),
+				_('View them now'),
+				onViewStatusScreen
 			);
 		} else if (this.props.showNeedUpgradingMasterKeyMessage) {
-			msg = (
-				<span>
-					{_('One of your master keys use an obsolete encryption method.')}{' '}
-					<a href="#" onClick={() => onViewEncryptionConfigScreen()}>
-						{_('View them now')}
-					</a>
-				</span>
+			msg = this.renderNotificationMessage(
+				_('One of your master keys use an obsolete encryption method.'),
+				_('View them now'),
+				onViewEncryptionConfigScreen
 			);
 		} else if (this.props.showShouldReencryptMessage) {
-			msg = (
-				<span>
-					{_('The default encryption method has been changed, you should re-encrypt your data.')}{' '}
-					<a href="#" onClick={() => onViewEncryptionConfigScreen()}>
-						{_('More info')}
-					</a>
-				</span>
+			msg = this.renderNotificationMessage(
+				_('The default encryption method has been changed, you should re-encrypt your data.'),
+				_('More info'),
+				onViewEncryptionConfigScreen
 			);
 		} else if (this.showShareInvitationNotification(this.props)) {
-			const invitation = this.props.shareInvitations[0];
+			const invitation = this.props.shareInvitations.find(inv => inv.status === 0);
 			const sharer = invitation.share.user;
 
-			msg = (
-				<span>
-					{_('%s (%s) would like to share a notebook with you.', sharer.full_name, sharer.email)}{' '}
-					<a href="#" onClick={() => onInvitationRespond(invitation.id, true)}>
-						{_('Accept')}
-					</a>
-					{' / '}
-					<a href="#" onClick={() => onInvitationRespond(invitation.id,true)}>
-						{_('Reject')}
-					</a>
-				</span>
+			msg = this.renderNotificationMessage(
+				_('%s (%s) would like to share a notebook with you.', sharer.full_name, sharer.email),
+				_('Accept'),
+				() => onInvitationRespond(invitation.id, invitation.share.folder_id, invitation.master_key, true),
+				_('Reject'),
+				() => onInvitationRespond(invitation.id, invitation.share.folder_id, invitation.master_key, false)
 			);
 		} else if (this.props.hasDisabledSyncItems) {
-			msg = (
-				<span>
-					{_('Some items cannot be synchronised.')}{' '}
-					<a href="#" onClick={() => onViewStatusScreen()}>
-						{_('View them now')}
-					</a>
-				</span>
+			msg = this.renderNotificationMessage(
+				_('Some items cannot be synchronised.'),
+				_('View them now'),
+				onViewStatusScreen
 			);
 		} else if (this.props.showMissingMasterKeyMessage) {
-			msg = (
-				<span>
-					{_('One or more master keys need a password.')}{' '}
-					<a href="#" onClick={() => onViewEncryptionConfigScreen()}>
-						{_('Set the password')}
-					</a>
-				</span>
+			msg = this.renderNotificationMessage(
+				_('One or more master keys need a password.'),
+				_('Set the password'),
+				onViewEncryptionConfigScreen
+			);
+		} else if (this.props.showInstallTemplatesPlugin) {
+			msg = this.renderNotificationMessage(
+				'The template feature has been moved to a plugin called "Templates".',
+				'Install plugin',
+				onViewPluginScreen
 			);
 		}
 
@@ -626,7 +644,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 
 	messageBoxVisible(props: Props = null) {
 		if (!props) props = this.props;
-		return props.hasDisabledSyncItems || props.showMissingMasterKeyMessage || props.showNeedUpgradingMasterKeyMessage || props.showShouldReencryptMessage || props.hasDisabledEncryptionItems || this.props.shouldUpgradeSyncTarget || props.isSafeMode || this.showShareInvitationNotification(props);
+		return props.hasDisabledSyncItems || props.showMissingMasterKeyMessage || props.showNeedUpgradingMasterKeyMessage || props.showShouldReencryptMessage || props.hasDisabledEncryptionItems || this.props.shouldUpgradeSyncTarget || props.isSafeMode || this.showShareInvitationNotification(props) || this.props.needApiAuth || this.props.showInstallTemplatesPlugin;
 	}
 
 	registerCommands() {
@@ -753,6 +771,7 @@ class MainScreenComponent extends React.Component<Props, State> {
 				scripts={view.scripts}
 				pluginId={plugin.id}
 				buttons={view.buttons}
+				fitToContent={view.fitToContent}
 			/>);
 		}
 
@@ -813,7 +832,9 @@ class MainScreenComponent extends React.Component<Props, State> {
 				{this.renderPluginDialogs()}
 				{noteContentPropertiesDialogOptions.visible && <NoteContentPropertiesDialog markupLanguage={noteContentPropertiesDialogOptions.markupLanguage} themeId={this.props.themeId} onClose={this.noteContentPropertiesDialog_close} text={noteContentPropertiesDialogOptions.text}/>}
 				{notePropertiesDialogOptions.visible && <NotePropertiesDialog themeId={this.props.themeId} noteId={notePropertiesDialogOptions.noteId} onClose={this.notePropertiesDialog_close} onRevisionLinkClick={notePropertiesDialogOptions.onRevisionLinkClick} />}
+				{/* @ts-ignore */}
 				{shareNoteDialogOptions.visible && <ShareNoteDialog themeId={this.props.themeId} noteIds={shareNoteDialogOptions.noteIds} onClose={this.shareNoteDialog_close} />}
+				{/* @ts-ignore */}
 				{shareFolderDialogOptions.visible && <ShareFolderDialog themeId={this.props.themeId} folderId={shareFolderDialogOptions.folderId} onClose={this.shareFolderDialog_close} />}
 
 				<PromptDialog autocomplete={promptOptions && 'autocomplete' in promptOptions ? promptOptions.autocomplete : null} defaultValue={promptOptions && promptOptions.value ? promptOptions.value : ''} themeId={this.props.themeId} style={styles.prompt} onClose={this.promptOnClose_} label={promptOptions ? promptOptions.label : ''} description={promptOptions ? promptOptions.description : null} visible={!!this.state.promptOptions} buttons={promptOptions && 'buttons' in promptOptions ? promptOptions.buttons : null} inputType={promptOptions && 'inputType' in promptOptions ? promptOptions.inputType : null} />
@@ -827,6 +848,8 @@ class MainScreenComponent extends React.Component<Props, State> {
 }
 
 const mapStateToProps = (state: AppState) => {
+	const syncInfo = localSyncInfoFromState(state);
+
 	return {
 		themeId: state.settings.theme,
 		settingEditorCodeView: state.settings['editor.codeView'],
@@ -834,15 +857,14 @@ const mapStateToProps = (state: AppState) => {
 		notes: state.notes,
 		hasDisabledSyncItems: state.hasDisabledSyncItems,
 		hasDisabledEncryptionItems: state.hasDisabledEncryptionItems,
-		showMissingMasterKeyMessage: state.notLoadedMasterKeys.length && state.masterKeys.length,
-		showNeedUpgradingMasterKeyMessage: !!EncryptionService.instance().masterKeysThatNeedUpgrading(state.masterKeys).length,
+		showMissingMasterKeyMessage: showMissingMasterKeyMessage(syncInfo, state.notLoadedMasterKeys),
+		showNeedUpgradingMasterKeyMessage: !!EncryptionService.instance().masterKeysThatNeedUpgrading(syncInfo.masterKeys).length,
 		showShouldReencryptMessage: state.settings['encryption.shouldReencrypt'] >= Setting.SHOULD_REENCRYPT_YES,
 		shouldUpgradeSyncTarget: state.settings['sync.upgradeState'] === Setting.SYNC_UPGRADE_STATE_SHOULD_DO,
 		selectedFolderId: state.selectedFolderId,
 		selectedNoteId: state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null,
 		pluginsLegacy: state.pluginsLegacy,
 		plugins: state.pluginService.plugins,
-		templates: state.templates,
 		customCss: state.customCss,
 		editorNoteStatuses: state.editorNoteStatuses,
 		hasNotesBeingSaved: stateUtils.hasNotesBeingSaved(state),
@@ -851,7 +873,10 @@ const mapStateToProps = (state: AppState) => {
 		mainLayout: state.mainLayout,
 		startupPluginsLoaded: state.startupPluginsLoaded,
 		shareInvitations: state.shareService.shareInvitations,
+		processingShareInvitationResponse: state.shareService.processingShareInvitationResponse,
 		isSafeMode: state.settings.isSafeMode,
+		needApiAuth: state.needApiAuth,
+		showInstallTemplatesPlugin: state.hasLegacyTemplates && !state.pluginService.plugins['joplin.plugin.templates'],
 	};
 };
 

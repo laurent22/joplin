@@ -1,32 +1,20 @@
 #!/usr/bin/env node
 
-// To test the tool with existing packages, the best is to:
-//
-// - Create a separate copy of the plugin repo
-// - Reset back a few commits
-// - Run with the --dry-run option: `plugin-repo-cli build ~/src/joplin-plugins-test/ --dry-run`
+require('source-map-support').install();
 
 import * as fs from 'fs-extra';
 import * as path from 'path';
 import * as process from 'process';
 import validatePluginId from '@joplin/lib/services/plugins/utils/validatePluginId';
+import validatePluginVersion from '@joplin/lib/services/plugins/utils/validatePluginVersion';
 import { execCommand2, resolveRelativePathWithinDir, gitPullTry, gitRepoCleanTry, gitRepoClean } from '@joplin/tools/tool-utils.js';
 import checkIfPluginCanBeAdded from './lib/checkIfPluginCanBeAdded';
 import updateReadme from './lib/updateReadme';
 import { NpmPackage } from './lib/types';
 import gitCompareUrl from './lib/gitCompareUrl';
-
-function stripOffPackageOrg(name: string): string {
-	const n = name.split('/');
-	if (n[0][0] === '@') n.splice(0, 1);
-	return n.join('/');
-}
-
-function isJoplinPluginPackage(pack: any): boolean {
-	if (!pack.keywords || !pack.keywords.includes('joplin-plugin')) return false;
-	if (stripOffPackageOrg(pack.name).indexOf('joplin-plugin') !== 0) return false;
-	return true;
-}
+import commandUpdateRelease from './commands/updateRelease';
+import { isJoplinPluginPackage, readJsonFile } from './lib/utils';
+import { applyManifestOverrides, getObsoleteManifests, readManifestOverrides } from './lib/overrideUtils';
 
 function pluginInfoFromSearchResults(results: any[]): NpmPackage[] {
 	const output: NpmPackage[] = [];
@@ -49,27 +37,21 @@ async function checkPluginRepository(dirPath: string, dryRun: boolean) {
 	if (!(await fs.pathExists(`${dirPath}/.git`))) throw new Error(`Directory is not a Git repository: ${dirPath}`);
 
 	const previousDir = chdir(dirPath);
-	await gitRepoCleanTry();
-	if (!dryRun) await gitPullTry();
-	chdir(previousDir);
-}
-
-async function readJsonFile(manifestPath: string, defaultValue: any = null): Promise<any> {
-	if (!(await fs.pathExists(manifestPath))) {
-		if (defaultValue === null) throw new Error(`No such file: ${manifestPath}`);
-		return defaultValue;
+	if (!dryRun) {
+		await gitRepoCleanTry();
+		await gitPullTry();
 	}
-
-	const content = await fs.readFile(manifestPath, 'utf8');
-	return JSON.parse(content);
+	chdir(previousDir);
 }
 
 async function extractPluginFilesFromPackage(existingManifests: any, workDir: string, packageName: string, destDir: string): Promise<any> {
 	const previousDir = chdir(workDir);
 
-	await execCommand2(`npm install ${packageName} --save --ignore-scripts`, { showOutput: false });
+	await execCommand2(`npm install ${packageName} --save --ignore-scripts`, { showStderr: false, showStdout: false });
 
 	const pluginDir = resolveRelativePathWithinDir(workDir, 'node_modules', packageName, 'publish');
+
+	if (!(await fs.pathExists(pluginDir))) throw new Error(`Could not find publish directory at ${pluginDir}`);
 
 	const files = await fs.readdir(pluginDir);
 	const manifestFilePath = path.resolve(pluginDir, files.find((f: any) => path.extname(f) === '.json'));
@@ -84,6 +66,7 @@ async function extractPluginFilesFromPackage(existingManifests: any, workDir: st
 	// manifest properties are checked when the plugin is loaded into the app.
 	const manifest = await readJsonFile(manifestFilePath);
 	validatePluginId(manifest.id);
+	validatePluginVersion(manifest.version);
 
 	manifest._npm_package_name = packageName;
 
@@ -152,14 +135,14 @@ function chdir(path: string): string {
 	return previous;
 }
 
-async function processNpmPackage(npmPackage: NpmPackage, repoDir: string) {
+async function processNpmPackage(npmPackage: NpmPackage, repoDir: string, dryRun: boolean) {
 	const tempDir = `${repoDir}/temp`;
-	const obsoleteManifestsPath = path.resolve(repoDir, 'obsoletes.json');
 
 	await fs.mkdirp(tempDir);
 
 	const originalPluginManifests = await readManifests(repoDir);
-	const obsoleteManifests = await readJsonFile(obsoleteManifestsPath, {});
+	const manifestOverrides = await readManifestOverrides(repoDir);
+	const obsoleteManifests = getObsoleteManifests(manifestOverrides);
 	const existingManifests = {
 		...originalPluginManifests,
 		...obsoleteManifests,
@@ -204,6 +187,8 @@ async function processNpmPackage(npmPackage: NpmPackage, repoDir: string) {
 			...manifests,
 		};
 
+		manifests = applyManifestOverrides(manifests, manifestOverrides);
+
 		await writeManifests(repoDir, manifests);
 		await updateReadme(`${repoDir}/README.md`, manifests);
 	}
@@ -211,11 +196,13 @@ async function processNpmPackage(npmPackage: NpmPackage, repoDir: string) {
 	chdir(repoDir);
 	await fs.remove(tempDir);
 
-	if (!(await gitRepoClean())) {
-		await execCommand2('git add -A', { showOutput: false });
-		await execCommand2(['git', 'commit', '-m', commitMessage(actionType, manifest, previousManifest, npmPackage, error)], { showOutput: false });
-	} else {
-		console.info('Nothing to commit');
+	if (!dryRun) {
+		if (!(await gitRepoClean())) {
+			await execCommand2('git add -A', { showStdout: false });
+			await execCommand2(['git', 'commit', '-m', commitMessage(actionType, manifest, previousManifest, npmPackage, error)], { showStdout: false });
+		} else {
+			console.info('Nothing to commit');
+		}
 	}
 }
 
@@ -228,33 +215,59 @@ async function commandBuild(args: CommandBuildArgs) {
 	await checkPluginRepository(repoDir, dryRun);
 
 	// When starting, always update and commit README, in case something has
-	// been updated via a pull request (for example obsoletes.json being
-	// modified). We do that separately so that the README update doesn't get
-	// mixed up with plugin updates, as in this example:
+	// been updated via a pull request. We do that separately so that the README
+	// update doesn't get mixed up with plugin updates, as in this example:
 	// https://github.com/joplin/plugins/commit/8a65bbbf64bf267674f854a172466ffd4f07c672
 	const manifests = await readManifests(repoDir);
 	await updateReadme(`${repoDir}/README.md`, manifests);
 	const previousDir = chdir(repoDir);
-	if (!(await gitRepoClean())) {
-		console.info('Updating README...');
-		await execCommand2('git add -A', { showOutput: true });
-		await execCommand2('git commit -m "Update README"', { showOutput: true });
+
+	if (!dryRun) {
+		if (!(await gitRepoClean())) {
+			console.info('Updating README...');
+			await execCommand2('git add -A');
+			await execCommand2('git commit -m "Update README"');
+		}
 	}
+
 	chdir(previousDir);
 
-	const searchResults = (await execCommand2('npm search joplin-plugin --searchlimit 5000 --json', { showOutput: false })).trim();
+	const searchResults = (await execCommand2('npm search joplin-plugin --searchlimit 5000 --json', { showStdout: false, showStderr: false })).trim();
 	const npmPackages = pluginInfoFromSearchResults(JSON.parse(searchResults));
 
 	for (const npmPackage of npmPackages) {
-		await processNpmPackage(npmPackage, repoDir);
+		await processNpmPackage(npmPackage, repoDir, dryRun);
 	}
 
-	if (!dryRun) await execCommand2('git push');
+	if (!dryRun) {
+		await commandUpdateRelease(args);
+
+		if (!(await gitRepoClean())) {
+			await execCommand2('git add -A');
+			await execCommand2('git commit -m "Update stats"');
+		}
+
+		await execCommand2('git push');
+	}
 }
 
 async function commandVersion() {
-	const p = await readJsonFile(path.resolve(__dirname, 'package.json'));
-	console.info(`Version ${p.version}`);
+	const paths = [
+		path.resolve(__dirname, 'package.json'),
+		path.resolve(__dirname, '..', 'package.json'),
+	];
+
+	for (const p of paths) {
+		try {
+			const info = await readJsonFile(p);
+			console.info(`Version ${info.version}`);
+			return;
+		} catch (error) {
+			// Try the next path
+		}
+	}
+
+	throw new Error(`Cannot find package.json in any of these paths: ${JSON.stringify(paths)}`);
 }
 
 async function main() {
@@ -263,6 +276,7 @@ async function main() {
 	const commands: Record<string, Function> = {
 		build: commandBuild,
 		version: commandVersion,
+		updateRelease: commandUpdateRelease,
 	};
 
 	let selectedCommand: string = '';
@@ -285,6 +299,8 @@ async function main() {
 		}, (args: any) => setSelectedCommand('build', args))
 
 		.command('version', 'Gives version info', () => {}, (args: any) => setSelectedCommand('version', args))
+
+		.command('update-release <plugin-repo-dir>', 'Update GitHub release', () => {}, (args: any) => setSelectedCommand('updateRelease', args))
 
 		.help()
 		.argv;

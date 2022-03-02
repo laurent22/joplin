@@ -1,14 +1,11 @@
 import { useCallback } from 'react';
 import { FormNote } from './types';
-import contextMenu, { openItemById } from './contextMenu';
-import { _ } from '@joplin/lib/locale';
+import contextMenu from './contextMenu';
 import CommandService from '@joplin/lib/services/CommandService';
 import PostMessageService from '@joplin/lib/services/PostMessageService';
-const bridge = require('electron').remote.require('./bridge').default;
-const { urlDecode } = require('@joplin/lib/string-utils');
-const urlUtils = require('@joplin/lib/urlUtils');
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 import { reg } from '@joplin/lib/registry';
+const bridge = require('@electron/remote').require('./bridge').default;
 
 export default function useMessageHandler(scrollWhenReady: any, setScrollWhenReady: Function, editorRef: any, setLocalSearchResultCount: Function, dispatch: Function, formNote: FormNote) {
 	return useCallback(async (event: any) => {
@@ -16,7 +13,7 @@ export default function useMessageHandler(scrollWhenReady: any, setScrollWhenRea
 		const args = event.args;
 		const arg0 = args && args.length >= 1 ? args[0] : null;
 
-		// if (msg !== 'percentScroll') console.info(`Got ipc-message: ${msg}`, arg0);
+		if (msg !== 'percentScroll') console.info(`Got ipc-message: ${msg}`, arg0);
 
 		if (msg.indexOf('error:') === 0) {
 			const s = msg.split(':');
@@ -45,17 +42,6 @@ export default function useMessageHandler(scrollWhenReady: any, setScrollWhenRea
 			}, dispatch);
 
 			menu.popup(bridge().window());
-		} else if (msg.indexOf('joplin://') === 0) {
-			const { itemId, hash } = urlUtils.parseResourceUrl(msg);
-			await openItemById(itemId, dispatch, hash);
-
-		} else if (urlUtils.urlProtocol(msg)) {
-			if (msg.indexOf('file://') === 0) {
-				// When using the file:// protocol, openPath doesn't work (does nothing) with URL-encoded paths
-				require('electron').shell.openPath(urlDecode(msg));
-			} else {
-				require('electron').shell.openExternal(msg);
-			}
 		} else if (msg.indexOf('#') === 0) {
 			// This is an internal anchor, which is handled by the WebView so skip this case
 		} else if (msg === 'contentScriptExecuteCommand') {
@@ -65,7 +51,8 @@ export default function useMessageHandler(scrollWhenReady: any, setScrollWhenRea
 		} else if (msg === 'postMessageService.message') {
 			void PostMessageService.instance().postMessage(arg0);
 		} else {
-			bridge().showErrorMessageBox(_('Unsupported link or message: %s', msg));
+			await CommandService.instance().execute('openItem', msg);
+			// bridge().showErrorMessageBox(_('Unsupported link or message: %s', msg));
 		}
 	}, [dispatch, setLocalSearchResultCount, scrollWhenReady, formNote]);
 }

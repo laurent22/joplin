@@ -29,8 +29,7 @@ function plugin(markdownIt: any, ruleOptions: RuleOptions) {
 
 				js = ` ontouchstart="${touchStart}" ontouchend="${cancel}" ontouchcancel="${cancel}" ontouchmove="${cancel}"`;
 			}
-
-			return `<img data-from-md ${htmlUtils.attributesHtml(Object.assign({}, r, { title: title }))}${js}/>`;
+			return `<img data-from-md ${htmlUtils.attributesHtml(Object.assign({}, r, { title: title, alt: token.content }))}${js}/>`;
 		}
 		return defaultRender(tokens, idx, options, env, self);
 	};

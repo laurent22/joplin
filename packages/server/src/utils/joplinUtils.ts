@@ -1,5 +1,4 @@
 import JoplinDatabase from '@joplin/lib/JoplinDatabase';
-import Logger from '@joplin/lib/Logger';
 import BaseModel, { ModelType } from '@joplin/lib/BaseModel';
 import BaseItem from '@joplin/lib/models/BaseItem';
 import Note from '@joplin/lib/models/Note';
@@ -11,18 +10,22 @@ import MasterKey from '@joplin/lib/models/MasterKey';
 import Revision from '@joplin/lib/models/Revision';
 import { Config } from './types';
 import * as fs from 'fs-extra';
-import { Item, Share, Uuid } from '../db';
+import { Item, Share, Uuid } from '../services/database/types';
 import ItemModel from '../models/ItemModel';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import { formatDateTime } from './time';
 import { ErrorNotFound } from './errors';
 import { MarkupToHtml } from '@joplin/renderer';
 import { OptionsResourceModel } from '@joplin/renderer/MarkupToHtml';
+import { isValidHeaderIdentifier } from '@joplin/lib/services/e2ee/EncryptionService';
 const { DatabaseDriverNode } = require('@joplin/lib/database-driver-node.js');
 import { themeStyle } from '@joplin/lib/theme';
 import Setting from '@joplin/lib/models/Setting';
 import { Models } from '../models/factory';
 import MustacheService from '../services/MustacheService';
+import Logger from '@joplin/lib/Logger';
+import config from '../config';
+const { substrWithEllipsis } = require('@joplin/lib/string-utils');
 
 const logger = Logger.create('JoplinUtils');
 
@@ -30,6 +33,7 @@ export interface FileViewerResponse {
 	body: any;
 	mime: string;
 	size: number;
+	filename: string;
 }
 
 interface ResourceInfo {
@@ -55,15 +59,16 @@ let baseUrl_: string = null;
 
 export const resourceDirName = '.resource';
 
-export async function initializeJoplinUtils(config: Config, models: Models) {
+export async function initializeJoplinUtils(config: Config, models: Models, mustache: MustacheService) {
 	models_ = models;
 	baseUrl_ = config.baseUrl;
+	mustache_ = mustache;
 
 	const filePath = `${config.tempDir}/joplin.sqlite`;
 	await fs.remove(filePath);
 
 	db_ = new JoplinDatabase(new DatabaseDriverNode());
-	db_.setLogger(logger as Logger);
+	// db_.setLogger(logger as Logger);
 	await db_.open({ name: filePath });
 
 	BaseModel.setDb(db_);
@@ -77,9 +82,6 @@ export async function initializeJoplinUtils(config: Config, models: Models) {
 	BaseItem.loadClass('NoteTag', NoteTag);
 	BaseItem.loadClass('MasterKey', MasterKey);
 	BaseItem.loadClass('Revision', Revision);
-
-	mustache_ = new MustacheService(config.viewDir, config.baseUrl);
-	mustache_.prefersDarkEnabled = false;
 }
 
 export function linkedResourceIds(body: string): string[] {
@@ -139,23 +141,37 @@ async function noteLinkedItemInfos(userId: Uuid, itemModel: ItemModel, note: Not
 	const output: LinkedItemInfos = {};
 
 	for (const jopId of jopIds) {
-		const item = await itemModel.loadByJopId(userId, jopId, { fields: ['*'] });
+		const item = await itemModel.loadByJopId(userId, jopId, { fields: ['*'], withContent: true });
 		if (!item) continue;
 
 		output[jopId] = {
 			item: itemModel.itemToJoplinItem(item),
-			file: null,// itemFileWithContent.file,
+			file: null,
 		};
 	}
 
 	return output;
 }
 
-async function renderResource(item: Item, content: any): Promise<FileViewerResponse> {
+async function renderResource(userId: string, resourceId: string, item: Item, content: Buffer): Promise<FileViewerResponse> {
+	// The item passed to this function is the resource blob, which is
+	// sufficient to download the resource. However, if we want a more user
+	// friendly download, we need to know the resource original name and mime
+	// type. So below, we try to get that information.
+	let jopItem: any = null;
+
+	try {
+		const resourceItem = await models_.item().loadByJopId(userId, resourceId);
+		jopItem = await models_.item().loadAsJoplinItem(resourceItem.id);
+	} catch (error) {
+		logger.error(`Could not load Joplin item ${resourceId} associated with item: ${item.id}`);
+	}
+
 	return {
 		body: content,
-		mime: item.mime_type,
-		size: item.content_size,
+		mime: jopItem ? jopItem.mime : item.mime_type,
+		size: content ? content.byteLength : 0,
+		filename: jopItem ? jopItem.title : '',
 	};
 }
 
@@ -176,7 +192,7 @@ async function renderNote(share: Share, note: NoteEntity, resourceInfos: Resourc
 			if (item.type_ === ModelType.Note) {
 				return '#';
 			} else if (item.type_ === ModelType.Resource) {
-				return `${models_.share().shareUrl(share.id)}?resource_id=${item.id}&t=${item.updated_time}`;
+				return `${models_.share().shareUrl(share.owner_id, share.id)}?resource_id=${item.id}&t=${item.updated_time}`;
 			} else {
 				throw new Error(`Unsupported item type: ${item.type_}`);
 			}
@@ -187,6 +203,8 @@ async function renderNote(share: Share, note: NoteEntity, resourceInfos: Resourc
 		audioPlayerEnabled: false,
 		videoPlayerEnabled: false,
 		pdfViewerEnabled: false,
+
+		linkRenderingType: 2,
 	};
 
 	const result = await markupToHtml.render(note.markup_language, note.body, themeStyle(Setting.THEME_LIGHT), renderOptions);
@@ -195,6 +213,8 @@ async function renderNote(share: Share, note: NoteEntity, resourceInfos: Resourc
 		cssFiles: ['items/note'],
 		jsFiles: ['items/note'],
 		name: 'note',
+		title: `${substrWithEllipsis(note.title, 0, 100)} - ${config().appName}`,
+		titleOverride: true,
 		path: 'index/items/note',
 		content: {
 			note: {
@@ -210,13 +230,21 @@ async function renderNote(share: Share, note: NoteEntity, resourceInfos: Resourc
 				};
 			`,
 		},
-	});
+	}, { prefersDarkEnabled: false });
 
 	return {
 		body: bodyHtml,
 		mime: 'text/html',
-		size: bodyHtml.length,
+		size: Buffer.byteLength(bodyHtml, 'utf-8'),
+		filename: '',
 	};
+}
+
+export function itemIsEncrypted(item: Item): boolean {
+	if ('jop_encryption_applied' in item) return !!item.jop_encryption_applied;
+	if (!('content' in item)) throw new Error('Cannot check encryption - item is missing both "content" and "jop_encryption_applied" property');
+	const header = item.content.toString('utf8', 0, 5);
+	return isValidHeaderIdentifier(header);
 }
 
 export async function renderItem(userId: Uuid, item: Item, share: Share, query: Record<string, any>): Promise<FileViewerResponse> {
@@ -224,28 +252,34 @@ export async function renderItem(userId: Uuid, item: Item, share: Share, query: 
 	const linkedItemInfos: LinkedItemInfos = await noteLinkedItemInfos(userId, models_.item(), rootNote);
 	const resourceInfos = await getResourceInfos(linkedItemInfos);
 
-	const fileToRender = {
+	interface FileToRender {
+		item: Item;
+		content: any;
+		jopItemId: string;
+	}
+
+	const fileToRender: FileToRender = {
 		item: item,
 		content: null as any,
-		itemId: rootNote.id,
+		jopItemId: rootNote.id,
 	};
 
 	if (query.resource_id) {
-		const resourceItem = await models_.item().loadByName(userId, resourceBlobPath(query.resource_id), { fields: ['*'] });
+		const resourceItem = await models_.item().loadByName(userId, resourceBlobPath(query.resource_id), { fields: ['*'], withContent: true });
 		fileToRender.item = resourceItem;
 		fileToRender.content = resourceItem.content;
-		fileToRender.itemId = query.resource_id;
+		fileToRender.jopItemId = query.resource_id;
 	}
 
-	if (fileToRender.item !== item && !linkedItemInfos[fileToRender.itemId]) {
-		throw new ErrorNotFound(`Item "${fileToRender.itemId}" does not belong to this note`);
+	if (fileToRender.item !== item && !linkedItemInfos[fileToRender.jopItemId]) {
+		throw new ErrorNotFound(`Item "${fileToRender.jopItemId}" does not belong to this note`);
 	}
 
-	const itemToRender = fileToRender.item === item ? rootNote : linkedItemInfos[fileToRender.itemId].item;
+	const itemToRender = fileToRender.item === item ? rootNote : linkedItemInfos[fileToRender.jopItemId].item;
 	const itemType: ModelType = itemToRender.type_;
 
 	if (itemType === ModelType.Resource) {
-		return renderResource(fileToRender.item, fileToRender.content);
+		return renderResource(userId, fileToRender.jopItemId, fileToRender.item, fileToRender.content);
 	} else if (itemType === ModelType.Note) {
 		return renderNote(share, itemToRender, resourceInfos, linkedItemInfos);
 	} else {

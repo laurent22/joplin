@@ -7,6 +7,7 @@ import BaseModel from '@joplin/lib/BaseModel';
 import uuid from '@joplin/lib/uuid';
 const { connect } = require('react-redux');
 import Note from '@joplin/lib/models/Note';
+import { AppState } from '../../app.reducer';
 const debounce = require('debounce');
 const styled = require('styled-components').default;
 
@@ -14,6 +15,7 @@ export const Root = styled.div`
 	position: relative;
 	display: flex;
 	width: 100%;
+	min-width: 30px;
 `;
 
 interface Props {
@@ -21,6 +23,7 @@ interface Props {
 	notesParentType: string;
 	dispatch?: Function;
 	selectedNoteId: string;
+	isFocused?: boolean;
 }
 
 function SearchBar(props: Props) {
@@ -116,8 +119,19 @@ function SearchBar(props: Props) {
 	}, [onExitSearch]);
 
 	const onSearchButtonClick = useCallback(() => {
-		void onExitSearch();
-	}, [onExitSearch]);
+		console.info('isFocused', props.isFocused);
+
+		if (props.isFocused) {
+			void onExitSearch();
+		} else {
+			setSearchStarted(true);
+			props.inputRef.current.focus();
+			props.dispatch({
+				type: 'FOCUS_SET',
+				field: 'globalSearch',
+			});
+		}
+	}, [onExitSearch, props.isFocused]);
 
 	useEffect(() => {
 		if (props.notesParentType !== 'Search') {
@@ -125,8 +139,23 @@ function SearchBar(props: Props) {
 		}
 	}, [props.notesParentType, onExitSearch]);
 
+	// When the searchbar is remounted, exit the search if it was previously open
+	// or else other buttons stay hidden (e.g. when opening Layout Editor and closing it)
+	// https://github.com/laurent22/joplin/issues/5953
+	useEffect(() => {
+		if (props.notesParentType === 'Search' || props.isFocused) {
+			if (props.isFocused) {
+				props.dispatch({
+					type: 'FOCUS_CLEAR',
+					field: 'globalSearch',
+				});
+			}
+			void onExitSearch(true);
+		}
+	}, []);
+
 	return (
-		<Root>
+		<Root className="search-bar">
 			<SearchInput
 				inputRef={props.inputRef}
 				value={query}
@@ -141,10 +170,11 @@ function SearchBar(props: Props) {
 	);
 }
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: AppState) => {
 	return {
 		notesParentType: state.notesParentType,
 		selectedNoteId: stateUtils.selectedNoteId(state),
+		isFocused: state.focusedField === 'globalSearch',
 	};
 };
 

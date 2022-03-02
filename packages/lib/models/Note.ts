@@ -10,7 +10,8 @@ import Tag from './Tag';
 
 const { sprintf } = require('sprintf-js');
 import Resource from './Resource';
-const { pregQuote } = require('../string-utils.js');
+import syncDebugLog from '../services/synchronizer/syncDebugLog';
+const { pregQuote, substrWithEllipsis } = require('../string-utils.js');
 const { _ } = require('../locale');
 const ArrayUtils = require('../ArrayUtils.js');
 const lodash = require('lodash');
@@ -127,7 +128,7 @@ export default class Note extends BaseItem {
 
 	static async linkedItemIdsByType(type: ModelType, body: string) {
 		const items = await this.linkedItems(body);
-		const output = [];
+		const output: string[] = [];
 
 		for (let i = 0; i < items.length; i++) {
 			const item = items[i];
@@ -208,9 +209,9 @@ export default class Note extends BaseItem {
 		for (const basePath of pathsToTry) {
 			const reStrings = [
 				// Handles file://path/to/abcdefg.jpg?t=12345678
-				`${pregQuote(`${basePath}/`)}[a-zA-Z0-9.]+\\?t=[0-9]+`,
+				`${pregQuote(`${basePath}/`)}[a-zA-Z0-9]{32}\\.[a-zA-Z0-9]+\\?t=[0-9]+`,
 				// Handles file://path/to/abcdefg.jpg
-				`${pregQuote(`${basePath}/`)}[a-zA-Z0-9.]+`,
+				`${pregQuote(`${basePath}/`)}[a-zA-Z0-9]{32}\\.[a-zA-Z0-9]+`,
 			];
 			for (const reString of reStrings) {
 				const re = new RegExp(reString, 'gi');
@@ -307,7 +308,7 @@ export default class Note extends BaseItem {
 			includeTimestamps: true,
 		}, options);
 
-		const output = ['id', 'title', 'is_todo', 'todo_completed', 'todo_due', 'parent_id', 'encryption_applied', 'order', 'markup_language', 'is_conflict'];
+		const output = ['id', 'title', 'is_todo', 'todo_completed', 'todo_due', 'parent_id', 'encryption_applied', 'order', 'markup_language', 'is_conflict', 'is_shared'];
 
 		if (options.includeTimestamps) {
 			output.push('updated_time');
@@ -458,7 +459,7 @@ export default class Note extends BaseItem {
 		return this.modelSelectAll('SELECT * FROM notes WHERE is_conflict = 0');
 	}
 
-	static async updateGeolocation(noteId: string) {
+	public static async updateGeolocation(noteId: string): Promise<void> {
 		if (!Setting.value('trackLocation')) return;
 		if (!Note.updateGeolocationEnabled_) return;
 
@@ -503,7 +504,7 @@ export default class Note extends BaseItem {
 		note.longitude = geoData.coords.longitude;
 		note.latitude = geoData.coords.latitude;
 		note.altitude = geoData.coords.altitude;
-		return Note.save(note, { ignoreProvisionalFlag: true });
+		await Note.save(note, { ignoreProvisionalFlag: true });
 	}
 
 	static filter(note: NoteEntity) {
@@ -523,6 +524,7 @@ export default class Note extends BaseItem {
 			changes: {
 				parent_id: folderId,
 				is_conflict: 0, // Also reset the conflict flag in case we're moving the note out of the conflict folder
+				conflict_original_id: '', // Reset parent id as well.
 			},
 		});
 	}
@@ -537,6 +539,7 @@ export default class Note extends BaseItem {
 			id: noteId,
 			parent_id: folderId,
 			is_conflict: 0,
+			conflict_original_id: '',
 			updated_time: time.unixMs(),
 		};
 
@@ -592,29 +595,45 @@ export default class Note extends BaseItem {
 		}
 	}
 
-	static async duplicate(noteId: string, options: any = null) {
+	private static async duplicateNoteResources(noteBody: string): Promise<string> {
+		const resourceIds = await this.linkedResourceIds(noteBody);
+		let newBody: string = noteBody;
+
+		for (const resourceId of resourceIds) {
+			const newResource = await Resource.duplicateResource(resourceId);
+			const regex = new RegExp(resourceId, 'gi');
+			newBody = newBody.replace(regex, newResource.id);
+		}
+
+		return newBody;
+	}
+
+	public static async duplicate(noteId: string, options: any = null) {
 		const changes = options && options.changes;
 		const uniqueTitle = options && options.uniqueTitle;
+		const duplicateResources = options && !!options.duplicateResources;
 
-		const originalNote = await Note.load(noteId);
+		const originalNote: NoteEntity = await Note.load(noteId);
 		if (!originalNote) throw new Error(`Unknown note: ${noteId}`);
 
 		const newNote = Object.assign({}, originalNote);
 		const fieldsToReset = ['id', 'created_time', 'updated_time', 'user_created_time', 'user_updated_time'];
 
 		for (const field of fieldsToReset) {
-			delete newNote[field];
+			delete (newNote as any)[field];
 		}
 
 		for (const n in changes) {
 			if (!changes.hasOwnProperty(n)) continue;
-			newNote[n] = changes[n];
+			(newNote as any)[n] = changes[n];
 		}
 
 		if (uniqueTitle) {
 			const title = await Note.findUniqueItemTitle(uniqueTitle);
 			newNote.title = title;
 		}
+
+		if (duplicateResources) newNote.body = await this.duplicateNoteResources(newNote.body);
 
 		const newNoteSaved = await this.save(newNote);
 		const originalTags = await Tag.tagsByNoteId(noteId);
@@ -631,7 +650,7 @@ export default class Note extends BaseItem {
 		return n.updated_time < date;
 	}
 
-	static async save(o: NoteEntity, options: any = null) {
+	public static async save(o: NoteEntity, options: any = null): Promise<NoteEntity> {
 		const isNew = this.isNew(o, options);
 
 		// If true, this is a provisional note - it will be saved permanently
@@ -662,6 +681,8 @@ export default class Note extends BaseItem {
 		// Trying to fix: https://github.com/laurent22/joplin/issues/3893
 		const oldNote = !isNew && o.id ? await Note.load(o.id) : null;
 
+		syncDebugLog.info('Save Note: P:', oldNote);
+
 		let beforeNoteJson = null;
 		if (oldNote && this.revisionService().isOldNote(o.id)) {
 			beforeNoteJson = JSON.stringify(oldNote);
@@ -677,6 +698,8 @@ export default class Note extends BaseItem {
 				}
 			}
 		}
+
+		syncDebugLog.info('Save Note: N:', o);
 
 		const note = await super.save(o, options);
 
@@ -727,6 +750,18 @@ export default class Note extends BaseItem {
 				});
 			}
 		}
+	}
+
+	static async deleteMessage(noteIds: string[]): Promise<string|null> {
+		let msg = '';
+		if (noteIds.length === 1) {
+			const note = await Note.load(noteIds[0]);
+			if (!note) return null;
+			msg = _('Delete note "%s"?', substrWithEllipsis(note.title, 0, 32));
+		} else {
+			msg = _('Delete these %d notes?', noteIds.length);
+		}
+		return msg;
 	}
 
 	static dueNotes() {
@@ -911,4 +946,12 @@ export default class Note extends BaseItem {
 		return new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' });
 	}
 
+
+	static async createConflictNote(sourceNote: NoteEntity, changeSource: number): Promise<NoteEntity> {
+		const conflictNote = Object.assign({}, sourceNote);
+		delete conflictNote.id;
+		conflictNote.is_conflict = 1;
+		conflictNote.conflict_original_id = sourceNote.id;
+		return await Note.save(conflictNote, { autoTimestamp: false, changeSource: changeSource });
+	}
 }

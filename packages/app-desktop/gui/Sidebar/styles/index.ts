@@ -46,7 +46,7 @@ export const StyledHeaderLabel = styled.span`
 
 export const StyledListItem = styled.div`
 	box-sizing: border-box;
-	height: 25px;
+	height: 30px;
 	display: flex;
 	flex-direction: row;
 	align-items: center;
@@ -69,7 +69,6 @@ function listItemTextColor(props: any) {
 
 export const StyledListItemAnchor = styled.a`
 	font-size: ${(props: any) => Math.round(props.theme.fontSize * 1.0833333)}px;
-	// font-weight: 500;
 	text-decoration: none;
 	color: ${(props: any) => listItemTextColor(props)};
 	cursor: default;

@@ -1,6 +1,6 @@
 import { FolderEntity } from '@joplin/lib/services/database/types';
 import { linkedResourceIds } from '../joplinUtils';
-import { Item, Share, ShareType, ShareUser, ShareUserStatus, User, Uuid } from '../../db';
+import { Item, Share, ShareType, ShareUser, ShareUserStatus, User, Uuid } from '../../services/database/types';
 import routeHandler from '../../middleware/routeHandler';
 import { AppContext } from '../types';
 import { patchApi, postApi } from './apiUtils';
@@ -16,7 +16,7 @@ export async function createFolderShare(sessionId: string, folderId: string): Pr
 	// const item = await createFolder(sessionId, { id: '00000000 });
 
 	return postApi<Share>(sessionId, 'shares', {
-		type: ShareType.JoplinRootFolder,
+		type: ShareType.Folder,
 		folder_id: folderId,
 	});
 }
@@ -45,6 +45,8 @@ function convertTree(tree: any): any[] {
 }
 
 async function createItemTree3(sessionId: Uuid, userId: Uuid, parentFolderId: string, shareId: Uuid, tree: any[]): Promise<void> {
+	const user = await models().user().load(userId);
+
 	for (const jopItem of tree) {
 		const isFolder = !!jopItem.children;
 		const serializedBody = isFolder ?
@@ -58,9 +60,25 @@ async function createItemTree3(sessionId: Uuid, userId: Uuid, parentFolderId: st
 			}
 		}
 
-		const newItem = await models().item().saveFromRawContent(userId, `${jopItem.id}.md`, Buffer.from(serializedBody));
+		const result = await models().item().saveFromRawContent(user, [{ name: `${jopItem.id}.md`, body: Buffer.from(serializedBody) }]);
+		const newItem = result[`${jopItem.id}.md`].item;
 		if (isFolder && jopItem.children.length) await createItemTree3(sessionId, userId, newItem.jop_id, shareId, jopItem.children);
 	}
+}
+
+export async function inviteUserToShare(share: Share, sharerSessionId: string, recipientEmail: string, acceptShare: boolean = true) {
+	let shareUser = await postApi(sharerSessionId, `shares/${share.id}/users`, {
+		email: recipientEmail,
+	}) as ShareUser;
+
+	shareUser = await models().shareUser().load(shareUser.id);
+
+	if (acceptShare) {
+		const session = await models().session().createUserSession(shareUser.user_id);
+		await patchApi(session.id, `share_users/${shareUser.id}`, { status: ShareUserStatus.Accepted });
+	}
+
+	return shareUser;
 }
 
 export async function shareFolderWithUser(sharerSessionId: string, shareeSessionId: string, sharedFolderId: string, itemTree: any, acceptShare: boolean = true): Promise<ShareResult> {
@@ -75,7 +93,7 @@ export async function shareFolderWithUser(sharerSessionId: string, shareeSession
 	});
 
 	const share: Share = await postApi<Share>(sharerSessionId, 'shares', {
-		type: ShareType.JoplinRootFolder,
+		type: ShareType.Folder,
 		folder_id: rootFolderItem.jop_id,
 	});
 
@@ -90,15 +108,7 @@ export async function shareFolderWithUser(sharerSessionId: string, shareeSession
 		}
 	}
 
-	let shareUser = await postApi(sharerSessionId, `shares/${share.id}/users`, {
-		email: sharee.email,
-	}) as ShareUser;
-
-	shareUser = await models().shareUser().load(shareUser.id);
-
-	if (acceptShare) {
-		await patchApi(shareeSessionId, `share_users/${shareUser.id}`, { status: ShareUserStatus.Accepted });
-	}
+	const shareUser = await inviteUserToShare(share, sharerSessionId, sharee.email, acceptShare);
 
 	await models().share().updateSharedItems3();
 
@@ -113,16 +123,16 @@ export async function shareFolderWithUser(sharerSessionId: string, shareeSession
 // - User 2 accepts the share
 //
 // The result is that user 2 will have a file linked to user 1's file.
-export async function shareWithUserAndAccept(sharerSessionId: string, shareeSessionId: string, sharee: User, shareType: ShareType = ShareType.App, item: Item = null): Promise<ShareResult> {
+export async function shareWithUserAndAccept(sharerSessionId: string, shareeSessionId: string, sharee: User, shareType: ShareType = ShareType.Folder, item: Item = null): Promise<ShareResult> {
 	item = item || await createItem(sharerSessionId, 'root:/test.txt:', 'testing share');
 
 	let share: Share = null;
 
-	if ([ShareType.JoplinRootFolder, ShareType.Link].includes(shareType)) {
+	if ([ShareType.Folder, ShareType.Note].includes(shareType)) {
 		share = await postApi<Share>(sharerSessionId, 'shares', {
 			type: shareType,
-			note_id: shareType === ShareType.Link ? item.jop_id : undefined,
-			folder_id: shareType === ShareType.JoplinRootFolder ? item.jop_id : undefined,
+			note_id: shareType === ShareType.Note ? item.jop_id : undefined,
+			folder_id: shareType === ShareType.Folder ? item.jop_id : undefined,
 		});
 	} else {
 		const sharer = await models().session().sessionUser(sharerSessionId);
@@ -140,12 +150,15 @@ export async function shareWithUserAndAccept(sharerSessionId: string, shareeSess
 
 	shareUser = await models().shareUser().load(shareUser.id);
 
-	await patchApi(shareeSessionId, `share_users/${shareUser.id}`, { status: ShareUserStatus.Accepted });
+	await respondInvitation(shareeSessionId, shareUser.id, ShareUserStatus.Accepted);
 
 	await models().share().updateSharedItems3();
-	// await models().share().updateSharedItems2(sharee.id);
 
 	return { share, item, shareUser };
+}
+
+export async function respondInvitation(recipientSessionId: Uuid, shareUserId: Uuid, status: ShareUserStatus) {
+	await patchApi(recipientSessionId, `share_users/${shareUserId}`, { status });
 }
 
 export async function postShareContext(sessionId: string, shareType: ShareType, itemId: Uuid): Promise<AppContext> {

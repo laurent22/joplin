@@ -9,7 +9,7 @@ import useCommandStatus from './utils/useCommandStatus';
 import styles_ from './styles';
 import { _ } from '@joplin/lib/locale';
 
-const bridge = require('electron').remote.require('./bridge').default;
+const bridge = require('@electron/remote').require('./bridge').default;
 import shim from '@joplin/lib/shim';
 
 const keymapService = KeymapService.instance();
@@ -50,7 +50,7 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 	};
 
 	const handleImport = async () => {
-		const filePath = bridge().showOpenDialog({
+		const filePath = await bridge().showOpenDialog({
 			properties: ['openFile'],
 			defaultPath: 'keymap-desktop',
 			filters: [{ name: 'Joplin Keymaps (keymap-desktop.json)', extensions: ['json'] }],
@@ -68,7 +68,7 @@ export const KeymapConfigScreen = ({ themeId }: KeymapConfigScreenProps) => {
 	};
 
 	const handleExport = async () => {
-		const filePath = bridge().showSaveDialog({
+		const filePath = await bridge().showSaveDialog({
 			defaultPath: 'keymap-desktop',
 			filters: [{ name: 'Joplin Keymaps (keymap-desktop.json)', extensions: ['json'] }],
 		});

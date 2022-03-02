@@ -1,14 +1,24 @@
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
-# Note: it was 13.4 to get @react-native-community/datetimepicker to work
-# but it's probably not necessary actually. Just needed to upgrade XCode.
-platform :ios, '10.0'
+# Note: it was 13.4 to get @react-native-community/datetimepicker to work but
+# it's probably not necessary actually. Just needed to upgrade XCode.
+#
+# 2021-11-04: Set to 13.0 because it crashes with 12.x
+# https://github.com/laurent22/joplin/issues/5671
+#
+# 2021-12-17: Changed back to 11.0 because after the fix it works with at least
+# 12.x, and probably 11.0 too, which is the version supported by React Native.
+platform :ios, '11.0'
 
 target 'Joplin' do
   config = use_native_modules!
 
-  use_react_native!(:path => config["reactNativePath"])
+  use_react_native!(
+    :path => config[:reactNativePath],
+    # to enable hermes on iOS, change `false` to `true` and then install pods
+    :hermes_enabled => false
+  )
   
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
   pod 'JoplinRNShareExtension', :path => 'ShareExtension'
@@ -16,11 +26,18 @@ target 'Joplin' do
   # Enables Flipper.
   #
   # Note that if you have use_frameworks! enabled, Flipper will not work and
-  # you should disable these next few lines.
-  use_flipper!
-  post_install do |installer|
-    flipper_post_install(installer)
-  end
+  # you should disable the next line.
+  # use_flipper!()
+  # post_install do |installer|
+  #   react_native_post_install(installer)
+  #   __apply_Xcode_12_5_M1_post_install_workaround(installer)
+  # end
+
+  # RN 0.63:
+  # use_flipper!({ 'Flipper-Folly' => '2.5.3', 'Flipper' => '0.87.0', 'Flipper-RSocket' => '1.3.1' })
+  # post_install do |installer|
+  #   flipper_post_install(installer)
+  # end
 end
 
 target 'ShareExtension' do

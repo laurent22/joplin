@@ -1,8 +1,9 @@
-import { Share, ShareType } from '../../db';
+import { Share, ShareType } from '../../services/database/types';
 import routeHandler from '../../middleware/routeHandler';
+import { ErrorForbidden } from '../../utils/errors';
 import { postApi } from '../../utils/testing/apiUtils';
 import { testImageBuffer } from '../../utils/testing/fileApiUtils';
-import { beforeAllDb, afterAllTests, parseHtml, beforeEachDb, createUserAndSession, koaAppContext, checkContextError, expectNotThrow, createNote, createItem } from '../../utils/testing/testUtils';
+import { beforeAllDb, afterAllTests, parseHtml, beforeEachDb, createUserAndSession, koaAppContext, checkContextError, expectNotThrow, createNote, createItem, models, expectHttpError } from '../../utils/testing/testUtils';
 
 const resourceSize = 2720;
 
@@ -62,7 +63,7 @@ describe('shares.link', function() {
 		});
 
 		const share = await postApi<Share>(session.id, 'shares', {
-			type: ShareType.Link,
+			type: ShareType.Note,
 			note_id: noteItem.jop_id,
 		});
 
@@ -72,6 +73,7 @@ describe('shares.link', function() {
 		expect(bodyHtml).toContain('rendered-md'); // Means we have the HTML body
 		expect(bodyHtml).toContain('Testing title'); // Means the note has been rendered
 		expect(bodyHtml).toContain('Testing body');
+		expect(bodyHtml).toContain('<title>Testing title'); // Means the page title is set to the note title
 	});
 
 	test('should load plugins', async function() {
@@ -82,7 +84,7 @@ describe('shares.link', function() {
 		});
 
 		const share = await postApi<Share>(session.id, 'shares', {
-			type: ShareType.Link,
+			type: ShareType.Note,
 			note_id: noteItem.jop_id,
 		});
 
@@ -103,7 +105,7 @@ describe('shares.link', function() {
 		await createItem(session.id, 'root:/.resource/96765a68655f4446b3dbad7d41b6566e:', await testImageBuffer());
 
 		const share = await postApi<Share>(session.id, 'shares', {
-			type: ShareType.Link,
+			type: ShareType.Note,
 			note_id: noteItem.jop_id,
 		});
 
@@ -137,7 +139,7 @@ describe('shares.link', function() {
 			});
 
 			const share = await postApi<Share>(session.id, 'shares', {
-				type: ShareType.Link,
+				type: ShareType.Note,
 				note_id: noteItem.jop_id,
 			});
 
@@ -151,12 +153,34 @@ describe('shares.link', function() {
 			});
 
 			const share = await postApi<Share>(session.id, 'shares', {
-				type: ShareType.Link,
+				type: ShareType.Note,
 				note_id: noteItem.jop_id,
 			});
 
 			await expectNotThrow(async () => getShareContent(share.id));
 		}
+	});
+
+
+	test('should throw an error if owner of share is disabled', async function() {
+		const { user, session } = await createUserAndSession();
+
+		const noteItem = await createNote(session.id, {
+			id: '00000000000000000000000000000001',
+			body: 'testing',
+		});
+
+		const share = await postApi<Share>(session.id, 'shares', {
+			type: ShareType.Note,
+			note_id: noteItem.jop_id,
+		});
+
+		await models().user().save({
+			id: user.id,
+			enabled: 0,
+		});
+
+		await expectHttpError(async () => getShareContent(share.id), ErrorForbidden.httpCode);
 	});
 
 });

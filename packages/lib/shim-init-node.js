@@ -16,6 +16,8 @@ const https = require('https');
 const toRelative = require('relative');
 const timers = require('timers');
 const zlib = require('zlib');
+const dgram = require('dgram');
+const { basename, fileExtension, safeFileExtension } = require('./path-utils');
 
 function fileExists(filePath) {
 	try {
@@ -62,8 +64,22 @@ const gunzipFile = function(source, destination) {
 	});
 };
 
-function shimInit(sharp = null, keytar = null, React = null, appVersion = null) {
-	keytar = (shim.isWindows() || shim.isMac()) && !shim.isPortable() ? keytar : null;
+function shimInit(options = null) {
+	options = {
+		sharp: null,
+		keytar: null,
+		React: null,
+		appVersion: null,
+		electronBridge: null,
+		nodeSqlite: null,
+		...options,
+	};
+
+	const sharp = options.sharp;
+	const keytar = (shim.isWindows() || shim.isMac()) && !shim.isPortable() ? options.keytar : null;
+	const appVersion = options.appVersion;
+
+	shim.setNodeSqlite(options.nodeSqlite);
 
 	shim.fsDriver = () => {
 		throw new Error('Not implemented');
@@ -72,17 +88,26 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 	shim.Geolocation = GeolocationNode;
 	shim.FormData = require('form-data');
 	shim.sjclModule = require('./vendor/sjcl.js');
+	shim.electronBridge_ = options.electronBridge;
 
 	shim.fsDriver = () => {
 		if (!shim.fsDriver_) shim.fsDriver_ = new FsDriverNode();
 		return shim.fsDriver_;
 	};
 
-	if (React) {
+	shim.dgram = () => {
+		return dgram;
+	};
+
+	if (options.React) {
 		shim.react = () => {
-			return React;
+			return options.React;
 		};
 	}
+
+	shim.electronBridge = () => {
+		return shim.electronBridge_;
+	};
 
 	shim.randomBytes = async count => {
 		const buffer = require('crypto').randomBytes(count);
@@ -123,8 +148,7 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 
 	shim.showMessageBox = (message, options = null) => {
 		if (shim.isElectron()) {
-			const bridge = require('electron').remote.require('./bridge').default;
-			return bridge().showMessageBox(message, options);
+			return shim.electronBridge().showMessageBox(message, options);
 		} else {
 			throw new Error('Not implemented');
 		}
@@ -154,7 +178,7 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 			}
 
 			if (!mustResize) {
-				shim.fsDriver().copy(filePath, targetPath);
+				await shim.fsDriver().copy(filePath, targetPath);
 				return true;
 			}
 
@@ -207,7 +231,6 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 		const imageType = require('image-type');
 
 		const uuid = require('./uuid').default;
-		const { basename, fileExtension, safeFileExtension } = require('./path-utils');
 
 		if (!(await fs.pathExists(filePath))) throw new Error(_('Cannot access %s', filePath));
 
@@ -306,6 +329,38 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 		});
 		return Note.save(newNote);
 	};
+
+	shim.imageToDataUrl = async (filePath, maxSize) => {
+		if (shim.isElectron()) {
+			const nativeImage = require('electron').nativeImage;
+			let image = nativeImage.createFromPath(filePath);
+			if (!image) throw new Error(`Could not load image: ${filePath}`);
+
+			const ext = fileExtension(filePath).toLowerCase();
+			if (!['jpg', 'jpeg', 'png'].includes(ext)) throw new Error(`Unsupported file format: ${ext}`);
+
+			if (maxSize) {
+				const size = image.getSize();
+
+				if (size.width > maxSize || size.height > maxSize) {
+					console.warn(`Image is over ${maxSize}px - resizing it: ${filePath}`);
+
+					const options = {};
+					if (size.width > size.height) {
+						options.width = maxSize;
+					} else {
+						options.height = maxSize;
+					}
+
+					image = image.resize(options);
+				}
+			}
+
+			return image.toDataURL();
+		} else {
+			throw new Error('Unsupported method');
+		}
+	},
 
 	shim.imageFromDataUrl = async function(imageDataUrl, filePath, options = null) {
 		if (options === null) options = {};
@@ -472,10 +527,9 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 	shim.Buffer = Buffer;
 
 	shim.openUrl = url => {
-		const bridge = require('electron').remote.require('./bridge').default;
 		// Returns true if it opens the file successfully; returns false if it could
 		// not find the file.
-		return bridge().openExternal(url);
+		return shim.electronBridge().openExternal(url);
 	};
 
 	shim.httpAgent_ = null;
@@ -487,13 +541,12 @@ function shimInit(sharp = null, keytar = null, React = null, appVersion = null) 
 				maxSockets: 1,
 				keepAliveMsecs: 5000,
 			};
-			if (url.startsWith('https')) {
-				shim.httpAgent_ = new https.Agent(AgentSettings);
-			} else {
-				shim.httpAgent_ = new http.Agent(AgentSettings);
-			}
+			shim.httpAgent_ = {
+				http: new http.Agent(AgentSettings),
+				https: new https.Agent(AgentSettings),
+			};
 		}
-		return shim.httpAgent_;
+		return url.startsWith('https') ? shim.httpAgent_.https : shim.httpAgent_.http;
 	};
 
 	shim.openOrCreateFile = (filepath, defaultContents) => {

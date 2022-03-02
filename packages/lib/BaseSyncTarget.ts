@@ -1,6 +1,6 @@
 import Logger from './Logger';
 import Synchronizer from './Synchronizer';
-import EncryptionService from './services/EncryptionService';
+import EncryptionService from './services/e2ee/EncryptionService';
 import shim from './shim';
 import ResourceService from './services/ResourceService';
 import ShareService from './services/share/ShareService';
@@ -23,6 +23,14 @@ export default class BaseSyncTarget {
 
 	public static supportsConfigCheck() {
 		return false;
+	}
+
+	public static description(): string {
+		return '';
+	}
+
+	public static supportsSelfHosted(): boolean {
+		return true;
 	}
 
 	public option(name: string, defaultValue: any = null) {

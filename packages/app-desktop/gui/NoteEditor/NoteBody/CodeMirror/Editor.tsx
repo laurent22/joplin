@@ -20,6 +20,7 @@ import useEditorSearch from './utils/useEditorSearch';
 import useJoplinMode from './utils/useJoplinMode';
 import useKeymap from './utils/useKeymap';
 import useExternalPlugins from './utils/useExternalPlugins';
+import useJoplinCommands from './utils/useJoplinCommands';
 
 import 'codemirror/keymap/emacs';
 import 'codemirror/keymap/vim';
@@ -91,6 +92,9 @@ export interface EditorProps {
 	onChange: any;
 	onScroll: any;
 	onEditorPaste: any;
+	isSafeMode: boolean;
+	onResize: any;
+	onUpdate: any;
 }
 
 function Editor(props: EditorProps, ref: any) {
@@ -107,6 +111,7 @@ function Editor(props: EditorProps, ref: any) {
 	useJoplinMode(CodeMirror);
 	const pluginOptions: any = useExternalPlugins(CodeMirror, props.plugins);
 	useKeymap(CodeMirror);
+	useJoplinCommands(CodeMirror);
 
 	useImperativeHandle(ref, () => {
 		return editor;
@@ -144,14 +149,24 @@ function Editor(props: EditorProps, ref: any) {
 		event.dataTransfer.dropEffect = 'copy';
 	}, []);
 
+	const editor_resize = useCallback((cm: any) => {
+		props.onResize(cm);
+	}, [props.onResize]);
+
+	const editor_update = useCallback((cm: any) => {
+		props.onUpdate(cm);
+	}, [props.onUpdate]);
+
 	useEffect(() => {
 		if (!editorParent.current) return () => {};
 
-		// const userOptions = eventManager.filterEmit('codeMirrorOptions', {});
 		const userOptions = {};
 
-		const cmOptions = Object.assign({}, {
+		const safeOptions: Record<string, any> = {
 			value: props.value,
+		};
+
+		const unsafeOptions: Record<string, any> = {
 			screenReaderLabel: props.value,
 			theme: props.codeMirrorTheme,
 			mode: props.mode,
@@ -165,7 +180,17 @@ function Editor(props: EditorProps, ref: any) {
 			spellcheck: true,
 			allowDropFileTypes: [''], // disable codemirror drop handling
 			keyMap: props.keyMap ? props.keyMap : 'default',
-		}, userOptions);
+		};
+
+		let cmOptions: Record<string, any> = { ...safeOptions };
+
+		if (!props.isSafeMode) {
+			cmOptions = {
+				...cmOptions,
+				...unsafeOptions,
+				...userOptions,
+			};
+		}
 
 		const cm = CodeMirror(editorParent.current, cmOptions);
 		setEditor(cm);
@@ -174,6 +199,8 @@ function Editor(props: EditorProps, ref: any) {
 		cm.on('paste', editor_paste);
 		cm.on('drop', editor_drop);
 		cm.on('dragover', editor_drag);
+		cm.on('refresh', editor_resize);
+		cm.on('update', editor_update);
 
 		// It's possible for searchMarkers to be available before the editor
 		// In these cases we set the markers asap so the user can see them as
@@ -187,6 +214,8 @@ function Editor(props: EditorProps, ref: any) {
 			cm.off('paste', editor_paste);
 			cm.off('drop', editor_drop);
 			cm.off('dragover', editor_drag);
+			cm.off('refresh', editor_resize);
+			cm.off('update', editor_update);
 			editorParent.current.removeChild(cm.getWrapperElement());
 			setEditor(null);
 		};

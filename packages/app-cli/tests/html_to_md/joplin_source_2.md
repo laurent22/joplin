@@ -1,3 +1,5 @@
+Hello World :
+
 $$
-katexcode
+\sqrt{3x}
 $$

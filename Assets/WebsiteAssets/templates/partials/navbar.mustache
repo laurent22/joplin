@@ -1,0 +1,78 @@
+<div class="{{#isFrontPage}}navbar-frontpage blue-bg{{/isFrontPage}} {{^isFrontPage}}navbar-main white-bg{{/isFrontPage}}" id="nav-section">
+	<div class="container">
+		<div class="row">
+			<div class="col-3">
+				<a href="{{baseUrl}}/">
+					<img
+						src="{{#isFrontPage}}{{imageBaseUrl}}/logo-text.svg{{/isFrontPage}}{{^isFrontPage}}{{imageBaseUrl}}/logo-text-blue.svg{{/isFrontPage}}"
+						alt=""
+						id="top-logo"
+						width="180"
+					/>
+				</a>
+			</div>
+			<div class="col-9 text-right d-none d-md-block">
+				{{> twitterLink}}
+				<a href="{{baseUrl}}/news/" class="fw500">News</a>
+				<a href="{{baseUrl}}/help/" class="fw500">Help</a>
+				<a href="{{forumUrl}}" class="fw500">Forum</a>
+				{{#showJoplinCloudLinks}}
+					{{> joplinCloudButton}}
+				{{/showJoplinCloudLinks}}
+				{{> supportButton}}
+			</div>
+			<div class="col-9 text-right d-block d-md-none navbar-mobile-content">
+				{{> twitterLink}}
+				{{> supportButton}}
+
+				<span class="pointer"
+					><img
+						src="{{#isFrontPage}}{{imageBaseUrl}}/mobile-menu-open-icon.png{{/isFrontPage}}{{^isFrontPage}}{{imageBaseUrl}}/mobile-menu-black-open-icon.png{{/isFrontPage}}"
+						id="open-menu-mobile"
+						alt=""
+				/></span>
+				&nbsp;&nbsp;
+
+				<div id="menu-mobile">
+					<div>
+						<div class="text-right">
+							<img
+								src="{{imageBaseUrl}}/close-icon.png"
+								alt=""
+								class="pointer"
+								id="close-menu-mobile"
+							/>
+						</div>
+
+						<div class="text-center menu-mobile-top">
+							<a href="{{baseUrl}}/news/" class="fw500 mobile-menu-link">News</a>
+							<a href="{{baseUrl}}/help/" class="fw500 mobile-menu-link">Help</a>
+							<a href="{{forumUrl}}" class="fw500 mobile-menu-link">Forum</a>
+						</div>
+
+						<div class="menu-mobile-buttons">
+							{{#showJoplinCloudLinks}}
+								{{> joplinCloudButton}}
+							{{/showJoplinCloudLinks}}
+							{{> supportButton}}
+						</div>
+					</div>
+
+					{{#showToc}}
+						<div id="toc-mobile">{{{tocHtml}}}</div>
+					{{/showToc}}
+
+					{{> socialFeeds}}
+					
+					<div>
+						<p class="light-blue mobile-menu-link-bottom text-center">
+							Copyright &copy; 2016-{{yyyy}} Laurent&nbsp;Cozic
+							<br/>
+							<a href="{{baseUrl}}/privacy/" class="fw500">Privacy Policy</a>
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

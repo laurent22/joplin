@@ -1,25 +1,34 @@
-import { ResourceEntity } from './services/database/types';
+import * as React from 'react';
+import { NoteEntity, ResourceEntity } from './services/database/types';
 
 let isTestingEnv_ = false;
 
-// We need to ensure that there's only one instance of React being used by
-// all the packages. In particular, the lib might need React to define
-// generic hooks, but it shouldn't have React in its dependencies as that
-// would cause the following error:
+// We need to ensure that there's only one instance of React being used by all
+// the packages. In particular, the lib might need React to define generic
+// hooks, but it shouldn't have React in its dependencies as that would cause
+// the following error:
 //
 // https://reactjs.org/warnings/invalid-hook-call-warning.html#duplicate-react
 //
-// So instead, the **applications** include React as a dependency, then
-// pass it to any other packages using the shim. Essentially, only one
-// package should require React, and in our case that should be one of the
-// applications (app-desktop, app-mobile, etc.) since we are sure they
-// won't be dependency to other packages (unlike the lib which can be
-// included anywhere).
-
-let react_: any = null;
+// So instead, the **applications** include React as a dependency, then pass it
+// to any other packages using the shim. Essentially, only one package should
+// require React, and in our case that should be one of the applications
+// (app-desktop, app-mobile, etc.) since we are sure they won't be dependency to
+// other packages (unlike the lib which can be included anywhere).
+//
+// Regarding the type - althought we import React, we only use it as a type
+// using `typeof React`. This is just to get types in hooks.
+//
+// https://stackoverflow.com/a/42816077/561309
+let react_: typeof React = null;
+let nodeSqlite_: any = null;
 
 const shim = {
 	Geolocation: null as any,
+
+	electronBridge: (): any => {
+		throw new Error('Not implemented');
+	},
 
 	msleep_: (ms: number) => {
 		return new Promise((resolve: Function) => {
@@ -169,7 +178,7 @@ const shim = {
 		}
 	},
 
-	fetch: (_url: string, _options: any): any => {
+	fetch: (_url: string, _options: any = null): any => {
 		throw new Error('Not implemented');
 	},
 
@@ -211,11 +220,15 @@ const shim = {
 
 	detectAndSetLocale: null as Function,
 
-	attachFileToNote: async (_note: any, _filePath: string) => {
+	attachFileToNote: async (_note: any, _filePath: string): Promise<NoteEntity> => {
 		throw new Error('Not implemented');
 	},
 
 	attachFileToNoteBody: async (_body: string, _filePath: string, _position: number, _options: any): Promise<string> => {
+		throw new Error('Not implemented');
+	},
+
+	imageToDataUrl: async (_filePath: string, _maxSize: number = 0): Promise<string> => {
 		throw new Error('Not implemented');
 	},
 
@@ -306,6 +319,15 @@ const shim = {
 		throw new Error('Not implemented');
 	},
 
+	setNodeSqlite: (nodeSqlite: any) => {
+		nodeSqlite_ = nodeSqlite;
+	},
+
+	nodeSqlite: () => {
+		if (!nodeSqlite_) throw new Error('Trying to access nodeSqlite before it has been set!!!');
+		return nodeSqlite_;
+	},
+
 	setReact: (react: any) => {
 		react_ = react;
 	},
@@ -313,6 +335,10 @@ const shim = {
 	react: () => {
 		if (!react_) throw new Error('Trying to access React before it has been set!!!');
 		return react_;
+	},
+
+	dgram: () => {
+		throw new Error('Not implemented');
 	},
 
 	platformSupportsKeyChain: () => {

@@ -31,7 +31,7 @@ export default class JoplinViewsPanels {
 	 */
 	public async create(id: string): Promise<ViewHandle> {
 		if (!id) {
-			this.plugin.deprecationNotice('1.5', 'Creating a view without an ID is deprecated. To fix it, change your call to `joplin.views.panels.create("my-unique-id")`');
+			this.plugin.deprecationNotice('1.5', 'Creating a view without an ID is deprecated. To fix it, change your call to `joplin.views.panels.create("my-unique-id")`', true);
 			id = `${this.plugin.viewCount}`;
 		}
 
@@ -44,14 +44,14 @@ export default class JoplinViewsPanels {
 	/**
 	 * Sets the panel webview HTML
 	 */
-	public async setHtml(handle: ViewHandle, html: string) {
+	public async setHtml(handle: ViewHandle, html: string): Promise<string> {
 		return this.controller(handle).html = html;
 	}
 
 	/**
 	 * Adds and loads a new JS or CSS files into the panel.
 	 */
-	public async addScript(handle: ViewHandle, scriptPath: string) {
+	public async addScript(handle: ViewHandle, scriptPath: string): Promise<void> {
 		return this.controller(handle).addScript(scriptPath);
 	}
 
@@ -74,8 +74,28 @@ export default class JoplinViewsPanels {
 	 * demo](https://github.com/laurent22/joplin/tree/dev/packages/app-cli/tests/support/plugins/post_messages) for more details.
 	 *
 	 */
-	public async onMessage(handle: ViewHandle, callback: Function) {
+	public async onMessage(handle: ViewHandle, callback: Function): Promise<void> {
 		return this.controller(handle).onMessage(callback);
+	}
+
+	/**
+	 * Sends a message to the webview.
+	 *
+	 * The webview must have registered a message handler prior, otherwise the message is ignored. Use;
+	 *
+	 * ```javascript
+	 * webviewApi.onMessage((message) => { ... });
+	 * ```
+	 *
+	 *  - `message` can be any JavaScript object, string or number
+	 *
+	 * The view API may have only one onMessage handler defined.
+	 * This method is fire and forget so no response is returned.
+	 *
+	 * It is particularly useful when the webview needs to react to events emitted by the plugin or the joplin api.
+	 */
+	public postMessage(handle: ViewHandle, message: any): void {
+		return this.controller(handle).postMessage(message);
 	}
 
 	/**

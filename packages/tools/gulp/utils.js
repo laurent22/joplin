@@ -19,6 +19,7 @@ utils.execCommandVerbose = function(commandName, args = []) {
 	console.info(`> ${commandName}`, args && args.length ? args : '');
 	const promise = execa(commandName, args);
 	promise.stdout.pipe(process.stdout);
+	promise.stderr.pipe(process.stderr);
 	return promise;
 };
 
@@ -164,6 +165,31 @@ utils.setPackagePrivateField = async function(filePath, value) {
 		obj.private = true;
 	}
 	await fs.writeFile(filePath, JSON.stringify(obj, null, 2), 'utf8');
+};
+
+utils.insertContentIntoFile = async (filePath, marker, contentToInsert, createIfNotExist = false) => {
+	const fs = require('fs-extra');
+	const fileExists = await fs.pathExists(filePath);
+
+	if (!fileExists) {
+		if (!createIfNotExist) throw new Error(`File not found: ${filePath}`);
+		await fs.writeFile(filePath, `${marker}\n${contentToInsert}\n${marker}`);
+	} else {
+		let content = await fs.readFile(filePath, 'utf-8');
+		// [^]* matches any character including new lines
+		const regex = new RegExp(`${marker}[^]*?${marker}`);
+		content = content.replace(regex, `${marker}\n${contentToInsert}\n${marker}`);
+		await fs.writeFile(filePath, content);
+	}
+};
+
+utils.getFilename = (path) => {
+	const lastPart = path.split('/').pop();
+	if (lastPart.indexOf('.') < 0) return lastPart;
+
+	const splitted = lastPart.split('.');
+	splitted.pop();
+	return splitted.join('.');
 };
 
 module.exports = utils;

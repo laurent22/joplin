@@ -13,9 +13,10 @@ export interface Theme {
 	oddBackgroundColor: string;
 	color: string; // For regular text
 	colorError: string;
+	colorCorrect: string;
 	colorWarn: string;
+	colorWarnUrl: string; // For URL displayed over a warningBackgroundColor
 	colorFaded: string; // For less important text
-	colorBright: string; // For important text
 	dividerColor: string;
 	selectedColor: string;
 	urlColor: string;
@@ -50,6 +51,8 @@ export interface Theme {
 	codeBackgroundColor: string;
 	codeBorderColor: string;
 	codeColor: string;
+
+	blockQuoteOpacity: number;
 
 	codeMirrorTheme: string;
 	codeThemeCss: string;

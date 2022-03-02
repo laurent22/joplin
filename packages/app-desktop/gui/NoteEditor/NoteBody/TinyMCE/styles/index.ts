@@ -1,3 +1,4 @@
+import { ThemeAppearance } from '@joplin/lib/themes/type';
 import { NoteBodyEditorProps } from '../../../utils/types';
 const { buildStyle } = require('@joplin/lib/theme');
 
@@ -19,8 +20,8 @@ export default function styles(props: NoteBodyEditorProps) {
 			disabledOverlay: {
 				zIndex: 10,
 				position: 'absolute',
-				backgroundColor: 'white',
-				opacity: 0.7,
+				backgroundColor: theme.backgroundColor,
+				opacity: theme.appearance === ThemeAppearance.Light ? 0.7 : 0.9,
 				height: '100%',
 				display: 'flex',
 				flexDirection: 'column',

@@ -5,7 +5,7 @@ import { _ } from '@joplin/lib/locale';
 import styled from 'styled-components';
 import SearchPlugins from './SearchPlugins';
 import PluginBox, { ItemEvent, UpdateState } from './PluginBox';
-import Button, { ButtonLevel } from '../../../Button/Button';
+import Button, { ButtonLevel, ButtonSize } from '../../../Button/Button';
 import bridge from '../../../../services/bridge';
 import produce from 'immer';
 import { OnChangeEvent } from '../../../lib/SearchInput/SearchInput';
@@ -13,7 +13,12 @@ import { PluginItem } from './PluginBox';
 import RepositoryApi from '@joplin/lib/services/plugins/RepositoryApi';
 import Setting from '@joplin/lib/models/Setting';
 import useOnInstallHandler, { OnPluginSettingChangeEvent } from './useOnInstallHandler';
+import Logger from '@joplin/lib/Logger';
+import StyledMessage from '../../../style/StyledMessage';
+import StyledLink from '../../../style/StyledLink';
 const { space } = require('styled-system');
+
+const logger = Logger.create('PluginState');
 
 const maxWidth: number = 320;
 
@@ -22,7 +27,7 @@ const Root = styled.div`
 	flex-direction: column;
 `;
 
-const UserPluginsRoot = styled.div`
+const UserPluginsRoot = styled.div<any>`
 	${space}
 	display: flex;
 	flex-wrap: wrap;
@@ -30,6 +35,11 @@ const UserPluginsRoot = styled.div`
 
 const ToolsButton = styled(Button)`
 	margin-right: 6px;
+`;
+
+const RepoApiErrorMessage = styled(StyledMessage)<any>`
+	max-width: ${props => props.maxWidth}px;
+	margin-bottom: 10px;
 `;
 
 interface Props {
@@ -84,6 +94,8 @@ export default function(props: Props) {
 	const [manifestsLoaded, setManifestsLoaded] = useState<boolean>(false);
 	const [updatingPluginsIds, setUpdatingPluginIds] = useState<Record<string, boolean>>({});
 	const [canBeUpdatedPluginIds, setCanBeUpdatedPluginIds] = useState<Record<string, boolean>>({});
+	const [repoApiError, setRepoApiError] = useState<Error>(null);
+	const [fetchManifestTime, setFetchManifestTime] = useState<number>(Date.now());
 
 	const pluginService = PluginService.instance();
 
@@ -96,9 +108,25 @@ export default function(props: Props) {
 	useEffect(() => {
 		let cancelled = false;
 		async function fetchManifests() {
-			await repoApi().loadManifests();
+			setManifestsLoaded(false);
+			setRepoApiError(null);
+
+			let loadError: Error = null;
+			try {
+				await repoApi().initialize();
+			} catch (error) {
+				logger.error(error);
+				loadError = error;
+			}
+
 			if (cancelled) return;
-			setManifestsLoaded(true);
+
+			if (loadError) {
+				setManifestsLoaded(false);
+				setRepoApiError(loadError);
+			} else {
+				setManifestsLoaded(true);
+			}
 		}
 
 		void fetchManifests();
@@ -106,7 +134,7 @@ export default function(props: Props) {
 		return () => {
 			cancelled = true;
 		};
-	}, []);
+	}, [fetchManifestTime]);
 
 	useEffect(() => {
 		if (!manifestsLoaded) return () => {};
@@ -153,7 +181,7 @@ export default function(props: Props) {
 	}, [pluginSettings, props.onChange]);
 
 	const onInstall = useCallback(async () => {
-		const result = bridge().showOpenDialog({
+		const result = await bridge().showOpenDialog({
 			filters: [{ name: 'Joplin Plugin Archive', extensions: ['jpl'] }],
 		});
 
@@ -170,7 +198,7 @@ export default function(props: Props) {
 	}, [pluginSettings, props.onChange]);
 
 	const onBrowsePlugins = useCallback(() => {
-		bridge().openExternal('https://github.com/joplin/plugins/blob/master/README.md#plugins');
+		void bridge().openExternal('https://github.com/joplin/plugins/blob/master/README.md#plugins');
 	}, []);
 
 	const onPluginSettingsChange = useCallback((event: OnPluginSettingChangeEvent) => {
@@ -252,7 +280,7 @@ export default function(props: Props) {
 
 	function renderSearchArea() {
 		return (
-			<div style={{ marginBottom: 20 }}>
+			<div style={{ marginBottom: 0 }}>
 				<SearchPlugins
 					disabled={!manifestsLoaded}
 					maxWidth={maxWidth}
@@ -268,13 +296,20 @@ export default function(props: Props) {
 		);
 	}
 
+	function renderRepoApiError() {
+		if (!repoApiError) return null;
+
+		return <RepoApiErrorMessage maxWidth={maxWidth} type="error">{_('Could not connect to plugin repository.')}<br/><br/>- <StyledLink href="#" onClick={() => { setFetchManifestTime(Date.now()); }}>{_('Try again')}</StyledLink><br/><br/>- <StyledLink href="#" onClick={onBrowsePlugins}>{_('Browse all plugins')}</StyledLink></RepoApiErrorMessage>;
+	}
+
 	function renderBottomArea() {
 		if (searchQuery) return null;
 
 		return (
 			<div>
+				{renderRepoApiError()}
 				<div style={{ display: 'flex', flexDirection: 'row', maxWidth }}>
-					<ToolsButton tooltip={_('Plugin tools')} iconName="fas fa-cog" level={ButtonLevel.Secondary} onClick={onToolsClick}/>
+					<ToolsButton size={ButtonSize.Small} tooltip={_('Plugin tools')} iconName="fas fa-cog" level={ButtonLevel.Secondary} onClick={onToolsClick}/>
 					<div style={{ display: 'flex', flex: 1 }}>
 						{props.renderHeader(props.themeId, _('Manage your plugins'))}
 					</div>

@@ -1,4 +1,5 @@
 const Folder = require('../../models/Folder').default;
+const Setting = require('../../models/Setting').default;
 const BaseModel = require('../../BaseModel').default;
 
 const shared = {};
@@ -81,6 +82,20 @@ shared.synchronize_press = async function(comp) {
 
 	const action = comp.props.syncStarted ? 'cancel' : 'start';
 
+	if (!Setting.value('sync.target')) {
+		comp.props.dispatch({
+			type: 'SIDE_MENU_CLOSE',
+		});
+
+		comp.props.dispatch({
+			type: 'NAV_GO',
+			routeName: 'Config',
+			sectionName: 'sync',
+		});
+
+		return 'init';
+	}
+
 	if (!(await reg.syncTarget().isAuthenticated())) {
 		if (reg.syncTarget().authRouteName()) {
 			comp.props.dispatch({
@@ -90,7 +105,7 @@ shared.synchronize_press = async function(comp) {
 			return 'auth';
 		}
 
-		reg.logger().info('Not authentified with sync target - please check your credential.');
+		reg.logger().error('Not authenticated with sync target - please check your credentials.');
 		return 'error';
 	}
 
@@ -98,8 +113,13 @@ shared.synchronize_press = async function(comp) {
 	try {
 		sync = await reg.syncTarget().synchronizer();
 	} catch (error) {
-		reg.logger().info('Could not acquire synchroniser:');
-		reg.logger().info(error);
+		reg.logger().error('Could not initialise synchroniser: ');
+		reg.logger().error(error);
+		error.message = `Could not initialise synchroniser: ${error.message}`;
+		comp.props.dispatch({
+			type: 'SYNC_REPORT_UPDATE',
+			report: { errors: [error] },
+		});
 		return 'error';
 	}
 

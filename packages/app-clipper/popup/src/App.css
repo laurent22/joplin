@@ -2,6 +2,7 @@ body {
 	margin: 0;
 	padding: 0;
 	font-family: sans-serif;
+	line-height: 2em;
 }
 
 .App {
@@ -13,9 +14,17 @@ body {
 	flex-direction: column;
 	background-color: #162b3d;
 	font-size: 16px;
-	color: #5A95C7;
+	color: #c1e2ff;
 	padding: 10px;
 	box-sizing: border-box;
+}
+
+.App.Startup {
+	padding: 20px;
+}
+
+.App.Startup h1 {
+	font-size: 20px;
 }
 
 .App h2 {
@@ -26,7 +35,7 @@ body {
 }
 
 .App a {
-	color: #5A95C7;
+	color: #c1e2ff;
 }
 
 .App .Disabled {
@@ -125,6 +134,7 @@ body {
 
 .App .Folders select {
 	flex: 1;
+	width: 100%;
 }
 
 .App .Tags input {
@@ -139,7 +149,7 @@ body {
 }
 
 .App .StatusBar {
-	color: #5A95C7;
+	color: #c1e2ff;
 	font-size: .7em;
 	display: flex;
 	flex: 0;

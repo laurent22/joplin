@@ -1,7 +1,7 @@
 const urlUtils = require('./urlUtils.js');
 const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = new Entities().encode;
-const htmlparser2 = require('@joplin/fork-htmlparser2');
+const { escapeHtml } = require('./string-utils.js');
 
 // [\s\S] instead of . for multiline matching
 // https://stackoverflow.com/a/16119722/561309
@@ -44,16 +44,37 @@ class HtmlUtils {
 	}
 
 	// Returns the **encoded** URLs, so to be useful they should be decoded again before use.
-	public extractImageUrls(html: string) {
+	private extractUrls(regex: RegExp, html: string) {
 		if (!html) return [];
 
 		const output = [];
 		let matches;
-		while ((matches = imageRegex.exec(html))) {
+		while ((matches = regex.exec(html))) {
 			output.push(matches[2]);
 		}
 
 		return output.filter(url => !!url);
+	}
+
+	// Returns the **encoded** URLs, so to be useful they should be decoded again before use.
+	public extractImageUrls(html: string) {
+		return this.extractUrls(imageRegex, html);
+	}
+
+	// Returns the **encoded** URLs, so to be useful they should be decoded again before use.
+	public extractAnchorUrls(html: string) {
+		return this.extractUrls(anchorRegex, html);
+	}
+
+	// Returns the **encoded** URLs, so to be useful they should be decoded again before use.
+	public extractFileUrls(html: string) {
+		return this.extractImageUrls(html).concat(this.extractAnchorUrls(html));
+	}
+
+	public replaceResourceUrl(html: string, urlToReplace: string, id: string) {
+		const htmlLinkRegex = `(?<=(?:src|href)=["'])${urlToReplace}(?=["'])`;
+		const htmlReg = new RegExp(htmlLinkRegex, 'g');
+		return html.replace(htmlReg, `:/${id}`);
 	}
 
 	public replaceImageUrls(html: string, callback: Function) {
@@ -116,40 +137,19 @@ class HtmlUtils {
 		return output.join(' ');
 	}
 
-	public stripHtml(html: string) {
-		const output: string[] = [];
-
-		const tagStack: any[] = [];
-
-		const currentTag = () => {
-			if (!tagStack.length) return '';
-			return tagStack[tagStack.length - 1];
-		};
-
-		const disallowedTags = ['script', 'style', 'head', 'iframe', 'frameset', 'frame', 'object', 'base'];
-
-		const parser = new htmlparser2.Parser({
-
-			onopentag: (name: string) => {
-				tagStack.push(name.toLowerCase());
-			},
-
-			ontext: (decodedText: string) => {
-				if (disallowedTags.includes(currentTag())) return;
-				output.push(decodedText);
-			},
-
-			onclosetag: (name: string) => {
-				if (currentTag() === name.toLowerCase()) tagStack.pop();
-			},
-
-		}, { decodeEntities: true });
-
-		parser.write(html);
-		parser.end();
-
-		return output.join('').replace(/\s+/g, ' ');
-	}
 }
 
 export default new HtmlUtils();
+
+export function plainTextToHtml(plainText: string): string {
+	const lines = plainText
+		.replace(/[\n\r]/g, '\n')
+		.split('\n');
+
+	const lineOpenTag = lines.length > 1 ? '<p>' : '';
+	const lineCloseTag = lines.length > 1 ? '</p>' : '';
+
+	return lines
+		.map(line => lineOpenTag + escapeHtml(line) + lineCloseTag)
+		.join('');
+}

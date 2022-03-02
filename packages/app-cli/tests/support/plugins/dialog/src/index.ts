@@ -42,6 +42,22 @@ joplin.plugins.register({
 		const result3 = await dialogs.open(handle3);
 		console.info('Got result: ' + JSON.stringify(result3));		
 		
+
+		const handle4 = await dialogs.create('myDialog4');
+		await dialogs.setHtml(handle4, `
+		<h1>This dialog tests dynamic sizing</h1>
+		<h3>Resize the window and the dialog should resize accordingly</h3>
+		<p>
+			Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+			Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+			Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+			Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum
+		</p>
+		`);
+		let tmpDlg: any = dialogs; // Temporary cast to use new properties.
+		await tmpDlg.setFitToContent(handle4, false);
+		await dialogs.open(handle4);
+
 	},
 
 });

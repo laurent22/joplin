@@ -37,6 +37,9 @@ module.exports = {
 
 		// Server admin UI global variables
 		'onDocumentReady': 'readonly',
+		'setupPasswordStrengthHandler': 'readonly',
+		'$': 'readonly',
+		'zxcvbn': 'readonly',
 
 		'tinymce': 'readonly',
 	},
@@ -76,7 +79,7 @@ module.exports = {
 
 		// Warn only for now because fixing everything would take too much
 		// refactoring, but new code should try to stick to it.
-		'complexity': ['warn', { max: 10 }],
+		// 'complexity': ['warn', { max: 10 }],
 
 		// Checks rules of Hooks
 		'react-hooks/rules-of-hooks': 'error',
@@ -168,6 +171,55 @@ module.exports = {
 					},
 				}],
 				'@typescript-eslint/no-floating-promises': ['error'],
+				'@typescript-eslint/naming-convention': ['error',
+					// Naming conventions over the codebase is very inconsistent
+					// unfortunately and fixing it would be way too much work.
+					// In general, we use "strictCamelCase" for variable names.
+
+					// {
+					// 	selector: 'default',
+					// 	format: ['StrictPascalCase', 'strictCamelCase', 'snake_case', 'UPPER_CASE'],
+					// 	leadingUnderscore: 'allow',
+					// 	trailingUnderscore: 'allow',
+					// },
+
+					// Each rule below is made of two blocks: first the rule we
+					// actually want, and below exceptions to the rule.
+
+					// -----------------------------------
+					// ENUM
+					// -----------------------------------
+
+					{
+						selector: 'enumMember',
+						format: ['StrictPascalCase'],
+					},
+					{
+						selector: 'enumMember',
+						format: null,
+						'filter': {
+							'regex': '^(GET|POST|PUT|DELETE|PATCH|HEAD|SQLite|PostgreSQL|ASC|DESC|E2EE|OR|AND|UNION|INTERSECT|EXCLUSION|INCLUSION|EUR|GBP|USD|SJCL.*)$',
+							'match': true,
+						},
+					},
+
+					// -----------------------------------
+					// INTERFACE
+					// -----------------------------------
+
+					{
+						selector: 'interface',
+						format: ['StrictPascalCase'],
+					},
+					{
+						selector: 'interface',
+						format: null,
+						'filter': {
+							'regex': '^(RSA|RSAKeyPair)$',
+							'match': true,
+						},
+					},
+				],
 			},
 		},
 	],

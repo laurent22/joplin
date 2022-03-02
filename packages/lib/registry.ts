@@ -1,7 +1,7 @@
 import Logger from './Logger';
 import Setting from './models/Setting';
 import shim from './shim';
-const SyncTargetRegistry = require('./SyncTargetRegistry.js');
+import SyncTargetRegistry from './SyncTargetRegistry';
 
 class Registry {
 
@@ -71,6 +71,11 @@ class Registry {
 	// sure it gets synced. So we wait for the current sync operation to
 	// finish (if one is running), then we trigger a sync just after.
 	waitForSyncFinishedThenSync = async () => {
+		if (!Setting.value('sync.target')) {
+			this.logger().info('waitForSyncFinishedThenSync - cancelling because no sync target is selected.');
+			return;
+		}
+
 		this.waitForReSyncCalls_.push(true);
 		try {
 			const synchronizer = await this.syncTarget().synchronizer();
@@ -118,6 +123,12 @@ class Registry {
 					}
 
 					const syncTargetId = Setting.value('sync.target');
+
+					if (!syncTargetId) {
+						this.logger().info('Sync cancelled - no sync target is selected.');
+						promiseResolve();
+						return;
+					}
 
 					if (!(await this.syncTarget(syncTargetId).isAuthenticated())) {
 						this.logger().info('Synchroniser is missing credentials - manual sync required to authenticate.');

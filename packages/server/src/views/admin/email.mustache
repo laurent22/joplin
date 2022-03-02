@@ -1,0 +1,16 @@
+<div class="block">
+	<strong>Subject: </strong> {{email.subject}}<br/>
+	<strong>From: </strong> {{sender.name}} &lt;{{sender.email}}&gt; (Sender ID: {{email.sender_id}})<br/>
+	<strong>To: </strong> {{#email.recipient_id}}<a href="{{{global.baseUrl}}}/admin/users/{{email.recipient_id}}">{{/email.recipient_id}}{{email.recipient_name}} &lt;{{email.recipient_email}}&gt;{{#email.recipient_id}}</a>{{/email.recipient_id}}
+	{{#emailSentTime}}<br/><strong>Sent: </strong> {{emailSentTime}}{{/emailSentTime}}
+</div>
+
+<hr/>
+
+<div class="content">
+	{{{bodyHtml}}}
+</div>
+
+<hr/>
+
+<pre class="block">{{email.body}}</pre>

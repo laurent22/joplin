@@ -1,88 +1,82 @@
-import { SubPath, redirect, respondWithItemContent } from '../../utils/routeUtils';
+import { SubPath, respondWithItemContent } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
+import { RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
-import { formParse } from '../../utils/requestUtils';
-import { ErrorNotFound } from '../../utils/errors';
-import { Item } from '../../db';
-import { createPaginationLinks, filterPaginationQueryParams, pageMaxSize, Pagination, PaginationOrder, PaginationOrderDir, requestPaginationOrder, validatePagination } from '../../models/utils/pagination';
-import { setQueryParameters } from '../../utils/urlUtils';
-import config from '../../config';
+import { ErrorForbidden, ErrorNotFound } from '../../utils/errors';
+import config, { showItemUrls } from '../../config';
 import { formatDateTime } from '../../utils/time';
 import defaultView from '../../utils/defaultView';
 import { View } from '../../services/MustacheService';
+import { makeTablePagination, makeTableView, Row, Table } from '../../utils/views/table';
+import { PaginationOrderDir } from '../../models/utils/pagination';
+import { formatBytes } from '../../utils/bytes';
 
-function makeFilePagination(query: any): Pagination {
-	const limit = Number(query.limit) || pageMaxSize;
-	const order: PaginationOrder[] = requestPaginationOrder(query, 'name', PaginationOrderDir.ASC);
-	// order.splice(0, 0, { by: 'is_directory', dir: PaginationOrderDir.DESC });
-	const page: number = 'page' in query ? Number(query.page) : 1;
-
-	const output: Pagination = { limit, order, page };
-	validatePagination(output);
-	return output;
-}
-
-const router = new Router();
-
-// router.alias(HttpMethod.GET, 'items', 'items/:id');
+const router = new Router(RouteType.Web);
 
 router.get('items', async (_path: SubPath, ctx: AppContext) => {
-	// Query parameters that should be appended to pagination-related URLs
-	const baseUrlQuery = filterPaginationQueryParams(ctx.query);
+	if (!ctx.joplin.owner.is_admin) throw new ErrorForbidden();
 
-	const pagination = makeFilePagination(ctx.query);
-	const owner = ctx.owner;
-	const itemModel = ctx.models.item();
-	const paginatedItems = await itemModel.children(owner.id, '', pagination, { fields: ['id', 'name', 'updated_time', 'mime_type'] });
-	const pageCount = Math.ceil((await itemModel.childrenCount(owner.id, '')) / pagination.limit);
-	const parentBaseUrl = itemModel.itemUrl();
-	const paginationLinks = createPaginationLinks(pagination.page, pageCount, setQueryParameters(parentBaseUrl, { ...baseUrlQuery, 'page': 'PAGE_NUMBER' }));
+	const pagination = makeTablePagination(ctx.query, 'name', PaginationOrderDir.ASC);
+	const paginatedItems = await ctx.joplin.models.item().children(ctx.joplin.owner.id, '', pagination, { fields: ['id', 'name', 'updated_time', 'mime_type', 'content_size'] });
 
-	async function itemToViewItem(item: Item): Promise<any> {
-		return {
-			name: item.name,
-			url: `${config().baseUrl}/items/${item.id}/content`,
-			type: 'file',
-			icon: 'far fa-file',
-			timestamp: formatDateTime(item.updated_time),
-			mime: item.mime_type || 'binary',
-		};
-	}
+	const table: Table = {
+		baseUrl: ctx.joplin.models.item().itemUrl(),
+		requestQuery: ctx.query,
+		pageCount: Math.ceil((await ctx.joplin.models.item().childrenCount(ctx.joplin.owner.id, '')) / pagination.limit),
+		pagination,
+		headers: [
+			{
+				name: 'name',
+				label: 'Name',
+				stretch: true,
+			},
+			{
+				name: 'content_size',
+				label: 'Size',
+			},
+			{
+				name: 'mime_type',
+				label: 'Mime',
+			},
+			{
+				name: 'updated_time',
+				label: 'Timestamp',
+			},
+		],
+		rows: paginatedItems.items.map(item => {
+			const row: Row = [
+				{
+					value: item.name,
+					stretch: true,
+					url: showItemUrls(config()) ? `${config().userContentBaseUrl}/items/${item.id}/content` : null,
+				},
+				{
+					value: formatBytes(item.content_size),
+				},
+				{
+					value: item.mime_type || 'binary',
+				},
+				{
+					value: formatDateTime(item.updated_time),
+				},
+			];
 
-	const items: any[] = [];
+			return row;
+		}),
+	};
 
-	for (const item of paginatedItems.items) {
-		items.push(await itemToViewItem(item));
-	}
-
-	const view: View = defaultView('items');
-	view.content.paginatedFiles = { ...paginatedItems, items: items };
-	view.content.paginationLinks = paginationLinks;
+	const view: View = defaultView('items', 'Items');
+	view.content.itemTable = makeTableView(table),
 	view.content.postUrl = `${config().baseUrl}/items`;
 	view.cssFiles = ['index/items'];
-	view.partials.push('pagination');
 	return view;
 });
 
 router.get('items/:id/content', async (path: SubPath, ctx: AppContext) => {
-	const itemModel = ctx.models.item();
+	const itemModel = ctx.joplin.models.item();
 	const item = await itemModel.loadWithContent(path.id);
 	if (!item) throw new ErrorNotFound();
 	return respondWithItemContent(ctx.response, item, item.content);
-});
-
-router.post('items', async (_path: SubPath, ctx: AppContext) => {
-	const body = await formParse(ctx.req);
-	const fields = body.fields;
-
-	if (fields.delete_all_button) {
-		const itemModel = ctx.models.item();
-		await itemModel.deleteAll(ctx.owner.id);
-	} else {
-		throw new Error('Invalid form button');
-	}
-
-	return redirect(ctx, await ctx.models.item().itemUrl());
-});
+}, RouteType.UserContent);
 
 export default router;

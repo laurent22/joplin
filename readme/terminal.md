@@ -2,11 +2,11 @@
 
 Joplin is a free, open source note taking and to-do application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be copied, tagged and modified with your own text editor.
 
-Notes exported from Evernote via .enex files [can be imported](https://joplinapp.org/#importing) into Joplin, including the formatted content (which is converted to Markdown), resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.). Plain Markdown files can also be imported.
+Notes exported from Evernote via .enex files [can be imported](https://joplinapp.org/help/#importing) into Joplin, including the formatted content (which is converted to Markdown), resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.). Plain Markdown files can also be imported.
 
 The notes can be [synchronised](#synchronisation) with various targets including the file system (for example with a network directory), Nextcloud, Dropbox, OneDrive or WebDAV. When synchronising the notes, notebooks, tags and other metadata are saved to plain text files which can be easily inspected, backed up and moved around.
 
-<img src="https://joplinapp.org/images/ScreenshotTerminal.png" style="max-width: 60%">
+<img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/ScreenshotTerminal.png" style="max-width: 60%">
 
 # Installation
 
@@ -22,14 +22,13 @@ There are other ways to install the terminal application. However, they are not 
 
 Operating system | Method
 -----------------|----------------
-macOS            | `brew install joplin`
 Arch Linux       | An Arch Linux package is available [here](https://aur.archlinux.org/packages/joplin/). To install it, use an AUR wrapper such as yay: `yay -S joplin`. Both the CLI tool (type `joplin`) and desktop app (type `joplin-desktop`) are packaged. You can also install a compiled version with the [chaotic-aur](https://wiki.archlinux.org/index.php/Unofficial_user_repositories#chaotic-aur) repository. For support, please go to the [GitHub repo](https://github.com/masterkorp/joplin-pkgbuild).
 
 # Usage
 
 To start the application type `joplin`. This will open the user interface, which has three main panes: Notebooks, Notes and the text of the current note. There are also additional panels that can be toggled on and off via [shortcuts](#shortcuts).
 
-<img src="https://joplinapp.org/images/ScreenshotTerminalCaptions.png" height="450px">
+<img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/ScreenshotTerminalCaptions.png" height="450px">
 
 ## Input modes
 
@@ -132,9 +131,20 @@ For WebDAV-compatible services that are known to work with Joplin see [WebDAV sy
 
 ## Dropbox synchronisation
 
+You will need to set the `sync.target` config variable from the command line mode using:
+
+	:config sync.target 7
+
 When syncing with Dropbox, Joplin creates a sub-directory in Dropbox, in `/Apps/Joplin` and read/write the notes and notebooks from it. The application does not have access to anything outside this directory.
 
 To initiate the synchronisation process, type `:sync`. You will be asked to follow a link to authorise the application.
+
+## Local filesystem synchronisation
+
+Local filesystem sync can be initiated after starting the joplin terminal app by using the [command-line mode](#command-line-mode)
+
+	:config sync.target 2
+	:config sync.2.path <path to local sync dir>
 
 ## OneDrive synchronisation
 
@@ -146,13 +156,13 @@ To initiate the synchronisation process, type `:sync`. You will be asked to foll
 
 When Ctrl+Clicking a URL (or opening with the shortcut 'o' while it is highlighted), most terminals will open that URL in the default browser. However, one issue, especially with long URLs, is that they can end up like this:
 
-<img src="https://joplinapp.org/images/UrlCut.png" width="300px">
+<img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/UrlCut.png" width="300px">
 
 Not only it makes the text hard to read, but the link, being cut in two, will also not be clickable.
 
 As a solution Joplin tries to start a mini-server in the background and, if successful, all the links will be converted to a much shorter URL:
 
-<img src="https://joplinapp.org/images/UrlNoCut.png" width="300px">
+<img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/UrlNoCut.png" width="300px">
 
 Since this is still an actual URL, the terminal will still make it clickable. And with shorter URLs, the text is more readable and the links unlikely to be cut. Both resources (files that are attached to notes) and external links are handled in this way.
 
@@ -293,7 +303,7 @@ The following commands are available in [command-line mode](#command-line-mode):
 	Possible keys/values:
 
 	    sync.target                    Synchronisation target.
-	                                   The target to synchonise to. Each sync
+	                                   The target to synchronise to. Each sync
 	                                   target may have additional parameters which
 	                                   are named as `sync.NUM.NAME` (all
 	                                   documented below).
@@ -347,7 +357,7 @@ The following commands are available in [command-line mode](#command-line-mode):
 
 	    locale                         Language.
 	                                   Please see localisation section on
-	                                   https://joplinapp.org/#localisation
+	                                   https://joplinapp.org/help/#localisation
 	                                   for info on translation completion progress
 	                                   Type: Enum.
 	                                   Possible values: ar (Arabic), eu (Basque),

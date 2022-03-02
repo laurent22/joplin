@@ -1,9 +1,8 @@
 import ResourceEditWatcher from '@joplin/lib/services/ResourceEditWatcher/index';
 import CommandService from '@joplin/lib/services/CommandService';
 import KeymapService from '@joplin/lib/services/KeymapService';
-import PluginService from '@joplin/lib/services/plugins/PluginService';
+import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import resourceEditWatcherReducer, { defaultState as resourceEditWatcherDefaultState } from '@joplin/lib/services/ResourceEditWatcher/reducer';
-import { defaultState, State } from '@joplin/lib/reducer';
 import PluginRunner from './services/plugins/PluginRunner';
 import PlatformImplementation from './services/plugins/PlatformImplementation';
 import shim from '@joplin/lib/shim';
@@ -19,382 +18,84 @@ import SpellCheckerService from '@joplin/lib/services/spellChecker/SpellCheckerS
 import SpellCheckerServiceDriverNative from './services/spellChecker/SpellCheckerServiceDriverNative';
 import bridge from './services/bridge';
 import menuCommandNames from './gui/menuCommandNames';
-import { LayoutItem } from './gui/ResizableLayout/utils/types';
 import stateToWhenClauseContext from './services/commands/stateToWhenClauseContext';
 import ResourceService from '@joplin/lib/services/ResourceService';
 import ExternalEditWatcher from '@joplin/lib/services/ExternalEditWatcher';
-import produce from 'immer';
-import iterateItems from './gui/ResizableLayout/utils/iterateItems';
-import validateLayout from './gui/ResizableLayout/utils/validateLayout';
-
+import appReducer, { createAppDefaultState } from './app.reducer';
 const { FoldersScreenUtils } = require('@joplin/lib/folders-screen-utils.js');
-import MasterKey from '@joplin/lib/models/MasterKey';
 import Folder from '@joplin/lib/models/Folder';
-const fs = require('fs-extra');
 import Tag from '@joplin/lib/models/Tag';
 import { reg } from '@joplin/lib/registry';
 const packageInfo = require('./packageInfo.js');
 import DecryptionWorker from '@joplin/lib/services/DecryptionWorker';
-const ClipperServer = require('@joplin/lib/ClipperServer');
+import ClipperServer from '@joplin/lib/ClipperServer';
 const { webFrame } = require('electron');
 const Menu = bridge().Menu;
 const PluginManager = require('@joplin/lib/services/PluginManager');
 import RevisionService from '@joplin/lib/services/RevisionService';
 import MigrationService from '@joplin/lib/services/MigrationService';
-const TemplateUtils = require('@joplin/lib/TemplateUtils');
-const CssUtils = require('@joplin/lib/CssUtils');
+import { loadCustomCss, injectCustomStyles } from '@joplin/lib/CssUtils';
+import mainScreenCommands from './gui/MainScreen/commands/index';
+import noteEditorCommands from './gui/NoteEditor/commands/index';
+import noteListCommands from './gui/NoteList/commands/index';
+import noteListControlsCommands from './gui/NoteListControls/commands/index';
+import sidebarCommands from './gui/Sidebar/commands/index';
+import appCommands from './commands/index';
+import libCommands from '@joplin/lib/commands/index';
+import { homedir } from 'os';
+const electronContextMenu = require('./services/electron-context-menu');
 // import  populateDatabase from '@joplin/lib/services/debug/populateDatabase';
 
-const commands = [
-	require('./gui/MainScreen/commands/editAlarm'),
-	require('./gui/MainScreen/commands/exportPdf'),
-	require('./gui/MainScreen/commands/hideModalMessage'),
-	require('./gui/MainScreen/commands/moveToFolder'),
-	require('./gui/MainScreen/commands/newFolder'),
-	require('./gui/MainScreen/commands/newNote'),
-	require('./gui/MainScreen/commands/newSubFolder'),
-	require('./gui/MainScreen/commands/newTodo'),
-	require('./gui/MainScreen/commands/openFolder'),
-	require('./gui/MainScreen/commands/openNote'),
-	require('./gui/MainScreen/commands/openTag'),
-	require('./gui/MainScreen/commands/print'),
-	require('./gui/MainScreen/commands/renameFolder'),
-	require('./gui/MainScreen/commands/showShareFolderDialog'),
-	require('./gui/MainScreen/commands/renameTag'),
-	require('./gui/MainScreen/commands/search'),
-	require('./gui/MainScreen/commands/selectTemplate'),
-	require('./gui/MainScreen/commands/setTags'),
-	require('./gui/MainScreen/commands/showModalMessage'),
-	require('./gui/MainScreen/commands/showNoteContentProperties'),
-	require('./gui/MainScreen/commands/showNoteProperties'),
-	require('./gui/MainScreen/commands/showShareNoteDialog'),
-	require('./gui/MainScreen/commands/showSpellCheckerMenu'),
-	require('./gui/MainScreen/commands/toggleEditors'),
-	require('./gui/MainScreen/commands/toggleLayoutMoveMode'),
-	require('./gui/MainScreen/commands/toggleNoteList'),
-	require('./gui/MainScreen/commands/toggleSideBar'),
-	require('./gui/MainScreen/commands/toggleVisiblePanes'),
-	require('./gui/NoteEditor/commands/focusElementNoteBody'),
-	require('./gui/NoteEditor/commands/focusElementNoteTitle'),
-	require('./gui/NoteEditor/commands/showLocalSearch'),
-	require('./gui/NoteEditor/commands/showRevisions'),
-	require('./gui/NoteList/commands/focusElementNoteList'),
-	require('./gui/NoteListControls/commands/focusSearch'),
-	require('./gui/Sidebar/commands/focusElementSideBar'),
-];
+const commands = mainScreenCommands
+	.concat(noteEditorCommands)
+	.concat(noteListCommands)
+	.concat(noteListControlsCommands)
+	.concat(sidebarCommands);
 
 // Commands that are not tied to any particular component.
 // The runtime for these commands can be loaded when the app starts.
-const globalCommands = [
-	require('./commands/copyDevCommand'),
-	require('./commands/exportFolders'),
-	require('./commands/exportNotes'),
-	require('./commands/focusElement'),
-	require('./commands/openProfileDirectory'),
-	require('./commands/replaceMisspelling'),
-	require('./commands/startExternalEditing'),
-	require('./commands/stopExternalEditing'),
-	require('./commands/toggleExternalEditing'),
-	require('./commands/toggleSafeMode'),
-	require('@joplin/lib/commands/historyBackward'),
-	require('@joplin/lib/commands/historyForward'),
-	require('@joplin/lib/commands/synchronize'),
-];
+const globalCommands = appCommands.concat(libCommands);
 
-import editorCommandDeclarations from './gui/NoteEditor/commands/editorCommandDeclarations';
+import editorCommandDeclarations from './gui/NoteEditor/editorCommandDeclarations';
+import PerFolderSortOrderService from './services/sortOrder/PerFolderSortOrderService';
 import ShareService from '@joplin/lib/services/share/ShareService';
+import checkForUpdates from './checkForUpdates';
+import { AppState } from './app.reducer';
+import syncDebugLog from '@joplin/lib/services/synchronizer/syncDebugLog';
+import eventManager from '@joplin/lib/eventManager';
+// import { runIntegrationTests } from '@joplin/lib/services/e2ee/ppkTestUtils';
 
 const pluginClasses = [
 	require('./plugins/GotoAnything').default,
 ];
 
-interface AppStateRoute {
-	type: string;
-	routeName: string;
-	props: any;
-}
-
-export interface AppState extends State {
-	route: AppStateRoute;
-	navHistory: any[];
-	noteVisiblePanes: string[];
-	windowContentSize: any;
-	watchedNoteFiles: string[];
-	lastEditorScrollPercents: any;
-	devToolsVisible: boolean;
-	visibleDialogs: any; // empty object if no dialog is visible. Otherwise contains the list of visible dialogs.
-	focusedField: string;
-	layoutMoveMode: boolean;
-	startupPluginsLoaded: boolean;
-
-	// Extra reducer keys go here
-	watchedResources: any;
-	mainLayout: LayoutItem;
-}
-
-const appDefaultState: AppState = {
-	...defaultState,
-	route: {
-		type: 'NAV_GO',
-		routeName: 'Main',
-		props: {},
-	},
-	navHistory: [],
-	noteVisiblePanes: ['editor', 'viewer'],
-	windowContentSize: bridge().windowContentSize(),
-	watchedNoteFiles: [],
-	lastEditorScrollPercents: {},
-	devToolsVisible: false,
-	visibleDialogs: {}, // empty object if no dialog is visible. Otherwise contains the list of visible dialogs.
-	focusedField: null,
-	layoutMoveMode: false,
-	mainLayout: null,
-	startupPluginsLoaded: false,
-	...resourceEditWatcherDefaultState,
-};
+const appDefaultState = createAppDefaultState(
+	bridge().windowContentSize(),
+	resourceEditWatcherDefaultState
+);
 
 class Application extends BaseApplication {
 
 	private checkAllPluginStartedIID_: any = null;
 
-	constructor() {
+	public constructor() {
 		super();
 
 		this.bridge_nativeThemeUpdated = this.bridge_nativeThemeUpdated.bind(this);
 	}
 
-	hasGui() {
+	public hasGui() {
 		return true;
 	}
 
-	checkForUpdateLoggerPath() {
-		return `${Setting.value('profileDir')}/log-autoupdater.txt`;
-	}
-
-	reducer(state: AppState = appDefaultState, action: any) {
-		let newState = state;
-
-		try {
-			switch (action.type) {
-
-			case 'NAV_BACK':
-			case 'NAV_GO':
-
-				{
-					const goingBack = action.type === 'NAV_BACK';
-
-					if (goingBack && !state.navHistory.length) break;
-
-					const currentRoute = state.route;
-
-					newState = Object.assign({}, state);
-					const newNavHistory = state.navHistory.slice();
-
-					if (goingBack) {
-						let newAction = null;
-						while (newNavHistory.length) {
-							newAction = newNavHistory.pop();
-							if (newAction.routeName !== state.route.routeName) break;
-						}
-
-						if (!newAction) break;
-
-						action = newAction;
-					}
-
-					if (!goingBack) newNavHistory.push(currentRoute);
-					newState.navHistory = newNavHistory;
-					newState.route = action;
-				}
-				break;
-
-			case 'STARTUP_PLUGINS_LOADED':
-
-				// When all startup plugins have loaded, we also recreate the
-				// main layout to ensure that it is updated in the UI. There's
-				// probably a cleaner way to do this, but for now that will do.
-				if (state.startupPluginsLoaded !== action.value) {
-					newState = {
-						...newState,
-						startupPluginsLoaded: action.value,
-						mainLayout: JSON.parse(JSON.stringify(newState.mainLayout)),
-					};
-				}
-				break;
-
-			case 'WINDOW_CONTENT_SIZE_SET':
-
-				newState = Object.assign({}, state);
-				newState.windowContentSize = action.size;
-				break;
-
-			case 'NOTE_VISIBLE_PANES_TOGGLE':
-
-				{
-					const getNextLayout = (currentLayout: any) => {
-						currentLayout = panes.length === 2 ? 'both' : currentLayout[0];
-
-						let paneOptions;
-						if (state.settings.layoutButtonSequence === Setting.LAYOUT_EDITOR_VIEWER) {
-							paneOptions = ['editor', 'viewer'];
-						} else if (state.settings.layoutButtonSequence === Setting.LAYOUT_EDITOR_SPLIT) {
-							paneOptions = ['editor', 'both'];
-						} else if (state.settings.layoutButtonSequence === Setting.LAYOUT_VIEWER_SPLIT) {
-							paneOptions = ['viewer', 'both'];
-						} else {
-							paneOptions = ['editor', 'viewer', 'both'];
-						}
-
-						const currentLayoutIndex = paneOptions.indexOf(currentLayout);
-						const nextLayoutIndex = currentLayoutIndex === paneOptions.length - 1 ? 0 : currentLayoutIndex + 1;
-
-						const nextLayout = paneOptions[nextLayoutIndex];
-						return nextLayout === 'both' ? ['editor', 'viewer'] : [nextLayout];
-					};
-
-					newState = Object.assign({}, state);
-
-					const panes = state.noteVisiblePanes.slice();
-					newState.noteVisiblePanes = getNextLayout(panes);
-				}
-				break;
-
-			case 'NOTE_VISIBLE_PANES_SET':
-
-				newState = Object.assign({}, state);
-				newState.noteVisiblePanes = action.panes;
-				break;
-
-			case 'MAIN_LAYOUT_SET':
-
-				newState = {
-					...state,
-					mainLayout: action.value,
-				};
-				break;
-
-			case 'MAIN_LAYOUT_SET_ITEM_PROP':
-
-				{
-					let newLayout = produce(state.mainLayout, (draftLayout: LayoutItem) => {
-						iterateItems(draftLayout, (_itemIndex: number, item: LayoutItem, _parent: LayoutItem) => {
-							if (item.key === action.itemKey) {
-								(item as any)[action.propName] = action.propValue;
-								return false;
-							}
-							return true;
-						});
-					});
-
-					if (newLayout !== state.mainLayout) newLayout = validateLayout(newLayout);
-
-					newState = {
-						...state,
-						mainLayout: newLayout,
-					};
-				}
-
-				break;
-
-			case 'NOTE_FILE_WATCHER_ADD':
-
-				if (newState.watchedNoteFiles.indexOf(action.id) < 0) {
-					newState = Object.assign({}, state);
-					const watchedNoteFiles = newState.watchedNoteFiles.slice();
-					watchedNoteFiles.push(action.id);
-					newState.watchedNoteFiles = watchedNoteFiles;
-				}
-				break;
-
-			case 'NOTE_FILE_WATCHER_REMOVE':
-
-				{
-					newState = Object.assign({}, state);
-					const idx = newState.watchedNoteFiles.indexOf(action.id);
-					if (idx >= 0) {
-						const watchedNoteFiles = newState.watchedNoteFiles.slice();
-						watchedNoteFiles.splice(idx, 1);
-						newState.watchedNoteFiles = watchedNoteFiles;
-					}
-				}
-				break;
-
-			case 'NOTE_FILE_WATCHER_CLEAR':
-
-				if (state.watchedNoteFiles.length) {
-					newState = Object.assign({}, state);
-					newState.watchedNoteFiles = [];
-				}
-				break;
-
-			case 'EDITOR_SCROLL_PERCENT_SET':
-
-				{
-					newState = Object.assign({}, state);
-					const newPercents = Object.assign({}, newState.lastEditorScrollPercents);
-					newPercents[action.noteId] = action.percent;
-					newState.lastEditorScrollPercents = newPercents;
-				}
-				break;
-
-			case 'NOTE_DEVTOOLS_TOGGLE':
-				newState = Object.assign({}, state);
-				newState.devToolsVisible = !newState.devToolsVisible;
-				break;
-
-			case 'NOTE_DEVTOOLS_SET':
-				newState = Object.assign({}, state);
-				newState.devToolsVisible = action.value;
-				break;
-
-			case 'VISIBLE_DIALOGS_ADD':
-				newState = Object.assign({}, state);
-				newState.visibleDialogs = Object.assign({}, newState.visibleDialogs);
-				newState.visibleDialogs[action.name] = true;
-				break;
-
-			case 'VISIBLE_DIALOGS_REMOVE':
-				newState = Object.assign({}, state);
-				newState.visibleDialogs = Object.assign({}, newState.visibleDialogs);
-				delete newState.visibleDialogs[action.name];
-				break;
-
-			case 'FOCUS_SET':
-
-				newState = Object.assign({}, state);
-				newState.focusedField = action.field;
-				break;
-
-			case 'FOCUS_CLEAR':
-
-				// A field can only clear its own state
-				if (action.field === state.focusedField) {
-					newState = Object.assign({}, state);
-					newState.focusedField = null;
-				}
-				break;
-
-			case 'LAYOUT_MOVE_MODE_SET':
-
-				newState = {
-					...state,
-					layoutMoveMode: action.value,
-				};
-				break;
-
-			}
-		} catch (error) {
-			error.message = `In reducer: ${error.message} Action: ${JSON.stringify(action)}`;
-			throw error;
-		}
-
+	public reducer(state: AppState = appDefaultState, action: any) {
+		let newState = appReducer(state, action);
 		newState = resourceEditWatcherReducer(newState, action);
 		newState = super.reducer(newState, action);
-
 		return newState;
 	}
 
-	toggleDevTools(visible: boolean) {
+	public toggleDevTools(visible: boolean) {
 		if (visible) {
 			bridge().openDevTools();
 		} else {
@@ -402,7 +103,7 @@ class Application extends BaseApplication {
 		}
 	}
 
-	async generalMiddleware(store: any, next: any, action: any) {
+	protected async generalMiddleware(store: any, next: any, action: any) {
 		if (action.type == 'SETTING_UPDATE_ONE' && action.key == 'locale' || action.type == 'SETTING_UPDATE_ALL') {
 			setLocale(Setting.value('locale'));
 			// The bridge runs within the main process, with its own instance of locale.js
@@ -448,7 +149,7 @@ class Application extends BaseApplication {
 		return result;
 	}
 
-	handleThemeAutoDetect() {
+	public handleThemeAutoDetect() {
 		if (!Setting.value('themeAutoDetect')) return;
 
 		if (bridge().shouldUseDarkColors()) {
@@ -458,11 +159,11 @@ class Application extends BaseApplication {
 		}
 	}
 
-	bridge_nativeThemeUpdated() {
+	private bridge_nativeThemeUpdated() {
 		this.handleThemeAutoDetect();
 	}
 
-	updateTray() {
+	public updateTray() {
 		const app = bridge().electronApp();
 
 		if (app.trayShown() === Setting.value('showTrayIcon')) return;
@@ -479,7 +180,7 @@ class Application extends BaseApplication {
 		}
 	}
 
-	updateEditorFont() {
+	public updateEditorFont() {
 		const fontFamilies = [];
 		if (Setting.value('style.editor.fontFamily')) fontFamilies.push(`"${Setting.value('style.editor.fontFamily')}"`);
 		fontFamilies.push('Avenir, Arial, sans-serif');
@@ -494,12 +195,24 @@ class Application extends BaseApplication {
 		document.head.appendChild(styleTag);
 	}
 
-	setupContextMenu() {
+	public setupContextMenu() {
+		// bridge().setupContextMenu((misspelledWord: string, dictionarySuggestions: string[]) => {
+		// 	let output = SpellCheckerService.instance().contextMenuItems(misspelledWord, dictionarySuggestions);
+		// 	console.info(misspelledWord, dictionarySuggestions);
+		// 	console.info(output);
+		// 	output = output.map(o => {
+		// 		delete o.click;
+		// 		return o;
+		// 	});
+		// 	return output;
+		// });
+
+
 		const MenuItem = bridge().MenuItem;
 
 		// The context menu must be setup in renderer process because that's where
 		// the spell checker service lives.
-		require('electron-context-menu')({
+		electronContextMenu({
 			shouldShowMenu: (_event: any, params: any) => {
 				// params.inputFieldType === 'none' when right-clicking the text editor. This is a bit of a hack to detect it because in this
 				// case we don't want to use the built-in context menu but a custom one.
@@ -521,21 +234,24 @@ class Application extends BaseApplication {
 		});
 	}
 
-	async loadCustomCss(filePath: string) {
-		let cssString = '';
-		if (await fs.pathExists(filePath)) {
+	private async checkForLegacyTemplates() {
+		const templatesDir = `${Setting.value('profileDir')}/templates`;
+		if (await shim.fsDriver().exists(templatesDir)) {
 			try {
-				cssString = await fs.readFile(filePath, 'utf-8');
-
+				const files = await shim.fsDriver().readDirStats(templatesDir);
+				for (const file of files) {
+					if (file.path.endsWith('.md')) {
+						// There is atleast one template.
+						this.store().dispatch({
+							type: 'CONTAINS_LEGACY_TEMPLATES',
+						});
+						break;
+					}
+				}
 			} catch (error) {
-				let msg = error.message ? error.message : '';
-				msg = `Could not load custom css from ${filePath}\n${msg}`;
-				error.message = msg;
-				throw error;
+				reg.logger().error(`Failed to read templates directory: ${error}`);
 			}
 		}
-
-		return cssString;
 	}
 
 	private async initPluginService() {
@@ -547,12 +263,14 @@ class Application extends BaseApplication {
 
 		const pluginSettings = service.unserializePluginSettings(Setting.value('plugins.states'));
 
-		// Users can add and remove plugins from the config screen at any
-		// time, however we only effectively uninstall the plugin the next
-		// time the app is started. What plugin should be uninstalled is
-		// stored in the settings.
-		const newSettings = service.clearUpdateState(await service.uninstallPlugins(pluginSettings));
-		Setting.setValue('plugins.states', newSettings);
+		{
+			// Users can add and remove plugins from the config screen at any
+			// time, however we only effectively uninstall the plugin the next
+			// time the app is started. What plugin should be uninstalled is
+			// stored in the settings.
+			const newSettings = service.clearUpdateState(await service.uninstallPlugins(pluginSettings));
+			Setting.setValue('plugins.states', newSettings);
+		}
 
 		try {
 			if (await shim.fsDriver().exists(Setting.value('pluginDir'))) {
@@ -576,6 +294,25 @@ class Application extends BaseApplication {
 			this.logger().error(`There was an error loading plugins from ${Setting.value('plugins.devPluginPaths')}:`, error);
 		}
 
+		{
+			// Users can potentially delete files from /plugins or even delete
+			// the complete folder. When that happens, we still have the plugin
+			// info in the state, which can cause various issues, so to sort it
+			// out we remove from the state any plugin that has *not* been loaded
+			// above (meaning the file was missing).
+			// https://github.com/laurent22/joplin/issues/5253
+			const oldSettings = service.unserializePluginSettings(Setting.value('plugins.states'));
+			const newSettings: PluginSettings = {};
+			for (const pluginId of Object.keys(oldSettings)) {
+				if (!service.pluginIds.includes(pluginId)) {
+					this.logger().warn('Found a plugin in the state that has not been loaded, which means the plugin might have been deleted outside Joplin - removing it from the state:', pluginId);
+					continue;
+				}
+				newSettings[pluginId] = oldSettings[pluginId];
+			}
+			Setting.setValue('plugins.states', newSettings);
+		}
+
 		this.checkAllPluginStartedIID_ = setInterval(() => {
 			if (service.allPluginsStarted) {
 				clearInterval(this.checkAllPluginStartedIID_);
@@ -587,16 +324,12 @@ class Application extends BaseApplication {
 		}, 500);
 	}
 
-	async start(argv: string[]): Promise<any> {
-		const electronIsDev = require('electron-is-dev');
-
+	public async start(argv: string[]): Promise<any> {
 		// If running inside a package, the command line, instead of being "node.exe <path> <flags>" is "joplin.exe <flags>" so
 		// insert an extra argument so that they can be processed in a consistent way everywhere.
-		if (!electronIsDev) argv.splice(1, 0, '.');
+		if (!bridge().electronIsDev()) argv.splice(1, 0, '.');
 
 		argv = await super.start(argv);
-
-		await fs.mkdirp(Setting.value('templateDir'), 0o755);
 
 		await this.applySettingsSideEffects();
 
@@ -608,11 +341,21 @@ class Application extends BaseApplication {
 
 		reg.logger().info('app.start: doing regular boot');
 
-		const dir = Setting.value('profileDir');
+		const dir: string = Setting.value('profileDir');
+
+		syncDebugLog.enabled = false;
+
+		if (dir.endsWith('dev-desktop-2')) {
+			syncDebugLog.addTarget(TargetType.File, {
+				path: `${homedir()}/synclog.txt`,
+			});
+			syncDebugLog.enabled = true;
+			syncDebugLog.info(`Profile dir: ${dir}`);
+		}
 
 		// Loads app-wide styles. (Markdown preview-specific styles loaded in app.js)
 		const filename = Setting.custom_css_files.JOPLIN_APP;
-		await CssUtils.injectCustomStyles(`${dir}/${filename}`);
+		await injectCustomStyles('appStyles', `${dir}/${filename}`);
 
 		AlarmService.setDriver(new AlarmServiceDriverNode({ appName: packageInfo.build.appId }));
 		AlarmService.setLogger(reg.logger());
@@ -628,6 +371,8 @@ class Application extends BaseApplication {
 		PluginManager.instance().register(pluginClasses);
 
 		this.initRedux();
+
+		PerFolderSortOrderService.initialize();
 
 		CommandService.instance().initialize(this.store(), Setting.value('env') == 'dev', stateToWhenClauseContext);
 
@@ -670,12 +415,12 @@ class Application extends BaseApplication {
 			items: tags,
 		});
 
-		const masterKeys = await MasterKey.all();
+		// const masterKeys = await MasterKey.all();
 
-		this.dispatch({
-			type: 'MASTERKEY_UPDATE_ALL',
-			items: masterKeys,
-		});
+		// this.dispatch({
+		// 	type: 'MASTERKEY_UPDATE_ALL',
+		// 	items: masterKeys,
+		// });
 
 		this.store().dispatch({
 			type: 'FOLDER_SELECT',
@@ -688,17 +433,10 @@ class Application extends BaseApplication {
 		});
 
 		// Loads custom Markdown preview styles
-		const cssString = await CssUtils.loadCustomCss(`${Setting.value('profileDir')}/userstyle.css`);
+		const cssString = await loadCustomCss(`${Setting.value('profileDir')}/userstyle.css`);
 		this.store().dispatch({
-			type: 'LOAD_CUSTOM_CSS',
+			type: 'CUSTOM_CSS_APPEND',
 			css: cssString,
-		});
-
-		const templates = await TemplateUtils.loadTemplates(Setting.value('templateDir'));
-
-		this.store().dispatch({
-			type: 'TEMPLATE_UPDATE_ALL',
-			templates: templates,
 		});
 
 		this.store().dispatch({
@@ -706,12 +444,15 @@ class Application extends BaseApplication {
 			value: Setting.value('flagOpenDevTools'),
 		});
 
-		// Note: Auto-update currently doesn't work in Linux: it downloads the update
-		// but then doesn't install it on exit.
+		await this.checkForLegacyTemplates();
+
+		// Note: Auto-update is a misnomer in the code.
+		// The code below only checks, if a new version is available.
+		// We only allow Windows and macOS users to automatically check for updates
 		if (shim.isWindows() || shim.isMac()) {
 			const runAutoUpdateCheck = () => {
 				if (Setting.value('autoUpdateEnabled')) {
-					bridge().checkForUpdates(true, bridge().window(), this.checkForUpdateLoggerPath(), { includePreReleases: Setting.value('autoUpdate.includePreReleases') });
+					void checkForUpdates(true, bridge().window(), { includePreReleases: Setting.value('autoUpdate.includePreReleases') });
 				}
 			};
 
@@ -758,13 +499,19 @@ class Application extends BaseApplication {
 		ClipperServer.instance().setDispatch(this.store().dispatch);
 
 		if (Setting.value('clipperServer.autoStart')) {
-			ClipperServer.instance().start();
+			void ClipperServer.instance().start();
 		}
 
 		ExternalEditWatcher.instance().setLogger(reg.logger());
 		ExternalEditWatcher.instance().initialize(bridge, this.store().dispatch);
 
-		ResourceEditWatcher.instance().initialize(reg.logger(), (action: any) => { this.store().dispatch(action); });
+		ResourceEditWatcher.instance().initialize(reg.logger(), (action: any) => { this.store().dispatch(action); }, (path: string) => bridge().openItem(path));
+
+		// Forwards the local event to the global event manager, so that it can
+		// be picked up by the plugin manager.
+		ResourceEditWatcher.instance().on('resourceChange', (event: any) => {
+			eventManager.emit('resourceChange', event);
+		});
 
 		RevisionService.instance().runInBackground();
 
@@ -799,10 +546,46 @@ class Application extends BaseApplication {
 		// 		type: 'NAV_GO',
 		// 		routeName: 'Config',
 		// 		props: {
+		// 			defaultSection: 'encryption',
+		// 		},
+		// 	});
+		// }, 2000);
+
+		// setTimeout(() => {
+		// 	this.dispatch({
+		// 		type: 'DIALOG_OPEN',
+		// 		name: 'editFolder',
+		// 		props: { folderId: '3d90f7da26b947dc9c8c6c65e86cd231' },
+		// 	});
+		// }, 2000);
+
+		// setTimeout(() => {
+		// 	this.dispatch({
+		// 		type: 'NAV_GO',
+		// 		routeName: 'Config',
+		// 		props: {
 		// 			defaultSection: 'plugins',
 		// 		},
 		// 	});
-		// }, 5000);
+		// }, 2000);
+
+
+
+
+		// const testData = {
+		// 	"publicKey": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAmKpb4JiYiY16pGOabje7uMsFd7DcMnruGxJ9HSpOiOduj3ApKqRu0xWCkGyqpekyOjjooZ98wVkDPUFsyVjN+kG8yKFn2xXC5SeRyhIVbdytjYiGshr6x+T9XVI+HnJKQF3WbrcqSOejlDXJv6u7jKrLAlOT3tkqEb0ZefhcEIajq6kNkH51R0lwsFnzxDIK3MW1wNzmiOfM92f8PFxiOBmUtVIngGPlNgyld1FzKN7Ypz1uS6GOqAtRm325qyfE/+2Jgb7WaDFT7VB5pHnOiojj9+xi1DvQWCbbIYXoMi0XVi9i2ZQfM32aFwiHez5UL61IMWUcqQ0/gldh4HFlAQIDAQAB\n-----END PUBLIC KEY-----",
+		// 	"privateKey": "-----BEGIN RSA PRIVATE KEY-----\nMIIEpAIBAAKCAQEAmKpb4JiYiY16pGOabje7uMsFd7DcMnruGxJ9HSpOiOduj3ApKqRu0xWCkGyqpekyOjjooZ98wVkDPUFsyVjN+kG8yKFn2xXC5SeRyhIVbdytjYiGshr6x+T9XVI+HnJKQF3WbrcqSOejlDXJv6u7jKrLAlOT3tkqEb0ZefhcEIajq6kNkH51R0lwsFnzxDIK3MW1wNzmiOfM92f8PFxiOBmUtVIngGPlNgyld1FzKN7Ypz1uS6GOqAtRm325qyfE/+2Jgb7WaDFT7VB5pHnOiojj9+xi1DvQWCbbIYXoMi0XVi9i2ZQfM32aFwiHez5UL61IMWUcqQ0/gldh4HFlAQIDAQABAoIBADFFMffPZ9Nk7MLnPmz54cTnCPGzC63jDLuCAQ0LnWMDxiPW4AJaJUZMt+GioISBOWue+D1JOrsv3iLD3bcxyPBOjP33UYxcfpT0a1Ha+j2FriFygX4zxOIEnlyi8VdkLWCOqGj9BlGXKKzpmx4X76Sbbn9mt9+BGNm2vOUnaZcPTVuOI7K6xZynlzMRYSyhu7J0QdYVK44vZ/TjdD/4pgX+ezrGiwx7OCf/KctjvEoYtXYV2gkBOifOlqYOp0fMEC3mVAZfwpvDTbRchb7h0rxmxfKbWsjPtDblByXBLJZ3PGcKcmJlu4Qsfd2AgrY62r+DbNt3EhK072ZilYIfKD0CgYEAybcDbucr67dWMlFh5b79bvJugw6rj1V59Tp+RX9nKgzaiBUHLun6cK5hbgg9z3ejc2SWlX7D+eOyveVjhDlxUOCFURJLo2oPMRKwBBKJkOJhdtAjPzyceYI6Yj2lvtDeijcZfg8F9YqUTMfisDsEi1MbGnqawWwUerN9P5TjRBcCgYEAwcAfw8KTnQsvXPwWwh6Wabtz0bUAKzA/D6oWTR5IbkBfb3jNU8lmh9H66H0P18Nsa3vozA6buW2LDhHCFFkQ4PUTQVKok1qhAsvJBECxdwMqb5iAXk3Yk3qQYGhR23Zkp1u82wmpSaBLKGr+SL9/q5EamqiR3PQYx/aQTeIaFqcCgYAn/N/xXGKYl/++eeOuZ+5V0DmYQZBBGfDTbIUbweXxsBqiX4jNBBVhwTAPYBLgzhbZCVfQyxCOuVT10EOqMrkED35eVAIqoxvf3pSGOiaLUlV/+EMEhj9+1xI753y0FzQGsmWbV98WjiJYFkgaJ5j/BbqZxTRoo8RrjqmFsT5cgQKBgQCWTc4WlmbfSKMIloOtOf9jrMjvoWOtHXN+WmuMjfaQmR2wI13eJvqEWRA1tXdJ4c/FHk39p0OFOQbL9ljCYknmyhiS72XZUlBgE+kwhGNnuSv9gKftAKUH2+gO8j62awUwk8lRfxA2DsTfaQk1NGH9ncauviDR8QcccRmHYeTtNwKBgQCOvHiVaNw8XJIqt2r3j8pEJcr8LO+WNtLDU+h9NhM5a5NxfeRUlxdrqR0FXS4NkE6E3h9iLIRt2V+0bghzJMhKuwdjC0K6+jCb7ImV+Xcl9LNOQ1mPLBLS1jqdQnBS1ZPtcQpMrVi6dU9vVespylKEyGnQnUUtLgYrbO9OMrP1uQ==\n-----END RSA PRIVATE KEY-----",
+		// 	"plaintext": "just testing",
+		// 	"ciphertext": "LBicxglLvMyBin8uMpUnF5ARQ+KtAM563RViMepnOcyXa/NOJonNBixm+th+jX44\r\n/rie2ESbWg/FnlR4mHCEpTQJFXt12zpeXvtM8Hy1OQMud1B1Hc9hp1hhd1t6cuDz\r\n/Cs10n1+57V6zwHottYA6tn84cBn678SvPa/WTwgvb9lnBVZbesm3dVIr5uh2hk9\r\nNcVkmqyfi+ilkNQ3FIQfL+ciHvPFUIpljgIOipZhmufubdgMGW1HEUYlsmxLE7ce\r\ndpUQJoIbfKJ1x2dJRoeYsCjvcYFWdMUcg78HkXR+UcObP6zkK8cH33fb6PKKd8Z4\r\nToj4HROza8Dp7uCV5XyBTA=="
+		// };
+		// await checkTestData(testData);
+
+		// const testData = await createTestData();
+		// await checkTestData(testData);
+
+		// await printTestData();
+
+		// await runIntegrationTests();
 
 		return null;
 	}

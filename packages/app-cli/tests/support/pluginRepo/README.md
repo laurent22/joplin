@@ -4,7 +4,7 @@ This is the official Joplin Plugin Repository
 
 ## Installation
 
-To install any of these plugins, open the desktop application, then go to the "Plugins" section in the Configuration screen. You can then search for any plugin and install it from there.
+To install any of these plugins, open the desktop application, then go to the "Plugins" section in the [Configuration screen](https://github.com/laurent22/joplin/blob/dev/readme/config_screen.md). You can then search for any plugin and install it from there.
 
 ## Plugins
 

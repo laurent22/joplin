@@ -3,7 +3,7 @@ import eventManager from '../../../eventManager';
 import Setting from '../../../models/Setting';
 import { FolderEntity } from '../../database/types';
 import makeListener from '../utils/makeListener';
-import { Disposable } from './types';
+import { Disposable, MenuItem } from './types';
 
 /**
  * @ignore
@@ -14,6 +14,12 @@ import Note from '../../../models/Note';
  * @ignore
  */
 import Folder from '../../../models/Folder';
+
+export interface EditContextMenuFilterObject {
+	items: MenuItem[];
+}
+
+type FilterHandler<T> = (object: T)=> Promise<void>;
 
 enum ItemChangeEventType {
 	Create = 1,
@@ -32,8 +38,13 @@ interface SyncStartEvent {
 	withErrors: boolean;
 }
 
+interface ResourceChangeEvent {
+	id: string;
+}
+
 type ItemChangeHandler = (event: ItemChangeEvent)=> void;
 type SyncStartHandler = (event: SyncStartEvent)=> void;
+type ResourceChangeHandler = (event: ResourceChangeEvent)=> void;
 
 /**
  * The workspace service provides access to all the parts of Joplin that
@@ -48,7 +59,7 @@ export default class JoplinWorkspace {
 
 	private store: any;
 
-	constructor(store: any) {
+	public constructor(store: any) {
 		this.store = store;
 	}
 
@@ -93,6 +104,14 @@ export default class JoplinWorkspace {
 	}
 
 	/**
+	 * Called when a resource is changed. Currently this handled will not be
+	 * called when a resource is added or deleted.
+	 */
+	public async onResourceChange(handler: ResourceChangeHandler): Promise<void> {
+		makeListener(eventManager, 'resourceChange', handler);
+	}
+
+	/**
 	 * Called when an alarm associated with a to-do is triggered.
 	 */
 	public async onNoteAlarmTrigger(handler: Function): Promise<Disposable> {
@@ -111,6 +130,14 @@ export default class JoplinWorkspace {
 	 */
 	public async onSyncComplete(callback: Function): Promise<Disposable> {
 		return makeListener(eventManager, 'syncComplete', callback);
+	}
+
+	/**
+	 * Called just before the editor context menu is about to open. Allows
+	 * adding items to it.
+	 */
+	public filterEditorContextMenu(handler: FilterHandler<EditContextMenuFilterObject>) {
+		eventManager.filterOn('editorContextMenu', handler);
 	}
 
 	/**
@@ -139,4 +166,5 @@ export default class JoplinWorkspace {
 	public async selectedNoteIds(): Promise<string[]> {
 		return this.store.getState().selectedNoteIds.slice();
 	}
+
 }

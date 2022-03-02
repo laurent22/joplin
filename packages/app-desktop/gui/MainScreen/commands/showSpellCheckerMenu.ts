@@ -2,7 +2,7 @@ import { CommandContext, CommandDeclaration, CommandRuntime } from '@joplin/lib/
 import { _ } from '@joplin/lib/locale';
 import bridge from '../../../services/bridge';
 import SpellCheckerService from '@joplin/lib/services/spellChecker/SpellCheckerService';
-import { AppState } from '../../../app';
+import { AppState } from '../../../app.reducer';
 
 const Menu = bridge().Menu;
 
@@ -19,7 +19,7 @@ export const runtime = (): CommandRuntime => {
 			useSpellChecker = useSpellChecker === null ? context.state.settings['spellChecker.enabled'] : useSpellChecker;
 
 			const menuItems = SpellCheckerService.instance().spellCheckerConfigMenuItems(selectedLanguage, useSpellChecker);
-			const menu = Menu.buildFromTemplate(menuItems);
+			const menu = Menu.buildFromTemplate(menuItems as any);
 			menu.popup(bridge().window());
 		},
 

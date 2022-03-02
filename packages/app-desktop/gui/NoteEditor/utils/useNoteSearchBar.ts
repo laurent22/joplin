@@ -1,5 +1,11 @@
 import { useState, useCallback } from 'react';
+import Logger from '@joplin/lib/Logger';
 import { SearchMarkers } from './useSearchMarkers';
+const CommandService = require('@joplin/lib/services/CommandService').default;
+
+const logger = Logger.create('useNoteSearchBar');
+
+const queryMaxLength = 1000;
 
 interface LocalSearch {
 	query: string;
@@ -24,6 +30,14 @@ export default function useNoteSearchBar() {
 	const [localSearch, setLocalSearch] = useState<LocalSearch>(defaultLocalSearch());
 
 	const onChange = useCallback((query: string) => {
+		// A query that's too long would make CodeMirror throw an exception
+		// which would crash the app.
+		// https://github.com/laurent22/joplin/issues/5380
+		if (query.length > queryMaxLength) {
+			logger.warn(`Query is longer than ${queryMaxLength} characters - it is going to be trimmed`);
+			query = query.substr(0, queryMaxLength);
+		}
+
 		setLocalSearch((prev: LocalSearch) => {
 			return {
 				query: query,
@@ -57,6 +71,7 @@ export default function useNoteSearchBar() {
 	const onClose = useCallback(() => {
 		setShowLocalSearch(false);
 		setLocalSearch(defaultLocalSearch());
+		void CommandService.instance().execute('focusElementNoteBody');
 	}, []);
 
 	const setResultCount = useCallback((count: number) => {
@@ -77,6 +92,7 @@ export default function useNoteSearchBar() {
 				selectedIndex: localSearch.selectedIndex,
 				separateWordSearch: false,
 				searchTimestamp: localSearch.timestamp,
+				withSelection: true,
 			},
 			keywords: [
 				{

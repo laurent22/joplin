@@ -25,8 +25,11 @@ export interface WhenClauseContext {
 	noteTodoCompleted: boolean;
 	noteIsMarkdown: boolean;
 	noteIsHtml: boolean;
+	folderIsShareRootAndNotOwnedByUser: boolean;
 	folderIsShareRootAndOwnedByUser: boolean;
 	folderIsShared: boolean;
+	folderIsShareRoot: boolean;
+	joplinServerConnected: boolean;
 }
 
 export default function stateToWhenClauseContext(state: State, options: WhenClauseContextOptions = null): WhenClauseContext {
@@ -42,7 +45,7 @@ export default function stateToWhenClauseContext(state: State, options: WhenClau
 	// const commandNoteId = options.commandNoteId || selectedNoteId;
 	// const commandNote:NoteEntity = commandNoteId ? BaseModel.byId(state.notes, commandNoteId) : null;
 
-	const commandFolderId = options.commandFolderId;
+	const commandFolderId = options.commandFolderId || state.selectedFolderId;
 	const commandFolder: FolderEntity = commandFolderId ? BaseModel.byId(state.folders, commandFolderId) : null;
 
 	return {
@@ -73,7 +76,11 @@ export default function stateToWhenClauseContext(state: State, options: WhenClau
 		noteIsHtml: selectedNote ? selectedNote.markup_language === MarkupToHtml.MARKUP_LANGUAGE_HTML : false,
 
 		// Current context folder
+		folderIsShareRoot: commandFolder ? isRootSharedFolder(commandFolder) : false,
+		folderIsShareRootAndNotOwnedByUser: commandFolder ? isRootSharedFolder(commandFolder) && !isSharedFolderOwner(state, commandFolder.id) : false,
 		folderIsShareRootAndOwnedByUser: commandFolder ? isRootSharedFolder(commandFolder) && isSharedFolderOwner(state, commandFolder.id) : false,
 		folderIsShared: commandFolder ? !!commandFolder.share_id : false,
+
+		joplinServerConnected: [9, 10].includes(state.settings['sync.target']),
 	};
 }

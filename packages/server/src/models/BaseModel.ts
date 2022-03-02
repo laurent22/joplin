@@ -1,15 +1,32 @@
-import { WithDates, WithUuid, databaseSchema, DbConnection, ItemType, Uuid, User } from '../db';
+import { WithDates, WithUuid, databaseSchema, ItemType, Uuid, User } from '../services/database/types';
+import { DbConnection, QueryContext } from '../db';
 import TransactionHandler from '../utils/TransactionHandler';
 import uuidgen from '../utils/uuidgen';
 import { ErrorUnprocessableEntity, ErrorBadRequest } from '../utils/errors';
-import { Models } from './factory';
+import { Models, NewModelFactoryHandler } from './factory';
 import * as EventEmitter from 'events';
+import { Config } from '../utils/types';
+import personalizedUserContentBaseUrl from '@joplin/lib/services/joplinServer/personalizedUserContentBaseUrl';
+import Logger from '@joplin/lib/Logger';
+import dbuuid from '../utils/dbuuid';
+import { defaultPagination, PaginatedResults, Pagination } from './utils/pagination';
+import { unique } from '../utils/array';
+
+const logger = Logger.create('BaseModel');
+
+type SavePoint = string;
+
+export enum UuidType {
+	NanoId = 1,
+	Native = 2,
+}
 
 export interface SaveOptions {
 	isNew?: boolean;
 	skipValidation?: boolean;
 	validationRules?: any;
 	previousItem?: any;
+	queryContext?: QueryContext;
 }
 
 export interface LoadOptions {
@@ -40,14 +57,15 @@ export default abstract class BaseModel<T> {
 	private defaultFields_: string[] = [];
 	private db_: DbConnection;
 	private transactionHandler_: TransactionHandler;
-	private modelFactory_: Function;
-	private baseUrl_: string;
+	private modelFactory_: NewModelFactoryHandler;
 	private static eventEmitter_: EventEmitter = null;
+	private config_: Config;
+	private savePoints_: SavePoint[] = [];
 
-	public constructor(db: DbConnection, modelFactory: Function, baseUrl: string) {
+	public constructor(db: DbConnection, modelFactory: NewModelFactoryHandler, config: Config) {
 		this.db_ = db;
 		this.modelFactory_ = modelFactory;
-		this.baseUrl_ = baseUrl;
+		this.config_ = config;
 
 		this.transactionHandler_ = new TransactionHandler(db);
 	}
@@ -60,10 +78,26 @@ export default abstract class BaseModel<T> {
 	}
 
 	protected get baseUrl(): string {
-		return this.baseUrl_;
+		return this.config_.baseUrl;
 	}
 
-	protected get db(): DbConnection {
+	protected get userContentBaseUrl(): string {
+		return this.config_.userContentBaseUrl;
+	}
+
+	protected personalizedUserContentBaseUrl(userId: Uuid): string {
+		return personalizedUserContentBaseUrl(userId, this.baseUrl, this.userContentBaseUrl);
+	}
+
+	protected get appName(): string {
+		return this.config_.appName;
+	}
+
+	protected get itemSizeHardLimit(): number {
+		return this.config_.itemSizeHardLimit;
+	}
+
+	public get db(): DbConnection {
 		if (this.transactionHandler_.activeTransaction) return this.transactionHandler_.activeTransaction;
 		return this.db_;
 	}
@@ -86,7 +120,7 @@ export default abstract class BaseModel<T> {
 		throw new Error('Must be overriden');
 	}
 
-	protected selectFields(options: LoadOptions, defaultFields: string[] = null, mainTable: string = ''): string[] {
+	protected selectFields(options: LoadOptions, defaultFields: string[] = null, mainTable: string = '', requiredFields: string[] = []): string[] {
 		let output: string[] = [];
 		if (options && options.fields) {
 			output = options.fields;
@@ -96,8 +130,17 @@ export default abstract class BaseModel<T> {
 			output = this.defaultFields;
 		}
 
+		if (!output.includes('*')) {
+			for (const f of requiredFields) {
+				if (!output.includes(f)) output.push(f);
+			}
+		}
+
 		if (mainTable) {
-			output = output.map(f => `${mainTable}.${f}`);
+			output = output.map(f => {
+				if (f.includes(`${mainTable}.`)) return f;
+				return `${mainTable}.${f}`;
+			});
 		}
 
 		return output;
@@ -115,8 +158,16 @@ export default abstract class BaseModel<T> {
 		return true;
 	}
 
+	protected uuidType(): UuidType {
+		return UuidType.NanoId;
+	}
+
 	protected autoTimestampEnabled(): boolean {
 		return true;
+	}
+
+	protected hasUpdatedTime(): boolean {
+		return this.autoTimestampEnabled();
 	}
 
 	protected get hasParentId(): boolean {
@@ -145,36 +196,38 @@ export default abstract class BaseModel<T> {
 	//
 	// The `name` argument is only for debugging, so that any stuck transaction
 	// can be more easily identified.
-	protected async withTransaction<T>(fn: Function, name: string = null): Promise<T> {
-		const debugTransaction = false;
+	protected async withTransaction<T>(fn: Function, name: string): Promise<T> {
+		const debugSteps = false;
+		const debugTimeout = true;
+		const timeoutMs = 10000;
 
-		const debugTimerId = debugTransaction ? setTimeout(() => {
-			console.info('Transaction did not complete:', name, txIndex);
-		}, 5000) : null;
+		let txIndex = 0;
 
-		const txIndex = await this.transactionHandler_.start();
+		const debugTimerId = debugTimeout ? setTimeout(() => {
+			logger.error(`Transaction #${txIndex} did not complete:`, name);
+			logger.error('Transaction stack:');
+			logger.error(this.transactionHandler_.stackInfo);
+		}, timeoutMs) : null;
 
-		if (debugTransaction) console.info('START', name, txIndex);
+		txIndex = await this.transactionHandler_.start(name);
+
+		if (debugSteps) console.info('START', name, txIndex);
 
 		let output: T = null;
 
 		try {
 			output = await fn();
 		} catch (error) {
+			if (debugSteps) console.info('ROLLBACK', name, txIndex);
+
 			await this.transactionHandler_.rollback(txIndex);
 
-			if (debugTransaction) {
-				console.info('ROLLBACK', name, txIndex);
-				clearTimeout(debugTimerId);
-			}
-
 			throw error;
+		} finally {
+			if (debugTimerId) clearTimeout(debugTimerId);
 		}
 
-		if (debugTransaction) {
-			console.info('COMMIT', name, txIndex);
-			clearTimeout(debugTimerId);
-		}
+		if (debugSteps) console.info('COMMIT', name, txIndex);
 
 		await this.transactionHandler_.commit(txIndex);
 		return output;
@@ -183,6 +236,35 @@ export default abstract class BaseModel<T> {
 	public async all(options: LoadOptions = {}): Promise<T[]> {
 		const rows: any[] = await this.db(this.tableName).select(this.selectFields(options));
 		return rows as T[];
+	}
+
+	public async allPaginated(pagination: Pagination, options: LoadOptions = {}): Promise<PaginatedResults<T>> {
+		pagination = {
+			...defaultPagination(),
+			...pagination,
+		};
+
+		const itemCount = await this.count();
+
+		const items = await this
+			.db(this.tableName)
+			.select(this.selectFields(options))
+			.orderBy(pagination.order[0].by, pagination.order[0].dir)
+			.offset((pagination.page - 1) * pagination.limit)
+			.limit(pagination.limit) as T[];
+
+		return {
+			items,
+			page_count: Math.ceil(itemCount / pagination.limit),
+			has_more: items.length >= pagination.limit,
+		};
+	}
+
+	public async count(): Promise<number> {
+		const r = await this
+			.db(this.tableName)
+			.count('*', { as: 'item_count' });
+		return r[0].item_count;
 	}
 
 	public fromApiInput(object: T): T {
@@ -224,13 +306,12 @@ export default abstract class BaseModel<T> {
 
 	public async save(object: T, options: SaveOptions = {}): Promise<T> {
 		if (!object) throw new Error('Object cannot be empty');
-
 		const toSave = Object.assign({}, object);
 
 		const isNew = await this.isNew(object, options);
 
 		if (this.hasUuid() && isNew && !(toSave as WithUuid).id) {
-			(toSave as WithUuid).id = uuidgen();
+			(toSave as WithUuid).id = this.uuidType() === UuidType.NanoId ? uuidgen() : dbuuid();
 		}
 
 		if (this.autoTimestampEnabled()) {
@@ -238,19 +319,19 @@ export default abstract class BaseModel<T> {
 			if (isNew) {
 				(toSave as WithDates).created_time = timestamp;
 			}
-			(toSave as WithDates).updated_time = timestamp;
+			if (this.hasUpdatedTime()) (toSave as WithDates).updated_time = timestamp;
 		}
 
 		if (options.skipValidation !== true) object = await this.validate(object, { isNew: isNew, rules: options.validationRules ? options.validationRules : {} });
 
 		await this.withTransaction(async () => {
 			if (isNew) {
-				await this.db(this.tableName).insert(toSave);
+				await this.db(this.tableName).insert(toSave).queryContext(options.queryContext || {});
 			} else {
 				const objectId: string = (toSave as WithUuid).id;
 				if (!objectId) throw new Error('Missing "id" property');
 				delete (toSave as WithUuid).id;
-				const updatedCount: number = await this.db(this.tableName).update(toSave).where({ id: objectId });
+				const updatedCount: number = await this.db(this.tableName).update(toSave).where({ id: objectId }).queryContext(options.queryContext || {});
 				(toSave as WithUuid).id = objectId;
 
 				// Sanity check:
@@ -263,19 +344,44 @@ export default abstract class BaseModel<T> {
 
 	public async loadByIds(ids: string[], options: LoadOptions = {}): Promise<T[]> {
 		if (!ids.length) return [];
+		ids = unique(ids);
 		return this.db(this.tableName).select(options.fields || this.defaultFields).whereIn('id', ids);
 	}
 
-	public async load(id: string, options: LoadOptions = {}): Promise<T> {
+	public async setSavePoint(): Promise<SavePoint> {
+		const name = `sp_${uuidgen()}`;
+		await this.db.raw(`SAVEPOINT ${name}`);
+		this.savePoints_.push(name);
+		return name;
+	}
+
+	public async rollbackSavePoint(savePoint: SavePoint) {
+		const last = this.savePoints_.pop();
+		if (last !== savePoint) throw new Error('Rollback save point does not match');
+		await this.db.raw(`ROLLBACK TO SAVEPOINT ${savePoint}`);
+	}
+
+	public async releaseSavePoint(savePoint: SavePoint) {
+		const last = this.savePoints_.pop();
+		if (last !== savePoint) throw new Error('Rollback save point does not match');
+		await this.db.raw(`RELEASE SAVEPOINT ${savePoint}`);
+	}
+
+	public async exists(id: string): Promise<boolean> {
+		const o = await this.load(id, { fields: ['id'] });
+		return !!o;
+	}
+
+	public async load(id: Uuid | number, options: LoadOptions = {}): Promise<T> {
 		if (!id) throw new Error('id cannot be empty');
 
 		return this.db(this.tableName).select(options.fields || this.defaultFields).where({ id: id }).first();
 	}
 
-	public async delete(id: string | string[], options: DeleteOptions = {}): Promise<void> {
+	public async delete(id: string | string[] | number | number[], options: DeleteOptions = {}): Promise<void> {
 		if (!id) throw new Error('id cannot be empty');
 
-		const ids = typeof id === 'string' ? [id] : id;
+		const ids = (typeof id === 'string' || typeof id === 'number') ? [id] : id;
 
 		if (!ids.length) throw new Error('no id provided');
 
@@ -286,7 +392,7 @@ export default abstract class BaseModel<T> {
 			}
 
 			const deletedCount = await query.del();
-			if (!options.allowNoOp && deletedCount !== ids.length) throw new Error(`${ids.length} row(s) should have been deleted but ${deletedCount} row(s) were deleted`);
+			if (!options.allowNoOp && deletedCount !== ids.length) throw new Error(`${ids.length} row(s) should have been deleted but ${deletedCount} row(s) were deleted. ID: ${id}`);
 		}, 'BaseModel::delete');
 	}
 

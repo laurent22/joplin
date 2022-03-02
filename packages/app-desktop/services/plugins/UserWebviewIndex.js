@@ -1,5 +1,6 @@
 // This is the API that JS files loaded from the webview can see
 const webviewApiPromises_ = {};
+let viewMessageHandler_ = () => {};
 
 // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
 const webviewApi = {
@@ -21,6 +22,13 @@ const webviewApi = {
 		});
 
 		return promise;
+	},
+
+	onMessage: function(viewMessageHandler) {
+		viewMessageHandler_ = viewMessageHandler;
+		window.postMessage({
+			target: 'postMessageService.registerViewMessageHandler',
+		});
 	},
 };
 
@@ -117,7 +125,7 @@ const webviewApi = {
 				const message = event.message;
 				const promise = webviewApiPromises_[message.responseId];
 				if (!promise) {
-					console.warn('postMessageService.response: could not find callback for message', message);
+					console.warn('postMessageService.response: Could not find recorded promise to process message response', message);
 					return;
 				}
 
@@ -127,8 +135,17 @@ const webviewApi = {
 					promise.resolve(message.response);
 				}
 			},
+
+			'postMessageService.plugin_message': (message) => {
+				if (!viewMessageHandler_) {
+					console.warn('postMessageService.plugin_message: Could not process message because no onMessage handler was defined', message);
+					return;
+				}
+				viewMessageHandler_(message);
+			},
 		};
 
+		// respond to window.postMessage({})
 		window.addEventListener('message', ((event) => {
 			if (!event.data || event.data.target !== 'webview') return;
 

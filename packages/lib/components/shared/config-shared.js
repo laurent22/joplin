@@ -1,5 +1,5 @@
 const Setting = require('../../models/Setting').default;
-const SyncTargetRegistry = require('../../SyncTargetRegistry');
+const SyncTargetRegistry = require('../../SyncTargetRegistry').default;
 const ObjectUtils = require('../../ObjectUtils');
 const { _ } = require('../../locale');
 const { createSelector } = require('reselect');
@@ -9,10 +9,8 @@ const shared = {};
 shared.init = function(comp) {
 	if (!comp.state) comp.state = {};
 	comp.state.checkSyncConfigResult = null;
-	comp.state.checkNextcloudAppResult = null;
 	comp.state.settings = {};
 	comp.state.changedSettingKeys = [];
-	comp.state.showNextcloudAppLog = false;
 	comp.state.showAdvancedSettings = false;
 };
 
@@ -35,7 +33,6 @@ shared.checkSyncConfig = async function(comp, settings) {
 	comp.setState({ checkSyncConfigResult: result });
 
 	if (result.ok) {
-		// await shared.checkNextcloudApp(comp, settings);
 		// Users often expect config to be auto-saved at this point, if the config check was successful
 		shared.saveSettings(comp);
 	}
@@ -85,7 +82,6 @@ shared.saveSettings = function(comp) {
 	for (const key in comp.state.settings) {
 		if (!comp.state.settings.hasOwnProperty(key)) continue;
 		if (comp.state.changedSettingKeys.indexOf(key) < 0) continue;
-		console.info('Saving', key, comp.state.settings[key]);
 		Setting.setValue(key, comp.state.settings[key]);
 	}
 

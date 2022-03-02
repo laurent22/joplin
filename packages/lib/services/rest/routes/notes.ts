@@ -23,9 +23,9 @@ const md5 = require('md5');
 import HtmlToMd from '../../../HtmlToMd';
 const urlUtils = require('../../../urlUtils.js');
 const ArrayUtils = require('../../../ArrayUtils.js');
-const { netUtils } = require('../../../net-utils');
+const { mimeTypeFromHeaders } = require('../../../net-utils');
 const { fileExtension, safeFileExtension, safeFilename, filename } = require('../../../path-utils');
-const uri2path = require('file-uri-to-path');
+const { fileUriToPath } = require('../../../urlUtils');
 const { MarkupToHtml } = require('@joplin/renderer');
 const { ErrorNotFound } = require('../utils/errors');
 
@@ -144,7 +144,7 @@ async function buildNoteStyleSheet(stylesheets: any[]) {
 }
 
 async function tryToGuessImageExtFromMimeType(response: any, imagePath: string) {
-	const mimeType = netUtils.mimeTypeFromHeaders(response.headers);
+	const mimeType = mimeTypeFromHeaders(response.headers);
 	if (!mimeType) return imagePath;
 
 	const newExt = mimeUtils.toFileExtension(mimeType);
@@ -178,7 +178,7 @@ async function downloadImage(url: string /* , allowFileProtocolImages */) {
 		} else if (urlUtils.urlProtocol(url).toLowerCase() === 'file:') {
 			// Can't think of any reason to disallow this at this point
 			// if (!allowFileProtocolImages) throw new Error('For security reasons, this URL with file:// protocol cannot be downloaded');
-			const localPath = uri2path(url);
+			const localPath = fileUriToPath(url);
 			await shim.fsDriver().copy(localPath, imagePath);
 		} else {
 			const response = await shim.fetchBlob(url, { path: imagePath, maxRetry: 1 });

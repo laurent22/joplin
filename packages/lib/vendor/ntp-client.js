@@ -44,8 +44,8 @@ const Buffer = require('buffer').Buffer;
 
         if (!exports.dgram) throw new Error('dgram package has not been set!!');
 
-        var client = exports.dgram.createSocket("udp4"),
-            ntpData = new Buffer(48);
+        var client = exports.dgram.createSocket("udp4");
+        var ntpData = Buffer.alloc(48); // new Buffer(48);
 
         // RFC 2030 -> LI = 0 (no warning, 2 bits), VN = 3 (IPv4 only, 3 bits), Mode = 3 (Client Mode, 3 bits) -> 1 byte
         // -> rtol(LI, 6) ^ rotl(VN, 3) ^ rotl(Mode, 0)

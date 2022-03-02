@@ -1,0 +1,8 @@
+<td class="{{#classNames}}{{.}} {{/classNames}}">
+	{{#checkbox}}
+		<input type="checkbox" name="{{value}}"/>
+	{{/checkbox}}
+	{{^checkbox}}
+		{{#url}}<a href="{{.}}"></span>{{/url}}{{#hint}}<abbr title="{{.}}">{{/hint}}{{#valueHtml}}{{{valueHtml}}}{{/valueHtml}}{{^valueHtml}}{{value}}{{/valueHtml}}</a>{{#hint}}</abbr>{{/hint}}
+	{{/checkbox}}
+</td>

@@ -29,6 +29,14 @@ export default class SyncTargetOneDrive extends BaseSyncTarget {
 		return _('OneDrive');
 	}
 
+	public static description() {
+		return 'A file hosting service operated by Microsoft as part of its web version of Office.';
+	}
+
+	public static supportsSelfHosted(): boolean {
+		return false;
+	}
+
 	async isAuthenticated() {
 		return !!this.api().auth();
 	}

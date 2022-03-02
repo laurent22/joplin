@@ -1,3 +1,4 @@
+import { cookieGet } from './cookies';
 import { ErrorForbidden } from './errors';
 import { AppContext } from './types';
 
@@ -22,6 +23,10 @@ export async function formParse(req: any): Promise<FormParseResult> {
 		return output;
 	}
 
+	if (req.__parsed) return req.__parsed;
+
+	// Note that for Formidable to work, the content-type must be set in the
+	// headers
 	return new Promise((resolve: Function, reject: Function) => {
 		const form = formidable({ multiples: true });
 		form.parse(req, (error: any, fields: any, files: any) => {
@@ -30,39 +35,24 @@ export async function formParse(req: any): Promise<FormParseResult> {
 				return;
 			}
 
-			resolve({ fields, files });
+			// Formidable seems to be doing some black magic and once a request
+			// has been parsed it cannot be parsed again. Doing so will do
+			// nothing, the code will just end there, or maybe wait
+			// indefinitely. So we cache the result on success and return it if
+			// some code somewhere tries again to parse the form.
+			req.__parsed = { fields, files };
+			resolve(req.__parsed);
 		});
 	});
 }
 
 export async function bodyFields<T>(req: any/* , filter:string[] = null*/): Promise<T> {
-	// Formidable needs the content-type to be 'application/json' so on our side
-	// we explicitely set it to that. However save the previous value so that it
-	// can be restored.
-	let previousContentType = null;
-	if (req.headers['content-type'] !== 'application/json') {
-		previousContentType = req.headers['content-type'];
-		req.headers['content-type'] = 'application/json';
-	}
-
 	const form = await formParse(req);
-	if (previousContentType) req.headers['content-type'] = previousContentType;
-
 	return form.fields as T;
-
-	// if (filter) {
-	// 	const output:BodyFields = {};
-	// 	Object.keys(form.fields).forEach(f => {
-	// 		if (filter.includes(f)) output[f] = form.fields[f];
-	// 	});
-	// 	return output;
-	// } else {
-	// 	return form.fields;
-	// }
 }
 
 export function ownerRequired(ctx: AppContext) {
-	if (!ctx.owner) throw new ErrorForbidden();
+	if (!ctx.joplin.owner) throw new ErrorForbidden();
 }
 
 export function headerSessionId(headers: any): string {
@@ -72,11 +62,20 @@ export function headerSessionId(headers: any): string {
 export function contextSessionId(ctx: AppContext, throwIfNotFound = true): string {
 	if (ctx.headers['x-api-auth']) return ctx.headers['x-api-auth'];
 
-	const id = ctx.cookies.get('sessionId');
+	const id = cookieGet(ctx, 'sessionId');
 	if (!id && throwIfNotFound) throw new ErrorForbidden('Invalid or missing session');
 	return id;
 }
 
 export function isApiRequest(ctx: AppContext): boolean {
 	return ctx.path.indexOf('/api/') === 0;
+}
+
+export function isAdminRequest(ctx: AppContext): boolean {
+	return ctx.path.indexOf('/admin/') === 0;
+}
+
+export function userIp(ctx: AppContext): string {
+	if (ctx.headers['x-real-ip']) return ctx.headers['x-real-ip'];
+	return ctx.ip;
 }

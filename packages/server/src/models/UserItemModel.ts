@@ -1,7 +1,8 @@
-import { ChangeType, ItemType, UserItem, Uuid } from '../db';
+import { ChangeType, Item, ItemType, UserItem, Uuid } from '../services/database/types';
 import BaseModel, { DeleteOptions, LoadOptions, SaveOptions } from './BaseModel';
 import { unique } from '../utils/array';
 import { ErrorNotFound } from '../utils/errors';
+import { Knex } from 'knex';
 
 interface DeleteByShare {
 	id: Uuid;
@@ -15,6 +16,7 @@ export interface UserItemDeleteOptions extends DeleteOptions {
 	byUserItem?: UserItem;
 	byUserItemIds?: number[];
 	byShare?: DeleteByShare;
+	recordChanges?: boolean;
 }
 
 export default class UserItemModel extends BaseModel<UserItem> {
@@ -25,13 +27,6 @@ export default class UserItemModel extends BaseModel<UserItem> {
 
 	protected hasUuid(): boolean {
 		return false;
-	}
-
-	public async add(userId: Uuid, itemId: Uuid): Promise<UserItem> {
-		return this.save({
-			user_id: userId,
-			item_id: itemId,
-		});
 	}
 
 	public async remove(userId: Uuid, itemId: Uuid): Promise<void> {
@@ -58,7 +53,6 @@ export default class UserItemModel extends BaseModel<UserItem> {
 			.leftJoin('items', 'user_items.item_id', 'items.id')
 			.select(this.selectFields(options, this.defaultFields, 'user_items'))
 			.where('items.jop_share_id', '=', shareId);
-		// return this.db(this.tableName).select(this.defaultFields).where('share_id', '=', shareId);
 	}
 
 	public async byShareAndUserId(shareId: Uuid, userId: Uuid, options: LoadOptions = {}): Promise<UserItem[]> {
@@ -68,10 +62,6 @@ export default class UserItemModel extends BaseModel<UserItem> {
 			.select(this.selectFields(options, this.defaultFields, 'user_items'))
 			.where('items.jop_share_id', '=', shareId)
 			.where('user_items.user_id', '=', userId);
-
-		// return this.db(this.tableName).select(this.defaultFields)
-		// 	.where('share_id', '=', shareId)
-		// 	.where('user_id', '=', userId);
 	}
 
 	public async byUserId(userId: Uuid): Promise<UserItem[]> {
@@ -90,7 +80,6 @@ export default class UserItemModel extends BaseModel<UserItem> {
 			.select(this.selectFields(options, this.defaultFields, 'user_items'))
 			.where('items.jop_share_id', '!=', '')
 			.where('user_items.user_id', '=', userId);
-		// return this.db(this.tableName).select(this.defaultFields).where('share_id', '!=', '').where('user_id', '=', userId);
 	}
 
 	public async deleteByUserItem(userId: Uuid, itemId: Uuid): Promise<void> {
@@ -99,8 +88,8 @@ export default class UserItemModel extends BaseModel<UserItem> {
 		await this.deleteBy({ byUserItem: userItem });
 	}
 
-	public async deleteByItemIds(itemIds: Uuid[]): Promise<void> {
-		await this.deleteBy({ byItemIds: itemIds });
+	public async deleteByItemIds(itemIds: Uuid[], options: UserItemDeleteOptions = null): Promise<void> {
+		await this.deleteBy({ ...options, byItemIds: itemIds });
 	}
 
 	public async deleteByShareId(shareId: Uuid): Promise<void> {
@@ -123,25 +112,40 @@ export default class UserItemModel extends BaseModel<UserItem> {
 		await this.deleteBy({ byShareId: shareId, byUserId: userId });
 	}
 
-	public async save(userItem: UserItem, options: SaveOptions = {}): Promise<UserItem> {
-		if (userItem.id) throw new Error('User items cannot be modified (only created or deleted)'); // Sanity check - shouldn't happen
+	public async add(userId: Uuid, itemId: Uuid, options: SaveOptions = {}): Promise<void> {
+		const item = await this.models().item().load(itemId, { fields: ['id', 'name'] });
+		await this.addMulti(userId, [item], options);
+	}
 
-		const item = await this.models().item().load(userItem.item_id, { fields: ['id', 'name'] });
+	public async addMulti(userId: Uuid, itemsQuery: Knex.QueryBuilder | Item[], options: SaveOptions = {}): Promise<void> {
+		const items: Item[] = Array.isArray(itemsQuery) ? itemsQuery : await itemsQuery.whereNotIn('id', this.db('user_items').select('item_id').where('user_id', '=', userId));
+		if (!items.length) return;
 
-		return this.withTransaction(async () => {
-			if (this.models().item().shouldRecordChange(item.name)) {
-				await this.models().change().save({
-					item_type: ItemType.UserItem,
-					item_id: userItem.item_id,
-					item_name: item.name,
-					type: ChangeType.Create,
-					previous_item: '',
-					user_id: userItem.user_id,
-				});
+		await this.withTransaction(async () => {
+			for (const item of items) {
+				if (!('name' in item) || !('id' in item)) throw new Error('item.id and item.name must be set');
+
+				await super.save({
+					user_id: userId,
+					item_id: item.id,
+				}, options);
+
+				if (this.models().item().shouldRecordChange(item.name)) {
+					await this.models().change().save({
+						item_type: ItemType.UserItem,
+						item_id: item.id,
+						item_name: item.name,
+						type: ChangeType.Create,
+						previous_item: '',
+						user_id: userId,
+					});
+				}
 			}
+		}, 'UserItemModel::addMulti');
+	}
 
-			return super.save(userItem, options);
-		});
+	public async save(_userItem: UserItem, _options: SaveOptions = {}): Promise<UserItem> {
+		throw new Error('Call add() or addMulti()');
 	}
 
 	public async delete(_id: string | string[], _options: DeleteOptions = {}): Promise<void> {
@@ -149,6 +153,11 @@ export default class UserItemModel extends BaseModel<UserItem> {
 	}
 
 	private async deleteBy(options: UserItemDeleteOptions = {}): Promise<void> {
+		options = {
+			recordChanges: true,
+			...options,
+		};
+
 		let userItems: UserItem[] = [];
 
 		if (options.byShareId && options.byUserId) {
@@ -177,7 +186,7 @@ export default class UserItemModel extends BaseModel<UserItem> {
 			for (const userItem of userItems) {
 				const item = items.find(i => i.id === userItem.item_id);
 
-				if (this.models().item().shouldRecordChange(item.name)) {
+				if (options.recordChanges && this.models().item().shouldRecordChange(item.name)) {
 					await this.models().change().save({
 						item_type: ItemType.UserItem,
 						item_id: userItem.item_id,

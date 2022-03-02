@@ -1,29 +1,42 @@
-import { ModelType } from '../BaseModel';
-import { NoteEntity } from '../services/database/types';
+import { ModelType, DeleteOptions } from '../BaseModel';
+import { BaseItemEntity, NoteEntity } from '../services/database/types';
 import Setting from './Setting';
 import BaseModel from '../BaseModel';
 import time from '../time';
 import markdownUtils from '../markdownUtils';
 import { _ } from '../locale';
-
 import Database from '../database';
 import ItemChange from './ItemChange';
 import ShareService from '../services/share/ShareService';
-const JoplinError = require('../JoplinError.js');
+import itemCanBeEncrypted from './utils/itemCanBeEncrypted';
+import { getEncryptionEnabled } from '../services/synchronizer/syncInfoUtils';
+import JoplinError from '../JoplinError';
 const { sprintf } = require('sprintf-js');
 const moment = require('moment');
-
-export interface BaseItemEntity {
-	id?: string;
-	encryption_applied?: boolean;
-	is_shared?: number;
-	share_id?: string;
-	type_?: ModelType;
-}
 
 export interface ItemsThatNeedDecryptionResult {
 	hasMore: boolean;
 	items: any[];
+}
+
+export interface ItemThatNeedSync {
+	id: string;
+	sync_time: number;
+	type_: ModelType;
+	updated_time: number;
+	encryption_applied: number;
+	share_id: string;
+}
+
+export interface ItemsThatNeedSyncResult {
+	hasMore: boolean;
+	items: ItemThatNeedSync[];
+	neverSyncedItemIds: string[];
+}
+
+export interface EncryptedItemsStats {
+	encrypted: number;
+	total: number;
 }
 
 export default class BaseItem extends BaseModel {
@@ -224,11 +237,11 @@ export default class BaseItem extends BaseModel {
 		return ItemClass.delete(id);
 	}
 
-	static async delete(id: string, options: any = null) {
+	static async delete(id: string, options: DeleteOptions = null) {
 		return this.batchDelete([id], options);
 	}
 
-	static async batchDelete(ids: string[], options: any = null) {
+	static async batchDelete(ids: string[], options: DeleteOptions = null) {
 		if (!options) options = {};
 		let trackDeleted = true;
 		if (options && options.trackDeleted !== null && options.trackDeleted !== undefined) trackDeleted = options.trackDeleted;
@@ -397,14 +410,15 @@ export default class BaseItem extends BaseModel {
 		return this.shareService_;
 	}
 
-	public static async serializeForSync(item: BaseItemEntity) {
+	public static async serializeForSync(item: BaseItemEntity): Promise<string> {
 		const ItemClass = this.itemClass(item);
 		const shownKeys = ItemClass.fieldNames();
 		shownKeys.push('type_');
 
+		const share = item.share_id ? await this.shareService().shareById(item.share_id) : null;
 		const serialized = await ItemClass.serialize(item, shownKeys);
 
-		if (!Setting.value('encryption.enabled') || !ItemClass.encryptionSupported() || item.is_shared || item.share_id) {
+		if (!getEncryptionEnabled() || !ItemClass.encryptionSupported() || !itemCanBeEncrypted(item)) {
 			// Normally not possible since itemsThatNeedSync should only return decrypted items
 			if (item.encryption_applied) throw new JoplinError('Item is encrypted but encryption is currently disabled', 'cannotSyncEncrypted');
 			return serialized;
@@ -419,7 +433,9 @@ export default class BaseItem extends BaseModel {
 		let cipherText = null;
 
 		try {
-			cipherText = await this.encryptionService().encryptString(serialized);
+			cipherText = await this.encryptionService().encryptString(serialized, {
+				masterKeyId: share && share.master_key_id ? share.master_key_id : '',
+			});
 		} catch (error) {
 			const msg = [`Could not encrypt item ${item.id}`];
 			if (error && error.message) msg.push(error.message);
@@ -506,7 +522,7 @@ export default class BaseItem extends BaseModel {
 		return output;
 	}
 
-	static async encryptedItemsStats() {
+	public static async encryptedItemsStats(): Promise<EncryptedItemsStats> {
 		const classNames = this.encryptableItemClassNames();
 		let encryptedCount = 0;
 		let totalCount = 0;
@@ -591,8 +607,14 @@ export default class BaseItem extends BaseModel {
 		throw new Error('Unreachable');
 	}
 
-	static async itemsThatNeedSync(syncTarget: number, limit = 100) {
-		const classNames = this.syncItemClassNames();
+	public static async itemHasBeenSynced(itemId: string): Promise<boolean> {
+		const r = await this.db().selectOne('SELECT item_id FROM sync_items WHERE item_id = ?', [itemId]);
+		return !!r;
+	}
+
+	public static async itemsThatNeedSync(syncTarget: number, limit = 100): Promise<ItemsThatNeedSyncResult> {
+		// Although we keep the master keys in the database, we no longer sync them
+		const classNames = this.syncItemClassNames().filter(n => n !== 'MasterKey');
 
 		for (let i = 0; i < classNames.length; i++) {
 			const className = classNames[i];
@@ -668,19 +690,20 @@ export default class BaseItem extends BaseModel {
 				changedItems = await ItemClass.modelSelectAll(sql);
 			}
 
+			const neverSyncedItemIds = neverSyncedItem.map((it: any) => it.id);
 			const items = neverSyncedItem.concat(changedItems);
 
 			if (i >= classNames.length - 1) {
-				return { hasMore: items.length >= limit, items: items };
+				return { hasMore: items.length >= limit, items: items, neverSyncedItemIds };
 			} else {
-				if (items.length) return { hasMore: true, items: items };
+				if (items.length) return { hasMore: true, items: items, neverSyncedItemIds };
 			}
 		}
 
 		throw new Error('Unreachable');
 	}
 
-	static syncItemClassNames() {
+	static syncItemClassNames(): string[] {
 		return BaseItem.syncItemDefinitions_.map((def: any) => {
 			return def.className;
 		});
@@ -754,6 +777,10 @@ export default class BaseItem extends BaseModel {
 		const syncTime = 'sync_time' in item ? item.sync_time : 0;
 		const queries = this.updateSyncTimeQueries(syncTargetId, item, syncTime, true, syncDisabledReason, itemLocation);
 		return this.db().transactionExecBatch(queries);
+	}
+
+	public static async saveSyncEnabled(itemType: ModelType, itemId: string) {
+		await this.db().exec('DELETE FROM sync_items WHERE item_type = ? AND item_id = ?', [itemType, itemId]);
 	}
 
 	// When an item is deleted, its associated sync_items data is not immediately deleted for

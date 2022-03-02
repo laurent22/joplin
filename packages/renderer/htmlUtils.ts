@@ -97,8 +97,7 @@ class HtmlUtils {
 		return selfClosingElements.includes(tagName.toLowerCase());
 	}
 
-	// TODO: copied from @joplin/lib
-	stripHtml(html: string) {
+	public stripHtml(html: string) {
 		const output: string[] = [];
 
 		const tagStack: string[] = [];
@@ -130,7 +129,14 @@ class HtmlUtils {
 		parser.write(html);
 		parser.end();
 
-		return output.join('').replace(/\s+/g, ' ');
+		// In general, we want to get back plain text from this function, so all
+		// HTML entities are decoded. Howver, to prevent XSS attacks, we
+		// re-encode all the "<" characters, which should break any attempt to
+		// inject HTML tags.
+
+		return output.join('')
+			.replace(/\s+/g, ' ')
+			.replace(/</g, '&lt;');
 	}
 
 	public sanitizeHtml(html: string, options: any = null) {
@@ -158,7 +164,7 @@ class HtmlUtils {
 		// "link" can be used to escape the parser and inject JavaScript.
 		// Adding "meta" too for the same reason as it shouldn't be used in
 		// notes anyway.
-		const disallowedTags = ['script', 'iframe', 'frameset', 'frame', 'object', 'base', 'embed', 'link', 'meta', 'noscript'];
+		const disallowedTags = ['script', 'iframe', 'frameset', 'frame', 'object', 'base', 'embed', 'link', 'meta', 'noscript', 'button', 'form', 'input', 'select', 'textarea', 'option', 'optgroup'];
 
 		const parser = new htmlparser2.Parser({
 
@@ -190,6 +196,15 @@ class HtmlUtils {
 						classAttr += ' jop-noMdConv';
 						attrs['class'] = classAttr.trim();
 					}
+				}
+
+				// For some reason, entire parts of HTML notes don't show up in
+				// the viewer when there's an anchor tag without an "href"
+				// attribute. It doesn't always happen and it seems to depend on
+				// what else is in the note but in any case adding the "href"
+				// fixes it. https://github.com/laurent22/joplin/issues/5687
+				if (name.toLowerCase() === 'a' && !attrs['href']) {
+					attrs['href'] = '#';
 				}
 
 				let attrHtml = this.attributesHtml(attrs);

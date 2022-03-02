@@ -13,9 +13,13 @@ interface HookDependencies {
 	plugins: PluginStates;
 }
 
-interface MarkupToHtmlOptions {
+export interface MarkupToHtmlOptions {
 	replaceResourceInternalToExternalLinks?: boolean;
 	resourceInfos?: ResourceInfos;
+	contentMaxWidth?: number;
+	plugins?: Record<string, any>;
+	bodyOnly?: boolean;
+	mapsToLine?: boolean;
 }
 
 export default function useMarkupToHtml(deps: HookDependencies) {
@@ -24,8 +28,9 @@ export default function useMarkupToHtml(deps: HookDependencies) {
 	const markupToHtml = useMemo(() => {
 		return markupLanguageUtils.newMarkupToHtml(deps.plugins, {
 			resourceBaseUrl: `file://${Setting.value('resourceDir')}/`,
+			customCss: customCss || '',
 		});
-	}, [plugins]);
+	}, [plugins, customCss]);
 
 	return useCallback(async (markupLanguage: number, md: string, options: MarkupToHtmlOptions = null): Promise<any> => {
 		options = {
@@ -49,7 +54,6 @@ export default function useMarkupToHtml(deps: HookDependencies) {
 
 		const result = await markupToHtml.render(markupLanguage, md, theme, Object.assign({}, {
 			codeTheme: theme.codeThemeCss,
-			userCss: customCss || '',
 			resources: resources,
 			postMessageSyntax: 'ipcProxySendToHost',
 			splitted: true,

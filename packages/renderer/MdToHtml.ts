@@ -5,9 +5,29 @@ import setupLinkify from './MdToHtml/setupLinkify';
 import validateLinks from './MdToHtml/validateLinks';
 import { ItemIdToUrlHandler } from './utils';
 import { RenderResult, RenderResultPluginAsset } from './MarkupToHtml';
+import { Options as NoteStyleOptions } from './noteStyle';
+const hljs = require('highlight.js');
 
 const MarkdownIt = require('markdown-it');
 const md5 = require('md5');
+
+export interface RenderOptions {
+	contentMaxWidth?: number;
+	bodyOnly?: boolean;
+	splitted?: boolean;
+	externalAssetsOnly?: boolean;
+	postMessageSyntax?: string;
+	highlightedKeywords?: string[];
+	codeTheme?: string;
+	theme?: any;
+	plugins?: Record<string, any>;
+	audioPlayerEnabled?: boolean;
+	videoPlayerEnabled?: boolean;
+	pdfViewerEnabled?: boolean;
+	codeHighlightCacheKey?: string;
+	plainResourceRendering?: boolean;
+	mapsToLine?: boolean;
+}
 
 interface RendererRule {
 	install(context: any, ruleOptions: any): any;
@@ -44,10 +64,10 @@ const rules: RendererRules = {
 	code_inline: require('./MdToHtml/rules/code_inline').default,
 	fountain: require('./MdToHtml/rules/fountain').default,
 	mermaid: require('./MdToHtml/rules/mermaid').default,
+	source_map: require('./MdToHtml/rules/source_map').default,
 };
 
-const hljs = require('highlight.js');
-const uslug = require('uslug');
+const uslug = require('@joplin/fork-uslug');
 const markdownItAnchor = require('markdown-it-anchor');
 
 // The keys must match the corresponding entry in Setting.js
@@ -86,6 +106,7 @@ export interface Options {
 	tempDir?: string;
 	fsDriver?: any;
 	extraRendererRules?: ExtraRendererRule[];
+	customCss?: string;
 }
 
 interface PluginAsset {
@@ -167,6 +188,7 @@ export default class MdToHtml {
 	private pluginOptions_: any = {};
 	private extraRendererRules_: RendererRules = {};
 	private allProcessedAssets_: any = {};
+	private customCss_: string = '';
 
 	public constructor(options: Options = null) {
 		if (!options) options = {};
@@ -195,6 +217,8 @@ export default class MdToHtml {
 				this.loadExtraRendererRule(rule.id, rule.assetPath, rule.module);
 			}
 		}
+
+		this.customCss_ = options.customCss || '';
 	}
 
 	private fsDriver() {
@@ -327,7 +351,7 @@ export default class MdToHtml {
 	}
 
 	// This is similar to allProcessedAssets() but used only by the Rich Text editor
-	public async allAssets(theme: any) {
+	public async allAssets(theme: any, noteStyleOptions: NoteStyleOptions = null) {
 		const assets: any = {};
 		for (const key in rules) {
 			if (!this.pluginEnabled(key)) continue;
@@ -339,14 +363,16 @@ export default class MdToHtml {
 		}
 
 		const processedAssets = this.processPluginAssets(assets);
-		processedAssets.cssStrings.splice(0, 0, noteStyle(theme).join('\n'));
+		processedAssets.cssStrings.splice(0, 0, noteStyle(theme, noteStyleOptions).join('\n'));
+		if (this.customCss_) processedAssets.cssStrings.push(this.customCss_);
 		const output = await this.outputAssetsToExternalAssets_(processedAssets);
 		return output.pluginAssets;
 	}
 
 	private async outputAssetsToExternalAssets_(output: any) {
 		for (const cssString of output.cssStrings) {
-			output.pluginAssets.push(await this.fsDriver().cacheCssToFile(cssString));
+			const filePath = await this.fsDriver().cacheCssToFile(cssString);
+			output.pluginAssets.push(filePath);
 		}
 		delete output.cssStrings;
 		return output;
@@ -369,9 +395,28 @@ export default class MdToHtml {
 		this.cachedOutputs_ = {};
 	}
 
+	private removeLastNewLine(s: string): string {
+		if (s[s.length - 1] === '\n') {
+			return s.substr(0, s.length - 1);
+		} else {
+			return s;
+		}
+	}
+
+	// Rendering large code blocks can freeze the app so we disable it in
+	// certain cases:
+	// https://github.com/laurent22/joplin/issues/5593#issuecomment-947374218
+	private shouldSkipHighlighting(str: string, lang: string): boolean {
+		if (lang && !hljs.getLanguage(lang)) lang = '';
+		if (str.length >= 1000 && !lang) return true;
+		if (str.length >= 512000 && lang) return true;
+		return false;
+	}
+
 	// "theme" is the theme as returned by themeStyle()
-	public async render(body: string, theme: any = null, options: any = null): Promise<RenderResult> {
-		options = Object.assign({}, {
+	public async render(body: string, theme: any = null, options: RenderOptions = null): Promise<RenderResult> {
+
+		options = {
 			// In bodyOnly mode, the rendered Markdown is returned without the wrapper DIV
 			bodyOnly: false,
 			// In splitted mode, the CSS and HTML will be returned in separate properties.
@@ -389,7 +434,10 @@ export default class MdToHtml {
 			audioPlayerEnabled: this.pluginEnabled('audioPlayer'),
 			videoPlayerEnabled: this.pluginEnabled('videoPlayer'),
 			pdfViewerEnabled: this.pluginEnabled('pdfViewer'),
-		}, options);
+
+			contentMaxWidth: 0,
+			...options,
+		};
 
 		// The "codeHighlightCacheKey" option indicates what set of cached object should be
 		// associated with this particular Markdown body. It is only used to allow us to
@@ -400,7 +448,7 @@ export default class MdToHtml {
 			this.lastCodeHighlightCacheKey_ = options.codeHighlightCacheKey;
 		}
 
-		const cacheKey = md5(escape(body + JSON.stringify(options) + JSON.stringify(options.theme)));
+		const cacheKey = md5(escape(body + this.customCss_ + JSON.stringify(options) + JSON.stringify(options.theme)));
 		const cachedOutput = this.cachedOutputs_[cacheKey];
 		if (cachedOutput) return cachedOutput;
 
@@ -427,28 +475,32 @@ export default class MdToHtml {
 
 				// The strings includes the last \n that is part of the fence,
 				// so we remove it because we need the exact code in the source block
-				const trimmedStr = str.replace(/(.*)\n$/, '$1');
+				const trimmedStr = this.removeLastNewLine(str);
 				const sourceBlockHtml = `<pre class="joplin-source" data-joplin-language="${lang}" data-joplin-source-open="\`\`\`${lang}&#10;" data-joplin-source-close="&#10;\`\`\`">${markdownIt.utils.escapeHtml(trimmedStr)}</pre>`;
 
-				try {
-					let hlCode = '';
-
-					const cacheKey = md5(`${str}_${lang}`);
-
-					if (options.codeHighlightCacheKey && this.cachedHighlightedCode_[cacheKey]) {
-						hlCode = this.cachedHighlightedCode_[cacheKey];
-					} else {
-						if (lang && hljs.getLanguage(lang)) {
-							hlCode = hljs.highlight(lang, trimmedStr, true).value;
-						} else {
-							hlCode = hljs.highlightAuto(trimmedStr).value;
-						}
-						this.cachedHighlightedCode_[cacheKey] = hlCode;
-					}
-
-					outputCodeHtml = hlCode;
-				} catch (error) {
+				if (this.shouldSkipHighlighting(trimmedStr, lang)) {
 					outputCodeHtml = markdownIt.utils.escapeHtml(trimmedStr);
+				} else {
+					try {
+						let hlCode = '';
+
+						const cacheKey = md5(`${str}_${lang}`);
+
+						if (options.codeHighlightCacheKey && this.cachedHighlightedCode_[cacheKey]) {
+							hlCode = this.cachedHighlightedCode_[cacheKey];
+						} else {
+							if (lang && hljs.getLanguage(lang)) {
+								hlCode = hljs.highlight(trimmedStr, { language: lang, ignoreIllegals: true }).value;
+							} else {
+								hlCode = hljs.highlightAuto(trimmedStr).value;
+							}
+							this.cachedHighlightedCode_[cacheKey] = hlCode;
+						}
+
+						outputCodeHtml = hlCode;
+					} catch (error) {
+						outputCodeHtml = markdownIt.utils.escapeHtml(trimmedStr);
+					}
 				}
 
 				const html = `<div class="joplin-editable">${sourceBlockHtml}<pre class="hljs"><code>${outputCodeHtml}</code></pre></div>`;
@@ -519,12 +571,14 @@ export default class MdToHtml {
 
 		const renderedBody = markdownIt.render(body, context);
 
-		let cssStrings = noteStyle(options.theme);
+		let cssStrings = noteStyle(options.theme, {
+			contentMaxWidth: options.contentMaxWidth,
+		});
 
 		let output = { ...this.allProcessedAssets(allRules, options.theme, options.codeTheme) };
 		cssStrings = cssStrings.concat(output.cssStrings);
 
-		if (options.userCss) cssStrings.push(options.userCss);
+		if (this.customCss_) cssStrings.push(this.customCss_);
 
 		if (options.bodyOnly) {
 			// Markdown-it wraps any content in <p></p> by default. There's a function to parse without

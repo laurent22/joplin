@@ -3,6 +3,9 @@ const { basename } = require('./path-utils');
 const shim = require('./shim').default;
 const JoplinError = require('./JoplinError').default;
 const { Buffer } = require('buffer');
+const { GetObjectCommand, ListObjectsV2Command, HeadObjectCommand, PutObjectCommand, DeleteObjectCommand, DeleteObjectsCommand, CopyObjectCommand } = require('@aws-sdk/client-s3');
+const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
+const parser = require('fast-xml-parser');
 
 const S3_MAX_DELETES = 1000;
 
@@ -26,43 +29,56 @@ class FileApiDriverAmazonS3 {
 	}
 
 	hasErrorCode_(error, errorCode) {
-		if (!error || typeof error.code !== 'string') return false;
-		return error.code.indexOf(errorCode) >= 0;
+		if (!error) return false;
+
+		if (error.name) {
+			return error.name.indexOf(errorCode) >= 0;
+		} else if (error.code) {
+			return error.code.indexOf(errorCode) >= 0;
+		} else if (error.Code) {
+			return error.Code.indexOf(errorCode) >= 0;
+		} else {
+			return false;
+		}
 	}
 
-	// Need to make a custom promise, built-in promise is broken: https://github.com/aws/aws-sdk-js/issues/1436
-	async s3GetObject(key) {
-		return new Promise((resolve, reject) => {
-			this.api().getObject({
-				Bucket: this.s3_bucket_,
-				Key: key,
-			}, (err, response) => {
-				if (err) reject(err);
-				else resolve(response);
-			});
+	// Because of the way AWS-SDK-v3 works for getting data from a bucket we will
+	// use a pre-signed URL to avoid https://github.com/aws/aws-sdk-js-v3/issues/1877
+	async s3GenerateGetURL(key) {
+		const signedUrl = await getSignedUrl(this.api(), new GetObjectCommand({
+			Bucket: this.s3_bucket_,
+			Key: key,
+		}), {
+			expiresIn: 3600,
 		});
+		return signedUrl;
 	}
 
+
+	// We've now moved to aws-sdk-v3 and this note is outdated, but explains the promise structure.
+	// Need to make a custom promise, built-in promise is broken: https://github.com/aws/aws-sdk-js/issues/1436
+	// TODO: Re-factor to https://github.com/aws/aws-sdk-js-v3/tree/main/clients/client-s3#asyncawait
 	async s3ListObjects(key, cursor) {
 		return new Promise((resolve, reject) => {
-			this.api().listObjectsV2({
+			this.api().send(new ListObjectsV2Command({
 				Bucket: this.s3_bucket_,
 				Prefix: key,
 				Delimiter: '/',
 				ContinuationToken: cursor,
-			}, (err, response) => {
+			}), (err, response) => {
 				if (err) reject(err);
 				else resolve(response);
 			});
 		});
 	}
 
+
 	async s3HeadObject(key) {
 		return new Promise((resolve, reject) => {
-			this.api().headObject({
+			this.api().send(new HeadObjectCommand({
 				Bucket: this.s3_bucket_,
 				Key: key,
-			}, (err, response) => {
+			}), (err, response) => {
 				if (err) reject(err);
 				else resolve(response);
 			});
@@ -71,11 +87,11 @@ class FileApiDriverAmazonS3 {
 
 	async s3PutObject(key, body) {
 		return new Promise((resolve, reject) => {
-			this.api().putObject({
+			this.api().send(new PutObjectCommand({
 				Bucket: this.s3_bucket_,
 				Key: key,
 				Body: body,
-			}, (err, response) => {
+			}), (err, response) => {
 				if (err) reject(err);
 				else resolve(response);
 			});
@@ -87,12 +103,12 @@ class FileApiDriverAmazonS3 {
 		const body = await shim.fsDriver().readFile(path, 'base64');
 		const fileStat = await shim.fsDriver().stat(path);
 		return new Promise((resolve, reject) => {
-			this.api().putObject({
+			this.api().send(new PutObjectCommand({
 				Bucket: this.s3_bucket_,
 				Key: key,
 				Body: Buffer.from(body, 'base64'),
 				ContentLength: `${fileStat.size}`,
-			}, (err, response) => {
+			}), (err, response) => {
 				if (err) reject(err);
 				else resolve(response);
 			});
@@ -101,10 +117,10 @@ class FileApiDriverAmazonS3 {
 
 	async s3DeleteObject(key) {
 		return new Promise((resolve, reject) => {
-			this.api().deleteObject({
+			this.api().send(new DeleteObjectCommand({
 				Bucket: this.s3_bucket_,
 				Key: key,
-			},
+			}),
 			(err, response) => {
 				if (err) {
 					console.log(err.code);
@@ -118,10 +134,10 @@ class FileApiDriverAmazonS3 {
 	// Assumes key is formatted, like `{Key: 's3 path'}`
 	async s3DeleteObjects(keys) {
 		return new Promise((resolve, reject) => {
-			this.api().deleteObjects({
+			this.api().send(new DeleteObjectsCommand({
 				Bucket: this.s3_bucket_,
 				Delete: { Objects: keys },
-			},
+			}),
 			(err, response) => {
 				if (err) {
 					console.log(err.code);
@@ -188,7 +204,19 @@ class FileApiDriverAmazonS3 {
 			prefixPath = `${prefixPath}/`;
 		}
 
+		// There is a bug/quirk of aws-sdk-js-v3 which causes the
+		// S3Client systemClockOffset to be wildly inaccurate. This
+		// effectively removes the offset and sets it to system time.
+		// See https://github.com/aws/aws-sdk-js-v3/issues/2208 for more.
+		// If the user's time actaully off, then this should correctly
+		// result in a RequestTimeTooSkewed error from s3ListObjects.
+		this.api().config.systemClockOffset = 0;
+
 		let response = await this.s3ListObjects(prefixPath);
+
+		// In aws-sdk-js-v3 if there are no contents it no longer returns
+		// an empty array. This creates an Empty array to pass onward.
+		if (response.Contents === undefined) response.Contents = [];
 
 		let output = this.metadataToStats_(response.Contents, prefixPath);
 
@@ -212,41 +240,51 @@ class FileApiDriverAmazonS3 {
 
 		try {
 			let output = null;
-			const response = await this.s3GetObject(remotePath);
-			output = response.Body;
+			let response = null;
+
+			const s3Url = await this.s3GenerateGetURL(remotePath);
 
 			if (options.target === 'file') {
-				const filePath = options.path;
-				if (!filePath) throw new Error('get: target options.path is missing');
+				output = await shim.fetchBlob(s3Url, options);
+			} else if (responseFormat === 'text') {
+				response = await shim.fetch(s3Url, options);
 
-				// TODO: check if this ever hits on RN
-				await shim.fsDriver().writeBinaryFile(filePath, output);
-				return {
-					ok: true,
-					path: filePath,
-					text: () => {
-						return response.statusMessage;
-					},
-					json: () => {
-						return { message: `${response.statusCode}: ${response.statusMessage}` };
-					},
-					status: response.statusCode,
-					headers: response.headers,
-				};
-			}
-
-			if (responseFormat === 'text') {
-				output = output.toString();
+				output = await response.text();
+				// we need to make sure that errors get thrown as we are manually fetching above.
+				if (!response.ok) {
+					throw { name: response.statusText, output: output };
+				}
 			}
 
 			return output;
 		} catch (error) {
-			if (this.hasErrorCode_(error, 'NoSuchKey')) {
-				return null;
-			} else if (this.hasErrorCode_(error, 'AccessDenied')) {
-				throw new JoplinError('Do not have proper permissions to Bucket', 'rejectedByTarget');
+
+			// This means that the error was on the Desktop client side and we need to handle that.
+			// On Mobile it won't match because FetchError is a node-fetch feature.
+			// https://github.com/node-fetch/node-fetch/blob/main/docs/ERROR-HANDLING.md
+			if (error.name === 'FetchError') { throw error.message; }
+
+			let parsedOutput = '';
+
+			// If error.output is not xml the last else case should
+			// actually let us see the output of error.
+			if (error.output) {
+				parsedOutput = parser.parse(error.output);
+				if (this.hasErrorCode_(parsedOutput.Error, 'AuthorizationHeaderMalformed')) {
+					throw error.output;
+				}
+
+				if (this.hasErrorCode_(parsedOutput.Error, 'NoSuchKey')) {
+					return null;
+				} else if (this.hasErrorCode_(parsedOutput.Error, 'AccessDenied')) {
+					throw new JoplinError('Do not have proper permissions to Bucket', 'rejectedByTarget');
+				}
 			} else {
-				throw error;
+				if (error.output) {
+					throw error.output;
+				} else {
+					throw error;
+				}
 			}
 		}
 	}
@@ -308,13 +346,14 @@ class FileApiDriverAmazonS3 {
 		}
 	}
 
+
 	async move(oldPath, newPath) {
 		const req = new Promise((resolve, reject) => {
-			this.api().copyObject({
+			this.api().send(new CopyObjectCommand({
 				Bucket: this.s3_bucket_,
 				CopySource: this.makePath_(oldPath),
 				Key: newPath,
-			},(err, response) => {
+			}),(err, response) => {
 				if (err) reject(err);
 				else resolve(response);
 			});
@@ -333,6 +372,7 @@ class FileApiDriverAmazonS3 {
 		}
 	}
 
+
 	format() {
 		throw new Error('Not supported');
 	}
@@ -340,10 +380,10 @@ class FileApiDriverAmazonS3 {
 	async clearRoot() {
 		const listRecursive = async (cursor) => {
 			return new Promise((resolve, reject) => {
-				return this.api().listObjectsV2({
+				return this.api().send(new ListObjectsV2Command({
 					Bucket: this.s3_bucket_,
 					ContinuationToken: cursor,
-				}, (err, response) => {
+				}), (err, response) => {
 					if (err) reject(err);
 					else resolve(response);
 				});
@@ -351,6 +391,9 @@ class FileApiDriverAmazonS3 {
 		};
 
 		let response = await listRecursive();
+		// In aws-sdk-js-v3 if there are no contents it no longer returns
+		// an empty array. This creates an Empty array to pass onward.
+		if (response.Contents === undefined) response.Contents = [];
 		let keys = response.Contents.map((content) => content.Key);
 
 		while (response.IsTruncated) {

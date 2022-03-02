@@ -12,6 +12,7 @@ const imageMimeTypes = [
 	'image/png',
 	'image/prs.btif',
 	'image/prs.pti',
+	'image/svg+xml',
 	'image/t38',
 	'image/tiff',
 	'image/tiff-fx',
@@ -38,7 +39,7 @@ const imageMimeTypes = [
 	'image/vnd.xiff',
 ];
 
-const escapeQuotes = (str) => str.replace(/"/g, '"');
+const escapeQuotes = (str) => str.replace(/"/g, '&quot;');
 
 const attributesToStr = (attributes) =>
 	Object.entries(attributes)

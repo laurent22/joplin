@@ -55,7 +55,7 @@ export interface State {
 	folders: any[];
 	tags: any[];
 	masterKeys: any[];
-	notLoadedMasterKeys: any[];
+	notLoadedMasterKeys: string[];
 	searches: any[];
 	highlightedWords: string[];
 	selectedNoteIds: string[];
@@ -78,7 +78,7 @@ export interface State {
 	hasDisabledSyncItems: boolean;
 	hasDisabledEncryptionItems: boolean;
 	customCss: string;
-	templates: any[];
+	hasLegacyTemplates: boolean;
 	collapsedFolderIds: string[];
 	clipperServer: StateClipperServer;
 	decryptionWorker: StateDecryptionWorker;
@@ -91,6 +91,7 @@ export interface State {
 	editorNoteStatuses: any;
 	isInsertingNotes: boolean;
 	hasEncryptedItems: boolean;
+	needApiAuth: boolean;
 
 	// Extra reducer keys go here:
 	pluginService: PluginServiceState;
@@ -131,7 +132,7 @@ export const defaultState: State = {
 	hasDisabledSyncItems: false,
 	hasDisabledEncryptionItems: false,
 	customCss: '',
-	templates: [],
+	hasLegacyTemplates: false,
 	collapsedFolderIds: [],
 	clipperServer: {
 		startState: 'idle',
@@ -160,6 +161,7 @@ export const defaultState: State = {
 	editorNoteStatuses: {},
 	isInsertingNotes: false,
 	hasEncryptedItems: false,
+	needApiAuth: false,
 
 	pluginService: pluginServiceDefaultState,
 	shareService: shareServiceDefaultState,
@@ -431,7 +433,7 @@ function updateSelectedNotesFromExistingNotes(draft: Draft<State>) {
 			}
 		}
 	}
-
+	if (JSON.stringify(draft.selectedNoteIds) === JSON.stringify(newSelectedNoteIds)) return;
 	draft.selectedNoteIds = newSelectedNoteIds;
 }
 
@@ -981,9 +983,9 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 			handleItemDelete(draft, action);
 			break;
 
-		case 'MASTERKEY_UPDATE_ALL':
-			draft.masterKeys = action.items;
-			break;
+			// case 'MASTERKEY_UPDATE_ALL':
+			// 	draft.masterKeys = action.items;
+			// 	break;
 
 		case 'MASTERKEY_SET_NOT_LOADED':
 			draft.notLoadedMasterKeys = action.ids;
@@ -1012,6 +1014,10 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 					}
 				}
 			}
+			break;
+
+		case 'CONTAINS_LEGACY_TEMPLATES':
+			draft.hasLegacyTemplates = true;
 			break;
 
 		case 'SYNC_STARTED':
@@ -1114,12 +1120,8 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 			}
 			break;
 
-		case 'LOAD_CUSTOM_CSS':
-			draft.customCss = action.css;
-			break;
-
-		case 'TEMPLATE_UPDATE_ALL':
-			draft.templates = action.templates;
+		case 'CUSTOM_CSS_APPEND':
+			draft.customCss += action.css;
 			break;
 
 		case 'SET_NOTE_TAGS':
@@ -1137,6 +1139,11 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 				draft.pluginsLegacy = newPluginsLegacy;
 			}
 			break;
+
+		case 'API_NEED_AUTH_SET':
+			draft.needApiAuth = action.value;
+			break;
+
 		}
 	} catch (error) {
 		error.message = `In reducer: ${error.message} Action: ${JSON.stringify(action)}`;

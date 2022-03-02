@@ -1,8 +1,8 @@
-import { ChangeType, Share, ShareType, ShareUser, ShareUserStatus } from '../../db';
+import { ChangeType, Share, ShareType, ShareUser, ShareUserStatus } from '../../services/database/types';
 import { beforeAllDb, afterAllTests, beforeEachDb, createUserAndSession, models, createNote, createFolder, updateItem, createItemTree, makeNoteSerializedBody, updateNote, expectHttpError, createResource } from '../../utils/testing/testUtils';
 import { postApi, patchApi, getApi, deleteApi } from '../../utils/testing/apiUtils';
-import { PaginatedChanges } from '../../models/ChangeModel';
-import { shareFolderWithUser } from '../../utils/testing/shareApiUtils';
+import { PaginatedDeltaChanges } from '../../models/ChangeModel';
+import { inviteUserToShare, shareFolderWithUser } from '../../utils/testing/shareApiUtils';
 import { msleep } from '../../utils/time';
 import { ErrorForbidden } from '../../utils/errors';
 import { resourceBlobPath, serializeJoplinItem, unserializeJoplinItem } from '../../utils/joplinUtils';
@@ -32,7 +32,7 @@ describe('shares.folder', function() {
 		// Create the file share object
 		// ----------------------------------------------------------------
 		const share = await postApi<Share>(session1.id, 'shares', {
-			type: ShareType.JoplinRootFolder,
+			type: ShareType.Folder,
 			folder_id: folderItem.jop_id,
 		});
 
@@ -477,11 +477,11 @@ describe('shares.folder', function() {
 		{
 			const names = ['000000000000000000000000000000F1.md', '00000000000000000000000000000001.md'].sort();
 
-			const page1 = await getApi<PaginatedChanges>(session1.id, 'items/root/delta');
+			const page1 = await getApi<PaginatedDeltaChanges>(session1.id, 'items/root/delta');
 			expect(page1.items.map(i => i.item_name).sort()).toEqual(names);
 			cursor1 = page1.cursor;
 
-			const page2 = await getApi<PaginatedChanges>(session2.id, 'items/root/delta');
+			const page2 = await getApi<PaginatedDeltaChanges>(session2.id, 'items/root/delta');
 			expect(page2.items.map(i => i.item_name).sort()).toEqual(names);
 			cursor2 = page2.cursor;
 		}
@@ -499,13 +499,13 @@ describe('shares.folder', function() {
 		}));
 
 		{
-			const page1 = await getApi<PaginatedChanges>(session1.id, 'items/root/delta', { query: { cursor: cursor1 } });
+			const page1 = await getApi<PaginatedDeltaChanges>(session1.id, 'items/root/delta', { query: { cursor: cursor1 } });
 			expect(page1.items.length).toBe(1);
 			expect(page1.items[0].item_name).toBe('00000000000000000000000000000001.md');
 			expect(page1.items[0].type).toBe(ChangeType.Update);
 			cursor1 = page1.cursor;
 
-			const page2 = await getApi<PaginatedChanges>(session2.id, 'items/root/delta', { query: { cursor: cursor2 } });
+			const page2 = await getApi<PaginatedDeltaChanges>(session2.id, 'items/root/delta', { query: { cursor: cursor2 } });
 			expect(page2.items.length).toBe(1);
 			expect(page2.items[0].item_name).toBe('00000000000000000000000000000001.md');
 			expect(page2.items[0].type).toBe(ChangeType.Update);
@@ -524,13 +524,13 @@ describe('shares.folder', function() {
 		}));
 
 		{
-			const page1 = await getApi<PaginatedChanges>(session1.id, 'items/root/delta', { query: { cursor: cursor1 } });
+			const page1 = await getApi<PaginatedDeltaChanges>(session1.id, 'items/root/delta', { query: { cursor: cursor1 } });
 			expect(page1.items.length).toBe(1);
 			expect(page1.items[0].item_name).toBe('00000000000000000000000000000001.md');
 			expect(page1.items[0].type).toBe(ChangeType.Update);
 			cursor1 = page1.cursor;
 
-			const page2 = await getApi<PaginatedChanges>(session2.id, 'items/root/delta', { query: { cursor: cursor2 } });
+			const page2 = await getApi<PaginatedDeltaChanges>(session2.id, 'items/root/delta', { query: { cursor: cursor2 } });
 			expect(page2.items.length).toBe(1);
 			expect(page2.items[0].item_name).toBe('00000000000000000000000000000001.md');
 			expect(page2.items[0].type).toBe(ChangeType.Update);
@@ -556,7 +556,7 @@ describe('shares.folder', function() {
 			'200000000000000000000000000000F2': {},
 		});
 
-		let latestChanges2 = await models().change().allForUser(user2.id);
+		let latestChanges2 = await models().change().delta(user2.id);
 		const cursor2 = latestChanges2.cursor;
 
 		await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F1', {
@@ -565,7 +565,7 @@ describe('shares.folder', function() {
 			},
 		});
 
-		latestChanges2 = await models().change().allForUser(user2.id, { cursor: cursor2 });
+		latestChanges2 = await models().change().delta(user2.id, { cursor: cursor2 });
 		expect(latestChanges2.items.length).toBe(2);
 	});
 
@@ -579,7 +579,7 @@ describe('shares.folder', function() {
 			},
 		});
 
-		let latestChanges1 = await models().change().allForUser(user1.id);
+		let latestChanges1 = await models().change().delta(user1.id);
 		const cursor1 = latestChanges1.cursor;
 
 		const folderItem1 = await models().item().loadByJopId(user1.id, '000000000000000000000000000000F1');
@@ -593,7 +593,7 @@ describe('shares.folder', function() {
 
 		await models().share().updateSharedItems3();
 
-		latestChanges1 = await models().change().allForUser(user1.id, { cursor: cursor1 });
+		latestChanges1 = await models().change().delta(user1.id, { cursor: cursor1 });
 		expect(latestChanges1.items.length).toBe(1);
 		expect(latestChanges1.items[0].item_name).toBe('00000000000000000000000000000002.md');
 	});
@@ -608,7 +608,7 @@ describe('shares.folder', function() {
 			},
 		});
 
-		let latestChanges1 = await models().change().allForUser(user1.id);
+		let latestChanges1 = await models().change().delta(user1.id);
 		const cursor1 = latestChanges1.cursor;
 
 		const folderItem2 = await createFolder(session2.id, { id: '000000000000000000000000000000F2', title: 'folder2' });
@@ -618,7 +618,7 @@ describe('shares.folder', function() {
 		await updateNote(session2.id, { ...note, parent_id: folderItem2.jop_id, share_id: '' });
 		await models().share().updateSharedItems3();
 
-		latestChanges1 = await models().change().allForUser(user1.id, { cursor: cursor1 });
+		latestChanges1 = await models().change().delta(user1.id, { cursor: cursor1 });
 		expect(latestChanges1.items.length).toBe(1);
 		expect(latestChanges1.items[0].type).toBe(ChangeType.Delete);
 		expect(latestChanges1.items[0].item_id).toBe(noteItem.id);
@@ -793,21 +793,112 @@ describe('shares.folder', function() {
 		await expectHttpError(async () => postApi<Share>(session1.id, 'shares', { folder_id: '000000000000000000000000000000F2' }), ErrorForbidden.httpCode);
 	});
 
-	// test('should check permissions - only owner of share can deleted associated folder', async function() {
-	// 	const { session: session1 } = await createUserAndSession(1);
-	// 	const { session: session2 } = await createUserAndSession(2);
+	test('should check permissions - cannot share if share feature not enabled', async function() {
+		const { user: user1, session: session1 } = await createUserAndSession(1);
+		const { session: session2 } = await createUserAndSession(2);
+		await models().user().save({ id: user1.id, can_share_folder: 0 });
 
-	// 	await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F1', [
-	// 		{
-	// 			id: '000000000000000000000000000000F1',
-	// 			children: [
-	// 				{
-	// 					id: '00000000000000000000000000000001',
-	// 				},
-	// 			],
-	// 		},
-	// 	]);
-	// 	await expectHttpError(async () => deleteApi(session2.id, 'items/root:/000000000000000000000000000000F1.md:'), ErrorForbidden.httpCode);
-	// });
+		await expectHttpError(async () =>
+			shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F1', [
+				{
+					id: '000000000000000000000000000000F1',
+					children: [],
+				},
+			]),
+		ErrorForbidden.httpCode
+		);
+	});
+
+	test('should check permissions - cannot share if share feature not enabled for recipient', async function() {
+		const { session: session1 } = await createUserAndSession(1);
+		const { user: user2, session: session2 } = await createUserAndSession(2);
+		await models().user().save({ id: user2.id, can_share_folder: 0 });
+
+		await expectHttpError(async () =>
+			shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F1', [
+				{
+					id: '000000000000000000000000000000F1',
+					children: [],
+				},
+			]),
+		ErrorForbidden.httpCode
+		);
+	});
+
+	test('should check permissions - by default sharing by note is always possible', async function() {
+		const { session: session1 } = await createUserAndSession(1);
+
+		const noteItem = await createNote(session1.id, {
+			title: 'Testing title',
+			body: 'Testing body',
+		});
+
+		const share = await postApi<Share>(session1.id, 'shares', {
+			type: ShareType.Note,
+			note_id: noteItem.jop_id,
+		});
+
+		expect(share).toBeTruthy();
+	});
+
+	test('should check permissions - cannot share with a disabled account', async function() {
+		const { session: session1 } = await createUserAndSession(1);
+		const { user: user2, session: session2 } = await createUserAndSession(2);
+		await models().user().save({
+			id: user2.id,
+			enabled: 0,
+		});
+
+		await expectHttpError(async () =>
+			shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F1', [
+				{
+					id: '000000000000000000000000000000F1',
+					children: [],
+				},
+			]),
+		ErrorForbidden.httpCode
+		);
+	});
+
+	test('should allow sharing, unsharing and sharing again', async function() {
+		// - U1 share a folder that contains a note
+		// - U2 accept
+		// - U2 syncs
+		// - U1 remove U2
+		// - U1 adds back U2
+		// - U2 accept
+		//
+		// => Previously, the notebook would be deleted fro U2 due to a quirk in
+		// delta sync, that doesn't handle user_items being deleted, then
+		// created again. Instead U2 should end up with both the folder and the
+		// note.
+		//
+		// Ref: https://discourse.joplinapp.org/t/20977
+
+		const { session: session1 } = await createUserAndSession(1);
+		const { user: user2, session: session2 } = await createUserAndSession(2);
+
+		const { shareUser: shareUserA, share } = await shareFolderWithUser(session1.id, session2.id, '000000000000000000000000000000F1', {
+			'000000000000000000000000000000F1': {
+				'00000000000000000000000000000001': null,
+			},
+		});
+
+		await models().share().updateSharedItems3();
+
+		await deleteApi(session1.id, `share_users/${shareUserA.id}`);
+
+		await models().share().updateSharedItems3();
+
+		await inviteUserToShare(share, session1.id, user2.email, true);
+
+		await models().share().updateSharedItems3();
+
+		const page = await getApi<PaginatedDeltaChanges>(session2.id, 'items/root/delta', { query: { cursor: '' } });
+
+		expect(page.items.length).toBe(2);
+		expect(page.items.find(it => it.item_name === '000000000000000000000000000000F1.md').type).toBe(ChangeType.Create);
+		expect(page.items.find(it => it.item_name === '00000000000000000000000000000001.md').type).toBe(ChangeType.Create);
+	});
 
 });

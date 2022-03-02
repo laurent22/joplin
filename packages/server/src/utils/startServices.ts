@@ -1,5 +1,7 @@
-import { AppContext } from './types';
+import { Services } from '../services/types';
 
-export default function startServices(appContext: AppContext) {
-	void appContext.services.share.runInBackground();
+export default async function startServices(services: Services) {
+	void services.share.runInBackground();
+	void services.email.runInBackground();
+	void services.tasks.runInBackground();
 }

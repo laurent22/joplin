@@ -1,18 +1,24 @@
-import { Change, ChangeType, Item, Uuid } from '../db';
+import { Knex } from 'knex';
+import Logger from '@joplin/lib/Logger';
+import { SqliteMaxVariableNum } from '../db';
+import { Change, ChangeType, Item, Uuid } from '../services/database/types';
 import { md5 } from '../utils/crypto';
 import { ErrorResyncRequired } from '../utils/errors';
+import { Day, formatDateTime } from '../utils/time';
 import BaseModel, { SaveOptions } from './BaseModel';
-import { PaginatedResults } from './utils/pagination';
+import { PaginatedResults, Pagination, PaginationOrderDir } from './utils/pagination';
 
-export interface ChangeWithItem {
-	item: Item;
-	updated_time: number;
-	type: ChangeType;
+const logger = Logger.create('ChangeModel');
+
+export const defaultChangeTtl = 180 * Day;
+
+export interface DeltaChange extends Change {
+	jop_updated_time?: number;
 }
 
-export interface PaginatedChanges extends PaginatedResults {
-	items: Change[];
-}
+export type PaginatedDeltaChanges = PaginatedResults<DeltaChange>;
+
+export type PaginatedChanges = PaginatedResults<Change>;
 
 export interface ChangePagination {
 	limit?: number;
@@ -26,15 +32,20 @@ export interface ChangePreviousItem {
 	jop_share_id: string;
 }
 
-export function defaultChangePagination(): ChangePagination {
+export function defaultDeltaPagination(): ChangePagination {
 	return {
 		limit: 100,
 		cursor: '',
 	};
 }
 
-interface AllForUserOptions {
-	compressChanges?: boolean;
+export function requestDeltaPagination(query: any): ChangePagination {
+	if (!query) return defaultDeltaPagination();
+
+	const output: ChangePagination = {};
+	if ('limit' in query) output.limit = query.limit;
+	if ('cursor' in query) output.cursor = query.cursor;
+	return output;
 }
 
 export default class ChangeModel extends BaseModel<Change> {
@@ -60,35 +71,24 @@ export default class ChangeModel extends BaseModel<Change> {
 		return `${this.baseUrl}/changes`;
 	}
 
-	public async allFromId(id: string): Promise<Change[]> {
+	public async allFromId(id: string, limit: number = SqliteMaxVariableNum): Promise<PaginatedChanges> {
 		const startChange: Change = id ? await this.load(id) : null;
 		const query = this.db(this.tableName).select(...this.defaultFields);
 		if (startChange) void query.where('counter', '>', startChange.counter);
-		void query.limit(1000);
-		let results = await query;
+		void query.limit(limit);
+		let results: Change[] = await query;
+		const hasMore = !!results.length;
+		const cursor = results.length ? results[results.length - 1].id : id;
 		results = await this.removeDeletedItems(results);
 		results = await this.compressChanges(results);
-		return results;
+		return {
+			items: results,
+			has_more: hasMore,
+			cursor,
+		};
 	}
 
-	public async allForUser(userId: Uuid, pagination: ChangePagination = null, options: AllForUserOptions = null): Promise<PaginatedChanges> {
-		options = {
-			compressChanges: true,
-			...options,
-		};
-
-		pagination = {
-			...defaultChangePagination(),
-			...pagination,
-		};
-
-		let changeAtCursor: Change = null;
-
-		if (pagination.cursor) {
-			changeAtCursor = await this.load(pagination.cursor) as Change;
-			if (!changeAtCursor) throw new ErrorResyncRequired();
-		}
-
+	private changesForUserQuery(userId: Uuid, count: boolean): Knex.QueryBuilder {
 		// When need to get:
 		//
 		// - All the CREATE and DELETE changes associated with the user
@@ -100,13 +100,6 @@ export default class ChangeModel extends BaseModel<Change> {
 
 		const query = this
 			.db('changes')
-			.select([
-				'id',
-				'item_id',
-				'item_name',
-				'type',
-				'updated_time',
-			])
 			.where(function() {
 				void this.whereRaw('((type = ? OR type = ?) AND user_id = ?)', [ChangeType.Create, ChangeType.Delete, userId])
 					// Need to use a RAW query here because Knex has a "not a
@@ -117,7 +110,66 @@ export default class ChangeModel extends BaseModel<Change> {
 					.orWhereRaw('type = ? AND item_id IN (SELECT item_id FROM user_items WHERE user_id = ?)', [ChangeType.Update, userId]);
 			});
 
-		// If a cursor was provided, apply it to both queries.
+		if (count) {
+			void query.countDistinct('id', { as: 'total' });
+		} else {
+			void query.select([
+				'id',
+				'item_id',
+				'item_name',
+				'type',
+				'updated_time',
+			]);
+		}
+
+		return query;
+	}
+
+	public async allByUser(userId: Uuid, pagination: Pagination = null): Promise<PaginatedDeltaChanges> {
+		pagination = {
+			page: 1,
+			limit: 100,
+			order: [{ by: 'counter', dir: PaginationOrderDir.ASC }],
+			...pagination,
+		};
+
+		const query = this.changesForUserQuery(userId, false);
+		const countQuery = this.changesForUserQuery(userId, true);
+		const itemCount = (await countQuery.first()).total;
+
+		void query
+			.orderBy(pagination.order[0].by, pagination.order[0].dir)
+			.offset((pagination.page - 1) * pagination.limit)
+			.limit(pagination.limit) as any[];
+
+		const changes = await query;
+
+		return {
+			items: changes,
+			// If we have changes, we return the ID of the latest changes from which delta sync can resume.
+			// If there's no change, we return the previous cursor.
+			cursor: changes.length ? changes[changes.length - 1].id : pagination.cursor,
+			has_more: changes.length >= pagination.limit,
+			page_count: itemCount !== null ? Math.ceil(itemCount / pagination.limit) : undefined,
+		};
+	}
+
+	public async delta(userId: Uuid, pagination: ChangePagination = null): Promise<PaginatedDeltaChanges> {
+		pagination = {
+			...defaultDeltaPagination(),
+			...pagination,
+		};
+
+		let changeAtCursor: Change = null;
+
+		if (pagination.cursor) {
+			changeAtCursor = await this.load(pagination.cursor) as Change;
+			if (!changeAtCursor) throw new ErrorResyncRequired();
+		}
+
+		const query = this.changesForUserQuery(userId, false);
+
+		// If a cursor was provided, apply it to the query.
 		if (changeAtCursor) {
 			void query.where('counter', '>', changeAtCursor.counter);
 		}
@@ -126,9 +178,21 @@ export default class ChangeModel extends BaseModel<Change> {
 			.orderBy('counter', 'asc')
 			.limit(pagination.limit) as any[];
 
-		const changes = await query;
+		const changes: Change[] = await query;
 
-		const finalChanges = options.compressChanges ? await this.removeDeletedItems(this.compressChanges(changes)) : changes;
+		const items: Item[] = await this.db('items').select('id', 'jop_updated_time').whereIn('items.id', changes.map(c => c.item_id));
+
+		let processedChanges = this.compressChanges(changes);
+		processedChanges = await this.removeDeletedItems(processedChanges, items);
+
+		const finalChanges: DeltaChange[] = processedChanges.map(c => {
+			const item = items.find(item => item.id === c.item_id);
+			if (!item) return c;
+			return {
+				...c,
+				jop_updated_time: item.jop_updated_time,
+			};
+		});
 
 		return {
 			items: finalChanges,
@@ -139,14 +203,14 @@ export default class ChangeModel extends BaseModel<Change> {
 		};
 	}
 
-	private async removeDeletedItems(changes: Change[]): Promise<Change[]> {
+	private async removeDeletedItems(changes: Change[], items: Item[] = null): Promise<Change[]> {
 		const itemIds = changes.map(c => c.item_id);
 
 		// We skip permission check here because, when an item is shared, we need
 		// to fetch files that don't belong to the current user. This check
 		// would not be needed anyway because the change items are generated in
 		// a context where permissions have already been checked.
-		const items: Item[] = await this.db('items').select('id').whereIn('items.id', itemIds);
+		items = items === null ? await this.db('items').select('id').whereIn('items.id', itemIds) : items;
 
 		const output: Change[] = [];
 
@@ -177,6 +241,7 @@ export default class ChangeModel extends BaseModel<Change> {
 	//     create - delete => NOOP
 	//     update - update => update
 	//     update - delete => delete
+	//     delete - create => create
 	//
 	// There's one exception for changes that include a "previous_item". This is
 	// used to save specific properties about the previous state of the item,
@@ -184,6 +249,13 @@ export default class ChangeModel extends BaseModel<Change> {
 	// to know if an item has been moved from one folder to another. In that
 	// case, we need to know about each individual change, so they are not
 	// compressed.
+	//
+	// The latest change, when an item goes from DELETE to CREATE seems odd but
+	// can happen because we are not checking for "item" changes but for
+	// "user_item" changes. When sharing is involved, an item can be shared
+	// (CREATED), then unshared (DELETED), then shared again (CREATED). When it
+	// happens, we want the user to get the item, thus we generate a CREATE
+	// event.
 	private compressChanges(changes: Change[]): Change[] {
 		const itemChanges: Record<Uuid, Change> = {};
 
@@ -215,6 +287,10 @@ export default class ChangeModel extends BaseModel<Change> {
 				if (previous.type === ChangeType.Update && change.type === ChangeType.Delete) {
 					itemChanges[itemId] = change;
 				}
+
+				if (previous.type === ChangeType.Delete && change.type === ChangeType.Create) {
+					itemChanges[itemId] = change;
+				}
 			} else {
 				itemChanges[itemId] = change;
 			}
@@ -238,10 +314,94 @@ export default class ChangeModel extends BaseModel<Change> {
 		return output;
 	}
 
+	// See spec for complete documentation:
+	// https://joplinapp.org/spec/server_delta_sync/#regarding-the-deletion-of-old-change-events
+	public async compressOldChanges(ttl: number = null) {
+		ttl = ttl === null ? defaultChangeTtl : ttl;
+		const cutOffDate = Date.now() - ttl;
+		const limit = 1000;
+		const doneItemIds: Uuid[] = [];
+
+		interface ChangeReportItem {
+			total: number;
+			max_created_time: number;
+			item_id: Uuid;
+		}
+
+		let error: Error = null;
+		let totalDeletedCount = 0;
+
+		logger.info(`compressOldChanges: Processing changes older than: ${formatDateTime(cutOffDate)} (${cutOffDate})`);
+
+		while (true) {
+			// First get all the UPDATE changes before the specified date, and
+			// order by the items that had the most changes. Also for each item
+			// get the most recent change date from within that time interval,
+			// as we need this below.
+
+			const changeReport: ChangeReportItem[] = await this
+				.db(this.tableName)
+
+				.select(['item_id'])
+				.countDistinct('id', { as: 'total' })
+				.max('created_time', { as: 'max_created_time' })
+
+				.where('type', '=', ChangeType.Update)
+				.where('created_time', '<', cutOffDate)
+
+				.groupBy('item_id')
+				.havingRaw('count(id) > 1')
+				.orderBy('total', 'desc')
+				.limit(limit);
+
+			if (!changeReport.length) break;
+
+			await this.withTransaction(async () => {
+				for (const row of changeReport) {
+					if (doneItemIds.includes(row.item_id)) {
+						// We don't throw from within the transaction because
+						// that would rollback all other operations even though
+						// they are valid. So we save the error and exit.
+						error = new Error(`Trying to process an item that has already been done. Aborting. Row: ${JSON.stringify(row)}`);
+						return;
+					}
+
+					// Still from within the specified interval, delete all
+					// UPDATE changes, except for the most recent one.
+
+					const deletedCount = await this
+						.db(this.tableName)
+						.where('type', '=', ChangeType.Update)
+						.where('created_time', '<', cutOffDate)
+						.where('created_time', '!=', row.max_created_time)
+						.where('item_id', '=', row.item_id)
+						.delete();
+
+					totalDeletedCount += deletedCount;
+					doneItemIds.push(row.item_id);
+				}
+			}, 'ChangeModel::compressOldChanges');
+
+			logger.info(`compressOldChanges: Processed: ${doneItemIds.length} items. Deleted: ${totalDeletedCount} changes.`);
+
+			if (error) throw error;
+		}
+
+		logger.info(`compressOldChanges: Finished processing. Done ${doneItemIds.length} items. Deleted: ${totalDeletedCount} changes.`);
+	}
+
 	public async save(change: Change, options: SaveOptions = {}): Promise<Change> {
 		const savedChange = await super.save(change, options);
 		ChangeModel.eventEmitter.emit('saved');
 		return savedChange;
+	}
+
+	public async deleteByItemIds(itemIds: Uuid[]) {
+		if (!itemIds.length) return;
+
+		await this.db(this.tableName)
+			.whereIn('item_id', itemIds)
+			.delete();
 	}
 
 }

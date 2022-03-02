@@ -8,6 +8,8 @@ import route_tags from './routes/tags';
 import route_master_keys from './routes/master_keys';
 import route_search from './routes/search';
 import route_ping from './routes/ping';
+import route_auth from './routes/auth';
+import route_events from './routes/events';
 
 const { ltrimSlashes } = require('../../path-utils');
 const md5 = require('md5');
@@ -19,7 +21,7 @@ export enum RequestMethod {
 	DELETE = 'DELETE',
 }
 
-interface RequestFile {
+export interface RequestFile {
 	path: string;
 }
 
@@ -39,6 +41,12 @@ interface RequestQuery {
 	limit?: number;
 	order_dir?: PaginationOrderDir;
 	order_by?: string;
+
+	// Auth token
+	auth_token?: string;
+
+	// Event cursor
+	cursor?: string;
 }
 
 export interface Request {
@@ -53,7 +61,24 @@ export interface Request {
 	action?: any;
 }
 
-type RouteFunction = (request: Request, id: string, link: string)=> Promise<any | void>;
+export enum AuthTokenStatus {
+	Waiting = 'waiting',
+	Accepted = 'accepted',
+	Rejected = 'rejected',
+}
+
+interface AuthToken {
+	value: string;
+	status: AuthTokenStatus;
+}
+
+export interface RequestContext {
+	dispatch: Function;
+	authToken: AuthToken;
+	token: string;
+}
+
+type RouteFunction = (request: Request, id: string, link: string, context: RequestContext)=> Promise<any | void>;
 
 interface ResourceNameToRoute {
 	[key: string]: RouteFunction;
@@ -62,13 +87,16 @@ interface ResourceNameToRoute {
 export default class Api {
 
 	private token_: string | Function;
+	private authToken_: AuthToken = null;
 	private knownNounces_: any = {};
 	private actionApi_: any;
 	private resourceNameToRoute_: ResourceNameToRoute = {};
+	private dispatch_: Function;
 
-	public constructor(token: string = null, actionApi: any = null) {
+	public constructor(token: string | Function = null, dispatch: Function = null, actionApi: any = null) {
 		this.token_ = token;
 		this.actionApi_ = actionApi;
+		this.dispatch_ = dispatch;
 
 		this.resourceNameToRoute_ = {
 			ping: route_ping,
@@ -79,11 +107,44 @@ export default class Api {
 			master_keys: route_master_keys,
 			search: route_search,
 			services: this.action_services.bind(this),
+			auth: route_auth,
+			events: route_events,
 		};
+
+		this.dispatch = this.dispatch.bind(this);
 	}
 
-	public get token() {
+	public get token(): string {
 		return typeof this.token_ === 'function' ? this.token_() : this.token_;
+	}
+
+	private dispatch(action: any) {
+		if (action.type === 'API_AUTH_TOKEN_SET') {
+			this.authToken_ = {
+				value: action.value,
+				status: AuthTokenStatus.Waiting,
+			};
+
+			this.dispatch_({
+				type: 'API_NEED_AUTH_SET',
+				value: true,
+			});
+
+			return;
+		}
+
+		return this.dispatch_(action);
+	}
+
+	public acceptAuthToken(accept: boolean) {
+		if (!this.authToken_) throw new Error('Auth token is not set');
+
+		this.authToken_.status = accept ? AuthTokenStatus.Accepted : AuthTokenStatus.Rejected;
+
+		this.dispatch_({
+			type: 'API_NEED_AUTH_SET',
+			value: false,
+		});
 	}
 
 	private parsePath(path: string) {
@@ -155,8 +216,14 @@ export default class Api {
 
 		this.checkToken_(request);
 
+		const context: RequestContext = {
+			dispatch: this.dispatch,
+			token: this.token,
+			authToken: this.authToken_,
+		};
+
 		try {
-			return await parsedPath.fn(request, id, link);
+			return await parsedPath.fn(request, id, link, context);
 		} catch (error) {
 			if (!error.httpCode) error.httpCode = 500;
 			throw error;
@@ -166,13 +233,23 @@ export default class Api {
 	private checkToken_(request: Request) {
 		// For now, whitelist some calls to allow the web clipper to work
 		// without an extra auth step
-		const whiteList = [['GET', 'ping'], ['GET', 'tags'], ['GET', 'folders'], ['POST', 'notes']];
+		// const whiteList = [['GET', 'ping'], ['GET', 'tags'], ['GET', 'folders'], ['POST', 'notes']];
+
+		const whiteList = [
+			['GET', 'ping'],
+			['GET', 'auth'],
+			['POST', 'auth'],
+			['GET', 'auth/check'],
+		];
 
 		for (let i = 0; i < whiteList.length; i++) {
 			if (whiteList[i][0] === request.method && whiteList[i][1] === request.path) return;
 		}
 
+		// If the API has been initialized without a token, it means no auth is
+		// needed. This is for example when it is used as the plugin data API.
 		if (!this.token) return;
+
 		if (!request.query || !request.query.token) throw new ErrorForbidden('Missing "token" parameter');
 		if (request.query.token !== this.token) throw new ErrorForbidden('Invalid "token" parameter');
 	}

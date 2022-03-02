@@ -4,7 +4,7 @@ const Folder = require('@joplin/lib/models/Folder').default;
 const { themeStyle } = require('@joplin/lib/theme');
 const { _ } = require('@joplin/lib/locale');
 const { filename, basename } = require('@joplin/lib/path-utils');
-const { importEnex } = require('@joplin/lib/import-enex');
+const importEnex = require('@joplin/lib/import-enex').default;
 
 class ImportScreenComponent extends React.Component {
 	UNSAFE_componentWillMount() {

@@ -1,0 +1,11 @@
+<form method='POST' action="{{postUrl}}">
+	{{{csrfTag}}}
+		
+	{{#userDeletionTable}}
+		{{>table}}
+	{{/userDeletionTable}}
+
+	<div class="block">
+		<input class="button is-link" type="submit" value="Remove selected jobs" name="removeButton"/>
+	</div>
+</form>

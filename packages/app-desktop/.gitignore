@@ -9,3 +9,8 @@ gui/note-viewer/fonts/
 gui/note-viewer/lib.js
 gui/NoteEditor/NoteBody/TinyMCE/supportedLocales.js
 runForSharingCommands-*
+runForTestingCommands-*
+style.min.css
+build/lib/
+vendor/*
+!vendor/loadEmojiLib.js

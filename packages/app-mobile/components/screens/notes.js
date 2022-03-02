@@ -227,6 +227,9 @@ class NotesScreenComponent extends BaseScreenComponent {
 			);
 		}
 
+		const icon = Folder.unserializeIcon(parent.icon);
+		const iconString = icon ? `${icon.emoji} ` : '';
+
 		let buttonFolderId = this.props.selectedFolderId != Folder.conflictFolderId() ? this.props.selectedFolderId : null;
 		if (!buttonFolderId) buttonFolderId = this.props.activeFolderId;
 
@@ -236,7 +239,7 @@ class NotesScreenComponent extends BaseScreenComponent {
 
 		return (
 			<View style={rootStyle}>
-				<ScreenHeader title={title} showBackButton={false} parentComponent={thisComp} sortButton_press={this.sortButton_press} folderPickerOptions={this.folderPickerOptions()} showSearchButton={true} showSideMenuButton={true} />
+				<ScreenHeader title={iconString + title} showBackButton={false} parentComponent={thisComp} sortButton_press={this.sortButton_press} folderPickerOptions={this.folderPickerOptions()} showSearchButton={true} showSideMenuButton={true} />
 				<NoteList style={this.styles().noteList} />
 				{actionButtonComp}
 				<DialogBox

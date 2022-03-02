@@ -14,6 +14,8 @@ const { themeStyle } = require('./global-style.js');
 const { Dropdown } = require('./Dropdown.js');
 const { dialogs } = require('../utils/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
+const { localSyncInfoFromState } = require('@joplin/lib/services/synchronizer/syncInfoUtils');
+const { showMissingMasterKeyMessage } = require('@joplin/lib/services/e2ee/utils');
 
 Icon.loadFont();
 
@@ -182,10 +184,14 @@ class ScreenHeaderComponent extends React.PureComponent {
 	async deleteButton_press() {
 		// Dialog needs to be displayed as a child of the parent component, otherwise
 		// it won't be visible within the header component.
-		const ok = await dialogs.confirm(this.props.parentComponent, _('Delete these notes?'));
+		const noteIds = this.props.selectedNoteIds;
+
+		const msg = await Note.deleteMessage(noteIds);
+		if (!msg) return;
+
+		const ok = await dialogs.confirm(this.props.parentComponent, msg);
 		if (!ok) return;
 
-		const noteIds = this.props.selectedNoteIds;
 		this.props.dispatch({ type: 'NOTE_SELECTION_END' });
 		await Note.batchDelete(noteIds);
 	}
@@ -379,7 +385,9 @@ class ScreenHeaderComponent extends React.PureComponent {
 
 					for (let i = 0; i < folders.length; i++) {
 						const f = folders[i];
-						pickerItems.push({ label: `${'      '.repeat(indent)} ${Folder.displayTitle(f)}`, value: f.id });
+						const icon = Folder.unserializeIcon(f.icon);
+						const iconString = icon ? `${icon.emoji} ` : '';
+						pickerItems.push({ label: `${'      '.repeat(indent)} ${iconString + Folder.displayTitle(f)}`, value: f.id });
 						pickerItems = addFolderChildren(f.children, pickerItems, indent + 1);
 					}
 
@@ -528,6 +536,8 @@ ScreenHeaderComponent.defaultProps = {
 };
 
 const ScreenHeader = connect(state => {
+	const syncInfo = localSyncInfoFromState(state);
+
 	return {
 		historyCanGoBack: state.historyCanGoBack,
 		locale: state.settings.locale,
@@ -535,7 +545,7 @@ const ScreenHeader = connect(state => {
 		themeId: state.settings.theme,
 		noteSelectionEnabled: state.noteSelectionEnabled,
 		selectedNoteIds: state.selectedNoteIds,
-		showMissingMasterKeyMessage: state.notLoadedMasterKeys.length && state.masterKeys.length,
+		showMissingMasterKeyMessage: showMissingMasterKeyMessage(syncInfo, state.notLoadedMasterKeys),
 		hasDisabledSyncItems: state.hasDisabledSyncItems,
 		shouldUpgradeSyncTarget: state.settings['sync.upgradeState'] === Setting.SYNC_UPGRADE_STATE_SHOULD_DO,
 	};

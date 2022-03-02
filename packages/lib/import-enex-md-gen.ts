@@ -31,6 +31,8 @@ interface Section {
 interface ParserStateTag {
 	name: string;
 	visible: boolean;
+	isCodeBlock: boolean;
+	isHighlight: boolean;
 }
 
 interface ParserStateList {
@@ -424,14 +426,21 @@ function attributeToLowerCase(node: any) {
 	return output;
 }
 
-function cssValue(context: any, style: string, propName: string): string {
+function cssValue(context: any, style: string, propName: string | string[]): string {
 	if (!style) return null;
+
+	const propNames = Array.isArray(propName) ? propName : [propName];
 
 	try {
 		const o = cssParser.parse(`pre {${style}}`);
 		if (!o.stylesheet.rules.length) return null;
-		const prop = o.stylesheet.rules[0].declarations.find((d: any) => d.property.toLowerCase() === propName);
-		return prop && prop.value ? prop.value.trim().toLowerCase() : null;
+
+		for (const propName of propNames) {
+			const prop = o.stylesheet.rules[0].declarations.find((d: any) => d.property.toLowerCase() === propName);
+			if (prop && prop.value) return prop.value.trim().toLowerCase();
+		}
+
+		return null;
 	} catch (error) {
 		displaySaxWarning(context, error.message);
 		return null;
@@ -441,6 +450,20 @@ function cssValue(context: any, style: string, propName: string): string {
 function isInvisibleBlock(context: any, attributes: any) {
 	const display = cssValue(context, attributes.style, 'display');
 	return display && display.indexOf('none') === 0;
+}
+
+function trimBlockOpenAndClose(lines: string[]): string[] {
+	const output = lines.slice();
+
+	while (output.length && [BLOCK_OPEN, BLOCK_CLOSE, ''].includes(output[0])) {
+		output.splice(0, 1);
+	}
+
+	while (output.length && [BLOCK_OPEN, BLOCK_CLOSE, ''].includes(output[output.length - 1])) {
+		output.pop();
+	}
+
+	return output;
 }
 
 function isSpanWithStyle(attributes: any) {
@@ -484,24 +507,46 @@ function displaySaxWarning(context: any, message: string) {
 	console.warn(line.join(': '));
 }
 
-// function removeSectionParent(section:Section | string) {
-// 	if (typeof section === 'string') return section;
+function isCodeBlock(context: any, nodeName: string, attributes: any) {
+	if (nodeName === 'code') return true;
 
-// 	section = { ...section };
-// 	delete section.parent;
+	if (attributes && attributes.style) {
+		// Yes, this property sometimes appears as -en-codeblock, sometimes as
+		// --en-codeblock. Would be too easy to import ENEX data otherwise.
+		// https://github.com/laurent22/joplin/issues/4965
+		const enCodeBlock = cssValue(context, attributes.style, [
+			'-en-codeblock',
+			'--en-codeblock',
+			'-evernote-codeblock',
+			'--evernote-codeblock',
+		]);
 
-// 	section.lines = section.lines.slice();
+		if (enCodeBlock && enCodeBlock.toLowerCase() === 'true') return true;
+	}
+	return false;
+}
 
-// 	for (let i = 0; i < section.lines.length; i++) {
-// 		section.lines[i] = removeSectionParent(section.lines[i]);
-// 	}
+function isHighlight(context: any, _nodeName: string, attributes: any) {
+	if (attributes && attributes.style) {
+		// Evernote uses various inconsistent CSS prefixes: so far I've found
+		// "--en", "-en", "-evernote", so I'm guessing "--evernote" probably
+		// exists too.
 
-// 	return section;
-// }
+		const enHighlight = cssValue(context, attributes.style, [
+			'-evernote-highlight',
+			'--evernote-highlight',
+			'-en-highlight',
+			'--en-highlight',
+		]);
 
-// function printSection(section:Section) {
-// 	console.info(JSON.stringify(removeSectionParent(section), null, 4));
-// }
+		// Value can be any colour or "true". I guess if it's set at all it
+		// should be highlighted but just in case handle case where it's
+		// "false".
+
+		if (enHighlight && enHighlight.toLowerCase() !== 'false') return true;
+	}
+	return false;
+}
 
 function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<EnexXmlToMdArrayResult> {
 	const remainingResources = resources.slice();
@@ -575,11 +620,14 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<Ene
 			const nodeAttributes = attributeToLowerCase(node);
 			const n = node.name.toLowerCase();
 			const isVisible = !isInvisibleBlock(this, nodeAttributes);
-
-			state.tags.push({
+			const tagInfo: ParserStateTag = {
 				name: n,
 				visible: isVisible,
-			});
+				isCodeBlock: isCodeBlock(this, n, nodeAttributes),
+				isHighlight: isHighlight(this, n, nodeAttributes),
+			};
+
+			state.tags.push(tagInfo);
 
 			const currentList = state.lists && state.lists.length ? state.lists[state.lists.length - 1] : null;
 
@@ -656,7 +704,6 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<Ene
 			} else if (n == 'caption') {
 				if (section.type != 'table') {
 					displaySaxWarning(this, 'Found a <caption> tag outside of a <table>');
-					// return;
 				}
 
 				const newSection: Section = {
@@ -673,6 +720,18 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<Ene
 					lines: [],
 					parent: section,
 				};
+				section.lines.push(newSection);
+				section = newSection;
+			} else if (tagInfo.isCodeBlock) {
+				state.inCode.push(true);
+				state.currentCode = '';
+
+				const newSection: Section = {
+					type: SectionType.Code,
+					lines: [],
+					parent: section,
+				};
+
 				section.lines.push(newSection);
 				section = newSection;
 			} else if (isBlockTag(n)) {
@@ -697,6 +756,8 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<Ene
 					section.lines.push(`${indent + container.counter}. `);
 					container.counter++;
 				}
+			} else if (tagInfo.isHighlight) {
+				section.lines.push('==');
 			} else if (isStrongTag(n)) {
 				section.lines.push('**');
 			} else if (isStrikeTag(n)) {
@@ -750,18 +811,6 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<Ene
 			} else if (n == 'blockquote') {
 				section.lines.push(BLOCK_OPEN);
 				state.inQuote = true;
-			} else if (n === 'code') {
-				state.inCode.push(true);
-				state.currentCode = '';
-
-				const newSection: Section = {
-					type: SectionType.Code,
-					lines: [],
-					parent: section,
-				};
-
-				section.lines.push(newSection);
-				section = newSection;
 			} else if (n === 'pre') {
 				section.lines.push(BLOCK_OPEN);
 				state.inPre = true;
@@ -871,6 +920,30 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<Ene
 				// End of note
 			} else if (!poppedTag.visible) {
 				if (section && section.parent) section = section.parent;
+			} else if (poppedTag.isHighlight) {
+				section.lines.push('==');
+			} else if (poppedTag.isCodeBlock) {
+				state.inCode.pop();
+
+				if (!state.inCode.length) {
+					// When a codeblock is wrapped in <pre><code>, it will have
+					// extra empty lines added by the "pre" logic, but since we
+					// are in a codeblock we should actually trim those.
+					const codeLines = trimBlockOpenAndClose(processMdArrayNewLines(section.lines).split('\n'));
+					section.lines = [];
+					if (codeLines.length > 1) {
+						section.lines.push('\n\n```\n');
+						for (let i = 0; i < codeLines.length; i++) {
+							if (i > 0) section.lines.push('\n');
+							section.lines.push(codeLines[i]);
+						}
+						section.lines.push('\n```\n\n');
+					} else {
+						section.lines.push(`\`${markdownUtils.escapeInlineCode(codeLines.join(''))}\``);
+					}
+
+					if (section && section.parent) section = section.parent;
+				}
 			} else if (isNewLineOnlyEndTag(n)) {
 				section.lines.push(BLOCK_CLOSE);
 			} else if (n == 'td' || n == 'th') {
@@ -897,23 +970,6 @@ function enexXmlToMdArray(stream: any, resources: ResourceEntity[]): Promise<Ene
 			} else if (n == 'blockquote') {
 				section.lines.push(BLOCK_OPEN);
 				state.inQuote = false;
-			} else if (n === 'code') {
-				state.inCode.pop();
-
-				if (!state.inCode.length) {
-					const codeLines = processMdArrayNewLines(section.lines).split('\n');
-					section.lines = [];
-					if (codeLines.length > 1) {
-						for (let i = 0; i < codeLines.length; i++) {
-							if (i > 0) section.lines.push('\n');
-							section.lines.push(`\t${codeLines[i]}`);
-						}
-					} else {
-						section.lines.push(`\`${codeLines.join('')}\``);
-					}
-
-					if (section && section.parent) section = section.parent;
-				}
 			} else if (n === 'pre') {
 				state.inPre = false;
 				section.lines.push(BLOCK_CLOSE);

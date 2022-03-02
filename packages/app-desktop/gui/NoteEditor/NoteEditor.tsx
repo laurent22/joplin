@@ -14,13 +14,13 @@ import useMarkupToHtml from './utils/useMarkupToHtml';
 import useFormNote, { OnLoadEvent } from './utils/useFormNote';
 import useFolder from './utils/useFolder';
 import styles_ from './styles';
-import { NoteEditorProps, FormNote, ScrollOptions, ScrollOptionTypes, OnChangeEvent, NoteBodyEditorProps } from './utils/types';
+import { NoteEditorProps, FormNote, ScrollOptions, ScrollOptionTypes, OnChangeEvent, NoteBodyEditorProps, AllAssetsOptions } from './utils/types';
 import ResourceEditWatcher from '@joplin/lib/services/ResourceEditWatcher/index';
 import CommandService from '@joplin/lib/services/CommandService';
 import ToolbarButton from '../ToolbarButton/ToolbarButton';
 import Button, { ButtonLevel } from '../Button/Button';
 import eventManager from '@joplin/lib/eventManager';
-import { AppState } from '../../app';
+import { AppState } from '../../app.reducer';
 import ToolbarButtonUtils from '@joplin/lib/services/commands/ToolbarButtonUtils';
 import { _ } from '@joplin/lib/locale';
 import TagList from '../TagList';
@@ -37,7 +37,7 @@ const NoteSearchBar = require('../NoteSearchBar.min.js');
 import { reg } from '@joplin/lib/registry';
 import Note from '@joplin/lib/models/Note';
 import Folder from '@joplin/lib/models/Folder';
-const bridge = require('electron').remote.require('./bridge').default;
+const bridge = require('@electron/remote').require('./bridge').default;
 const NoteRevisionViewer = require('../NoteRevisionViewer.min');
 
 const commands = [
@@ -110,7 +110,7 @@ function NoteEditor(props: NoteEditorProps) {
 				const savedNote: any = await Note.save(note);
 
 				setFormNote((prev: FormNote) => {
-					return { ...prev, user_updated_time: savedNote.user_updated_time };
+					return { ...prev, user_updated_time: savedNote.user_updated_time, hasChanged: false };
 				});
 
 				void ExternalEditWatcher.instance().updateNoteFile(savedNote);
@@ -151,15 +151,24 @@ function NoteEditor(props: NoteEditorProps) {
 		plugins: props.plugins,
 	});
 
-	const allAssets = useCallback(async (markupLanguage: number): Promise<any[]> => {
+	const allAssets = useCallback(async (markupLanguage: number, options: AllAssetsOptions = null): Promise<any[]> => {
+		options = {
+			contentMaxWidthTarget: '',
+			...options,
+		};
+
 		const theme = themeStyle(props.themeId);
 
 		const markupToHtml = markupLanguageUtils.newMarkupToHtml({}, {
 			resourceBaseUrl: `file://${Setting.value('resourceDir')}/`,
+			customCss: props.customCss,
 		});
 
-		return markupToHtml.allAssets(markupLanguage, theme);
-	}, [props.themeId]);
+		return markupToHtml.allAssets(markupLanguage, theme, {
+			contentMaxWidth: props.contentMaxWidth,
+			contentMaxWidthTarget: options.contentMaxWidthTarget,
+		});
+	}, [props.themeId, props.customCss, props.contentMaxWidth]);
 
 	const handleProvisionalFlag = useCallback(() => {
 		if (props.isProvisional) {
@@ -335,7 +344,10 @@ function NoteEditor(props: NoteEditorProps) {
 	const onScroll = useCallback((event: any) => {
 		props.dispatch({
 			type: 'EDITOR_SCROLL_PERCENT_SET',
-			noteId: formNote.id,
+			// In callbacks of setTimeout()/setInterval(), props/state cannot be used
+			// to refer the current value, since they would be one or more generations old.
+			// For the purpose, useRef value should be used.
+			noteId: formNoteRef.current.id,
 			percent: event.percent,
 		});
 	}, [props.dispatch, formNote]);
@@ -399,6 +411,8 @@ function NoteEditor(props: NoteEditorProps) {
 		noteToolbarButtonInfos: props.toolbarButtonInfos,
 		plugins: props.plugins,
 		fontSize: Setting.value('style.editor.fontSize'),
+		contentMaxWidth: props.contentMaxWidth,
+		isSafeMode: props.isSafeMode,
 	};
 
 	let editor = null;
@@ -458,6 +472,7 @@ function NoteEditor(props: NoteEditorProps) {
 			watchedNoteFiles={props.watchedNoteFiles}
 			plugins={props.plugins}
 			inConflictFolder={props.selectedFolderId === Folder.conflictFolderId()}
+			customCss={props.customCss}
 		/>;
 	}
 
@@ -543,13 +558,13 @@ function NoteEditor(props: NoteEditorProps) {
 					onTitleChange={onTitleChange}
 				/>
 				{renderSearchInfo()}
-				<div style={{ display: 'flex', flex: 1, paddingLeft: theme.editorPaddingLeft }}>
+				<div style={{ display: 'flex', flex: 1, paddingLeft: theme.editorPaddingLeft, maxHeight: '100%' }}>
 					{editor}
 				</div>
 				<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
 					{renderSearchBar()}
 				</div>
-				<div style={{ paddingLeft: theme.editorPaddingLeft, display: 'flex', flexDirection: 'row', alignItems: 'center', height: 40 }}>
+				<div className="tag-bar" style={{ paddingLeft: theme.editorPaddingLeft, display: 'flex', flexDirection: 'row', alignItems: 'center', height: 40 }}>
 					{renderTagButton()}
 					{renderTagBar()}
 				</div>
@@ -599,6 +614,8 @@ const mapStateToProps = (state: AppState) => {
 		setTagsToolbarButtonInfo: toolbarButtonUtils.commandsToToolbarButtons([
 			'setTags',
 		], whenClauseContext)[0],
+		contentMaxWidth: state.settings['style.editor.contentMaxWidth'],
+		isSafeMode: state.settings.isSafeMode,
 	};
 };
 

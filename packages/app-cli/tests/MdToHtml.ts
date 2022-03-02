@@ -1,7 +1,6 @@
 import MdToHtml from '@joplin/renderer/MdToHtml';
-const os = require('os');
 const { filename } = require('@joplin/lib/path-utils');
-const { setupDatabaseAndSynchronizer, switchClient } = require('./test-utils.js');
+import { setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
 import shim from '@joplin/lib/shim';
 const { themeStyle } = require('@joplin/lib/theme');
 
@@ -57,10 +56,8 @@ describe('MdToHtml', function() {
 			const result = await mdToHtml.render(markdown, null, mdToHtmlOptions);
 			let actualHtml = result.html;
 
-			if (os.EOL === '\r\n') {
-				expectedHtml = expectedHtml.replace(/\r\n/g, '\n');
-				actualHtml = actualHtml.replace(/\r\n/g, '\n');
-			}
+			expectedHtml = expectedHtml.replace(/\r?\n/g, '\n');
+			actualHtml = actualHtml.replace(/\r?\n/g, '\n');
 
 			if (actualHtml !== expectedHtml) {
 				console.info('');
@@ -135,6 +132,14 @@ describe('MdToHtml', function() {
 			const result = await mdToHtml.render('one\n\ntwo', null, { bodyOnly: true });
 			expect(result.html.trim()).toBe('<p>one</p>\n<p>two</p>');
 		}
+	}));
+
+	it('should render an empty string', (async () => {
+		const mdToHtml = newTestMdToHtml();
+		const result = await mdToHtml.render('', null, { splitted: true });
+		// The TinyMCE component checks for this exact string to apply a hack,
+		// so make sure it doesn't change from version to version.
+		expect(result.html).toBe('<div id="rendered-md"></div>');
 	}));
 
 	it('should split HTML and CSS', (async () => {
@@ -229,4 +234,18 @@ describe('MdToHtml', function() {
 		}
 	}));
 
+	it('should return attributes of line numbers', (async () => {
+		const mdToHtml = newTestMdToHtml();
+
+		// Mapping information between source lines and html elements is
+		// annotated.
+		{
+			const input = '# Head\nFruits\n- Apple\n';
+			const result = await mdToHtml.render(input, null, { bodyOnly: true, mapsToLine: true });
+			expect(result.html.trim()).toBe('<h1 id="head" class="maps-to-line" source-line="0">Head</h1>\n' +
+				'<p class="maps-to-line" source-line="1">Fruits</p>\n' +
+				'<ul>\n<li class="maps-to-line" source-line="2">Apple</li>\n</ul>'
+			);
+		}
+	}));
 });

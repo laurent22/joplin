@@ -9,7 +9,7 @@ const Tag = require('@joplin/lib/models/Tag').default;
 const Setting = require('@joplin/lib/models/Setting').default;
 const { reg } = require('@joplin/lib/registry.js');
 const { fileExtension } = require('@joplin/lib/path-utils');
-const { splitCommandString } = require('@joplin/lib/string-utils');
+const { splitCommandString, splitCommandBatch } = require('@joplin/lib/string-utils');
 const { _ } = require('@joplin/lib/locale');
 const fs = require('fs-extra');
 const { cliUtils } = require('./cli-utils.js');
@@ -390,7 +390,8 @@ class Application extends BaseApplication {
 	async commandList(argv) {
 		if (argv.length && argv[0] === 'batch') {
 			const commands = [];
-			const commandLines = (await fs.readFile(argv[1], 'utf-8')).split('\n');
+			const commandLines = splitCommandBatch(await fs.readFile(argv[1], 'utf-8'));
+
 			for (const commandLine of commandLines) {
 				if (!commandLine.trim()) continue;
 				const splitted = splitCommandString(commandLine.trim());
@@ -402,12 +403,22 @@ class Application extends BaseApplication {
 		}
 	}
 
+	// We need this special case here because by the time the `version` command
+	// runs, the keychain has already been setup.
+	checkIfKeychainEnabled(argv) {
+		return argv.indexOf('version') < 0;
+	}
+
 	async start(argv) {
-		argv = await super.start(argv);
+		const keychainEnabled = this.checkIfKeychainEnabled(argv);
+
+		argv = await super.start(argv, { keychainEnabled });
 
 		cliUtils.setStdout(object => {
 			return this.stdout(object);
 		});
+
+		this.initRedux();
 
 		// If we have some arguments left at this point, it's a command
 		// so execute it.
@@ -439,8 +450,6 @@ class Application extends BaseApplication {
 			process.exit(0);
 		} else {
 			// Otherwise open the GUI
-			this.initRedux();
-
 			const keymap = await this.loadKeymaps();
 
 			const AppGui = require('./app-gui.js');
