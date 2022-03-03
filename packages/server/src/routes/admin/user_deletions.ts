@@ -38,6 +38,7 @@ router.get('admin/user_deletions', async (_path: SubPath, ctx: AppContext) => {
 					name: 'email',
 					label: 'Email',
 					stretch: true,
+					canSort: false,
 				},
 				{
 					name: 'process_data',
