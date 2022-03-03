@@ -735,11 +735,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 			const x = params.x, y = params.y, isEditable = params.isEditable, inputFieldType = params.inputFieldType;
 			const elements = document.getElementsByClassName('codeMirrorEditor');
 
-			// To check if codeMirrorEditor doesn't exist. --OR--
-			// If isEditable is false which means there is a blur layout on codeMirrorEditor (e.g. add hyperlink)
-			// or mouse cursor is out of codeMirrorEditor. --OR--
-			// If the context menu was invoked on an input field (isEditable: true) and the input field on codeMirrorEditor,
-			// to avoid context-menu flickering (two context-menu) by checking if is an input field or not by using inputFieldType (e.g plainText, password).
+			// inputFieldType: To avoid context-menu flickering when there is an input field above the codeMirrorEditor.
 			if (!elements.length || !isEditable || inputFieldType !== 'none') return null;
 			const rect = convertToScreenCoordinates(Setting.value('windowContentZoomFactor'), elements[0].getBoundingClientRect());
 			return rect.x < x && rect.y < y && rect.right > x && rect.bottom > y;
