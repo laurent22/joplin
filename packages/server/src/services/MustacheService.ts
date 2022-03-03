@@ -5,22 +5,12 @@ import config from '../config';
 import { filename } from '@joplin/lib/path-utils';
 import { NotificationView } from '../utils/types';
 import { User } from '../services/database/types';
-import { makeUrl, SubPath, urlMatchesSchema, UrlType } from '../utils/routeUtils';
+import { makeUrl, SubPath, UrlType } from '../utils/routeUtils';
 import MarkdownIt = require('markdown-it');
 import { headerAnchor } from '@joplin/renderer';
 import { _ } from '@joplin/lib/locale';
 import { adminDashboardUrl, adminEmailsUrl, adminTasksUrl, adminUserDeletionsUrl, adminUsersUrl, changesUrl, homeUrl, itemsUrl } from '../utils/urlUtils';
-
-type MenuItemSelectedCondition = (selectedUrl: SubPath)=> boolean;
-
-export interface MenuItem {
-	title: string;
-	url?: string;
-	children?: MenuItem[];
-	selected?: boolean;
-	icon?: string;
-	selectedCondition?: MenuItemSelectedCondition;
-}
+import { MenuItem, setSelectedMenu } from '../utils/views/menu';
 
 export interface RenderOptions {
 	partials?: any;
@@ -40,6 +30,7 @@ export interface View {
 	cssFiles?: string[];
 	jsFiles?: string[];
 	strings?: Record<string, string>; // List of translatable strings
+	sidebarMenu?: MenuItem[];
 }
 
 interface GlobalParams {
@@ -111,22 +102,6 @@ export default class MustacheService {
 		return `${config().layoutDir}/${name}.mustache`;
 	}
 
-	private setSelectedMenu(selectedPath: SubPath, menuItems: MenuItem[]) {
-		if (!selectedPath) return;
-		if (!menuItems) return;
-
-		for (const menuItem of menuItems) {
-			if (menuItem.url) {
-				if (menuItem.selectedCondition) {
-					menuItem.selected = menuItem.selectedCondition(selectedPath);
-				} else {
-					menuItem.selected = urlMatchesSchema(menuItem.url, selectedPath.schema);
-				}
-			}
-			this.setSelectedMenu(selectedPath, menuItem.children);
-		}
-	}
-
 	private makeAdminMenu(selectedPath: SubPath): MenuItem[] {
 		const output: MenuItem[] = [
 			{
@@ -156,9 +131,7 @@ export default class MustacheService {
 			},
 		];
 
-		this.setSelectedMenu(selectedPath, output);
-
-		return output;
+		return setSelectedMenu(selectedPath, output);
 	}
 
 	private makeNavbar(selectedPath: SubPath, isAdmin: boolean): MenuItem[] {
@@ -190,9 +163,7 @@ export default class MustacheService {
 			]);
 		}
 
-		this.setSelectedMenu(selectedPath, output);
-
-		return output;
+		return setSelectedMenu(selectedPath, output);
 	}
 
 	private get defaultLayoutOptions(): GlobalParams {
@@ -318,6 +289,7 @@ export default class MustacheService {
 			cssFiles: cssFiles,
 			jsFiles: jsFiles,
 			navbar: view.navbar,
+			sidebarMenu: view.sidebarMenu,
 			...view.content,
 		};
 
