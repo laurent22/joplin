@@ -49,7 +49,7 @@ msgstr "(%s)"
 
 #: packages/lib/SyncTargetNone.ts:16
 msgid "(None)"
-msgstr "(None)"
+msgstr "(Κανένας)"
 
 #: packages/lib/models/Setting.ts:327 packages/lib/models/Setting.ts:328
 msgid "(wysiwyg: %s)"
@@ -1659,7 +1659,7 @@ msgstr "Αρχείο"
 
 #: packages/lib/SyncTargetFilesystem.js:18
 msgid "File system"
-msgstr "File system"
+msgstr "Σύστημα Αρχείων"
 
 #: packages/app-desktop/gui/ExtensionBadge.min.js:10
 msgid "Firefox Extension"
