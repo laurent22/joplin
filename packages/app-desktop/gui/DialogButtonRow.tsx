@@ -1,5 +1,5 @@
 const React = require('react');
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 const { _ } = require('@joplin/lib/locale');
 const { themeStyle } = require('@joplin/lib/theme');
 
@@ -56,7 +56,13 @@ export default function DialogButtonRow(props: Props) {
 			cancelButton_click();
 		}
 	};
+	useEffect(() => {
+		window.addEventListener('keydown', onKeyDown);
 
+		return () => {
+			window.removeEventListener('keydown', onKeyDown);
+		};
+	}, [onKeyDown]);
 	const buttonComps = [];
 
 	if (props.customButtons) {
