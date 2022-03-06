@@ -32,7 +32,7 @@ const packageJsonPath = `${rootDir}/package.json`;
 const manifest = readManifest(manifestPath);
 const pluginArchiveFilePath = path.resolve(publishDir, `${manifest.id}.jpl`);
 const pluginInfoFilePath = path.resolve(publishDir, `${manifest.id}.json`);
-const allPossibleCategories = ['Appearance', 'Developer tools', 'Productivity', 'Themes', 'Integrations', 'Note Management', 'Search', 'Tags', 'Editor', 'Files'];
+const allPossibleCategories = ['Appearance', 'Developer tools', 'Productivity', 'Themes', 'Integrations', 'Note management', 'Search', 'Tags', 'Editor', 'Files'];
 
 function validatePackageJson() {
 	const content = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
