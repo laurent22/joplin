@@ -32,9 +32,7 @@ const packageJsonPath = `${rootDir}/package.json`;
 const manifest = readManifest(manifestPath);
 const pluginArchiveFilePath = path.resolve(publishDir, `${manifest.id}.jpl`);
 const pluginInfoFilePath = path.resolve(publishDir, `${manifest.id}.json`);
-const allPossibleCategories = ["Recommended", "Appearance"," Developer tools", "Productivity", "Themes",
-								"Templates", "Integrations", "Todos", "Note Management", "Linking", "Education",
-								"Search Tools", "Tags", "Files and Backup", "Editor Enhancer", "Customization", "Import/Export"]
+const allPossibleCategories = ['Appearance', 'Developer tools', 'Productivity', 'Themes', 'Integrations', 'Note Management', 'Search', 'Tags', 'Editor', 'Files'];
 
 function validatePackageJson() {
 	const content = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
@@ -75,7 +73,6 @@ function validateCategories(categories) {
 	categories.forEach(category => {
 		if (!allPossibleCategories.includes(category)) throw new Error(`${category} is not a valid category. Valid Categories are: \n${allPossibleCategories}\n`);
 	});
-	if (categories.length > 3) throw new Error('Plugin cannot have more than 3 categories');
 }
 
 function readManifest(manifestPath) {
