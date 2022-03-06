@@ -34,7 +34,13 @@ export async function resourceInfo(options: ContextMenuOptions): Promise<any> {
 	const resource = options.resourceId ? await Resource.load(options.resourceId) : null;
 	const filePath = resource ? Resource.fullPath(resource) : null;
 	const filename = resource ? (resource.filename ? resource.filename : resource.title) : options.filename ? options.filename : '';
-	return { resource, filePath, filename };
+	const getCopyPath = () => {
+		if (options.textToCopy && options.mime) {
+			return textToDataUri(options.textToCopy, options.mime);
+		}
+		return filePath;
+	};
+	return { resource, filePath, filename, getCopyPath };
 }
 
 export function textToDataUri(text: string, mime: string): string {
@@ -43,48 +49,37 @@ export function textToDataUri(text: string, mime: string): string {
 
 export const svgUriToPng = (document: Document, svg: string) => new Promise<Uint8Array>((resolve, reject) => {
 	let canvas: HTMLCanvasElement;
-	let img: HTMLImageElement;
+	let ctx;
+	const img = document.createElement('img');
 
-	const cleanUpAndReject = (e: Error) => {
+	const cleanUpAndReject = () => {
 		if (canvas) canvas.remove();
 		if (img) img.remove();
-		return reject(e);
+		return reject();
 	};
 
-	try {
-		img = document.createElement('img');
-		if (!img) throw new Error('Failed to create img element');
-	} catch (e) {
-		return cleanUpAndReject(e);
-	}
-
+	if (!img) return cleanUpAndReject();
 	img.onload = function() {
-		try {
-			canvas = document.createElement('canvas');
-			if (!canvas) throw new Error('Failed to create canvas element');
-			canvas.width = img.width;
-			canvas.height = img.height;
-			const ctx = canvas.getContext('2d');
-			if (!ctx) throw new Error('Failed to get context');
-			ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, img.width, img.height);
-			const pngUri = canvas.toDataURL('image/png');
-			if (!pngUri) throw new Error('Failed to generate png uri');
-			const pngBase64 = pngUri.split(',')[1];
-			const byteString = atob(pngBase64);
-			// write the bytes of the string to a typed array
-			const buff = new Uint8Array(byteString.length);
-			for (let i = 0; i < byteString.length; i++) {
-				buff[i] = byteString.charCodeAt(i);
-			}
-			canvas.remove();
-			img.remove();
-			resolve(buff);
-		} catch (err) {
-			cleanUpAndReject(err);
+		canvas = document.createElement('canvas');
+		if (!canvas) return cleanUpAndReject();
+		canvas.width = img.width;
+		canvas.height = img.height;
+		ctx = canvas.getContext('2d');
+		if (!ctx) return cleanUpAndReject();
+		ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, img.width, img.height);
+		const pngUri = canvas.toDataURL('image/png');
+		if (!pngUri) return cleanUpAndReject();
+		const pngBase64 = pngUri.split(',')[1];
+		const byteString = atob(pngBase64);
+		// write the bytes of the string to a typed array
+		const buff = new Uint8Array(byteString.length);
+		for (let i = 0; i < byteString.length; i++) {
+			buff[i] = byteString.charCodeAt(i);
 		}
+		canvas.remove();
+		img.remove();
+		resolve(buff);
 	};
-	img.onerror = function(e) {
-		cleanUpAndReject(new Error(e.toString()));
-	};
+	img.onerror = cleanUpAndReject;
 	img.src = svg;
 });

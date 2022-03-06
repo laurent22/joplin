@@ -1,4 +1,4 @@
-import { textToDataUri, ContextMenuOptions, ContextMenuItemType, svgUriToPng } from './contextMenuUtils';
+import { resourceInfo, ContextMenuOptions, ContextMenuItemType, svgUriToPng } from './contextMenuUtils';
 
 jest.mock('@joplin/lib/models/Resource');
 
@@ -22,7 +22,8 @@ describe('contextMenu', () => {
 
 		for (const testCase of testCases) {
 			const [inputObj, expectedText] = testCase;
-			expect(textToDataUri(inputObj.textToCopy, inputObj.mime)).toBe(expectedText);
+			const { getCopyPath } = await resourceInfo(inputObj);
+			expect(getCopyPath()).toBe(expectedText);
 		}
 	});
 
@@ -34,17 +35,6 @@ describe('contextMenu', () => {
 		for (const testCase of testCases) {
 			const png = await svgUriToPng(document, testCase);
 			expect(png).toBeInstanceOf(Uint8Array);
-		}
-	});
-
-	it('should throw error on invalid svg uri', async () => {
-		const testCases: Array<string> = [
-			'data:image/svg+xml;base64,error',
-			'invalid',
-		];
-
-		for (const testCase of testCases) {
-			expect(svgUriToPng(document, testCase)).rejects.toBeInstanceOf(Error);
 		}
 	});
 });
