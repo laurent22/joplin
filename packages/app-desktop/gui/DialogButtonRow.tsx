@@ -50,9 +50,9 @@ export default function DialogButtonRow(props: Props) {
 	};
 
 	const onKeyDown = (event: any) => {
-		if (event.keyCode === 13) {
+		if (event.buttonName === 'Enter') {
 			okButton_click();
-		} else if (event.keyCode === 27) {
+		} else if (event.buttonName === 'Escape') {
 			cancelButton_click();
 		}
 	};

@@ -129,11 +129,11 @@ export default function(props: Props) {
 				<div className="form">
 					<div className="form-input-group">
 						<label>{_('Title')}</label>
-						<StyledInput type="text" ref={titleInputRef} value={folderTitle} onChange={onFolderTitleChange}/>
+						<StyledInput type="text" ref={titleInputRef} value={folderTitle} onChange={onFolderTitleChange} onKeyDown={(e: any) => (e.key === 'Enter') && (onButtonRowClick)}/>
 					</div>
 
 					<div className="form-input-group">
-						<label>{_('Icon')}</label>
+						<label>{_('Select')}</label>
 						<div className="icon-selector-row">
 							{ folderIcon && <div className="foldericon"><FolderIconBox folderIcon={folderIcon} /></div> }
 							<IconSelector
@@ -141,7 +141,7 @@ export default function(props: Props) {
 								icon={folderIcon}
 								onChange={onFolderIconChange}
 							/>
-							<Button ml={1} title={_('Select file...')} onClick={onBrowseClick}/>
+							<Button ml={1} title={_('Select file...')} onClick={onBrowseClick} />
 							{ folderIcon && <Button ml={1} title={_('Clear')} onClick={onClearClick}/> }
 						</div>
 					</div>
@@ -158,7 +158,7 @@ export default function(props: Props) {
 		);
 	}
 
-	const dialogTitle = isNew ? _('Create notebook') : _('Edit notebook');
+	const dialogTitle = isNew ? _('Create Notebook') : _('Edit Notebook');
 
 	function renderDialogWrapper() {
 		return (
