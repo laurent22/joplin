@@ -400,6 +400,9 @@ packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/styles/index.js.map
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/index.d.ts
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/index.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/index.js.map
+packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/tables.d.ts
+packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/tables.js
+packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/tables.js.map
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/types.d.ts
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/types.js
 packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/utils/types.js.map
@@ -658,6 +661,9 @@ packages/app-desktop/gui/StyleSheets/StyleSheetContainer.js.map
 packages/app-desktop/gui/SyncWizard/Dialog.d.ts
 packages/app-desktop/gui/SyncWizard/Dialog.js
 packages/app-desktop/gui/SyncWizard/Dialog.js.map
+packages/app-desktop/gui/TableEditorDialog/Dialog.d.ts
+packages/app-desktop/gui/TableEditorDialog/Dialog.js
+packages/app-desktop/gui/TableEditorDialog/Dialog.js.map
 packages/app-desktop/gui/TagList.d.ts
 packages/app-desktop/gui/TagList.js
 packages/app-desktop/gui/TagList.js.map

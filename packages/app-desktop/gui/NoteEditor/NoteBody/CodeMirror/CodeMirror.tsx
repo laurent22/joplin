@@ -38,6 +38,7 @@ import ErrorBoundary from '../../../ErrorBoundary';
 import { MarkupToHtmlOptions } from '../../utils/useMarkupToHtml';
 import eventManager from '@joplin/lib/eventManager';
 import { EditContextMenuFilterObject } from '@joplin/lib/services/plugins/api/JoplinWorkspace';
+import { checkTableIsUnderCursor, readTableAroundCursor } from './utils/tables';
 
 const menuUtils = new MenuUtils(CommandService.instance());
 
@@ -744,7 +745,14 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 
 			const menu = new Menu();
 
-			const hasSelectedText = editorRef.current && !!editorRef.current.getSelection() ;
+			const cm = editorRef.current;
+
+			const hasSelectedText = cm && !!cm.getSelection() ;
+
+			const tableIsUnderCursor = checkTableIsUnderCursor(cm);
+			let tableUnderCursor: string = null;
+
+			if (tableIsUnderCursor) tableUnderCursor = readTableAroundCursor(cm);
 
 			menu.append(
 				new MenuItem({
@@ -775,6 +783,27 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 					},
 				})
 			);
+
+			if (tableUnderCursor) {
+				menu.append(
+					new MenuItem({ type: 'separator' })
+				);
+
+				menu.append(
+					new MenuItem({
+						label: _('Edit table...'),
+						click: async () => {
+							props.dispatch({
+								type: 'DIALOG_OPEN',
+								name: 'tableEditor',
+								props: {
+									markdownTable: tableUnderCursor,
+								},
+							});
+						},
+					})
+				);
+			}
 
 			const spellCheckerMenuItems = SpellCheckerService.instance().contextMenuItems(params.misspelledWord, params.dictionarySuggestions);
 

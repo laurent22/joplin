@@ -174,6 +174,7 @@
     "styled-components": "5.1.1",
     "styled-system": "5.1.5",
     "taboverride": "^4.0.3",
+    "tabulator-tables": "^5.1.4",
     "tinymce": "^5.2.0"
   }
 }

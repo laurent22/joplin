@@ -22,6 +22,7 @@ import Dialog from './Dialog';
 import SyncWizardDialog from './SyncWizard/Dialog';
 import MasterPasswordDialog from './MasterPasswordDialog/Dialog';
 import EditFolderDialog from './EditFolderDialog/Dialog';
+import TableEditorDialog from './TableEditorDialog/Dialog';
 import StyleSheetContainer from './StyleSheets/StyleSheetContainer';
 const { ImportScreen } = require('./ImportScreen.min.js');
 const { ResourceScreen } = require('./ResourceScreen.js');
@@ -38,6 +39,7 @@ interface Props {
 	zoomFactor: number;
 	needApiAuth: boolean;
 	dialogs: AppStateDialog[];
+	dialogContentMaxSize: Size;
 }
 
 interface ModalDialogProps {
@@ -51,6 +53,7 @@ interface RegisteredDialogProps {
 	themeId: number;
 	key: string;
 	dispatch: Function;
+	dialogContentMaxSize: Size;
 }
 
 interface RegisteredDialog {
@@ -60,19 +63,25 @@ interface RegisteredDialog {
 const registeredDialogs: Record<string, RegisteredDialog> = {
 	syncWizard: {
 		render: (props: RegisteredDialogProps, customProps: any) => {
-			return <SyncWizardDialog key={props.key} dispatch={props.dispatch} themeId={props.themeId} {...customProps}/>;
+			return <SyncWizardDialog key={props.key} dispatch={props.dispatch} dialogContentMaxSize={props.dialogContentMaxSize} themeId={props.themeId} {...customProps}/>;
 		},
 	},
 
 	masterPassword: {
 		render: (props: RegisteredDialogProps, customProps: any) => {
-			return <MasterPasswordDialog key={props.key} dispatch={props.dispatch} themeId={props.themeId} {...customProps}/>;
+			return <MasterPasswordDialog key={props.key} dispatch={props.dispatch} dialogContentMaxSize={props.dialogContentMaxSize} themeId={props.themeId} {...customProps}/>;
 		},
 	},
 
 	editFolder: {
 		render: (props: RegisteredDialogProps, customProps: any) => {
-			return <EditFolderDialog key={props.key} dispatch={props.dispatch} themeId={props.themeId} {...customProps}/>;
+			return <EditFolderDialog key={props.key} dispatch={props.dispatch} dialogContentMaxSize={props.dialogContentMaxSize} themeId={props.themeId} {...customProps}/>;
+		},
+	},
+
+	tableEditor: {
+		render: (props: RegisteredDialogProps, customProps: any) => {
+			return <TableEditorDialog key={props.key} dispatch={props.dispatch} dialogContentMaxSize={props.dialogContentMaxSize} themeId={props.themeId} {...customProps}/>;
 		},
 	},
 };
@@ -195,10 +204,12 @@ class RootComponent extends React.Component<Props, any> {
 		for (const dialog of props.dialogs) {
 			const md = registeredDialogs[dialog.name];
 			if (!md) throw new Error(`Unknown dialog: ${dialog.name}`);
+
 			output.push(md.render({
 				key: dialog.name,
 				themeId: props.themeId,
 				dispatch: props.dispatch,
+				dialogContentMaxSize: props.dialogContentMaxSize,
 			}, dialog.props));
 		}
 		return output;
@@ -245,6 +256,11 @@ const mapStateToProps = (state: AppState) => {
 		themeId: state.settings.theme,
 		needApiAuth: state.needApiAuth,
 		dialogs: state.dialogs,
+		dialogContentMaxSize: {
+			// Minus padding, margins and dialog header and button bar.
+			width: state.windowContentSize.width - 36 * 2,
+			height: state.windowContentSize.height - 36 * 2 - 28 - 30 - 20,
+		},
 	};
 };
 

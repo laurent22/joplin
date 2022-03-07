@@ -165,6 +165,7 @@ export default function useJoplinMode(CodeMirror: any) {
 				}
 
 				if (isMonospace) { token = `${token} jn-monospace`; }
+				if (state.inTable) { token = `${token} jn-table-item`; }
 				// //////// End Monospace //////////
 
 				return token;

@@ -83,6 +83,8 @@ async function main() {
 		'codemirror/addon/dialog/dialog.css',
 		'@joeattardi/emoji-button/dist/index.js',
 		'mark.js/dist/mark.min.js',
+		'tabulator-tables/dist/css/tabulator.min.css',
+		'tabulator-tables/dist/js/tabulator.min.js',
 		{
 			src: resolve(__dirname, '../../lib/services/plugins/sandboxProxy.js'),
 			dest: `${buildLibDir}/@joplin/lib/services/plugins/sandboxProxy.js`,

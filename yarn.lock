@@ -2954,6 +2954,7 @@ __metadata:
     styled-components: 5.1.1
     styled-system: 5.1.5
     taboverride: ^4.0.3
+    tabulator-tables: ^5.1.4
     tinymce: ^5.2.0
     typescript: 4.0.5
   dependenciesMeta:
@@ -28476,6 +28477,13 @@ __metadata:
   version: 4.0.3
   resolution: "taboverride@npm:4.0.3"
   checksum: 0383191561412ef2e199cc5439578f4bb2c4802402cb47b6012fc7d6485d3507e057a414411a7b10af34ae32919e4508812e4c77cf30834d3e306d9e9ef3bb6a
+  languageName: node
+  linkType: hard
+
+"tabulator-tables@npm:^5.1.4":
+  version: 5.1.4
+  resolution: "tabulator-tables@npm:5.1.4"
+  checksum: f77f9e975502253ec945d66d5d2f1fb615743824a05c6e8b67013c8f53976edb3c734ef1286c24253d85dd3990e596e3f04ecc1fbd0682541b5ed1a5a6c0d762
   languageName: node
   linkType: hard
 

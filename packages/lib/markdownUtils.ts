@@ -10,7 +10,7 @@ const emptyListRegex = /^(\s*)([*+-] \[[x ]\]|[*+-]|(\d+)[.)])(\s+)$/;
 export enum MarkdownTableJustify {
 	Left = 'left',
 	Center = 'center',
-	Right = 'right,',
+	Right = 'right',
 }
 
 export interface MarkdownTableHeader {
@@ -23,6 +23,11 @@ export interface MarkdownTableHeader {
 
 export interface MarkdownTableRow {
 	[key: string]: string;
+}
+
+export interface MarkdownTable {
+	headers: MarkdownTableHeader[];
+	rows: MarkdownTableRow[];
 }
 
 const markdownUtils = {
@@ -204,6 +209,97 @@ const markdownUtils = {
 		const title = lines[0].trim();
 		return title.replace(filterRegex, '').replace(mdLinkRegex, '$1').replace(emptyMdLinkRegex, '$1').substring(0,80);
 	},
+};
+
+export const parseMarkdownTable = (tableMarkdown: string): MarkdownTable => {
+	interface Token {
+		type: string;
+		content: string;
+		attrGet: (name: string)=> string;
+	}
+
+	const getJustifyFromStyle = (token: Token): MarkdownTableJustify => {
+		const style = token.attrGet('style');
+		if (!style) return MarkdownTableJustify.Left;
+		if (style.includes('text-align:right')) return MarkdownTableJustify.Right;
+		if (style.includes('text-align:left')) return MarkdownTableJustify.Left;
+		if (style.includes('text-align:center')) return MarkdownTableJustify.Center;
+		return MarkdownTableJustify.Left;
+	};
+
+	const env = {};
+	const markdownIt = new MarkdownIt();
+	const tokens: Token[] = markdownIt.parse(tableMarkdown, env);
+	const headers: MarkdownTableHeader[] = [];
+	const rows: MarkdownTableRow[] = [];
+
+	let state = 'start';
+	let headerIndex = 0;
+	let rowIndex = -1;
+
+	for (const token of tokens) {
+		if (state === 'start') {
+			if (token.type !== 'table_open') {
+				throw new Error('Expected table_open token');
+			} else {
+				state = 'open';
+			}
+			continue;
+		}
+
+		if (token.type === 'thead_open') {
+			state = 'header';
+			continue;
+		}
+
+		if (state === 'header') {
+			if (token.type === 'th_open') {
+				headers.push({
+					label: '',
+					name: `c${headerIndex}`,
+					justify: getJustifyFromStyle(token),
+				});
+			}
+
+			if (token.type === 'inline') {
+				headers[headerIndex].label += token.content;
+			}
+
+			if (token.type === 'th_close') {
+				headerIndex++;
+			}
+
+			if (token.type === 'thead_close') {
+				state = 'content';
+			}
+			continue;
+		}
+
+		if (state === 'content') {
+			if (token.type === 'tr_open') {
+				state = 'row';
+				rows.push({});
+				rowIndex++;
+				headerIndex = 0;
+			}
+			continue;
+		}
+
+		if (state === 'row') {
+			if (token.type === 'inline') {
+				rows[rowIndex][`c${headerIndex}`] = token.content;
+				headerIndex++;
+			}
+
+			if (token.type === 'tr_close') {
+				state = 'content';
+			}
+
+			continue;
+		}
+	}
+
+	return { headers, rows };
 };
 
 export default markdownUtils;
