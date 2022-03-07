@@ -96,7 +96,14 @@ export default function(props: Props) {
 	}, []);
 
 	const onBrowseClick = useCallback(async () => {
-		const filePaths = await bridge().showOpenDialog();
+		const filePaths = await bridge().showOpenDialog({
+			filters: [
+				{
+					name: _('Images'),
+					extensions: ['jpg', 'jpeg', 'png'],
+				},
+			],
+		});
 		if (filePaths.length !== 1) return;
 		const filePath = filePaths[0];
 

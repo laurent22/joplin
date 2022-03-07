@@ -48,7 +48,7 @@ export default class Revision extends BaseItem {
 
 	private static isNewPatch(patch: string): boolean {
 		if (!patch) return true;
-		return patch.indexOf('[{') === 0;
+		return patch.indexOf('[{') === 0 || patch === '[]';
 	}
 
 	public static applyTextPatch(text: string, patch: string): string {
@@ -58,7 +58,7 @@ export default class Revision extends BaseItem {
 			// An empty patch should be '[]', but legacy data may be just "".
 			// However an empty string would make JSON.parse fail so we set it
 			// to '[]'.
-			const result = dmp.patch_apply(JSON.parse(patch ? patch : '[]'), text);
+			const result = dmp.patch_apply(this.parsePatch(patch), text);
 			if (!result || !result.length) throw new Error('Could not apply patch');
 			return result[0];
 		}
@@ -78,7 +78,7 @@ export default class Revision extends BaseItem {
 		return true;
 	}
 
-	static createObjectPatch(oldObject: any, newObject: any) {
+	public static createObjectPatch(oldObject: any, newObject: any) {
 		if (!oldObject) oldObject = {};
 
 		const output: any = {
@@ -120,7 +120,7 @@ export default class Revision extends BaseItem {
 	// line, so that it can be processed by patchStats().
 	private static newPatchToDiffFormat(patch: string): string {
 		const changeList: string[] = [];
-		const patchArray = JSON.parse(patch);
+		const patchArray = this.parsePatch(patch);
 		for (const patchItem of patchArray) {
 			for (const d of patchItem.diffs) {
 				if (d[0] !== 0) changeList.push(d[0] < 0 ? `-${d[1].replace(/[\n\r]/g, ' ')}` : `+${d[1].trim().replace(/[\n\r]/g, ' ')}`);
@@ -237,7 +237,7 @@ export default class Revision extends BaseItem {
 	}
 
 	// Note: revs must be sorted by update_time ASC (as returned by allByType)
-	static async mergeDiffs(revision: RevisionEntity, revs: RevisionEntity[] = null) {
+	public static async mergeDiffs(revision: RevisionEntity, revs: RevisionEntity[] = null) {
 		if (!('encryption_applied' in revision) || !!revision.encryption_applied) throw new JoplinError('Target revision is encrypted', 'revision_encrypted');
 
 		if (!revs) {
@@ -273,7 +273,12 @@ export default class Revision extends BaseItem {
 			if (rev.encryption_applied) throw new JoplinError(sprintf('Revision "%s" is encrypted', rev.id), 'revision_encrypted');
 			output.title = this.applyTextPatch(output.title, rev.title_diff);
 			output.body = this.applyTextPatch(output.body, rev.body_diff);
-			output.metadata = this.applyObjectPatch(output.metadata, rev.metadata_diff);
+			try {
+				output.metadata = this.applyObjectPatch(output.metadata, rev.metadata_diff);
+			} catch (error) {
+				error.message = `Revision ${rev.id}: Could not apply patch: ${error.message}: ${rev.metadata_diff}`;
+				throw error;
+			}
 		}
 
 		return output;
@@ -330,4 +335,9 @@ export default class Revision extends BaseItem {
 		const existingRev = await Revision.latestRevision(itemType, itemId);
 		return existingRev && existingRev.item_updated_time === updatedTime;
 	}
+
+	private static parsePatch(patch: any): any[] {
+		return patch ? JSON.parse(patch) : [];
+	}
+
 }

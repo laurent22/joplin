@@ -1,6 +1,7 @@
 const Folder = require('../../models/Folder').default;
 const Setting = require('../../models/Setting').default;
 const BaseModel = require('../../BaseModel').default;
+const Tag = require('../../models/Tag').default;
 
 const shared = {};
 
@@ -50,20 +51,7 @@ shared.renderFolders = function(props, renderItem) {
 };
 
 shared.renderTags = function(props, renderItem) {
-	const tags = props.tags.slice();
-	tags.sort((a, b) => {
-		// It seems title can sometimes be undefined (perhaps when syncing
-		// and before tag has been decrypted?). It would be best to find
-		// the root cause but for now that will do.
-		//
-		// Fixes https://github.com/laurent22/joplin/issues/4051
-		if (!a || !a.title || !b || !b.title) return 0;
-
-		// Note: while newly created tags are normalized and lowercase
-		// imported tags might be any case, so we need to do case-insensitive
-		// sort.
-		return a.title.toLowerCase() < b.title.toLowerCase() ? -1 : +1;
-	});
+	const tags = Tag.sortTags(props.tags.slice());
 	const tagItems = [];
 	const order = [];
 	for (let i = 0; i < tags.length; i++) {

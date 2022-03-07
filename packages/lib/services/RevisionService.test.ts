@@ -472,4 +472,35 @@ describe('services_Revision', function() {
 		expect(Date.now() - interval < timeRev2).toBe(true); // check the computer is not too slow for this test
 		expect((await Revision.all()).length).toBe(2);
 	}));
+
+	it('should give a detailed error when a patch cannot be applied', async () => {
+		const n1_v0 = await Note.save({ title: '', is_todo: 1, todo_completed: 0 });
+		const n1_v1 = await Note.save({ id: n1_v0.id, title: 'hello' });
+		await revisionService().collectRevisions(); // REV 1
+		await time.msleep(100);
+
+		await Note.save({ id: n1_v1.id, title: 'hello welcome', todo_completed: 1000 });
+		await revisionService().collectRevisions(); // REV 2
+
+		// Corrupt the metadata diff to generate the error - we assume that it's
+		// been truncated for whatever reason.
+
+		const corruptedMetadata = '{"new":{"todo_completed":10';
+		const revId2 = (await Revision.all())[1].id;
+		await Revision.save({ id: revId2, metadata_diff: corruptedMetadata });
+
+		const note = await Note.load(n1_v0.id);
+		let error = null;
+		try {
+			await revisionService().createNoteRevision_(note);
+		} catch (e) {
+			error = e;
+		}
+
+		expect(error).toBeTruthy();
+		expect(error.message).toContain(revId2);
+		expect(error.message).toContain(note.id);
+		expect(error.message).toContain(corruptedMetadata);
+	});
+
 });

@@ -1,4 +1,5 @@
 import { Plan, StripePublicConfig } from '@joplin/lib/utils/joplinCloud';
+import { OpenGraphTags } from './openGraph';
 
 export enum Env {
 	Dev = 'dev',
@@ -72,6 +73,7 @@ export interface TemplateParams {
 	assetUrls: AssetUrls;
 	discussOnForumLink?: string;
 	showBottomLinks?: boolean;
+	openGraph: OpenGraphTags;
 }
 
 export interface PlanPageParams extends TemplateParams {
