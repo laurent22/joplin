@@ -11,6 +11,7 @@ import BaseModel from '@joplin/lib/BaseModel';
 import { processPastedHtml } from './resourceHandling';
 import { NoteEntity, ResourceEntity } from '@joplin/lib/services/database/types';
 const fs = require('fs-extra');
+const { writeFile } = require('fs-extra');
 const { clipboard } = require('electron');
 const { toSystemSlashes } = require('@joplin/lib/path-utils');
 
@@ -25,7 +26,7 @@ function handleCopyToClipboard(options: ContextMenuOptions) {
 async function saveFileData(data: any, filename: string) {
 	const newFilePath = await bridge().showSaveDialog({ defaultPath: filename });
 	if (!newFilePath) return;
-	await fs.outputFile(newFilePath, data);
+	await writeFile(newFilePath, data);
 }
 
 export async function openItemById(itemId: string, dispatch: Function, hash: string = '') {
@@ -99,6 +100,9 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 			label: _('Save as PNG'),
 			onAction: async (options: ContextMenuOptions) => {
 				// First convert it to png then save
+				if (options.mime != 'image/svg+xml') {
+					throw new Error(`Unsupported image type: ${options.mime}`);
+				}
 				const dataUri = textToDataUri(options.textToCopy, options.mime);
 				const png = await svgUriToPng(document, dataUri);
 				const filename = options.filename?.replace('.svg', '.png');
@@ -117,8 +121,12 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 		copyPathToClipboard: {
 			label: _('Copy path to clipboard'),
 			onAction: async (options: ContextMenuOptions) => {
-				const { getCopyPath } = await resourceInfo(options);
-				clipboard.writeText(toSystemSlashes(getCopyPath()));
+				let path = '';
+				if (options.textToCopy && options.mime) { path = textToDataUri(options.textToCopy, options.mime); } else {
+					const { resourcePath } = await resourceInfo(options);
+					if (resourcePath) path = toSystemSlashes(resourcePath);
+				}
+				clipboard.writeText(path);
 			},
 			isActive: (itemType: ContextMenuItemType) => itemType === ContextMenuItemType.Image || itemType === ContextMenuItemType.Resource,
 		},

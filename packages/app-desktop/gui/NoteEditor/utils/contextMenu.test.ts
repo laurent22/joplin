@@ -1,4 +1,4 @@
-import { resourceInfo, ContextMenuOptions, ContextMenuItemType, svgUriToPng } from './contextMenuUtils';
+import { textToDataUri, ContextMenuOptions, ContextMenuItemType, svgUriToPng } from './contextMenuUtils';
 
 jest.mock('@joplin/lib/models/Resource');
 
@@ -22,8 +22,7 @@ describe('contextMenu', () => {
 
 		for (const testCase of testCases) {
 			const [inputObj, expectedText] = testCase;
-			const { getCopyPath } = await resourceInfo(inputObj);
-			expect(getCopyPath()).toBe(expectedText);
+			expect(textToDataUri(inputObj.textToCopy, inputObj.mime)).toBe(expectedText);
 		}
 	});
 
@@ -36,5 +35,26 @@ describe('contextMenu', () => {
 			const png = await svgUriToPng(document, testCase);
 			expect(png).toBeInstanceOf(Uint8Array);
 		}
+	});
+
+	describe('error handling', () => {
+		// We are mocking console.error since jsdom throws errors to console when we try to load an invalid img
+		// https://github.com/facebook/jest/pull/5267#issuecomment-356605468
+		const consoleError = console.error;
+		beforeAll(() => {
+			console.error = jest.fn();
+		});
+		afterAll(() => {
+			console.error = consoleError;
+		});
+		it('should throw error on invalid svg uri', async () => {
+			const testCases: Array<string> = [
+				'data:image/svg+xml;base64,error',
+				'invalid',
+			];
+			for (const testCase of testCases) {
+				expect(svgUriToPng(document, testCase)).rejects.toBeInstanceOf(Error);
+			}
+		});
 	});
 });
