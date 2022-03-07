@@ -593,13 +593,14 @@
 			let mermaidElement = element.closest(".mermaid")?.children[0];
 			if(mermaidElement) {
 				const svgString = new XMLSerializer().serializeToString(mermaidElement);
-				if(!!svgString)
-				ipcProxySendToHost('contextMenu', {
+				if(!!svgString){
+					ipcProxySendToHost('contextMenu', {
 					type: 'image',
 					textToCopy: svgString,
 					mime: 'image/svg+xml',
 					filename: mermaidElement.id + '.svg',
 				});
+				}
 				return;
 			}
 
