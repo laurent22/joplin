@@ -2,11 +2,11 @@
 
 2022 is Joplin third round at Google Summer of Code. Detailed information on how to get involved and apply are given in the [general Summer of Code introduction](https://joplinapp.org/gsoc2022/index/)
 
-**These are all proposals! We are open to new ideas you might have!!** Do you have an awesome idea you want to work on with Joplin but that is not among the ideas below? That's cool. We love that! But please do us a favour: Get in touch with a mentor early on and make sure your project is realistic and within the scope of Joplin. Just make sure your idea is within this year's theme:
+**These are all proposals! We are open to new ideas you might have!!** Do you have an awesome idea you want to work on with Joplin but that is not among the ideas below? That's cool. We love that! But please do us a favour: Get in touch with a mentor early on and make sure your project is realistic and within the scope of Joplin. This year's themes are:
 
-- **Plugin development** - implementing new features using Joplin's plugin system.
-- **External desktop applications** - build external Joplin applications by retrieving, creating or modifying notes via the Data API.
-- **External server applications** - leverage the Joplin Server API to provide online features to Joplin users.
+- **Mobile and tablet development** - we want to improve the mobile/tablet application on iOS and Android.
+- **Plugin and external apps** - leverage the Joplin API to create plugins and external apps.
+- And you are welcome to suggest your own ideas.
 
 # Information for Contributors
 
