@@ -735,7 +735,8 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 			const x = params.x, y = params.y, isEditable = params.isEditable, inputFieldType = params.inputFieldType;
 			const elements = document.getElementsByClassName('codeMirrorEditor');
 
-			// inputFieldType: To avoid context-menu flickering when there is an input field above the codeMirrorEditor.
+			// inputFieldType: The input field type of CodeMirror is "textarea" so the inputFieldType = "none",
+			// and any single-line input above codeMirror has inputFieldType value according to the type of input e.g.(text = plainText, password = password, ...).
 			if (!elements.length || !isEditable || inputFieldType !== 'none') return null;
 			const rect = convertToScreenCoordinates(Setting.value('windowContentZoomFactor'), elements[0].getBoundingClientRect());
 			return rect.x < x && rect.y < y && rect.right > x && rect.bottom > y;
