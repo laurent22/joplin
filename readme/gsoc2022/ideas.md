@@ -48,7 +48,7 @@ Difficulty Level: Medium
 
 Skills Required: TypeScript, React. Some knowledge of Electron and electron-builder.
 
-Potential Mentor(s): [tessus](https://discourse.joplinapp.org/u/tessus/), [CalebJohn](https://github.com/CalebJohn/)
+Potential Mentor(s): [CalebJohn](https://github.com/CalebJohn/)
 
 Expected size of project: 175 hours
 
@@ -82,7 +82,7 @@ Difficulty Level: High
 
 Skills Required: TypeScript, JavaScript, knowledge of Electron and GitHub Actions.
 
-Potential Mentor(s): [tessus](https://discourse.joplinapp.org/u/tessus/), [CalebJohn](https://github.com/CalebJohn/), [JackGruber](https://discourse.joplinapp.org/u/JackGruber)
+Potential Mentor(s): [CalebJohn](https://github.com/CalebJohn/), [JackGruber](https://discourse.joplinapp.org/u/JackGruber)
 
 Expected size of project: 350 hours
 
@@ -208,7 +208,7 @@ Difficulty Level: Medium
 
 Skills Required: Typescript, CSS, GitHub Actions.
 
-Potential Mentor(s): [tessus](https://discourse.joplinapp.org/u/tessus/), [JackGruber](https://discourse.joplinapp.org/u/JackGruber), [Laurent](https://github.com/laurent22/)
+Potential Mentor(s): [JackGruber](https://discourse.joplinapp.org/u/JackGruber), [Laurent](https://github.com/laurent22/)
 
 Expected size of project: 350 hours
 
