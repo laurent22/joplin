@@ -6,7 +6,7 @@ Due to our limited resources and in order to give everyone a chance to submit a 
 
 2. Each contributor **may only create one pull request at a time**. Once your pull request has been merged, you can post a second one. We have this rule in place due to our limited resources - if everyone was allowed to post multiple pull requests we will not be able to review them properly. It is also better for you because you only need to care about one PR - so spend time making sure it is as good as it can be - make sure it works well, has test units, documentation and screenshots (if relevant).
 
-3. If the pull request has serious issues, or would require a significant rewrite to be acceptable, we might closed it and you will not be allowed to open a new one. So **please be careful when posting a PR**.
+3. If the pull request has serious issues, or would require a significant rewrite to be acceptable, we might close it and you will not be allowed to open a new one. So **please be careful when posting a PR**.
 
 4. **If you are borrowing code, please disclose it**. It is fine and sometimes even recommended to borrow code, but we need to know about it to assess your work. If we find out that your pull request contains a lot of code copied from elsewhere, we will close the pull request.
 

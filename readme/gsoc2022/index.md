@@ -2,9 +2,8 @@
 
 Joplin has a young but well proven history. All contributors, Joplin users and developers are welcome to participate in the hopefully third year Summer of Code program with Joplin. This year the main themes will be:
 
-- **Plugin development** - implementing new features using Joplin's plugin system.
-- **External desktop applications** - build external Joplin applications by retrieving, creating or modifying notes via the Data API.
-- **External server applications** - leverage the Joplin Server API to provide online features to Joplin users.
+- **Mobile and tablet development** - we want to improve the mobile/tablet application on iOS and Android.
+- **Plugin and external apps** - leverage the Joplin API to create plugins and external apps.
 - And you are welcome to suggest your own ideas.
 
 Mentors, administrators and contributors: read [Summer of Code](https://developers.google.com/open-source/gsoc) occasionally. Also read the [Summer of Code FAQ](https://developers.google.com/open-source/gsoc/faq).
