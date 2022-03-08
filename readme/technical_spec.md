@@ -68,7 +68,7 @@ Please provide test units if possible.
 
 If it's for GSoC, test units are compulsory. We don't accept pull requests without.
 
-In general try to think how you can unit test your code - sometimes it means refactoring some parts of it into a few functions, which can then be easily unit tested. Integration tests may be trickier so they are not always required.
+In general try to think how you can unit test your code - sometimes it means refactoring some parts of it into a few functions, which can then be easily unit tested.
 
 Additionally, if the unit tests are not sufficient, please provide a manual testing plan, which should include detailed steps on:
 
