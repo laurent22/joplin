@@ -53,36 +53,56 @@ For changes made to the Desktop client that affect the user interface, refer to 
 
 ## Automated tests
 
-When submitting a pull request for a new feature or a bug fix, please add automated tests for your code whenever possible. Tests in Joplin are divided into **unit tests** and **feature tests**.
+When submitting a pull request for a new feature or a bug fix, please add automated tests. We use [Jest](https://jestjs.io/) as a testing framework so you will need to be familiar with it or go through their documentation.
 
-* **Unit tests** are used to test models, services or utility classes - they are relatively low level. Unit tests should be prefixed with the type of class that is being tested - for example "models_Folder" or "services_SearchEngine".
+### Running the tests
 
-* **Feature tests** on the other hand are to test higher level functionalities such as interactions with the GUI and how they affect the underlying model. Often these tests would dispatch Redux actions, and inspect how the application state has been changed. The feature tests should be prefixed with "feature_", for example "feature_TagList". There's a good explanation on what qualifies as a feature test in [this post](https://github.com/laurent22/joplin/pull/2819#issuecomment-603502230).
-
-The tests are under packages/app-cli/tests. To get them running, you first need to build the CLI app:
-
-```sh
-yarn install
-cd packages/app-cli
-```
-
-To run all the test units:
+To run all the test units, run from the root:
 
 ```sh
 yarn test
 ```
 
+Or you can go inside a package folder, and run the tests from there. For example to run all the library tests, go in `packages/lib` and run `yarn test`
+
 To run just one particular file:
 
 ```sh
-yarn test --filter=markdownUtils # Don't add the .js extension
+# Run all the tests in markdownUtils.test.ts
+yarn test markdownUtils
 ```
 
-To filter tests. For example, to run all the test units that contain "should handle conflict" in their description:
+To run only a particular test in a file:
 
 ```sh
-yarn test --filter="should handle conflict"
+# Run only the test described as "should handle conflict"
+# inside markdownUtils.test.ts:
+yarn test markdownUtils --filter="should handle conflict"
 ```
+
+### Adding a new test file
+
+To add a test, simply create a new file with an extension `.test.ts` in the same directory. For example if you are working on the file `example.ts`, create a file `example.test.ts` for the unit tests. If this file already exist, simply add your tests directly to it.
+
+### Setting the testing environment
+
+Many utility functions are available under the package `@joplin/lib/testing/test-utils`. Have a look for example at [Note.test.ts](https://github.com/laurent22/joplin/blob/dev/packages/lib/models/Note.test.ts) to see how to setup test units with database support and synchroniser support. Note that this is not needed for all tests - if you just have a simple functions to test you won't need that extra setup.
+
+### Testing React Hooks
+
+To test React Hooks please use the package `@testing-library/react-hooks`. See [useLayoutItemSizes.test.ts](https://github.com/laurent22/joplin/blob/dev/packages/app-desktop/gui/ResizableLayout/utils/useLayoutItemSizes.test.ts) for an example.
+
+### If it is not possible to add tests
+
+More often than not, it is actually possible to add tests - just go back to your code and see if it can be refactored and certain functionalities moved to simple functions (with no dependencies). Once you have a simple function, you can easily add unit tests for it.
+
+Additionally, if the unit tests are not sufficient, please provide a **manual testing plan**, which should include detailed steps on:
+
+- How to test that your feature is working. Include at least 5 tests. Try to think of the possible inputs - if it's a list, how does it work with 0 elements, or 1, or 10, or 100,000. If it's a text input, how does it work with an empty string, or a very large string, etc. Basically don't just put one test that check the best case scenario.
+
+- How to verify that related parts of the applications are not broken. For example if you changed the note loading logic, check that the toolbar is still working as expected (and not modifying the previously loaded note for example), check that switching from one note to another still works. Look at the note list and verify that the note title is updated there too, etc.
+
+A reviewer should be able to run the app with your changes, then do the above steps to verify that everything's working as expected.
 
 ## About abandoned pull requests
 
