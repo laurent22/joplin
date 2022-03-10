@@ -127,7 +127,7 @@ async function saveGitHubUsernameCache(cache: any) {
 }
 
 // Returns the project root dir
-export const rootDir = require('path').dirname(require('path').dirname(__dirname));
+export const rootDir: string = require('path').dirname(require('path').dirname(__dirname));
 
 export function execCommand(command: string, options: any = null): Promise<string> {
 	options = options || {};
