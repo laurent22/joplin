@@ -4,7 +4,7 @@ import { pressCarouselItems } from './utils/pressCarousel';
 import { getMarkdownIt, loadMustachePartials, markdownToPageHtml, renderMustache } from './utils/render';
 import { AssetUrls, Env, PlanPageParams, Sponsors, TemplateParams } from './utils/types';
 import { getPlans, loadStripeConfig } from '@joplin/lib/utils/joplinCloud';
-import { stripOffFrontMatter } from './utils/frontMatter';
+import { MarkdownAndFrontMatter, stripOffFrontMatter } from './utils/frontMatter';
 import { dirname, basename } from 'path';
 import { readmeFileTitle, replaceGitHubByWebsiteLinks } from './utils/parser';
 import { extractOpenGraphTags } from './utils/openGraph';
@@ -171,10 +171,23 @@ async function loadSponsors(): Promise<Sponsors> {
 	return output;
 }
 
+const getNewsDateString = (info: MarkdownAndFrontMatter, mdFilePath: string): string => {
+	// If the date is set in the metadata, we get it from there. Otherwise we
+	// derive it from the filename (eg. 20220224-release-2-7.md)
+
+	if (info.created) {
+		return moment(info.created).format('D MMM YYYY');
+	} else {
+		const filenameNoExt = basename(mdFilePath, '.md');
+		const s = filenameNoExt.split('-');
+		return moment(s[0], 'YYYYMMDD').format('D MMM YYYY');
+	}
+};
+
 const processNewsMarkdown = (md: string, mdFilePath: string): string => {
 	const info = stripOffFrontMatter(md);
 	md = info.doc.trim();
-	const dateString = moment(info.created).format('D MMM YYYY');
+	const dateString = getNewsDateString(info, mdFilePath);
 	md = md.replace(/^# (.*)/, `# [$1](https://github.com/laurent22/joplin/blob/dev/readme/news/${path.basename(mdFilePath)})\n\n*Published on **${dateString}***\n\n`);
 	md += `\n\n* * *\n\n[<i class="fab fa-discourse"></i> Discuss on the forum](${discussLink})`;
 	return md;
