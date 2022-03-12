@@ -2,7 +2,7 @@ import InteropService from '@joplin/lib/services/interop/InteropService';
 import CommandService from '@joplin/lib/services/CommandService';
 import shim from '@joplin/lib/shim';
 import { ExportOptions, FileSystemItem, Module } from '@joplin/lib/services/interop/types';
-
+import preprocessor from './utils/preprocessor';
 import { _ } from '@joplin/lib/locale';
 import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 const bridge = require('@electron/remote').require('./bridge').default;
@@ -10,6 +10,7 @@ import Setting from '@joplin/lib/models/Setting';
 import Note from '@joplin/lib/models/Note';
 const { friendlySafeFilename } = require('@joplin/lib/path-utils');
 import time from '@joplin/lib/time';
+const fs = require('fs-extra');
 const md5 = require('md5');
 const url = require('url');
 
@@ -60,6 +61,18 @@ export default class InteropServiceHelper {
 			};
 
 			htmlFile = await this.exportNoteToHtmlFile(noteId, exportOptions);
+
+			// Get the Original HTML files
+			const htmlData = await fs.readFileSync(htmlFile, 'utf8');
+
+			// Write the new file with open attribute
+			await fs.writeFileSync(
+				htmlFile, 
+				preprocessor.openDetailsTags(htmlData),
+				{ 
+					encoding: 'utf8' 
+				}
+			);
 
 			const windowOptions = {
 				show: false,
