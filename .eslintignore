@@ -796,6 +796,12 @@ packages/app-desktop/services/spellChecker/SpellCheckerServiceDriverNative.js.ma
 packages/app-desktop/utils/markupLanguageUtils.d.ts
 packages/app-desktop/utils/markupLanguageUtils.js
 packages/app-desktop/utils/markupLanguageUtils.js.map
+packages/app-desktop/utils/preprocessor.d.ts
+packages/app-desktop/utils/preprocessor.js
+packages/app-desktop/utils/preprocessor.js.map
+packages/app-desktop/utils/preprocessor.test.d.ts
+packages/app-desktop/utils/preprocessor.test.js
+packages/app-desktop/utils/preprocessor.test.js.map
 packages/app-mobile/PluginAssetsLoader.d.ts
 packages/app-mobile/PluginAssetsLoader.js
 packages/app-mobile/PluginAssetsLoader.js.map

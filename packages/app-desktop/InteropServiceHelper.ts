@@ -63,14 +63,14 @@ export default class InteropServiceHelper {
 			htmlFile = await this.exportNoteToHtmlFile(noteId, exportOptions);
 
 			// Get the Original HTML files
-			const htmlData = await fs.readFileSync(htmlFile, 'utf8');
+			const htmlData = fs.readFileSync(htmlFile, 'utf8');
 
 			// Write the new file with open attribute
-			await fs.writeFileSync(
-				htmlFile, 
+			fs.writeFileSync(
+				htmlFile,
 				preprocessor.openDetailsTags(htmlData),
-				{ 
-					encoding: 'utf8' 
+				{
+					encoding: 'utf8',
 				}
 			);
 
