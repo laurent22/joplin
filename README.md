@@ -133,6 +133,7 @@ A community maintained list of these distributions can be found here: [Unofficia
 	- [How to build the apps](https://github.com/laurent22/joplin/blob/dev/BUILD.md)
 	- [Writing a technical spec](https://github.com/laurent22/joplin/blob/dev/readme/technical_spec.md)
 	- [End-to-end encryption spec](https://github.com/laurent22/joplin/blob/dev/readme/spec/e2ee.md)
+	- [Desktop application styling](https://github.com/laurent22/joplin/blob/dev/readme/spec/desktop_styling.md)
 	- [Note History spec](https://github.com/laurent22/joplin/blob/dev/readme/spec/history.md)
 	- [Sync Lock spec](https://github.com/laurent22/joplin/blob/dev/readme/spec/sync_lock.md)
 	- [Synchronous Scroll spec](https://github.com/laurent22/joplin/blob/dev/readme/spec/sync_scroll.md)
