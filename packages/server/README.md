@@ -1,23 +1,28 @@
 # Installing
 
-## Configuration
+## Requirements
 
-First copy `.env-sample` to `.env` and edit the values in there:
+- Docker Engine run Joplin Server. See [Install Docker Engine](https://docs.docker.com/engine/install/) for steps to install Docker Engine for your operating system.
+- Docker Compose is required to store item contents (notes, tags, etc.) if PostgreSQL is not used. See [Install Docker Compose](https://docs.docker.com/compose/install/) for steps to install Docker Compose for your operating system.
 
-- `APP_BASE_URL`: This is the base public URL where the service will be running. For example, if you want it to run from `https://example.com/joplin`, this is what you should set the URL to. The base URL can include the port.
-- `APP_PORT`: The local port on which the Docker container will listen. You would typically map this port to 443 (TLS) with a reverse proxy.
+## Configure Docker for Joplin Server
 
-## Running the server
+1. Copy `.env-sample` (located [here](https://github.com/laurent22/joplin/blob/dev/.env-sample)) to the location of your Docker configuration files. Example: /home/[user]/docker
+2. Rename the file `.env-sample` to `.env`.
 
-To start the server with default configuration, run:
+
+## Test Starting the Server
+
+1. Run the following command to test starting the server using the default configuration:
 
 ```shell
 docker run --env-file .env -p 22300:22300 joplin/server:latest
 ```
 
-This will start the server, which will listen on port **22300** on **localhost**. By default it will use SQLite, which allows you to test the app without setting up a database. To run it for production though, you'll want to connect the container to a database, as described below.
+The server will listen on port **22300** on **localhost**. By default, the server will use SQLite, which allows you to test the app without setting up a database. When running the server for production use, you should connect the container to a database, as described below.
 
-## Supported docker tags
+
+## Supported Docker Tags
 
 The following tags are available:
 
@@ -27,11 +32,11 @@ The following tags are available:
 - Specific minor versions, such as `2.1`, `2.2`, `2.3-beta`
 - Specific patch versions, such as `2.0.4`, `2.2.8-beta`
 
-## Setup the database
+## Setup the Database
 
-You can setup the container to either use an existing PostgreSQL server, or connect it to a new one using docker-compose
+You can setup the container to either use an existing PostgreSQL server, or connect it to a new database using docker-compose.
 
-### Using an existing PostgreSQL server
+### Using an Existing PostgreSQL Server
 
 To use an existing PostgresSQL server, set the following environment variables in the .env file:
 
@@ -44,39 +49,55 @@ POSTGRES_PORT=5432
 POSTGRES_HOST=localhost
 ```
 
-Make sure that the provided database and user exist as the server will not create them. When running on macOS or Windows through Docker Desktop, a mapping of localhost is made automatically. On Linux, you can add `--net=host --add-host=host.docker.internal:127.0.0.1` to the `docker run` command line to make the mapping happen. Any other `POSTGRES_HOST` than localhost or 127.0.0.1 should work as expected without further action.
+Ensure that the provided database and user exist as Joplin server will not create them. When running on macOS or Windows through Docker Desktop, a mapping of localhost is made automatically. On Linux, you can add `--net=host --add-host=host.docker.internal:127.0.0.1` to the `docker run` command line to make the mapping happen. Any other `POSTGRES_HOST` than localhost or 127.0.0.1 should work as expected without further action.
 
-### Using docker-compose
+### Using Docker-Compose
 
-A [sample docker-compose file](https://github.com/laurent22/joplin/blob/dev/docker-compose.server.yml
- ) is available to show how to use Docker to install both the database and server and connect them:
+1. Using the sample [docker-compose file](https://github.com/laurent22/joplin/blob/dev/docker-compose.server.yml), create a docker compose file in the location of your Docker configuration files. Example: /home/[user]/docker/docker-compose.yml
+2. Update the following fields:
 
-## Setup reverse proxy
 
-Once Joplin Server is running, you will then need to expose it to the internet by setting up a reverse proxy, and that will depend on how your server is currently configured, and whether you already have Nginx or Apache running:
+```conf
+POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+POSTGRES_USER=${POSTGRES_USER}
+APP_BASE_URL=${APP_BASE_URL}
+```
+
+
+- `APP_BASE_URL`: This is the base public URL where the service will be running. 
+	- If Joplin Server needs to be accessible over the internet, configure `APP_BASE_URL` as follows: `https://example.com/joplin`. 
+	- If Joplin Server does not need to be accessible over the internet, set the the `APP_BASE_URL` to your server's hostname. For Example: 		 `http://[hostname]:22300`. The base URL can include the port.
+- `APP_PORT`: The local port on which the Docker container will listen. 
+	- You would typically map this port to 443 (TLS) with a reverse proxy.
+	- If Joplin Server does not need to be accessible over the internet, the port can be mapped to 22300.
+
+
+## Setup Reverse Proxy (Optional)
+
+Configuring a reverse proxy is not required for core functionality and is only required if Joplin Server needs to be accessible over the internet. See the following documentation for configuring a reverse proxy with Apache or Nginx.
 
 - [Apache Reverse Proxy](https://httpd.apache.org/docs/current/mod/mod_proxy.html)
 - [Nginx Reverse Proxy](https://docs.nginx.com/nginx/admin-guide/web-server/reverse-proxy/)
 
-## Setup storage
+## Setup Storage (Optional)
 
-By default, the item contents (notes, tags, etc.) are stored in the database and you don't need to do anything special to get that working.
+By default, the item contents (notes, tags, etc.) are stored in the database and no additional steps are required to get that working.
 
-However since that content can be quite large, you also have the option to store it outside the database by setting the `STORAGE_DRIVER` environment variable.
+However, since that content can be quite large, you have the option to store it outside the database by setting the `STORAGE_DRIVER` environment variable.
 
-### Setting up storage on a new installation
+### Setting up Storage on a New Installation
 
-Again this is optional - by default items will simply be saved to the database. To save to the local filesystem instead, use:
+To save item contents (notes, tags, etc.) to the local filesystem instead, use:
 
 	STORAGE_DRIVER=Type=Filesystem; Path=/path/to/dir
 
-Then all item data will be saved under this `/path/to/dir` directory.
+After this is set, all item contents will be saved under the defined `/path/to/dir` directory.
 
-### Migrating storage for an existing installation
+### Migrating Storage for an Existing Installation
 
 Migrating storage is a bit more complicated because the old content will have to be migrated to the new storage. This is done by providing a fallback driver, which tells the server where to look if a particular item is not yet available on the new storage. 
 
-To migrate from the database to the file system for example, you would set the environment variables like so:
+To migrate from the database to the file system, you would set the environment variables as follows:
 
 	STORAGE_DRIVER=Type=Filesystem; Path=/path/to/dir
 	STORAGE_DRIVER_FALLBACK=Type=Database; Mode=ReadAndWrite
@@ -105,21 +126,23 @@ SELECT count(*), content_storage_id FROM items GROUP BY content_storage_id;
 
 If everything went well, all items should have a `content_storage_id` > 1 ("1" being the database).
 
-### Other storage driver
+### Other Storage Driver
 
 Besides the database and filesystem, it's also possible to use AWS S3 for storage using the same environment variable:
 
 	STORAGE_DRIVER=Type=S3; Region=YOUR_REGION_CODE; AccessKeyId=YOUR_ACCESS_KEY; SecretAccessKeyId=YOUR_SECRET_ACCESS_KEY; Bucket=YOUR_BUCKET
 
-## Setup the website
+## Verify Access to the Admin Page
 
-Once the server is exposed to the internet, you can open the admin UI and get it ready for synchronisation. For the following instructions, we'll assume that the Joplin server is running on `https://example.com/joplin`.
+Once Joplin Server is exposed to the internet, you can open the admin UI and get it ready for synchronisation. For the following instructions, we'll assume that the Joplin server is running on `https://example.com/joplin`.
 
-### Secure the admin user
+If Joplin Server is running running locally only, access the Admin Page using `http://[hostname]:22300`
 
-By default, the instance will be setup with an admin user with email **admin@localhost** and password **admin** and you should change this. To do so, open `https://example.com/joplin/login` and login as admin. Then go to the Profile section and change the admin password.
+### Update the Admin User Credentials
 
-### Create a user for sync
+By default, Joplin Server will be setup with an admin user with email **admin@localhost** and password **admin**. For security purposes, the admin user's credentials should be changed. On the Admin Page, login as the admin user. In the upper right, select the Profile button update the admin password.
+
+### Create a User for Sync
 
 While the admin user can be used for synchronisation, it is recommended to create a separate non-admin user for it. To do so, navigate to the Users page - from there you can create a new user. Once this is done, you can use the email and password you specified to sync this user account with your Joplin clients.
 
@@ -135,9 +158,9 @@ docker logs --follow CONTAINER
 docker-compose --file docker-compose.server.yml logs
 ```
 
-# Setup for development
+# Setup for Development
 
-## Setup up the database
+## Setup up the Database
 
 ### SQLite
 
@@ -147,7 +170,7 @@ By default the server supports SQLite for development, so nothing needs to be se
 
 To use Postgres, from the monorepo root, run `docker-compose --file docker-compose.server-dev.yml up`, which will start the PostgreSQL database.
 
-## Starting the server
+## Starting the Server
 
 From `packages/server`, run `npm run start-dev`
 
