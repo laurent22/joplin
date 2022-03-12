@@ -1956,6 +1956,9 @@ packages/tools/generate-images.js.map
 packages/tools/git-changelog.d.ts
 packages/tools/git-changelog.js
 packages/tools/git-changelog.js.map
+packages/tools/licenseChecker.d.ts
+packages/tools/licenseChecker.js
+packages/tools/licenseChecker.js.map
 packages/tools/release-android.d.ts
 packages/tools/release-android.js
 packages/tools/release-android.js.map

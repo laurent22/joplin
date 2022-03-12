@@ -63,13 +63,15 @@ class AppComponent extends Component {
 			contentScriptLoaded: false,
 			selectedTags: [],
 			contentScriptError: '',
+			newNoteId: null,
 		});
 
-		this.confirm_click = () => {
+		this.confirm_click = async () => {
 			const content = Object.assign({}, this.props.clippedContent);
 			content.tags = this.state.selectedTags.join(',');
 			content.parent_id = this.props.selectedFolderId;
-			bridge().sendContentToJoplin(content);
+			const response = await bridge().sendContentToJoplin(content);
+			this.setState({ newNoteId: response.id });
 		};
 
 		this.contentTitle_change = (event) => {
@@ -402,6 +404,24 @@ class AppComponent extends Component {
 			);
 		};
 
+		const openNewNoteButton = () => {
+
+			if (!this.state.newNoteId) { return null; } else {
+				return (
+					// The jopin:// link must be opened in a new tab. When it's opened for the first time, a system dialog will ask for the user's permission.
+					// The system dialog is too big to fit into the popup so the user will not be able to see the dialog buttons and get stuck.
+					<a
+						className="Button"
+						href={`joplin://x-callback-url/openNote?id=${encodeURIComponent(this.state.newNoteId)}`}
+						target="_blank"
+						onClick={() => this.setState({ newNoteId: null })}
+					>
+          Open newly created note
+					</a>
+				);
+			}
+		};
+
 		const tagDataListOptions = [];
 		for (let i = 0; i < this.props.tags.length; i++) {
 			const tag = this.props.tags[i];
@@ -437,6 +457,7 @@ class AppComponent extends Component {
 				</div>
 				{ warningComponent }
 				{ previewComponent }
+				{ openNewNoteButton() }
 				{ clipperStatusComp() }
 			</div>
 		);

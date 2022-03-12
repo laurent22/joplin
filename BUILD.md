@@ -25,6 +25,8 @@ There are also a few forks of existing packages under the "fork-*" name.
 
 ## Building
 
+Make sure the path to the project directory does not contain spaces or the build may fail.
+
 Before doing anything else, from the root of the project, run:
 
 	yarn install

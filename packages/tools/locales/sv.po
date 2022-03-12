@@ -15,6 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.4.2\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:565
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -390,7 +392,7 @@ msgstr "Autentisering slutfördes inte (mottog inte en autentiseringstoken)."
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:194
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:148
 msgid "Authorisation token:"
-msgstr "Auktoriserings token:"
+msgstr "Auktoriseringstoken:"
 
 #: packages/lib/models/Setting.ts:668
 msgid "Auto"
@@ -398,16 +400,15 @@ msgstr "Automatiskt"
 
 #: packages/server/src/services/TaskService.ts:39
 msgid "Auto-add disabled accounts for deletion"
-msgstr ""
+msgstr "Lägg automatiskt till inaktiverade konton för radering"
 
 #: packages/lib/models/Setting.ts:855
 msgid "Auto-pair braces, parenthesis, quotations, etc."
 msgstr "Para automatiskt hakparenteser, paranteser, situationstecken, etc."
 
 #: packages/lib/models/Setting.ts:1195
-#, fuzzy
 msgid "Automatically check for updates"
-msgstr "Sök efter uppdateringar..."
+msgstr "Sök automatiskt efter uppdateringar"
 
 #: packages/lib/models/Setting.ts:772
 msgid "Automatically switch theme to match system theme"
@@ -718,7 +719,7 @@ msgstr "Slutfört: %s (%s)"
 
 #: packages/server/src/services/TaskService.ts:37
 msgid "Compress old changes"
-msgstr ""
+msgstr "Komprimera gamla ändringar"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:637
 #: packages/app-mobile/components/side-menu-content.js:332
@@ -780,9 +781,8 @@ msgid "Copy external link"
 msgstr "Kopiera extern länk"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:134
-#, fuzzy
 msgid "Copy image"
-msgstr "Kopiera token"
+msgstr "Kopiera bild"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:172
 msgid "Copy Link Address"
@@ -875,14 +875,12 @@ msgid "Create a notebook"
 msgstr "Skapar en anteckningsbok"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:161
-#, fuzzy
 msgid "Create notebook"
-msgstr "Skapar en anteckningsbok"
+msgstr "Skapa anteckningsbok"
 
 #: packages/server/src/routes/admin/users.ts:171
-#, fuzzy
 msgid "Create user"
-msgstr "Skapad: %s"
+msgstr "Skapa användare"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:29
 msgid "Created"
@@ -974,7 +972,7 @@ msgstr "Mörkt"
 
 #: packages/server/src/services/MustacheService.ts:136
 msgid "Dashboard"
-msgstr ""
+msgstr "Instrumentbräda"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:625
 msgid "Database v%s"
@@ -1031,14 +1029,12 @@ msgid "Delete attachment \"%s\"?"
 msgstr "Ta bort bilagan \"%s\"?"
 
 #: packages/server/src/services/TaskService.ts:36
-#, fuzzy
 msgid "Delete expired sessions"
-msgstr "Aktivera matematiska uttryck"
+msgstr "Ta bort utgångna sessioner"
 
 #: packages/server/src/services/TaskService.ts:31
-#, fuzzy
 msgid "Delete expired tokens"
-msgstr "Ta bort dessa %d anteckningar?"
+msgstr "Ta bort utgångna tokens"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:88
 msgid "Delete line"
@@ -1335,7 +1331,7 @@ msgstr "Redigerarens teckensnitt"
 
 #: packages/lib/models/Setting.ts:1110
 msgid "Editor font family"
-msgstr "Redigerarens typsnittsfamilj"
+msgstr "Redigerarens teckensnittsfamilj"
 
 #: packages/lib/models/Setting.ts:1077
 msgid "Editor font size"
@@ -1360,12 +1356,12 @@ msgstr "Emacs"
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:236
 #: packages/server/src/routes/admin/emails.ts:128
 msgid "Email"
-msgstr ""
+msgstr "E-postmeddelande"
 
 #: packages/server/src/routes/admin/emails.ts:112
 #: packages/server/src/services/MustacheService.ts:152
 msgid "Emails"
-msgstr ""
+msgstr "E-postmeddelanden"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:194
 msgid "emphasised text"
@@ -1386,7 +1382,7 @@ msgstr "Aktivera ++ insert ++ syntax"
 
 #: packages/lib/models/Setting.ts:1023
 msgid "Enable ==mark== syntax"
-msgstr "Aktivera ==mark== syntax"
+msgstr "Aktivera ==mark==-syntax"
 
 #: packages/lib/models/Setting.ts:1026
 msgid "Enable ~sub~ syntax"
@@ -1852,7 +1848,7 @@ msgstr "Ignorera TLS-certifikatfel"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:102
 msgid "Images"
-msgstr ""
+msgstr "Bilder"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:170
 #: packages/app-desktop/gui/MenuBar.tsx:484
@@ -2039,7 +2035,7 @@ msgstr "Objektet \"%s\" kunde inte hämtas: %s"
 #: packages/server/src/services/MustacheService.ts:175
 #: packages/server/src/services/MustacheService.ts:302
 msgid "Items"
-msgstr ""
+msgstr "Objekt"
 
 #: packages/lib/services/ReportService.ts:208
 msgid "Items that cannot be decrypted"
@@ -2260,7 +2256,7 @@ msgstr "Logga ut"
 
 #: packages/server/src/services/MustacheService.ts:179
 msgid "Logs"
-msgstr ""
+msgstr "Loggar"
 
 #: packages/app-desktop/gui/MenuBar.tsx:716
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:583
@@ -2301,15 +2297,15 @@ msgstr "Markdown"
 #: packages/lib/services/interop/InteropService.ts:119
 #: packages/lib/services/interop/InteropService.ts:66
 msgid "Markdown + Front Matter"
-msgstr ""
+msgstr "Markdown + Front Matter"
 
 #: packages/app-cli/app/command-done.js:14
 msgid "Marks a to-do as done."
-msgstr "Märker en att-göra som gjord."
+msgstr "Markerar en att-göra som gjord."
 
 #: packages/app-cli/app/command-undone.js:12
 msgid "Marks a to-do as non-completed."
-msgstr "Märker en att-göra som inte fullständig."
+msgstr "Markerar en att-göra som inte fullständig."
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:35
 msgid "Markup"
@@ -2720,9 +2716,8 @@ msgid "Or create an account."
 msgstr "Eller skapa ett konto."
 
 #: packages/app-desktop/gui/MenuBar.tsx:352
-#, fuzzy
 msgid "Other applications..."
-msgstr "Avslutar programmet."
+msgstr "Andra program..."
 
 #: packages/app-cli/app/command-import.js:27
 msgid "Output format: %s"
@@ -2924,19 +2919,19 @@ msgstr "Integritetspolicy"
 
 #: packages/server/src/services/TaskService.ts:35
 msgid "Process failed payment subscriptions"
-msgstr ""
+msgstr "Bearbeta misslyckade betalningsprenumerationer"
 
 #: packages/server/src/services/TaskService.ts:33
 msgid "Process oversized accounts"
-msgstr ""
+msgstr "Bearbeta överdimensionerade konton"
 
 #: packages/server/src/services/TaskService.ts:38
 msgid "Process user deletions"
-msgstr ""
+msgstr "Bearbeta raderingar av användare"
 
 #: packages/server/src/routes/admin/users.ts:168
 msgid "Profile"
-msgstr ""
+msgstr "Profil"
 
 #: packages/lib/versionInfo.ts:26
 msgid "Profile Version: %s"
@@ -3131,7 +3126,7 @@ msgstr "S3 bucket"
 
 #: packages/lib/models/Setting.ts:536
 msgid "S3 region"
-msgstr ""
+msgstr "S3 region"
 
 #: packages/lib/models/Setting.ts:558
 msgid "S3 secret key"
@@ -3216,14 +3211,12 @@ msgid "Select all"
 msgstr "Välj alla"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:140
-#, fuzzy
 msgid "Select emoji..."
-msgstr "Välj datum"
+msgstr "Välj emoji..."
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:144
-#, fuzzy
 msgid "Select file..."
-msgstr "Välj alla"
+msgstr "Välj fil..."
 
 #: packages/app-cli/app/command-server.js:38
 msgid "Server is already running on port %d"
@@ -4241,14 +4234,12 @@ msgstr "Uppdatera"
 
 #: packages/server/src/routes/admin/users.ts:171
 #: packages/server/src/routes/index/users.ts:89
-#, fuzzy
 msgid "Update profile"
-msgstr "Exportera profil"
+msgstr "Uppdatera profil"
 
 #: packages/server/src/services/TaskService.ts:32
-#, fuzzy
 msgid "Update total sizes"
-msgstr "Uppdaterade lokala objekt: %d."
+msgstr "Uppdatera totala storlekar"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:208
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:209
@@ -4356,7 +4347,7 @@ msgstr ""
 
 #: packages/server/src/services/MustacheService.ts:144
 msgid "User deletions"
-msgstr ""
+msgstr "Användarraderingar"
 
 #: packages/server/src/routes/admin/users.ts:107
 #: packages/server/src/services/MustacheService.ts:140

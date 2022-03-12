@@ -2,9 +2,8 @@
 
 Joplin has a young but well proven history. All contributors, Joplin users and developers are welcome to participate in the hopefully third year Summer of Code program with Joplin. This year the main themes will be:
 
-- **Plugin development** - implementing new features using Joplin's plugin system.
-- **External desktop applications** - build external Joplin applications by retrieving, creating or modifying notes via the Data API.
-- **External server applications** - leverage the Joplin Server API to provide online features to Joplin users.
+- **Mobile and tablet development** - we want to improve the mobile/tablet application on iOS and Android.
+- **Plugin and external apps** - leverage the Joplin API to create plugins and external apps.
 - And you are welcome to suggest your own ideas.
 
 Mentors, administrators and contributors: read [Summer of Code](https://developers.google.com/open-source/gsoc) occasionally. Also read the [Summer of Code FAQ](https://developers.google.com/open-source/gsoc/faq).
@@ -51,8 +50,6 @@ Contributors who neglect active communication will be failed!
 Before you can be accepted as a contributor we expect you to write some code and link that work on your proposal. As a first pull request, we suggest one of the following:
 
 - Fix a [high priority](https://github.com/laurent22/joplin/issues?utf8=%E2%9C%93&q=is:open+is:issue+label:bug+label:high) or [medium priority](https://github.com/laurent22/joplin/issues?utf8=%E2%9C%93&q=is:open+is:issue+label:bug+label:medium) bug. This is something we highly value and is a good way to get a deep understanding of certain parts of the codebase.
-
-- Implement a small plugin or external application, to get yourself familiar with the Joplin API.
 
 - Alternatively you may browse the [GitHub Issues](https://github.com/laurent22/joplin/issues) to find something that can be worked on. Note that this is a difficult way to get a pull request in, so make sure the issue you choose has a very clear technical spec. If we need to discuss how it should work or what it should do in the pull request, it means there was no consensus for this feature, and we are likely to close the pull request.
 

@@ -25,13 +25,25 @@
 			<div class="container main-container">
 				{{> notifications}}
 
+				{{! ADMIN PAGE }}
+
 				{{#global.isAdminPage}}
 					{{> adminLayout}}
 				{{/global.isAdminPage}}
 
-				{{^global.isAdminPage}}
-					{{{contentHtml}}}
-				{{/global.isAdminPage}}
+				{{! USER PAGE - WITH SIDEBAR }}
+
+				{{^sidebarMenu}}
+					{{^global.isAdminPage}}
+						{{{contentHtml}}}
+					{{/global.isAdminPage}}
+				{{/sidebarMenu}}
+
+				{{! USER PAGE - NO SIDEBAR }}
+
+				{{#sidebarMenu}}
+					{{> sidebarLayout}}
+				{{/sidebarMenu}}
 			</div>
 		</main>
 		{{> footer}}

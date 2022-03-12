@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useMemo } from 'react';
 import { AppState } from '../app.reducer';
+import Tag from '@joplin/lib/models/Tag';
 
 const { connect } = require('react-redux');
 const { themeStyle } = require('@joplin/lib/theme');
@@ -28,11 +29,7 @@ function TagList(props: Props) {
 	}, [props.style, props.themeId]);
 
 	const tags = useMemo(() => {
-		const output = props.items.slice();
-
-		output.sort((a: any, b: any) => {
-			return a.title < b.title ? -1 : +1;
-		});
+		const output = Tag.sortTags(props.items.slice());
 
 		return output;
 	}, [props.items]);

@@ -8,6 +8,11 @@ const { sprintf } = require('sprintf-js');
 
 const dmp = new DiffMatchPatch();
 
+export interface ObjectPatch {
+	new: Record<string, any>;
+	deleted: string[];
+}
+
 export default class Revision extends BaseItem {
 	static tableName() {
 		return 'revisions';
@@ -81,7 +86,7 @@ export default class Revision extends BaseItem {
 	public static createObjectPatch(oldObject: any, newObject: any) {
 		if (!oldObject) oldObject = {};
 
-		const output: any = {
+		const output: ObjectPatch = {
 			new: {},
 			deleted: [],
 		};
@@ -100,16 +105,22 @@ export default class Revision extends BaseItem {
 		return JSON.stringify(output);
 	}
 
-	static applyObjectPatch(object: any, patch: any) {
-		patch = JSON.parse(patch);
+	// We need to sanitise the object patch because it seems some are broken and
+	// may contain new lines: https://github.com/laurent22/joplin/issues/6209
+	private static sanitizeObjectPatch(patch: string): string {
+		return patch.replace(/[\n\r]/g, '');
+	}
+
+	public static applyObjectPatch(object: any, patch: string) {
+		const parsedPatch: ObjectPatch = JSON.parse(this.sanitizeObjectPatch(patch));
 		const output = Object.assign({}, object);
 
-		for (const k in patch.new) {
-			output[k] = patch.new[k];
+		for (const k in parsedPatch.new) {
+			output[k] = parsedPatch.new[k];
 		}
 
-		for (let i = 0; i < patch.deleted.length; i++) {
-			delete output[patch.deleted[i]];
+		for (let i = 0; i < parsedPatch.deleted.length; i++) {
+			delete output[parsedPatch.deleted[i]];
 		}
 
 		return output;
