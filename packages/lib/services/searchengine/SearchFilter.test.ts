@@ -1,19 +1,19 @@
 /* @typescript-eslint/prefer-const */
 
-const time = require('../../time').default;
-const { setupDatabaseAndSynchronizer, supportDir, db, createNTestNotes, switchClient } = require('../../testing/test-utils.js');
-const SearchEngine = require('../../services/searchengine/SearchEngine').default;
-const Note = require('../../models/Note').default;
-const Folder = require('../../models/Folder').default;
-const Tag = require('../../models/Tag').default;
-const shim = require('../../shim').default;
-const ResourceService = require('../../services/ResourceService').default;
+import time from '@joplin/lib/time';
+import { setupDatabaseAndSynchronizer, supportDir, db, createNTestNotes, switchClient } from '@joplin/lib/testing//test-utils';
+import SearchEngine from '@joplin/lib/services/searchengine/SearchEngine';
+import Note from '@joplin/lib/models/Note';
+import Folder from '@joplin/lib/models/Folder';
+import Tag from '@joplin/lib/models/Tag';
+import shim from '@joplin/lib/shim';
+import ResourceService from '@joplin/lib/services/ResourceService';
+import { NoteEntity } from '@joplin/lib/services/database/types';
 
 
 let engine: any = null;
 
-interface ObjectWithId { id: any }
-const ids = (array: ObjectWithId[]) => array.map(a => a.id);
+const ids = (array: NoteEntity[]) => array.map(a => a.id);
 
 describe('services_SearchFilter', function() {
 	beforeEach(async (done) => {
