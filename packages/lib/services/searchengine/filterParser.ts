@@ -54,8 +54,8 @@ const getTerms = (query: string, validFilters: Set<string>): Term[] => {
 		}
 
 		if (c === ':' && !inQuote && !inTerm &&
-		(validFilters.has(currentTerm) || currentTerm[0] === '-' && validFilters.has(currentTerm.substr(1, currentTerm.length)))) {
-			currentCol = currentTerm;
+		(validFilters.has(currentTerm.toLowerCase()) || currentTerm[0] === '-' && validFilters.has(currentTerm.toLowerCase().substr(1, currentTerm.length)))) {
+			currentCol = currentTerm.toLowerCase();
 			currentTerm = '';
 			inTerm = true; // to ignore any other ':' before a space eg.'sourceurl:https://www.google.com'
 			continue;
