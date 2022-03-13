@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars, @typescript-eslint/no-unused-vars, prefer-const */
+/* @typescript-eslint/prefer-const */
 
 const time = require('../../time').default;
 const { setupDatabaseAndSynchronizer, supportDir, db, createNTestNotes, switchClient } = require('../../testing/test-utils.js');
@@ -105,24 +105,22 @@ describe('services_SearchFilter', function() {
 			}));
 
 			it('should return note matching title', (async () => {
-				let rows;
 				const n1 = await Note.save({ title: 'abcd', body: 'body 1' });
-				const n2 = await Note.save({ title: 'efgh', body: 'body 2' });
+				await Note.save({ title: 'efgh', body: 'body 2' });
 
 				await engine.syncTables();
-				rows = await engine.search('title: abcd', { searchType });
+				const rows = await engine.search('title: abcd', { searchType });
 
 				expect(rows.length).toBe(1);
 				expect(rows[0].id).toBe(n1.id);
 			}));
 
 			it('should return note matching negated title', (async () => {
-				let rows;
-				const n1 = await Note.save({ title: 'abcd', body: 'body 1' });
+				await Note.save({ title: 'abcd', body: 'body 1' });
 				const n2 = await Note.save({ title: 'efgh', body: 'body 2' });
 
 				await engine.syncTables();
-				rows = await engine.search('-title: abcd', { searchType });
+				const rows = await engine.search('-title: abcd', { searchType });
 
 				expect(rows.length).toBe(1);
 
@@ -130,12 +128,11 @@ describe('services_SearchFilter', function() {
 			}));
 
 			it('should return note matching body', (async () => {
-				let rows;
 				const n1 = await Note.save({ title: 'abcd', body: 'body1' });
-				const n2 = await Note.save({ title: 'efgh', body: 'body2' });
+				await Note.save({ title: 'efgh', body: 'body2' });
 
 				await engine.syncTables();
-				rows = await engine.search('body: body1', { searchType });
+				const rows = await engine.search('body: body1', { searchType });
 
 				expect(rows.length).toBe(1);
 
@@ -143,36 +140,33 @@ describe('services_SearchFilter', function() {
 			}));
 
 			it('should return note matching negated body', (async () => {
-				let rows;
-				const n1 = await Note.save({ title: 'abcd', body: 'body1' });
+				await Note.save({ title: 'abcd', body: 'body1' });
 				const n2 = await Note.save({ title: 'efgh', body: 'body2' });
 
 				await engine.syncTables();
-				rows = await engine.search('-body: body1', { searchType });
+				const rows = await engine.search('-body: body1', { searchType });
 
 				expect(rows.length).toBe(1);
 				expect(rows[0].id).toBe(n2.id);
 			}));
 
 			it('should return note matching title containing multiple words', (async () => {
-				let rows;
 				const n1 = await Note.save({ title: 'abcd xyz', body: 'body1' });
-				const n2 = await Note.save({ title: 'efgh ijk', body: 'body2' });
+				await Note.save({ title: 'efgh ijk', body: 'body2' });
 
 				await engine.syncTables();
-				rows = await engine.search('title: "abcd xyz"', { searchType });
+				const rows = await engine.search('title: "abcd xyz"', { searchType });
 
 				expect(rows.length).toBe(1);
 				expect(rows[0].id).toBe(n1.id);
 			}));
 
 			it('should return note matching body containing multiple words', (async () => {
-				let rows;
-				const n1 = await Note.save({ title: 'abcd', body: 'ho ho ho' });
+				await Note.save({ title: 'abcd', body: 'ho ho ho' });
 				const n2 = await Note.save({ title: 'efgh', body: 'foo bar' });
 
 				await engine.syncTables();
-				rows = await engine.search('body: "foo bar"', { searchType });
+				const rows = await engine.search('body: "foo bar"', { searchType });
 
 				expect(rows.length).toBe(1);
 				expect(rows[0].id).toBe(n2.id);
@@ -180,7 +174,7 @@ describe('services_SearchFilter', function() {
 
 			it('should return note matching title AND body', (async () => {
 				let rows;
-				const n1 = await Note.save({ title: 'abcd', body: 'ho ho ho' });
+				await Note.save({ title: 'abcd', body: 'ho ho ho' });
 				const n2 = await Note.save({ title: 'efgh', body: 'foo bar' });
 
 				await engine.syncTables();
@@ -234,13 +228,12 @@ describe('services_SearchFilter', function() {
 			}));
 
 			it('should return notes matching any negated text', (async () => {
-				let rows;
 				const n1 = await Note.save({ title: 'abc', body: 'def' });
 				const n2 = await Note.save({ title: 'def', body: 'ghi' });
 				const n3 = await Note.save({ title: 'ghi', body: 'jkl' });
 				await engine.syncTables();
 
-				rows = await engine.search('any:1 -abc -ghi', { searchType });
+				const rows = await engine.search('any:1 -abc -ghi', { searchType });
 				expect(rows.length).toBe(3);
 				expect(ids(rows)).toContain(n1.id);
 				expect(ids(rows)).toContain(n2.id);
@@ -248,13 +241,12 @@ describe('services_SearchFilter', function() {
 			}));
 
 			it('should return notes matching any negated title', (async () => {
-				let rows;
 				const n1 = await Note.save({ title: 'abc', body: 'def' });
 				const n2 = await Note.save({ title: 'def', body: 'ghi' });
 				const n3 = await Note.save({ title: 'ghi', body: 'jkl' });
 				await engine.syncTables();
 
-				rows = await engine.search('any:1 -title:abc -title:ghi', { searchType });
+				const rows = await engine.search('any:1 -title:abc -title:ghi', { searchType });
 				expect(rows.length).toBe(3);
 				expect(ids(rows)).toContain(n1.id);
 				expect(ids(rows)).toContain(n2.id);
@@ -262,13 +254,12 @@ describe('services_SearchFilter', function() {
 			}));
 
 			it('should return notes matching any negated body', (async () => {
-				let rows;
 				const n1 = await Note.save({ title: 'abc', body: 'def' });
 				const n2 = await Note.save({ title: 'def', body: 'ghi' });
 				const n3 = await Note.save({ title: 'ghi', body: 'jkl' });
 				await engine.syncTables();
 
-				rows = await engine.search('any:1 -body:xyz -body:ghi', { searchType });
+				const rows = await engine.search('any:1 -body:xyz -body:ghi', { searchType });
 				expect(rows.length).toBe(3);
 				expect(ids(rows)).toContain(n1.id);
 				expect(ids(rows)).toContain(n2.id);
@@ -276,23 +267,21 @@ describe('services_SearchFilter', function() {
 			}));
 
 			it('should support phrase search', (async () => {
-				let rows;
 				const n1 = await Note.save({ title: 'foo beef', body: 'bar dog' });
-				const n2 = await Note.save({ title: 'bar efgh', body: 'foo dog' });
+				await Note.save({ title: 'bar efgh', body: 'foo dog' });
 				await engine.syncTables();
 
-				rows = await engine.search('"bar dog"', { searchType });
+				const rows = await engine.search('"bar dog"', { searchType });
 				expect(rows.length).toBe(1);
 				expect(rows[0].id).toBe(n1.id);
 			}));
 
 			it('should support prefix search', (async () => {
-				let rows;
 				const n1 = await Note.save({ title: 'foo beef', body: 'bar dog' });
 				const n2 = await Note.save({ title: 'bar efgh', body: 'foo dog' });
 				await engine.syncTables();
 
-				rows = await engine.search('"bar*"', { searchType });
+				const rows = await engine.search('"bar*"', { searchType });
 				expect(rows.length).toBe(2);
 				expect(ids(rows)).toContain(n1.id);
 				expect(ids(rows)).toContain(n2.id);
@@ -375,38 +364,35 @@ describe('services_SearchFilter', function() {
 			}));
 
 			it('should support filtering by notebook', (async () => {
-				let rows;
 				const folder0 = await Folder.save({ title: 'notebook0' });
 				const folder1 = await Folder.save({ title: 'notebook1' });
 				const notes0 = await createNTestNotes(5, folder0);
-				const notes1 = await createNTestNotes(5, folder1);
+				await createNTestNotes(5, folder1);
 
 				await engine.syncTables();
 
-				rows = await engine.search('notebook:notebook0', { searchType });
+				const rows = await engine.search('notebook:notebook0', { searchType });
 				expect(rows.length).toBe(5);
 				expect(ids(rows).sort()).toEqual(ids(notes0).sort());
 
 			}));
 
 			it('should support filtering by nested notebook', (async () => {
-				let rows;
 				const folder0 = await Folder.save({ title: 'notebook0' });
 				const folder00 = await Folder.save({ title: 'notebook00', parent_id: folder0.id });
 				const folder1 = await Folder.save({ title: 'notebook1' });
 				const notes0 = await createNTestNotes(5, folder0);
 				const notes00 = await createNTestNotes(5, folder00);
-				const notes1 = await createNTestNotes(5, folder1);
+				await createNTestNotes(5, folder1);
 
 				await engine.syncTables();
 
-				rows = await engine.search('notebook:notebook0', { searchType });
+				const rows = await engine.search('notebook:notebook0', { searchType });
 				expect(rows.length).toBe(10);
 				expect(ids(rows).sort()).toEqual(ids(notes0.concat(notes00)).sort());
 			}));
 
 			it('should support filtering by multiple notebooks', (async () => {
-				let rows;
 				const folder0 = await Folder.save({ title: 'notebook0' });
 				const folder00 = await Folder.save({ title: 'notebook00', parent_id: folder0.id });
 				const folder1 = await Folder.save({ title: 'notebook1' });
@@ -414,11 +400,11 @@ describe('services_SearchFilter', function() {
 				const notes0 = await createNTestNotes(5, folder0);
 				const notes00 = await createNTestNotes(5, folder00);
 				const notes1 = await createNTestNotes(5, folder1);
-				const notes2 = await createNTestNotes(5, folder2);
+				await createNTestNotes(5, folder2);
 
 				await engine.syncTables();
 
-				rows = await engine.search('notebook:notebook0 notebook:notebook1', { searchType });
+				const rows = await engine.search('notebook:notebook0 notebook:notebook1', { searchType });
 				expect(rows.length).toBe(15);
 				expect(ids(rows).sort()).toEqual(ids(notes0).concat(ids(notes00).concat(ids(notes1))).sort());
 			}));
@@ -647,7 +633,7 @@ describe('services_SearchFilter', function() {
 				let rows;
 				const t1 = await Note.save({ title: 'This is a ', body: 'todo', is_todo: 1 });
 				const t2 = await Note.save({ title: 'This is another', body: 'todo but completed', is_todo: 1, todo_completed: 1590085027710 });
-				const t3 = await Note.save({ title: 'This is NOT a ', body: 'todo' });
+				await Note.save({ title: 'This is NOT a ', body: 'todo' });
 
 				await engine.syncTables();
 
@@ -671,14 +657,13 @@ describe('services_SearchFilter', function() {
 			}));
 
 			it('should support filtering by type note', (async () => {
-				let rows;
-				const t1 = await Note.save({ title: 'This is a ', body: 'todo', is_todo: 1 });
-				const t2 = await Note.save({ title: 'This is another', body: 'todo but completed', is_todo: 1, todo_completed: 1590085027710 });
+				await Note.save({ title: 'This is a ', body: 'todo', is_todo: 1 });
+				await Note.save({ title: 'This is another', body: 'todo but completed', is_todo: 1, todo_completed: 1590085027710 });
 				const t3 = await Note.save({ title: 'This is NOT a ', body: 'todo' });
 
 				await engine.syncTables();
 
-				rows = await engine.search('type:note', { searchType });
+				const rows = await engine.search('type:note', { searchType });
 				expect(rows.length).toBe(1);
 				expect(ids(rows)).toContain(t3.id);
 			}));
@@ -687,7 +672,7 @@ describe('services_SearchFilter', function() {
 				let rows;
 				const toDo1 = await Note.save({ title: 'ToDo 1', body: 'todo', is_todo: 1, todo_due: Date.parse('2021-04-27') });
 				const toDo2 = await Note.save({ title: 'ToDo 2', body: 'todo', is_todo: 1, todo_due: Date.parse('2021-03-17') });
-				const note1 = await Note.save({ title: 'Note 1', body: 'Note' });
+				await Note.save({ title: 'Note 1', body: 'Note' });
 
 				await engine.syncTables();
 
@@ -901,8 +886,8 @@ describe('services_SearchFilter', function() {
 
 
 				const subFolder = await Folder.save({ title: 'child', parent_id: parentFolder.id });
-				const n3 = await Note.save({ title: 'task3', body: 'baz', parent_id: subFolder.id });
-				const n4 = await Note.save({ title: 'task4', body: 'blah', parent_id: subFolder.id });
+				await Note.save({ title: 'task3', body: 'baz', parent_id: subFolder.id });
+				await Note.save({ title: 'task4', body: 'blah', parent_id: subFolder.id });
 
 
 				await engine.syncTables();
