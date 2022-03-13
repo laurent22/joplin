@@ -67,6 +67,42 @@ describe('services_SearchFilter', function() {
 	for (const searchType of [SearchEngine.SEARCH_TYPE_FTS, SearchEngine.SEARCH_TYPE_NONLATIN_SCRIPT]) {
 
 		describe(`search type ${searchType}`, () => {
+			it('Check case insensitivity for filter keywords', (async () => {
+				let rows;
+				const notebook1 = await Folder.save({ title: 'folderA' });
+				const notebook2 = await Folder.save({ title: 'folderB' });
+				const note1 = await Note.save({ title: 'Note1', body: 'obelix', parent_id: notebook1.id });
+				const note2 = await Note.save({ title: 'Note2', body: 'asterix', parent_id: notebook2.id });
+				const note3 = await Note.save({ title: 'Note3', body: 'rom', parent_id: notebook1.id });
+
+				await Tag.setNoteTagsByTitles(note1.id, ['tag1', 'tag2']);
+				await Tag.setNoteTagsByTitles(note2.id, ['tag2', 'tag3']);
+				await Tag.setNoteTagsByTitles(note3.id, ['tag3', 'tag4', 'space travel']);
+
+				await engine.syncTables();
+
+				const testCases = [
+					{ searchString: 'tag:tag2', expectedResults: 2, expectedtNoteIds: [note1.id, note2.id] },
+					{ searchString: 'tAg:tag2', expectedResults: 2, expectedtNoteIds: [note1.id, note2.id] },
+					{ searchString: 'Tag:tag2', expectedResults: 2, expectedtNoteIds: [note1.id, note2.id] },
+					{ searchString: '-tag:tag2', expectedResults: 1, expectedtNoteIds: [note3.id] },
+					{ searchString: '-Tag:tag2', expectedResults: 1, expectedtNoteIds: [note3.id] },
+					{ searchString: 'title:Note1', expectedResults: 1, expectedtNoteIds: [note1.id] },
+					{ searchString: 'Title:Note1', expectedResults: 1, expectedtNoteIds: [note1.id] },
+					{ searchString: 'Any:1 -tag:tag1 -notebook:folderB', expectedResults: 1, expectedtNoteIds: [note3.id] },
+					{ searchString: 'notebook:folderA', expectedResults: 2, expectedtNoteIds: [note1.id, note3.id] },
+					{ searchString: 'notebooK:folderA', expectedResults: 2, expectedtNoteIds: [note1.id, note3.id] },
+				];
+
+				for (const testCase of testCases) {
+					rows = await engine.search(testCase.searchString, { searchType });
+					expect(rows.length).toBe(testCase.expectedResults);
+					for (const expectedNoteId of testCase.expectedtNoteIds) {
+						expect(ids(rows)).toContain(expectedNoteId);
+					}
+				}
+			}));
+
 			it('should return note matching title', (async () => {
 				let rows;
 				const n1 = await Note.save({ title: 'abcd', body: 'body 1' });
