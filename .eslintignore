@@ -1639,6 +1639,9 @@ packages/lib/services/searchengine/SearchEngineUtils.js.map
 packages/lib/services/searchengine/SearchEngineUtils.test.d.ts
 packages/lib/services/searchengine/SearchEngineUtils.test.js
 packages/lib/services/searchengine/SearchEngineUtils.test.js.map
+packages/lib/services/searchengine/SearchFilter.test.d.ts
+packages/lib/services/searchengine/SearchFilter.test.js
+packages/lib/services/searchengine/SearchFilter.test.js.map
 packages/lib/services/searchengine/filterParser.d.ts
 packages/lib/services/searchengine/filterParser.js
 packages/lib/services/searchengine/filterParser.js.map

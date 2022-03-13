@@ -10,9 +10,10 @@ const shim = require('../../shim').default;
 const ResourceService = require('../../services/ResourceService').default;
 
 
-let engine = null;
+let engine: any = null;
 
-const ids = (array) => array.map(a => a.id);
+interface ObjectWithId { id: any }
+const ids = (array: ObjectWithId[]) => array.map(a => a.id);
 
 describe('services_SearchFilter', function() {
 	beforeEach(async (done) => {
@@ -199,8 +200,8 @@ describe('services_SearchFilter', function() {
 				await engine.syncTables();
 				rows = await engine.search('any:1 title: abcd body: "foo bar"', { searchType });
 				expect(rows.length).toBe(2);
-				expect(rows.map(r=>r.id)).toContain(n1.id);
-				expect(rows.map(r=>r.id)).toContain(n2.id);
+				expect(ids(rows)).toContain(n1.id);
+				expect(ids(rows)).toContain(n2.id);
 
 				rows = await engine.search('any:1 title: wxyz body: "blah blah"', { searchType });
 				expect(rows.length).toBe(0);
@@ -217,12 +218,12 @@ describe('services_SearchFilter', function() {
 				// Note: This is NOT saying to match notes containing foo bar in title/body
 				rows = await engine.search('foo bar', { searchType });
 				expect(rows.length).toBe(2);
-				expect(rows.map(r=>r.id)).toContain(n1.id);
-				expect(rows.map(r=>r.id)).toContain(n2.id);
+				expect(ids(rows)).toContain(n1.id);
+				expect(ids(rows)).toContain(n2.id);
 
 				rows = await engine.search('foo -bar', { searchType });
 				expect(rows.length).toBe(1);
-				expect(rows.map(r=>r.id)).toContain(n3.id);
+				expect(ids(rows)).toContain(n3.id);
 
 				rows = await engine.search('foo efgh', { searchType });
 				expect(rows.length).toBe(1);
@@ -241,9 +242,9 @@ describe('services_SearchFilter', function() {
 
 				rows = await engine.search('any:1 -abc -ghi', { searchType });
 				expect(rows.length).toBe(3);
-				expect(rows.map(r=>r.id)).toContain(n1.id);
-				expect(rows.map(r=>r.id)).toContain(n2.id);
-				expect(rows.map(r=>r.id)).toContain(n3.id);
+				expect(ids(rows)).toContain(n1.id);
+				expect(ids(rows)).toContain(n2.id);
+				expect(ids(rows)).toContain(n3.id);
 			}));
 
 			it('should return notes matching any negated title', (async () => {
@@ -255,9 +256,9 @@ describe('services_SearchFilter', function() {
 
 				rows = await engine.search('any:1 -title:abc -title:ghi', { searchType });
 				expect(rows.length).toBe(3);
-				expect(rows.map(r=>r.id)).toContain(n1.id);
-				expect(rows.map(r=>r.id)).toContain(n2.id);
-				expect(rows.map(r=>r.id)).toContain(n3.id);
+				expect(ids(rows)).toContain(n1.id);
+				expect(ids(rows)).toContain(n2.id);
+				expect(ids(rows)).toContain(n3.id);
 			}));
 
 			it('should return notes matching any negated body', (async () => {
@@ -269,9 +270,9 @@ describe('services_SearchFilter', function() {
 
 				rows = await engine.search('any:1 -body:xyz -body:ghi', { searchType });
 				expect(rows.length).toBe(3);
-				expect(rows.map(r=>r.id)).toContain(n1.id);
-				expect(rows.map(r=>r.id)).toContain(n2.id);
-				expect(rows.map(r=>r.id)).toContain(n3.id);
+				expect(ids(rows)).toContain(n1.id);
+				expect(ids(rows)).toContain(n2.id);
+				expect(ids(rows)).toContain(n3.id);
 			}));
 
 			it('should support phrase search', (async () => {
@@ -922,20 +923,20 @@ describe('services_SearchFilter', function() {
 
 				rows = await engine.search(`id:${note1.id}`, { searchType });
 				expect(rows.length).toBe(1);
-				expect(rows.map(r=>r.id)).toContain(note1.id);
+				expect(ids(rows)).toContain(note1.id);
 
 				rows = await engine.search(`any:1 id:${note1.id} id:${note2.id}`, { searchType });
 				expect(rows.length).toBe(2);
-				expect(rows.map(r=>r.id)).toContain(note1.id);
-				expect(rows.map(r=>r.id)).toContain(note2.id);
+				expect(ids(rows)).toContain(note1.id);
+				expect(ids(rows)).toContain(note2.id);
 
 				rows = await engine.search(`any:0 id:${note1.id} id:${note2.id}`, { searchType });
 				expect(rows.length).toBe(0);
 
 				rows = await engine.search(`-id:${note2.id}`, { searchType });
 				expect(rows.length).toBe(2);
-				expect(rows.map(r=>r.id)).toContain(note1.id);
-				expect(rows.map(r=>r.id)).toContain(note3.id);
+				expect(ids(rows)).toContain(note1.id);
+				expect(ids(rows)).toContain(note3.id);
 			}));
 
 		});
