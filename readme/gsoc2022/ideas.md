@@ -266,6 +266,6 @@ Expected size of project: 350 hours
 
 # More info
 
-- Make sure you read the [Joplin Google Summer of Code Introduction](https://joplinapp.org/gsoc2022/index/)
+- Make sure you read the [Joplin Google Summer of Code Introduction](https://joplinapp.org/gsoc2022/)
 - To build the application, please read [BUILD.md](https://github.com/laurent22/joplin/blob/dev/BUILD.md)
 - And before creating a pull request, please read the [pull request guidelines](https://joplinapp.org/gsoc2022/pull_request_guidelines/)
