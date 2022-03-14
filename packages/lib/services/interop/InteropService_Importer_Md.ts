@@ -50,18 +50,16 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 		console.info(`Import: ${dirPath}`);
 		const supportedFileExtension = this.metadata().fileExtensions;
 		const stats = await shim.fsDriver().readDirStats(dirPath);
-		console.log(stats);
 		for (let i = 0; i < stats.length; i++) {
 			const stat = stats[i];
 
 			if (stat.isDirectory()) {
 				if (await this.isDirectoryEmpty(dirPath, stat)) {
-					console.log(`Ignoring empty directory: ${stat.path}`);
+					console.info(`Ignoring empty directory: ${stat.path}`);
 					continue;
 				}
 				const folderTitle = await Folder.findUniqueItemTitle(basename(stat.path));
 				const folder = await Folder.save({ title: folderTitle, parent_id: parentFolderId });
-				console.log(`Importing directory: ${dirPath}/${basename(stat.path)}`);
 				await this.importDirectory(`${dirPath}/${basename(stat.path)}`, folder.id);
 			} else if (supportedFileExtension.indexOf(fileExtension(stat.path).toLowerCase()) >= 0) {
 				await this.importFile(`${dirPath}/${stat.path}`, parentFolderId);
@@ -71,11 +69,9 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 
 	// If the directory's all subdirectories are empty, we don't want to create a folder with no notes
 	private async isDirectoryEmpty(dirPath: string, stat: any) {
-		console.log(`Checking if directory is empty: ${dirPath}/${basename(stat.path)}`);
 		const supportedFileExtension = this.metadata().fileExtensions;
 		let isEmpty = true;
 		const innerStats = await shim.fsDriver().readDirStats(`${dirPath}/${basename(stat.path)}`);
-		console.log(innerStats);
 		for (let i = 0; i < innerStats.length; i++) {
 			const innerStat = innerStats[i];
 
@@ -88,11 +84,6 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 				isEmpty = false;
 				break;
 			}
-		}
-		if (isEmpty) {
-			console.log(`Directory is empty: ${dirPath}/${basename(stat.path)}`);
-		} else {
-			console.log(`Directory is not empty: ${dirPath}/${basename(stat.path)}`);
 		}
 		return isEmpty;
 
