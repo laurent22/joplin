@@ -1,6 +1,6 @@
 import InteropService_Importer_Md from '../../services/interop/InteropService_Importer_Md';
 import Note from '../../models/Note';
-import { setupDatabaseAndSynchronizer, supportDir, switchClient } from '../../testing/test-utils';
+import { db, setupDatabaseAndSynchronizer, supportDir, switchClient } from '../../testing/test-utils';
 import { MarkupToHtml } from '@joplin/renderer';
 
 
@@ -117,4 +117,60 @@ describe('InteropService_Importer_Md: importLocalImages', function() {
 		const preservedAlt = note.body.includes('alt="../../photo.jpg"');
 		expect(preservedAlt).toBe(true);
 	});
+});
+describe('InteropService_Importer_Md: importDirectory', function() {
+	async function importNoteDirectory(path: string) {
+		const importer = new InteropService_Importer_Md();
+		importer.setMetadata({ fileExtensions: ['md', 'html'] });
+		return await importer.importDirectory(path, 'notebook');
+	}
+
+	beforeEach(async (done) => {
+		await setupDatabaseAndSynchronizer(1);
+		await switchClient(1);
+		done();
+	});
+	it('should import non-empty directory', async function() {
+		await db(1).clearForTesting();
+		await importNoteDirectory(`${supportDir}/test_notes/directory/non-empty`);
+
+		const exist = await db(1).selectOne('SELECT COUNT(*) AS count FROM folders WHERE title = "non-empty"');
+
+		expect(exist.count).toBe(1);
+	});
+	it('should not import empty directory', async function() {
+		await db(1).clearForTesting();
+		await importNoteDirectory(`${supportDir}/test_notes/directory/empty`);
+
+		const exist = await db(1).selectOne('SELECT COUNT(*) AS count FROM folders WHERE title = "empty"');
+
+		expect(exist.count).toBe(0);
+	});
+	it('should import directory with non-empty subdirectory', async function() {
+		await db(1).clearForTesting();
+		await importNoteDirectory(`${supportDir}/test_notes/directory/non-empty-subdir`);
+
+		const existParent = await db(1).selectOne('SELECT COUNT(*) AS count FROM folders WHERE title = "non-empty-subdir"');
+		console.log(existParent);
+		const existSubDirEmpty = await db(1).selectOne('SELECT COUNT(*) AS count FROM folders WHERE title = "subdir-empty"');
+		const existSubDirNonEmpty = await db(1).selectOne('SELECT COUNT(*) AS count FROM folders WHERE title = "subdir-non-empty"');
+
+
+		expect(existParent.count).toBe(1);
+		expect(existSubDirEmpty.count).toBe(0);
+		expect(existSubDirNonEmpty.count).toBe(1);
+	});
+	// it('should not import assets directory', async function() {
+	// 	await db(1).clearForTesting();
+	// 	await importNoteDirectory(`${supportDir}/test_notes/directory/non-empty-subdir`);
+
+	// 	const existParent = await db(1).selectOne('SELECT COUNT(*) AS count FROM folders WHERE title = "non-empty-subdir"');
+	// 	const existSubDirEmpty = await db(1).selectOne('SELECT COUNT(*) AS count FROM folders WHERE title = "subdir-empty"');
+	// 	const existSubDirNonEmpty = await db(1).selectOne('SELECT COUNT(*) AS count FROM folders WHERE title = "subdir-non-empty"');
+
+
+	// 	expect(existParent.count).toBe(1);
+	// 	expect(existSubDirEmpty.count).toBe(0);
+	// 	expect(existSubDirNonEmpty.count).toBe(1);
+	// });
 });
