@@ -96,6 +96,7 @@ function NoteEditor(props: NoteEditorProps) {
 	// before loading it in this editor.
 	// const waitingToSaveNote = props.noteId && formNote.id !== props.noteId && props.editorNoteStatuses[props.noteId] === 'saving';
 
+
 	const styles = styles_(props);
 
 	function scheduleSaveNote(formNote: FormNote) {
@@ -564,7 +565,7 @@ function NoteEditor(props: NoteEditorProps) {
 				<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
 					{renderSearchBar()}
 				</div>
-				<div className="tag-bar" style={{ paddingLeft: theme.editorPaddingLeft, display: 'flex', flexDirection: 'row', alignItems: 'center', height: 40 }}>
+				<div className="tag-bar" style={{ paddingLeft: theme.editorPaddingLeft, display: 'flex', flexDirection: 'row', alignItems: 'center', height: 40, overflowX: 'scroll', overflowY: 'hidden' }}>
 					{renderTagButton()}
 					{renderTagBar()}
 				</div>
