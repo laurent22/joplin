@@ -5,15 +5,11 @@
 - Docker Engine run Joplin Server. See [Install Docker Engine](https://docs.docker.com/engine/install/) for steps to install Docker Engine for your operating system.
 - Docker Compose is required to store item contents (notes, tags, etc.) if PostgreSQL is not used. See [Install Docker Compose](https://docs.docker.com/compose/install/) for steps to install Docker Compose for your operating system.
 
-## Configure Docker for Joplin Server
+## Configure docker for joplin server
 
 1. Copy `.env-sample` (located [here](https://github.com/laurent22/joplin/blob/dev/.env-sample)) to the location of your Docker configuration files. Example: /home/[user]/docker
 2. Rename the file `.env-sample` to `.env`.
-
-
-## Test Starting the Server
-
-1. Run the following command to test starting the server using the default configuration:
+3. Run the following command to test starting the server using the default configuration:
 
 ```shell
 docker run --env-file .env -p 22300:22300 joplin/server:latest
@@ -22,7 +18,7 @@ docker run --env-file .env -p 22300:22300 joplin/server:latest
 The server will listen on port **22300** on **localhost**. By default, the server will use SQLite, which allows you to test the app without setting up a database. When running the server for production use, you should connect the container to a database, as described below.
 
 
-## Supported Docker Tags
+## Supported docker tags
 
 The following tags are available:
 
@@ -32,11 +28,11 @@ The following tags are available:
 - Specific minor versions, such as `2.1`, `2.2`, `2.3-beta`
 - Specific patch versions, such as `2.0.4`, `2.2.8-beta`
 
-## Setup the Database
+## Setup the database
 
 You can setup the container to either use an existing PostgreSQL server, or connect it to a new database using docker-compose.
 
-### Using an Existing PostgreSQL Server
+### Using an existing postgreSQL server
 
 To use an existing PostgresSQL server, set the following environment variables in the .env file:
 
@@ -51,35 +47,24 @@ POSTGRES_HOST=localhost
 
 Ensure that the provided database and user exist as Joplin server will not create them. When running on macOS or Windows through Docker Desktop, a mapping of localhost is made automatically. On Linux, you can add `--net=host --add-host=host.docker.internal:127.0.0.1` to the `docker run` command line to make the mapping happen. Any other `POSTGRES_HOST` than localhost or 127.0.0.1 should work as expected without further action.
 
-### Using Docker-Compose
+### Using docker-compose
 
-1. Using the sample [docker-compose file](https://github.com/laurent22/joplin/blob/dev/docker-compose.server.yml), create a docker compose file in the location of your Docker configuration files. Example: /home/[user]/docker/docker-compose.yml
-2. Update the following fields:
-
-
-```conf
-POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-POSTGRES_USER=${POSTGRES_USER}
-APP_BASE_URL=${APP_BASE_URL}
-```
+1. Using the [sample docker-compose file](https://github.com/laurent22/joplin/blob/dev/docker-compose.server.yml), create a docker compose file in the location of your Docker configuration files. Example: /home/[user]/docker/docker-compose.yml
+2. Update the fields in the docker-compose file as seen in the sample file.
 
 
-- `APP_BASE_URL`: This is the base public URL where the service will be running. 
-	- If Joplin Server needs to be accessible over the internet, configure `APP_BASE_URL` as follows: `https://example.com/joplin`. 
-	- If Joplin Server does not need to be accessible over the internet, set the the `APP_BASE_URL` to your server's hostname. For Example: 		 `http://[hostname]:22300`. The base URL can include the port.
-- `APP_PORT`: The local port on which the Docker container will listen. 
-	- You would typically map this port to 443 (TLS) with a reverse proxy.
-	- If Joplin Server does not need to be accessible over the internet, the port can be mapped to 22300.
+## Setup reverse proxy
 
-
-## Setup Reverse Proxy (Optional)
+This step is optional.
 
 Configuring a reverse proxy is not required for core functionality and is only required if Joplin Server needs to be accessible over the internet. See the following documentation for configuring a reverse proxy with Apache or Nginx.
 
 - [Apache Reverse Proxy](https://httpd.apache.org/docs/current/mod/mod_proxy.html)
 - [Nginx Reverse Proxy](https://docs.nginx.com/nginx/admin-guide/web-server/reverse-proxy/)
 
-## Setup Storage (Optional)
+## Setup storage
+
+This step is optional.
 
 By default, the item contents (notes, tags, etc.) are stored in the database and no additional steps are required to get that working.
 
@@ -87,13 +72,17 @@ However, since that content can be quite large, you have the option to store it 
 
 ### Setting up Storage on a New Installation
 
+This step is optional.
+
 To save item contents (notes, tags, etc.) to the local filesystem instead, use:
 
 	STORAGE_DRIVER=Type=Filesystem; Path=/path/to/dir
 
 After this is set, all item contents will be saved under the defined `/path/to/dir` directory.
 
-### Migrating Storage for an Existing Installation
+### Migrating storage for an existing installation
+
+This step is optional.
 
 Migrating storage is a bit more complicated because the old content will have to be migrated to the new storage. This is done by providing a fallback driver, which tells the server where to look if a particular item is not yet available on the new storage. 
 
@@ -126,23 +115,23 @@ SELECT count(*), content_storage_id FROM items GROUP BY content_storage_id;
 
 If everything went well, all items should have a `content_storage_id` > 1 ("1" being the database).
 
-### Other Storage Driver
+### Other storage driver
 
 Besides the database and filesystem, it's also possible to use AWS S3 for storage using the same environment variable:
 
 	STORAGE_DRIVER=Type=S3; Region=YOUR_REGION_CODE; AccessKeyId=YOUR_ACCESS_KEY; SecretAccessKeyId=YOUR_SECRET_ACCESS_KEY; Bucket=YOUR_BUCKET
 
-## Verify Access to the Admin Page
+## Verify access to the admin page
 
-Once Joplin Server is exposed to the internet, you can open the admin UI and get it ready for synchronisation. For the following instructions, we'll assume that the Joplin server is running on `https://example.com/joplin`.
+Once Joplin Server is exposed to the internet, open the admin UI. For the following instructions, we'll assume that Joplin Server is running on `https://example.com/joplin`.
 
 If Joplin Server is running running locally only, access the Admin Page using `http://[hostname]:22300`
 
-### Update the Admin User Credentials
+### Update the admin user credentials
 
 By default, Joplin Server will be setup with an admin user with email **admin@localhost** and password **admin**. For security purposes, the admin user's credentials should be changed. On the Admin Page, login as the admin user. In the upper right, select the Profile button update the admin password.
 
-### Create a User for Sync
+### Create a user for sync
 
 While the admin user can be used for synchronisation, it is recommended to create a separate non-admin user for it. To do so, navigate to the Users page - from there you can create a new user. Once this is done, you can use the email and password you specified to sync this user account with your Joplin clients.
 
@@ -158,9 +147,9 @@ docker logs --follow CONTAINER
 docker-compose --file docker-compose.server.yml logs
 ```
 
-# Setup for Development
+# Setup for development
 
-## Setup up the Database
+## Setup up the database
 
 ### SQLite
 
