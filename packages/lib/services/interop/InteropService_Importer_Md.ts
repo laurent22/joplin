@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/explicit-member-accessibility */
 import { ImportExportResult } from './types';
 import { _ } from '../../locale';
 
@@ -54,7 +53,7 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 			const stat = stats[i];
 
 			if (stat.isDirectory()) {
-				if (await this.isDirectoryEmpty(dirPath, stat)) {
+				if (await this.isDirectoryEmpty(`${dirPath}/${basename(stat.path)}`)) {
 					console.info(`Ignoring empty directory: ${stat.path}`);
 					continue;
 				}
@@ -67,25 +66,21 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 		}
 	}
 
-	// If the directory's all subdirectories are empty, we don't want to create a folder with no notes
-	private async isDirectoryEmpty(dirPath: string, stat: any) {
+	private async isDirectoryEmpty(dirPath: string) {
 		const supportedFileExtension = this.metadata().fileExtensions;
-		let isEmpty = true;
-		const innerStats = await shim.fsDriver().readDirStats(`${dirPath}/${basename(stat.path)}`);
+		const innerStats = await shim.fsDriver().readDirStats(dirPath);
 		for (let i = 0; i < innerStats.length; i++) {
 			const innerStat = innerStats[i];
 
 			if (innerStat.isDirectory()) {
-				if (!await this.isDirectoryEmpty(`${dirPath}/${basename(stat.path)}`, innerStat)) {
-					isEmpty = false;
-					break;
+				if (!(await this.isDirectoryEmpty(`${dirPath}/${basename(innerStat.path)}`))) {
+					return false;
 				}
 			} else if (supportedFileExtension.indexOf(fileExtension(innerStat.path).toLowerCase()) >= 0) {
-				isEmpty = false;
-				break;
+				return false;
 			}
 		}
-		return isEmpty;
+		return true;
 
 	}
 

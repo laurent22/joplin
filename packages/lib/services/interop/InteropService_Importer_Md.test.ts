@@ -1,20 +1,33 @@
 import InteropService_Importer_Md from '../../services/interop/InteropService_Importer_Md';
 import Note from '../../models/Note';
-import { db, setupDatabaseAndSynchronizer, supportDir, switchClient } from '../../testing/test-utils';
+import Folder from '../../models/Folder';
+import * as fs from 'fs-extra';
+import { createTempDir, setupDatabaseAndSynchronizer, supportDir, switchClient } from '../../testing/test-utils';
 import { MarkupToHtml } from '@joplin/renderer';
 
 
-describe('InteropService_Importer_Md: importLocalImages', function() {
+describe('InteropService_Importer_Md', function() {
+	let rootDir: string;
 	async function importNote(path: string) {
 		const importer = new InteropService_Importer_Md();
 		importer.setMetadata({ fileExtensions: ['md', 'html'] });
 		return await importer.importFile(path, 'notebook');
 	}
-
+	async function importNoteDirectory(path: string) {
+		const importer = new InteropService_Importer_Md();
+		importer.setMetadata({ fileExtensions: ['md', 'html'] });
+		return await importer.importDirectory(path, 'notebook');
+	}
+	beforeAll(async () => {
+		rootDir = await createTempDir();
+	});
 	beforeEach(async (done) => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
 		done();
+	});
+	afterAll(async () => {
+		await fs.remove(rootDir);
 	});
 	it('should import linked files and modify tags appropriately', async function() {
 		const note = await importNote(`${supportDir}/test_notes/md/sample.md`);
@@ -117,46 +130,30 @@ describe('InteropService_Importer_Md: importLocalImages', function() {
 		const preservedAlt = note.body.includes('alt="../../photo.jpg"');
 		expect(preservedAlt).toBe(true);
 	});
-});
-describe('InteropService_Importer_Md: importDirectory', function() {
-	async function importNoteDirectory(path: string) {
-		const importer = new InteropService_Importer_Md();
-		importer.setMetadata({ fileExtensions: ['md', 'html'] });
-		return await importer.importDirectory(path, 'notebook');
-	}
-
-	beforeEach(async (done) => {
-		await setupDatabaseAndSynchronizer(1);
-		await switchClient(1);
-		done();
-	});
 	it('should import non-empty directory', async function() {
-		await db(1).clearForTesting();
-		await importNoteDirectory(`${supportDir}/test_notes/directory/non-empty`);
+		await fs.mkdirp(`${rootDir}/non-empty/non-empty`);
+		await fs.writeFile(`${rootDir}/non-empty/non-empty/sample.md`, '# Sample');
 
-		const exist = await db(1).selectOne('SELECT COUNT(*) AS count FROM folders WHERE title = "non-empty"');
-
-		expect(exist.count).toBe(1);
+		await importNoteDirectory(`${rootDir}/non-empty`);
+		const allFolders = await Folder.all();
+		expect(allFolders.map((f: any) => f.title).indexOf('non-empty')).toBeGreaterThanOrEqual(0);
 	});
 	it('should not import empty directory', async function() {
-		await db(1).clearForTesting();
-		await importNoteDirectory(`${supportDir}/test_notes/directory/empty`);
+		await fs.mkdirp(`${rootDir}/empty/empty`);
 
-		const exist = await db(1).selectOne('SELECT COUNT(*) AS count FROM folders WHERE title = "empty"');
-
-		expect(exist.count).toBe(0);
+		await importNoteDirectory(`${rootDir}/empty`);
+		const allFolders = await Folder.all();
+		expect(allFolders.map((f: any) => f.title).indexOf('empty')).toBe(-1);
 	});
 	it('should import directory with non-empty subdirectory', async function() {
-		await db(1).clearForTesting();
-		await importNoteDirectory(`${supportDir}/test_notes/directory/non-empty-subdir`);
+		await fs.mkdirp(`${rootDir}/non-empty-subdir/non-empty-subdir/subdir-empty`);
+		await fs.mkdirp(`${rootDir}/non-empty-subdir/non-empty-subdir/subdir-non-empty`);
+		await fs.writeFile(`${rootDir}/non-empty-subdir/non-empty-subdir/subdir-non-empty/sample.md`, '# Sample');
 
-		const existParent = await db(1).selectOne('SELECT COUNT(*) AS count FROM folders WHERE title = "non-empty-subdir"');
-		const existSubDirEmpty = await db(1).selectOne('SELECT COUNT(*) AS count FROM folders WHERE title = "subdir-empty"');
-		const existSubDirNonEmpty = await db(1).selectOne('SELECT COUNT(*) AS count FROM folders WHERE title = "subdir-non-empty"');
-
-
-		expect(existParent.count).toBe(1);
-		expect(existSubDirEmpty.count).toBe(0);
-		expect(existSubDirNonEmpty.count).toBe(1);
+		await importNoteDirectory(`${rootDir}/non-empty-subdir`);
+		const allFolders = await Folder.all();
+		expect(allFolders.map((f: any) => f.title).indexOf('non-empty-subdir')).toBeGreaterThanOrEqual(0);
+		expect(allFolders.map((f: any) => f.title).indexOf('subdir-empty')).toBe(-1);
+		expect(allFolders.map((f: any) => f.title).indexOf('subdir-non-empty')).toBeGreaterThanOrEqual(0);
 	});
 });
