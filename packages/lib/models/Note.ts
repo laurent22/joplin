@@ -704,7 +704,7 @@ export default class Note extends BaseItem {
 		const note = await super.save(o, options);
 
 		const changeSource = options && options.changeSource ? options.changeSource : null;
-		void ItemChange.add(BaseModel.TYPE_NOTE, note.id, isNew ? ItemChange.TYPE_CREATE : ItemChange.TYPE_UPDATE, changeSource, beforeNoteJson);
+		await ItemChange.add(BaseModel.TYPE_NOTE, note.id, isNew ? ItemChange.TYPE_CREATE : ItemChange.TYPE_UPDATE, changeSource, beforeNoteJson);
 
 		if (dispatchUpdateAction) {
 			this.dispatch({
@@ -742,7 +742,7 @@ export default class Note extends BaseItem {
 			const changeSource = options && options.changeSource ? options.changeSource : null;
 			for (let i = 0; i < processIds.length; i++) {
 				const id = processIds[i];
-				void ItemChange.add(BaseModel.TYPE_NOTE, id, ItemChange.TYPE_DELETE, changeSource, beforeChangeItems[id]);
+				await ItemChange.add(BaseModel.TYPE_NOTE, id, ItemChange.TYPE_DELETE, changeSource, beforeChangeItems[id]);
 
 				this.dispatch({
 					type: 'NOTE_DELETE',
