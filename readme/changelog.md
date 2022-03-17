@@ -1,5 +1,13 @@
 # Joplin changelog
 
+## [v2.7.15](https://github.com/laurent22/joplin/releases/tag/v2.7.15) - 2022-03-17T13:03:23Z
+
+- Improved: Handle invalid revision patches ([#6209](https://github.com/laurent22/joplin/issues/6209))
+- Fixed: Clicking on folder button was no longer jumping to the right folder ([#5584](https://github.com/laurent22/joplin/issues/5584))
+- Fixed: Ensure that note revision markup type is set correctly ([#6261](https://github.com/laurent22/joplin/issues/6261))
+- Fixed: Fixed Tags Order ([#6136](https://github.com/laurent22/joplin/issues/6136)) ([#5686](https://github.com/laurent22/joplin/issues/5686) by [@OmGole](https://github.com/OmGole))
+- Fixed: Undo and redo on note title did not work in some cases ([#6214](https://github.com/laurent22/joplin/issues/6214))
+
 ## [v2.7.14](https://github.com/laurent22/joplin/releases/tag/v2.7.14) - 2022-02-27T11:30:53Z
 
 - Improved: Improve error message when revision metadata cannot be decoded, to improve debugging (a325bf6)
