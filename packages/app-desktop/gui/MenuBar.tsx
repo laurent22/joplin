@@ -347,6 +347,12 @@ function useMenu(props: Props) {
 				}
 			}
 
+			importItems.push({ type: 'separator' });
+			importItems.push({
+				label: _('Other applications...'),
+				click: () => { void bridge().openExternal('https://discourse.joplinapp.org/t/importing-notes-from-other-notebook-applications/22425'); },
+			});
+
 			exportItems.push(
 				menuItemDic.exportPdf
 			);
@@ -566,8 +572,15 @@ function useMenu(props: Props) {
 						menuItemDic.textPaste,
 						menuItemDic.textSelectAll,
 						separator(),
-						menuItemDic['editor.undo'],
-						menuItemDic['editor.redo'],
+						// Using the generic "undo"/"redo" roles mean the menu
+						// item will work in every text fields, whether it's the
+						// editor or a regular text field.
+						{
+							role: 'undo',
+						},
+						{
+							role: 'redo',
+						},
 						separator(),
 						menuItemDic.textBold,
 						menuItemDic.textItalic,

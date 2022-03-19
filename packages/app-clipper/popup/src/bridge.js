@@ -463,9 +463,11 @@ class Bridge {
 			// This is the perfect Heisenbug - it happens always when opening the popup the first time EXCEPT
 			// when the debugger is open. Then everything is working fine and the bug NEVER EVER happens,
 			// so it's impossible to understand what's going on.
-			await this.clipperApiExec('POST', 'notes', { nounce: this.nounce_++ }, content);
+			const response = await this.clipperApiExec('POST', 'notes', { nounce: this.nounce_++ }, content);
 
 			this.dispatch({ type: 'CONTENT_UPLOAD', operation: { uploading: false, success: true } });
+
+			return response;
 		} catch (error) {
 			if (error.message === '{"error":"Duplicate Nounce"}') {
 				this.dispatch({ type: 'CONTENT_UPLOAD', operation: { uploading: false, success: true } });

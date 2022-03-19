@@ -17,6 +17,7 @@ const toRelative = require('relative');
 const timers = require('timers');
 const zlib = require('zlib');
 const dgram = require('dgram');
+const { basename, fileExtension, safeFileExtension } = require('./path-utils');
 
 function fileExists(filePath) {
 	try {
@@ -230,7 +231,6 @@ function shimInit(options = null) {
 		const imageType = require('image-type');
 
 		const uuid = require('./uuid').default;
-		const { basename, fileExtension, safeFileExtension } = require('./path-utils');
 
 		if (!(await fs.pathExists(filePath))) throw new Error(_('Cannot access %s', filePath));
 
@@ -329,6 +329,38 @@ function shimInit(options = null) {
 		});
 		return Note.save(newNote);
 	};
+
+	shim.imageToDataUrl = async (filePath, maxSize) => {
+		if (shim.isElectron()) {
+			const nativeImage = require('electron').nativeImage;
+			let image = nativeImage.createFromPath(filePath);
+			if (!image) throw new Error(`Could not load image: ${filePath}`);
+
+			const ext = fileExtension(filePath).toLowerCase();
+			if (!['jpg', 'jpeg', 'png'].includes(ext)) throw new Error(`Unsupported file format: ${ext}`);
+
+			if (maxSize) {
+				const size = image.getSize();
+
+				if (size.width > maxSize || size.height > maxSize) {
+					console.warn(`Image is over ${maxSize}px - resizing it: ${filePath}`);
+
+					const options = {};
+					if (size.width > size.height) {
+						options.width = maxSize;
+					} else {
+						options.height = maxSize;
+					}
+
+					image = image.resize(options);
+				}
+			}
+
+			return image.toDataURL();
+		} else {
+			throw new Error('Unsupported method');
+		}
+	},
 
 	shim.imageFromDataUrl = async function(imageDataUrl, filePath, options = null) {
 		if (options === null) options = {};

@@ -4,10 +4,11 @@ import Setting from '../models/Setting';
 import Note from '../models/Note';
 import ItemChange from '../models/ItemChange';
 import Revision from '../models/Revision';
-import BaseModel from '../BaseModel';
+import BaseModel, { ModelType } from '../BaseModel';
 import RevisionService from '../services/RevisionService';
+import { MarkupLanguage } from '../../renderer';
 
-describe('services_Revision', function() {
+describe('services/RevisionService', function() {
 
 	beforeEach(async (done) => {
 		await setupDatabaseAndSynchronizer(1);
@@ -472,4 +473,82 @@ describe('services_Revision', function() {
 		expect(Date.now() - interval < timeRev2).toBe(true); // check the computer is not too slow for this test
 		expect((await Revision.all()).length).toBe(2);
 	}));
+
+	it('should give a detailed error when a patch cannot be applied', async () => {
+		const n1_v0 = await Note.save({ title: '', is_todo: 1, todo_completed: 0 });
+		const n1_v1 = await Note.save({ id: n1_v0.id, title: 'hello' });
+		await revisionService().collectRevisions(); // REV 1
+		await time.msleep(100);
+
+		await Note.save({ id: n1_v1.id, title: 'hello welcome', todo_completed: 1000 });
+		await revisionService().collectRevisions(); // REV 2
+
+		// Corrupt the metadata diff to generate the error - we assume that it's
+		// been truncated for whatever reason.
+
+		const corruptedMetadata = '{"new":{"todo_completed":10';
+		const revId2 = (await Revision.all())[1].id;
+		await Revision.save({ id: revId2, metadata_diff: corruptedMetadata });
+
+		const note = await Note.load(n1_v0.id);
+		let error = null;
+		try {
+			await revisionService().createNoteRevision_(note);
+		} catch (e) {
+			error = e;
+		}
+
+		expect(error).toBeTruthy();
+		expect(error.message).toContain(revId2);
+		expect(error.message).toContain(note.id);
+		expect(error.message).toContain(corruptedMetadata);
+	});
+
+	it('note revisions should include certain required properties', async () => {
+		const revisions = [
+			{
+				id: '2b7d7aa51f944aa5b63b8453e1182cb0',
+				parent_id: '',
+				item_type: 1,
+				item_id: 'cc333327a8d64456a73773b13f22a1ce',
+				item_updated_time: 1647101206511,
+				title_diff: '[{"diffs":[[1,"hello"]],"start1":0,"start2":0,"length1":0,"length2":5}]',
+				body_diff: '[]',
+				metadata_diff: '{"new":{},"deleted":[]}',
+				encryption_applied: 0,
+				type_: 13,
+			},
+			{
+				id: 'd2e1cd8433364bcba8e689aaa20dfef2',
+				parent_id: '2b7d7aa51f944aa5b63b8453e1182cb0',
+				item_type: 1,
+				item_id: 'cc333327a8d64456a73773b13f22a1ce',
+				item_updated_time: 1647101206622,
+				title_diff: '[{"diffs":[[0,"hello"],[1," welcome"]],"start1":0,"start2":0,"length1":5,"length2":13}]',
+				body_diff: '[]',
+				metadata_diff: '{"new":{},"deleted":[]}',
+				encryption_applied: 0,
+				type_: 13,
+			},
+		];
+
+		const note1 = await revisionService().revisionNote(revisions, 1);
+
+		expect(note1.title).toBe('hello welcome');
+		expect(note1.body).toBe('');
+		expect(note1.markup_language).toBe(MarkupLanguage.Markdown);
+		expect(note1.type_).toBe(ModelType.Note);
+
+		// Check that it's not overidding the property if it's already set
+
+		const revisions2 = revisions.slice();
+		revisions2[0] = {
+			...revisions2[0],
+			metadata_diff: '{"new":{"markup_language":2},"deleted":[]}',
+		};
+
+		const note2 = await revisionService().revisionNote(revisions2, 1);
+		expect(note2.markup_language).toBe(MarkupLanguage.Html);
+	});
+
 });

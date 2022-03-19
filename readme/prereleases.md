@@ -6,4 +6,4 @@ You can help the development of Joplin by choosing to receive these early releas
 
 In general it is safe to use these pre-releases as they do not include any experimental or unstable features. Hundreds of users run them without any issue. Moreover even if you do find an issue, you can report it and it is usually fixed very quickly as these bugs are given the highest priority.
 
-To have access to these pre-releases, simply go to [Configuration &gt; General](https://github.com/laurent22/joplin/blob/dev/readme/config_screen.md) and tick the box "**Get pre-releases when checking for updates**".
+To have access to these pre-releases, simply go to [Configuration &gt; Application](https://github.com/laurent22/joplin/blob/dev/readme/config_screen.md) and tick the box "**Get pre-releases when checking for updates**".

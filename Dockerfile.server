@@ -6,12 +6,8 @@ FROM node:16-bullseye AS builder
 
 RUN apt-get update \
     && apt-get install -y \
-    python \
+    python tini \
     && rm -rf /var/lib/apt/lists/*
-
-# Download the init tool Tini and make it executable for use in the final image
-ADD https://github.com/krallin/tini/releases/download/v0.19.0/tini-static /tini
-RUN chmod u+x /tini
 
 # Enables Yarn
 RUN corepack enable
@@ -63,7 +59,7 @@ RUN useradd --create-home --shell /bin/bash $user
 USER $user
 
 COPY --chown=$user:$user --from=builder /build/packages /home/$user/packages
-COPY --chown=$user:$user --from=builder /tini /usr/local/bin/tini
+COPY --chown=$user:$user --from=builder /usr/bin/tini /usr/local/bin/tini
 
 ENV NODE_ENV=production
 ENV RUNNING_IN_DOCKER=1

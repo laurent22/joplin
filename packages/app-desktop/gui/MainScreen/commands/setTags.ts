@@ -1,6 +1,7 @@
 import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
 import { _ } from '@joplin/lib/locale';
 import Tag from '@joplin/lib/models/Tag';
+import { TagEntity } from '@joplin/lib/services/database/types';
 
 export const declaration: CommandDeclaration = {
 	name: 'setTags',
@@ -14,23 +15,16 @@ export const runtime = (comp: any): CommandRuntime => {
 			noteIds = noteIds || context.state.selectedNoteIds;
 
 			const tags = await Tag.commonTagsByNoteIds(noteIds);
-			const startTags = tags
-				.map((a: any) => {
+			const sortedTags = Tag.sortTags(tags);
+			const startTags = sortedTags
+				.map((a: TagEntity) => {
 					return { value: a.id, label: a.title };
-				})
-				.sort((a: any, b: any) => {
-					// sensitivity accent will treat accented characters as differemt
-					// but treats caps as equal
-					return a.label.localeCompare(b.label, undefined, { sensitivity: 'accent' });
 				});
 			const allTags = await Tag.allWithNotes();
-			const tagSuggestions = allTags.map((a: any) => {
-				return { value: a.id, label: a.title };
-			})
-				.sort((a: any, b: any) => {
-				// sensitivity accent will treat accented characters as differemt
-				// but treats caps as equal
-					return a.label.localeCompare(b.label, undefined, { sensitivity: 'accent' });
+			const sortedAllTags = Tag.sortTags(allTags);
+			const tagSuggestions = sortedAllTags
+				.map((a: TagEntity) => {
+					return { value: a.id, label: a.title };
 				});
 
 			comp.setState({
