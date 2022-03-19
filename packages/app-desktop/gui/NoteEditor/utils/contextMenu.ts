@@ -103,9 +103,12 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 				if (options.mime != 'image/svg+xml') {
 					throw new Error(`Unsupported image type: ${options.mime}`);
 				}
+				if (!options.filename) {
+					throw new Error('Filename is needed to save as png');
+				}
 				const dataUri = textToDataUri(options.textToCopy, options.mime);
 				const png = await svgUriToPng(document, dataUri);
-				const filename = options.filename?.replace('.svg', '.png');
+				const filename = options.filename.replace('.svg', '.png');
 				await saveFileData(png, filename);
 			},
 			isActive: (itemType: ContextMenuItemType, options: ContextMenuOptions) => !!options.textToCopy && itemType === ContextMenuItemType.Image && options.mime?.startsWith('image/svg'),
@@ -122,10 +125,13 @@ export function menuItems(dispatch: Function): ContextMenuItems {
 			label: _('Copy path to clipboard'),
 			onAction: async (options: ContextMenuOptions) => {
 				let path = '';
-				if (options.textToCopy && options.mime) { path = textToDataUri(options.textToCopy, options.mime); } else {
+				if (options.textToCopy && options.mime) {
+					path = textToDataUri(options.textToCopy, options.mime);
+				} else {
 					const { resourcePath } = await resourceInfo(options);
 					if (resourcePath) path = toSystemSlashes(resourcePath);
 				}
+				if (!path) return;
 				clipboard.writeText(path);
 			},
 			isActive: (itemType: ContextMenuItemType) => itemType === ContextMenuItemType.Image || itemType === ContextMenuItemType.Resource,

@@ -1,13 +1,6 @@
 import { htmlToClipboardData } from './clipboardUtils';
 
 describe('clipboardUtils', () => {
-
-	// We are mocking console.error since jsdom throws errors to console when we try to load an invalid img
-	// https://github.com/facebook/jest/pull/5267#issuecomment-356605468
-	beforeEach(() => {
-		console.error = jest.fn();
-	});
-
 	test('should convert HTML to the right format', () => {
 		const testCases = [
 			[
@@ -34,6 +27,11 @@ describe('clipboardUtils', () => {
 			expect(result.text).toBe(expectedText);
 		}
 	});
+
+	// We are mocking console.error for the following tests
+	// since jsdom throws errors to console when we try to load an invalid img
+	// https://github.com/facebook/jest/pull/5267#issuecomment-356605468
+	console.error = jest.fn();
 
 	test('should remove parameters from local images', () => {
 		const localImage = 'file:///home/some/path/test.jpg';
