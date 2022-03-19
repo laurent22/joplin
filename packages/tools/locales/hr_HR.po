@@ -244,7 +244,7 @@ msgstr "Aktivno"
 msgid "Actual Size"
 msgstr "Stvarna veličina"
 
-#: packages/app-mobile/components/screens/Note.tsx:1128
+#: packages/app-mobile/components/screens/Note.tsx:1116
 msgid "Add body"
 msgstr "Dodaj sadržaj"
 
@@ -256,7 +256,7 @@ msgstr "Dodaj ili ukloni oznake:"
 msgid "Add recipient:"
 msgstr "Dodaj primaoca:"
 
-#: packages/app-mobile/components/screens/Note.tsx:1191
+#: packages/app-mobile/components/screens/Note.tsx:1177
 msgid "Add title"
 msgstr "Dodaj naslov"
 
@@ -264,8 +264,8 @@ msgstr "Dodaj naslov"
 msgid "Add to dictionary"
 msgstr "Dodaj u rječnik"
 
-#: packages/server/src/services/MustacheService.ts:186
-#: packages/server/src/services/MustacheService.ts:310
+#: packages/server/src/services/MustacheService.ts:183
+#: packages/server/src/services/MustacheService.ts:307
 msgid "Admin"
 msgstr ""
 
@@ -331,15 +331,15 @@ msgstr "Aritim tamna"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:53
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:589
-#: packages/app-mobile/components/screens/Note.tsx:898
+#: packages/app-mobile/components/screens/Note.tsx:893
 msgid "Attach file"
 msgstr "Priloži datoteku"
 
-#: packages/app-mobile/components/screens/Note.tsx:902
+#: packages/app-mobile/components/screens/Note.tsx:897
 msgid "Attach photo"
 msgstr "Priloži sliku"
 
-#: packages/app-mobile/components/screens/Note.tsx:885
+#: packages/app-mobile/components/screens/Note.tsx:880
 msgid "Attach..."
 msgstr "Priloži …"
 
@@ -451,8 +451,8 @@ msgstr "Popis s predznakom"
 #: packages/app-mobile/components/CameraView.tsx:191
 #: packages/app-mobile/components/ModalDialog.js:70
 #: packages/app-mobile/components/screens/encryption-config.tsx:190
-#: packages/app-mobile/components/screens/Note.tsx:107
-#: packages/app-mobile/components/screens/Note.tsx:593
+#: packages/app-mobile/components/screens/Note.tsx:104
+#: packages/app-mobile/components/screens/Note.tsx:588
 #: packages/app-mobile/components/SelectDateTimeDialog.tsx:152
 #: packages/app-mobile/components/side-menu-content.js:156
 #: packages/app-mobile/components/side-menu-content.js:165
@@ -508,8 +508,8 @@ msgstr "Nije moguće kopirati bilješku u bilježnicu „%s”"
 #: packages/app-cli/app/command-tag.js:87
 #: packages/app-cli/app/command-todo.js:21
 #: packages/app-cli/app/command-use.js:21
-#: packages/lib/services/interop/InteropService.ts:290
-#: packages/lib/services/interop/InteropService.ts:308
+#: packages/lib/services/interop/InteropService.ts:266
+#: packages/lib/services/interop/InteropService.ts:284
 msgid "Cannot find \"%s\"."
 msgstr "Nije moguće pronaći „%s”."
 
@@ -517,11 +517,11 @@ msgstr "Nije moguće pronaći „%s”."
 msgid "Cannot initialise synchroniser."
 msgstr "Nije moguće pokrenuti sinkronizaciju."
 
-#: packages/lib/services/interop/InteropService.ts:209
+#: packages/lib/services/interop/InteropService.ts:208
 msgid "Cannot load \"%s\" module for format \"%s\" and output \"%s\""
 msgstr "Nije moguće učitati modul „%s” za format „%s” i rezultat „%s”"
 
-#: packages/lib/services/interop/InteropService.ts:235
+#: packages/lib/services/interop/InteropService.ts:234
 msgid "Cannot load \"%s\" module for format \"%s\" and target \"%s\""
 msgstr "Nije moguće učitati modul „%s” za format „%s” i cilj „%s”"
 
@@ -601,7 +601,7 @@ msgstr "Označiv popis"
 msgid "Checking... Please wait."
 msgstr "Provjeravanje … Pričekaj."
 
-#: packages/app-mobile/components/screens/Note.tsx:905
+#: packages/app-mobile/components/screens/Note.tsx:900
 msgid "Choose an option"
 msgstr "Odaberi jednu opciju"
 
@@ -745,17 +745,17 @@ msgstr "Konflikti (privici)"
 msgid "Content provided by %s"
 msgstr "Sadržaj pruža %s"
 
-#: packages/app-mobile/components/screens/Note.tsx:938
+#: packages/app-mobile/components/screens/Note.tsx:933
 msgid "Convert to note"
 msgstr "Pretvori u bilješku"
 
-#: packages/app-mobile/components/screens/Note.tsx:938
+#: packages/app-mobile/components/screens/Note.tsx:933
 msgid "Convert to todo"
 msgstr "Pretvori u zadatak"
 
 #: packages/app-desktop/gui/MenuBar.tsx:433
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:13
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:760
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:761
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:151
 msgid "Copy"
 msgstr "Kopiraj"
@@ -780,7 +780,7 @@ msgid "Copy Link Address"
 msgstr "Kopiraj adresu poveznice"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:124
-#: packages/app-mobile/components/screens/Note.tsx:945
+#: packages/app-mobile/components/screens/Note.tsx:940
 msgid "Copy Markdown link"
 msgstr "Kopiraj Markdown poveznicu"
 
@@ -905,7 +905,7 @@ msgid "Created: %d."
 msgstr "Stvoreno: %d."
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:118
-#: packages/app-mobile/components/screens/Note.tsx:840
+#: packages/app-mobile/components/screens/Note.tsx:835
 msgid "Created: %s"
 msgstr "Stvoreno: %s"
 
@@ -954,7 +954,7 @@ msgid "Custom TLS certificates"
 msgstr "Prilagođeni TLS certifikati"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:18
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:750
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:751
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:143
 msgid "Cut"
 msgstr "Izreži"
@@ -963,7 +963,7 @@ msgstr "Izreži"
 msgid "Dark"
 msgstr "Tamna"
 
-#: packages/server/src/services/MustacheService.ts:139
+#: packages/server/src/services/MustacheService.ts:136
 msgid "Dashboard"
 msgstr ""
 
@@ -1012,7 +1012,7 @@ msgstr "Standardno: %s"
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:192
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:222
 #: packages/app-mobile/components/screen-header.js:362
-#: packages/app-mobile/components/screens/Note.tsx:958
+#: packages/app-mobile/components/screens/Note.tsx:953
 #: packages/app-mobile/components/side-menu-content.js:146
 msgid "Delete"
 msgstr "Izbriši"
@@ -1044,7 +1044,7 @@ msgid "Delete note \"%s\"?"
 msgstr "Izbrisati bilješku „%s”?"
 
 #: packages/app-cli/app/command-rmnote.js:27
-#: packages/app-mobile/components/screens/Note.tsx:530
+#: packages/app-mobile/components/screens/Note.tsx:525
 msgid "Delete note?"
 msgstr "Izbrisati bilješku?"
 
@@ -1157,7 +1157,7 @@ msgstr ""
 "ponovo sinkronizirati i poslati nešifrirano u cilj sinkronizacije. Želiš li "
 "nastaviti?"
 
-#: packages/app-mobile/components/screens/Note.tsx:107
+#: packages/app-mobile/components/screens/Note.tsx:104
 msgid "Discard changes"
 msgstr "Odbaci promjene"
 
@@ -1295,7 +1295,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/MainScreen/commands/openFolderDialog.ts:12
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/openEditDialog.ts:83
-#: packages/app-mobile/components/screens/Note.tsx:1151
+#: packages/app-mobile/components/screens/Note.tsx:1139
 msgid "Edit"
 msgstr "Uredi"
 
@@ -1352,7 +1352,7 @@ msgid "Email"
 msgstr ""
 
 #: packages/server/src/routes/admin/emails.ts:112
-#: packages/server/src/services/MustacheService.ts:155
+#: packages/server/src/services/MustacheService.ts:152
 msgid "Emails"
 msgstr ""
 
@@ -1551,11 +1551,11 @@ msgstr ""
 msgid "Errors only"
 msgstr "Samo greške"
 
-#: packages/lib/services/interop/InteropService.ts:89
+#: packages/lib/services/interop/InteropService.ts:88
 msgid "Evernote Export File (as HTML)"
 msgstr "Evernote datoteka izvoza (kao HTML)"
 
-#: packages/lib/services/interop/InteropService.ts:80
+#: packages/lib/services/interop/InteropService.ts:79
 msgid "Evernote Export File (as Markdown)"
 msgstr "Evernote datoteka izvoza (kao Markdown)"
 
@@ -1722,7 +1722,7 @@ msgid "Full changelog"
 msgstr "Potpuni dnevnik promjena"
 
 #: packages/lib/models/Setting.ts:2141
-#: packages/server/src/services/MustacheService.ts:136
+#: packages/server/src/services/MustacheService.ts:133
 msgid "General"
 msgstr "Opće"
 
@@ -1755,7 +1755,7 @@ msgstr ""
 "zadana, prikazat će vrijednost imena [name]. Ako [name] niti [value] nisu "
 "zadani, ispisat će trenutačnu konfiguraciju."
 
-#: packages/app-mobile/components/screens/Note.tsx:852
+#: packages/app-mobile/components/screens/Note.tsx:847
 msgid "Go to source URL"
 msgstr "Idi na URL izvora"
 
@@ -1772,7 +1772,7 @@ msgstr "Odobri autorizaciju"
 msgid "Heading"
 msgstr "Naslov"
 
-#: packages/server/src/services/MustacheService.ts:308
+#: packages/server/src/services/MustacheService.ts:305
 #, fuzzy
 msgid "Help"
 msgstr "Pomoć"
@@ -1793,8 +1793,8 @@ msgstr "Sakrij Joplin"
 msgid "Highlight"
 msgstr "Istaknuto"
 
-#: packages/server/src/services/MustacheService.ts:170
-#: packages/server/src/services/MustacheService.ts:303
+#: packages/server/src/services/MustacheService.ts:167
+#: packages/server/src/services/MustacheService.ts:300
 msgid "Home"
 msgstr ""
 
@@ -1802,11 +1802,11 @@ msgstr ""
 msgid "Horizontal Rule"
 msgstr "Vodoravna crta"
 
-#: packages/lib/services/interop/InteropService.ts:134
+#: packages/lib/services/interop/InteropService.ts:133
 msgid "HTML Directory"
 msgstr "HTML mapa"
 
-#: packages/lib/services/interop/InteropService.ts:128
+#: packages/lib/services/interop/InteropService.ts:127
 msgid "HTML File"
 msgstr "HTML datoteka"
 
@@ -1882,7 +1882,7 @@ msgstr ""
 "odabranu bilješku ili bilježnicu. `$c` se može koristiti za upućivanje na "
 "trenutačno odabrani element."
 
-#: packages/app-mobile/components/screens/Note.tsx:407
+#: packages/app-mobile/components/screens/Note.tsx:402
 msgid ""
 "In order to associate a geo-location with the note, the app needs your "
 "permission to access your location.\n"
@@ -2024,8 +2024,8 @@ msgstr "Kurziv"
 msgid "Item \"%s\" could not be downloaded: %s"
 msgstr "Nije bilo moguće preuzeti element „%s”: %s"
 
-#: packages/server/src/services/MustacheService.ts:178
-#: packages/server/src/services/MustacheService.ts:305
+#: packages/server/src/services/MustacheService.ts:175
+#: packages/server/src/services/MustacheService.ts:302
 msgid "Items"
 msgstr ""
 
@@ -2057,13 +2057,13 @@ msgstr "Joplin Cloud email"
 msgid "Joplin Cloud password"
 msgstr "Joplin Cloud lozinka"
 
-#: packages/lib/services/interop/InteropService.ts:108
-#: packages/lib/services/interop/InteropService.ts:73
+#: packages/lib/services/interop/InteropService.ts:107
+#: packages/lib/services/interop/InteropService.ts:72
 msgid "Joplin Export Directory"
 msgstr "Joplin mapa izvoza"
 
-#: packages/lib/services/interop/InteropService.ts:102
-#: packages/lib/services/interop/InteropService.ts:51
+#: packages/lib/services/interop/InteropService.ts:101
+#: packages/lib/services/interop/InteropService.ts:50
 msgid "Joplin Export File"
 msgstr "Joplin datoteka izvoza"
 
@@ -2159,7 +2159,7 @@ msgstr "Zadnja greška: %s"
 msgid "Later"
 msgstr "Kasnije"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:609
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:610
 msgid "Layout"
 msgstr "Raspored"
 
@@ -2194,7 +2194,7 @@ msgstr[0] "Poveznica je kopirana u međuspremnik!"
 msgstr[1] "Poveznice su kopirane u međuspremnik!"
 msgstr[2] "Poveznice su kopirane u međuspremnik!"
 
-#: packages/app-mobile/components/screens/Note.tsx:200
+#: packages/app-mobile/components/screens/Note.tsx:197
 msgid "Links with protocol \"%s\" are not supported"
 msgstr "Poveznice s protokolom „%s” se ne podržavaju"
 
@@ -2224,7 +2224,7 @@ msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:521
 #: packages/app-mobile/components/screens/log.js:100
-#: packages/server/src/services/MustacheService.ts:306
+#: packages/server/src/services/MustacheService.ts:303
 msgid "Log"
 msgstr "Dnevnik"
 
@@ -2244,11 +2244,11 @@ msgstr "Prijavi se s Dropbox"
 msgid "Login with OneDrive"
 msgstr "Prijavi se s OneDrive"
 
-#: packages/server/src/services/MustacheService.ts:309
+#: packages/server/src/services/MustacheService.ts:306
 msgid "Logout"
 msgstr ""
 
-#: packages/server/src/services/MustacheService.ts:182
+#: packages/server/src/services/MustacheService.ts:179
 msgid "Logs"
 msgstr ""
 
@@ -2284,13 +2284,13 @@ msgid "Manual"
 msgstr "Ručno"
 
 #: packages/lib/models/Setting.ts:2146
-#: packages/lib/services/interop/InteropService.ts:114
-#: packages/lib/services/interop/InteropService.ts:59
+#: packages/lib/services/interop/InteropService.ts:113
+#: packages/lib/services/interop/InteropService.ts:58
 msgid "Markdown"
 msgstr "Markdown"
 
-#: packages/lib/services/interop/InteropService.ts:120
-#: packages/lib/services/interop/InteropService.ts:67
+#: packages/lib/services/interop/InteropService.ts:119
+#: packages/lib/services/interop/InteropService.ts:66
 msgid "Markdown + Front Matter"
 msgstr "Markdown + Front Matter"
 
@@ -2441,7 +2441,7 @@ msgid "no"
 msgstr "ne"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:29
-#: packages/app-mobile/components/screens/Note.tsx:592
+#: packages/app-mobile/components/screens/Note.tsx:587
 #: packages/lib/shim-init-node.js:172 packages/lib/versionInfo.ts:27
 msgid "No"
 msgstr "Ne"
@@ -2450,7 +2450,7 @@ msgstr "Ne"
 msgid "No active notebook."
 msgstr "Nema aktivne bilježnice."
 
-#: packages/app-mobile/components/screens/Note.tsx:171
+#: packages/app-mobile/components/screens/Note.tsx:168
 msgid "No item with ID %s"
 msgstr "Nema elementa s ID oznakom %s"
 
@@ -2748,7 +2748,7 @@ msgid "Passwords do not match!"
 msgstr "Lozinke se ne poklapaju!"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:23
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:770
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:771
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:158
 msgid "Paste"
 msgstr "Umetni"
@@ -2762,7 +2762,7 @@ msgstr "Putanja:"
 msgid "PDF File"
 msgstr "PDF datoteka"
 
-#: packages/app-mobile/components/screens/Note.tsx:408
+#: packages/app-mobile/components/screens/Note.tsx:403
 msgid "Permission needed"
 msgstr "Potrebna je dozvola"
 
@@ -2819,7 +2819,7 @@ msgstr "Najprije odaberi bilješku ili bilježnicu za brisanje."
 msgid "Please select where the sync status should be exported to"
 msgstr "Odaberi mjesto za izvoz stanja sinkronizacije"
 
-#: packages/lib/services/interop/InteropService.ts:301
+#: packages/lib/services/interop/InteropService.ts:277
 msgid "Please specify import format for %s"
 msgstr "Odredi format uvoza za %s"
 
@@ -2933,7 +2933,7 @@ msgstr ""
 msgid "Profile Version: %s"
 msgstr "Verzija profila: %s"
 
-#: packages/app-mobile/components/screens/Note.tsx:952
+#: packages/app-mobile/components/screens/Note.tsx:947
 msgid "Properties"
 msgstr "Svojstva"
 
@@ -3161,7 +3161,7 @@ msgstr "Spremi upozorenje"
 msgid "Save as..."
 msgstr "Spremi kao …"
 
-#: packages/app-mobile/components/screens/Note.tsx:107
+#: packages/app-mobile/components/screens/Note.tsx:104
 msgid "Save changes"
 msgstr "Spremi promjene"
 
@@ -3235,7 +3235,7 @@ msgid "Server is running on port %d"
 msgstr "Poslužitelj se pokreće na priključku %d"
 
 #: packages/app-desktop/gui/MainScreen/commands/editAlarm.ts:10
-#: packages/app-mobile/components/screens/Note.tsx:916
+#: packages/app-mobile/components/screens/Note.tsx:911
 #: packages/app-mobile/components/SelectDateTimeDialog.tsx:141
 msgid "Set alarm"
 msgstr "Postavi upozorenje"
@@ -3270,7 +3270,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:248
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.ts:20
-#: packages/app-mobile/components/screens/Note.tsx:924
+#: packages/app-mobile/components/screens/Note.tsx:919
 msgid "Share"
 msgstr "Dijeli"
 
@@ -3631,18 +3631,18 @@ msgstr "Označeno: %d."
 
 #: packages/app-desktop/gui/MainScreen/commands/setTags.ts:7
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:725
-#: packages/app-mobile/components/screens/Note.tsx:931
+#: packages/app-mobile/components/screens/Note.tsx:926
 #: packages/app-mobile/components/screens/tags.js:101
 #: packages/app-mobile/components/side-menu-content.js:330
 msgid "Tags"
 msgstr "Oznake"
 
-#: packages/app-mobile/components/screens/Note.tsx:903
+#: packages/app-mobile/components/screens/Note.tsx:898
 msgid "Take photo"
 msgstr "Snimi sliku"
 
-#: packages/server/src/services/MustacheService.ts:151
-#: packages/server/src/services/MustacheService.ts:307
+#: packages/server/src/services/MustacheService.ts:148
+#: packages/server/src/services/MustacheService.ts:304
 msgid "Tasks"
 msgstr ""
 
@@ -3748,7 +3748,7 @@ msgstr ""
 "preporučujemo da ih nadogradiš. Nadograđeni ključ će i nadalje moći "
 "dešifrirati i šifrirati tvoje podatke."
 
-#: packages/app-mobile/components/screens/Note.tsx:196
+#: packages/app-mobile/components/screens/Note.tsx:193
 msgid "The Joplin mobile app does not currently support this type of link: %s"
 msgstr ""
 "Joplin program za mobilne uređaje trenutačno ne podržava ovu vrstu "
@@ -3933,7 +3933,7 @@ msgstr ""
 msgid "This attachment is not downloaded or not decrypted yet"
 msgstr "Ovaj privitak još nije preuzet ili dešifriran"
 
-#: packages/app-mobile/components/screens/Note.tsx:190
+#: packages/app-mobile/components/screens/Note.tsx:187
 msgid "This attachment is not downloaded or not decrypted yet."
 msgstr "Ovaj privitak još nije preuzet ili dešifriran."
 
@@ -3959,11 +3959,11 @@ msgstr ""
 msgid "This note does not have geolocation information."
 msgstr "Ova bilješka nema geografske podatke mjesta."
 
-#: packages/app-mobile/components/screens/Note.tsx:107
+#: packages/app-mobile/components/screens/Note.tsx:104
 msgid "This note has been modified:"
 msgstr "Ova je blješka promijenjena:"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:609
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:610
 msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
 "note."
@@ -4215,7 +4215,7 @@ msgstr ""
 "Prestati dijeliti ovu bilježnicu? Primalac više neće imati pristup sadržaju "
 "bilježnice."
 
-#: packages/app-mobile/components/screens/Note.tsx:685
+#: packages/app-mobile/components/screens/Note.tsx:680
 msgid "Unsupported image type: %s"
 msgstr "Nepodržana vrsta slike: %s"
 
@@ -4272,7 +4272,7 @@ msgstr "Aktualizirano: "
 msgid "Updated: %d."
 msgstr "Aktualizirano: %d."
 
-#: packages/app-mobile/components/screens/Note.tsx:841
+#: packages/app-mobile/components/screens/Note.tsx:836
 msgid "Updated: %s"
 msgstr "Aktualizirano: %s"
 
@@ -4347,13 +4347,13 @@ msgstr ""
 "Koristi se za tekst fiksne širine (npr. tablice, potvrdni okivi, programski "
 "kod). Ako se ne pronađe, koristi se generički font fiksne širine."
 
-#: packages/server/src/services/MustacheService.ts:147
+#: packages/server/src/services/MustacheService.ts:144
 msgid "User deletions"
 msgstr ""
 
 #: packages/server/src/routes/admin/users.ts:107
-#: packages/server/src/services/MustacheService.ts:143
-#: packages/server/src/services/MustacheService.ts:304
+#: packages/server/src/services/MustacheService.ts:140
+#: packages/server/src/services/MustacheService.ts:301
 msgid "Users"
 msgstr ""
 
@@ -4365,7 +4365,7 @@ msgstr "Ispravno"
 msgid "View"
 msgstr "Prikaz"
 
-#: packages/app-mobile/components/screens/Note.tsx:845
+#: packages/app-mobile/components/screens/Note.tsx:840
 msgid "View on map"
 msgstr "Pogledaj na karti"
 
@@ -4461,12 +4461,12 @@ msgid "yes"
 msgstr "da"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:28
-#: packages/app-mobile/components/screens/Note.tsx:591
+#: packages/app-mobile/components/screens/Note.tsx:586
 #: packages/lib/shim-init-node.js:172 packages/lib/versionInfo.ts:27
 msgid "Yes"
 msgstr "Da"
 
-#: packages/app-mobile/components/screens/Note.tsx:590
+#: packages/app-mobile/components/screens/Note.tsx:585
 #: packages/lib/shim-init-node.js:171
 msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "

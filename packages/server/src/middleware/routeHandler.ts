@@ -10,7 +10,7 @@ export default async function(ctx: AppContext) {
 	const requestStartTime = Date.now();
 
 	try {
-		const responseObject = await execRequest(ctx.joplin.routes, ctx);
+		const { response: responseObject, path } = await execRequest(ctx.joplin.routes, ctx);
 
 		if (responseObject instanceof Response) {
 			ctx.response = responseObject.response;
@@ -20,7 +20,7 @@ export default async function(ctx: AppContext) {
 			const view = responseObject as View;
 			ctx.response.status = view?.content?.error ? view?.content?.error?.httpCode || 500 : 200;
 			ctx.response.body = await ctx.joplin.services.mustache.renderView(view, {
-				currentUrl: ctx.URL,
+				currentPath: path,
 				notifications: ctx.joplin.notifications || [],
 				hasNotifications: !!ctx.joplin.notifications && !!ctx.joplin.notifications.length,
 				owner: ctx.joplin.owner,

@@ -244,7 +244,7 @@ msgstr "활성"
 msgid "Actual Size"
 msgstr "실제 크기"
 
-#: packages/app-mobile/components/screens/Note.tsx:1128
+#: packages/app-mobile/components/screens/Note.tsx:1116
 msgid "Add body"
 msgstr "내용 추가"
 
@@ -256,7 +256,7 @@ msgstr "태그 추가 및 제거:"
 msgid "Add recipient:"
 msgstr "받는 사람 추가:"
 
-#: packages/app-mobile/components/screens/Note.tsx:1191
+#: packages/app-mobile/components/screens/Note.tsx:1177
 msgid "Add title"
 msgstr "제목 추가"
 
@@ -264,8 +264,8 @@ msgstr "제목 추가"
 msgid "Add to dictionary"
 msgstr "사전에 추가"
 
-#: packages/server/src/services/MustacheService.ts:186
-#: packages/server/src/services/MustacheService.ts:310
+#: packages/server/src/services/MustacheService.ts:183
+#: packages/server/src/services/MustacheService.ts:307
 msgid "Admin"
 msgstr ""
 
@@ -331,15 +331,15 @@ msgstr "Aritim Dark"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:53
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:589
-#: packages/app-mobile/components/screens/Note.tsx:898
+#: packages/app-mobile/components/screens/Note.tsx:893
 msgid "Attach file"
 msgstr "파일 첨부"
 
-#: packages/app-mobile/components/screens/Note.tsx:902
+#: packages/app-mobile/components/screens/Note.tsx:897
 msgid "Attach photo"
 msgstr "사진 첨부"
 
-#: packages/app-mobile/components/screens/Note.tsx:885
+#: packages/app-mobile/components/screens/Note.tsx:880
 msgid "Attach..."
 msgstr "첨부..."
 
@@ -451,8 +451,8 @@ msgstr "글머리 기호 목록"
 #: packages/app-mobile/components/CameraView.tsx:191
 #: packages/app-mobile/components/ModalDialog.js:70
 #: packages/app-mobile/components/screens/encryption-config.tsx:190
-#: packages/app-mobile/components/screens/Note.tsx:107
-#: packages/app-mobile/components/screens/Note.tsx:593
+#: packages/app-mobile/components/screens/Note.tsx:104
+#: packages/app-mobile/components/screens/Note.tsx:588
 #: packages/app-mobile/components/SelectDateTimeDialog.tsx:152
 #: packages/app-mobile/components/side-menu-content.js:156
 #: packages/app-mobile/components/side-menu-content.js:165
@@ -508,8 +508,8 @@ msgstr "노트를 \"%s\" 노트북으로 복사할 수 없습니다"
 #: packages/app-cli/app/command-tag.js:87
 #: packages/app-cli/app/command-todo.js:21
 #: packages/app-cli/app/command-use.js:21
-#: packages/lib/services/interop/InteropService.ts:290
-#: packages/lib/services/interop/InteropService.ts:308
+#: packages/lib/services/interop/InteropService.ts:266
+#: packages/lib/services/interop/InteropService.ts:284
 msgid "Cannot find \"%s\"."
 msgstr "\"%s\"를 찾을 수 없습니다."
 
@@ -517,11 +517,11 @@ msgstr "\"%s\"를 찾을 수 없습니다."
 msgid "Cannot initialise synchroniser."
 msgstr "동기화를 시작할 수 없습니다."
 
-#: packages/lib/services/interop/InteropService.ts:209
+#: packages/lib/services/interop/InteropService.ts:208
 msgid "Cannot load \"%s\" module for format \"%s\" and output \"%s\""
 msgstr "\"%s\" 모듈(\"%s\" 포맷과 \"%s\" 출력을 위한)을 불러올 수 없습니다"
 
-#: packages/lib/services/interop/InteropService.ts:235
+#: packages/lib/services/interop/InteropService.ts:234
 msgid "Cannot load \"%s\" module for format \"%s\" and target \"%s\""
 msgstr "\"%s\" 모듈(\"%s\" 포맷과 \"%s\" 대상을 위한)을 불러올 수 없습니다"
 
@@ -596,7 +596,7 @@ msgstr "선택상자 목록"
 msgid "Checking... Please wait."
 msgstr "확인 중입니다... 잠시만 기다리세요."
 
-#: packages/app-mobile/components/screens/Note.tsx:905
+#: packages/app-mobile/components/screens/Note.tsx:900
 msgid "Choose an option"
 msgstr "옵션 선택"
 
@@ -745,17 +745,17 @@ msgstr "노트 첨부"
 msgid "Content provided by %s"
 msgstr "노트 속성"
 
-#: packages/app-mobile/components/screens/Note.tsx:938
+#: packages/app-mobile/components/screens/Note.tsx:933
 msgid "Convert to note"
 msgstr "노트로 변환"
 
-#: packages/app-mobile/components/screens/Note.tsx:938
+#: packages/app-mobile/components/screens/Note.tsx:933
 msgid "Convert to todo"
 msgstr "'할 일'로 변환"
 
 #: packages/app-desktop/gui/MenuBar.tsx:433
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:13
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:760
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:761
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:151
 msgid "Copy"
 msgstr "복사"
@@ -781,7 +781,7 @@ msgid "Copy Link Address"
 msgstr "링크 주소 복사"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:124
-#: packages/app-mobile/components/screens/Note.tsx:945
+#: packages/app-mobile/components/screens/Note.tsx:940
 msgid "Copy Markdown link"
 msgstr "마크다운 링크 복사"
 
@@ -901,7 +901,7 @@ msgid "Created: %d."
 msgstr "생성됨: %d."
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:118
-#: packages/app-mobile/components/screens/Note.tsx:840
+#: packages/app-mobile/components/screens/Note.tsx:835
 msgid "Created: %s"
 msgstr "생성됨: %s"
 
@@ -950,7 +950,7 @@ msgid "Custom TLS certificates"
 msgstr "사용자 TLS 인증서"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:18
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:750
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:751
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:143
 msgid "Cut"
 msgstr "잘라내기"
@@ -959,7 +959,7 @@ msgstr "잘라내기"
 msgid "Dark"
 msgstr "Dark"
 
-#: packages/server/src/services/MustacheService.ts:139
+#: packages/server/src/services/MustacheService.ts:136
 msgid "Dashboard"
 msgstr ""
 
@@ -1008,7 +1008,7 @@ msgstr "기본값:  %s"
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:192
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:222
 #: packages/app-mobile/components/screen-header.js:362
-#: packages/app-mobile/components/screens/Note.tsx:958
+#: packages/app-mobile/components/screens/Note.tsx:953
 #: packages/app-mobile/components/side-menu-content.js:146
 msgid "Delete"
 msgstr "삭제"
@@ -1040,7 +1040,7 @@ msgid "Delete note \"%s\"?"
 msgstr "\"%s\" 노트를 삭제할까요?"
 
 #: packages/app-cli/app/command-rmnote.js:27
-#: packages/app-mobile/components/screens/Note.tsx:530
+#: packages/app-mobile/components/screens/Note.tsx:525
 msgid "Delete note?"
 msgstr "이 노트를 삭제할까요?"
 
@@ -1153,7 +1153,7 @@ msgstr ""
 "암호화를 해제하게 되면 모든 노트와 첨부 파일이 다시 동기화되며, 암호화 되지 "
 "않은 상태로 동기화 대상에게 전달됩니다. 계속 진행할까요?"
 
-#: packages/app-mobile/components/screens/Note.tsx:107
+#: packages/app-mobile/components/screens/Note.tsx:104
 msgid "Discard changes"
 msgstr "변경 사항 버리기"
 
@@ -1291,7 +1291,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/MainScreen/commands/openFolderDialog.ts:12
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/openEditDialog.ts:83
-#: packages/app-mobile/components/screens/Note.tsx:1151
+#: packages/app-mobile/components/screens/Note.tsx:1139
 msgid "Edit"
 msgstr "편집"
 
@@ -1348,7 +1348,7 @@ msgid "Email"
 msgstr ""
 
 #: packages/server/src/routes/admin/emails.ts:112
-#: packages/server/src/services/MustacheService.ts:155
+#: packages/server/src/services/MustacheService.ts:152
 msgid "Emails"
 msgstr ""
 
@@ -1551,11 +1551,11 @@ msgstr ""
 msgid "Errors only"
 msgstr "오류 보기"
 
-#: packages/lib/services/interop/InteropService.ts:89
+#: packages/lib/services/interop/InteropService.ts:88
 msgid "Evernote Export File (as HTML)"
 msgstr "Evernote 내보내기 파일 (HTML로)"
 
-#: packages/lib/services/interop/InteropService.ts:80
+#: packages/lib/services/interop/InteropService.ts:79
 msgid "Evernote Export File (as Markdown)"
 msgstr "Evernote 내보내기 파일 (마크다운으로)"
 
@@ -1721,7 +1721,7 @@ msgid "Full changelog"
 msgstr "바뀐 내용을 모두 보기"
 
 #: packages/lib/models/Setting.ts:2141
-#: packages/server/src/services/MustacheService.ts:136
+#: packages/server/src/services/MustacheService.ts:133
 msgid "General"
 msgstr "일반"
 
@@ -1753,7 +1753,7 @@ msgstr ""
 "값을 표시할 것입니다. [name] 과 [value] 모두 제공되지 않았다면, 현재 설정을 "
 "표시할 것입니다."
 
-#: packages/app-mobile/components/screens/Note.tsx:852
+#: packages/app-mobile/components/screens/Note.tsx:847
 msgid "Go to source URL"
 msgstr "소스 URL로 이동"
 
@@ -1771,7 +1771,7 @@ msgstr "인증 토큰:"
 msgid "Heading"
 msgstr "표제"
 
-#: packages/server/src/services/MustacheService.ts:308
+#: packages/server/src/services/MustacheService.ts:305
 msgid "Help"
 msgstr "도움말"
 
@@ -1791,8 +1791,8 @@ msgstr "Joplin 숨기기"
 msgid "Highlight"
 msgstr "하이라이트"
 
-#: packages/server/src/services/MustacheService.ts:170
-#: packages/server/src/services/MustacheService.ts:303
+#: packages/server/src/services/MustacheService.ts:167
+#: packages/server/src/services/MustacheService.ts:300
 msgid "Home"
 msgstr ""
 
@@ -1800,11 +1800,11 @@ msgstr ""
 msgid "Horizontal Rule"
 msgstr "수평줄"
 
-#: packages/lib/services/interop/InteropService.ts:134
+#: packages/lib/services/interop/InteropService.ts:133
 msgid "HTML Directory"
 msgstr "HTML 디렉터리"
 
-#: packages/lib/services/interop/InteropService.ts:128
+#: packages/lib/services/interop/InteropService.ts:127
 msgid "HTML File"
 msgstr "HTML 파일"
 
@@ -1879,7 +1879,7 @@ msgstr ""
 "다. 현재 선택된 노트 또는 노트북의 경우 `$n` 이나 `$b`같은 바로가기로, 현재 "
 "선택된 항목의 경우 `$c`로 참조할 수 있습니다."
 
-#: packages/app-mobile/components/screens/Note.tsx:407
+#: packages/app-mobile/components/screens/Note.tsx:402
 msgid ""
 "In order to associate a geo-location with the note, the app needs your "
 "permission to access your location.\n"
@@ -2018,8 +2018,8 @@ msgstr "기울임"
 msgid "Item \"%s\" could not be downloaded: %s"
 msgstr "\"%s\"를 다운로드 할 수 없습니다: %s"
 
-#: packages/server/src/services/MustacheService.ts:178
-#: packages/server/src/services/MustacheService.ts:305
+#: packages/server/src/services/MustacheService.ts:175
+#: packages/server/src/services/MustacheService.ts:302
 msgid "Items"
 msgstr ""
 
@@ -2049,13 +2049,13 @@ msgstr "Joplin 클라우드 email"
 msgid "Joplin Cloud password"
 msgstr "Joplin 클라우드 암호"
 
-#: packages/lib/services/interop/InteropService.ts:108
-#: packages/lib/services/interop/InteropService.ts:73
+#: packages/lib/services/interop/InteropService.ts:107
+#: packages/lib/services/interop/InteropService.ts:72
 msgid "Joplin Export Directory"
 msgstr "Joplin 내보내기 폴더"
 
-#: packages/lib/services/interop/InteropService.ts:102
-#: packages/lib/services/interop/InteropService.ts:51
+#: packages/lib/services/interop/InteropService.ts:101
+#: packages/lib/services/interop/InteropService.ts:50
 msgid "Joplin Export File"
 msgstr "Joplin 내보내기 파일"
 
@@ -2149,7 +2149,7 @@ msgstr "최근 오류: %s"
 msgid "Later"
 msgstr "나중에"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:609
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:610
 msgid "Layout"
 msgstr "배치"
 
@@ -2183,7 +2183,7 @@ msgid "Link has been copied to clipboard!"
 msgid_plural "Links have been copied to clipboard!"
 msgstr[0] "링크가 클립보드로 복사되었습니다!"
 
-#: packages/app-mobile/components/screens/Note.tsx:200
+#: packages/app-mobile/components/screens/Note.tsx:197
 msgid "Links with protocol \"%s\" are not supported"
 msgstr "링크를 위한 프로토콜 “%s”는 지원하지 않습니다"
 
@@ -2213,7 +2213,7 @@ msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:521
 #: packages/app-mobile/components/screens/log.js:100
-#: packages/server/src/services/MustacheService.ts:306
+#: packages/server/src/services/MustacheService.ts:303
 msgid "Log"
 msgstr "로그"
 
@@ -2233,11 +2233,11 @@ msgstr "Dropbox로 로그인"
 msgid "Login with OneDrive"
 msgstr "OneDrive 로그인"
 
-#: packages/server/src/services/MustacheService.ts:309
+#: packages/server/src/services/MustacheService.ts:306
 msgid "Logout"
 msgstr ""
 
-#: packages/server/src/services/MustacheService.ts:182
+#: packages/server/src/services/MustacheService.ts:179
 msgid "Logs"
 msgstr ""
 
@@ -2275,13 +2275,13 @@ msgid "Manual"
 msgstr "수동"
 
 #: packages/lib/models/Setting.ts:2146
-#: packages/lib/services/interop/InteropService.ts:114
-#: packages/lib/services/interop/InteropService.ts:59
+#: packages/lib/services/interop/InteropService.ts:113
+#: packages/lib/services/interop/InteropService.ts:58
 msgid "Markdown"
 msgstr "마크다운"
 
-#: packages/lib/services/interop/InteropService.ts:120
-#: packages/lib/services/interop/InteropService.ts:67
+#: packages/lib/services/interop/InteropService.ts:119
+#: packages/lib/services/interop/InteropService.ts:66
 msgid "Markdown + Front Matter"
 msgstr ""
 
@@ -2434,7 +2434,7 @@ msgid "no"
 msgstr "아니오"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:29
-#: packages/app-mobile/components/screens/Note.tsx:592
+#: packages/app-mobile/components/screens/Note.tsx:587
 #: packages/lib/shim-init-node.js:172 packages/lib/versionInfo.ts:27
 msgid "No"
 msgstr "아니오"
@@ -2443,7 +2443,7 @@ msgstr "아니오"
 msgid "No active notebook."
 msgstr "활성화된 노트북이 없습니다."
 
-#: packages/app-mobile/components/screens/Note.tsx:171
+#: packages/app-mobile/components/screens/Note.tsx:168
 msgid "No item with ID %s"
 msgstr "식별자 %s에 해당하는 항목이 없습니다"
 
@@ -2740,7 +2740,7 @@ msgid "Passwords do not match!"
 msgstr "비밀번호가 맞지 않습니다!"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:23
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:770
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:771
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:158
 msgid "Paste"
 msgstr "붙여넣기"
@@ -2754,7 +2754,7 @@ msgstr "경로:"
 msgid "PDF File"
 msgstr "PDF 파일"
 
-#: packages/app-mobile/components/screens/Note.tsx:408
+#: packages/app-mobile/components/screens/Note.tsx:403
 msgid "Permission needed"
 msgstr "권한 요구"
 
@@ -2809,7 +2809,7 @@ msgstr "삭제할 노트나 노트북을 먼저 선택해주세요."
 msgid "Please select where the sync status should be exported to"
 msgstr "동기화 상태를 내보낼 대상을 선택하세요"
 
-#: packages/lib/services/interop/InteropService.ts:301
+#: packages/lib/services/interop/InteropService.ts:277
 msgid "Please specify import format for %s"
 msgstr "%s 항목에 사용할 가져오기 형식을 지정하세요"
 
@@ -2923,7 +2923,7 @@ msgstr ""
 msgid "Profile Version: %s"
 msgstr "프로파일 버전: %s"
 
-#: packages/app-mobile/components/screens/Note.tsx:952
+#: packages/app-mobile/components/screens/Note.tsx:947
 msgid "Properties"
 msgstr "속성"
 
@@ -3151,7 +3151,7 @@ msgstr "알람 저장"
 msgid "Save as..."
 msgstr "다른 이름으로 저장..."
 
-#: packages/app-mobile/components/screens/Note.tsx:107
+#: packages/app-mobile/components/screens/Note.tsx:104
 msgid "Save changes"
 msgstr "변경 사항 저장"
 
@@ -3226,7 +3226,7 @@ msgid "Server is running on port %d"
 msgstr "서버가 %d 포트에서 동작하고 있습니다"
 
 #: packages/app-desktop/gui/MainScreen/commands/editAlarm.ts:10
-#: packages/app-mobile/components/screens/Note.tsx:916
+#: packages/app-mobile/components/screens/Note.tsx:911
 #: packages/app-mobile/components/SelectDateTimeDialog.tsx:141
 msgid "Set alarm"
 msgstr "알람 설정"
@@ -3259,7 +3259,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:248
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.ts:20
-#: packages/app-mobile/components/screens/Note.tsx:924
+#: packages/app-mobile/components/screens/Note.tsx:919
 msgid "Share"
 msgstr "공유"
 
@@ -3615,18 +3615,18 @@ msgstr "태그됨: %d."
 
 #: packages/app-desktop/gui/MainScreen/commands/setTags.ts:7
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:725
-#: packages/app-mobile/components/screens/Note.tsx:931
+#: packages/app-mobile/components/screens/Note.tsx:926
 #: packages/app-mobile/components/screens/tags.js:101
 #: packages/app-mobile/components/side-menu-content.js:330
 msgid "Tags"
 msgstr "태그"
 
-#: packages/app-mobile/components/screens/Note.tsx:903
+#: packages/app-mobile/components/screens/Note.tsx:898
 msgid "Take photo"
 msgstr "사진 찍기"
 
-#: packages/server/src/services/MustacheService.ts:151
-#: packages/server/src/services/MustacheService.ts:307
+#: packages/server/src/services/MustacheService.ts:148
+#: packages/server/src/services/MustacheService.ts:304
 msgid "Tasks"
 msgstr ""
 
@@ -3726,7 +3726,7 @@ msgstr ""
 "를 권장합니다. 업그레이드된 마스터 키는 기존 데이터의 암호화 및 복호화에 그대"
 "로 사용될 수 있습니다."
 
-#: packages/app-mobile/components/screens/Note.tsx:196
+#: packages/app-mobile/components/screens/Note.tsx:193
 msgid "The Joplin mobile app does not currently support this type of link: %s"
 msgstr "Joplin 모바일 앱에서는 현재 해당 형식의 링크를 지원하지 않습니다: %s"
 
@@ -3897,7 +3897,7 @@ msgstr ""
 msgid "This attachment is not downloaded or not decrypted yet"
 msgstr "이 첨부 파일은 아직 다운로드 또는 복호화되지 않았습니다"
 
-#: packages/app-mobile/components/screens/Note.tsx:190
+#: packages/app-mobile/components/screens/Note.tsx:187
 msgid "This attachment is not downloaded or not decrypted yet."
 msgstr "이 첨부는 아직 다운로드 또는 복호화되지 않았습니다."
 
@@ -3922,11 +3922,11 @@ msgstr ""
 msgid "This note does not have geolocation information."
 msgstr "이 노트는 위치 정보를 포함하고 있지 않습니다."
 
-#: packages/app-mobile/components/screens/Note.tsx:107
+#: packages/app-mobile/components/screens/Note.tsx:104
 msgid "This note has been modified:"
 msgstr "노트가 변경되었습니다:"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:609
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:610
 msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
 "note."
@@ -4179,7 +4179,7 @@ msgstr ""
 "현재 노트북을 공유하지 많으시겠습니까? 공유자는 더 이상 해당 노트북에 접근이 "
 "불가능합니다."
 
-#: packages/app-mobile/components/screens/Note.tsx:685
+#: packages/app-mobile/components/screens/Note.tsx:680
 msgid "Unsupported image type: %s"
 msgstr "지원하지 않는 이미지 형식: %s"
 
@@ -4237,7 +4237,7 @@ msgstr "업데이트됨: %s"
 msgid "Updated: %d."
 msgstr "갱신됨: %d."
 
-#: packages/app-mobile/components/screens/Note.tsx:841
+#: packages/app-mobile/components/screens/Note.tsx:836
 msgid "Updated: %s"
 msgstr "업데이트됨: %s"
 
@@ -4312,13 +4312,13 @@ msgstr ""
 "텍스트를 읽기 쉽게 폭이 변경될 글꼴을 선택합니다 (표, 체크박스, 코드 등). 글"
 "꼴을 찾지 못할 경우, 기본 모노스페이스 (폭이 변경된) 글꼴이 사용됩니다."
 
-#: packages/server/src/services/MustacheService.ts:147
+#: packages/server/src/services/MustacheService.ts:144
 msgid "User deletions"
 msgstr ""
 
 #: packages/server/src/routes/admin/users.ts:107
-#: packages/server/src/services/MustacheService.ts:143
-#: packages/server/src/services/MustacheService.ts:304
+#: packages/server/src/services/MustacheService.ts:140
+#: packages/server/src/services/MustacheService.ts:301
 msgid "Users"
 msgstr ""
 
@@ -4331,7 +4331,7 @@ msgstr "유효하지 않음"
 msgid "View"
 msgstr "보기"
 
-#: packages/app-mobile/components/screens/Note.tsx:845
+#: packages/app-mobile/components/screens/Note.tsx:840
 msgid "View on map"
 msgstr "지도에 표시"
 
@@ -4426,12 +4426,12 @@ msgid "yes"
 msgstr "예"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:28
-#: packages/app-mobile/components/screens/Note.tsx:591
+#: packages/app-mobile/components/screens/Note.tsx:586
 #: packages/lib/shim-init-node.js:172 packages/lib/versionInfo.ts:27
 msgid "Yes"
 msgstr "예"
 
-#: packages/app-mobile/components/screens/Note.tsx:590
+#: packages/app-mobile/components/screens/Note.tsx:585
 #: packages/lib/shim-init-node.js:171
 msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "

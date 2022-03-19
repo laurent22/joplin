@@ -4,8 +4,10 @@ import { pressCarouselItems } from './utils/pressCarousel';
 import { getMarkdownIt, loadMustachePartials, markdownToPageHtml, renderMustache } from './utils/render';
 import { AssetUrls, Env, PlanPageParams, Sponsors, TemplateParams } from './utils/types';
 import { getPlans, loadStripeConfig } from '@joplin/lib/utils/joplinCloud';
-import { stripOffFrontMatter } from './utils/frontMatter';
+import { MarkdownAndFrontMatter, stripOffFrontMatter } from './utils/frontMatter';
 import { dirname, basename } from 'path';
+import { readmeFileTitle, replaceGitHubByWebsiteLinks } from './utils/parser';
+import { extractOpenGraphTags } from './utils/openGraph';
 const moment = require('moment');
 
 const glob = require('glob');
@@ -47,14 +49,6 @@ async function getDonateLinks() {
 	if (!matches) throw new Error('Cannot fetch donate links');
 
 	return `<div class="donate-links">\n\n${matches[1].trim()}\n\n</div>`;
-}
-
-function replaceGitHubByWebsiteLinks(md: string) {
-	return md
-		.replace(/https:\/\/github.com\/laurent22\/joplin\/blob\/dev\/readme\/(.*?)\/index\.md(#[^\s)]+|)/g, '/$1/$2')
-		.replace(/https:\/\/github.com\/laurent22\/joplin\/blob\/dev\/readme\/(.*?)\.md(#[^\s)]+|)/g, '/$1/$2')
-		.replace(/https:\/\/github.com\/laurent22\/joplin\/blob\/dev\/README\.md(#[^\s)]+|)/g, '/help/$1')
-		.replace(/https:\/\/raw.githubusercontent.com\/laurent22\/joplin\/dev\/Assets\/WebsiteAssets\/(.*?)/g, '/$1');
 }
 
 function tocHtml() {
@@ -104,6 +98,7 @@ function defaultTemplateParams(assetUrls: AssetUrls): TemplateParams {
 			isFrontPage: false,
 		},
 		assetUrls,
+		openGraph: null,
 	};
 }
 
@@ -116,7 +111,7 @@ function renderPageToHtml(md: string, targetPath: string, templateParams: Templa
 		...templateParams,
 	};
 
-	templateParams.showBottomLinks = templateParams.showImproveThisDoc || !!templateParams.discussOnForumLink;
+	templateParams.showBottomLinks = templateParams.showImproveThisDoc;
 
 	const title = [];
 
@@ -142,20 +137,11 @@ function renderPageToHtml(md: string, targetPath: string, templateParams: Templa
 	writeFileSync(targetPath, html);
 }
 
-async function readmeFileTitle(sourcePath: string) {
-	let md = await readFile(sourcePath, 'utf8');
-	md = stripOffFrontMatter(md).doc;
-	const r = md.match(/(^|\n)# (.*)/);
-
-	if (!r) {
-		throw new Error(`Could not determine title for Markdown file: ${sourcePath}`);
-	} else {
-		return r[2];
-	}
-}
-
 function renderFileToHtml(sourcePath: string, targetPath: string, templateParams: TemplateParams) {
 	let md = readFileSync(sourcePath, 'utf8');
+	if (templateParams.isNews) {
+		md = processNewsMarkdown(md, sourcePath);
+	}
 	md = stripOffFrontMatter(md).doc;
 	return renderPageToHtml(md, targetPath, templateParams);
 }
@@ -185,6 +171,28 @@ async function loadSponsors(): Promise<Sponsors> {
 	return output;
 }
 
+const getNewsDateString = (info: MarkdownAndFrontMatter, mdFilePath: string): string => {
+	// If the date is set in the metadata, we get it from there. Otherwise we
+	// derive it from the filename (eg. 20220224-release-2-7.md)
+
+	if (info.created) {
+		return moment(info.created).format('D MMM YYYY');
+	} else {
+		const filenameNoExt = basename(mdFilePath, '.md');
+		const s = filenameNoExt.split('-');
+		return moment(s[0], 'YYYYMMDD').format('D MMM YYYY');
+	}
+};
+
+const processNewsMarkdown = (md: string, mdFilePath: string): string => {
+	const info = stripOffFrontMatter(md);
+	md = info.doc.trim();
+	const dateString = getNewsDateString(info, mdFilePath);
+	md = md.replace(/^# (.*)/, `# [$1](https://github.com/laurent22/joplin/blob/dev/readme/news/${path.basename(mdFilePath)})\n\n*Published on **${dateString}***\n\n`);
+	md += `\n\n* * *\n\n[<i class="fab fa-discourse"></i> Discuss on the forum](${discussLink})`;
+	return md;
+};
+
 const makeNewsFrontPage = async (sourceFilePaths: string[], targetFilePath: string, templateParams: TemplateParams) => {
 	const maxNewsPerPage = 20;
 
@@ -192,11 +200,7 @@ const makeNewsFrontPage = async (sourceFilePaths: string[], targetFilePath: stri
 
 	for (const mdFilePath of sourceFilePaths) {
 		let md = await readFile(mdFilePath, 'utf8');
-		const info = stripOffFrontMatter(md);
-		md = info.doc.trim();
-		const dateString = moment(info.created).format('D MMM YYYY');
-		md = md.replace(/^# (.*)/, `# [$1](https://github.com/laurent22/joplin/blob/dev/readme/news/${path.basename(mdFilePath)})\n\n*Published on **${dateString}***\n\n`);
-		md += `\n\n* * *\n\n[<i class="fab fa-discourse"></i> Discuss on the forum](${discussLink})`;
+		md = processNewsMarkdown(md, mdFilePath);
 		frontPageMd.push(md);
 		if (frontPageMd.length >= maxNewsPerPage) break;
 	}
@@ -229,6 +233,11 @@ async function main() {
 		partials,
 		sponsors,
 		assetUrls,
+		openGraph: {
+			title: 'Joplin documentation',
+			description: '',
+			url: 'https://joplinapp.org/help/',
+		},
 	});
 
 	// =============================================================
@@ -252,6 +261,11 @@ async function main() {
 		},
 		showToc: false,
 		assetUrls,
+		openGraph: {
+			title: 'Joplin website',
+			description: 'Joplin, the open source note-taking application',
+			url: 'https://joplinapp.org',
+		},
 	});
 
 	// =============================================================
@@ -290,19 +304,17 @@ async function main() {
 	const mdFiles = glob.sync(`${readmeDir}/**/*.md`).map((f: string) => f.substr(rootDir.length + 1));
 	const sources = [];
 
-	const makeTargetFilePath = (input: string): string => {
+	const makeTargetBasename = (input: string): string => {
 		if (isNewsFile(input)) {
 			const filenameNoExt = basename(input, '.md');
-			return `${docDir}/news/${filenameNoExt}/index.html`;
+			return `news/${filenameNoExt}/index.html`;
 		} else {
 			// Input is for example "readme/spec/interop_with_frontmatter.md",
 			// and we need to convert it to
 			// "docs/spec/interop_with_frontmatter/index.html" and prefix it
 			// with the website repo full path.
 
-			console.info('input', input);
-
-			let s = `${docDir}/${input}`;
+			let s = input;
 			if (s.endsWith('index.md')) {
 				s = s.replace(/index\.md/, 'index.html');
 			} else {
@@ -311,10 +323,16 @@ async function main() {
 
 			s = s.replace(/readme\//, '');
 
-			console.info('OUTPUT', s);
-
 			return s;
 		}
+	};
+
+	const makeTargetFilePath = (input: string): string => {
+		return `${docDir}/${makeTargetBasename(input)}`;
+	};
+
+	const makeTargetUrl = (input: string) => {
+		return `https://joplinapp.org/${makeTargetBasename(input)}`;
 	};
 
 	const newsFilePaths: string[] = [];
@@ -322,6 +340,7 @@ async function main() {
 	for (const mdFile of mdFiles) {
 		const title = await readmeFileTitle(`${rootDir}/${mdFile}`);
 		const targetFilePath = makeTargetFilePath(mdFile);
+		const openGraph = await extractOpenGraphTags(mdFile, makeTargetUrl(mdFile));
 
 		const isNews = isNewsFile(mdFile);
 		if (isNews) newsFilePaths.push(mdFile);
@@ -330,6 +349,7 @@ async function main() {
 			title: title,
 			donateLinksMd: mdFile === 'readme/donate.md' ? '' : donateLinksMd,
 			showToc: mdFile !== 'readme/download.md' && !isNews,
+			openGraph,
 		}]);
 	}
 
@@ -345,8 +365,8 @@ async function main() {
 			...source[2],
 			templateHtml: mainTemplateHtml,
 			pageName: isNews ? 'news-item' : '',
-			discussOnForumLink: isNews ? discussLink : '',
 			showImproveThisDoc: !isNews,
+			isNews,
 			partials,
 			assetUrls,
 		});
@@ -358,11 +378,17 @@ async function main() {
 
 	await makeNewsFrontPage(newsFilePaths, `${docDir}/news/index.html`, {
 		...defaultTemplateParams(assetUrls),
+		title: 'What\'s new',
 		pageName: 'news',
 		partials,
 		showToc: false,
 		showImproveThisDoc: false,
 		donateLinksMd,
+		openGraph: {
+			title: 'Joplin - what\'s new',
+			description: 'News about the Joplin open source application',
+			url: 'https://joplinapp.org/news/',
+		},
 	});
 }
 

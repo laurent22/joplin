@@ -98,6 +98,8 @@ jobs:
         env:
           IS_CONTINUOUS_INTEGRATION: 1
           BUILD_SEQUENCIAL: 1
+          SERVER_REPOSITORY: joplin/server
+          SERVER_TAG_PREFIX: server
         run: |
           yarn install && cd packages/app-desktop && yarn run dist --publish=never
 
@@ -138,5 +140,5 @@ jobs:
           BUILD_SEQUENCIAL: 1
         run: |
           yarn install
-          yarn run buildServerDocker --tag-name server-v0.0.0
+          yarn run buildServerDocker --tag-name server-v0.0.0 --repository joplin/server
           

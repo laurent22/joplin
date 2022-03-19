@@ -4,6 +4,10 @@
 
 * * *
 
+🌞 Joplin participates in **Google Summer of Code 2022**! More info on [the announcement post](https://github.com/laurent22/joplin/blob/dev/readme/news/20220308-gsoc2022-start.md). 🌞
+
+* * *
+
 <img width="64" src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/LinuxIcons/256x256.png" align="left" /> **Joplin** is a free, open source note taking and to-do application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be copied, tagged and modified either from the applications directly or from your own text editor. The notes are in [Markdown format](#markdown).
 
 Notes exported from Evernote [can be imported](#importing) into Joplin, including the formatted content (which is converted to Markdown), resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.). Plain Markdown files can also be imported.
@@ -24,11 +28,11 @@ Three types of applications are available: for **desktop** (Windows, macOS and L
 
 Operating System | Download
 ---|---
-Windows (32 and 64-bit) | <a href='https://github.com/laurent22/joplin/releases/download/v2.6.10/Joplin-Setup-2.6.10.exe'><img alt='Get it on Windows' width="134px" src='https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/BadgeWindows.png'/></a>
-macOS | <a href='https://github.com/laurent22/joplin/releases/download/v2.6.10/Joplin-2.6.10.dmg'><img alt='Get it on macOS' width="134px" src='https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/BadgeMacOS.png'/></a>
-Linux | <a href='https://github.com/laurent22/joplin/releases/download/v2.6.10/Joplin-2.6.10.AppImage'><img alt='Get it on Linux' width="134px" src='https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/BadgeLinux.png'/></a>
+Windows (32 and 64-bit) | <a href='https://github.com/laurent22/joplin/releases/download/v2.7.15/Joplin-Setup-2.7.15.exe'><img alt='Get it on Windows' width="134px" src='https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/BadgeWindows.png'/></a>
+macOS | <a href='https://github.com/laurent22/joplin/releases/download/v2.7.15/Joplin-2.7.15.dmg'><img alt='Get it on macOS' width="134px" src='https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/BadgeMacOS.png'/></a>
+Linux | <a href='https://github.com/laurent22/joplin/releases/download/v2.7.15/Joplin-2.7.15.AppImage'><img alt='Get it on Linux' width="134px" src='https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/BadgeLinux.png'/></a>
 
-**On Windows**, you may also use the <a href='https://github.com/laurent22/joplin/releases/download/v2.6.10/JoplinPortable.exe'>Portable version</a>. The [portable application](https://en.wikipedia.org/wiki/Portable_application) allows installing the software on a portable device such as a USB key. Simply copy the file JoplinPortable.exe in any directory on that USB key ; the application will then create a directory called "JoplinProfile" next to the executable file.
+**On Windows**, you may also use the <a href='https://github.com/laurent22/joplin/releases/download/v2.7.15/JoplinPortable.exe'>Portable version</a>. The [portable application](https://en.wikipedia.org/wiki/Portable_application) allows installing the software on a portable device such as a USB key. Simply copy the file JoplinPortable.exe in any directory on that USB key ; the application will then create a directory called "JoplinProfile" next to the executable file.
 
 **On Linux**, the recommended way is to use the following installation script as it will handle the desktop icon too:
 
@@ -38,7 +42,7 @@ Linux | <a href='https://github.com/laurent22/joplin/releases/download/v2.6.10/J
 
 Operating System | Download | Alt. Download
 ---|---|---
-Android | <a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/BadgeAndroid.png'/></a> | or download the APK file: [64-bit](https://github.com/laurent22/joplin-android/releases/download/android-v2.6.9/joplin-v2.6.9.apk) [32-bit](https://github.com/laurent22/joplin-android/releases/download/android-v2.6.9/joplin-v2.6.9-32bit.apk)
+Android | <a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/BadgeAndroid.png'/></a> | or download the APK file: [64-bit](https://github.com/laurent22/joplin-android/releases/download/android-v2.7.2/joplin-v2.7.2.apk) [32-bit](https://github.com/laurent22/joplin-android/releases/download/android-v2.7.2/joplin-v2.7.2-32bit.apk)
 iOS | <a href='https://itunes.apple.com/us/app/joplin/id1315599797'><img alt='Get it on the App Store' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/BadgeIOS.png'/></a> | -
 
 ## Terminal application
@@ -76,11 +80,11 @@ A community maintained list of these distributions can be found here: [Unofficia
 | :---: | :---: | :---: | :---: |
 | <img width="50" src="https://avatars2.githubusercontent.com/u/215668?s=96&v=4"/></br>[avanderberg](https://github.com/avanderberg) | <img width="50" src="https://avatars2.githubusercontent.com/u/3061769?s=96&v=4"/></br>[c-nagy](https://github.com/c-nagy) | <img width="50" src="https://avatars2.githubusercontent.com/u/70780798?s=96&v=4"/></br>[cabottech](https://github.com/cabottech) | <img width="50" src="https://avatars2.githubusercontent.com/u/67130?s=96&v=4"/></br>[chr15m](https://github.com/chr15m) |
 | <img width="50" src="https://avatars2.githubusercontent.com/u/4862947?s=96&v=4"/></br>[chrootlogin](https://github.com/chrootlogin) | <img width="50" src="https://avatars2.githubusercontent.com/u/82579431?s=96&v=4"/></br>[clmntsl](https://github.com/clmntsl) | <img width="50" src="https://avatars2.githubusercontent.com/u/808091?s=96&v=4"/></br>[cuongtransc](https://github.com/cuongtransc) | <img width="50" src="https://avatars2.githubusercontent.com/u/1307332?s=96&v=4"/></br>[dbrandonjohnson](https://github.com/dbrandonjohnson) |
-| <img width="50" src="https://avatars2.githubusercontent.com/u/1439535?s=96&v=4"/></br>[fbloise](https://github.com/fbloise) | <img width="50" src="https://avatars2.githubusercontent.com/u/38898566?s=96&v=4"/></br>[h4sh5](https://github.com/h4sh5) | <img width="50" src="https://avatars2.githubusercontent.com/u/3266447?s=96&v=4"/></br>[iamwillbar](https://github.com/iamwillbar) | <img width="50" src="https://avatars2.githubusercontent.com/u/37297218?s=96&v=4"/></br>[Jesssullivan](https://github.com/Jesssullivan) |
-| <img width="50" src="https://avatars2.githubusercontent.com/u/1248504?s=96&v=4"/></br>[joesfer](https://github.com/joesfer) | <img width="50" src="https://avatars2.githubusercontent.com/u/5588131?s=96&v=4"/></br>[kianenigma](https://github.com/kianenigma) | <img width="50" src="https://avatars2.githubusercontent.com/u/24908652?s=96&v=4"/></br>[konishi-t](https://github.com/konishi-t) | <img width="50" src="https://avatars2.githubusercontent.com/u/42319182?s=96&v=4"/></br>[marcdw1289](https://github.com/marcdw1289) |
-| <img width="50" src="https://avatars2.githubusercontent.com/u/1788010?s=96&v=4"/></br>[maxtruxa](https://github.com/maxtruxa) | <img width="50" src="https://avatars2.githubusercontent.com/u/29300939?s=96&v=4"/></br>[mcejp](https://github.com/mcejp) | <img width="50" src="https://avatars2.githubusercontent.com/u/1168659?s=96&v=4"/></br>[nicholashead](https://github.com/nicholashead) | <img width="50" src="https://avatars2.githubusercontent.com/u/5782817?s=96&v=4"/></br>[piccobit](https://github.com/piccobit) |
-| <img width="50" src="https://avatars2.githubusercontent.com/u/47742?s=96&v=4"/></br>[ravenscroftj](https://github.com/ravenscroftj) | <img width="50" src="https://avatars2.githubusercontent.com/u/765564?s=96&v=4"/></br>[taskcruncher](https://github.com/taskcruncher) | <img width="50" src="https://avatars2.githubusercontent.com/u/73081837?s=96&v=4"/></br>[thismarty](https://github.com/thismarty) | <img width="50" src="https://avatars2.githubusercontent.com/u/15859362?s=96&v=4"/></br>[thomasbroussard](https://github.com/thomasbroussard) |
-|       |       |       |       |
+| <img width="50" src="https://avatars2.githubusercontent.com/u/1439535?s=96&v=4"/></br>[fbloise](https://github.com/fbloise) | <img width="50" src="https://avatars2.githubusercontent.com/u/49439044?s=96&v=4"/></br>[fourstepper](https://github.com/fourstepper) | <img width="50" src="https://avatars2.githubusercontent.com/u/38898566?s=96&v=4"/></br>[h4sh5](https://github.com/h4sh5) | <img width="50" src="https://avatars2.githubusercontent.com/u/3266447?s=96&v=4"/></br>[iamwillbar](https://github.com/iamwillbar) |
+| <img width="50" src="https://avatars2.githubusercontent.com/u/37297218?s=96&v=4"/></br>[Jesssullivan](https://github.com/Jesssullivan) | <img width="50" src="https://avatars2.githubusercontent.com/u/1248504?s=96&v=4"/></br>[joesfer](https://github.com/joesfer) | <img width="50" src="https://avatars2.githubusercontent.com/u/5588131?s=96&v=4"/></br>[kianenigma](https://github.com/kianenigma) | <img width="50" src="https://avatars2.githubusercontent.com/u/24908652?s=96&v=4"/></br>[konishi-t](https://github.com/konishi-t) |
+| <img width="50" src="https://avatars2.githubusercontent.com/u/42319182?s=96&v=4"/></br>[marcdw1289](https://github.com/marcdw1289) | <img width="50" src="https://avatars2.githubusercontent.com/u/1788010?s=96&v=4"/></br>[maxtruxa](https://github.com/maxtruxa) | <img width="50" src="https://avatars2.githubusercontent.com/u/29300939?s=96&v=4"/></br>[mcejp](https://github.com/mcejp) | <img width="50" src="https://avatars2.githubusercontent.com/u/1168659?s=96&v=4"/></br>[nicholashead](https://github.com/nicholashead) |
+| <img width="50" src="https://avatars2.githubusercontent.com/u/5782817?s=96&v=4"/></br>[piccobit](https://github.com/piccobit) | <img width="50" src="https://avatars2.githubusercontent.com/u/47742?s=96&v=4"/></br>[ravenscroftj](https://github.com/ravenscroftj) | <img width="50" src="https://avatars2.githubusercontent.com/u/765564?s=96&v=4"/></br>[taskcruncher](https://github.com/taskcruncher) | <img width="50" src="https://avatars2.githubusercontent.com/u/73081837?s=96&v=4"/></br>[thismarty](https://github.com/thismarty) |
+| <img width="50" src="https://avatars2.githubusercontent.com/u/15859362?s=96&v=4"/></br>[thomasbroussard](https://github.com/thomasbroussard) |       |       |       |
 <!-- SPONSORS-GITHUB -->
 
 <!-- TOC -->
@@ -129,6 +133,7 @@ A community maintained list of these distributions can be found here: [Unofficia
 	- [How to build the apps](https://github.com/laurent22/joplin/blob/dev/BUILD.md)
 	- [Writing a technical spec](https://github.com/laurent22/joplin/blob/dev/readme/technical_spec.md)
 	- [End-to-end encryption spec](https://github.com/laurent22/joplin/blob/dev/readme/spec/e2ee.md)
+	- [Desktop application styling](https://github.com/laurent22/joplin/blob/dev/readme/spec/desktop_styling.md)
 	- [Note History spec](https://github.com/laurent22/joplin/blob/dev/readme/spec/history.md)
 	- [Sync Lock spec](https://github.com/laurent22/joplin/blob/dev/readme/spec/sync_lock.md)
 	- [Synchronous Scroll spec](https://github.com/laurent22/joplin/blob/dev/readme/spec/sync_scroll.md)
@@ -529,7 +534,7 @@ Current translations:
 <img src="https://joplinapp.org/images/flags/country-4x3/us.png" width="16px"/>  |  English (United States of America)  |  [en_US](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/en_US.po)  |    |  100%
 <img src="https://joplinapp.org/images/flags/country-4x3/es.png" width="16px"/>  |  Español (España)  |  [es_ES](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/es_ES.po)  |  [Francisco Mora](mailto:francisco.m.collao@gmail.com)  |  96%
 <img src="https://joplinapp.org/images/flags/esperanto.png" width="16px"/>  |  Esperanto  |  [eo](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/eo.po)  |  Marton Paulo  |  29%
-<img src="https://joplinapp.org/images/flags/country-4x3/fi.png" width="16px"/>  |  Finnish (Suomi)  |  [fi_FI](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/fi_FI.po)  |  mrkaato  |  91%
+<img src="https://joplinapp.org/images/flags/country-4x3/fi.png" width="16px"/>  |  Finnish (Suomi)  |  [fi_FI](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/fi_FI.po)  |  miucci  |  92%
 <img src="https://joplinapp.org/images/flags/country-4x3/fr.png" width="16px"/>  |  Français (France)  |  [fr_FR](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/fr_FR.po)  |  Laurent Cozic  |  100%
 <img src="https://joplinapp.org/images/flags/es/galicia.png" width="16px"/>  |  Galician (España)  |  [gl_ES](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/gl_ES.po)  |  [Marcos Lans](mailto:marcoslansgarza@gmail.com)  |  33%
 <img src="https://joplinapp.org/images/flags/country-4x3/id.png" width="16px"/>  |  Indonesian (Indonesia)  |  [id_ID](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/id_ID.po)  |  [eresytter](mailto:42007357+eresytter@users.noreply.github.com)  |  90%

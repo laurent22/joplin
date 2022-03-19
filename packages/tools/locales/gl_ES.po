@@ -248,7 +248,7 @@ msgstr "Activa"
 msgid "Actual Size"
 msgstr ""
 
-#: packages/app-mobile/components/screens/Note.tsx:1128
+#: packages/app-mobile/components/screens/Note.tsx:1116
 msgid "Add body"
 msgstr ""
 
@@ -260,7 +260,7 @@ msgstr "Engadir ou eliminar etiquetas:"
 msgid "Add recipient:"
 msgstr ""
 
-#: packages/app-mobile/components/screens/Note.tsx:1191
+#: packages/app-mobile/components/screens/Note.tsx:1177
 #, fuzzy
 msgid "Add title"
 msgstr "Sen título"
@@ -269,8 +269,8 @@ msgstr "Sen título"
 msgid "Add to dictionary"
 msgstr ""
 
-#: packages/server/src/services/MustacheService.ts:186
-#: packages/server/src/services/MustacheService.ts:310
+#: packages/server/src/services/MustacheService.ts:183
+#: packages/server/src/services/MustacheService.ts:307
 msgid "Admin"
 msgstr ""
 
@@ -340,15 +340,15 @@ msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:53
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:589
-#: packages/app-mobile/components/screens/Note.tsx:898
+#: packages/app-mobile/components/screens/Note.tsx:893
 msgid "Attach file"
 msgstr "Anexar un ficheiro"
 
-#: packages/app-mobile/components/screens/Note.tsx:902
+#: packages/app-mobile/components/screens/Note.tsx:897
 msgid "Attach photo"
 msgstr "Anexar foto"
 
-#: packages/app-mobile/components/screens/Note.tsx:885
+#: packages/app-mobile/components/screens/Note.tsx:880
 #, fuzzy
 msgid "Attach..."
 msgstr "Buscar…"
@@ -463,8 +463,8 @@ msgstr ""
 #: packages/app-mobile/components/CameraView.tsx:191
 #: packages/app-mobile/components/ModalDialog.js:70
 #: packages/app-mobile/components/screens/encryption-config.tsx:190
-#: packages/app-mobile/components/screens/Note.tsx:107
-#: packages/app-mobile/components/screens/Note.tsx:593
+#: packages/app-mobile/components/screens/Note.tsx:104
+#: packages/app-mobile/components/screens/Note.tsx:588
 #: packages/app-mobile/components/SelectDateTimeDialog.tsx:152
 #: packages/app-mobile/components/side-menu-content.js:156
 #: packages/app-mobile/components/side-menu-content.js:165
@@ -520,8 +520,8 @@ msgstr "Non é posíbel copiar a nota ao caderno «%s»"
 #: packages/app-cli/app/command-tag.js:87
 #: packages/app-cli/app/command-todo.js:21
 #: packages/app-cli/app/command-use.js:21
-#: packages/lib/services/interop/InteropService.ts:290
-#: packages/lib/services/interop/InteropService.ts:308
+#: packages/lib/services/interop/InteropService.ts:266
+#: packages/lib/services/interop/InteropService.ts:284
 msgid "Cannot find \"%s\"."
 msgstr "Non é posíbel atopar «%s»."
 
@@ -530,12 +530,12 @@ msgstr "Non é posíbel atopar «%s»."
 msgid "Cannot initialise synchroniser."
 msgstr "Non é posíbel iniciar o sincronizador."
 
-#: packages/lib/services/interop/InteropService.ts:209
+#: packages/lib/services/interop/InteropService.ts:208
 #, fuzzy
 msgid "Cannot load \"%s\" module for format \"%s\" and output \"%s\""
 msgstr "Non foi posíbel cargar o módulo «%s» para o formato «%s»"
 
-#: packages/lib/services/interop/InteropService.ts:235
+#: packages/lib/services/interop/InteropService.ts:234
 #, fuzzy
 msgid "Cannot load \"%s\" module for format \"%s\" and target \"%s\""
 msgstr "Non foi posíbel cargar o módulo «%s» para o formato «%s»"
@@ -614,7 +614,7 @@ msgstr ""
 msgid "Checking... Please wait."
 msgstr "Cancelando... Agarde."
 
-#: packages/app-mobile/components/screens/Note.tsx:905
+#: packages/app-mobile/components/screens/Note.tsx:900
 #, fuzzy
 msgid "Choose an option"
 msgstr "Mostrar opcións avanzadas"
@@ -765,17 +765,17 @@ msgstr "Anexar un ficheiro"
 msgid "Content provided by %s"
 msgstr "Título do caderno:"
 
-#: packages/app-mobile/components/screens/Note.tsx:938
+#: packages/app-mobile/components/screens/Note.tsx:933
 msgid "Convert to note"
 msgstr "Converter para nota"
 
-#: packages/app-mobile/components/screens/Note.tsx:938
+#: packages/app-mobile/components/screens/Note.tsx:933
 msgid "Convert to todo"
 msgstr "Converter para tarefa"
 
 #: packages/app-desktop/gui/MenuBar.tsx:433
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:13
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:760
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:761
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:151
 msgid "Copy"
 msgstr "Copiar"
@@ -800,7 +800,7 @@ msgid "Copy Link Address"
 msgstr ""
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:124
-#: packages/app-mobile/components/screens/Note.tsx:945
+#: packages/app-mobile/components/screens/Note.tsx:940
 #, fuzzy
 msgid "Copy Markdown link"
 msgstr "Markdown"
@@ -915,7 +915,7 @@ msgid "Created: %d."
 msgstr "Creado: %d."
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:118
-#: packages/app-mobile/components/screens/Note.tsx:840
+#: packages/app-mobile/components/screens/Note.tsx:835
 msgid "Created: %s"
 msgstr "Creado: %s"
 
@@ -965,7 +965,7 @@ msgid "Custom TLS certificates"
 msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:18
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:750
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:751
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:143
 msgid "Cut"
 msgstr "Cortar"
@@ -974,7 +974,7 @@ msgstr "Cortar"
 msgid "Dark"
 msgstr "Escuro"
 
-#: packages/server/src/services/MustacheService.ts:139
+#: packages/server/src/services/MustacheService.ts:136
 msgid "Dashboard"
 msgstr ""
 
@@ -1027,7 +1027,7 @@ msgstr "Predeterminado: %s"
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:192
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:222
 #: packages/app-mobile/components/screen-header.js:362
-#: packages/app-mobile/components/screens/Note.tsx:958
+#: packages/app-mobile/components/screens/Note.tsx:953
 #: packages/app-mobile/components/side-menu-content.js:146
 msgid "Delete"
 msgstr "Eliminar"
@@ -1062,7 +1062,7 @@ msgid "Delete note \"%s\"?"
 msgstr "Desexa eliminar as notas?"
 
 #: packages/app-cli/app/command-rmnote.js:27
-#: packages/app-mobile/components/screens/Note.tsx:530
+#: packages/app-mobile/components/screens/Note.tsx:525
 msgid "Delete note?"
 msgstr "Eliminar nota?"
 
@@ -1174,7 +1174,7 @@ msgstr ""
 "Desactivar o cifrado significa que *todas* as súas notas e anexos serán "
 "sincronizados de novo e enviados sen cifrar ao destino. Desexa continuar?"
 
-#: packages/app-mobile/components/screens/Note.tsx:107
+#: packages/app-mobile/components/screens/Note.tsx:104
 msgid "Discard changes"
 msgstr "Desbotar os cambios"
 
@@ -1315,7 +1315,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/MainScreen/commands/openFolderDialog.ts:12
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/openEditDialog.ts:83
-#: packages/app-mobile/components/screens/Note.tsx:1151
+#: packages/app-mobile/components/screens/Note.tsx:1139
 msgid "Edit"
 msgstr "Edtar"
 
@@ -1376,7 +1376,7 @@ msgid "Email"
 msgstr ""
 
 #: packages/server/src/routes/admin/emails.ts:112
-#: packages/server/src/services/MustacheService.ts:155
+#: packages/server/src/services/MustacheService.ts:152
 msgid "Emails"
 msgstr ""
 
@@ -1585,12 +1585,12 @@ msgstr ""
 msgid "Errors only"
 msgstr "Somente erros"
 
-#: packages/lib/services/interop/InteropService.ts:89
+#: packages/lib/services/interop/InteropService.ts:88
 #, fuzzy
 msgid "Evernote Export File (as HTML)"
 msgstr "Ficheiro de exportación de Evernote"
 
-#: packages/lib/services/interop/InteropService.ts:80
+#: packages/lib/services/interop/InteropService.ts:79
 #, fuzzy
 msgid "Evernote Export File (as Markdown)"
 msgstr "Ficheiro de exportación de Evernote"
@@ -1764,7 +1764,7 @@ msgid "Full changelog"
 msgstr ""
 
 #: packages/lib/models/Setting.ts:2141
-#: packages/server/src/services/MustacheService.ts:136
+#: packages/server/src/services/MustacheService.ts:133
 #, fuzzy
 msgid "General"
 msgstr "Opcións xerais"
@@ -1799,7 +1799,7 @@ msgstr ""
 "mostrará o valor de [name]. Se non se indica [name] nin [value] listará a "
 "configuración actual."
 
-#: packages/app-mobile/components/screens/Note.tsx:852
+#: packages/app-mobile/components/screens/Note.tsx:847
 msgid "Go to source URL"
 msgstr ""
 
@@ -1816,7 +1816,7 @@ msgstr ""
 msgid "Heading"
 msgstr ""
 
-#: packages/server/src/services/MustacheService.ts:308
+#: packages/server/src/services/MustacheService.ts:305
 #, fuzzy
 msgid "Help"
 msgstr "Axuda"
@@ -1838,8 +1838,8 @@ msgstr "Sobre o Joplin"
 msgid "Highlight"
 msgstr ""
 
-#: packages/server/src/services/MustacheService.ts:170
-#: packages/server/src/services/MustacheService.ts:303
+#: packages/server/src/services/MustacheService.ts:167
+#: packages/server/src/services/MustacheService.ts:300
 msgid "Home"
 msgstr ""
 
@@ -1847,12 +1847,12 @@ msgstr ""
 msgid "Horizontal Rule"
 msgstr ""
 
-#: packages/lib/services/interop/InteropService.ts:134
+#: packages/lib/services/interop/InteropService.ts:133
 #, fuzzy
 msgid "HTML Directory"
 msgstr "Cartafol"
 
-#: packages/lib/services/interop/InteropService.ts:128
+#: packages/lib/services/interop/InteropService.ts:127
 #, fuzzy
 msgid "HTML File"
 msgstr "Ficheiro"
@@ -1926,7 +1926,7 @@ msgstr ""
 "cadernos seleccionados actualmente. «$c» pode usarse para referirse ao "
 "elemento seleccionado actualmente."
 
-#: packages/app-mobile/components/screens/Note.tsx:407
+#: packages/app-mobile/components/screens/Note.tsx:402
 msgid ""
 "In order to associate a geo-location with the note, the app needs your "
 "permission to access your location.\n"
@@ -2055,8 +2055,8 @@ msgstr ""
 msgid "Item \"%s\" could not be downloaded: %s"
 msgstr "Non foi posíbel gardar o caderno: %s"
 
-#: packages/server/src/services/MustacheService.ts:178
-#: packages/server/src/services/MustacheService.ts:305
+#: packages/server/src/services/MustacheService.ts:175
+#: packages/server/src/services/MustacheService.ts:302
 msgid "Items"
 msgstr ""
 
@@ -2090,13 +2090,13 @@ msgstr "Sitio web de Joplin"
 msgid "Joplin Cloud password"
 msgstr "Introducir contrasinal mestre:"
 
-#: packages/lib/services/interop/InteropService.ts:108
-#: packages/lib/services/interop/InteropService.ts:73
+#: packages/lib/services/interop/InteropService.ts:107
+#: packages/lib/services/interop/InteropService.ts:72
 msgid "Joplin Export Directory"
 msgstr "Cartafol de exportación do Joplin"
 
-#: packages/lib/services/interop/InteropService.ts:102
-#: packages/lib/services/interop/InteropService.ts:51
+#: packages/lib/services/interop/InteropService.ts:101
+#: packages/lib/services/interop/InteropService.ts:50
 msgid "Joplin Export File"
 msgstr "Ficheiro de exportación do Joplin"
 
@@ -2188,7 +2188,7 @@ msgstr "Último erro: %s"
 msgid "Later"
 msgstr ""
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:609
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:610
 msgid "Layout"
 msgstr "Disposición"
 
@@ -2223,7 +2223,7 @@ msgid_plural "Links have been copied to clipboard!"
 msgstr[0] ""
 msgstr[1] ""
 
-#: packages/app-mobile/components/screens/Note.tsx:200
+#: packages/app-mobile/components/screens/Note.tsx:197
 msgid "Links with protocol \"%s\" are not supported"
 msgstr ""
 
@@ -2253,7 +2253,7 @@ msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:521
 #: packages/app-mobile/components/screens/log.js:100
-#: packages/server/src/services/MustacheService.ts:306
+#: packages/server/src/services/MustacheService.ts:303
 msgid "Log"
 msgstr "Rexistro"
 
@@ -2274,11 +2274,11 @@ msgstr "Acceder con OneDrive"
 msgid "Login with OneDrive"
 msgstr "Acceder con OneDrive"
 
-#: packages/server/src/services/MustacheService.ts:309
+#: packages/server/src/services/MustacheService.ts:306
 msgid "Logout"
 msgstr ""
 
-#: packages/server/src/services/MustacheService.ts:182
+#: packages/server/src/services/MustacheService.ts:179
 msgid "Logs"
 msgstr ""
 
@@ -2316,13 +2316,13 @@ msgid "Manual"
 msgstr ""
 
 #: packages/lib/models/Setting.ts:2146
-#: packages/lib/services/interop/InteropService.ts:114
-#: packages/lib/services/interop/InteropService.ts:59
+#: packages/lib/services/interop/InteropService.ts:113
+#: packages/lib/services/interop/InteropService.ts:58
 msgid "Markdown"
 msgstr "Markdown"
 
-#: packages/lib/services/interop/InteropService.ts:120
-#: packages/lib/services/interop/InteropService.ts:67
+#: packages/lib/services/interop/InteropService.ts:119
+#: packages/lib/services/interop/InteropService.ts:66
 msgid "Markdown + Front Matter"
 msgstr ""
 
@@ -2482,7 +2482,7 @@ msgid "no"
 msgstr "n"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:29
-#: packages/app-mobile/components/screens/Note.tsx:592
+#: packages/app-mobile/components/screens/Note.tsx:587
 #: packages/lib/shim-init-node.js:172 packages/lib/versionInfo.ts:27
 msgid "No"
 msgstr "Non"
@@ -2491,7 +2491,7 @@ msgstr "Non"
 msgid "No active notebook."
 msgstr "Ningún caderno activo."
 
-#: packages/app-mobile/components/screens/Note.tsx:171
+#: packages/app-mobile/components/screens/Note.tsx:168
 msgid "No item with ID %s"
 msgstr ""
 
@@ -2806,7 +2806,7 @@ msgid "Passwords do not match!"
 msgstr "O contrasinal non pode estar baleiro"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:23
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:770
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:771
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:158
 msgid "Paste"
 msgstr "Pegar"
@@ -2820,7 +2820,7 @@ msgstr ""
 msgid "PDF File"
 msgstr "Ficheiro PDF"
 
-#: packages/app-mobile/components/screens/Note.tsx:408
+#: packages/app-mobile/components/screens/Note.tsx:403
 msgid "Permission needed"
 msgstr ""
 
@@ -2874,7 +2874,7 @@ msgstr "Selecciona a nota ou caderno para eliminar primeiro."
 msgid "Please select where the sync status should be exported to"
 msgstr "Seleccione onde exportar o estado da sincronización"
 
-#: packages/lib/services/interop/InteropService.ts:301
+#: packages/lib/services/interop/InteropService.ts:277
 msgid "Please specify import format for %s"
 msgstr "Indique o formato de importación de %s"
 
@@ -2986,7 +2986,7 @@ msgstr ""
 msgid "Profile Version: %s"
 msgstr "Valores posíbeis: %s."
 
-#: packages/app-mobile/components/screens/Note.tsx:952
+#: packages/app-mobile/components/screens/Note.tsx:947
 msgid "Properties"
 msgstr ""
 
@@ -3212,7 +3212,7 @@ msgstr "Estabelecer alarma"
 msgid "Save as..."
 msgstr "Gardar como…"
 
-#: packages/app-mobile/components/screens/Note.tsx:107
+#: packages/app-mobile/components/screens/Note.tsx:104
 msgid "Save changes"
 msgstr "Gardar cambios"
 
@@ -3290,7 +3290,7 @@ msgid "Server is running on port %d"
 msgstr ""
 
 #: packages/app-desktop/gui/MainScreen/commands/editAlarm.ts:10
-#: packages/app-mobile/components/screens/Note.tsx:916
+#: packages/app-mobile/components/screens/Note.tsx:911
 #: packages/app-mobile/components/SelectDateTimeDialog.tsx:141
 msgid "Set alarm"
 msgstr "Estabelecer alarma"
@@ -3323,7 +3323,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:248
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.ts:20
-#: packages/app-mobile/components/screens/Note.tsx:924
+#: packages/app-mobile/components/screens/Note.tsx:919
 msgid "Share"
 msgstr ""
 
@@ -3695,19 +3695,19 @@ msgstr "Etiquetado: %d."
 
 #: packages/app-desktop/gui/MainScreen/commands/setTags.ts:7
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:725
-#: packages/app-mobile/components/screens/Note.tsx:931
+#: packages/app-mobile/components/screens/Note.tsx:926
 #: packages/app-mobile/components/screens/tags.js:101
 #: packages/app-mobile/components/side-menu-content.js:330
 msgid "Tags"
 msgstr "Etiquetas"
 
-#: packages/app-mobile/components/screens/Note.tsx:903
+#: packages/app-mobile/components/screens/Note.tsx:898
 #, fuzzy
 msgid "Take photo"
 msgstr "Anexar foto"
 
-#: packages/server/src/services/MustacheService.ts:151
-#: packages/server/src/services/MustacheService.ts:307
+#: packages/server/src/services/MustacheService.ts:148
+#: packages/server/src/services/MustacheService.ts:304
 msgid "Tasks"
 msgstr ""
 
@@ -3800,7 +3800,7 @@ msgid ""
 "and encrypt your data as usual."
 msgstr ""
 
-#: packages/app-mobile/components/screens/Note.tsx:196
+#: packages/app-mobile/components/screens/Note.tsx:193
 msgid "The Joplin mobile app does not currently support this type of link: %s"
 msgstr ""
 
@@ -3958,7 +3958,7 @@ msgstr ""
 msgid "This attachment is not downloaded or not decrypted yet"
 msgstr ""
 
-#: packages/app-mobile/components/screens/Note.tsx:190
+#: packages/app-mobile/components/screens/Note.tsx:187
 msgid "This attachment is not downloaded or not decrypted yet."
 msgstr ""
 
@@ -3980,11 +3980,11 @@ msgstr ""
 msgid "This note does not have geolocation information."
 msgstr "Esta nota non ten información de xeolocalización."
 
-#: packages/app-mobile/components/screens/Note.tsx:107
+#: packages/app-mobile/components/screens/Note.tsx:104
 msgid "This note has been modified:"
 msgstr "Esta nota foi modificada:"
 
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:609
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:610
 msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
 "note."
@@ -4226,7 +4226,7 @@ msgid ""
 "content."
 msgstr ""
 
-#: packages/app-mobile/components/screens/Note.tsx:685
+#: packages/app-mobile/components/screens/Note.tsx:680
 msgid "Unsupported image type: %s"
 msgstr "Tipo de imaxe incompatíbel: %s"
 
@@ -4286,7 +4286,7 @@ msgstr "Actualizado: %d."
 msgid "Updated: %d."
 msgstr "Actualizado: %d."
 
-#: packages/app-mobile/components/screens/Note.tsx:841
+#: packages/app-mobile/components/screens/Note.tsx:836
 #, fuzzy
 msgid "Updated: %s"
 msgstr "Actualizado: %d."
@@ -4356,13 +4356,13 @@ msgid ""
 "font is used."
 msgstr ""
 
-#: packages/server/src/services/MustacheService.ts:147
+#: packages/server/src/services/MustacheService.ts:144
 msgid "User deletions"
 msgstr ""
 
 #: packages/server/src/routes/admin/users.ts:107
-#: packages/server/src/services/MustacheService.ts:143
-#: packages/server/src/services/MustacheService.ts:304
+#: packages/server/src/services/MustacheService.ts:140
+#: packages/server/src/services/MustacheService.ts:301
 msgid "Users"
 msgstr ""
 
@@ -4376,7 +4376,7 @@ msgstr "Resposta non válida: %s"
 msgid "View"
 msgstr "Vista"
 
-#: packages/app-mobile/components/screens/Note.tsx:845
+#: packages/app-mobile/components/screens/Note.tsx:840
 msgid "View on map"
 msgstr "Ver no mapa"
 
@@ -4473,12 +4473,12 @@ msgid "yes"
 msgstr "Si"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:28
-#: packages/app-mobile/components/screens/Note.tsx:591
+#: packages/app-mobile/components/screens/Note.tsx:586
 #: packages/lib/shim-init-node.js:172 packages/lib/versionInfo.ts:27
 msgid "Yes"
 msgstr "Si"
 
-#: packages/app-mobile/components/screens/Note.tsx:590
+#: packages/app-mobile/components/screens/Note.tsx:585
 #: packages/lib/shim-init-node.js:171
 msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "
