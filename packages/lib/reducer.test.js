@@ -1,7 +1,7 @@
 const { setupDatabaseAndSynchronizer, switchClient, createNTestNotes, createNTestFolders, createNTestTags } = require('./testing/test-utils.js');
 const reducer = require('./reducer').default;
 const { defaultState, MAX_HISTORY } = require('./reducer');
-const { ALL_NOTES_FILTER_ID } = require('./reserved-ids');
+// const { ALL_NOTES_FILTER_ID } = require('./reserved-ids');
 
 function initTestState(folders, selectedFolderIndex, notes, selectedNoteIndexes, tags = null, selectedTagIndex = null) {
 	let state = defaultState;
@@ -571,24 +571,24 @@ describe('reducer', function() {
 		expect(state.forwardHistoryNotes.map(x => x.id)).toEqual([]);
 	}));
 
-	it('should not change folders when all notes filter is on', async () => {
-		const folders = await createNTestFolders(2);
-		const notes = [];
-		for (let i = 0; i < folders.length; i++) {
-			notes.push(...await createNTestNotes(1, folders[i]));
-		}
-		// initialize state with no folders selected
-		let state = initTestState(folders, null, notes.slice(0,2), null);
+	// it('should not change folders when all notes filter is on', async () => {
+	// 	const folders = await createNTestFolders(2);
+	// 	const notes = [];
+	// 	for (let i = 0; i < folders.length; i++) {
+	// 		notes.push(...await createNTestNotes(1, folders[i]));
+	// 	}
+	// 	// initialize state with no folders selected
+	// 	let state = initTestState(folders, null, notes.slice(0,2), null);
 
-		// turn on 'All Notes' filter
-		state = reducer(state, { type: 'SMART_FILTER_SELECT', id: ALL_NOTES_FILTER_ID });
+	// 	// turn on 'All Notes' filter
+	// 	state = reducer(state, { type: 'SMART_FILTER_SELECT', id: ALL_NOTES_FILTER_ID });
 
-		// change folder
-		state = reducer(state, { type: 'FOLDER_AND_NOTE_SELECT', folderId: folders[1].id, noteId: notes[1].id });
+	// 	// change folder
+	// 	state = reducer(state, { type: 'FOLDER_AND_NOTE_SELECT', folderId: folders[1].id, noteId: notes[1].id });
 
-		expect(state.selectedFolderId).toEqual(null);
-		expect(state.selectedNoteIds[0]).toEqual(notes[1].id);
-	});
+	// 	expect(state.selectedFolderId).toEqual(null);
+	// 	expect(state.selectedNoteIds[0]).toEqual(notes[1].id);
+	// });
 
 	// tests for NOTE_UPDATE_ALL about issue #5447
 	it('should not change selectedNoteIds object when selections are not changed', async () => {

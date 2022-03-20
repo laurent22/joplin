@@ -1,8 +1,14 @@
 import { execCommand2, rootDir } from './tool-utils';
 import * as moment from 'moment';
 
+interface Argv {
+	dryRun?: boolean;
+	pushImages?: boolean;
+	repository?: string;
+	tagName?: string;
+}
+
 export function getVersionFromTag(tagName: string, isPreRelease: boolean): string {
-	if (tagName.indexOf('server-') !== 0) throw new Error(`Invalid tag: ${tagName}`);
 	const s = tagName.split('-');
 	const suffix = isPreRelease ? '-beta' : '';
 	return s[1].substr(1) + suffix;
@@ -16,11 +22,13 @@ export function getIsPreRelease(_tagName: string): boolean {
 }
 
 async function main() {
-	const argv = require('yargs').argv;
+	const argv = require('yargs').argv as Argv;
 	if (!argv.tagName) throw new Error('--tag-name not provided');
+	if (!argv.repository) throw new Error('--repository not provided');
 
 	const dryRun = !!argv.dryRun;
 	const pushImages = !!argv.pushImages;
+	const repository = argv.repository;
 	const tagName = argv.tagName;
 	const isPreRelease = getIsPreRelease(tagName);
 	const imageVersion = getVersionFromTag(tagName, isPreRelease);
@@ -48,7 +56,7 @@ async function main() {
 	console.info('isPreRelease:', isPreRelease);
 	console.info('Docker tags:', dockerTags.join(', '));
 
-	const dockerCommand = `docker build --progress=plain -t "joplin/server:${imageVersion}" ${buildArgs} -f Dockerfile.server .`;
+	const dockerCommand = `docker build --progress=plain -t "${repository}:${imageVersion}" ${buildArgs} -f Dockerfile.server .`;
 	if (dryRun) {
 		console.info(dockerCommand);
 		return;
@@ -57,8 +65,8 @@ async function main() {
 	await execCommand2(dockerCommand);
 
 	for (const tag of dockerTags) {
-		await execCommand2(`docker tag "joplin/server:${imageVersion}" "joplin/server:${tag}"`);
-		if (pushImages) await execCommand2(`docker push joplin/server:${tag}`);
+		await execCommand2(`docker tag "${repository}:${imageVersion}" "${repository}:${tag}"`);
+		if (pushImages) await execCommand2(`docker push ${repository}:${tag}`);
 	}
 }
 

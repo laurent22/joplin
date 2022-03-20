@@ -307,7 +307,7 @@ p,
 div.navbar-mobile-content a.sponsor-button {
 	padding: 4px 12px;
 	font-size: 0.9em;
-	margin-right: 1em;
+	margin-right: 0.5em;
 }
 
 #nav-section.white-bg a {
@@ -670,8 +670,8 @@ footer .bottom-links-row p {
     margin-right: auto;
 }
 
-.news-page     img,
-.news-item-page img {
+.news-page .main-content img,
+.news-item-page .main-content img {
 	max-width: 100%;
 }
 
@@ -740,7 +740,7 @@ footer .bottom-links-row p {
 	}
 
 	#nav-section .button-link {
-		padding: 4px 12px;
+		padding: 4px 10px;
 		font-size: 15px;
 	}
 }
@@ -935,6 +935,25 @@ footer .bottom-links-row p {
 		padding-top: 30px;
 		padding-bottom: 30px;
 	}
+}
+
+/*****************************************************************
+ VERY NARROW VIEW
+ eg for Galaxy Fold
+*****************************************************************/
+
+@media (max-width: 350px) {
+
+	#nav-section .navbar-mobile-content a.sponsor-button {
+		background-color: transparent;
+		color: #0557ba !important;
+		font-size: 18px;
+	}
+
+	#nav-section .navbar-mobile-content a.sponsor-button .sponsor-button-label {
+		display: none;
+	}
+
 }
 
 /*****************************************************************

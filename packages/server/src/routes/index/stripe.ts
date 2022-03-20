@@ -106,7 +106,7 @@ export const handleSubscriptionCreated = async (stripe: Stripe, models: Models, 
 			}
 		}
 	} else {
-		logger.info(`Creating subscription for new user: ${userEmail}`);
+		logger.info(`Creating subscription for new user: ${customerName} (${userEmail})`);
 
 		await models.subscription().saveUserAndSubscription(
 			userEmail,
@@ -233,59 +233,78 @@ export const postHandlers: PostHandlers = {
 		}
 		await models.keyValue().setValue(eventDoneKey, 1);
 
-		const hooks: any = {
+		type HookFunction = ()=> Promise<void>;
+
+		const hooks: Record<string, HookFunction> = {
+
+			// Stripe says that handling this event is required, and to
+			// provision the subscription at that point:
+			//
+			// https://stripe.com/docs/billing/subscriptions/build-subscription?ui=checkout#provision-and-monitor
+			//
+			// But it's strange because it doesn't contain any info about the
+			// subscription. In fact we don't need this event at all, we only
+			// need "customer.subscription.created", which is sent at the same
+			// time and actually contains the subscription info.
 
 			'checkout.session.completed': async () => {
-				// Payment is successful and the subscription is created.
-				//
-				// For testing: `stripe trigger checkout.session.completed`
-				// Or use /checkoutTest URL.
-
 				const checkoutSession: Stripe.Checkout.Session = event.data.object as Stripe.Checkout.Session;
 				const userEmail = checkoutSession.customer_details.email || checkoutSession.customer_email;
-
-				let customerName = '';
-				try {
-					const customer = await stripe.customers.retrieve(checkoutSession.customer as string) as Stripe.Customer;
-					customerName = customer.name;
-				} catch (error) {
-					logger.error('Could not fetch customer information:', error);
-				}
-
 				logger.info('Checkout session completed:', checkoutSession.id);
 				logger.info('User email:', userEmail);
-				logger.info('User name:', customerName);
-
-				let accountType = AccountType.Basic;
-				try {
-					const priceId: string = await models.keyValue().value(`stripeSessionToPriceId::${checkoutSession.id}`);
-					accountType = priceIdToAccountType(priceId);
-					logger.info('Price ID:', priceId);
-				} catch (error) {
-					// We don't want this part to fail since the user has
-					// already paid at that point, so we just default to Basic
-					// in that case. Normally it shoud not happen anyway.
-					logger.error('Could not determine account type from price ID - defaulting to "Basic"', error);
-				}
-
-				logger.info('Account type:', accountType);
-
-				// The Stripe TypeScript object defines "customer" and
-				// "subscription" as various types but they are actually
-				// string according to the documentation.
-				const stripeUserId = checkoutSession.customer as string;
-				const stripeSubscriptionId = checkoutSession.subscription as string;
-
-				await handleSubscriptionCreated(
-					stripe,
-					models,
-					customerName,
-					userEmail,
-					accountType,
-					stripeUserId,
-					stripeSubscriptionId
-				);
 			},
+
+			// 'checkout.session.completed': async () => {
+			// 	// Payment is successful and the subscription is created.
+			// 	//
+			// 	// For testing: `stripe trigger checkout.session.completed`
+			// 	// Or use /checkoutTest URL.
+
+			// 	const checkoutSession: Stripe.Checkout.Session = event.data.object as Stripe.Checkout.Session;
+			// 	const userEmail = checkoutSession.customer_details.email || checkoutSession.customer_email;
+
+			// 	let customerName = '';
+			// 	try {
+			// 		const customer = await stripe.customers.retrieve(checkoutSession.customer as string) as Stripe.Customer;
+			// 		customerName = customer.name;
+			// 	} catch (error) {
+			// 		logger.error('Could not fetch customer information:', error);
+			// 	}
+
+			// 	logger.info('Checkout session completed:', checkoutSession.id);
+			// 	logger.info('User email:', userEmail);
+			// 	logger.info('User name:', customerName);
+
+			// 	let accountType = AccountType.Basic;
+			// 	try {
+			// 		const priceId: string = await models.keyValue().value(`stripeSessionToPriceId::${checkoutSession.id}`);
+			// 		accountType = priceIdToAccountType(priceId);
+			// 		logger.info('Price ID:', priceId);
+			// 	} catch (error) {
+			// 		// We don't want this part to fail since the user has
+			// 		// already paid at that point, so we just default to Basic
+			// 		// in that case. Normally it shoud not happen anyway.
+			// 		logger.error('Could not determine account type from price ID - defaulting to "Basic"', error);
+			// 	}
+
+			// 	logger.info('Account type:', accountType);
+
+			// 	// The Stripe TypeScript object defines "customer" and
+			// 	// "subscription" as various types but they are actually
+			// 	// string according to the documentation.
+			// 	const stripeUserId = checkoutSession.customer as string;
+			// 	const stripeSubscriptionId = checkoutSession.subscription as string;
+
+			// 	await handleSubscriptionCreated(
+			// 		stripe,
+			// 		models,
+			// 		customerName,
+			// 		userEmail,
+			// 		accountType,
+			// 		stripeUserId,
+			// 		stripeSubscriptionId
+			// 	);
+			// },
 
 			'customer.subscription.created': async () => {
 				const stripeSub: Stripe.Subscription = event.data.object as Stripe.Subscription;
