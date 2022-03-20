@@ -6,6 +6,7 @@ import { AppContext, HttpMethod, RouteType } from './types';
 import { URL } from 'url';
 import { csrfCheck } from './csrf';
 import { contextSessionId } from './requestUtils';
+import { stripOffQueryParameters } from './urlUtils';
 
 const { ltrimSlashes, rtrimSlashes } = require('@joplin/lib/path-utils');
 
@@ -112,6 +113,12 @@ export function isPathBasedAddressing(fileId: string): boolean {
 	return fileId.indexOf(':') >= 0;
 }
 
+export const urlMatchesSchema = (url: string, schema: string): boolean => {
+	url = stripOffQueryParameters(url);
+	const regex = new RegExp(`${schema.replace(/:id/, '[a-zA-Z0-9]+')}$`);
+	return !!url.match(regex);
+};
+
 // Allows parsing the two types of paths supported by the API:
 //
 // root:/Documents/MyFile.md:/content
@@ -189,7 +196,12 @@ function disabledAccountCheck(route: MatchedRoute, user: User) {
 	if (route.subPath.schema.startsWith('api/')) throw new ErrorForbidden(`This account is disabled. Please login to ${config().baseUrl} for more information.`);
 }
 
-export async function execRequest(routes: Routers, ctx: AppContext) {
+interface ExecRequestResult {
+	response: any;
+	path: SubPath;
+}
+
+export async function execRequest(routes: Routers, ctx: AppContext): Promise<ExecRequestResult> {
 	const match = findMatchingRoute(ctx.path, routes);
 	if (!match) throw new ErrorNotFound();
 
@@ -215,7 +227,10 @@ export async function execRequest(routes: Routers, ctx: AppContext) {
 	await csrfCheck(ctx, isPublicRoute);
 	disabledAccountCheck(match, ctx.joplin.owner);
 
-	return endPoint.handler(match.subPath, ctx);
+	return {
+		response: await endPoint.handler(match.subPath, ctx),
+		path: match.subPath,
+	};
 }
 
 // In a path such as "/api/files/SOME_ID/content" we want to find:

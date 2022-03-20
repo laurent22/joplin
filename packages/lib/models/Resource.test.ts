@@ -1,8 +1,8 @@
-const { supportDir, setupDatabaseAndSynchronizer, switchClient } = require('../testing/test-utils.js');
-const Folder = require('../models/Folder').default;
-const Note = require('../models/Note').default;
-const Resource = require('../models/Resource').default;
-const shim = require('../shim').default;
+import { supportDir, setupDatabaseAndSynchronizer, switchClient } from '../testing/test-utils';
+import Folder from '../models/Folder';
+import Note from '../models/Note';
+import Resource from '../models/Resource';
+import shim from '../shim';
 
 const testImagePath = `${supportDir}/photo.jpg`;
 
@@ -76,5 +76,25 @@ describe('models/Resource', function() {
 
 		expect(originalStat.size).toBe(newStat.size);
 	}));
+
+	// it('should encrypt a shared resource using the correct encryption key', (async () => {
+	// 	const folder1 = await Folder.save({ title: 'folder1' });
+	// 	const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
+	// 	await shim.attachFileToNote(note1, testImagePath);
+
+	// 	Resource.shareService_ = {
+	// 		shareById: () => {
+	// 			return {
+	// 				master_key_id: '',
+	// 			};
+	// 		},
+	// 	} as any;
+
+	// 	try {
+
+	// 	} finally {
+	// 		Resource.shareService_ = null;
+	// 	}
+	// }));
 
 });

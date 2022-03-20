@@ -515,8 +515,9 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				color: ${theme.searchMarkerColor} !important;
 			}
 
+			/* We need !important because the search marker is overridden by CodeMirror's own text selection marker */
 			.cm-search-marker-selected {
-				background: ${theme.selectedColor2};
+				background: ${theme.selectedColor2} !important;
 				color: ${theme.color2} !important;
 			}
 

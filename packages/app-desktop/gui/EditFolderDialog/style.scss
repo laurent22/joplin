@@ -6,4 +6,8 @@
 
 .icon-selector-row > .foldericon {
 	margin-right: 5px;
+	display: flex;
+	border: 1px solid var(--joplin-divider-color);
+	padding: 5px;
+	background-color: var(--joplin-background-color);
 }

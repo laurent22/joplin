@@ -31,7 +31,7 @@
     "linter": "eslint --resolve-plugins-relative-to . --fix --quiet --ext .js --ext .jsx --ext .ts --ext .tsx",
     "postinstall": "gulp build",
     "publishAll": "git pull && yarn run buildParallel && lerna version --yes --no-private --no-git-tag-version && gulp completePublishAll",
-    "releaseAndroid": "yarn run buildParallel && export PATH=\"/usr/local/opt/openjdk@11/bin:$PATH\" && node packages/tools/release-android.js",
+    "releaseAndroid": "PATH=\"/usr/local/opt/openjdk@11/bin:$PATH\" node packages/tools/release-android.js",
     "releaseAndroidClean": "node packages/tools/release-android.js",
     "releaseCli": "node packages/tools/release-cli.js",
     "releaseClipper": "node packages/tools/release-clipper.js",

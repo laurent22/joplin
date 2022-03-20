@@ -1,6 +1,6 @@
 import { expectNotThrow, naughtyStrings, setupDatabaseAndSynchronizer, switchClient } from '../testing/test-utils';
 import Note from '../models/Note';
-import Revision from '../models/Revision';
+import Revision, { ObjectPatch } from '../models/Revision';
 
 describe('models/Revision', function() {
 
@@ -139,6 +139,53 @@ describe('models/Revision', function() {
 		expect(JSON.stringify(merged)).toBe(JSON.stringify(newObject));
 	}));
 
+	it('should handle invalid object patch', (async () => {
+		const oldObject = {
+			one: '123',
+			two: '456',
+			three: '789',
+		};
+
+		const brokenPatch = `{"new":{"four":"444
+"},"deleted":["one"]}`;
+
+		const expected = {
+			two: '456',
+			three: '789',
+			four: '444',
+		};
+
+		const merged = Revision.applyObjectPatch(oldObject, brokenPatch);
+
+		expect(JSON.stringify(merged)).toBe(JSON.stringify(expected));
+	}));
+
+	it('should not strip off newlines from object values', (async () => {
+		const oldObject = {
+			one: '123',
+			two: '456',
+			three: '789',
+		};
+
+		const patch: ObjectPatch = {
+			'new': {
+				'four': 'one line\ntwo line',
+			},
+			'deleted': [],
+		};
+
+		const expected = {
+			one: '123',
+			two: '456',
+			three: '789',
+			four: 'one line\ntwo line',
+		};
+
+		const merged = Revision.applyObjectPatch(oldObject, JSON.stringify(patch));
+
+		expect(JSON.stringify(merged)).toBe(JSON.stringify(expected));
+	}));
+
 	it('should move target revision to the top', (async () => {
 		const revs = [
 			{ id: '123' },
@@ -181,6 +228,10 @@ describe('models/Revision', function() {
 +%C2%A0How does it work?%0A%0AAll the apps save a version of the modified notes every 10 minutes.
  %0A%0A# `,
 				expected: [-(19 + 27 + 2), 17 + 67 + 4],
+			},
+			{
+				patch: '',
+				expected: [-0, +0],
 			},
 		];
 

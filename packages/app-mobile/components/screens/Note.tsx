@@ -93,9 +93,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		this.doFocusUpdate_ = false;
 
-		// iOS doesn't support multiline text fields properly so disable it
-		this.enableMultilineTitle_ = Platform.OS !== 'ios';
-
 		this.saveButtonHasBeenShown_ = false;
 
 		this.styles_ = {};
@@ -231,7 +228,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.onAlarmDialogAccept = this.onAlarmDialogAccept.bind(this);
 		this.onAlarmDialogReject = this.onAlarmDialogReject.bind(this);
 		this.todoCheckbox_change = this.todoCheckbox_change.bind(this);
-		this.titleTextInput_contentSizeChange = this.titleTextInput_contentSizeChange.bind(this);
 		this.title_changeText = this.title_changeText.bind(this);
 		this.undoRedoService_stackChange = this.undoRedoService_stackChange.bind(this);
 		this.screenHeader_undoButtonPress = this.screenHeader_undoButtonPress.bind(this);
@@ -389,7 +385,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 			paddingBottom: 10, // Added for iOS (Not needed for Android??)
 		};
 
-		if (this.enableMultilineTitle_) styles.titleTextInput.height = this.state.titleTextInputHeight;
 		if (this.state.HACK_webviewLoadingState === 1) styles.titleTextInput.marginTop = 1;
 
 		this.styles_[cacheKey] = StyleSheet.create(styles);
@@ -971,13 +966,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 		await this.saveOneProperty('todo_completed', checked ? time.unixMs() : 0);
 	}
 
-	titleTextInput_contentSizeChange(event: any) {
-		if (!this.enableMultilineTitle_) return;
-
-		const height = event.nativeEvent.contentSize.height;
-		this.setState({ titleTextInputHeight: height });
-	}
-
 	scheduleFocusUpdate() {
 		if (this.focusUpdateIID_) shim.clearTimeout(this.focusUpdateIID_);
 
@@ -1178,8 +1166,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 			<View style={titleContainerStyle}>
 				{isTodo && <Checkbox style={this.styles().checkbox} checked={!!Number(note.todo_completed)} onChange={this.todoCheckbox_change} />}
 				<TextInput
-					onContentSizeChange={this.titleTextInput_contentSizeChange}
-					multiline={this.enableMultilineTitle_}
 					ref="titleTextField"
 					underlineColorAndroid="#ffffff00"
 					autoCapitalize="sentences"
