@@ -214,7 +214,7 @@ Expected size of project: 350 hours
 
 ## 12. Email plugin
 
-Create a plugin to fetch mail via IMAP and convert messages to notes (including attachments). The plugin should be able to filter what messages it donwloads, e.g. based on the folder.
+Create a plugin to fetch mail via IMAP and convert messages to notes (including attachments). The plugin should be able to filter what messages it download, e.g. based on the folder.
 
 Additional features to consider:
 
