@@ -732,15 +732,19 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 	// It might be buggy, refer to the below issue
 	// https://github.com/laurent22/joplin/pull/3974#issuecomment-718936703
 	useEffect(() => {
-		function pointerInsideEditor(x: number, y: number) {
+		function pointerInsideEditor(params: any) {
+			const x = params.x, y = params.y, isEditable = params.isEditable, inputFieldType = params.inputFieldType;
 			const elements = document.getElementsByClassName('codeMirrorEditor');
-			if (!elements.length) return null;
+
+			// inputFieldType: The input field type of CodeMirror is "textarea" so the inputFieldType = "none",
+			// and any single-line input above codeMirror has inputFieldType value according to the type of input e.g.(text = plainText, password = password, ...).
+			if (!elements.length || !isEditable || inputFieldType !== 'none') return null;
 			const rect = convertToScreenCoordinates(Setting.value('windowContentZoomFactor'), elements[0].getBoundingClientRect());
 			return rect.x < x && rect.y < y && rect.right > x && rect.bottom > y;
 		}
 
 		async function onContextMenu(_event: any, params: any) {
-			if (!pointerInsideEditor(params.x, params.y)) return;
+			if (!pointerInsideEditor(params)) return;
 
 			const menu = new Menu();
 
