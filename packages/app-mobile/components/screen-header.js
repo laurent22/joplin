@@ -29,7 +29,10 @@ class ScreenHeaderComponent extends React.PureComponent {
 	constructor() {
 		super();
 		this.styles_ = {};
+		this.state = { titleModalActive: false };
+		this.hideShowUndoRedoButton = this.hideShowUndoRedoButton.bind(this);
 	}
+
 
 	styles() {
 		const themeId = Setting.value('theme');
@@ -171,6 +174,12 @@ class ScreenHeaderComponent extends React.PureComponent {
 		NavService.go('Search');
 	}
 
+	hideShowUndoRedoButton() {
+		this.setState(prevState => ({
+			titleModalActive: !prevState.titleModalActive,
+		}));
+	}
+
 	async duplicateButton_press() {
 		const noteIds = this.props.selectedNoteIds;
 
@@ -256,7 +265,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 		}
 
 		const renderTopButton = (options) => {
-			if (!options.visible) return null;
+			if (!options.visible || this.state.titleModalActive) return null;
 
 			const icon = <Icon name={options.iconName} style={this.styles().topIcon} />;
 			const viewStyle = options.disabled ? this.styles().iconButtonDisabled : this.styles().iconButton;
@@ -422,6 +431,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 							color: theme.color,
 							fontSize: theme.fontSize,
 						}}
+						hideShowUndoRedoButton={this.hideShowUndoRedoButton}
 						onValueChange={async (folderId, itemIndex) => {
 							// If onValueChange is specified, use this as a callback, otherwise do the default
 							// which is to take the selectedNoteIds from the state and move them to the
