@@ -86,7 +86,7 @@ class Dropdown extends React.Component {
 		if (this.props.labelTransform && this.props.labelTransform === 'trim') headerLabel = headerLabel.trim();
 
 		const closeList = () => {
-			this.props.hideShowUndoRedoButton();
+			this.props.hasOwnProperty('hideShowUndoRedoButton') && this.props.hideShowUndoRedoButton();
 			this.setState({ listVisible: false });
 		};
 
@@ -116,7 +116,7 @@ class Dropdown extends React.Component {
 					onPress={() => {
 						this.updateHeaderCoordinates();
 						this.setState({ listVisible: true });
-						this.props.hideShowUndoRedoButton();
+						this.props.hasOwnProperty('hideShowUndoRedoButton') && this.props.hideShowUndoRedoButton();
 					}}
 				>
 					<Text ellipsizeMode="tail" numberOfLines={1} style={headerStyle}>
