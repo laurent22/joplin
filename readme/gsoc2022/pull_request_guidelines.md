@@ -8,7 +8,9 @@ Due to our limited resources and in order to give everyone a chance to submit a 
 
 	2. Alternatively you may look at the [Good first issues](https://github.com/laurent22/joplin/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22).
 
-	3. And finally check the backlog of possible [feature requests](https://github.com/laurent22/joplin/issues?q=is%3Aopen+is%3Aissue+label%3Aenhancement). Some of those are complex and not a good fit for a first pull request, but others are more simple so you might want to consider these.
+	3. Also check the backlog of possible [feature requests](https://github.com/laurent22/joplin/issues?q=is%3Aopen+is%3Aissue+label%3Aenhancement). Some of those are complex and not a good fit for a first pull request, but others are more simple so you might want to consider these.
+
+	4. Finally you may implement a plugin in your own repository. Note that we will look at your code, so make sure your choose something not too trivial, so that you can really showcase your skills. Please announce your plugin on the forum, in the [#plugins category](https://discourse.joplinapp.org/c/development/plugins/19).
 
 1. You may not work on issues created by yourself (or your friends). It is likely we will close such issues.
 
