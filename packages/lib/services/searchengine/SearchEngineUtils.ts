@@ -12,7 +12,7 @@ export default class SearchEngineUtils {
 
 		let searchType = SearchEngine.SEARCH_TYPE_FTS;
 		if (query.length && query[0] === '/') {
-			query = query.substr(1);
+			query = query.slice(1);
 			searchType = SearchEngine.SEARCH_TYPE_BASIC;
 		}
 

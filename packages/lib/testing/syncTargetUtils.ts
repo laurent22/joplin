@@ -82,7 +82,7 @@ export async function checkTestData(data: any) {
 
 				if (obj.resource) {
 					const urls = markdownUtils.extractImageUrls(note.body);
-					const resourceId = urls[0].substr(2);
+					const resourceId = urls[0].slice(2);
 					const resource = await Resource.load(resourceId);
 					if (!resource) throw new Error(`Cannot load note resource: ${n}`);
 				}

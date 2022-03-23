@@ -729,7 +729,7 @@ export default class Folder extends BaseItem {
 
 		if (options.stripLeftSlashes === true && o.title) {
 			while (o.title.length && (o.title[0] == '/' || o.title[0] == '\\')) {
-				o.title = o.title.substr(1);
+				o.title = o.title.slice(1);
 			}
 		}
 

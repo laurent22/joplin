@@ -7,7 +7,7 @@ const rootDir = resolve(__dirname, '../../..');
 const nodeModulesDir = resolve(__dirname, '../node_modules');
 
 function stripOffRootDir(path) {
-	if (path.startsWith(rootDir)) return path.substr(rootDir.length + 1);
+	if (path.startsWith(rootDir)) return path.slice(rootDir.length + 1);
 	return path;
 }
 

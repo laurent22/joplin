@@ -829,9 +829,9 @@
 		do {
 		  var next = value.indexOf(";", index) + 1;
 		  var length = next - index - 1;
-		  var style = (length > 0 ? value.substr(index, length) : value.substr(index));
-		  if (style.substr(0, style.indexOf(":")).trim() === styleName) {
-			value = value.substr(0, index).trim() + (next ? " " + value.substr(next).trim() : "");
+		  var style = (length > 0 ? value.slice(index, index + length) : value.slice(index));
+		  if (style.substring(0, style.indexOf(":")).trim() === styleName) {
+			value = value.slice(0, index).trim() + (next ? " " + value.slice(next).trim() : "");
 			break;
 		  }
 		  index = next;
@@ -1016,7 +1016,7 @@
 	   */
 	  match: function (str) {
 		var strlen = str.length;
-		if (this.html.substr(this.currentChar, strlen).toLowerCase() === str.toLowerCase()) {
+		if (this.html.slice(this.currentChar, this.currentChar + strlen).toLowerCase() === str.toLowerCase()) {
 		  this.currentChar += strlen;
 		  return true;
 		}
@@ -1137,7 +1137,7 @@
 		  this.readChildren(node);
 		  var closingTag = "</" + node._matchingTag + ">";
 		  if (!this.match(closingTag)) {
-			this.error("expected '" + closingTag + "' and got " + this.html.substr(this.currentChar, closingTag.length));
+			this.error("expected '" + closingTag + "' and got " + this.html.slice(this.currentChar, this.currentChar + closingTag.length));
 			return null;
 		  }
 		}

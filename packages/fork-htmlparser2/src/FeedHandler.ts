@@ -98,7 +98,7 @@ export class FeedHandler extends DomHandler {
             } else {
                 const childs = getOneElement("channel", feedRoot.children)
                     .children;
-                feed.type = feedRoot.name.substr(0, 3);
+                feed.type = feedRoot.name.slice(0, 3);
                 feed.id = "";
 
                 addConditionally(feed, "title", "title", childs);

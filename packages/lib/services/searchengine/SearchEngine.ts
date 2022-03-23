@@ -401,13 +401,13 @@ export default class SearchEngine {
 	// https://stackoverflow.com/a/13818704/561309
 	queryTermToRegex(term: any) {
 		while (term.length && term.indexOf('*') === 0) {
-			term = term.substr(1);
+			term = term.slice(1);
 		}
 
 		let regexString = pregQuote(term);
 		if (regexString[regexString.length - 1] === '*') {
-			regexString = `${regexString.substr(0, regexString.length - 2)}[^${pregQuote(' \t\n\r,.,+-*?!={}<>|:"\'()[]')}]` + '*?';
-			// regexString = regexString.substr(0, regexString.length - 2) + '.*?';
+			regexString = `${regexString.slice(0, -2)}[^${pregQuote(' \t\n\r,.,+-*?!={}<>|:"\'()[]')}]` + '*?';
+			// regexString = regexString.slice(0, -2) + '.*?';
 		}
 
 		return regexString;
@@ -415,7 +415,7 @@ export default class SearchEngine {
 
 	async parseQuery(query: string) {
 
-		const trimQuotes = (str: string) => str.startsWith('"') ? str.substr(1, str.length - 2) : str;
+		const trimQuotes = (str: string) => str.startsWith('"') ? str.slice(1, -1) : str;
 
 		let allTerms: any[] = [];
 

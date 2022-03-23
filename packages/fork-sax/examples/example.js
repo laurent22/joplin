@@ -21,8 +21,8 @@ loose.onend = function () {
 (function () {
   if (xml) {
     var c = Math.ceil(Math.random() * 1000)
-    loose.write(xml.substr(0, c))
-    xml = xml.substr(c)
+    loose.write(xml.slice(0, c))
+    xml = xml.slice(c)
     process.nextTick(arguments.callee)
   } else loose.close()
 })()

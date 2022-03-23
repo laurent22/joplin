@@ -51,7 +51,7 @@ export default class FileApiDriverJoplinServer {
 
 	private metadataToStat_(md: any, path: string, isDeleted: boolean = false, rootPath: string) {
 		const output = {
-			path: rootPath ? path.substr(rootPath.length + 1) : path,
+			path: rootPath ? path.slice(rootPath.length + 1) : path,
 			updated_time: md.updated_time,
 			jop_updated_time: md.jop_updated_time,
 			isDir: false,

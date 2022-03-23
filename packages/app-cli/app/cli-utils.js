@@ -45,14 +45,14 @@ cliUtils.parseFlags = function(flags) {
 	for (let i = 0; i < flags.length; i++) {
 		let f = flags[i].trim();
 
-		if (f.substr(0, 2) == '--') {
+		if (f.slice(0, 2) == '--') {
 			f = f.split(' ');
-			output.long = f[0].substr(2).trim();
+			output.long = f[0].slice(2).trim();
 			if (f.length == 2) {
 				output.arg = cliUtils.parseCommandArg(f[1].trim());
 			}
-		} else if (f.substr(0, 1) == '-') {
-			output.short = f.substr(1);
+		} else if (f.slice(0, 1) == '-') {
+			output.short = f.slice(1);
 		}
 	}
 	return output;
@@ -63,7 +63,7 @@ cliUtils.parseCommandArg = function(arg) {
 
 	const c1 = arg[0];
 	const c2 = arg[arg.length - 1];
-	const name = arg.substr(1, arg.length - 2);
+	const name = arg.slice(1, -1);
 
 	if (c1 == '<' && c2 == '>') {
 		return { required: true, name: name };

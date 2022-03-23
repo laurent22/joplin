@@ -167,7 +167,7 @@ const TinyMCE = (props: NoteBodyEditorProps, ref: any) => {
 			const href = event.target.getAttribute('href');
 
 			if (href.indexOf('#') === 0) {
-				const anchorName = href.substr(1);
+				const anchorName = href.slice(1);
 				const anchor = editor.getDoc().getElementById(anchorName);
 				if (anchor) {
 					anchor.scrollIntoView();

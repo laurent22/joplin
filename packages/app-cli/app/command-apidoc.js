@@ -206,7 +206,7 @@ async function fetchAllNotes() {
 			const ModelClass = BaseItem.getClassByItemType(model.type);
 			const tableName = ModelClass.tableName();
 			let tableFields = reg.db().tableFields(tableName, { includeDescription: true });
-			const singular = tableName.substr(0, tableName.length - 1);
+			const singular = tableName.slice(0, -1);
 
 			if (model.type === BaseModel.TYPE_NOTE) {
 				tableFields = tableFields.slice();

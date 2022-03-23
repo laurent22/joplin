@@ -174,7 +174,7 @@ class DropboxApi {
 
 					// Gives a shorter response for error messages. Useful for cases where a full HTML page is accidentally loaded instead of
 					// JSON. That way the error message will still show there's a problem but without filling up the log or screen.
-					const shortResponseText = (`${responseText}`).substr(0, 1024);
+					const shortResponseText = (`${responseText}`).slice(0, 1024);
 					const error = new JoplinError(`${method} ${path}: ${message} (${response.status}): ${shortResponseText}`, code);
 					error.httpStatus = response.status;
 					return error;

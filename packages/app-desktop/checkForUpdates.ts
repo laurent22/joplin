@@ -40,7 +40,7 @@ async function fetchLatestRelease(options: CheckForUpdateOptions) {
 
 	if (!response.ok) {
 		const responseText = await response.text();
-		throw new Error(`Cannot get latest release info: ${responseText.substr(0,500)}`);
+		throw new Error(`Cannot get latest release info: ${responseText.slice(0, 500)}`);
 	}
 
 	const releases = await response.json();
@@ -61,7 +61,7 @@ async function fetchLatestRelease(options: CheckForUpdateOptions) {
 
 	if (!release) throw new Error('Could not get tag name');
 
-	const version = release.tag_name.substr(1);
+	const version = release.tag_name.slice(1);
 
 	// We concatenate all the release notes of the major/minor versions
 	// corresponding to the latest version. For example, if the latest version

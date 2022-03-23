@@ -38,7 +38,7 @@ const mime = {
 	fromDataUrl(dataUrl) {
 		// Example: data:image/jpeg;base64,/9j/4AAQSkZJR.....
 		const defaultMime = 'text/plain';
-		const p = dataUrl.substr(0, dataUrl.indexOf(',')).split(';');
+		const p = dataUrl.substring(0, dataUrl.indexOf(',')).split(';');
 		let s = p[0];
 		s = s.split(':');
 		if (s.length <= 1) return defaultMime;

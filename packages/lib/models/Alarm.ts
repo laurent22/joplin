@@ -47,10 +47,10 @@ export default class Alarm extends BaseModel {
 			id: alarm.id,
 			noteId: alarm.note_id,
 			date: new Date(note.todo_due),
-			title: note.title.substr(0, 128),
+			title: note.title.slice(0, 128),
 		};
 
-		if (note.body) output.body = note.body.substr(0, 512);
+		if (note.body) output.body = note.body.slice(0, 512);
 
 		return output;
 	}

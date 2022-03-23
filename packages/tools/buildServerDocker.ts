@@ -11,7 +11,7 @@ interface Argv {
 export function getVersionFromTag(tagName: string, isPreRelease: boolean): string {
 	const s = tagName.split('-');
 	const suffix = isPreRelease ? '-beta' : '';
-	return s[1].substr(1) + suffix;
+	return s[1].slice(1) + suffix;
 }
 
 export function getIsPreRelease(_tagName: string): boolean {

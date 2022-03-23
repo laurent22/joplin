@@ -14,13 +14,13 @@ export function modifyListLines(lines: string[], num: number, listSymbol: string
 				num++;
 			} else {
 				const listToken = markdownUtils.extractListToken(line);
-				lines[j] = line.substr(listToken.length, line.length - listToken.length);
+				lines[j] = line.slice(listToken.length, -listToken.length);
 			}
 		} else {
 			if (!line.startsWith(listSymbol)) {
 				lines[j] = listSymbol + line;
 			} else {
-				lines[j] = line.substr(listSymbol.length, line.length - listSymbol.length);
+				lines[j] = line.slice(listSymbol.length, -listSymbol.length);
 			}
 		}
 	}
@@ -83,14 +83,14 @@ export default function useCursorUtils(CodeMirror: any) {
 				// Remove white space on either side of selection
 				const start = selected.search(/[^\s]/);
 				const end = selected.search(/[^\s](?=[\s]*$)/);
-				const core = selected.substr(start, end - start + 1);
+				const core = selected.slice(start, end + 1);
 
 				// If selection can be toggled do that
 				if (core.startsWith(string1) && core.endsWith(string2)) {
-					const inside = core.substr(string1.length, core.length - string1.length - string2.length);
-					selectedStrings[i] = selected.substr(0, start) + inside + selected.substr(end + 1);
+					const inside = core.slice(string1.length, -string2.length);
+					selectedStrings[i] = selected.substring(0, start) + inside + selected.slice(end + 1);
 				} else {
-					selectedStrings[i] = selected.substr(0, start) + string1 + core + string2 + selected.substr(end + 1);
+					selectedStrings[i] = selected.substring(0, start) + string1 + core + string2 + selected.slice(end + 1);
 				}
 			}
 			this.replaceSelections(selectedStrings, 'around');
@@ -125,7 +125,7 @@ export default function useCursorUtils(CodeMirror: any) {
 		// the click to determine what the codemirror selection should be
 		const alignStrings = (s1: string, s2: string) => {
 			for (let i = 0; i < s1.length; i++) {
-				if (s1.substr(i, s2.length) === s2) { return i; }
+				if (s1.slice(i, i + s2.length) === s2) { return i; }
 			}
 			return -1;
 		};

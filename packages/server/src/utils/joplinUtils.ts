@@ -112,8 +112,8 @@ export function isJoplinResourceBlobPath(path: string): boolean {
 export async function localFileFromUrl(url: string): Promise<string> {
 	const cssPluginAssets = 'css/pluginAssets/';
 	const jsPluginAssets = 'js/pluginAssets/';
-	if (url.indexOf(cssPluginAssets) === 0) return `${pluginAssetRootDir_}/${url.substr(cssPluginAssets.length)}`;
-	if (url.indexOf(jsPluginAssets) === 0) return `${pluginAssetRootDir_}/${url.substr(jsPluginAssets.length)}`;
+	if (url.indexOf(cssPluginAssets) === 0) return `${pluginAssetRootDir_}/${url.slice(cssPluginAssets.length)}`;
+	if (url.indexOf(jsPluginAssets) === 0) return `${pluginAssetRootDir_}/${url.slice(jsPluginAssets.length)}`;
 	return null;
 }
 

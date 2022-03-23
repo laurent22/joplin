@@ -5,19 +5,19 @@ import { Theme } from '../../themes/type';
 const cssParse = require('css/lib/parse');
 
 function formatCssToThemeVariable(cssVariable: string): string {
-	const elements = cssVariable.substr(2).split('-');
+	const elements = cssVariable.slice(2).split('-');
 	if (elements[0] !== 'joplin') throw new Error(`CSS variable name must start with "--joplin": ${cssVariable}`);
 
 	elements.splice(0, 1);
 
 	return elements.map((e, i) => {
 		const c = i === 0 ? e[0] : e[0].toUpperCase();
-		return c + e.substr(1);
+		return c + e.slice(1);
 	}).join('');
 }
 
 // function unquoteValue(v:string):string {
-// 	if (v.startsWith("'") && v.endsWith("'") || v.startsWith('"') && v.endsWith('"')) return v.substr(1, v.length - 2);
+// 	if (v.startsWith("'") && v.endsWith("'") || v.startsWith('"') && v.endsWith('"')) return v.slice(1, -1);
 // 	return v;
 // }
 

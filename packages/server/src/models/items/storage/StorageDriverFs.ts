@@ -22,7 +22,7 @@ export default class StorageDriverFs extends StorageDriverBase {
 	}
 
 	private itemPath(itemId: string): string {
-		return `${this.config.path}/${itemId.substr(0, 2).toLowerCase()}/${itemId.substr(2, 2).toLowerCase()}/${itemId}`;
+		return `${this.config.path}/${itemId.slice(0, 2).toLowerCase()}/${itemId.slice(2, 4).toLowerCase()}/${itemId}`;
 	}
 
 	public async write(itemId: string, content: Buffer): Promise<void> {

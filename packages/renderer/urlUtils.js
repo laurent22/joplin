@@ -21,7 +21,7 @@ urlUtils.parseResourceUrl = function(url) {
 	// In general we want the hash to be decoded so that non-alphabetical languages
 	// appear as-is without being encoded with %.
 	// Fixes https://github.com/laurent22/joplin/issues/1870
-	if (hash) hash = urlUtils.urlDecode(hash.substr(1)); // Remove the first #
+	if (hash) hash = urlUtils.urlDecode(hash.slice(1)); // Remove the first #
 
 	return {
 		itemId: itemId,

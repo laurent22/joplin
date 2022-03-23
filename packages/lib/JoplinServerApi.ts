@@ -198,7 +198,7 @@ export default class JoplinServerApi {
 			}
 
 			const shortResponseText = () => {
-				return (`${responseText}`).substr(0, 1024);
+				return (`${responseText}`).slice(0, 1024);
 			};
 
 			// Creates an error object with as much data as possible as it will appear in the log, which will make debugging easier

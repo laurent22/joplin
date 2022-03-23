@@ -274,7 +274,7 @@ function formatCommitMessage(commit: string, msg: string, author: Author, option
 				output = output.replace(issueRegex, `($1 by ${authorMd})`);
 			}
 		} else {
-			const commitStrings = [commit.substr(0, 7)];
+			const commitStrings = [commit.slice(0, 7)];
 			if (authorMd) commitStrings.push(`by ${authorMd}`);
 			output += ` (${commitStrings.join(' ')})`;
 		}

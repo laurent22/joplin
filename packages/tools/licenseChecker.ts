@@ -48,7 +48,7 @@ async function main() {
 		console.info(`Processing ${dir}...`);
 		const dirLicenses = await getLicenses(dir);
 		for (const [, v] of Object.entries(dirLicenses)) {
-			v.path = dir.substr(rootDir.length);
+			v.path = dir.slice(rootDir.length);
 		}
 		licenses = { ...licenses, ...dirLicenses };
 	}

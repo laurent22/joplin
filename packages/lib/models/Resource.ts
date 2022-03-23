@@ -264,7 +264,7 @@ export default class Resource extends BaseItem {
 
 	static urlToId(url: string) {
 		if (!this.isResourceUrl(url)) throw new Error(`Not a valid resource URL: ${url}`);
-		return url.substr(2);
+		return url.slice(2);
 	}
 
 	static async localState(resourceOrId: any) {

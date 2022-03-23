@@ -153,7 +153,7 @@ class StatusBarWidget extends BaseWidget {
 			});
 		} else {
 			for (let i = 0; i < this.items_.length; i++) {
-				const s = this.items_[i].substr(0, this.innerWidth - 1);
+				const s = this.items_[i].substring(0, this.innerWidth - 1);
 				this.term.write(textStyle(s));
 			}
 		}

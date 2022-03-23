@@ -386,7 +386,7 @@ export default class MdToHtml {
 		// and removing the first and last tag will result in invalid HTML.
 		if ((html.match(/<\/p>/g) || []).length > 1) return html;
 
-		if (html.substr(0, 3) !== '<p>') return html;
+		if (html.slice(0, 3) !== '<p>') return html;
 		if (html.slice(-5) !== '</p>\n') return html;
 		return html.substring(3, html.length - 5);
 	}
@@ -397,7 +397,7 @@ export default class MdToHtml {
 
 	private removeLastNewLine(s: string): string {
 		if (s[s.length - 1] === '\n') {
-			return s.substr(0, s.length - 1);
+			return s.slice(0, -1);
 		} else {
 			return s;
 		}

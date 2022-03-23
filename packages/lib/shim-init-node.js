@@ -305,7 +305,7 @@ function shimInit(options = null) {
 			position = noteBody ? noteBody.length : 0;
 		}
 
-		if (noteBody && position) newBody.push(noteBody.substr(0, position));
+		if (noteBody && position) newBody.push(noteBody.slice(0, position));
 
 		if (!options.createFileURL) {
 			newBody.push(Resource.markdownTag(resource));
@@ -315,7 +315,7 @@ function shimInit(options = null) {
 			newBody.push(fileURL);
 		}
 
-		if (noteBody) newBody.push(noteBody.substr(position));
+		if (noteBody) newBody.push(noteBody.slice(position));
 
 		return newBody.join('\n\n');
 	};

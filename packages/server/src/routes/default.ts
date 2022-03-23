@@ -36,7 +36,7 @@ async function findLocalFile(path: string): Promise<string> {
 
 	if (path in pathToFileMap) return pathToFileMap[path];
 	// For now a bit of a hack to load FontAwesome fonts.
-	if (path.indexOf('css/fontawesome/webfonts/fa-') === 0) return `node_modules/@fortawesome/fontawesome-free/${path.substr(16)}`;
+	if (path.indexOf('css/fontawesome/webfonts/fa-') === 0) return `node_modules/@fortawesome/fontawesome-free/${path.slice(16)}`;
 
 	let localPath = normalize(path);
 	if (localPath.indexOf('..') >= 0) throw new ErrorNotFound(`Cannot resolve path: ${path}`);

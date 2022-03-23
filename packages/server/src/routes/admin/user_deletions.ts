@@ -135,7 +135,7 @@ router.post('admin/user_deletions', async (_path: SubPath, ctx: AppContext) => {
 	const fields: PostFields = await bodyFields<PostFields>(ctx.req);
 
 	if (fields.removeButton) {
-		const jobIds = Object.keys(fields).filter(f => f.startsWith('checkbox_')).map(f => Number(f.substr(9)));
+		const jobIds = Object.keys(fields).filter(f => f.startsWith('checkbox_')).map(f => Number(f.slice(9)));
 		for (const jobId of jobIds) await models.userDeletion().remove(jobId);
 		await models.notification().addInfo(user.id, `${jobIds.length} job(s) have been removed`);
 	} else {

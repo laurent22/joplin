@@ -694,7 +694,7 @@ class AppGui {
 				if (resourceIdRegex.test(url)) {
 					noteLinks[index] = {
 						type: 'item',
-						id: url.substr(2),
+						id: url.slice(2),
 					};
 				} else if (hasProtocol(url, ['http', 'https', 'file', 'ftp'])) {
 					noteLinks[index] = {

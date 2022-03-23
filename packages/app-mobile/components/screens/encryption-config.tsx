@@ -114,7 +114,7 @@ const EncryptionConfigScreen = (props: Props) => {
 
 		return (
 			<View key={mk.id}>
-				<Text style={styles.titleText}>{_('Master Key %s', mk.id.substr(0, 6))}</Text>
+				<Text style={styles.titleText}>{_('Master Key %s', mk.id.slice(0, 6))}</Text>
 				<Text style={styles.normalText}>{_('Created: %s', time.formatMsToLocal(mk.created_time))}</Text>
 				<View style={{ flexDirection: 'row', alignItems: 'center' }}>
 					<Text style={{ flex: 0, fontSize: theme.fontSize, marginRight: 10, color: theme.color }}>{_('Password:')}</Text>

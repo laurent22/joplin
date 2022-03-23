@@ -339,7 +339,7 @@ const sourceUrlFilter = (terms: Term[], conditons: string[], params: string[], r
 	genericFilter(urlTerms, conditons, params, relation, 'sourceurl', useFts);
 };
 
-const trimQuotes = (str: string) => str.startsWith('"') && str.endsWith('"') ? str.substr(1, str.length - 2) : str;
+const trimQuotes = (str: string) => str.startsWith('"') && str.endsWith('"') ? str.slice(1, -1) : str;
 
 const textFilter = (terms: Term[], conditions: string[], params: string[], relation: Relation, useFts: boolean) => {
 	const createLikeMatch = (term: Term, negate: boolean) => {

@@ -457,7 +457,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 				const splitCmd = (cmdString: string) => {
 					const path = pathUtils.extractExecutablePath(cmdString);
-					const args = cmdString.substr(path.length + 1);
+					const args = cmdString.slice(path.length + 1);
 					return [pathUtils.unquotePath(path), args];
 				};
 

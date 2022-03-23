@@ -84,8 +84,8 @@ export default class HtmlToHtml {
 		if (closingIndex < 0) return { html: html, css: '' };
 
 		return {
-			html: trimmedHtml.substr(closingIndex + 8),
-			css: trimmedHtml.substr(7, closingIndex),
+			html: trimmedHtml.slice(closingIndex + 8),
+			css: trimmedHtml.slice(7, 7 + closingIndex),
 		};
 	}
 

@@ -43,7 +43,7 @@ class Application extends BaseApplication {
 		let type = BaseModel.TYPE_NOTE;
 		if (pattern.indexOf('/') === 0) {
 			type = BaseModel.TYPE_FOLDER;
-			pattern = pattern.substr(1);
+			pattern = pattern.slice(1);
 		}
 		return this.loadItem(type, pattern, options);
 	}

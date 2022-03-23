@@ -25,7 +25,7 @@ class WebDavApi {
 
 		const serializeRequest = (r) => {
 			const options = Object.assign({}, r.options);
-			if (typeof options.body === 'string') options.body = options.body.substr(0, 4096);
+			if (typeof options.body === 'string') options.body = options.body.slice(0, 4096);
 			const output = [];
 			output.push(options.method ? options.method : 'GET');
 			output.push(r.url);
@@ -40,7 +40,7 @@ class WebDavApi {
 		this.lastRequests_.push({
 			timestamp: Date.now(),
 			request: serializeRequest(request),
-			response: responseText ? responseText.substr(0, 4096) : '',
+			response: responseText ? responseText.slice(0, 4096) : '',
 		});
 	}
 
@@ -410,7 +410,7 @@ class WebDavApi {
 		const newError = (message, code = 0) => {
 			// Gives a shorter response for error messages. Useful for cases where a full HTML page is accidentally loaded instead of
 			// JSON. That way the error message will still show there's a problem but without filling up the log or screen.
-			const shortResponseText = (`${responseText}`).substr(0, 1024);
+			const shortResponseText = (`${responseText}`).slice(0, 1024);
 			return new JoplinError(`${method} ${path}: ${message} (${code}): ${shortResponseText}`, code);
 		};
 

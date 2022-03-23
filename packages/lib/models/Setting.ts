@@ -1952,7 +1952,7 @@ class Setting extends BaseModel {
 		for (const key in settings) {
 			if (!settings.hasOwnProperty(key)) continue;
 			if (key.indexOf(baseKey) === 0) {
-				const subKey = includeBaseKeyInName ? key : key.substr(baseKey.length + 1);
+				const subKey = includeBaseKeyInName ? key : key.slice(baseKey.length + 1);
 				output[subKey] = settings[key];
 			}
 		}
@@ -2187,7 +2187,7 @@ class Setting extends BaseModel {
 	static appTypeToLabel(name: string) {
 		// Not translated for now because only used on Welcome notes (which are not translated)
 		if (name === 'cli') return 'CLI';
-		return name[0].toUpperCase() + name.substr(1).toLowerCase();
+		return name[0].toUpperCase() + name.slice(1).toLowerCase();
 	}
 }
 

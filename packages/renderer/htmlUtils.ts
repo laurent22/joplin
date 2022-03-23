@@ -186,7 +186,7 @@ class HtmlUtils {
 				for (const name in attrs) {
 					if (!attrs.hasOwnProperty(name)) continue;
 					if (name.length <= 2) continue;
-					if (name.toLowerCase().substr(0, 2) !== 'on') continue;
+					if (name.toLowerCase().slice(0, 2) !== 'on') continue;
 					delete attrs[name];
 				}
 

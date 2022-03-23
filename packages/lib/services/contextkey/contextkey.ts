@@ -176,7 +176,7 @@ export abstract class ContextKeyExpr {
 		}
 
 		if (/^\!\s*/.test(serializedOne)) {
-			return ContextKeyNotExpr.create(serializedOne.substr(1).trim());
+			return ContextKeyNotExpr.create(serializedOne.slice(1).trim());
 		}
 
 		return ContextKeyDefinedExpr.create(serializedOne);

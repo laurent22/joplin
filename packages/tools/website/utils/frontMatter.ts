@@ -10,7 +10,7 @@ export interface MarkdownAndFrontMatter {
 const readProp = (line: string): string[] => {
 	line = line.trim();
 	const d = line.indexOf(':');
-	return [line.substr(0, d).trim(), line.substr(d + 1).trim()];
+	return [line.substring(0, d).trim(), line.slice(d + 1).trim()];
 };
 
 export const stripOffFrontMatter = (md: string): MarkdownAndFrontMatter => {

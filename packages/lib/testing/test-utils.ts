@@ -599,7 +599,7 @@ async function initFileApi() {
 		const api = new OneDriveApi(config.id, config.secret, false);
 		const authData = fs.readFileSync(await credentialFile('onedrive-auth.txt'), 'utf8');
 		const urlInfo = require('url-parse')(authData, true);
-		const auth = require('querystring').parse(urlInfo.hash.substr(1));
+		const auth = require('querystring').parse(urlInfo.hash.slice(1));
 		api.setAuth(auth);
 
 		const accountProperties = await api.execAccountPropertiesRequest();
@@ -749,7 +749,7 @@ async function allSyncTargetItemsEncrypted() {
 		if (remoteContent.type_ === BaseModel.TYPE_RESOURCE) {
 			const content = await fileApi().get(`.resource/${remoteContent.id}`);
 			totalCount++;
-			if (content.substr(0, 5) === 'JED01') encryptedCount++;
+			if (content.slice(0, 5) === 'JED01') encryptedCount++;
 		}
 
 		if (remoteContent.encryption_applied) encryptedCount++;

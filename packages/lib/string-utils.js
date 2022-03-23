@@ -111,7 +111,7 @@ function escapeFilename(s, maxLength = 32) {
 
 	if (output.toLowerCase() == 'nul') output = 'n_l'; // For Windows...
 
-	return output.substr(0, maxLength);
+	return output.slice(0, maxLength);
 }
 
 function wrap(text, indent, width) {
@@ -314,7 +314,7 @@ function surroundKeywords(keywords, text, prefix, suffix) {
 
 function substrWithEllipsis(s, start, length) {
 	if (s.length <= length) return s;
-	return `${s.substr(start, length - 3)}...`;
+	return `${s.slice(start, start + length - 3)}...`;
 }
 
 function nextWhitespaceIndex(s, begin) {

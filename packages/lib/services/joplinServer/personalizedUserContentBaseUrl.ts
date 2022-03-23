@@ -11,7 +11,7 @@ export default function(userId: string, baseUrl: string, userContentBaseUrl: str
 	if (userContentBaseUrl && baseUrl !== userContentBaseUrl) {
 		if (!userId) throw new Error('User ID must be specified');
 		const url = new URL(userContentBaseUrl);
-		return `${url.protocol}//${userId.substr(0, 10).toLowerCase()}.${url.host}`;
+		return `${url.protocol}//${userId.slice(0, 10).toLowerCase()}.${url.host}`;
 	} else {
 		return baseUrl;
 	}

@@ -189,7 +189,7 @@ async function processNoteResource(resource: ExtractedResource) {
 
 		if (!resource.id || !resource.size) {
 			const debugTemp = Object.assign({}, resource);
-			debugTemp.data = debugTemp.data ? `${debugTemp.data.substr(0, 32)}...` : debugTemp.data;
+			debugTemp.data = debugTemp.data ? `${debugTemp.data.slice(0, 32)}...` : debugTemp.data;
 			throw new Error(`This resource was not added because it has no ID or no content: ${JSON.stringify(debugTemp)}`);
 		}
 	}

@@ -23,7 +23,7 @@ const beautifyHtml = (html) => {
 		try {
 			cleanHtml.clean(html, { wrap: 0 }, (...cleanedHtml) => resolve(cleanedHtml.join('')));
 		} catch (error) {
-			console.warn(`Could not clean HTML - the "unclean" version will be used: ${error.message}: ${html.trim().substr(0, 512).replace(/[\n\r]/g, ' ')}...`);
+			console.warn(`Could not clean HTML - the "unclean" version will be used: ${error.message}: ${html.trim().slice(0, 512).replace(/[\n\r]/g, ' ')}...`);
 			resolve([html].join(''));
 		}
 	});

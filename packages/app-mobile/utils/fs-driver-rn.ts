@@ -49,7 +49,7 @@ export default class FsDriverRN extends FsDriverBase {
 		let output: any[] = [];
 		for (let i = 0; i < items.length; i++) {
 			const item = items[i];
-			const relativePath = item.path.substr(path.length + 1);
+			const relativePath = item.path.slice(path.length + 1);
 			output.push(this.rnfsStatToStd_(item, relativePath));
 
 			output = await this.readDirStatsHandleRecursion_(path, item, output, options);

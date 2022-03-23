@@ -47,7 +47,7 @@ export function safeFileExtension(e: string, maxLength: number = null) {
 	// https://discourse.joplinapp.org/t/troubles-with-webarchive-files-on-ios/10447
 	if (maxLength === null) maxLength = 20;
 	if (!e || !e.replace) return '';
-	return e.replace(/[^a-zA-Z0-9]/g, '').substr(0, maxLength);
+	return e.replace(/[^a-zA-Z0-9]/g, '').slice(0, maxLength);
 }
 
 export function safeFilename(e: string, maxLength: number = null, allowSpaces: boolean = false) {
@@ -55,7 +55,7 @@ export function safeFilename(e: string, maxLength: number = null, allowSpaces: b
 	if (!e || !e.replace) return '';
 	const regex = allowSpaces ? /[^a-zA-Z0-9\-_\(\)\. ]/g : /[^a-zA-Z0-9\-_\(\)\.]/g;
 	const output = e.replace(regex, '_');
-	return output.substr(0, maxLength);
+	return output.slice(0, maxLength);
 }
 
 let friendlySafeFilename_blackListChars = '/\n\r<>:\'"\\|?*#';
@@ -107,7 +107,7 @@ export function friendlySafeFilename(e: string, maxLength: number = null, preser
 	while (output.length) {
 		const c = output[output.length - 1];
 		if (c === ' ' || c === '.') {
-			output = output.substr(0, output.length - 1);
+			output = output.slice(0, -1);
 		} else {
 			break;
 		}
@@ -116,7 +116,7 @@ export function friendlySafeFilename(e: string, maxLength: number = null, preser
 	while (output.length) {
 		const c = output[0];
 		if (c === ' ') {
-			output = output.substr(1, output.length - 1);
+			output = output.slice(1);
 		} else {
 			break;
 		}
@@ -124,7 +124,7 @@ export function friendlySafeFilename(e: string, maxLength: number = null, preser
 
 	if (!output) return _('Untitled') + fileExt;
 
-	return output.substr(0, maxLength) + fileExt;
+	return output.slice(0, maxLength) + fileExt;
 }
 
 export function toFileProtocolPath(filePathEncode: string, os: string = null) {
@@ -168,7 +168,7 @@ export function quotePath(path: string) {
 export function unquotePath(path: string) {
 	if (!path.length) return '';
 	if (path.length && path[0] === '"') {
-		path = path.substr(1, path.length - 2);
+		path = path.slice(1, -1);
 	}
 	path = path.replace(/\\"/, '"');
 	return path;

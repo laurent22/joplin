@@ -301,7 +301,7 @@ async function main() {
 	// Markdown files under /readme
 	// =============================================================
 
-	const mdFiles = glob.sync(`${readmeDir}/**/*.md`).map((f: string) => f.substr(rootDir.length + 1));
+	const mdFiles = glob.sync(`${readmeDir}/**/*.md`).map((f: string) => f.slice(rootDir.length + 1));
 	const sources = [];
 
 	const makeTargetBasename = (input: string): string => {

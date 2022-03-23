@@ -65,7 +65,7 @@ function collapseWhitespace (options) {
 
       if ((!prevText || / $/.test(prevText.data)) &&
           !prevVoid && text[0] === ' ') {
-        text = text.substr(1)
+        text = text.slice(1)
       }
 
       var textIsOnlySpaces = containsOnlySpaces(text);

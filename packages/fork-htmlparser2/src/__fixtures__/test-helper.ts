@@ -55,7 +55,7 @@ function eventReducer(events: Event[], arr: [string, ...unknown[]]): Event[] {
         events[events.length - 1].data[0] += arr[1];
     } else {
         events.push({
-            event: arr[0].substr(2),
+            event: arr[0].slice(2),
             data: arr.slice(1)
         });
     }

@@ -515,12 +515,12 @@ function languageName(languageCode: string, defaultToEnglish: boolean = true) {
 
 function languageCodeOnly(canonicalName: string) {
 	if (canonicalName.length < 2) return canonicalName;
-	return canonicalName.substr(0, 2);
+	return canonicalName.slice(0, 2);
 }
 
 function countryCodeOnly(canonicalName: string) {
 	if (canonicalName.length <= 2) return '';
-	return canonicalName.substr(3);
+	return canonicalName.slice(3);
 }
 
 function countryDisplayName(canonicalName: string) {

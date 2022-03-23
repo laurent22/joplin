@@ -23,7 +23,7 @@ export default function(markdownIt: any) {
 			output = output.toLowerCase();
 
 			while (output.length && output[output.length - 1] === '-') {
-				output = output.substr(0, output.length - 1);
+				output = output.slice(0, -1);
 			}
 
 			let temp = output;

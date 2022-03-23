@@ -24,7 +24,7 @@ function renderOptions(options) {
 		const indent = INDENT + INDENT + ' '.repeat(optionColWidth + 2);
 
 		let r = wrap(option[1], indent);
-		r = r.substr(flag.length + (INDENT + INDENT).length);
+		r = r.slice(flag.length + (INDENT + INDENT).length);
 		r = INDENT + INDENT + flag + r;
 		output.push(r);
 	}

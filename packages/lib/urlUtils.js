@@ -57,7 +57,7 @@ urlUtils.parseResourceUrl = function(url) {
 	// In general we want the hash to be decoded so that non-alphabetical languages
 	// appear as-is without being encoded with %.
 	// Fixes https://github.com/laurent22/joplin/issues/1870
-	if (hash) hash = urlDecode(hash.substr(1)); // Remove the first #
+	if (hash) hash = urlDecode(hash.slice(1)); // Remove the first #
 
 	return {
 		itemId: itemId,
@@ -196,7 +196,7 @@ urlUtils.fileUriToPath = (path, platform = 'linux') => {
 	// https://github.com/laurent22/joplin/issues/5693
 
 	if (output.match(/^\/\/[a-zA-Z]:/)) {
-		return output.substr(2);
+		return output.slice(2);
 	}
 
 	return output;

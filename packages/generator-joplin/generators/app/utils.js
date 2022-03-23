@@ -67,7 +67,7 @@ function packageNameFromPluginName(pluginName) {
 	output = `joplin-plugin-${output}`;
 
 	// Package name is limited to 214 characters
-	output = output.substr(0, 214);
+	output = output.slice(0, 214);
 
 	// Trim any remaining "-" from end of string
 	output = output.replace(/[-]+$/, '');

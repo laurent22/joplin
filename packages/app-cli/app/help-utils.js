@@ -15,7 +15,7 @@ function renderTwoColumnData(options, baseIndent, width) {
 		const indent = baseIndent + INDENT + ' '.repeat(optionColWidth + 2);
 
 		let r = wrap(option[1], indent, width);
-		r = r.substr(flag.length + (baseIndent + INDENT).length);
+		r = r.slice(flag.length + (baseIndent + INDENT).length);
 		r = baseIndent + INDENT + flag + r;
 		output.push(r);
 	}

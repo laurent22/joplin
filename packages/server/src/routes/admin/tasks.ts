@@ -28,7 +28,7 @@ router.post('admin/tasks', async (_path: SubPath, ctx: AppContext) => {
 
 		for (const k of Object.keys(fields)) {
 			if (k.startsWith('checkbox_')) {
-				const taskId = Number(k.substr(9));
+				const taskId = Number(k.slice(9));
 				try {
 					void taskService.runTask(taskId, RunType.Manual);
 				} catch (error) {

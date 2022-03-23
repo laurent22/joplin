@@ -477,7 +477,7 @@ export default class EncryptionService {
 		const reader = {
 			index: 0,
 			read: function(size: number) {
-				const output = string.substr(reader.index, size);
+				const output = string.slice(reader.index, reader.index + size);
 				reader.index += size;
 				return !sync ? Promise.resolve(output) : output;
 			},
@@ -623,7 +623,7 @@ export default class EncryptionService {
 		const reader: any = this.stringReader_(headerHexaBytes, true);
 		const identifier = reader.read(3);
 		const version = parseInt(reader.read(2), 16);
-		if (identifier !== 'JED') throw new Error(`Invalid header (missing identifier): ${headerHexaBytes.substr(0, 64)}`);
+		if (identifier !== 'JED') throw new Error(`Invalid header (missing identifier): ${headerHexaBytes.slice(0, 64)}`);
 		const template = this.headerTemplate(version);
 
 		parseInt(reader.read(6), 16); // Read the size and move the reader pointer forward

@@ -273,7 +273,7 @@ export default class JoplinDatabase extends Database {
 
 			for (let i = 0; i < baseItems.length; i++) {
 				const n = baseItems[i];
-				const singular = n.substr(0, n.length - 1);
+				const singular = n.slice(0, -1);
 				this.tableDescriptions_[n].title = sp('The %s title.', singular);
 				this.tableDescriptions_[n].created_time = sp('When the %s was created.', singular);
 				this.tableDescriptions_[n].updated_time = sp('When the %s was last updated.', singular);
@@ -309,7 +309,7 @@ export default class JoplinDatabase extends Database {
 								// In SQLite, if the default value is a string it has double quotes around it, so remove them here
 								let defaultValue = item.dflt_value;
 								if (typeof defaultValue == 'string' && defaultValue.length >= 2 && defaultValue[0] == '"' && defaultValue[defaultValue.length - 1] == '"') {
-									defaultValue = defaultValue.substr(1, defaultValue.length - 2);
+									defaultValue = defaultValue.slice(1, -1);
 								}
 								const q = Database.insertQuery('table_fields', {
 									table_name: tableName,

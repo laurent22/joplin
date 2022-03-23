@@ -376,7 +376,7 @@ export class Parser extends EventEmitter {
 
     _getInstructionName(value: string) {
         const idx = value.search(reNameEnd);
-        let name = idx < 0 ? value : value.substr(0, idx);
+        let name = idx < 0 ? value : value.slice(0, idx);
 
         if (this._lowerCaseTagNames) {
             name = name.toLowerCase();

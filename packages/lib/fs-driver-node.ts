@@ -120,7 +120,7 @@ export default class FsDriverNode extends FsDriverBase {
 			const item = items[i];
 			const stat = await this.stat(`${path}/${item}`);
 			if (!stat) continue; // Has been deleted between the readdir() call and now
-			stat.path = stat.path.substr(path.length + 1);
+			stat.path = stat.path.slice(path.length + 1);
 			output.push(stat);
 
 			output = await this.readDirStatsHandleRecursion_(path, stat, output, options);

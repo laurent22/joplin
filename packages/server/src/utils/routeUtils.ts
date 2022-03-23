@@ -65,7 +65,7 @@ export class Response {
 
 function removeTrailingColon(path: string): string {
 	if (!path || !path.length) return '';
-	if (path[path.length - 1] === ':') return path.substr(0, path.length - 1);
+	if (path[path.length - 1] === ':') return path.slice(0, -1);
 	return path;
 }
 
@@ -143,8 +143,8 @@ export function parseSubPath(basePath: string, p: string, rawPath: string = null
 		if (colonIndex2 < 0) {
 			throw new ErrorBadRequest(`Invalid path format: ${p}`);
 		} else {
-			output.id = decodeURIComponent(p.substr(0, colonIndex2 + 1));
-			output.link = ltrimSlashes(p.substr(colonIndex2 + 1));
+			output.id = decodeURIComponent(p.slice(0, colonIndex2 + 1));
+			output.link = ltrimSlashes(p.slice(colonIndex2 + 1));
 		}
 	} else {
 		const s = p.split('/');

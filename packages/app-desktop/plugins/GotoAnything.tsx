@@ -288,7 +288,7 @@ class Dialog extends React.PureComponent<Props, State> {
 			let commandArgs: string[] = [];
 
 			if (this.state.query.indexOf(':') === 0) { // COMMANDS
-				const commandQuery = this.parseCommandQuery(this.state.query.substr(1));
+				const commandQuery = this.parseCommandQuery(this.state.query.slice(1));
 
 				listType = BaseModel.TYPE_COMMAND;
 				keywords = [commandQuery.name];
@@ -307,11 +307,11 @@ class Dialog extends React.PureComponent<Props, State> {
 				});
 			} else if (this.state.query.indexOf('#') === 0) { // TAGS
 				listType = BaseModel.TYPE_TAG;
-				searchQuery = `*${this.state.query.split(' ')[0].substr(1).trim()}*`;
+				searchQuery = `*${this.state.query.split(' ')[0].slice(1).trim()}*`;
 				results = await Tag.searchAllWithNotes({ titlePattern: searchQuery });
 			} else if (this.state.query.indexOf('@') === 0) { // FOLDERS
 				listType = BaseModel.TYPE_FOLDER;
-				searchQuery = `*${this.state.query.split(' ')[0].substr(1).trim()}*`;
+				searchQuery = `*${this.state.query.split(' ')[0].slice(1).trim()}*`;
 				results = await Folder.search({ titlePattern: searchQuery });
 
 				for (let i = 0; i < results.length; i++) {

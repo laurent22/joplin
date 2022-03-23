@@ -506,7 +506,7 @@
 			curTitle = origTitle.substring(origTitle.indexOf(":") + 1);
 			// But if we have too many words before the colon there's something weird
 			// with the titles and the H tags so let's just use the original title instead
-		  } else if (wordCount(origTitle.substr(0, origTitle.indexOf(":"))) > 5) {
+		  } else if (wordCount(origTitle.substring(0, origTitle.indexOf(":"))) > 5) {
 			curTitle = origTitle;
 		  }
 		}

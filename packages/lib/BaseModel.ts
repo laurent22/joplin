@@ -165,7 +165,7 @@ class BaseModel {
 	static modelTypeToName(type: number) {
 		for (let i = 0; i < BaseModel.typeEnum_.length; i++) {
 			const e = BaseModel.typeEnum_[i];
-			if (e[1] === type) return e[0].substr(5).toLowerCase();
+			if (e[1] === type) return e[0].slice(5).toLowerCase();
 		}
 		throw new Error(`Unknown model type: ${type}`);
 	}
@@ -173,7 +173,7 @@ class BaseModel {
 	static modelNameToType(name: string) {
 		for (let i = 0; i < BaseModel.typeEnum_.length; i++) {
 			const e = BaseModel.typeEnum_[i];
-			const eName = e[0].substr(5).toLowerCase();
+			const eName = e[0].slice(5).toLowerCase();
 			if (eName === name) return e[1];
 		}
 		throw new Error(`Unknown model name: ${name}`);
@@ -258,7 +258,7 @@ class BaseModel {
 	}
 
 	static shortId(id: string) {
-		return id.substr(0, 5);
+		return id.slice(0, 5);
 	}
 
 	static loadByPartialId(partialId: string) {

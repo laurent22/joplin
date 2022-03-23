@@ -195,7 +195,7 @@ const filterBindings = (bindings: any[]): Record<string, any> => {
 
 	for (let i = 0; i < bindings.length; i++) {
 		let value = bindings[i];
-		if (typeof value === 'string') value = value.substr(0, 200);
+		if (typeof value === 'string') value = value.slice(0, 200);
 		if (Buffer.isBuffer(value)) value = '<binary>';
 		output[`$${i + 1}`] = value;
 	}

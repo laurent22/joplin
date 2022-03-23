@@ -71,7 +71,7 @@ async function parseNoteFile(filePath) {
 	const n = basename(filePath);
 	const number = n.split('_')[0];
 	const body = fs.readFileSync(filePath, 'utf8');
-	const title = `${number}. ${body.split('\n')[0].substr(2)}`;
+	const title = `${number}. ${body.split('\n')[0].slice(2)}`;
 	const resources = {};
 
 	const imagePaths = markdownUtils.extractImageUrls(body);

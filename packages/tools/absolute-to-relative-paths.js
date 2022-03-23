@@ -27,13 +27,13 @@ async function main() {
 			'**/node_modules/**',
 			'**/*.d.ts',
 		],
-	}).map(f => f.substr(libDir.length + 1));
+	}).map(f => f.slice(libDir.length + 1));
 
 	for (const file of files) {
 		const content = await fs.readFile(`${libDir}/${file}`, 'utf8');
 
 		const newContent = content.replace(/('|")(inner\/lib\/.*)('|")/g, (_matched, p1, p2, p3) => {
-			const absoluteRequirePath = p2.substr(10);
+			const absoluteRequirePath = p2.slice(10);
 			const relativePath = getRelativePath(file, absoluteRequirePath);
 			return p1 + relativePath + p3;
 		});

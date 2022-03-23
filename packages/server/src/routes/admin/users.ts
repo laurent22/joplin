@@ -289,7 +289,7 @@ router.post('admin/users', async (path: SubPath, ctx: AppContext) => {
 			const userFlagTypes: UserFlagType[] = [];
 			for (const key of Object.keys(fields)) {
 				if (key.startsWith('user_flag_')) {
-					const type = Number(key.substr(10));
+					const type = Number(key.slice(10));
 					userFlagTypes.push(type);
 				}
 			}

@@ -35,7 +35,7 @@ export default function useNoteSearchBar() {
 		// https://github.com/laurent22/joplin/issues/5380
 		if (query.length > queryMaxLength) {
 			logger.warn(`Query is longer than ${queryMaxLength} characters - it is going to be trimmed`);
-			query = query.substr(0, queryMaxLength);
+			query = query.slice(0, queryMaxLength);
 		}
 
 		setLocalSearch((prev: LocalSearch) => {

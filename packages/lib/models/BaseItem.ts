@@ -493,8 +493,8 @@ export default class BaseItem extends BaseModel {
 
 				const p = line.indexOf(':');
 				if (p < 0) throw new Error(`Invalid property format: ${line}: ${content}`);
-				const key = line.substr(0, p).trim();
-				const value = line.substr(p + 1).trim();
+				const key = line.slice(0, p).trim();
+				const value = line.slice(p + 1).trim();
 				output[key] = value;
 			} else if (state == 'readingBody') {
 				body.splice(0, 0, line);

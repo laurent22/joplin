@@ -73,10 +73,10 @@ export default class FileApiDriverMemory {
 			const item = this.items_[i];
 			if (item.path == path) continue;
 			if (item.path.indexOf(`${path}/`) === 0) {
-				const s = item.path.substr(path.length + 1);
+				const s = item.path.slice(path.length + 1);
 				if (s.split('/').length === 1) {
 					const it = Object.assign({}, item);
-					it.path = it.path.substr(path.length + 1);
+					it.path = it.path.slice(path.length + 1);
 					output.push(it);
 				}
 			}
@@ -179,7 +179,7 @@ export default class FileApiDriverMemory {
 			const output = this.items_.slice();
 			for (let i = 0; i < output.length; i++) {
 				const item = Object.assign({}, output[i]);
-				item.path = item.path.substr(path.length + 1);
+				item.path = item.path.slice(path.length + 1);
 				output[i] = item;
 			}
 			return output;

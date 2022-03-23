@@ -185,7 +185,7 @@ export default class JoplinSettings {
 		eventManager.on('settingsChange', (event: ChangeEvent) => {
 			const keys = event.keys
 				.filter(k => k.indexOf(this.keyPrefix) === 0)
-				.map(k => k.substr(this.keyPrefix.length));
+				.map(k => k.slice(this.keyPrefix.length));
 			if (!keys.length) return;
 			handler({ keys });
 		});

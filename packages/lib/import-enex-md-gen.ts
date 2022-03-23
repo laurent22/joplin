@@ -304,8 +304,8 @@ function simplifyString(s: string): string {
 		previousWhite = isWhite;
 	}
 
-	while (output.length && isWhiteSpace(output[0])) output = output.substr(1);
-	while (output.length && isWhiteSpace(output[output.length - 1])) output = output.substr(0, output.length - 1);
+	while (output.length && isWhiteSpace(output[0])) output = output.slice(1);
+	while (output.length && isWhiteSpace(output[output.length - 1])) output = output.slice(0, -1);
 
 	return output;
 }
@@ -315,8 +315,8 @@ function collapseWhiteSpaceAndAppend(lines: string[], state: any, text: string) 
 		lines.push(text);
 	} else {
 		// Remove all \n and \r from the left and right of the text
-		while (text.length && (text[0] == '\n' || text[0] == '\r')) text = text.substr(1);
-		while (text.length && (text[text.length - 1] == '\n' || text[text.length - 1] == '\r')) text = text.substr(0, text.length - 1);
+		while (text.length && (text[0] == '\n' || text[0] == '\r')) text = text.slice(1);
+		while (text.length && (text[text.length - 1] == '\n' || text[text.length - 1] == '\r')) text = text.slice(0, -1);
 
 		// Collapse all white spaces to just one. If there are spaces to the left and right of the string
 		// also collapse them to just one space.

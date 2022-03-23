@@ -51,7 +51,7 @@ async function main() {
 	const files = walk(sourceAssetDir);
 
 	for (const file of files) {
-		const destFile = file.substr(sourceAssetDir.length + 1);
+		const destFile = file.slice(sourceAssetDir.length + 1);
 		encodedFiles.push(await encodeFile(file, destFile));
 	}
 

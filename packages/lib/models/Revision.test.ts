@@ -110,9 +110,9 @@ describe('models/Revision', function() {
 		];
 
 		// Sanity check - verify that the patches are as expected
-		expect(patches[0].substr(0, 2)).toBe('[{'); // New
-		expect(patches[1].substr(0, 2)).toBe('@@'); // Legacy
-		expect(patches[2].substr(0, 2)).toBe('[{'); // New
+		expect(patches[0].slice(0, 2)).toBe('[{'); // New
+		expect(patches[1].slice(0, 2)).toBe('@@'); // Legacy
+		expect(patches[2].slice(0, 2)).toBe('[{'); // New
 
 		let finalString = Revision.applyTextPatch(changes[0], patches[0]);
 		finalString = Revision.applyTextPatch(finalString, patches[1]);
