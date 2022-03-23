@@ -21,6 +21,8 @@ export const runtime = (comp: any): CommandRuntime => {
 				for (let i = 0; i < folders.length; i++) {
 					const folder = folders[i];
 					startFolders.push({ key: folder.id, value: folder.id, label: folder.title, indentDepth: depth });
+					const folderEmoji = folder.icon ? JSON.parse(folder.icon).emoji : '';
+					startFolders.push({ key: folder.id, value: folder.id, label: `${folderEmoji} ${folder.title}` , indentDepth: depth });
 					if (folder.children) addOptions(folder.children, (depth + 1) < maxDepth ? depth + 1 : maxDepth);
 				}
 			};
