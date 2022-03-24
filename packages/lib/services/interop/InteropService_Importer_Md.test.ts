@@ -4,6 +4,7 @@ import Folder from '../../models/Folder';
 import * as fs from 'fs-extra';
 import { createTempDir, setupDatabaseAndSynchronizer, supportDir, switchClient } from '../../testing/test-utils';
 import { MarkupToHtml } from '@joplin/renderer';
+import { FolderEntity } from '../database/types';
 
 
 describe('InteropService_Importer_Md', function() {
@@ -136,14 +137,14 @@ describe('InteropService_Importer_Md', function() {
 
 		await importNoteDirectory(`${rootDir}/non-empty`);
 		const allFolders = await Folder.all();
-		expect(allFolders.map((f: any) => f.title).indexOf('non-empty')).toBeGreaterThanOrEqual(0);
+		expect(allFolders.map((f: FolderEntity) => f.title).indexOf('non-empty')).toBeGreaterThanOrEqual(0);
 	});
 	it('should not import empty directory', async function() {
 		await fs.mkdirp(`${rootDir}/empty/empty`);
 
 		await importNoteDirectory(`${rootDir}/empty`);
 		const allFolders = await Folder.all();
-		expect(allFolders.map((f: any) => f.title).indexOf('empty')).toBe(-1);
+		expect(allFolders.map((f: FolderEntity) => f.title).indexOf('empty')).toBe(-1);
 	});
 	it('should import directory with non-empty subdirectory', async function() {
 		await fs.mkdirp(`${rootDir}/non-empty-subdir/non-empty-subdir/subdir-empty`);
@@ -152,8 +153,8 @@ describe('InteropService_Importer_Md', function() {
 
 		await importNoteDirectory(`${rootDir}/non-empty-subdir`);
 		const allFolders = await Folder.all();
-		expect(allFolders.map((f: any) => f.title).indexOf('non-empty-subdir')).toBeGreaterThanOrEqual(0);
-		expect(allFolders.map((f: any) => f.title).indexOf('subdir-empty')).toBe(-1);
-		expect(allFolders.map((f: any) => f.title).indexOf('subdir-non-empty')).toBeGreaterThanOrEqual(0);
+		expect(allFolders.map((f: FolderEntity) => f.title).indexOf('non-empty-subdir')).toBeGreaterThanOrEqual(0);
+		expect(allFolders.map((f: FolderEntity) => f.title).indexOf('subdir-empty')).toBe(-1);
+		expect(allFolders.map((f: FolderEntity) => f.title).indexOf('subdir-non-empty')).toBeGreaterThanOrEqual(0);
 	});
 });

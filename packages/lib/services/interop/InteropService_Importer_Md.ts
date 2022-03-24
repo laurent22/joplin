@@ -53,7 +53,7 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 			const stat = stats[i];
 
 			if (stat.isDirectory()) {
-				if (await this.isDirectoryEmpty(`${dirPath}/${basename(stat.path)}`)) {
+				if (await this.isDirectoryEmpty(`${dirPath}/${stat.path}`)) {
 					console.info(`Ignoring empty directory: ${stat.path}`);
 					continue;
 				}
@@ -73,7 +73,7 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 			const innerStat = innerStats[i];
 
 			if (innerStat.isDirectory()) {
-				if (!(await this.isDirectoryEmpty(`${dirPath}/${basename(innerStat.path)}`))) {
+				if (!(await this.isDirectoryEmpty(`${dirPath}/${innerStat.path}`))) {
 					return false;
 				}
 			} else if (supportedFileExtension.indexOf(fileExtension(innerStat.path).toLowerCase()) >= 0) {
