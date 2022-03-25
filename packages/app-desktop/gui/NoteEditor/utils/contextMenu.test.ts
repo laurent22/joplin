@@ -1,3 +1,9 @@
+/** @jest-environment ./loadResources.testEnv */
+// eslint-disable-next-line strict, lines-around-directive
+'use strict';
+// use strict is necessary here so that typescript doesn't place "use strict" above the jest docblock
+// https://github.com/microsoft/TypeScript/issues/15819#issuecomment-782235619
+
 import { textToDataUri, svgUriToPng } from './contextMenuUtils';
 
 jest.mock('@joplin/lib/models/Resource');

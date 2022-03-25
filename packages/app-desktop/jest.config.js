@@ -128,10 +128,7 @@ module.exports = {
 	testEnvironment: 'jsdom',
 
 	// Options that will be passed to the testEnvironment
-	// Resources is set to 'usable' to enable fetching of resources like images and fonts while testing
-	// Which does not happen by default in jest
-	// https://stackoverflow.com/a/49482563
-	testEnvironmentOptions: { resources: 'usable' },
+	// testEnvironmentOptions: {},
 
 	// Adds a location field to test results
 	// testLocationInResults: false,
