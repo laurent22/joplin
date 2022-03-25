@@ -8,7 +8,7 @@ import { FolderEntity } from '../database/types';
 
 
 describe('InteropService_Importer_Md', function() {
-	let rootDir: string;
+	let tempDir: string;
 	async function importNote(path: string) {
 		const importer = new InteropService_Importer_Md();
 		importer.setMetadata({ fileExtensions: ['md', 'html'] });
@@ -19,16 +19,14 @@ describe('InteropService_Importer_Md', function() {
 		importer.setMetadata({ fileExtensions: ['md', 'html'] });
 		return await importer.importDirectory(path, 'notebook');
 	}
-	beforeAll(async () => {
-		rootDir = await createTempDir();
-	});
 	beforeEach(async (done) => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
+		tempDir = await createTempDir();
 		done();
 	});
-	afterAll(async () => {
-		await fs.remove(rootDir);
+	afterEach(async () => {
+		await fs.remove(tempDir);
 	});
 	it('should import linked files and modify tags appropriately', async function() {
 		const note = await importNote(`${supportDir}/test_notes/md/sample.md`);
@@ -132,26 +130,26 @@ describe('InteropService_Importer_Md', function() {
 		expect(preservedAlt).toBe(true);
 	});
 	it('should import non-empty directory', async function() {
-		await fs.mkdirp(`${rootDir}/non-empty/non-empty`);
-		await fs.writeFile(`${rootDir}/non-empty/non-empty/sample.md`, '# Sample');
+		await fs.mkdirp(`${tempDir}/non-empty/non-empty`);
+		await fs.writeFile(`${tempDir}/non-empty/non-empty/sample.md`, '# Sample');
 
-		await importNoteDirectory(`${rootDir}/non-empty`);
+		await importNoteDirectory(`${tempDir}/non-empty`);
 		const allFolders = await Folder.all();
 		expect(allFolders.map((f: FolderEntity) => f.title).indexOf('non-empty')).toBeGreaterThanOrEqual(0);
 	});
 	it('should not import empty directory', async function() {
-		await fs.mkdirp(`${rootDir}/empty/empty`);
+		await fs.mkdirp(`${tempDir}/empty/empty`);
 
-		await importNoteDirectory(`${rootDir}/empty`);
+		await importNoteDirectory(`${tempDir}/empty`);
 		const allFolders = await Folder.all();
 		expect(allFolders.map((f: FolderEntity) => f.title).indexOf('empty')).toBe(-1);
 	});
 	it('should import directory with non-empty subdirectory', async function() {
-		await fs.mkdirp(`${rootDir}/non-empty-subdir/non-empty-subdir/subdir-empty`);
-		await fs.mkdirp(`${rootDir}/non-empty-subdir/non-empty-subdir/subdir-non-empty`);
-		await fs.writeFile(`${rootDir}/non-empty-subdir/non-empty-subdir/subdir-non-empty/sample.md`, '# Sample');
+		await fs.mkdirp(`${tempDir}/non-empty-subdir/non-empty-subdir/subdir-empty`);
+		await fs.mkdirp(`${tempDir}/non-empty-subdir/non-empty-subdir/subdir-non-empty`);
+		await fs.writeFile(`${tempDir}/non-empty-subdir/non-empty-subdir/subdir-non-empty/sample.md`, '# Sample');
 
-		await importNoteDirectory(`${rootDir}/non-empty-subdir`);
+		await importNoteDirectory(`${tempDir}/non-empty-subdir`);
 		const allFolders = await Folder.all();
 		expect(allFolders.map((f: FolderEntity) => f.title).indexOf('non-empty-subdir')).toBeGreaterThanOrEqual(0);
 		expect(allFolders.map((f: FolderEntity) => f.title).indexOf('subdir-empty')).toBe(-1);
