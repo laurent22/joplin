@@ -31,6 +31,7 @@ function fontFamilyFromSettings() {
 	return [f, 'sans-serif'].join(', ');
 }
 
+// Obsolete with CodeMirror 6. See ./CodeMirror.ts for styling.
 // function useCss(themeId:number):string {
 // 	const [css, setCss] = useState('');
 
