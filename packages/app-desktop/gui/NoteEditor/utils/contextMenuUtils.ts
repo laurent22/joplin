@@ -12,7 +12,7 @@ export interface ContextMenuOptions {
 	itemType: ContextMenuItemType;
 	resourceId: string;
 	mime: string;
-    	filename: string;
+	filename: string;
 	linkToCopy: string;
 	textToCopy: string;
 	htmlToCopy: string;
