@@ -271,11 +271,11 @@ msgstr "Lägg till i ordlistan"
 #: packages/server/src/services/MustacheService.ts:183
 #: packages/server/src/services/MustacheService.ts:307
 msgid "Admin"
-msgstr ""
+msgstr "Administratör"
 
 #: packages/server/src/routes/admin/dashboard.ts:10
 msgid "Admin dashboard"
-msgstr ""
+msgstr "Administratörsinstrumentbräda"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:189
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:147
@@ -829,8 +829,8 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Kunde inte ansluta till Joplin Server. Vänligen kontrollera konfigurationen "
-"i synkroniseringsinställningarna. Fullständigt fel var:\n"
+"Kunde inte ansluta till Joplin Server. Kontrollera konfigurationen i "
+"synkroniseringsinställningarna. Fullständigt fel var:\n"
 "\n"
 "%s"
 
@@ -853,8 +853,8 @@ msgid ""
 "\n"
 "The error was: \"%s\""
 msgstr ""
-"Det gick inte att svara på inbjudan. Vänligen försök igen, eller kontrollera "
-"med den anteckningsboksägaren om de fortfarande delar den.\n"
+"Det gick inte att svara på inbjudan. Försök igen, eller kontrollera med den "
+"anteckningsboksägaren om de fortfarande delar den.\n"
 "\n"
 "Felet var: \"%s\""
 
@@ -868,7 +868,7 @@ msgid ""
 "again when you are connected to the internet."
 msgstr ""
 "Det gick inte att verifiera delningsstatusen för den här anteckningsboken - "
-"avbryter. Vänligen försök igen när du är ansluten till internet."
+"avbryter. Försök igen när du är ansluten till internet."
 
 #: packages/app-mobile/components/note-list.js:101
 msgid "Create a notebook"
@@ -1234,8 +1234,8 @@ msgid ""
 "below."
 msgstr ""
 "Förlora inte lösenordet som för säkerhetsändamål kommer det att vara det "
-"*enda* sättet att dekryptera data! För att aktivera kryptering, vänligen "
-"ange ditt lösenord nedan."
+"*enda* sättet att dekryptera data! För att aktivera kryptering, ange ditt "
+"lösenord nedan."
 
 #: packages/app-desktop/checkForUpdates.ts:199
 msgid "Download"
@@ -1700,7 +1700,7 @@ msgid ""
 "For more information about End-To-End Encryption (E2EE) and advice on how to "
 "enable it please check the documentation:"
 msgstr ""
-"För mer information om End-to-End Encryption (E2EE) och råd om hur du "
+"För mer information om ände-till-ände-kryptering (E2EE) och råd om hur du "
 "aktiverar det finns i dokumentationen:"
 
 #: packages/app-cli/app/command-help.js:84
@@ -2203,7 +2203,7 @@ msgstr[1] "Länkarna har kopierats till urklipp!"
 
 #: packages/app-mobile/components/screens/Note.tsx:197
 msgid "Links with protocol \"%s\" are not supported"
-msgstr "Länkar med protokoll \"%s\" stöds ej"
+msgstr "Länkar med protokoll \"%s\" stöds inte"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:229
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:231
@@ -2500,7 +2500,7 @@ msgstr "Nord"
 
 #: packages/app-cli/app/command-sync.ts:106
 msgid "Not authentified with %s. Please provide any missing credentials."
-msgstr "Ej autentiserad med %s. Ange eventuella saknade uppgifter."
+msgstr "Inte autentiserad med %s. Ange eventuella saknade uppgifter."
 
 #: packages/lib/models/Resource.ts:353
 msgid "Not downloaded"
@@ -2775,7 +2775,7 @@ msgstr "Tillåtelse att använda kameran"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:271
 msgid "Please click on \"%s\" to proceed"
-msgstr "Vänligen klicka på \"%s\" för att fortsätta"
+msgstr "Klicka på \"%s\" för att fortsätta"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:65
 msgid ""
@@ -2794,8 +2794,8 @@ msgid ""
 "Please note that if it is a large notebook, it may take a few minutes for "
 "all the notes to show up on the recipient's device."
 msgstr ""
-"Vänligen observera att om det är en stor anteckningsbok kan det ta några "
-"minuter för alla anteckningar att dyka upp på mottagarens enhet."
+"Observera att om det är en stor anteckningsbok kan det ta några minuter för "
+"alla anteckningar att dyka upp på mottagarens enhet."
 
 #: packages/lib/onedrive-api-node-utils.js:116
 msgid ""
@@ -2833,20 +2833,20 @@ msgstr "Ange anteckningsboken som anteckningarna ska importeras till."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:227
 msgid "Please upgrade Joplin to use this plugin"
-msgstr "Vänligen uppgradera Joplin för att använda denna insticksmodul"
+msgstr "Uppgradera Joplin för att använda denna insticksmodul"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1164
 msgid ""
 "Please wait for all attachments to be downloaded and decrypted. You may also "
 "switch to %s to edit the note."
 msgstr ""
-"Vänligen vänta tills alla bilagor hämtas och dekrypteras. Du kan också växla "
-"till %s för att redigera anteckningen."
+"Vänta tills alla bilagor hämtas och dekrypteras. Du kan också växla till %s "
+"för att redigera anteckningen."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.tsx:120
 #: packages/app-desktop/gui/ResourceScreen.tsx:231
 msgid "Please wait..."
-msgstr "Vänligen vänta..."
+msgstr "Vänta..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:312
 msgid "Plugin tools"
@@ -3805,7 +3805,7 @@ msgid ""
 "\n"
 "The error was: \"%s\""
 msgstr ""
-"Det gick inte att ta bort mottagaren från listan. Vänligen försök igen.\n"
+"Det gick inte att ta bort mottagaren från listan. Försök igen.\n"
 "\n"
 "Felet var: \"%s\""
 
@@ -4039,7 +4039,7 @@ msgstr ""
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:54
 msgid "To continue, please enter your master password below."
-msgstr "För att fortsätta, vänligen ange ditt huvudlösenord nedan."
+msgstr "För att fortsätta, ange ditt huvudlösenord nedan."
 
 #: packages/app-cli/app/app-gui.js:452
 msgid "To delete a tag, untag the associated notes."
