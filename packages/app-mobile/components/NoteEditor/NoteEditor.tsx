@@ -15,14 +15,27 @@ export interface UndoRedoDepthChangeEvent {
 	redoDepth: number;
 }
 
+export interface Selection {
+	start: number;
+	end: number;
+}
+
+export interface SelectionChangeEvent {
+	selection: Selection;
+}
+
 type ChangeEventHandler = (event: ChangeEvent)=> void;
 type UndoRedoDepthChangeHandler = (event: UndoRedoDepthChangeEvent)=> void;
+type SelectionChangeEventHandler = (event: SelectionChangeEvent)=> void;
 
 interface Props {
 	themeId: number;
 	initialText: string;
+	initialSelection?: Selection;
 	style: any;
+
 	onChange: ChangeEventHandler;
+	onSelectionChange: SelectionChangeEventHandler;
 	onUndoRedoDepthChange: UndoRedoDepthChangeHandler;
 }
 
@@ -212,11 +225,15 @@ function NoteEditor(props: Props, ref: any) {
 	const [source, setSource] = useState(undefined);
 	const webviewRef = useRef(null);
 
+	const setInitialSelectionJS = props.initialSelection ? `
+		cm.select(${props.initialSelection.start}, ${props.initialSelection.end});
+	` : '';
+
 	const injectedJavaScript = `
 		function postMessage(name, data) {
 			window.ReactNativeWebView.postMessage(JSON.stringify({
 				data,
-				name,	
+				name,
 			}));
 		}
 
@@ -227,7 +244,7 @@ function NoteEditor(props: Props, ref: any) {
 		// This variable is not used within this script
 		// but is called using "injectJavaScript" from
 		// the wrapper component.
-		let cm = null;
+		window.cm = null;
 
 		try {
 			${shim.injectedJs('codeMirrorBundle')};
@@ -237,6 +254,7 @@ function NoteEditor(props: Props, ref: any) {
 			const initialText = ${JSON.stringify(props.initialText)};
 
 			cm = codeMirrorBundle.initCodeMirror(parentElement, initialText, theme);
+			${setInitialSelectionJS}
 		} catch (e) {
 			window.ReactNativeWebView.postMessage("error:" + e.message + ": " + JSON.stringify(e))
 		} finally {
@@ -254,6 +272,14 @@ function NoteEditor(props: Props, ref: any) {
 			},
 			redo: function() {
 				webviewRef.current.injectJavaScript('cm.redo(); true;');
+			},
+			select: (anchor: number, head: number) => {
+				webviewRef.current.injectJavaScript(
+					`cm.select(${JSON.stringify(anchor)}, ${JSON.stringify(head)}); true;`
+				);
+			},
+			insertText: (text: string) => {
+				webviewRef.current.injectJavaScript(`cm.insertText(${JSON.stringify(text)}); true;`);
 			},
 		};
 	});
@@ -300,6 +326,10 @@ function NoteEditor(props: Props, ref: any) {
 			onUndoRedoDepthChange: (event: UndoRedoDepthChangeEvent) => {
 				console.info('onUndoRedoDepthChange', event);
 				props.onUndoRedoDepthChange(event);
+			},
+
+			onSelectionChange: (event: SelectionChangeEvent) => {
+				props.onSelectionChange(event);
 			},
 		};
 
