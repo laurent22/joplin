@@ -275,7 +275,7 @@ msgstr "Administratör"
 
 #: packages/server/src/routes/admin/dashboard.ts:10
 msgid "Admin dashboard"
-msgstr "Administratörsinstrumentbräd"
+msgstr "Administratörsinstrumentbräda"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:189
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:147
