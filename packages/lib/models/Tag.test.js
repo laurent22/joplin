@@ -50,7 +50,7 @@ describe('models/Tag', function() {
 	it('should return tags with note counts', (async () => {
 		const folder1 = await Folder.save({ title: 'folder1' });
 		const note1 = await Note.save({ title: 'ma note', parent_id: folder1.id });
-		const note2 = await Note.save({ title: 'ma 2nd note',parent_id: folder1.id });
+		const note2 = await Note.save({ title: 'ma 2nd note', parent_id: folder1.id });
 		const todo1 = await Note.save({ title: 'todo 1', parent_id: folder1.id, is_todo: 1, todo_completed: 1590085027710 });
 		await Tag.setNoteTagsByTitles(note1.id, ['un']);
 		await Tag.setNoteTagsByTitles(note2.id, ['un']);
@@ -156,24 +156,4 @@ describe('models/Tag', function() {
 		expect(commonTagIds.includes(tagc.id)).toBe(true);
 	}));
 
-	it('should sort tags', (async () => {
-		// test for tags with titles
-		const unsortedTags = [{ title: '@⏲15 min' },{ title: '#house' },{ title: '#coding' }, { title: '@⏲60 min' }, { title: '#wait' }, { title: '@⏲30 min' }];
-		const sortedTags = Tag.sortTags(unsortedTags);
-		expect(sortedTags).toEqual([{ title: '@⏲15 min' }, { title: '@⏲30 min' }, { title: '@⏲60 min' }, { title: '#coding' }, { title: '#house' }, { title: '#wait' }]);
-
-		// test for tags without titles
-		const unsortedTags2 = [{ id: '40' } , { id: '50' }, { id: '10' }, { id: '30' }, { id: '20' }];
-		const sortedTags2 = Tag.sortTags(unsortedTags2);
-		expect(sortedTags2).toEqual([{ id: '40' } , { id: '50' }, { id: '10' }, { id: '30' }, { id: '20' }]);
-
-		// test for tags with titles, without titles and empty tags
-		const unsortedTags3 = [{ id: '1' }, { id: '2', title: 'two' }, {}, { id: '3' }, { id: '4', title: 'four' }, { id: '5',title: 'five' }];
-		const sortedTags3 = Tag.sortTags(unsortedTags3);
-		expect(sortedTags3).toEqual([{ id: '1' }, { id: '2', title: 'two' }, {}, { id: '3' }, { id: '5', title: 'five' }, { id: '4', title: 'four' }]);
-
-		// test for empty list
-		const emptyListSort = Tag.sortTags([]);
-		expect(emptyListSort).toEqual([]);
-	}));
 });
