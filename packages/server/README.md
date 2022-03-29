@@ -5,7 +5,7 @@
 - Docker Engine runs Joplin Server. See [Install Docker Engine](https://docs.docker.com/engine/install/) for steps to install Docker Engine for your operating system.
 - Docker Compose is required to store item contents (notes, tags, etc.) if PostgreSQL is not used. See [Install Docker Compose](https://docs.docker.com/compose/install/) for steps to install Docker Compose for your operating system.
 
-## Configure docker for joplin server
+## Configure Docker for Joplin Server
 
 1. Copy `.env-sample` (located [here](https://github.com/laurent22/joplin/blob/dev/.env-sample)) to the location of your Docker configuration files. Example: /home/[user]/docker
 2. Rename the file `.env-sample` to `.env`.
@@ -18,7 +18,7 @@ docker run --env-file .env -p 22300:22300 joplin/server:latest
 The server will listen on port **22300** on **localhost**. By default, the server will use SQLite, which allows you to test the app without setting up a database. When running the server for production use, you should connect the container to a database, as described below.
 
 
-## Supported docker tags
+## Supported Docker tags
 
 The following tags are available:
 
@@ -32,7 +32,7 @@ The following tags are available:
 
 You can setup the container to either use an existing PostgreSQL server, or connect it to a new database using docker-compose.
 
-### Using an existing postgreSQL server
+### Using an existing PostgreSQL server
 
 To use an existing PostgresSQL server, set the following environment variables in the .env file:
 
@@ -45,7 +45,7 @@ POSTGRES_PORT=5432
 POSTGRES_HOST=localhost
 ```
 
-Ensure that the provided database and user exist as Joplin server will not create them. When running on macOS or Windows through Docker Desktop, a mapping of localhost is made automatically. On Linux, you can add `--net=host --add-host=host.docker.internal:127.0.0.1` to the `docker run` command line to make the mapping happen. Any other `POSTGRES_HOST` than localhost or 127.0.0.1 should work as expected without further action.
+Ensure that the provided database and user exist as Joplin Server will not create them. When running on macOS or Windows through Docker Desktop, a mapping of localhost is made automatically. On Linux, you can add `--net=host --add-host=host.docker.internal:127.0.0.1` to the `docker run` command line to make the mapping happen. Any other `POSTGRES_HOST` than localhost or 127.0.0.1 should work as expected without further action.
 
 ### Using docker-compose
 
