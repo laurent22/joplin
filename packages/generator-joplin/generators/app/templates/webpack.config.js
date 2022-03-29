@@ -80,7 +80,7 @@ function readManifest(manifestPath) {
 	const content = fs.readFileSync(manifestPath, 'utf8');
 	const output = JSON.parse(content);
 	if (!output.id) throw new Error(`Manifest plugin ID is not set in ${manifestPath}`);
-	output.categories && validateCategories(output.categories);
+	validateCategories(output.categories);
 	return output;
 }
 
