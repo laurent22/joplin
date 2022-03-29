@@ -29,7 +29,7 @@ const userConfig = Object.assign({}, {
 
 const manifestPath = `${srcDir}/manifest.json`;
 const packageJsonPath = `${rootDir}/package.json`;
-const allPossibleCategories = ['appearance', 'developer tools', 'productivity', 'themes', 'integrations', 'viewer', 'search', 'tags', 'editor', 'files'];
+const allPossibleCategories = ['appearance', 'developer tools', 'productivity', 'themes', 'integrations', 'viewer', 'search', 'tags', 'editor', 'files', 'personal knowledge management'];
 const manifest = readManifest(manifestPath);
 const pluginArchiveFilePath = path.resolve(publishDir, `${manifest.id}.jpl`);
 const pluginInfoFilePath = path.resolve(publishDir, `${manifest.id}.json`);
@@ -69,6 +69,7 @@ function currentGitInfo() {
 }
 
 function validateCategories(categories) {
+	if (!categories) return null;
 	if ((categories.length !== new Set(categories).size)) throw new Error('Repeated categories are not allowed');
 	categories.forEach(category => {
 		if (!allPossibleCategories.includes(category)) throw new Error(`${category} is not a valid category. Please make sure that the category name is lowercase. Valid Categories are: \n${allPossibleCategories}\n`);
