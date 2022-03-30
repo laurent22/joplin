@@ -67,8 +67,12 @@ class PromptDialog extends React.Component {
 		this.styles_.promptDialog = {
 			backgroundColor: theme.backgroundColor,
 			padding: 16,
-			display: 'inline-block',
+			display: 'flex',
+			flexDirection: 'column',
+			gap: '1rem',
 			maxWidth: width * 0.5,
+			minWidth: '15rem',
+			width: '25rem',
 			boxShadow: '6px 6px 20px rgba(0,0,0,0.5)',
 		};
 
@@ -102,13 +106,11 @@ class PromptDialog extends React.Component {
 		this.styles_.select = {
 			control: provided =>
 				Object.assign(provided, {
-					minWidth: width * 0.2,
-					maxWidth: width * 0.5,
 					fontFamily: theme.fontFamily,
+					overflow: 'hidden',
 				}),
 			input: provided =>
 				Object.assign(provided, {
-					minWidth: '20px',
 					color: theme.color,
 				}),
 			menu: provided =>
@@ -261,7 +263,7 @@ class PromptDialog extends React.Component {
 						{inputComp}
 						{descComp}
 					</div>
-					<div style={{ textAlign: 'right', marginTop: 10 }}>{buttonComps}</div>
+					<div style={{ textAlign: 'right' }}>{buttonComps}</div>
 				</div>
 			</div>
 		);
