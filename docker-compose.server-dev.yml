@@ -19,8 +19,8 @@ services:
             - POSTGRES_HOST=localhost
     db:
         image: postgres:13
-        ports:
-            - "5432:5432"
+        expose:
+            - 5432
         environment:
             - POSTGRES_PASSWORD=joplin
             - POSTGRES_USER=joplin

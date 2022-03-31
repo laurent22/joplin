@@ -1,0 +1,64 @@
+# This is a sample docker-compose file that can be used to run Joplin Server
+# along with a PostgreSQL server and the Traefik v2 Proxy.
+#
+# Update the following fields in the stanza below:
+#
+# POSTGRES_USER
+# POSTGRES_PASSWORD
+# LETSENCRYPT_EMAIL
+# FULL_DOMAIN
+#
+# FULL_DOMAIN: This is the base public domain where the service will be running, for example joplin.example.com
+# LETSENCRYPT_EMAIL: This is your e-mail that will be used for sending potential expiry notifications e-mail to you.
+
+version: '3'
+services:
+  traefik:
+    image: "traefik:v2.6.3"
+    container_name: "traefik"
+    restart: always
+    command:
+      - "--certificatesresolvers.mytlschallenge.acme.tlschallenge=true"
+      - "--certificatesresolvers.mytlschallenge.acme.email=${LETSENCRYPT_EMAIL}"
+      - "--certificatesresolvers.mytlschallenge.acme.storage=/letsencrypt/acme.json"
+      # This option is for testing, in order not to hit rate limits by accident. Once you get the fake LE certificate, comment this out
+      - "--certificatesresolvers.mytlschallenge.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+      - "--entrypoints.websecure.address=:443"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "./letsencrypt:/letsencrypt"
+
+
+  joplin-server:
+    environment:
+      - APP_BASE_URL=https://${FULL_DOMAIN}
+      - APP_PORT=22300
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_DB=${POSTGRES_DATABASE}
+      - POSTGRES_PORT=5432
+      - POSTGRES_HOST=joplin-db
+      - DB_CLIENT=pg
+    restart: unless-stopped
+    image: joplin/server:latest
+    container_name: joplin-server
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.joplin-server.rule=Host(`${FULL_DOMAIN}`)"
+      - "traefik.http.routers.joplin-server.entrypoints=websecure"
+      - "traefik.http.routers.joplin-server.tls.certresolver=mytlschallenge"
+      - "traefik.http.routers.joplin.tls=true"
+      - "traefik.http.services.joplin-server.loadbalancer.passhostheader=true"
+      - "traefik.http.services.joplin-server.loadbalancer.server.port=22300"
+      # add redirect root to path
+      - "traefik.http.routers.joplin-server.middlewares=redirect-to-login"
+      - "traefik.http.middlewares.redirect-to-login.redirectregex.regex=^https:\\/\\/([^\\/]+)\\/?$$"
+      - "traefik.http.middlewares.redirect-to-login.redirectregex.replacement=https://$$1/login"
