@@ -3129,7 +3129,7 @@ msgstr "选择emoji..."
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:144
 msgid "Select file..."
-msgstr "选择文件…"
+msgstr "选择文件..."
 
 #: packages/app-cli/app/command-server.js:38
 msgid "Server is already running on port %d"
