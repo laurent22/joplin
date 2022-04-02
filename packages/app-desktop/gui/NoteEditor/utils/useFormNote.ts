@@ -20,7 +20,7 @@ export interface OnLoadEvent {
 
 interface HookDependencies {
 	syncStarted: boolean;
-	notes: any[];
+	updatedTime: number;
 	noteId: string;
 	isProvisional: boolean;
 	titleInputRef: any;
@@ -59,12 +59,8 @@ function resourceInfosChanged(a: ResourceInfos, b: ResourceInfos): boolean {
 	return false;
 }
 
-const getCompareKey = (a: FormNote) => `${a.body}|${a.id}|${a.title}|${a.parent_id}|${a.is_todo}`;
-const isNoteEqual = (a: FormNote, b: FormNote) => getCompareKey(a) === getCompareKey(b);
-const isNewer = (a: FormNote, b: any) => a.user_updated_time > b.update_time;
-
 export default function useFormNote(dependencies: HookDependencies) {
-	const { syncStarted, notes, noteId, isProvisional, titleInputRef, editorRef, onBeforeLoad, onAfterLoad } = dependencies;
+	const { syncStarted, noteId, updatedTime, isProvisional, titleInputRef, editorRef, onBeforeLoad, onAfterLoad } = dependencies;
 
 	const [formNote, setFormNote] = useState<FormNote>(defaultFormNote());
 	const [isNewNote, setIsNewNote] = useState(false);
@@ -124,16 +120,6 @@ export default function useFormNote(dependencies: HookDependencies) {
 		const loadNote = async () => {
 			const n = await Note.load(noteId);
 			if (cancelled) return;
-			// compare the note to the current formNote to see if there are even changes
-			if (isNoteEqual(formNote, n)) {
-				reg.logger().warn('Trying to reload a note that has no updates:', noteId);
-				return;
-			}
-			// compare the note to the current formNote to see if the changes are newer
-			if (isNewer(formNote, n)) {
-				reg.logger().warn('Trying to reload a note that is older than current:', noteId);
-				return;
-			}
 			// Normally should not happened because if the note has been deleted via sync
 			// it would not have been loaded in the editor (due to note selection changing
 			// on delete)
@@ -149,7 +135,7 @@ export default function useFormNote(dependencies: HookDependencies) {
 		return () => {
 			cancelled = true;
 		};
-	}, [syncStarted, notes]);
+	}, [syncStarted, updatedTime]);
 
 	useEffect(() => {
 		if (!noteId) {

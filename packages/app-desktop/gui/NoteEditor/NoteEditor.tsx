@@ -67,7 +67,7 @@ function NoteEditor(props: NoteEditorProps) {
 
 	const { formNote, setFormNote, isNewNote, resourceInfos } = useFormNote({
 		syncStarted: props.syncStarted,
-		notes: props.notes,
+		updatedTime: props.notes.find(n => n.id === props.noteId)?.updated_time,
 		noteId: props.noteId,
 		isProvisional: props.isProvisional,
 		titleInputRef: titleInputRef,
