@@ -3,6 +3,18 @@ import Setting from './models/Setting';
 import { reg } from './registry';
 import PluginService, { Plugins } from '@joplin/lib/services/plugins/PluginService';
 
+// Get Plugins in Array Form
+export const getPluginsArr = (pluginsObj: Plugins) => {
+	const plugins = [];
+	for (const pluginId in pluginsObj) {
+		plugins.push({
+			name: pluginsObj[pluginId].manifest.name,
+			version: pluginsObj[pluginId].manifest.version,
+		});
+	}
+	return plugins;
+};
+
 export default function versionInfo(packageInfo: any) {
 	const p = packageInfo;
 	let gitInfo = '';
@@ -11,15 +23,6 @@ export default function versionInfo(packageInfo: any) {
 		if (p.git.branch === 'HEAD') gitInfo = gitInfo.slice(0, -7);
 	}
 
-	// Get all the Plugins
-	const getPlugins: Plugins = PluginService.instance().plugins;
-	const plugins = [];
-	for (const pluginId in getPlugins) {
-		plugins.push({
-			name: getPlugins[pluginId].manifest.name,
-			version: getPlugins[pluginId].manifest.version,
-		});
-	}
 
 	const copyrightText = 'Copyright © 2016-YYYY Laurent Cozic';
 	const now = new Date();
@@ -44,6 +47,7 @@ export default function versionInfo(packageInfo: any) {
 		console.info(gitInfo);
 	}
 
+	const plugins = getPluginsArr(PluginService.instance().plugins);
 	if (plugins.length > 0) {
 		body.push(`\n${_('Plugins:')}`);
 		plugins.map((plugin)=>{
