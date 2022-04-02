@@ -1,21 +1,7 @@
-import { _ } from './locale';
 import { getPluginsArr, PluginInfo } from './versionInfo';
-import PluginService from '@joplin/lib/services/plugins/PluginService';
 import Plugin from '@joplin/lib/services/plugins/Plugin';
 
 describe('versionInfo', function() {
-
-	it('should not push plugin to body if no plugin is found',() => {
-		const plugins = getPluginsArr(PluginService.instance().plugins);
-		const body = [];
-		if (plugins.length > 0) {
-			body.push(`\n${_('Plugins:')}`);
-			plugins.map((plugin)=>{
-				body.push(`${plugin.name}: ${plugin.version}`);
-			});
-		}
-		expect(body.length).toBe(0);
-	});
 
 	it('should return a empty array', () => {
 		const pluginsObjEmpty = {};
