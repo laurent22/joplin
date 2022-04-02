@@ -3,9 +3,14 @@ import Setting from './models/Setting';
 import { reg } from './registry';
 import PluginService, { Plugins } from '@joplin/lib/services/plugins/PluginService';
 
+export type PluginInfo = {
+	name: string;
+	version: string;
+};
+
 // Get Plugins in Array Form
-export const getPluginsArr = (pluginsObj: Plugins) => {
-	const plugins = [];
+export const getPluginsArr = (pluginsObj: Plugins): PluginInfo[] => {
+	const plugins: PluginInfo[] = [];
 	for (const pluginId in pluginsObj) {
 		plugins.push({
 			name: pluginsObj[pluginId].manifest.name,
