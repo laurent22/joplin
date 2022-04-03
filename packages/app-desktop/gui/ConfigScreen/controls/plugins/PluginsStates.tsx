@@ -37,7 +37,7 @@ const ToolsButton = styled(Button)`
 	margin-right: 6px;
 `;
 
-const RepoApiErrorMessage = styled(StyledMessage)<any>`
+const RepoApiErrorMessage = styled(StyledMessage) <any>`
 	max-width: ${props => props.maxWidth}px;
 	margin-bottom: 10px;
 `;
@@ -93,7 +93,7 @@ export default function(props: Props) {
 	const [searchQuery, setSearchQuery] = useState('');
 	const [manifestsLoaded, setManifestsLoaded] = useState<boolean>(false);
 	const [updatingPluginsIds, setUpdatingPluginIds] = useState<Record<string, boolean>>({});
-	const [canBeUpdatedPluginIds, setCanBeUpdatedPluginIds] = useState<Record<string, boolean>>({});
+	const [canBeUpdatedPluginIds, setCanBeUpdatedPluginIds] = useState<Record<string,boolean>>({});
 	const [repoApiError, setRepoApiError] = useState<Error>(null);
 	const [fetchManifestTime, setFetchManifestTime] = useState<number>(Date.now());
 
@@ -137,7 +137,7 @@ export default function(props: Props) {
 	}, [fetchManifestTime]);
 
 	useEffect(() => {
-		if (!manifestsLoaded) return () => {};
+		if (!manifestsLoaded) return () => { };
 
 		let cancelled = false;
 
@@ -145,7 +145,9 @@ export default function(props: Props) {
 			const pluginIds = await repoApi().canBeUpdatedPlugins(pluginItems.map(p => p.manifest));
 			if (cancelled) return;
 			const conv: Record<string, boolean> = {};
-			pluginIds.forEach(id => conv[id] = true);
+			pluginIds.forEach(plugin => {
+				conv[plugin.id] = plugin.needToUpdateApp;
+			});
 			setCanBeUpdatedPluginIds(conv);
 		}
 
@@ -241,6 +243,7 @@ export default function(props: Props) {
 			const onUpdateHandler = canBeUpdatedPluginIds[item.manifest.id] ? onUpdate : null;
 
 			let updateState = UpdateState.Idle;
+			updateState = canBeUpdatedPluginIds[item.manifest.id] ? UpdateState.Idle : UpdateState.needToUpdateApp;
 			if (onUpdateHandler) updateState = UpdateState.CanUpdate;
 			if (isUpdating) updateState = UpdateState.Updating;
 			if (item.hasBeenUpdated) updateState = UpdateState.HasBeenUpdated;
@@ -299,7 +302,7 @@ export default function(props: Props) {
 	function renderRepoApiError() {
 		if (!repoApiError) return null;
 
-		return <RepoApiErrorMessage maxWidth={maxWidth} type="error">{_('Could not connect to plugin repository.')}<br/><br/>- <StyledLink href="#" onClick={() => { setFetchManifestTime(Date.now()); }}>{_('Try again')}</StyledLink><br/><br/>- <StyledLink href="#" onClick={onBrowsePlugins}>{_('Browse all plugins')}</StyledLink></RepoApiErrorMessage>;
+		return <RepoApiErrorMessage maxWidth={maxWidth} type="error">{_('Could not connect to plugin repository.')}<br /><br />- <StyledLink href="#" onClick={() => { setFetchManifestTime(Date.now()); }}>{_('Try again')}</StyledLink><br /><br />- <StyledLink href="#" onClick={onBrowsePlugins}>{_('Browse all plugins')}</StyledLink></RepoApiErrorMessage>;
 	}
 
 	function renderBottomArea() {
@@ -309,7 +312,7 @@ export default function(props: Props) {
 			<div>
 				{renderRepoApiError()}
 				<div style={{ display: 'flex', flexDirection: 'row', maxWidth }}>
-					<ToolsButton size={ButtonSize.Small} tooltip={_('Plugin tools')} iconName="fas fa-cog" level={ButtonLevel.Secondary} onClick={onToolsClick}/>
+					<ToolsButton size={ButtonSize.Small} tooltip={_('Plugin tools')} iconName="fas fa-cog" level={ButtonLevel.Secondary} onClick={onToolsClick} />
 					<div style={{ display: 'flex', flex: 1 }}>
 						{props.renderHeader(props.themeId, _('Manage your plugins'))}
 					</div>

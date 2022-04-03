@@ -3,7 +3,7 @@ import shim from '../../shim';
 import { PluginManifest } from './utils/types';
 const md5 = require('md5');
 const compareVersions = require('compare-versions');
-
+const packageInfo = require('../../../app-desktop/packageInfo.js');
 const logger = Logger.create('RepositoryApi');
 
 interface ReleaseAsset {
@@ -215,21 +215,35 @@ export default class RepositoryApi {
 		return this.manifests_;
 	}
 
-	public async canBeUpdatedPlugins(installedManifests: PluginManifest[]): Promise<string[]> {
+	public async canBeUpdatedPlugins(installedManifests: PluginManifest[]): Promise<any[]> {
 		const output = [];
 
 		for (const manifest of installedManifests) {
-			const canBe = await this.pluginCanBeUpdated(manifest.id, manifest.version);
-			if (canBe) output.push(manifest.id);
+			const { status: canBe,needToUpdateApp: needToUpdateApp } = await this.pluginCanBeUpdated(manifest.id, manifest.version);
+			if (canBe) output.push({ id: manifest.id,needToUpdateApp: needToUpdateApp });
 		}
 
 		return output;
 	}
 
-	public async pluginCanBeUpdated(pluginId: string, installedVersion: string): Promise<boolean> {
+	public async pluginCanBeUpdated(pluginId: string, installedVersion: string): Promise<any> {
 		const manifest = (await this.manifests()).find(m => m.id === pluginId);
-		if (!manifest) return false;
-		return compareVersions(installedVersion, manifest.version) < 0;
+		if (!manifest) {
+			return {
+				status: false,
+			};
+		}
+		if (compareVersions(installedVersion,manifest.version) < 0) {
+			return {
+				status: compareVersions(packageInfo.version,manifest.app_min_version) < 0,
+				needToUpdateApp: true,
+			};
+		} else {
+			return {
+				status: compareVersions(installedVersion, manifest.version) < 0,
+				needToUpdateApp: false,
+			};
+		}
 	}
 
 }

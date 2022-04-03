@@ -16,8 +16,9 @@ export enum InstallState {
 export enum UpdateState {
 	Idle = 1,
 	CanUpdate = 2,
-	Updating = 3,
-	HasBeenUpdated = 4,
+	NeedToUpdateApp=3,
+	Updating = 4,
+	HasBeenUpdated = 5,
 }
 
 export interface ItemEvent {
@@ -229,7 +230,15 @@ export default function(props: Props) {
 				</CellFooter>
 			);
 		}
-
+		if (props.updateState === UpdateState.NeedToUpdateApp) {
+			return (
+				<CellFooter>
+					<NeedUpgradeMessage>
+						{_('Please upgrade Joplin to upgrade this plugin')}
+					</NeedUpgradeMessage>
+				</CellFooter>
+			);
+		}
 		return (
 			<CellFooter>
 				{renderDeleteButton()}
