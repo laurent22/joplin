@@ -16,19 +16,19 @@ Name | Type | Required? | Description
 `categories` | string[] | No  | Categories that describes the functionality of the plugin. |
 
 All the possible categories are:
-| Category | Description |
+| Category | Description of eligible plugin|
 | --- | --- |
-| appearance | specifies a plugin which deals with appearance of some element/s of the app for example line numbers, layout, etc. |
-| developer tools | specifies a plugin built for the developers. |
-| editor | specifies a plugin which enhances note editor. |
-| files | specifies a plugin which deals with files. For example Import/Export, Backup, etc. |
-| integrations | specifies a plugin which integrates third party services/apps with Joplin. |
-| personal knowledge management | specifies a plugins which manages/organizes notes. |
-| productivity | specifies a plugin which makes Joplin more productive to use. |
-| search | specifies a plugins which enhances search inside the app. |
-| tags | specifies a plugins which deals with note tags. |
-| themes | specifies a plugin which changes theme of the app. |
-| viewer | specifies a plugin which enhances the rendering of a note. |
+| appearance | dealing with appearance of some element/s of the app. For example line numbers, layout, etc. |
+| developer tools |  built for the developers. |
+| editor |  enhancing note editor. |
+| files |  dealing with files. For example Import/Export, Backup, etc. |
+| integrations | integrating third party services/apps with Joplin. |
+| personal knowledge management | managing/organizing notes. |
+| productivity | making Joplin more productive to use. |
+| search |  enhancing search inside the app. |
+| tags |  dealing with note tags. |
+| themes |  changing theme of the app. |
+| viewer | enhancing the rendering of a note. |
 
 ## Manifest example
 
