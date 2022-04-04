@@ -112,7 +112,15 @@ document.addEventListener('auxclick', event => event.preventDefault());
 // Each link (rendered as a button or list item) has its own custom click event
 // so disable the default. In particular this will disable Ctrl+Clicking a link
 // which would open a new browser window.
-document.addEventListener('click', (event) => event.preventDefault());
+document.addEventListener('click', (event) => {
+	// We don't apply this to labels and inputs because it would break
+	// checkboxes. Such a global event handler is probably not a good idea
+	// anyway but keeping it for now, as it doesn't seem to break anything else.
+	// https://github.com/facebook/react/issues/13477#issuecomment-489274045
+	if (['LABEL', 'INPUT'].includes(event.target.nodeName)) return;
+
+	event.preventDefault();
+});
 
 app().start(bridge().processArgv()).then((result) => {
 	if (!result || !result.action) {
