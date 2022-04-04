@@ -2,7 +2,7 @@ import { SubPath, redirect } from '../../utils/routeUtils';
 import Router from '../../utils/Router';
 import { RouteType } from '../../utils/types';
 import { AppContext } from '../../utils/types';
-import { findPrice, getFeatureList, getPlans, PricePeriod } from '@joplin/lib/utils/joplinCloud';
+import { findPrice, PricePeriod, PlanName, getFeatureLabel, getFeatureEnabled, getAllFeatureIds } from '@joplin/lib/utils/joplinCloud';
 import config from '../../config';
 import defaultView from '../../utils/defaultView';
 import { stripeConfig, stripePriceIdByUserId, updateSubscriptionType } from '../../utils/stripe';
@@ -28,21 +28,23 @@ router.get('upgrade', async (_path: SubPath, ctx: AppContext) => {
 		proLabel: string;
 	}
 
-	const plans = getPlans(stripeConfig());
-	const basicFeatureList = getFeatureList(plans.basic);
-	const proFeatureList = getFeatureList(plans.pro);
+	const featureIds = getAllFeatureIds();
 
 	const planRows: PlanRow[] = [];
 
-	for (let i = 0; i < basicFeatureList.length; i++) {
-		const basic = basicFeatureList[i];
-		const pro = proFeatureList[i];
+	for (let i = 0; i < featureIds.length; i++) {
+		const featureId = featureIds[i];
 
-		if (basic.label === pro.label && basic.enabled === pro.enabled) continue;
+		const basicLabel = getFeatureLabel(PlanName.Basic, featureId);
+		const proLabel = getFeatureLabel(PlanName.Pro, featureId);
+		const basicEnabled = getFeatureEnabled(PlanName.Basic, featureId);
+		const proEnabled = getFeatureEnabled(PlanName.Pro, featureId);
+
+		if (basicLabel === proLabel && basicEnabled === proEnabled) continue;
 
 		planRows.push({
-			basicLabel: basic.enabled ? basic.label : '-',
-			proLabel: pro.label,
+			basicLabel: basicEnabled ? basicLabel : '-',
+			proLabel: proLabel,
 		});
 	}
 
