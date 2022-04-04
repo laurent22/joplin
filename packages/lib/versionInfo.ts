@@ -1,6 +1,17 @@
 import { _ } from './locale';
 import Setting from './models/Setting';
 import { reg } from './registry';
+import PluginService, { Plugins } from '@joplin/lib/services/plugins/PluginService';
+
+export function getPluginList(allPlugins: Plugins) {
+	const plugins = [];
+	if (Object.keys(allPlugins).length > 0) {
+		for (const pluginId in allPlugins) {
+			plugins.push(`   ${allPlugins[pluginId].manifest.name}:${allPlugins[pluginId].manifest.version}`);
+		}
+	}
+	return plugins;
+}
 
 export default function versionInfo(packageInfo: any) {
 	const p = packageInfo;
@@ -35,6 +46,7 @@ export default function versionInfo(packageInfo: any) {
 	return {
 		header: header.join('\n'),
 		body: body.join('\n'),
+		plugins: getPluginList(PluginService.instance().plugins),
 		message: header.concat(body).join('\n'),
 	};
 }

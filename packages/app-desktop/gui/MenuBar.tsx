@@ -19,6 +19,8 @@ import stateToWhenClauseContext from '../services/commands/stateToWhenClauseCont
 import bridge from '../services/bridge';
 import checkForUpdates from '../checkForUpdates';
 
+
+
 const { connect } = require('react-redux');
 import { reg } from '@joplin/lib/registry';
 const packageInfo = require('../packageInfo.js');
@@ -428,7 +430,22 @@ function useMenu(props: Props) {
 			function _showAbout() {
 				const v = versionInfo(packageInfo);
 
-				const copyToClipboard = bridge().showMessageBox(v.message, {
+				const plugins = v.plugins;
+
+				let limitedPluginsList: string[] = [];
+
+				let allPluginsList = [`\n${plugins.length && _('Installed Plugins:')}`];
+
+				if (plugins.length <= 20 && plugins.length > 0) {
+					allPluginsList = allPluginsList.concat(plugins);
+					limitedPluginsList = allPluginsList;
+				} else if (plugins.length > 20) {
+					allPluginsList = allPluginsList.concat(plugins.slice(0, 20));
+					allPluginsList.push('   ...');
+					limitedPluginsList = allPluginsList.concat(plugins);
+				}
+
+				const copyToClipboard = bridge().showMessageBox(v.message.concat(allPluginsList.join('\n')), {
 					icon: `${bridge().electronApp().buildDir()}/icons/128x128.png`,
 					buttons: [_('Copy'), _('OK')],
 					cancelId: 1,
@@ -436,7 +453,7 @@ function useMenu(props: Props) {
 				});
 
 				if (copyToClipboard === 0) {
-					clipboard.writeText(v.body);
+					clipboard.writeText(v.body.concat(limitedPluginsList.join('\n')));
 				}
 			}
 
@@ -652,11 +669,11 @@ function useMenu(props: Props) {
 							},
 							accelerator: 'CommandOrControl+0',
 						}, {
-						// There are 2 shortcuts for the action 'zoom in', mainly to increase the user experience.
-						// Most applications handle this the same way. These applications indicate Ctrl +, but actually mean Ctrl =.
-						// In fact they allow both: + and =. On the English keyboard layout - and = are used without the shift key.
-						// So to use Ctrl + would mean to use the shift key, but this is not the case in any of the apps that show Ctrl +.
-						// Additionally it allows the use of the plus key on the numpad.
+							// There are 2 shortcuts for the action 'zoom in', mainly to increase the user experience.
+							// Most applications handle this the same way. These applications indicate Ctrl +, but actually mean Ctrl =.
+							// In fact they allow both: + and =. On the English keyboard layout - and = are used without the shift key.
+							// So to use Ctrl + would mean to use the shift key, but this is not the case in any of the apps that show Ctrl +.
+							// Additionally it allows the use of the plus key on the numpad.
 							label: _('Zoom In'),
 							click: () => {
 								Setting.incValue('windowContentZoomFactor', 10);
