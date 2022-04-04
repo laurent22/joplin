@@ -1,7 +1,7 @@
 import { _ } from './locale';
 import Setting from './models/Setting';
 import { reg } from './registry';
-import PluginService, { Plugins } from '@joplin/lib/services/plugins/PluginService';
+import { Plugins } from '@joplin/lib/services/plugins/PluginService';
 
 export type PluginInfo = {
 	name: string;
@@ -20,14 +20,17 @@ export const getPluginsArr = (pluginsObj: Plugins): PluginInfo[] => {
 	return plugins;
 };
 
-export default function versionInfo(packageInfo: any) {
+export default function versionInfo(
+	packageInfo: any,
+	pluginsObj: Plugins = {},
+	profileVersion: number = reg.db().version()
+) {
 	const p = packageInfo;
 	let gitInfo = '';
 	if ('git' in p) {
 		gitInfo = _('Revision: %s (%s)', p.git.hash, p.git.branch);
 		if (p.git.branch === 'HEAD') gitInfo = gitInfo.slice(0, -7);
 	}
-
 
 	const copyrightText = 'Copyright © 2016-YYYY Laurent Cozic';
 	const now = new Date();
@@ -43,7 +46,7 @@ export default function versionInfo(packageInfo: any) {
 		'',
 		_('Client ID: %s', Setting.value('clientId')),
 		_('Sync Version: %s', Setting.value('syncVersion')),
-		_('Profile Version: %s', reg.db().version()),
+		_('Profile Version: %s', profileVersion),
 		_('Keychain Supported: %s', Setting.value('keychain.supported') >= 1 ? _('Yes') : _('No')),
 	];
 
@@ -52,7 +55,7 @@ export default function versionInfo(packageInfo: any) {
 		console.info(gitInfo);
 	}
 
-	const plugins = getPluginsArr(PluginService.instance().plugins);
+	const plugins = getPluginsArr(pluginsObj);
 	if (plugins.length > 0) {
 		body.push(`\n${_('Plugins:')}`);
 		plugins.map((plugin)=>{

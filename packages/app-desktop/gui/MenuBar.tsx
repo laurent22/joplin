@@ -18,6 +18,7 @@ import menuCommandNames from './menuCommandNames';
 import stateToWhenClauseContext from '../services/commands/stateToWhenClauseContext';
 import bridge from '../services/bridge';
 import checkForUpdates from '../checkForUpdates';
+import PluginService from '@joplin/lib/services/plugins/PluginService';
 
 const { connect } = require('react-redux');
 import { reg } from '@joplin/lib/registry';
@@ -426,7 +427,7 @@ function useMenu(props: Props) {
 			}
 
 			function _showAbout() {
-				const v = versionInfo(packageInfo);
+				const v = versionInfo(packageInfo, PluginService.instance().plugins);
 
 				const copyToClipboard = bridge().showMessageBox(v.message, {
 					icon: `${bridge().electronApp().buildDir()}/icons/128x128.png`,
