@@ -243,7 +243,7 @@ export default function(props: Props) {
 			const onUpdateHandler = canBeUpdatedPluginIds[item.manifest.id] ? onUpdate : null;
 
 			let updateState = UpdateState.Idle;
-			updateState = canBeUpdatedPluginIds[item.manifest.id] ? UpdateState.Idle : UpdateState.needToUpdateApp;
+			updateState = canBeUpdatedPluginIds[item.manifest.id] ? UpdateState.Idle : UpdateState.NeedToUpdateApp;
 			if (onUpdateHandler) updateState = UpdateState.CanUpdate;
 			if (isUpdating) updateState = UpdateState.Updating;
 			if (item.hasBeenUpdated) updateState = UpdateState.HasBeenUpdated;
