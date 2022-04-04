@@ -12,10 +12,6 @@
 
 Moreover, by getting a subscription you are supporting the development of the project as a whole, including the open source applications. Such support is needed in the long term to provide bug and security fixes, add new features, and provide support.
 
-## What if I exceed the storage space?
-
-If you exceed the storage space, you will not be able to upload new notes. You may however delete notes and attachments so as to free up space. If you are on a Basic plan, you may also upgrade to Pro. If you are on a Pro or Business plan please contact us and let us know that you need more space and we will increase your storage space.
-
 ## Do you offer discounts?
 
 We offer a 50% Education Discount for students and teachers. To claim it, please [contact us](mailto:support@joplincloud.com) from your university or school email address. You will then receive a URL you can use to subscribe to Joplin Cloud while benefiting from the 50% discount. This is valid for a whole year and can be renewed for as long as you are in education by contacting us again.
