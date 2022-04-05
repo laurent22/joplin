@@ -53,7 +53,7 @@ describe('ShareService', function() {
 			},
 		});
 		await msleep(1);
-		await service.shareNote(note.id);
+		await service.shareNote(note.id, false);
 
 		function checkTimestamps(previousNote: NoteEntity, newNote: NoteEntity) {
 			// After sharing or unsharing, only the updated_time property should

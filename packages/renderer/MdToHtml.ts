@@ -148,6 +148,7 @@ export interface RuleOptions {
 
 	// Used by checkboxes to specify how it should be rendered
 	checkboxRenderingType?: number;
+	checkboxDisabled?: boolean;
 
 	// Used by the keyword highlighting plugin (mobile only)
 	highlightedKeywords?: any[];

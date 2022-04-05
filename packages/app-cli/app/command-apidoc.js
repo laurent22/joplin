@@ -313,6 +313,10 @@ async function fetchAllNotes() {
 				lines.push('');
 				lines.push('\tcurl -F \'data=@/path/to/file.jpg\' -F \'props={"title":"my resource title"}\' http://localhost:41184/resources');
 				lines.push('');
+				lines.push('Or to **update** a resource:');
+				lines.push('');
+				lines.push('\tcurl -X PUT -F \'data=@/path/to/file.jpg\' -F \'props={"title":"my modified title"}\' http://localhost:41184/resources/8fe1417d7b184324bf6b0122b76c4696');
+				lines.push('');
 				lines.push('The "data" field is required, while the "props" one is not. If not specified, default values will be used.');
 				lines.push('');
 				lines.push('**From a plugin** the syntax to create a resource is also a bit special:');
@@ -367,6 +371,11 @@ async function fetchAllNotes() {
 			lines.push('');
 			lines.push(`Sets the properties of the ${singular} with ID :id`);
 			lines.push('');
+
+			if (model.type === BaseModel.TYPE_RESOURCE) {
+				lines.push('You may also update the file data by specifying a file (See `POST /resources` example).');
+				lines.push('');
+			}
 
 			lines.push(`## DELETE /${tableName}/:id`);
 			lines.push('');
