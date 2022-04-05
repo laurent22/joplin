@@ -6,20 +6,20 @@ type FeatureId = string;
 export enum PlanName {
 	Basic = 'basic',
 	Pro = 'pro',
-	Team = 'team',
+	Teams = 'teams',
 }
 
 interface PlanFeature {
 	title: string;
 	basic: boolean;
 	pro: boolean;
-	team: boolean;
+	teams: boolean;
 	basicInfo?: string;
 	proInfo?: string;
-	teamInfo?: string;
+	teamsInfo?: string;
 	basicInfoShort?: string;
 	proInfoShort?: string;
-	teamInfoShort?: string;
+	teamsInfoShort?: string;
 }
 
 export interface Plan {
@@ -115,73 +115,73 @@ const features: Record<FeatureId, PlanFeature> = {
 		title: 'Publish notes to the internet',
 		basic: true,
 		pro: true,
-		team: true,
+		teams: true,
 		basicInfo: '10 MB per note or attachment',
 		proInfo: '200 MB per note or attachment',
-		teamInfo: '200 MB per note or attachment',
+		teamsInfo: '200 MB per note or attachment',
 		basicInfoShort: '10 MB',
 		proInfoShort: '200 MB',
-		teamInfoShort: '200 MB',
+		teamsInfoShort: '200 MB',
 	},
 	maxStorage: {
 		title: 'Storage space',
 		basic: true,
 		pro: true,
-		team: true,
+		teams: true,
 		basicInfo: '1 GB storage space',
 		proInfo: '200 GB storage space',
-		teamInfo: '200 GB storage space',
+		teamsInfo: '200 GB storage space',
 		basicInfoShort: '1 GB',
 		proInfoShort: '200 GB',
-		teamInfoShort: '200 GB',
+		teamsInfoShort: '200 GB',
 	},
 	publishNote: {
 		title: 'Publish notes to the internet',
 		basic: true,
 		pro: true,
-		team: true,
+		teams: true,
 	},
 	sync: {
 		title: 'Sync as many devices as you want',
 		basic: true,
 		pro: true,
-		team: true,
+		teams: true,
 	},
 	clipper: {
 		title: 'Web Clipper',
 		basic: true,
 		pro: true,
-		team: true,
+		teams: true,
 	},
 	collaborate: {
 		title: 'Share and collaborate on a notebook',
 		basic: false,
 		pro: true,
-		team: true,
+		teams: true,
 	},
 	multiUsers: {
 		title: 'Manage multiple users',
 		basic: false,
 		pro: false,
-		team: true,
+		teams: true,
 	},
 	consolidatedBilling: {
 		title: 'Consolidated billing',
 		basic: false,
 		pro: false,
-		team: true,
+		teams: true,
 	},
 	sharingAccessControl: {
 		title: 'Sharing access control',
 		basic: false,
 		pro: false,
-		team: true,
+		teams: true,
 	},
 	prioritySupport: {
 		title: 'Priority support',
 		basic: false,
 		pro: false,
-		team: true,
+		teams: true,
 	},
 };
 
@@ -256,8 +256,8 @@ export const createFeatureTableMd = () => {
 			label: 'Pro',
 		},
 		{
-			name: 'team',
-			label: 'Team',
+			name: 'teams',
+			label: 'Teams',
 		},
 	];
 
@@ -275,7 +275,7 @@ export const createFeatureTableMd = () => {
 			featureLabel: feature.title,
 			basic: getCellInfo(PlanName.Basic, feature),
 			pro: getCellInfo(PlanName.Pro, feature),
-			team: getCellInfo(PlanName.Team, feature),
+			teams: getCellInfo(PlanName.Teams, feature),
 		};
 
 		rows.push(row);
@@ -330,9 +330,9 @@ export function getPlans(stripeConfig: StripePublicConfig): Record<PlanName, Pla
 			footnote: '',
 		},
 
-		team: {
-			name: 'team',
-			title: 'Team',
+		teams: {
+			name: 'teams',
+			title: 'Teams',
 			priceMonthly: findPrice(stripeConfig.prices, {
 				accountType: 3,
 				period: PricePeriod.Monthly,
@@ -343,10 +343,10 @@ export function getPlans(stripeConfig: StripePublicConfig): Record<PlanName, Pla
 			}),
 			featured: false,
 			iconName: 'business-icon',
-			featuresOn: getFeatureIdsByPlan(PlanName.Team, true),
-			featuresOff: getFeatureIdsByPlan(PlanName.Team, false),
-			featureLabelsOn: getFeatureLabelsByPlan(PlanName.Team, true),
-			featureLabelsOff: getFeatureLabelsByPlan(PlanName.Team, false),
+			featuresOn: getFeatureIdsByPlan(PlanName.Teams, true),
+			featuresOff: getFeatureIdsByPlan(PlanName.Teams, false),
+			featureLabelsOn: getFeatureLabelsByPlan(PlanName.Teams, true),
+			featureLabelsOff: getFeatureLabelsByPlan(PlanName.Teams, false),
 			cfaLabel: 'Try it now',
 			cfaUrl: '',
 			footnote: 'Per user. Minimum of 2 users.',

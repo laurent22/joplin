@@ -42,7 +42,7 @@
 				"accountType": 3,
 				"id": "price_1Kl9uNLx4fybOTqJpsB2l3Kg",
 				"period": "yearly",
-				"amount": "80",
+				"amount": "80.28",
 				"currency": "EUR"
 			}
 		]		
@@ -90,7 +90,7 @@
 				"accountType": 3,
 				"id": "price_1Kl9nLLx4fybOTqJYTtts35z",
 				"period": "yearly",
-				"amount": "80",
+				"amount": "80.28",
 				"currency": "EUR"
 			}
 		]
