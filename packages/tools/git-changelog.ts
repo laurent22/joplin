@@ -92,7 +92,7 @@ function platformFromTag(tagName: string): Platform {
 }
 
 function filterLogs(logs: LogEntry[], platform: Platform) {
-	const output = [];
+	const output: LogEntry[] = [];
 	const revertedLogs = [];
 
 	// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
@@ -126,7 +126,7 @@ function filterLogs(logs: LogEntry[], platform: Platform) {
 		if (platform === 'cli' && prefix.indexOf('cli') >= 0) addIt = true;
 		if (platform === 'clipper' && prefix.indexOf('clipper') >= 0) addIt = true;
 		if (platform === 'server' && prefix.indexOf('server') >= 0) addIt = true;
-		if (platform === 'cloud' && (prefix.indexOf('cloud') >= 0 || prefix.indexOf('server'))) addIt = true;
+		if (platform === 'cloud' && (prefix.indexOf('cloud') >= 0 || prefix.indexOf('server') >= 0)) addIt = true;
 
 		// Translation updates often comes in format "Translation: Update pt_PT.po"
 		// but that's not useful in a changelog especially since most people
@@ -134,6 +134,11 @@ function filterLogs(logs: LogEntry[], platform: Platform) {
 		// bundle them all up in a single "Updated translations" at the end.
 		if (log.message.match(/Translation: Update .*?\.po/)) {
 			// updatedTranslations = true;
+			addIt = false;
+		}
+
+		// Remove duplicate messages
+		if (output.find(l => l.message === log.message)) {
 			addIt = false;
 		}
 

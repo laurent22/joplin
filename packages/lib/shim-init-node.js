@@ -221,10 +221,15 @@ function shimInit(options = null) {
 		return true;
 	};
 
+	// This is a bit of an ugly method that's used to both create a new resource
+	// from a file, and update one. To update a resource, pass the
+	// destinationResourceId option. This method is indirectly tested in
+	// Api.test.ts.
 	shim.createResourceFromPath = async function(filePath, defaultProps = null, options = null) {
 		options = Object.assign({
 			resizeLargeImages: 'always', // 'always', 'ask' or 'never'
 			userSideValidation: false,
+			destinationResourceId: '',
 		}, options);
 
 		const readChunk = require('read-chunk');
@@ -236,9 +241,10 @@ function shimInit(options = null) {
 
 		defaultProps = defaultProps ? defaultProps : {};
 
-		const resourceId = defaultProps.id ? defaultProps.id : uuid.create();
+		let resourceId = defaultProps.id ? defaultProps.id : uuid.create();
+		if (options.destinationResourceId) resourceId = options.destinationResourceId;
 
-		const resource = Resource.new();
+		let resource = options.destinationResourceId ? {} : Resource.new();
 		resource.id = resourceId;
 		resource.mime = mimeUtils.fromFilename(filePath);
 		resource.title = basename(filePath);
@@ -281,7 +287,18 @@ function shimInit(options = null) {
 
 		const saveOptions = { isNew: true };
 		if (options.userSideValidation) saveOptions.userSideValidation = true;
-		return Resource.save(resource, saveOptions);
+
+		if (options.destinationResourceId) {
+			saveOptions.isNew = false;
+			const tempPath = `${targetPath}.tmp`;
+			await shim.fsDriver().move(targetPath, tempPath);
+			resource = await Resource.save(resource, saveOptions);
+			await Resource.updateResourceBlobContent(resource.id, tempPath);
+			await shim.fsDriver().remove(tempPath);
+			return resource;
+		} else {
+			return Resource.save(resource, saveOptions);
+		}
 	};
 
 	shim.attachFileToNoteBody = async function(noteBody, filePath, position = null, options = null) {

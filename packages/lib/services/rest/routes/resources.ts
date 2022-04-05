@@ -47,13 +47,17 @@ export default async function(request: Request, id: string = null, link: string 
 		if (link) throw new ErrorNotFound();
 	}
 
-	if (request.method === RequestMethod.POST) {
+	if (request.method === RequestMethod.POST || request.method === RequestMethod.PUT) {
+		const isUpdate = request.method === RequestMethod.PUT;
+
 		if (!request.files.length) throw new ErrorBadRequest('Resource cannot be created without a file');
+		if (isUpdate && !id) throw new ErrorBadRequest('Missing resource ID');
 		const filePath = request.files[0].path;
-		const defaultProps = request.bodyJson(readonlyProperties('POST'));
+		const defaultProps = request.bodyJson(readonlyProperties(request.method));
 		return shim.createResourceFromPath(filePath, defaultProps, {
 			userSideValidation: true,
 			resizeLargeImages: 'never',
+			destinationResourceId: isUpdate ? id : '',
 		});
 	}
 
