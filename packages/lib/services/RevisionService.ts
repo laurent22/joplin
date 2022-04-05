@@ -10,6 +10,7 @@ import BaseService from './BaseService';
 import { _ } from '../locale';
 import { ItemChangeEntity, NoteEntity, RevisionEntity } from './database/types';
 import Logger from '../Logger';
+import { MarkupLanguage } from '../../renderer';
 const { substrWithEllipsis } = require('../string-utils');
 const { sprintf } = require('sprintf-js');
 const { wrapError } = require('../errorUtils');
@@ -217,7 +218,7 @@ export default class RevisionService extends BaseService {
 		return Revision.deleteOldRevisions(ttl);
 	}
 
-	async revisionNote(revisions: RevisionEntity[], index: number) {
+	public async revisionNote(revisions: RevisionEntity[], index: number) {
 		if (index < 0 || index >= revisions.length) throw new Error(`Invalid revision index: ${index}`);
 
 		const rev = revisions[index];
@@ -233,6 +234,7 @@ export default class RevisionService extends BaseService {
 		output.updated_time = output.user_updated_time;
 		output.created_time = output.user_created_time;
 		(output as any).type_ = BaseModel.TYPE_NOTE;
+		if (!('markup_language' in output)) output.markup_language = MarkupLanguage.Markdown;
 
 		return output;
 	}

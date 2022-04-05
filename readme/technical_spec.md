@@ -68,12 +68,4 @@ Please provide test units if possible.
 
 If it's for GSoC, test units are compulsory. We don't accept pull requests without.
 
-In general try to think how you can unit test your code - sometimes it means refactoring some parts of it into a few functions, which can then be easily unit tested. Integration tests may be trickier so they are not always required.
-
-Additionally, if the unit tests are not sufficient, please provide a manual testing plan, which should include detailed steps on:
-
-- How to test that your feature is working. Include at least 5 tests. Try to think of the possible inputs - if it's a list, how does it work with 0 elements, or 1, or 10, or 100,000. If it's a text input, how does it work with an empty string, or a very large string, etc. Basically don't just put one test that check the best case scenario.
-
-- How to verify that related parts of the applications are not broken. For example if you changed the note loading logic, check that the toolbar is still working as expected (and not modifying the previously loaded note for example), check that switching from one note to another still works. Look at the note list and verify that the note title is updated there too, etc.
-
-A reviewer should be able to run the app with your changes, then do the above steps to verify that everything's working as expected.
+For information on how to created unit tests, please see the [Automated Tests](https://github.com/laurent22/joplin/blob/dev/CONTRIBUTING.md#automated-tests) documentation.
