@@ -2,12 +2,14 @@
 # Copyright (C) 2001 Laurent Cozic
 # This file is distributed under the same license as the Joplin-CLI package.
 # Hrvoje Mandić <trbuhom@net.hr>
-# Milo Ivir <mail@milotype.de>, 2021.
+# Milo Ivir <mail@milotype.de>, 2021., 2022.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Joplin 1.7.11\n"
+"Project-Id-Version: Joplin\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: \n"
 "Language: hr\n"
@@ -267,11 +269,11 @@ msgstr "Dodaj u rječnik"
 #: packages/server/src/services/MustacheService.ts:183
 #: packages/server/src/services/MustacheService.ts:307
 msgid "Admin"
-msgstr ""
+msgstr "Administrator"
 
 #: packages/server/src/routes/admin/dashboard.ts:10
 msgid "Admin dashboard"
-msgstr ""
+msgstr "Pregledna ploča administratora"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:189
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:147
@@ -396,16 +398,15 @@ msgstr "Automatski"
 
 #: packages/server/src/services/TaskService.ts:39
 msgid "Auto-add disabled accounts for deletion"
-msgstr ""
+msgstr "Automatski dodaj deaktivirane račune za brisanje"
 
 #: packages/lib/models/Setting.ts:855
 msgid "Auto-pair braces, parenthesis, quotations, etc."
 msgstr "Automatski uskladi zagrade, navodnike itd."
 
 #: packages/lib/models/Setting.ts:1195
-#, fuzzy
 msgid "Automatically check for updates"
-msgstr "Traži nove verzije …"
+msgstr "Automatski traži nove verzije"
 
 #: packages/lib/models/Setting.ts:772
 msgid "Automatically switch theme to match system theme"
@@ -709,7 +710,7 @@ msgstr "Završeno: %s (%s)"
 
 #: packages/server/src/services/TaskService.ts:37
 msgid "Compress old changes"
-msgstr ""
+msgstr "Komprimiraj stare promjene"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:637
 #: packages/app-mobile/components/side-menu-content.js:332
@@ -771,9 +772,8 @@ msgid "Copy external link"
 msgstr "Kopiraj vanjsku poveznicu"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:134
-#, fuzzy
 msgid "Copy image"
-msgstr "Kopiraj ključ"
+msgstr "Kopiraj sliku"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:172
 msgid "Copy Link Address"
@@ -860,20 +860,20 @@ msgid ""
 "Could not verify the share status of this notebook - aborting. Please try "
 "again when you are connected to the internet."
 msgstr ""
+"Nije moguće provjeriti stanje dijeljenja ove bilježnice – prekid. Pokušaj "
+"ponovo kad si povezan/a s internetom."
 
 #: packages/app-mobile/components/note-list.js:101
 msgid "Create a notebook"
 msgstr "Stvori bilježnicu"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:161
-#, fuzzy
 msgid "Create notebook"
 msgstr "Stvori bilježnicu"
 
 #: packages/server/src/routes/admin/users.ts:171
-#, fuzzy
 msgid "Create user"
-msgstr "Stvoreno: %s"
+msgstr "Stvori korisnika"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:29
 msgid "Created"
@@ -965,7 +965,7 @@ msgstr "Tamna"
 
 #: packages/server/src/services/MustacheService.ts:136
 msgid "Dashboard"
-msgstr ""
+msgstr "Pregledna ploča"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:625
 msgid "Database v%s"
@@ -1022,14 +1022,12 @@ msgid "Delete attachment \"%s\"?"
 msgstr "Izbrisati privitak „%s”?"
 
 #: packages/server/src/services/TaskService.ts:36
-#, fuzzy
 msgid "Delete expired sessions"
-msgstr "Aktiviraj matematičke izraze"
+msgstr "Izbriši istekle sesije"
 
 #: packages/server/src/services/TaskService.ts:31
-#, fuzzy
 msgid "Delete expired tokens"
-msgstr "Izbrisati ove %d bilješke?"
+msgstr "Izbriši istekle tokene"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:88
 msgid "Delete line"
@@ -1349,12 +1347,12 @@ msgstr "Emacs"
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:236
 #: packages/server/src/routes/admin/emails.ts:128
 msgid "Email"
-msgstr ""
+msgstr "E-mail"
 
 #: packages/server/src/routes/admin/emails.ts:112
 #: packages/server/src/services/MustacheService.ts:152
 msgid "Emails"
-msgstr ""
+msgstr "E-mailovi"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:194
 msgid "emphasised text"
@@ -1702,7 +1700,7 @@ msgstr "Za popis tipkovnih prečaca i opcija konfiguracije, upiši `help keymap`
 
 #: packages/lib/models/Setting.ts:569
 msgid "Force path style"
-msgstr ""
+msgstr "Prisili stil putanje"
 
 #: packages/lib/commands/historyForward.ts:6
 msgid "Forward"
@@ -1773,7 +1771,6 @@ msgid "Heading"
 msgstr "Naslov"
 
 #: packages/server/src/services/MustacheService.ts:305
-#, fuzzy
 msgid "Help"
 msgstr "Pomoć"
 
@@ -1796,7 +1793,7 @@ msgstr "Istaknuto"
 #: packages/server/src/services/MustacheService.ts:167
 #: packages/server/src/services/MustacheService.ts:300
 msgid "Home"
-msgstr ""
+msgstr "Početak"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:78
 msgid "Horizontal Rule"
@@ -1816,7 +1813,7 @@ msgstr "Poveznica"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:136
 msgid "Icon"
-msgstr ""
+msgstr "Ikona"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:179
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:329
@@ -1840,7 +1837,7 @@ msgstr "Zanemari greške TLS certifikata"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:102
 msgid "Images"
-msgstr ""
+msgstr "Slike"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:170
 #: packages/app-desktop/gui/MenuBar.tsx:484
@@ -2012,9 +2009,8 @@ msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Neispravna vrijednost opcije: „%s”. Moguće vrijednosti su: %s."
 
 #: packages/app-cli/app/command-e2ee.ts:46
-#, fuzzy
 msgid "Invalid password"
-msgstr "Neispravan odgovor: %s"
+msgstr "Neispravna lozinka"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:38
 msgid "Italic"
@@ -2027,7 +2023,7 @@ msgstr "Nije bilo moguće preuzeti element „%s”: %s"
 #: packages/server/src/services/MustacheService.ts:175
 #: packages/server/src/services/MustacheService.ts:302
 msgid "Items"
-msgstr ""
+msgstr "Elementi"
 
 #: packages/lib/services/ReportService.ts:208
 msgid "Items that cannot be decrypted"
@@ -2246,11 +2242,11 @@ msgstr "Prijavi se s OneDrive"
 
 #: packages/server/src/services/MustacheService.ts:306
 msgid "Logout"
-msgstr ""
+msgstr "Odjava"
 
 #: packages/server/src/services/MustacheService.ts:179
 msgid "Logs"
-msgstr ""
+msgstr "Dnevnici"
 
 #: packages/app-desktop/gui/MenuBar.tsx:716
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:583
@@ -2580,9 +2576,8 @@ msgid "Note&book"
 msgstr "Biljež&nica"
 
 #: packages/lib/models/Setting.ts:2145
-#, fuzzy
 msgid "Notebook"
-msgstr "Bilježnice"
+msgstr "Bilježnica"
 
 #: packages/lib/models/Setting.ts:1380
 msgid "Notebook list growth factor"
@@ -2603,9 +2598,8 @@ msgstr "Naslov „%s” je rezerviran i ne može se koristiti za bilježnice."
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleNotesSortOrderField.ts:8
 #: packages/app-desktop/gui/MainScreen/commands/toggleNotesSortOrderReverse.ts:9
-#, fuzzy
 msgid "Notes"
-msgstr "Bilješka"
+msgstr "Bilješke"
 
 #: packages/lib/models/Setting.ts:2161
 msgid "Notes and settings are stored in: %s"
@@ -2712,9 +2706,8 @@ msgid "Or create an account."
 msgstr "Ili stvori novi račun."
 
 #: packages/app-desktop/gui/MenuBar.tsx:352
-#, fuzzy
 msgid "Other applications..."
-msgstr "Zatvara program."
+msgstr "Drugi programi …"
 
 #: packages/app-cli/app/command-import.js:27
 msgid "Output format: %s"
@@ -2915,19 +2908,19 @@ msgstr "Politika privatnosti"
 
 #: packages/server/src/services/TaskService.ts:35
 msgid "Process failed payment subscriptions"
-msgstr ""
+msgstr "Obradi neuspjela plaćanja pretplata"
 
 #: packages/server/src/services/TaskService.ts:33
 msgid "Process oversized accounts"
-msgstr ""
+msgstr "Obradi prevelike račune"
 
 #: packages/server/src/services/TaskService.ts:38
 msgid "Process user deletions"
-msgstr ""
+msgstr "Obradi brisanja korisnika"
 
 #: packages/server/src/routes/admin/users.ts:168
 msgid "Profile"
-msgstr ""
+msgstr "Profil"
 
 #: packages/lib/versionInfo.ts:26
 msgid "Profile Version: %s"
@@ -3111,31 +3104,27 @@ msgstr ""
 
 #: packages/lib/SyncTargetAmazonS3.js:28
 msgid "S3"
-msgstr ""
+msgstr "S3"
 
 #: packages/lib/models/Setting.ts:547
-#, fuzzy
 msgid "S3 access key"
-msgstr "AWS ključ"
+msgstr "S3 pristupni ključ"
 
 #: packages/lib/models/Setting.ts:507
-#, fuzzy
 msgid "S3 bucket"
-msgstr "AWS S3 bucket"
+msgstr "S3 bucket"
 
 #: packages/lib/models/Setting.ts:536
 msgid "S3 region"
-msgstr ""
+msgstr "S3 područje"
 
 #: packages/lib/models/Setting.ts:558
-#, fuzzy
 msgid "S3 secret key"
-msgstr "AWS tajna"
+msgstr "S3 tajni ključ"
 
 #: packages/lib/models/Setting.ts:522
-#, fuzzy
 msgid "S3 URL"
-msgstr "AWS S3 URL"
+msgstr "S3 URL"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:579
 msgid ""
@@ -3212,14 +3201,12 @@ msgid "Select all"
 msgstr "Označi sve"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:140
-#, fuzzy
 msgid "Select emoji..."
-msgstr "Odaberi datum"
+msgstr "Odaberi emoji …"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:144
-#, fuzzy
 msgid "Select file..."
-msgstr "Označi sve"
+msgstr "Odaberi datoteku …"
 
 #: packages/app-cli/app/command-server.js:38
 msgid "Server is already running on port %d"
@@ -3311,9 +3298,8 @@ msgid "Show note counts"
 msgstr "Prikaži broj bilježaka"
 
 #: packages/lib/models/Setting.ts:868
-#, fuzzy
 msgid "Show sort order buttons"
-msgstr "Prikaži broj bilježaka"
+msgstr "Prikaži gumbe za mijenjanje redoslijeda"
 
 #: packages/lib/models/Setting.ts:1044
 msgid "Show tray icon"
@@ -3644,7 +3630,7 @@ msgstr "Snimi sliku"
 #: packages/server/src/services/MustacheService.ts:148
 #: packages/server/src/services/MustacheService.ts:304
 msgid "Tasks"
-msgstr ""
+msgstr "Zadaci"
 
 #: packages/lib/models/Setting.ts:1230
 msgid "Text editor command"
@@ -4117,9 +4103,8 @@ msgid "Toggle note list"
 msgstr "Uključi/Isključi popis bilježaka"
 
 #: packages/app-desktop/gui/MainScreen/commands/togglePerFolderSortOrder.ts:7
-#, fuzzy
 msgid "Toggle own sort order"
-msgstr "Uključi/Isključi sigurni modus"
+msgstr "Uključi/Isključi vlastiti redoslijed"
 
 #: packages/app-desktop/commands/toggleSafeMode.ts:8
 msgid "Toggle safe mode"
@@ -4130,9 +4115,8 @@ msgid "Toggle sidebar"
 msgstr "Uključi/Isključi bočnu traku"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleNotesSortOrderField.ts:7
-#, fuzzy
 msgid "Toggle sort order field"
-msgstr "Uključi/Isključi sigurni modus"
+msgstr "Uključi/Isključi redoslijed polja"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:40
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:41
@@ -4236,14 +4220,12 @@ msgstr "Aktualiziraj"
 
 #: packages/server/src/routes/admin/users.ts:171
 #: packages/server/src/routes/index/users.ts:89
-#, fuzzy
 msgid "Update profile"
-msgstr "Izvezi profil"
+msgstr "Aktualiziraj profil"
 
 #: packages/server/src/services/TaskService.ts:32
-#, fuzzy
 msgid "Update total sizes"
-msgstr "Aktualizirani lokalni elementi: %d."
+msgstr "Aktualiziraj ukupne veličine"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:208
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:209
@@ -4349,13 +4331,13 @@ msgstr ""
 
 #: packages/server/src/services/MustacheService.ts:144
 msgid "User deletions"
-msgstr ""
+msgstr "Brisanja korisnika"
 
 #: packages/server/src/routes/admin/users.ts:107
 #: packages/server/src/services/MustacheService.ts:140
 #: packages/server/src/services/MustacheService.ts:301
 msgid "Users"
-msgstr ""
+msgstr "Korisnici"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:182
 msgid "Valid"
@@ -4510,12 +4492,12 @@ msgstr ""
 "Tvoja glavna lozinka je potrebna za dešifriranje nekih tvojih podataka."
 
 #: packages/app-cli/app/command-sync.ts:242
-#, fuzzy
 msgid ""
 "Your password is needed to decrypt some of your data. Type `:e2ee decrypt` "
 "to set it."
 msgstr ""
-"Tvoja glavna lozinka je potrebna za dešifriranje nekih tvojih podataka."
+"Tvoja lozinka je potrebna za dešifriranje nekih tvojih podataka. Za "
+"postavljanje utipkaj `:e2ee decrypt`."
 
 #: packages/app-mobile/components/CameraView.tsx:189
 msgid "Your permission to use your camera is required."
@@ -4528,11 +4510,11 @@ msgstr "Tvoja verzija: %s"
 #: packages/app-desktop/gui/MenuBar.tsx:653
 #: packages/app-desktop/gui/MenuBar.tsx:659
 msgid "Zoom In"
-msgstr "Uvećaj"
+msgstr "Uvećaj prikaz"
 
 #: packages/app-desktop/gui/MenuBar.tsx:666
 msgid "Zoom Out"
-msgstr "Umanji"
+msgstr "Umanji prikaz"
 
 #~ msgid "Automatically update the application"
 #~ msgstr "Automatski aktualiziraj program"

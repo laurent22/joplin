@@ -13,6 +13,8 @@ Otherwise, follow these instructions:
 - The development tools should now be opened. Click the "Console" tab
 - Now repeat the action that was causing problem. The console might output warnings or errors - please add them to the GitHub issue. Also open log.txt in the config folder and if there is any error or warning, please also add them to the issue.
 
+Make sure you disable debugging once you've finished. Leaving it enabled can cause your log.txt to grow very quickly. To disable debugging, simply delete the "flags.txt" file created.
+
 ## CLI application
 
 - Start the app with `joplin --debug --log-level debug`
