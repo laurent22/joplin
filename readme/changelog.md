@@ -3299,6 +3299,53 @@ Note: This is the same as v84 but with the note creation bug fixed.
 
 - Fixes [#365](https://github.com/laurent22/joplin/issues/365): Cannot paste in Dropbox screen
 
+## [v1.0.82](https://github.com/laurent22/joplin/releases/tag/v1.0.82) - 2018-03-31T19:16:31Z
+
+- Updated translations
+
+## [v1.0.81](https://github.com/laurent22/joplin/releases/tag/v1.0.81) - 2018-03-28T08:13:58Z
+
+- New: Dropbox synchronisation
+- New: Czech translation
+- Fixes [#318](https://github.com/laurent22/joplin/issues/318): Display full links in editor
+- Resolves [#329](https://github.com/laurent22/joplin/issues/329): Add link to E2EE doc
+
+## [v1.0.79](https://github.com/laurent22/joplin/releases/tag/v1.0.79) - 2018-03-23T18:00:11Z
+
+- New: Resolves [#144](https://github.com/laurent22/joplin/issues/144), Resolves [#311](https://github.com/laurent22/joplin/issues/311): Highlight search results and search in real time. Associated Ctrl+F with searching.
+- New: Resolves [#73](https://github.com/laurent22/joplin/issues/73): Show modified date next to note in editor
+- New: Danish translation
+- Improved: Fixes [#318](https://github.com/laurent22/joplin/issues/318), Fixes [#317](https://github.com/laurent22/joplin/issues/317): ENEX: Improved handling and rendering of plain text links. Improved detection and import of resources. Improved import of tables.
+- Updated: Resolves [#307](https://github.com/laurent22/joplin/issues/307): Use blue colour for sidebar, to be consistent with mobile app and logo
+- Updated: Translations
+
+## [v1.0.78](https://github.com/laurent22/joplin/releases/tag/v1.0.78) - 2018-03-17T15:27:18Z
+
+- Improved: Handle deletion of resources that are not linked to any note
+
+## [v1.0.77](https://github.com/laurent22/joplin/releases/tag/v1.0.77) - 2018-03-16T15:12:35Z
+
+Note: This fixes an invalid database upgrade in the previous version.
+
+- New: Resolves [#237](https://github.com/laurent22/joplin/issues/237): Export to PDF and print option
+- New: Resolves [#154](https://github.com/laurent22/joplin/issues/154): No longer used resources are automatically deleted after approximately 24h
+- Improved: Resolves [#298](https://github.com/laurent22/joplin/issues/298): Removed extraneous first characters from auto-title
+- Improved: Made WebDAV options dynamics so that changing username or password doesn't require restarting the app
+- Fix: Fixes [#291](https://github.com/laurent22/joplin/issues/291): Crash with empty backtick
+- Fix: Fixes [#292](https://github.com/laurent22/joplin/issues/292): Improved auto-update feature and fixed incorrect notifications
+- Fix: Signed executables on Windows
+- Updated Russian, German, Portuguese, Spanish and French translations. Many thanks to the translators!
+
+## [v1.0.72](https://github.com/laurent22/joplin/releases/tag/v1.0.72) - 2018-03-14T09:44:35Z
+
+- New: Allow exporting only selected notes or notebook
+- New: Resolves [#266](https://github.com/laurent22/joplin/issues/266): Allow setting text editor font family
+- New: Display icon next to resources and allow downloading them from Electron client
+- Improved: Optimised sync when dealing with many items, in particular when using Nextcloud or WebDAV
+- Improved: Display last sync error unless it's a timeout or network error
+- Improved: Fixes [#268](https://github.com/laurent22/joplin/issues/268): Improve error message for invalid flags
+- Fix: Fixes [#271](https://github.com/laurent22/joplin/issues/271): Sort by created time was not respected
+
 ## [v1.0.70](https://github.com/laurent22/joplin/releases/tag/v1.0.70) - 2018-02-28T20:04:30Z
 
 - New: Resolves [#97](https://github.com/laurent22/joplin/issues/97): Export to JEX format or RAW format
@@ -3454,49 +3501,6 @@ IMPORTANT: If you use Nextcloud it is recommended to sync all your notes before 
 - Fixes [#86](https://github.com/laurent22/joplin/issues/86): App icon missing on Linux
 - Fixes [#87](https://github.com/laurent22/joplin/issues/87): Show warningn when deleting notebook that contains notes.
 - Fixes [#3](https://github.com/laurent22/joplin/issues/3): Paths with '.' would cause JSX compilation to fail
-
-## [v0.10.38](https://github.com/laurent22/joplin/releases/tag/v0.10.38) - 2017-12-08T10:12:06Z
-
-- Dialog to export sync status
-- Enabled support for filesystem sync
-
-## [v0.10.37](https://github.com/laurent22/joplin/releases/tag/v0.10.37) - 2017-12-07T19:38:05Z
-
-- Better handling of items that cannot be synchronised (for example, if they exceed the max file size supported by the target)
-- Added Synchronisation Status screen
-- Improved Enex support:
-    - Better handling of notes containing entire web pages (such as when imported via Web Clipper)
-    - Support for `<img>` tags
-    - Support for various other tags
-    - Improved importing web pages that contain tables within tables. In which case the outer tables (which are usually the website layout) are rendered as regular text block and only the inner tables are actually rendered as tables.
-     - Fixed many other minor warnings and errors
-- Allow setting installation directory in Windows
-
-## [v0.10.36](https://github.com/laurent22/joplin/releases/tag/v0.10.36) - 2017-12-05T09:34:40Z
-
-- All: Improved synchronisation when sync target has unreliable timestamps
-- All: Fixed display issue - when items were modified during sync it could result in blank rows being displayed in note lists.
-
-## [v0.10.35](https://github.com/laurent22/joplin/releases/tag/v0.10.35) - 2017-12-02T15:56:08Z
-
-- All: Fixed sync issue and database migration issue
-
-## [v0.10.34](https://github.com/laurent22/joplin/releases/tag/v0.10.34) - 2017-12-02T14:50:28Z
-
-- All: fixed database creation error
-- All: Improved Evernote import for blockquotes and sup tags
-- CLI: Fixed crash when inputting command without closed quote
-- CLI: Allow Backspace key to delete items on macOS
-- Electron: Fixed header font sizes
-- Electron: Fix [#33](https://github.com/laurent22/joplin/issues/33): Allow copy and paste in OneDrive login
-- Electron: Fixes [#32](https://github.com/laurent22/joplin/issues/32): Error when manually input alarm date
-- Electron: Allow attaching multiple files
-- All: Allow attaching files of unknown mime type
-- All: Added error for OneDrive for Business
-
-## [v0.10.33](https://github.com/laurent22/joplin/releases/tag/v0.10.33) - 2017-12-02T13:20:39Z
-
-- Improved Evernote import for blockquotes and sup tags
 
 ## [v0.10.38](https://github.com/laurent22/joplin/releases/tag/v0.10.38) - 2017-12-08T10:12:06Z
 
