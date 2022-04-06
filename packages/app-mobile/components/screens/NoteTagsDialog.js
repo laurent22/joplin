@@ -7,7 +7,6 @@ const { _ } = require('@joplin/lib/locale');
 const { themeStyle } = require('../global-style.js');
 const Icon = require('react-native-vector-icons/Ionicons').default;
 const ModalDialog = require('../ModalDialog');
-const naturalCompare = require('string-natural-compare');
 
 Icon.loadFont();
 
@@ -114,7 +113,7 @@ class NoteTagsDialogComponent extends React.Component {
 		});
 
 		tagListData.sort((a, b) => {
-			if (a.selected === b.selected) return naturalCompare.caseInsensitive(a.title, b.title);
+			if (a.selected === b.selected) return a.title.localeCompare(b.title, undefined, { sensitivity: 'accent' });
 			else if (b.selected === true) return 1;
 			else return -1;
 		});

@@ -83,7 +83,7 @@ class TagsScreenComponent extends BaseScreenComponent {
 	async componentDidMount() {
 		const tags = await Tag.allWithNotes();
 		tags.sort((a, b) => {
-			return a.title.toLowerCase() < b.title.toLowerCase() ? -1 : +1;
+			return a.title.localeCompare(b.title, undefined, { sensitivity: 'accent' });
 		});
 		this.setState({ tags: tags });
 	}
