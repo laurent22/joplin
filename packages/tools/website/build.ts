@@ -14,7 +14,7 @@ const glob = require('glob');
 const path = require('path');
 const md5File = require('md5-file/promise');
 
-const env = Env.Dev;
+const env = Env.Prod;
 
 const docDir = `${dirname(dirname(dirname(dirname(__dirname))))}/joplin-website/docs`;
 
