@@ -3,7 +3,7 @@ import { rootDir } from '../tool-utils';
 import { pressCarouselItems } from './utils/pressCarousel';
 import { getMarkdownIt, loadMustachePartials, markdownToPageHtml, renderMustache } from './utils/render';
 import { AssetUrls, Env, PlanPageParams, Sponsors, TemplateParams } from './utils/types';
-import { getPlans, loadStripeConfig } from '@joplin/lib/utils/joplinCloud';
+import { createFeatureTableMd, getPlans, loadStripeConfig } from '@joplin/lib/utils/joplinCloud';
 import { MarkdownAndFrontMatter, stripOffFrontMatter } from './utils/frontMatter';
 import { dirname, basename } from 'path';
 import { readmeFileTitle, replaceGitHubByWebsiteLinks } from './utils/parser';
@@ -14,7 +14,7 @@ const glob = require('glob');
 const path = require('path');
 const md5File = require('md5-file/promise');
 
-const env = Env.Prod;
+const env = Env.Dev;
 
 const docDir = `${dirname(dirname(dirname(dirname(__dirname))))}/joplin-website/docs`;
 
@@ -281,6 +281,7 @@ async function main() {
 		templateHtml: plansTemplateHtml,
 		plans: getPlans(stripeConfig),
 		faqHtml: planPageFaqHtml,
+		featureListHtml: getMarkdownIt().render(createFeatureTableMd(), {}),
 		stripeConfig,
 	};
 
