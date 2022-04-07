@@ -41,6 +41,7 @@ yarn install
 git reset --hard
 
 yarn run updateMarkdownDoc
+yarn run updateNews $DISCOURSE_API_KEY $DISCOURSE_USERNAME
 
 # We commit and push the change. It will be a noop if nothing was actually
 # changed

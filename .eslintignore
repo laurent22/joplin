@@ -2023,6 +2023,9 @@ packages/tools/website/build.js.map
 packages/tools/website/updateDownloadPage.d.ts
 packages/tools/website/updateDownloadPage.js
 packages/tools/website/updateDownloadPage.js.map
+packages/tools/website/updateNews.d.ts
+packages/tools/website/updateNews.js
+packages/tools/website/updateNews.js.map
 packages/tools/website/utils/frontMatter.d.ts
 packages/tools/website/utils/frontMatter.js
 packages/tools/website/utils/frontMatter.js.map
