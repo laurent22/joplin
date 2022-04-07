@@ -112,7 +112,7 @@ export function findPrice(prices: StripePublicConfigPrice[], query: FindPriceQue
 
 const features: Record<FeatureId, PlanFeature> = {
 	maxItemSize: {
-		title: 'Publish notes to the internet',
+		title: 'Max note or attachment size',
 		basic: true,
 		pro: true,
 		teams: true,
