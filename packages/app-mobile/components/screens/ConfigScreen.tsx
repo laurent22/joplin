@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-member-accessibility */
 import Slider from '@react-native-community/slider';
 const React = require('react');
 const { Platform, Linking, View, Switch, StyleSheet, ScrollView, Text, Button, TouchableOpacity, TextInput, Alert, PermissionsAndroid } = require('react-native');
@@ -58,8 +59,24 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		};
 
 		this.saveButton_press = async () => {
-			if (this.state.changedSettingKeys.includes('sync.target') && this.state.settings['sync.target'] === SyncTargetRegistry.nameToId('filesystem') && !(await this.checkFilesystemPermission())) {
-				Alert.alert(_('Warning'), _('In order to use file system synchronisation your permission to write to external storage is required.'));
+			if (this.state.changedSettingKeys.includes('sync.target') && this.state.settings['sync.target'] === SyncTargetRegistry.nameToId('filesystem')) {
+				if (Platform.OS === 'android') {
+					if (Platform.Version < 29) {
+						if (!(await this.checkFilesystemPermission())) {
+							Alert.alert(_('Warning'), _('In order to use file system synchronisation your permission to write to external storage is required.'));
+						}
+					} else {
+						// scoped storage is needed
+						await import('react-native-scoped-storage').then(scopedStorage => {
+							return scopedStorage.openDocumentTree(true);
+						}).then(dir => {
+							return shared.updateSettingValue(this, 'sync.2.path', dir.uri);
+						}).catch(err => {
+							Alert.alert(_('Error'), _(err.message));
+						});
+					}
+				}
+
 				// Save settings anyway, even if permission has not been granted
 			}
 

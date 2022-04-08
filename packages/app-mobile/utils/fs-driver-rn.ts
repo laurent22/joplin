@@ -1,5 +1,5 @@
 import FsDriverBase from '@joplin/lib/fs-driver-base';
-const RNFetchBlob = require('rn-fetch-blob').default;
+const RNFetchBlob = require('react-native-blob-util').default;
 const RNFS = require('react-native-fs');
 
 export default class FsDriverRN extends FsDriverBase {

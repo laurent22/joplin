@@ -15,7 +15,7 @@ import KvStore from '@joplin/lib/services/KvStore';
 import NoteScreen from './components/screens/Note';
 import UpgradeSyncTargetScreen from './components/screens/UpgradeSyncTargetScreen';
 import Setting, { Env } from '@joplin/lib/models/Setting';
-import RNFetchBlob from 'rn-fetch-blob';
+import RNFetchBlob from 'react-native-blob-util';
 import PoorManIntervals from '@joplin/lib/PoorManIntervals';
 import reducer from '@joplin/lib/reducer';
 import ShareExtension from './utils/ShareExtension';
@@ -70,7 +70,7 @@ const { SideMenuContentNote } = require('./components/side-menu-content-note.js'
 const { DatabaseDriverReactNative } = require('./utils/database-driver-react-native');
 import { reg } from '@joplin/lib/registry';
 const { defaultState } = require('@joplin/lib/reducer');
-const { FileApiDriverLocal } = require('@joplin/lib/file-api-driver-local.js');
+import { FileApiDriverLocal } from '@joplin/lib/file-api-driver-local';
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 import SearchEngine from '@joplin/lib/services/searchengine/SearchEngine';
 const WelcomeUtils = require('@joplin/lib/WelcomeUtils');
@@ -93,6 +93,7 @@ SyncTargetRegistry.addClass(SyncTargetJoplinServer);
 SyncTargetRegistry.addClass(SyncTargetJoplinCloud);
 
 import FsDriverRN from './utils/fs-driver-rn';
+import FsDriverAndroid from './utils/fs-driver-android';
 import DecryptionWorker from '@joplin/lib/services/DecryptionWorker';
 import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
 import MigrationService from '@joplin/lib/services/MigrationService';
@@ -462,7 +463,12 @@ async function initialize(dispatch: Function) {
 	BaseItem.loadClass('MasterKey', MasterKey);
 	BaseItem.loadClass('Revision', Revision);
 
-	const fsDriver = new FsDriverRN();
+	let fsDriver;
+	if (Platform.OS === 'android' && Platform.Version >= 29) {
+		fsDriver = new FsDriverAndroid();
+	} else {
+		fsDriver = new FsDriverRN();
+	}
 
 	Resource.fsDriver_ = fsDriver;
 	FileApiDriverLocal.fsDriver_ = fsDriver;

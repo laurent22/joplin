@@ -247,6 +247,8 @@ class FileApi {
 	}
 
 	fullPath(path: string) {
+		if (path.startsWith('content://')) return path;
+
 		const output = [];
 		if (this.baseDir()) output.push(this.baseDir());
 		if (path) output.push(path);
