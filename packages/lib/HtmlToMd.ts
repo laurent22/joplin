@@ -30,7 +30,7 @@ export default class HtmlToMd {
 		const pdfRule = {
 			filter: ['embed', 'object'],
 			replacement: function(_content: string, node: any, _options: any) {
-				if (node.getAttribute('type') === 'application/pdf' && node.getAttribute('src')) {
+				if (node.getAttribute('src') && (node.getAttribute('type') === 'application/pdf' || node.getAttribute('src').endsWith('.pdf'))) {
 					// We are adding _pdf: prefix so that we can later distingish them from normal links and create resources for them.
 					return `[${node.getAttribute('src')}](_pdf:${node.getAttribute('src')})`;
 				}
