@@ -61,9 +61,10 @@ const markdownUtils = {
 		return url;
 	},
 
-	prependBaseUrl(md: string, baseUrl: string) {
+	prependBaseUrl(md: string, baseUrl: string, test?: Function) {
 		// eslint-disable-next-line no-useless-escape
 		return md.replace(/(\]\()([^\s\)]+)(.*?\))/g, (_match: any, before: string, url: string, after: string) => {
+			if (test && !test(url)) return `${before}${url}${after}`;
 			return before + urlUtils.prependBaseUrl(url, baseUrl) + after;
 		});
 	},
@@ -108,6 +109,10 @@ const markdownUtils = {
 
 	extractImageUrls(md: string) {
 		return markdownUtils.extractFileUrls(md,true);
+	},
+
+	extractPdfUrls(md: string) {
+		return markdownUtils.extractFileUrls(md, false).filter((url) => url.startsWith('_pdf:')).map((url) => url.slice(5));
 	},
 
 	// The match results has 5 items

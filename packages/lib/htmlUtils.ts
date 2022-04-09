@@ -7,6 +7,7 @@ const { escapeHtml } = require('./string-utils.js');
 // https://stackoverflow.com/a/16119722/561309
 const imageRegex = /<img([\s\S]*?)src=["']([\s\S]*?)["']([\s\S]*?)>/gi;
 const anchorRegex = /<a([\s\S]*?)href=["']([\s\S]*?)["']([\s\S]*?)>/gi;
+const pdfRegex = /<(embed|object)([\s\S]*?)src=["']([\s\S]*?)["']([\s\S]*?)>/gi;
 
 const selfClosingElements = [
 	'area',
@@ -44,13 +45,13 @@ class HtmlUtils {
 	}
 
 	// Returns the **encoded** URLs, so to be useful they should be decoded again before use.
-	private extractUrls(regex: RegExp, html: string) {
+	private extractUrls(regex: RegExp, html: string, key = 2) {
 		if (!html) return [];
 
 		const output = [];
 		let matches;
 		while ((matches = regex.exec(html))) {
-			output.push(matches[2]);
+			output.push(matches[key]);
 		}
 
 		return output.filter(url => !!url);
@@ -59,6 +60,11 @@ class HtmlUtils {
 	// Returns the **encoded** URLs, so to be useful they should be decoded again before use.
 	public extractImageUrls(html: string) {
 		return this.extractUrls(imageRegex, html);
+	}
+
+	// Returns the **encoded** URLs, so to be useful they should be decoded again before use.
+	public extractPdfUrls(html: string) {
+		return this.extractUrls(pdfRegex, html, 3).filter(url => url.endsWith('.pdf'));
 	}
 
 	// Returns the **encoded** URLs, so to be useful they should be decoded again before use.
@@ -85,6 +91,22 @@ class HtmlUtils {
 				src: newSrc,
 			};
 		});
+	}
+
+	public replacePdfUrls(html: string, callback: Function) {
+		if (!html) return '';
+		return html.replace(pdfRegex, (_v: string, _tag: string, _before: string, src: string, _after: string) => {
+			const link = callback(src);
+			// We are adding the link as <a> since joplin disabled <embed> tag due to security reasons.
+			// See: CVE-2020-15930
+			return `<a href="${link}">${src}</a>`;
+		});
+	}
+
+	public replaceMediaUrls(html: string, callback: Function) {
+		html = this.replaceImageUrls(html, callback);
+		html = this.replacePdfUrls(html, callback);
+		return html;
 	}
 
 	// Note that the URLs provided by this function are URL-encoded, which is

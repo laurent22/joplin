@@ -204,6 +204,11 @@
 					}
 				}
 
+				if (nodeName === 'embed' || nodeName === 'object') {
+					const src = absoluteUrl(node.src);
+					node.setAttribute('src', src);
+				}
+
 				cleanUpElement(convertToMarkup, node, imageSizes, imageIndexes);
 			}
 		}
@@ -317,6 +322,9 @@
 	}
 
 	function readabilityProcess() {
+
+		if (isPagePdf()) throw new Error('Could not parse PDF document with Readability');
+
 		// eslint-disable-next-line no-undef
 		const readability = new Readability(documentForReadability());
 		const article = readability.parse();
@@ -327,6 +335,14 @@
 			title: article.title,
 			body: article.content,
 		};
+	}
+
+	function isPagePdf() {
+		return document.contentType == 'application/pdf';
+	}
+
+	function embedPageUrl() {
+		return `<embed src="${window.location.href}" type="${document.contentType}" />`;
 	}
 
 	async function prepareCommandResponse(command) {
@@ -374,6 +390,10 @@
 			return { name: 'isProbablyReaderable', value: ok };
 
 		} else if (command.name === 'completePageHtml') {
+
+			if (isPagePdf()) {
+				return clippedContentResponse(pageTitle(), embedPageUrl(), getImageSizes(document), getAnchorNames(document));
+			}
 
 			hardcodePreStyles(document);
 			addSvgClass(document);
