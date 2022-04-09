@@ -55,6 +55,7 @@ import SyncTargetNone from './SyncTargetNone';
 import { setRSA } from './services/e2ee/ppk';
 import RSA from './services/e2ee/RSA.node';
 import Resource from './models/Resource';
+import { parseProfileConfig, getCurrentProfile, getProfileFullPath } from './services/profileConfig';
 
 const appLogger: LoggerWrapper = Logger.create('App');
 
@@ -714,7 +715,12 @@ export default class BaseApplication {
 		// https://immerjs.github.io/immer/docs/freezing
 		setAutoFreeze(initArgs.env === 'dev');
 
-		const profileDir = this.determineProfileDir(initArgs);
+		const rootProfileDir = this.determineProfileDir(initArgs);
+		const profileConfig = await parseProfileConfig(`${rootProfileDir}/profiles.json`);
+		const profileDir = getProfileFullPath(getCurrentProfile(profileConfig), rootProfileDir);
+
+		appLogger.info(`Using profile at: ${profileDir}`);
+
 		const resourceDirName = 'resources';
 		const resourceDir = `${profileDir}/${resourceDirName}`;
 		const tempDir = `${profileDir}/tmp`;
