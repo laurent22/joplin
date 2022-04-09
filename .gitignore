@@ -138,6 +138,9 @@ packages/app-desktop/checkForUpdates.js.map
 packages/app-desktop/commands/copyDevCommand.d.ts
 packages/app-desktop/commands/copyDevCommand.js
 packages/app-desktop/commands/copyDevCommand.js.map
+packages/app-desktop/commands/editProfileConfig.d.ts
+packages/app-desktop/commands/editProfileConfig.js
+packages/app-desktop/commands/editProfileConfig.js.map
 packages/app-desktop/commands/exportFolders.d.ts
 packages/app-desktop/commands/exportFolders.js
 packages/app-desktop/commands/exportFolders.js.map
@@ -1242,6 +1245,9 @@ packages/lib/services/DecryptionWorker.js.map
 packages/lib/services/ExternalEditWatcher.d.ts
 packages/lib/services/ExternalEditWatcher.js
 packages/lib/services/ExternalEditWatcher.js.map
+packages/lib/services/ExternalEditWatcher/utils.d.ts
+packages/lib/services/ExternalEditWatcher/utils.js
+packages/lib/services/ExternalEditWatcher/utils.js.map
 packages/lib/services/ItemChangeUtils.d.ts
 packages/lib/services/ItemChangeUtils.js
 packages/lib/services/ItemChangeUtils.js.map

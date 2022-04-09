@@ -1,5 +1,6 @@
 // AUTO-GENERATED using `gulp buildCommandIndex`
 import * as copyDevCommand from './copyDevCommand';
+import * as editProfileConfig from './editProfileConfig';
 import * as exportFolders from './exportFolders';
 import * as exportNotes from './exportNotes';
 import * as focusElement from './focusElement';
@@ -14,6 +15,7 @@ import * as toggleSafeMode from './toggleSafeMode';
 
 const index:any[] = [
 	copyDevCommand,
+	editProfileConfig,
 	exportFolders,
 	exportNotes,
 	focusElement,

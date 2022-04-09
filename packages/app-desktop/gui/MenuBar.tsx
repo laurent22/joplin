@@ -395,6 +395,9 @@ function useMenu(props: Props) {
 					},
 					() => {
 						void CommandService.instance().execute('addProfile');
+					},
+					() => {
+						void CommandService.instance().execute('editProfileConfig');
 					}
 				),
 			};

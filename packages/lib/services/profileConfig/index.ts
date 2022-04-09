@@ -1,7 +1,7 @@
 import { rtrimSlashes, trimSlashes } from '../../path-utils';
 import shim from '../../shim';
 import { MenuItem } from '../commands/MenuUtils';
-import { defaultProfile, defaultProfileConfig, NewProfileClickHandler, Profile, ProfileConfig, ProfileSwitchClickHandler } from './types';
+import { defaultProfile, defaultProfileConfig, EditProfileClickHandler, NewProfileClickHandler, Profile, ProfileConfig, ProfileSwitchClickHandler } from './types';
 import { _ } from '@joplin/lib/locale';
 import { customAlphabet } from 'nanoid/non-secure';
 
@@ -49,7 +49,7 @@ export const getProfileFullPath = (profile: Profile, rootProfilePath: string): s
 	return rtrimSlashes(`${rtrimSlashes(rootProfilePath)}/${p}`);
 };
 
-export const getSwitchProfileMenuItems = (config: ProfileConfig, onProfileSwitchClick: ProfileSwitchClickHandler, onNewProfileClick: NewProfileClickHandler): MenuItem[] => {
+export const getSwitchProfileMenuItems = (config: ProfileConfig, onProfileSwitchClick: ProfileSwitchClickHandler, onNewProfileClick: NewProfileClickHandler, onEditProfileClick: EditProfileClickHandler): MenuItem[] => {
 	const output: MenuItem[] = [];
 
 	for (let i = 0; i < config.profiles.length; i++) {
@@ -71,6 +71,13 @@ export const getSwitchProfileMenuItems = (config: ProfileConfig, onProfileSwitch
 		label: _('Create new profile...'),
 		click: () => {
 			onNewProfileClick();
+		},
+	});
+
+	output.push({
+		label: _('Edit profile configuration...'),
+		click: () => {
+			onEditProfileClick();
 		},
 	});
 
