@@ -60,5 +60,10 @@ export default function() {
 		'gotoAnything',
 		'commandPalette',
 		'openMasterPasswordDialog',
+		'addProfile',
+		'editProfileConfig',
+		'switchProfile0',
+		'switchProfile1',
+		'switchProfile2',
 	];
 }

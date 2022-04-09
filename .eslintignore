@@ -181,6 +181,15 @@ packages/app-desktop/commands/stopExternalEditing.js.map
 packages/app-desktop/commands/switchProfile.d.ts
 packages/app-desktop/commands/switchProfile.js
 packages/app-desktop/commands/switchProfile.js.map
+packages/app-desktop/commands/switchProfile0.d.ts
+packages/app-desktop/commands/switchProfile0.js
+packages/app-desktop/commands/switchProfile0.js.map
+packages/app-desktop/commands/switchProfile1.d.ts
+packages/app-desktop/commands/switchProfile1.js
+packages/app-desktop/commands/switchProfile1.js.map
+packages/app-desktop/commands/switchProfile2.d.ts
+packages/app-desktop/commands/switchProfile2.js
+packages/app-desktop/commands/switchProfile2.js.map
 packages/app-desktop/commands/toggleExternalEditing.d.ts
 packages/app-desktop/commands/toggleExternalEditing.js
 packages/app-desktop/commands/toggleExternalEditing.js.map
@@ -1585,6 +1594,9 @@ packages/lib/services/plugins/utils/validatePluginVersion.test.js.map
 packages/lib/services/profileConfig/index.d.ts
 packages/lib/services/profileConfig/index.js
 packages/lib/services/profileConfig/index.js.map
+packages/lib/services/profileConfig/index.test.d.ts
+packages/lib/services/profileConfig/index.test.js
+packages/lib/services/profileConfig/index.test.js.map
 packages/lib/services/profileConfig/types.d.ts
 packages/lib/services/profileConfig/types.js
 packages/lib/services/profileConfig/types.js.map

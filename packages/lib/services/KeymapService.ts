@@ -55,6 +55,9 @@ const defaultKeymapItems = {
 		{ accelerator: 'Option+Cmd+A', command: 'editor.sortSelectedLines' },
 		{ accelerator: 'Option+Up', command: 'editor.swapLineUp' },
 		{ accelerator: 'Option+Down', command: 'editor.swapLineDown' },
+		{ accelerator: 'Option+Cmd+0', command: 'switchProfile0' },
+		{ accelerator: 'Option+Cmd+1', command: 'switchProfile1' },
+		{ accelerator: 'Option+Cmd+2', command: 'switchProfile2' },
 	],
 	default: [
 		{ accelerator: 'Ctrl+N', command: 'newNote' },
@@ -97,6 +100,9 @@ const defaultKeymapItems = {
 		{ accelerator: 'Ctrl+Alt+S', command: 'editor.sortSelectedLines' },
 		{ accelerator: 'Alt+Up', command: 'editor.swapLineUp' },
 		{ accelerator: 'Alt+Down', command: 'editor.swapLineDown' },
+		{ accelerator: 'Ctrl+Alt+0', command: 'switchProfile0' },
+		{ accelerator: 'Ctrl+Alt+1', command: 'switchProfile1' },
+		{ accelerator: 'Ctrl+Alt+2', command: 'switchProfile2' },
 	],
 };
 

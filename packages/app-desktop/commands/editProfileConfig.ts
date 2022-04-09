@@ -2,9 +2,11 @@ import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/
 import Setting from '../../lib/models/Setting';
 import { openFileWithExternalEditor } from '../../lib/services/ExternalEditWatcher/utils';
 import bridge from '../services/bridge';
+import { _ } from '@joplin/lib/locale';
 
 export const declaration: CommandDeclaration = {
 	name: 'editProfileConfig',
+	label: () => _('Edit profile configuration...'),
 };
 
 export const runtime = (): CommandRuntime => {

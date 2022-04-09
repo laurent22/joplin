@@ -6,6 +6,7 @@ import bridge from '../../../services/bridge';
 
 export const declaration: CommandDeclaration = {
 	name: 'addProfile',
+	label: () => _('Create new profile...'),
 };
 
 export const runtime = (comp: any): CommandRuntime => {
