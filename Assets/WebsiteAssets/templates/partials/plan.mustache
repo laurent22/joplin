@@ -6,11 +6,11 @@
 			</div>
 
 			<div class="plan-price plan-price-monthly">
-				{{priceMonthly.formattedMonthlyAmount}}<sub class="per-month">&nbsp;/month</sub>
+				{{priceMonthly.formattedMonthlyAmount}}<sub class="per-month">&nbsp;/month{{#footnote}} (*){{/footnote}}</sub>
 			</div>
 
 			<div class="plan-price plan-price-yearly">
-				{{priceYearly.formattedMonthlyAmount}}<sub class="per-month">&nbsp;/month</sub>
+				{{priceYearly.formattedMonthlyAmount}}<sub class="per-month">&nbsp;/month{{#footnote}} (*){{/footnote}}</sub>
 			</div>
 		</div>
 
@@ -20,17 +20,19 @@
 			</div>
 		</div>
 
-		{{#featuresOn}}
+		{{#featureLabelsOn}}
 			<p><i class="fas fa-check feature feature-on"></i>{{.}}</p>
-		{{/featuresOn}}
+		{{/featureLabelsOn}}
 
-		{{#featuresOff}}
+		{{#featureLabelsOff}}
 			<p class="unchecked-text"><i class="fas fa-times feature feature-off"></i>{{.}}</p>
-		{{/featuresOff}}
+		{{/featureLabelsOff}}
 		
 		<p class="text-center subscribe-wrapper">
 			<a id="subscribeButton-{{name}}" href="{{cfaUrl}}" class="button-link btn-white subscribeButton">{{cfaLabel}}</a>
 		</p>
+
+		{{#footnote}}<sub>(*) {{.}}</sub>{{/footnote}}
 	</div>
 
 	<script>

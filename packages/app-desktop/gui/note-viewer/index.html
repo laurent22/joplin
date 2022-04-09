@@ -586,9 +586,24 @@
 		}));
 
 		document.addEventListener('contextmenu', webviewLib.logEnabledEventHandler(event => {
-			let element = event.target;
-
 			// To handle right clicks on resource icons
+			let element = event.target;
+			
+			// Mermaid svgs are wrapped inside a <pre> with class "mermaid"
+			let mermaidElement = element.closest(".mermaid")?.children[0];
+			if (mermaidElement) {
+				const svgString = new XMLSerializer().serializeToString(mermaidElement);
+				if (!!svgString) {
+					ipcProxySendToHost('contextMenu', {
+						type: 'image',
+						textToCopy: svgString,
+						mime: 'image/svg+xml',
+						filename: mermaidElement.id + '.svg',
+					});
+				}
+				return;
+			}
+
 			if (element && !element.getAttribute('data-resource-id')) element = element.parentElement;
 
 			if (element && element.getAttribute('data-resource-id')) {
