@@ -116,7 +116,7 @@
 			const now = Date.now();
 			if (now >= ignoreNextScrollTime_) ignoreNextScrollEventCount_ = 0;
 			if (ignoreNextScrollEventCount_ < 10) { // for safety
-				ignoreNextScrollTime_ = now + 200;
+				ignoreNextScrollTime_ = now + 1000;
 				ignoreNextScrollEventCount_ += 1;
 			}
 		};
@@ -293,7 +293,7 @@
 					return;
 				}
 			}
-			if (!heightChanged) return;
+			if (!heightChanged && cause !== 'dom-changed') return;
 			const restoreAndRefresh = () => {
 				scrollmap.refresh();
 				restorePercentScroll();
@@ -337,7 +337,11 @@
 			contentElement.innerHTML = html;
 
 			scrollmap.create(event.options.markupLineCount);
-			restorePercentScroll(); // First, a quick treatment is applied.
+			if (typeof event.options.percent !== 'number') {
+				restorePercentScroll(); // First, a quick treatment is applied.
+			} else {
+				setPercentScroll(event.options.percent);
+			}
 
 			addPluginAssets(event.options.pluginAssets);
 
