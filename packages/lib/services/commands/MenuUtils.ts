@@ -7,14 +7,14 @@ const { createSelectorCreator, defaultMemoize } = require('reselect');
 const { createCachedSelector } = require('re-reselect');
 
 export interface MenuItem {
-	id: string;
-	label: string;
-	click: Function;
+	id?: string;
+	label?: string;
+	click?: Function;
 	role?: any;
 	type?: string;
 	accelerator?: string;
 	checked?: boolean;
-	enabled: boolean;
+	enabled?: boolean;
 }
 
 interface MenuItems {

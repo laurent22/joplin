@@ -1,7 +1,9 @@
 import { rtrimSlashes, trimSlashes } from '../../path-utils';
 import shim from '../../shim';
 import { MenuItem } from '../commands/MenuUtils';
-import { defaultProfile, defaultProfileConfig, Profile, ProfileConfig, ProfileSwitchClickHandler } from './types';
+import { defaultProfile, defaultProfileConfig, NewProfileClickHandler, Profile, ProfileConfig, ProfileSwitchClickHandler } from './types';
+import { _ } from '@joplin/lib/locale';
+import { customAlphabet } from 'nanoid/non-secure';
 
 export const loadProfileConfig = async (profileConfigPath: string): Promise<ProfileConfig> => {
 	if (!(await shim.fsDriver().exists(profileConfigPath))) {
@@ -34,7 +36,7 @@ export const loadProfileConfig = async (profileConfigPath: string): Promise<Prof
 };
 
 export const saveProfileConfig = async (profileConfigPath: string, config: ProfileConfig) => {
-	await shim.fsDriver().writeFile(profileConfigPath, JSON.stringify(config), 'utf8');
+	await shim.fsDriver().writeFile(profileConfigPath, JSON.stringify(config, null, '\t'), 'utf8');
 };
 
 export const getCurrentProfile = (config: ProfileConfig): Profile => {
@@ -47,25 +49,48 @@ export const getProfileFullPath = (profile: Profile, rootProfilePath: string): s
 	return rtrimSlashes(`${rtrimSlashes(rootProfilePath)}/${p}`);
 };
 
-export const getSwitchProfileMenuItems = (config: ProfileConfig, onClick: ProfileSwitchClickHandler): MenuItem[] => {
+export const getSwitchProfileMenuItems = (config: ProfileConfig, onProfileSwitchClick: ProfileSwitchClickHandler, onNewProfileClick: NewProfileClickHandler): MenuItem[] => {
 	const output: MenuItem[] = [];
 
 	for (let i = 0; i < config.profiles.length; i++) {
 		const profile = config.profiles[i];
 
 		output.push({
-			id: `profile-${i}`,
 			label: profile.name,
-			enabled: true,
 			type: 'checkbox',
 			checked: config.currentProfile === i,
 			click: () => {
-				onClick(config, i);
+				onProfileSwitchClick(i);
 			},
 		});
 	}
 
+	output.push({ type: 'separator' });
+
+	output.push({
+		label: _('Create new profile...'),
+		click: () => {
+			onNewProfileClick();
+		},
+	});
+
 	return output;
+};
+
+const profileIdGenerator = customAlphabet('0123456789abcdefghijklmnopqrstuvwxyz', 8);
+
+export const createNewProfile = (config: ProfileConfig, profileName: string) => {
+	const newConfig = {
+		...config,
+		profiles: config.profiles.slice(),
+	};
+
+	newConfig.profiles.push({
+		name: profileName,
+		path: `profile-${profileIdGenerator()}`,
+	});
+
+	return newConfig;
 };
 
 // export const getRootProfilePath = async (currentDir:string):Promise<string> => {

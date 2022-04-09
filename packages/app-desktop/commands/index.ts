@@ -8,6 +8,7 @@ import * as replaceMisspelling from './replaceMisspelling';
 import * as restoreNoteRevision from './restoreNoteRevision';
 import * as startExternalEditing from './startExternalEditing';
 import * as stopExternalEditing from './stopExternalEditing';
+import * as switchProfile from './switchProfile';
 import * as toggleExternalEditing from './toggleExternalEditing';
 import * as toggleSafeMode from './toggleSafeMode';
 
@@ -21,6 +22,7 @@ const index:any[] = [
 	restoreNoteRevision,
 	startExternalEditing,
 	stopExternalEditing,
+	switchProfile,
 	toggleExternalEditing,
 	toggleSafeMode,
 ];

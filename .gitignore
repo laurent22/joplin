@@ -165,6 +165,9 @@ packages/app-desktop/commands/startExternalEditing.js.map
 packages/app-desktop/commands/stopExternalEditing.d.ts
 packages/app-desktop/commands/stopExternalEditing.js
 packages/app-desktop/commands/stopExternalEditing.js.map
+packages/app-desktop/commands/switchProfile.d.ts
+packages/app-desktop/commands/switchProfile.js
+packages/app-desktop/commands/switchProfile.js.map
 packages/app-desktop/commands/toggleExternalEditing.d.ts
 packages/app-desktop/commands/toggleExternalEditing.js
 packages/app-desktop/commands/toggleExternalEditing.js.map
@@ -249,6 +252,9 @@ packages/app-desktop/gui/KeymapConfig/utils/useKeymap.js.map
 packages/app-desktop/gui/MainScreen/MainScreen.d.ts
 packages/app-desktop/gui/MainScreen/MainScreen.js
 packages/app-desktop/gui/MainScreen/MainScreen.js.map
+packages/app-desktop/gui/MainScreen/commands/addProfile.d.ts
+packages/app-desktop/gui/MainScreen/commands/addProfile.js
+packages/app-desktop/gui/MainScreen/commands/addProfile.js.map
 packages/app-desktop/gui/MainScreen/commands/commandPalette.d.ts
 packages/app-desktop/gui/MainScreen/commands/commandPalette.js
 packages/app-desktop/gui/MainScreen/commands/commandPalette.js.map

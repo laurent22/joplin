@@ -24,4 +24,6 @@ export const defaultProfileConfig = (): ProfileConfig => {
 	};
 };
 
-export type ProfileSwitchClickHandler = (config: ProfileConfig, profileIndex: number)=> void;
+export type ProfileSwitchClickHandler = (profileIndex: number)=> void;
+
+export type NewProfileClickHandler = ()=> void;

@@ -3118,6 +3118,7 @@ __metadata:
     "@types/fs-extra": ^9.0.6
     "@types/jest": ^26.0.15
     "@types/js-yaml": ^4.0.2
+    "@types/nanoid": ^3.0.0
     "@types/node": ^14.14.6
     "@types/node-rsa": ^1.1.1
     "@types/react": ^17.0.20
@@ -5573,6 +5574,15 @@ __metadata:
   version: 0.8.32
   resolution: "@types/mustache@npm:0.8.32"
   checksum: 390fb7dc873932b9b07d8a3c09c2cf5708232ca01be71ddac8d58a145735909687f9fd661ed3ff9037f4051abf3e010f109c91baa5e704d87aad80d6cd377562
+  languageName: node
+  linkType: hard
+
+"@types/nanoid@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "@types/nanoid@npm:3.0.0"
+  dependencies:
+    nanoid: "*"
+  checksum: 6e84d71ce2b8a2e23b20a018249a2e6a1c36b4ea0f45ff0265e8db514010ccf13141d87d6892f35b8e50ca5832d1d04ddc27062b5e69f91db2d5b3c5321c8c56
   languageName: node
   linkType: hard
 
@@ -21816,6 +21826,15 @@ __metadata:
   dependencies:
     node-gyp: latest
   checksum: 33e1bb4dfca447fe37d4bb5889be55de154828632c8d38646db67293a21afd61ed9909cdf1b886214a64707d935926c4e60e2b09de9edfc2ad58de31d6ce8f39
+  languageName: node
+  linkType: hard
+
+"nanoid@npm:*":
+  version: 3.3.2
+  resolution: "nanoid@npm:3.3.2"
+  bin:
+    nanoid: bin/nanoid.cjs
+  checksum: 376717f0685251fad77850bd84c6b8d57837c71eeb1c05be7c742140cc1835a5a2953562add05166d6dbc8fb65f3fdffa356213037b967a470e1691dc3e7b9cc
   languageName: node
   linkType: hard
 

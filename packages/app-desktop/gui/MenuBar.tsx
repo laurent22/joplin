@@ -18,10 +18,9 @@ import menuCommandNames from './menuCommandNames';
 import stateToWhenClauseContext from '../services/commands/stateToWhenClauseContext';
 import bridge from '../services/bridge';
 import checkForUpdates from '../checkForUpdates';
-
 const { connect } = require('react-redux');
 import { reg } from '@joplin/lib/registry';
-import { getSwitchProfileMenuItems, saveProfileConfig } from '../../lib/services/profileConfig';
+import { getSwitchProfileMenuItems } from '../../lib/services/profileConfig';
 import { ProfileConfig } from '../../lib/services/profileConfig/types';
 const packageInfo = require('../packageInfo.js');
 const { clipboard } = require('electron');
@@ -390,21 +389,14 @@ function useMenu(props: Props) {
 			const printItem = menuItemDic.print;
 			const switchProfileItem = {
 				label: _('Switch profile'),
-				submenu: getSwitchProfileMenuItems(props.profileConfig, async (config: ProfileConfig, profileIndex: number) => {
-					const newConfig: ProfileConfig = {
-						...config,
-						currentProfile: profileIndex,
-					};
-
-					await saveProfileConfig(`${Setting.value('rootProfileDir')}/profiles.json`, newConfig);
-
-					props.dispatch({
-						type: 'PROFILE_CONFIG_SET',
-						value: newConfig,
-					});
-
-					bridge().restart();
-				}),
+				submenu: getSwitchProfileMenuItems(props.profileConfig,
+					(profileIndex: number) => {
+						void CommandService.instance().execute('switchProfile', profileIndex);
+					},
+					() => {
+						void CommandService.instance().execute('addProfile');
+					}
+				),
 			};
 
 			let toolsItems: any[] = [];
