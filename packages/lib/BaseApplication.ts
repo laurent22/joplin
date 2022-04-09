@@ -55,7 +55,8 @@ import SyncTargetNone from './SyncTargetNone';
 import { setRSA } from './services/e2ee/ppk';
 import RSA from './services/e2ee/RSA.node';
 import Resource from './models/Resource';
-import { parseProfileConfig, getCurrentProfile, getProfileFullPath } from './services/profileConfig';
+import { loadProfileConfig, getCurrentProfile, getProfileFullPath } from './services/profileConfig';
+import { ProfileConfig } from './services/profileConfig/types';
 
 const appLogger: LoggerWrapper = Logger.create('App');
 
@@ -71,6 +72,7 @@ export default class BaseApplication {
 	private eventEmitter_: any;
 	private scheduleAutoAddResourcesIID_: any = null;
 	private database_: any = null;
+	private profileConfig_: ProfileConfig = null;
 
 	protected showStackTraces_: boolean = false;
 	protected showPromptString_: boolean = false;
@@ -647,6 +649,12 @@ export default class BaseApplication {
 	public initRedux() {
 		this.store_ = createStore(this.reducer, applyMiddleware(this.generalMiddlewareFn() as any));
 		setStore(this.store_);
+
+		this.store_.dispatch({
+			type: 'PROFILE_CONFIG_SET',
+			value: this.profileConfig_,
+		});
+
 		BaseModel.dispatch = this.store().dispatch;
 		FoldersScreenUtils.dispatch = this.store().dispatch;
 		// reg.dispatch = this.store().dispatch;
@@ -716,17 +724,15 @@ export default class BaseApplication {
 		setAutoFreeze(initArgs.env === 'dev');
 
 		const rootProfileDir = this.determineProfileDir(initArgs);
-		const profileConfig = await parseProfileConfig(`${rootProfileDir}/profiles.json`);
-		const profileDir = getProfileFullPath(getCurrentProfile(profileConfig), rootProfileDir);
-
-		appLogger.info(`Using profile at: ${profileDir}`);
-
+		this.profileConfig_ = await loadProfileConfig(`${rootProfileDir}/profiles.json`);
+		const profileDir = getProfileFullPath(getCurrentProfile(this.profileConfig_), rootProfileDir);
 		const resourceDirName = 'resources';
 		const resourceDir = `${profileDir}/${resourceDirName}`;
 		const tempDir = `${profileDir}/tmp`;
 		const cacheDir = `${profileDir}/cache`;
 
 		Setting.setConstant('env', initArgs.env);
+		Setting.setConstant('rootProfileDir', rootProfileDir);
 		Setting.setConstant('profileDir', profileDir);
 		Setting.setConstant('resourceDirName', resourceDirName);
 		Setting.setConstant('resourceDir', resourceDir);
@@ -784,6 +790,7 @@ export default class BaseApplication {
 
 
 		appLogger.info(`Profile directory: ${profileDir}`);
+		appLogger.info(`Root profile directory: ${rootProfileDir}`);
 
 		this.database_ = new JoplinDatabase(new DatabaseDriverNode());
 		this.database_.setLogExcludedQueryTypes(['SELECT']);

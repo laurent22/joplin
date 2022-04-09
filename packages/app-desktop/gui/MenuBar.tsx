@@ -21,6 +21,8 @@ import checkForUpdates from '../checkForUpdates';
 
 const { connect } = require('react-redux');
 import { reg } from '@joplin/lib/registry';
+import { getSwitchProfileMenuItems, saveProfileConfig } from '../../lib/services/profileConfig';
+import { ProfileConfig } from '../../lib/services/profileConfig/types';
 const packageInfo = require('../packageInfo.js');
 const { clipboard } = require('electron');
 const Menu = bridge().Menu;
@@ -90,6 +92,7 @@ interface Props {
 	plugins: PluginStates;
 	customCss: string;
 	locale: string;
+	profileConfig: ProfileConfig;
 }
 
 const commandNames: string[] = menuCommandNames();
@@ -385,6 +388,24 @@ function useMenu(props: Props) {
 			const newFolderItem = menuItemDic.newFolder;
 			const newSubFolderItem = menuItemDic.newSubFolder;
 			const printItem = menuItemDic.print;
+			const switchProfileItem = {
+				label: _('Switch profile'),
+				submenu: getSwitchProfileMenuItems(props.profileConfig, async (config: ProfileConfig, profileIndex: number) => {
+					const newConfig: ProfileConfig = {
+						...config,
+						currentProfile: profileIndex,
+					};
+
+					await saveProfileConfig(`${Setting.value('rootProfileDir')}/profiles.json`, newConfig);
+
+					props.dispatch({
+						type: 'PROFILE_CONFIG_SET',
+						value: newConfig,
+					});
+
+					bridge().restart();
+				}),
+			};
 
 			let toolsItems: any[] = [];
 
@@ -499,6 +520,8 @@ function useMenu(props: Props) {
 					platforms: ['darwin'],
 				},
 
+				shim.isMac() ? noItem : switchProfileItem,
+
 				shim.isMac() ? {
 					label: _('Hide %s', 'Joplin'),
 					platforms: ['darwin'],
@@ -545,6 +568,7 @@ function useMenu(props: Props) {
 						type: 'separator',
 					},
 					printItem,
+					switchProfileItem,
 				],
 			};
 
@@ -848,7 +872,19 @@ function useMenu(props: Props) {
 			clearTimeout(timeoutId);
 			timeoutId = null;
 		};
-	}, [props.routeName, props.pluginMenuItems, props.pluginMenus, keymapLastChangeTime, modulesLastChangeTime, props['spellChecker.language'], props['spellChecker.enabled'], props.plugins, props.customCss, props.locale]);
+	}, [
+		props.routeName,
+		props.pluginMenuItems,
+		props.pluginMenus,
+		keymapLastChangeTime,
+		modulesLastChangeTime,
+		props['spellChecker.language'],
+		props['spellChecker.enabled'],
+		props.plugins,
+		props.customCss,
+		props.locale,
+		props.profileConfig,
+	]);
 
 	useMenuStates(menu, props);
 
@@ -907,6 +943,7 @@ const mapStateToProps = (state: AppState) => {
 		['spellChecker.enabled']: state.settings['spellChecker.enabled'],
 		plugins: state.pluginService.plugins,
 		customCss: state.customCss,
+		profileConfig: state.profileConfig,
 	};
 };
 

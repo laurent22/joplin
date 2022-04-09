@@ -1,6 +1,5 @@
 export interface Profile {
 	name: string;
-	isRelative: boolean;
 	path: string;
 }
 
@@ -13,7 +12,6 @@ export interface ProfileConfig {
 export const defaultProfile = (): Profile => {
 	return {
 		name: 'Default',
-		isRelative: true,
 		path: '.',
 	};
 };
@@ -25,3 +23,5 @@ export const defaultProfileConfig = (): ProfileConfig => {
 		profiles: [defaultProfile()],
 	};
 };
+
+export type ProfileSwitchClickHandler = (config: ProfileConfig, profileIndex: number)=> void;
