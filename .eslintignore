@@ -1600,9 +1600,12 @@ packages/lib/services/profileConfig/index.test.js.map
 packages/lib/services/profileConfig/initProfile.d.ts
 packages/lib/services/profileConfig/initProfile.js
 packages/lib/services/profileConfig/initProfile.js.map
-packages/lib/services/profileConfig/mergeRootAndSubProfileSettings.d.ts
-packages/lib/services/profileConfig/mergeRootAndSubProfileSettings.js
-packages/lib/services/profileConfig/mergeRootAndSubProfileSettings.js.map
+packages/lib/services/profileConfig/mergeGlobalAndLocalSettings.d.ts
+packages/lib/services/profileConfig/mergeGlobalAndLocalSettings.js
+packages/lib/services/profileConfig/mergeGlobalAndLocalSettings.js.map
+packages/lib/services/profileConfig/splitGlobalAndLocalSettings.d.ts
+packages/lib/services/profileConfig/splitGlobalAndLocalSettings.js
+packages/lib/services/profileConfig/splitGlobalAndLocalSettings.js.map
 packages/lib/services/profileConfig/types.d.ts
 packages/lib/services/profileConfig/types.js
 packages/lib/services/profileConfig/types.js.map

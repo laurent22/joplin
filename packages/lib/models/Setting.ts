@@ -7,7 +7,8 @@ import SyncTargetRegistry from '../SyncTargetRegistry';
 import time from '../time';
 import FileHandler, { SettingValues } from './settings/FileHandler';
 import Logger from '../Logger';
-import mergeRootAndSubProfileSettings from '../services/profileConfig/mergeRootAndSubProfileSettings';
+import mergeGlobalAndLocalSettings from '../services/profileConfig/mergeGlobalAndLocalSettings';
+import splitGlobalAndLocalSettings from '../services/profileConfig/splitGlobalAndLocalSettings';
 const { sprintf } = require('sprintf-js');
 const ObjectUtils = require('../ObjectUtils');
 const { toTitleCase } = require('../string-utils.js');
@@ -61,10 +62,16 @@ export interface SettingItem {
 	storage?: SettingStorage;
 	hideLabel?: boolean;
 
-	// In a multi-profile context, all settings are by default global - they
-	// take their value from the root profile. This flag can be set to specify
-	// that the setting is local and that its value should come from the
-	// sub-profile config. This flag does not apply to the root profile.
+	// In a multi-profile context, all settings are by default local - they take
+	// their value from the current profile. This flag can be set to specify
+	// that the setting is global and that its value should come from the root
+	// profile. This flag only applies to sub-profiles.
+	//
+	// At the moment, all global settings must be saved to file (have the
+	// storage attribute set to "file") because it's simpler to load the root
+	// profile settings.json than load the whole SQLite database. This
+	// restriction is not an issue normally since all settings that are
+	// considered global are also the user-facing ones.
 	isGlobal?: boolean;
 }
 
@@ -720,7 +727,7 @@ class Setting extends BaseModel {
 			// to the last folder that was selected.
 			activeFolderId: { value: '', type: SettingItemType.String, public: false },
 
-			richTextBannerDismissed: { value: false, type: SettingItemType.Bool, isGlobal: true, public: false },
+			richTextBannerDismissed: { value: false, type: SettingItemType.Bool, storage: SettingStorage.File, isGlobal: true, public: false },
 
 			firstStart: { value: true, type: SettingItemType.Bool, public: false },
 			locale: {
@@ -983,6 +990,7 @@ class Setting extends BaseModel {
 				appTypes: [AppType.Mobile],
 				label: () => 'Opt-in to the editor beta',
 				description: () => 'This beta adds list continuation and syntax highlighting. If you find bugs, please report them in the Discourse forum.',
+				storage: SettingStorage.File,
 				isGlobal: true,
 			},
 
@@ -1192,6 +1200,7 @@ class Setting extends BaseModel {
 				label: () => _('Custom stylesheet for rendered Markdown'),
 				section: 'appearance',
 				advanced: true,
+				storage: SettingStorage.File,
 				isGlobal: true,
 			},
 			'style.customCss.joplinApp': {
@@ -1211,6 +1220,7 @@ class Setting extends BaseModel {
 				section: 'appearance',
 				advanced: true,
 				description: () => 'CSS file support is provided for your convenience, but they are advanced settings, and styles you define may break from one version to the next. If you want to use them, please know that it might require regular development work from you to keep them working. The Joplin team cannot make a commitment to keep the application HTML structure stable.',
+				storage: SettingStorage.File,
 				isGlobal: true,
 			},
 
@@ -1318,6 +1328,7 @@ class Setting extends BaseModel {
 				appTypes: [AppType.Desktop],
 				label: () => 'Enable spell checking in Markdown editor? (WARNING BETA feature)',
 				description: () => 'Spell checker in the Markdown editor was previously unstable (cursor location was not stable, sometimes edits would not be saved or reflected in the viewer, etc.) however it appears to be more reliable now. If you notice any issue, please report it on GitHub or the Joplin Forum (Help -> Joplin Forum)',
+				storage: SettingStorage.File,
 				isGlobal: true,
 			},
 
@@ -1505,7 +1516,15 @@ class Setting extends BaseModel {
 
 		this.metadata_ = Object.assign(this.metadata_, this.customMetadata_);
 
+		if (this.value('env') === Env.Dev) this.validateMetadata(this.metadata_);
+
 		return this.metadata_;
+	}
+
+	private static validateMetadata(md: SettingItems) {
+		for (const [k, v] of Object.entries(md)) {
+			if (v.isGlobal && v.storage !== SettingStorage.File) throw new Error(`Setting "${k}" is global but storage is not "file"`);
+		}
 	}
 
 	public static skipDefaultMigrations() {
@@ -1652,7 +1671,7 @@ class Setting extends BaseModel {
 			const md = this.settingMetadata(key);
 			if (md.isGlobal) {
 				const rootFileSettings = await this.rootFileHandler.load();
-				fileSettings = mergeRootAndSubProfileSettings(rootFileSettings, fileSettings);
+				fileSettings = mergeGlobalAndLocalSettings(rootFileSettings, fileSettings);
 			}
 
 			return {
@@ -1728,7 +1747,7 @@ class Setting extends BaseModel {
 
 			if (this.value('isSubProfile')) {
 				const rootFileSettings = await this.rootFileHandler.load();
-				fileSettings = mergeRootAndSubProfileSettings(rootFileSettings, fileSettings);
+				fileSettings = mergeGlobalAndLocalSettings(rootFileSettings, fileSettings);
 			}
 
 			for (const k of Object.keys(fileSettings)) {
@@ -2084,7 +2103,15 @@ class Setting extends BaseModel {
 
 		await BaseModel.db().transactionExecBatch(queries);
 
-		if (this.canUseFileStorage()) await this.fileHandler.save(valuesForFile);
+		if (this.canUseFileStorage()) {
+			if (this.value('isSubProfile')) {
+				const { globalSettings, localSettings } = splitGlobalAndLocalSettings(valuesForFile);
+				await this.rootFileHandler.save(globalSettings);
+				await this.fileHandler.save(localSettings);
+			} else {
+				await this.fileHandler.save(valuesForFile);
+			}
+		}
 
 		logger.debug('Settings have been saved.');
 	}
