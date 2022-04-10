@@ -13,6 +13,23 @@ Name | Type | Required? | Description
 `keywords` | string[] | No | Keywords associated with the plugins. They are used in search in particular.
 `homepage_url` | string | No | Homepage URL of the plugin. It can also be, for example, a link to a GitHub repository.
 `repository_url` | string | No | Repository URL where the plugin source code is hosted.
+`categories` | string[] | No  | [Categories](#categories) that describes the functionality of the plugin. |
+
+## Categories
+
+| Category | Description |
+| --- | --- |
+| appearance | dealing with appearance of some element/s of the app. For example line numbers, layout, etc. |
+| developer tools |  built for the developers. |
+| editor |  enhancing note editor. |
+| files |  dealing with files. For example import, export, backup, etc. |
+| integrations | integrating third party services or apps. |
+| personal knowledge management | managing and organizing notes. |
+| productivity | making Joplin more productive to use. |
+| search |  enhancing search inside the app. |
+| tags |  dealing with note tags. |
+| themes |  changing theme of the app. |
+| viewer | enhancing the rendering of a note. |
 
 ## Manifest example
 
