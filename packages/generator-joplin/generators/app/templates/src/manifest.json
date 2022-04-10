@@ -8,5 +8,6 @@
 	"author": "<%= pluginAuthor %>",
 	"homepage_url": "<%= pluginHomepageUrl %>",
 	"repository_url": "<%= pluginRepositoryUrl %>",
-	"keywords": []
+	"keywords": [],
+	"categories": []
 }

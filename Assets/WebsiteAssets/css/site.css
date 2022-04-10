@@ -1073,6 +1073,10 @@ footer .bottom-links-row p {
 	display: none;
 }
 
+.joplin-cloud-feature-list table {
+	width: 100%;
+}
+
 .price-row .plan-type {
 	display: flex;
 	align-items: center;

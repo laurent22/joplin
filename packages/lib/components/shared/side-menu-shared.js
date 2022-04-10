@@ -52,7 +52,6 @@ shared.renderFolders = function(props, renderItem) {
 
 shared.renderTags = function(props, renderItem) {
 	const tags = Tag.sortTags(props.tags.slice());
-
 	const tagItems = [];
 	const order = [];
 	for (let i = 0; i < tags.length; i++) {
