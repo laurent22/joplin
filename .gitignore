@@ -1923,6 +1923,9 @@ packages/renderer/MdToHtml/rules/sanitize_html.js.map
 packages/renderer/MdToHtml/rules/source_map.d.ts
 packages/renderer/MdToHtml/rules/source_map.js
 packages/renderer/MdToHtml/rules/source_map.js.map
+packages/renderer/MdToHtml/rules/table.d.ts
+packages/renderer/MdToHtml/rules/table.js
+packages/renderer/MdToHtml/rules/table.js.map
 packages/renderer/MdToHtml/setupLinkify.d.ts
 packages/renderer/MdToHtml/setupLinkify.js
 packages/renderer/MdToHtml/setupLinkify.js.map
