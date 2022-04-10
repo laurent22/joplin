@@ -2,6 +2,9 @@ import Setting, { SettingSectionSource } from '../models/Setting';
 import { setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow, msleep } from '../testing/test-utils';
 import * as fs from 'fs-extra';
 import Logger from '../Logger';
+import { defaultProfileConfig } from '../services/profileConfig/types';
+import { createNewProfile, saveProfileConfig } from '../services/profileConfig';
+import initProfile from '../services/profileConfig/initProfile';
 
 async function loadSettingsFromFile(): Promise<any> {
 	return JSON.parse(await fs.readFile(Setting.settingFilePath, 'utf8'));
@@ -255,5 +258,31 @@ describe('models/Setting', function() {
 		expect(Setting.value('sync.target')).toBe(0); // Not changed
 		expect(Setting.value('style.editor.contentMaxWidth')).toBe(600); // Changed
 	}));
+
+	it('should load sub-profile settings', async () => {
+		await Setting.reset();
+
+		Setting.setValue('locale', 'fr_FR'); // Global setting
+		Setting.setValue('theme', Setting.THEME_DARK); // Global setting
+		Setting.setValue('sync.target', 9); // Local setting
+		await Setting.saveAll();
+
+		await Setting.reset();
+
+		const rootProfileDir = Setting.value('profileDir');
+		const profileConfigPath = `${rootProfileDir}/profiles.json`;
+		let profileConfig = defaultProfileConfig();
+		profileConfig = createNewProfile(profileConfig, 'Sub-profile');
+		profileConfig.currentProfile = 1;
+		await saveProfileConfig(profileConfigPath, profileConfig);
+
+		await initProfile(rootProfileDir);
+
+		await Setting.load();
+
+		expect(Setting.value('locale')).toBe('fr_FR');
+		expect(Setting.value('theme')).toBe(Setting.THEME_DARK);
+		expect(Setting.value('sync.target')).toBe(0);
+	});
 
 });

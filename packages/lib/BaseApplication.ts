@@ -55,8 +55,8 @@ import SyncTargetNone from './SyncTargetNone';
 import { setRSA } from './services/e2ee/ppk';
 import RSA from './services/e2ee/RSA.node';
 import Resource from './models/Resource';
-import { loadProfileConfig, getCurrentProfile, getProfileFullPath } from './services/profileConfig';
 import { ProfileConfig } from './services/profileConfig/types';
+import initProfile from './services/profileConfig/initProfile';
 
 const appLogger: LoggerWrapper = Logger.create('App');
 
@@ -724,16 +724,15 @@ export default class BaseApplication {
 		setAutoFreeze(initArgs.env === 'dev');
 
 		const rootProfileDir = this.determineProfileDir(initArgs);
-		this.profileConfig_ = await loadProfileConfig(`${rootProfileDir}/profiles.json`);
-		const profileDir = getProfileFullPath(getCurrentProfile(this.profileConfig_), rootProfileDir);
+		const { profileDir, profileConfig } = await initProfile(rootProfileDir);
+		this.profileConfig_ = profileConfig;
+
 		const resourceDirName = 'resources';
 		const resourceDir = `${profileDir}/${resourceDirName}`;
 		const tempDir = `${profileDir}/tmp`;
 		const cacheDir = `${profileDir}/cache`;
 
 		Setting.setConstant('env', initArgs.env);
-		Setting.setConstant('rootProfileDir', rootProfileDir);
-		Setting.setConstant('profileDir', profileDir);
 		Setting.setConstant('resourceDirName', resourceDirName);
 		Setting.setConstant('resourceDir', resourceDir);
 		Setting.setConstant('tempDir', tempDir);
