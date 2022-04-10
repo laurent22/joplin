@@ -280,9 +280,15 @@ describe('models/Setting', function() {
 
 		await Setting.load();
 
-		expect(Setting.value('locale')).toBe('fr_FR');
-		expect(Setting.value('theme')).toBe(Setting.THEME_DARK);
-		expect(Setting.value('sync.target')).toBe(0);
+		expect(Setting.value('locale')).toBe('fr_FR'); // Should come from the root profile
+		expect(Setting.value('theme')).toBe(Setting.THEME_DARK); // Should come from the root profile
+		expect(Setting.value('sync.target')).toBe(0); // Should come from the local profile
+
+		// Also check that the special loadOne() function works as expected
+
+		expect((await Setting.loadOne('locale')).value).toBe('fr_FR');
+		expect((await Setting.loadOne('theme')).value).toBe(Setting.THEME_DARK);
+		expect((await Setting.loadOne('sync.target')).value).toBe(undefined);
 	});
 
 });

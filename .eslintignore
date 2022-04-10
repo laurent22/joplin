@@ -1597,6 +1597,12 @@ packages/lib/services/profileConfig/index.js.map
 packages/lib/services/profileConfig/index.test.d.ts
 packages/lib/services/profileConfig/index.test.js
 packages/lib/services/profileConfig/index.test.js.map
+packages/lib/services/profileConfig/initProfile.d.ts
+packages/lib/services/profileConfig/initProfile.js
+packages/lib/services/profileConfig/initProfile.js.map
+packages/lib/services/profileConfig/mergeRootAndSubProfileSettings.d.ts
+packages/lib/services/profileConfig/mergeRootAndSubProfileSettings.js
+packages/lib/services/profileConfig/mergeRootAndSubProfileSettings.js.map
 packages/lib/services/profileConfig/types.d.ts
 packages/lib/services/profileConfig/types.js
 packages/lib/services/profileConfig/types.js.map
