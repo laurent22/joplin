@@ -1,0 +1,23 @@
+site_name: Joplin Documentation
+site_url: https://docs.joplinapp.org
+repo_url: https://github.com/laurent22/joplin/
+edit_uri: edit/dev/docs/
+theme:
+  name: material
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/brightness-2
+        name: Switch to light mode
+extra_css:
+  - stylesheets/extra.css
+
+plugins:
+  - search
+  - awesome-pages
