@@ -424,7 +424,6 @@ class ScreenHeaderComponent extends React.PureComponent {
 							color: theme.color,
 							fontSize: theme.fontSize,
 						}}
-						hideShowUndoRedoButton={this.hideShowUndoRedoButton}
 						onOpen={() => {
 							this.setState({
 								showUndoRedoButtons: false,
