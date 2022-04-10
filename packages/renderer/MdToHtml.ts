@@ -65,6 +65,7 @@ const rules: RendererRules = {
 	fountain: require('./MdToHtml/rules/fountain').default,
 	mermaid: require('./MdToHtml/rules/mermaid').default,
 	source_map: require('./MdToHtml/rules/source_map').default,
+	table: require('./MdToHtml/rules/table').default,
 };
 
 const uslug = require('@joplin/fork-uslug');
