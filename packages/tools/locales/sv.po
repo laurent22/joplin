@@ -1748,7 +1748,7 @@ msgstr[1] "Skapar länkar..."
 
 #: packages/app-desktop/gui/ExtensionBadge.min.js:44
 msgid "Get it now:"
-msgstr "Hämta den nu:"
+msgstr "Hämta det nu:"
 
 #: packages/lib/models/Setting.ts:1196
 msgid "Get pre-releases when checking for updates"

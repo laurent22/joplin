@@ -42,11 +42,21 @@
 				{{> plan}}
 			{{/plans.pro}}
 
-			{{#plans.business}}
+			{{#plans.teams}}
 				{{> plan}}
-			{{/plans.business}}
+			{{/plans.teams}}
 
 			<p class="joplin-cloud-login-info">Already have a Joplin Cloud account? <a href="https://joplincloud.com">Login now</a></p>
+		</div>
+
+		<div class="row">
+			<div>
+				<h1>Feature comparison</h1>
+				<div class="joplin-cloud-feature-list">
+					{{{featureListHtml}}}
+				</div>
+				<p>&nbsp;</p>
+			</div>
 		</div>
 
 		<div class="row">

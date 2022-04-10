@@ -9,6 +9,7 @@ import Tag from '../../models/Tag';
 import NoteTag from '../../models/NoteTag';
 import ResourceService from '../../services/ResourceService';
 import SearchEngine from '../../services/searchengine/SearchEngine';
+import { ResourceEntity } from '../database/types';
 
 const createFolderForPagination = async (num: number, time: number) => {
 	await Folder.save({
@@ -354,7 +355,7 @@ describe('services_rest_Api', function() {
 			},
 		]);
 
-		const resourceV1 = (await Resource.all())[0];
+		const resourceV1: ResourceEntity = (await Resource.all())[0];
 
 		await msleep(1);
 
@@ -366,7 +367,7 @@ describe('services_rest_Api', function() {
 			},
 		]);
 
-		const resourceV2 = (await Resource.all())[0];
+		const resourceV2: ResourceEntity = (await Resource.all())[0];
 
 		expect(resourceV2.title).toBe('resource mod');
 		expect(resourceV2.mime).toBe('image/png');
@@ -376,6 +377,25 @@ describe('services_rest_Api', function() {
 		expect(resourceV2.size).toBeGreaterThan(resourceV1.size);
 
 		expect(resourceV2.size).toBe((await shim.fsDriver().stat(Resource.fullPath(resourceV2))).size);
+	}));
+
+	it('should update resource properties', (async () => {
+		await api.route(RequestMethod.POST, 'resources', null, JSON.stringify({
+			title: 'resource',
+		}), [{ path: `${supportDir}/photo.jpg` }]);
+
+		const resourceV1: ResourceEntity = (await Resource.all())[0];
+
+		await msleep(1);
+
+		await api.route(RequestMethod.PUT, `resources/${resourceV1.id}`, null, JSON.stringify({
+			title: 'my new title',
+		}));
+
+		const resourceV2: ResourceEntity = (await Resource.all())[0];
+
+		expect(resourceV2.title).toBe('my new title');
+		expect(resourceV2.mime).toBe(resourceV1.mime);
 	}));
 
 	it('should delete resources', (async () => {
