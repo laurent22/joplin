@@ -51,8 +51,8 @@ export default class FsDriverAndroid extends FsDriverRN {
 		let output: DocumentFileDetails[] = [];
 		for (let i = 0; i < stats.length; i++) {
 			const stat = stats[i];
-			output.push(stat);
-
+			const relativePath = stat.uri.substring(path.length + 1);
+			output.push({ ...stat, uri: relativePath });
 			output = await this.readUriDirStatsHandleRecursion_(stat, output, options);
 		}
 		return output;
