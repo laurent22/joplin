@@ -14,5 +14,6 @@ export const runtime = (): CommandRuntime => {
 		execute: async (_context: CommandContext) => {
 			await openFileWithExternalEditor(`${Setting.value('rootProfileDir')}/profiles.json`, bridge());
 		},
+		enabledCondition: 'hasMultiProfiles',
 	};
 };
