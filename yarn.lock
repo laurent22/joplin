@@ -3444,6 +3444,7 @@ __metadata:
     "@types/jest": ^26.0.15
     "@types/mustache": ^0.8.32
     "@types/node": ^14.14.6
+    "@types/node-fetch": 1.6.9
     dayjs: ^1.10.7
     execa: ^4.1.0
     fs-extra: ^4.0.3
@@ -3456,7 +3457,7 @@ __metadata:
     md5-file: ^4.0.0
     moment: ^2.24.0
     mustache: ^2.3.0
-    node-fetch: ^1.7.3
+    node-fetch: 1.7.3
     relative: ^3.0.2
     request: ^2.88.0
     sass: ^1.39.2
@@ -5572,6 +5573,15 @@ __metadata:
   version: 0.8.32
   resolution: "@types/mustache@npm:0.8.32"
   checksum: 390fb7dc873932b9b07d8a3c09c2cf5708232ca01be71ddac8d58a145735909687f9fd661ed3ff9037f4051abf3e010f109c91baa5e704d87aad80d6cd377562
+  languageName: node
+  linkType: hard
+
+"@types/node-fetch@npm:1.6.9":
+  version: 1.6.9
+  resolution: "@types/node-fetch@npm:1.6.9"
+  dependencies:
+    "@types/node": "*"
+  checksum: 9c5306e852275a464ec6106d8ce7f0b7d009b2a62a613ea183601e3c469cc66d6c22fe786d12bdebbdece396df3b53cc387a32b2834634cd5f4b8b2d4fe1136c
   languageName: node
   linkType: hard
 
@@ -22049,7 +22059,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-fetch@npm:^1.0.1, node-fetch@npm:^1.7.1, node-fetch@npm:^1.7.3":
+"node-fetch@npm:1.7.3, node-fetch@npm:^1.0.1, node-fetch@npm:^1.7.1, node-fetch@npm:^1.7.3":
   version: 1.7.3
   resolution: "node-fetch@npm:1.7.3"
   dependencies:

@@ -1,3 +1,7 @@
+---
+forum_url: https://discourse.joplinapp.org/t/24913
+---
+
 # GSoC "Contributor Proposals" phase is starting now!
 
 The "Contributor Proposals" phase of GSoC 2022 is starting today! If you would like to be a contributor, now is the time to choose your project idea, write your proposal, and upload it to https://summerofcode.withgoogle.com/
