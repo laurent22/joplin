@@ -46,7 +46,6 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 	}
 
 	async importDirectory(dirPath: string, parentFolderId: string) {
-		console.info(`Import: ${dirPath}`);
 		const supportedFileExtension = this.metadata().fileExtensions;
 		const stats = await shim.fsDriver().readDirStats(dirPath);
 		for (let i = 0; i < stats.length; i++) {
@@ -54,7 +53,6 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 
 			if (stat.isDirectory()) {
 				if (await this.isDirectoryEmpty(`${dirPath}/${stat.path}`)) {
-					console.info(`Ignoring empty directory: ${stat.path}`);
 					continue;
 				}
 				const folderTitle = await Folder.findUniqueItemTitle(basename(stat.path));
