@@ -78,9 +78,10 @@ const useSwitchProfileMenuItems = (profileConfig: ProfileConfig, menuItemDic: an
 			const profile = profileConfig.profiles[i];
 
 			let menuItem: any = {};
+			const profileNum = i + 1;
 
-			if (menuItemDic[`switchProfile${i}`]) {
-				menuItem = { ...menuItemDic[`switchProfile${i}`] };
+			if (menuItemDic[`switchProfile${profileNum}`]) {
+				menuItem = { ...menuItemDic[`switchProfile${profileNum}`] };
 			} else {
 				menuItem = {
 					label: profile.name,

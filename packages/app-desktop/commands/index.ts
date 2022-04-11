@@ -10,9 +10,9 @@ import * as restoreNoteRevision from './restoreNoteRevision';
 import * as startExternalEditing from './startExternalEditing';
 import * as stopExternalEditing from './stopExternalEditing';
 import * as switchProfile from './switchProfile';
-import * as switchProfile0 from './switchProfile0';
 import * as switchProfile1 from './switchProfile1';
 import * as switchProfile2 from './switchProfile2';
+import * as switchProfile3 from './switchProfile3';
 import * as toggleExternalEditing from './toggleExternalEditing';
 import * as toggleSafeMode from './toggleSafeMode';
 
@@ -28,9 +28,9 @@ const index:any[] = [
 	startExternalEditing,
 	stopExternalEditing,
 	switchProfile,
-	switchProfile0,
 	switchProfile1,
 	switchProfile2,
+	switchProfile3,
 	toggleExternalEditing,
 	toggleSafeMode,
 ];

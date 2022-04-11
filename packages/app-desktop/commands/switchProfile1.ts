@@ -9,7 +9,7 @@ export const declaration: CommandDeclaration = {
 export const runtime = (): CommandRuntime => {
 	return {
 		execute: async (_context: CommandContext) => {
-			await CommandService.instance().execute('switchProfile', 1);
+			await CommandService.instance().execute('switchProfile', 0);
 		},
 	};
 };

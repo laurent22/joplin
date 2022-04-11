@@ -2,14 +2,14 @@ import CommandService, { CommandRuntime, CommandDeclaration, CommandContext } fr
 import { _ } from '@joplin/lib/locale';
 
 export const declaration: CommandDeclaration = {
-	name: 'switchProfile0',
-	label: () => _('Switch to profile %d', 0),
+	name: 'switchProfile3',
+	label: () => _('Switch to profile %d', 3),
 };
 
 export const runtime = (): CommandRuntime => {
 	return {
 		execute: async (_context: CommandContext) => {
-			await CommandService.instance().execute('switchProfile', 0);
+			await CommandService.instance().execute('switchProfile', 2);
 		},
 	};
 };
