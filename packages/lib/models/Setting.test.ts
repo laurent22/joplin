@@ -1,4 +1,4 @@
-import Setting, { SettingSectionSource } from '../models/Setting';
+import Setting, { SettingSectionSource, SettingStorage } from '../models/Setting';
 import { setupDatabaseAndSynchronizer, switchClient, expectThrow, expectNotThrow, msleep } from '../testing/test-utils';
 import { readFile, stat, mkdirp, writeFile, pathExists, readdir } from 'fs-extra';
 import Logger from '../Logger';
@@ -10,7 +10,7 @@ async function loadSettingsFromFile(): Promise<any> {
 	return JSON.parse(await readFile(Setting.settingFilePath, 'utf8'));
 }
 
-export const switchToSubProfileSettings = async () => {
+const switchToSubProfileSettings = async () => {
 	await Setting.reset();
 	const rootProfileDir = Setting.value('profileDir');
 	const profileConfigPath = `${rootProfileDir}/profiles.json`;
@@ -23,7 +23,7 @@ export const switchToSubProfileSettings = async () => {
 	await Setting.load();
 };
 
-export const restoreSettingState = async () => {
+const restoreSettingState = async () => {
 	await setupDatabaseAndSynchronizer(1);
 	await switchClient(1);
 };
@@ -277,71 +277,71 @@ describe('models/Setting', function() {
 		expect(Setting.value('style.editor.contentMaxWidth')).toBe(600); // Changed
 	}));
 
-	// it('should load sub-profile settings', async () => {
-	// 	await Setting.reset();
+	it('should load sub-profile settings', async () => {
+		await Setting.reset();
 
-	// 	Setting.setValue('locale', 'fr_FR'); // Global setting
-	// 	Setting.setValue('theme', Setting.THEME_DARK); // Global setting
-	// 	Setting.setValue('sync.target', 9); // Local setting
-	// 	await Setting.saveAll();
+		Setting.setValue('locale', 'fr_FR'); // Global setting
+		Setting.setValue('theme', Setting.THEME_DARK); // Global setting
+		Setting.setValue('sync.target', 9); // Local setting
+		await Setting.saveAll();
 
-	// 	await switchToSubProfileSettings();
+		await switchToSubProfileSettings();
 
-	// 	expect(Setting.value('locale')).toBe('fr_FR'); // Should come from the root profile
-	// 	expect(Setting.value('theme')).toBe(Setting.THEME_DARK); // Should come from the root profile
-	// 	expect(Setting.value('sync.target')).toBe(0); // Should come from the local profile
+		expect(Setting.value('locale')).toBe('fr_FR'); // Should come from the root profile
+		expect(Setting.value('theme')).toBe(Setting.THEME_DARK); // Should come from the root profile
+		expect(Setting.value('sync.target')).toBe(0); // Should come from the local profile
 
-	// 	// Also check that the special loadOne() function works as expected
+		// Also check that the special loadOne() function works as expected
 
-	// 	expect((await Setting.loadOne('locale')).value).toBe('fr_FR');
-	// 	expect((await Setting.loadOne('theme')).value).toBe(Setting.THEME_DARK);
-	// 	expect((await Setting.loadOne('sync.target')).value).toBe(undefined);
+		expect((await Setting.loadOne('locale')).value).toBe('fr_FR');
+		expect((await Setting.loadOne('theme')).value).toBe(Setting.THEME_DARK);
+		expect((await Setting.loadOne('sync.target')).value).toBe(undefined);
 
-	// 	await restoreSettingState();
-	// });
+		await restoreSettingState();
+	});
 
-	// it('should save sub-profile settings', async () => {
-	// 	await Setting.reset();
-	// 	Setting.setValue('locale', 'fr_FR'); // Global setting
-	// 	Setting.setValue('theme', Setting.THEME_DARK); // Global setting
-	// 	await Setting.saveAll();
+	it('should save sub-profile settings', async () => {
+		await Setting.reset();
+		Setting.setValue('locale', 'fr_FR'); // Global setting
+		Setting.setValue('theme', Setting.THEME_DARK); // Global setting
+		await Setting.saveAll();
 
-	// 	await switchToSubProfileSettings();
+		await switchToSubProfileSettings();
 
-	// 	Setting.setValue('locale', 'en_GB'); // Should be saved to global
-	// 	Setting.setValue('sync.target', 8); // Should be saved to local
+		Setting.setValue('locale', 'en_GB'); // Should be saved to global
+		Setting.setValue('sync.target', 8); // Should be saved to local
 
-	// 	await Setting.saveAll();
-	// 	await Setting.reset();
-	// 	await Setting.load();
+		await Setting.saveAll();
+		await Setting.reset();
+		await Setting.load();
 
-	// 	expect(Setting.value('locale')).toBe('en_GB');
-	// 	expect(Setting.value('theme')).toBe(Setting.THEME_DARK);
-	// 	expect(Setting.value('sync.target')).toBe(8);
+		expect(Setting.value('locale')).toBe('en_GB');
+		expect(Setting.value('theme')).toBe(Setting.THEME_DARK);
+		expect(Setting.value('sync.target')).toBe(8);
 
-	// 	// Double-check that actual file content is correct
+		// Double-check that actual file content is correct
 
-	// 	const globalSettings = JSON.parse(await readFile(`${Setting.value('rootProfileDir')}/settings-1.json`, 'utf8'));
-	// 	const localSettings = JSON.parse(await readFile(`${Setting.value('profileDir')}/settings-1.json`, 'utf8'));
+		const globalSettings = JSON.parse(await readFile(`${Setting.value('rootProfileDir')}/settings-1.json`, 'utf8'));
+		const localSettings = JSON.parse(await readFile(`${Setting.value('profileDir')}/settings-1.json`, 'utf8'));
 
-	// 	expect(globalSettings).toEqual({
-	// 		'$schema': 'https://joplinapp.org/schema/settings.json',
-	// 		locale: 'en_GB',
-	// 		theme: 2,
-	// 	});
+		expect(globalSettings).toEqual({
+			'$schema': 'https://joplinapp.org/schema/settings.json',
+			locale: 'en_GB',
+			theme: 2,
+		});
 
-	// 	expect(localSettings).toEqual({
-	// 		'$schema': 'https://joplinapp.org/schema/settings.json',
-	// 		'sync.target': 8,
-	// 	});
+		expect(localSettings).toEqual({
+			'$schema': 'https://joplinapp.org/schema/settings.json',
+			'sync.target': 8,
+		});
 
-	// 	await restoreSettingState();
-	// });
+		await restoreSettingState();
+	});
 
-	// it('all global settings should be saved to file', async () => {
-	// 	for (const [k, v] of Object.entries(Setting.metadata())) {
-	// 		if (v.isGlobal && v.storage !== SettingStorage.File) throw new Error(`Setting "${k}" is global but storage is not "file"`);
-	// 	}
-	// });
+	it('all global settings should be saved to file', async () => {
+		for (const [k, v] of Object.entries(Setting.metadata())) {
+			if (v.isGlobal && v.storage !== SettingStorage.File) throw new Error(`Setting "${k}" is global but storage is not "file"`);
+		}
+	});
 
 });

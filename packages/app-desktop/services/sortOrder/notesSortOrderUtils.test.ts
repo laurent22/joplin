@@ -1,6 +1,6 @@
 import { notesSortOrderFieldArray, notesSortOrderNextField, setNotesSortOrder } from './notesSortOrderUtils';
 import Setting from '@joplin/lib/models/Setting';
-import { setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
+// import { setupDatabaseAndSynchronizer, switchClient } from '@joplin/lib/testing/test-utils';
 const { shimInit } = require('@joplin/lib/shim-init-node.js');
 
 beforeAll(() => {
@@ -10,11 +10,11 @@ beforeAll(() => {
 
 describe('notesSortOrderUtils', () => {
 
-	beforeEach(async (done) => {
-		await setupDatabaseAndSynchronizer(1);
-		await switchClient(1);
-		done();
-	});
+	// beforeEach(async (done) => {
+	// 	await setupDatabaseAndSynchronizer(1);
+	// 	await switchClient(1);
+	// 	done();
+	// });
 
 	it('should always provide the same ordered fields', async () => {
 		const expected = ['user_updated_time', 'user_created_time', 'title', 'order'];
