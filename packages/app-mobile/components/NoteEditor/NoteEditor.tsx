@@ -2,7 +2,7 @@ import Setting from '@joplin/lib/models/Setting';
 import shim from '@joplin/lib/shim';
 import { themeStyle } from '@joplin/lib/theme';
 const React = require('react');
-const { forwardRef, useImperativeHandle, useEffect, useState, useCallback, useRef } = require('react');
+const { forwardRef, useImperativeHandle, useEffect, useMemo, useState, useCallback, useRef } = require('react');
 const { WebView } = require('react-native-webview');
 const { editorFont } = require('../global-style');
 
@@ -183,6 +183,17 @@ function fontFamilyFromSettings() {
 // 	return css;
 // }
 
+function useCss(themeId: number): string {
+	return useMemo(() => {
+		const theme = themeStyle(themeId);
+		return `
+			:root {
+				background-color: ${theme.backgroundColor};
+			}
+		`;
+	}, [themeId]);
+}
+
 function useHtml(css: string): string {
 	const [html, setHtml] = useState('');
 
@@ -262,8 +273,8 @@ function NoteEditor(props: Props, ref: any) {
 		}
 	`;
 
-	// const css = useCss(props.themeId);
-	const html = useHtml('');
+	const css = useCss(props.themeId);
+	const html = useHtml(css);
 
 	useImperativeHandle(ref, () => {
 		return {
