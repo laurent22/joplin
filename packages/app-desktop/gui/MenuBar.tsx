@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, useCallback } from 'react';
+import { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import { AppState } from '../app.reducer';
 import InteropService from '@joplin/lib/services/interop/InteropService';
 import { stateUtils } from '@joplin/lib/reducer';
@@ -18,9 +18,9 @@ import menuCommandNames from './menuCommandNames';
 import stateToWhenClauseContext from '../services/commands/stateToWhenClauseContext';
 import bridge from '../services/bridge';
 import checkForUpdates from '../checkForUpdates';
-
 const { connect } = require('react-redux');
 import { reg } from '@joplin/lib/registry';
+import { ProfileConfig } from '../../lib/services/profileConfig/types';
 const packageInfo = require('../packageInfo.js');
 const { clipboard } = require('electron');
 const Menu = bridge().Menu;
@@ -39,7 +39,7 @@ function pluginMenuItemsCommandNames(menuItems: MenuItem[]): string[] {
 	return output;
 }
 
-function pluginCommandNames(plugins: PluginStates): string[] {
+function getPluginCommandNames(plugins: PluginStates): string[] {
 	let output: string[] = [];
 
 	for (const view of pluginUtils.viewsByType(plugins, 'menu')) {
@@ -70,6 +70,42 @@ function createPluginMenuTree(label: string, menuItems: MenuItem[], onMenuItemCl
 	return output;
 }
 
+const useSwitchProfileMenuItems = (profileConfig: ProfileConfig, menuItemDic: any) => {
+	return useMemo(() => {
+		const switchProfileMenuItems: any[] = [];
+
+		for (let i = 0; i < profileConfig.profiles.length; i++) {
+			const profile = profileConfig.profiles[i];
+
+			let menuItem: any = {};
+			const profileNum = i + 1;
+
+			if (menuItemDic[`switchProfile${profileNum}`]) {
+				menuItem = { ...menuItemDic[`switchProfile${profileNum}`] };
+			} else {
+				menuItem = {
+					label: profile.name,
+					click: () => {
+						void CommandService.instance().execute('switchProfile', i);
+					},
+				};
+			}
+
+			menuItem.label = profile.name;
+			menuItem.type = 'checkbox';
+			menuItem.checked = profileConfig.currentProfile === i;
+
+			switchProfileMenuItems.push(menuItem);
+		}
+
+		switchProfileMenuItems.push({ type: 'separator' });
+		switchProfileMenuItems.push(menuItemDic.addProfile);
+		switchProfileMenuItems.push(menuItemDic.editProfileConfig);
+
+		return switchProfileMenuItems;
+	}, [profileConfig, menuItemDic]);
+};
+
 interface Props {
 	dispatch: Function;
 	menuItemProps: any;
@@ -90,6 +126,7 @@ interface Props {
 	plugins: PluginStates;
 	customCss: string;
 	locale: string;
+	profileConfig: ProfileConfig;
 }
 
 const commandNames: string[] = menuCommandNames();
@@ -241,6 +278,18 @@ function useMenu(props: Props) {
 	const onImportModuleClickRef = useRef(null);
 	onImportModuleClickRef.current = onImportModuleClick;
 
+	const pluginCommandNames = useMemo(() => props.pluginMenuItems.map((view: any) => view.commandName), [props.pluginMenuItems]);
+
+	const menuItemDic = useMemo(() => {
+		return menuUtils.commandsToMenuItems(
+			commandNames.concat(pluginCommandNames),
+			(commandName: string) => onMenuItemClickRef.current(commandName),
+			props.locale
+		);
+	}, [commandNames, pluginCommandNames, props.locale]);
+
+	const switchProfileMenuItems: any[] = useSwitchProfileMenuItems(props.profileConfig, menuItemDic);
+
 	useEffect(() => {
 		let timeoutId: any = null;
 
@@ -248,13 +297,6 @@ function useMenu(props: Props) {
 			if (!timeoutId) return; // Has been cancelled
 
 			const keymapService = KeymapService.instance();
-
-			const pluginCommandNames = props.pluginMenuItems.map((view: any) => view.commandName);
-			const menuItemDic = menuUtils.commandsToMenuItems(
-				commandNames.concat(pluginCommandNames),
-				(commandName: string) => onMenuItemClickRef.current(commandName),
-				props.locale
-			);
 
 			const quitMenuItem = {
 				label: _('Quit'),
@@ -385,6 +427,10 @@ function useMenu(props: Props) {
 			const newFolderItem = menuItemDic.newFolder;
 			const newSubFolderItem = menuItemDic.newSubFolder;
 			const printItem = menuItemDic.print;
+			const switchProfileItem = {
+				label: _('Switch profile'),
+				submenu: switchProfileMenuItems,
+			};
 
 			let toolsItems: any[] = [];
 
@@ -499,6 +545,8 @@ function useMenu(props: Props) {
 					platforms: ['darwin'],
 				},
 
+				shim.isMac() ? noItem : switchProfileItem,
+
 				shim.isMac() ? {
 					label: _('Hide %s', 'Joplin'),
 					platforms: ['darwin'],
@@ -545,6 +593,7 @@ function useMenu(props: Props) {
 						type: 'separator',
 					},
 					printItem,
+					switchProfileItem,
 				],
 			};
 
@@ -848,7 +897,21 @@ function useMenu(props: Props) {
 			clearTimeout(timeoutId);
 			timeoutId = null;
 		};
-	}, [props.routeName, props.pluginMenuItems, props.pluginMenus, keymapLastChangeTime, modulesLastChangeTime, props['spellChecker.language'], props['spellChecker.enabled'], props.plugins, props.customCss, props.locale]);
+	}, [
+		props.routeName,
+		props.pluginMenuItems,
+		props.pluginMenus,
+		keymapLastChangeTime,
+		modulesLastChangeTime,
+		props['spellChecker.language'],
+		props['spellChecker.enabled'],
+		props.plugins,
+		props.customCss,
+		props.locale,
+		props.profileConfig,
+		switchProfileMenuItems,
+		menuItemDic,
+	]);
 
 	useMenuStates(menu, props);
 
@@ -889,7 +952,7 @@ const mapStateToProps = (state: AppState) => {
 	const whenClauseContext = stateToWhenClauseContext(state);
 
 	return {
-		menuItemProps: menuUtils.commandsToMenuItemProps(commandNames.concat(pluginCommandNames(state.pluginService.plugins)), whenClauseContext),
+		menuItemProps: menuUtils.commandsToMenuItemProps(commandNames.concat(getPluginCommandNames(state.pluginService.plugins)), whenClauseContext),
 		locale: state.settings.locale,
 		routeName: state.route.routeName,
 		selectedFolderId: state.selectedFolderId,
@@ -907,6 +970,7 @@ const mapStateToProps = (state: AppState) => {
 		['spellChecker.enabled']: state.settings['spellChecker.enabled'],
 		plugins: state.pluginService.plugins,
 		customCss: state.customCss,
+		profileConfig: state.profileConfig,
 	};
 };
 

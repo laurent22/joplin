@@ -231,6 +231,13 @@ class PromptDialog extends React.Component {
 		}
 
 		const buttonComps = [];
+		if (buttonTypes.indexOf('create') >= 0) {
+			buttonComps.push(
+				<button key="create" disabled={!this.state.answer} style={styles.button} onClick={() => onClose(true, 'create')}>
+					{_('Create')}
+				</button>
+			);
+		}
 		if (buttonTypes.indexOf('ok') >= 0) {
 			buttonComps.push(
 				<button key="ok" disabled={!this.state.answer} style={styles.button} onClick={() => onClose(true, 'ok')}>

@@ -106,6 +106,7 @@ const supportDir = `${oldTestDir}/support`;
 // various space-in-path issues.
 const dataDir = `${oldTestDir}/test data/${suiteName_}`;
 const profileDir = `${dataDir}/profile`;
+const rootProfileDir = profileDir;
 
 fs.mkdirpSync(logDir);
 fs.mkdirpSync(baseTempDir);
@@ -185,6 +186,7 @@ Setting.setConstant('tempDir', baseTempDir);
 Setting.setConstant('cacheDir', baseTempDir);
 Setting.setConstant('pluginDataDir', `${profileDir}/profile/plugin-data`);
 Setting.setConstant('profileDir', profileDir);
+Setting.setConstant('rootProfileDir', rootProfileDir);
 Setting.setConstant('env', 'dev');
 
 BaseService.logger_ = logger;
@@ -271,6 +273,8 @@ async function switchClient(id: number, options: any = null) {
 	await Setting.reset();
 	Setting.settingFilename = `settings-${id}.json`;
 
+	Setting.setConstant('profileDir', rootProfileDir);
+	Setting.setConstant('rootProfileDir', rootProfileDir);
 	Setting.setConstant('resourceDirName', resourceDirName(id));
 	Setting.setConstant('resourceDir', resourceDir(id));
 	Setting.setConstant('pluginDir', pluginDir(id));
@@ -329,6 +333,9 @@ async function setupDatabase(id: number = null, options: any = null) {
 	// some strange async issue related to settings when the tests are
 	// running.
 	await Setting.reset();
+
+	Setting.setConstant('profileDir', rootProfileDir);
+	Setting.setConstant('rootProfileDir', rootProfileDir);
 
 	if (databases_[id]) {
 		BaseModel.setDb(databases_[id]);
