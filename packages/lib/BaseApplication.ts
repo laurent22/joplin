@@ -724,7 +724,7 @@ export default class BaseApplication {
 		setAutoFreeze(initArgs.env === 'dev');
 
 		const rootProfileDir = this.determineProfileDir(initArgs);
-		const { profileDir, profileConfig } = await initProfile(rootProfileDir);
+		const { profileDir, profileConfig, isSubProfile } = await initProfile(rootProfileDir);
 		this.profileConfig_ = profileConfig;
 
 		const resourceDirName = 'resources';
@@ -850,6 +850,7 @@ export default class BaseApplication {
 		}
 
 		if ('welcomeDisabled' in initArgs) Setting.setValue('welcome.enabled', !initArgs.welcomeDisabled);
+		if (isSubProfile) Setting.setValue('welcome.enabled', false);
 
 		if (!Setting.value('api.token')) {
 			void EncryptionService.instance()
