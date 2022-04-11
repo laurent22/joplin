@@ -27,7 +27,8 @@ export interface Theme {
 	color2: string;
 	selectedColor2: string;
 	colorError2: string;
-	colorWarn2: string;
+	colorWarn2: string; // On a darker background (eg. sidebar)
+	colorWarn3: string; // On a lighter background (eg. note list)
 
 	// Color scheme "3" is used for the config screens for example/
 	// It's dark text over gray background.

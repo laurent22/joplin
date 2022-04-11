@@ -30,6 +30,20 @@
 				"period": "yearly",
 				"amount": "57.48",
 				"currency": "EUR"
+			},
+			{
+				"accountType": 3,
+				"id": "price_1Kl9uBLx4fybOTqJhx7q4zzj",
+				"period": "monthly",
+				"amount": "7.99",
+				"currency": "EUR"
+			},
+			{
+				"accountType": 3,
+				"id": "price_1Kl9uNLx4fybOTqJpsB2l3Kg",
+				"period": "yearly",
+				"amount": "80.28",
+				"currency": "EUR"
 			}
 		]		
 	},
@@ -63,6 +77,20 @@
 				"id": "price_1JJIQ7Lx4fybOTqJsQNv1QUp",
 				"period": "yearly",
 				"amount": "57.48",
+				"currency": "EUR"
+			},
+			{
+				"accountType": 3,
+				"id": "price_1Kl9jyLx4fybOTqJN0i1A88B",
+				"period": "monthly",
+				"amount": "7.99",
+				"currency": "EUR"
+			},
+			{
+				"accountType": 3,
+				"id": "price_1Kl9nLLx4fybOTqJYTtts35z",
+				"period": "yearly",
+				"amount": "80.28",
 				"currency": "EUR"
 			}
 		]

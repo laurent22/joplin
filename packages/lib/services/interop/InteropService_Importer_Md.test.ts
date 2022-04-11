@@ -1,20 +1,32 @@
 import InteropService_Importer_Md from '../../services/interop/InteropService_Importer_Md';
 import Note from '../../models/Note';
-import { setupDatabaseAndSynchronizer, supportDir, switchClient } from '../../testing/test-utils';
+import Folder from '../../models/Folder';
+import * as fs from 'fs-extra';
+import { createTempDir, setupDatabaseAndSynchronizer, supportDir, switchClient } from '../../testing/test-utils';
 import { MarkupToHtml } from '@joplin/renderer';
+import { FolderEntity } from '../database/types';
 
 
-describe('InteropService_Importer_Md: importLocalImages', function() {
+describe('InteropService_Importer_Md', function() {
+	let tempDir: string;
 	async function importNote(path: string) {
 		const importer = new InteropService_Importer_Md();
 		importer.setMetadata({ fileExtensions: ['md', 'html'] });
 		return await importer.importFile(path, 'notebook');
 	}
-
+	async function importNoteDirectory(path: string) {
+		const importer = new InteropService_Importer_Md();
+		importer.setMetadata({ fileExtensions: ['md', 'html'] });
+		return await importer.importDirectory(path, 'notebook');
+	}
 	beforeEach(async (done) => {
 		await setupDatabaseAndSynchronizer(1);
 		await switchClient(1);
+		tempDir = await createTempDir();
 		done();
+	});
+	afterEach(async () => {
+		await fs.remove(tempDir);
 	});
 	it('should import linked files and modify tags appropriately', async function() {
 		const note = await importNote(`${supportDir}/test_notes/md/sample.md`);
@@ -116,5 +128,31 @@ describe('InteropService_Importer_Md: importLocalImages', function() {
 		expect(note.markup_language).toBe(MarkupToHtml.MARKUP_LANGUAGE_HTML);
 		const preservedAlt = note.body.includes('alt="../../photo.jpg"');
 		expect(preservedAlt).toBe(true);
+	});
+	it('should import non-empty directory', async function() {
+		await fs.mkdirp(`${tempDir}/non-empty/non-empty`);
+		await fs.writeFile(`${tempDir}/non-empty/non-empty/sample.md`, '# Sample');
+
+		await importNoteDirectory(`${tempDir}/non-empty`);
+		const allFolders = await Folder.all();
+		expect(allFolders.map((f: FolderEntity) => f.title).indexOf('non-empty')).toBeGreaterThanOrEqual(0);
+	});
+	it('should not import empty directory', async function() {
+		await fs.mkdirp(`${tempDir}/empty/empty`);
+
+		await importNoteDirectory(`${tempDir}/empty`);
+		const allFolders = await Folder.all();
+		expect(allFolders.map((f: FolderEntity) => f.title).indexOf('empty')).toBe(-1);
+	});
+	it('should import directory with non-empty subdirectory', async function() {
+		await fs.mkdirp(`${tempDir}/non-empty-subdir/non-empty-subdir/subdir-empty`);
+		await fs.mkdirp(`${tempDir}/non-empty-subdir/non-empty-subdir/subdir-non-empty`);
+		await fs.writeFile(`${tempDir}/non-empty-subdir/non-empty-subdir/subdir-non-empty/sample.md`, '# Sample');
+
+		await importNoteDirectory(`${tempDir}/non-empty-subdir`);
+		const allFolders = await Folder.all();
+		expect(allFolders.map((f: FolderEntity) => f.title).indexOf('non-empty-subdir')).toBeGreaterThanOrEqual(0);
+		expect(allFolders.map((f: FolderEntity) => f.title).indexOf('subdir-empty')).toBe(-1);
+		expect(allFolders.map((f: FolderEntity) => f.title).indexOf('subdir-non-empty')).toBeGreaterThanOrEqual(0);
 	});
 });

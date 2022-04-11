@@ -9,6 +9,7 @@ import Tag from '../../models/Tag';
 import NoteTag from '../../models/NoteTag';
 import ResourceService from '../../services/ResourceService';
 import SearchEngine from '../../services/searchengine/SearchEngine';
+import { ResourceEntity } from '../database/types';
 
 const createFolderForPagination = async (num: number, time: number) => {
 	await Folder.save({
@@ -325,7 +326,7 @@ describe('services_rest_Api', function() {
 		expect(response.body.indexOf(resource.id) >= 0).toBe(true);
 	}));
 
-	it('should not compress images uploaded through resource api', (async () => {
+	it('should not compress images uploaded through resource API', (async () => {
 		const originalImagePath = `${supportDir}/photo-large.png`;
 		await api.route(RequestMethod.POST, 'resources', null, JSON.stringify({
 			title: 'testing resource',
@@ -343,6 +344,80 @@ describe('services_rest_Api', function() {
 		const uploadedImageSize = (await shim.fsDriver().stat(uploadedImagePath)).size;
 
 		expect(originalImageSize).toEqual(uploadedImageSize);
+	}));
+
+	it('should update a resource', (async () => {
+		await api.route(RequestMethod.POST, 'resources', null, JSON.stringify({
+			title: 'resource',
+		}), [
+			{
+				path: `${supportDir}/photo.jpg`,
+			},
+		]);
+
+		const resourceV1: ResourceEntity = (await Resource.all())[0];
+
+		await msleep(1);
+
+		await api.route(RequestMethod.PUT, `resources/${resourceV1.id}`, null, JSON.stringify({
+			title: 'resource mod',
+		}), [
+			{
+				path: `${supportDir}/photo-large.png`,
+			},
+		]);
+
+		const resourceV2: ResourceEntity = (await Resource.all())[0];
+
+		expect(resourceV2.title).toBe('resource mod');
+		expect(resourceV2.mime).toBe('image/png');
+		expect(resourceV2.file_extension).toBe('png');
+		expect(resourceV2.updated_time).toBeGreaterThan(resourceV1.updated_time);
+		expect(resourceV2.created_time).toBe(resourceV1.created_time);
+		expect(resourceV2.size).toBeGreaterThan(resourceV1.size);
+
+		expect(resourceV2.size).toBe((await shim.fsDriver().stat(Resource.fullPath(resourceV2))).size);
+	}));
+
+	it('should allow updating a resource file only', (async () => {
+		await api.route(RequestMethod.POST, 'resources', null, JSON.stringify({
+			title: 'resource',
+		}), [{ path: `${supportDir}/photo.jpg` }]);
+
+		const resourceV1: ResourceEntity = (await Resource.all())[0];
+
+		await msleep(1);
+
+		await api.route(RequestMethod.PUT, `resources/${resourceV1.id}`, null, null, [
+			{
+				path: `${supportDir}/photo-large.png`,
+			},
+		]);
+
+		const resourceV2: ResourceEntity = (await Resource.all())[0];
+
+		// It should have updated the file content, but not the metadata
+		expect(resourceV2.title).toBe(resourceV1.title);
+		expect(resourceV2.size).toBeGreaterThan(resourceV1.size);
+	}));
+
+	it('should update resource properties', (async () => {
+		await api.route(RequestMethod.POST, 'resources', null, JSON.stringify({
+			title: 'resource',
+		}), [{ path: `${supportDir}/photo.jpg` }]);
+
+		const resourceV1: ResourceEntity = (await Resource.all())[0];
+
+		await msleep(1);
+
+		await api.route(RequestMethod.PUT, `resources/${resourceV1.id}`, null, JSON.stringify({
+			title: 'my new title',
+		}));
+
+		const resourceV2: ResourceEntity = (await Resource.all())[0];
+
+		expect(resourceV2.title).toBe('my new title');
+		expect(resourceV2.mime).toBe(resourceV1.mime);
 	}));
 
 	it('should delete resources', (async () => {
