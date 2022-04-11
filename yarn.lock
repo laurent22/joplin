@@ -3026,7 +3026,7 @@ __metadata:
     react-native-popup-menu: ^0.10.0
     react-native-quick-actions: ^0.3.13
     react-native-rsa-native: ^2.0.4
-    react-native-scoped-storage: ^1.9.2
+    react-native-saf-x: ^0.4.0
     react-native-securerandom: ^1.0.0-rc.0
     react-native-share: ^7.2.1
     react-native-side-menu: ^1.1.3
@@ -25004,12 +25004,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-scoped-storage@npm:^1.9.2":
-  version: 1.9.2
-  resolution: "react-native-scoped-storage@npm:1.9.2"
+"react-native-saf-x@npm:^0.4.0":
+  version: 0.4.0
+  resolution: "react-native-saf-x@npm:0.4.0"
   peerDependencies:
+    react: "*"
     react-native: "*"
-  checksum: ece34259b553201d0d8a9b965257a5facfa1f4760a2c51d28057157ea4b5dbaeec219250f4522e27219059b4c2189ea77d6635b86ba77019629de4ad29c3f272
+  checksum: 0563ff22eca772a8be22cb13985dec045adb63a65ca90437c97f9d4e414234131a88110357b454a9d20d64f87139b0b921535570bae52434d6cc4e66924e9832
   languageName: node
   linkType: hard
 

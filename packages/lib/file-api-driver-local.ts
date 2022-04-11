@@ -275,17 +275,10 @@ export class FileApiDriverLocal {
 
 	async clearRoot(baseDir: string) {
 		if (baseDir.startsWith('content://')) {
-			const recurseItems = async (path: string) => {
-				const result = await this.list(path);
-				for (const item of result.items) {
-					if (item.isDir) {
-						await recurseItems(item.path);
-					}
-					await this.fsDriver().remove(item.path);
-				}
-			};
-
-			await recurseItems(baseDir);
+			const result = await this.list(baseDir);
+			for (const item of result.items) {
+				await this.fsDriver().remove(item.path);
+			}
 		} else {
 			await this.fsDriver().remove(baseDir);
 			await this.fsDriver().mkdir(baseDir);

@@ -2,56 +2,13 @@ import { ReadDirStatsOptions } from '@joplin/lib/fs-driver-base';
 import { fileExtension, filename } from '@joplin/lib/path-utils';
 import time from '@joplin/lib/time';
 import FsDriverRN from './fs-driver-rn';
-const RNSS = require('react-native-scoped-storage');
-
-type StatResult = {
-	/** document path */
-	path: string;
-	/** document uri */
-	uri: string;
-	/** document name */
-	name: string;
-	/** type of document */
-	type: 'directory' | 'file';
-	/** if document is a file */
-	mime?: string;
-  /** if document is a file, length in bytes */
-	size?: number;
-	/** last modified date in milliseconds */
-	lastModified: number;
-};
+import RNSAF, { Encoding, DocumentFileDetails } from 'react-native-saf-x';
 
 const ANDROID_URI_PREFIX = 'content://';
 
 function isScopedUri(path: string) {
 	return path.includes(ANDROID_URI_PREFIX);
 }
-
-export function normalizePath(path: string) {
-	if (!path.startsWith(ANDROID_URI_PREFIX)) return path;
-
-	const baseUriParts = decodeURIComponent(path).split(':');
-	if (baseUriParts.length > 2) {
-		return `${baseUriParts[0]}:${baseUriParts[1]}${encodeURIComponent(`:${baseUriParts.slice(2).join(':')}`)}`;
-	} else {
-		throw new Error('selecting root folder is not supported');
-	}
-}
-
-function getAllPossibleDirCreations(normalizedPath: string) {
-	const baseUriParts = decodeURIComponent(normalizedPath).split(':');
-	if (baseUriParts.length > 2) {
-		const uris = baseUriParts[2].split('/').reduce((accumulator, dirName)=> {
-			const parentUri = accumulator.length ? `${accumulator[accumulator.length - 1][0]}/${accumulator[accumulator.length - 1][1]}` : `${baseUriParts[0]}:${baseUriParts[1]}`;
-			accumulator.push([parentUri, dirName]);
-			return accumulator;
-		}, []);
-		return uris;
-	} else {
-		return [];
-	}
-}
-
 
 // fs file driver for android api 29+ with fallback to fs-driver-rn whenever necessary
 export default class FsDriverAndroid extends FsDriverRN {
@@ -60,7 +17,7 @@ export default class FsDriverAndroid extends FsDriverRN {
 	// @ts-ignore
 	public appendFile(path: string, content: any, encoding = 'base64') {
 		if (isScopedUri(path)) {
-			return RNSS.writeFile(normalizePath(path), null, null, content, encoding, true);
+			return RNSAF.writeFile(path, content, { encoding: encoding as Encoding, append: true });
 		}
 		return super.appendFile(path, content, encoding);
 	}
@@ -69,14 +26,14 @@ export default class FsDriverAndroid extends FsDriverRN {
 	// @ts-ignore
 	public writeFile(path: string, content: any, encoding = 'base64') {
 		if (isScopedUri(path)) {
-			return RNSS.writeFile(normalizePath(path), null, null, content, encoding);
+			return RNSAF.writeFile(path, content, { encoding: encoding as Encoding });
 		}
 
 		return super.writeFile(path, content, encoding);
 	}
 
 
-	public async readDirStats(path: string, options: ReadDirStatsOptions = null): Promise<StatResult[]> {
+	public async readDirStats(path: string, options: ReadDirStatsOptions = null): Promise<DocumentFileDetails[]> {
 		if (!options) options = { recursive: false };
 		if (!('recursive' in options)) options.recursive = false;
 
@@ -84,25 +41,26 @@ export default class FsDriverAndroid extends FsDriverRN {
 			return super.readDirStats(path, options);
 		}
 
-		let items: StatResult[] = [];
+		let stats: DocumentFileDetails[] = [];
 		try {
-			items = await RNSS.listFiles(normalizePath(path));
+			stats = await RNSAF.listFiles(path);
 		} catch (error) {
 			throw new Error(`Could not read directory: ${path}: ${error.message}`);
 		}
 
-		let output: StatResult[] = [];
-		for (let i = 0; i < items.length; i++) {
-			const item = items[i];
-			output.push(item);
+		let output: DocumentFileDetails[] = [];
+		for (let i = 0; i < stats.length; i++) {
+			const stat = stats[i];
+			output.push(stat);
 
-			output = await this.readUriDirStatsHandleRecursion_(item, output, options);
+			output = await this.readUriDirStatsHandleRecursion_(stat, output, options);
 		}
 		return output;
 	}
 
 	public async move(source: string, dest: string) {
 		if (isScopedUri(source) && isScopedUri(dest)) {
+			console.warn('move not ready');
 			await this.writeFile(dest, this.readFile(source));
 			await this.unlink(source);
 		} else if (isScopedUri(source) || isScopedUri(dest)) {
@@ -113,33 +71,23 @@ export default class FsDriverAndroid extends FsDriverRN {
 
 	public async exists(path: string) {
 		if (isScopedUri(path)) {
-			try {
-				// TODO: fix when module exposes exists()
-				await this.mkdir(path);
-				return true;
-			} catch (e) {
-				return false;
-			}
+			return RNSAF.exists(path);
 		}
 		return super.exists(path);
 	}
 
 	public async mkdir(path: string) {
 		if (isScopedUri(path)) {
-			/** recursivly try to make directories after id part of content url */
-			const dirCreations = getAllPossibleDirCreations(normalizePath(path)).slice(1);
-			for (const entry of dirCreations) {
-				await RNSS.createDirectory(entry[0], entry[1]);
-			}
+			await RNSAF.mkdir(path);
 			return;
 		}
 		return super.mkdir(path);
 	}
 
 	// @ts-ignore
-	public async stat(path: string): Promise<StatResult> {
+	public async stat(path: string): Promise<DocumentFileDetails> {
 		try {
-			return RNSS.stat(normalizePath(path));
+			return RNSAF.stat(path);
 		} catch (error) {
 			if (error && ((error.message && error.message.indexOf('exist') >= 0) || error.code === 'ENOENT')) {
 				// Probably { [Error: File does not exist] framesToPop: 1, code: 'EUNSPECIFIED' }
@@ -161,7 +109,7 @@ export default class FsDriverAndroid extends FsDriverRN {
 	public readFile(path: string, encoding = 'utf8') {
 		if (isScopedUri(path)) {
 			if (encoding === 'Buffer') throw new Error('Raw buffer output not supported for FsDriverAndroid.readFile');
-			return RNSS.readFile(normalizePath(path), encoding);
+			return RNSAF.readFile(path, { encoding: encoding as Encoding });
 		}
 		return super.readFile(path);
 	}
@@ -169,6 +117,7 @@ export default class FsDriverAndroid extends FsDriverRN {
 	// Always overwrite destination
 	public async copy(source: string, dest: string) {
 		if (isScopedUri(source) && isScopedUri(dest)) {
+			console.warn('copy not ready');
 			await this.writeFile(dest, this.readFile(source));
 		} else if (isScopedUri(source) || isScopedUri(dest)) {
 			throw new Error('Move between different storage types not supported');
@@ -178,7 +127,8 @@ export default class FsDriverAndroid extends FsDriverRN {
 
 	public async unlink(path: string) {
 		if (isScopedUri(path)) {
-			return await RNSS.deleteFile(normalizePath(path));
+			await RNSAF.unlink(path);
+			return;
 		}
 		return super.unlink(path);
 	}
@@ -197,7 +147,7 @@ export default class FsDriverAndroid extends FsDriverRN {
 		return super.stat(path).then(result => result.isDirectory());
 	}
 
-	protected async readUriDirStatsHandleRecursion_(stat: StatResult, output: StatResult[], options: ReadDirStatsOptions): Promise<StatResult[]> {
+	protected async readUriDirStatsHandleRecursion_(stat: DocumentFileDetails, output: DocumentFileDetails[], options: ReadDirStatsOptions): Promise<DocumentFileDetails[]> {
 		if (options.recursive && stat.type === 'directory') {
 			const subStats = await this.readDirStats(stat.uri, options);
 			for (let j = 0; j < subStats.length; j++) {
@@ -205,7 +155,6 @@ export default class FsDriverAndroid extends FsDriverRN {
 				output.push(subStat);
 			}
 		}
-
 		return output;
 	}
 

@@ -21,6 +21,7 @@ const { Dropdown } = require('../Dropdown.js');
 const { themeStyle } = require('../global-style.js');
 const shared = require('@joplin/lib/components/shared/config-shared.js');
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
+import { openDocumentTree } from 'react-native-saf-x';
 const RNFS = require('react-native-fs');
 
 class ConfigScreenComponent extends BaseScreenComponent {
@@ -67,9 +68,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 						}
 					} else {
 						// scoped storage is needed
-						await import('react-native-scoped-storage').then(scopedStorage => {
-							return scopedStorage.openDocumentTree(true);
-						}).then(dir => {
+						await openDocumentTree(true).then(dir => {
 							return shared.updateSettingValue(this, 'sync.2.path', dir.uri);
 						}).catch(err => {
 							Alert.alert(_('Error'), _(err.message));
