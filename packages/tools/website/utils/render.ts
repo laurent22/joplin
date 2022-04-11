@@ -24,15 +24,11 @@ export function renderMustache(contentHtml: string, templateParams: TemplatePara
 }
 
 export function getMarkdownIt() {
-	return new MarkdownIt({
+	const markdownIt = new MarkdownIt({
 		breaks: true,
 		linkify: true,
 		html: true,
 	});
-}
-
-export function markdownToPageHtml(md: string, templateParams: TemplateParams): string {
-	const markdownIt = getMarkdownIt();
 
 	markdownIt.core.ruler.push('tableClass', (state: any) => {
 		const tokens = state.tokens;
@@ -47,7 +43,11 @@ export function markdownToPageHtml(md: string, templateParams: TemplateParams): 
 		}
 	});
 
-	markdownIt.use(headerAnchor);
+	return markdownIt;
+}
 
+export function markdownToPageHtml(md: string, templateParams: TemplateParams): string {
+	const markdownIt = getMarkdownIt();
+	markdownIt.use(headerAnchor);
 	return renderMustache(markdownIt.render(md), templateParams);
 }

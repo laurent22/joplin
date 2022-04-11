@@ -22,6 +22,7 @@
   "dependencies": {
     "@joplin/lib": "~2.7",
     "@joplin/renderer": "~2.7",
+    "@types/node-fetch": "1.6.9",
     "dayjs": "^1.10.7",
     "execa": "^4.1.0",
     "fs-extra": "^4.0.3",
@@ -31,7 +32,7 @@
     "md5-file": "^4.0.0",
     "moment": "^2.24.0",
     "mustache": "^2.3.0",
-    "node-fetch": "^1.7.3",
+    "node-fetch": "1.7.3",
     "relative": "^3.0.2",
     "request": "^2.88.0",
     "sharp": "^0.25.2",

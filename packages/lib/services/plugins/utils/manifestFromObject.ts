@@ -45,6 +45,7 @@ export default function manifestFromObject(o: any): PluginManifest {
 		homepage_url: getString('homepage_url', false),
 		repository_url: getString('repository_url', false),
 		keywords: getStrings('keywords', false),
+		categories: getStrings('categories', false),
 		permissions: permissions,
 
 		_recommended: getBoolean('_recommended', false, false),

@@ -19,6 +19,8 @@ interface CodeMirrorResult {
 	editor: EditorView;
 	undo: Function;
 	redo: Function;
+	select: (anchor: number, head: number)=> void;
+	insertText: (text: string)=> void;
 }
 
 function postMessage(name: string, data: any) {
@@ -36,25 +38,53 @@ function logMessage(...msg: any[]) {
 //
 // https://github.com/codemirror/theme-one-dark/blob/main/src/one-dark.ts
 //
+// For a tutorial, see:
+//
+// https://codemirror.net/6/examples/styling/#themes
+//
 // Use Safari developer tools to view the content of the CodeMirror iframe while
 // the app is running. It seems that what appears as ".ͼ1" in the CSS is the
 // equivalent of "&" in the theme object. So to target ".ͼ1.cm-focused", you'd
 // use '&.cm-focused' in the theme.
 const createTheme = (theme: any): Extension => {
+	const isDarkTheme = theme.appearance === 'dark';
+
+	const baseGlobalStyle: Record<string, string> = {
+		color: theme.color,
+		backgroundColor: theme.backgroundColor,
+		fontFamily: theme.fontFamily,
+		fontSize: `${theme.fontSize}px`,
+	};
+	const baseCursorStyle: Record<string, string> = { };
+	const baseContentStyle: Record<string, string> = { };
+	const baseSelectionStyle: Record<string, string> = { };
+
+	// If we're in dark mode, the caret and selection are difficult to see.
+	// Adjust them appropriately
+	if (isDarkTheme) {
+		// Styling the caret requires styling both the caret itself
+		// and the CodeMirror caret.
+		// See https://codemirror.net/6/examples/styling/#themes
+		baseContentStyle.caretColor = 'white';
+		baseCursorStyle.borderLeftColor = 'white';
+
+		baseSelectionStyle.backgroundColor = '#6b6b6b';
+	}
+
 	const baseTheme = EditorView.baseTheme({
-		'&': {
-			color: theme.color,
-			backgroundColor: theme.backgroundColor,
-			fontFamily: theme.fontFamily,
-			fontSize: `${theme.fontSize}px`,
-		},
+		'&': baseGlobalStyle,
+
+		// These must be !important or more specific than CodeMirror's built-ins
+		'.cm-content': baseContentStyle,
+		'&.cm-focused .cm-cursor': baseCursorStyle,
+		'&.cm-focused .cm-selectionBackground, ::selection': baseSelectionStyle,
 
 		'&.cm-focused': {
 			outline: 'none',
 		},
 	});
 
-	const appearanceTheme = EditorView.theme({}, { dark: theme.appearance === 'dark' });
+	const appearanceTheme = EditorView.theme({}, { dark: isDarkTheme });
 
 	const baseHeadingStyle = {
 		fontWeight: 'bold',
@@ -152,6 +182,13 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 						postMessage('onChange', { value: editor.state.doc.toString() });
 						schedulePostUndoRedoDepthChange(editor);
 					}
+
+					if (!viewUpdate.state.selection.eq(viewUpdate.startState.selection)) {
+						const mainRange = viewUpdate.state.selection.main;
+						const selStart = mainRange.from;
+						const selEnd = mainRange.to;
+						postMessage('onSelectionChange', { selection: { start: selStart, end: selEnd } });
+					}
 				}),
 			],
 			doc: initialText,
@@ -168,6 +205,15 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 		redo: () => {
 			redo(editor);
 			schedulePostUndoRedoDepthChange(editor, true);
+		},
+		select: (anchor: number, head: number) => {
+			editor.dispatch(editor.state.update({
+				selection: { anchor, head },
+				scrollIntoView: true,
+			}));
+		},
+		insertText: (text: string) => {
+			editor.dispatch(editor.state.replaceSelection(text));
 		},
 	};
 }
