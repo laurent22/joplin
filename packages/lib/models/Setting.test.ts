@@ -23,6 +23,11 @@ const switchToSubProfileSettings = async () => {
 	await Setting.load();
 };
 
+const restoreSettingState = async () => {
+	await setupDatabaseAndSynchronizer(1);
+	await switchClient(1);
+};
+
 describe('models/Setting', function() {
 
 	beforeEach(async (done) => {
@@ -291,6 +296,8 @@ describe('models/Setting', function() {
 		expect((await Setting.loadOne('locale')).value).toBe('fr_FR');
 		expect((await Setting.loadOne('theme')).value).toBe(Setting.THEME_DARK);
 		expect((await Setting.loadOne('sync.target')).value).toBe(undefined);
+
+		await restoreSettingState();
 	});
 
 	it('should save sub-profile settings', async () => {
@@ -327,6 +334,8 @@ describe('models/Setting', function() {
 			'$schema': 'https://joplinapp.org/schema/settings.json',
 			'sync.target': 8,
 		});
+
+		await restoreSettingState();
 	});
 
 	it('all global settings should be saved to file', async () => {
