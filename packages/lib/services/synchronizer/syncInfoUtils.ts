@@ -90,11 +90,32 @@ export function localSyncInfoFromState(state: State): SyncInfo {
 	return new SyncInfo(state.settings['syncInfoCache']);
 }
 
+const mergeActiveMasterKeys = (s1: SyncInfo, s2: SyncInfo, output: SyncInfo) => {
+	const activeMasterKey1 = getActiveMasterKey(s1);
+	const activeMasterKey2 = getActiveMasterKey(s2);
+	let doDefaultAction = false;
+
+	if (activeMasterKey1 && activeMasterKey2) {
+		if (activeMasterKey1.hasBeenUsed && !activeMasterKey2.hasBeenUsed) {
+			output.setWithTimestamp(s1, 'activeMasterKeyId');
+		} else if (!activeMasterKey1.hasBeenUsed && activeMasterKey2.hasBeenUsed) {
+			output.setWithTimestamp(s2, 'activeMasterKeyId');
+		} else {
+			doDefaultAction = true;
+		}
+	} else {
+		doDefaultAction = true;
+	}
+
+	if (doDefaultAction) {
+		output.setWithTimestamp(s1.keyTimestamp('activeMasterKeyId') > s2.keyTimestamp('activeMasterKeyId') ? s1 : s2, 'activeMasterKeyId');
+	}
+};
+
 export function mergeSyncInfos(s1: SyncInfo, s2: SyncInfo): SyncInfo {
 	const output: SyncInfo = new SyncInfo();
 
 	output.setWithTimestamp(s1.keyTimestamp('e2ee') > s2.keyTimestamp('e2ee') ? s1 : s2, 'e2ee');
-	output.setWithTimestamp(s1.keyTimestamp('activeMasterKeyId') > s2.keyTimestamp('activeMasterKeyId') ? s1 : s2, 'activeMasterKeyId');
 	output.setWithTimestamp(s1.keyTimestamp('ppk') > s2.keyTimestamp('ppk') ? s1 : s2, 'ppk');
 	output.version = s1.version > s2.version ? s1.version : s2.version;
 
@@ -109,6 +130,8 @@ export function mergeSyncInfos(s1: SyncInfo, s2: SyncInfo): SyncInfo {
 			output.masterKeys[idx] = mk.updated_time > mk2.updated_time ? mk : mk2;
 		}
 	}
+
+	mergeActiveMasterKeys(s1, s2, output);
 
 	return output;
 }
@@ -154,6 +177,14 @@ export class SyncInfo {
 		this.activeMasterKeyId_ = 'activeMasterKeyId' in s ? s.activeMasterKeyId : { value: '', updatedTime: 0 };
 		this.masterKeys_ = 'masterKeys' in s ? s.masterKeys : [];
 		this.ppk_ = 'ppk' in s ? s.ppk : { value: null, updatedTime: 0 };
+
+		// Migration for master keys that didn't have "hasBeenUsed" property -
+		// in that case we assume they've been used at least once.
+		for (const mk of this.masterKeys_) {
+			if (!('hasBeenUsed' in mk) || mk.hasBeenUsed === undefined) {
+				mk.hasBeenUsed = true;
+			}
+		}
 	}
 
 	public setWithTimestamp(fromSyncInfo: SyncInfo, propName: string) {
