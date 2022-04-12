@@ -60,9 +60,7 @@ export default class FsDriverAndroid extends FsDriverRN {
 
 	public async move(source: string, dest: string) {
 		if (isScopedUri(source) && isScopedUri(dest)) {
-			console.warn('move not ready');
-			await this.writeFile(dest, this.readFile(source));
-			await this.unlink(source);
+			await RNSAF.moveFile(source, dest, { replaceIfDestinationExists: true });
 		} else if (isScopedUri(source) || isScopedUri(dest)) {
 			throw new Error('Move between different storage types not supported');
 		}
@@ -117,8 +115,7 @@ export default class FsDriverAndroid extends FsDriverRN {
 	// Always overwrite destination
 	public async copy(source: string, dest: string) {
 		if (isScopedUri(source) && isScopedUri(dest)) {
-			console.warn('copy not ready');
-			await this.writeFile(dest, this.readFile(source));
+			await RNSAF.copyFile(source, dest, { replaceIfDestinationExists: true });
 		} else if (isScopedUri(source) || isScopedUri(dest)) {
 			throw new Error('Move between different storage types not supported');
 		}

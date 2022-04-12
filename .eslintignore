@@ -874,6 +874,9 @@ packages/app-mobile/utils/TlsUtils.js.map
 packages/app-mobile/utils/checkPermissions.d.ts
 packages/app-mobile/utils/checkPermissions.js
 packages/app-mobile/utils/checkPermissions.js.map
+packages/app-mobile/utils/fs-driver-android.d.ts
+packages/app-mobile/utils/fs-driver-android.js
+packages/app-mobile/utils/fs-driver-android.js.map
 packages/app-mobile/utils/fs-driver-rn.d.ts
 packages/app-mobile/utils/fs-driver-rn.js
 packages/app-mobile/utils/fs-driver-rn.js.map
@@ -1054,6 +1057,9 @@ packages/lib/eventManager.js.map
 packages/lib/file-api-driver-joplinServer.d.ts
 packages/lib/file-api-driver-joplinServer.js
 packages/lib/file-api-driver-joplinServer.js.map
+packages/lib/file-api-driver-local.d.ts
+packages/lib/file-api-driver-local.js
+packages/lib/file-api-driver-local.js.map
 packages/lib/file-api-driver-memory.d.ts
 packages/lib/file-api-driver-memory.js
 packages/lib/file-api-driver-memory.js.map
