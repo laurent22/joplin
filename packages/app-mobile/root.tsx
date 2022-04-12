@@ -15,7 +15,7 @@ import KvStore from '@joplin/lib/services/KvStore';
 import NoteScreen from './components/screens/Note';
 import UpgradeSyncTargetScreen from './components/screens/UpgradeSyncTargetScreen';
 import Setting, { Env } from '@joplin/lib/models/Setting';
-import RNFetchBlob from 'react-native-blob-util';
+import RNFetchBlob from 'rn-fetch-blob';
 import PoorManIntervals from '@joplin/lib/PoorManIntervals';
 import reducer from '@joplin/lib/reducer';
 import ShareExtension from './utils/ShareExtension';
