@@ -5,6 +5,7 @@ import Note from './models/Note';
 import Folder from './models/Folder';
 import BaseModel from './BaseModel';
 import { Store } from 'redux';
+import { ProfileConfig } from './services/profileConfig/types';
 const ArrayUtils = require('./ArrayUtils.js');
 const { ALL_NOTES_FILTER_ID } = require('./reserved-ids');
 const { createSelectorCreator, defaultMemoize } = require('reselect');
@@ -92,6 +93,7 @@ export interface State {
 	isInsertingNotes: boolean;
 	hasEncryptedItems: boolean;
 	needApiAuth: boolean;
+	profileConfig: ProfileConfig;
 
 	// Extra reducer keys go here:
 	pluginService: PluginServiceState;
@@ -162,6 +164,7 @@ export const defaultState: State = {
 	isInsertingNotes: false,
 	hasEncryptedItems: false,
 	needApiAuth: false,
+	profileConfig: null,
 
 	pluginService: pluginServiceDefaultState,
 	shareService: shareServiceDefaultState,
@@ -1136,6 +1139,10 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 
 		case 'API_NEED_AUTH_SET':
 			draft.needApiAuth = action.value;
+			break;
+
+		case 'PROFILE_CONFIG_SET':
+			draft.profileConfig = action.value;
 			break;
 
 		}

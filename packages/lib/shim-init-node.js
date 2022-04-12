@@ -235,6 +235,8 @@ function shimInit(options = null) {
 		const readChunk = require('read-chunk');
 		const imageType = require('image-type');
 
+		const isUpdate = !!options.destinationResourceId;
+
 		const uuid = require('./uuid').default;
 
 		if (!(await fs.pathExists(filePath))) throw new Error(_('Cannot access %s', filePath));
@@ -242,12 +244,16 @@ function shimInit(options = null) {
 		defaultProps = defaultProps ? defaultProps : {};
 
 		let resourceId = defaultProps.id ? defaultProps.id : uuid.create();
-		if (options.destinationResourceId) resourceId = options.destinationResourceId;
+		if (isUpdate) resourceId = options.destinationResourceId;
 
-		let resource = options.destinationResourceId ? {} : Resource.new();
+		let resource = isUpdate ? {} : Resource.new();
 		resource.id = resourceId;
+
+		// When this is an update we auto-update the mime type, in case the
+		// content type has changed, but we keep the title. It is still possible
+		// to modify the title on update using defaultProps.
 		resource.mime = mimeUtils.fromFilename(filePath);
-		resource.title = basename(filePath);
+		if (!isUpdate) resource.title = basename(filePath);
 
 		let fileExt = safeFileExtension(fileExtension(filePath));
 
@@ -288,7 +294,7 @@ function shimInit(options = null) {
 		const saveOptions = { isNew: true };
 		if (options.userSideValidation) saveOptions.userSideValidation = true;
 
-		if (options.destinationResourceId) {
+		if (isUpdate) {
 			saveOptions.isNew = false;
 			const tempPath = `${targetPath}.tmp`;
 			await shim.fsDriver().move(targetPath, tempPath);
