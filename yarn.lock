@@ -3026,7 +3026,7 @@ __metadata:
     react-native-popup-menu: ^0.10.0
     react-native-quick-actions: ^0.3.13
     react-native-rsa-native: ^2.0.4
-    react-native-saf-x: ^0.5.0
+    react-native-saf-x: ^0.5.2
     react-native-securerandom: ^1.0.0-rc.0
     react-native-share: ^7.2.1
     react-native-side-menu: ^1.1.3
@@ -24884,13 +24884,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-saf-x@npm:^0.5.0":
-  version: 0.5.0
-  resolution: "react-native-saf-x@npm:0.5.0"
+"react-native-saf-x@npm:^0.5.2":
+  version: 0.5.2
+  resolution: "react-native-saf-x@npm:0.5.2"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 95992a727fbd6a55e029081bb57ae61fd373615e4a9de448435fb3603d9348b7bcdda353d737ca9583e501472f7aff3a9fadaf5042975192f94d363d48ddba5c
+  checksum: 9c246ce4842d532f1a5369d3470392d86022fae6b241ccccbdb822f3ce162a56a2c4c1909743845b374e5532d98851693bf9bfc1e40c57401b10a39763b6a6d7
   languageName: node
   linkType: hard
 

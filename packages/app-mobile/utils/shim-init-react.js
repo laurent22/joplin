@@ -4,7 +4,6 @@ const PoorManIntervals = require('@joplin/lib/PoorManIntervals').default;
 const RNFetchBlob = require('react-native-blob-util').default;
 const { generateSecureRandom } = require('react-native-securerandom');
 const FsDriverRN = require('./fs-driver-rn').default;
-const FsDriverAndroid = require('./fs-driver-android').default;
 const urlValidator = require('valid-url');
 const { Buffer } = require('buffer');
 const { Linking, Platform } = require('react-native');
@@ -24,11 +23,7 @@ function shimInit() {
 
 	shim.fsDriver = () => {
 		if (!shim.fsDriver_) {
-			if (Platform.OS === 'android' && Platform.Version >= 29) {
-				shim.fsDriver_ = new FsDriverAndroid();
-			} else {
-				shim.fsDriver_ = new FsDriverRN();
-			}
+			shim.fsDriver_ = new FsDriverRN();
 		}
 		return shim.fsDriver_;
 	};

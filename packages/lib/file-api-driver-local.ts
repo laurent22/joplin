@@ -13,31 +13,13 @@ const { basicDelta } = require('./file-api');
 // check that it is indeed the problem, check log-database.txt of both clients, search for the note ID, and most likely both notes
 // will have been modified at the same exact second at some point. If not, it's another bug that needs to be investigated.
 
-type StatResult =
-// non uri based:
-| {
-	name: string | undefined; // The name of the item TODO: why is this not documented?
-	path: string; // The absolute path to the item
-	size: number; // Size in bytes
-	mode: number; // UNIX file mode
-	ctime: Date; // Created date
+// this is the format that fs-driver-rn would return
+type StdStatResult = {
+	birthtime: Date; // Created date
 	mtime: Date; // Last modified date
-	originalFilepath: string; // In case of content uri this is the pointed file path, otherwise is the same as path
-	isFile: ()=> boolean; // Is the file just a file?
 	isDirectory: ()=> boolean; // Is the file a directory?
-}
-// the uri based:
-| {
-	/** document uri */
-	uri: string;
-	/** document name */
-	name: string;
-	/** type of document */
-	type: 'directory' | 'file';
-	/** if document is a file */
-	mime?: string;
-	/** last modified date in milliseconds */
-	lastModified: number;
+	path: string;
+	size: number; // Size in bytes
 };
 
 type MetaData = {
@@ -75,7 +57,7 @@ export class FileApiDriverLocal {
 
 	async stat(path: string): Promise<MetaData> {
 		try {
-			const s = await this.fsDriver().stat(path) as StatResult;
+			const s = await this.fsDriver().stat(path) as StdStatResult;
 			if (!s) return null;
 			return this.metadataFromStat_(s);
 		} catch (error) {
@@ -83,14 +65,7 @@ export class FileApiDriverLocal {
 		}
 	}
 
-	metadataFromStat_(stat: StatResult): MetaData {
-		if ('uri' in stat) {
-			return {
-				path: stat.uri,
-				updated_time: stat.lastModified,
-				isDir: stat.type === 'directory',
-			};
-		}
+	metadataFromStat_(stat: StdStatResult): MetaData {
 		return {
 			path: stat.path,
 			// created_time: stat.birthtime.getTime(),
@@ -99,7 +74,7 @@ export class FileApiDriverLocal {
 		};
 	}
 
-	metadataFromStats_(stats: StatResult[]) {
+	metadataFromStats_(stats: StdStatResult[]) {
 		const output = [];
 		for (let i = 0; i < stats.length; i++) {
 			const mdStat = this.metadataFromStat_(stats[i]);

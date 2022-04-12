@@ -93,7 +93,6 @@ SyncTargetRegistry.addClass(SyncTargetJoplinServer);
 SyncTargetRegistry.addClass(SyncTargetJoplinCloud);
 
 import FsDriverRN from './utils/fs-driver-rn';
-import FsDriverAndroid from './utils/fs-driver-android';
 import DecryptionWorker from '@joplin/lib/services/DecryptionWorker';
 import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
 import MigrationService from '@joplin/lib/services/MigrationService';
@@ -463,12 +462,7 @@ async function initialize(dispatch: Function) {
 	BaseItem.loadClass('MasterKey', MasterKey);
 	BaseItem.loadClass('Revision', Revision);
 
-	let fsDriver;
-	if (Platform.OS === 'android' && Platform.Version >= 29) {
-		fsDriver = new FsDriverAndroid();
-	} else {
-		fsDriver = new FsDriverRN();
-	}
+	const fsDriver = new FsDriverRN();
 
 	Resource.fsDriver_ = fsDriver;
 	FileApiDriverLocal.fsDriver_ = fsDriver;
