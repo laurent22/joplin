@@ -216,6 +216,21 @@ class PromptDialog extends React.Component {
 			}
 		};
 
+		const searchByValue = option => {
+			return option.val;
+		};
+
+		// Add the title path for each note in 'Move to notebook'
+		if (this.props.autocomplete) {
+			for (let i = 0; i < this.props.autocomplete.length; i++) {
+				// To modify only the labels in the 'Move to notebook' selector
+				if (this.props.autocomplete[i].val) {
+					this.props.autocomplete[i].label = <span title={this.props.autocomplete[i].path}> {this.props.autocomplete[i].val}</span>;
+				}
+			}
+		}
+
+
 		const descComp = this.props.description ? <div style={styles.desc}>{this.props.description}</div> : null;
 
 		let inputComp = null;
@@ -225,7 +240,7 @@ class PromptDialog extends React.Component {
 		} else if (this.props.inputType === 'tags') {
 			inputComp = <CreatableSelect className="tag-selector" styles={styles.select} theme={styles.selectTheme} ref={this.answerInput_} value={this.state.answer} placeholder="" components={makeAnimated()} isMulti={true} isClearable={false} backspaceRemovesValue={true} options={this.props.autocomplete} onChange={onSelectChange} onKeyDown={event => onKeyDown(event)} />;
 		} else if (this.props.inputType === 'dropdown') {
-			inputComp = <Select className="item-selector" styles={styles.select} theme={styles.selectTheme} ref={this.answerInput_} components={makeAnimated()} value={this.props.answer} defaultValue={this.props.defaultValue} isClearable={false} options={this.props.autocomplete} onChange={onSelectChange} onKeyDown={event => onKeyDown(event)} />;
+			inputComp = <Select className="item-selector" styles={styles.select} theme={styles.selectTheme} ref={this.answerInput_} components={makeAnimated()} value={this.props.answer} defaultValue={this.props.defaultValue} isClearable={false} options={this.props.autocomplete} getOptionValue={searchByValue} onChange={onSelectChange} onKeyDown={event => onKeyDown(event)} />;
 		} else {
 			inputComp = <input style={styles.input} ref={this.answerInput_} value={this.state.answer} type="text" onChange={event => onChange(event)} onKeyDown={event => onKeyDown(event)} />;
 		}
