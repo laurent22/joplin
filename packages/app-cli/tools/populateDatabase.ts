@@ -44,7 +44,7 @@ const processUser = async (userNum: number) => {
 
 	try {
 		const userEmail = `user${userNum}@example.com`;
-		const userPassword = 'hunter1hunter2hunter3';
+		const userPassword = '111111';
 		const commandFile = `${tempDir}/populateDatabase-${userNum}.txt`;
 		const profileDir = `${homedir()}/.config/joplindev-populate/joplindev-testing-${userNum}`;
 
