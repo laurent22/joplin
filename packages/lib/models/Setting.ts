@@ -1516,7 +1516,7 @@ class Setting extends BaseModel {
 
 		this.metadata_ = Object.assign(this.metadata_, this.customMetadata_);
 
-		if (this.value('env') === Env.Dev) this.validateMetadata(this.metadata_);
+		if (this.constants_.env === Env.Dev) this.validateMetadata(this.metadata_);
 
 		return this.metadata_;
 	}
