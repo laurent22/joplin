@@ -161,8 +161,8 @@ describe('admin/users', function() {
 		await patchUser(session.id, {
 			id: user.id,
 			email: 'changed@example.com',
-			password: 'hunter11hunter22hunter33',
-			password2: 'hunter11hunter22hunter33',
+			password: '111111',
+			password2: '111111',
 		}, '/admin/users/me');
 
 		const sessions = await models().session().all();

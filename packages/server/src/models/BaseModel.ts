@@ -5,7 +5,7 @@ import uuidgen from '../utils/uuidgen';
 import { ErrorUnprocessableEntity, ErrorBadRequest } from '../utils/errors';
 import { Models, NewModelFactoryHandler } from './factory';
 import * as EventEmitter from 'events';
-import { Config } from '../utils/types';
+import { Config, Env } from '../utils/types';
 import personalizedUserContentBaseUrl from '@joplin/lib/services/joplinServer/personalizedUserContentBaseUrl';
 import Logger from '@joplin/lib/Logger';
 import dbuuid from '../utils/dbuuid';
@@ -83,6 +83,10 @@ export default abstract class BaseModel<T> {
 
 	protected get userContentBaseUrl(): string {
 		return this.config_.userContentBaseUrl;
+	}
+
+	protected get env(): Env {
+		return this.config_.env;
 	}
 
 	protected personalizedUserContentBaseUrl(userId: Uuid): string {
