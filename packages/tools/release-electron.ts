@@ -1,4 +1,4 @@
-import { execCommand2, githubRelease, gitPullTry, rootDir } from './tool-utils';
+import { execCommand2, gitCurrentBranch, githubRelease, gitPullTry, rootDir } from './tool-utils';
 
 const appDir = `${rootDir}/packages/app-desktop`;
 
@@ -27,10 +27,12 @@ async function main() {
 	console.info('Release options: ', releaseOptions);
 
 	const release = await githubRelease('joplin', tagName, releaseOptions);
+	const currentBranch = await gitCurrentBranch();
 
 	console.info(`Created GitHub release: ${release.html_url}`);
 	console.info('GitHub release page: https://github.com/laurent22/joplin/releases');
 	console.info(`To create changelog: node packages/tools/git-changelog.js ${version}`);
+	console.info(`To merge the version update: git checkout dev && git mergeff ${currentBranch} && git push && git checkout ${currentBranch}`);
 }
 
 main().catch((error) => {
