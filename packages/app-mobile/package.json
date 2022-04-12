@@ -38,7 +38,6 @@
     "react": "17.0.2",
     "react-native": "0.66.1",
     "react-native-action-button": "^2.8.5",
-    "react-native-blob-util": "^0.15.0",
     "react-native-camera": "^3.40.0",
     "react-native-dialogbox": "^0.6.10",
     "react-native-document-picker": "^4.0.0",
@@ -62,6 +61,7 @@
     "react-native-webview": "^10.9.2",
     "react-redux": "5.0.7",
     "redux": "4.0.0",
+    "rn-fetch-blob": "0.12.0",
     "stream": "0.0.2",
     "stream-browserify": "^3.0.0",
     "string-natural-compare": "^2.0.2",
@@ -93,16 +93,5 @@
     "rollup": "^2.53.1",
     "typescript": "^4.0.5",
     "uglify-js": "^3.13.10"
-  },
-  "expo": {
-    "autolinking": {
-      "exclude": [
-        "expo-keep-awake",
-        "expo-font",
-        "expo-constants",
-        "expo-asset",
-        "expo-application"
-      ]
-    }
   }
 }
