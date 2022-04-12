@@ -21,7 +21,7 @@ const { Dropdown } = require('../Dropdown.js');
 const { themeStyle } = require('../global-style.js');
 const shared = require('@joplin/lib/components/shared/config-shared.js');
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
-import { openDocumentTree } from 'react-native-saf-x';
+import { openDocumentTree } from '@joplin/react-native-saf-x';
 const RNFS = require('react-native-fs');
 
 class ConfigScreenComponent extends BaseScreenComponent {

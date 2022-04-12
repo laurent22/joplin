@@ -1,7 +1,7 @@
 import FsDriverBase, { ReadDirStatsOptions } from '@joplin/lib/fs-driver-base';
 const RNFetchBlob = require('react-native-blob-util').default;
 const RNFS = require('react-native-fs');
-import RNSAF, { Encoding, DocumentFileDetail } from 'react-native-saf-x';
+import RNSAF, { Encoding, DocumentFileDetail } from '@joplin/react-native-saf-x';
 
 const ANDROID_URI_PREFIX = 'content://';
 
