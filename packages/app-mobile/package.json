@@ -16,8 +16,8 @@
     "postinstall": "jetify && yarn run build"
   },
   "dependencies": {
-    "@joplin/lib": "~2.6",
-    "@joplin/renderer": "~2.6",
+    "@joplin/lib": "~2.8",
+    "@joplin/renderer": "~2.8",
     "@react-native-community/clipboard": "^1.5.0",
     "@react-native-community/datetimepicker": "^3.0.3",
     "@react-native-community/geolocation": "^2.0.2",
