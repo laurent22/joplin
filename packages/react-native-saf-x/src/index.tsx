@@ -6,18 +6,25 @@ const LINKING_ERROR =
 	}- You rebuilt the app after installing the package\n` +
 	'- You are not using Expo managed workflow\n';
 
-const SafX = (
-	NativeModules.SafX
-		? NativeModules.SafX
-		: new Proxy(
-			{},
-			{
-				get() {
-					throw new Error(LINKING_ERROR);
-				},
-			}
-		)
-) as SafxInterface;
+let SafX: SafxInterface;
+
+if (Platform.OS === 'android') {
+	SafX = (
+		NativeModules.SafX
+			? NativeModules.SafX
+			: new Proxy(
+				{},
+				{
+					get() {
+						throw new Error(LINKING_ERROR);
+					},
+				}
+			)
+	) as SafxInterface;
+} else {
+	// @ts-ignore
+	SafX = {};
+}
 
 export type Encoding = 'utf8' | 'base64' | 'ascii';
 
