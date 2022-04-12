@@ -1,9 +1,5 @@
 {
   "extends": "../../tsconfig.json",
-  "paths": {
-    "@joplin/react-native-saf-x": ["./src/index"],
-    "@/*": ["src/*"],
-  },
   "include": [
       "**/*.ts",
       "**/*.tsx",
