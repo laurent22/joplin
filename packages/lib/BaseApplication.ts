@@ -55,6 +55,8 @@ import SyncTargetNone from './SyncTargetNone';
 import { setRSA } from './services/e2ee/ppk';
 import RSA from './services/e2ee/RSA.node';
 import Resource from './models/Resource';
+import { ProfileConfig } from './services/profileConfig/types';
+import initProfile from './services/profileConfig/initProfile';
 
 const appLogger: LoggerWrapper = Logger.create('App');
 
@@ -70,6 +72,7 @@ export default class BaseApplication {
 	private eventEmitter_: any;
 	private scheduleAutoAddResourcesIID_: any = null;
 	private database_: any = null;
+	private profileConfig_: ProfileConfig = null;
 
 	protected showStackTraces_: boolean = false;
 	protected showPromptString_: boolean = false;
@@ -646,6 +649,12 @@ export default class BaseApplication {
 	public initRedux() {
 		this.store_ = createStore(this.reducer, applyMiddleware(this.generalMiddlewareFn() as any));
 		setStore(this.store_);
+
+		this.store_.dispatch({
+			type: 'PROFILE_CONFIG_SET',
+			value: this.profileConfig_,
+		});
+
 		BaseModel.dispatch = this.store().dispatch;
 		FoldersScreenUtils.dispatch = this.store().dispatch;
 		// reg.dispatch = this.store().dispatch;
@@ -714,14 +723,16 @@ export default class BaseApplication {
 		// https://immerjs.github.io/immer/docs/freezing
 		setAutoFreeze(initArgs.env === 'dev');
 
-		const profileDir = this.determineProfileDir(initArgs);
+		const rootProfileDir = this.determineProfileDir(initArgs);
+		const { profileDir, profileConfig, isSubProfile } = await initProfile(rootProfileDir);
+		this.profileConfig_ = profileConfig;
+
 		const resourceDirName = 'resources';
 		const resourceDir = `${profileDir}/${resourceDirName}`;
 		const tempDir = `${profileDir}/tmp`;
 		const cacheDir = `${profileDir}/cache`;
 
 		Setting.setConstant('env', initArgs.env);
-		Setting.setConstant('profileDir', profileDir);
 		Setting.setConstant('resourceDirName', resourceDirName);
 		Setting.setConstant('resourceDir', resourceDir);
 		Setting.setConstant('tempDir', tempDir);
@@ -778,6 +789,7 @@ export default class BaseApplication {
 
 
 		appLogger.info(`Profile directory: ${profileDir}`);
+		appLogger.info(`Root profile directory: ${rootProfileDir}`);
 
 		this.database_ = new JoplinDatabase(new DatabaseDriverNode());
 		this.database_.setLogExcludedQueryTypes(['SELECT']);
@@ -838,6 +850,7 @@ export default class BaseApplication {
 		}
 
 		if ('welcomeDisabled' in initArgs) Setting.setValue('welcome.enabled', !initArgs.welcomeDisabled);
+		if (isSubProfile) Setting.setValue('welcome.enabled', false);
 
 		if (!Setting.value('api.token')) {
 			void EncryptionService.instance()

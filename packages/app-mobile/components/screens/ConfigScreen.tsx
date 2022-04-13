@@ -41,7 +41,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 
 		this.scrollViewRef_ = React.createRef();
 
-		shared.init(this);
+		shared.init(this, reg);
 
 		this.checkSyncConfig_ = async () => {
 			// to ignore TLS erros we need to chage the global state of the app, if the check fails we need to restore the original state

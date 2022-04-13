@@ -19,6 +19,8 @@ interface CodeMirrorResult {
 	editor: EditorView;
 	undo: Function;
 	redo: Function;
+	select: (anchor: number, head: number)=> void;
+	insertText: (text: string)=> void;
 }
 
 function postMessage(name: string, data: any) {
@@ -180,6 +182,13 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 						postMessage('onChange', { value: editor.state.doc.toString() });
 						schedulePostUndoRedoDepthChange(editor);
 					}
+
+					if (!viewUpdate.state.selection.eq(viewUpdate.startState.selection)) {
+						const mainRange = viewUpdate.state.selection.main;
+						const selStart = mainRange.from;
+						const selEnd = mainRange.to;
+						postMessage('onSelectionChange', { selection: { start: selStart, end: selEnd } });
+					}
 				}),
 			],
 			doc: initialText,
@@ -196,6 +205,15 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 		redo: () => {
 			redo(editor);
 			schedulePostUndoRedoDepthChange(editor, true);
+		},
+		select: (anchor: number, head: number) => {
+			editor.dispatch(editor.state.update({
+				selection: { anchor, head },
+				scrollIntoView: true,
+			}));
+		},
+		insertText: (text: string) => {
+			editor.dispatch(editor.state.replaceSelection(text));
 		},
 	};
 }

@@ -33,7 +33,7 @@ export async function createTestUsers(db: DbConnection, config: Config, options:
 		...options,
 	};
 
-	const password = 'hunter1hunter2hunter3';
+	const password = '111111';
 
 	const models = newModelFactory(db, config);
 

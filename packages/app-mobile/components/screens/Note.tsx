@@ -488,7 +488,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	body_selectionChange(event: any) {
-		this.selection = event.nativeEvent.selection;
+		if (this.useEditorBeta()) {
+			this.selection = event.selection;
+		} else {
+			this.selection = event.nativeEvent.selection;
+		}
 	}
 
 	makeSaveAction() {
@@ -708,9 +712,17 @@ class NoteScreenComponent extends BaseScreenComponent {
 		const newNote = Object.assign({}, this.state.note);
 
 		if (this.state.mode == 'edit' && !!this.selection) {
+			const newText = `\n${resourceTag}\n`;
+
 			const prefix = newNote.body.substring(0, this.selection.start);
 			const suffix = newNote.body.substring(this.selection.end);
-			newNote.body = `${prefix}\n${resourceTag}\n${suffix}`;
+			newNote.body = `${prefix}${newText}${suffix}`;
+
+			if (this.useEditorBeta()) {
+				// The beta editor needs to be explicitly informed of changes
+				// to the note's body
+				this.editorRef.current.insertText(newText);
+			}
 		} else {
 			newNote.body += `\n${resourceTag}`;
 		}
@@ -879,11 +891,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 			output.push({
 				title: _('Attach...'),
 				onPress: async () => {
-					if (this.state.mode === 'edit' && this.useEditorBeta()) {
-						alert('Attaching files from the beta editor is not yet supported. You may do so from the viewer mode instead.');
-						return;
-					}
-
 					const buttons = [];
 
 					// On iOS, it will show "local files", which means certain files saved from the browser
@@ -1125,7 +1132,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 					ref={this.editorRef}
 					themeId={this.props.themeId}
 					initialText={note.body}
+					initialSelection={this.selection}
 					onChange={this.onBodyChange}
+					onSelectionChange={this.body_selectionChange}
 					onUndoRedoDepthChange={this.onUndoRedoDepthChange}
 					style={this.styles().bodyTextInput}
 				/>;

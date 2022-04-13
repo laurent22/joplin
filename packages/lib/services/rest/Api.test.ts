@@ -379,6 +379,28 @@ describe('services_rest_Api', function() {
 		expect(resourceV2.size).toBe((await shim.fsDriver().stat(Resource.fullPath(resourceV2))).size);
 	}));
 
+	it('should allow updating a resource file only', (async () => {
+		await api.route(RequestMethod.POST, 'resources', null, JSON.stringify({
+			title: 'resource',
+		}), [{ path: `${supportDir}/photo.jpg` }]);
+
+		const resourceV1: ResourceEntity = (await Resource.all())[0];
+
+		await msleep(1);
+
+		await api.route(RequestMethod.PUT, `resources/${resourceV1.id}`, null, null, [
+			{
+				path: `${supportDir}/photo-large.png`,
+			},
+		]);
+
+		const resourceV2: ResourceEntity = (await Resource.all())[0];
+
+		// It should have updated the file content, but not the metadata
+		expect(resourceV2.title).toBe(resourceV1.title);
+		expect(resourceV2.size).toBeGreaterThan(resourceV1.size);
+	}));
+
 	it('should update resource properties', (async () => {
 		await api.route(RequestMethod.POST, 'resources', null, JSON.stringify({
 			title: 'resource',
