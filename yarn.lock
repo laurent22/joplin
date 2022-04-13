@@ -24832,18 +24832,15 @@ __metadata:
   linkType: hard
 
 "react-native-fs@npm:^2.16.6":
-  version: 2.19.0
-  resolution: "react-native-fs@npm:2.19.0"
+  version: 2.18.0
+  resolution: "react-native-fs@npm:2.18.0"
   dependencies:
     base-64: ^0.1.0
     utf8: ^3.0.0
   peerDependencies:
     react-native: "*"
     react-native-windows: "*"
-  peerDependenciesMeta:
-    react-native-windows:
-      optional: true
-  checksum: 89f0591bfca1f93155d2e72b80b45fed46e9f2674a2eaa92cfe2bc49701dd249fc79d5ed89b54d859fdf6cedd0063a6d9d760a750adf744f76180cedb505652c
+  checksum: e9442fda46b515c1b05752c95c63c7c7eb76b33569aac798a29d088be77f2d27353256da5128f15140ed0ee1bece1ff2063bb0230b35c78624f959d61475617d
   languageName: node
   linkType: hard
 
