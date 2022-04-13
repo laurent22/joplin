@@ -117,11 +117,11 @@ class PromptDialog extends React.Component {
 					fontFamily: theme.fontFamily,
 					backgroundColor: theme.backgroundColor,
 				}),
-			option: (provided, state) =>
+			option: (provided) =>
 				Object.assign(provided, {
 					color: theme.color,
 					fontFamily: theme.fontFamily,
-					paddingLeft: `${10 + (state.data.indentDepth || 0) * 20}px`,
+					paddingLeft: '10px',
 				}),
 			multiValueLabel: provided =>
 				Object.assign(provided, {
@@ -225,11 +225,10 @@ class PromptDialog extends React.Component {
 			for (let i = 0; i < this.props.autocomplete.length; i++) {
 				// To modify only the labels in the 'Move to notebook' selector
 				if (this.props.autocomplete[i].val) {
-					this.props.autocomplete[i].label = <span title={this.props.autocomplete[i].path}> {this.props.autocomplete[i].val}</span>;
+					this.props.autocomplete[i].label = <span> {this.props.autocomplete[i].label}</span>;
 				}
 			}
 		}
-
 
 		const descComp = this.props.description ? <div style={styles.desc}>{this.props.description}</div> : null;
 
