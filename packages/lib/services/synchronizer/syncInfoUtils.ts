@@ -90,13 +90,61 @@ export function localSyncInfoFromState(state: State): SyncInfo {
 	return new SyncInfo(state.settings['syncInfoCache']);
 }
 
+// When deciding which master key should be active we should take into account
+// whether it's been used or not. If it's been used before it should most likely
+// remain the active one, regardless of timestamps. This is because the extra
+// key was most likely created by mistake by the user, in particular in this
+// kind of scenario:
+//
+// - Client 1 setup sync with sync target
+// - Client 1 enable encryption
+// - Client 1 sync
+//
+// Then user 2 does the same:
+//
+// - Client 2 setup sync with sync target
+// - Client 2 enable encryption
+// - Client 2 sync
+//
+// The problem is that enabling encryption was not needed since it was already
+// done (and recorded in info.json) on the sync target. As a result an extra key
+// has been created and it has been set as the active one, but we shouldn't use
+// it. Instead the key created by client 1 should be used and made active again.
+//
+// And we can do this using the "hasBeenUsed" field which tells us which keys
+// has already been used to encrypt data. In this case, at the moment we compare
+// local and remote sync info (before synchronising the data), key1.hasBeenUsed
+// is true, but key2.hasBeenUsed is false.
+const mergeActiveMasterKeys = (s1: SyncInfo, s2: SyncInfo, output: SyncInfo) => {
+	const activeMasterKey1 = getActiveMasterKey(s1);
+	const activeMasterKey2 = getActiveMasterKey(s2);
+	let doDefaultAction = false;
+
+	if (activeMasterKey1 && activeMasterKey2) {
+		if (activeMasterKey1.hasBeenUsed && !activeMasterKey2.hasBeenUsed) {
+			output.setWithTimestamp(s1, 'activeMasterKeyId');
+		} else if (!activeMasterKey1.hasBeenUsed && activeMasterKey2.hasBeenUsed) {
+			output.setWithTimestamp(s2, 'activeMasterKeyId');
+		} else {
+			doDefaultAction = true;
+		}
+	} else {
+		doDefaultAction = true;
+	}
+
+	if (doDefaultAction) {
+		output.setWithTimestamp(s1.keyTimestamp('activeMasterKeyId') > s2.keyTimestamp('activeMasterKeyId') ? s1 : s2, 'activeMasterKeyId');
+	}
+};
+
 export function mergeSyncInfos(s1: SyncInfo, s2: SyncInfo): SyncInfo {
 	const output: SyncInfo = new SyncInfo();
 
 	output.setWithTimestamp(s1.keyTimestamp('e2ee') > s2.keyTimestamp('e2ee') ? s1 : s2, 'e2ee');
-	output.setWithTimestamp(s1.keyTimestamp('activeMasterKeyId') > s2.keyTimestamp('activeMasterKeyId') ? s1 : s2, 'activeMasterKeyId');
 	output.setWithTimestamp(s1.keyTimestamp('ppk') > s2.keyTimestamp('ppk') ? s1 : s2, 'ppk');
 	output.version = s1.version > s2.version ? s1.version : s2.version;
+
+	mergeActiveMasterKeys(s1, s2, output);
 
 	output.masterKeys = s1.masterKeys.slice();
 
@@ -154,6 +202,14 @@ export class SyncInfo {
 		this.activeMasterKeyId_ = 'activeMasterKeyId' in s ? s.activeMasterKeyId : { value: '', updatedTime: 0 };
 		this.masterKeys_ = 'masterKeys' in s ? s.masterKeys : [];
 		this.ppk_ = 'ppk' in s ? s.ppk : { value: null, updatedTime: 0 };
+
+		// Migration for master keys that didn't have "hasBeenUsed" property -
+		// in that case we assume they've been used at least once.
+		for (const mk of this.masterKeys_) {
+			if (!('hasBeenUsed' in mk) || mk.hasBeenUsed === undefined) {
+				mk.hasBeenUsed = true;
+			}
+		}
 	}
 
 	public setWithTimestamp(fromSyncInfo: SyncInfo, propName: string) {
@@ -274,6 +330,21 @@ export function setMasterKeyEnabled(mkId: string, enabled: boolean = true) {
 
 	saveLocalSyncInfo(s);
 }
+
+export const setMasterKeyHasBeenUsed = (s: SyncInfo, mkId: string) => {
+	const idx = s.masterKeys.findIndex(mk => mk.id === mkId);
+	if (idx < 0) throw new Error(`No such master key: ${mkId}`);
+
+	s.masterKeys[idx] = {
+		...s.masterKeys[idx],
+		hasBeenUsed: true,
+		updated_time: Date.now(),
+	};
+
+	saveLocalSyncInfo(s);
+
+	return s;
+};
 
 export function masterKeyEnabled(mk: MasterKeyEntity): boolean {
 	if ('enabled' in mk) return !!mk.enabled;
