@@ -44,7 +44,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 
 		this.scrollViewRef_ = React.createRef();
 
-		shared.init(this);
+		shared.init(this, reg);
 
 		this.selectDirectoryButtonPress = async () => {
 			try {
