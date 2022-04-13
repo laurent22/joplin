@@ -116,6 +116,15 @@ function SearchBar(props: Props) {
 			if (document.activeElement) (document.activeElement as any).blur();
 			void onExitSearch();
 		}
+		//when down arrow is pressed
+		else if(event.key === 40 ){
+			if (searchStarted) searchId.next.focus();
+		}
+		//when up arrow is pressed
+		else if(event.key === 38 ){
+			if (searchStarted) searchId.previous.focus();
+		}
+		
 	}, [onExitSearch]);
 
 	const onSearchButtonClick = useCallback(() => {
@@ -132,6 +141,7 @@ function SearchBar(props: Props) {
 			});
 		}
 	}, [onExitSearch, props.isFocused]);
+
 
 	useEffect(() => {
 		if (props.notesParentType !== 'Search') {
