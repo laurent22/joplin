@@ -1,4 +1,5 @@
 // AUTO-GENERATED using `gulp buildCommandIndex`
+import * as addProfile from './addProfile';
 import * as commandPalette from './commandPalette';
 import * as editAlarm from './editAlarm';
 import * as exportPdf from './exportPdf';
@@ -38,6 +39,7 @@ import * as toggleSideBar from './toggleSideBar';
 import * as toggleVisiblePanes from './toggleVisiblePanes';
 
 const index:any[] = [
+	addProfile,
 	commandPalette,
 	editAlarm,
 	exportPdf,

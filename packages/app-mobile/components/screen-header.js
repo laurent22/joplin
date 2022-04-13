@@ -29,7 +29,9 @@ class ScreenHeaderComponent extends React.PureComponent {
 	constructor() {
 		super();
 		this.styles_ = {};
+		this.state = { showUndoRedoButtons: true };
 	}
+
 
 	styles() {
 		const themeId = Setting.value('theme');
@@ -256,7 +258,7 @@ class ScreenHeaderComponent extends React.PureComponent {
 		}
 
 		const renderTopButton = (options) => {
-			if (!options.visible) return null;
+			if (!options.visible || !this.state.showUndoRedoButtons) return null;
 
 			const icon = <Icon name={options.iconName} style={this.styles().topIcon} />;
 			const viewStyle = options.disabled ? this.styles().iconButtonDisabled : this.styles().iconButton;
@@ -421,6 +423,16 @@ class ScreenHeaderComponent extends React.PureComponent {
 						itemStyle={{
 							color: theme.color,
 							fontSize: theme.fontSize,
+						}}
+						onOpen={() => {
+							this.setState({
+								showUndoRedoButtons: false,
+							});
+						}}
+						onClose={() => {
+							this.setState({
+								showUndoRedoButtons: true,
+							});
 						}}
 						onValueChange={async (folderId, itemIndex) => {
 							// If onValueChange is specified, use this as a callback, otherwise do the default
