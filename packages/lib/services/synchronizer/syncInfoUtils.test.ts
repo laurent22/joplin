@@ -1,6 +1,6 @@
-import { afterAllCleanUp, setupDatabaseAndSynchronizer, switchClient, encryptionService } from '../../testing/test-utils';
+import { afterAllCleanUp, setupDatabaseAndSynchronizer, switchClient, encryptionService, msleep } from '../../testing/test-utils';
 import MasterKey from '../../models/MasterKey';
-import { masterKeyEnabled, setMasterKeyEnabled, SyncInfo, syncInfoEquals } from './syncInfoUtils';
+import { masterKeyEnabled, mergeSyncInfos, setMasterKeyEnabled, SyncInfo, syncInfoEquals } from './syncInfoUtils';
 
 describe('syncInfoUtils', function() {
 
@@ -90,6 +90,35 @@ describe('syncInfoUtils', function() {
 
 			expect(syncInfoEquals(syncInfo1, syncInfo2)).toBe(true);
 		}
+	});
+
+	it('should merge sync target info and takes into account usage of master key - 1', async () => {
+		const syncInfo1 = new SyncInfo();
+		syncInfo1.masterKeys = [{
+			id: '1',
+			content: 'content1',
+			hasBeenUsed: true,
+		}];
+		syncInfo1.activeMasterKeyId = '1';
+
+		await msleep(1);
+
+		const syncInfo2 = new SyncInfo();
+		syncInfo2.masterKeys = [{
+			id: '2',
+			content: 'content2',
+			hasBeenUsed: false,
+		}];
+		syncInfo2.activeMasterKeyId = '2';
+
+		// If one master key has been used and the other not, it should select
+		// the one that's been used regardless of timestamps.
+		expect(mergeSyncInfos(syncInfo1, syncInfo2).activeMasterKeyId).toBe('1');
+
+		// If both master keys have been used it should rely on timestamp
+		// (latest modified is picked).
+		syncInfo2.masterKeys[0].hasBeenUsed = true;
+		expect(mergeSyncInfos(syncInfo1, syncInfo2).activeMasterKeyId).toBe('2');
 	});
 
 });
