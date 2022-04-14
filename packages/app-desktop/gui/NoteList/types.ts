@@ -1,5 +1,5 @@
-import { FolderEntity, NoteEntity } from '../../../lib/services/database/types';
-import { PluginStates } from '../../../lib/services/plugins/reducer';
+import { FolderEntity, NoteEntity } from '@joplin/lib/services/database/types';
+import { PluginStates } from '@joplin/lib/services/plugins/reducer';
 
 export interface Props {
 	themeId: any;
