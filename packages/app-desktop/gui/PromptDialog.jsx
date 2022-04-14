@@ -117,11 +117,11 @@ class PromptDialog extends React.Component {
 					fontFamily: theme.fontFamily,
 					backgroundColor: theme.backgroundColor,
 				}),
-			option: (provided) =>
+			option: (provided, state) =>
 				Object.assign(provided, {
 					color: theme.color,
 					fontFamily: theme.fontFamily,
-					paddingLeft: '10px',
+					paddingLeft: `${10 + (state.data.indentDepth || 0) * 20}px`,
 				}),
 			multiValueLabel: provided =>
 				Object.assign(provided, {
@@ -217,18 +217,31 @@ class PromptDialog extends React.Component {
 		};
 
 		const searchByValue = option => {
-			return option.val;
+			return option._value;
 		};
 
-		// Add the title path for each note in 'Move to notebook'
-		if (this.props.autocomplete) {
-			for (let i = 0; i < this.props.autocomplete.length; i++) {
-				// To modify only the labels in the 'Move to notebook' selector
-				if (this.props.autocomplete[i].val) {
-					this.props.autocomplete[i].label = <span> {this.props.autocomplete[i].label}</span>;
+		const onInputChange = (_input) => {
+			if (_input !== '') {
+				// To convert Notebooks names to paths.
+				if (this.props.autocomplete) {
+					for (let i = 0; i < this.props.autocomplete.length; i++) {
+						this.props.autocomplete[i].label = <span> {this.props.autocomplete[i].path}</span>;
+						this.props.autocomplete[i].indentDepth = 0;
+					}
+				}
+
+			} else {
+				// To convert the Notebooks names into a tree again
+				if (this.props.autocomplete) {
+					for (let i = 0; i < this.props.autocomplete.length; i++) {
+						// To return the previous 'label & indentDepth' value
+						this.props.autocomplete[i].label = this.props.autocomplete[i]._value;
+						this.props.autocomplete[i].indentDepth = this.props.autocomplete[i]._indentDepth;
+					}
 				}
 			}
-		}
+
+		};
 
 		const descComp = this.props.description ? <div style={styles.desc}>{this.props.description}</div> : null;
 
@@ -239,7 +252,7 @@ class PromptDialog extends React.Component {
 		} else if (this.props.inputType === 'tags') {
 			inputComp = <CreatableSelect className="tag-selector" styles={styles.select} theme={styles.selectTheme} ref={this.answerInput_} value={this.state.answer} placeholder="" components={makeAnimated()} isMulti={true} isClearable={false} backspaceRemovesValue={true} options={this.props.autocomplete} onChange={onSelectChange} onKeyDown={event => onKeyDown(event)} />;
 		} else if (this.props.inputType === 'dropdown') {
-			inputComp = <Select className="item-selector" styles={styles.select} theme={styles.selectTheme} ref={this.answerInput_} components={makeAnimated()} value={this.props.answer} defaultValue={this.props.defaultValue} isClearable={false} options={this.props.autocomplete} getOptionValue={searchByValue} onChange={onSelectChange} onKeyDown={event => onKeyDown(event)} />;
+			inputComp = <Select className="item-selector" styles={styles.select} theme={styles.selectTheme} ref={this.answerInput_} components={makeAnimated()} value={this.props.answer} defaultValue={this.props.defaultValue} isClearable={false} options={this.props.autocomplete} getOptionValue={searchByValue} onInputChange={onInputChange} onChange={onSelectChange} onKeyDown={event => onKeyDown(event)} />;
 		} else {
 			inputComp = <input style={styles.input} ref={this.answerInput_} value={this.state.answer} type="text" onChange={event => onChange(event)} onKeyDown={event => onKeyDown(event)} />;
 		}
