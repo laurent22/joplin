@@ -137,7 +137,7 @@ const EncryptionConfigScreen = (props: Props) => {
 				return (
 					<td style={theme.textStyle}>
 						<input type="password" style={passwordStyle} value={password} onChange={event => onInputPasswordChange(mk, event.target.value)} />{' '}
-						<button style={theme.buttonStyle} onClick={() => onSavePasswordClick(mk, props.passwords)}>
+						<button style={theme.buttonStyle} onClick={() => onSavePasswordClick(mk, { ...props.passwords, ...inputPasswords })}>
 							{_('Save')}
 						</button>
 					</td>
@@ -268,7 +268,7 @@ const EncryptionConfigScreen = (props: Props) => {
 		const buttonTitle = CommandService.instance().label('openMasterPasswordDialog');
 
 		const needPasswordMessage = !needMasterPassword ? null : (
-			<p className="needpassword">{_('Your master password is needed to decrypt some of your data.')}<br/>{_('Please click on "%s" to proceed', buttonTitle)}</p>
+			<p className="needpassword">{_('Your password is needed to decrypt some of your data.')}<br/>{_('Please click on "%s" to proceed, or set the passwords in the "%s" list below.', buttonTitle, _('Encryption keys'))}</p>
 		);
 
 		return (

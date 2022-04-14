@@ -20,7 +20,7 @@ import bridge from '../services/bridge';
 import checkForUpdates from '../checkForUpdates';
 const { connect } = require('react-redux');
 import { reg } from '@joplin/lib/registry';
-import { ProfileConfig } from '../../lib/services/profileConfig/types';
+import { ProfileConfig } from '@joplin/lib/services/profileConfig/types';
 const packageInfo = require('../packageInfo.js');
 const { clipboard } = require('electron');
 const Menu = bridge().Menu;

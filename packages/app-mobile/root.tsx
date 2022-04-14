@@ -507,7 +507,7 @@ async function initialize(dispatch: Function) {
 
 			// Setting.setValue('sync.target', 10);
 			// Setting.setValue('sync.10.username', 'user1@example.com');
-			// Setting.setValue('sync.10.password', 'hunter1hunter2hunter3');
+			// Setting.setValue('sync.10.password', '111111');
 		}
 
 		if (Setting.value('db.ftsEnabled') === -1) {
