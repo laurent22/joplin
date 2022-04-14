@@ -11,8 +11,9 @@ export const declaration: CommandDeclaration = {
 export class AddOptions {
 
 	public startFolders: any[] = [];
+	private maxDepth = 15;
 
-	public addOptions(folders: any[], path: string) {
+	public addOptions(folders: any[], depth: number, path: string) {
 		for (let i = 0; i < folders.length; i++) {
 			const folder = folders[i];
 			// When NoteBook doesn't get a title
@@ -20,8 +21,8 @@ export class AddOptions {
 				folder.title = 'Untitled';
 			}
 			const new_path = path + folder.title;
-			this.startFolders.push({ key: folder.id, value: folder.id, label: new_path, val: folder.title });
-			if (folder.children) this.addOptions(folder.children, `${new_path}/`);
+			this.startFolders.push({ key: folder.id, value: folder.id, label: folder.title, _value: folder.title, path: new_path, indentDepth: depth, _indentDepth: depth });
+			if (folder.children) this.addOptions(folder.children, (depth + 1) < this.maxDepth ? depth + 1 : this.maxDepth, `${new_path}/`);
 		}
 	}
 }
@@ -33,7 +34,7 @@ export const runtime = (comp: any): CommandRuntime => {
 
 			const folders: any[] = await Folder.sortFolderTree();
 			const options = new AddOptions();
-			options.addOptions(folders, '');
+			options.addOptions(folders, 0, '');
 
 			comp.setState({
 				promptOptions: {
