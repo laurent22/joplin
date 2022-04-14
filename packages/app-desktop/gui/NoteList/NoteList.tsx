@@ -486,6 +486,15 @@ class NoteListComponent extends React.Component {
 		);
 	}
 
+	// componentWillReceiveProps(nextProps:any) {
+	// 	for (const index in nextProps) {
+	// 	  if (nextProps[index] !== this.props[index]) {
+	// 		console.log('PROPS', index, this.props[index], '-->', nextProps[index]);
+	// 	  }
+	// 	}
+	//   }
+
+
 	render() {
 		if (!this.props.size) throw new Error('props.size is required');
 
