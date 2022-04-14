@@ -37,7 +37,7 @@ import { localSyncInfoFromState } from '@joplin/lib/services/synchronizer/syncIn
 import { parseCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 import ElectronAppWrapper from '../../ElectronAppWrapper';
 import { showMissingMasterKeyMessage } from '@joplin/lib/services/e2ee/utils';
-import { MasterKeyEntity } from '../../../lib/services/e2ee/types';
+import { MasterKeyEntity } from '@joplin/lib/services/e2ee/types';
 import commands from './commands/index';
 import invitationRespond from '../../services/share/invitationRespond';
 const { connect } = require('react-redux');

@@ -1,6 +1,6 @@
 import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
-import Setting from '../../lib/models/Setting';
-import { openFileWithExternalEditor } from '../../lib/services/ExternalEditWatcher/utils';
+import Setting from '@joplin/lib/models/Setting';
+import { openFileWithExternalEditor } from '@joplin/lib/services/ExternalEditWatcher/utils';
 import bridge from '../services/bridge';
 import { _ } from '@joplin/lib/locale';
 
