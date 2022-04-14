@@ -199,6 +199,18 @@ export default class CommandService extends BaseService {
 		command.runtime = runtime;
 	}
 
+	public registerCommands(commands: any[]) {
+		for (const command of commands) {
+			CommandService.instance().registerRuntime(command.declaration.name, command.runtime());
+		}
+	}
+
+	public unregisterCommands(commands: any[]) {
+		for (const command of commands) {
+			CommandService.instance().unregisterRuntime(command.declaration.name);
+		}
+	}
+
 	public componentRegisterCommands(component: any, commands: any[]) {
 		for (const command of commands) {
 			CommandService.instance().registerRuntime(command.declaration.name, command.runtime(component));
