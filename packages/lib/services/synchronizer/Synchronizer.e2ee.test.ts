@@ -9,7 +9,7 @@ import ResourceFetcher from '../../services/ResourceFetcher';
 import MasterKey from '../../models/MasterKey';
 import BaseItem from '../../models/BaseItem';
 import Synchronizer from '../../Synchronizer';
-import { getEncryptionEnabled, setEncryptionEnabled } from '../synchronizer/syncInfoUtils';
+import { fetchSyncInfo, getEncryptionEnabled, localSyncInfo, setEncryptionEnabled } from '../synchronizer/syncInfoUtils';
 import { loadMasterKeysFromSettings, setupAndDisableEncryption, setupAndEnableEncryption } from '../e2ee/utils';
 
 let insideBeforeEach = false;
@@ -71,6 +71,32 @@ describe('Synchronizer.e2ee', function() {
 		expect(folder1_2.title).toBe(folder1.title);
 		expect(folder1_2.updated_time).toBe(folder1.updated_time);
 		expect(!folder1_2.encryption_cipher_text).toBe(true);
+	}));
+
+	it('should mark the key has having been used when synchronising the first time', (async () => {
+		setEncryptionEnabled(true);
+		await loadEncryptionMasterKey();
+		await Folder.save({ title: 'folder1' });
+		await synchronizerStart();
+
+		const localInfo = localSyncInfo();
+		const remoteInfo = await fetchSyncInfo(fileApi());
+		expect(localInfo.masterKeys[0].hasBeenUsed).toBe(true);
+		expect(remoteInfo.masterKeys[0].hasBeenUsed).toBe(true);
+	}));
+
+	it('should mark the key has having been used when synchronising after enabling encryption', (async () => {
+		await Folder.save({ title: 'folder1' });
+		await synchronizerStart();
+
+		setEncryptionEnabled(true);
+		await loadEncryptionMasterKey();
+		await synchronizerStart();
+
+		const localInfo = localSyncInfo();
+		const remoteInfo = await fetchSyncInfo(fileApi());
+		expect(localInfo.masterKeys[0].hasBeenUsed).toBe(true);
+		expect(remoteInfo.masterKeys[0].hasBeenUsed).toBe(true);
 	}));
 
 	it('should enable encryption automatically when downloading new master key (and none was previously available)',(async () => {

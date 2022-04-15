@@ -335,6 +335,11 @@ export async function gitPullTry(ignoreIfNotBranch = true) {
 	}
 }
 
+export const gitCurrentBranch = async (): Promise<string> => {
+	const output = await execCommand2('git rev-parse --abbrev-ref HEAD', { quiet: true });
+	return output.trim();
+};
+
 export async function githubUsername(email: string, name: string) {
 	const cache = await loadGitHubUsernameCache();
 	const cacheKey = `${email}:${name}`;

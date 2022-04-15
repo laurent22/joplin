@@ -341,7 +341,7 @@ msgstr "Liitä valokuva"
 
 #: packages/app-mobile/components/screens/Note.tsx:880
 msgid "Attach..."
-msgstr "Liitä..."
+msgstr "Liittää..."
 
 #: packages/app-cli/app/command-attach.js:13
 msgid "Attaches the given file to the note."
@@ -2010,7 +2010,7 @@ msgstr "Virheellinen asetusarvo: \"%s\". Mahdolliset arvot ovat: %s."
 
 #: packages/app-cli/app/command-e2ee.ts:46
 msgid "Invalid password"
-msgstr "Virheellinen salasana"
+msgstr "Väärä salasana"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:38
 msgid "Italic"
@@ -2257,7 +2257,7 @@ msgstr "Pääsalasanan hallinta"
 
 #: packages/lib/commands/openMasterPasswordDialog.ts:6
 msgid "Manage master password..."
-msgstr "Pääsalasanan hallinta..."
+msgstr "Hallitse pääsalasanaa..."
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:314
 msgid "Manage your plugins"
@@ -2533,7 +2533,7 @@ msgstr "Huomautus on tallennettu."
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:34
 #: packages/lib/models/Setting.ts:2149
 msgid "Note History"
-msgstr "Muistiinpanohistoria"
+msgstr "Muistiinpano historia"
 
 #: packages/app-cli/app/command-done.js:21
 msgid "Note is not a to-do: \"%s\""

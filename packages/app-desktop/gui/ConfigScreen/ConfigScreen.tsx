@@ -7,6 +7,7 @@ import bridge from '../../services/bridge';
 import Setting, { AppType, SyncStartupOperation } from '@joplin/lib/models/Setting';
 import control_PluginsStates from './controls/plugins/PluginsStates';
 import EncryptionConfigScreen from '../EncryptionConfigScreen/EncryptionConfigScreen';
+import { reg } from '@joplin/lib/registry';
 const { connect } = require('react-redux');
 const { themeStyle } = require('@joplin/lib/theme');
 const pathUtils = require('@joplin/lib/path-utils');
@@ -26,7 +27,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 	constructor(props: any) {
 		super(props);
 
-		shared.init(this);
+		shared.init(this, reg);
 
 		this.state = {
 			selectedSectionName: 'general',

@@ -79,5 +79,6 @@ export interface TemplateParams {
 export interface PlanPageParams extends TemplateParams {
 	plans: Record<string, Plan>;
 	faqHtml: string;
+	featureListHtml: string;
 	stripeConfig: StripePublicConfig;
 }

@@ -554,10 +554,16 @@ class Application extends BaseApplication {
 		// setTimeout(() => {
 		// 	this.dispatch({
 		// 		type: 'DIALOG_OPEN',
-		// 		name: 'editFolder',
-		// 		props: { folderId: '3d90f7da26b947dc9c8c6c65e86cd231' },
+		// 		name: 'syncWizard',
 		// 	});
 		// }, 2000);
+
+		// setTimeout(() => {
+		// 	this.dispatch({
+		// 		type: 'DIALOG_OPEN',
+		// 		name: 'editFolder',
+		// 	});
+		// }, 3000);
 
 		// setTimeout(() => {
 		// 	this.dispatch({

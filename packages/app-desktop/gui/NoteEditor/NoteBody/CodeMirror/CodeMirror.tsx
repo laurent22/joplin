@@ -649,6 +649,11 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		// undefined. Maybe due to the error boundary that unmount components.
 		// Since we can't do much about it we just print an error.
 		if (webviewRef.current && webviewRef.current.wrappedInstance) {
+			// To keep consistency among CodeMirror's editing and scroll percents
+			// of Editor and Viewer.
+			const percent = getLineScrollPercent();
+			setEditorPercentScroll(percent);
+			options.percent = percent;
 			webviewRef.current.wrappedInstance.send('setHtml', renderedBody.html, options);
 		} else {
 			console.error('Trying to set HTML on an undefined webview ref');

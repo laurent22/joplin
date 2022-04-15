@@ -22,7 +22,7 @@ import TaskQueue from './TaskQueue';
 import ItemUploader from './services/synchronizer/ItemUploader';
 import { FileApi, RemoteItem } from './file-api';
 import JoplinDatabase from './JoplinDatabase';
-import { fetchSyncInfo, getActiveMasterKey, localSyncInfo, mergeSyncInfos, saveLocalSyncInfo, SyncInfo, syncInfoEquals, uploadSyncInfo } from './services/synchronizer/syncInfoUtils';
+import { fetchSyncInfo, getActiveMasterKey, localSyncInfo, mergeSyncInfos, saveLocalSyncInfo, setMasterKeyHasBeenUsed, SyncInfo, syncInfoEquals, uploadSyncInfo } from './services/synchronizer/syncInfoUtils';
 import { getMasterPassword, setupAndDisableEncryption, setupAndEnableEncryption } from './services/e2ee/utils';
 import { generateKeyPair } from './services/e2ee/ppk';
 import syncDebugLog from './services/synchronizer/syncDebugLog';
@@ -439,10 +439,13 @@ export default class Synchronizer {
 				let remoteInfo = await fetchSyncInfo(this.api());
 				logger.info('Sync target remote info:', remoteInfo);
 
+				let syncTargetIsNew = false;
+
 				if (!remoteInfo.version) {
 					logger.info('Sync target is new - setting it up...');
 					await this.migrationHandler().upgrade(Setting.value('syncVersion'));
 					remoteInfo = await fetchSyncInfo(this.api());
+					syncTargetIsNew = true;
 				}
 
 				logger.info('Sync target is already setup - checking it...');
@@ -455,11 +458,16 @@ export default class Synchronizer {
 
 				localInfo = await this.setPpkIfNotExist(localInfo, remoteInfo);
 
+				if (syncTargetIsNew && localInfo.activeMasterKeyId) {
+					localInfo = setMasterKeyHasBeenUsed(localInfo, localInfo.activeMasterKeyId);
+				}
+
 				// console.info('LOCAL', localInfo);
 				// console.info('REMOTE', remoteInfo);
 
 				if (!syncInfoEquals(localInfo, remoteInfo)) {
-					const newInfo = mergeSyncInfos(localInfo, remoteInfo);
+					let newInfo = mergeSyncInfos(localInfo, remoteInfo);
+					if (newInfo.activeMasterKeyId) newInfo = setMasterKeyHasBeenUsed(newInfo, newInfo.activeMasterKeyId);
 					const previousE2EE = localInfo.e2ee;
 					logger.info('Sync target info differs between local and remote - merging infos: ', newInfo.toObject());
 
