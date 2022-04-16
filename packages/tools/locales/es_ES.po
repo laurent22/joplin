@@ -24,6 +24,8 @@ msgstr ""
 "X-Generator: Poedit 2.4.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:565
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -275,11 +277,11 @@ msgstr "Agregar al diccionario"
 #: packages/server/src/services/MustacheService.ts:183
 #: packages/server/src/services/MustacheService.ts:307
 msgid "Admin"
-msgstr ""
+msgstr "Administrador"
 
 #: packages/server/src/routes/admin/dashboard.ts:10
 msgid "Admin dashboard"
-msgstr ""
+msgstr "Tablero de Mandos de Administrador"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:189
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:147
@@ -406,16 +408,15 @@ msgstr "Automático"
 
 #: packages/server/src/services/TaskService.ts:39
 msgid "Auto-add disabled accounts for deletion"
-msgstr ""
+msgstr "Añadir automáticamente las cuentas deshabilitadas para su eliminación"
 
 #: packages/lib/models/Setting.ts:855
 msgid "Auto-pair braces, parenthesis, quotations, etc."
 msgstr "Autoemparejar llaves, paréntesis, comillas, etc."
 
 #: packages/lib/models/Setting.ts:1195
-#, fuzzy
 msgid "Automatically check for updates"
-msgstr "Comprobar actualizaciones..."
+msgstr "Comprobar actualizaciones"
 
 #: packages/lib/models/Setting.ts:772
 msgid "Automatically switch theme to match system theme"
@@ -725,7 +726,7 @@ msgstr "Completado: %s (%s)"
 
 #: packages/server/src/services/TaskService.ts:37
 msgid "Compress old changes"
-msgstr ""
+msgstr "Comprimir cambios antiguos"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:637
 #: packages/app-mobile/components/side-menu-content.js:332
@@ -787,9 +788,8 @@ msgid "Copy external link"
 msgstr "Copiar enlace externo"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:134
-#, fuzzy
 msgid "Copy image"
-msgstr "Copiar token"
+msgstr "Copiar imagen"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:172
 msgid "Copy Link Address"
@@ -882,14 +882,12 @@ msgid "Create a notebook"
 msgstr "Crea una libreta"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:161
-#, fuzzy
 msgid "Create notebook"
-msgstr "Crea una libreta"
+msgstr "Crea libreta"
 
 #: packages/server/src/routes/admin/users.ts:171
-#, fuzzy
 msgid "Create user"
-msgstr "Creado: %s"
+msgstr "Crear usuario"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:29
 msgid "Created"
@@ -981,7 +979,7 @@ msgstr "Oscuro"
 
 #: packages/server/src/services/MustacheService.ts:136
 msgid "Dashboard"
-msgstr ""
+msgstr "Tablero de Mandos"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:625
 msgid "Database v%s"
@@ -1038,14 +1036,12 @@ msgid "Delete attachment \"%s\"?"
 msgstr "¿Borrar adjunto «%s»?"
 
 #: packages/server/src/services/TaskService.ts:36
-#, fuzzy
 msgid "Delete expired sessions"
-msgstr "Activar expresiones matemáticas"
+msgstr "Borrar sesiones expiradas"
 
 #: packages/server/src/services/TaskService.ts:31
-#, fuzzy
 msgid "Delete expired tokens"
-msgstr "¿Borrar estas %d notas?"
+msgstr "Borrar tokens expirados"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:88
 msgid "Delete line"
@@ -1366,12 +1362,12 @@ msgstr "Emacs"
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:236
 #: packages/server/src/routes/admin/emails.ts:128
 msgid "Email"
-msgstr ""
+msgstr "Email"
 
 #: packages/server/src/routes/admin/emails.ts:112
 #: packages/server/src/services/MustacheService.ts:152
 msgid "Emails"
-msgstr ""
+msgstr "Emails"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:194
 msgid "emphasised text"
@@ -1859,7 +1855,7 @@ msgstr "Ignorar errores en certificados TLS"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:102
 msgid "Images"
-msgstr ""
+msgstr "Imágenes"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:170
 #: packages/app-desktop/gui/MenuBar.tsx:484
@@ -2270,7 +2266,7 @@ msgstr "Cerrar sesión"
 
 #: packages/server/src/services/MustacheService.ts:179
 msgid "Logs"
-msgstr ""
+msgstr "Registros"
 
 #: packages/app-desktop/gui/MenuBar.tsx:716
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:583
@@ -2729,9 +2725,8 @@ msgid "Or create an account."
 msgstr "Crea una nueva nota.O crea una cuenta."
 
 #: packages/app-desktop/gui/MenuBar.tsx:352
-#, fuzzy
 msgid "Other applications..."
-msgstr "Sale de la aplicación."
+msgstr "Otras aplicaciones..."
 
 #: packages/app-cli/app/command-import.js:27
 msgid "Output format: %s"
@@ -2935,19 +2930,19 @@ msgstr "Política de Privacidad"
 
 #: packages/server/src/services/TaskService.ts:35
 msgid "Process failed payment subscriptions"
-msgstr ""
+msgstr "Procesar las suscripciones de pago fallidas"
 
 #: packages/server/src/services/TaskService.ts:33
 msgid "Process oversized accounts"
-msgstr ""
+msgstr "Procesar cuentas de gran tamaño"
 
 #: packages/server/src/services/TaskService.ts:38
 msgid "Process user deletions"
-msgstr ""
+msgstr "Procesar eliminaciones de usuarios"
 
 #: packages/server/src/routes/admin/users.ts:168
 msgid "Profile"
-msgstr ""
+msgstr "Perfil"
 
 #: packages/lib/versionInfo.ts:26
 msgid "Profile Version: %s"
@@ -3133,29 +3128,24 @@ msgid "S3"
 msgstr "S3"
 
 #: packages/lib/models/Setting.ts:547
-#, fuzzy
 msgid "S3 access key"
-msgstr "Clave de acceso de AWS"
+msgstr "Clave de acceso de S3"
 
 #: packages/lib/models/Setting.ts:507
-#, fuzzy
 msgid "S3 bucket"
-msgstr "AWS S3 bucket"
+msgstr "S3 bucket"
 
 #: packages/lib/models/Setting.ts:536
-#, fuzzy
 msgid "S3 region"
-msgstr "Región de AWS"
+msgstr "Región de S3"
 
 #: packages/lib/models/Setting.ts:558
-#, fuzzy
 msgid "S3 secret key"
-msgstr "Clave secreta de AWS"
+msgstr "Clave secreta de S3"
 
 #: packages/lib/models/Setting.ts:522
-#, fuzzy
 msgid "S3 URL"
-msgstr "URL de AWS S3"
+msgstr "URL de S3"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:579
 msgid ""
@@ -3232,14 +3222,12 @@ msgid "Select all"
 msgstr "Seleccionar todo"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:140
-#, fuzzy
 msgid "Select emoji..."
-msgstr "Seleccione fecha"
+msgstr "Seleccionar emoji..."
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:144
-#, fuzzy
 msgid "Select file..."
-msgstr "Seleccionar todo"
+msgstr "Seleccionar archivo..."
 
 #: packages/app-cli/app/command-server.js:38
 msgid "Server is already running on port %d"
@@ -4272,14 +4260,12 @@ msgstr "Actualizar"
 
 #: packages/server/src/routes/admin/users.ts:171
 #: packages/server/src/routes/index/users.ts:89
-#, fuzzy
 msgid "Update profile"
-msgstr "Exportar perfil"
+msgstr "Actualizar perfil"
 
 #: packages/server/src/services/TaskService.ts:32
-#, fuzzy
 msgid "Update total sizes"
-msgstr "Elementos locales actualizados: %d."
+msgstr "Actualizar tamaños totales"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:208
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:209
@@ -4388,7 +4374,7 @@ msgstr ""
 
 #: packages/server/src/services/MustacheService.ts:144
 msgid "User deletions"
-msgstr ""
+msgstr "Eliminaciones de usuarios"
 
 #: packages/server/src/routes/admin/users.ts:107
 #: packages/server/src/services/MustacheService.ts:140
