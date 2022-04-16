@@ -86,14 +86,14 @@ const useSwitchProfileMenuItems = (profileConfig: ProfileConfig, menuItemDic: an
 				menuItem = {
 					label: profile.name,
 					click: () => {
-						void CommandService.instance().execute('switchProfile', i);
+						void CommandService.instance().execute('switchProfile', profile.id);
 					},
 				};
 			}
 
 			menuItem.label = profile.name;
 			menuItem.type = 'checkbox';
-			menuItem.checked = profileConfig.currentProfile === i;
+			menuItem.checked = profileConfig.currentProfileId === profile.id;
 
 			switchProfileMenuItems.push(menuItem);
 		}

@@ -10,13 +10,13 @@ export const declaration: CommandDeclaration = {
 
 export const runtime = (): CommandRuntime => {
 	return {
-		execute: async (context: CommandContext, profileIndex: number) => {
+		execute: async (context: CommandContext, profileId: string) => {
 			const currentConfig = context.state.profileConfig;
-			if (currentConfig.currentProfile === profileIndex) return;
+			if (currentConfig.currentProfileId === profileId) return;
 
 			const newConfig: ProfileConfig = {
 				...currentConfig,
-				currentProfile: profileIndex,
+				currentProfileId: profileId,
 			};
 
 			await saveProfileConfig(`${Setting.value('rootProfileDir')}/profiles.json`, newConfig);
