@@ -740,7 +740,7 @@ class Setting extends BaseModel {
 					return ObjectUtils.sortByValue(supportedLocalesToLanguages({ includeStats: true }));
 				},
 				storage: SettingStorage.File,
-				isGlobal: true,
+				isGlobal: false,
 			},
 			dateFormat: {
 				value: Setting.DATE_FORMAT_1,
