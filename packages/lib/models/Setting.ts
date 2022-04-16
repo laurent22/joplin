@@ -243,7 +243,7 @@ class Setting extends BaseModel {
 	public static SYNC_UPGRADE_STATE_SHOULD_DO = 1; // Should be upgraded, but waiting for user to confirm
 	public static SYNC_UPGRADE_STATE_MUST_DO = 2; // Must be upgraded - on next restart, the upgrade will start
 
-	public static custom_css_files = {
+	public static customCssFilenames = {
 		JOPLIN_APP: 'userchrome.css',
 		RENDERED_MARKDOWN: 'userstyle.css',
 	};
@@ -1187,12 +1187,10 @@ class Setting extends BaseModel {
 			'style.customCss.renderedMarkdown': {
 				value: null,
 				onClick: () => {
-					const dir = Setting.value('profileDir');
-					const filename = Setting.custom_css_files.RENDERED_MARKDOWN;
-					const filepath = `${dir}/${filename}`;
-					const defaultContents = '/* For styling the rendered Markdown */';
-
-					shim.openOrCreateFile(filepath, defaultContents);
+					shim.openOrCreateFile(
+						this.customCssFilePath(Setting.customCssFilenames.RENDERED_MARKDOWN),
+						'/* For styling the rendered Markdown */'
+					);
 				},
 				type: SettingItemType.Button,
 				public: true,
@@ -1206,12 +1204,10 @@ class Setting extends BaseModel {
 			'style.customCss.joplinApp': {
 				value: null,
 				onClick: () => {
-					const dir = Setting.value('profileDir');
-					const filename = Setting.custom_css_files.JOPLIN_APP;
-					const filepath = `${dir}/${filename}`;
-					const defaultContents = `/* For styling the entire Joplin app (except the rendered Markdown, which is defined in \`${Setting.custom_css_files.RENDERED_MARKDOWN}\`) */`;
-
-					shim.openOrCreateFile(filepath, defaultContents);
+					shim.openOrCreateFile(
+						this.customCssFilePath(Setting.customCssFilenames.JOPLIN_APP),
+						`/* For styling the entire Joplin app (except the rendered Markdown, which is defined in \`${Setting.customCssFilenames.RENDERED_MARKDOWN}\`) */`
+					);
 				},
 				type: SettingItemType.Button,
 				public: true,
@@ -1525,6 +1521,10 @@ class Setting extends BaseModel {
 		for (const [k, v] of Object.entries(md)) {
 			if (v.isGlobal && v.storage !== SettingStorage.File) throw new Error(`Setting "${k}" is global but storage is not "file"`);
 		}
+	}
+
+	public static customCssFilePath(filename: string): string {
+		return `${this.value('rootProfileDir')}/${filename}`;
 	}
 
 	public static skipDefaultMigrations() {
