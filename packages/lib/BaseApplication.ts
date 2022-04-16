@@ -738,7 +738,7 @@ export default class BaseApplication {
 		Setting.setConstant('tempDir', tempDir);
 		Setting.setConstant('pluginDataDir', `${profileDir}/plugin-data`);
 		Setting.setConstant('cacheDir', cacheDir);
-		Setting.setConstant('pluginDir', `${profileDir}/plugins`);
+		Setting.setConstant('pluginDir', `${rootProfileDir}/plugins`);
 
 		SyncTargetRegistry.addClass(SyncTargetNone);
 		SyncTargetRegistry.addClass(SyncTargetFilesystem);
