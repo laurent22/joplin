@@ -38,5 +38,4 @@ describe('contextMenu', () => {
 		}
 		console.error = consoleError;
 	});
-
 });
