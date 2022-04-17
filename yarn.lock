@@ -2981,7 +2981,7 @@ __metadata:
     "@joplin/lib": ~2.8
     "@joplin/react-native-saf-x": ~0.5
     "@joplin/renderer": ~2.8
-    "@joplin/tools": ~2.6
+    "@joplin/tools": ~2.8
     "@react-native-community/clipboard": ^1.5.0
     "@react-native-community/datetimepicker": ^3.0.3
     "@react-native-community/geolocation": ^2.0.2
@@ -3103,7 +3103,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/lib@^2.6.3, @joplin/lib@workspace:packages/lib, @joplin/lib@~2.8":
+"@joplin/lib@workspace:packages/lib, @joplin/lib@~2.8":
   version: 0.0.0-use.local
   resolution: "@joplin/lib@workspace:packages/lib"
   dependencies:
@@ -3232,7 +3232,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/renderer@^2.6.3, @joplin/renderer@workspace:packages/renderer, @joplin/renderer@~2.8":
+"@joplin/renderer@workspace:packages/renderer, @joplin/renderer@~2.8":
   version: 0.0.0-use.local
   resolution: "@joplin/renderer@workspace:packages/renderer"
   dependencies:
@@ -3326,31 +3326,6 @@ __metadata:
     zxcvbn: ^4.4.2
   languageName: unknown
   linkType: soft
-
-"@joplin/tools@npm:~2.6":
-  version: 2.6.3
-  resolution: "@joplin/tools@npm:2.6.3"
-  dependencies:
-    "@joplin/lib": ^2.6.3
-    "@joplin/renderer": ^2.6.3
-    execa: ^4.1.0
-    fs-extra: ^4.0.3
-    gettext-parser: ^1.3.0
-    glob: ^7.1.6
-    markdown-it: ^8.4.1
-    md5-file: ^4.0.0
-    moment: ^2.24.0
-    mustache: ^2.3.0
-    node-fetch: ^1.7.3
-    relative: ^3.0.2
-    request: ^2.88.0
-    sharp: ^0.25.2
-    source-map-support: ^0.5.19
-    uri-template: ^1.0.1
-    yargs: ^16.0.3
-  checksum: d9320b87b43336b8fdc446e144e9dd913fa4de13704c14cdfac0a885f11a8e84824e5e73eb5f20380bdc68e010d738a0cf3203ade445f7765c51d143f2bb4d35
-  languageName: node
-  linkType: hard
 
 "@joplin/tools@workspace:packages/tools, @joplin/tools@~2.8":
   version: 0.0.0-use.local
