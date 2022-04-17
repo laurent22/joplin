@@ -4,7 +4,7 @@
 // use strict is necessary here so that typescript doesn't place "use strict" above the jest docblock
 // https://github.com/microsoft/TypeScript/issues/15819#issuecomment-782235619
 
-import { textToDataUri, svgUriToPng } from './contextMenuUtils';
+import { textToDataUri, svgUriToPng, resourceInfo, ContextMenuOptions, ContextMenuItemType, ResourceInfo } from './contextMenuUtils';
 
 jest.mock('@joplin/lib/models/Resource');
 
@@ -37,5 +37,26 @@ describe('contextMenu', () => {
 			await expect(svgUriToPng(document, testCase)).rejects.toBeInstanceOf(Error);
 		}
 		console.error = consoleError;
+	});
+
+	it('should generate resource info', async () => {
+		const opts: ContextMenuOptions = {
+			itemType: ContextMenuItemType.Image,
+			resourceId: '',
+			mime: 'image/png',
+			filename: 'testfile.png',
+			linkToCopy: null,
+			textToCopy: null,
+			htmlToCopy: null,
+			insertContent: function() { },
+		};
+		const result: ResourceInfo = {
+			resource: null,
+			resourcePath: null,
+			filename: 'testfile.png',
+		};
+
+		const info = await resourceInfo(opts);
+		expect(info).toEqual(result);
 	});
 });
