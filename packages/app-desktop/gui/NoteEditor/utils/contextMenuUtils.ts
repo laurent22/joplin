@@ -30,11 +30,11 @@ export interface ContextMenuItems {
 	[key: string]: ContextMenuItem;
 }
 
-export async function resourceInfo(options: ContextMenuOptions): Promise<any> {
+export async function resourceInfo(options: ContextMenuOptions) {
 	const resource = options.resourceId ? await Resource.load(options.resourceId) : null;
-	const filePath = resource ? Resource.fullPath(resource) : null;
+	const resourcePath = resource ? Resource.fullPath(resource) : null;
 	const filename = resource ? (resource.filename ? resource.filename : resource.title) : options.filename ? options.filename : '';
-	return { resource, filePath, filename };
+	return { resource, resourcePath, filename };
 }
 
 export function textToDataUri(text: string, mime: string): string {
