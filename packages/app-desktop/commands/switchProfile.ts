@@ -20,7 +20,7 @@ export const runtime = (): CommandRuntime => {
 			};
 
 			await saveProfileConfig(`${Setting.value('rootProfileDir')}/profiles.json`, newConfig);
-			bridge().restart();
+			bridge().restart(false);
 		},
 	};
 };
