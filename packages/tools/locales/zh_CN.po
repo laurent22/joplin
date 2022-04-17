@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: horaceyoung <yonghaoharry@gmail.com>\n"
-"Language-Team: zh_CN <jackytsu.vip.qq.com>\n"
+"Last-Translator: horaceyoung <paventyang@gmail.com>\n"
+"Language-Team: zh_CN <paventyang@gmail.com>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1797,7 +1797,7 @@ msgstr "忽略 TLS 证书错误"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:102
 msgid "Images"
-msgstr ""
+msgstr "图片"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:170
 #: packages/app-desktop/gui/MenuBar.tsx:484
@@ -2640,9 +2640,8 @@ msgid "Or create an account."
 msgstr "创建帐号。"
 
 #: packages/app-desktop/gui/MenuBar.tsx:352
-#, fuzzy
 msgid "Other applications..."
-msgstr "退出应用。"
+msgstr "其他应用..."
 
 #: packages/app-cli/app/command-import.js:27
 msgid "Output format: %s"
@@ -3125,14 +3124,12 @@ msgid "Select all"
 msgstr "全选"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:140
-#, fuzzy
 msgid "Select emoji..."
-msgstr "选择日期"
+msgstr "选择emoji..."
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:144
-#, fuzzy
 msgid "Select file..."
-msgstr "全选"
+msgstr "选择文件..."
 
 #: packages/app-cli/app/command-server.js:38
 msgid "Server is already running on port %d"

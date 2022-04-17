@@ -6,13 +6,15 @@ import propsHaveChanged from './propsHaveChanged';
 const { createSelectorCreator, defaultMemoize } = require('reselect');
 const { createCachedSelector } = require('re-reselect');
 
-interface MenuItem {
-	id: string;
-	label: string;
-	click: Function;
+export interface MenuItem {
+	id?: string;
+	label?: string;
+	click?: Function;
 	role?: any;
+	type?: string;
 	accelerator?: string;
-	enabled: boolean;
+	checked?: boolean;
+	enabled?: boolean;
 }
 
 interface MenuItems {

@@ -71,13 +71,14 @@ export interface TemplateParams {
 	navbar?: NavBar;
 	showJoplinCloudLinks?: boolean;
 	assetUrls: AssetUrls;
-	discussOnForumLink?: string;
 	showBottomLinks?: boolean;
 	openGraph: OpenGraphTags;
+	isNews?: boolean;
 }
 
 export interface PlanPageParams extends TemplateParams {
 	plans: Record<string, Plan>;
 	faqHtml: string;
+	featureListHtml: string;
 	stripeConfig: StripePublicConfig;
 }

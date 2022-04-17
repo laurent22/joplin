@@ -8,6 +8,7 @@ export interface MasterKeyEntity {
 	content?: string;
 	type_?: number;
 	enabled?: number;
+	hasBeenUsed?: boolean;
 }
 
 export type RSAKeyPair = any; // Depends on implementation

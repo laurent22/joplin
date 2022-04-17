@@ -3,19 +3,26 @@ import { rootDir } from '../tool-utils';
 import { pressCarouselItems } from './utils/pressCarousel';
 import { getMarkdownIt, loadMustachePartials, markdownToPageHtml, renderMustache } from './utils/render';
 import { AssetUrls, Env, PlanPageParams, Sponsors, TemplateParams } from './utils/types';
-import { getPlans, loadStripeConfig } from '@joplin/lib/utils/joplinCloud';
-import { stripOffFrontMatter } from './utils/frontMatter';
+import { createFeatureTableMd, getPlans, loadStripeConfig } from '@joplin/lib/utils/joplinCloud';
+import { MarkdownAndFrontMatter, stripOffFrontMatter } from './utils/frontMatter';
 import { dirname, basename } from 'path';
 import { readmeFileTitle, replaceGitHubByWebsiteLinks } from './utils/parser';
 import { extractOpenGraphTags } from './utils/openGraph';
+import { readCredentialFileJson } from '@joplin/lib/utils/credentialFiles';
+
 const moment = require('moment');
+
+interface BuildConfig {
+	env: Env;
+}
+
+const buildConfig = readCredentialFileJson<BuildConfig>('website-build.json', {
+	env: Env.Prod,
+});
 
 const glob = require('glob');
 const path = require('path');
 const md5File = require('md5-file/promise');
-
-const env = Env.Prod;
-
 const docDir = `${dirname(dirname(dirname(dirname(__dirname))))}/joplin-website/docs`;
 
 if (!pathExistsSync(docDir)) throw new Error(`Doc directory does not exist: ${docDir}`);
@@ -25,7 +32,7 @@ const readmeDir = `${rootDir}/readme`;
 const mainTemplateHtml = readFileSync(`${websiteAssetDir}/templates/main-new.mustache`, 'utf8');
 const frontTemplateHtml = readFileSync(`${websiteAssetDir}/templates/front.mustache`, 'utf8');
 const plansTemplateHtml = readFileSync(`${websiteAssetDir}/templates/plans.mustache`, 'utf8');
-const stripeConfig = loadStripeConfig(env, `${rootDir}/packages/server/stripeConfig.json`);
+const stripeConfig = loadStripeConfig(buildConfig.env, `${rootDir}/packages/server/stripeConfig.json`);
 const partialDir = `${websiteAssetDir}/templates/partials`;
 
 const discussLink = 'https://discourse.joplinapp.org/c/news/9';
@@ -82,7 +89,7 @@ async function getAssetUrls(): Promise<AssetUrls> {
 
 function defaultTemplateParams(assetUrls: AssetUrls): TemplateParams {
 	return {
-		env,
+		env: buildConfig.env,
 		baseUrl,
 		imageBaseUrl: `${baseUrl}/images`,
 		cssBaseUrl,
@@ -111,7 +118,7 @@ function renderPageToHtml(md: string, targetPath: string, templateParams: Templa
 		...templateParams,
 	};
 
-	templateParams.showBottomLinks = templateParams.showImproveThisDoc || !!templateParams.discussOnForumLink;
+	templateParams.showBottomLinks = templateParams.showImproveThisDoc;
 
 	const title = [];
 
@@ -139,6 +146,9 @@ function renderPageToHtml(md: string, targetPath: string, templateParams: Templa
 
 function renderFileToHtml(sourcePath: string, targetPath: string, templateParams: TemplateParams) {
 	let md = readFileSync(sourcePath, 'utf8');
+	if (templateParams.isNews) {
+		md = processNewsMarkdown(md, sourcePath);
+	}
 	md = stripOffFrontMatter(md).doc;
 	return renderPageToHtml(md, targetPath, templateParams);
 }
@@ -168,6 +178,28 @@ async function loadSponsors(): Promise<Sponsors> {
 	return output;
 }
 
+const getNewsDateString = (info: MarkdownAndFrontMatter, mdFilePath: string): string => {
+	// If the date is set in the metadata, we get it from there. Otherwise we
+	// derive it from the filename (eg. 20220224-release-2-7.md)
+
+	if (info.created) {
+		return moment(info.created).format('D MMM YYYY');
+	} else {
+		const filenameNoExt = basename(mdFilePath, '.md');
+		const s = filenameNoExt.split('-');
+		return moment(s[0], 'YYYYMMDD').format('D MMM YYYY');
+	}
+};
+
+const processNewsMarkdown = (md: string, mdFilePath: string): string => {
+	const info = stripOffFrontMatter(md);
+	md = info.doc.trim();
+	const dateString = getNewsDateString(info, mdFilePath);
+	md = md.replace(/^# (.*)/, `# [$1](https://github.com/laurent22/joplin/blob/dev/readme/news/${path.basename(mdFilePath)})\n\n*Published on **${dateString}***\n\n`);
+	md += `\n\n* * *\n\n[<i class="fab fa-discourse"></i> Discuss on the forum](${discussLink})`;
+	return md;
+};
+
 const makeNewsFrontPage = async (sourceFilePaths: string[], targetFilePath: string, templateParams: TemplateParams) => {
 	const maxNewsPerPage = 20;
 
@@ -175,11 +207,7 @@ const makeNewsFrontPage = async (sourceFilePaths: string[], targetFilePath: stri
 
 	for (const mdFilePath of sourceFilePaths) {
 		let md = await readFile(mdFilePath, 'utf8');
-		const info = stripOffFrontMatter(md);
-		md = info.doc.trim();
-		const dateString = moment(info.created).format('D MMM YYYY');
-		md = md.replace(/^# (.*)/, `# [$1](https://github.com/laurent22/joplin/blob/dev/readme/news/${path.basename(mdFilePath)})\n\n*Published on **${dateString}***\n\n`);
-		md += `\n\n* * *\n\n[<i class="fab fa-discourse"></i> Discuss on the forum](${discussLink})`;
+		md = processNewsMarkdown(md, mdFilePath);
 		frontPageMd.push(md);
 		if (frontPageMd.length >= maxNewsPerPage) break;
 	}
@@ -260,6 +288,7 @@ async function main() {
 		templateHtml: plansTemplateHtml,
 		plans: getPlans(stripeConfig),
 		faqHtml: planPageFaqHtml,
+		featureListHtml: getMarkdownIt().render(createFeatureTableMd(), {}),
 		stripeConfig,
 	};
 
@@ -344,8 +373,8 @@ async function main() {
 			...source[2],
 			templateHtml: mainTemplateHtml,
 			pageName: isNews ? 'news-item' : '',
-			discussOnForumLink: isNews ? discussLink : '',
 			showImproveThisDoc: !isNews,
+			isNews,
 			partials,
 			assetUrls,
 		});

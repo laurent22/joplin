@@ -45,7 +45,8 @@ scrollmap.get_ = () => {
 	// Each map entry is total-ordered.
 	let last = 0;
 	for (let i = 0; i < elems.length; i++) {
-		const top = elems[i].getBoundingClientRect().top - offset;
+		const rect = elems[i].getBoundingClientRect();
+		const top = rect.top - offset;
 		const line = Number(elems[i].getAttribute('source-line'));
 		const percent = Math.max(0, Math.min(1, top / height));
 		if (map.line[last] < line && map.percent[last] < percent) {
@@ -53,12 +54,20 @@ scrollmap.get_ = () => {
 			map.percent.push(percent);
 			last += 1;
 		}
+		const bottom = rect.bottom - offset;
+		const lineEnd = Number(elems[i].getAttribute('source-line-end'));
+		const percentEnd = Math.max(0, Math.min(1, bottom / height));
+		if (map.line[last] < lineEnd && map.percent[last] < percentEnd) {
+			map.line.push(lineEnd);
+			map.percent.push(percentEnd);
+			last += 1;
+		}
 	}
 	const lineCount = scrollmap.lineCount_;
 	if (lineCount) {
 		map.lineCount = lineCount;
 	} else {
-		if (map.lineCount <= map.line[last]) map.lineCount = map.line[last] + 1;
+		if (map.lineCount < map.line[last]) map.lineCount = map.line[last];
 	}
 	if (map.percent[last] < 1) {
 		map.line.push(lineCount || 1e10);

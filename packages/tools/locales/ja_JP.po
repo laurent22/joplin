@@ -7,14 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: genneko <genneko217@gmail.com>\n"
 "Language-Team: \n"
 "Language: ja_JP\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.2\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.0.1\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:565
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -264,11 +266,11 @@ msgstr "辞書に追加"
 #: packages/server/src/services/MustacheService.ts:183
 #: packages/server/src/services/MustacheService.ts:307
 msgid "Admin"
-msgstr ""
+msgstr "管理者"
 
 #: packages/server/src/routes/admin/dashboard.ts:10
 msgid "Admin dashboard"
-msgstr ""
+msgstr "管理者ダッシュボード"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:189
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:147
@@ -393,16 +395,15 @@ msgstr "自動"
 
 #: packages/server/src/services/TaskService.ts:39
 msgid "Auto-add disabled accounts for deletion"
-msgstr ""
+msgstr "無効アカウントを削除に自動追加"
 
 #: packages/lib/models/Setting.ts:855
 msgid "Auto-pair braces, parenthesis, quotations, etc."
 msgstr "始めの括弧や引用符入力時に終わりの括弧や引用符を自動入力する。"
 
 #: packages/lib/models/Setting.ts:1195
-#, fuzzy
 msgid "Automatically check for updates"
-msgstr "アップデートのチェック..."
+msgstr "アップデートを自動的に確認する"
 
 #: packages/lib/models/Setting.ts:772
 msgid "Automatically switch theme to match system theme"
@@ -705,7 +706,7 @@ msgstr "完了: %s (%s)"
 
 #: packages/server/src/services/TaskService.ts:37
 msgid "Compress old changes"
-msgstr ""
+msgstr "古い変更を圧縮する"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:637
 #: packages/app-mobile/components/side-menu-content.js:332
@@ -767,9 +768,8 @@ msgid "Copy external link"
 msgstr "外部リンクをコピー"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:134
-#, fuzzy
 msgid "Copy image"
-msgstr "トークンのコピー"
+msgstr "画像のコピー"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:172
 msgid "Copy Link Address"
@@ -861,14 +861,12 @@ msgid "Create a notebook"
 msgstr "ノートブックを作成します"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:161
-#, fuzzy
 msgid "Create notebook"
-msgstr "ノートブックを作成します"
+msgstr "ノートブックの作成"
 
 #: packages/server/src/routes/admin/users.ts:171
-#, fuzzy
 msgid "Create user"
-msgstr "作成しました：%s"
+msgstr "ユーザーを作成"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:29
 msgid "Created"
@@ -960,7 +958,7 @@ msgstr "暗い"
 
 #: packages/server/src/services/MustacheService.ts:136
 msgid "Dashboard"
-msgstr ""
+msgstr "ダッシュボード"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:625
 msgid "Database v%s"
@@ -1017,14 +1015,12 @@ msgid "Delete attachment \"%s\"?"
 msgstr "添付ファイル \"%s\" を削除しますか？"
 
 #: packages/server/src/services/TaskService.ts:36
-#, fuzzy
 msgid "Delete expired sessions"
-msgstr "数式表現を有効にする"
+msgstr "期限切れセッションを削除"
 
 #: packages/server/src/services/TaskService.ts:31
-#, fuzzy
 msgid "Delete expired tokens"
-msgstr "ノート \"%d\" を削除しますか？"
+msgstr "期限切れトークンを削除"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:88
 msgid "Delete line"
@@ -1342,12 +1338,12 @@ msgstr "Emacs"
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:236
 #: packages/server/src/routes/admin/emails.ts:128
 msgid "Email"
-msgstr ""
+msgstr "Eメール"
 
 #: packages/server/src/routes/admin/emails.ts:112
 #: packages/server/src/services/MustacheService.ts:152
 msgid "Emails"
-msgstr ""
+msgstr "Eメール"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:194
 msgid "emphasised text"
@@ -1697,9 +1693,8 @@ msgstr ""
 "力してください"
 
 #: packages/lib/models/Setting.ts:569
-#, fuzzy
 msgid "Force path style"
-msgstr "Path Styleを強制する"
+msgstr "パス形式を強制する"
 
 #: packages/lib/commands/historyForward.ts:6
 msgid "Forward"
@@ -1789,7 +1784,7 @@ msgstr "ハイライト"
 #: packages/server/src/services/MustacheService.ts:167
 #: packages/server/src/services/MustacheService.ts:300
 msgid "Home"
-msgstr ""
+msgstr "ホーム"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:78
 msgid "Horizontal Rule"
@@ -1833,7 +1828,7 @@ msgstr "TLS証明書のエラーを無視"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:102
 msgid "Images"
-msgstr ""
+msgstr "画像"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:170
 #: packages/app-desktop/gui/MenuBar.tsx:484
@@ -2016,7 +2011,7 @@ msgstr "アイテム \"%s\" はダウンロードできませんでした：%s"
 #: packages/server/src/services/MustacheService.ts:175
 #: packages/server/src/services/MustacheService.ts:302
 msgid "Items"
-msgstr ""
+msgstr "アイテム"
 
 #: packages/lib/services/ReportService.ts:208
 msgid "Items that cannot be decrypted"
@@ -2231,11 +2226,11 @@ msgstr "OneDriveログイン"
 
 #: packages/server/src/services/MustacheService.ts:306
 msgid "Logout"
-msgstr ""
+msgstr "ログアウト"
 
 #: packages/server/src/services/MustacheService.ts:179
 msgid "Logs"
-msgstr ""
+msgstr "ログ"
 
 #: packages/app-desktop/gui/MenuBar.tsx:716
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:583
@@ -2697,9 +2692,8 @@ msgid "Or create an account."
 msgstr "またはアカウントを作成。"
 
 #: packages/app-desktop/gui/MenuBar.tsx:352
-#, fuzzy
 msgid "Other applications..."
-msgstr "アプリケーションの終了。"
+msgstr "その他のアプリケーション..."
 
 #: packages/app-cli/app/command-import.js:27
 msgid "Output format: %s"
@@ -2901,19 +2895,19 @@ msgstr "プライバシーポリシー"
 
 #: packages/server/src/services/TaskService.ts:35
 msgid "Process failed payment subscriptions"
-msgstr ""
+msgstr "サブスクリプションの支払い処理に失敗しました"
 
 #: packages/server/src/services/TaskService.ts:33
 msgid "Process oversized accounts"
-msgstr ""
+msgstr "容量オーバーのアカウントを処理する"
 
 #: packages/server/src/services/TaskService.ts:38
 msgid "Process user deletions"
-msgstr ""
+msgstr "ユーザー削除を実施する"
 
 #: packages/server/src/routes/admin/users.ts:168
 msgid "Profile"
-msgstr ""
+msgstr "プロファイル"
 
 #: packages/lib/versionInfo.ts:26
 msgid "Profile Version: %s"
@@ -3099,27 +3093,22 @@ msgid "S3"
 msgstr "S3"
 
 #: packages/lib/models/Setting.ts:547
-#, fuzzy
 msgid "S3 access key"
-msgstr "アクセスキー"
+msgstr "S3 アクセスキー"
 
 #: packages/lib/models/Setting.ts:507
-#, fuzzy
 msgid "S3 bucket"
 msgstr "S3 バケット"
 
 #: packages/lib/models/Setting.ts:536
-#, fuzzy
 msgid "S3 region"
-msgstr "リージョン"
+msgstr "S3 リージョン"
 
 #: packages/lib/models/Setting.ts:558
-#, fuzzy
 msgid "S3 secret key"
-msgstr "シークレットアクセスキー"
+msgstr "S3 シークレットアクセスキー"
 
 #: packages/lib/models/Setting.ts:522
-#, fuzzy
 msgid "S3 URL"
 msgstr "S3 URL"
 
@@ -3198,14 +3187,12 @@ msgid "Select all"
 msgstr "すべて選択"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:140
-#, fuzzy
 msgid "Select emoji..."
-msgstr "日付の選択"
+msgstr "絵文字の選択..."
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:144
-#, fuzzy
 msgid "Select file..."
-msgstr "すべて選択"
+msgstr "ファイルの選択..."
 
 #: packages/app-cli/app/command-server.js:38
 msgid "Server is already running on port %d"
@@ -3625,7 +3612,7 @@ msgstr "写真を撮影する"
 #: packages/server/src/services/MustacheService.ts:148
 #: packages/server/src/services/MustacheService.ts:304
 msgid "Tasks"
-msgstr ""
+msgstr "タスク"
 
 #: packages/lib/models/Setting.ts:1230
 msgid "Text editor command"
@@ -4014,7 +4001,7 @@ msgstr "DropboxでJoplinを同期する場合は、次のステップを実行�
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:54
 msgid "To continue, please enter your master password below."
-msgstr "続行するには、マスターパスワードを入力してください"
+msgstr "続行するには、マスターパスワードを入力してください。"
 
 #: packages/app-cli/app/app-gui.js:452
 msgid "To delete a tag, untag the associated notes."
@@ -4210,14 +4197,12 @@ msgstr "アップデート"
 
 #: packages/server/src/routes/admin/users.ts:171
 #: packages/server/src/routes/index/users.ts:89
-#, fuzzy
 msgid "Update profile"
-msgstr "プロファイルをエクスポート"
+msgstr "プロファイルの更新"
 
 #: packages/server/src/services/TaskService.ts:32
-#, fuzzy
 msgid "Update total sizes"
-msgstr "ローカルアイテムの更新: %d."
+msgstr "総容量を更新する"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:208
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:209
@@ -4321,13 +4306,13 @@ msgstr ""
 
 #: packages/server/src/services/MustacheService.ts:144
 msgid "User deletions"
-msgstr ""
+msgstr "ユーザー削除"
 
 #: packages/server/src/routes/admin/users.ts:107
 #: packages/server/src/services/MustacheService.ts:140
 #: packages/server/src/services/MustacheService.ts:301
 msgid "Users"
-msgstr ""
+msgstr "ユーザー"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:182
 msgid "Valid"
