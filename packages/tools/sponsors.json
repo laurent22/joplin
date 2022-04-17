@@ -117,6 +117,11 @@
 			"urlWebsite": "https://www.hosting.de/nextcloud/?mtm_campaign=managed-nextcloud&mtm_kwd=joplinapp&mtm_source=joplinapp-webseite&mtm_medium=banner",
 			"title": "Hosting.de",
 			"imageName": "HostingDe.png"
+		},
+		{
+			"url": "https://residence-greece.com/",
+			"title": "Greece Golden Visa",
+			"imageName": "ResidenceGreece.jpg"
 		}
 	],
 	"orgsOld": []
