@@ -2979,7 +2979,10 @@ __metadata:
     "@codemirror/state": ^0.18.7
     "@codemirror/view": ^0.18.19
     "@joplin/lib": ~2.8
+<<<<<<< HEAD
     "@joplin/react-native-saf-x": ~0.5
+=======
+>>>>>>> dev
     "@joplin/renderer": ~2.8
     "@joplin/tools": ~2.8
     "@react-native-community/clipboard": ^1.5.0
@@ -3214,6 +3217,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+<<<<<<< HEAD
 "@joplin/react-native-saf-x@workspace:packages/react-native-saf-x, @joplin/react-native-saf-x@~0.5":
   version: 0.0.0-use.local
   resolution: "@joplin/react-native-saf-x@workspace:packages/react-native-saf-x"
@@ -3232,6 +3236,8 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+=======
+>>>>>>> dev
 "@joplin/renderer@workspace:packages/renderer, @joplin/renderer@~2.8":
   version: 0.0.0-use.local
   resolution: "@joplin/renderer@workspace:packages/renderer"
