@@ -11,6 +11,7 @@ import Tag from './Tag';
 const { sprintf } = require('sprintf-js');
 import Resource from './Resource';
 import syncDebugLog from '../services/synchronizer/syncDebugLog';
+import { toFileProtocolPath, toForwardSlashes } from '../path-utils';
 const { pregQuote, substrWithEllipsis } = require('../string-utils.js');
 const { _ } = require('../locale');
 const ArrayUtils = require('../ArrayUtils.js');
@@ -167,7 +168,7 @@ export default class Note extends BaseItem {
 			// change, the preview is updated inside the note. This is not
 			// needed for other resources since they are simple links.
 			const timestampParam = isImage ? `?t=${resource.updated_time}` : '';
-			const resourcePath = options.useAbsolutePaths ? `file://${Resource.fullPath(resource)}${timestampParam}` : Resource.relativePath(resource);
+			const resourcePath = options.useAbsolutePaths ? toFileProtocolPath(Resource.fullPath(resource)) + timestampParam : Resource.relativePath(resource);
 			body = body.replace(new RegExp(`:/${id}`, 'gi'), markdownUtils.escapeLinkUrl(resourcePath));
 		}
 
@@ -181,10 +182,14 @@ export default class Note extends BaseItem {
 			useAbsolutePaths: false,
 		}, options);
 
+		const resourceDir = toForwardSlashes(Setting.value('resourceDir'));
+
 		let pathsToTry = [];
 		if (options.useAbsolutePaths) {
-			pathsToTry.push(`file://${Setting.value('resourceDir')}`);
-			pathsToTry.push(`file://${shim.pathRelativeToCwd(Setting.value('resourceDir'))}`);
+			pathsToTry.push(`file://${resourceDir}`);
+			pathsToTry.push(`file:///${resourceDir}`);
+			pathsToTry.push(`file://${shim.pathRelativeToCwd(resourceDir)}`);
+			pathsToTry.push(`file:///${shim.pathRelativeToCwd(resourceDir)}`);
 		} else {
 			pathsToTry.push(Resource.baseRelativeDirectoryPath());
 		}

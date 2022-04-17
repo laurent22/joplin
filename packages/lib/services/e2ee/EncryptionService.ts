@@ -254,6 +254,7 @@ export default class EncryptionService {
 		model.created_time = now;
 		model.updated_time = now;
 		model.source_application = Setting.value('appId');
+		model.hasBeenUsed = false;
 
 		return model;
 	}

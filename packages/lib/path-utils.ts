@@ -146,6 +146,10 @@ export function toSystemSlashes(path: string, os: string = null) {
 	return path.replace(/\\/g, '/');
 }
 
+export function toForwardSlashes(path: string) {
+	return toSystemSlashes(path, 'linux');
+}
+
 export function rtrimSlashes(path: string) {
 	return path.replace(/[\/\\]+$/, '');
 }

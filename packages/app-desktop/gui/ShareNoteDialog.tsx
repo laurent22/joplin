@@ -15,7 +15,7 @@ import Button from './Button/Button';
 import { connect } from 'react-redux';
 import { AppState } from '../app.reducer';
 import { getEncryptionEnabled } from '@joplin/lib/services/synchronizer/syncInfoUtils';
-import SyncTargetRegistry from '../../lib/SyncTargetRegistry';
+import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 const { clipboard } = require('electron');
 
 interface Props {

@@ -1,7 +1,7 @@
 import { writeFile } from 'fs-extra';
-import { createNewProfile, getProfileFullPath, loadProfileConfig, saveProfileConfig } from '.';
+import { createNewProfile, getProfileFullPath, loadProfileConfig, migrateProfileConfig, saveProfileConfig } from '.';
 import { tempFilePath } from '../../testing/test-utils';
-import { defaultProfile, defaultProfileConfig, ProfileConfig } from './types';
+import { CurrentProfileVersion, defaultProfile, defaultProfileConfig, DefaultProfileId, Profile, ProfileConfig } from './types';
 
 describe('profileConfig/index', () => {
 
@@ -17,7 +17,7 @@ describe('profileConfig/index', () => {
 			profiles: [
 				{
 					name: 'Testing',
-					path: '.',
+					id: DefaultProfileId,
 				},
 			],
 		};
@@ -26,12 +26,12 @@ describe('profileConfig/index', () => {
 		const loadedConfig = await loadProfileConfig(filePath);
 
 		const expected: ProfileConfig = {
-			version: 1,
-			currentProfile: 0,
+			version: CurrentProfileVersion,
+			currentProfileId: DefaultProfileId,
 			profiles: [
 				{
 					name: 'Testing',
-					path: '.',
+					id: DefaultProfileId,
 				},
 			],
 		};
@@ -50,36 +50,71 @@ describe('profileConfig/index', () => {
 	});
 
 	it('should get a profile full path', async () => {
-		const profile1 = {
+		const profile1: Profile = {
 			...defaultProfile(),
-			path: 'profile-abcd',
+			id: 'abcd',
 		};
 
-		const profile2 = {
+		const profile2: Profile = {
 			...defaultProfile(),
-			path: '.',
-		};
-
-		const profile3 = {
-			...defaultProfile(),
-			path: 'profiles/pro/',
+			id: DefaultProfileId,
 		};
 
 		expect(getProfileFullPath(profile1, '/test/root')).toBe('/test/root/profile-abcd');
 		expect(getProfileFullPath(profile2, '/test/root')).toBe('/test/root');
-		expect(getProfileFullPath(profile3, '/test/root')).toBe('/test/root/profiles/pro');
 	});
 
 	it('should create a new profile', async () => {
 		let config = defaultProfileConfig();
-		config = createNewProfile(config, 'new profile 1');
-		config = createNewProfile(config, 'new profile 2');
+		const r1 = createNewProfile(config, 'new profile 1');
+		const r2 = createNewProfile(r1.newConfig, 'new profile 2');
+		config = r2.newConfig;
 
 		expect(config.profiles.length).toBe(3);
 		expect(config.profiles[1].name).toBe('new profile 1');
 		expect(config.profiles[2].name).toBe('new profile 2');
 
-		expect(config.profiles[1].path).not.toBe(config.profiles[2].path);
+		expect(config.profiles[1].id).not.toBe(config.profiles[2].id);
+	});
+
+	it('should migrate profile config - version 1 to 2', async () => {
+		const migrated1 = migrateProfileConfig({
+			'version': 1,
+			'currentProfile': 2,
+			'profiles': [
+				{
+					'name': 'Default',
+					'path': '.',
+				},
+				{
+					'name': 'sub1',
+					'path': 'profile-sjn25kuh',
+				},
+				{
+					'name': 'sub2',
+					'path': 'profile-yufzkns3',
+				},
+			],
+		}, 2);
+
+		expect(migrated1).toEqual({
+			'version': 2,
+			'currentProfileId': 'yufzkns3',
+			'profiles': [
+				{
+					'name': 'Default',
+					'id': 'default',
+				},
+				{
+					'name': 'sub1',
+					'id': 'sjn25kuh',
+				},
+				{
+					'name': 'sub2',
+					'id': 'yufzkns3',
+				},
+			],
+		});
 	});
 
 });

@@ -239,7 +239,7 @@ class RootComponent extends React.Component<Props, any> {
 					<StyleSheetContainer themeId={this.props.themeId}></StyleSheetContainer>
 					<MenuBar/>
 					<GlobalStyle/>
-					<Navigator style={navigatorStyle} screens={screens} />
+					<Navigator style={navigatorStyle} screens={screens} className={`profile-${this.props.profileConfigCurrentProfileId}`} />
 					{this.renderModalMessage(this.modalDialogProps())}
 					{this.renderDialogs()}
 				</ThemeProvider>
@@ -261,6 +261,7 @@ const mapStateToProps = (state: AppState) => {
 			width: state.windowContentSize.width - 36 * 2,
 			height: state.windowContentSize.height - 36 * 2 - 28 - 30 - 20,
 		},
+		profileConfigCurrentProfileId: state.profileConfig.currentProfileId,
 	};
 };
 

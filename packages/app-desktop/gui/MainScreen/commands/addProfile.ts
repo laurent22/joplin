@@ -19,10 +19,10 @@ export const runtime = (comp: any): CommandRuntime => {
 					value: '',
 					onClose: async (answer: string) => {
 						if (answer) {
-							const newConfig = await createNewProfile(context.state.profileConfig, answer);
-							newConfig.currentProfile = newConfig.profiles.length - 1;
+							const { newConfig, newProfile } = createNewProfile(context.state.profileConfig, answer);
+							newConfig.currentProfileId = newProfile.id;
 							await saveProfileConfig(`${Setting.value('rootProfileDir')}/profiles.json`, newConfig);
-							bridge().restart();
+							bridge().restart(false);
 						}
 
 						comp.setState({ promptOptions: null });

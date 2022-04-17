@@ -265,7 +265,7 @@ export class Bridge {
 		}
 	}
 
-	restart() {
+	restart(linuxSafeRestart = true) {
 		// Note that in this case we are not sending the "appClose" event
 		// to notify services and component that the app is about to close
 		// but for the current use-case it's not really needed.
@@ -276,7 +276,7 @@ export class Bridge {
 				execPath: process.env.PORTABLE_EXECUTABLE_FILE,
 			};
 			app.relaunch(options);
-		} else if (shim.isLinux()) {
+		} else if (shim.isLinux() && linuxSafeRestart) {
 			this.showInfoMessageBox(_('The app is now going to close. Please relaunch it to complete the process.'));
 		} else {
 			app.relaunch();

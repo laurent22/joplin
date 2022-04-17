@@ -1,7 +1,33 @@
-import { rtrimSlashes, trimSlashes } from '../../path-utils';
+import { rtrimSlashes } from '../../path-utils';
 import shim from '../../shim';
-import { defaultProfile, defaultProfileConfig, Profile, ProfileConfig } from './types';
+import { CurrentProfileVersion, defaultProfile, defaultProfileConfig, DefaultProfileId, Profile, ProfileConfig } from './types';
 import { customAlphabet } from 'nanoid/non-secure';
+
+export const migrateProfileConfig = (profileConfig: any, toVersion: number): ProfileConfig => {
+	let version = 2;
+
+	while (profileConfig.version < toVersion) {
+		if (profileConfig.version === 1) {
+			for (const profile of profileConfig.profiles) {
+				if (profile.path === '.') {
+					profile.id = DefaultProfileId;
+				} else {
+					profile.id = profile.path.split('-').pop();
+				}
+				delete profile.path;
+			}
+
+			const currentProfile = profileConfig.profiles[profileConfig.currentProfile];
+			profileConfig.currentProfileId = currentProfile.id;
+			delete profileConfig.currentProfile;
+		}
+
+		profileConfig.version = version;
+		version++;
+	}
+
+	return profileConfig;
+};
 
 export const loadProfileConfig = async (profileConfigPath: string): Promise<ProfileConfig> => {
 	if (!(await shim.fsDriver().exists(profileConfigPath))) {
@@ -10,8 +36,10 @@ export const loadProfileConfig = async (profileConfigPath: string): Promise<Prof
 
 	try {
 		const configContent = await shim.fsDriver().readFile(profileConfigPath, 'utf8');
-		const parsed = JSON.parse(configContent) as ProfileConfig;
+		let parsed = JSON.parse(configContent) as ProfileConfig;
 		if (!parsed.profiles || !parsed.profiles.length) throw new Error(`Profile config should contain at least one profile: ${profileConfigPath}`);
+
+		parsed = migrateProfileConfig(parsed, CurrentProfileVersion);
 
 		const output: ProfileConfig = {
 			...defaultProfileConfig(),
@@ -25,7 +53,7 @@ export const loadProfileConfig = async (profileConfigPath: string): Promise<Prof
 			};
 		}
 
-		if (output.currentProfile < 0 || output.currentProfile >= output.profiles.length) throw new Error(`Profile index out of range: ${output.currentProfile}`);
+		if (!output.profiles.find(p => p.id === output.currentProfileId)) throw new Error(`Current profile ID is invalid: ${output.currentProfileId}`);
 		return output;
 	} catch (error) {
 		error.message = `Could not parse profile configuration: ${profileConfigPath}: ${error.message}`;
@@ -38,27 +66,39 @@ export const saveProfileConfig = async (profileConfigPath: string, config: Profi
 };
 
 export const getCurrentProfile = (config: ProfileConfig): Profile => {
-	return { ...config.profiles[config.currentProfile] };
+	return config.profiles.find(p => p.id === config.currentProfileId);
 };
 
 export const getProfileFullPath = (profile: Profile, rootProfilePath: string): string => {
-	let p = trimSlashes(profile.path);
-	if (p === '.') p = '';
-	return rtrimSlashes(`${rtrimSlashes(rootProfilePath)}/${p}`);
+	const folderName = profile.id === DefaultProfileId ? '' : `/profile-${profile.id}`;
+	return `${rtrimSlashes(rootProfilePath)}${folderName}`;
+};
+
+export const isSubProfile = (profile: Profile): boolean => {
+	return profile.id !== DefaultProfileId;
 };
 
 const profileIdGenerator = customAlphabet('0123456789abcdefghijklmnopqrstuvwxyz', 8);
 
 export const createNewProfile = (config: ProfileConfig, profileName: string) => {
-	const newConfig = {
+	const newConfig: ProfileConfig = {
 		...config,
 		profiles: config.profiles.slice(),
 	};
 
-	newConfig.profiles.push({
+	const newProfile: Profile = {
 		name: profileName,
-		path: `profile-${profileIdGenerator()}`,
-	});
+		id: profileIdGenerator(),
+	};
 
-	return newConfig;
+	newConfig.profiles.push(newProfile);
+
+	return {
+		newConfig: newConfig,
+		newProfile: newProfile,
+	};
+};
+
+export const profileIdByIndex = (config: ProfileConfig, index: number): string => {
+	return config.profiles[index].id;
 };
