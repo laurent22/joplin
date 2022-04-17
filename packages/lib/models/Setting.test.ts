@@ -15,8 +15,9 @@ const switchToSubProfileSettings = async () => {
 	const rootProfileDir = Setting.value('profileDir');
 	const profileConfigPath = `${rootProfileDir}/profiles.json`;
 	let profileConfig = defaultProfileConfig();
-	profileConfig = createNewProfile(profileConfig, 'Sub-profile');
-	profileConfig.currentProfile = 1;
+	const { newConfig, newProfile } = createNewProfile(profileConfig, 'Sub-profile');
+	profileConfig = newConfig;
+	profileConfig.currentProfileId = newProfile.id;
 	await saveProfileConfig(profileConfigPath, profileConfig);
 	const { profileDir } = await initProfile(rootProfileDir);
 	await mkdirp(profileDir);
@@ -272,7 +273,7 @@ describe('models/Setting', function() {
 		expect(Setting.value('style.editor.contentMaxWidth')).toBe(600); // Changed
 	}));
 
-	it('should load sub-profile settings', async () => {
+	it('should load sub-profile settings - 1', async () => {
 		await Setting.reset();
 
 		Setting.setValue('locale', 'fr_FR'); // Global setting
@@ -293,7 +294,7 @@ describe('models/Setting', function() {
 		expect((await Setting.loadOne('sync.target')).value).toBe(undefined);
 	});
 
-	it('should save sub-profile settings', async () => {
+	it('should save sub-profile settings - 2', async () => {
 		await Setting.reset();
 		Setting.setValue('locale', 'fr_FR'); // Global setting
 		Setting.setValue('theme', Setting.THEME_DARK); // Global setting

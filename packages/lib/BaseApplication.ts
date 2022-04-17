@@ -738,7 +738,7 @@ export default class BaseApplication {
 		Setting.setConstant('tempDir', tempDir);
 		Setting.setConstant('pluginDataDir', `${profileDir}/plugin-data`);
 		Setting.setConstant('cacheDir', cacheDir);
-		Setting.setConstant('pluginDir', `${profileDir}/plugins`);
+		Setting.setConstant('pluginDir', `${rootProfileDir}/plugins`);
 
 		SyncTargetRegistry.addClass(SyncTargetNone);
 		SyncTargetRegistry.addClass(SyncTargetFilesystem);
@@ -811,8 +811,12 @@ export default class BaseApplication {
 		appLogger.info(`Client ID: ${Setting.value('clientId')}`);
 
 		if (Setting.value('firstStart')) {
-			const locale = shim.detectAndSetLocale(Setting);
-			reg.logger().info(`First start: detected locale as ${locale}`);
+			// If it's a sub-profile, the locale must come from the root
+			// profile.
+			if (!Setting.value('isSubProfile')) {
+				const locale = shim.detectAndSetLocale(Setting);
+				reg.logger().info(`First start: detected locale as ${locale}`);
+			}
 
 			Setting.skipDefaultMigrations();
 
@@ -825,8 +829,9 @@ export default class BaseApplication {
 			Setting.setValue('firstStart', 0);
 		} else {
 			Setting.applyDefaultMigrations();
-			setLocale(Setting.value('locale'));
 		}
+
+		setLocale(Setting.value('locale'));
 
 		if (Setting.value('env') === Env.Dev) {
 			// Setting.setValue('sync.10.path', 'https://api.joplincloud.com');
