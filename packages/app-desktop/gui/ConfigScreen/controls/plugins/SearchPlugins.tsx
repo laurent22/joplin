@@ -10,6 +10,8 @@ import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/Plug
 import { _ } from '@joplin/lib/locale';
 import useOnInstallHandler from './useOnInstallHandler';
 import { themeStyle } from '@joplin/lib/theme';
+import Button, { ButtonLevel, ButtonSize } from '../../../Button/Button';
+import FilterForPlugins from './FilterForPlugins/FilterForPlugins';
 
 const Root = styled.div`
 `;
@@ -17,6 +19,10 @@ const Root = styled.div`
 const ResultsRoot = styled.div`
 	display: flex;
 	flex-wrap: wrap;
+`;
+
+const ToolsButton = styled(Button)`
+	margin-right: 6px;
 `;
 
 interface Props {
@@ -29,6 +35,7 @@ interface Props {
 	maxWidth: number;
 	repoApi(): RepositoryApi;
 	disabled: boolean;
+	setShouldRenderUserPlugins: Function;
 }
 
 function sortManifestResults(results: PluginManifest[]): PluginManifest[] {
@@ -46,21 +53,30 @@ export default function(props: Props) {
 	const [installingPluginsIds, setInstallingPluginIds] = useState<Record<string, boolean>>({});
 	const [searchResultCount, setSearchResultCount] = useState(null);
 
+	const [filterValue, setFilterValue] = useState<string>('');
+
 	const onInstall = useOnInstallHandler(setInstallingPluginIds, props.pluginSettings, props.repoApi, props.onPluginSettingsChange, false);
 
 	useEffect(() => {
 		setSearchResultCount(null);
 		asyncSearchQueue.current.push(async () => {
-			if (!props.searchQuery) {
+			if (!props.searchQuery && !filterValue || filterValue.toLowerCase() === 'installed') {
 				setManifests([]);
 				setSearchResultCount(null);
+				props.setShouldRenderUserPlugins(true);
 			} else {
-				const r = await props.repoApi().search(props.searchQuery);
-				setManifests(sortManifestResults(r));
+				const r = await props.repoApi().sortByCategory(filterValue.toLowerCase(), props.searchQuery);
+				!(['most downloaded', 'newest'].includes(filterValue.toLowerCase())) && setManifests(sortManifestResults(r));
+				['most downloaded', 'newest'].includes(filterValue.toLowerCase()) && setManifests(r);
+
+				// !['most downloaded', 'newest'].includes(filterValue.toLowerCase()) && setManifests(sortManifestResults(r, sortValue));
+				console.log('r: ', r);
 				setSearchResultCount(r.length);
+				props.setShouldRenderUserPlugins(false);
 			}
 		});
-	}, [props.searchQuery]);
+	}, [props.searchQuery, filterValue]);
+	// }, [props.searchQuery, filterValue, sortValue]);
 
 	const onChange = useCallback((event: OnChangeEvent) => {
 		setSearchStarted(true);
@@ -96,7 +112,6 @@ export default function(props: Props) {
 					installState={installState(manifest.id)}
 				/>);
 			}
-
 			return output;
 		}
 	}
@@ -110,7 +125,7 @@ export default function(props: Props) {
 
 	return (
 		<Root>
-			<div style={{ marginBottom: 10, width: props.maxWidth }}>
+			<div style={{ marginBottom: 10, width: props.maxWidth , display: 'flex',flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
 				<SearchInput
 					inputRef={null}
 					value={props.searchQuery}
@@ -120,6 +135,8 @@ export default function(props: Props) {
 					placeholder={props.disabled ? _('Please wait...') : _('Search for plugins...')}
 					disabled={props.disabled}
 				/>
+				<FilterForPlugins themeId={props.themeId} setFilterValue={setFilterValue} />
+				<ToolsButton size={ButtonSize.Small} tooltip={_('Plugin tools')} iconName="fas fa-cog" level={ButtonLevel.Secondary}/>
 				{renderContentSourceInfo()}
 			</div>
 

@@ -2,4 +2,5 @@
 @use 'gui/EditFolderDialog/style.scss' as edit-folder-dialog;
 @use 'gui/EncryptionConfigScreen/style.scss' as encryption-config-screen;
 @use 'gui/PasswordInput/style.scss' as password-input;
+@use 'gui/ConfigScreen/controls/plugins/FilterForPlugins/style.scss' as filter-for-plugins;
 @use 'main.scss' as main;

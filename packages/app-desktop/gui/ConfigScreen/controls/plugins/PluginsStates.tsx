@@ -5,7 +5,7 @@ import { _ } from '@joplin/lib/locale';
 import styled from 'styled-components';
 import SearchPlugins from './SearchPlugins';
 import PluginBox, { ItemEvent, UpdateState } from './PluginBox';
-import Button, { ButtonLevel, ButtonSize } from '../../../Button/Button';
+import Button from '../../../Button/Button';
 import bridge from '../../../../services/bridge';
 import produce from 'immer';
 import { OnChangeEvent } from '../../../lib/SearchInput/SearchInput';
@@ -20,7 +20,7 @@ const { space } = require('styled-system');
 
 const logger = Logger.create('PluginState');
 
-const maxWidth: number = 320;
+const maxWidth: number = 460;
 
 const Root = styled.div`
 	display: flex;
@@ -31,10 +31,6 @@ const UserPluginsRoot = styled.div<any>`
 	${space}
 	display: flex;
 	flex-wrap: wrap;
-`;
-
-const ToolsButton = styled(Button)`
-	margin-right: 6px;
 `;
 
 const RepoApiErrorMessage = styled(StyledMessage)<any>`
@@ -96,6 +92,8 @@ export default function(props: Props) {
 	const [canBeUpdatedPluginIds, setCanBeUpdatedPluginIds] = useState<Record<string, boolean>>({});
 	const [repoApiError, setRepoApiError] = useState<Error>(null);
 	const [fetchManifestTime, setFetchManifestTime] = useState<number>(Date.now());
+	const [shouldRenderUserPlugins, setShouldRenderUserPlugins] = useState<boolean>(true);
+
 
 	const pluginService = PluginService.instance();
 
@@ -291,6 +289,7 @@ export default function(props: Props) {
 					onPluginSettingsChange={onSearchPluginSettingsChange}
 					renderDescription={props.renderDescription}
 					repoApi={repoApi}
+					setShouldRenderUserPlugins={setShouldRenderUserPlugins}
 				/>
 			</div>
 		);
@@ -308,13 +307,7 @@ export default function(props: Props) {
 		return (
 			<div>
 				{renderRepoApiError()}
-				<div style={{ display: 'flex', flexDirection: 'row', maxWidth }}>
-					<ToolsButton size={ButtonSize.Small} tooltip={_('Plugin tools')} iconName="fas fa-cog" level={ButtonLevel.Secondary} onClick={onToolsClick}/>
-					<div style={{ display: 'flex', flex: 1 }}>
-						{props.renderHeader(props.themeId, _('Manage your plugins'))}
-					</div>
-				</div>
-				{renderUserPlugins(pluginItems)}
+				{shouldRenderUserPlugins && renderUserPlugins(pluginItems)}
 			</div>
 		);
 	}

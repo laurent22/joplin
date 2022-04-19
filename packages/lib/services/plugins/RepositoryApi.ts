@@ -1,6 +1,9 @@
 import Logger from '../../Logger';
 import shim from '../../shim';
 import { PluginManifest } from './utils/types';
+import PluginService from '@joplin/lib/services/plugins/PluginService';
+import { pluginCategories } from './pluginCategories';
+import Setting from '@joplin/lib/models/Setting';
 const md5 = require('md5');
 const compareVersions = require('compare-versions');
 
@@ -14,6 +17,11 @@ interface ReleaseAsset {
 interface Release {
 	upload_url: string;
 	assets: ReleaseAsset[];
+}
+
+interface statsObj {
+	totalDownloads: number;
+	created_date?: string;
 }
 
 const findWorkingGitHubUrl = async (defaultContentUrl: string): Promise<string> => {
@@ -59,9 +67,12 @@ export default class RepositoryApi {
 	private tempDir_: string;
 	private release_: Release = null;
 	private manifests_: PluginManifest[] = null;
+	private stats_: any = null;
 	private githubApiUrl_: string;
 	private contentBaseUrl_: string;
 	private isUsingDefaultContentUrl_: boolean = true;
+	private statsObj_: statsObj = null;
+	private allStats_: Array<any> = [];
 
 	public constructor(baseUrl: string, tempDir: string) {
 		this.baseUrl_ = baseUrl;
@@ -79,21 +90,54 @@ export default class RepositoryApi {
 
 		await this.loadManifests();
 		await this.loadRelease();
+		await this.loadStats();
 	}
 
 	private async loadManifests() {
 		const manifestsText = await this.fetchText('manifests.json');
 		try {
 			const manifests = JSON.parse(manifestsText);
+			console.log('----manifests-----', (manifests));
 			if (!manifests) throw new Error('Invalid or missing JSON');
 
+			const tempOptions = pluginCategories();
 			this.manifests_ = Object.keys(manifests).map(id => {
 				const m: PluginManifest = manifests[id];
+
+				m._plugin_category = tempOptions[m.name];
 				// If we don't control the repository, we can't recommend
 				// anything on it since it could have been modified.
 				if (!this.isUsingDefaultContentUrl) m._recommended = false;
 				return m;
 			});
+		} catch (error) {
+			throw new Error(`Could not parse JSON: ${error.message}`);
+		}
+	}
+
+	private async loadStats() {
+		this.stats_ = null;
+		const statsText = await this.fetchText('stats.json');
+
+		if (this.stats_) return this.stats_;
+
+		try {
+			const statsJson = JSON.parse(statsText);
+			console.log('stats.json', statsJson);
+			if (!statsJson) throw new Error('Invalid or missing JSON');
+			let tempDownloadCount: number = 0;
+			let created_date = '';
+			this.manifests_.forEach(manifest => {
+				statsJson[manifest.id] && Object.entries(statsJson[manifest.id]).forEach((stats, index) => {
+					tempDownloadCount += stats[1].downloadCount;
+					if (index === 0) created_date = stats[1].createdAt;
+				});
+				const manifestObj = this.manifests_.find(obj => obj.id === manifest.id);
+				manifestObj._totalDownloads = tempDownloadCount;
+				manifestObj._created_date = created_date;
+				tempDownloadCount = 0;
+			});
+
 		} catch (error) {
 			throw new Error(`Could not parse JSON: ${error.message}`);
 		}
@@ -165,24 +209,73 @@ export default class RepositoryApi {
 		}
 	}
 
-	public async search(query: string): Promise<PluginManifest[]> {
-		query = query.toLowerCase().trim();
-
+	// this function can go into parent function -> filterPlugins and
+	// if given keyword is a cateogry then call this function
+	public async sortByCategory(category?: string, searchQuery?: string): Promise<PluginManifest[]> {
 		const manifests = await this.manifests();
-		const output: PluginManifest[] = [];
+		let output: PluginManifest[] = [];
+		const output2: PluginManifest[] = [];
+		category = category.toLowerCase();
+		const pluginStates = Setting.value('plugins.states');
 
-		for (const manifest of manifests) {
-			for (const field of ['name', 'description']) {
-				const v = (manifest as any)[field];
-				if (!v) continue;
 
-				if (v.toLowerCase().indexOf(query) >= 0) {
-					output.push(manifest);
-					break;
-				}
+		const filterGroupOne = ['most downloaded','recommended', 'newest', 'built-in', 'all'];
+		const filterGroupTwo = ['appearance', 'developer tools', 'productivity', 'themes', 'integrations', 'viewer', 'search', 'tags', 'editor', 'files', 'personal knowledge management'];
+		const filterGroupThree = ['Installed', 'enabled', 'disabled', 'outdated'];
+
+		console.log('category-----: ', category);
+		if (filterGroupTwo.includes(category)) {
+			output = manifests.filter((m) => m._plugin_category === category);
+		} else if (filterGroupOne.includes(category) || filterGroupThree.includes(category)) {
+			switch (category) {
+			case 'most downloaded':
+				output = this.manifests_.sort((m1, m2) => m2._totalDownloads - m1._totalDownloads).slice(0, 50);
+				break;
+			case 'recommended':
+				output = this.manifests_.filter(manifest => manifest._recommended);
+				break;
+			case 'newest':
+				// + before new keyword forces date to be number https://github.com/microsoft/TypeScript/issues/5710
+				output = manifests.sort((m1, m2) => +new Date(m2._created_date) - +new Date(m1._created_date)).slice(0,50);
+				break;
+			case 'built-in':
+				output = manifests.filter(manifest => manifest._built_in);
+				break;
+			case 'all':
+				output = manifests;
+				break;
+			case 'outdated':
+				output = manifests.filter(manifest => !PluginService.instance().isCompatible(manifest.app_min_version));
+				break;
+			case 'enabled':
+				output = manifests.filter(manifest => pluginStates[manifest.id] && pluginStates[manifest.id].enabled);
+				break;
+			case 'disabled':
+				output = manifests.filter(manifest => pluginStates[manifest.id] && !(pluginStates[manifest.id].enabled));
+				break;
+			default:
+				output = manifests;
+				break;
 			}
 		}
 
+		if (searchQuery) {
+			searchQuery = searchQuery.toLowerCase().trim();
+			if (!category) output = manifests;
+
+			for (const manifest of output) {
+				for (const field of ['name', 'description']) {
+					const v = (manifest as any)[field];
+					if (!v) continue;
+
+					if (v.toLowerCase().indexOf(searchQuery) >= 0) {
+						output2.push(manifest);
+						break;
+					}
+				}
+			}
+			return output2;
+		}
 		return output;
 	}
 

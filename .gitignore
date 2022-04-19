@@ -186,6 +186,9 @@ packages/app-desktop/gui/ConfigScreen/ConfigScreen.js.map
 packages/app-desktop/gui/ConfigScreen/Sidebar.d.ts
 packages/app-desktop/gui/ConfigScreen/Sidebar.js
 packages/app-desktop/gui/ConfigScreen/Sidebar.js.map
+packages/app-desktop/gui/ConfigScreen/controls/plugins/FilterForPlugins/FilterForPlugins.d.ts
+packages/app-desktop/gui/ConfigScreen/controls/plugins/FilterForPlugins/FilterForPlugins.js
+packages/app-desktop/gui/ConfigScreen/controls/plugins/FilterForPlugins/FilterForPlugins.js.map
 packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.d.ts
 packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js
 packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.js.map
@@ -1524,6 +1527,9 @@ packages/lib/services/plugins/api/JoplinWorkspace.js.map
 packages/lib/services/plugins/api/types.d.ts
 packages/lib/services/plugins/api/types.js
 packages/lib/services/plugins/api/types.js.map
+packages/lib/services/plugins/pluginCategories.d.ts
+packages/lib/services/plugins/pluginCategories.js
+packages/lib/services/plugins/pluginCategories.js.map
 packages/lib/services/plugins/reducer.d.ts
 packages/lib/services/plugins/reducer.js
 packages/lib/services/plugins/reducer.js.map

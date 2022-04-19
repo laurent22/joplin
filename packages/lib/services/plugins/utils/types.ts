@@ -16,10 +16,14 @@ export interface PluginManifest {
 	permissions?: PluginPermission[];
 
 	// Private keys
+	_totalDownloads?: number;
+	_created_date?: string;
+	_plugin_category?: any;
 	_package_hash?: string;
 	_publish_hash?: string;
 	_publish_commit?: string;
 	_npm_package_name?: string;
 	_obsolete?: boolean;
 	_recommended?: boolean;
+	_built_in?: boolean;
 }
