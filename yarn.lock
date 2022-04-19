@@ -3320,6 +3320,7 @@ __metadata:
     "@types/mustache": ^0.8.32
     "@types/node": ^14.14.6
     "@types/node-fetch": 1.6.9
+    "@types/yargs": 16.0.3
     dayjs: ^1.10.7
     execa: ^4.1.0
     fs-extra: ^4.0.3
@@ -5740,6 +5741,15 @@ __metadata:
   version: 20.2.1
   resolution: "@types/yargs-parser@npm:20.2.1"
   checksum: 1d039e64494a7a61ddd278349a3dc60b19f99ff0517425696e796f794e4252452b9d62178e69755ad03f439f9dc0c8c3d7b3a1201b3a24e134bac1a09fa11eaa
+  languageName: node
+  linkType: hard
+
+"@types/yargs@npm:16.0.3":
+  version: 16.0.3
+  resolution: "@types/yargs@npm:16.0.3"
+  dependencies:
+    "@types/yargs-parser": "*"
+  checksum: 0968b06d2f6df764cb180a4089b293ae313a310b0c3524c296f93ac896ca1ed8d857b595db0388355f9f45772226d25d6a4f7df359302f245040a63ba057ae5a
   languageName: node
   linkType: hard
 

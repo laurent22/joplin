@@ -23,6 +23,7 @@
     "@joplin/lib": "~2.8",
     "@joplin/renderer": "~2.8",
     "@types/node-fetch": "1.6.9",
+    "@types/yargs": "16.0.3",
     "dayjs": "^1.10.7",
     "execa": "^4.1.0",
     "fs-extra": "^4.0.3",
