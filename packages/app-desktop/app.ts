@@ -521,6 +521,7 @@ class Application extends BaseApplication {
 				migrationService: MigrationService.instance(),
 				decryptionWorker: DecryptionWorker.instance(),
 				commandService: CommandService.instance(),
+				pluginService: PluginService.instance(),
 				bridge: bridge(),
 				debug: new DebugService(reg.db()),
 			};
