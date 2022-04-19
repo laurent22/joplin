@@ -1137,7 +1137,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 					onSelectionChange={this.body_selectionChange}
 					onUndoRedoDepthChange={this.onUndoRedoDepthChange}
 					style={this.styles().bodyTextInput}
-					// disableBetaUndoRedo={this.disableBetaUndoRedo}
 				/>;
 			}
 		}
