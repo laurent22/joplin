@@ -259,7 +259,7 @@ export default class CommandService extends BaseService {
 
 		if (!whenClauseContext) whenClauseContext = this.currentWhenClauseContext();
 
-		const exp = new WhenClause(command.runtime.enabledCondition, this.devMode_);
+		const exp = WhenClause.get(command.runtime.enabledCondition, this.devMode_);
 		return exp.evaluate(whenClauseContext);
 	}
 

@@ -7,8 +7,16 @@ import { AppState } from '../../app.reducer';
 import libStateToWhenClauseContext, { WhenClauseContextOptions } from '@joplin/lib/services/commands/stateToWhenClauseContext';
 import layoutItemProp from '../../gui/ResizableLayout/utils/layoutItemProp';
 
+// Since state is immutable, if state is not changed and options === null, its context is not changed.
+// So, the last context without option is cached.
+let lastIn: any = null, lastOut: any = null;
+
 export default function stateToWhenClauseContext(state: AppState, options: WhenClauseContextOptions = null) {
-	return {
+
+	if (lastOut !== null && state === lastIn && options === null) return lastOut;
+
+	const sidebarVisible = !!state.mainLayout && layoutItemProp(state.mainLayout, 'sideBar', 'visible');
+	const value = {
 		...libStateToWhenClauseContext(state, options),
 
 		// UI elements
@@ -18,10 +26,15 @@ export default function stateToWhenClauseContext(state: AppState, options: WhenC
 		markdownViewerPaneVisible: state.settings['editor.codeView'] && state.noteVisiblePanes.includes('viewer'),
 		modalDialogVisible: !!Object.keys(state.visibleDialogs).length,
 		gotoAnythingVisible: !!state.visibleDialogs['gotoAnything'],
-		sidebarVisible: !!state.mainLayout && layoutItemProp(state.mainLayout, 'sideBar', 'visible'),
+		sidebarVisible: sidebarVisible,
 		noteListHasNotes: !!state.notes.length,
 
 		// Deprecated
-		sideBarVisible: !!state.mainLayout && layoutItemProp(state.mainLayout, 'sideBar', 'visible'),
+		sideBarVisible: sidebarVisible,
 	};
+	if (options === null) {
+		lastIn = state;
+		lastOut = value;
+	}
+	return value;
 }

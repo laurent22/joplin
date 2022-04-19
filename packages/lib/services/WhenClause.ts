@@ -59,18 +59,25 @@ export default class WhenClause {
 	private expression_: AdvancedExpression;
 	private validate_: boolean;
 	private ruleCache_: Record<string, ContextKeyExpression> = {};
+	private static whenClauseCache_: { [expression: string]: { [validate: string]: WhenClause } } = {};
 
 	public constructor(expression: string, validate: boolean = true) {
 		this.expression_ = parseAdvancedExpression(expression);
 		this.validate_ = validate;
 	}
 
-	private createContext(ctx: any): IContext {
-		return {
-			getValue: (key: string) => {
-				return ctx[key];
-			},
-		};
+	// Since a WhenClause object is immutable, and its creation cost is high,
+	// it should be reused.
+	public static get(expression: string, validate: boolean): WhenClause {
+		WhenClause.whenClauseCache_[expression] ??= {};
+		const entry = WhenClause.whenClauseCache_[expression];
+		const vkey = validate ? 'true' : 'false';
+		entry[vkey] ??= new WhenClause(expression, validate);
+		return entry[vkey];
+	}
+
+	private createContext(ctx1: any, ctx2: any = null): IContext {
+		return { getValue: key => ctx2?.[key] ?? ctx1[key] };
 	}
 
 	private rules(exp: string): ContextKeyExpression {
@@ -83,14 +90,14 @@ export default class WhenClause {
 		if (this.validate_) this.validate(context);
 
 		const subContext: any = {};
+		const ctx = this.createContext(context);
 
 		for (const k in this.expression_.subExpressions) {
 			const subExp = this.expression_.subExpressions[k];
-			subContext[k] = this.rules(subExp).evaluate(this.createContext(context));
+			subContext[k] = this.rules(subExp).evaluate(ctx);
 		}
 
-		const fullContext = { ...context, ...subContext };
-		return this.rules(this.expression_.compiledText).evaluate(this.createContext(fullContext));
+		return this.rules(this.expression_.compiledText).evaluate(this.createContext(context, subContext));
 	}
 
 	public validate(context: any) {
