@@ -1,5 +1,20 @@
 # Joplin changelog
 
+## [v2.8.4](https://github.com/laurent22/joplin/releases/tag/v2.8.4) (Pre-release) - 2022-04-19T18:00:09Z
+
+- New: Multi-profiles: Added profile ID in CSS root class so that different profiles can have different styles (fd9fe5c)
+- Improved: Enabled plugin throttling logic to prevent certain plugins from freezing the app (b716755)
+- Improved: Multi-profiles: Improve performance when switching notes, when multiple plugins are loaded ([#6394](https://github.com/laurent22/joplin/issues/6394))
+- Improved: Multi-profiles: Assign an ID to profiles and remove path (b4a6e17)
+- Improved: Multi-profiles: Automatically restart the app when switching profiles on Linux (1797e84)
+- Improved: Multi-profiles: Share UI layout between profiles (a111531)
+- Improved: Multi-profiles: Share custom CSS between profiles (0cdef66)
+- Improved: Multi-profiles: Share plugins between profiles (510df43)
+- Improved: Multi-profiles: Locale was not being preserved when creating a new profile ([#6411](https://github.com/laurent22/joplin/issues/6411))
+- Improved: Performance improvement when switching note while plugins are running ([#6409](https://github.com/laurent22/joplin/issues/6409)) ([#5770](https://github.com/laurent22/joplin/issues/5770) by Kenichi Kobayashi)
+- Fixed: Editor context menu was broken (regression) ([#6422](https://github.com/laurent22/joplin/issues/6422)) ([#6126](https://github.com/laurent22/joplin/issues/6126) by [@asrient](https://github.com/asrient))
+- Fixed: Opening a file with ctrl-click in the editor results in a 'network error' dialogue ([#6145](https://github.com/laurent22/joplin/issues/6145))
+
 ## [v2.8.2](https://github.com/laurent22/joplin/releases/tag/v2.8.2) (Pre-release) - 2022-04-14T11:35:45Z
 
 - New: Add support for multiple profiles ([#6385](https://github.com/laurent22/joplin/issues/6385)) ([#591](https://github.com/laurent22/joplin/issues/591))
