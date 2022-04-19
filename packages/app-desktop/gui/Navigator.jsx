@@ -39,7 +39,7 @@ class NavigatorComponent extends Component {
 		};
 
 		return (
-			<div style={this.props.style}>
+			<div style={this.props.style} className={this.props.className}>
 				<Screen style={screenStyle} {...screenProps} />
 			</div>
 		);

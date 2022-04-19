@@ -354,8 +354,7 @@ class Application extends BaseApplication {
 		}
 
 		// Loads app-wide styles. (Markdown preview-specific styles loaded in app.js)
-		const filename = Setting.custom_css_files.JOPLIN_APP;
-		await injectCustomStyles('appStyles', `${dir}/${filename}`);
+		await injectCustomStyles('appStyles', Setting.customCssFilePath(Setting.customCssFilenames.JOPLIN_APP));
 
 		AlarmService.setDriver(new AlarmServiceDriverNode({ appName: packageInfo.build.appId }));
 		AlarmService.setLogger(reg.logger());
@@ -433,7 +432,7 @@ class Application extends BaseApplication {
 		});
 
 		// Loads custom Markdown preview styles
-		const cssString = await loadCustomCss(`${Setting.value('profileDir')}/userstyle.css`);
+		const cssString = await loadCustomCss(Setting.customCssFilePath(Setting.customCssFilenames.RENDERED_MARKDOWN));
 		this.store().dispatch({
 			type: 'CUSTOM_CSS_APPEND',
 			css: cssString,
@@ -522,6 +521,7 @@ class Application extends BaseApplication {
 				migrationService: MigrationService.instance(),
 				decryptionWorker: DecryptionWorker.instance(),
 				commandService: CommandService.instance(),
+				pluginService: PluginService.instance(),
 				bridge: bridge(),
 				debug: new DebugService(reg.db()),
 			};

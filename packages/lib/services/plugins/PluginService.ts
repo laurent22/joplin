@@ -315,6 +315,10 @@ export default class PluginService extends BaseService {
 		return settings[pluginId].enabled !== false;
 	}
 
+	public callStatsSummary(pluginId: string, duration: number) {
+		return this.runner_.callStatsSummary(pluginId, duration);
+	}
+
 	public async loadAndRunPlugins(pluginDirOrPaths: string | string[], settings: PluginSettings, devMode: boolean = false) {
 		let pluginPaths = [];
 

@@ -86,7 +86,7 @@ class Dropdown extends React.Component {
 		if (this.props.labelTransform && this.props.labelTransform === 'trim') headerLabel = headerLabel.trim();
 
 		const closeList = () => {
-			if (this.props.onClose()) this.props.onClose();
+			if (this.props.onClose) this.props.onClose();
 			this.setState({ listVisible: false });
 		};
 
@@ -116,7 +116,7 @@ class Dropdown extends React.Component {
 					onPress={() => {
 						this.updateHeaderCoordinates();
 						this.setState({ listVisible: true });
-						if (this.props.onOpen()) this.props.onOpen();
+						if (this.props.onOpen) this.props.onOpen();
 					}}
 				>
 					<Text ellipsizeMode="tail" numberOfLines={1} style={headerStyle}>

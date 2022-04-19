@@ -2978,9 +2978,9 @@ __metadata:
     "@codemirror/lang-markdown": ^0.18.4
     "@codemirror/state": ^0.18.7
     "@codemirror/view": ^0.18.19
-    "@joplin/lib": ~2.6
-    "@joplin/renderer": ~2.6
-    "@joplin/tools": ~2.6
+    "@joplin/lib": ~2.8
+    "@joplin/renderer": ~2.8
+    "@joplin/tools": ~2.8
     "@react-native-community/clipboard": ^1.5.0
     "@react-native-community/datetimepicker": ^3.0.3
     "@react-native-community/geolocation": ^2.0.2
@@ -3089,7 +3089,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/htmlpack@^2.6.1, @joplin/htmlpack@workspace:packages/htmlpack, @joplin/htmlpack@~2.8":
+"@joplin/htmlpack@workspace:packages/htmlpack, @joplin/htmlpack@~2.8":
   version: 0.0.0-use.local
   resolution: "@joplin/htmlpack@workspace:packages/htmlpack"
   dependencies:
@@ -3102,7 +3102,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/lib@^2.6.3, @joplin/lib@workspace:packages/lib, @joplin/lib@~2.8":
+"@joplin/lib@workspace:packages/lib, @joplin/lib@~2.8":
   version: 0.0.0-use.local
   resolution: "@joplin/lib@workspace:packages/lib"
   dependencies:
@@ -3183,76 +3183,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/lib@npm:~2.6":
-  version: 2.6.3
-  resolution: "@joplin/lib@npm:2.6.3"
-  dependencies:
-    "@aws-sdk/client-s3": ^3.34.0
-    "@aws-sdk/s3-request-presigner": ^3.34.0
-    "@joplin/fork-htmlparser2": ^4.1.39
-    "@joplin/fork-sax": ^1.2.43
-    "@joplin/htmlpack": ^2.6.1
-    "@joplin/renderer": ^2.6.3
-    "@joplin/turndown": ^4.0.61
-    "@joplin/turndown-plugin-gfm": ^1.0.43
-    async-mutex: ^0.1.3
-    base-64: ^0.1.0
-    base64-stream: ^1.0.0
-    builtin-modules: ^3.1.0
-    chokidar: ^3.4.3
-    color: 3.1.2
-    compare-versions: ^3.6.0
-    css: ^3.0.0
-    diff-match-patch: ^1.0.4
-    es6-promise-pool: ^2.5.0
-    fast-deep-equal: ^3.1.3
-    follow-redirects: ^1.2.4
-    form-data: ^2.1.4
-    fs-extra: ^5.0.0
-    html-entities: ^1.2.1
-    html-minifier: ^3.5.15
-    image-data-uri: ^2.0.0
-    image-type: ^3.0.0
-    immer: ^7.0.14
-    js-yaml: ^4.1.0
-    levenshtein: ^1.0.5
-    lodash: ^4.17.20
-    markdown-it: ^10.0.0
-    md5: ^2.2.1
-    md5-file: ^4.0.0
-    moment: ^2.29.1
-    multiparty: ^4.2.1
-    mustache: ^4.0.1
-    nanoid: ^3.1.12
-    node-fetch: ^1.7.1
-    node-notifier: ^8.0.0
-    node-persist: ^2.1.0
-    node-rsa: ^1.1.1
-    promise: ^7.1.1
-    query-string: 4.3.4
-    re-reselect: ^4.0.0
-    read-chunk: ^2.1.0
-    redux: ^3.7.2
-    relative: ^3.0.2
-    reselect: ^4.0.0
-    server-destroy: ^1.0.1
-    sprintf-js: ^1.1.2
-    sqlite3: ^5.0.2
-    string-padding: ^1.0.2
-    string-to-stream: ^1.1.0
-    tar: ^4.4.10
-    tcp-port-used: ^0.1.2
-    uglifycss: 0.0.29
-    url-parse: ^1.4.7
-    uslug: "git+https://github.com/laurent22/uslug.git#emoji-support"
-    uuid: ^3.0.1
-    valid-url: ^1.0.9
-    word-wrap: ^1.2.3
-    xml2js: ^0.4.19
-  checksum: d0208121688057f179fe52a61a3442ce63fe82f3ef65d1fa27a7d21e2912048f7009daa464d44ec00f5fa980d3cf33ae0ec869598357ed96225aed20dcc1dcd0
-  languageName: node
-  linkType: hard
-
 "@joplin/plugin-repo-cli@workspace:packages/plugin-repo-cli":
   version: 0.0.0-use.local
   resolution: "@joplin/plugin-repo-cli@workspace:packages/plugin-repo-cli"
@@ -3283,7 +3213,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/renderer@^2.6.3, @joplin/renderer@workspace:packages/renderer, @joplin/renderer@~2.8":
+"@joplin/renderer@workspace:packages/renderer, @joplin/renderer@~2.8":
   version: 0.0.0-use.local
   resolution: "@joplin/renderer@workspace:packages/renderer"
   dependencies:
@@ -3316,37 +3246,6 @@ __metadata:
     typescript: ^4.0.5
   languageName: unknown
   linkType: soft
-
-"@joplin/renderer@npm:~2.6":
-  version: 2.6.3
-  resolution: "@joplin/renderer@npm:2.6.3"
-  dependencies:
-    "@joplin/fork-htmlparser2": ^4.1.39
-    font-awesome-filetypes: ^2.1.0
-    fs-extra: ^8.1.0
-    highlight.js: ^11.2.0
-    html-entities: ^1.2.1
-    json-stringify-safe: ^5.0.1
-    katex: ^0.13.3
-    markdown-it: ^10.0.0
-    markdown-it-abbr: ^1.0.4
-    markdown-it-anchor: ^5.2.5
-    markdown-it-deflist: ^2.0.3
-    markdown-it-emoji: ^1.4.0
-    markdown-it-expand-tabs: ^1.0.13
-    markdown-it-footnote: ^3.0.2
-    markdown-it-ins: ^3.0.0
-    markdown-it-mark: ^3.0.0
-    markdown-it-multimd-table: ^4.0.1
-    markdown-it-sub: ^1.0.0
-    markdown-it-sup: ^1.0.0
-    markdown-it-toc-done-right: ^4.1.0
-    md5: ^2.2.1
-    mermaid: ^8.13.5
-    uslug: "git+https://github.com/laurent22/uslug.git#emoji-support"
-  checksum: d72adc250939c425175d61956e7060dc2fca77a00b49cfcd41cc3ff5a44de1c891c0c3be3232ba761efc67129726df155fb8626398feedc5eebdbce9094bc5c5
-  languageName: node
-  linkType: hard
 
 "@joplin/server@workspace:packages/server":
   version: 0.0.0-use.local
@@ -3408,31 +3307,6 @@ __metadata:
     zxcvbn: ^4.4.2
   languageName: unknown
   linkType: soft
-
-"@joplin/tools@npm:~2.6":
-  version: 2.6.3
-  resolution: "@joplin/tools@npm:2.6.3"
-  dependencies:
-    "@joplin/lib": ^2.6.3
-    "@joplin/renderer": ^2.6.3
-    execa: ^4.1.0
-    fs-extra: ^4.0.3
-    gettext-parser: ^1.3.0
-    glob: ^7.1.6
-    markdown-it: ^8.4.1
-    md5-file: ^4.0.0
-    moment: ^2.24.0
-    mustache: ^2.3.0
-    node-fetch: ^1.7.3
-    relative: ^3.0.2
-    request: ^2.88.0
-    sharp: ^0.25.2
-    source-map-support: ^0.5.19
-    uri-template: ^1.0.1
-    yargs: ^16.0.3
-  checksum: d9320b87b43336b8fdc446e144e9dd913fa4de13704c14cdfac0a885f11a8e84824e5e73eb5f20380bdc68e010d738a0cf3203ade445f7765c51d143f2bb4d35
-  languageName: node
-  linkType: hard
 
 "@joplin/tools@workspace:packages/tools, @joplin/tools@~2.8":
   version: 0.0.0-use.local
@@ -16135,13 +16009,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"highlight.js@npm:^11.2.0":
-  version: 11.3.1
-  resolution: "highlight.js@npm:11.3.1"
-  checksum: 9adaaa1fe5aaae0ca522f9355bc2a7387f76ab362f88c32c86879b99f606619a9aa33c32ffc94cd893987e71ba5d2de6f3e325ed9e8eac65e5872d251e8cba3a
-  languageName: node
-  linkType: hard
-
 "highlight.js@npm:~9.12.0":
   version: 9.12.0
   resolution: "highlight.js@npm:9.12.0"
@@ -20480,15 +20347,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"markdown-it-multimd-table@npm:^4.0.1":
-  version: 4.1.1
-  resolution: "markdown-it-multimd-table@npm:4.1.1"
-  dependencies:
-    markdown-it: ^11.0.0
-  checksum: a92c9d43f87f26f0f9d1271612ba94bb27affe0408c6bcd34641e9b4c361bf561cf9a1276ce6cf2f8df77fc5a9bb598826dc50e6411905b46aeb481a524e2974
-  languageName: node
-  linkType: hard
-
 "markdown-it-multimd-table@npm:^4.1.2":
   version: 4.1.2
   resolution: "markdown-it-multimd-table@npm:4.1.2"
@@ -20531,21 +20389,6 @@ __metadata:
   bin:
     markdown-it: bin/markdown-it.js
   checksum: 69f5ee640cbebb451b80d3cce308fff7230767e05c0f8c206a1e413775b7a6e5a08e91e9f3ec59f9b5c5a45493f9ce7ac089379cffb60c9d3e6677ed9d535086
-  languageName: node
-  linkType: hard
-
-"markdown-it@npm:^11.0.0":
-  version: 11.0.1
-  resolution: "markdown-it@npm:11.0.1"
-  dependencies:
-    argparse: ^1.0.7
-    entities: ~2.0.0
-    linkify-it: ^3.0.1
-    mdurl: ^1.0.1
-    uc.micro: ^1.0.5
-  bin:
-    markdown-it: bin/markdown-it.js
-  checksum: 05e953045479fb0e47ef45fbae1ba544e9539cd26bc4cd56a9662ac08dd716a61f78a1fa64aea618c20eb80805aef8214b02e5aa7280e47cd6c3517d31591dad
   languageName: node
   linkType: hard
 
@@ -20857,23 +20700,6 @@ __metadata:
   version: 1.4.1
   resolution: "merge2@npm:1.4.1"
   checksum: 7268db63ed5169466540b6fb947aec313200bcf6d40c5ab722c22e242f651994619bcd85601602972d3c85bd2cc45a358a4c61937e9f11a061919a1da569b0c2
-  languageName: node
-  linkType: hard
-
-"mermaid@npm:^8.13.5":
-  version: 8.13.6
-  resolution: "mermaid@npm:8.13.6"
-  dependencies:
-    "@braintree/sanitize-url": ^3.1.0
-    d3: ^7.0.0
-    dagre: ^0.8.5
-    dagre-d3: ^0.6.4
-    dompurify: 2.3.4
-    graphlib: ^2.1.8
-    khroma: ^1.4.1
-    moment-mini: ^2.24.0
-    stylis: ^4.0.10
-  checksum: 70c75c236b04d8e430de58129bd9afa5305f0879c7a60c1d4e44f636181adcc2dcdf6a2fc467ac9e76a008958a8701480dd4cb211729b0be785b650bdd55a408
   languageName: node
   linkType: hard
 
@@ -22051,7 +21877,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-emoji@npm:1.11.0, node-emoji@npm:^1.11.0":
+"node-emoji@npm:1.11.0":
   version: 1.11.0
   resolution: "node-emoji@npm:1.11.0"
   dependencies:
@@ -30334,16 +30160,6 @@ __metadata:
   dependencies:
     os-homedir: ^1.0.0
   checksum: a3329faa959fcd9e3e01a03347ca974f7f6b8896e6a634f29c61d8d5b61557d853c6fc5a6dff1a28e2da85b400d0e4490368a28de452ba8c41a2bf3a92cb110a
-  languageName: node
-  linkType: hard
-
-"uslug@git+https://github.com/laurent22/uslug.git#emoji-support":
-  version: 1.0.4
-  resolution: "uslug@https://github.com/laurent22/uslug.git#commit=8c12bc7678eaefa752e673ea9cfbc0b1a14d7237"
-  dependencies:
-    node-emoji: ^1.11.0
-    unorm: ">= 1.0.0"
-  checksum: 9ed2a3b18f25090aec7468d60b8fa0b2172029d6bb8e917079971758cb67a68c9a591f2a42aa447124849dae8aaea2fa9873d38c9e792cc2e9c3c05329f59fb3
   languageName: node
   linkType: hard
 
