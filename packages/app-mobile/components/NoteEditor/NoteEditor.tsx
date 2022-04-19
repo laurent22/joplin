@@ -27,7 +27,6 @@ export interface SelectionChangeEvent {
 type ChangeEventHandler = (event: ChangeEvent)=> void;
 type UndoRedoDepthChangeHandler = (event: UndoRedoDepthChangeEvent)=> void;
 type SelectionChangeEventHandler = (event: SelectionChangeEvent)=> void;
-type disableBetaUndoRedoHandler = ()=> void;
 
 interface Props {
 	themeId: number;
@@ -38,7 +37,6 @@ interface Props {
 	onChange: ChangeEventHandler;
 	onSelectionChange: SelectionChangeEventHandler;
 	onUndoRedoDepthChange: UndoRedoDepthChangeHandler;
-	disableBetaUndoRedo: disableBetaUndoRedoHandler;
 }
 
 function fontFamilyFromSettings() {
@@ -317,12 +315,6 @@ function NoteEditor(props: Props, ref: any) {
 		};
 	}, [html]);
 
-	useEffect(() => {
-
-		return () => {
-			props.disableBetaUndoRedo();
-		};
-	}, []);
 
 	const onMessage = useCallback((event: any) => {
 		const data = event.nativeEvent.data;

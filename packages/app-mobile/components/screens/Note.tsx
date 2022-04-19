@@ -237,7 +237,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.onBodyViewerCheckboxChange = this.onBodyViewerCheckboxChange.bind(this);
 		this.onBodyChange = this.onBodyChange.bind(this);
 		this.onUndoRedoDepthChange = this.onUndoRedoDepthChange.bind(this);
-		this.disableBetaUndoRedo = this.disableBetaUndoRedo.bind(this);
 	}
 
 	private useEditorBeta(): boolean {
@@ -1048,13 +1047,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 		void this.saveOneProperty('body', newBody);
 	}
 
-	disableBetaUndoRedo() {
-		this.setState({ undoRedoButtonState: {
-			canUndo: false,
-			canRedo: false,
-		} });
-	}
-
 	render() {
 		if (this.state.isLoading) {
 			return (
@@ -1145,7 +1137,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 					onSelectionChange={this.body_selectionChange}
 					onUndoRedoDepthChange={this.onUndoRedoDepthChange}
 					style={this.styles().bodyTextInput}
-					disableBetaUndoRedo={this.disableBetaUndoRedo}
+					// disableBetaUndoRedo={this.disableBetaUndoRedo}
 				/>;
 			}
 		}
@@ -1210,8 +1202,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 					onSaveButtonPress={this.saveNoteButton_press}
 					showSideMenuButton={false}
 					showSearchButton={false}
-					showUndoButton={this.state.undoRedoButtonState.canUndo || this.state.undoRedoButtonState.canRedo}
-					showRedoButton={this.state.undoRedoButtonState.canRedo}
+					showUndoButton={(this.state.undoRedoButtonState.canUndo || this.state.undoRedoButtonState.canRedo) && this.state.mode === 'edit'}
+					showRedoButton={this.state.undoRedoButtonState.canRedo && this.state.mode === 'edit'}
 					undoButtonDisabled={!this.state.undoRedoButtonState.canUndo && this.state.undoRedoButtonState.canRedo}
 					onUndoButtonPress={this.screenHeader_undoButtonPress}
 					onRedoButtonPress={this.screenHeader_redoButtonPress}
