@@ -14,6 +14,7 @@ const pathUtils = require('@joplin/lib/path-utils');
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 const shared = require('@joplin/lib/components/shared/config-shared.js');
 import ClipperConfigScreen from '../ClipperConfigScreen';
+import restart from '../../services/restart';
 const { KeymapConfigScreen } = require('../KeymapConfig/KeymapConfigScreen');
 
 const settingKeyToControl: any = {
@@ -72,12 +73,12 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			if (!confirm('This cannot be undone. Do you want to continue?')) return;
 			Setting.setValue('sync.startupOperation', SyncStartupOperation.ClearLocalSyncState);
 			await Setting.saveAll();
-			bridge().restart();
+			await restart();
 		} else if (key === 'sync.clearLocalDataButton') {
 			if (!confirm('This cannot be undone. Do you want to continue?')) return;
 			Setting.setValue('sync.startupOperation', SyncStartupOperation.ClearLocalData);
 			await Setting.saveAll();
-			bridge().restart();
+			await restart();
 		} else if (key === 'sync.openSyncWizard') {
 			this.props.dispatch({
 				type: 'DIALOG_OPEN',
@@ -632,7 +633,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 	private async restartApp() {
 		await Setting.saveAll();
-		bridge().restart();
+		await restart();
 	}
 
 	private async checkNeedRestart() {

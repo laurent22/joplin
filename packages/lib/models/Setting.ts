@@ -1500,6 +1500,12 @@ class Setting extends BaseModel {
 				public: false,
 			},
 
+			wasClosedSuccessfully: {
+				value: true,
+				type: SettingItemType.Bool,
+				public: false,
+			},
+
 			// 'featureFlag.syncAccurateTimestamps': {
 			// 	value: false,
 			// 	type: SettingItemType.Bool,

@@ -324,12 +324,23 @@ class Application extends BaseApplication {
 		}, 500);
 	}
 
+	private crashDetectionHandler() {
+		if (!Setting.value('wasClosedSuccessfully')) {
+			const answer = confirm(_('The application did not close properly. Would you like to start in safe mode?'));
+			Setting.setValue('isSafeMode', !!answer);
+		}
+
+		Setting.setValue('wasClosedSuccessfully', false);
+	}
+
 	public async start(argv: string[]): Promise<any> {
 		// If running inside a package, the command line, instead of being "node.exe <path> <flags>" is "joplin.exe <flags>" so
 		// insert an extra argument so that they can be processed in a consistent way everywhere.
 		if (!bridge().electronIsDev()) argv.splice(1, 0, '.');
 
 		argv = await super.start(argv);
+
+		this.crashDetectionHandler();
 
 		await this.applySettingsSideEffects();
 

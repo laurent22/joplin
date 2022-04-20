@@ -40,6 +40,7 @@ import { showMissingMasterKeyMessage } from '@joplin/lib/services/e2ee/utils';
 import { MasterKeyEntity } from '@joplin/lib/services/e2ee/types';
 import commands from './commands/index';
 import invitationRespond from '../../services/share/invitationRespond';
+import restart from '../../services/restart';
 const { connect } = require('react-redux');
 const { PromptDialog } = require('../PromptDialog.min.js');
 const NotePropertiesDialog = require('../NotePropertiesDialog.min.js');
@@ -267,18 +268,22 @@ class MainScreenComponent extends React.Component<Props, State> {
 			if (this.waitForNotesSavedIID_) shim.clearInterval(this.waitForNotesSavedIID_);
 			this.waitForNotesSavedIID_ = null;
 
-			ipcRenderer.send('asynchronous-message', 'appCloseReply', {
-				canClose: !this.props.hasNotesBeingSaved,
-			});
+			const sendCanClose = async (canClose: boolean) => {
+				if (canClose) {
+					Setting.setValue('wasClosedSuccessfully', true);
+					await Setting.saveAll();
+				}
+				ipcRenderer.send('asynchronous-message', 'appCloseReply', { canClose });
+			};
+
+			await sendCanClose(!this.props.hasNotesBeingSaved);
 
 			if (this.props.hasNotesBeingSaved) {
 				this.waitForNotesSavedIID_ = shim.setInterval(() => {
 					if (!this.props.hasNotesBeingSaved) {
 						shim.clearInterval(this.waitForNotesSavedIID_);
 						this.waitForNotesSavedIID_ = null;
-						ipcRenderer.send('asynchronous-message', 'appCloseReply', {
-							canClose: true,
-						});
+						void sendCanClose(true);
 					}
 				}, 50);
 			}
@@ -557,13 +562,13 @@ class MainScreenComponent extends React.Component<Props, State> {
 		const onRestartAndUpgrade = async () => {
 			Setting.setValue('sync.upgradeState', Setting.SYNC_UPGRADE_STATE_MUST_DO);
 			await Setting.saveAll();
-			bridge().restart();
+			await restart();
 		};
 
 		const onDisableSafeModeAndRestart = async () => {
 			Setting.setValue('isSafeMode', false);
 			await Setting.saveAll();
-			bridge().restart();
+			await restart();
 		};
 
 		const onInvitationRespond = async (shareUserId: string, folderId: string, masterKey: MasterKeyEntity, accept: boolean) => {
