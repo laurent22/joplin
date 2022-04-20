@@ -315,7 +315,6 @@ function NoteEditor(props: Props, ref: any) {
 		};
 	}, [html]);
 
-
 	const onMessage = useCallback((event: any) => {
 		const data = event.nativeEvent.data;
 
