@@ -49,7 +49,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 	const styles = styles_(props);
 
 	const [renderedBody, setRenderedBody] = useState<RenderedBody>(defaultRenderedBody()); // Viewer content
-	const [renderedBodyContentKey, setRenderedBodyContentKey] = useState<string>(null);
+	const renderedBodyContentKey = useRef('');
 
 	const [webviewReady, setWebviewReady] = useState(false);
 
@@ -603,9 +603,10 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		// When a new note is loaded (contentKey is different), we want the note to be displayed
 		// right away. However once that's done, we put a small delay so that the view is not
 		// being constantly updated while the user changes the note.
-		const interval = renderedBodyContentKey !== props.contentKey ? 0 : 500;
+		const interval = renderedBodyContentKey.current !== props.contentKey ? 0 : 500;
+		let timeoutId: any = null;
 
-		const timeoutId = shim.setTimeout(async () => {
+		const markupedBodyToHtml = async () => {
 			let bodyToRender = props.content;
 
 			if (!bodyToRender.trim() && props.visiblePanes.indexOf('viewer') >= 0 && props.visiblePanes.indexOf('editor') < 0) {
@@ -624,24 +625,21 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 			}));
 
 			if (cancelled) return;
-
+			renderedBodyContentKey.current = props.contentKey;
 			setRenderedBody(result);
-
-			// Since we set `renderedBodyContentKey` here, it means this effect is going to
-			// be triggered again, but that's hard to avoid and the second call would be cheap
-			// anyway since the renderered markdown is cached by MdToHtml. We could use a ref
-			// to avoid this, but a second rendering might still happens anyway to render images,
-			// resources, or for other reasons. So it's best to focus on making any second call
-			// to this effect as cheap as possible with caching, etc.
-			setRenderedBodyContentKey(props.contentKey);
-		}, interval);
+		};
+		if (interval > 0) {
+			timeoutId = shim.setTimeout(markupedBodyToHtml, interval);
+		} else {
+			void markupedBodyToHtml(); // markups right away
+		}
 
 		return () => {
 			cancelled = true;
 			shim.clearTimeout(timeoutId);
 		};
 		// eslint-disable-next-line @seiyab/react-hooks/exhaustive-deps -- Old code before rule was applied
-	}, [props.content, props.contentKey, renderedBodyContentKey, props.contentMarkupLanguage, props.visiblePanes, props.resourceInfos, props.markupToHtml]);
+	}, [props.content, props.contentKey, props.contentMarkupLanguage, props.visiblePanes, props.resourceInfos, props.markupToHtml]);
 
 	useEffect(() => {
 		if (!webviewReady) return;
