@@ -25,6 +25,12 @@ export enum SettingItemType {
 	Button = 6,
 }
 
+export enum SettingItemSubType {
+	FilePathAndArgs = 'file_path_and_args',
+	FilePath = 'file_path', // Not supported on mobile!
+	DirectoryPath = 'directory_path', // Not supported on mobile!
+}
+
 interface KeysOptions {
 	secureOnly?: boolean;
 }
