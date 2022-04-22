@@ -453,7 +453,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			});
 			const inputType = md.secure === true ? 'password' : 'text';
 
-			if (md.subType === 'file_path_and_args') {
+			if (md.subType === 'file_path_and_args' || md.subType === 'file_path' || md.subType === 'directory_path') {
 				inputStyle.marginBottom = subLabel.marginBottom;
 
 				const splitCmd = (cmdString: string) => {
@@ -483,14 +483,40 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				};
 
 				const browseButtonClick = async () => {
-					const paths = await bridge().showOpenDialog();
-					if (!paths || !paths.length) return;
-					const cmd = splitCmd(this.state.settings[key]);
-					cmd[0] = paths[0];
-					updateSettingValue(key, joinCmd(cmd));
+					if (md.subType === 'directory_path') {
+						const paths = await bridge().showOpenDialog({
+							properties: ['openDirectory'],
+						});
+						if (!paths || !paths.length) return;
+						updateSettingValue(key, paths[0]);
+					} else {
+						const paths = await bridge().showOpenDialog();
+						if (!paths || !paths.length) return;
+						const cmd = splitCmd(this.state.settings[key]);
+						cmd[0] = paths[0];
+						updateSettingValue(key, joinCmd(cmd));
+					}
 				};
 
 				const cmd = splitCmd(this.state.settings[key]);
+
+				const argComp = md.subType !== 'file_path_and_args' ? null : (
+					<div style={{ ...rowStyle, marginBottom: 5 }}>
+						<div style={subLabel}>{_('Arguments:')}</div>
+						<input
+							type={inputType}
+							style={inputStyle}
+							onChange={(event: any) => {
+								onArgsChange(event);
+							}}
+							value={cmd[1]}
+							spellCheck={false}
+						/>
+						<div style={{ width: inputStyle.width, minWidth: inputStyle.minWidth }}>
+							{descriptionComp}
+						</div>
+					</div>
+				);
 
 				return (
 					<div key={key} style={rowStyle}>
@@ -519,25 +545,9 @@ class ConfigScreenComponent extends React.Component<any, any> {
 										/>
 									</div>
 								</div>
-								<div style={{ ...rowStyle, marginBottom: 5 }}>
-									<div style={subLabel}>{_('Arguments:')}</div>
-									<input
-										type={inputType}
-										style={inputStyle}
-										onChange={(event: any) => {
-											onArgsChange(event);
-										}}
-										value={cmd[1]}
-										spellCheck={false}
-									/>
-									<div style={{ width: inputStyle.width, minWidth: inputStyle.minWidth }}>
-										{descriptionComp}
-									</div>
-								</div>
 							</div>
 						</div>
-
-
+						{argComp}
 					</div>
 				);
 			} else {

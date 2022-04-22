@@ -1,5 +1,14 @@
 # Joplin iOS app changelog
 
+## [ios-v12.7.2](https://github.com/laurent22/joplin/releases/tag/ios-v12.7.2) - 2022-04-15T11:07:27Z
+
+- Improved: Allow filtering tags in tag dialog (#6221 by [@shinglyu](https://github.com/shinglyu))
+- Improved: Handle invalid revision patches (#6209)
+- Improved: Improve error message when revision metadata cannot be decoded, to improve debugging (a325bf6)
+- Fixed: Ensure that note revision markup type is set correctly (#6261)
+- Fixed: IOS and Dropbox synchronisation not working on iOS 15 (#6375)
+- Fixed: The camera button remains clickable after taking a photo bug (#6222 by [@shinglyu](https://github.com/shinglyu))
+
 ## [ios-v12.7.1](https://github.com/laurent22/joplin/releases/tag/ios-v12.7.1) - 2022-02-14T14:10:49Z
 
 - New: Add additional time format HH.mm (#6086 by [@vincentjocodes](https://github.com/vincentjocodes))

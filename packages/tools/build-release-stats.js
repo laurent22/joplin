@@ -51,7 +51,8 @@ function createChangeLog(releases) {
 		const preReleaseString = r.prerelease ? ' (Pre-release)' : '';
 		s.push(`## ${r.tag_name}${preReleaseString} - ${r.published_at}`);
 		s.push('');
-		const body = r.body.replace(/#(\d+)/g, '[#$1](https://github.com/laurent22/joplin/issues/$1)');
+		let body = r.body.replace(/#(\d+)/g, '[#$1](https://github.com/laurent22/joplin/issues/$1)');
+		body = body.replace(/\(([0-9a-z]{7})\)/g, '([$1](https://github.com/laurent22/joplin/commit/$1))');
 		s.push(body);
 		output.push(s.join('\n'));
 	}

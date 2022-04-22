@@ -16,8 +16,12 @@ interface ItemChangeEvent {
 interface SyncStartEvent {
     withErrors: boolean;
 }
+interface ResourceChangeEvent {
+    id: string;
+}
 declare type ItemChangeHandler = (event: ItemChangeEvent)=> void;
 declare type SyncStartHandler = (event: SyncStartEvent)=> void;
+declare type ResourceChangeHandler = (event: ResourceChangeEvent)=> void;
 /**
  * The workspace service provides access to all the parts of Joplin that
  * are being worked on - i.e. the currently selected notes or notebooks as
@@ -42,6 +46,11 @@ export default class JoplinWorkspace {
      * Called when the content of the current note changes.
      */
     onNoteChange(handler: ItemChangeHandler): Promise<Disposable>;
+    /**
+     * Called when a resource is changed. Currently this handled will not be
+     * called when a resource is added or deleted.
+     */
+    onResourceChange(handler: ResourceChangeHandler): Promise<void>;
     /**
      * Called when an alarm associated with a to-do is triggered.
      */

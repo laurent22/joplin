@@ -21,7 +21,7 @@ import checkForUpdates from '../checkForUpdates';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
 const { connect } = require('react-redux');
 import { reg } from '@joplin/lib/registry';
-import { ProfileConfig } from '../../lib/services/profileConfig/types';
+import { ProfileConfig } from '@joplin/lib/services/profileConfig/types';
 const packageInfo = require('../packageInfo.js');
 const { clipboard } = require('electron');
 const Menu = bridge().Menu;
@@ -87,14 +87,14 @@ const useSwitchProfileMenuItems = (profileConfig: ProfileConfig, menuItemDic: an
 				menuItem = {
 					label: profile.name,
 					click: () => {
-						void CommandService.instance().execute('switchProfile', i);
+						void CommandService.instance().execute('switchProfile', profile.id);
 					},
 				};
 			}
 
 			menuItem.label = profile.name;
 			menuItem.type = 'checkbox';
-			menuItem.checked = profileConfig.currentProfile === i;
+			menuItem.checked = profileConfig.currentProfileId === profile.id;
 
 			switchProfileMenuItems.push(menuItem);
 		}
@@ -211,6 +211,12 @@ function useMenu(props: Props) {
 	const [menu, setMenu] = useState(null);
 	const [keymapLastChangeTime, setKeymapLastChangeTime] = useState(Date.now());
 	const [modulesLastChangeTime, setModulesLastChangeTime] = useState(Date.now());
+
+	// We use a ref here because the plugin state can change frequently when
+	// switching note since any plugin view might be rendered again. However we
+	// need this plugin state only in a click handler when exporting notes, and
+	// for that a ref is sufficient.
+	const pluginsRef = useRef(props.plugins);
 
 	const onMenuItemClick = useCallback((commandName: string) => {
 		void CommandService.instance().execute(commandName);
@@ -372,7 +378,7 @@ function useMenu(props: Props) {
 									(action: any) => props.dispatch(action),
 									module,
 									{
-										plugins: props.plugins,
+										plugins: pluginsRef.current,
 										customCss: props.customCss,
 									}
 								);
@@ -906,7 +912,6 @@ function useMenu(props: Props) {
 		modulesLastChangeTime,
 		props['spellChecker.language'],
 		props['spellChecker.enabled'],
-		props.plugins,
 		props.customCss,
 		props.locale,
 		props.profileConfig,

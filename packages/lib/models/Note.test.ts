@@ -9,6 +9,7 @@ import Tag from './Tag';
 import ItemChange from './ItemChange';
 import Resource from './Resource';
 import { ResourceEntity } from '../services/database/types';
+import { toForwardSlashes } from '../path-utils';
 const ArrayUtils = require('../ArrayUtils.js');
 
 async function allItems() {
@@ -259,7 +260,8 @@ describe('models/Note', function() {
 		const t1 = r1.updated_time;
 		const t2 = r2.updated_time;
 
-		const resourceDirE = markdownUtils.escapeLinkUrl(resourceDir);
+		const resourceDirE = markdownUtils.escapeLinkUrl(toForwardSlashes(resourceDir));
+		const fileProtocol = `file://${process.platform === 'win32' ? '/' : ''}`;
 
 		const testCases = [
 			[
@@ -285,17 +287,17 @@ describe('models/Note', function() {
 			[
 				true,
 				`![](:/${r1.id})`,
-				`![](file://${resourceDirE}/${r1.id}.jpg?t=${t1})`,
+				`![](${fileProtocol}${resourceDirE}/${r1.id}.jpg?t=${t1})`,
 			],
 			[
 				true,
 				`![](:/${r1.id}) ![](:/${r1.id}) ![](:/${r2.id})`,
-				`![](file://${resourceDirE}/${r1.id}.jpg?t=${t1}) ![](file://${resourceDirE}/${r1.id}.jpg?t=${t1}) ![](file://${resourceDirE}/${r2.id}.jpg?t=${t2})`,
+				`![](${fileProtocol}${resourceDirE}/${r1.id}.jpg?t=${t1}) ![](${fileProtocol}${resourceDirE}/${r1.id}.jpg?t=${t1}) ![](${fileProtocol}${resourceDirE}/${r2.id}.jpg?t=${t2})`,
 			],
 			[
 				true,
 				`![](:/${r3.id})`,
-				`![](file://${resourceDirE}/${r3.id}.pdf)`,
+				`![](${fileProtocol}${resourceDirE}/${r3.id}.pdf)`,
 			],
 		];
 

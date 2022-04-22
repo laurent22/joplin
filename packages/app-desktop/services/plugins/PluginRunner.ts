@@ -157,6 +157,8 @@ export default class PluginRunner extends BasePluginRunner {
 				const debugMappedArgs = fullPath.includes('setHtml') ? '<hidden>' : mappedArgs;
 				logger.debug(`Got message (3): ${fullPath}`, debugMappedArgs);
 
+				this.recordCallStat(plugin.id);
+
 				try {
 					await this.backOffHandler(plugin.id).wait(fullPath, debugMappedArgs);
 				} catch (error) {

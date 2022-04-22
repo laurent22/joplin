@@ -112,6 +112,7 @@ export default class JoplinSettings {
 				description: (_appType: string) => setting.description,
 			};
 
+			if ('subType' in setting) internalSettingItem.subType = setting.subType;
 			if ('isEnum' in setting) internalSettingItem.isEnum = setting.isEnum;
 			if ('section' in setting) internalSettingItem.section = this.namespacedKey(setting.section);
 			if ('options' in setting) internalSettingItem.options = () => setting.options;
