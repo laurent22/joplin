@@ -9,11 +9,14 @@ import useWebviewToPluginMessages from './hooks/useWebviewToPluginMessages';
 import useScriptLoader from './hooks/useScriptLoader';
 import Logger from '@joplin/lib/Logger';
 import styled from 'styled-components';
+import { AppState } from '../../app.reducer';
 
+const { connect } = require('react-redux');
 const logger = Logger.create('UserWebview');
 
 export interface Props {
-	html: string;
+	forwardedRef?: any;
+	html?: string;
 	scripts: string[];
 	pluginId: string;
 	viewId: string;
@@ -59,7 +62,8 @@ function serializeForms(document: any) {
 	return output;
 }
 
-function UserWebview(props: Props, ref: any) {
+function UserWebview(props: Props) {
+	const ref = props.forwardedRef;
 	const minWidth = props.minWidth ? props.minWidth : 200;
 	const minHeight = props.minHeight ? props.minHeight : 20;
 
@@ -149,4 +153,15 @@ function UserWebview(props: Props, ref: any) {
 	></StyledFrame>;
 }
 
-export default forwardRef(UserWebview);
+const mapStateToProps = (state: AppState, ownProps: Props) => {
+	const pluginHtmlContents = state.pluginService.pluginHtmlContents;
+	const html = pluginHtmlContents?.[ownProps.pluginId]?.[ownProps.viewId] ?? '';
+	return {
+		html: html,
+	};
+};
+
+// Since only redux v6 and higher support connect() for forwardRef of function component,
+// a component wrapped by connect() is passed to forwardRef() to support mapStateToProps.
+const ConnectedUserWebview = connect(mapStateToProps)(UserWebview);
+export default forwardRef((props: Props, ref) => <ConnectedUserWebview {...props} forwardedRef={ref} />);

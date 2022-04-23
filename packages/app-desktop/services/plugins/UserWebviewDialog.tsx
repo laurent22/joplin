@@ -110,7 +110,6 @@ export default function UserWebviewDialog(props: Props) {
 				<UserWebViewWrapper>
 					<UserWebview
 						ref={webviewRef}
-						html={props.html}
 						scripts={props.scripts}
 						pluginId={props.pluginId}
 						viewId={props.viewId}
