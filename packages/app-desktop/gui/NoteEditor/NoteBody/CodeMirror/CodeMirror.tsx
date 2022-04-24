@@ -465,6 +465,10 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				color: ${theme.color};
 			}
 
+			div.CodeMirror span.cm-variable-2, div.CodeMirror span.cm-variable-3, div.CodeMirror span.cm-keyword {
+				color: ${theme.color};
+			}
+
 			div.CodeMirror span.cm-quote {
 				color: ${theme.color};
 				opacity: ${theme.blockQuoteOpacity};
@@ -477,10 +481,6 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 			div.CodeMirror span.cm-url {
 				color: ${theme.urlColor};
 				opacity: 0.5;
-			}
-
-			div.CodeMirror span.cm-variable-2, div.CodeMirror span.cm-variable-3, div.CodeMirror span.cm-keyword {
-				color: ${theme.color};
 			}
 
 			div.CodeMirror span.cm-comment {
