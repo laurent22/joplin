@@ -1,4 +1,5 @@
-import produce, { Draft } from 'immer';
+import produce, { Draft, original } from 'immer';
+import { isDeepStrictEqual } from 'util';
 import pluginServiceReducer, { stateRootKey as pluginServiceStateRootKey, defaultState as pluginServiceDefaultState, State as PluginServiceState } from './services/plugins/reducer';
 import shareServiceReducer, { stateRootKey as shareServiceStateRootKey, defaultState as shareServiceDefaultState, State as ShareServiceState } from './services/share/reducer';
 import Note from './models/Note';
@@ -927,7 +928,9 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 			break;
 
 		case 'TAG_UPDATE_ALL':
-			draft.tags = action.items;
+			if (!isDeepStrictEqual(original(draft.tags), action.items)) {
+				draft.tags = action.items;
+			}
 			break;
 
 		case 'TAG_SELECT':
