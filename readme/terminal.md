@@ -507,8 +507,8 @@ The following commands are available in [command-line mode](#command-line-mode):
 	    complete database including notebooks, notes, tags and resources.
 
 	    --format <format>      Destination format: jex (Joplin Export File), raw
-	                           (Joplin Export Directory), md (Markdown), 
-				   md_frontmatter (Markdown + Front Matter)
+	                           (Joplin Export Directory), md (Markdown),
+	                           md_frontmatter (Markdown + Front Matter)
 	    --note <note>          Exports only the given note.
 	    --notebook <notebook>  Exports only the given notebook.
 
@@ -525,7 +525,7 @@ The following commands are available in [command-line mode](#command-line-mode):
 	    Imports data into Joplin.
 
 	    --format <format>  Source format: auto, jex, md, md_frontmatter, raw,
-	    		       enex, enex
+	                       enex, enex
 	    -f, --force        Do not ask for confirmation.
 	    --output-format <output-format>  Output format: md, html
 
