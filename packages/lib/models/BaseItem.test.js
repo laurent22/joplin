@@ -63,7 +63,12 @@ describe('models/BaseItem', function() {
 		expect(unserialized.longitude).toEqual('0.00000000');
 		expect(unserialized.altitude).toEqual('0.0000');
 
-		await Note.updateGeolocation(note.id);
+		await Note.save({
+			id: note.id,
+			longitude: -3.459,
+			altitude: 0,
+			latitude: 48.732,
+		});
 		note = await Note.load(note.id);
 
 		serialized = await Note.serialize(note);
@@ -77,7 +82,12 @@ describe('models/BaseItem', function() {
 	it('should serialize and unserialize notes', (async () => {
 		const folder = await Folder.save({ title: 'folder' });
 		const note = await Note.save({ title: 'note', parent_id: folder.id });
-		await Note.updateGeolocation(note.id);
+		await Note.save({
+			id: note.id,
+			longitude: -3.459,
+			altitude: 0,
+			latitude: 48.732,
+		});
 
 		const noteBefore = await Note.load(note.id);
 		const serialized = await Note.serialize(noteBefore);

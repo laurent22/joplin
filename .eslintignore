@@ -1102,6 +1102,9 @@ packages/lib/fs-driver-node.js.map
 packages/lib/fsDriver.test.d.ts
 packages/lib/fsDriver.test.js
 packages/lib/fsDriver.test.js.map
+packages/lib/geolocation-node.d.ts
+packages/lib/geolocation-node.js
+packages/lib/geolocation-node.js.map
 packages/lib/hooks/useAsyncEffect.d.ts
 packages/lib/hooks/useAsyncEffect.js
 packages/lib/hooks/useAsyncEffect.js.map
