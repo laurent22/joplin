@@ -9,7 +9,7 @@ import shim from '@joplin/lib/shim';
 import AlarmService from '@joplin/lib/services/AlarmService';
 import AlarmServiceDriverNode from '@joplin/lib/services/AlarmServiceDriverNode';
 import Logger, { TargetType } from '@joplin/lib/Logger';
-import Setting from '@joplin/lib/models/Setting';
+import Setting, { Env } from '@joplin/lib/models/Setting';
 import actionApi from '@joplin/lib/services/rest/actionApi.desktop';
 import BaseApplication from '@joplin/lib/BaseApplication';
 import DebugService from '@joplin/lib/debug/DebugService';
@@ -325,6 +325,8 @@ class Application extends BaseApplication {
 	}
 
 	private crashDetectionHandler() {
+		if (Setting.value('env') === Env.Dev) return;
+
 		if (!Setting.value('wasClosedSuccessfully')) {
 			const answer = confirm(_('The application did not close properly. Would you like to start in safe mode?'));
 			Setting.setValue('isSafeMode', !!answer);
