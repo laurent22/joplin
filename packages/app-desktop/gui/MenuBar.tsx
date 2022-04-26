@@ -1,9 +1,11 @@
 import { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import { AppState } from '../app.reducer';
+import usePrevious from './hooks/usePrevious';
 import InteropService from '@joplin/lib/services/interop/InteropService';
 import { stateUtils } from '@joplin/lib/reducer';
 import CommandService from '@joplin/lib/services/CommandService';
 import MenuUtils from '@joplin/lib/services/commands/MenuUtils';
+import { MenuItemPropsMap, setMenuBarMenuItemProps, prepareMenuItemChecked, prepareMenuItemEnabled } from './utils/MenuBarUtils';
 import KeymapService from '@joplin/lib/services/KeymapService';
 import { PluginStates, utils as pluginUtils } from '@joplin/lib/services/plugins/reducer';
 import shim from '@joplin/lib/shim';
@@ -131,20 +133,6 @@ interface Props {
 
 const commandNames: string[] = menuCommandNames();
 
-function menuItemSetChecked(id: string, checked: boolean) {
-	const menu = Menu.getApplicationMenu();
-	const menuItem = menu.getMenuItemById(id);
-	if (!menuItem) return;
-	menuItem.checked = checked;
-}
-
-function menuItemSetEnabled(id: string, enabled: boolean) {
-	const menu = Menu.getApplicationMenu();
-	const menuItem = menu.getMenuItemById(id);
-	if (!menuItem) return;
-	menuItem.enabled = enabled;
-}
-
 function useMenuStates(menu: any, props: Props) {
 	useEffect(() => {
 		let timeoutId: any = null;
@@ -154,36 +142,40 @@ function useMenuStates(menu: any, props: Props) {
 			timeoutId = null;
 
 			const whenClauseContext = CommandService.instance().currentWhenClauseContext();
+			const propsMap: MenuItemPropsMap = {};
 
 			for (const commandName in props.menuItemProps) {
 				const p = props.menuItemProps[commandName];
 				if (!p) continue;
 				const enabled = 'enabled' in p ? p.enabled : CommandService.instance().isEnabled(commandName, whenClauseContext);
-				menuItemSetEnabled(commandName, enabled);
+				prepareMenuItemEnabled(propsMap, commandName, enabled);
 			}
 
 			const layoutButtonSequenceOptions = Setting.enumOptions('layoutButtonSequence');
 			for (const value in layoutButtonSequenceOptions) {
-				menuItemSetChecked(`layoutButtonSequence_${value}`, props.layoutButtonSequence === Number(value));
+				prepareMenuItemChecked(propsMap, `layoutButtonSequence_${value}`, props.layoutButtonSequence === Number(value));
 			}
 
 			function applySortItemCheckState(type: string) {
 				const sortOptions = Setting.enumOptions(`${type}.sortOrder.field`);
 				for (const field in sortOptions) {
 					if (!sortOptions.hasOwnProperty(field)) continue;
-					menuItemSetChecked(`sort:${type}:${field}`, (props as any)[`${type}.sortOrder.field`] === field);
+					prepareMenuItemChecked(propsMap, `sort:${type}:${field}`, (props as any)[`${type}.sortOrder.field`] === field);
 				}
 
 				const id = type === 'notes' ? 'toggleNotesSortOrderReverse' : `sort:${type}:reverse`;
-				menuItemSetChecked(id, (props as any)[`${type}.sortOrder.reverse`]);
+				prepareMenuItemChecked(propsMap, id, (props as any)[`${type}.sortOrder.reverse`]);
 			}
 
 			applySortItemCheckState('notes');
 			applySortItemCheckState('folders');
 
-			menuItemSetChecked('showNoteCounts', props.showNoteCounts);
-			menuItemSetChecked('uncompletedTodosOnTop', props.uncompletedTodosOnTop);
-			menuItemSetChecked('showCompletedTodos', props.showCompletedTodos);
+			prepareMenuItemChecked(propsMap, 'showNoteCounts', props.showNoteCounts);
+			prepareMenuItemChecked(propsMap, 'uncompletedTodosOnTop', props.uncompletedTodosOnTop);
+			prepareMenuItemChecked(propsMap, 'showCompletedTodos', props.showCompletedTodos);
+
+			// Change multiple MenuItems' props at once, because changing such a prop one-by-one is very slow.
+			setMenuBarMenuItemProps(propsMap);
 		}
 
 		timeoutId = setTimeout(scheduleUpdate, 150);
@@ -961,7 +953,13 @@ function useMenu(props: Props) {
 
 function MenuBar(props: Props): any {
 	const menu = useMenu(props);
-	if (menu) Menu.setApplicationMenu(menu);
+	const previousMenu = usePrevious(menu, null);
+
+	// The menu bar is (re-)constructed only if its content changes.
+	if (menu && menu !== previousMenu) {
+		if (menu) Menu.setApplicationMenu(menu);
+	}
+
 	return null;
 }
 

@@ -762,6 +762,9 @@ packages/app-desktop/gui/style/StyledMessage.js.map
 packages/app-desktop/gui/style/StyledTextInput.d.ts
 packages/app-desktop/gui/style/StyledTextInput.js
 packages/app-desktop/gui/style/StyledTextInput.js.map
+packages/app-desktop/gui/utils/MenuBarUtils.d.ts
+packages/app-desktop/gui/utils/MenuBarUtils.js
+packages/app-desktop/gui/utils/MenuBarUtils.js.map
 packages/app-desktop/gui/utils/NoteListUtils.d.ts
 packages/app-desktop/gui/utils/NoteListUtils.js
 packages/app-desktop/gui/utils/NoteListUtils.js.map

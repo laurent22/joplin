@@ -2,6 +2,7 @@ import Logger from '@joplin/lib/Logger';
 import { PluginMessage } from './services/plugins/PluginRunner';
 import shim from '@joplin/lib/shim';
 import { isCallbackUrl } from '@joplin/lib/callbackUrlUtils';
+import { ipcMainOnSetMenuBarMenuItemProps } from './gui/utils/MenuBarUtils';
 
 const { BrowserWindow, Tray, screen } = require('electron');
 const url = require('url');
@@ -195,6 +196,8 @@ export default class ElectronAppWrapper {
 				this.quit();
 			}
 		});
+
+		ipcMainOnSetMenuBarMenuItemProps();
 
 		// This handler receives IPC messages from a plugin or from the main window,
 		// and forwards it to the main window or the plugin window.
