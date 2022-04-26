@@ -180,7 +180,10 @@ class HtmlUtils {
 			onopentag: (name: string, attrs: any) => {
 				tagStack.push(name.toLowerCase());
 
-				if (disallowedTags.includes(currentTag())) disallowedTagDepth++;
+				if (disallowedTags.includes(currentTag())) {
+					disallowedTagDepth++;
+					return;
+				}
 
 				if (disallowedTagDepth) return;
 
@@ -242,7 +245,10 @@ class HtmlUtils {
 
 				if (current === name.toLowerCase()) tagStack.pop();
 
-				if (disallowedTags.includes(current)) disallowedTagDepth--;
+				if (disallowedTags.includes(current)) {
+					disallowedTagDepth--;
+					return;
+				}
 
 				if (disallowedTagDepth) return;
 
