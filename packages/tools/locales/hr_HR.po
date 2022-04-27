@@ -22,7 +22,7 @@ msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:565
 msgid "- Camera: to allow taking a picture and attaching it to a note."
-msgstr "- Kamera: dozvoli snimanje slike i priloži je bilješci."
+msgstr "- Kamera: za dozvoljavanje snimanja slike i prilaganje slike bilješci."
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:568
 msgid "- Location: to allow attaching geo-location information to a note."
@@ -33,8 +33,8 @@ msgid ""
 "- Storage: to allow attaching files to notes and to enable filesystem "
 "synchronisation."
 msgstr ""
-"- Spremište: dozvoli prilaganje datoteka bilješkama i aktiviraj "
-"sinkronizaciju datotečnog sustava."
+"- Spremište: za dozvoljavanje prilaganja datoteka bilješkama i aktiviranje "
+"sinkronizacije datotečnog sustava."
 
 #: packages/lib/services/KeymapService.ts:308
 #: packages/lib/services/KeymapService.ts:314
@@ -292,7 +292,7 @@ msgstr "Sve bilješke"
 
 #: packages/lib/onedrive-api-node-utils.js:46
 msgid "All potential ports are in use - please report the issue at %s"
-msgstr "Svi mogući priključci su zauzeti – prijavi problem na %s"
+msgstr "Svi mogući priključci se koriste – prijavi problem na %s"
 
 #: packages/app-cli/app/command-config.js:18
 msgid "Also displays unset and hidden config variables."
@@ -321,7 +321,7 @@ msgstr "Primijeni"
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:44
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:45
 msgid "Are you sure you want to renew the authorisation token?"
-msgstr "Stvarno želiš obnoviti ključ za autorizaciju?"
+msgstr "Stvarno želiš obnoviti ključ autorizacije?"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:522
 msgid "Arguments:"
@@ -360,7 +360,7 @@ msgstr "Konflikt s privitkom: „%s”"
 
 #: packages/lib/models/Setting.ts:662
 msgid "Attachment download behaviour"
-msgstr "Način preuzimanja privitaka"
+msgstr "Preuzimanje privitaka"
 
 #: packages/lib/services/ReportService.ts:233
 msgid "Attachments"
@@ -376,7 +376,7 @@ msgid ""
 "to it before syncing, otherwise all files will be removed! See the FAQ for "
 "more details: %s"
 msgstr ""
-"Oprez: Ako promijeniš ovo mjesto, pazi da kopiraš sav tvoj sadržaj na to "
+"Oprez: Ako promijeniš ovo mjesto, pazi da kopiraš sav svoj sadržaj na to "
 "mjesto prije sinkronizacije, jer će se inače ukloniti sve datoteke! Saznaj "
 "više na ČPP-stranici: %s"
 
@@ -385,12 +385,12 @@ msgstr ""
 #: packages/app-desktop/gui/OneDriveLoginScreen.tsx:45
 msgid ""
 "Authentication was not completed (did not receive an authentication token)."
-msgstr "Autentifikacija nije završena (nije dobiven ključ za autentifikaciju)."
+msgstr "Autentifikacija nije završena (nije dobiven ključ autentifikacije)."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:194
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:148
 msgid "Authorisation token:"
-msgstr "Ključ za autorizaciju:"
+msgstr "Ključ autorizacije:"
 
 #: packages/lib/models/Setting.ts:668
 msgid "Auto"
@@ -464,7 +464,7 @@ msgstr "Odustani"
 
 #: packages/app-cli/app/app.js:171
 msgid "Cancelling background synchronisation... Please wait."
-msgstr "Prekidanje sinkronizacije u pozadini … Pričekaj."
+msgstr "Prekida se sinkronizacija u pozadini … Pričekaj."
 
 #: packages/lib/Synchronizer.ts:189
 msgid "Cancelling..."
@@ -539,12 +539,12 @@ msgid ""
 "Cannot refresh token: authentication data is missing. Starting the "
 "synchronisation again may fix the problem."
 msgstr ""
-"Nije moguće aktualizirati ključ: nedostaju podaci za autentifikaciju. "
-"Ponovno pokretanje sinkronizacije može ispraviti problem."
+"Nije moguće aktualizirati ključ: nedostaju podaci autentifikacije. Ponovno "
+"pokretanje sinkronizacije može ispraviti problem."
 
 #: packages/server/src/models/UserModel.ts:213
 msgid "Cannot save %s \"%s\" because it is larger than the allowed limit (%s)"
-msgstr "Nije moguće spremiti %s „%s\\” jer je veći od dozvoljene granice (%s)"
+msgstr "Nije moguće spremiti %s „%s” jer je veći od dozvoljene granice (%s)"
 
 #: packages/server/src/models/UserModel.ts:230
 msgid ""
@@ -560,8 +560,8 @@ msgid ""
 "enabled end-to-end encryption. They may do so from the screen Configuration "
 "> Encryption."
 msgstr ""
-"Šifriranu bilježnicu nije moguće dijeliti s primateljem %s jer nije omogućio/"
-"la obostrano šifriranje. Primatelji to mogu učiniti putem Konfiguracija > "
+"Nije moguće dijeliti šifriranu bilježnicu s primateljem %s, jer obostrano "
+"šifriranje nije aktivirano. To se može riješiti putem Konfiguracija > "
 "Šifriranje."
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleLayoutMoveMode.ts:7
@@ -596,7 +596,7 @@ msgstr "Označivo polje"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/plugins/lists.js:2151
 msgid "Checkbox list"
-msgstr "Označiv popis"
+msgstr "Označivi popis"
 
 #: packages/lib/components/shared/config-shared.js:47
 msgid "Checking... Please wait."
@@ -608,7 +608,7 @@ msgstr "Odaberi jednu opciju"
 
 #: packages/app-desktop/gui/ExtensionBadge.min.js:17
 msgid "Chrome Web Store"
-msgstr "Chrome Web Store"
+msgstr "Chrome web-trgovina"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:145
 #: packages/app-desktop/gui/PromptDialog.min.js:249
@@ -719,7 +719,7 @@ msgstr "Konfiguracija"
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:137
 msgid "Confirm password cannot be empty"
-msgstr "Potvrda lozinke ne smije biti prazna"
+msgstr "Lozinka potvrde ne smije biti prazna"
 
 #: packages/app-cli/app/command-e2ee.ts:94
 #: packages/app-mobile/components/screens/encryption-config.tsx:168
@@ -821,9 +821,8 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Nije bilo moguće povezati se s Joplin Nextcloud programom. Provjeri "
-"konfiguraciju u prozoru za konfiguraciju sinkronizacije. Potpuna greška "
-"glasi:\n"
+"Neuspjelo povezivanje s Joplin poslužiteljem. Provjeri opcije sinkronizacije "
+"u prozoru konfiguracije. Potpuna greška glasi:\n"
 "\n"
 "%s"
 
@@ -846,8 +845,8 @@ msgid ""
 "\n"
 "The error was: \"%s\""
 msgstr ""
-"Nije bilo moguće odgovoriti na poziv. Pokušaj ponovo ili provjeri s "
-"vlasnikom prijenosnog računala ako ga još uvijek dijele.\n"
+"Neuspjelo odgovaranje na poziv. Pokušaj ponovo ili provjeri s vlasnikom "
+"prijenosnog računala je li ga još uvijek dijeli.\n"
 "\n"
 "Greška je bila: „% s”"
 
@@ -860,8 +859,8 @@ msgid ""
 "Could not verify the share status of this notebook - aborting. Please try "
 "again when you are connected to the internet."
 msgstr ""
-"Nije moguće provjeriti stanje dijeljenja ove bilježnice – prekid. Pokušaj "
-"ponovo kad si povezan/a s internetom."
+"Neuspjela provjera stanja dijeljenja ove bilježnice – prekida se. Pokušaj "
+"ponovo kad uspostaviš vezu s internetom."
 
 #: packages/app-mobile/components/note-list.js:101
 msgid "Create a notebook"
@@ -923,7 +922,7 @@ msgstr "Stvara novi zadatak."
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.tsx:110
 msgid "Creating new %s..."
-msgstr "Stvara se novi/nova %s …"
+msgstr "Stvara se %s …"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:523
 msgid "Creating report..."
@@ -1198,7 +1197,7 @@ msgid ""
 "Displays the notes in the current notebook. Use `ls /` to display the list "
 "of notebooks."
 msgstr ""
-"Prikazuje bilješke u trenutačnoj bilježnici. Upiši `ls/` za prikaz popisa "
+"Prikazuje bilješke u trenutačnoj bilježnici. Upiši `ls /` za prikaz popisa "
 "bilježnica."
 
 #: packages/app-cli/app/command-help.js:13
@@ -1212,7 +1211,7 @@ msgstr "Prikazuje podatke verzije"
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:630
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:173
 msgid "Do it now"
-msgstr "Odradi sada"
+msgstr "Učini to sada"
 
 #: packages/app-cli/app/command-import.js:26
 msgid "Do not ask for confirmation."
@@ -1597,8 +1596,8 @@ msgid ""
 "Exports Joplin data to the given path. By default, it will export the "
 "complete database including notebooks, notes, tags and resources."
 msgstr ""
-"Izvozi Joplin podatke u zadanu putanju. Standardno izvozi cijelu bazu "
-"podataka uključujući bilježnice, bilješke, zadatke i resurse."
+"Izvozi Joplin podatke u zadanu putanju. Standardno izvozi kompletnu bazu "
+"podataka uključujući bilježnice, bilješke, oznake i resurse."
 
 #: packages/app-cli/app/command-export.js:23
 msgid "Exports only the given note."
@@ -1750,8 +1749,8 @@ msgid ""
 "current configuration."
 msgstr ""
 "Nabavlja ili postavlja vrijednost konfiguracije. Ako vrijednost [value] nije "
-"zadana, prikazat će vrijednost imena [name]. Ako [name] niti [value] nisu "
-"zadani, ispisat će trenutačnu konfiguraciju."
+"zadana, prikazat će vrijednost imena [name]. Ako ime [name] niti vrijednost "
+"[value] nisu zadani, ispisat će trenutačnu konfiguraciju."
 
 #: packages/app-mobile/components/screens/Note.tsx:847
 msgid "Go to source URL"
@@ -2083,15 +2082,15 @@ msgstr "Joplin poslužitelj"
 
 #: packages/lib/models/Setting.ts:598
 msgid "Joplin Server email"
-msgstr "Joplin Server email"
+msgstr "Joplin poslužitelj email"
 
 #: packages/lib/models/Setting.ts:609
 msgid "Joplin Server password"
-msgstr "Joplin Server lozinka"
+msgstr "Joplin poslužitelj lozinka"
 
 #: packages/lib/models/Setting.ts:580
 msgid "Joplin Server URL"
-msgstr "Joplin Server URL"
+msgstr "Joplin poslužitelj URL"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:137
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:128
@@ -2351,7 +2350,7 @@ msgstr "Više elemenata se poklapaju s „%s”. Ograniči pretragu."
 
 #: packages/app-mobile/components/screen-header.js:441
 msgid "Move %d notes to notebook \"%s\"?"
-msgstr "Premjesti %d bilješke u bilježnicu „%s”?"
+msgstr "Premjestiti %d bilješke u bilježnicu „%s”?"
 
 #: packages/app-desktop/gui/MainScreen/commands/moveToFolder.ts:8
 msgid "Move to notebook"
@@ -3131,7 +3130,7 @@ msgid ""
 "Safe mode is currently active. Note rendering and all plugins are "
 "temporarily disabled."
 msgstr ""
-"Trenutačno je aktivan siguran način. Prikaz bilježaka i svi dodaci "
+"Trenutačno je aktivan sigurni modus. Prikaz bilježaka i svi dodaci "
 "privremeno su deaktivirani."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:141
@@ -3236,8 +3235,8 @@ msgid ""
 "Set it to 0 to make it take the complete available space. Recommended width "
 "is 600."
 msgstr ""
-"Postavi na 0 kako bi zauzeo cijeli raspoloživi prostor. Preporučena širina "
-"je 600."
+"Postavi na 0 kako bi zauzeo sav raspoloživi prostor. Preporučena širina je "
+"600."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:627
 msgid "Set the password"
@@ -3299,7 +3298,7 @@ msgstr "Prikaži broj bilježaka"
 
 #: packages/lib/models/Setting.ts:868
 msgid "Show sort order buttons"
-msgstr "Prikaži gumbe za mijenjanje redoslijeda"
+msgstr "Prikaži gumbe redoslijeda"
 
 #: packages/lib/models/Setting.ts:1044
 msgid "Show tray icon"
@@ -3351,12 +3350,12 @@ msgstr ""
 
 #: packages/lib/models/Setting.ts:922
 msgid "Sort notebooks by"
-msgstr "Razvrstaj bilježnice po"
+msgstr "Redoslijed bilježnica"
 
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:172
 #: packages/lib/models/Setting.ts:837
 msgid "Sort notes by"
-msgstr "Razvrstaj bilješke po"
+msgstr "Redoslijed bilježaka"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:116
 msgid "Sort selected lines"
@@ -3365,7 +3364,7 @@ msgstr "Razvrstaj odabrane retke"
 #: packages/app-cli/app/command-ls.js:28
 msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
 msgstr ""
-"Razrstava element po polju <field>, npr. naslov (title), vrijeme "
+"Razrstava element na osnovi polja <field>, npr. naslov (title), vrijeme "
 "aktualiziranja (updated_time), vrijeme stvaranja (created_time)."
 
 #: packages/app-cli/app/command-import.js:25
@@ -3392,7 +3391,7 @@ msgstr "Provjera pravopisa"
 #: packages/lib/models/Setting.ts:821 packages/lib/models/Setting.ts:823
 #: packages/lib/models/Setting.ts:824
 msgid "Split View"
-msgstr "Podijeljen prikaz"
+msgstr "Razdvojeni prikaz"
 
 #: packages/lib/models/Setting.ts:1051
 msgid "Start application minimised in the tray icon"
@@ -3511,7 +3510,7 @@ msgstr "Zamijeni s retkom iznad"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:76
 msgid "Switch between note and to-do type"
-msgstr "Mijenjaj između bilješke i zadatka"
+msgstr "Promijeni u bilješku ili zadatak"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:105
 msgid "Switch to note type"
@@ -3526,7 +3525,7 @@ msgid ""
 "Switches to [notebook] - all further operations will happen within this "
 "notebook."
 msgstr ""
-"Prebacuje na bilježnicu [notebook] – sve daljnje operacije izvode se u toj "
+"Mijenja se u bilježnicu [notebook] – sve daljnje operacije izvode se u toj "
 "bilježnici."
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:520
@@ -3672,7 +3671,7 @@ msgstr "Privici se više neće pratiti kad se prebaciš na jednu drugu bilješku
 
 #: packages/app-cli/app/app.js:304
 msgid "The command \"%s\" is only available in GUI mode"
-msgstr "Naredba „%s” dostupna je samo u modusu grafičkog sučelja"
+msgstr "Naredba „%s” dostupna je samo u modusu korisničkog grafičkog sučelja"
 
 #: packages/server/src/middleware/notificationHandler.ts:25
 msgid ""
@@ -4037,11 +4036,11 @@ msgstr "Za brisanje: %d"
 
 #: packages/app-cli/app/command-help.js:82
 msgid "To enter command line mode, press \":\""
-msgstr "Za otvaranje naredbenog retka, pritisni „:”"
+msgstr "Za otvaranje naredbenog retka, pritisni tipku dvotočke (:)"
 
 #: packages/app-cli/app/command-help.js:83
 msgid "To exit command line mode, press ESCAPE"
-msgstr "Zatvori naredbeni redak pomoću tipke „Escape”"
+msgstr "Za zatvaranje naredbenog retka, pritisni tipku ESCAPE"
 
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:172
 msgid ""
@@ -4071,7 +4070,7 @@ msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
 "them in your phone settings, in Apps > Joplin > Permissions"
 msgstr ""
-"Za ispravno pokretanje, program treba sljedeće dozvole. Aktiviraj ih u "
+"Za ispravan rad programa potrebne su sljedeće dozvole. Aktiviraj ih u "
 "postavkama mobitela, u Aplikacije > Joplin > Dozvole"
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.tsx:110
@@ -4116,7 +4115,7 @@ msgstr "Uključi/Isključi bočnu traku"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleNotesSortOrderField.ts:7
 msgid "Toggle sort order field"
-msgstr "Uključi/Isključi redoslijed polja"
+msgstr "Uključi/Isključi polje redoslijeda"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:40
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:41
@@ -4140,8 +4139,8 @@ msgid ""
 "Type `help [command]` for more information about a command; or type `help "
 "all` for the complete usage information."
 msgstr ""
-"Upiši `help [naredba]` za daljnje informacije o naredbi ili `help all` za "
-"sve informacije o korištenju naredbi."
+"Upiši `help [command]` (zadaj naredbu) za daljnje informacije o naredbi ili "
+"`help all` za sve informacije o korištenju naredbi."
 
 #: packages/app-cli/app/main.js:93
 msgid "Type `joplin help` for usage information."
@@ -4455,7 +4454,7 @@ msgid ""
 "resize it down to %d pixels before attaching it?"
 msgstr ""
 "Priložit ćeš veliku sliku (%d × %d piksela). Želiš li je smanjiti na %d "
-"piksela?"
+"piksela prije prilaganja slike?"
 
 #: packages/app-mobile/components/note-list.js:97
 msgid "You currently have no notebooks."
