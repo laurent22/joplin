@@ -22,27 +22,27 @@ export default class BackOffHandler {
 
 	// The current logic is:
 	//
-	// - Up to 200 calls per 10 seconds without restrictions
-	// - For calls 200 to 300, a 1 second wait time is applied
-	// - Over 300 calls, a 2 seconds wait time is applied
+	// - Up to 1000 calls per 10 seconds without restrictions
+	// - For calls 1000 to 2000, a 100 ms wait time is applied
+	// - Over 2000 calls, a 200 ms wait time is applied
 	// - After 10 seconds without making any call, the limits are reset (back to
 	//   0 second between calls).
 	//
-	// If more than 50 simultaneous calls are being throttled, it's a bug in the
-	// plugin (not waiting for API responses), so we stop responding and throw
-	// an error.
+	// If more than 5000 simultaneous calls are being throttled, it's a bug in
+	// the plugin (not waiting for API responses), so we stop responding and
+	// throw an error.
 
 	private backOffIntervals_ =
-		Array(200).fill(0).concat(
-			Array(100).fill(1)).concat(
-			[2]);
+		Array(1000).fill(0).concat(
+			Array(1000).fill(100)).concat(
+			[200]);
 
 	private lastRequestTime_ = 0;
 	private pluginId_: string;
-	private resetBackOffInterval_ = 10 * 1000; // (this.backOffIntervals_[this.backOffIntervals_.length - 1] + 1) * 1000;
+	private resetBackOffInterval_ = 10 * 1000;
 	private backOffIndex_ = 0;
 	private waitCount_ = 0;
-	private maxWaitCount_ = 50;
+	private maxWaitCount_ = 5000;
 
 	public constructor(pluginId: string) {
 		this.pluginId_ = pluginId;
@@ -68,11 +68,11 @@ export default class BackOffHandler {
 
 		this.waitCount_++;
 
-		logger.warn(`Plugin ${this.pluginId_}: Applying a backoff of ${interval} seconds due to frequent plugin API calls. Consider reducing the number of calls, caching the data, or requesting more data per call. API call was: `, path, args, `[Wait count: ${this.waitCount_}]`);
+		logger.warn(`Plugin ${this.pluginId_}: Applying a backoff of ${interval} milliseconds due to frequent plugin API calls. Consider reducing the number of calls, caching the data, or requesting more data per call. API call was: `, path, args, `[Wait count: ${this.waitCount_}]`);
 
 		if (this.waitCount_ > this.maxWaitCount_) throw new Error(`Plugin ${this.pluginId_}: More than ${this.maxWaitCount_} API calls are waiting - aborting. Please consider queuing the API calls in your plugins to reduce the load on the application.`);
 
-		await time.sleep(interval);
+		await time.msleep(interval);
 
 		this.waitCount_--;
 	}
