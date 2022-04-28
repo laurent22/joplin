@@ -313,11 +313,15 @@ async function fetchAllNotes() {
 				lines.push('');
 				lines.push('\tcurl -F \'data=@/path/to/file.jpg\' -F \'props={"title":"my resource title"}\' http://localhost:41184/resources');
 				lines.push('');
-				lines.push('Or to **update** a resource:');
+				lines.push('To **update** the resource content, you can make a PUT request with the same arguments:');
 				lines.push('');
 				lines.push('\tcurl -X PUT -F \'data=@/path/to/file.jpg\' -F \'props={"title":"my modified title"}\' http://localhost:41184/resources/8fe1417d7b184324bf6b0122b76c4696');
 				lines.push('');
 				lines.push('The "data" field is required, while the "props" one is not. If not specified, default values will be used.');
+				lines.push('');
+				lines.push('Or if you only need to update the resource properties (title, etc.), without changing the content, you can make a regular PUT request:');
+				lines.push('');
+				lines.push('\tcurl -X PUT --data \'{"title": "My new title"}\' http://localhost:41184/resources/8fe1417d7b184324bf6b0122b76c4696');
 				lines.push('');
 				lines.push('**From a plugin** the syntax to create a resource is also a bit special:');
 				lines.push('');

@@ -13,6 +13,7 @@ export interface PluginManifest {
 	homepage_url?: string;
 	repository_url?: string;
 	keywords?: string[];
+	categories?: string[];
 	permissions?: PluginPermission[];
 
 	// Private keys

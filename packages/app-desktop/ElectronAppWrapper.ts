@@ -192,7 +192,7 @@ export default class ElectronAppWrapper {
 				// We got the response from the renderer process:
 				// save the response and try quit again.
 				this.rendererProcessQuitReply_ = args;
-				this.electronApp_.quit();
+				this.quit();
 			}
 		});
 
@@ -253,7 +253,7 @@ export default class ElectronAppWrapper {
 		});
 	}
 
-	async quit() {
+	quit() {
 		this.electronApp_.quit();
 	}
 
@@ -325,7 +325,7 @@ export default class ElectronAppWrapper {
 
 		if (!gotTheLock) {
 			// Another instance is already running - exit
-			this.electronApp_.quit();
+			this.quit();
 			return true;
 		}
 
@@ -362,7 +362,7 @@ export default class ElectronAppWrapper {
 		});
 
 		this.electronApp_.on('window-all-closed', () => {
-			this.electronApp_.quit();
+			this.quit();
 		});
 
 		this.electronApp_.on('activate', () => {

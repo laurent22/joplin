@@ -9,7 +9,7 @@ import shim from '@joplin/lib/shim';
 import AlarmService from '@joplin/lib/services/AlarmService';
 import AlarmServiceDriverNode from '@joplin/lib/services/AlarmServiceDriverNode';
 import Logger, { TargetType } from '@joplin/lib/Logger';
-import Setting from '@joplin/lib/models/Setting';
+import Setting, { Env } from '@joplin/lib/models/Setting';
 import actionApi from '@joplin/lib/services/rest/actionApi.desktop';
 import BaseApplication from '@joplin/lib/BaseApplication';
 import DebugService from '@joplin/lib/debug/DebugService';
@@ -324,12 +324,25 @@ class Application extends BaseApplication {
 		}, 500);
 	}
 
+	private crashDetectionHandler() {
+		if (Setting.value('env') === Env.Dev) return;
+
+		if (!Setting.value('wasClosedSuccessfully')) {
+			const answer = confirm(_('The application did not close properly. Would you like to start in safe mode?'));
+			Setting.setValue('isSafeMode', !!answer);
+		}
+
+		Setting.setValue('wasClosedSuccessfully', false);
+	}
+
 	public async start(argv: string[]): Promise<any> {
 		// If running inside a package, the command line, instead of being "node.exe <path> <flags>" is "joplin.exe <flags>" so
 		// insert an extra argument so that they can be processed in a consistent way everywhere.
 		if (!bridge().electronIsDev()) argv.splice(1, 0, '.');
 
 		argv = await super.start(argv);
+
+		this.crashDetectionHandler();
 
 		await this.applySettingsSideEffects();
 
@@ -354,8 +367,7 @@ class Application extends BaseApplication {
 		}
 
 		// Loads app-wide styles. (Markdown preview-specific styles loaded in app.js)
-		const filename = Setting.custom_css_files.JOPLIN_APP;
-		await injectCustomStyles('appStyles', `${dir}/${filename}`);
+		await injectCustomStyles('appStyles', Setting.customCssFilePath(Setting.customCssFilenames.JOPLIN_APP));
 
 		AlarmService.setDriver(new AlarmServiceDriverNode({ appName: packageInfo.build.appId }));
 		AlarmService.setLogger(reg.logger());
@@ -433,7 +445,7 @@ class Application extends BaseApplication {
 		});
 
 		// Loads custom Markdown preview styles
-		const cssString = await loadCustomCss(`${Setting.value('profileDir')}/userstyle.css`);
+		const cssString = await loadCustomCss(Setting.customCssFilePath(Setting.customCssFilenames.RENDERED_MARKDOWN));
 		this.store().dispatch({
 			type: 'CUSTOM_CSS_APPEND',
 			css: cssString,
@@ -522,6 +534,7 @@ class Application extends BaseApplication {
 				migrationService: MigrationService.instance(),
 				decryptionWorker: DecryptionWorker.instance(),
 				commandService: CommandService.instance(),
+				pluginService: PluginService.instance(),
 				bridge: bridge(),
 				debug: new DebugService(reg.db()),
 			};
@@ -554,10 +567,16 @@ class Application extends BaseApplication {
 		// setTimeout(() => {
 		// 	this.dispatch({
 		// 		type: 'DIALOG_OPEN',
-		// 		name: 'editFolder',
-		// 		props: { folderId: '3d90f7da26b947dc9c8c6c65e86cd231' },
+		// 		name: 'syncWizard',
 		// 	});
 		// }, 2000);
+
+		// setTimeout(() => {
+		// 	this.dispatch({
+		// 		type: 'DIALOG_OPEN',
+		// 		name: 'editFolder',
+		// 	});
+		// }, 3000);
 
 		// setTimeout(() => {
 		// 	this.dispatch({

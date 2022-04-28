@@ -8,7 +8,7 @@ import NoteEditor from '../NoteEditor/NoteEditor';
 import NoteContentPropertiesDialog from '../NoteContentPropertiesDialog';
 import ShareNoteDialog from '../ShareNoteDialog';
 import CommandService from '@joplin/lib/services/CommandService';
-import { PluginStates, utils as pluginUtils } from '@joplin/lib/services/plugins/reducer';
+import { PluginHtmlContents, PluginStates, utils as pluginUtils } from '@joplin/lib/services/plugins/reducer';
 import Sidebar from '../Sidebar/Sidebar';
 import UserWebview from '../../services/plugins/UserWebview';
 import UserWebviewDialog from '../../services/plugins/UserWebviewDialog';
@@ -37,9 +37,10 @@ import { localSyncInfoFromState } from '@joplin/lib/services/synchronizer/syncIn
 import { parseCallbackUrl } from '@joplin/lib/callbackUrlUtils';
 import ElectronAppWrapper from '../../ElectronAppWrapper';
 import { showMissingMasterKeyMessage } from '@joplin/lib/services/e2ee/utils';
-import { MasterKeyEntity } from '../../../lib/services/e2ee/types';
+import { MasterKeyEntity } from '@joplin/lib/services/e2ee/types';
 import commands from './commands/index';
 import invitationRespond from '../../services/share/invitationRespond';
+import restart from '../../services/restart';
 const { connect } = require('react-redux');
 const { PromptDialog } = require('../PromptDialog.min.js');
 const NotePropertiesDialog = require('../NotePropertiesDialog.min.js');
@@ -53,6 +54,7 @@ interface LayerModalState {
 
 interface Props {
 	plugins: PluginStates;
+	pluginHtmlContents: PluginHtmlContents;
 	pluginsLoaded: boolean;
 	hasNotesBeingSaved: boolean;
 	dispatch: Function;
@@ -266,18 +268,22 @@ class MainScreenComponent extends React.Component<Props, State> {
 			if (this.waitForNotesSavedIID_) shim.clearInterval(this.waitForNotesSavedIID_);
 			this.waitForNotesSavedIID_ = null;
 
-			ipcRenderer.send('asynchronous-message', 'appCloseReply', {
-				canClose: !this.props.hasNotesBeingSaved,
-			});
+			const sendCanClose = async (canClose: boolean) => {
+				if (canClose) {
+					Setting.setValue('wasClosedSuccessfully', true);
+					await Setting.saveAll();
+				}
+				ipcRenderer.send('asynchronous-message', 'appCloseReply', { canClose });
+			};
+
+			await sendCanClose(!this.props.hasNotesBeingSaved);
 
 			if (this.props.hasNotesBeingSaved) {
 				this.waitForNotesSavedIID_ = shim.setInterval(() => {
 					if (!this.props.hasNotesBeingSaved) {
 						shim.clearInterval(this.waitForNotesSavedIID_);
 						this.waitForNotesSavedIID_ = null;
-						ipcRenderer.send('asynchronous-message', 'appCloseReply', {
-							canClose: true,
-						});
+						void sendCanClose(true);
 					}
 				}, 50);
 			}
@@ -556,13 +562,13 @@ class MainScreenComponent extends React.Component<Props, State> {
 		const onRestartAndUpgrade = async () => {
 			Setting.setValue('sync.upgradeState', Setting.SYNC_UPGRADE_STATE_MUST_DO);
 			await Setting.saveAll();
-			bridge().restart();
+			await restart();
 		};
 
 		const onDisableSafeModeAndRestart = async () => {
 			Setting.setValue('isSafeMode', false);
 			await Setting.saveAll();
-			bridge().restart();
+			await restart();
 		};
 
 		const onInvitationRespond = async (shareUserId: string, folderId: string, masterKey: MasterKeyEntity, accept: boolean) => {
@@ -723,12 +729,13 @@ class MainScreenComponent extends React.Component<Props, State> {
 				}
 			} else {
 				const { view, plugin } = viewInfo;
+				const html = this.props.pluginHtmlContents[plugin.id]?.[view.id] ?? '';
 
 				return <UserWebview
 					key={view.id}
 					viewId={view.id}
 					themeId={this.props.themeId}
-					html={view.html}
+					html={html}
 					scripts={view.scripts}
 					pluginId={plugin.id}
 					borderBottom={true}
@@ -762,12 +769,13 @@ class MainScreenComponent extends React.Component<Props, State> {
 			const { plugin, view } = info;
 			if (view.containerType !== ContainerType.Dialog) continue;
 			if (!view.opened) continue;
+			const html = this.props.pluginHtmlContents[plugin.id]?.[view.id] ?? '';
 
 			output.push(<UserWebviewDialog
 				key={view.id}
 				viewId={view.id}
 				themeId={this.props.themeId}
-				html={view.html}
+				html={html}
 				scripts={view.scripts}
 				pluginId={plugin.id}
 				buttons={view.buttons}
@@ -865,6 +873,7 @@ const mapStateToProps = (state: AppState) => {
 		selectedNoteId: state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null,
 		pluginsLegacy: state.pluginsLegacy,
 		plugins: state.pluginService.plugins,
+		pluginHtmlContents: state.pluginService.pluginHtmlContents,
 		customCss: state.customCss,
 		editorNoteStatuses: state.editorNoteStatuses,
 		hasNotesBeingSaved: stateUtils.hasNotesBeingSaved(state),

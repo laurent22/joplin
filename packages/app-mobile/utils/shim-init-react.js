@@ -36,6 +36,50 @@ function shimInit() {
 		return temp;
 	};
 
+	// This function can be used to debug "Network Request Failed" errors. It
+	// uses the native XMLHttpRequest which is more likely to get the proper
+	// response and error message.
+
+	shim.debugFetch = async (url, options = null) => {
+		options = {
+			method: 'GET',
+			headers: {},
+			...options,
+		};
+
+		return new Promise((resolve, reject) => {
+			const xhr = new XMLHttpRequest();
+			xhr.open(options.method, url, true);
+
+			for (const [key, value] of Object.entries(options.headers)) {
+				xhr.setRequestHeader(key, value);
+			}
+
+			xhr.onload = function() {
+				console.info('======================== XHR RESPONSE');
+				console.info(xhr.getAllResponseHeaders());
+				console.info('-------------------------------------');
+				// console.info(xhr.responseText);
+				console.info('======================== XHR RESPONSE');
+
+				resolve(xhr.responseText);
+			};
+
+			xhr.onerror = function() {
+				console.info('======================== XHR ERROR');
+				console.info(xhr.getAllResponseHeaders());
+				console.info('-------------------------------------');
+				console.info(xhr.responseText);
+				console.info('======================== XHR ERROR');
+
+				reject(new Error(xhr.responseText));
+			};
+
+			// TODO: Send POST data here if needed
+			xhr.send();
+		});
+	};
+
 	shim.fetch = async function(url, options = null) {
 		// The native fetch() throws an uncatchable error that crashes the
 		// app if calling it with an invalid URL such as '//.resource' or

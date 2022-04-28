@@ -7,7 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: MrKanister <pthrp_bnsrv@aleeas.com>\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: MrKanister <pueblos_spatulas@aleeas.com>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
 "MIME-Version: 1.0\n"
@@ -402,7 +404,6 @@ msgid "Auto"
 msgstr "Automatisch"
 
 #: packages/server/src/services/TaskService.ts:39
-#, fuzzy
 msgid "Auto-add disabled accounts for deletion"
 msgstr "Automatisches Hinzufügen deaktivierter Accounts zur Löschliste"
 
@@ -1867,7 +1868,7 @@ msgstr "TLS-Zertifikatfehler ignorieren"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:102
 msgid "Images"
-msgstr ""
+msgstr "Bilder"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:170
 #: packages/app-desktop/gui/MenuBar.tsx:484
@@ -2745,9 +2746,8 @@ msgid "Or create an account."
 msgstr "Oder erstelle ein Konto."
 
 #: packages/app-desktop/gui/MenuBar.tsx:352
-#, fuzzy
 msgid "Other applications..."
-msgstr "Beendet die Anwendung."
+msgstr "Andere Anwendungen..."
 
 #: packages/app-cli/app/command-import.js:27
 msgid "Output format: %s"
@@ -3254,14 +3254,12 @@ msgid "Select all"
 msgstr "Alles auswählen"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:140
-#, fuzzy
 msgid "Select emoji..."
-msgstr "Datum auswählen"
+msgstr "Emoji auswählen..."
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:144
-#, fuzzy
 msgid "Select file..."
-msgstr "Alles auswählen"
+msgstr "Datei auswählen..."
 
 #: packages/app-cli/app/command-server.js:38
 msgid "Server is already running on port %d"

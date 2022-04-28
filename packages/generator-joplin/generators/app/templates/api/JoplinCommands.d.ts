@@ -15,7 +15,7 @@ import { Command } from './types';
  *
  * * [Main screen commands](https://github.com/laurent22/joplin/tree/dev/packages/app-desktop/gui/MainScreen/commands)
  * * [Global commands](https://github.com/laurent22/joplin/tree/dev/packages/app-desktop/commands)
- * * [Editor commands](https://github.com/laurent22/joplin/tree/dev/packages/app-desktop/gui/NoteEditor/commands/editorCommandDeclarations.ts)
+ * * [Editor commands](https://github.com/laurent22/joplin/tree/dev/packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts)
  *
  * To view what arguments are supported, you can open any of these files
  * and look at the `execute()` command.

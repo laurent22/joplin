@@ -1,7 +1,8 @@
-const React = require('react');
-import { useMemo } from 'react';
-const { _ } = require('@joplin/lib/locale');
-const { themeStyle } = require('@joplin/lib/theme');
+import * as React from 'react';
+import { useMemo, useCallback } from 'react';
+import { _ } from '@joplin/lib/locale';
+import { themeStyle } from '@joplin/lib/theme';
+import useKeyboardHandler from './DialogButtonRow/useKeyboardHandler';
 
 export interface ButtonSpec {
 	name: string;
@@ -37,32 +38,26 @@ export default function DialogButtonRow(props: Props) {
 		};
 	}, [theme.buttonStyle]);
 
-	const okButton_click = () => {
-		if (props.onClick) props.onClick({ buttonName: 'ok' });
-	};
+	const onOkButtonClick = useCallback(() => {
+		if (props.onClick && !props.okButtonDisabled) props.onClick({ buttonName: 'ok' });
+	}, [props.onClick, props.okButtonDisabled]);
 
-	const cancelButton_click = () => {
-		if (props.onClick) props.onClick({ buttonName: 'cancel' });
-	};
+	const onCancelButtonClick = useCallback(() => {
+		if (props.onClick && !props.cancelButtonDisabled) props.onClick({ buttonName: 'cancel' });
+	}, [props.onClick, props.cancelButtonDisabled]);
 
-	const customButton_click = (event: ClickEvent) => {
+	const onCustomButtonClick = useCallback((event: ClickEvent) => {
 		if (props.onClick) props.onClick(event);
-	};
+	}, [props.onClick]);
 
-	const onKeyDown = (event: any) => {
-		if (event.keyCode === 13) {
-			okButton_click();
-		} else if (event.keyCode === 27) {
-			cancelButton_click();
-		}
-	};
+	const onKeyDown = useKeyboardHandler({ onOkButtonClick, onCancelButtonClick });
 
 	const buttonComps = [];
 
 	if (props.customButtons) {
 		for (const b of props.customButtons) {
 			buttonComps.push(
-				<button key={b.name} style={buttonStyle} onClick={() => customButton_click({ buttonName: b.name })} onKeyDown={onKeyDown}>
+				<button key={b.name} style={buttonStyle} onClick={() => onCustomButtonClick({ buttonName: b.name })} onKeyDown={onKeyDown}>
 					{b.label}
 				</button>
 			);
@@ -71,7 +66,7 @@ export default function DialogButtonRow(props: Props) {
 
 	if (props.okButtonShow !== false) {
 		buttonComps.push(
-			<button disabled={props.okButtonDisabled} key="ok" style={buttonStyle} onClick={okButton_click} ref={props.okButtonRef} onKeyDown={onKeyDown}>
+			<button disabled={props.okButtonDisabled} key="ok" style={buttonStyle} onClick={onOkButtonClick} ref={props.okButtonRef} onKeyDown={onKeyDown}>
 				{props.okButtonLabel ? props.okButtonLabel : _('OK')}
 			</button>
 		);
@@ -79,7 +74,7 @@ export default function DialogButtonRow(props: Props) {
 
 	if (props.cancelButtonShow !== false) {
 		buttonComps.push(
-			<button disabled={props.cancelButtonDisabled} key="cancel" style={Object.assign({}, buttonStyle)} onClick={cancelButton_click}>
+			<button disabled={props.cancelButtonDisabled} key="cancel" style={Object.assign({}, buttonStyle)} onClick={onCancelButtonClick}>
 				{props.cancelButtonLabel ? props.cancelButtonLabel : _('Cancel')}
 			</button>
 		);

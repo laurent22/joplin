@@ -334,6 +334,12 @@ export enum SettingItemType {
 	Button = 6,
 }
 
+export enum SettingItemSubType {
+	FilePathAndArgs = 'file_path_and_args',
+	FilePath = 'file_path', // Not supported on mobile!
+	DirectoryPath = 'directory_path', // Not supported on mobile!
+}
+
 export enum AppType {
 	Desktop = 'desktop',
 	Mobile = 'mobile',
@@ -350,6 +356,7 @@ export enum SettingStorage {
 export interface SettingItem {
 	value: any;
 	type: SettingItemType;
+	subType?: SettingItemSubType;
 
 	label: string;
 	description?: string;

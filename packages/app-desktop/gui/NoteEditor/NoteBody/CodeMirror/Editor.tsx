@@ -100,6 +100,7 @@ export interface EditorProps {
 function Editor(props: EditorProps, ref: any) {
 	const [editor, setEditor] = useState(null);
 	const editorParent = useRef(null);
+	const lastEditTime = useRef(NaN);
 
 	// Codemirror plugins add new commands to codemirror (or change it's behavior)
 	// This command adds the smartListIndent function which will be bound to tab
@@ -120,6 +121,7 @@ function Editor(props: EditorProps, ref: any) {
 	const editor_change = useCallback((cm: any, change: any) => {
 		if (props.onChange && change.origin !== 'setValue') {
 			props.onChange(cm.getValue());
+			lastEditTime.current = Date.now();
 		}
 	}, [props.onChange]);
 
@@ -154,7 +156,8 @@ function Editor(props: EditorProps, ref: any) {
 	}, [props.onResize]);
 
 	const editor_update = useCallback((cm: any) => {
-		props.onUpdate(cm);
+		const edited = Date.now() - lastEditTime.current <= 100;
+		props.onUpdate(cm, edited);
 	}, [props.onUpdate]);
 
 	useEffect(() => {

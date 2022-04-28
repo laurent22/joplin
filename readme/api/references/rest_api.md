@@ -331,11 +331,15 @@ Creating a new resource is special because you also need to upload the file. Unl
 
 	curl -F 'data=@/path/to/file.jpg' -F 'props={"title":"my resource title"}' http://localhost:41184/resources
 
-Or to **update** a resource:
+To **update** the resource content, you can make a PUT request with the same arguments:
 
 	curl -X PUT -F 'data=@/path/to/file.jpg' -F 'props={"title":"my modified title"}' http://localhost:41184/resources/8fe1417d7b184324bf6b0122b76c4696
 
 The "data" field is required, while the "props" one is not. If not specified, default values will be used.
+
+Or if you only need to update the resource properties (title, etc.), without changing the content, you can make a regular PUT request:
+
+	curl -X PUT --data '{"title": "My new title"}' http://localhost:41184/resources/8fe1417d7b184324bf6b0122b76c4696
 
 **From a plugin** the syntax to create a resource is also a bit special:
 

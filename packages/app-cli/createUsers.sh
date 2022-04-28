@@ -45,7 +45,7 @@ while [ "$NUM" -lt 400 ]; do
 	echo "config keychain.supported 0" >> "$CMD_FILE" 
 	echo "config sync.target 10" >> "$CMD_FILE" 
 	echo "config sync.10.username $USER_EMAIL" >> "$CMD_FILE" 
-	echo "config sync.10.password hunter1hunter2hunter3" >> "$CMD_FILE"
+	echo "config sync.10.password 111111" >> "$CMD_FILE"
 	echo "sync" >> "$CMD_FILE"
 
 	yarn start --profile "$PROFILE_DIR" batch "$CMD_FILE"

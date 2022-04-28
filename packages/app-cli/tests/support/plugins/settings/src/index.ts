@@ -1,5 +1,5 @@
 import joplin from 'api';
-import { SettingItemType, ToolbarButtonLocation } from 'api/types';
+import { SettingItemSubType, SettingItemType, ToolbarButtonLocation } from 'api/types';
 
 joplin.plugins.register({
 	onStart: async function() {
@@ -48,6 +48,33 @@ joplin.plugins.register({
 				label: 'My file setting',
 				description: 'This setting will be saved to settings.json',
 				['storage' as any]: 2, // Should be `storage: SettingStorage.File`
+			},
+
+			'myFilePathAndArgs': {
+				value: '',
+				type: SettingItemType.String,
+				subType: SettingItemSubType.FilePathAndArgs,
+				section: 'myCustomSection',
+				public: true,
+				label: 'File path and args',
+			},
+
+			'myFilePathOnly': {
+				value: '',
+				type: SettingItemType.String,
+				subType: SettingItemSubType.FilePath,
+				section: 'myCustomSection',
+				public: true,
+				label: 'File path',
+			},
+
+			'myDirectory': {
+				value: '',
+				type: SettingItemType.String,
+				subType: SettingItemSubType.DirectoryPath,
+				section: 'myCustomSection',
+				public: true,
+				label: 'Directory path',
 			},
 		});
 

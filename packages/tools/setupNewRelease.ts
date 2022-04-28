@@ -122,6 +122,7 @@ async function main() {
 
 	await updatePackageVersion(`${rootDir}/packages/app-cli/package.json`, majorMinorVersion, options);
 	await updatePackageVersion(`${rootDir}/packages/app-desktop/package.json`, majorMinorVersion, options);
+	await updatePackageVersion(`${rootDir}/packages/app-mobile/package.json`, majorMinorVersion, options);
 	await updatePackageVersion(`${rootDir}/packages/generator-joplin/package.json`, majorMinorVersion, options);
 	await updatePackageVersion(`${rootDir}/packages/htmlpack/package.json`, majorMinorVersion, options);
 	await updatePackageVersion(`${rootDir}/packages/lib/package.json`, majorMinorVersion, options);

@@ -1,4 +1,26 @@
 import * as fs from 'fs-extra';
+import markdownUtils, { MarkdownTableHeader, MarkdownTableRow } from '../markdownUtils';
+
+type FeatureId = string;
+
+export enum PlanName {
+	Basic = 'basic',
+	Pro = 'pro',
+	Teams = 'teams',
+}
+
+interface PlanFeature {
+	title: string;
+	basic: boolean;
+	pro: boolean;
+	teams: boolean;
+	basicInfo?: string;
+	proInfo?: string;
+	teamsInfo?: string;
+	basicInfoShort?: string;
+	proInfoShort?: string;
+	teamsInfoShort?: string;
+}
 
 export interface Plan {
 	name: string;
@@ -7,10 +29,13 @@ export interface Plan {
 	priceYearly: StripePublicConfigPrice;
 	featured: boolean;
 	iconName: string;
-	featuresOn: string[];
-	featuresOff: string[];
+	featuresOn: FeatureId[];
+	featuresOff: FeatureId[];
+	featureLabelsOn: string[];
+	featureLabelsOff: string[];
 	cfaLabel: string;
 	cfaUrl: string;
+	footnote: string;
 }
 
 export enum PricePeriod {
@@ -38,31 +63,6 @@ export interface StripePublicConfig {
 	publishableKey: string;
 	prices: StripePublicConfigPrice[];
 	webhookBaseUrl: string;
-}
-
-export interface PlanFeature {
-	label: string;
-	enabled: boolean;
-}
-
-export function getFeatureList(plan: Plan): PlanFeature[] {
-	const output: PlanFeature[] = [];
-
-	for (const f of plan.featuresOn) {
-		output.push({
-			label: f,
-			enabled: true,
-		});
-	}
-
-	for (const f of plan.featuresOff) {
-		output.push({
-			label: f,
-			enabled: false,
-		});
-	}
-
-	return output;
 }
 
 function formatPrice(amount: string | number, currency: PriceCurrency): string {
@@ -110,28 +110,181 @@ export function findPrice(prices: StripePublicConfigPrice[], query: FindPriceQue
 	return output;
 }
 
-const businessAccountEmailBody = `Hello,
+const features: Record<FeatureId, PlanFeature> = {
+	maxItemSize: {
+		title: 'Max note or attachment size',
+		basic: true,
+		pro: true,
+		teams: true,
+		basicInfo: '10 MB per note or attachment',
+		proInfo: '200 MB per note or attachment',
+		teamsInfo: '200 MB per note or attachment',
+		basicInfoShort: '10 MB',
+		proInfoShort: '200 MB',
+		teamsInfoShort: '200 MB',
+	},
+	maxStorage: {
+		title: 'Storage space',
+		basic: true,
+		pro: true,
+		teams: true,
+		basicInfo: '1 GB storage space',
+		proInfo: '10 GB storage space',
+		teamsInfo: '10 GB storage space',
+		basicInfoShort: '1 GB',
+		proInfoShort: '10 GB',
+		teamsInfoShort: '10 GB',
+	},
+	publishNote: {
+		title: 'Publish notes to the internet',
+		basic: true,
+		pro: true,
+		teams: true,
+	},
+	sync: {
+		title: 'Sync as many devices as you want',
+		basic: true,
+		pro: true,
+		teams: true,
+	},
+	clipper: {
+		title: 'Web Clipper',
+		basic: true,
+		pro: true,
+		teams: true,
+	},
+	collaborate: {
+		title: 'Share and collaborate on a notebook',
+		basic: false,
+		pro: true,
+		teams: true,
+	},
+	multiUsers: {
+		title: 'Manage multiple users',
+		basic: false,
+		pro: false,
+		teams: true,
+	},
+	consolidatedBilling: {
+		title: 'Consolidated billing',
+		basic: false,
+		pro: false,
+		teams: true,
+	},
+	sharingAccessControl: {
+		title: 'Sharing access control',
+		basic: false,
+		pro: false,
+		teams: true,
+	},
+	prioritySupport: {
+		title: 'Priority support',
+		basic: false,
+		pro: false,
+		teams: true,
+	},
+};
 
-This is an automatically generated email. The Business feature is coming soon, and in the meantime we offer a business discount if you would like to register multiple users.
+export const getFeatureIdsByPlan = (planName: PlanName, featureOn: boolean): FeatureId[] => {
+	const output: FeatureId[] = [];
 
-If so please let us know the following details and we will get back to you as soon as possible:
+	for (const [k, v] of Object.entries(features)) {
+		if (v[planName] === featureOn) {
+			output.push(k);
+		}
+	}
 
-- Name: 
+	return output;
+};
 
-- Email: 
+export const getFeatureLabelsByPlan = (planName: PlanName, featureOn: boolean): string[] => {
+	const output: FeatureId[] = [];
 
-- Number of users: `;
+	for (const [featureId, v] of Object.entries(features)) {
+		if (v[planName] === featureOn) {
+			output.push(getFeatureLabel(planName, featureId));
+		}
+	}
 
-export function getPlans(stripeConfig: StripePublicConfig): Record<string, Plan> {
-	const features = {
-		publishNote: 'Publish notes to the internet',
-		sync: 'Sync as many devices as you want',
-		clipper: 'Web Clipper',
-		collaborate: 'Share and collaborate on a notebook',
-		multiUsers: 'Up to 10 users',
-		prioritySupport: 'Priority support',
+	return output;
+};
+
+export const getAllFeatureIds = (): FeatureId[] => {
+	return Object.keys(features);
+};
+
+export const getFeatureById = (featureId: FeatureId): PlanFeature => {
+	return features[featureId];
+};
+
+export const getFeaturesByPlan = (planName: PlanName, featureOn: boolean): PlanFeature[] => {
+	const output: PlanFeature[] = [];
+
+	for (const [, v] of Object.entries(features)) {
+		if (v[planName] === featureOn) {
+			output.push(v);
+		}
+	}
+
+	return output;
+};
+
+export const getFeatureLabel = (planName: PlanName, featureId: FeatureId): string => {
+	const feature = features[featureId];
+	const k = `${planName}Info`;
+	if ((feature as any)[k]) return (feature as any)[k];
+	return feature.title;
+};
+
+export const getFeatureEnabled = (planName: PlanName, featureId: FeatureId): boolean => {
+	const feature = features[featureId];
+	return feature[planName];
+};
+
+export const createFeatureTableMd = () => {
+	const headers: MarkdownTableHeader[] = [
+		{
+			name: 'featureLabel',
+			label: 'Feature',
+		},
+		{
+			name: 'basic',
+			label: 'Basic',
+		},
+		{
+			name: 'pro',
+			label: 'Pro',
+		},
+		{
+			name: 'teams',
+			label: 'Teams',
+		},
+	];
+
+	const rows: MarkdownTableRow[] = [];
+
+	const getCellInfo = (planName: PlanName, feature: PlanFeature) => {
+		if (!feature[planName]) return '-';
+		const infoShort: string = (feature as any)[`${planName}InfoShort`];
+		if (infoShort) return infoShort;
+		return '✔️';
 	};
 
+	for (const [, feature] of Object.entries(features)) {
+		const row: MarkdownTableRow = {
+			featureLabel: feature.title,
+			basic: getCellInfo(PlanName.Basic, feature),
+			pro: getCellInfo(PlanName.Pro, feature),
+			teams: getCellInfo(PlanName.Teams, feature),
+		};
+
+		rows.push(row);
+	}
+
+	return markdownUtils.createMarkdownTable(headers, rows);
+};
+
+export function getPlans(stripeConfig: StripePublicConfig): Record<PlanName, Plan> {
 	return {
 		basic: {
 			name: 'basic',
@@ -146,20 +299,13 @@ export function getPlans(stripeConfig: StripePublicConfig): Record<string, Plan>
 			}),
 			featured: false,
 			iconName: 'basic-icon',
-			featuresOn: [
-				'Max 10 MB per note or attachment',
-				features.publishNote,
-				features.sync,
-				features.clipper,
-				'1 GB storage space',
-			],
-			featuresOff: [
-				features.collaborate,
-				features.multiUsers,
-				features.prioritySupport,
-			],
+			featuresOn: getFeatureIdsByPlan(PlanName.Basic, true),
+			featuresOff: getFeatureIdsByPlan(PlanName.Basic, false),
+			featureLabelsOn: getFeatureLabelsByPlan(PlanName.Basic, true),
+			featureLabelsOff: getFeatureLabelsByPlan(PlanName.Basic, false),
 			cfaLabel: 'Try it now',
 			cfaUrl: '',
+			footnote: '',
 		},
 
 		pro: {
@@ -175,42 +321,35 @@ export function getPlans(stripeConfig: StripePublicConfig): Record<string, Plan>
 			}),
 			featured: true,
 			iconName: 'pro-icon',
-			featuresOn: [
-				'Max 200 MB per note or attachment',
-				features.publishNote,
-				features.sync,
-				features.clipper,
-				'10 GB storage space',
-				features.collaborate,
-			],
-			featuresOff: [
-				features.multiUsers,
-				features.prioritySupport,
-			],
+			featuresOn: getFeatureIdsByPlan(PlanName.Pro, true),
+			featuresOff: getFeatureIdsByPlan(PlanName.Pro, false),
+			featureLabelsOn: getFeatureLabelsByPlan(PlanName.Pro, true),
+			featureLabelsOff: getFeatureLabelsByPlan(PlanName.Pro, false),
 			cfaLabel: 'Try it now',
 			cfaUrl: '',
+			footnote: '',
 		},
 
-		business: {
-			name: 'business',
-			title: 'Business',
-			priceMonthly: { accountType: 3, formattedMonthlyAmount: '49.99€' } as any,
-			priceYearly: { accountType: 3, formattedMonthlyAmount: '39.99€', formattedAmount: '479.88€' } as any,
+		teams: {
+			name: 'teams',
+			title: 'Teams',
+			priceMonthly: findPrice(stripeConfig.prices, {
+				accountType: 3,
+				period: PricePeriod.Monthly,
+			}),
+			priceYearly: findPrice(stripeConfig.prices, {
+				accountType: 3,
+				period: PricePeriod.Yearly,
+			}),
 			featured: false,
 			iconName: 'business-icon',
-			featuresOn: [
-				'Max 200 MB per note or attachment',
-				features.publishNote,
-				features.sync,
-				features.clipper,
-				'10 GB storage space',
-				features.collaborate,
-				features.multiUsers,
-				features.prioritySupport,
-			],
-			featuresOff: [],
-			cfaLabel: 'Contact us',
-			cfaUrl: `mailto:business@joplincloud.com?subject=${encodeURIComponent('Joplin Cloud Business Account Order')}&body=${encodeURIComponent(businessAccountEmailBody)}`,
+			featuresOn: getFeatureIdsByPlan(PlanName.Teams, true),
+			featuresOff: getFeatureIdsByPlan(PlanName.Teams, false),
+			featureLabelsOn: getFeatureLabelsByPlan(PlanName.Teams, true),
+			featureLabelsOff: getFeatureLabelsByPlan(PlanName.Teams, false),
+			cfaLabel: 'Try it now',
+			cfaUrl: '',
+			footnote: 'Per user. Minimum of 2 users.',
 		},
 	};
 }
