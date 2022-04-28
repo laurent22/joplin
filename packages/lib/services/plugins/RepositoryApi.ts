@@ -71,8 +71,6 @@ export default class RepositoryApi {
 	private githubApiUrl_: string;
 	private contentBaseUrl_: string;
 	private isUsingDefaultContentUrl_: boolean = true;
-	private statsObj_: statsObj = null;
-	private allStats_: Array<any> = [];
 
 	public constructor(baseUrl: string, tempDir: string) {
 		this.baseUrl_ = baseUrl;
@@ -97,7 +95,6 @@ export default class RepositoryApi {
 		const manifestsText = await this.fetchText('manifests.json');
 		try {
 			const manifests = JSON.parse(manifestsText);
-			console.log('----manifests-----', (manifests));
 			if (!manifests) throw new Error('Invalid or missing JSON');
 
 			const tempOptions = pluginCategories();
@@ -123,12 +120,11 @@ export default class RepositoryApi {
 
 		try {
 			const statsJson = JSON.parse(statsText);
-			console.log('stats.json', statsJson);
 			if (!statsJson) throw new Error('Invalid or missing JSON');
 			let tempDownloadCount: number = 0;
 			let created_date = '';
 			this.manifests_.forEach(manifest => {
-				statsJson[manifest.id] && Object.entries(statsJson[manifest.id]).forEach((stats, index) => {
+				statsJson[manifest.id] && Object.entries(statsJson[manifest.id]).forEach((stats: any[], index) => {
 					tempDownloadCount += stats[1].downloadCount;
 					if (index === 0) created_date = stats[1].createdAt;
 				});
@@ -209,30 +205,26 @@ export default class RepositoryApi {
 		}
 	}
 
-	// this function can go into parent function -> filterPlugins and
-	// if given keyword is a cateogry then call this function
 	public async sortByCategory(category?: string, searchQuery?: string): Promise<PluginManifest[]> {
 		const manifests = await this.manifests();
 		let output: PluginManifest[] = [];
 		const output2: PluginManifest[] = [];
-		category = category.toLowerCase();
 		const pluginStates = Setting.value('plugins.states');
+		category = category.toLowerCase();
 
 
-		const filterGroupOne = ['most downloaded','recommended', 'newest', 'built-in', 'all'];
-		const filterGroupTwo = ['appearance', 'developer tools', 'productivity', 'themes', 'integrations', 'viewer', 'search', 'tags', 'editor', 'files', 'personal knowledge management'];
-		const filterGroupThree = ['Installed', 'enabled', 'disabled', 'outdated'];
+		const categoryFilterList = ['appearance', 'developer tools', 'productivity', 'themes', 'integrations', 'viewer', 'search', 'tags', 'editor', 'files', 'personal knowledge management'];
 
-		console.log('category-----: ', category);
-		if (filterGroupTwo.includes(category)) {
+		if (categoryFilterList.includes(category)) {
 			output = manifests.filter((m) => m._plugin_category === category);
-		} else if (filterGroupOne.includes(category) || filterGroupThree.includes(category)) {
+		} else {
 			switch (category) {
+				// decide whether to uise filter on object of objects?
 			case 'most downloaded':
-				output = this.manifests_.sort((m1, m2) => m2._totalDownloads - m1._totalDownloads).slice(0, 50);
+				output = manifests.sort((m1, m2) => m2._totalDownloads - m1._totalDownloads).slice(0, 50);
 				break;
 			case 'recommended':
-				output = this.manifests_.filter(manifest => manifest._recommended);
+				output = manifests.filter(manifest => manifest._recommended);
 				break;
 			case 'newest':
 				// + before new keyword forces date to be number https://github.com/microsoft/TypeScript/issues/5710
@@ -253,8 +245,9 @@ export default class RepositoryApi {
 			case 'disabled':
 				output = manifests.filter(manifest => pluginStates[manifest.id] && !(pluginStates[manifest.id].enabled));
 				break;
+			case 'installed':
 			default:
-				output = manifests;
+				output = manifests.filter(manifest => (pluginStates[manifest.id]) !== undefined);
 				break;
 			}
 		}

@@ -6,12 +6,13 @@ import RepositoryApi from '@joplin/lib/services/plugins/RepositoryApi';
 import AsyncActionQueue from '@joplin/lib/AsyncActionQueue';
 import { PluginManifest } from '@joplin/lib/services/plugins/utils/types';
 import PluginBox, { InstallState } from './PluginBox';
-import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
+import PluginService , { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import { _ } from '@joplin/lib/locale';
 import useOnInstallHandler from './useOnInstallHandler';
 import { themeStyle } from '@joplin/lib/theme';
 import Button, { ButtonLevel, ButtonSize } from '../../../Button/Button';
 import FilterForPlugins from './FilterForPlugins/FilterForPlugins';
+import bridge from '../../../../bridge';
 
 const Root = styled.div`
 `;
@@ -60,23 +61,24 @@ export default function(props: Props) {
 	useEffect(() => {
 		setSearchResultCount(null);
 		asyncSearchQueue.current.push(async () => {
-			if (!props.searchQuery && !filterValue || filterValue.toLowerCase() === 'installed') {
+			if (!props.searchQuery && !filterValue) {
 				setManifests([]);
 				setSearchResultCount(null);
 				props.setShouldRenderUserPlugins(true);
+				console.log('filterValue: ', filterValue);
 			} else {
-				const r = await props.repoApi().sortByCategory(filterValue.toLowerCase(), props.searchQuery);
-				!(['most downloaded', 'newest'].includes(filterValue.toLowerCase())) && setManifests(sortManifestResults(r));
-				['most downloaded', 'newest'].includes(filterValue.toLowerCase()) && setManifests(r);
-
-				// !['most downloaded', 'newest'].includes(filterValue.toLowerCase()) && setManifests(sortManifestResults(r, sortValue));
-				console.log('r: ', r);
-				setSearchResultCount(r.length);
-				props.setShouldRenderUserPlugins(false);
+				if (filterValue === undefined) {
+					setFilterValue('');
+				} else {
+					const r = await props.repoApi().sortByCategory(filterValue.toLowerCase(), props.searchQuery);
+					!(['most downloaded', 'newest'].includes(filterValue.toLowerCase())) && setManifests(sortManifestResults(r));
+					['most downloaded', 'newest'].includes(filterValue.toLowerCase()) && setManifests(r);
+					setSearchResultCount(r.length);
+					props.setShouldRenderUserPlugins(false);
+				}
 			}
 		});
 	}, [props.searchQuery, filterValue]);
-	// }, [props.searchQuery, filterValue, sortValue]);
 
 	const onChange = useCallback((event: OnChangeEvent) => {
 		setSearchStarted(true);
@@ -88,6 +90,28 @@ export default function(props: Props) {
 		props.onSearchQueryChange({ value: '' });
 	}, []);
 
+	const onBrowsePlugins = useCallback(() => {
+		void bridge().openExternal('https://github.com/joplin/plugins/blob/master/README.md#plugins');
+	}, []);
+
+	// ----- to be implemented -----
+
+	// const onToolsClick = useCallback(async () => {
+	// 	const template = [
+	// 		{
+	// 			label: _('Browse all plugins'),
+	// 			click: onBrowsePlugins,
+	// 		},
+	// 		{
+	// 			label: _('Install from file'),
+	// 			click: onInstall,
+	// 		},
+	// 	];
+
+	// 	const menu = bridge().Menu.buildFromTemplate(template);
+	// 	menu.popup(bridge().window());
+	// }, [onInstall, onBrowsePlugins]);
+
 	function installState(pluginId: string): InstallState {
 		const settings = props.pluginSettings[pluginId];
 		if (settings && !settings.deleted) return InstallState.Installed;
@@ -95,8 +119,48 @@ export default function(props: Props) {
 		return InstallState.NotInstalled;
 	}
 
-	function renderResults(query: string, manifests: PluginManifest[]) {
+	// ----- to be implemented: onToggle function -----
+
+	// const pluginSettings = useMemo(() => {
+	// 	return pluginService.unserializePluginSettings(props.value);
+	// }, [props.value]);
+
+	// const onToggle = useCallback((event: ItemEvent) => {
+	// 	const item = event.item;
+
+	// 	const newSettings = produce(pluginSettings, (draft: PluginSettings) => {
+	// 		if (!draft[item.manifest.id]) draft[item.manifest.id] = defaultPluginSetting();
+	// 		draft[item.manifest.id].enabled = !draft[item.manifest.id].enabled;
+	// 	});
+
+	// 	props.onChange({ value: pluginService.serializePluginSettings(newSettings) });
+	// }, []);
+
+	function renderResultsInstalled(query: string, manifests: PluginManifest[]) {
 		if (query && !manifests.length) {
+
+			if (searchResultCount === null) return ''; // Search in progress
+			return props.renderDescription(props.themeId, _('No results'));
+		} else {
+			const output = [];
+
+			for (const manifest of manifests) {
+				output.push(<PluginBox
+					key={manifest.id}
+					manifest={manifest}
+					themeId={props.themeId}
+					isCompatible={PluginService.instance().isCompatible(manifest.app_min_version)}
+					onInstall={onInstall}
+					onToggle={() => console.log('onToggle to be implemented')}
+					installState={installState(manifest.id)}
+				/>);
+			}
+			return output;
+		}
+	}
+
+	function renderResults(query: string, manifests: PluginManifest[]) {
+		if ((query && !manifests.length) || !manifests.length) {
 			if (searchResultCount === null) return ''; // Search in progress
 			return props.renderDescription(props.themeId, _('No results'));
 		} else {
@@ -135,13 +199,13 @@ export default function(props: Props) {
 					placeholder={props.disabled ? _('Please wait...') : _('Search for plugins...')}
 					disabled={props.disabled}
 				/>
-				<FilterForPlugins themeId={props.themeId} setFilterValue={setFilterValue} />
+				<FilterForPlugins themeId={props.themeId} onSearchButtonClick={onSearchButtonClick} setFilterValue={setFilterValue} />
 				<ToolsButton size={ButtonSize.Small} tooltip={_('Plugin tools')} iconName="fas fa-cog" level={ButtonLevel.Secondary}/>
 				{renderContentSourceInfo()}
 			</div>
 
 			<ResultsRoot>
-				{renderResults(props.searchQuery, manifests)}
+				{!['Installed', 'Enabled', 'Disabled', 'Outdated'].includes(filterValue) ? renderResults(props.searchQuery, manifests) : renderResultsInstalled(props.searchQuery, manifests)}
 			</ResultsRoot>
 		</Root>
 	);

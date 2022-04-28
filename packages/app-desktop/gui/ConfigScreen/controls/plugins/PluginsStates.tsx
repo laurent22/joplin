@@ -5,7 +5,6 @@ import { _ } from '@joplin/lib/locale';
 import styled from 'styled-components';
 import SearchPlugins from './SearchPlugins';
 import PluginBox, { ItemEvent, UpdateState } from './PluginBox';
-import Button from '../../../Button/Button';
 import bridge from '../../../../services/bridge';
 import produce from 'immer';
 import { OnChangeEvent } from '../../../lib/SearchInput/SearchInput';
@@ -20,7 +19,8 @@ const { space } = require('styled-system');
 
 const logger = Logger.create('PluginState');
 
-const maxWidth: number = 460;
+// const maxWidth: number = 460;
+const maxWidth: number = 640;
 
 const Root = styled.div`
 	display: flex;
@@ -205,22 +205,6 @@ export default function(props: Props) {
 
 	const onUpdate = useOnInstallHandler(setUpdatingPluginIds, pluginSettings, repoApi, onPluginSettingsChange, true);
 
-	const onToolsClick = useCallback(async () => {
-		const template = [
-			{
-				label: _('Browse all plugins'),
-				click: onBrowsePlugins,
-			},
-			{
-				label: _('Install from file'),
-				click: onInstall,
-			},
-		];
-
-		const menu = bridge().Menu.buildFromTemplate(template);
-		menu.popup(bridge().window());
-	}, [onInstall, onBrowsePlugins]);
-
 	const onSearchQueryChange = useCallback((event: OnChangeEvent) => {
 		setSearchQuery(event.value);
 	}, []);
@@ -254,7 +238,6 @@ export default function(props: Props) {
 				onUpdate={onUpdateHandler}
 			/>);
 		}
-
 		return output;
 	}
 
