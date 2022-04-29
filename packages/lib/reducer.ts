@@ -1,5 +1,4 @@
 import produce, { Draft, original } from 'immer';
-import { isDeepStrictEqual } from 'util';
 import pluginServiceReducer, { stateRootKey as pluginServiceStateRootKey, defaultState as pluginServiceDefaultState, State as PluginServiceState } from './services/plugins/reducer';
 import shareServiceReducer, { stateRootKey as shareServiceStateRootKey, defaultState as shareServiceDefaultState, State as ShareServiceState } from './services/share/reducer';
 import Note from './models/Note';
@@ -7,6 +6,7 @@ import Folder from './models/Folder';
 import BaseModel from './BaseModel';
 import { Store } from 'redux';
 const ArrayUtils = require('./ArrayUtils.js');
+const fastDeepEqual = require('fast-deep-equal');
 const { ALL_NOTES_FILTER_ID } = require('./reserved-ids');
 const { createSelectorCreator, defaultMemoize } = require('reselect');
 const { createCachedSelector } = require('re-reselect');
@@ -928,7 +928,7 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 			break;
 
 		case 'TAG_UPDATE_ALL':
-			if (!isDeepStrictEqual(original(draft.tags), action.items)) {
+			if (!fastDeepEqual(original(draft.tags), action.items)) {
 				draft.tags = action.items;
 			}
 			break;
