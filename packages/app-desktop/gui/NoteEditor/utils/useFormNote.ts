@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { FormNote, defaultFormNote, ResourceInfos } from './types';
 import { clearResourceCache, attachedResources } from './resourceHandling';
 import AsyncActionQueue from '@joplin/lib/AsyncActionQueue';
@@ -64,8 +64,14 @@ export default function useFormNote(dependencies: HookDependencies) {
 	const [formNote, setFormNote] = useState<FormNote>(defaultFormNote());
 	const [isNewNote, setIsNewNote] = useState(false);
 	const prevSyncStarted = usePrevious(syncStarted);
-	const previousNoteId = usePrevious(formNote.id);
 	const [resourceInfos, setResourceInfos] = useState<ResourceInfos>({});
+	const resourceInfosDesc = useRef({ id: '', body: '' });
+
+	const updateResourceInfos = (newResourceInfos: ResourceInfos, id: string, body: string) => {
+		if (id) resourceInfosDesc.current.id = id;
+		if (body) resourceInfosDesc.current.body = body;
+		setResourceInfos(prev => resourceInfosChanged(prev, newResourceInfos) ? newResourceInfos : prev);
+	};
 
 	async function initNoteState(n: any) {
 		let originalCss = '';
@@ -96,7 +102,8 @@ export default function useFormNote(dependencies: HookDependencies) {
 		// be first because it loads the resource infos in an async way. If we
 		// swap them, the formNote will be updated first and rendered, then the
 		// the resources will load, and the note will be re-rendered.
-		setResourceInfos(await attachedResources(n.body));
+		if (resourceInfosDesc.current.id !== n.id) clearResourceCache();
+		updateResourceInfos(await attachedResources(n.body), n.id, n.body);
 		setFormNote(newFormNote);
 
 		await handleResourceDownloadMode(n.body);
@@ -194,7 +201,7 @@ export default function useFormNote(dependencies: HookDependencies) {
 		const resourceIds = await Note.linkedResourceIds(formNote.body);
 		if (!event || resourceIds.indexOf(event.id) >= 0) {
 			clearResourceCache();
-			setResourceInfos(await attachedResources(formNote.body));
+			updateResourceInfos(await attachedResources(formNote.body), '', formNote.body);
 		}
 	}, [formNote.body]);
 
@@ -206,20 +213,16 @@ export default function useFormNote(dependencies: HookDependencies) {
 	}, [onResourceChange]);
 
 	useEffect(() => {
-		if (previousNoteId !== formNote.id) {
-			void onResourceChange();
-		}
-	}, [previousNoteId, formNote.id, onResourceChange]);
-
-	useEffect(() => {
 		let cancelled = false;
 
 		async function runEffect() {
-			const r = await attachedResources(formNote.body);
-			if (cancelled) return;
-			setResourceInfos((previous: ResourceInfos) => {
-				return resourceInfosChanged(previous, r) ? r : previous;
-			});
+			const isNoteChanged = resourceInfosDesc.current.id !== formNote.id;
+			if (isNoteChanged || resourceInfosDesc.current.body !== formNote.body) {
+				if (isNoteChanged) clearResourceCache();
+				const r = await attachedResources(formNote.body);
+				if (cancelled) return;
+				updateResourceInfos(r, formNote.id, formNote.body);
+			}
 		}
 
 		void runEffect();
@@ -227,7 +230,7 @@ export default function useFormNote(dependencies: HookDependencies) {
 		return () => {
 			cancelled = true;
 		};
-	}, [formNote.body]);
+	}, [formNote.id, formNote.body]);
 
 	return { isNewNote, formNote, setFormNote, resourceInfos };
 }
