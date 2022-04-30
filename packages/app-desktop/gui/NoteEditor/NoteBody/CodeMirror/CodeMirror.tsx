@@ -259,7 +259,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 				return commandOutput;
 			},
 		};
-	}, [props.content, props.visiblePanes, addListItem, wrapSelectionWithStrings, setEditorPercentScroll, setViewerPercentScroll, resetScroll, renderedBody]);
+	}, [props.content, props.visiblePanes, addListItem, wrapSelectionWithStrings, setEditorPercentScroll, setViewerPercentScroll, resetScroll]);
 
 	const onEditorPaste = useCallback(async (event: any = null) => {
 		const resourceMds = await handlePasteEvent(event);
