@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
 "PO-Revision-Date: \n"
-"Last-Translator: Alexander Hagen Huse <ahh@keemail.me>\n"
+"Last-Translator: Mats Estensen <code@mxe.no>\n"
 "Language-Team: \n"
 "Language: nb_NO\n"
 "MIME-Version: 1.0\n"
@@ -2309,18 +2309,16 @@ msgstr "Skriv inn masterpassordet"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:278
 #: packages/app-mobile/components/screens/encryption-config.tsx:211
-#, fuzzy
 msgid "Master password:"
-msgstr "Skriv inn masterpassordet:"
+msgstr "Masterpassord:"
 
 #: packages/lib/models/Setting.ts:690
 msgid "Max concurrent connections"
 msgstr "Maksimalt samtidige tilkoblinger"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:324
-#, fuzzy
 msgid "Missing keys"
-msgstr "Mangler masternøkler"
+msgstr "Mangler nøkler"
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:271
 msgid "Missing Master Keys"
@@ -2905,15 +2903,15 @@ msgstr "Personvernerklæring"
 
 #: packages/server/src/services/TaskService.ts:35
 msgid "Process failed payment subscriptions"
-msgstr ""
+msgstr "Behandle feilende betalingsavtaler"
 
 #: packages/server/src/services/TaskService.ts:33
 msgid "Process oversized accounts"
-msgstr ""
+msgstr "Prosesser for store brukerkontoer"
 
 #: packages/server/src/services/TaskService.ts:38
 msgid "Process user deletions"
-msgstr ""
+msgstr "Behandle brukerslettinger"
 
 #: packages/server/src/routes/admin/users.ts:168
 msgid "Profile"
@@ -3105,9 +3103,8 @@ msgid "S3 access key"
 msgstr "AWS-nøkkel"
 
 #: packages/lib/models/Setting.ts:507
-#, fuzzy
 msgid "S3 bucket"
-msgstr "AWS S3 bucket"
+msgstr "S3-bøtte"
 
 #: packages/lib/models/Setting.ts:536
 msgid "S3 region"
@@ -4560,7 +4557,6 @@ msgstr "Zoom ut"
 #~ msgid "Delete these notes?"
 #~ msgstr "Slett disse notatene?"
 
-#, javascript-format
 #~ msgid "%s %s (%s)"
 #~ msgstr "%s %s (%s)"
 
@@ -4661,7 +4657,6 @@ msgstr "Zoom ut"
 #~ msgid "Notebook properties"
 #~ msgstr "Notatbokegenskaper"
 
-#, javascript-format
 #~ msgid "This file could not be opened: %s"
 #~ msgstr "Filen kunne ikke åpnes: %s"
 
