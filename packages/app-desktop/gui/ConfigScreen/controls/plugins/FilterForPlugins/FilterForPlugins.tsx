@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { themeStyle } from '@joplin/lib/theme';
 
-interface props {
+interface FilterProps {
     themeId: number;
     setFilterValue: Function;
 	onSearchButtonClick: Function;
 }
 
-export default function FilterForPlugins(props: props) {
+export default function FilterForPlugins(props: FilterProps) {
 
 	const theme = themeStyle(props.themeId);
 
@@ -19,7 +19,6 @@ export default function FilterForPlugins(props: props) {
 	};
 
 	return (
-
 		<div className="filter-for-plugins" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} onClick={event => props.setFilterValue((event.target as HTMLInputElement).value)}>
 			<select name="" id="filter-select" style={{ backgroundColor: theme.backgroundColor, color: theme.color }}>
 				{filterOptions.map((filterOption) => {

@@ -1,4 +1,4 @@
-export function pluginCategories() {
+export default function pluginCategories() {
 type pluginCategory = {
 	[key: string]: string;
 };
@@ -37,10 +37,10 @@ const pluginCategoriesOptions: pluginCategory = {
 	'Automatic Backlinks to note': 'personal knowledge management',
 	'Copy Anchor Link': 'personal knowledge management',
 	'Copy link to active note': 'personal knowledge management',
-	'GitHub Theme': 'themes', 
+	'GitHub Theme': 'themes',
 	'macOS theme': 'themes',
 	'White Theme': 'themes',
-	'ABC Sheet Music Plugin':'viewer',
+	'ABC Sheet Music Plugin': 'viewer',
 	'Admonition markdown extension': 'viewer',
 	'Better Markdown Viewer': 'viewer',
 	'Embed Search': 'search',

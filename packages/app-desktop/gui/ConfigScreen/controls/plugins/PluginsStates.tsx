@@ -178,22 +178,22 @@ export default function(props: Props) {
 		props.onChange({ value: pluginService.serializePluginSettings(newSettings) });
 	}, [pluginSettings, props.onChange]);
 
-	const onInstall = useCallback(async () => {
-		const result = await bridge().showOpenDialog({
-			filters: [{ name: 'Joplin Plugin Archive', extensions: ['jpl'] }],
-		});
+	// const onInstall = useCallback(async () => {
+	// 	const result = await bridge().showOpenDialog({
+	// 		filters: [{ name: 'Joplin Plugin Archive', extensions: ['jpl'] }],
+	// 	});
 
-		const filePath = result && result.length ? result[0] : null;
-		if (!filePath) return;
+	// 	const filePath = result && result.length ? result[0] : null;
+	// 	if (!filePath) return;
 
-		const plugin = await pluginService.installPlugin(filePath);
+	// 	const plugin = await pluginService.installPlugin(filePath);
 
-		const newSettings = produce(pluginSettings, (draft: PluginSettings) => {
-			draft[plugin.manifest.id] = defaultPluginSetting();
-		});
+	// 	const newSettings = produce(pluginSettings, (draft: PluginSettings) => {
+	// 		draft[plugin.manifest.id] = defaultPluginSetting();
+	// 	});
 
-		props.onChange({ value: pluginService.serializePluginSettings(newSettings) });
-	}, [pluginSettings, props.onChange]);
+	// 	props.onChange({ value: pluginService.serializePluginSettings(newSettings) });
+	// }, [pluginSettings, props.onChange]);
 
 	const onBrowsePlugins = useCallback(() => {
 		void bridge().openExternal('https://github.com/joplin/plugins/blob/master/README.md#plugins');

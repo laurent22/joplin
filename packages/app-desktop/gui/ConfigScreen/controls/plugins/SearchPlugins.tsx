@@ -12,7 +12,6 @@ import useOnInstallHandler from './useOnInstallHandler';
 import { themeStyle } from '@joplin/lib/theme';
 import Button, { ButtonLevel, ButtonSize } from '../../../Button/Button';
 import FilterForPlugins from './FilterForPlugins/FilterForPlugins';
-import bridge from '../../../../bridge';
 
 const Root = styled.div`
 `;
@@ -56,7 +55,7 @@ export default function(props: Props) {
 
 	const [filterValue, setFilterValue] = useState<string>('');
 
-	const onInstall = useOnInstallHandler(setInstallingPluginIds, props.pluginSettings, props.repoApi, props.onPluginSettingsChange, false);
+	const 	onInstall = useOnInstallHandler(setInstallingPluginIds, props.pluginSettings, props.repoApi, props.onPluginSettingsChange, false);
 
 	useEffect(() => {
 		setSearchResultCount(null);
@@ -90,9 +89,9 @@ export default function(props: Props) {
 		props.onSearchQueryChange({ value: '' });
 	}, []);
 
-	const onBrowsePlugins = useCallback(() => {
-		void bridge().openExternal('https://github.com/joplin/plugins/blob/master/README.md#plugins');
-	}, []);
+	// const onBrowsePlugins = useCallback(() => {
+	// 	void bridge().openExternal('https://github.com/joplin/plugins/blob/master/README.md#plugins');
+	// }, []);
 
 	// ----- to be implemented -----
 
