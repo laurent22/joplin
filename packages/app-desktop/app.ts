@@ -9,7 +9,7 @@ import shim from '@joplin/lib/shim';
 import AlarmService from '@joplin/lib/services/AlarmService';
 import AlarmServiceDriverNode from '@joplin/lib/services/AlarmServiceDriverNode';
 import Logger, { TargetType } from '@joplin/lib/Logger';
-import Setting, { Env } from '@joplin/lib/models/Setting';
+import Setting from '@joplin/lib/models/Setting';
 import actionApi from '@joplin/lib/services/rest/actionApi.desktop';
 import BaseApplication from '@joplin/lib/BaseApplication';
 import DebugService from '@joplin/lib/debug/DebugService';
@@ -241,7 +241,7 @@ class Application extends BaseApplication {
 				const files = await shim.fsDriver().readDirStats(templatesDir);
 				for (const file of files) {
 					if (file.path.endsWith('.md')) {
-						// There is atleast one template.
+						// There is at least one template.
 						this.store().dispatch({
 							type: 'CONTAINS_LEGACY_TEMPLATES',
 						});
@@ -324,9 +324,10 @@ class Application extends BaseApplication {
 		}, 500);
 	}
 
-	private crashDetectionHandler() {
-		if (Setting.value('env') === Env.Dev) return;
-
+	public crashDetectionHandler() {
+		// This handler conflicts with the single instance behaviour, so it's
+		// not used for now.
+		// https://discourse.joplinapp.org/t/pre-release-v2-8-is-now-available-updated-27-april/25158/56?u=laurent
 		if (!Setting.value('wasClosedSuccessfully')) {
 			const answer = confirm(_('The application did not close properly. Would you like to start in safe mode?'));
 			Setting.setValue('isSafeMode', !!answer);
@@ -342,7 +343,7 @@ class Application extends BaseApplication {
 
 		argv = await super.start(argv);
 
-		this.crashDetectionHandler();
+		// this.crashDetectionHandler();
 
 		await this.applySettingsSideEffects();
 
