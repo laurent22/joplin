@@ -211,7 +211,7 @@ export default class RepositoryApi {
 	}
 
 	public async manifests(): Promise<PluginManifest[]> {
-		if (!this.manifests_) throw new Error('Manifests have no been loaded!');
+		if (!this.manifests_) throw new Error('Manifests have not been loaded!');
 		return this.manifests_;
 	}
 

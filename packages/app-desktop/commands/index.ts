@@ -4,6 +4,7 @@ import * as editProfileConfig from './editProfileConfig';
 import * as exportFolders from './exportFolders';
 import * as exportNotes from './exportNotes';
 import * as focusElement from './focusElement';
+import * as installPlugin from './installPlugin';
 import * as openProfileDirectory from './openProfileDirectory';
 import * as replaceMisspelling from './replaceMisspelling';
 import * as restoreNoteRevision from './restoreNoteRevision';
@@ -22,6 +23,7 @@ const index:any[] = [
 	exportFolders,
 	exportNotes,
 	focusElement,
+	installPlugin,
 	openProfileDirectory,
 	replaceMisspelling,
 	restoreNoteRevision,

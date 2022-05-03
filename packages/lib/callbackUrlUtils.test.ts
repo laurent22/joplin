@@ -30,6 +30,12 @@ describe('callbackUrlUtils', function() {
 		expect(tagUrl).toBe('joplin://x-callback-url/openTag?id=123456');
 	});
 
+	it('should build valid install plugin callback urls', () => {
+		const installPluginUrl = callbackUrlUtils.getTagCallbackUrl('test.plugin-joplin');
+		expect(callbackUrlUtils.isCallbackUrl(installPluginUrl)).toBe(true);
+		expect(installPluginUrl).toBe('joplin://x-callback-url/openTag?id=test.plugin-joplin');
+	});
+
 	it('should parse note callback urls', () => {
 		const parsed = callbackUrlUtils.parseCallbackUrl('joplin://x-callback-url/openNote?id=123456');
 		expect(parsed.command).toBe(callbackUrlUtils.CallbackUrlCommand.OpenNote);
@@ -46,6 +52,12 @@ describe('callbackUrlUtils', function() {
 		const parsed = callbackUrlUtils.parseCallbackUrl('joplin://x-callback-url/openTag?id=123456');
 		expect(parsed.command).toBe(callbackUrlUtils.CallbackUrlCommand.OpenTag);
 		expect(parsed.params).toStrictEqual({ id: '123456' });
+	});
+
+	it('should parse install plugin callback urls', () => {
+		const parsed = callbackUrlUtils.parseCallbackUrl('joplin://x-callback-url/installPlugin?id=test.plugin-joplin');
+		expect(parsed.command).toBe(callbackUrlUtils.CallbackUrlCommand.InstallPlugin);
+		expect(parsed.params).toStrictEqual({ id: 'test.plugin-joplin' });
 	});
 
 	it('should throw an error on invalid input', () => {

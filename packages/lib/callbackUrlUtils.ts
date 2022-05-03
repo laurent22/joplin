@@ -16,10 +16,15 @@ export function getTagCallbackUrl(tagId: string) {
 	return `joplin://x-callback-url/openTag?id=${encodeURIComponent(tagId)}`;
 }
 
+export function installPluginUrl(pluginId: string) {
+	return `joplin://x-callback-url/installPlugin?id=${encodeURIComponent(pluginId)}`;
+}
+
 export const enum CallbackUrlCommand {
     OpenNote = 'openNote',
     OpenFolder = 'openFolder',
     OpenTag = 'openTag',
+	InstallPlugin = 'installPlugin',
 }
 
 export interface CallbackUrlInfo {

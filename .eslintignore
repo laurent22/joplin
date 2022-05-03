@@ -163,6 +163,9 @@ packages/app-desktop/commands/focusElement.js.map
 packages/app-desktop/commands/index.d.ts
 packages/app-desktop/commands/index.js
 packages/app-desktop/commands/index.js.map
+packages/app-desktop/commands/installPlugin.d.ts
+packages/app-desktop/commands/installPlugin.js
+packages/app-desktop/commands/installPlugin.js.map
 packages/app-desktop/commands/openProfileDirectory.d.ts
 packages/app-desktop/commands/openProfileDirectory.js
 packages/app-desktop/commands/openProfileDirectory.js.map
