@@ -169,7 +169,7 @@ export default class RepositoryApi {
 		query = query.toLowerCase().trim();
 
 		const manifests = await this.manifests();
-		const output: PluginManifest[] = [];
+		let output: PluginManifest[] = [];
 
 		for (const manifest of manifests) {
 			for (const field of ['name', 'description']) {
@@ -180,6 +180,10 @@ export default class RepositoryApi {
 					output.push(manifest);
 					break;
 				}
+			}
+			if (manifest.id === query) {
+				output = [];
+				output.push(manifest);
 			}
 		}
 

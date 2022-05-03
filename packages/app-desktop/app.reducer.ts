@@ -33,6 +33,7 @@ export interface AppState extends State {
 	focusedField: string;
 	layoutMoveMode: boolean;
 	startupPluginsLoaded: boolean;
+	pluginSearchQuery: string;
 
 	// Extra reducer keys go here
 	watchedResources: any;
@@ -59,6 +60,7 @@ export function createAppDefaultState(windowContentSize: any, resourceEditWatche
 		layoutMoveMode: false,
 		mainLayout: null,
 		startupPluginsLoaded: false,
+		pluginSearchQuery: '',
 		dialogs: [],
 		...resourceEditWatcherDefaultState,
 	};
@@ -66,7 +68,6 @@ export function createAppDefaultState(windowContentSize: any, resourceEditWatche
 
 export default function(state: AppState, action: any) {
 	let newState = state;
-
 	try {
 		switch (action.type) {
 
@@ -308,6 +309,10 @@ export default function(state: AppState, action: any) {
 			};
 			break;
 
+		case 'PLUGIN_SEARCH_QUERY':
+			newState = Object.assign({}, state);
+			newState.pluginSearchQuery = action.pluginId;
+			break;
 		}
 	} catch (error) {
 		error.message = `In reducer: ${error.message} Action: ${JSON.stringify(action)}`;

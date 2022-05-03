@@ -16,6 +16,8 @@ import useOnInstallHandler, { OnPluginSettingChangeEvent } from './useOnInstallH
 import Logger from '@joplin/lib/Logger';
 import StyledMessage from '../../../style/StyledMessage';
 import StyledLink from '../../../style/StyledLink';
+import app from '../../../../app';
+
 const { space } = require('styled-system');
 
 const logger = Logger.create('PluginState');
@@ -98,6 +100,11 @@ export default function(props: Props) {
 	const [fetchManifestTime, setFetchManifestTime] = useState<number>(Date.now());
 
 	const pluginService = PluginService.instance();
+	const store = app().store();
+
+	useEffect(()=>{
+		setSearchQuery(store.getState().pluginSearchQuery);
+	},[store.getState().pluginSearchQuery]);
 
 	const pluginSettings = useMemo(() => {
 		return pluginService.unserializePluginSettings(props.value);
