@@ -305,7 +305,7 @@ class Setting extends BaseModel {
 		return BaseModel.TYPE_SETTING;
 	}
 
-	static async reset() {
+	public static async reset() {
 		if (this.saveTimeoutId_) shim.clearTimeout(this.saveTimeoutId_);
 		if (this.changeEventTimeoutId_) shim.clearTimeout(this.changeEventTimeoutId_);
 
@@ -316,6 +316,7 @@ class Setting extends BaseModel {
 		this.cache_ = [];
 		this.customMetadata_ = {};
 		this.fileHandler_ = null;
+		this.rootFileHandler_ = null;
 	}
 
 	public static get settingFilePath(): string {
@@ -2156,7 +2157,17 @@ class Setting extends BaseModel {
 		if (this.canUseFileStorage()) {
 			if (this.value('isSubProfile')) {
 				const { globalSettings, localSettings } = splitGlobalAndLocalSettings(valuesForFile);
-				await this.rootFileHandler.save(globalSettings);
+				const currentGlobalSettings = await this.rootFileHandler.load();
+
+				// When saving to the root setting file, we preserve the
+				// existing settings, which are specific to the root profile,
+				// and add the global settings.
+
+				await this.rootFileHandler.save({
+					...currentGlobalSettings,
+					...globalSettings,
+				});
+
 				await this.fileHandler.save(localSettings);
 			} else {
 				await this.fileHandler.save(valuesForFile);
