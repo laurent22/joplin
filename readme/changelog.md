@@ -11,6 +11,7 @@
 - Improved: More permissive plugin back-off rules ([22ae50c](https://github.com/laurent22/joplin/commit/22ae50c))
 - Fixed: Fixed color of links within list in Markdown editor ([#6447](https://github.com/laurent22/joplin/issues/6447) by Hieu-Thi Luong)
 - Fixed: Fixed getting geolocation for new notes ([86179bd](https://github.com/laurent22/joplin/commit/86179bd))
+- Security: Fixed disallowed tag XSS ([774c207](https://github.com/laurent22/joplin/commit/774c207)) (Discovered by @hexodotsh)
 
 ## [v2.8.4](https://github.com/laurent22/joplin/releases/tag/v2.8.4) (Pre-release) - 2022-04-19T18:00:09Z
 
