@@ -83,16 +83,15 @@ export default class SyncTargetRegistry {
 		}
 
 		return output;
-
-		// const sorted: Record<string, string> = {};
-		// for (const o of syncTargetOrder) {
-		// 	sorted[o] = output[o];
-		// }
-
-		// for (const [name, value] of Object.entries(output)) {
-		// 	if (!sorted[name]) sorted[name] = value;
-		// }
-
-		// return sorted;
 	}
+
+	public static optionsOrder(): string[] {
+		return [
+			'0', // None
+			'10', // Joplin Cloud
+			'7', // Dropbox
+			'3', // OneDrive
+		];
+	}
+
 }
