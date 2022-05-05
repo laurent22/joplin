@@ -17,6 +17,8 @@ msgstr ""
 "X-Generator: Poedit 3.0\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:560
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -297,9 +299,8 @@ msgid "Also displays unset and hidden config variables."
 msgstr "Također prikazuje nepostavljene i skrivene varijable konfiguracije."
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:203
-#, fuzzy
 msgid "Also publish linked notes"
-msgstr "Poništi objavljivanje bilješke"
+msgstr "Također objavi povezane bilješke"
 
 #: packages/lib/models/Setting.ts:712
 msgid "Always"
@@ -866,18 +867,16 @@ msgstr ""
 "ponovo kad uspostaviš vezu s internetom."
 
 #: packages/app-desktop/gui/PromptDialog.min.js:235
-#, fuzzy
 msgid "Create"
-msgstr "Stvoreno"
+msgstr "Stvori"
 
 #: packages/app-mobile/components/note-list.js:101
 msgid "Create a notebook"
 msgstr "Stvori bilježnicu"
 
 #: packages/app-desktop/gui/MainScreen/commands/addProfile.ts:9
-#, fuzzy
 msgid "Create new profile..."
-msgstr "Stvara novu bilješku."
+msgstr "Stvori novi profil …"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:161
 msgid "Create notebook"
@@ -1324,7 +1323,7 @@ msgstr "Uredi bilježnicu"
 
 #: packages/app-desktop/commands/editProfileConfig.ts:9
 msgid "Edit profile configuration..."
-msgstr ""
+msgstr "Uredi konfiguraciju profila …"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:138
 #: packages/lib/models/Setting.ts:875 packages/lib/models/Setting.ts:876
@@ -1354,9 +1353,8 @@ msgstr "Obitelj fontova fiksne širine uređivača"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:100
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:96
-#, fuzzy
 msgid "Editor: %s"
-msgstr "Uređivač"
+msgstr "Uređivač: %s"
 
 #: packages/app-cli/app/command-ls.js:31
 msgid "Either \"text\" or \"json\""
@@ -1669,9 +1667,8 @@ msgid "File system"
 msgstr "Datotečni sustav"
 
 #: packages/app-mobile/components/screens/NoteTagsDialog.js:190
-#, fuzzy
 msgid "Filter tags"
-msgstr "Nove oznake:"
+msgstr "Filtriraj oznake"
 
 #: packages/app-desktop/gui/ExtensionBadge.min.js:10
 msgid "Firefox Extension"
@@ -2795,7 +2792,7 @@ msgstr "Dozvola za korištenje kamere"
 msgid ""
 "Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list "
 "below."
-msgstr ""
+msgstr "Nastavi pritiskom na „%s” ili postavi lozinke u donjem popisu „%s”."
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:65
 msgid ""
@@ -2953,9 +2950,8 @@ msgid "Profile"
 msgstr "Profil"
 
 #: packages/app-desktop/gui/MainScreen/commands/addProfile.ts:17
-#, fuzzy
 msgid "Profile name:"
-msgstr "Profil"
+msgstr "Ime profila:"
 
 #: packages/lib/versionInfo.ts:26
 msgid "Profile Version: %s"
@@ -3184,9 +3180,8 @@ msgstr "Spremi upozorenje"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:100
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:93
-#, fuzzy
 msgid "Save as %s"
-msgstr "Spremi kao …"
+msgstr "Spremi kao %s"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:80
 msgid "Save as..."
@@ -3556,9 +3551,8 @@ msgid "Switch between note and to-do type"
 msgstr "Promijeni u bilješku ili zadatak"
 
 #: packages/app-desktop/gui/MenuBar.tsx:437
-#, fuzzy
 msgid "Switch profile"
-msgstr "Izvezi profil"
+msgstr "Promijeni profil"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:105
 msgid "Switch to note type"
@@ -3567,9 +3561,8 @@ msgstr "Promijeni u bilješku"
 #: packages/app-desktop/commands/switchProfile1.ts:7
 #: packages/app-desktop/commands/switchProfile2.ts:7
 #: packages/app-desktop/commands/switchProfile3.ts:7
-#, fuzzy
 msgid "Switch to profile %d"
-msgstr "Promijeni u bilješku"
+msgstr "Promijeni u profil %d"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:114
 msgid "Switch to to-do type"
@@ -3666,7 +3659,7 @@ msgstr "Tabloid"
 
 #: packages/app-mobile/components/screens/NoteTagsDialog.js:179
 msgid "tag1, tag2, ..."
-msgstr ""
+msgstr "oznaka1, oznaka2, …"
 
 #: packages/app-cli/app/command-import.js:52
 #: packages/app-desktop/gui/ImportScreen.min.js:73
@@ -3709,6 +3702,7 @@ msgstr ""
 msgid ""
 "The application did not close properly. Would you like to start in safe mode?"
 msgstr ""
+"Program se nije pravilno zatvorio. Želiš li početi u sigurnom načinu rada?"
 
 #: packages/lib/onedrive-api-node-utils.js:86
 msgid ""
@@ -4551,10 +4545,8 @@ msgid "Your data is going to be re-encrypted and synced again."
 msgstr "Tvoji će se podaci ponovo šifrirati i sinkronizirati."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:271
-#, fuzzy
 msgid "Your password is needed to decrypt some of your data."
-msgstr ""
-"Tvoja glavna lozinka je potrebna za dešifriranje nekih tvojih podataka."
+msgstr "Tvoja lozinka je potrebna za dešifriranje nekih tvojih podataka."
 
 #: packages/app-cli/app/command-sync.ts:242
 msgid ""
