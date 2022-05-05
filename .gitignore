@@ -2052,6 +2052,9 @@ packages/tools/release-server.js.map
 packages/tools/setupNewRelease.d.ts
 packages/tools/setupNewRelease.js
 packages/tools/setupNewRelease.js.map
+packages/tools/spellcheck.d.ts
+packages/tools/spellcheck.js
+packages/tools/spellcheck.js.map
 packages/tools/tagServerLatest.d.ts
 packages/tools/tagServerLatest.js
 packages/tools/tagServerLatest.js.map
