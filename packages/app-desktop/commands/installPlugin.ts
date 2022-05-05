@@ -15,11 +15,8 @@ export const runtime = (): CommandRuntime => {
 				routeName: 'Config',
 				props: {
 					defaultSection: 'plugins',
+					pluginId,
 				},
-			});
-			store.dispatch({
-				type: 'PLUGIN_SEARCH_QUERY',
-				pluginId,
 			});
 		},
 	};

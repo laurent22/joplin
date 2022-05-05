@@ -33,7 +33,6 @@ export interface AppState extends State {
 	focusedField: string;
 	layoutMoveMode: boolean;
 	startupPluginsLoaded: boolean;
-	pluginSearchQuery: string;
 
 	// Extra reducer keys go here
 	watchedResources: any;
@@ -60,7 +59,6 @@ export function createAppDefaultState(windowContentSize: any, resourceEditWatche
 		layoutMoveMode: false,
 		mainLayout: null,
 		startupPluginsLoaded: false,
-		pluginSearchQuery: '',
 		dialogs: [],
 		...resourceEditWatcherDefaultState,
 	};
@@ -94,6 +92,10 @@ export default function(state: AppState, action: any) {
 					if (!newAction) break;
 
 					action = newAction;
+				}
+
+				if (!goingBack && currentRoute.props.pluginId) {
+					newState.route.props.pluginId = currentRoute.props.pluginId;
 				}
 
 				if (!goingBack) newNavHistory.push(currentRoute);
@@ -309,10 +311,6 @@ export default function(state: AppState, action: any) {
 			};
 			break;
 
-		case 'PLUGIN_SEARCH_QUERY':
-			newState = Object.assign({}, state);
-			newState.pluginSearchQuery = action.pluginId;
-			break;
 		}
 	} catch (error) {
 		error.message = `In reducer: ${error.message} Action: ${JSON.stringify(action)}`;

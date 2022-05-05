@@ -181,7 +181,7 @@ export default class RepositoryApi {
 					break;
 				}
 			}
-			if (manifest.id === query) {
+			if (manifest.id.toLowerCase() === query) {
 				output = [];
 				output.push(manifest);
 			}

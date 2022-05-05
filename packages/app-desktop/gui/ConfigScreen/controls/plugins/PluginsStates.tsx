@@ -16,7 +16,8 @@ import useOnInstallHandler, { OnPluginSettingChangeEvent } from './useOnInstallH
 import Logger from '@joplin/lib/Logger';
 import StyledMessage from '../../../style/StyledMessage';
 import StyledLink from '../../../style/StyledLink';
-import app from '../../../../app';
+import { AppState } from '../../../../app.reducer';
+import { connect } from 'react-redux';
 
 const { space } = require('styled-system');
 
@@ -51,6 +52,7 @@ interface Props {
 	renderLabel: Function;
 	renderDescription: Function;
 	renderHeader: Function;
+	pluginSearchQuery: string;
 }
 
 let repoApi_: RepositoryApi = null;
@@ -91,7 +93,7 @@ function usePluginItems(plugins: Plugins, settings: PluginSettings): PluginItem[
 	}, [plugins, settings]);
 }
 
-export default function(props: Props) {
+function PluginsStates(props: Props) {
 	const [searchQuery, setSearchQuery] = useState('');
 	const [manifestsLoaded, setManifestsLoaded] = useState<boolean>(false);
 	const [updatingPluginsIds, setUpdatingPluginIds] = useState<Record<string, boolean>>({});
@@ -100,11 +102,10 @@ export default function(props: Props) {
 	const [fetchManifestTime, setFetchManifestTime] = useState<number>(Date.now());
 
 	const pluginService = PluginService.instance();
-	const store = app().store();
 
 	useEffect(()=>{
-		setSearchQuery(store.getState().pluginSearchQuery);
-	},[store.getState().pluginSearchQuery]);
+		setSearchQuery(props.pluginSearchQuery);
+	},[props.pluginSearchQuery]);
 
 	const pluginSettings = useMemo(() => {
 		return pluginService.unserializePluginSettings(props.value);
@@ -333,3 +334,11 @@ export default function(props: Props) {
 		</Root>
 	);
 }
+
+const mapStateToProps = (state: AppState) => {
+	return {
+		pluginSearchQuery: state.route.props?.pluginId ?? '',
+	};
+};
+
+export default connect(mapStateToProps)(PluginsStates);

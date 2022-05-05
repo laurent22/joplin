@@ -16,7 +16,7 @@ export function getTagCallbackUrl(tagId: string) {
 	return `joplin://x-callback-url/openTag?id=${encodeURIComponent(tagId)}`;
 }
 
-export function installPluginUrl(pluginId: string) {
+export function installPluginCallbackUrl(pluginId: string) {
 	return `joplin://x-callback-url/installPlugin?id=${encodeURIComponent(pluginId)}`;
 }
 

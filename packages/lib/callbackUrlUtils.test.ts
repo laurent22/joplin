@@ -31,9 +31,9 @@ describe('callbackUrlUtils', function() {
 	});
 
 	it('should build valid install plugin callback urls', () => {
-		const installPluginUrl = callbackUrlUtils.getTagCallbackUrl('test.plugin-joplin');
+		const installPluginUrl = callbackUrlUtils.installPluginCallbackUrl('test.plugin-joplin');
 		expect(callbackUrlUtils.isCallbackUrl(installPluginUrl)).toBe(true);
-		expect(installPluginUrl).toBe('joplin://x-callback-url/openTag?id=test.plugin-joplin');
+		expect(installPluginUrl).toBe('joplin://x-callback-url/installPlugin?id=test.plugin-joplin');
 	});
 
 	it('should parse note callback urls', () => {
