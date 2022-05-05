@@ -61,16 +61,15 @@ const markdownUtils = {
 		return url;
 	},
 
-	prependBaseUrl(md: string, baseUrl: string, test?: Function) {
+	prependBaseUrl(md: string, baseUrl: string) {
 		// eslint-disable-next-line no-useless-escape
 		return md.replace(/(\]\()([^\s\)]+)(.*?\))/g, (_match: any, before: string, url: string, after: string) => {
-			if (test && !test(url)) return `${before}${url}${after}`;
 			return before + urlUtils.prependBaseUrl(url, baseUrl) + after;
 		});
 	},
 
 	// Returns the **encoded** URLs, so to be useful they should be decoded again before use.
-	extractFileUrls(md: string, onlyImage: boolean = false): Array<string> {
+	extractFileUrls(md: string, onlyType: string = null): Array<string> {
 		const markdownIt = new MarkdownIt();
 		markdownIt.validateLink = validateLinks; // Necessary to support file:/// links
 
@@ -78,10 +77,14 @@ const markdownUtils = {
 		const tokens = markdownIt.parse(md, env);
 		const output: string[] = [];
 
+		let linkType = onlyType || 'any';
+		if (linkType === 'pdf') linkType = 'link_open';
+
 		const searchUrls = (tokens: any[]) => {
 			for (let i = 0; i < tokens.length; i++) {
 				const token = tokens[i];
-				if ((onlyImage === true && token.type === 'image') || (onlyImage === false && (token.type === 'image' || token.type === 'link_open'))) {
+				if ((linkType === 'any' && (token.type === 'link_open' || token.type === 'image')) || (linkType != 'any' && token.type === linkType)) {
+					if (onlyType === 'pdf' && !(tokens.length > i + 1 && tokens[i + 1].type === 'text' && tokens[i + 1].content === 'embedded_pdf')) continue;
 					for (let j = 0; j < token.attrs.length; j++) {
 						const a = token.attrs[j];
 						if ((a[0] === 'src' || a[0] === 'href') && a.length >= 2 && a[1]) {
@@ -108,11 +111,11 @@ const markdownUtils = {
 	},
 
 	extractImageUrls(md: string) {
-		return markdownUtils.extractFileUrls(md,true);
+		return markdownUtils.extractFileUrls(md, 'image');
 	},
 
 	extractPdfUrls(md: string) {
-		return markdownUtils.extractFileUrls(md, false).filter((url) => url.startsWith('_pdf:')).map((url) => url.slice(5));
+		return markdownUtils.extractFileUrls(md, 'pdf');
 	},
 
 	// The match results has 5 items

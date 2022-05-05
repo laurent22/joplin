@@ -436,13 +436,18 @@ describe('services_rest_Api', function() {
 		const tests = [
 			{
 				language: MarkupToHtml.MARKUP_LANGUAGE_HTML,
-				body: '<div> <img src="https://example.com/img.png" /> <embed src="https://example.com/sample.pdf" type="application/pdf" /> </div>',
-				result: ['https://example.com/img.png','https://example.com/sample.pdf'],
+				body: '<div> <img src="https://example.com/img.png" /> <embed src="https://example.com/sample.pdf"/> <object data="https://example.com/file.PDF"></object> </div>',
+				result: ['https://example.com/img.png', 'https://example.com/sample.pdf', 'https://example.com/file.PDF'],
 			},
 			{
 				language: MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN,
-				body: 'test text \n ![img 1](https://example.com/img1.png) [pdf 1](_pdf:https://example.com/sample1.pdf)',
-				result: ['https://example.com/img1.png','https://example.com/sample1.pdf'],
+				body: 'test text \n ![img 1](https://example.com/img1.png) [embedded_pdf](https://example.com/sample1.pdf) [embedded_pdf](https://example.com/file.PDF)',
+				result: ['https://example.com/img1.png', 'https://example.com/sample1.pdf', 'https://example.com/file.PDF'],
+			},
+			{
+				language: MarkupToHtml.MARKUP_LANGUAGE_HTML,
+				body: '<div> <embed src="https://example.com/sample"/> <embed /> <object data="https://example.com/file.pdfff"></object> <a href="https://test.com/file.pdf">Link</a> </div>',
+				result: [],
 			},
 		];
 		tests.forEach((test) => {

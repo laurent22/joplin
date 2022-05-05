@@ -204,9 +204,14 @@
 					}
 				}
 
-				if (nodeName === 'embed' || nodeName === 'object') {
+				if (nodeName === 'embed') {
 					const src = absoluteUrl(node.src);
 					node.setAttribute('src', src);
+				}
+
+				if (nodeName === 'object') {
+					const data = absoluteUrl(node.data);
+					node.setAttribute('data', data);
 				}
 
 				cleanUpElement(convertToMarkup, node, imageSizes, imageIndexes);

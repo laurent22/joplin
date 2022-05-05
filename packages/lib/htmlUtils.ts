@@ -7,7 +7,9 @@ const { escapeHtml } = require('./string-utils.js');
 // https://stackoverflow.com/a/16119722/561309
 const imageRegex = /<img([\s\S]*?)src=["']([\s\S]*?)["']([\s\S]*?)>/gi;
 const anchorRegex = /<a([\s\S]*?)href=["']([\s\S]*?)["']([\s\S]*?)>/gi;
-const pdfRegex = /<(embed|object)([\s\S]*?)src=["']([\s\S]*?)["']([\s\S]*?)>/gi;
+const embedRegex = /<embed([\s\S]*?)src=["']([\s\S]*?)["']([\s\S]*?)>/gi;
+const objectRegex = /<object([\s\S]*?)data=["']([\s\S]*?)["']([\s\S]*?)>/gi;
+const pdfUrlRegex = /[\s\S]*?\.pdf$/i;
 
 const selfClosingElements = [
 	'area',
@@ -45,13 +47,13 @@ class HtmlUtils {
 	}
 
 	// Returns the **encoded** URLs, so to be useful they should be decoded again before use.
-	private extractUrls(regex: RegExp, html: string, key = 2) {
+	private extractUrls(regex: RegExp, html: string, urlKey = 2) {
 		if (!html) return [];
 
 		const output = [];
 		let matches;
 		while ((matches = regex.exec(html))) {
-			output.push(matches[key]);
+			output.push(matches[urlKey]);
 		}
 
 		return output.filter(url => !!url);
@@ -64,7 +66,7 @@ class HtmlUtils {
 
 	// Returns the **encoded** URLs, so to be useful they should be decoded again before use.
 	public extractPdfUrls(html: string) {
-		return this.extractUrls(pdfRegex, html, 3).filter(url => url.endsWith('.pdf'));
+		return [...this.extractUrls(embedRegex, html), ...this.extractUrls(objectRegex, html)].filter(url => pdfUrlRegex.test(url));
 	}
 
 	// Returns the **encoded** URLs, so to be useful they should be decoded again before use.
@@ -93,19 +95,24 @@ class HtmlUtils {
 		});
 	}
 
-	public replacePdfUrls(html: string, callback: Function) {
+	public replaceEmbedUrls(html: string, callback: Function) {
 		if (!html) return '';
-		return html.replace(pdfRegex, (_v: string, _tag: string, _before: string, src: string, _after: string) => {
+		// We are adding the link as <a> since joplin disabled <embed>, <object> tags due to security reasons.
+		// See: CVE-2020-15930
+		html = html.replace(embedRegex, (_v: string, _before: string, src: string, _after: string) => {
 			const link = callback(src);
-			// We are adding the link as <a> since joplin disabled <embed> tag due to security reasons.
-			// See: CVE-2020-15930
-			return `<a href="${link}">${src}</a>`;
+			return `<a href="${link}">${escapeHtml(src)}</a>`;
 		});
+		html = html.replace(objectRegex, (_v: string, _before: string, src: string, _after: string) => {
+			const link = callback(src);
+			return `<a href="${link}">${escapeHtml(src)}</a>`;
+		});
+		return html;
 	}
 
 	public replaceMediaUrls(html: string, callback: Function) {
 		html = this.replaceImageUrls(html, callback);
-		html = this.replacePdfUrls(html, callback);
+		html = this.replaceEmbedUrls(html, callback);
 		return html;
 	}
 

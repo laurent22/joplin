@@ -89,7 +89,7 @@ async function requestNoteToNote(requestNote: any) {
 			output.body = await htmlToMdParser().parse(`<div>${requestNote.body_html}</div>`, {
 				baseUrl: baseUrl,
 				anchorNames: requestNote.anchor_names ? requestNote.anchor_names : [],
-				loadPdfs: true,
+				convertEmbeddedPdfsToLinks: true,
 			});
 			output.markup_language = MarkupToHtml.MARKUP_LANGUAGE_MARKDOWN;
 		}
@@ -266,8 +266,7 @@ function replaceUrlsByResources(markupLanguage: number, md: string, urls: any, i
 		// eslint-disable-next-line no-useless-escape
 		return md.replace(/(!?\[.*?\]\()([^\s\)]+)(.*?\))/g, (_match: any, before: string, url: string, after: string) => {
 			let type = 'link';
-			if (url.startsWith('_pdf:')) {
-				url = url.slice(5);
+			if (before.startsWith('[embedded_pdf]')) {
 				type = 'pdf';
 			} else if (before.startsWith('![')) {
 				type = 'image';
@@ -275,11 +274,14 @@ function replaceUrlsByResources(markupLanguage: number, md: string, urls: any, i
 
 			const urlInfo = urls[url];
 			if (type === 'link' || !urlInfo || !urlInfo.resource) return before + url + after;
-			if (!(urlInfo.originalUrl in imageSizesIndexes)) imageSizesIndexes[urlInfo.originalUrl] = 0;
 
 			const resourceUrl = Resource.internalUrl(urlInfo.resource);
-			const imageSizesCollection = imageSizes[urlInfo.originalUrl];
+			if (type === 'pdf') {
+				return `[${markdownUtils.escapeLinkUrl(url)}](${resourceUrl}${after}`;
+			}
 
+			if (!(urlInfo.originalUrl in imageSizesIndexes)) imageSizesIndexes[urlInfo.originalUrl] = 0;
+			const imageSizesCollection = imageSizes[urlInfo.originalUrl];
 			if (!imageSizesCollection) {
 				// Either its not an image or we don't know the size of the image
 				// In some cases, we won't find the image size information for that particular image URL. Normally
