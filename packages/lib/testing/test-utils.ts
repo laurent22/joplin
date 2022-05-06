@@ -255,6 +255,10 @@ async function afterAllCleanUp() {
 	}
 }
 
+const settingFilename = (id: number): string => {
+	return `settings-${id}.json`;
+};
+
 async function switchClient(id: number, options: any = null) {
 	options = Object.assign({}, { keychainEnabled: false }, options);
 
@@ -271,18 +275,19 @@ async function switchClient(id: number, options: any = null) {
 	BaseItem.revisionService_ = revisionServices_[id];
 
 	await Setting.reset();
-	Setting.settingFilename = `settings-${id}.json`;
+	Setting.settingFilename = settingFilename(id);
 
 	Setting.setConstant('profileDir', rootProfileDir);
 	Setting.setConstant('rootProfileDir', rootProfileDir);
 	Setting.setConstant('resourceDirName', resourceDirName(id));
 	Setting.setConstant('resourceDir', resourceDir(id));
 	Setting.setConstant('pluginDir', pluginDir(id));
+	Setting.setConstant('isSubProfile', false);
 
 	await loadKeychainServiceAndSettings(options.keychainEnabled ? KeychainServiceDriver : KeychainServiceDriverDummy);
 
 	Setting.setValue('sync.target', syncTargetId());
-	Setting.setValue('sync.wipeOutFailSafe', false); // To keep things simple, always disable fail-safe unless explicitely set in the test itself
+	Setting.setValue('sync.wipeOutFailSafe', false); // To keep things simple, always disable fail-safe unless explicitly set in the test itself
 
 	// More generally, this function should clear all data, and so that should
 	// include settings.json
@@ -336,6 +341,7 @@ async function setupDatabase(id: number = null, options: any = null) {
 
 	Setting.setConstant('profileDir', rootProfileDir);
 	Setting.setConstant('rootProfileDir', rootProfileDir);
+	Setting.setConstant('isSubProfile', false);
 
 	if (databases_[id]) {
 		BaseModel.setDb(databases_[id]);

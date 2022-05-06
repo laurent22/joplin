@@ -413,12 +413,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		if (md.isEnum) {
 			value = value.toString();
 
-			const items = [];
-			const settingOptions = md.options();
-			for (const k in settingOptions) {
-				if (!settingOptions.hasOwnProperty(k)) continue;
-				items.push({ label: settingOptions[k], value: k.toString() });
-			}
+			const items = Setting.enumOptionsToValueLabels(md.options(), md.optionsOrder ? md.optionsOrder() : []);
 
 			return (
 				<View key={key} style={{ flexDirection: 'column', borderBottomWidth: 1, borderBottomColor: theme.dividerColor }}>
