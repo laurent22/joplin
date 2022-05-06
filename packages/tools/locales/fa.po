@@ -45,7 +45,7 @@ msgstr ""
 msgid "(None)"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:369 packages/lib/models/Setting.ts:370
+#: packages/lib/models/Setting.ts:370 packages/lib/models/Setting.ts:371
 msgid "(wysiwyg: %s)"
 msgstr ""
 
@@ -80,20 +80,20 @@ msgstr "&ابزارها"
 msgid "&View"
 msgstr "&نما"
 
-#: packages/lib/models/Setting.ts:1417
+#: packages/lib/models/Setting.ts:1418
 msgid "%d days"
 msgstr "%d روز"
 
-#: packages/lib/models/Setting.ts:1277
+#: packages/lib/models/Setting.ts:1278
 msgid "%d hour"
 msgstr "%d ساعت"
 
-#: packages/lib/models/Setting.ts:1278 packages/lib/models/Setting.ts:1279
+#: packages/lib/models/Setting.ts:1279 packages/lib/models/Setting.ts:1280
 msgid "%d hours"
 msgstr "%d ساعت"
 
-#: packages/lib/models/Setting.ts:1274 packages/lib/models/Setting.ts:1275
-#: packages/lib/models/Setting.ts:1276
+#: packages/lib/models/Setting.ts:1275 packages/lib/models/Setting.ts:1276
+#: packages/lib/models/Setting.ts:1277
 msgid "%d minutes"
 msgstr "%d دقیقه"
 
@@ -121,12 +121,12 @@ msgstr "%s (%s): %s"
 msgid "%s (pre-release)"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:876 packages/lib/models/Setting.ts:877
-#: packages/lib/models/Setting.ts:878
+#: packages/lib/models/Setting.ts:877 packages/lib/models/Setting.ts:878
+#: packages/lib/models/Setting.ts:879
 msgid "%s / %s"
 msgstr "%s / %s"
 
-#: packages/lib/models/Setting.ts:875
+#: packages/lib/models/Setting.ts:876
 msgid "%s / %s / %s"
 msgstr "%s / %s / %s"
 
@@ -178,15 +178,15 @@ msgid ""
 "convert the to-do back to a regular note."
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1303
+#: packages/lib/models/Setting.ts:1304
 msgid "A3"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1301
+#: packages/lib/models/Setting.ts:1302
 msgid "A4"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1304
+#: packages/lib/models/Setting.ts:1305
 msgid "A5"
 msgstr ""
 
@@ -290,7 +290,7 @@ msgstr "همچنین متغیر‌های تنظیماتی که تنظیم نشد
 msgid "Also publish linked notes"
 msgstr "اشتراک گذاری"
 
-#: packages/lib/models/Setting.ts:712
+#: packages/lib/models/Setting.ts:713
 msgid "Always"
 msgstr "همیشه"
 
@@ -298,11 +298,11 @@ msgstr "همیشه"
 msgid "An update is available, do you want to download it now?"
 msgstr "یک بروزرسانی موجود است، آیا میخواهید هم اکنون بارگیری‌اش کنید؟"
 
-#: packages/lib/models/Setting.ts:2286
+#: packages/lib/models/Setting.ts:2297
 msgid "Appearance"
 msgstr "ظاهر"
 
-#: packages/lib/models/Setting.ts:2291
+#: packages/lib/models/Setting.ts:2302
 msgid "Application"
 msgstr "نرم‌افزار"
 
@@ -319,7 +319,7 @@ msgstr ""
 msgid "Arguments:"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:387
+#: packages/lib/models/Setting.ts:388
 msgid "Aritim Dark"
 msgstr ""
 
@@ -351,7 +351,7 @@ msgstr "پیوست ها"
 msgid "Attachment conflict: \"%s\""
 msgstr "تداخل پیوست: «%s»"
 
-#: packages/lib/models/Setting.ts:708
+#: packages/lib/models/Setting.ts:709
 msgid "Attachment download behaviour"
 msgstr "رفتار بارگیری پیوست"
 
@@ -363,7 +363,7 @@ msgstr "پیوست ها"
 msgid "Attachments that could not be downloaded"
 msgstr "پیوست هایی که بارگیری نشده"
 
-#: packages/lib/models/Setting.ts:373
+#: packages/lib/models/Setting.ts:374
 msgid ""
 "Attention: If you change this location, make sure you copy all your content "
 "to it before syncing, otherwise all files will be removed! See the FAQ for "
@@ -382,7 +382,7 @@ msgstr "احراز هویت انجام نشد (توکن احراز هویت در
 msgid "Authorisation token:"
 msgstr "توکن مجوز:"
 
-#: packages/lib/models/Setting.ts:714
+#: packages/lib/models/Setting.ts:715
 msgid "Auto"
 msgstr "خودکار"
 
@@ -390,16 +390,16 @@ msgstr "خودکار"
 msgid "Auto-add disabled accounts for deletion"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:911
+#: packages/lib/models/Setting.ts:912
 msgid "Auto-pair braces, parenthesis, quotations, etc."
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1261
+#: packages/lib/models/Setting.ts:1262
 #, fuzzy
 msgid "Automatically check for updates"
 msgstr "بررسی برای ارتقا..."
 
-#: packages/lib/models/Setting.ts:823
+#: packages/lib/models/Setting.ts:824
 msgid "Automatically switch theme to match system theme"
 msgstr "به طور خودکار پوسته هماهنگ با پوسته سیستم تغییر کند"
 
@@ -658,7 +658,7 @@ msgstr "لطفا ابتدا یک دفترچه ایجاد کنید"
 msgid "Coming alarms"
 msgstr "هشدار‌های آینده"
 
-#: packages/lib/models/Setting.ts:1361
+#: packages/lib/models/Setting.ts:1362
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
 "or path to individual cert files. For example: /my/cert_dir, /other/custom."
@@ -941,15 +941,15 @@ msgstr "ترتیب سفارشی"
 msgid "Custom order"
 msgstr "ترتیب سفارشی"
 
-#: packages/lib/models/Setting.ts:1230
+#: packages/lib/models/Setting.ts:1231
 msgid "Custom stylesheet for Joplin-wide app styles"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1213
+#: packages/lib/models/Setting.ts:1214
 msgid "Custom stylesheet for rendered Markdown"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1360
+#: packages/lib/models/Setting.ts:1361
 msgid "Custom TLS certificates"
 msgstr ""
 
@@ -959,7 +959,7 @@ msgstr ""
 msgid "Cut"
 msgstr "بریدن"
 
-#: packages/lib/models/Setting.ts:382
+#: packages/lib/models/Setting.ts:383
 msgid "Dark"
 msgstr "تیره"
 
@@ -975,11 +975,11 @@ msgstr "پایگاه داده ورژن %s"
 msgid "Date"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:765
+#: packages/lib/models/Setting.ts:766
 msgid "Date format"
 msgstr "فرمت تاریخ"
 
-#: packages/lib/models/Setting.ts:1417
+#: packages/lib/models/Setting.ts:1418
 msgid "days"
 msgstr "روز"
 
@@ -996,8 +996,8 @@ msgstr "موارد رمزگشایی شده: %s از %s"
 msgid "Decrypting items: %d/%d"
 msgstr "در حال رمزگشایی موارد: %d/%d"
 
-#: packages/lib/models/Setting.ts:1155 packages/lib/models/Setting.ts:1162
-#: packages/lib/models/Setting.ts:1326
+#: packages/lib/models/Setting.ts:1156 packages/lib/models/Setting.ts:1163
+#: packages/lib/models/Setting.ts:1327
 msgid "Default"
 msgstr "پیش فرض"
 
@@ -1036,7 +1036,7 @@ msgstr "تعداد %d یادداشت حذف شود؟"
 msgid "Delete line"
 msgstr "یادداشت حذف شود؟"
 
-#: packages/lib/models/Setting.ts:1254
+#: packages/lib/models/Setting.ts:1255
 msgid "Delete local data and re-download from sync target"
 msgstr ""
 
@@ -1116,7 +1116,7 @@ msgstr "فرمت مقصد: %s"
 msgid "Directory"
 msgstr "پوشه"
 
-#: packages/lib/models/Setting.ts:463
+#: packages/lib/models/Setting.ts:464
 msgid "Directory to synchronise with (absolute path)"
 msgstr ""
 
@@ -1143,7 +1143,7 @@ msgstr ""
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:249
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:138
 #: packages/app-mobile/components/screens/encryption-config.tsx:303
-#: packages/lib/models/Setting.ts:1273
+#: packages/lib/models/Setting.ts:1274
 msgid "Disabled"
 msgstr "غیر‌فعال"
 
@@ -1256,7 +1256,7 @@ msgstr "در حال بارگیری"
 msgid "Downloading resources..."
 msgstr "در حال بارگیری منابع..."
 
-#: packages/lib/models/Setting.ts:383
+#: packages/lib/models/Setting.ts:384
 msgid "Dracula"
 msgstr ""
 
@@ -1314,28 +1314,28 @@ msgid "Edit profile configuration..."
 msgstr ""
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:138
-#: packages/lib/models/Setting.ts:875 packages/lib/models/Setting.ts:876
-#: packages/lib/models/Setting.ts:877
+#: packages/lib/models/Setting.ts:876 packages/lib/models/Setting.ts:877
+#: packages/lib/models/Setting.ts:878
 msgid "Editor"
 msgstr "ویرایشگر"
 
-#: packages/lib/models/Setting.ts:1148
+#: packages/lib/models/Setting.ts:1149
 msgid "Editor font"
 msgstr "فونت ویرایشگر"
 
-#: packages/lib/models/Setting.ts:1174
+#: packages/lib/models/Setting.ts:1175
 msgid "Editor font family"
 msgstr "خانواده فونت ویرایشگر"
 
-#: packages/lib/models/Setting.ts:1140
+#: packages/lib/models/Setting.ts:1141
 msgid "Editor font size"
 msgstr "سایز فونت ویرایشگر"
 
-#: packages/lib/models/Setting.ts:1193
+#: packages/lib/models/Setting.ts:1194
 msgid "Editor maximum width"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1186
+#: packages/lib/models/Setting.ts:1187
 #, fuzzy
 msgid "Editor monospace font family"
 msgstr "خانواده فونت ویرایشگر"
@@ -1350,7 +1350,7 @@ msgstr "ویرایشگر"
 msgid "Either \"text\" or \"json\""
 msgstr "یا «text» و یا «json»"
 
-#: packages/lib/models/Setting.ts:1327
+#: packages/lib/models/Setting.ts:1328
 msgid "Emacs"
 msgstr ""
 
@@ -1373,32 +1373,32 @@ msgstr "متن تأکید شده"
 msgid "Enable"
 msgstr "فعال سازی"
 
-#: packages/lib/models/Setting.ts:1089
+#: packages/lib/models/Setting.ts:1090
 msgid "Enable ^sup^ syntax"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1093
+#: packages/lib/models/Setting.ts:1094
 msgid "Enable ++insert++ syntax"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1085
+#: packages/lib/models/Setting.ts:1086
 msgid "Enable ==mark== syntax"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1088
+#: packages/lib/models/Setting.ts:1089
 msgid "Enable ~sub~ syntax"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1091
+#: packages/lib/models/Setting.ts:1092
 msgid "Enable abbreviation syntax"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1082
+#: packages/lib/models/Setting.ts:1083
 #, fuzzy
 msgid "Enable audio player"
 msgstr "فعال‌سازی شکلک markdown"
 
-#: packages/lib/models/Setting.ts:1090
+#: packages/lib/models/Setting.ts:1091
 msgid "Enable deflist syntax"
 msgstr ""
 
@@ -1407,56 +1407,56 @@ msgstr ""
 msgid "Enable encryption"
 msgstr "فعال کردن رمزنگاری"
 
-#: packages/lib/models/Setting.ts:1086
+#: packages/lib/models/Setting.ts:1087
 msgid "Enable footnotes"
 msgstr "فعال سازی پاورقی"
 
-#: packages/lib/models/Setting.ts:1079
+#: packages/lib/models/Setting.ts:1080
 msgid "Enable Fountain syntax support"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1076
+#: packages/lib/models/Setting.ts:1077
 #, fuzzy
 msgid "Enable Linkify"
 msgstr "فعال سایز ثبت تاریخچه ی یادداشت"
 
-#: packages/lib/models/Setting.ts:1092
+#: packages/lib/models/Setting.ts:1093
 msgid "Enable markdown emoji"
 msgstr "فعال‌سازی شکلک markdown"
 
-#: packages/lib/models/Setting.ts:1078
+#: packages/lib/models/Setting.ts:1079
 msgid "Enable math expressions"
 msgstr "فعال‌سازی عبارت‌های ریاضی"
 
-#: packages/lib/models/Setting.ts:1080
+#: packages/lib/models/Setting.ts:1081
 msgid "Enable Mermaid diagrams support"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1094
+#: packages/lib/models/Setting.ts:1095
 msgid "Enable multimarkdown table extension"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1407
+#: packages/lib/models/Setting.ts:1408
 msgid "Enable note history"
 msgstr "فعال سایز ثبت تاریخچه ی یادداشت"
 
-#: packages/lib/models/Setting.ts:1084
+#: packages/lib/models/Setting.ts:1085
 msgid "Enable PDF viewer"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1074
+#: packages/lib/models/Setting.ts:1075
 msgid "Enable soft breaks"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1087
+#: packages/lib/models/Setting.ts:1088
 msgid "Enable table of contents extension"
 msgstr "فعال کردن افزونه ی لیست مطالب"
 
-#: packages/lib/models/Setting.ts:1075
+#: packages/lib/models/Setting.ts:1076
 msgid "Enable typographer support"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1083
+#: packages/lib/models/Setting.ts:1084
 msgid "Enable video player"
 msgstr ""
 
@@ -1489,7 +1489,7 @@ msgstr "موارد رمزنگاری شده نمی‌توانند تغییر پی
 msgid "Encrypted notebooks cannot be renamed"
 msgstr "دفترچه‌های رمزگذاری شده نمی‌توانند تغییر نام داده شوند"
 
-#: packages/lib/models/Setting.ts:2293
+#: packages/lib/models/Setting.ts:2304
 msgid "Encryption"
 msgstr "رمزنگاری"
 
@@ -1624,11 +1624,11 @@ msgstr "تنها یادداشت مشخص شده را استخراج می‌کن�
 msgid "Exports only the given notebook."
 msgstr "تنها دفترچه مشخص شده را استخراج می‌کند."
 
-#: packages/lib/models/Setting.ts:1393
+#: packages/lib/models/Setting.ts:1394
 msgid "Fail-safe"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1394
+#: packages/lib/models/Setting.ts:1395
 msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
@@ -1684,11 +1684,11 @@ msgstr ""
 msgid "Focus"
 msgstr "تمرکز"
 
-#: packages/lib/models/Setting.ts:1023 packages/lib/models/Setting.ts:1040
+#: packages/lib/models/Setting.ts:1024 packages/lib/models/Setting.ts:1041
 msgid "Focus body"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1022 packages/lib/models/Setting.ts:1039
+#: packages/lib/models/Setting.ts:1023 packages/lib/models/Setting.ts:1040
 msgid "Focus title"
 msgstr ""
 
@@ -1717,7 +1717,7 @@ msgid ""
 "For the list of keyboard shortcuts and config options, type `help keymap`"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:615
+#: packages/lib/models/Setting.ts:616
 msgid "Force path style"
 msgstr ""
 
@@ -1739,7 +1739,7 @@ msgstr "FTS فعال شده: %d"
 msgid "Full changelog"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:2284
+#: packages/lib/models/Setting.ts:2295
 #: packages/server/src/services/MustacheService.ts:108
 msgid "General"
 msgstr "کلی"
@@ -1759,7 +1759,7 @@ msgstr[1] "در حال بوجود آوردن پیوند..."
 msgid "Get it now:"
 msgstr "هم‌اکنون دریافت کنید:"
 
-#: packages/lib/models/Setting.ts:1262
+#: packages/lib/models/Setting.ts:1263
 msgid "Get pre-releases when checking for updates"
 msgstr ""
 
@@ -1852,7 +1852,7 @@ msgstr "بیکار"
 msgid "Ignore"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1383
+#: packages/lib/models/Setting.ts:1384
 msgid "Ignore TLS certificate errors"
 msgstr ""
 
@@ -1879,7 +1879,7 @@ msgstr "در حال وارد کردن یادداشت‌ها..."
 msgid "Imports data into Joplin."
 msgstr "داده را در Joplin وارد می‌کند."
 
-#: packages/lib/models/Setting.ts:709
+#: packages/lib/models/Setting.ts:710
 msgid ""
 "In \"Manual\" mode, attachments are downloaded only when you click on them. "
 "In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
@@ -2003,7 +2003,7 @@ msgstr "پاسخ نامعتبر: %s"
 msgid "Invalid command: \"%s\""
 msgstr "دستور نامعتبر: «%s»"
 
-#: packages/lib/models/Setting.ts:1833
+#: packages/lib/models/Setting.ts:1834
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "مقدار گزینه نامعتبر: «%s». مقادیر احتمالی شامل: %s."
 
@@ -2044,12 +2044,12 @@ msgstr ""
 msgid "Joplin Cloud"
 msgstr "انجمن Joplin"
 
-#: packages/lib/models/Setting.ts:683
+#: packages/lib/models/Setting.ts:684
 #, fuzzy
 msgid "Joplin Cloud email"
 msgstr "سایت Joplin"
 
-#: packages/lib/models/Setting.ts:694
+#: packages/lib/models/Setting.ts:695
 #, fuzzy
 msgid "Joplin Cloud password"
 msgstr "گذرواژه اصلی را وارد کنید:"
@@ -2083,17 +2083,17 @@ msgstr "انجمن Joplin"
 msgid "Joplin Server"
 msgstr "سایت Joplin"
 
-#: packages/lib/models/Setting.ts:644
+#: packages/lib/models/Setting.ts:645
 #, fuzzy
 msgid "Joplin Server email"
 msgstr "سایت Joplin"
 
-#: packages/lib/models/Setting.ts:655
+#: packages/lib/models/Setting.ts:656
 #, fuzzy
 msgid "Joplin Server password"
 msgstr "گذرواژه اصلی را وارد کنید:"
 
-#: packages/lib/models/Setting.ts:626
+#: packages/lib/models/Setting.ts:627
 msgid "Joplin Server URL"
 msgstr ""
 
@@ -2114,11 +2114,11 @@ msgid ""
 "such as publishing notes or collaborating on notebooks with others."
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1419
+#: packages/lib/models/Setting.ts:1420
 msgid "Keep note history for"
 msgstr "تاریخچه ی یادداشت را نگه دار به مدت"
 
-#: packages/lib/models/Setting.ts:1323
+#: packages/lib/models/Setting.ts:1324
 msgid "Keyboard Mode"
 msgstr "حالت صفحه کلید"
 
@@ -2126,7 +2126,7 @@ msgstr "حالت صفحه کلید"
 msgid "Keyboard Shortcut"
 msgstr "کلید های میانبر"
 
-#: packages/lib/models/Setting.ts:2295
+#: packages/lib/models/Setting.ts:2306
 msgid "Keyboard Shortcuts"
 msgstr "کلید های میانبر"
 
@@ -2139,11 +2139,11 @@ msgstr ""
 msgid "Keys that need upgrading"
 msgstr "کلید‌های اصلی به ارتقا نیاز دارند"
 
-#: packages/lib/models/Setting.ts:1312
+#: packages/lib/models/Setting.ts:1313
 msgid "Landscape"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:753
+#: packages/lib/models/Setting.ts:754
 msgid "Language"
 msgstr "زبان"
 
@@ -2168,15 +2168,15 @@ msgstr "توالی دکمه قالب"
 msgid "Leave notebook..."
 msgstr "به اشتراک گذاری یادداشت..."
 
-#: packages/lib/models/Setting.ts:1306
+#: packages/lib/models/Setting.ts:1307
 msgid "Legal"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1302
+#: packages/lib/models/Setting.ts:1303
 msgid "Letter"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:381
+#: packages/lib/models/Setting.ts:382
 msgid "Light"
 msgstr "روشن"
 
@@ -2275,11 +2275,11 @@ msgstr ""
 "تنظیمات E2EE را مدیریت می‌کند. دستورات شامل `enable`، `disable`، `decrypt`، "
 "`status`، `decrypt-file` و `target-status` هستند."
 
-#: packages/lib/models/Setting.ts:713
+#: packages/lib/models/Setting.ts:714
 msgid "Manual"
 msgstr "دستی"
 
-#: packages/lib/models/Setting.ts:2289
+#: packages/lib/models/Setting.ts:2300
 #: packages/lib/services/interop/InteropService.ts:113
 #: packages/lib/services/interop/InteropService.ts:58
 msgid "Markdown"
@@ -2319,7 +2319,7 @@ msgstr "گذرواژه اصلی را وارد کنید:"
 msgid "Master password:"
 msgstr "گذرواژه اصلی را وارد کنید:"
 
-#: packages/lib/models/Setting.ts:737
+#: packages/lib/models/Setting.ts:738
 msgid "Max concurrent connections"
 msgstr "حداکثر اتصالات همزمان"
 
@@ -2421,19 +2421,19 @@ msgstr "ورژن جدید: %s"
 msgid "Nextcloud"
 msgstr "Nextcloud"
 
-#: packages/lib/models/Setting.ts:499
+#: packages/lib/models/Setting.ts:500
 msgid "Nextcloud password"
 msgstr "گذرواژه Nextcloud"
 
-#: packages/lib/models/Setting.ts:488
+#: packages/lib/models/Setting.ts:489
 msgid "Nextcloud username"
 msgstr "نام کاربری Nextcloud"
 
-#: packages/lib/models/Setting.ts:476
+#: packages/lib/models/Setting.ts:477
 msgid "Nextcloud WebDAV URL"
 msgstr "آدرس Nextcloud WebDAV"
 
-#: packages/lib/models/Setting.ts:370
+#: packages/lib/models/Setting.ts:371
 msgid "no"
 msgstr "خیر"
 
@@ -2487,7 +2487,7 @@ msgstr ""
 "هیچ ویرایشگر متنی مشخص نشده. لطفا با استفاده از `config editor <editor-"
 "path>` آن را مشخص کنید"
 
-#: packages/lib/models/Setting.ts:386
+#: packages/lib/models/Setting.ts:387
 msgid "Nord"
 msgstr ""
 
@@ -2509,11 +2509,11 @@ msgstr ""
 msgid "note"
 msgstr "یادداشت"
 
-#: packages/lib/models/Setting.ts:2287
+#: packages/lib/models/Setting.ts:2298
 msgid "Note"
 msgstr "یادداشت"
 
-#: packages/lib/models/Setting.ts:1482
+#: packages/lib/models/Setting.ts:1483
 msgid "Note area growth factor"
 msgstr "فاکتور رشد منطقه یادداشت"
 
@@ -2538,7 +2538,7 @@ msgid "Note has been saved."
 msgstr "یادداشت ذخیره شد."
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:34
-#: packages/lib/models/Setting.ts:2292
+#: packages/lib/models/Setting.ts:2303
 msgid "Note History"
 msgstr "تاریخچه ی یادداشت"
 
@@ -2550,7 +2550,7 @@ msgstr "یادداشت یک فهرست کار نیست: «%s»"
 msgid "Note list"
 msgstr "لیست یادداشت"
 
-#: packages/lib/models/Setting.ts:1467
+#: packages/lib/models/Setting.ts:1468
 msgid "Note list growth factor"
 msgstr "فاکتور رشد لیست یادداشت"
 
@@ -2563,7 +2563,7 @@ msgstr "جزییات یادداشت"
 msgid "Note title"
 msgstr "عنوان یادداشت"
 
-#: packages/lib/models/Setting.ts:1108
+#: packages/lib/models/Setting.ts:1109
 msgid "Note: Does not work in all desktop environments."
 msgstr ""
 
@@ -2577,12 +2577,12 @@ msgstr ""
 msgid "Note&book"
 msgstr "دفترچه ها"
 
-#: packages/lib/models/Setting.ts:2288
+#: packages/lib/models/Setting.ts:2299
 #, fuzzy
 msgid "Notebook"
 msgstr "دفترچه ها"
 
-#: packages/lib/models/Setting.ts:1452
+#: packages/lib/models/Setting.ts:1453
 msgid "Notebook list growth factor"
 msgstr "فاکتور رشد لیست دفترچه"
 
@@ -2605,7 +2605,7 @@ msgstr "دفترچه نمی‌تواند «%s» نام داشته باشد، ا�
 msgid "Notes"
 msgstr "یادداشت"
 
-#: packages/lib/models/Setting.ts:2304
+#: packages/lib/models/Setting.ts:2315
 msgid "Notes and settings are stored in: %s"
 msgstr "یادداشت‌ها و تنظیمات در این محل ذخیره شده‌اند: %s"
 
@@ -2633,7 +2633,7 @@ msgstr "لیست شماره گذاری شده"
 msgid "OK"
 msgstr "باشه"
 
-#: packages/lib/models/Setting.ts:388
+#: packages/lib/models/Setting.ts:389
 msgid "OLED Dark"
 msgstr "OLED تیره"
 
@@ -2687,7 +2687,7 @@ msgstr "باز کردن %s"
 msgid "Open profile directory"
 msgstr "بازکردن پوشه الگو"
 
-#: packages/lib/models/Setting.ts:412
+#: packages/lib/models/Setting.ts:413
 msgid "Open Sync Wizard..."
 msgstr ""
 
@@ -2721,11 +2721,11 @@ msgstr "خروح از نرم‌افزار."
 msgid "Output format: %s"
 msgstr "فرمت خروجی: %s"
 
-#: packages/lib/models/Setting.ts:1309
+#: packages/lib/models/Setting.ts:1310
 msgid "Page orientation for PDF export"
 msgstr "جهت صفحه برای استخراج PDF"
 
-#: packages/lib/models/Setting.ts:1299
+#: packages/lib/models/Setting.ts:1300
 msgid "Page size for PDF export"
 msgstr "اندازه صفحه برای استخراج PDF"
 
@@ -2850,11 +2850,11 @@ msgid "Plugin tools"
 msgstr "پلاگین ها"
 
 #: packages/app-desktop/gui/ConfigScreen/Sidebar.tsx:105
-#: packages/lib/models/Setting.ts:2290
+#: packages/lib/models/Setting.ts:2301
 msgid "Plugins"
 msgstr "پلاگین ها"
 
-#: packages/lib/models/Setting.ts:1311
+#: packages/lib/models/Setting.ts:1312
 msgid "Portrait"
 msgstr ""
 
@@ -2874,11 +2874,11 @@ msgstr "تنظیمات"
 msgid "Preferences..."
 msgstr "تنظیمات..."
 
-#: packages/lib/models/Setting.ts:853
+#: packages/lib/models/Setting.ts:854
 msgid "Preferred dark theme"
 msgstr "تم ترجیحی تاریک"
 
-#: packages/lib/models/Setting.ts:837
+#: packages/lib/models/Setting.ts:838
 msgid "Preferred light theme"
 msgstr "تم ترجیحی روشن"
 
@@ -2976,7 +2976,7 @@ msgstr "رمزنگاری دوباره داده"
 msgid "Re-encryption"
 msgstr "رمزنگاری"
 
-#: packages/lib/models/Setting.ts:1243
+#: packages/lib/models/Setting.ts:1244
 msgid "Re-upload local data to sync target"
 msgstr ""
 
@@ -3101,7 +3101,7 @@ msgid "Reveal file in folder"
 msgstr "نمایش فایل در پوشه"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleNotesSortOrderReverse.ts:8
-#: packages/lib/models/Setting.ts:915 packages/lib/models/Setting.ts:992
+#: packages/lib/models/Setting.ts:916 packages/lib/models/Setting.ts:993
 msgid "Reverse sort order"
 msgstr "معکوس کردن ترتیب مرتب سازی"
 
@@ -3124,24 +3124,24 @@ msgstr ""
 msgid "S3"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:593
+#: packages/lib/models/Setting.ts:594
 msgid "S3 access key"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:553
+#: packages/lib/models/Setting.ts:554
 #, fuzzy
 msgid "S3 bucket"
 msgstr "AWS S3"
 
-#: packages/lib/models/Setting.ts:582
+#: packages/lib/models/Setting.ts:583
 msgid "S3 region"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:604
+#: packages/lib/models/Setting.ts:605
 msgid "S3 secret key"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:568
+#: packages/lib/models/Setting.ts:569
 #, fuzzy
 msgid "S3 URL"
 msgstr "AWS S3"
@@ -3178,7 +3178,7 @@ msgstr "ذخیره به عنوان..."
 msgid "Save changes"
 msgstr "ذخیره ی تغییرات"
 
-#: packages/lib/models/Setting.ts:993
+#: packages/lib/models/Setting.ts:994
 msgid "Save geo-location with notes"
 msgstr "ذخیره ژئولوکیشن با یادداشت‌ها"
 
@@ -3213,7 +3213,7 @@ msgstr "جستجو..."
 msgid "Searches for the given <pattern> in all the notes."
 msgstr "برای <pattern> داده شده در همه یادداشت‌ها جستجو می‌کند."
 
-#: packages/lib/models/Setting.ts:1262
+#: packages/lib/models/Setting.ts:1263
 msgid "See the pre-release page for more details: %s"
 msgstr ""
 
@@ -3259,7 +3259,7 @@ msgstr "تنظیم هشدار"
 msgid "Set alarm:"
 msgstr "تنظیم هشدار:"
 
-#: packages/lib/models/Setting.ts:1193
+#: packages/lib/models/Setting.ts:1194
 msgid ""
 "Set it to 0 to make it take the complete available space. Recommended width "
 "is 600."
@@ -3314,7 +3314,7 @@ msgstr "نمایش تنظیمات پیشرفته"
 msgid "Show all"
 msgstr "نمایش همه"
 
-#: packages/lib/models/Setting.ts:884
+#: packages/lib/models/Setting.ts:885
 msgid "Show completed to-dos"
 msgstr "نمایش فهرست کار‌های کامل شده"
 
@@ -3323,16 +3323,16 @@ msgstr "نمایش فهرست کار‌های کامل شده"
 msgid "Show disabled keys"
 msgstr "نمایش تنظیمات پیشرفته"
 
-#: packages/lib/models/Setting.ts:866
+#: packages/lib/models/Setting.ts:867
 msgid "Show note counts"
 msgstr "نمایش تعداد یادداشت"
 
-#: packages/lib/models/Setting.ts:925
+#: packages/lib/models/Setting.ts:926
 #, fuzzy
 msgid "Show sort order buttons"
 msgstr "نمایش تعداد یادداشت"
 
-#: packages/lib/models/Setting.ts:1106
+#: packages/lib/models/Setting.ts:1107
 msgid "Show tray icon"
 msgstr ""
 
@@ -3359,11 +3359,11 @@ msgstr ""
 msgid "Skipped: %d."
 msgstr "رد شده: %d."
 
-#: packages/lib/models/Setting.ts:385
+#: packages/lib/models/Setting.ts:386
 msgid "Solarised Dark"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:384
+#: packages/lib/models/Setting.ts:385
 msgid "Solarised Light"
 msgstr ""
 
@@ -3379,12 +3379,12 @@ msgstr "بعضی از موارد نمی‌توانند همگام‌سازی ش�
 msgid "Some items cannot be synchronised. Press for more info."
 msgstr "بعضی از موارد نمی‌توانند همگام‌سازی شوند. برای اطلاعات بیشتر بفشارید."
 
-#: packages/lib/models/Setting.ts:980
+#: packages/lib/models/Setting.ts:981
 msgid "Sort notebooks by"
 msgstr "مرتب سازی دفترچه ها با"
 
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:167
-#: packages/lib/models/Setting.ts:892
+#: packages/lib/models/Setting.ts:893
 msgid "Sort notes by"
 msgstr "مرتب سازی یادداشت ها با"
 
@@ -3407,7 +3407,7 @@ msgstr "فرمت مبدا: %s"
 msgid "Source: "
 msgstr "منبع"
 
-#: packages/lib/models/Setting.ts:1399
+#: packages/lib/models/Setting.ts:1400
 msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
@@ -3418,12 +3418,12 @@ msgstr ""
 msgid "Spell checker"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:875 packages/lib/models/Setting.ts:877
-#: packages/lib/models/Setting.ts:878
+#: packages/lib/models/Setting.ts:876 packages/lib/models/Setting.ts:878
+#: packages/lib/models/Setting.ts:879
 msgid "Split View"
 msgstr "تقسیم نما"
 
-#: packages/lib/models/Setting.ts:1114
+#: packages/lib/models/Setting.ts:1115
 msgid "Start application minimised in the tray icon"
 msgstr ""
 
@@ -3597,11 +3597,11 @@ msgstr "نسخه همگام‌سازی: %s"
 msgid "Sync your notes"
 msgstr "مرتب سازی یادداشت ها با"
 
-#: packages/lib/models/Setting.ts:2285
+#: packages/lib/models/Setting.ts:2296
 msgid "Synchronisation"
 msgstr "همگام‌سازی"
 
-#: packages/lib/models/Setting.ts:1270
+#: packages/lib/models/Setting.ts:1271
 msgid "Synchronisation interval"
 msgstr "بازه همگام‌سازی"
 
@@ -3614,7 +3614,7 @@ msgstr "همگام سازی در حال حاضر در حال انجام است."
 msgid "Synchronisation Status"
 msgstr "وضعیت همگام‌سازی"
 
-#: packages/lib/models/Setting.ts:423
+#: packages/lib/models/Setting.ts:424
 msgid "Synchronisation target"
 msgstr "هدف همگام‌سازی"
 
@@ -3628,7 +3628,7 @@ msgstr "همگام‌سازی هدف: %s (%s)"
 msgid "Synchronise"
 msgstr "همگام سازی"
 
-#: packages/lib/models/Setting.ts:1290
+#: packages/lib/models/Setting.ts:1291
 msgid "Synchronise only over WiFi connection"
 msgstr ""
 
@@ -3645,7 +3645,7 @@ msgstr "در حال همگام سازی..."
 msgid "Synchronizing..."
 msgstr "در حال همگام سازی..."
 
-#: packages/lib/models/Setting.ts:1305
+#: packages/lib/models/Setting.ts:1306
 msgid "Tabloid"
 msgstr ""
 
@@ -3675,7 +3675,7 @@ msgstr "گرفتن عکس"
 msgid "Tasks"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1298
+#: packages/lib/models/Setting.ts:1299
 msgid "Text editor command"
 msgstr "دستور ویرایشگر متن"
 
@@ -3745,14 +3745,14 @@ msgstr ""
 "روش رمزگذاری پیش فرض تغییر یافته است،‌ شما باید داده خود را دوباره رمزگذاری "
 "کنید."
 
-#: packages/lib/models/Setting.ts:1298
+#: packages/lib/models/Setting.ts:1299
 msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1454 packages/lib/models/Setting.ts:1469
-#: packages/lib/models/Setting.ts:1484
+#: packages/lib/models/Setting.ts:1455 packages/lib/models/Setting.ts:1470
+#: packages/lib/models/Setting.ts:1485
 msgid ""
 "The factor property sets how the item will grow or shrink to fit the "
 "available space in its container with respect to the other items. Thus an "
@@ -3854,7 +3854,7 @@ msgstr ""
 msgid "The tag \"%s\" already exists. Please choose a different name."
 msgstr "برچسب «%s» وجود دارد. لطفا نام دیگری انتخاب کنید."
 
-#: packages/lib/models/Setting.ts:425
+#: packages/lib/models/Setting.ts:426
 msgid ""
 "The target to synchronise to. Each sync target may have additional "
 "parameters which are named as `sync.NUM.NAME` (all documented below)."
@@ -3874,7 +3874,7 @@ msgstr ""
 msgid "The web clipper service is not enabled."
 msgstr ""
 
-#: packages/lib/models/Setting.ts:810
+#: packages/lib/models/Setting.ts:811
 msgid "Theme"
 msgstr "پوسته"
 
@@ -3925,7 +3925,7 @@ msgstr ""
 "این پیدا کردن این موارد، عنوان و یا شناسه (که در براکت‌های بالا نمایش داده "
 "شده‌اند) را جستجو کنید."
 
-#: packages/lib/models/Setting.ts:2303
+#: packages/lib/models/Setting.ts:2314
 msgid ""
 "These plugins enhance the Markdown renderer with additional features. Please "
 "note that, while these features might be useful, they are not standard "
@@ -3995,7 +3995,7 @@ msgid ""
 "to a particular port."
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1108
+#: packages/lib/models/Setting.ts:1109
 msgid ""
 "This will allow Joplin to run in the background. It is recommended to enable "
 "this setting so that your notes are constantly being synchronised, thus "
@@ -4012,7 +4012,7 @@ msgid ""
 "have access to its content. Do you wish to continue?"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:788
+#: packages/lib/models/Setting.ts:789
 msgid "Time format"
 msgstr "فرمت ساعت"
 
@@ -4182,7 +4182,7 @@ msgstr "برچسب‌های جدید را تایپ کنید یا از لیست �
 msgid "Type: %s."
 msgstr "نوع: %s."
 
-#: packages/lib/models/Setting.ts:883
+#: packages/lib/models/Setting.ts:884
 msgid "Uncompleted to-dos on top"
 msgstr "فهرست کار‌های کامل نشده در بالا"
 
@@ -4334,13 +4334,13 @@ msgid ""
 "may take a long time depending on the number of notes."
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1176
+#: packages/lib/models/Setting.ts:1177
 msgid ""
 "Used for most text in the markdown editor. If not found, a generic "
 "proportional (variable width) font is used."
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1188
+#: packages/lib/models/Setting.ts:1189
 msgid ""
 "Used where a fixed width font is needed to lay out text legibly (e.g. "
 "tables, checkboxes, code). If not found, a generic monospace (fixed width) "
@@ -4377,12 +4377,12 @@ msgid "View them now"
 msgstr "هم‌اکنون ببینید"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:139
-#: packages/lib/models/Setting.ts:875 packages/lib/models/Setting.ts:876
-#: packages/lib/models/Setting.ts:878
+#: packages/lib/models/Setting.ts:876 packages/lib/models/Setting.ts:877
+#: packages/lib/models/Setting.ts:879
 msgid "Viewer"
 msgstr "بیننده"
 
-#: packages/lib/models/Setting.ts:1328
+#: packages/lib/models/Setting.ts:1329
 msgid "Vim"
 msgstr ""
 
@@ -4394,7 +4394,7 @@ msgstr "اخطار ها"
 msgid "Warning: not all resources shown for performance reasons (limit: %s)."
 msgstr ""
 
-#: packages/lib/models/Setting.ts:2294
+#: packages/lib/models/Setting.ts:2305
 msgid "Web Clipper"
 msgstr ""
 
@@ -4402,15 +4402,15 @@ msgstr ""
 msgid "WebDAV"
 msgstr "WebDAV"
 
-#: packages/lib/models/Setting.ts:534
+#: packages/lib/models/Setting.ts:535
 msgid "WebDAV password"
 msgstr "گذرواژه WebDAV"
 
-#: packages/lib/models/Setting.ts:511
+#: packages/lib/models/Setting.ts:512
 msgid "WebDAV URL"
 msgstr "آدرس WebDAV"
 
-#: packages/lib/models/Setting.ts:523
+#: packages/lib/models/Setting.ts:524
 msgid "WebDAV username"
 msgstr "نام کاربری WebDAV"
 
@@ -4437,11 +4437,11 @@ msgstr ""
 "به عنوان مثال ، برای ایجاد یک نوت بوک `mb` را فشار دهید ؛ برای ایجاد یک "
 "یادداشت `mn` را فشار دهید."
 
-#: packages/lib/models/Setting.ts:1036
+#: packages/lib/models/Setting.ts:1037
 msgid "When creating a new note:"
 msgstr "در زمان ایجاد یادداشت جدید:"
 
-#: packages/lib/models/Setting.ts:1019
+#: packages/lib/models/Setting.ts:1020
 msgid "When creating a new to-do:"
 msgstr "زمان ساخت یک فهرست کار جدید:"
 
@@ -4457,7 +4457,7 @@ msgstr "y"
 msgid "Y"
 msgstr "Y"
 
-#: packages/lib/models/Setting.ts:369
+#: packages/lib/models/Setting.ts:370
 msgid "yes"
 msgstr "بله"
 

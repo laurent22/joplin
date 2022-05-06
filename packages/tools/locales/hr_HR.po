@@ -17,8 +17,6 @@ msgstr ""
 "X-Generator: Poedit 3.0\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:560
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -49,7 +47,7 @@ msgstr "(%s)"
 msgid "(None)"
 msgstr "(Ništa)"
 
-#: packages/lib/models/Setting.ts:369 packages/lib/models/Setting.ts:370
+#: packages/lib/models/Setting.ts:370 packages/lib/models/Setting.ts:371
 msgid "(wysiwyg: %s)"
 msgstr "(wysiwyg: %s)"
 
@@ -84,20 +82,20 @@ msgstr "&Alati"
 msgid "&View"
 msgstr "&Prikaz"
 
-#: packages/lib/models/Setting.ts:1417
+#: packages/lib/models/Setting.ts:1418
 msgid "%d days"
 msgstr "%d dana"
 
-#: packages/lib/models/Setting.ts:1277
+#: packages/lib/models/Setting.ts:1278
 msgid "%d hour"
 msgstr "%d h"
 
-#: packages/lib/models/Setting.ts:1278 packages/lib/models/Setting.ts:1279
+#: packages/lib/models/Setting.ts:1279 packages/lib/models/Setting.ts:1280
 msgid "%d hours"
 msgstr "%d h"
 
-#: packages/lib/models/Setting.ts:1274 packages/lib/models/Setting.ts:1275
-#: packages/lib/models/Setting.ts:1276
+#: packages/lib/models/Setting.ts:1275 packages/lib/models/Setting.ts:1276
+#: packages/lib/models/Setting.ts:1277
 msgid "%d minutes"
 msgstr "%d min"
 
@@ -125,12 +123,12 @@ msgstr "%s (%s): %s"
 msgid "%s (pre-release)"
 msgstr "%s (predizdanje)"
 
-#: packages/lib/models/Setting.ts:876 packages/lib/models/Setting.ts:877
-#: packages/lib/models/Setting.ts:878
+#: packages/lib/models/Setting.ts:877 packages/lib/models/Setting.ts:878
+#: packages/lib/models/Setting.ts:879
 msgid "%s / %s"
 msgstr "%s / %s"
 
-#: packages/lib/models/Setting.ts:875
+#: packages/lib/models/Setting.ts:876
 msgid "%s / %s / %s"
 msgstr "%s / %s / %s"
 
@@ -191,15 +189,15 @@ msgstr ""
 "stanja (ako je cilj uobičajena bilješka, pretvorit će se u zadatak). Koristi "
 "„clear” za pretvaranje zadatka u uobičajenu bilješku."
 
-#: packages/lib/models/Setting.ts:1303
+#: packages/lib/models/Setting.ts:1304
 msgid "A3"
 msgstr "A3"
 
-#: packages/lib/models/Setting.ts:1301
+#: packages/lib/models/Setting.ts:1302
 msgid "A4"
 msgstr "A4"
 
-#: packages/lib/models/Setting.ts:1304
+#: packages/lib/models/Setting.ts:1305
 msgid "A5"
 msgstr "A5"
 
@@ -302,7 +300,7 @@ msgstr "Također prikazuje nepostavljene i skrivene varijable konfiguracije."
 msgid "Also publish linked notes"
 msgstr "Također objavi povezane bilješke"
 
-#: packages/lib/models/Setting.ts:712
+#: packages/lib/models/Setting.ts:713
 msgid "Always"
 msgstr "Uvijek"
 
@@ -310,11 +308,11 @@ msgstr "Uvijek"
 msgid "An update is available, do you want to download it now?"
 msgstr "Dostupna je nova verzija. Želiš li je sada preuzeti?"
 
-#: packages/lib/models/Setting.ts:2286
+#: packages/lib/models/Setting.ts:2297
 msgid "Appearance"
 msgstr "Izgled"
 
-#: packages/lib/models/Setting.ts:2291
+#: packages/lib/models/Setting.ts:2302
 msgid "Application"
 msgstr "Program"
 
@@ -331,7 +329,7 @@ msgstr "Stvarno želiš obnoviti ključ autorizacije?"
 msgid "Arguments:"
 msgstr "Argumenti:"
 
-#: packages/lib/models/Setting.ts:387
+#: packages/lib/models/Setting.ts:388
 msgid "Aritim Dark"
 msgstr "Aritim tamna"
 
@@ -362,7 +360,7 @@ msgstr "privitak"
 msgid "Attachment conflict: \"%s\""
 msgstr "Konflikt s privitkom: „%s”"
 
-#: packages/lib/models/Setting.ts:708
+#: packages/lib/models/Setting.ts:709
 msgid "Attachment download behaviour"
 msgstr "Preuzimanje privitaka"
 
@@ -374,7 +372,7 @@ msgstr "Privici"
 msgid "Attachments that could not be downloaded"
 msgstr "Privici koji se nisu mogli preuzeti"
 
-#: packages/lib/models/Setting.ts:373
+#: packages/lib/models/Setting.ts:374
 msgid ""
 "Attention: If you change this location, make sure you copy all your content "
 "to it before syncing, otherwise all files will be removed! See the FAQ for "
@@ -396,7 +394,7 @@ msgstr "Autentifikacija nije završena (nije dobiven ključ autentifikacije)."
 msgid "Authorisation token:"
 msgstr "Ključ autorizacije:"
 
-#: packages/lib/models/Setting.ts:714
+#: packages/lib/models/Setting.ts:715
 msgid "Auto"
 msgstr "Automatski"
 
@@ -404,15 +402,15 @@ msgstr "Automatski"
 msgid "Auto-add disabled accounts for deletion"
 msgstr "Automatski dodaj deaktivirane račune za brisanje"
 
-#: packages/lib/models/Setting.ts:911
+#: packages/lib/models/Setting.ts:912
 msgid "Auto-pair braces, parenthesis, quotations, etc."
 msgstr "Automatski uskladi zagrade, navodnike itd."
 
-#: packages/lib/models/Setting.ts:1261
+#: packages/lib/models/Setting.ts:1262
 msgid "Automatically check for updates"
 msgstr "Automatski traži nove verzije"
 
-#: packages/lib/models/Setting.ts:823
+#: packages/lib/models/Setting.ts:824
 msgid "Automatically switch theme to match system theme"
 msgstr "Automatski promijeni temu na temu sustava"
 
@@ -672,7 +670,7 @@ msgstr "Surađuj s drugima na bilježnicama"
 msgid "Coming alarms"
 msgstr "Nadolazeća upozorenja"
 
-#: packages/lib/models/Setting.ts:1361
+#: packages/lib/models/Setting.ts:1362
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
 "or path to individual cert files. For example: /my/cert_dir, /other/custom."
@@ -952,15 +950,15 @@ msgstr "prilagođeni redoslijed"
 msgid "Custom order"
 msgstr "Prilagođeni redoslijed"
 
-#: packages/lib/models/Setting.ts:1230
+#: packages/lib/models/Setting.ts:1231
 msgid "Custom stylesheet for Joplin-wide app styles"
 msgstr "Prilagođeni stilovi za Joplinove programske stilove"
 
-#: packages/lib/models/Setting.ts:1213
+#: packages/lib/models/Setting.ts:1214
 msgid "Custom stylesheet for rendered Markdown"
 msgstr "Prilagođeni stilovi za prikazani Markdown"
 
-#: packages/lib/models/Setting.ts:1360
+#: packages/lib/models/Setting.ts:1361
 msgid "Custom TLS certificates"
 msgstr "Prilagođeni TLS certifikati"
 
@@ -970,7 +968,7 @@ msgstr "Prilagođeni TLS certifikati"
 msgid "Cut"
 msgstr "Izreži"
 
-#: packages/lib/models/Setting.ts:382
+#: packages/lib/models/Setting.ts:383
 msgid "Dark"
 msgstr "Tamna"
 
@@ -986,11 +984,11 @@ msgstr "Baza podataka v%s"
 msgid "Date"
 msgstr "Datum"
 
-#: packages/lib/models/Setting.ts:765
+#: packages/lib/models/Setting.ts:766
 msgid "Date format"
 msgstr "Format datuma"
 
-#: packages/lib/models/Setting.ts:1417
+#: packages/lib/models/Setting.ts:1418
 msgid "days"
 msgstr "dani"
 
@@ -1007,8 +1005,8 @@ msgstr "Dešifrirani elementi: %s / %s"
 msgid "Decrypting items: %d/%d"
 msgstr "Dešifrirani elementi: %d/%d"
 
-#: packages/lib/models/Setting.ts:1155 packages/lib/models/Setting.ts:1162
-#: packages/lib/models/Setting.ts:1326
+#: packages/lib/models/Setting.ts:1156 packages/lib/models/Setting.ts:1163
+#: packages/lib/models/Setting.ts:1327
 msgid "Default"
 msgstr "Standardno"
 
@@ -1044,7 +1042,7 @@ msgstr "Izbriši istekle tokene"
 msgid "Delete line"
 msgstr "Izbriši redak"
 
-#: packages/lib/models/Setting.ts:1254
+#: packages/lib/models/Setting.ts:1255
 msgid "Delete local data and re-download from sync target"
 msgstr "Izbriši lokalne podatke i ponovo preuzmi iz izvora sinronizacije"
 
@@ -1125,7 +1123,7 @@ msgstr "Format odredišta: %s"
 msgid "Directory"
 msgstr "Mapa"
 
-#: packages/lib/models/Setting.ts:463
+#: packages/lib/models/Setting.ts:464
 msgid "Directory to synchronise with (absolute path)"
 msgstr "Mapa za sinkroniziranje (apsolutna putanja)"
 
@@ -1151,7 +1149,7 @@ msgstr "Dektiviraj Web Clipper uslugu"
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:249
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:138
 #: packages/app-mobile/components/screens/encryption-config.tsx:303
-#: packages/lib/models/Setting.ts:1273
+#: packages/lib/models/Setting.ts:1274
 msgid "Disabled"
 msgstr "Deaktivirano"
 
@@ -1268,7 +1266,7 @@ msgstr "Preuzimanje"
 msgid "Downloading resources..."
 msgstr "Preuzimanje resursa …"
 
-#: packages/lib/models/Setting.ts:383
+#: packages/lib/models/Setting.ts:384
 msgid "Dracula"
 msgstr "Drakula"
 
@@ -1326,28 +1324,28 @@ msgid "Edit profile configuration..."
 msgstr "Uredi konfiguraciju profila …"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:138
-#: packages/lib/models/Setting.ts:875 packages/lib/models/Setting.ts:876
-#: packages/lib/models/Setting.ts:877
+#: packages/lib/models/Setting.ts:876 packages/lib/models/Setting.ts:877
+#: packages/lib/models/Setting.ts:878
 msgid "Editor"
 msgstr "Uređivač"
 
-#: packages/lib/models/Setting.ts:1148
+#: packages/lib/models/Setting.ts:1149
 msgid "Editor font"
 msgstr "Font uređivača"
 
-#: packages/lib/models/Setting.ts:1174
+#: packages/lib/models/Setting.ts:1175
 msgid "Editor font family"
 msgstr "Obitelj fontova uređivača"
 
-#: packages/lib/models/Setting.ts:1140
+#: packages/lib/models/Setting.ts:1141
 msgid "Editor font size"
 msgstr "Veličina fonta uređivača"
 
-#: packages/lib/models/Setting.ts:1193
+#: packages/lib/models/Setting.ts:1194
 msgid "Editor maximum width"
 msgstr "Maksimala širina uređivača"
 
-#: packages/lib/models/Setting.ts:1186
+#: packages/lib/models/Setting.ts:1187
 msgid "Editor monospace font family"
 msgstr "Obitelj fontova fiksne širine uređivača"
 
@@ -1360,7 +1358,7 @@ msgstr "Uređivač: %s"
 msgid "Either \"text\" or \"json\""
 msgstr "„text” ili „json”"
 
-#: packages/lib/models/Setting.ts:1327
+#: packages/lib/models/Setting.ts:1328
 msgid "Emacs"
 msgstr "Emacs"
 
@@ -1383,31 +1381,31 @@ msgstr "istaknuti tekst"
 msgid "Enable"
 msgstr "Aktiviraj"
 
-#: packages/lib/models/Setting.ts:1089
+#: packages/lib/models/Setting.ts:1090
 msgid "Enable ^sup^ syntax"
 msgstr "Aktiviraj sintaksu za eksponent ^sup^"
 
-#: packages/lib/models/Setting.ts:1093
+#: packages/lib/models/Setting.ts:1094
 msgid "Enable ++insert++ syntax"
 msgstr "Aktiviraj sintaksu za umetanje ++insert++"
 
-#: packages/lib/models/Setting.ts:1085
+#: packages/lib/models/Setting.ts:1086
 msgid "Enable ==mark== syntax"
 msgstr "Aktiviraj sintaksu za isticanje ==mark=="
 
-#: packages/lib/models/Setting.ts:1088
+#: packages/lib/models/Setting.ts:1089
 msgid "Enable ~sub~ syntax"
 msgstr "Aktiviraj sintaksu za indeks ~sub~"
 
-#: packages/lib/models/Setting.ts:1091
+#: packages/lib/models/Setting.ts:1092
 msgid "Enable abbreviation syntax"
 msgstr "Aktiviraj sintaksu za kratice"
 
-#: packages/lib/models/Setting.ts:1082
+#: packages/lib/models/Setting.ts:1083
 msgid "Enable audio player"
 msgstr "Aktiviraj audio-player"
 
-#: packages/lib/models/Setting.ts:1090
+#: packages/lib/models/Setting.ts:1091
 msgid "Enable deflist syntax"
 msgstr "Aktiviraj sintaksu za pojmovni popis deflist"
 
@@ -1416,55 +1414,55 @@ msgstr "Aktiviraj sintaksu za pojmovni popis deflist"
 msgid "Enable encryption"
 msgstr "Aktiviraj šifriranje"
 
-#: packages/lib/models/Setting.ts:1086
+#: packages/lib/models/Setting.ts:1087
 msgid "Enable footnotes"
 msgstr "Aktiviraj fusnote"
 
-#: packages/lib/models/Setting.ts:1079
+#: packages/lib/models/Setting.ts:1080
 msgid "Enable Fountain syntax support"
 msgstr "Aktiviraj podršku za Fountain sintaksu"
 
-#: packages/lib/models/Setting.ts:1076
+#: packages/lib/models/Setting.ts:1077
 msgid "Enable Linkify"
 msgstr "Aktiviraj Linkify"
 
-#: packages/lib/models/Setting.ts:1092
+#: packages/lib/models/Setting.ts:1093
 msgid "Enable markdown emoji"
 msgstr "Aktiviraj markdown označavanje za emoji"
 
-#: packages/lib/models/Setting.ts:1078
+#: packages/lib/models/Setting.ts:1079
 msgid "Enable math expressions"
 msgstr "Aktiviraj matematičke izraze"
 
-#: packages/lib/models/Setting.ts:1080
+#: packages/lib/models/Setting.ts:1081
 msgid "Enable Mermaid diagrams support"
 msgstr "Aktiviraj podršku za Mermaid dijagrame"
 
-#: packages/lib/models/Setting.ts:1094
+#: packages/lib/models/Setting.ts:1095
 msgid "Enable multimarkdown table extension"
 msgstr "Aktiviraj multimarkdown proširenje za tablice"
 
-#: packages/lib/models/Setting.ts:1407
+#: packages/lib/models/Setting.ts:1408
 msgid "Enable note history"
 msgstr "Aktiviraj povijest bilješke"
 
-#: packages/lib/models/Setting.ts:1084
+#: packages/lib/models/Setting.ts:1085
 msgid "Enable PDF viewer"
 msgstr "Aktiviraj PDF-preglednik"
 
-#: packages/lib/models/Setting.ts:1074
+#: packages/lib/models/Setting.ts:1075
 msgid "Enable soft breaks"
 msgstr "Aktiviraj prijelom redaka"
 
-#: packages/lib/models/Setting.ts:1087
+#: packages/lib/models/Setting.ts:1088
 msgid "Enable table of contents extension"
 msgstr "Aktiviraj proširenje za kazalo"
 
-#: packages/lib/models/Setting.ts:1075
+#: packages/lib/models/Setting.ts:1076
 msgid "Enable typographer support"
 msgstr "Aktiviraj tipografsku podršku"
 
-#: packages/lib/models/Setting.ts:1083
+#: packages/lib/models/Setting.ts:1084
 msgid "Enable video player"
 msgstr "Aktiviraj video-player"
 
@@ -1499,7 +1497,7 @@ msgstr "Šifrirani elementi se ne mogu promijeniti"
 msgid "Encrypted notebooks cannot be renamed"
 msgstr "Šifrirane bilježnice se ne mogu preimenovati"
 
-#: packages/lib/models/Setting.ts:2293
+#: packages/lib/models/Setting.ts:2304
 msgid "Encryption"
 msgstr "Šifriranje"
 
@@ -1629,11 +1627,11 @@ msgstr "Izvozi samo zadanu bilješku."
 msgid "Exports only the given notebook."
 msgstr "Izvozi samo zadanu bilježnicu."
 
-#: packages/lib/models/Setting.ts:1393
+#: packages/lib/models/Setting.ts:1394
 msgid "Fail-safe"
 msgstr "Sigurnosni mehanizam"
 
-#: packages/lib/models/Setting.ts:1394
+#: packages/lib/models/Setting.ts:1395
 msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
@@ -1690,11 +1688,11 @@ msgstr "Ispravljanje popisa rezultata pretrage …"
 msgid "Focus"
 msgstr "Fokusiraj"
 
-#: packages/lib/models/Setting.ts:1023 packages/lib/models/Setting.ts:1040
+#: packages/lib/models/Setting.ts:1024 packages/lib/models/Setting.ts:1041
 msgid "Focus body"
 msgstr "Fokusiraj sadržaj"
 
-#: packages/lib/models/Setting.ts:1022 packages/lib/models/Setting.ts:1039
+#: packages/lib/models/Setting.ts:1023 packages/lib/models/Setting.ts:1040
 msgid "Focus title"
 msgstr "Fokusiraj naslov"
 
@@ -1723,7 +1721,7 @@ msgid ""
 "For the list of keyboard shortcuts and config options, type `help keymap`"
 msgstr "Za popis tipkovnih prečaca i opcija konfiguracije, upiši `help keymap`"
 
-#: packages/lib/models/Setting.ts:615
+#: packages/lib/models/Setting.ts:616
 msgid "Force path style"
 msgstr "Prisili stil putanje"
 
@@ -1744,7 +1742,7 @@ msgstr "Pretraživanje cijelog teksta je aktivirano: %d"
 msgid "Full changelog"
 msgstr "Potpuni dnevnik promjena"
 
-#: packages/lib/models/Setting.ts:2284
+#: packages/lib/models/Setting.ts:2295
 #: packages/server/src/services/MustacheService.ts:108
 msgid "General"
 msgstr "Opće"
@@ -1764,7 +1762,7 @@ msgstr[2] "Generiranje poveznica …"
 msgid "Get it now:"
 msgstr "Nabavi sada:"
 
-#: packages/lib/models/Setting.ts:1262
+#: packages/lib/models/Setting.ts:1263
 msgid "Get pre-releases when checking for updates"
 msgstr "Preuzmi predizdanja prilikom traženja novih verzija"
 
@@ -1856,7 +1854,7 @@ msgstr "Bez aktivnosti"
 msgid "Ignore"
 msgstr "Zanemari"
 
-#: packages/lib/models/Setting.ts:1383
+#: packages/lib/models/Setting.ts:1384
 msgid "Ignore TLS certificate errors"
 msgstr "Zanemari greške TLS certifikata"
 
@@ -1883,7 +1881,7 @@ msgstr "Uvoz bilježaka …"
 msgid "Imports data into Joplin."
 msgstr "Uvozi podatake u Joplin."
 
-#: packages/lib/models/Setting.ts:709
+#: packages/lib/models/Setting.ts:710
 msgid ""
 "In \"Manual\" mode, attachments are downloaded only when you click on them. "
 "In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
@@ -2029,7 +2027,7 @@ msgstr "Neispravan odgovor: %s"
 msgid "Invalid command: \"%s\""
 msgstr "Neispravna naredba: „%s”"
 
-#: packages/lib/models/Setting.ts:1833
+#: packages/lib/models/Setting.ts:1834
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Neispravna vrijednost opcije: „%s”. Moguće vrijednosti su: %s."
 
@@ -2070,11 +2068,11 @@ msgstr ""
 msgid "Joplin Cloud"
 msgstr "Joplin Cloud"
 
-#: packages/lib/models/Setting.ts:683
+#: packages/lib/models/Setting.ts:684
 msgid "Joplin Cloud email"
 msgstr "Joplin Cloud email"
 
-#: packages/lib/models/Setting.ts:694
+#: packages/lib/models/Setting.ts:695
 msgid "Joplin Cloud password"
 msgstr "Joplin Cloud lozinka"
 
@@ -2106,15 +2104,15 @@ msgstr "Joplin forum"
 msgid "Joplin Server"
 msgstr "Joplin poslužitelj"
 
-#: packages/lib/models/Setting.ts:644
+#: packages/lib/models/Setting.ts:645
 msgid "Joplin Server email"
 msgstr "Joplin poslužitelj email"
 
-#: packages/lib/models/Setting.ts:655
+#: packages/lib/models/Setting.ts:656
 msgid "Joplin Server password"
 msgstr "Joplin poslužitelj lozinka"
 
-#: packages/lib/models/Setting.ts:626
+#: packages/lib/models/Setting.ts:627
 msgid "Joplin Server URL"
 msgstr "Joplin poslužitelj URL"
 
@@ -2140,11 +2138,11 @@ msgstr ""
 "funkcijama kao što su objavljivanje bilježaka ili suradnja na bilježnicama s "
 "drugima."
 
-#: packages/lib/models/Setting.ts:1419
+#: packages/lib/models/Setting.ts:1420
 msgid "Keep note history for"
 msgstr "Čuvaj povijest bilješke"
 
-#: packages/lib/models/Setting.ts:1323
+#: packages/lib/models/Setting.ts:1324
 msgid "Keyboard Mode"
 msgstr "Modus tipkovnice"
 
@@ -2152,7 +2150,7 @@ msgstr "Modus tipkovnice"
 msgid "Keyboard Shortcut"
 msgstr "Tipkovni prečaci"
 
-#: packages/lib/models/Setting.ts:2295
+#: packages/lib/models/Setting.ts:2306
 msgid "Keyboard Shortcuts"
 msgstr "Tipkovni prečaci"
 
@@ -2164,11 +2162,11 @@ msgstr "Podržani privjesak ključeva: %s"
 msgid "Keys that need upgrading"
 msgstr "Ključevi koji se moraju nadograditi"
 
-#: packages/lib/models/Setting.ts:1312
+#: packages/lib/models/Setting.ts:1313
 msgid "Landscape"
 msgstr "Ležeći"
 
-#: packages/lib/models/Setting.ts:753
+#: packages/lib/models/Setting.ts:754
 msgid "Language"
 msgstr "Jezik"
 
@@ -2192,15 +2190,15 @@ msgstr "Slijed gumbova rasporeda"
 msgid "Leave notebook..."
 msgstr "Napusti bilježnicu …"
 
-#: packages/lib/models/Setting.ts:1306
+#: packages/lib/models/Setting.ts:1307
 msgid "Legal"
 msgstr "Legal"
 
-#: packages/lib/models/Setting.ts:1302
+#: packages/lib/models/Setting.ts:1303
 msgid "Letter"
 msgstr "Letter"
 
-#: packages/lib/models/Setting.ts:381
+#: packages/lib/models/Setting.ts:382
 msgid "Light"
 msgstr "Svijetla"
 
@@ -2300,11 +2298,11 @@ msgstr ""
 "(deaktiviraj), `decrypt` (dešifriraj), `status` (stanje), `decrypt-file` "
 "(dešifriraj datoteku) i `target-status` (stanje cilja)."
 
-#: packages/lib/models/Setting.ts:713
+#: packages/lib/models/Setting.ts:714
 msgid "Manual"
 msgstr "Ručno"
 
-#: packages/lib/models/Setting.ts:2289
+#: packages/lib/models/Setting.ts:2300
 #: packages/lib/services/interop/InteropService.ts:113
 #: packages/lib/services/interop/InteropService.ts:58
 msgid "Markdown"
@@ -2342,7 +2340,7 @@ msgstr "Glavna lozinka"
 msgid "Master password:"
 msgstr "Glavna lozinka:"
 
-#: packages/lib/models/Setting.ts:737
+#: packages/lib/models/Setting.ts:738
 msgid "Max concurrent connections"
 msgstr "Najviše istovremenih veza"
 
@@ -2445,19 +2443,19 @@ msgstr "Nova verzija: %s"
 msgid "Nextcloud"
 msgstr "Nextcloud"
 
-#: packages/lib/models/Setting.ts:499
+#: packages/lib/models/Setting.ts:500
 msgid "Nextcloud password"
 msgstr "Nextcloud lozinka"
 
-#: packages/lib/models/Setting.ts:488
+#: packages/lib/models/Setting.ts:489
 msgid "Nextcloud username"
 msgstr "Nextcloud korisničko ime"
 
-#: packages/lib/models/Setting.ts:476
+#: packages/lib/models/Setting.ts:477
 msgid "Nextcloud WebDAV URL"
 msgstr "Nextcloud WebDAV URL"
 
-#: packages/lib/models/Setting.ts:370
+#: packages/lib/models/Setting.ts:371
 msgid "no"
 msgstr "ne"
 
@@ -2510,7 +2508,7 @@ msgstr ""
 "Program za uređivanje teksta nije određen. Postavi ga pomoću `config editor "
 "<editor-path>` (gdje je editor-path putanja do programa)"
 
-#: packages/lib/models/Setting.ts:386
+#: packages/lib/models/Setting.ts:387
 msgid "Nord"
 msgstr "Nord"
 
@@ -2532,11 +2530,11 @@ msgstr "Nije izrađeno"
 msgid "note"
 msgstr "bilješka"
 
-#: packages/lib/models/Setting.ts:2287
+#: packages/lib/models/Setting.ts:2298
 msgid "Note"
 msgstr "Bilješka"
 
-#: packages/lib/models/Setting.ts:1482
+#: packages/lib/models/Setting.ts:1483
 msgid "Note area growth factor"
 msgstr "Faktor povećanja područja bilježaka"
 
@@ -2561,7 +2559,7 @@ msgid "Note has been saved."
 msgstr "Bilješka je spremljena."
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:34
-#: packages/lib/models/Setting.ts:2292
+#: packages/lib/models/Setting.ts:2303
 msgid "Note History"
 msgstr "Povijest bilježaka"
 
@@ -2573,7 +2571,7 @@ msgstr "Bilješka nije zadatak: „%s”"
 msgid "Note list"
 msgstr "Popis bilježaka"
 
-#: packages/lib/models/Setting.ts:1467
+#: packages/lib/models/Setting.ts:1468
 msgid "Note list growth factor"
 msgstr "Faktor povećanja popisa bilježaka"
 
@@ -2586,7 +2584,7 @@ msgstr "Svojstva bilješke"
 msgid "Note title"
 msgstr "Naslov bilješke"
 
-#: packages/lib/models/Setting.ts:1108
+#: packages/lib/models/Setting.ts:1109
 msgid "Note: Does not work in all desktop environments."
 msgstr "Napomena: Ne radi u svim radnim okruženjima."
 
@@ -2600,11 +2598,11 @@ msgstr ""
 msgid "Note&book"
 msgstr "Biljež&nica"
 
-#: packages/lib/models/Setting.ts:2288
+#: packages/lib/models/Setting.ts:2299
 msgid "Notebook"
 msgstr "Bilježnica"
 
-#: packages/lib/models/Setting.ts:1452
+#: packages/lib/models/Setting.ts:1453
 msgid "Notebook list growth factor"
 msgstr "Faktor povećanja popisa bilježnice"
 
@@ -2626,7 +2624,7 @@ msgstr "Naslov „%s” je rezerviran i ne može se koristiti za bilježnice."
 msgid "Notes"
 msgstr "Bilješke"
 
-#: packages/lib/models/Setting.ts:2304
+#: packages/lib/models/Setting.ts:2315
 msgid "Notes and settings are stored in: %s"
 msgstr "Bilješke i postavke spremaju se u: %s"
 
@@ -2654,7 +2652,7 @@ msgstr "Numerirani popis"
 msgid "OK"
 msgstr "U redu"
 
-#: packages/lib/models/Setting.ts:388
+#: packages/lib/models/Setting.ts:389
 msgid "OLED Dark"
 msgstr "OLED tamna"
 
@@ -2706,7 +2704,7 @@ msgstr "Otvori %s"
 msgid "Open profile directory"
 msgstr "Otvori mapu profila"
 
-#: packages/lib/models/Setting.ts:412
+#: packages/lib/models/Setting.ts:413
 msgid "Open Sync Wizard..."
 msgstr "Otvori programčić za sinkronizaciju …"
 
@@ -2738,11 +2736,11 @@ msgstr "Drugi programi …"
 msgid "Output format: %s"
 msgstr "Format rezultata: %s"
 
-#: packages/lib/models/Setting.ts:1309
+#: packages/lib/models/Setting.ts:1310
 msgid "Page orientation for PDF export"
 msgstr "Položaj stranice za izvoz u PDF"
 
-#: packages/lib/models/Setting.ts:1299
+#: packages/lib/models/Setting.ts:1300
 msgid "Page size for PDF export"
 msgstr "Veličina stranice za izvoz u PDF"
 
@@ -2869,11 +2867,11 @@ msgid "Plugin tools"
 msgstr "Dodaci"
 
 #: packages/app-desktop/gui/ConfigScreen/Sidebar.tsx:105
-#: packages/lib/models/Setting.ts:2290
+#: packages/lib/models/Setting.ts:2301
 msgid "Plugins"
 msgstr "Dodaci"
 
-#: packages/lib/models/Setting.ts:1311
+#: packages/lib/models/Setting.ts:1312
 msgid "Portrait"
 msgstr "Uspravni"
 
@@ -2893,11 +2891,11 @@ msgstr "Postavke"
 msgid "Preferences..."
 msgstr "Postavke …"
 
-#: packages/lib/models/Setting.ts:853
+#: packages/lib/models/Setting.ts:854
 msgid "Preferred dark theme"
 msgstr "Preferirana tamna tema"
 
-#: packages/lib/models/Setting.ts:837
+#: packages/lib/models/Setting.ts:838
 msgid "Preferred light theme"
 msgstr "Preferirana svijetla tema"
 
@@ -2991,7 +2989,7 @@ msgstr "Ponovo šifriraj podatke"
 msgid "Re-encryption"
 msgstr "Ponovno šifriranje"
 
-#: packages/lib/models/Setting.ts:1243
+#: packages/lib/models/Setting.ts:1244
 msgid "Re-upload local data to sync target"
 msgstr "Ponovo učitaj lokalne podatke u izvor sinronizacije"
 
@@ -3114,7 +3112,7 @@ msgid "Reveal file in folder"
 msgstr "Pokaži datoteku u mapi"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleNotesSortOrderReverse.ts:8
-#: packages/lib/models/Setting.ts:915 packages/lib/models/Setting.ts:992
+#: packages/lib/models/Setting.ts:916 packages/lib/models/Setting.ts:993
 msgid "Reverse sort order"
 msgstr "Obrni redoslijed"
 
@@ -3138,23 +3136,23 @@ msgstr ""
 msgid "S3"
 msgstr "S3"
 
-#: packages/lib/models/Setting.ts:593
+#: packages/lib/models/Setting.ts:594
 msgid "S3 access key"
 msgstr "S3 pristupni ključ"
 
-#: packages/lib/models/Setting.ts:553
+#: packages/lib/models/Setting.ts:554
 msgid "S3 bucket"
 msgstr "S3 bucket"
 
-#: packages/lib/models/Setting.ts:582
+#: packages/lib/models/Setting.ts:583
 msgid "S3 region"
 msgstr "S3 područje"
 
-#: packages/lib/models/Setting.ts:604
+#: packages/lib/models/Setting.ts:605
 msgid "S3 secret key"
 msgstr "S3 tajni ključ"
 
-#: packages/lib/models/Setting.ts:568
+#: packages/lib/models/Setting.ts:569
 msgid "S3 URL"
 msgstr "S3 URL"
 
@@ -3191,7 +3189,7 @@ msgstr "Spremi kao …"
 msgid "Save changes"
 msgstr "Spremi promjene"
 
-#: packages/lib/models/Setting.ts:993
+#: packages/lib/models/Setting.ts:994
 msgid "Save geo-location with notes"
 msgstr "Spremi geografske podatke mjesta s bilješkama"
 
@@ -3225,7 +3223,7 @@ msgstr "Traži …"
 msgid "Searches for the given <pattern> in all the notes."
 msgstr "Pretražuje zadani uzorak <pattern> u svim bilješkama."
 
-#: packages/lib/models/Setting.ts:1262
+#: packages/lib/models/Setting.ts:1263
 msgid "See the pre-release page for more details: %s"
 msgstr "Pregledaj pojedinosti na stranici predizdanja: %s"
 
@@ -3268,7 +3266,7 @@ msgstr "Postavi upozorenje"
 msgid "Set alarm:"
 msgstr "Postavi upozorenje:"
 
-#: packages/lib/models/Setting.ts:1193
+#: packages/lib/models/Setting.ts:1194
 msgid ""
 "Set it to 0 to make it take the complete available space. Recommended width "
 "is 600."
@@ -3322,7 +3320,7 @@ msgstr "Prikaži napredne postavke"
 msgid "Show all"
 msgstr "Prikaži sve"
 
-#: packages/lib/models/Setting.ts:884
+#: packages/lib/models/Setting.ts:885
 msgid "Show completed to-dos"
 msgstr "Prikaži završene zadatke"
 
@@ -3330,15 +3328,15 @@ msgstr "Prikaži završene zadatke"
 msgid "Show disabled keys"
 msgstr "Prikaži deaktivirane ključeve"
 
-#: packages/lib/models/Setting.ts:866
+#: packages/lib/models/Setting.ts:867
 msgid "Show note counts"
 msgstr "Prikaži broj bilježaka"
 
-#: packages/lib/models/Setting.ts:925
+#: packages/lib/models/Setting.ts:926
 msgid "Show sort order buttons"
 msgstr "Prikaži gumbe redoslijeda"
 
-#: packages/lib/models/Setting.ts:1106
+#: packages/lib/models/Setting.ts:1107
 msgid "Show tray icon"
 msgstr "Prikaži ikonu u programskoj traci"
 
@@ -3365,11 +3363,11 @@ msgstr ""
 msgid "Skipped: %d."
 msgstr "Preskočeno: %d."
 
-#: packages/lib/models/Setting.ts:385
+#: packages/lib/models/Setting.ts:386
 msgid "Solarised Dark"
 msgstr "Solarno tamna"
 
-#: packages/lib/models/Setting.ts:384
+#: packages/lib/models/Setting.ts:385
 msgid "Solarised Light"
 msgstr "Solarno svijetla"
 
@@ -3386,12 +3384,12 @@ msgid "Some items cannot be synchronised. Press for more info."
 msgstr ""
 "Neki elementi se ne mogu sinkronizirati. Pritisni za daljnje inormacije."
 
-#: packages/lib/models/Setting.ts:980
+#: packages/lib/models/Setting.ts:981
 msgid "Sort notebooks by"
 msgstr "Redoslijed bilježnica"
 
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:167
-#: packages/lib/models/Setting.ts:892
+#: packages/lib/models/Setting.ts:893
 msgid "Sort notes by"
 msgstr "Redoslijed bilježaka"
 
@@ -3413,7 +3411,7 @@ msgstr "Format izvora: %s"
 msgid "Source: "
 msgstr "Izvor: "
 
-#: packages/lib/models/Setting.ts:1399
+#: packages/lib/models/Setting.ts:1400
 msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
@@ -3426,12 +3424,12 @@ msgstr ""
 msgid "Spell checker"
 msgstr "Provjera pravopisa"
 
-#: packages/lib/models/Setting.ts:875 packages/lib/models/Setting.ts:877
-#: packages/lib/models/Setting.ts:878
+#: packages/lib/models/Setting.ts:876 packages/lib/models/Setting.ts:878
+#: packages/lib/models/Setting.ts:879
 msgid "Split View"
 msgstr "Razdvojeni prikaz"
 
-#: packages/lib/models/Setting.ts:1114
+#: packages/lib/models/Setting.ts:1115
 msgid "Start application minimised in the tray icon"
 msgstr "Pokreni program u sklopljenom stanju u programskoj traci"
 
@@ -3606,11 +3604,11 @@ msgstr "Verzija sinkronizacije: %s"
 msgid "Sync your notes"
 msgstr "Sinkroniziraj svoje bilješke"
 
-#: packages/lib/models/Setting.ts:2285
+#: packages/lib/models/Setting.ts:2296
 msgid "Synchronisation"
 msgstr "Sinkronizacija"
 
-#: packages/lib/models/Setting.ts:1270
+#: packages/lib/models/Setting.ts:1271
 msgid "Synchronisation interval"
 msgstr "Interval sinkronizacije"
 
@@ -3623,7 +3621,7 @@ msgstr "Sinkronizacija je već u tijeku."
 msgid "Synchronisation Status"
 msgstr "Stanje sinkronizacije"
 
-#: packages/lib/models/Setting.ts:423
+#: packages/lib/models/Setting.ts:424
 msgid "Synchronisation target"
 msgstr "Cilj sinkronizacije"
 
@@ -3637,7 +3635,7 @@ msgstr "Cilj sinkronizacije: %s (%s)"
 msgid "Synchronise"
 msgstr "Sinkroniziraj"
 
-#: packages/lib/models/Setting.ts:1290
+#: packages/lib/models/Setting.ts:1291
 msgid "Synchronise only over WiFi connection"
 msgstr "Sinkroniziraj samo putem WiFi veze"
 
@@ -3653,7 +3651,7 @@ msgstr "Sinkroniziranje …"
 msgid "Synchronizing..."
 msgstr "Sinkroniziranje …"
 
-#: packages/lib/models/Setting.ts:1305
+#: packages/lib/models/Setting.ts:1306
 msgid "Tabloid"
 msgstr "Tabloid"
 
@@ -3683,7 +3681,7 @@ msgstr "Snimi sliku"
 msgid "Tasks"
 msgstr "Zadaci"
 
-#: packages/lib/models/Setting.ts:1298
+#: packages/lib/models/Setting.ts:1299
 msgid "Text editor command"
 msgstr "Naredba za uređivača teksta"
 
@@ -3755,7 +3753,7 @@ msgstr ""
 "Standardna metoda šifriranja je promijenjena. Preporučujemo da ponovo "
 "šifriraš tvoje podatke."
 
-#: packages/lib/models/Setting.ts:1298
+#: packages/lib/models/Setting.ts:1299
 msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
@@ -3764,8 +3762,8 @@ msgstr ""
 "za otvaranje bilješke. Ako se ne zada, program će pokušati automatski "
 "otkriti standardni uređivač."
 
-#: packages/lib/models/Setting.ts:1454 packages/lib/models/Setting.ts:1469
-#: packages/lib/models/Setting.ts:1484
+#: packages/lib/models/Setting.ts:1455 packages/lib/models/Setting.ts:1470
+#: packages/lib/models/Setting.ts:1485
 msgid ""
 "The factor property sets how the item will grow or shrink to fit the "
 "available space in its container with respect to the other items. Thus an "
@@ -3876,7 +3874,7 @@ msgstr ""
 msgid "The tag \"%s\" already exists. Please choose a different name."
 msgstr "Oznaka „%s” već postoji. Odaberi jedno drugo ime."
 
-#: packages/lib/models/Setting.ts:425
+#: packages/lib/models/Setting.ts:426
 msgid ""
 "The target to synchronise to. Each sync target may have additional "
 "parameters which are named as `sync.NUM.NAME` (all documented below)."
@@ -3899,7 +3897,7 @@ msgstr ""
 msgid "The web clipper service is not enabled."
 msgstr "Web Clipper usluga nije aktivirana."
 
-#: packages/lib/models/Setting.ts:810
+#: packages/lib/models/Setting.ts:811
 msgid "Theme"
 msgstr "Tema"
 
@@ -3953,7 +3951,7 @@ msgstr ""
 "sinkronizacije. Za pronalaženje ovih elemenata, traži naslov ili ID (gore "
 "prikazan u zagradama)."
 
-#: packages/lib/models/Setting.ts:2303
+#: packages/lib/models/Setting.ts:2314
 msgid ""
 "These plugins enhance the Markdown renderer with additional features. Please "
 "note that, while these features might be useful, they are not standard "
@@ -4037,7 +4035,7 @@ msgstr ""
 "aktiviraš, možda ćeš u vatrozidu morati dozvoliti Joplinu pristup određenom "
 "priključku."
 
-#: packages/lib/models/Setting.ts:1108
+#: packages/lib/models/Setting.ts:1109
 msgid ""
 "This will allow Joplin to run in the background. It is recommended to enable "
 "this setting so that your notes are constantly being synchronised, thus "
@@ -4060,7 +4058,7 @@ msgstr ""
 "Ovime će se ukloniti bilježnica iz tvoje zbirke i više nećeš imati pristup "
 "sadržaju bilježnice. Želiš li nastaviti?"
 
-#: packages/lib/models/Setting.ts:788
+#: packages/lib/models/Setting.ts:789
 msgid "Time format"
 msgstr "Format vremena"
 
@@ -4222,7 +4220,7 @@ msgstr "Upiši nove oznake ili odaberi iz popisa"
 msgid "Type: %s."
 msgstr "Vrsta: %s."
 
-#: packages/lib/models/Setting.ts:883
+#: packages/lib/models/Setting.ts:884
 msgid "Uncompleted to-dos on top"
 msgstr "Najprije nezavršeni zadaci"
 
@@ -4370,7 +4368,7 @@ msgstr ""
 "Koristi ovo za ponovnu izgradnju popisa rezultata pretrage, ako postoji "
 "problem s pretragom. Ovisno o broju bilježaka, može potrajati."
 
-#: packages/lib/models/Setting.ts:1176
+#: packages/lib/models/Setting.ts:1177
 msgid ""
 "Used for most text in the markdown editor. If not found, a generic "
 "proportional (variable width) font is used."
@@ -4378,7 +4376,7 @@ msgstr ""
 "Koristi se za većinu teksta u markdown uređivaču. Ako se ne pronađe, koristi "
 "se generički font proporcijalne širine."
 
-#: packages/lib/models/Setting.ts:1188
+#: packages/lib/models/Setting.ts:1189
 msgid ""
 "Used where a fixed width font is needed to lay out text legibly (e.g. "
 "tables, checkboxes, code). If not found, a generic monospace (fixed width) "
@@ -4416,12 +4414,12 @@ msgid "View them now"
 msgstr "Pogledaj ih sada"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:139
-#: packages/lib/models/Setting.ts:875 packages/lib/models/Setting.ts:876
-#: packages/lib/models/Setting.ts:878
+#: packages/lib/models/Setting.ts:876 packages/lib/models/Setting.ts:877
+#: packages/lib/models/Setting.ts:879
 msgid "Viewer"
 msgstr "Preglednik"
 
-#: packages/lib/models/Setting.ts:1328
+#: packages/lib/models/Setting.ts:1329
 msgid "Vim"
 msgstr "Vim"
 
@@ -4434,7 +4432,7 @@ msgid "Warning: not all resources shown for performance reasons (limit: %s)."
 msgstr ""
 "Upozorenje: za brže izvođenje, ne prikazuju se svi resursi (ograničenje: %s)."
 
-#: packages/lib/models/Setting.ts:2294
+#: packages/lib/models/Setting.ts:2305
 msgid "Web Clipper"
 msgstr "Web Clipper"
 
@@ -4442,15 +4440,15 @@ msgstr "Web Clipper"
 msgid "WebDAV"
 msgstr "WebDAV"
 
-#: packages/lib/models/Setting.ts:534
+#: packages/lib/models/Setting.ts:535
 msgid "WebDAV password"
 msgstr "WebDAV lozinka"
 
-#: packages/lib/models/Setting.ts:511
+#: packages/lib/models/Setting.ts:512
 msgid "WebDAV URL"
 msgstr "WebDAV URL"
 
-#: packages/lib/models/Setting.ts:523
+#: packages/lib/models/Setting.ts:524
 msgid "WebDAV username"
 msgstr "WebDAV korisničko ime"
 
@@ -4476,11 +4474,11 @@ msgstr ""
 "Na primjer, za stvaranje bilježnice pritisni `mb`; za stvaranje bilješke "
 "pritisni `mn`."
 
-#: packages/lib/models/Setting.ts:1036
+#: packages/lib/models/Setting.ts:1037
 msgid "When creating a new note:"
 msgstr "Prilikom stvaranja nove bilješke:"
 
-#: packages/lib/models/Setting.ts:1019
+#: packages/lib/models/Setting.ts:1020
 msgid "When creating a new to-do:"
 msgstr "Prilikom stvaranja novog zadatka:"
 
@@ -4496,7 +4494,7 @@ msgstr "d"
 msgid "Y"
 msgstr "D"
 
-#: packages/lib/models/Setting.ts:369
+#: packages/lib/models/Setting.ts:370
 msgid "yes"
 msgstr "da"
 

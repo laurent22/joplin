@@ -46,7 +46,7 @@ msgstr "(%s)"
 msgid "(None)"
 msgstr "(Geen)"
 
-#: packages/lib/models/Setting.ts:369 packages/lib/models/Setting.ts:370
+#: packages/lib/models/Setting.ts:370 packages/lib/models/Setting.ts:371
 msgid "(wysiwyg: %s)"
 msgstr "(wuziwuk: %s)"
 
@@ -81,20 +81,20 @@ msgstr "E&xtra"
 msgid "&View"
 msgstr "Beel&d"
 
-#: packages/lib/models/Setting.ts:1417
+#: packages/lib/models/Setting.ts:1418
 msgid "%d days"
 msgstr "%d dagen"
 
-#: packages/lib/models/Setting.ts:1277
+#: packages/lib/models/Setting.ts:1278
 msgid "%d hour"
 msgstr "%d uur"
 
-#: packages/lib/models/Setting.ts:1278 packages/lib/models/Setting.ts:1279
+#: packages/lib/models/Setting.ts:1279 packages/lib/models/Setting.ts:1280
 msgid "%d hours"
 msgstr "%d uur"
 
-#: packages/lib/models/Setting.ts:1274 packages/lib/models/Setting.ts:1275
-#: packages/lib/models/Setting.ts:1276
+#: packages/lib/models/Setting.ts:1275 packages/lib/models/Setting.ts:1276
+#: packages/lib/models/Setting.ts:1277
 msgid "%d minutes"
 msgstr "%d minuten"
 
@@ -122,12 +122,12 @@ msgstr "%s (%s): %s"
 msgid "%s (pre-release)"
 msgstr "%s (pre-release)"
 
-#: packages/lib/models/Setting.ts:876 packages/lib/models/Setting.ts:877
-#: packages/lib/models/Setting.ts:878
+#: packages/lib/models/Setting.ts:877 packages/lib/models/Setting.ts:878
+#: packages/lib/models/Setting.ts:879
 msgid "%s / %s"
 msgstr "%s / %s"
 
-#: packages/lib/models/Setting.ts:875
+#: packages/lib/models/Setting.ts:876
 msgid "%s / %s / %s"
 msgstr "%s / %s / %s"
 
@@ -187,15 +187,15 @@ msgstr ""
 "het doel een reguliere notitie is, dan wordt deze omgezet in een taak). "
 "Gebruik \"clear\" om de taak weer om te zetten naar een reguliere notitie."
 
-#: packages/lib/models/Setting.ts:1303
+#: packages/lib/models/Setting.ts:1304
 msgid "A3"
 msgstr "A3"
 
-#: packages/lib/models/Setting.ts:1301
+#: packages/lib/models/Setting.ts:1302
 msgid "A4"
 msgstr "A4"
 
-#: packages/lib/models/Setting.ts:1304
+#: packages/lib/models/Setting.ts:1305
 msgid "A5"
 msgstr "A5"
 
@@ -300,7 +300,7 @@ msgstr "Toont ook niet-ingestelde en verborgen configuratiewaarden."
 msgid "Also publish linked notes"
 msgstr "Publicatie van notitie intrekken"
 
-#: packages/lib/models/Setting.ts:712
+#: packages/lib/models/Setting.ts:713
 msgid "Always"
 msgstr "Altijd"
 
@@ -308,11 +308,11 @@ msgstr "Altijd"
 msgid "An update is available, do you want to download it now?"
 msgstr "Er is een update beschikbaar. Wilt u deze nu downloaden?"
 
-#: packages/lib/models/Setting.ts:2286
+#: packages/lib/models/Setting.ts:2297
 msgid "Appearance"
 msgstr "Weergave"
 
-#: packages/lib/models/Setting.ts:2291
+#: packages/lib/models/Setting.ts:2302
 msgid "Application"
 msgstr "Applicatie"
 
@@ -329,7 +329,7 @@ msgstr "Weet u zeker dat u het autorisatietoken wilt vernieuwen?"
 msgid "Arguments:"
 msgstr "Argumenten:"
 
-#: packages/lib/models/Setting.ts:387
+#: packages/lib/models/Setting.ts:388
 msgid "Aritim Dark"
 msgstr "Aritim Dark"
 
@@ -360,7 +360,7 @@ msgstr "bijlagen"
 msgid "Attachment conflict: \"%s\""
 msgstr "Conflict in bijlage: \"%s\""
 
-#: packages/lib/models/Setting.ts:708
+#: packages/lib/models/Setting.ts:709
 msgid "Attachment download behaviour"
 msgstr "Bijlage downloadgedrag"
 
@@ -372,7 +372,7 @@ msgstr "Bijlagen"
 msgid "Attachments that could not be downloaded"
 msgstr "Bijlagen die niet konden worden gedownload"
 
-#: packages/lib/models/Setting.ts:373
+#: packages/lib/models/Setting.ts:374
 msgid ""
 "Attention: If you change this location, make sure you copy all your content "
 "to it before syncing, otherwise all files will be removed! See the FAQ for "
@@ -394,7 +394,7 @@ msgstr "Authenticatie is niet voltooid (geen authenticatiesleutel ontvangen)."
 msgid "Authorisation token:"
 msgstr "Autorisatie-token:"
 
-#: packages/lib/models/Setting.ts:714
+#: packages/lib/models/Setting.ts:715
 msgid "Auto"
 msgstr "Auto"
 
@@ -402,15 +402,15 @@ msgstr "Auto"
 msgid "Auto-add disabled accounts for deletion"
 msgstr "Voeg uitgeschakelde account automatisch toe voor verwijdering"
 
-#: packages/lib/models/Setting.ts:911
+#: packages/lib/models/Setting.ts:912
 msgid "Auto-pair braces, parenthesis, quotations, etc."
 msgstr "Auto-paar accolades, haakjes, citaten, enz."
 
-#: packages/lib/models/Setting.ts:1261
+#: packages/lib/models/Setting.ts:1262
 msgid "Automatically check for updates"
 msgstr "Automatisch controleren op updates"
 
-#: packages/lib/models/Setting.ts:823
+#: packages/lib/models/Setting.ts:824
 msgid "Automatically switch theme to match system theme"
 msgstr "Automatisch omschakelen thema op basis van systeemthema"
 
@@ -672,7 +672,7 @@ msgstr "Samenwerken aan notitieblokken met anderen"
 msgid "Coming alarms"
 msgstr "Aankomende alarmen"
 
-#: packages/lib/models/Setting.ts:1361
+#: packages/lib/models/Setting.ts:1362
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
 "or path to individual cert files. For example: /my/cert_dir, /other/custom."
@@ -954,15 +954,15 @@ msgstr "aangepaste volgorde"
 msgid "Custom order"
 msgstr "Aangepaste volgorde"
 
-#: packages/lib/models/Setting.ts:1230
+#: packages/lib/models/Setting.ts:1231
 msgid "Custom stylesheet for Joplin-wide app styles"
 msgstr "Aangepaste stylesheet voor Joplin-brede app-stijlen"
 
-#: packages/lib/models/Setting.ts:1213
+#: packages/lib/models/Setting.ts:1214
 msgid "Custom stylesheet for rendered Markdown"
 msgstr "Aangepaste stylesheet voor gerenderde Markdown"
 
-#: packages/lib/models/Setting.ts:1360
+#: packages/lib/models/Setting.ts:1361
 msgid "Custom TLS certificates"
 msgstr "Aangepaste TLS-certificaten"
 
@@ -972,7 +972,7 @@ msgstr "Aangepaste TLS-certificaten"
 msgid "Cut"
 msgstr "Knippen"
 
-#: packages/lib/models/Setting.ts:382
+#: packages/lib/models/Setting.ts:383
 msgid "Dark"
 msgstr "Donker"
 
@@ -988,11 +988,11 @@ msgstr "Database v%s"
 msgid "Date"
 msgstr "Datum"
 
-#: packages/lib/models/Setting.ts:765
+#: packages/lib/models/Setting.ts:766
 msgid "Date format"
 msgstr "Datumopmaak"
 
-#: packages/lib/models/Setting.ts:1417
+#: packages/lib/models/Setting.ts:1418
 msgid "days"
 msgstr "dagen"
 
@@ -1009,8 +1009,8 @@ msgstr "Ontsleutelde items: %s / %s"
 msgid "Decrypting items: %d/%d"
 msgstr "Bezig met ontsleutelen van items: %d/%d"
 
-#: packages/lib/models/Setting.ts:1155 packages/lib/models/Setting.ts:1162
-#: packages/lib/models/Setting.ts:1326
+#: packages/lib/models/Setting.ts:1156 packages/lib/models/Setting.ts:1163
+#: packages/lib/models/Setting.ts:1327
 msgid "Default"
 msgstr "Standaard"
 
@@ -1046,7 +1046,7 @@ msgstr "Verwijder verlopen tokens"
 msgid "Delete line"
 msgstr "Regel verwijderen"
 
-#: packages/lib/models/Setting.ts:1254
+#: packages/lib/models/Setting.ts:1255
 msgid "Delete local data and re-download from sync target"
 msgstr ""
 "Lokale gegevens verwijderen en opnieuw downloaden van het synchronisatiedoel"
@@ -1129,7 +1129,7 @@ msgstr "Bestemmingsformaat: %s"
 msgid "Directory"
 msgstr "Map"
 
-#: packages/lib/models/Setting.ts:463
+#: packages/lib/models/Setting.ts:464
 msgid "Directory to synchronise with (absolute path)"
 msgstr "Map waarnaar gesynchroniseerd moet worden (absoluut pad)"
 
@@ -1155,7 +1155,7 @@ msgstr "Webclipper-dienst uitschakelen"
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:249
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:138
 #: packages/app-mobile/components/screens/encryption-config.tsx:303
-#: packages/lib/models/Setting.ts:1273
+#: packages/lib/models/Setting.ts:1274
 msgid "Disabled"
 msgstr "Uitgeschakeld"
 
@@ -1271,7 +1271,7 @@ msgstr "Bezig met downloaden"
 msgid "Downloading resources..."
 msgstr "Bronnen downloaden..."
 
-#: packages/lib/models/Setting.ts:383
+#: packages/lib/models/Setting.ts:384
 msgid "Dracula"
 msgstr "Dracula"
 
@@ -1329,28 +1329,28 @@ msgid "Edit profile configuration..."
 msgstr ""
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:138
-#: packages/lib/models/Setting.ts:875 packages/lib/models/Setting.ts:876
-#: packages/lib/models/Setting.ts:877
+#: packages/lib/models/Setting.ts:876 packages/lib/models/Setting.ts:877
+#: packages/lib/models/Setting.ts:878
 msgid "Editor"
 msgstr "Editor"
 
-#: packages/lib/models/Setting.ts:1148
+#: packages/lib/models/Setting.ts:1149
 msgid "Editor font"
 msgstr "Lettertype van editor"
 
-#: packages/lib/models/Setting.ts:1174
+#: packages/lib/models/Setting.ts:1175
 msgid "Editor font family"
 msgstr "Lettertype van editor"
 
-#: packages/lib/models/Setting.ts:1140
+#: packages/lib/models/Setting.ts:1141
 msgid "Editor font size"
 msgstr "Lettergrootte van editor"
 
-#: packages/lib/models/Setting.ts:1193
+#: packages/lib/models/Setting.ts:1194
 msgid "Editor maximum width"
 msgstr "Maximale breedte van editor"
 
-#: packages/lib/models/Setting.ts:1186
+#: packages/lib/models/Setting.ts:1187
 msgid "Editor monospace font family"
 msgstr "Editor monospace lettertypefamilie"
 
@@ -1364,7 +1364,7 @@ msgstr "Editor"
 msgid "Either \"text\" or \"json\""
 msgstr "\"text\" of \"json\""
 
-#: packages/lib/models/Setting.ts:1327
+#: packages/lib/models/Setting.ts:1328
 msgid "Emacs"
 msgstr "Emacs"
 
@@ -1387,31 +1387,31 @@ msgstr "benadrukte tekst"
 msgid "Enable"
 msgstr "Inschakelen"
 
-#: packages/lib/models/Setting.ts:1089
+#: packages/lib/models/Setting.ts:1090
 msgid "Enable ^sup^ syntax"
 msgstr "^sup^ syntaxis inschakelen"
 
-#: packages/lib/models/Setting.ts:1093
+#: packages/lib/models/Setting.ts:1094
 msgid "Enable ++insert++ syntax"
 msgstr "++insert++ syntaxis inschakelen"
 
-#: packages/lib/models/Setting.ts:1085
+#: packages/lib/models/Setting.ts:1086
 msgid "Enable ==mark== syntax"
 msgstr "==mark== syntaxis inschakelen"
 
-#: packages/lib/models/Setting.ts:1088
+#: packages/lib/models/Setting.ts:1089
 msgid "Enable ~sub~ syntax"
 msgstr "~sub~ syntaxis inschakelen"
 
-#: packages/lib/models/Setting.ts:1091
+#: packages/lib/models/Setting.ts:1092
 msgid "Enable abbreviation syntax"
 msgstr "Afkortingen syntaxis inschakelen"
 
-#: packages/lib/models/Setting.ts:1082
+#: packages/lib/models/Setting.ts:1083
 msgid "Enable audio player"
 msgstr "Ondersteuning voor muziekspeler inschakelen"
 
-#: packages/lib/models/Setting.ts:1090
+#: packages/lib/models/Setting.ts:1091
 msgid "Enable deflist syntax"
 msgstr "Deflist syntaxis inschakelen"
 
@@ -1420,55 +1420,55 @@ msgstr "Deflist syntaxis inschakelen"
 msgid "Enable encryption"
 msgstr "Encryptie inschakelen"
 
-#: packages/lib/models/Setting.ts:1086
+#: packages/lib/models/Setting.ts:1087
 msgid "Enable footnotes"
 msgstr "Voetnoten inschakelen"
 
-#: packages/lib/models/Setting.ts:1079
+#: packages/lib/models/Setting.ts:1080
 msgid "Enable Fountain syntax support"
 msgstr "Ondersteuning voor Fountain syntaxis inschakelen"
 
-#: packages/lib/models/Setting.ts:1076
+#: packages/lib/models/Setting.ts:1077
 msgid "Enable Linkify"
 msgstr "Ondersteuning voor Linkify inschakelen"
 
-#: packages/lib/models/Setting.ts:1092
+#: packages/lib/models/Setting.ts:1093
 msgid "Enable markdown emoji"
 msgstr "Markdown emoji inschakelen"
 
-#: packages/lib/models/Setting.ts:1078
+#: packages/lib/models/Setting.ts:1079
 msgid "Enable math expressions"
 msgstr "Ondersteuning voor wiskundige expressies inschakelen"
 
-#: packages/lib/models/Setting.ts:1080
+#: packages/lib/models/Setting.ts:1081
 msgid "Enable Mermaid diagrams support"
 msgstr "Ondersteuning voor Mermaid diagrammen Inschakelen"
 
-#: packages/lib/models/Setting.ts:1094
+#: packages/lib/models/Setting.ts:1095
 msgid "Enable multimarkdown table extension"
 msgstr "Multimarkdown tabel extensie inschakelen"
 
-#: packages/lib/models/Setting.ts:1407
+#: packages/lib/models/Setting.ts:1408
 msgid "Enable note history"
 msgstr "Inschakelen geschiedenis van notities"
 
-#: packages/lib/models/Setting.ts:1084
+#: packages/lib/models/Setting.ts:1085
 msgid "Enable PDF viewer"
 msgstr "Ondersteuning voor PDF weergave inschakelen"
 
-#: packages/lib/models/Setting.ts:1074
+#: packages/lib/models/Setting.ts:1075
 msgid "Enable soft breaks"
 msgstr "Inschakelen zacht afbreken"
 
-#: packages/lib/models/Setting.ts:1087
+#: packages/lib/models/Setting.ts:1088
 msgid "Enable table of contents extension"
 msgstr "Inhoudsopgave inschakelen"
 
-#: packages/lib/models/Setting.ts:1075
+#: packages/lib/models/Setting.ts:1076
 msgid "Enable typographer support"
 msgstr "Ondersteuning voor typografie inschakelen"
 
-#: packages/lib/models/Setting.ts:1083
+#: packages/lib/models/Setting.ts:1084
 msgid "Enable video player"
 msgstr "Ondersteuning voor videospeler inschakelen"
 
@@ -1504,7 +1504,7 @@ msgstr "Versleutelde items kunnen niet worden bewerkt"
 msgid "Encrypted notebooks cannot be renamed"
 msgstr "Versleutelde notitieboeken kunnen niet worden hernoemd"
 
-#: packages/lib/models/Setting.ts:2293
+#: packages/lib/models/Setting.ts:2304
 msgid "Encryption"
 msgstr "Encryptie"
 
@@ -1634,11 +1634,11 @@ msgstr "Exporteert alleen de opgegeven notitie."
 msgid "Exports only the given notebook."
 msgstr "Exporteert alleen het opgegeven notitieboek."
 
-#: packages/lib/models/Setting.ts:1393
+#: packages/lib/models/Setting.ts:1394
 msgid "Fail-safe"
 msgstr "Faalveilig"
 
-#: packages/lib/models/Setting.ts:1394
+#: packages/lib/models/Setting.ts:1395
 msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
@@ -1696,11 +1696,11 @@ msgstr "Zoekindex repareren..."
 msgid "Focus"
 msgstr "Focus"
 
-#: packages/lib/models/Setting.ts:1023 packages/lib/models/Setting.ts:1040
+#: packages/lib/models/Setting.ts:1024 packages/lib/models/Setting.ts:1041
 msgid "Focus body"
 msgstr "Inhoud focussen"
 
-#: packages/lib/models/Setting.ts:1022 packages/lib/models/Setting.ts:1039
+#: packages/lib/models/Setting.ts:1023 packages/lib/models/Setting.ts:1040
 msgid "Focus title"
 msgstr "Titel focussen"
 
@@ -1731,7 +1731,7 @@ msgstr ""
 "Typ `help keymap` om de lijst met sneltoetsen en configuratie-opties te "
 "bekijken"
 
-#: packages/lib/models/Setting.ts:615
+#: packages/lib/models/Setting.ts:616
 msgid "Force path style"
 msgstr "Forceer pad-stijl"
 
@@ -1752,7 +1752,7 @@ msgstr "FTS ingeschakeld: %d"
 msgid "Full changelog"
 msgstr "Volledige changelog"
 
-#: packages/lib/models/Setting.ts:2284
+#: packages/lib/models/Setting.ts:2295
 #: packages/server/src/services/MustacheService.ts:108
 msgid "General"
 msgstr "Algemeen"
@@ -1771,7 +1771,7 @@ msgstr[1] "Nieuwe links genereren..."
 msgid "Get it now:"
 msgstr "Download nu:"
 
-#: packages/lib/models/Setting.ts:1262
+#: packages/lib/models/Setting.ts:1263
 msgid "Get pre-releases when checking for updates"
 msgstr "Verkrijg pre-releases bij controleren op updates"
 
@@ -1863,7 +1863,7 @@ msgstr "Inactief"
 msgid "Ignore"
 msgstr "Negeren"
 
-#: packages/lib/models/Setting.ts:1383
+#: packages/lib/models/Setting.ts:1384
 msgid "Ignore TLS certificate errors"
 msgstr "TLS-certificaatfouten negeren"
 
@@ -1891,7 +1891,7 @@ msgstr "Notities importeren..."
 msgid "Imports data into Joplin."
 msgstr "Importeert gegeven naar Joplin."
 
-#: packages/lib/models/Setting.ts:709
+#: packages/lib/models/Setting.ts:710
 msgid ""
 "In \"Manual\" mode, attachments are downloaded only when you click on them. "
 "In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
@@ -2036,7 +2036,7 @@ msgstr "Ongeldig antwoord: %s"
 msgid "Invalid command: \"%s\""
 msgstr "Ongeldige opdracht: \"%s\""
 
-#: packages/lib/models/Setting.ts:1833
+#: packages/lib/models/Setting.ts:1834
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Ongeldige optie: \"%s\". Geldige waarden zijn: %s."
 
@@ -2077,11 +2077,11 @@ msgstr ""
 msgid "Joplin Cloud"
 msgstr "Joplin Cloud"
 
-#: packages/lib/models/Setting.ts:683
+#: packages/lib/models/Setting.ts:684
 msgid "Joplin Cloud email"
 msgstr "Joplin Cloud email"
 
-#: packages/lib/models/Setting.ts:694
+#: packages/lib/models/Setting.ts:695
 msgid "Joplin Cloud password"
 msgstr "Joplin Cloud wachtwoord"
 
@@ -2113,15 +2113,15 @@ msgstr "Joplin-forum"
 msgid "Joplin Server"
 msgstr "Joplin Server"
 
-#: packages/lib/models/Setting.ts:644
+#: packages/lib/models/Setting.ts:645
 msgid "Joplin Server email"
 msgstr "Joplin Server e-mail"
 
-#: packages/lib/models/Setting.ts:655
+#: packages/lib/models/Setting.ts:656
 msgid "Joplin Server password"
 msgstr "Joplin Server Wachtwoord"
 
-#: packages/lib/models/Setting.ts:626
+#: packages/lib/models/Setting.ts:627
 msgid "Joplin Server URL"
 msgstr "Joplin Server URL"
 
@@ -2147,11 +2147,11 @@ msgstr ""
 "specifieke functies zoals het publiceren van notities of samenwerken aan "
 "notitieblokken met anderen."
 
-#: packages/lib/models/Setting.ts:1419
+#: packages/lib/models/Setting.ts:1420
 msgid "Keep note history for"
 msgstr "Bewaar geschiedenis van notities voor"
 
-#: packages/lib/models/Setting.ts:1323
+#: packages/lib/models/Setting.ts:1324
 msgid "Keyboard Mode"
 msgstr "Toetsenbordmodus"
 
@@ -2159,7 +2159,7 @@ msgstr "Toetsenbordmodus"
 msgid "Keyboard Shortcut"
 msgstr "Sneltoets"
 
-#: packages/lib/models/Setting.ts:2295
+#: packages/lib/models/Setting.ts:2306
 msgid "Keyboard Shortcuts"
 msgstr "Sneltoetsen"
 
@@ -2171,11 +2171,11 @@ msgstr "Ondersteunde Sleutelhanger: %s"
 msgid "Keys that need upgrading"
 msgstr "Hoofdsleutels die moeten worden bijgewerkt"
 
-#: packages/lib/models/Setting.ts:1312
+#: packages/lib/models/Setting.ts:1313
 msgid "Landscape"
 msgstr "Landschap"
 
-#: packages/lib/models/Setting.ts:753
+#: packages/lib/models/Setting.ts:754
 msgid "Language"
 msgstr "Taal"
 
@@ -2199,15 +2199,15 @@ msgstr "Knopindelingreeks"
 msgid "Leave notebook..."
 msgstr "Verlaat notitie..."
 
-#: packages/lib/models/Setting.ts:1306
+#: packages/lib/models/Setting.ts:1307
 msgid "Legal"
 msgstr "Wettelijk"
 
-#: packages/lib/models/Setting.ts:1302
+#: packages/lib/models/Setting.ts:1303
 msgid "Letter"
 msgstr "Brief"
 
-#: packages/lib/models/Setting.ts:381
+#: packages/lib/models/Setting.ts:382
 msgid "Light"
 msgstr "Licht"
 
@@ -2305,11 +2305,11 @@ msgstr ""
 "Beheert de E2EE-configuratie. Opdrachten zijn: `enable`, `disable`, "
 "`decrypt`, `status`, `decrypt-file` en `target-status`."
 
-#: packages/lib/models/Setting.ts:713
+#: packages/lib/models/Setting.ts:714
 msgid "Manual"
 msgstr "Handmatig"
 
-#: packages/lib/models/Setting.ts:2289
+#: packages/lib/models/Setting.ts:2300
 #: packages/lib/services/interop/InteropService.ts:113
 #: packages/lib/services/interop/InteropService.ts:58
 msgid "Markdown"
@@ -2347,7 +2347,7 @@ msgstr "Hoofdwachtwoord"
 msgid "Master password:"
 msgstr "Hoofdwachtwoord:"
 
-#: packages/lib/models/Setting.ts:737
+#: packages/lib/models/Setting.ts:738
 msgid "Max concurrent connections"
 msgstr "Max gelijktijdige verbindingen"
 
@@ -2450,19 +2450,19 @@ msgstr "Nieuwe versie: %s"
 msgid "Nextcloud"
 msgstr "Nextcloud"
 
-#: packages/lib/models/Setting.ts:499
+#: packages/lib/models/Setting.ts:500
 msgid "Nextcloud password"
 msgstr "Nextcloud-wachtwoord"
 
-#: packages/lib/models/Setting.ts:488
+#: packages/lib/models/Setting.ts:489
 msgid "Nextcloud username"
 msgstr "Nextcloud-gebruikersnaam"
 
-#: packages/lib/models/Setting.ts:476
+#: packages/lib/models/Setting.ts:477
 msgid "Nextcloud WebDAV URL"
 msgstr "Nextcloud WebDAV-URL"
 
-#: packages/lib/models/Setting.ts:370
+#: packages/lib/models/Setting.ts:371
 msgid "no"
 msgstr "nee"
 
@@ -2517,7 +2517,7 @@ msgstr ""
 "Geen teksteditor opgegeven. Stel deze in via `config editor <pad-naar-"
 "editor>`"
 
-#: packages/lib/models/Setting.ts:386
+#: packages/lib/models/Setting.ts:387
 msgid "Nord"
 msgstr "Nord"
 
@@ -2539,11 +2539,11 @@ msgstr "Niet  gegenereerd"
 msgid "note"
 msgstr "notitie"
 
-#: packages/lib/models/Setting.ts:2287
+#: packages/lib/models/Setting.ts:2298
 msgid "Note"
 msgstr "Notitie"
 
-#: packages/lib/models/Setting.ts:1482
+#: packages/lib/models/Setting.ts:1483
 msgid "Note area growth factor"
 msgstr "Notitiegebied groeifactor"
 
@@ -2568,7 +2568,7 @@ msgid "Note has been saved."
 msgstr "Notitie is opgeslagen."
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:34
-#: packages/lib/models/Setting.ts:2292
+#: packages/lib/models/Setting.ts:2303
 msgid "Note History"
 msgstr "Notitiegeschiedenis"
 
@@ -2580,7 +2580,7 @@ msgstr "Notitie is geen taak: \"%s\""
 msgid "Note list"
 msgstr "Notitielijst"
 
-#: packages/lib/models/Setting.ts:1467
+#: packages/lib/models/Setting.ts:1468
 msgid "Note list growth factor"
 msgstr "Notitielijst groeifactor"
 
@@ -2593,7 +2593,7 @@ msgstr "Eigenschappen van notitie"
 msgid "Note title"
 msgstr "Titel van notitie"
 
-#: packages/lib/models/Setting.ts:1108
+#: packages/lib/models/Setting.ts:1109
 msgid "Note: Does not work in all desktop environments."
 msgstr "Let op: dit werkt niet in alle desktop-omgevingen."
 
@@ -2608,11 +2608,11 @@ msgstr ""
 msgid "Note&book"
 msgstr "Notitie&boek"
 
-#: packages/lib/models/Setting.ts:2288
+#: packages/lib/models/Setting.ts:2299
 msgid "Notebook"
 msgstr "Notitieboek"
 
-#: packages/lib/models/Setting.ts:1452
+#: packages/lib/models/Setting.ts:1453
 msgid "Notebook list growth factor"
 msgstr "Notitieboeklijst groeifactor"
 
@@ -2634,7 +2634,7 @@ msgstr "Notitieboeken mogen niet \"%s\" heten; dit is een gereserveerde titel."
 msgid "Notes"
 msgstr "Notities"
 
-#: packages/lib/models/Setting.ts:2304
+#: packages/lib/models/Setting.ts:2315
 msgid "Notes and settings are stored in: %s"
 msgstr "Notities en instellingen worden opgeslagen in: %s"
 
@@ -2662,7 +2662,7 @@ msgstr "Genummerde lijst"
 msgid "OK"
 msgstr "Oké"
 
-#: packages/lib/models/Setting.ts:388
+#: packages/lib/models/Setting.ts:389
 msgid "OLED Dark"
 msgstr "OLED Donker"
 
@@ -2714,7 +2714,7 @@ msgstr "Open %s"
 msgid "Open profile directory"
 msgstr "Open profiel map"
 
-#: packages/lib/models/Setting.ts:412
+#: packages/lib/models/Setting.ts:413
 msgid "Open Sync Wizard..."
 msgstr "Open Sync Wizard..."
 
@@ -2746,11 +2746,11 @@ msgstr "Overige applicaties..."
 msgid "Output format: %s"
 msgstr "Uitvoerformaat: %s"
 
-#: packages/lib/models/Setting.ts:1309
+#: packages/lib/models/Setting.ts:1310
 msgid "Page orientation for PDF export"
 msgstr "Pagina-oriëntatie voor PDF-export"
 
-#: packages/lib/models/Setting.ts:1299
+#: packages/lib/models/Setting.ts:1300
 msgid "Page size for PDF export"
 msgstr "Paginaformaat voor PDF-export"
 
@@ -2881,11 +2881,11 @@ msgid "Plugin tools"
 msgstr "Plugin tools"
 
 #: packages/app-desktop/gui/ConfigScreen/Sidebar.tsx:105
-#: packages/lib/models/Setting.ts:2290
+#: packages/lib/models/Setting.ts:2301
 msgid "Plugins"
 msgstr "Plugins"
 
-#: packages/lib/models/Setting.ts:1311
+#: packages/lib/models/Setting.ts:1312
 msgid "Portrait"
 msgstr "Portret"
 
@@ -2905,11 +2905,11 @@ msgstr "Voorkeuren"
 msgid "Preferences..."
 msgstr "Voorkeuren..."
 
-#: packages/lib/models/Setting.ts:853
+#: packages/lib/models/Setting.ts:854
 msgid "Preferred dark theme"
 msgstr "Voorkeur donker thema"
 
-#: packages/lib/models/Setting.ts:837
+#: packages/lib/models/Setting.ts:838
 msgid "Preferred light theme"
 msgstr "Voorkeur licht thema"
 
@@ -3004,7 +3004,7 @@ msgstr "Data opnieuw versleutelen"
 msgid "Re-encryption"
 msgstr "Opnieuw versleutelen"
 
-#: packages/lib/models/Setting.ts:1243
+#: packages/lib/models/Setting.ts:1244
 msgid "Re-upload local data to sync target"
 msgstr "Lokale gegevens opnieuw uploaden om het doel te synchroniseren"
 
@@ -3127,7 +3127,7 @@ msgid "Reveal file in folder"
 msgstr "Bestand in map onthullen"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleNotesSortOrderReverse.ts:8
-#: packages/lib/models/Setting.ts:915 packages/lib/models/Setting.ts:992
+#: packages/lib/models/Setting.ts:916 packages/lib/models/Setting.ts:993
 msgid "Reverse sort order"
 msgstr "Sorteervolgorde omdraaien"
 
@@ -3151,23 +3151,23 @@ msgstr ""
 msgid "S3"
 msgstr "S3"
 
-#: packages/lib/models/Setting.ts:593
+#: packages/lib/models/Setting.ts:594
 msgid "S3 access key"
 msgstr "S3 toegangs sleutel"
 
-#: packages/lib/models/Setting.ts:553
+#: packages/lib/models/Setting.ts:554
 msgid "S3 bucket"
 msgstr "S3 bucket"
 
-#: packages/lib/models/Setting.ts:582
+#: packages/lib/models/Setting.ts:583
 msgid "S3 region"
 msgstr "S3 regio"
 
-#: packages/lib/models/Setting.ts:604
+#: packages/lib/models/Setting.ts:605
 msgid "S3 secret key"
 msgstr "S2 geheime sleutel"
 
-#: packages/lib/models/Setting.ts:568
+#: packages/lib/models/Setting.ts:569
 msgid "S3 URL"
 msgstr "S3 URL"
 
@@ -3205,7 +3205,7 @@ msgstr "Opslaan als..."
 msgid "Save changes"
 msgstr "Wijzigingen opslaan"
 
-#: packages/lib/models/Setting.ts:993
+#: packages/lib/models/Setting.ts:994
 msgid "Save geo-location with notes"
 msgstr "Locatie opslaan in notities"
 
@@ -3239,7 +3239,7 @@ msgstr "Zoeken..."
 msgid "Searches for the given <pattern> in all the notes."
 msgstr "Doorzoekt alle notities op het opgegeven <pattern>."
 
-#: packages/lib/models/Setting.ts:1262
+#: packages/lib/models/Setting.ts:1263
 msgid "See the pre-release page for more details: %s"
 msgstr "Zie de pre-release pagina voor meer details: %s"
 
@@ -3282,7 +3282,7 @@ msgstr "Alarm instellen"
 msgid "Set alarm:"
 msgstr "Alarm instellen:"
 
-#: packages/lib/models/Setting.ts:1193
+#: packages/lib/models/Setting.ts:1194
 msgid ""
 "Set it to 0 to make it take the complete available space. Recommended width "
 "is 600."
@@ -3336,7 +3336,7 @@ msgstr "Geavanceerde opties"
 msgid "Show all"
 msgstr "Alles tonen"
 
-#: packages/lib/models/Setting.ts:884
+#: packages/lib/models/Setting.ts:885
 msgid "Show completed to-dos"
 msgstr "Afgeronde taken tonen"
 
@@ -3344,15 +3344,15 @@ msgstr "Afgeronde taken tonen"
 msgid "Show disabled keys"
 msgstr "Toon uigeschakelde sleutels"
 
-#: packages/lib/models/Setting.ts:866
+#: packages/lib/models/Setting.ts:867
 msgid "Show note counts"
 msgstr "Toon notitietellingen"
 
-#: packages/lib/models/Setting.ts:925
+#: packages/lib/models/Setting.ts:926
 msgid "Show sort order buttons"
 msgstr "Sorteervolgordeknoppen weergeven"
 
-#: packages/lib/models/Setting.ts:1106
+#: packages/lib/models/Setting.ts:1107
 msgid "Show tray icon"
 msgstr "Systeemvakpictogram tonen"
 
@@ -3379,11 +3379,11 @@ msgstr ""
 msgid "Skipped: %d."
 msgstr "Overgeslagen: %d."
 
-#: packages/lib/models/Setting.ts:385
+#: packages/lib/models/Setting.ts:386
 msgid "Solarised Dark"
 msgstr "Solarised Dark"
 
-#: packages/lib/models/Setting.ts:384
+#: packages/lib/models/Setting.ts:385
 msgid "Solarised Light"
 msgstr "Solarised Light"
 
@@ -3400,12 +3400,12 @@ msgid "Some items cannot be synchronised. Press for more info."
 msgstr ""
 "Sommige items kunnen niet worden gesynchroniseerd. Klik voor meer informatie."
 
-#: packages/lib/models/Setting.ts:980
+#: packages/lib/models/Setting.ts:981
 msgid "Sort notebooks by"
 msgstr "Notitieboeken sorteren op"
 
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:167
-#: packages/lib/models/Setting.ts:892
+#: packages/lib/models/Setting.ts:893
 msgid "Sort notes by"
 msgstr "Notities sorteren op"
 
@@ -3426,7 +3426,7 @@ msgstr "Bronformaat: %s"
 msgid "Source: "
 msgstr "Bron: "
 
-#: packages/lib/models/Setting.ts:1399
+#: packages/lib/models/Setting.ts:1400
 msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
@@ -3439,12 +3439,12 @@ msgstr ""
 msgid "Spell checker"
 msgstr "Spellingscontrole"
 
-#: packages/lib/models/Setting.ts:875 packages/lib/models/Setting.ts:877
-#: packages/lib/models/Setting.ts:878
+#: packages/lib/models/Setting.ts:876 packages/lib/models/Setting.ts:878
+#: packages/lib/models/Setting.ts:879
 msgid "Split View"
 msgstr "Gesplitste Weergave"
 
-#: packages/lib/models/Setting.ts:1114
+#: packages/lib/models/Setting.ts:1115
 msgid "Start application minimised in the tray icon"
 msgstr "Start applicatie geminimaliseerd in het systeemvak"
 
@@ -3623,11 +3623,11 @@ msgstr "Synchronisatieversie: %s"
 msgid "Sync your notes"
 msgstr "Synchroniseer je notities"
 
-#: packages/lib/models/Setting.ts:2285
+#: packages/lib/models/Setting.ts:2296
 msgid "Synchronisation"
 msgstr "Synchronisatie"
 
-#: packages/lib/models/Setting.ts:1270
+#: packages/lib/models/Setting.ts:1271
 msgid "Synchronisation interval"
 msgstr "Synchronisatie-interval"
 
@@ -3640,7 +3640,7 @@ msgstr "Synchronisatie is al bezig."
 msgid "Synchronisation Status"
 msgstr "Synchronisatiestatus"
 
-#: packages/lib/models/Setting.ts:423
+#: packages/lib/models/Setting.ts:424
 msgid "Synchronisation target"
 msgstr "Synchronisatiedoel"
 
@@ -3654,7 +3654,7 @@ msgstr "Synchronisatiedoel: %s (%s)"
 msgid "Synchronise"
 msgstr "Synchroniseren"
 
-#: packages/lib/models/Setting.ts:1290
+#: packages/lib/models/Setting.ts:1291
 msgid "Synchronise only over WiFi connection"
 msgstr "Synchroniseer alleen via wifi-verbinding"
 
@@ -3670,7 +3670,7 @@ msgstr "Synchroniseren..."
 msgid "Synchronizing..."
 msgstr "Synchroniseren..."
 
-#: packages/lib/models/Setting.ts:1305
+#: packages/lib/models/Setting.ts:1306
 msgid "Tabloid"
 msgstr "Tabloid"
 
@@ -3700,7 +3700,7 @@ msgstr "Foto maken"
 msgid "Tasks"
 msgstr "Taken"
 
-#: packages/lib/models/Setting.ts:1298
+#: packages/lib/models/Setting.ts:1299
 msgid "Text editor command"
 msgstr "Tekst editor commando"
 
@@ -3775,7 +3775,7 @@ msgstr ""
 "De standaard versleutelmethode is gewijzigd, je moet je data opnieuw "
 "versleutelen."
 
-#: packages/lib/models/Setting.ts:1298
+#: packages/lib/models/Setting.ts:1299
 msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
@@ -3784,8 +3784,8 @@ msgstr ""
 "het openen van notities. Als er geen wordt opgegeven, dan wordt getracht de "
 "standaard editor te achterhalen."
 
-#: packages/lib/models/Setting.ts:1454 packages/lib/models/Setting.ts:1469
-#: packages/lib/models/Setting.ts:1484
+#: packages/lib/models/Setting.ts:1455 packages/lib/models/Setting.ts:1470
+#: packages/lib/models/Setting.ts:1485
 msgid ""
 "The factor property sets how the item will grow or shrink to fit the "
 "available space in its container with respect to the other items. Thus an "
@@ -3895,7 +3895,7 @@ msgstr ""
 msgid "The tag \"%s\" already exists. Please choose a different name."
 msgstr "Het label “%s” bestaat al. Kies een andere naam."
 
-#: packages/lib/models/Setting.ts:425
+#: packages/lib/models/Setting.ts:426
 msgid ""
 "The target to synchronise to. Each sync target may have additional "
 "parameters which are named as `sync.NUM.NAME` (all documented below)."
@@ -3920,7 +3920,7 @@ msgstr "De webclipper-dienst is ingeschakeld en wordt automatisch opgestart."
 msgid "The web clipper service is not enabled."
 msgstr "De webclipper-dienst is niet ingeschakeld."
 
-#: packages/lib/models/Setting.ts:810
+#: packages/lib/models/Setting.ts:811
 msgid "Theme"
 msgstr "Thema"
 
@@ -3977,7 +3977,7 @@ msgstr ""
 "synchronisatiedoel. Als u deze items wilt vinden, moet u zoeken naar de "
 "titel of ID ervan (welke hierboven tussen haakjes wordt getoond)."
 
-#: packages/lib/models/Setting.ts:2303
+#: packages/lib/models/Setting.ts:2314
 msgid ""
 "These plugins enhance the Markdown renderer with additional features. Please "
 "note that, while these features might be useful, they are not standard "
@@ -4062,7 +4062,7 @@ msgstr ""
 "Na het inschakelen kan uw firewall om toestemming vragen voor het uitvoeren "
 "van Joplin op een specifieke poort."
 
-#: packages/lib/models/Setting.ts:1108
+#: packages/lib/models/Setting.ts:1109
 msgid ""
 "This will allow Joplin to run in the background. It is recommended to enable "
 "this setting so that your notes are constantly being synchronised, thus "
@@ -4084,7 +4084,7 @@ msgstr ""
 "Hiermee wordt het notitieblok uit uw verzameling verwijderd en hebt u geen "
 "toegang meer tot de inhoud ervan. Wilt u doorgaan?"
 
-#: packages/lib/models/Setting.ts:788
+#: packages/lib/models/Setting.ts:789
 msgid "Time format"
 msgstr "Tijdopmaak"
 
@@ -4249,7 +4249,7 @@ msgstr "Typ nieuwe labels of kies ze uit de lijst"
 msgid "Type: %s."
 msgstr "Type: %s."
 
-#: packages/lib/models/Setting.ts:883
+#: packages/lib/models/Setting.ts:884
 msgid "Uncompleted to-dos on top"
 msgstr "Niet-afgeronde taken bovenaan"
 
@@ -4398,7 +4398,7 @@ msgstr ""
 "Gebruik dit om de zoekindex opnieuw op te bouwen als er een probleem is met "
 "zoeken: Het kan lang duren afhankelijk van het aantal notities."
 
-#: packages/lib/models/Setting.ts:1176
+#: packages/lib/models/Setting.ts:1177
 msgid ""
 "Used for most text in the markdown editor. If not found, a generic "
 "proportional (variable width) font is used."
@@ -4407,7 +4407,7 @@ msgstr ""
 "wordt gevonden, wordt een generiek proportioneel lettertype (variabele "
 "breedte) gebruikt."
 
-#: packages/lib/models/Setting.ts:1188
+#: packages/lib/models/Setting.ts:1189
 msgid ""
 "Used where a fixed width font is needed to lay out text legibly (e.g. "
 "tables, checkboxes, code). If not found, a generic monospace (fixed width) "
@@ -4447,12 +4447,12 @@ msgid "View them now"
 msgstr "Items tonen"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:139
-#: packages/lib/models/Setting.ts:875 packages/lib/models/Setting.ts:876
-#: packages/lib/models/Setting.ts:878
+#: packages/lib/models/Setting.ts:876 packages/lib/models/Setting.ts:877
+#: packages/lib/models/Setting.ts:879
 msgid "Viewer"
 msgstr "Viewer"
 
-#: packages/lib/models/Setting.ts:1328
+#: packages/lib/models/Setting.ts:1329
 msgid "Vim"
 msgstr "Vim"
 
@@ -4466,7 +4466,7 @@ msgstr ""
 "Waarschuwing: niet alle resources getoond om redenen van performance "
 "(limiet: %s)."
 
-#: packages/lib/models/Setting.ts:2294
+#: packages/lib/models/Setting.ts:2305
 msgid "Web Clipper"
 msgstr "Webclipper"
 
@@ -4474,15 +4474,15 @@ msgstr "Webclipper"
 msgid "WebDAV"
 msgstr "WebDAV"
 
-#: packages/lib/models/Setting.ts:534
+#: packages/lib/models/Setting.ts:535
 msgid "WebDAV password"
 msgstr "WebDAV-wachtwoord"
 
-#: packages/lib/models/Setting.ts:511
+#: packages/lib/models/Setting.ts:512
 msgid "WebDAV URL"
 msgstr "WebDAV-URL"
 
-#: packages/lib/models/Setting.ts:523
+#: packages/lib/models/Setting.ts:524
 msgid "WebDAV username"
 msgstr "WebDAV-gebruikersnaam"
 
@@ -4508,11 +4508,11 @@ msgstr ""
 "Voorbeeld: om een notitieboek te creëren, drukt u op `mb`; om een notitie te "
 "creëren, drukt u op `mn`."
 
-#: packages/lib/models/Setting.ts:1036
+#: packages/lib/models/Setting.ts:1037
 msgid "When creating a new note:"
 msgstr "Bij het creëren van een nieuwe notitie:"
 
-#: packages/lib/models/Setting.ts:1019
+#: packages/lib/models/Setting.ts:1020
 msgid "When creating a new to-do:"
 msgstr "Bij het creëren van een nieuwe taak:"
 
@@ -4528,7 +4528,7 @@ msgstr "j"
 msgid "Y"
 msgstr "J"
 
-#: packages/lib/models/Setting.ts:369
+#: packages/lib/models/Setting.ts:370
 msgid "yes"
 msgstr "ja"
 

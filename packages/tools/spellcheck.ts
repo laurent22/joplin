@@ -12,6 +12,8 @@ const main = async () => {
 	try {
 		await execCommand2(['yarn', 'run', 'cspell'].concat(filePaths), { showStderr: false, showStdout: false });
 	} catch (error) {
+		if (!error.stdout.trim()) return;
+
 		console.error(`Some spelling mistakes were found:\n${error.stdout}`);
 		process.exit(1);
 	}

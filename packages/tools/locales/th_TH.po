@@ -43,7 +43,7 @@ msgstr ""
 msgid "(None)"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:369 packages/lib/models/Setting.ts:370
+#: packages/lib/models/Setting.ts:370 packages/lib/models/Setting.ts:371
 msgid "(wysiwyg: %s)"
 msgstr ""
 
@@ -79,20 +79,20 @@ msgstr "&เครื่องมือ"
 msgid "&View"
 msgstr "&มุมมอง"
 
-#: packages/lib/models/Setting.ts:1417
+#: packages/lib/models/Setting.ts:1418
 msgid "%d days"
 msgstr "%d วัน"
 
-#: packages/lib/models/Setting.ts:1277
+#: packages/lib/models/Setting.ts:1278
 msgid "%d hour"
 msgstr "%d ชั่วโมง"
 
-#: packages/lib/models/Setting.ts:1278 packages/lib/models/Setting.ts:1279
+#: packages/lib/models/Setting.ts:1279 packages/lib/models/Setting.ts:1280
 msgid "%d hours"
 msgstr "%d ชั่วโมง"
 
-#: packages/lib/models/Setting.ts:1274 packages/lib/models/Setting.ts:1275
-#: packages/lib/models/Setting.ts:1276
+#: packages/lib/models/Setting.ts:1275 packages/lib/models/Setting.ts:1276
+#: packages/lib/models/Setting.ts:1277
 msgid "%d minutes"
 msgstr "%d นาที"
 
@@ -123,12 +123,12 @@ msgstr "%s (%s): %s"
 msgid "%s (pre-release)"
 msgstr "%s (pre-release)"
 
-#: packages/lib/models/Setting.ts:876 packages/lib/models/Setting.ts:877
-#: packages/lib/models/Setting.ts:878
+#: packages/lib/models/Setting.ts:877 packages/lib/models/Setting.ts:878
+#: packages/lib/models/Setting.ts:879
 msgid "%s / %s"
 msgstr "%s / %s"
 
-#: packages/lib/models/Setting.ts:875
+#: packages/lib/models/Setting.ts:876
 msgid "%s / %s / %s"
 msgstr "%s / %s / %s"
 
@@ -180,15 +180,15 @@ msgid ""
 "convert the to-do back to a regular note."
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1303
+#: packages/lib/models/Setting.ts:1304
 msgid "A3"
 msgstr "A3"
 
-#: packages/lib/models/Setting.ts:1301
+#: packages/lib/models/Setting.ts:1302
 msgid "A4"
 msgstr "A4"
 
-#: packages/lib/models/Setting.ts:1304
+#: packages/lib/models/Setting.ts:1305
 msgid "A5"
 msgstr "A5"
 
@@ -295,7 +295,7 @@ msgstr ""
 msgid "Also publish linked notes"
 msgstr "แบ่งปัน"
 
-#: packages/lib/models/Setting.ts:712
+#: packages/lib/models/Setting.ts:713
 #, fuzzy
 msgid "Always"
 msgstr "ตลอดเวลา"
@@ -305,12 +305,12 @@ msgstr "ตลอดเวลา"
 msgid "An update is available, do you want to download it now?"
 msgstr "มีอัพเดทใหม่ คุณต้องการดาวน์โหลดเลยหรือไม่?"
 
-#: packages/lib/models/Setting.ts:2286
+#: packages/lib/models/Setting.ts:2297
 #, fuzzy
 msgid "Appearance"
 msgstr "รูปร่างหน้าตา"
 
-#: packages/lib/models/Setting.ts:2291
+#: packages/lib/models/Setting.ts:2302
 msgid "Application"
 msgstr "แอปพลิเคชัน"
 
@@ -327,7 +327,7 @@ msgstr ""
 msgid "Arguments:"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:387
+#: packages/lib/models/Setting.ts:388
 msgid "Aritim Dark"
 msgstr ""
 
@@ -361,7 +361,7 @@ msgstr "ไฟล์แนบ"
 msgid "Attachment conflict: \"%s\""
 msgstr "ไฟล์แนบ"
 
-#: packages/lib/models/Setting.ts:708
+#: packages/lib/models/Setting.ts:709
 msgid "Attachment download behaviour"
 msgstr ""
 
@@ -374,7 +374,7 @@ msgstr "ไฟล์แนบ"
 msgid "Attachments that could not be downloaded"
 msgstr "ไฟล์แนบไม่สามารถดาวน์โหลดได้"
 
-#: packages/lib/models/Setting.ts:373
+#: packages/lib/models/Setting.ts:374
 msgid ""
 "Attention: If you change this location, make sure you copy all your content "
 "to it before syncing, otherwise all files will be removed! See the FAQ for "
@@ -393,7 +393,7 @@ msgstr "การขออนุมัติไม่สมบูรณ์ (ไ�
 msgid "Authorisation token:"
 msgstr "Token สำหรับการขออนุมัติ:"
 
-#: packages/lib/models/Setting.ts:714
+#: packages/lib/models/Setting.ts:715
 msgid "Auto"
 msgstr "อัตโนมัติ"
 
@@ -401,17 +401,17 @@ msgstr "อัตโนมัติ"
 msgid "Auto-add disabled accounts for deletion"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:911
+#: packages/lib/models/Setting.ts:912
 #, fuzzy
 msgid "Auto-pair braces, parenthesis, quotations, etc."
 msgstr "จับคู่อัตโนมัติ {}, (), \"\", ฯลฯ"
 
-#: packages/lib/models/Setting.ts:1261
+#: packages/lib/models/Setting.ts:1262
 #, fuzzy
 msgid "Automatically check for updates"
 msgstr "ตรวจสอบการอัพเดท..."
 
-#: packages/lib/models/Setting.ts:823
+#: packages/lib/models/Setting.ts:824
 msgid "Automatically switch theme to match system theme"
 msgstr ""
 
@@ -677,7 +677,7 @@ msgstr "โปรดสร้างสมุดบันทึกก่อน"
 msgid "Coming alarms"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1361
+#: packages/lib/models/Setting.ts:1362
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
 "or path to individual cert files. For example: /my/cert_dir, /other/custom."
@@ -956,17 +956,17 @@ msgstr ""
 msgid "Custom order"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1230
+#: packages/lib/models/Setting.ts:1231
 #, fuzzy
 msgid "Custom stylesheet for Joplin-wide app styles"
 msgstr "Stylesheet แบบกำหนดเอง สำหรับ Joplin"
 
-#: packages/lib/models/Setting.ts:1213
+#: packages/lib/models/Setting.ts:1214
 #, fuzzy
 msgid "Custom stylesheet for rendered Markdown"
 msgstr "Stylesheet แบบกำหนดเอง สำหรับ Joplin"
 
-#: packages/lib/models/Setting.ts:1360
+#: packages/lib/models/Setting.ts:1361
 msgid "Custom TLS certificates"
 msgstr "TLS certificate แบบกำหนดเอง"
 
@@ -976,7 +976,7 @@ msgstr "TLS certificate แบบกำหนดเอง"
 msgid "Cut"
 msgstr "ตัด"
 
-#: packages/lib/models/Setting.ts:382
+#: packages/lib/models/Setting.ts:383
 #, fuzzy
 msgid "Dark"
 msgstr "มืด"
@@ -994,11 +994,11 @@ msgstr "ฐานข้อมูล v%s"
 msgid "Date"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:765
+#: packages/lib/models/Setting.ts:766
 msgid "Date format"
 msgstr "รูปแบบวันที่"
 
-#: packages/lib/models/Setting.ts:1417
+#: packages/lib/models/Setting.ts:1418
 msgid "days"
 msgstr "วัน"
 
@@ -1016,8 +1016,8 @@ msgstr "รายการที่ถูกถอดรหัส: %s / %s"
 msgid "Decrypting items: %d/%d"
 msgstr "กำลังถอดรหัสรายการ: %d/%d"
 
-#: packages/lib/models/Setting.ts:1155 packages/lib/models/Setting.ts:1162
-#: packages/lib/models/Setting.ts:1326
+#: packages/lib/models/Setting.ts:1156 packages/lib/models/Setting.ts:1163
+#: packages/lib/models/Setting.ts:1327
 msgid "Default"
 msgstr "ค่าเริ่มต้น"
 
@@ -1057,7 +1057,7 @@ msgstr "ลบบันทึก %d เหล่านี้?"
 msgid "Delete line"
 msgstr "ลบบันทึก?"
 
-#: packages/lib/models/Setting.ts:1254
+#: packages/lib/models/Setting.ts:1255
 msgid "Delete local data and re-download from sync target"
 msgstr ""
 
@@ -1139,7 +1139,7 @@ msgstr "ฟอร์แมตปลายทาง: %s"
 msgid "Directory"
 msgstr "ไดเรกทอรี่"
 
-#: packages/lib/models/Setting.ts:463
+#: packages/lib/models/Setting.ts:464
 msgid "Directory to synchronise with (absolute path)"
 msgstr ""
 
@@ -1167,7 +1167,7 @@ msgstr "ปิดบริการ Web Clipper"
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:249
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:138
 #: packages/app-mobile/components/screens/encryption-config.tsx:303
-#: packages/lib/models/Setting.ts:1273
+#: packages/lib/models/Setting.ts:1274
 msgid "Disabled"
 msgstr "ปิด"
 
@@ -1276,7 +1276,7 @@ msgstr "กำลังดาวน์โหลด"
 msgid "Downloading resources..."
 msgstr "กำลังดาวน์โหลดทรัพยากร..."
 
-#: packages/lib/models/Setting.ts:383
+#: packages/lib/models/Setting.ts:384
 msgid "Dracula"
 msgstr "Dracula"
 
@@ -1333,28 +1333,28 @@ msgid "Edit profile configuration..."
 msgstr ""
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:138
-#: packages/lib/models/Setting.ts:875 packages/lib/models/Setting.ts:876
-#: packages/lib/models/Setting.ts:877
+#: packages/lib/models/Setting.ts:876 packages/lib/models/Setting.ts:877
+#: packages/lib/models/Setting.ts:878
 msgid "Editor"
 msgstr "ตัวแก้ไข"
 
-#: packages/lib/models/Setting.ts:1148
+#: packages/lib/models/Setting.ts:1149
 msgid "Editor font"
 msgstr "แบบตัวอักษรของตัวแก้ไข"
 
-#: packages/lib/models/Setting.ts:1174
+#: packages/lib/models/Setting.ts:1175
 msgid "Editor font family"
 msgstr "ตระกูลของแบบตัวอักษรของตัวแก้ไข"
 
-#: packages/lib/models/Setting.ts:1140
+#: packages/lib/models/Setting.ts:1141
 msgid "Editor font size"
 msgstr "ขนาดตัวอักษรของตัวแก้ไข"
 
-#: packages/lib/models/Setting.ts:1193
+#: packages/lib/models/Setting.ts:1194
 msgid "Editor maximum width"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1186
+#: packages/lib/models/Setting.ts:1187
 #, fuzzy
 msgid "Editor monospace font family"
 msgstr "ตระกูลของแบบตัวอักษรของตัวแก้ไข"
@@ -1370,7 +1370,7 @@ msgstr "ตัวแก้ไข"
 msgid "Either \"text\" or \"json\""
 msgstr "ไม่ “text” ก็ “json”"
 
-#: packages/lib/models/Setting.ts:1327
+#: packages/lib/models/Setting.ts:1328
 msgid "Emacs"
 msgstr "Emacs"
 
@@ -1393,32 +1393,32 @@ msgstr ""
 msgid "Enable"
 msgstr "เปิด"
 
-#: packages/lib/models/Setting.ts:1089
+#: packages/lib/models/Setting.ts:1090
 msgid "Enable ^sup^ syntax"
 msgstr "เปิดใช้งาน ^sup^ syntax"
 
-#: packages/lib/models/Setting.ts:1093
+#: packages/lib/models/Setting.ts:1094
 msgid "Enable ++insert++ syntax"
 msgstr "เปิดใช้งาน ++insert++syntax"
 
-#: packages/lib/models/Setting.ts:1085
+#: packages/lib/models/Setting.ts:1086
 msgid "Enable ==mark== syntax"
 msgstr "เปิดใช้งาน ==mark== syntax"
 
-#: packages/lib/models/Setting.ts:1088
+#: packages/lib/models/Setting.ts:1089
 msgid "Enable ~sub~ syntax"
 msgstr "เปิดใช้งาน ~sub~ syntax"
 
-#: packages/lib/models/Setting.ts:1091
+#: packages/lib/models/Setting.ts:1092
 msgid "Enable abbreviation syntax"
 msgstr "เปิดใช้งาน abbreviation syntax"
 
-#: packages/lib/models/Setting.ts:1082
+#: packages/lib/models/Setting.ts:1083
 #, fuzzy
 msgid "Enable audio player"
 msgstr "เปิดใช้งาน Markdown Emoji"
 
-#: packages/lib/models/Setting.ts:1090
+#: packages/lib/models/Setting.ts:1091
 msgid "Enable deflist syntax"
 msgstr "เปิดใช้งาน deflist syntax"
 
@@ -1428,57 +1428,57 @@ msgstr "เปิดใช้งาน deflist syntax"
 msgid "Enable encryption"
 msgstr "เปิดการเข้ารหัส"
 
-#: packages/lib/models/Setting.ts:1086
+#: packages/lib/models/Setting.ts:1087
 msgid "Enable footnotes"
 msgstr "เปิดใช้งาน Footnotes"
 
-#: packages/lib/models/Setting.ts:1079
+#: packages/lib/models/Setting.ts:1080
 msgid "Enable Fountain syntax support"
 msgstr "เปิดใช้งานการรองรับ Fountain syntax"
 
-#: packages/lib/models/Setting.ts:1076
+#: packages/lib/models/Setting.ts:1077
 #, fuzzy
 msgid "Enable Linkify"
 msgstr "เปิดใช้ประวัติบันทึกย้อนหลัง"
 
-#: packages/lib/models/Setting.ts:1092
+#: packages/lib/models/Setting.ts:1093
 msgid "Enable markdown emoji"
 msgstr "เปิดใช้งาน Markdown Emoji"
 
-#: packages/lib/models/Setting.ts:1078
+#: packages/lib/models/Setting.ts:1079
 msgid "Enable math expressions"
 msgstr "เปิดใช้งาน Math Expressions"
 
-#: packages/lib/models/Setting.ts:1080
+#: packages/lib/models/Setting.ts:1081
 msgid "Enable Mermaid diagrams support"
 msgstr "เปิดใช้งานการรองรับ Mermaid diagram"
 
-#: packages/lib/models/Setting.ts:1094
+#: packages/lib/models/Setting.ts:1095
 msgid "Enable multimarkdown table extension"
 msgstr "เปิดใช้งานส่วนเสริมตาราง Multimarkdown"
 
-#: packages/lib/models/Setting.ts:1407
+#: packages/lib/models/Setting.ts:1408
 msgid "Enable note history"
 msgstr "เปิดใช้ประวัติบันทึกย้อนหลัง"
 
-#: packages/lib/models/Setting.ts:1084
+#: packages/lib/models/Setting.ts:1085
 msgid "Enable PDF viewer"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1074
+#: packages/lib/models/Setting.ts:1075
 msgid "Enable soft breaks"
 msgstr "เปิดใช้งาน Soft Break"
 
-#: packages/lib/models/Setting.ts:1087
+#: packages/lib/models/Setting.ts:1088
 msgid "Enable table of contents extension"
 msgstr "เปิดใช้งานส่วนเสริมสารบัญ"
 
-#: packages/lib/models/Setting.ts:1075
+#: packages/lib/models/Setting.ts:1076
 #, fuzzy
 msgid "Enable typographer support"
 msgstr "เปิดใช้งานการรองรับ Typographer"
 
-#: packages/lib/models/Setting.ts:1083
+#: packages/lib/models/Setting.ts:1084
 msgid "Enable video player"
 msgstr ""
 
@@ -1512,7 +1512,7 @@ msgstr "รายการที่เข้ารหัสแล้วไม่
 msgid "Encrypted notebooks cannot be renamed"
 msgstr "สมุดบันทึกที่ถูกเข้ารหัสจะไม่สามารถแก้ไขชื่อได้"
 
-#: packages/lib/models/Setting.ts:2293
+#: packages/lib/models/Setting.ts:2304
 msgid "Encryption"
 msgstr "การเข้ารหัส"
 
@@ -1649,11 +1649,11 @@ msgstr "ส่งออกเฉพาะบันทึกที่เลือ
 msgid "Exports only the given notebook."
 msgstr "ส่งออกเฉพาะสมุดบันทึกที่เลือก"
 
-#: packages/lib/models/Setting.ts:1393
+#: packages/lib/models/Setting.ts:1394
 msgid "Fail-safe"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1394
+#: packages/lib/models/Setting.ts:1395
 msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
@@ -1709,12 +1709,12 @@ msgstr "กำลังซ่อมดัชนีค้นหา..."
 msgid "Focus"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1023 packages/lib/models/Setting.ts:1040
+#: packages/lib/models/Setting.ts:1024 packages/lib/models/Setting.ts:1041
 #, fuzzy
 msgid "Focus body"
 msgstr "โฟกัสที่เนื้อเรื่อง"
 
-#: packages/lib/models/Setting.ts:1022 packages/lib/models/Setting.ts:1039
+#: packages/lib/models/Setting.ts:1023 packages/lib/models/Setting.ts:1040
 #, fuzzy
 msgid "Focus title"
 msgstr "โฟกัสที่ชื่อเรื่อง"
@@ -1745,7 +1745,7 @@ msgid ""
 "For the list of keyboard shortcuts and config options, type `help keymap`"
 msgstr "สำหรับรายการคีย์ลัดและตัวเลือกการตั้งค่า พิมพ์ `help keymap`"
 
-#: packages/lib/models/Setting.ts:615
+#: packages/lib/models/Setting.ts:616
 msgid "Force path style"
 msgstr ""
 
@@ -1767,7 +1767,7 @@ msgstr "เปิดใช้ FTS: %d"
 msgid "Full changelog"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:2284
+#: packages/lib/models/Setting.ts:2295
 #: packages/server/src/services/MustacheService.ts:108
 msgid "General"
 msgstr "ทั่วไป"
@@ -1786,7 +1786,7 @@ msgstr[0] "กำลังสร้างลิงก์..."
 msgid "Get it now:"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1262
+#: packages/lib/models/Setting.ts:1263
 msgid "Get pre-releases when checking for updates"
 msgstr ""
 
@@ -1880,7 +1880,7 @@ msgstr "ว่าง"
 msgid "Ignore"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1383
+#: packages/lib/models/Setting.ts:1384
 msgid "Ignore TLS certificate errors"
 msgstr "เพิกเฉยข้อผิดพลาด TLS certificate"
 
@@ -1907,7 +1907,7 @@ msgstr "กำลังนำเข้าบันทึก..."
 msgid "Imports data into Joplin."
 msgstr "นำเข้าข้อมูลเข้ามาที่ Joplin"
 
-#: packages/lib/models/Setting.ts:709
+#: packages/lib/models/Setting.ts:710
 msgid ""
 "In \"Manual\" mode, attachments are downloaded only when you click on them. "
 "In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
@@ -2029,7 +2029,7 @@ msgstr ""
 msgid "Invalid command: \"%s\""
 msgstr "คำสั่งไม่ถูกต้อง: \"%s\""
 
-#: packages/lib/models/Setting.ts:1833
+#: packages/lib/models/Setting.ts:1834
 #, fuzzy
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "ค่าของตัวเลือกไม่ถูกต้อง: \"%s\" ค่าที่เป็นไปได้คือ: %s."
@@ -2072,12 +2072,12 @@ msgstr ""
 msgid "Joplin Cloud"
 msgstr "Joplin Forum"
 
-#: packages/lib/models/Setting.ts:683
+#: packages/lib/models/Setting.ts:684
 #, fuzzy
 msgid "Joplin Cloud email"
 msgstr "เว็บไซต์ของ Joplin"
 
-#: packages/lib/models/Setting.ts:694
+#: packages/lib/models/Setting.ts:695
 #, fuzzy
 msgid "Joplin Cloud password"
 msgstr "ตั้งรหัสผ่าน"
@@ -2109,17 +2109,17 @@ msgstr "Joplin Forum"
 msgid "Joplin Server"
 msgstr "เว็บไซต์ของ Joplin"
 
-#: packages/lib/models/Setting.ts:644
+#: packages/lib/models/Setting.ts:645
 #, fuzzy
 msgid "Joplin Server email"
 msgstr "เว็บไซต์ของ Joplin"
 
-#: packages/lib/models/Setting.ts:655
+#: packages/lib/models/Setting.ts:656
 #, fuzzy
 msgid "Joplin Server password"
 msgstr "ตั้งรหัสผ่าน"
 
-#: packages/lib/models/Setting.ts:626
+#: packages/lib/models/Setting.ts:627
 msgid "Joplin Server URL"
 msgstr ""
 
@@ -2140,12 +2140,12 @@ msgid ""
 "such as publishing notes or collaborating on notebooks with others."
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1419
+#: packages/lib/models/Setting.ts:1420
 #, fuzzy
 msgid "Keep note history for"
 msgstr "เก็บประวัติบันทึกย้อนหลังเป็นเวลา"
 
-#: packages/lib/models/Setting.ts:1323
+#: packages/lib/models/Setting.ts:1324
 msgid "Keyboard Mode"
 msgstr "โหมดของคีย์บอร์ด"
 
@@ -2154,7 +2154,7 @@ msgstr "โหมดของคีย์บอร์ด"
 msgid "Keyboard Shortcut"
 msgstr "โหมดของคีย์บอร์ด"
 
-#: packages/lib/models/Setting.ts:2295
+#: packages/lib/models/Setting.ts:2306
 #, fuzzy
 msgid "Keyboard Shortcuts"
 msgstr "โหมดของคีย์บอร์ด"
@@ -2167,11 +2167,11 @@ msgstr ""
 msgid "Keys that need upgrading"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1312
+#: packages/lib/models/Setting.ts:1313
 msgid "Landscape"
 msgstr "แนวนอน"
 
-#: packages/lib/models/Setting.ts:753
+#: packages/lib/models/Setting.ts:754
 msgid "Language"
 msgstr "ภาษา"
 
@@ -2196,15 +2196,15 @@ msgstr ""
 msgid "Leave notebook..."
 msgstr "แบ่งปันบันทึก..."
 
-#: packages/lib/models/Setting.ts:1306
+#: packages/lib/models/Setting.ts:1307
 msgid "Legal"
 msgstr "Legal"
 
-#: packages/lib/models/Setting.ts:1302
+#: packages/lib/models/Setting.ts:1303
 msgid "Letter"
 msgstr "Letter"
 
-#: packages/lib/models/Setting.ts:381
+#: packages/lib/models/Setting.ts:382
 #, fuzzy
 msgid "Light"
 msgstr "สว่าง"
@@ -2305,11 +2305,11 @@ msgstr ""
 "จัดการการตั้งค่า E2EE คำสั่งคือ `enable`, `disable`, `decrypt`, `status`, `decrypt-"
 "file` และ `target-status`"
 
-#: packages/lib/models/Setting.ts:713
+#: packages/lib/models/Setting.ts:714
 msgid "Manual"
 msgstr "ทำด้วยตนเอง"
 
-#: packages/lib/models/Setting.ts:2289
+#: packages/lib/models/Setting.ts:2300
 #: packages/lib/services/interop/InteropService.ts:113
 #: packages/lib/services/interop/InteropService.ts:58
 msgid "Markdown"
@@ -2349,7 +2349,7 @@ msgstr "ตั้งรหัสผ่าน"
 msgid "Master password:"
 msgstr "ตั้งรหัสผ่าน"
 
-#: packages/lib/models/Setting.ts:737
+#: packages/lib/models/Setting.ts:738
 msgid "Max concurrent connections"
 msgstr ""
 
@@ -2454,19 +2454,19 @@ msgstr "เวอร์ชั่นใหม่: %s"
 msgid "Nextcloud"
 msgstr "Nextcloud"
 
-#: packages/lib/models/Setting.ts:499
+#: packages/lib/models/Setting.ts:500
 msgid "Nextcloud password"
 msgstr "รหัสผ่าน Nextcloud"
 
-#: packages/lib/models/Setting.ts:488
+#: packages/lib/models/Setting.ts:489
 msgid "Nextcloud username"
 msgstr "ชื่อผู้ใช้ Nextcloud"
 
-#: packages/lib/models/Setting.ts:476
+#: packages/lib/models/Setting.ts:477
 msgid "Nextcloud WebDAV URL"
 msgstr "Nextcloud WebDAV URL"
 
-#: packages/lib/models/Setting.ts:370
+#: packages/lib/models/Setting.ts:371
 #, fuzzy
 msgid "no"
 msgstr "n"
@@ -2521,7 +2521,7 @@ msgid ""
 "No text editor is defined. Please set it using `config editor <editor-path>`"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:386
+#: packages/lib/models/Setting.ts:387
 msgid "Nord"
 msgstr "Nord"
 
@@ -2543,11 +2543,11 @@ msgstr ""
 msgid "note"
 msgstr "บันทึก"
 
-#: packages/lib/models/Setting.ts:2287
+#: packages/lib/models/Setting.ts:2298
 msgid "Note"
 msgstr "บันทึก"
 
-#: packages/lib/models/Setting.ts:1482
+#: packages/lib/models/Setting.ts:1483
 msgid "Note area growth factor"
 msgstr ""
 
@@ -2576,7 +2576,7 @@ msgid "Note has been saved."
 msgstr "สมุดบันทึกไม่ได้ระบุ"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:34
-#: packages/lib/models/Setting.ts:2292
+#: packages/lib/models/Setting.ts:2303
 msgid "Note History"
 msgstr "ประวัติบันทึกย้อนหลัง"
 
@@ -2588,7 +2588,7 @@ msgstr ""
 msgid "Note list"
 msgstr "รายการบันทึก"
 
-#: packages/lib/models/Setting.ts:1467
+#: packages/lib/models/Setting.ts:1468
 msgid "Note list growth factor"
 msgstr ""
 
@@ -2601,7 +2601,7 @@ msgstr "คุณสมบัติของบันทึก"
 msgid "Note title"
 msgstr "ชื่อบันทึก"
 
-#: packages/lib/models/Setting.ts:1108
+#: packages/lib/models/Setting.ts:1109
 #, fuzzy
 msgid "Note: Does not work in all desktop environments."
 msgstr "หมายเหตุ: ทำงานได้กับบาง Desktop Environment เท่านั้น"
@@ -2616,12 +2616,12 @@ msgstr ""
 msgid "Note&book"
 msgstr "สมุดบันทึก"
 
-#: packages/lib/models/Setting.ts:2288
+#: packages/lib/models/Setting.ts:2299
 #, fuzzy
 msgid "Notebook"
 msgstr "สมุดบันทึก"
 
-#: packages/lib/models/Setting.ts:1452
+#: packages/lib/models/Setting.ts:1453
 msgid "Notebook list growth factor"
 msgstr ""
 
@@ -2645,7 +2645,7 @@ msgstr "สมุดบันทึกไม่สามารถใช้ชื
 msgid "Notes"
 msgstr "บันทึก"
 
-#: packages/lib/models/Setting.ts:2304
+#: packages/lib/models/Setting.ts:2315
 #, fuzzy
 msgid "Notes and settings are stored in: %s"
 msgstr "บันทึก และ การตั้งค่า จะถูกเก็บไว้ใน: %s"
@@ -2674,7 +2674,7 @@ msgstr "รายการแบบตัวเลข"
 msgid "OK"
 msgstr "ตกลง"
 
-#: packages/lib/models/Setting.ts:388
+#: packages/lib/models/Setting.ts:389
 msgid "OLED Dark"
 msgstr "OLED Dark"
 
@@ -2725,7 +2725,7 @@ msgstr "เปิด %s"
 msgid "Open profile directory"
 msgstr "เปิดไดเรกทอรี่เทมเพลต"
 
-#: packages/lib/models/Setting.ts:412
+#: packages/lib/models/Setting.ts:413
 msgid "Open Sync Wizard..."
 msgstr ""
 
@@ -2760,12 +2760,12 @@ msgstr "ออกจากแอปพลิเคชั่น"
 msgid "Output format: %s"
 msgstr "ฟอร์แมตต้นฉบับ: %s"
 
-#: packages/lib/models/Setting.ts:1309
+#: packages/lib/models/Setting.ts:1310
 #, fuzzy
 msgid "Page orientation for PDF export"
 msgstr "การจัดวางหน้า สำหรับการส่งออก PDF"
 
-#: packages/lib/models/Setting.ts:1299
+#: packages/lib/models/Setting.ts:1300
 msgid "Page size for PDF export"
 msgstr "ขนาดของหน้า สำหรับการส่งออก PDF"
 
@@ -2888,11 +2888,11 @@ msgid "Plugin tools"
 msgstr "ปลั๊กอิน"
 
 #: packages/app-desktop/gui/ConfigScreen/Sidebar.tsx:105
-#: packages/lib/models/Setting.ts:2290
+#: packages/lib/models/Setting.ts:2301
 msgid "Plugins"
 msgstr "ปลั๊กอิน"
 
-#: packages/lib/models/Setting.ts:1311
+#: packages/lib/models/Setting.ts:1312
 msgid "Portrait"
 msgstr "แนวตั้ง"
 
@@ -2912,11 +2912,11 @@ msgstr "การตั้งค่า"
 msgid "Preferences..."
 msgstr "การตั้งค่า"
 
-#: packages/lib/models/Setting.ts:853
+#: packages/lib/models/Setting.ts:854
 msgid "Preferred dark theme"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:837
+#: packages/lib/models/Setting.ts:838
 msgid "Preferred light theme"
 msgstr ""
 
@@ -3012,7 +3012,7 @@ msgstr "เลือกวันที่"
 msgid "Re-encryption"
 msgstr "การเข้ารหัส"
 
-#: packages/lib/models/Setting.ts:1243
+#: packages/lib/models/Setting.ts:1244
 msgid "Re-upload local data to sync target"
 msgstr ""
 
@@ -3138,7 +3138,7 @@ msgid "Reveal file in folder"
 msgstr ""
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleNotesSortOrderReverse.ts:8
-#: packages/lib/models/Setting.ts:915 packages/lib/models/Setting.ts:992
+#: packages/lib/models/Setting.ts:916 packages/lib/models/Setting.ts:993
 #, fuzzy
 msgid "Reverse sort order"
 msgstr "จัดเรียงย้อนกลับ"
@@ -3162,23 +3162,23 @@ msgstr ""
 msgid "S3"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:593
+#: packages/lib/models/Setting.ts:594
 msgid "S3 access key"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:553
+#: packages/lib/models/Setting.ts:554
 msgid "S3 bucket"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:582
+#: packages/lib/models/Setting.ts:583
 msgid "S3 region"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:604
+#: packages/lib/models/Setting.ts:605
 msgid "S3 secret key"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:568
+#: packages/lib/models/Setting.ts:569
 msgid "S3 URL"
 msgstr ""
 
@@ -3215,7 +3215,7 @@ msgstr "บันทึกเป็น..."
 msgid "Save changes"
 msgstr "บันทึกการเปลี่ยนแปลง"
 
-#: packages/lib/models/Setting.ts:993
+#: packages/lib/models/Setting.ts:994
 #, fuzzy
 msgid "Save geo-location with notes"
 msgstr "บันทึกตำหน่งภูมิศาสตร์"
@@ -3251,7 +3251,7 @@ msgstr "ค้นหา..."
 msgid "Searches for the given <pattern> in all the notes."
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1262
+#: packages/lib/models/Setting.ts:1263
 msgid "See the pre-release page for more details: %s"
 msgstr ""
 
@@ -3298,7 +3298,7 @@ msgstr "ตั้งการแจ้งเตือน"
 msgid "Set alarm:"
 msgstr "ตั้งการแจ้งเตือน:"
 
-#: packages/lib/models/Setting.ts:1193
+#: packages/lib/models/Setting.ts:1194
 msgid ""
 "Set it to 0 to make it take the complete available space. Recommended width "
 "is 600."
@@ -3351,7 +3351,7 @@ msgstr "แสดงการตั้งค่าขั้นสูง"
 msgid "Show all"
 msgstr "แสดงทั้งหมด"
 
-#: packages/lib/models/Setting.ts:884
+#: packages/lib/models/Setting.ts:885
 #, fuzzy
 msgid "Show completed to-dos"
 msgstr "แสดง to-do ที่เสร็จแล้ว"
@@ -3361,17 +3361,17 @@ msgstr "แสดง to-do ที่เสร็จแล้ว"
 msgid "Show disabled keys"
 msgstr "แสดงการตั้งค่าขั้นสูง"
 
-#: packages/lib/models/Setting.ts:866
+#: packages/lib/models/Setting.ts:867
 #, fuzzy
 msgid "Show note counts"
 msgstr "แสดงจำนวนบันทึก"
 
-#: packages/lib/models/Setting.ts:925
+#: packages/lib/models/Setting.ts:926
 #, fuzzy
 msgid "Show sort order buttons"
 msgstr "แสดงจำนวนบันทึก"
 
-#: packages/lib/models/Setting.ts:1106
+#: packages/lib/models/Setting.ts:1107
 msgid "Show tray icon"
 msgstr "แสดงไอคอนใน System tray"
 
@@ -3396,11 +3396,11 @@ msgstr ""
 msgid "Skipped: %d."
 msgstr "ข้าม: %d"
 
-#: packages/lib/models/Setting.ts:385
+#: packages/lib/models/Setting.ts:386
 msgid "Solarised Dark"
 msgstr "Solarised Dark"
 
-#: packages/lib/models/Setting.ts:384
+#: packages/lib/models/Setting.ts:385
 msgid "Solarised Light"
 msgstr "Solarised Light"
 
@@ -3418,12 +3418,12 @@ msgstr "รายการที่ไม่สามารถทำการซ
 msgid "Some items cannot be synchronised. Press for more info."
 msgstr "มีบางรายการที่ไม่สามารถทำการซิงโครไนซ์ได้ กดเพื่อดูข้อมูลเพิ่มเติม"
 
-#: packages/lib/models/Setting.ts:980
+#: packages/lib/models/Setting.ts:981
 msgid "Sort notebooks by"
 msgstr "จัดเรียงสมุดบันทึกโดย"
 
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:167
-#: packages/lib/models/Setting.ts:892
+#: packages/lib/models/Setting.ts:893
 msgid "Sort notes by"
 msgstr "จัดเรียงบันทึกโดย"
 
@@ -3445,7 +3445,7 @@ msgstr "ฟอร์แมตต้นฉบับ: %s"
 msgid "Source: "
 msgstr "ต้นฉบับ"
 
-#: packages/lib/models/Setting.ts:1399
+#: packages/lib/models/Setting.ts:1400
 msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
@@ -3456,12 +3456,12 @@ msgstr "ระบุพอร์ตที่จะใช้โดยเซิร
 msgid "Spell checker"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:875 packages/lib/models/Setting.ts:877
-#: packages/lib/models/Setting.ts:878
+#: packages/lib/models/Setting.ts:876 packages/lib/models/Setting.ts:878
+#: packages/lib/models/Setting.ts:879
 msgid "Split View"
 msgstr "มุมมองแบบแบ่งครึ่ง"
 
-#: packages/lib/models/Setting.ts:1114
+#: packages/lib/models/Setting.ts:1115
 msgid "Start application minimised in the tray icon"
 msgstr "เริ่มต้นแอปพลิเคชั่นโดยย่อไว้ที่ไอคอน System tray"
 
@@ -3639,11 +3639,11 @@ msgstr "ซิงค์เวอร์ชั่น: %s"
 msgid "Sync your notes"
 msgstr "จัดเรียงบันทึกโดย"
 
-#: packages/lib/models/Setting.ts:2285
+#: packages/lib/models/Setting.ts:2296
 msgid "Synchronisation"
 msgstr "การซิงโครไนซ์"
 
-#: packages/lib/models/Setting.ts:1270
+#: packages/lib/models/Setting.ts:1271
 msgid "Synchronisation interval"
 msgstr "ความถี่ในการซิงโครไนซ์"
 
@@ -3657,7 +3657,7 @@ msgstr "การซิงโครไนซ์กำลังดำเนิน
 msgid "Synchronisation Status"
 msgstr "สถานะการซิงโครไนซ์"
 
-#: packages/lib/models/Setting.ts:423
+#: packages/lib/models/Setting.ts:424
 msgid "Synchronisation target"
 msgstr "จุดหมายการซิงโครไนซ์"
 
@@ -3671,7 +3671,7 @@ msgstr "จุดหมายการซิงโครไนซ์: %s (%s)"
 msgid "Synchronise"
 msgstr "ซิงโครไนซ์"
 
-#: packages/lib/models/Setting.ts:1290
+#: packages/lib/models/Setting.ts:1291
 msgid "Synchronise only over WiFi connection"
 msgstr ""
 
@@ -3688,7 +3688,7 @@ msgstr "กำลังซิงโครไนซ์..."
 msgid "Synchronizing..."
 msgstr "กำลังซิงโครไนซ์..."
 
-#: packages/lib/models/Setting.ts:1305
+#: packages/lib/models/Setting.ts:1306
 msgid "Tabloid"
 msgstr "Tabloid"
 
@@ -3719,7 +3719,7 @@ msgstr "ถ่ายรูป"
 msgid "Tasks"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1298
+#: packages/lib/models/Setting.ts:1299
 msgid "Text editor command"
 msgstr ""
 
@@ -3782,14 +3782,14 @@ msgid ""
 "data."
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1298
+#: packages/lib/models/Setting.ts:1299
 msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1454 packages/lib/models/Setting.ts:1469
-#: packages/lib/models/Setting.ts:1484
+#: packages/lib/models/Setting.ts:1455 packages/lib/models/Setting.ts:1470
+#: packages/lib/models/Setting.ts:1485
 msgid ""
 "The factor property sets how the item will grow or shrink to fit the "
 "available space in its container with respect to the other items. Thus an "
@@ -3875,7 +3875,7 @@ msgstr ""
 msgid "The tag \"%s\" already exists. Please choose a different name."
 msgstr "แท็ก “%s” มีอยู่แล้ว โปรดใช้ชื่ออื่น"
 
-#: packages/lib/models/Setting.ts:425
+#: packages/lib/models/Setting.ts:426
 msgid ""
 "The target to synchronise to. Each sync target may have additional "
 "parameters which are named as `sync.NUM.NAME` (all documented below)."
@@ -3895,7 +3895,7 @@ msgstr ""
 msgid "The web clipper service is not enabled."
 msgstr ""
 
-#: packages/lib/models/Setting.ts:810
+#: packages/lib/models/Setting.ts:811
 msgid "Theme"
 msgstr "ธีม"
 
@@ -3939,7 +3939,7 @@ msgid ""
 "(which is displayed in brackets above)."
 msgstr ""
 
-#: packages/lib/models/Setting.ts:2303
+#: packages/lib/models/Setting.ts:2314
 msgid ""
 "These plugins enhance the Markdown renderer with additional features. Please "
 "note that, while these features might be useful, they are not standard "
@@ -4009,7 +4009,7 @@ msgstr ""
 "บริการนี้จะอนุญาตให้เว็บเบราว์เซอร์ติดต่อกับ Joplin ได้ และเมื่อเปิดใช้งานแล้ว "
 "ไฟล์วอลล์ของคุณอาจจะต้องการให้คุณอนุญาตสิทธิ์ Joplin ในการเข้าถึงพอร์ตบางพอร์ต"
 
-#: packages/lib/models/Setting.ts:1108
+#: packages/lib/models/Setting.ts:1109
 msgid ""
 "This will allow Joplin to run in the background. It is recommended to enable "
 "this setting so that your notes are constantly being synchronised, thus "
@@ -4026,7 +4026,7 @@ msgid ""
 "have access to its content. Do you wish to continue?"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:788
+#: packages/lib/models/Setting.ts:789
 msgid "Time format"
 msgstr "รูปแบบเวลา"
 
@@ -4193,7 +4193,7 @@ msgstr "กรอกแท็กใหม่หรือเลือกจาก
 msgid "Type: %s."
 msgstr "ชนิด: %s"
 
-#: packages/lib/models/Setting.ts:883
+#: packages/lib/models/Setting.ts:884
 #, fuzzy
 msgid "Uncompleted to-dos on top"
 msgstr "to-do ที่ยังไม่เสร็จไว้บนสุด"
@@ -4342,13 +4342,13 @@ msgid ""
 "may take a long time depending on the number of notes."
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1176
+#: packages/lib/models/Setting.ts:1177
 msgid ""
 "Used for most text in the markdown editor. If not found, a generic "
 "proportional (variable width) font is used."
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1188
+#: packages/lib/models/Setting.ts:1189
 msgid ""
 "Used where a fixed width font is needed to lay out text legibly (e.g. "
 "tables, checkboxes, code). If not found, a generic monospace (fixed width) "
@@ -4386,13 +4386,13 @@ msgid "View them now"
 msgstr ""
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:139
-#: packages/lib/models/Setting.ts:875 packages/lib/models/Setting.ts:876
-#: packages/lib/models/Setting.ts:878
+#: packages/lib/models/Setting.ts:876 packages/lib/models/Setting.ts:877
+#: packages/lib/models/Setting.ts:879
 #, fuzzy
 msgid "Viewer"
 msgstr "Viewer"
 
-#: packages/lib/models/Setting.ts:1328
+#: packages/lib/models/Setting.ts:1329
 msgid "Vim"
 msgstr "Vim"
 
@@ -4406,7 +4406,7 @@ msgstr "คำเตือน"
 msgid "Warning: not all resources shown for performance reasons (limit: %s)."
 msgstr "คำเตือน: ทรัพยากรทั้งหมดไม่ได้ถูกแสดง ด้วยเห็นผลเรื่องสมรรถภาพ (จำกัด: %s)"
 
-#: packages/lib/models/Setting.ts:2294
+#: packages/lib/models/Setting.ts:2305
 msgid "Web Clipper"
 msgstr "Web Clipper"
 
@@ -4414,15 +4414,15 @@ msgstr "Web Clipper"
 msgid "WebDAV"
 msgstr "WebDAV"
 
-#: packages/lib/models/Setting.ts:534
+#: packages/lib/models/Setting.ts:535
 msgid "WebDAV password"
 msgstr "รหัสผ่าน WebDAV"
 
-#: packages/lib/models/Setting.ts:511
+#: packages/lib/models/Setting.ts:512
 msgid "WebDAV URL"
 msgstr "WebDAV URL"
 
-#: packages/lib/models/Setting.ts:523
+#: packages/lib/models/Setting.ts:524
 msgid "WebDAV username"
 msgstr "ชื่อผู้ใช้ WebDAV"
 
@@ -4446,12 +4446,12 @@ msgstr ""
 "\n"
 "ตัวอย่างเช่น สร้างสมุดบันทึกใหม่พิมพ์ `mb`; สร้างบันทึกใหม่พิมพ์ `mn`."
 
-#: packages/lib/models/Setting.ts:1036
+#: packages/lib/models/Setting.ts:1037
 #, fuzzy
 msgid "When creating a new note:"
 msgstr "เมื่อสร้างบันทึกใหม่:"
 
-#: packages/lib/models/Setting.ts:1019
+#: packages/lib/models/Setting.ts:1020
 msgid "When creating a new to-do:"
 msgstr "เมื่อสร้าง to-do ใหม่:"
 
@@ -4467,7 +4467,7 @@ msgstr "y"
 msgid "Y"
 msgstr "Y"
 
-#: packages/lib/models/Setting.ts:369
+#: packages/lib/models/Setting.ts:370
 #, fuzzy
 msgid "yes"
 msgstr "ใช่"

@@ -45,7 +45,7 @@ msgstr "(%s)"
 msgid "(None)"
 msgstr "(Ei mitään)"
 
-#: packages/lib/models/Setting.ts:369 packages/lib/models/Setting.ts:370
+#: packages/lib/models/Setting.ts:370 packages/lib/models/Setting.ts:371
 msgid "(wysiwyg: %s)"
 msgstr "(wysiwyg: %s)"
 
@@ -80,20 +80,20 @@ msgstr "&Työkalut"
 msgid "&View"
 msgstr "&Näytä"
 
-#: packages/lib/models/Setting.ts:1417
+#: packages/lib/models/Setting.ts:1418
 msgid "%d days"
 msgstr "%d päivää"
 
-#: packages/lib/models/Setting.ts:1277
+#: packages/lib/models/Setting.ts:1278
 msgid "%d hour"
 msgstr "%d tunti"
 
-#: packages/lib/models/Setting.ts:1278 packages/lib/models/Setting.ts:1279
+#: packages/lib/models/Setting.ts:1279 packages/lib/models/Setting.ts:1280
 msgid "%d hours"
 msgstr "%d tuntia"
 
-#: packages/lib/models/Setting.ts:1274 packages/lib/models/Setting.ts:1275
-#: packages/lib/models/Setting.ts:1276
+#: packages/lib/models/Setting.ts:1275 packages/lib/models/Setting.ts:1276
+#: packages/lib/models/Setting.ts:1277
 msgid "%d minutes"
 msgstr "%d minuuttia"
 
@@ -121,12 +121,12 @@ msgstr "%s (%s): %s"
 msgid "%s (pre-release)"
 msgstr "%s (ennakkojulkaisu)"
 
-#: packages/lib/models/Setting.ts:876 packages/lib/models/Setting.ts:877
-#: packages/lib/models/Setting.ts:878
+#: packages/lib/models/Setting.ts:877 packages/lib/models/Setting.ts:878
+#: packages/lib/models/Setting.ts:879
 msgid "%s / %s"
 msgstr "%s / %s"
 
-#: packages/lib/models/Setting.ts:875
+#: packages/lib/models/Setting.ts:876
 msgid "%s / %s / %s"
 msgstr "%s / %s / %s"
 
@@ -187,15 +187,15 @@ msgstr ""
 "kohde on säännöllinen huomautus, se muunnetaan tehtäväksi). Käytä \"clear\" "
 "voit muuntaa tehtäväkokeen takaisin tavalliseksi. muistiinpanoksi.."
 
-#: packages/lib/models/Setting.ts:1303
+#: packages/lib/models/Setting.ts:1304
 msgid "A3"
 msgstr "A3"
 
-#: packages/lib/models/Setting.ts:1301
+#: packages/lib/models/Setting.ts:1302
 msgid "A4"
 msgstr "A4"
 
-#: packages/lib/models/Setting.ts:1304
+#: packages/lib/models/Setting.ts:1305
 msgid "A5"
 msgstr "A5"
 
@@ -300,7 +300,7 @@ msgstr "Näyttää myös merkitsemättömät ja piilotetut konfigurointimuuttuja
 msgid "Also publish linked notes"
 msgstr "Peruuta muistiinpanon julkaisu"
 
-#: packages/lib/models/Setting.ts:712
+#: packages/lib/models/Setting.ts:713
 msgid "Always"
 msgstr "Aina"
 
@@ -308,11 +308,11 @@ msgstr "Aina"
 msgid "An update is available, do you want to download it now?"
 msgstr "Päivitys on saatavilla. Haluatko ladata sen nyt?"
 
-#: packages/lib/models/Setting.ts:2286
+#: packages/lib/models/Setting.ts:2297
 msgid "Appearance"
 msgstr "Ulkonäkö"
 
-#: packages/lib/models/Setting.ts:2291
+#: packages/lib/models/Setting.ts:2302
 msgid "Application"
 msgstr "Sovellus"
 
@@ -329,7 +329,7 @@ msgstr "Haluatko varmasti uusia valtuutustunnuksen?"
 msgid "Arguments:"
 msgstr "Väitteet:"
 
-#: packages/lib/models/Setting.ts:387
+#: packages/lib/models/Setting.ts:388
 msgid "Aritim Dark"
 msgstr "Aritim Dark"
 
@@ -360,7 +360,7 @@ msgstr "liite"
 msgid "Attachment conflict: \"%s\""
 msgstr "Liitteen ristiriita: \"%s\""
 
-#: packages/lib/models/Setting.ts:708
+#: packages/lib/models/Setting.ts:709
 msgid "Attachment download behaviour"
 msgstr "Liitteen latauskäyttäytyminen"
 
@@ -372,7 +372,7 @@ msgstr "Liitteet"
 msgid "Attachments that could not be downloaded"
 msgstr "Liitteet, joita ei voitu ladata"
 
-#: packages/lib/models/Setting.ts:373
+#: packages/lib/models/Setting.ts:374
 msgid ""
 "Attention: If you change this location, make sure you copy all your content "
 "to it before syncing, otherwise all files will be removed! See the FAQ for "
@@ -394,7 +394,7 @@ msgstr "Todennusta ei suoritettu loppuun (todennustunnusta ei saatu)."
 msgid "Authorisation token:"
 msgstr "Valtuutuksen tunnus:"
 
-#: packages/lib/models/Setting.ts:714
+#: packages/lib/models/Setting.ts:715
 msgid "Auto"
 msgstr "Automaattinen"
 
@@ -402,15 +402,15 @@ msgstr "Automaattinen"
 msgid "Auto-add disabled accounts for deletion"
 msgstr "Lisää käytöstä poistetut tilit automaattisesti poistettavaksi"
 
-#: packages/lib/models/Setting.ts:911
+#: packages/lib/models/Setting.ts:912
 msgid "Auto-pair braces, parenthesis, quotations, etc."
 msgstr "Yhdistä sulut, sulkeet, lainaukset jne."
 
-#: packages/lib/models/Setting.ts:1261
+#: packages/lib/models/Setting.ts:1262
 msgid "Automatically check for updates"
 msgstr "Tarkista päivitykset automaattisesti"
 
-#: packages/lib/models/Setting.ts:823
+#: packages/lib/models/Setting.ts:824
 msgid "Automatically switch theme to match system theme"
 msgstr "Vaihda teema automaattisesti vastaamaan järjestelmän teemaa"
 
@@ -671,7 +671,7 @@ msgstr "Muistikirjojen yhteiskäyttö muiden kanssa"
 msgid "Coming alarms"
 msgstr "Tulevat hälytykset"
 
-#: packages/lib/models/Setting.ts:1361
+#: packages/lib/models/Setting.ts:1362
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
 "or path to individual cert files. For example: /my/cert_dir, /other/custom."
@@ -953,15 +953,15 @@ msgstr "mukautettu järjestys"
 msgid "Custom order"
 msgstr "Mukautettu järjestys"
 
-#: packages/lib/models/Setting.ts:1230
+#: packages/lib/models/Setting.ts:1231
 msgid "Custom stylesheet for Joplin-wide app styles"
 msgstr "Mukautettu tyylitaulukko Joplinin sovellustyyleille"
 
-#: packages/lib/models/Setting.ts:1213
+#: packages/lib/models/Setting.ts:1214
 msgid "Custom stylesheet for rendered Markdown"
 msgstr "Mukautettu tyylitaulukko mukautetuille Markdown tyyleille"
 
-#: packages/lib/models/Setting.ts:1360
+#: packages/lib/models/Setting.ts:1361
 msgid "Custom TLS certificates"
 msgstr "Mukautetut TLS varmenteet"
 
@@ -971,7 +971,7 @@ msgstr "Mukautetut TLS varmenteet"
 msgid "Cut"
 msgstr "Leikkaa"
 
-#: packages/lib/models/Setting.ts:382
+#: packages/lib/models/Setting.ts:383
 msgid "Dark"
 msgstr "Tumma"
 
@@ -987,11 +987,11 @@ msgstr "Tietokanta v%s"
 msgid "Date"
 msgstr "Päivämäärä"
 
-#: packages/lib/models/Setting.ts:765
+#: packages/lib/models/Setting.ts:766
 msgid "Date format"
 msgstr "Päivämäärän muoto"
 
-#: packages/lib/models/Setting.ts:1417
+#: packages/lib/models/Setting.ts:1418
 msgid "days"
 msgstr "päivää"
 
@@ -1008,8 +1008,8 @@ msgstr "Purettuja kohteita: %s / %s"
 msgid "Decrypting items: %d/%d"
 msgstr "Kohteiden salauksen purkaminen: %d/%d"
 
-#: packages/lib/models/Setting.ts:1155 packages/lib/models/Setting.ts:1162
-#: packages/lib/models/Setting.ts:1326
+#: packages/lib/models/Setting.ts:1156 packages/lib/models/Setting.ts:1163
+#: packages/lib/models/Setting.ts:1327
 msgid "Default"
 msgstr "Oletus"
 
@@ -1045,7 +1045,7 @@ msgstr "Poista vanhentuneet tunnukset"
 msgid "Delete line"
 msgstr "Poista rivi"
 
-#: packages/lib/models/Setting.ts:1254
+#: packages/lib/models/Setting.ts:1255
 msgid "Delete local data and re-download from sync target"
 msgstr "Poista paikalliset tiedot ja lataa uudelleen synkronointikohteesta"
 
@@ -1126,7 +1126,7 @@ msgstr "Kohteen muoto: %s"
 msgid "Directory"
 msgstr "Hakemisto"
 
-#: packages/lib/models/Setting.ts:463
+#: packages/lib/models/Setting.ts:464
 msgid "Directory to synchronise with (absolute path)"
 msgstr "Kansio, jonka kanssa synkronoidaan (absoluuttinen polku)"
 
@@ -1152,7 +1152,7 @@ msgstr "Poista käytöstä Web Clipper työkalu"
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:249
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:138
 #: packages/app-mobile/components/screens/encryption-config.tsx:303
-#: packages/lib/models/Setting.ts:1273
+#: packages/lib/models/Setting.ts:1274
 msgid "Disabled"
 msgstr "Poistettu käytöstä"
 
@@ -1270,7 +1270,7 @@ msgstr "Ladataan"
 msgid "Downloading resources..."
 msgstr "Ladataan resursseja..."
 
-#: packages/lib/models/Setting.ts:383
+#: packages/lib/models/Setting.ts:384
 msgid "Dracula"
 msgstr "Dracula"
 
@@ -1328,28 +1328,28 @@ msgid "Edit profile configuration..."
 msgstr ""
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:138
-#: packages/lib/models/Setting.ts:875 packages/lib/models/Setting.ts:876
-#: packages/lib/models/Setting.ts:877
+#: packages/lib/models/Setting.ts:876 packages/lib/models/Setting.ts:877
+#: packages/lib/models/Setting.ts:878
 msgid "Editor"
 msgstr "Editoija"
 
-#: packages/lib/models/Setting.ts:1148
+#: packages/lib/models/Setting.ts:1149
 msgid "Editor font"
 msgstr "Editorin fontti"
 
-#: packages/lib/models/Setting.ts:1174
+#: packages/lib/models/Setting.ts:1175
 msgid "Editor font family"
 msgstr "Editorin fonttiperhe"
 
-#: packages/lib/models/Setting.ts:1140
+#: packages/lib/models/Setting.ts:1141
 msgid "Editor font size"
 msgstr "Editorin fonttikoko"
 
-#: packages/lib/models/Setting.ts:1193
+#: packages/lib/models/Setting.ts:1194
 msgid "Editor maximum width"
 msgstr "Editorin enimmäisleveys"
 
-#: packages/lib/models/Setting.ts:1186
+#: packages/lib/models/Setting.ts:1187
 msgid "Editor monospace font family"
 msgstr "Editorin monospace fonttiperhe"
 
@@ -1363,7 +1363,7 @@ msgstr "Editoija"
 msgid "Either \"text\" or \"json\""
 msgstr "Joko \"text\" tai \"json\""
 
-#: packages/lib/models/Setting.ts:1327
+#: packages/lib/models/Setting.ts:1328
 msgid "Emacs"
 msgstr "Emacs"
 
@@ -1386,31 +1386,31 @@ msgstr "korostettu teksti"
 msgid "Enable"
 msgstr "Ota käyttöön"
 
-#: packages/lib/models/Setting.ts:1089
+#: packages/lib/models/Setting.ts:1090
 msgid "Enable ^sup^ syntax"
 msgstr "Ota käyttöön ^sup^ syntax"
 
-#: packages/lib/models/Setting.ts:1093
+#: packages/lib/models/Setting.ts:1094
 msgid "Enable ++insert++ syntax"
 msgstr "Ota käyttöön ++insert++ syntax"
 
-#: packages/lib/models/Setting.ts:1085
+#: packages/lib/models/Setting.ts:1086
 msgid "Enable ==mark== syntax"
 msgstr "Ota käyttöön ==mark== syntax"
 
-#: packages/lib/models/Setting.ts:1088
+#: packages/lib/models/Setting.ts:1089
 msgid "Enable ~sub~ syntax"
 msgstr "Ota käyttöön ~sub~ syntax"
 
-#: packages/lib/models/Setting.ts:1091
+#: packages/lib/models/Setting.ts:1092
 msgid "Enable abbreviation syntax"
 msgstr "Ota lyhenteen syntaksi käyttöön"
 
-#: packages/lib/models/Setting.ts:1082
+#: packages/lib/models/Setting.ts:1083
 msgid "Enable audio player"
 msgstr "Ota käyttöön audiosoitin"
 
-#: packages/lib/models/Setting.ts:1090
+#: packages/lib/models/Setting.ts:1091
 msgid "Enable deflist syntax"
 msgstr "Ota deflist syntaksi käyttöön"
 
@@ -1419,55 +1419,55 @@ msgstr "Ota deflist syntaksi käyttöön"
 msgid "Enable encryption"
 msgstr "Ota salaus käyttöön"
 
-#: packages/lib/models/Setting.ts:1086
+#: packages/lib/models/Setting.ts:1087
 msgid "Enable footnotes"
 msgstr "Ota alaviitteet käyttöön"
 
-#: packages/lib/models/Setting.ts:1079
+#: packages/lib/models/Setting.ts:1080
 msgid "Enable Fountain syntax support"
 msgstr "Ota Fountain syntaksin tuki käyttöön"
 
-#: packages/lib/models/Setting.ts:1076
+#: packages/lib/models/Setting.ts:1077
 msgid "Enable Linkify"
 msgstr "Ota käyttöön Linkify"
 
-#: packages/lib/models/Setting.ts:1092
+#: packages/lib/models/Setting.ts:1093
 msgid "Enable markdown emoji"
 msgstr "Ota merkinnän hymiö käyttöön"
 
-#: packages/lib/models/Setting.ts:1078
+#: packages/lib/models/Setting.ts:1079
 msgid "Enable math expressions"
 msgstr "Ota matemaattiset lausekkeet käyttöön"
 
-#: packages/lib/models/Setting.ts:1080
+#: packages/lib/models/Setting.ts:1081
 msgid "Enable Mermaid diagrams support"
 msgstr "Ota Mermaid kaavioiden tuki käyttöön"
 
-#: packages/lib/models/Setting.ts:1094
+#: packages/lib/models/Setting.ts:1095
 msgid "Enable multimarkdown table extension"
 msgstr "Ota multimarkdown taulukon laajennus käyttöön"
 
-#: packages/lib/models/Setting.ts:1407
+#: packages/lib/models/Setting.ts:1408
 msgid "Enable note history"
 msgstr "Muistiinpanohistorian ottaminen käyttöön"
 
-#: packages/lib/models/Setting.ts:1084
+#: packages/lib/models/Setting.ts:1085
 msgid "Enable PDF viewer"
 msgstr "Ota käyttöön PDF katseluohjelma"
 
-#: packages/lib/models/Setting.ts:1074
+#: packages/lib/models/Setting.ts:1075
 msgid "Enable soft breaks"
 msgstr "Ota pehmeät tauot käyttöön"
 
-#: packages/lib/models/Setting.ts:1087
+#: packages/lib/models/Setting.ts:1088
 msgid "Enable table of contents extension"
 msgstr "Ota sisällysluettelon laajennus käyttöön"
 
-#: packages/lib/models/Setting.ts:1075
+#: packages/lib/models/Setting.ts:1076
 msgid "Enable typographer support"
 msgstr "Ota typografiatuki käyttöön"
 
-#: packages/lib/models/Setting.ts:1083
+#: packages/lib/models/Setting.ts:1084
 msgid "Enable video player"
 msgstr "Ota käyttöön videosoitin"
 
@@ -1503,7 +1503,7 @@ msgstr "Salattuja kohteita ei voi muokata"
 msgid "Encrypted notebooks cannot be renamed"
 msgstr "Salattuja muistikirjoja ei voi nimetä uudelleen"
 
-#: packages/lib/models/Setting.ts:2293
+#: packages/lib/models/Setting.ts:2304
 msgid "Encryption"
 msgstr "Salaus"
 
@@ -1633,11 +1633,11 @@ msgstr "Vie vain annetun huomautuksen."
 msgid "Exports only the given notebook."
 msgstr "Vie vain annetun muistikirjan."
 
-#: packages/lib/models/Setting.ts:1393
+#: packages/lib/models/Setting.ts:1394
 msgid "Fail-safe"
 msgstr "Vikaturvallinen"
 
-#: packages/lib/models/Setting.ts:1394
+#: packages/lib/models/Setting.ts:1395
 msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
@@ -1695,11 +1695,11 @@ msgstr "Korjataan hakuindeksiä..."
 msgid "Focus"
 msgstr "Osoita"
 
-#: packages/lib/models/Setting.ts:1023 packages/lib/models/Setting.ts:1040
+#: packages/lib/models/Setting.ts:1024 packages/lib/models/Setting.ts:1041
 msgid "Focus body"
 msgstr "Tarkennuksen runko"
 
-#: packages/lib/models/Setting.ts:1022 packages/lib/models/Setting.ts:1039
+#: packages/lib/models/Setting.ts:1023 packages/lib/models/Setting.ts:1040
 msgid "Focus title"
 msgstr "Tarkennuksen otsikko"
 
@@ -1729,7 +1729,7 @@ msgid ""
 msgstr ""
 "Saat luettelon pikanäppäimistä ja config vaihtoehtoja, kirjoita `help keymap`"
 
-#: packages/lib/models/Setting.ts:615
+#: packages/lib/models/Setting.ts:616
 msgid "Force path style"
 msgstr "Pakota polun tyyli"
 
@@ -1750,7 +1750,7 @@ msgstr "Koko tekstin haku (FTS) Käytössä: %d"
 msgid "Full changelog"
 msgstr "Täysi muutosloki"
 
-#: packages/lib/models/Setting.ts:2284
+#: packages/lib/models/Setting.ts:2295
 #: packages/server/src/services/MustacheService.ts:108
 msgid "General"
 msgstr "Yleiset"
@@ -1769,7 +1769,7 @@ msgstr[1] "Luodaan linkkejä..."
 msgid "Get it now:"
 msgstr "Hae se nyt:"
 
-#: packages/lib/models/Setting.ts:1262
+#: packages/lib/models/Setting.ts:1263
 msgid "Get pre-releases when checking for updates"
 msgstr "Hanki ennakkojulkaisuja, kun etsit päivityksiä"
 
@@ -1861,7 +1861,7 @@ msgstr "Käyttämättömänä"
 msgid "Ignore"
 msgstr "Ohita"
 
-#: packages/lib/models/Setting.ts:1383
+#: packages/lib/models/Setting.ts:1384
 msgid "Ignore TLS certificate errors"
 msgstr "Ohita TLS varmenteen virheet"
 
@@ -1888,7 +1888,7 @@ msgstr "Muistiinpanojen tuominen..."
 msgid "Imports data into Joplin."
 msgstr "Tuo tiedot Jopliniin."
 
-#: packages/lib/models/Setting.ts:709
+#: packages/lib/models/Setting.ts:710
 msgid ""
 "In \"Manual\" mode, attachments are downloaded only when you click on them. "
 "In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
@@ -2034,7 +2034,7 @@ msgstr "Virheellinen vastaus: %s"
 msgid "Invalid command: \"%s\""
 msgstr "Virheellinen komento: \"%s\""
 
-#: packages/lib/models/Setting.ts:1833
+#: packages/lib/models/Setting.ts:1834
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Virheellinen asetusarvo: \"%s\". Mahdolliset arvot ovat: %s."
 
@@ -2075,11 +2075,11 @@ msgstr ""
 msgid "Joplin Cloud"
 msgstr "Joplin Cloud"
 
-#: packages/lib/models/Setting.ts:683
+#: packages/lib/models/Setting.ts:684
 msgid "Joplin Cloud email"
 msgstr "Joplin Cloud sähköposti"
 
-#: packages/lib/models/Setting.ts:694
+#: packages/lib/models/Setting.ts:695
 msgid "Joplin Cloud password"
 msgstr "Joplin Cloud salasana"
 
@@ -2111,15 +2111,15 @@ msgstr "Joplin Foorumi"
 msgid "Joplin Server"
 msgstr "Joplin Palvelin"
 
-#: packages/lib/models/Setting.ts:644
+#: packages/lib/models/Setting.ts:645
 msgid "Joplin Server email"
 msgstr "Joplin palvelimen sähköposti"
 
-#: packages/lib/models/Setting.ts:655
+#: packages/lib/models/Setting.ts:656
 msgid "Joplin Server password"
 msgstr "Joplin palvelimen salasana"
 
-#: packages/lib/models/Setting.ts:626
+#: packages/lib/models/Setting.ts:627
 msgid "Joplin Server URL"
 msgstr "Joplin palvelimen URL-osoite"
 
@@ -2145,11 +2145,11 @@ msgstr ""
 "erityisominaisuuksia, kuten muistiinpanojen julkaisemista tai muistikirjojen "
 "yhteiskäyttöä muiden kanssa."
 
-#: packages/lib/models/Setting.ts:1419
+#: packages/lib/models/Setting.ts:1420
 msgid "Keep note history for"
 msgstr "Säilytä muistiinpanohistoria"
 
-#: packages/lib/models/Setting.ts:1323
+#: packages/lib/models/Setting.ts:1324
 msgid "Keyboard Mode"
 msgstr "Näppäimistötila"
 
@@ -2157,7 +2157,7 @@ msgstr "Näppäimistötila"
 msgid "Keyboard Shortcut"
 msgstr "Pikanäppäin"
 
-#: packages/lib/models/Setting.ts:2295
+#: packages/lib/models/Setting.ts:2306
 msgid "Keyboard Shortcuts"
 msgstr "Pikanäppäimet"
 
@@ -2169,11 +2169,11 @@ msgstr "Avainnippu tuettu: %s"
 msgid "Keys that need upgrading"
 msgstr "Päivitystä vaativat avaimet"
 
-#: packages/lib/models/Setting.ts:1312
+#: packages/lib/models/Setting.ts:1313
 msgid "Landscape"
 msgstr "Vaakasuunta"
 
-#: packages/lib/models/Setting.ts:753
+#: packages/lib/models/Setting.ts:754
 msgid "Language"
 msgstr "Kieli"
 
@@ -2197,15 +2197,15 @@ msgstr "Aseta painike järjestys"
 msgid "Leave notebook..."
 msgstr "Poistu muistikirjasta..."
 
-#: packages/lib/models/Setting.ts:1306
+#: packages/lib/models/Setting.ts:1307
 msgid "Legal"
 msgstr "Legal"
 
-#: packages/lib/models/Setting.ts:1302
+#: packages/lib/models/Setting.ts:1303
 msgid "Letter"
 msgstr "Letter"
 
-#: packages/lib/models/Setting.ts:381
+#: packages/lib/models/Setting.ts:382
 msgid "Light"
 msgstr "Vaalea"
 
@@ -2302,11 +2302,11 @@ msgstr ""
 "Hallitse E2EE määrityksiä. Komennot ovat `enable`, `disable`, `decrypt`, "
 "`status`, `decrypt-file` ja `target-status`."
 
-#: packages/lib/models/Setting.ts:713
+#: packages/lib/models/Setting.ts:714
 msgid "Manual"
 msgstr "Manuaalinen"
 
-#: packages/lib/models/Setting.ts:2289
+#: packages/lib/models/Setting.ts:2300
 #: packages/lib/services/interop/InteropService.ts:113
 #: packages/lib/services/interop/InteropService.ts:58
 msgid "Markdown"
@@ -2344,7 +2344,7 @@ msgstr "Pääsalasana"
 msgid "Master password:"
 msgstr "Pääsalasana:"
 
-#: packages/lib/models/Setting.ts:737
+#: packages/lib/models/Setting.ts:738
 msgid "Max concurrent connections"
 msgstr "Samanaikaiset yhteydet enintään"
 
@@ -2445,19 +2445,19 @@ msgstr "Uusi versio: %s"
 msgid "Nextcloud"
 msgstr "Nextcloud"
 
-#: packages/lib/models/Setting.ts:499
+#: packages/lib/models/Setting.ts:500
 msgid "Nextcloud password"
 msgstr "Nextcloud salasana"
 
-#: packages/lib/models/Setting.ts:488
+#: packages/lib/models/Setting.ts:489
 msgid "Nextcloud username"
 msgstr "Nextcloud käyttäjänimi"
 
-#: packages/lib/models/Setting.ts:476
+#: packages/lib/models/Setting.ts:477
 msgid "Nextcloud WebDAV URL"
 msgstr "Nextcloud WebDAV osoite (URL)"
 
-#: packages/lib/models/Setting.ts:370
+#: packages/lib/models/Setting.ts:371
 msgid "no"
 msgstr "ei"
 
@@ -2510,7 +2510,7 @@ msgstr ""
 "Tekstieditoria ei ole määritetty. Aseta se käyttäen `config editor <editor-"
 "path>`"
 
-#: packages/lib/models/Setting.ts:386
+#: packages/lib/models/Setting.ts:387
 msgid "Nord"
 msgstr "Nord"
 
@@ -2532,11 +2532,11 @@ msgstr "Ei luotu"
 msgid "note"
 msgstr "merkintä"
 
-#: packages/lib/models/Setting.ts:2287
+#: packages/lib/models/Setting.ts:2298
 msgid "Note"
 msgstr "Huomautus"
 
-#: packages/lib/models/Setting.ts:1482
+#: packages/lib/models/Setting.ts:1483
 msgid "Note area growth factor"
 msgstr "Huomautus alueen kasvutekijä"
 
@@ -2561,7 +2561,7 @@ msgid "Note has been saved."
 msgstr "Huomautus on tallennettu."
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:34
-#: packages/lib/models/Setting.ts:2292
+#: packages/lib/models/Setting.ts:2303
 msgid "Note History"
 msgstr "Muistiinpano historia"
 
@@ -2573,7 +2573,7 @@ msgstr "Huomautus ei ole tehtävä: \"%s\""
 msgid "Note list"
 msgstr "Muistiinpanot"
 
-#: packages/lib/models/Setting.ts:1467
+#: packages/lib/models/Setting.ts:1468
 msgid "Note list growth factor"
 msgstr "Huomautus luettelon kasvutekijä"
 
@@ -2586,7 +2586,7 @@ msgstr "Muistiinpanon ominaisuudet"
 msgid "Note title"
 msgstr "Muistiinpanon otsikko"
 
-#: packages/lib/models/Setting.ts:1108
+#: packages/lib/models/Setting.ts:1109
 msgid "Note: Does not work in all desktop environments."
 msgstr "Huomautus: Ei toimi kaikissa työpöytäympäristöissä."
 
@@ -2600,11 +2600,11 @@ msgstr ""
 msgid "Note&book"
 msgstr "&Muistikirjat"
 
-#: packages/lib/models/Setting.ts:2288
+#: packages/lib/models/Setting.ts:2299
 msgid "Notebook"
 msgstr "Muistikirja"
 
-#: packages/lib/models/Setting.ts:1452
+#: packages/lib/models/Setting.ts:1453
 msgid "Notebook list growth factor"
 msgstr "Muistikirjaluettelon kasvutekijä"
 
@@ -2626,7 +2626,7 @@ msgstr "Muistikirjoja ei voi nimetä \"%s\", joka on varattu otsikko."
 msgid "Notes"
 msgstr "Muistiinpanot"
 
-#: packages/lib/models/Setting.ts:2304
+#: packages/lib/models/Setting.ts:2315
 msgid "Notes and settings are stored in: %s"
 msgstr "Muistiinpanot ja oletusasetukset tallennetaan: %s"
 
@@ -2654,7 +2654,7 @@ msgstr "Numeroitu luettelo"
 msgid "OK"
 msgstr "OK"
 
-#: packages/lib/models/Setting.ts:388
+#: packages/lib/models/Setting.ts:389
 msgid "OLED Dark"
 msgstr "OLED Dark"
 
@@ -2706,7 +2706,7 @@ msgstr "Avaa %s"
 msgid "Open profile directory"
 msgstr "Avaa profiilihakemisto"
 
-#: packages/lib/models/Setting.ts:412
+#: packages/lib/models/Setting.ts:413
 msgid "Open Sync Wizard..."
 msgstr "Avaa ohjattu synkronointitoiminto."
 
@@ -2738,11 +2738,11 @@ msgstr "Muut sovellukset..."
 msgid "Output format: %s"
 msgstr "Esitysmuoto: %s"
 
-#: packages/lib/models/Setting.ts:1309
+#: packages/lib/models/Setting.ts:1310
 msgid "Page orientation for PDF export"
 msgstr "Sivun suunta PDF vientiä varten"
 
-#: packages/lib/models/Setting.ts:1299
+#: packages/lib/models/Setting.ts:1300
 msgid "Page size for PDF export"
 msgstr "PDF viennin sivukoko"
 
@@ -2871,11 +2871,11 @@ msgid "Plugin tools"
 msgstr "Laajennustyökalut"
 
 #: packages/app-desktop/gui/ConfigScreen/Sidebar.tsx:105
-#: packages/lib/models/Setting.ts:2290
+#: packages/lib/models/Setting.ts:2301
 msgid "Plugins"
 msgstr "Laajennukset"
 
-#: packages/lib/models/Setting.ts:1311
+#: packages/lib/models/Setting.ts:1312
 msgid "Portrait"
 msgstr "Pystysuunta"
 
@@ -2895,11 +2895,11 @@ msgstr "Oletusasetukset"
 msgid "Preferences..."
 msgstr "Oletusasetukset..."
 
-#: packages/lib/models/Setting.ts:853
+#: packages/lib/models/Setting.ts:854
 msgid "Preferred dark theme"
 msgstr "Ensisijainen tumma teema"
 
-#: packages/lib/models/Setting.ts:837
+#: packages/lib/models/Setting.ts:838
 msgid "Preferred light theme"
 msgstr "Ensisijainen vaalea teema"
 
@@ -2994,7 +2994,7 @@ msgstr "Salaa tiedot uudelleen"
 msgid "Re-encryption"
 msgstr "Uudelleen salaus"
 
-#: packages/lib/models/Setting.ts:1243
+#: packages/lib/models/Setting.ts:1244
 msgid "Re-upload local data to sync target"
 msgstr "Lataa paikalliset tiedot uudelleen kohteen synkronointia varten"
 
@@ -3116,7 +3116,7 @@ msgid "Reveal file in folder"
 msgstr "Osoita kansion tiedosto"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleNotesSortOrderReverse.ts:8
-#: packages/lib/models/Setting.ts:915 packages/lib/models/Setting.ts:992
+#: packages/lib/models/Setting.ts:916 packages/lib/models/Setting.ts:993
 msgid "Reverse sort order"
 msgstr "Käänteinen lajittelujärjestys"
 
@@ -3139,23 +3139,23 @@ msgstr ""
 msgid "S3"
 msgstr "S3"
 
-#: packages/lib/models/Setting.ts:593
+#: packages/lib/models/Setting.ts:594
 msgid "S3 access key"
 msgstr "S3 access key"
 
-#: packages/lib/models/Setting.ts:553
+#: packages/lib/models/Setting.ts:554
 msgid "S3 bucket"
 msgstr "S3 bucket"
 
-#: packages/lib/models/Setting.ts:582
+#: packages/lib/models/Setting.ts:583
 msgid "S3 region"
 msgstr "S3 region"
 
-#: packages/lib/models/Setting.ts:604
+#: packages/lib/models/Setting.ts:605
 msgid "S3 secret key"
 msgstr "S3 secret key"
 
-#: packages/lib/models/Setting.ts:568
+#: packages/lib/models/Setting.ts:569
 msgid "S3 URL"
 msgstr "S3 URL"
 
@@ -3193,7 +3193,7 @@ msgstr "Tallenna nimellä..."
 msgid "Save changes"
 msgstr "Tallenna muutokset"
 
-#: packages/lib/models/Setting.ts:993
+#: packages/lib/models/Setting.ts:994
 msgid "Save geo-location with notes"
 msgstr "Tallenna maantieteellinen sijainti muistiinpanojen avulla"
 
@@ -3227,7 +3227,7 @@ msgstr "Etsi..."
 msgid "Searches for the given <pattern> in all the notes."
 msgstr "Etsii annettua <pattern> kaikista muistiinpanoista."
 
-#: packages/lib/models/Setting.ts:1262
+#: packages/lib/models/Setting.ts:1263
 msgid "See the pre-release page for more details: %s"
 msgstr "Lisätietoja on ennakkojulkaisusivulla: %s"
 
@@ -3270,7 +3270,7 @@ msgstr "Aseta hälytys"
 msgid "Set alarm:"
 msgstr "Aseta hälytys:"
 
-#: packages/lib/models/Setting.ts:1193
+#: packages/lib/models/Setting.ts:1194
 msgid ""
 "Set it to 0 to make it take the complete available space. Recommended width "
 "is 600."
@@ -3324,7 +3324,7 @@ msgstr "Näytä lisäasetukset"
 msgid "Show all"
 msgstr "Näytä kaikki"
 
-#: packages/lib/models/Setting.ts:884
+#: packages/lib/models/Setting.ts:885
 msgid "Show completed to-dos"
 msgstr "Näytä valmiit tehtävät"
 
@@ -3332,15 +3332,15 @@ msgstr "Näytä valmiit tehtävät"
 msgid "Show disabled keys"
 msgstr "Näytä käytöstä poistetut avaimet"
 
-#: packages/lib/models/Setting.ts:866
+#: packages/lib/models/Setting.ts:867
 msgid "Show note counts"
 msgstr "Näytä muistiinpanojen määrä"
 
-#: packages/lib/models/Setting.ts:925
+#: packages/lib/models/Setting.ts:926
 msgid "Show sort order buttons"
 msgstr "Näytä lajittelujärjestyspainikkeet"
 
-#: packages/lib/models/Setting.ts:1106
+#: packages/lib/models/Setting.ts:1107
 msgid "Show tray icon"
 msgstr "Näytä kuvake tehtäväpalkissa"
 
@@ -3367,11 +3367,11 @@ msgstr ""
 msgid "Skipped: %d."
 msgstr "Ohitetaan: %d."
 
-#: packages/lib/models/Setting.ts:385
+#: packages/lib/models/Setting.ts:386
 msgid "Solarised Dark"
 msgstr "Solarised Dark"
 
-#: packages/lib/models/Setting.ts:384
+#: packages/lib/models/Setting.ts:385
 msgid "Solarised Light"
 msgstr "Solarised Light"
 
@@ -3387,12 +3387,12 @@ msgstr "Joitakin kohteita ei voida synkronoida."
 msgid "Some items cannot be synchronised. Press for more info."
 msgstr "Joitakin kohteita ei voida synkronoida. Paina saadaksesi lisätietoja."
 
-#: packages/lib/models/Setting.ts:980
+#: packages/lib/models/Setting.ts:981
 msgid "Sort notebooks by"
 msgstr "Muistikirjojen lajitteleminen"
 
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:167
-#: packages/lib/models/Setting.ts:892
+#: packages/lib/models/Setting.ts:893
 msgid "Sort notes by"
 msgstr "Lajittele muistiinpanot"
 
@@ -3414,7 +3414,7 @@ msgstr "Lähdemuoto: %s"
 msgid "Source: "
 msgstr "Lähde: "
 
-#: packages/lib/models/Setting.ts:1399
+#: packages/lib/models/Setting.ts:1400
 msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
@@ -3427,12 +3427,12 @@ msgstr ""
 msgid "Spell checker"
 msgstr "Oikeinkirjoituksen tarkistus"
 
-#: packages/lib/models/Setting.ts:875 packages/lib/models/Setting.ts:877
-#: packages/lib/models/Setting.ts:878
+#: packages/lib/models/Setting.ts:876 packages/lib/models/Setting.ts:878
+#: packages/lib/models/Setting.ts:879
 msgid "Split View"
 msgstr "Jaettu näkymä"
 
-#: packages/lib/models/Setting.ts:1114
+#: packages/lib/models/Setting.ts:1115
 msgid "Start application minimised in the tray icon"
 msgstr "Käynnistys sovellus pienennetään tehtäväpalkkiin"
 
@@ -3609,11 +3609,11 @@ msgstr "Synkronoi versio: %s"
 msgid "Sync your notes"
 msgstr "Synkronoi muistiinpanosi"
 
-#: packages/lib/models/Setting.ts:2285
+#: packages/lib/models/Setting.ts:2296
 msgid "Synchronisation"
 msgstr "Synkronointi"
 
-#: packages/lib/models/Setting.ts:1270
+#: packages/lib/models/Setting.ts:1271
 msgid "Synchronisation interval"
 msgstr "Synkronoinnin aikaväli"
 
@@ -3626,7 +3626,7 @@ msgstr "Synkronointi on jo käynnissä."
 msgid "Synchronisation Status"
 msgstr "Synkronoinnin tila"
 
-#: packages/lib/models/Setting.ts:423
+#: packages/lib/models/Setting.ts:424
 msgid "Synchronisation target"
 msgstr "Synkronointikohde"
 
@@ -3640,7 +3640,7 @@ msgstr "Synkronoinnin kohde: %s (%s)"
 msgid "Synchronise"
 msgstr "Synkronoi"
 
-#: packages/lib/models/Setting.ts:1290
+#: packages/lib/models/Setting.ts:1291
 msgid "Synchronise only over WiFi connection"
 msgstr "Synkronoi vain WiFi yhteyden kautta"
 
@@ -3656,7 +3656,7 @@ msgstr "Synkronoidaan..."
 msgid "Synchronizing..."
 msgstr "Synkronoidaan..."
 
-#: packages/lib/models/Setting.ts:1305
+#: packages/lib/models/Setting.ts:1306
 msgid "Tabloid"
 msgstr "Tabloid"
 
@@ -3686,7 +3686,7 @@ msgstr "Ota valokuva"
 msgid "Tasks"
 msgstr "Tehtävät"
 
-#: packages/lib/models/Setting.ts:1298
+#: packages/lib/models/Setting.ts:1299
 msgid "Text editor command"
 msgstr "Tekstieditorin komento"
 
@@ -3756,7 +3756,7 @@ msgid ""
 msgstr ""
 "Oletussalausmenetelmää on muutettu, sinun on salattava tiedot uudelleen."
 
-#: packages/lib/models/Setting.ts:1298
+#: packages/lib/models/Setting.ts:1299
 msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
@@ -3765,8 +3765,8 @@ msgstr ""
 "avaamiseen. Jos mitään ei ole annettu, se yrittää tunnistaa oletuseditorin "
 "automaattisesti."
 
-#: packages/lib/models/Setting.ts:1454 packages/lib/models/Setting.ts:1469
-#: packages/lib/models/Setting.ts:1484
+#: packages/lib/models/Setting.ts:1455 packages/lib/models/Setting.ts:1470
+#: packages/lib/models/Setting.ts:1485
 msgid ""
 "The factor property sets how the item will grow or shrink to fit the "
 "available space in its container with respect to the other items. Thus an "
@@ -3874,7 +3874,7 @@ msgstr "Synkronointikohde on päivitettävä. Jatka painamalla tätä banneria."
 msgid "The tag \"%s\" already exists. Please choose a different name."
 msgstr "Tunniste \"%s\" on jo olemassa. Valitse toinen nimi."
 
-#: packages/lib/models/Setting.ts:425
+#: packages/lib/models/Setting.ts:426
 msgid ""
 "The target to synchronise to. Each sync target may have additional "
 "parameters which are named as `sync.NUM.NAME` (all documented below)."
@@ -3898,7 +3898,7 @@ msgstr ""
 msgid "The web clipper service is not enabled."
 msgstr "Web Clipper työkalu ei ole käytössä."
 
-#: packages/lib/models/Setting.ts:810
+#: packages/lib/models/Setting.ts:811
 msgid "Theme"
 msgstr "Teema"
 
@@ -3955,7 +3955,7 @@ msgstr ""
 "synkronointikohteeseen. Löytääksesi nämä kohteet, etsi joko otsikko tai "
 "tunnus (joka näkyy edellä olevissa hakasulkeissa)."
 
-#: packages/lib/models/Setting.ts:2303
+#: packages/lib/models/Setting.ts:2314
 msgid ""
 "These plugins enhance the Markdown renderer with additional features. Please "
 "note that, while these features might be useful, they are not standard "
@@ -4040,7 +4040,7 @@ msgstr ""
 "otetaan käyttöön, palomuuri voi pyytää sinua antamaan Joplinille luvan "
 "kuunnella tiettyä porttia."
 
-#: packages/lib/models/Setting.ts:1108
+#: packages/lib/models/Setting.ts:1109
 msgid ""
 "This will allow Joplin to run in the background. It is recommended to enable "
 "this setting so that your notes are constantly being synchronised, thus "
@@ -4062,7 +4062,7 @@ msgstr ""
 "Tämä poistaa muistikirjan kokoelmasta, etkä voi enää käyttää sen sisältöä. "
 "Haluatko jatkaa?"
 
-#: packages/lib/models/Setting.ts:788
+#: packages/lib/models/Setting.ts:789
 msgid "Time format"
 msgstr "Ajan muoto"
 
@@ -4226,7 +4226,7 @@ msgstr "Kirjoita uudet tunnisteet tai valitse luettelosta"
 msgid "Type: %s."
 msgstr "Tyyppi: %s."
 
-#: packages/lib/models/Setting.ts:883
+#: packages/lib/models/Setting.ts:884
 msgid "Uncompleted to-dos on top"
 msgstr "Keskeneräiset tehtävät ylhäällä"
 
@@ -4372,7 +4372,7 @@ msgstr ""
 "Tämän avulla voit muodostaa hakuindeksin uudelleen, jos haussa on ongelma. "
 "Se voi kestää kauan muistiinpanojen määrästä riippuen."
 
-#: packages/lib/models/Setting.ts:1176
+#: packages/lib/models/Setting.ts:1177
 msgid ""
 "Used for most text in the markdown editor. If not found, a generic "
 "proportional (variable width) font is used."
@@ -4380,7 +4380,7 @@ msgstr ""
 "Käytetään useimmissa teksteissä markdown editorissa. Jos sitä ei löydy, "
 "käytetään yleistä suhteellista fonttia (vaihtelevaa leveyttä)."
 
-#: packages/lib/models/Setting.ts:1188
+#: packages/lib/models/Setting.ts:1189
 msgid ""
 "Used where a fixed width font is needed to lay out text legibly (e.g. "
 "tables, checkboxes, code). If not found, a generic monospace (fixed width) "
@@ -4419,12 +4419,12 @@ msgid "View them now"
 msgstr "Näytä ne nyt"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:139
-#: packages/lib/models/Setting.ts:875 packages/lib/models/Setting.ts:876
-#: packages/lib/models/Setting.ts:878
+#: packages/lib/models/Setting.ts:876 packages/lib/models/Setting.ts:877
+#: packages/lib/models/Setting.ts:879
 msgid "Viewer"
 msgstr "Katselija"
 
-#: packages/lib/models/Setting.ts:1328
+#: packages/lib/models/Setting.ts:1329
 msgid "Vim"
 msgstr "Vim"
 
@@ -4437,7 +4437,7 @@ msgid "Warning: not all resources shown for performance reasons (limit: %s)."
 msgstr ""
 "Varoitus: kaikkia resursseja ei näytetä suorituskyvyn vuoksi (raja: %s)."
 
-#: packages/lib/models/Setting.ts:2294
+#: packages/lib/models/Setting.ts:2305
 msgid "Web Clipper"
 msgstr "Web Clipper"
 
@@ -4445,15 +4445,15 @@ msgstr "Web Clipper"
 msgid "WebDAV"
 msgstr "WebDAV"
 
-#: packages/lib/models/Setting.ts:534
+#: packages/lib/models/Setting.ts:535
 msgid "WebDAV password"
 msgstr "WebDAV salasana"
 
-#: packages/lib/models/Setting.ts:511
+#: packages/lib/models/Setting.ts:512
 msgid "WebDAV URL"
 msgstr "WebDAV osoite (URL)"
 
-#: packages/lib/models/Setting.ts:523
+#: packages/lib/models/Setting.ts:524
 msgid "WebDAV username"
 msgstr "WebDAV käyttäjänimi"
 
@@ -4476,11 +4476,11 @@ msgstr ""
 "Valitse `:help shortcuts` pikanäppäinten luetteloa varten, tai `:help` "
 "saadaksesi käytöstä lisätietoja."
 
-#: packages/lib/models/Setting.ts:1036
+#: packages/lib/models/Setting.ts:1037
 msgid "When creating a new note:"
 msgstr "Kun luot uutta muistiinpanoa:"
 
-#: packages/lib/models/Setting.ts:1019
+#: packages/lib/models/Setting.ts:1020
 msgid "When creating a new to-do:"
 msgstr "Kun luot uuden tehtävän:"
 
@@ -4496,7 +4496,7 @@ msgstr "k"
 msgid "Y"
 msgstr "K"
 
-#: packages/lib/models/Setting.ts:369
+#: packages/lib/models/Setting.ts:370
 msgid "yes"
 msgstr "kyllä"
 
