@@ -9,4 +9,5 @@ jobs:
       - uses: vedantmgoyal2009/vedantmgoyal2009/winget-pkgs-automation/releaser-action@v1.0.0
         with:
           identifier: Joplin.Joplin
+          installer-regex: 'Joplin-Setup.*.exe$'
           token: ${{ secrets.WINGET_TOKEN }}
