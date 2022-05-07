@@ -125,19 +125,6 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		this.switchSection(event.section.name);
 	}
 
-	keyValueToArray(kv: any) {
-		const output = [];
-		for (const k in kv) {
-			if (!kv.hasOwnProperty(k)) continue;
-			output.push({
-				key: k,
-				label: kv[k],
-			});
-		}
-
-		return output;
-	}
-
 	renderSectionDescription(section: any) {
 		const description = Setting.sectionDescription(section.name);
 		if (!description) return null;
@@ -376,7 +363,11 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		} else if (md.isEnum) {
 			const items = [];
 			const settingOptions = md.options();
-			const array = this.keyValueToArray(settingOptions);
+			const array = Setting.enumOptionsToValueLabels(settingOptions, md.optionsOrder ? md.optionsOrder() : [], {
+				valueKey: 'key',
+				labelKey: 'label',
+			});
+
 			for (let i = 0; i < array.length; i++) {
 				const e = array[i];
 				items.push(

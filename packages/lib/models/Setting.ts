@@ -25,6 +25,11 @@ export enum SettingItemType {
 	Button = 6,
 }
 
+interface OptionsToValueLabelsOptions {
+	valueKey: string;
+	labelKey: string;
+}
+
 export enum SettingItemSubType {
 	FilePathAndArgs = 'file_path_and_args',
 	FilePath = 'file_path', // Not supported on mobile!
@@ -53,6 +58,7 @@ export interface SettingItem {
 	label?(): string;
 	description?: Function;
 	options?(): any;
+	optionsOrder?(): string[];
 	appTypes?: AppType[];
 	show?(settings: any): boolean;
 	filter?(value: any): any;
@@ -299,7 +305,7 @@ class Setting extends BaseModel {
 		return BaseModel.TYPE_SETTING;
 	}
 
-	static async reset() {
+	public static async reset() {
 		if (this.saveTimeoutId_) shim.clearTimeout(this.saveTimeoutId_);
 		if (this.changeEventTimeoutId_) shim.clearTimeout(this.changeEventTimeoutId_);
 
@@ -310,6 +316,7 @@ class Setting extends BaseModel {
 		this.cache_ = [];
 		this.customMetadata_ = {};
 		this.fileHandler_ = null;
+		this.rootFileHandler_ = null;
 	}
 
 	public static get settingFilePath(): string {
@@ -420,6 +427,9 @@ class Setting extends BaseModel {
 				},
 				options: () => {
 					return SyncTargetRegistry.idAndLabelPlainObject(platform);
+				},
+				optionsOrder: () => {
+					return SyncTargetRegistry.optionsOrder();
 				},
 				storage: SettingStorage.File,
 			},
@@ -905,7 +915,7 @@ class Setting extends BaseModel {
 			},
 			'notes.sortOrder.reverse': { value: true, type: SettingItemType.Bool, storage: SettingStorage.File, isGlobal: true, section: 'note', public: true, label: () => _('Reverse sort order'), appTypes: [AppType.Cli] },
 			// NOTE: A setting whose name starts with 'notes.sortOrder' is special,
-			// which implies changing the setting automatically triggers the reflesh of notes.
+			// which implies changing the setting automatically triggers the refresh of notes.
 			// See lib/BaseApplication.ts/generalMiddleware() for details.
 			'notes.sortOrder.buttonsVisible': {
 				value: true,
@@ -1735,7 +1745,7 @@ class Setting extends BaseModel {
 		// Keys in the database takes precedence over keys in the keychain because
 		// they are more likely to be up to date (saving to keychain can fail, but
 		// saving to database shouldn't). When the keychain works, the secure keys
-		// are deleted from the database and transfered to the keychain in saveAll().
+		// are deleted from the database and transferred to the keychain in saveAll().
 
 		const rowKeys = rows.map((r: any) => r.key);
 		const secureKeys = this.keys(false, null, { secureOnly: true });
@@ -1899,6 +1909,35 @@ class Setting extends BaseModel {
 		for (const key of secureKeys) {
 			await this.keychainService().deletePassword(`setting.${key}`);
 		}
+	}
+
+	public static enumOptionsToValueLabels(enumOptions: Record<string, string>, order: string[], options: OptionsToValueLabelsOptions = null) {
+		options = {
+			labelKey: 'label',
+			valueKey: 'value',
+			...options,
+		};
+
+		const output = [];
+
+		for (const value of order) {
+			output.push({
+				[options.valueKey]: value,
+				[options.labelKey]: enumOptions[value],
+			});
+		}
+
+		for (const k in enumOptions) {
+			if (!enumOptions.hasOwnProperty(k)) continue;
+			if (order.includes(k)) continue;
+
+			output.push({
+				[options.valueKey]: k,
+				[options.labelKey]: enumOptions[k],
+			});
+		}
+
+		return output;
 	}
 
 	static valueToString(key: string, value: any) {
@@ -2078,7 +2117,7 @@ class Setting extends BaseModel {
 				// We need to be careful here because there's a bug in the macOS keychain that can
 				// make it fail to save a password. https://github.com/desktop/desktop/issues/3263
 				// So we try to set it and if it fails, we set it on the database instead. This is not
-				// ideal because they won't be crypted, but better than losing all the user's passwords.
+				// ideal because they won't be encrypted, but better than losing all the user's passwords.
 				// The passwords would be set again on the keychain once it starts working again (probably
 				// after the user switch their computer off and on again).
 				//
@@ -2118,7 +2157,17 @@ class Setting extends BaseModel {
 		if (this.canUseFileStorage()) {
 			if (this.value('isSubProfile')) {
 				const { globalSettings, localSettings } = splitGlobalAndLocalSettings(valuesForFile);
-				await this.rootFileHandler.save(globalSettings);
+				const currentGlobalSettings = await this.rootFileHandler.load();
+
+				// When saving to the root setting file, we preserve the
+				// existing settings, which are specific to the root profile,
+				// and add the global settings.
+
+				await this.rootFileHandler.save({
+					...currentGlobalSettings,
+					...globalSettings,
+				});
+
 				await this.fileHandler.save(localSettings);
 			} else {
 				await this.fileHandler.save(valuesForFile);
