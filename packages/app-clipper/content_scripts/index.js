@@ -32,6 +32,15 @@
 		}
 	}
 
+	function escapeHtml(s) {
+		return s
+			.replace(/&/g, '&amp;')
+			.replace(/</g, '&lt;')
+			.replace(/>/g, '&gt;')
+			.replace(/"/g, '&quot;')
+			.replace(/'/g, '&#039;');
+	}
+
 	function pageTitle() {
 		const titleElements = document.getElementsByTagName('title');
 		if (titleElements.length) return titleElements[0].text.trim();
@@ -347,7 +356,7 @@
 	}
 
 	function embedPageUrl() {
-		return `<embed src="${window.location.href}" type="${document.contentType}" />`;
+		return `<embed src="${escapeHtml(window.location.href)}" type="${escapeHtml(document.contentType)}" />`;
 	}
 
 	async function prepareCommandResponse(command) {
