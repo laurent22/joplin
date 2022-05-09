@@ -1,7 +1,5 @@
 name: 'Close stale issues'
-on:
-  schedule:
-    - cron: '0 16 * * *'
+on: workflow_dispatch
 permissions:
   issues: write
 jobs:
