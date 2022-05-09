@@ -7,6 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: MrKanister <pueblos_spatulas@aleeas.com>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -299,9 +301,8 @@ msgid "Also displays unset and hidden config variables."
 msgstr "Zeigt auch nicht gesetzte und versteckte Konfigurationsvariablen an."
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:203
-#, fuzzy
 msgid "Also publish linked notes"
-msgstr "Veröffentlichung der Notiz aufheben"
+msgstr "Auch verlinkte Notizen veröffentlichen"
 
 #: packages/lib/models/Setting.ts:713
 msgid "Always"
@@ -424,6 +425,8 @@ msgstr "Automatisch auf Aktualisierungen prüfen"
 # Not sure what other applications use. I don't have any German apps thus I can't say.
 # Both words don't strike me as a proper translation in this context.
 # I think "design" is a translation that I've seen before and that also everybody would understand.
+# ---
+# Gimp z. B. verwendet "Thema", ich denke aber, dass "Design" genauso allgemein verständlich ist.
 #: packages/lib/models/Setting.ts:824
 msgid "Automatically switch theme to match system theme"
 msgstr "Automatisch das Design ändern, um es dem System-Design anzupassen"
@@ -565,14 +568,14 @@ msgstr ""
 #: packages/server/src/models/UserModel.ts:214
 msgid "Cannot save %s \"%s\" because it is larger than the allowed limit (%s)"
 msgstr ""
-"Kann %s \"%s\" nicht speichern, da es größer ist als das erlaubte Limit (%s)"
+"Kann %s „%s“ nicht speichern, da es größer ist als das erlaubte Limit (%s)"
 
 #: packages/server/src/models/UserModel.ts:231
 msgid ""
 "Cannot save %s \"%s\" because it would go over the total allowed size (%s) "
 "for this account"
 msgstr ""
-"Kann %s \"%s\" nicht speichern, da es die zulässige Gesamtgröße (%s) für "
+"Kann %s „%s“ nicht speichern, da es die zulässige Gesamtgröße (%s) für "
 "dieses Konto überschreiten würde"
 
 #: packages/lib/services/share/ShareService.ts:318
@@ -871,7 +874,7 @@ msgstr ""
 "Die Einladung konnte nicht beantwortet werden. Bitte versuche es erneut, "
 "oder prüfe, ob der Notizbuch-Besitzer dieses noch freigibt.\n"
 "\n"
-"Der Fehler war: \"%s\""
+"Der Fehler war: „%s“"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:219
 msgid "Could not upgrade master key: %s"
@@ -887,18 +890,16 @@ msgstr ""
 "besteht."
 
 #: packages/app-desktop/gui/PromptDialog.min.js:235
-#, fuzzy
 msgid "Create"
-msgstr "Erstellt"
+msgstr "Erstellen"
 
 #: packages/app-mobile/components/note-list.js:101
 msgid "Create a notebook"
 msgstr "Notizbuch erstellen"
 
 #: packages/app-desktop/gui/MainScreen/commands/addProfile.ts:9
-#, fuzzy
 msgid "Create new profile..."
-msgstr "Erstellt eine neue Notiz."
+msgstr "Neues Profil erstellen..."
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:161
 msgid "Create notebook"
@@ -1351,7 +1352,7 @@ msgstr "Notizbuch bearbeiten"
 
 #: packages/app-desktop/commands/editProfileConfig.ts:9
 msgid "Edit profile configuration..."
-msgstr ""
+msgstr "Profilkonfiguration bearbeiten..."
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:138
 #: packages/lib/models/Setting.ts:876 packages/lib/models/Setting.ts:877
@@ -1379,11 +1380,11 @@ msgstr "Maximale Breite des Editors"
 msgid "Editor monospace font family"
 msgstr "Nichtproportionale Schriftfamilie im Editor"
 
+# Je nach Kontext wäre auch "Herausgeber" möglich.
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:100
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:96
-#, fuzzy
 msgid "Editor: %s"
-msgstr "Editor"
+msgstr "Editor: %s"
 
 #: packages/app-cli/app/command-ls.js:31
 msgid "Either \"text\" or \"json\""
@@ -1697,9 +1698,8 @@ msgid "File system"
 msgstr "Dateisystem"
 
 #: packages/app-mobile/components/screens/NoteTagsDialog.js:190
-#, fuzzy
 msgid "Filter tags"
-msgstr "Neue Schlagwörter:"
+msgstr "Tags filtern"
 
 #: packages/app-desktop/gui/ExtensionBadge.min.js:10
 msgid "Firefox Extension"
@@ -2837,6 +2837,8 @@ msgid ""
 "Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list "
 "below."
 msgstr ""
+"Bitte klicke auf „%s“, um fortzufahren, oder trage die Passwörter in die "
+"Liste „%s“ unten ein."
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:65
 msgid ""
@@ -3008,9 +3010,8 @@ msgid "Profile"
 msgstr "Profil"
 
 #: packages/app-desktop/gui/MainScreen/commands/addProfile.ts:17
-#, fuzzy
 msgid "Profile name:"
-msgstr "Profil"
+msgstr "Profilname:"
 
 #: packages/lib/versionInfo.ts:26
 msgid "Profile Version: %s"
@@ -3238,9 +3239,8 @@ msgstr "Alarm speichern"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:100
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:93
-#, fuzzy
 msgid "Save as %s"
-msgstr "Speichern unter ..."
+msgstr "Speichern unter %s"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:80
 msgid "Save as..."
@@ -3615,9 +3615,8 @@ msgid "Switch between note and to-do type"
 msgstr "Zwischen Notiz- und Aufgaben-Typ wechseln"
 
 #: packages/app-desktop/gui/MenuBar.tsx:437
-#, fuzzy
 msgid "Switch profile"
-msgstr "Profil exportieren"
+msgstr "Profil wechseln"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:105
 msgid "Switch to note type"
@@ -3626,9 +3625,8 @@ msgstr "Zu Notiz-Typ wechseln"
 #: packages/app-desktop/commands/switchProfile1.ts:7
 #: packages/app-desktop/commands/switchProfile2.ts:7
 #: packages/app-desktop/commands/switchProfile3.ts:7
-#, fuzzy
 msgid "Switch to profile %d"
-msgstr "Zu Notiz-Typ wechseln"
+msgstr "Wechsle zu Profil %d"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:114
 msgid "Switch to to-do type"
@@ -3727,7 +3725,7 @@ msgstr "Tabloid"
 
 #: packages/app-mobile/components/screens/NoteTagsDialog.js:179
 msgid "tag1, tag2, ..."
-msgstr ""
+msgstr "tag1, tag2, ..."
 
 #: packages/app-cli/app/command-import.js:52
 #: packages/app-desktop/gui/ImportScreen.min.js:73
@@ -3771,6 +3769,8 @@ msgstr ""
 msgid ""
 "The application did not close properly. Would you like to start in safe mode?"
 msgstr ""
+"Die Anwendung wurde nicht ordnungsgemäß geschlossen. Im abgesicherten Modus "
+"starten?"
 
 #: packages/lib/onedrive-api-node-utils.js:86
 msgid ""
@@ -3930,7 +3930,7 @@ msgstr ""
 "Der Empfänger konnte nicht von der Liste entfernt werden. Bitte versuche es "
 "erneut.\n"
 "\n"
-"Der Fehler war: \"%s\""
+"Der Fehler war: „%s“"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:591
 msgid ""
@@ -4643,10 +4643,8 @@ msgid "Your data is going to be re-encrypted and synced again."
 msgstr "Deine Daten werden neu verschlüsselt und erneut synchronisiert."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:271
-#, fuzzy
 msgid "Your password is needed to decrypt some of your data."
-msgstr ""
-"Dein Master-Passwort ist nötig um einige deiner Daten zu entschlüsseln."
+msgstr "Dein Passwort ist nötig, um einige deiner Daten zu entschlüsseln."
 
 #: packages/app-cli/app/command-sync.ts:242
 msgid ""
