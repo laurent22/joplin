@@ -7,6 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: genneko <genneko217@gmail.com>\n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -294,9 +296,8 @@ msgid "Also displays unset and hidden config variables."
 msgstr "未設定または非表示の設定項目も表示します。"
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:203
-#, fuzzy
 msgid "Also publish linked notes"
-msgstr "ノートの公開を停止"
+msgstr "リンクされたノートも公開する"
 
 #: packages/lib/models/Setting.ts:713
 msgid "Always"
@@ -377,7 +378,7 @@ msgid ""
 "more details: %s"
 msgstr ""
 "注意: この場所を変更する際は、同期する前に新しい場所にすべての内容をコピーし"
-"ておきましょう。そうしないとすべてのファイルが削除されていまいます！ 詳しくは"
+"ておきましょう。そうしないとすべてのファイルが削除されてしまいます！ 詳しくは"
 "次のFAQをご覧ください: %s"
 
 #: packages/app-cli/app/command-sync.ts:82
@@ -476,7 +477,7 @@ msgstr "中止中...お待ちください。"
 
 #: packages/lib/shim-init-node.js:242
 msgid "Cannot access %s"
-msgstr "%sにアクセスできません"
+msgstr "%s にアクセスできません"
 
 #: packages/app-cli/app/base-command.js:15
 msgid "Cannot change encrypted item"
@@ -512,7 +513,7 @@ msgstr "ノートをノートブック \"%s\" にコピーできません"
 #: packages/lib/services/interop/InteropService.ts:266
 #: packages/lib/services/interop/InteropService.ts:284
 msgid "Cannot find \"%s\"."
-msgstr "\"%s\"は見つかりませんでした。"
+msgstr "\"%s\" は見つかりませんでした。"
 
 #: packages/app-cli/app/command-sync.ts:182
 msgid "Cannot initialise synchroniser."
@@ -520,11 +521,13 @@ msgstr "同期プロセスを初期化できませんでした。"
 
 #: packages/lib/services/interop/InteropService.ts:208
 msgid "Cannot load \"%s\" module for format \"%s\" and output \"%s\""
-msgstr "\"%s\" モジュール （\"%s / %s\" フォーマット用） を読み込めません"
+msgstr ""
+"\"%s\" フォーマットと \"%s\" 出力用の \"%s\" モジュールを読み込めません"
 
 #: packages/lib/services/interop/InteropService.ts:234
 msgid "Cannot load \"%s\" module for format \"%s\" and target \"%s\""
-msgstr "\"%s\" モジュール （\"%s / %s\" フォーマット用） を読み込めません"
+msgstr ""
+"\"%s\" フォーマットと\" %s\" ターゲット用の \"%s\" モジュールを読み込めません"
 
 #: packages/lib/models/Note.ts:538
 msgid "Cannot move note to \"%s\" notebook"
@@ -532,7 +535,7 @@ msgstr "ノートをノートブック \"%s\" に移動できません"
 
 #: packages/lib/models/Folder.ts:699
 msgid "Cannot move notebook to this location"
-msgstr "ノートをノートブック \"%s\" に移動できません"
+msgstr "ノートブックをこの場所に移動できません"
 
 #: packages/lib/onedrive-api.ts:408
 msgid ""
@@ -860,18 +863,16 @@ msgstr ""
 "ネット接続を確認してから再度お試しください。"
 
 #: packages/app-desktop/gui/PromptDialog.min.js:235
-#, fuzzy
 msgid "Create"
-msgstr "作成日時"
+msgstr "作成"
 
 #: packages/app-mobile/components/note-list.js:101
 msgid "Create a notebook"
 msgstr "ノートブックを作成します"
 
 #: packages/app-desktop/gui/MainScreen/commands/addProfile.ts:9
-#, fuzzy
 msgid "Create new profile..."
-msgstr "あたらしいノートを作成します。"
+msgstr "あたらしいプロファイルを作成..."
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:161
 msgid "Create notebook"
@@ -1078,7 +1079,7 @@ msgstr "プラグイン \"%s\" を削除しますか？"
 
 #: packages/lib/models/Note.ts:767
 msgid "Delete these %d notes?"
-msgstr "ノート \"%d\" を削除しますか？"
+msgstr "これら %d のノートを削除しますか？"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:221
 msgid ""
@@ -1316,7 +1317,7 @@ msgstr "ノートブックの編集"
 
 #: packages/app-desktop/commands/editProfileConfig.ts:9
 msgid "Edit profile configuration..."
-msgstr ""
+msgstr "プロファイル設定を編集..."
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:138
 #: packages/lib/models/Setting.ts:876 packages/lib/models/Setting.ts:877
@@ -1346,9 +1347,8 @@ msgstr "エディターの等幅フォントファミリー"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:100
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:96
-#, fuzzy
 msgid "Editor: %s"
-msgstr "エディター"
+msgstr "エディター: %s"
 
 #: packages/app-cli/app/command-ls.js:31
 msgid "Either \"text\" or \"json\""
@@ -1662,9 +1662,8 @@ msgid "File system"
 msgstr "ファイルシステム"
 
 #: packages/app-mobile/components/screens/NoteTagsDialog.js:190
-#, fuzzy
 msgid "Filter tags"
-msgstr "新しいタグ:"
+msgstr "フィルタータグ"
 
 #: packages/app-desktop/gui/ExtensionBadge.min.js:10
 msgid "Firefox Extension"
@@ -2343,7 +2342,7 @@ msgstr "マスターキーがありません"
 
 #: packages/app-cli/app/cli-utils.js:109
 msgid "Missing required argument: %s"
-msgstr "引数が足りません：%s"
+msgstr "引数が足りません: %s"
 
 #: packages/app-mobile/components/side-menu-content.js:367
 msgid "Mobile data - auto-sync disabled"
@@ -2364,7 +2363,7 @@ msgstr ""
 
 #: packages/app-mobile/components/screen-header.js:453
 msgid "Move %d notes to notebook \"%s\"?"
-msgstr "%d個のノートを\"%s\"に移動しますか？"
+msgstr "%d 個のノートを \"%s\" ノートブックに移動しますか？"
 
 #: packages/app-desktop/gui/MainScreen/commands/moveToFolder.ts:8
 msgid "Move to notebook"
@@ -2380,7 +2379,7 @@ msgstr "ノートブックへ移動..."
 
 #: packages/app-cli/app/command-mv.js:14
 msgid "Moves the notes matching <note> to [notebook]."
-msgstr "<note>に一致するアイテムを、[notebook]に移動します。"
+msgstr "<note>に一致するノートを、[notebook]に移動します。"
 
 #: packages/app-cli/app/app.js:138 packages/app-cli/app/cli-utils.js:161
 msgid "n"
@@ -2542,7 +2541,7 @@ msgstr "ノートの本文"
 
 #: packages/app-cli/app/command-edit.js:46
 msgid "Note does not exist: \"%s\". Create it?"
-msgstr "\"%s\"というノートはありません。作成しますか？"
+msgstr "\"%s\" というノートはありません。作成しますか？"
 
 #: packages/app-cli/app/command-edit.js:97
 msgid "Note has been saved."
@@ -2783,6 +2782,8 @@ msgid ""
 "Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list "
 "below."
 msgstr ""
+"\"%s\"をクリックして続行するか、以下の\"%s\"リストでパスワードを設定してくだ"
+"さい。"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:65
 msgid ""
@@ -2941,9 +2942,8 @@ msgid "Profile"
 msgstr "プロファイル"
 
 #: packages/app-desktop/gui/MainScreen/commands/addProfile.ts:17
-#, fuzzy
 msgid "Profile name:"
-msgstr "プロファイル"
+msgstr "プロファイル名:"
 
 #: packages/lib/versionInfo.ts:26
 msgid "Profile Version: %s"
@@ -3171,9 +3171,8 @@ msgstr "アラームの保存"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:100
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:93
-#, fuzzy
 msgid "Save as %s"
-msgstr "名前を付けて保存..."
+msgstr "%sで保存"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:80
 msgid "Save as..."
@@ -3258,7 +3257,7 @@ msgstr "アラームをセット"
 
 #: packages/app-desktop/gui/MainScreen/commands/editAlarm.ts:27
 msgid "Set alarm:"
-msgstr "アラームをセット："
+msgstr "アラームをセット:"
 
 #: packages/lib/models/Setting.ts:1194
 msgid ""
@@ -3269,7 +3268,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:633
 msgid "Set the password"
-msgstr "パスワードの設定"
+msgstr "パスワードを設定"
 
 #: packages/app-cli/app/command-set.js:22
 msgid ""
@@ -3366,15 +3365,15 @@ msgstr "Solarised (明)"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:597
 msgid "Some items cannot be decrypted."
-msgstr "いくつかの項目は復号されませんでした。"
+msgstr "いくつかのアイテムは復号されませんでした。"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:626
 msgid "Some items cannot be synchronised."
-msgstr "いくつかの項目は同期されませんでした。"
+msgstr "いくつかのアイテムは同期されませんでした。"
 
 #: packages/app-mobile/components/screen-header.js:472
 msgid "Some items cannot be synchronised. Press for more info."
-msgstr "いくつかの項目は同期されませんでした。詳細はクリック。"
+msgstr "いくつかのアイテムは同期されませんでした。詳細はクリック。"
 
 #: packages/lib/models/Setting.ts:981
 msgid "Sort notebooks by"
@@ -3540,9 +3539,8 @@ msgid "Switch between note and to-do type"
 msgstr "ノートとToDoを切り替え"
 
 #: packages/app-desktop/gui/MenuBar.tsx:437
-#, fuzzy
 msgid "Switch profile"
-msgstr "プロファイルをエクスポート"
+msgstr "プロファイルを切り替え"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:105
 msgid "Switch to note type"
@@ -3551,9 +3549,8 @@ msgstr "ノートに切り替え"
 #: packages/app-desktop/commands/switchProfile1.ts:7
 #: packages/app-desktop/commands/switchProfile2.ts:7
 #: packages/app-desktop/commands/switchProfile3.ts:7
-#, fuzzy
 msgid "Switch to profile %d"
-msgstr "ノートに切り替え"
+msgstr "%d プロファイルに切り替え"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:114
 msgid "Switch to to-do type"
@@ -3649,7 +3646,7 @@ msgstr "Tabloid"
 
 #: packages/app-mobile/components/screens/NoteTagsDialog.js:179
 msgid "tag1, tag2, ..."
-msgstr ""
+msgstr "タグ1, タグ2, ..."
 
 #: packages/app-cli/app/command-import.js:52
 #: packages/app-desktop/gui/ImportScreen.min.js:73
@@ -3693,7 +3690,7 @@ msgstr ""
 #: packages/app-desktop/app.ts:332
 msgid ""
 "The application did not close properly. Would you like to start in safe mode?"
-msgstr ""
+msgstr "アプリケーションが正しく閉じませんでした。セーフモードで開始しますか？"
 
 #: packages/lib/onedrive-api-node-utils.js:86
 msgid ""
@@ -4425,7 +4422,7 @@ msgstr "WebDAV"
 
 #: packages/lib/models/Setting.ts:535
 msgid "WebDAV password"
-msgstr "WevDAV パスワード"
+msgstr "WebDAV パスワード"
 
 #: packages/lib/models/Setting.ts:512
 msgid "WebDAV URL"
@@ -4518,16 +4515,15 @@ msgstr ""
 
 #: packages/app-cli/app/cli-utils.js:144
 msgid "Your choice: "
-msgstr "選択： "
+msgstr "選択: "
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:71
 msgid "Your data is going to be re-encrypted and synced again."
 msgstr "既存データを暗号化しなおし、再同期します。"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:271
-#, fuzzy
 msgid "Your password is needed to decrypt some of your data."
-msgstr "一部のデータを復号化するためにあなたのマスターパスワードが必要です。"
+msgstr "一部のデータを復号化するためにあなたのパスワードが必要です。"
 
 #: packages/app-cli/app/command-sync.ts:242
 msgid ""
