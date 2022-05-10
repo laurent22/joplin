@@ -417,7 +417,7 @@ Important: userstyle.css and userchrome.css are provided for your convenience, b
 
 # Plugins
 
-The **desktop app** has the ability to extend beyond its standard functionality by the way of plugins. These plugins adhere to the Joplin [plugin API])https://joplinapp.org/api/references/plugin_api/classes/joplin.html) and can be installed & configured within the application via the `Plugins` page of the Settings menu (*Windows/Linux*: Tools > Options > Plugins; *macOS*: Joplin > Preferences).  
+The **desktop app** has the ability to extend beyond its standard functionality by the way of plugins. These plugins adhere to the Joplin [plugin API](https://joplinapp.org/api/references/plugin_api/classes/joplin.html) and can be installed & configured within the application via the `Plugins` page of the Settings menu (*Windows/Linux*: Tools > Options > Plugins; *macOS*: Joplin > Preferences).  
 From this menu you can search for plugins uploaded to the [Joplin plugins](https://github.com/joplin/plugins) repository as well as manual installation of plugins using a 'Joplin Plugin Archive' (*.jpl) file.  
 Once the application is reloaded the plugins will appear within the plugins menu where they can be toggled on/off or removed entirely.
 

@@ -12,7 +12,7 @@ See the [Joplin Discourse 'plugins' category](https://discourse.joplinapp.org/c/
 
 ## Installing a plugin
 
-To install a plugin just search for the name of the plugin within the search box within the `Plugins` page of the [Configuration screen](https://github.com/laurent22/joplin/blob/dev/readme/config_screen.md). Typing a `space` will display all plugins or you can browse the repository by pressing the `Plugin tools` "gear" button and selecting `Browse all plugins`.  
+To install a plugin just search for the name of the plugin within the search box within the `Plugins` page of the [Configuration screen](https://github.com/laurent22/joplin/blob/dev/readme/config_screen.md). Typing a <kbd>space</kbd> will display all plugins or you can browse the repository by pressing the `Plugin tools` "gear" button and selecting `Browse all plugins`.  
 [Recommended plugins](https://github.com/joplin/plugins/blob/master/readme/recommended.md#recommended-plugins) are marked by a gold crown icon and have been vetted and recommended by the Joplin team.  
 To install a plugin just press its `Install` button, the application will then require restarting to finish the installation and will prompt you to do so.  
 
