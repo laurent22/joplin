@@ -94,10 +94,52 @@ Important: If you use custom notebook icons and sync with the mobile app, make s
 - Fixed: Scroll position is not remembered (regression) ([#6043](https://github.com/laurent22/joplin/issues/6043)) ([#6042](https://github.com/laurent22/joplin/issues/6042) by Kenichi Kobayashi)
 - Fixed: Shared resource was not encrypted with correct encryption key ([#6092](https://github.com/laurent22/joplin/issues/6092))
 
+## [v2.7.8](https://github.com/laurent22/joplin/releases/tag/v2.7.8) (Pre-release) - 2022-01-19T09:35:27Z
+
+- Improved: Disable plugin throttling for now ([6bb0318](https://github.com/laurent22/joplin/commit/6bb0318))
+- Fixed [#6035](https://github.com/laurent22/joplin/issues/6035): Revert "Desktop: Fixes [#5850](https://github.com/laurent22/joplin/issues/5850): Editor loses cursor focus when Ctrl+F search is closed ([#5919](https://github.com/laurent22/joplin/issues/5919))"
+
 ## [v2.7.7](https://github.com/laurent22/joplin/releases/tag/v2.7.7) (Pre-release) - 2022-01-18T14:05:07Z
 
 - Improved: Disable plugin throttling mechanism for now ([c6b6712](https://github.com/laurent22/joplin/commit/c6b6712))
 - Fixed: Fixes alt text not appearing in html ([#6017](https://github.com/laurent22/joplin/issues/6017)) ([#5803](https://github.com/laurent22/joplin/issues/5803) by Mayank Bondre)
+
+## [v2.7.6](https://github.com/laurent22/joplin/releases/tag/v2.7.6) (Pre-release) - 2022-01-17T17:08:28Z
+
+- New: Plugins: Add support for joplin.workspace.filterEditorContextMenu to allow dynamically setting editor menu items depending on context ([960863f](https://github.com/laurent22/joplin/commit/960863f))
+- New: Plugins: Add utility functions joplin.data.itemType() and joplin.data.resourcePath() ([27b62bf](https://github.com/laurent22/joplin/commit/27b62bf))
+- New: Plugins: Added "openItem" command ([83c0c48](https://github.com/laurent22/joplin/commit/83c0c48))
+- New: Plugins: Added ModelType type ([c423551](https://github.com/laurent22/joplin/commit/c423551))
+- New: Plugins: Added revealResourceFile command ([6e6432b](https://github.com/laurent22/joplin/commit/6e6432b))
+- New: Plugins: Adds `joplin.workspace.onResourceChange` ([2660ff3](https://github.com/laurent22/joplin/commit/2660ff3))
+- Improved: Adjusted styling to make it more consistent across app ([d031a04](https://github.com/laurent22/joplin/commit/d031a04))
+- Improved: Better handling of bold text to simplify customisation ([#5732](https://github.com/laurent22/joplin/issues/5732) by Hieu-Thi Luong)
+- Improved: Clickable tags in Tag Bar ([#5956](https://github.com/laurent22/joplin/issues/5956) by Kenichi Kobayashi)
+- Improved: Do no duplicate resources when duplicating a note ([721d008](https://github.com/laurent22/joplin/commit/721d008))
+- Improved: Expand search field when clicking on search button ([#5893](https://github.com/laurent22/joplin/issues/5893))
+- Improved: Focus notebook title when opening Notebook dialog ([3117133](https://github.com/laurent22/joplin/commit/3117133))
+- Improved: Plugins: Throttle plugins that make too many API calls ([#5895](https://github.com/laurent22/joplin/issues/5895))
+- Improved: Prevent Desktop Environments to launch a new window ([#5984](https://github.com/laurent22/joplin/issues/5984) by Felipe Kinoshita)
+- Improved: Right click on image to copy it to clipboard ([297b992](https://github.com/laurent22/joplin/commit/297b992))
+- Improved: Show login prompt for OneDrive ([#5933](https://github.com/laurent22/joplin/issues/5933) by Jonathan Heard)
+- Improved: Use same notebook dialog when creating a new notebook too ([#5934](https://github.com/laurent22/joplin/issues/5934))
+- Fixed: Add back text editor commands to Command Palette ([#5707](https://github.com/laurent22/joplin/issues/5707))
+- Fixed: Cannot jump if local search count is one ([#5894](https://github.com/laurent22/joplin/issues/5894)) ([#5549](https://github.com/laurent22/joplin/issues/5549) by Kenichi Kobayashi)
+- Fixed: Editor loses cursor focus when Ctrl+F search is closed ([#5919](https://github.com/laurent22/joplin/issues/5919)) ([#5850](https://github.com/laurent22/joplin/issues/5850) by Kenichi Kobayashi)
+- Fixed: Fix white space in the bottom of Add Tag Prompt dialog ([#5998](https://github.com/laurent22/joplin/issues/5998) by Krishna Kumar)
+- Fixed: Fix wording "Check for updates" in settings ([#5832](https://github.com/laurent22/joplin/issues/5832) by Helmut K. C. Tessarek)
+- Fixed: Fixed issue where synchroniser would try to update a shared folder that is not longer accessible ([667d642](https://github.com/laurent22/joplin/commit/667d642))
+- Fixed: Fixed order of editor search buttons ([6bc70ed](https://github.com/laurent22/joplin/commit/6bc70ed))
+- Fixed: Fixed search icon when note list is resized ([#5974](https://github.com/laurent22/joplin/issues/5974)) ([#5916](https://github.com/laurent22/joplin/issues/5916) by Krishna Kumar)
+- Fixed: Note list buttons do not reappear after changing app layout ([#5994](https://github.com/laurent22/joplin/issues/5994)) ([#5953](https://github.com/laurent22/joplin/issues/5953) by [@asrient](https://github.com/asrient))
+- Fixed: Scroll jump when checkbox is toggled in Viewer ([#5941](https://github.com/laurent22/joplin/issues/5941)) ([#5890](https://github.com/laurent22/joplin/issues/5890) by Kenichi Kobayashi)
+- Fixed: Scroll jumps when images are rendered in Markdown Editor ([#5929](https://github.com/laurent22/joplin/issues/5929)) ([#5918](https://github.com/laurent22/joplin/issues/5918) by Kenichi Kobayashi)
+- Fixed: Scrolling was out of sync when a Multi Markdown Table was being used ([#5815](https://github.com/laurent22/joplin/issues/5815)) ([#5808](https://github.com/laurent22/joplin/issues/5808) by Caleb John)
+- Fixed: Show error on sync if S3 region is not set ([#5923](https://github.com/laurent22/joplin/issues/5923)) ([#5875](https://github.com/laurent22/joplin/issues/5875) by [@shinglyu](https://github.com/shinglyu))
+- Fixed: Update menu item labels when the language changes ([#5927](https://github.com/laurent22/joplin/issues/5927))
+- Fixed: Default sort order lost on exit ([#6022](https://github.com/laurent22/joplin/issues/6022)) ([#5968](https://github.com/laurent22/joplin/issues/5968) by Kenichi Kobayashi)
+- Fixed: Scroll positions are not preserved when layout changes ([#6021](https://github.com/laurent22/joplin/issues/6021)) ([#5981](https://github.com/laurent22/joplin/issues/5981) by Kenichi Kobayashi)
+- Security: Fixes [#6004](https://github.com/laurent22/joplin/issues/6004): Prevent XSS in Goto Anything ([#6004](https://github.com/laurent22/joplin/issues/6004))
 
 ## [v2.6.10](https://github.com/laurent22/joplin/releases/tag/v2.6.10) - 2021-12-19T11:31:16Z
 
@@ -219,26 +261,6 @@ Important: If you use custom notebook icons and sync with the mobile app, make s
 - Improved: Improved accepting a folder share ([8ada059](https://github.com/laurent22/joplin/commit/8ada059))
 - Improved: Make exported HTML more readable on mobile ([b1d0c15](https://github.com/laurent22/joplin/commit/b1d0c15))
 - Fixed: Fix default sync target ([4b39d30](https://github.com/laurent22/joplin/commit/4b39d30))
-
-## [v2.4.8](https://github.com/laurent22/joplin/releases/tag/v2.4.8) (Pre-release) - 2021-09-22T19:01:46Z
-
-- Fixed: Fixed Sync Wizard logo images on Windows ([da88475](https://github.com/laurent22/joplin/commit/da88475))
-- Improved: Improved plugin search and installing new plugins from China ([#5161](https://github.com/laurent22/joplin/issues/5161))
-
-## [v2.4.7](https://github.com/laurent22/joplin/releases/tag/v2.4.7) (Pre-release) - 2021-09-19T12:53:22Z
-
-- New: MacOS: Added Cmd+Backspace shortcut to delete line ([#5478](https://github.com/laurent22/joplin/issues/5478) by Helmut K. C. Tessarek)
-- Improved: Display 0/0 when no search results are found in editor ([#5360](https://github.com/laurent22/joplin/issues/5360)) ([#5299](https://github.com/laurent22/joplin/issues/5299) by Nikhil Gautam)
-- Improved: Do not escape content when copying from Rich Text editor ([#5440](https://github.com/laurent22/joplin/issues/5440))
-- Improved: Fire resize event whenever the layout changes ([#5344](https://github.com/laurent22/joplin/issues/5344)) ([#5233](https://github.com/laurent22/joplin/issues/5233) by [@CalebJohn](https://github.com/CalebJohn))
-- Improved: Linux: Installer: properly quote variables ([#5476](https://github.com/laurent22/joplin/issues/5476) by [@a1346054](https://github.com/a1346054))
-- Improved: Support for user-data-dir flag ([#5467](https://github.com/laurent22/joplin/issues/5467) by [@Marph](https://github.com/Marph))
-- Improved: Sync deleted items first to allow fixing oversized accounts ([43c594b](https://github.com/laurent22/joplin/commit/43c594b))
-- Improved: Update Mermaid 8.10.2 -&gt; 8.12.1 and fix gitGraph crash ([#5448](https://github.com/laurent22/joplin/issues/5448)) ([#5295](https://github.com/laurent22/joplin/issues/5295) by Helmut K. C. Tessarek)
-- Fixed: Editor max width was not always applied in Rich Text editor ([#5461](https://github.com/laurent22/joplin/issues/5461))
-- Fixed: Misinterpreted search term after filter in quotation marks ([#5445](https://github.com/laurent22/joplin/issues/5445)) ([#5444](https://github.com/laurent22/joplin/issues/5444) by [@JackGruber](https://github.com/JackGruber))
-- Fixed: Plugin onNoteSelectionChange() is triggered twice after a search ([#5449](https://github.com/laurent22/joplin/issues/5449)) ([#5447](https://github.com/laurent22/joplin/issues/5447) by Kenichi Kobayashi)
-- Fixed: Underline was not applied when using Cmd+U in Rich Text editor ([#5480](https://github.com/laurent22/joplin/issues/5480))
 
 ## [v2.4.8](https://github.com/laurent22/joplin/releases/tag/v2.4.8) (Pre-release) - 2021-09-22T19:01:46Z
 
