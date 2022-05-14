@@ -7,6 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: Magyari Balázs <balmag@gmail.com>\n"
 "Language-Team: \n"
 "Language: hu_HU\n"
@@ -14,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0\n"
+"X-Generator: Poedit 3.0.1\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:560
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -111,7 +113,7 @@ msgstr "%s (%s) nem tölthető fel: %s"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:618
 msgid "%s (%s) would like to share a notebook with you."
-msgstr ""
+msgstr "%s (%s) szeretne egy jegyzetfüzetet megosztani önnel."
 
 #: packages/lib/services/ReportService.ts:262
 msgid "%s (%s): %s"
@@ -214,16 +216,17 @@ msgstr ""
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:619
 msgid "Accept"
-msgstr ""
+msgstr "Elfogadás"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:95
+#, fuzzy
 msgid "Action"
-msgstr ""
+msgstr "Akció"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:183
 #, fuzzy
 msgid "Actions"
-msgstr "Beállítások"
+msgstr "Akciók"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:178
 msgid "Active"
@@ -257,11 +260,11 @@ msgstr "Hozzáadás szótárhoz"
 #: packages/server/src/services/MustacheService.ts:156
 #: packages/server/src/services/MustacheService.ts:278
 msgid "Admin"
-msgstr ""
+msgstr "Adminisztrátor"
 
 #: packages/server/src/routes/admin/dashboard.ts:10
 msgid "Admin dashboard"
-msgstr ""
+msgstr "Adminisztrátori felület"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:189
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:147
@@ -289,7 +292,7 @@ msgstr "Megjeleníti a beállítatlan és rejtett config változókat."
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:203
 #, fuzzy
 msgid "Also publish linked notes"
-msgstr "Megosztás"
+msgstr "Linkelt jegyzetek megosztása"
 
 #: packages/lib/models/Setting.ts:713
 msgid "Always"
@@ -344,9 +347,8 @@ msgstr "Csatolja az adott fájlt a jegyzethez."
 
 #: packages/server/src/models/UserModel.ts:215
 #: packages/server/src/models/UserModel.ts:232
-#, fuzzy
 msgid "attachment"
-msgstr "Csatolmányok"
+msgstr "csatolmány"
 
 #: packages/lib/models/Resource.ts:423
 msgid "Attachment conflict: \"%s\""
@@ -399,9 +401,8 @@ msgid "Auto-pair braces, parenthesis, quotations, etc."
 msgstr "Auto-párosítása az idézőjeleknek, zárójeleknek, stb."
 
 #: packages/lib/models/Setting.ts:1262
-#, fuzzy
 msgid "Automatically check for updates"
-msgstr "Frissítés keresése..."
+msgstr "Automatikus frissítés keresés"
 
 #: packages/lib/models/Setting.ts:824
 msgid "Automatically switch theme to match system theme"
@@ -688,9 +689,8 @@ msgid "Command palette"
 msgstr "Parancs paletta"
 
 #: packages/app-desktop/gui/MainScreen/commands/commandPalette.ts:7
-#, fuzzy
 msgid "Command palette..."
-msgstr "Parancs paletta"
+msgstr "Parancs paletta…"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:31
 msgid "Completed"
@@ -701,9 +701,8 @@ msgid "Completed decryption."
 msgstr "Visszafejtés befejeződött."
 
 #: packages/lib/Synchronizer.ts:190
-#, fuzzy
 msgid "Completed: %s (%s)"
-msgstr "Befejeződött: %s"
+msgstr "Befejeződött: %s (%s)"
 
 #: packages/server/src/services/TaskService.ts:37
 msgid "Compress old changes"
@@ -724,9 +723,8 @@ msgid "Confirm password:"
 msgstr "Jelszó ismétlése:"
 
 #: packages/app-desktop/gui/Root.tsx:147
-#, fuzzy
 msgid "Confirmation"
-msgstr "Beállítások"
+msgstr "Megerősítés"
 
 #: packages/lib/services/ReportService.ts:284
 msgid "Conflicted: %d"
@@ -737,13 +735,12 @@ msgid "Conflicts"
 msgstr "Ütközés"
 
 #: packages/lib/models/Resource.ts:407
-#, fuzzy
 msgid "Conflicts (attachments)"
-msgstr "Jegyzet csatolmányok"
+msgstr "Ütközés (jegyzet csatolmányok)"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.tsx:108
 msgid "Content provided by %s"
-msgstr ""
+msgstr "Tartalom %s által biztosítva"
 
 #: packages/app-mobile/components/screens/Note.tsx:940
 msgid "Convert to note"
@@ -767,14 +764,12 @@ msgstr "Dev mód parancs másolása vágólapra"
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:355
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:369
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:139
-#, fuzzy
 msgid "Copy external link"
-msgstr "Külső szerkesztés leállítása"
+msgstr "Külső link másolása"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:140
-#, fuzzy
 msgid "Copy image"
-msgstr "Token másolása"
+msgstr "Kép másolása"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:178
 msgid "Copy Link Address"
@@ -815,22 +810,20 @@ msgstr ""
 "Kérem próbálja újra."
 
 #: packages/lib/JoplinServerApi.ts:92
-#, fuzzy
 msgid ""
 "Could not connect to Joplin Server. Please check the Synchronisation options "
 "in the config screen. Full error was:\n"
 "\n"
 "%s"
 msgstr ""
-"Nem lehet kapcsolódni a Joplin Nextcloud applikációhoz. Kérem ellenőrizze a "
-"beállításokat a Szinkronizáció beállításoknál. Ez volt a tejles hiba:\n"
+"Sikertelen kapcsolódás a Joplin szerverhez. Kérem ellenőrizze a "
+"Szinkronizáció beállításokat a  beállításoknál. Ez volt a teljes hiba:\n"
 "\n"
 "%s"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:302
-#, fuzzy
 msgid "Could not connect to plugin repository."
-msgstr "Bővítmény nem telepíthető: %s"
+msgstr "Sikertelen kapcsolódás a plugin adattárhoz."
 
 #: packages/app-desktop/InteropServiceHelper.ts:190
 msgid "Could not export notes: %s"
@@ -859,28 +852,24 @@ msgid ""
 msgstr ""
 
 #: packages/app-desktop/gui/PromptDialog.min.js:235
-#, fuzzy
 msgid "Create"
-msgstr "Létrehozva"
+msgstr "Létrehozás"
 
 #: packages/app-mobile/components/note-list.js:101
 msgid "Create a notebook"
 msgstr "Jegyzetfüzet létrehozása"
 
 #: packages/app-desktop/gui/MainScreen/commands/addProfile.ts:9
-#, fuzzy
 msgid "Create new profile..."
-msgstr "Új jegyzet létrehozása."
+msgstr "Új profil létrehozása."
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:161
-#, fuzzy
 msgid "Create notebook"
 msgstr "Jegyzetfüzet létrehozása"
 
 #: packages/server/src/routes/admin/users.ts:171
-#, fuzzy
 msgid "Create user"
-msgstr "Létrehozva: %s"
+msgstr "Új felhasználó létrehozása"
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:29
 msgid "Created"
@@ -903,9 +892,8 @@ msgid "Created remote items: %d."
 msgstr "Helyben létrehozott elemek: %d."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:152
-#, fuzzy
 msgid "Created: "
-msgstr "Létrehozva: %s"
+msgstr "Létrehozva: "
 
 #: packages/app-cli/app/command-import.js:48
 #: packages/app-desktop/gui/ImportScreen.min.js:69
@@ -977,11 +965,11 @@ msgstr ""
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:620
 msgid "Database v%s"
-msgstr ""
+msgstr "Adatbázis v%s"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:180
 msgid "Date"
-msgstr ""
+msgstr "Dátum"
 
 #: packages/lib/models/Setting.ts:766
 msgid "Date format"
@@ -1030,14 +1018,12 @@ msgid "Delete attachment \"%s\"?"
 msgstr "\"%s\" csatolmány törlése ?"
 
 #: packages/server/src/services/TaskService.ts:36
-#, fuzzy
 msgid "Delete expired sessions"
-msgstr "Képletek engedélyezése"
+msgstr "Lejárt munkamenetek törlése"
 
 #: packages/server/src/services/TaskService.ts:31
-#, fuzzy
 msgid "Delete expired tokens"
-msgstr "%d jegyzetek törlése?"
+msgstr "Lejárt tokenek törlése"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:88
 msgid "Delete line"
@@ -1127,9 +1113,8 @@ msgid "Directory to synchronise with (absolute path)"
 msgstr "Könyvtár amivel szinkronizálunk (abszolút útvonal)"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:156
-#, fuzzy
 msgid "Disable"
-msgstr "Letiltva"
+msgstr "Letiltás"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:237
 #: packages/app-mobile/components/screens/encryption-config.tsx:281
@@ -1291,9 +1276,8 @@ msgid "Duplicate"
 msgstr "Duplikált"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:92
-#, fuzzy
 msgid "Duplicate line"
-msgstr "Duplikált"
+msgstr "Duplikált sor"
 
 #: packages/app-cli/app/command-cp.js:13
 msgid ""
@@ -1353,9 +1337,8 @@ msgstr "Szerkesztő betű család"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:100
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:96
-#, fuzzy
 msgid "Editor: %s"
-msgstr "Szerkesztő"
+msgstr "Szerkesztő: %s"
 
 #: packages/app-cli/app/command-ls.js:31
 msgid "Either \"text\" or \"json\""
@@ -1368,12 +1351,12 @@ msgstr "Emacs"
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:236
 #: packages/server/src/routes/admin/emails.ts:128
 msgid "Email"
-msgstr ""
+msgstr "Email"
 
 #: packages/server/src/routes/admin/emails.ts:112
 #: packages/server/src/services/MustacheService.ts:127
 msgid "Emails"
-msgstr ""
+msgstr "Emailek"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:194
 msgid "emphasised text"
@@ -1518,19 +1501,16 @@ msgstr "Titkosítás: %s"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:172
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:271
-#, fuzzy
 msgid "Encryption keys"
-msgstr "Titkosítás:"
+msgstr "Titkosítási kulcsok"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:249
-#, fuzzy
 msgid "Encryption:"
-msgstr "Titkosítás"
+msgstr "Titkosítás:"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:247
-#, fuzzy
 msgid "End-to-end encryption"
-msgstr "Titkosítás engedélyezése"
+msgstr "End-to-end titkosítás"
 
 #: packages/app-mobile/components/screens/dropbox-login.js:66
 msgid "Enter code here"
@@ -1573,9 +1553,8 @@ msgstr ""
 "megfelelőek-e és a szinkronizációs cél elérhető. A hiba a következő:"
 
 #: packages/app-mobile/components/screens/log.js:117
-#, fuzzy
 msgid "Errors only"
-msgstr "Hiba"
+msgstr "Csak hibák"
 
 #: packages/lib/services/interop/InteropService.ts:88
 msgid "Evernote Export File (as HTML)"
@@ -1655,14 +1634,13 @@ msgid "Feature flags"
 msgstr ""
 
 #: packages/lib/Synchronizer.ts:188
-#, fuzzy
 msgid "Fetched items: %d/%d."
-msgstr "Fetched elemek: %d/%d."
+msgstr "Letöltött elemek: %d/%d."
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:749
 #: packages/app-mobile/components/side-menu-content.js:346
 msgid "Fetching resources: %d/%d"
-msgstr "Erőforrások lekérése: %d/%d."
+msgstr "Erőforrások lekérése: %d/%d"
 
 #: packages/lib/services/interop/types.ts:126
 msgid "File"
@@ -1675,7 +1653,7 @@ msgstr "Fájl-rendszer"
 #: packages/app-mobile/components/screens/NoteTagsDialog.js:190
 #, fuzzy
 msgid "Filter tags"
-msgstr "Új tag-ek:"
+msgstr "Tag-ek filterezése"
 
 #: packages/app-desktop/gui/ExtensionBadge.min.js:10
 msgid "Firefox Extension"
@@ -1742,13 +1720,12 @@ msgid "Found: %d."
 msgstr "Találtam: %d."
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:626
-#, fuzzy
 msgid "FTS enabled: %d"
-msgstr "Törölni: %d"
+msgstr "FTS engedélyezve: %d"
 
 #: packages/app-desktop/checkForUpdates.ts:199
 msgid "Full changelog"
-msgstr ""
+msgstr "Teljes változási napló"
 
 #: packages/lib/models/Setting.ts:2295
 #: packages/server/src/services/MustacheService.ts:108
@@ -1756,9 +1733,8 @@ msgid "General"
 msgstr "Általános"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:252
-#, fuzzy
 msgid "Generated"
-msgstr "Általános"
+msgstr "Generált"
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:184
 msgid "Generating link..."
@@ -1791,9 +1767,8 @@ msgid "Goto Anything..."
 msgstr "Ugrás bárhova..."
 
 #: packages/app-desktop/gui/Root.tsx:172
-#, fuzzy
 msgid "Grant authorisation"
-msgstr "Hitelesítő token:"
+msgstr "Engedély megadása"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:73
 msgid "Heading"
@@ -1808,8 +1783,9 @@ msgid "Hide %s"
 msgstr "%s elrejtése"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:172
+#, fuzzy
 msgid "Hide disabled keys"
-msgstr ""
+msgstr "Letiltott karakterek elrejtése"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:22
 msgid "Hide Joplin"
@@ -1817,7 +1793,7 @@ msgstr "Joplin elrejtése"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:14
 msgid "Highlight"
-msgstr ""
+msgstr "Kiemelés"
 
 #: packages/server/src/services/MustacheService.ts:140
 #: packages/server/src/services/MustacheService.ts:271
@@ -1842,7 +1818,7 @@ msgstr "Hiperlink"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:136
 msgid "Icon"
-msgstr ""
+msgstr "Ikon"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:179
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:329
@@ -1866,7 +1842,7 @@ msgstr "TLS bizonyítvány hibák figyelmen kívül hagyása"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:102
 msgid "Images"
-msgstr ""
+msgstr "Képek"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:170
 #: packages/app-desktop/gui/MenuBar.tsx:536
@@ -1978,7 +1954,7 @@ msgstr "Beágyazott kód"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:24
 msgid "Insert"
-msgstr ""
+msgstr "Beszúrás"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:83
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:623
@@ -2026,9 +2002,8 @@ msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Érvénytelen opció érték: \"%s\". Lehetséges értékek: %s."
 
 #: packages/app-cli/app/command-e2ee.ts:46
-#, fuzzy
 msgid "Invalid password"
-msgstr "Érvénytelen válasz: %s"
+msgstr "Érvénytelen jelszó: %s"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:38
 msgid "Italic"
@@ -2041,7 +2016,7 @@ msgstr "Elem \"%s\" nem tölthető le: %s"
 #: packages/server/src/services/MustacheService.ts:148
 #: packages/server/src/services/MustacheService.ts:273
 msgid "Items"
-msgstr ""
+msgstr "Elemek"
 
 #: packages/lib/services/ReportService.ts:208
 msgid "Items that cannot be decrypted"
@@ -2058,19 +2033,16 @@ msgid ""
 msgstr ""
 
 #: packages/lib/SyncTargetJoplinCloud.ts:30
-#, fuzzy
 msgid "Joplin Cloud"
-msgstr "Joplin Forum"
+msgstr "Joplin Cloud"
 
 #: packages/lib/models/Setting.ts:684
-#, fuzzy
 msgid "Joplin Cloud email"
-msgstr "Joplin Szerver"
+msgstr "Joplin Cloud email"
 
 #: packages/lib/models/Setting.ts:695
-#, fuzzy
 msgid "Joplin Cloud password"
-msgstr "Joplin Szerver jelszó"
+msgstr "Joplin Cloud jelszó"
 
 #: packages/lib/services/interop/InteropService.ts:107
 #: packages/lib/services/interop/InteropService.ts:72
@@ -2098,9 +2070,8 @@ msgid "Joplin Server"
 msgstr "Joplin Szerver"
 
 #: packages/lib/models/Setting.ts:645
-#, fuzzy
 msgid "Joplin Server email"
-msgstr "Joplin Szerver"
+msgstr "Joplin Server email"
 
 #: packages/lib/models/Setting.ts:656
 msgid "Joplin Server password"
@@ -2180,9 +2151,8 @@ msgid "Layout button sequence"
 msgstr "Elrendezés gomb sorrend"
 
 #: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:10
-#, fuzzy
 msgid "Leave notebook..."
-msgstr "Jegyzet megosztása..."
+msgstr "Jegyzet elhagyása…"
 
 #: packages/lib/models/Setting.ts:1307
 msgid "Legal"
@@ -2240,11 +2210,11 @@ msgstr "Napló"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:240
 msgid "Login"
-msgstr ""
+msgstr "Belépés"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:235
 msgid "Login below."
-msgstr ""
+msgstr "Belépés."
 
 #: packages/app-mobile/components/screens/dropbox-login.js:55
 msgid "Login with Dropbox"
@@ -2256,11 +2226,11 @@ msgstr "Belép OneDrive-al"
 
 #: packages/server/src/services/MustacheService.ts:277
 msgid "Logout"
-msgstr ""
+msgstr "Kilépés"
 
 #: packages/server/src/services/MustacheService.ts:152
 msgid "Logs"
-msgstr ""
+msgstr "Log-ok"
 
 #: packages/app-desktop/gui/MenuBar.tsx:780
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:578
@@ -2268,14 +2238,12 @@ msgid "Make a donation"
 msgstr "Adakozzon"
 
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:217
-#, fuzzy
 msgid "Manage master password"
-msgstr "Adja meg a mester jelszót:"
+msgstr "Mester jelszó kezelése"
 
 #: packages/lib/commands/openMasterPasswordDialog.ts:6
-#, fuzzy
 msgid "Manage master password..."
-msgstr "Adja meg a mester jelszót:"
+msgstr "Mester jelszó kezelése…"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:314
 msgid "Manage your plugins"
@@ -2304,7 +2272,7 @@ msgstr "Markdown"
 #: packages/lib/services/interop/InteropService.ts:119
 #: packages/lib/services/interop/InteropService.ts:66
 msgid "Markdown + Front Matter"
-msgstr ""
+msgstr "Markdown + Front Matter"
 
 #: packages/app-cli/app/command-done.js:14
 msgid "Marks a to-do as done."
@@ -2325,24 +2293,21 @@ msgstr "Mester Kulcs %s"
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:133
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:277
 #: packages/app-mobile/components/screens/encryption-config.tsx:102
-#, fuzzy
 msgid "Master password"
-msgstr "Adja meg a mester jelszót:"
+msgstr "Mester jelszó"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:278
 #: packages/app-mobile/components/screens/encryption-config.tsx:211
-#, fuzzy
 msgid "Master password:"
-msgstr "Adja meg a mester jelszót:"
+msgstr "Mester jelszó:"
 
 #: packages/lib/models/Setting.ts:738
 msgid "Max concurrent connections"
 msgstr "Maximális konkurrens kapcsolat"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:324
-#, fuzzy
 msgid "Missing keys"
-msgstr "Hiányzó Mester Kulcsok"
+msgstr "Hiányzó kulcsok"
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:271
 msgid "Missing Master Keys"
@@ -2354,7 +2319,7 @@ msgstr "Szükséges paraméter hiányzik: %s"
 
 #: packages/app-mobile/components/side-menu-content.js:367
 msgid "Mobile data - auto-sync disabled"
-msgstr ""
+msgstr "Mobil adat - auto-szinkronizáció letiltva"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:610
 msgid "More info"
@@ -2369,26 +2334,25 @@ msgid "More than one item match \"%s\". Please narrow down your query."
 msgstr "Több mint egy elem egyezik ezzel \"%s\". Kérem szűkítse a lekérdezést."
 
 #: packages/app-mobile/components/screen-header.js:453
-#, fuzzy
 msgid "Move %d notes to notebook \"%s\"?"
-msgstr "Jegyzetfüzetbe mozgatás"
+msgstr ""
 
 #: packages/app-desktop/gui/MainScreen/commands/moveToFolder.ts:8
 msgid "Move to notebook"
-msgstr "Jegyzetfüzetbe mozgatás"
+msgstr "Jegyzetfüzetbe áthelyezés"
 
 #: packages/app-desktop/gui/MainScreen/commands/moveToFolder.ts:32
 msgid "Move to notebook:"
-msgstr "Jegyzetfüzetbe mozgatás:"
+msgstr "Jegyzetfüzetbe áthelyezés:"
 
 #: packages/app-mobile/components/screen-header.js:402
-#, fuzzy
 msgid "Move to notebook..."
-msgstr "Jegyzetfüzetbe mozgatás"
+msgstr "Jegyzetfüzetbe áthelyezés…"
 
 #: packages/app-cli/app/command-mv.js:14
+#, fuzzy
 msgid "Moves the notes matching <note> to [notebook]."
-msgstr "Egyező jegyzetek <note> mozgása [notebook]-ba."
+msgstr "Egyező jegyzetek <note> áthelyezése [notebook]-ba."
 
 #: packages/app-cli/app/app.js:138 packages/app-cli/app/cli-utils.js:161
 msgid "n"
@@ -2520,7 +2484,7 @@ msgstr "Nincs letöltve"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:252
 msgid "Not generated"
-msgstr ""
+msgstr "Nem generált"
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.tsx:110
 #: packages/server/src/models/UserModel.ts:215
@@ -2592,14 +2556,12 @@ msgid ""
 msgstr ""
 
 #: packages/app-desktop/gui/MenuBar.tsx:750
-#, fuzzy
 msgid "Note&book"
-msgstr "Jegyzetfüzetek"
+msgstr ""
 
 #: packages/lib/models/Setting.ts:2299
-#, fuzzy
 msgid "Notebook"
-msgstr "Jegyzetfüzetek"
+msgstr "Jegyzetfüzet"
 
 #: packages/lib/models/Setting.ts:1453
 msgid "Notebook list growth factor"
@@ -2620,9 +2582,8 @@ msgstr "Jegyzetfüzet nem nevezhető \"%s\"-nak, az egy fenntartott cím."
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleNotesSortOrderField.ts:8
 #: packages/app-desktop/gui/MainScreen/commands/toggleNotesSortOrderReverse.ts:9
-#, fuzzy
 msgid "Notes"
-msgstr "Megjegyzés"
+msgstr "Jegyzetek"
 
 #: packages/lib/models/Setting.ts:2315
 msgid "Notes and settings are stored in: %s"
@@ -2702,7 +2663,7 @@ msgstr "Adatmappa megnyitása"
 
 #: packages/lib/models/Setting.ts:413
 msgid "Open Sync Wizard..."
-msgstr ""
+msgstr "Sync-varázsló megnyitása…"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:73
 msgid "Open..."
@@ -2721,14 +2682,12 @@ msgid "Options"
 msgstr "Beállítások"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:235
-#, fuzzy
 msgid "Or create an account."
-msgstr "Új jegyzet létrehozása."
+msgstr "Vagy hozzon létre új felhasználót."
 
 #: packages/app-desktop/gui/MenuBar.tsx:400
-#, fuzzy
 msgid "Other applications..."
-msgstr "Kilép a programból."
+msgstr "Más applikációk…"
 
 #: packages/app-cli/app/command-import.js:27
 msgid "Output format: %s"
@@ -2939,12 +2898,11 @@ msgstr ""
 
 #: packages/server/src/routes/admin/users.ts:168
 msgid "Profile"
-msgstr ""
+msgstr "Profil"
 
 #: packages/app-desktop/gui/MainScreen/commands/addProfile.ts:17
-#, fuzzy
 msgid "Profile name:"
-msgstr "Profil verzió: %s"
+msgstr "Profil név:"
 
 #: packages/lib/versionInfo.ts:26
 msgid "Profile Version: %s"
@@ -2956,20 +2914,19 @@ msgstr "Tulajdonságok"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:252
 msgid "Public-private key pair:"
-msgstr ""
+msgstr "Nyilvános-titkos kulcs pár:"
 
 #: packages/app-desktop/gui/MainScreen/commands/showShareNoteDialog.ts:6
-#, fuzzy
 msgid "Publish note..."
-msgstr "Jegyzet megosztása..."
+msgstr "Jegyzet publikálálása…"
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:211
 msgid "Publish Notes"
-msgstr ""
+msgstr "Jegyzetek Publikálálása"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:178
 msgid "Publish notes to the internet"
-msgstr ""
+msgstr "Jegyzetek publikálálása az internetre"
 
 #: packages/app-desktop/app.ts:177
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:16
@@ -3027,7 +2984,7 @@ msgstr "Frissítés"
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:621
 #: packages/app-desktop/gui/Root.tsx:173
 msgid "Reject"
-msgstr ""
+msgstr "Elutasít"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:252
 msgid "Remove"
@@ -3062,13 +3019,12 @@ msgstr "Átnevezi az adott  <item> (jegyzet vagy jegyzetfüzet) erre <name>."
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:222
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:158
 msgid "Renew token"
-msgstr ""
+msgstr "Token megújítása"
 
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:217
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:218
-#, fuzzy
 msgid "Reset master password"
-msgstr "Adja meg a mester jelszót:"
+msgstr "Mester jelszó visszaállítása"
 
 #: packages/app-cli/app/command-import.js:51
 #: packages/app-desktop/gui/ImportScreen.min.js:72
@@ -3128,31 +3084,27 @@ msgstr ""
 
 #: packages/lib/SyncTargetAmazonS3.js:28
 msgid "S3"
-msgstr ""
+msgstr "S3"
 
 #: packages/lib/models/Setting.ts:594
-#, fuzzy
 msgid "S3 access key"
-msgstr "AWS key"
+msgstr "S3 hozzáférési kulcs"
 
 #: packages/lib/models/Setting.ts:554
-#, fuzzy
 msgid "S3 bucket"
-msgstr "AWS S3 bucket"
+msgstr "S3 bucket"
 
 #: packages/lib/models/Setting.ts:583
 msgid "S3 region"
-msgstr ""
+msgstr "S3 régió"
 
 #: packages/lib/models/Setting.ts:605
-#, fuzzy
 msgid "S3 secret key"
-msgstr "AWS secret"
+msgstr "S3 titkos kulcs"
 
 #: packages/lib/models/Setting.ts:569
-#, fuzzy
 msgid "S3 URL"
-msgstr "AWS S3 URL"
+msgstr "S3 URL"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:585
 msgid ""
@@ -3176,7 +3128,7 @@ msgstr "Riasztás mentése"
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:93
 #, fuzzy
 msgid "Save as %s"
-msgstr "Mentés másként..."
+msgstr "Mentés mint %s"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:80
 msgid "Save as..."
@@ -3225,9 +3177,8 @@ msgid "See the pre-release page for more details: %s"
 msgstr "Nézze meg a előzetes kiadás oldalát a részletekért: %s"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:266
-#, fuzzy
 msgid "Select"
-msgstr "Minden kiválasztása"
+msgstr "Kiválasztás"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:28
 msgid "Select all"
@@ -3235,12 +3186,11 @@ msgstr "Minden kiválasztása"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:140
 msgid "Select emoji..."
-msgstr ""
+msgstr "Emoji kiválasztása…"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:144
-#, fuzzy
 msgid "Select file..."
-msgstr "Minden kiválasztása"
+msgstr "Fájl kiválasztása…"
 
 #: packages/app-cli/app/command-server.js:38
 msgid "Server is already running on port %d"
@@ -3290,14 +3240,12 @@ msgid "Share"
 msgstr "Megosztás"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:338
-#, fuzzy
 msgid "Share Notebook"
-msgstr "Jegyzetek megosztása"
+msgstr "Jegyzetfüzet megosztása"
 
 #: packages/app-desktop/gui/MainScreen/commands/showShareFolderDialog.ts:6
-#, fuzzy
 msgid "Share notebook..."
-msgstr "Jegyzet megosztása..."
+msgstr "Jegyzetfüzet megosztása…"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:304
 #, fuzzy
@@ -3313,9 +3261,8 @@ msgid "Show Advanced Settings"
 msgstr "Speciális beállítások megjelenítése"
 
 #: packages/app-mobile/components/screens/log.js:117
-#, fuzzy
 msgid "Show all"
-msgstr "Napló mutatása"
+msgstr "Összes megjelenítése"
 
 #: packages/lib/models/Setting.ts:885
 msgid "Show completed to-dos"
@@ -3324,20 +3271,19 @@ msgstr "Mutassa a befejezett to-do-kat"
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:172
 #, fuzzy
 msgid "Show disabled keys"
-msgstr "Speciális beállítások megjelenítése"
+msgstr "Tiltott karakterek megjelenítése"
 
 #: packages/lib/models/Setting.ts:867
 msgid "Show note counts"
-msgstr "Mutassa a jegyzet számot"
+msgstr "Jegyzet számok megjelenítése"
 
 #: packages/lib/models/Setting.ts:926
-#, fuzzy
 msgid "Show sort order buttons"
-msgstr "Mutassa a jegyzet számot"
+msgstr "Rendszerezési sorrend gombok megjelenítése"
 
 #: packages/lib/models/Setting.ts:1107
 msgid "Show tray icon"
-msgstr "Mutassa a tálca ikon-t"
+msgstr "Tálca ikon megjelenítése"
 
 #: packages/app-desktop/gui/Sidebar/commands/focusElementSideBar.ts:8
 msgid "Sidebar"
@@ -3349,7 +3295,7 @@ msgstr "Méret"
 
 #: packages/app-desktop/checkForUpdates.ts:199
 msgid "Skip this version"
-msgstr ""
+msgstr "Verzió átugrása"
 
 #: packages/app-cli/app/command-e2ee.ts:65
 msgid "Skipped items: %d (use --retry-failed-items to retry decrypting them)"
@@ -3376,12 +3322,11 @@ msgstr "Néhány elemet nem lehet visszafejteni."
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:626
 msgid "Some items cannot be synchronised."
-msgstr "Néhány elemet nem lehet szinkronizálnii."
+msgstr "Néhány elemet nem lehet szinkronizálni."
 
 #: packages/app-mobile/components/screen-header.js:472
-#, fuzzy
 msgid "Some items cannot be synchronised. Press for more info."
-msgstr "Néhány elemet nem lehet szinkronizálnii."
+msgstr "Néhány elemet nem lehet szinkronizálni. Kattintson több információért."
 
 #: packages/lib/models/Setting.ts:981
 msgid "Sort notebooks by"
@@ -3405,9 +3350,8 @@ msgid "Source format: %s"
 msgstr "Forrás formátum: %s"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:151
-#, fuzzy
 msgid "Source: "
-msgstr "Forrás"
+msgstr "Forrás: "
 
 #: packages/lib/models/Setting.ts:1400
 msgid ""
@@ -3508,7 +3452,7 @@ msgstr "Külső szerkesztés leállítása"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:19
 msgid "Strikethrough"
-msgstr ""
+msgstr "Áthúzott"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:193
 msgid "strong text"
@@ -3521,7 +3465,7 @@ msgstr "Elküld"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:36
 msgid "Subscript"
-msgstr ""
+msgstr "Alsó index"
 
 #: packages/lib/components/shared/config-shared.js:69
 msgid "Success! Synchronisation configuration appears to be correct."
@@ -3529,7 +3473,7 @@ msgstr "Siker! Szinkronizációs beállítás jónak tűnik."
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/setupToolbarButtons.ts:30
 msgid "Superscript"
-msgstr ""
+msgstr "Felső index"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:124
 msgid "Swap line down"
@@ -3544,9 +3488,8 @@ msgid "Switch between note and to-do type"
 msgstr "Váltás jegyzet és todo típus között"
 
 #: packages/app-desktop/gui/MenuBar.tsx:437
-#, fuzzy
 msgid "Switch profile"
-msgstr "Profil exportálása"
+msgstr "Profil váltása"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:105
 msgid "Switch to note type"
@@ -3555,9 +3498,8 @@ msgstr "Váltás jegyzet típusra"
 #: packages/app-desktop/commands/switchProfile1.ts:7
 #: packages/app-desktop/commands/switchProfile2.ts:7
 #: packages/app-desktop/commands/switchProfile3.ts:7
-#, fuzzy
 msgid "Switch to profile %d"
-msgstr "Váltás jegyzet típusra"
+msgstr "Váltás a %d profilra"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:114
 msgid "Switch to to-do type"
@@ -3598,9 +3540,8 @@ msgid "Sync Version: %s"
 msgstr "Szinkronizáció verzió: %s"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:177
-#, fuzzy
 msgid "Sync your notes"
-msgstr "Jegyzetek rendezése"
+msgstr "Jegyzetek szinkronizálása"
 
 #: packages/lib/models/Setting.ts:2296
 msgid "Synchronisation"
@@ -3646,7 +3587,6 @@ msgid "Synchronising..."
 msgstr "Szinkronizálás..."
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:303
-#, fuzzy
 msgid "Synchronizing..."
 msgstr "Szinkronizálás..."
 
@@ -3656,7 +3596,7 @@ msgstr "Tabloid"
 
 #: packages/app-mobile/components/screens/NoteTagsDialog.js:179
 msgid "tag1, tag2, ..."
-msgstr ""
+msgstr "tag1, tag2, …"
 
 #: packages/app-cli/app/command-import.js:52
 #: packages/app-desktop/gui/ImportScreen.min.js:73
@@ -3678,7 +3618,7 @@ msgstr "Fotó készítése"
 #: packages/server/src/services/MustacheService.ts:123
 #: packages/server/src/services/MustacheService.ts:275
 msgid "Tasks"
-msgstr ""
+msgstr "Feladatok"
 
 #: packages/lib/models/Setting.ts:1299
 msgid "Text editor command"
@@ -3847,7 +3787,7 @@ msgstr ""
 
 #: packages/lib/models/Tag.ts:204
 msgid "The tag \"%s\" already exists. Please choose a different name."
-msgstr ""
+msgstr "A tag “%s” már létezik. Kérem válasszon másik nevet."
 
 #: packages/lib/models/Setting.ts:426
 msgid ""
@@ -4032,9 +3972,8 @@ msgstr ""
 "lépéseket:"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:54
-#, fuzzy
 msgid "To continue, please enter your master password below."
-msgstr "Adja meg a mester jelszót:"
+msgstr "A folytatáshoz adja meg a mester jelszót."
 
 #: packages/app-cli/app/app-gui.js:452
 msgid "To delete a tag, untag the associated notes."
@@ -4141,7 +4080,7 @@ msgstr "Összes: %d/%d"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:302
 msgid "Try again"
-msgstr ""
+msgstr "Próbálja újra"
 
 #: packages/app-cli/app/command-help.js:71
 msgid ""
@@ -4228,9 +4167,8 @@ msgstr "Frissítés"
 
 #: packages/server/src/routes/admin/users.ts:171
 #: packages/server/src/routes/index/users.ts:89
-#, fuzzy
 msgid "Update profile"
-msgstr "Profil exportálása"
+msgstr "Profil frissítése"
 
 #: packages/server/src/services/TaskService.ts:32
 #, fuzzy
@@ -4256,9 +4194,8 @@ msgid "Updated remote items: %d."
 msgstr "Frissített távoli elemek: %d."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:152
-#, fuzzy
 msgid "Updated: "
-msgstr "Frissített: %s"
+msgstr "Frissített: "
 
 #: packages/app-cli/app/command-import.js:49
 #: packages/app-desktop/gui/ImportScreen.min.js:70
@@ -4339,12 +4276,11 @@ msgstr ""
 #: packages/server/src/services/MustacheService.ts:115
 #: packages/server/src/services/MustacheService.ts:272
 msgid "Users"
-msgstr ""
+msgstr "Felhasználók"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:182
-#, fuzzy
 msgid "Valid"
-msgstr "Érvénytelen"
+msgstr "Érvényes"
 
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:167
 msgid "View"
