@@ -1,5 +1,10 @@
 # Joplin changelog
 
+## [v2.8.8](https://github.com/laurent22/joplin/releases/tag/v2.8.8) (Pre-release) - 2022-05-17T14:48:06Z
+
+- Improved: Remove plugin backoff handler for now ([7ec3a7b](https://github.com/laurent22/joplin/commit/7ec3a7b))
+- Fixed: Dropbox login button is not visible in dark mode ([#6513](https://github.com/laurent22/joplin/issues/6513)) ([#6503](https://github.com/laurent22/joplin/issues/6503) by [@Retrove](https://github.com/Retrove))
+
 ## [v2.8.7](https://github.com/laurent22/joplin/releases/tag/v2.8.7) (Pre-release) - 2022-05-06T11:34:27Z
 
 - Improved: Sort sync target options ([814a5a0](https://github.com/laurent22/joplin/commit/814a5a0))
