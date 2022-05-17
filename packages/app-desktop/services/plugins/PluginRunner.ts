@@ -97,6 +97,7 @@ export default class PluginRunner extends BasePluginRunner {
 		return cb(...args);
 	}
 
+	// @ts-ignore
 	private backOffHandler(pluginId: string): BackOffHandler {
 		if (!this.backOffHandlers_[pluginId]) {
 			this.backOffHandlers_[pluginId] = new BackOffHandler(pluginId);
@@ -159,12 +160,12 @@ export default class PluginRunner extends BasePluginRunner {
 
 				this.recordCallStat(plugin.id);
 
-				try {
-					await this.backOffHandler(plugin.id).wait(fullPath, debugMappedArgs);
-				} catch (error) {
-					logger.error(error);
-					return;
-				}
+				// try {
+				// 	await this.backOffHandler(plugin.id).wait(fullPath, debugMappedArgs);
+				// } catch (error) {
+				// 	logger.error(error);
+				// 	return;
+				// }
 
 				let result: any = null;
 				let error: any = null;
