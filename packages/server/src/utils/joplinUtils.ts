@@ -26,6 +26,7 @@ import MustacheService from '../services/MustacheService';
 import Logger from '@joplin/lib/Logger';
 import config from '../config';
 const { substrWithEllipsis } = require('@joplin/lib/string-utils');
+import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
 
 const logger = Logger.create('JoplinUtils');
 
@@ -212,11 +213,19 @@ async function renderNote(share: Share, note: NoteEntity, resourceInfos: Resourc
 	let noteTitle: string = note.title;
 
 	if (note.encryption_applied) {
-		console.info(note);
+		const encryptionService = new EncryptionService();
+		const header = await encryptionService.decodeHeaderString(note.encryption_cipher_text);
+		const masterKey = await models_.user().masterKeyById(share.owner_id, header.masterKeyId);
 
 		result = {
 			cssStrings: [],
-			html: `<pre>${note.encryption_cipher_text}</pre>`,
+			html: `<script>
+				if (!window.__joplin) window.__joplin = {};
+				window.__joplin.note = {
+					ciphertext: ${JSON.stringify(note.encryption_cipher_text)},
+					masterKey: ${JSON.stringify(masterKey)},
+				};
+			</script>`,
 			pluginAssets: [],
 		};
 
@@ -227,7 +236,10 @@ async function renderNote(share: Share, note: NoteEntity, resourceInfos: Resourc
 
 	const bodyHtml = await mustache_.renderView({
 		cssFiles: ['items/note'],
-		jsFiles: ['items/note'],
+		jsFiles: [
+			'items/note',
+			'bundle_e2ee',
+		],
 		name: 'note',
 		title: `${substrWithEllipsis(noteTitle, 0, 100)} - ${config().appName}`,
 		titleOverride: true,

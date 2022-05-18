@@ -16,7 +16,7 @@ let isTestingEnv_ = false;
 // (app-desktop, app-mobile, etc.) since we are sure they won't be dependency to
 // other packages (unlike the lib which can be included anywhere).
 //
-// Regarding the type - althought we import React, we only use it as a type
+// Regarding the type - although we import React, we only use it as a type
 // using `typeof React`. This is just to get types in hooks.
 //
 // https://stackoverflow.com/a/42816077/561309
@@ -254,7 +254,7 @@ const shim = {
 		throw new Error('Not implemented');
 	},
 
-	waitForFrame: () => {
+	waitForFrame: (): any => {
 		throw new Error('Not implemented');
 	},
 
@@ -303,19 +303,19 @@ const shim = {
 	//
 	// Having the timers wrapped in that way would also make it easier to debug timing issue and
 	// find out what timers have been fired or not.
-	setTimeout: (_fn: Function, _interval: number) => {
+	setTimeout: (_fn: Function, _interval: number): any => {
 		throw new Error('Not implemented');
 	},
 
-	setInterval: (_fn: Function, _interval: number) => {
+	setInterval: (_fn: Function, _interval: number): any => {
 		throw new Error('Not implemented');
 	},
 
-	clearTimeout: (_id: any) => {
+	clearTimeout: (_id: any): any => {
 		throw new Error('Not implemented');
 	},
 
-	clearInterval: (_id: any) => {
+	clearInterval: (_id: any): any => {
 		throw new Error('Not implemented');
 	},
 

@@ -605,7 +605,7 @@ export default class EncryptionService {
 		return `JED01${encryptionMetadata}`;
 	}
 
-	async decodeHeaderString(cipherText: any) {
+	public async decodeHeaderString(cipherText: any) {
 		const source = this.stringReader_(cipherText);
 		return this.decodeHeaderSource_(source);
 	}

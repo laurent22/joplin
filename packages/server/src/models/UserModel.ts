@@ -28,6 +28,7 @@ import changeEmailNotificationTemplate from '../views/emails/changeEmailNotifica
 import { NotificationKey } from './NotificationModel';
 import prettyBytes = require('pretty-bytes');
 import { Env } from '../utils/types';
+import { MasterKeyEntity } from '@joplin/lib/services/e2ee/types';
 
 const logger = Logger.create('UserModel');
 
@@ -616,6 +617,14 @@ export default class UserModel extends BaseModel<User> {
 	public async publicPrivateKey(userId: string): Promise<PublicPrivateKeyPair> {
 		const syncInfo = await this.syncInfo(userId);
 		return syncInfo.ppk?.value || null;
+	}
+
+	public async masterKeyById(userId: Uuid, masterKeyId: string): Promise<MasterKeyEntity> {
+		const syncInfo = await this.syncInfo(userId);
+		if (!syncInfo.masterKeys) throw new ErrorBadRequest(`This user does not have any master key: ${userId}`);
+		const mk = syncInfo.masterKeys.find((mk: any) => mk.id === masterKeyId);
+		if (!mk) throw new ErrorBadRequest(`Could not find key ${masterKeyId} for user ${userId}`);
+		return mk;
 	}
 
 	// Note that when the "password" property is provided, it is going to be
