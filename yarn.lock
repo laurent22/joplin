@@ -3389,7 +3389,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/fork-htmlparser2@^4.1.39, @joplin/fork-htmlparser2@workspace:packages/fork-htmlparser2":
+"@joplin/fork-htmlparser2@^4.1.40, @joplin/fork-htmlparser2@workspace:packages/fork-htmlparser2":
   version: 0.0.0-use.local
   resolution: "@joplin/fork-htmlparser2@workspace:packages/fork-htmlparser2"
   dependencies:
@@ -3411,7 +3411,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/fork-sax@^1.2.43, @joplin/fork-sax@workspace:packages/fork-sax":
+"@joplin/fork-sax@^1.2.44, @joplin/fork-sax@workspace:packages/fork-sax":
   version: 0.0.0-use.local
   resolution: "@joplin/fork-sax@workspace:packages/fork-sax"
   dependencies:
@@ -3420,7 +3420,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/fork-uslug@^1.0.4, @joplin/fork-uslug@workspace:packages/fork-uslug":
+"@joplin/fork-uslug@^1.0.5, @joplin/fork-uslug@workspace:packages/fork-uslug":
   version: 0.0.0-use.local
   resolution: "@joplin/fork-uslug@workspace:packages/fork-uslug"
   dependencies:
@@ -3430,11 +3430,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/htmlpack@workspace:packages/htmlpack, @joplin/htmlpack@~2.8":
+"@joplin/htmlpack@^2.8.1, @joplin/htmlpack@workspace:packages/htmlpack":
   version: 0.0.0-use.local
   resolution: "@joplin/htmlpack@workspace:packages/htmlpack"
   dependencies:
-    "@joplin/fork-htmlparser2": ^4.1.39
+    "@joplin/fork-htmlparser2": ^4.1.40
     "@types/fs-extra": ^9.0.6
     css: ^3.0.0
     datauri: ^4.1.0
@@ -3443,19 +3443,19 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/lib@workspace:packages/lib, @joplin/lib@~2.8":
+"@joplin/lib@^2.8.1, @joplin/lib@workspace:packages/lib, @joplin/lib@~2.8":
   version: 0.0.0-use.local
   resolution: "@joplin/lib@workspace:packages/lib"
   dependencies:
     "@aws-sdk/client-s3": ^3.34.0
     "@aws-sdk/s3-request-presigner": ^3.34.0
-    "@joplin/fork-htmlparser2": ^4.1.39
-    "@joplin/fork-sax": ^1.2.43
-    "@joplin/fork-uslug": ^1.0.4
-    "@joplin/htmlpack": ~2.8
-    "@joplin/renderer": ~2.8
-    "@joplin/turndown": ^4.0.61
-    "@joplin/turndown-plugin-gfm": ^1.0.43
+    "@joplin/fork-htmlparser2": ^4.1.40
+    "@joplin/fork-sax": ^1.2.44
+    "@joplin/fork-uslug": ^1.0.5
+    "@joplin/htmlpack": ^2.8.1
+    "@joplin/renderer": ^2.8.1
+    "@joplin/turndown": ^4.0.62
+    "@joplin/turndown-plugin-gfm": ^1.0.44
     "@types/fs-extra": ^9.0.6
     "@types/jest": ^26.0.15
     "@types/js-yaml": ^4.0.2
@@ -3528,8 +3528,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@joplin/plugin-repo-cli@workspace:packages/plugin-repo-cli"
   dependencies:
-    "@joplin/lib": ~2.8
-    "@joplin/tools": ~2.8
+    "@joplin/lib": ^2.8.1
+    "@joplin/tools": ^2.8.1
     "@types/fs-extra": ^9.0.6
     "@types/jest": ^26.0.15
     "@types/node": ^14.14.6
@@ -3554,12 +3554,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/renderer@workspace:packages/renderer, @joplin/renderer@~2.8":
+"@joplin/renderer@^2.8.1, @joplin/renderer@workspace:packages/renderer, @joplin/renderer@~2.8":
   version: 0.0.0-use.local
   resolution: "@joplin/renderer@workspace:packages/renderer"
   dependencies:
-    "@joplin/fork-htmlparser2": ^4.1.39
-    "@joplin/fork-uslug": ^1.0.4
+    "@joplin/fork-htmlparser2": ^4.1.40
+    "@joplin/fork-uslug": ^1.0.5
     "@types/jest": ^26.0.15
     "@types/node": ^14.14.6
     font-awesome-filetypes: ^2.1.0
@@ -3649,12 +3649,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/tools@workspace:packages/tools, @joplin/tools@~2.8":
+"@joplin/tools@^2.8.1, @joplin/tools@workspace:packages/tools, @joplin/tools@~2.8":
   version: 0.0.0-use.local
   resolution: "@joplin/tools@workspace:packages/tools"
   dependencies:
-    "@joplin/lib": ~2.8
-    "@joplin/renderer": ~2.8
+    "@joplin/lib": ^2.8.1
+    "@joplin/renderer": ^2.8.1
     "@rmp135/sql-ts": ^1.6.0
     "@types/fs-extra": ^9.0.6
     "@types/jest": ^26.0.15
@@ -3687,7 +3687,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/turndown-plugin-gfm@^1.0.43, @joplin/turndown-plugin-gfm@workspace:packages/turndown-plugin-gfm":
+"@joplin/turndown-plugin-gfm@^1.0.44, @joplin/turndown-plugin-gfm@workspace:packages/turndown-plugin-gfm":
   version: 0.0.0-use.local
   resolution: "@joplin/turndown-plugin-gfm@workspace:packages/turndown-plugin-gfm"
   dependencies:
@@ -3699,7 +3699,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/turndown@^4.0.61, @joplin/turndown@workspace:packages/turndown":
+"@joplin/turndown@^4.0.62, @joplin/turndown@workspace:packages/turndown":
   version: 0.0.0-use.local
   resolution: "@joplin/turndown@workspace:packages/turndown"
   dependencies:
