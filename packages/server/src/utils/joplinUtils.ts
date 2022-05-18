@@ -16,7 +16,7 @@ import { NoteEntity } from '@joplin/lib/services/database/types';
 import { formatDateTime } from './time';
 import { ErrorNotFound } from './errors';
 import { MarkupToHtml } from '@joplin/renderer';
-import { OptionsResourceModel } from '@joplin/renderer/MarkupToHtml';
+import { OptionsResourceModel, RenderResult } from '@joplin/renderer/MarkupToHtml';
 import { isValidHeaderIdentifier } from '@joplin/lib/services/e2ee/EncryptionService';
 const { DatabaseDriverNode } = require('@joplin/lib/database-driver-node.js');
 import { themeStyle } from '@joplin/lib/theme';
@@ -208,13 +208,28 @@ async function renderNote(share: Share, note: NoteEntity, resourceInfos: Resourc
 		linkRenderingType: 2,
 	};
 
-	const result = await markupToHtml.render(note.markup_language, note.body, themeStyle(Setting.THEME_LIGHT), renderOptions);
+	let result: RenderResult = null;
+	let noteTitle: string = note.title;
+
+	if (note.encryption_applied) {
+		console.info(note);
+
+		result = {
+			cssStrings: [],
+			html: `<pre>${note.encryption_cipher_text}</pre>`,
+			pluginAssets: [],
+		};
+
+		noteTitle = '🔑';
+	} else {
+		result = await markupToHtml.render(note.markup_language, note.body, themeStyle(Setting.THEME_LIGHT), renderOptions);
+	}
 
 	const bodyHtml = await mustache_.renderView({
 		cssFiles: ['items/note'],
 		jsFiles: ['items/note'],
 		name: 'note',
-		title: `${substrWithEllipsis(note.title, 0, 100)} - ${config().appName}`,
+		title: `${substrWithEllipsis(noteTitle, 0, 100)} - ${config().appName}`,
 		titleOverride: true,
 		path: 'index/items/note',
 		content: {
