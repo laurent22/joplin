@@ -11,19 +11,6 @@
 - Fixed: Make undo/redo menu items translatable ([#6435](https://github.com/laurent22/joplin/issues/6435))
 - Fixed: Sync config was lost when switching profiles ([#6459](https://github.com/laurent22/joplin/issues/6459))
 
-## [v2.8.6](https://github.com/laurent22/joplin/releases/tag/v2.8.6) (Pre-release) - 2022-05-03T10:08:25Z
-
-- Improved: Disable crash detection handler for now ([47c3ee0](https://github.com/laurent22/joplin/commit/47c3ee0))
-
-## [v2.8.5](https://github.com/laurent22/joplin/releases/tag/v2.8.5) (Pre-release) - 2022-04-27T13:51:50Z
-
-- New: Plugins: Add support for file and directory selector in Settings API ([fc09598](https://github.com/laurent22/joplin/commit/fc09598))
-- Improved: Ask to start in safe mode when the application has crashed ([d9a4a9c](https://github.com/laurent22/joplin/commit/d9a4a9c))
-- Improved: More permissive plugin back-off rules ([22ae50c](https://github.com/laurent22/joplin/commit/22ae50c))
-- Fixed: Fixed color of links within list in Markdown editor ([#6447](https://github.com/laurent22/joplin/issues/6447) by Hieu-Thi Luong)
-- Fixed: Fixed getting geolocation for new notes ([86179bd](https://github.com/laurent22/joplin/commit/86179bd))
-- Security: Fixed disallowed tag XSS ([774c207](https://github.com/laurent22/joplin/commit/774c207)) (Discovered by @hexodotsh)
-
 ## [v2.8.4](https://github.com/laurent22/joplin/releases/tag/v2.8.4) (Pre-release) - 2022-04-19T18:00:09Z
 
 - New: Multi-profiles: Added profile ID in CSS root class so that different profiles can have different styles ([fd9fe5c](https://github.com/laurent22/joplin/commit/fd9fe5c))
@@ -256,9 +243,22 @@ Important: If you use custom notebook icons and sync with the mobile app, make s
 
 - Fixed: Fixed running out of memory when importing large ENEX files ([#5543](https://github.com/laurent22/joplin/issues/5543))
 
-## [v2.5.1](https://github.com/laurent22/joplin/releases/tag/v2.5.1) (Pre-release) - 2021-10-02T09:51:58Z
+## [v2.4.9](https://github.com/laurent22/joplin/releases/tag/v2.4.9) - 2021-09-29T19:08:58Z
 
-- Improved: Upgrade Electron from v10 to v14 ([4a7746b](https://github.com/laurent22/joplin/commit/4a7746b))
+- Improved: Allow importing certain corrupted ENEX files ([f144dae](https://github.com/laurent22/joplin/commit/f144dae))
+- Improved: Improved accepting a folder share ([8ada059](https://github.com/laurent22/joplin/commit/8ada059))
+- Improved: Make exported HTML more readable on mobile ([b1d0c15](https://github.com/laurent22/joplin/commit/b1d0c15))
+- Fixed: Fix default sync target ([4b39d30](https://github.com/laurent22/joplin/commit/4b39d30))
+
+## [v2.4.8](https://github.com/laurent22/joplin/releases/tag/v2.4.8) (Pre-release) - 2021-09-22T19:01:46Z
+
+- Fixed: Fixed Sync Wizard logo images on Windows ([da88475](https://github.com/laurent22/joplin/commit/da88475))
+- Improved: Improved plugin search and installing new plugins from China ([#5161](https://github.com/laurent22/joplin/issues/5161))
+
+## [v2.4.6](https://github.com/laurent22/joplin/releases/tag/v2.4.6) (Pre-release) - 2021-09-09T18:57:17Z
+
+- New: Plugins: Add support for enabledConditions when creating menu item from command ([9260b2a](https://github.com/laurent22/joplin/commit/9260b2a))
+- Fixed: Fix handling of disabled master keys when enabling E2EE ([267c321](https://github.com/laurent22/joplin/commit/267c321))
 
 ## [v2.4.9](https://github.com/laurent22/joplin/releases/tag/v2.4.9) - 2021-09-29T19:08:58Z
 
