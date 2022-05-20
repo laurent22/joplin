@@ -996,7 +996,7 @@ class Setting extends BaseModel {
 				type: SettingItemType.Bool,
 				public: true,
 				appTypes: [AppType.Cli],
-				label: () => _('Show the note count of the notebook after its title'),
+				label: () => _('Show note count in folder list'),
 				storage: SettingStorage.File,
 			},
 			trackLocation: { value: true, type: SettingItemType.Bool, section: 'note', storage: SettingStorage.File, isGlobal: true, public: true, label: () => _('Save geo-location with notes') },
