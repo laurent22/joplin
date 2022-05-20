@@ -990,7 +990,7 @@ class Setting extends BaseModel {
 				},
 				storage: SettingStorage.File,
 			},
-			'folders.sortOrder.reverse': { value: true, type: SettingItemType.Bool, storage: SettingStorage.File, isGlobal: true, public: true, label: () => _('Reverse sort order'), appTypes: [AppType.Cli] },
+			'folders.sortOrder.reverse': { value: false, type: SettingItemType.Bool, storage: SettingStorage.File, isGlobal: true, public: true, label: () => _('Reverse sort order'), appTypes: [AppType.Cli] },
 			'folders.showNoteCount': {
 				value: true,
 				type: SettingItemType.Bool,
