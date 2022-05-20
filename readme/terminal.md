@@ -487,8 +487,8 @@ The following commands are available in [command-line mode](#command-line-mode):
 	    folders.sortOrder.reverse      Reverse sort order.
 	                                   Type: bool.
 	                                   Default: false
-		
-		folders.showNoteCount          Show the note count of the notebook after its title.
+
+	    folders.showNoteCount          Show note count in folder list.
 	                                   Type: bool.
 	                                   Default: true
 
