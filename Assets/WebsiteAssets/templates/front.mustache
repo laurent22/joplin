@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
+		{{> gtmHead}}
 		{{> gaOptimize}}
 		<meta
 			charset="utf-8"
@@ -33,6 +34,8 @@
 		<title>Joplin</title>
 	</head>
 	<body class="front-page website-env-{{env}}">
+		{{> gtmBody}}
+
 		<div class="container-fluid" id="main-container">
 
 			{{#navbar}}
