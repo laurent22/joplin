@@ -1,3 +1,7 @@
+---
+forum_url: https://discourse.joplinapp.org/t/25726
+---
+
 # Joplin received 6 Contributor Projects for GSoC 2022!
 
 We are glad to announce that Google allocated us six projects this year for Google Summer of Code! So this is six contributors who will be working on various parts of the apps, both desktop and mobile, over the summer.
