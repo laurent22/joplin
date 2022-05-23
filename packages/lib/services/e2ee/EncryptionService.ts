@@ -6,6 +6,7 @@ import MasterKey from '../../models/MasterKey';
 import BaseItem from '../../models/BaseItem';
 import JoplinError from '../../JoplinError';
 import { getActiveMasterKeyId, setActiveMasterKeyId } from '../synchronizer/syncInfoUtils';
+import * as base64 from 'base64-arraybuffer';
 const { padLeft } = require('../../string-utils.js');
 
 const logger = Logger.create('EncryptionService');
@@ -463,11 +464,11 @@ export default class EncryptionService {
 			if (!length) continue; // Weird but could be not completely invalid (block of size 0) so continue decrypting
 
 			doneSize += length;
-			if (options.onProgress) options.onProgress({ doneSize: doneSize });
+			if (options.onProgress) options.onProgress({ doneSize });
 
 			await shim.waitForFrame();
 
-			const block = await source.read(length);
+			const block: string = await source.read(length);
 
 			const plainText = await this.decrypt(header.encryptionMethod, masterKeyPlainText, block);
 			await destination.append(plainText);
@@ -497,6 +498,9 @@ export default class EncryptionService {
 				return output.data.join('');
 			},
 			close: function() {},
+			size: async () => {
+				return output.data.join('').length;
+			},
 		};
 		return output;
 	}
@@ -521,9 +525,18 @@ export default class EncryptionService {
 				return this.fsDriver().appendFile(path, data, encoding);
 			},
 			close: function() {},
+			size: async () => {
+				const s = await this.fsDriver().stat(path);
+				return s.size;
+			},
 		};
 	}
 
+	// Note that data encrypted using encryptString should only be decrypted
+	// using decryptString. And likewise data encrypted using encryptFile should
+	// be decrypted using decryptFile. This is because encryptFile encode the
+	// data as base64 so it needs to be decoded back to binary (while
+	// decryptString would treat it as simple strings).
 	public async encryptString(plainText: any, options: EncryptOptions = null): Promise<string> {
 		const source = this.stringReader_(plainText);
 		const destination = this.stringWriter_();
@@ -531,14 +544,19 @@ export default class EncryptionService {
 		return destination.result();
 	}
 
-	public async decryptString(cipherText: any, options: EncryptOptions = null): Promise<string> {
+	public async decryptStringToChunks(cipherText: any, options: EncryptOptions = null): Promise<string[]> {
 		const source = this.stringReader_(cipherText);
 		const destination = this.stringWriter_();
 		await this.decryptAbstract_(source, destination, options);
-		return destination.data.join('');
+		return destination.data;
 	}
 
-	async encryptFile(srcPath: string, destPath: string, options: EncryptOptions = null) {
+	public async decryptString(cipherText: any, options: EncryptOptions = null): Promise<string> {
+		const data = await this.decryptStringToChunks(cipherText, options);
+		return data.join('');
+	}
+
+	public async encryptFile(srcPath: string, destPath: string, options: EncryptOptions = null) {
 		let source = await this.fileReader_(srcPath, 'base64');
 		let destination = await this.fileWriter_(destPath, 'ascii');
 
@@ -563,7 +581,7 @@ export default class EncryptionService {
 		await cleanUp();
 	}
 
-	async decryptFile(srcPath: string, destPath: string, options: EncryptOptions = null) {
+	public async decryptFile(srcPath: string, destPath: string, options: EncryptOptions = null) {
 		let source = await this.fileReader_(srcPath, 'ascii');
 		let destination = await this.fileWriter_(destPath, 'base64');
 
@@ -586,6 +604,31 @@ export default class EncryptionService {
 		}
 
 		await cleanUp();
+	}
+
+	// This can be used to decrypt a string that has been encoded using
+	// encryptFile(). For example when download the encrypted file and
+	// decrypting the content to memory (without writing to a file as in
+	// decryptFile).
+	public async decryptBase64(cipherText: any, options: EncryptOptions = null): Promise<string> {
+		const plaintext = await this.decryptStringToChunks(cipherText, options);
+
+		let totalSize: number = 0;
+		const decodedBuffers: ArrayBuffer[] = [];
+		for (const chunk of plaintext) {
+			const c = base64.decode(chunk);
+			totalSize += c.byteLength;
+			decodedBuffers.push(c);
+		}
+
+		const fullBuffer = new Uint8Array(new ArrayBuffer(totalSize));
+		let pos = 0;
+		for (const decodedBuffer of decodedBuffers) {
+			fullBuffer.set(new Uint8Array(decodedBuffer), pos);
+			pos += decodedBuffer.byteLength;
+		}
+
+		return base64.encode(fullBuffer.buffer);
 	}
 
 	headerTemplate(version: number) {

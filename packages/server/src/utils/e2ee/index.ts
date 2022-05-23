@@ -4,6 +4,8 @@ import Logger, { LogLevel, TargetType } from '@joplin/lib/Logger';
 import shim from '@joplin/lib/shim';
 const sjcl = require('@joplin/lib/vendor/sjcl.js');
 
+const fetchResourceUrl = 'http://joplincloud.local:22300/shares/SHARE_ID?resource_id=RESOURCE_ID';
+
 interface JoplinNsNote {
 	ciphertext: string;
 	masterKey: MasterKeyEntity;
@@ -41,6 +43,17 @@ const setupShim = () => {
 	shim.waitForFrame = () => {};
 };
 
+const downloadResource = async (shareId: string, resourceId: string) => {
+	const url = fetchResourceUrl.replace(/SHARE_ID/, shareId).replace(/RESOURCE_ID/, resourceId);
+	const response = await fetch(url);
+
+	if (!response.ok) {
+		throw new Error(`Could not download resource: ${url}: ${await response.text()}`);
+	}
+
+	return response.text();
+};
+
 const decryptNote = async () => {
 	const joplin = (window as any).__joplin as JoplinNs;
 
@@ -49,7 +62,19 @@ const decryptNote = async () => {
 
 	const encryptionService = new EncryptionService();
 	await encryptionService.loadMasterKey(joplin.note.masterKey, '111111', false);
-	console.info(await encryptionService.decryptString(joplin.note.ciphertext));
+
+	const content = await downloadResource('PnVTq4aIf3jIsP0uvuRpr4', 'b1e90fd31f2d492facc903579562b2e3');
+	// const content = await downloadResource('PnVTq4aIf3jIsP0uvuRpr4', '879da30580d94e4d899e54f029c84dd2');
+
+	const decrypted = await encryptionService.decryptBase64(content, {
+		onProgress: (event: any) => {
+			console.info('Progress', event);
+		},
+	});
+
+	const image = document.createElement('img');
+	image.src = `data:image/gif;base64,${decrypted}`;
+	document.body.appendChild(image);
 
 	return encryptionService;
 };

@@ -292,25 +292,30 @@ export async function renderItem(userId: Uuid, item: Item, share: Share, query: 
 		jopItemId: rootNote.id,
 	};
 
+	let itemToRenderType: ModelType = item.jop_type;
+
 	if (query.resource_id) {
 		const resourceItem = await models_.item().loadByName(userId, resourceBlobPath(query.resource_id), { fields: ['*'], withContent: true });
+		if (!resourceItem) throw new ErrorNotFound(`No such resource: ${query.resource_id}`);
 		fileToRender.item = resourceItem;
 		fileToRender.content = resourceItem.content;
 		fileToRender.jopItemId = query.resource_id;
+		itemToRenderType = ModelType.Resource;
 	}
 
-	if (fileToRender.item !== item && !linkedItemInfos[fileToRender.jopItemId]) {
+	// If the item is encrypted we cannot know if the resource is part of the
+	// note or not so we skip this check. But this is fine because access
+	// control is done via the password.
+	if (fileToRender.item !== item && !linkedItemInfos[fileToRender.jopItemId] && !item.jop_encryption_applied) {
 		throw new ErrorNotFound(`Item "${fileToRender.jopItemId}" does not belong to this note`);
 	}
 
-	const itemToRender = fileToRender.item === item ? rootNote : linkedItemInfos[fileToRender.jopItemId].item;
-	const itemType: ModelType = itemToRender.type_;
-
-	if (itemType === ModelType.Resource) {
+	if (itemToRenderType === ModelType.Resource) {
 		return renderResource(userId, fileToRender.jopItemId, fileToRender.item, fileToRender.content);
-	} else if (itemType === ModelType.Note) {
+	} else if (itemToRenderType === ModelType.Note) {
+		const itemToRender = fileToRender.item === item ? rootNote : linkedItemInfos[fileToRender.jopItemId].item;
 		return renderNote(share, itemToRender, resourceInfos, linkedItemInfos);
 	} else {
-		throw new Error(`Cannot render item with type "${itemType}"`);
+		throw new Error(`Cannot render item with type "${itemToRenderType}"`);
 	}
 }
