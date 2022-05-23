@@ -6,6 +6,20 @@ import BaseItem from '../../models/BaseItem';
 import MasterKey from '../../models/MasterKey';
 import EncryptionService, { EncryptionMethod } from './EncryptionService';
 import { setEncryptionEnabled } from '../synchronizer/syncInfoUtils';
+import { readFile } from 'fs-extra';
+
+const encryptFile = async (service: EncryptionService) => {
+	let masterKey = await service.generateMasterKey('123456');
+	masterKey = await MasterKey.save(masterKey);
+	await service.loadMasterKey(masterKey, '123456', true);
+
+	const sourcePath = `${supportDir}/photo.jpg`;
+	const encryptedPath = `${Setting.value('tempDir')}/photo.crypted`;
+
+	await service.encryptFile(sourcePath, encryptedPath);
+
+	return { sourcePath, encryptedPath };
+};
 
 let service: EncryptionService = null;
 
@@ -245,12 +259,7 @@ describe('services_EncryptionService', function() {
 	}));
 
 	it('should encrypt and decrypt files', (async () => {
-		let masterKey = await service.generateMasterKey('123456');
-		masterKey = await MasterKey.save(masterKey);
-		await service.loadMasterKey(masterKey, '123456', true);
-
-		const sourcePath = `${supportDir}/photo.jpg`;
-		const encryptedPath = `${Setting.value('tempDir')}/photo.crypted`;
+		const { sourcePath, encryptedPath } = await encryptFile(service);
 		const decryptedPath = `${Setting.value('tempDir')}/photo.jpg`;
 
 		await service.encryptFile(sourcePath, encryptedPath);
@@ -259,6 +268,14 @@ describe('services_EncryptionService', function() {
 		expect(fileContentEqual(sourcePath, encryptedPath)).toBe(false);
 		expect(fileContentEqual(sourcePath, decryptedPath)).toBe(true);
 	}));
+
+	it('should decrypt to base64', async () => {
+		const { sourcePath, encryptedPath } = await encryptFile(service);
+		const ciphertext = await readFile(encryptedPath, 'utf8');
+		const originalPlaintext = await readFile(sourcePath, 'base64');
+		const plaintext = await service.decryptBase64(ciphertext);
+		expect(plaintext).toBe(originalPlaintext);
+	});
 
 	it('should encrypt invalid UTF-8 data', (async () => {
 		let masterKey = await service.generateMasterKey('123456');
