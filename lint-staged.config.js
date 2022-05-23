@@ -14,6 +14,5 @@ module.exports = {
 		'yarn run linter-precommit',
 		'yarn run checkLibPaths',
 		'yarn run spellcheck',
-		'git add',
 	],
 };

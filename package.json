@@ -32,6 +32,7 @@
     "linter-precommit": "eslint --resolve-plugins-relative-to . --fix --ext .js --ext .jsx --ext .ts --ext .tsx",
     "linter": "eslint --resolve-plugins-relative-to . --fix --quiet --ext .js --ext .jsx --ext .ts --ext .tsx",
     "postinstall": "gulp build",
+    "prepare": "husky install",
     "publishAll": "git pull && yarn run buildParallel && lerna version --yes --no-private --no-git-tag-version && gulp completePublishAll",
     "releaseAndroid": "PATH=\"/usr/local/opt/openjdk@11/bin:$PATH\" node packages/tools/release-android.js",
     "releaseAndroidClean": "node packages/tools/release-android.js",
@@ -55,11 +56,6 @@
     "watch": "yarn workspaces foreach --parallel --verbose --interlaced --jobs 999 run watch",
     "watchWebsite": "nodemon --verbose --watch Assets/WebsiteAssets --watch packages/tools/website/build.js --ext md,ts,js,mustache,css,tsx,gif,png,svg --exec \"node packages/tools/website/build.js && http-server --port 8077 ../joplin-website/docs -a localhost\""
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^4.6.0",
     "@typescript-eslint/parser": "^4.6.0",
@@ -71,9 +67,9 @@
     "fs-extra": "^8.1.0",
     "glob": "^7.1.6",
     "gulp": "^4.0.2",
-    "husky": "^3.0.2",
+    "husky": "^8.0.0",
     "lerna": "^3.22.1",
-    "lint-staged": "^9.2.1",
+    "lint-staged": "^12.4.1",
     "madge": "^4.0.2",
     "typedoc": "^0.17.8",
     "typescript": "4.0.5"
