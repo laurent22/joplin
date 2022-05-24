@@ -70,11 +70,13 @@ describe('markdownUtils', function() {
 			['[something](file://img.png)', ['file://img.png']],
 			['[pdf file](:/94e5f66b8521436aa4f07bf8dcc18758)', [':/94e5f66b8521436aa4f07bf8dcc18758']],
 			['![some image](:/94e5f66b8521436aa4f07bf8dcc18758)', [':/94e5f66b8521436aa4f07bf8dcc18758']],
+			['<img src=":/94e5f66b8521436aa4f07bf8dcc18758"/>', [':/94e5f66b8521436aa4f07bf8dcc18758']],
+			['<img src=":/94e5f66b8521436aa4f07bf8dcc18758"/> <a href=":/94e5f66b8521436aa4f07bf8dcc17777">testing</a>', [':/94e5f66b8521436aa4f07bf8dcc18758', ':/94e5f66b8521436aa4f07bf8dcc17777']],
 		];
 
 		for (let i = 0; i < testCases.length; i++) {
 			const md = testCases[i][0] as string;
-			const actual = markdownUtils.extractFileUrls(md);
+			const actual = markdownUtils.extractFileUrls(md, { html: true });
 			const expected = testCases[i][1];
 
 			expect(actual.join(' ')).toBe((expected as string[]).join(' '));
@@ -90,13 +92,19 @@ describe('markdownUtils', function() {
 				],
 			],
 			[
+				'<img src=":/94e5f66b8521436aa4f07bf8dcc18758"/> <a href=":/94e5f66b8521436aa4f07bf8dcc17777">testing</a>', [
+					{ url: ':/94e5f66b8521436aa4f07bf8dcc18758', type: 2 },
+					{ url: ':/94e5f66b8521436aa4f07bf8dcc17777', type: 1 },
+				],
+			],
+			[
 				'', [],
 			],
 		];
 
 		for (let i = 0; i < testCases.length; i++) {
 			const md = testCases[i][0] as string;
-			const actual = markdownUtils.extractFileUrls(md, { detailedResults: true });
+			const actual = markdownUtils.extractFileUrls(md, { detailedResults: true, html: true });
 			const expected = testCases[i][1];
 
 			expect(actual).toEqual(expected);

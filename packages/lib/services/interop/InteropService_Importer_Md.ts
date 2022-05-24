@@ -96,7 +96,7 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 	 */
 	async importLocalFiles(filePath: string, md: string, parentFolderId: string) {
 		let updated = md;
-		const markdownLinks = markdownUtils.extractFileUrls(md);
+		const markdownLinks = markdownUtils.extractFileUrls(md) as string[];
 		const htmlLinks = htmlUtils.extractFileUrls(md);
 		const fileLinks = unique(markdownLinks.concat(htmlLinks));
 		await Promise.all(fileLinks.map(async (encodedLink: string) => {
@@ -125,7 +125,7 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 				}
 
 				// The first is a normal link, the second is supports the <link> and [](<link with spaces>) syntax
-				// Only opening patterns are consider in order to cover all occurances
+				// Only opening patterns are consider in order to cover all occurrences
 				// We need to use the encoded link as well because some links (link's with spaces)
 				// will appear encoded in the source. Other links (unicode chars) will not
 				const linksToReplace = [this.trimAnchorLink(link), this.trimAnchorLink(encodedLink)];

@@ -1,4 +1,5 @@
 import { validateLinks } from '@joplin/renderer';
+import { anchorRegex, imageRegex } from './htmlUtils';
 const stringPadding = require('string-padding');
 const urlUtils = require('./urlUtils');
 const MarkdownIt = require('markdown-it');
@@ -29,6 +30,7 @@ export interface ExtractFileUrlsOptions {
 	includeImages?: boolean;
 	includeAnchors?: boolean;
 	detailedResults?: boolean;
+	html?: boolean;
 }
 
 export enum ExtractFileUrlsResultType {
@@ -90,10 +92,13 @@ const markdownUtils = {
 			includeAnchors: true,
 			includeImages: true,
 			detailedResults: false,
+			// Should probably be true by default but since it was added
+			// afterwards we make it false for now.
+			html: false,
 			...options,
 		};
 
-		const markdownIt = new MarkdownIt();
+		const markdownIt = new MarkdownIt({ html: options.html });
 		markdownIt.validateLink = validateLinks; // Necessary to support file:/// links
 
 		const env = {};
@@ -104,6 +109,7 @@ const markdownUtils = {
 			for (let i = 0; i < tokens.length; i++) {
 				const token = tokens[i];
 				const type: string = token.type;
+
 				if (type === 'image' || type === 'link_open') {
 					if (type === 'image' && !options.includeImages) continue;
 					if (type === 'link_open' && !options.includeAnchors) continue;
@@ -114,6 +120,19 @@ const markdownUtils = {
 							output.push({
 								url: a[1],
 								type: type === 'image' ? ExtractFileUrlsResultType.Image : ExtractFileUrlsResultType.Anchor,
+							});
+						}
+					}
+				} else if (type === 'html_block' || type === 'html_inline') {
+					for (const regex of [imageRegex, anchorRegex]) {
+						if (regex === imageRegex && !options.includeImages) continue;
+						if (regex === anchorRegex && !options.includeAnchors) continue;
+
+						let result: RegExpExecArray = null;
+						while ((result = regex.exec(token.content)) !== null) {
+							output.push({
+								url: result[2],
+								type: regex === imageRegex ? ExtractFileUrlsResultType.Image : ExtractFileUrlsResultType.Anchor,
 							});
 						}
 					}
@@ -144,7 +163,7 @@ const markdownUtils = {
 		return markdownUtils.extractFileUrls(md, {
 			includeImages: true,
 			includeAnchors: false,
-		});
+		}) as string[];
 	},
 
 	// The match results has 5 items
