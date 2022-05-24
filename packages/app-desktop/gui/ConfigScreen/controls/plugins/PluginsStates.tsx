@@ -19,7 +19,6 @@ const { space } = require('styled-system');
 
 const logger = Logger.create('PluginState');
 
-// const maxWidth: number = 460;
 const maxWidth: number = 640;
 
 const Root = styled.div`
@@ -178,22 +177,22 @@ export default function(props: Props) {
 		props.onChange({ value: pluginService.serializePluginSettings(newSettings) });
 	}, [pluginSettings, props.onChange]);
 
-	// const onInstall = useCallback(async () => {
-	// 	const result = await bridge().showOpenDialog({
-	// 		filters: [{ name: 'Joplin Plugin Archive', extensions: ['jpl'] }],
-	// 	});
+	const onInstall = useCallback(async () => {
+		const result = await bridge().showOpenDialog({
+			filters: [{ name: 'Joplin Plugin Archive', extensions: ['jpl'] }],
+		});
 
-	// 	const filePath = result && result.length ? result[0] : null;
-	// 	if (!filePath) return;
+		const filePath = result && result.length ? result[0] : null;
+		if (!filePath) return;
 
-	// 	const plugin = await pluginService.installPlugin(filePath);
+		const plugin = await pluginService.installPlugin(filePath);
 
-	// 	const newSettings = produce(pluginSettings, (draft: PluginSettings) => {
-	// 		draft[plugin.manifest.id] = defaultPluginSetting();
-	// 	});
+		const newSettings = produce(pluginSettings, (draft: PluginSettings) => {
+			draft[plugin.manifest.id] = defaultPluginSetting();
+		});
 
-	// 	props.onChange({ value: pluginService.serializePluginSettings(newSettings) });
-	// }, [pluginSettings, props.onChange]);
+		props.onChange({ value: pluginService.serializePluginSettings(newSettings) });
+	}, [pluginSettings, props.onChange]);
 
 	const onBrowsePlugins = useCallback(() => {
 		void bridge().openExternal('https://github.com/joplin/plugins/blob/master/README.md#plugins');
@@ -202,6 +201,22 @@ export default function(props: Props) {
 	const onPluginSettingsChange = useCallback((event: OnPluginSettingChangeEvent) => {
 		props.onChange({ value: pluginService.serializePluginSettings(event.value) });
 	}, []);
+
+	const onToolsClick = useCallback(async () => {
+		const template = [
+			{
+				label: _('Browse all plugins'),
+				click: onBrowsePlugins,
+			},
+			{
+				label: _('Install from file'),
+				click: onInstall,
+			},
+		];
+
+		const menu = bridge().Menu.buildFromTemplate(template);
+		menu.popup(bridge().window());
+	}, [onInstall, onBrowsePlugins]);
 
 	const onUpdate = useOnInstallHandler(setUpdatingPluginIds, pluginSettings, repoApi, onPluginSettingsChange, true);
 
@@ -261,7 +276,7 @@ export default function(props: Props) {
 
 	function renderSearchArea() {
 		return (
-			<div style={{ marginBottom: 0 }}>
+			<div style={{ marginBottom: 0, display: 'flex' }}>
 				<SearchPlugins
 					disabled={!manifestsLoaded}
 					maxWidth={maxWidth}
@@ -273,6 +288,10 @@ export default function(props: Props) {
 					renderDescription={props.renderDescription}
 					repoApi={repoApi}
 					setShouldRenderUserPlugins={setShouldRenderUserPlugins}
+					onToggle={onToggle}
+					renderCells={renderCells}
+					pluginItems={pluginItems}
+					onToolsClick={onToolsClick}
 				/>
 			</div>
 		);

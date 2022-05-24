@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import RepositoryApi from '@joplin/lib/services/plugins/RepositoryApi';
 import AsyncActionQueue from '@joplin/lib/AsyncActionQueue';
 import { PluginManifest } from '@joplin/lib/services/plugins/utils/types';
-import PluginBox, { InstallState } from './PluginBox';
+import PluginBox, { InstallState, PluginItem } from './PluginBox';
 import PluginService , { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import { _ } from '@joplin/lib/locale';
 import useOnInstallHandler from './useOnInstallHandler';
@@ -36,6 +36,10 @@ interface Props {
 	repoApi(): RepositoryApi;
 	disabled: boolean;
 	setShouldRenderUserPlugins: Function;
+	onToggle: Function;
+	pluginItems: PluginItem[];
+	renderCells: Function;
+	onToolsClick: Function;
 }
 
 function sortManifestResults(results: PluginManifest[]): PluginManifest[] {
@@ -60,6 +64,7 @@ export default function(props: Props) {
 	useEffect(() => {
 		setSearchResultCount(null);
 		asyncSearchQueue.current.push(async () => {
+			// if ((!props.searchQuery && !filterValue) || ['installed', 'enabled', 'disabled', 'outdated'].includes(filterValue.toLowerCase())) {
 			if (!props.searchQuery && !filterValue) {
 				setManifests([]);
 				setSearchResultCount(null);
@@ -135,34 +140,21 @@ export default function(props: Props) {
 	// 	props.onChange({ value: pluginService.serializePluginSettings(newSettings) });
 	// }, []);
 
-	function renderResultsInstalled(query: string, manifests: PluginManifest[]) {
-		if (query && !manifests.length) {
-
-			if (searchResultCount === null) return ''; // Search in progress
-			return props.renderDescription(props.themeId, _('No results'));
-		} else {
-			const output = [];
-
-			for (const manifest of manifests) {
-				output.push(<PluginBox
-					key={manifest.id}
-					manifest={manifest}
-					themeId={props.themeId}
-					isCompatible={PluginService.instance().isCompatible(manifest.app_min_version)}
-					onInstall={onInstall}
-					onToggle={() => console.log('onToggle to be implemented')}
-					installState={installState(manifest.id)}
-				/>);
-			}
-			return output;
-		}
-	}
+	// function renderResultsInstalled(query: string, manifests: PluginManifest[]) {
+	// 	const renderCellsPlugins = props.pluginItems.filter((pluginItem) => manifests.find((m) => m.id === pluginItem.manifest.id))
+	// 	if ((query && !manifests.length) || renderCellsPlugins === null) {
+	// 		if (searchResultCount === null) return ''; // Search in progress
+	// 		return props.renderDescription(props.themeId, _('No results'));
+	// 	} else {
+	// 		return props.renderCells(renderCellsPlugins);
+	// 	}
+	// }
 
 	function renderResults(query: string, manifests: PluginManifest[]) {
 		if ((query && !manifests.length) || !manifests.length) {
 			if (searchResultCount === null) return ''; // Search in progress
 			return props.renderDescription(props.themeId, _('No results'));
-		} else {
+		} else if (!['Installed', 'Enabled', 'Disabled', 'Outdated'].includes(filterValue)) {
 			const output = [];
 
 			for (const manifest of manifests) {
@@ -176,6 +168,14 @@ export default function(props: Props) {
 				/>);
 			}
 			return output;
+		} else {
+			const renderCellsPlugins = props.pluginItems.filter((pluginItem) => manifests.find((m) => m.id === pluginItem.manifest.id));
+			if ((query && !manifests.length) || renderCellsPlugins === null) {
+				if (searchResultCount === null) return ''; // Search in progress
+				return props.renderDescription(props.themeId, _('No results'));
+			} else {
+				return props.renderCells(renderCellsPlugins);
+			}
 		}
 	}
 
@@ -199,12 +199,12 @@ export default function(props: Props) {
 					disabled={props.disabled}
 				/>
 				<FilterForPlugins themeId={props.themeId} onSearchButtonClick={onSearchButtonClick} setFilterValue={setFilterValue} />
-				<ToolsButton size={ButtonSize.Small} tooltip={_('Plugin tools')} iconName="fas fa-cog" level={ButtonLevel.Secondary}/>
+				<ToolsButton size={ButtonSize.Small} tooltip={_('Plugin tools')} iconName="fas fa-cog" level={ButtonLevel.Secondary} onClick={props.onToolsClick}/>
 				{renderContentSourceInfo()}
 			</div>
 
 			<ResultsRoot>
-				{!['Installed', 'Enabled', 'Disabled', 'Outdated'].includes(filterValue) ? renderResults(props.searchQuery, manifests) : renderResultsInstalled(props.searchQuery, manifests)}
+				{renderResults(props.searchQuery, manifests)}
 			</ResultsRoot>
 		</Root>
 	);
