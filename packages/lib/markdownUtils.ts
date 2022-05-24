@@ -25,6 +25,22 @@ export interface MarkdownTableRow {
 	[key: string]: string;
 }
 
+export interface ExtractFileUrlsOptions {
+	includeImages?: boolean;
+	includeAnchors?: boolean;
+	detailedResults?: boolean;
+}
+
+export enum ExtractFileUrlsResultType {
+	Anchor = 1,
+	Image = 2,
+}
+
+export interface ExtractFileUrlsResult {
+	url: string;
+	type: ExtractFileUrlsResultType;
+}
+
 const markdownUtils = {
 	// Titles for markdown links only need escaping for [ and ]
 	escapeTitleText(text: string) {
@@ -69,22 +85,36 @@ const markdownUtils = {
 	},
 
 	// Returns the **encoded** URLs, so to be useful they should be decoded again before use.
-	extractFileUrls(md: string, onlyImage: boolean = false): Array<string> {
+	extractFileUrls(md: string, options: ExtractFileUrlsOptions = null): string[] | ExtractFileUrlsResult[] {
+		options = {
+			includeAnchors: true,
+			includeImages: true,
+			detailedResults: false,
+			...options,
+		};
+
 		const markdownIt = new MarkdownIt();
 		markdownIt.validateLink = validateLinks; // Necessary to support file:/// links
 
 		const env = {};
 		const tokens = markdownIt.parse(md, env);
-		const output: string[] = [];
+		const output: ExtractFileUrlsResult[] = [];
 
 		const searchUrls = (tokens: any[]) => {
 			for (let i = 0; i < tokens.length; i++) {
 				const token = tokens[i];
-				if ((onlyImage === true && token.type === 'image') || (onlyImage === false && (token.type === 'image' || token.type === 'link_open'))) {
+				const type: string = token.type;
+				if (type === 'image' || type === 'link_open') {
+					if (type === 'image' && !options.includeImages) continue;
+					if (type === 'link_open' && !options.includeAnchors) continue;
+
 					for (let j = 0; j < token.attrs.length; j++) {
 						const a = token.attrs[j];
 						if ((a[0] === 'src' || a[0] === 'href') && a.length >= 2 && a[1]) {
-							output.push(a[1]);
+							output.push({
+								url: a[1],
+								type: type === 'image' ? ExtractFileUrlsResultType.Image : ExtractFileUrlsResultType.Anchor,
+							});
 						}
 					}
 				}
@@ -97,7 +127,11 @@ const markdownUtils = {
 
 		searchUrls(tokens);
 
-		return output;
+		if (options.detailedResults) {
+			return output;
+		} else {
+			return output.map(r => r.url);
+		}
 	},
 
 	replaceResourceUrl(md: string, urlToReplace: string, id: string) {
@@ -107,7 +141,10 @@ const markdownUtils = {
 	},
 
 	extractImageUrls(md: string) {
-		return markdownUtils.extractFileUrls(md,true);
+		return markdownUtils.extractFileUrls(md, {
+			includeImages: true,
+			includeAnchors: false,
+		});
 	},
 
 	// The match results has 5 items

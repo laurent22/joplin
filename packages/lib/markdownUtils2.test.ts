@@ -67,6 +67,9 @@ describe('markdownUtils', function() {
 			['[something](testing.html)', ['testing.html']],
 			['[something](img.png)', ['img.png']],
 			['[something](file://img.png)', ['file://img.png']],
+			['[something](file://img.png)', ['file://img.png']],
+			['[pdf file](:/94e5f66b8521436aa4f07bf8dcc18758)', [':/94e5f66b8521436aa4f07bf8dcc18758']],
+			['![some image](:/94e5f66b8521436aa4f07bf8dcc18758)', [':/94e5f66b8521436aa4f07bf8dcc18758']],
 		];
 
 		for (let i = 0; i < testCases.length; i++) {
@@ -75,6 +78,28 @@ describe('markdownUtils', function() {
 			const expected = testCases[i][1];
 
 			expect(actual.join(' ')).toBe((expected as string[]).join(' '));
+		}
+	}));
+
+	it('should extract files URLs with details', (async () => {
+		const testCases = [
+			[
+				'![some image](:/94e5f66b8521436aa4f07bf8dcc18758) [something](http://test.com/img.png)', [
+					{ url: ':/94e5f66b8521436aa4f07bf8dcc18758', type: 2 },
+					{ url: 'http://test.com/img.png', type: 1 },
+				],
+			],
+			[
+				'', [],
+			],
+		];
+
+		for (let i = 0; i < testCases.length; i++) {
+			const md = testCases[i][0] as string;
+			const actual = markdownUtils.extractFileUrls(md, { detailedResults: true });
+			const expected = testCases[i][1];
+
+			expect(actual).toEqual(expected);
 		}
 	}));
 
