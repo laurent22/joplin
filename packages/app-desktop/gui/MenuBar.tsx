@@ -632,9 +632,11 @@ function useMenu(props: Props) {
 						// editor or a regular text field.
 						{
 							role: 'undo',
+							label: _('Undo'),
 						},
 						{
 							role: 'redo',
+							label: _('Redo'),
 						},
 						separator(),
 						menuItemDic.textBold,

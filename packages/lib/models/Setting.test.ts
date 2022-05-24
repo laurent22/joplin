@@ -330,6 +330,25 @@ describe('models/Setting', function() {
 		});
 	});
 
+	it('should not erase settings of parent profile', async () => {
+		// When a sub-profile settings are saved, we should ensure that the
+		// local settings of the root profiles are not lost.
+		// https://github.com/laurent22/joplin/issues/6459
+
+		await Setting.reset();
+
+		Setting.setValue('sync.target', 9); // Local setting (Root profile)
+		await Setting.saveAll();
+
+		await switchToSubProfileSettings();
+
+		Setting.setValue('sync.target', 2); // Local setting (Sub-profile)
+		await Setting.saveAll();
+
+		const globalSettings = JSON.parse(await readFile(`${Setting.value('rootProfileDir')}/settings-1.json`, 'utf8'));
+		expect(globalSettings['sync.target']).toBe(9);
+	});
+
 	it('all global settings should be saved to file', async () => {
 		for (const [k, v] of Object.entries(Setting.metadata())) {
 			if (v.isGlobal && v.storage !== SettingStorage.File) throw new Error(`Setting "${k}" is global but storage is not "file"`);

@@ -49,5 +49,10 @@ export function getMarkdownIt() {
 export function markdownToPageHtml(md: string, templateParams: TemplateParams): string {
 	const markdownIt = getMarkdownIt();
 	markdownIt.use(headerAnchor);
+	markdownIt.linkify.set({
+		'fuzzyLink': false,
+		'fuzzyIP': false,
+		'fuzzyEmail': false,
+	});
 	return renderMustache(markdownIt.render(md), templateParams);
 }

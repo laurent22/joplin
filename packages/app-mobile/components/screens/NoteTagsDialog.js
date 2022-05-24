@@ -176,7 +176,7 @@ class NoteTagsDialogComponent extends React.Component {
 							this.setState({ newTags: value });
 						}}
 						style={this.styles().tagBoxInput}
-						placeholder={_('tag1,tag2,...')}
+						placeholder={_('tag1, tag2, ...')}
 					/>
 				</View>
 				<View style={this.styles().tagBox}>
