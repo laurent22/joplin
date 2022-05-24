@@ -42,6 +42,8 @@
     "releasePluginGenerator": "node packages/tools/release-plugin-generator.js",
     "releasePluginRepoCli": "node packages/tools/release-plugin-repo-cli.js",
     "releaseServer": "node packages/tools/release-server.js",
+    "cspell": "cspell",
+    "spellcheck": "node packages/tools/spellcheck.js",
     "tagServerLatest": "node packages/tools/tagServerLatest.js",
     "buildServerDocker": "node packages/tools/buildServerDocker.js",
     "setupNewRelease": "node ./packages/tools/setupNewRelease",
@@ -61,6 +63,7 @@
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^4.6.0",
     "@typescript-eslint/parser": "^4.6.0",
+    "cspell": "^5.20.0",
     "eslint": "^7.6.0",
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-react": "^7.18.0",
