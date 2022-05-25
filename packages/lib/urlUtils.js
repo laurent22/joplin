@@ -65,26 +65,54 @@ urlUtils.parseResourceUrl = function(url) {
 	};
 };
 
+// Note: this duplicates what htmlUtils/markdownUtils.extractFileUrls do
 urlUtils.extractResourceUrls = function(text) {
-	const markdownLinksRE = /\]\((.*?)\)/g;
-	const output = [];
-	let result = null;
+	const mdRegexes = [
+		{
+			regex: /!\[.*?\]\((.*?)\)/g,
+			type: 'image',
+		},
+		{
+			regex: /\[.*?\]\((.*?)\)/g,
+			type: 'anchor',
+		},
+	];
 
-	while ((result = markdownLinksRE.exec(text)) !== null) {
-		const resourceUrlInfo = urlUtils.parseResourceUrl(result[1]);
-		if (resourceUrlInfo) output.push(resourceUrlInfo);
+	const output = [];
+
+	for (const mdRegex of mdRegexes) {
+		let result = null;
+		while ((result = mdRegex.regex.exec(text)) !== null) {
+			const resourceUrlInfo = urlUtils.parseResourceUrl(result[1]);
+			if (resourceUrlInfo && !output.find(o => o.itemId === resourceUrlInfo.itemId)) {
+				output.push({
+					...resourceUrlInfo,
+					type: mdRegex.type,
+				});
+			}
+		}
 	}
 
 	const htmlRegexes = [
-		/<img[\s\S]*?src=["']:\/([a-zA-Z0-9]{32})["'][\s\S]*?>/gi,
-		/<a[\s\S]*?href=["']:\/([a-zA-Z0-9]{32})["'][\s\S]*?>/gi,
+		{
+			regex: /<img[\s\S]*?src=["']:\/([a-zA-Z0-9]{32})["'][\s\S]*?>/gi,
+			type: 'image',
+		},
+		{
+			regex: /<a[\s\S]*?href=["']:\/([a-zA-Z0-9]{32})["'][\s\S]*?>/gi,
+			type: 'anchor',
+		},
 	];
 
 	for (const htmlRegex of htmlRegexes) {
 		while (true) {
-			const m = htmlRegex.exec(text);
+			const m = htmlRegex.regex.exec(text);
 			if (!m) break;
-			output.push({ itemId: m[1], hash: '' });
+			output.push({
+				itemId: m[1],
+				hash: '',
+				type: htmlRegex.type,
+			});
 		}
 	}
 
@@ -113,7 +141,7 @@ urlUtils.objectToQueryString = function(query) {
 // - It always returns paths with forward slashes "/". This is normally handled
 //   properly everywhere.
 //
-// - Adds the "platform" parameter to optionall return paths with "\" for win32
+// - Adds the "platform" parameter to optionally return paths with "\" for win32
 function fileUriToPath_(uri, platform) {
 	const sep = '/';
 
