@@ -67,22 +67,31 @@ const rules: RendererRules = {
 	source_map: require('./MdToHtml/rules/source_map').default,
 };
 
+// This is an ugly hack to go around this bug in Webpack:
+// https://github.com/webpack/webpack/issues/4742 If the module exposes a
+// default key, that's what we should use. This is not an issue in Node or React
+// Native.
+const defaultify = (module: any) => {
+	return module.default ? module.default : module;
+};
+
 const uslug = require('@joplin/fork-uslug');
-const markdownItAnchor = require('markdown-it-anchor');
+
+const markdownItAnchor = defaultify(require('markdown-it-anchor'));
 
 // The keys must match the corresponding entry in Setting.js
 const plugins: RendererPlugins = {
-	mark: { module: require('markdown-it-mark') },
-	footnote: { module: require('markdown-it-footnote') },
-	sub: { module: require('markdown-it-sub') },
-	sup: { module: require('markdown-it-sup') },
-	deflist: { module: require('markdown-it-deflist') },
-	abbr: { module: require('markdown-it-abbr') },
-	emoji: { module: require('markdown-it-emoji') },
-	insert: { module: require('markdown-it-ins') },
-	multitable: { module: require('markdown-it-multimd-table'), options: { multiline: true, rowspan: true, headerless: true } },
-	toc: { module: require('markdown-it-toc-done-right'), options: { listType: 'ul', slugify: slugify } },
-	expand_tabs: { module: require('markdown-it-expand-tabs'), options: { tabWidth: 4 } },
+	mark: { module: defaultify(require('markdown-it-mark')) },
+	footnote: { module: defaultify(require('markdown-it-footnote')) },
+	sub: { module: defaultify(require('markdown-it-sub')) },
+	sup: { module: defaultify(require('markdown-it-sup')) },
+	deflist: { module: defaultify(require('markdown-it-deflist')) },
+	abbr: { module: defaultify(require('markdown-it-abbr')) },
+	emoji: { module: defaultify(require('markdown-it-emoji')) },
+	insert: { module: defaultify(require('markdown-it-ins')) },
+	multitable: { module: defaultify(require('markdown-it-multimd-table')), options: { multiline: true, rowspan: true, headerless: true } },
+	toc: { module: defaultify(require('markdown-it-toc-done-right')), options: { listType: 'ul', slugify: slugify } },
+	expand_tabs: { module: defaultify(require('markdown-it-expand-tabs')), options: { tabWidth: 4 } },
 };
 const defaultNoteStyle = require('./defaultNoteStyle');
 

@@ -255,7 +255,7 @@ export default class EncryptionService {
 		const now = Date.now();
 		model.created_time = now;
 		model.updated_time = now;
-		model.source_application = options.appId ? options.appId : Setting.value('appId');
+		model.source_application = options?.appId ? options.appId : Setting.value('appId');
 		model.hasBeenUsed = false;
 
 		return model;
