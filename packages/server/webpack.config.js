@@ -27,18 +27,6 @@ module.exports = {
 
 		// Exclude locales because it's a lot of files and they aren't used
 		'./locales/index.js': 'commonjs locales',
-
-		// Remove the largest highlight.js languages
-		'./languages/mathematica': 'commonjs mathematica',
-		'./languages/isbl': 'commonjs isbl',
-		'./languages/1c': 'commonjs 1c',
-		'./languages/gml': 'commonjs gml',
-		'./languages/sqf': 'commonjs sqf',
-		'./languages/maxima': 'commonjs maxima',
-		'./languages/pgsql': 'commonjs pgsql',
-		'./languages/stata': 'commonjs stata',
-		'./languages/less': 'commonjs less',
-		'./languages/lsl': 'commonjs lsl',
 	},
 	plugins: [
 		// https://github.com/moment/moment/issues/2416
