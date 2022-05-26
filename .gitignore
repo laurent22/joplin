@@ -1989,6 +1989,9 @@ packages/renderer/MdToHtml/validateLinks.js.map
 packages/renderer/headerAnchor.d.ts
 packages/renderer/headerAnchor.js
 packages/renderer/headerAnchor.js.map
+packages/renderer/highlight.d.ts
+packages/renderer/highlight.js
+packages/renderer/highlight.js.map
 packages/renderer/htmlUtils.d.ts
 packages/renderer/htmlUtils.js
 packages/renderer/htmlUtils.js.map
