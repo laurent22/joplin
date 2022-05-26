@@ -111,7 +111,7 @@ describe('e2ee/index', () => {
 					type: LinkType.Image,
 				},
 			},
-		}, 'SHARE_ID', mockDownloadResource);
+		}, '', 'SHARE_ID', mockDownloadResource);
 
 		expect(result.html).toContain('<img data-from-md data-resource-id="879da30580d94e4d899e54f029c84dd2" src="data:image/gif;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAkGBwgHBgkIBwgKCgkLDRYPDQwMDRsUFRAWIB0iIiAdHx8kKDQsJCYxJx8fLT0tMTU3Ojo6Iys/RD84QzQ5Ojf/2wBDAQoKCg0MDRoPDxo3JR8lNzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzf/wAARCAByAHsDASIAAhEBAxEB/8QAHAAAAAcBAQAAAAAAAAAAAAAAAA');
 	});

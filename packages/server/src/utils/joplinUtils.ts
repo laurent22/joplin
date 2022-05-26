@@ -18,16 +18,17 @@ import { ErrorNotFound } from './errors';
 import { MarkupToHtml } from '@joplin/renderer';
 import { OptionsResourceModel, RenderResult } from '@joplin/renderer/MarkupToHtml';
 import { isValidHeaderIdentifier } from '@joplin/lib/services/e2ee/EncryptionService';
-const { DatabaseDriverNode } = require('@joplin/lib/database-driver-node.js');
 import { themeStyle } from '@joplin/lib/theme';
 import Setting from '@joplin/lib/models/Setting';
 import { Models } from '../models/factory';
 import MustacheService from '../services/MustacheService';
 import Logger from '@joplin/lib/Logger';
 import config from '../config';
-const { substrWithEllipsis } = require('@joplin/lib/string-utils');
 import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
+import personalizedUserContentBaseUrl from '@joplin/lib/services/joplinServer/personalizedUserContentBaseUrl';
 
+const { DatabaseDriverNode } = require('@joplin/lib/database-driver-node.js');
+const { substrWithEllipsis } = require('@joplin/lib/string-utils');
 const logger = Logger.create('JoplinUtils');
 
 export interface FileViewerResponse {
@@ -216,11 +217,13 @@ async function renderNote(share: Share, note: NoteEntity, resourceInfos: Resourc
 		const encryptionService = new EncryptionService();
 		const header = await encryptionService.decodeHeaderString(note.encryption_cipher_text);
 		const masterKey = await models_.user().masterKeyById(share.owner_id, header.masterKeyId);
+		const userContentBaseUrl = personalizedUserContentBaseUrl(share.owner_id, config().baseUrl, config().userContentBaseUrl);
 
 		result = {
 			cssStrings: [],
 			html: `<script>
 				if (!window.__joplin) window.__joplin = {};
+				window.__joplin.getResourceTemplateUrl = ${JSON.stringify(`${userContentBaseUrl}/shares/SHARE_ID?resource_id=RESOURCE_ID`)},
 				window.__joplin.note = {
 					ciphertext: ${JSON.stringify(note.encryption_cipher_text)},
 					masterKey: ${JSON.stringify(masterKey)},

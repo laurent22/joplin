@@ -15,16 +15,6 @@ import Setting from '@joplin/lib/models/Setting';
 const sjcl = require('@joplin/lib/vendor/sjcl.js');
 const urlUtils = require('@joplin/lib/urlUtils');
 
-
-
-
-
-// TODO
-const fetchResourceUrl = 'http://joplincloud.local:22300/shares/SHARE_ID?resource_id=RESOURCE_ID';
-
-
-
-
 interface LinkedItemInfoLocalState {
 	fetch_status: number;
 }
@@ -49,7 +39,10 @@ interface JoplinNsNote {
 
 interface JoplinNs {
 	note: JoplinNsNote;
+	getResourceTemplateUrl: string;
 }
+
+type DownloadResourceHandler = (getResourceTemplateUrl: string, shareId: string, resourceId: string)=> Promise<string>;
 
 const setupGlobalLogger = () => {
 	const mainLogger = new Logger();
@@ -86,8 +79,8 @@ const setupEncryptionService = async (masterKey: MasterKeyEntity, password: stri
 	return encryptionService;
 };
 
-const downloadResource = async (shareId: string, resourceId: string) => {
-	const url = fetchResourceUrl.replace(/SHARE_ID/, shareId).replace(/RESOURCE_ID/, resourceId);
+const downloadResource: DownloadResourceHandler = async (getResourceTemplateUrl: string, shareId: string, resourceId: string) => {
+	const url = getResourceTemplateUrl.replace(/SHARE_ID/, shareId).replace(/RESOURCE_ID/, resourceId);
 	const response = await fetch(url);
 
 	if (!response.ok) {
@@ -124,24 +117,9 @@ const decryptNote = async (encryptionService: EncryptionService, joplinNsNote: J
 		note,
 		linkedItemInfos,
 	};
-
-	// const content = await downloadResource('PnVTq4aIf3jIsP0uvuRpr4', 'b1e90fd31f2d492facc903579562b2e3');
-	// // const content = await downloadResource('PnVTq4aIf3jIsP0uvuRpr4', '879da30580d94e4d899e54f029c84dd2');
-
-	// const decrypted = await encryptionService.decryptBase64(content, {
-	// 	onProgress: (event: any) => {
-	// 		console.info('Progress', event);
-	// 	},
-	// });
-
-	// const image = document.createElement('img');
-	// image.src = `data:image/gif;base64,${decrypted}`;
-	// document.body.appendChild(image);
-
-	// return encryptionService;
 };
 
-const renderNote = async (encryptionService: EncryptionService, note: NoteEntity, linkedItemInfos: LinkedItemInfos, shareId: string, downloadResource: Function) => {
+const renderNote = async (encryptionService: EncryptionService, note: NoteEntity, linkedItemInfos: LinkedItemInfos, getResourceTemplateUrl: string, shareId: string, downloadResource: DownloadResourceHandler) => {
 	const markupToHtml = new MarkupToHtml({
 		ResourceModel: Resource as OptionsResourceModel,
 	});
@@ -150,7 +128,7 @@ const renderNote = async (encryptionService: EncryptionService, note: NoteEntity
 
 	for (const [itemId, linkedItemInfo] of Object.entries(linkedItemInfos)) {
 		if (linkedItemInfo.item.type === LinkType.Image) {
-			const content = await downloadResource(shareId, itemId);
+			const content = await downloadResource(getResourceTemplateUrl, shareId, itemId);
 			const decrypted = await encryptionService.decryptBase64(content);
 			// We don't know if it's actually a gif but it seems that
 			// "image/gif" work with png, jpg, etc. so that might be fine.
@@ -206,7 +184,7 @@ if (typeof window !== 'undefined') {
 		logger.info('Decrypted note');
 		logger.info(decrypted);
 
-		const result = await renderNote(encryptionService, decrypted.note, decrypted.linkedItemInfos, 'PnVTq4aIf3jIsP0uvuRpr4', downloadResource);
+		const result = await renderNote(encryptionService, decrypted.note, decrypted.linkedItemInfos, joplin.getResourceTemplateUrl, 'PnVTq4aIf3jIsP0uvuRpr4', downloadResource);
 
 		const contentElement = document.createElement('div');
 		contentElement.innerHTML = result.html;
