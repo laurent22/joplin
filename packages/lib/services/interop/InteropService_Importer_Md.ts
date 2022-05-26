@@ -9,7 +9,7 @@ import { basename, filename, rtrimSlashes, fileExtension, dirname } from '../../
 import shim from '../../shim';
 import markdownUtils from '../../markdownUtils';
 import htmlUtils from '../../htmlUtils';
-const { unique } = require('../../ArrayUtils');
+import { unique } from '../../ArrayUtils';
 const { pregQuote } = require('../../string-utils-common');
 import { MarkupToHtml } from '@joplin/renderer';
 

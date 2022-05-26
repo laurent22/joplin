@@ -967,6 +967,9 @@ packages/generator-joplin/generators/app/templates/src/index.js.map
 packages/htmlpack/src/index.d.ts
 packages/htmlpack/src/index.js
 packages/htmlpack/src/index.js.map
+packages/lib/ArrayUtils.d.ts
+packages/lib/ArrayUtils.js
+packages/lib/ArrayUtils.js.map
 packages/lib/AsyncActionQueue.d.ts
 packages/lib/AsyncActionQueue.js
 packages/lib/AsyncActionQueue.js.map

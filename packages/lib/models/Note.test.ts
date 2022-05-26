@@ -10,7 +10,7 @@ import ItemChange from './ItemChange';
 import Resource from './Resource';
 import { ResourceEntity } from '../services/database/types';
 import { toForwardSlashes } from '../path-utils';
-const ArrayUtils = require('../ArrayUtils.js');
+import * as ArrayUtils from '../ArrayUtils';
 
 async function allItems() {
 	const folders = await Folder.all();

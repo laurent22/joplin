@@ -4,7 +4,7 @@ import { _ } from '@joplin/lib/locale';
 import bridge from './services/bridge';
 import KvStore from '@joplin/lib/services/KvStore';
 const { fileExtension } = require('@joplin/lib/path-utils');
-const ArrayUtils = require('@joplin/lib/ArrayUtils');
+import * as ArrayUtils from '@joplin/lib/ArrayUtils';
 const packageInfo = require('./packageInfo.js');
 const compareVersions = require('compare-versions');
 
