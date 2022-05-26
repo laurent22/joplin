@@ -174,18 +174,55 @@ const renderNote = async (encryptionService: EncryptionService, note: NoteEntity
 
 if (typeof window !== 'undefined') {
 	(() => {
+		const getPassword = () => {
+			const params = new URLSearchParams(window.location.search);
+			const queryPassword = params.get('password');
+			if (queryPassword) return atob(queryPassword);
+
+			const answer = prompt('This note is encrypted. Please enter the password:');
+			if (!answer) throw new Error('The note cannot be decrypted without a password');
+			return answer.trim();
+		};
+
+		const getShareId = () => {
+			const p = location.pathname.split('/');
+			const shareId = p.pop();
+			return shareId;
+		};
+
 		const initPage = async () => {
 			const joplin = (window as any).__joplin as JoplinNs;
-
 			const logger = setupGlobalLogger();
 			setupShim();
-			const encryptionService = await setupEncryptionService(joplin.note.masterKey, '111111');
-			const decrypted = await decryptNote(encryptionService, joplin.note);
+
+			const password = getPassword();
+			const shareId = getShareId();
+
+			console.info('Share ID', shareId);
+			console.info('Password', password);
+
+			const encryptionService = await setupEncryptionService(joplin.note.masterKey, password);
+
+			const decrypted = await (async () => {
+				try {
+					return decryptNote(encryptionService, joplin.note);
+				} catch (error) {
+					error.message = `Could not decrypt note: ${error.message}`;
+					throw error;
+				}
+			})();
 
 			logger.info('Decrypted note');
 			logger.info(decrypted);
 
-			const result = await renderNote(encryptionService, decrypted.note, decrypted.linkedItemInfos, joplin.getResourceTemplateUrl, 'PnVTq4aIf3jIsP0uvuRpr4', downloadResource);
+			const result = await (async () => {
+				try {
+					return renderNote(encryptionService, decrypted.note, decrypted.linkedItemInfos, joplin.getResourceTemplateUrl, shareId, downloadResource);
+				} catch (error) {
+					error.message = `Could not render note: ${error.message}`;
+					throw error;
+				}
+			})();
 
 			const contentElement = document.createElement('div');
 			contentElement.innerHTML = result.html;
@@ -195,7 +232,12 @@ if (typeof window !== 'undefined') {
 		const initPageIID = setInterval(async () => {
 			if (document.readyState !== 'loading') {
 				clearInterval(initPageIID);
-				await initPage();
+				try {
+					await initPage();
+				} catch (error) {
+					console.error(error);
+					alert(`There was an error loading this page: ${error.message}`);
+				}
 			}
 		}, 10);
 	})();
