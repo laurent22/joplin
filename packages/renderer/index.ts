@@ -7,6 +7,11 @@ import validateLinks from './MdToHtml/validateLinks';
 import headerAnchor from './headerAnchor';
 const assetsToHeaders = require('./assetsToHeaders');
 
+export enum LinkType {
+	Anchor = 1,
+	Image = 2,
+}
+
 export {
 	MarkupToHtml,
 	MarkupLanguage,

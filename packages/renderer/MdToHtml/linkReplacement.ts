@@ -1,3 +1,4 @@
+import { LinkType } from '..';
 import utils, { ItemIdToUrlHandler } from '../utils';
 const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = new Entities().encode;
@@ -115,7 +116,7 @@ export default function(href: string, options: Options = null): LinkReplacementR
 	let resourceFullPath = resource && options?.ResourceModel?.fullPath ? options.ResourceModel.fullPath(resource) : null;
 
 	if (resourceId && options.itemIdToUrl) {
-		const url = options.itemIdToUrl(resourceId);
+		const url = options.itemIdToUrl(resourceId, LinkType.Anchor);
 		attrHtml.push(`href='${htmlentities(url)}'`);
 		resourceFullPath = url;
 	} else if (options.plainResourceRendering || options.linkRenderingType === 2) {

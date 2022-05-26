@@ -96,12 +96,12 @@ describe('urlUtils', function() {
 			{
 				itemId: '11111111111111111111111111111111',
 				hash: '',
-				type: 'image',
+				type: 2,
 			},
 			{
 				itemId: '22222222222222222222222222222222',
 				hash: '',
-				type: 'anchor',
+				type: 1,
 			},
 		]);
 	}));

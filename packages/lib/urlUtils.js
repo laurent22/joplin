@@ -70,11 +70,11 @@ urlUtils.extractResourceUrls = function(text) {
 	const mdRegexes = [
 		{
 			regex: /!\[.*?\]\((.*?)\)/g,
-			type: 'image',
+			type: 2, // image (matches LinkType)
 		},
 		{
 			regex: /\[.*?\]\((.*?)\)/g,
-			type: 'anchor',
+			type: 1, // anchor
 		},
 	];
 
@@ -96,11 +96,11 @@ urlUtils.extractResourceUrls = function(text) {
 	const htmlRegexes = [
 		{
 			regex: /<img[\s\S]*?src=["']:\/([a-zA-Z0-9]{32})["'][\s\S]*?>/gi,
-			type: 'image',
+			type: 2, // image
 		},
 		{
 			regex: /<a[\s\S]*?href=["']:\/([a-zA-Z0-9]{32})["'][\s\S]*?>/gi,
-			type: 'anchor',
+			type: 1, // anchor
 		},
 	];
 

@@ -1,4 +1,4 @@
-import { validateLinks } from '@joplin/renderer';
+import { validateLinks, LinkType } from '@joplin/renderer';
 import { anchorRegex, imageRegex } from './htmlUtils';
 const stringPadding = require('string-padding');
 const urlUtils = require('./urlUtils');
@@ -33,14 +33,9 @@ export interface ExtractFileUrlsOptions {
 	html?: boolean;
 }
 
-export enum ExtractFileUrlsResultType {
-	Anchor = 1,
-	Image = 2,
-}
-
 export interface ExtractFileUrlsResult {
 	url: string;
-	type: ExtractFileUrlsResultType;
+	type: LinkType;
 }
 
 const markdownUtils = {
@@ -119,7 +114,7 @@ const markdownUtils = {
 						if ((a[0] === 'src' || a[0] === 'href') && a.length >= 2 && a[1]) {
 							output.push({
 								url: a[1],
-								type: type === 'image' ? ExtractFileUrlsResultType.Image : ExtractFileUrlsResultType.Anchor,
+								type: type === 'image' ? LinkType.Image : LinkType.Anchor,
 							});
 						}
 					}
@@ -132,7 +127,7 @@ const markdownUtils = {
 						while ((result = regex.exec(token.content)) !== null) {
 							output.push({
 								url: result[2],
-								type: regex === imageRegex ? ExtractFileUrlsResultType.Image : ExtractFileUrlsResultType.Anchor,
+								type: regex === imageRegex ? LinkType.Image : LinkType.Anchor,
 							});
 						}
 					}

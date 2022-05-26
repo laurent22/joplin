@@ -1,5 +1,5 @@
 import { ModelType, DeleteOptions } from '../BaseModel';
-import { BaseItemEntity, NoteEntity } from '../services/database/types';
+import { BaseItemEntity } from '../services/database/types';
 import Setting from './Setting';
 import BaseModel from '../BaseModel';
 import time from '../time';
@@ -17,6 +17,19 @@ const moment = require('moment');
 export interface ItemsThatNeedDecryptionResult {
 	hasMore: boolean;
 	items: any[];
+}
+
+interface UnserializeOptions {
+	// Currently, to unserialize a note we need access to the database to get
+	// the correct type for each field. However that's a problem when we need
+	// unserialize in a context where we have no db (in the browser in
+	// particular). So as a hack we have this "noDb" option here which ensures
+	// there's no db access when it's on.
+	//
+	// That could be improved by pre-generating a schema object using
+	// generate-database-type. In which case db access won't be necessary, but
+	// it's not done yet.
+	noDb?: boolean;
 }
 
 export interface ItemThatNeedSync {
@@ -251,7 +264,7 @@ export default class BaseItem extends BaseModel {
 		let conflictNoteIds: string[] = [];
 		if (this.modelType() == BaseModel.TYPE_NOTE) {
 			const conflictNotes = await this.db().selectAll(`SELECT id FROM notes WHERE id IN ("${ids.join('","')}") AND is_conflict = 1`);
-			conflictNoteIds = conflictNotes.map((n: NoteEntity) => {
+			conflictNoteIds = conflictNotes.map((n: any) => {
 				return n.id;
 			});
 		}
@@ -474,7 +487,12 @@ export default class BaseItem extends BaseModel {
 		return ItemClass.save(plainItem, { autoTimestamp: false, changeSource: ItemChange.SOURCE_DECRYPTION });
 	}
 
-	static async unserialize(content: string) {
+	static async unserialize(content: string, options: UnserializeOptions = null) {
+		options = {
+			noDb: false,
+			...options,
+		};
+
 		const lines = content.split('\n');
 		let output: any = {};
 		let state = 'readingProps';
@@ -512,11 +530,13 @@ export default class BaseItem extends BaseModel {
 		if (output.type_ === BaseModel.TYPE_NOTE) output.body = body.join('\n');
 
 		const ItemClass = this.itemClass(output.type_);
-		output = ItemClass.removeUnknownFields(output);
+		if (!options.noDb) output = ItemClass.removeUnknownFields(output);
 
-		for (const n in output) {
-			if (!output.hasOwnProperty(n)) continue;
-			output[n] = await this.unserialize_format(output.type_, n, output[n]);
+		if (!options.noDb) {
+			for (const n in output) {
+				if (!output.hasOwnProperty(n)) continue;
+				output[n] = await this.unserialize_format(output.type_, n, output[n]);
+			}
 		}
 
 		return output;

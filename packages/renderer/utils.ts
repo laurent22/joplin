@@ -1,3 +1,5 @@
+import { LinkType } from '.';
+
 const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = new Entities().encode;
 
@@ -122,7 +124,7 @@ utils.resourceStatus = function(ResourceModel: any, resourceInfo: any) {
 	return resourceStatus;
 };
 
-export type ItemIdToUrlHandler = (resource: any)=> string;
+export type ItemIdToUrlHandler = (resource: any, linkType: LinkType)=> string;
 
 utils.imageReplacement = function(ResourceModel: any, src: string, resources: any, resourceBaseUrl: string, itemIdToUrl: ItemIdToUrlHandler = null) {
 	if (!ResourceModel || !resources) return null;
@@ -138,13 +140,15 @@ utils.imageReplacement = function(ResourceModel: any, src: string, resources: an
 		const icon = utils.resourceStatusImage(resourceStatus);
 		return `<div class="not-loaded-resource resource-status-${resourceStatus}" data-resource-id="${resourceId}">` + `<img src="data:image/svg+xml;utf8,${htmlentities(icon)}"/>` + '</div>';
 	}
-	const mime = resource.mime ? resource.mime.toLowerCase() : '';
-	if (ResourceModel.isSupportedImageMimeType(mime)) {
-		let newSrc = '';
 
-		if (itemIdToUrl) {
-			newSrc = itemIdToUrl(resource.id);
-		} else {
+	if (itemIdToUrl) {
+		return {
+			'data-resource-id': resource.id,
+			src: itemIdToUrl(resource.id, LinkType.Image),
+		};
+	} else {
+		const mime = resource.mime ? resource.mime.toLowerCase() : '';
+		if (ResourceModel.isSupportedImageMimeType(mime)) {
 			const temp = [];
 
 			if (resourceBaseUrl) {
@@ -156,15 +160,13 @@ utils.imageReplacement = function(ResourceModel: any, src: string, resources: an
 			temp.push(ResourceModel.filename(resource));
 			temp.push(`?t=${resource.updated_time}`);
 
-			newSrc = temp.join('');
-		}
+			const newSrc = temp.join('');
 
-		// let newSrc = `./${ResourceModel.filename(resource)}`;
-		// newSrc += `?t=${resource.updated_time}`;
-		return {
-			'data-resource-id': resource.id,
-			src: newSrc,
-		};
+			return {
+				'data-resource-id': resource.id,
+				src: newSrc,
+			};
+		}
 	}
 
 	return null;

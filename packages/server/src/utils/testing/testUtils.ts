@@ -30,6 +30,8 @@ import { URL } from 'url';
 // when it runs.
 const packageRootDir = path.dirname(path.dirname(path.dirname(__dirname)));
 
+export const supportDir = `${path.dirname(packageRootDir)}/app-cli/tests/support`;
+
 let db_: DbConnection = null;
 
 // require('source-map-support').install();
@@ -61,10 +63,10 @@ export async function makeTempFileWithContent(content: string | Buffer): Promise
 	return filePath;
 }
 
-function initGlobalLogger() {
+export const initGlobalLogger = () => {
 	const globalLogger = new Logger();
 	Logger.initializeGlobalLogger(globalLogger);
-}
+};
 
 let createdDbPath_: string = null;
 export async function beforeAllDb(unitName: string, createDbOptions: CreateDbOptions = null) {
