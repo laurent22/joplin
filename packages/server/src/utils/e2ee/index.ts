@@ -173,23 +173,32 @@ const renderNote = async (encryptionService: EncryptionService, note: NoteEntity
 // (window as any).decryptNote = decryptNote;
 
 if (typeof window !== 'undefined') {
-	setTimeout(async () => {
-		const joplin = (window as any).__joplin as JoplinNs;
+	(() => {
+		const initPage = async () => {
+			const joplin = (window as any).__joplin as JoplinNs;
 
-		const logger = setupGlobalLogger();
-		setupShim();
-		const encryptionService = await setupEncryptionService(joplin.note.masterKey, '111111');
-		const decrypted = await decryptNote(encryptionService, joplin.note);
+			const logger = setupGlobalLogger();
+			setupShim();
+			const encryptionService = await setupEncryptionService(joplin.note.masterKey, '111111');
+			const decrypted = await decryptNote(encryptionService, joplin.note);
 
-		logger.info('Decrypted note');
-		logger.info(decrypted);
+			logger.info('Decrypted note');
+			logger.info(decrypted);
 
-		const result = await renderNote(encryptionService, decrypted.note, decrypted.linkedItemInfos, joplin.getResourceTemplateUrl, 'PnVTq4aIf3jIsP0uvuRpr4', downloadResource);
+			const result = await renderNote(encryptionService, decrypted.note, decrypted.linkedItemInfos, joplin.getResourceTemplateUrl, 'PnVTq4aIf3jIsP0uvuRpr4', downloadResource);
 
-		const contentElement = document.createElement('div');
-		contentElement.innerHTML = result.html;
-		document.body.appendChild(contentElement);
-	}, 1000);
+			const contentElement = document.createElement('div');
+			contentElement.innerHTML = result.html;
+			document.body.appendChild(contentElement);
+		};
+
+		const initPageIID = setInterval(async () => {
+			if (document.readyState !== 'loading') {
+				clearInterval(initPageIID);
+				await initPage();
+			}
+		}, 10);
+	})();
 }
 
 export { decryptNote, renderNote };
