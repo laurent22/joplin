@@ -9,10 +9,12 @@ const FsDriverNode = require('./fs-driver-node').default;
 const mimeUtils = require('./mime-utils.js').mime;
 const Note = require('./models/Note').default;
 const Resource = require('./models/Resource').default;
+const Setting = require('./models/Setting').default;
 const urlValidator = require('valid-url');
 const { _ } = require('./locale');
 const http = require('http');
 const https = require('https');
+const { HttpProxyAgent, HttpsProxyAgent } = require('hpagent');
 const toRelative = require('relative');
 const timers = require('timers');
 const zlib = require('zlib');
@@ -25,6 +27,20 @@ function fileExists(filePath) {
 	} catch (err) {
 		return false;
 	}
+}
+
+function isUrlHttps(url) {
+	return url.startsWith('https');
+}
+
+function fetchProxyUrl() {
+	return (
+		Setting.value('sync.proxyUrl') ||
+		process.env['http_proxy'] ||
+		process.env['https_proxy'] ||
+		process.env['HTTP_PROXY'] ||
+		process.env['HTTPS_PROXY']
+	);
 }
 
 // https://github.com/sindresorhus/callsites/blob/main/index.js
@@ -420,11 +436,18 @@ function shimInit(options = null) {
 		return new Buffer(data).toString('base64');
 	};
 
-	shim.fetch = async function(url, options = null) {
+	shim.fetch = async function(url, options = {}) {
 		const validatedUrl = urlValidator.isUri(url);
 		if (!validatedUrl) throw new Error(`Not a valid URL: ${url}`);
+		const proxyUrl = fetchProxyUrl();
+		options.agent = proxyUrl ? shim.proxyAgent(url, proxyUrl) : null;
 
-		return shim.fetchWithRetry(() => {
+		return shim.fetchWithRetry((requestWithProxy) => {
+			// If a proxy has been set but it failed, try again without proxy agent
+			if (options?.agent?.proxy && requestWithProxy === false) {
+				options.agent = null;
+			}
+
 			return nodeFetch(url, options);
 		}, options);
 	};
@@ -570,6 +593,27 @@ function shimInit(options = null) {
 			};
 		}
 		return url.startsWith('https') ? shim.httpAgent_.https : shim.httpAgent_.http;
+	};
+
+	shim.proxyAgent = (serverUrl, proxyUrl) => {
+		const proxyAgentConfig = {
+			keepAlive: true,
+			maxSockets: Setting.value('sync.maxConcurrentConnections'),
+			keepAliveMsecs: 5000,
+			proxy: proxyUrl,
+			timeout: Setting.value('sync.proxyTimeout') * 1000,
+		};
+
+		// Based on https://github.com/delvedor/hpagent#usage
+		if (!isUrlHttps(proxyUrl) && !isUrlHttps(serverUrl)) {
+			return new HttpProxyAgent(proxyAgentConfig);
+		} else if (isUrlHttps(proxyUrl) && !isUrlHttps(serverUrl)) {
+			return new HttpProxyAgent(proxyAgentConfig);
+		} else if (!isUrlHttps(proxyUrl) && isUrlHttps(serverUrl)) {
+			return new HttpsProxyAgent(proxyAgentConfig);
+		} else {
+			return new HttpsProxyAgent(proxyAgentConfig);
+		}
 	};
 
 	shim.openOrCreateFile = (filepath, defaultContents) => {

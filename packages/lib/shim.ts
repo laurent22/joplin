@@ -16,7 +16,7 @@ let isTestingEnv_ = false;
 // (app-desktop, app-mobile, etc.) since we are sure they won't be dependency to
 // other packages (unlike the lib which can be included anywhere).
 //
-// Regarding the type - althought we import React, we only use it as a type
+// Regarding the type - although we import React, we only use it as a type
 // using `typeof React`. This is just to get types in hooks.
 //
 // https://stackoverflow.com/a/42816077/561309
@@ -157,19 +157,25 @@ const shim = {
 	},
 
 	fetchWithRetry: async function(fetchFn: Function, options: any = null) {
+		let requestWithProxy = options?.agent?.proxy || false;
 		if (!options) options = {};
 		if (!options.timeout) options.timeout = 1000 * 120; // ms
-		if (!('maxRetry' in options)) options.maxRetry = shim.fetchMaxRetry_;
+		// For maxRetry the file API sets it to 0, but we want to try at least twice in fetch to accommodate proxy retrying
+		if (!('maxRetry' in options)) options.maxRetry = Math.max(shim.fetchMaxRetry_, 1);
 
 		let retryCount = 0;
 		while (true) {
 			try {
-				const response = await fetchFn();
+				const response = await fetchFn(requestWithProxy);
 				return response;
 			} catch (error) {
 				if (shim.fetchRequestCanBeRetried(error)) {
+					// If proxy was set try again without proxy being set (sometimes proxies/vpns get turned off)
+					if (requestWithProxy) requestWithProxy = false;
 					retryCount++;
-					if (retryCount > options.maxRetry) throw error;
+					if (retryCount > options.maxRetry) {
+						throw error;
+					}
 					await shim.msleep_(retryCount * 3000);
 				} else {
 					throw error;
