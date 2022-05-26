@@ -3,6 +3,7 @@ const path = require('path');
 module.exports = {
 	entry: './dist/utils/e2ee/index.js',
 	devtool: 'source-map',
+	mode: 'production',
 	output: {
 		path: path.resolve(__dirname, 'public', 'js'),
 		filename: 'bundle_e2ee.js',
@@ -22,5 +23,7 @@ module.exports = {
 		// them as "external" here.
 		'crypto': 'commonjs crypto',
 		'stream': 'commonjs stream',
+		// Exclude locales because it's a lot of files and they aren't used
+		'./locales/index.js': 'commonjs locales',
 	},
 };

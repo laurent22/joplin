@@ -8,6 +8,7 @@ logs/
 tests/temp/
 temp/
 .env
+stats.json
 
 public/js/bundle_e2ee.js
 public/js/bundle_e2ee.js.LICENSE.txt
