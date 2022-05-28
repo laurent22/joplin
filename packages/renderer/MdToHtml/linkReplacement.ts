@@ -1,5 +1,5 @@
 import { LinkType } from '..';
-import utils, { ItemIdToUrlHandler } from '../utils';
+import utils, { ItemIdToUrlHandler, ItemIdToUrlResponse } from '../utils';
 const Entities = require('html-entities').AllHtmlEntities;
 const htmlentities = new Entities().encode;
 const urlUtils = require('../urlUtils.js');
@@ -116,9 +116,13 @@ export default function(href: string, options: Options = null): LinkReplacementR
 	let resourceFullPath = resource && options?.ResourceModel?.fullPath ? options.ResourceModel.fullPath(resource) : null;
 
 	if (resourceId && options.itemIdToUrl) {
-		const url = options.itemIdToUrl(resourceId, LinkType.Anchor);
-		attrHtml.push(`href='${htmlentities(url)}'`);
-		resourceFullPath = url;
+		const r = options.itemIdToUrl(resourceId, LinkType.Anchor);
+		const response: ItemIdToUrlResponse = typeof r === 'string' ? { url: r, attributes: {} } : r;
+		attrHtml.push(`href='${htmlentities(response.url)}'`);
+		for (const [key, value] of Object.entries(response.attributes)) {
+			attrHtml.push(`${key}='${htmlentities(value)}'`);
+		}
+		resourceFullPath = response.url;
 	} else if (options.plainResourceRendering || options.linkRenderingType === 2) {
 		icon = '';
 		attrHtml.push(`href='${htmlentities(href)}'`);

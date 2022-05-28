@@ -19,20 +19,38 @@ const mime = {
 		return mime.fromFileExtension(splitted[splitted.length - 1]);
 	},
 
+	appendExtensionFromMime(name, mimeType) {
+		const extensions = mime.toFileExtensions(mimeType);
+		if (!extensions.length) return `${name}.bin`;
+
+		for (const ext of extensions) {
+			if (name.toLowerCase().endsWith(`.${ext}`)) return name;
+		}
+
+		return name += `.${mime.toFileExtension(mimeType)}`;
+	},
+
 	toFileExtension(mimeType) {
+		const extensions = mime.toFileExtensions(mimeType);
+
+		// Return the first file extension that is 3 characters long
+		// If none exist return the first one in the list.
+		for (let j = 0; j < extensions.length; j++) {
+			if (extensions[j].length == 3) return extensions[j];
+		}
+
+		return extensions.length ? extensions[0] : null;
+	},
+
+	toFileExtensions(mimeType) {
 		mimeType = mimeType.toLowerCase();
 		for (let i = 0; i < mimeTypes.length; i++) {
 			const t = mimeTypes[i];
 			if (mimeType == t.t) {
-				// Return the first file extension that is 3 characters long
-				// If none exist return the first one in the list.
-				for (let j = 0; j < t.e.length; j++) {
-					if (t.e[j].length == 3) return t.e[j];
-				}
-				return t.e[0];
+				return t.e;
 			}
 		}
-		return null;
+		return [];
 	},
 
 	fromDataUrl(dataUrl) {

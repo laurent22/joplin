@@ -14,7 +14,7 @@ import { Item, Share, Uuid } from '../services/database/types';
 import ItemModel from '../models/ItemModel';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import { formatDateTime } from './time';
-import { ErrorNotFound } from './errors';
+import { ErrorBadRequest, ErrorNotFound } from './errors';
 import { MarkupToHtml } from '@joplin/renderer';
 import { OptionsResourceModel, RenderResult } from '@joplin/renderer/MarkupToHtml';
 import { isValidHeaderIdentifier } from '@joplin/lib/services/e2ee/EncryptionService';
@@ -223,7 +223,7 @@ async function renderNote(share: Share, note: NoteEntity, resourceInfos: Resourc
 			cssStrings: [],
 			html: `<script>
 				if (!window.__joplin) window.__joplin = {};
-				window.__joplin.getResourceTemplateUrl = ${JSON.stringify(`${userContentBaseUrl}/shares/SHARE_ID?resource_id=RESOURCE_ID`)},
+				window.__joplin.getResourceTemplateUrl = ${JSON.stringify(`${userContentBaseUrl}/shares/SHARE_ID?resource_id=RESOURCE_ID&resource_metadata=RESOURCE_METADATA`)},
 				window.__joplin.note = {
 					ciphertext: ${JSON.stringify(note.encryption_cipher_text)},
 					masterKey: ${JSON.stringify(masterKey)},
@@ -278,8 +278,13 @@ export function itemIsEncrypted(item: Item): boolean {
 	return isValidHeaderIdentifier(header);
 }
 
-export async function renderItem(userId: Uuid, item: Item, share: Share, query: Record<string, any>): Promise<FileViewerResponse> {
-	const rootNote: NoteEntity = models_.item().itemToJoplinItem(item); // await this.unserializeItem(content);
+interface RenderItemQuery {
+	resource_id?: string;
+	resource_metadata?: string;
+}
+
+export async function renderItem(userId: Uuid, item: Item, share: Share, query: RenderItemQuery): Promise<FileViewerResponse> {
+	const rootNote: NoteEntity = models_.item().itemToJoplinItem(item);
 	const linkedItemInfos: LinkedItemInfos = await noteLinkedItemInfos(userId, models_.item(), rootNote);
 	const resourceInfos = await getResourceInfos(linkedItemInfos);
 
@@ -298,8 +303,23 @@ export async function renderItem(userId: Uuid, item: Item, share: Share, query: 
 	let itemToRenderType: ModelType = item.jop_type;
 
 	if (query.resource_id) {
-		const resourceItem = await models_.item().loadByName(userId, resourceBlobPath(query.resource_id), { fields: ['*'], withContent: true });
+		const resourceMetadataOnly = query.resource_metadata === '1';
+		if (resourceMetadataOnly) {
+			const resourceItem = await models_.item().loadByJopId(userId, query.resource_id, { fields: ['*'] });
+			if (!resourceItem) throw new ErrorNotFound(`No such resource: ${query.resource_id}`);
+			if (!resourceItem.jop_encryption_applied) throw new ErrorBadRequest('Not supported');
+			const asJoplinItem = JSON.stringify(models_.item().itemToJoplinItem(resourceItem));
+			return {
+				body: asJoplinItem,
+				filename: '',
+				mime: 'text/json',
+				size: Buffer.byteLength(asJoplinItem),
+			};
+		}
+
+		const resourceItem = await models_.item().loadByName(userId, resourceBlobPath(query.resource_id), { fields: ['*'], withContent: !resourceMetadataOnly });
 		if (!resourceItem) throw new ErrorNotFound(`No such resource: ${query.resource_id}`);
+
 		fileToRender.item = resourceItem;
 		fileToRender.content = resourceItem.content;
 		fileToRender.jopItemId = query.resource_id;

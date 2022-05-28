@@ -124,7 +124,12 @@ utils.resourceStatus = function(ResourceModel: any, resourceInfo: any) {
 	return resourceStatus;
 };
 
-export type ItemIdToUrlHandler = (resource: any, linkType: LinkType)=> string;
+export interface ItemIdToUrlResponse {
+	url: string;
+	attributes: Record<string, string>;
+}
+
+export type ItemIdToUrlHandler = (resource: any, linkType: LinkType)=> string | ItemIdToUrlResponse;
 
 utils.imageReplacement = function(ResourceModel: any, src: string, resources: any, resourceBaseUrl: string, itemIdToUrl: ItemIdToUrlHandler = null) {
 	if (!ResourceModel || !resources) return null;

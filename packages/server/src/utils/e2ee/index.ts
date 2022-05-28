@@ -3,7 +3,7 @@ import { MasterKeyEntity } from '@joplin/lib/services/e2ee/types';
 import Logger, { LogLevel, TargetType } from '@joplin/lib/Logger';
 import shim from '@joplin/lib/shim';
 import Note from '@joplin/lib/models/Note';
-import { NoteEntity } from '@joplin/lib/services/database/types';
+import { NoteEntity, ResourceEntity } from '@joplin/lib/services/database/types';
 import BaseItem from '@joplin/lib/models/BaseItem';
 import { LinkType, MarkupToHtml } from '@joplin/renderer';
 import Resource from '@joplin/lib/models/Resource';
@@ -12,8 +12,10 @@ import { ModelType } from '@joplin/lib/BaseModel';
 import { Uuid } from '../../services/database/types';
 import { themeStyle } from '@joplin/lib/theme';
 import Setting from '@joplin/lib/models/Setting';
+import { ItemIdToUrlResponse } from '@joplin/renderer/utils';
 const sjcl = require('@joplin/lib/vendor/sjcl.js');
 const urlUtils = require('@joplin/lib/urlUtils');
+const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
 
 interface LinkedItemInfoLocalState {
 	fetch_status: number;
@@ -42,7 +44,7 @@ interface JoplinNs {
 	getResourceTemplateUrl: string;
 }
 
-type DownloadResourceHandler = (getResourceTemplateUrl: string, shareId: string, resourceId: string)=> Promise<string>;
+export type DownloadResourceHandler = (getResourceTemplateUrl: string, shareId: string, resourceId: string, metadataOnly: boolean)=> Promise<string>;
 
 const setupGlobalLogger = () => {
 	const mainLogger = new Logger();
@@ -79,19 +81,32 @@ const setupEncryptionService = async (masterKey: MasterKeyEntity, password: stri
 	return encryptionService;
 };
 
-const downloadResource: DownloadResourceHandler = async (getResourceTemplateUrl: string, shareId: string, resourceId: string) => {
-	const url = getResourceTemplateUrl.replace(/SHARE_ID/, shareId).replace(/RESOURCE_ID/, resourceId);
+export const setupModels = () => {
+	BaseItem.loadClass('Note', Note);
+	BaseItem.loadClass('Resource', Resource);
+};
+
+const makeResourceUrl = (getResourceTemplateUrl: string, shareId: string, resourceId: string, metadataOnly: boolean) => {
+	return getResourceTemplateUrl.replace(/SHARE_ID/, shareId).replace(/RESOURCE_ID/, resourceId).replace(/RESOURCE_METADATA/, metadataOnly ? '1' : '0');
+};
+
+const downloadResource: DownloadResourceHandler = async (getResourceTemplateUrl: string, shareId: string, resourceId: string, metadataOnly: boolean) => {
+	const url = makeResourceUrl(getResourceTemplateUrl, shareId, resourceId, metadataOnly);
 	const response = await fetch(url);
 
 	if (!response.ok) {
 		throw new Error(`Could not download resource: ${url}: ${await response.text()}`);
 	}
 
-	return response.text();
+	if (metadataOnly) {
+		return response.json();
+	} else {
+		return response.text();
+	}
 };
 
 const decryptNote = async (encryptionService: EncryptionService, joplinNsNote: JoplinNsNote) => {
-	BaseItem.loadClass('Note', Note);
+	setupModels();
 
 	const serializedContent = await encryptionService.decryptString(joplinNsNote.ciphertext);
 	const note: NoteEntity = await Note.unserialize(serializedContent, { noDb: true });
@@ -124,24 +139,31 @@ const renderNote = async (encryptionService: EncryptionService, note: NoteEntity
 		ResourceModel: Resource as OptionsResourceModel,
 	});
 
-	const resourceDataUrls: Record<string, string> = {};
+	interface FetchedResource {
+		metadata: ResourceEntity;
+		content: string;
+	}
 
-	for (const [itemId, linkedItemInfo] of Object.entries(linkedItemInfos)) {
-		if (linkedItemInfo.item.type === LinkType.Image) {
-			const content = await downloadResource(getResourceTemplateUrl, shareId, itemId);
-			const decrypted = await encryptionService.decryptBase64(content);
-			// We don't know if it's actually a gif but it seems that
-			// "image/gif" work with png, jpg, etc. so that might be fine.
-			// Getting the mime type would require fetching the resource
-			// metadata and decrypting so hopefully that can be avoided.
-			resourceDataUrls[itemId] = `data:image/gif;base64,${decrypted}`;
-		}
+	const fetchedResources: Record<string, FetchedResource> = {};
+
+	for (const [itemId] of Object.entries(linkedItemInfos)) {
+
+		const encryptedMd = await downloadResource(getResourceTemplateUrl, shareId, itemId, true) as ResourceEntity;
+		const plaintextMd = await encryptionService.decryptString(encryptedMd.encryption_cipher_text);
+		const md = await Resource.unserialize(plaintextMd, { noDb: true }) as ResourceEntity;
+
+		const content = await downloadResource(getResourceTemplateUrl, shareId, itemId, false);
+		const decrypted = await encryptionService.decryptBase64(content);
+		fetchedResources[itemId] = {
+			metadata: md,
+			content: `data:${md.mime};base64,${decrypted}`,
+		};
 	}
 
 	const renderOptions: any = {
 		resources: linkedItemInfos,
 
-		itemIdToUrl: (itemId: Uuid, _linkType: LinkType) => {
+		itemIdToUrl: (itemId: Uuid, linkType: LinkType): string|ItemIdToUrlResponse => {
 			if (!linkedItemInfos[itemId]) return '#';
 
 			const item = linkedItemInfos[itemId].item;
@@ -150,7 +172,18 @@ const renderNote = async (encryptionService: EncryptionService, note: NoteEntity
 			if (item.type_ === ModelType.Note) {
 				return '#';
 			} else if (item.type_ === ModelType.Resource) {
-				return resourceDataUrls[itemId]; // `${models_.share().shareUrl(share.owner_id, share.id)}?resource_id=${item.id}&t=${item.updated_time}`;
+				const fetchedResource = fetchedResources[itemId];
+
+				if (linkType === LinkType.Image) {
+					return fetchedResource.content;
+				} else {
+					return {
+						url: fetchedResource.content,
+						attributes: {
+							download: mimeUtils.appendExtensionFromMime(fetchedResource.metadata.filename || 'file', fetchedResource.metadata.mime),
+						},
+					};
+				}
 			} else {
 				throw new Error(`Unsupported item type: ${item.type_}`);
 			}
@@ -169,8 +202,6 @@ const renderNote = async (encryptionService: EncryptionService, note: NoteEntity
 	const result = await markupToHtml.render(note.markup_language, note.body, themeStyle(Setting.THEME_LIGHT), renderOptions);
 	return result;
 };
-
-// (window as any).decryptNote = decryptNote;
 
 if (typeof window !== 'undefined') {
 	(() => {

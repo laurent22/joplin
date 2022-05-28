@@ -1,6 +1,6 @@
 import EncryptionService from '@joplin/lib/services/e2ee/EncryptionService';
 import MasterKey from '@joplin/lib/models/MasterKey';
-import { decryptNote, renderNote } from './index';
+import { decryptNote, DownloadResourceHandler, renderNote, setupModels } from './index';
 import { initGlobalLogger, supportDir, tempDir } from '../testing/testUtils';
 import { readFile } from 'fs-extra';
 import FsDriverNode from '@joplin/lib/fs-driver-node';
@@ -39,6 +39,24 @@ conflict_original_id:
 master_key_id: 
 type_: 1`;
 
+const resourceMetadataContent = `photo.jpg
+
+id: 879da30580d94e4d899e54f029c84dd2
+mime: image/jpeg
+filename: photo.jpg
+created_time: 2021-08-07T17:03:33.701Z
+updated_time: 2021-08-07T17:03:33.701Z
+user_created_time: 2021-08-07T17:03:33.701Z
+user_updated_time: 2021-08-07T17:03:33.701Z
+file_extension: jpg
+encryption_cipher_text: 
+encryption_applied: 0
+encryption_blob_encrypted: 0
+size: 2720
+is_shared: 0
+share_id: 
+type_: 4`;
+
 const setupEncryptionService = async () => {
 	const fsDriver = new FsDriverNode();
 	EncryptionService.fsDriver_ = fsDriver;
@@ -55,6 +73,7 @@ describe('e2ee/index', () => {
 
 	beforeAll(() => {
 		initGlobalLogger();
+		setupModels();
 	});
 
 	it('should decrypt note info', async () => {
@@ -91,14 +110,19 @@ describe('e2ee/index', () => {
 		const tmp = await tempDir();
 		const encryptedFilePath = `${tmp}/photo.crypted`;
 		await encryptionService.encryptFile(`${supportDir}/photo.jpg`, encryptedFilePath);
+		const encryptedMd = await encryptionService.encryptString(resourceMetadataContent);
 
-		const mockDownloadResource = async () => {
-			return readFile(encryptedFilePath, 'utf8');
+		const mockDownloadResource: DownloadResourceHandler = async (_getResourceTemplateUrl: string, _shareId: string, _resourceId: string, metadataOnly: boolean) => {
+			if (metadataOnly) {
+				return { encryption_cipher_text: encryptedMd } as any;
+			} else {
+				return readFile(encryptedFilePath, 'utf8');
+			}
 		};
 
 		const result = await renderNote(encryptionService, {
 			title: 'note test',
-			body: '**bold** and an image: ![test.jpg](:/879da30580d94e4d899e54f029c84dd2)',
+			body: '**bold** and an image: ![test.jpg](:/879da30580d94e4d899e54f029c84dd2) and a link to a resource: [link](:/879da30580d94e4d899e54f029c84dd2)',
 			markup_language: MarkupLanguage.Markdown,
 		}, {
 			'879da30580d94e4d899e54f029c84dd2': {
@@ -111,9 +135,13 @@ describe('e2ee/index', () => {
 					type: LinkType.Image,
 				},
 			},
-		}, '', 'SHARE_ID', mockDownloadResource);
+		}, 'http://localhost/shares/SHARE_ID?resource_id=RESOURCE_ID&resource_metadata=RESOURCE_METADATA', 'abcdefgh', mockDownloadResource);
 
-		expect(result.html).toContain('<img data-from-md data-resource-id="879da30580d94e4d899e54f029c84dd2" src="data:image/gif;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAkGBwgHBgkIBwgKCgkLDRYPDQwMDRsUFRAWIB0iIiAdHx8kKDQsJCYxJx8fLT0tMTU3Ojo6Iys/RD84QzQ5Ojf/2wBDAQoKCg0MDRoPDxo3JR8lNzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzf/wAARCAByAHsDASIAAhEBAxEB/8QAHAAAAAcBAQAAAAAAAAAAAAAAAA');
+		// Check that the image is being displayed
+		expect(result.html).toContain('<img data-from-md data-resource-id="879da30580d94e4d899e54f029c84dd2" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAkGBwgHBgkIBwgKCgkLDRYPDQwMDRsUFRAWIB0iIiAdHx8kKDQsJCYxJx8fLT0tMTU3Ojo6Iys/RD84QzQ5Ojf/2wBDAQoKCg0MDRoPDxo3JR8lNzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzf/wAARCAByAHsDASIAAhEBAxEB/8QAHAAAAAcBAQAAAAAAAAAAAAAAAA');
+
+		// Check that the link to the encrypted resource is available
+		expect(result.html).toContain('FF2QQQAfuiO6CCYf/9k=\' download=\'photo.jpg\'>');
 	});
 
 });

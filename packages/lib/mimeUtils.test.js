@@ -20,4 +20,12 @@ describe('mimeUils', function() {
 		expect(mimeUtils.fromFilename('test')).toBe(null);
 	}));
 
+	it('should append a file extension to a filename', (async () => {
+		expect(mimeUtils.appendExtensionFromMime('test', 'image/jpeg')).toBe('test.jpg');
+		expect(mimeUtils.appendExtensionFromMime('test.bmp', 'image/jpeg')).toBe('test.bmp.jpg');
+		expect(mimeUtils.appendExtensionFromMime('test.JPG', 'image/jpeg')).toBe('test.JPG');
+		expect(mimeUtils.appendExtensionFromMime('test.jpeg', 'image/jpeg')).toBe('test.jpeg');
+		expect(mimeUtils.appendExtensionFromMime('test', 'image/doesntexist')).toBe('test.bin');
+	}));
+
 });
