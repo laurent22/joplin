@@ -5,14 +5,18 @@ import { basename } from 'path';
 const moment = require('moment');
 
 export const getNewsDateString = (info: MarkdownAndFrontMatter, mdFilePath: string): string => {
+	return moment(getNewsDate(info, mdFilePath)).format('D MMM YYYY');
+};
+
+export const getNewsDate = (info: MarkdownAndFrontMatter, mdFilePath: string): Date => {
 	// If the date is set in the metadata, we get it from there. Otherwise we
 	// derive it from the filename (eg. 20220224-release-2-7.md)
 
 	if (info.created) {
-		return moment(info.created).format('D MMM YYYY');
+		return info.created;
 	} else {
 		const filenameNoExt = basename(mdFilePath, '.md');
 		const s = filenameNoExt.split('-');
-		return moment(s[0], 'YYYYMMDD').format('D MMM YYYY');
+		return moment.utc(s[0], 'YYYYMMDD').toDate();
 	}
 };

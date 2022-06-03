@@ -8,7 +8,7 @@ import { rootDir } from '../tool-utils';
 import fetch from 'node-fetch';
 import { compileWithFrontMatter, MarkdownAndFrontMatter, stripOffFrontMatter } from './utils/frontMatter';
 import { markdownToHtml } from './utils/render';
-import { getNewsDateString } from './utils/news';
+import { getNewsDate } from './utils/news';
 const RSS = require('rss');
 
 interface ApiConfig {
@@ -133,24 +133,22 @@ const getForumTopPostByExternalId = async (externalId: string): Promise<ForumTop
 };
 
 const generateRssFeed = async (posts: Post[]) => {
-	const feed = new RSS({
-		title: 'Joplin',
-		description: 'Joplin, the open source note-taking application',
-		feed_url: 'https://joplinapp.org/rss.xml',
-		site_url: 'https://joplinapp.org',
-	});
-
+	let pubDate = null;
 	let postCount = 0;
+	const feedItems: any[] = [];
 	for (const post of posts.reverse()) {
 		const content = await getPostContent(post);
+		const postDate = getNewsDate(content.parsed, post.path);
 		const html = markdownToHtml(content.body);
 
-		feed.item({
+		if (pubDate === null) pubDate = postDate;
+
+		feedItems.push({
 			title: content.title,
 			description: html,
 			url: `https://joplinapp.org/news/${post.id}/`,
 			guid: post.id,
-			date: getNewsDateString(content.parsed, post.path),
+			date: postDate,
 			custom_elements: [
 				{ 'twitter-text': content.parsed.tweet },
 			],
@@ -160,7 +158,23 @@ const generateRssFeed = async (posts: Post[]) => {
 		if (postCount >= 20) break;
 	}
 
-	return feed.xml() as string;
+	const feed = new RSS({
+		title: 'Joplin',
+		description: 'Joplin, the open source note-taking application',
+		feed_url: 'https://joplinapp.org/rss.xml',
+		site_url: 'https://joplinapp.org',
+		pubDate,
+	});
+
+	for (const feedItem of feedItems) feed.item(feedItem);
+
+	let xml = feed.xml() as string;
+
+	// Change the build date otherwise it changes even when nothing has changed.
+	// https://github.com/dylang/node-rss/pull/52
+	xml = xml.replace(/<lastBuildDate>(.*?)<\/lastBuildDate>/, `<lastBuildDate>${pubDate.toUTCString()}</lastBuildDate>`);
+
+	return xml;
 };
 
 const main = async () => {
