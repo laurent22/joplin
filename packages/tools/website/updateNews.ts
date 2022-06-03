@@ -7,6 +7,9 @@ import { basename } from 'path';
 import { rootDir } from '../tool-utils';
 import fetch from 'node-fetch';
 import { compileWithFrontMatter, MarkdownAndFrontMatter, stripOffFrontMatter } from './utils/frontMatter';
+import { markdownToHtml } from './utils/render';
+import { getNewsDateString } from './utils/news';
+const RSS = require('rss');
 
 interface ApiConfig {
 	baseUrl: string;
@@ -60,6 +63,11 @@ const getPosts = async (newsDir: string): Promise<Post[]> => {
 			path: `${newsDir}/${filename}`,
 		});
 	}
+
+	output.sort((a: Post, b: Post) => {
+		if (a.id < b.id) return -1;
+		return +1;
+	});
 
 	return output;
 };
@@ -124,6 +132,37 @@ const getForumTopPostByExternalId = async (externalId: string): Promise<ForumTop
 	}
 };
 
+const generateRssFeed = async (posts: Post[]) => {
+	const feed = new RSS({
+		title: 'Joplin',
+		description: 'Joplin, the open source note-taking application',
+		feed_url: 'https://joplinapp.org/rss.xml',
+		site_url: 'https://joplinapp.org',
+	});
+
+	let postCount = 0;
+	for (const post of posts.reverse()) {
+		const content = await getPostContent(post);
+		const html = markdownToHtml(content.body);
+
+		feed.item({
+			title: content.title,
+			description: html,
+			url: `https://joplinapp.org/news/${post.id}/`,
+			guid: post.id,
+			date: getNewsDateString(content.parsed, post.path),
+			custom_elements: [
+				{ 'twitter-text': content.parsed.tweet },
+			],
+		});
+
+		postCount++;
+		if (postCount >= 20) break;
+	}
+
+	return feed.xml() as string;
+};
+
 const main = async () => {
 	const argv = require('yargs').argv;
 	config.key = argv._[0];
@@ -132,6 +171,9 @@ const main = async () => {
 	if (!config.key || !config.username) throw new Error('API Key and Username are required');
 
 	const posts = await getPosts(`${rootDir}/readme/news`);
+
+	const rssFeed = await generateRssFeed(posts);
+	await writeFile(`${rootDir}/Assets/WebsiteAssets/rss.xml`, rssFeed, 'utf8');
 
 	for (const post of posts) {
 		if (ignoredPostIds.includes(post.id)) continue;

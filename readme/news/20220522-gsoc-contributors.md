@@ -1,5 +1,6 @@
 ---
 forum_url: https://discourse.joplinapp.org/t/25726
+tweet: Joplin received 6 Contributor Projects for GSoC 2022! Welcome to our new contributors who will be working on these projects over summer! #GSoC2022
 ---
 
 # Joplin received 6 Contributor Projects for GSoC 2022!
