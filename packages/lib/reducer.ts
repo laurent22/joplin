@@ -6,7 +6,7 @@ import Folder from './models/Folder';
 import BaseModel from './BaseModel';
 import { Store } from 'redux';
 import { ProfileConfig } from './services/profileConfig/types';
-const ArrayUtils = require('./ArrayUtils.js');
+import * as ArrayUtils from './ArrayUtils';
 const { ALL_NOTES_FILTER_ID } = require('./reserved-ids');
 const { createSelectorCreator, defaultMemoize } = require('reselect');
 const { createCachedSelector } = require('re-reselect');
