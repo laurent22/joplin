@@ -143,7 +143,7 @@ async function main() {
 	// installed by CRA and 6.1.0 by us. It doesn't affect anything though, and the behaviour of the preflight
 	// check is buggy so we can ignore it.
 	console.info(await execCommand(`rm -rf ${clipperDir}/popup/build`));
-	console.info(await execCommand('yarn run build'));
+	console.info(await execCommand('npm run build'));
 
 	const dists = {
 		chrome: {
