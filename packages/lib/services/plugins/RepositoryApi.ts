@@ -95,7 +95,8 @@ export default class RepositoryApi {
 			this.manifests_ = Object.keys(manifests).map(id => {
 				const m: PluginManifest = manifests[id];
 
-				m._plugin_category = tempOptions[m.name];
+				// this is only for development purpose, here we insert categories into the manifests
+				tempOptions[m.name] && (m.categories = tempOptions[m.name]);
 				// If we don't control the repository, we can't recommend
 				// anything on it since it could have been modified.
 				if (!this.isUsingDefaultContentUrl) m._recommended = false;
@@ -205,7 +206,7 @@ export default class RepositoryApi {
 		const categoryFilterList = ['appearance', 'developer tools', 'productivity', 'themes', 'integrations', 'viewer', 'search', 'tags', 'editor', 'files', 'personal knowledge management'];
 
 		if (categoryFilterList.includes(category)) {
-			output = manifests.filter((m) => m.categories.includes(category));
+			output = manifests.filter((m) => m.categories && m.categories.includes(category));
 		} else {
 			switch (category) {
 			case 'most downloaded':

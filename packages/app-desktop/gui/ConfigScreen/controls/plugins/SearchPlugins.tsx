@@ -147,7 +147,7 @@ export default function(props: Props) {
 					placeholder={props.disabled ? _('Please wait...') : _('Search for plugins...')}
 					disabled={props.disabled}
 				/>
-				<FilterForPlugins themeId={props.themeId} onSearchButtonClick={onSearchButtonClick} setFilterValue={setFilterValue} />
+				<FilterForPlugins themeId={props.themeId} onSearchButtonClick={onSearchButtonClick} setFilterValue={setFilterValue} filterValue={filterValue}/>
 				<ToolsButton size={ButtonSize.Small} tooltip={_('Plugin tools')} iconName="fas fa-cog" level={ButtonLevel.Secondary} onClick={props.onToolsClick}/>
 				{renderContentSourceInfo()}
 			</div>
