@@ -118,7 +118,7 @@ async function checkSourceZip(sourceZip, compiledZip) {
 	console.info(await execCommand(`cp "${sourceZip}" .`));
 	console.info(await execCommand(`unzip "${sourceZip}"`));
 	process.chdir(`${sourceDir}/Clipper-source/popup`);
-	console.info(await execCommand('yarn install'));
+	console.info(await execCommand('npm install'));
 
 	process.chdir(compiledDir);
 	console.info(await execCommand(`cp "${compiledZip}" .`));
