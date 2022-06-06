@@ -64,7 +64,6 @@ export default function(props: Props) {
 	useEffect(() => {
 		setSearchResultCount(null);
 		asyncSearchQueue.current.push(async () => {
-			// if ((!props.searchQuery && !filterValue) || ['installed', 'enabled', 'disabled', 'outdated'].includes(filterValue.toLowerCase())) {
 			if (!props.searchQuery && !filterValue) {
 				setManifests([]);
 				setSearchResultCount(null);
@@ -74,9 +73,8 @@ export default function(props: Props) {
 				if (filterValue === undefined) {
 					setFilterValue('');
 				} else {
-					const r = await props.repoApi().sortByCategory(filterValue.toLowerCase(), props.searchQuery);
-					!(['most downloaded', 'newest'].includes(filterValue.toLowerCase())) && setManifests(sortManifestResults(r));
-					['most downloaded', 'newest'].includes(filterValue.toLowerCase()) && setManifests(r);
+					const r = await props.repoApi().searchAndFilter(filterValue.toLowerCase(), props.searchQuery);
+					['most downloaded', 'newest'].includes(filterValue.toLowerCase()) ? setManifests(r) : setManifests(sortManifestResults(r));
 					setSearchResultCount(r.length);
 					props.setShouldRenderUserPlugins(false);
 				}
@@ -94,61 +92,12 @@ export default function(props: Props) {
 		props.onSearchQueryChange({ value: '' });
 	}, []);
 
-	// const onBrowsePlugins = useCallback(() => {
-	// 	void bridge().openExternal('https://github.com/joplin/plugins/blob/master/README.md#plugins');
-	// }, []);
-
-	// ----- to be implemented -----
-
-	// const onToolsClick = useCallback(async () => {
-	// 	const template = [
-	// 		{
-	// 			label: _('Browse all plugins'),
-	// 			click: onBrowsePlugins,
-	// 		},
-	// 		{
-	// 			label: _('Install from file'),
-	// 			click: onInstall,
-	// 		},
-	// 	];
-
-	// 	const menu = bridge().Menu.buildFromTemplate(template);
-	// 	menu.popup(bridge().window());
-	// }, [onInstall, onBrowsePlugins]);
-
 	function installState(pluginId: string): InstallState {
 		const settings = props.pluginSettings[pluginId];
 		if (settings && !settings.deleted) return InstallState.Installed;
 		if (installingPluginsIds[pluginId]) return InstallState.Installing;
 		return InstallState.NotInstalled;
 	}
-
-	// ----- to be implemented: onToggle function -----
-
-	// const pluginSettings = useMemo(() => {
-	// 	return pluginService.unserializePluginSettings(props.value);
-	// }, [props.value]);
-
-	// const onToggle = useCallback((event: ItemEvent) => {
-	// 	const item = event.item;
-
-	// 	const newSettings = produce(pluginSettings, (draft: PluginSettings) => {
-	// 		if (!draft[item.manifest.id]) draft[item.manifest.id] = defaultPluginSetting();
-	// 		draft[item.manifest.id].enabled = !draft[item.manifest.id].enabled;
-	// 	});
-
-	// 	props.onChange({ value: pluginService.serializePluginSettings(newSettings) });
-	// }, []);
-
-	// function renderResultsInstalled(query: string, manifests: PluginManifest[]) {
-	// 	const renderCellsPlugins = props.pluginItems.filter((pluginItem) => manifests.find((m) => m.id === pluginItem.manifest.id))
-	// 	if ((query && !manifests.length) || renderCellsPlugins === null) {
-	// 		if (searchResultCount === null) return ''; // Search in progress
-	// 		return props.renderDescription(props.themeId, _('No results'));
-	// 	} else {
-	// 		return props.renderCells(renderCellsPlugins);
-	// 	}
-	// }
 
 	function renderResults(query: string, manifests: PluginManifest[]) {
 		if ((query && !manifests.length) || !manifests.length) {
@@ -169,12 +118,12 @@ export default function(props: Props) {
 			}
 			return output;
 		} else {
-			const renderCellsPlugins = props.pluginItems.filter((pluginItem) => manifests.find((m) => m.id === pluginItem.manifest.id));
-			if ((query && !manifests.length) || renderCellsPlugins === null) {
+			const filteredPluginItems = props.pluginItems.filter((pluginItem) => manifests.find((m) => m.id === pluginItem.manifest.id));
+			if ((query && !manifests.length) || filteredPluginItems === null) {
 				if (searchResultCount === null) return ''; // Search in progress
 				return props.renderDescription(props.themeId, _('No results'));
 			} else {
-				return props.renderCells(renderCellsPlugins);
+				return props.renderCells(filteredPluginItems);
 			}
 		}
 	}

@@ -107,7 +107,7 @@ export default class RepositoryApi {
 		}
 	}
 
-	private async loadStats() {
+	public async loadStats() {
 		const statsText = await shim.fetch('https://raw.githubusercontent.com/joplin/plugins/master/stats.json');
 		try {
 			const stats = JSON.parse(await statsText.text());
@@ -195,39 +195,17 @@ export default class RepositoryApi {
 		}
 	}
 
-	public async search(query: string): Promise<PluginManifest[]> {
-		query = query.toLowerCase().trim();
-
-		const manifests = await this.manifests();
-		const output: PluginManifest[] = [];
-
-		for (const manifest of manifests) {
-			for (const field of ['name', 'description']) {
-				const v = (manifest as any)[field];
-				if (!v) continue;
-
-				if (v.toLowerCase().indexOf(query) >= 0) {
-					output.push(manifest);
-					break;
-				}
-			}
-		}
-
-		return output;
-	}
-
-	public async sortByCategory(category?: string, searchQuery?: string): Promise<PluginManifest[]> {
-		const manifests = await this.manifests();
+	public async searchAndFilter(category?: string, searchQuery?: string): Promise<PluginManifest[]> {
+		const manifests: PluginManifest[] = await this.manifests();
 		let output: PluginManifest[] = [];
 		const output2: PluginManifest[] = [];
 		const pluginStates = Setting.value('plugins.states');
 		category = category.toLowerCase();
 
-
 		const categoryFilterList = ['appearance', 'developer tools', 'productivity', 'themes', 'integrations', 'viewer', 'search', 'tags', 'editor', 'files', 'personal knowledge management'];
 
 		if (categoryFilterList.includes(category)) {
-			output = manifests.filter((m) => m._plugin_category === category);
+			output = manifests.filter((m) => m.categories.includes(category));
 		} else {
 			switch (category) {
 			case 'most downloaded':

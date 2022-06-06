@@ -23,20 +23,53 @@ describe('services_plugins_RepositoryApi', function() {
 		expect(!!manifests.find(m => m.id === 'org.joplinapp.plugins.ToggleSidebars')).toBe(true);
 	}));
 
-	it('should search', (async () => {
+	it('it should load statistics', (async () => {
+		const api = await newRepoApi();
+		const manifests = await api.manifests();
+		{
+			expect(manifests.find(m => m.id === 'joplin.plugin.ambrt.backlinksToNote')._created_date).toBe('2021-06-01T08:30:48Z');
+		}
+
+		{
+			const statsText = await shim.fetch('https://raw.githubusercontent.com/joplin/plugins/master/stats.json');
+			const stats = JSON.parse(await statsText.text());
+
+			let totalDownloadCount: number = 0;
+
+			const pluginStats = stats['joplin.plugin.ambrt.backlinksToNote'];
+			Object.entries(pluginStats).forEach((stats: any[]) => {
+				totalDownloadCount += stats[1].downloadCount;
+			});
+			expect(totalDownloadCount).toBe(manifests.find(m => m.id === 'joplin.plugin.ambrt.backlinksToNote')._totalDownloads);
+		}
+	}));
+
+	it('should search and sort', (async () => {
 		const api = await newRepoApi();
 
 		{
-			const results = await api.search('to');
+			const results = await api.searchAndFilter('','to');
 			expect(results.length).toBe(2);
 			expect(!!results.find(m => m.id === 'joplin.plugin.ambrt.backlinksToNote')).toBe(true);
 			expect(!!results.find(m => m.id === 'org.joplinapp.plugins.ToggleSidebars')).toBe(true);
 		}
 
 		{
-			const results = await api.search('backlink');
+			const results = await api.searchAndFilter('','backlink');
 			expect(results.length).toBe(1);
 			expect(!!results.find(m => m.id === 'joplin.plugin.ambrt.backlinksToNote')).toBe(true);
+		}
+
+		{
+			const results = await api.searchAndFilter('appearance','');
+			expect(results.length).toBe(1);
+			expect(!!results.find(m => m.id === 'org.joplinapp.plugins.ToggleSidebars')).toBe(true);
+		}
+
+		{
+			const results = await api.searchAndFilter('appearance', 'toggle');
+			expect(results.length).toBe(1);
+			expect(!!results.find(m => m.id === 'org.joplinapp.plugins.ToggleSidebars')).toBe(true);
 		}
 	}));
 

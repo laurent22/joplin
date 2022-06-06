@@ -27,7 +27,7 @@ export default function FilterForPlugins(props: FilterProps) {
 					return <option value={filterOption} key={filterOption} style={{ backgroundColor: theme.backgroundColor, color: theme.color }}>{filterOption}</option>;
 				})}
 			</select>
-			<i className="fas fa-music" style={{ margin: '0px 0px 0px 4px', backgroundColor: theme.backgroundColor, height: '26px', width: '26px', display: 'flex', justifyContent: 'center', alignItems: 'center' }} onClick={clearFilterValue}></i>
+			<i className="fas fa-window-close" style={{ margin: '0px 0px 0px 6px', backgroundColor: theme.backgroundColor, height: '26px', width: '26px', display: 'flex', justifyContent: 'center', alignItems: 'center' }} onClick={clearFilterValue}></i>
 		</div>
 	);
 }

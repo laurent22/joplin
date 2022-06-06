@@ -19,7 +19,6 @@ export interface PluginManifest {
 	// Private keys
 	_totalDownloads?: number;
 	_created_date?: string;
-	_plugin_category?: any;
 	_package_hash?: string;
 	_publish_hash?: string;
 	_publish_commit?: string;
