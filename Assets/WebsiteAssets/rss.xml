@@ -1,4 +1,20 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Joplin]]></title><description><![CDATA[Joplin, the open source note-taking application]]></description><link>https://joplinapp.org</link><generator>RSS for Node</generator><lastBuildDate>Sun, 22 May 2022 00:00:00 GMT</lastBuildDate><atom:link href="https://joplinapp.org/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Sun, 22 May 2022 00:00:00 GMT</pubDate><item><title><![CDATA[Joplin received 6 Contributor Projects for GSoC 2022!]]></title><description><![CDATA[<p>We are glad to announce that Google allocated us six projects this year for Google Summer of Code! So this is six contributors who will be working on various parts of the apps, both desktop and mobile, over the summer.</p>
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Joplin]]></title><description><![CDATA[Joplin, the open source note-taking application]]></description><link>https://joplinapp.org</link><generator>RSS for Node</generator><lastBuildDate>Mon, 06 Jun 2022 00:00:00 GMT</lastBuildDate><atom:link href="https://joplinapp.org/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Mon, 06 Jun 2022 00:00:00 GMT</pubDate><item><title><![CDATA[Joplin 2.8 is available!]]></title><description><![CDATA[<p>As always a lot of changes and new features in this new version available on both desktop and mobile.</p>
+<h1>Multiple profile support<a name="multiple-profile-support" href="#multiple-profile-support" class="heading-anchor">🔗</a></h1>
+<p>Perhaps the most visible change in this version is the support for multiple profiles. You can now create as many application profile as you wish, each with their own settings, and easily switch from one to another. The main use case is to support for example a &quot;work&quot; profile and a &quot;personal&quot; profile, to allow you to keep things independent, and each profile can sync with a different sync target.</p>
+<p>To create a new profile, open <strong>File &gt; Switch profile</strong> and select <strong>Create new profile</strong>, enter the profile name and press OK. The app will automatically switch to this new profile, which you can now configure.</p>
+<p>To switch back to the previous profile, again open <strong>File &gt; Switch profile</strong> and select <strong>Default</strong>.</p>
+<p>Note that profiles all share certain settings, such as language, font size, theme, etc. This is done so that you don't have reconfigure every details when switching profiles. Other settings such as sync configuration is per profile.</p>
+<p>The feature is available on desktop only for now, and should be ported to mobile relatively soon.</p>
+<h1>Save Mermaid graph as PNG/SVG<a name="save-mermaid-graph-as-png-svg" href="#save-mermaid-graph-as-png-svg" class="heading-anchor">🔗</a></h1>
+<p>This convenient feature allows exporting a Mermaid graph as a PNG or SVG image, or allows copying the image as a DataUrl, which can then be pasted in any compatible text editor. Thanks Asrient for implementing this!</p>
+<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20220606-mermaid-as-png.png" alt=""></p>
+<h1>Publish a mini-website using Joplin Cloud<a name="publish-a-mini-website-using-joplin-cloud" href="#publish-a-mini-website-using-joplin-cloud" class="heading-anchor">🔗</a></h1>
+<p>Joplin Cloud now supports publishing a note &quot;recursively&quot;, which means the notes and all the notes it is linked to. This allows easily publishing a simple website made of multiples and images.</p>
+<p>To make use of this feature, simply select <strong>Also publish linked notes</strong> when publishing a note.</p>
+<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20220606-publish-website.png" alt=""></p>
+<h1>And more!<a name="and-more" href="#and-more" class="heading-anchor">🔗</a></h1>
+<p>In total there are 38 changes to improve the app reliability, security and usability. Full changelog is at <a href="https://joplinapp.org/changelog/">https://joplinapp.org/changelog/</a></p>
+]]></description><link>https://joplinapp.org/news/20220606-release-2-8/</link><guid isPermaLink="false">20220606-release-2-8</guid><pubDate>Mon, 06 Jun 2022 00:00:00 GMT</pubDate><twitter-text></twitter-text></item><item><title><![CDATA[Joplin received 6 Contributor Projects for GSoC 2022!]]></title><description><![CDATA[<p>We are glad to announce that Google allocated us six projects this year for Google Summer of Code! So this is six contributors who will be working on various parts of the apps, both desktop and mobile, over the summer.</p>
 <p>Over the next few weeks, till 13 June, will be the Community Bonding Period during which GSoC contributors get to know mentors, read documentation, and get up to speed to begin working on their projects.</p>
 <p>Here's the full list of projects, contributors and mentors.</p>
 <table class="table">
@@ -242,38 +258,4 @@
 <p>So far I have &quot;Your notes, anywhere you are&quot; but I'm not certain that's particularly inspiring. Any other idea about what tagline could be used?</p>
 ]]></description><link>https://joplinapp.org/news/20210705-094247/</link><guid isPermaLink="false">20210705-094247</guid><pubDate>Mon, 05 Jul 2021 09:42:47 GMT</pubDate><twitter-text></twitter-text></item><item><title><![CDATA[Poll: What's the size of your note collection?]]></title><description><![CDATA[<p>Poll is on the forum:</p>
 <p><a href="https://discourse.joplinapp.org/t/poll-whats-the-size-of-your-note-collection/18191">https://discourse.joplinapp.org/t/poll-whats-the-size-of-your-note-collection/18191</a></p>
-]]></description><link>https://joplinapp.org/news/20210624-171844/</link><guid isPermaLink="false">20210624-171844</guid><pubDate>Thu, 24 Jun 2021 17:18:44 GMT</pubDate><twitter-text></twitter-text></item><item><title><![CDATA[Share notebooks and collaborate on them using Joplin Server 2.0]]></title><description><![CDATA[<p>Since a few versions Joplin Server includes a way to share notebooks between users and collaborate on them - i.e. any participant can view or modify notes in the shared notebook. It's been present since version 2.x and the feature is getting close to be stable.</p>
-<p><strong>How does it work?</strong></p>
-<p>When connected to Joplin Server (or the upcoming Joplin Cloud service), a new &quot;Share notebook&quot; menu item is available when right-clicking on a notebook.</p>
-<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20210621-104753_0.png" alt=""></p>
-<p>Click on it, and it will display a new dialog where you can add any number of recipients. Those recipients also need to be on the same Joplin Server instance. From this dialog you can also remove a recipient or unshare the whole notebook, in which case it will be removed from everybody's note collection, except yours.</p>
-<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20210621-104753_1.png" alt=""></p>
-<p>Once this is done, the recipient(s) will receive a notification in Joplin the next time they synchronise their data:</p>
-<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20210621-104753_2.png" alt=""></p>
-<p>Then, finally, once the invitation is accepted, Joplin will download all the shared notebooks and notes. A shared notebook is denoted by the usual Share icon. Now the invited user can read or modify the shared notes, add attachments, etc. and the changes will be visible to everyone with access to the notebook.</p>
-<p><img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/news/20210621-104753_3.png" alt=""></p>
-<p><strong>What's the availability of the notebook sharing feature?</strong></p>
-<p>The notebook sharing feature is available on Joplin Server and Joplin Cloud.</p>
-<p>On desktop, you can share notebooks and of course view or modify any notebook that has been shared with you.</p>
-<p>On mobile and CLI, you cannot currently share notebooks, but you can view or modify any notebook that has been shared with you.</p>
-<p><strong>If I share a notebook with someone, what access do they have?</strong></p>
-<p>Currently they have full access to the data, including reading, writing and deleting notebooks or notes. In a future version, access control might be implemented. For example, to only give read-only access to the shared notebook.</p>
-<p><strong>What can actually be shared?</strong></p>
-<p>All the sub-notebooks, notes and resources within the shared notebook are shared.</p>
-<p><strong>Does it work with End-To-End-Encryption?</strong></p>
-<p>Yes and no. It is possible to use the share notebook feature even with E2EE enabled, however any shared notebook or note will not be encrypted, otherwise you would have had to give your master key password to the people you share with, which you'd probably not want to do.</p>
-<p>In a future version, this might be supported. For example by automatically creating a new master key for the shared notebook. You would then provide the recipients with that master key password.</p>
-<p><strong>What can it be used for?</strong></p>
-<p>Some ideas:</p>
-<ul>
-<li>
-<p>Plan a trip with friends or within a small organisation. For example, the notes could contain the maps, hotel and flight reservations, etc. or any document or note relevant to the trip. And all participants would have access to them.</p>
-</li>
-<li>
-<p>Work on a project with colleagues. Everybody can access various work-related documents, add to them, modify them, etc. That could serve as a knowledge base for a project.</p>
-</li>
-<li>
-<p>Another possible use, which has been requested many times, is to support multiple profiles. You could create a main profile that have access to all notes, and in there create a Work and Personal notebook. Then you would create a separate account for work. You can then share your Work notebook with that other account. That way the work account will only have access to the Work notebooks. You can use this technique in various ways to split your notebooks between multiple accounts and ensure strict separation between datasets.</p>
-</li>
-</ul>
-]]></description><link>https://joplinapp.org/news/20210621-104753/</link><guid isPermaLink="false">20210621-104753</guid><pubDate>Mon, 21 Jun 2021 10:47:53 GMT</pubDate><twitter-text></twitter-text></item></channel></rss>
+]]></description><link>https://joplinapp.org/news/20210624-171844/</link><guid isPermaLink="false">20210624-171844</guid><pubDate>Thu, 24 Jun 2021 17:18:44 GMT</pubDate><twitter-text></twitter-text></item></channel></rss>
