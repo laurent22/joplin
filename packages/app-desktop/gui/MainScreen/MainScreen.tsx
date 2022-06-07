@@ -70,7 +70,6 @@ interface Props {
 	showNeedUpgradingMasterKeyMessage: boolean;
 	showShouldReencryptMessage: boolean;
 	showInstallTemplatesPlugin: boolean;
-	focusedField: string;
 	themeId: number;
 	settingEditorCodeView: boolean;
 	pluginsLegacy: any;
@@ -698,7 +697,6 @@ class MainScreenComponent extends React.Component<Props, State> {
 					key={key}
 					resizableLayoutEventEmitter={eventEmitter}
 					visible={event.visible}
-					focusedField={this.props.focusedField}
 					size={event.size}
 					themeId={this.props.themeId}
 				/>;
@@ -869,15 +867,12 @@ const mapStateToProps = (state: AppState) => {
 		showNeedUpgradingMasterKeyMessage: !!EncryptionService.instance().masterKeysThatNeedUpgrading(syncInfo.masterKeys).length,
 		showShouldReencryptMessage: state.settings['encryption.shouldReencrypt'] >= Setting.SHOULD_REENCRYPT_YES,
 		shouldUpgradeSyncTarget: state.settings['sync.upgradeState'] === Setting.SYNC_UPGRADE_STATE_SHOULD_DO,
-		selectedFolderId: state.selectedFolderId,
-		selectedNoteId: state.selectedNoteIds.length === 1 ? state.selectedNoteIds[0] : null,
 		pluginsLegacy: state.pluginsLegacy,
 		plugins: state.pluginService.plugins,
 		pluginHtmlContents: state.pluginService.pluginHtmlContents,
 		customCss: state.customCss,
 		editorNoteStatuses: state.editorNoteStatuses,
 		hasNotesBeingSaved: stateUtils.hasNotesBeingSaved(state),
-		focusedField: state.focusedField,
 		layoutMoveMode: state.layoutMoveMode,
 		mainLayout: state.mainLayout,
 		startupPluginsLoaded: state.startupPluginsLoaded,
