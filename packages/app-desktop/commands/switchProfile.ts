@@ -2,7 +2,7 @@ import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/
 import Setting from '@joplin/lib/models/Setting';
 import { saveProfileConfig } from '@joplin/lib/services/profileConfig';
 import { ProfileConfig } from '@joplin/lib/services/profileConfig/types';
-import bridge from '../services/bridge';
+import restart from '../services/restart';
 
 export const declaration: CommandDeclaration = {
 	name: 'switchProfile',
@@ -20,7 +20,7 @@ export const runtime = (): CommandRuntime => {
 			};
 
 			await saveProfileConfig(`${Setting.value('rootProfileDir')}/profiles.json`, newConfig);
-			bridge().restart(false);
+			await restart(false);
 		},
 	};
 };

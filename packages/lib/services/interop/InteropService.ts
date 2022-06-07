@@ -9,7 +9,7 @@ import Resource from '../../models/Resource';
 import Folder from '../../models/Folder';
 import NoteTag from '../../models/NoteTag';
 import Note from '../../models/Note';
-const ArrayUtils = require('../../ArrayUtils');
+import * as ArrayUtils from '../../ArrayUtils';
 const { sprintf } = require('sprintf-js');
 const { fileExtension } = require('../../path-utils');
 const { toTitleCase } = require('../../string-utils');

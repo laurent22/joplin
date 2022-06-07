@@ -1,7 +1,7 @@
 import { _ } from '@joplin/lib/locale';
 import Setting from '@joplin/lib/models/Setting';
 import { CommandRuntime, CommandDeclaration, CommandContext } from '@joplin/lib/services/CommandService';
-import bridge from '../services/bridge';
+import restart from '../services/restart';
 
 export const declaration: CommandDeclaration = {
 	name: 'toggleSafeMode',
@@ -14,7 +14,7 @@ export const runtime = (): CommandRuntime => {
 			enabled = enabled !== null ? enabled : !Setting.value('isSafeMode');
 			Setting.setValue('isSafeMode', enabled);
 			await Setting.saveAll();
-			bridge().restart();
+			await restart();
 		},
 	};
 };

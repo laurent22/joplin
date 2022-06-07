@@ -16,18 +16,18 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Poedit 3.0\n"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:565
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:560
 msgid "- Camera: to allow taking a picture and attaching it to a note."
 msgstr ""
 "- Kamera: untuk memungkinkan pengambilan gambar dan melampirkannya ke "
 "catatan."
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:568
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:563
 msgid "- Location: to allow attaching geo-location information to a note."
 msgstr ""
 "- Lokasi: untuk memungkinkan melampirkan informasi geolokasi ke catatan."
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:562
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:557
 msgid ""
 "- Storage: to allow attaching files to notes and to enable filesystem "
 "synchronisation."
@@ -35,8 +35,8 @@ msgstr ""
 "- Penyimpanan: untuk memungkinkan melampirkan berkas ke catatan dan "
 "mengaktifkan sinkronisasi sistem berkas."
 
-#: packages/lib/services/KeymapService.ts:308
 #: packages/lib/services/KeymapService.ts:314
+#: packages/lib/services/KeymapService.ts:320
 msgid "\"%s\" is missing the required \"%s\" property."
 msgstr "\"%s\" tidak menemukan properti \"%s\"."
 
@@ -48,55 +48,55 @@ msgstr "(%s)"
 msgid "(None)"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:327 packages/lib/models/Setting.ts:328
+#: packages/lib/models/Setting.ts:370 packages/lib/models/Setting.ts:371
 msgid "(wysiwyg: %s)"
 msgstr "(wysiwyg: %s)"
 
-#: packages/app-desktop/gui/MenuBar.tsx:568
-#: packages/app-desktop/gui/MenuBar.tsx:824
+#: packages/app-desktop/gui/MenuBar.tsx:623
+#: packages/app-desktop/gui/MenuBar.tsx:888
 msgid "&Edit"
 msgstr "&Ubah"
 
-#: packages/app-desktop/gui/MenuBar.tsx:446
-#: packages/app-desktop/gui/MenuBar.tsx:524
-#: packages/app-desktop/gui/MenuBar.tsx:820
+#: packages/app-desktop/gui/MenuBar.tsx:498
+#: packages/app-desktop/gui/MenuBar.tsx:578
+#: packages/app-desktop/gui/MenuBar.tsx:884
 msgid "&File"
 msgstr "&Berkas"
 
-#: packages/app-desktop/gui/MenuBar.tsx:674
+#: packages/app-desktop/gui/MenuBar.tsx:738
 msgid "&Go"
 msgstr "&Pergi"
 
-#: packages/app-desktop/gui/MenuBar.tsx:706
+#: packages/app-desktop/gui/MenuBar.tsx:770
 msgid "&Help"
 msgstr "&Bantuan"
 
-#: packages/app-desktop/gui/MenuBar.tsx:692
+#: packages/app-desktop/gui/MenuBar.tsx:756
 msgid "&Note"
 msgstr "&Catatan"
 
-#: packages/app-desktop/gui/MenuBar.tsx:702
+#: packages/app-desktop/gui/MenuBar.tsx:766
 msgid "&Tools"
 msgstr "&Alat"
 
-#: packages/app-desktop/gui/MenuBar.tsx:600
+#: packages/app-desktop/gui/MenuBar.tsx:664
 msgid "&View"
 msgstr "&Lihat"
 
-#: packages/lib/models/Setting.ts:1346
+#: packages/lib/models/Setting.ts:1418
 msgid "%d days"
 msgstr "%d hari"
 
-#: packages/lib/models/Setting.ts:1211
+#: packages/lib/models/Setting.ts:1278
 msgid "%d hour"
 msgstr "%d jam"
 
-#: packages/lib/models/Setting.ts:1212 packages/lib/models/Setting.ts:1213
+#: packages/lib/models/Setting.ts:1279 packages/lib/models/Setting.ts:1280
 msgid "%d hours"
 msgstr "%d jam"
 
-#: packages/lib/models/Setting.ts:1208 packages/lib/models/Setting.ts:1209
-#: packages/lib/models/Setting.ts:1210
+#: packages/lib/models/Setting.ts:1275 packages/lib/models/Setting.ts:1276
+#: packages/lib/models/Setting.ts:1277
 msgid "%d minutes"
 msgstr "%d menit"
 
@@ -112,7 +112,7 @@ msgstr "%s - Salin"
 msgid "%s (%s) could not be uploaded: %s"
 msgstr "%s (%s) tidak dapat diunggah: %s"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:612
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:618
 msgid "%s (%s) would like to share a notebook with you."
 msgstr "%s (%s) ingin berbagi buku catatan dengan Anda."
 
@@ -124,12 +124,12 @@ msgstr "%s (%s): %s"
 msgid "%s (pre-release)"
 msgstr "%s (prarilis)"
 
-#: packages/lib/models/Setting.ts:822 packages/lib/models/Setting.ts:823
-#: packages/lib/models/Setting.ts:824
+#: packages/lib/models/Setting.ts:877 packages/lib/models/Setting.ts:878
+#: packages/lib/models/Setting.ts:879
 msgid "%s / %s"
 msgstr "%s / %s"
 
-#: packages/lib/models/Setting.ts:821
+#: packages/lib/models/Setting.ts:876
 msgid "%s / %s / %s"
 msgstr "%s / %s / %s"
 
@@ -192,33 +192,33 @@ msgstr ""
 "akan dikonversi menjadi tugas). Gunakan \"clear\" untuk mengubah tugas "
 "kembali menjadi catatan biasa."
 
-#: packages/lib/models/Setting.ts:1235
+#: packages/lib/models/Setting.ts:1304
 msgid "A3"
 msgstr "A3"
 
-#: packages/lib/models/Setting.ts:1233
+#: packages/lib/models/Setting.ts:1302
 msgid "A4"
 msgstr "A4"
 
-#: packages/lib/models/Setting.ts:1236
+#: packages/lib/models/Setting.ts:1305
 msgid "A5"
 msgstr "A5"
 
-#: packages/app-desktop/gui/MenuBar.tsx:452
-#: packages/app-desktop/gui/MenuBar.tsx:744
+#: packages/app-desktop/gui/MenuBar.tsx:504
+#: packages/app-desktop/gui/MenuBar.tsx:808
 msgid "About Joplin"
 msgstr "Tentang Joplin"
 
-#: packages/lib/services/KeymapService.ts:314
-#: packages/lib/services/KeymapService.ts:319
+#: packages/lib/services/KeymapService.ts:320
+#: packages/lib/services/KeymapService.ts:325
 msgid "accelerator"
 msgstr "akselerator"
 
-#: packages/lib/services/KeymapService.ts:371
+#: packages/lib/services/KeymapService.ts:377
 msgid "Accelerator \"%s\" is not valid."
 msgstr "Akselerator \"%s\" tidak valid."
 
-#: packages/lib/services/KeymapService.ts:340
+#: packages/lib/services/KeymapService.ts:346
 msgid ""
 "Accelerator \"%s\" is used for \"%s\" and \"%s\" commands. This may lead to "
 "unexpected behaviour."
@@ -226,7 +226,7 @@ msgstr ""
 "Akselerator \"%s\" digunakan untuk perintah \"%s\" dan \"%s\". Ini bisa "
 "memberikan dampak tidak terduga."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:613
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:619
 msgid "Accept"
 msgstr "Terima"
 
@@ -244,11 +244,11 @@ msgid "Active"
 msgstr "Aktif"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:18
-#: packages/app-desktop/gui/MenuBar.tsx:642
+#: packages/app-desktop/gui/MenuBar.tsx:706
 msgid "Actual Size"
 msgstr "Ukuran sebenarnya"
 
-#: packages/app-mobile/components/screens/Note.tsx:1116
+#: packages/app-mobile/components/screens/Note.tsx:1123
 msgid "Add body"
 msgstr "Tambahkan isi"
 
@@ -260,7 +260,7 @@ msgstr "Tambah atau hapus label:"
 msgid "Add recipient:"
 msgstr "Tambah penerima:"
 
-#: packages/app-mobile/components/screens/Note.tsx:1177
+#: packages/app-mobile/components/screens/Note.tsx:1186
 msgid "Add title"
 msgstr "Tambahkan judul"
 
@@ -268,8 +268,8 @@ msgstr "Tambahkan judul"
 msgid "Add to dictionary"
 msgstr "Tambahkan ke kamus"
 
-#: packages/server/src/services/MustacheService.ts:183
-#: packages/server/src/services/MustacheService.ts:307
+#: packages/server/src/services/MustacheService.ts:156
+#: packages/server/src/services/MustacheService.ts:278
 msgid "Admin"
 msgstr ""
 
@@ -302,7 +302,12 @@ msgstr ""
 "Juga menampilkan variabel konfigurasi yang belum disetel dan yang "
 "tersembunyi."
 
-#: packages/lib/models/Setting.ts:666
+#: packages/app-desktop/gui/ShareNoteDialog.tsx:203
+#, fuzzy
+msgid "Also publish linked notes"
+msgstr "Batalkan publikasi catatan"
+
+#: packages/lib/models/Setting.ts:713
 msgid "Always"
 msgstr "Selalu"
 
@@ -310,11 +315,11 @@ msgstr "Selalu"
 msgid "An update is available, do you want to download it now?"
 msgstr "Pembaruan tersedia, apakah Anda mau mengunduhnya sekarang?"
 
-#: packages/lib/models/Setting.ts:2143
+#: packages/lib/models/Setting.ts:2297
 msgid "Appearance"
 msgstr "Tampilan"
 
-#: packages/lib/models/Setting.ts:2148
+#: packages/lib/models/Setting.ts:2302
 msgid "Application"
 msgstr "Aplikasi"
 
@@ -327,25 +332,25 @@ msgstr "Terapkan"
 msgid "Are you sure you want to renew the authorisation token?"
 msgstr "Yakin ingin memperpanjang token otorisasi?"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:522
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:497
 msgid "Arguments:"
 msgstr "Argumen:"
 
-#: packages/lib/models/Setting.ts:345
+#: packages/lib/models/Setting.ts:388
 msgid "Aritim Dark"
 msgstr "Aritim Dark"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:53
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:589
-#: packages/app-mobile/components/screens/Note.tsx:893
+#: packages/app-mobile/components/screens/Note.tsx:900
 msgid "Attach file"
 msgstr "Lampirkan berkas"
 
-#: packages/app-mobile/components/screens/Note.tsx:897
+#: packages/app-mobile/components/screens/Note.tsx:904
 msgid "Attach photo"
 msgstr "Lampirkan foto"
 
-#: packages/app-mobile/components/screens/Note.tsx:880
+#: packages/app-mobile/components/screens/Note.tsx:892
 msgid "Attach..."
 msgstr "Lampirkan..."
 
@@ -353,8 +358,8 @@ msgstr "Lampirkan..."
 msgid "Attaches the given file to the note."
 msgstr "Melampirkan berkas yang dipilih ke catatan."
 
-#: packages/server/src/models/UserModel.ts:214
-#: packages/server/src/models/UserModel.ts:231
+#: packages/server/src/models/UserModel.ts:215
+#: packages/server/src/models/UserModel.ts:232
 msgid "attachment"
 msgstr "lampiran"
 
@@ -362,7 +367,7 @@ msgstr "lampiran"
 msgid "Attachment conflict: \"%s\""
 msgstr "Konflik lampiran: \"%s\""
 
-#: packages/lib/models/Setting.ts:662
+#: packages/lib/models/Setting.ts:709
 msgid "Attachment download behaviour"
 msgstr "Perilaku mengunduh lampiran"
 
@@ -374,7 +379,7 @@ msgstr "Lampiran"
 msgid "Attachments that could not be downloaded"
 msgstr "Lampiran yang tidak dapat diunduh"
 
-#: packages/lib/models/Setting.ts:331
+#: packages/lib/models/Setting.ts:374
 msgid ""
 "Attention: If you change this location, make sure you copy all your content "
 "to it before syncing, otherwise all files will be removed! See the FAQ for "
@@ -396,7 +401,7 @@ msgstr "Otentikasi tidak selesai (tidak menerima token otentikasi)."
 msgid "Authorisation token:"
 msgstr "Token otorisasi:"
 
-#: packages/lib/models/Setting.ts:668
+#: packages/lib/models/Setting.ts:715
 msgid "Auto"
 msgstr "Otomatis"
 
@@ -404,21 +409,21 @@ msgstr "Otomatis"
 msgid "Auto-add disabled accounts for deletion"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:855
+#: packages/lib/models/Setting.ts:912
 msgid "Auto-pair braces, parenthesis, quotations, etc."
 msgstr "Pasangkan secara otomatis kurung kurawal, tanda kurung, kutipan, dll."
 
-#: packages/lib/models/Setting.ts:1195
+#: packages/lib/models/Setting.ts:1262
 #, fuzzy
 msgid "Automatically check for updates"
 msgstr "Periksa pembaruan..."
 
-#: packages/lib/models/Setting.ts:772
+#: packages/lib/models/Setting.ts:824
 msgid "Automatically switch theme to match system theme"
 msgstr "Beralih tema secara otomatis untuk menyesuaikannya dengan tema sistem"
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:42
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:715
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:718
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:187
 #: packages/lib/commands/historyBackward.ts:6
 msgid "Back"
@@ -433,7 +438,7 @@ msgstr "Tebal"
 msgid "Browse all plugins"
 msgstr "Lihat semua plugin"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:515
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:534
 msgid "Browse..."
 msgstr "Telusuri..."
 
@@ -443,12 +448,12 @@ msgstr "Daftar berpoin"
 
 #: packages/app-desktop/bridge.ts:196 packages/app-desktop/bridge.ts:217
 #: packages/app-desktop/checkForUpdates.ts:199
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:715
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:718
 #: packages/app-desktop/gui/DialogButtonRow.min.js:38
-#: packages/app-desktop/gui/DialogButtonRow.tsx:83
+#: packages/app-desktop/gui/DialogButtonRow.tsx:78
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:81
-#: packages/app-desktop/gui/NoteList/NoteList.tsx:173
-#: packages/app-desktop/gui/PromptDialog.min.js:242
+#: packages/app-desktop/gui/NoteList/NoteList.tsx:168
+#: packages/app-desktop/gui/PromptDialog.min.js:249
 #: packages/app-desktop/gui/ResourceScreen.tsx:170
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:282
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:658
@@ -458,7 +463,7 @@ msgstr "Daftar berpoin"
 #: packages/app-mobile/components/ModalDialog.js:70
 #: packages/app-mobile/components/screens/encryption-config.tsx:190
 #: packages/app-mobile/components/screens/Note.tsx:104
-#: packages/app-mobile/components/screens/Note.tsx:588
+#: packages/app-mobile/components/screens/Note.tsx:592
 #: packages/app-mobile/components/SelectDateTimeDialog.tsx:152
 #: packages/app-mobile/components/side-menu-content.js:156
 #: packages/app-mobile/components/side-menu-content.js:165
@@ -479,7 +484,7 @@ msgstr "Membatalkan..."
 msgid "Cancelling... Please wait."
 msgstr "Membatalkan… Mohon tunggu."
 
-#: packages/lib/shim-init-node.js:235
+#: packages/lib/shim-init-node.js:242
 msgid "Cannot access %s"
 msgstr "Tidak dapat mengakses %s"
 
@@ -487,7 +492,7 @@ msgstr "Tidak dapat mengakses %s"
 msgid "Cannot change encrypted item"
 msgstr "Tidak dapat mengubah item yang terenkripsi"
 
-#: packages/lib/models/Note.ts:521
+#: packages/lib/models/Note.ts:526
 msgid "Cannot copy note to \"%s\" notebook"
 msgstr "Tidak dapat menyalin catatan ke buku catatan \"%s\""
 
@@ -531,7 +536,7 @@ msgstr "Tidak dapat memuat modul \"%s\" untuk format \"%s\" dan output \"%s\""
 msgid "Cannot load \"%s\" module for format \"%s\" and target \"%s\""
 msgstr "Tidak dapat memuat modul \"%s\" untuk format \"%s\" dan target \"%s\""
 
-#: packages/lib/models/Note.ts:533
+#: packages/lib/models/Note.ts:538
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "TIdak dapat memindah catatan ke buku catatan \"%s\""
 
@@ -547,14 +552,14 @@ msgstr ""
 "Tidak dapat menyegarkan token: data otentikasi tidak ada. Memulai "
 "sinkronisasi lagi mungkin dapat memperbaiki masalah."
 
-#: packages/server/src/models/UserModel.ts:213
+#: packages/server/src/models/UserModel.ts:214
 #, fuzzy
 msgid "Cannot save %s \"%s\" because it is larger than the allowed limit (%s)"
 msgstr ""
 "Tidak dapat menyimpan %s “%s” karena lebih besar dari batas yang diizinkan "
 "(%s)"
 
-#: packages/server/src/models/UserModel.ts:230
+#: packages/server/src/models/UserModel.ts:231
 msgid ""
 "Cannot save %s \"%s\" because it would go over the total allowed size (%s) "
 "for this account"
@@ -562,7 +567,7 @@ msgstr ""
 "Tidak dapat menyimpan %s “%s” karena akan melebihi ukuran total yang "
 "diizinkan (%s) untuk akun ini"
 
-#: packages/lib/services/share/ShareService.ts:315
+#: packages/lib/services/share/ShareService.ts:318
 msgid ""
 "Cannot share encrypted notebook with recipient %s because they have not "
 "enabled end-to-end encryption. They may do so from the screen Configuration "
@@ -585,12 +590,12 @@ msgstr "Karakter"
 msgid "Characters excluding spaces"
 msgstr "Karakter tidak termasuk spasi"
 
-#: packages/app-desktop/gui/MenuBar.tsx:469
-#: packages/app-desktop/gui/MenuBar.tsx:719
+#: packages/app-desktop/gui/MenuBar.tsx:521
+#: packages/app-desktop/gui/MenuBar.tsx:783
 msgid "Check for updates..."
 msgstr "Periksa pembaruan..."
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:201
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:190
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:356
 msgid "Check synchronisation configuration"
 msgstr "Periksa konfigurasi sinkronisasi"
@@ -603,11 +608,11 @@ msgstr "Kotak centang"
 msgid "Checkbox list"
 msgstr "Kotak centang"
 
-#: packages/lib/components/shared/config-shared.js:47
+#: packages/lib/components/shared/config-shared.js:67
 msgid "Checking... Please wait."
 msgstr "Sedang memeriksa… Mohon tunggu."
 
-#: packages/app-mobile/components/screens/Note.tsx:900
+#: packages/app-mobile/components/screens/Note.tsx:907
 msgid "Choose an option"
 msgstr "Pilih satu opsi"
 
@@ -616,7 +621,7 @@ msgid "Chrome Web Store"
 msgstr "Toko Web Chrome"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:145
-#: packages/app-desktop/gui/PromptDialog.min.js:249
+#: packages/app-desktop/gui/PromptDialog.min.js:256
 msgid "Clear"
 msgstr "Bersihkan"
 
@@ -643,14 +648,14 @@ msgstr "ID klien: %s"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:170
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:349
-#: packages/app-desktop/gui/ShareNoteDialog.tsx:229
+#: packages/app-desktop/gui/ShareNoteDialog.tsx:221
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:336
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:30
 msgid "Close"
 msgstr "Tutup"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:24
-#: packages/app-desktop/gui/MenuBar.tsx:532
+#: packages/app-desktop/gui/MenuBar.tsx:586
 msgid "Close Window"
 msgstr "Tutup jendela"
 
@@ -674,7 +679,7 @@ msgstr "Collaborasi buku catatan dengan orang lain"
 msgid "Coming alarms"
 msgstr "Alarm yang akan datang"
 
-#: packages/lib/models/Setting.ts:1290
+#: packages/lib/models/Setting.ts:1362
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
 "or path to individual cert files. For example: /my/cert_dir, /other/custom."
@@ -687,7 +692,7 @@ msgstr ""
 "TLS, Anda harus menyimpan perubahan Anda sebelum mengeklik \"Periksa "
 "konfigurasi sinkronisasi\"."
 
-#: packages/lib/services/KeymapService.ts:308
+#: packages/lib/services/KeymapService.ts:314
 msgid "command"
 msgstr "perintah"
 
@@ -719,7 +724,7 @@ msgstr "Telah Selesai: %s (%s)"
 msgid "Compress old changes"
 msgstr ""
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:637
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:632
 #: packages/app-mobile/components/side-menu-content.js:332
 msgid "Configuration"
 msgstr "Konfigurasi"
@@ -754,18 +759,18 @@ msgstr "Konflik catatan"
 msgid "Content provided by %s"
 msgstr "Properti konten"
 
-#: packages/app-mobile/components/screens/Note.tsx:933
+#: packages/app-mobile/components/screens/Note.tsx:940
 msgid "Convert to note"
 msgstr "Konversi ke catatan"
 
-#: packages/app-mobile/components/screens/Note.tsx:933
+#: packages/app-mobile/components/screens/Note.tsx:940
 msgid "Convert to todo"
 msgstr "Konversi ke tugas"
 
-#: packages/app-desktop/gui/MenuBar.tsx:433
+#: packages/app-desktop/gui/MenuBar.tsx:485
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:13
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:761
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:151
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:770
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:157
 msgid "Copy"
 msgstr "Salin"
 
@@ -780,25 +785,25 @@ msgstr "Salin perintah dev mode ke papan klip"
 msgid "Copy external link"
 msgstr "Hentikan pengeditan eksternal"
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:134
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:140
 #, fuzzy
 msgid "Copy image"
 msgstr "Salin token"
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:172
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:178
 msgid "Copy Link Address"
 msgstr "Salin Alamat Tautan"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:124
-#: packages/app-mobile/components/screens/Note.tsx:940
+#: packages/app-mobile/components/screens/Note.tsx:947
 msgid "Copy Markdown link"
 msgstr "Salin tautan Markdown"
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:126
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:125
 msgid "Copy path to clipboard"
 msgstr "Salin jalur ke papan klip"
 
-#: packages/app-desktop/gui/ShareNoteDialog.tsx:222
+#: packages/app-desktop/gui/ShareNoteDialog.tsx:214
 msgid "Copy Shareable Link"
 msgid_plural "Copy Shareable Links"
 msgstr[0] "Salin Tautan yang Dapat Dibagikan"
@@ -864,9 +869,19 @@ msgid ""
 "again when you are connected to the internet."
 msgstr ""
 
+#: packages/app-desktop/gui/PromptDialog.min.js:235
+#, fuzzy
+msgid "Create"
+msgstr "Dibuat"
+
 #: packages/app-mobile/components/note-list.js:101
 msgid "Create a notebook"
 msgstr "Buat buku catatan"
+
+#: packages/app-desktop/gui/MainScreen/commands/addProfile.ts:9
+#, fuzzy
+msgid "Create new profile..."
+msgstr "Membuat catatan baru."
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:161
 #, fuzzy
@@ -882,7 +897,7 @@ msgstr "Dibuat: %s"
 msgid "Created"
 msgstr "Dibuat"
 
-#: packages/lib/models/Note.ts:38
+#: packages/lib/models/Note.ts:39
 msgid "created date"
 msgstr "tanggal dibuat"
 
@@ -909,7 +924,7 @@ msgid "Created: %d."
 msgstr "Dibuat: %d."
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:118
-#: packages/app-mobile/components/screens/Note.tsx:835
+#: packages/app-mobile/components/screens/Note.tsx:847
 msgid "Created: %s"
 msgstr "Dibuat: %s"
 
@@ -929,7 +944,7 @@ msgstr "Membuat tugas baru."
 msgid "Creating new %s..."
 msgstr "Membuat %s baru..."
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:523
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:518
 msgid "Creating report..."
 msgstr "Membuat laporan..."
 
@@ -937,41 +952,41 @@ msgstr "Membuat laporan..."
 msgid "Current version is up-to-date."
 msgstr "Versi saat ini adalah versi terbaru."
 
-#: packages/lib/models/Note.ts:39
+#: packages/lib/models/Note.ts:40
 msgid "custom order"
 msgstr "urutan khusus"
 
-#: packages/app-desktop/gui/NoteList/NoteList.tsx:172
+#: packages/app-desktop/gui/NoteList/NoteList.tsx:167
 msgid "Custom order"
 msgstr "Urutan khusus"
 
-#: packages/lib/models/Setting.ts:1166
+#: packages/lib/models/Setting.ts:1231
 msgid "Custom stylesheet for Joplin-wide app styles"
 msgstr "Lembar gaya khusus untuk gaya keseluruhan aplikasi Joplin"
 
-#: packages/lib/models/Setting.ts:1149
+#: packages/lib/models/Setting.ts:1214
 msgid "Custom stylesheet for rendered Markdown"
 msgstr "Lembar gaya untuk rendering Markdown"
 
-#: packages/lib/models/Setting.ts:1289
+#: packages/lib/models/Setting.ts:1361
 msgid "Custom TLS certificates"
 msgstr "Sertifikat TLS khusus"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:18
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:751
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:143
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:760
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:149
 msgid "Cut"
 msgstr "Potong"
 
-#: packages/lib/models/Setting.ts:340
+#: packages/lib/models/Setting.ts:383
 msgid "Dark"
 msgstr "Gelap"
 
-#: packages/server/src/services/MustacheService.ts:136
+#: packages/server/src/services/MustacheService.ts:111
 msgid "Dashboard"
 msgstr ""
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:625
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:620
 msgid "Database v%s"
 msgstr "Basis data v%s"
 
@@ -979,11 +994,11 @@ msgstr "Basis data v%s"
 msgid "Date"
 msgstr "Tanggal"
 
-#: packages/lib/models/Setting.ts:717
+#: packages/lib/models/Setting.ts:766
 msgid "Date format"
 msgstr "Format tanggal"
 
-#: packages/lib/models/Setting.ts:1346
+#: packages/lib/models/Setting.ts:1418
 msgid "days"
 msgstr "hari"
 
@@ -1000,8 +1015,8 @@ msgstr "Item yang didekripsi: %s / %s"
 msgid "Decrypting items: %d/%d"
 msgstr "Mendekripsi item: %d/%d"
 
-#: packages/lib/models/Setting.ts:1092 packages/lib/models/Setting.ts:1099
-#: packages/lib/models/Setting.ts:1258
+#: packages/lib/models/Setting.ts:1156 packages/lib/models/Setting.ts:1163
+#: packages/lib/models/Setting.ts:1327
 msgid "Default"
 msgstr "Default"
 
@@ -1015,8 +1030,8 @@ msgstr "Default: %s"
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:256
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:192
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:222
-#: packages/app-mobile/components/screen-header.js:362
-#: packages/app-mobile/components/screens/Note.tsx:953
+#: packages/app-mobile/components/screen-header.js:364
+#: packages/app-mobile/components/screens/Note.tsx:960
 #: packages/app-mobile/components/side-menu-content.js:146
 msgid "Delete"
 msgstr "Hapus"
@@ -1039,16 +1054,16 @@ msgstr "Hapus %d catatan ini?"
 msgid "Delete line"
 msgstr "Hapus baris"
 
-#: packages/lib/models/Setting.ts:1188
+#: packages/lib/models/Setting.ts:1255
 msgid "Delete local data and re-download from sync target"
 msgstr "Hapus data lokal dan unduh ulang dari target sinkronisasi"
 
-#: packages/lib/models/Note.ts:760
+#: packages/lib/models/Note.ts:765
 msgid "Delete note \"%s\"?"
 msgstr "Hapus catatan \"%s\"?"
 
 #: packages/app-cli/app/command-rmnote.js:27
-#: packages/app-mobile/components/screens/Note.tsx:525
+#: packages/app-mobile/components/screens/Note.tsx:529
 msgid "Delete note?"
 msgstr "Hapus catatan?"
 
@@ -1076,7 +1091,7 @@ msgstr ""
 msgid "Delete plugin \"%s\"?"
 msgstr "Hapus plugin \"%s\"?"
 
-#: packages/lib/models/Note.ts:762
+#: packages/lib/models/Note.ts:767
 msgid "Delete these %d notes?"
 msgstr "Hapus %d catatan ini?"
 
@@ -1120,7 +1135,7 @@ msgstr "Format tujuan: %s"
 msgid "Directory"
 msgstr "Direktori"
 
-#: packages/lib/models/Setting.ts:417
+#: packages/lib/models/Setting.ts:464
 msgid "Directory to synchronise with (absolute path)"
 msgstr "Direktori untuk disinkronkan (jalur absolut)"
 
@@ -1134,7 +1149,7 @@ msgstr "Dinonaktifkan"
 msgid "Disable encryption"
 msgstr "Nonaktifkan enkripsi"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:580
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:586
 msgid "Disable safe mode and restart"
 msgstr "Nonaktifkan mode aman dan mulai ulang"
 
@@ -1147,7 +1162,7 @@ msgstr "Nonaktifkan Layanan Web Clipper"
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:249
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:138
 #: packages/app-mobile/components/screens/encryption-config.tsx:303
-#: packages/lib/models/Setting.ts:1207
+#: packages/lib/models/Setting.ts:1274
 msgid "Disabled"
 msgstr "Dinonaktifkan"
 
@@ -1217,8 +1232,8 @@ msgstr "Menampilkan informasi penggunaan."
 msgid "Displays version information"
 msgstr "Menampilkan informasi versi"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:630
-#: packages/app-desktop/gui/NoteList/NoteList.tsx:173
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:633
+#: packages/app-desktop/gui/NoteList/NoteList.tsx:168
 msgid "Do it now"
 msgstr "Lakukan sekarang"
 
@@ -1268,7 +1283,7 @@ msgstr "Mengunduh"
 msgid "Downloading resources..."
 msgstr "Mengunduh sumber daya..."
 
-#: packages/lib/models/Setting.ts:341
+#: packages/lib/models/Setting.ts:384
 msgid "Dracula"
 msgstr "Dracula"
 
@@ -1285,7 +1300,7 @@ msgid "Dropbox Login"
 msgstr "Masuk Dropbox"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:56
-#: packages/app-mobile/components/screen-header.js:368
+#: packages/app-mobile/components/screen-header.js:370
 msgid "Duplicate"
 msgstr "Buat duplikat"
 
@@ -1304,7 +1319,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/MainScreen/commands/openFolderDialog.ts:12
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/openEditDialog.ts:83
-#: packages/app-mobile/components/screens/Note.tsx:1139
+#: packages/app-mobile/components/screens/Note.tsx:1148
 msgid "Edit"
 msgstr "Ubah"
 
@@ -1321,37 +1336,47 @@ msgstr "Ubah catatan."
 msgid "Edit notebook"
 msgstr "Ubah buku catatan"
 
+#: packages/app-desktop/commands/editProfileConfig.ts:9
+msgid "Edit profile configuration..."
+msgstr ""
+
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:138
-#: packages/lib/models/Setting.ts:821 packages/lib/models/Setting.ts:822
-#: packages/lib/models/Setting.ts:823
+#: packages/lib/models/Setting.ts:876 packages/lib/models/Setting.ts:877
+#: packages/lib/models/Setting.ts:878
 msgid "Editor"
 msgstr "Editor"
 
-#: packages/lib/models/Setting.ts:1085
+#: packages/lib/models/Setting.ts:1149
 msgid "Editor font"
 msgstr "Font pada editor"
 
-#: packages/lib/models/Setting.ts:1110
+#: packages/lib/models/Setting.ts:1175
 msgid "Editor font family"
 msgstr "Keluarga font pada editor"
 
-#: packages/lib/models/Setting.ts:1077
+#: packages/lib/models/Setting.ts:1141
 msgid "Editor font size"
 msgstr "Ukuran font pada editor"
 
-#: packages/lib/models/Setting.ts:1127
+#: packages/lib/models/Setting.ts:1194
 msgid "Editor maximum width"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1121
+#: packages/lib/models/Setting.ts:1187
 msgid "Editor monospace font family"
 msgstr "Keluarga font editor"
+
+#: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:100
+#: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:96
+#, fuzzy
+msgid "Editor: %s"
+msgstr "Editor"
 
 #: packages/app-cli/app/command-ls.js:31
 msgid "Either \"text\" or \"json\""
 msgstr "Antara \"text\" atau \"json\""
 
-#: packages/lib/models/Setting.ts:1259
+#: packages/lib/models/Setting.ts:1328
 msgid "Emacs"
 msgstr "Emacs"
 
@@ -1361,7 +1386,7 @@ msgid "Email"
 msgstr ""
 
 #: packages/server/src/routes/admin/emails.ts:112
-#: packages/server/src/services/MustacheService.ts:152
+#: packages/server/src/services/MustacheService.ts:127
 msgid "Emails"
 msgstr ""
 
@@ -1374,31 +1399,31 @@ msgstr "teks yang ditekankan (emphasized text)"
 msgid "Enable"
 msgstr "Aktifkan"
 
-#: packages/lib/models/Setting.ts:1027
+#: packages/lib/models/Setting.ts:1090
 msgid "Enable ^sup^ syntax"
 msgstr "Aktifkan sintaksis ^sup^"
 
-#: packages/lib/models/Setting.ts:1031
+#: packages/lib/models/Setting.ts:1094
 msgid "Enable ++insert++ syntax"
 msgstr "Aktifkan sintaksis ++insert++"
 
-#: packages/lib/models/Setting.ts:1023
+#: packages/lib/models/Setting.ts:1086
 msgid "Enable ==mark== syntax"
 msgstr "Aktifkan sintaksis ==mark=="
 
-#: packages/lib/models/Setting.ts:1026
+#: packages/lib/models/Setting.ts:1089
 msgid "Enable ~sub~ syntax"
 msgstr "Aktifkan sintaksis ~sub~"
 
-#: packages/lib/models/Setting.ts:1029
+#: packages/lib/models/Setting.ts:1092
 msgid "Enable abbreviation syntax"
 msgstr "Aktifkan sintaksis singkatan (abbreviation)"
 
-#: packages/lib/models/Setting.ts:1020
+#: packages/lib/models/Setting.ts:1083
 msgid "Enable audio player"
 msgstr "Aktifkan pemutar audio"
 
-#: packages/lib/models/Setting.ts:1028
+#: packages/lib/models/Setting.ts:1091
 msgid "Enable deflist syntax"
 msgstr "Aktifkan sintaksis daftar definisi"
 
@@ -1407,55 +1432,55 @@ msgstr "Aktifkan sintaksis daftar definisi"
 msgid "Enable encryption"
 msgstr "Aktifkan enkripsi"
 
-#: packages/lib/models/Setting.ts:1024
+#: packages/lib/models/Setting.ts:1087
 msgid "Enable footnotes"
 msgstr "Aktifkan catatan kaki"
 
-#: packages/lib/models/Setting.ts:1017
+#: packages/lib/models/Setting.ts:1080
 msgid "Enable Fountain syntax support"
 msgstr "Aktifkan dukungan sintaksis Fountain"
 
-#: packages/lib/models/Setting.ts:1014
+#: packages/lib/models/Setting.ts:1077
 msgid "Enable Linkify"
 msgstr "Aktifkan Linkify"
 
-#: packages/lib/models/Setting.ts:1030
+#: packages/lib/models/Setting.ts:1093
 msgid "Enable markdown emoji"
 msgstr "Aktifkan emoji markdown"
 
-#: packages/lib/models/Setting.ts:1016
+#: packages/lib/models/Setting.ts:1079
 msgid "Enable math expressions"
 msgstr "Aktifkan ekspresi matematika"
 
-#: packages/lib/models/Setting.ts:1018
+#: packages/lib/models/Setting.ts:1081
 msgid "Enable Mermaid diagrams support"
 msgstr "Aktifkan dukungan diagram Mermaid"
 
-#: packages/lib/models/Setting.ts:1032
+#: packages/lib/models/Setting.ts:1095
 msgid "Enable multimarkdown table extension"
 msgstr "Aktifkan ekstensi tabel multimarkdown"
 
-#: packages/lib/models/Setting.ts:1336
+#: packages/lib/models/Setting.ts:1408
 msgid "Enable note history"
 msgstr "Aktifkan riwayat catatan"
 
-#: packages/lib/models/Setting.ts:1022
+#: packages/lib/models/Setting.ts:1085
 msgid "Enable PDF viewer"
 msgstr "Aktifkan penampil PDF"
 
-#: packages/lib/models/Setting.ts:1012
+#: packages/lib/models/Setting.ts:1075
 msgid "Enable soft breaks"
 msgstr "Aktifkan soft break"
 
-#: packages/lib/models/Setting.ts:1025
+#: packages/lib/models/Setting.ts:1088
 msgid "Enable table of contents extension"
 msgstr "Aktifkan ekstensi daftar isi"
 
-#: packages/lib/models/Setting.ts:1013
+#: packages/lib/models/Setting.ts:1076
 msgid "Enable typographer support"
 msgstr "Aktifkan dukungan typographer"
 
-#: packages/lib/models/Setting.ts:1021
+#: packages/lib/models/Setting.ts:1084
 msgid "Enable video player"
 msgstr "Aktifkan pemutar video"
 
@@ -1492,7 +1517,7 @@ msgstr "Item yang terenkripsi tidak bisa diubah"
 msgid "Encrypted notebooks cannot be renamed"
 msgstr "Buku catatan terenkripsi tidak bisa diganti nama"
 
-#: packages/lib/models/Setting.ts:2150
+#: packages/lib/models/Setting.ts:2304
 msgid "Encryption"
 msgstr "Enkripsi"
 
@@ -1507,6 +1532,7 @@ msgid "Encryption is: %s"
 msgstr "Enkripsi adalah: %s"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:172
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:271
 #, fuzzy
 msgid "Encryption keys"
 msgstr "Enkripsi adalah:"
@@ -1549,11 +1575,11 @@ msgstr "Terjadi kesalahan saat membuka catatan di editor: %s"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:65
 #: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:31
-#: packages/lib/services/KeymapService.ts:197
+#: packages/lib/services/KeymapService.ts:203
 msgid "Error: %s"
 msgstr "Terjadi kesalahan: %s"
 
-#: packages/lib/components/shared/config-shared.js:51
+#: packages/lib/components/shared/config-shared.js:71
 msgid ""
 "Error. Please check that URL, username, password, etc. are correct and that "
 "the sync target is accessible. The reported error was:"
@@ -1584,8 +1610,8 @@ msgstr "Keluar dari aplikasi."
 msgid "Export"
 msgstr "Ekspor"
 
-#: packages/app-desktop/gui/MenuBar.tsx:488
-#: packages/app-desktop/gui/MenuBar.tsx:542
+#: packages/app-desktop/gui/MenuBar.tsx:540
+#: packages/app-desktop/gui/MenuBar.tsx:596
 msgid "Export all"
 msgstr "Ekspor semuanya"
 
@@ -1593,15 +1619,15 @@ msgstr "Ekspor semuanya"
 msgid "Export debug report"
 msgstr "Ekspor Laporan Debug"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:523
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:518
 msgid "Export Debug Report"
 msgstr "Ekspor Laporan Debug"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:528
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:523
 msgid "Export profile"
 msgstr "Ekspor profil"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:528
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:523
 msgid "Exporting profile..."
 msgstr "Mengekspor profil..."
 
@@ -1626,11 +1652,11 @@ msgstr "Mengekspor hanya catatan yang diberikan."
 msgid "Exports only the given notebook."
 msgstr "Mengekspor hanya buku catatan yang diberikan."
 
-#: packages/lib/models/Setting.ts:1322
+#: packages/lib/models/Setting.ts:1394
 msgid "Fail-safe"
 msgstr "Gagal-aman"
 
-#: packages/lib/models/Setting.ts:1323
+#: packages/lib/models/Setting.ts:1395
 msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
@@ -1642,7 +1668,7 @@ msgstr ""
 msgid "Fatal error:"
 msgstr "Kesalahan fatal:"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:545
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:540
 msgid "Feature flags"
 msgstr ""
 
@@ -1663,31 +1689,36 @@ msgstr "Berkas"
 msgid "File system"
 msgstr "Sistem berkas"
 
+#: packages/app-mobile/components/screens/NoteTagsDialog.js:190
+#, fuzzy
+msgid "Filter tags"
+msgstr "Label baru:"
+
 #: packages/app-desktop/gui/ExtensionBadge.min.js:10
 msgid "Firefox Extension"
 msgstr "Ekstensi Firefox"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:525
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:520
 msgid "Fix search index"
 msgstr "Perbaiki indeks pencarian"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:525
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:520
 msgid "Fixing search index..."
 msgstr "Memperbaiki indeks pencarian..."
 
-#: packages/app-desktop/gui/MenuBar.tsx:680
+#: packages/app-desktop/gui/MenuBar.tsx:744
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteBody.ts:7
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteTitle.ts:7
-#: packages/app-desktop/gui/NoteList/commands/focusElementNoteList.ts:8
+#: packages/app-desktop/gui/NoteList/commands/focusElementNoteList.ts:9
 #: packages/app-desktop/gui/Sidebar/commands/focusElementSideBar.ts:9
 msgid "Focus"
 msgstr "Fokus"
 
-#: packages/lib/models/Setting.ts:963 packages/lib/models/Setting.ts:979
+#: packages/lib/models/Setting.ts:1024 packages/lib/models/Setting.ts:1041
 msgid "Focus body"
 msgstr "Fokus pada isi"
 
-#: packages/lib/models/Setting.ts:962 packages/lib/models/Setting.ts:978
+#: packages/lib/models/Setting.ts:1023 packages/lib/models/Setting.ts:1040
 msgid "Focus title"
 msgstr "Fokus pada judul"
 
@@ -1695,7 +1726,7 @@ msgstr "Fokus pada judul"
 msgid "Folders"
 msgstr "Folder"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:528
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:523
 msgid "For debugging purpose only: export your profile to an external SD card."
 msgstr ""
 "Hanya untuk keperluan debugging: ekspor profil Anda ke kartu SD eksternal."
@@ -1721,7 +1752,7 @@ msgstr ""
 "Untuk melihat daftar pintasan keyboard dan opsi konfigurasi, ketik `help "
 "keymap`"
 
-#: packages/lib/models/Setting.ts:569
+#: packages/lib/models/Setting.ts:616
 msgid "Force path style"
 msgstr ""
 
@@ -1734,7 +1765,7 @@ msgstr "Maju"
 msgid "Found: %d."
 msgstr "Ditemukan: %d."
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:631
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:626
 msgid "FTS enabled: %d"
 msgstr "FTS diaktifkan: %d"
 
@@ -1742,8 +1773,8 @@ msgstr "FTS diaktifkan: %d"
 msgid "Full changelog"
 msgstr "Full Changelog"
 
-#: packages/lib/models/Setting.ts:2141
-#: packages/server/src/services/MustacheService.ts:133
+#: packages/lib/models/Setting.ts:2295
+#: packages/server/src/services/MustacheService.ts:108
 msgid "General"
 msgstr "Umum"
 
@@ -1752,7 +1783,7 @@ msgstr "Umum"
 msgid "Generated"
 msgstr "Umum"
 
-#: packages/app-desktop/gui/ShareNoteDialog.tsx:207
+#: packages/app-desktop/gui/ShareNoteDialog.tsx:184
 msgid "Generating link..."
 msgid_plural "Generating links..."
 msgstr[0] "Menghasilkan tautan..."
@@ -1761,7 +1792,7 @@ msgstr[0] "Menghasilkan tautan..."
 msgid "Get it now:"
 msgstr "Dapatkan sekarang:"
 
-#: packages/lib/models/Setting.ts:1196
+#: packages/lib/models/Setting.ts:1263
 msgid "Get pre-releases when checking for updates"
 msgstr "Dapatkan prarilis saat memeriksa pembaruan"
 
@@ -1776,7 +1807,7 @@ msgstr ""
 "[value] tidak tersedia juga, maka akan menampilkan daftar konfigurasi saat "
 "ini."
 
-#: packages/app-mobile/components/screens/Note.tsx:847
+#: packages/app-mobile/components/screens/Note.tsx:859
 msgid "Go to source URL"
 msgstr "Pergi ke URL sumber"
 
@@ -1793,11 +1824,11 @@ msgstr "Berikan otorisasi"
 msgid "Heading"
 msgstr "Tajuk"
 
-#: packages/server/src/services/MustacheService.ts:305
+#: packages/server/src/services/MustacheService.ts:276
 msgid "Help"
 msgstr "Bantuan"
 
-#: packages/app-desktop/gui/MenuBar.tsx:503
+#: packages/app-desktop/gui/MenuBar.tsx:557
 msgid "Hide %s"
 msgstr "Sembunyikan %s"
 
@@ -1814,8 +1845,8 @@ msgstr "Sembunyikan Joplin"
 msgid "Highlight"
 msgstr "Sorotan"
 
-#: packages/server/src/services/MustacheService.ts:167
-#: packages/server/src/services/MustacheService.ts:300
+#: packages/server/src/services/MustacheService.ts:140
+#: packages/server/src/services/MustacheService.ts:271
 msgid "Home"
 msgstr ""
 
@@ -1855,7 +1886,7 @@ msgstr "Diam"
 msgid "Ignore"
 msgstr "Abaikan"
 
-#: packages/lib/models/Setting.ts:1312
+#: packages/lib/models/Setting.ts:1384
 msgid "Ignore TLS certificate errors"
 msgstr "Abaikan kesalahan sertifikat TLS"
 
@@ -1864,13 +1895,13 @@ msgid "Images"
 msgstr ""
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:170
-#: packages/app-desktop/gui/MenuBar.tsx:484
-#: packages/app-desktop/gui/MenuBar.tsx:539
+#: packages/app-desktop/gui/MenuBar.tsx:536
+#: packages/app-desktop/gui/MenuBar.tsx:593
 #: packages/app-desktop/gui/Root.tsx:219
 msgid "Import"
 msgstr "Impor"
 
-#: packages/app-desktop/gui/MenuBar.tsx:198
+#: packages/app-desktop/gui/MenuBar.tsx:241
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr "Mengimpor dari \"%s\" sebagai format \"%s\". Mohon tunggu..."
 
@@ -1882,7 +1913,7 @@ msgstr "Mengimpor catatan..."
 msgid "Imports data into Joplin."
 msgstr "Mengimpor data ke Joplin."
 
-#: packages/lib/models/Setting.ts:663
+#: packages/lib/models/Setting.ts:710
 msgid ""
 "In \"Manual\" mode, attachments are downloaded only when you click on them. "
 "In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
@@ -2017,7 +2048,7 @@ msgstr "Memasang..."
 msgid "Invalid"
 msgstr "Jawaban tidak valid"
 
-#: packages/lib/services/KeymapService.ts:319
+#: packages/lib/services/KeymapService.ts:325
 msgid "Invalid %s: %s."
 msgstr "%s tidak valid: %s."
 
@@ -2029,7 +2060,7 @@ msgstr "Jawaban tidak valid: %s"
 msgid "Invalid command: \"%s\""
 msgstr "Perintah tidak valid: \"%s\""
 
-#: packages/lib/models/Setting.ts:1727
+#: packages/lib/models/Setting.ts:1834
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Nilai opsi tidak valid: \"%s\". Nilai yang mungkin adalah: %s."
 
@@ -2046,8 +2077,8 @@ msgstr "Miring"
 msgid "Item \"%s\" could not be downloaded: %s"
 msgstr "Item \"%s\" tidak dapat diunduh: %s"
 
-#: packages/server/src/services/MustacheService.ts:175
-#: packages/server/src/services/MustacheService.ts:302
+#: packages/server/src/services/MustacheService.ts:148
+#: packages/server/src/services/MustacheService.ts:273
 msgid "Items"
 msgstr ""
 
@@ -2071,11 +2102,11 @@ msgstr ""
 msgid "Joplin Cloud"
 msgstr "Joplin Cloud"
 
-#: packages/lib/models/Setting.ts:637
+#: packages/lib/models/Setting.ts:684
 msgid "Joplin Cloud email"
 msgstr "Email Joplin Cloud"
 
-#: packages/lib/models/Setting.ts:648
+#: packages/lib/models/Setting.ts:695
 msgid "Joplin Cloud password"
 msgstr "Kata sandi Joplin Cloud"
 
@@ -2099,7 +2130,7 @@ msgstr ""
 "atau terlalu besar. Item ini akan tetap berada di perangkat tetapi Joplin "
 "tidak akan mencoba mendekripsinya lagi."
 
-#: packages/app-desktop/gui/MenuBar.tsx:713
+#: packages/app-desktop/gui/MenuBar.tsx:777
 msgid "Joplin Forum"
 msgstr "Forum Joplin"
 
@@ -2107,15 +2138,15 @@ msgstr "Forum Joplin"
 msgid "Joplin Server"
 msgstr "Server Joplin"
 
-#: packages/lib/models/Setting.ts:598
+#: packages/lib/models/Setting.ts:645
 msgid "Joplin Server email"
 msgstr "Email Server Joplin"
 
-#: packages/lib/models/Setting.ts:609
+#: packages/lib/models/Setting.ts:656
 msgid "Joplin Server password"
 msgstr "Kata sandi Server Joplin"
 
-#: packages/lib/models/Setting.ts:580
+#: packages/lib/models/Setting.ts:627
 msgid "Joplin Server URL"
 msgstr "URL Server Joplin"
 
@@ -2128,7 +2159,7 @@ msgstr ""
 "Web Clipper Joplin memungkinkan penyimpanan halaman web dan tangkapan layar "
 "dari peramban web Anda ke Joplin."
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:597
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:592
 msgid "Joplin website"
 msgstr "Situs web Joplin"
 
@@ -2141,11 +2172,11 @@ msgstr ""
 "Joplin seperti publikasi catatan atau kollaborasi buku catatan dengan orang "
 "lain."
 
-#: packages/lib/models/Setting.ts:1348
+#: packages/lib/models/Setting.ts:1420
 msgid "Keep note history for"
 msgstr "Simpan riwayat catatan untuk"
 
-#: packages/lib/models/Setting.ts:1255
+#: packages/lib/models/Setting.ts:1324
 msgid "Keyboard Mode"
 msgstr "Mode Papan Ketik"
 
@@ -2153,7 +2184,7 @@ msgstr "Mode Papan Ketik"
 msgid "Keyboard Shortcut"
 msgstr "Pintasan Papan Ketik"
 
-#: packages/lib/models/Setting.ts:2152
+#: packages/lib/models/Setting.ts:2306
 msgid "Keyboard Shortcuts"
 msgstr "Pintasan Papan Ketik"
 
@@ -2166,11 +2197,11 @@ msgstr "Keychain Didukung: %s"
 msgid "Keys that need upgrading"
 msgstr "Kunci master yang perlu upgrade"
 
-#: packages/lib/models/Setting.ts:1244
+#: packages/lib/models/Setting.ts:1313
 msgid "Landscape"
 msgstr "Lanskap"
 
-#: packages/lib/models/Setting.ts:706
+#: packages/lib/models/Setting.ts:754
 msgid "Language"
 msgstr "Bahasa"
 
@@ -2178,7 +2209,7 @@ msgstr "Bahasa"
 msgid "Last error: %s"
 msgstr "Kesalahan terakhir: %s"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:630
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:633
 msgid "Later"
 msgstr "Nanti"
 
@@ -2186,7 +2217,7 @@ msgstr "Nanti"
 msgid "Layout"
 msgstr "Tata letak"
 
-#: packages/app-desktop/gui/MenuBar.tsx:608
+#: packages/app-desktop/gui/MenuBar.tsx:672
 msgid "Layout button sequence"
 msgstr "Urutan tombol tata letak"
 
@@ -2195,15 +2226,15 @@ msgstr "Urutan tombol tata letak"
 msgid "Leave notebook..."
 msgstr "Bagikan buku catatan…"
 
-#: packages/lib/models/Setting.ts:1238
+#: packages/lib/models/Setting.ts:1307
 msgid "Legal"
 msgstr "Legal"
 
-#: packages/lib/models/Setting.ts:1234
+#: packages/lib/models/Setting.ts:1303
 msgid "Letter"
 msgstr "Letter"
 
-#: packages/lib/models/Setting.ts:339
+#: packages/lib/models/Setting.ts:382
 msgid "Light"
 msgstr "Terang"
 
@@ -2211,7 +2242,7 @@ msgstr "Terang"
 msgid "Lines"
 msgstr "Garis"
 
-#: packages/app-desktop/gui/ShareNoteDialog.tsx:208
+#: packages/app-desktop/gui/ShareNoteDialog.tsx:185
 msgid "Link has been copied to clipboard!"
 msgid_plural "Links have been copied to clipboard!"
 msgstr[0] "Tautan telah tersalin ke papan klip!"
@@ -2245,9 +2276,9 @@ msgstr ""
 "proses sinkronisasi yang terjadi, Anda dapat menghapus berkas kunci di \"%s"
 "\" dan melanjutkan operasi."
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:521
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:516
 #: packages/app-mobile/components/screens/log.js:100
-#: packages/server/src/services/MustacheService.ts:303
+#: packages/server/src/services/MustacheService.ts:274
 msgid "Log"
 msgstr "Log"
 
@@ -2267,20 +2298,20 @@ msgstr "Masuk dengan Dropboox"
 msgid "Login with OneDrive"
 msgstr "Masuk dengan OneDrive"
 
-#: packages/server/src/services/MustacheService.ts:306
+#: packages/server/src/services/MustacheService.ts:277
 msgid "Logout"
 msgstr ""
 
-#: packages/server/src/services/MustacheService.ts:179
+#: packages/server/src/services/MustacheService.ts:152
 msgid "Logs"
 msgstr ""
 
-#: packages/app-desktop/gui/MenuBar.tsx:716
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:583
+#: packages/app-desktop/gui/MenuBar.tsx:780
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:578
 msgid "Make a donation"
 msgstr "Beri donasi"
 
-#: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:212
+#: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:217
 #, fuzzy
 msgid "Manage master password"
 msgstr "Masukkan kata sandi master:"
@@ -2304,11 +2335,11 @@ msgstr ""
 "Mengelola konfigurasi E2EE. Terdapat beberapa perintah yaitu `enable`, "
 "`disable`, `decrypt`, `status`, `decrypt-file` dan `target-status`."
 
-#: packages/lib/models/Setting.ts:667
+#: packages/lib/models/Setting.ts:714
 msgid "Manual"
 msgstr "Manual"
 
-#: packages/lib/models/Setting.ts:2146
+#: packages/lib/models/Setting.ts:2300
 #: packages/lib/services/interop/InteropService.ts:113
 #: packages/lib/services/interop/InteropService.ts:58
 msgid "Markdown"
@@ -2348,7 +2379,7 @@ msgstr "Masukkan kata sandi master:"
 msgid "Master password:"
 msgstr "Masukkan kata sandi master:"
 
-#: packages/lib/models/Setting.ts:690
+#: packages/lib/models/Setting.ts:738
 msgid "Max concurrent connections"
 msgstr "Koneksi bersamaan maksimum"
 
@@ -2369,11 +2400,11 @@ msgstr "Argumen yang dibutuhkan tidak ada: %s"
 msgid "Mobile data - auto-sync disabled"
 msgstr "Data seluler - sinkronisasi otomatis dinonaktifkan"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:604
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:610
 msgid "More info"
 msgstr "Info lain"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:549
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:544
 msgid "More information"
 msgstr "Informasi lebih lanjut"
 
@@ -2382,7 +2413,7 @@ msgid "More than one item match \"%s\". Please narrow down your query."
 msgstr ""
 "Lebih dari satu item cocok dengan \"%s\". Silakan persempit kueri Anda."
 
-#: packages/app-mobile/components/screen-header.js:441
+#: packages/app-mobile/components/screen-header.js:453
 msgid "Move %d notes to notebook \"%s\"?"
 msgstr "Pindahkan %d catatan ke buku catatan \"%s\"?"
 
@@ -2394,7 +2425,7 @@ msgstr "Pindah ke buku catatan"
 msgid "Move to notebook:"
 msgstr "Pindah ke buku catatan:"
 
-#: packages/app-mobile/components/screen-header.js:400
+#: packages/app-mobile/components/screen-header.js:402
 msgid "Move to notebook..."
 msgstr "Pindahkan ke buku catatan..."
 
@@ -2437,7 +2468,7 @@ msgstr ""
 msgid "New sub-notebook"
 msgstr "Sub-buku catatan baru"
 
-#: packages/app-mobile/components/screens/NoteTagsDialog.js:165
+#: packages/app-mobile/components/screens/NoteTagsDialog.js:170
 msgid "New tags:"
 msgstr "Label baru:"
 
@@ -2455,24 +2486,24 @@ msgstr "Versi baru: %s"
 msgid "Nextcloud"
 msgstr "Nextcloud"
 
-#: packages/lib/models/Setting.ts:453
+#: packages/lib/models/Setting.ts:500
 msgid "Nextcloud password"
 msgstr "Kata sandi Nextcloud"
 
-#: packages/lib/models/Setting.ts:442
+#: packages/lib/models/Setting.ts:489
 msgid "Nextcloud username"
 msgstr "Nama pengguna Nextcloud"
 
-#: packages/lib/models/Setting.ts:430
+#: packages/lib/models/Setting.ts:477
 msgid "Nextcloud WebDAV URL"
 msgstr "URL WebDav Nextcloud"
 
-#: packages/lib/models/Setting.ts:328
+#: packages/lib/models/Setting.ts:371
 msgid "no"
 msgstr "tidak"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:29
-#: packages/app-mobile/components/screens/Note.tsx:587
+#: packages/app-mobile/components/screens/Note.tsx:591
 #: packages/lib/shim-init-node.js:172 packages/lib/versionInfo.ts:27
 msgid "No"
 msgstr "Tidak"
@@ -2493,7 +2524,7 @@ msgstr "Belum ada buku catatan yang ditentukan."
 msgid "No notebook selected."
 msgstr "Tidak ada buku catatan yang terpilih."
 
-#: packages/app-desktop/gui/NoteList/NoteList.tsx:469
+#: packages/app-desktop/gui/NoteList/NoteList.tsx:468
 msgid "No notes in here. Create one by clicking on \"New note\"."
 msgstr ""
 "Tidak ada catatan di sini. Buat catatan dengan mengeklik \"Catatan baru\"."
@@ -2521,7 +2552,7 @@ msgstr ""
 "Tidak ada editor teks yang diatur. Silakan setel menggunakan `config editor "
 "<editor-path>`"
 
-#: packages/lib/models/Setting.ts:344
+#: packages/lib/models/Setting.ts:387
 msgid "Nord"
 msgstr "Nord"
 
@@ -2540,16 +2571,16 @@ msgid "Not generated"
 msgstr ""
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.tsx:110
-#: packages/server/src/models/UserModel.ts:214
-#: packages/server/src/models/UserModel.ts:231
+#: packages/server/src/models/UserModel.ts:215
+#: packages/server/src/models/UserModel.ts:232
 msgid "note"
 msgstr "catatan"
 
-#: packages/lib/models/Setting.ts:2144
+#: packages/lib/models/Setting.ts:2298
 msgid "Note"
 msgstr "Catatan"
 
-#: packages/lib/models/Setting.ts:1408
+#: packages/lib/models/Setting.ts:1483
 msgid "Note area growth factor"
 msgstr "Faktor pertumbuhan area catatan"
 
@@ -2557,7 +2588,7 @@ msgstr "Faktor pertumbuhan area catatan"
 msgid "Note attachments"
 msgstr "Lampiran catatan"
 
-#: packages/app-desktop/gui/MenuBar.tsx:408
+#: packages/app-desktop/gui/MenuBar.tsx:460
 msgid "Note attachments..."
 msgstr "Lampiran catatan..."
 
@@ -2574,7 +2605,7 @@ msgid "Note has been saved."
 msgstr "Catatan sudah disimpan."
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:34
-#: packages/lib/models/Setting.ts:2149
+#: packages/lib/models/Setting.ts:2303
 msgid "Note History"
 msgstr "Riwayat catatan"
 
@@ -2582,11 +2613,11 @@ msgstr "Riwayat catatan"
 msgid "Note is not a to-do: \"%s\""
 msgstr "Catatan bukan sebuah tugas: \"%s\""
 
-#: packages/app-desktop/gui/NoteList/commands/focusElementNoteList.ts:7
+#: packages/app-desktop/gui/NoteList/commands/focusElementNoteList.ts:8
 msgid "Note list"
 msgstr "Daftar catatan"
 
-#: packages/lib/models/Setting.ts:1394
+#: packages/lib/models/Setting.ts:1468
 msgid "Note list growth factor"
 msgstr "Faktor pertumbuhan daftar catatan"
 
@@ -2599,27 +2630,27 @@ msgstr "Properti catatan"
 msgid "Note title"
 msgstr "Judul catatan"
 
-#: packages/lib/models/Setting.ts:1046
+#: packages/lib/models/Setting.ts:1109
 msgid "Note: Does not work in all desktop environments."
 msgstr "Catatan: Tidak berfungsi di semua lingkungan desktop."
 
-#: packages/app-desktop/gui/ShareNoteDialog.tsx:214
+#: packages/app-desktop/gui/ShareNoteDialog.tsx:191
 msgid ""
 "Note: When a note is shared, it will no longer be encrypted on the server."
 msgstr ""
 "Catatan: Ketika sebuah catatan dibagikan, ia tidak akan dienkripsi lagi di "
 "server."
 
-#: packages/app-desktop/gui/MenuBar.tsx:686
+#: packages/app-desktop/gui/MenuBar.tsx:750
 msgid "Note&book"
 msgstr "Catatan & Buku"
 
-#: packages/lib/models/Setting.ts:2145
+#: packages/lib/models/Setting.ts:2299
 #, fuzzy
 msgid "Notebook"
 msgstr "Buku catatan"
 
-#: packages/lib/models/Setting.ts:1380
+#: packages/lib/models/Setting.ts:1453
 msgid "Notebook list growth factor"
 msgstr "Faktor pertumbuhan daftar buku catatan"
 
@@ -2644,7 +2675,7 @@ msgstr ""
 msgid "Notes"
 msgstr "Catatan"
 
-#: packages/lib/models/Setting.ts:2161
+#: packages/lib/models/Setting.ts:2315
 msgid "Notes and settings are stored in: %s"
 msgstr "Catatan dan pengaturan disimpan di: %s"
 
@@ -2661,9 +2692,9 @@ msgstr "Daftar nomor"
 #: packages/app-desktop/bridge.ts:217 packages/app-desktop/bridge.ts:227
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:28
 #: packages/app-desktop/gui/DialogButtonRow.min.js:30
-#: packages/app-desktop/gui/DialogButtonRow.tsx:75
-#: packages/app-desktop/gui/MenuBar.tsx:433
-#: packages/app-desktop/gui/PromptDialog.min.js:235
+#: packages/app-desktop/gui/DialogButtonRow.tsx:70
+#: packages/app-desktop/gui/MenuBar.tsx:485
+#: packages/app-desktop/gui/PromptDialog.min.js:242
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:26
 #: packages/app-mobile/components/CameraView.tsx:190
 #: packages/app-mobile/components/ModalDialog.js:67
@@ -2672,7 +2703,7 @@ msgstr "Daftar nomor"
 msgid "OK"
 msgstr "Baik"
 
-#: packages/lib/models/Setting.ts:346
+#: packages/lib/models/Setting.ts:389
 msgid "OLED Dark"
 msgstr "OLED Gelap"
 
@@ -2680,7 +2711,7 @@ msgstr "OLED Gelap"
 msgid "On %s: %s"
 msgstr "Di %s: %s"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:597
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:603
 msgid "One of your master keys use an obsolete encryption method."
 msgstr "Salah satu kunci utama Anda menggunakan metode enkripsi yang usang."
 
@@ -2696,7 +2727,7 @@ msgstr ""
 "Anda telah memberikan kata sandi, maka item yang terenkripsi sedang "
 "didekripsi di latar belakang dan akan segera tersedia."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:626
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:632
 msgid "One or more master keys need a password."
 msgstr "Satu atau lebih kunci utama membutuhkan sandi."
 
@@ -2724,11 +2755,11 @@ msgstr "Buka %s"
 msgid "Open profile directory"
 msgstr "Buka direktori profil"
 
-#: packages/lib/models/Setting.ts:369
+#: packages/lib/models/Setting.ts:413
 msgid "Open Sync Wizard..."
 msgstr "Buka Sync Wizard..."
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:99
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:73
 msgid "Open..."
 msgstr "Buka..."
 
@@ -2739,7 +2770,7 @@ msgid "Operation cancelled"
 msgstr "Operasi dibatalkan"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:26
-#: packages/app-desktop/gui/MenuBar.tsx:394
+#: packages/app-desktop/gui/MenuBar.tsx:446
 #: packages/app-desktop/gui/Root.tsx:220
 msgid "Options"
 msgstr "Pilihan"
@@ -2748,7 +2779,7 @@ msgstr "Pilihan"
 msgid "Or create an account."
 msgstr "Atau buat akun baru."
 
-#: packages/app-desktop/gui/MenuBar.tsx:352
+#: packages/app-desktop/gui/MenuBar.tsx:400
 #, fuzzy
 msgid "Other applications..."
 msgstr "Keluar dari aplikasi."
@@ -2757,11 +2788,11 @@ msgstr "Keluar dari aplikasi."
 msgid "Output format: %s"
 msgstr "Format output: %s"
 
-#: packages/lib/models/Setting.ts:1241
+#: packages/lib/models/Setting.ts:1310
 msgid "Page orientation for PDF export"
 msgstr "Orientasi halaman untuk ekspor PDF"
 
-#: packages/lib/models/Setting.ts:1231
+#: packages/lib/models/Setting.ts:1300
 msgid "Page size for PDF export"
 msgstr "Ukuran halaman untuk ekspor PDF"
 
@@ -2785,12 +2816,12 @@ msgid "Passwords do not match!"
 msgstr "Kata sandi tidak cocok!"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:23
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:771
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:158
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:780
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:164
 msgid "Paste"
 msgstr "Tempel"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:502
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:521
 msgid "Path:"
 msgstr "Lokasi:"
 
@@ -2808,7 +2839,9 @@ msgid "Permission to use camera"
 msgstr "Izin penggunaan kamera"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:271
-msgid "Please click on \"%s\" to proceed"
+msgid ""
+"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list "
+"below."
 msgstr ""
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:65
@@ -2889,11 +2922,11 @@ msgid "Plugin tools"
 msgstr "Setelan plugin"
 
 #: packages/app-desktop/gui/ConfigScreen/Sidebar.tsx:105
-#: packages/lib/models/Setting.ts:2147
+#: packages/lib/models/Setting.ts:2301
 msgid "Plugins"
 msgstr "Plugin"
 
-#: packages/lib/models/Setting.ts:1243
+#: packages/lib/models/Setting.ts:1312
 msgid "Portrait"
 msgstr "Potret"
 
@@ -2909,15 +2942,15 @@ msgstr "Nilai yang mungkin: %s."
 msgid "Preferences"
 msgstr "Preferensi"
 
-#: packages/app-desktop/gui/MenuBar.tsx:459
+#: packages/app-desktop/gui/MenuBar.tsx:511
 msgid "Preferences..."
 msgstr "Preferensi..."
 
-#: packages/lib/models/Setting.ts:800
+#: packages/lib/models/Setting.ts:854
 msgid "Preferred dark theme"
 msgstr "Tema gelap yang dipilih"
 
-#: packages/lib/models/Setting.ts:785
+#: packages/lib/models/Setting.ts:838
 msgid "Preferred light theme"
 msgstr "Tema terang yang dipilih"
 
@@ -2937,7 +2970,7 @@ msgstr ""
 "Klik pintasan kemudian tekan ENTER atau tekan BACKSPACE untuk menghapus "
 "pintasan."
 
-#: packages/app-mobile/components/screen-header.js:459
+#: packages/app-mobile/components/screen-header.js:471
 msgid "Press to set the decryption password."
 msgstr "Tekan untuk mengatur kata sandi dekripsi."
 
@@ -2949,7 +2982,7 @@ msgstr "Versi sebelumnya dari catatan ini"
 msgid "Print"
 msgstr "Cetak"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:611
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:606
 msgid "Privacy Policy"
 msgstr "Kebijakan privasi"
 
@@ -2969,11 +3002,16 @@ msgstr ""
 msgid "Profile"
 msgstr ""
 
+#: packages/app-desktop/gui/MainScreen/commands/addProfile.ts:17
+#, fuzzy
+msgid "Profile name:"
+msgstr "Versi Profil: %s"
+
 #: packages/lib/versionInfo.ts:26
 msgid "Profile Version: %s"
 msgstr "Versi Profil: %s"
 
-#: packages/app-mobile/components/screens/Note.tsx:947
+#: packages/app-mobile/components/screens/Note.tsx:954
 msgid "Properties"
 msgstr "Properti"
 
@@ -2985,7 +3023,7 @@ msgstr ""
 msgid "Publish note..."
 msgstr "Publikasikan catatan…"
 
-#: packages/app-desktop/gui/ShareNoteDialog.tsx:220
+#: packages/app-desktop/gui/ShareNoteDialog.tsx:211
 msgid "Publish Notes"
 msgstr "Publikasikan Catatan"
 
@@ -2995,7 +3033,7 @@ msgstr "Publikasikan catatan ke internet"
 
 #: packages/app-desktop/app.ts:177
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:16
-#: packages/app-desktop/gui/MenuBar.tsx:260
+#: packages/app-desktop/gui/MenuBar.tsx:308
 msgid "Quit"
 msgstr "Keluar"
 
@@ -3007,7 +3045,7 @@ msgstr "Enkripsi ulang data"
 msgid "Re-encryption"
 msgstr "Enkripsi ulang"
 
-#: packages/lib/models/Setting.ts:1177
+#: packages/lib/models/Setting.ts:1244
 msgid "Re-upload local data to sync target"
 msgstr "Unggah ulang data lokal untuk menyinkronkan target"
 
@@ -3035,6 +3073,7 @@ msgstr "Penerima telah menolak undangan"
 msgid "Recipients:"
 msgstr "Penerima:"
 
+#: packages/app-desktop/gui/MenuBar.tsx:639
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:100
 msgid "Redo"
 msgstr "Ulangi"
@@ -3045,7 +3084,7 @@ msgstr "Ulangi"
 msgid "Refresh"
 msgstr "Segarkan"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:615
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:621
 #: packages/app-desktop/gui/Root.tsx:173
 msgid "Reject"
 msgstr "Tolak"
@@ -3087,8 +3126,8 @@ msgstr ""
 msgid "Renew token"
 msgstr "Perbaharui Token"
 
-#: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:212
-#: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:213
+#: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:217
+#: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:218
 #, fuzzy
 msgid "Reset master password"
 msgstr "Masukkan kata sandi master:"
@@ -3098,11 +3137,11 @@ msgstr "Masukkan kata sandi master:"
 msgid "Resources: %d."
 msgstr "Sumber daya: %d."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:586
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:592
 msgid "Restart and upgrade"
 msgstr "Mulai ulang dan upgrade"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:695
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:698
 msgid "Restart now"
 msgstr "Mulai ulang sekarang"
 
@@ -3111,7 +3150,7 @@ msgstr "Mulai ulang sekarang"
 msgid "Restore"
 msgstr "Pulihkan"
 
-#: packages/lib/services/RevisionService.ts:221
+#: packages/lib/services/RevisionService.ts:243
 msgid "Restored Notes"
 msgstr "Catatan yang Dipulihkan"
 
@@ -3126,12 +3165,12 @@ msgid "Retry All"
 msgstr "Coba lagi semua"
 
 #: packages/app-desktop/gui/MainScreen/commands/revealResourceFile.ts:8
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:118
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:117
 msgid "Reveal file in folder"
 msgstr "Buka file di berkas"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleNotesSortOrderReverse.ts:8
-#: packages/lib/models/Setting.ts:858 packages/lib/models/Setting.ts:934
+#: packages/lib/models/Setting.ts:916 packages/lib/models/Setting.ts:993
 msgid "Reverse sort order"
 msgstr "Balikkan urutan"
 
@@ -3155,31 +3194,31 @@ msgstr ""
 msgid "S3"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:547
+#: packages/lib/models/Setting.ts:594
 #, fuzzy
 msgid "S3 access key"
 msgstr "AWS key"
 
-#: packages/lib/models/Setting.ts:507
+#: packages/lib/models/Setting.ts:554
 #, fuzzy
 msgid "S3 bucket"
 msgstr "AWS S3 bucket"
 
-#: packages/lib/models/Setting.ts:536
+#: packages/lib/models/Setting.ts:583
 msgid "S3 region"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:558
+#: packages/lib/models/Setting.ts:605
 #, fuzzy
 msgid "S3 secret key"
 msgstr "AWS secret"
 
-#: packages/lib/models/Setting.ts:522
+#: packages/lib/models/Setting.ts:569
 #, fuzzy
 msgid "S3 URL"
 msgstr "AWS S3 URL"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:579
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:585
 msgid ""
 "Safe mode is currently active. Note rendering and all plugins are "
 "temporarily disabled."
@@ -3189,7 +3228,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:141
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:75
-#: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:213
+#: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:218
 #: packages/app-mobile/components/screens/encryption-config.tsx:109
 #: packages/app-mobile/components/screens/encryption-config.tsx:221
 msgid "Save"
@@ -3199,7 +3238,13 @@ msgstr "Simpan"
 msgid "Save alarm"
 msgstr "Simpan alarm"
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:106
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:100
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:93
+#, fuzzy
+msgid "Save as %s"
+msgstr "Simpan sebagai..."
+
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:80
 msgid "Save as..."
 msgstr "Simpan sebagai..."
 
@@ -3207,7 +3252,7 @@ msgstr "Simpan sebagai..."
 msgid "Save changes"
 msgstr "Simpan perubahan"
 
-#: packages/lib/models/Setting.ts:935
+#: packages/lib/models/Setting.ts:994
 msgid "Save geo-location with notes"
 msgstr "Simpan geolokasi dengan catatan"
 
@@ -3241,7 +3286,7 @@ msgstr "Pencarian…."
 msgid "Searches for the given <pattern> in all the notes."
 msgstr "Pencarian untuk <pattern> (pola) yang diberikan di semua catatan."
 
-#: packages/lib/models/Setting.ts:1196
+#: packages/lib/models/Setting.ts:1263
 msgid "See the pre-release page for more details: %s"
 msgstr "Lihat halaman prarilis untuk detail lebih lanjut: %s"
 
@@ -3277,7 +3322,7 @@ msgid "Server is running on port %d"
 msgstr "Server berjalan pada port %d"
 
 #: packages/app-desktop/gui/MainScreen/commands/editAlarm.ts:10
-#: packages/app-mobile/components/screens/Note.tsx:911
+#: packages/app-mobile/components/screens/Note.tsx:918
 #: packages/app-mobile/components/SelectDateTimeDialog.tsx:141
 msgid "Set alarm"
 msgstr "Setel alarm"
@@ -3286,13 +3331,13 @@ msgstr "Setel alarm"
 msgid "Set alarm:"
 msgstr "Setel alarm:"
 
-#: packages/lib/models/Setting.ts:1127
+#: packages/lib/models/Setting.ts:1194
 msgid ""
 "Set it to 0 to make it take the complete available space. Recommended width "
 "is 600."
 msgstr ""
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:627
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:633
 msgid "Set the password"
 msgstr "Atur kata sandi"
 
@@ -3310,7 +3355,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:248
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.ts:20
-#: packages/app-mobile/components/screens/Note.tsx:919
+#: packages/app-mobile/components/screens/Note.tsx:926
 msgid "Share"
 msgstr "Bagikan"
 
@@ -3330,7 +3375,7 @@ msgstr "Berbagi buku catatan…"
 msgid "Shortcuts are not available in CLI mode."
 msgstr "Pintasan tidak tersedia dalam mode CLI."
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:224
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:213
 msgid "Show Advanced Settings"
 msgstr "Perlihatkan pengaturan lanjutan"
 
@@ -3338,7 +3383,7 @@ msgstr "Perlihatkan pengaturan lanjutan"
 msgid "Show all"
 msgstr "Tampilkan semua"
 
-#: packages/lib/models/Setting.ts:829
+#: packages/lib/models/Setting.ts:885
 msgid "Show completed to-dos"
 msgstr "Tampilkan tugas yang sudah selesai"
 
@@ -3347,16 +3392,16 @@ msgstr "Tampilkan tugas yang sudah selesai"
 msgid "Show disabled keys"
 msgstr "Tunjukkan kunci master nonaktif"
 
-#: packages/lib/models/Setting.ts:812
+#: packages/lib/models/Setting.ts:867
 msgid "Show note counts"
 msgstr "Tampilkan jumlah catatan"
 
-#: packages/lib/models/Setting.ts:868
+#: packages/lib/models/Setting.ts:926
 #, fuzzy
 msgid "Show sort order buttons"
 msgstr "Tampilkan jumlah catatan"
 
-#: packages/lib/models/Setting.ts:1044
+#: packages/lib/models/Setting.ts:1107
 msgid "Show tray icon"
 msgstr "Tampilkan ikon tray"
 
@@ -3383,32 +3428,32 @@ msgstr ""
 msgid "Skipped: %d."
 msgstr "Dilewati: %d."
 
-#: packages/lib/models/Setting.ts:343
+#: packages/lib/models/Setting.ts:386
 msgid "Solarised Dark"
 msgstr "Solarized Gelap"
 
-#: packages/lib/models/Setting.ts:342
+#: packages/lib/models/Setting.ts:385
 msgid "Solarised Light"
 msgstr "Solarized Terang"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:591
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:597
 msgid "Some items cannot be decrypted."
 msgstr "Beberapa item tidak dapat di dekripsi."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:620
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:626
 msgid "Some items cannot be synchronised."
 msgstr "Beberapa item tidak dapat di sinkronisasi."
 
-#: packages/app-mobile/components/screen-header.js:460
+#: packages/app-mobile/components/screen-header.js:472
 msgid "Some items cannot be synchronised. Press for more info."
 msgstr "Beberapa item tidak dapat disinkronkan. Tekan untuk info lebih lanjut."
 
-#: packages/lib/models/Setting.ts:922
+#: packages/lib/models/Setting.ts:981
 msgid "Sort notebooks by"
 msgstr "Urutkan buku catatan menurut"
 
-#: packages/app-desktop/gui/NoteList/NoteList.tsx:172
-#: packages/lib/models/Setting.ts:837
+#: packages/app-desktop/gui/NoteList/NoteList.tsx:167
+#: packages/lib/models/Setting.ts:893
 msgid "Sort notes by"
 msgstr "Urutkan catatan berdasarkan"
 
@@ -3431,7 +3476,7 @@ msgstr "Format sumber: %s"
 msgid "Source: "
 msgstr "Sumber"
 
-#: packages/lib/models/Setting.ts:1328
+#: packages/lib/models/Setting.ts:1400
 msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
@@ -3444,12 +3489,12 @@ msgstr ""
 msgid "Spell checker"
 msgstr "Pemeriksa ejaan"
 
-#: packages/lib/models/Setting.ts:821 packages/lib/models/Setting.ts:823
-#: packages/lib/models/Setting.ts:824
+#: packages/lib/models/Setting.ts:876 packages/lib/models/Setting.ts:878
+#: packages/lib/models/Setting.ts:879
 msgid "Split View"
 msgstr "Tampilan Terpisah"
 
-#: packages/lib/models/Setting.ts:1051
+#: packages/lib/models/Setting.ts:1115
 msgid "Start application minimised in the tray icon"
 msgstr "Mulai aplikasi dalam keadaan disembunyikan dalam ikon tray"
 
@@ -3550,7 +3595,7 @@ msgstr "Kirim"
 msgid "Subscript"
 msgstr "Tulisan kecil di bawah garis"
 
-#: packages/lib/components/shared/config-shared.js:49
+#: packages/lib/components/shared/config-shared.js:69
 msgid "Success! Synchronisation configuration appears to be correct."
 msgstr "Berhasil! Konfigurasi sinkronisasi sepertinya benar."
 
@@ -3570,8 +3615,20 @@ msgstr "Tukar baris ke atas"
 msgid "Switch between note and to-do type"
 msgstr "Beralih antara tipe catatan dan tugas"
 
+#: packages/app-desktop/gui/MenuBar.tsx:437
+#, fuzzy
+msgid "Switch profile"
+msgstr "Ekspor profil"
+
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:105
 msgid "Switch to note type"
+msgstr "Beralih ke tipe catatan"
+
+#: packages/app-desktop/commands/switchProfile1.ts:7
+#: packages/app-desktop/commands/switchProfile2.ts:7
+#: packages/app-desktop/commands/switchProfile3.ts:7
+#, fuzzy
+msgid "Switch to profile %d"
 msgstr "Beralih ke tipe catatan"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:114
@@ -3586,7 +3643,7 @@ msgstr ""
 "Beralih ke [notebook] (buku catatan) - semua operasi selanjutnya akan "
 "terjadi dalam buku catatan ini."
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:520
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:515
 msgid "Sync Status"
 msgstr "Status sinkronisasi"
 
@@ -3616,11 +3673,11 @@ msgstr "Versi Sinkronisasi: %s"
 msgid "Sync your notes"
 msgstr "Sinkronisasi catatan Anda"
 
-#: packages/lib/models/Setting.ts:2142
+#: packages/lib/models/Setting.ts:2296
 msgid "Synchronisation"
 msgstr "Sinkronisasi"
 
-#: packages/lib/models/Setting.ts:1204
+#: packages/lib/models/Setting.ts:1271
 msgid "Synchronisation interval"
 msgstr "Interval sinkronisasi"
 
@@ -3628,12 +3685,12 @@ msgstr "Interval sinkronisasi"
 msgid "Synchronisation is already in progress."
 msgstr "Sinkronisasi sedang berlangsung."
 
-#: packages/app-desktop/gui/MenuBar.tsx:368
+#: packages/app-desktop/gui/MenuBar.tsx:416
 #: packages/app-desktop/gui/Root.tsx:222
 msgid "Synchronisation Status"
 msgstr "Status Sinkronisasi"
 
-#: packages/lib/models/Setting.ts:380
+#: packages/lib/models/Setting.ts:424
 msgid "Synchronisation target"
 msgstr "Target sinkronisasi"
 
@@ -3647,7 +3704,7 @@ msgstr "Target sinkronisasi: %s (%s)"
 msgid "Synchronise"
 msgstr "Sinkronisasi %s"
 
-#: packages/lib/models/Setting.ts:1223
+#: packages/lib/models/Setting.ts:1291
 msgid "Synchronise only over WiFi connection"
 msgstr "Sinkronkan hanya melalui koneksi WiFi"
 
@@ -3655,7 +3712,7 @@ msgstr "Sinkronkan hanya melalui koneksi WiFi"
 msgid "Synchronises with remote storage."
 msgstr "Menyinkronkan dengan penyimpanan jarak jauh."
 
-#: packages/app-desktop/gui/ShareNoteDialog.tsx:206
+#: packages/app-desktop/gui/ShareNoteDialog.tsx:183
 msgid "Synchronising..."
 msgstr "Menyinkronkan..."
 
@@ -3663,9 +3720,13 @@ msgstr "Menyinkronkan..."
 msgid "Synchronizing..."
 msgstr "Menyinkronkan…"
 
-#: packages/lib/models/Setting.ts:1237
+#: packages/lib/models/Setting.ts:1306
 msgid "Tabloid"
 msgstr "Tabloid"
+
+#: packages/app-mobile/components/screens/NoteTagsDialog.js:179
+msgid "tag1, tag2, ..."
+msgstr ""
 
 #: packages/app-cli/app/command-import.js:52
 #: packages/app-desktop/gui/ImportScreen.min.js:73
@@ -3674,22 +3735,22 @@ msgstr "Diberi label: %d."
 
 #: packages/app-desktop/gui/MainScreen/commands/setTags.ts:7
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:725
-#: packages/app-mobile/components/screens/Note.tsx:926
+#: packages/app-mobile/components/screens/Note.tsx:933
 #: packages/app-mobile/components/screens/tags.js:101
 #: packages/app-mobile/components/side-menu-content.js:330
 msgid "Tags"
 msgstr "Label"
 
-#: packages/app-mobile/components/screens/Note.tsx:898
+#: packages/app-mobile/components/screens/Note.tsx:905
 msgid "Take photo"
 msgstr "Ambil foto"
 
-#: packages/server/src/services/MustacheService.ts:148
-#: packages/server/src/services/MustacheService.ts:304
+#: packages/server/src/services/MustacheService.ts:123
+#: packages/server/src/services/MustacheService.ts:275
 msgid "Tasks"
 msgstr ""
 
-#: packages/lib/models/Setting.ts:1230
+#: packages/lib/models/Setting.ts:1299
 msgid "Text editor command"
 msgstr "Perintah editor teks"
 
@@ -3702,6 +3763,11 @@ msgid ""
 "The app is now going to close. Please relaunch it to complete the process."
 msgstr ""
 "Aplikasi akan ditutup. Silakan luncurkan ulang untuk menyelesaikan prosesnya."
+
+#: packages/app-desktop/app.ts:332
+msgid ""
+"The application did not close properly. Would you like to start in safe mode?"
+msgstr ""
 
 #: packages/lib/onedrive-api-node-utils.js:86
 msgid ""
@@ -3718,7 +3784,7 @@ msgstr "Aplikasi sudah terotorisasi!"
 msgid "The application has been successfully authorised."
 msgstr "Aplikasi telah berhasil diotorisasi."
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:619
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:622
 msgid "The application must be restarted for these changes to take effect."
 msgstr "Aplikasi harus dimulai ulang agar perubahan ini diterapkan."
 
@@ -3747,14 +3813,14 @@ msgstr ""
 "Metode enkripsi default telah diubah menjadi yang lebih aman dan Anda "
 "disarankan untuk menerapkannya pada data Anda."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:603
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:609
 msgid ""
 "The default encryption method has been changed, you should re-encrypt your "
 "data."
 msgstr ""
 "Metode enkripsi default telah diubah, Kamu harus mengenkripsi ulang datamu."
 
-#: packages/lib/models/Setting.ts:1230
+#: packages/lib/models/Setting.ts:1299
 msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
@@ -3763,8 +3829,8 @@ msgstr ""
 "catatan. Jika tidak ada yang disediakan, ia akan mencoba mendeteksi editor "
 "default secara otomatis."
 
-#: packages/lib/models/Setting.ts:1382 packages/lib/models/Setting.ts:1396
-#: packages/lib/models/Setting.ts:1410
+#: packages/lib/models/Setting.ts:1455 packages/lib/models/Setting.ts:1470
+#: packages/lib/models/Setting.ts:1485
 msgid ""
 "The factor property sets how the item will grow or shrink to fit the "
 "available space in its container with respect to the other items. Thus an "
@@ -3828,7 +3894,7 @@ msgstr ""
 "saat ini aplikasi tidak dapat mengakses mereka. Sepertinya, mereka pada "
 "akhirnya akan diunduh via sinkronisasi."
 
-#: packages/lib/services/RevisionService.ts:245
+#: packages/lib/services/RevisionService.ts:267
 msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
 msgstr "Catatan \"%s\" telah berhasil dipulihkan ke buku catatan \"%s\"."
 
@@ -3852,7 +3918,7 @@ msgid ""
 "The error was: \"%s\""
 msgstr ""
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:585
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:591
 msgid ""
 "The sync target needs to be upgraded before Joplin can sync. The operation "
 "may take a few minutes to complete and the app needs to be restarted. To "
@@ -3862,7 +3928,7 @@ msgstr ""
 "Operasinya akan berjalan beberapa menit dan aplikasi perlu dimulai ulang. "
 "Untuk melanjutkan, silakan klik linknya."
 
-#: packages/app-mobile/components/screen-header.js:461
+#: packages/app-mobile/components/screen-header.js:473
 #, fuzzy
 msgid "The sync target needs to be upgraded. Press this banner to proceed."
 msgstr "Target sinkronisasi harus diperbarui. Jalankan `%s` untuk melanjutkan."
@@ -3871,7 +3937,7 @@ msgstr "Target sinkronisasi harus diperbarui. Jalankan `%s` untuk melanjutkan."
 msgid "The tag \"%s\" already exists. Please choose a different name."
 msgstr "Label \"%s\" sudah ada. Silakan pilih nama yang berbeda."
 
-#: packages/lib/models/Setting.ts:382
+#: packages/lib/models/Setting.ts:426
 msgid ""
 "The target to synchronise to. Each sync target may have additional "
 "parameters which are named as `sync.NUM.NAME` (all documented below)."
@@ -3894,7 +3960,7 @@ msgstr "Layanan Web Clipper diaktifkan dan disetel menjadi mulai otomatis."
 msgid "The web clipper service is not enabled."
 msgstr "Layanan web clipper tidak diaktifkan."
 
-#: packages/lib/models/Setting.ts:760
+#: packages/lib/models/Setting.ts:811
 msgid "Theme"
 msgstr "Tema"
 
@@ -3902,7 +3968,7 @@ msgstr "Tema"
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr "Saat ini belum ada catatan. Buat catatan dengan mengeklik tombol (+)."
 
-#: packages/app-desktop/gui/NoteList/NoteList.tsx:469
+#: packages/app-desktop/gui/NoteList/NoteList.tsx:468
 msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
 msgstr ""
@@ -3923,7 +3989,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:69
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:43
 msgid "There was an error downloading this attachment:"
 msgstr "Terjadi kesalahan saat mengunduh lampiran ini:"
 
@@ -3949,7 +4015,7 @@ msgstr ""
 "sinkronisasi. Untuk menemukan item ini, lakukan pencarian untuk judul atau "
 "ID (yang ditampilkan dalam tanda kurung di atas)."
 
-#: packages/lib/models/Setting.ts:2160
+#: packages/lib/models/Setting.ts:2314
 msgid ""
 "These plugins enhance the Markdown renderer with additional features. Please "
 "note that, while these features might be useful, they are not standard "
@@ -3967,7 +4033,7 @@ msgstr ""
 "editor itu, Anda akan kehilangan format plugin. Di bawah ini ditunjukkan "
 "plugin mana yang kompatibel atau tidak dengan editor WYSIWYG."
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:71
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:45
 #: packages/lib/services/ResourceEditWatcher/index.ts:231
 msgid "This attachment is not downloaded or not decrypted yet"
 msgstr "Lampiran ini belum diunduh atau belum didekripsi"
@@ -3995,7 +4061,7 @@ msgstr ""
 "catatan Anda. Harap berhati-hati saat menghapus salah satunya karena mereka "
 "tidak dapat dipulihkan setelahnya."
 
-#: packages/lib/models/Note.ts:103
+#: packages/lib/models/Note.ts:104
 msgid "This note does not have geolocation information."
 msgstr "Catatan ini tidak memiliki informasi gelokasi."
 
@@ -4034,7 +4100,7 @@ msgstr ""
 "Joplin. Saat mengaktifkannya, mungkin firewall Anda akan meminta Anda untuk "
 "memberi izin kepada Joplin untuk mendengarkan port tertentu."
 
-#: packages/lib/models/Setting.ts:1046
+#: packages/lib/models/Setting.ts:1109
 msgid ""
 "This will allow Joplin to run in the background. It is recommended to enable "
 "this setting so that your notes are constantly being synchronised, thus "
@@ -4044,7 +4110,7 @@ msgstr ""
 "mengaktifkan pengaturan ini agar catatan Anda terus disinkronkan, sehingga "
 "mengurangi jumlah konflik."
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:114
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:116
 msgid "This will open a new screen. Save your current changes?"
 msgstr "Ini akan membuka layar baru. Simpan perubahan Anda saat ini?"
 
@@ -4057,11 +4123,11 @@ msgstr ""
 "Batalkan berbagi buku catatan ini? Penerima tidak akan lagi memiliki akses "
 "ke kontennya."
 
-#: packages/lib/models/Setting.ts:739
+#: packages/lib/models/Setting.ts:789
 msgid "Time format"
 msgstr "Format waktu"
 
-#: packages/lib/models/Folder.ts:39 packages/lib/models/Note.ts:36
+#: packages/lib/models/Folder.ts:39 packages/lib/models/Note.ts:37
 msgid "title"
 msgstr "judul"
 
@@ -4100,7 +4166,7 @@ msgstr "Untuk masuk mode CLI, tekan \":\""
 msgid "To exit command line mode, press ESCAPE"
 msgstr "Untuk keluar dari mode CLI, tekan ESCAPE"
 
-#: packages/app-desktop/gui/NoteList/NoteList.tsx:172
+#: packages/app-desktop/gui/NoteList/NoteList.tsx:167
 msgid ""
 "To manually sort the notes, the sort order must be changed to \"%s\" in the "
 "menu \"%s\" > \"%s\""
@@ -4124,7 +4190,7 @@ msgstr ""
 "Untuk mencoba kembali dekripsi item ini, jalankan perintah `e2ee decrypt --"
 "retry-failed-items`"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:559
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:554
 msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
 "them in your phone settings, in Apps > Joplin > Permissions"
@@ -4141,7 +4207,7 @@ msgstr "tugas"
 msgid "Toggle comment"
 msgstr "Lihat/sembunyikan komentar"
 
-#: packages/app-desktop/gui/MenuBar.tsx:728
+#: packages/app-desktop/gui/MenuBar.tsx:792
 msgid "Toggle development tools"
 msgstr "Alihkan alat pengembang"
 
@@ -4184,7 +4250,7 @@ msgstr "Alihkan ke mode aman"
 msgid "Token has been copied to the clipboard!"
 msgstr "Token telah disalin ke papan klip!"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:518
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:513
 msgid "Tools"
 msgstr "Alat"
 
@@ -4218,7 +4284,7 @@ msgstr ""
 "Atau ketik # diikuti dengan nama label, atau @ diikuti dengan nama buku "
 "catatan. Atau ketik : untuk mencari perintah."
 
-#: packages/app-mobile/components/screens/NoteTagsDialog.js:180
+#: packages/app-mobile/components/screens/NoteTagsDialog.js:198
 msgid "Type new tags or select from list"
 msgstr "Ketik label baru atau pilih dari daftar"
 
@@ -4226,25 +4292,26 @@ msgstr "Ketik label baru atau pilih dari daftar"
 msgid "Type: %s."
 msgstr "Tipe: %s."
 
-#: packages/lib/models/Setting.ts:828
+#: packages/lib/models/Setting.ts:884
 msgid "Uncompleted to-dos on top"
 msgstr "Tugas belum selesai diatas"
 
+#: packages/app-desktop/gui/MenuBar.tsx:635
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:96
 msgid "Undo"
 msgstr "Urungkan"
 
-#: packages/lib/BaseApplication.ts:277
+#: packages/lib/BaseApplication.ts:280
 msgid "Unknown flag: %s"
 msgstr "Tanda tidak diketahui: %s"
 
-#: packages/lib/Synchronizer.ts:1088
+#: packages/lib/Synchronizer.ts:1096
 msgid ""
 "Unknown item type downloaded - please upgrade Joplin to the latest version"
 msgstr ""
 "Tipe item tidak dikenal diunduh - silakan perbarui Joplin ke versi terbaru"
 
-#: packages/app-desktop/gui/ShareNoteDialog.tsx:171
+#: packages/app-desktop/gui/ShareNoteDialog.tsx:164
 msgid "Unpublish note"
 msgstr "Batalkan publikasi catatan"
 
@@ -4260,7 +4327,7 @@ msgstr ""
 "Batalkan berbagi buku catatan ini? Penerima tidak akan lagi memiliki akses "
 "ke kontennya."
 
-#: packages/app-mobile/components/screens/Note.tsx:680
+#: packages/app-mobile/components/screens/Note.tsx:684
 msgid "Unsupported image type: %s"
 msgstr "Tipe gambar tidak didukung: %s"
 
@@ -4296,7 +4363,7 @@ msgstr "Item lokal yang diperbarui: %d."
 msgid "Updated"
 msgstr "Diubah"
 
-#: packages/lib/models/Folder.ts:40 packages/lib/models/Note.ts:37
+#: packages/lib/models/Folder.ts:40 packages/lib/models/Note.ts:38
 msgid "updated date"
 msgstr "tanggal diperbarui"
 
@@ -4318,7 +4385,7 @@ msgstr "Diperbarui: %s"
 msgid "Updated: %d."
 msgstr "Diubah: %d."
 
-#: packages/app-mobile/components/screens/Note.tsx:836
+#: packages/app-mobile/components/screens/Note.tsx:848
 msgid "Updated: %s"
 msgstr "Diperbarui: %s"
 
@@ -4338,8 +4405,8 @@ msgstr "Perbarui target sinkronisasi ke versi terakhir."
 msgid "URL"
 msgstr "URL"
 
-#: packages/lib/BaseApplication.ts:166 packages/lib/BaseApplication.ts:179
-#: packages/lib/BaseApplication.ts:216
+#: packages/lib/BaseApplication.ts:169 packages/lib/BaseApplication.ts:182
+#: packages/lib/BaseApplication.ts:219
 msgid "Usage: %s"
 msgstr "Penggunaan: %s"
 
@@ -4364,13 +4431,13 @@ msgstr ""
 "Gunakan tombol tanda panah dan tombol page up/down pada keyboard untuk "
 "menggulir daftar dan area teks (termasuk konsol ini)."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:825
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:833
 msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
 msgstr ""
 "Gunakan tanda panah untuk memindahkan item tata letak. Tekan \"Escape\" "
 "untuk keluar."
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:525
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:520
 msgid ""
 "Use this to rebuild the search index if there is a problem with search. It "
 "may take a long time depending on the number of notes."
@@ -4378,7 +4445,7 @@ msgstr ""
 "Gunakan ini untuk membangun kembali indeks pencarian jika ada masalah dengan "
 "pencarian. Ini mungkin butuh waktu lama tergantung pada jumlah catatan."
 
-#: packages/lib/models/Setting.ts:1112
+#: packages/lib/models/Setting.ts:1177
 msgid ""
 "Used for most text in the markdown editor. If not found, a generic "
 "proportional (variable width) font is used."
@@ -4386,7 +4453,7 @@ msgstr ""
 "Digunakan untuk sebagian besar teks di editor penurunan harga. Jika tidak "
 "ditemukan, font proporsional (lebar variabel) generik digunakan."
 
-#: packages/lib/models/Setting.ts:1123
+#: packages/lib/models/Setting.ts:1189
 msgid ""
 "Used where a fixed width font is needed to lay out text legibly (e.g. "
 "tables, checkboxes, code). If not found, a generic monospace (fixed width) "
@@ -4396,13 +4463,13 @@ msgstr ""
 "jelas (misalnya tabel, kotak centang, kode). Jika tidak ditemukan, font "
 "monospace generik (lebar tetap) digunakan."
 
-#: packages/server/src/services/MustacheService.ts:144
+#: packages/server/src/services/MustacheService.ts:119
 msgid "User deletions"
 msgstr ""
 
 #: packages/server/src/routes/admin/users.ts:107
-#: packages/server/src/services/MustacheService.ts:140
-#: packages/server/src/services/MustacheService.ts:301
+#: packages/server/src/services/MustacheService.ts:115
+#: packages/server/src/services/MustacheService.ts:272
 msgid "Users"
 msgstr ""
 
@@ -4411,27 +4478,27 @@ msgstr ""
 msgid "Valid"
 msgstr "Jawaban tidak valid"
 
-#: packages/app-desktop/gui/NoteList/NoteList.tsx:172
+#: packages/app-desktop/gui/NoteList/NoteList.tsx:167
 msgid "View"
 msgstr "Lihat"
 
-#: packages/app-mobile/components/screens/Note.tsx:840
+#: packages/app-mobile/components/screens/Note.tsx:852
 msgid "View on map"
 msgstr "Lihat di peta"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:592
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:598
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:621
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:604
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:627
 msgid "View them now"
 msgstr "Lihat sekarang"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:139
-#: packages/lib/models/Setting.ts:821 packages/lib/models/Setting.ts:822
-#: packages/lib/models/Setting.ts:824
+#: packages/lib/models/Setting.ts:876 packages/lib/models/Setting.ts:877
+#: packages/lib/models/Setting.ts:879
 msgid "Viewer"
 msgstr "Viewer"
 
-#: packages/lib/models/Setting.ts:1260
+#: packages/lib/models/Setting.ts:1329
 msgid "Vim"
 msgstr "Vim"
 
@@ -4445,7 +4512,7 @@ msgstr ""
 "Peringatan: tidak semua sumber daya ditampilkan karena alasan performa "
 "(batas: %s)."
 
-#: packages/lib/models/Setting.ts:2151
+#: packages/lib/models/Setting.ts:2305
 msgid "Web Clipper"
 msgstr "Web Clipper"
 
@@ -4453,20 +4520,20 @@ msgstr "Web Clipper"
 msgid "WebDAV"
 msgstr "WebDAV"
 
-#: packages/lib/models/Setting.ts:488
+#: packages/lib/models/Setting.ts:535
 msgid "WebDAV password"
 msgstr "Kata sandi WebDAV"
 
-#: packages/lib/models/Setting.ts:465
+#: packages/lib/models/Setting.ts:512
 msgid "WebDAV URL"
 msgstr "URL WebDAV"
 
-#: packages/lib/models/Setting.ts:477
+#: packages/lib/models/Setting.ts:524
 msgid "WebDAV username"
 msgstr "Nama pengguna WebDAV"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:20
-#: packages/app-desktop/gui/MenuBar.tsx:709
+#: packages/app-desktop/gui/MenuBar.tsx:773
 msgid "Website and documentation"
 msgstr "Situs web dan dokumentasi"
 
@@ -4487,11 +4554,11 @@ msgstr ""
 "Contoh, untuk membuat buku catatan tekan `mb`; untuk membuat catatan tekan "
 "`mn`."
 
-#: packages/lib/models/Setting.ts:975
+#: packages/lib/models/Setting.ts:1037
 msgid "When creating a new note:"
 msgstr "Ketika membuat catatan baru:"
 
-#: packages/lib/models/Setting.ts:959
+#: packages/lib/models/Setting.ts:1020
 msgid "When creating a new to-do:"
 msgstr "Ketika membuat tugas baru:"
 
@@ -4507,17 +4574,17 @@ msgstr "y"
 msgid "Y"
 msgstr "Y"
 
-#: packages/lib/models/Setting.ts:327
+#: packages/lib/models/Setting.ts:370
 msgid "yes"
 msgstr "ya"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:28
-#: packages/app-mobile/components/screens/Note.tsx:586
+#: packages/app-mobile/components/screens/Note.tsx:590
 #: packages/lib/shim-init-node.js:172 packages/lib/versionInfo.ts:27
 msgid "Yes"
 msgstr "Ya"
 
-#: packages/app-mobile/components/screens/Note.tsx:585
+#: packages/app-mobile/components/screens/Note.tsx:589
 #: packages/lib/shim-init-node.js:171
 msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "
@@ -4556,7 +4623,7 @@ msgid "Your data is going to be re-encrypted and synced again."
 msgstr "Data Anda akan dienkripsi ulang dan disinkronkan lagi."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:271
-msgid "Your master password is needed to decrypt some of your data."
+msgid "Your password is needed to decrypt some of your data."
 msgstr ""
 
 #: packages/app-cli/app/command-sync.ts:242
@@ -4573,14 +4640,18 @@ msgstr "Membutuhkan perizinan untuk penggunaan kamera."
 msgid "Your version: %s"
 msgstr "Versi Anda: %s"
 
-#: packages/app-desktop/gui/MenuBar.tsx:653
-#: packages/app-desktop/gui/MenuBar.tsx:659
+#: packages/app-desktop/gui/MenuBar.tsx:717
+#: packages/app-desktop/gui/MenuBar.tsx:723
 msgid "Zoom In"
 msgstr "Perbesar"
 
-#: packages/app-desktop/gui/MenuBar.tsx:666
+#: packages/app-desktop/gui/MenuBar.tsx:730
 msgid "Zoom Out"
 msgstr "Perkecil"
+
+#, fuzzy
+#~ msgid "Save as SVG"
+#~ msgstr "Simpan sebagai..."
 
 #~ msgid "Automatically update the application"
 #~ msgstr "Perbarui aplikasi secara otomatis"

@@ -5,7 +5,7 @@ import useSyncTargetUpgrade, { SyncTargetUpgradeResult } from '@joplin/lib/servi
 const { render } = require('react-dom');
 const ipcRenderer = require('electron').ipcRenderer;
 import Setting from '@joplin/lib/models/Setting';
-const bridge = require('@electron/remote').require('./bridge').default;
+import restart from '../services/restart';
 
 function useAppCloseHandler(upgradeResult: SyncTargetUpgradeResult) {
 	useEffect(function() {
@@ -64,7 +64,7 @@ function useStyle() {
 function useRestartOnDone(upgradeResult: SyncTargetUpgradeResult) {
 	useEffect(function() {
 		if (upgradeResult.done && !upgradeResult.error) {
-			bridge().restart();
+			void restart();
 		}
 	}, [upgradeResult.done]);
 }

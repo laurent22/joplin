@@ -2,7 +2,7 @@ import * as React from 'react';
 import versionInfo from '@joplin/lib/versionInfo';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
 import Setting from '@joplin/lib/models/Setting';
-import bridge from '../services/bridge';
+import restart from '../services/restart';
 const packageInfo = require('../packageInfo.js');
 const ipcRenderer = require('electron').ipcRenderer;
 
@@ -75,7 +75,7 @@ export default class ErrorBoundary extends React.Component<Props, State> {
 			const safeMode_click = async () => {
 				Setting.setValue('isSafeMode', true);
 				await Setting.saveAll();
-				bridge().restart();
+				await restart();
 			};
 
 			try {

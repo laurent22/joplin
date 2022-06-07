@@ -1201,8 +1201,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 					onSaveButtonPress={this.saveNoteButton_press}
 					showSideMenuButton={false}
 					showSearchButton={false}
-					showUndoButton={this.state.undoRedoButtonState.canUndo || this.state.undoRedoButtonState.canRedo}
-					showRedoButton={this.state.undoRedoButtonState.canRedo}
+					showUndoButton={(this.state.undoRedoButtonState.canUndo || this.state.undoRedoButtonState.canRedo) && this.state.mode === 'edit'}
+					showRedoButton={this.state.undoRedoButtonState.canRedo && this.state.mode === 'edit'}
 					undoButtonDisabled={!this.state.undoRedoButtonState.canUndo && this.state.undoRedoButtonState.canRedo}
 					onUndoButtonPress={this.screenHeader_undoButtonPress}
 					onRedoButtonPress={this.screenHeader_redoButtonPress}

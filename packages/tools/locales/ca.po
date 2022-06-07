@@ -5,7 +5,7 @@
 # Translators:
 # Josep Maria Planell <planell.josep@gmail.com>, 2019
 # Joan Montané <jmontane@softcatala.org>, 2019
-# Xavi Ivars <xavi.ivars@gmail.com>, 2021
+# Xavi Ivars <xavi.ivars@gmail.com>, 2021-2022
 #
 msgid ""
 msgstr ""
@@ -19,17 +19,17 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:565
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:560
 msgid "- Camera: to allow taking a picture and attaching it to a note."
 msgstr "- Càmera: per a poder fer fotografies i adjuntar-les a les notes."
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:568
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:563
 msgid "- Location: to allow attaching geo-location information to a note."
 msgstr ""
 "- Geolocalització: per a poder ajuntar la informació de geolocalització a "
 "les notes."
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:562
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:557
 msgid ""
 "- Storage: to allow attaching files to notes and to enable filesystem "
 "synchronisation."
@@ -37,8 +37,8 @@ msgstr ""
 "- Emmagatzematge: per a adjuntar fitxers a les notes i per a activar la "
 "sincronització amb el sistema de fitxers."
 
-#: packages/lib/services/KeymapService.ts:308
 #: packages/lib/services/KeymapService.ts:314
+#: packages/lib/services/KeymapService.ts:320
 msgid "\"%s\" is missing the required \"%s\" property."
 msgstr "A «%s» li manca la propietat «%s»."
 
@@ -50,55 +50,55 @@ msgstr "(%s)"
 msgid "(None)"
 msgstr "(cap)"
 
-#: packages/lib/models/Setting.ts:327 packages/lib/models/Setting.ts:328
+#: packages/lib/models/Setting.ts:370 packages/lib/models/Setting.ts:371
 msgid "(wysiwyg: %s)"
 msgstr "(wysiwyg: %s)"
 
-#: packages/app-desktop/gui/MenuBar.tsx:568
-#: packages/app-desktop/gui/MenuBar.tsx:824
+#: packages/app-desktop/gui/MenuBar.tsx:623
+#: packages/app-desktop/gui/MenuBar.tsx:888
 msgid "&Edit"
 msgstr "&Edita"
 
-#: packages/app-desktop/gui/MenuBar.tsx:446
-#: packages/app-desktop/gui/MenuBar.tsx:524
-#: packages/app-desktop/gui/MenuBar.tsx:820
+#: packages/app-desktop/gui/MenuBar.tsx:498
+#: packages/app-desktop/gui/MenuBar.tsx:578
+#: packages/app-desktop/gui/MenuBar.tsx:884
 msgid "&File"
 msgstr "&Fitxer"
 
-#: packages/app-desktop/gui/MenuBar.tsx:674
+#: packages/app-desktop/gui/MenuBar.tsx:738
 msgid "&Go"
 msgstr "Vés"
 
-#: packages/app-desktop/gui/MenuBar.tsx:706
+#: packages/app-desktop/gui/MenuBar.tsx:770
 msgid "&Help"
 msgstr "&Ajuda"
 
-#: packages/app-desktop/gui/MenuBar.tsx:692
+#: packages/app-desktop/gui/MenuBar.tsx:756
 msgid "&Note"
 msgstr "&Nota"
 
-#: packages/app-desktop/gui/MenuBar.tsx:702
+#: packages/app-desktop/gui/MenuBar.tsx:766
 msgid "&Tools"
 msgstr "&Eines"
 
-#: packages/app-desktop/gui/MenuBar.tsx:600
+#: packages/app-desktop/gui/MenuBar.tsx:664
 msgid "&View"
 msgstr "&Visualitza"
 
-#: packages/lib/models/Setting.ts:1346
+#: packages/lib/models/Setting.ts:1418
 msgid "%d days"
 msgstr "%d dies"
 
-#: packages/lib/models/Setting.ts:1211
+#: packages/lib/models/Setting.ts:1278
 msgid "%d hour"
 msgstr "%d hora"
 
-#: packages/lib/models/Setting.ts:1212 packages/lib/models/Setting.ts:1213
+#: packages/lib/models/Setting.ts:1279 packages/lib/models/Setting.ts:1280
 msgid "%d hours"
 msgstr "%d hores"
 
-#: packages/lib/models/Setting.ts:1208 packages/lib/models/Setting.ts:1209
-#: packages/lib/models/Setting.ts:1210
+#: packages/lib/models/Setting.ts:1275 packages/lib/models/Setting.ts:1276
+#: packages/lib/models/Setting.ts:1277
 msgid "%d minutes"
 msgstr "%d minuts"
 
@@ -114,7 +114,7 @@ msgstr "%s - Copia"
 msgid "%s (%s) could not be uploaded: %s"
 msgstr "%s (%s) no s'ha pogut pujar: %s"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:612
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:618
 msgid "%s (%s) would like to share a notebook with you."
 msgstr "%s (%s) vol compartir un quadern amb tu."
 
@@ -126,12 +126,12 @@ msgstr "%s (%s): %s"
 msgid "%s (pre-release)"
 msgstr "%s (prellançament)"
 
-#: packages/lib/models/Setting.ts:822 packages/lib/models/Setting.ts:823
-#: packages/lib/models/Setting.ts:824
+#: packages/lib/models/Setting.ts:877 packages/lib/models/Setting.ts:878
+#: packages/lib/models/Setting.ts:879
 msgid "%s / %s"
 msgstr "%s / %s"
 
-#: packages/lib/models/Setting.ts:821
+#: packages/lib/models/Setting.ts:876
 msgid "%s / %s / %s"
 msgstr "%s / %s / %s"
 
@@ -175,8 +175,8 @@ msgid ""
 "list all the tags (use -l for long option)."
 msgstr ""
 "<tag-command> pot ser «add», «remove», «list» o «notetags» per a assignar o "
-"suprimir l'[etiqueta] de la [nota], o per a llistar les notes associades amb"
-" l'[etiqueta]. L'ordre «tag list» es pot usar per a llistar totes les "
+"suprimir l'[etiqueta] de la [nota], o per a llistar les notes associades amb "
+"l'[etiqueta]. L'ordre «tag list» es pot usar per a llistar totes les "
 "etiquetes (useu -l per l'opció llarga)."
 
 #: packages/app-cli/app/command-todo.js:14
@@ -189,44 +189,44 @@ msgstr ""
 "<todo-command> pot ser «toggle» o «clear». Useu «toggle» per a canviar els "
 "llistats de tasques entre l'estat de finalitzat i no finalitzat (si "
 "l'objectiu és una nota normal, es convertirà a un llistat de tasques "
-"pendents). Useu «clear» per a convertir un llistat de tasques pendents a una"
-" nota normal."
+"pendents). Useu «clear» per a convertir un llistat de tasques pendents a una "
+"nota normal."
 
-#: packages/lib/models/Setting.ts:1235
+#: packages/lib/models/Setting.ts:1304
 msgid "A3"
 msgstr "A3"
 
-#: packages/lib/models/Setting.ts:1233
+#: packages/lib/models/Setting.ts:1302
 msgid "A4"
 msgstr "A4"
 
-#: packages/lib/models/Setting.ts:1236
+#: packages/lib/models/Setting.ts:1305
 msgid "A5"
 msgstr "A5"
 
-#: packages/app-desktop/gui/MenuBar.tsx:452
-#: packages/app-desktop/gui/MenuBar.tsx:744
+#: packages/app-desktop/gui/MenuBar.tsx:504
+#: packages/app-desktop/gui/MenuBar.tsx:808
 msgid "About Joplin"
 msgstr "Quant al Joplin"
 
-#: packages/lib/services/KeymapService.ts:314
-#: packages/lib/services/KeymapService.ts:319
+#: packages/lib/services/KeymapService.ts:320
+#: packages/lib/services/KeymapService.ts:325
 msgid "accelerator"
 msgstr "accelerador"
 
-#: packages/lib/services/KeymapService.ts:371
+#: packages/lib/services/KeymapService.ts:377
 msgid "Accelerator \"%s\" is not valid."
 msgstr "L'accelerador «%s» no és vàlid."
 
-#: packages/lib/services/KeymapService.ts:340
+#: packages/lib/services/KeymapService.ts:346
 msgid ""
 "Accelerator \"%s\" is used for \"%s\" and \"%s\" commands. This may lead to "
 "unexpected behaviour."
 msgstr ""
-"L'accelerador «%s» s'utilitza per a les ordres «%s» i «%s». Això pot conduir"
-" a un comportament inesperat."
+"L'accelerador «%s» s'utilitza per a les ordres «%s» i «%s». Això pot conduir "
+"a un comportament inesperat."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:613
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:619
 msgid "Accept"
 msgstr "Accepta"
 
@@ -243,11 +243,11 @@ msgid "Active"
 msgstr "Activa"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:18
-#: packages/app-desktop/gui/MenuBar.tsx:642
+#: packages/app-desktop/gui/MenuBar.tsx:706
 msgid "Actual Size"
 msgstr "Mida real"
 
-#: packages/app-mobile/components/screens/Note.tsx:1116
+#: packages/app-mobile/components/screens/Note.tsx:1123
 msgid "Add body"
 msgstr "Afegeix contingut"
 
@@ -259,7 +259,7 @@ msgstr "Afegeix o suprimeix etiquetes:"
 msgid "Add recipient:"
 msgstr "Afegeix un destinatari:"
 
-#: packages/app-mobile/components/screens/Note.tsx:1177
+#: packages/app-mobile/components/screens/Note.tsx:1186
 msgid "Add title"
 msgstr "Afegeix títol"
 
@@ -267,8 +267,8 @@ msgstr "Afegeix títol"
 msgid "Add to dictionary"
 msgstr "Afegeix al diccionari"
 
-#: packages/server/src/services/MustacheService.ts:183
-#: packages/server/src/services/MustacheService.ts:307
+#: packages/server/src/services/MustacheService.ts:156
+#: packages/server/src/services/MustacheService.ts:278
 msgid "Admin"
 msgstr "Administració"
 
@@ -301,7 +301,11 @@ msgstr ""
 msgid "Also displays unset and hidden config variables."
 msgstr "També mostra variables de configuració ocultes o sense definir."
 
-#: packages/lib/models/Setting.ts:666
+#: packages/app-desktop/gui/ShareNoteDialog.tsx:203
+msgid "Also publish linked notes"
+msgstr "Publica també les notes enllaçades"
+
+#: packages/lib/models/Setting.ts:713
 msgid "Always"
 msgstr "Sempre"
 
@@ -309,11 +313,11 @@ msgstr "Sempre"
 msgid "An update is available, do you want to download it now?"
 msgstr "Hi ha disponible una actualització. Voleu descarregar-la ara?"
 
-#: packages/lib/models/Setting.ts:2143
+#: packages/lib/models/Setting.ts:2297
 msgid "Appearance"
 msgstr "Aspecte"
 
-#: packages/lib/models/Setting.ts:2148
+#: packages/lib/models/Setting.ts:2302
 msgid "Application"
 msgstr "Aplicació"
 
@@ -326,25 +330,25 @@ msgstr "Aplica"
 msgid "Are you sure you want to renew the authorisation token?"
 msgstr "Esteu segur que voleu renovar el testimoni d'autorització?"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:522
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:497
 msgid "Arguments:"
 msgstr "Arguments:"
 
-#: packages/lib/models/Setting.ts:345
+#: packages/lib/models/Setting.ts:388
 msgid "Aritim Dark"
 msgstr "Aritim fosc"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:53
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:589
-#: packages/app-mobile/components/screens/Note.tsx:893
+#: packages/app-mobile/components/screens/Note.tsx:900
 msgid "Attach file"
 msgstr "Adjunta un fitxer"
 
-#: packages/app-mobile/components/screens/Note.tsx:897
+#: packages/app-mobile/components/screens/Note.tsx:904
 msgid "Attach photo"
 msgstr "Adjunta una imatge"
 
-#: packages/app-mobile/components/screens/Note.tsx:880
+#: packages/app-mobile/components/screens/Note.tsx:892
 msgid "Attach..."
 msgstr "Adjunta..."
 
@@ -352,8 +356,8 @@ msgstr "Adjunta..."
 msgid "Attaches the given file to the note."
 msgstr "Adjunta el fitxer indicat a la nota."
 
-#: packages/server/src/models/UserModel.ts:214
-#: packages/server/src/models/UserModel.ts:231
+#: packages/server/src/models/UserModel.ts:215
+#: packages/server/src/models/UserModel.ts:232
 msgid "attachment"
 msgstr "fitxer adjunt"
 
@@ -361,7 +365,7 @@ msgstr "fitxer adjunt"
 msgid "Attachment conflict: \"%s\""
 msgstr "Conflicte en un adjunt: \"%s\""
 
-#: packages/lib/models/Setting.ts:662
+#: packages/lib/models/Setting.ts:709
 msgid "Attachment download behaviour"
 msgstr "Comportament de descàrrega d'adjunts"
 
@@ -373,7 +377,7 @@ msgstr "Adjunts"
 msgid "Attachments that could not be downloaded"
 msgstr "Adjunts que no s'han pogut descarregar"
 
-#: packages/lib/models/Setting.ts:331
+#: packages/lib/models/Setting.ts:374
 msgid ""
 "Attention: If you change this location, make sure you copy all your content "
 "to it before syncing, otherwise all files will be removed! See the FAQ for "
@@ -396,7 +400,7 @@ msgstr ""
 msgid "Authorisation token:"
 msgstr "Testimoni d'autorització:"
 
-#: packages/lib/models/Setting.ts:668
+#: packages/lib/models/Setting.ts:715
 msgid "Auto"
 msgstr "Automàtic"
 
@@ -404,20 +408,20 @@ msgstr "Automàtic"
 msgid "Auto-add disabled accounts for deletion"
 msgstr "Afegeix automàticament per a eliminar els comptes deshabilitats"
 
-#: packages/lib/models/Setting.ts:855
+#: packages/lib/models/Setting.ts:912
 msgid "Auto-pair braces, parenthesis, quotations, etc."
 msgstr "Aparellament automàtic de claus, parèntesis, cites, etc."
 
-#: packages/lib/models/Setting.ts:1195
+#: packages/lib/models/Setting.ts:1262
 msgid "Automatically check for updates"
 msgstr "Comprova les actualitzacions automàticament"
 
-#: packages/lib/models/Setting.ts:772
+#: packages/lib/models/Setting.ts:824
 msgid "Automatically switch theme to match system theme"
 msgstr "Canvia de tema automàticament per a coincidir amb el tema del sistema"
 
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:42
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:715
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:718
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:187
 #: packages/lib/commands/historyBackward.ts:6
 msgid "Back"
@@ -432,7 +436,7 @@ msgstr "Negreta"
 msgid "Browse all plugins"
 msgstr "Navega per totes les extensions"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:515
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:534
 msgid "Browse..."
 msgstr "Navega..."
 
@@ -442,12 +446,12 @@ msgstr "Llista de pics"
 
 #: packages/app-desktop/bridge.ts:196 packages/app-desktop/bridge.ts:217
 #: packages/app-desktop/checkForUpdates.ts:199
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:715
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:718
 #: packages/app-desktop/gui/DialogButtonRow.min.js:38
-#: packages/app-desktop/gui/DialogButtonRow.tsx:83
+#: packages/app-desktop/gui/DialogButtonRow.tsx:78
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:81
-#: packages/app-desktop/gui/NoteList/NoteList.tsx:173
-#: packages/app-desktop/gui/PromptDialog.min.js:242
+#: packages/app-desktop/gui/NoteList/NoteList.tsx:168
+#: packages/app-desktop/gui/PromptDialog.min.js:249
 #: packages/app-desktop/gui/ResourceScreen.tsx:170
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:282
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:658
@@ -457,7 +461,7 @@ msgstr "Llista de pics"
 #: packages/app-mobile/components/ModalDialog.js:70
 #: packages/app-mobile/components/screens/encryption-config.tsx:190
 #: packages/app-mobile/components/screens/Note.tsx:104
-#: packages/app-mobile/components/screens/Note.tsx:588
+#: packages/app-mobile/components/screens/Note.tsx:592
 #: packages/app-mobile/components/SelectDateTimeDialog.tsx:152
 #: packages/app-mobile/components/side-menu-content.js:156
 #: packages/app-mobile/components/side-menu-content.js:165
@@ -478,7 +482,7 @@ msgstr "S'està cancel·lant..."
 msgid "Cancelling... Please wait."
 msgstr "S'està cancel·lant... Espereu."
 
-#: packages/lib/shim-init-node.js:235
+#: packages/lib/shim-init-node.js:242
 msgid "Cannot access %s"
 msgstr "No es pot accedir a %s"
 
@@ -486,13 +490,13 @@ msgstr "No es pot accedir a %s"
 msgid "Cannot change encrypted item"
 msgstr "No es pot canviar un element xifrat"
 
-#: packages/lib/models/Note.ts:521
+#: packages/lib/models/Note.ts:526
 msgid "Cannot copy note to \"%s\" notebook"
 msgstr "No es pot copiar la nota al bloc de notes «%s»"
 
 #: packages/app-cli/app/command-attach.js:21
-#: packages/app-cli/app/command-cat.js:25
-#: packages/app-cli/app/command-cp.js:24 packages/app-cli/app/command-cp.js:27
+#: packages/app-cli/app/command-cat.js:25 packages/app-cli/app/command-cp.js:24
+#: packages/app-cli/app/command-cp.js:27
 #: packages/app-cli/app/command-done.js:20
 #: packages/app-cli/app/command-export.js:36
 #: packages/app-cli/app/command-export.js:40
@@ -530,7 +534,7 @@ msgstr "No puc carregar el mòdul «%s» per al format «%s» i destí \"%s\""
 msgid "Cannot load \"%s\" module for format \"%s\" and target \"%s\""
 msgstr "No puc carregar el mòdul «%s» per al format «%s» i destí «%s»"
 
-#: packages/lib/models/Note.ts:533
+#: packages/lib/models/Note.ts:538
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "No es pot moure la nota al bloc de notes «%s»"
 
@@ -546,11 +550,11 @@ msgstr ""
 "No es pot actualitzar el testimoni: manquen les dades d'autenticació. "
 "Reiniciar la sincronització pot solucionar el problema."
 
-#: packages/server/src/models/UserModel.ts:213
+#: packages/server/src/models/UserModel.ts:214
 msgid "Cannot save %s \"%s\" because it is larger than the allowed limit (%s)"
 msgstr "No es pot desar %s «%s» perquè és més gran que el límit permès (%s)"
 
-#: packages/server/src/models/UserModel.ts:230
+#: packages/server/src/models/UserModel.ts:231
 msgid ""
 "Cannot save %s \"%s\" because it would go over the total allowed size (%s) "
 "for this account"
@@ -558,7 +562,7 @@ msgstr ""
 "No es pot desar %s «%s» perquè se'n passaria de l'espai total (%s) d'aquest "
 "compte"
 
-#: packages/lib/services/share/ShareService.ts:315
+#: packages/lib/services/share/ShareService.ts:318
 msgid ""
 "Cannot share encrypted notebook with recipient %s because they have not "
 "enabled end-to-end encryption. They may do so from the screen Configuration "
@@ -584,12 +588,12 @@ msgstr "Caràcters"
 msgid "Characters excluding spaces"
 msgstr "Caràcters excloent espais"
 
-#: packages/app-desktop/gui/MenuBar.tsx:469
-#: packages/app-desktop/gui/MenuBar.tsx:719
+#: packages/app-desktop/gui/MenuBar.tsx:521
+#: packages/app-desktop/gui/MenuBar.tsx:783
 msgid "Check for updates..."
 msgstr "Comprova les actualitzacions..."
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:201
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:190
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:356
 msgid "Check synchronisation configuration"
 msgstr "Comprova la configuració de la sincronització"
@@ -602,11 +606,11 @@ msgstr "Casella de verificació"
 msgid "Checkbox list"
 msgstr "Llista de caselles de verificació"
 
-#: packages/lib/components/shared/config-shared.js:47
+#: packages/lib/components/shared/config-shared.js:67
 msgid "Checking... Please wait."
 msgstr "Verificant... Espereu."
 
-#: packages/app-mobile/components/screens/Note.tsx:900
+#: packages/app-mobile/components/screens/Note.tsx:907
 msgid "Choose an option"
 msgstr "Escolliu una opció"
 
@@ -615,7 +619,7 @@ msgid "Chrome Web Store"
 msgstr "Web store de Chrome"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:145
-#: packages/app-desktop/gui/PromptDialog.min.js:249
+#: packages/app-desktop/gui/PromptDialog.min.js:256
 msgid "Clear"
 msgstr "Neteja"
 
@@ -628,9 +632,8 @@ msgid ""
 "Click \"%s\" to restore the note. It will be copied in the notebook named "
 "\"%s\". The current version of the note will not be replaced or modified."
 msgstr ""
-"Feu clic «%s» per a restaurar la nota. Aquesta serà copiada al bloc de notes"
-" anomenat «%s». La versió actual de la nota no serà substituïda o "
-"modificada."
+"Feu clic «%s» per a restaurar la nota. Aquesta serà copiada al bloc de notes "
+"anomenat «%s». La versió actual de la nota no serà substituïda o modificada."
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:376
 msgid "Click to add tags..."
@@ -642,14 +645,14 @@ msgstr "ID del client: %s"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:170
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:349
-#: packages/app-desktop/gui/ShareNoteDialog.tsx:229
+#: packages/app-desktop/gui/ShareNoteDialog.tsx:221
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:336
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:30
 msgid "Close"
 msgstr "Tanca"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:24
-#: packages/app-desktop/gui/MenuBar.tsx:532
+#: packages/app-desktop/gui/MenuBar.tsx:586
 msgid "Close Window"
 msgstr "Tanca la finestra"
 
@@ -673,13 +676,12 @@ msgstr "Col·laboreu en blocs de notes amb altres"
 msgid "Coming alarms"
 msgstr "Alarmes programades"
 
-#: packages/lib/models/Setting.ts:1290
+#: packages/lib/models/Setting.ts:1362
 msgid ""
 "Comma-separated list of paths to directories to load the certificates from, "
-"or path to individual cert files. For example: /my/cert_dir, "
-"/other/custom.pem. Note that if you make changes to the TLS settings, you "
-"must save your changes before clicking on \"Check synchronisation "
-"configuration\"."
+"or path to individual cert files. For example: /my/cert_dir, /other/custom."
+"pem. Note that if you make changes to the TLS settings, you must save your "
+"changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
 "Una llista separada per comes de camins a directoris d'on carregar els "
 "certificats, o el camí a fitxers de certificats concrets. Per exemple, "
@@ -687,7 +689,7 @@ msgstr ""
 "compte que si feu canvis en la configuració TLS, cal que els deseu abans de "
 "fer clic a «Comprova la configuració de la sincronització»."
 
-#: packages/lib/services/KeymapService.ts:308
+#: packages/lib/services/KeymapService.ts:314
 msgid "command"
 msgstr "ordre"
 
@@ -719,7 +721,7 @@ msgstr "Completat: %s (%s)"
 msgid "Compress old changes"
 msgstr "Comprimeix els canvis vells"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:637
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:632
 #: packages/app-mobile/components/side-menu-content.js:332
 msgid "Configuration"
 msgstr "Configuració"
@@ -753,18 +755,18 @@ msgstr "Conflictes (adjunts)"
 msgid "Content provided by %s"
 msgstr "Contingut proporcionat per %s"
 
-#: packages/app-mobile/components/screens/Note.tsx:933
+#: packages/app-mobile/components/screens/Note.tsx:940
 msgid "Convert to note"
 msgstr "Converteix a nota"
 
-#: packages/app-mobile/components/screens/Note.tsx:933
+#: packages/app-mobile/components/screens/Note.tsx:940
 msgid "Convert to todo"
 msgstr "Converteix a llistat de tasques pendents"
 
-#: packages/app-desktop/gui/MenuBar.tsx:433
+#: packages/app-desktop/gui/MenuBar.tsx:485
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:13
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:761
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:151
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:770
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:157
 msgid "Copy"
 msgstr "Copia"
 
@@ -778,24 +780,24 @@ msgstr "Copia l'ordre en mode de desenvolupament al porta-retalls"
 msgid "Copy external link"
 msgstr "Copia l'enllaç extern"
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:134
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:140
 msgid "Copy image"
 msgstr "Copia la imatge"
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:172
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:178
 msgid "Copy Link Address"
 msgstr "Copia l'adreça de l'enllaç"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:124
-#: packages/app-mobile/components/screens/Note.tsx:940
+#: packages/app-mobile/components/screens/Note.tsx:947
 msgid "Copy Markdown link"
 msgstr "Copia l'enllaç Markdown"
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:126
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:125
 msgid "Copy path to clipboard"
 msgstr "Copia el camí al porta-retalls"
 
-#: packages/app-desktop/gui/ShareNoteDialog.tsx:222
+#: packages/app-desktop/gui/ShareNoteDialog.tsx:214
 msgid "Copy Shareable Link"
 msgid_plural "Copy Shareable Links"
 msgstr[0] "Copia l'enllaç compartible"
@@ -822,7 +824,8 @@ msgstr ""
 
 #: packages/lib/JoplinServerApi.ts:92
 msgid ""
-"Could not connect to Joplin Server. Please check the Synchronisation options in the config screen. Full error was:\n"
+"Could not connect to Joplin Server. Please check the Synchronisation options "
+"in the config screen. Full error was:\n"
 "\n"
 "%s"
 msgstr ""
@@ -843,11 +846,13 @@ msgstr "No s'ha pogut instal·lar l'extensió: %s"
 
 #: packages/app-desktop/services/share/invitationRespond.ts:20
 msgid ""
-"Could not respond to the invitation. Please try again, or check with the notebook owner if they are still sharing it.\n"
+"Could not respond to the invitation. Please try again, or check with the "
+"notebook owner if they are still sharing it.\n"
 "\n"
 "The error was: \"%s\""
 msgstr ""
-"No s'ha pogut contestar a la invitació. Torneu-ho a provar, o comproveu amb el propietari del bloc de notes si encara l'està compartint.\n"
+"No s'ha pogut contestar a la invitació. Torneu-ho a provar, o comproveu amb "
+"el propietari del bloc de notes si encara l'està compartint.\n"
 "\n"
 "L'error és \"%s\""
 
@@ -863,9 +868,17 @@ msgstr ""
 "No s'ha pogut verificar l'estat de compartició d'aquest bloc de notes - "
 "s'està avortant. Torneu a provar quan tingueu connexió a Internet."
 
+#: packages/app-desktop/gui/PromptDialog.min.js:235
+msgid "Create"
+msgstr "Crea"
+
 #: packages/app-mobile/components/note-list.js:101
 msgid "Create a notebook"
 msgstr "Crea un bloc de notes nou"
+
+#: packages/app-desktop/gui/MainScreen/commands/addProfile.ts:9
+msgid "Create new profile..."
+msgstr "Crea un perfil nou..."
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:161
 msgid "Create notebook"
@@ -879,7 +892,7 @@ msgstr "Crea un usuari"
 msgid "Created"
 msgstr "Creació"
 
-#: packages/lib/models/Note.ts:38
+#: packages/lib/models/Note.ts:39
 msgid "created date"
 msgstr "data de creació"
 
@@ -905,7 +918,7 @@ msgid "Created: %d."
 msgstr "Creades: %d."
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:118
-#: packages/app-mobile/components/screens/Note.tsx:835
+#: packages/app-mobile/components/screens/Note.tsx:847
 msgid "Created: %s"
 msgstr "Creació: %s"
 
@@ -925,7 +938,7 @@ msgstr "Crea una llista de tasques pendents."
 msgid "Creating new %s..."
 msgstr "S'està creant una %s..."
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:523
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:518
 msgid "Creating report..."
 msgstr "Creant informe..."
 
@@ -933,41 +946,41 @@ msgstr "Creant informe..."
 msgid "Current version is up-to-date."
 msgstr "La versió actual està actualitzada."
 
-#: packages/lib/models/Note.ts:39
+#: packages/lib/models/Note.ts:40
 msgid "custom order"
 msgstr "ordre personalitzat"
 
-#: packages/app-desktop/gui/NoteList/NoteList.tsx:172
+#: packages/app-desktop/gui/NoteList/NoteList.tsx:167
 msgid "Custom order"
 msgstr "Ordenació personalitzada"
 
-#: packages/lib/models/Setting.ts:1166
+#: packages/lib/models/Setting.ts:1231
 msgid "Custom stylesheet for Joplin-wide app styles"
 msgstr "Full d'estil personalitzat per a estils d'aplicacions de tot Joplin"
 
-#: packages/lib/models/Setting.ts:1149
+#: packages/lib/models/Setting.ts:1214
 msgid "Custom stylesheet for rendered Markdown"
 msgstr "Full d'estil personalitzat per als Markdown renderitzats"
 
-#: packages/lib/models/Setting.ts:1289
+#: packages/lib/models/Setting.ts:1361
 msgid "Custom TLS certificates"
 msgstr "Certificats TLS personalitzats"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:18
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:751
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:143
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:760
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:149
 msgid "Cut"
 msgstr "Retalla"
 
-#: packages/lib/models/Setting.ts:340
+#: packages/lib/models/Setting.ts:383
 msgid "Dark"
 msgstr "Fosc"
 
-#: packages/server/src/services/MustacheService.ts:136
+#: packages/server/src/services/MustacheService.ts:111
 msgid "Dashboard"
 msgstr "Tauler de control"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:625
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:620
 msgid "Database v%s"
 msgstr "Base de dades v%s"
 
@@ -975,11 +988,11 @@ msgstr "Base de dades v%s"
 msgid "Date"
 msgstr "Data"
 
-#: packages/lib/models/Setting.ts:717
+#: packages/lib/models/Setting.ts:766
 msgid "Date format"
 msgstr "Format de data"
 
-#: packages/lib/models/Setting.ts:1346
+#: packages/lib/models/Setting.ts:1418
 msgid "days"
 msgstr "dies"
 
@@ -996,8 +1009,8 @@ msgstr "Elements desxifrats: %s / %s"
 msgid "Decrypting items: %d/%d"
 msgstr "S'estan desxifrant els elements: %d/%d"
 
-#: packages/lib/models/Setting.ts:1092 packages/lib/models/Setting.ts:1099
-#: packages/lib/models/Setting.ts:1258
+#: packages/lib/models/Setting.ts:1156 packages/lib/models/Setting.ts:1163
+#: packages/lib/models/Setting.ts:1327
 msgid "Default"
 msgstr "Per defecte"
 
@@ -1011,8 +1024,8 @@ msgstr "Per defecte: %s"
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:256
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:192
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:222
-#: packages/app-mobile/components/screen-header.js:362
-#: packages/app-mobile/components/screens/Note.tsx:953
+#: packages/app-mobile/components/screen-header.js:364
+#: packages/app-mobile/components/screens/Note.tsx:960
 #: packages/app-mobile/components/side-menu-content.js:146
 msgid "Delete"
 msgstr "Suprimeix"
@@ -1033,18 +1046,18 @@ msgstr "Suprimeix els tokens expirats"
 msgid "Delete line"
 msgstr "Suprimeix la línia"
 
-#: packages/lib/models/Setting.ts:1188
+#: packages/lib/models/Setting.ts:1255
 msgid "Delete local data and re-download from sync target"
 msgstr ""
 "Suprimeix les dades locals i torna a baixar de la destinació de "
 "sincronització"
 
-#: packages/lib/models/Note.ts:760
+#: packages/lib/models/Note.ts:765
 msgid "Delete note \"%s\"?"
 msgstr "Voleu suprimir la nota \"%s\"?"
 
 #: packages/app-cli/app/command-rmnote.js:27
-#: packages/app-mobile/components/screens/Note.tsx:525
+#: packages/app-mobile/components/screens/Note.tsx:529
 msgid "Delete note?"
 msgstr "Voleu suprimir la nota?"
 
@@ -1072,7 +1085,7 @@ msgstr ""
 msgid "Delete plugin \"%s\"?"
 msgstr "Voleu suprimir l'extensió \"%s\"?"
 
-#: packages/lib/models/Note.ts:762
+#: packages/lib/models/Note.ts:767
 msgid "Delete these %d notes?"
 msgstr "Voleu suprimir aquestes %d notes?"
 
@@ -1081,8 +1094,8 @@ msgid ""
 "Delete this invitation? The recipient will no longer have access to this "
 "shared notebook."
 msgstr ""
-"Voleu suprimir aquesta invitació? El destinatari ja no tindrà accés a aquest"
-" quadern compartit."
+"Voleu suprimir aquesta invitació? El destinatari ja no tindrà accés a aquest "
+"quadern compartit."
 
 #: packages/lib/Synchronizer.ts:186
 msgid "Deleted local items: %d."
@@ -1116,7 +1129,7 @@ msgstr "Format destí: %s"
 msgid "Directory"
 msgstr "Directori"
 
-#: packages/lib/models/Setting.ts:417
+#: packages/lib/models/Setting.ts:464
 msgid "Directory to synchronise with (absolute path)"
 msgstr "Directori on es farà la sincronització (camí absolut)"
 
@@ -1129,7 +1142,7 @@ msgstr "Desactiva"
 msgid "Disable encryption"
 msgstr "Desactiva el xifratge"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:580
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:586
 msgid "Disable safe mode and restart"
 msgstr "Desactiva el mode segur i reinicia"
 
@@ -1142,7 +1155,7 @@ msgstr "Desactiva el servei del porta-retalls de webs"
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:249
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:138
 #: packages/app-mobile/components/screens/encryption-config.tsx:303
-#: packages/lib/models/Setting.ts:1207
+#: packages/lib/models/Setting.ts:1274
 msgid "Disabled"
 msgstr "Desactivat"
 
@@ -1212,8 +1225,8 @@ msgstr "Mostra la informació d'ús."
 msgid "Displays version information"
 msgstr "Mostra la informació de versió"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:630
-#: packages/app-desktop/gui/NoteList/NoteList.tsx:173
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:633
+#: packages/app-desktop/gui/NoteList/NoteList.tsx:168
 msgid "Do it now"
 msgstr "Fes-ho ara"
 
@@ -1227,8 +1240,8 @@ msgid ""
 "way to decrypt the data! To enable encryption, please enter your password "
 "below."
 msgstr ""
-"No perdeu les contrasenyes perquè, per motius de seguretat, és l'única forma"
-" de desxifrar les dades. Per habilitar el xifrat, introduïu la vostra "
+"No perdeu les contrasenyes perquè, per motius de seguretat, és l'única forma "
+"de desxifrar les dades. Per habilitar el xifrat, introduïu la vostra "
 "contrasenya."
 
 #: packages/app-desktop/checkForUpdates.ts:199
@@ -1260,7 +1273,7 @@ msgstr "Descarregant"
 msgid "Downloading resources..."
 msgstr "Descarregant recursos..."
 
-#: packages/lib/models/Setting.ts:341
+#: packages/lib/models/Setting.ts:384
 msgid "Dracula"
 msgstr "Dràcula"
 
@@ -1277,7 +1290,7 @@ msgid "Dropbox Login"
 msgstr "Inicia sessió al Dropbox"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:56
-#: packages/app-mobile/components/screen-header.js:368
+#: packages/app-mobile/components/screen-header.js:370
 msgid "Duplicate"
 msgstr "Duplica"
 
@@ -1295,7 +1308,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/MainScreen/commands/openFolderDialog.ts:12
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/utils/openEditDialog.ts:83
-#: packages/app-mobile/components/screens/Note.tsx:1139
+#: packages/app-mobile/components/screens/Note.tsx:1148
 msgid "Edit"
 msgstr "Edita"
 
@@ -1312,37 +1325,46 @@ msgstr "Edita la nota."
 msgid "Edit notebook"
 msgstr "Edita el bloc de notes"
 
+#: packages/app-desktop/commands/editProfileConfig.ts:9
+msgid "Edit profile configuration..."
+msgstr "Edita la configuració del perfil"
+
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:138
-#: packages/lib/models/Setting.ts:821 packages/lib/models/Setting.ts:822
-#: packages/lib/models/Setting.ts:823
+#: packages/lib/models/Setting.ts:876 packages/lib/models/Setting.ts:877
+#: packages/lib/models/Setting.ts:878
 msgid "Editor"
 msgstr "Editor"
 
-#: packages/lib/models/Setting.ts:1085
+#: packages/lib/models/Setting.ts:1149
 msgid "Editor font"
 msgstr "Tipus de lletra de l'editor"
 
-#: packages/lib/models/Setting.ts:1110
+#: packages/lib/models/Setting.ts:1175
 msgid "Editor font family"
 msgstr "Família de lletra de l'editor"
 
-#: packages/lib/models/Setting.ts:1077
+#: packages/lib/models/Setting.ts:1141
 msgid "Editor font size"
 msgstr "Mida de lletra de l'editor"
 
-#: packages/lib/models/Setting.ts:1127
+#: packages/lib/models/Setting.ts:1194
 msgid "Editor maximum width"
 msgstr "Amplada màxima de l'editor"
 
-#: packages/lib/models/Setting.ts:1121
+#: packages/lib/models/Setting.ts:1187
 msgid "Editor monospace font family"
 msgstr "Lletra d'amplada fixa de l'editor"
+
+#: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:100
+#: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:96
+msgid "Editor: %s"
+msgstr "Editor: %s"
 
 #: packages/app-cli/app/command-ls.js:31
 msgid "Either \"text\" or \"json\""
 msgstr "«text» o «json»"
 
-#: packages/lib/models/Setting.ts:1259
+#: packages/lib/models/Setting.ts:1328
 msgid "Emacs"
 msgstr "Emacs"
 
@@ -1352,7 +1374,7 @@ msgid "Email"
 msgstr "Correu electrònic"
 
 #: packages/server/src/routes/admin/emails.ts:112
-#: packages/server/src/services/MustacheService.ts:152
+#: packages/server/src/services/MustacheService.ts:127
 msgid "Emails"
 msgstr "Correus electrònics"
 
@@ -1365,31 +1387,31 @@ msgstr "text ressaltat"
 msgid "Enable"
 msgstr "Activa"
 
-#: packages/lib/models/Setting.ts:1027
+#: packages/lib/models/Setting.ts:1090
 msgid "Enable ^sup^ syntax"
 msgstr "Activa la sintaxi ^sup^"
 
-#: packages/lib/models/Setting.ts:1031
+#: packages/lib/models/Setting.ts:1094
 msgid "Enable ++insert++ syntax"
 msgstr "Activa la sintaxi ++insert++"
 
-#: packages/lib/models/Setting.ts:1023
+#: packages/lib/models/Setting.ts:1086
 msgid "Enable ==mark== syntax"
 msgstr "Activa la sintaxi ==mark=="
 
-#: packages/lib/models/Setting.ts:1026
+#: packages/lib/models/Setting.ts:1089
 msgid "Enable ~sub~ syntax"
 msgstr "Activa la sintaxi ~sub~"
 
-#: packages/lib/models/Setting.ts:1029
+#: packages/lib/models/Setting.ts:1092
 msgid "Enable abbreviation syntax"
 msgstr "Activa la sintaxi d'abreviatures"
 
-#: packages/lib/models/Setting.ts:1020
+#: packages/lib/models/Setting.ts:1083
 msgid "Enable audio player"
 msgstr "Habilita el reproductor d'àudio"
 
-#: packages/lib/models/Setting.ts:1028
+#: packages/lib/models/Setting.ts:1091
 msgid "Enable deflist syntax"
 msgstr "Activa la sintaxi deflist"
 
@@ -1398,55 +1420,55 @@ msgstr "Activa la sintaxi deflist"
 msgid "Enable encryption"
 msgstr "Activa el xifratge"
 
-#: packages/lib/models/Setting.ts:1024
+#: packages/lib/models/Setting.ts:1087
 msgid "Enable footnotes"
 msgstr "Activar notes a peu de pàgina"
 
-#: packages/lib/models/Setting.ts:1017
+#: packages/lib/models/Setting.ts:1080
 msgid "Enable Fountain syntax support"
 msgstr "Activa el suport de sintaxi de Fountain"
 
-#: packages/lib/models/Setting.ts:1014
+#: packages/lib/models/Setting.ts:1077
 msgid "Enable Linkify"
 msgstr "Habilita Linkify"
 
-#: packages/lib/models/Setting.ts:1030
+#: packages/lib/models/Setting.ts:1093
 msgid "Enable markdown emoji"
 msgstr "Activa els emoticons Markdown"
 
-#: packages/lib/models/Setting.ts:1016
+#: packages/lib/models/Setting.ts:1079
 msgid "Enable math expressions"
 msgstr "Activa les expressions matemàtiques"
 
-#: packages/lib/models/Setting.ts:1018
+#: packages/lib/models/Setting.ts:1081
 msgid "Enable Mermaid diagrams support"
 msgstr "Activa el suport de diagrames Mermaid"
 
-#: packages/lib/models/Setting.ts:1032
+#: packages/lib/models/Setting.ts:1095
 msgid "Enable multimarkdown table extension"
 msgstr "Activa l'extensió de taules multimarkdown"
 
-#: packages/lib/models/Setting.ts:1336
+#: packages/lib/models/Setting.ts:1408
 msgid "Enable note history"
 msgstr "Activa l'historial de notes"
 
-#: packages/lib/models/Setting.ts:1022
+#: packages/lib/models/Setting.ts:1085
 msgid "Enable PDF viewer"
 msgstr "Habilita el visor de PDF"
 
-#: packages/lib/models/Setting.ts:1012
+#: packages/lib/models/Setting.ts:1075
 msgid "Enable soft breaks"
 msgstr "Activa els salts de línia"
 
-#: packages/lib/models/Setting.ts:1025
+#: packages/lib/models/Setting.ts:1088
 msgid "Enable table of contents extension"
 msgstr "Activar l'extensió de l'índex"
 
-#: packages/lib/models/Setting.ts:1013
+#: packages/lib/models/Setting.ts:1076
 msgid "Enable typographer support"
 msgstr "Activa el suport tipogràfic"
 
-#: packages/lib/models/Setting.ts:1021
+#: packages/lib/models/Setting.ts:1084
 msgid "Enable video player"
 msgstr "Habilita el reproductor de vídeo"
 
@@ -1467,8 +1489,7 @@ msgid ""
 "re-synchronised and sent encrypted to the sync target."
 msgstr ""
 "Habilitar el xifrat significa que totes les notes i adjunts es tornaran a "
-"sincronitzar i s'enviaran de forma xifrada a la destinació de "
-"sincronització."
+"sincronitzar i s'enviaran de forma xifrada a la destinació de sincronització."
 
 #: packages/lib/models/BaseItem.ts:808
 msgid "Encrypted"
@@ -1482,7 +1503,7 @@ msgstr "Els elements xifrats no es poden modificar"
 msgid "Encrypted notebooks cannot be renamed"
 msgstr "No es pot canviar el nom dels blocs de notes xifrats"
 
-#: packages/lib/models/Setting.ts:2150
+#: packages/lib/models/Setting.ts:2304
 msgid "Encryption"
 msgstr "Xifratge"
 
@@ -1497,6 +1518,7 @@ msgid "Encryption is: %s"
 msgstr "El xifratge és: %s"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:172
+#: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:271
 msgid "Encryption keys"
 msgstr "Claus de xifrat"
 
@@ -1536,11 +1558,11 @@ msgstr "S'ha produït un error en l'obrir la nota amb l'editor: %s"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:65
 #: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:31
-#: packages/lib/services/KeymapService.ts:197
+#: packages/lib/services/KeymapService.ts:203
 msgid "Error: %s"
 msgstr "Error: %s"
 
-#: packages/lib/components/shared/config-shared.js:51
+#: packages/lib/components/shared/config-shared.js:71
 msgid ""
 "Error. Please check that URL, username, password, etc. are correct and that "
 "the sync target is accessible. The reported error was:"
@@ -1571,8 +1593,8 @@ msgstr "Surt de l'aplicació."
 msgid "Export"
 msgstr "Exporta"
 
-#: packages/app-desktop/gui/MenuBar.tsx:488
-#: packages/app-desktop/gui/MenuBar.tsx:542
+#: packages/app-desktop/gui/MenuBar.tsx:540
+#: packages/app-desktop/gui/MenuBar.tsx:596
 msgid "Export all"
 msgstr "Exporta-ho tot"
 
@@ -1580,15 +1602,15 @@ msgstr "Exporta-ho tot"
 msgid "Export debug report"
 msgstr "Exporta l'informe de depuració"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:523
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:518
 msgid "Export Debug Report"
 msgstr "Exporta l'informe de depuració"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:528
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:523
 msgid "Export profile"
 msgstr "Exporta el perfil"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:528
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:523
 msgid "Exporting profile..."
 msgstr "Exportant el perfil..."
 
@@ -1601,8 +1623,8 @@ msgid ""
 "Exports Joplin data to the given path. By default, it will export the "
 "complete database including notebooks, notes, tags and resources."
 msgstr ""
-"Exporta les dades del Joplin al camí indicat. Per defecte, exportarà tota la"
-" base de dades, incloent-hi blocs de notes, notes, etiquetes i recursos."
+"Exporta les dades del Joplin al camí indicat. Per defecte, exportarà tota la "
+"base de dades, incloent-hi blocs de notes, notes, etiquetes i recursos."
 
 #: packages/app-cli/app/command-export.js:23
 msgid "Exports only the given note."
@@ -1612,11 +1634,11 @@ msgstr "Exporta només la nota indicada."
 msgid "Exports only the given notebook."
 msgstr "Exporta només el bloc de notes indicat."
 
-#: packages/lib/models/Setting.ts:1322
+#: packages/lib/models/Setting.ts:1394
 msgid "Fail-safe"
 msgstr "A prova d'errors"
 
-#: packages/lib/models/Setting.ts:1323
+#: packages/lib/models/Setting.ts:1395
 msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
@@ -1629,7 +1651,7 @@ msgstr ""
 msgid "Fatal error:"
 msgstr "Error fatal:"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:545
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:540
 msgid "Feature flags"
 msgstr "Interruptors de funcions"
 
@@ -1650,31 +1672,35 @@ msgstr "Fitxer"
 msgid "File system"
 msgstr "Sistema de fitxers"
 
+#: packages/app-mobile/components/screens/NoteTagsDialog.js:190
+msgid "Filter tags"
+msgstr "Filtra les etiquetes"
+
 #: packages/app-desktop/gui/ExtensionBadge.min.js:10
 msgid "Firefox Extension"
 msgstr "Extensió del Firefox"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:525
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:520
 msgid "Fix search index"
 msgstr "Corregeix l'índex de cerca"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:525
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:520
 msgid "Fixing search index..."
 msgstr "Corregint l'índex de cerca..."
 
-#: packages/app-desktop/gui/MenuBar.tsx:680
+#: packages/app-desktop/gui/MenuBar.tsx:744
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteBody.ts:7
 #: packages/app-desktop/gui/NoteEditor/commands/focusElementNoteTitle.ts:7
-#: packages/app-desktop/gui/NoteList/commands/focusElementNoteList.ts:8
+#: packages/app-desktop/gui/NoteList/commands/focusElementNoteList.ts:9
 #: packages/app-desktop/gui/Sidebar/commands/focusElementSideBar.ts:9
 msgid "Focus"
 msgstr "Focus"
 
-#: packages/lib/models/Setting.ts:963 packages/lib/models/Setting.ts:979
+#: packages/lib/models/Setting.ts:1024 packages/lib/models/Setting.ts:1041
 msgid "Focus body"
 msgstr "Vés al cos"
 
-#: packages/lib/models/Setting.ts:962 packages/lib/models/Setting.ts:978
+#: packages/lib/models/Setting.ts:1023 packages/lib/models/Setting.ts:1040
 msgid "Focus title"
 msgstr "Vés al títol"
 
@@ -1682,9 +1708,8 @@ msgstr "Vés al títol"
 msgid "Folders"
 msgstr "Carpetes"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:528
-msgid ""
-"For debugging purpose only: export your profile to an external SD card."
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:523
+msgid "For debugging purpose only: export your profile to an external SD card."
 msgstr ""
 "Només en cas depuració: exporta el vostre perfil a una targeta SD externa."
 
@@ -1696,8 +1721,8 @@ msgstr ""
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:291
 msgid ""
-"For more information about End-To-End Encryption (E2EE) and advice on how to"
-" enable it please check the documentation:"
+"For more information about End-To-End Encryption (E2EE) and advice on how to "
+"enable it please check the documentation:"
 msgstr ""
 "Per a més informació sobre el xifratge d'extrem a extrem (E2EE de l'anglès) "
 "i consells sobre com activar-lo, llegiu la documentació:"
@@ -1709,7 +1734,7 @@ msgstr ""
 "Per a llistar les dreceres de teclat i opcions de configuració, escriviu "
 "«help keymap»"
 
-#: packages/lib/models/Setting.ts:569
+#: packages/lib/models/Setting.ts:616
 msgid "Force path style"
 msgstr "Força l'estil del camí"
 
@@ -1722,7 +1747,7 @@ msgstr "Endavant"
 msgid "Found: %d."
 msgstr "Trobades: %d."
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:631
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:626
 msgid "FTS enabled: %d"
 msgstr "FTS activat: %d"
 
@@ -1730,8 +1755,8 @@ msgstr "FTS activat: %d"
 msgid "Full changelog"
 msgstr "Registre complet de canvis"
 
-#: packages/lib/models/Setting.ts:2141
-#: packages/server/src/services/MustacheService.ts:133
+#: packages/lib/models/Setting.ts:2295
+#: packages/server/src/services/MustacheService.ts:108
 msgid "General"
 msgstr "General"
 
@@ -1739,7 +1764,7 @@ msgstr "General"
 msgid "Generated"
 msgstr "Generat"
 
-#: packages/app-desktop/gui/ShareNoteDialog.tsx:207
+#: packages/app-desktop/gui/ShareNoteDialog.tsx:184
 msgid "Generating link..."
 msgid_plural "Generating links..."
 msgstr[0] "Generant enllaç..."
@@ -1749,21 +1774,21 @@ msgstr[1] "Generant enllaços..."
 msgid "Get it now:"
 msgstr "Obteniu-lo ara:"
 
-#: packages/lib/models/Setting.ts:1196
+#: packages/lib/models/Setting.ts:1263
 msgid "Get pre-releases when checking for updates"
 msgstr "Obtén prellançaments quan cerqui actualitzacions"
 
 #: packages/app-cli/app/command-config.js:13
 msgid ""
 "Gets or sets a config value. If [value] is not provided, it will show the "
-"value of [name]. If neither [name] nor [value] is provided, it will list the"
-" current configuration."
+"value of [name]. If neither [name] nor [value] is provided, it will list the "
+"current configuration."
 msgstr ""
 "Obté o estableix un valor de configuració. Si no s'indica [valor], mostrarà "
 "el valor de [nom]. Si no s'indica ni [nom] ni [valor], es mostrarà un "
 "llistat amb la configuració actual."
 
-#: packages/app-mobile/components/screens/Note.tsx:847
+#: packages/app-mobile/components/screens/Note.tsx:859
 msgid "Go to source URL"
 msgstr "Anar a URL origen"
 
@@ -1780,11 +1805,11 @@ msgstr "Autoritza"
 msgid "Heading"
 msgstr "Capçalera"
 
-#: packages/server/src/services/MustacheService.ts:305
+#: packages/server/src/services/MustacheService.ts:276
 msgid "Help"
 msgstr "Ajuda"
 
-#: packages/app-desktop/gui/MenuBar.tsx:503
+#: packages/app-desktop/gui/MenuBar.tsx:557
 msgid "Hide %s"
 msgstr "Amaga %s"
 
@@ -1800,8 +1825,8 @@ msgstr "Amaga el Joplin"
 msgid "Highlight"
 msgstr "Ressalta"
 
-#: packages/server/src/services/MustacheService.ts:167
-#: packages/server/src/services/MustacheService.ts:300
+#: packages/server/src/services/MustacheService.ts:140
+#: packages/server/src/services/MustacheService.ts:271
 msgid "Home"
 msgstr "Inici"
 
@@ -1841,7 +1866,7 @@ msgstr "Ociós"
 msgid "Ignore"
 msgstr "Ignora"
 
-#: packages/lib/models/Setting.ts:1312
+#: packages/lib/models/Setting.ts:1384
 msgid "Ignore TLS certificate errors"
 msgstr "Ignora els errors de certificat TLS"
 
@@ -1850,13 +1875,13 @@ msgid "Images"
 msgstr "Imatges"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:170
-#: packages/app-desktop/gui/MenuBar.tsx:484
-#: packages/app-desktop/gui/MenuBar.tsx:539
+#: packages/app-desktop/gui/MenuBar.tsx:536
+#: packages/app-desktop/gui/MenuBar.tsx:593
 #: packages/app-desktop/gui/Root.tsx:219
 msgid "Import"
 msgstr "Importació"
 
-#: packages/app-desktop/gui/MenuBar.tsx:198
+#: packages/app-desktop/gui/MenuBar.tsx:241
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
 msgstr "S'està important el format de «%s» a «%s». Espereu..."
 
@@ -1868,7 +1893,7 @@ msgstr "S'estan important notes..."
 msgid "Imports data into Joplin."
 msgstr "Importa les dades al Joplin."
 
-#: packages/lib/models/Setting.ts:663
+#: packages/lib/models/Setting.ts:710
 msgid ""
 "In \"Manual\" mode, attachments are downloaded only when you click on them. "
 "In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
@@ -1891,35 +1916,44 @@ msgstr ""
 
 #: packages/app-mobile/components/screens/Note.tsx:402
 msgid ""
-"In order to associate a geo-location with the note, the app needs your permission to access your location.\n"
+"In order to associate a geo-location with the note, the app needs your "
+"permission to access your location.\n"
 "\n"
 "You may turn off this option at any time in the Configuration screen."
 msgstr ""
-"Per tal d'associar una geolocalització a la nota, l'aplicació necessita permís per a accedir a la vostra ubicació.\n"
+"Per tal d'associar una geolocalització a la nota, l'aplicació necessita "
+"permís per a accedir a la vostra ubicació.\n"
 "\n"
-"Podeu desactivar aquesta opció en qualsevol moment a la pantalla de configuració."
+"Podeu desactivar aquesta opció en qualsevol moment a la pantalla de "
+"configuració."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:95
 msgid ""
-"In order to do so, your entire data set will have to be encrypted and synchronised, so it is best to run it overnight.\n"
+"In order to do so, your entire data set will have to be encrypted and "
+"synchronised, so it is best to run it overnight.\n"
 "\n"
 "To start, please follow these instructions:\n"
 "\n"
 "1. Synchronise all your devices.\n"
 "2. Click \"%s\".\n"
-"3. Let it run to completion. While it runs, avoid changing any note on your other devices, to avoid conflicts.\n"
-"4. Once sync is done on this device, sync all your other devices and let it run to completion.\n"
+"3. Let it run to completion. While it runs, avoid changing any note on your "
+"other devices, to avoid conflicts.\n"
+"4. Once sync is done on this device, sync all your other devices and let it "
+"run to completion.\n"
 "\n"
 "Important: you only need to run this ONCE on one device."
 msgstr ""
-"Per a fer-ho, totes les vostres dades hauran de ser encriptades i sincronitzades, per tant és millor executar-ho durant la nit.\n"
+"Per a fer-ho, totes les vostres dades hauran de ser encriptades i "
+"sincronitzades, per tant és millor executar-ho durant la nit.\n"
 "\n"
 "Per a començar, seguiu aquestes instruccions:\n"
 "\n"
 "1. Sincronitzeu tots els vostres dispositius.\n"
 "2. Feu click en \"%s\".\n"
-"3. Deixeu-lo executant-se fins que acabi. Mentre s'executa, eviteu fer canvis en cap nota des dels altres dispositius per a evitar els conflictes.\n"
-"4. Un cop la sincronització està acabada en aquest dispositiu, sincronitzeu tots els altres dispositius, i deixeu-los executant-se fins que acabin.\n"
+"3. Deixeu-lo executant-se fins que acabi. Mentre s'executa, eviteu fer "
+"canvis en cap nota des dels altres dispositius per a evitar els conflictes.\n"
+"4. Un cop la sincronització està acabada en aquest dispositiu, sincronitzeu "
+"tots els altres dispositius, i deixeu-los executant-se fins que acabin.\n"
 "\n"
 "Important: només cal executar això UNA SOLA VEGADA en un dispositiu."
 
@@ -1994,7 +2028,7 @@ msgstr "S'està cancel·lant..."
 msgid "Invalid"
 msgstr "Invàlid"
 
-#: packages/lib/services/KeymapService.ts:319
+#: packages/lib/services/KeymapService.ts:325
 msgid "Invalid %s: %s."
 msgstr "%s invàlid: %s."
 
@@ -2006,7 +2040,7 @@ msgstr "La resposta no és vàlida: %s"
 msgid "Invalid command: \"%s\""
 msgstr "Ordre no vàlida: «%s»"
 
-#: packages/lib/models/Setting.ts:1727
+#: packages/lib/models/Setting.ts:1834
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "El valor de l'opció no és vàlid: «%s». Els valors possibles són: %s."
 
@@ -2022,8 +2056,8 @@ msgstr "Cursiva"
 msgid "Item \"%s\" could not be downloaded: %s"
 msgstr "L'element \"%s\" no s'ha pogut descarregar: %s"
 
-#: packages/server/src/services/MustacheService.ts:175
-#: packages/server/src/services/MustacheService.ts:302
+#: packages/server/src/services/MustacheService.ts:148
+#: packages/server/src/services/MustacheService.ts:273
 msgid "Items"
 msgstr "Elements"
 
@@ -2047,11 +2081,11 @@ msgstr ""
 msgid "Joplin Cloud"
 msgstr "Joplin Cloud"
 
-#: packages/lib/models/Setting.ts:637
+#: packages/lib/models/Setting.ts:684
 msgid "Joplin Cloud email"
 msgstr "Correu electrònic del Joplin Cloud"
 
-#: packages/lib/models/Setting.ts:648
+#: packages/lib/models/Setting.ts:695
 msgid "Joplin Cloud password"
 msgstr "Contrasenya del Joplin Cloud"
 
@@ -2068,14 +2102,14 @@ msgstr "Fitxer d'exportació del Joplin"
 #: packages/lib/services/ReportService.ts:210
 msgid ""
 "Joplin failed to decrypt these items multiple times, possibly because they "
-"are corrupted or too large. These items will remain on the device but Joplin"
-" will no longer attempt to decrypt them."
+"are corrupted or too large. These items will remain on the device but Joplin "
+"will no longer attempt to decrypt them."
 msgstr ""
-"Joplin no ha pogut desxifrar aquests elements diverses vegades, possiblement"
-" perquè estan danyats o són massa grans. Aquests elements romandran al "
+"Joplin no ha pogut desxifrar aquests elements diverses vegades, possiblement "
+"perquè estan danyats o són massa grans. Aquests elements romandran al "
 "dispositiu, però Joplin ja no intentarà desxifrar-los."
 
-#: packages/app-desktop/gui/MenuBar.tsx:713
+#: packages/app-desktop/gui/MenuBar.tsx:777
 msgid "Joplin Forum"
 msgstr "Fòrum del Joplin"
 
@@ -2083,28 +2117,28 @@ msgstr "Fòrum del Joplin"
 msgid "Joplin Server"
 msgstr "Servidor del Joplin"
 
-#: packages/lib/models/Setting.ts:598
+#: packages/lib/models/Setting.ts:645
 msgid "Joplin Server email"
 msgstr "Correu electrònic del servidor del Joplin"
 
-#: packages/lib/models/Setting.ts:609
+#: packages/lib/models/Setting.ts:656
 msgid "Joplin Server password"
 msgstr "Contrasenya del servidor del Joplin"
 
-#: packages/lib/models/Setting.ts:580
+#: packages/lib/models/Setting.ts:627
 msgid "Joplin Server URL"
 msgstr "URL del servidor Joplin"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:137
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:128
 msgid ""
-"Joplin Web Clipper allows saving web pages and screenshots from your browser"
-" to Joplin."
+"Joplin Web Clipper allows saving web pages and screenshots from your browser "
+"to Joplin."
 msgstr ""
 "El porta-retalls de webs del Joplin us permet desar pàgines web i captures "
 "de pantalla del navegador web al Joplin."
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:597
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:592
 msgid "Joplin website"
 msgstr "Lloc web del Joplin"
 
@@ -2117,11 +2151,11 @@ msgstr ""
 "funcionalitats específiques de Joplin, com la publicació de notes o la "
 "col·laboració en blocs de notes amb altres."
 
-#: packages/lib/models/Setting.ts:1348
+#: packages/lib/models/Setting.ts:1420
 msgid "Keep note history for"
 msgstr "Conserva l'historial de la nota durant"
 
-#: packages/lib/models/Setting.ts:1255
+#: packages/lib/models/Setting.ts:1324
 msgid "Keyboard Mode"
 msgstr "Mode de teclat"
 
@@ -2129,7 +2163,7 @@ msgstr "Mode de teclat"
 msgid "Keyboard Shortcut"
 msgstr "Drecera de teclat"
 
-#: packages/lib/models/Setting.ts:2152
+#: packages/lib/models/Setting.ts:2306
 msgid "Keyboard Shortcuts"
 msgstr "Dreceres de teclat"
 
@@ -2141,11 +2175,11 @@ msgstr "Clauer admès: %s"
 msgid "Keys that need upgrading"
 msgstr "Claus que requereixen actualització"
 
-#: packages/lib/models/Setting.ts:1244
+#: packages/lib/models/Setting.ts:1313
 msgid "Landscape"
 msgstr "Paisatge"
 
-#: packages/lib/models/Setting.ts:706
+#: packages/lib/models/Setting.ts:754
 msgid "Language"
 msgstr "Llengua"
 
@@ -2153,7 +2187,7 @@ msgstr "Llengua"
 msgid "Last error: %s"
 msgstr "Últim error: %s"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:630
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:633
 msgid "Later"
 msgstr "Més tard"
 
@@ -2161,7 +2195,7 @@ msgstr "Més tard"
 msgid "Layout"
 msgstr "Disposició"
 
-#: packages/app-desktop/gui/MenuBar.tsx:608
+#: packages/app-desktop/gui/MenuBar.tsx:672
 msgid "Layout button sequence"
 msgstr "Seqüència del botó de disposició"
 
@@ -2169,15 +2203,15 @@ msgstr "Seqüència del botó de disposició"
 msgid "Leave notebook..."
 msgstr "Surt del bloc de notes"
 
-#: packages/lib/models/Setting.ts:1238
+#: packages/lib/models/Setting.ts:1307
 msgid "Legal"
 msgstr "Legal"
 
-#: packages/lib/models/Setting.ts:1234
+#: packages/lib/models/Setting.ts:1303
 msgid "Letter"
 msgstr "Carta"
 
-#: packages/lib/models/Setting.ts:339
+#: packages/lib/models/Setting.ts:382
 msgid "Light"
 msgstr "Clar"
 
@@ -2185,7 +2219,7 @@ msgstr "Clar"
 msgid "Lines"
 msgstr "Línies"
 
-#: packages/app-desktop/gui/ShareNoteDialog.tsx:208
+#: packages/app-desktop/gui/ShareNoteDialog.tsx:185
 msgid "Link has been copied to clipboard!"
 msgid_plural "Links have been copied to clipboard!"
 msgstr[0] "L'enllaç s'ha copiat al porta-retalls!"
@@ -2219,9 +2253,9 @@ msgstr ""
 "sincronització ara mateix, podeu suprimir el fitxer de bloqueig a «%s» i "
 "reprendre l'operació."
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:521
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:516
 #: packages/app-mobile/components/screens/log.js:100
-#: packages/server/src/services/MustacheService.ts:303
+#: packages/server/src/services/MustacheService.ts:274
 msgid "Log"
 msgstr "Registre"
 
@@ -2241,20 +2275,20 @@ msgstr "Inicia sessió amb Dropbox"
 msgid "Login with OneDrive"
 msgstr "Inicia sessió amb OneDrive"
 
-#: packages/server/src/services/MustacheService.ts:306
+#: packages/server/src/services/MustacheService.ts:277
 msgid "Logout"
 msgstr "Desconnecta"
 
-#: packages/server/src/services/MustacheService.ts:179
+#: packages/server/src/services/MustacheService.ts:152
 msgid "Logs"
 msgstr "Registres"
 
-#: packages/app-desktop/gui/MenuBar.tsx:716
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:583
+#: packages/app-desktop/gui/MenuBar.tsx:780
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:578
 msgid "Make a donation"
 msgstr "Donatius"
 
-#: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:212
+#: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:217
 msgid "Manage master password"
 msgstr "Gestiona la contrasenya mestra"
 
@@ -2275,11 +2309,11 @@ msgstr ""
 "Gestiona la configuració E2EE. Les ordres són `enable`, `disable`, "
 "`decrypt`, `status`, `decrypt-file`, i `target-status`."
 
-#: packages/lib/models/Setting.ts:667
+#: packages/lib/models/Setting.ts:714
 msgid "Manual"
 msgstr "Manual"
 
-#: packages/lib/models/Setting.ts:2146
+#: packages/lib/models/Setting.ts:2300
 #: packages/lib/services/interop/InteropService.ts:113
 #: packages/lib/services/interop/InteropService.ts:58
 msgid "Markdown"
@@ -2317,7 +2351,7 @@ msgstr "Contrasenya mestra"
 msgid "Master password:"
 msgstr "Contrasenya mestra:"
 
-#: packages/lib/models/Setting.ts:690
+#: packages/lib/models/Setting.ts:738
 msgid "Max concurrent connections"
 msgstr "Connexions simultànies màximes"
 
@@ -2337,11 +2371,11 @@ msgstr "Manca un argument requerit: %s"
 msgid "Mobile data - auto-sync disabled"
 msgstr "Dades mòbils - sincronització automàtica desactivada"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:604
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:610
 msgid "More info"
 msgstr "Més informació"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:549
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:544
 msgid "More information"
 msgstr "Més informació"
 
@@ -2350,7 +2384,7 @@ msgid "More than one item match \"%s\". Please narrow down your query."
 msgstr ""
 "Hi ha més d'un element que coincideix amb «%s». Restringiu la consulta."
 
-#: packages/app-mobile/components/screen-header.js:441
+#: packages/app-mobile/components/screen-header.js:453
 msgid "Move %d notes to notebook \"%s\"?"
 msgstr "Voleu moure %dnotes al bloc de notes \"%s\"?"
 
@@ -2362,7 +2396,7 @@ msgstr "Mou al bloc de notes"
 msgid "Move to notebook:"
 msgstr "Mou al bloc de notes:"
 
-#: packages/app-mobile/components/screen-header.js:400
+#: packages/app-mobile/components/screen-header.js:402
 msgid "Move to notebook..."
 msgstr "Mou al bloc de notes..."
 
@@ -2393,14 +2427,15 @@ msgid "New Notebook"
 msgstr "Bloc de notes nou"
 
 #: packages/app-desktop/gui/ImportScreen.min.js:61
-msgid "New notebook \"%s\" will be created and file \"%s\" will be imported into it"
+msgid ""
+"New notebook \"%s\" will be created and file \"%s\" will be imported into it"
 msgstr "Es crearà un bloc de notes «%s» i s'hi importarà el fitxer «%s»"
 
 #: packages/app-desktop/gui/MainScreen/commands/newSubFolder.ts:6
 msgid "New sub-notebook"
 msgstr "Sub-bloc de notes nou"
 
-#: packages/app-mobile/components/screens/NoteTagsDialog.js:165
+#: packages/app-mobile/components/screens/NoteTagsDialog.js:170
 msgid "New tags:"
 msgstr "Etiquetes noves:"
 
@@ -2418,24 +2453,24 @@ msgstr "Nova versió: %s"
 msgid "Nextcloud"
 msgstr "Nextcloud"
 
-#: packages/lib/models/Setting.ts:453
+#: packages/lib/models/Setting.ts:500
 msgid "Nextcloud password"
 msgstr "Contrasenya del Nextcloud"
 
-#: packages/lib/models/Setting.ts:442
+#: packages/lib/models/Setting.ts:489
 msgid "Nextcloud username"
 msgstr "Nom d'usuari del Nextcloud"
 
-#: packages/lib/models/Setting.ts:430
+#: packages/lib/models/Setting.ts:477
 msgid "Nextcloud WebDAV URL"
 msgstr "URL del Nextcloud WebDAV"
 
-#: packages/lib/models/Setting.ts:328
+#: packages/lib/models/Setting.ts:371
 msgid "no"
 msgstr "no"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:29
-#: packages/app-mobile/components/screens/Note.tsx:587
+#: packages/app-mobile/components/screens/Note.tsx:591
 #: packages/lib/shim-init-node.js:172 packages/lib/versionInfo.ts:27
 msgid "No"
 msgstr "No"
@@ -2456,7 +2491,7 @@ msgstr "No heu indicat cap bloc de notes."
 msgid "No notebook selected."
 msgstr "No heu seleccionat cap bloc de notes."
 
-#: packages/app-desktop/gui/NoteList/NoteList.tsx:469
+#: packages/app-desktop/gui/NoteList/NoteList.tsx:468
 msgid "No notes in here. Create one by clicking on \"New note\"."
 msgstr "No hi ha cap nota aquí. Creeu-ne una fent clic a «Nota nova»."
 
@@ -2483,7 +2518,7 @@ msgstr ""
 "No hi ha definit cap editor de text. Establiu-ne un usant \"config editor "
 "<editor-path>\""
 
-#: packages/lib/models/Setting.ts:344
+#: packages/lib/models/Setting.ts:387
 msgid "Nord"
 msgstr "Nord"
 
@@ -2500,16 +2535,16 @@ msgid "Not generated"
 msgstr "No s'ha generat"
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.tsx:110
-#: packages/server/src/models/UserModel.ts:214
-#: packages/server/src/models/UserModel.ts:231
+#: packages/server/src/models/UserModel.ts:215
+#: packages/server/src/models/UserModel.ts:232
 msgid "note"
 msgstr "nota"
 
-#: packages/lib/models/Setting.ts:2144
+#: packages/lib/models/Setting.ts:2298
 msgid "Note"
 msgstr "Nota"
 
-#: packages/lib/models/Setting.ts:1408
+#: packages/lib/models/Setting.ts:1483
 msgid "Note area growth factor"
 msgstr "Factor de creixement de l'àrea de nota"
 
@@ -2517,7 +2552,7 @@ msgstr "Factor de creixement de l'àrea de nota"
 msgid "Note attachments"
 msgstr "Adjunts de la nota"
 
-#: packages/app-desktop/gui/MenuBar.tsx:408
+#: packages/app-desktop/gui/MenuBar.tsx:460
 msgid "Note attachments..."
 msgstr "Adjunts..."
 
@@ -2534,7 +2569,7 @@ msgid "Note has been saved."
 msgstr "S'ha desat la nota."
 
 #: packages/app-desktop/gui/NotePropertiesDialog.min.js:34
-#: packages/lib/models/Setting.ts:2149
+#: packages/lib/models/Setting.ts:2303
 msgid "Note History"
 msgstr "Historial de la nota"
 
@@ -2542,11 +2577,11 @@ msgstr "Historial de la nota"
 msgid "Note is not a to-do: \"%s\""
 msgstr "La nota no és un llistat de tasques pendents: «%s»"
 
-#: packages/app-desktop/gui/NoteList/commands/focusElementNoteList.ts:7
+#: packages/app-desktop/gui/NoteList/commands/focusElementNoteList.ts:8
 msgid "Note list"
 msgstr "Llistat de notes"
 
-#: packages/lib/models/Setting.ts:1394
+#: packages/lib/models/Setting.ts:1468
 msgid "Note list growth factor"
 msgstr "Factor de creixement de la llista de notes"
 
@@ -2559,24 +2594,24 @@ msgstr "Propietats de la nota"
 msgid "Note title"
 msgstr "Títol de la nota"
 
-#: packages/lib/models/Setting.ts:1046
+#: packages/lib/models/Setting.ts:1109
 msgid "Note: Does not work in all desktop environments."
 msgstr "Nota: no funciona en tots els entorns d'escriptori."
 
-#: packages/app-desktop/gui/ShareNoteDialog.tsx:214
+#: packages/app-desktop/gui/ShareNoteDialog.tsx:191
 msgid ""
 "Note: When a note is shared, it will no longer be encrypted on the server."
 msgstr "Nota: quan es comparteix una nota, deixa d'estar xifrada al servidor."
 
-#: packages/app-desktop/gui/MenuBar.tsx:686
+#: packages/app-desktop/gui/MenuBar.tsx:750
 msgid "Note&book"
 msgstr "&Blocs de notes"
 
-#: packages/lib/models/Setting.ts:2145
+#: packages/lib/models/Setting.ts:2299
 msgid "Notebook"
 msgstr "Bloc de notes"
 
-#: packages/lib/models/Setting.ts:1380
+#: packages/lib/models/Setting.ts:1453
 msgid "Notebook list growth factor"
 msgstr "Factor de creixement de la llista de blocs de notes"
 
@@ -2598,7 +2633,7 @@ msgstr "Els blocs de notes no poden tenir el nom «%s», és un títol reservat.
 msgid "Notes"
 msgstr "otes"
 
-#: packages/lib/models/Setting.ts:2161
+#: packages/lib/models/Setting.ts:2315
 msgid "Notes and settings are stored in: %s"
 msgstr "Les notes i la configuració es desen a: %s"
 
@@ -2615,9 +2650,9 @@ msgstr "Llista numerada"
 #: packages/app-desktop/bridge.ts:217 packages/app-desktop/bridge.ts:227
 #: packages/app-desktop/gui/ConfigScreen/ButtonBar.tsx:28
 #: packages/app-desktop/gui/DialogButtonRow.min.js:30
-#: packages/app-desktop/gui/DialogButtonRow.tsx:75
-#: packages/app-desktop/gui/MenuBar.tsx:433
-#: packages/app-desktop/gui/PromptDialog.min.js:235
+#: packages/app-desktop/gui/DialogButtonRow.tsx:70
+#: packages/app-desktop/gui/MenuBar.tsx:485
+#: packages/app-desktop/gui/PromptDialog.min.js:242
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:26
 #: packages/app-mobile/components/CameraView.tsx:190
 #: packages/app-mobile/components/ModalDialog.js:67
@@ -2626,7 +2661,7 @@ msgstr "Llista numerada"
 msgid "OK"
 msgstr "D'acord"
 
-#: packages/lib/models/Setting.ts:346
+#: packages/lib/models/Setting.ts:389
 msgid "OLED Dark"
 msgstr "OLED fosc"
 
@@ -2634,7 +2669,7 @@ msgstr "OLED fosc"
 msgid "On %s: %s"
 msgstr "A les %s.%s"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:597
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:603
 msgid "One of your master keys use an obsolete encryption method."
 msgstr ""
 "Una de les vostres claus mestres utilitza un mètode de xifratge obsolet."
@@ -2651,7 +2686,7 @@ msgstr ""
 "contrasenya, els elements xifrats s'estan desxifrant en segon pla i seran "
 "disponibles aviat."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:626
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:632
 msgid "One or more master keys need a password."
 msgstr "Una o més claus mestres necessiten una contrasenya."
 
@@ -2679,11 +2714,11 @@ msgstr "Obre %s"
 msgid "Open profile directory"
 msgstr "Obre carpeta de perfil"
 
-#: packages/lib/models/Setting.ts:369
+#: packages/lib/models/Setting.ts:413
 msgid "Open Sync Wizard..."
 msgstr "Obre l'assistent de sincronització..."
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:99
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:73
 msgid "Open..."
 msgstr "Obre..."
 
@@ -2694,7 +2729,7 @@ msgid "Operation cancelled"
 msgstr "L'operació s'ha cancel·lat"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:26
-#: packages/app-desktop/gui/MenuBar.tsx:394
+#: packages/app-desktop/gui/MenuBar.tsx:446
 #: packages/app-desktop/gui/Root.tsx:220
 msgid "Options"
 msgstr "Opcions"
@@ -2703,7 +2738,7 @@ msgstr "Opcions"
 msgid "Or create an account."
 msgstr "O creeu un compte."
 
-#: packages/app-desktop/gui/MenuBar.tsx:352
+#: packages/app-desktop/gui/MenuBar.tsx:400
 msgid "Other applications..."
 msgstr "Altres aplicacions"
 
@@ -2711,11 +2746,11 @@ msgstr "Altres aplicacions"
 msgid "Output format: %s"
 msgstr "Format destí: %s"
 
-#: packages/lib/models/Setting.ts:1241
+#: packages/lib/models/Setting.ts:1310
 msgid "Page orientation for PDF export"
 msgstr "Orientació de la pàgina per exportació a PDF"
 
-#: packages/lib/models/Setting.ts:1231
+#: packages/lib/models/Setting.ts:1300
 msgid "Page size for PDF export"
 msgstr "Mida de la pàgina per exportació a PDF"
 
@@ -2739,12 +2774,12 @@ msgid "Passwords do not match!"
 msgstr "Les contrasenyes no coincideixen!"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:23
-#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:771
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:158
+#: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:780
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:164
 msgid "Paste"
 msgstr "Enganxa"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:502
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:521
 msgid "Path:"
 msgstr "Camí:"
 
@@ -2762,8 +2797,12 @@ msgid "Permission to use camera"
 msgstr "Permís per a utilitzar la càmera"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:271
-msgid "Please click on \"%s\" to proceed"
-msgstr "Feu clic a \"%s\" per a continuar"
+msgid ""
+"Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list "
+"below."
+msgstr ""
+"Feu clic a \"%s\" per a continuar, o definiu les contrasenyes a la llista "
+"\"%s\" inferior."
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:65
 msgid ""
@@ -2772,8 +2811,8 @@ msgstr "Confirmeu que voleu tornar a xifrar la vostra base de dades completa."
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:208
 msgid ""
-"Please enter your password in the master key list below before upgrading the"
-" key."
+"Please enter your password in the master key list below before upgrading the "
+"key."
 msgstr ""
 "Entreu la vostra contrasenya en la llista de claus mestres d'aquí a sota "
 "abans d'actualitzar la clau."
@@ -2826,8 +2865,8 @@ msgstr "Si us plau, actualitzeu Joplin per a utilitzar aquesta extensió"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/TinyMCE/TinyMCE.tsx:1164
 msgid ""
-"Please wait for all attachments to be downloaded and decrypted. You may also"
-" switch to %s to edit the note."
+"Please wait for all attachments to be downloaded and decrypted. You may also "
+"switch to %s to edit the note."
 msgstr ""
 "Espereu que tots els adjunts hagin estat descarregats i desxifrats. També "
 "podeu canviar a %s per a editar la nota."
@@ -2842,11 +2881,11 @@ msgid "Plugin tools"
 msgstr "Eines de les extensions"
 
 #: packages/app-desktop/gui/ConfigScreen/Sidebar.tsx:105
-#: packages/lib/models/Setting.ts:2147
+#: packages/lib/models/Setting.ts:2301
 msgid "Plugins"
 msgstr "Extensions"
 
-#: packages/lib/models/Setting.ts:1243
+#: packages/lib/models/Setting.ts:1312
 msgid "Portrait"
 msgstr "Retrat"
 
@@ -2862,15 +2901,15 @@ msgstr "Valors possibles: %s."
 msgid "Preferences"
 msgstr "Preferències"
 
-#: packages/app-desktop/gui/MenuBar.tsx:459
+#: packages/app-desktop/gui/MenuBar.tsx:511
 msgid "Preferences..."
 msgstr "Preferències..."
 
-#: packages/lib/models/Setting.ts:800
+#: packages/lib/models/Setting.ts:854
 msgid "Preferred dark theme"
 msgstr "Tema fosc preferit"
 
-#: packages/lib/models/Setting.ts:785
+#: packages/lib/models/Setting.ts:838
 msgid "Preferred light theme"
 msgstr "Tema clar preferit"
 
@@ -2890,7 +2929,7 @@ msgstr ""
 "Premeu la drecera i premeu RETORN. O, premeu RETROCÉS per a esborrar la "
 "drecera."
 
-#: packages/app-mobile/components/screen-header.js:459
+#: packages/app-mobile/components/screen-header.js:471
 msgid "Press to set the decryption password."
 msgstr "Premeu per a definir la contrasenya de desxifrat."
 
@@ -2902,7 +2941,7 @@ msgstr "Versions prèvies d'aquesta nota"
 msgid "Print"
 msgstr "Imprimeix"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:611
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:606
 msgid "Privacy Policy"
 msgstr "Política de privacitat"
 
@@ -2922,11 +2961,15 @@ msgstr "Processa les supressions d'usuaris"
 msgid "Profile"
 msgstr "Perfil"
 
+#: packages/app-desktop/gui/MainScreen/commands/addProfile.ts:17
+msgid "Profile name:"
+msgstr "Nom del perfil:"
+
 #: packages/lib/versionInfo.ts:26
 msgid "Profile Version: %s"
 msgstr "Versió del perfil: %s"
 
-#: packages/app-mobile/components/screens/Note.tsx:947
+#: packages/app-mobile/components/screens/Note.tsx:954
 msgid "Properties"
 msgstr "Propietats"
 
@@ -2938,7 +2981,7 @@ msgstr "Parell de claus pública-privada:"
 msgid "Publish note..."
 msgstr "Publica la nota..."
 
-#: packages/app-desktop/gui/ShareNoteDialog.tsx:220
+#: packages/app-desktop/gui/ShareNoteDialog.tsx:211
 msgid "Publish Notes"
 msgstr "Publica notes"
 
@@ -2948,7 +2991,7 @@ msgstr "Publica les notes a internet"
 
 #: packages/app-desktop/app.ts:177
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:16
-#: packages/app-desktop/gui/MenuBar.tsx:260
+#: packages/app-desktop/gui/MenuBar.tsx:308
 msgid "Quit"
 msgstr "Surt"
 
@@ -2960,7 +3003,7 @@ msgstr "Torna a xifrar les dades"
 msgid "Re-encryption"
 msgstr "Xifratge"
 
-#: packages/lib/models/Setting.ts:1177
+#: packages/lib/models/Setting.ts:1244
 msgid "Re-upload local data to sync target"
 msgstr "Torna a pujar les dades locals per a sincronitzar la destinació"
 
@@ -2988,6 +3031,7 @@ msgstr "El destinatari ha rebutjat la invitació"
 msgid "Recipients:"
 msgstr "Destinataris:"
 
+#: packages/app-desktop/gui/MenuBar.tsx:639
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:100
 msgid "Redo"
 msgstr "Refés"
@@ -2998,7 +3042,7 @@ msgstr "Refés"
 msgid "Refresh"
 msgstr "Actualitza"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:615
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:621
 #: packages/app-desktop/gui/Root.tsx:173
 msgid "Reject"
 msgstr "Rebutja"
@@ -3038,8 +3082,8 @@ msgstr "Canvia el nom de la nota o bloc de notes indicat de <item> a <name>."
 msgid "Renew token"
 msgstr "Renova el testimoni"
 
-#: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:212
-#: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:213
+#: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:217
+#: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:218
 msgid "Reset master password"
 msgstr "Torna a definir la contrasenya mestra"
 
@@ -3048,11 +3092,11 @@ msgstr "Torna a definir la contrasenya mestra"
 msgid "Resources: %d."
 msgstr "Recursos: %d."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:586
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:592
 msgid "Restart and upgrade"
 msgstr "Reinicia i actualitza"
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:695
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:698
 msgid "Restart now"
 msgstr "Reinicia ara"
 
@@ -3061,7 +3105,7 @@ msgstr "Reinicia ara"
 msgid "Restore"
 msgstr "Restaurar"
 
-#: packages/lib/services/RevisionService.ts:221
+#: packages/lib/services/RevisionService.ts:243
 msgid "Restored Notes"
 msgstr "Notes restaurades"
 
@@ -3076,12 +3120,12 @@ msgid "Retry All"
 msgstr "Torna a provar-los tots"
 
 #: packages/app-desktop/gui/MainScreen/commands/revealResourceFile.ts:8
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:118
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:117
 msgid "Reveal file in folder"
 msgstr "Mostra el fitxer a la carpeta"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleNotesSortOrderReverse.ts:8
-#: packages/lib/models/Setting.ts:858 packages/lib/models/Setting.ts:934
+#: packages/lib/models/Setting.ts:916 packages/lib/models/Setting.ts:993
 msgid "Reverse sort order"
 msgstr "Ordre invers"
 
@@ -3105,27 +3149,27 @@ msgstr ""
 msgid "S3"
 msgstr "S3"
 
-#: packages/lib/models/Setting.ts:547
+#: packages/lib/models/Setting.ts:594
 msgid "S3 access key"
 msgstr "Clau d'acces d'S3"
 
-#: packages/lib/models/Setting.ts:507
+#: packages/lib/models/Setting.ts:554
 msgid "S3 bucket"
 msgstr "Bucket S3"
 
-#: packages/lib/models/Setting.ts:536
+#: packages/lib/models/Setting.ts:583
 msgid "S3 region"
 msgstr "Regió S3"
 
-#: packages/lib/models/Setting.ts:558
+#: packages/lib/models/Setting.ts:605
 msgid "S3 secret key"
 msgstr "Clau secreta S3"
 
-#: packages/lib/models/Setting.ts:522
+#: packages/lib/models/Setting.ts:569
 msgid "S3 URL"
 msgstr "URL S3"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:579
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:585
 msgid ""
 "Safe mode is currently active. Note rendering and all plugins are "
 "temporarily disabled."
@@ -3135,7 +3179,7 @@ msgstr ""
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:141
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:75
-#: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:213
+#: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:218
 #: packages/app-mobile/components/screens/encryption-config.tsx:109
 #: packages/app-mobile/components/screens/encryption-config.tsx:221
 msgid "Save"
@@ -3145,7 +3189,12 @@ msgstr "Desa"
 msgid "Save alarm"
 msgstr "Desa l'alarma"
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:106
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:100
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:93
+msgid "Save as %s"
+msgstr "Desa-ho com a %s"
+
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:80
 msgid "Save as..."
 msgstr "Anomena i desa..."
 
@@ -3153,7 +3202,7 @@ msgstr "Anomena i desa..."
 msgid "Save changes"
 msgstr "Desa els canvis"
 
-#: packages/lib/models/Setting.ts:935
+#: packages/lib/models/Setting.ts:994
 msgid "Save geo-location with notes"
 msgstr "Desa la geolocalització a les notes"
 
@@ -3187,7 +3236,7 @@ msgstr "Cerca..."
 msgid "Searches for the given <pattern> in all the notes."
 msgstr "Cerca el patró <pattern> en totes les notes."
 
-#: packages/lib/models/Setting.ts:1196
+#: packages/lib/models/Setting.ts:1263
 msgid "See the pre-release page for more details: %s"
 msgstr "Consulta la pàgina de prellançament per a més detalls: %s"
 
@@ -3221,7 +3270,7 @@ msgid "Server is running on port %d"
 msgstr "El servidor està corrent en el port %d"
 
 #: packages/app-desktop/gui/MainScreen/commands/editAlarm.ts:10
-#: packages/app-mobile/components/screens/Note.tsx:911
+#: packages/app-mobile/components/screens/Note.tsx:918
 #: packages/app-mobile/components/SelectDateTimeDialog.tsx:141
 msgid "Set alarm"
 msgstr "Estableix una alarma"
@@ -3230,31 +3279,33 @@ msgstr "Estableix una alarma"
 msgid "Set alarm:"
 msgstr "Estableix una alarma:"
 
-#: packages/lib/models/Setting.ts:1127
+#: packages/lib/models/Setting.ts:1194
 msgid ""
 "Set it to 0 to make it take the complete available space. Recommended width "
 "is 600."
 msgstr ""
-"Definiu-ho a 0 perquè ocupe tot l'espai disponible. L'amplària recomanada és"
-" 600."
+"Definiu-ho a 0 perquè ocupe tot l'espai disponible. L'amplària recomanada és "
+"600."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:627
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:633
 msgid "Set the password"
 msgstr "Establiu la contrasenya"
 
 #: packages/app-cli/app/command-set.js:22
 msgid ""
-"Sets the property <name> of the given <note> to the given [value]. Possible properties are:\n"
+"Sets the property <name> of the given <note> to the given [value]. Possible "
+"properties are:\n"
 "\n"
 "%s"
 msgstr ""
-"Estableix la propietat <name> de la <note> indicada al [valor] donat. Les propietats possibles són:\n"
+"Estableix la propietat <name> de la <note> indicada al [valor] donat. Les "
+"propietats possibles són:\n"
 "\n"
 "%s"
 
 #: packages/app-desktop/gui/ShareFolderDialog/ShareFolderDialog.tsx:248
 #: packages/app-mobile/components/NoteBodyViewer/hooks/useOnResourceLongPress.ts:20
-#: packages/app-mobile/components/screens/Note.tsx:919
+#: packages/app-mobile/components/screens/Note.tsx:926
 msgid "Share"
 msgstr "Comparteix"
 
@@ -3274,7 +3325,7 @@ msgstr "S'està compartint el bloc de notes."
 msgid "Shortcuts are not available in CLI mode."
 msgstr "Les dreceres no són disponibles en el mode de línia d'ordres."
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:224
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:213
 msgid "Show Advanced Settings"
 msgstr "Mostra opcions avançades"
 
@@ -3282,7 +3333,7 @@ msgstr "Mostra opcions avançades"
 msgid "Show all"
 msgstr "Mostra-ho tot"
 
-#: packages/lib/models/Setting.ts:829
+#: packages/lib/models/Setting.ts:885
 msgid "Show completed to-dos"
 msgstr "Mostra els llistats de tasques pendents finalitzats"
 
@@ -3290,15 +3341,15 @@ msgstr "Mostra els llistats de tasques pendents finalitzats"
 msgid "Show disabled keys"
 msgstr "Mostra les claus deshabilitades"
 
-#: packages/lib/models/Setting.ts:812
+#: packages/lib/models/Setting.ts:867
 msgid "Show note counts"
 msgstr "Mostra el nombre de notes"
 
-#: packages/lib/models/Setting.ts:868
+#: packages/lib/models/Setting.ts:926
 msgid "Show sort order buttons"
 msgstr "Mostra els botons de canviar l'ordenació"
 
-#: packages/lib/models/Setting.ts:1044
+#: packages/lib/models/Setting.ts:1107
 msgid "Show tray icon"
 msgstr "Mostra la icona a la safata"
 
@@ -3325,33 +3376,32 @@ msgstr ""
 msgid "Skipped: %d."
 msgstr "Omeses: %d."
 
-#: packages/lib/models/Setting.ts:343
+#: packages/lib/models/Setting.ts:386
 msgid "Solarised Dark"
 msgstr "Solaritzat fosc"
 
-#: packages/lib/models/Setting.ts:342
+#: packages/lib/models/Setting.ts:385
 msgid "Solarised Light"
 msgstr "Solaritzat clar"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:591
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:597
 msgid "Some items cannot be decrypted."
 msgstr "Alguns elements no s'han pogut desxifrar."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:620
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:626
 msgid "Some items cannot be synchronised."
 msgstr "Alguns elements no s'han pogut sincronitzar."
 
-#: packages/app-mobile/components/screen-header.js:460
+#: packages/app-mobile/components/screen-header.js:472
 msgid "Some items cannot be synchronised. Press for more info."
-msgstr ""
-"Alguns elements no es poden sincronitzar. Premeu per a més informació."
+msgstr "Alguns elements no es poden sincronitzar. Premeu per a més informació."
 
-#: packages/lib/models/Setting.ts:922
+#: packages/lib/models/Setting.ts:981
 msgid "Sort notebooks by"
 msgstr "Ordena els blocs de notes per"
 
-#: packages/app-desktop/gui/NoteList/NoteList.tsx:172
-#: packages/lib/models/Setting.ts:837
+#: packages/app-desktop/gui/NoteList/NoteList.tsx:167
+#: packages/lib/models/Setting.ts:893
 msgid "Sort notes by"
 msgstr "Ordena les notes per"
 
@@ -3371,7 +3421,7 @@ msgstr "Format d'origen: %s"
 msgid "Source: "
 msgstr "Font: "
 
-#: packages/lib/models/Setting.ts:1328
+#: packages/lib/models/Setting.ts:1400
 msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
@@ -3384,19 +3434,19 @@ msgstr ""
 msgid "Spell checker"
 msgstr "Corrector ortogràfic"
 
-#: packages/lib/models/Setting.ts:821 packages/lib/models/Setting.ts:823
-#: packages/lib/models/Setting.ts:824
+#: packages/lib/models/Setting.ts:876 packages/lib/models/Setting.ts:878
+#: packages/lib/models/Setting.ts:879
 msgid "Split View"
 msgstr "Vista dividida"
 
-#: packages/lib/models/Setting.ts:1051
+#: packages/lib/models/Setting.ts:1115
 msgid "Start application minimised in the tray icon"
 msgstr "Inicieu l'aplicació minimitzada a la icona de la safata"
 
 #: packages/app-cli/app/command-server.js:14
 msgid ""
-"Start, stop or check the API server. To specify on which port it should run,"
-" set the api.port config variable. Commands are (%s)."
+"Start, stop or check the API server. To specify on which port it should run, "
+"set the api.port config variable. Commands are (%s)."
 msgstr ""
 "Arrenca, atura o verifica el servidor API. Per a especificar a quin port ha "
 "de córrer, estableix la variable api.port. Les ordres són (%s)."
@@ -3489,7 +3539,7 @@ msgstr "Tramet"
 msgid "Subscript"
 msgstr "Subíndex"
 
-#: packages/lib/components/shared/config-shared.js:49
+#: packages/lib/components/shared/config-shared.js:69
 msgid "Success! Synchronisation configuration appears to be correct."
 msgstr "Èxit! Sembla que la configuració de sincronització és correcta."
 
@@ -3509,9 +3559,19 @@ msgstr "Intercanvia la línia cap amunt"
 msgid "Switch between note and to-do type"
 msgstr "Alterna entre el tipus nota i tasques pendents"
 
+#: packages/app-desktop/gui/MenuBar.tsx:437
+msgid "Switch profile"
+msgstr "Canvia el perfil"
+
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:105
 msgid "Switch to note type"
 msgstr "Canvia el tipus a nota"
+
+#: packages/app-desktop/commands/switchProfile1.ts:7
+#: packages/app-desktop/commands/switchProfile2.ts:7
+#: packages/app-desktop/commands/switchProfile3.ts:7
+msgid "Switch to profile %d"
+msgstr "Canvia al perfil %d"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:114
 msgid "Switch to to-do type"
@@ -3525,7 +3585,7 @@ msgstr ""
 "Canvia a [notebook] - totes les operacions posteriors s'aplicaran en aquest "
 "bloc de notes."
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:520
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:515
 msgid "Sync Status"
 msgstr "Estat de sincronització"
 
@@ -3557,11 +3617,11 @@ msgstr "Versió de la sincronització: %s"
 msgid "Sync your notes"
 msgstr "Sincronitzeu les notes"
 
-#: packages/lib/models/Setting.ts:2142
+#: packages/lib/models/Setting.ts:2296
 msgid "Synchronisation"
 msgstr "Sincronització"
 
-#: packages/lib/models/Setting.ts:1204
+#: packages/lib/models/Setting.ts:1271
 msgid "Synchronisation interval"
 msgstr "Interval de sincronització"
 
@@ -3569,12 +3629,12 @@ msgstr "Interval de sincronització"
 msgid "Synchronisation is already in progress."
 msgstr "La sincronització ja és en curs."
 
-#: packages/app-desktop/gui/MenuBar.tsx:368
+#: packages/app-desktop/gui/MenuBar.tsx:416
 #: packages/app-desktop/gui/Root.tsx:222
 msgid "Synchronisation Status"
 msgstr "Estat de la sincronització"
 
-#: packages/lib/models/Setting.ts:380
+#: packages/lib/models/Setting.ts:424
 msgid "Synchronisation target"
 msgstr "Objectiu de sincronització"
 
@@ -3588,7 +3648,7 @@ msgstr "Destinació de la sincronització: %s(%s)"
 msgid "Synchronise"
 msgstr "Sincronitza"
 
-#: packages/lib/models/Setting.ts:1223
+#: packages/lib/models/Setting.ts:1291
 msgid "Synchronise only over WiFi connection"
 msgstr "Sincronitza només amb la connexió Wi-Fi"
 
@@ -3596,7 +3656,7 @@ msgstr "Sincronitza només amb la connexió Wi-Fi"
 msgid "Synchronises with remote storage."
 msgstr "Sincronitza amb un emmagatzemament remot."
 
-#: packages/app-desktop/gui/ShareNoteDialog.tsx:206
+#: packages/app-desktop/gui/ShareNoteDialog.tsx:183
 msgid "Synchronising..."
 msgstr "Sincronitzant..."
 
@@ -3604,9 +3664,13 @@ msgstr "Sincronitzant..."
 msgid "Synchronizing..."
 msgstr "S'està sincronitzant..."
 
-#: packages/lib/models/Setting.ts:1237
+#: packages/lib/models/Setting.ts:1306
 msgid "Tabloid"
 msgstr "Tabloide"
+
+#: packages/app-mobile/components/screens/NoteTagsDialog.js:179
+msgid "tag1, tag2, ..."
+msgstr "etiqueta1, etiqueta2, ..."
 
 #: packages/app-cli/app/command-import.js:52
 #: packages/app-desktop/gui/ImportScreen.min.js:73
@@ -3615,22 +3679,22 @@ msgstr "Etiquetats: %d."
 
 #: packages/app-desktop/gui/MainScreen/commands/setTags.ts:7
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:725
-#: packages/app-mobile/components/screens/Note.tsx:926
+#: packages/app-mobile/components/screens/Note.tsx:933
 #: packages/app-mobile/components/screens/tags.js:101
 #: packages/app-mobile/components/side-menu-content.js:330
 msgid "Tags"
 msgstr "Etiquetes"
 
-#: packages/app-mobile/components/screens/Note.tsx:898
+#: packages/app-mobile/components/screens/Note.tsx:905
 msgid "Take photo"
 msgstr "Fes una foto"
 
-#: packages/server/src/services/MustacheService.ts:148
-#: packages/server/src/services/MustacheService.ts:304
+#: packages/server/src/services/MustacheService.ts:123
+#: packages/server/src/services/MustacheService.ts:275
 msgid "Tasks"
 msgstr "Tasques"
 
-#: packages/lib/models/Setting.ts:1230
+#: packages/lib/models/Setting.ts:1299
 msgid "Text editor command"
 msgstr "Ordre de l'editor de text"
 
@@ -3643,8 +3707,14 @@ msgstr ""
 msgid ""
 "The app is now going to close. Please relaunch it to complete the process."
 msgstr ""
-"L'aplicació es tancarà ara. Si us plau, torneu-la a executar per a completar"
-" el procés."
+"L'aplicació es tancarà ara. Si us plau, torneu-la a executar per a completar "
+"el procés."
+
+#: packages/app-desktop/app.ts:332
+msgid ""
+"The application did not close properly. Would you like to start in safe "
+"mode?"
+msgstr "L'aplicació no s'ha tancat correctament. Voleu iniciar en mode segur?"
 
 #: packages/lib/onedrive-api-node-utils.js:86
 msgid ""
@@ -3661,7 +3731,7 @@ msgstr "L'aplicació s'ha autoritzat correctament!"
 msgid "The application has been successfully authorised."
 msgstr "L'aplicació s'ha autoritzat correctament."
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:619
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:622
 msgid "The application must be restarted for these changes to take effect."
 msgstr "Cal reiniciar l'aplicació perquè aquests canvis tinguin efecte."
 
@@ -3691,7 +3761,7 @@ msgstr ""
 "El mètode de xifratge per defecte s'ha canviat a un de més segur i és "
 "recomanable que l'apliqueu a les vostres dades."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:603
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:609
 msgid ""
 "The default encryption method has been changed, you should re-encrypt your "
 "data."
@@ -3699,17 +3769,17 @@ msgstr ""
 "El mètode de xifratge per defecte s'ha canviat, hauríeu de tornar a xifrar "
 "les vostres dades."
 
-#: packages/lib/models/Setting.ts:1230
+#: packages/lib/models/Setting.ts:1299
 msgid ""
-"The editor command (may include arguments) that will be used to open a note."
-" If none is provided it will try to auto-detect the default editor."
+"The editor command (may include arguments) that will be used to open a note. "
+"If none is provided it will try to auto-detect the default editor."
 msgstr ""
-"L'ordre de l'editor (que pot incloure arguments) que s'usarà per a obrir una"
-" nota. Si no se'n proporciona cap, es detectarà automàticament l'editor "
+"L'ordre de l'editor (que pot incloure arguments) que s'usarà per a obrir una "
+"nota. Si no se'n proporciona cap, es detectarà automàticament l'editor "
 "predeterminat."
 
-#: packages/lib/models/Setting.ts:1382 packages/lib/models/Setting.ts:1396
-#: packages/lib/models/Setting.ts:1410
+#: packages/lib/models/Setting.ts:1455 packages/lib/models/Setting.ts:1470
+#: packages/lib/models/Setting.ts:1485
 msgid ""
 "The factor property sets how the item will grow or shrink to fit the "
 "available space in its container with respect to the other items. Thus an "
@@ -3732,15 +3802,14 @@ msgid ""
 "recommended to upgrade them. The upgraded key will still be able to decrypt "
 "and encrypt your data as usual."
 msgstr ""
-"Les següents claus utilitzen un algorisme de xifrat obsolet i és recomanable"
-" actualitzar-les. La clau actualitzada podrà xifrar i desxifrar les dades "
-"com és habitual."
+"Les següents claus utilitzen un algorisme de xifrat obsolet i és recomanable "
+"actualitzar-les. La clau actualitzada podrà xifrar i desxifrar les dades com "
+"és habitual."
 
 #: packages/app-mobile/components/screens/Note.tsx:193
 msgid "The Joplin mobile app does not currently support this type of link: %s"
 msgstr ""
-"L'aplicació mòbil del Joplin, ara per ara, no admet aquest tipus d'enllaç: "
-"%s"
+"L'aplicació mòbil del Joplin, ara per ara, no admet aquest tipus d'enllaç: %s"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:246
 msgid ""
@@ -3767,14 +3836,14 @@ msgstr "La clau mestra s'ha actualitzat amb èxit!"
 #: packages/app-mobile/components/screens/encryption-config.tsx:272
 msgid ""
 "The master keys with these IDs are used to encrypt some of your items, "
-"however the application does not currently have access to them. It is likely"
-" they will eventually be downloaded via synchronisation."
+"however the application does not currently have access to them. It is likely "
+"they will eventually be downloaded via synchronisation."
 msgstr ""
 "Les claus mestres amb aquests ID s'usen per a xifrar alguns dels elements. "
 "Tot i això l'aplicació actualment no hi té accés. Probablement es baixaran "
 "via sincronització."
 
-#: packages/lib/services/RevisionService.ts:245
+#: packages/lib/services/RevisionService.ts:267
 msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
 msgstr "La nota «%s» s'ha restaurat amb èxit en el bloc de notes «%s»."
 
@@ -3801,7 +3870,7 @@ msgstr ""
 "\n"
 "L'error era \"%s\""
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:585
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:591
 msgid ""
 "The sync target needs to be upgraded before Joplin can sync. The operation "
 "may take a few minutes to complete and the app needs to be restarted. To "
@@ -3811,7 +3880,7 @@ msgstr ""
 "sincronitzar. L'operació pot trigar uns minuts a completar-se i cal "
 "reiniciar l'aplicació. Per a continuar, feu clic a l'enllaç."
 
-#: packages/app-mobile/components/screen-header.js:461
+#: packages/app-mobile/components/screen-header.js:473
 msgid "The sync target needs to be upgraded. Press this banner to proceed."
 msgstr ""
 "La destinació de sincronització s'ha d'actualitzar. Premeu aquest bàner per "
@@ -3821,7 +3890,7 @@ msgstr ""
 msgid "The tag \"%s\" already exists. Please choose a different name."
 msgstr "L'etiqueta \"%s\" ja existeix. Escolliu un nom diferent."
 
-#: packages/lib/models/Setting.ts:382
+#: packages/lib/models/Setting.ts:426
 msgid ""
 "The target to synchronise to. Each sync target may have additional "
 "parameters which are named as `sync.NUM.NAME` (all documented below)."
@@ -3847,16 +3916,15 @@ msgstr ""
 msgid "The web clipper service is not enabled."
 msgstr "El servei del porta-retalls de webs no està activat."
 
-#: packages/lib/models/Setting.ts:760
+#: packages/lib/models/Setting.ts:811
 msgid "Theme"
 msgstr "Tema"
 
 #: packages/app-mobile/components/note-list.js:105
-msgid ""
-"There are currently no notes. Create one by clicking on the (+) button."
+msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr "Ara mateix no hi ha cap nota. Creeu-ne una fent clic en el botó (+)."
 
-#: packages/app-desktop/gui/NoteList/NoteList.tsx:469
+#: packages/app-desktop/gui/NoteList/NoteList.tsx:468
 msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
 msgstr ""
@@ -3877,17 +3945,20 @@ msgstr ""
 "\n"
 "%s"
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:69
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:43
 msgid "There was an error downloading this attachment:"
 msgstr "Hi ha hagut un error en baixar aquest adjunt:"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:224
 msgid ""
-"There was an error setting up your Joplin Cloud account. Please verify your email and password and try again. Error was:\n"
+"There was an error setting up your Joplin Cloud account. Please verify your "
+"email and password and try again. Error was:\n"
 "\n"
 "%s"
 msgstr ""
-"S'ha produït un error configurant el vostre compte de Joplin Cloud. Verifiqueu el vostre correu electrònic i la contrasenya, i proveu de nou. L'error ha sigut:\n"
+"S'ha produït un error configurant el vostre compte de Joplin Cloud. "
+"Verifiqueu el vostre correu electrònic i la contrasenya, i proveu de nou. "
+"L'error ha sigut:\n"
 "\n"
 "%s"
 
@@ -3901,10 +3972,10 @@ msgstr ""
 "destinació de sincronització. Per a poder trobar aquests elements, podeu "
 "cercar pel títol o la ID (que es mostra entre claudàtors a sobre)."
 
-#: packages/lib/models/Setting.ts:2160
+#: packages/lib/models/Setting.ts:2314
 msgid ""
-"These plugins enhance the Markdown renderer with additional features. Please"
-" note that, while these features might be useful, they are not standard "
+"These plugins enhance the Markdown renderer with additional features. Please "
+"note that, while these features might be useful, they are not standard "
 "Markdown and thus most of them will only work in Joplin. Additionally, some "
 "of them are *incompatible* with the WYSIWYG editor. If you open a note that "
 "uses one of these plugins in that editor, you will lose the plugin "
@@ -3919,7 +3990,7 @@ msgstr ""
 "editor, perdreu el format de l'extensió. A continuació s’indica quines "
 "extensions són compatibles o no amb l’editor WYSIWYG."
 
-#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:71
+#: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:45
 #: packages/lib/services/ResourceEditWatcher/index.ts:231
 msgid "This attachment is not downloaded or not decrypted yet"
 msgstr "Aquest adjunt no ha estat descarregat o desxifrat encara"
@@ -3931,8 +4002,8 @@ msgstr "Aquest adjunt no s'ha descarregat o no s'ha desxifrat encara."
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:214
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:155
 msgid ""
-"This authorisation token is only needed to allow third-party applications to"
-" access Joplin."
+"This authorisation token is only needed to allow third-party applications to "
+"access Joplin."
 msgstr ""
 "Aquest testimoni d'autorització només és necessari per a permetre l'accés "
 "d'aplicacions de tercers al Joplin."
@@ -3943,11 +4014,11 @@ msgid ""
 "notes. Please be careful when deleting one of them as they cannot be "
 "restored afterwards."
 msgstr ""
-"Aquesta és una eina avançada per a mostrar els adjunts que estan enllaçats a"
-" les vostres notes. Tingueu precaució en suprimir-ne un, ja que després no "
-"es poden restaurar."
+"Aquesta és una eina avançada per a mostrar els adjunts que estan enllaçats a "
+"les vostres notes. Tingueu precaució en suprimir-ne un, ja que després no es "
+"poden restaurar."
 
-#: packages/lib/models/Note.ts:103
+#: packages/lib/models/Note.ts:104
 msgid "This note does not have geolocation information."
 msgstr "Aquesta nota no té informació de geolocalització."
 
@@ -3972,31 +4043,31 @@ msgid ""
 "This Rich Text editor has a number of limitations and it is recommended to "
 "be aware of them before using it."
 msgstr ""
-"Aquest editor de text enriquit té una sèrie de limitacions i es recomana ser"
-" conscient d'elles abans d'utilitzar-lo."
+"Aquest editor de text enriquit té una sèrie de limitacions i es recomana ser "
+"conscient d'elles abans d'utilitzar-lo."
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:155
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:133
 msgid ""
 "This service allows the browser extension to communicate with Joplin. When "
-"enabling it your firewall may ask you to give permission to Joplin to listen"
-" to a particular port."
+"enabling it your firewall may ask you to give permission to Joplin to listen "
+"to a particular port."
 msgstr ""
 "Aquest servei permet que l'extensió del navegador pugui comunicar-se amb el "
 "Joplin. En activar-la, el tallafoc us podria demanar  de donar permís al "
 "Joplin per a escoltar un port determinat."
 
-#: packages/lib/models/Setting.ts:1046
+#: packages/lib/models/Setting.ts:1109
 msgid ""
-"This will allow Joplin to run in the background. It is recommended to enable"
-" this setting so that your notes are constantly being synchronised, thus "
+"This will allow Joplin to run in the background. It is recommended to enable "
+"this setting so that your notes are constantly being synchronised, thus "
 "reducing the number of conflicts."
 msgstr ""
 "Això permetrà que Joplin s’executi en segon pla. Es recomana habilitar "
 "aquesta configuració perquè les notes se sincronitzin constantment, reduint "
 "així el nombre de conflictes."
 
-#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:114
+#: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:116
 msgid "This will open a new screen. Save your current changes?"
 msgstr "Això obrirà una nova pantalla. Voleu desar els canvis actuals?"
 
@@ -4008,11 +4079,11 @@ msgstr ""
 "Això eliminarà el bloc de notes de la vostra col·lecció i no hi tindreu "
 "accés al contingut. Voleu continuar?"
 
-#: packages/lib/models/Setting.ts:739
+#: packages/lib/models/Setting.ts:789
 msgid "Time format"
 msgstr "Format horari"
 
-#: packages/lib/models/Folder.ts:39 packages/lib/models/Note.ts:36
+#: packages/lib/models/Folder.ts:39 packages/lib/models/Note.ts:37
 msgid "title"
 msgstr "títol"
 
@@ -4051,13 +4122,13 @@ msgstr "Per a anar al mode de línia d'ordres, premeu «:»"
 msgid "To exit command line mode, press ESCAPE"
 msgstr "Per a sortir del mode en línia d'ordres, premeu la tecla Escapada"
 
-#: packages/app-desktop/gui/NoteList/NoteList.tsx:172
+#: packages/app-desktop/gui/NoteList/NoteList.tsx:167
 msgid ""
 "To manually sort the notes, the sort order must be changed to \"%s\" in the "
 "menu \"%s\" > \"%s\""
 msgstr ""
-"Per a ordenar les notes manualment, l'ordre de classificació s'ha de canviar"
-" a \"%s\" en el menú \"%s\" > \"%s\""
+"Per a ordenar les notes manualment, l'ordre de classificació s'ha de canviar "
+"a \"%s\" en el menú \"%s\" > \"%s\""
 
 #: packages/app-cli/app/command-help.js:81
 msgid "To maximise/minimise the console, press \"tc\"."
@@ -4071,17 +4142,16 @@ msgstr "Per a desplaçar-vos d'un panell a un altre, premeu Tab o Maj+Tab."
 msgid ""
 "To retry decryption of these items. Run `e2ee decrypt --retry-failed-items`"
 msgstr ""
-"Per a reintentar el desxifratge d'aquests elements. Executa \"e2ee decrypt "
-"--retry-failed-items\""
+"Per a reintentar el desxifratge d'aquests elements. Executa \"e2ee decrypt --"
+"retry-failed-items\""
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:559
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:554
 msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
 "them in your phone settings, in Apps > Joplin > Permissions"
 msgstr ""
 "Per a funcionar correctament, l'aplicació requereix els permisos següents. "
-"Habiliteu-los a la configuració del telèfon a Aplicacions > Joplin > "
-"Permisos"
+"Habiliteu-los a la configuració del telèfon a Aplicacions > Joplin > Permisos"
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.tsx:110
 msgid "to-do"
@@ -4091,7 +4161,7 @@ msgstr "tasques pendents"
 msgid "Toggle comment"
 msgstr "Mostra o amaga el comentari"
 
-#: packages/app-desktop/gui/MenuBar.tsx:728
+#: packages/app-desktop/gui/MenuBar.tsx:792
 msgid "Toggle development tools"
 msgstr "Activa/desactiva eines de desenvolupament"
 
@@ -4132,7 +4202,7 @@ msgstr "Canvia el camp d'ordenació"
 msgid "Token has been copied to the clipboard!"
 msgstr "El testimoni s'ha copiat al porta-retalls!"
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:518
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:513
 msgid "Tools"
 msgstr "Eines"
 
@@ -4149,8 +4219,8 @@ msgid ""
 "Type `help [command]` for more information about a command; or type `help "
 "all` for the complete usage information."
 msgstr ""
-"Escriviu «help [ordre]» per a més informació sobre l'ordre; o escriviu «help"
-" all» per a la informació d'ús completa."
+"Escriviu «help [ordre]» per a més informació sobre l'ordre; o escriviu «help "
+"all» per a la informació d'ús completa."
 
 #: packages/app-cli/app/main.js:93
 msgid "Type `joplin help` for usage information."
@@ -4162,11 +4232,11 @@ msgid ""
 "by a tag name, or @ followed by a notebook name. Or type : to search for "
 "commands."
 msgstr ""
-"Escriviu un títol de nota o part del seu contingut per a saltar a la nota. O"
-" escriviu # seguit d'un nom d'etiqueta, o @ seguit d'un nom de bloc de "
-"notes. O escriviu \":\" per a cercar entre les ordres."
+"Escriviu un títol de nota o part del seu contingut per a saltar a la nota. O "
+"escriviu # seguit d'un nom d'etiqueta, o @ seguit d'un nom de bloc de notes. "
+"O escriviu \":\" per a cercar entre les ordres."
 
-#: packages/app-mobile/components/screens/NoteTagsDialog.js:180
+#: packages/app-mobile/components/screens/NoteTagsDialog.js:198
 msgid "Type new tags or select from list"
 msgstr "Escriviu etiquetes noves o seleccioneu-ne de la llista"
 
@@ -4174,26 +4244,27 @@ msgstr "Escriviu etiquetes noves o seleccioneu-ne de la llista"
 msgid "Type: %s."
 msgstr "Tipus: %s."
 
-#: packages/lib/models/Setting.ts:828
+#: packages/lib/models/Setting.ts:884
 msgid "Uncompleted to-dos on top"
 msgstr "Les tasques pendents sense finalitzar a la part superior"
 
+#: packages/app-desktop/gui/MenuBar.tsx:635
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:96
 msgid "Undo"
 msgstr "Desfés"
 
-#: packages/lib/BaseApplication.ts:277
+#: packages/lib/BaseApplication.ts:280
 msgid "Unknown flag: %s"
 msgstr "Bandera desconeguda: %s"
 
-#: packages/lib/Synchronizer.ts:1088
+#: packages/lib/Synchronizer.ts:1096
 msgid ""
 "Unknown item type downloaded - please upgrade Joplin to the latest version"
 msgstr ""
 "S'ha baixat un tipus d'ítem desconegut. Si us plau, actualitzeu Joplin a la "
 "darrera versió"
 
-#: packages/app-desktop/gui/ShareNoteDialog.tsx:171
+#: packages/app-desktop/gui/ShareNoteDialog.tsx:164
 msgid "Unpublish note"
 msgstr "Deixa de publicar la nota"
 
@@ -4209,7 +4280,7 @@ msgstr ""
 "Voleu deixar de compartir aquest bloc de notes? Els destinataris ja no "
 "tindran accés al seu contingut."
 
-#: packages/app-mobile/components/screens/Note.tsx:680
+#: packages/app-mobile/components/screens/Note.tsx:684
 msgid "Unsupported image type: %s"
 msgstr "Tipus d'imatge no admesa: %s"
 
@@ -4243,7 +4314,7 @@ msgstr "Actualitza les mides totals"
 msgid "Updated"
 msgstr "Actualització"
 
-#: packages/lib/models/Folder.ts:40 packages/lib/models/Note.ts:37
+#: packages/lib/models/Folder.ts:40 packages/lib/models/Note.ts:38
 msgid "updated date"
 msgstr "data d'actualització"
 
@@ -4264,7 +4335,7 @@ msgstr "Última actualització: "
 msgid "Updated: %d."
 msgstr "Actualitzades: %d."
 
-#: packages/app-mobile/components/screens/Note.tsx:836
+#: packages/app-mobile/components/screens/Note.tsx:848
 msgid "Updated: %s"
 msgstr "Actualitzat: %s"
 
@@ -4284,13 +4355,12 @@ msgstr "Actualitza la destinació de sincronització a la versió més recent."
 msgid "URL"
 msgstr "URL"
 
-#: packages/lib/BaseApplication.ts:166 packages/lib/BaseApplication.ts:179
-#: packages/lib/BaseApplication.ts:216
+#: packages/lib/BaseApplication.ts:169 packages/lib/BaseApplication.ts:182
+#: packages/lib/BaseApplication.ts:219
 msgid "Usage: %s"
 msgstr "Ús: %s"
 
-#: packages/app-cli/app/command-ls.js:32
-#: packages/app-cli/app/command-tag.js:18
+#: packages/app-cli/app/command-ls.js:32 packages/app-cli/app/command-tag.js:18
 msgid ""
 "Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, "
 "TODO_CHECKED (for to-dos), TITLE"
@@ -4310,13 +4380,13 @@ msgstr ""
 "Useu les fletxes del cursor i les tecles de pàgina amunt i avall per a "
 "recórrer les llistes i les àrees de text (incloent-hi aquesta consola)."
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:825
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:833
 msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
 msgstr ""
 "Utilitzeu les fletxes per a moure els elements de la disposició. Premeu "
 "«Escapa» per a sortir."
 
-#: packages/app-mobile/components/screens/ConfigScreen.tsx:525
+#: packages/app-mobile/components/screens/ConfigScreen.tsx:520
 msgid ""
 "Use this to rebuild the search index if there is a problem with search. It "
 "may take a long time depending on the number of notes."
@@ -4324,7 +4394,7 @@ msgstr ""
 "Utilitzeu això per a reconstruir l'índex de cerca si hi ha un problema amb "
 "la cerca. Pot trigar molt en funció del nombre de notes."
 
-#: packages/lib/models/Setting.ts:1112
+#: packages/lib/models/Setting.ts:1177
 msgid ""
 "Used for most text in the markdown editor. If not found, a generic "
 "proportional (variable width) font is used."
@@ -4332,23 +4402,23 @@ msgstr ""
 "S'utilitza per a la majoria de text a l'editor Markdown. Si no es troba, "
 "s'utilitza un tipus de lletra genèric proporcional (amplada variable)."
 
-#: packages/lib/models/Setting.ts:1123
+#: packages/lib/models/Setting.ts:1189
 msgid ""
 "Used where a fixed width font is needed to lay out text legibly (e.g. "
 "tables, checkboxes, code). If not found, a generic monospace (fixed width) "
 "font is used."
 msgstr ""
-"S'utilitza quan es necessita un tipus de lletra d'amplada fixa per a mostrar"
-" text de manera llegible (p. ex. taules, caselles de selecció, codi). Si no "
+"S'utilitza quan es necessita un tipus de lletra d'amplada fixa per a mostrar "
+"text de manera llegible (p. ex. taules, caselles de selecció, codi). Si no "
 "es troba, s'utilitza un tipus de lletra genèric monoespai (amplada fixa)."
 
-#: packages/server/src/services/MustacheService.ts:144
+#: packages/server/src/services/MustacheService.ts:119
 msgid "User deletions"
 msgstr "Supressions d'usuari"
 
 #: packages/server/src/routes/admin/users.ts:107
-#: packages/server/src/services/MustacheService.ts:140
-#: packages/server/src/services/MustacheService.ts:301
+#: packages/server/src/services/MustacheService.ts:115
+#: packages/server/src/services/MustacheService.ts:272
 msgid "Users"
 msgstr "Usuaris"
 
@@ -4356,27 +4426,27 @@ msgstr "Usuaris"
 msgid "Valid"
 msgstr "Vàlid"
 
-#: packages/app-desktop/gui/NoteList/NoteList.tsx:172
+#: packages/app-desktop/gui/NoteList/NoteList.tsx:167
 msgid "View"
 msgstr "Vista"
 
-#: packages/app-mobile/components/screens/Note.tsx:840
+#: packages/app-mobile/components/screens/Note.tsx:852
 msgid "View on map"
 msgstr "Mostra-ho al mapa"
 
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:592
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:598
-#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:621
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:604
+#: packages/app-desktop/gui/MainScreen/MainScreen.tsx:627
 msgid "View them now"
 msgstr "Mostra'ls ara"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:139
-#: packages/lib/models/Setting.ts:821 packages/lib/models/Setting.ts:822
-#: packages/lib/models/Setting.ts:824
+#: packages/lib/models/Setting.ts:876 packages/lib/models/Setting.ts:877
+#: packages/lib/models/Setting.ts:879
 msgid "Viewer"
 msgstr "Visor"
 
-#: packages/lib/models/Setting.ts:1260
+#: packages/lib/models/Setting.ts:1329
 msgid "Vim"
 msgstr "Vim"
 
@@ -4389,7 +4459,7 @@ msgid "Warning: not all resources shown for performance reasons (limit: %s)."
 msgstr ""
 "Avís: no es mostren tots els recursos per motius de rendiment (límit:% s)."
 
-#: packages/lib/models/Setting.ts:2151
+#: packages/lib/models/Setting.ts:2305
 msgid "Web Clipper"
 msgstr "Desa-retalls de webs"
 
@@ -4397,20 +4467,20 @@ msgstr "Desa-retalls de webs"
 msgid "WebDAV"
 msgstr "WebDAV"
 
-#: packages/lib/models/Setting.ts:488
+#: packages/lib/models/Setting.ts:535
 msgid "WebDAV password"
 msgstr "Contrasenya de WebDAV"
 
-#: packages/lib/models/Setting.ts:465
+#: packages/lib/models/Setting.ts:512
 msgid "WebDAV URL"
 msgstr "URL de WebDAV"
 
-#: packages/lib/models/Setting.ts:477
+#: packages/lib/models/Setting.ts:524
 msgid "WebDAV username"
 msgstr "Nom d'usuari WebDAV"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:20
-#: packages/app-desktop/gui/MenuBar.tsx:709
+#: packages/app-desktop/gui/MenuBar.tsx:773
 msgid "Website and documentation"
 msgstr "Lloc web i documentació"
 
@@ -4418,21 +4488,24 @@ msgstr "Lloc web i documentació"
 msgid ""
 "Welcome to Joplin!\n"
 "\n"
-"Type `:help shortcuts` for the list of keyboard shortcuts, or just `:help` for usage information.\n"
+"Type `:help shortcuts` for the list of keyboard shortcuts, or just `:help` "
+"for usage information.\n"
 "\n"
 "For example, to create a notebook press `mb`; to create a note press `mn`."
 msgstr ""
 "Us donem la benvinguda al Joplin!\n"
 "\n"
-"Escriviu «:help shortcuts» per a llistar les dreceres de teclat, o simplement «:help» per a informació d'ús.\n"
+"Escriviu «:help shortcuts» per a llistar les dreceres de teclat, o "
+"simplement «:help» per a informació d'ús.\n"
 "\n"
-"Per exemple, per a crear un bloc de notes premeu «mb»; per a crear una nota premeu «mn»."
+"Per exemple, per a crear un bloc de notes premeu «mb»; per a crear una nota "
+"premeu «mn»."
 
-#: packages/lib/models/Setting.ts:975
+#: packages/lib/models/Setting.ts:1037
 msgid "When creating a new note:"
 msgstr "En crear una nota:"
 
-#: packages/lib/models/Setting.ts:959
+#: packages/lib/models/Setting.ts:1020
 msgid "When creating a new to-do:"
 msgstr "En crear un llistat de tasques pendents:"
 
@@ -4448,24 +4521,24 @@ msgstr "s"
 msgid "Y"
 msgstr "S"
 
-#: packages/lib/models/Setting.ts:327
+#: packages/lib/models/Setting.ts:370
 msgid "yes"
 msgstr "sí"
 
 #: packages/app-desktop/services/plugins/UserWebviewDialogButtonBar.tsx:28
-#: packages/app-mobile/components/screens/Note.tsx:586
+#: packages/app-mobile/components/screens/Note.tsx:590
 #: packages/lib/shim-init-node.js:172 packages/lib/versionInfo.ts:27
 msgid "Yes"
 msgstr "Sí"
 
-#: packages/app-mobile/components/screens/Note.tsx:585
+#: packages/app-mobile/components/screens/Note.tsx:589
 #: packages/lib/shim-init-node.js:171
 msgid ""
 "You are about to attach a large image (%dx%d pixels). Would you like to "
 "resize it down to %d pixels before attaching it?"
 msgstr ""
-"Esteu a punt d'adjuntar una imatge gran (%dx%d pixels). Voleu reduir-la a %d"
-" pixels abans d'adjuntar-la?"
+"Esteu a punt d'adjuntar una imatge gran (%dx%d pixels). Voleu reduir-la a %d "
+"pixels abans d'adjuntar-la?"
 
 #: packages/app-mobile/components/note-list.js:97
 msgid "You currently have no notebooks."
@@ -4497,8 +4570,8 @@ msgid "Your data is going to be re-encrypted and synced again."
 msgstr "Les vostres dades es tornaran a xifrar i sincronitzar."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:271
-msgid "Your master password is needed to decrypt some of your data."
-msgstr "La contrasenya mestra és necessària per a desxifrar algunes dades."
+msgid "Your password is needed to decrypt some of your data."
+msgstr "Fa falta la contrasenya per a desxifrar part de les dades."
 
 #: packages/app-cli/app/command-sync.ts:242
 msgid ""
@@ -4516,14 +4589,21 @@ msgstr "Es necessita el vostre permís per a utilitzar la càmera."
 msgid "Your version: %s"
 msgstr "La vostra versió: %s"
 
-#: packages/app-desktop/gui/MenuBar.tsx:653
-#: packages/app-desktop/gui/MenuBar.tsx:659
+#: packages/app-desktop/gui/MenuBar.tsx:717
+#: packages/app-desktop/gui/MenuBar.tsx:723
 msgid "Zoom In"
 msgstr "Ampliar"
 
-#: packages/app-desktop/gui/MenuBar.tsx:666
+#: packages/app-desktop/gui/MenuBar.tsx:730
 msgid "Zoom Out"
 msgstr "Allunyar"
+
+#, fuzzy
+#~ msgid "Save as SVG"
+#~ msgstr "Anomena i desa..."
+
+#~ msgid "Please click on \"%s\" to proceed"
+#~ msgstr "Feu clic a \"%s\" per a continuar"
 
 #~ msgid "Automatically update the application"
 #~ msgstr "Actualitza automàticament l'aplicació"

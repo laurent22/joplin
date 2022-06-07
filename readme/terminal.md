@@ -281,6 +281,11 @@ The following commands are available in [command-line mode](#command-line-mode):
 
 	    Attaches the given file to the note.
 
+	batch <file-path>
+
+	    Runs the commands contained in the text file. There should be one command
+	    per line.
+
 	cat <note>
 
 	    Displays the given note.
@@ -308,11 +313,11 @@ The following commands are available in [command-line mode](#command-line-mode):
 	                                   are named as `sync.NUM.NAME` (all
 	                                   documented below).
 	                                   Type: Enum.
-	                                   Possible values: 2 (File system), 3
-	                                   (OneDrive), 4 (OneDrive Dev (For testing
-	                                   only)), 5 (Nextcloud), 6 (WebDAV), 7
-	                                   (Dropbox).
-	                                   Default: 7
+	                                   Possible values: 0 ((None)), 2 (File
+	                                   system), 3 (OneDrive), 5 (Nextcloud), 6
+	                                   (WebDAV), 7 (Dropbox), 8 (S3 (Beta)), 9
+	                                   (Joplin Server (Beta)), 10 (Joplin Cloud).
+	                                   Default: 0
 
 	    sync.2.path                    Directory to synchronise with (absolute
 	                                   path).
@@ -351,35 +356,91 @@ The following commands are available in [command-line mode](#command-line-mode):
 	    sync.6.password                WebDAV password.
 	                                   Type: string.
 
+	    sync.8.path                    AWS S3 bucket.
+	                                   Attention: If you change this location,
+	                                   make sure you copy all your content to it
+	                                   before syncing, otherwise all files will be
+	                                   removed! See the FAQ for more details:
+	                                   https://joplinapp.org/faq/
+	                                   Type: string.
+
+	    sync.8.url                     AWS S3 URL.
+	                                   Type: string.
+	                                   Default: "https://s3.amazonaws.com/"
+
+	    sync.8.region                  AWS region.
+	                                   Type: string.
+
+	    sync.8.username                AWS access key.
+	                                   Type: string.
+
+	    sync.8.password                AWS secret key.
+	                                   Type: string.
+
+	    sync.8.forcePathStyle          Force path style.
+	                                   Type: bool.
+	                                   Default: false
+
+	    sync.9.path                    Joplin Server URL.
+	                                   Attention: If you change this location,
+	                                   make sure you copy all your content to it
+	                                   before syncing, otherwise all files will be
+	                                   removed! See the FAQ for more details:
+	                                   https://joplinapp.org/faq/
+	                                   Type: string.
+
+	    sync.9.username                Joplin Server email.
+	                                   Type: string.
+
+	    sync.9.password                Joplin Server password.
+	                                   Type: string.
+
+	    sync.10.username               Joplin Cloud email.
+	                                   Type: string.
+
+	    sync.10.password               Joplin Cloud password.
+	                                   Type: string.
+
 	    sync.maxConcurrentConnections  Max concurrent connections.
 	                                   Type: int.
 	                                   Default: 5
 
 	    locale                         Language.
-	                                   Please see localisation section on
-	                                   https://joplinapp.org/help/#localisation
-	                                   for info on translation completion progress
 	                                   Type: Enum.
-	                                   Possible values: ar (Arabic), eu (Basque),
-	                                   bs_BA (Bosnian), bg_BG (Bulgarian),
-	                                   ca (Catalan), hr_HR (Croatian),
-	                                   cs_CZ (Czech), da_DK (Dansk),
-	                                   de_DE (Deutsch), et_EE (Eesti Keel),
-	                                   en_GB (English (UK)), en_US (English (US)),
-	                                   es_ES (Español), eo (Esperanto),
-	                                   fi_FI (Finnish), fr_FR (Français),
-	                                   gl_ES (Galician), id_ID (Indonesian),
-	                                   it_IT (Italiano), nl_BE (Nederlands),
-	                                   nl_NL (Nederlands), nb_NO (Norwegian),
-	                                   fa (Persian), pl_PL (Polski),
-	                                   pt_PT (Português),
-	                                   pt_BR (Português (Brasil)), ro (Română),
-	                                   sl_SI (Slovenian), sv (Svenska),
-	                                   th_TH (Thai), vi (Tiếng Việt),
-	                                   tr_TR (Türkçe), el_GR (Ελληνικά),
-	                                   ru_RU (Русский), sr_RS (српски језик),
-	                                   zh_CN (中文 (简体)), zh_TW (中文 (繁體)),
-	                                   ja_JP (日本語), ko (한국말).
+	                                   Possible values: ar (Arabic (93%)), eu
+	                                   (Basque (27%)), bs_BA (Bosnian (Bosna i
+	                                   Hercegovina) (67%)), bg_BG (Bulgarian
+	                                   (България) (53%)), ca (Catalan (93%)),
+	                                   hr_HR (Croatian (Hrvatska) (97%)), cs_CZ
+	                                   (Czech (Česká republika) (89%)), da_DK
+	                                   (Dansk (Danmark) (97%)), de_DE (Deutsch
+	                                   (Deutschland) (97%)), et_EE (Eesti Keel
+	                                   (Eesti) (51%)), en_GB (English (United
+	                                   Kingdom) (100%)), en_US (English (United
+	                                   States of America) (100%)), es_ES (Español
+	                                   (España) (93%)), eo (Esperanto (30%)),
+	                                   fi_FI (Finnish (Suomi) (93%)), fr_FR
+	                                   (Français (France) (100%)), gl_ES (Galician
+	                                   (España) (34%)), id_ID (Indonesian
+	                                   (Indonesia) (92%)), it_IT (Italiano
+	                                   (Italia) (90%)), hu_HU (Magyar
+	                                   (Magyarország) (78%)), nl_BE (Nederlands
+	                                   (België, Belgique, Belgien) (81%)), nl_NL
+	                                   (Nederlands (Nederland) (85%)), nb_NO
+	                                   (Norwegian (Norge, Noreg) (90%)), fa
+	                                   (Persian (64%)), pl_PL (Polski (Polska)
+	                                   (84%)), pt_BR (Português (Brasil) (94%)),
+	                                   pt_PT (Português (Portugal) (84%)), ro
+	                                   (Română (59%)), sl_SI (Slovenian
+	                                   (Slovenija) (93%)), sv (Svenska (97%)),
+	                                   th_TH (Thai (ประเทศไทย) (43%)), vi (Tiếng
+	                                   Việt (90%)), tr_TR (Türkçe (Türkiye)
+	                                   (93%)), uk_UA (Ukrainian (Україна) (83%)),
+	                                   el_GR (Ελληνικά (Ελλάδα) (87%)), ru_RU
+	                                   (Русский (Россия) (93%)), sr_RS (српски
+	                                   језик (Србија) (76%)), zh_CN (中文 (简体)
+	                                   (97%)), zh_TW (中文 (繁體) (90%)), ja_JP (日本語
+	                                   (日本) (98%)), ko (한국어 (89%)).
 	                                   Default: "en_GB"
 
 	    dateFormat                     Date format.
@@ -389,7 +450,7 @@ The following commands are available in [command-line mode](#command-line-mode):
 	                                   (01/30/2017), MM/DD/YY (01/30/17),
 	                                   YYYY-MM-DD (2017-01-30), DD.MM.YYYY
 	                                   (30.01.2017), YYYY.MM.DD (2017.01.30),
-	                                   YYMMDD (170130).
+	                                   YYMMDD (170130), YYYY/MM/DD (2017/01/30).
 	                                   Default: "DD/MM/YYYY"
 
 	    timeFormat                     Time format.
@@ -410,7 +471,7 @@ The following commands are available in [command-line mode](#command-line-mode):
 	                                   Type: Enum.
 	                                   Possible values: user_updated_time (Updated
 	                                   date), user_created_time (Created date),
-	                                   title (Title).
+	                                   title (Title), order (Custom order).
 	                                   Default: "user_updated_time"
 
 	    notes.sortOrder.reverse        Reverse sort order.
@@ -461,9 +522,10 @@ The following commands are available in [command-line mode](#command-line-mode):
 	                                   Type: bool.
 	                                   Default: false
 
-	    sync.wipeOutFailSafe           Fail-safe: Do not wipe out local data when
+	    sync.wipeOutFailSafe           Fail-safe.
+	                                   Fail-safe: Do not wipe out local data when
 	                                   sync target is empty (often the result of a
-	                                   misconfiguration or bug).
+	                                   misconfiguration or bug)
 	                                   Type: bool.
 	                                   Default: true
 
@@ -475,6 +537,36 @@ The following commands are available in [command-line mode](#command-line-mode):
 	    revisionService.ttlDays        Keep note history for.
 	                                   Type: int.
 	                                   Default: 90
+
+	    layout.folderList.factor       Notebook list growth factor.
+	                                   The factor property sets how the item will
+	                                   grow or shrink to fit the available space
+	                                   in its container with respect to the other
+	                                   items. Thus an item with a factor of 2 will
+	                                   take twice as much space as an item with a
+	                                   factor of 1.Restart app to see changes.
+	                                   Type: int.
+	                                   Default: 1
+
+	    layout.noteList.factor         Note list growth factor.
+	                                   The factor property sets how the item will
+	                                   grow or shrink to fit the available space
+	                                   in its container with respect to the other
+	                                   items. Thus an item with a factor of 2 will
+	                                   take twice as much space as an item with a
+	                                   factor of 1.Restart app to see changes.
+	                                   Type: int.
+	                                   Default: 1
+
+	    layout.note.factor             Note area growth factor.
+	                                   The factor property sets how the item will
+	                                   grow or shrink to fit the available space
+	                                   in its container with respect to the other
+	                                   items. Thus an item with a factor of 2 will
+	                                   take twice as much space as an item with a
+	                                   factor of 1.Restart app to see changes.
+	                                   Type: int.
+	                                   Default: 2
 
 	cp <note> [notebook]
 
@@ -488,7 +580,7 @@ The following commands are available in [command-line mode](#command-line-mode):
 	e2ee <command> [path]
 
 	    Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`,
-	    `status`, `decrypt-file` and `target-status`.
+	    `status`, `decrypt-file`, and `target-status`.
 
 	    -p, --password <password>  Use this password as master password (For
 	                               security reasons, it is not recommended to use
@@ -496,6 +588,9 @@ The following commands are available in [command-line mode](#command-line-mode):
 	    -v, --verbose              More verbose output for the `target-status`
 	                               command
 	    -o, --output <directory>   Output directory
+	    --retry-failed-items       Applies to `decrypt` command - retries
+	                               decrypting items that previously could not be
+	                               decrypted.
 
 	edit <note>
 
@@ -507,9 +602,8 @@ The following commands are available in [command-line mode](#command-line-mode):
 	    complete database including notebooks, notes, tags and resources.
 
 	    --format <format>      Destination format: jex (Joplin Export File), raw
-	                           (Joplin Export Directory), json (Json Export
-	                           Directory), md (Markdown), html (HTML File), html
-	                           (HTML Directory)
+	                           (Joplin Export Directory), md (Markdown),
+	                           md_frontmatter (Markdown + Front Matter)
 	    --note <note>          Exports only the given note.
 	    --notebook <notebook>  Exports only the given notebook.
 
@@ -525,8 +619,10 @@ The following commands are available in [command-line mode](#command-line-mode):
 
 	    Imports data into Joplin.
 
-	    --format <format>  Source format: auto, jex, md, raw, enex, enex
-	    -f, --force        Do not ask for confirmation.
+	    --format <format>                Source format: auto, jex, md,
+	                                     md_frontmatter, raw, enex, enex
+	    -f, --force                      Do not ask for confirmation.
+	    --output-format <output-format>  Output format: md, html
 
 	ls [note-pattern]
 
@@ -540,7 +636,7 @@ The following commands are available in [command-line mode](#command-line-mode):
 	    -t, --type <type>      Displays only the items of the specific type(s).
 	                           Can be `n` for notes, `t` for to-dos, or `nt` for
 	                           notes and to-dos (eg. `-tt` would display only the
-	                           to-dos, while `-ttd` would display notes and
+	                           to-dos, while `-tnt` would display notes and
 	                           to-dos.
 	    -f, --format <format>  Either "text" or "json"
 	    -l, --long             Use long list format. Format is ID, NOTE_COUNT (for
@@ -596,9 +692,10 @@ The following commands are available in [command-line mode](#command-line-mode):
 	    updated_time (int), is_conflict (int), latitude (numeric), longitude
 	    (numeric), altitude (numeric), author (text), source_url (text), is_todo
 	    (int), todo_due (int), todo_completed (int), source (text),
-	    source_application (text), application_data (text), order (int),
+	    source_application (text), application_data (text), order (numeric),
 	    user_created_time (int), user_updated_time (int), encryption_cipher_text
-	    (text), encryption_applied (int), markup_language (int), is_shared (int)
+	    (text), encryption_applied (int), markup_language (int), is_shared (int),
+	    share_id (text), conflict_original_id (text), master_key_id (text)
 
 	status
 
@@ -608,8 +705,11 @@ The following commands are available in [command-line mode](#command-line-mode):
 
 	    Synchronises with remote storage.
 
-	    --target <target>  Sync to provided target (defaults to sync.target config
-	                       value)
+	    --target <target>   Sync to provided target (defaults to sync.target
+	                        config value)
+	    --upgrade           Upgrade the sync target to the latest version.
+	    --use-lock <value>  Disable local locks that prevent multiple clients from
+	                        synchronizing at the same time (Default = 1)
 
 	tag <tag-command> [tag] [note]
 
