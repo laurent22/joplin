@@ -483,6 +483,16 @@ Notes are sorted by "relevance". Currently it means the notes that contain the r
 
 In the desktop application, press <kbd>Ctrl+P</kbd> or <kbd>Cmd+P</kbd> and type a note title or part of its content to jump to it. Or type <kbd>#</kbd> followed by a tag name, or <kbd>@</kbd> followed by a notebook name.
 
+# Multiple profile support
+	
+To create a new profile, open File > Switch profile and select Create new profile, enter the profile name and press OK. The app will automatically switch to this new profile, which you can now configure.
+
+To switch back to the previous profile, again open File > Switch profile and select Default.
+
+Note that profiles all share certain settings, such as language, font size, theme, etc. This is done so that you don't have reconfigure every details when switching profiles. Other settings such as sync configuration is per profile.
+
+The feature is available on desktop only for now, and should be ported to mobile relatively soon.
+	
 # Donations
 
 Donations to Joplin support the development of the project. Developing quality applications mostly takes time, but there are also some expenses, such as digital certificates to sign the applications, app store fees, hosting, etc. Most of all, your donation will make it possible to keep up the current development standard.
