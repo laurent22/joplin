@@ -99,6 +99,10 @@ shimInit({
 	appVersion,
 	electronBridge: bridge(),
 	nodeSqlite,
+	maxConcurrentConnections: Setting.value('sync.maxConcurrentConnections'),
+	proxyTimeout: Setting.value('net.proxyTimeout'),
+	proxyEnabled: Setting.value('net.proxyEnabled'),
+	proxyUrl: Setting.value('net.proxyUrl'),
 });
 
 // Disable drag and drop of links inside application (which would

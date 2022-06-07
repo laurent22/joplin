@@ -157,21 +157,16 @@ const shim = {
 	},
 
 	fetchWithRetry: async function(fetchFn: Function, options: any = null) {
-		let requestWithProxy = options?.agent?.proxy || false;
 		if (!options) options = {};
 		if (!options.timeout) options.timeout = 1000 * 120; // ms
-		// For maxRetry the file API sets it to 0, but we want to try at least twice in fetch to accommodate proxy retrying
-		if (!('maxRetry' in options)) options.maxRetry = Math.max(shim.fetchMaxRetry_, 1);
 
 		let retryCount = 0;
 		while (true) {
 			try {
-				const response = await fetchFn(requestWithProxy);
+				const response = await fetchFn();
 				return response;
 			} catch (error) {
 				if (shim.fetchRequestCanBeRetried(error)) {
-					// If proxy was set try again without proxy being set (sometimes proxies/vpns get turned off)
-					if (requestWithProxy) requestWithProxy = false;
 					retryCount++;
 					if (retryCount > options.maxRetry) {
 						throw error;
