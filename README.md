@@ -185,6 +185,7 @@ A community maintained list of these distributions can be found here: [Unofficia
 - Custom CSS support for customisation of both the rendered markdown and overall user interface.
 - Customisable layout allows toggling, movement and sizing of various elements.
 - Keyboard shortcuts are editable and allow binding of most Joplin commands with export/import functionality.
+- Multiple profile support.
 
 # Importing
 
