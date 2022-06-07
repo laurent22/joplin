@@ -5,7 +5,7 @@
 # Translators:
 # Josep Maria Planell <planell.josep@gmail.com>, 2019
 # Joan Montané <jmontane@softcatala.org>, 2019
-# Xavi Ivars <xavi.ivars@gmail.com>, 2021
+# Xavi Ivars <xavi.ivars@gmail.com>, 2021-2022
 #
 msgid ""
 msgstr ""
@@ -302,9 +302,8 @@ msgid "Also displays unset and hidden config variables."
 msgstr "També mostra variables de configuració ocultes o sense definir."
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:203
-#, fuzzy
 msgid "Also publish linked notes"
-msgstr "Deixa de publicar la nota"
+msgstr "Publica també les notes enllaçades"
 
 #: packages/lib/models/Setting.ts:713
 msgid "Always"
@@ -870,18 +869,16 @@ msgstr ""
 "s'està avortant. Torneu a provar quan tingueu connexió a Internet."
 
 #: packages/app-desktop/gui/PromptDialog.min.js:235
-#, fuzzy
 msgid "Create"
-msgstr "Creació"
+msgstr "Crea"
 
 #: packages/app-mobile/components/note-list.js:101
 msgid "Create a notebook"
 msgstr "Crea un bloc de notes nou"
 
 #: packages/app-desktop/gui/MainScreen/commands/addProfile.ts:9
-#, fuzzy
 msgid "Create new profile..."
-msgstr "Crea una nota nova."
+msgstr "Crea un perfil nou..."
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:161
 msgid "Create notebook"
@@ -1330,7 +1327,7 @@ msgstr "Edita el bloc de notes"
 
 #: packages/app-desktop/commands/editProfileConfig.ts:9
 msgid "Edit profile configuration..."
-msgstr ""
+msgstr "Edita la configuració del perfil"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:138
 #: packages/lib/models/Setting.ts:876 packages/lib/models/Setting.ts:877
@@ -1360,9 +1357,8 @@ msgstr "Lletra d'amplada fixa de l'editor"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:100
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:96
-#, fuzzy
 msgid "Editor: %s"
-msgstr "Editor"
+msgstr "Editor: %s"
 
 #: packages/app-cli/app/command-ls.js:31
 msgid "Either \"text\" or \"json\""
@@ -1677,9 +1673,8 @@ msgid "File system"
 msgstr "Sistema de fitxers"
 
 #: packages/app-mobile/components/screens/NoteTagsDialog.js:190
-#, fuzzy
 msgid "Filter tags"
-msgstr "Etiquetes noves:"
+msgstr "Filtra les etiquetes"
 
 #: packages/app-desktop/gui/ExtensionBadge.min.js:10
 msgid "Firefox Extension"
@@ -2806,6 +2801,8 @@ msgid ""
 "Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list "
 "below."
 msgstr ""
+"Feu clic a \"%s\" per a continuar, o definiu les contrasenyes a la llista "
+"\"%s\" inferior."
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:65
 msgid ""
@@ -2965,9 +2962,8 @@ msgid "Profile"
 msgstr "Perfil"
 
 #: packages/app-desktop/gui/MainScreen/commands/addProfile.ts:17
-#, fuzzy
 msgid "Profile name:"
-msgstr "Perfil"
+msgstr "Nom del perfil:"
 
 #: packages/lib/versionInfo.ts:26
 msgid "Profile Version: %s"
@@ -3195,9 +3191,8 @@ msgstr "Desa l'alarma"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:100
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:93
-#, fuzzy
 msgid "Save as %s"
-msgstr "Anomena i desa..."
+msgstr "Desa-ho com a %s"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:80
 msgid "Save as..."
@@ -3565,9 +3560,8 @@ msgid "Switch between note and to-do type"
 msgstr "Alterna entre el tipus nota i tasques pendents"
 
 #: packages/app-desktop/gui/MenuBar.tsx:437
-#, fuzzy
 msgid "Switch profile"
-msgstr "Exporta el perfil"
+msgstr "Canvia el perfil"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:105
 msgid "Switch to note type"
@@ -3576,9 +3570,8 @@ msgstr "Canvia el tipus a nota"
 #: packages/app-desktop/commands/switchProfile1.ts:7
 #: packages/app-desktop/commands/switchProfile2.ts:7
 #: packages/app-desktop/commands/switchProfile3.ts:7
-#, fuzzy
 msgid "Switch to profile %d"
-msgstr "Canvia el tipus a nota"
+msgstr "Canvia al perfil %d"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:114
 msgid "Switch to to-do type"
@@ -3677,7 +3670,7 @@ msgstr "Tabloide"
 
 #: packages/app-mobile/components/screens/NoteTagsDialog.js:179
 msgid "tag1, tag2, ..."
-msgstr ""
+msgstr "etiqueta1, etiqueta2, ..."
 
 #: packages/app-cli/app/command-import.js:52
 #: packages/app-desktop/gui/ImportScreen.min.js:73
@@ -3719,8 +3712,9 @@ msgstr ""
 
 #: packages/app-desktop/app.ts:332
 msgid ""
-"The application did not close properly. Would you like to start in safe mode?"
-msgstr ""
+"The application did not close properly. Would you like to start in safe "
+"mode?"
+msgstr "L'aplicació no s'ha tancat correctament. Voleu iniciar en mode segur?"
 
 #: packages/lib/onedrive-api-node-utils.js:86
 msgid ""
@@ -4576,9 +4570,8 @@ msgid "Your data is going to be re-encrypted and synced again."
 msgstr "Les vostres dades es tornaran a xifrar i sincronitzar."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:271
-#, fuzzy
 msgid "Your password is needed to decrypt some of your data."
-msgstr "La contrasenya mestra és necessària per a desxifrar algunes dades."
+msgstr "Fa falta la contrasenya per a desxifrar part de les dades."
 
 #: packages/app-cli/app/command-sync.ts:242
 msgid ""
