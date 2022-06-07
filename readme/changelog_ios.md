@@ -1,5 +1,37 @@
 # Joplin iOS app changelog
 
+## [ios-v12.8.1](https://github.com/laurent22/joplin/releases/tag/ios-v12.8.1) - 2022-06-06T10:56:27Z
+
+- Improved: Automatically start sync after setting the sync parameters (ff066ba)
+- Improved: Color of Date-Time text changed to match theme (#6279 by Ayush Srivastava)
+- Improved: Make search engine filter keywords case insensitive (#6267) (#6266 by [@JackGruber](https://github.com/JackGruber))
+- Improved: Sort sync target options (814a5a0)
+- Fixed: "Move Note" dropdown menu can be very narrow (#6306) (#3564 by Ayush Srivastava)
+- Fixed: Error when pressing undo or redo button while editor is closed (#6426) (#6328 by Tolulope Malomo)
+- Fixed: IOS and Dropbox synchronisation not working on iOS 15 (#6375)
+- Fixed: Remove white border around Beta Editor (#6326) (#6318 by Henry Heino)
+- Fixed: Support inserting attachments from Beta Editor (#6325) (#6324 by Henry Heino)
+
+## [ios-v12.7.2](https://github.com/laurent22/joplin/releases/tag/ios-v12.7.2) - 2022-04-15T11:07:27Z
+
+- Improved: Allow filtering tags in tag dialog (#6221 by [@shinglyu](https://github.com/shinglyu))
+- Improved: Handle invalid revision patches (#6209)
+- Improved: Improve error message when revision metadata cannot be decoded, to improve debugging (a325bf6)
+- Fixed: Ensure that note revision markup type is set correctly (#6261)
+- Fixed: IOS and Dropbox synchronisation not working on iOS 15 (#6375)
+- Fixed: The camera button remains clickable after taking a photo bug (#6222 by [@shinglyu](https://github.com/shinglyu))
+
+## [ios-v12.7.1](https://github.com/laurent22/joplin/releases/tag/ios-v12.7.1) - 2022-02-14T14:10:49Z
+
+- New: Add additional time format HH.mm (#6086 by [@vincentjocodes](https://github.com/vincentjocodes))
+- Improved: Do no duplicate resources when duplicating a note (721d008)
+- Improved: Make heading 4, 5 and 6 styling more consistent (fca5875)
+- Improved: Show login prompt for OneDrive (#5933 by Jonathan Heard)
+- Improved: Update Mermaid 8.13.5 -&gt; 8.13.9 and Katex dependencies (#6039 by Helmut K. C. Tessarek)
+- Fixed: Fixed issue where synchroniser would try to update a shared folder that is not longer accessible (667d642)
+- Fixed: Prevent multiline note titles (#6144) (#5482 by [@Daeraxa](https://github.com/Daeraxa))
+- Fixed: Shared resource was not encrypted with correct encryption key (#6092)
+
 ## [ios-v12.6.2](https://github.com/laurent22/joplin/releases/tag/ios-v12.6.2) - 2021-12-17T09:59:16Z
 
 - New: Add date format YYYY/MM/DD (#5759 by Helmut K. C. Tessarek)

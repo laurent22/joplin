@@ -60,16 +60,20 @@ describe('MdToHtml', function() {
 			actualHtml = actualHtml.replace(/\r?\n/g, '\n');
 
 			if (actualHtml !== expectedHtml) {
-				console.info('');
-				console.info(`Error converting file: ${mdFilename}`);
-				console.info('--------------------------------- Got:');
-				console.info(actualHtml);
-				console.info('--------------------------------- Raw:');
-				console.info(actualHtml.split('\n'));
-				console.info('--------------------------------- Expected:');
-				console.info(expectedHtml.split('\n'));
-				console.info('--------------------------------------------');
-				console.info('');
+				const msg: string[] = [
+					'',
+					`Error converting file: ${mdFilename}`,
+					'--------------------------------- Got:',
+					actualHtml,
+					'--------------------------------- Raw:',
+					actualHtml.split('\n'),
+					'--------------------------------- Expected:',
+					expectedHtml.split('\n'),
+					'--------------------------------------------',
+					'',
+				];
+
+				console.info(msg.join('\n'));
 
 				expect(false).toBe(true);
 				// return;
@@ -242,9 +246,9 @@ describe('MdToHtml', function() {
 		{
 			const input = '# Head\nFruits\n- Apple\n';
 			const result = await mdToHtml.render(input, null, { bodyOnly: true, mapsToLine: true });
-			expect(result.html.trim()).toBe('<h1 id="head" class="maps-to-line" source-line="0">Head</h1>\n' +
-				'<p class="maps-to-line" source-line="1">Fruits</p>\n' +
-				'<ul>\n<li class="maps-to-line" source-line="2">Apple</li>\n</ul>'
+			expect(result.html.trim()).toBe('<h1 id="head" class="maps-to-line" source-line="0" source-line-end="1">Head</h1>\n' +
+				'<p class="maps-to-line" source-line="1" source-line-end="2">Fruits</p>\n' +
+				'<ul>\n<li class="maps-to-line" source-line="2" source-line-end="3">Apple</li>\n</ul>'
 			);
 		}
 	}));

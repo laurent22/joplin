@@ -17,7 +17,7 @@ export default function useScrollHandler(editorRef: any, webviewRef: any, onScro
 		const now = Date.now();
 		if (now >= ignoreNextEditorScrollTime_.current) ignoreNextEditorScrollEventCount_.current = 0;
 		if (ignoreNextEditorScrollEventCount_.current < 10) { // for safety
-			ignoreNextEditorScrollTime_.current = now + 200;
+			ignoreNextEditorScrollTime_.current = now + 1000;
 			ignoreNextEditorScrollEventCount_.current += 1;
 		}
 	};
@@ -157,8 +157,9 @@ export default function useScrollHandler(editorRef: any, webviewRef: any, onScro
 	// When heights of lines are updated in CodeMirror, 'update' events are raised.
 	// If such an update event is raised, scroll position should be restored.
 	// See https://github.com/laurent22/joplin/issues/5981
-	const editor_update = useCallback((cm) => {
+	const editor_update = useCallback((cm: any, edited: boolean) => {
 		if (isCodeMirrorReady(cm)) {
+			if (edited) return;
 			const linesHeight = cm.heightAtLine(cm.lineCount()) - cm.heightAtLine(0);
 			if (lastLinesHeight_.current !== linesHeight) {
 				// To avoid cancelling intentional scroll position changes,

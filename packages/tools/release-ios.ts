@@ -1,6 +1,6 @@
 import * as fs from 'fs-extra';
 import { rootDir, gitPullTry, completeReleaseWithChangelog } from './tool-utils';
-const { unique } = require('@joplin/lib/ArrayUtils');
+import { unique } from '@joplin/lib/ArrayUtils';
 
 const mobileDir = `${rootDir}/packages/app-mobile`;
 

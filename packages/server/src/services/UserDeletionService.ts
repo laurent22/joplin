@@ -112,7 +112,7 @@ export default class UserDeletionService extends BaseService {
 		const addedUserIds = await this.models.userDeletion().autoAdd(
 			10,
 			this.config.USER_DATA_AUTO_DELETE_AFTER_DAYS * Day,
-			3 * Day,
+			Date.now() + 3 * Day,
 			{
 				processAccount: true,
 				processData: true,

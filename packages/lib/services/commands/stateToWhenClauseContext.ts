@@ -30,6 +30,7 @@ export interface WhenClauseContext {
 	folderIsShared: boolean;
 	folderIsShareRoot: boolean;
 	joplinServerConnected: boolean;
+	hasMultiProfiles: boolean;
 }
 
 export default function stateToWhenClauseContext(state: State, options: WhenClauseContextOptions = null): WhenClauseContext {
@@ -82,5 +83,7 @@ export default function stateToWhenClauseContext(state: State, options: WhenClau
 		folderIsShared: commandFolder ? !!commandFolder.share_id : false,
 
 		joplinServerConnected: [9, 10].includes(state.settings['sync.target']),
+
+		hasMultiProfiles: state.profileConfig && state.profileConfig.profiles.length > 1,
 	};
 }

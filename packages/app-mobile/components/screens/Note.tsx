@@ -93,9 +93,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		this.doFocusUpdate_ = false;
 
-		// iOS doesn't support multiline text fields properly so disable it
-		this.enableMultilineTitle_ = Platform.OS !== 'ios';
-
 		this.saveButtonHasBeenShown_ = false;
 
 		this.styles_ = {};
@@ -231,7 +228,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 		this.onAlarmDialogAccept = this.onAlarmDialogAccept.bind(this);
 		this.onAlarmDialogReject = this.onAlarmDialogReject.bind(this);
 		this.todoCheckbox_change = this.todoCheckbox_change.bind(this);
-		this.titleTextInput_contentSizeChange = this.titleTextInput_contentSizeChange.bind(this);
 		this.title_changeText = this.title_changeText.bind(this);
 		this.undoRedoService_stackChange = this.undoRedoService_stackChange.bind(this);
 		this.screenHeader_undoButtonPress = this.screenHeader_undoButtonPress.bind(this);
@@ -389,7 +385,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 			paddingBottom: 10, // Added for iOS (Not needed for Android??)
 		};
 
-		if (this.enableMultilineTitle_) styles.titleTextInput.height = this.state.titleTextInputHeight;
 		if (this.state.HACK_webviewLoadingState === 1) styles.titleTextInput.marginTop = 1;
 
 		this.styles_[cacheKey] = StyleSheet.create(styles);
@@ -493,7 +488,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 	}
 
 	body_selectionChange(event: any) {
-		this.selection = event.nativeEvent.selection;
+		if (this.useEditorBeta()) {
+			this.selection = event.selection;
+		} else {
+			this.selection = event.nativeEvent.selection;
+		}
 	}
 
 	makeSaveAction() {
@@ -713,9 +712,17 @@ class NoteScreenComponent extends BaseScreenComponent {
 		const newNote = Object.assign({}, this.state.note);
 
 		if (this.state.mode == 'edit' && !!this.selection) {
+			const newText = `\n${resourceTag}\n`;
+
 			const prefix = newNote.body.substring(0, this.selection.start);
 			const suffix = newNote.body.substring(this.selection.end);
-			newNote.body = `${prefix}\n${resourceTag}\n${suffix}`;
+			newNote.body = `${prefix}${newText}${suffix}`;
+
+			if (this.useEditorBeta()) {
+				// The beta editor needs to be explicitly informed of changes
+				// to the note's body
+				this.editorRef.current.insertText(newText);
+			}
 		} else {
 			newNote.body += `\n${resourceTag}`;
 		}
@@ -884,11 +891,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 			output.push({
 				title: _('Attach...'),
 				onPress: async () => {
-					if (this.state.mode === 'edit' && this.useEditorBeta()) {
-						alert('Attaching files from the beta editor is not yet supported. You may do so from the viewer mode instead.');
-						return;
-					}
-
 					const buttons = [];
 
 					// On iOS, it will show "local files", which means certain files saved from the browser
@@ -969,13 +971,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 	async todoCheckbox_change(checked: boolean) {
 		await this.saveOneProperty('todo_completed', checked ? time.unixMs() : 0);
-	}
-
-	titleTextInput_contentSizeChange(event: any) {
-		if (!this.enableMultilineTitle_) return;
-
-		const height = event.nativeEvent.contentSize.height;
-		this.setState({ titleTextInputHeight: height });
 	}
 
 	scheduleFocusUpdate() {
@@ -1137,7 +1132,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 					ref={this.editorRef}
 					themeId={this.props.themeId}
 					initialText={note.body}
+					initialSelection={this.selection}
 					onChange={this.onBodyChange}
+					onSelectionChange={this.body_selectionChange}
 					onUndoRedoDepthChange={this.onUndoRedoDepthChange}
 					style={this.styles().bodyTextInput}
 				/>;
@@ -1178,8 +1175,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 			<View style={titleContainerStyle}>
 				{isTodo && <Checkbox style={this.styles().checkbox} checked={!!Number(note.todo_completed)} onChange={this.todoCheckbox_change} />}
 				<TextInput
-					onContentSizeChange={this.titleTextInput_contentSizeChange}
-					multiline={this.enableMultilineTitle_}
 					ref="titleTextField"
 					underlineColorAndroid="#ffffff00"
 					autoCapitalize="sentences"
@@ -1206,8 +1201,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 					onSaveButtonPress={this.saveNoteButton_press}
 					showSideMenuButton={false}
 					showSearchButton={false}
-					showUndoButton={this.state.undoRedoButtonState.canUndo || this.state.undoRedoButtonState.canRedo}
-					showRedoButton={this.state.undoRedoButtonState.canRedo}
+					showUndoButton={(this.state.undoRedoButtonState.canUndo || this.state.undoRedoButtonState.canRedo) && this.state.mode === 'edit'}
+					showRedoButton={this.state.undoRedoButtonState.canRedo && this.state.mode === 'edit'}
 					undoButtonDisabled={!this.state.undoRedoButtonState.canUndo && this.state.undoRedoButtonState.canRedo}
 					onUndoButtonPress={this.screenHeader_undoButtonPress}
 					onRedoButtonPress={this.screenHeader_redoButtonPress}

@@ -4,6 +4,10 @@
 
 * * *
 
+🌞 Joplin participates in **Google Summer of Code 2022**! More info on [the announcement post](https://github.com/laurent22/joplin/blob/dev/readme/news/20220308-gsoc2022-start.md). 🌞
+
+* * *
+
 <img width="64" src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/LinuxIcons/256x256.png" align="left" /> **Joplin** is a free, open source note taking and to-do application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be copied, tagged and modified either from the applications directly or from your own text editor. The notes are in [Markdown format](#markdown).
 
 Notes exported from Evernote [can be imported](#importing) into Joplin, including the formatted content (which is converted to Markdown), resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.). Plain Markdown files can also be imported.
@@ -24,11 +28,11 @@ Three types of applications are available: for **desktop** (Windows, macOS and L
 
 Operating System | Download
 ---|---
-Windows (32 and 64-bit) | <a href='https://github.com/laurent22/joplin/releases/download/v2.6.10/Joplin-Setup-2.6.10.exe'><img alt='Get it on Windows' width="134px" src='https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/BadgeWindows.png'/></a>
-macOS | <a href='https://github.com/laurent22/joplin/releases/download/v2.6.10/Joplin-2.6.10.dmg'><img alt='Get it on macOS' width="134px" src='https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/BadgeMacOS.png'/></a>
-Linux | <a href='https://github.com/laurent22/joplin/releases/download/v2.6.10/Joplin-2.6.10.AppImage'><img alt='Get it on Linux' width="134px" src='https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/BadgeLinux.png'/></a>
+Windows (32 and 64-bit) | <a href='https://github.com/laurent22/joplin/releases/download/v2.8.8/Joplin-Setup-2.8.8.exe'><img alt='Get it on Windows' width="134px" src='https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/BadgeWindows.png'/></a>
+macOS | <a href='https://github.com/laurent22/joplin/releases/download/v2.8.8/Joplin-2.8.8.dmg'><img alt='Get it on macOS' width="134px" src='https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/BadgeMacOS.png'/></a>
+Linux | <a href='https://github.com/laurent22/joplin/releases/download/v2.8.8/Joplin-2.8.8.AppImage'><img alt='Get it on Linux' width="134px" src='https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/BadgeLinux.png'/></a>
 
-**On Windows**, you may also use the <a href='https://github.com/laurent22/joplin/releases/download/v2.6.10/JoplinPortable.exe'>Portable version</a>. The [portable application](https://en.wikipedia.org/wiki/Portable_application) allows installing the software on a portable device such as a USB key. Simply copy the file JoplinPortable.exe in any directory on that USB key ; the application will then create a directory called "JoplinProfile" next to the executable file.
+**On Windows**, you may also use the <a href='https://github.com/laurent22/joplin/releases/download/v2.8.8/JoplinPortable.exe'>Portable version</a>. The [portable application](https://en.wikipedia.org/wiki/Portable_application) allows installing the software on a portable device such as a USB key. Simply copy the file JoplinPortable.exe in any directory on that USB key ; the application will then create a directory called "JoplinProfile" next to the executable file.
 
 **On Linux**, the recommended way is to use the following installation script as it will handle the desktop icon too:
 
@@ -38,7 +42,7 @@ Linux | <a href='https://github.com/laurent22/joplin/releases/download/v2.6.10/J
 
 Operating System | Download | Alt. Download
 ---|---|---
-Android | <a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/BadgeAndroid.png'/></a> | or download the APK file: [64-bit](https://github.com/laurent22/joplin-android/releases/download/android-v2.6.9/joplin-v2.6.9.apk) [32-bit](https://github.com/laurent22/joplin-android/releases/download/android-v2.6.9/joplin-v2.6.9-32bit.apk)
+Android | <a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/BadgeAndroid.png'/></a> | or download the APK file: [64-bit](https://github.com/laurent22/joplin-android/releases/download/android-v2.8.1/joplin-v2.8.1.apk) [32-bit](https://github.com/laurent22/joplin-android/releases/download/android-v2.8.1/joplin-v2.8.1-32bit.apk)
 iOS | <a href='https://itunes.apple.com/us/app/joplin/id1315599797'><img alt='Get it on the App Store' height="40px" src='https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/BadgeIOS.png'/></a> | -
 
 ## Terminal application
@@ -51,23 +55,22 @@ To start it, type `joplin`.
 
 For usage information, please refer to the full [Joplin Terminal Application Documentation](https://joplinapp.org/terminal/).
 
-### Unsupported methods
-
-There are other ways to install the terminal application. However, they are not supported and problems must be reported to the upstream projects.
-
-Operating system | Method
------------------|----------------
-Arch Linux       | An Arch Linux package is available [here](https://aur.archlinux.org/packages/joplin/). To install it, use an AUR wrapper such as yay: `yay -S joplin`. Both the CLI tool (type `joplin`) and desktop app (type `joplin-desktop`) are packaged. You can also install a compiled version with the [chaotic-aur](https://wiki.archlinux.org/index.php/Unofficial_user_repositories#chaotic-aur) repository. For support, please go to the [GitHub repo](https://github.com/masterkorp/joplin-pkgbuild). If you are interested in [pre-release](https://joplinapp.org/prereleases/) you have [joplin-beta](https://aur.archlinux.org/packages/joplin-beta).
-Flatpak          | A Flatpak is available on [Flathub](https://flathub.org/apps/details/net.cozic.joplin_desktop). To install it, run `flatpak install net.cozic.joplin_desktop` after [setting up Flathub](https://flatpak.org/setup/). GUI software managers on most distros support Flatpak installation.
-
 ## Web Clipper
 
 The Web Clipper is a browser extension that allows you to save web pages and screenshots from your browser. For more information on how to install and use it, see the [Web Clipper Help Page](https://github.com/laurent22/joplin/blob/dev/readme/clipper.md).
 
+## Unofficial Alternative Distributions
+
+There are a number of unofficial alternative Joplin distributions. If you do not want to or cannot use appimages or any of the other officially supported releases then you may wish to consider these.
+
+However these come with a caveat in that they are not officially supported so certain issues may not be supportable by the main project. Rather support requests, bug reports and general advice would need to go to the maintainers of these distributions.
+
+A community maintained list of these distributions can be found here: [Unofficial Joplin distributions](https://discourse.joplinapp.org/t/unofficial-alternative-joplin-distributions/23703)
+
 # Sponsors
 
 <!-- SPONSORS-ORG -->
-<a href="https://seirei.ne.jp"><img title="Serei Network" width="256" src="https://joplinapp.org/images/sponsors/SeireiNetwork.png"/></a> <a href="https://usrigging.com/"><img title="U.S. Ringing Supply" width="256" src="https://joplinapp.org/images/sponsors/RingingSupply.svg"/></a> <a href="https://www.hosting.de/nextcloud/?mtm_campaign=managed-nextcloud&amp;mtm_kwd=joplinapp&amp;mtm_source=joplinapp-github&amp;mtm_medium=banner"><img title="Hosting.de" width="256" src="https://joplinapp.org/images/sponsors/HostingDe.png"/></a>
+<a href="https://seirei.ne.jp"><img title="Serei Network" width="256" src="https://joplinapp.org/images/sponsors/SeireiNetwork.png"/></a> <a href="https://usrigging.com/"><img title="U.S. Ringing Supply" width="256" src="https://joplinapp.org/images/sponsors/RingingSupply.svg"/></a> <a href="https://www.hosting.de/nextcloud/?mtm_campaign=managed-nextcloud&amp;mtm_kwd=joplinapp&amp;mtm_source=joplinapp-github&amp;mtm_medium=banner"><img title="Hosting.de" width="256" src="https://joplinapp.org/images/sponsors/HostingDe.png"/></a> <a href="https://residence-greece.com/"><img title="Greece Golden Visa" width="256" src="https://joplinapp.org/images/sponsors/ResidenceGreece.jpg"/></a>
 <!-- SPONSORS-ORG -->
 
 * * *
@@ -77,11 +80,11 @@ The Web Clipper is a browser extension that allows you to save web pages and scr
 | :---: | :---: | :---: | :---: |
 | <img width="50" src="https://avatars2.githubusercontent.com/u/215668?s=96&v=4"/></br>[avanderberg](https://github.com/avanderberg) | <img width="50" src="https://avatars2.githubusercontent.com/u/3061769?s=96&v=4"/></br>[c-nagy](https://github.com/c-nagy) | <img width="50" src="https://avatars2.githubusercontent.com/u/70780798?s=96&v=4"/></br>[cabottech](https://github.com/cabottech) | <img width="50" src="https://avatars2.githubusercontent.com/u/67130?s=96&v=4"/></br>[chr15m](https://github.com/chr15m) |
 | <img width="50" src="https://avatars2.githubusercontent.com/u/4862947?s=96&v=4"/></br>[chrootlogin](https://github.com/chrootlogin) | <img width="50" src="https://avatars2.githubusercontent.com/u/82579431?s=96&v=4"/></br>[clmntsl](https://github.com/clmntsl) | <img width="50" src="https://avatars2.githubusercontent.com/u/808091?s=96&v=4"/></br>[cuongtransc](https://github.com/cuongtransc) | <img width="50" src="https://avatars2.githubusercontent.com/u/1307332?s=96&v=4"/></br>[dbrandonjohnson](https://github.com/dbrandonjohnson) |
-| <img width="50" src="https://avatars2.githubusercontent.com/u/1439535?s=96&v=4"/></br>[fbloise](https://github.com/fbloise) | <img width="50" src="https://avatars2.githubusercontent.com/u/38898566?s=96&v=4"/></br>[h4sh5](https://github.com/h4sh5) | <img width="50" src="https://avatars2.githubusercontent.com/u/3266447?s=96&v=4"/></br>[iamwillbar](https://github.com/iamwillbar) | <img width="50" src="https://avatars2.githubusercontent.com/u/37297218?s=96&v=4"/></br>[Jesssullivan](https://github.com/Jesssullivan) |
-| <img width="50" src="https://avatars2.githubusercontent.com/u/1248504?s=96&v=4"/></br>[joesfer](https://github.com/joesfer) | <img width="50" src="https://avatars2.githubusercontent.com/u/5588131?s=96&v=4"/></br>[kianenigma](https://github.com/kianenigma) | <img width="50" src="https://avatars2.githubusercontent.com/u/24908652?s=96&v=4"/></br>[konishi-t](https://github.com/konishi-t) | <img width="50" src="https://avatars2.githubusercontent.com/u/42319182?s=96&v=4"/></br>[marcdw1289](https://github.com/marcdw1289) |
-| <img width="50" src="https://avatars2.githubusercontent.com/u/1788010?s=96&v=4"/></br>[maxtruxa](https://github.com/maxtruxa) | <img width="50" src="https://avatars2.githubusercontent.com/u/29300939?s=96&v=4"/></br>[mcejp](https://github.com/mcejp) | <img width="50" src="https://avatars2.githubusercontent.com/u/1168659?s=96&v=4"/></br>[nicholashead](https://github.com/nicholashead) | <img width="50" src="https://avatars2.githubusercontent.com/u/5782817?s=96&v=4"/></br>[piccobit](https://github.com/piccobit) |
-| <img width="50" src="https://avatars2.githubusercontent.com/u/47742?s=96&v=4"/></br>[ravenscroftj](https://github.com/ravenscroftj) | <img width="50" src="https://avatars2.githubusercontent.com/u/765564?s=96&v=4"/></br>[taskcruncher](https://github.com/taskcruncher) | <img width="50" src="https://avatars2.githubusercontent.com/u/73081837?s=96&v=4"/></br>[thismarty](https://github.com/thismarty) | <img width="50" src="https://avatars2.githubusercontent.com/u/15859362?s=96&v=4"/></br>[thomasbroussard](https://github.com/thomasbroussard) |
-|       |       |       |       |
+| <img width="50" src="https://avatars2.githubusercontent.com/u/1439535?s=96&v=4"/></br>[fbloise](https://github.com/fbloise) | <img width="50" src="https://avatars2.githubusercontent.com/u/49439044?s=96&v=4"/></br>[fourstepper](https://github.com/fourstepper) | <img width="50" src="https://avatars2.githubusercontent.com/u/38898566?s=96&v=4"/></br>[h4sh5](https://github.com/h4sh5) | <img width="50" src="https://avatars2.githubusercontent.com/u/3266447?s=96&v=4"/></br>[iamwillbar](https://github.com/iamwillbar) |
+| <img width="50" src="https://avatars2.githubusercontent.com/u/37297218?s=96&v=4"/></br>[Jesssullivan](https://github.com/Jesssullivan) | <img width="50" src="https://avatars2.githubusercontent.com/u/1248504?s=96&v=4"/></br>[joesfer](https://github.com/joesfer) | <img width="50" src="https://avatars2.githubusercontent.com/u/5588131?s=96&v=4"/></br>[kianenigma](https://github.com/kianenigma) | <img width="50" src="https://avatars2.githubusercontent.com/u/24908652?s=96&v=4"/></br>[konishi-t](https://github.com/konishi-t) |
+| <img width="50" src="https://avatars2.githubusercontent.com/u/42319182?s=96&v=4"/></br>[marcdw1289](https://github.com/marcdw1289) | <img width="50" src="https://avatars2.githubusercontent.com/u/1788010?s=96&v=4"/></br>[maxtruxa](https://github.com/maxtruxa) | <img width="50" src="https://avatars2.githubusercontent.com/u/29300939?s=96&v=4"/></br>[mcejp](https://github.com/mcejp) | <img width="50" src="https://avatars2.githubusercontent.com/u/1168659?s=96&v=4"/></br>[nicholashead](https://github.com/nicholashead) |
+| <img width="50" src="https://avatars2.githubusercontent.com/u/5782817?s=96&v=4"/></br>[piccobit](https://github.com/piccobit) | <img width="50" src="https://avatars2.githubusercontent.com/u/77214738?s=96&v=4"/></br>[Polymathic-Company](https://github.com/Polymathic-Company) | <img width="50" src="https://avatars2.githubusercontent.com/u/47742?s=96&v=4"/></br>[ravenscroftj](https://github.com/ravenscroftj) | <img width="50" src="https://avatars2.githubusercontent.com/u/765564?s=96&v=4"/></br>[taskcruncher](https://github.com/taskcruncher) |
+| <img width="50" src="https://avatars2.githubusercontent.com/u/73081837?s=96&v=4"/></br>[thismarty](https://github.com/thismarty) | <img width="50" src="https://avatars2.githubusercontent.com/u/15859362?s=96&v=4"/></br>[thomasbroussard](https://github.com/thomasbroussard) |       |       |
 <!-- SPONSORS-GITHUB -->
 
 <!-- TOC -->
@@ -129,12 +132,14 @@ The Web Clipper is a browser extension that allows you to save web pages and scr
 
 	- [How to build the apps](https://github.com/laurent22/joplin/blob/dev/BUILD.md)
 	- [Writing a technical spec](https://github.com/laurent22/joplin/blob/dev/readme/technical_spec.md)
-	- [End-to-end encryption spec](https://github.com/laurent22/joplin/blob/dev/readme/spec/e2ee.md)
+	- [Desktop application styling](https://github.com/laurent22/joplin/blob/dev/readme/spec/desktop_styling.md)
 	- [Note History spec](https://github.com/laurent22/joplin/blob/dev/readme/spec/history.md)
 	- [Sync Lock spec](https://github.com/laurent22/joplin/blob/dev/readme/spec/sync_lock.md)
 	- [Synchronous Scroll spec](https://github.com/laurent22/joplin/blob/dev/readme/spec/sync_scroll.md)
 	- [Plugin Architecture spec](https://github.com/laurent22/joplin/blob/dev/readme/spec/plugins.md)
 	- [Search Sorting spec](https://github.com/laurent22/joplin/blob/dev/readme/spec/search_sorting.md)
+	- [E2EE: Technical spec](https://github.com/laurent22/joplin/blob/dev/readme/spec/e2ee.md)
+	- [E2EE: Workflow](https://github.com/laurent22/joplin/blob/dev/readme/spec/e2ee/workflow.md)
 	- [Server: File URL Format](https://github.com/laurent22/joplin/blob/dev/readme/spec/server_file_url_format.md)
 	- [Server: Delta Sync](https://github.com/laurent22/joplin/blob/dev/readme/spec/server_delta_sync.md)
 	- [Server: Sharing](https://github.com/laurent22/joplin/blob/dev/readme/spec/server_sharing.md)
@@ -148,6 +153,8 @@ The Web Clipper is a browser extension that allows you to save web pages and scr
 - About
 
 	- [Changelog (Desktop App)](https://github.com/laurent22/joplin/blob/dev/readme/changelog.md)
+	- [Changelog (Android)](https://github.com/laurent22/joplin/blob/dev/readme/changelog_android.md)
+	- [Changelog (iOS)](https://github.com/laurent22/joplin/blob/dev/readme/changelog_ios.md)
 	- [Changelog (CLI App)](https://github.com/laurent22/joplin/blob/dev/readme/changelog_cli.md)
 	- [Changelog (Server)](https://github.com/laurent22/joplin/blob/dev/readme/changelog_server.md)
 	- [Stats](https://github.com/laurent22/joplin/blob/dev/readme/stats.md)
@@ -180,6 +187,7 @@ The Web Clipper is a browser extension that allows you to save web pages and scr
 - Custom CSS support for customisation of both the rendered markdown and overall user interface.
 - Customisable layout allows toggling, movement and sizing of various elements.
 - Keyboard shortcuts are editable and allow binding of most Joplin commands with export/import functionality.
+- Multiple profile support.
 
 # Importing
 
@@ -412,9 +420,10 @@ Important: userstyle.css and userchrome.css are provided for your convenience, b
 
 # Plugins
 
-The **desktop app** has the ability to extend beyond its standard functionality by the way of plugins. These plugins adhere to the Joplin plugin API and can be installed & configured within the application via the `Plugins` page in the [Configuration screen](https://github.com/laurent22/joplin/blob/dev/readme/config_screen.md). This menu allows the manual installation of the plugin using the single 'Joplin Plugin Archive' (*.jpl) file. Once the application is reloaded the plugins will appear within the plugins menu where they can be toggled on/off or removed entirely.
+The **desktop app** has the ability to extend beyond its standard functionality by the way of plugins. These plugins adhere to the Joplin [plugin API](https://joplinapp.org/api/references/plugin_api/classes/joplin.html) and can be installed & configured within the application via the `Plugins` page of the [Configuration screen](https://github.com/laurent22/joplin/blob/dev/readme/config_screen.md).
 
-Plugins are currently maintained by the community in the [Joplin Discourse 'plugins' category](https://discourse.joplinapp.org/c/plugins/18).
+From this menu you can search for plugins uploaded to the [Joplin plugins](https://github.com/joplin/plugins) repository as well as manual installation of plugins using a 'Joplin Plugin Archive' (*.jpl) file.  
+Once the application is reloaded the plugins will appear within the plugins menu where they can be toggled on/off or removed entirely.
 
 For more information see [Plugins](https://github.com/laurent22/joplin/blob/dev/readme/plugins.md)
 
@@ -444,7 +453,7 @@ You can also use search filters to further restrict the search.
 
 | Operator | Description | Example |
 | --- | --- | --- |
-|**-**|If placed before a text term, it excludes the notes that contain that term. You can also place it before a filter to negate it. |`-spam` searches for all notes without the word `spam`.<br>`office -trash` searches for all notes with the word`office` and without the word `trash`.|
+|**-**|If placed before a text term, it excludes the notes that contain that term. You can also place it before a filter to negate it. |`-spam` searches for all notes without the word `spam`.<br>`office -trash` searches for all notes with the word `office` and without the word `trash`.|
 |**any:**|Return notes that satisfy any/all of the required conditions. `any:0` is the default, which means all conditions must be satisfied.|`any:1 cat dog` will return notes that have the word `cat` or `dog`.<br>`any:0 cat dog` will return notes with both the words `cat` and `dog`. |
 | **title:** <br> **body:**|Restrict your search to just the title or the body field.|`title:"hello world"` searches for notes whose title contains `hello` and `world`.<br>`title:hello -body:world` searches for notes whose title contains `hello` and body does not contain `world`.
 | **tag:** |Restrict the search to the notes with the specified tags.|`tag:office` searches for all notes having tag office.<br>`tag:office tag:important` searches for all notes having both office and important tags.<br>`tag:office -tag:spam` searches for notes having tag `office` which do not have tag `spam`.<br>`any:1 tag:office tag:spam` searches for notes having tag `office` or tag `spam`.<br>`tag:be*ful` does a search with wildcards.<br>`tag:*` returns all notes with tags.<br>`-tag:*` returns all notes without tags.|
@@ -476,6 +485,16 @@ Notes are sorted by "relevance". Currently it means the notes that contain the r
 
 In the desktop application, press <kbd>Ctrl+P</kbd> or <kbd>Cmd+P</kbd> and type a note title or part of its content to jump to it. Or type <kbd>#</kbd> followed by a tag name, or <kbd>@</kbd> followed by a notebook name.
 
+# Multiple profile support
+	
+To create a new profile, open File > Switch profile and select Create new profile, enter the profile name and press OK. The app will automatically switch to this new profile, which you can now configure.
+
+To switch back to the previous profile, again open File > Switch profile and select Default.
+
+Note that profiles all share certain settings, such as language, font size, theme, etc. This is done so that you don't have reconfigure every details when switching profiles. Other settings such as sync configuration is per profile.
+
+The feature is available on desktop only for now, and should be ported to mobile relatively soon.
+	
 # Donations
 
 Donations to Joplin support the development of the project. Developing quality applications mostly takes time, but there are also some expenses, such as digital certificates to sign the applications, app store fees, hosting, etc. Most of all, your donation will make it possible to keep up the current development standard.
@@ -516,47 +535,47 @@ Current translations:
 <!-- LOCALE-TABLE-AUTO-GENERATED -->
 &nbsp;  |  Language  |  Po File  |  Last translator  |  Percent done
 ---|---|---|---|---
-<img src="https://joplinapp.org/images/flags/country-4x3/arableague.png" width="16px"/>  |  Arabic  |  [ar](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/ar.po)  |  [Whaell O](mailto:Whaell@protonmail.com)  |  91%
-<img src="https://joplinapp.org/images/flags/es/basque_country.png" width="16px"/>  |  Basque  |  [eu](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/eu.po)  |  juan.abasolo@ehu.eus  |  26%
-<img src="https://joplinapp.org/images/flags/country-4x3/ba.png" width="16px"/>  |  Bosnian (Bosna i Hercegovina)  |  [bs_BA](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/bs_BA.po)  |  [Derviš T.](mailto:dervis.t@pm.me)  |  65%
-<img src="https://joplinapp.org/images/flags/country-4x3/bg.png" width="16px"/>  |  Bulgarian (България)  |  [bg_BG](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/bg_BG.po)  |    |  51%
-<img src="https://joplinapp.org/images/flags/es/catalonia.png" width="16px"/>  |  Catalan  |  [ca](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/ca.po)  |  [Xavi Ivars](mailto:xavi.ivars@gmail.com)  |  97%
-<img src="https://joplinapp.org/images/flags/country-4x3/hr.png" width="16px"/>  |  Croatian (Hrvatska)  |  [hr_HR](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/hr_HR.po)  |  [Milo Ivir](mailto:mail@milotype.de)  |  95%
-<img src="https://joplinapp.org/images/flags/country-4x3/cz.png" width="16px"/>  |  Czech (Česká republika)  |  [cs_CZ](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/cs_CZ.po)  |  [Michal Stanke](mailto:michal@stanke.cz)  |  87%
+<img src="https://joplinapp.org/images/flags/country-4x3/arableague.png" width="16px"/>  |  Arabic  |  [ar](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/ar.po)  |  [Whaell O](mailto:Whaell@protonmail.com)  |  89%
+<img src="https://joplinapp.org/images/flags/es/basque_country.png" width="16px"/>  |  Basque  |  [eu](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/eu.po)  |  juan.abasolo@ehu.eus  |  25%
+<img src="https://joplinapp.org/images/flags/country-4x3/ba.png" width="16px"/>  |  Bosnian (Bosna i Hercegovina)  |  [bs_BA](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/bs_BA.po)  |  [Derviš T.](mailto:dervis.t@pm.me)  |  64%
+<img src="https://joplinapp.org/images/flags/country-4x3/bg.png" width="16px"/>  |  Bulgarian (България)  |  [bg_BG](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/bg_BG.po)  |    |  50%
+<img src="https://joplinapp.org/images/flags/es/catalonia.png" width="16px"/>  |  Catalan  |  [ca](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/ca.po)  |  [Xavi Ivars](mailto:xavi.ivars@gmail.com)  |  98%
+<img src="https://joplinapp.org/images/flags/country-4x3/hr.png" width="16px"/>  |  Croatian (Hrvatska)  |  [hr_HR](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/hr_HR.po)  |  [Milo Ivir](mailto:mail@milotype.de)  |  100%
+<img src="https://joplinapp.org/images/flags/country-4x3/cz.png" width="16px"/>  |  Czech (Česká republika)  |  [cs_CZ](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/cs_CZ.po)  |  [Michal Stanke](mailto:michal@stanke.cz)  |  86%
 <img src="https://joplinapp.org/images/flags/country-4x3/dk.png" width="16px"/>  |  Dansk (Danmark)  |  [da_DK](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/da_DK.po)  |  ERYpTION  |  98%
-<img src="https://joplinapp.org/images/flags/country-4x3/de.png" width="16px"/>  |  Deutsch (Deutschland)  |  [de_DE](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/de_DE.po)  |  [Benjamin Weis](mailto:benjamin.weis@gmx.com)  |  98%
-<img src="https://joplinapp.org/images/flags/country-4x3/ee.png" width="16px"/>  |  Eesti Keel (Eesti)  |  [et_EE](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/et_EE.po)  |    |  50%
+<img src="https://joplinapp.org/images/flags/country-4x3/de.png" width="16px"/>  |  Deutsch (Deutschland)  |  [de_DE](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/de_DE.po)  |  [MrKanister](mailto:pueblos_spatulas@aleeas.com)  |  100%
+<img src="https://joplinapp.org/images/flags/country-4x3/ee.png" width="16px"/>  |  Eesti Keel (Eesti)  |  [et_EE](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/et_EE.po)  |    |  49%
 <img src="https://joplinapp.org/images/flags/country-4x3/gb.png" width="16px"/>  |  English (United Kingdom)  |  [en_GB](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/en_GB.po)  |    |  100%
 <img src="https://joplinapp.org/images/flags/country-4x3/us.png" width="16px"/>  |  English (United States of America)  |  [en_US](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/en_US.po)  |    |  100%
-<img src="https://joplinapp.org/images/flags/country-4x3/es.png" width="16px"/>  |  Español (España)  |  [es_ES](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/es_ES.po)  |  [Francisco Mora](mailto:francisco.m.collao@gmail.com)  |  97%
-<img src="https://joplinapp.org/images/flags/esperanto.png" width="16px"/>  |  Esperanto  |  [eo](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/eo.po)  |  Marton Paulo  |  29%
-<img src="https://joplinapp.org/images/flags/country-4x3/fi.png" width="16px"/>  |  Finnish (Suomi)  |  [fi_FI](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/fi_FI.po)  |  mrkaato  |  91%
-<img src="https://joplinapp.org/images/flags/country-4x3/fr.png" width="16px"/>  |  Français (France)  |  [fr_FR](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/fr_FR.po)  |  Laurent Cozic  |  98%
-<img src="https://joplinapp.org/images/flags/es/galicia.png" width="16px"/>  |  Galician (España)  |  [gl_ES](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/gl_ES.po)  |  [Marcos Lans](mailto:marcoslansgarza@gmail.com)  |  33%
-<img src="https://joplinapp.org/images/flags/country-4x3/id.png" width="16px"/>  |  Indonesian (Indonesia)  |  [id_ID](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/id_ID.po)  |  [eresytter](mailto:42007357+eresytter@users.noreply.github.com)  |  90%
-<img src="https://joplinapp.org/images/flags/country-4x3/it.png" width="16px"/>  |  Italiano (Italia)  |  [it_IT](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/it_IT.po)  |  [Albano Battistella](mailto:albano_battistella@hotmail.com)  |  88%
-<img src="https://joplinapp.org/images/flags/country-4x3/hu.png" width="16px"/>  |  Magyar (Magyarország)  |  [hu_HU](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/hu_HU.po)  |  [Magyari Balázs](mailto:balmag@gmail.com)  |  76%
-<img src="https://joplinapp.org/images/flags/country-4x3/be.png" width="16px"/>  |  Nederlands (België, Belgique, Belgien)  |  [nl_BE](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/nl_BE.po)  |    |  89%
-<img src="https://joplinapp.org/images/flags/country-4x3/nl.png" width="16px"/>  |  Nederlands (Nederland)  |  [nl_NL](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/nl_NL.po)  |  [MetBril](mailto:metbril@users.noreply.github.com)  |  83%
-<img src="https://joplinapp.org/images/flags/country-4x3/no.png" width="16px"/>  |  Norwegian (Norge, Noreg)  |  [nb_NO](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/nb_NO.po)  |  Alexander Dawson  |  88%
-<img src="https://joplinapp.org/images/flags/country-4x3/ir.png" width="16px"/>  |  Persian  |  [fa](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/fa.po)  |  [Kourosh Firoozbakht](mailto:kourox@protonmail.com)  |  63%
-<img src="https://joplinapp.org/images/flags/country-4x3/pl.png" width="16px"/>  |  Polski (Polska)  |  [pl_PL](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/pl_PL.po)  |  [konhi](mailto:hello.konhi@gmail.com)  |  82%
-<img src="https://joplinapp.org/images/flags/country-4x3/br.png" width="16px"/>  |  Português (Brasil)  |  [pt_BR](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/pt_BR.po)  |  [Felipe Viggiano](mailto:felipeviggiano@gmail.com)  |  91%
-<img src="https://joplinapp.org/images/flags/country-4x3/pt.png" width="16px"/>  |  Português (Portugal)  |  [pt_PT](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/pt_PT.po)  |  [Diogo Caveiro](mailto:dcaveiro@yahoo.com)  |  82%
-<img src="https://joplinapp.org/images/flags/country-4x3/ro.png" width="16px"/>  |  Română  |  [ro](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/ro.po)  |  [Cristi Duluta](mailto:cristi.duluta@gmail.com)  |  58%
-<img src="https://joplinapp.org/images/flags/country-4x3/si.png" width="16px"/>  |  Slovenian (Slovenija)  |  [sl_SI](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/sl_SI.po)  |  [Martin Korelič](mailto:martin.korelic@protonmail.com)  |  91%
-<img src="https://joplinapp.org/images/flags/country-4x3/se.png" width="16px"/>  |  Svenska  |  [sv](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/sv.po)  |  [Jonatan Nyberg](mailto:jonatan@autistici.org)  |  97%
+<img src="https://joplinapp.org/images/flags/country-4x3/es.png" width="16px"/>  |  Español (España)  |  [es_ES](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/es_ES.po)  |  [Francisco Mora](mailto:francisco.m.collao@gmail.com)  |  98%
+<img src="https://joplinapp.org/images/flags/esperanto.png" width="16px"/>  |  Esperanto  |  [eo](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/eo.po)  |  Marton Paulo  |  28%
+<img src="https://joplinapp.org/images/flags/country-4x3/fi.png" width="16px"/>  |  Finnish (Suomi)  |  [fi_FI](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/fi_FI.po)  |  mrkaato0  |  98%
+<img src="https://joplinapp.org/images/flags/country-4x3/fr.png" width="16px"/>  |  Français (France)  |  [fr_FR](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/fr_FR.po)  |  Laurent Cozic  |  100%
+<img src="https://joplinapp.org/images/flags/es/galicia.png" width="16px"/>  |  Galician (España)  |  [gl_ES](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/gl_ES.po)  |  [Marcos Lans](mailto:marcoslansgarza@gmail.com)  |  32%
+<img src="https://joplinapp.org/images/flags/country-4x3/id.png" width="16px"/>  |  Indonesian (Indonesia)  |  [id_ID](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/id_ID.po)  |  [eresytter](mailto:42007357+eresytter@users.noreply.github.com)  |  88%
+<img src="https://joplinapp.org/images/flags/country-4x3/it.png" width="16px"/>  |  Italiano (Italia)  |  [it_IT](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/it_IT.po)  |  [Albano Battistella](mailto:albano_battistella@hotmail.com)  |  86%
+<img src="https://joplinapp.org/images/flags/country-4x3/hu.png" width="16px"/>  |  Magyar (Magyarország)  |  [hu_HU](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/hu_HU.po)  |  [Magyari Balázs](mailto:balmag@gmail.com)  |  86%
+<img src="https://joplinapp.org/images/flags/country-4x3/be.png" width="16px"/>  |  Nederlands (België, Belgique, Belgien)  |  [nl_BE](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/nl_BE.po)  |    |  88%
+<img src="https://joplinapp.org/images/flags/country-4x3/nl.png" width="16px"/>  |  Nederlands (Nederland)  |  [nl_NL](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/nl_NL.po)  |  [MHolkamp](mailto:mholkamp@users.noreply.github.com)  |  98%
+<img src="https://joplinapp.org/images/flags/country-4x3/no.png" width="16px"/>  |  Norwegian (Norge, Noreg)  |  [nb_NO](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/nb_NO.po)  |  [Mats Estensen](mailto:code@mxe.no)  |  98%
+<img src="https://joplinapp.org/images/flags/country-4x3/ir.png" width="16px"/>  |  Persian  |  [fa](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/fa.po)  |  [Kourosh Firoozbakht](mailto:kourox@protonmail.com)  |  62%
+<img src="https://joplinapp.org/images/flags/country-4x3/pl.png" width="16px"/>  |  Polski (Polska)  |  [pl_PL](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/pl_PL.po)  |  [konhi](mailto:hello.konhi@gmail.com)  |  81%
+<img src="https://joplinapp.org/images/flags/country-4x3/br.png" width="16px"/>  |  Português (Brasil)  |  [pt_BR](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/pt_BR.po)  |  [Renato Nunes Bastos](mailto:rnbastos@gmail.com)  |  98%
+<img src="https://joplinapp.org/images/flags/country-4x3/pt.png" width="16px"/>  |  Português (Portugal)  |  [pt_PT](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/pt_PT.po)  |  [Diogo Caveiro](mailto:dcaveiro@yahoo.com)  |  81%
+<img src="https://joplinapp.org/images/flags/country-4x3/ro.png" width="16px"/>  |  Română  |  [ro](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/ro.po)  |  [Cristi Duluta](mailto:cristi.duluta@gmail.com)  |  57%
+<img src="https://joplinapp.org/images/flags/country-4x3/si.png" width="16px"/>  |  Slovenian (Slovenija)  |  [sl_SI](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/sl_SI.po)  |  [Martin Korelič](mailto:martin.korelic@protonmail.com)  |  90%
+<img src="https://joplinapp.org/images/flags/country-4x3/se.png" width="16px"/>  |  Svenska  |  [sv](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/sv.po)  |  [Jonatan Nyberg](mailto:jonatan@autistici.org)  |  98%
 <img src="https://joplinapp.org/images/flags/country-4x3/th.png" width="16px"/>  |  Thai (ประเทศไทย)  |  [th_TH](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/th_TH.po)  |    |  41%
-<img src="https://joplinapp.org/images/flags/country-4x3/vn.png" width="16px"/>  |  Tiếng Việt  |  [vi](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/vi.po)  |    |  88%
-<img src="https://joplinapp.org/images/flags/country-4x3/tr.png" width="16px"/>  |  Türkçe (Türkiye)  |  [tr_TR](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/tr_TR.po)  |  [Arda Kılıçdağı](mailto:arda@kilicdagi.com)  |  98%
-<img src="https://joplinapp.org/images/flags/country-4x3/ua.png" width="16px"/>  |  Ukrainian (Україна)  |  [uk_UA](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/uk_UA.po)  |  [Vyacheslav Andreykiv](mailto:vandreykiv@gmail.com)  |  81%
-<img src="https://joplinapp.org/images/flags/country-4x3/gr.png" width="16px"/>  |  Ελληνικά (Ελλάδα)  |  [el_GR](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/el_GR.po)  |  [Harris Arvanitis](mailto:xaris@tuta.io)  |  85%
-<img src="https://joplinapp.org/images/flags/country-4x3/ru.png" width="16px"/>  |  Русский (Россия)  |  [ru_RU](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/ru_RU.po)  |  [Sergey Segeda](mailto:thesermanarm@gmail.com)  |  91%
-<img src="https://joplinapp.org/images/flags/country-4x3/rs.png" width="16px"/>  |  српски језик (Србија)  |  [sr_RS](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/sr_RS.po)  |    |  74%
-<img src="https://joplinapp.org/images/flags/country-4x3/cn.png" width="16px"/>  |  中文 (简体)  |  [zh_CN](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/zh_CN.po)  |  [horaceyoung](mailto:yonghaoharry@gmail.com)  |  98%
-<img src="https://joplinapp.org/images/flags/country-4x3/tw.png" width="16px"/>  |  中文 (繁體)  |  [zh_TW](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/zh_TW.po)  |  [SiderealArt](mailto:nelson22768384@gmail.com)  |  88%
-<img src="https://joplinapp.org/images/flags/country-4x3/jp.png" width="16px"/>  |  日本語 (日本)  |  [ja_JP](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/ja_JP.po)  |  [genneko](mailto:genneko217@gmail.com)  |  96%
-<img src="https://joplinapp.org/images/flags/country-4x3/kr.png" width="16px"/>  |  한국어  |  [ko](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/ko.po)  |  [Ji-Hyeon Gim](mailto:potatogim@potatogim.net)  |  87%
+<img src="https://joplinapp.org/images/flags/country-4x3/vn.png" width="16px"/>  |  Tiếng Việt  |  [vi](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/vi.po)  |    |  87%
+<img src="https://joplinapp.org/images/flags/country-4x3/tr.png" width="16px"/>  |  Türkçe (Türkiye)  |  [tr_TR](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/tr_TR.po)  |  [Arda Kılıçdağı](mailto:arda@kilicdagi.com)  |  96%
+<img src="https://joplinapp.org/images/flags/country-4x3/ua.png" width="16px"/>  |  Ukrainian (Україна)  |  [uk_UA](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/uk_UA.po)  |  [Vyacheslav Andreykiv](mailto:vandreykiv@gmail.com)  |  80%
+<img src="https://joplinapp.org/images/flags/country-4x3/gr.png" width="16px"/>  |  Ελληνικά (Ελλάδα)  |  [el_GR](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/el_GR.po)  |  [Harris Arvanitis](mailto:xaris@tuta.io)  |  98%
+<img src="https://joplinapp.org/images/flags/country-4x3/ru.png" width="16px"/>  |  Русский (Россия)  |  [ru_RU](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/ru_RU.po)  |  [Sergey Segeda](mailto:thesermanarm@gmail.com)  |  89%
+<img src="https://joplinapp.org/images/flags/country-4x3/rs.png" width="16px"/>  |  српски језик (Србија)  |  [sr_RS](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/sr_RS.po)  |    |  72%
+<img src="https://joplinapp.org/images/flags/country-4x3/cn.png" width="16px"/>  |  中文 (简体)  |  [zh_CN](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/zh_CN.po)  |  [horaceyoung](mailto:paventyang@gmail.com)  |  98%
+<img src="https://joplinapp.org/images/flags/country-4x3/tw.png" width="16px"/>  |  中文 (繁體)  |  [zh_TW](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/zh_TW.po)  |  [SiderealArt](mailto:nelson22768384@gmail.com)  |  87%
+<img src="https://joplinapp.org/images/flags/country-4x3/jp.png" width="16px"/>  |  日本語 (日本)  |  [ja_JP](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/ja_JP.po)  |  [genneko](mailto:genneko217@gmail.com)  |  100%
+<img src="https://joplinapp.org/images/flags/country-4x3/kr.png" width="16px"/>  |  한국어  |  [ko](https://github.com/laurent22/joplin/blob/dev/packages/tools/locales/ko.po)  |  [Ji-Hyeon Gim](mailto:potatogim@potatogim.net)  |  86%
 <!-- LOCALE-TABLE-AUTO-GENERATED -->
 
 # Contributors

@@ -180,6 +180,22 @@ h2 {
 	margin-bottom: 10px;
 }
 
+.form > .form-input-group-checkbox {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+
+.form > .form-input-group-checkbox > input {
+	display: flex;
+	margin-right: 6px;
+}
+
+.form > .form-input-group-checkbox > label {
+	display: flex;
+	margin-bottom: 0;
+}
+
 .bold {
 	font-weight: bold;
 }
@@ -259,4 +275,5 @@ Component-specific classes
 
 .master-password-dialog .fa-times {
 	color: var(--joplin-color-error);
+	margin-left: 5px;
 }

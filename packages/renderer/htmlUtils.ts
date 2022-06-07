@@ -155,6 +155,11 @@ class HtmlUtils {
 			return tagStack[tagStack.length - 1];
 		};
 
+		// When we encounter a disallowed tag, all the other tags within it are
+		// going to be skipped too. This is necessary to prevent certain XSS
+		// attacks. See sanitize_11.md
+		let disallowedTagDepth = 0;
+
 		// The BASE tag allows changing the base URL from which files are
 		// loaded, and that can break several plugins, such as Katex (which
 		// needs to load CSS files using a relative URL). For that reason
@@ -164,14 +169,23 @@ class HtmlUtils {
 		// "link" can be used to escape the parser and inject JavaScript.
 		// Adding "meta" too for the same reason as it shouldn't be used in
 		// notes anyway.
-		const disallowedTags = ['script', 'iframe', 'frameset', 'frame', 'object', 'base', 'embed', 'link', 'meta', 'noscript', 'button', 'form', 'input', 'select', 'textarea', 'option', 'optgroup'];
+		const disallowedTags = [
+			'script', 'iframe', 'frameset', 'frame', 'object', 'base',
+			'embed', 'link', 'meta', 'noscript', 'button', 'form',
+			'input', 'select', 'textarea', 'option', 'optgroup',
+		];
 
 		const parser = new htmlparser2.Parser({
 
 			onopentag: (name: string, attrs: any) => {
 				tagStack.push(name.toLowerCase());
 
-				if (disallowedTags.includes(currentTag())) return;
+				if (disallowedTags.includes(currentTag())) {
+					disallowedTagDepth++;
+					return;
+				}
+
+				if (disallowedTagDepth) return;
 
 				attrs = Object.assign({}, attrs);
 
@@ -214,7 +228,7 @@ class HtmlUtils {
 			},
 
 			ontext: (decodedText: string) => {
-				if (disallowedTags.includes(currentTag())) return;
+				if (disallowedTagDepth) return;
 
 				if (currentTag() === 'style') {
 					// For CSS, we have to put the style as-is inside the tag because if we html-entities encode
@@ -231,7 +245,12 @@ class HtmlUtils {
 
 				if (current === name.toLowerCase()) tagStack.pop();
 
-				if (disallowedTags.includes(current)) return;
+				if (disallowedTags.includes(current)) {
+					disallowedTagDepth--;
+					return;
+				}
+
+				if (disallowedTagDepth) return;
 
 				if (this.isSelfClosingTag(name)) return;
 				output.push(`</${name}>`);

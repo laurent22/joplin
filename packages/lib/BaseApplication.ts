@@ -55,6 +55,8 @@ import SyncTargetNone from './SyncTargetNone';
 import { setRSA } from './services/e2ee/ppk';
 import RSA from './services/e2ee/RSA.node';
 import Resource from './models/Resource';
+import { ProfileConfig } from './services/profileConfig/types';
+import initProfile from './services/profileConfig/initProfile';
 
 const appLogger: LoggerWrapper = Logger.create('App');
 
@@ -70,6 +72,7 @@ export default class BaseApplication {
 	private eventEmitter_: any;
 	private scheduleAutoAddResourcesIID_: any = null;
 	private database_: any = null;
+	private profileConfig_: ProfileConfig = null;
 
 	protected showStackTraces_: boolean = false;
 	protected showPromptString_: boolean = false;
@@ -646,6 +649,12 @@ export default class BaseApplication {
 	public initRedux() {
 		this.store_ = createStore(this.reducer, applyMiddleware(this.generalMiddlewareFn() as any));
 		setStore(this.store_);
+
+		this.store_.dispatch({
+			type: 'PROFILE_CONFIG_SET',
+			value: this.profileConfig_,
+		});
+
 		BaseModel.dispatch = this.store().dispatch;
 		FoldersScreenUtils.dispatch = this.store().dispatch;
 		// reg.dispatch = this.store().dispatch;
@@ -714,20 +723,22 @@ export default class BaseApplication {
 		// https://immerjs.github.io/immer/docs/freezing
 		setAutoFreeze(initArgs.env === 'dev');
 
-		const profileDir = this.determineProfileDir(initArgs);
+		const rootProfileDir = this.determineProfileDir(initArgs);
+		const { profileDir, profileConfig, isSubProfile } = await initProfile(rootProfileDir);
+		this.profileConfig_ = profileConfig;
+
 		const resourceDirName = 'resources';
 		const resourceDir = `${profileDir}/${resourceDirName}`;
 		const tempDir = `${profileDir}/tmp`;
 		const cacheDir = `${profileDir}/cache`;
 
 		Setting.setConstant('env', initArgs.env);
-		Setting.setConstant('profileDir', profileDir);
 		Setting.setConstant('resourceDirName', resourceDirName);
 		Setting.setConstant('resourceDir', resourceDir);
 		Setting.setConstant('tempDir', tempDir);
 		Setting.setConstant('pluginDataDir', `${profileDir}/plugin-data`);
 		Setting.setConstant('cacheDir', cacheDir);
-		Setting.setConstant('pluginDir', `${profileDir}/plugins`);
+		Setting.setConstant('pluginDir', `${rootProfileDir}/plugins`);
 
 		SyncTargetRegistry.addClass(SyncTargetNone);
 		SyncTargetRegistry.addClass(SyncTargetFilesystem);
@@ -778,6 +789,7 @@ export default class BaseApplication {
 
 
 		appLogger.info(`Profile directory: ${profileDir}`);
+		appLogger.info(`Root profile directory: ${rootProfileDir}`);
 
 		this.database_ = new JoplinDatabase(new DatabaseDriverNode());
 		this.database_.setLogExcludedQueryTypes(['SELECT']);
@@ -799,8 +811,12 @@ export default class BaseApplication {
 		appLogger.info(`Client ID: ${Setting.value('clientId')}`);
 
 		if (Setting.value('firstStart')) {
-			const locale = shim.detectAndSetLocale(Setting);
-			reg.logger().info(`First start: detected locale as ${locale}`);
+			// If it's a sub-profile, the locale must come from the root
+			// profile.
+			if (!Setting.value('isSubProfile')) {
+				const locale = shim.detectAndSetLocale(Setting);
+				reg.logger().info(`First start: detected locale as ${locale}`);
+			}
 
 			Setting.skipDefaultMigrations();
 
@@ -813,14 +829,15 @@ export default class BaseApplication {
 			Setting.setValue('firstStart', 0);
 		} else {
 			Setting.applyDefaultMigrations();
-			setLocale(Setting.value('locale'));
 		}
+
+		setLocale(Setting.value('locale'));
 
 		if (Setting.value('env') === Env.Dev) {
 			// Setting.setValue('sync.10.path', 'https://api.joplincloud.com');
 			// Setting.setValue('sync.10.userContentPath', 'https://joplinusercontent.com');
 			Setting.setValue('sync.10.path', 'http://api.joplincloud.local:22300');
-			Setting.setValue('sync.10.userContentPath', 'http://joplinusercontent.local:22300');
+			Setting.setValue('sync.10.userContentPath', 'http://joplincloud.local:22300');
 		}
 
 		// For now always disable fuzzy search due to performance issues:
@@ -838,6 +855,7 @@ export default class BaseApplication {
 		}
 
 		if ('welcomeDisabled' in initArgs) Setting.setValue('welcome.enabled', !initArgs.welcomeDisabled);
+		if (isSubProfile) Setting.setValue('welcome.enabled', false);
 
 		if (!Setting.value('api.token')) {
 			void EncryptionService.instance()
