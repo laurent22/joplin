@@ -859,8 +859,6 @@ const mapStateToProps = (state: AppState) => {
 	return {
 		themeId: state.settings.theme,
 		settingEditorCodeView: state.settings['editor.codeView'],
-		folders: state.folders,
-		notes: state.notes,
 		hasDisabledSyncItems: state.hasDisabledSyncItems,
 		hasDisabledEncryptionItems: state.hasDisabledEncryptionItems,
 		showMissingMasterKeyMessage: showMissingMasterKeyMessage(syncInfo, state.notLoadedMasterKeys),
