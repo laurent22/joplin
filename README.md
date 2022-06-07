@@ -153,6 +153,8 @@ A community maintained list of these distributions can be found here: [Unofficia
 - About
 
 	- [Changelog (Desktop App)](https://github.com/laurent22/joplin/blob/dev/readme/changelog.md)
+	- [Changelog (Android)](https://github.com/laurent22/joplin/blob/dev/readme/changelog_android.md)
+	- [Changelog (iOS)](https://github.com/laurent22/joplin/blob/dev/readme/changelog_ios.md)
 	- [Changelog (CLI App)](https://github.com/laurent22/joplin/blob/dev/readme/changelog_cli.md)
 	- [Changelog (Server)](https://github.com/laurent22/joplin/blob/dev/readme/changelog_server.md)
 	- [Stats](https://github.com/laurent22/joplin/blob/dev/readme/stats.md)
