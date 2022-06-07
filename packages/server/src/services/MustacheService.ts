@@ -5,23 +5,12 @@ import config from '../config';
 import { filename } from '@joplin/lib/path-utils';
 import { NotificationView } from '../utils/types';
 import { User } from '../services/database/types';
-import { makeUrl, UrlType } from '../utils/routeUtils';
+import { makeUrl, SubPath, UrlType } from '../utils/routeUtils';
 import MarkdownIt = require('markdown-it');
 import { headerAnchor } from '@joplin/renderer';
 import { _ } from '@joplin/lib/locale';
-import { adminDashboardUrl, adminEmailsUrl, adminTasksUrl, adminUserDeletionsUrl, adminUsersUrl, changesUrl, homeUrl, itemsUrl, stripOffQueryParameters } from '../utils/urlUtils';
-import { URL } from 'url';
-
-type MenuItemSelectedCondition = (selectedUrl: URL)=> boolean;
-
-export interface MenuItem {
-	title: string;
-	url?: string;
-	children?: MenuItem[];
-	selected?: boolean;
-	icon?: string;
-	selectedCondition?: MenuItemSelectedCondition;
-}
+import { adminDashboardUrl, adminEmailsUrl, adminTasksUrl, adminUserDeletionsUrl, adminUsersUrl, changesUrl, homeUrl, itemsUrl } from '../utils/urlUtils';
+import { MenuItem, setSelectedMenu } from '../utils/views/menu';
 
 export interface RenderOptions {
 	partials?: any;
@@ -41,6 +30,7 @@ export interface View {
 	cssFiles?: string[];
 	jsFiles?: string[];
 	strings?: Record<string, string>; // List of translatable strings
+	sidebarMenu?: MenuItem[];
 }
 
 interface GlobalParams {
@@ -64,7 +54,7 @@ interface GlobalParams {
 	isAdminPage?: boolean;
 	adminMenu?: MenuItem[];
 	navbarMenu?: MenuItem[];
-	currentUrl?: URL;
+	currentPath?: SubPath;
 }
 
 export function isView(o: any): boolean {
@@ -112,25 +102,7 @@ export default class MustacheService {
 		return `${config().layoutDir}/${name}.mustache`;
 	}
 
-	private setSelectedMenu(selectedUrl: URL, menuItems: MenuItem[]) {
-		if (!selectedUrl) return;
-		if (!menuItems) return;
-
-		const url = stripOffQueryParameters(selectedUrl.href);
-
-		for (const menuItem of menuItems) {
-			if (menuItem.url) {
-				if (menuItem.selectedCondition) {
-					menuItem.selected = menuItem.selectedCondition(selectedUrl);
-				} else {
-					menuItem.selected = url === menuItem.url;
-				}
-			}
-			this.setSelectedMenu(selectedUrl, menuItem.children);
-		}
-	}
-
-	private makeAdminMenu(selectedUrl: URL): MenuItem[] {
+	private makeAdminMenu(selectedPath: SubPath): MenuItem[] {
 		const output: MenuItem[] = [
 			{
 				title: _('General'),
@@ -159,12 +131,10 @@ export default class MustacheService {
 			},
 		];
 
-		this.setSelectedMenu(selectedUrl, output);
-
-		return output;
+		return setSelectedMenu(selectedPath, output);
 	}
 
-	private makeNavbar(selectedUrl: URL, isAdmin: boolean): MenuItem[] {
+	private makeNavbar(selectedPath: SubPath, isAdmin: boolean): MenuItem[] {
 		let output: MenuItem[] = [
 			{
 				title: _('Home'),
@@ -186,16 +156,14 @@ export default class MustacheService {
 					title: _('Admin'),
 					url: adminDashboardUrl(),
 					icon: 'fas fa-hammer',
-					selectedCondition: (selectedUrl: URL) => {
-						return selectedUrl.pathname.startsWith('/admin/') || selectedUrl.pathname === '/admin';
+					selectedCondition: (selectedPath: SubPath) => {
+						return selectedPath.schema.startsWith('admin/') || selectedPath.schema === 'admin';
 					},
 				},
 			]);
 		}
 
-		this.setSelectedMenu(selectedUrl, output);
-
-		return output;
+		return setSelectedMenu(selectedPath, output);
 	}
 
 	private get defaultLayoutOptions(): GlobalParams {
@@ -295,8 +263,8 @@ export default class MustacheService {
 		globalParams = {
 			...this.defaultLayoutOptions,
 			...globalParams,
-			adminMenu: globalParams ? this.makeAdminMenu(globalParams.currentUrl) : null,
-			navbarMenu: this.makeNavbar(globalParams?.currentUrl, globalParams?.owner ? !!globalParams.owner.is_admin : false),
+			adminMenu: globalParams ? this.makeAdminMenu(globalParams.currentPath) : null,
+			navbarMenu: this.makeNavbar(globalParams?.currentPath, globalParams?.owner ? !!globalParams.owner.is_admin : false),
 			userDisplayName: this.userDisplayName(globalParams ? globalParams.owner : null),
 			isAdminPage,
 			s: {
@@ -321,6 +289,7 @@ export default class MustacheService {
 			cssFiles: cssFiles,
 			jsFiles: jsFiles,
 			navbar: view.navbar,
+			sidebarMenu: view.sidebarMenu,
 			...view.content,
 		};
 

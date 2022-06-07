@@ -254,6 +254,7 @@ export default class EncryptionService {
 		model.created_time = now;
 		model.updated_time = now;
 		model.source_application = Setting.value('appId');
+		model.hasBeenUsed = false;
 
 		return model;
 	}
@@ -336,7 +337,7 @@ export default class EncryptionService {
 			}
 		}
 
-		// 2020-01-23: Deprectated - see above.
+		// 2020-01-23: Deprecated - see above.
 		// Was used to encrypt master keys
 		if (method === EncryptionMethod.SJCL2) {
 			try {

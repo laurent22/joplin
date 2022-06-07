@@ -5,7 +5,8 @@ import Note from './models/Note';
 import Folder from './models/Folder';
 import BaseModel from './BaseModel';
 import { Store } from 'redux';
-const ArrayUtils = require('./ArrayUtils.js');
+import { ProfileConfig } from './services/profileConfig/types';
+import * as ArrayUtils from './ArrayUtils';
 const fastDeepEqual = require('fast-deep-equal');
 const { ALL_NOTES_FILTER_ID } = require('./reserved-ids');
 const { createSelectorCreator, defaultMemoize } = require('reselect');
@@ -93,6 +94,7 @@ export interface State {
 	isInsertingNotes: boolean;
 	hasEncryptedItems: boolean;
 	needApiAuth: boolean;
+	profileConfig: ProfileConfig;
 
 	// Extra reducer keys go here:
 	pluginService: PluginServiceState;
@@ -163,6 +165,7 @@ export const defaultState: State = {
 	isInsertingNotes: false,
 	hasEncryptedItems: false,
 	needApiAuth: false,
+	profileConfig: null,
 
 	pluginService: pluginServiceDefaultState,
 	shareService: shareServiceDefaultState,
@@ -755,15 +758,9 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 
 		case 'FOLDER_AND_NOTE_SELECT':
 			{
+				changeSelectedFolder(draft, action);
 				const noteSelectAction = Object.assign({}, action, { type: 'NOTE_SELECT' });
-
-				if (draft.notesParentType === 'SmartFilter' && draft.selectedSmartFilterId === ALL_NOTES_FILTER_ID) {
-					// we don't want to change folder when 'All Notes' filter is on
-					changeSelectedNotes(draft, noteSelectAction);
-				} else {
-					changeSelectedFolder(draft, action);
-					changeSelectedNotes(draft, noteSelectAction);
-				}
+				changeSelectedNotes(draft, noteSelectAction);
 			}
 			break;
 
@@ -1145,6 +1142,10 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 
 		case 'API_NEED_AUTH_SET':
 			draft.needApiAuth = action.value;
+			break;
+
+		case 'PROFILE_CONFIG_SET':
+			draft.profileConfig = action.value;
 			break;
 
 		}

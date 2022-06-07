@@ -5,6 +5,8 @@ export interface MarkdownAndFrontMatter {
 	created?: Date;
 	updated?: Date;
 	source_url?: string;
+	forum_url?: string;
+	tweet?: string;
 }
 
 const readProp = (line: string): string[] => {
@@ -61,4 +63,38 @@ export const stripOffFrontMatter = (md: string): MarkdownAndFrontMatter => {
 	if (output.updated) output.updated = moment(output.updated).toDate();
 
 	return output;
+};
+
+// ---
+// created: 2021-07-05T09:42:47.000+00:00
+// source_url: https://www.patreon.com/posts/any-ideas-for-53317699
+// ---
+
+const formatFrontMatterValue = (key: string, value: any) => {
+	if (['created', 'updated'].includes(key)) {
+		return moment((value as Date)).toISOString();
+	} else {
+		return value.toString();
+	}
+};
+
+export const compileWithFrontMatter = (md: MarkdownAndFrontMatter): string => {
+	const output: string[] = [];
+	const header: string[] = [];
+
+	for (const [key, value] of Object.entries(md)) {
+		if (key === 'doc') continue;
+		header.push(`${key}: ${formatFrontMatterValue(key, value)}`);
+	}
+
+	if (header.length) {
+		output.push('---');
+		output.push(header.join('\n'));
+		output.push('---');
+		output.push('');
+	}
+
+	output.push(md.doc);
+
+	return output.join('\n');
 };

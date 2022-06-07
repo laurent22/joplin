@@ -97,6 +97,7 @@ export default class PluginRunner extends BasePluginRunner {
 		return cb(...args);
 	}
 
+	// @ts-ignore
 	private backOffHandler(pluginId: string): BackOffHandler {
 		if (!this.backOffHandlers_[pluginId]) {
 			this.backOffHandlers_[pluginId] = new BackOffHandler(pluginId);
@@ -157,12 +158,14 @@ export default class PluginRunner extends BasePluginRunner {
 				const debugMappedArgs = fullPath.includes('setHtml') ? '<hidden>' : mappedArgs;
 				logger.debug(`Got message (3): ${fullPath}`, debugMappedArgs);
 
-				try {
-					await this.backOffHandler(plugin.id).wait(fullPath, debugMappedArgs);
-				} catch (error) {
-					logger.error(error);
-					return;
-				}
+				this.recordCallStat(plugin.id);
+
+				// try {
+				// 	await this.backOffHandler(plugin.id).wait(fullPath, debugMappedArgs);
+				// } catch (error) {
+				// 	logger.error(error);
+				// 	return;
+				// }
 
 				let result: any = null;
 				let error: any = null;

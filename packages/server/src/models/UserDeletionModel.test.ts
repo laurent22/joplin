@@ -159,21 +159,22 @@ describe('UserDeletionModel', function() {
 			disabled_time: t0,
 		});
 
-		await models().userDeletion().autoAdd(10, 90 * Day, 3 * Day);
+		await models().userDeletion().autoAdd(10, 90 * Day, t0 + 3 * Day);
 
 		expect(await models().userDeletion().count()).toBe(0);
 
 		const t1 = new Date('2022-05-30').getTime();
 		jest.setSystemTime(t1);
 
-		await models().userDeletion().autoAdd(10, 90 * Day, 3 * Day);
+		await models().userDeletion().autoAdd(10, 90 * Day, t1 + 3 * Day);
 
 		expect(await models().userDeletion().count()).toBe(1);
 		const d = (await models().userDeletion().all())[0];
 		expect(d.user_id).toBe(user2.id);
+		expect(d.scheduled_time).toBe(t1 + 3 * Day);
 
 		// Shouldn't add it again if running autoAdd() again
-		await models().userDeletion().autoAdd(10, 90 * Day, 3 * Day);
+		await models().userDeletion().autoAdd(10, 90 * Day, t1 + 3 * Day);
 		expect(await models().userDeletion().count()).toBe(1);
 
 		jest.useRealTimers();

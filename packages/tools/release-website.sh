@@ -41,13 +41,14 @@ yarn install
 git reset --hard
 
 yarn run updateMarkdownDoc
+yarn run updateNews $DISCOURSE_API_KEY $DISCOURSE_USERNAME
 
 # We commit and push the change. It will be a noop if nothing was actually
 # changed
 
 git add -A
 
-git commit -m "Doc: Updated Markdown files
+git commit -m "Doc: Auto-update documentation
 
 Auto-updated using $SCRIPT_NAME" || true
 

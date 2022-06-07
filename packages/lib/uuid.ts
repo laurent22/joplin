@@ -1,5 +1,5 @@
 const createUuidV4 = require('uuid/v4');
-const { customAlphabet } = require('nanoid/non-secure');
+import { customAlphabet } from 'nanoid/non-secure';
 
 // https://zelark.github.io/nano-id-cc/
 // https://security.stackexchange.com/a/41749/1873

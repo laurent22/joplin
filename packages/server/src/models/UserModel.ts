@@ -1,7 +1,7 @@
 import BaseModel, { AclAction, SaveOptions, ValidateOptions } from './BaseModel';
 import { EmailSender, Item, NotificationLevel, Subscription, User, UserFlagType, Uuid } from '../services/database/types';
 import * as auth from '../utils/auth';
-import { ErrorUnprocessableEntity, ErrorForbidden, ErrorPayloadTooLarge, ErrorNotFound } from '../utils/errors';
+import { ErrorUnprocessableEntity, ErrorForbidden, ErrorPayloadTooLarge, ErrorNotFound, ErrorBadRequest } from '../utils/errors';
 import { ModelType } from '@joplin/lib/BaseModel';
 import { _ } from '@joplin/lib/locale';
 import { formatBytes, GB, MB } from '../utils/bytes';
@@ -27,6 +27,7 @@ import changeEmailConfirmationTemplate from '../views/emails/changeEmailConfirma
 import changeEmailNotificationTemplate from '../views/emails/changeEmailNotificationTemplate';
 import { NotificationKey } from './NotificationModel';
 import prettyBytes = require('pretty-bytes');
+import { Env } from '../utils/types';
 
 const logger = Logger.create('UserModel');
 
@@ -237,6 +238,8 @@ export default class UserModel extends BaseModel<User> {
 	}
 
 	private validatePassword(password: string) {
+		if (this.env === Env.Dev) return;
+
 		const result = zxcvbn(password);
 		if (result.score < 3) {
 			let msg: string[] = [result.feedback.warning];
@@ -600,7 +603,12 @@ export default class UserModel extends BaseModel<User> {
 
 	private async syncInfo(userId: Uuid): Promise<any> {
 		const item = await this.models().item().loadByName(userId, 'info.json');
-		if (!item) throw new Error('Cannot find info.json file');
+
+		// We can get there if user 1 tries to share a notebook with user 2, but
+		// user 2 has never initiated a sync. In this case, they won't have the
+		// info.json file that we need, so we try to return an error message
+		// that makes sense.
+		if (!item) throw new ErrorBadRequest('The account of this user is not correctly initialised (missing info.json)');
 		const withContent = await this.models().item().loadWithContent(item.id);
 		return JSON.parse(withContent.content.toString());
 	}

@@ -228,11 +228,14 @@ export default class ShareService {
 		}
 	}
 
-	public async shareNote(noteId: string): Promise<StateShare> {
+	public async shareNote(noteId: string, recursive: boolean): Promise<StateShare> {
 		const note = await Note.load(noteId);
 		if (!note) throw new Error(`No such note: ${noteId}`);
 
-		const share = await this.api().exec('POST', 'api/shares', {}, { note_id: noteId });
+		const share = await this.api().exec('POST', 'api/shares', {}, {
+			note_id: noteId,
+			recursive: recursive ? 1 : 0,
+		});
 
 		await Note.save({
 			id: note.id,

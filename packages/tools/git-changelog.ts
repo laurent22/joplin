@@ -16,6 +16,7 @@ enum Platform {
 	Desktop = 'desktop',
 	Clipper = 'clipper',
 	Server = 'server',
+	Cloud = 'cloud',
 	Cli = 'cli',
 	PluginGenerator = 'plugin-generator',
 	PluginRepoCli = 'plugin-repo-cli',
@@ -84,13 +85,14 @@ function platformFromTag(tagName: string): Platform {
 	if (tagName.indexOf('clipper') === 0) return Platform.Clipper;
 	if (tagName.indexOf('cli') === 0) return Platform.Cli;
 	if (tagName.indexOf('server') === 0) return Platform.Server;
+	if (tagName.indexOf('cloud') === 0) return Platform.Cloud;
 	if (tagName.indexOf('plugin-generator') === 0) return Platform.PluginGenerator;
 	if (tagName.indexOf('plugin-repo-cli') === 0) return Platform.PluginRepoCli;
 	throw new Error(`Could not determine platform from tag: "${tagName}"`);
 }
 
 function filterLogs(logs: LogEntry[], platform: Platform) {
-	const output = [];
+	const output: LogEntry[] = [];
 	const revertedLogs = [];
 
 	// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
@@ -115,7 +117,7 @@ function filterLogs(logs: LogEntry[], platform: Platform) {
 		let addIt = false;
 
 		// "All" refers to desktop, CLI and mobile app. Clipper and Server are not included.
-		if (prefix.indexOf('all') >= 0 && (platform !== 'clipper' && platform !== 'server')) addIt = true;
+		if (prefix.indexOf('all') >= 0 && (platform !== 'clipper' && platform !== 'server' && platform !== 'cloud')) addIt = true;
 		if ((platform === 'android' || platform === 'ios') && prefix.indexOf('mobile') >= 0) addIt = true;
 		if (platform === 'android' && prefix.indexOf('android') >= 0) addIt = true;
 		if (platform === 'ios' && prefix.indexOf('ios') >= 0) addIt = true;
@@ -124,6 +126,7 @@ function filterLogs(logs: LogEntry[], platform: Platform) {
 		if (platform === 'cli' && prefix.indexOf('cli') >= 0) addIt = true;
 		if (platform === 'clipper' && prefix.indexOf('clipper') >= 0) addIt = true;
 		if (platform === 'server' && prefix.indexOf('server') >= 0) addIt = true;
+		if (platform === 'cloud' && (prefix.indexOf('cloud') >= 0 || prefix.indexOf('server') >= 0)) addIt = true;
 
 		// Translation updates often comes in format "Translation: Update pt_PT.po"
 		// but that's not useful in a changelog especially since most people
@@ -131,6 +134,11 @@ function filterLogs(logs: LogEntry[], platform: Platform) {
 		// bundle them all up in a single "Updated translations" at the end.
 		if (log.message.match(/Translation: Update .*?\.po/)) {
 			// updatedTranslations = true;
+			addIt = false;
+		}
+
+		// Remove duplicate messages
+		if (output.find(l => l.message === log.message)) {
 			addIt = false;
 		}
 
@@ -155,7 +163,7 @@ function formatCommitMessage(commit: string, msg: string, author: Author, option
 	const isPlatformPrefix = (prefixString: string) => {
 		const prefix = prefixString.split(',').map(p => p.trim().toLowerCase());
 		for (const p of prefix) {
-			if (['android', 'mobile', 'ios', 'desktop', 'cli', 'clipper', 'all', 'api', 'plugins', 'server'].indexOf(p) >= 0) return true;
+			if (['android', 'mobile', 'ios', 'desktop', 'cli', 'clipper', 'all', 'api', 'plugins', 'server', 'cloud'].indexOf(p) >= 0) return true;
 		}
 		return false;
 	};

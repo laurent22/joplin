@@ -33,6 +33,10 @@ export default class BaseSyncTarget {
 		return true;
 	}
 
+	public static supportsRecursiveLinkedNotes(): boolean {
+		return false;
+	}
+
 	public option(name: string, defaultValue: any = null) {
 		return this.options_ && name in this.options_ ? this.options_[name] : defaultValue;
 	}

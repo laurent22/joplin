@@ -9,7 +9,7 @@ import { basename, filename, rtrimSlashes, fileExtension, dirname } from '../../
 import shim from '../../shim';
 import markdownUtils from '../../markdownUtils';
 import htmlUtils from '../../htmlUtils';
-const { unique } = require('../../ArrayUtils');
+import { unique } from '../../ArrayUtils';
 const { pregQuote } = require('../../string-utils-common');
 import { MarkupToHtml } from '@joplin/renderer';
 
@@ -46,14 +46,15 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 	}
 
 	async importDirectory(dirPath: string, parentFolderId: string) {
-		console.info(`Import: ${dirPath}`);
-
 		const supportedFileExtension = this.metadata().fileExtensions;
 		const stats = await shim.fsDriver().readDirStats(dirPath);
 		for (let i = 0; i < stats.length; i++) {
 			const stat = stats[i];
 
 			if (stat.isDirectory()) {
+				if (await this.isDirectoryEmpty(`${dirPath}/${stat.path}`)) {
+					continue;
+				}
 				const folderTitle = await Folder.findUniqueItemTitle(basename(stat.path));
 				const folder = await Folder.save({ title: folderTitle, parent_id: parentFolderId });
 				await this.importDirectory(`${dirPath}/${basename(stat.path)}`, folder.id);
@@ -61,6 +62,24 @@ export default class InteropService_Importer_Md extends InteropService_Importer_
 				await this.importFile(`${dirPath}/${stat.path}`, parentFolderId);
 			}
 		}
+	}
+
+	private async isDirectoryEmpty(dirPath: string) {
+		const supportedFileExtension = this.metadata().fileExtensions;
+		const innerStats = await shim.fsDriver().readDirStats(dirPath);
+		for (let i = 0; i < innerStats.length; i++) {
+			const innerStat = innerStats[i];
+
+			if (innerStat.isDirectory()) {
+				if (!(await this.isDirectoryEmpty(`${dirPath}/${innerStat.path}`))) {
+					return false;
+				}
+			} else if (supportedFileExtension.indexOf(fileExtension(innerStat.path).toLowerCase()) >= 0) {
+				return false;
+			}
+		}
+		return true;
+
 	}
 
 	private trimAnchorLink(link: string) {

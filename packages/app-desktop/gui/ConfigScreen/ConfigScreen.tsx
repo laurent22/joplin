@@ -7,12 +7,14 @@ import bridge from '../../services/bridge';
 import Setting, { AppType, SyncStartupOperation } from '@joplin/lib/models/Setting';
 import control_PluginsStates from './controls/plugins/PluginsStates';
 import EncryptionConfigScreen from '../EncryptionConfigScreen/EncryptionConfigScreen';
+import { reg } from '@joplin/lib/registry';
 const { connect } = require('react-redux');
 const { themeStyle } = require('@joplin/lib/theme');
 const pathUtils = require('@joplin/lib/path-utils');
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 const shared = require('@joplin/lib/components/shared/config-shared.js');
 import ClipperConfigScreen from '../ClipperConfigScreen';
+import restart from '../../services/restart';
 const { KeymapConfigScreen } = require('../KeymapConfig/KeymapConfigScreen');
 
 const settingKeyToControl: any = {
@@ -26,7 +28,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 	constructor(props: any) {
 		super(props);
 
-		shared.init(this);
+		shared.init(this, reg);
 
 		this.state = {
 			selectedSectionName: 'general',
@@ -71,12 +73,12 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			if (!confirm('This cannot be undone. Do you want to continue?')) return;
 			Setting.setValue('sync.startupOperation', SyncStartupOperation.ClearLocalSyncState);
 			await Setting.saveAll();
-			bridge().restart();
+			await restart();
 		} else if (key === 'sync.clearLocalDataButton') {
 			if (!confirm('This cannot be undone. Do you want to continue?')) return;
 			Setting.setValue('sync.startupOperation', SyncStartupOperation.ClearLocalData);
 			await Setting.saveAll();
-			bridge().restart();
+			await restart();
 		} else if (key === 'sync.openSyncWizard') {
 			this.props.dispatch({
 				type: 'DIALOG_OPEN',
@@ -121,19 +123,6 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 	sidebar_selectionChange(event: any) {
 		this.switchSection(event.section.name);
-	}
-
-	keyValueToArray(kv: any) {
-		const output = [];
-		for (const k in kv) {
-			if (!kv.hasOwnProperty(k)) continue;
-			output.push({
-				key: k,
-				label: kv[k],
-			});
-		}
-
-		return output;
 	}
 
 	renderSectionDescription(section: any) {
@@ -374,7 +363,11 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		} else if (md.isEnum) {
 			const items = [];
 			const settingOptions = md.options();
-			const array = this.keyValueToArray(settingOptions);
+			const array = Setting.enumOptionsToValueLabels(settingOptions, md.optionsOrder ? md.optionsOrder() : [], {
+				valueKey: 'key',
+				labelKey: 'label',
+			});
+
 			for (let i = 0; i < array.length; i++) {
 				const e = array[i];
 				items.push(
@@ -452,7 +445,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			});
 			const inputType = md.secure === true ? 'password' : 'text';
 
-			if (md.subType === 'file_path_and_args') {
+			if (md.subType === 'file_path_and_args' || md.subType === 'file_path' || md.subType === 'directory_path') {
 				inputStyle.marginBottom = subLabel.marginBottom;
 
 				const splitCmd = (cmdString: string) => {
@@ -482,14 +475,40 @@ class ConfigScreenComponent extends React.Component<any, any> {
 				};
 
 				const browseButtonClick = async () => {
-					const paths = await bridge().showOpenDialog();
-					if (!paths || !paths.length) return;
-					const cmd = splitCmd(this.state.settings[key]);
-					cmd[0] = paths[0];
-					updateSettingValue(key, joinCmd(cmd));
+					if (md.subType === 'directory_path') {
+						const paths = await bridge().showOpenDialog({
+							properties: ['openDirectory'],
+						});
+						if (!paths || !paths.length) return;
+						updateSettingValue(key, paths[0]);
+					} else {
+						const paths = await bridge().showOpenDialog();
+						if (!paths || !paths.length) return;
+						const cmd = splitCmd(this.state.settings[key]);
+						cmd[0] = paths[0];
+						updateSettingValue(key, joinCmd(cmd));
+					}
 				};
 
 				const cmd = splitCmd(this.state.settings[key]);
+
+				const argComp = md.subType !== 'file_path_and_args' ? null : (
+					<div style={{ ...rowStyle, marginBottom: 5 }}>
+						<div style={subLabel}>{_('Arguments:')}</div>
+						<input
+							type={inputType}
+							style={inputStyle}
+							onChange={(event: any) => {
+								onArgsChange(event);
+							}}
+							value={cmd[1]}
+							spellCheck={false}
+						/>
+						<div style={{ width: inputStyle.width, minWidth: inputStyle.minWidth }}>
+							{descriptionComp}
+						</div>
+					</div>
+				);
 
 				return (
 					<div key={key} style={rowStyle}>
@@ -518,25 +537,9 @@ class ConfigScreenComponent extends React.Component<any, any> {
 										/>
 									</div>
 								</div>
-								<div style={{ ...rowStyle, marginBottom: 5 }}>
-									<div style={subLabel}>{_('Arguments:')}</div>
-									<input
-										type={inputType}
-										style={inputStyle}
-										onChange={(event: any) => {
-											onArgsChange(event);
-										}}
-										value={cmd[1]}
-										spellCheck={false}
-									/>
-									<div style={{ width: inputStyle.width, minWidth: inputStyle.minWidth }}>
-										{descriptionComp}
-									</div>
-								</div>
 							</div>
 						</div>
-
-
+						{argComp}
 					</div>
 				);
 			} else {
@@ -621,7 +624,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 
 	private async restartApp() {
 		await Setting.saveAll();
-		bridge().restart();
+		await restart();
 	}
 
 	private async checkNeedRestart() {

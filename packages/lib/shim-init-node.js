@@ -2,7 +2,7 @@
 
 const fs = require('fs-extra');
 const shim = require('./shim').default;
-const { GeolocationNode } = require('./geolocation-node.js');
+const GeolocationNode = require('./geolocation-node').default;
 const { FileApiDriverLocal } = require('./file-api-driver-local.js');
 const { setLocale, defaultLocale, closestSupportedLocale } = require('./locale');
 const FsDriverNode = require('./fs-driver-node').default;
@@ -221,14 +221,21 @@ function shimInit(options = null) {
 		return true;
 	};
 
+	// This is a bit of an ugly method that's used to both create a new resource
+	// from a file, and update one. To update a resource, pass the
+	// destinationResourceId option. This method is indirectly tested in
+	// Api.test.ts.
 	shim.createResourceFromPath = async function(filePath, defaultProps = null, options = null) {
 		options = Object.assign({
 			resizeLargeImages: 'always', // 'always', 'ask' or 'never'
 			userSideValidation: false,
+			destinationResourceId: '',
 		}, options);
 
 		const readChunk = require('read-chunk');
 		const imageType = require('image-type');
+
+		const isUpdate = !!options.destinationResourceId;
 
 		const uuid = require('./uuid').default;
 
@@ -236,12 +243,17 @@ function shimInit(options = null) {
 
 		defaultProps = defaultProps ? defaultProps : {};
 
-		const resourceId = defaultProps.id ? defaultProps.id : uuid.create();
+		let resourceId = defaultProps.id ? defaultProps.id : uuid.create();
+		if (isUpdate) resourceId = options.destinationResourceId;
 
-		const resource = Resource.new();
+		let resource = isUpdate ? {} : Resource.new();
 		resource.id = resourceId;
+
+		// When this is an update we auto-update the mime type, in case the
+		// content type has changed, but we keep the title. It is still possible
+		// to modify the title on update using defaultProps.
 		resource.mime = mimeUtils.fromFilename(filePath);
-		resource.title = basename(filePath);
+		if (!isUpdate) resource.title = basename(filePath);
 
 		let fileExt = safeFileExtension(fileExtension(filePath));
 
@@ -281,7 +293,18 @@ function shimInit(options = null) {
 
 		const saveOptions = { isNew: true };
 		if (options.userSideValidation) saveOptions.userSideValidation = true;
-		return Resource.save(resource, saveOptions);
+
+		if (isUpdate) {
+			saveOptions.isNew = false;
+			const tempPath = `${targetPath}.tmp`;
+			await shim.fsDriver().move(targetPath, tempPath);
+			resource = await Resource.save(resource, saveOptions);
+			await Resource.updateResourceBlobContent(resource.id, tempPath);
+			await shim.fsDriver().remove(tempPath);
+			return resource;
+		} else {
+			return Resource.save(resource, saveOptions);
+		}
 	};
 
 	shim.attachFileToNoteBody = async function(noteBody, filePath, position = null, options = null) {
@@ -333,7 +356,7 @@ function shimInit(options = null) {
 	shim.imageToDataUrl = async (filePath, maxSize) => {
 		if (shim.isElectron()) {
 			const nativeImage = require('electron').nativeImage;
-			const image = nativeImage.createFromPath(filePath);
+			let image = nativeImage.createFromPath(filePath);
 			if (!image) throw new Error(`Could not load image: ${filePath}`);
 
 			const ext = fileExtension(filePath).toLowerCase();
@@ -341,7 +364,19 @@ function shimInit(options = null) {
 
 			if (maxSize) {
 				const size = image.getSize();
-				if (size.width > maxSize || size.height > maxSize) throw new Error(`Image cannot be larger than ${maxSize}x${maxSize} pixels`);
+
+				if (size.width > maxSize || size.height > maxSize) {
+					console.warn(`Image is over ${maxSize}px - resizing it: ${filePath}`);
+
+					const options = {};
+					if (size.width > size.height) {
+						options.width = maxSize;
+					} else {
+						options.height = maxSize;
+					}
+
+					image = image.resize(options);
+				}
 			}
 
 			return image.toDataURL();
