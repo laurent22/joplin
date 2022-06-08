@@ -55,7 +55,7 @@ const NoteListComponent = (props: Props) => {
 		};
 	}, []);
 
-	const itemHeight = 34;
+	const [itemHeight, setItemHeight] = useState(34);
 
 	const focusItemIID_ = useRef<any>(null);
 	const noteListRef = useRef(null);
@@ -452,6 +452,16 @@ const NoteListComponent = (props: Props) => {
 			CommandService.instance().componentUnregisterCommands(commands);
 		};
 	}, []);
+
+	useEffect(() => {
+		// When a note list item is styled by userchrome.css, its height is reflected.
+		// Ref. https://github.com/laurent22/joplin/pull/6542
+		const noteItem = Object.values<any>(itemAnchorRefs_.current)[0]?.current;
+		const actualItemHeight = noteItem?.getHeight() ?? 0;
+		if (actualItemHeight >= 8) { // To avoid generating too many narrow items
+			setItemHeight(actualItemHeight);
+		}
+	});
 
 	const renderEmptyList = () => {
 		if (props.notes.length) return null;

@@ -19,6 +19,13 @@ describe('ArrayUtils', function() {
 		expect(a.length).toBe(3);
 	}));
 
+	it('should pull array elements', (async () => {
+		expect(ArrayUtils.pull(['a', 'b', 'c', 'a', 'b', 'c'], 'a')).toEqual(['b', 'c', 'b', 'c']);
+		expect(ArrayUtils.pull(['b', 'c', 'b', 'c'], 'a')).toEqual(['b', 'c', 'b', 'c']);
+		expect(ArrayUtils.pull(['a', 'b', 'c', 'a', 'b', 'c'], 'a', 'c')).toEqual(['b', 'b']);
+		expect(ArrayUtils.pull([], 'a')).toEqual([]);
+	}));
+
 	it('should find items using binary search', (async () => {
 		let items = ['aaa', 'ccc', 'bbb'];
 		expect(ArrayUtils.binarySearch(items, 'bbb')).toBe(-1); // Array not sorted!
