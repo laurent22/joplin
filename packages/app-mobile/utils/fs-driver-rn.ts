@@ -59,7 +59,7 @@ export default class FsDriverRN extends FsDriverBase {
 	}
 
 	public async isDirectory(path: string): Promise<boolean> {
-		return this.stat(path).then(result => result.isDirectory());
+		return (await this.stat(path)).isDirectory();
 	}
 
 	public async readDirStats(path: string, options: any = null) {

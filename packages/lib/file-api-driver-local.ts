@@ -14,7 +14,7 @@ const { basicDelta } = require('./file-api');
 // will have been modified at the same exact second at some point. If not, it's another bug that needs to be investigated.
 
 // this is the format that fs-driver-rn would return
-type StdStatResult = {
+type Stat = {
 	birthtime: Date; // Created date
 	mtime: Date; // Last modified date
 	isDirectory: ()=> boolean; // Is the file a directory?
@@ -29,15 +29,13 @@ type MetaData = {
 	isDir: boolean;
 };
 
-export type FileOptions = {encoding?: string} & (
-	| {
-		source: 'file';
-		path: string;
-	}| {
-		target: 'file';
-		path: string;
-	}
-);
+export type FileOptions =
+{
+	encoding?: string;
+	path?: string;
+	target?: 'file';
+	source?: 'file';
+};
 
 export class FileApiDriverLocal {
 	static fsDriver_: any;
@@ -57,7 +55,7 @@ export class FileApiDriverLocal {
 
 	async stat(path: string): Promise<MetaData> {
 		try {
-			const s = await this.fsDriver().stat(path) as StdStatResult;
+			const s = await this.fsDriver().stat(path) as Stat;
 			if (!s) return null;
 			return this.metadataFromStat_(s);
 		} catch (error) {
@@ -65,7 +63,7 @@ export class FileApiDriverLocal {
 		}
 	}
 
-	metadataFromStat_(stat: StdStatResult): MetaData {
+	metadataFromStat_(stat: Stat): MetaData {
 		return {
 			path: stat.path,
 			// created_time: stat.birthtime.getTime(),
@@ -74,7 +72,7 @@ export class FileApiDriverLocal {
 		};
 	}
 
-	metadataFromStats_(stats: StdStatResult[]) {
+	metadataFromStats_(stats: Stat[]) {
 		const output = [];
 		for (let i = 0; i < stats.length; i++) {
 			const mdStat = this.metadataFromStat_(stats[i]);
@@ -122,10 +120,11 @@ export class FileApiDriverLocal {
 	}
 
 	async get(path: string, options: FileOptions) {
+		if (!options) options = {};
 		let output = null;
 
 		try {
-			if (options && 'target' in options && options.target === 'file') {
+			if (options.target === 'file') {
 				output = await this.fsDriver().copy(path, options.path);
 			} else {
 				output = await this.fsDriver().readFile(path, options.encoding);
@@ -166,9 +165,10 @@ export class FileApiDriverLocal {
 	}
 
 	async put(path: string, content: any, options: FileOptions = null) {
+		if (!options) options = {};
 
 		try {
-			if (options && 'source' in options && options.source === 'file') {
+			if (options.source === 'file') {
 				await this.fsDriver().copy(options.path, path);
 				return;
 			}

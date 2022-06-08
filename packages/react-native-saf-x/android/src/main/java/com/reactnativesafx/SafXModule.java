@@ -171,7 +171,7 @@ public class SafXModule extends ReactContextBaseJavaModule {
       boolean result = doc.delete();
       promise.resolve(result);
     } catch (FileNotFoundException e) {
-      promise.resolve(true);
+      promise.reject("ENOENT", e.getLocalizedMessage());
     } catch (SecurityException e) {
       promise.reject("EPERM", e.getLocalizedMessage());
     } catch (Exception e) {

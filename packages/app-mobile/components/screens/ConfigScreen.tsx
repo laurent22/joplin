@@ -56,7 +56,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 					throw new Error('User cancelled operation');
 				}
 			} catch (e) {
-				reg.logger().info(`Didn't pick sync dir: ${e}`);
+				reg.logger().info('Didn\'t pick sync dir: ', e);
 			}
 		};
 
