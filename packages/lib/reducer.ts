@@ -1125,7 +1125,9 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 			break;
 
 		case 'SET_NOTE_TAGS':
-			draft.selectedNoteTags = action.items;
+			if (!fastDeepEqual(original(draft.selectedNoteTags), action.items)) {
+				draft.selectedNoteTags = action.items;
+			}
 			break;
 
 		case 'PLUGINLEGACY_DIALOG_SET':
