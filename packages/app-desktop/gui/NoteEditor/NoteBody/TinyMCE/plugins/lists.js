@@ -2057,7 +2057,6 @@
       editor.addQueryStateHandler('InsertOrderedList', queryListCommandState(editor, 'OL'));
       editor.addQueryStateHandler('InsertDefinitionList', queryListCommandState(editor, 'DL'));
       addJoplinChecklistCommands(editor, ToggleList);
-      
       var editorClickHandler = function (event) {
         if (!isJoplinChecklistItem(event.target))
           return;
@@ -2066,7 +2065,6 @@
         editor.execCommand('ToggleJoplinChecklistItem', false, { element: event.target });
       };
       editor.on('click', editorClickHandler);
-
     };
 
     var setupTabKey = function (editor) {
@@ -2110,7 +2108,6 @@
           var listType = findContainerListTypeFromEvent(e);
           buttonApi.setActive(listType === options.listType && lists.length > 0 && lists[0].nodeName === listName && !isCustomList(lists[0]));
         };
-
         editor.on('NodeChange', nodeChangeHandler);
         return function () {
           editor.off('NodeChange', nodeChangeHandler);
