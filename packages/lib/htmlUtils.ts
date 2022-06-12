@@ -47,13 +47,13 @@ class HtmlUtils {
 	}
 
 	// Returns the **encoded** URLs, so to be useful they should be decoded again before use.
-	private extractUrls(regex: RegExp, html: string, urlKey = 2) {
+	private extractUrls(regex: RegExp, html: string) {
 		if (!html) return [];
 
 		const output = [];
 		let matches;
 		while ((matches = regex.exec(html))) {
-			output.push(matches[urlKey]);
+			output.push(matches[2]);
 		}
 
 		return output.filter(url => !!url);

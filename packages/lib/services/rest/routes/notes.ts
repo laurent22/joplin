@@ -151,9 +151,9 @@ async function tryToGuessExtFromMimeType(response: any, mediaPath: string) {
 	const newExt = mimeUtils.toFileExtension(mimeType);
 	if (!newExt) return mediaPath;
 
-	const newImagePath = `${mediaPath}.${newExt}`;
-	await shim.fsDriver().move(mediaPath, newImagePath);
-	return newImagePath;
+	const newMediaPath = `${mediaPath}.${newExt}`;
+	await shim.fsDriver().move(mediaPath, newMediaPath);
+	return newMediaPath;
 }
 
 async function downloadMediaFile(url: string /* , allowFileProtocolImages */) {
