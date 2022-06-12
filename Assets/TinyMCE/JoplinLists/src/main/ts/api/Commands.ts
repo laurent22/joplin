@@ -9,7 +9,6 @@ import * as ToggleList from '../actions/ToggleList';
 import { indentListSelection, outdentListSelection, flattenListSelection } from '../actions/Indendation';
 import { addJoplinChecklistCommands } from '../listModel/JoplinListUtil';
 
-
 const queryListCommandState = function (editor, listName) {
   return function () {
     const parentList = editor.dom.getParent(editor.selection.getStart(), 'UL,OL,DL');
@@ -49,8 +48,6 @@ const register = function (editor) {
   editor.addQueryStateHandler('InsertDefinitionList', queryListCommandState(editor, 'DL'));
 
   addJoplinChecklistCommands(editor, ToggleList);
-
-
 };
 
 export {
