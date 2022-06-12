@@ -2057,14 +2057,6 @@
       editor.addQueryStateHandler('InsertOrderedList', queryListCommandState(editor, 'OL'));
       editor.addQueryStateHandler('InsertDefinitionList', queryListCommandState(editor, 'DL'));
       addJoplinChecklistCommands(editor, ToggleList);
-      var editorClickHandler = function (event) {
-        if (!isJoplinChecklistItem(event.target))
-          return;
-        if (event.offsetX >= 0)
-          return;
-        editor.execCommand('ToggleJoplinChecklistItem', false, { element: event.target });
-      };
-      editor.on('click', editorClickHandler);
     };
 
     var setupTabKey = function (editor) {
@@ -2084,6 +2076,17 @@
         setupTabKey(editor);
       }
       setup(editor);
+    };
+
+    var setup$2 = function (editor) {
+      var editorClickHandler = function (event) {
+        if (!isJoplinChecklistItem(event.target))
+          return;
+        if (event.offsetX >= 0)
+          return;
+        editor.execCommand('ToggleJoplinChecklistItem', false, { element: event.target });
+      };
+      editor.on('click', editorClickHandler);
     };
 
     var findIndex = function (list, predicate) {
@@ -2153,6 +2156,7 @@
     function Plugin () {
       PluginManager.add('joplinLists', function (editor) {
         setup$1(editor);
+        setup$2(editor);
         register$1(editor);
         register(editor);
         return get(editor);
