@@ -130,7 +130,7 @@ class AppGui {
 		this.rootWidget_.name = 'root';
 		this.rootWidget_.autoShortcutsEnabled = false;
 
-		const folderList = new FolderListWidget(Setting);
+		const folderList = new FolderListWidget();
 		folderList.style = {
 			borderBottomWidth: 1,
 			borderRightWidth: 1,

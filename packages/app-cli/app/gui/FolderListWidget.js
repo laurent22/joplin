@@ -2,10 +2,11 @@ const Folder = require('@joplin/lib/models/Folder').default;
 const Tag = require('@joplin/lib/models/Tag').default;
 const BaseModel = require('@joplin/lib/BaseModel').default;
 const ListWidget = require('tkwidgets/ListWidget.js');
+const Setting = require('@joplin/lib/models/Setting').default;
 const _ = require('@joplin/lib/locale')._;
 
 class FolderListWidget extends ListWidget {
-	constructor(setting) {
+	constructor() {
 		super();
 
 		this.tags_ = [];
@@ -25,7 +26,7 @@ class FolderListWidget extends ListWidget {
 				output.push('-'.repeat(this.innerWidth));
 			} else if (item.type_ === Folder.modelType()) {
 				output.push(' '.repeat(this.folderDepth(this.folders, item.id)) + Folder.displayTitle(item));
-				if (setting.value('folders.showNoteCount')) {
+				if (Setting.value('showNoteCounts')) {
 					output.push(item.note_count);
 				}
 			} else if (item.type_ === Tag.modelType()) {
