@@ -48,7 +48,7 @@ yarn run updateNews $DISCOURSE_API_KEY $DISCOURSE_USERNAME
 
 git add -A
 
-git commit -m "Doc: Updated Markdown files
+git commit -m "Doc: Auto-update documentation
 
 Auto-updated using $SCRIPT_NAME" || true
 

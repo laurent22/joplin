@@ -10,7 +10,7 @@ import ItemChange from './ItemChange';
 import Resource from './Resource';
 import { ResourceEntity } from '../services/database/types';
 import { toForwardSlashes } from '../path-utils';
-const ArrayUtils = require('../ArrayUtils.js');
+import * as ArrayUtils from '../ArrayUtils';
 
 async function allItems() {
 	const folders = await Folder.all();
@@ -61,8 +61,8 @@ describe('models/Note', function() {
 			const t = testCases[i];
 
 			const input = t[0] as string;
-			const expected = t[1];
-			const actual = Note.linkedItemIds(input);
+			const expected = t[1] as string[];
+			const actual = Note.linkedItemIds(input) as string[];
 			const contentEquals = ArrayUtils.contentEquals(actual, expected);
 
 			// console.info(contentEquals, input, expected, actual);

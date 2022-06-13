@@ -6,6 +6,7 @@ export interface MarkdownAndFrontMatter {
 	updated?: Date;
 	source_url?: string;
 	forum_url?: string;
+	tweet?: string;
 }
 
 const readProp = (line: string): string[] => {
