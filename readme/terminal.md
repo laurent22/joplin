@@ -488,10 +488,6 @@ The following commands are available in [command-line mode](#command-line-mode):
 	                                   Type: bool.
 	                                   Default: false
 
-	    folders.showNoteCount          Show note count in folder list.
-	                                   Type: bool.
-	                                   Default: true
-
 	    trackLocation                  Save geo-location with notes.
 	                                   Type: bool.
 	                                   Default: true
