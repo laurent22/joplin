@@ -27,7 +27,16 @@ class FolderListWidget extends ListWidget {
 			} else if (item.type_ === Folder.modelType()) {
 				output.push(' '.repeat(this.folderDepth(this.folders, item.id)) + Folder.displayTitle(item));
 				if (Setting.value('showNoteCounts')) {
-					output.push(item.note_count);
+					let noteCount = item.note_count;
+					// Subtract children note_count from parent folder.
+					if (this.folderHasChildren_(this.folders,item.id)) {
+						for (let i = 0; i < this.folders.length; i++) {
+							if (this.folders[i].parent_id === item.id) {
+								noteCount -= this.folders[i].note_count;
+							}
+						}
+					}
+					output.push(noteCount);
 				}
 			} else if (item.type_ === Tag.modelType()) {
 				output.push(`[${Folder.displayTitle(item)}]`);
