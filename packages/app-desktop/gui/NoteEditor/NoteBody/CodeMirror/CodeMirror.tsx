@@ -672,7 +672,7 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		// props.content has been updated).
 		const textChanged = props.searchMarkers.keywords.length > 0 && (props.content !== previousContent || renderedBody !== previousRenderedBody);
 
-		if (props.searchMarkers !== previousSearchMarkers || textChanged) {
+		if (webviewRef.current?.wrappedInstance && (props.searchMarkers !== previousSearchMarkers || textChanged)) {
 			webviewRef.current.wrappedInstance.send('setMarkers', props.searchMarkers.keywords, props.searchMarkers.options);
 
 			if (editorRef.current) {
