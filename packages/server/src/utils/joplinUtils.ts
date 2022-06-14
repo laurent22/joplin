@@ -194,7 +194,14 @@ async function renderNote(share: Share, note: NoteEntity, resourceInfos: Resourc
 			} else if (item.type_ === ModelType.Resource) {
 				return `${models_.share().shareUrl(share.owner_id, share.id)}?resource_id=${item.id}&t=${item.updated_time}`;
 			} else {
-				throw new Error(`Unsupported item type: ${item.type_}`);
+				// In theory, there can only be links to notes or resources. But
+				// in practice nothing's stopping a plugin for example to create
+				// a link to a folder. In this case, we don't want to throw an
+				// exception as that would break rendering. Instead we just
+				// disable the link.
+				// https://github.com/laurent22/joplin/issues/6531
+				logger.warn(`Unsupported type in share ${share.id}. Item: ${itemId}`);
+				return '#';
 			}
 		},
 
