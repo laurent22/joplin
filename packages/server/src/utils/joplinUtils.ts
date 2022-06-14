@@ -330,7 +330,8 @@ export async function renderItem(userId: Uuid, item: Item, share: Share, query: 
 		// Render a linked note
 		// ------------------------------------------------------------------------------------------
 
-		if (!share.recursive) throw new ErrorForbidden('Linked notes are not published');
+
+		if (!share.recursive) throw new ErrorForbidden('This linked note has not been published');
 
 		const noteItem = await models_.item().loadByName(userId, `${query.note_id}.md`, { fields: ['*'], withContent: true });
 		if (!noteItem) throw new ErrorNotFound(`No such note: ${query.note_id}`);
