@@ -2,9 +2,11 @@ import Setting from '@joplin/lib/models/Setting';
 import shim from '@joplin/lib/shim';
 import { themeStyle } from '@joplin/lib/theme';
 const React = require('react');
-const { forwardRef, useImperativeHandle, useEffect, useMemo, useState, useCallback, useRef } = require('react');
+const { forwardRef, useImperativeHandle } = require('react');
+const { useEffect, useMemo, useState, useCallback, useRef } = require('react');
 const { WebView } = require('react-native-webview');
 const { editorFont } = require('../global-style');
+import { MarkdownToolbar } from './MarkdownToolbar';
 
 export interface ChangeEvent {
 	value: string;
@@ -43,145 +45,6 @@ function fontFamilyFromSettings() {
 	const f = editorFont(Setting.value('style.editor.fontFamily'));
 	return [f, 'sans-serif'].join(', ');
 }
-
-// Obsolete with CodeMirror 6. See ./CodeMirror.ts for styling.
-// function useCss(themeId:number):string {
-// 	const [css, setCss] = useState('');
-
-// 	// useEffect(() => {
-// 	// 	const theme = themeStyle(themeId);
-
-// 	// 	// Selection in dark mode is hard to see so make it brighter.
-// 	// 	// https://discourse.joplinapp.org/t/dragging-in-dark-theme/12433/4?u=laurent
-// 	// 	const selectionColorCss = theme.appearance === ThemeAppearance.Dark ?
-// 	// 		`.CodeMirror-selected {
-// 	// 			background: #6b6b6b !important;
-// 	// 		}` : '';
-// 	// 	const monospaceFonts = [];
-// 	// 	// if (Setting.value('style.editor.monospaceFontFamily')) monospaceFonts.push(`"${Setting.value('style.editor.monospaceFontFamily')}"`);
-// 	// 	monospaceFonts.push('monospace');
-
-// 	// 	const fontSize = 15;
-// 	// 	const fontFamily = fontFamilyFromSettings();
-
-// 	// 	// BUG: caret-color seems to be ignored for some reason
-// 	// 	const caretColor = theme.appearance === ThemeAppearance.Dark ? "white" : 'black';
-
-// 	// 	setCss(`
-// 	// 		/* These must be important to prevent the codemirror defaults from taking over*/
-// 	// 		.CodeMirror {
-// 	// 			font-family: ${fontFamily};
-// 	// 			font-size: ${fontSize}px;
-// 	// 			height: 100% !important;
-// 	// 			width: 100% !important;
-// 	// 			color: ${theme.color};
-// 	// 			background-color: ${theme.backgroundColor};
-// 	// 			position: absolute !important;
-// 	// 			-webkit-box-shadow: none !important; // Some themes add a box shadow for some reason
-// 	// 		}
-
-// 	// 		.CodeMirror-lines {
-// 	// 			/* This is used to enable the scroll-past end behaviour. The same height should */
-// 	// 			/* be applied to the viewer. */
-// 	// 			padding-bottom: 400px !important;
-// 	// 		}
-
-// 	// 		/* Left padding is applied at the editor component level, so we should remove it from the lines */
-// 	// 		.CodeMirror pre.CodeMirror-line,
-// 	// 		.CodeMirror pre.CodeMirror-line-like {
-// 	// 			padding-left: 0;
-// 	// 		}
-
-// 	// 		.CodeMirror-sizer {
-// 	// 			/* Add a fixed right padding to account for the appearance (and disappearance) */
-// 	// 			/* of the sidebar */
-// 	// 			padding-right: 10px !important;
-// 	// 		}
-
-// 	// 		/* This enforces monospace for certain elements (code, tables, etc.) */
-// 	// 		.cm-jn-monospace {
-// 	// 			font-family: ${monospaceFonts.join(', ')} !important;
-// 	// 		}
-
-// 	// 		.cm-header-1 {
-// 	// 			font-size: 1.5em;
-// 	// 		}
-
-// 	// 		.cm-header-2 {
-// 	// 			font-size: 1.3em;
-// 	// 		}
-
-// 	// 		.cm-header-3 {
-// 	// 			font-size: 1.1em;
-// 	// 		}
-
-// 	// 		.cm-header-4, .cm-header-5, .cm-header-6 {
-// 	// 			font-size: 1em;
-// 	// 		}
-
-// 	// 		.cm-header-1, .cm-header-2, .cm-header-3, .cm-header-4, .cm-header-5, .cm-header-6 {
-// 	// 			line-height: 1.5em;
-// 	// 		}
-
-// 	// 		.cm-search-marker {
-// 	// 			background: ${theme.searchMarkerBackgroundColor};
-// 	// 			color: ${theme.searchMarkerColor} !important;
-// 	// 		}
-
-// 	// 		.cm-search-marker-selected {
-// 	// 			background: ${theme.selectedColor2};
-// 	// 			color: ${theme.color2} !important;
-// 	// 		}
-
-// 	// 		.cm-search-marker-scrollbar {
-// 	// 			background: ${theme.searchMarkerBackgroundColor};
-// 	// 			-moz-box-sizing: border-box;
-// 	// 			box-sizing: border-box;
-// 	// 			opacity: .5;
-// 	// 		}
-
-// 	// 		/* We need to use important to override theme specific values */
-// 	// 		.cm-error {
-// 	// 			color: inherit !important;
-// 	// 			background-color: inherit !important;
-// 	// 			border-bottom: 1px dotted #dc322f;
-// 	// 		}
-
-// 	// 		/* The default dark theme colors don't have enough contrast with the background */
-// 	// 		.cm-s-nord span.cm-comment {
-// 	// 			color: #9aa4b6 !important;
-// 	// 		}
-
-// 	// 		.cm-s-dracula span.cm-comment {
-// 	// 			color: #a1abc9 !important;
-// 	// 		}
-
-// 	// 		.cm-s-monokai span.cm-comment {
-// 	// 			color: #908b74 !important;
-// 	// 		}
-
-// 	// 		.cm-s-material-darker span.cm-comment {
-// 	// 			color: #878787 !important;
-// 	// 		}
-
-// 	// 		.cm-s-solarized.cm-s-dark span.cm-comment {
-// 	// 			color: #8ba1a7 !important;
-// 	// 		}
-
-// 	// 		/* MOBILE SPECIFIC */
-
-// 	// 		.CodeMirror .cm-scroller,
-// 	// 		.CodeMirror .cm-line {
-// 	// 			font-family: ${fontFamily};
-// 	// 			caret-color: ${caretColor};
-// 	// 		}
-
-// 	// 		${selectionColorCss}
-// 	// 	`);
-// 	// }, [themeId]);
-
-// 	return css;
-// }
 
 function useCss(themeId: number): string {
 	return useMemo(() => {
@@ -252,6 +115,12 @@ function NoteEditor(props: Props, ref: any) {
 			postMessage('onLog', { value: msg });
 		}
 
+		window.onerror = (message, source, lineno) => {
+			window.ReactNativeWebView.postMessage(
+				"error: " + message + " in file://" + source + ", line " + lineno
+			);
+		};
+
 		// This variable is not used within this script
 		// but is called using "injectJavaScript" from
 		// the wrapper component.
@@ -276,21 +145,35 @@ function NoteEditor(props: Props, ref: any) {
 	const css = useCss(props.themeId);
 	const html = useHtml(css);
 
+	// / Runs [js] in the context of the CodeMirror frame.
+	const injectJS = (js: string) => {
+		webviewRef.current.injectJavaScript(`
+			try {
+				${js}
+			}
+			catch(e) {
+				console.error(e);
+				throw e;
+			};
+
+			true;`);
+	};
+
 	useImperativeHandle(ref, () => {
 		return {
 			undo: function() {
-				webviewRef.current.injectJavaScript('cm.undo(); true;');
+				injectJS('cm.undo();');
 			},
 			redo: function() {
-				webviewRef.current.injectJavaScript('cm.redo(); true;');
+				injectJS('cm.redo();');
 			},
 			select: (anchor: number, head: number) => {
-				webviewRef.current.injectJavaScript(
-					`cm.select(${JSON.stringify(anchor)}, ${JSON.stringify(head)}); true;`
+				injectJS(
+					`cm.select(${JSON.stringify(anchor)}, ${JSON.stringify(head)});`
 				);
 			},
 			insertText: (text: string) => {
-				webviewRef.current.injectJavaScript(`cm.insertText(${JSON.stringify(text)}); true;`);
+				injectJS(`cm.insertText(${JSON.stringify(text)});`);
 			},
 		};
 	});
@@ -357,19 +240,32 @@ function NoteEditor(props: Props, ref: any) {
 
 	// - `setSupportMultipleWindows` must be `true` for security reasons:
 	//   https://github.com/react-native-webview/react-native-webview/releases/tag/v11.0.0
-	return <WebView
-		style={props.style}
-		ref={webviewRef}
-		useWebKit={true}
-		source={source}
-		setSupportMultipleWindows={true}
-		allowingReadAccessToURL={`file://${Setting.value('resourceDir')}`}
-		originWhitelist={['file://*', './*', 'http://*', 'https://*']}
-		allowFileAccess={true}
-		injectedJavaScript={injectedJavaScript}
-		onMessage={onMessage}
-		onError={onError}
-	/>;
+	return (
+		<>
+			<WebView
+				style={props.style}
+				ref={webviewRef}
+				useWebKit={true}
+				source={source}
+				setSupportMultipleWindows={true}
+				allowingReadAccessToURL={`file://${Setting.value('resourceDir')}`}
+				originWhitelist={['file://*', './*', 'http://*', 'https://*']}
+				allowFileAccess={true}
+				injectedJavaScript={injectedJavaScript}
+				onMessage={onMessage}
+				onError={onError}
+			/>
+
+			<MarkdownToolbar
+				doBold={() => {
+					injectJS('cm.selectionCommands.bold();');
+				}}
+				doItalicize={() => {
+					injectJS('cm.selectionCommands.italicize();');
+				}}
+			/>
+		</>
+	);
 }
 
 export default forwardRef(NoteEditor);

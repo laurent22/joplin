@@ -14,13 +14,16 @@ import { markdown } from '@codemirror/lang-markdown';
 import { highlightSelectionMatches, search } from '@codemirror/search';
 import { defaultHighlightStyle, syntaxHighlighting, HighlightStyle } from '@codemirror/language';
 import { tags } from '@lezer/highlight';
+import { GFM } from '@lezer/markdown';
 import { EditorView, drawSelection, highlightSpecialChars, ViewUpdate } from '@codemirror/view';
 import { undo, redo, history, undoDepth, redoDepth } from '@codemirror/commands';
 
 import { keymap } from '@codemirror/view';
-import { indentOnInput } from '@codemirror/language';
+import { indentOnInput, syntaxTree } from '@codemirror/language';
 import { searchKeymap } from '@codemirror/search';
 import { historyKeymap, defaultKeymap } from '@codemirror/commands';
+
+import { SelectionRange, EditorSelection } from '@codemirror/state';
 
 interface CodeMirrorResult {
 	editor: EditorView;
@@ -182,7 +185,9 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 			// See https://github.com/codemirror/basic-setup/blob/main/src/codemirror.ts
 			// for a sample configuration.
 			extensions: [
-				markdown(),
+				markdown({
+					extensions: [GFM],
+				}),
 				...createTheme(theme),
 				history(),
 				search(),
@@ -215,24 +220,133 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 		parent: parentElement,
 	});
 
-	return {
+	const editorControls = {
 		editor,
-		undo: () => {
+		undo() {
 			undo(editor);
 			schedulePostUndoRedoDepthChange(editor, true);
 		},
-		redo: () => {
+		redo() {
 			redo(editor);
 			schedulePostUndoRedoDepthChange(editor, true);
 		},
-		select: (anchor: number, head: number) => {
+		select(anchor: number, head: number) {
 			editor.dispatch(editor.state.update({
 				selection: { anchor, head },
 				scrollIntoView: true,
 			}));
 		},
-		insertText: (text: string) => {
+		insertText(text: string) {
 			editor.dispatch(editor.state.replaceSelection(text));
 		},
+		selectionCommands: {
+			// / Expands selections to the smallest container node
+			// / with name [nodeName].
+			growSelectionToNode(nodeName: string) {
+				const selectionRanges = editor.state.selection.ranges.map((range: SelectionRange) => {
+					let newFrom = null;
+					let newTo = null;
+					let smallestLen = Infinity;
+
+					// Find the smallest range.
+					syntaxTree(editor.state).iterate({
+						from: range.from, to: range.to,
+						enter: node => {
+							if (node.name == nodeName) {
+								if (node.to - node.from < smallestLen) {
+									newFrom = node.from;
+									newTo = node.to;
+									smallestLen = newTo - newFrom;
+								}
+							}
+						},
+					});
+
+					// If it's in such a node,
+					if (newFrom != null && newTo != null) {
+						return EditorSelection.range(newFrom, newTo);
+					} else {
+						return range;
+					}
+				});
+
+				editor.dispatch({
+					selection: EditorSelection.create(selectionRanges),
+				});
+			},
+
+			// / Adds/removes [before] before the current selection and [after]
+			// / after it.
+			// / For example, surroundSelecton('**', '**') surrounds every selection
+			// / range with asterisks (including the caret).
+			// / If the selection is already surrounded by these characters, they are
+			// / removed.
+			surroundSelection(before: string, after: string) {
+				// Ref: https://codemirror.net/examples/decoration/
+				const changes = editor.state.changeByRange((sel: SelectionRange) => {
+					let content = editor.state.doc.sliceString(sel.from, sel.to);
+					const startsWithBefore = content.indexOf(before) == 0;
+					const endsWithAfter = content.lastIndexOf(after) == content.length - after.length;
+
+					const changes = [];
+					let finalSelStart = sel.from;
+					let finalSelStop = sel.to;
+
+					if (startsWithBefore && endsWithAfter) {
+						// Remove the before and after.
+						content = content.substring(before.length);
+						content = content.substring(0, content.length - after.length);
+
+						finalSelStop -= before.length + after.length;
+
+						changes.push({
+							from: sel.from,
+							to: sel.to,
+							insert: content,
+						});
+					} else {
+						changes.push({
+							from: sel.from,
+							insert: before,
+						});
+
+						changes.push({
+							from: sel.to,
+							insert: after,
+						});
+
+						// If not a caret,
+						if (!sel.empty) {
+							// Select the surrounding chars.
+							finalSelStop += before.length + after.length;
+						} else {
+							// Position the caret within the added content.
+							finalSelStart = sel.from + before.length;
+							finalSelStop = finalSelStart;
+						}
+					}
+
+					return {
+						changes,
+						range: EditorSelection.range(finalSelStart, finalSelStop),
+					};
+				});
+
+				editor.dispatch(changes);
+			},
+			// / Bolds/unbolds the current selection.
+			bold() {
+				editorControls.selectionCommands.growSelectionToNode('StrongEmphasis');
+				editorControls.selectionCommands.surroundSelection('**', '**');
+			},
+
+			// / Italicizes/deitalicizes the current selection.
+			italicize() {
+				editorControls.selectionCommands.growSelectionToNode('Emphasis');
+				editorControls.selectionCommands.surroundSelection('_', '_');
+			},
+		},
 	};
+
+	return editorControls;
 }
