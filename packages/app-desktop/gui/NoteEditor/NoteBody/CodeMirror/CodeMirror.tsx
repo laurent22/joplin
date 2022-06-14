@@ -706,6 +706,8 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		return output;
 	}, [styles.cellViewer, props.visiblePanes]);
 
+	const editorPaneVisible = props.visiblePanes.indexOf('editor') >= 0;
+
 	useEffect(() => {
 		if (!editorRef.current) return;
 
@@ -713,10 +715,10 @@ function CodeMirror(props: NoteBodyEditorProps, ref: any) {
 		// we should focus the editor
 		// The intuition is that a panel toggle (with editor in view) is the equivalent of
 		// an editor interaction so users should expect the editor to be focused
-		if (props.visiblePanes.indexOf('editor') >= 0) {
+		if (editorPaneVisible) {
 			editorRef.current.focus();
 		}
-	}, [props.visiblePanes]);
+	}, [editorPaneVisible]);
 
 	useEffect(() => {
 		if (!editorRef.current) return;
