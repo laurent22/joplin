@@ -378,7 +378,7 @@ export default class ShareModel extends BaseModel<Share> {
 		return super.save(shareToSave);
 	}
 
-	public async shareNote(owner: User, noteId: string, masterKeyId: string): Promise<Share> {
+	public async shareNote(owner: User, noteId: string, masterKeyId: string, recursive: boolean): Promise<Share> {
 		const noteItem = await this.models().item().loadByJopId(owner.id, noteId);
 		if (!noteItem) throw new ErrorNotFound(`No such note: ${noteId}`);
 
@@ -391,6 +391,7 @@ export default class ShareModel extends BaseModel<Share> {
 			owner_id: owner.id,
 			note_id: noteId,
 			master_key_id: masterKeyId,
+			recursive: recursive ? 1 : 0,
 		};
 
 		await this.checkIfAllowed(owner, AclAction.Create, shareToSave);

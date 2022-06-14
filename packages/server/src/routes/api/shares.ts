@@ -10,6 +10,7 @@ import { AclAction } from '../../models/BaseModel';
 interface ShareApiInput extends Share {
 	folder_id?: string;
 	note_id?: string;
+	recursive?: number;
 }
 
 const router = new Router(RouteType.Api);
@@ -23,6 +24,7 @@ router.post('api/shares', async (_path: SubPath, ctx: AppContext) => {
 		folder_id?: string;
 		note_id?: string;
 		master_key_id?: string;
+		recursive?: number;
 	}
 
 	const shareModel = ctx.joplin.models.share();
@@ -40,7 +42,7 @@ router.post('api/shares', async (_path: SubPath, ctx: AppContext) => {
 	if (shareInput.folder_id) {
 		return ctx.joplin.models.share().shareFolder(ctx.joplin.owner, shareInput.folder_id, masterKeyId);
 	} else if (shareInput.note_id) {
-		return ctx.joplin.models.share().shareNote(ctx.joplin.owner, shareInput.note_id, masterKeyId);
+		return ctx.joplin.models.share().shareNote(ctx.joplin.owner, shareInput.note_id, masterKeyId, fields.recursive === 1);
 	} else {
 		throw new ErrorBadRequest('Either folder_id or note_id must be provided');
 	}
