@@ -12,7 +12,8 @@
     "clean": "node tools/clean.js",
     "buildInjectedJs": "gulp buildInjectedJs",
     "watchInjectedJs": "nodemon --verbose --watch components/NoteEditor/CodeMirror.ts --exec \"yarn run buildInjectedJs\"",
-    "postinstall": "jetify && yarn run build"
+    "postinstall": "jetify && yarn run build",
+    "test": "jest"
   },
   "dependencies": {
     "@joplin/lib": "~2.8",
@@ -78,6 +79,7 @@
     "@joplin/tools": "~2.8",
     "@rollup/plugin-node-resolve": "^13.0.0",
     "@rollup/plugin-typescript": "^8.2.1",
+    "@types/jest": "^28.1.1",
     "@types/node": "^14.14.6",
     "@types/react": "^16.9.55",
     "@types/react-native": "^0.64.4",
@@ -85,6 +87,7 @@
     "execa": "^4.0.0",
     "fs-extra": "^8.1.0",
     "gulp": "^4.0.2",
+    "jest": "^28.1.1",
     "jetifier": "^1.6.5",
     "metro-react-native-babel-preset": "^0.66.2",
     "nodemon": "^2.0.12",
