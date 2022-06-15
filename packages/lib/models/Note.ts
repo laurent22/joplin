@@ -207,7 +207,7 @@ export default class Note extends BaseItem {
 		const temp = [];
 		for (const p of pathsToTry) {
 			temp.push(p);
-			temp.push(markdownUtils.escapeLinkUrl(p));
+			temp.push(encodeURI(p));
 		}
 
 		pathsToTry = temp;
