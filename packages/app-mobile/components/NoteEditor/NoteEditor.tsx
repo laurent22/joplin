@@ -1,30 +1,17 @@
 import Setting from '@joplin/lib/models/Setting';
 import shim from '@joplin/lib/shim';
 import { themeStyle } from '@joplin/lib/theme';
+import MarkdownToolbar from './MarkdownToolbar';
+
 const React = require('react');
 const { forwardRef, useImperativeHandle } = require('react');
 const { useEffect, useMemo, useState, useCallback, useRef } = require('react');
 const { WebView } = require('react-native-webview');
 const { editorFont } = require('../global-style');
-import { MarkdownToolbar } from './MarkdownToolbar';
 
-export interface ChangeEvent {
-	value: string;
-}
-
-export interface UndoRedoDepthChangeEvent {
-	undoDepth: number;
-	redoDepth: number;
-}
-
-export interface Selection {
-	start: number;
-	end: number;
-}
-
-export interface SelectionChangeEvent {
-	selection: Selection;
-}
+import { ChangeEvent, UndoRedoDepthChangeEvent } from './EditorType';
+import { Selection, SelectionChangeEvent, SelectionFormatting } from './EditorType';
+import { EditorControl } from './EditorType';
 
 type ChangeEventHandler = (event: ChangeEvent)=> void;
 type UndoRedoDepthChangeHandler = (event: UndoRedoDepthChangeEvent)=> void;
@@ -104,46 +91,49 @@ function NoteEditor(props: Props, ref: any) {
 	` : '';
 
 	const injectedJavaScript = `
-		function postMessage(name, data) {
-			window.ReactNativeWebView.postMessage(JSON.stringify({
-				data,
-				name,
-			}));
-		}
+		if (!window.cm) {
+			function postMessage(name, data) {
+				window.ReactNativeWebView.postMessage(JSON.stringify({
+					data,
+					name,
+				}));
+			}
 
-		function logMessage(...msg) {
-			postMessage('onLog', { value: msg });
-		}
+			function logMessage(...msg) {
+				postMessage('onLog', { value: msg });
+			}
 
-		window.onerror = (message, source, lineno) => {
-			window.ReactNativeWebView.postMessage(
-				"error: " + message + " in file://" + source + ", line " + lineno
-			);
-		};
+			window.onerror = (message, source, lineno) => {
+				window.ReactNativeWebView.postMessage(
+					"error: " + message + " in file://" + source + ", line " + lineno
+				);
+			};
 
-		// This variable is not used within this script
-		// but is called using "injectJavaScript" from
-		// the wrapper component.
-		window.cm = null;
+			// This variable is not used within this script
+			// but is called using "injectJavaScript" from
+			// the wrapper component.
+			window.cm = null;
 
-		try {
-			${shim.injectedJs('codeMirrorBundle')};
+			try {
+				${shim.injectedJs('codeMirrorBundle')};
 
-			const parentElement = document.getElementsByClassName('CodeMirror')[0];
-			const theme = ${JSON.stringify(editorTheme(props.themeId))};
-			const initialText = ${JSON.stringify(props.initialText)};
+				const parentElement = document.getElementsByClassName('CodeMirror')[0];
+				const theme = ${JSON.stringify(editorTheme(props.themeId))};
+				const initialText = ${JSON.stringify(props.initialText)};
 
-			cm = codeMirrorBundle.initCodeMirror(parentElement, initialText, theme);
-			${setInitialSelectionJS}
-		} catch (e) {
-			window.ReactNativeWebView.postMessage("error:" + e.message + ": " + JSON.stringify(e))
-		} finally {
-			true;
+				cm = codeMirrorBundle.initCodeMirror(parentElement, initialText, theme);
+				${setInitialSelectionJS}
+			} catch (e) {
+				window.ReactNativeWebView.postMessage("error:" + e.message + ": " + JSON.stringify(e))
+			} finally {
+				true;
+			}
 		}
 	`;
 
 	const css = useCss(props.themeId);
 	const html = useHtml(css);
+	const [selectionState, setSelectionState] = useState(new SelectionFormatting());
 
 	// / Runs [js] in the context of the CodeMirror frame.
 	const injectJS = (js: string) => {
@@ -159,23 +149,33 @@ function NoteEditor(props: Props, ref: any) {
 			true;`);
 	};
 
+
+	const editorControl: EditorControl = {
+		undo() {
+			injectJS('cm.undo();');
+		},
+		redo() {
+			injectJS('cm.redo();');
+		},
+		select(anchor: number, head: number) {
+			injectJS(
+				`cm.select(${JSON.stringify(anchor)}, ${JSON.stringify(head)});`
+			);
+		},
+		insertText(text: string) {
+			injectJS(`cm.insertText(${JSON.stringify(text)});`);
+		},
+
+		toggleBolded() {
+			injectJS('cm.selectionCommands.bold();');
+		},
+		toggleItalicized() {
+			injectJS('cm.selectionCommands.italicize();');
+		},
+	};
+
 	useImperativeHandle(ref, () => {
-		return {
-			undo: function() {
-				injectJS('cm.undo();');
-			},
-			redo: function() {
-				injectJS('cm.redo();');
-			},
-			select: (anchor: number, head: number) => {
-				injectJS(
-					`cm.select(${JSON.stringify(anchor)}, ${JSON.stringify(head)});`
-				);
-			},
-			insertText: (text: string) => {
-				injectJS(`cm.insertText(${JSON.stringify(text)});`);
-			},
-		};
+		return editorControl;
 	});
 
 	useEffect(() => {
@@ -225,6 +225,13 @@ function NoteEditor(props: Props, ref: any) {
 			onSelectionChange: (event: SelectionChangeEvent) => {
 				props.onSelectionChange(event);
 			},
+
+			onSelectionFormattingChange(data: string) {
+				// We want a SelectionFormatting object, so are
+				// instantiating it from JSON.
+				const formatting = SelectionFormatting.fromJSON(data);
+				setSelectionState(formatting);
+			},
 		};
 
 		if (handlers[msg.name]) {
@@ -237,6 +244,7 @@ function NoteEditor(props: Props, ref: any) {
 	const onError = useCallback(() => {
 		console.error('NoteEditor: webview error');
 	});
+
 
 	// - `setSupportMultipleWindows` must be `true` for security reasons:
 	//   https://github.com/react-native-webview/react-native-webview/releases/tag/v11.0.0
@@ -257,12 +265,9 @@ function NoteEditor(props: Props, ref: any) {
 			/>
 
 			<MarkdownToolbar
-				doBold={() => {
-					injectJS('cm.selectionCommands.bold();');
-				}}
-				doItalicize={() => {
-					injectJS('cm.selectionCommands.italicize();');
-				}}
+				themeId={props.themeId}
+				editorControl={editorControl}
+				selectionState={selectionState}
 			/>
 		</>
 	);

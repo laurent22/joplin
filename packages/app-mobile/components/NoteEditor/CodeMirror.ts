@@ -9,6 +9,8 @@
 // wrapper to access CodeMirror functionalities. Anything else should be done
 // from NoteEditor.tsx.
 
+import { SelectionFormatting } from './EditorType';
+
 import { EditorState, Extension } from '@codemirror/state';
 import { markdown } from '@codemirror/lang-markdown';
 import { highlightSelectionMatches, search } from '@codemirror/search';
@@ -180,6 +182,60 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 		}, doItNow ? 0 : 1000);
 	}
 
+	function notifyDocChanged(viewUpdate: ViewUpdate) {
+		if (viewUpdate.docChanged) {
+			postMessage('onChange', { value: editor.state.doc.toString() });
+			schedulePostUndoRedoDepthChange(editor);
+		}
+	}
+
+	function notifySelectionChange(viewUpdate: ViewUpdate) {
+		if (!viewUpdate.state.selection.eq(viewUpdate.startState.selection)) {
+			const mainRange = viewUpdate.state.selection.main;
+			const selStart = mainRange.from;
+			const selEnd = mainRange.to;
+			postMessage('onSelectionChange', { selection: { start: selStart, end: selEnd } });
+		}
+	}
+
+	function notifySelectionFormattingChange(viewUpdate: ViewUpdate) {
+		if (viewUpdate.docChanged || !viewUpdate.state.selection.eq(viewUpdate.startState.selection)) {
+			const oldFormatting = computeSelectionFormatting(viewUpdate.startState);
+			const newFormatting = computeSelectionFormatting(viewUpdate.state);
+
+			if (!oldFormatting.eq(newFormatting)) {
+				postMessage('onSelectionFormattingChange', newFormatting.toJSON());
+			}
+		}
+	}
+
+	function computeSelectionFormatting(state: EditorState) {
+		const range = state.selection.main;
+		const formatting: SelectionFormatting = new SelectionFormatting();
+
+		// Find the smallest range.
+		syntaxTree(state).iterate({
+			from: range.from, to: range.to,
+			enter: node => {
+				// Only handle notes that contain the entire range.
+				if (node.from > range.from || node.to < range.to) {
+					return;
+				}
+
+				switch (node.name) {
+				case 'StrongEmphasis':
+					formatting.bolded = true;
+					break;
+				case 'Emphasis':
+					formatting.italicized = true;
+					break;
+				}
+			},
+		});
+
+		return formatting;
+	}
+
 	const editor = new EditorView({
 		state: EditorState.create({
 			// See https://github.com/codemirror/basic-setup/blob/main/src/codemirror.ts
@@ -199,17 +255,9 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 				EditorView.lineWrapping,
 				EditorView.contentAttributes.of({ autocapitalize: 'sentence' }),
 				EditorView.updateListener.of((viewUpdate: ViewUpdate) => {
-					if (viewUpdate.docChanged) {
-						postMessage('onChange', { value: editor.state.doc.toString() });
-						schedulePostUndoRedoDepthChange(editor);
-					}
-
-					if (!viewUpdate.state.selection.eq(viewUpdate.startState.selection)) {
-						const mainRange = viewUpdate.state.selection.main;
-						const selStart = mainRange.from;
-						const selEnd = mainRange.to;
-						postMessage('onSelectionChange', { selection: { start: selStart, end: selEnd } });
-					}
+					notifyDocChanged(viewUpdate);
+					notifySelectionChange(viewUpdate);
+					notifySelectionFormattingChange(viewUpdate);
 				}),
 				keymap.of([
 					...defaultKeymap, ...historyKeymap, ...searchKeymap,
@@ -240,8 +288,8 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 			editor.dispatch(editor.state.replaceSelection(text));
 		},
 		selectionCommands: {
-			// / Expands selections to the smallest container node
-			// / with name [nodeName].
+			// Expands selections to the smallest container node
+			// with name [nodeName].
 			growSelectionToNode(nodeName: string) {
 				const selectionRanges = editor.state.selection.ranges.map((range: SelectionRange) => {
 					let newFrom = null;
@@ -275,12 +323,12 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 				});
 			},
 
-			// / Adds/removes [before] before the current selection and [after]
-			// / after it.
-			// / For example, surroundSelecton('**', '**') surrounds every selection
-			// / range with asterisks (including the caret).
-			// / If the selection is already surrounded by these characters, they are
-			// / removed.
+			// Adds/removes [before] before the current selection and [after]
+			// after it.
+			// For example, surroundSelecton('**', '**') surrounds every selection
+			// range with asterisks (including the caret).
+			// If the selection is already surrounded by these characters, they are
+			// removed.
 			surroundSelection(before: string, after: string) {
 				// Ref: https://codemirror.net/examples/decoration/
 				const changes = editor.state.changeByRange((sel: SelectionRange) => {
@@ -334,13 +382,17 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 
 				editor.dispatch(changes);
 			},
-			// / Bolds/unbolds the current selection.
+
+			// Bolds/unbolds the current selection.
 			bold() {
+				// TODO:
+				// if isBolded,
+				//    ;
 				editorControls.selectionCommands.growSelectionToNode('StrongEmphasis');
 				editorControls.selectionCommands.surroundSelection('**', '**');
 			},
 
-			// / Italicizes/deitalicizes the current selection.
+			// Italicizes/deitalicizes the current selection.
 			italicize() {
 				editorControls.selectionCommands.growSelectionToNode('Emphasis');
 				editorControls.selectionCommands.surroundSelection('_', '_');
@@ -350,3 +402,4 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 
 	return editorControls;
 }
+
