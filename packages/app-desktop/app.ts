@@ -254,6 +254,14 @@ class Application extends BaseApplication {
 		}
 	}
 
+	private checkFirstAppStart(): boolean {
+		if (Setting.value('isFirstAppStart') === true) {
+			Setting.setValue('isFirstAppStart', false);
+			return true;
+		}
+		return false;
+	}
+
 	private async initPluginService() {
 		const service = PluginService.instance();
 
@@ -543,6 +551,7 @@ class Application extends BaseApplication {
 
 		bridge().addEventListener('nativeThemeUpdated', this.bridge_nativeThemeUpdated);
 
+		this.checkFirstAppStart();
 		await this.initPluginService();
 
 		this.setupContextMenu();

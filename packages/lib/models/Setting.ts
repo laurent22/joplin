@@ -1516,6 +1516,13 @@ class Setting extends BaseModel {
 				public: false,
 			},
 
+			isFirstAppStart: {
+				value: true,
+				type: SettingItemType.Bool,
+				storage: SettingStorage.File,
+				public: false,
+			},
+
 			// 'featureFlag.syncAccurateTimestamps': {
 			// 	value: false,
 			// 	type: SettingItemType.Bool,
