@@ -182,7 +182,7 @@ export default class Note extends BaseItem {
 
 		const resourceDir = toForwardSlashes(Setting.value('resourceDir'));
 
-		let pathsToTry = [];
+		const pathsToTry = [];
 		if (options.useAbsolutePaths) {
 			pathsToTry.push(`file://${resourceDir}`);
 			pathsToTry.push(`file:///${resourceDir}`);
@@ -192,6 +192,11 @@ export default class Note extends BaseItem {
 			pathsToTry.push(Resource.baseRelativeDirectoryPath());
 		}
 
+		body = Note.replacePaths(pathsToTry, body);
+		return body;
+	}
+
+	static replacePaths(pathsToTry: string[], body: string) {
 		// We support both the escaped and unescaped versions because both
 		// of those paths are valid:
 		//
@@ -206,8 +211,6 @@ export default class Note extends BaseItem {
 		}
 
 		pathsToTry = temp;
-
-		// this.logger().debug('replaceResourceExternalToInternalLinks', 'options:', options, 'pathsToTry:', pathsToTry);
 
 		for (const basePath of pathsToTry) {
 			const reStrings = [
@@ -227,9 +230,6 @@ export default class Note extends BaseItem {
 			// Handles joplin://af0edffa4a60496bba1b0ba06b8fb39a
 			body = body.replace(/\(joplin:\/\/([a-zA-Z0-9]{32})\)/g, '(:/$1)');
 		}
-
-		// this.logger().debug('replaceResourceExternalToInternalLinks result', body);
-
 		return body;
 	}
 
