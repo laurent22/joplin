@@ -11,6 +11,7 @@
 
 import { EditorState, Extension } from '@codemirror/state';
 import { markdown } from '@codemirror/lang-markdown';
+import { highlightSelectionMatches, search } from '@codemirror/search';
 import { defaultHighlightStyle, syntaxHighlighting, HighlightStyle } from '@codemirror/language';
 import { tags } from '@lezer/highlight';
 import { EditorView, drawSelection, highlightSpecialChars, ViewUpdate } from '@codemirror/view';
@@ -18,6 +19,7 @@ import { undo, redo, history, undoDepth, redoDepth } from '@codemirror/commands'
 
 import { keymap } from '@codemirror/view';
 import { indentOnInput } from '@codemirror/language';
+import { searchKeymap } from '@codemirror/search';
 import { historyKeymap, defaultKeymap } from '@codemirror/commands';
 
 interface CodeMirrorResult {
@@ -183,8 +185,10 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 				markdown(),
 				...createTheme(theme),
 				history(),
+				search(),
 				drawSelection(),
 				highlightSpecialChars(),
+				highlightSelectionMatches(),
 				indentOnInput(),
 
 				EditorView.lineWrapping,
@@ -203,7 +207,7 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 					}
 				}),
 				keymap.of([
-					...defaultKeymap, ...historyKeymap,
+					...defaultKeymap, ...historyKeymap, ...searchKeymap,
 				]),
 			],
 			doc: initialText,
