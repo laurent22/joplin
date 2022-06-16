@@ -25,7 +25,8 @@ import { indentOnInput, syntaxTree } from '@codemirror/language';
 import { searchKeymap } from '@codemirror/search';
 import { historyKeymap, defaultKeymap } from '@codemirror/commands';
 
-import { SelectionRange, EditorSelection } from '@codemirror/state';
+import { SelectionRange, EditorSelection, ChangeSpec } from '@codemirror/state';
+import { Text as DocumentText } from '@codemirror/state';
 
 interface CodeMirrorResult {
 	editor: EditorView;
@@ -34,6 +35,225 @@ interface CodeMirrorResult {
 	select: (anchor: number, head: number)=> void;
 	insertText: (text: string)=> void;
 }
+
+// Specifies the update of a single selection region and its contents
+type SelectionUpdate = { range: SelectionRange; changes?: ChangeSpec };
+
+// Specifies a type of formatting region in Markdown
+class RegionSpec {
+	// Patterns to use when creating an instance of the tag.
+	// E.g.
+	//   templateStart=**
+	//   templateStop=**
+	//  would be used to create
+	//   **content here**
+	public templateStart: string;
+	public templateStop: string;
+
+	// Size of the buffer used to check for a match.
+	// Particularly useful for [startExp], [stopExp].
+	// Only used when the selection is empty.
+	protected startBuffSize: number;
+	protected stopBuffSize: number;
+
+	// Regular expressions for matching possible starting/stopping
+	// regions.
+	protected startExp?: RegExp;
+	protected stopExp?: RegExp;
+
+	public constructor({
+		templateStart, templateStop,
+		startExp, stopExp,
+		startBuffSize, stopBuffSize,
+	}: {
+			templateStart: string; templateStop: string;
+			startExp?: RegExp; stopExp?: RegExp;
+			startBuffSize?: number; stopBuffSize?: number;
+	}) {
+		this.templateStart = templateStart;
+		this.templateStop = templateStop;
+		this.startExp = startExp;
+		this.stopExp = stopExp;
+		this.startBuffSize = startBuffSize ?? this.templateStart.length;
+		this.stopBuffSize = stopBuffSize ?? this.templateStop.length;
+	}
+
+
+	// Returns the length of a match for this in [searchText], matching either
+	// [template] or [regex], starting at [startIndex] or ending at [endIndex].
+	// Note that the [regex], if provided, must have the global flag enabled.
+	private matchLen({
+		searchText, template, startIndex, endIndex, regex,
+	}: {
+		searchText: string; template: string;
+		startIndex: number; endIndex: number; regex?: RegExp;
+	}): number {
+		let matchLength, matchIndex;
+
+		// Returns true if [idx] is in the right place (the match is at
+		// the end of the string or the beginning based on startIndex/endIndex).
+		const indexSatisfies = (idx: number, len: number): boolean => {
+			return (startIndex == -1 || idx == startIndex)
+				&& (endIndex == -1 || idx == endIndex - len);
+		};
+
+		if (regex) {
+			// Enforce 'g' flag.
+			if (regex.flags.indexOf('g') == -1) {
+				throw new Error('Regular expressions used by RegionSpec must have the global flag!');
+			}
+
+			// Search from the beginning.
+			regex!.lastIndex = 0;
+
+			let foundMatch = null;
+			let match;
+			while ((match = regex!.exec(searchText)) !== null) {
+				if (indexSatisfies(match.index, match[0].length)) {
+					foundMatch = match;
+					break;
+				}
+			}
+
+			if (!foundMatch) {
+				return -1;
+			}
+
+			matchLength = foundMatch[0].length;
+			matchIndex = foundMatch.index;
+		} else {
+			if (startIndex != -1) {
+				matchIndex = searchText.indexOf(template);
+			} else {
+				matchIndex = searchText.lastIndexOf(template);
+			}
+
+			if (matchIndex == -1) {
+				return -1;
+			}
+
+			matchLength = template.length;
+		}
+		// If the match isn't in the right place,
+		if (!indexSatisfies(matchIndex, matchLength)) {
+			return -1;
+		}
+
+		return matchLength;
+	}
+
+	// If [sel].empty,
+	//   returns the length of a match for this that precedes [sel].
+	//   returns -1 if no match is found.
+	// Else,
+	//   returns the length of the match in the region containing [sel]
+	public matchStart(doc: DocumentText, sel: SelectionRange): number {
+		let searchText;
+		if (sel.empty) {
+			searchText = doc.sliceString(sel.from - this.startBuffSize, sel.from);
+		} else {
+			searchText = doc.sliceString(sel.from, sel.to);
+		}
+
+		return this.matchLen({
+			searchText,
+			template: this.templateStart,
+			startIndex: 0,
+			endIndex: -1,
+			regex: this.startExp,
+		});
+	}
+
+	public matchStop(doc: DocumentText, sel: SelectionRange): number {
+		let searchText;
+		if (sel.empty) {
+			searchText = doc.sliceString(sel.to, sel.to + this.stopBuffSize);
+		} else {
+			searchText = doc.sliceString(sel.from, sel.to);
+		}
+
+		return this.matchLen({
+			searchText,
+			template: this.templateStop,
+			startIndex: -1,
+			endIndex: searchText.length,
+			regex: this.stopExp,
+		});
+	}
+
+	// Lightweight tests.
+	public static _test() {
+		const fail = (reason: string) => {
+			logMessage('Test failed!', reason);
+			throw new Error(`Test failure: ${reason}`);
+		};
+		const failIfNeq = (a: any, b: any, reason: string) => {
+			if (a != b) {
+				fail(`${reason} (${a as string} != ${b as string})`);
+			}
+		};
+
+		let spec = new RegionSpec({
+			templateStart: '**',
+			templateStop: '**',
+		});
+		failIfNeq(
+			spec.matchStart(DocumentText.of(['**test**']), EditorSelection.range(0, 5)), 2,
+			'Bolded/matchStart failed'
+		);
+		failIfNeq(
+			spec.matchStop(DocumentText.of(['**...** test.']), EditorSelection.range(5, 5)), 2,
+			'Bolded/matchStop (single caret) failed'
+		);
+		failIfNeq(
+			spec.matchStop(DocumentText.of(['**...** test.']), EditorSelection.range(3, 3)), -1,
+			'Bolded/nomatch(single caret) failed'
+		);
+
+		spec = new RegionSpec({
+			templateStart: '*',
+			templateStop: '*',
+			startExp: /[*_]/g,
+			stopExp: /[*_]/g,
+		});
+		const testString = 'This is a _test_';
+		const testSel = EditorSelection.range('This is a '.length, testString.length);
+		failIfNeq(
+			spec.matchStart(DocumentText.of([testString]), testSel), 1,
+			'Italicized/matchStart (full selection) failed'
+		);
+		failIfNeq(
+			spec.matchStop(DocumentText.of([testString]), testSel), 1,
+			'Italicized/matchStop (full selection) failed'
+		);
+
+		spec = new RegionSpec({
+			templateStart: ' - ',
+			templateStop: '',
+			startBuffSize: 4,
+			startExp: /^\s*[-*]\s/g,
+		});
+		failIfNeq(
+			spec.matchStart(DocumentText.of(['- Test...']), EditorSelection.range(1, 6)), -1,
+			'List region spec/no matchStart (simple) failure!'
+		);
+		failIfNeq(
+			spec.matchStart(DocumentText.of(['- Test...']), EditorSelection.range(0, 6)), 2,
+			'List region spec/matchStart (simple) failure!'
+		);
+		failIfNeq(
+			spec.matchStart(DocumentText.of(['   - Test...']), EditorSelection.range(0, 6)), 5,
+			'List region spec/matchStart failure!'
+		);
+		failIfNeq(
+			spec.matchStop(DocumentText.of(['   - Test...']), EditorSelection.range(0, 100)), 0,
+			'List region spec/matchStop failure!'
+		);
+	}
+}
+
+RegionSpec._test();
+
 
 function postMessage(name: string, data: any) {
 	(window as any).ReactNativeWebView.postMessage(JSON.stringify({
@@ -229,6 +449,24 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 				case 'Emphasis':
 					formatting.italicized = true;
 					break;
+				case 'ListItem':
+					formatting.listLevel += 1;
+					break;
+				case 'InlineCode':
+					formatting.inInlineCode = true;
+					break;
+				case 'ATXHeading1':
+					formatting.headerLevel = 1;
+					break;
+				case 'ATXHeading2':
+					formatting.headerLevel = 2;
+					break;
+				case 'ATXHeading3':
+					formatting.headerLevel = 3;
+					break;
+				case 'ATXHeading4':
+					formatting.headerLevel = 4;
+					break;
 				}
 			},
 		});
@@ -268,6 +506,272 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 		parent: parentElement,
 	});
 
+	const selectionCommands = {
+		// Expands selections to the smallest container node
+		// with name [nodeName].
+		// Returns a new selection.
+		growSelectionToNode(sel: SelectionRange, nodeName: string): SelectionRange {
+			let newFrom = null;
+			let newTo = null;
+			let smallestLen = Infinity;
+
+			// Find the smallest range.
+			syntaxTree(editor.state).iterate({
+				from: sel.from, to: sel.to,
+				enter: node => {
+					if (node.name == nodeName) {
+						if (node.to - node.from < smallestLen) {
+							newFrom = node.from;
+							newTo = node.to;
+							smallestLen = newTo - newFrom;
+						}
+					}
+				},
+			});
+
+			// If it's in such a node,
+			if (newFrom != null && newTo != null) {
+				return EditorSelection.range(newFrom, newTo);
+			} else {
+				return sel;
+			}
+		},
+
+		// Adds/removes [spec.templateStart] before the current selection and
+		// [spec.templateStop] after it.
+		// For example, surroundSelecton('**', '**') surrounds every selection
+		// range with asterisks (including the caret).
+		// If the selection is already surrounded by these characters, they are
+		// removed.
+		toggleRegionSurrounded(doc: DocumentText, sel: SelectionRange, spec: RegionSpec): SelectionUpdate {
+			let content = doc.sliceString(sel.from, sel.to);
+			const startMatchLen = spec.matchStart(editor.state.doc, sel);
+			const endMatchLen = spec.matchStop(editor.state.doc, sel);
+
+			const startsWithBefore = startMatchLen >= 0;
+			const endsWithAfter = endMatchLen >= 0;
+
+			const changes = [];
+			let finalSelStart = sel.from;
+			let finalSelStop = sel.to;
+
+			if (startsWithBefore && endsWithAfter) {
+				// Remove the before and after.
+				content = content.substring(startMatchLen);
+				content = content.substring(0, content.length - endMatchLen);
+
+				finalSelStop -= startMatchLen + endMatchLen;
+
+				changes.push({
+					from: sel.from,
+					to: sel.to,
+					insert: content,
+				});
+			} else {
+				changes.push({
+					from: sel.from,
+					insert: spec.templateStart,
+				});
+
+				changes.push({
+					from: sel.to,
+					insert: spec.templateStop,
+				});
+
+				// If not a caret,
+				if (!sel.empty) {
+					// Select the surrounding chars.
+					finalSelStop += spec.templateStart.length + spec.templateStop.length;
+				} else {
+					// Position the caret within the added content.
+					finalSelStart = sel.from + spec.templateStart.length;
+					finalSelStop = finalSelStart;
+				}
+			}
+
+			return {
+				changes,
+				range: EditorSelection.range(finalSelStart, finalSelStop),
+			};
+		},
+
+		// Toggles whether the current selection/caret location is
+		// associated with [nodeName], if [start] defines the start of
+		// the region and [end], the end.
+		toggleSelectionFormat(nodeName: string, spec: RegionSpec) {
+			const changes = editor.state.changeByRange((sel: SelectionRange) => {
+				const endMatchLen = spec.matchStop(editor.state.doc, sel);
+
+				// If at the end of the region, move the
+				// caret to the end.
+				// E.g.
+				//   **foobar|**
+				//   **foobar**|
+				if (sel.empty && endMatchLen > -1) {
+					const newCursorPos = sel.from + endMatchLen;
+
+					return {
+						range: EditorSelection.range(newCursorPos, newCursorPos),
+					};
+				}
+
+				// Grow the selection to encompass the entire node.
+				const newRange = selectionCommands.growSelectionToNode(sel, nodeName);
+				return selectionCommands.toggleRegionSurrounded(editor.state.doc, newRange, spec);
+			});
+			editor.dispatch(changes);
+		},
+
+		// Toggles whether all lines in the user's selection start with [regex].
+		// [template] is that match of [regex] that is used when adding a match.
+		// If [matchEmpty], all lines **after the first** that have no non-space
+		// content are ignored.
+		toggleSelectedLinesStartWith(regex: RegExp, template: string, matchEmpty: boolean): boolean {
+			let didDeletion = false;
+
+			const changes = editor.state.changeByRange((sel: SelectionRange) => {
+				const doc = editor.state.doc;
+				const fromLine = doc.lineAt(sel.from);
+				const toLine = doc.lineAt(sel.to);
+				let hasProp = false;
+				let charsAdded = 0;
+
+				const changes = [];
+				const lines = [];
+
+				for (let i = fromLine.number; i <= toLine.number; i++) {
+					const line = doc.line(i);
+
+					// If already matching [regex],
+					if (line.text.search(regex) == 0) {
+						hasProp = true;
+					}
+
+					lines.push(line);
+				}
+
+				for (const line of lines) {
+					// Only process if the line is non-empty.
+					if (!matchEmpty && line.text.trim().length == 0
+							// Treat the first line differently
+							&& fromLine.number < line.number) {
+						continue;
+					}
+
+					if (hasProp) {
+						const match = line.text.match(regex);
+						if (!match) {
+							continue;
+						}
+
+						changes.push({
+							from: line.from,
+							to: line.from + match[0].length,
+						});
+
+						charsAdded -= match[0].length;
+						didDeletion = true;
+					} else {
+						changes.push({
+							from: line.from,
+							insert: template,
+						});
+
+						charsAdded += template.length;
+					}
+				}
+
+				return {
+					changes,
+
+					// Selection should now encompass all lines that were changed.
+					range: EditorSelection.range(fromLine.from, toLine.to + charsAdded),
+				};
+			});
+			editor.dispatch(changes);
+
+			return didDeletion;
+		},
+
+		// Bolds/unbolds the current selection.
+		bold() {
+			logMessage('Toggling bolded!');
+
+			selectionCommands.toggleSelectionFormat('StrongEmphasis', new RegionSpec({
+				templateStart: '**',
+				templateStop: '**',
+			}));
+		},
+
+		// Italicizes/deitalicizes the current selection.
+		italicize() {
+			logMessage('Toggling italicized!');
+
+			selectionCommands.toggleSelectionFormat('Emphasis', new RegionSpec({
+				// Template start/end
+				templateStart: '*',
+				templateStop: '*',
+
+				// Regular expressions that match all possible start/ends
+				startExp: /[_*]/g,
+				stopExp: /[_*]/g,
+			}));
+		},
+
+		toggleInlineCode() {
+			logMessage('Toggling inline code!');
+
+			selectionCommands.toggleSelectionFormat('InlineCode', new RegionSpec({
+				templateStart: '`',
+				templateStop: '`',
+			}));
+		},
+
+		toggleList() {
+			logMessage('Toggling list!');
+
+			const matchEmpty = false;
+			selectionCommands.toggleSelectedLinesStartWith(
+				// Include `(?:\[[ xX]+\]...)?` to also match checklists.
+				/^\s*[-*]\s(?:\[[ xX]+\]\s?)?/,
+				' - ',
+				matchEmpty
+			);
+		},
+
+		toggleHeaderLevel(level: number) {
+			logMessage(`Setting heading level to ${level}`);
+
+			let headerStr = '';
+			for (let i = 0; i < level; i++) {
+				headerStr += '#';
+			}
+
+			const matchEmpty = true;
+			// Remove header formatting for any other level
+			selectionCommands.toggleSelectedLinesStartWith(
+				new RegExp(
+					// Check all numbers of #s lower than [level]
+					`${level - 1 >= 1 ? `(?:^[#]{1,${level - 1}}\\s)|` : ''
+
+					// Check all number of #s higher than [level]
+					}(?:^[#]{${level + 1},}\\s)`
+				),
+				'',
+				matchEmpty
+			);
+
+			// Set to the proper header level
+			selectionCommands.toggleSelectedLinesStartWith(
+				// We want exactly [level] '#' characters.
+				new RegExp(`^[#]{${level}} `),
+				`${headerStr} `,
+				matchEmpty
+			);
+		},
+	};
+
+
 	const editorControls = {
 		editor,
 		undo() {
@@ -284,120 +788,17 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 				scrollIntoView: true,
 			}));
 		},
+		scrollSelectionIntoView() {
+			editor.dispatch(editor.state.update({
+				scrollIntoView: true,
+			}));
+		},
 		insertText(text: string) {
 			editor.dispatch(editor.state.replaceSelection(text));
 		},
-		selectionCommands: {
-			// Expands selections to the smallest container node
-			// with name [nodeName].
-			growSelectionToNode(nodeName: string) {
-				const selectionRanges = editor.state.selection.ranges.map((range: SelectionRange) => {
-					let newFrom = null;
-					let newTo = null;
-					let smallestLen = Infinity;
 
-					// Find the smallest range.
-					syntaxTree(editor.state).iterate({
-						from: range.from, to: range.to,
-						enter: node => {
-							if (node.name == nodeName) {
-								if (node.to - node.from < smallestLen) {
-									newFrom = node.from;
-									newTo = node.to;
-									smallestLen = newTo - newFrom;
-								}
-							}
-						},
-					});
-
-					// If it's in such a node,
-					if (newFrom != null && newTo != null) {
-						return EditorSelection.range(newFrom, newTo);
-					} else {
-						return range;
-					}
-				});
-
-				editor.dispatch({
-					selection: EditorSelection.create(selectionRanges),
-				});
-			},
-
-			// Adds/removes [before] before the current selection and [after]
-			// after it.
-			// For example, surroundSelecton('**', '**') surrounds every selection
-			// range with asterisks (including the caret).
-			// If the selection is already surrounded by these characters, they are
-			// removed.
-			surroundSelection(before: string, after: string) {
-				// Ref: https://codemirror.net/examples/decoration/
-				const changes = editor.state.changeByRange((sel: SelectionRange) => {
-					let content = editor.state.doc.sliceString(sel.from, sel.to);
-					const startsWithBefore = content.indexOf(before) == 0;
-					const endsWithAfter = content.lastIndexOf(after) == content.length - after.length;
-
-					const changes = [];
-					let finalSelStart = sel.from;
-					let finalSelStop = sel.to;
-
-					if (startsWithBefore && endsWithAfter) {
-						// Remove the before and after.
-						content = content.substring(before.length);
-						content = content.substring(0, content.length - after.length);
-
-						finalSelStop -= before.length + after.length;
-
-						changes.push({
-							from: sel.from,
-							to: sel.to,
-							insert: content,
-						});
-					} else {
-						changes.push({
-							from: sel.from,
-							insert: before,
-						});
-
-						changes.push({
-							from: sel.to,
-							insert: after,
-						});
-
-						// If not a caret,
-						if (!sel.empty) {
-							// Select the surrounding chars.
-							finalSelStop += before.length + after.length;
-						} else {
-							// Position the caret within the added content.
-							finalSelStart = sel.from + before.length;
-							finalSelStop = finalSelStart;
-						}
-					}
-
-					return {
-						changes,
-						range: EditorSelection.range(finalSelStart, finalSelStop),
-					};
-				});
-
-				editor.dispatch(changes);
-			},
-
-			// Bolds/unbolds the current selection.
-			bold() {
-				// TODO:
-				// if isBolded,
-				//    ;
-				editorControls.selectionCommands.growSelectionToNode('StrongEmphasis');
-				editorControls.selectionCommands.surroundSelection('**', '**');
-			},
-
-			// Italicizes/deitalicizes the current selection.
-			italicize() {
-				editorControls.selectionCommands.growSelectionToNode('Emphasis');
-				editorControls.selectionCommands.surroundSelection('_', '_');
-			},
-		},
+		// Formatting commands
+		selectionCommands,
 	};
 
 	return editorControls;

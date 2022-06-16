@@ -121,10 +121,20 @@ function NoteEditor(props: Props, ref: any) {
 				const theme = ${JSON.stringify(editorTheme(props.themeId))};
 				const initialText = ${JSON.stringify(props.initialText)};
 
-				cm = codeMirrorBundle.initCodeMirror(parentElement, initialText, theme);
-				${setInitialSelectionJS}
+				// If parentElement is null, the JavaScript has been injected before the page
+				// finished loading. The JavaScript will be re-injected after page load.
+				if (parentElement) {
+					window.cm = codeMirrorBundle.initCodeMirror(parentElement, initialText, theme);
+					${setInitialSelectionJS}
+
+					// When the keyboard is shown/hidden (or the window is resized),
+					// make sure we can see the cursor!
+					window.onresize = () => {
+						cm.scrollSelectionIntoView();
+					};
+				}
 			} catch (e) {
-				window.ReactNativeWebView.postMessage("error:" + e.message + ": " + JSON.stringify(e))
+				window.ReactNativeWebView.postMessage("error: " + e.message + ": " + JSON.stringify(e))
 			} finally {
 				true;
 			}
@@ -142,7 +152,7 @@ function NoteEditor(props: Props, ref: any) {
 				${js}
 			}
 			catch(e) {
-				console.error(e);
+				logMessage('Error in injected JS:', e);
 				throw e;
 			};
 
@@ -171,6 +181,15 @@ function NoteEditor(props: Props, ref: any) {
 		},
 		toggleItalicized() {
 			injectJS('cm.selectionCommands.italicize();');
+		},
+		toggleList() {
+			injectJS('cm.selectionCommands.toggleList();');
+		},
+		toggleInlineCode() {
+			injectJS('cm.selectionCommands.toggleInlineCode();');
+		},
+		toggleHeaderLevel(level: number) {
+			injectJS(`cm.selectionCommands.toggleHeaderLevel(${level});`);
 		},
 	};
 
