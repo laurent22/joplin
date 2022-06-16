@@ -63,6 +63,7 @@ import checkForUpdates from './checkForUpdates';
 import { AppState } from './app.reducer';
 import syncDebugLog from '@joplin/lib/services/synchronizer/syncDebugLog';
 import eventManager from '@joplin/lib/eventManager';
+import path = require('path');
 // import { runIntegrationTests } from '@joplin/lib/services/e2ee/ppkTestUtils';
 
 const pluginClasses = [
@@ -260,6 +261,15 @@ class Application extends BaseApplication {
 		const pluginRunner = new PluginRunner();
 		service.initialize(packageInfo.version, PlatformImplementation.instance(), pluginRunner, this.store());
 		service.isSafeMode = Setting.value('isSafeMode');
+
+		// if(Setting.value('firstStart')){
+		const defaultPlugins = await shim.fsDriver().readDirStats(path.join(__dirname, '..', 'app-desktop/build/defaultPlugins/'));
+		for (const plugin of defaultPlugins) {
+			const defaultPluginPath = path.join(__dirname, '..', `app-desktop/build/defaultPlugins/${plugin.path}`);
+			await service.installPlugin(defaultPluginPath, true);
+		}
+		// }
+
 
 		const pluginSettings = service.unserializePluginSettings(Setting.value('plugins.states'));
 
