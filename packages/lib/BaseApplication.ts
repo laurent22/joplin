@@ -1,6 +1,7 @@
 import Setting, { Env } from './models/Setting';
 import Logger, { TargetType, LoggerWrapper } from './Logger';
 import shim from './shim';
+const { setupProxySettings } = require('./shim-init-node');
 import BaseService from './services/BaseService';
 import reducer, { setStore } from './reducer';
 import KeychainServiceDriver from './services/keychain/KeychainServiceDriver.node';
@@ -500,6 +501,13 @@ export default class BaseApplication {
 				await sideEffects[key]();
 			}
 		}
+
+		setupProxySettings({
+			maxConcurrentConnections: Setting.value('sync.maxConcurrentConnections'),
+			proxyTimeout: Setting.value('net.proxyTimeout'),
+			proxyEnabled: Setting.value('net.proxyEnabled'),
+			proxyUrl: Setting.value('net.proxyUrl'),
+		});
 	}
 
 	protected async generalMiddleware(store: any, next: any, action: any) {

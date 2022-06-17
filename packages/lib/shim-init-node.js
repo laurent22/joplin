@@ -20,6 +20,8 @@ const zlib = require('zlib');
 const dgram = require('dgram');
 const { basename, fileExtension, safeFileExtension } = require('./path-utils');
 
+const proxySettings = {};
+
 function fileExists(filePath) {
 	try {
 		return fs.statSync(filePath).isFile();
@@ -79,6 +81,17 @@ const gunzipFile = function(source, destination) {
 	});
 };
 
+function setupProxySettings(options) {
+	console.log(options);
+	if (!proxySettings.set) {
+		proxySettings.maxConcurrentConnections = options.maxConcurrentConnections;
+		proxySettings.proxyTimeout = options.proxyTimeout;
+		proxySettings.proxyEnabled = options.proxyEnabled;
+		proxySettings.proxyUrl = options.proxyUrl;
+		proxySettings.set = true;
+	}
+}
+
 function shimInit(options = null) {
 	options = {
 		sharp: null,
@@ -93,10 +106,7 @@ function shimInit(options = null) {
 	const sharp = options.sharp;
 	const keytar = (shim.isWindows() || shim.isMac()) && !shim.isPortable() ? options.keytar : null;
 	const appVersion = options.appVersion;
-	const maxConcurrentConnections = options.maxConcurrentConnections;
-	const proxyTimeout = options.proxyTimeout;
-	const proxyEnabled = options.proxyEnabled;
-	const proxyUrl = options.proxyUrl;
+
 
 	shim.setNodeSqlite(options.nodeSqlite);
 
@@ -440,10 +450,11 @@ function shimInit(options = null) {
 	};
 
 	shim.fetch = async function(url, options = {}) {
+		console.log(proxySettings);
 		const validatedUrl = urlValidator.isUri(url);
 		if (!validatedUrl) throw new Error(`Not a valid URL: ${url}`);
-		const resolvedProxyUrl = resolveProxyUrl(proxyUrl);
-		options.agent = (resolvedProxyUrl && proxyEnabled) ? shim.proxyAgent(url, resolvedProxyUrl) : null;
+		const resolvedProxyUrl = resolveProxyUrl(proxySettings.proxyUrl);
+		options.agent = (resolvedProxyUrl && proxySettings.proxyEnabled) ? shim.proxyAgent(url, resolvedProxyUrl) : null;
 		return shim.fetchWithRetry(() => {
 			return nodeFetch(url, options);
 		}, options);
@@ -486,8 +497,8 @@ function shimInit(options = null) {
 			headers: headers,
 		};
 
-		const resolvedProxyUrl = resolveProxyUrl(proxyUrl);
-		requestOptions.agent = (resolvedProxyUrl && proxyEnabled) ? shim.proxyAgent(url, resolvedProxyUrl) : null;
+		const resolvedProxyUrl = resolveProxyUrl(proxySettings.proxyUrl);
+		requestOptions.agent = (resolvedProxyUrl && proxySettings.proxyEnabled) ? shim.proxyAgent(url, resolvedProxyUrl) : null;
 
 		const doFetchOperation = async () => {
 			return new Promise((resolve, reject) => {
@@ -598,10 +609,10 @@ function shimInit(options = null) {
 	shim.proxyAgent = (serverUrl, proxyUrl) => {
 		const proxyAgentConfig = {
 			keepAlive: true,
-			maxSockets: maxConcurrentConnections,
+			maxSockets: proxySettings.maxConcurrentConnections,
 			keepAliveMsecs: 5000,
 			proxy: proxyUrl,
-			timeout: proxyTimeout * 1000,
+			timeout: proxySettings.proxyTimeout * 1000,
 		};
 
 		// Based on https://github.com/delvedor/hpagent#usage
@@ -678,4 +689,4 @@ function shimInit(options = null) {
 	};
 }
 
-module.exports = { shimInit };
+module.exports = { shimInit, setupProxySettings };
