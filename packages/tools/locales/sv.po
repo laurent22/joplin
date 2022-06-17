@@ -2287,7 +2287,7 @@ msgstr "Loggar"
 #: packages/app-desktop/gui/MenuBar.tsx:780
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:578
 msgid "Make a donation"
-msgstr ""
+msgstr "Gör en donation"
 
 #: packages/app-desktop/gui/MasterPasswordDialog/Dialog.tsx:217
 msgid "Manage master password"
