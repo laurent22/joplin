@@ -11,12 +11,21 @@
 // Eg. [10, 15, 20, 25, 30] means { xs: 10, sm: 15, md: 20, lg: 25, xl: 30 }
 // [10] and [10, 15] are equivalent to { xs: 10 } and { xs: 10, sm: 15 } respectively
 
+import { Dimensions } from 'react-native';
+
 interface ValueMap {
-    sm: number;
-    md: number;
-    lg: number;
+    sm?: number;
+    md?: number;
+    lg?: number;
+    xl?: number;
 }
 
-export default function getResponsiveValue(valueMap: number[] | ValueMap) {
-	return valueMap;
+export default function getResponsiveValue(valueMap: number[] | ValueMap): number {
+	const width = Dimensions.get('screen').width;
+
+	if (Array.isArray(valueMap)) { if (valueMap.length === 0) return undefined; }
+
+	if (Object.keys(valueMap).length === 0) { return undefined; }
+
+	return width;
 }
