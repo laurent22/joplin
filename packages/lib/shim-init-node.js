@@ -82,7 +82,6 @@ const gunzipFile = function(source, destination) {
 };
 
 function setupProxySettings(options) {
-	console.log(options);
 	if (!proxySettings.set) {
 		proxySettings.maxConcurrentConnections = options.maxConcurrentConnections;
 		proxySettings.proxyTimeout = options.proxyTimeout;
@@ -450,7 +449,6 @@ function shimInit(options = null) {
 	};
 
 	shim.fetch = async function(url, options = {}) {
-		console.log(proxySettings);
 		const validatedUrl = urlValidator.isUri(url);
 		if (!validatedUrl) throw new Error(`Not a valid URL: ${url}`);
 		const resolvedProxyUrl = resolveProxyUrl(proxySettings.proxyUrl);
