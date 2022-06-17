@@ -185,8 +185,8 @@ function NoteEditor(props: Props, ref: any) {
 		toggleList() {
 			injectJS('cm.selectionCommands.toggleList();');
 		},
-		toggleInlineCode() {
-			injectJS('cm.selectionCommands.toggleInlineCode();');
+		toggleCode() {
+			injectJS('cm.selectionCommands.toggleCode();');
 		},
 		toggleHeaderLevel(level: number) {
 			injectJS(`cm.selectionCommands.toggleHeaderLevel(${level});`);

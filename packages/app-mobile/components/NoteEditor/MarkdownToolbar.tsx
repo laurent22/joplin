@@ -99,11 +99,11 @@ const MarkdownToolbar = (props: ToolbarProps) => {
 						props.selectionState.italicized ? _('Un-italicize') : _('Italicize')
 					}/>
 				<ToolbarButton
-					onPress={props.editorControl.toggleInlineCode}
-					activated={props.selectionState.inInlineCode}
+					onPress={props.editorControl.toggleCode}
+					activated={props.selectionState.inCode}
 					title="{;}"
 					accessibilityLabel={
-						props.selectionState.inInlineCode ? _('End Inline Code') : _('Inline Code')
+						props.selectionState.inCode ? _('End Code') : _('Code')
 					}/>
 				<ToolbarButton
 					onPress={props.editorControl.toggleList}

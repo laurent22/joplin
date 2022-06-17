@@ -453,7 +453,8 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 					formatting.listLevel += 1;
 					break;
 				case 'InlineCode':
-					formatting.inInlineCode = true;
+				case 'FencedCode':
+					formatting.inCode = true;
 					break;
 				case 'ATXHeading1':
 					formatting.headerLevel = 1;
@@ -598,28 +599,32 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 		// Toggles whether the current selection/caret location is
 		// associated with [nodeName], if [start] defines the start of
 		// the region and [end], the end.
-		toggleSelectionFormat(nodeName: string, spec: RegionSpec) {
+		toggleGlobalSelectionFormat(nodeName: string, spec: RegionSpec) {
 			const changes = editor.state.changeByRange((sel: SelectionRange) => {
-				const endMatchLen = spec.matchStop(editor.state.doc, sel);
-
-				// If at the end of the region, move the
-				// caret to the end.
-				// E.g.
-				//   **foobar|**
-				//   **foobar**|
-				if (sel.empty && endMatchLen > -1) {
-					const newCursorPos = sel.from + endMatchLen;
-
-					return {
-						range: EditorSelection.range(newCursorPos, newCursorPos),
-					};
-				}
-
-				// Grow the selection to encompass the entire node.
-				const newRange = selectionCommands.growSelectionToNode(sel, nodeName);
-				return selectionCommands.toggleRegionSurrounded(editor.state.doc, newRange, spec);
+				return selectionCommands.toggleSelectionFormat(nodeName, sel, spec);
 			});
 			editor.dispatch(changes);
+		},
+
+		toggleSelectionFormat(nodeName: string, sel: SelectionRange, spec: RegionSpec): SelectionUpdate {
+			const endMatchLen = spec.matchStop(editor.state.doc, sel);
+
+			// If at the end of the region, move the
+			// caret to the end.
+			// E.g.
+			//   **foobar|**
+			//   **foobar**|
+			if (sel.empty && endMatchLen > -1) {
+				const newCursorPos = sel.from + endMatchLen;
+
+				return {
+					range: EditorSelection.range(newCursorPos, newCursorPos),
+				};
+			}
+
+			// Grow the selection to encompass the entire node.
+			const newRange = selectionCommands.growSelectionToNode(sel, nodeName);
+			return selectionCommands.toggleRegionSurrounded(editor.state.doc, newRange, spec);
 		},
 
 		// Toggles whether all lines in the user's selection start with [regex].
@@ -697,7 +702,7 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 		bold() {
 			logMessage('Toggling bolded!');
 
-			selectionCommands.toggleSelectionFormat('StrongEmphasis', new RegionSpec({
+			selectionCommands.toggleGlobalSelectionFormat('StrongEmphasis', new RegionSpec({
 				templateStart: '**',
 				templateStop: '**',
 			}));
@@ -707,7 +712,7 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 		italicize() {
 			logMessage('Toggling italicized!');
 
-			selectionCommands.toggleSelectionFormat('Emphasis', new RegionSpec({
+			selectionCommands.toggleGlobalSelectionFormat('Emphasis', new RegionSpec({
 				// Template start/end
 				templateStart: '*',
 				templateStop: '*',
@@ -718,17 +723,72 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 			}));
 		},
 
-		toggleInlineCode() {
+		toggleCode() {
 			logMessage('Toggling inline code!');
 
-			selectionCommands.toggleSelectionFormat('InlineCode', new RegionSpec({
+			const inlineRegionSpec = new RegionSpec({
 				templateStart: '`',
 				templateStop: '`',
-			}));
+			});
+
+			const changes = editor.state.changeByRange((sel: SelectionRange) => {
+				const doc = editor.state.doc;
+
+				// If we're in fenced code, grow the selection to cover the entire region.
+				sel = selectionCommands.growSelectionToNode(sel, 'FencedCode');
+
+				const fromLine = doc.lineAt(sel.from);
+				const toLine = doc.lineAt(sel.to);
+				let charsAdded = 0;
+				const changes = [];
+
+				// Single line: Inline code toggle.
+				if (fromLine.number == toLine.number) {
+					return selectionCommands.toggleSelectionFormat('InlineCode', sel, inlineRegionSpec);
+				}
+
+				// Otherwise, we're toggling fenced code.
+				if (/^```\w*\s*$/.exec(fromLine.text) && /^```\s*$/.exec(toLine.text)) {
+					// Delete content of the first line
+					changes.push({
+						from: fromLine.from,
+						to: fromLine.to + 1,
+					});
+					charsAdded -= fromLine.text.length + 1;
+
+					// Delete content of the last line
+					changes.push({
+						from: toLine.from,
+						to: toLine.to + 1,
+					});
+					charsAdded -= toLine.text.length + 1;
+				} else {
+					const insertBefore = '```\n';
+					const insertAfter = '\n```';
+					changes.push({
+						from: fromLine.from,
+						insert: insertBefore,
+					});
+
+					changes.push({
+						from: toLine.to,
+						insert: insertAfter,
+					});
+					charsAdded += insertBefore.length + insertAfter.length;
+				}
+
+				return {
+					changes,
+
+					// Selection should now encompass all lines that were changed.
+					range: EditorSelection.range(fromLine.from, toLine.to + charsAdded),
+				};
+			});
+			editor.dispatch(changes);
 		},
 
 		toggleList() {
-			logMessage('Toggling list!');
+			logMessage('Toggling bulleted list!');
 
 			const matchEmpty = false;
 			selectionCommands.toggleSelectedLinesStartWith(
