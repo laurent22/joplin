@@ -7,6 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Türkçe\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: Arda Kılıçdağı <arda@kilicdagi.com>\n"
 "Language-Team: Turkish (Turkey)\n"
 "Language: tr_TR\n"
@@ -14,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.1\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:560
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -298,9 +300,8 @@ msgstr ""
 "Ayrıca ayarlanmamış ve gizlenmiş yapılandırma değişkenlerini de görüntüler."
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:203
-#, fuzzy
 msgid "Also publish linked notes"
-msgstr "Notu paylaşmayı bırak"
+msgstr "Ayrıca linklenmiş notları paylaş"
 
 #: packages/lib/models/Setting.ts:713
 msgid "Always"
@@ -402,7 +403,7 @@ msgstr "Otomatik"
 
 #: packages/server/src/services/TaskService.ts:39
 msgid "Auto-add disabled accounts for deletion"
-msgstr ""
+msgstr "Silmek için devre dışı bırakılmış hesapları otomatik olarak ekle"
 
 #: packages/lib/models/Setting.ts:912
 msgid "Auto-pair braces, parenthesis, quotations, etc."
@@ -715,7 +716,7 @@ msgstr "Tamamlandı: %s (%s)"
 
 #: packages/server/src/services/TaskService.ts:37
 msgid "Compress old changes"
-msgstr ""
+msgstr "Eski değişiklikleri sıkıştır"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:632
 #: packages/app-mobile/components/side-menu-content.js:332
@@ -867,18 +868,16 @@ msgstr ""
 "ediliyor. Lütfen internet bağlantınız varken bu işlemi yeniden deneyin."
 
 #: packages/app-desktop/gui/PromptDialog.min.js:235
-#, fuzzy
 msgid "Create"
-msgstr "Oluşturuldu"
+msgstr "Oluştur"
 
 #: packages/app-mobile/components/note-list.js:101
 msgid "Create a notebook"
 msgstr "Yeni bir not defteri oluşturur"
 
 #: packages/app-desktop/gui/MainScreen/commands/addProfile.ts:9
-#, fuzzy
 msgid "Create new profile..."
-msgstr "Yeni bir not oluşturur."
+msgstr "Yeni bir profil oluşturur..."
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:161
 msgid "Create notebook"
@@ -1035,14 +1034,12 @@ msgid "Delete attachment \"%s\"?"
 msgstr "\"%s\" eki silinsin mi?"
 
 #: packages/server/src/services/TaskService.ts:36
-#, fuzzy
 msgid "Delete expired sessions"
-msgstr "Matematik ifadelerini etkinleştir"
+msgstr "Süresi geçmiş oturumları sil"
 
 #: packages/server/src/services/TaskService.ts:31
-#, fuzzy
 msgid "Delete expired tokens"
-msgstr "Bu %d not silinsin mi?"
+msgstr "Süresi geçmiş jetonları sil"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:88
 msgid "Delete line"
@@ -1325,7 +1322,7 @@ msgstr "Not defterini düzenle"
 
 #: packages/app-desktop/commands/editProfileConfig.ts:9
 msgid "Edit profile configuration..."
-msgstr ""
+msgstr "Profil ayarlarını düzenle…"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:138
 #: packages/lib/models/Setting.ts:876 packages/lib/models/Setting.ts:877
@@ -1355,9 +1352,8 @@ msgstr "Metin düzenleyici monospace (sabit genişlikteki) yazı tipi"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:100
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:96
-#, fuzzy
 msgid "Editor: %s"
-msgstr "Düzenleyici"
+msgstr "Düzenleyici: %s"
 
 #: packages/app-cli/app/command-ls.js:31
 msgid "Either \"text\" or \"json\""
@@ -1370,12 +1366,12 @@ msgstr "Emacs"
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:236
 #: packages/server/src/routes/admin/emails.ts:128
 msgid "Email"
-msgstr ""
+msgstr "E-posta"
 
 #: packages/server/src/routes/admin/emails.ts:112
 #: packages/server/src/services/MustacheService.ts:127
 msgid "Emails"
-msgstr ""
+msgstr "E-posta"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:194
 msgid "emphasised text"
@@ -1672,9 +1668,8 @@ msgid "File system"
 msgstr "Dosya sistemi"
 
 #: packages/app-mobile/components/screens/NoteTagsDialog.js:190
-#, fuzzy
 msgid "Filter tags"
-msgstr "Yeni etiketler:"
+msgstr "Etikerleri filtrele"
 
 #: packages/app-desktop/gui/ExtensionBadge.min.js:10
 msgid "Firefox Extension"
@@ -1872,7 +1867,7 @@ msgstr "TLS sertifikası hatalarını yoksay"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:102
 msgid "Images"
-msgstr ""
+msgstr "Resim"
 
 #: packages/app-desktop/gui/KeymapConfig/KeymapConfigScreen.tsx:170
 #: packages/app-desktop/gui/MenuBar.tsx:536
@@ -2201,7 +2196,7 @@ msgstr "Düzen butonu sıralaması"
 
 #: packages/app-desktop/gui/MainScreen/commands/leaveSharedFolder.ts:10
 msgid "Leave notebook..."
-msgstr "Not defterinden ayrıl"
+msgstr "Not defterinden ayrıl..."
 
 #: packages/lib/models/Setting.ts:1307
 msgid "Legal"
@@ -2739,9 +2734,8 @@ msgid "Or create an account."
 msgstr "Ya da yeni bir hesap oluştur."
 
 #: packages/app-desktop/gui/MenuBar.tsx:400
-#, fuzzy
 msgid "Other applications..."
-msgstr "Uygulamadan çıkar."
+msgstr "Diğer uygulamalar..."
 
 #: packages/app-cli/app/command-import.js:27
 msgid "Output format: %s"
@@ -2802,6 +2796,8 @@ msgid ""
 "Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list "
 "below."
 msgstr ""
+"Devam etmek için lütfen \"%s\" butonuna basın, ya da aşağıdaki \"%s\" "
+"listesinden parola belirleyin."
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:65
 msgid ""
@@ -2945,25 +2941,23 @@ msgstr "Gizlilik Politikası"
 
 #: packages/server/src/services/TaskService.ts:35
 msgid "Process failed payment subscriptions"
-msgstr ""
+msgstr "Ödeme hatası almış abonelikleri işle"
 
 #: packages/server/src/services/TaskService.ts:33
 msgid "Process oversized accounts"
-msgstr ""
+msgstr "Fazla büyük, şişmiş hesapları işle"
 
 #: packages/server/src/services/TaskService.ts:38
-#, fuzzy
 msgid "Process user deletions"
-msgstr "Kullancı silmeleri"
+msgstr "Kullancı silmelerini yönet"
 
 #: packages/server/src/routes/admin/users.ts:168
 msgid "Profile"
 msgstr "Profil"
 
 #: packages/app-desktop/gui/MainScreen/commands/addProfile.ts:17
-#, fuzzy
 msgid "Profile name:"
-msgstr "Profil"
+msgstr "Profil adı:"
 
 #: packages/lib/versionInfo.ts:26
 msgid "Profile Version: %s"
@@ -3191,9 +3185,8 @@ msgstr "Alarm kurun"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:100
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:93
-#, fuzzy
 msgid "Save as %s"
-msgstr "Farklı kaydet..."
+msgstr "\"%s\" olarak farklı kaydet"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:80
 msgid "Save as..."
@@ -3250,14 +3243,12 @@ msgid "Select all"
 msgstr "Tümünü seç"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:140
-#, fuzzy
 msgid "Select emoji..."
-msgstr "Tarih seç"
+msgstr "Emoji seç..."
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:144
-#, fuzzy
 msgid "Select file..."
-msgstr "Tümünü seç"
+msgstr "Dosya seç..."
 
 #: packages/app-cli/app/command-server.js:38
 msgid "Server is already running on port %d"
@@ -3565,9 +3556,8 @@ msgid "Switch between note and to-do type"
 msgstr "Not ve yapılacaklar tipi arasında değişim yap"
 
 #: packages/app-desktop/gui/MenuBar.tsx:437
-#, fuzzy
 msgid "Switch profile"
-msgstr "Profili dışarı aktar"
+msgstr "Profili değiştir"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:105
 msgid "Switch to note type"
@@ -3576,9 +3566,8 @@ msgstr "Not tipine dönüştür"
 #: packages/app-desktop/commands/switchProfile1.ts:7
 #: packages/app-desktop/commands/switchProfile2.ts:7
 #: packages/app-desktop/commands/switchProfile3.ts:7
-#, fuzzy
 msgid "Switch to profile %d"
-msgstr "Not tipine dönüştür"
+msgstr "%d profiline geç"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:114
 msgid "Switch to to-do type"
@@ -3677,7 +3666,7 @@ msgstr "Tablo"
 
 #: packages/app-mobile/components/screens/NoteTagsDialog.js:179
 msgid "tag1, tag2, ..."
-msgstr ""
+msgstr "etiket1, etiket2, ..."
 
 #: packages/app-cli/app/command-import.js:52
 #: packages/app-desktop/gui/ImportScreen.min.js:73
@@ -3721,7 +3710,7 @@ msgstr ""
 #: packages/app-desktop/app.ts:332
 msgid ""
 "The application did not close properly. Would you like to start in safe mode?"
-msgstr ""
+msgstr "Uygulama düzgün kapanmadı. Güvenli modda başlatmak ister misiniz?"
 
 #: packages/lib/onedrive-api-node-utils.js:86
 msgid ""
@@ -3889,7 +3878,7 @@ msgstr ""
 msgid "The sync target needs to be upgraded. Press this banner to proceed."
 msgstr ""
 "Senkronizasyon hedefinin güncellenmesi gerekmekte. Devam etmek için bu "
-"butona basın"
+"butona basın."
 
 #: packages/lib/models/Tag.ts:204
 msgid "The tag \"%s\" already exists. Please choose a different name."
@@ -4105,7 +4094,7 @@ msgstr ""
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:54
 msgid "To continue, please enter your master password below."
-msgstr "Devam etmek için lütfen aşağıya ana parolanızı girin"
+msgstr "Devam etmek için lütfen aşağıya ana parolanızı girin."
 
 #: packages/app-cli/app/app-gui.js:452
 msgid "To delete a tag, untag the associated notes."
@@ -4305,9 +4294,8 @@ msgid "Update profile"
 msgstr "Profili güncelle"
 
 #: packages/server/src/services/TaskService.ts:32
-#, fuzzy
 msgid "Update total sizes"
-msgstr "Güncellenen yerel öğeler: %d."
+msgstr "Toplam ebatı güncelle"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:208
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:209
@@ -4571,10 +4559,9 @@ msgid "Your data is going to be re-encrypted and synced again."
 msgstr "Veriniz yeniden şifrelenecek ve senkron edilecek."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:271
-#, fuzzy
 msgid "Your password is needed to decrypt some of your data."
 msgstr ""
-"Verilerinizin bir kısmının şifrelemesinin çözülmesi için ana parolanız "
+"Verilerinizin bir kısmının şifrelemesinin çözülmesi için parolanız "
 "gerekmektedir."
 
 #: packages/app-cli/app/command-sync.ts:242

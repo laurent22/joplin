@@ -22,7 +22,7 @@ const mimeUtils = require('../../../mime-utils.js').mime;
 const md5 = require('md5');
 import HtmlToMd from '../../../HtmlToMd';
 const urlUtils = require('../../../urlUtils.js');
-const ArrayUtils = require('../../../ArrayUtils.js');
+import * as ArrayUtils from '../../../ArrayUtils';
 const { mimeTypeFromHeaders } = require('../../../net-utils');
 const { fileExtension, safeFileExtension, safeFilename, filename } = require('../../../path-utils');
 const { fileUriToPath } = require('../../../urlUtils');

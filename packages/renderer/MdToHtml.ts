@@ -6,7 +6,7 @@ import validateLinks from './MdToHtml/validateLinks';
 import { ItemIdToUrlHandler } from './utils';
 import { RenderResult, RenderResultPluginAsset } from './MarkupToHtml';
 import { Options as NoteStyleOptions } from './noteStyle';
-const hljs = require('highlight.js');
+import hljs from './highlight';
 
 const MarkdownIt = require('markdown-it');
 const md5 = require('md5');

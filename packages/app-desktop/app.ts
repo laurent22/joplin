@@ -548,6 +548,7 @@ class Application extends BaseApplication {
 				pluginService: PluginService.instance(),
 				bridge: bridge(),
 				debug: new DebugService(reg.db()),
+				resourceService: ResourceService.instance(),
 			};
 		}
 
