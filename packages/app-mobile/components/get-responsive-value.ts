@@ -2,14 +2,14 @@
 // of a particular device screen width based on a valueMap
 //
 // Breakpoints:
-// xs: 0px to 600px
-// sm: 601px to 900px
-// md: 901px to 1200px
-// lg: 1201px to 1536px
-// xl: > 1536px
+// sm: < 481
+// md: >= 481
+// lg: >= 769px
+// xl: >= 1025px
+// xxl: >= 1200px
 //
-// Eg. [10, 15, 20, 25, 30] means { xs: 10, sm: 15, md: 20, lg: 25, xl: 30 }
-// [10] and [10, 15] are equivalent to { xs: 10 } and { xs: 10, sm: 15 } respectively
+// Eg. [ 10, 15, 20, 25, 30 ] means { sm: 10, md: 15, lg: 20, xl: 25, xxl: 30 }
+// [10] and [10, 15] are equivalent to { sm: 10 } and { sm: 10, md: 15 } respectively
 
 import { Dimensions } from 'react-native';
 
@@ -18,6 +18,7 @@ interface ValueMap {
     md?: number;
     lg?: number;
     xl?: number;
+    xxl?: number;
 }
 
 export default function getResponsiveValue(valueMap: number[] | ValueMap): number {
