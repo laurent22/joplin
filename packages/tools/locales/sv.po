@@ -1679,7 +1679,7 @@ msgstr "Filsystem"
 
 #: packages/app-mobile/components/screens/NoteTagsDialog.js:190
 msgid "Filter tags"
-msgstr "Nya taggar"
+msgstr "Filtrera taggar"
 
 #: packages/app-desktop/gui/ExtensionBadge.min.js:10
 msgid "Firefox Extension"
