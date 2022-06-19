@@ -744,6 +744,8 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 		// Toggles whether all lines in the user's selection start with [regex].
 		// [template] is that match of [regex] that is used when adding a match.
 		// [template] can also be a function that maps a given line to a string.
+		// If so, it is called on each line of a selection sequentially, starting
+		// with the first.
 		// If [matchEmpty], all lines **after the first** that have no non-space
 		// content are ignored.
 		// [nodeName], if given, is the name of the node to expand the selection
@@ -912,14 +914,16 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 				bulleted ? 'OrderedList' : 'BulletList'
 			);
 
+			let lineIdx = 0;
 			selectionCommands.toggleSelectedLinesStartWith(
 				thisListTypeRegex,
-				(line, firstLine) => {
+				() => {
 					if (bulleted) {
 						return ' - ';
 					}
 
-					return ` ${line.number - firstLine.number + 1}. `;
+					lineIdx ++;
+					return ` ${lineIdx}. `;
 				},
 				matchEmpty,
 				bulleted ? 'BulletList' : 'OrderedList'
@@ -953,6 +957,33 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 				// We want exactly [level] '#' characters.
 				new RegExp(`^[#]{${level}} `),
 				`${headerStr} `,
+				matchEmpty
+			);
+		},
+
+		increaseIndent() {
+			logMessage('Increasing indentation.');
+			const matchEmpty = true;
+			const matchNothing = /$ ^/;
+
+			selectionCommands.toggleSelectedLinesStartWith(
+				// Add a tab to the beginning of all lines
+				matchNothing,
+				// Always indent with a tab
+				'\t',
+				matchEmpty
+			);
+		},
+
+		decreaseIndent() {
+			logMessage('Decreasing indentation.');
+			const matchEmpty = true;
+			selectionCommands.toggleSelectedLinesStartWith(
+				// Assume indentation is either a tab or in units
+				// of four spaces.
+				/^(?:[\t]|[ ]{1,4})/,
+				// Don't add new text
+				'',
 				matchEmpty
 			);
 		},

@@ -196,6 +196,12 @@ function NoteEditor(props: Props, ref: any) {
 		toggleHeaderLevel(level: number) {
 			injectJS(`cm.selectionCommands.toggleHeaderLevel(${level});`);
 		},
+		increaseIndent() {
+			injectJS('cm.selectionCommands.increaseIndent();');
+		},
+		decreaseIndent() {
+			injectJS('cm.selectionCommands.decreaseIndent();');
+		},
 	};
 
 	useImperativeHandle(ref, () => {

@@ -113,5 +113,8 @@ export interface EditorControl {
 	toggleMath(): void;
 
 	toggleHeaderLevel(level: number): void;
+
+	increaseIndent(): void;
+	decreaseIndent(): void;
 }
 

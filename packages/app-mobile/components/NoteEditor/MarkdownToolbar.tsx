@@ -302,6 +302,28 @@ const MarkdownToolbar = (props: ToolbarProps) => {
 		editorControl.toggleList(bulleted);
 	});
 
+	listMenuModel.addAction({
+		icon: (
+			<Text style={ styles.multiLineIconText }>
+				{'← …\n← …\n← …'}
+			</Text>
+		),
+		accessibilityLabel: _('Decrease indent level'),
+	}, () => {
+		editorControl.decreaseIndent();
+	});
+
+	listMenuModel.addAction({
+		icon: (
+			<Text style={ styles.multiLineIconText }>
+				{'→ …\n→ …\n→ …'}
+			</Text>
+		),
+		accessibilityLabel: _('Increase indent level'),
+	}, () => {
+		editorControl.increaseIndent();
+	});
+
 
 	// Inline formatting
 	miscFormatMenuModel.addAction({
