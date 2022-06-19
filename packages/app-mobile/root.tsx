@@ -889,7 +889,7 @@ class AppComponent extends React.Component {
 					}}
 				>
 					<StatusBar barStyle={statusBarStyle} />
-					<MenuContext style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
+					<MenuContext style={{ flex: 1, backgroundColor: theme.backgroundColor2 }}>
 						<SafeAreaView style={{ flex: 1 }}>
 							<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
 								<AppNav screens={appNavInit} />
