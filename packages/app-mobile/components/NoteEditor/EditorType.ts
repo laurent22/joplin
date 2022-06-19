@@ -26,6 +26,9 @@ export class SelectionFormatting {
 	public italicized: boolean = false;
 	public inChecklist: boolean = false;
 	public inCode: boolean = false;
+	public inUnorderedList: boolean = false;
+	public inOrderedList: boolean = false;
+	public inMath: boolean = false;
 
 	// If [headerLevel], [listLevel], etc. are zero, then the
 	// selection isn't in a header/list
@@ -35,6 +38,7 @@ export class SelectionFormatting {
 	// List of data properties (for serializing/deseralizing)
 	private static propNames: string[] = [
 		'bolded', 'italicized', 'inChecklist', 'inCode',
+		'inUnorderedList', 'inOrderedList', 'inMath',
 		'headerLevel', 'listLevel',
 	];
 
@@ -104,8 +108,9 @@ export interface EditorControl {
 	// Toggle whether we're in a type of region.
 	toggleBolded(): void;
 	toggleItalicized(): void;
-	toggleList(): void;
+	toggleList(bulleted: boolean): void;
 	toggleCode(): void;
+	toggleMath(): void;
 
 	toggleHeaderLevel(level: number): void;
 }

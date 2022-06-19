@@ -182,11 +182,16 @@ function NoteEditor(props: Props, ref: any) {
 		toggleItalicized() {
 			injectJS('cm.selectionCommands.italicize();');
 		},
-		toggleList() {
-			injectJS('cm.selectionCommands.toggleList();');
+		toggleList(bulleted: boolean) {
+			injectJS(`cm.selectionCommands.toggleList(${
+				bulleted ? 'true' : 'false'
+			});`);
 		},
 		toggleCode() {
 			injectJS('cm.selectionCommands.toggleCode();');
+		},
+		toggleMath() {
+			injectJS('cm.selectionCommands.toggleMath();');
 		},
 		toggleHeaderLevel(level: number) {
 			injectJS(`cm.selectionCommands.toggleHeaderLevel(${level});`);

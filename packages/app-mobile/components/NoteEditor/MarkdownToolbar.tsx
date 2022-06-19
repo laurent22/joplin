@@ -247,6 +247,7 @@ const MarkdownToolbar = (props: ToolbarProps) => {
 			</Text>
 		),
 		accessibilityLabel: _('Lists'),
+		active: selState.listLevel > 0,
 	}, listMenuModel);
 
 	rootMenuModel.addCategory({
@@ -279,20 +280,46 @@ const MarkdownToolbar = (props: ToolbarProps) => {
 				{'•—\n•—\n•—'}
 			</Text>
 		),
-		accessibilityLabel: _('Unordered list'),
-		active: selState.listLevel > 0,
+		accessibilityLabel:
+			selState.inUnorderedList ? _('Remove unordered list') : _('Create unordered list'),
+		active: selState.inUnorderedList,
 	}, () => {
-		editorControl.toggleList();
+		const bulleted = true;
+		editorControl.toggleList(bulleted);
 	});
+
+	listMenuModel.addAction({
+		icon: (
+			<Text style={ styles.multiLineIconText }>
+				{'1.—\n2.—\n3.—'}
+			</Text>
+		),
+		accessibilityLabel:
+			selState.inOrderedList ? _('Remove ordered list') : _('Create ordered list'),
+		active: selState.inOrderedList,
+	}, () => {
+		const bulleted = false;
+		editorControl.toggleList(bulleted);
+	});
+
 
 	// Inline formatting
 	miscFormatMenuModel.addAction({
 		icon: '{;}',
 		accessibilityLabel:
-			selState.inCode ? _('Remove Code Formatting') : _('Code Formatting'),
+			selState.inCode ? _('Remove code formatting') : _('Format as code'),
 		active: selState.inCode,
 	}, () => {
 		editorControl.toggleCode();
+	});
+
+	miscFormatMenuModel.addAction({
+		icon: '∑',
+		accessibilityLabel:
+			selState.inMath ? _('Remove TeX region') : _('Create TeX region'),
+		active: selState.inMath,
+	}, () => {
+		editorControl.toggleMath();
 	});
 
 	miscFormatMenuModel.addAction({
@@ -339,12 +366,11 @@ const MarkdownToolbar = (props: ToolbarProps) => {
  * regardless of state.
  */
 const getStyles = (themeId: number): StyleSheet => {
-	const BUTTON_SIZE = 100;
+	const BUTTON_SIZE = 75;
 	const theme = themeStyle(themeId);
 
 	return StyleSheet.create({
 		button: {
-			padding: 15,
 			width: BUTTON_SIZE,
 			height: BUTTON_SIZE,
 			alignItems: 'center',
@@ -374,7 +400,7 @@ const getStyles = (themeId: number): StyleSheet => {
 			flexDirection: 'row',
 			alignItems: 'baseline',
 			justifyContent: 'center',
-			height: 100,
+			height: BUTTON_SIZE,
 		},
 		toolbarContent: {
 			flexGrow: 1,

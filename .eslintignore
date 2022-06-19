@@ -859,6 +859,9 @@ packages/app-mobile/components/NoteEditor/CodeMirror.js.map
 packages/app-mobile/components/NoteEditor/EditorType.d.ts
 packages/app-mobile/components/NoteEditor/EditorType.js
 packages/app-mobile/components/NoteEditor/EditorType.js.map
+packages/app-mobile/components/NoteEditor/MarkdownTeXParser.d.ts
+packages/app-mobile/components/NoteEditor/MarkdownTeXParser.js
+packages/app-mobile/components/NoteEditor/MarkdownTeXParser.js.map
 packages/app-mobile/components/NoteEditor/MarkdownToolbar.d.ts
 packages/app-mobile/components/NoteEditor/MarkdownToolbar.js
 packages/app-mobile/components/NoteEditor/MarkdownToolbar.js.map

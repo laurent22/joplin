@@ -10,8 +10,9 @@
 // from NoteEditor.tsx.
 
 import { SelectionFormatting } from './EditorType';
+import MarkdownTeXParser from './MarkdownTeXParser';
 
-import { EditorState, Extension } from '@codemirror/state';
+import { EditorState, Extension, Line } from '@codemirror/state';
 import { markdown } from '@codemirror/lang-markdown';
 import { highlightSelectionMatches, search } from '@codemirror/search';
 import { defaultHighlightStyle, syntaxHighlighting, HighlightStyle } from '@codemirror/language';
@@ -367,6 +368,13 @@ const createTheme = (theme: any): Extension[] => {
 			tag: tags.list,
 			fontFamily: theme.fontFamily,
 		},
+		{
+			tag: tags.comment,
+			color: theme.color3,
+			backgroundColor: theme.backgroundColor3,
+			borderRadius: '4px',
+			fontStyle: 'italic',
+		},
 	]);
 
 	return [
@@ -452,9 +460,22 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 				case 'ListItem':
 					formatting.listLevel += 1;
 					break;
+				case 'BulletList':
+					formatting.inUnorderedList = true;
+					break;
+				case 'OrderedList':
+					formatting.inOrderedList = true;
+					break;
+				case 'TaskList':
+					formatting.inChecklist = true;
+					break;
 				case 'InlineCode':
 				case 'FencedCode':
 					formatting.inCode = true;
+					break;
+				case 'InlineMath':
+				case 'BlockMath':
+					formatting.inMath = true;
 					break;
 				case 'ATXHeading1':
 					formatting.headerLevel = 1;
@@ -481,7 +502,9 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 			// for a sample configuration.
 			extensions: [
 				markdown({
-					extensions: [GFM],
+					extensions: [
+						GFM, MarkdownTeXParser,
+					],
 				}),
 				...createTheme(theme),
 				history(),
@@ -627,14 +650,119 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 			return selectionCommands.toggleRegionSurrounded(editor.state.doc, newRange, spec);
 		},
 
+		// Toggle formatting in a region, applying a block version of the formatting
+		// if multiple lines are selected.
+		toggleRegionFormat(
+			inlineNodeName: string, inlineSpec: RegionSpec,
+
+			// The block version of the tag (e.g. fenced code)
+			blockNodeName: string,
+			blockRegex: { start: RegExp; stop: RegExp },
+
+			// start: Single-line content that precedes the block
+			// stop: Single-line content that follows the block.
+			// line breaks will be added
+			blockTemplate: { start: string; stop: string }
+		) {
+			const getMatchEndPoints = (match: RegExpMatchArray, line: Line):
+				[startIdx: number, stopIdx: number] => {
+				const startIdx = line.from + match.index;
+				let stopIdx;
+				// If it matches the entire line, remove the newline character.
+				if (match[0].length == line.text.length) {
+					stopIdx = line.to + 1;
+				} else {
+					stopIdx = startIdx + match[0].length;
+				}
+
+				return [startIdx, stopIdx];
+			};
+
+			const changes = editor.state.changeByRange((sel: SelectionRange) => {
+				const doc = editor.state.doc;
+
+				// If we're in the block version, grow the selection to cover the entire region.
+				sel = selectionCommands.growSelectionToNode(sel, blockNodeName);
+
+				const fromLine = doc.lineAt(sel.from);
+				const toLine = doc.lineAt(sel.to);
+				let charsAdded = 0;
+				const changes = [];
+
+				// Single line: Inline code toggle.
+				if (fromLine.number == toLine.number) {
+					return selectionCommands.toggleSelectionFormat(inlineNodeName, sel, inlineSpec);
+				}
+
+				// Otherwise, we're toggling the block version
+				const startMatch = blockRegex.start.exec(fromLine.text);
+				const stopMatch = blockRegex.stop.exec(toLine.text);
+				if (startMatch && stopMatch) {
+					// Get start and stop indicies for the starting and ending matches
+					const [fromMatchFrom, fromMatchTo] = getMatchEndPoints(startMatch, fromLine);
+					const [toMatchFrom, toMatchTo] = getMatchEndPoints(stopMatch, toLine);
+
+
+					// Delete content of the first line
+					changes.push({
+						from: fromMatchFrom,
+						to: fromMatchTo,
+					});
+					charsAdded -= fromMatchTo - fromMatchFrom;
+
+					// Delete content of the last line
+					changes.push({
+						from: toMatchFrom,
+						to: toMatchTo,
+					});
+					charsAdded -= toMatchTo - toMatchFrom;
+				} else {
+					const insertBefore = `${blockTemplate.start}\n`;
+					const insertAfter = `\n${blockTemplate.stop}`;
+					changes.push({
+						from: fromLine.from,
+						insert: insertBefore,
+					});
+
+					changes.push({
+						from: toLine.to,
+						insert: insertAfter,
+					});
+					charsAdded += insertBefore.length + insertAfter.length;
+				}
+
+				return {
+					changes,
+
+					// Selection should now encompass all lines that were changed.
+					range: EditorSelection.range(fromLine.from, toLine.to + charsAdded),
+				};
+			});
+			editor.dispatch(changes);
+		},
+
 		// Toggles whether all lines in the user's selection start with [regex].
 		// [template] is that match of [regex] that is used when adding a match.
+		// [template] can also be a function that maps a given line to a string.
 		// If [matchEmpty], all lines **after the first** that have no non-space
 		// content are ignored.
-		toggleSelectedLinesStartWith(regex: RegExp, template: string, matchEmpty: boolean): boolean {
+		// [nodeName], if given, is the name of the node to expand the selection
+		// to, (e.g. TaskList to expand selections to containing TaskLists if possible).
+		// Note that selection is only expanded if the existing selection is empty
+		// (just a caret).
+		toggleSelectedLinesStartWith(
+			regex: RegExp,
+			template: string | ((line: Line, firstLine: Line, lastLine: Line)=> string),
+			matchEmpty: boolean, nodeName?: string
+		): boolean {
 			let didDeletion = false;
 
 			const changes = editor.state.changeByRange((sel: SelectionRange) => {
+				// Attempt to select all lines in the region
+				if (nodeName && sel.empty) {
+					sel = selectionCommands.growSelectionToNode(sel, nodeName);
+				}
+
 				const doc = editor.state.doc;
 				const fromLine = doc.lineAt(sel.from);
 				const toLine = doc.lineAt(sel.to);
@@ -677,12 +805,19 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 						charsAdded -= match[0].length;
 						didDeletion = true;
 					} else {
+						let templateVal;
+						if (typeof template == 'string') {
+							templateVal = template;
+						} else {
+							templateVal = template(line, fromLine, toLine);
+						}
+
 						changes.push({
 							from: line.from,
-							insert: template,
+							insert: templateVal,
 						});
 
-						charsAdded += template.length;
+						charsAdded += templateVal.length;
 					}
 				}
 
@@ -724,78 +859,70 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 		},
 
 		toggleCode() {
-			logMessage('Toggling inline code!');
+			logMessage('Toggling code!');
 
+			const codeFenceRegex = /^```\w*\s*$/;
 			const inlineRegionSpec = new RegionSpec({
 				templateStart: '`',
 				templateStop: '`',
 			});
 
-			const changes = editor.state.changeByRange((sel: SelectionRange) => {
-				const doc = editor.state.doc;
+			selectionCommands.toggleRegionFormat(
+				'InlineCode', inlineRegionSpec,
 
-				// If we're in fenced code, grow the selection to cover the entire region.
-				sel = selectionCommands.growSelectionToNode(sel, 'FencedCode');
-
-				const fromLine = doc.lineAt(sel.from);
-				const toLine = doc.lineAt(sel.to);
-				let charsAdded = 0;
-				const changes = [];
-
-				// Single line: Inline code toggle.
-				if (fromLine.number == toLine.number) {
-					return selectionCommands.toggleSelectionFormat('InlineCode', sel, inlineRegionSpec);
-				}
-
-				// Otherwise, we're toggling fenced code.
-				if (/^```\w*\s*$/.exec(fromLine.text) && /^```\s*$/.exec(toLine.text)) {
-					// Delete content of the first line
-					changes.push({
-						from: fromLine.from,
-						to: fromLine.to + 1,
-					});
-					charsAdded -= fromLine.text.length + 1;
-
-					// Delete content of the last line
-					changes.push({
-						from: toLine.from,
-						to: toLine.to + 1,
-					});
-					charsAdded -= toLine.text.length + 1;
-				} else {
-					const insertBefore = '```\n';
-					const insertAfter = '\n```';
-					changes.push({
-						from: fromLine.from,
-						insert: insertBefore,
-					});
-
-					changes.push({
-						from: toLine.to,
-						insert: insertAfter,
-					});
-					charsAdded += insertBefore.length + insertAfter.length;
-				}
-
-				return {
-					changes,
-
-					// Selection should now encompass all lines that were changed.
-					range: EditorSelection.range(fromLine.from, toLine.to + charsAdded),
-				};
-			});
-			editor.dispatch(changes);
+				'FencedCode', { start: codeFenceRegex, stop: codeFenceRegex },
+				{ start: '```', stop: '```' }
+			);
 		},
 
-		toggleList() {
+		toggleMath() {
+			logMessage('Toggling math!');
+
+			const blockStartRegex = /^\$\$/;
+			const blockStopRegex = /\$\$\s*$/;
+			const inlineRegionSpec = new RegionSpec({
+				templateStart: '$',
+				templateStop: '$',
+			});
+
+			selectionCommands.toggleRegionFormat(
+				'InlineMath', inlineRegionSpec,
+
+				'BlockMath', { start: blockStartRegex, stop: blockStopRegex },
+				{ start: '$$', stop: '$$' }
+			);
+		},
+
+		toggleList(bulleted: boolean) {
 			logMessage('Toggling bulleted list!');
 
+			// Include `(?:\[[ xX]+\]...)?` to also match checklists.
+			const bulletedRegex = /^\s*[-*]\s(?:\[[ xX]+\]\s?)?/;
+			const numberedRegex = /^\s*\d+\.\s?/;
+			const otherListTypeRegex = bulleted ? numberedRegex : bulletedRegex;
+			const thisListTypeRegex = bulleted ? bulletedRegex : numberedRegex;
+
+
 			const matchEmpty = false;
+			// Remove formatting from a different type of list
 			selectionCommands.toggleSelectedLinesStartWith(
-				// Include `(?:\[[ xX]+\]...)?` to also match checklists.
-				/^\s*[-*]\s(?:\[[ xX]+\]\s?)?/,
-				' - ',
-				matchEmpty
+				otherListTypeRegex,
+				'',
+				matchEmpty,
+				bulleted ? 'OrderedList' : 'BulletList'
+			);
+
+			selectionCommands.toggleSelectedLinesStartWith(
+				thisListTypeRegex,
+				(line, firstLine) => {
+					if (bulleted) {
+						return ' - ';
+					}
+
+					return ` ${line.number - firstLine.number + 1}. `;
+				},
+				matchEmpty,
+				bulleted ? 'BulletList' : 'OrderedList'
 			);
 		},
 
