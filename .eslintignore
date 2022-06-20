@@ -1087,9 +1087,6 @@ packages/lib/eventManager.js.map
 packages/lib/file-api-driver-joplinServer.d.ts
 packages/lib/file-api-driver-joplinServer.js
 packages/lib/file-api-driver-joplinServer.js.map
-packages/lib/file-api-driver-local.d.ts
-packages/lib/file-api-driver-local.js
-packages/lib/file-api-driver-local.js.map
 packages/lib/file-api-driver-memory.d.ts
 packages/lib/file-api-driver-memory.js
 packages/lib/file-api-driver-memory.js.map

@@ -1,3 +1,4 @@
+/* eslint-disable import/prefer-default-export */
 const { basicDelta } = require('./file-api');
 
 // NOTE: when synchronising with the file system the time resolution is the second (unlike milliseconds for OneDrive for instance).
@@ -13,49 +14,23 @@ const { basicDelta } = require('./file-api');
 // check that it is indeed the problem, check log-database.txt of both clients, search for the note ID, and most likely both notes
 // will have been modified at the same exact second at some point. If not, it's another bug that needs to be investigated.
 
-// this is the format that fs-driver-rn would return
-type Stat = {
-	birthtime: Date; // Created date
-	mtime: Date; // Last modified date
-	isDirectory: ()=> boolean; // Is the file a directory?
-	path: string;
-	size: number; // Size in bytes
-};
-
-type MetaData = {
-	path: string;
-	/** in milliseconds */
-	updated_time: number;
-	isDir: boolean;
-};
-
-export type FileOptions =
-{
-	encoding?: string;
-	path?: string;
-	target?: 'file';
-	source?: 'file';
-};
-
 export class FileApiDriverLocal {
-	static fsDriver_: any;
-
-	fsErrorToJsError_(error: Error & {code?: string} , path: string | null = null) {
+	fsErrorToJsError_(error, path = null) {
 		let msg = error.toString();
 		if (path !== null) msg += `. Path: ${path}`;
-		const output = new Error(msg) as Error & {code?: string};
+		const output = new Error(msg);
 		if (error.code) output.code = error.code;
 		return output;
 	}
 
 	fsDriver() {
-		if (!FileApiDriverLocal.fsDriver_) throw new Error('FileApiDriverLocal.fsDriver_ not set!');
+		if (!FileApiDriverLocal.fsDriver_) { throw new Error('FileApiDriverLocal.fsDriver_ not set!'); }
 		return FileApiDriverLocal.fsDriver_;
 	}
 
-	async stat(path: string): Promise<MetaData> {
+	async stat(path) {
 		try {
-			const s = await this.fsDriver().stat(path) as Stat;
+			const s = await this.fsDriver().stat(path);
 			if (!s) return null;
 			return this.metadataFromStat_(s);
 		} catch (error) {
@@ -63,7 +38,7 @@ export class FileApiDriverLocal {
 		}
 	}
 
-	metadataFromStat_(stat: Stat): MetaData {
+	metadataFromStat_(stat) {
 		return {
 			path: stat.path,
 			// created_time: stat.birthtime.getTime(),
@@ -72,7 +47,7 @@ export class FileApiDriverLocal {
 		};
 	}
 
-	metadataFromStats_(stats: Stat[]) {
+	metadataFromStats_(stats) {
 		const output = [];
 		for (let i = 0; i < stats.length; i++) {
 			const mdStat = this.metadataFromStat_(stats[i]);
@@ -81,7 +56,7 @@ export class FileApiDriverLocal {
 		return output;
 	}
 
-	async setTimestamp(path: string, timestampMs: number) {
+	async setTimestamp(path, timestampMs) {
 		try {
 			await this.fsDriver().setTimestamp(path, new Date(timestampMs));
 		} catch (error) {
@@ -89,8 +64,8 @@ export class FileApiDriverLocal {
 		}
 	}
 
-	async delta(path: string, options: any) {
-		const getStatFn = async (path: string) => {
+	async delta(path, options) {
+		const getStatFn = async path => {
 			const stats = await this.fsDriver().readDirStats(path);
 			return this.metadataFromStats_(stats);
 		};
@@ -103,7 +78,7 @@ export class FileApiDriverLocal {
 		}
 	}
 
-	async list(path: string) {
+	async list(path) {
 		try {
 			const stats = await this.fsDriver().readDirStats(path);
 			const output = this.metadataFromStats_(stats);
@@ -111,7 +86,6 @@ export class FileApiDriverLocal {
 			return {
 				items: output,
 				hasMore: false,
-				// @ts-ignore
 				context: null,
 			};
 		} catch (error) {
@@ -119,14 +93,16 @@ export class FileApiDriverLocal {
 		}
 	}
 
-	async get(path: string, options: FileOptions) {
+	async get(path, options) {
 		if (!options) options = {};
 		let output = null;
 
 		try {
 			if (options.target === 'file') {
+				// output = await fs.copy(path, options.path, { overwrite: true });
 				output = await this.fsDriver().copy(path, options.path);
 			} else {
+				// output = await fs.readFile(path, options.encoding);
 				output = await this.fsDriver().readFile(path, options.encoding);
 			}
 		} catch (error) {
@@ -137,7 +113,7 @@ export class FileApiDriverLocal {
 		return output;
 	}
 
-	async mkdir(path: string) {
+	async mkdir(path) {
 		if (await this.fsDriver().exists(path)) return;
 
 		try {
@@ -164,7 +140,7 @@ export class FileApiDriverLocal {
 		// });
 	}
 
-	async put(path: string, content: any, options: FileOptions = null) {
+	async put(path, content, options = null) {
 		if (!options) options = {};
 
 		try {
@@ -192,7 +168,7 @@ export class FileApiDriverLocal {
 		// });
 	}
 
-	async delete(path: string) {
+	async delete(path) {
 		try {
 			await this.fsDriver().unlink(path);
 		} catch (error) {
@@ -215,7 +191,7 @@ export class FileApiDriverLocal {
 		// });
 	}
 
-	async move(oldPath: string, newPath: string) {
+	async move(oldPath, newPath) {
 		try {
 			await this.fsDriver().move(oldPath, newPath);
 		} catch (error) {
@@ -247,7 +223,7 @@ export class FileApiDriverLocal {
 		throw new Error('Not supported');
 	}
 
-	async clearRoot(baseDir: string) {
+	async clearRoot(baseDir) {
 		if (baseDir.startsWith('content://')) {
 			const result = await this.list(baseDir);
 			for (const item of result.items) {
@@ -260,4 +236,4 @@ export class FileApiDriverLocal {
 	}
 }
 
-export default { FileApiDriverLocal };
+module.exports = { FileApiDriverLocal };
