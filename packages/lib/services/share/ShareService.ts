@@ -241,6 +241,7 @@ export default class ShareService {
 			id: note.id,
 			parent_id: note.parent_id,
 			is_shared: 1,
+			is_shared_recursive: recursive ? 1 : 0,
 			updated_time: Date.now(),
 		}, {
 			autoTimestamp: false,

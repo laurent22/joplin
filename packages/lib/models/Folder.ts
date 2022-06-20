@@ -348,24 +348,55 @@ export default class Folder extends BaseItem {
 	}
 
 	public static async updateNoteShareIds() {
-		// Find all the notes where the share_id is not the same as the
-		// parent share_id because we only need to update those.
-		const rows = await this.db().selectAll(`
-			SELECT notes.id, folders.share_id, notes.parent_id
-			FROM notes
-			LEFT JOIN folders ON notes.parent_id = folders.id
-			WHERE notes.share_id != folders.share_id
-		`);
+		{
+			// Find all the notes where the share_id is not the same as the
+			// parent share_id because we only need to update those.
+			const rows = await this.db().selectAll(`
+				SELECT notes.id, folders.share_id, notes.parent_id
+				FROM notes
+				LEFT JOIN folders ON notes.parent_id = folders.id
+				WHERE notes.share_id != folders.share_id
+			`);
 
-		logger.debug('updateNoteShareIds: notes to update:', rows.length);
+			logger.debug('updateNoteShareIds: notes to update:', rows.length);
 
-		for (const row of rows) {
-			await Note.save({
-				id: row.id,
-				share_id: row.share_id || '',
-				parent_id: row.parent_id,
-				updated_time: Date.now(),
-			}, { autoTimestamp: false });
+			for (const row of rows) {
+				await Note.save({
+					id: row.id,
+					share_id: row.share_id || '',
+					parent_id: row.parent_id,
+					updated_time: Date.now(),
+				}, { autoTimestamp: false });
+			}
+		}
+
+		// Also applies recursively published notes
+		{
+			// Find all the notes where the share_id is not the same as the
+			// parent share_id because we only need to update those.
+			const rows = await this.db().selectAll(`
+				SELECT notes.id, folders.share_id, notes.parent_id, notes.body
+				FROM notes
+				WHERE notes.is_shared = 1 AND notes.is_shared_recursive = 1
+			`);
+
+			logger.debug('updateNoteShareIds: notes recursively published:', rows.length);
+
+			// for (const row of rows) {
+
+			// 	// await Note.save({
+			// 	// 	id: row.id,
+			// 	// 	share_id: row.share_id || '',
+			// 	// 	parent_id: row.parent_id,
+			// 	// 	updated_time: Date.now(),
+			// 	// }, { autoTimestamp: false });
+			// }
+
+			// TODO: should start from root notes - don't set is_recursive on children?
+			// TODO: when a child note is moved out of parent, how to know that is_shared should be cleared? - need share_root prop?
+			//     or based on Share API objects? (passed to this function?)
+			// TODO: also unshare notes that have been unlinked (is_shared != parent.is_shared)
+			// TODO: avoid infinite loops
 		}
 	}
 
@@ -625,7 +656,7 @@ export default class Folder extends BaseItem {
 				rootFolders.push(folder);
 			} else {
 				if (!idToFolders[folder.parent_id]) {
-					// It means the notebook is refering a folder that doesn't exist. In theory it shouldn't happen
+					// It means the notebook is referring a folder that doesn't exist. In theory it shouldn't happen
 					// but sometimes does - https://github.com/laurent22/joplin/issues/1068#issuecomment-450594708
 					rootFolders.push(folder);
 				} else {

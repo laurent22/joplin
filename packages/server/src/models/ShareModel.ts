@@ -64,6 +64,7 @@ export default class ShareModel extends BaseModel<Share> {
 		if (object.owner_id) output.owner_id = object.owner_id;
 		if (object.note_id) output.note_id = object.note_id;
 		if (object.master_key_id) output.master_key_id = object.master_key_id;
+		if ('recursive' in object) output.recursive = object.recursive;
 
 		return output;
 	}
