@@ -24,25 +24,56 @@ interface ValueMap {
 export default function getResponsiveValue(valueMap: number[] | ValueMap): number {
 	const width = Dimensions.get('screen').width;
 	let value: number;
-	let sm: number,
-		md: number;
+	let sm: number, md: number, lg: number, xl: number, xxl: number;
 
 	if (Array.isArray(valueMap)) {
 		if (valueMap.length === 0) {
 			return undefined;
 		}
 
-		[sm, md] = valueMap;
+		[sm, md, lg, xl, xxl] = valueMap;
+
+		value = sm;
 	} else if (Object.keys(valueMap).length === 0) {
 		return undefined;
 	} else {
-		({ sm, md } = valueMap as ValueMap);
-	}
+		({ sm, md, lg, xl, xxl } = valueMap as ValueMap);
 
-	value = sm;
+		if (xxl) {
+			value = xxl;
+		}
+
+		if (xl) {
+			value = xl;
+		}
+
+		if (lg) {
+			value = lg;
+		}
+
+		if (md) {
+			value = md;
+		}
+
+		if (sm) {
+			value = sm;
+		}
+	}
 
 	if (width >= 481 && !!md) {
 		value = md;
+	}
+
+	if (width >= 769 && !!lg) {
+		value = lg;
+	}
+
+	if (width >= 1025 && !!xl) {
+		value = xl;
+	}
+
+	if (width >= 1201 && !!xxl) {
+		value = xxl;
 	}
 
 	return value;
