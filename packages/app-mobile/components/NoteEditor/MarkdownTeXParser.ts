@@ -4,10 +4,12 @@
 import { tags } from '@lezer/highlight';
 import {
 	MarkdownConfig, InlineContext,
-	BlockContext, Line,
+	BlockContext, Line, LeafBlock,
 } from '@lezer/markdown';
 
 const DOLLAR_SIGN_CHAR_CODE = 36;
+const MATH_BLOCK_START_REGEX = /^\$\$/;
+const MATH_BLOCK_STOP_REGEX = /^.*\$\$\s*$/;
 
 const InlineMathDelim = { resolve: 'InlineMath', mark: 'InlineMathDelim' };
 
@@ -24,6 +26,7 @@ const InlineMathConfig: MarkdownConfig = {
 	],
 	parseInline: [{
 		name: 'InlineMath',
+		after: 'InlineCode',
 
 		parse(cx: InlineContext, next: number, pos: number): number {
 			const prevCharCode = pos - 1 >= 0 ? cx.char(pos - 1) : -1;
@@ -37,7 +40,8 @@ const InlineMathConfig: MarkdownConfig = {
 			// $ delimiters are both opening and closing delimiters
 			const isOpen = true;
 			const isClose = true;
-			return cx.addDelimiter(InlineMathDelim, pos, pos + 1, isOpen, isClose);
+			cx.addDelimiter(InlineMathDelim, pos, pos + 1, isOpen, isClose);
+			return pos + 1;
 		},
 	}],
 };
@@ -51,24 +55,37 @@ const BlockMathConfig: MarkdownConfig = {
 	],
 	parseBlock: [{
 		name: 'BlockMath',
+		before: 'FencedCode',
 		parse(cx: BlockContext, line: Line): boolean {
 			const delimLength = 2;
-			const stopRegex = /^.*\$\$\s*$/;
-			const startRegex = /^\$\$/;
 			const start = cx.lineStart;
 
-			// Stop if we reach a $$ delimiter.
-			if (startRegex.exec(line.text)) {
-				// If a single-line block-display,
-				if (stopRegex.exec(line.text.substring(delimLength))) {
+			// $$ delimiter? Start math!
+			if (MATH_BLOCK_START_REGEX.exec(line.text)) {
+				// If the math region ends immediately (on the same line),
+				if (MATH_BLOCK_STOP_REGEX.exec(line.text.substring(delimLength))) {
 					const elem = cx.elt('BlockMath', cx.lineStart, cx.lineStart + line.text.length);
 					cx.addElement(elem);
 				} else {
+					let hadNextLine = false;
 					// Otherwise, it's a multi-line block display.
-					while (cx.nextLine() && !stopRegex.exec(line.text));
+					// Consume lines until we reach the end.
+					do {
+						hadNextLine = cx.nextLine();
+					}
+					while (hadNextLine && !MATH_BLOCK_STOP_REGEX.exec(line.text));
 
-					// Mark all lines, including the ending delimiter, as math.
-					const elem = cx.elt('BlockMath', start, cx.lineStart + delimLength);
+					let stop;
+
+					// Only include the ending delimiter if it exists
+					if (hadNextLine) {
+						stop = cx.lineStart + delimLength;
+					} else {
+						stop = cx.lineStart;
+					}
+
+					// Mark all lines in the block as math.
+					const elem = cx.elt('BlockMath', start, stop);
 					cx.addElement(elem);
 				}
 
@@ -80,6 +97,11 @@ const BlockMathConfig: MarkdownConfig = {
 			}
 
 			return false;
+		},
+		// End paragraph-like blocks
+		endLeaf(_cx: BlockContext, line: Line, _leaf: LeafBlock): boolean {
+			// Leaf blocks (e.g. block quotes) end early if math starts.
+			return MATH_BLOCK_START_REGEX.exec(line.text) != null;
 		},
 	}],
 };

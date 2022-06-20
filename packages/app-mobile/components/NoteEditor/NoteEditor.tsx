@@ -152,7 +152,7 @@ function NoteEditor(props: Props, ref: any) {
 				${js}
 			}
 			catch(e) {
-				logMessage('Error in injected JS:', e);
+				logMessage('Error in injected JS:' + e, e);
 				throw e;
 			};
 

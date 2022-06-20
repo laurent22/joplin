@@ -630,6 +630,8 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 			// line breaks will be added
 			blockTemplate: { start: string; stop: string }
 		) {
+			const doc = editor.state.doc;
+
 			const getMatchEndPoints = (match: RegExpMatchArray, line: Line):
 				[startIdx: number, stopIdx: number] => {
 				const startIdx = line.from + match.index;
@@ -641,11 +643,11 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 					stopIdx = startIdx + match[0].length;
 				}
 
+				stopIdx = Math.min(stopIdx, doc.length);
 				return [startIdx, stopIdx];
 			};
 
 			const changes = editor.state.changeByRange((sel: SelectionRange) => {
-				const doc = editor.state.doc;
 
 				// If we're in the block version, grow the selection to cover the entire region.
 				sel = selectionCommands.growSelectionToNode(sel, blockNodeName);
@@ -655,7 +657,7 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 				let charsAdded = 0;
 				const changes = [];
 
-				// Single line: Inline code toggle.
+				// Single line: Inline toggle.
 				if (fromLine.number == toLine.number) {
 					return selectionCommands.toggleSelectionFormat(inlineNodeName, sel, inlineSpec);
 				}
@@ -701,7 +703,9 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 					changes,
 
 					// Selection should now encompass all lines that were changed.
-					range: EditorSelection.range(fromLine.from, toLine.to + charsAdded),
+					range: EditorSelection.range(
+						fromLine.from, Math.min(doc.length, toLine.to + charsAdded)
+					),
 				};
 			});
 			editor.dispatch(changes);
