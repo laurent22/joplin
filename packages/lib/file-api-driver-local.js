@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 const { basicDelta } = require('./file-api');
 
 // NOTE: when synchronising with the file system the time resolution is the second (unlike milliseconds for OneDrive for instance).
@@ -14,7 +13,7 @@ const { basicDelta } = require('./file-api');
 // check that it is indeed the problem, check log-database.txt of both clients, search for the note ID, and most likely both notes
 // will have been modified at the same exact second at some point. If not, it's another bug that needs to be investigated.
 
-export class FileApiDriverLocal {
+class FileApiDriverLocal {
 	fsErrorToJsError_(error, path = null) {
 		let msg = error.toString();
 		if (path !== null) msg += `. Path: ${path}`;
