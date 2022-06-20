@@ -12,6 +12,7 @@ interface ToolbarProps {
 	editorControl: EditorControl;
 	selectionState: SelectionFormatting;
 	themeId: number;
+	style?: any;
 }
 
 interface ToolbarStyleData {
@@ -214,7 +215,9 @@ enum MenuRowType {
 }
 
 const MarkdownToolbar = (props: ToolbarProps) => {
-	const styles = useMemo(() => getStyles(props.themeId), [props.themeId]);
+	const styles = useMemo(() =>
+		getStyles(props.style, props.themeId),
+	[props.themeId, props.style]);
 	const selState = props.selectionState;
 	const editorControl = props.editorControl;
 	const [openMenu, setOpenMenu] = useState(MenuRowType.RootMenu);
@@ -384,10 +387,12 @@ const MarkdownToolbar = (props: ToolbarProps) => {
 /**
  * Creates a StyleSheet based on the application's theme.
  *
+ * [styleProps] are user-supplied style properties, which apply to the root toolbar element.
+ *
  * This uses react hooks, so should be called in the same places, the same number of times,
  * regardless of state.
  */
-const getStyles = (themeId: number): StyleSheet => {
+const getStyles = (styleProps: any, themeId: number): StyleSheet => {
 	const BUTTON_SIZE = 75;
 	const theme = themeStyle(themeId);
 
@@ -423,6 +428,8 @@ const getStyles = (themeId: number): StyleSheet => {
 			alignItems: 'baseline',
 			justifyContent: 'center',
 			height: BUTTON_SIZE,
+
+			...styleProps,
 		},
 		toolbarContent: {
 			flexGrow: 1,

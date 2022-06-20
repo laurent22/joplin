@@ -7,6 +7,7 @@ const React = require('react');
 const { forwardRef, useImperativeHandle } = require('react');
 const { useEffect, useMemo, useState, useCallback, useRef } = require('react');
 const { WebView } = require('react-native-webview');
+const { View } = require('react-native');
 const { editorFont } = require('../global-style');
 
 import { ChangeEvent, UndoRedoDepthChangeEvent } from './EditorType';
@@ -279,27 +280,39 @@ function NoteEditor(props: Props, ref: any) {
 	// - `setSupportMultipleWindows` must be `true` for security reasons:
 	//   https://github.com/react-native-webview/react-native-webview/releases/tag/v11.0.0
 	return (
-		<>
-			<WebView
-				style={props.style}
-				ref={webviewRef}
-				useWebKit={true}
-				source={source}
-				setSupportMultipleWindows={true}
-				allowingReadAccessToURL={`file://${Setting.value('resourceDir')}`}
-				originWhitelist={['file://*', './*', 'http://*', 'https://*']}
-				allowFileAccess={true}
-				injectedJavaScript={injectedJavaScript}
-				onMessage={onMessage}
-				onError={onError}
-			/>
+		<View style={{
+			...props.style,
+			flexDirection: 'column',
+		}}>
+			<View style={{
+				flexGrow: 1,
+				flexShrink: 0,
+				minHeight: '40%',
+			}}>
+				<WebView
+					ref={webviewRef}
+					useWebKit={true}
+					source={source}
+					setSupportMultipleWindows={true}
+					allowingReadAccessToURL={`file://${Setting.value('resourceDir')}`}
+					originWhitelist={['file://*', './*', 'http://*', 'https://*']}
+					allowFileAccess={true}
+					injectedJavaScript={injectedJavaScript}
+					onMessage={onMessage}
+					onError={onError}
+				/>
+			</View>
 
 			<MarkdownToolbar
+				style={{
+					overflow: 'hidden',
+					flexShrink: 1,
+				}}
 				themeId={props.themeId}
 				editorControl={editorControl}
 				selectionState={selectionState}
 			/>
-		</>
+		</View>
 	);
 }
 
