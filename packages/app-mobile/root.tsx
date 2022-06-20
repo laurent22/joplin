@@ -892,8 +892,8 @@ class AppComponent extends React.Component {
 					<StatusBar barStyle={statusBarStyle} />
 					<MenuContext style={{ flex: 1 }}>
 						<SafeAreaView style={{ flex: 0, backgroundColor: theme.backgroundColor2 }}/>
-						<SafeAreaView style={{ flex: 1 }} forceInset={{ 'bottom': 'never' }}>
-							<View style={{ flex: 1, backgroundColor: theme.backgroundColor2 }}>
+						<SafeAreaView style={{ flex: 1 }}>
+							<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
 								<AppNav screens={appNavInit} />
 							</View>
 							<DropdownAlert ref={(ref: any) => this.dropdownAlert_ = ref} tapToCloseEnabled={true} />
