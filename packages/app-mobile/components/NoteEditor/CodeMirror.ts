@@ -18,7 +18,7 @@ import { highlightSelectionMatches, search } from '@codemirror/search';
 import { defaultHighlightStyle, syntaxHighlighting, HighlightStyle } from '@codemirror/language';
 import { tags } from '@lezer/highlight';
 import { GFM } from '@lezer/markdown';
-import { EditorView, drawSelection, highlightSpecialChars, ViewUpdate } from '@codemirror/view';
+import { EditorView, drawSelection, highlightSpecialChars, ViewUpdate, KeyBinding } from '@codemirror/view';
 import { undo, redo, history, undoDepth, redoDepth } from '@codemirror/commands';
 
 import { keymap } from '@codemirror/view';
@@ -496,40 +496,6 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 		return formatting;
 	}
 
-	const editor = new EditorView({
-		state: EditorState.create({
-			// See https://github.com/codemirror/basic-setup/blob/main/src/codemirror.ts
-			// for a sample configuration.
-			extensions: [
-				markdown({
-					extensions: [
-						GFM, MarkdownTeXParser,
-					],
-				}),
-				...createTheme(theme),
-				history(),
-				search(),
-				drawSelection(),
-				highlightSpecialChars(),
-				highlightSelectionMatches(),
-				indentOnInput(),
-
-				EditorView.lineWrapping,
-				EditorView.contentAttributes.of({ autocapitalize: 'sentence' }),
-				EditorView.updateListener.of((viewUpdate: ViewUpdate) => {
-					notifyDocChanged(viewUpdate);
-					notifySelectionChange(viewUpdate);
-					notifySelectionFormattingChange(viewUpdate);
-				}),
-				keymap.of([
-					...defaultKeymap, ...historyKeymap, ...searchKeymap,
-				]),
-			],
-			doc: initialText,
-		}),
-		parent: parentElement,
-	});
-
 	const selectionCommands = {
 		// Expands selections to the smallest container node
 		// with name [nodeName].
@@ -989,6 +955,57 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 		},
 	};
 
+	// Returns a keyboard command that returns true (so accepts the keybind)
+	const keyCommand = (key: string, run: ()=> void): KeyBinding => {
+		return {
+			key,
+			run: (_: EditorView): boolean => {
+				run();
+				return true;
+			},
+			preventDefault: true,
+		};
+	};
+
+	const editor = new EditorView({
+		state: EditorState.create({
+			// See https://github.com/codemirror/basic-setup/blob/main/src/codemirror.ts
+			// for a sample configuration.
+			extensions: [
+				markdown({
+					extensions: [
+						GFM, MarkdownTeXParser,
+					],
+				}),
+				...createTheme(theme),
+				history(),
+				search(),
+				drawSelection(),
+				highlightSpecialChars(),
+				highlightSelectionMatches(),
+				indentOnInput(),
+
+				EditorView.lineWrapping,
+				EditorView.contentAttributes.of({ autocapitalize: 'sentence' }),
+				EditorView.updateListener.of((viewUpdate: ViewUpdate) => {
+					notifyDocChanged(viewUpdate);
+					notifySelectionChange(viewUpdate);
+					notifySelectionFormattingChange(viewUpdate);
+				}),
+				keymap.of([
+					...defaultKeymap, ...historyKeymap, ...searchKeymap,
+
+					// Markdown formatting keyboard shortcuts
+					keyCommand('Mod-b', selectionCommands.bold),
+					keyCommand('Mod-i', selectionCommands.italicize),
+					keyCommand('Mod-$', selectionCommands.toggleMath),
+					keyCommand('Mod-`', selectionCommands.toggleCode),
+				]),
+			],
+			doc: initialText,
+		}),
+		parent: parentElement,
+	});
 
 	const editorControls = {
 		editor,
