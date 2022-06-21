@@ -2110,3 +2110,6 @@ packages/tools/website/utils/types.d.ts
 packages/tools/website/utils/types.js
 packages/tools/website/utils/types.js.map
 # AUTO-GENERATED - EXCLUDED TYPESCRIPT BUILD
+packages/app-mobile/components/get-responsive-value.test.js
+packages/app-mobile/components/get-responsive-value.test.js
+packages/app-mobile/components/get-responsive-value.test.js
