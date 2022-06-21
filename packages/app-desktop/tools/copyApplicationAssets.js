@@ -87,6 +87,14 @@ async function main() {
 			src: resolve(__dirname, '../../lib/services/plugins/sandboxProxy.js'),
 			dest: `${buildLibDir}/@joplin/lib/services/plugins/sandboxProxy.js`,
 		},
+		{
+			src: resolve(__dirname, '../../pdf-viewer/dist/pdfViewer.js'),
+			dest: `${buildLibDir}/@joplin/pdf-viewer/pdfViewer.js`,
+		},
+		{
+			src: resolve(__dirname, '../../pdf-viewer/index.html'),
+			dest: `${buildLibDir}/@joplin/pdf-viewer/index.html`,
+		},
 	];
 
 	// First we delete all the destination directories, then we copy the files.

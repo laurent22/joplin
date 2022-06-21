@@ -1869,6 +1869,9 @@ packages/lib/uuid.js.map
 packages/lib/versionInfo.d.ts
 packages/lib/versionInfo.js
 packages/lib/versionInfo.js.map
+packages/pdf-viewer/index.d.ts
+packages/pdf-viewer/index.js
+packages/pdf-viewer/index.js.map
 packages/plugin-repo-cli/commands/updateRelease.d.ts
 packages/plugin-repo-cli/commands/updateRelease.js
 packages/plugin-repo-cli/commands/updateRelease.js.map
