@@ -1504,6 +1504,22 @@ class Setting extends BaseModel {
 				storage: SettingStorage.Database,
 			},
 
+			updatedDefaultPluginsInstallStates: {
+				value: false,
+				type: SettingItemType.Bool,
+				public: false,
+				appTypes: [AppType.Desktop],
+				storage: SettingStorage.File,
+			},
+
+			defaultPlugins: {
+				value: {},
+				type: SettingItemType.Object,
+				public: true,
+				appTypes: [AppType.Desktop],
+				storage: SettingStorage.Database,
+			},
+
 			lastSettingDefaultMigration: {
 				value: -1,
 				type: SettingItemType.Int,
@@ -1515,6 +1531,13 @@ class Setting extends BaseModel {
 				type: SettingItemType.Bool,
 				public: false,
 			},
+
+			// isFirstAppStart: {
+			// 	value: true,
+			// 	type: SettingItemType.Bool,
+			// 	storage: SettingStorage.File,
+			// 	public: false,
+			// },
 
 			// 'featureFlag.syncAccurateTimestamps': {
 			// 	value: false,

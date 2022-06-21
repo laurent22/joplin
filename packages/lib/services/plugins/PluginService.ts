@@ -416,7 +416,7 @@ export default class PluginService extends BaseService {
 		return this.installPluginFromRepo(repoApi, pluginId);
 	}
 
-	public async installPlugin(jplPath: string, defaultPlugin: boolean = false): Promise<Plugin> {
+	public async installPlugin(jplPath: string, loadPlugin: boolean = true): Promise<Plugin> {
 		logger.info(`Installing plugin: "${jplPath}"`);
 
 		// Before moving the plugin to the profile directory, we load it
@@ -429,11 +429,11 @@ export default class PluginService extends BaseService {
 		await shim.fsDriver().copy(jplPath, destPath);
 
 		// Now load it from the profile directory
-		if (!defaultPlugin) {
+		if (loadPlugin) {
 			const plugin = await this.loadPluginFromPath(destPath);
 			if (!this.plugins_[plugin.id]) this.setPluginAt(plugin.id, plugin);
 			return plugin;
-		}
+		} else { return null; }
 	}
 
 	private async pluginPath(pluginId: string) {

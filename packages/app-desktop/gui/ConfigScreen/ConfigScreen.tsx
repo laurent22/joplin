@@ -60,11 +60,25 @@ class ConfigScreenComponent extends React.Component<any, any> {
 		this.setState({ settings: this.props.settings });
 	}
 
+	updatePluginsStates(value: any) {
+		const key = 'plugins.states';
+		const md = Setting.settingMetadata(key);
+		shared.updateSettingValue(this, key, value);
+
+		if (md.autoSave) {
+			shared.scheduleSaveSettings(this);
+		}
+	}
+
 	componentDidMount() {
 		if (this.props.defaultSection) {
 			this.setState({ selectedSectionName: this.props.defaultSection }, () => {
 				this.switchSection(this.props.defaultSection);
 			});
+		}
+		if (!Setting.value('updatedDefaultPluginsInstallStates')) {
+			this.updatePluginsStates(Setting.value('defaultPlugins'));
+			Setting.setValue('updatedDefaultPluginsInstallStates', true);
 		}
 	}
 
