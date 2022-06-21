@@ -28,6 +28,17 @@ export class MarkupLanguageUtils {
 		return urls;
 	}
 
+	public extractPdfUrls(language: MarkupLanguage, text: string): string[] {
+		let urls: string[] = [];
+		if (language === MarkupLanguage.Any) {
+			urls = urls.concat(this.lib_(MarkupLanguage.Markdown).extractPdfUrls(text));
+			urls = urls.concat(this.lib_(MarkupLanguage.Html).extractPdfUrls(text));
+		} else {
+			urls = this.lib_(language).extractPdfUrls(text);
+		}
+		return urls;
+	}
+
 	// Create a new MarkupToHtml instance while injecting options specific to Joplin
 	// desktop and mobile applications.
 	public newMarkupToHtml(_plugins: PluginStates = null, options: Options = null) {

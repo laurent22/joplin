@@ -10,10 +10,15 @@
 // from NoteEditor.tsx.
 
 import { EditorState, Extension } from '@codemirror/state';
-import { EditorView, drawSelection, highlightSpecialChars, ViewUpdate } from '@codemirror/view';
 import { markdown } from '@codemirror/lang-markdown';
-import { defaultHighlightStyle, HighlightStyle, tags } from '@codemirror/highlight';
-import { undo, redo, history, undoDepth, redoDepth } from '@codemirror/history';
+import { defaultHighlightStyle, syntaxHighlighting, HighlightStyle } from '@codemirror/language';
+import { tags } from '@lezer/highlight';
+import { EditorView, drawSelection, highlightSpecialChars, ViewUpdate } from '@codemirror/view';
+import { undo, redo, history, undoDepth, redoDepth } from '@codemirror/commands';
+
+import { keymap } from '@codemirror/view';
+import { indentOnInput } from '@codemirror/language';
+import { historyKeymap, defaultKeymap } from '@codemirror/commands';
 
 interface CodeMirrorResult {
 	editor: EditorView;
@@ -46,7 +51,7 @@ function logMessage(...msg: any[]) {
 // the app is running. It seems that what appears as ".ͼ1" in the CSS is the
 // equivalent of "&" in the theme object. So to target ".ͼ1.cm-focused", you'd
 // use '&.cm-focused' in the theme.
-const createTheme = (theme: any): Extension => {
+const createTheme = (theme: any): Extension[] => {
 	const isDarkTheme = theme.appearance === 'dark';
 
 	const baseGlobalStyle: Record<string, string> = {
@@ -91,7 +96,7 @@ const createTheme = (theme: any): Extension => {
 		fontFamily: theme.fontFamily,
 	};
 
-	const syntaxHighlighting = HighlightStyle.define([
+	const highlightingStyle = HighlightStyle.define([
 		{
 			tag: tags.strong,
 			fontWeight: 'bold',
@@ -140,7 +145,11 @@ const createTheme = (theme: any): Extension => {
 	return [
 		baseTheme,
 		appearanceTheme,
-		syntaxHighlighting,
+		syntaxHighlighting(highlightingStyle),
+
+		// If we haven't defined highlighting for tags, fall back
+		// to the default.
+		syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
 	];
 };
 
@@ -168,15 +177,18 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 
 	const editor = new EditorView({
 		state: EditorState.create({
+			// See https://github.com/codemirror/basic-setup/blob/main/src/codemirror.ts
+			// for a sample configuration.
 			extensions: [
 				markdown(),
-				createTheme(theme),
+				...createTheme(theme),
 				history(),
 				drawSelection(),
 				highlightSpecialChars(),
+				indentOnInput(),
+
 				EditorView.lineWrapping,
 				EditorView.contentAttributes.of({ autocapitalize: 'sentence' }),
-				defaultHighlightStyle.fallback,
 				EditorView.updateListener.of((viewUpdate: ViewUpdate) => {
 					if (viewUpdate.docChanged) {
 						postMessage('onChange', { value: editor.state.doc.toString() });
@@ -190,6 +202,9 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 						postMessage('onSelectionChange', { selection: { start: selStart, end: selEnd } });
 					}
 				}),
+				keymap.of([
+					...defaultKeymap, ...historyKeymap,
+				]),
 			],
 			doc: initialText,
 		}),
