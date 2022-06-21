@@ -1,4 +1,4 @@
-import produce, { Draft } from 'immer';
+import produce, { Draft, original } from 'immer';
 import pluginServiceReducer, { stateRootKey as pluginServiceStateRootKey, defaultState as pluginServiceDefaultState, State as PluginServiceState } from './services/plugins/reducer';
 import shareServiceReducer, { stateRootKey as shareServiceStateRootKey, defaultState as shareServiceDefaultState, State as ShareServiceState } from './services/share/reducer';
 import Note from './models/Note';
@@ -6,7 +6,8 @@ import Folder from './models/Folder';
 import BaseModel from './BaseModel';
 import { Store } from 'redux';
 import { ProfileConfig } from './services/profileConfig/types';
-const ArrayUtils = require('./ArrayUtils.js');
+import * as ArrayUtils from './ArrayUtils';
+const fastDeepEqual = require('fast-deep-equal');
 const { ALL_NOTES_FILTER_ID } = require('./reserved-ids');
 const { createSelectorCreator, defaultMemoize } = require('reselect');
 const { createCachedSelector } = require('re-reselect');
@@ -924,7 +925,9 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 			break;
 
 		case 'TAG_UPDATE_ALL':
-			draft.tags = action.items;
+			if (!fastDeepEqual(original(draft.tags), action.items)) {
+				draft.tags = action.items;
+			}
 			break;
 
 		case 'TAG_SELECT':
@@ -1122,7 +1125,9 @@ const reducer = produce((draft: Draft<State> = defaultState, action: any) => {
 			break;
 
 		case 'SET_NOTE_TAGS':
-			draft.selectedNoteTags = action.items;
+			if (!fastDeepEqual(original(draft.selectedNoteTags), action.items)) {
+				draft.selectedNoteTags = action.items;
+			}
 			break;
 
 		case 'PLUGINLEGACY_DIALOG_SET':

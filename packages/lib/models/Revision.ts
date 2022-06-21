@@ -2,7 +2,7 @@ import BaseModel, { ModelType } from '../BaseModel';
 import { RevisionEntity } from '../services/database/types';
 import BaseItem from './BaseItem';
 const DiffMatchPatch = require('diff-match-patch');
-const ArrayUtils = require('../ArrayUtils.js');
+import * as ArrayUtils from '../ArrayUtils';
 import JoplinError from '../JoplinError';
 const { sprintf } = require('sprintf-js');
 
