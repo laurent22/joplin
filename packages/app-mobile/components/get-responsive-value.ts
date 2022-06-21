@@ -1,5 +1,6 @@
 // getResponsiveValue() returns the corresponding value for
-// of a particular device screen width based on a valueMap
+// of a particular device screen width based on a valueMap argument
+// and breakpoints
 //
 // Breakpoints:
 // sm: < 481
@@ -10,7 +11,8 @@
 //
 // Eg. [ 10, 15, 20, 25, 30 ] means { sm: 10, md: 15, lg: 20, xl: 25, xxl: 30 }
 // [10] and [10, 15] are equivalent to { sm: 10 } and { sm: 10, md: 15 } respectively
-
+//
+// More Info: https://discourse.joplinapp.org/t/week-4-report/26117
 import { Dimensions } from 'react-native';
 
 interface ValueMap {
@@ -39,6 +41,7 @@ export default function getResponsiveValue(valueMap: number[] | ValueMap): numbe
 	} else {
 		({ sm, md, lg, xl, xxl } = valueMap as ValueMap);
 
+		// This handles cases where certain values are omitted
 		if (xxl) {
 			value = xxl;
 		}

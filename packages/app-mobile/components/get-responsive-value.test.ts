@@ -3,6 +3,7 @@ import { Dimensions } from 'react-native';
 
 describe('getResponsiveValue', () => {
 	beforeEach(() => {
+		// Mock the device width values returned by Dimensions.get() for better test coverage
 		Dimensions.get = jest.fn()
 			.mockReturnValueOnce({ width: 400 })
 			.mockReturnValueOnce({ width: 480 })
@@ -177,6 +178,83 @@ describe('getResponsiveValue', () => {
 	test('Should always return xxl value, if only xxl value is specified', () => {
 		const input = { xxl: 130 };
 		const correctOutputs = [130, 130, 130, 130, 130, 130, 130, 130, 130, 130, 130, 130, 130];
+		let result: number;
+
+		for (let i = 0; i < 13; i++) {
+			result = getResponsiveValue(input);
+			expect(result).toBe(correctOutputs[i]);
+		}
+	});
+
+	test('Should return correct value when sm and lg values are specified', () => {
+		const input = { sm: 10, lg: 50 };
+		const correctOutputs = [10, 10, 10, 10, 10, 50, 50, 50, 50, 50, 50, 50, 50];
+		let result: number;
+
+		for (let i = 0; i < 13; i++) {
+			result = getResponsiveValue(input);
+			expect(result).toBe(correctOutputs[i]);
+		}
+	});
+
+	test('Should return correct value when sm and xl values are specified', () => {
+		const input = { sm: 10, xl: 50 };
+		const correctOutputs = [10, 10, 10, 10, 10, 10, 10, 10, 50, 50, 50, 50, 50];
+		let result: number;
+
+		for (let i = 0; i < 13; i++) {
+			result = getResponsiveValue(input);
+			expect(result).toBe(correctOutputs[i]);
+		}
+	});
+
+	test('Should return correct values when sm and xxl values are specified', () => {
+		const input = { sm: 10, xxl: 50 };
+		const correctOutputs = [10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 50, 50];
+		let result: number;
+
+		for (let i = 0; i < 13; i++) {
+			result = getResponsiveValue(input);
+			expect(result).toBe(correctOutputs[i]);
+		}
+	});
+
+	test('Should return correct values when md and lg values are specified', () => {
+		const input = { md: 30, lg: 50 };
+		const correctOutputs = [30, 30, 30, 30, 30, 50, 50, 50, 50, 50, 50, 50, 50];
+		let result: number;
+
+		for (let i = 0; i < 13; i++) {
+			result = getResponsiveValue(input);
+			expect(result).toBe(correctOutputs[i]);
+		}
+	});
+
+	test('Should return correct values when md and xl values are specified', () => {
+		const input = { md: 30, xl: 50 };
+		const correctOutputs = [30, 30, 30, 30, 30, 30, 30, 30, 50, 50, 50, 50, 50];
+		let result: number;
+
+		for (let i = 0; i < 13; i++) {
+			result = getResponsiveValue(input);
+			expect(result).toBe(correctOutputs[i]);
+		}
+	});
+
+	test('Should return correct values when md and xxl values are specified', () => {
+		const input = { md: 30, xxl: 50 };
+		const correctOutputs = [30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 50, 50];
+		let result: number;
+
+		for (let i = 0; i < 13; i++) {
+			result = getResponsiveValue(input);
+			expect(result).toBe(correctOutputs[i]);
+		}
+	});
+
+	test('Should return correct values when xl and xxl values are specified', () => {
+		const input = { xl: 30, xxl: 50 };
+		const correctOutputs = [30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 50, 50];
 		let result: number;
 
 		for (let i = 0; i < 13; i++) {
