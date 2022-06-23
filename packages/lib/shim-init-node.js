@@ -82,13 +82,10 @@ const gunzipFile = function(source, destination) {
 };
 
 function setupProxySettings(options) {
-	if (!proxySettings.set) {
-		proxySettings.maxConcurrentConnections = options.maxConcurrentConnections;
-		proxySettings.proxyTimeout = options.proxyTimeout;
-		proxySettings.proxyEnabled = options.proxyEnabled;
-		proxySettings.proxyUrl = options.proxyUrl;
-		proxySettings.set = true;
-	}
+	proxySettings.maxConcurrentConnections = options.maxConcurrentConnections;
+	proxySettings.proxyTimeout = options.proxyTimeout;
+	proxySettings.proxyEnabled = options.proxyEnabled;
+	proxySettings.proxyUrl = options.proxyUrl;
 }
 
 function shimInit(options = null) {

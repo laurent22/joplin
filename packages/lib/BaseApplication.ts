@@ -457,6 +457,14 @@ export default class BaseApplication {
 					syswidecas.addCAs(f);
 				}
 			},
+			'net.proxyEnabled': async () => {
+				setupProxySettings({
+					maxConcurrentConnections: Setting.value('sync.maxConcurrentConnections'),
+					proxyTimeout: Setting.value('net.proxyTimeout'),
+					proxyEnabled: Setting.value('net.proxyEnabled'),
+					proxyUrl: Setting.value('net.proxyUrl'),
+				});
+			},
 
 			// Note: this used to run when "encryption.enabled" was changed, but
 			// now we run it anytime any property of the sync target info is
@@ -492,6 +500,9 @@ export default class BaseApplication {
 		sideEffects['locale'] = sideEffects['dateFormat'];
 		sideEffects['encryption.passwordCache'] = sideEffects['syncInfoCache'];
 		sideEffects['encryption.masterPassword'] = sideEffects['syncInfoCache'];
+		sideEffects['sync.maxConcurrentConnections'] = sideEffects['net.proxyEnabled'];
+		sideEffects['sync.proxyTimeout'] = sideEffects['net.proxyEnabled'];
+		sideEffects['sync.proxyUrl'] = sideEffects['net.proxyEnabled'];
 
 		if (action) {
 			const effect = sideEffects[action.key];
@@ -501,13 +512,6 @@ export default class BaseApplication {
 				await sideEffects[key]();
 			}
 		}
-
-		setupProxySettings({
-			maxConcurrentConnections: Setting.value('sync.maxConcurrentConnections'),
-			proxyTimeout: Setting.value('net.proxyTimeout'),
-			proxyEnabled: Setting.value('net.proxyEnabled'),
-			proxyUrl: Setting.value('net.proxyUrl'),
-		});
 	}
 
 	protected async generalMiddleware(store: any, next: any, action: any) {
