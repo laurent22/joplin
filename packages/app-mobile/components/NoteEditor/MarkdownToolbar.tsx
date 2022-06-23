@@ -4,6 +4,8 @@ const React = require('react');
 const { StyleSheet } = require('react-native');
 const { ScrollView, View, Text, TouchableHighlight } = require('react-native');
 const { useMemo, useState } = require('react');
+const AntIcon = require('react-native-vector-icons/AntDesign').default;
+const FontAwesomeIcon = require('react-native-vector-icons/FontAwesome5').default;
 import { themeStyle } from '@joplin/lib/theme';
 import { _ } from '@joplin/lib/locale';
 import { EditorControl, SelectionFormatting } from './EditorType';
@@ -279,9 +281,7 @@ const MarkdownToolbar = (props: ToolbarProps) => {
 	// List menu
 	listMenuModel.addAction({
 		icon: (
-			<Text style={ styles.multiLineIconText }>
-				{'•—\n•—\n•—'}
-			</Text>
+			<FontAwesomeIcon name="list-ul" style={styles.text}/>
 		),
 		accessibilityLabel:
 			selState.inUnorderedList ? _('Remove unordered list') : _('Create unordered list'),
@@ -293,9 +293,7 @@ const MarkdownToolbar = (props: ToolbarProps) => {
 
 	listMenuModel.addAction({
 		icon: (
-			<Text style={ styles.multiLineIconText }>
-				{'1.—\n2.—\n3.—'}
-			</Text>
+			<FontAwesomeIcon name="list-ol" style={styles.text}/>
 		),
 		accessibilityLabel:
 			selState.inOrderedList ? _('Remove ordered list') : _('Create ordered list'),
@@ -307,9 +305,7 @@ const MarkdownToolbar = (props: ToolbarProps) => {
 
 	listMenuModel.addAction({
 		icon: (
-			<Text style={ styles.multiLineIconText }>
-				{'← …\n← …\n← …'}
-			</Text>
+			<AntIcon name="indent-left" style={styles.text}/>
 		),
 		accessibilityLabel: _('Decrease indent level'),
 	}, () => {
@@ -318,9 +314,7 @@ const MarkdownToolbar = (props: ToolbarProps) => {
 
 	listMenuModel.addAction({
 		icon: (
-			<Text style={ styles.multiLineIconText }>
-				{'→ …\n→ …\n→ …'}
-			</Text>
+			<AntIcon name="indent-right" style={styles.text}/>
 		),
 		accessibilityLabel: _('Increase indent level'),
 	}, () => {
@@ -349,11 +343,7 @@ const MarkdownToolbar = (props: ToolbarProps) => {
 
 	miscFormatMenuModel.addAction({
 		icon: (
-			<Text
-				style={{ ...styles.text, fontWeight: 'bold' }}
-			>
-				B
-			</Text>
+			<FontAwesomeIcon name="bold" style={styles.text}/>
 		),
 		accessibilityLabel:
 			selState.bolded ? _('Unbold') : _('Bold text'),
@@ -364,15 +354,24 @@ const MarkdownToolbar = (props: ToolbarProps) => {
 
 	miscFormatMenuModel.addAction({
 		icon: (
-			<Text style={{ ...styles.text, fontStyle: 'italic' }}>
-				I
-			</Text>
+			<FontAwesomeIcon name="italic" style={styles.text}/>
 		),
 		accessibilityLabel:
 			selState.italicized ? _('Unitalicize') : _('Italicize'),
 		active: selState.italicized,
 	}, () => {
 		editorControl.toggleItalicized();
+	});
+
+	miscFormatMenuModel.addAction({
+		icon: (
+			<FontAwesomeIcon name="link" style={styles.text}/>
+		),
+		accessibilityLabel:
+			selState.inLink ? _('Edit Link') : _('Create Link'),
+		active: selState.inLink,
+	}, () => {
+		editorControl.showLinkDialog();
 	});
 
 

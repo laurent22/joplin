@@ -371,9 +371,13 @@ const createTheme = (theme: any): Extension[] => {
 		{
 			tag: tags.comment,
 			color: theme.color3,
-			backgroundColor: theme.backgroundColor3,
 			borderRadius: '4px',
 			fontStyle: 'italic',
+		},
+		{
+			tag: tags.link,
+			color: theme.urlColor,
+			textDecoration: 'underline',
 		},
 	]);
 
@@ -447,7 +451,7 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 		formatting.selectedText = state.doc.sliceString(range.from, range.to);
 
 		const parseLinkData = (nodeText: string) => {
-			const linkMatch = nodeText.match(/\[([^\]]*)\]\([^)]*\)/);
+			const linkMatch = nodeText.match(/\[([^\]]*)\]\(([^)]*)\)/);
 			return {
 				linkText: linkMatch[1],
 				linkURL: linkMatch[2],
