@@ -216,13 +216,13 @@ class PromptDialog extends React.Component {
 			}
 		};
 
-		const searchByValue = option => {
-			return option._value;
+		const searchByTitle = option => {
+			return option.title;
 		};
 
-		const onInputChange = (_input) => {
-			if (_input !== '') {
-				// To convert Notebooks names to paths.
+		const onInputChange = (input) => {
+			if (input) {
+				// To convert Notebooks title to paths.
 				if (this.props.autocomplete) {
 					for (let i = 0; i < this.props.autocomplete.length; i++) {
 						this.props.autocomplete[i].label = <span> {this.props.autocomplete[i].path}</span>;
@@ -231,11 +231,11 @@ class PromptDialog extends React.Component {
 				}
 
 			} else {
-				// To convert the Notebooks names into a tree again
+				// To convert the Notebooks title into a tree again
 				if (this.props.autocomplete) {
 					for (let i = 0; i < this.props.autocomplete.length; i++) {
-						// To return the previous 'label & indentDepth' value
-						this.props.autocomplete[i].label = this.props.autocomplete[i]._value;
+						// To return the previous 'label & indentDepth' value.
+						this.props.autocomplete[i].label = this.props.autocomplete[i].title;
 						this.props.autocomplete[i].indentDepth = this.props.autocomplete[i]._indentDepth;
 					}
 				}
@@ -252,7 +252,7 @@ class PromptDialog extends React.Component {
 		} else if (this.props.inputType === 'tags') {
 			inputComp = <CreatableSelect className="tag-selector" styles={styles.select} theme={styles.selectTheme} ref={this.answerInput_} value={this.state.answer} placeholder="" components={makeAnimated()} isMulti={true} isClearable={false} backspaceRemovesValue={true} options={this.props.autocomplete} onChange={onSelectChange} onKeyDown={event => onKeyDown(event)} />;
 		} else if (this.props.inputType === 'dropdown') {
-			inputComp = <Select className="item-selector" styles={styles.select} theme={styles.selectTheme} ref={this.answerInput_} components={makeAnimated()} value={this.props.answer} defaultValue={this.props.defaultValue} isClearable={false} options={this.props.autocomplete} getOptionValue={searchByValue} onInputChange={onInputChange} onChange={onSelectChange} onKeyDown={event => onKeyDown(event)} />;
+			inputComp = <Select className="item-selector" styles={styles.select} theme={styles.selectTheme} ref={this.answerInput_} components={makeAnimated()} value={this.props.answer} defaultValue={this.props.defaultValue} isClearable={false} options={this.props.autocomplete} getOptionValue={searchByTitle} onInputChange={onInputChange} onChange={onSelectChange} onKeyDown={event => onKeyDown(event)} />;
 		} else {
 			inputComp = <input style={styles.input} ref={this.answerInput_} value={this.state.answer} type="text" onChange={event => onChange(event)} onKeyDown={event => onKeyDown(event)} />;
 		}
