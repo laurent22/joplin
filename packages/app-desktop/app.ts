@@ -1,7 +1,7 @@
 import ResourceEditWatcher from '@joplin/lib/services/ResourceEditWatcher/index';
 import CommandService from '@joplin/lib/services/CommandService';
 import KeymapService from '@joplin/lib/services/KeymapService';
-import PluginService, { defaultPluginSetting, PluginSettings } from '@joplin/lib/services/plugins/PluginService';
+import PluginService, { PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import resourceEditWatcherReducer, { defaultState as resourceEditWatcherDefaultState } from '@joplin/lib/services/ResourceEditWatcher/reducer';
 import PluginRunner from './services/plugins/PluginRunner';
 import PlatformImplementation from './services/plugins/PlatformImplementation';
@@ -63,8 +63,7 @@ import checkForUpdates from './checkForUpdates';
 import { AppState } from './app.reducer';
 import syncDebugLog from '@joplin/lib/services/synchronizer/syncDebugLog';
 import eventManager from '@joplin/lib/eventManager';
-import path = require('path');
-import produce from 'immer';
+import installDefaultPlugins from './installDefaultPlugins';
 // import { runIntegrationTests } from '@joplin/lib/services/e2ee/ppkTestUtils';
 
 const pluginClasses = [
@@ -274,21 +273,8 @@ class Application extends BaseApplication {
 			Setting.setValue('plugins.states', newSettings);
 		}
 
-		if (Setting.value('firstStart')) {
-			const defaultPlugins = await shim.fsDriver().readDirStats(path.join(__dirname, '..', 'app-desktop/build/defaultPlugins/'));
-			for (const plugin of defaultPlugins) {
-				const defaultPluginPath: string = path.join(__dirname, '..', `app-desktop/build/defaultPlugins/${plugin.path}`);
-				await service.installPlugin(defaultPluginPath, false);
-
-				pluginSettings = produce(pluginSettings, (draft: PluginSettings) => {
-					draft[plugin.path.replace('.jpl', '')] = defaultPluginSetting();
-				});
-			}
-
-			Setting.setValue('defaultPlugins', service.serializePluginSettings(pluginSettings));
-		}
-
 		try {
+			pluginSettings = await installDefaultPlugins(pluginSettings, service);
 			if (await shim.fsDriver().exists(Setting.value('pluginDir'))) {
 				await service.loadAndRunPlugins(Setting.value('pluginDir'), pluginSettings);
 			}
