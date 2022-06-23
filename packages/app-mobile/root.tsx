@@ -928,6 +928,7 @@ class AppComponent extends React.Component {
 							value: percent,
 						});
 					}}
+					key={this.state.sideMenuWidth}
 				>
 					<StatusBar barStyle={statusBarStyle} />
 					<MenuContext style={{ flex: 1 }}>
