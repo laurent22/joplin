@@ -2,6 +2,7 @@ import Setting from '@joplin/lib/models/Setting';
 import shim from '@joplin/lib/shim';
 import { themeStyle } from '@joplin/lib/theme';
 import MarkdownToolbar from './MarkdownToolbar';
+import EditLinkDialog from './EditLinkDialog';
 
 const React = require('react');
 const { forwardRef, useImperativeHandle } = require('react');
@@ -145,6 +146,7 @@ function NoteEditor(props: Props, ref: any) {
 	const css = useCss(props.themeId);
 	const html = useHtml(css);
 	const [selectionState, setSelectionState] = useState(new SelectionFormatting());
+	const [linkDialogVisible, setLinkDialogVisible] = useState(false);
 
 	// / Runs [js] in the context of the CodeMirror frame.
 	const injectJS = (js: string) => {
@@ -202,6 +204,18 @@ function NoteEditor(props: Props, ref: any) {
 		},
 		decreaseIndent() {
 			injectJS('cm.selectionCommands.decreaseIndent();');
+		},
+		showLinkDialog() {
+			setLinkDialogVisible(true);
+		},
+		hideLinkDialog() {
+			setLinkDialogVisible(false);
+		},
+		updateLink(label: string, url: string) {
+			injectJS(`cm.selectionCommands.updateLink(
+				${JSON.stringify(label)},
+				${JSON.stringify(url)}
+			);`);
 		},
 	};
 
@@ -263,6 +277,10 @@ function NoteEditor(props: Props, ref: any) {
 				const formatting = SelectionFormatting.fromJSON(data);
 				setSelectionState(formatting);
 			},
+
+			onRequestLinkEdit() {
+				editorControl.showLinkDialog();
+			},
 		};
 
 		if (handlers[msg.name]) {
@@ -284,6 +302,12 @@ function NoteEditor(props: Props, ref: any) {
 			...props.style,
 			flexDirection: 'column',
 		}}>
+			<EditLinkDialog
+				visible={linkDialogVisible}
+				themeId={props.themeId}
+				editorControl={editorControl}
+				selectionState={selectionState}
+			/>
 			<View style={{
 				flexGrow: 1,
 				flexShrink: 0,

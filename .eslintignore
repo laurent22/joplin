@@ -856,6 +856,9 @@ packages/app-mobile/components/NoteBodyViewer/hooks/useSource.js.map
 packages/app-mobile/components/NoteEditor/CodeMirror.d.ts
 packages/app-mobile/components/NoteEditor/CodeMirror.js
 packages/app-mobile/components/NoteEditor/CodeMirror.js.map
+packages/app-mobile/components/NoteEditor/EditLinkDialog.d.ts
+packages/app-mobile/components/NoteEditor/EditLinkDialog.js
+packages/app-mobile/components/NoteEditor/EditLinkDialog.js.map
 packages/app-mobile/components/NoteEditor/EditorType.d.ts
 packages/app-mobile/components/NoteEditor/EditorType.js
 packages/app-mobile/components/NoteEditor/EditorType.js.map

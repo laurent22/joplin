@@ -437,9 +437,22 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 		}
 	}
 
+	function notifyLinkEditRequest() {
+		postMessage('onRequestLinkEdit', null);
+	}
+
 	function computeSelectionFormatting(state: EditorState) {
 		const range = state.selection.main;
 		const formatting: SelectionFormatting = new SelectionFormatting();
+		formatting.selectedText = state.doc.sliceString(range.from, range.to);
+
+		const parseLinkData = (nodeText: string) => {
+			const linkMatch = nodeText.match(/\[([^\]]*)\]\([^)]*\)/);
+			return {
+				linkText: linkMatch[1],
+				linkURL: linkMatch[2],
+			};
+		};
 
 		// Find the smallest range.
 		syntaxTree(state).iterate({
@@ -449,6 +462,8 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 				if (node.from > range.from || node.to < range.to) {
 					return;
 				}
+				// Lazily compute the node's text
+				const nodeText = () => state.doc.sliceString(node.from, node.to);
 
 				switch (node.name) {
 				case 'StrongEmphasis':
@@ -488,6 +503,14 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 					break;
 				case 'ATXHeading4':
 					formatting.headerLevel = 4;
+					break;
+				case 'URL':
+					formatting.inLink = true;
+					formatting.linkData.linkURL = nodeText();
+					break;
+				case 'Link':
+					formatting.inLink = true;
+					formatting.linkData = parseLinkData(nodeText());
 					break;
 				}
 			},
@@ -957,6 +980,47 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 				matchEmpty
 			);
 		},
+
+		// Create a new link with [label] and [url], or, if a link is either partially
+		// or fully selected, update the label and URL of that link.
+		updateLink(label: string, url: string) {
+			const linkText = `[${label}](${url})`;
+
+			const transaction = editor.state.changeByRange((sel: SelectionRange) => {
+				const changes = [];
+
+				// Search for a link that overlaps [sel]
+				let linkFrom: number | null = null;
+				let linkTo: number | null = null;
+				syntaxTree(editor.state).iterate({
+					from: sel.from, to: sel.to,
+					enter: node => {
+						const haveFoundLink = (linkFrom != null && linkTo != null);
+
+						if (node.name == 'Link' || (node.name == 'URL' && !haveFoundLink)) {
+							linkFrom = node.from;
+							linkTo = node.to;
+						}
+					},
+				});
+
+				if (linkFrom == null || linkTo == null) {
+					linkFrom = sel.from;
+					linkTo = sel.to;
+				}
+
+				changes.push({
+					from: linkFrom, to: linkTo,
+					insert: linkText,
+				});
+
+				return {
+					changes,
+					range: EditorSelection.range(linkFrom, linkFrom + linkText.length),
+				};
+			});
+			editor.dispatch(transaction);
+		},
 	};
 
 	// Returns a keyboard command that returns true (so accepts the keybind)
@@ -1004,6 +1068,7 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 					keyCommand('Mod-i', selectionCommands.italicize),
 					keyCommand('Mod-$', selectionCommands.toggleMath),
 					keyCommand('Mod-`', selectionCommands.toggleCode),
+					keyCommand('Mod-k', notifyLinkEditRequest),
 				]),
 			],
 			doc: initialText,

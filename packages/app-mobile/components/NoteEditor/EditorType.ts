@@ -29,17 +29,31 @@ export class SelectionFormatting {
 	public inUnorderedList: boolean = false;
 	public inOrderedList: boolean = false;
 	public inMath: boolean = false;
+	public inLink: boolean = false;
+
+	// Link data, both fields are null if not in a link.
+	public linkData: { linkText?: string; linkURL?: string } = {
+		linkText: null,
+		linkURL: null,
+	};
 
 	// If [headerLevel], [listLevel], etc. are zero, then the
 	// selection isn't in a header/list
 	public headerLevel: number = 0;
 	public listLevel: number = 0;
 
+	// Content of the selection
+	public selectedText: string = '';
+
 	// List of data properties (for serializing/deseralizing)
 	private static propNames: string[] = [
 		'bolded', 'italicized', 'inChecklist', 'inCode',
 		'inUnorderedList', 'inOrderedList', 'inMath',
+		'inLink', 'linkData',
+
 		'headerLevel', 'listLevel',
+
+		'selectedText',
 	];
 
 	// Returns true iff [this] is equivalent to [other]
@@ -111,8 +125,13 @@ export interface EditorControl {
 	toggleList(bulleted: boolean): void;
 	toggleCode(): void;
 	toggleMath(): void;
-
 	toggleHeaderLevel(level: number): void;
+
+	// Create a new link or update the currently selected link with
+	// the given [label] and [url].
+	updateLink(label: string, url: string): void;
+	showLinkDialog(): void;
+	hideLinkDialog(): void;
 
 	increaseIndent(): void;
 	decreaseIndent(): void;
