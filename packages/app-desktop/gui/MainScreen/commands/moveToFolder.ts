@@ -10,19 +10,15 @@ export const declaration: CommandDeclaration = {
 
 export class AddOptions {
 
-	public startFolders: any[] = [];
 	private maxDepth = 15;
+	public startFolders: any[] = [];
 
 	public addOptions(folders: any[], depth: number, path: string) {
 		for (let i = 0; i < folders.length; i++) {
 			const folder = folders[i];
-			// When NoteBook doesn't get a title
-			if (folder.title === '') {
-				folder.title = 'Untitled';
-			}
-			const new_path = path + folder.title;
-			this.startFolders.push({ key: folder.id, value: folder.id, label: folder.title, _value: folder.title, path: new_path, indentDepth: depth, _indentDepth: depth });
-			if (folder.children) this.addOptions(folder.children, (depth + 1) < this.maxDepth ? depth + 1 : this.maxDepth, `${new_path}/`);
+			const newPath = path + folder.title;
+			this.startFolders.push({ key: folder.id, value: folder.id, label: folder.title, title: folder.title, path: newPath, indentDepth: depth, _indentDepth: depth });
+			if (folder.children) this.addOptions(folder.children, (depth + 1) < this.maxDepth ? depth + 1 : this.maxDepth, `${newPath}/`);
 		}
 	}
 }
