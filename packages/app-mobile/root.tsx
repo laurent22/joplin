@@ -28,7 +28,8 @@ import SyncTargetJoplinServer from '@joplin/lib/SyncTargetJoplinServer';
 import SyncTargetJoplinCloud from '@joplin/lib/SyncTargetJoplinCloud';
 import SyncTargetOneDrive from '@joplin/lib/SyncTargetOneDrive';
 const VersionInfo = require('react-native-version-info').default;
-const { AppState, Keyboard, NativeModules, BackHandler, Animated, View, StatusBar, Linking, Platform } = require('react-native');
+const { AppState, Keyboard, NativeModules, BackHandler, Animated, View, StatusBar, Linking, Platform, Dimensions } = require('react-native');
+const getResponsiveValue = require('./components/get-responsive-value').default;
 import NetInfo from '@react-native-community/netinfo';
 const DropdownAlert = require('react-native-dropdownalert').default;
 const AlarmServiceDriver = require('./services/AlarmServiceDriver').default;
@@ -684,6 +685,7 @@ class AppComponent extends React.Component {
 
 		this.state = {
 			sideMenuContentOpacity: new Animated.Value(0),
+			sideMenuWidth: getResponsiveValue([250, 180]),
 		};
 
 		this.lastSyncStarted_ = defaultState.syncStarted;
@@ -769,6 +771,9 @@ class AppComponent extends React.Component {
 		});
 
 		AppState.addEventListener('change', this.onAppStateChange_);
+		Dimensions.addEventListener('change', () => {
+			this.setState({ sideMenuWidth: getResponsiveValue([250, 180]) });
+		});
 
 		await this.handleShareData();
 
@@ -783,6 +788,7 @@ class AppComponent extends React.Component {
 	public componentWillUnmount() {
 		AppState.removeEventListener('change', this.onAppStateChange_);
 		Linking.removeEventListener('url', this.handleOpenURL_);
+		Dimensions.removeEventListener('change');
 		if (this.unsubscribeNetInfoHandler_) this.unsubscribeNetInfoHandler_();
 	}
 
@@ -879,6 +885,7 @@ class AppComponent extends React.Component {
 				<SideMenu
 					menu={sideMenuContent}
 					edgeHitWidth={5}
+					openMenuOffset={this.state.sideMenuWidth}
 					menuPosition={menuPosition}
 					onChange={(isOpen: boolean) => this.sideMenu_change(isOpen)}
 					onSliding={(percent: number) => {
@@ -887,6 +894,7 @@ class AppComponent extends React.Component {
 							value: percent,
 						});
 					}}
+					key={this.state.sideMenuWidth}
 				>
 					<StatusBar barStyle={statusBarStyle} />
 					<MenuContext style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
