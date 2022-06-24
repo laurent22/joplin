@@ -416,7 +416,7 @@ export default class PluginService extends BaseService {
 		return this.installPluginFromRepo(repoApi, pluginId);
 	}
 
-	public async installPlugin(jplPath: string, loadPlugin: boolean = true): Promise<Plugin> {
+	public async installPlugin(jplPath: string, loadPlugin: boolean = true): Promise<Plugin | null> {
 		logger.info(`Installing plugin: "${jplPath}"`);
 
 		// Before moving the plugin to the profile directory, we load it
