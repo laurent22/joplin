@@ -62,12 +62,17 @@ const InlineMathConfig: MarkdownConfig = {
 		name: INLINE_MATH_TAG,
 		after: 'InlineCode',
 
-		parse(cx: InlineContext, next: number, pos: number): number {
+		parse(cx: InlineContext, current: number, pos: number): number {
 			const prevCharCode = pos - 1 >= 0 ? cx.char(pos - 1) : -1;
 			const nextCharCode = cx.char(pos + 1);
-			if (next != DOLLAR_SIGN_CHAR_CODE
+			if (current != DOLLAR_SIGN_CHAR_CODE
 					|| prevCharCode == DOLLAR_SIGN_CHAR_CODE
 					|| nextCharCode == DOLLAR_SIGN_CHAR_CODE) {
+				return -1;
+			}
+
+			// Don't match if there's a space directly after the '$'
+			if (/\s/.exec(String.fromCharCode(nextCharCode))) {
 				return -1;
 			}
 
@@ -84,6 +89,12 @@ const InlineMathConfig: MarkdownConfig = {
 				} else {
 					escaped = false;
 				}
+			}
+
+			// Don't match if the ending '$' is preceded by a space.
+			const prevChar = String.fromCharCode(cx.char(pos - 1));
+			if (/\s/.exec(prevChar)) {
+				return -1;
 			}
 
 			// Advance to just after the ending '$'
