@@ -1,5 +1,6 @@
-// Languages supported by code regions
-
+/**
+ * Exports a list of languages that can be used in fenced code blocks.
+ */
 
 import { LanguageDescription, LanguageSupport, StreamParser } from '@codemirror/language';
 import { StreamLanguage } from '@codemirror/language';
@@ -22,6 +23,7 @@ import { julia } from '@codemirror/legacy-modes/mode/julia';
 import { haskell } from '@codemirror/legacy-modes/mode/haskell';
 import { pascal } from '@codemirror/legacy-modes/mode/pascal';
 import { yaml } from '@codemirror/legacy-modes/mode/yaml';
+import { xml } from '@codemirror/legacy-modes/mode/xml';
 import { shell } from '@codemirror/legacy-modes/mode/shell';
 import { dockerFile } from '@codemirror/legacy-modes/mode/dockerfile';
 import { diff } from '@codemirror/legacy-modes/mode/diff';
@@ -45,18 +47,17 @@ const supportedLanguages: {
 	support?: LanguageSupport;
 }[] = [
 	// Based on @joplin/desktop/CodeMirror/Editor.tsx
+
 	{
 		name: 'LaTeX',
 		aliases: ['tex', 'latex', 'luatex'],
 		parser: stex,
 	},
-	// 'python': [ 'py', ],
 	{
 		name: 'python',
 		aliases: ['py'],
 		parser: python,
 	},
-	// 'clike': [ 'c', 'h', ],
 	{
 		name: 'clike',
 		aliases: ['c', 'h'],
@@ -71,7 +72,6 @@ const supportedLanguages: {
 		name: 'java',
 		support: java(),
 	},
-	// 'javascript': [ 'js', ],
 	{
 		name: 'javascript',
 		aliases: ['js', 'mjs'],
@@ -82,7 +82,6 @@ const supportedLanguages: {
 		aliases: ['ts'],
 		support: javascript({ jsx: false, typescript: true }),
 	},
-	// 'jsx': [],
 	{
 		name: 'react javascript',
 		aliases: ['jsx'],
@@ -93,138 +92,117 @@ const supportedLanguages: {
 		aliases: ['tsx'],
 		support: javascript({ jsx: true, typescript: true }),
 	},
-	// 'lua': [],
 	{
 		name: 'lua',
 		parser: lua,
 	},
-	// 'php': [],
 	{
 		name: 'php',
 		support: php(),
 	},
-	// 'r': [],
 	{
 		name: 'r',
 		parser: r,
 	},
-	// 'swift': [],
 	{
 		name: 'swift',
 		parser: swift,
 	},
-	// 'go': [],
 	{
 		name: 'go',
 		parser: go,
 	},
-	// 'vb': [ 'visualbasic' ],
 	{
 		name: 'visualbasic',
 		aliases: ['vb'],
 		parser: vb,
 	},
-	// 'vbscript': [ 'vbs' ],
 	{
 		name: 'visualbasicscript',
 		aliases: ['vbscript', 'vbs'],
 		parser: vbScript,
 	},
-	// 'ruby': [],
 	{
 		name: 'ruby',
 		aliases: ['rb'],
 		parser: ruby,
 	},
-	// 'rust': [],
 	{
 		name: 'rust',
 		aliases: ['rs'],
 		support: rust(),
 	},
-	// 'dart': [],
 	{
 		name: 'dart',
 		parser: dart,
 	},
-	// 'groovy': [],
 	{
 		name: 'groovy',
 		parser: groovy,
 	},
-	// 'perl': [],
 	{
 		name: 'perl',
 		aliases: ['pl'],
 		parser: perl,
 	},
-	// 'cobol': [],
 	{
 		name: 'cobol',
 		aliases: ['cbl', 'cob'],
 		parser: cobol,
 	},
-	// 'julia': [],
 	{
 		name: 'julia',
 		aliases: ['jl'],
 		parser: julia,
 	},
-	// 'haskell': [],
 	{
 		name: 'haskell',
 		aliases: ['hs'],
 		parser: haskell,
 	},
-	// 'pascal': [],
 	{
 		name: 'pascal',
 		parser: pascal,
 	},
-	// 'css': [],
 	{
 		name: 'css',
 		parser: css,
 	},
-	// 'xml': [ 'html', 'xhtml' ],
+	{
+		name: 'xml',
+		aliases: ['xhtml'],
+		parser: xml,
+	},
 	{
 		name: 'html',
 		aliases: ['html', 'htm'],
 		support: html(),
 	},
-	// 'markdown': [ 'md' ],
 	{
 		name: 'markdown',
-		aliases: ['md'],
 		support: markdown(),
 	},
-	// 'yaml': [],
 	{
 		name: 'yaml',
 		parser: yaml,
 	},
-	// 'shell': [ 'bash', 'sh', 'zsh', ],
 	{
 		name: 'shell',
 		aliases: ['bash', 'sh', 'zsh', 'dash'],
 		parser: shell,
 	},
-	// 'dockerfile': [],
 	{
 		name: 'dockerfile',
 		parser: dockerFile,
 	},
-	// 'diff': [],
 	{
 		name: 'diff',
 		parser: diff,
 	},
-	// 'erlang': [],
 	{
 		name: 'erlang',
 		parser: erlang,
 	},
-	// 'sql': [],
 	{
 		name: 'sql',
 		parser: standardSQL,

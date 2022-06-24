@@ -1,8 +1,9 @@
-// Handles multi-line decorations.
-// Exports a CodeMirror6 plugin.
-//
-// Ref:
-//  • https://codemirror.net/examples/zebra/
+/**
+ * Exports an editor plugin that creates multi-line decorations based on the
+ * editor's syntax tree (assumes markdown).
+ *
+ * For more about creating decorations, see https://codemirror.net/examples/zebra/
+ */
 
 import { Decoration, EditorView } from '@codemirror/view';
 import { ViewPlugin, DecorationSet, ViewUpdate } from '@codemirror/view';
@@ -101,6 +102,7 @@ function computeDecorations(view: EditorView) {
 					break;
 				}
 
+				// Only block decorations will have differing first and last lines
 				if (blockDecorated) {
 					// Allow different styles for the first, last lines in a block.
 					if (viewFrom == node.from) {
@@ -134,8 +136,6 @@ const decoratorPlugin = ViewPlugin.fromClass(class {
 	}
 
 	public update(viewUpdate: ViewUpdate) {
-		// TODO: If decorations that are invisible when the focus is near, this
-		// may need to be updated more often:
 		if (viewUpdate.docChanged || viewUpdate.viewportChanged) {
 			this.decorations = computeDecorations(viewUpdate.view);
 		}
