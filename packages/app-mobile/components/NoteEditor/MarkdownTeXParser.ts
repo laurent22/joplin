@@ -1,12 +1,20 @@
-// Extends the lezer markdown parser to identify math regions (display and inline)
-// See also https://github.com/lezer-parser/markdown/blob/main/src/extension.ts
-// for the built-in extensions.
+/**
+ * Search for $s and $$s in markdown and mark the regions between them as math.
+ *
+ * Text between single $s is marked as InlineMath and text between $$s is marked
+ * as BlockMath.
+ */
+
 import { tags, Tag } from '@lezer/highlight';
 import { parseMixed, SyntaxNodeRef, Input, NestedParse } from '@lezer/common';
+
+// Extend the existing markdown parser
 import {
 	MarkdownConfig, InlineContext,
 	BlockContext, Line, LeafBlock,
 } from '@lezer/markdown';
+
+// The existing stexMath parser is used to parse the text between the $s
 import { stexMath } from '@codemirror/legacy-modes/mode/stex';
 import { StreamLanguage } from '@codemirror/language';
 
@@ -39,6 +47,7 @@ const wrappedTeXParser = (nodeTag: string) => parseMixed(
 		};
 	});
 
+// Markdown extension for recognizing inline code
 const InlineMathConfig: MarkdownConfig = {
 	defineNodes: [
 		{
@@ -92,6 +101,7 @@ const InlineMathConfig: MarkdownConfig = {
 	wrap: wrappedTeXParser(INLINE_MATH_CONTENT_TAG),
 };
 
+// Extension for recognising block code
 const BlockMathConfig: MarkdownConfig = {
 	defineNodes: [
 		{

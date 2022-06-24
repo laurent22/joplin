@@ -18,10 +18,12 @@ import { EditorState } from '@codemirror/state';
 import { markdown } from '@codemirror/lang-markdown';
 import { GFM } from '@lezer/markdown';
 import { indentOnInput, indentUnit } from '@codemirror/language';
+import { highlightSelectionMatches, search } from '@codemirror/search';
 import { EditorView, drawSelection, highlightSpecialChars, ViewUpdate } from '@codemirror/view';
 import { undo, redo, history, undoDepth, redoDepth } from '@codemirror/commands';
 
 import { keymap } from '@codemirror/view';
+import { searchKeymap } from '@codemirror/search';
 import { historyKeymap, defaultKeymap, indentWithTab } from '@codemirror/commands';
 
 interface CodeMirrorResult {
@@ -79,8 +81,10 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 				}),
 				...createTheme(theme),
 				history(),
+				search(),
 				drawSelection(),
 				highlightSpecialChars(),
+				highlightSelectionMatches(),
 				indentOnInput(),
 
 				// By default, indent with a tab
@@ -105,7 +109,7 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 					}
 				}),
 				keymap.of([
-					...defaultKeymap, ...historyKeymap, indentWithTab,
+					...defaultKeymap, ...historyKeymap, indentWithTab, ...searchKeymap,
 				]),
 			],
 			doc: initialText,
