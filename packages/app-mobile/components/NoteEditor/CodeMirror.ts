@@ -9,7 +9,7 @@
 // wrapper to access CodeMirror functionalities. Anything else should be done
 // from NoteEditor.tsx.
 
-import { MarkdownMathExtension } from './MarkdownTeXParser';
+import { MarkdownMathExtension } from './MarkdownMathParser';
 import codeMirrorDecorator from './CodeMirrorDecorator';
 import createTheme from './CodeMirrorTheme';
 import syntaxHighlightingLanguages from './CodeMirrorLanguages';
