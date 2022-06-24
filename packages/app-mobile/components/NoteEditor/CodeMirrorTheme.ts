@@ -96,7 +96,7 @@ const createTheme = (theme: any): Extension[] => {
 		},
 
 		'& .cm-mathBlock, & .cm-inlineMath': {
-			color: isDarkTheme ? '#afe' : '#276',
+			color: isDarkTheme ? '#9fa' : '#276',
 		},
 	});
 
