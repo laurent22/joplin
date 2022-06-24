@@ -2189,6 +2189,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@codemirror/search@npm:^6.0.0":
+  version: 6.0.0
+  resolution: "@codemirror/search@npm:6.0.0"
+  dependencies:
+    "@codemirror/state": ^6.0.0
+    "@codemirror/view": ^6.0.0
+    crelt: ^1.0.5
+  checksum: e40b55f1ff1287a8b5b321f633bff638c9d4a411ada524b36b275344a13f9f4a66b7c5176d8a142a6a7761d1591d18dc535c88897f30b9885508a2890162fc72
+  languageName: node
+  linkType: hard
+
 "@codemirror/state@npm:^6.0.0":
   version: 6.0.0
   resolution: "@codemirror/state@npm:6.0.0"
@@ -3261,6 +3272,7 @@ __metadata:
     "@codemirror/commands": ^6.0.0
     "@codemirror/lang-markdown": ^6.0.0
     "@codemirror/language": ^6.0.0
+    "@codemirror/search": ^6.0.0
     "@codemirror/state": ^6.0.0
     "@codemirror/view": ^6.0.0
     "@joplin/lib": ~2.8

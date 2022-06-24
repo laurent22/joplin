@@ -73,6 +73,7 @@
     "@codemirror/commands": "^6.0.0",
     "@codemirror/lang-markdown": "^6.0.0",
     "@codemirror/language": "^6.0.0",
+    "@codemirror/search": "^6.0.0",
     "@codemirror/state": "^6.0.0",
     "@codemirror/view": "^6.0.0",
     "@joplin/tools": "~2.8",
