@@ -30,10 +30,9 @@ async function buildCodeMirrorBundle() {
 		'run', 'rollup',
 		sourceFile,
 		'--name', 'codeMirrorBundle',
+		'--config', `${mobileDir}/injectedJS.config.js`,
 		'-f', 'iife',
 		'-o', fullBundleFile,
-		'-p', '@rollup/plugin-node-resolve',
-		'-p', '@rollup/plugin-typescript',
 	]);
 
 	// await execa('./node_modules/uglify-js/bin/uglifyjs', [
