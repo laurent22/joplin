@@ -9,7 +9,7 @@
 // wrapper to access CodeMirror functionalities. Anything else should be done
 // from NoteEditor.tsx.
 
-import MarkdownTeXParser from './MarkdownTeXParser';
+import { MarkdownMathExtension } from './MarkdownTeXParser';
 import codeMirrorDecorator from './CodeMirrorDecorator';
 import createTheme from './CodeMirrorTheme';
 import syntaxHighlightingLanguages from './CodeMirrorLanguages';
@@ -22,7 +22,7 @@ import { EditorView, drawSelection, highlightSpecialChars, ViewUpdate } from '@c
 import { undo, redo, history, undoDepth, redoDepth } from '@codemirror/commands';
 
 import { keymap } from '@codemirror/view';
-import { historyKeymap, defaultKeymap } from '@codemirror/commands';
+import { historyKeymap, defaultKeymap, indentWithTab } from '@codemirror/commands';
 
 interface CodeMirrorResult {
 	editor: EditorView;
@@ -73,7 +73,7 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 				markdown({
 					extensions: [
 						GFM,
-						MarkdownTeXParser,
+						MarkdownMathExtension,
 					],
 					codeLanguages: syntaxHighlightingLanguages,
 				}),
@@ -105,7 +105,7 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 					}
 				}),
 				keymap.of([
-					...defaultKeymap, ...historyKeymap,
+					...defaultKeymap, ...historyKeymap, indentWithTab,
 				]),
 			],
 			doc: initialText,

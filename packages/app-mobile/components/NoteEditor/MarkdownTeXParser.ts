@@ -1,7 +1,7 @@
 // Extends the lezer markdown parser to identify math regions (display and inline)
 // See also https://github.com/lezer-parser/markdown/blob/main/src/extension.ts
 // for the built-in extensions.
-import { tags } from '@lezer/highlight';
+import { tags, Tag } from '@lezer/highlight';
 import { parseMixed, SyntaxNodeRef, Input, NestedParse } from '@lezer/common';
 import {
 	MarkdownConfig, InlineContext,
@@ -11,16 +11,23 @@ import { stexMath } from '@codemirror/legacy-modes/mode/stex';
 import { StreamLanguage } from '@codemirror/language';
 
 const DOLLAR_SIGN_CHAR_CODE = 36;
-const MATH_BLOCK_START_REGEX = /^\$\$/;
-const MATH_BLOCK_STOP_REGEX = /^.*\$\$\s*$/;
+const BACKSLASH_CHAR_CODE = 92;
+
+// (?:[>]\s*)?: Optionally allow block math lines to start with '> '
+const MATH_BLOCK_START_REGEX = /^(?:\s*[>]\s*)?\$\$/;
+const MATH_BLOCK_STOP_REGEX = /\$\$\s*$/;
 
 const TEX_LANGUAGE = StreamLanguage.define(stexMath);
 const BLOCK_MATH_TAG = 'BlockMath';
+const BLOCK_MATH_CONTENT_TAG = 'BlockMathContent';
 const INLINE_MATH_TAG = 'InlineMath';
+const INLINE_MATH_CONTENT_TAG = 'InlineMathContent';
 
-const InlineMathDelim = { resolve: INLINE_MATH_TAG, mark: 'InlineMathDelim' };
+export const mathTag = Tag.define(tags.monospace);
+export const inlineMathTag = Tag.define(mathTag);
 
-// Wraps a TeX math-mode parser
+// Wraps a TeX math-mode parser. This removes [nodeTag] from the syntax tree
+// and replaces it with a region handled by the sTeXMath parser.
 const wrappedTeXParser = (nodeTag: string) => parseMixed(
 	(node: SyntaxNodeRef, _input: Input): NestedParse => {
 		if (node.name != nodeTag) {
@@ -36,11 +43,10 @@ const InlineMathConfig: MarkdownConfig = {
 	defineNodes: [
 		{
 			name: INLINE_MATH_TAG,
-			style: tags.comment,
+			style: inlineMathTag,
 		},
 		{
-			name: 'InlineMathDelim',
-			style: tags.processingInstruction,
+			name: INLINE_MATH_CONTENT_TAG,
 		},
 	],
 	parseInline: [{
@@ -56,59 +62,90 @@ const InlineMathConfig: MarkdownConfig = {
 				return -1;
 			}
 
-			// $ delimiters are both opening and closing delimiters
-			const isOpen = true;
-			const isClose = true;
-			cx.addDelimiter(InlineMathDelim, pos, pos + 1, isOpen, isClose);
+			let escaped = false;
+			const start = pos;
+			const end = cx.end;
+
+			pos ++;
+
+			// Scan ahead for the next '$' symbol
+			for (; pos < end && (escaped || cx.char(pos) != DOLLAR_SIGN_CHAR_CODE); pos++) {
+				if (!escaped && cx.char(pos) == BACKSLASH_CHAR_CODE) {
+					escaped = true;
+				} else {
+					escaped = false;
+				}
+			}
+
+			// Advance to just after the ending '$'
+			pos ++;
+
+			// Add a wraping INLINE_MATH_TAG node that contains an INLINE_MATH_CONTENT_TAG.
+			// The INLINE_MATH_CONTENT_TAG node can thus be safely removed and the region
+			// will still be marked as a math region.
+			const contentElem = cx.elt(INLINE_MATH_CONTENT_TAG, start + 1, pos - 1);
+			cx.addElement(cx.elt(INLINE_MATH_TAG, start, pos + 1, [contentElem]));
+
 			return pos + 1;
 		},
 	}],
-	wrap: wrappedTeXParser(INLINE_MATH_TAG),
+	wrap: wrappedTeXParser(INLINE_MATH_CONTENT_TAG),
 };
 
 const BlockMathConfig: MarkdownConfig = {
 	defineNodes: [
 		{
 			name: BLOCK_MATH_TAG,
-			style: tags.comment,
+			style: mathTag,
+		},
+		{
+			name: BLOCK_MATH_CONTENT_TAG,
 		},
 	],
 	parseBlock: [{
 		name: BLOCK_MATH_TAG,
-		before: 'FencedCode',
+		before: 'Blockquote',
 		parse(cx: BlockContext, line: Line): boolean {
-			const delimLength = 2;
-			const start = cx.lineStart;
+			const lineLength = line.text.length;
+			const delimLen = 2;
 
 			// $$ delimiter? Start math!
-			if (MATH_BLOCK_START_REGEX.exec(line.text)) {
+			const mathStartMatch = MATH_BLOCK_START_REGEX.exec(line.text);
+			if (mathStartMatch) {
+				const start = cx.lineStart + mathStartMatch[0].length;
+				let stop;
+
+				let endMatch = MATH_BLOCK_STOP_REGEX.exec(
+					line.text.substring(mathStartMatch[0].length)
+				);
+
 				// If the math region ends immediately (on the same line),
-				if (MATH_BLOCK_STOP_REGEX.exec(line.text.substring(delimLength))) {
-					const elem = cx.elt(
-						BLOCK_MATH_TAG, cx.lineStart, cx.lineStart + line.text.length);
-					cx.addElement(elem);
+				if (endMatch) {
+					stop = cx.lineStart + lineLength - endMatch[0].length;
 				} else {
 					let hadNextLine = false;
+
 					// Otherwise, it's a multi-line block display.
 					// Consume lines until we reach the end.
 					do {
 						hadNextLine = cx.nextLine();
+						endMatch = hadNextLine ? MATH_BLOCK_STOP_REGEX.exec(line.text) : null;
 					}
-					while (hadNextLine && !MATH_BLOCK_STOP_REGEX.exec(line.text));
+					while (hadNextLine && endMatch == null);
 
-					let stop;
-
-					// Only include the ending delimiter if it exists
-					if (hadNextLine) {
-						stop = cx.lineStart + delimLength;
+					if (hadNextLine && endMatch) {
+						// Remove the ending delimiter
+						stop = cx.lineStart + lineLength - endMatch[0].length;
 					} else {
 						stop = cx.lineStart;
 					}
-
-					// Mark all lines in the block as math.
-					const elem = cx.elt(BLOCK_MATH_TAG, start, stop);
-					cx.addElement(elem);
 				}
+
+				// Label the region. Add two labels so that one can be removed.
+				const contentElem = cx.elt(BLOCK_MATH_CONTENT_TAG, start, stop);
+				cx.addElement(
+					cx.elt(BLOCK_MATH_TAG, start - delimLen, stop + delimLen, [contentElem])
+				);
 
 				// Don't re-process the ending delimiter (it may look the same
 				// as the starting delimiter).
@@ -125,8 +162,13 @@ const BlockMathConfig: MarkdownConfig = {
 			return MATH_BLOCK_START_REGEX.exec(line.text) != null;
 		},
 	}],
-	wrap: wrappedTeXParser(BLOCK_MATH_TAG),
+	wrap: wrappedTeXParser(BLOCK_MATH_CONTENT_TAG),
 };
 
+// Markdown configuration for block and inline math support.
+const MarkdownMathExtension: MarkdownConfig[] = [
+	InlineMathConfig,
+	BlockMathConfig,
+];
 
-export default [InlineMathConfig, BlockMathConfig];
+export { MarkdownMathExtension };

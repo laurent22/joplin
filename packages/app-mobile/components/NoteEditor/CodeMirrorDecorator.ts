@@ -21,8 +21,16 @@ const codeBlockDecoration = Decoration.line({
 	attributes: { class: 'cm-codeBlock' },
 });
 
+const inlineCodeDecoration = Decoration.mark({
+	attributes: { class: 'cm-inlineCode' },
+});
+
 const mathBlockDecoration = Decoration.line({
 	attributes: { class: 'cm-mathBlock' },
+});
+
+const inlineMathDecoration = Decoration.mark({
+	attributes: { class: 'cm-inlineMath' },
 });
 
 const blockQuoteDecoration = Decoration.line({
@@ -31,8 +39,8 @@ const blockQuoteDecoration = Decoration.line({
 
 // Returns a set of [Decoration]s, associated with block syntax groups that require
 // full-line styling.
-function lineDecoration(view: EditorView) {
-	const decorations: { pos: number; decoration: Decoration }[] = [];
+function computeDecorations(view: EditorView) {
+	const decorations: { pos: number; length?: number; decoration: Decoration }[] = [];
 
 	// Add a decoration to all lines between the document position [from] up to
 	// and includeing the position [to].
@@ -50,6 +58,14 @@ function lineDecoration(view: EditorView) {
 		}
 	};
 
+	const addDecorationToRange = (from: number, to: number, decoration: Decoration) => {
+		decorations.push({
+			pos: from,
+			length: to - from,
+			decoration,
+		});
+	};
+
 	for (const { from, to } of view.visibleRanges) {
 		ensureSyntaxTree(
 			view.state,
@@ -57,7 +73,7 @@ function lineDecoration(view: EditorView) {
 		)?.iterate({
 			from, to,
 			enter: node => {
-				let decorated = false;
+				let blockDecorated = false;
 
 				// Compute the visible region of the node.
 				const viewFrom = Math.max(from, node.from);
@@ -67,19 +83,25 @@ function lineDecoration(view: EditorView) {
 				case 'FencedCode':
 				case 'CodeBlock':
 					addDecorationToLines(viewFrom, viewTo, codeBlockDecoration);
-					decorated = true;
+					blockDecorated = true;
 					break;
 				case 'BlockMath':
 					addDecorationToLines(viewFrom, viewTo, mathBlockDecoration);
-					decorated = true;
+					blockDecorated = true;
 					break;
 				case 'Blockquote':
 					addDecorationToLines(viewFrom, viewTo, blockQuoteDecoration);
-					decorated = true;
+					blockDecorated = true;
+					break;
+				case 'InlineMath':
+					addDecorationToRange(viewFrom, viewTo, inlineMathDecoration);
+					break;
+				case 'InlineCode':
+					addDecorationToRange(viewFrom, viewTo, inlineCodeDecoration);
 					break;
 				}
 
-				if (decorated) {
+				if (blockDecorated) {
 					// Allow different styles for the first, last lines in a block.
 					if (viewFrom == node.from) {
 						addDecorationToLines(viewFrom, viewFrom, regionStartDecoration);
@@ -97,8 +119,9 @@ function lineDecoration(view: EditorView) {
 
 	// Items need to be added to a RangeSetBuilder in ascending order
 	const decorationBuilder = new RangeSetBuilder<Decoration>();
-	for (const { pos, decoration } of decorations) {
-		decorationBuilder.add(pos, pos, decoration);
+	for (const { pos, length, decoration } of decorations) {
+		// Null length => entire line
+		decorationBuilder.add(pos, pos + (length ?? 0), decoration);
 	}
 	return decorationBuilder.finish();
 }
@@ -107,15 +130,14 @@ const decoratorPlugin = ViewPlugin.fromClass(class {
 	public decorations: DecorationSet;
 
 	public constructor(view: EditorView) {
-		this.decorations = lineDecoration(view);
-
+		this.decorations = computeDecorations(view);
 	}
 
 	public update(viewUpdate: ViewUpdate) {
 		// TODO: If decorations that are invisible when the focus is near, this
 		// may need to be updated more often:
 		if (viewUpdate.docChanged || viewUpdate.viewportChanged) {
-			this.decorations = lineDecoration(viewUpdate.view);
+			this.decorations = computeDecorations(viewUpdate.view);
 		}
 	}
 }, {

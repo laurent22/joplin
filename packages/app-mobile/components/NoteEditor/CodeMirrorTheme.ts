@@ -8,6 +8,8 @@ import { tags } from '@lezer/highlight';
 import { EditorView } from '@codemirror/view';
 import { Extension } from '@codemirror/state';
 
+import { inlineMathTag, mathTag } from './MarkdownTeXParser';
+
 // For an example on how to customize the theme, see:
 //
 // https://github.com/codemirror/theme-one-dark/blob/main/src/one-dark.ts
@@ -85,6 +87,17 @@ const createTheme = (theme: any): Extension[] => {
 			borderColor: theme.colorFaded,
 			backgroundColor: 'rgba(155, 155, 155, 0.1)',
 		},
+
+		// CodeMirror wraps the existing inline span in an additional element.
+		// Style the contianed element (work around a rendering bug).
+		'& .cm-inlineCode > *': {
+			border: '1px solid rgba(100, 100, 100, 0.3)',
+			borderRadius: '4px',
+		},
+
+		'& .cm-mathBlock, & .cm-inlineMath': {
+			color: isDarkTheme ? '#afe' : '#276',
+		},
 	});
 
 	const appearanceTheme = EditorView.theme({}, { dark: isDarkTheme });
@@ -148,12 +161,9 @@ const createTheme = (theme: any): Extension[] => {
 			color: theme.urlColor,
 			textDecoration: 'underline',
 		},
-
-		// Code blocks
 		{
-			tag: tags.monospace,
-			border: '1px solid rgba(100, 100, 100, 0.2)',
-			borderRadius: '4px',
+			tag: [mathTag, inlineMathTag],
+			fontStyle: 'italic',
 		},
 
 		// Content of code blocks
