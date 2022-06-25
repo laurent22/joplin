@@ -754,6 +754,9 @@ packages/app-desktop/gui/utils/convertToScreenCoordinates.js.map
 packages/app-desktop/gui/utils/loadScript.d.ts
 packages/app-desktop/gui/utils/loadScript.js
 packages/app-desktop/gui/utils/loadScript.js.map
+packages/app-desktop/installDefaultPlugins.d.ts
+packages/app-desktop/installDefaultPlugins.js
+packages/app-desktop/installDefaultPlugins.js.map
 packages/app-desktop/loadResources.testEnv.d.ts
 packages/app-desktop/loadResources.testEnv.js
 packages/app-desktop/loadResources.testEnv.js.map
@@ -1573,6 +1576,9 @@ packages/lib/services/plugins/api/JoplinWorkspace.js.map
 packages/lib/services/plugins/api/types.d.ts
 packages/lib/services/plugins/api/types.js
 packages/lib/services/plugins/api/types.js.map
+packages/lib/services/plugins/defaultPlugins.d.ts
+packages/lib/services/plugins/defaultPlugins.js
+packages/lib/services/plugins/defaultPlugins.js.map
 packages/lib/services/plugins/reducer.d.ts
 packages/lib/services/plugins/reducer.js
 packages/lib/services/plugins/reducer.js.map

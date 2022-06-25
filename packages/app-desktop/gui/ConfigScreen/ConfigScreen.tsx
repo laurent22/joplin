@@ -15,6 +15,7 @@ import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
 const shared = require('@joplin/lib/components/shared/config-shared.js');
 import ClipperConfigScreen from '../ClipperConfigScreen';
 import restart from '../../services/restart';
+import getDefaultPluginSettings from '@joplin/lib/services/plugins/defaultPlugins';
 const { KeymapConfigScreen } = require('../KeymapConfig/KeymapConfigScreen');
 
 const settingKeyToControl: any = {
@@ -77,7 +78,7 @@ class ConfigScreenComponent extends React.Component<any, any> {
 			});
 		}
 		if (!Setting.value('updatedDefaultPluginsInstallStates')) {
-			this.updatePluginsStates(Setting.value('defaultPlugins'));
+			this.updatePluginsStates(getDefaultPluginSettings());
 			Setting.setValue('updatedDefaultPluginsInstallStates', true);
 		}
 	}
