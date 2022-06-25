@@ -13,7 +13,7 @@ const { editorFont } = require('../global-style');
 
 import { ChangeEvent, UndoRedoDepthChangeEvent } from './EditorType';
 import { Selection, SelectionChangeEvent, SelectionFormatting } from './EditorType';
-import { EditorControl } from './EditorType';
+import { EditorControl, EditorSettings } from './EditorType';
 
 type ChangeEventHandler = (event: ChangeEvent)=> void;
 type UndoRedoDepthChangeHandler = (event: UndoRedoDepthChangeEvent)=> void;
@@ -42,6 +42,20 @@ function useCss(themeId: number): string {
 			:root {
 				background-color: ${theme.backgroundColor};
 			}
+			
+			body {
+				margin: 0;
+				height: 100vh;
+				width: 100vh;
+				width: 100vw;
+				min-width: 100vw;
+				box-sizing: border-box;
+				
+				padding-left: 1px;
+				padding-right: 1px;
+				padding-bottom: 1px;
+				padding-top: 10px;
+			}
 		`;
 	}, [themeId]);
 }
@@ -49,28 +63,26 @@ function useCss(themeId: number): string {
 function useHtml(css: string): string {
 	const [html, setHtml] = useState('');
 
-	useEffect(() => {
-		setHtml(
-			`
-				<!DOCTYPE html>
-				<html>
-					<head>
-						<meta charset="UTF-8">
-						<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-						<style>
-							.cm-editor {
-								height: 100%;
-							}
+	useMemo(() => {
+		setHtml(`
+			<!DOCTYPE html>
+			<html>
+				<head>
+					<meta charset="UTF-8">
+					<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+					<style>
+						.cm-editor {
+							height: 100%;
+						}
 
-							${css}
-						</style>
-					</head>
-					<body style="margin:0; height:100vh; width:100vh; width:100vw; min-width:100vw; box-sizing: border-box; padding: 10px;">
-						<div class="CodeMirror" style="height:100%;" autocapitalize="on"></div>
-					</body>
-				</html>
-			`
-		);
+						${css}
+					</style>
+				</head>
+				<body>
+					<div class="CodeMirror" style="height:100%;" autocapitalize="on"></div>
+				</body>
+			</html>
+		`);
 	}, [css]);
 
 	return html;
@@ -92,25 +104,34 @@ function NoteEditor(props: Props, ref: any) {
 		cm.select(${props.initialSelection.start}, ${props.initialSelection.end});
 	` : '';
 
+	const editorSettings: EditorSettings = {
+		themeData: editorTheme(props.themeId),
+		katexEnabled: Setting.value('markdown.plugin.katex') as boolean,
+	};
+
 	const injectedJavaScript = `
+		function postMessage(name, data) {
+			window.ReactNativeWebView.postMessage(JSON.stringify({
+				data,
+				name,
+			}));
+		}
+
+		function logMessage(...msg) {
+			postMessage('onLog', { value: msg });
+		}
+
+		// Globalize logMessage, postMessage
+		window.logMessage = logMessage;
+		window.postMessage = postMessage;
+
+		window.onerror = (message, source, lineno) => {
+			window.ReactNativeWebView.postMessage(
+				"error: " + message + " in file://" + source + ", line " + lineno
+			);
+		};
+
 		if (!window.cm) {
-			function postMessage(name, data) {
-				window.ReactNativeWebView.postMessage(JSON.stringify({
-					data,
-					name,
-				}));
-			}
-
-			function logMessage(...msg) {
-				postMessage('onLog', { value: msg });
-			}
-
-			window.onerror = (message, source, lineno) => {
-				window.ReactNativeWebView.postMessage(
-					"error: " + message + " in file://" + source + ", line " + lineno
-				);
-			};
-
 			// This variable is not used within this script
 			// but is called using "injectJavaScript" from
 			// the wrapper component.
@@ -120,27 +141,16 @@ function NoteEditor(props: Props, ref: any) {
 				${shim.injectedJs('codeMirrorBundle')};
 
 				const parentElement = document.getElementsByClassName('CodeMirror')[0];
-				const theme = ${JSON.stringify(editorTheme(props.themeId))};
 				const initialText = ${JSON.stringify(props.initialText)};
+				const settings = ${JSON.stringify(editorSettings)};
 
-				// If parentElement is null, the JavaScript has been injected before the page
-				// finished loading. The JavaScript will be re-injected after page load.
-				if (parentElement) {
-					window.cm = codeMirrorBundle.initCodeMirror(parentElement, initialText, theme);
-					${setInitialSelectionJS}
-
-					// When the keyboard is shown/hidden (or the window is resized),
-					// make sure we can see the cursor!
-					window.onresize = () => {
-						cm.scrollSelectionIntoView();
-					};
-				}
+				cm = codeMirrorBundle.initCodeMirror(parentElement, initialText, settings);
+				${setInitialSelectionJS}
 			} catch (e) {
-				window.ReactNativeWebView.postMessage("error: " + e.message + ": " + JSON.stringify(e))
-			} finally {
-				true;
+				window.ReactNativeWebView.postMessage("error:" + e.message + ": " + JSON.stringify(e))
 			}
 		}
+		true;
 	`;
 
 	const css = useCss(props.themeId);
@@ -180,30 +190,30 @@ function NoteEditor(props: Props, ref: any) {
 		},
 
 		toggleBolded() {
-			injectJS('cm.selectionCommands.bold();');
+			injectJS('cm.toggleBolded();');
 		},
 		toggleItalicized() {
-			injectJS('cm.selectionCommands.italicize();');
+			injectJS('cm.toggleItalicized();');
 		},
 		toggleList(bulleted: boolean) {
-			injectJS(`cm.selectionCommands.toggleList(${
+			injectJS(`cm.toggleList(${
 				bulleted ? 'true' : 'false'
 			});`);
 		},
 		toggleCode() {
-			injectJS('cm.selectionCommands.toggleCode();');
+			injectJS('cm.toggleCode();');
 		},
 		toggleMath() {
-			injectJS('cm.selectionCommands.toggleMath();');
+			injectJS('cm.toggleMath();');
 		},
 		toggleHeaderLevel(level: number) {
-			injectJS(`cm.selectionCommands.toggleHeaderLevel(${level});`);
+			injectJS(`cm.toggleHeaderLevel(${level});`);
 		},
 		increaseIndent() {
-			injectJS('cm.selectionCommands.increaseIndent();');
+			injectJS('cm.increaseIndent();');
 		},
 		decreaseIndent() {
-			injectJS('cm.selectionCommands.decreaseIndent();');
+			injectJS('cm.decreaseIndent();');
 		},
 		showLinkDialog() {
 			setLinkDialogVisible(true);
@@ -212,7 +222,7 @@ function NoteEditor(props: Props, ref: any) {
 			setLinkDialogVisible(false);
 		},
 		updateLink(label: string, url: string) {
-			injectJS(`cm.selectionCommands.updateLink(
+			injectJS(`cm.updateLink(
 				${JSON.stringify(label)},
 				${JSON.stringify(url)}
 			);`);

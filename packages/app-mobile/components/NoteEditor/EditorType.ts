@@ -113,7 +113,8 @@ export class SelectionFormatting {
 	}
 }
 
-export interface EditorControl {
+// Controls for the CodeMirror portion of the editor
+export interface CodeMirrorControl {
 	undo(): void;
 	redo(): void;
 	select(anchor: number, head: number): void;
@@ -130,10 +131,19 @@ export interface EditorControl {
 	// Create a new link or update the currently selected link with
 	// the given [label] and [url].
 	updateLink(label: string, url: string): void;
-	showLinkDialog(): void;
-	hideLinkDialog(): void;
 
 	increaseIndent(): void;
 	decreaseIndent(): void;
 }
 
+// Controls for the entire editor (including dialogs)
+export interface EditorControl extends CodeMirrorControl {
+	showLinkDialog(): void;
+	hideLinkDialog(): void;
+}
+
+
+export interface EditorSettings {
+    themeData: any;
+    katexEnabled: boolean;
+}

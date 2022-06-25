@@ -10,32 +10,27 @@
 // from NoteEditor.tsx.
 
 import { SelectionFormatting } from './EditorType';
-import MarkdownTeXParser from './MarkdownTeXParser';
+import { MarkdownMathExtension } from './MarkdownMathParser';
+import codeMirrorDecorator from './CodeMirrorDecorator';
+import createTheme from './CodeMirrorTheme';
+import syntaxHighlightingLanguages from './CodeMirrorLanguages';
 
-import { EditorState, Extension, Line } from '@codemirror/state';
+import { EditorState } from '@codemirror/state';
 import { markdown } from '@codemirror/lang-markdown';
-import { highlightSelectionMatches, search } from '@codemirror/search';
-import { defaultHighlightStyle, syntaxHighlighting, HighlightStyle } from '@codemirror/language';
-import { tags } from '@lezer/highlight';
 import { GFM } from '@lezer/markdown';
-import { EditorView, drawSelection, highlightSpecialChars, ViewUpdate, KeyBinding } from '@codemirror/view';
+import { indentOnInput, indentUnit, syntaxTree } from '@codemirror/language';
+import { highlightSelectionMatches, search } from '@codemirror/search';
+import { EditorView, drawSelection, highlightSpecialChars, ViewUpdate } from '@codemirror/view';
 import { undo, redo, history, undoDepth, redoDepth } from '@codemirror/commands';
 
-import { keymap } from '@codemirror/view';
-import { indentOnInput, syntaxTree } from '@codemirror/language';
+import { keymap, KeyBinding } from '@codemirror/view';
 import { searchKeymap } from '@codemirror/search';
-import { historyKeymap, defaultKeymap } from '@codemirror/commands';
+import { historyKeymap, defaultKeymap, indentWithTab } from '@codemirror/commands';
 
-import { SelectionRange, EditorSelection, ChangeSpec } from '@codemirror/state';
+import { CodeMirrorControl, EditorSettings } from './EditorType';
+import { ChangeEvent, SelectionChangeEvent, Selection } from './EditorType';
+import { SelectionRange, EditorSelection, ChangeSpec, Line } from '@codemirror/state';
 import { Text as DocumentText } from '@codemirror/state';
-
-interface CodeMirrorResult {
-	editor: EditorView;
-	undo: Function;
-	redo: Function;
-	select: (anchor: number, head: number)=> void;
-	insertText: (text: string)=> void;
-}
 
 // Specifies the update of a single selection region and its contents
 type SelectionUpdate = { range: SelectionRange; changes?: ChangeSpec };
@@ -267,133 +262,12 @@ function logMessage(...msg: any[]) {
 	postMessage('onLog', { value: msg });
 }
 
-// For an example on how to customize the theme, see:
-//
-// https://github.com/codemirror/theme-one-dark/blob/main/src/one-dark.ts
-//
-// For a tutorial, see:
-//
-// https://codemirror.net/6/examples/styling/#themes
-//
-// Use Safari developer tools to view the content of the CodeMirror iframe while
-// the app is running. It seems that what appears as ".ͼ1" in the CSS is the
-// equivalent of "&" in the theme object. So to target ".ͼ1.cm-focused", you'd
-// use '&.cm-focused' in the theme.
-const createTheme = (theme: any): Extension[] => {
-	const isDarkTheme = theme.appearance === 'dark';
 
-	const baseGlobalStyle: Record<string, string> = {
-		color: theme.color,
-		backgroundColor: theme.backgroundColor,
-		fontFamily: theme.fontFamily,
-		fontSize: `${theme.fontSize}px`,
-	};
-	const baseCursorStyle: Record<string, string> = { };
-	const baseContentStyle: Record<string, string> = { };
-	const baseSelectionStyle: Record<string, string> = { };
-
-	// If we're in dark mode, the caret and selection are difficult to see.
-	// Adjust them appropriately
-	if (isDarkTheme) {
-		// Styling the caret requires styling both the caret itself
-		// and the CodeMirror caret.
-		// See https://codemirror.net/6/examples/styling/#themes
-		baseContentStyle.caretColor = 'white';
-		baseCursorStyle.borderLeftColor = 'white';
-
-		baseSelectionStyle.backgroundColor = '#6b6b6b';
-	}
-
-	const baseTheme = EditorView.baseTheme({
-		'&': baseGlobalStyle,
-
-		// These must be !important or more specific than CodeMirror's built-ins
-		'.cm-content': baseContentStyle,
-		'&.cm-focused .cm-cursor': baseCursorStyle,
-		'&.cm-focused .cm-selectionBackground, ::selection': baseSelectionStyle,
-
-		'&.cm-focused': {
-			outline: 'none',
-		},
-	});
-
-	const appearanceTheme = EditorView.theme({}, { dark: isDarkTheme });
-
-	const baseHeadingStyle = {
-		fontWeight: 'bold',
-		fontFamily: theme.fontFamily,
-	};
-
-	const highlightingStyle = HighlightStyle.define([
-		{
-			tag: tags.strong,
-			fontWeight: 'bold',
-		},
-		{
-			tag: tags.emphasis,
-			fontStyle: 'italic',
-		},
-		{
-			...baseHeadingStyle,
-			tag: tags.heading1,
-			fontSize: '1.6em',
-			borderBottom: `1px solid ${theme.dividerColor}`,
-		},
-		{
-			...baseHeadingStyle,
-			tag: tags.heading2,
-			fontSize: '1.4em',
-		},
-		{
-			...baseHeadingStyle,
-			tag: tags.heading3,
-			fontSize: '1.3em',
-		},
-		{
-			...baseHeadingStyle,
-			tag: tags.heading4,
-			fontSize: '1.2em',
-		},
-		{
-			...baseHeadingStyle,
-			tag: tags.heading5,
-			fontSize: '1.1em',
-		},
-		{
-			...baseHeadingStyle,
-			tag: tags.heading6,
-			fontSize: '1.0em',
-		},
-		{
-			tag: tags.list,
-			fontFamily: theme.fontFamily,
-		},
-		{
-			tag: tags.comment,
-			color: theme.color3,
-			borderRadius: '4px',
-			fontStyle: 'italic',
-		},
-		{
-			tag: tags.link,
-			color: theme.urlColor,
-			textDecoration: 'underline',
-		},
-	]);
-
-	return [
-		baseTheme,
-		appearanceTheme,
-		syntaxHighlighting(highlightingStyle),
-
-		// If we haven't defined highlighting for tags, fall back
-		// to the default.
-		syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
-	];
-};
-
-export function initCodeMirror(parentElement: any, initialText: string, theme: any): CodeMirrorResult {
+export function initCodeMirror(
+	parentElement: any, initialText: string, settings: EditorSettings
+): CodeMirrorControl {
 	logMessage('Initializing CodeMirror...');
+	const theme = settings.themeData;
 
 	let schedulePostUndoRedoDepthChangeId_: any = 0;
 	function schedulePostUndoRedoDepthChange(editor: EditorView, doItNow: boolean = false) {
@@ -416,7 +290,11 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 
 	function notifyDocChanged(viewUpdate: ViewUpdate) {
 		if (viewUpdate.docChanged) {
-			postMessage('onChange', { value: editor.state.doc.toString() });
+			const event: ChangeEvent = {
+				value: editor.state.doc.toString(),
+			};
+
+			postMessage('onChange', event);
 			schedulePostUndoRedoDepthChange(editor);
 		}
 	}
@@ -424,9 +302,14 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 	function notifySelectionChange(viewUpdate: ViewUpdate) {
 		if (!viewUpdate.state.selection.eq(viewUpdate.startState.selection)) {
 			const mainRange = viewUpdate.state.selection.main;
-			const selStart = mainRange.from;
-			const selEnd = mainRange.to;
-			postMessage('onSelectionChange', { selection: { start: selStart, end: selEnd } });
+			const selection: Selection = {
+				start: mainRange.from,
+				end: mainRange.to,
+			};
+			const event: SelectionChangeEvent = {
+				selection,
+			};
+			postMessage('onSelectionChange', event);
 		}
 	}
 
@@ -833,7 +716,7 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 		},
 
 		// Bolds/unbolds the current selection.
-		bold() {
+		toggleBolded() {
 			logMessage('Toggling bolded!');
 
 			selectionCommands.toggleGlobalSelectionFormat('StrongEmphasis', new RegionSpec({
@@ -843,7 +726,7 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 		},
 
 		// Italicizes/deitalicizes the current selection.
-		italicize() {
+		toggleItalicized() {
 			logMessage('Toggling italicized!');
 
 			selectionCommands.toggleGlobalSelectionFormat('Emphasis', new RegionSpec({
@@ -1046,8 +929,12 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 			extensions: [
 				markdown({
 					extensions: [
-						GFM, MarkdownTeXParser,
+						GFM,
+
+						// Don't highlight KaTeX if the user disabled it
+						settings.katexEnabled ? MarkdownMathExtension : [],
 					],
+					codeLanguages: syntaxHighlightingLanguages,
 				}),
 				...createTheme(theme),
 				history(),
@@ -1057,6 +944,12 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 				highlightSelectionMatches(),
 				indentOnInput(),
 
+				// By default, indent with a tab
+				indentUnit.of('\t'),
+
+				// Full-line styling
+				codeMirrorDecorator,
+
 				EditorView.lineWrapping,
 				EditorView.contentAttributes.of({ autocapitalize: 'sentence' }),
 				EditorView.updateListener.of((viewUpdate: ViewUpdate) => {
@@ -1065,11 +958,11 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 					notifySelectionFormattingChange(viewUpdate);
 				}),
 				keymap.of([
-					...defaultKeymap, ...historyKeymap, ...searchKeymap,
+					...defaultKeymap, ...historyKeymap, indentWithTab, ...searchKeymap,
 
 					// Markdown formatting keyboard shortcuts
-					keyCommand('Mod-b', selectionCommands.bold),
-					keyCommand('Mod-i', selectionCommands.italicize),
+					keyCommand('Mod-b', selectionCommands.toggleBolded),
+					keyCommand('Mod-i', selectionCommands.toggleItalicized),
 					keyCommand('Mod-$', selectionCommands.toggleMath),
 					keyCommand('Mod-`', selectionCommands.toggleCode),
 					keyCommand('Mod-k', notifyLinkEditRequest),
@@ -1106,7 +999,7 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 		},
 
 		// Formatting commands
-		selectionCommands,
+		...selectionCommands,
 	};
 
 	return editorControls;
