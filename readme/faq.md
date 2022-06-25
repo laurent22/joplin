@@ -28,7 +28,7 @@ If execution permissions are present then your system may not have the `libfuse2
 
 ## How can I edit my note in an external text editor?
 
-The editiior command (may include arguments) defines which editor will be used to open a note. If none is provided it will try to auto-detect the default editor. If this does nothing or you want to change it for Joplin, you need to configure it in the Preferences -> Text editor command.
+The editor command (may include arguments) defines which editor will be used to open a note. If none is provided it will try to auto-detect the default editor. If this does nothing or you want to change it for Joplin, you need to configure it in the Preferences -> Text editor command.
 
 Some example configurations are: (comments after #)
 
