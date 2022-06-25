@@ -122,7 +122,7 @@ interface Props {
 	pluginMenuItems: any[];
 	pluginMenus: any[];
 	['spellChecker.enabled']: boolean;
-	['spellChecker.language']: string;
+	['spellChecker.language']: string[];
 	plugins: PluginStates;
 	customCss: string;
 	locale: string;

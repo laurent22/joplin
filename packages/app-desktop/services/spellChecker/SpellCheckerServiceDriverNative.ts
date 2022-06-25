@@ -17,15 +17,7 @@ export default class SpellCheckerServiceDriverNative extends SpellCheckerService
 		return this.session().availableSpellCheckerLanguages;
 	}
 
-	// Language can be set to '' to disable spell-checking
-	public setLanguage(v: string) {
-		// If we pass an empty array, it disables spell checking
-		// https://github.com/electron/electron/issues/25228
-		if (!v) {
-			this.session().setSpellCheckerLanguages([]);
-			return;
-		}
-
+	private isLanguageSupported(v: string): boolean {
 		// The below function will throw an error if the provided language is
 		// not supported, so we provide fallbacks.
 		// https://github.com/laurent22/joplin/issues/4146
@@ -37,8 +29,7 @@ export default class SpellCheckerServiceDriverNative extends SpellCheckerService
 		for (const toTry of languagesToTry) {
 			try {
 				this.session().setSpellCheckerLanguages([toTry]);
-				logger.info(`Set effective language from "${v}" to "${toTry}"`);
-				return;
+				return true;
 			} catch (error) {
 				logger.warn(`Failed to set language to "${toTry}". Will try the next one in this list: ${JSON.stringify(languagesToTry)}`);
 				logger.warn('Error was:', error);
@@ -46,6 +37,27 @@ export default class SpellCheckerServiceDriverNative extends SpellCheckerService
 		}
 
 		logger.error(`Could not set language to: ${v}`);
+		return false;
+	}
+
+	// Language can be set to [] to disable spell-checking
+	public setLanguage(v: string[]) {
+		// If we pass an empty array, it disables spell checking
+		// https://github.com/electron/electron/issues/25228
+		if (v === []) {
+			this.session().setSpellCheckerLanguages([]);
+			return;
+		}
+
+		const languagesToCheckSpelling: string[] = [];
+		v.forEach((language: string) => {
+			if (this.isLanguageSupported(language)) {
+				languagesToCheckSpelling.push(language);
+			}
+		});
+
+		this.session().setSpellCheckerLanguages(languagesToCheckSpelling);
+		logger.info(`Set effective languages to "${languagesToCheckSpelling}"`);
 	}
 
 	public get language(): string {
@@ -53,7 +65,7 @@ export default class SpellCheckerServiceDriverNative extends SpellCheckerService
 		return languages.length ? languages[0] : '';
 	}
 
-	public addWordToSpellCheckerDictionary(_language: string, word: string) {
+	public addWordToSpellCheckerDictionary(word: string, _language?: string) {
 		// Actually on Electron all languages share the same dictionary, or
 		// perhaps it's added to the currently active language.
 		this.session().addWordToSpellCheckerDictionary(word);

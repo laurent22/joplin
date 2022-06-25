@@ -36,20 +36,22 @@ export default class SpellCheckerService {
 
 	private async addLatestSelectedLanguage(language: string) {
 		const languages = this.latestSelectedLanguages_.slice();
-		if (languages.length > 5) languages.splice(0, 1);
-
-		if (languages.includes(language)) {
-			languages.splice(languages.indexOf(language), 1);
+		if (!languages.includes(language)) {
+			languages.push(language);
 		}
 
-		languages.splice(0, 0, language);
+		if (languages.length > 5) {
+			this.latestSelectedLanguages_.forEach(l => {
+				if (!this.language.includes(l) && languages.length > 5) languages.splice(languages.indexOf(l), 1);
+			});
+		}
 
 		this.latestSelectedLanguages_ = languages;
 		await KvStore.instance().setValue('spellCheckerService.latestSelectedLanguages', JSON.stringify(this.latestSelectedLanguages_));
 	}
 
 	public setupDefaultLanguage() {
-		if (!Setting.value('spellChecker.language')) {
+		if (Setting.value('spellChecker.language') === []) {
 			const l = this.driver_.language;
 			this.setLanguage(l ? l : this.defaultLanguage);
 		}
@@ -60,16 +62,22 @@ export default class SpellCheckerService {
 	}
 
 	private applyStateToDriver() {
-		this.driver_.setLanguage(this.enabled ? this.language : '');
+		this.driver_.setLanguage(this.enabled ? this.language : []);
 	}
 
 	public setLanguage(language: string) {
-		Setting.setValue('spellChecker.language', language);
+		let enabledLanguages: string[] = [...this.language];
+		if (enabledLanguages.includes(language)) {
+			enabledLanguages = enabledLanguages.filter(obj => obj !== language);
+		} else {
+			enabledLanguages.push(language);
+		}
+		Setting.setValue('spellChecker.language', enabledLanguages);
 		this.applyStateToDriver();
 		void this.addLatestSelectedLanguage(language);
 	}
 
-	public get language(): string {
+	public get language(): string[] {
 		return Setting.value('spellChecker.language');
 	}
 
@@ -82,8 +90,8 @@ export default class SpellCheckerService {
 		this.applyStateToDriver();
 	}
 
-	private async addToDictionary(language: string, word: string) {
-		this.driver_.addWordToSpellCheckerDictionary(language, word);
+	private async addToDictionary(word: string, language?: string) {
+		this.driver_.addWordToSpellCheckerDictionary(word, language);
 	}
 
 	public contextMenuItems(misspelledWord: string, dictionarySuggestions: string[]): any[] {
@@ -115,7 +123,7 @@ export default class SpellCheckerService {
 		output.push({
 			label: _('Add to dictionary'),
 			click: () => {
-				void this.addToDictionary(this.language, misspelledWord);
+				void this.addToDictionary(misspelledWord);
 			},
 		});
 
@@ -125,7 +133,7 @@ export default class SpellCheckerService {
 	private changeLanguageMenuItem(language: string, enabled: boolean, checked: boolean) {
 		return {
 			label: countryDisplayName(language),
-			type: 'radio',
+			type: 'checkbox',
 			checked: checked,
 			enabled: enabled,
 			click: () => {
@@ -134,11 +142,11 @@ export default class SpellCheckerService {
 		};
 	}
 
-	private changeLanguageMenuItems(selectedLanguage: string, enabled: boolean) {
+	private changeLanguageMenuItems(selectedLanguage: string[], enabled: boolean) {
 		const languageMenuItems = [];
 
 		for (const locale of this.driver_.availableLanguages) {
-			languageMenuItems.push(this.changeLanguageMenuItem(locale, enabled, locale === selectedLanguage));
+			languageMenuItems.push(this.changeLanguageMenuItem(locale, enabled, selectedLanguage.includes(locale)));
 		}
 
 		languageMenuItems.sort((a: any, b: any) => {
@@ -148,9 +156,9 @@ export default class SpellCheckerService {
 		return languageMenuItems;
 	}
 
-	public spellCheckerConfigMenuItems(selectedLanguage: string, useSpellChecker: boolean) {
+	public spellCheckerConfigMenuItems(selectedLanguage: string[], useSpellChecker: boolean) {
 		const latestLanguageItems = this.latestSelectedLanguages_.map((language: string) => {
-			return this.changeLanguageMenuItem(language, true, language === selectedLanguage);
+			return this.changeLanguageMenuItem(language, true, selectedLanguage.includes(language));
 		});
 
 		if (latestLanguageItems.length) latestLanguageItems.splice(0, 0, { type: 'separator' } as any);
@@ -192,7 +200,7 @@ export default class SpellCheckerService {
 		];
 	}
 
-	public spellCheckerConfigMenuItem(selectedLanguage: string, useSpellChecker: boolean) {
+	public spellCheckerConfigMenuItem(selectedLanguage: string[], useSpellChecker: boolean) {
 		return {
 			label: _('Spell checker'),
 			submenu: this.spellCheckerConfigMenuItems(selectedLanguage, useSpellChecker),
