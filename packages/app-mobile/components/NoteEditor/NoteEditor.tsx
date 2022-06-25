@@ -5,24 +5,10 @@ const React = require('react');
 const { forwardRef, useImperativeHandle, useEffect, useMemo, useState, useCallback, useRef } = require('react');
 const { WebView } = require('react-native-webview');
 const { editorFont } = require('../global-style');
-
-export interface ChangeEvent {
-	value: string;
-}
-
-export interface UndoRedoDepthChangeEvent {
-	undoDepth: number;
-	redoDepth: number;
-}
-
-export interface Selection {
-	start: number;
-	end: number;
-}
-
-export interface SelectionChangeEvent {
-	selection: Selection;
-}
+import {
+	ChangeEvent, UndoRedoDepthChangeEvent, Selection, SelectionChangeEvent,
+	EditorSettings,
+} from './EditorType';
 
 type ChangeEventHandler = (event: ChangeEvent)=> void;
 type UndoRedoDepthChangeHandler = (event: UndoRedoDepthChangeEvent)=> void;
@@ -252,6 +238,11 @@ function NoteEditor(props: Props, ref: any) {
 		cm.select(${props.initialSelection.start}, ${props.initialSelection.end});
 	` : '';
 
+	const editorSettings: EditorSettings = {
+		themeData: JSON.stringify(editorTheme(props.themeId)),
+		katexEnabled: Setting.value('markdown.plugin.katex') as boolean,
+	};
+
 	const injectedJavaScript = `
 		function postMessage(name, data) {
 			window.ReactNativeWebView.postMessage(JSON.stringify({
@@ -275,8 +266,9 @@ function NoteEditor(props: Props, ref: any) {
 			const parentElement = document.getElementsByClassName('CodeMirror')[0];
 			const theme = ${JSON.stringify(editorTheme(props.themeId))};
 			const initialText = ${JSON.stringify(props.initialText)};
+			const settings = ${JSON.stringify(editorSettings)};
 
-			cm = codeMirrorBundle.initCodeMirror(parentElement, initialText, theme);
+			cm = codeMirrorBundle.initCodeMirror(parentElement, initialText, settings);
 			${setInitialSelectionJS}
 		} catch (e) {
 			window.ReactNativeWebView.postMessage("error:" + e.message + ": " + JSON.stringify(e))

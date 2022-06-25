@@ -26,13 +26,9 @@ import { keymap } from '@codemirror/view';
 import { searchKeymap } from '@codemirror/search';
 import { historyKeymap, defaultKeymap, indentWithTab } from '@codemirror/commands';
 
-interface CodeMirrorResult {
-	editor: EditorView;
-	undo: Function;
-	redo: Function;
-	select: (anchor: number, head: number)=> void;
-	insertText: (text: string)=> void;
-}
+import { EditorControl, EditorSettings } from './EditorType';
+import { ChangeEvent, SelectionChangeEvent, Selection } from './EditorType';
+
 
 function postMessage(name: string, data: any) {
 	(window as any).ReactNativeWebView.postMessage(JSON.stringify({
@@ -45,8 +41,11 @@ function logMessage(...msg: any[]) {
 	postMessage('onLog', { value: msg });
 }
 
-export function initCodeMirror(parentElement: any, initialText: string, theme: any): CodeMirrorResult {
+export function initCodeMirror(
+	parentElement: any, initialText: string, settings: EditorSettings
+): EditorControl {
 	logMessage('Initializing CodeMirror...');
+	const theme = settings.themeData;
 
 	let schedulePostUndoRedoDepthChangeId_: any = 0;
 	function schedulePostUndoRedoDepthChange(editor: EditorView, doItNow: boolean = false) {
@@ -67,6 +66,31 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 		}, doItNow ? 0 : 1000);
 	}
 
+	function notifyDocChanged(viewUpdate: ViewUpdate) {
+		if (viewUpdate.docChanged) {
+			const event: ChangeEvent = {
+				value: editor.state.doc.toString(),
+			};
+
+			postMessage('onChange', event);
+			schedulePostUndoRedoDepthChange(editor);
+		}
+	}
+
+	function notifySelectionChange(viewUpdate: ViewUpdate) {
+		if (!viewUpdate.state.selection.eq(viewUpdate.startState.selection)) {
+			const mainRange = viewUpdate.state.selection.main;
+			const selection: Selection = {
+				start: mainRange.from,
+				end: mainRange.to,
+			};
+			const event: SelectionChangeEvent = {
+				selection,
+			};
+			postMessage('onSelectionChange', event);
+		}
+	}
+
 	const editor = new EditorView({
 		state: EditorState.create({
 			// See https://github.com/codemirror/basic-setup/blob/main/src/codemirror.ts
@@ -75,7 +99,9 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 				markdown({
 					extensions: [
 						GFM,
-						MarkdownMathExtension,
+
+						// Don't highlight KaTeX if the user disabled it
+						settings.katexEnabled ? MarkdownMathExtension : [],
 					],
 					codeLanguages: syntaxHighlightingLanguages,
 				}),
@@ -96,17 +122,8 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 				EditorView.lineWrapping,
 				EditorView.contentAttributes.of({ autocapitalize: 'sentence' }),
 				EditorView.updateListener.of((viewUpdate: ViewUpdate) => {
-					if (viewUpdate.docChanged) {
-						postMessage('onChange', { value: editor.state.doc.toString() });
-						schedulePostUndoRedoDepthChange(editor);
-					}
-
-					if (!viewUpdate.state.selection.eq(viewUpdate.startState.selection)) {
-						const mainRange = viewUpdate.state.selection.main;
-						const selStart = mainRange.from;
-						const selEnd = mainRange.to;
-						postMessage('onSelectionChange', { selection: { start: selStart, end: selEnd } });
-					}
+					notifyDocChanged(viewUpdate);
+					notifySelectionChange(viewUpdate);
 				}),
 				keymap.of([
 					...defaultKeymap, ...historyKeymap, indentWithTab, ...searchKeymap,
@@ -119,6 +136,7 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 
 	return {
 		editor,
+
 		undo: () => {
 			undo(editor);
 			schedulePostUndoRedoDepthChange(editor, true);
