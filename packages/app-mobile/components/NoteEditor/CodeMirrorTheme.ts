@@ -91,7 +91,9 @@ const createTheme = (theme: any): Extension[] => {
 		// CodeMirror wraps the existing inline span in an additional element.
 		// Style the contianed element (work around a rendering bug).
 		'& .cm-inlineCode > *': {
-			border: '1px solid rgba(100, 100, 100, 0.3)',
+			borderWidth: '1px',
+			borderStyle: 'solid',
+			borderColor: isDarkTheme ? 'rgba(200, 200, 200, 0.5)' : 'rgba(100, 100, 100, 0.5)',
 			borderRadius: '4px',
 		},
 

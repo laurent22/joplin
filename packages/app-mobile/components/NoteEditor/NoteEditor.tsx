@@ -239,7 +239,7 @@ function NoteEditor(props: Props, ref: any) {
 	` : '';
 
 	const editorSettings: EditorSettings = {
-		themeData: JSON.stringify(editorTheme(props.themeId)),
+		themeData: editorTheme(props.themeId),
 		katexEnabled: Setting.value('markdown.plugin.katex') as boolean,
 	};
 
@@ -264,7 +264,6 @@ function NoteEditor(props: Props, ref: any) {
 			${shim.injectedJs('codeMirrorBundle')};
 
 			const parentElement = document.getElementsByClassName('CodeMirror')[0];
-			const theme = ${JSON.stringify(editorTheme(props.themeId))};
 			const initialText = ${JSON.stringify(props.initialText)};
 			const settings = ${JSON.stringify(editorSettings)};
 
