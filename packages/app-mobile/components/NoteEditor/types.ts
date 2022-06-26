@@ -28,6 +28,7 @@ export interface EditorControl {
 	redo(): void;
 	select(anchor: number, head: number): void;
 	insertText(text: string): void;
+	scrollSelectionIntoView(): void;
 }
 
 export interface EditorSettings {

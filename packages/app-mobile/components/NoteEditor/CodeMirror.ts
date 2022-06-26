@@ -151,6 +151,11 @@ export function initCodeMirror(
 				scrollIntoView: true,
 			}));
 		},
+		scrollSelectionIntoView: () => {
+			editor.dispatch(editor.state.update({
+				scrollIntoView: true,
+			}));
+		},
 		insertText: (text: string) => {
 			editor.dispatch(editor.state.replaceSelection(text));
 		},
