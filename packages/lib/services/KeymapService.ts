@@ -27,7 +27,7 @@ const defaultKeymapItems = {
 		{ accelerator: 'Cmd+B', command: 'textBold' },
 		{ accelerator: 'Cmd+I', command: 'textItalic' },
 		{ accelerator: 'Cmd+K', command: 'textLink' },
-		{ accelerator: 'Cmd+`', command: 'textCode' },
+		{ accelerator: 'Option+Cmd+`', command: 'textCode' },
 		{ accelerator: 'Option+Cmd+-', command: 'textBulletedList' },
 		{ accelerator: 'Shift+Cmd+T', command: 'insertDateTime' },
 		{ accelerator: 'Shift+Cmd+F', command: 'focusSearch' },
