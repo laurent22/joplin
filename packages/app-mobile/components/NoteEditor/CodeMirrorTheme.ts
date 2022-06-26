@@ -103,6 +103,16 @@ const createTheme = (theme: any): Extension[] => {
 		'& .cm-mathBlock, & .cm-inlineMath': {
 			color: isDarkTheme ? '#9fa' : '#276',
 		},
+
+
+		// Style the search widget. Use ':root' to increase the selector's precedence
+		// (override the existing preset styles).
+		':root & .cm-panel.cm-search': {
+			'& label, & button, & input': {
+				fontSize: '1em',
+				color: isDarkTheme ? 'white' : 'black',
+			},
+		},
 	});
 
 	const appearanceTheme = EditorView.theme({}, { dark: isDarkTheme });

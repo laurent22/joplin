@@ -225,6 +225,9 @@ function NoteEditor(props: Props, ref: any) {
 		hideLinkDialog() {
 			setLinkDialogVisible(false);
 		},
+		toggleFindDialog() {
+			injectJS('cm.toggleFindDialog();');
+		},
 		hideKeyboard() {
 			injectJS('document.activeElement?.blur();');
 		},

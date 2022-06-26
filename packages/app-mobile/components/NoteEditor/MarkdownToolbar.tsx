@@ -429,6 +429,15 @@ const MarkdownToolbar = (props: ToolbarProps) => {
 		});
 	}
 
+	actionsMenuModel.addAction({
+		icon: (
+			<MaterialIcon name="search" style={styles.text}/>
+		),
+		accessibilityLabel: _('Find and replace'),
+	}, () => {
+		editorControl.toggleFindDialog();
+	});
+
 	return (
 		<ToolbarMenu
 			styles={{ styleSheet: styles }}

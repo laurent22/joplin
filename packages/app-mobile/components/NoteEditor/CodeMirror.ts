@@ -19,7 +19,7 @@ import { EditorState } from '@codemirror/state';
 import { markdown } from '@codemirror/lang-markdown';
 import { GFM } from '@lezer/markdown';
 import { indentOnInput, indentUnit, syntaxTree } from '@codemirror/language';
-import { highlightSelectionMatches, search } from '@codemirror/search';
+import { closeSearchPanel, highlightSelectionMatches, openSearchPanel, search } from '@codemirror/search';
 import { EditorView, drawSelection, highlightSpecialChars, ViewUpdate } from '@codemirror/view';
 import { undo, redo, history, undoDepth, redoDepth } from '@codemirror/commands';
 
@@ -1064,6 +1064,12 @@ export function initCodeMirror(
 		},
 		insertText(text: string) {
 			editor.dispatch(editor.state.replaceSelection(text));
+		},
+		toggleFindDialog() {
+			const opened = openSearchPanel(editor);
+			if (!opened) {
+				closeSearchPanel(editor);
+			}
 		},
 
 		// Formatting commands

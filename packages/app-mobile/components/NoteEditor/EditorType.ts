@@ -141,13 +141,14 @@ export interface CodeMirrorControl {
 
 	increaseIndent(): void;
 	decreaseIndent(): void;
+
+	toggleFindDialog(): void;
 }
 
 // Controls for the entire editor (including dialogs)
 export interface EditorControl extends CodeMirrorControl {
 	showLinkDialog(): void;
 	hideLinkDialog(): void;
-
 	hideKeyboard(): void;
 }
 
