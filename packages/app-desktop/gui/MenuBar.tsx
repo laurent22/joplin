@@ -732,7 +732,13 @@ function useMenu(props: Props) {
 								Setting.incValue('windowContentZoomFactor', -10);
 							},
 							accelerator: 'CommandOrControl+-',
-						}],
+						},
+						separator(),
+						{
+							role: 'togglefullscreen',
+							visible: shim.isMac(),
+						},
+					],
 				},
 				go: {
 					label: _('&Go'),
