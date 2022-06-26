@@ -512,7 +512,7 @@ Attention: The default font size has been changed in the Markdown editor. You ca
 ## [v1.8.5](https://github.com/laurent22/joplin/releases/tag/v1.8.5) - 2021-05-10T11:58:14Z
 
 - Fixed: Fixed pasting of text and images from Word on Windows ([#4916](https://github.com/laurent22/joplin/issues/4916))
-- Security: Filter out NOSCRIPT tags that could be used to cause an XSS (found by [Jubair Rehman Yousafzai](https://twitter.com/jubairfolder)) ([9c20d59](https://github.com/laurent22/joplin/commit/9c20d59))
+- Security: Filter out NOSCRIPT tags that could be used to cause an XSS (CVE-2021-33295) (found by [Jubair Rehman Yousafzai](https://twitter.com/newfolderj)) ([9c20d59](https://github.com/laurent22/joplin/commit/9c20d59))
 
 ## [v1.8.4](https://github.com/laurent22/joplin/releases/tag/v1.8.4) (Pre-release) - 2021-05-09T18:05:05Z
 

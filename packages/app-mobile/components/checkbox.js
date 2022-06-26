@@ -61,7 +61,14 @@ class Checkbox extends Component {
 		// if (style.display) thStyle.display = style.display;
 
 		return (
-			<TouchableHighlight onPress={() => this.onPress()} style={thStyle}>
+			<TouchableHighlight
+				onPress={() => this.onPress()}
+				style={thStyle}
+				accessibilityRole="checkbox"
+				accessibilityState={{
+					checked: this.state.checked,
+				}}
+				accessibilityLabel={this.props.accessibilityLabel ?? ''}>
 				<Icon name={iconName} style={checkboxIconStyle} />
 			</TouchableHighlight>
 		);

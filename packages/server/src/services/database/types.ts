@@ -182,6 +182,7 @@ export interface Share extends WithDates, WithUuid {
 	folder_id?: Uuid;
 	note_id?: Uuid;
 	master_key_id?: Uuid;
+	recursive?: number;
 }
 
 export interface Change extends WithDates, WithUuid {
@@ -378,6 +379,7 @@ export const databaseSchema: DatabaseTables = {
 		folder_id: { type: 'string' },
 		note_id: { type: 'string' },
 		master_key_id: { type: 'string' },
+		recursive: { type: 'number' },
 	},
 	changes: {
 		counter: { type: 'number' },
