@@ -141,6 +141,7 @@ export interface CodeMirrorControl {
 
 	increaseIndent(): void;
 	decreaseIndent(): void;
+	scrollSelectionIntoView(): void;
 
 	toggleFindDialog(): void;
 }

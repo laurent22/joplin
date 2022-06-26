@@ -10,10 +10,13 @@ const { useEffect, useMemo, useState, useCallback, useRef } = require('react');
 const { WebView } = require('react-native-webview');
 const { View } = require('react-native');
 const { editorFont } = require('../global-style');
-
-import { ChangeEvent, ListType, UndoRedoDepthChangeEvent } from './EditorType';
-import { Selection, SelectionChangeEvent, SelectionFormatting } from './EditorType';
-import { EditorControl, EditorSettings } from './EditorType';
+import {
+	ChangeEvent, UndoRedoDepthChangeEvent, Selection, SelectionChangeEvent,
+	EditorSettings,
+	EditorControl,
+	ListType,
+	SelectionFormatting,
+} from './types';
 
 type ChangeEventHandler = (event: ChangeEvent)=> void;
 type UndoRedoDepthChangeHandler = (event: UndoRedoDepthChangeEvent)=> void;
@@ -218,6 +221,9 @@ function NoteEditor(props: Props, ref: any) {
 				${JSON.stringify(label)},
 				${JSON.stringify(url)}
 			);`);
+		},
+		scrollSelectionIntoView() {
+			injectJS('cm.scrollSelectionIntoView();');
 		},
 		showLinkDialog() {
 			setLinkDialogVisible(true);
