@@ -904,19 +904,16 @@ function useMenu(props: Props) {
 
 			if (props.routeName !== 'Main') {
 				setMenu(Menu.buildFromTemplate([
-					{
+					shim.isMac() ? rootMenus.macOsApp : {
 						label: _('&File'),
 						submenu: [quitMenuItem],
 					},
 					{
 						label: _('&Edit'),
-						submenu: [
-							menuItemDic.textCopy,
-							menuItemDic.textCut,
-							menuItemDic.textPaste,
-							menuItemDic.textSelectAll,
-						] as any,
+						submenu: basicEditMenuItems,
 					},
+					shim.isMac() ? rootMenus.macOsWindow : noItem,
+					rootMenus.help,
 				]));
 			} else {
 				setMenu(Menu.buildFromTemplate(template));
