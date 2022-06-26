@@ -267,6 +267,7 @@ function NoteEditor(props: Props, ref: any) {
 			cm = codeMirrorBundle.initCodeMirror(parentElement, initialText, theme);
 			${setInitialSelectionJS}
 
+			// Fixes https://github.com/laurent22/joplin/issues/5949
 			window.onresize = () => {
 				cm.scrollSelectionIntoView();
 			};
