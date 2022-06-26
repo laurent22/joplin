@@ -26,8 +26,9 @@ interface CodeMirrorResult {
 	editor: EditorView;
 	undo: Function;
 	redo: Function;
-	select: (anchor: number, head: number)=> void;
-	insertText: (text: string)=> void;
+	select(anchor: number, head: number): void;
+	scrollSelectionIntoView(): void;
+	insertText(text: string): void;
 }
 
 function postMessage(name: string, data: any) {
@@ -228,6 +229,11 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 		select: (anchor: number, head: number) => {
 			editor.dispatch(editor.state.update({
 				selection: { anchor, head },
+				scrollIntoView: true,
+			}));
+		},
+		scrollSelectionIntoView: () => {
+			editor.dispatch(editor.state.update({
 				scrollIntoView: true,
 			}));
 		},
