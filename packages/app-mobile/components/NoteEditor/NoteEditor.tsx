@@ -149,6 +149,10 @@ function NoteEditor(props: Props, ref: any) {
 
 				cm = codeMirrorBundle.initCodeMirror(parentElement, initialText, settings);
 				${setInitialSelectionJS}
+
+				window.onresize = () => {
+					cm.scrollSelectionIntoView();
+				};
 			} catch (e) {
 				window.ReactNativeWebView.postMessage("error:" + e.message + ": " + JSON.stringify(e))
 			}
