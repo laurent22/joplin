@@ -6,14 +6,13 @@ const { ScrollView, View, Text, TouchableHighlight } = require('react-native');
 const { useMemo, useState } = require('react');
 const AntIcon = require('react-native-vector-icons/AntDesign').default;
 const FontAwesomeIcon = require('react-native-vector-icons/FontAwesome5').default;
-import { themeStyle } from '@joplin/lib/theme';
 import { _ } from '@joplin/lib/locale';
-import { EditorControl, SelectionFormatting } from './EditorType';
+import { EditorControl, EditorSettings, SelectionFormatting, ListType } from './EditorType';
 
 interface ToolbarProps {
 	editorControl: EditorControl;
 	selectionState: SelectionFormatting;
-	themeId: number;
+	editorSettings: EditorSettings;
 	style?: any;
 }
 
@@ -149,7 +148,8 @@ const ToolbarButton = ({ styles, spec, onClick }:
 		<TouchableHighlight
 			style={{ ...styleSheet.button, ...activatedStyle }}
 			onPress={onClick}
-			accessibilityLabel={spec.accessibilityLabel}>
+			accessibilityLabel={spec.accessibilityLabel}
+			accessibilityRole="button">
 			{ content }
 		</TouchableHighlight>
 	);
@@ -217,9 +217,8 @@ enum MenuRowType {
 }
 
 const MarkdownToolbar = (props: ToolbarProps) => {
-	const styles = useMemo(() =>
-		getStyles(props.style, props.themeId),
-	[props.themeId, props.style]);
+	const themeData = props.editorSettings.themeData;
+	const styles = useMemo(() => getStyles(props.style, themeData), [themeData, props.style]);
 	const selState = props.selectionState;
 	const editorControl = props.editorControl;
 	const [openMenu, setOpenMenu] = useState(MenuRowType.RootMenu);
@@ -262,6 +261,7 @@ const MarkdownToolbar = (props: ToolbarProps) => {
 			</Text>
 		),
 		accessibilityLabel: _('Inline formatting'),
+		active: selState.inCode || selState.bolded || selState.italicized || selState.inMath,
 	}, miscFormatMenuModel);
 
 
@@ -287,8 +287,7 @@ const MarkdownToolbar = (props: ToolbarProps) => {
 			selState.inUnorderedList ? _('Remove unordered list') : _('Create unordered list'),
 		active: selState.inUnorderedList,
 	}, () => {
-		const bulleted = true;
-		editorControl.toggleList(bulleted);
+		editorControl.toggleList(ListType.UnorderedList);
 	});
 
 	listMenuModel.addAction({
@@ -299,8 +298,18 @@ const MarkdownToolbar = (props: ToolbarProps) => {
 			selState.inOrderedList ? _('Remove ordered list') : _('Create ordered list'),
 		active: selState.inOrderedList,
 	}, () => {
-		const bulleted = false;
-		editorControl.toggleList(bulleted);
+		editorControl.toggleList(ListType.OrderedList);
+	});
+
+	listMenuModel.addAction({
+		icon: (
+			<FontAwesomeIcon name="tasks" style={styles.text}/>
+		),
+		accessibilityLabel:
+			selState.inChecklist ? _('Remove task list') : _('Create task list'),
+		active: selState.inChecklist,
+	}, () => {
+		editorControl.toggleList(ListType.CheckList);
 	});
 
 	listMenuModel.addAction({
@@ -332,14 +341,16 @@ const MarkdownToolbar = (props: ToolbarProps) => {
 		editorControl.toggleCode();
 	});
 
-	miscFormatMenuModel.addAction({
-		icon: '∑',
-		accessibilityLabel:
-			selState.inMath ? _('Remove TeX region') : _('Create TeX region'),
-		active: selState.inMath,
-	}, () => {
-		editorControl.toggleMath();
-	});
+	if (props.editorSettings.katexEnabled) {
+		miscFormatMenuModel.addAction({
+			icon: '∑',
+			accessibilityLabel:
+				selState.inMath ? _('Remove TeX region') : _('Create TeX region'),
+			active: selState.inMath,
+		}, () => {
+			editorControl.toggleMath();
+		});
+	}
 
 	miscFormatMenuModel.addAction({
 		icon: (
@@ -391,9 +402,8 @@ const MarkdownToolbar = (props: ToolbarProps) => {
  * This uses react hooks, so should be called in the same places, the same number of times,
  * regardless of state.
  */
-const getStyles = (styleProps: any, themeId: number): StyleSheet => {
-	const BUTTON_SIZE = 75;
-	const theme = themeStyle(themeId);
+const getStyles = (styleProps: any, theme: any): StyleSheet => {
+	const BUTTON_SIZE = 56;
 
 	return StyleSheet.create({
 		button: {

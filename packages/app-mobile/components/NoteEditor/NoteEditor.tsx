@@ -11,7 +11,7 @@ const { WebView } = require('react-native-webview');
 const { View } = require('react-native');
 const { editorFont } = require('../global-style');
 
-import { ChangeEvent, UndoRedoDepthChangeEvent } from './EditorType';
+import { ChangeEvent, ListType, UndoRedoDepthChangeEvent } from './EditorType';
 import { Selection, SelectionChangeEvent, SelectionFormatting } from './EditorType';
 import { EditorControl, EditorSettings } from './EditorType';
 
@@ -195,10 +195,8 @@ function NoteEditor(props: Props, ref: any) {
 		toggleItalicized() {
 			injectJS('cm.toggleItalicized();');
 		},
-		toggleList(bulleted: boolean) {
-			injectJS(`cm.toggleList(${
-				bulleted ? 'true' : 'false'
-			});`);
+		toggleList(listType: ListType) {
+			injectJS(`cm.toggleList(${JSON.stringify(listType)});`);
 		},
 		toggleCode() {
 			injectJS('cm.toggleCode();');
@@ -328,6 +326,7 @@ function NoteEditor(props: Props, ref: any) {
 					useWebKit={true}
 					source={source}
 					setSupportMultipleWindows={true}
+					hideKeyboardAccessoryView={true}
 					allowingReadAccessToURL={`file://${Setting.value('resourceDir')}`}
 					originWhitelist={['file://*', './*', 'http://*', 'https://*']}
 					allowFileAccess={true}
@@ -342,7 +341,7 @@ function NoteEditor(props: Props, ref: any) {
 					overflow: 'hidden',
 					flexShrink: 1,
 				}}
-				themeId={props.themeId}
+				editorSettings={editorSettings}
 				editorControl={editorControl}
 				selectionState={selectionState}
 			/>

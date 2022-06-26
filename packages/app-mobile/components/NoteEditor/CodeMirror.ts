@@ -9,7 +9,7 @@
 // wrapper to access CodeMirror functionalities. Anything else should be done
 // from NoteEditor.tsx.
 
-import { SelectionFormatting } from './EditorType';
+import { ListType, SelectionFormatting } from './EditorType';
 import { MarkdownMathExtension } from './MarkdownMathParser';
 import codeMirrorDecorator from './CodeMirrorDecorator';
 import createTheme from './CodeMirrorTheme';
@@ -341,10 +341,16 @@ export function initCodeMirror(
 			};
 		};
 
-		// Find the smallest range.
+		// Find nodes that overlap/are within the selected region
 		syntaxTree(state).iterate({
 			from: range.from, to: range.to,
 			enter: node => {
+				// Checklists don't have a specific containing node. As such,
+				// we're in a checklist if we've selected a 'Task' node.
+				if (node.name == 'Task') {
+					formatting.inChecklist = true;
+				}
+
 				// Only handle notes that contain the entire range.
 				if (node.from > range.from || node.to < range.to) {
 					return;
@@ -403,6 +409,19 @@ export function initCodeMirror(
 			},
 		});
 
+		// The markdown parser marks checklists as unordered lists. Ensure
+		// that they aren't marked as such.
+		if (formatting.inChecklist) {
+			if (!formatting.inUnorderedList) {
+				// Even if the selection contains a Task, because an unordered list node
+				// must contain a valid Task node, we're only in a checklist if we're also in
+				// an unordered list.
+				formatting.inChecklist = false;
+			} else {
+				formatting.inUnorderedList = false;
+			}
+		}
+
 		return formatting;
 	}
 
@@ -435,6 +454,22 @@ export function initCodeMirror(
 			} else {
 				return sel;
 			}
+		},
+
+		// Expand each selection range to match an enclosing node with [nodeName], provided that
+		// node exists and [expandSelection] returns true.
+		growAllSelectionsToNodes(
+			nodeName: string, expandSelection: (sel: SelectionRange)=> boolean) {
+			const updatedSelection = EditorSelection.create(editor.state.selection.ranges.map((sel: SelectionRange): SelectionRange => {
+				if (!expandSelection(sel)) {
+					return sel;
+				}
+
+				return selectionCommands.growSelectionToNode(sel, nodeName);
+			}));
+			editor.dispatch({
+				selection: updatedSelection,
+			});
 		},
 
 		// Adds/removes [spec.templateStart] before the current selection and
@@ -775,38 +810,68 @@ export function initCodeMirror(
 			);
 		},
 
-		toggleList(bulleted: boolean) {
-			logMessage('Toggling bulleted list!');
+		toggleList(listType: ListType) {
+			logMessage('Toggling list!');
 
-			// Include `(?:\[[ xX]+\]...)?` to also match checklists.
-			const bulletedRegex = /^\s*[-*]\s(?:\[[ xX]+\]\s?)?/;
+			const listTypes = [ListType.OrderedList, ListType.UnorderedList, ListType.CheckList];
+
+			// `(?!\[[ xX]+\]\s?)` means "not followed by [x] or [ ]".
+			const bulletedRegex = /^\s*[-*](?!\s\[[ xX]+\])\s?/;
+			const checklistRegex = /^\s*[-*]\s\[[ xX]+\]\s?/;
 			const numberedRegex = /^\s*\d+\.\s?/;
-			const otherListTypeRegex = bulleted ? numberedRegex : bulletedRegex;
-			const thisListTypeRegex = bulleted ? bulletedRegex : numberedRegex;
 
+			const listRegexes: Record<ListType, RegExp> = {
+				[ListType.OrderedList]: numberedRegex,
+				[ListType.CheckList]: checklistRegex,
+				[ListType.UnorderedList]: bulletedRegex,
+			};
+			const listTags = {
+				[ListType.OrderedList]: 'OrderedList',
 
+				// Both checklists and unordered lists use the BulletList
+				// node as a container
+				[ListType.CheckList]: 'BulletList',
+				[ListType.UnorderedList]: 'BulletList',
+			};
+			const thisListTypeRegex = listRegexes[listType];
+			const thisTag = listTags[listType];
+
+			// Select the current list type, if possible.
+			selectionCommands.growAllSelectionsToNodes(thisTag, (sel) => sel.empty);
+
+			// Ignore empty lines
 			const matchEmpty = false;
-			// Remove formatting from a different type of list
-			selectionCommands.toggleSelectedLinesStartWith(
-				otherListTypeRegex,
-				'',
-				matchEmpty,
-				bulleted ? 'OrderedList' : 'BulletList'
-			);
+
+			// Remove existing formatting matching other list types.
+			for (const kind of listTypes) {
+				if (kind == listType) {
+					continue;
+				}
+
+				// Remove the contianing list, if it exists.
+				selectionCommands.toggleSelectedLinesStartWith(
+					listRegexes[kind],
+					'',
+					matchEmpty,
+					listTags[kind]
+				);
+			}
 
 			let lineIdx = 0;
 			selectionCommands.toggleSelectedLinesStartWith(
 				thisListTypeRegex,
 				() => {
-					if (bulleted) {
+					if (listType == ListType.UnorderedList) {
 						return ' - ';
+					} else if (listType == ListType.CheckList) {
+						return ' - [ ] ';
 					}
 
 					lineIdx ++;
 					return ` ${lineIdx}. `;
 				},
 				matchEmpty,
-				bulleted ? 'BulletList' : 'OrderedList'
+				thisTag
 			);
 		},
 

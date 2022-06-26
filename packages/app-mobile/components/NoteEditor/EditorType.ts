@@ -113,6 +113,13 @@ export class SelectionFormatting {
 	}
 }
 
+// Possible types of lists in the editor
+export enum ListType {
+	CheckList,
+	OrderedList,
+	UnorderedList,
+}
+
 // Controls for the CodeMirror portion of the editor
 export interface CodeMirrorControl {
 	undo(): void;
@@ -123,7 +130,7 @@ export interface CodeMirrorControl {
 	// Toggle whether we're in a type of region.
 	toggleBolded(): void;
 	toggleItalicized(): void;
-	toggleList(bulleted: boolean): void;
+	toggleList(kind: ListType): void;
 	toggleCode(): void;
 	toggleMath(): void;
 	toggleHeaderLevel(level: number): void;
