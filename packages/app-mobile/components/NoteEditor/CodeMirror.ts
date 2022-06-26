@@ -9,10 +9,10 @@
 // wrapper to access CodeMirror functionalities. Anything else should be done
 // from NoteEditor.tsx.
 
-import { MarkdownMathExtension } from './MarkdownMathParser';
-import codeMirrorDecorator from './CodeMirrorDecorator';
-import createTheme from './CodeMirrorTheme';
-import syntaxHighlightingLanguages from './CodeMirrorLanguages';
+import { MarkdownMathExtension } from './markdownMathParser';
+import codeMirrorDecorator from './codeMirrorDecorators';
+import createTheme from './codeMirrorTheme';
+import syntaxHighlightingLanguages from './codeMirrorLanguages';
 
 import { EditorState } from '@codemirror/state';
 import { markdown } from '@codemirror/lang-markdown';
@@ -26,8 +26,8 @@ import { keymap } from '@codemirror/view';
 import { searchKeymap } from '@codemirror/search';
 import { historyKeymap, defaultKeymap, indentWithTab } from '@codemirror/commands';
 
-import { EditorControl, EditorSettings } from './EditorType';
-import { ChangeEvent, SelectionChangeEvent, Selection } from './EditorType';
+import { EditorControl, EditorSettings } from './types';
+import { ChangeEvent, SelectionChangeEvent, Selection } from './types';
 
 
 function postMessage(name: string, data: any) {
@@ -48,7 +48,7 @@ export function initCodeMirror(
 	const theme = settings.themeData;
 
 	let schedulePostUndoRedoDepthChangeId_: any = 0;
-	function schedulePostUndoRedoDepthChange(editor: EditorView, doItNow: boolean = false) {
+	const schedulePostUndoRedoDepthChange = (editor: EditorView, doItNow: boolean = false) => {
 		if (schedulePostUndoRedoDepthChangeId_) {
 			if (doItNow) {
 				clearTimeout(schedulePostUndoRedoDepthChangeId_);
@@ -64,9 +64,9 @@ export function initCodeMirror(
 				redoDepth: redoDepth(editor.state),
 			});
 		}, doItNow ? 0 : 1000);
-	}
+	};
 
-	function notifyDocChanged(viewUpdate: ViewUpdate) {
+	const notifyDocChanged = (viewUpdate: ViewUpdate) => {
 		if (viewUpdate.docChanged) {
 			const event: ChangeEvent = {
 				value: editor.state.doc.toString(),
@@ -75,9 +75,9 @@ export function initCodeMirror(
 			postMessage('onChange', event);
 			schedulePostUndoRedoDepthChange(editor);
 		}
-	}
+	};
 
-	function notifySelectionChange(viewUpdate: ViewUpdate) {
+	const notifySelectionChange = (viewUpdate: ViewUpdate) => {
 		if (!viewUpdate.state.selection.eq(viewUpdate.startState.selection)) {
 			const mainRange = viewUpdate.state.selection.main;
 			const selection: Selection = {
@@ -89,7 +89,7 @@ export function initCodeMirror(
 			};
 			postMessage('onSelectionChange', event);
 		}
-	}
+	};
 
 	const editor = new EditorView({
 		state: EditorState.create({

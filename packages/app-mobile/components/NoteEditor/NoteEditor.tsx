@@ -8,7 +8,7 @@ const { editorFont } = require('../global-style');
 import {
 	ChangeEvent, UndoRedoDepthChangeEvent, Selection, SelectionChangeEvent,
 	EditorSettings,
-} from './EditorType';
+} from './types';
 
 type ChangeEventHandler = (event: ChangeEvent)=> void;
 type UndoRedoDepthChangeHandler = (event: UndoRedoDepthChangeEvent)=> void;

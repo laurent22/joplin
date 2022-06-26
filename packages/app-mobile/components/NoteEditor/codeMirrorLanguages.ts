@@ -217,7 +217,8 @@ const supportedLanguages: {
 	},
 ];
 
-
+// Convert supportedLanguages to a CodeMirror-readable list
+// of LanguageDescriptions
 const syntaxHighlightingLanguages: LanguageDescription[] = [];
 for (const language of supportedLanguages) {
 	// Convert from parsers to LanguageSupport objects as necessary
