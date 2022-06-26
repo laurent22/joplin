@@ -903,8 +903,8 @@ function useMenu(props: Props) {
 			}
 
 			if (props.routeName !== 'Main') {
-				const preferencesWindowMenu = { ...rootMenus.macOsWindow };
-				preferencesWindowMenu.submenu = [{
+				const escapingMacOsWindowMenu = { ...rootMenus.macOsWindow };
+				escapingMacOsWindowMenu.submenu = [{
 					label: _('Exit to main screen'),
 					accelerator: 'Esc',
 					click() {
@@ -924,7 +924,7 @@ function useMenu(props: Props) {
 						label: _('&Edit'),
 						submenu: basicEditMenuItems,
 					},
-					shim.isMac() ? preferencesWindowMenu : noItem,
+					shim.isMac() ? escapingMacOsWindowMenu : noItem,
 					rootMenus.help,
 				]));
 			} else {
