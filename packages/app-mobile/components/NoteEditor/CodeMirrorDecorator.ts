@@ -38,6 +38,10 @@ const blockQuoteDecoration = Decoration.line({
 	attributes: { class: 'cm-blockQuote' },
 });
 
+const headerLineDecoration = Decoration.line({
+	attributes: { class: 'cm-headerLine' },
+});
+
 // Returns a set of [Decoration]s, associated with block syntax groups that require
 // full-line styling.
 function computeDecorations(view: EditorView) {
@@ -99,6 +103,16 @@ function computeDecorations(view: EditorView) {
 					break;
 				case 'InlineCode':
 					addDecorationToRange(viewFrom, viewTo, inlineCodeDecoration);
+					break;
+				case 'SetextHeading1':
+				case 'SetextHeading2':
+				case 'ATXHeading1':
+				case 'ATXHeading2':
+				case 'ATXHeading3':
+				case 'ATXHeading4':
+				case 'ATXHeading5':
+				case 'ATXHeading6':
+					addDecorationToLines(viewFrom, viewTo, headerLineDecoration);
 					break;
 				}
 
