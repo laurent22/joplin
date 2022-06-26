@@ -89,8 +89,11 @@ const createTheme = (theme: any): Extension[] => {
 		},
 
 		// CodeMirror wraps the existing inline span in an additional element.
-		// Style the contianed element (work around a rendering bug).
-		'& .cm-inlineCode > *': {
+		// Due to a Chrome rendering bug, because the .cm-inlineCode wraps a
+		// span with a larger font-size, the .cm-inlineCode's bounding box won't
+		// be big enough for its content.
+		// As such, we need to style whichever element directly wraps its content.
+		'& .cm-headerLine > .cm-inlineCode > *, & :not(.cm-headerLine) > .cm-inlineCode': {
 			borderWidth: '1px',
 			borderStyle: 'solid',
 			borderColor: isDarkTheme ? 'rgba(200, 200, 200, 0.5)' : 'rgba(100, 100, 100, 0.5)',
