@@ -397,6 +397,9 @@ export function initCodeMirror(
 				case 'ATXHeading4':
 					formatting.headerLevel = 4;
 					break;
+				case 'ATXHeading5':
+					formatting.headerLevel = 5;
+					break;
 				case 'URL':
 					formatting.inLink = true;
 					formatting.linkData.linkURL = nodeText();

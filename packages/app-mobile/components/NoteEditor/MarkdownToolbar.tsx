@@ -266,7 +266,7 @@ const MarkdownToolbar = (props: ToolbarProps) => {
 
 
 	// Header menu
-	for (let level = 1; level <= 4; level++) {
+	for (let level = 1; level <= 5; level++) {
 		const active = selState.headerLevel == level;
 		const label = !active ? _('Create header level %d', level) : _('Remove level %d header');
 		headerMenuModel.addAction({
