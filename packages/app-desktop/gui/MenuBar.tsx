@@ -603,6 +603,33 @@ function useMenu(props: Props) {
 				],
 			};
 
+			const clipboardMenuItems = [
+				menuItemDic.textCopy,
+				menuItemDic.textCut,
+				menuItemDic.textPaste,
+				menuItemDic.textSelectAll,
+				separator(),
+			];
+
+			const historyMenuItems = [
+				// Using the generic "undo"/"redo" roles mean the menu
+				// item will work in every text fields, whether it's the
+				// editor or a regular text field.
+				{
+					role: 'undo',
+					label: _('Undo'),
+				},
+				{
+					role: 'redo',
+					label: _('Redo'),
+				},
+				separator(),
+			];
+
+			const basicEditMenuItems = shim.isMac()
+				? [...historyMenuItems, ...clipboardMenuItems]
+				: [...clipboardMenuItems, ...historyMenuItems];
+
 			const layoutButtonSequenceOptions = Setting.enumOptions('layoutButtonSequence');
 			const layoutButtonSequenceMenuItems = [];
 
@@ -622,23 +649,7 @@ function useMenu(props: Props) {
 					id: 'edit',
 					label: _('&Edit'),
 					submenu: [
-						menuItemDic.textCopy,
-						menuItemDic.textCut,
-						menuItemDic.textPaste,
-						menuItemDic.textSelectAll,
-						separator(),
-						// Using the generic "undo"/"redo" roles mean the menu
-						// item will work in every text fields, whether it's the
-						// editor or a regular text field.
-						{
-							role: 'undo',
-							label: _('Undo'),
-						},
-						{
-							role: 'redo',
-							label: _('Redo'),
-						},
-						separator(),
+						...basicEditMenuItems,
 						menuItemDic.textBold,
 						menuItemDic.textItalic,
 						menuItemDic.textLink,
