@@ -147,6 +147,8 @@ export interface CodeMirrorControl {
 export interface EditorControl extends CodeMirrorControl {
 	showLinkDialog(): void;
 	hideLinkDialog(): void;
+
+	hideKeyboard(): void;
 }
 
 

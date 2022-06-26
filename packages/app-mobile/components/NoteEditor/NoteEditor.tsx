@@ -213,17 +213,20 @@ function NoteEditor(props: Props, ref: any) {
 		decreaseIndent() {
 			injectJS('cm.decreaseIndent();');
 		},
+		updateLink(label: string, url: string) {
+			injectJS(`cm.updateLink(
+				${JSON.stringify(label)},
+				${JSON.stringify(url)}
+			);`);
+		},
 		showLinkDialog() {
 			setLinkDialogVisible(true);
 		},
 		hideLinkDialog() {
 			setLinkDialogVisible(false);
 		},
-		updateLink(label: string, url: string) {
-			injectJS(`cm.updateLink(
-				${JSON.stringify(label)},
-				${JSON.stringify(url)}
-			);`);
+		hideKeyboard() {
+			injectJS('document.activeElement?.blur();');
 		},
 	};
 

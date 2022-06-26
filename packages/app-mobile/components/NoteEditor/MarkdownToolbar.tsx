@@ -6,7 +6,10 @@ const { ScrollView, View, Text, TouchableHighlight } = require('react-native');
 const { useMemo, useState } = require('react');
 const AntIcon = require('react-native-vector-icons/AntDesign').default;
 const FontAwesomeIcon = require('react-native-vector-icons/FontAwesome5').default;
+const MaterialIcon = require('react-native-vector-icons/MaterialIcons').default;
 import { _ } from '@joplin/lib/locale';
+import { useEffect } from 'react';
+import { Keyboard } from 'react-native';
 import { EditorControl, EditorSettings, SelectionFormatting, ListType } from './EditorType';
 
 interface ToolbarProps {
@@ -214,6 +217,7 @@ enum MenuRowType {
 	HeaderMenu,
 	ListMenu,
 	FormatMenu,
+	ViewMenu,
 }
 
 const MarkdownToolbar = (props: ToolbarProps) => {
@@ -236,6 +240,9 @@ const MarkdownToolbar = (props: ToolbarProps) => {
 	);
 	const miscFormatMenuModel = new MenuRowModel(
 		_('Formatting'), MenuRowType.FormatMenu, openMenu, rootMenuModel
+	);
+	const actionsMenuModel = new MenuRowModel(
+		_('View'), MenuRowType.ViewMenu, openMenu, rootMenuModel
 	);
 
 	rootMenuModel.addCategory({
@@ -263,6 +270,13 @@ const MarkdownToolbar = (props: ToolbarProps) => {
 		accessibilityLabel: _('Inline formatting'),
 		active: selState.inCode || selState.bolded || selState.italicized || selState.inMath,
 	}, miscFormatMenuModel);
+
+	rootMenuModel.addCategory({
+		icon: (
+			<MaterialIcon name="settings" style={styles.text}/>
+		),
+		accessibilityLabel: _('Editor options'),
+	}, actionsMenuModel);
 
 
 	// Header menu
@@ -379,12 +393,41 @@ const MarkdownToolbar = (props: ToolbarProps) => {
 			<FontAwesomeIcon name="link" style={styles.text}/>
 		),
 		accessibilityLabel:
-			selState.inLink ? _('Edit Link') : _('Create Link'),
+			selState.inLink ? _('Edit link') : _('Create link'),
 		active: selState.inLink,
 	}, () => {
 		editorControl.showLinkDialog();
 	});
 
+
+	// Actions
+	const [keyboardVisible, setKeyboardVisible] = useState(false);
+	useEffect(() => {
+		const showListener = Keyboard.addListener('keyboardDidShow', () => {
+			setKeyboardVisible(true);
+		});
+		const hideListener = Keyboard.addListener('keyboardDidHide', () => {
+			setKeyboardVisible(false);
+		});
+
+		return (() => {
+			showListener.remove();
+			hideListener.remove();
+		});
+	});
+
+	if (keyboardVisible) {
+		actionsMenuModel.addAction({
+			icon: (
+				<MaterialIcon name="keyboard-hide" style={styles.text}/>
+			),
+			accessibilityLabel: _('Hide keyboard'),
+		}, () => {
+			// Keyboard.dismiss() doesn't dismiss the keyboard if it's editing the WebView.
+			// As such, dismiss the keyboard by sending a message to the View.
+			editorControl.hideKeyboard();
+		});
+	}
 
 	return (
 		<ToolbarMenu
