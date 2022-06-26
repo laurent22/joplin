@@ -104,7 +104,7 @@ const InlineMathConfig: MarkdownConfig = {
 			// The INLINE_MATH_CONTENT_TAG node can thus be safely removed and the region
 			// will still be marked as a math region.
 			const contentElem = cx.elt(INLINE_MATH_CONTENT_TAG, start + 1, pos - 1);
-			cx.addElement(cx.elt(INLINE_MATH_TAG, start, pos + 1, [contentElem]));
+			cx.addElement(cx.elt(INLINE_MATH_TAG, start, pos, [contentElem]));
 
 			return pos + 1;
 		},
