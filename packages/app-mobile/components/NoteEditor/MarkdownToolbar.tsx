@@ -401,6 +401,15 @@ const MarkdownToolbar = (props: ToolbarProps) => {
 
 
 	// Actions
+	actionsMenuModel.addAction({
+		icon: (
+			<MaterialIcon name="search" style={styles.text}/>
+		),
+		accessibilityLabel: _('Find and replace'),
+	}, () => {
+		editorControl.toggleFindDialog();
+	});
+
 	const [keyboardVisible, setKeyboardVisible] = useState(false);
 	useEffect(() => {
 		const showListener = Keyboard.addListener('keyboardDidShow', () => {
@@ -428,15 +437,6 @@ const MarkdownToolbar = (props: ToolbarProps) => {
 			editorControl.hideKeyboard();
 		});
 	}
-
-	actionsMenuModel.addAction({
-		icon: (
-			<MaterialIcon name="search" style={styles.text}/>
-		),
-		accessibilityLabel: _('Find and replace'),
-	}, () => {
-		editorControl.toggleFindDialog();
-	});
 
 	return (
 		<ToolbarMenu
