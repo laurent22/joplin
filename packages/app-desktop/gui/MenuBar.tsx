@@ -810,6 +810,10 @@ function useMenu(props: Props) {
 						click: () => _showAbout(),
 					}],
 				},
+				macOsWindow: {
+					label: _('Window'),
+					role: 'windowMenu', // Use default Window menu on macOS
+				},
 			};
 
 			if (shim.isMac()) {
@@ -876,7 +880,10 @@ function useMenu(props: Props) {
 				rootMenus.help,
 			];
 
-			if (shim.isMac()) template.splice(0, 0, rootMenus.macOsApp);
+			if (shim.isMac()) {
+				template.splice(0, 0, rootMenus.macOsApp);
+				template.splice(template.length - 1, 0, rootMenus.macOsWindow);
+			}
 
 			if (props.routeName !== 'Main') {
 				setMenu(Menu.buildFromTemplate([
