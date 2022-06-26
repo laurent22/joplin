@@ -903,6 +903,18 @@ function useMenu(props: Props) {
 			}
 
 			if (props.routeName !== 'Main') {
+				const preferencesWindowMenu = { ...rootMenus.macOsWindow };
+				preferencesWindowMenu.submenu = [{
+					label: _('Exit to main screen'),
+					accelerator: 'Esc',
+					click() {
+						props.dispatch({
+							type: 'NAV_GO',
+							routeName: 'Main',
+						});
+					},
+				}];
+
 				setMenu(Menu.buildFromTemplate([
 					shim.isMac() ? rootMenus.macOsApp : {
 						label: _('&File'),
@@ -912,7 +924,7 @@ function useMenu(props: Props) {
 						label: _('&Edit'),
 						submenu: basicEditMenuItems,
 					},
-					shim.isMac() ? rootMenus.macOsWindow : noItem,
+					shim.isMac() ? preferencesWindowMenu : noItem,
 					rootMenus.help,
 				]));
 			} else {
