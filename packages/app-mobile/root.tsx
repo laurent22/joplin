@@ -685,7 +685,7 @@ class AppComponent extends React.Component {
 
 		this.state = {
 			sideMenuContentOpacity: new Animated.Value(0),
-			sideMenuWidth: getResponsiveValue([250, 180]),
+			sideMenuWidth: getResponsiveValue({ sm: 275, lg: 180 }),
 		};
 
 		this.lastSyncStarted_ = defaultState.syncStarted;
@@ -703,6 +703,8 @@ class AppComponent extends React.Component {
 				void this.handleShareData();
 			}
 		};
+
+		this.handleScreenWidthChange_ = this.handleScreenWidthChange_.bind(this);
 	}
 
 	// 2020-10-08: It seems the initialisation code is quite fragile in general and should be kept simple.
@@ -771,9 +773,7 @@ class AppComponent extends React.Component {
 		});
 
 		AppState.addEventListener('change', this.onAppStateChange_);
-		Dimensions.addEventListener('change', () => {
-			this.setState({ sideMenuWidth: getResponsiveValue([250, 180]) });
-		});
+		Dimensions.addEventListener('change', this.handleScreenWidthChange_);
 
 		await this.handleShareData();
 
@@ -788,7 +788,7 @@ class AppComponent extends React.Component {
 	public componentWillUnmount() {
 		AppState.removeEventListener('change', this.onAppStateChange_);
 		Linking.removeEventListener('url', this.handleOpenURL_);
-		Dimensions.removeEventListener('change');
+		Dimensions.removeEventListener('change', this.handleScreenWidthChange_);
 		if (this.unsubscribeNetInfoHandler_) this.unsubscribeNetInfoHandler_();
 	}
 
@@ -831,6 +831,16 @@ class AppComponent extends React.Component {
 			} else {
 				reg.logger().info('Cannot handle share - default folder id is not set');
 			}
+		}
+	}
+
+	private async handleScreenWidthChange_() {
+		const currentScreenWidth = Dimensions.get('screen').width;
+
+		if (currentScreenWidth > 700 && currentScreenWidth < 768) {
+			this.setState({ sideMenuWidth: getResponsiveValue({ sm: 275, md: 160 }) });
+		} else {
+			this.setState({ sideMenuWidth: getResponsiveValue({ sm: 275, lg: 160 }) });
 		}
 	}
 
@@ -879,7 +889,7 @@ class AppComponent extends React.Component {
 		};
 
 		const statusBarStyle = theme.appearance === 'light' ? 'dark-content' : 'light-content';
-
+		console.log(`SCreen Width: ${Dimensions.get('screen').width}, SideMenuWidth: ${this.state.sideMenuWidth}`);
 		return (
 			<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
 				<SideMenu
