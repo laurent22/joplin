@@ -27,12 +27,11 @@ export const runtime = (): CommandRuntime => {
 			if (!state.settings['spellChecker.enabled']) return null;
 			const languages = state.settings['spellChecker.language'];
 			if (languages.length == 0) return null;
-			let s = '';
+			const s: string[] = [];
 			languages.forEach((language: string) => {
-				s += `${language.split('-')[0]}, `;
+				s.push(language.split('-')[0]);
 			});
-			s = s.slice(0, -2);
-			return s;
+			return s.join(', ');
 		},
 	};
 };
