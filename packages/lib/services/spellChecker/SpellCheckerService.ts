@@ -46,7 +46,7 @@ export default class SpellCheckerService {
 
 		if (languages.length > LANGUAGES_HISTORY_SIZE_MAX) {
 			this.latestSelectedLanguages_.forEach(l => {
-				if (!this.language.includes(l) && languages.length > LANGUAGES_HISTORY_SIZE_MAX) languages.splice(languages.indexOf(l), 1);
+				if (!this.languages.includes(l) && languages.length > LANGUAGES_HISTORY_SIZE_MAX) languages.splice(languages.indexOf(l), 1);
 			});
 		}
 
@@ -66,11 +66,11 @@ export default class SpellCheckerService {
 	}
 
 	private applyStateToDriver() {
-		this.driver_.setLanguage(this.enabled ? this.language : []);
+		this.driver_.setLanguage(this.enabled ? this.languages : []);
 	}
 
 	public setLanguage(language: string) {
-		let enabledLanguages: string[] = [...this.language];
+		let enabledLanguages: string[] = [...this.languages];
 		if (enabledLanguages.includes(language)) {
 			enabledLanguages = enabledLanguages.filter(obj => obj !== language);
 		} else {
@@ -81,7 +81,7 @@ export default class SpellCheckerService {
 		void this.addLatestSelectedLanguage(language);
 	}
 
-	public get language(): string[] {
+	public get languages(): string[] {
 		return Setting.value('spellChecker.language');
 	}
 
