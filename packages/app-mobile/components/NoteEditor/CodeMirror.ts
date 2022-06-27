@@ -672,9 +672,28 @@ export function initCodeMirror(
 		toggleSelectedLinesStartWith(
 			regex: RegExp,
 			template: string | ((line: Line, firstLine: Line, lastLine: Line)=> string),
-			matchEmpty: boolean, nodeName?: string
+			matchEmpty: boolean, nodeName?: string, ignoreBlockQuotes: boolean = true
 		): boolean {
 			let didDeletion = false;
+			const blockQuoteRegex = /^>\s(.*)$/;
+
+			const getLineContentStart = (line: Line): number => {
+				if (!ignoreBlockQuotes) {
+					return line.from;
+				}
+
+				const blockQuoteMatch = blockQuoteRegex.exec(line.text);
+				if (blockQuoteMatch) {
+					return line.from + blockQuoteMatch.length;
+				}
+
+				return line.from;
+			};
+
+			const getLineContent = (line: Line): string => {
+				const contentStart = getLineContentStart(line);
+				return line.text.substring(contentStart - line.from);
+			};
 
 			const changes = editor.state.changeByRange((sel: SelectionRange) => {
 				// Attempt to select all lines in the region
@@ -693,9 +712,10 @@ export function initCodeMirror(
 
 				for (let i = fromLine.number; i <= toLine.number; i++) {
 					const line = doc.line(i);
+					const text = getLineContent(line);
 
 					// If already matching [regex],
-					if (line.text.search(regex) == 0) {
+					if (text.search(regex) == 0) {
 						hasProp = true;
 					}
 
@@ -703,22 +723,25 @@ export function initCodeMirror(
 				}
 
 				for (const line of lines) {
+					const text = getLineContent(line);
+					const contentFrom = getLineContentStart(line);
+
 					// Only process if the line is non-empty.
-					if (!matchEmpty && line.text.trim().length == 0
+					if (!matchEmpty && text.trim().length == 0
 							// Treat the first line differently
 							&& fromLine.number < line.number) {
 						continue;
 					}
 
 					if (hasProp) {
-						const match = line.text.match(regex);
+						const match = text.match(regex);
 						if (!match) {
 							continue;
 						}
 
 						changes.push({
-							from: line.from,
-							to: line.from + match[0].length,
+							from: contentFrom,
+							to: contentFrom + match[0].length,
 						});
 
 						charsAdded -= match[0].length;
@@ -732,7 +755,7 @@ export function initCodeMirror(
 						}
 
 						changes.push({
-							from: line.from,
+							from: contentFrom,
 							insert: templateVal,
 						});
 
@@ -740,11 +763,21 @@ export function initCodeMirror(
 					}
 				}
 
+				// If the selection is empty, don't grow it (user might be adding a
+				// list/header, in which case, selecting the just added text isn't helpful)
+				let newSel;
+				if (sel.empty) {
+					const regionEnd = toLine.to + charsAdded;
+					newSel = EditorSelection.range(regionEnd, regionEnd);
+				} else {
+					newSel = EditorSelection.range(fromLine.from, toLine.to + charsAdded);
+				}
+
 				return {
 					changes,
 
 					// Selection should now encompass all lines that were changed.
-					range: EditorSelection.range(fromLine.from, toLine.to + charsAdded),
+					range: newSel,
 				};
 			});
 			editor.dispatch(changes);
