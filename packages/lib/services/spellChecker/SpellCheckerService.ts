@@ -35,14 +35,18 @@ export default class SpellCheckerService {
 	}
 
 	private async addLatestSelectedLanguage(language: string) {
+		// This function will add selected languages to the history. History size will be capped at LANGUAGES_HISTORY_SIZE_MAX,
+		// but it can be bigger. Enabled languages will always be in the history, even if it count greater then
+		// LANGUAGES_HISTORY_SIZE_MAX, in such case if one of the languages will be disabled it will disappear from history.
+		const LANGUAGES_HISTORY_SIZE_MAX = 5;
 		const languages = this.latestSelectedLanguages_.slice();
 		if (!languages.includes(language)) {
 			languages.push(language);
 		}
 
-		if (languages.length > 5) {
+		if (languages.length > LANGUAGES_HISTORY_SIZE_MAX) {
 			this.latestSelectedLanguages_.forEach(l => {
-				if (!this.language.includes(l) && languages.length > 5) languages.splice(languages.indexOf(l), 1);
+				if (!this.language.includes(l) && languages.length > LANGUAGES_HISTORY_SIZE_MAX) languages.splice(languages.indexOf(l), 1);
 			});
 		}
 
