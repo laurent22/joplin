@@ -51,7 +51,7 @@ export default class SpellCheckerService {
 	}
 
 	public setupDefaultLanguage() {
-		if (Setting.value('spellChecker.language') === []) {
+		if (Setting.value('spellChecker.language').length == 0) {
 			const l = this.driver_.language;
 			this.setLanguage(l ? l : this.defaultLanguage);
 		}

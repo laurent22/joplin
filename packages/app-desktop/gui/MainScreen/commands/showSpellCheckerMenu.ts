@@ -26,7 +26,7 @@ export const runtime = (): CommandRuntime => {
 		mapStateToTitle(state: AppState): string {
 			if (!state.settings['spellChecker.enabled']) return null;
 			const languages = state.settings['spellChecker.language'];
-			if (languages === []) return null;
+			if (languages.length == 0) return null;
 			let s = '';
 			languages.forEach((language: string) => {
 				s += `${language.split('-')[0]}, `;
