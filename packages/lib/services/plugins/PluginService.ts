@@ -9,6 +9,7 @@ import Setting from '../../models/Setting';
 import Logger from '../../Logger';
 import RepositoryApi from './RepositoryApi';
 import produce from 'immer';
+import path = require('path');
 const compareVersions = require('compare-versions');
 const uslug = require('@joplin/fork-uslug');
 
@@ -434,6 +435,21 @@ export default class PluginService extends BaseService {
 			if (!this.plugins_[plugin.id]) this.setPluginAt(plugin.id, plugin);
 			return plugin;
 		} else { return null; }
+	}
+
+	public async installDefaultPlugins(pathToPlugins: string, pluginSettings: PluginSettings, service: PluginService): Promise<PluginSettings> {
+		if (!Setting.value('firstStart')) return pluginSettings;
+		const defaultPlugins = await shim.fsDriver().readDirStats(pathToPlugins);
+
+		for (const plugin of defaultPlugins) {
+			const defaultPluginPath: string = path.join(`${pathToPlugins}/${plugin.path}`);
+			await service.installPlugin(defaultPluginPath, false);
+
+			pluginSettings = produce(pluginSettings, (draft: PluginSettings) => {
+				draft[filename(plugin.path)] = defaultPluginSetting();
+			});
+		}
+		return pluginSettings;
 	}
 
 	private async pluginPath(pluginId: string) {

@@ -9,7 +9,7 @@ import shim from '@joplin/lib/shim';
 import AlarmService from '@joplin/lib/services/AlarmService';
 import AlarmServiceDriverNode from '@joplin/lib/services/AlarmServiceDriverNode';
 import Logger, { TargetType } from '@joplin/lib/Logger';
-import Setting from '@joplin/lib/models/Setting';
+import Setting, { Env } from '@joplin/lib/models/Setting';
 import actionApi from '@joplin/lib/services/rest/actionApi.desktop';
 import BaseApplication from '@joplin/lib/BaseApplication';
 import DebugService from '@joplin/lib/debug/DebugService';
@@ -63,7 +63,8 @@ import checkForUpdates from './checkForUpdates';
 import { AppState } from './app.reducer';
 import syncDebugLog from '@joplin/lib/services/synchronizer/syncDebugLog';
 import eventManager from '@joplin/lib/eventManager';
-import installDefaultPlugins from './installDefaultPlugins';
+// import { setSettingsForDefaultPlugins } from './defaultSettings';
+import path = require('path');
 // import { runIntegrationTests } from '@joplin/lib/services/e2ee/ppkTestUtils';
 
 const pluginClasses = [
@@ -274,7 +275,10 @@ class Application extends BaseApplication {
 		}
 
 		try {
-			pluginSettings = await installDefaultPlugins(pluginSettings, service);
+			const devEnv = Setting.constants_.env === Env.Dev;
+			let pluginsPath = '';
+			devEnv ? pluginsPath = path.join(__dirname, '..', 'app-desktop/build/defaultPlugins/') : pluginsPath = path.join(__dirname, '..', 'build/defaultPlugins/');
+			pluginSettings = await service.installDefaultPlugins(pluginsPath, pluginSettings, service);
 			if (await shim.fsDriver().exists(Setting.value('pluginDir'))) {
 				await service.loadAndRunPlugins(Setting.value('pluginDir'), pluginSettings);
 			}
@@ -315,13 +319,14 @@ class Application extends BaseApplication {
 			Setting.setValue('plugins.states', newSettings);
 		}
 
-		this.checkAllPluginStartedIID_ = setInterval(() => {
+		this.checkAllPluginStartedIID_ = setInterval(async () => {
 			if (service.allPluginsStarted) {
 				clearInterval(this.checkAllPluginStartedIID_);
 				this.dispatch({
 					type: 'STARTUP_PLUGINS_LOADED',
 					value: true,
 				});
+				// await setSettingsForDefaultPlugins();
 			}
 		}, 500);
 	}

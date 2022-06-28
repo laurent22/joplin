@@ -9,6 +9,7 @@ import Note from '@joplin/lib/models/Note';
 import Folder from '@joplin/lib/models/Folder';
 import { expectNotThrow, setupDatabaseAndSynchronizer, switchClient, expectThrow, createTempDir, supportDir } from '@joplin/lib/testing/test-utils';
 import { newPluginScript } from '../../testUtils';
+import path = require('path');
 
 const testPluginDir = `${supportDir}/plugins`;
 
@@ -269,6 +270,17 @@ describe('services_PluginService', function() {
 		await service.installPlugin(pluginPath);
 		const installedPluginPath = `${Setting.value('pluginDir')}/org.joplinapp.FirstJplPlugin.jpl`;
 		expect(await fs.pathExists(installedPluginPath)).toBe(true);
+	}));
+
+	it('should install default plugins', (async () => {
+		const service = newPluginService();
+		const pluginsPath = path.join(__dirname, '..', '/defaultPlugins/');
+		const pluginSettings = service.unserializePluginSettings(Setting.value('plugins.states'));
+		await service.installDefaultPlugins(pluginsPath, pluginSettings, service);
+		const installedPluginPath1 = `${Setting.value('pluginDir')}/io.github.jackgruber.backup.jpl`;
+		const installedPluginPath2 = `${Setting.value('pluginDir')}/plugin.calebjohn.rich-markdown.jpl`;
+		expect(await fs.pathExists(installedPluginPath1)).toBe(true);
+		expect(await fs.pathExists(installedPluginPath2)).toBe(true);
 	}));
 
 	it('should rename the plugin archive to the right name', (async () => {
