@@ -773,7 +773,7 @@ class AppComponent extends React.Component {
 		});
 
 		AppState.addEventListener('change', this.onAppStateChange_);
-		Dimensions.addEventListener('change', this.handleScreenWidthChange_);
+		this.screenWidthChangeEvent = Dimensions.addEventListener('change', this.handleScreenWidthChange_);
 
 		await this.handleShareData();
 
@@ -788,7 +788,7 @@ class AppComponent extends React.Component {
 	public componentWillUnmount() {
 		AppState.removeEventListener('change', this.onAppStateChange_);
 		Linking.removeEventListener('url', this.handleOpenURL_);
-		Dimensions.removeEventListener('change', this.handleScreenWidthChange_);
+		this.screenWidthChangeEvent.remove();
 		if (this.unsubscribeNetInfoHandler_) this.unsubscribeNetInfoHandler_();
 	}
 
@@ -889,7 +889,6 @@ class AppComponent extends React.Component {
 		};
 
 		const statusBarStyle = theme.appearance === 'light' ? 'dark-content' : 'light-content';
-		console.log(`SCreen Width: ${Dimensions.get('screen').width}, SideMenuWidth: ${this.state.sideMenuWidth}`);
 		return (
 			<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
 				<SideMenu
