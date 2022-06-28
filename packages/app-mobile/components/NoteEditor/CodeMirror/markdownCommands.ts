@@ -164,7 +164,7 @@ const toggleSelectionFormat = (
 
 // Toggle formatting in a region, applying a block version of the formatting
 // if multiple lines are selected.
-const toggleRegionFormat = (
+export const toggleRegionFormat = (
 	state: EditorState,
 
 	inlineNodeName: string, inlineSpec: RegionSpec,
@@ -271,7 +271,7 @@ const toggleRegionFormat = (
 // to, (e.g. TaskList to expand selections to containing TaskLists if possible).
 // Note that selection is only expanded if the existing selection is empty
 // (just a caret).
-const toggleSelectedLinesStartWith = (
+export const toggleSelectedLinesStartWith = (
 	state: EditorState,
 	regex: RegExp,
 	template: string | ((line: Line, firstLine: Line, lastLine: Line)=> string),

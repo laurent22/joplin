@@ -871,6 +871,9 @@ packages/app-mobile/components/NoteEditor/CodeMirror/languages.js.map
 packages/app-mobile/components/NoteEditor/CodeMirror/markdownCommands.d.ts
 packages/app-mobile/components/NoteEditor/CodeMirror/markdownCommands.js
 packages/app-mobile/components/NoteEditor/CodeMirror/markdownCommands.js.map
+packages/app-mobile/components/NoteEditor/CodeMirror/markdownCommands.test.d.ts
+packages/app-mobile/components/NoteEditor/CodeMirror/markdownCommands.test.js
+packages/app-mobile/components/NoteEditor/CodeMirror/markdownCommands.test.js.map
 packages/app-mobile/components/NoteEditor/CodeMirror/markdownMathParser.d.ts
 packages/app-mobile/components/NoteEditor/CodeMirror/markdownMathParser.js
 packages/app-mobile/components/NoteEditor/CodeMirror/markdownMathParser.js.map
