@@ -829,6 +829,7 @@ export default class BaseApplication {
 			Setting.setValue('firstStart', 0);
 		} else {
 			Setting.applyDefaultMigrations();
+			Setting.applyUserSettingMigration();
 		}
 
 		setLocale(Setting.value('locale'));

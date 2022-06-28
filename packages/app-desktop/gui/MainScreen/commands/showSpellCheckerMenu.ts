@@ -15,7 +15,7 @@ export const declaration: CommandDeclaration = {
 export const runtime = (): CommandRuntime => {
 	return {
 		execute: async (context: CommandContext, selectedLanguage: string[] = null, useSpellChecker: boolean = null) => {
-			selectedLanguage = selectedLanguage === null ? context.state.settings['spellChecker.language'] : selectedLanguage;
+			selectedLanguage = selectedLanguage === null ? context.state.settings['spellChecker.languages'] : selectedLanguage;
 			useSpellChecker = useSpellChecker === null ? context.state.settings['spellChecker.enabled'] : useSpellChecker;
 
 			const menuItems = SpellCheckerService.instance().spellCheckerConfigMenuItems(selectedLanguage, useSpellChecker);
@@ -25,7 +25,7 @@ export const runtime = (): CommandRuntime => {
 
 		mapStateToTitle(state: AppState): string {
 			if (!state.settings['spellChecker.enabled']) return null;
-			const languages = state.settings['spellChecker.language'];
+			const languages = state.settings['spellChecker.languages'];
 			if (languages.length == 0) return null;
 			const s: string[] = [];
 			languages.forEach((language: string) => {

@@ -122,7 +122,7 @@ interface Props {
 	pluginMenuItems: any[];
 	pluginMenus: any[];
 	['spellChecker.enabled']: boolean;
-	['spellChecker.language']: string[];
+	['spellChecker.languages']: string[];
 	plugins: PluginStates;
 	customCss: string;
 	locale: string;
@@ -471,7 +471,7 @@ function useMenu(props: Props) {
 			}
 			toolsItems = toolsItems.concat(toolsItemsAll);
 
-			toolsItems.push(SpellCheckerService.instance().spellCheckerConfigMenuItem(props['spellChecker.language'], props['spellChecker.enabled']));
+			toolsItems.push(SpellCheckerService.instance().spellCheckerConfigMenuItem(props['spellChecker.languages'], props['spellChecker.enabled']));
 
 			function _checkForUpdates() {
 				void checkForUpdates(false, bridge().window(), { includePreReleases: Setting.value('autoUpdate.includePreReleases') });
@@ -911,7 +911,7 @@ function useMenu(props: Props) {
 		props.pluginMenus,
 		keymapLastChangeTime,
 		modulesLastChangeTime,
-		props['spellChecker.language'],
+		props['spellChecker.languages'],
 		props['spellChecker.enabled'],
 		props.customCss,
 		props.locale,
@@ -973,7 +973,7 @@ const mapStateToProps = (state: AppState) => {
 		showCompletedTodos: state.settings.showCompletedTodos,
 		pluginMenuItems: stateUtils.selectArrayShallow({ array: pluginUtils.viewsByType(state.pluginService.plugins, 'menuItem') }, 'menuBar.pluginMenuItems'),
 		pluginMenus: stateUtils.selectArrayShallow({ array: pluginUtils.viewsByType(state.pluginService.plugins, 'menu') }, 'menuBar.pluginMenus'),
-		['spellChecker.language']: state.settings['spellChecker.language'],
+		['spellChecker.languages']: state.settings['spellChecker.languages'],
 		['spellChecker.enabled']: state.settings['spellChecker.enabled'],
 		plugins: state.pluginService.plugins,
 		customCss: state.customCss,

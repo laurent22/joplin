@@ -201,6 +201,22 @@ const defaultMigrations: DefaultMigration[] = [
 	},
 ];
 
+// "UserSettingMigration" are used to migrate existing user setting to a new setting. With a way
+// to transform existing value of the old setting to value and type of the new setting.
+interface UserSettingMigration {
+	oldName: string;
+	newName: string;
+	transformValue: Function;
+}
+
+const userSettingMigration: UserSettingMigration[] = [
+	{
+		oldName: 'spellChecker.language',
+		newName: 'spellChecker.languages',
+		transformValue: (value: string) => { return [value]; },
+	},
+];
+
 class Setting extends BaseModel {
 
 	public static schemaUrl = 'https://joplinapp.org/schema/settings.json';
@@ -1430,7 +1446,8 @@ class Setting extends BaseModel {
 			'camera.ratio': { value: '4:3', type: SettingItemType.String, public: false, appTypes: [AppType.Mobile] },
 
 			'spellChecker.enabled': { value: true, type: SettingItemType.Bool, isGlobal: true, storage: SettingStorage.File, public: false },
-			'spellChecker.language': { value: [], type: SettingItemType.Array, isGlobal: true, storage: SettingStorage.File, public: false },
+			'spellChecker.language': { value: '', type: SettingItemType.String, isGlobal: true, storage: SettingStorage.File, public: false }, // Depreciated in favour of spellChecker.languages.
+			'spellChecker.languages': { value: [], type: SettingItemType.Array, isGlobal: true, storage: SettingStorage.File, public: false },
 
 			windowContentZoomFactor: {
 				value: 100,
@@ -1576,6 +1593,16 @@ class Setting extends BaseModel {
 		}
 
 		this.setValue('lastSettingDefaultMigration', defaultMigrations.length - 1);
+	}
+
+	public static applyUserSettingMigration() {
+		// Function to translate existing user settings to new setting.
+		userSettingMigration.forEach(userMigration => {
+			if (!this.isSet(userMigration.newName) && this.isSet(userMigration.oldName)) {
+				this.setValue(userMigration.newName, userMigration.transformValue(this.value(userMigration.oldName)));
+				logger.info(`Migrating ${userMigration.oldName} to ${userMigration.newName}`);
+			}
+		});
 	}
 
 	public static featureFlagKeys(appType: AppType): string[] {
@@ -1975,8 +2002,6 @@ class Setting extends BaseModel {
 		if (md.type === SettingItemType.Array) {
 			if (!value) return [];
 			if (Array.isArray(value)) return value;
-			// Hack to transform existing string values of spellChecker.language to array.
-			if (key === 'spellChecker.language' && typeof value === 'string') return [value];
 			if (typeof value === 'string') return JSON.parse(value);
 			return [];
 		}

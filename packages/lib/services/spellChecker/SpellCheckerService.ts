@@ -55,7 +55,7 @@ export default class SpellCheckerService {
 	}
 
 	public setupDefaultLanguage() {
-		if (Setting.value('spellChecker.language').length == 0) {
+		if (Setting.value('spellChecker.languages').length == 0) {
 			const l = this.driver_.language;
 			if (this.availableLanguages.includes(l)) this.setLanguage(l);
 			else this.setLanguage(this.defaultLanguage);
@@ -77,13 +77,13 @@ export default class SpellCheckerService {
 		} else {
 			enabledLanguages.push(language);
 		}
-		Setting.setValue('spellChecker.language', enabledLanguages);
+		Setting.setValue('spellChecker.languages', enabledLanguages);
 		this.applyStateToDriver();
 		void this.addLatestSelectedLanguage(language);
 	}
 
 	public get languages(): string[] {
-		return Setting.value('spellChecker.language');
+		return Setting.value('spellChecker.languages');
 	}
 
 	public get enabled(): boolean {
