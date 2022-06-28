@@ -108,8 +108,10 @@ const markdownUtils = {
 				const type: string = token.type;
 
 				if (type === 'image' || type === 'link_open') {
-					// Pdf embeds are a special case, they are represented as 'link_open' tokens but are marked with 'embedded_pdf' as link name by the parser
-					// We are making sure if its in the proper pdf link format, only then we add it to the list
+					// Pdf embeds are a special case, they are represented as
+					// 'link_open' tokens but are marked with 'embedded_pdf' as
+					// link name by the parser We are making sure if its in the
+					// proper pdf link format, only then we add it to the list
 					const isPdf = tokens.length > i + 1 && tokens[i + 1].type === 'text' && tokens[i + 1].content === 'embedded_pdf';
 
 					if (type === 'image' && !options.includeImages) continue;

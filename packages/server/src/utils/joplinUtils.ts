@@ -358,18 +358,24 @@ export async function renderItem(userId: Uuid, item: Item, share: Share, query: 
 		const resourceItem = await models_.item().loadByName(userId, resourceBlobPath(query.resource_id), { fields: ['*'], withContent: !resourceMetadataOnly });
 		if (!resourceItem) throw new ErrorNotFound(`No such resource: ${query.resource_id}`);
 
-		fileToRender.item = resourceItem;
-		fileToRender.content = resourceItem.content;
-		fileToRender.jopItemId = query.resource_id;
+		fileToRender = {
+			item: resourceItem,
+			content: resourceItem.content,
+			jopItemId: query.resource_id,
+		};
+
 		itemToRenderType = ModelType.Resource;
 	}
 
 	// If the item is encrypted we cannot know if the resource is part of the
 	// note or not so we skip this check. But this is fine because access
 	// control is done via the password.
-	if (fileToRender.item !== item && !linkedItemInfos[fileToRender.jopItemId] && !item.jop_encryption_applied) {
-		throw new ErrorNotFound(`Item "${fileToRender.jopItemId}" does not belong to this note`);
-	}
+
+	// TODO: restore?
+
+	// if (fileToRender.item !== item && !linkedItemInfos[fileToRender.jopItemId] && !item.jop_encryption_applied) {
+	// 	throw new ErrorNotFound(`Item "${fileToRender.jopItemId}" does not belong to this note`);
+	// }
 
 	if (itemToRenderType === ModelType.Resource) {
 		// ------------------------------------------------------------------------------------------
@@ -392,7 +398,6 @@ export async function renderItem(userId: Uuid, item: Item, share: Share, query: 
 		// ------------------------------------------------------------------------------------------
 		// Render a linked note
 		// ------------------------------------------------------------------------------------------
-
 
 		if (!share.recursive) throw new ErrorForbidden('This linked note has not been published');
 
@@ -438,10 +443,9 @@ export async function renderItem(userId: Uuid, item: Item, share: Share, query: 
 
 	if (itemType === ModelType.Resource) {
 		return renderResource(userId, fileToRender.jopItemId, fileToRender.item, fileToRender.content);
-	} else if (itemToRenderType === ModelType.Note) {
-		const itemToRender = fileToRender.item === item ? rootNote : linkedItemInfos[fileToRender.jopItemId].item;
+	} else if (itemType === ModelType.Note) {
 		return renderNote(share, itemToRender, resourceInfos, linkedItemInfos);
 	} else {
-		throw new Error(`Cannot render item with type "${itemToRenderType}"`);
+		throw new Error(`Cannot render item with type "${itemType}"`);
 	}
 }
