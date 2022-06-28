@@ -38,9 +38,10 @@ class Dropdown extends React.Component {
 		const listTop = Math.min(maxListTop, this.state.headerSize.y + this.state.headerSize.height);
 
 		const wrapperStyle = {
+			width: this.state.headerSize.width,
 			height: listHeight + 2, // +2 for the border (otherwise it makes the scrollbar appear)
 			marginTop: listTop,
-			alignSelf: 'center',
+			marginLeft: this.state.headerSize.x,
 		};
 
 		const itemListStyle = Object.assign({}, this.props.itemListStyle ? this.props.itemListStyle : {}, {
@@ -86,7 +87,6 @@ class Dropdown extends React.Component {
 		if (this.props.labelTransform && this.props.labelTransform === 'trim') headerLabel = headerLabel.trim();
 
 		const closeList = () => {
-			if (this.props.onClose) this.props.onClose();
 			this.setState({ listVisible: false });
 		};
 
@@ -116,7 +116,6 @@ class Dropdown extends React.Component {
 					onPress={() => {
 						this.updateHeaderCoordinates();
 						this.setState({ listVisible: true });
-						if (this.props.onOpen) this.props.onOpen();
 					}}
 				>
 					<Text ellipsizeMode="tail" numberOfLines={1} style={headerStyle}>

@@ -29,6 +29,7 @@ export interface MarkdownTableRow {
 export interface ExtractFileUrlsOptions {
 	includeImages?: boolean;
 	includeAnchors?: boolean;
+	includePdfs?: boolean;
 	detailedResults?: boolean;
 	html?: boolean;
 }
@@ -86,6 +87,7 @@ const markdownUtils = {
 		options = {
 			includeAnchors: true,
 			includeImages: true,
+			includePdfs: false,
 			detailedResults: false,
 			// Should probably be true by default but since it was added
 			// afterwards we make it false for now.
@@ -100,6 +102,9 @@ const markdownUtils = {
 		const tokens = markdownIt.parse(md, env);
 		const output: ExtractFileUrlsResult[] = [];
 
+		// let linkType = onlyType;
+		// if (linkType === 'pdf') linkType = 'link_open';
+
 		const searchUrls = (tokens: any[]) => {
 			for (let i = 0; i < tokens.length; i++) {
 				const token = tokens[i];
@@ -108,6 +113,11 @@ const markdownUtils = {
 				if (type === 'image' || type === 'link_open') {
 					if (type === 'image' && !options.includeImages) continue;
 					if (type === 'link_open' && !options.includeAnchors) continue;
+
+					// Pdf embeds are a special case, they are represented as 'link_open' tokens but are marked with 'embedded_pdf' as link name by the parser
+					// We are making sure if its in the proper pdf link format, only then we add it to the list
+					const isPdf = tokens.length > i + 1 && tokens[i + 1].type === 'text' && tokens[i + 1].content === 'embedded_pdf';
+					if (isPdf && !options.includePdfs) continue;
 
 					for (let j = 0; j < token.attrs.length; j++) {
 						const a = token.attrs[j];
@@ -159,6 +169,14 @@ const markdownUtils = {
 			includeImages: true,
 			includeAnchors: false,
 		}) as string[];
+	},
+
+	extractPdfUrls(md: string) {
+		return markdownUtils.extractFileUrls(md, {
+			includeImages: false,
+			includeAnchors: false,
+			includePdfs: true,
+		});
 	},
 
 	// The match results has 5 items
