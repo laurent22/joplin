@@ -12,8 +12,8 @@
     "tsc": "tsc --project tsconfig.json",
     "watch": "tsc --watch --preserveWatchOutput --project tsconfig.json",
     "generatePluginTypes": "rm -rf ./plugin_types && yarn run tsc --declaration --declarationDir ./plugin_types --project tsconfig.json",
-    "test": "jest --verbose=false",
-    "test-ci": "yarn test"
+    "test": "BROWSERSLIST_IGNORE_OLD_DATA=1 jest --verbose=false",
+    "test-ci": "BROWSERSLIST_IGNORE_OLD_DATA=1 yarn test"
   },
   "devDependencies": {
     "@types/fs-extra": "^9.0.6",

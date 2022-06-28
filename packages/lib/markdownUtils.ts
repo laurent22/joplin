@@ -102,21 +102,22 @@ const markdownUtils = {
 		const tokens = markdownIt.parse(md, env);
 		const output: ExtractFileUrlsResult[] = [];
 
-		// let linkType = onlyType;
-		// if (linkType === 'pdf') linkType = 'link_open';
-
 		const searchUrls = (tokens: any[]) => {
 			for (let i = 0; i < tokens.length; i++) {
 				const token = tokens[i];
 				const type: string = token.type;
 
 				if (type === 'image' || type === 'link_open') {
-					if (type === 'image' && !options.includeImages) continue;
-					if (type === 'link_open' && !options.includeAnchors) continue;
-
 					// Pdf embeds are a special case, they are represented as 'link_open' tokens but are marked with 'embedded_pdf' as link name by the parser
 					// We are making sure if its in the proper pdf link format, only then we add it to the list
 					const isPdf = tokens.length > i + 1 && tokens[i + 1].type === 'text' && tokens[i + 1].content === 'embedded_pdf';
+
+					if (type === 'image' && !options.includeImages) continue;
+
+					if (type === 'link_open') {
+						if (!options.includeAnchors && !options.includePdfs) continue;
+					}
+
 					if (isPdf && !options.includePdfs) continue;
 
 					for (let j = 0; j < token.attrs.length; j++) {
@@ -176,7 +177,7 @@ const markdownUtils = {
 			includeImages: false,
 			includeAnchors: false,
 			includePdfs: true,
-		});
+		}) as string[];
 	},
 
 	// The match results has 5 items
