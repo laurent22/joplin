@@ -39,10 +39,24 @@ describe('Formatting commands', () => {
 
 		toggleHeaderLevel(1)(editor);
 
-		const mainSel = editor.state.selection.main;
+		let mainSel = editor.state.selection.main;
 		expect(editor.state.doc.toString()).toEqual('# Testing...\nThis is a test.');
 		expect(mainSel.empty).toBeTruthy();
 		expect(mainSel.from).toBe('# Testing...'.length);
+
+		toggleHeaderLevel(2)(editor);
+
+		mainSel = editor.state.selection.main;
+		expect(editor.state.doc.toString()).toEqual('## Testing...\nThis is a test.');
+		expect(mainSel.empty).toBeTruthy();
+		expect(mainSel.from).toBe('## Testing...'.length);
+
+		toggleHeaderLevel(2)(editor);
+
+		mainSel = editor.state.selection.main;
+		expect(editor.state.doc.toString()).toEqual(initialDocText);
+		expect(mainSel.empty).toBeTruthy();
+		expect(mainSel.from).toBe('Testing...'.length);
 	});
 });
 
