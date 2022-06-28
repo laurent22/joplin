@@ -10,12 +10,14 @@ const { useEffect, useMemo, useState, useCallback, useRef } = require('react');
 const { WebView } = require('react-native-webview');
 const { View } = require('react-native');
 const { editorFont } = require('../global-style');
+
+import SelectionFormatting from './SelectionFormatting';
 import {
-	ChangeEvent, UndoRedoDepthChangeEvent, Selection, SelectionChangeEvent,
 	EditorSettings,
 	EditorControl,
+
+	ChangeEvent, UndoRedoDepthChangeEvent, Selection, SelectionChangeEvent,
 	ListType,
-	SelectionFormatting,
 } from './types';
 
 type ChangeEventHandler = (event: ChangeEvent)=> void;

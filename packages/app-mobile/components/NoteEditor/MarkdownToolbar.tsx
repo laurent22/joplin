@@ -10,7 +10,8 @@ const MaterialIcon = require('react-native-vector-icons/MaterialIcons').default;
 import { _ } from '@joplin/lib/locale';
 import { useEffect } from 'react';
 import { Keyboard } from 'react-native';
-import { EditorControl, EditorSettings, SelectionFormatting, ListType } from './types';
+import { EditorControl, EditorSettings, ListType } from './types';
+import SelectionFormatting from './SelectionFormatting';
 
 interface ToolbarProps {
 	editorControl: EditorControl;

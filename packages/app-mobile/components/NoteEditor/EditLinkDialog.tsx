@@ -9,7 +9,8 @@ const { View, Modal, Text, TextInput, Button } = require('react-native');
 
 import { themeStyle } from '@joplin/lib/theme';
 import { _ } from '@joplin/lib/locale';
-import { EditorControl, SelectionFormatting } from './types';
+import { EditorControl } from './types';
+import SelectionFormatting from './SelectionFormatting';
 
 interface LinkDialogProps {
 	editorControl: EditorControl;

@@ -10,7 +10,8 @@ const execa = require('execa');
 const rootDir = path.dirname(path.dirname(path.dirname(__dirname)));
 const mobileDir = `${rootDir}/packages/app-mobile`;
 const outputDir = `${mobileDir}/lib/rnInjectedJs`;
-const codeMirrorBundleFile = `${mobileDir}/components/NoteEditor/CodeMirror.bundle.min.js`;
+const codeMirrorDir = `${mobileDir}/components/NoteEditor/CodeMirror`;
+const codeMirrorBundleFile = `${codeMirrorDir}/CodeMirror.bundle.min.js`;
 
 async function copyJs(name, filePath) {
 	const outputPath = `${outputDir}/${name}.js`;
@@ -23,8 +24,8 @@ async function copyJs(name, filePath) {
 async function buildCodeMirrorBundle() {
 	console.info('Building CodeMirror bundle...');
 
-	const sourceFile = `${mobileDir}/components/NoteEditor/CodeMirror.ts`;
-	const fullBundleFile = `${mobileDir}/components/NoteEditor/CodeMirror.bundle.js`;
+	const sourceFile = `${codeMirrorDir}/CodeMirror.ts`;
+	const fullBundleFile = `${codeMirrorDir}/CodeMirror.bundle.js`;
 
 	await execa('yarn', [
 		'run', 'rollup',
@@ -48,7 +49,7 @@ async function main() {
 	await fs.mkdirp(outputDir);
 	await buildCodeMirrorBundle();
 	await copyJs('webviewLib', `${mobileDir}/../lib/renderers/webviewLib.js`);
-	await copyJs('CodeMirror.bundle', `${mobileDir}/components/NoteEditor/CodeMirror.bundle.min.js`);
+	await copyJs('CodeMirror.bundle', `${codeMirrorDir}/CodeMirror.bundle.min.js`);
 }
 
 module.exports = main;

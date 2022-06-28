@@ -7,7 +7,7 @@ import { nodeResolve } from '@rollup/plugin-node-resolve';
 
 const rootDir = dirname(dirname(dirname(__dirname)));
 const mobileDir = `${rootDir}/packages/app-mobile`;
-const codeMirrorDir = `${mobileDir}/components/NoteEditor`;
+const codeMirrorDir = `${mobileDir}/components/NoteEditor/CodeMirror`;
 const outputFile = `${codeMirrorDir}/CodeMirror.bundle.js`;
 
 export default {
