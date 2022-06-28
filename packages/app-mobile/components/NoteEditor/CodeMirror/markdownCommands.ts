@@ -404,8 +404,8 @@ export const toggleItalicized: Command = (view: EditorView): boolean => {
 
 	const changes = toggleGlobalSelectionFormat(view.state, 'Emphasis', new RegionSpec({
 		// Template start/end
-		templateStart: '*',
-		templateStop: '*',
+		templateStart: '_',
+		templateStop: '_',
 
 		// Regular expressions that match all possible start/ends
 		startExp: /[_*]/g,

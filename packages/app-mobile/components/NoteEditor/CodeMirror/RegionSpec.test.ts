@@ -7,7 +7,7 @@ describe('Matching start/end of bolded regions', () => {
 		templateStop: '**',
 	});
 
-	test('Match start of bolded', () => {
+	it('Match start of bolded', () => {
 		const doc = DocumentText.of(['**test**']);
 		const sel = EditorSelection.range(0, 5);
 
@@ -15,13 +15,13 @@ describe('Matching start/end of bolded regions', () => {
 		expect(spec.matchStart(doc, sel)).toBe(2);
 	});
 
-	test('Match stop of bolded region (empty selection)', () => {
+	it('Match stop of bolded region (empty selection)', () => {
 		const doc = DocumentText.of(['**...** test.']);
 		const sel = EditorSelection.range(5, 5);
 		expect(spec.matchStop(doc, sel)).toBe(2);
 	});
 
-	test('Region without a match', () => {
+	it('Region without a match', () => {
 		const doc = DocumentText.of(['**...** test.']);
 		const sel = EditorSelection.range(3, 3);
 		expect(spec.matchStop(doc, sel)).toBe(-1);
@@ -41,48 +41,51 @@ describe('Matching start/end of italicized regions', () => {
 		const testDoc = DocumentText.of([testString]);
 		const fullSel = EditorSelection.range('This is a '.length, testString.length);
 
-		test('matchStart (full selection)', () => {
+		it('matchStart (full selection)', () => {
 			expect(spec.matchStart(testDoc, fullSel)).toBe(1);
 		});
 
-		test('matchStop (full selection)', () => {
+		it('matchStop (full selection)', () => {
 			expect(spec.matchStop(testDoc, fullSel)).toBe(1);
 		});
 	});
 });
 
-// describe('')
-//
-// const testString = 'This is a _test_';
-// const testSel = EditorSelection.range('This is a '.length, testString.length);
-// failIfNeq(
-//     spec.matchStart(DocumentText.of([testString]), testSel), 1,
-//     'Italicized/matchStart (full selection) failed'
-// );
-// failIfNeq(
-//     spec.matchStop(DocumentText.of([testString]), testSel), 1,
-//     'Italicized/matchStop (full selection) failed'
-// );
+describe('List matching start/stop', () => {
+	const spec = new RegionSpec({
+		templateStart: ' - ',
+		templateStop: '',
+		startBuffSize: 4,
+		startExp: /^\s*[-*]\s/g,
+	});
 
-// spec = new RegionSpec({
-//     templateStart: ' - ',
-//     templateStop: '',
-//     startBuffSize: 4,
-//     startExp: /^\s*[-*]\s/g,
-// });
-// failIfNeq(
-//     spec.matchStart(DocumentText.of(['- Test...']), EditorSelection.range(1, 6)), -1,
-//     'List region spec/no matchStart (simple) failure!'
-// );
-// failIfNeq(
-//     spec.matchStart(DocumentText.of(['- Test...']), EditorSelection.range(0, 6)), 2,
-//     'List region spec/matchStart (simple) failure!'
-// );
-// failIfNeq(
-//     spec.matchStart(DocumentText.of(['   - Test...']), EditorSelection.range(0, 6)), 5,
-//     'List region spec/matchStart failure!'
-// );
-// failIfNeq(
-//     spec.matchStop(DocumentText.of(['   - Test...']), EditorSelection.range(0, 100)), 0,
-//     'List region spec/matchStop failure!'
-// );
+	it('Don\'t match start of list (not fully selected)', () => {
+		const doc = DocumentText.of(['- Test...']);
+		const sel = EditorSelection.range(1, 6);
+
+		// Beginning of list not selected: no match
+		expect(spec.matchStart(doc, sel)).toBe(-1);
+	});
+
+	it('Match start of list', () => {
+		const doc = DocumentText.of(['- Test...']);
+		const sel = EditorSelection.range(0, 6);
+
+		expect(spec.matchStart(doc, sel)).toBe(2);
+	});
+
+	it('Match start of indented list', () => {
+		const doc = DocumentText.of(['   - Test...']);
+		const sel = EditorSelection.range(0, 6);
+
+		expect(spec.matchStart(doc, sel)).toBe(5);
+	});
+
+	it('Match end of indented list', () => {
+		const doc = DocumentText.of(['   - Test...']);
+		const sel = EditorSelection.range(0, 6);
+
+		// Zero-length, but found, selection
+		expect(spec.matchStop(doc, sel)).toBe(0);
+	});
+});
