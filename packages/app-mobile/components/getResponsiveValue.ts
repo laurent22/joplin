@@ -23,44 +23,34 @@ interface ValueMap {
     xxl?: number;
 }
 
-export default function getResponsiveValue(valueMap: number[] | ValueMap): number {
+export default function getResponsiveValue(valueMap: ValueMap): number {
+	if (Object.keys(valueMap).length === 0) {
+		throw 'valueMap cannot be an empty object!';
+	}
+
 	const width = Dimensions.get('screen').width;
 	let value: number;
-	let sm: number, md: number, lg: number, xl: number, xxl: number;
+	const { sm, md, lg, xl, xxl } = valueMap;
 
-	if (Array.isArray(valueMap)) {
-		if (valueMap.length === 0) {
-			return undefined;
-		}
+	// This handles cases where certain values are omitted
+	if (xxl) {
+		value = xxl;
+	}
 
-		[sm, md, lg, xl, xxl] = valueMap;
+	if (xl) {
+		value = xl;
+	}
 
+	if (lg) {
+		value = lg;
+	}
+
+	if (md) {
+		value = md;
+	}
+
+	if (sm) {
 		value = sm;
-	} else if (Object.keys(valueMap).length === 0) {
-		return undefined;
-	} else {
-		({ sm, md, lg, xl, xxl } = valueMap as ValueMap);
-
-		// This handles cases where certain values are omitted
-		if (xxl) {
-			value = xxl;
-		}
-
-		if (xl) {
-			value = xl;
-		}
-
-		if (lg) {
-			value = lg;
-		}
-
-		if (md) {
-			value = md;
-		}
-
-		if (sm) {
-			value = sm;
-		}
 	}
 
 	if (width >= 481 && !!md) {

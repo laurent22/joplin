@@ -20,10 +20,9 @@ describe('getResponsiveValue', () => {
 			.mockReturnValueOnce({ width: 1300 });
 	});
 
-	test('Should return undefined if argument is an empty object', () => {
+	test('Should throw exception if value map is an empty object', () => {
 		const input = {};
-		const result = getResponsiveValue(input);
-		expect(result).toBe(undefined);
+		expect(() => getResponsiveValue(input)).toThrow('valueMap cannot be an empty object!');
 	});
 
 	test('Should return correct value when only sm value is specified', () => {
