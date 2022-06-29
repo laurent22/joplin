@@ -293,9 +293,9 @@ describe('models/Setting', function() {
 	it('should not set new setting, if old setting is not set', (async () => {
 		await Setting.reset();
 
-		expect(Setting.isSet('spellChecker.language')).toBeFalsy();
+		expect(Setting.isSet('spellChecker.language')).toBe(false);
 		Setting.applyUserSettingMigration();
-		expect(Setting.isSet('spellChecker.languages')).toBeFalsy();
+		expect(Setting.isSet('spellChecker.languages')).toBe(false);
 	}));
 
 	it('should load sub-profile settings - 1', async () => {
