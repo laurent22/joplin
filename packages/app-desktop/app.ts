@@ -63,7 +63,7 @@ import checkForUpdates from './checkForUpdates';
 import { AppState } from './app.reducer';
 import syncDebugLog from '@joplin/lib/services/synchronizer/syncDebugLog';
 import eventManager from '@joplin/lib/eventManager';
-// import { setSettingsForDefaultPlugins } from './defaultSettings';
+import setSettingsForDefaultPlugins from './defaultPluginsSettings';
 import path = require('path');
 // import { runIntegrationTests } from '@joplin/lib/services/e2ee/ppkTestUtils';
 
@@ -277,7 +277,8 @@ class Application extends BaseApplication {
 		try {
 			const devEnv = Setting.constants_.env === Env.Dev;
 			let pluginsPath = '';
-			devEnv ? pluginsPath = path.join(__dirname, '..', 'app-desktop/build/defaultPlugins/') : pluginsPath = path.join(__dirname, '..', 'build/defaultPlugins/');
+			devEnv ? pluginsPath = path.join(__dirname, '..', 'app-desktop/build/defaultPlugins/') : pluginsPath = path.join(process.resourcesPath, 'build/defaultPlugins/');
+
 			pluginSettings = await service.installDefaultPlugins(pluginsPath, pluginSettings, service);
 			if (await shim.fsDriver().exists(Setting.value('pluginDir'))) {
 				await service.loadAndRunPlugins(Setting.value('pluginDir'), pluginSettings);
@@ -326,7 +327,7 @@ class Application extends BaseApplication {
 					type: 'STARTUP_PLUGINS_LOADED',
 					value: true,
 				});
-				// await setSettingsForDefaultPlugins();
+				await setSettingsForDefaultPlugins();
 			}
 		}, 500);
 	}

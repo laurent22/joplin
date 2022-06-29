@@ -449,6 +449,7 @@ export default class PluginService extends BaseService {
 				draft[filename(plugin.path)] = defaultPluginSetting();
 			});
 		}
+		Setting.setValue('firstStart', 0);
 		return pluginSettings;
 	}
 
