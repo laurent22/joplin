@@ -31,7 +31,8 @@
     "afterSign": "./tools/notarizeMacApp.js",
     "extraResources": [
       "build/icons/**",
-      "build/images/**"
+      "build/images/**",
+      "build/defaultPlugins/**"
     ],
     "afterAllArtifactBuild": "./generateSha512.js",
     "asar": true,
