@@ -290,6 +290,14 @@ describe('models/Setting', function() {
 		expect(Setting.value('spellChecker.languages')).toStrictEqual(['fr-FR', 'en-US']);
 	}));
 
+	it('should not set new setting, if old setting is not set', (async () => {
+		await Setting.reset();
+
+		expect(Setting.isSet('spellChecker.language')).toBeFalsy();
+		Setting.applyUserSettingMigration();
+		expect(Setting.isSet('spellChecker.languages')).toBeFalsy();
+	}));
+
 	it('should load sub-profile settings - 1', async () => {
 		await Setting.reset();
 
