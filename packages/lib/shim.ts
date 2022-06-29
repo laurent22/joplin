@@ -159,6 +159,7 @@ const shim = {
 	fetchWithRetry: async function(fetchFn: Function, options: any = null) {
 		if (!options) options = {};
 		if (!options.timeout) options.timeout = 1000 * 120; // ms
+		if (!('maxRetry' in options)) options.maxRetry = shim.fetchMaxRetry_;
 
 		let retryCount = 0;
 		while (true) {
@@ -168,9 +169,7 @@ const shim = {
 			} catch (error) {
 				if (shim.fetchRequestCanBeRetried(error)) {
 					retryCount++;
-					if (retryCount > options.maxRetry) {
-						throw error;
-					}
+					if (retryCount > options.maxRetry) throw error;
 					await shim.msleep_(retryCount * 3000);
 				} else {
 					throw error;
