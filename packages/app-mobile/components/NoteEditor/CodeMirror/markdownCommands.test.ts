@@ -45,7 +45,7 @@ describe('Formatting commands', () => {
 
 		toggleMath(editor);
 		expect(editor.state.doc.toString()).toEqual('Testing... $$');
-		expect(editor.state.selection.main.empty).toBeTruthy();
+		expect(editor.state.selection.main.empty).toBe(true);
 
 		editor.dispatch(editor.state.replaceSelection('3 + 3 \\neq 5'));
 		expect(editor.state.doc.toString()).toEqual('Testing... $3 + 3 \\neq 5$');
@@ -66,21 +66,21 @@ describe('Formatting commands', () => {
 
 		let mainSel = editor.state.selection.main;
 		expect(editor.state.doc.toString()).toEqual('# Testing...\nThis is a test.');
-		expect(mainSel.empty).toBeTruthy();
+		expect(mainSel.empty).toBe(true);
 		expect(mainSel.from).toBe('# Testing...'.length);
 
 		toggleHeaderLevel(2)(editor);
 
 		mainSel = editor.state.selection.main;
 		expect(editor.state.doc.toString()).toEqual('## Testing...\nThis is a test.');
-		expect(mainSel.empty).toBeTruthy();
+		expect(mainSel.empty).toBe(true);
 		expect(mainSel.from).toBe('## Testing...'.length);
 
 		toggleHeaderLevel(2)(editor);
 
 		mainSel = editor.state.selection.main;
 		expect(editor.state.doc.toString()).toEqual(initialDocText);
-		expect(mainSel.empty).toBeTruthy();
+		expect(mainSel.empty).toBe(true);
 		expect(mainSel.from).toBe('Testing...'.length);
 	});
 
@@ -99,7 +99,7 @@ describe('Formatting commands', () => {
 		expect(editor.state.doc.toString()).toEqual(
 			'Testing...\n\n> # This is a test.\n> ...a test'
 		);
-		expect(mainSel.empty).toBeTruthy();
+		expect(mainSel.empty).toBe(true);
 		expect(mainSel.from).toBe('Testing...\n\n> # This is a test.'.length);
 
 		toggleHeaderLevel(3)(editor);
