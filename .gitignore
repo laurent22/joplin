@@ -885,6 +885,9 @@ packages/app-mobile/components/NoteEditor/MarkdownToolbar.js.map
 packages/app-mobile/components/NoteEditor/NoteEditor.d.ts
 packages/app-mobile/components/NoteEditor/NoteEditor.js
 packages/app-mobile/components/NoteEditor/NoteEditor.js.map
+packages/app-mobile/components/NoteEditor/SearchPanel.d.ts
+packages/app-mobile/components/NoteEditor/SearchPanel.js
+packages/app-mobile/components/NoteEditor/SearchPanel.js.map
 packages/app-mobile/components/NoteEditor/SelectionFormatting.d.ts
 packages/app-mobile/components/NoteEditor/SelectionFormatting.js
 packages/app-mobile/components/NoteEditor/SelectionFormatting.js.map

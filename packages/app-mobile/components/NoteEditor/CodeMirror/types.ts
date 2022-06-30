@@ -1,4 +1,4 @@
-import { ListType } from '../types';
+import { ListType, SearchControl } from '../types';
 
 // Controls for the CodeMirror portion of the editor
 export interface CodeMirrorControl {
@@ -23,5 +23,5 @@ export interface CodeMirrorControl {
 	decreaseIndent(): void;
 	scrollSelectionIntoView(): void;
 
-	toggleFindDialog(): void;
+	searchControl: SearchControl;
 }

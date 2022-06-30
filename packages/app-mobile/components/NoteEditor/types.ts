@@ -33,6 +33,26 @@ export interface SelectionChangeEvent {
 	selection: Selection;
 }
 
+export interface SearchControl {
+    findNext(): void;
+    findPrevious(): void;
+    replaceCurrent(): void;
+    replaceAll(): void;
+	setSearchState(state: SearchState): void;
+
+    showSearch(): void;
+    hideSearch(): void;
+}
+
+export interface SearchState {
+	useRegex: boolean;
+	caseSensitive: boolean;
+
+	searchText: string;
+	replaceText: string;
+    dialogVisible: boolean;
+}
+
 // Possible types of lists in the editor
 export enum ListType {
 	CheckList,

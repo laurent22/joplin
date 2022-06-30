@@ -18,7 +18,7 @@ import { EditorState } from '@codemirror/state';
 import { markdown } from '@codemirror/lang-markdown';
 import { GFM } from '@lezer/markdown';
 import { indentOnInput, indentUnit, syntaxTree } from '@codemirror/language';
-import { closeSearchPanel, highlightSelectionMatches, openSearchPanel, search } from '@codemirror/search';
+import { closeSearchPanel, findNext, findPrevious, getSearchQuery, highlightSelectionMatches, openSearchPanel, replaceAll, replaceNext, search, SearchQuery, setSearchQuery } from '@codemirror/search';
 import { EditorView, drawSelection, highlightSpecialChars, ViewUpdate, Command } from '@codemirror/view';
 import { undo, redo, history, undoDepth, redoDepth } from '@codemirror/commands';
 
@@ -27,19 +27,24 @@ import { searchKeymap } from '@codemirror/search';
 import { historyKeymap, defaultKeymap, indentWithTab } from '@codemirror/commands';
 
 import { CodeMirrorControl } from './types';
-import { EditorSettings, ListType } from '../types';
+import { EditorSettings, ListType, SearchState } from '../types';
 import { ChangeEvent, SelectionChangeEvent, Selection } from '../types';
 import SelectionFormatting from '../SelectionFormatting';
 import { logMessage, postMessage } from './webviewLogger';
-import { decreaseIndent, increaseIndent, toggleBolded, toggleCode, toggleHeaderLevel, toggleItalicized, toggleList, toggleMath, updateLink } from './markdownCommands';
-
-
+import {
+	decreaseIndent, increaseIndent,
+	toggleBolded, toggleCode,
+	toggleHeaderLevel, toggleItalicized,
+	toggleList, toggleMath, updateLink,
+} from './markdownCommands';
 
 export function initCodeMirror(
 	parentElement: any, initialText: string, settings: EditorSettings
 ): CodeMirrorControl {
 	logMessage('Initializing CodeMirror...');
 	const theme = settings.themeData;
+
+	let searchVisible = false;
 
 	let schedulePostUndoRedoDepthChangeId_: any = 0;
 	const schedulePostUndoRedoDepthChange = (editor: EditorView, doItNow: boolean = false) => {
@@ -71,6 +76,29 @@ export function initCodeMirror(
 		}
 	};
 
+	const notifyLinkEditRequest = () => {
+		postMessage('onRequestLinkEdit', null);
+	};
+
+	const showSearchDialog = () => {
+		const query = getSearchQuery(editor.state);
+		const searchState: SearchState = {
+			searchText: query.search,
+			replaceText: query.replace,
+			useRegex: query.regexp,
+			caseSensitive: query.caseSensitive,
+			dialogVisible: true,
+		};
+
+		postMessage('onRequestShowSearch', searchState);
+		searchVisible = true;
+	};
+
+	const hideSearchDialog = () => {
+		postMessage('onRequestHideSearch', null);
+		searchVisible = false;
+	};
+
 	const notifySelectionChange = (viewUpdate: ViewUpdate) => {
 		if (!viewUpdate.state.selection.eq(viewUpdate.startState.selection)) {
 			const mainRange = viewUpdate.state.selection.main;
@@ -94,10 +122,6 @@ export function initCodeMirror(
 				postMessage('onSelectionFormattingChange', newFormatting.toJSON());
 			}
 		}
-	};
-
-	const notifyLinkEditRequest = () => {
-		postMessage('onRequestLinkEdit', null);
 	};
 
 	const computeSelectionFormatting = (state: EditorState): SelectionFormatting => {
@@ -226,7 +250,21 @@ export function initCodeMirror(
 				}),
 				...createTheme(theme),
 				history(),
-				search(),
+				search({
+					createPanel(_: EditorView) {
+						return {
+							// The actual search dialog is implemented with react native,
+							// use a dummy element.
+							dom: document.createElement('div'),
+							mount() {
+								showSearchDialog();
+							},
+							destroy() {
+								hideSearchDialog();
+							},
+						};
+					},
+				}),
 				drawSelection(),
 				highlightSpecialChars(),
 				highlightSelectionMatches(),
@@ -246,6 +284,14 @@ export function initCodeMirror(
 					notifySelectionFormattingChange(viewUpdate);
 				}),
 				keymap.of([
+					keyCommand('Mod-f', (_: EditorView) => {
+						if (searchVisible) {
+							hideSearchDialog();
+						} else {
+							showSearchDialog();
+						}
+						return true;
+					}),
 					// Markdown formatting keyboard shortcuts
 					keyCommand('Mod-b', toggleBolded),
 					keyCommand('Mod-i', toggleItalicized),
@@ -265,6 +311,18 @@ export function initCodeMirror(
 		}),
 		parent: parentElement,
 	});
+
+	const updateSearchQuery = (newState: SearchState) => {
+		const query = new SearchQuery({
+			search: newState.searchText,
+			caseSensitive: newState.caseSensitive,
+			regexp: newState.useRegex,
+			replace: newState.replaceText,
+		});
+		editor.dispatch({
+			effects: setSearchQuery.of(query),
+		});
+	};
 
 	const editorControls = {
 		editor,
@@ -307,6 +365,31 @@ export function initCodeMirror(
 		toggleList(kind: ListType) { toggleList(kind)(editor); },
 		toggleHeaderLevel(level: number) { toggleHeaderLevel(level)(editor); },
 		updateLink(label: string, url: string) { updateLink(label, url)(editor); },
+
+		// Search
+		searchControl: {
+			findNext() {
+				findNext(editor);
+			},
+			findPrevious() {
+				findPrevious(editor);
+			},
+			replaceCurrent() {
+				replaceNext(editor);
+			},
+			replaceAll() {
+				replaceAll(editor);
+			},
+			setSearchState(state: SearchState) {
+				updateSearchQuery(state);
+			},
+			showSearch() {
+				showSearchDialog();
+			},
+			hideSearch() {
+				hideSearchDialog();
+			},
+		},
 	};
 
 	return editorControls;

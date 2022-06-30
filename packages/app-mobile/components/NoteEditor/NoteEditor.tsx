@@ -3,6 +3,7 @@ import shim from '@joplin/lib/shim';
 import { themeStyle } from '@joplin/lib/theme';
 import MarkdownToolbar from './MarkdownToolbar';
 import EditLinkDialog from './EditLinkDialog';
+import { DEFAULT_SEARCH_STATE, SearchPanel } from './SearchPanel';
 
 const React = require('react');
 const { forwardRef, useImperativeHandle } = require('react');
@@ -18,6 +19,7 @@ import {
 
 	ChangeEvent, UndoRedoDepthChangeEvent, Selection, SelectionChangeEvent,
 	ListType,
+	SearchState,
 } from './types';
 
 type ChangeEventHandler = (event: ChangeEvent)=> void;
@@ -165,6 +167,7 @@ function NoteEditor(props: Props, ref: any) {
 	const css = useCss(props.themeId);
 	const html = useHtml(css);
 	const [selectionState, setSelectionState] = useState(new SelectionFormatting());
+	const [searchState, setSearchState] = useState(DEFAULT_SEARCH_STATE);
 	const [linkDialogVisible, setLinkDialogVisible] = useState(false);
 
 	// / Runs [js] in the context of the CodeMirror frame.
@@ -237,11 +240,38 @@ function NoteEditor(props: Props, ref: any) {
 		hideLinkDialog() {
 			setLinkDialogVisible(false);
 		},
-		toggleFindDialog() {
-			injectJS('cm.toggleFindDialog();');
-		},
 		hideKeyboard() {
 			injectJS('document.activeElement?.blur();');
+		},
+		searchControl: {
+			findNext() {
+				injectJS('cm.searchControl.findNext();');
+			},
+			findPrevious() {
+				injectJS('cm.searchControl.findPrevious();');
+			},
+			replaceCurrent() {
+				injectJS('cm.searchControl.replaceCurrent();');
+			},
+			replaceAll() {
+				injectJS('cm.searchControl.replaceAll();');
+			},
+			setSearchState(state: SearchState) {
+				injectJS(`cm.searchControl.setSearchState(${JSON.stringify(state)})`);
+				setSearchState(state);
+			},
+			showSearch() {
+				const newSearchState: SearchState = Object.assign({}, searchState);
+				newSearchState.dialogVisible = true;
+
+				setSearchState(newSearchState);
+			},
+			hideSearch() {
+				const newSearchState: SearchState = Object.assign({}, searchState);
+				newSearchState.dialogVisible = false;
+
+				setSearchState(newSearchState);
+			},
 		},
 	};
 
@@ -307,6 +337,15 @@ function NoteEditor(props: Props, ref: any) {
 			onRequestLinkEdit() {
 				editorControl.showLinkDialog();
 			},
+
+			onRequestShowSearch(data: SearchState) {
+				setSearchState(data);
+				editorControl.searchControl.showSearch();
+			},
+
+			onRequestHideSearch() {
+				editorControl.searchControl.hideSearch();
+			},
 		};
 
 		if (handlers[msg.name]) {
@@ -354,6 +393,12 @@ function NoteEditor(props: Props, ref: any) {
 				/>
 			</View>
 
+			<SearchPanel
+				editorSettings={editorSettings}
+				searchControl={editorControl.searchControl}
+				searchState={searchState}
+			/>
+
 			<MarkdownToolbar
 				style={{
 					overflow: 'hidden',
@@ -362,6 +407,7 @@ function NoteEditor(props: Props, ref: any) {
 				editorSettings={editorSettings}
 				editorControl={editorControl}
 				selectionState={selectionState}
+				searchState={searchState}
 			/>
 		</View>
 	);

@@ -4,18 +4,23 @@ const React = require('react');
 const { StyleSheet } = require('react-native');
 const { ScrollView, View, Text, TouchableHighlight } = require('react-native');
 const { useMemo, useState } = require('react');
+
+// See https://oblador.github.io/react-native-vector-icons/ for a list of
+// available icons.
 const AntIcon = require('react-native-vector-icons/AntDesign').default;
 const FontAwesomeIcon = require('react-native-vector-icons/FontAwesome5').default;
 const MaterialIcon = require('react-native-vector-icons/MaterialIcons').default;
+
 import { _ } from '@joplin/lib/locale';
 import { useEffect } from 'react';
 import { Keyboard } from 'react-native';
-import { EditorControl, EditorSettings, ListType } from './types';
+import { EditorControl, EditorSettings, ListType, SearchState } from './types';
 import SelectionFormatting from './SelectionFormatting';
 
 interface ToolbarProps {
 	editorControl: EditorControl;
 	selectionState: SelectionFormatting;
+	searchState: SearchState;
 	editorSettings: EditorSettings;
 	style?: any;
 }
@@ -407,8 +412,13 @@ const MarkdownToolbar = (props: ToolbarProps) => {
 			<MaterialIcon name="search" style={styles.text}/>
 		),
 		accessibilityLabel: _('Find and replace'),
+		active: props.searchState.dialogVisible,
 	}, () => {
-		editorControl.toggleFindDialog();
+		if (props.searchState.dialogVisible) {
+			editorControl.searchControl.hideSearch();
+		} else {
+			editorControl.searchControl.showSearch();
+		}
 	});
 
 	const [keyboardVisible, setKeyboardVisible] = useState(false);

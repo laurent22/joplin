@@ -36,6 +36,7 @@ const createTheme = (theme: any): Extension[] => {
 	const baseCursorStyle: Record<string, string> = { };
 	const baseContentStyle: Record<string, string> = { };
 	const baseSelectionStyle: Record<string, string> = { };
+	const blurredSelectionStyle: Record<string, string> = { };
 
 	// If we're in dark mode, the caret and selection are difficult to see.
 	// Adjust them appropriately
@@ -47,6 +48,7 @@ const createTheme = (theme: any): Extension[] => {
 		baseCursorStyle.borderLeftColor = 'white';
 
 		baseSelectionStyle.backgroundColor = '#6b6b6b';
+		blurredSelectionStyle.backgroundColor = '#444';
 	}
 
 	const baseTheme = EditorView.baseTheme({
@@ -56,6 +58,7 @@ const createTheme = (theme: any): Extension[] => {
 		'.cm-content': baseContentStyle,
 		'&.cm-focused .cm-cursor': baseCursorStyle,
 		'&.cm-focused .cm-selectionBackground, ::selection': baseSelectionStyle,
+		'.cm-selectionBackground': blurredSelectionStyle,
 
 		'&.cm-focused': {
 			outline: 'none',
