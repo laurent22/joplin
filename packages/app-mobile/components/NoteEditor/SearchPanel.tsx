@@ -47,11 +47,13 @@ const ActionButton = (
 const ToggleButton = (
 	props: { styles: any; iconName: string; title: string; active: boolean; onToggle: (()=> void) }
 ) => {
+	const active = props.active;
+
 	return (
 		<TouchableOpacity
 			style={{
 				...props.styles.toggleButton,
-				...(props.active ? props.styles.toggleButtonActive : {}),
+				...(active ? props.styles.toggleButtonActive : {}),
 			}}
 			onPress={props.onToggle}
 
@@ -61,7 +63,9 @@ const ToggleButton = (
 			accessibilityLabel={props.title}
 			accessibilityRole='switch'
 		>
-			<MaterialCommunityIcon name={props.iconName} style={props.styles.buttonText}/>
+			<MaterialCommunityIcon name={props.iconName} style={
+				active ? props.styles.activeButtonText : props.styles.buttonText
+			}/>
 		</TouchableOpacity>
 	);
 };
@@ -73,9 +77,14 @@ export const SearchPanel = (props: SearchPanelProps) => {
 		const buttonStyle = {
 			width: BUTTON_SIZE,
 			height: BUTTON_SIZE,
-			backgroundColor: theme.backgroundColor3,
+			backgroundColor: theme.backgroundColor4,
 			alignItems: 'center',
 			justifyContent: 'center',
+			flexShrink: 1,
+		};
+		const buttonTextStyle = {
+			color: theme.color4,
+			fontSize: 30,
 		};
 
 		return StyleSheet.create({
@@ -85,16 +94,17 @@ export const SearchPanel = (props: SearchPanelProps) => {
 			},
 			toggleButtonActive: {
 				...buttonStyle,
-				backgroundColor: theme.backgroundColor2,
+				backgroundColor: theme.backgroundColor3,
 			},
 			input: {
 				flexGrow: 1,
-				backgroundColor: theme.backgroundColor,
-				color: theme.color,
+				backgroundColor: theme.backgroundColor2,
+				color: theme.color2,
 			},
-			buttonText: {
-				color: theme.color3,
-				fontSize: 30,
+			buttonText: buttonTextStyle,
+			activeButtonText: {
+				...buttonTextStyle,
+				color: theme.color4,
 			},
 			text: {
 				color: theme.color,
@@ -284,10 +294,7 @@ export const SearchPanel = (props: SearchPanelProps) => {
 				{ toPrevButton }
 				{ toNextButton }
 			</View>
-			<View style={{
-				flexDirection: 'row',
-				flexWrap: 'wrap',
-			}}>
+			<View style={{ flexDirection: 'row' }}>
 				{ regexpButton }
 				{ caseSensitiveButton }
 				{ labeledReplaceInput }
