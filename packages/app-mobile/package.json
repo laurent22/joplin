@@ -13,7 +13,8 @@
     "buildInjectedJs": "gulp buildInjectedJs",
     "watchInjectedJs": "nodemon --verbose --watch components/NoteEditor/CodeMirror.ts --exec \"yarn run buildInjectedJs\"",
     "postinstall": "jetify && yarn run build",
-    "test": "jest"
+    "test": "jest",
+    "test-ci": "yarn test"
   },
   "dependencies": {
     "@joplin/lib": "~2.8",
