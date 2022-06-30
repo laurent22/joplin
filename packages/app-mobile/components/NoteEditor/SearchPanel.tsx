@@ -5,11 +5,12 @@
 const React = require('react');
 const { StyleSheet } = require('react-native');
 const { TextInput, View, Text, TouchableOpacity } = require('react-native');
-const { useMemo, useState } = require('react');
+const { useMemo, useState, useEffect } = require('react');
 const MaterialCommunityIcon = require('react-native-vector-icons/MaterialCommunityIcons').default;
 
 import { SearchControl, SearchState, EditorSettings } from './types';
 import { _ } from '@joplin/lib/locale';
+import { BackHandler } from 'react-native';
 
 const BUTTON_SIZE = 48;
 
@@ -70,53 +71,57 @@ const ToggleButton = (
 	);
 };
 
+
+const getStyles = (theme: any): StyleSheet => {
+	const buttonStyle = {
+		width: BUTTON_SIZE,
+		height: BUTTON_SIZE,
+		backgroundColor: theme.backgroundColor4,
+		alignItems: 'center',
+		justifyContent: 'center',
+		flexShrink: 1,
+	};
+	const buttonTextStyle = {
+		color: theme.color4,
+		fontSize: 30,
+	};
+
+	return StyleSheet.create({
+		button: buttonStyle,
+		toggleButton: {
+			...buttonStyle,
+		},
+		toggleButtonActive: {
+			...buttonStyle,
+			backgroundColor: theme.backgroundColor3,
+		},
+		input: {
+			flexGrow: 1,
+			backgroundColor: theme.backgroundColor2,
+			color: theme.color2,
+		},
+		buttonText: buttonTextStyle,
+		activeButtonText: {
+			...buttonTextStyle,
+			color: theme.color4,
+		},
+		text: {
+			color: theme.color,
+		},
+		labeledInput: {
+			flexGrow: 1,
+			flexDirection: 'row',
+			alignItems: 'center',
+			justifyContent: 'center',
+			marginLeft: 10,
+		},
+	});
+};
+
 export const SearchPanel = (props: SearchPanelProps) => {
 	const placeholderColor = props.editorSettings.themeData.color3;
 	const styles = useMemo(() => {
-		const theme = props.editorSettings.themeData;
-		const buttonStyle = {
-			width: BUTTON_SIZE,
-			height: BUTTON_SIZE,
-			backgroundColor: theme.backgroundColor4,
-			alignItems: 'center',
-			justifyContent: 'center',
-			flexShrink: 1,
-		};
-		const buttonTextStyle = {
-			color: theme.color4,
-			fontSize: 30,
-		};
-
-		return StyleSheet.create({
-			button: buttonStyle,
-			toggleButton: {
-				...buttonStyle,
-			},
-			toggleButtonActive: {
-				...buttonStyle,
-				backgroundColor: theme.backgroundColor3,
-			},
-			input: {
-				flexGrow: 1,
-				backgroundColor: theme.backgroundColor2,
-				color: theme.color2,
-			},
-			buttonText: buttonTextStyle,
-			activeButtonText: {
-				...buttonTextStyle,
-				color: theme.color4,
-			},
-			text: {
-				color: theme.color,
-			},
-			labeledInput: {
-				flexGrow: 1,
-				flexDirection: 'row',
-				alignItems: 'center',
-				justifyContent: 'center',
-				marginLeft: 10,
-			},
-		});
+		return getStyles(props.editorSettings.themeData);
 	}, [props.editorSettings.themeData]);
 
 	const [showingAdvanced, setShowAdvanced] = useState(false);
@@ -148,6 +153,23 @@ export const SearchPanel = (props: SearchPanelProps) => {
 			/>
 		);
 	};
+
+	// Close the search dialog on back button press
+	useEffect(() => {
+		// Only register the listener if the dialog is visible
+		if (!state.dialogVisible) {
+			return () => {};
+		}
+
+		const backListener = BackHandler.addEventListener('hardwareBackPress', () => {
+			control.hideSearch();
+			return true;
+		});
+
+		return () => backListener.remove();
+	}, [state.dialogVisible]);
+
+
 
 	const closeButton = (
 		<ActionButton
@@ -312,4 +334,3 @@ export const SearchPanel = (props: SearchPanelProps) => {
 };
 
 export default SearchPanel;
-
