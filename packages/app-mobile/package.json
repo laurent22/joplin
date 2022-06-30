@@ -9,7 +9,7 @@
     "build": "gulp build",
     "tsc": "tsc --project tsconfig.json",
     "test": "jest",
-    "test-ci": "jest",
+    "test-ci": "yarn test",
     "watch": "tsc --watch --preserveWatchOutput --project tsconfig.json",
     "clean": "node tools/clean.js",
     "buildInjectedJs": "gulp buildInjectedJs",
