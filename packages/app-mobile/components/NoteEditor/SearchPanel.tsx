@@ -72,57 +72,57 @@ const ToggleButton = (
 };
 
 
-const getStyles = (theme: any): StyleSheet => {
-	const buttonStyle = {
-		width: BUTTON_SIZE,
-		height: BUTTON_SIZE,
-		backgroundColor: theme.backgroundColor4,
-		alignItems: 'center',
-		justifyContent: 'center',
-		flexShrink: 1,
-	};
-	const buttonTextStyle = {
-		color: theme.color4,
-		fontSize: 30,
-	};
-
-	return StyleSheet.create({
-		button: buttonStyle,
-		toggleButton: {
-			...buttonStyle,
-		},
-		toggleButtonActive: {
-			...buttonStyle,
-			backgroundColor: theme.backgroundColor3,
-		},
-		input: {
-			flexGrow: 1,
-			backgroundColor: theme.backgroundColor2,
-			color: theme.color2,
-		},
-		buttonText: buttonTextStyle,
-		activeButtonText: {
-			...buttonTextStyle,
-			color: theme.color4,
-		},
-		text: {
-			color: theme.color,
-		},
-		labeledInput: {
-			flexGrow: 1,
-			flexDirection: 'row',
+const useStyles = (theme: any): any => {
+	return useMemo(() => {
+		const buttonStyle = {
+			width: BUTTON_SIZE,
+			height: BUTTON_SIZE,
+			backgroundColor: theme.backgroundColor4,
 			alignItems: 'center',
 			justifyContent: 'center',
-			marginLeft: 10,
-		},
-	});
+			flexShrink: 1,
+		};
+		const buttonTextStyle = {
+			color: theme.color4,
+			fontSize: 30,
+		};
+
+		return StyleSheet.create({
+			button: buttonStyle,
+			toggleButton: {
+				...buttonStyle,
+			},
+			toggleButtonActive: {
+				...buttonStyle,
+				backgroundColor: theme.backgroundColor3,
+			},
+			input: {
+				flexGrow: 1,
+				backgroundColor: theme.backgroundColor2,
+				color: theme.color2,
+			},
+			buttonText: buttonTextStyle,
+			activeButtonText: {
+				...buttonTextStyle,
+				color: theme.color4,
+			},
+			text: {
+				color: theme.color,
+			},
+			labeledInput: {
+				flexGrow: 1,
+				flexDirection: 'row',
+				alignItems: 'center',
+				justifyContent: 'center',
+				marginLeft: 10,
+			},
+		});
+	}, [theme]);
 };
 
 export const SearchPanel = (props: SearchPanelProps) => {
 	const placeholderColor = props.editorSettings.themeData.color3;
-	const styles = useMemo(() => {
-		return getStyles(props.editorSettings.themeData);
-	}, [props.editorSettings.themeData]);
+	const styles = useStyles(props.editorSettings.themeData);
 
 	const [showingAdvanced, setShowAdvanced] = useState(false);
 

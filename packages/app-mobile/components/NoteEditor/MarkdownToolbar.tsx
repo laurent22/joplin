@@ -228,7 +228,7 @@ enum MenuRowType {
 
 const MarkdownToolbar = (props: ToolbarProps) => {
 	const themeData = props.editorSettings.themeData;
-	const styles = useMemo(() => getStyles(props.style, themeData), [themeData, props.style]);
+	const styles = useStyles(props.style, themeData);
 	const selState = props.selectionState;
 	const editorControl = props.editorControl;
 	const [openMenu, setOpenMenu] = useState(MenuRowType.RootMenu);
@@ -465,49 +465,51 @@ const MarkdownToolbar = (props: ToolbarProps) => {
  * This uses react hooks, so should be called in the same places, the same number of times,
  * regardless of state.
  */
-const getStyles = (styleProps: any, theme: any): StyleSheet => {
-	const BUTTON_SIZE = 56;
+const useStyles = (styleProps: any, theme: any): any => {
+	return useMemo(() => {
+		const BUTTON_SIZE = 56;
 
-	return StyleSheet.create({
-		button: {
-			width: BUTTON_SIZE,
-			height: BUTTON_SIZE,
-			alignItems: 'center',
-			justifyContent: 'center',
-			backgroundColor: theme.backgroundColor4,
-			color: theme.color4,
-		},
-		buttonActive: {
-			backgroundColor: theme.backgroundColor3,
-			color: theme.color3,
-		},
-		buttonActiveContent: {
-			color: theme.color3,
-		},
-		text: {
-			fontSize: 22,
-			color: theme.color4,
-		},
-		multiLineIconText: {
-			fontSize: 14,
-			lineHeight: 10,
-			paddingTop: 4,
-			color: theme.color4,
-		},
-		toolbar: {
-			flex: 0,
-			flexDirection: 'row',
-			alignItems: 'baseline',
-			justifyContent: 'center',
-			height: BUTTON_SIZE,
+		return StyleSheet.create({
+			button: {
+				width: BUTTON_SIZE,
+				height: BUTTON_SIZE,
+				alignItems: 'center',
+				justifyContent: 'center',
+				backgroundColor: theme.backgroundColor4,
+				color: theme.color4,
+			},
+			buttonActive: {
+				backgroundColor: theme.backgroundColor3,
+				color: theme.color3,
+			},
+			buttonActiveContent: {
+				color: theme.color3,
+			},
+			text: {
+				fontSize: 22,
+				color: theme.color4,
+			},
+			multiLineIconText: {
+				fontSize: 14,
+				lineHeight: 10,
+				paddingTop: 4,
+				color: theme.color4,
+			},
+			toolbar: {
+				flex: 0,
+				flexDirection: 'row',
+				alignItems: 'baseline',
+				justifyContent: 'center',
+				height: BUTTON_SIZE,
 
-			...styleProps,
-		},
-		toolbarContent: {
-			flexGrow: 1,
-			justifyContent: 'center',
-		},
-	});
+				...styleProps,
+			},
+			toolbarContent: {
+				flexGrow: 1,
+				justifyContent: 'center',
+			},
+		});
+	}, [styleProps, theme]);
 };
 
 export default MarkdownToolbar;
