@@ -10,6 +10,7 @@ import { syntaxTree } from '@codemirror/language';
 import RegionSpec from './RegionSpec';
 import { logMessage } from './webviewLogger';
 
+const BLOCK_QUOTE_LINESTART_LEN = '> '.length;
 
 
 type SelectionFilter = (sel: SelectionRange)=> boolean;
@@ -176,19 +177,36 @@ export const toggleRegionFormat = (
 	// start: Single-line content that precedes the block
 	// stop: Single-line content that follows the block.
 	// line breaks will be added
-	blockTemplate: { start: string; stop: string }
+	blockTemplate: { start: string; stop: string },
+
+	// If false, don't ensure that block formatting preserves block quotes
+	preserveBlockQuotes: boolean = true
 ) => {
 	const doc = state.doc;
 
-	const getMatchEndPoints = (match: RegExpMatchArray, line: Line):
-		[startIdx: number, stopIdx: number] => {
+	const getMatchEndPoints = (
+		match: RegExpMatchArray, line: Line, inBlockQuote: boolean
+	): [startIdx: number, stopIdx: number] => {
 		const startIdx = line.from + match.index;
 		let stopIdx;
+
+		let contentLength = line.text.length;
+
+		// Don't treat '> ' as part of the line's content if we're in a blockquote.
+		if (inBlockQuote && preserveBlockQuotes) {
+			contentLength -= BLOCK_QUOTE_LINESTART_LEN;
+		}
+
 		// If it matches the entire line, remove the newline character.
-		if (match[0].length == line.text.length) {
+		if (match[0].length == contentLength) {
 			stopIdx = line.to + 1;
 		} else {
 			stopIdx = startIdx + match[0].length;
+
+			// Take into account the extra '> ' characters, if necessary
+			if (inBlockQuote && preserveBlockQuotes) {
+				stopIdx += BLOCK_QUOTE_LINESTART_LEN;
+			}
 		}
 
 		stopIdx = Math.min(stopIdx, doc.length);
@@ -202,6 +220,9 @@ export const toggleRegionFormat = (
 
 		const fromLine = doc.lineAt(sel.from);
 		const toLine = doc.lineAt(sel.to);
+		let fromLineText = fromLine.text;
+		let toLineText = toLine.text;
+
 		let charsAdded = 0;
 		const changes = [];
 
@@ -210,14 +231,30 @@ export const toggleRegionFormat = (
 			return toggleSelectionFormat(state, inlineNodeName, sel, inlineSpec);
 		}
 
+		// Are all lines in a block quote?
+		let inBlockQuote = true;
+		for (let i = fromLine.number; i <= toLine.number; i++) {
+			const line = doc.line(i);
+
+			if (!line.text.match(/^>\s/)) {
+				inBlockQuote = false;
+				break;
+			}
+		}
+
+		// Ignore block quote characters if in a block quote.
+		if (inBlockQuote && preserveBlockQuotes) {
+			fromLineText = fromLineText.substring(BLOCK_QUOTE_LINESTART_LEN);
+			toLineText = toLineText.substring(BLOCK_QUOTE_LINESTART_LEN);
+		}
+
 		// Otherwise, we're toggling the block version
-		const startMatch = blockRegex.start.exec(fromLine.text);
-		const stopMatch = blockRegex.stop.exec(toLine.text);
+		const startMatch = blockRegex.start.exec(fromLineText);
+		const stopMatch = blockRegex.stop.exec(toLineText);
 		if (startMatch && stopMatch) {
 			// Get start and stop indicies for the starting and ending matches
-			const [fromMatchFrom, fromMatchTo] = getMatchEndPoints(startMatch, fromLine);
-			const [toMatchFrom, toMatchTo] = getMatchEndPoints(stopMatch, toLine);
-
+			const [fromMatchFrom, fromMatchTo] = getMatchEndPoints(startMatch, fromLine, inBlockQuote);
+			const [toMatchFrom, toMatchTo] = getMatchEndPoints(stopMatch, toLine, inBlockQuote);
 
 			// Delete content of the first line
 			changes.push({
@@ -233,8 +270,16 @@ export const toggleRegionFormat = (
 			});
 			charsAdded -= toMatchTo - toMatchFrom;
 		} else {
-			const insertBefore = `${blockTemplate.start}\n`;
-			const insertAfter = `\n${blockTemplate.stop}`;
+			let insertBefore, insertAfter;
+
+			if (inBlockQuote && preserveBlockQuotes) {
+				insertBefore = `> ${blockTemplate.start}\n`;
+				insertAfter = `\n> ${blockTemplate.stop}`;
+			} else {
+				insertBefore = `${blockTemplate.start}\n`;
+				insertAfter = `\n${blockTemplate.stop}`;
+			}
+
 			changes.push({
 				from: fromLine.from,
 				insert: insertBefore,

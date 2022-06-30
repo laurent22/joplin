@@ -5,6 +5,8 @@
 import { EditorSelection, EditorState } from '@codemirror/state';
 import { EditorView } from '@codemirror/view';
 import { toggleBolded, toggleHeaderLevel, toggleItalicized, toggleMath, toggleRegionFormat } from './markdownCommands';
+import { markdown } from '@codemirror/lang-markdown';
+import { MarkdownMathExtension } from './markdownMathParser';
 import RegionSpec from './RegionSpec';
 
 describe('Formatting commands', () => {
@@ -107,6 +109,48 @@ describe('Formatting commands', () => {
 		expect(editor.state.doc.toString()).toEqual(
 			'Testing...\n\n> ### This is a test.\n> ...a test'
 		);
+	});
+
+	it('Toggling math (in block quote)', () => {
+		const initialDocText = 'Testing...\n\n> This is a test.\n> y = mx + b\n> ...a test';
+		const editor = new EditorView({
+			doc: initialDocText,
+			selection: EditorSelection.create(
+				[EditorSelection.range(
+					'Testing...\n\n> This'.length,
+					'Testing...\n\n> This is a test.\n> y = mx + b'.length
+				)]
+			),
+
+			// Include the math extension to test auto-selection of the entire math region
+			extensions: [
+				markdown({
+					extensions: [MarkdownMathExtension],
+				}),
+			],
+		});
+
+		toggleMath(editor);
+
+		// Toggling math should surround the content in '$$'s
+		let mainSel = editor.state.selection.main;
+		expect(editor.state.doc.toString()).toEqual(
+			'Testing...\n\n> $$\n> This is a test.\n> y = mx + b\n> $$\n> ...a test'
+		);
+		expect(mainSel.from).toBe('Testing...\n\n'.length);
+		expect(mainSel.to).toBe('Testing...\n\n> $$\n> This is a test.\n> y = mx + b\n> $$'.length);
+
+		// Change to a cursor --- test cursor expansion
+		editor.dispatch({
+			selection: EditorSelection.cursor('Testing...\n\n> $$\n> This is'.length),
+		});
+
+		// Toggling math again should remove the '$$'s
+		toggleMath(editor);
+		mainSel = editor.state.selection.main;
+		expect(editor.state.doc.toString()).toEqual(initialDocText);
+		expect(mainSel.from).toBe('Testing...\n\n'.length);
+		expect(mainSel.to).toBe('Testing...\n\n> This is a test.\n> y = mx + b'.length);
 	});
 });
 
