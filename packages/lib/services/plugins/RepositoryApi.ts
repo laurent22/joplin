@@ -2,7 +2,6 @@ import Logger from '../../Logger';
 import shim from '../../shim';
 import { PluginManifest } from './utils/types';
 import PluginService from '@joplin/lib/services/plugins/PluginService';
-import pluginCategories from './pluginCategories';
 import Setting from '@joplin/lib/models/Setting';
 const md5 = require('md5');
 const compareVersions = require('compare-versions');
@@ -90,13 +89,9 @@ export default class RepositoryApi {
 		try {
 			const manifests = JSON.parse(manifestsText);
 			if (!manifests) throw new Error('Invalid or missing JSON');
-
-			const tempOptions = pluginCategories();
 			this.manifests_ = Object.keys(manifests).map(id => {
 				const m: PluginManifest = manifests[id];
 
-				// this is only for development purpose, here we insert categories into the manifests
-				tempOptions[m.name] && (m.categories = tempOptions[m.name]);
 				// If we don't control the repository, we can't recommend
 				// anything on it since it could have been modified.
 				if (!this.isUsingDefaultContentUrl) m._recommended = false;
