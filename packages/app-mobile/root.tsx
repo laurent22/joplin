@@ -29,7 +29,7 @@ import SyncTargetJoplinCloud from '@joplin/lib/SyncTargetJoplinCloud';
 import SyncTargetOneDrive from '@joplin/lib/SyncTargetOneDrive';
 const VersionInfo = require('react-native-version-info').default;
 const { AppState, Keyboard, NativeModules, BackHandler, Animated, View, StatusBar, Linking, Platform, Dimensions } = require('react-native');
-const getResponsiveValue = require('./components/get-responsive-value').default;
+import getResponsiveValue from './components/getResponsiveValue';
 import NetInfo from '@react-native-community/netinfo';
 const DropdownAlert = require('react-native-dropdownalert').default;
 const AlarmServiceDriver = require('./services/AlarmServiceDriver').default;
