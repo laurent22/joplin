@@ -15,7 +15,7 @@
 // More Info: https://discourse.joplinapp.org/t/week-4-report/26117
 import { Dimensions } from 'react-native';
 
-interface ValueMap {
+export interface ValueMap {
     sm?: number;
     md?: number;
     lg?: number;
