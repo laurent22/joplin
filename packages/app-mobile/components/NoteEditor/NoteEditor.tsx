@@ -379,6 +379,9 @@ function NoteEditor(props: Props, ref: any) {
 				minHeight: '40%',
 			}}>
 				<WebView
+					style={{
+						backgroundColor: editorSettings.themeData.backgroundColor,
+					}}
 					ref={webviewRef}
 					useWebKit={true}
 					source={source}
