@@ -21,6 +21,7 @@ import {
 	ListType,
 	SearchState,
 } from './types';
+import { _ } from '@joplin/lib/locale';
 
 type ChangeEventHandler = (event: ChangeEvent)=> void;
 type UndoRedoDepthChangeHandler = (event: UndoRedoDepthChangeEvent)=> void;
@@ -77,6 +78,7 @@ function useHtml(css: string): string {
 				<head>
 					<meta charset="UTF-8">
 					<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+					<title>${_('Note editor')}</title>
 					<style>
 						.cm-editor {
 							height: 100%;

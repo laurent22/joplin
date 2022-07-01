@@ -13,7 +13,7 @@ const MaterialIcon = require('react-native-vector-icons/MaterialIcons').default;
 
 import { _ } from '@joplin/lib/locale';
 import { useEffect } from 'react';
-import { Keyboard } from 'react-native';
+import { AccessibilityInfo, Keyboard } from 'react-native';
 import { EditorControl, EditorSettings, ListType, SearchState } from './types';
 import SelectionFormatting from './SelectionFormatting';
 
@@ -112,6 +112,9 @@ class MenuRowModel {
 		this.items.push({
 			buttonSpec: spec,
 			onClick: () => {
+				AccessibilityInfo.announceForAccessibility(
+					_('Opening %s', childMenu.title)
+				);
 				this.openMenuChangeListener(childMenu.id);
 			},
 		});
@@ -129,6 +132,7 @@ class MenuRowModel {
 		this.items.push({
 			buttonSpec,
 			onClick: () => {
+				AccessibilityInfo.announceForAccessibility(_('Closed %s', this.title));
 				this.openMenuChangeListener(this.parent.id);
 			},
 		});
@@ -158,7 +162,8 @@ const ToolbarButton = ({ styles, spec, onClick }:
 			style={{ ...styleSheet.button, ...activatedStyle }}
 			onPress={onClick}
 			accessibilityLabel={spec.accessibilityLabel}
-			accessibilityRole="button">
+			accessibilityRole="button"
+		>
 			{ content }
 		</TouchableHighlight>
 	);
@@ -178,7 +183,8 @@ const ToolbarMenu = ({ styles, model }: { styles: ToolbarStyleData; model: MenuR
 				key={key.toString()}
 				styles={styles}
 				onClick={item.onClick}
-				spec={item.buttonSpec} />
+				spec={item.buttonSpec}
+			/>
 		);
 	}
 
@@ -245,10 +251,10 @@ const MarkdownToolbar = (props: ToolbarProps) => {
 		_('List Menu'), MenuRowType.ListMenu, openMenu, rootMenuModel
 	);
 	const miscFormatMenuModel = new MenuRowModel(
-		_('Formatting'), MenuRowType.FormatMenu, openMenu, rootMenuModel
+		_('Formatting Menu'), MenuRowType.FormatMenu, openMenu, rootMenuModel
 	);
 	const actionsMenuModel = new MenuRowModel(
-		_('View'), MenuRowType.ViewMenu, openMenu, rootMenuModel
+		_('View Menu'), MenuRowType.ViewMenu, openMenu, rootMenuModel
 	);
 
 	rootMenuModel.addCategory({
@@ -288,7 +294,13 @@ const MarkdownToolbar = (props: ToolbarProps) => {
 	// Header menu
 	for (let level = 1; level <= 5; level++) {
 		const active = selState.headerLevel == level;
-		const label = !active ? _('Create header level %d', level) : _('Remove level %d header');
+		let label;
+		if (!active) {
+			label = _('Create header level %d', level);
+		} else {
+			label = _('Remove level %d header', level);
+		}
+
 		headerMenuModel.addAction({
 			icon: `H${level}`,
 			accessibilityLabel: label,
@@ -444,6 +456,8 @@ const MarkdownToolbar = (props: ToolbarProps) => {
 			accessibilityLabel: _('Hide keyboard'),
 		}, () => {
 			// Keyboard.dismiss() doesn't dismiss the keyboard if it's editing the WebView.
+			Keyboard.dismiss();
+
 			// As such, dismiss the keyboard by sending a message to the View.
 			editorControl.hideKeyboard();
 		});

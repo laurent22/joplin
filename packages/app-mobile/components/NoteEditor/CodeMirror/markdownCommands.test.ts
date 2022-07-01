@@ -275,7 +275,6 @@ describe('Internal text manipulation', () => {
 	});
 
 	it('Toggle block region format', () => {
-
 		const initialState: EditorState = EditorState.create({
 			doc: initialText,
 			selection: EditorSelection.range(0, initialText.length),
