@@ -711,7 +711,8 @@ export const decreaseIndent: Command = (editor: EditorView): boolean => {
 // Create a new link with [label] and [url], or, if a link is either partially
 // or fully selected, update the label and URL of that link.
 export const updateLink = (label: string, url: string): Command => {
-	const linkText = `[${label}](${url})`;
+	// Empty label? Just include the URL.
+	const linkText = label == '' ? url : `[${label}](${url})`;
 
 	return (editor: EditorView): boolean => {
 		const transaction = editor.state.changeByRange((sel: SelectionRange) => {

@@ -2,21 +2,34 @@
  * @jest-environment jsdom
  */
 
-import { EditorSelection, EditorState } from '@codemirror/state';
+import { EditorSelection, EditorState, SelectionRange } from '@codemirror/state';
 import { EditorView } from '@codemirror/view';
-import { increaseIndent, toggleBolded, toggleHeaderLevel, toggleItalicized, toggleList, toggleMath, toggleRegionFormat } from './markdownCommands';
+import { increaseIndent, toggleBolded, toggleHeaderLevel, toggleItalicized, toggleList, toggleMath, toggleRegionFormat, updateLink } from './markdownCommands';
+import { GFM as GithubFlavoredMarkdownExt } from '@lezer/markdown';
 import { markdown } from '@codemirror/lang-markdown';
 import { MarkdownMathExtension } from './markdownMathParser';
 import RegionSpec from './RegionSpec';
 import { ListType } from '../types';
 
+// Creates and returns a minimal editor with markdown extensions
+const createEditor = (initialText: string, initialSelection: SelectionRange): EditorView => {
+	return new EditorView({
+		doc: initialText,
+		selection: EditorSelection.create([initialSelection]),
+		extensions: [
+			markdown({
+				extensions: [MarkdownMathExtension, GithubFlavoredMarkdownExt],
+			}),
+		],
+	});
+};
+
 describe('Formatting commands', () => {
 	it('Bolding/italicizing (everything selected)', () => {
 		const initialDocText = 'Testing...';
-		const editor = new EditorView({
-			doc: initialDocText,
-			selection: EditorSelection.create([EditorSelection.range(0, initialDocText.length)]),
-		});
+		const editor = createEditor(
+			initialDocText, EditorSelection.range(0, initialDocText.length)
+		);
 
 		toggleBolded(editor);
 
@@ -41,10 +54,7 @@ describe('Formatting commands', () => {
 
 	it('Creating/exiting a math region', () => {
 		const initialDocText = 'Testing... ';
-		const editor = new EditorView({
-			doc: initialDocText,
-			selection: EditorSelection.create([EditorSelection.cursor(initialDocText.length)]),
-		});
+		const editor = createEditor(initialDocText, EditorSelection.cursor(initialDocText.length));
 
 		toggleMath(editor);
 		expect(editor.state.doc.toString()).toEqual('Testing... $$');
@@ -60,10 +70,7 @@ describe('Formatting commands', () => {
 
 	it('Toggling header', () => {
 		const initialDocText = 'Testing...\nThis is a test.';
-		const editor = new EditorView({
-			doc: initialDocText,
-			selection: EditorSelection.create([EditorSelection.cursor(3)]),
-		});
+		const editor = createEditor(initialDocText, EditorSelection.cursor(3));
 
 		toggleHeaderLevel(1)(editor);
 
@@ -89,12 +96,10 @@ describe('Formatting commands', () => {
 
 	it('Toggling header (in block quote)', () => {
 		const initialDocText = 'Testing...\n\n> This is a test.\n> ...a test';
-		const editor = new EditorView({
-			doc: initialDocText,
-			selection: EditorSelection.create(
-				[EditorSelection.cursor('Testing...\n\n> This'.length)]
-			),
-		});
+		const editor = createEditor(
+			initialDocText,
+			EditorSelection.cursor('Testing...\n\n> This'.length)
+		);
 
 		toggleHeaderLevel(1)(editor);
 
@@ -114,22 +119,13 @@ describe('Formatting commands', () => {
 
 	it('Toggling math (in block quote)', () => {
 		const initialDocText = 'Testing...\n\n> This is a test.\n> y = mx + b\n> ...a test';
-		const editor = new EditorView({
-			doc: initialDocText,
-			selection: EditorSelection.create(
-				[EditorSelection.range(
-					'Testing...\n\n> This'.length,
-					'Testing...\n\n> This is a test.\n> y = mx + b'.length
-				)]
-			),
-
-			// Include the math extension to test auto-selection of the entire math region
-			extensions: [
-				markdown({
-					extensions: [MarkdownMathExtension],
-				}),
-			],
-		});
+		const editor = createEditor(
+			initialDocText,
+			EditorSelection.range(
+				'Testing...\n\n> This'.length,
+				'Testing...\n\n> This is a test.\n> y = mx + b'.length
+			)
+		);
 
 		toggleMath(editor);
 
@@ -158,16 +154,10 @@ describe('Formatting commands', () => {
 		const preSubListText = '# List test\n * This\n * is\n';
 		const initialDocText = `${preSubListText}\t* a\n\t* test\n * of list toggling`;
 
-		const editor = new EditorView({
-			doc: initialDocText,
-			selection: EditorSelection.create([
-				EditorSelection.cursor(preSubListText.length + '\t* a'.length),
-			]),
-
-			// The markdown extension lets us test the auto-selection of a list
-			// (which relies on the syntax tree).
-			extensions: [markdown()],
-		});
+		const editor = createEditor(
+			initialDocText,
+			EditorSelection.cursor(preSubListText.length + '\t* a'.length)
+		);
 
 		// Indentation should be preserved when changing list types
 		toggleList(ListType.OrderedList)(editor);
@@ -228,20 +218,30 @@ describe('Formatting commands', () => {
 	it('Changing list type (in block quote)', () => {
 		const preSubListText = '> # List test\n> * This\n> * is\n';
 		const initialDocText = `${preSubListText}> \t* a\n> \t* test\n> * of list toggling`;
-		const editor = new EditorView({
-			doc: initialDocText,
-			selection: EditorSelection.create([
-				EditorSelection.cursor(preSubListText.length + 3),
-			]),
-
-			extensions: [markdown()],
-		});
+		const editor = createEditor(
+			initialDocText, EditorSelection.cursor(preSubListText.length + 3)
+		);
 
 		toggleList(ListType.OrderedList)(editor);
 		expect(editor.state.doc.toString()).toBe(
 			'> # List test\n> * This\n> * is\n> \t1. a\n> \t2. test\n> * of list toggling'
 		);
 		expect(editor.state.selection.main.from).toBe(preSubListText.length);
+	});
+
+	it('Updating a link', () => {
+		const initialDocText = '[foo](http://example.com/)';
+		const editor = createEditor(initialDocText, EditorSelection.cursor('[f'.length));
+
+		updateLink('bar', 'https://example.com/')(editor);
+		expect(editor.state.doc.toString()).toBe(
+			'[bar](https://example.com/)'
+		);
+
+		updateLink('', 'https://example.com/')(editor);
+		expect(editor.state.doc.toString()).toBe(
+			'https://example.com/'
+		);
 	});
 });
 
