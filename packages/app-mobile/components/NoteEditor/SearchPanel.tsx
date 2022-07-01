@@ -72,7 +72,7 @@ const ToggleButton = (
 };
 
 
-const useStyles = (theme: any): any => {
+const useStyles = (theme: any) => {
 	return useMemo(() => {
 		const buttonStyle = {
 			width: buttonSize,

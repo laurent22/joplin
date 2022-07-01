@@ -465,7 +465,7 @@ const MarkdownToolbar = (props: ToolbarProps) => {
  * This uses react hooks, so should be called in the same places, the same number of times,
  * regardless of state.
  */
-const useStyles = (styleProps: any, theme: any): any => {
+const useStyles = (styleProps: any, theme: any) => {
 	return useMemo(() => {
 		const buttonSize = 56;
 

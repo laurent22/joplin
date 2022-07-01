@@ -18,8 +18,14 @@ import { EditorState } from '@codemirror/state';
 import { markdown } from '@codemirror/lang-markdown';
 import { GFM } from '@lezer/markdown';
 import { indentOnInput, indentUnit, syntaxTree } from '@codemirror/language';
-import { closeSearchPanel, findNext, findPrevious, getSearchQuery, highlightSelectionMatches, openSearchPanel, replaceAll, replaceNext, search, SearchQuery, setSearchQuery } from '@codemirror/search';
-import { EditorView, drawSelection, highlightSpecialChars, ViewUpdate, Command } from '@codemirror/view';
+import {
+	openSearchPanel, closeSearchPanel, SearchQuery, setSearchQuery, getSearchQuery,highlightSelectionMatches, search,
+	findNext, findPrevious, replaceAll, replaceNext,
+} from '@codemirror/search';
+
+import {
+	EditorView, drawSelection, highlightSpecialChars, ViewUpdate, Command,
+} from '@codemirror/view';
 import { undo, redo, history, undoDepth, redoDepth } from '@codemirror/commands';
 
 import { keymap, KeyBinding } from '@codemirror/view';
@@ -273,7 +279,7 @@ export function initCodeMirror(
 				// By default, indent with a tab
 				indentUnit.of('\t'),
 
-				// Full-line styling
+				// Apply styles to entire lines (block-display decorations)
 				codeMirrorDecorator,
 
 				EditorView.lineWrapping,
@@ -284,6 +290,8 @@ export function initCodeMirror(
 					notifySelectionFormattingChange(viewUpdate);
 				}),
 				keymap.of([
+					// Custom mod-f binding: Toggle the external dialog implementation
+					// (don't show/hide the Panel dialog).
 					keyCommand('Mod-f', (_: EditorView) => {
 						if (searchVisible) {
 							hideSearchDialog();
