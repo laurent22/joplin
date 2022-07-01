@@ -60,18 +60,33 @@ const EditLinkDialog = (props: LinkDialogProps) => {
 			text: {
 				color: theme.color,
 			},
+			header: {
+				color: theme.color,
+				fontSize: 22,
+			},
 			input: {
 				color: theme.color,
+				borderBottomColor: theme.backgroundColor3,
+				borderBottomWidth: 1,
+			},
+			inputContainer: {
+				flexDirection: 'column',
+				paddingBottom: 10,
 			},
 		});
 		const placeholderColor = theme.colorFaded;
 		return [styleSheet, placeholderColor];
 	}, [props.themeId]);
 
+	const submit = () => {
+		updateEditor();
+		props.editorControl.hideLinkDialog();
+	};
+
 	// See https://www.hingehealth.com/engineering-blog/accessible-react-native-textinput/
 	// for more about creating accessible RN inputs.
 	const linkTextInput = (
-		<View accessible>
+		<View style={styles.inputContainer} accessible>
 			<Text style={styles.text}>{_('Link Text')}</Text>
 			<TextInput
 				style={styles.input}
@@ -83,16 +98,23 @@ const EditLinkDialog = (props: LinkDialogProps) => {
 	);
 
 	const linkURLInput = (
-		<View accessible>
+		<View style={styles.inputContainer} accessible>
 			<Text style={styles.text}>{_('URL')}</Text>
 			<TextInput
 				style={styles.input}
 				placeholder={_('URL')}
 				placeholderTextColor={placeholderColor}
 				value={linkURL}
+
 				autoCorrect={false}
+				autoCapitalize="none"
 				keyboardType="url"
-				onChangeText={(text: string) => setLinkURL(text)}/>
+				textContentType="URL"
+				returnKeyType="done"
+
+				onSubmitEditing={submit}
+				onChangeText={(text: string) => setLinkURL(text)}
+			/>
 		</View>
 	);
 
@@ -105,18 +127,16 @@ const EditLinkDialog = (props: LinkDialogProps) => {
 				props.editorControl.hideLinkDialog();
 			}}>
 			<View style={styles.modalContent}>
-				<Text style={styles.text}>{_('Edit Link')}</Text>
+				<Text style={styles.header}>{_('Edit Link')}</Text>
 				<View>
 					{linkTextInput}
 					{linkURLInput}
 				</View>
 				<Button
 					style={styles.button}
-					onPress={() => {
-						updateEditor();
-						props.editorControl.hideLinkDialog();
-					}}
-					title={_('Done')} />
+					onPress={submit}
+					title={_('Done')}
+				/>
 			</View>
 		</Modal>
 	);
