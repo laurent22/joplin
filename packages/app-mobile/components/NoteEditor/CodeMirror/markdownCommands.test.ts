@@ -4,10 +4,11 @@
 
 import { EditorSelection, EditorState } from '@codemirror/state';
 import { EditorView } from '@codemirror/view';
-import { toggleBolded, toggleHeaderLevel, toggleItalicized, toggleMath, toggleRegionFormat } from './markdownCommands';
+import { increaseIndent, toggleBolded, toggleHeaderLevel, toggleItalicized, toggleList, toggleMath, toggleRegionFormat } from './markdownCommands';
 import { markdown } from '@codemirror/lang-markdown';
 import { MarkdownMathExtension } from './markdownMathParser';
 import RegionSpec from './RegionSpec';
+import { ListType } from '../types';
 
 describe('Formatting commands', () => {
 	it('Bolding/italicizing (everything selected)', () => {
@@ -67,14 +68,14 @@ describe('Formatting commands', () => {
 		toggleHeaderLevel(1)(editor);
 
 		let mainSel = editor.state.selection.main;
-		expect(editor.state.doc.toString()).toEqual('# Testing...\nThis is a test.');
+		expect(editor.state.doc.toString()).toBe('# Testing...\nThis is a test.');
 		expect(mainSel.empty).toBe(true);
 		expect(mainSel.from).toBe('# Testing...'.length);
 
 		toggleHeaderLevel(2)(editor);
 
 		mainSel = editor.state.selection.main;
-		expect(editor.state.doc.toString()).toEqual('## Testing...\nThis is a test.');
+		expect(editor.state.doc.toString()).toBe('## Testing...\nThis is a test.');
 		expect(mainSel.empty).toBe(true);
 		expect(mainSel.from).toBe('## Testing...'.length);
 
@@ -98,7 +99,7 @@ describe('Formatting commands', () => {
 		toggleHeaderLevel(1)(editor);
 
 		const mainSel = editor.state.selection.main;
-		expect(editor.state.doc.toString()).toEqual(
+		expect(editor.state.doc.toString()).toBe(
 			'Testing...\n\n> # This is a test.\n> ...a test'
 		);
 		expect(mainSel.empty).toBe(true);
@@ -106,7 +107,7 @@ describe('Formatting commands', () => {
 
 		toggleHeaderLevel(3)(editor);
 
-		expect(editor.state.doc.toString()).toEqual(
+		expect(editor.state.doc.toString()).toBe(
 			'Testing...\n\n> ### This is a test.\n> ...a test'
 		);
 	});
@@ -151,6 +152,88 @@ describe('Formatting commands', () => {
 		expect(editor.state.doc.toString()).toEqual(initialDocText);
 		expect(mainSel.from).toBe('Testing...\n\n'.length);
 		expect(mainSel.to).toBe('Testing...\n\n> This is a test.\n> y = mx + b'.length);
+	});
+
+	it('Changing list type', () => {
+		const preSubListText = '# List test\n * This\n * is\n';
+		const initialDocText = `${preSubListText}\t* a\n\t* test\n * of list toggling`;
+		const editor = new EditorView({
+			doc: initialDocText,
+			selection: EditorSelection.create([
+				EditorSelection.cursor(preSubListText.length + '\t* a'.length),
+			]),
+
+			extensions: [markdown()],
+		});
+
+		toggleList(ListType.OrderedList)(editor);
+		expect(editor.state.selection.main.from).toBe(preSubListText.length);
+		expect(editor.state.doc.toString()).toBe(
+			'# List test\n * This\n * is\n\t1. a\n\t2. test\n * of list toggling'
+		);
+
+		toggleList(ListType.OrderedList)(editor);
+		expect(editor.state.selection.main.from).toBe(preSubListText.length);
+		expect(editor.state.doc.toString()).toBe(
+			'# List test\n * This\n * is\na\ntest\n * of list toggling'
+		);
+
+		editor.dispatch({
+			selection: EditorSelection.cursor(preSubListText.length),
+		});
+
+		toggleList(ListType.CheckList)(editor);
+		expect(editor.state.selection.main.from).toBe('# List test\n'.length);
+		expect(editor.state.selection.main.to).toBe(editor.state.doc.length);
+		expect(editor.state.doc.toString()).toBe(
+			'# List test\n - [ ] This\n - [ ] is\n - [ ] a\n - [ ] test\n - [ ] of list toggling'
+		);
+
+		editor.dispatch({
+			selection: EditorSelection.cursor(editor.state.doc.length),
+		});
+		editor.dispatch(editor.state.replaceSelection('\n\n\n'));
+
+		toggleList(ListType.OrderedList)(editor);
+		editor.dispatch(editor.state.replaceSelection('Test.\n2. Test2\n3. Test3'));
+
+		const expectedChecklistPart =
+			'# List test\n - [ ] This\n - [ ] is\n - [ ] a\n - [ ] test\n - [ ] of list toggling';
+		expect(editor.state.doc.toString()).toBe(
+			`${expectedChecklistPart
+			}\n\n\n1. Test.\n2. Test2\n3. Test3`
+		);
+
+		toggleList(ListType.CheckList)(editor);
+		expect(editor.state.doc.toString()).toBe(
+			`${expectedChecklistPart
+			}\n\n\n- [ ] Test.\n- [ ] Test2\n- [ ] Test3`
+		);
+
+		increaseIndent(editor);
+		expect(editor.state.doc.toString()).toBe(
+			`${expectedChecklistPart
+			}\n\n\n\t- [ ] Test.\n\t- [ ] Test2\n\t- [ ] Test3`
+		);
+	});
+
+	it('Changing list type (in block quote)', () => {
+		const preSubListText = '> # List test\n> * This\n> * is\n';
+		const initialDocText = `${preSubListText}> \t* a\n> \t* test\n> * of list toggling`;
+		const editor = new EditorView({
+			doc: initialDocText,
+			selection: EditorSelection.create([
+				EditorSelection.cursor(preSubListText.length + 3),
+			]),
+
+			extensions: [markdown()],
+		});
+
+		toggleList(ListType.OrderedList)(editor);
+		expect(editor.state.doc.toString()).toBe(
+			'> # List test\n> * This\n> * is\n> \t1. a\n> \t2. test\n> * of list toggling'
+		);
+		expect(editor.state.selection.main.from).toBe(preSubListText.length);
 	});
 });
 

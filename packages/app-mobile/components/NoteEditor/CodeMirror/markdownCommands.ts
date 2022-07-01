@@ -15,27 +15,41 @@ import { logMessage } from './webviewLogger';
 
 // Length of the symbol that starts a block quote
 const blockQuoteStartLen = '> '.length;
+const blockQuoteRegex = /^>\s/;
 
 type SelectionFilter = (sel: SelectionRange)=> boolean;
 
 // Specifies the update of a single selection region and its contents
 type SelectionUpdate = { range: SelectionRange; changes?: ChangeSpec };
 
-// Expands selections to the smallest container node
-// with name [nodeName].
+// Expands [sel] to the smallest container node with name in [nodeNames].
 // Returns a new selection.
 const growSelectionToNode = (
-	state: EditorState, sel: SelectionRange, nodeName: string
+	state: EditorState, sel: SelectionRange, nodeNames: string|string[]
 ): SelectionRange => {
 	let newFrom = null;
 	let newTo = null;
 	let smallestLen = Infinity;
 
+	const isAcceptableNode = (name: string): boolean => {
+		if (typeof nodeNames == 'string') {
+			return name == nodeNames;
+		}
+
+		for (const otherName of nodeNames) {
+			if (otherName == name) {
+				return true;
+			}
+		}
+
+		return false;
+	};
+
 	// Find the smallest range.
 	syntaxTree(state).iterate({
 		from: sel.from, to: sel.to,
 		enter: node => {
-			if (node.name == nodeName) {
+			if (isAcceptableNode(node.name)) {
 				if (node.to - node.from < smallestLen) {
 					newFrom = node.from;
 					newTo = node.to;
@@ -53,17 +67,18 @@ const growSelectionToNode = (
 	}
 };
 
-// Expand each selection range to match an enclosing node with [nodeName], provided that
-// node exists and [expandSelection] returns true.
-const growAllSelectionsToNodes = (
-	state: EditorState, nodeName: string, expandSelection: SelectionFilter
+// Expand each selection range to match an enclosing node with name in [nodeNames], provided that
+// node exists and [expandSelection] returns true. Expands to the smallest non-empty expansion,
+// if possible.
+const growAllSelectionsToNode = (
+	state: EditorState, nodeNames: string|string[], expandSelection: SelectionFilter
 ): TransactionSpec => {
 	const updatedSelection = EditorSelection.create(state.selection.ranges.map((sel: SelectionRange): SelectionRange => {
 		if (!expandSelection(sel)) {
 			return sel;
 		}
 
-		return growSelectionToNode(state, sel, nodeName);
+		return growSelectionToNode(state, sel, nodeNames);
 	}));
 
 	return {
@@ -239,7 +254,7 @@ export const toggleRegionFormat = (
 		for (let i = fromLine.number; i <= toLine.number; i++) {
 			const line = doc.line(i);
 
-			if (!line.text.match(/^>\s/)) {
+			if (!line.text.match(blockQuoteRegex)) {
 				inBlockQuote = false;
 				break;
 			}
@@ -312,7 +327,8 @@ export const toggleRegionFormat = (
 // [template] is that match of [regex] that is used when adding a match.
 // [template] can also be a function that maps a given line to a string.
 // If so, it is called on each line of a selection sequentially, starting
-// with the first.
+// with the first. [lineContent], in that case, is the portion of the line
+// relevant to the match (e.g. in a block quote, everything after "> ").
 // If [matchEmpty], all lines **after the first** that have no non-space
 // content are ignored.
 // [nodeName], if given, is the name of the node to expand the selection
@@ -322,8 +338,9 @@ export const toggleRegionFormat = (
 export const toggleSelectedLinesStartWith = (
 	state: EditorState,
 	regex: RegExp,
-	template: string | ((line: Line, firstLine: Line, lastLine: Line)=> string),
-	matchEmpty: boolean, nodeName?: string, ignoreBlockQuotes: boolean = true
+	template: string | ((lineContent: string, line: Line)=> string),
+	matchEmpty: boolean, nodeName?: string, ignoreBlockQuotes: boolean = true,
+	forEachDeletion: (lineContent: string, line: Line)=> void = (() => {})
 ): TransactionSpec => {
 	const blockQuoteRegex = /^>\s(.*)$/;
 
@@ -389,6 +406,8 @@ export const toggleSelectedLinesStartWith = (
 					continue;
 				}
 
+				forEachDeletion(text, line);
+
 				changes.push({
 					from: contentFrom,
 					to: contentFrom + match[0].length,
@@ -400,7 +419,7 @@ export const toggleSelectedLinesStartWith = (
 				if (typeof template == 'string') {
 					templateVal = template;
 				} else {
-					templateVal = template(line, fromLine, toLine);
+					templateVal = template(text, line);
 				}
 
 				changes.push({
@@ -412,12 +431,13 @@ export const toggleSelectedLinesStartWith = (
 			}
 		}
 
-		// If the selection is empty, don't grow it (user might be adding a
-		// list/header, in which case, selecting the just added text isn't helpful)
+		// If the selection is empty and a single line was changed, don't grow it.
+		// (user might be adding a list/header, in which case, selecting the just
+		// added text isn't helpful)
 		let newSel;
-		if (sel.empty) {
+		if (sel.empty && fromLine.number == toLine.number) {
 			const regionEnd = toLine.to + charsAdded;
-			newSel = EditorSelection.range(regionEnd, regionEnd);
+			newSel = EditorSelection.cursor(regionEnd);
 		} else {
 			newSel = EditorSelection.range(fromLine.from, toLine.to + charsAdded);
 		}
@@ -536,11 +556,19 @@ export const toggleList = (listType: ListType): Command => {
 		let changes: TransactionSpec;
 
 		// Select the current list type, if possible.
-		changes = growAllSelectionsToNodes(view.state, thisTag, (sel) => sel.empty);
+		changes = growAllSelectionsToNode(
+			view.state, ['OrderedList', 'BulletList'], (sel) => sel.empty
+		);
 		view.dispatch(changes);
 
 		// Ignore empty lines
 		const matchEmpty = false;
+
+		// Handle list items within block quotes
+		const ignoreBlockQuotes = true;
+
+		// Maps line numbers to leading space characters
+		const leadingSpaces: Record<string, string> = {};
 
 		// Remove existing formatting matching other list types.
 		const replacementUpdates: TransactionSpec[] = [];
@@ -555,7 +583,20 @@ export const toggleList = (listType: ListType): Command => {
 				listRegexes[kind],
 				'',
 				matchEmpty,
-				listTags[kind]
+				listTags[kind],
+
+				ignoreBlockQuotes,
+
+				// For each deletion,
+				(content, line) => {
+					// Store all leading spaces so that they can be restored later.
+					const spaceMatch = content.match(/^\s*/);
+					const listRegexMatch = content.match(listRegexes[kind]);
+
+					if (listRegexMatch && !leadingSpaces[line.number]) {
+						leadingSpaces[line.number] = spaceMatch ? spaceMatch[0] : '';
+					}
+				}
 			));
 		}
 		view.dispatch(...replacementUpdates);
@@ -564,15 +605,25 @@ export const toggleList = (listType: ListType): Command => {
 		changes = toggleSelectedLinesStartWith(
 			view.state,
 			thisListTypeRegex,
-			() => {
+			(_lineContent: string, line: Line): string => {
+				let leadingSpaceChars = leadingSpaces[line.number];
+
+				if (listType == ListType.OrderedList) {
+					// Default to no leading spaces for a numbered list
+					leadingSpaceChars ??= '';
+				} else {
+					// Default to a single leading space for bulleted/checklists
+					leadingSpaceChars ??= ' ';
+				}
+
 				if (listType == ListType.UnorderedList) {
-					return ' - ';
+					return `${leadingSpaceChars}- `;
 				} else if (listType == ListType.CheckList) {
-					return ' - [ ] ';
+					return `${leadingSpaceChars}- [ ] `;
 				}
 
 				lineIdx++;
-				return ` ${lineIdx}. `;
+				return `${leadingSpaceChars}${lineIdx}. `;
 			},
 			matchEmpty,
 			thisTag
