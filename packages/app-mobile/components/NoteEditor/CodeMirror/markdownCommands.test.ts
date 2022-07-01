@@ -157,31 +157,42 @@ describe('Formatting commands', () => {
 	it('Changing list type', () => {
 		const preSubListText = '# List test\n * This\n * is\n';
 		const initialDocText = `${preSubListText}\t* a\n\t* test\n * of list toggling`;
+
 		const editor = new EditorView({
 			doc: initialDocText,
 			selection: EditorSelection.create([
 				EditorSelection.cursor(preSubListText.length + '\t* a'.length),
 			]),
 
+			// The markdown extension lets us test the auto-selection of a list
+			// (which relies on the syntax tree).
 			extensions: [markdown()],
 		});
 
+		// Indentation should be preserved when changing list types
 		toggleList(ListType.OrderedList)(editor);
-		expect(editor.state.selection.main.from).toBe(preSubListText.length);
 		expect(editor.state.doc.toString()).toBe(
 			'# List test\n * This\n * is\n\t1. a\n\t2. test\n * of list toggling'
 		);
 
+		// The changed region should be selected
+		expect(editor.state.selection.main.from).toBe(preSubListText.length);
+		expect(editor.state.selection.main.to).toBe(
+			'# List test\n * This\n * is\n\t1. a\n\t2. test'.length
+		);
+
+		// Indentation should not be preserved when removing lists
 		toggleList(ListType.OrderedList)(editor);
 		expect(editor.state.selection.main.from).toBe(preSubListText.length);
 		expect(editor.state.doc.toString()).toBe(
 			'# List test\n * This\n * is\na\ntest\n * of list toggling'
 		);
 
-		editor.dispatch({
-			selection: EditorSelection.cursor(preSubListText.length),
-		});
 
+		// Put the cursor in the middle of the list
+		editor.dispatch({ selection: EditorSelection.cursor(preSubListText.length) });
+
+		// All non-empty lines in the list should change to the new type
 		toggleList(ListType.CheckList)(editor);
 		expect(editor.state.selection.main.from).toBe('# List test\n'.length);
 		expect(editor.state.selection.main.to).toBe(editor.state.doc.length);
@@ -189,31 +200,28 @@ describe('Formatting commands', () => {
 			'# List test\n - [ ] This\n - [ ] is\n - [ ] a\n - [ ] test\n - [ ] of list toggling'
 		);
 
-		editor.dispatch({
-			selection: EditorSelection.cursor(editor.state.doc.length),
-		});
+		editor.dispatch({ selection: EditorSelection.cursor(editor.state.doc.length) });
 		editor.dispatch(editor.state.replaceSelection('\n\n\n'));
 
+		// toggleList should also create a new list if the cursor is on an empty line.
 		toggleList(ListType.OrderedList)(editor);
 		editor.dispatch(editor.state.replaceSelection('Test.\n2. Test2\n3. Test3'));
 
 		const expectedChecklistPart =
 			'# List test\n - [ ] This\n - [ ] is\n - [ ] a\n - [ ] test\n - [ ] of list toggling';
 		expect(editor.state.doc.toString()).toBe(
-			`${expectedChecklistPart
-			}\n\n\n1. Test.\n2. Test2\n3. Test3`
+			`${expectedChecklistPart}\n\n\n1. Test.\n2. Test2\n3. Test3`
 		);
 
 		toggleList(ListType.CheckList)(editor);
 		expect(editor.state.doc.toString()).toBe(
-			`${expectedChecklistPart
-			}\n\n\n- [ ] Test.\n- [ ] Test2\n- [ ] Test3`
+			`${expectedChecklistPart}\n\n\n- [ ] Test.\n- [ ] Test2\n- [ ] Test3`
 		);
 
+		// The entire checklist should have been selected (and thus will now be indented)
 		increaseIndent(editor);
 		expect(editor.state.doc.toString()).toBe(
-			`${expectedChecklistPart
-			}\n\n\n\t- [ ] Test.\n\t- [ ] Test2\n\t- [ ] Test3`
+			`${expectedChecklistPart}\n\n\n\t- [ ] Test.\n\t- [ ] Test2\n\t- [ ] Test3`
 		);
 	});
 
