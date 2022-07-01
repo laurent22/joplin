@@ -1,3 +1,6 @@
+/**
+ * CodeMirror 6 commands that modify markdown formatting (e.g. toggleBold).
+ */
 
 import { EditorView, Command } from '@codemirror/view';
 
@@ -10,8 +13,8 @@ import { syntaxTree } from '@codemirror/language';
 import RegionSpec from './RegionSpec';
 import { logMessage } from './webviewLogger';
 
-const BLOCK_QUOTE_LINESTART_LEN = '> '.length;
-
+// Length of the symbol that starts a block quote
+const blockQuoteStartLen = '> '.length;
 
 type SelectionFilter = (sel: SelectionRange)=> boolean;
 
@@ -194,7 +197,7 @@ export const toggleRegionFormat = (
 
 		// Don't treat '> ' as part of the line's content if we're in a blockquote.
 		if (inBlockQuote && preserveBlockQuotes) {
-			contentLength -= BLOCK_QUOTE_LINESTART_LEN;
+			contentLength -= blockQuoteStartLen;
 		}
 
 		// If it matches the entire line, remove the newline character.
@@ -205,7 +208,7 @@ export const toggleRegionFormat = (
 
 			// Take into account the extra '> ' characters, if necessary
 			if (inBlockQuote && preserveBlockQuotes) {
-				stopIdx += BLOCK_QUOTE_LINESTART_LEN;
+				stopIdx += blockQuoteStartLen;
 			}
 		}
 
@@ -244,8 +247,8 @@ export const toggleRegionFormat = (
 
 		// Ignore block quote characters if in a block quote.
 		if (inBlockQuote && preserveBlockQuotes) {
-			fromLineText = fromLineText.substring(BLOCK_QUOTE_LINESTART_LEN);
-			toLineText = toLineText.substring(BLOCK_QUOTE_LINESTART_LEN);
+			fromLineText = fromLineText.substring(blockQuoteStartLen);
+			toLineText = toLineText.substring(blockQuoteStartLen);
 		}
 
 		// Otherwise, we're toggling the block version

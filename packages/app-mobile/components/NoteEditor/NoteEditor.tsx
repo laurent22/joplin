@@ -3,7 +3,7 @@ import shim from '@joplin/lib/shim';
 import { themeStyle } from '@joplin/lib/theme';
 import MarkdownToolbar from './MarkdownToolbar';
 import EditLinkDialog from './EditLinkDialog';
-import { DEFAULT_SEARCH_STATE, SearchPanel } from './SearchPanel';
+import { defaultSearchState, SearchPanel } from './SearchPanel';
 
 const React = require('react');
 const { forwardRef, useImperativeHandle } = require('react');
@@ -167,7 +167,7 @@ function NoteEditor(props: Props, ref: any) {
 	const css = useCss(props.themeId);
 	const html = useHtml(css);
 	const [selectionState, setSelectionState] = useState(new SelectionFormatting());
-	const [searchState, setSearchState] = useState(DEFAULT_SEARCH_STATE);
+	const [searchState, setSearchState] = useState(defaultSearchState);
 	const [linkDialogVisible, setLinkDialogVisible] = useState(false);
 
 	// / Runs [js] in the context of the CodeMirror frame.

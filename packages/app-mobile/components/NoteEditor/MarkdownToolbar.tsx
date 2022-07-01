@@ -467,12 +467,12 @@ const MarkdownToolbar = (props: ToolbarProps) => {
  */
 const useStyles = (styleProps: any, theme: any): any => {
 	return useMemo(() => {
-		const BUTTON_SIZE = 56;
+		const buttonSize = 56;
 
 		return StyleSheet.create({
 			button: {
-				width: BUTTON_SIZE,
-				height: BUTTON_SIZE,
+				width: buttonSize,
+				height: buttonSize,
 				alignItems: 'center',
 				justifyContent: 'center',
 				backgroundColor: theme.backgroundColor4,
@@ -500,7 +500,7 @@ const useStyles = (styleProps: any, theme: any): any => {
 				flexDirection: 'row',
 				alignItems: 'baseline',
 				justifyContent: 'center',
-				height: BUTTON_SIZE,
+				height: buttonSize,
 
 				...styleProps,
 			},

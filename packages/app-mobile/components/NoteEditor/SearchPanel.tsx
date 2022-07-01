@@ -12,9 +12,9 @@ import { SearchControl, SearchState, EditorSettings } from './types';
 import { _ } from '@joplin/lib/locale';
 import { BackHandler } from 'react-native';
 
-const BUTTON_SIZE = 48;
+const buttonSize = 48;
 
-export const DEFAULT_SEARCH_STATE: SearchState = {
+export const defaultSearchState: SearchState = {
 	useRegex: false,
 	caseSensitive: false,
 
@@ -75,8 +75,8 @@ const ToggleButton = (
 const useStyles = (theme: any): any => {
 	return useMemo(() => {
 		const buttonStyle = {
-			width: BUTTON_SIZE,
-			height: BUTTON_SIZE,
+			width: buttonSize,
+			height: buttonSize,
 			backgroundColor: theme.backgroundColor4,
 			alignItems: 'center',
 			justifyContent: 'center',
