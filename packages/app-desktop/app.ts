@@ -319,7 +319,7 @@ class Application extends BaseApplication {
 			Setting.setValue('plugins.states', newSettings);
 		}
 
-		this.checkAllPluginStartedIID_ = setInterval(async () => {
+		this.checkAllPluginStartedIID_ = setInterval(() => {
 			if (service.allPluginsStarted) {
 				clearInterval(this.checkAllPluginStartedIID_);
 				this.dispatch({
