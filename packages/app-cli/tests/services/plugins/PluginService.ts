@@ -1,5 +1,5 @@
 import PluginRunner from '../../../app/services/plugins/PluginRunner';
-import PluginService from '@joplin/lib/services/plugins/PluginService';
+import PluginService, { InitialSettings } from '@joplin/lib/services/plugins/PluginService';
 import { ContentScriptType } from '@joplin/lib/services/plugins/api/types';
 import MdToHtml from '@joplin/renderer/MdToHtml';
 import shim from '@joplin/lib/shim';
@@ -316,5 +316,46 @@ describe('services_PluginService', function() {
 		const folders = await Folder.all();
 		expect(JSON.parse(folders[0].title)).toBe(expectedPath);
 	}));
+
+	test('should set initial settings for default plugins', async () => {
+		const service = newPluginService();
+
+		const pluginScript = `
+		/* joplin-manifest:
+		{
+			"id": "io.github.jackgruber.backup",
+			"manifest_version": 1,
+			"app_min_version": "1.4",
+			"name": "JS Bundle test",
+			"version": "1.0.0"
+		}
+		*/
+		joplin.plugins.register({
+			onStart: async function() {
+				await joplin.settings.registerSettings({
+					path: {
+						value: "",
+						type: 2,
+						section: "backupSection",
+						public: true,
+						label: "Backup path",
+					  },
+				})
+			},
+		});`;
+
+		const plugin = await service.loadPluginFromJsBundle('', pluginScript);
+		await service.runPlugin(plugin);
+
+		const initialSettings: InitialSettings = {
+			'io.github.jackgruber.backup': {
+				'path': '/JoplinBackupTest',
+			},
+		};
+
+		service.setSettingsForDefaultPlugins(initialSettings);
+		expect(Setting.value('plugin-io.github.jackgruber.backup.path')).toBe('/JoplinBackupTest');
+		await service.destroy();
+	});
 
 });

@@ -29,6 +29,14 @@ export interface Plugins {
 	[key: string]: Plugin;
 }
 
+export interface SettingAndValue {
+    [settingName: string]: string;
+}
+
+export interface InitialSettings {
+    [pluginId: string]: SettingAndValue;
+}
+
 export interface PluginSetting {
 	enabled: boolean;
 	deleted: boolean;
@@ -69,6 +77,12 @@ export default class PluginService extends BaseService {
 		return this.instance_;
 	}
 
+	public initialSettings: InitialSettings = {
+		'io.github.jackgruber.backup': {
+			'path': '/JoplinBackup',
+		},
+	};
+
 	private appVersion_: string;
 	private store_: any = null;
 	private platformImplementation_: any = null;
@@ -105,6 +119,10 @@ export default class PluginService extends BaseService {
 			...this.plugins_,
 			[pluginId]: plugin,
 		};
+	}
+
+	public get initialPluginsSettings(): InitialSettings {
+		return this.initialSettings;
 	}
 
 	private deletePluginAt(pluginId: string) {
@@ -451,6 +469,14 @@ export default class PluginService extends BaseService {
 		}
 		Setting.setValue('firstStart', 0);
 		return pluginSettings;
+	}
+
+	public setSettingsForDefaultPlugins(initialSettings: InitialSettings) {
+		Object.keys(initialSettings).forEach(pluginId => {
+			Object.keys(initialSettings[pluginId]).forEach((setting) => {
+				Setting.setValue(`plugin-${pluginId}.${setting}`, initialSettings[pluginId][setting]);
+			});
+		});
 	}
 
 	private async pluginPath(pluginId: string) {

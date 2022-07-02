@@ -63,7 +63,6 @@ import checkForUpdates from './checkForUpdates';
 import { AppState } from './app.reducer';
 import syncDebugLog from '@joplin/lib/services/synchronizer/syncDebugLog';
 import eventManager from '@joplin/lib/eventManager';
-import setSettingsForDefaultPlugins from './defaultPluginsSettings';
 import path = require('path');
 // import { runIntegrationTests } from '@joplin/lib/services/e2ee/ppkTestUtils';
 
@@ -327,7 +326,7 @@ class Application extends BaseApplication {
 					type: 'STARTUP_PLUGINS_LOADED',
 					value: true,
 				});
-				await setSettingsForDefaultPlugins();
+				service.setSettingsForDefaultPlugins(service.initialPluginsSettings);
 			}
 		}, 500);
 	}
