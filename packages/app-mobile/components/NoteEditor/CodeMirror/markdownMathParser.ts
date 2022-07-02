@@ -97,6 +97,11 @@ const InlineMathConfig: MarkdownConfig = {
 				return -1;
 			}
 
+			// It isn't a math region if there is no ending '$'
+			if (pos == end) {
+				return -1;
+			}
+
 			// Advance to just after the ending '$'
 			pos ++;
 
