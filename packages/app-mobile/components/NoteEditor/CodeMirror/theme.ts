@@ -30,7 +30,6 @@ const createTheme = (theme: any): Extension[] => {
 	const baseGlobalStyle: Record<string, string> = {
 		color: theme.color,
 		backgroundColor: theme.backgroundColor,
-		fontFamily: theme.fontFamily,
 		fontSize: `${theme.fontSize}px`,
 	};
 	const baseCursorStyle: Record<string, string> = { };
@@ -55,7 +54,10 @@ const createTheme = (theme: any): Extension[] => {
 		'&': baseGlobalStyle,
 
 		// These must be !important or more specific than CodeMirror's built-ins
-		'.cm-content': baseContentStyle,
+		'.cm-content': {
+			fontFamily: theme.fontFamily,
+			...baseContentStyle,
+		},
 		'&.cm-focused .cm-cursor': baseCursorStyle,
 		'&.cm-focused .cm-selectionBackground, ::selection': baseSelectionStyle,
 		'.cm-selectionBackground': blurredSelectionStyle,
