@@ -10,6 +10,7 @@ import { markdown } from '@codemirror/lang-markdown';
 import { MarkdownMathExtension } from './markdownMathParser';
 import RegionSpec from './RegionSpec';
 import { ListType } from '../types';
+import { indentUnit } from '@codemirror/language';
 
 // Creates and returns a minimal editor with markdown extensions
 const createEditor = (initialText: string, initialSelection: SelectionRange): EditorView => {
@@ -20,6 +21,7 @@ const createEditor = (initialText: string, initialSelection: SelectionRange): Ed
 			markdown({
 				extensions: [MarkdownMathExtension, GithubFlavoredMarkdownExt],
 			}),
+			indentUnit.of('\t'),
 		],
 	});
 };
@@ -254,7 +256,7 @@ describe('Formatting commands', () => {
 		expect(editor.state.selection.main.from).toBe('# List test\n'.length);
 		expect(editor.state.selection.main.to).toBe(editor.state.doc.length);
 		expect(editor.state.doc.toString()).toBe(
-			'# List test\n - [ ] This\n - [ ] is\n - [ ] a\n - [ ] test\n - [ ] of list toggling'
+			'# List test\n - [ ] This\n - [ ] is\n- [ ] a\n- [ ] test\n - [ ] of list toggling'
 		);
 
 		editor.dispatch({ selection: EditorSelection.cursor(editor.state.doc.length) });
@@ -265,7 +267,7 @@ describe('Formatting commands', () => {
 		editor.dispatch(editor.state.replaceSelection('Test.\n2. Test2\n3. Test3'));
 
 		const expectedChecklistPart =
-			'# List test\n - [ ] This\n - [ ] is\n - [ ] a\n - [ ] test\n - [ ] of list toggling';
+			'# List test\n - [ ] This\n - [ ] is\n- [ ] a\n- [ ] test\n - [ ] of list toggling';
 		expect(editor.state.doc.toString()).toBe(
 			`${expectedChecklistPart}\n\n\n1. Test.\n2. Test2\n3. Test3`
 		);
