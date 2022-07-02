@@ -726,8 +726,9 @@ export const increaseIndent: Command = (view: EditorView): boolean => {
 
 	const changes = toggleSelectedLinesStartWith(
 		view.state,
-		// Add a tab to the beginning of all lines
+		// Delete nothing
 		matchNothing,
+		// ...and thus always add indentUnit.
 		indentUnit,
 		matchEmpty
 	);
