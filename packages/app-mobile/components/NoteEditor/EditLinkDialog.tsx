@@ -3,7 +3,7 @@
  */
 
 const React = require('react');
-const { useState, useEffect, useMemo } = require('react');
+const { useState, useEffect, useMemo, useRef } = require('react');
 const { StyleSheet } = require('react-native');
 const { View, Modal, Text, TextInput, Button } = require('react-native');
 
@@ -66,6 +66,9 @@ const EditLinkDialog = (props: LinkDialogProps) => {
 			},
 			input: {
 				color: theme.color,
+				backgroundColor: theme.backgroundColor,
+
+				minHeight: 48,
 				borderBottomColor: theme.backgroundColor3,
 				borderBottomWidth: 1,
 			},
@@ -82,6 +85,7 @@ const EditLinkDialog = (props: LinkDialogProps) => {
 		updateEditor();
 		props.editorControl.hideLinkDialog();
 	};
+	const linkInputRef = useRef();
 
 	// See https://www.hingehealth.com/engineering-blog/accessible-react-native-textinput/
 	// for more about creating accessible RN inputs.
@@ -93,7 +97,15 @@ const EditLinkDialog = (props: LinkDialogProps) => {
 				placeholder={_('Description of the link')}
 				placeholderTextColor={placeholderColor}
 				value={linkLabel}
-				onChangeText={(text: string) => setLinkLabel(text)}/>
+
+				returnKeyType="next"
+				autoFocus
+
+				onSubmitEditing={() => {
+					linkInputRef.current.focus();
+				}}
+				onChangeText={(text: string) => setLinkLabel(text)}
+			/>
 		</View>
 	);
 
@@ -105,6 +117,7 @@ const EditLinkDialog = (props: LinkDialogProps) => {
 				placeholder={_('URL')}
 				placeholderTextColor={placeholderColor}
 				value={linkURL}
+				ref={linkInputRef}
 
 				autoCorrect={false}
 				autoCapitalize="none"
