@@ -135,6 +135,24 @@ By default, Joplin Server will be setup with an admin user with email **admin@lo
 
 While the admin user can be used for synchronisation, it is recommended to create a separate non-admin user for it. To do so, navigate to the Users page - from there you can create a new user. Once this is done, you can use the email and password you specified to sync this user account with your Joplin clients.
 
+## Perform initial data upload to Joplin server
+
+This step will perform the initial upload of all the notebooks and notes to Joplin server.
+
+1. Select *Tools* > *Options* > *Synchronization*.
+2. Select *Joplin Server (Beta)* for the Synchronization target.
+3. Enter *http://[Joplin_server_URL]:22300/* for the Joplin Server URL.
+4. Enter the Joplin Server email and Joplin Server password. This can be the admin credentials, or a user specifically created for syncing.
+5. Select *Show Advanced Settings.*
+6. Select *Re-upload local data to sync target*.
+7. You will be prompted with: *"This cannot be undone. Do you want to continue?"*
+8. Select OK.
+9. You will be prompted with: "The app is now going to close. Please relaunch it to complete the process."
+10. Select OK.
+11. Relaunch Joplin.
+
+
+
 ## Checking the logs
 
 Checking the log can be done the standard Docker way:
