@@ -281,7 +281,7 @@ export function initCodeMirror(
 				highlightSelectionMatches(),
 				indentOnInput(),
 
-				// By default, indent with a tab
+				// By default, indent with tabs
 				indentUnit.of('\t'),
 
 				// Apply styles to entire lines (block-display decorations)

@@ -9,7 +9,7 @@ import {
 	SelectionRange, EditorSelection, ChangeSpec, Line, TransactionSpec, EditorState,
 	Text as DocumentText,
 } from '@codemirror/state';
-import { syntaxTree } from '@codemirror/language';
+import { getIndentUnit, indentString, syntaxTree } from '@codemirror/language';
 import RegionSpec from './RegionSpec';
 import { logMessage } from './webviewLogger';
 
@@ -659,15 +659,7 @@ export const toggleList = (listType: ListType): Command => {
 			view.state,
 			thisListTypeRegex,
 			(_lineContent: string, line: Line): string => {
-				let leadingSpaceChars = leadingSpaces[line.number];
-
-				if (listType == ListType.OrderedList) {
-					// Default to no leading spaces for a numbered list
-					leadingSpaceChars ??= '';
-				} else {
-					// Default to a single leading space for bulleted/checklists
-					leadingSpaceChars ??= ' ';
-				}
+				const leadingSpaceChars = leadingSpaces[line.number] ?? '';
 
 				if (listType == ListType.UnorderedList) {
 					return `${leadingSpaceChars}- `;
@@ -730,13 +722,13 @@ export const increaseIndent: Command = (view: EditorView): boolean => {
 	logMessage('Increasing indentation.');
 	const matchEmpty = true;
 	const matchNothing = /$ ^/;
+	const indentUnit = indentString(view.state, getIndentUnit(view.state));
 
 	const changes = toggleSelectedLinesStartWith(
 		view.state,
 		// Add a tab to the beginning of all lines
 		matchNothing,
-		// Always indent with a tab
-		'\t',
+		indentUnit,
 		matchEmpty
 	);
 	view.dispatch(changes);
