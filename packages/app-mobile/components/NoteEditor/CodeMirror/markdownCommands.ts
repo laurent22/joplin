@@ -172,7 +172,7 @@ const toggleSelectionFormat = (
 		const newCursorPos = sel.from + endMatchLen;
 
 		return {
-			range: EditorSelection.range(newCursorPos, newCursorPos),
+			range: EditorSelection.cursor(newCursorPos),
 		};
 	}
 
@@ -231,7 +231,60 @@ export const toggleRegionFormat = (
 		return [startIdx, stopIdx];
 	};
 
+	// Returns a change spec that converts an inline region to a block region
+	// only if the user's cursor is in an empty inline region.
+	// For example,
+	//    $|$ -> $$\n|\n$$ where | represents the cursor.
+	const handleInlineToBlockConversion = (sel: SelectionRange) => {
+		if (!sel.empty) {
+			return null;
+		}
+
+		const startMatchLen = inlineSpec.matchStart(doc, sel);
+		const stopMatchLen = inlineSpec.matchStop(doc, sel);
+
+		if (startMatchLen >= 0 && stopMatchLen >= 0) {
+			const inlineStart = sel.from - startMatchLen;
+			const inlineStop = sel.from + stopMatchLen;
+
+			const fromLine = doc.lineAt(sel.from);
+			const inBlockQuote = fromLine.text.match(blockQuoteRegex);
+
+			let lineStartStr = '\n';
+			if (inBlockQuote && preserveBlockQuotes) {
+				lineStartStr = '\n> ';
+			}
+
+			// Determine the text that starts the new block (e.g. \n$$\n for
+			// a math block).
+			let blockStart = `${blockTemplate.start}${lineStartStr}`;
+			if (fromLine.from != inlineStart) {
+				// Add a line before to put the start of the block
+				// on its own line.
+				blockStart = lineStartStr + blockStart;
+			}
+
+			return {
+				changes: [
+					{
+						from: inlineStart,
+						to: inlineStop,
+						insert: `${blockStart}${lineStartStr}${blockTemplate.stop}`,
+					},
+				],
+
+				range: EditorSelection.cursor(inlineStart + blockStart.length),
+			};
+		}
+
+		return null;
+	};
+
 	const changes = state.changeByRange((sel: SelectionRange) => {
+		const blockConversion = handleInlineToBlockConversion(sel);
+		if (blockConversion) {
+			return blockConversion;
+		}
 
 		// If we're in the block version, grow the selection to cover the entire region.
 		sel = growSelectionToNode(state, sel, blockNodeName);
@@ -315,7 +368,7 @@ export const toggleRegionFormat = (
 
 			// Selection should now encompass all lines that were changed.
 			range: EditorSelection.range(
-				fromLine.from, Math.min(doc.length, toLine.to + charsAdded)
+				fromLine.from, toLine.to + charsAdded
 			),
 		};
 	});

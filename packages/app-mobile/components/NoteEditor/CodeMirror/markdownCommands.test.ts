@@ -4,7 +4,7 @@
 
 import { EditorSelection, EditorState, SelectionRange } from '@codemirror/state';
 import { EditorView } from '@codemirror/view';
-import { increaseIndent, toggleBolded, toggleHeaderLevel, toggleItalicized, toggleList, toggleMath, toggleRegionFormat, updateLink } from './markdownCommands';
+import { increaseIndent, toggleBolded, toggleCode, toggleHeaderLevel, toggleItalicized, toggleList, toggleMath, toggleRegionFormat, updateLink } from './markdownCommands';
 import { GFM as GithubFlavoredMarkdownExt } from '@lezer/markdown';
 import { markdown } from '@codemirror/lang-markdown';
 import { MarkdownMathExtension } from './markdownMathParser';
@@ -35,21 +35,21 @@ describe('Formatting commands', () => {
 
 		let mainSel = editor.state.selection.main;
 		const boldedText = '**Testing...**';
-		expect(editor.state.doc.toString()).toEqual(boldedText);
+		expect(editor.state.doc.toString()).toBe(boldedText);
 		expect(mainSel.from).toBe(0);
 		expect(mainSel.to).toBe(boldedText.length);
 
 		toggleBolded(editor);
 		mainSel = editor.state.selection.main;
-		expect(editor.state.doc.toString()).toEqual(initialDocText);
+		expect(editor.state.doc.toString()).toBe(initialDocText);
 		expect(mainSel.from).toBe(0);
 		expect(mainSel.to).toBe(initialDocText.length);
 
 		toggleItalicized(editor);
-		expect(editor.state.doc.toString()).toEqual('_Testing..._');
+		expect(editor.state.doc.toString()).toBe('_Testing..._');
 
 		toggleItalicized(editor);
-		expect(editor.state.doc.toString()).toEqual('Testing...');
+		expect(editor.state.doc.toString()).toBe('Testing...');
 	});
 
 	it('Creating/exiting a math region', () => {
@@ -57,15 +57,82 @@ describe('Formatting commands', () => {
 		const editor = createEditor(initialDocText, EditorSelection.cursor(initialDocText.length));
 
 		toggleMath(editor);
-		expect(editor.state.doc.toString()).toEqual('Testing... $$');
+		expect(editor.state.doc.toString()).toBe('Testing... $$');
 		expect(editor.state.selection.main.empty).toBe(true);
 
 		editor.dispatch(editor.state.replaceSelection('3 + 3 \\neq 5'));
-		expect(editor.state.doc.toString()).toEqual('Testing... $3 + 3 \\neq 5$');
+		expect(editor.state.doc.toString()).toBe('Testing... $3 + 3 \\neq 5$');
 
 		toggleMath(editor);
 		editor.dispatch(editor.state.replaceSelection('...'));
-		expect(editor.state.doc.toString()).toEqual('Testing... $3 + 3 \\neq 5$...');
+		expect(editor.state.doc.toString()).toBe('Testing... $3 + 3 \\neq 5$...');
+	});
+
+	describe('Creating block regions by toggling twice', () => {
+		it('Block math, line with text', () => {
+			const initialDocText = 'Testing... ';
+			const editor = createEditor(initialDocText, EditorSelection.cursor(initialDocText.length));
+
+			toggleMath(editor);
+			toggleMath(editor);
+			editor.dispatch(editor.state.replaceSelection('f(x) = ...'));
+			expect(editor.state.doc.toString()).toBe('Testing... \n$$\nf(x) = ...\n$$');
+		});
+
+		it('Block math, empty line', () => {
+			const initialDocText = 'Testing...\n\n';
+			const editor = createEditor(initialDocText, EditorSelection.cursor(initialDocText.length));
+
+			toggleMath(editor);
+			toggleMath(editor);
+			editor.dispatch(editor.state.replaceSelection('f(x) = ...'));
+			expect(editor.state.doc.toString()).toBe('Testing...\n\n$$\nf(x) = ...\n$$');
+		});
+
+		it('Block code, empty line', () => {
+			const initialDocText = 'Testing...\n\n';
+			const editor = createEditor(initialDocText, EditorSelection.cursor(initialDocText.length));
+
+			// Toggling code twice should create a block code region
+			toggleCode(editor);
+			toggleCode(editor);
+			editor.dispatch(editor.state.replaceSelection('f(x) = ...'));
+			expect(editor.state.doc.toString()).toBe('Testing...\n\n```\nf(x) = ...\n```');
+
+			toggleCode(editor);
+			expect(editor.state.doc.toString()).toBe('Testing...\n\nf(x) = ...\n');
+		});
+
+		it('Block math, inside block quote', () => {
+			const initialDocText = '> Testing...> \n> ';
+			const editor = createEditor(initialDocText, EditorSelection.cursor(initialDocText.length));
+
+			toggleMath(editor);
+			toggleMath(editor);
+			editor.dispatch(editor.state.replaceSelection('f(x) = ...'));
+			expect(editor.state.doc.toString()).toBe(
+				'> Testing...> \n> \n> $$\n> f(x) = ...\n> $$'
+			);
+
+			// If we toggle math again, everything from the start of the line with the first
+			// $$ to the end of the document should be selected.
+			toggleMath(editor);
+			const sel = editor.state.selection.main;
+			expect(sel.from).toBe('> Testing...> \n> \n'.length);
+			expect(sel.to).toBe(editor.state.doc.length);
+		});
+	});
+
+	it('Inline code, empty line', () => {
+		const initialDocText = 'Testing...\n\n';
+		const editor = createEditor(initialDocText, EditorSelection.cursor(initialDocText.length));
+
+		toggleCode(editor);
+		editor.dispatch(editor.state.replaceSelection('f(x) = ...'));
+		toggleCode(editor);
+
+		editor.dispatch(editor.state.replaceSelection(' is a function.'));
+		expect(editor.state.doc.toString()).toBe('Testing...\n\n`f(x) = ...` is a function.');
 	});
 
 	it('Toggling header', () => {
@@ -249,12 +316,12 @@ describe('Internal text manipulation', () => {
 	const initialText = `Internal text manipulation
 		This is a test...
 		of block and inline region toggling.`;
-	const codeFenceRegex = /^```\w*\s*$/;
+	const codeFenceRegex = /^``````\w*\s*$/;
 	const inlineCodeRegionSpec = new RegionSpec({
 		templateStart: '`',
 		templateStop: '`',
 	});
-	const codeTemplate = { start: '```', stop: '```' };
+	const codeTemplate = { start: '``````', stop: '``````' };
 
 	it('Toggle inline region format', () => {
 		const initialState: EditorState = EditorState.create({
@@ -289,6 +356,9 @@ describe('Internal text manipulation', () => {
 		);
 
 		const newState = initialState.update(changes).state;
-		expect(newState.doc.toString()).toEqual(`\`\`\`\n${initialText}\n\`\`\``);
+		const editorText = newState.doc.toString();
+		expect(editorText).toBe(`\`\`\`\`\`\`\n${initialText}\n\`\`\`\`\`\``);
+		expect(newState.selection.main.from).toBe(0);
+		expect(newState.selection.main.to).toBe(editorText.length);
 	});
 });
