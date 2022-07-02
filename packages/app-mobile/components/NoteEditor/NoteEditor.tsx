@@ -172,7 +172,7 @@ function NoteEditor(props: Props, ref: any) {
 	const [searchState, setSearchState] = useState(defaultSearchState);
 	const [linkDialogVisible, setLinkDialogVisible] = useState(false);
 
-	// / Runs [js] in the context of the CodeMirror frame.
+	// Runs [js] in the context of the CodeMirror frame.
 	const injectJS = (js: string) => {
 		webviewRef.current.injectJavaScript(`
 			try {
