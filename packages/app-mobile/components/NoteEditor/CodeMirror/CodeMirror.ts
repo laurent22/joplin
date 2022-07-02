@@ -137,10 +137,15 @@ export function initCodeMirror(
 
 		const parseLinkData = (nodeText: string) => {
 			const linkMatch = nodeText.match(/\[([^\]]*)\]\(([^)]*)\)/);
-			return {
-				linkText: linkMatch[1],
-				linkURL: linkMatch[2],
-			};
+
+			if (linkMatch) {
+				return {
+					linkText: linkMatch[1],
+					linkURL: linkMatch[2],
+				};
+			}
+
+			return null;
 		};
 
 		// Find nodes that overlap/are within the selected region
