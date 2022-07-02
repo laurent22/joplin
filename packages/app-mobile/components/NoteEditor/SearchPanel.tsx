@@ -98,8 +98,9 @@ const useStyles = (theme: any) => {
 			},
 			input: {
 				flexGrow: 1,
-				backgroundColor: theme.backgroundColor2,
-				color: theme.color2,
+				height: buttonSize,
+				backgroundColor: theme.backgroundColor4,
+				color: theme.color4,
 			},
 			buttonText: buttonTextStyle,
 			activeButtonText: {
