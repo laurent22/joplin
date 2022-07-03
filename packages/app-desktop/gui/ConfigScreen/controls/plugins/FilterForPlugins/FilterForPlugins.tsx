@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { themeStyle } from '@joplin/lib/theme';
+import uuid from '@joplin/lib/uuid';
 
 interface FilterProps {
     themeId: number;
@@ -21,11 +22,11 @@ export default function FilterForPlugins(props: FilterProps) {
 
 	return (
 		<div className="filter-for-plugins" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} onClick={event => props.setFilterValue((event.target as HTMLInputElement).value)}>
-			<select name="" id="filter-select" style={{ backgroundColor: theme.backgroundColor, color: theme.color }}>
+			<select name="" id="filter-select" defaultValue={'default'} style={{ backgroundColor: theme.backgroundColor, color: theme.color }}>
 				{filterOptions.map((filterOption) => {
-					if (filterOption === 'Select plugin category') return <option value="" disabled selected>{filterOption}</option>;
-					if (filterOption === 'line-separator') return <option disabled>─────────────────────</option>;
-					return <option value={filterOption} key={filterOption} style={{ backgroundColor: theme.backgroundColor, color: theme.color }}>{filterOption}</option>;
+					if (filterOption === 'Select plugin category') return <option value="default" key={uuid.createNano()} disabled>{filterOption}</option>;
+					if (filterOption === 'line-separator') return <option key={uuid.createNano()} disabled>─────────────────────</option>;
+					return <option value={filterOption} key={uuid.createNano()} style={{ backgroundColor: theme.backgroundColor, color: theme.color }}>{filterOption}</option>;
 				})}
 			</select>
 			{props.filterValue && <i className="fas fa-window-close" style={{ margin: '0px 0px 0px 6px', backgroundColor: theme.backgroundColor, height: '26px', width: '26px', display: 'flex', justifyContent: 'center', alignItems: 'center' }} onClick={clearFilterValue}></i>}
