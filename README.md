@@ -239,6 +239,26 @@ If the **terminal client** has been installed, it is possible to also synchronis
 
 ` */30 * * * * /path/to/joplin sync`
 
+
+## Joplin Server synchronisation
+
+### Perform initial data upload to Joplin server
+
+This step will perform the initial upload of all the notebooks and notes to Joplin server.
+
+1. Select *Tools* > *Options* > *Synchronization*.
+2. Select *Joplin Server (Beta)* for the Synchronization target.
+3. Enter *http://[Joplin_server_URL]:22300/* for the Joplin Server URL.
+4. Enter the Joplin Server email and Joplin Server password. This can be the admin credentials, or a user specifically created for syncing.
+5. Select *Show Advanced Settings.*
+6. Select *Re-upload local data to sync target*.
+7. You will be prompted with: *"This cannot be undone. Do you want to continue?"*
+8. Select OK.
+9. You will be prompted with: "The app is now going to close. Please relaunch it to complete the process."
+10. Select OK.
+11. Relaunch Joplin.
+
+
 ## Nextcloud synchronisation
 
 <img src="https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/WebsiteAssets/images/nextcloud-logo-background.png" width="100" align="left"> <a href="https://nextcloud.com/">Nextcloud</a> is a self-hosted, private cloud solution. It can store documents, images and videos but also calendars, passwords and countless other things and can sync them to your laptop or phone. As you can host your own Nextcloud server, you own both the data on your device and infrastructure used for synchronisation. As such it is a good fit for Joplin. The platform is also well supported and with a strong community, so it is likely to be around for a while - since it's open source anyway, it is not a service that can be closed, it can exist on a server for as long as one chooses.
