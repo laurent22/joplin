@@ -104,7 +104,7 @@ export default class RepositoryApi {
 	}
 
 	public async loadStats() {
-		const statsText = await shim.fetch('https://raw.githubusercontent.com/joplin/plugins/master/stats.json');
+		const statsText = await fetch(this.repoFileUrl('stats.json'));
 		try {
 			const stats = JSON.parse(await statsText.text());
 			if (!stats) throw new Error('Invalid or missing JSON');
@@ -194,7 +194,6 @@ export default class RepositoryApi {
 	public async searchAndFilter(category?: string, searchQuery?: string): Promise<PluginManifest[]> {
 		const manifests: PluginManifest[] = await this.manifests();
 		let output: PluginManifest[] = [];
-		const output2: PluginManifest[] = [];
 		const pluginStates = Setting.value('plugins.states');
 		category = category.toLowerCase();
 
@@ -240,18 +239,13 @@ export default class RepositoryApi {
 			searchQuery = searchQuery.toLowerCase().trim();
 			if (!category) output = manifests;
 
-			for (const manifest of output) {
+			return output.filter(manifest => {
 				for (const field of ['name', 'description']) {
 					const v = (manifest as any)[field];
-					if (!v) continue;
-
-					if (v.toLowerCase().indexOf(searchQuery) >= 0) {
-						output2.push(manifest);
-						break;
-					}
+					if (v && v.toLowerCase().indexOf(searchQuery) >= 0) return manifest;
 				}
-			}
-			return output2;
+				return null;
+			});
 		}
 		return output;
 	}
