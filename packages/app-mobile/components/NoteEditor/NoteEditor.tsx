@@ -63,6 +63,8 @@ function useCss(themeId: number): string {
 				padding-right: 1px;
 				padding-bottom: 1px;
 				padding-top: 10px;
+
+				position: fixed;
 			}
 		`;
 	}, [themeId]);
@@ -159,6 +161,13 @@ function NoteEditor(props: Props, ref: any) {
 				window.onresize = () => {
 					cm.scrollSelectionIntoView();
 				};
+
+				// Prevent scrolling the root element
+				// (see https://stackoverflow.com/a/63518068)
+				window.addEventListener('scroll', (e) => {
+					e.preventDefault();
+					window.scrollTo(0, 0);
+				});
 			} catch (e) {
 				window.ReactNativeWebView.postMessage("error:" + e.message + ": " + JSON.stringify(e))
 			}
