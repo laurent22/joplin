@@ -862,6 +862,9 @@ packages/app-mobile/components/NoteEditor/NoteEditor.js.map
 packages/app-mobile/components/SelectDateTimeDialog.d.ts
 packages/app-mobile/components/SelectDateTimeDialog.js
 packages/app-mobile/components/SelectDateTimeDialog.js.map
+packages/app-mobile/components/WarningBox.d.ts
+packages/app-mobile/components/WarningBox.js
+packages/app-mobile/components/WarningBox.js.map
 packages/app-mobile/components/screens/ConfigScreen.d.ts
 packages/app-mobile/components/screens/ConfigScreen.js
 packages/app-mobile/components/screens/ConfigScreen.js.map

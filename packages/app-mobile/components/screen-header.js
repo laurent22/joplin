@@ -17,6 +17,8 @@ const DialogBox = require('react-native-dialogbox').default;
 const { localSyncInfoFromState } = require('@joplin/lib/services/synchronizer/syncInfoUtils');
 const { showMissingMasterKeyMessage } = require('@joplin/lib/services/e2ee/utils');
 
+import WarningBox from './WarningBox';
+
 Icon.loadFont();
 
 // Rather than applying a padding to the whole bar, it is applied to each
@@ -216,9 +218,11 @@ class ScreenHeaderComponent extends React.PureComponent {
 
 	renderWarningBox(screen, message) {
 		return (
-			<TouchableOpacity key={screen} style={this.styles().warningBox} onPress={() => this.warningBox_press({ screen: screen })} activeOpacity={0.8}>
-				<Text style={{ flex: 1 }}>{message}</Text>
-			</TouchableOpacity>
+			<WarningBox
+				key={screen}
+				style={this.styles().warningBox}
+				onPress={() => this.warningBox_press({ screen: screen })}
+				message={message}/>
 		);
 	}
 
