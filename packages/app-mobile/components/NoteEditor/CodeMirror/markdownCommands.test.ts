@@ -4,7 +4,9 @@
 
 import { EditorSelection, EditorState, SelectionRange } from '@codemirror/state';
 import { EditorView } from '@codemirror/view';
-import { increaseIndent, toggleBolded, toggleCode, toggleHeaderLevel, toggleItalicized, toggleList, toggleMath, toggleRegionFormat, updateLink } from './markdownCommands';
+import {
+	increaseIndent, toggleBolded, toggleCode, toggleHeaderLevel, toggleItalicized, toggleList, toggleMath, toggleRegionFormat, updateLink,
+} from './markdownCommands';
 import { GFM as GithubFlavoredMarkdownExt } from '@lezer/markdown';
 import { markdown } from '@codemirror/lang-markdown';
 import { MarkdownMathExtension } from './markdownMathParser';
@@ -219,83 +221,230 @@ describe('Formatting commands', () => {
 		expect(mainSel.to).toBe('Testing...\n\n> This is a test.\n> y = mx + b'.length);
 	});
 
-	it('Changing list type', () => {
-		const preSubListText = '# List test\n * This\n * is\n';
-		const initialDocText = `${preSubListText}\t* a\n\t* test\n * of list toggling`;
+	describe('Changing list type', () => {
+		it('Removing a bulleted list', () => {
+			const initialDocText = '- testing\n- this is a test';
 
-		const editor = createEditor(
-			initialDocText,
-			EditorSelection.cursor(preSubListText.length + '\t* a'.length)
-		);
+			const editor = createEditor(
+				initialDocText,
+				EditorSelection.cursor(5)
+			);
 
-		// Indentation should be preserved when changing list types
-		toggleList(ListType.OrderedList)(editor);
-		expect(editor.state.doc.toString()).toBe(
-			'# List test\n * This\n * is\n\t1. a\n\t2. test\n * of list toggling'
-		);
+			toggleList(ListType.UnorderedList)(editor);
+			expect(editor.state.doc.toString()).toBe(
+				'testing\nthis is a test'
+			);
+		});
 
-		// The changed region should be selected
-		expect(editor.state.selection.main.from).toBe(preSubListText.length);
-		expect(editor.state.selection.main.to).toBe(
-			'# List test\n * This\n * is\n\t1. a\n\t2. test'.length
-		);
+		describe('Adding a numbered list', () => {
+			const initialDocText = 'Testing...\nThis is a test\nof list toggling...';
 
-		// Indentation should not be preserved when removing lists
-		toggleList(ListType.OrderedList)(editor);
-		expect(editor.state.selection.main.from).toBe(preSubListText.length);
-		expect(editor.state.doc.toString()).toBe(
-			'# List test\n * This\n * is\na\ntest\n * of list toggling'
-		);
+			it('Single line', () => {
+				const editor = createEditor(
+					initialDocText,
+					EditorSelection.cursor('Testing...\nThis is a'.length)
+				);
+
+				toggleList(ListType.OrderedList)(editor);
+				expect(editor.state.doc.toString()).toBe(
+					'Testing...\n1. This is a test\nof list toggling...'
+				);
+			});
+
+			it('Multi-line', () => {
+				const editor = createEditor(
+					initialDocText,
+					EditorSelection.range(4, initialDocText.length)
+				);
+
+				toggleList(ListType.OrderedList)(editor);
+				expect(editor.state.doc.toString()).toBe(
+					'1. Testing...\n2. This is a test\n3. of list toggling...'
+				);
+			});
+		});
+
+		describe('Replacing an unordered list', () => {
+			const initialDocText = '- 1\n- 2\n- 3\n- 4\n- 5\n- 6\n- 7';
+
+			it('with a numbered list', () => {
+				const editor = createEditor(
+					initialDocText,
+					EditorSelection.cursor(initialDocText.length)
+				);
+
+				toggleList(ListType.OrderedList)(editor);
+				expect(editor.state.doc.toString()).toBe(
+					'1. 1\n2. 2\n3. 3\n4. 4\n5. 5\n6. 6\n7. 7'
+				);
+			});
 
 
-		// Put the cursor in the middle of the list
-		editor.dispatch({ selection: EditorSelection.cursor(preSubListText.length) });
+			it('with a checklist', () => {
+				const editor = createEditor(
+					initialDocText,
+					EditorSelection.cursor(initialDocText.length)
+				);
 
-		// All non-empty lines in the list should change to the new type
-		toggleList(ListType.CheckList)(editor);
-		expect(editor.state.selection.main.from).toBe('# List test\n'.length);
-		expect(editor.state.selection.main.to).toBe(editor.state.doc.length);
-		expect(editor.state.doc.toString()).toBe(
-			'# List test\n - [ ] This\n - [ ] is\n- [ ] a\n- [ ] test\n - [ ] of list toggling'
-		);
+				toggleList(ListType.CheckList)(editor);
+				expect(editor.state.doc.toString()).toBe(
+					'- [ ] 1\n- [ ] 2\n- [ ] 3\n- [ ] 4\n- [ ] 5\n- [ ] 6\n- [ ] 7'
+				);
+			});
+		});
 
-		editor.dispatch({ selection: EditorSelection.cursor(editor.state.doc.length) });
-		editor.dispatch(editor.state.replaceSelection('\n\n\n'));
+		it('With a bulleted list containing another list', () => {
+			const preSubListText = '# List test\n * This\n * is\n';
+			const initialDocText = `${preSubListText}\t* a\n\t* test\n * of list toggling`;
 
-		// toggleList should also create a new list if the cursor is on an empty line.
-		toggleList(ListType.OrderedList)(editor);
-		editor.dispatch(editor.state.replaceSelection('Test.\n2. Test2\n3. Test3'));
+			const editor = createEditor(
+				initialDocText,
+				EditorSelection.cursor(preSubListText.length + '\t* a'.length)
+			);
 
-		const expectedChecklistPart =
-			'# List test\n - [ ] This\n - [ ] is\n- [ ] a\n- [ ] test\n - [ ] of list toggling';
-		expect(editor.state.doc.toString()).toBe(
-			`${expectedChecklistPart}\n\n\n1. Test.\n2. Test2\n3. Test3`
-		);
+			// Indentation should be preserved when changing list types
+			toggleList(ListType.OrderedList)(editor);
+			expect(editor.state.doc.toString()).toBe(
+				'# List test\n * This\n * is\n\t1. a\n\t2. test\n * of list toggling'
+			);
 
-		toggleList(ListType.CheckList)(editor);
-		expect(editor.state.doc.toString()).toBe(
-			`${expectedChecklistPart}\n\n\n- [ ] Test.\n- [ ] Test2\n- [ ] Test3`
-		);
+			// The changed region should be selected
+			expect(editor.state.selection.main.from).toBe(preSubListText.length);
+			expect(editor.state.selection.main.to).toBe(
+				`${preSubListText}\t1. a\n\t2. test`.length
+			);
 
-		// The entire checklist should have been selected (and thus will now be indented)
-		increaseIndent(editor);
-		expect(editor.state.doc.toString()).toBe(
-			`${expectedChecklistPart}\n\n\n\t- [ ] Test.\n\t- [ ] Test2\n\t- [ ] Test3`
-		);
-	});
+			// Indentation should not be preserved when removing lists
+			toggleList(ListType.OrderedList)(editor);
+			expect(editor.state.selection.main.from).toBe(preSubListText.length);
+			expect(editor.state.doc.toString()).toBe(
+				'# List test\n * This\n * is\na\ntest\n * of list toggling'
+			);
 
-	it('Changing list type (in block quote)', () => {
-		const preSubListText = '> # List test\n> * This\n> * is\n';
-		const initialDocText = `${preSubListText}> \t* a\n> \t* test\n> * of list toggling`;
-		const editor = createEditor(
-			initialDocText, EditorSelection.cursor(preSubListText.length + 3)
-		);
 
-		toggleList(ListType.OrderedList)(editor);
-		expect(editor.state.doc.toString()).toBe(
-			'> # List test\n> * This\n> * is\n> \t1. a\n> \t2. test\n> * of list toggling'
-		);
-		expect(editor.state.selection.main.from).toBe(preSubListText.length);
+			// Put the cursor in the middle of the list
+			editor.dispatch({ selection: EditorSelection.cursor(preSubListText.length) });
+
+			// Sublists should be changed
+			toggleList(ListType.CheckList)(editor);
+			const expectedChecklistPart =
+				'# List test\n - [ ] This\n - [ ] is\n - [ ] a\n - [ ] test\n - [ ] of list toggling';
+			expect(editor.state.doc.toString()).toBe(
+				expectedChecklistPart
+			);
+
+			editor.dispatch({ selection: EditorSelection.cursor(editor.state.doc.length) });
+			editor.dispatch(editor.state.replaceSelection('\n\n\n'));
+
+			// toggleList should also create a new list if the cursor is on an empty line.
+			toggleList(ListType.OrderedList)(editor);
+			editor.dispatch(editor.state.replaceSelection('Test.\n2. Test2\n3. Test3'));
+
+			expect(editor.state.doc.toString()).toBe(
+				`${expectedChecklistPart}\n\n\n1. Test.\n2. Test2\n3. Test3`
+			);
+
+			toggleList(ListType.CheckList)(editor);
+			expect(editor.state.doc.toString()).toBe(
+				`${expectedChecklistPart}\n\n\n- [ ] Test.\n- [ ] Test2\n- [ ] Test3`
+			);
+
+			// The entire checklist should have been selected (and thus will now be indented)
+			increaseIndent(editor);
+			expect(editor.state.doc.toString()).toBe(
+				`${expectedChecklistPart}\n\n\n\t- [ ] Test.\n\t- [ ] Test2\n\t- [ ] Test3`
+			);
+		});
+
+		it('Numbered list with bulleted sublist (toggling container)', () => {
+			const initialDocText = '1. Foo\n2. Bar\n3. Baz\n\t- Test\n\t- of\n\t- sublists\n4. Foo';
+
+			const editor = createEditor(
+				initialDocText,
+				EditorSelection.cursor(0)
+			);
+
+			toggleList(ListType.CheckList)(editor);
+			expect(editor.state.doc.toString()).toBe(
+				'- [ ] Foo\n- [ ] Bar\n- [ ] Baz\n\t- Test\n\t- of\n\t- sublists\n- [ ] Foo'
+			);
+		});
+
+		it('Toggling a sublist', () => {
+			const initialDocText = '1. This\n2. is\n3. ';
+
+			const editor = createEditor(
+				initialDocText,
+				EditorSelection.cursor(initialDocText.length)
+			);
+
+			increaseIndent(editor);
+			expect(editor.state.selection.main.empty).toBe(true);
+
+			toggleList(ListType.CheckList)(editor);
+			expect(editor.state.doc.toString()).toBe(
+				'1. This\n2. is\n\t- [ ] '
+			);
+
+			editor.dispatch(editor.state.replaceSelection('a test.'));
+			expect(editor.state.doc.toString()).toBe(
+				'1. This\n2. is\n\t- [ ] a test.'
+			);
+		});
+
+		it('In a block quote', () => {
+			const preSubListText = '> # List test\n> * This\n> * is\n';
+			const initialDocText = `${preSubListText}> \t* a\n> \t* test\n> * of list toggling`;
+			const editor = createEditor(
+				initialDocText, EditorSelection.cursor(preSubListText.length + 3)
+			);
+
+			toggleList(ListType.OrderedList)(editor);
+			expect(editor.state.doc.toString()).toBe(
+				'> # List test\n> * This\n> * is\n> \t1. a\n> \t2. test\n> * of list toggling'
+			);
+			expect(editor.state.selection.main.from).toBe(preSubListText.length);
+		});
+
+		describe('Checklist list following an unordered list', () => {
+			const bulletedListPart = '- Test\n- This is a test.\n- 3\n- 4\n- 5';
+			const checklistPart = '- [ ] This is a checklist\n- [ ] with multiple items.\n- [ ] ☑';
+			const initialDocText = `${bulletedListPart}\n\n${checklistPart}`;
+
+			it('Removing the checklist', () => {
+				const editor = createEditor(
+					initialDocText, EditorSelection.cursor(bulletedListPart.length + 5)
+				);
+
+				toggleList(ListType.CheckList)(editor);
+				expect(editor.state.doc.toString()).toBe(
+					`${bulletedListPart}\n\nThis is a checklist\nwith multiple items.\n☑`
+				);
+			});
+
+			it('Removing the unordered list', () => {
+				const editor = createEditor(
+					initialDocText, EditorSelection.cursor(bulletedListPart.length - 5)
+				);
+
+				toggleList(ListType.UnorderedList)(editor);
+				expect(editor.state.doc.toString()).toBe(
+					`Test\nThis is a test.\n3\n4\n5\n\n${checklistPart}`
+				);
+			});
+
+			it('Converting all to a numbered list', () => {
+				const editor = createEditor(
+					initialDocText, EditorSelection.range(0, initialDocText.length)
+				);
+
+				toggleList(ListType.OrderedList)(editor);
+				expect(editor.state.doc.toString()).toBe(
+					'1. Test\n2. This is a test.\n3. 3\n4. 4\n5. 5'
+					+ '\n\n6. This is a checklist\n7. with multiple items.\n8. ☑'
+				);
+			});
+		});
 	});
 
 	it('Updating a link', () => {

@@ -16,11 +16,31 @@ import { logMessage } from './webviewLogger';
 // Length of the symbol that starts a block quote
 const blockQuoteStartLen = '> '.length;
 const blockQuoteRegex = /^>\s/;
-
-type SelectionFilter = (sel: SelectionRange)=> boolean;
+const startingSpaceRegex = /^(\s*)/;
 
 // Specifies the update of a single selection region and its contents
 type SelectionUpdate = { range: SelectionRange; changes?: ChangeSpec };
+
+// Returns the text of [line], ignoring starting blockquote characters.
+const stripBlockquote = (line: Line): string => {
+	const match = line.text.match(blockQuoteRegex);
+
+	if (match) {
+		return line.text.substring(match[0].length);
+	}
+
+	return line.text;
+};
+
+// Returns a version of [text] with all tabs converted to spaces
+const tabsToSpaces = (state: EditorState, text: string): string => {
+	let tabAsSpaces = '';
+	for (let i = 0; i < state.tabSize; i++) {
+		tabAsSpaces += ' ';
+	}
+
+	return text.replace(/[\t]/g, tabAsSpaces);
+};
 
 // Expands [sel] to the smallest container node with name in [nodeNames].
 // Returns a new selection.
@@ -65,25 +85,6 @@ const growSelectionToNode = (
 	} else {
 		return sel;
 	}
-};
-
-// Expand each selection range to match an enclosing node with name in [nodeNames], provided that
-// node exists and [expandSelection] returns true. Expands to the smallest non-empty expansion,
-// if possible.
-const growAllSelectionsToNode = (
-	state: EditorState, nodeNames: string|string[], expandSelection: SelectionFilter
-): TransactionSpec => {
-	const updatedSelection = EditorSelection.create(state.selection.ranges.map((sel: SelectionRange): SelectionRange => {
-		if (!expandSelection(sel)) {
-			return sel;
-		}
-
-		return growSelectionToNode(state, sel, nodeNames);
-	}));
-
-	return {
-		selection: updatedSelection,
-	};
 };
 
 // Adds/removes [spec.templateStart] before the current selection and
@@ -391,20 +392,17 @@ export const toggleRegionFormat = (
 export const toggleSelectedLinesStartWith = (
 	state: EditorState,
 	regex: RegExp,
-	template: string | ((lineContent: string, line: Line)=> string),
-	matchEmpty: boolean, nodeName?: string, ignoreBlockQuotes: boolean = true,
-	forEachDeletion: (lineContent: string, line: Line)=> void = (() => {})
+	template: string,
+	matchEmpty: boolean, nodeName?: string, ignoreBlockQuotes: boolean = true
 ): TransactionSpec => {
-	const blockQuoteRegex = /^>\s(.*)$/;
-
 	const getLineContentStart = (line: Line): number => {
 		if (!ignoreBlockQuotes) {
 			return line.from;
 		}
 
-		const blockQuoteMatch = blockQuoteRegex.exec(line.text);
+		const blockQuoteMatch = line.text.match(blockQuoteRegex);
 		if (blockQuoteMatch) {
-			return line.from + blockQuoteMatch.length;
+			return line.from + blockQuoteMatch[0].length;
 		}
 
 		return line.from;
@@ -458,29 +456,20 @@ export const toggleSelectedLinesStartWith = (
 				if (!match) {
 					continue;
 				}
-
-				forEachDeletion(text, line);
-
 				changes.push({
 					from: contentFrom,
 					to: contentFrom + match[0].length,
+					insert: '',
 				});
 
 				charsAdded -= match[0].length;
 			} else {
-				let templateVal;
-				if (typeof template == 'string') {
-					templateVal = template;
-				} else {
-					templateVal = template(text, line);
-				}
-
 				changes.push({
 					from: contentFrom,
-					insert: templateVal,
+					insert: template,
 				});
 
-				charsAdded += templateVal.length;
+				charsAdded += template.length;
 			}
 		}
 
@@ -583,10 +572,16 @@ export const toggleList = (listType: ListType): Command => {
 	return (view: EditorView): boolean => {
 		logMessage('Toggling list!');
 
-		const listTypes = [ListType.OrderedList, ListType.UnorderedList, ListType.CheckList];
+		const state = view.state;
+		const doc = state.doc;
 
+		const orderedListTag = 'OrderedList';
+		const unorderedListTag = 'BulletList';
+
+		// RegExps for different list types. The regular expressions MUST
+		// be mutually exclusive.
 		// `(?!\[[ xX]+\]\s?)` means "not followed by [x] or [ ]".
-		const bulletedRegex = /^\s*[-*](?!\s\[[ xX]+\])\s?/;
+		const bulletedRegex = /^\s*([-*])(?!\s\[[ xX]+\])\s?/;
 		const checklistRegex = /^\s*[-*]\s\[[ xX]+\]\s?/;
 		const numberedRegex = /^\s*\d+\.\s?/;
 
@@ -595,84 +590,221 @@ export const toggleList = (listType: ListType): Command => {
 			[ListType.CheckList]: checklistRegex,
 			[ListType.UnorderedList]: bulletedRegex,
 		};
-		const listTags = {
-			[ListType.OrderedList]: 'OrderedList',
 
-			// Both checklists and unordered lists use the BulletList
-			// node as a container
-			[ListType.CheckList]: 'BulletList',
-			[ListType.UnorderedList]: 'BulletList',
+		const isIndentationEquivalent = (a: string, b: string): boolean => {
+			// Consider sublists to be the same as their parent list if they have the same
+			// label plus or minus 1 space.
+			return Math.abs(tabsToSpaces(state, a).length - tabsToSpaces(state, b).length) <= 1;
 		};
-		const thisListTypeRegex = listRegexes[listType];
-		const thisTag = listTags[listType];
 
-		let changes: TransactionSpec;
+		const getContainerType = (line: Line): ListType|null => {
+			const lineContent = stripBlockquote(line);
 
-		// Select the current list type, if possible.
-		changes = growAllSelectionsToNode(
-			view.state, ['OrderedList', 'BulletList'], (sel) => sel.empty
-		);
-		view.dispatch(changes);
+			// Determine the container's type.
+			const checklistMatch = lineContent.match(checklistRegex);
+			const bulletListMatch = lineContent.match(bulletedRegex);
+			const orderedListMatch = lineContent.match(numberedRegex);
 
-		// Ignore empty lines
-		const matchEmpty = false;
-
-		// Handle list items within block quotes
-		const ignoreBlockQuotes = true;
-
-		// Maps line numbers to leading space characters
-		const leadingSpaces: Record<string, string> = {};
-
-		// Remove existing formatting matching other list types.
-		const replacementUpdates: TransactionSpec[] = [];
-		for (const kind of listTypes) {
-			if (kind == listType) {
-				continue;
+			if (checklistMatch) {
+				return ListType.CheckList;
+			} else if (bulletListMatch) {
+				return ListType.UnorderedList;
+			} else if (orderedListMatch) {
+				return ListType.OrderedList;
 			}
 
-			// Remove the contianing list, if it exists.
-			replacementUpdates.push(toggleSelectedLinesStartWith(
-				view.state,
-				listRegexes[kind],
-				'',
-				matchEmpty,
-				listTags[kind],
+			return null;
+		};
 
-				ignoreBlockQuotes,
+		const changes: TransactionSpec = state.changeByRange((sel: SelectionRange) => {
+			const changes: ChangeSpec[] = [];
+			let containerType: ListType|null = null;
 
-				// For each deletion,
-				(content, line) => {
-					// Store all leading spaces so that they can be restored later.
-					const spaceMatch = content.match(/^\s*/);
-					const listRegexMatch = content.match(listRegexes[kind]);
+			// Total number of characters added (deleted if negative)
+			let charsAdded = 0;
 
-					if (listRegexMatch && !leadingSpaces[line.number]) {
-						leadingSpaces[line.number] = spaceMatch ? spaceMatch[0] : '';
+			const originalSel = sel;
+			let fromLine: Line;
+			let toLine: Line;
+			let firstLineIndentation: string;
+			let firstLineInBlockQuote: boolean;
+			let fromLineContent: string;
+			const computeSelectionProps = () => {
+				fromLine = doc.lineAt(sel.from);
+				toLine = doc.lineAt(sel.to);
+				fromLineContent = stripBlockquote(fromLine);
+				firstLineIndentation = fromLineContent.match(startingSpaceRegex)[0];
+				firstLineInBlockQuote = (fromLineContent != fromLine.text);
+
+				containerType = getContainerType(fromLine);
+			};
+			computeSelectionProps();
+
+			const origFirstLineIndentation = firstLineIndentation;
+			const origContainerType = containerType;
+
+			// Grow [sel] to the smallest containing list
+			if (sel.empty) {
+				sel = growSelectionToNode(state, sel, [orderedListTag, unorderedListTag]);
+				computeSelectionProps();
+			}
+
+			// Reset the selection if it seems likely the user didn't want the selection
+			// to be expanded
+			const isIndentationDiff =
+				!isIndentationEquivalent(firstLineIndentation, origFirstLineIndentation);
+			if (isIndentationDiff) {
+				const expandedRegionIndentation = firstLineIndentation;
+				sel = originalSel;
+				computeSelectionProps();
+
+				// Use the indentation level of the expanded region if it's greater.
+				// This makes sense in the case where unindented text is being converted to
+				// the same type of list as its container. For example,
+				//     1. Foobar
+				// unindented text
+				// that should be made a part of the above list.
+				//
+				// becoming
+				//
+				//     1. Foobar
+				//     2. unindented text
+				//     3. that should be made a part of the above list.
+				const wasGreaterIndentation = (
+					tabsToSpaces(state, expandedRegionIndentation).length
+						> tabsToSpaces(state, firstLineIndentation).length
+				);
+				if (wasGreaterIndentation) {
+					firstLineIndentation = expandedRegionIndentation;
+				}
+			} else if (
+				(origContainerType != containerType && origContainerType != null)
+					|| containerType != getContainerType(toLine)
+			) {
+				// If the container type changed, this could be an artifact of checklists/bulleted
+				// lists sharing the same node type.
+				// Find the closest range of the same type of list to the original selection
+				let newFromLineNo = doc.lineAt(originalSel.from).number;
+				let newToLineNo = doc.lineAt(originalSel.to).number;
+				let lastFromLineNo;
+				let lastToLineNo;
+
+				while (newFromLineNo != lastFromLineNo || newToLineNo != lastToLineNo) {
+					lastFromLineNo = newFromLineNo;
+					lastToLineNo = newToLineNo;
+
+					if (lastFromLineNo - 1 >= 1) {
+						const testFromLine = doc.line(lastFromLineNo - 1);
+						if (getContainerType(testFromLine) == origContainerType) {
+							newFromLineNo --;
+						}
+					}
+
+					if (lastToLineNo + 1 <= doc.lines) {
+						const testToLine = doc.line(lastToLineNo + 1);
+						if (getContainerType(testToLine) == origContainerType) {
+							newToLineNo ++;
+						}
 					}
 				}
-			));
-		}
-		view.dispatch(...replacementUpdates);
 
-		let lineIdx = 0;
-		changes = toggleSelectedLinesStartWith(
-			view.state,
-			thisListTypeRegex,
-			(_lineContent: string, line: Line): string => {
-				const leadingSpaceChars = leadingSpaces[line.number] ?? '';
+				sel = EditorSelection.range(
+					doc.line(newFromLineNo).from,
+					doc.line(newToLineNo).to
+				);
+				computeSelectionProps();
+			}
 
-				if (listType == ListType.UnorderedList) {
-					return `${leadingSpaceChars}- `;
-				} else if (listType == ListType.CheckList) {
-					return `${leadingSpaceChars}- [ ] `;
+			// Determine whether the expanded selection should be empty
+			if (originalSel.empty && fromLine.number == toLine.number) {
+				sel = EditorSelection.cursor(toLine.to);
+			}
+
+			// Select entire lines (if not just a cursor)
+			if (!sel.empty) {
+				sel = EditorSelection.range(fromLine.from, toLine.to);
+			}
+
+			// Number of the item in the list (e.g. 2 for the 2nd item in the list)
+			let listItemCounter = 1;
+			for (let lineNum = fromLine.number; lineNum <= toLine.number; lineNum ++) {
+				const line = doc.line(lineNum);
+				const lineContent = stripBlockquote(line);
+				const lineContentFrom = line.to - lineContent.length;
+				const inBlockQuote = (lineContent != line.text);
+				const indentation = lineContent.match(startingSpaceRegex)[0];
+
+				const wrongIndentaton = !isIndentationEquivalent(indentation, firstLineIndentation);
+
+				// If not the right list level,
+				if (inBlockQuote != firstLineInBlockQuote || wrongIndentaton) {
+					// We'll be starting a new list
+					listItemCounter = 1;
+					continue;
 				}
 
-				lineIdx++;
-				return `${leadingSpaceChars}${lineIdx}. `;
-			},
-			matchEmpty,
-			thisTag
-		);
+				// Don't add list numbers to otherwise empty lines (unless it's the first line)
+				if (lineNum != fromLine.number && line.text.trim().length == 0) {
+					// Do not reset the counter -- the markdown renderer doesn't!
+					continue;
+				}
+
+				const deleteFrom = lineContentFrom;
+				let deleteTo = deleteFrom + indentation.length;
+
+				// If we need to remove an existing list,
+				const currentContainer = getContainerType(line);
+				if (currentContainer != null) {
+					const containerRegex = listRegexes[currentContainer];
+					const containerMatch = lineContent.match(containerRegex);
+					if (!containerMatch) {
+						throw new Error(
+							'Assertion failed: container regex does not match line content.'
+						);
+					}
+
+					deleteTo = lineContentFrom + containerMatch[0].length;
+				}
+
+				let replacementString;
+
+				if (listType == containerType) {
+					// Delete the existing list if it's the same type as the current
+					replacementString = '';
+				} else if (listType == ListType.OrderedList) {
+					replacementString = `${firstLineIndentation}${listItemCounter}. `;
+				} else if (listType == ListType.CheckList) {
+					replacementString = `${firstLineIndentation}- [ ] `;
+				} else {
+					replacementString = `${firstLineIndentation}- `;
+				}
+
+				changes.push({
+					from: deleteFrom,
+					to: deleteTo,
+					insert: replacementString,
+				});
+				charsAdded -= deleteTo - deleteFrom;
+				charsAdded += replacementString.length;
+				listItemCounter++;
+			}
+
+			// Don't change cursors to selections
+			if (sel.empty) {
+				// Position the cursor at the end of the last line modified
+				sel = EditorSelection.cursor(toLine.to + charsAdded);
+			} else {
+				sel = EditorSelection.range(
+					sel.from,
+					sel.to + charsAdded
+				);
+			}
+
+			return {
+				changes,
+				range: sel,
+			};
+		});
 		view.dispatch(changes);
 
 		return true;
