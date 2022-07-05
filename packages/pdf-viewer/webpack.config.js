@@ -1,7 +1,10 @@
 const path = require('path');
 
 module.exports = {
-	entry: './index.tsx',
+	entry: {
+		main: './index.tsx',
+		'pdf.worker': 'pdfjs-dist/build/pdf.worker.entry',
+	},
 	module: {
 		rules: [
 			{
@@ -9,13 +12,18 @@ module.exports = {
 				use: 'ts-loader',
 				exclude: /node_modules/,
 			},
+			{
+				test: /\.css$/i,
+				use: ['style-loader', 'css-loader'],
+			},
 		],
 	},
 	resolve: {
 		extensions: ['.tsx', '.ts', '.js'],
 	},
 	output: {
-		filename: 'pdfViewer.js',
+		filename: '[name].js',
 		path: path.resolve(__dirname, 'dist'),
+		clean: true,
 	},
 };

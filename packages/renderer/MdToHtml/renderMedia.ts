@@ -8,6 +8,7 @@ export interface Options {
 	videoPlayerEnabled: boolean;
 	pdfViewerEnabled: boolean;
 	useCustomPdfViewer: boolean;
+	theme: any;
 }
 
 function resourceUrl(resourceFullPath: string): string {
@@ -40,7 +41,12 @@ export default function(link: Link, options: Options) {
 	}
 
 	if (options.pdfViewerEnabled && resource.mime === 'application/pdf') {
-		if (options.useCustomPdfViewer) { return `<iframe src="../../vendor/lib/@joplin/pdf-viewer/index.html?resPath=${escapedResourcePath}" class="media-player media-pdf"></iframe>`; }
+		console.log('got theme', options.theme);
+		if (options.useCustomPdfViewer) {
+			return `<iframe src="../../vendor/lib/@joplin/pdf-viewer/index.html?resPath=${escapedResourcePath}"
+			appearance="${options.theme.appearance}"
+		 class="media-player media-pdf"></iframe>`;
+		}
 		return `<object data="${escapedResourcePath}" class="media-player media-pdf" type="${escapedMime}"></object>`;
 	}
 
