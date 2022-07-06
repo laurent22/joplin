@@ -20,6 +20,12 @@ You can pass [arguments](https://github.com/laurent22/joplin/blob/dev/Joplin_ins
 
 <pre><code style="word-break: break-all">wget -O - https://raw.githubusercontent.com/laurent22/joplin/dev/Joplin_install_and_update.sh | bash -s -- --argument1 --argument2</code></pre>
 
+## Desktop application will not launch on Linux
+
+If you downloaded the AppImage directly and therefore did not install via the recommended script then it may not be currently allowed to execute and needs to have these permissions set manually (see [AppImage User Guide](https://docs.appimage.org/introduction/quickstart.html#how-to-run-an-AppImage)).
+
+If execution permissions are correct and it still does not launch then your system may not have the `libfuse2` library that AppImages require to run. This library requirement is inherent to the AppImage format and not Joplin specifically. For more info see [this forum thread](https://discourse.joplinapp.org/t/appimage-incompatibility-in-ubuntu-22-04/25173) which has further detail on the issue and an [Ubuntu specific fix](https://discourse.joplinapp.org/t/appimage-incompatibility-in-ubuntu-22-04/25173/12).
+
 ## How can I edit my note in an external text editor?
 
 The editor command (may include arguments) defines which editor will be used to open a note. If none is provided it will try to auto-detect the default editor. If this does nothing or you want to change it for Joplin, you need to configure it in the Preferences -> Text editor command.

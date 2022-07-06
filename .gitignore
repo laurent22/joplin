@@ -1479,6 +1479,9 @@ packages/lib/services/keychain/KeychainServiceDriver.node.js.map
 packages/lib/services/keychain/KeychainServiceDriverBase.d.ts
 packages/lib/services/keychain/KeychainServiceDriverBase.js
 packages/lib/services/keychain/KeychainServiceDriverBase.js.map
+packages/lib/services/plugins/BasePlatformImplementation.d.ts
+packages/lib/services/plugins/BasePlatformImplementation.js
+packages/lib/services/plugins/BasePlatformImplementation.js.map
 packages/lib/services/plugins/BasePluginRunner.d.ts
 packages/lib/services/plugins/BasePluginRunner.js
 packages/lib/services/plugins/BasePluginRunner.js.map

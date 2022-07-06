@@ -221,6 +221,12 @@ export enum ModelType {
 	Command = 16,
 }
 
+export interface VersionInfo {
+	version: string;
+	profileVersion: number;
+	syncVersion: number;
+}
+
 // =================================================================
 // Menu types
 // =================================================================
