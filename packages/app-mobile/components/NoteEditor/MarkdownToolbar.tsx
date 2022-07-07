@@ -37,6 +37,8 @@ interface ButtonSpec {
 	// True if the button is connected to an enabled action.
 	// E.g. the cursor is in a header and the button is a header button.
 	active?: boolean;
+
+	disabled?: boolean;
 }
 
 interface MenuItemModel {
@@ -142,16 +144,21 @@ class MenuRowModel {
 const ToolbarButton = ({ styles, spec, onClick }:
 		{ styles: ToolbarStyleData; spec: ButtonSpec; onClick: ClickListener }) => {
 	const styleSheet = styles.styleSheet;
+	const disabled = spec.disabled ?? false;
 
 	// Additional styles if activated
 	const activatedStyle = spec.active ? styleSheet.buttonActive : {};
 	const activatedTextStyle = spec.active ? styleSheet.buttonActiveContent : {};
+	const disabledStyle = disabled ? styleSheet.buttonDisabled : {};
+	const disabledTextStyle = disabled ? styleSheet.buttonDisabledContent : {};
 
 	let content;
 
 	if (typeof spec.icon == 'string') {
 		content = (
-			<Text style={{ ...styleSheet.text, ...activatedTextStyle }}>{spec.icon}</Text>
+			<Text style={{ ...styleSheet.text, ...activatedTextStyle, ...disabledTextStyle }}>
+				{spec.icon}
+			</Text>
 		);
 	} else {
 		content = spec.icon;
@@ -159,10 +166,11 @@ const ToolbarButton = ({ styles, spec, onClick }:
 
 	return (
 		<TouchableHighlight
-			style={{ ...styleSheet.button, ...activatedStyle }}
-			onPress={onClick}
+			style={{ ...styleSheet.button, ...activatedStyle, ...disabledStyle }}
+			onPress={ !disabled ? onClick : () => {}}
 			accessibilityLabel={spec.accessibilityLabel}
 			accessibilityRole="button"
+			disabled={ disabled }
 		>
 			{ content }
 		</TouchableHighlight>
@@ -433,6 +441,18 @@ const MarkdownToolbar = (props: ToolbarProps) => {
 		}
 	});
 
+	actionsMenuModel.addAction({
+		icon: (
+			<MaterialIcon name="spellcheck" style={styles.text}/>
+		),
+		accessibilityLabel:
+			props.selectionState.spellChecking ? _('Check spelling') : _('Stop checking spelling'),
+		active: props.selectionState.spellChecking,
+		disabled: props.selectionState.unspellCheckableRegion,
+	}, () => {
+		props.editorControl.setSpellcheckEnabled(!props.selectionState.spellChecking);
+	});
+
 	const [keyboardVisible, setKeyboardVisible] = useState(false);
 	useEffect(() => {
 		const showListener = Keyboard.addListener('keyboardDidShow', () => {
@@ -489,25 +509,32 @@ const useStyles = (styleProps: any, theme: any) => {
 				height: buttonSize,
 				alignItems: 'center',
 				justifyContent: 'center',
-				backgroundColor: theme.backgroundColor4,
-				color: theme.color4,
+				backgroundColor: theme.backgroundColor,
+			},
+			buttonDisabled: {
+				opacity: 0.5,
+			},
+			buttonDisabledContent: {
 			},
 			buttonActive: {
 				backgroundColor: theme.backgroundColor3,
 				color: theme.color3,
+				borderWidth: 1,
+				borderColor: theme.color3,
+				borderRadius: 3,
 			},
 			buttonActiveContent: {
 				color: theme.color3,
 			},
 			text: {
 				fontSize: 22,
-				color: theme.color4,
+				color: theme.color,
 			},
 			multiLineIconText: {
 				fontSize: 14,
 				lineHeight: 10,
 				paddingTop: 4,
-				color: theme.color4,
+				color: theme.color,
 			},
 			toolbar: {
 				flex: 0,

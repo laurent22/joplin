@@ -519,24 +519,6 @@ export const renumberList = (state: EditorState, sel: SelectionRange): Selection
 	const toLine = doc.lineAt(sel.to);
 	let charsAdded = 0;
 
-	let firstLineFrom: number;
-	let firstLineTo: number;
-
-	// Find the first line, its indentation, etc.
-	for (let lineNum = fromLine.number; lineNum <= toLine.number; lineNum ++) {
-		const line = doc.lineAt(lineNum);
-		const lineText = stripBlockquote(line);
-		const listItemMatch = lineText.match(listItemRegex);
-
-		if (!listItemMatch) {
-			continue;
-		}
-
-		firstLineFrom = line.from;
-		firstLineTo = line.to;
-		break;
-	}
-
 	const handleLines = (linesToHandle: Line[]) => {
 		let currntGroupIndentation = '';
 		let nextListNumber = 1;
@@ -581,16 +563,12 @@ export const renumberList = (state: EditorState, sel: SelectionRange): Selection
 		}
 	};
 
-	// Search for a parent node
-
 	const linesToHandle: Line[] = [];
 	syntaxTree(state).iterate({
-		from: firstLineFrom,
-		to: firstLineTo,
+		from: sel.from,
+		to: sel.to,
 		enter: (nodeRef: SyntaxNodeRef) => {
 			if (nodeRef.name == 'ListItem') {
-				console.log(nodeRef.node.parent.name, nodeRef.node.parent, firstLineFrom);
-
 				for (const node of nodeRef.node.parent.getChildren('ListItem')) {
 					const line = doc.lineAt(node.from);
 					const filteredText = stripBlockquote(line);

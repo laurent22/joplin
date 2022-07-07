@@ -119,8 +119,13 @@ export function initCodeMirror(
 		}
 	};
 
-	const notifySelectionFormattingChange = (viewUpdate: ViewUpdate) => {
-		if (viewUpdate.docChanged || !viewUpdate.state.selection.eq(viewUpdate.startState.selection)) {
+	const notifySelectionFormattingChange = (viewUpdate?: ViewUpdate) => {
+		// If we can't determine the previous formatting, post the update regardless
+		if (viewUpdate == null) {
+			const formatting = computeSelectionFormatting(editor.state);
+			postMessage('onSelectionFormattingChange', formatting.toJSON());
+		} else if (viewUpdate.docChanged || !viewUpdate.state.selection.eq(viewUpdate.startState.selection)) {
+			// Only post the update if something changed
 			const oldFormatting = computeSelectionFormatting(viewUpdate.startState);
 			const newFormatting = computeSelectionFormatting(viewUpdate.state);
 
@@ -134,6 +139,7 @@ export function initCodeMirror(
 		const range = state.selection.main;
 		const formatting: SelectionFormatting = new SelectionFormatting();
 		formatting.selectedText = state.doc.sliceString(range.from, range.to);
+		formatting.spellChecking = editor.contentDOM.spellcheck;
 
 		const parseLinkData = (nodeText: string) => {
 			const linkMatch = nodeText.match(/\[([^\]]*)\]\(([^)]*)\)/);
@@ -187,10 +193,12 @@ export function initCodeMirror(
 				case 'InlineCode':
 				case 'FencedCode':
 					formatting.inCode = true;
+					formatting.unspellCheckableRegion = true;
 					break;
 				case 'InlineMath':
 				case 'BlockMath':
 					formatting.inMath = true;
+					formatting.unspellCheckableRegion = true;
 					break;
 				case 'ATXHeading1':
 					formatting.headerLevel = 1;
@@ -210,6 +218,7 @@ export function initCodeMirror(
 				case 'URL':
 					formatting.inLink = true;
 					formatting.linkData.linkURL = nodeText();
+					formatting.unspellCheckableRegion = true;
 					break;
 				case 'Link':
 					formatting.inLink = true;
@@ -232,9 +241,12 @@ export function initCodeMirror(
 			}
 		}
 
+		if (formatting.unspellCheckableRegion) {
+			formatting.spellChecking = false;
+		}
+
 		return formatting;
 	};
-
 
 	// Returns a keyboard command that returns true (so accepts the keybind)
 	const keyCommand = (key: string, run: Command): KeyBinding => {
@@ -367,6 +379,10 @@ export function initCodeMirror(
 			if (!opened) {
 				closeSearchPanel(editor);
 			}
+		},
+		setSpellcheckEnabled(enabled: boolean) {
+			editor.contentDOM.spellcheck = enabled;
+			notifySelectionFormattingChange();
 		},
 
 		// Formatting

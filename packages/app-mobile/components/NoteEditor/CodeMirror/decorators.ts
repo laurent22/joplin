@@ -19,19 +19,23 @@ const regionStopDecoration = Decoration.line({
 });
 
 const codeBlockDecoration = Decoration.line({
-	attributes: { class: 'cm-codeBlock' },
+	attributes: { class: 'cm-codeBlock', spellcheck: 'false' },
 });
 
 const inlineCodeDecoration = Decoration.mark({
-	attributes: { class: 'cm-inlineCode' },
+	attributes: { class: 'cm-inlineCode', spellcheck: 'false' },
 });
 
 const mathBlockDecoration = Decoration.line({
-	attributes: { class: 'cm-mathBlock' },
+	attributes: { class: 'cm-mathBlock', spellcheck: 'false' },
 });
 
 const inlineMathDecoration = Decoration.mark({
-	attributes: { class: 'cm-inlineMath' },
+	attributes: { class: 'cm-inlineMath', spellcheck: 'false' },
+});
+
+const urlDecoration = Decoration.mark({
+	attributes: { class: 'cm-url', spellcheck: 'false' },
 });
 
 const blockQuoteDecoration = Decoration.line({
@@ -103,6 +107,9 @@ function computeDecorations(view: EditorView) {
 					break;
 				case 'InlineCode':
 					addDecorationToRange(viewFrom, viewTo, inlineCodeDecoration);
+					break;
+				case 'URL':
+					addDecorationToRange(viewFrom, viewTo, urlDecoration);
 					break;
 				case 'SetextHeading1':
 				case 'SetextHeading2':

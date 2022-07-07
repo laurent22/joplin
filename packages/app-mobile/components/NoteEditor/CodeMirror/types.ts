@@ -7,6 +7,8 @@ export interface CodeMirrorControl {
 	select(anchor: number, head: number): void;
 	insertText(text: string): void;
 
+	setSpellcheckEnabled(enabled: boolean): void;
+
 	// Toggle whether we're in a type of region.
 	toggleBolded(): void;
 	toggleItalicized(): void;
