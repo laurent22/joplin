@@ -5,7 +5,7 @@
 import { EditorSelection, EditorState, SelectionRange } from '@codemirror/state';
 import { EditorView } from '@codemirror/view';
 import {
-	increaseIndent, toggleBolded, toggleCode, toggleHeaderLevel, toggleItalicized, toggleList, toggleMath, toggleRegionFormat, updateLink,
+	increaseIndent, tabsToSpaces, toggleBolded, toggleCode, toggleHeaderLevel, toggleItalicized, toggleList, toggleMath, toggleRegionFormat, updateLink,
 } from './markdownCommands';
 import { GFM as GithubFlavoredMarkdownExt } from '@lezer/markdown';
 import { markdown } from '@codemirror/lang-markdown';
@@ -24,6 +24,7 @@ const createEditor = (initialText: string, initialSelection: SelectionRange): Ed
 				extensions: [MarkdownMathExtension, GithubFlavoredMarkdownExt],
 			}),
 			indentUnit.of('\t'),
+			EditorState.tabSize.of(4),
 		],
 	});
 };
@@ -511,5 +512,12 @@ describe('Internal text manipulation', () => {
 		expect(editorText).toBe(`\`\`\`\`\`\`\n${initialText}\n\`\`\`\`\`\``);
 		expect(newState.selection.main.from).toBe(0);
 		expect(newState.selection.main.to).toBe(editorText.length);
+	});
+
+	it('Tabs to spaces', () => {
+		const editor = createEditor('', EditorSelection.cursor(0));
+		expect(tabsToSpaces(editor.state, '\t')).toBe('    ');
+		expect(tabsToSpaces(editor.state, '\t  ')).toBe('      ');
+		expect(tabsToSpaces(editor.state, '  \t  ')).toBe('      ');
 	});
 });

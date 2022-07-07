@@ -10,6 +10,7 @@ import {
 	Text as DocumentText,
 } from '@codemirror/state';
 import { getIndentUnit, indentString, syntaxTree } from '@codemirror/language';
+import { SyntaxNodeRef } from '@lezer/common';
 import RegionSpec from './RegionSpec';
 import { logMessage } from './webviewLogger';
 
@@ -33,13 +34,27 @@ const stripBlockquote = (line: Line): string => {
 };
 
 // Returns a version of [text] with all tabs converted to spaces
-const tabsToSpaces = (state: EditorState, text: string): string => {
-	let tabAsSpaces = '';
-	for (let i = 0; i < state.tabSize; i++) {
-		tabAsSpaces += ' ';
-	}
+export const tabsToSpaces = (state: EditorState, text: string): string => {
+	const chunks = text.split('\t');
+	const spaceLen = getIndentUnit(state);
+	let result = chunks[0];
 
-	return text.replace(/[\t]/g, tabAsSpaces);
+	for (let i = 1; i < chunks.length; i++) {
+		for (let j = result.length % spaceLen; j < spaceLen; j++) {
+			result += ' ';
+		}
+
+		result += chunks[i];
+	}
+	return result;
+};
+
+// Returns true iff [a] (an indentation string) is roughly equivalent to [b] (also)
+// an indentation string.
+const isIndentationEquivalent = (state: EditorState, a: string, b: string): boolean => {
+	// Consider sublists to be the same as their parent list if they have the same
+	// label plus or minus 1 space.
+	return Math.abs(tabsToSpaces(state, a).length - tabsToSpaces(state, b).length) <= 1;
 };
 
 // Expands [sel] to the smallest container node with name in [nodeNames].
@@ -495,6 +510,119 @@ export const toggleSelectedLinesStartWith = (
 	return changes;
 };
 
+export const renumberList = (state: EditorState, sel: SelectionRange): SelectionUpdate => {
+	const doc = state.doc;
+
+	const listItemRegex = /^(\s*)(\d+)\.\s?/;
+	const changes: ChangeSpec[] = [];
+	const fromLine = doc.lineAt(sel.from);
+	const toLine = doc.lineAt(sel.to);
+	let charsAdded = 0;
+
+	let firstLineFrom: number;
+	let firstLineTo: number;
+
+	// Find the first line, its indentation, etc.
+	for (let lineNum = fromLine.number; lineNum <= toLine.number; lineNum ++) {
+		const line = doc.lineAt(lineNum);
+		const lineText = stripBlockquote(line);
+		const listItemMatch = lineText.match(listItemRegex);
+
+		if (!listItemMatch) {
+			continue;
+		}
+
+		firstLineFrom = line.from;
+		firstLineTo = line.to;
+		break;
+	}
+
+	const handleLines = (linesToHandle: Line[]) => {
+		let currntGroupIndentation = '';
+		let nextListNumber = 1;
+		const listNumberStack: number[] = [];
+		let prevLineNumber;
+
+		for (const line of linesToHandle) {
+			if (line.number == prevLineNumber) {
+				continue;
+			}
+			prevLineNumber = line.number;
+
+			const filteredText = stripBlockquote(line);
+			const match = filteredText.match(listItemRegex);
+			const indentation = match[1];
+
+			const indentationLen = tabsToSpaces(state, indentation).length;
+			const targetIndentLen = tabsToSpaces(state, currntGroupIndentation).length;
+			if (targetIndentLen < indentationLen) {
+				listNumberStack.push(nextListNumber);
+				nextListNumber = 1;
+			} else if (targetIndentLen > indentationLen) {
+				nextListNumber = listNumberStack.pop() ?? parseInt(match[2], 10);
+			}
+
+			if (targetIndentLen != indentationLen) {
+				currntGroupIndentation = indentation;
+			}
+
+			const from = line.to - filteredText.length;
+			const to = from + match[0].length;
+			const inserted = `${indentation}${nextListNumber}. `;
+			nextListNumber++;
+
+			changes.push({
+				from,
+				to,
+				insert: inserted,
+			});
+			charsAdded -= to - from;
+			charsAdded += inserted.length;
+		}
+	};
+
+	// Search for a parent node
+
+	const linesToHandle: Line[] = [];
+	syntaxTree(state).iterate({
+		from: firstLineFrom,
+		to: firstLineTo,
+		enter: (nodeRef: SyntaxNodeRef) => {
+			if (nodeRef.name == 'ListItem') {
+				console.log(nodeRef.node.parent.name, nodeRef.node.parent, firstLineFrom);
+
+				for (const node of nodeRef.node.parent.getChildren('ListItem')) {
+					const line = doc.lineAt(node.from);
+					const filteredText = stripBlockquote(line);
+					const match = filteredText.match(listItemRegex);
+					if (match) {
+						linesToHandle.push(line);
+					}
+				}
+			}
+		},
+	});
+
+
+	linesToHandle.sort((a, b) => a.number - b.number);
+	handleLines(linesToHandle);
+
+	// Re-position the selection in a way that makes sense
+	if (sel.empty) {
+		sel = EditorSelection.cursor(toLine.to + charsAdded);
+	} else {
+		sel = EditorSelection.range(
+			fromLine.from,
+			toLine.to + charsAdded
+		);
+	}
+
+	return {
+		range: sel,
+		changes,
+	};
+};
+
 // Bolds/unbolds the current selection.
 export const toggleBolded: Command = (view: EditorView): boolean => {
 	logMessage('Toggling bolded!');
@@ -572,8 +700,8 @@ export const toggleList = (listType: ListType): Command => {
 	return (view: EditorView): boolean => {
 		logMessage('Toggling list!');
 
-		const state = view.state;
-		const doc = state.doc;
+		let state = view.state;
+		let doc = state.doc;
 
 		const orderedListTag = 'OrderedList';
 		const unorderedListTag = 'BulletList';
@@ -589,12 +717,6 @@ export const toggleList = (listType: ListType): Command => {
 			[ListType.OrderedList]: numberedRegex,
 			[ListType.CheckList]: checklistRegex,
 			[ListType.UnorderedList]: bulletedRegex,
-		};
-
-		const isIndentationEquivalent = (a: string, b: string): boolean => {
-			// Consider sublists to be the same as their parent list if they have the same
-			// label plus or minus 1 space.
-			return Math.abs(tabsToSpaces(state, a).length - tabsToSpaces(state, b).length) <= 1;
 		};
 
 		const getContainerType = (line: Line): ListType|null => {
@@ -652,7 +774,7 @@ export const toggleList = (listType: ListType): Command => {
 			// Reset the selection if it seems likely the user didn't want the selection
 			// to be expanded
 			const isIndentationDiff =
-				!isIndentationEquivalent(firstLineIndentation, origFirstLineIndentation);
+				!isIndentationEquivalent(state, firstLineIndentation, origFirstLineIndentation);
 			if (isIndentationDiff) {
 				const expandedRegionIndentation = firstLineIndentation;
 				sel = originalSel;
@@ -734,7 +856,7 @@ export const toggleList = (listType: ListType): Command => {
 				const inBlockQuote = (lineContent != line.text);
 				const indentation = lineContent.match(startingSpaceRegex)[0];
 
-				const wrongIndentaton = !isIndentationEquivalent(indentation, firstLineIndentation);
+				const wrongIndentaton = !isIndentationEquivalent(state, indentation, firstLineIndentation);
 
 				// If not the right list level,
 				if (inBlockQuote != firstLineInBlockQuote || wrongIndentaton) {
@@ -806,6 +928,13 @@ export const toggleList = (listType: ListType): Command => {
 			};
 		});
 		view.dispatch(changes);
+		state = view.state;
+		doc = state.doc;
+
+		// Renumber the list
+		view.dispatch(state.changeByRange((sel: SelectionRange) => {
+			return renumberList(state, sel);
+		}));
 
 		return true;
 	};
@@ -866,23 +995,34 @@ export const increaseIndent: Command = (view: EditorView): boolean => {
 	);
 	view.dispatch(changes);
 
+	// Fix any lists
+	view.dispatch(view.state.changeByRange((sel: SelectionRange) => {
+		return renumberList(view.state, sel);
+	}));
+
 	return true;
 };
 
-export const decreaseIndent: Command = (editor: EditorView): boolean => {
+export const decreaseIndent: Command = (view: EditorView): boolean => {
 	logMessage('Decreasing indentation.');
 	const matchEmpty = true;
 	const changes = toggleSelectedLinesStartWith(
-		editor.state,
+		view.state,
 		// Assume indentation is either a tab or in units
-		// of four spaces.
-		/^(?:[\t]|[ ]{1,4})/,
+		// of n spaces.
+		new RegExp(`^(?:[\\t]|[ ]{1,${getIndentUnit(view.state)}})`),
 		// Don't add new text
 		'',
 		matchEmpty
 	);
 
-	editor.dispatch(changes);
+	view.dispatch(changes);
+
+	// Fix any lists
+	view.dispatch(view.state.changeByRange((sel: SelectionRange) => {
+		return renumberList(view.state, sel);
+	}));
+
 	return true;
 };
 
