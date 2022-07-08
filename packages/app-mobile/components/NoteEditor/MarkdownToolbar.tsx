@@ -12,6 +12,7 @@ const FontAwesomeIcon = require('react-native-vector-icons/FontAwesome5').defaul
 const MaterialIcon = require('react-native-vector-icons/MaterialIcons').default;
 
 import { _ } from '@joplin/lib/locale';
+import time from '@joplin/lib/time';
 import { useEffect } from 'react';
 import { AccessibilityInfo, Keyboard } from 'react-native';
 import { EditorControl, EditorSettings, ListType, SearchState } from './types';
@@ -451,6 +452,15 @@ const MarkdownToolbar = (props: ToolbarProps) => {
 		disabled: props.selectionState.unspellCheckableRegion,
 	}, () => {
 		props.editorControl.setSpellcheckEnabled(!props.selectionState.spellChecking);
+	});
+
+	actionsMenuModel.addAction({
+		icon: (
+			<FontAwesomeIcon name="calendar-plus" style={styles.text}/>
+		),
+		accessibilityLabel: _('Insert time'),
+	}, () => {
+		props.editorControl.insertText(time.formatDateToLocal(new Date()));
 	});
 
 	const [keyboardVisible, setKeyboardVisible] = useState(false);
