@@ -28,6 +28,10 @@ We offer a 14 days trial when the subscription starts so that you can evaluate t
 
 Click on the [Profile button](#how-can-i-change-my-details), then scroll down and click on "Manage subscription". Your subscription will be cancelled and you will not be charged on what would have been the next billing period. Please note that we do not cancel accounts over email as we cannot verify your identity, however we can provide assistance if there is an issue.
 
+## Why was I charged?
+
+If you have been charged and you didn't expect it the most likely explanation is that the trial ended, after 14 days, and an invoice was emitted. You may have cancelled the subscription after that date, but the invoice is still due. As with everything, cancelling a contract doesn't cancel existing invoices.
+
 ## Further information
 
 - [Joplin Offical Website](https://joplinapp.org)
