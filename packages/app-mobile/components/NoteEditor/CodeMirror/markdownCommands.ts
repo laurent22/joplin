@@ -22,7 +22,7 @@ const startingSpaceRegex = /^(\s*)/;
 // Specifies the update of a single selection region and its contents
 type SelectionUpdate = { range: SelectionRange; changes?: ChangeSpec };
 
-// Returns the text of [line], ignoring starting blockquote characters.
+/** @return the text of [line], ignoring starting blockquote characters. */
 const stripBlockquote = (line: Line): string => {
 	const match = line.text.match(blockQuoteRegex);
 
@@ -33,7 +33,7 @@ const stripBlockquote = (line: Line): string => {
 	return line.text;
 };
 
-// Returns a version of [text] with all tabs converted to spaces
+/** @return a version of [text] with all tabs converted to spaces */
 export const tabsToSpaces = (state: EditorState, text: string): string => {
 	const chunks = text.split('\t');
 	const spaceLen = getIndentUnit(state);
@@ -49,16 +49,24 @@ export const tabsToSpaces = (state: EditorState, text: string): string => {
 	return result;
 };
 
-// Returns true iff [a] (an indentation string) is roughly equivalent to [b] (also)
-// an indentation string.
+/**
+ * @param a An indentation string
+ * @param b A string of tabs and spaces to be compared with [a]
+ * @return true iff [a] (an indentation string) is roughly equivalent to [b].
+ */
 const isIndentationEquivalent = (state: EditorState, a: string, b: string): boolean => {
 	// Consider sublists to be the same as their parent list if they have the same
 	// label plus or minus 1 space.
 	return Math.abs(tabsToSpaces(state, a).length - tabsToSpaces(state, b).length) <= 1;
 };
 
-// Expands [sel] to the smallest container node with name in [nodeNames].
-// Returns a new selection.
+/**
+ * Expands [sel] to the smallest container node with name in [nodeNames].
+ * @param nodeNames Either a string containing the name of the node to expand to
+ * 					in the syntax tree or a list of node names.
+ * @return the expanded selection.
+ * @see https://github.com/lezer-parser/markdown/blob/3c5f5dc3b5be08e19c32f0f7fac6f3619a58c911/src/markdown.ts#L41
+ */
 const growSelectionToNode = (
 	state: EditorState, sel: SelectionRange, nodeNames: string|string[]
 ): SelectionRange => {
@@ -102,12 +110,20 @@ const growSelectionToNode = (
 	}
 };
 
-// Adds/removes [spec.templateStart] before the current selection and
-// [spec.templateStop] after it.
-// For example, surroundSelecton('**', '**') surrounds every selection
-// range with asterisks (including the caret).
-// If the selection is already surrounded by these characters, they are
-// removed.
+/**
+ * Toggles whether the given selection matches [spec].
+ *
+ * @param sel The region to add/remove formatting from.
+ * @param spec Specifies how the target region starts/stops. To add formatting,
+ * `spec.templateStart` is added before `sel` and `spec.templateStop` is added after.
+ *
+ * For example, something similar to surroundSelecton('**', '**') would surround
+ * every selection range with asterisks (including the caret).
+ * If the selection is already surrounded by these characters, they are
+ * removed.
+ *
+ * @return A list of changes and an updated selection.
+ */
 const toggleRegionSurrounded = (
 	doc: DocumentText, sel: SelectionRange, spec: RegionSpec
 ): SelectionUpdate => {
@@ -162,9 +178,14 @@ const toggleRegionSurrounded = (
 	};
 };
 
-// Toggles whether the current selection/caret location is
-// associated with [nodeName], if [start] defines the start of
-// the region and [end], the end.
+/**
+ * For all selections in the given `EditorState`, toggles whether each
+ * is contained in a region of type [spec].
+ * @param nodeName The name of the SyntaxNode associated with [spec].
+ * @param spec Describes the formatting to toggle.
+ * @return A TransactionSpec that toggles each selected region's formatting.
+ * @see toggleSelectionFormat
+ */
 const toggleGlobalSelectionFormat = (
 	state: EditorState, nodeName: string, spec: RegionSpec
 ): TransactionSpec => {
@@ -197,8 +218,20 @@ const toggleSelectionFormat = (
 	return toggleRegionSurrounded(state.doc, newRange, spec);
 };
 
-// Toggle formatting in a region, applying a block version of the formatting
-// if multiple lines are selected.
+/**
+ * Toggle formatting in a region, applying a block version of the formatting
+ * if multiple lines are selected.
+ *
+ * @param inlineNodeName the `SyntaxNode::name` associated with the inline version
+ * 	of the region.
+ * @param inlineSpec specifies how to find/create the inline region.
+ * @param blockNodeName the `SyntaxNode::name` associated with the **block** version
+ * 	of the region (e.g. `FencedCode`).
+ * @param blockTemplate The `start` and `stop` strings that can be used to surround the
+ * 	selected lines to create a block region.
+ * @param preserveBlockQuotes `true` iff block quote formatting (`> `...) should be ignored
+ * 	when identifying region formatting.
+ */
 export const toggleRegionFormat = (
 	state: EditorState,
 
@@ -215,7 +248,7 @@ export const toggleRegionFormat = (
 
 	// If false, don't ensure that block formatting preserves block quotes
 	preserveBlockQuotes: boolean = true
-) => {
+): TransactionSpec => {
 	const doc = state.doc;
 
 	const getMatchEndPoints = (
@@ -392,18 +425,16 @@ export const toggleRegionFormat = (
 	return changes;
 };
 
-// Toggles whether all lines in the user's selection start with [regex].
-// [template] is that match of [regex] that is used when adding a match.
-// [template] can also be a function that maps a given line to a string.
-// If so, it is called on each line of a selection sequentially, starting
-// with the first. [lineContent], in that case, is the portion of the line
-// relevant to the match (e.g. in a block quote, everything after "> ").
-// If [matchEmpty], all lines **after the first** that have no non-space
-// content are ignored.
-// [nodeName], if given, is the name of the node to expand the selection
-// to, (e.g. TaskList to expand selections to containing TaskLists if possible).
-// Note that selection is only expanded if the existing selection is empty
-// (just a caret).
+/**
+ * Toggles whether all lines in the user's selection start with [regex].
+ * @param template is that match of [regex] that is used when adding a match.
+ * @param matchEmpty if true, all lines **after the first** that have no non-space
+ * content are ignored.
+ * @param nodeName if given, is the name of the node to expand the selection
+ * to, (e.g. TaskList to expand selections to containing TaskLists if possible).
+ * Note that selection is only expanded if the existing selection is empty
+ * (just a caret).
+ */
 export const toggleSelectedLinesStartWith = (
 	state: EditorState,
 	regex: RegExp,
@@ -510,6 +541,10 @@ export const toggleSelectedLinesStartWith = (
 	return changes;
 };
 
+/**
+ * Ensures that ordered lists within [sel] are numbered in ascending order.
+ * @return a list of changes and an updated selection after adjusting such lists.
+ */
 export const renumberList = (state: EditorState, sel: SelectionRange): SelectionUpdate => {
 	const doc = state.doc;
 
@@ -519,13 +554,15 @@ export const renumberList = (state: EditorState, sel: SelectionRange): Selection
 	const toLine = doc.lineAt(sel.to);
 	let charsAdded = 0;
 
+	// Re-numbers ordered lists and sublists with numbers on each line in [linesToHandle]
 	const handleLines = (linesToHandle: Line[]) => {
-		let currntGroupIndentation = '';
+		let currentGroupIndentation = '';
 		let nextListNumber = 1;
 		const listNumberStack: number[] = [];
 		let prevLineNumber;
 
 		for (const line of linesToHandle) {
+			// Don't re-handle lines.
 			if (line.number == prevLineNumber) {
 				continue;
 			}
@@ -536,7 +573,7 @@ export const renumberList = (state: EditorState, sel: SelectionRange): Selection
 			const indentation = match[1];
 
 			const indentationLen = tabsToSpaces(state, indentation).length;
-			const targetIndentLen = tabsToSpaces(state, currntGroupIndentation).length;
+			const targetIndentLen = tabsToSpaces(state, currentGroupIndentation).length;
 			if (targetIndentLen < indentationLen) {
 				listNumberStack.push(nextListNumber);
 				nextListNumber = 1;
@@ -545,7 +582,7 @@ export const renumberList = (state: EditorState, sel: SelectionRange): Selection
 			}
 
 			if (targetIndentLen != indentationLen) {
-				currntGroupIndentation = indentation;
+				currentGroupIndentation = indentation;
 			}
 
 			const from = line.to - filteredText.length;
@@ -581,7 +618,6 @@ export const renumberList = (state: EditorState, sel: SelectionRange): Selection
 		},
 	});
 
-
 	linesToHandle.sort((a, b) => a.number - b.number);
 	handleLines(linesToHandle);
 
@@ -601,7 +637,7 @@ export const renumberList = (state: EditorState, sel: SelectionRange): Selection
 	};
 };
 
-// Bolds/unbolds the current selection.
+/** Bolds/unbolds the current selection. */
 export const toggleBolded: Command = (view: EditorView): boolean => {
 	logMessage('Toggling bolded!');
 
@@ -614,7 +650,7 @@ export const toggleBolded: Command = (view: EditorView): boolean => {
 	return true;
 };
 
-// Italicizes/deitalicizes the current selection.
+/** Italicizes/deitalicizes the current selection. */
 export const toggleItalicized: Command = (view: EditorView): boolean => {
 	logMessage('Toggling italicized!');
 
@@ -632,6 +668,11 @@ export const toggleItalicized: Command = (view: EditorView): boolean => {
 	return true;
 };
 
+/**
+ * Toggles whether the currently selected region is within inline/block code.
+ * If the current region is an empty inline code block, it will be converted to
+ * a block (fenced) code block.
+ */
 export const toggleCode: Command = (view: EditorView): boolean => {
 	logMessage('Toggling code!');
 
@@ -957,6 +998,10 @@ export const toggleHeaderLevel = (level: number): Command => {
 	};
 };
 
+/**
+ * Prepends the given editor's indentUnit to all lines of the current selection
+ * and re-numbers modified ordered lists (if any).
+ */
 export const increaseIndent: Command = (view: EditorView): boolean => {
 	logMessage('Increasing indentation.');
 	const matchEmpty = true;
@@ -1004,8 +1049,10 @@ export const decreaseIndent: Command = (view: EditorView): boolean => {
 	return true;
 };
 
-// Create a new link with [label] and [url], or, if a link is either partially
-// or fully selected, update the label and URL of that link.
+/**
+ * Create a new link with [label] and [url], or, if a link is either partially
+ * or fully selected, update the label and URL of that link.
+ */
 export const updateLink = (label: string, url: string): Command => {
 	// Empty label? Just include the URL.
 	const linkText = label == '' ? url : `[${label}](${url})`;

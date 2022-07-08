@@ -1,4 +1,6 @@
-// Specifies a type of formatting region in Markdown
+/**
+ * Describes an inline region's formatting. For example, an italicized region.
+ */
 
 import { Text as DocumentText, SelectionRange } from '@codemirror/state';
 
@@ -41,9 +43,11 @@ export default class RegionSpec {
 	}
 
 
-	// Returns the length of a match for this in [searchText], matching either
-	// [template] or [regex], starting at [startIndex] or ending at [endIndex].
-	// Note that the [regex], if provided, must have the global flag enabled.
+	/**
+	 * Returns the length of a match for this in [searchText], matching either
+	 * [template] or [regex], starting at [startIndex] or ending at [endIndex].
+	 * Note that the [regex], if provided, must have the global flag enabled.
+	 */
 	private matchLen({
 		searchText, template, startIndex, endIndex, regex,
 	}: {
@@ -104,11 +108,12 @@ export default class RegionSpec {
 		return matchLength;
 	}
 
-	// If [sel].empty,
-	//   returns the length of a match for this that precedes [sel].
-	//   returns -1 if no match is found.
-	// Else,
-	//   returns the length of the match in the region containing [sel]
+	/**
+	 * @param doc The `Document` that contains `sel`
+	 * @param sel the region to search for a match. If empty, searches for a match
+	 * 	immediately  before `sel`.
+	 * @return the length of the found match, or -1 if no match is found.
+	 */
 	public matchStart(doc: DocumentText, sel: SelectionRange): number {
 		let searchText;
 		if (sel.empty) {
@@ -126,6 +131,9 @@ export default class RegionSpec {
 		});
 	}
 
+	/**
+	 * @see matchStart
+	 */
 	public matchStop(doc: DocumentText, sel: SelectionRange): number {
 		let searchText;
 		if (sel.empty) {

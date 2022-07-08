@@ -46,8 +46,10 @@ const headerLineDecoration = Decoration.line({
 	attributes: { class: 'cm-headerLine' },
 });
 
-// Returns a set of [Decoration]s, associated with block syntax groups that require
-// full-line styling.
+/**
+ * @return a set of [Decoration]s, associated with block syntax groups that require
+ * full-line styling.
+ */
 function computeDecorations(view: EditorView) {
 	const decorations: { pos: number; length?: number; decoration: Decoration }[] = [];
 
