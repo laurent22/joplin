@@ -683,9 +683,21 @@ class AppComponent extends React.Component {
 	public constructor() {
 		super();
 
+		this.getSideMenuWidth = () => {
+			const sideMenuWidth = getResponsiveValue({
+				sm: 250,
+				md: 260,
+				lg: 270,
+				xl: 280,
+				xxl: 290,
+			});
+
+			return sideMenuWidth;
+		};
+
 		this.state = {
 			sideMenuContentOpacity: new Animated.Value(0),
-			sideMenuWidth: getResponsiveValue({ sm: 275, lg: 180 }),
+			sideMenuWidth: this.getSideMenuWidth(),
 		};
 
 		this.lastSyncStarted_ = defaultState.syncStarted;
@@ -840,13 +852,7 @@ class AppComponent extends React.Component {
 	}
 
 	private async handleScreenWidthChange_() {
-		const currentScreenWidth = Dimensions.get('screen').width;
-
-		if (currentScreenWidth > 700 && currentScreenWidth < 768) {
-			this.setState({ sideMenuWidth: getResponsiveValue({ sm: 275, md: 160 }) });
-		} else {
-			this.setState({ sideMenuWidth: getResponsiveValue({ sm: 275, lg: 160 }) });
-		}
+		this.setState({ sideMenuWidth: this.getSideMenuWidth() });
 	}
 
 	public UNSAFE_componentWillReceiveProps(newProps: any) {
@@ -894,6 +900,7 @@ class AppComponent extends React.Component {
 		};
 
 		const statusBarStyle = theme.appearance === 'light' ? 'dark-content' : 'light-content';
+		console.log(`Height: ${Dimensions.get('screen').height}, Width: ${Dimensions.get('screen').width}, SideMenuWidth: ${this.state.sideMenuWidth}`);
 		return (
 			<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
 				<SideMenu
