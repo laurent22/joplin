@@ -28,7 +28,7 @@ export default function getResponsiveValue(valueMap: ValueMap): number {
 		throw 'valueMap cannot be an empty object!';
 	}
 
-	const width = Dimensions.get('screen').width;
+	const width = Dimensions.get('window').width;
 	let value: number;
 	const { sm, md, lg, xl, xxl } = valueMap;
 
