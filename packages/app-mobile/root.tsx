@@ -900,7 +900,6 @@ class AppComponent extends React.Component {
 		};
 
 		const statusBarStyle = theme.appearance === 'light' ? 'dark-content' : 'light-content';
-		console.log(`Height: ${Dimensions.get('screen').height}, Width: ${Dimensions.get('screen').width}, SideMenuWidth: ${this.state.sideMenuWidth}`);
 		return (
 			<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
 				<SideMenu
