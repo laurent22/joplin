@@ -15,6 +15,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.4.2\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:560
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -299,9 +301,8 @@ msgid "Also displays unset and hidden config variables."
 msgstr "Visar även inte inställda och dolda konfigurationsvariabler."
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:203
-#, fuzzy
 msgid "Also publish linked notes"
-msgstr "Sluta publisera anteckningen"
+msgstr "Publicera även länkade anteckningar"
 
 #: packages/lib/models/Setting.ts:713
 msgid "Always"
@@ -874,18 +875,16 @@ msgstr ""
 "avbryter. Försök igen när du är ansluten till internet."
 
 #: packages/app-desktop/gui/PromptDialog.min.js:235
-#, fuzzy
 msgid "Create"
-msgstr "Skapad"
+msgstr "Skapa"
 
 #: packages/app-mobile/components/note-list.js:101
 msgid "Create a notebook"
 msgstr "Skapar en anteckningsbok"
 
 #: packages/app-desktop/gui/MainScreen/commands/addProfile.ts:9
-#, fuzzy
 msgid "Create new profile..."
-msgstr "Skapar en ny anteckning."
+msgstr "Skapa ny profil..."
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:161
 msgid "Create notebook"
@@ -1334,7 +1333,7 @@ msgstr "Redigera anteckningsbok"
 
 #: packages/app-desktop/commands/editProfileConfig.ts:9
 msgid "Edit profile configuration..."
-msgstr ""
+msgstr "Redigera profilkonfiguration..."
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:138
 #: packages/lib/models/Setting.ts:876 packages/lib/models/Setting.ts:877
@@ -1364,9 +1363,8 @@ msgstr "Redigerarens monospace teckensnittsfamilj"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:100
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:96
-#, fuzzy
 msgid "Editor: %s"
-msgstr "Redigerare"
+msgstr "Redigerare: %s"
 
 #: packages/app-cli/app/command-ls.js:31
 msgid "Either \"text\" or \"json\""
@@ -1680,9 +1678,8 @@ msgid "File system"
 msgstr "Filsystem"
 
 #: packages/app-mobile/components/screens/NoteTagsDialog.js:190
-#, fuzzy
 msgid "Filter tags"
-msgstr "Nya taggar:"
+msgstr "Filtrera taggar"
 
 #: packages/app-desktop/gui/ExtensionBadge.min.js:10
 msgid "Firefox Extension"
@@ -2807,6 +2804,8 @@ msgid ""
 "Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list "
 "below."
 msgstr ""
+"Klicka på \"%s\" för att fortsätta, eller ställ in lösenorden i listan \"%s"
+"\" nedan."
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:65
 msgid ""
@@ -2965,9 +2964,8 @@ msgid "Profile"
 msgstr "Profil"
 
 #: packages/app-desktop/gui/MainScreen/commands/addProfile.ts:17
-#, fuzzy
 msgid "Profile name:"
-msgstr "Profil"
+msgstr "Profilnamn:"
 
 #: packages/lib/versionInfo.ts:26
 msgid "Profile Version: %s"
@@ -3195,9 +3193,8 @@ msgstr "Spara alarm"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:100
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:93
-#, fuzzy
 msgid "Save as %s"
-msgstr "Spara som..."
+msgstr "Spara som %s"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:80
 msgid "Save as..."
@@ -3568,9 +3565,8 @@ msgid "Switch between note and to-do type"
 msgstr "Växla mellan antecknings- och att-göra-typ"
 
 #: packages/app-desktop/gui/MenuBar.tsx:437
-#, fuzzy
 msgid "Switch profile"
-msgstr "Exportera profil"
+msgstr "Byt profil"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:105
 msgid "Switch to note type"
@@ -3579,9 +3575,8 @@ msgstr "Byt till anteckningstyp"
 #: packages/app-desktop/commands/switchProfile1.ts:7
 #: packages/app-desktop/commands/switchProfile2.ts:7
 #: packages/app-desktop/commands/switchProfile3.ts:7
-#, fuzzy
 msgid "Switch to profile %d"
-msgstr "Byt till anteckningstyp"
+msgstr "Byt till profilen %d"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:114
 msgid "Switch to to-do type"
@@ -3678,7 +3673,7 @@ msgstr "Tabloid"
 
 #: packages/app-mobile/components/screens/NoteTagsDialog.js:179
 msgid "tag1, tag2, ..."
-msgstr ""
+msgstr "tagg1, tagg2, ..."
 
 #: packages/app-cli/app/command-import.js:52
 #: packages/app-desktop/gui/ImportScreen.min.js:73
@@ -3719,7 +3714,7 @@ msgstr "Appen kommer nu att stängas. Starta om den för att slutföra processen
 #: packages/app-desktop/app.ts:332
 msgid ""
 "The application did not close properly. Would you like to start in safe mode?"
-msgstr ""
+msgstr "Programmet stängdes inte ordentligt. Vill du starta i säkert läge?"
 
 #: packages/lib/onedrive-api-node-utils.js:86
 msgid ""
@@ -4568,9 +4563,8 @@ msgid "Your data is going to be re-encrypted and synced again."
 msgstr "Dina data kommer att omkrypteras och synkroniseras igen."
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:271
-#, fuzzy
 msgid "Your password is needed to decrypt some of your data."
-msgstr "Ditt huvudlösenord behövs för att dekryptera några av dina data."
+msgstr "Ditt lösenord behövs för att dekryptera en del av dina data."
 
 #: packages/app-cli/app/command-sync.ts:242
 msgid ""

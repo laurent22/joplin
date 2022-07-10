@@ -6,7 +6,7 @@ import time from './time';
 const { isHidden } = require('./path-utils');
 import JoplinError from './JoplinError';
 import { Lock, LockClientType, LockType } from './services/synchronizer/LockHandler';
-const ArrayUtils = require('./ArrayUtils');
+import * as ArrayUtils from './ArrayUtils';
 const { sprintf } = require('sprintf-js');
 const Mutex = require('async-mutex').Mutex;
 

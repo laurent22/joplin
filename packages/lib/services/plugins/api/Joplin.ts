@@ -10,6 +10,7 @@ import JoplinSettings from './JoplinSettings';
 import JoplinContentScripts from './JoplinContentScripts';
 import JoplinClipboard from './JoplinClipboard';
 import JoplinWindow from './JoplinWindow';
+import BasePlatformImplementation from '../BasePlatformImplementation';
 
 /**
  * This is the main entry point to the Joplin API. You can access various services using the provided accessors.
@@ -36,8 +37,10 @@ export default class Joplin {
 	private contentScripts_: JoplinContentScripts = null;
 	private clipboard_: JoplinClipboard = null;
 	private window_: JoplinWindow = null;
+	private implementation_: BasePlatformImplementation = null;
 
-	public constructor(implementation: any, plugin: Plugin, store: any) {
+	public constructor(implementation: BasePlatformImplementation, plugin: Plugin, store: any) {
+		this.implementation_ = implementation;
 		this.data_ = new JoplinData();
 		this.plugins_ = new JoplinPlugins(plugin);
 		this.workspace_ = new JoplinWorkspace(store);
@@ -115,6 +118,10 @@ export default class Joplin {
 	 */
 	public require(_path: string): any {
 		// Just a stub. Implementation has to be done within plugin process, in plugin_index.js
+	}
+
+	public async versionInfo() {
+		return this.implementation_.versionInfo;
 	}
 
 }

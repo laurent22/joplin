@@ -6,7 +6,7 @@ const fs = require('fs-extra');
 async function main() {
 	// Run the CLI app once so as to generate the database file
 	process.chdir(`${rootDir}/packages/app-cli`);
-	await execCommand2('yarn start -- version');
+	await execCommand2('yarn start version');
 
 	const sqlTsConfig = {
 		'client': 'sqlite3',
@@ -40,6 +40,17 @@ async function main() {
 		});
 
 		return t;
+	});
+
+	definitions.tables = definitions.tables.map((table: any) => {
+		table.columns = table.columns.map((column: any) => {
+			return {
+				...column,
+				optional: true,
+			};
+		});
+
+		return table;
 	});
 
 	const tsString = sqlts.fromObject(definitions, sqlTsConfig)
