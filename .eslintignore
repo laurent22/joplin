@@ -1933,6 +1933,9 @@ packages/plugins/ToggleSidebars/api/types.js.map
 packages/plugins/ToggleSidebars/src/index.d.ts
 packages/plugins/ToggleSidebars/src/index.js
 packages/plugins/ToggleSidebars/src/index.js.map
+packages/react-native-saf-x/src/index.d.ts
+packages/react-native-saf-x/src/index.js
+packages/react-native-saf-x/src/index.js.map
 packages/renderer/HtmlToHtml.d.ts
 packages/renderer/HtmlToHtml.js
 packages/renderer/HtmlToHtml.js.map

@@ -3,7 +3,7 @@
 const fs = require('fs-extra');
 const shim = require('./shim').default;
 const GeolocationNode = require('./geolocation-node').default;
-const { FileApiDriverLocal } = require('./file-api-driver-local.js');
+const { FileApiDriverLocal } = require('./file-api-driver-local');
 const { setLocale, defaultLocale, closestSupportedLocale } = require('./locale');
 const FsDriverNode = require('./fs-driver-node').default;
 const mimeUtils = require('./mime-utils.js').mime;

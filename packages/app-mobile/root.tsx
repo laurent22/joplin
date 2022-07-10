@@ -70,7 +70,7 @@ const { SideMenuContentNote } = require('./components/side-menu-content-note.js'
 const { DatabaseDriverReactNative } = require('./utils/database-driver-react-native');
 import { reg } from '@joplin/lib/registry';
 const { defaultState } = require('@joplin/lib/reducer');
-const { FileApiDriverLocal } = require('@joplin/lib/file-api-driver-local.js');
+const { FileApiDriverLocal } = require('@joplin/lib/file-api-driver-local');
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 import SearchEngine from '@joplin/lib/services/searchengine/SearchEngine';
 const WelcomeUtils = require('@joplin/lib/WelcomeUtils');

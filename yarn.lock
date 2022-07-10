@@ -3276,6 +3276,7 @@ __metadata:
     "@codemirror/state": ^6.0.0
     "@codemirror/view": ^6.0.0
     "@joplin/lib": ~2.8
+    "@joplin/react-native-saf-x": ~0.5
     "@joplin/renderer": ~2.8
     "@joplin/tools": ~2.8
     "@lezer/highlight": ^1.0.0
@@ -3508,6 +3509,24 @@ __metadata:
 "@joplin/plugins@workspace:packages/plugins":
   version: 0.0.0-use.local
   resolution: "@joplin/plugins@workspace:packages/plugins"
+  languageName: unknown
+  linkType: soft
+
+"@joplin/react-native-saf-x@workspace:packages/react-native-saf-x, @joplin/react-native-saf-x@~0.5":
+  version: 0.0.0-use.local
+  resolution: "@joplin/react-native-saf-x@workspace:packages/react-native-saf-x"
+  dependencies:
+    "@babel/core": ^7.12.9
+    "@types/jest": ^26.0.15
+    "@types/react": ^16.9.55
+    "@types/react-native": ^0.64.4
+    jest: ^26.6.3
+    react: 17.0.2
+    react-native: 0.66.1
+    typescript: ^4.0.5
+  peerDependencies:
+    react: "*"
+    react-native: "*"
   languageName: unknown
   linkType: soft
 
