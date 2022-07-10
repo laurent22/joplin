@@ -872,7 +872,8 @@ class AppComponent extends React.Component {
 			Config: { screen: ConfigScreen },
 		};
 
-		const statusBarStyle = theme.appearance === 'light' ? 'dark-content' : 'light-content';
+		// const statusBarStyle = theme.appearance === 'light-content';
+		const statusBarStyle = 'light-content';
 
 		return (
 			<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
@@ -889,7 +890,8 @@ class AppComponent extends React.Component {
 					}}
 				>
 					<StatusBar barStyle={statusBarStyle} />
-					<MenuContext style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
+					<MenuContext style={{ flex: 1 }}>
+						<SafeAreaView style={{ flex: 0, backgroundColor: theme.backgroundColor2 }}/>
 						<SafeAreaView style={{ flex: 1 }}>
 							<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
 								<AppNav screens={appNavInit} />
