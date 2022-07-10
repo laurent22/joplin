@@ -3276,6 +3276,7 @@ __metadata:
     "@codemirror/state": ^6.0.0
     "@codemirror/view": ^6.0.0
     "@joplin/lib": ~2.8
+    "@joplin/react-native-saf-x": ~0.5
     "@joplin/renderer": ~2.8
     "@joplin/tools": ~2.8
     "@lezer/highlight": ^1.0.0
@@ -3436,6 +3437,7 @@ __metadata:
     follow-redirects: ^1.2.4
     form-data: ^2.1.4
     fs-extra: ^5.0.0
+    hpagent: ^1.0.0
     html-entities: ^1.2.1
     html-minifier: ^3.5.15
     image-data-uri: ^2.0.0
@@ -3507,6 +3509,24 @@ __metadata:
 "@joplin/plugins@workspace:packages/plugins":
   version: 0.0.0-use.local
   resolution: "@joplin/plugins@workspace:packages/plugins"
+  languageName: unknown
+  linkType: soft
+
+"@joplin/react-native-saf-x@workspace:packages/react-native-saf-x, @joplin/react-native-saf-x@~0.5":
+  version: 0.0.0-use.local
+  resolution: "@joplin/react-native-saf-x@workspace:packages/react-native-saf-x"
+  dependencies:
+    "@babel/core": ^7.12.9
+    "@types/jest": ^26.0.15
+    "@types/react": ^16.9.55
+    "@types/react-native": ^0.64.4
+    jest: ^26.6.3
+    react: 17.0.2
+    react-native: 0.66.1
+    typescript: ^4.0.5
+  peerDependencies:
+    react: "*"
+    react-native: "*"
   languageName: unknown
   linkType: soft
 
@@ -16669,6 +16689,13 @@ __metadata:
   dependencies:
     lru-cache: ^6.0.0
   checksum: c3f87b3c2f7eb8c2748c8f49c0c2517c9a95f35d26f4bf54b2a8cba05d2e668f3753548b6ea366b18ec8dadb4e12066e19fa382a01496b0ffa0497eb23cbe461
+  languageName: node
+  linkType: hard
+
+"hpagent@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "hpagent@npm:1.0.0"
+  checksum: 911a9ba612747f5c9403fb60c1abd0c47a27fa634826caad9aecad41b899533489da36c92758b5cd83576e2bf9e84e23a4374a40aa513106d5450f62856c4b2d
   languageName: node
   linkType: hard
 

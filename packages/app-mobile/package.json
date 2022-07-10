@@ -6,6 +6,7 @@
   "private": true,
   "scripts": {
     "start": "react-native start --reset-cache",
+    "android": "react-native run-android",
     "build": "gulp build",
     "tsc": "tsc --project tsconfig.json",
     "watch": "tsc --watch --preserveWatchOutput --project tsconfig.json",
@@ -16,6 +17,7 @@
   },
   "dependencies": {
     "@joplin/lib": "~2.8",
+    "@joplin/react-native-saf-x": "~0.5",
     "@joplin/renderer": "~2.8",
     "@react-native-community/clipboard": "^1.5.0",
     "@react-native-community/datetimepicker": "^3.0.3",

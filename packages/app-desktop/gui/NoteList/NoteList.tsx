@@ -456,6 +456,11 @@ const NoteListComponent = (props: Props) => {
 	useEffect(() => {
 		// When a note list item is styled by userchrome.css, its height is reflected.
 		// Ref. https://github.com/laurent22/joplin/pull/6542
+		if (dragOverTargetNoteIndex !== null) {
+			// When dragged, its height should not be considered.
+			// Ref. https://github.com/laurent22/joplin/issues/6639
+			return;
+		}
 		const noteItem = Object.values<any>(itemAnchorRefs_.current)[0]?.current;
 		const actualItemHeight = noteItem?.getHeight() ?? 0;
 		if (actualItemHeight >= 8) { // To avoid generating too many narrow items

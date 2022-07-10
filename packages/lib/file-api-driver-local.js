@@ -23,7 +23,7 @@ class FileApiDriverLocal {
 	}
 
 	fsDriver() {
-		if (!FileApiDriverLocal.fsDriver_) throw new Error('FileApiDriverLocal.fsDriver_ not set!');
+		if (!FileApiDriverLocal.fsDriver_) { throw new Error('FileApiDriverLocal.fsDriver_ not set!'); }
 		return FileApiDriverLocal.fsDriver_;
 	}
 
@@ -93,6 +93,7 @@ class FileApiDriverLocal {
 	}
 
 	async get(path, options) {
+		if (!options) options = {};
 		let output = null;
 
 		try {
@@ -151,7 +152,6 @@ class FileApiDriverLocal {
 		} catch (error) {
 			throw this.fsErrorToJsError_(error, path);
 		}
-
 		// if (!options) options = {};
 
 		// if (options.source === 'file') content = await fs.readFile(options.path);
@@ -223,8 +223,15 @@ class FileApiDriverLocal {
 	}
 
 	async clearRoot(baseDir) {
-		await this.fsDriver().remove(baseDir);
-		await this.fsDriver().mkdir(baseDir);
+		if (baseDir.startsWith('content://')) {
+			const result = await this.list(baseDir);
+			for (const item of result.items) {
+				await this.fsDriver().remove(item.path);
+			}
+		} else {
+			await this.fsDriver().remove(baseDir);
+			await this.fsDriver().mkdir(baseDir);
+		}
 	}
 }
 
