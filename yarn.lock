@@ -3436,6 +3436,7 @@ __metadata:
     follow-redirects: ^1.2.4
     form-data: ^2.1.4
     fs-extra: ^5.0.0
+    hpagent: ^1.0.0
     html-entities: ^1.2.1
     html-minifier: ^3.5.15
     image-data-uri: ^2.0.0
@@ -16669,6 +16670,13 @@ __metadata:
   dependencies:
     lru-cache: ^6.0.0
   checksum: c3f87b3c2f7eb8c2748c8f49c0c2517c9a95f35d26f4bf54b2a8cba05d2e668f3753548b6ea366b18ec8dadb4e12066e19fa382a01496b0ffa0497eb23cbe461
+  languageName: node
+  linkType: hard
+
+"hpagent@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "hpagent@npm:1.0.0"
+  checksum: 911a9ba612747f5c9403fb60c1abd0c47a27fa634826caad9aecad41b899533489da36c92758b5cd83576e2bf9e84e23a4374a40aa513106d5450f62856c4b2d
   languageName: node
   linkType: hard
 

@@ -13,11 +13,14 @@ const urlValidator = require('valid-url');
 const { _ } = require('./locale');
 const http = require('http');
 const https = require('https');
+const { HttpProxyAgent, HttpsProxyAgent } = require('hpagent');
 const toRelative = require('relative');
 const timers = require('timers');
 const zlib = require('zlib');
 const dgram = require('dgram');
 const { basename, fileExtension, safeFileExtension } = require('./path-utils');
+
+const proxySettings = {};
 
 function fileExists(filePath) {
 	try {
@@ -25,6 +28,20 @@ function fileExists(filePath) {
 	} catch (err) {
 		return false;
 	}
+}
+
+function isUrlHttps(url) {
+	return url.startsWith('https');
+}
+
+function resolveProxyUrl(proxyUrl) {
+	return (
+		proxyUrl ||
+		process.env['http_proxy'] ||
+		process.env['https_proxy'] ||
+		process.env['HTTP_PROXY'] ||
+		process.env['HTTPS_PROXY']
+	);
 }
 
 // https://github.com/sindresorhus/callsites/blob/main/index.js
@@ -64,6 +81,13 @@ const gunzipFile = function(source, destination) {
 	});
 };
 
+function setupProxySettings(options) {
+	proxySettings.maxConcurrentConnections = options.maxConcurrentConnections;
+	proxySettings.proxyTimeout = options.proxyTimeout;
+	proxySettings.proxyEnabled = options.proxyEnabled;
+	proxySettings.proxyUrl = options.proxyUrl;
+}
+
 function shimInit(options = null) {
 	options = {
 		sharp: null,
@@ -78,6 +102,7 @@ function shimInit(options = null) {
 	const sharp = options.sharp;
 	const keytar = (shim.isWindows() || shim.isMac()) && !shim.isPortable() ? options.keytar : null;
 	const appVersion = options.appVersion;
+
 
 	shim.setNodeSqlite(options.nodeSqlite);
 
@@ -420,10 +445,11 @@ function shimInit(options = null) {
 		return new Buffer(data).toString('base64');
 	};
 
-	shim.fetch = async function(url, options = null) {
+	shim.fetch = async function(url, options = {}) {
 		const validatedUrl = urlValidator.isUri(url);
 		if (!validatedUrl) throw new Error(`Not a valid URL: ${url}`);
-
+		const resolvedProxyUrl = resolveProxyUrl(proxySettings.proxyUrl);
+		options.agent = (resolvedProxyUrl && proxySettings.proxyEnabled) ? shim.proxyAgent(url, resolvedProxyUrl) : null;
 		return shim.fetchWithRetry(() => {
 			return nodeFetch(url, options);
 		}, options);
@@ -465,6 +491,9 @@ function shimInit(options = null) {
 			path: url.pathname + (url.query ? `?${url.query}` : ''),
 			headers: headers,
 		};
+
+		const resolvedProxyUrl = resolveProxyUrl(proxySettings.proxyUrl);
+		requestOptions.agent = (resolvedProxyUrl && proxySettings.proxyEnabled) ? shim.proxyAgent(url, resolvedProxyUrl) : null;
 
 		const doFetchOperation = async () => {
 			return new Promise((resolve, reject) => {
@@ -572,6 +601,27 @@ function shimInit(options = null) {
 		return url.startsWith('https') ? shim.httpAgent_.https : shim.httpAgent_.http;
 	};
 
+	shim.proxyAgent = (serverUrl, proxyUrl) => {
+		const proxyAgentConfig = {
+			keepAlive: true,
+			maxSockets: proxySettings.maxConcurrentConnections,
+			keepAliveMsecs: 5000,
+			proxy: proxyUrl,
+			timeout: proxySettings.proxyTimeout * 1000,
+		};
+
+		// Based on https://github.com/delvedor/hpagent#usage
+		if (!isUrlHttps(proxyUrl) && !isUrlHttps(serverUrl)) {
+			return new HttpProxyAgent(proxyAgentConfig);
+		} else if (isUrlHttps(proxyUrl) && !isUrlHttps(serverUrl)) {
+			return new HttpProxyAgent(proxyAgentConfig);
+		} else if (!isUrlHttps(proxyUrl) && isUrlHttps(serverUrl)) {
+			return new HttpsProxyAgent(proxyAgentConfig);
+		} else {
+			return new HttpsProxyAgent(proxyAgentConfig);
+		}
+	};
+
 	shim.openOrCreateFile = (filepath, defaultContents) => {
 		// If the file doesn't exist, create it
 		if (!fs.existsSync(filepath)) {
@@ -634,4 +684,4 @@ function shimInit(options = null) {
 	};
 }
 
-module.exports = { shimInit };
+module.exports = { shimInit, setupProxySettings };

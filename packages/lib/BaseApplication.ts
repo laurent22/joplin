@@ -1,6 +1,7 @@
 import Setting, { Env } from './models/Setting';
 import Logger, { TargetType, LoggerWrapper } from './Logger';
 import shim from './shim';
+const { setupProxySettings } = require('./shim-init-node');
 import BaseService from './services/BaseService';
 import reducer, { setStore } from './reducer';
 import KeychainServiceDriver from './services/keychain/KeychainServiceDriver.node';
@@ -456,6 +457,14 @@ export default class BaseApplication {
 					syswidecas.addCAs(f);
 				}
 			},
+			'net.proxyEnabled': async () => {
+				setupProxySettings({
+					maxConcurrentConnections: Setting.value('sync.maxConcurrentConnections'),
+					proxyTimeout: Setting.value('net.proxyTimeout'),
+					proxyEnabled: Setting.value('net.proxyEnabled'),
+					proxyUrl: Setting.value('net.proxyUrl'),
+				});
+			},
 
 			// Note: this used to run when "encryption.enabled" was changed, but
 			// now we run it anytime any property of the sync target info is
@@ -491,6 +500,9 @@ export default class BaseApplication {
 		sideEffects['locale'] = sideEffects['dateFormat'];
 		sideEffects['encryption.passwordCache'] = sideEffects['syncInfoCache'];
 		sideEffects['encryption.masterPassword'] = sideEffects['syncInfoCache'];
+		sideEffects['sync.maxConcurrentConnections'] = sideEffects['net.proxyEnabled'];
+		sideEffects['sync.proxyTimeout'] = sideEffects['net.proxyEnabled'];
+		sideEffects['sync.proxyUrl'] = sideEffects['net.proxyEnabled'];
 
 		if (action) {
 			const effect = sideEffects[action.key];
