@@ -49,7 +49,7 @@ Please see [readme/coding_style.md](readme/coding_style.md).
 
 ## GUI style
 
-For changes made to the Desktop and mobile clients that affect the user interface, refer to [`packages/lib/theme.ts`](https://github.com/laurent22/joplin/blob/dev/packages/lib/theme.ts) for all styling information. The goal is to create a consistent user interface to allow for easy navigation of Joplin's various features and improve the overall user experience.
+For changes made to the Desktop client that affect the user interface, refer to `packages/app-desktop/theme.ts` for all styling information. The goal is to create a consistent user interface to allow for easy navigation of Joplin's various features and improve the overall user experience.
 
 ## Automated tests
 
