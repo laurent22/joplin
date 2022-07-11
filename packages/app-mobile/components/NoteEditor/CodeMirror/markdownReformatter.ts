@@ -1,10 +1,8 @@
 import {
-	Text as DocumentText, EditorSelection, SelectionRange, ChangeSpec, EditorState, Line, TransactionSpec
+	Text as DocumentText, EditorSelection, SelectionRange, ChangeSpec, EditorState, Line, TransactionSpec,
 } from '@codemirror/state';
 import { getIndentUnit, syntaxTree } from '@codemirror/language';
 import { SyntaxNodeRef } from '@lezer/common';
-
-const { pregQuote } = require('@joplin/lib/string-utils-common');
 
 // Length of the symbol that starts a block quote
 const blockQuoteStartLen = '> '.length;
@@ -31,40 +29,34 @@ export interface RegionSpec {
 
 	/**
 	 * Text to be inserted before and after the region when toggling.
-	 * 
+	 *
 	 * For example, if template is { start: '(', end: ')' }, a selection
 	 * would be surrounded with parentheses.
 	 */
-	template: { start: string, end: string };
+	template: { start: string; end: string };
 
 	/**
 	 * How to identify the region. If not given, [template] is used.
-	 * 
+	 *
 	 * @see template
 	 */
 	matcher: RegionMatchSpec;
 }
 
-/** Whether a match is at the start or end of a selection */
-export enum MatchSide {
-	Start,
-	End,
-}
-
-export namespace RegionSpec {
+export namespace RegionSpec { // eslint-disable-line no-redeclare
 	interface RegionSpecConfig {
-		nodeName?: string,
-		template: string | { start: string, end: string };
+		nodeName?: string;
+		template: string | { start: string; end: string };
 		matcher?: RegionMatchSpec;
 	}
 
 	/**
 	 * @return a new RegionSpec, given a simplified set of options.
-	 * 
+	 *
 	 * If [config.template] is a string, it is used as both the starting and ending
 	 * templates.
 	 * Similarly, if [config.matcher] is not given, a matcher is created based on
-	 * [config.template]. 
+	 * [config.template].
 	 */
 	export const of = (config: RegionSpecConfig): RegionSpec => {
 		let templateStart: string, templateEnd: string;
@@ -81,15 +73,15 @@ export namespace RegionSpec {
 
 		return {
 			nodeName: config.nodeName,
-			template: { start: templateStart, end: templateEnd, },
+			template: { start: templateStart, end: templateEnd },
 			matcher,
-		}
+		};
 	};
 
 	const matcherFromTemplate = (start: string, end: string): RegionMatchSpec => {
 		// See https://stackoverflow.com/a/30851002
-		const escapedStart = pregQuote(start);
-		const escapedEnd = pregQuote(end);
+		const escapedStart = regexEscape(start);
+		const escapedEnd = regexEscape(end);
 
 		return {
 			start: new RegExp(escapedStart, 'g'),
@@ -98,30 +90,41 @@ export namespace RegionSpec {
 	};
 }
 
+/** Whether a match is at the start or end of a selection */
+export enum MatchSide {
+	Start,
+	End,
+}
+
+/** Replace all non-alphanumeric characters with escaped versions */
+const regexEscape = (text: string) => {
+	return text.replace(/[^a-zA-Z0-9]/g, '\\$&');
+};
+
 /**
  * @returns the length of a match for this in the given selection.
  *          Returns -1 if no match is found.
  */
 export const findInlineMatch = (
-	doc: DocumentText, spec: RegionSpec, sel: SelectionRange, side: MatchSide,
+	doc: DocumentText, spec: RegionSpec, sel: SelectionRange, side: MatchSide
 ): number => {
-	const [ regex, template ] = (() => {
+	const [regex, template] = (() => {
 		if (side === MatchSide.Start) {
-			return [ spec.matcher.start, spec.template.start ];
+			return [spec.matcher.start, spec.template.start];
 		} else {
-			return [ spec.matcher.end, spec.template.end ];
+			return [spec.matcher.end, spec.template.end];
 		}
 	})();
-	const [ startIndex, endIndex ] = (() => {
+	const [startIndex, endIndex] = (() => {
 		if (!sel.empty) {
-			return [ sel.from, sel.to ];
+			return [sel.from, sel.to];
 		}
 
-		let bufferSize = spec.matcher.bufferSize ?? template.length;
+		const bufferSize = spec.matcher.bufferSize ?? template.length;
 		if (side === MatchSide.Start) {
-			return [ sel.from - bufferSize, sel.to ]
+			return [sel.from - bufferSize, sel.to];
 		} else {
-			return [ sel.from, sel.to + bufferSize];
+			return [sel.from, sel.to + bufferSize];
 		}
 	})();
 	const searchText = doc.sliceString(startIndex, endIndex);
@@ -155,8 +158,8 @@ export const findInlineMatch = (
 	}
 
 	if (foundMatch) {
-		let matchLength = foundMatch[0].length;
-		let matchIndex = foundMatch.index;
+		const matchLength = foundMatch[0].length;
+		const matchIndex = foundMatch.index;
 
 		// If the match isn't in the right place,
 		if (indexSatisfies(matchIndex, matchLength)) {
@@ -334,7 +337,7 @@ const toggleInlineRegionSurrounded = (
  * @returns an update to the selection and formatted text
  */
 export const toggleInlineSelectionFormat = (
-	state: EditorState, spec: RegionSpec, sel: SelectionRange,
+	state: EditorState, spec: RegionSpec, sel: SelectionRange
 ): SelectionUpdate => {
 	const endMatchLen = findInlineMatch(state.doc, spec, sel, MatchSide.End);
 
@@ -364,7 +367,7 @@ export const toggleInlineSelectionFormat = (
  * @see toggleSelectionFormat
  */
 export const toggleInlineFormatGlobally = (
-	state: EditorState, spec: RegionSpec,
+	state: EditorState, spec: RegionSpec
 ): TransactionSpec => {
 	const changes = state.changeByRange((sel: SelectionRange) => {
 		return toggleInlineSelectionFormat(state, spec, sel);
