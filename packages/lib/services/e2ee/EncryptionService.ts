@@ -41,6 +41,11 @@ export enum EncryptionMethod {
 	Custom = 6,
 }
 
+interface EncryptionHeader {
+	encryptionMethod: EncryptionMethod;
+	masterKeyId: string;
+}
+
 export interface EncryptOptions {
 	encryptionMethod?: EncryptionMethod;
 	onProgress?: Function;
@@ -422,7 +427,7 @@ export default class EncryptionService {
 		const masterKeyId = options.masterKeyId ? options.masterKeyId : this.activeMasterKeyId();
 		const masterKeyPlainText = this.loadedMasterKey(masterKeyId).plainText;
 
-		const header = {
+		const header: EncryptionHeader = {
 			encryptionMethod: method,
 			masterKeyId: masterKeyId,
 		};
@@ -452,7 +457,7 @@ export default class EncryptionService {
 	async decryptAbstract_(source: any, destination: any, options: EncryptOptions = null) {
 		if (!options) options = {};
 
-		const header: any = await this.decodeHeaderSource_(source);
+		const header = await this.decodeHeaderSource_(source);
 		const masterKeyPlainText = this.loadedMasterKey(header.masterKeyId).plainText;
 
 		let doneSize = 0;
@@ -638,7 +643,7 @@ export default class EncryptionService {
 		return r;
 	}
 
-	encodeHeader_(header: any) {
+	encodeHeader_(header: EncryptionHeader) {
 		// Sanity check
 		if (header.masterKeyId.length !== 32) throw new Error(`Invalid master key ID size: ${header.masterKeyId}`);
 
@@ -654,7 +659,7 @@ export default class EncryptionService {
 		return this.decodeHeaderSource_(source);
 	}
 
-	async decodeHeaderSource_(source: any) {
+	async decodeHeaderSource_(source: any): Promise<EncryptionHeader> {
 		const identifier = await source.read(5);
 		if (!isValidHeaderIdentifier(identifier)) throw new JoplinError(`Invalid encryption identifier. Data is not actually encrypted? ID was: ${identifier}`, 'invalidIdentifier');
 		const mdSizeHex = await source.read(6);
