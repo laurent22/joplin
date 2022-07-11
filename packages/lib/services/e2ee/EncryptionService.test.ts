@@ -4,7 +4,7 @@ import Note from '../../models/Note';
 import Setting from '../../models/Setting';
 import BaseItem from '../../models/BaseItem';
 import MasterKey from '../../models/MasterKey';
-import EncryptionService, { EncryptionMethod } from './EncryptionService';
+import EncryptionService, { EncryptionHeader, EncryptionMethod } from './EncryptionService';
 import { setEncryptionEnabled } from '../synchronizer/syncInfoUtils';
 import { readFile } from 'fs-extra';
 
@@ -36,8 +36,7 @@ describe('services/e2ee/EncryptionService', function() {
 
 	it('should decode header v1', (async () => {
 		const encodedHeader = 'JED0100002205c24138199f5b403fa3e9b8b4f22685c500027c';
-		const decodedHeader = service.decodeHeaderBytes_(encodedHeader);
-
+		const decodedHeader: EncryptionHeader = service.decodeHeaderBytes_(encodedHeader);
 		expect(decodedHeader.encryptionMethod).toBe(5);
 		expect(decodedHeader.masterKeyId).toBe('c24138199f5b403fa3e9b8b4f22685c5');
 	}));

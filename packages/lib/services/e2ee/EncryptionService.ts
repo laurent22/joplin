@@ -56,8 +56,7 @@ interface EncryptionHeaderKey {
 	ciphertext: string;
 }
 
-interface EncryptionHeader {
-	version: number;
+export interface EncryptionHeader {
 	encryptionMethod: EncryptionMethod;
 	masterKeyId: string;
 	keys?: EncryptionHeaderKey[];
@@ -437,7 +436,6 @@ export default class EncryptionService {
 		const masterKeyPlainText = this.loadedMasterKey(masterKeyId).plainText;
 
 		const header: EncryptionHeader = {
-			version: currentEncryptionHeaderVersion,
 			encryptionMethod: method,
 			masterKeyId: masterKeyId,
 		};
@@ -659,16 +657,7 @@ export default class EncryptionService {
 
 	public encodeHeader_(header: EncryptionHeader) {
 		const encoded = JSON.stringify(header);
-		return `JED02${padLeft(encoded.length.toString(16), 6, '0')}${encoded}`;
-
-		// // Sanity check
-		// if (header.masterKeyId.length !== 32) throw new Error(`Invalid master key ID size: ${header.masterKeyId}`);
-
-		// let encryptionMetadata = '';
-		// encryptionMetadata += padLeft(header.encryptionMethod.toString(16), 2, '0');
-		// encryptionMetadata += header.masterKeyId;
-		// encryptionMetadata = padLeft(encryptionMetadata.length.toString(16), 6, '0') + encryptionMetadata;
-		// return `JED01${encryptionMetadata}`;
+		return `JED0${currentEncryptionHeaderVersion}${padLeft(encoded.length.toString(16), 6, '0')}${encoded}`;
 	}
 
 	public async decodeHeaderString(cipherText: any) {
@@ -690,9 +679,9 @@ export default class EncryptionService {
 			return this.decodeHeaderBytes_(identifier + mdSizeHex + md);
 		} else if (version === 2) {
 			try {
-				const json = JSON.parse(md);
-				if (!json) throw new Error('Could not parse JSON');
-				return json;
+				const header = JSON.parse(md);
+				if (!header) throw new Error('Could not parse JSON');
+				return header;
 			} catch (error) {
 				throw new Error(`Could not decode encryption header: ${error.message}: ${md}`);
 			}
