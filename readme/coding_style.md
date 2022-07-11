@@ -160,39 +160,28 @@ As much as possible, avoid default parameters in **function definitions** and op
 
 **BAD:**
 ```ts
-interface CustomTag {
-	name: string;
-	validContentValues?: string[];
-}
-
-const createTagFromName = (name: string, validContentValues: string[] = []): CustomTag => {
-	return {
-		name,
-		validContentValues,
-	};
+const getFallingObjectVelocity = (time: number, acceleration: number = 9.8) => {
+	return acceleration * time * time / 2;
 };
+
+console.log(getFallingObjectVelocity(10));
 ```
 
-**Good:**
+**Better:**
 ```ts
-interface CustomTag {
-	name: string;
-	validContentValues: string[];
+class Environment {
+	private constructor(
+		private readonly acceleration: number,
+	) { }
+
+	public getFallingObjectVelocity(time: number) {
+		return this.acceleration * time * time / 2;
+	}
 }
 
-const createAttributelessTag = (name: string): CustomTag => {
-	return {
-		name,
-		validContentValues: [],
-	};
-};
-
-const createTagWithAttributes = (name: string, validContentValues: string[]): CustomTag => {
-	return {
-		name,
-		validContentValues,
-	};
-};
+const earthGravityAcceleration = 9.8;
+const defaultEnvironment = new Environment(earthGravityAcceleration);
+console.log(defaultEnvironment.getFallingObjectVelocity(10));
 ```
 
 # React
