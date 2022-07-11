@@ -846,12 +846,6 @@ packages/app-mobile/components/NoteBodyViewer/hooks/useSource.js.map
 packages/app-mobile/components/NoteEditor/CodeMirror/CodeMirror.d.ts
 packages/app-mobile/components/NoteEditor/CodeMirror/CodeMirror.js
 packages/app-mobile/components/NoteEditor/CodeMirror/CodeMirror.js.map
-packages/app-mobile/components/NoteEditor/CodeMirror/RegionSpec.d.ts
-packages/app-mobile/components/NoteEditor/CodeMirror/RegionSpec.js
-packages/app-mobile/components/NoteEditor/CodeMirror/RegionSpec.js.map
-packages/app-mobile/components/NoteEditor/CodeMirror/RegionSpec.test.d.ts
-packages/app-mobile/components/NoteEditor/CodeMirror/RegionSpec.test.js
-packages/app-mobile/components/NoteEditor/CodeMirror/RegionSpec.test.js.map
 packages/app-mobile/components/NoteEditor/CodeMirror/decorators.d.ts
 packages/app-mobile/components/NoteEditor/CodeMirror/decorators.js
 packages/app-mobile/components/NoteEditor/CodeMirror/decorators.js.map
@@ -867,6 +861,12 @@ packages/app-mobile/components/NoteEditor/CodeMirror/markdownCommands.test.js.ma
 packages/app-mobile/components/NoteEditor/CodeMirror/markdownMathParser.d.ts
 packages/app-mobile/components/NoteEditor/CodeMirror/markdownMathParser.js
 packages/app-mobile/components/NoteEditor/CodeMirror/markdownMathParser.js.map
+packages/app-mobile/components/NoteEditor/CodeMirror/markdownReformatter.d.ts
+packages/app-mobile/components/NoteEditor/CodeMirror/markdownReformatter.js
+packages/app-mobile/components/NoteEditor/CodeMirror/markdownReformatter.js.map
+packages/app-mobile/components/NoteEditor/CodeMirror/markdownReformatter.test.d.ts
+packages/app-mobile/components/NoteEditor/CodeMirror/markdownReformatter.test.js
+packages/app-mobile/components/NoteEditor/CodeMirror/markdownReformatter.test.js.map
 packages/app-mobile/components/NoteEditor/CodeMirror/theme.d.ts
 packages/app-mobile/components/NoteEditor/CodeMirror/theme.js
 packages/app-mobile/components/NoteEditor/CodeMirror/theme.js.map

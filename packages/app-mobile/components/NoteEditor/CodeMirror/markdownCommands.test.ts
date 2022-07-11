@@ -5,12 +5,11 @@
 import { EditorSelection, EditorState, SelectionRange } from '@codemirror/state';
 import { EditorView } from '@codemirror/view';
 import {
-	increaseIndent, tabsToSpaces, toggleBolded, toggleCode, toggleHeaderLevel, toggleItalicized, toggleList, toggleMath, toggleRegionFormat, updateLink,
+	increaseIndent, toggleBolded, toggleCode, toggleHeaderLevel, toggleItalicized, toggleList, toggleMath, updateLink,
 } from './markdownCommands';
 import { GFM as GithubFlavoredMarkdownExt } from '@lezer/markdown';
 import { markdown } from '@codemirror/lang-markdown';
 import { MarkdownMathExtension } from './markdownMathParser';
-import RegionSpec from './RegionSpec';
 import { ListType } from '../types';
 import { indentUnit } from '@codemirror/language';
 
@@ -464,60 +463,3 @@ describe('Formatting commands', () => {
 	});
 });
 
-describe('Internal text manipulation', () => {
-	const initialText = `Internal text manipulation
-		This is a test...
-		of block and inline region toggling.`;
-	const codeFenceRegex = /^``````\w*\s*$/;
-	const inlineCodeRegionSpec = new RegionSpec({
-		templateStart: '`',
-		templateStop: '`',
-	});
-	const codeTemplate = { start: '``````', stop: '``````' };
-
-	it('Toggle inline region format', () => {
-		const initialState: EditorState = EditorState.create({
-			doc: initialText,
-			selection: EditorSelection.cursor(0),
-		});
-
-		const changes = toggleRegionFormat(
-			initialState,
-			'InlineCode', inlineCodeRegionSpec,
-
-			'FencedCode', { start: codeFenceRegex, stop: codeFenceRegex },
-			codeTemplate
-		);
-
-		const newState = initialState.update(changes).state;
-		expect(newState.doc.toString()).toEqual(`\`\`${initialText}`);
-	});
-
-	it('Toggle block region format', () => {
-		const initialState: EditorState = EditorState.create({
-			doc: initialText,
-			selection: EditorSelection.range(0, initialText.length),
-		});
-
-		const changes = toggleRegionFormat(
-			initialState,
-			'InlineCode', inlineCodeRegionSpec,
-
-			'FencedCode', { start: codeFenceRegex, stop: codeFenceRegex },
-			codeTemplate
-		);
-
-		const newState = initialState.update(changes).state;
-		const editorText = newState.doc.toString();
-		expect(editorText).toBe(`\`\`\`\`\`\`\n${initialText}\n\`\`\`\`\`\``);
-		expect(newState.selection.main.from).toBe(0);
-		expect(newState.selection.main.to).toBe(editorText.length);
-	});
-
-	it('Tabs to spaces', () => {
-		const editor = createEditor('', EditorSelection.cursor(0));
-		expect(tabsToSpaces(editor.state, '\t')).toBe('    ');
-		expect(tabsToSpaces(editor.state, '\t  ')).toBe('      ');
-		expect(tabsToSpaces(editor.state, '  \t  ')).toBe('      ');
-	});
-});
