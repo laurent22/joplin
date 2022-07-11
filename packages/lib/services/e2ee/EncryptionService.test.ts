@@ -1,4 +1,4 @@
-import { fileContentEqual, setupDatabaseAndSynchronizer, supportDir, switchClient, objectsEqual, checkThrowAsync, msleep } from '../../testing/test-utils';
+import { fileContentEqual, setupDatabaseAndSynchronizer, supportDir, switchClient, checkThrowAsync, msleep } from '../../testing/test-utils';
 import Folder from '../../models/Folder';
 import Note from '../../models/Note';
 import Setting from '../../models/Setting';
@@ -23,7 +23,7 @@ const encryptFile = async (service: EncryptionService) => {
 
 let service: EncryptionService = null;
 
-describe('services_EncryptionService', function() {
+describe('services/e2ee/EncryptionService', function() {
 
 	beforeEach(async (done) => {
 		await setupDatabaseAndSynchronizer(1);
@@ -34,17 +34,12 @@ describe('services_EncryptionService', function() {
 		done();
 	});
 
-	it('should encode and decode header', (async () => {
-		const header = {
-			encryptionMethod: EncryptionMethod.SJCL,
-			masterKeyId: '01234568abcdefgh01234568abcdefgh',
-		};
-
-		const encodedHeader = service.encodeHeader_(header);
+	it('should decode header v1', (async () => {
+		const encodedHeader = 'JED0100002205c24138199f5b403fa3e9b8b4f22685c500027c';
 		const decodedHeader = service.decodeHeaderBytes_(encodedHeader);
-		delete decodedHeader.length;
 
-		expect(objectsEqual(header, decodedHeader)).toBe(true);
+		expect(decodedHeader.encryptionMethod).toBe(5);
+		expect(decodedHeader.masterKeyId).toBe('c24138199f5b403fa3e9b8b4f22685c5');
 	}));
 
 	it('should generate and decrypt a master key', (async () => {

@@ -41,9 +41,26 @@ export enum EncryptionMethod {
 	Custom = 6,
 }
 
+const headerVersions = [1, 2];
+
+const currentEncryptionHeaderVersion = headerVersions[headerVersions.length - 1];
+
+enum EncryptionHeaderKeyEncryptionMode {
+	MasterKey = 1,
+	Password = 2,
+}
+
+interface EncryptionHeaderKey {
+	encryptionMode: EncryptionHeaderKeyEncryptionMode;
+	masterKeyId?: string;
+	ciphertext: string;
+}
+
 interface EncryptionHeader {
+	version: number;
 	encryptionMethod: EncryptionMethod;
 	masterKeyId: string;
+	keys?: EncryptionHeaderKey[];
 }
 
 export interface EncryptOptions {
@@ -78,13 +95,13 @@ export default class EncryptionService {
 	public defaultEncryptionMethod_ = EncryptionMethod.SJCL1a; // public because used in tests
 	private defaultMasterKeyEncryptionMethod_ = EncryptionMethod.SJCL4;
 
-	private headerTemplates_ = {
-		// Template version 1
-		1: {
-			// Fields are defined as [name, valueSize, valueType]
-			fields: [['encryptionMethod', 2, 'int'], ['masterKeyId', 32, 'hex']],
-		},
-	};
+	// private headerTemplates_ = {
+	// 	// Template version 1
+	// 	1: {
+	// 		// Fields are defined as [name, valueSize, valueType]
+	// 		fields: [['encryptionMethod', 2, 'int'], ['masterKeyId', 32, 'hex']],
+	// 	},
+	// };
 
 	constructor() {
 		// Note: 1 MB is very slow with Node and probably even worse on mobile.
@@ -104,14 +121,6 @@ export default class EncryptionService {
 		this.decryptedMasterKeys_ = {};
 		this.defaultEncryptionMethod_ = EncryptionMethod.SJCL1a;
 		this.defaultMasterKeyEncryptionMethod_ = EncryptionMethod.SJCL4;
-
-		this.headerTemplates_ = {
-			// Template version 1
-			1: {
-				// Fields are defined as [name, valueSize, valueType]
-				fields: [['encryptionMethod', 2, 'int'], ['masterKeyId', 32, 'hex']],
-			},
-		};
 	}
 
 	public static instance() {
@@ -428,6 +437,7 @@ export default class EncryptionService {
 		const masterKeyPlainText = this.loadedMasterKey(masterKeyId).plainText;
 
 		const header: EncryptionHeader = {
+			version: currentEncryptionHeaderVersion,
 			encryptionMethod: method,
 			masterKeyId: masterKeyId,
 		};
@@ -637,21 +647,28 @@ export default class EncryptionService {
 		return base64.encode(fullBuffer.buffer);
 	}
 
-	headerTemplate(version: number) {
-		const r = (this.headerTemplates_ as any)[version];
-		if (!r) throw new Error(`Unknown header version: ${version}`);
-		return r;
+	private headerTemplate(version: number) {
+		// This deprecated function should only be called with v1 headers
+		if (version !== 1) throw new Error(`Unsupported header version: ${version}`);
+
+		return {
+			// Fields are defined as [name, valueSize, valueType]
+			fields: [['encryptionMethod', 2, 'int'], ['masterKeyId', 32, 'hex']],
+		};
 	}
 
-	encodeHeader_(header: EncryptionHeader) {
-		// Sanity check
-		if (header.masterKeyId.length !== 32) throw new Error(`Invalid master key ID size: ${header.masterKeyId}`);
+	public encodeHeader_(header: EncryptionHeader) {
+		const encoded = JSON.stringify(header);
+		return `JED02${padLeft(encoded.length.toString(16), 6, '0')}${encoded}`;
 
-		let encryptionMetadata = '';
-		encryptionMetadata += padLeft(header.encryptionMethod.toString(16), 2, '0');
-		encryptionMetadata += header.masterKeyId;
-		encryptionMetadata = padLeft(encryptionMetadata.length.toString(16), 6, '0') + encryptionMetadata;
-		return `JED01${encryptionMetadata}`;
+		// // Sanity check
+		// if (header.masterKeyId.length !== 32) throw new Error(`Invalid master key ID size: ${header.masterKeyId}`);
+
+		// let encryptionMetadata = '';
+		// encryptionMetadata += padLeft(header.encryptionMethod.toString(16), 2, '0');
+		// encryptionMetadata += header.masterKeyId;
+		// encryptionMetadata = padLeft(encryptionMetadata.length.toString(16), 6, '0') + encryptionMetadata;
+		// return `JED01${encryptionMetadata}`;
 	}
 
 	public async decodeHeaderString(cipherText: any) {
@@ -660,16 +677,31 @@ export default class EncryptionService {
 	}
 
 	async decodeHeaderSource_(source: any): Promise<EncryptionHeader> {
-		const identifier = await source.read(5);
+		const identifier: string = await source.read(5);
 		if (!isValidHeaderIdentifier(identifier)) throw new JoplinError(`Invalid encryption identifier. Data is not actually encrypted? ID was: ${identifier}`, 'invalidIdentifier');
+
+		const version = Number(identifier[identifier.length - 1]);
 		const mdSizeHex = await source.read(6);
 		const mdSize = parseInt(mdSizeHex, 16);
 		if (isNaN(mdSize) || !mdSize) throw new Error(`Invalid header metadata size: ${mdSizeHex}`);
-		const md = await source.read(parseInt(mdSizeHex, 16));
-		return this.decodeHeaderBytes_(identifier + mdSizeHex + md);
+		const md = await source.read(mdSize);
+
+		if (version === 1) {
+			return this.decodeHeaderBytes_(identifier + mdSizeHex + md);
+		} else if (version === 2) {
+			try {
+				const json = JSON.parse(md);
+				if (!json) throw new Error('Could not parse JSON');
+				return json;
+			} catch (error) {
+				throw new Error(`Could not decode encryption header: ${error.message}: ${md}`);
+			}
+		} else {
+			throw new Error(`Unsupported header version: ${version}`);
+		}
 	}
 
-	decodeHeaderBytes_(headerHexaBytes: any) {
+	decodeHeaderBytes_(headerHexaBytes: string) {
 		const reader: any = this.stringReader_(headerHexaBytes, true);
 		const identifier = reader.read(3);
 		const version = parseInt(reader.read(2), 16);

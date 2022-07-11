@@ -762,7 +762,8 @@ async function allSyncTargetItemsEncrypted() {
 		if (remoteContent.type_ === BaseModel.TYPE_RESOURCE) {
 			const content = await fileApi().get(`.resource/${remoteContent.id}`);
 			totalCount++;
-			if (content.substr(0, 5) === 'JED01') encryptedCount++;
+			const headerStart = content.substr(0, 5);
+			if (['JED01', 'JED02'].includes(headerStart)) encryptedCount++;
 		}
 
 		if (remoteContent.encryption_applied) encryptedCount++;
