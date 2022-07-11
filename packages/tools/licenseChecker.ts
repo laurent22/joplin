@@ -1,6 +1,8 @@
 import { readdir, stat, writeFile } from 'fs-extra';
 import { chdir, cwd } from 'process';
 import { execCommand2, rootDir } from './tool-utils';
+import yargs = require('yargs');
+import { rtrimSlashes } from '@joplin/lib/path-utils';
 
 interface LicenseInfo {
 	licenses: string;
@@ -33,14 +35,22 @@ const enforceString = (line: any): string => {
 };
 
 async function main() {
+	const argv = await yargs.argv;
+	const pathToCheck = rtrimSlashes(argv._.length ? argv._[0].toString() : '');
+
 	const directories: string[] = [];
 	const packageItems = await readdir(`${rootDir}/packages`);
 	for (const item of packageItems) {
 		const fullPath = `${rootDir}/packages/${item}`;
+		if (pathToCheck && !fullPath.endsWith(pathToCheck)) continue;
+
 		const info = await stat(fullPath);
 		if (info.isDirectory()) directories.push(fullPath);
 	}
-	directories.push(rootDir);
+
+	if (!pathToCheck || rootDir.endsWith(pathToCheck)) {
+		directories.push(rootDir);
+	}
 
 	let licenses: Record<string, LicenseInfo> = {};
 
