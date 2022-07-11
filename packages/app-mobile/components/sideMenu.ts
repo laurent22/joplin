@@ -1,6 +1,7 @@
 const { connect } = require('react-redux');
 const SideMenu_ = require('react-native-side-menu-updated').default;
 import { Dimensions } from 'react-native';
+import { State } from '@joplin/lib/reducer';
 
 type Event = {
 	nativeEvent: {
@@ -21,7 +22,7 @@ class SideMenuComponent extends SideMenu_ {
 	}
 }
 
-const SideMenu = connect((state: any) => {
+const SideMenu = connect((state: State) => {
 	return {
 		isOpen: state.showSideMenu,
 	};
