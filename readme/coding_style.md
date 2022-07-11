@@ -1,4 +1,4 @@
-> Coding style is mostly enforced by a pre-commit hook that runs `eslint`. This hook is installed whenever running `yarn install` on any of the application directory. If for some reason the pre-commit hook didn't get installed, you can manually install it by running `yarn install` at the root of the repository.
+Coding style is mostly enforced by a pre-commit hook that runs `eslint`. This hook is installed whenever running `yarn install` on any of the application directory. If for some reason the pre-commit hook didn't get installed, you can manually install it by running `yarn install` at the root of the repository.
 
 
 
@@ -6,7 +6,7 @@
 
 ## Use TypeScript for new files
 
-> Even if you are **modifying** a file that was originally in JavaScript you should ideally convert it first to TypeScript before modifying it.
+Even if you are **modifying** a file that was originally in JavaScript you should ideally convert it first to TypeScript before modifying it.
 
 ### Creating a new `.ts` file
 
@@ -26,6 +26,38 @@ To do this,
    * Example : [`types.ts`](https://github.com/laurent22/joplin/blob/dev/packages/server/src/utils/types.ts)
 
 
+## Use the same case for imported and exported members
+
+If you create a file that exports a single function called `processData()`, the file should be named `processData.ts`. When importing, it should be imported as `processData`, too. Basically, be consistent with naming, even though JS allows things to be named differently.
+
+**BAD:**
+```ts
+// ProcessDATA.ts
+export default const processData = () => {
+	// ...
+};
+
+// foo.ts
+import doDataProcessing from './ProcessDATA';
+
+doDataProcessing();
+...
+```
+
+**Good:**
+```ts
+// processData.ts
+export default const processData = () => {
+	// ...
+};
+
+// foo.ts
+import processData from './processData';
+
+processData();
+...
+```
+
 ## Use `camelCase` for `const`ants in new code
 
 **BAD:**
@@ -42,24 +74,22 @@ const gravityAccel = 9.8;
 
 ## Indent using `tab`s
 
-> **VSCode**: In `vscode`, be sure to check whether new files are created with `tab` or `space` indentation! [Spaces can be converted to tabs using the command palette.](https://code.visualstudio.com/docs/editor/codebasics#_autodetection)
+**VSCode**: In `vscode`, be sure to check whether new files are created with `tab` or `space` indentation! [Spaces can be converted to tabs using the command palette.](https://code.visualstudio.com/docs/editor/codebasics#_autodetection)
 
 
-## Avoid `==`
+## Use strict equality
 
-Use `===` to check equality. This keeps our code style consistent across TypeScript and JavaScript files and avoids a [misleading compiler error message](https://github.com/microsoft/TypeScript/issues/26592).
+Use `===` instead of `==`.
 
-> See also
->  * [Unofficial TypeScript style guide, `==` vs `===`](https://basarat.gitbook.io/typescript/styleguide#or)
->  * [More about `==` vs `===` in TypeScript.](https://stackoverflow.com/a/60669874)
+Although the TypeScript compiler _will_ give error messages if two different types are compared with `==` (e.g. `number == boolean`), its compiler error [messages in this case can be misleading](https://github.com/microsoft/TypeScript/issues/26592).
+
+
+### See also
+ * [Unofficial TypeScript style guide, `==` vs `===`](https://basarat.gitbook.io/typescript/styleguide#or)
+ * [More about `==` vs `===` in TypeScript.](https://stackoverflow.com/a/60669874)
 
 
 ## Declare variables just before their usage
-
-> What about numeric constants? E.g.
-> ```ts
-> const gravityAcceleration = 9.8; // m/s
-> ```
 
 **BAD:**
 ```ts
@@ -91,12 +121,15 @@ foo += Math.sin(bar + Math.tan(foo));
 ...
 ```
 
+Don't allow this to lead to duplicate code, however. If constants are used multiple times, it's okay to declare them at the top of a file or in a separate, imported file.
+
 
 ## Prefer `const` to `let` (where possible)
 
 
 ## Prefer `() => {}` to `function() { ... }`
-Prefer arrow functions to `function() { ... }` in new code.
+
+Doing this avoids having to deal with the `this` keyword. Not having it makes it easier to refactor class components into React Hooks, because any use of `this` (used in classes) will be correctly detected as invalid by TypeScript.
 
 **BAD:**
 ```ts
@@ -113,7 +146,51 @@ const foo = () => {
 };
 ```
 
+### See also
+ * [Frontend Armory — When should I use arrow functions with React?](https://frontarm.com/james-k-nelson/when-to-use-arrow-functions/)
 
+
+
+## Avoid default and optional parameters
+
+As much as possible, avoid default parameters in **function definitions** and optional fields in **interface definitions**. When all parameters are required, it is much easier to refactor the code because the compiler will automatically catch any missing parameters.
+
+**BAD:**
+```ts
+interface CustomTag {
+	name: string;
+	validContentValues?: string[];
+}
+
+const createTagFromName = (name: string, validContentValues: string[] = []): CustomTag => {
+	return {
+		name,
+		validContentValues,
+	};
+};
+```
+
+**Good:**
+```ts
+interface CustomTag {
+	name: string;
+	validContentValues: string[];
+}
+
+const createAttributelessTag = (name: string): CustomTag => {
+	return {
+		name,
+		validContentValues: [],
+	};
+};
+
+const createTagWithAttributes = (name: string, validContentValues: string[]): CustomTag => {
+	return {
+		name,
+		validContentValues,
+	};
+};
+```
 
 # React
 ## Use function components for new code
@@ -164,7 +241,7 @@ We aren't using these guides, but they may still be helpful!
 
 ## Posts/resources related to Joplin's style
 
- * Post: https://discourse.joplinapp.org/t/troubleshooting-faq-and-collecting-topic-for-contributing-to-joplin-codebase/6501
- * Post: https://discourse.joplinapp.org/t/how-to-style-your-code/6502
+ * Forum Post: [Troubleshooting FAQ and collecting topic for contributing to Joplin codebase](https://discourse.joplinapp.org/t/troubleshooting-faq-and-collecting-topic-for-contributing-to-joplin-codebase/6501)
+ * Forum Post: [How to style your code](https://discourse.joplinapp.org/t/how-to-style-your-code/6502)
  * GSoC: [GSoC 2022 pull request guidelines](gsoc2022/pull_request_guidelines.md)
  * GitHub: [`.eslintrc.js`](https://github.com/laurent22/joplin/blob/dev/.eslintrc.js)
