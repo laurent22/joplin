@@ -158,32 +158,6 @@ const foo = () => {
 
 As much as possible, avoid default parameters in **function definitions** and optional fields in **interface definitions**. When all parameters are required, it is much easier to refactor the code because the compiler will automatically catch any missing parameters.
 
-**BAD:**
-```ts
-const getFallingObjectVelocity = (time: number, acceleration: number = 9.8) => {
-	return acceleration * time * time / 2;
-};
-
-console.log(getFallingObjectVelocity(10));
-```
-
-**Better:**
-```ts
-class Environment {
-	private constructor(
-		private readonly acceleration: number,
-	) { }
-
-	public getFallingObjectVelocity(time: number) {
-		return this.acceleration * time * time / 2;
-	}
-}
-
-const earthGravityAcceleration = 9.8;
-const defaultEnvironment = new Environment(earthGravityAcceleration);
-console.log(defaultEnvironment.getFallingObjectVelocity(10));
-```
-
 # React
 ## Use function components for new code
 
