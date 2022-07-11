@@ -415,7 +415,7 @@ describe('models/Note', function() {
 describe('models/Note_replacePaths', function() {
 
 	function testResourceReplacment(body: string, pathsToTry: string[], expected: string) {
-		expect(Note.replacePaths(pathsToTry, body)).toBe(expected);
+		expect(Note['replaceResourceExternalToInternalLinks_'](pathsToTry, body)).toBe(expected);
 	}
 	test('Basic replacement', () => {
 		const body = '![image.png](file:///C:Users/Username/resources/849eae4dade045298c107fc706b6d2bc.png?t=1655192326803)';

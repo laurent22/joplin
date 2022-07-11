@@ -192,11 +192,13 @@ export default class Note extends BaseItem {
 			pathsToTry.push(Resource.baseRelativeDirectoryPath());
 		}
 
-		body = Note.replacePaths(pathsToTry, body);
+		body = Note.replaceResourceExternalToInternalLinks_(pathsToTry, body);
 		return body;
 	}
 
-	static replacePaths(pathsToTry: string[], body: string) {
+	private static replaceResourceExternalToInternalLinks_(pathsToTry: string[], body: string) {
+		// This is a moved to a separate function for the purpose of testing only
+
 		// We support both the escaped and unescaped versions because both
 		// of those paths are valid:
 		//
@@ -211,6 +213,8 @@ export default class Note extends BaseItem {
 		}
 
 		pathsToTry = temp;
+
+		// this.logger().debug('replaceResourceExternalToInternalLinks', 'options:', options, 'pathsToTry:', pathsToTry);
 
 		for (const basePath of pathsToTry) {
 			const reStrings = [
@@ -230,6 +234,8 @@ export default class Note extends BaseItem {
 			// Handles joplin://af0edffa4a60496bba1b0ba06b8fb39a
 			body = body.replace(/\(joplin:\/\/([a-zA-Z0-9]{32})\)/g, '(:/$1)');
 		}
+		// this.logger().debug('replaceResourceExternalToInternalLinks result', body);
+
 		return body;
 	}
 
