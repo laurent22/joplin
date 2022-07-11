@@ -6,8 +6,6 @@ Coding style is mostly enforced by a pre-commit hook that runs `eslint`. This ho
 
 ## Use TypeScript for new files
 
-Even if you are **modifying** a file that was originally in JavaScript you should ideally convert it first to TypeScript before modifying it.
-
 ### Creating a new `.ts` file
 
 Because the TypeScript compiler generates `.js` files, be sure to add these new `.js` files to `.eslintignore` and `.gitignore`.
@@ -16,6 +14,11 @@ To do this,
 1. If the TypeScript compiler has already generated a `.js` file for the new `.ts` file, delete it.
 2. Run `yarn run updateIgnored` in the root directory of the project (or `yarn run postinstall`)
 
+### Convert existing `.js` files to TypeScript before modifying
+
+Even if you are **modifying** a file that was originally in JavaScript you should ideally convert it first to TypeScript before modifying it.
+
+If this is a large file however please ask first if it needs to be converted. Some very old and large JS files are tricky to convert properly due to poorly defined types, so in some cases it's better to leave that for another day (or another PR).
 
 ## Filenames
 
