@@ -15,13 +15,9 @@
     "react-native-saf-x.podspec",
     "!lib/typescript/example",
     "!android/build",
-    "!ios/build",
-    "!**/__tests__",
-    "!**/__fixtures__",
-    "!**/__mocks__"
+    "!ios/build"
   ],
   "scripts": {
-    "test": "jest",
     "linter-precommit": "yarn --cwd ../../ eslint --resolve-plugins-relative-to . --fix packages/react-native-saf-x/**/*.{js,ts,tsx}",
     "tsc": "tsc --project tsconfig.json"
   },
@@ -42,10 +38,8 @@
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
-    "@types/jest": "^26.0.15",
     "@types/react": "^16.9.55",
     "@types/react-native": "^0.64.4",
-    "jest": "^26.6.3",
     "react": "17.0.2",
     "react-native": "0.66.1",
     "typescript": "^4.0.5"
