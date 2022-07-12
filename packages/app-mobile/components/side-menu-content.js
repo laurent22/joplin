@@ -250,7 +250,8 @@ class SideMenuContentComponent extends Component {
 
 		let iconWrapper = null;
 
-		const iconName = this.props.collapsedFolderIds.indexOf(folder.id) >= 0 ? 'chevron-down' : 'chevron-up';
+		const collapsed = this.props.collapsedFolderIds.indexOf(folder.id) >= 0;
+		const iconName = collapsed ? 'chevron-down' : 'chevron-up';
 		const iconComp = <Icon name={iconName} style={this.styles().folderIcon} />;
 
 		iconWrapper = !hasChildren ? null : (
@@ -260,6 +261,9 @@ class SideMenuContentComponent extends Component {
 				onPress={() => {
 					if (hasChildren) this.folder_togglePress(folder);
 				}}
+
+				accessibilityLabel={collapsed ? _('Expand folder') : _('Collapse folder')}
+				accessibilityRole="togglebutton"
 			>
 				{iconComp}
 			</TouchableOpacity>

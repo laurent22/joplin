@@ -119,9 +119,7 @@ function SearchBar(props: Props) {
 	}, [onExitSearch]);
 
 	const onSearchButtonClick = useCallback(() => {
-		console.info('isFocused', props.isFocused);
-
-		if (props.isFocused) {
+		if (props.isFocused || searchStarted) {
 			void onExitSearch();
 		} else {
 			setSearchStarted(true);
@@ -131,7 +129,7 @@ function SearchBar(props: Props) {
 				field: 'globalSearch',
 			});
 		}
-	}, [onExitSearch, props.isFocused]);
+	}, [onExitSearch, props.isFocused, searchStarted]);
 
 	useEffect(() => {
 		if (props.notesParentType !== 'Search') {

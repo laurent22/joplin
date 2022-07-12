@@ -1,9 +1,9 @@
 import { Share, ShareType } from '../../services/database/types';
 import routeHandler from '../../middleware/routeHandler';
-import { ErrorForbidden } from '../../utils/errors';
+import { ErrorForbidden, ErrorNotFound } from '../../utils/errors';
 import { postApi } from '../../utils/testing/apiUtils';
 import { testImageBuffer } from '../../utils/testing/fileApiUtils';
-import { beforeAllDb, afterAllTests, parseHtml, beforeEachDb, createUserAndSession, koaAppContext, checkContextError, expectNotThrow, createNote, createItem, models, expectHttpError } from '../../utils/testing/testUtils';
+import { beforeAllDb, afterAllTests, parseHtml, beforeEachDb, createUserAndSession, koaAppContext, checkContextError, expectNotThrow, createNote, createItem, models, expectHttpError, createResource } from '../../utils/testing/testUtils';
 
 const resourceSize = 2720;
 
@@ -129,6 +129,89 @@ describe('shares.link', function() {
 		expect(resourceContent.byteLength).toBe(resourceSize);
 	});
 
+	test('should share a linked note', async function() {
+		const { session } = await createUserAndSession();
+
+		const linkedNote1 = await createNote(session.id, {
+			id: '000000000000000000000000000000C1',
+		});
+
+		const resource = await createResource(session.id, {
+			id: '000000000000000000000000000000E1',
+		}, 'test');
+
+		const linkedNote2 = await createNote(session.id, {
+			id: '000000000000000000000000000000C2',
+			body: `[](:/${resource.jop_id})`,
+		});
+
+		const rootNote = await createNote(session.id, {
+			id: '00000000000000000000000000000001',
+			body: `[](:/${linkedNote1.jop_id}) [](:/${linkedNote2.jop_id})`,
+		});
+
+		const share = await postApi<Share>(session.id, 'shares', {
+			type: ShareType.Note,
+			note_id: rootNote.jop_id,
+			recursive: 1,
+		});
+
+		const bodyHtml = await getShareContent(share.id, { note_id: '000000000000000000000000000000C2' }) as string;
+		const doc = parseHtml(bodyHtml);
+		const image = doc.querySelector('a[data-resource-id="000000000000000000000000000000E1"]');
+		expect(image.getAttribute('href')).toBe(`http://localhost:22300/shares/${share.id}?resource_id=000000000000000000000000000000E1&t=1602758278090`);
+
+		const resourceContent = await getShareContent(share.id, { resource_id: '000000000000000000000000000000E1' });
+		expect(resourceContent.toString()).toBe('test');
+	});
+
+	test('should not share items that are not linked to a shared note', async function() {
+		const { session } = await createUserAndSession();
+
+		const notSharedResource = await createResource(session.id, {
+			id: '000000000000000000000000000000E2',
+		}, 'test2');
+
+		await createNote(session.id, {
+			id: '000000000000000000000000000000C5',
+			body: `[](:/${notSharedResource.jop_id})`,
+		});
+
+		const rootNote = await createNote(session.id, {
+			id: '00000000000000000000000000000001',
+		});
+
+		const share = await postApi<Share>(session.id, 'shares', {
+			type: ShareType.Note,
+			note_id: rootNote.jop_id,
+			recursive: 1,
+		});
+
+		await expectNotThrow(async () => getShareContent(share.id, { note_id: '00000000000000000000000000000001' }));
+		await expectHttpError(async () => getShareContent(share.id, { note_id: '000000000000000000000000000000C5' }), ErrorNotFound.httpCode);
+		await expectHttpError(async () => getShareContent(share.id, { note_id: '000000000000000000000000000000E2' }), ErrorNotFound.httpCode);
+	});
+
+	test('should not share linked notes if the "recursive" field is not set', async function() {
+		const { session } = await createUserAndSession();
+
+		const linkedNote1 = await createNote(session.id, {
+			id: '000000000000000000000000000000C1',
+		});
+
+		const rootNote = await createNote(session.id, {
+			id: '00000000000000000000000000000001',
+			body: `[](:/${linkedNote1.jop_id})`,
+		});
+
+		const share = await postApi<Share>(session.id, 'shares', {
+			type: ShareType.Note,
+			note_id: rootNote.jop_id,
+		});
+
+		await expectHttpError(async () => getShareContent(share.id, { note_id: '000000000000000000000000000000C1' }), ErrorForbidden.httpCode);
+	});
+
 	test('should not throw an error if the note contains links to non-existing items', async function() {
 		const { session } = await createUserAndSession();
 
@@ -160,7 +243,6 @@ describe('shares.link', function() {
 			await expectNotThrow(async () => getShareContent(share.id));
 		}
 	});
-
 
 	test('should throw an error if owner of share is disabled', async function() {
 		const { user, session } = await createUserAndSession();

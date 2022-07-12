@@ -114,7 +114,7 @@ export default function useFormNote(dependencies: HookDependencies) {
 		if (syncStarted) return () => {};
 		if (formNote.hasChanged) return () => {};
 
-		reg.logger().debug('Sync has finished and note has never been changed - reloading it');
+		reg.logger().info('Sync has finished and note has never been changed - reloading it');
 
 		let cancelled = false;
 

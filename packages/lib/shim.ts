@@ -16,7 +16,7 @@ let isTestingEnv_ = false;
 // (app-desktop, app-mobile, etc.) since we are sure they won't be dependency to
 // other packages (unlike the lib which can be included anywhere).
 //
-// Regarding the type - althought we import React, we only use it as a type
+// Regarding the type - although we import React, we only use it as a type
 // using `typeof React`. This is just to get types in hooks.
 //
 // https://stackoverflow.com/a/42816077/561309
