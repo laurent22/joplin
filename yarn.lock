@@ -2423,6 +2423,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@codemirror/legacy-modes@npm:^6.1.0":
+  version: 6.1.0
+  resolution: "@codemirror/legacy-modes@npm:6.1.0"
+  dependencies:
+    "@codemirror/language": ^6.0.0
+  checksum: bc0e3b771360de435735e0203c47feef8336749738da364c744da50e838d1ad5b36402da00131323238b579f657868210659029d44a1935baf3de8cb964903a6
+  languageName: node
+  linkType: hard
+
 "@codemirror/lint@npm:^6.0.0":
   version: 6.0.0
   resolution: "@codemirror/lint@npm:6.0.0"
@@ -3748,6 +3757,7 @@ __metadata:
     "@codemirror/commands": ^6.0.0
     "@codemirror/lang-markdown": ^6.0.0
     "@codemirror/language": ^6.0.0
+    "@codemirror/legacy-modes": ^6.1.0
     "@codemirror/search": ^6.0.0
     "@codemirror/state": ^6.0.0
     "@codemirror/view": ^6.0.0

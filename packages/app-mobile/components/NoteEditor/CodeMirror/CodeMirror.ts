@@ -21,6 +21,8 @@ import { keymap } from '@codemirror/view';
 import { indentOnInput } from '@codemirror/language';
 import { searchKeymap } from '@codemirror/search';
 import { historyKeymap, defaultKeymap } from '@codemirror/commands';
+import { MarkdownMathExtension } from './markdownMathParser';
+import { GFM as GitHubFlavoredMarkdownExtension } from '@lezer/markdown';
 
 interface CodeMirrorResult {
 	editor: EditorView;
@@ -69,7 +71,12 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 			// See https://github.com/codemirror/basic-setup/blob/main/src/codemirror.ts
 			// for a sample configuration.
 			extensions: [
-				markdown(),
+				markdown({
+					extensions: [
+						MarkdownMathExtension,
+						GitHubFlavoredMarkdownExtension,
+					],
+				}),
 				...createTheme(theme),
 				history(),
 				search(),
