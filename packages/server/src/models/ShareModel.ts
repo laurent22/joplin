@@ -115,6 +115,14 @@ export default class ShareModel extends BaseModel<Share> {
 		return this.db(this.tableName).select(this.defaultFields).whereIn('item_id', itemIds);
 	}
 
+	public async byItemAndRecursive(itemId: Uuid, recursive: boolean): Promise<Share | null> {
+		return this.db(this.tableName)
+			.select(this.defaultFields)
+			.where('item_id', itemId)
+			.where('recursive', recursive ? 1 : 0)
+			.first();
+	}
+
 	public async byUserId(userId: Uuid, type: ShareType): Promise<Share[]> {
 		const query1 = this
 			.db(this.tableName)
@@ -378,11 +386,11 @@ export default class ShareModel extends BaseModel<Share> {
 		return super.save(shareToSave);
 	}
 
-	public async shareNote(owner: User, noteId: string, masterKeyId: string): Promise<Share> {
+	public async shareNote(owner: User, noteId: string, masterKeyId: string, recursive: boolean): Promise<Share> {
 		const noteItem = await this.models().item().loadByJopId(owner.id, noteId);
 		if (!noteItem) throw new ErrorNotFound(`No such note: ${noteId}`);
 
-		const existingShare = await this.byItemId(noteItem.id);
+		const existingShare = await this.byItemAndRecursive(noteItem.id, recursive);
 		if (existingShare) return existingShare;
 
 		const shareToSave: Share = {
@@ -391,6 +399,7 @@ export default class ShareModel extends BaseModel<Share> {
 			owner_id: owner.id,
 			note_id: noteId,
 			master_key_id: masterKeyId,
+			recursive: recursive ? 1 : 0,
 		};
 
 		await this.checkIfAllowed(owner, AclAction.Create, shareToSave);

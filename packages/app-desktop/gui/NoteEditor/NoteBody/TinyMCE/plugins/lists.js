@@ -2078,6 +2078,17 @@
       setup(editor);
     };
 
+    var setup$2 = function (editor) {
+      var editorClickHandler = function (event) {
+        if (!isJoplinChecklistItem(event.target))
+          return;
+        if (event.offsetX >= 0)
+          return;
+        editor.execCommand('ToggleJoplinChecklistItem', false, { element: event.target });
+      };
+      editor.on('click', editorClickHandler);
+    };
+
     var findIndex = function (list, predicate) {
       for (var index = 0; index < list.length; index++) {
         var element = list[index];
@@ -2100,21 +2111,8 @@
           var listType = findContainerListTypeFromEvent(e);
           buttonApi.setActive(listType === options.listType && lists.length > 0 && lists[0].nodeName === listName && !isCustomList(lists[0]));
         };
-        var editorClickHandler = function (event) {
-          if (!isJoplinChecklistItem(event.target))
-            return;
-          if (event.offsetX >= 0)
-            return;
-          editor.execCommand('ToggleJoplinChecklistItem', false, { element: event.target });
-        };
-        if (options.listType === 'joplinChecklist') {
-          editor.on('click', editorClickHandler);
-        }
         editor.on('NodeChange', nodeChangeHandler);
         return function () {
-          if (options.listType === 'joplinChecklist') {
-            editor.off('click', editorClickHandler);
-          }
           editor.off('NodeChange', nodeChangeHandler);
         };
       };
@@ -2158,6 +2156,7 @@
     function Plugin () {
       PluginManager.add('joplinLists', function (editor) {
         setup$1(editor);
+        setup$2(editor);
         register$1(editor);
         register(editor);
         return get(editor);

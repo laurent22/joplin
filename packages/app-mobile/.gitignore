@@ -65,3 +65,5 @@ lib/rnInjectedJs/
 dist/
 components/NoteEditor/CodeMirror.bundle.js
 components/NoteEditor/CodeMirror.bundle.min.js
+
+utils/fs-driver-android.js

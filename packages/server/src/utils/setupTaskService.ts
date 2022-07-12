@@ -31,7 +31,7 @@ export default function(env: Env, models: Models, config: Config, services: Serv
 		{
 			id: TaskId.ProcessUserDeletions,
 			description: taskIdToLabel(TaskId.ProcessUserDeletions),
-			schedule: '0 */6 * * *',
+			schedule: '10 * * * *',
 			run: (_models: Models, services: Services) => services.userDeletion.runMaintenance(),
 		},
 

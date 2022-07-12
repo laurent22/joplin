@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"Last-Translator: horaceyoung <paventyang@gmail.com>\n"
-"Language-Team: zh_CN <paventyang@gmail.com>\n"
+"Last-Translator: KaneGreen <737445366KG@Gmail.com>\n"
+"Language-Team: zh_CN <737445366KG@Gmail.com>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.1\n"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:560
 msgid "- Camera: to allow taking a picture and attaching it to a note."
@@ -32,7 +32,7 @@ msgstr "- 存储：允许将文件附加到笔记中并启用文件系统同步�
 #: packages/lib/services/KeymapService.ts:314
 #: packages/lib/services/KeymapService.ts:320
 msgid "\"%s\" is missing the required \"%s\" property."
-msgstr "“%s”缺少必须的属性\"%s”。"
+msgstr "“%s” 缺少必须的属性 “%s”。"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:252
 msgid "(%s)"
@@ -44,7 +44,7 @@ msgstr "（无）"
 
 #: packages/lib/models/Setting.ts:370 packages/lib/models/Setting.ts:371
 msgid "(wysiwyg: %s)"
-msgstr "(兼容所见即所得编辑器: %s)"
+msgstr "（兼容所见即所得编辑器：%s）"
 
 #: packages/app-desktop/gui/MenuBar.tsx:623
 #: packages/app-desktop/gui/MenuBar.tsx:888
@@ -166,9 +166,9 @@ msgid ""
 "to list tags associated with [note]. The command `tag list` can be used to "
 "list all the tags (use -l for long option)."
 msgstr ""
-"<tag-command> 可以是 \"add\" 、 \"remove\" 、 \"list\"  或者  \"notetags\" ，"
-"用于从 [note] 中赋值或删除 [tag]，或者列出与 [tag] 相关的笔记。`tag list` 命"
-"令可以用于列出所有的标签 (对于过长选项请使用 -l 参数) 。"
+"<tag-command> 可以是 “add” 、“remove” 、“list” 或者 “notetags” ，用于从 "
+"[note] 中赋值或删除 [tag]，或者列出与 [tag] 相关的笔记。`tag list` 命令可以用"
+"于列出所有的标签（对于过长选项请使用 -l 参数）。"
 
 #: packages/app-cli/app/command-todo.js:14
 msgid ""
@@ -177,9 +177,9 @@ msgid ""
 "target is a regular note it will be converted to a to-do). Use \"clear\" to "
 "convert the to-do back to a regular note."
 msgstr ""
-"<todo-command> 可以是 \"toggle\" 或者 \"clear\" 。使用 \"toggle\" 命令来切换"
-"待办事项的完成状态 (若目标为普通笔记则将会转换成待办事项) 。使用 \"clear\" 命"
-"令来把待办事项转换到普通笔记。"
+"<todo-command> 可以是 “toggle” 或者 “clear” 。使用 “toggle” 命令来切换待办事"
+"项的完成状态（若目标为普通笔记则将会转换成待办事项）。使用 “clear” 命令来把待"
+"办事项转换到普通笔记。"
 
 #: packages/lib/models/Setting.ts:1304
 msgid "A3"
@@ -205,13 +205,13 @@ msgstr "加速键"
 
 #: packages/lib/services/KeymapService.ts:377
 msgid "Accelerator \"%s\" is not valid."
-msgstr "加速键“%s”无效。"
+msgstr "加速键 “%s” 无效。"
 
 #: packages/lib/services/KeymapService.ts:346
 msgid ""
 "Accelerator \"%s\" is used for \"%s\" and \"%s\" commands. This may lead to "
 "unexpected behaviour."
-msgstr "加速键“%s”被用于“%s”和“%s”命令。这可能导致意外的表现。"
+msgstr "加速键 “%s” 被用于 “%s” 和 “%s” 命令。这可能导致意外的表现。"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:619
 msgid "Accept"
@@ -280,16 +280,15 @@ msgstr "全部笔记"
 
 #: packages/lib/onedrive-api-node-utils.js:46
 msgid "All potential ports are in use - please report the issue at %s"
-msgstr "所有默认端口都已经被使用中-请在%s反馈这个问题"
+msgstr "所有默认端口都已经被使用中 - 请在 %s 反馈这个问题"
 
 #: packages/app-cli/app/command-config.js:18
 msgid "Also displays unset and hidden config variables."
 msgstr "同时显示未设置的与隐藏的配置变量。"
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:203
-#, fuzzy
 msgid "Also publish linked notes"
-msgstr "取消分享笔记"
+msgstr "同时发布链接的笔记"
 
 #: packages/lib/models/Setting.ts:713
 msgid "Always"
@@ -369,7 +368,7 @@ msgid ""
 "to it before syncing, otherwise all files will be removed! See the FAQ for "
 "more details: %s"
 msgstr ""
-"注意: 如果您更改该位置，请确保在同步之前将所有内容复制到该位置，否则将删除所"
+"注意：如果您更改该位置，请确保在同步之前将所有内容复制到该位置，否则将删除所"
 "有文件！ 更多详细信息请参阅常见问题解答 (FAQ) : %s"
 
 #: packages/app-cli/app/command-sync.ts:82
@@ -377,7 +376,7 @@ msgstr ""
 #: packages/app-desktop/gui/OneDriveLoginScreen.tsx:45
 msgid ""
 "Authentication was not completed (did not receive an authentication token)."
-msgstr "认证未完成 (未收到认证令牌) 。"
+msgstr "认证未完成（未收到认证令牌）。"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:194
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:148
@@ -476,7 +475,7 @@ msgstr "无法更改已加密条目"
 
 #: packages/lib/models/Note.ts:526
 msgid "Cannot copy note to \"%s\" notebook"
-msgstr "无法复制笔记到笔记本 \"%s\""
+msgstr "无法复制笔记到笔记本 “%s”"
 
 #: packages/app-cli/app/command-attach.js:21
 #: packages/app-cli/app/command-cat.js:25 packages/app-cli/app/command-cp.js:24
@@ -504,7 +503,7 @@ msgstr "无法复制笔记到笔记本 \"%s\""
 #: packages/lib/services/interop/InteropService.ts:266
 #: packages/lib/services/interop/InteropService.ts:284
 msgid "Cannot find \"%s\"."
-msgstr "无法找到“%s”。"
+msgstr "无法找到 “%s”。"
 
 #: packages/app-cli/app/command-sync.ts:182
 msgid "Cannot initialise synchroniser."
@@ -512,15 +511,15 @@ msgstr "无法启动同步。"
 
 #: packages/lib/services/interop/InteropService.ts:208
 msgid "Cannot load \"%s\" module for format \"%s\" and output \"%s\""
-msgstr "无法为格式“%2$s”和输出“%3$s”加载“%1$s”模块"
+msgstr "无法为格式 “%2$s” 和输出 “%3$s” 加载 “%1$s” 模块"
 
 #: packages/lib/services/interop/InteropService.ts:234
 msgid "Cannot load \"%s\" module for format \"%s\" and target \"%s\""
-msgstr "无法加载为格式“%2$s”和目标“%3$s”加载“%1$s”模块"
+msgstr "无法加载为格式 “%2$s” 和目标 “%3$s” 加载 “%1$s” 模块"
 
 #: packages/lib/models/Note.ts:538
 msgid "Cannot move note to \"%s\" notebook"
-msgstr "无法移动笔记到笔记本 \"%s\""
+msgstr "无法移动笔记到笔记本 “%s”"
 
 #: packages/lib/models/Folder.ts:699
 msgid "Cannot move notebook to this location"
@@ -534,13 +533,13 @@ msgstr "无法刷新令牌：缺少认证数据。重新同步可能会修正此
 
 #: packages/server/src/models/UserModel.ts:214
 msgid "Cannot save %s \"%s\" because it is larger than the allowed limit (%s)"
-msgstr "无法保存 %s “%s”，因为超过了允许的限制大小（%s）。"
+msgstr "无法保存 %s “%s”，因为超过了允许的限制大小 (%s)。"
 
 #: packages/server/src/models/UserModel.ts:231
 msgid ""
 "Cannot save %s \"%s\" because it would go over the total allowed size (%s) "
 "for this account"
-msgstr "无法保存 %s “%s”，因为超过了允许的限制大小（%s）"
+msgstr "无法保存 %s “%s”，因为超过了允许的限制大小 (%s)"
 
 #: packages/lib/services/share/ShareService.ts:318
 msgid ""
@@ -548,8 +547,8 @@ msgid ""
 "enabled end-to-end encryption. They may do so from the screen Configuration "
 "> Encryption."
 msgstr ""
-"无法与收件人%s共享加密的笔记本，因为他们没有启用端到端加密。他们可以通过“配"
-"置”>“加密”界面来启用。"
+"无法与收件人 %s 共享加密的笔记本，因为他们没有启用端到端加密。他们可以通过 配"
+"置 > 加密 界面来启用。"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleLayoutMoveMode.ts:7
 msgid "Change application layout"
@@ -565,7 +564,7 @@ msgstr "字符数"
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:101
 msgid "Characters excluding spaces"
-msgstr "字符数 (不计空格)"
+msgstr "字符数（不计空格）"
 
 #: packages/app-desktop/gui/MenuBar.tsx:521
 #: packages/app-desktop/gui/MenuBar.tsx:783
@@ -611,8 +610,8 @@ msgid ""
 "Click \"%s\" to restore the note. It will be copied in the notebook named "
 "\"%s\". The current version of the note will not be replaced or modified."
 msgstr ""
-"单击“%s”以恢复笔记。它将会被复制到名为“%s”的笔记本中。笔记的当前版本不会被替"
-"换或修改。"
+"单击 “%s” 以恢复笔记。它将会被复制到名为 “%s” 的笔记本中。笔记的当前版本不会"
+"被替换或修改。"
 
 #: packages/app-desktop/gui/NoteEditor/NoteEditor.tsx:376
 msgid "Click to add tags..."
@@ -662,9 +661,9 @@ msgid ""
 "pem. Note that if you make changes to the TLS settings, you must save your "
 "changes before clicking on \"Check synchronisation configuration\"."
 msgstr ""
-"以逗号分隔的路径列表，可以是包含证书的目录，也可以直接指向单独的证书路径。 例"
-"如: /my/cert_dir,/other/custom.pem 。 请注意，如果更改 TLS 设置，则必须先保存"
-"更改，之后再点击 \"检查同步配置\" 。"
+"以逗号分隔的路径列表，可以是包含证书的目录，也可以直接指向单独的证书路径。例"
+"如：/my/cert_dir,/other/custom.pem。请注意，如果更改 TLS 设置，则必须先保存更"
+"改，之后再点击 “检查同步配置”。"
 
 #: packages/lib/services/KeymapService.ts:314
 msgid "command"
@@ -692,7 +691,7 @@ msgstr "已完成解密。"
 
 #: packages/lib/Synchronizer.ts:190
 msgid "Completed: %s (%s)"
-msgstr "已完成: %s（%s）"
+msgstr "已完成：%s（%s）"
 
 #: packages/server/src/services/TaskService.ts:37
 msgid "Compress old changes"
@@ -718,7 +717,7 @@ msgstr "确认"
 
 #: packages/lib/services/ReportService.ts:284
 msgid "Conflicted: %d"
-msgstr "有冲突: %d 条"
+msgstr "有冲突：%d 条"
 
 #: packages/lib/models/Folder.ts:111
 msgid "Conflicts"
@@ -730,7 +729,7 @@ msgstr "冲突（附件）"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/SearchPlugins.tsx:108
 msgid "Content provided by %s"
-msgstr "内容由%s提供"
+msgstr "内容由 %s 提供"
 
 #: packages/app-mobile/components/screens/Note.tsx:940
 msgid "Convert to note"
@@ -805,7 +804,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"无法连接到 Joplin 服务器。请在配置页面中检查同步选项。 完整的错误信息是: \n"
+"无法连接到 Joplin 服务器。请在配置页面中检查同步选项。完整的错误信息是：\n"
 "\n"
 "%s"
 
@@ -840,21 +839,19 @@ msgstr "无法升级主密钥：%s"
 msgid ""
 "Could not verify the share status of this notebook - aborting. Please try "
 "again when you are connected to the internet."
-msgstr "无法验证此笔记的分享状态 - 正在终止。 请在连接到互联网后再次尝试。"
+msgstr "无法验证此笔记的分享状态 — 正在终止。请在连接到互联网后再次尝试。"
 
 #: packages/app-desktop/gui/PromptDialog.min.js:235
-#, fuzzy
 msgid "Create"
-msgstr "创建日期"
+msgstr "创建"
 
 #: packages/app-mobile/components/note-list.js:101
 msgid "Create a notebook"
 msgstr "新建一个笔记本"
 
 #: packages/app-desktop/gui/MainScreen/commands/addProfile.ts:9
-#, fuzzy
 msgid "Create new profile..."
-msgstr "新建笔记。"
+msgstr "创建新的配置文件..."
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:161
 msgid "Create notebook"
@@ -874,7 +871,7 @@ msgstr "创建日期"
 
 #: packages/lib/Synchronizer.ts:182
 msgid "Created local items: %d."
-msgstr "已新建本地项目: %d。"
+msgstr "已新建本地项目：%d。"
 
 #: packages/lib/services/ReportService.ts:244
 msgid "Created locally"
@@ -882,7 +879,7 @@ msgstr "已新建本地项目"
 
 #: packages/lib/Synchronizer.ts:184
 msgid "Created remote items: %d."
-msgstr "已新建远程项目: %d。"
+msgstr "已新建远程项目：%d。"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:152
 msgid "Created: "
@@ -891,7 +888,7 @@ msgstr "创建于： "
 #: packages/app-cli/app/command-import.js:48
 #: packages/app-desktop/gui/ImportScreen.min.js:69
 msgid "Created: %d."
-msgstr "已创建: %d条。"
+msgstr "已创建：%d 条。"
 
 #: packages/app-mobile/components/screens/encryption-config.tsx:118
 #: packages/app-mobile/components/screens/Note.tsx:847
@@ -974,7 +971,7 @@ msgstr "天"
 
 #: packages/app-cli/app/command-e2ee.ts:64
 msgid "Decrypted items: %d"
-msgstr "已解密条目: %d"
+msgstr "已解密条目：%d"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:46
 msgid "Decrypted items: %s / %s"
@@ -992,7 +989,7 @@ msgstr "默认"
 
 #: packages/app-cli/app/help-utils.js:71
 msgid "Default: %s"
-msgstr "默认值: %s"
+msgstr "默认值：%s"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginBox.tsx:185
 #: packages/app-desktop/gui/ResourceScreen.tsx:111
@@ -1008,7 +1005,7 @@ msgstr "删除"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:169
 msgid "Delete attachment \"%s\"?"
-msgstr "是否删除附件“%s”？"
+msgstr "是否删除附件 “%s”？"
 
 #: packages/server/src/services/TaskService.ts:36
 msgid "Delete expired sessions"
@@ -1028,7 +1025,7 @@ msgstr "删除本地数据并从同步目标导入数据"
 
 #: packages/lib/models/Note.ts:765
 msgid "Delete note \"%s\"?"
-msgstr "是否删除笔记“%s”？"
+msgstr "是否删除笔记 “%s”？"
 
 #: packages/app-cli/app/command-rmnote.js:27
 #: packages/app-mobile/components/screens/Note.tsx:529
@@ -1042,7 +1039,7 @@ msgid ""
 "\n"
 "All notes and sub-notebooks within this notebook will also be deleted."
 msgstr ""
-"是否删除笔记本“%s”？\n"
+"是否删除笔记本 “%s”？\n"
 "\n"
 "所有在该笔记本内的笔记和子笔记本也将同时被删除。"
 
@@ -1055,7 +1052,7 @@ msgstr "是否删除笔记本？所有在该笔记本内的笔记和子笔记本
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:161
 msgid "Delete plugin \"%s\"?"
-msgstr "是否删除插件“%s”？"
+msgstr "是否删除插件 “%s”？"
 
 #: packages/lib/models/Note.ts:767
 msgid "Delete these %d notes?"
@@ -1069,11 +1066,11 @@ msgstr "是否删除该邀请？收件人将无法再次访问此共享笔记本
 
 #: packages/lib/Synchronizer.ts:186
 msgid "Deleted local items: %d."
-msgstr "已删除本地项目: %d。"
+msgstr "已删除本地项目：%d。"
 
 #: packages/lib/Synchronizer.ts:187
 msgid "Deleted remote items: %d."
-msgstr "已删除远程项目: %d。"
+msgstr "已删除远程项目：%d。"
 
 #: packages/app-cli/app/command-rmbook.js:13
 msgid "Deletes the given notebook."
@@ -1081,7 +1078,7 @@ msgstr "删除选定的笔记本。"
 
 #: packages/app-cli/app/command-rmbook.js:17
 msgid "Deletes the notebook without asking for confirmation."
-msgstr "删除笔记本 (不要求确认) 。"
+msgstr "删除笔记本（不要求确认）。"
 
 #: packages/app-cli/app/command-rmnote.js:13
 msgid "Deletes the notes matching <note-pattern>."
@@ -1089,7 +1086,7 @@ msgstr "删除符合 <note-pattern> 的笔记。"
 
 #: packages/app-cli/app/command-rmnote.js:17
 msgid "Deletes the notes without asking for confirmation."
-msgstr "删除笔记 (不要求确认) 。"
+msgstr "删除笔记（不要求确认）。"
 
 #: packages/app-cli/app/command-export.js:23
 msgid "Destination format: %s"
@@ -1101,7 +1098,7 @@ msgstr "文件目录"
 
 #: packages/lib/models/Setting.ts:464
 msgid "Directory to synchronise with (absolute path)"
-msgstr "同步目录 (绝对路径)"
+msgstr "同步目录（绝对路径）"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:156
 msgid "Disable"
@@ -1162,8 +1159,8 @@ msgid ""
 "to-dos, while `-tnt` would display notes and to-dos."
 msgstr ""
 "仅显示指定类型的项目。可以把 `n` 用于笔记，`t` 用于待办事项，或者 `nt` 用于笔"
-"记和待办事项 (示例: `-tt` 只会显示待办事项，当使用 `-tnt` 时将会显示笔记和待"
-"办事项。"
+"记和待办事项（示例：`-tt` 只会显示待办事项，当使用 `-tnt` 时将会显示笔记和待"
+"办事项。）"
 
 #: packages/app-cli/app/command-status.js:13
 msgid "Displays summary about the notes and notebooks."
@@ -1292,7 +1289,7 @@ msgstr "编辑笔记本"
 
 #: packages/app-desktop/commands/editProfileConfig.ts:9
 msgid "Edit profile configuration..."
-msgstr ""
+msgstr "编辑配置文件内的配置..."
 
 #: packages/app-desktop/gui/NoteContentPropertiesDialog.tsx:138
 #: packages/lib/models/Setting.ts:876 packages/lib/models/Setting.ts:877
@@ -1322,13 +1319,12 @@ msgstr "编辑器等宽字体族"
 
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:100
 #: packages/app-desktop/gui/NoteEditor/editorCommandDeclarations.ts:96
-#, fuzzy
 msgid "Editor: %s"
-msgstr "编辑器"
+msgstr "编辑器：%s"
 
 #: packages/app-cli/app/command-ls.js:31
 msgid "Either \"text\" or \"json\""
-msgstr "\"text\" 或 \"json\""
+msgstr "“text” 或 “json”"
 
 #: packages/lib/models/Setting.ts:1328
 msgid "Emacs"
@@ -1480,7 +1476,7 @@ msgstr "加密配置"
 #: packages/app-cli/app/command-e2ee.ts:127
 #: packages/app-mobile/components/screens/encryption-config.tsx:303
 msgid "Encryption is: %s"
-msgstr "加密状态: %s"
+msgstr "加密状态：%s"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:172
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:271
@@ -1532,7 +1528,7 @@ msgid ""
 "Error. Please check that URL, username, password, etc. are correct and that "
 "the sync target is accessible. The reported error was:"
 msgstr ""
-"发生错误。请检查 URL 、用户名、密码等是否正确以及同步目标是否可访问。报告的错"
+"发生错误。请检查 URL、用户名、密码等是否正确以及同步目标是否可访问。报告的错"
 "误为："
 
 #: packages/app-mobile/components/screens/log.js:117
@@ -1580,7 +1576,7 @@ msgstr "正在导出配置文件..."
 
 #: packages/app-desktop/InteropServiceHelper.ts:170
 msgid "Exporting to \"%s\" as \"%s\" format. Please wait..."
-msgstr "导出到“%s”，格式为“%s”。请稍等..."
+msgstr "导出到 “%s”，格式为 “%s”。请稍等..."
 
 #: packages/app-cli/app/command-export.js:13
 msgid ""
@@ -1607,8 +1603,8 @@ msgid ""
 "Fail-safe: Do not wipe out local data when sync target is empty (often the "
 "result of a misconfiguration or bug)"
 msgstr ""
-"故障保护 (Fail-safe) ：当同步目标为空时 (通常是配置错误或 Bug ) ，不要删除本"
-"地数据"
+"故障保护 (Fail-safe) ：当同步目标为空时（通常是配置错误或 Bug），不要删除本地"
+"数据"
 
 #: packages/app-cli/app/main.js:95
 msgid "Fatal error:"
@@ -1620,7 +1616,7 @@ msgstr "特性标志"
 
 #: packages/lib/Synchronizer.ts:188
 msgid "Fetched items: %d/%d."
-msgstr "已获取项目: %d/%d."
+msgstr "已获取项目：%d/%d."
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:749
 #: packages/app-mobile/components/side-menu-content.js:346
@@ -1636,9 +1632,8 @@ msgid "File system"
 msgstr "文件系统"
 
 #: packages/app-mobile/components/screens/NoteTagsDialog.js:190
-#, fuzzy
 msgid "Filter tags"
-msgstr "新建标签："
+msgstr "筛选标签"
 
 #: packages/app-desktop/gui/ExtensionBadge.min.js:10
 msgid "Firefox Extension"
@@ -1703,11 +1698,11 @@ msgstr "前进"
 #: packages/app-cli/app/command-import.js:47
 #: packages/app-desktop/gui/ImportScreen.min.js:68
 msgid "Found: %d."
-msgstr "已找到: %d条。"
+msgstr "已找到：%d 条。"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:626
 msgid "FTS enabled: %d"
-msgstr "FTS 已开启: %d"
+msgstr "FTS 已开启：%d"
 
 #: packages/app-desktop/checkForUpdates.ts:199
 msgid "Full changelog"
@@ -1839,7 +1834,7 @@ msgstr "导入"
 
 #: packages/app-desktop/gui/MenuBar.tsx:241
 msgid "Importing from \"%s\" as \"%s\" format. Please wait..."
-msgstr "从“%s” 导入为“%s”格式 。请稍等..."
+msgstr "从 “%s” 导入为 “%s” 格式 。请稍等..."
 
 #: packages/app-cli/app/command-import.js:65
 msgid "Importing notes..."
@@ -1855,8 +1850,8 @@ msgid ""
 "In \"Auto\", they are downloaded when you open the note. In \"Always\", all "
 "the attachments are downloaded whether you open the note or not."
 msgstr ""
-"“手动”模式下，仅在单击附件时才会下载。“自动”模式下，打开笔记，其中的附件就会"
-"被全部下载。 “总是”模式下，无论是否打开笔记，所有的附件均会被下载。"
+"“手动” 模式下，仅在单击附件时才会下载。“自动” 模式下，打开笔记，其中的附件就"
+"会被全部下载。“总是” 模式下，无论是否打开笔记，所有的附件均会被下载。"
 
 #: packages/app-cli/app/command-help.js:77
 msgid ""
@@ -1896,14 +1891,14 @@ msgid ""
 msgstr ""
 "为此，必须对整个数据集进行加密和同步，因此最好在夜间休息时分运行。\n"
 "\n"
-"首先，请按照以下说明进行操作: \n"
+"首先，请按照以下说明进行操作：\n"
 "\n"
-"1.同步您的所有设备。\n"
-"2.单击“%s”。\n"
-"3.让其完成运行。 在运行时，请不要在其他设备上更改任何笔记，以免发生冲突。\n"
-"4.在此设备上完成同步后，同步其他所有设备，并运行至同步完成。\n"
+"1. 同步您的所有设备。\n"
+"2. 单击 “%s”。\n"
+"3. 让其完成运行。在运行时，请不要在其他设备上更改任何笔记，以免发生冲突。\n"
+"4. 在此设备上完成同步后，同步其他所有设备，并运行至同步完成。\n"
 "\n"
-"重要提醒: 在一台设备上只需要运行一次。"
+"重要提醒：在一台设备上只需要运行一次。"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:167
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:62
@@ -1976,7 +1971,7 @@ msgstr "无效"
 
 #: packages/lib/services/KeymapService.ts:325
 msgid "Invalid %s: %s."
-msgstr "无效的%s：%s。"
+msgstr "无效的 %s：%s。"
 
 #: packages/app-cli/app/cli-utils.js:151
 msgid "Invalid answer: %s"
@@ -1988,7 +1983,7 @@ msgstr "无效命令：“%s”"
 
 #: packages/lib/models/Setting.ts:1834
 msgid "Invalid option value: \"%s\". Possible values are: %s."
-msgstr "无效的选项值: \"%s\" 。可用值有: %s。"
+msgstr "无效的选项值：“%s”。可用值有：%s。"
 
 #: packages/app-cli/app/command-e2ee.ts:46
 msgid "Invalid password"
@@ -2000,7 +1995,7 @@ msgstr "斜体"
 
 #: packages/lib/services/ReportService.ts:185
 msgid "Item \"%s\" could not be downloaded: %s"
-msgstr "条目 \"%s\" 无法下载：%s"
+msgstr "条目 “%s” 无法下载：%s"
 
 #: packages/server/src/services/MustacheService.ts:148
 #: packages/server/src/services/MustacheService.ts:273
@@ -2109,7 +2104,7 @@ msgstr "键盘快捷键"
 
 #: packages/lib/versionInfo.ts:27
 msgid "Keychain Supported: %s"
-msgstr "支持的密钥链: %s"
+msgstr "支持的密钥链：%s"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:71
 msgid "Keys that need upgrading"
@@ -2125,7 +2120,7 @@ msgstr "语言"
 
 #: packages/lib/Synchronizer.ts:191
 msgid "Last error: %s"
-msgstr "最后的错误: %s"
+msgstr "最后的错误：%s"
 
 #: packages/app-desktop/gui/ConfigScreen/ConfigScreen.tsx:633
 msgid "Later"
@@ -2166,7 +2161,7 @@ msgstr[0] "链接已复制到剪贴板！"
 
 #: packages/app-mobile/components/screens/Note.tsx:197
 msgid "Links with protocol \"%s\" are not supported"
-msgstr "不支持“%s”协议的链接"
+msgstr "不支持 “%s” 协议的链接"
 
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:229
 #: packages/app-desktop/gui/NoteEditor/NoteBody/CodeMirror/CodeMirror.tsx:231
@@ -2188,8 +2183,8 @@ msgid ""
 "taking place, you may delete the lock file at \"%s\" and resume the "
 "operation."
 msgstr ""
-"锁定文件已被占用。如果您确认当前未在进行任何同步，可在删除锁定文件 \"%s\" 后"
-"继续上一步操作。"
+"锁定文件已被占用。如果您确认当前未在进行任何同步，可在删除锁定文件 “%s” 后继"
+"续上一步操作。"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:516
 #: packages/app-mobile/components/screens/log.js:100
@@ -2244,7 +2239,7 @@ msgid ""
 "Manages E2EE configuration. Commands are `enable`, `disable`, `decrypt`, "
 "`status`, `decrypt-file`, and `target-status`."
 msgstr ""
-"管理 E2EE 配置。命令为: `enable`、`disable`、`decrypt`、`status`、`decrypt-"
+"管理 E2EE 配置。命令为：`enable`、`disable`、`decrypt`、`status`、`decrypt-"
 "file` 和 `target-status`。"
 
 #: packages/lib/models/Setting.ts:714
@@ -2319,11 +2314,11 @@ msgstr "更多信息"
 
 #: packages/app-cli/app/app.js:63
 msgid "More than one item match \"%s\". Please narrow down your query."
-msgstr "有多条项目符合“%s”。请缩小您的检索范围。"
+msgstr "有多条项目符合 “%s”。请缩小您的检索范围。"
 
 #: packages/app-mobile/components/screen-header.js:453
 msgid "Move %d notes to notebook \"%s\"?"
-msgstr "是否移动 %d 条笔记到笔记本“%s”？"
+msgstr "是否移动 %d 条笔记到笔记本 “%s”？"
 
 #: packages/app-desktop/gui/MainScreen/commands/moveToFolder.ts:8
 msgid "Move to notebook"
@@ -2366,7 +2361,7 @@ msgstr "新建笔记本"
 #: packages/app-desktop/gui/ImportScreen.min.js:61
 msgid ""
 "New notebook \"%s\" will be created and file \"%s\" will be imported into it"
-msgstr "将新建笔记本“%s”，并将文件“%s”导入其中"
+msgstr "将新建笔记本 “%s”，并将文件 “%s” 导入其中"
 
 #: packages/app-desktop/gui/MainScreen/commands/newSubFolder.ts:6
 msgid "New sub-notebook"
@@ -2430,7 +2425,7 @@ msgstr "未选择笔记本。"
 
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:468
 msgid "No notes in here. Create one by clicking on \"New note\"."
-msgstr "此处没有笔记。点击 \"新建笔记\" 创建。"
+msgstr "此处没有笔记。点击 “新建笔记” 创建。"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:234
 msgid "No resources!"
@@ -2497,7 +2492,7 @@ msgstr "笔记正文"
 
 #: packages/app-cli/app/command-edit.js:46
 msgid "Note does not exist: \"%s\". Create it?"
-msgstr "笔记不存在: \"%s\" 。是否创建？"
+msgstr "笔记不存在：“%s” 。是否创建？"
 
 #: packages/app-cli/app/command-edit.js:97
 msgid "Note has been saved."
@@ -2531,12 +2526,12 @@ msgstr "笔记标题"
 
 #: packages/lib/models/Setting.ts:1109
 msgid "Note: Does not work in all desktop environments."
-msgstr "注意: 在部分桌面环境下无法工作。"
+msgstr "注意：在部分桌面环境下无法工作。"
 
 #: packages/app-desktop/gui/ShareNoteDialog.tsx:191
 msgid ""
 "Note: When a note is shared, it will no longer be encrypted on the server."
-msgstr "注意: 笔记分享后，便不再在服务器上加密。"
+msgstr "注意：笔记分享后，便不再在服务器上加密。"
 
 #: packages/app-desktop/gui/MenuBar.tsx:750
 msgid "Note&book"
@@ -2561,7 +2556,7 @@ msgstr "笔记本"
 
 #: packages/lib/models/Folder.ts:751
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
-msgstr "笔记本无法被命名为 \"%s\" ，该标题已被留作他用。"
+msgstr "笔记本无法被命名为 “%s”，该标题已被留作他用。"
 
 #: packages/app-desktop/gui/MainScreen/commands/toggleNotesSortOrderField.ts:8
 #: packages/app-desktop/gui/MainScreen/commands/toggleNotesSortOrderReverse.ts:9
@@ -2676,7 +2671,7 @@ msgstr "其他应用..."
 
 #: packages/app-cli/app/command-import.js:27
 msgid "Output format: %s"
-msgstr "导出格式: %s"
+msgstr "导出格式：%s"
 
 #: packages/lib/models/Setting.ts:1310
 msgid "Page orientation for PDF export"
@@ -2732,7 +2727,7 @@ msgstr "使用相机的权限"
 msgid ""
 "Please click on \"%s\" to proceed, or set the passwords in the \"%s\" list "
 "below."
-msgstr ""
+msgstr "请单击 “%s” 继续，或在下面的 “%s” 列表中设置密码。"
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:65
 msgid ""
@@ -2761,7 +2756,7 @@ msgid ""
 "any files outside this directory nor to any other personal data. No data "
 "will be shared with any third party."
 msgstr ""
-"请在浏览器中打开以下链接以验证本应用程序。本应用会建立 \"Apps/Joplin\" 文件目"
+"请在浏览器中打开以下链接以验证本应用程序。本应用会建立 “Apps/Joplin” 文件目"
 "录，并只会读写该目录中的文件。本应用没有任何权限访问此目录以外的任何文件或个"
 "人信息，也不会与第三方分享任何数据。"
 
@@ -2819,7 +2814,7 @@ msgstr "可用键/值："
 
 #: packages/app-cli/app/help-utils.js:57
 msgid "Possible values: %s."
-msgstr "可用值: %s。"
+msgstr "可用值：%s。"
 
 #: packages/app-desktop/gui/KeymapConfig/utils/getLabel.ts:26
 msgid "Preferences"
@@ -2839,7 +2834,7 @@ msgstr "首选亮色主题"
 
 #: packages/app-cli/app/app-gui.js:750
 msgid "Press Ctrl+D or type \"exit\" to exit the application"
-msgstr "按 Ctrl+D 或输入 \"exit\" 退出程序"
+msgstr "按 Ctrl+D 或输入 “exit” 退出程序"
 
 #: packages/app-desktop/gui/KeymapConfig/ShortcutRecorder.tsx:66
 msgid "Press the shortcut"
@@ -2884,13 +2879,12 @@ msgid "Profile"
 msgstr "配置文件"
 
 #: packages/app-desktop/gui/MainScreen/commands/addProfile.ts:17
-#, fuzzy
 msgid "Profile name:"
-msgstr "配置文件"
+msgstr "配置文件："
 
 #: packages/lib/versionInfo.ts:26
 msgid "Profile Version: %s"
-msgstr "配置文件版本: %s"
+msgstr "配置文件版本：%s"
 
 #: packages/app-mobile/components/screens/Note.tsx:954
 msgid "Properties"
@@ -2898,7 +2892,7 @@ msgstr "笔记属性"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:252
 msgid "Public-private key pair:"
-msgstr "公、私密钥对："
+msgstr "公钥、私钥对："
 
 #: packages/app-desktop/gui/MainScreen/commands/showShareNoteDialog.ts:6
 msgid "Publish note..."
@@ -2976,7 +2970,7 @@ msgstr "删除"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:259
 msgid "Remove tag \"%s\" from all notes?"
-msgstr "从所有笔记中删除标签“%s”？"
+msgstr "从所有笔记中删除标签 “%s”？"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:261
 msgid "Remove this search from the sidebar?"
@@ -2998,7 +2992,7 @@ msgstr "重命名标签："
 
 #: packages/app-cli/app/command-ren.js:14
 msgid "Renames the given <item> (note or notebook) to <name>."
-msgstr "重命名选定的 <item> (笔记或笔记本) 到 <name>。"
+msgstr "重命名选定的 <item> （笔记或笔记本）到 <name>。"
 
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:222
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:158
@@ -3013,7 +3007,7 @@ msgstr "重置主密码"
 #: packages/app-cli/app/command-import.js:51
 #: packages/app-desktop/gui/ImportScreen.min.js:72
 msgid "Resources: %d."
-msgstr "资源: %d。"
+msgstr "资源：%d。"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:592
 msgid "Restart and upgrade"
@@ -3058,7 +3052,7 @@ msgstr "倒序。"
 
 #: packages/lib/versionInfo.ts:9
 msgid "Revision: %s (%s)"
-msgstr "修订: %s (%s)"
+msgstr "修订：%s (%s)"
 
 #: packages/app-cli/app/command-batch.js:10
 msgid ""
@@ -3110,9 +3104,8 @@ msgstr "保存提醒"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:100
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:93
-#, fuzzy
 msgid "Save as %s"
-msgstr "另存为..."
+msgstr "另存为 %s"
 
 #: packages/app-desktop/gui/NoteEditor/utils/contextMenu.ts:80
 msgid "Save as..."
@@ -3170,7 +3163,7 @@ msgstr "全选"
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:140
 msgid "Select emoji..."
-msgstr "选择emoji..."
+msgstr "选择 emoji..."
 
 #: packages/app-desktop/gui/EditFolderDialog/Dialog.tsx:144
 msgid "Select file..."
@@ -3203,7 +3196,7 @@ msgstr "设置提醒："
 msgid ""
 "Set it to 0 to make it take the complete available space. Recommended width "
 "is 600."
-msgstr "设置为 0 则占用全部可用空间。建议宽度为600。"
+msgstr "设置为 0 则占用全部可用空间。建议宽度为 600。"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:633
 msgid "Set the password"
@@ -3216,7 +3209,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"将给定的 <note> 的属性 <name> 设置为 [value]。可用属性有: \n"
+"将给定的 <note> 的属性 <name> 设置为 [value]。可用属性有：\n"
 "\n"
 "%s"
 
@@ -3284,12 +3277,12 @@ msgstr "跳过该版本"
 
 #: packages/app-cli/app/command-e2ee.ts:65
 msgid "Skipped items: %d (use --retry-failed-items to retry decrypting them)"
-msgstr "已跳过条目: %d (使用 --retry-failed-items 来尝试重新解密)"
+msgstr "已跳过条目：%d（使用 --retry-failed-items 来尝试重新解密）"
 
 #: packages/app-cli/app/command-import.js:50
 #: packages/app-desktop/gui/ImportScreen.min.js:71
 msgid "Skipped: %d."
-msgstr "已跳过: %d条。"
+msgstr "已跳过：%d 条。"
 
 #: packages/lib/models/Setting.ts:386
 msgid "Solarised Dark"
@@ -3326,11 +3319,11 @@ msgstr "排序所选行"
 
 #: packages/app-cli/app/command-ls.js:28
 msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
-msgstr "通过 <field> 排序项目 (示例: title, updated_time, created_time) 。"
+msgstr "通过 <field> 排序项目（示例：title, updated_time, created_time）。"
 
 #: packages/app-cli/app/command-import.js:25
 msgid "Source format: %s"
-msgstr "原数据格式: %s"
+msgstr "原数据格式：%s"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:151
 msgid "Source: "
@@ -3340,7 +3333,7 @@ msgstr "来源： "
 msgid ""
 "Specify the port that should be used by the API server. If not set, a "
 "default will be used."
-msgstr "请指定 API 服务器应使用的端口。 如果未设置，将使用默认值。"
+msgstr "请指定 API 服务器应使用的端口。如果未设置，将使用默认值。"
 
 #: packages/app-desktop/gui/MainScreen/commands/showSpellCheckerMenu.ts:11
 #: packages/lib/services/spellChecker/SpellCheckerService.ts:197
@@ -3404,7 +3397,7 @@ msgstr "状态：在 %d 端口运行"
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:150
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:132
 msgid "Step 1: Enable the clipper service"
-msgstr "步骤一: 启用网页剪辑器"
+msgstr "步骤一：启用网页剪辑器"
 
 #: packages/app-cli/app/command-sync.ts:92
 #: packages/app-desktop/gui/DropboxLoginScreen.tsx:44
@@ -3421,7 +3414,7 @@ msgstr "步骤二：输入 Dropbox 提供的代码："
 #: packages/app-desktop/gui/ClipperConfigScreen.min.js:169
 #: packages/app-desktop/gui/ClipperConfigScreen.tsx:138
 msgid "Step 2: Install the extension"
-msgstr "步骤二: 安装扩展"
+msgstr "步骤二：安装扩展"
 
 #: packages/app-desktop/commands/toggleExternalEditing.ts:28
 msgid "Stop"
@@ -3469,20 +3462,18 @@ msgid "Switch between note and to-do type"
 msgstr "在笔记和待办事项类型之间切换"
 
 #: packages/app-desktop/gui/MenuBar.tsx:437
-#, fuzzy
 msgid "Switch profile"
-msgstr "导出配置文件"
+msgstr "切换配置文件"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:105
 msgid "Switch to note type"
-msgstr "切换为笔记"
+msgstr "切换为笔记类型"
 
 #: packages/app-desktop/commands/switchProfile1.ts:7
 #: packages/app-desktop/commands/switchProfile2.ts:7
 #: packages/app-desktop/commands/switchProfile3.ts:7
-#, fuzzy
 msgid "Switch to profile %d"
-msgstr "切换为笔记"
+msgstr "切换到配置文件 %d"
 
 #: packages/app-desktop/gui/utils/NoteListUtils.ts:114
 msgid "Switch to to-do type"
@@ -3500,7 +3491,7 @@ msgstr "同步状态"
 
 #: packages/lib/services/ReportService.ts:275
 msgid "Sync status (synced items / total items)"
-msgstr "同步状态 (已同步条目/条目总数)"
+msgstr "同步状态（已同步条目/条目总数）"
 
 #: packages/app-cli/app/command-sync.ts:251
 msgid "Sync target must be upgraded! Run `%s` to proceed."
@@ -3512,11 +3503,11 @@ msgstr "同步目标升级"
 
 #: packages/app-cli/app/command-sync.ts:34
 msgid "Sync to provided target (defaults to sync.target config value)"
-msgstr "同步到所提供的目标 (默认为同步目标配置值)"
+msgstr "同步到所提供的目标（默认为同步目标配置值）"
 
 #: packages/lib/versionInfo.ts:25
 msgid "Sync Version: %s"
-msgstr "同步版本: %s"
+msgstr "同步版本：%s"
 
 #: packages/app-desktop/gui/SyncWizard/Dialog.tsx:177
 msgid "Sync your notes"
@@ -3545,7 +3536,7 @@ msgstr "同步目标"
 
 #: packages/app-cli/app/command-sync.ts:180
 msgid "Synchronisation target: %s (%s)"
-msgstr "同步目标: %s (%s)"
+msgstr "同步目标：%s (%s)"
 
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:658
 #: packages/app-mobile/components/side-menu-content.js:354
@@ -3575,12 +3566,12 @@ msgstr "文摘 (Tabloid)"
 
 #: packages/app-mobile/components/screens/NoteTagsDialog.js:179
 msgid "tag1, tag2, ..."
-msgstr ""
+msgstr "标签1, 标签2, ..."
 
 #: packages/app-cli/app/command-import.js:52
 #: packages/app-desktop/gui/ImportScreen.min.js:73
 msgid "Tagged: %d."
-msgstr "已加标签: %d条。"
+msgstr "已加标签：%d 条。"
 
 #: packages/app-desktop/gui/MainScreen/commands/setTags.ts:7
 #: packages/app-desktop/gui/Sidebar/Sidebar.tsx:725
@@ -3615,7 +3606,7 @@ msgstr "应用将要关闭。请重新启动它以完成此过程。"
 #: packages/app-desktop/app.ts:332
 msgid ""
 "The application did not close properly. Would you like to start in safe mode?"
-msgstr ""
+msgstr "该应用程序没有正确关闭。你想在安全模式下启动吗？"
 
 #: packages/lib/onedrive-api-node-utils.js:86
 msgid ""
@@ -3642,7 +3633,7 @@ msgstr "当您切换到其他笔记时，这些附件将不再被监控。"
 
 #: packages/app-cli/app/app.js:304
 msgid "The command \"%s\" is only available in GUI mode"
-msgstr "命令“%s”仅在 GUI 模式下可用"
+msgstr "命令 “%s” 仅在 GUI 模式下可用"
 
 #: packages/server/src/middleware/notificationHandler.ts:25
 msgid ""
@@ -3667,7 +3658,7 @@ msgid ""
 "The editor command (may include arguments) that will be used to open a note. "
 "If none is provided it will try to auto-detect the default editor."
 msgstr ""
-"该文本编辑器命令 (可包含参数) 将会被用于打开笔记。若未提供将尝试自动检测默认"
+"该文本编辑器命令（可包含参数）将会被用于打开笔记。若未提供将尝试自动检测默认"
 "编辑器。"
 
 #: packages/lib/models/Setting.ts:1455 packages/lib/models/Setting.ts:1470
@@ -3691,7 +3682,7 @@ msgid ""
 "recommended to upgrade them. The upgraded key will still be able to decrypt "
 "and encrypt your data as usual."
 msgstr ""
-"以下密钥使用了过时的加密算法，建议对其进行升级。 升级后的密钥仍将能够照常解密"
+"以下密钥使用了过时的加密算法，建议对其进行升级。升级后的密钥仍将能够照常解密"
 "和加密您的数据。"
 
 #: packages/app-mobile/components/screens/Note.tsx:193
@@ -3728,7 +3719,7 @@ msgstr ""
 
 #: packages/lib/services/RevisionService.ts:267
 msgid "The note \"%s\" has been successfully restored to the notebook \"%s\"."
-msgstr "笔记“%s”已成功恢复到笔记本“%s”中。"
+msgstr "笔记 “%s” 已成功恢复到笔记本 “%s” 中。"
 
 #: packages/app-mobile/components/screens/folder.js:87
 msgid "The notebook could not be saved: %s"
@@ -3737,7 +3728,7 @@ msgstr "无法保存笔记本：%s"
 #: packages/app-cli/app/command-import.js:70
 #: packages/app-desktop/gui/ImportScreen.min.js:88
 msgid "The notes have been imported: %s"
-msgstr "以下笔记已被导入: %s"
+msgstr "以下笔记已被导入：%s"
 
 #: packages/app-cli/app/command-help.js:73
 msgid "The possible commands are:"
@@ -3768,15 +3759,15 @@ msgstr "同步目标需要升级。按这个横幅继续。"
 
 #: packages/lib/models/Tag.ts:204
 msgid "The tag \"%s\" already exists. Please choose a different name."
-msgstr "标签 \"%s\" 已存在。请选择一个不同的名称。"
+msgstr "标签 “%s” 已存在。请选择一个不同的名称。"
 
 #: packages/lib/models/Setting.ts:426
 msgid ""
 "The target to synchronise to. Each sync target may have additional "
 "parameters which are named as `sync.NUM.NAME` (all documented below)."
 msgstr ""
-"所要同步的目标。每个同步目标都可能有名为 `sync.NUM.NAME` 的附加参数 (见下"
-"文) 。"
+"所要同步的目标。每个同步目标都可能有名为 `sync.NUM.NAME` 的附加参数（见下"
+"文）。"
 
 #: packages/app-desktop/gui/Root.tsx:171
 msgid "The Web Clipper needs your authorisation to access your data."
@@ -3803,7 +3794,7 @@ msgstr "当前没有任何笔记。点击 (+) 按钮创建。"
 #: packages/app-desktop/gui/NoteList/NoteList.tsx:468
 msgid ""
 "There is currently no notebook. Create one by clicking on \"New notebook\"."
-msgstr "当前没有笔记本。点击 \"新建笔记本\" 创建。"
+msgstr "当前没有笔记本。点击 “新建笔记本” 创建。"
 
 #: packages/lib/services/interop/InteropService_Exporter_Jex.ts:35
 msgid "There is no data to export."
@@ -3842,7 +3833,7 @@ msgid ""
 "(which is displayed in brackets above)."
 msgstr ""
 "这些条目将只保留在本设备上，不会上传到同步目标。若需查找这些项，请搜索标题或 "
-"ID (显示在上方括号中) 。"
+"ID（显示在上方括号中）。"
 
 #: packages/lib/models/Setting.ts:2314
 msgid ""
@@ -3895,7 +3886,7 @@ msgstr "该笔记已被修改："
 msgid ""
 "This note has no content. Click on \"%s\" to toggle the editor and edit the "
 "note."
-msgstr "该笔记没有任何内容。点击 \"%s\" 切换到编辑器并编辑笔记。"
+msgstr "该笔记没有任何内容。点击 “%s” 切换到编辑器并编辑笔记。"
 
 #: packages/app-desktop/gui/NoteRevisionViewer.min.js:100
 msgid "This note has no history"
@@ -3966,11 +3957,11 @@ msgstr "移除相关笔记的标签后才可删除此标签。"
 
 #: packages/lib/services/ReportService.ts:285
 msgid "To delete: %d"
-msgstr "将删除: %d 条"
+msgstr "将删除：%d 条"
 
 #: packages/app-cli/app/command-help.js:82
 msgid "To enter command line mode, press \":\""
-msgstr "按 \":\" 键进入命令行模式"
+msgstr "按 “:” 键进入命令行模式"
 
 #: packages/app-cli/app/command-help.js:83
 msgid "To exit command line mode, press ESCAPE"
@@ -3980,8 +3971,7 @@ msgstr "按 ESC 键退出命令行模式"
 msgid ""
 "To manually sort the notes, the sort order must be changed to \"%s\" in the "
 "menu \"%s\" > \"%s\""
-msgstr ""
-"欲手动排序笔记，应在菜单 “%2$s”  >  “%3$s\"  中将排序方式调整为  “%1$s\""
+msgstr "欲手动排序笔记，应在菜单 “%2$s” > “%3$s” 中将排序方式调整为 “%1$s”"
 
 #: packages/app-cli/app/command-help.js:81
 msgid "To maximise/minimise the console, press \"tc\"."
@@ -4001,7 +3991,7 @@ msgid ""
 "To work correctly, the app needs the following permissions. Please enable "
 "them in your phone settings, in Apps > Joplin > Permissions"
 msgstr ""
-"本应用程序需要下列权限才能正常运作。请在您的手机设置 (应用 > Joplin > 权限) "
+"本应用程序需要下列权限才能正常运作。请在您的手机设置（应用 > Joplin > 权限）"
 "中启用它们"
 
 #: packages/app-desktop/gui/NoteEditor/NoteTitle/NoteTitleBar.tsx:110
@@ -4059,7 +4049,7 @@ msgstr "工具"
 
 #: packages/lib/services/ReportService.ts:282
 msgid "Total: %d/%d"
-msgstr "总数: %d/%d 条"
+msgstr "总数：%d/%d 条"
 
 #: packages/app-desktop/gui/ConfigScreen/controls/plugins/PluginsStates.tsx:302
 msgid "Try again"
@@ -4166,11 +4156,11 @@ msgstr "更新日期"
 
 #: packages/lib/Synchronizer.ts:183
 msgid "Updated local items: %d."
-msgstr "已更新本地项目: %d。"
+msgstr "已更新本地项目：%d。"
 
 #: packages/lib/Synchronizer.ts:185
 msgid "Updated remote items: %d."
-msgstr "已更新远程项目: %d。"
+msgstr "已更新远程项目：%d。"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:152
 msgid "Updated: "
@@ -4179,7 +4169,7 @@ msgstr "更新于： "
 #: packages/app-cli/app/command-import.js:49
 #: packages/app-desktop/gui/ImportScreen.min.js:70
 msgid "Updated: %d."
-msgstr "已更新: %d条。"
+msgstr "已更新：%d 条。"
 
 #: packages/app-mobile/components/screens/Note.tsx:848
 msgid "Updated: %s"
@@ -4211,8 +4201,8 @@ msgid ""
 "Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, "
 "TODO_CHECKED (for to-dos), TITLE"
 msgstr ""
-"使用长列表格式。格式为: ID, NOTE_COUNT (仅笔记本) , DATE, TODO_CHECKED (仅待"
-"办事项) , TITLE"
+"使用长列表格式。格式为：ID, NOTE_COUNT（仅笔记本）, DATE, TODO_CHECKED（仅待"
+"办事项）, TITLE"
 
 #: packages/lib/services/spellChecker/SpellCheckerService.ts:164
 msgid "Use spell checker"
@@ -4222,11 +4212,11 @@ msgstr "使用拼写检查器"
 msgid ""
 "Use the arrows and page up/down to scroll the lists and text areas "
 "(including this console)."
-msgstr "通过方向键与 Page Up / Down 键来滚动列表与文本区域 (包含此控制台) 。"
+msgstr "通过方向键与 Page Up / Down 键来滚动列表与文本区域（包含此控制台）。"
 
 #: packages/app-desktop/gui/MainScreen/MainScreen.tsx:833
 msgid "Use the arrows to move the layout items. Press \"Escape\" to exit."
-msgstr "使用箭头移动布局项。按“Escape”退出。"
+msgstr "使用箭头移动布局项。按 “Escape” 退出。"
 
 #: packages/app-mobile/components/screens/ConfigScreen.tsx:520
 msgid ""
@@ -4295,7 +4285,7 @@ msgstr "警告"
 
 #: packages/app-desktop/gui/ResourceScreen.tsx:238
 msgid "Warning: not all resources shown for performance reasons (limit: %s)."
-msgstr "警告: 由于性能原因无法显示所有资源 (最多：%s)。"
+msgstr "警告：由于性能原因无法显示所有资源（最多：%s）。"
 
 #: packages/lib/models/Setting.ts:2305
 msgid "Web Clipper"
@@ -4335,7 +4325,7 @@ msgstr ""
 "\n"
 "输入 `:help shortcuts` 获取键盘快捷键列表，或输入 `:help` 获取用法信息。\n"
 "\n"
-"例: 输入 `mb` 新建笔记本；输入 `mn`新建笔记。"
+"例：输入 `mb` 新建笔记本；输入 `mn`新建笔记。"
 
 #: packages/lib/models/Setting.ts:1037
 msgid "When creating a new note:"
@@ -4397,16 +4387,15 @@ msgstr ""
 
 #: packages/app-cli/app/cli-utils.js:144
 msgid "Your choice: "
-msgstr "您的选择: "
+msgstr "您的选择："
 
 #: packages/lib/components/EncryptionConfigScreen/utils.ts:71
 msgid "Your data is going to be re-encrypted and synced again."
 msgstr "您的数据将被重新加密并再次同步。"
 
 #: packages/app-desktop/gui/EncryptionConfigScreen/EncryptionConfigScreen.tsx:271
-#, fuzzy
 msgid "Your password is needed to decrypt some of your data."
-msgstr "要解密您的某些数据，必须使用您的主密码。"
+msgstr "要解密您的某些数据，需要使用您的密码。"
 
 #: packages/app-cli/app/command-sync.ts:242
 msgid ""
@@ -4430,329 +4419,3 @@ msgstr "放大"
 #: packages/app-desktop/gui/MenuBar.tsx:730
 msgid "Zoom Out"
 msgstr "缩小"
-
-#, fuzzy
-#~ msgid "Save as SVG"
-#~ msgstr "另存为..."
-
-#~ msgid "Please click on \"%s\" to proceed"
-#~ msgstr "请点击“%s”继续"
-
-#~ msgid "Automatically update the application"
-#~ msgstr "自动更新应用"
-
-#~ msgid "Notebook title:"
-#~ msgstr "笔记本标题："
-
-#~ msgid "AWS S3"
-#~ msgstr "AWS S3"
-
-#~ msgid "Master keys that need upgrading"
-#~ msgstr "需要升级的主密钥"
-
-#~ msgid ""
-#~ "The following master keys use an out-dated encryption algorithm and it is "
-#~ "recommended to upgrade them. The upgraded master key will still be able "
-#~ "to decrypt and encrypt your data as usual."
-#~ msgstr ""
-#~ "以下主密钥使用了过时的加密算法，建议对其进行升级。 升级后的主密钥仍将能够"
-#~ "照常解密和加密您的数据。"
-
-#~ msgid ""
-#~ "Enabling encryption means *all* your notes and attachments are going to "
-#~ "be re-synchronised and sent encrypted to the sync target. Do not lose the "
-#~ "password as, for security purposes, this will be the *only* way to "
-#~ "decrypt the data! To enable encryption, please enter your password below."
-#~ msgstr ""
-#~ "启用加密会导致 *所有* 笔记与附件重新同步，并以加密数据的形式发送到同步目"
-#~ "标。请勿丢失该密码！为了安全目的，此密码是您解密数据的 *唯一方式* ！若确认"
-#~ "启动加密，请在下方输入您的密码。"
-
-#~ msgid "Master Keys"
-#~ msgstr "主密码"
-
-#~ msgid "Source"
-#~ msgstr "来源"
-
-#~ msgid "Password OK"
-#~ msgstr "密码可用"
-
-#~ msgid ""
-#~ "Note: Only one master key is going to be used for encryption (the one "
-#~ "marked as \"active\"). Any of the keys might be used for decryption, "
-#~ "depending on how the notes or notebooks were originally encrypted."
-#~ msgstr ""
-#~ "注意：仅有一个主密码会用于加密（被标记为 \"正在使用\" 的主密码）。但列出的"
-#~ "所有密码都可用于解密，这取决于笔记或笔记本最初是如何加密的。"
-
-#~ msgid "Encryption is:"
-#~ msgstr "加密状态："
-
-#~ msgid "Delete these notes?"
-#~ msgstr "是否删除这些笔记？"
-
-#, javascript-format
-#~ msgid "Encryption will be enabled using the master key created on %s"
-#~ msgstr "将使用创建于 %s 的密钥来启用加密功能"
-
-#, javascript-format
-#~ msgid "%s %s (%s)"
-#~ msgstr "%s %s (%s)"
-
-#~ msgid "Insert template"
-#~ msgstr "插入模版"
-
-#~ msgid "Template file:"
-#~ msgstr "模版文件："
-
-#~ msgid "Create note from template"
-#~ msgstr "从模版创建笔记"
-
-#~ msgid "Create to-do from template"
-#~ msgstr "从模版创建待办事项"
-
-#~ msgid "Open template directory"
-#~ msgstr "打开模版目录"
-
-#~ msgid "Refresh templates"
-#~ msgstr "刷新模版"
-
-#~ msgid "Templates"
-#~ msgstr "模版"
-
-#~ msgid "Share Notes"
-#~ msgstr "分享笔记"
-
-#~ msgid "Joplin Server Directory"
-#~ msgstr "Joplin 服务器目录"
-
-#~ msgid "Joplin Server username"
-#~ msgstr "Joplin 服务器用户名"
-
-#, fuzzy
-#~ msgid "marked text"
-#~ msgstr "强调文本"
-
-#, fuzzy
-#~ msgid "Mark"
-#~ msgstr "标记语言"
-
-#~ msgid "Full Release Notes"
-#~ msgstr "完整发行说明"
-
-#, fuzzy
-#~ msgid ""
-#~ "If the font is incorrect or empty, it will default to a generic monospace "
-#~ "font."
-#~ msgstr ""
-#~ "必须是 *等宽* 字体，否则一些元素将无法被正确渲染。若字体不正确或留空，该处"
-#~ "将会默认设置为通用的等宽字体。"
-
-#~ msgid ""
-#~ "This should be a *monospace* font or some elements will render "
-#~ "incorrectly. If the font is incorrect or empty, it will default to a "
-#~ "generic monospace font."
-#~ msgstr ""
-#~ "必须是 *等宽* 字体，否则一些元素将无法被正确渲染。若字体不正确或留空，该处"
-#~ "将会默认设置为通用的等宽字体。"
-
-#~ msgid "Unknown"
-#~ msgstr "未知"
-
-#~ msgid "Checking..."
-#~ msgstr "正在检查..."
-
-#~ msgid ""
-#~ "The Joplin Nextcloud App is either not installed or misconfigured. Please "
-#~ "see the full error message below:"
-#~ msgstr ""
-#~ "没有安装 Joplin Nextcloud 应用或配置错误。请查看下面的完整错误消息："
-
-#~ msgid "Show Log"
-#~ msgstr "显示日志"
-
-#~ msgid "Joplin Nextcloud App status:"
-#~ msgstr "Joplin Nextcloud 应用状态："
-
-#~ msgid "Check Status"
-#~ msgstr "检查状态"
-
-#~ msgid "OneDrive Dev (For testing only)"
-#~ msgstr "OneDrive 开发版 (仅供测试)"
-
-#~ msgid ""
-#~ "Type a note title or part of its content to jump to it. Or type # "
-#~ "followed by a tag name, or @ followed by a notebook name."
-#~ msgstr ""
-#~ "输入笔记标题或内容以便转跳到它。或者输入 # 跟着一个标签名字，或者输入 @ 跟"
-#~ "着一个笔记本名字。"
-
-#~ msgid "Name"
-#~ msgstr "名称"
-
-#~ msgid "Notebook properties"
-#~ msgstr "笔记本属性"
-
-#, javascript-format
-#~ msgid "This file could not be opened: %s"
-#~ msgstr "该文件无法打开：%s"
-
-#~ msgid "emphasized text"
-#~ msgstr "强调文本"
-
-#~ msgid "Click to stop external editing"
-#~ msgstr "单击以停止外部编辑"
-
-#~ msgid "Content Properties"
-#~ msgstr "内容属性"
-
-#~ msgid "Please create a notebook first."
-#~ msgstr "请先创建一本笔记本。"
-
-#~ msgid "Usage"
-#~ msgstr "用法提示"
-
-#~ msgid "Exit"
-#~ msgstr "退出"
-
-#~ msgid "Confirm"
-#~ msgstr "确认"
-
-#~ msgid "Attach any file"
-#~ msgstr "附加任何文件"
-
-#~ msgid "Unknown log level: %s"
-#~ msgstr "未知日志级别: %s"
-
-#~ msgid "Unknown level ID: %s"
-#~ msgstr "未知级别 ID: %s"
-
-#~ msgid "Synchronize"
-#~ msgstr "同步"
-
-#~ msgid "Json Export Directory"
-#~ msgstr "Json 导出目录"
-
-#~ msgid ""
-#~ "This item is currently encrypted: %s \"%s\". Please wait for all items to "
-#~ "be decrypted and try again."
-#~ msgstr "该项目当前已加密: %s \"%s\" 。请等待所有项目解密后再重试。"
-
-#~ msgid "Remove tag \"%s\" and its descendant tags from all notes?"
-#~ msgstr "从所有笔记中删除标签 \"%s\" 以及其后代标签？"
-
-#~ msgid ""
-#~ "Could not synchronise with OneDrive.\n"
-#~ "\n"
-#~ "This error often happens when using OneDrive for Business, which "
-#~ "unfortunately cannot be supported.\n"
-#~ "\n"
-#~ "Please consider using a regular OneDrive account."
-#~ msgstr ""
-#~ "无法与 OneDrive 同步。\n"
-#~ "\n"
-#~ "这种错误通常出现在使用 OneDrive 企业版时，很遗憾它不被支持。\n"
-#~ "\n"
-#~ "请考虑使用 OneDrive 个人版。"
-
-#~ msgid "Use CodeMirror as the code editor (WARNING: BETA)."
-#~ msgstr "使用 CodeMirror 作为代码编辑器 (BETA)"
-
-#~ msgid "Cannot move tag to this location."
-#~ msgstr "无法移动标签到该位置。"
-
-#~ msgid "Tag name cannot start or end with a `/`."
-#~ msgstr "标签名不能以'/'开始或者结束。"
-
-#~ msgid "Tag name cannot contain `//`."
-#~ msgstr "标签名不能包括符号'//'。"
-
-#~ msgid "Add or remove tags"
-#~ msgstr "添加或删除标签"
-
-#~ msgid "Link"
-#~ msgstr "链接"
-
-#, fuzzy
-#~ msgid "Split"
-#~ msgstr "拆分视图"
-
-#~ msgid "Resources"
-#~ msgstr "资源"
-
-#~ msgid "Global zoom percentage"
-#~ msgstr "全局缩放比例"
-
-#~ msgid "Synchronisation is already in progress. State: %s"
-#~ msgstr "已经在同步。状态：%s"
-
-#~ msgid "Confirm master password:"
-#~ msgstr "确认主密码："
-
-#~ msgid "Confirm password"
-#~ msgstr "确认密码："
-
-#~ msgid "Missing required argument: note"
-#~ msgstr "缺少必要参数：笔记"
-
-#~ msgid "Synchronisation status"
-#~ msgstr "同步状态"
-
-#~ msgid "General Options"
-#~ msgstr "通用选项"
-
-#~ msgid "Encryption options"
-#~ msgstr "加密选项"
-
-#~ msgid "Encryption Options"
-#~ msgstr "加密选项"
-
-#~ msgid "Clipper Options"
-#~ msgstr "网页剪辑选项"
-
-#~ msgid "Permission to write to external storage"
-#~ msgstr "写入外部存储的权限"
-
-#~ msgid "Cancel synchronisation"
-#~ msgstr "取消同步"
-
-#~ msgid "Hide metadata"
-#~ msgstr "隐藏元数据"
-
-#~ msgid "Show metadata"
-#~ msgstr "显示元数据"
-
-#~ msgid "Delete notebook"
-#~ msgstr "删除笔记本"
-
-#~ msgid ""
-#~ "Click on the (+) button to create a new note or notebook. Click on the "
-#~ "side menu to access your existing notebooks."
-#~ msgstr "单击 (+) 按钮新建笔记或笔记本。单击切换侧边栏来访问现有的笔记本。"
-
-#~ msgid ""
-#~ "You currently have no notebook. Create one by clicking on (+) button."
-#~ msgstr "您目前未有笔记本。点击 (+) 按钮创建。"
-
-#~ msgid "Welcome"
-#~ msgstr "欢迎"
-
-#~ msgid "Separate each tag by a comma."
-#~ msgstr "用半角逗号 \",\" 分开每个标签。"
-
-#~ msgid "Table of contents"
-#~ msgstr "目录"
-
-#~ msgid ""
-#~ "The path to synchronise with when file system synchronisation is enabled. "
-#~ "See `sync.target`."
-#~ msgstr "启用文件系统同步的路径。见 `sync.target`。"
-
-#~ msgid "State: %s."
-#~ msgstr "状态：%s。"
-
-#~ msgid "A notebook with this title already exists: \"%s\""
-#~ msgstr "该命名的笔记本已存在于：\"%s\""
-
-#~ msgid "Searches"
-#~ msgstr "搜索历史"

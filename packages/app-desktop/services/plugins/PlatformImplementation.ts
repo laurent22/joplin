@@ -1,19 +1,12 @@
 import bridge from '../bridge';
 import { Implementation as WindowImplementation } from '@joplin/lib/services/plugins/api/JoplinWindow';
 import { injectCustomStyles } from '@joplin/lib/CssUtils';
+import { VersionInfo } from '@joplin/lib/services/plugins/api/types';
+import Setting from '@joplin/lib/models/Setting';
+import { reg } from '@joplin/lib/registry';
+import BasePlatformImplementation, { Joplin } from '@joplin/lib/services/plugins/BasePlatformImplementation';
 const { clipboard, nativeImage } = require('electron');
-
-interface JoplinViewsDialogs {
-	showMessageBox(message: string): Promise<number>;
-}
-
-interface JoplinViews {
-	dialogs: JoplinViewsDialogs;
-}
-
-interface Joplin {
-	views: JoplinViews;
-}
+const packageInfo = require('../../packageInfo');
 
 interface Components {
 	[key: string]: any;
@@ -22,7 +15,7 @@ interface Components {
 // PlatformImplementation provides access to platform specific dependencies,
 // such as the clipboard, message dialog, etc. It allows having the same plugin
 // API for all platforms, but with different implementations.
-export default class PlatformImplementation {
+export default class PlatformImplementation extends BasePlatformImplementation {
 
 	private static instance_: PlatformImplementation;
 	private joplin_: Joplin;
@@ -31,6 +24,14 @@ export default class PlatformImplementation {
 	public static instance(): PlatformImplementation {
 		if (!this.instance_) this.instance_ = new PlatformImplementation();
 		return this.instance_;
+	}
+
+	public get versionInfo(): VersionInfo {
+		return {
+			version: packageInfo.version,
+			syncVersion: Setting.value('syncVersion'),
+			profileVersion: reg.db().version(),
+		};
 	}
 
 	public get clipboard() {
@@ -48,6 +49,8 @@ export default class PlatformImplementation {
 	}
 
 	public constructor() {
+		super();
+
 		this.components_ = {};
 
 		this.joplin_ = {
