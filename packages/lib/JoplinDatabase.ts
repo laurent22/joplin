@@ -910,6 +910,22 @@ export default class JoplinDatabase extends Database {
 				queries.push('ALTER TABLE `folders` ADD COLUMN icon TEXT NOT NULL DEFAULT ""');
 			}
 
+			if (targetVersion === 42) {
+				queries.push('ALTER TABLE `note_resources` ADD COLUMN item_type INT NOT NULL DEFAULT 0');
+				queries.push('UPDATE note_resources SET item_type = 4'); // 4 = Resource
+
+				queries = queries.concat(
+					this.alterColumnQueries('note_resources', {
+						id: 'INTEGER PRIMARY KEY',
+						note_id: 'TEXT NOT NULL',
+						resource_id: 'TEXT NOT NULL',
+						is_associated: 'INT NOT NULL',
+						last_seen_time: 'INT NOT NULL',
+						item_type: 'INT NOT NULL',
+					})
+				);
+			}
+
 			const updateVersionQuery = { sql: 'UPDATE version SET version = ?', params: [targetVersion] };
 
 			queries.push(updateVersionQuery);
