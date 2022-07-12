@@ -18,18 +18,18 @@ import {
 import { stexMath } from '@codemirror/legacy-modes/mode/stex';
 import { StreamLanguage } from '@codemirror/language';
 
-const DOLLAR_SIGN_CHAR_CODE = 36;
-const BACKSLASH_CHAR_CODE = 92;
+const dollarSignCharcode = 36;
+const backslashCharcode = 92;
 
 // (?:[>]\s*)?: Optionally allow block math lines to start with '> '
-const MATH_BLOCK_START_REGEX = /^(?:\s*[>]\s*)?\$\$/;
-const MATH_BLOCK_STOP_REGEX = /\$\$\s*$/;
+const mathBlockStartRegex = /^(?:\s*[>]\s*)?\$\$/;
+const mathBlockEndRegex = /\$\$\s*$/;
 
-const TEX_LANGUAGE = StreamLanguage.define(stexMath);
-const BLOCK_MATH_TAG = 'BlockMath';
-const BLOCK_MATH_CONTENT_TAG = 'BlockMathContent';
-const INLINE_MATH_TAG = 'InlineMath';
-const INLINE_MATH_CONTENT_TAG = 'InlineMathContent';
+const texLanguage = StreamLanguage.define(stexMath);
+export const blockMathTagName = 'BlockMath';
+export const blockMathContentTagName = 'BlockMathContent';
+export const inlineMathTagName = 'InlineMath';
+export const inlineMathContentTagName = 'InlineMathContent';
 
 export const mathTag = Tag.define(tags.monospace);
 export const inlineMathTag = Tag.define(mathTag);
@@ -43,7 +43,7 @@ const wrappedTeXParser = (nodeTag: string) => parseMixed(
 		}
 
 		return {
-			parser: TEX_LANGUAGE.parser,
+			parser: texLanguage.parser,
 		};
 	});
 
@@ -51,23 +51,23 @@ const wrappedTeXParser = (nodeTag: string) => parseMixed(
 const InlineMathConfig: MarkdownConfig = {
 	defineNodes: [
 		{
-			name: INLINE_MATH_TAG,
+			name: inlineMathTagName,
 			style: inlineMathTag,
 		},
 		{
-			name: INLINE_MATH_CONTENT_TAG,
+			name: inlineMathContentTagName,
 		},
 	],
 	parseInline: [{
-		name: INLINE_MATH_TAG,
+		name: inlineMathTagName,
 		after: 'InlineCode',
 
 		parse(cx: InlineContext, current: number, pos: number): number {
 			const prevCharCode = pos - 1 >= 0 ? cx.char(pos - 1) : -1;
 			const nextCharCode = cx.char(pos + 1);
-			if (current != DOLLAR_SIGN_CHAR_CODE
-					|| prevCharCode == DOLLAR_SIGN_CHAR_CODE
-					|| nextCharCode == DOLLAR_SIGN_CHAR_CODE) {
+			if (current != dollarSignCharcode
+					|| prevCharCode == dollarSignCharcode
+					|| nextCharCode == dollarSignCharcode) {
 				return -1;
 			}
 
@@ -76,15 +76,15 @@ const InlineMathConfig: MarkdownConfig = {
 				return -1;
 			}
 
-			let escaped = false;
 			const start = pos;
 			const end = cx.end;
+			let escaped = false;
 
 			pos ++;
 
 			// Scan ahead for the next '$' symbol
-			for (; pos < end && (escaped || cx.char(pos) != DOLLAR_SIGN_CHAR_CODE); pos++) {
-				if (!escaped && cx.char(pos) == BACKSLASH_CHAR_CODE) {
+			for (; pos < end && (escaped || cx.char(pos) != dollarSignCharcode); pos++) {
+				if (!escaped && cx.char(pos) == backslashCharcode) {
 					escaped = true;
 				} else {
 					escaped = false;
@@ -105,48 +105,48 @@ const InlineMathConfig: MarkdownConfig = {
 			// Advance to just after the ending '$'
 			pos ++;
 
-			// Add a wraping INLINE_MATH_TAG node that contains an INLINE_MATH_CONTENT_TAG.
-			// The INLINE_MATH_CONTENT_TAG node can thus be safely removed and the region
+			// Add a wraping inlineMathTagName node that contains an inlineMathContentTagName.
+			// The inlineMathContentTagName node can thus be safely removed and the region
 			// will still be marked as a math region.
-			const contentElem = cx.elt(INLINE_MATH_CONTENT_TAG, start + 1, pos - 1);
-			cx.addElement(cx.elt(INLINE_MATH_TAG, start, pos, [contentElem]));
+			const contentElem = cx.elt(inlineMathContentTagName, start + 1, pos - 1);
+			cx.addElement(cx.elt(inlineMathTagName, start, pos, [contentElem]));
 
 			return pos + 1;
 		},
 	}],
-	wrap: wrappedTeXParser(INLINE_MATH_CONTENT_TAG),
+	wrap: wrappedTeXParser(inlineMathContentTagName),
 };
 
 // Extension for recognising block code
 const BlockMathConfig: MarkdownConfig = {
 	defineNodes: [
 		{
-			name: BLOCK_MATH_TAG,
+			name: blockMathTagName,
 			style: mathTag,
 		},
 		{
-			name: BLOCK_MATH_CONTENT_TAG,
+			name: blockMathContentTagName,
 		},
 	],
 	parseBlock: [{
-		name: BLOCK_MATH_TAG,
+		name: blockMathTagName,
 		before: 'Blockquote',
 		parse(cx: BlockContext, line: Line): boolean {
-			const lineLength = line.text.length;
 			const delimLen = 2;
 
 			// $$ delimiter? Start math!
-			const mathStartMatch = MATH_BLOCK_START_REGEX.exec(line.text);
+			const mathStartMatch = mathBlockStartRegex.exec(line.text);
 			if (mathStartMatch) {
 				const start = cx.lineStart + mathStartMatch[0].length;
 				let stop;
 
-				let endMatch = MATH_BLOCK_STOP_REGEX.exec(
+				let endMatch = mathBlockEndRegex.exec(
 					line.text.substring(mathStartMatch[0].length)
 				);
 
 				// If the math region ends immediately (on the same line),
 				if (endMatch) {
+					const lineLength = line.text.length;
 					stop = cx.lineStart + lineLength - endMatch[0].length;
 				} else {
 					let hadNextLine = false;
@@ -155,23 +155,35 @@ const BlockMathConfig: MarkdownConfig = {
 					// Consume lines until we reach the end.
 					do {
 						hadNextLine = cx.nextLine();
-						endMatch = hadNextLine ? MATH_BLOCK_STOP_REGEX.exec(line.text) : null;
+						endMatch = hadNextLine ? mathBlockEndRegex.exec(line.text) : null;
 					}
 					while (hadNextLine && endMatch == null);
 
 					if (hadNextLine && endMatch) {
+						const lineLength = line.text.length;
+
 						// Remove the ending delimiter
 						stop = cx.lineStart + lineLength - endMatch[0].length;
 					} else {
 						stop = cx.lineStart;
 					}
 				}
+				const lineEnd = cx.lineStart + line.text.length;
 
 				// Label the region. Add two labels so that one can be removed.
-				const contentElem = cx.elt(BLOCK_MATH_CONTENT_TAG, start, stop);
-				cx.addElement(
-					cx.elt(BLOCK_MATH_TAG, start - delimLen, stop + delimLen, [contentElem])
+				const contentElem = cx.elt(blockMathContentTagName, start, stop);
+				const containerElement = cx.elt(
+					blockMathTagName,
+					start - delimLen,
+
+					// Math blocks don't need ending delimiters, so ensure we don't
+					// include text that doesn't exist.
+					Math.min(lineEnd, stop + delimLen),
+
+					// The child of the container element should be the content element
+					[contentElem]
 				);
+				cx.addElement(containerElement);
 
 				// Don't re-process the ending delimiter (it may look the same
 				// as the starting delimiter).
@@ -185,16 +197,14 @@ const BlockMathConfig: MarkdownConfig = {
 		// End paragraph-like blocks
 		endLeaf(_cx: BlockContext, line: Line, _leaf: LeafBlock): boolean {
 			// Leaf blocks (e.g. block quotes) end early if math starts.
-			return MATH_BLOCK_START_REGEX.exec(line.text) != null;
+			return mathBlockStartRegex.exec(line.text) != null;
 		},
 	}],
-	wrap: wrappedTeXParser(BLOCK_MATH_CONTENT_TAG),
+	wrap: wrappedTeXParser(blockMathContentTagName),
 };
 
-// Markdown configuration for block and inline math support.
-const MarkdownMathExtension: MarkdownConfig[] = [
+/** Markdown configuration for block and inline math support. */
+export const MarkdownMathExtension: MarkdownConfig[] = [
 	InlineMathConfig,
 	BlockMathConfig,
 ];
-
-export { MarkdownMathExtension };
