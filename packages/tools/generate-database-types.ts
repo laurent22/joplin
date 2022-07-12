@@ -6,12 +6,14 @@ const fs = require('fs-extra');
 async function main() {
 	// Run the CLI app once so as to generate the database file
 	process.chdir(`${rootDir}/packages/app-cli`);
+	const sqliteFilePath = `${require('os').homedir()}/.config/joplindev/database.sqlite`;
+	await fs.remove(sqliteFilePath);
 	await execCommand2('yarn start version');
 
 	const sqlTsConfig = {
 		'client': 'sqlite3',
 		'connection': {
-			'filename': `${require('os').homedir()}/.config/joplindev/database.sqlite`,
+			'filename': sqliteFilePath,
 		},
 		'tableNameCasing': 'pascal',
 		'singularTableNames': true,
