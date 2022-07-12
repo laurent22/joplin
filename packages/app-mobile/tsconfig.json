@@ -1,12 +1,16 @@
 {
-    "extends": "../../tsconfig.json",
-    "include": [
-        "**/*.ts",
-        "**/*.tsx",
+	"extends": "../../tsconfig.json",
+	"include": [
+		"**/*.ts",
+		"**/*.tsx",
 	],
 	"exclude": [
 		"**/node_modules",
-        "**/*.test.ts",
-        "**/*.test.tsx",
+		"**/*.test.ts",
+		"**/*.test.tsx",
+
+		// Files that don't need transpilation
+		"gulpfile.ts",
+		"tools/*.ts",
 	],
 }
