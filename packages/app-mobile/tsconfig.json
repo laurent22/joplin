@@ -6,5 +6,9 @@
 	],
 	"exclude": [
 		"**/node_modules",
+
+		// Files that don't need transpilation
+		"gulpfile.ts",
+		"tools/*.ts",
 	],
 }
