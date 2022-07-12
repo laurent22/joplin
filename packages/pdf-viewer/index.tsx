@@ -32,13 +32,16 @@ const useIsVisible = (elementRef: any, rootRef: any) => {
 	return isVisible;
 };
 
-function Page(props: { pdf: PdfData; pageNo: number; scaledSize: ScaledSize; isDarkTheme: boolean; container: any }) {
+function Page(props: { pdf: PdfData; pageNo: number; focusOnLoad: boolean; isAnchored: boolean; scaledSize: ScaledSize; isDarkTheme: boolean; container: any }) {
 	const [error, setError] = useState(null);
+	const [isLoaded, setIsLoaded] = useState(false);
 	const canvasEl = useRef<HTMLCanvasElement>(null);
+	const wrapperEl = useRef<HTMLDivElement>(null);
 	const isVisible = useIsVisible(canvasEl, props.container);
+
 	useEffect(() => {
 		const loader = async () => {
-			if (!isVisible || !props.pdf || !props.scaledSize) return;
+			if (isLoaded || !isVisible || !props.pdf || !props.scaledSize) return;
 			try {
 				const page = await props.pdf.getPage(props.pageNo);
 				const viewport = page.getViewport({ scale: props.scaledSize.scale || 1.0 });
@@ -52,8 +55,8 @@ function Page(props: { pdf: PdfData; pageNo: number; scaledSize: ScaledSize; isD
 					viewport,
 				});
 
-				console.log('page loaded:', props.pageNo);
-				// return renderTask.promise;
+				// console.log('page loaded:', props.pageNo);
+				setIsLoaded(true);
 			} catch (err) {
 				console.log('Error loading page no.', props.pageNo, err);
 				setError(err);
@@ -63,9 +66,14 @@ function Page(props: { pdf: PdfData; pageNo: number; scaledSize: ScaledSize; isD
 			.catch(console.error);
 	}, [props.pageNo, props.scaledSize, props.pdf, isVisible]);
 
-	let style: any = {
-		// borderColor: isVisible ? 'green' : 'red',
-	};
+	useEffect(() => {
+		if (props.focusOnLoad && !!props.scaledSize && !!wrapperEl && !!props.container && !!wrapperEl.current && !!props.container.current) {
+			props.container.current.scrollTop = wrapperEl.current.offsetTop;
+			// console.warn('setting focus on page', props.pageNo, wrapperEl.current.offsetTop);
+		}
+	}, [wrapperEl.current, props.container.current, props.scaledSize]);
+
+	let style: any = {};
 	if (props.scaledSize) {
 		style = {
 			...style,
@@ -74,13 +82,16 @@ function Page(props: { pdf: PdfData; pageNo: number; scaledSize: ScaledSize; isD
 		};
 	}
 	return (
-		<div className="page-wrapper" style={style}>
-			<canvas ref={canvasEl} className="page-canvas">
+		<div className="page-wrapper" ref={wrapperEl} style={style}>
+			<canvas ref={canvasEl} className="page-canvas" style={style}>
 				<div>
 					{error ? 'ERROR' : 'Loading..'}
 				</div>
 				Page {props.pageNo}
 			</canvas>
+			<div className="p-info">
+				{props.isAnchored ? '📌' : ''} Page {props.pageNo}
+			</div>
 		</div>
 	);
 }
@@ -150,65 +161,63 @@ class PdfData {
 			scale,
 		};
 	};
-	//
-	// // @ts-ignore Todo
-	// scrollPosYToPageNo = async (pageSize: ScaledSize, scrollTop: number) => {
-	//
-	// };
-	// // @ts-ignore Todo
-	// scrollPosXToPageNo = async (pageSize: ScaledSize, scrollLeft: number) => {
-	//
-	// };
-	// // @ts-ignore Todo
-	// pageNoToScrollPosX = async (pageSize: ScaledSize, pageNo: number) => {
-	//
-	// };
-	// // @ts-ignore Todo
-	// pageNoToScrollPosY = async (pageSize: ScaledSize, pageNo: number) => {
-	//
-	// };
-	//
 }
 
-function MiniViewerApp(props: { pdfPath: string; isDarkTheme: boolean; pageHeight: number }) {
+function MiniViewerApp(props: { pdfPath: string; isDarkTheme: boolean; pageWidth: number; anchorPage: number }) {
 	const [pdf, setPdf] = useState<PdfData>(null);
 	const [scaledSize, setScaledSize] = useState<ScaledSize>(null);
+	const [isFocused, setIsFocused] = useState(false);
 	const containerEl = useRef(null);
+	const innerContainerEl = useRef(null);
 	useEffect(() => {
 		const load = async () => {
 			const pdfData = new PdfData();
 			await pdfData.loadDoc(props.pdfPath);
-			const scaledSize = await pdfData.getScaledSize(props.pageHeight, null);
+			const scaledSize = await pdfData.getScaledSize(null, props.pageWidth);
 			setPdf(pdfData);
 			setScaledSize(scaledSize);
 		};
 		load()
 			.catch(console.error);
+		window.addEventListener('message', (event: any) => {
+			if (event.data.type === 'blur') {
+				setIsFocused(false);
+			}
+		});
+		document.addEventListener('click', (_) => {
+			setIsFocused(true);
+		});
 	}, []);
 	if (!pdf) return <div className="mini-app">Loading Pages..</div>;
 	return (
-		<div className="mini-app">
-			<div className="app-pages" ref={containerEl}>
-				{Array.from(Array(pdf.pageCount).keys()).map((i: number) => {
-					return <Page pdf={pdf} pageNo={i + 1} isDarkTheme={props.isDarkTheme} scaledSize={scaledSize} container={containerEl} key={i} />;
-				}
-				)}
+		<div className={`mini-app${isFocused ? ' focused' : ''}`}>
+			<div className={`app-pages${isFocused ? ' focused' : ''}`} ref={containerEl}>
+				<div className='pages-holder' ref={innerContainerEl} >
+					{Array.from(Array(pdf.pageCount).keys()).map((i: number) => {
+						return <Page pdf={pdf} pageNo={i + 1} focusOnLoad={props.anchorPage && props.anchorPage == i + 1}
+							isAnchored={props.anchorPage && props.anchorPage == i + 1}
+							isDarkTheme={props.isDarkTheme} scaledSize={scaledSize} container={containerEl} key={i} />;
+					}
+					)}
+				</div>
 			</div>
 			<div className='app-bottom-bar'>
 				<div className='page-info'>
 					{pdf.pageCount} pages
 				</div>
+				<div>{isFocused ? '' : 'Click to enable scroll'}</div>
 			</div>
 		</div>
 	);
 }
 
-const url = window.location.href.split('?resPath=')[1];
+const url = window.frameElement.getAttribute('url');
 const appearance = window.frameElement.getAttribute('appearance');
+const anchorPage = window.frameElement.getAttribute('anchorPage');
 
 document.documentElement.setAttribute('data-theme', appearance);
 
 render(
-	<MiniViewerApp pdfPath={url} isDarkTheme={appearance == 'dark'} pageHeight={400} />,
+	<MiniViewerApp pdfPath={url} isDarkTheme={appearance == 'dark'} anchorPage={anchorPage ? Number(anchorPage) : null} pageWidth={400} />,
 	document.getElementById('pdf-root')
 );

@@ -41,10 +41,14 @@ export default function(link: Link, options: Options) {
 	}
 
 	if (options.pdfViewerEnabled && resource.mime === 'application/pdf') {
-		console.log('got theme', options.theme);
+		let anchorPageNo = null;
+		if (link.href.indexOf('#') > 0) {
+			anchorPageNo = Number(link.href.split('#').pop());
+			if (anchorPageNo < 1) anchorPageNo = null;
+		}
 		if (options.useCustomPdfViewer) {
-			return `<iframe src="../../vendor/lib/@joplin/pdf-viewer/index.html?resPath=${escapedResourcePath}"
-			appearance="${options.theme.appearance}"
+			return `<iframe src="../../vendor/lib/@joplin/pdf-viewer/index.html" url="${escapedResourcePath}" 
+			appearance="${options.theme.appearance}" ${anchorPageNo ? `anchorPage="${anchorPageNo}"` : ''}
 		 class="media-player media-pdf"></iframe>`;
 		}
 		return `<object data="${escapedResourcePath}" class="media-player media-pdf" type="${escapedMime}"></object>`;

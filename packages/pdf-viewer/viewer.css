@@ -58,22 +58,26 @@ hr {
     height: 0;
     overflow: visible;
 }
+
 ::-webkit-scrollbar {
     width: 7px;
     height: 7px;
 }
+
 ::-webkit-scrollbar-corner {
     background: none;
 }
+
 ::-webkit-scrollbar-track {
     border: none;
 }
+
 ::-webkit-scrollbar-thumb {
     background: var(--grey);
     border-radius: 5px;
 }
 
-.mini-app{
+.mini-app {
     display: grid;
     grid-template-rows: auto 2rem;
     height: 100vh;
@@ -82,22 +86,51 @@ hr {
     overflow: hidden;
     border-radius: 0.4rem;
     border: solid thin var(--tertiary);
+    padding-top: 0.6rem;
+    padding-right: 0.25rem;
+    background-color: rgb(240, 241, 245);
 }
-.app-pages{
+
+.mini-app.focused {
+    border: solid thin var(--grey);
+}
+
+[data-theme="dark"] .mini-app {
+    background-color: rgb(54, 54, 54);
+}
+
+.app-pages {
     display: flex;
-    flex-flow: column;
-    flex-wrap: wrap;
     justify-content: center;
-    align-items: center;
-    overflow-x: auto;
-    overflow-y: hidden;
+    align-items: start;
+    overflow-x: hidden;
     width: 100%;
     height: 100%;
     padding: 0.5rem;
-    padding-top: 1rem;
-    column-gap: 0.2rem;
+    padding-top: 0px;
+    overflow-y: hidden;
+    padding-right: 0.25rem;
+    position: relative;
 }
-.app-bottom-bar{
+
+.app-pages.focused {
+    padding-right: 0px;
+    overflow-y: auto;
+}
+
+.pages-holder {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    flex-flow: column;
+    width: 100%;
+    min-height: 100%;
+    height: auto;
+    row-gap: 2px;
+}
+
+.app-bottom-bar {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -106,12 +139,31 @@ hr {
     font-size: 0.8rem;
     color: var(--grey);
 }
-.page-wrapper{
+
+.page-wrapper {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     overflow: hidden;
     border: solid thin rgba(120, 120, 120, 0.498);
-    background: var(--tertiary);
+    background: rgb(233, 233, 233);
+    position: relative;
+}
+
+.p-info {
+    position: absolute;
+    top: 0.5rem;
+    left: 0.5rem;
+    padding: 0.3rem;
+    background: rgba(203, 203, 203, 0.509);
+    border-radius: 0.3rem;
+    font-size: 0.8rem;
+    color: rgba(91, 91, 91, 0.829);
+    backdrop-filter: blur(0.5rem);
+    cursor: default;
+}
+
+.p-info:hover {
+    opacity: 0.3;
 }
