@@ -104,7 +104,7 @@ const InlineMathConfig: MarkdownConfig = {
 			}
 
 			// It isn't a math region if there is no ending '$'
-			if (pos == end) {
+			if (pos === end) {
 				return -1;
 			}
 
@@ -163,7 +163,7 @@ const BlockMathConfig: MarkdownConfig = {
 						hadNextLine = cx.nextLine();
 						endMatch = hadNextLine ? mathBlockEndRegex.exec(line.text) : null;
 					}
-					while (hadNextLine && endMatch == null);
+					while (hadNextLine && endMatch === null);
 
 					if (hadNextLine && endMatch) {
 						const lineLength = line.text.length;
@@ -203,7 +203,7 @@ const BlockMathConfig: MarkdownConfig = {
 		// End paragraph-like blocks
 		endLeaf(_cx: BlockContext, line: Line, _leaf: LeafBlock): boolean {
 			// Leaf blocks (e.g. block quotes) end early if math starts.
-			return mathBlockStartRegex.exec(line.text) != null;
+			return mathBlockStartRegex.exec(line.text) !== null;
 		},
 	}],
 	wrap: wrappedTeXParser(blockMathContentTagName),
