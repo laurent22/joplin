@@ -27,7 +27,7 @@ const findNodesWithName = (editor: EditorState, nodeName: string) => {
 	const result: SyntaxNode[] = [];
 	ensureSyntaxTree(editor, syntaxTreeCreateTimeout)?.iterate({
 		enter: (node) => {
-			if (node.name == nodeName) {
+			if (node.name === nodeName) {
 				result.push(node.node);
 			}
 		},
