@@ -852,6 +852,12 @@ packages/app-mobile/components/NoteEditor/NoteEditor.js.map
 packages/app-mobile/components/SelectDateTimeDialog.d.ts
 packages/app-mobile/components/SelectDateTimeDialog.js
 packages/app-mobile/components/SelectDateTimeDialog.js.map
+packages/app-mobile/components/getResponsiveValue.d.ts
+packages/app-mobile/components/getResponsiveValue.js
+packages/app-mobile/components/getResponsiveValue.js.map
+packages/app-mobile/components/getResponsiveValue.test.d.ts
+packages/app-mobile/components/getResponsiveValue.test.js
+packages/app-mobile/components/getResponsiveValue.test.js.map
 packages/app-mobile/components/screens/ConfigScreen.d.ts
 packages/app-mobile/components/screens/ConfigScreen.js
 packages/app-mobile/components/screens/ConfigScreen.js.map
@@ -864,6 +870,9 @@ packages/app-mobile/components/screens/UpgradeSyncTargetScreen.js.map
 packages/app-mobile/components/screens/encryption-config.d.ts
 packages/app-mobile/components/screens/encryption-config.js
 packages/app-mobile/components/screens/encryption-config.js.map
+packages/app-mobile/components/sideMenu.d.ts
+packages/app-mobile/components/sideMenu.js
+packages/app-mobile/components/sideMenu.js.map
 packages/app-mobile/root.d.ts
 packages/app-mobile/root.js
 packages/app-mobile/root.js.map
