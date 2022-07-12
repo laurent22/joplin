@@ -3678,9 +3678,9 @@ __metadata:
     "@electron/remote": ^2.0.1
     "@fortawesome/fontawesome-free": ^5.13.0
     "@joeattardi/emoji-button": ^4.6.0
-    "@joplin/lib": ~2.8
-    "@joplin/renderer": ~2.8
-    "@joplin/tools": ~2.8
+    "@joplin/lib": ~2.9
+    "@joplin/renderer": ~2.9
+    "@joplin/tools": ~2.9
     "@testing-library/react-hooks": ^3.4.2
     "@types/jest": ^26.0.15
     "@types/node": ^14.14.6
@@ -3761,9 +3761,10 @@ __metadata:
     "@codemirror/search": ^6.0.0
     "@codemirror/state": ^6.0.0
     "@codemirror/view": ^6.0.0
-    "@joplin/lib": ~2.8
-    "@joplin/renderer": ~2.8
-    "@joplin/tools": ~2.8
+    "@joplin/lib": ~2.9
+    "@joplin/react-native-saf-x": ~2.9
+    "@joplin/renderer": ~2.9
+    "@joplin/tools": ~2.9
     "@lezer/highlight": ^1.0.0
     "@react-native-community/clipboard": ^1.5.0
     "@react-native-community/datetimepicker": ^3.0.3
@@ -3877,7 +3878,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/htmlpack@^2.8.1, @joplin/htmlpack@workspace:packages/htmlpack":
+"@joplin/htmlpack@workspace:packages/htmlpack, @joplin/htmlpack@~2.9":
   version: 0.0.0-use.local
   resolution: "@joplin/htmlpack@workspace:packages/htmlpack"
   dependencies:
@@ -3890,7 +3891,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/lib@^2.8.1, @joplin/lib@workspace:packages/lib, @joplin/lib@~2.8":
+"@joplin/lib@workspace:packages/lib, @joplin/lib@~2.9":
   version: 0.0.0-use.local
   resolution: "@joplin/lib@workspace:packages/lib"
   dependencies:
@@ -3899,8 +3900,8 @@ __metadata:
     "@joplin/fork-htmlparser2": ^4.1.40
     "@joplin/fork-sax": ^1.2.44
     "@joplin/fork-uslug": ^1.0.5
-    "@joplin/htmlpack": ^2.8.1
-    "@joplin/renderer": ^2.8.1
+    "@joplin/htmlpack": ~2.9
+    "@joplin/renderer": ~2.9
     "@joplin/turndown": ^4.0.62
     "@joplin/turndown-plugin-gfm": ^1.0.44
     "@types/fs-extra": ^9.0.6
@@ -3926,6 +3927,7 @@ __metadata:
     follow-redirects: ^1.2.4
     form-data: ^2.1.4
     fs-extra: ^5.0.0
+    hpagent: ^1.0.0
     html-entities: ^1.2.1
     html-minifier: ^3.5.15
     image-data-uri: ^2.0.0
@@ -3974,8 +3976,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@joplin/plugin-repo-cli@workspace:packages/plugin-repo-cli"
   dependencies:
-    "@joplin/lib": ^2.8.1
-    "@joplin/tools": ^2.8.1
+    "@joplin/lib": ~2.9
+    "@joplin/tools": ~2.9
     "@types/fs-extra": ^9.0.6
     "@types/jest": ^26.0.15
     "@types/node": ^14.14.6
@@ -4000,7 +4002,23 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/renderer@^2.8.1, @joplin/renderer@workspace:packages/renderer, @joplin/renderer@~2.8":
+"@joplin/react-native-saf-x@workspace:packages/react-native-saf-x, @joplin/react-native-saf-x@~2.9":
+  version: 0.0.0-use.local
+  resolution: "@joplin/react-native-saf-x@workspace:packages/react-native-saf-x"
+  dependencies:
+    "@babel/core": ^7.12.9
+    "@types/react": ^16.9.55
+    "@types/react-native": ^0.64.4
+    react: 17.0.2
+    react-native: 0.66.1
+    typescript: ^4.0.5
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  languageName: unknown
+  linkType: soft
+
+"@joplin/renderer@workspace:packages/renderer, @joplin/renderer@~2.9":
   version: 0.0.0-use.local
   resolution: "@joplin/renderer@workspace:packages/renderer"
   dependencies:
@@ -4040,9 +4058,9 @@ __metadata:
   dependencies:
     "@aws-sdk/client-s3": ^3.40.0
     "@fortawesome/fontawesome-free": ^5.15.1
-    "@joplin/lib": ~2.8
-    "@joplin/renderer": ~2.8
-    "@joplin/tools": ~2.8
+    "@joplin/lib": ~2.9
+    "@joplin/renderer": ~2.9
+    "@joplin/tools": ~2.9
     "@koa/cors": ^3.1.0
     "@rmp135/sql-ts": ^1.12.1
     "@types/fs-extra": ^8.0.0
@@ -4095,12 +4113,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joplin/tools@^2.8.1, @joplin/tools@workspace:packages/tools, @joplin/tools@~2.8":
+"@joplin/tools@workspace:packages/tools, @joplin/tools@~2.9":
   version: 0.0.0-use.local
   resolution: "@joplin/tools@workspace:packages/tools"
   dependencies:
-    "@joplin/lib": ^2.8.1
-    "@joplin/renderer": ^2.8.1
+    "@joplin/lib": ~2.9
+    "@joplin/renderer": ~2.9
     "@rmp135/sql-ts": ^1.6.0
     "@types/fs-extra": ^9.0.6
     "@types/jest": ^26.0.15
@@ -17433,6 +17451,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"hpagent@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "hpagent@npm:1.0.0"
+  checksum: 911a9ba612747f5c9403fb60c1abd0c47a27fa634826caad9aecad41b899533489da36c92758b5cd83576e2bf9e84e23a4374a40aa513106d5450f62856c4b2d
+  languageName: node
+  linkType: hard
+
 "html-encoding-sniffer@npm:^1.0.2":
   version: 1.0.2
   resolution: "html-encoding-sniffer@npm:1.0.2"
@@ -20355,9 +20380,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "joplin@workspace:packages/app-cli"
   dependencies:
-    "@joplin/lib": ~2.8
-    "@joplin/renderer": ~2.8
-    "@joplin/tools": ~2.8
+    "@joplin/lib": ~2.9
+    "@joplin/renderer": ~2.9
+    "@joplin/tools": ~2.9
     "@types/fs-extra": ^9.0.6
     "@types/jest": ^26.0.15
     "@types/node": ^14.14.6

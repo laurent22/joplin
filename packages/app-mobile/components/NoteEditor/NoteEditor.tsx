@@ -135,7 +135,6 @@ function NoteEditor(props: Props, ref: any) {
 		} catch (e) {
 			window.ReactNativeWebView.postMessage("error:" + e.message + ": " + JSON.stringify(e))
 		}
-		
 		true;
 	`;
 
