@@ -55,10 +55,13 @@ export default class SpellCheckerService {
 	}
 
 	public setupDefaultLanguage() {
-		if (Setting.value('spellChecker.languages').length == 0) {
+		if (Setting.value('spellChecker.languages').length === 0) {
 			const l = this.driver_.language;
-			if (this.availableLanguages.includes(l)) this.setLanguage(l);
-			else this.setLanguage(this.defaultLanguage);
+			if (this.availableLanguages.includes(l)) {
+				this.setLanguage(l);
+			} else {
+				this.setLanguage(this.defaultLanguage);
+			}
 		}
 	}
 
