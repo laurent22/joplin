@@ -1,6 +1,6 @@
 // getResponsiveValue() returns the corresponding value for
-// of a particular device screen width based on a valueMap argument
-// and breakpoints
+// a particular device screen width based on a valueMap argument
+// and breakpoints.
 //
 // Breakpoints:
 // sm: < 481
