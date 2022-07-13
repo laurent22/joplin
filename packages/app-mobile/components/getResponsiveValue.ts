@@ -3,8 +3,8 @@
 // and breakpoints.
 //
 // Breakpoints:
-// sm: < 481
-// md: >= 481
+// sm: < 481px
+// md: >= 481px
 // lg: >= 769px
 // xl: >= 1025px
 // xxl: >= 1201px
