@@ -12,7 +12,7 @@ export class Vec3 {
 	private constructor(
 		public readonly x: number,
 		public readonly y: number,
-		public readonly z: number,
+		public readonly z: number
 	) {
 	}
 
@@ -61,6 +61,27 @@ export class Vec3 {
 
 	public dot(other: Vec3): number {
 		return this.x * other.x + this.y * other.y + this.z * other.z;
+	}
+
+	public cross(other: Vec3): Vec3 {
+		// | i  j  k |
+		// | x1 y1 z1| = (i)(y1z2 - y2z1) - (j)(x1z2 - x2z1) + (k)(x1y2 - x2y1)
+		// | x2 y2 z2|
+		return Vec3.of(
+			this.y * other.z - other.y * this.z,
+			other.x * this.z - this.x * other.z,
+			this.x * other.y - other.x * this.y
+		);
+	}
+
+	/** @return this + direction.normalized() * distance */
+	public extend(distance: number, direction: Vec3): Vec3 {
+		return this.plus(direction.normalized().times(distance));
+	}
+
+	/** @return a vector [fractionTo] of the way to target from this. */
+	public lerp(target: Vec3, fractionTo: number): Vec3 {
+		return this.times(1 - fractionTo).plus(target.times(fractionTo));
 	}
 
 	/**
@@ -126,7 +147,7 @@ export namespace Vec2 {
 }
 
 export type Point2 = Vec3;
-export type Vec2 = Vec3;
+export type Vec2 = Vec3; // eslint-disable-line
 
 /**
  * Represents a three dimensional linear transformation or
@@ -186,7 +207,7 @@ export class Mat33 {
 		// toResult to the inverse through elementary row operations
 		for (let cursor = 0; cursor < 3; cursor++) {
 			// Make toIdentity[k = cursor] = 1
-			let scale = 1.0 / toIdentity[cursor].at(cursor);
+			let scale = 1.0 / (toIdentity[cursor].at(cursor) || 1);
 			toIdentity[cursor] = toIdentity[cursor].times(scale);
 			toResult[cursor] = toResult[cursor].times(scale);
 
@@ -237,8 +258,8 @@ export class Mat33 {
 	/**
 	 * Treat the given vector like a Vec2. Applies this as an affine transformation
 	 * to the given vector.
-	 * 
-	 * @return the transformed vector. 
+	 *
+	 * @return the transformed vector.
 	 */
 	public transformVec2(other: Vec3): Vec2 {
 		// When transforming a Vec2, we want to use the z transformation
@@ -339,7 +360,7 @@ export class Mat33 {
 		result = result.rightMul(new Mat33(
 			amount, 0, 0,
 			0, amount, 0,
-			0, 0, 1,
+			0, 0, 1
 		));
 
 		// Translate such that [center] goes to (0, 0)
@@ -382,6 +403,10 @@ export class Rect2 {
 
 	public translatedBy(vec: Vec2): Rect2 {
 		return new Rect2(vec.x + this.x, vec.y + this.y, this.w, this.h);
+	}
+
+	public resizedTo(size: Vec2): Rect2 {
+		return new Rect2(this.x, this.y, size.x, size.y);
 	}
 
 	public containsPoint(other: Point2): boolean {
@@ -454,10 +479,14 @@ export class Rect2 {
 	public get corners(): Point2[] {
 		return [
 			this.bottomRight,
-			this.bottomRight.plus(Vec2.of(0, this.h)),
+			this.bottomRight.plus(Vec2.of(0, -this.h)),
 			this.topLeft,
-			this.topLeft.plus(Vec2.of(0, -this.h)),
+			this.topLeft.plus(Vec2.of(0, this.h)),
 		];
+	}
+
+	public get maxDimension(): number {
+		return Math.max(this.w, this.h);
 	}
 
 	/**
@@ -529,7 +558,7 @@ export class Rect2 {
 
 /**
  * Represents a function with a derivative that can be taken/approximated.
- * 
+ *
  * Implementers can override [derivativeAt] for more efficient derivative
  * computation.
  */
@@ -545,13 +574,13 @@ export abstract class SmoothFunction {
 	/**
 	 * If f(t) ≝ this.at(t) and g(t) ≝ other.at(t), returns
 	 *     h(t) = f(t) + g(t)
-	 * 
+	 *
 	 * @return Returns (this + other)(t)
 	 */
 	public plus(other: SmoothFunction): SmoothFunction {
 		return SmoothFunction.ofFn(
 			t => this.at(t) + other.at(t),
-			t => this.derivativeAt(t) + other.derivativeAt(t),
+			t => this.derivativeAt(t) + other.derivativeAt(t)
 		);
 	}
 
@@ -569,7 +598,7 @@ export abstract class SmoothFunction {
 		} else {
 			return SmoothFunction.ofFn(
 				t => this.at(t) * other.at(t),
-				t => this.derivativeAt(t) * other.at(t) + this.at(t) * other.derivativeAt(t),
+				t => this.derivativeAt(t) * other.at(t) + this.at(t) * other.derivativeAt(t)
 			);
 		}
 	}
@@ -580,8 +609,8 @@ export abstract class SmoothFunction {
 	public timesConstant(scalar: number): SmoothFunction {
 		return SmoothFunction.ofFn(
 			t => this.at(t) * scalar,
-			t => this.derivativeAt(t) * scalar,
-		)
+			t => this.derivativeAt(t) * scalar
+		);
 	}
 
 	/** @return the derivative of this at [t]. */
@@ -613,7 +642,7 @@ export abstract class SmoothFunction {
 
 	/**
 	 * Approximates a zero near the given input.
-	 * 
+	 *
 	 * @param t Starting value/a guess
 	 * @param threshold A number, if within, an output value is assumed to be zero
 	 * @param maxSteps Maximum number of algorithm steps
@@ -632,7 +661,7 @@ export abstract class SmoothFunction {
 
 			for (const t of possibleTs) {
 				if (!isNaN(t)) {
-					let test = Math.abs(this.at(t));
+					const test = Math.abs(this.at(t));
 
 					if (test <= best) {
 						current = t;
@@ -683,7 +712,7 @@ export abstract class SmoothFunction {
 	 */
 	public minimumNear(
 		minT: number, maxT: number, guess: number,
-		maxIterations: number = 10, threshold: number = 0.005,
+		maxIterations: number = 10, threshold: number = 0.005
 	): number {
 		// Ensure maxT > minT
 		if (maxT < minT) {
@@ -728,7 +757,7 @@ export abstract class SmoothFunction {
 					}
 				} else {
 					// Slightly increase the step size
-					stepSize *= 1 + 1/(i + 1);
+					stepSize *= 1 + 1 / (i + 1);
 				}
 			}
 
@@ -757,10 +786,10 @@ export abstract class SmoothFunction {
 	 */
 	public minimize(
 		minT: number, maxT: number, initialGuessCount: number = 5, maxIterationsEach: number = 10,
-		threshold: number = 0.005,
+		threshold: number = 0.005
 	): number {
 		if (minT > maxT) {
-			let tmp = maxT;
+			const tmp = maxT;
 			maxT = minT;
 			minT = tmp;
 		}
@@ -806,7 +835,7 @@ export abstract class SmoothFunction {
 		}
 
 		return new (class extends SmoothFunction {
-			at(t: number): number {
+			public at(t: number): number {
 				t -= center;
 
 				let res = 0;
@@ -842,17 +871,17 @@ export abstract class SmoothFunction {
 
 	/**
 	 * Returns a representation of a piecewise smooth function
-	 * 
+	 *
 	 * @param f Function to implement
 	 * @param df Derivative of that function (if not given, it will be approximated)
 	 */
-	public static ofFn(f: (t: number)=>number, df?: (t: number)=>number): SmoothFunction {
+	public static ofFn(f: (t: number)=> number, df?: (t: number)=> number): SmoothFunction {
 		return new (class extends SmoothFunction {
-			at(t: number): number {
+			public at(t: number): number {
 				return f(t);
 			}
 
-			derivativeAt(t: number): number {
+			public derivativeAt(t: number): number {
 				if (df) {
 					return df(t);
 				} else {
@@ -869,13 +898,26 @@ export abstract class SmoothFunction {
 
 /**
  * Represents a piecewise smooth function that maps from ℝ → ℝ³
- * 
+ *
  * Implementers should either override xComponent, yComponent, zComponent
  * or override at(t).
  */
 export abstract class SmoothVectorFunction {
 	public at(t: number): Vec3 {
 		return Vec3.of(this.xComponent.at(t), this.yComponent.at(t), this.zComponent.at(t));
+	}
+
+	public derivativeAt(t: number): Vec3 {
+		return Vec3.of(
+			this.xComponent.derivativeAt(t),
+			this.yComponent.derivativeAt(t),
+			this.zComponent.derivativeAt(t)
+		);
+	}
+
+	public normAt(t: number, vecCross: Vec3 = Vec3.unitZ): Vec3 {
+		const derivative = this.derivativeAt(t);
+		return derivative.cross(vecCross).normalized();
 	}
 
 	public readonly magnitude: SmoothFunction = SmoothFunction.ofFn(t => this.at(t).magnitude());
@@ -948,12 +990,12 @@ export abstract class SmoothVectorFunction {
 
 	/**
 	 * x-component calculated using this.at.
-	 * 
+	 *
 	 * Computations using derivedXComponent will be slower than computations using
 	 * this.at. As such, use derivedXComponent, derivedYComponent, and derivedZComponent
 	 * to initialize xComponent, yComponent, and zComponent when performance is not
 	 * critical and it is more readable to compute the components of this with vectors.
-	 * 
+	 *
 	 * If `derivedXComponent` is used, `at` **must** be overridden!
 	 */
 	protected readonly derivedXComponent: SmoothFunction = SmoothFunction.ofFn(t => this.at(t).x);
@@ -982,7 +1024,7 @@ export abstract class SmoothVectorFunction {
 /**
  * Represents a cubic Bézier curve
  * (B_{P_0P_1P_2P_3}(t)) = \sum_{k=0}^n {n \choose k} t^k (1 - t)^{n - k} P_k
- * 
+ *
  * See https://en.wikipedia.org/wiki/Bézier_curve
  */
 export class CubicBezierCurve extends SmoothVectorFunction {
@@ -993,31 +1035,21 @@ export class CubicBezierCurve extends SmoothVectorFunction {
 
 	public constructor(
 		public readonly p0: Point2, public readonly p1: Point2,
-		public readonly p2: Point2, public readonly p3: Point2,
+		public readonly p2: Point2, public readonly p3: Point2
 	) {
 		super();
 	}
 
 	public at(t: number): Point2 {
-		const fromRight = 1 - t;
-		const fromLeft = t;
-
-		// TODO: Is this worth the speedup from not using Math.pow?
-		//       Is there a speedup?
-		const fromRightCubed = Math.pow(fromRight, 3);
-		const fromRightSqrd = Math.pow(fromRight, 2);
-		const fromLeftCubed = Math.pow(fromLeft, 3);
-		const fromLeftSqrd = Math.pow(fromLeft, 2);
-
 		// TODO: If we switch to MathJS, etc., use a matrix multiplication.
 		//       We can then cache the matrix (because this.p0, this.p1, this.p2, this.p3)
 		//       are constant and take advantage of optimized matrix multiplication.
-		return this.p0.times(fromRightCubed).plus(
-			this.p1.times(2 * fromLeft * fromRightSqrd)
+		return this.p0.times((1 - t) * (1 - t) * (1 - t)).plus(
+			this.p1.times(3 * t * (1 - t) * (1 - t))
 		).plus(
-			this.p2.times(2 * fromLeftSqrd * fromRight)
+			this.p2.times(3 * t * t * (1 - t))
 		).plus(
-			this.p3.times(fromLeftCubed)
+			this.p3.times(t * t * t)
 		);
 	}
 
@@ -1027,7 +1059,7 @@ export class CubicBezierCurve extends SmoothVectorFunction {
 	 */
 	public static approximationOf(
 		points: Point2[], incomingGradient?: Point2
-	): { curve: CubicBezierCurve, error: number} {
+	): { curve: CubicBezierCurve; error: number} {
 		const mseWithPoints = (p1: Point2, p2: Point2, p3: Point2, p4: Point2) => {
 			const curve = new CubicBezierCurve(p1, p2, p3, p4);
 			return curve.meanSquareError(points, 0, 1);
@@ -1040,7 +1072,7 @@ export class CubicBezierCurve extends SmoothVectorFunction {
 			return {
 				curve,
 				error: curve.meanSquareError(points, 0, 1),
-			}
+			};
 		}
 
 		if (incomingGradient == null) {
@@ -1056,10 +1088,10 @@ export class CubicBezierCurve extends SmoothVectorFunction {
 		//  •  B'(0) = α incomingGradient/|incomingGradient|
 
 		// Base p1 and p2 on hueristics (a reasonable range for variation)
-		let p0 = points[0];
-		let p1 = (t: number) => incomingGradient.times(4 * t);
-		let p2 = (t: number) => outgoingGradient.times(4 * t);
-		let p3 = points[points.length - 1];
+		const p0 = points[0];
+		const p1 = (t: number) => incomingGradient.times(4 * t);
+		const p2 = (t: number) => outgoingGradient.times(4 * t);
+		const p3 = points[points.length - 1];
 
 		// We don't need true MSE, just an approximation
 		let mseFunction = SmoothFunction.ofFn(

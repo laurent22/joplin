@@ -879,6 +879,9 @@ packages/app-mobile/components/NoteEditor/CodeMirror/webviewLogger.js.map
 packages/app-mobile/components/NoteEditor/EditLinkDialog.d.ts
 packages/app-mobile/components/NoteEditor/EditLinkDialog.js
 packages/app-mobile/components/NoteEditor/EditLinkDialog.js.map
+packages/app-mobile/components/NoteEditor/ImageEditor/Color4.d.ts
+packages/app-mobile/components/NoteEditor/ImageEditor/Color4.js
+packages/app-mobile/components/NoteEditor/ImageEditor/Color4.js.map
 packages/app-mobile/components/NoteEditor/ImageEditor/EditorImage.d.ts
 packages/app-mobile/components/NoteEditor/ImageEditor/EditorImage.js
 packages/app-mobile/components/NoteEditor/ImageEditor/EditorImage.js.map
@@ -903,6 +906,15 @@ packages/app-mobile/components/NoteEditor/ImageEditor/math.js.map
 packages/app-mobile/components/NoteEditor/ImageEditor/math.test.d.ts
 packages/app-mobile/components/NoteEditor/ImageEditor/math.test.js
 packages/app-mobile/components/NoteEditor/ImageEditor/math.test.js.map
+packages/app-mobile/components/NoteEditor/ImageEditor/rendering/AbstractRenderer.d.ts
+packages/app-mobile/components/NoteEditor/ImageEditor/rendering/AbstractRenderer.js
+packages/app-mobile/components/NoteEditor/ImageEditor/rendering/AbstractRenderer.js.map
+packages/app-mobile/components/NoteEditor/ImageEditor/rendering/CanvasRenderer.d.ts
+packages/app-mobile/components/NoteEditor/ImageEditor/rendering/CanvasRenderer.js
+packages/app-mobile/components/NoteEditor/ImageEditor/rendering/CanvasRenderer.js.map
+packages/app-mobile/components/NoteEditor/ImageEditor/tools/BaseTool.d.ts
+packages/app-mobile/components/NoteEditor/ImageEditor/tools/BaseTool.js
+packages/app-mobile/components/NoteEditor/ImageEditor/tools/BaseTool.js.map
 packages/app-mobile/components/NoteEditor/ImageEditor/tools/PanZoom.d.ts
 packages/app-mobile/components/NoteEditor/ImageEditor/tools/PanZoom.js
 packages/app-mobile/components/NoteEditor/ImageEditor/tools/PanZoom.js.map
@@ -942,6 +954,9 @@ packages/app-mobile/components/screens/UpgradeSyncTargetScreen.js.map
 packages/app-mobile/components/screens/encryption-config.d.ts
 packages/app-mobile/components/screens/encryption-config.js
 packages/app-mobile/components/screens/encryption-config.js.map
+packages/app-mobile/gulpfile.d.ts
+packages/app-mobile/gulpfile.js
+packages/app-mobile/gulpfile.js.map
 packages/app-mobile/root.d.ts
 packages/app-mobile/root.js
 packages/app-mobile/root.js.map

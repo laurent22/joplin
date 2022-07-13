@@ -70,4 +70,3 @@ export interface Command {
 	apply(editor: ImageEditor): void;
 	unapply(editor: ImageEditor): void;
 }
-

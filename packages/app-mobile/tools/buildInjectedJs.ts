@@ -7,6 +7,10 @@ import { mkdirp, readFile, writeFile } from 'fs-extra';
 import { dirname, extname, basename } from 'path';
 const execa = require('execa');
 
+import { OutputOptions, rollup, RollupOptions, watch as rollupWatch } from 'rollup';
+import typescript from '@rollup/plugin-typescript';
+import { nodeResolve } from '@rollup/plugin-node-resolve';
+
 const rootDir = dirname(dirname(dirname(__dirname)));
 const mobileDir = `${rootDir}/packages/app-mobile`;
 const outputDir = `${mobileDir}/lib/rnInjectedJs`;
@@ -31,33 +35,43 @@ class BundledFile {
 	private readonly bundleOutputPath: string;
 	private readonly bundleMinifiedPath: string;
 	private readonly bundleBaseName: string;
+	private readonly rootFileDirectory: string;
 
 	public constructor(
-		private readonly bundleName: string,
+		public readonly bundleName: string,
 		private readonly sourceFilePath: string
 	) {
-		const rootFileDirectory = dirname(sourceFilePath);
+		this.rootFileDirectory = dirname(sourceFilePath);
 		this.bundleBaseName = basename(sourceFilePath, extname(sourceFilePath));
-		this.bundleOutputPath = `${rootFileDirectory}/${this.bundleBaseName}.bundle.js`;
-		this.bundleMinifiedPath = `${rootFileDirectory}/${this.bundleBaseName}.bundle.min.js`;
+		this.bundleOutputPath = `${this.rootFileDirectory}/${this.bundleBaseName}.bundle.js`;
+		this.bundleMinifiedPath = `${this.rootFileDirectory}/${this.bundleBaseName}.bundle.min.js`;
 	}
 
-	/**
-	 * Create a minified JS file in the same directory as `this.sourceFilePath` with
-	 * the same name.
-	 */
-	public async build() {
-		console.info(`Building bundle: ${this.bundleName}...`);
+	private getRollupOptions(): [RollupOptions, OutputOptions] {
+		const rollupInputOptions: RollupOptions = {
+			input: this.sourceFilePath,
+			plugins: [
+				typescript({
+					// Exclude all .js files. Rollup will attempt to import a .js
+					// file if both a .ts and .js file are present, conflicting
+					// with our build setup. See
+					// https://discourse.joplinapp.org/t/importing-a-ts-file-from-a-rollup-bundled-ts-file/
+					exclude: `${this.rootFileDirectory}/**/*.js`,
+				}),
+				nodeResolve(),
+			],
+		};
 
-		await execa('yarn', [
-			'run', 'rollup',
-			this.sourceFilePath,
-			'--name', this.bundleName,
-			'--config', `${mobileDir}/injectedJS.config.js`,
-			'-f', 'iife',
-			'-o', this.bundleOutputPath,
-		]);
+		const rollupOutputOptions: OutputOptions = {
+			format: 'iife',
+			name: this.bundleName,
+			file: this.bundleOutputPath,
+		};
 
+		return [rollupInputOptions, rollupOutputOptions];
+	}
+
+	private async uglify() {
 		console.info(`Minifying bundle: ${this.bundleName}...`);
 		await execa('yarn', [
 			'run', 'uglifyjs',
@@ -65,6 +79,58 @@ class BundledFile {
 			'-o', this.bundleMinifiedPath,
 			this.bundleOutputPath,
 		]);
+	}
+
+	/**
+	 * Create a minified JS file in the same directory as `this.sourceFilePath` with
+	 * the same name.
+	 */
+	public async build() {
+		const [rollupInputOptions, rollupOutputOptions] = this.getRollupOptions();
+
+		console.info(`Building bundle: ${this.bundleName}...`);
+		const bundle = await rollup(rollupInputOptions);
+		await bundle.generate(rollupOutputOptions);
+
+		await this.uglify();
+	}
+
+	public async startWatching() {
+		const [rollupInputOptions, rollupOutputOptions] = this.getRollupOptions();
+		const watcher = rollupWatch({
+			...rollupInputOptions,
+			output: [rollupOutputOptions],
+			watch: {
+				exclude: [
+					`${mobileDir}/node_modules/`,
+				],
+			},
+		});
+
+		watcher.on('event', async event => {
+			if (event.code === 'BUNDLE_END') {
+				await this.uglify();
+				await this.copyToImportableFile();
+				console.info(`☑ Bundled ${this.bundleName}!`);
+
+				// Let plugins clean up
+				await event.result.close();
+			} else if (event.code === 'ERROR') {
+				console.error(event.error);
+
+				// Clean up any bundle-related resources
+				if (event.result) {
+					await event.result?.close();
+				}
+			} else if (event.code === 'END') {
+				console.info('Done bundling.');
+			} else if (event.code === 'START') {
+				console.info('Starting bundler...');
+			}
+		});
+
+		// We're done configuring the watcher
+		watcher.close();
 	}
 
 	/**
@@ -76,15 +142,21 @@ class BundledFile {
 	}
 }
 
-async function main() {
+
+const bundledFiles: BundledFile[] = [
+	new BundledFile(
+		'svgEditor',
+		`${mobileDir}/components/NoteEditor/ImageEditor/editor.ts`
+	),
+	new BundledFile(
+		'codeMirrorBundle',
+		`${mobileDir}/components/NoteEditor/CodeMirror/CodeMirror.ts`
+	),
+];
+
+export async function buildInjectedJS() {
 	await mkdirp(outputDir);
 
-	const bundledFiles: BundledFile[] = [
-		new BundledFile(
-			'codeMirrorBundle',
-			`${mobileDir}/components/NoteEditor/CodeMirror/CodeMirror.ts`
-		),
-	];
 
 	// Build all in parallel
 	await Promise.all(bundledFiles.map(async file => {
@@ -95,4 +167,11 @@ async function main() {
 	await copyJs('webviewLib', `${mobileDir}/../lib/renderers/webviewLib.js`);
 }
 
-module.exports = main;
+export async function watchInjectedJS() {
+	// Watch for changes
+	for (const file of bundledFiles) {
+		void(file.startWatching());
+	}
+}
+
+

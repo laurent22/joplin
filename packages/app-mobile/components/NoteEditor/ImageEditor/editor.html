@@ -3,6 +3,18 @@
 	<head>
 		<meta charset="utf-8"/>
 		<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
+		<style>
+			canvas {
+				position: absolute;
+				left: 0;
+				right: 0;
+				top: 0;
+				bottom: 0;
+				width: 100vw;
+				height: 100vh;
+				touch-action: none;
+			}
+		</style>
 	</head>
 	<body>
 		<p>
@@ -15,8 +27,13 @@
 			browser.
 		</p>
 	</body>
-	<script type="module">
-		import { ImageEditor } from './editor.js';
-		new ImageEditor(document.body);
+	<script>
+		window.onerror = (evt, source) => {
+			alert(evt);
+		};
+	</script>
+	<script src='editor.bundle.js'></script>
+	<script>
+		new svgEditor.ImageEditor(document.body);
 	</script>
 </html>

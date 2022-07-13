@@ -1,57 +1,74 @@
 
-import { Tool, ImageEditor, ToolType } from '../editor';
-import { Mat33, Point2 } from '../math';
+import { ImageEditor } from '../editor';
+import { Mat33, Point2, Vec2, Vec3 } from '../math';
 import { Pointer } from '../types';
 import { Viewport } from '../Viewport';
+import BaseTool from './BaseTool';
+import { ToolType } from './BaseTool';
 
-export default class PanZoom implements Tool {
+interface PinchData {
+	canvasCenter: Point2;
+	screenCenter: Point2;
+	angle: number;
+	dist: number;
+}
+
+export default class PanZoom extends BaseTool {
 	public readonly type = ToolType.PanZoom;
 	private transform: Viewport.ViewportTransform;
 
 	private lastAngle: number;
 	private lastDist: number;
-	private lastCenter: Point2;
+	private lastCanvasCenter: Point2;
+	private lastScreenCenter: Point2;
 
-	constructor(private editor: ImageEditor) {
+	public constructor(private editor: ImageEditor) {
+		super();
 	}
 
 	/** @return information about the pointers in a gesture */
-	computePinchData(p1: Pointer, p2: Pointer): { center: Point2, angle: number, dist: number } {
-		const vecBetween = p2.screenPos.minus(p1.screenPos);
-		const angle = vecBetween.angle();
-		const dist = vecBetween.magnitude();
-		const center = p2.screenPos.plus(p1.screenPos).times(0.5);
+	public computePinchData(p1: Pointer, p2: Pointer): PinchData {
+		const screenBetween = p2.screenPos.minus(p1.screenPos);
+		const angle = screenBetween.angle();
+		const dist = screenBetween.magnitude();
+		const canvasCenter = p2.canvasPos.plus(p1.canvasPos).times(0.5);
+		const screenCenter = p2.screenPos.plus(p1.screenPos).times(0.5);
 
-		return { center, angle, dist };
+		return { canvasCenter, screenCenter, angle, dist };
 	}
 
-	onPointerDown(_current: Pointer, allPointers: Pointer[]): boolean {
+	public onPointerDown(_current: Pointer, allPointers: Pointer[]): boolean {
 		if (allPointers.length == 2) {
 			this.transform = new Viewport.ViewportTransform(Mat33.identity);
 
-			const { center, angle, dist } = this.computePinchData(allPointers[0], allPointers[1]);
+			const { screenCenter, canvasCenter, angle, dist } = this.computePinchData(allPointers[0], allPointers[1]);
 			this.lastAngle = angle;
 			this.lastDist = dist;
-			this.lastCenter = center;
+			this.lastScreenCenter = screenCenter;
+			this.lastCanvasCenter = canvasCenter;
 			return true;
 		}
 
 		return false;
 	}
 
-	onPointerMove(_current: Pointer, allPointers: Pointer[]): void {
+	public onPointerMove(_current: Pointer, allPointers: Pointer[]): void {
 		if (allPointers.length != 2) {
 			return;
 		}
 
-		const { center, angle, dist } = this.computePinchData(allPointers[0], allPointers[1]);
+		this.transform ??= new Viewport.ViewportTransform(Mat33.identity);
 
-		const transformUpdate = Mat33.zRotation(angle - this.lastAngle, center).rightMul(
-			Mat33.scaling2D(dist / this.lastDist, center)
-		).rightMul(
-			Mat33.translation(center.minus(this.lastCenter))
-		);
-		this.lastCenter = center;
+		const { screenCenter, canvasCenter, angle, dist } = this.computePinchData(allPointers[0], allPointers[1]);
+
+		// Use transformVec3 to avoid translating the delta
+		const delta = this.editor.viewport.screenToCanvasTransform.transformVec3(screenCenter.minus(this.lastScreenCenter));
+
+		const transformUpdate = Mat33.translation(delta)
+			.rightMul(Mat33.scaling2D(dist / this.lastDist, canvasCenter))
+			.rightMul(Mat33.zRotation(angle - this.lastAngle, canvasCenter));
+		this.lastScreenCenter = screenCenter;
+		this.lastCanvasCenter = canvasCenter;
 		this.lastDist = dist;
 		this.lastAngle = angle;
 
@@ -62,12 +79,34 @@ export default class PanZoom implements Tool {
 		this.transform.apply(this.editor);
 	}
 
-	onPointerUp(_pointer: Pointer, _allPointers: Pointer[]): void {
-		this.transform.unapply(this.editor);
-		this.editor.dispatch(this.transform);
+	public onPointerUp(_pointer: Pointer, _allPointers: Pointer[]): void {
+		if (this.transform) {
+			this.transform.unapply(this.editor);
+			this.editor.dispatch(this.transform);
+			this.transform = null;
+		}
 	}
 
-	onGestureCancel(): void {
+	public onGestureCancel(): void {
+		this.transform?.unapply(this.editor);
+		this.transform = null;
+	}
+
+	public onWheel(delta: Vec3): boolean {
+		if (this.transform == null) {
+			this.transform = new Viewport.ViewportTransform(Mat33.identity);
+		}
+
+		const transformUpdate = Mat33.scaling2D(Math.pow(1.1, delta.z)).rightMul(
+			Mat33.translation(Vec2.of(delta.x, delta.y))
+		);
+
 		this.transform.unapply(this.editor);
+		this.transform = new Viewport.ViewportTransform(
+			this.transform.transform.rightMul(transformUpdate)
+		);
+		this.transform.apply(this.editor);
+
+		return true;
 	}
 }

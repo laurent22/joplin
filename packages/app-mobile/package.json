@@ -13,7 +13,7 @@
     "watch": "tsc --watch --preserveWatchOutput --project tsconfig.json",
     "clean": "node tools/clean.js",
     "buildInjectedJs": "gulp buildInjectedJs",
-    "watchInjectedJs": "nodemon --verbose --watch components/NoteEditor/CodeMirror.ts --exec \"yarn run buildInjectedJs\"",
+    "watchInjectedJs": "gulp watchInjectedJs",
     "postinstall": "jetify && yarn run build"
   },
   "dependencies": {

@@ -1,32 +1,37 @@
 /**
- * 
+ *
  */
 
-import { Point2, Rect2, Vec3 } from './math';
+import { Point2, Rect2 } from './math';
+import AbstractRenderer from './rendering/AbstractRenderer';
+import Color4 from './Color4';
+import { ImageComponent } from './EditorImage';
 
-export class StrokeDataPoint {
-	constructor(
-		public readonly pos: Point2, public readonly width: number,
-		public readonly color: Vec3, public readonly opacity: number,
-	) { }
+
+export interface StrokeDataPoint {
+	pos: Point2;
+	width: number;
+	color: Color4;
 }
 
-/** Callback to draw a bezier curve with the given control points */
-export type DrawCurveCallback =
-	(p1: StrokeDataPoint, p2: StrokeDataPoint, p3: StrokeDataPoint, p4: StrokeDataPoint) => void;
 
-class Stroke {
+class Stroke implements ImageComponent {
 	protected points: StrokeDataPoint[];
 	protected bbox: Rect2;
 	protected maxStrokeWidth: number;
+	public readonly isContainer: boolean = false;
 
 	public constructor(
-			public readonly strokeSize: number,
-			startPoint: StrokeDataPoint
-		) {
+		startPoint: StrokeDataPoint
+	) {
+		this.points = [];
 		this.bbox = new Rect2(startPoint.pos.x, startPoint.pos.y, 0, 0);
 		this.maxStrokeWidth = 0;
 		this.addPoint(startPoint);
+	}
+
+	public getBBox(): Rect2 {
+		return this.bbox;
 	}
 
 	public addPoint(point: StrokeDataPoint) {
@@ -46,14 +51,23 @@ class Stroke {
 		return this.bbox;
 	}
 
-	public render(drawCurve: DrawCurveCallback, _startingIdx: number = 0) {
-		for (let i = 0; i < this.points.length - 1; i += 2) {
+	public render(ctx: AbstractRenderer, startingIdx: number = 0) {
+		for (let i = startingIdx; i < this.points.length - 1; i += 2) {
+			let exitingVec;
+
+			if (i > 0) {
+				exitingVec = this.points[i].pos.minus(this.points[i - 1].pos);
+			}
+
 			const p1 = this.points[i];
-			const p2 = this.points[i + 1];
-			const p3 = this.points[i + 1];
-			const p4 = this.points[Math.min(i + 2, this.points.length - 1)];
-			drawCurve(p1, p2, p3, p4);
+			const p3 = this.points[i + 1].pos;
+			const p2 = exitingVec ? p1.pos.plus(exitingVec) : p3;
+			const p4 = i + 2 < this.points.length ? this.points[i + 2] : this.points[i + 1];
+
+			ctx.drawStyledCubicBezierCurve(p1, p2, p3, p4);
 		}
+
+		ctx.drawPoints(...this.bbox.corners);
 	}
 }
 

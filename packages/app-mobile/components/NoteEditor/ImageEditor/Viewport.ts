@@ -4,7 +4,7 @@
 
 import ImageEditor from './editor';
 import { Command } from './types';
-import { Mat33, Point2 } from './math';
+import { Mat33, Point2, Rect2, Vec2, Vec3 } from './math';
 
 export class Viewport {
 	/**
@@ -20,21 +20,31 @@ export class Viewport {
 		public apply(editor: ImageEditor) {
 			const viewport = editor.viewport;
 			viewport.updateTransform(viewport.transform.rightMul(this.transform));
-			//editor.rerender();
+			editor.rerender();
 		}
 
 		public unapply(editor: ImageEditor) {
 			const viewport = editor.viewport;
 			viewport.updateTransform(viewport.transform.rightMul(this.inverseTransform));
-			//editor.rerender();
+			editor.rerender();
 		}
 	};
 
 	private transform: Mat33;
 	private inverseTransform: Mat33;
+	private screenRect: Rect2;
 
 	public constructor() {
 		this.updateTransform(Mat33.identity);
+		this.screenRect = Rect2.empty;
+	}
+
+	public updateScreenSize(screenSize: Vec2) {
+		this.screenRect = this.screenRect.resizedTo(screenSize);
+	}
+
+	public get visibleRect(): Rect2 {
+		return this.screenRect.transformedBoundingBox(this.inverseTransform);
 	}
 
 	/** @return the given point, but in canvas coordinates */
@@ -51,9 +61,21 @@ export class Viewport {
 		this.transform = newTransform;
 		this.inverseTransform = newTransform.inverse();
 	}
+
+	public get screenToCanvasTransform(): Mat33 {
+		return this.inverseTransform;
+	}
+
+	public get canvasToScreenTransform(): Mat33 {
+		return this.transform;
+	}
+
+	public getScaleFactor(): number {
+		return this.transform.transformVec3(Vec3.unitX).magnitude();
+	}
 }
 
-export namespace Viewport {
+export namespace Viewport { // eslint-disable-line
 	// Needed to allow accessing as a type. See https://stackoverflow.com/a/68201883
 	export type ViewportTransform = typeof Viewport.ViewportTransform.prototype;
 }
