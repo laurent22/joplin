@@ -40,11 +40,11 @@ export default function getResponsiveValue(valueMap: ValueMap): number {
 	// This handles cases where certain values are omitted
 	value = sm ?? md ?? lg ?? xl ?? xxl;
 
-	if (width >= 481) {
+	if (width >= 481 != null) {
 		value = md ?? value;
 	}
 
-	if (width >= 769) {
+	if (width >= 769 != null) {
 		value = lg ?? value;
 	}
 
