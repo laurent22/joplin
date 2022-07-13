@@ -610,7 +610,7 @@ const mimeTypes = [
 	{ t: 'audio/x-aac', e: ['aac'] },
 	{ t: 'audio/x-aiff', e: ['aif', 'aiff', 'aifc'] },
 	{ t: 'audio/x-caf', e: ['caf'] },
-	{ t: 'audio/x-flac', e: ['flac'] },
+	{ t: 'audio/flac', e: ['flac'] },
 	{ t: 'audio/x-matroska', e: ['mka'] },
 	{ t: 'audio/x-mpegurl', e: ['m3u'] },
 	{ t: 'audio/x-ms-wax', e: ['wax'] },
