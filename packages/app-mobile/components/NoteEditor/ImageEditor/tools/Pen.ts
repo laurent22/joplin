@@ -10,9 +10,13 @@ const pressureToWidthMultiplier = 4.0;
 export default class Pen extends BaseTool {
 	private strokeAction: AddElementCommand;
 	private stroke: Stroke;
-	private color: Color4 = Color4.green;
+	private color: Color4 = Color4.ofRGBA(1.0, 0.0, 0.5, 0.3);
 
 	public constructor(private editor: ImageEditor) { super(); }
+
+	private getPressureMultiplier() {
+		return 1 / this.editor.viewport.getScaleFactor() * pressureToWidthMultiplier;
+	}
 
 	private addPointToStroke(pointer: Pointer) {
 		if (this.strokeAction == null) {
@@ -22,7 +26,7 @@ export default class Pen extends BaseTool {
 		this.strokeAction.unapply(this.editor);
 		this.stroke.addPoint({
 			pos: pointer.canvasPos,
-			width: (pointer.pressure ?? 1.0) * pressureToWidthMultiplier,
+			width: (pointer.pressure ?? 1.0) * this.getPressureMultiplier(),
 			color: this.color,
 		});
 		this.strokeAction = new EditorImage.AddElementCommand(this.stroke);
@@ -30,10 +34,10 @@ export default class Pen extends BaseTool {
 	}
 
 	public onPointerDown(current: Pointer, allPointers: Pointer[]): boolean {
-		if (allPointers.length === 1 && current.isPrimary) {
+		if (allPointers.length === 1) {
 			this.stroke = new Stroke({
 				pos: current.canvasPos,
-				width: (current.pressure ?? 1.0) * pressureToWidthMultiplier,
+				width: (current.pressure ?? 1.0) * this.getPressureMultiplier(),
 				color: this.color,
 			});
 			return true;
@@ -43,17 +47,23 @@ export default class Pen extends BaseTool {
 	}
 
 	public onPointerMove(current: Pointer, allPointers: Pointer[]): void {
-		if (allPointers.length != 1 || !current.down) {
+		if (allPointers.length !== 1 || !current.down) {
 			return;
 		}
 
 		this.addPointToStroke(current);
 	}
-	public onPointerUp(pointer: Pointer, _allPointers: Pointer[]): void {
+
+	public onPointerUp(pointer: Pointer, allPointers: Pointer[]): void {
+		if (allPointers.length > 1) {
+			return;
+		}
+
+		this.addPointToStroke(pointer);
 		if (this.strokeAction && pointer.isPrimary) {
-			this.addPointToStroke(pointer);
 			this.strokeAction.unapply(this.editor);
 			this.editor.dispatch(this.strokeAction);
+			console.log('Added stroke');
 		}
 		this.strokeAction = null;
 	}

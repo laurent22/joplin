@@ -37,7 +37,7 @@ export default class PanZoom extends BaseTool {
 	}
 
 	public onPointerDown(_current: Pointer, allPointers: Pointer[]): boolean {
-		if (allPointers.length == 2) {
+		if (allPointers.length === 2) {
 			this.transform = new Viewport.ViewportTransform(Mat33.identity);
 
 			const { screenCenter, angle, dist } = this.computePinchData(allPointers[0], allPointers[1]);

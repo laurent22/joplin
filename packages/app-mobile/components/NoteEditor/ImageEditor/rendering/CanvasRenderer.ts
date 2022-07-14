@@ -10,27 +10,27 @@ export default class CanvasRenderer extends AbstractRenderer {
 
 	public clear(): void {
 		this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
-
-		const visibleRect = this.viewport.visibleRect;
-		const renderable = visibleRect.transformedBoundingBox(this.viewport.canvasToScreenTransform);
-		this.ctx.lineWidth = 12;
-		this.ctx.strokeRect(renderable.x, renderable.y, renderable.w, renderable.h);
-		this.ctx.font = '22pt serif';
-		this.ctx.fillText(`☒ Factor: ${this.viewport.getScaleFactor()}`, 0, 33);
 	}
+
 	public beginPath(): void {
 		this.ctx.beginPath();
 	}
+
 	public endPath(): void {
 		this.ctx.closePath();
 	}
+
 	public fill(style: FillStyle): void {
 		this.ctx.fillStyle = style.color.toHexString();
-		this.ctx.strokeStyle = this.ctx.fillStyle;
-		this.ctx.lineWidth = 1;
-		this.ctx.fill();
+		this.ctx.strokeStyle = style.color.toHexString();
+
+		// Ensure the filled region overlaps slightly with neighboring
+		// regions.
+		this.ctx.lineWidth = 2;
 		this.ctx.stroke();
+		this.ctx.fill();
 	}
+
 	public traceCubicBezierCurve(p0: Point2, p1: Point2, p2: Point2, p3: Point2): void {
 		p0 = this.viewport.canvasToScreen(p0);
 		p1 = this.viewport.canvasToScreen(p1);

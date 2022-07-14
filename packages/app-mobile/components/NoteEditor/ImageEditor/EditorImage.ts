@@ -173,7 +173,13 @@ export class ImageNode<T extends ImageComponent> {
 		this.parent.children = this.parent.children.filter(node => {
 			return node !== this;
 		});
-		this.parent.recomputeBBox();
+		let node = this.parent;
+		while (node != null) {
+			node.rebalance();
+			node.recomputeBBox();
+			node = node.parent;
+		}
+		this.content = null;
 	}
 }
 

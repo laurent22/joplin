@@ -2,7 +2,7 @@
  *
  */
 
-import { Point2, Rect2 } from './math';
+import { Point2, Rect2, Vec2 } from './math';
 import AbstractRenderer from './rendering/AbstractRenderer';
 import Color4 from './Color4';
 import { ImageComponent } from './EditorImage';
@@ -20,7 +20,7 @@ class Stroke implements ImageComponent {
 	protected bbox: Rect2;
 	protected maxStrokeWidth: number;
 	public readonly isContainer: boolean = false;
-	private curveCache: Record<number, (()=> void)> = [];
+	private curveCache: Record<number, ((renderer: AbstractRenderer)=> void)> = [];
 
 	public constructor(
 		startPoint: StrokeDataPoint
@@ -37,21 +37,19 @@ class Stroke implements ImageComponent {
 
 	public addPoint(point: StrokeDataPoint) {
 		// Can we move the last point instead?
-		if (this.points.length > 1) {
+		if (this.points.length > 2) {
+			const rootPoint = this.points[this.points.length - 3];
 			const prevPrevPoint = this.points[this.points.length - 2];
-			const prevPoint = this.points[this.points.length - 1];
-			const prevDisplacement = prevPoint.pos.minus(prevPrevPoint.pos);
-			const fullDisplacement = point.pos.minus(prevPrevPoint.pos);
-			const prevDirectionVec = prevDisplacement.normalized();
-			const directionVec = point.pos.minus(prevPoint.pos).normalized();
+			const prevDisplacement = prevPrevPoint.pos.minus(rootPoint.pos);
+			const fullDisplacement = point.pos.minus(rootPoint.pos);
+			const dist = fullDisplacement.magnitude();
+			const sweep = ((fullDisplacement.angle() - prevDisplacement.angle()) % (2 * Math.PI)) * dist;
 
-			if (directionVec.dot(prevDirectionVec) > 0.9
-					|| fullDisplacement.magnitude() < point.width * 3) {
-				prevPoint.pos = point.pos;
-				prevPoint.color = point.color;
-				prevPoint.width = point.width;
-				this.curveCache[this.points.length - 1] = null;
+			// If the angle hasn't changed enough or the stroke isn't long enough, update the current point.
+			if (Math.abs(sweep) < point.width * 2 || dist < point.width * 2) {
+				this.points[this.points.length - 1] = point;
 				this.curveCache[this.points.length - 2] = null;
+				this.curveCache[this.points.length - 3] = null;
 			} else {
 				this.points.push(point);
 			}
@@ -75,30 +73,42 @@ class Stroke implements ImageComponent {
 	}
 
 	public render(ctx: AbstractRenderer, visibleRegion: Rect2, startingIdx: number = 0) {
-		for (let i = startingIdx; i < this.points.length; i += 2) {
+		for (let i = startingIdx; i < this.points.length - 1; i += 2) {
 			let exitingVec;
 
+			const p1 = this.points[i];
 			if (i > 0) {
-				exitingVec = this.points[i].pos.minus(this.points[i - 1].pos);
+				exitingVec = p1.pos.minus(this.points[i - 1].pos).normalized();
+				exitingVec = exitingVec.times(this.points[i + 1].pos.minus(p1.pos).magnitude() * 0.5);
 			}
 
-			const p1 = this.points[i];
-			const p3 = this.points[Math.min(i + 1, this.points.length - 1)].pos;
+
+			let p3, p4;
+			if (i == this.points.length - 2) {
+				p4 = this.points[i + 1];
+				if (p4.pos.minus(p1.pos).magnitude() < p1.width) {
+					p4 = {
+						pos: p1.pos.plus(Vec2.unitX.times(p1.width * 2)),
+						color: p4.color,
+						width: p4.width,
+					};
+				}
+				p3 = exitingVec ? p1.pos.plus(exitingVec) : p4.pos.lerp(p1.pos, 0.75);
+			} else {
+				p4 = this.points[i + 2];
+				p3 = this.points[i + 1].pos;
+			}
 			const p2 = exitingVec ? p1.pos.plus(exitingVec) : p3;
-			const p4 = this.points[Math.min(i + 2, this.points.length - 1)];
 
 			const box = Rect2.bboxOf([p1.pos, p2, p3, p4.pos], Math.max(p1.width, p4.width));
 			if (box.intersects(visibleRegion)) {
-				if (this.curveCache[i] == null) {
-					ctx.drawPoints(p4.pos);
+				if (this.curveCache[i] == null || true) {
 					this.curveCache[i] = ctx.drawStyledCubicBezierCurve(p1, p2, p3, p4);
 				} else {
-					this.curveCache[i]();
+					this.curveCache[i](ctx);
 				}
 			}
 		}
-
-		ctx.drawPoints(...this.bbox.corners);
 	}
 }
 

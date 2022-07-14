@@ -97,7 +97,9 @@ export class ImageEditor {
 		const getPointerList = () => {
 			const res = [];
 			for (const id in pointers) {
-				res.push(pointers[id]);
+				if (pointers[id]) {
+					res.push(pointers[id]);
+				}
 			}
 			return res;
 		};
@@ -109,28 +111,43 @@ export class ImageEditor {
 
 			for (const tool of this.tools) {
 				if (tool.isEnabled() && tool.onPointerDown(pointer, getPointerList())) {
+					if (this.activeTool) {
+						this.activeTool.onGestureCancel();
+					}
+
 					this.activeTool = tool;
 					break;
 				}
 			}
+
+			return true;
 		});
 
 		this.container.addEventListener('pointermove', evt => {
 			const pointer = pointerFor(evt, pointers[evt.pointerId]?.down ?? false);
-			pointers[pointer.id] = pointer;
+			if (pointer.down) {
+				pointers[pointer.id] = pointer;
+				this.activeTool?.onPointerMove(pointer, getPointerList());
+			}
 
-			this.activeTool?.onPointerMove(pointer, getPointerList());
+			return true;
 		});
 
-		this.container.addEventListener('pointerup', evt => {
+		const handlePointerEnd = (evt: PointerEvent) => {
 			const pointer = pointerFor(evt, false);
+			if (!pointers[pointer.id]) {
+				return;
+			}
+
 			pointers[pointer.id] = pointer;
 			this.container.releasePointerCapture(pointer.id);
 
 			this.activeTool?.onPointerUp(pointer, getPointerList());
 
-			delete pointers[pointer.id];
-		});
+			pointers[pointer.id] = null;
+		};
+
+		this.container.addEventListener('pointerup', handlePointerEnd);
 
 		this.container.addEventListener('wheel', evt => {
 			let delta = Vec3.of(evt.deltaX, evt.deltaY, evt.deltaZ);
@@ -179,14 +196,13 @@ export class ImageEditor {
 		if (!this.rerenderQueued) {
 			this.rerenderQueued = true;
 			requestAnimationFrame(() => {
-				this.rerender();
 				this.rerenderQueued = false;
+				this.rerender();
 			});
 		}
 	}
 
 	public rerender() {
-		console.log('rerender');
 		this.resizeDrawingSurfaces();
 		this.canvasRenderer.clear();
 		this.image.render(this.canvasRenderer, this.viewport);
