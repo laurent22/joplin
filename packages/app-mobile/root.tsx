@@ -683,18 +683,6 @@ class AppComponent extends React.Component {
 	public constructor() {
 		super();
 
-		this.getSideMenuWidth = () => {
-			const sideMenuWidth = getResponsiveValue({
-				sm: 250,
-				md: 260,
-				lg: 270,
-				xl: 280,
-				xxl: 290,
-			});
-
-			return sideMenuWidth;
-		};
-
 		this.state = {
 			sideMenuContentOpacity: new Animated.Value(0),
 			sideMenuWidth: this.getSideMenuWidth(),
@@ -869,6 +857,18 @@ class AppComponent extends React.Component {
 			type: isOpen ? 'SIDE_MENU_OPEN' : 'SIDE_MENU_CLOSE',
 		});
 	}
+
+	private getSideMenuWidth = () => {
+		const sideMenuWidth = getResponsiveValue({
+			sm: 250,
+			md: 260,
+			lg: 270,
+			xl: 280,
+			xxl: 290,
+		});
+
+		return sideMenuWidth;
+	};
 
 	public render() {
 		if (this.props.appState != 'ready') return null;
