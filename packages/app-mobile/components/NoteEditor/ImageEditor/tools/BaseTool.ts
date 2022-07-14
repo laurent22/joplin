@@ -14,7 +14,7 @@ export default abstract class BaseTool implements PointerEventListener {
 	public abstract onPointerUp(pointer: Pointer, allPointers: Pointer[]): void;
 	public abstract onGestureCancel(): void;
 
-	public onWheel(_delta: Vec3): boolean {
+	public onWheel(_delta: Vec3, _screenPos: Vec3): boolean {
 		return false;
 	}
 

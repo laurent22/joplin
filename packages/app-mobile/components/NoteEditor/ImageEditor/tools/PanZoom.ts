@@ -1,6 +1,6 @@
 
 import { ImageEditor } from '../editor';
-import { Mat33, Point2, Vec2, Vec3 } from '../math';
+import { Mat33, Point2, Vec3 } from '../math';
 import { Pointer } from '../types';
 import { Viewport } from '../Viewport';
 import BaseTool from './BaseTool';
@@ -19,7 +19,6 @@ export default class PanZoom extends BaseTool {
 
 	private lastAngle: number;
 	private lastDist: number;
-	private lastCanvasCenter: Point2;
 	private lastScreenCenter: Point2;
 
 	public constructor(private editor: ImageEditor) {
@@ -41,11 +40,10 @@ export default class PanZoom extends BaseTool {
 		if (allPointers.length == 2) {
 			this.transform = new Viewport.ViewportTransform(Mat33.identity);
 
-			const { screenCenter, canvasCenter, angle, dist } = this.computePinchData(allPointers[0], allPointers[1]);
+			const { screenCenter, angle, dist } = this.computePinchData(allPointers[0], allPointers[1]);
 			this.lastAngle = angle;
 			this.lastDist = dist;
 			this.lastScreenCenter = screenCenter;
-			this.lastCanvasCenter = canvasCenter;
 			return true;
 		}
 
@@ -68,7 +66,6 @@ export default class PanZoom extends BaseTool {
 			.rightMul(Mat33.scaling2D(dist / this.lastDist, canvasCenter))
 			.rightMul(Mat33.zRotation(angle - this.lastAngle, canvasCenter));
 		this.lastScreenCenter = screenCenter;
-		this.lastCanvasCenter = canvasCenter;
 		this.lastDist = dist;
 		this.lastAngle = angle;
 
@@ -92,13 +89,20 @@ export default class PanZoom extends BaseTool {
 		this.transform = null;
 	}
 
-	public onWheel(delta: Vec3): boolean {
+	public onWheel(delta: Vec3, screenPos: Point2): boolean {
 		if (this.transform == null) {
 			this.transform = new Viewport.ViewportTransform(Mat33.identity);
 		}
 
-		const transformUpdate = Mat33.scaling2D(Math.pow(1.1, delta.z)).rightMul(
-			Mat33.translation(Vec2.of(delta.x, delta.y))
+		const canvasPos = this.editor.viewport.screenToCanvas(screenPos);
+		// Transform without including translation
+		const translation =
+			this.editor.viewport.screenToCanvasTransform.transformVec3(
+				Vec3.of(-delta.x, -delta.y, 0)
+			);
+		const pinchZoomScaleFactor = 1.04;
+		const transformUpdate = Mat33.scaling2D(Math.pow(pinchZoomScaleFactor, -delta.z), canvasPos).rightMul(
+			Mat33.translation(translation)
 		);
 
 		this.transform.unapply(this.editor);

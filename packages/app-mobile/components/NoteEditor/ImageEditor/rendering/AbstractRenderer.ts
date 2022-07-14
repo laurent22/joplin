@@ -16,9 +16,12 @@ export default abstract class AbstractRenderer {
 	public abstract traceCubicBezierCurve(p0: Point2, p1: Point2, p2: Point2, p3: Point2): void;
 	public abstract drawPoints(...points: Point2[]): void;
 
+	//
+	// @returns a function that can be called to re-render the curve (less expensive than calling
+	// this function again.)
 	public drawStyledCubicBezierCurve(
 		p0: StrokeDataPoint, p1: Point2, p2: Point2, p3: StrokeDataPoint
-	): void {
+	): (()=> void) {
 		const curve = new CubicBezierCurve(p0.pos, p1, p2, p3.pos);
 		const startingNorm = curve.normAt(0);
 		const endingNorm = curve.normAt(1);
@@ -34,13 +37,24 @@ export default abstract class AbstractRenderer {
 		const lowerP1 = p1.extend(-p0.width / 2, halfwayNorm);
 		const lowerP2 = p2.extend(-p3.width / 2, halfwayNorm);
 
+		console.log(p0, p1, p2, p3);
 
-		this.beginPath();
-		this.traceCubicBezierCurve(upperP0, upperP1, upperP2, upperP3);
-		this.traceCubicBezierCurve(lowerP3, lowerP2, lowerP1, lowerP0);
-		this.fill({
-			color: p3.color,
-		});
-		this.endPath();
+		const render = () => {
+			this.beginPath();
+			this.traceCubicBezierCurve(upperP0, upperP1, upperP2, upperP3);
+			this.traceCubicBezierCurve(lowerP3, lowerP2, lowerP1, lowerP0);
+			this.fill({
+				color: p3.color,
+			});
+			this.endPath();
+
+			for (let t = 0; t < 1.0; t += 0.05) {
+				this.drawPoints(
+					curve.at(t), curve.at(t).plus(curve.normAt(t).times(22))
+				);
+			}
+		};
+		render();
+		return render;
 	}
 }

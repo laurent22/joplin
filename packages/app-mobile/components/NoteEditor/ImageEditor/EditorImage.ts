@@ -2,8 +2,10 @@
  * A tree of nodes contained within the editor
  */
 
+import ImageEditor from './editor';
 import { Rect2 } from './math';
 import AbstractRenderer from './rendering/AbstractRenderer';
+import { Command } from './types';
 import Viewport from './Viewport';
 
 class EditorImage {
@@ -13,25 +15,44 @@ class EditorImage {
 		this.root = new ImageNode<ImageComponent>();
 	}
 
-	public addElement(elem: ImageComponent) {
-		this.root.addLeaf(elem);
+	private addElement(elem: ImageComponent): ImageNode<ImageComponent> {
+		return this.root.addLeaf(elem);
 	}
 
 	public render(renderer: AbstractRenderer, viewport: Viewport) {
 		const minFraction = 0.01;
 		const leaves = this.root.getLeavesInRegion(viewport.visibleRect, minFraction);
 		for (const leaf of leaves) {
-			leaf.render(renderer);
+			leaf.render(renderer, viewport.visibleRect);
 		}
 	}
+
+	public static AddElementCommand = class implements Command {
+		private elementContainer: ImageNode<ImageComponent>;
+		public constructor(public readonly element: ImageComponent) {
+		}
+
+		public apply(editor: ImageEditor) {
+			this.elementContainer = editor.image.addElement(this.element);
+			editor.queueRerender();
+		}
+
+		public unapply(editor: ImageEditor) {
+			this.elementContainer?.remove();
+			this.elementContainer = null;
+			editor.queueRerender();
+		}
+	};
 }
+
+export type AddElementCommand = typeof EditorImage.AddElementCommand.prototype;
 
 /**
  * Any component of the EditorImage (e.g. Text, Stroke, etc.)
  */
 export interface ImageComponent {
 	getBBox(): Rect2;
-	render(canvas: AbstractRenderer): void;
+	render(canvas: AbstractRenderer, visibleRect: Rect2): void;
 }
 
 export class ImageNode<T extends ImageComponent> {
@@ -75,10 +96,12 @@ export class ImageNode<T extends ImageComponent> {
 		return result;
 	}
 
-	public addLeaf(leaf: T) {
+	public addLeaf(leaf: T): ImageNode<T> {
 		if (this.content == null && this.children.length === 0) {
 			this.content = leaf;
 			this.recomputeBBox();
+
+			return this;
 		} else {
 			const newNode = new ImageNode<T>(this);
 			newNode.addLeaf(leaf);
@@ -86,6 +109,7 @@ export class ImageNode<T extends ImageComponent> {
 			this.recomputeBBox();
 
 			this.rebalance();
+			return newNode;
 		}
 	}
 

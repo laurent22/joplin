@@ -20,6 +20,7 @@ class Stroke implements ImageComponent {
 	protected bbox: Rect2;
 	protected maxStrokeWidth: number;
 	public readonly isContainer: boolean = false;
+	private curveCache: Record<number, (()=> void)> = [];
 
 	public constructor(
 		startPoint: StrokeDataPoint
@@ -35,7 +36,29 @@ class Stroke implements ImageComponent {
 	}
 
 	public addPoint(point: StrokeDataPoint) {
-		this.points.push(point);
+		// Can we move the last point instead?
+		if (this.points.length > 1) {
+			const prevPrevPoint = this.points[this.points.length - 2];
+			const prevPoint = this.points[this.points.length - 1];
+			const prevDisplacement = prevPoint.pos.minus(prevPrevPoint.pos);
+			const fullDisplacement = point.pos.minus(prevPrevPoint.pos);
+			const prevDirectionVec = prevDisplacement.normalized();
+			const directionVec = point.pos.minus(prevPoint.pos).normalized();
+
+			if (directionVec.dot(prevDirectionVec) > 0.9
+					|| fullDisplacement.magnitude() < point.width * 3) {
+				prevPoint.pos = point.pos;
+				prevPoint.color = point.color;
+				prevPoint.width = point.width;
+				this.curveCache[this.points.length - 1] = null;
+				this.curveCache[this.points.length - 2] = null;
+			} else {
+				this.points.push(point);
+			}
+		} else {
+			this.points.push(point);
+		}
+
 		const pointRadius = this.getWidthAt(point, this.points.length - 1);
 
 		// recompute bbox
@@ -51,8 +74,8 @@ class Stroke implements ImageComponent {
 		return this.bbox;
 	}
 
-	public render(ctx: AbstractRenderer, startingIdx: number = 0) {
-		for (let i = startingIdx; i < this.points.length - 1; i += 2) {
+	public render(ctx: AbstractRenderer, visibleRegion: Rect2, startingIdx: number = 0) {
+		for (let i = startingIdx; i < this.points.length; i += 2) {
 			let exitingVec;
 
 			if (i > 0) {
@@ -60,11 +83,19 @@ class Stroke implements ImageComponent {
 			}
 
 			const p1 = this.points[i];
-			const p3 = this.points[i + 1].pos;
+			const p3 = this.points[Math.min(i + 1, this.points.length - 1)].pos;
 			const p2 = exitingVec ? p1.pos.plus(exitingVec) : p3;
-			const p4 = i + 2 < this.points.length ? this.points[i + 2] : this.points[i + 1];
+			const p4 = this.points[Math.min(i + 2, this.points.length - 1)];
 
-			ctx.drawStyledCubicBezierCurve(p1, p2, p3, p4);
+			const box = Rect2.bboxOf([p1.pos, p2, p3, p4.pos], Math.max(p1.width, p4.width));
+			if (box.intersects(visibleRegion)) {
+				if (this.curveCache[i] == null) {
+					ctx.drawPoints(p4.pos);
+					this.curveCache[i] = ctx.drawStyledCubicBezierCurve(p1, p2, p3, p4);
+				} else {
+					this.curveCache[i]();
+				}
+			}
 		}
 
 		ctx.drawPoints(...this.bbox.corners);

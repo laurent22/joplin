@@ -231,6 +231,7 @@ describe('Rect2 tests', () => {
 		expect(new Rect2(-2, 0, 1, 2).intersection(new Rect2(-3, 0, 2, 2))).objEq(
 			new Rect2(-2, 0, 1, 2)
 		);
+		expect(new Rect2(-1, -1, 2, 2).intersection(new Rect2(3, 3, 10, 10))).toBe(null);
 	});
 
 	it('A transformed bounding box', () => {

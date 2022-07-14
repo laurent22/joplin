@@ -421,21 +421,7 @@ export class Rect2 {
 	}
 
 	public intersects(other: Rect2): boolean {
-		// Ensure at least one corner of this or at least one corner of
-		// the other rectangle is in the other.
-		for (const corner of this.corners) {
-			if (other.containsPoint(corner)) {
-				return true;
-			}
-		}
-
-		for (const corner of other.corners) {
-			if (this.containsPoint(corner)) {
-				return true;
-			}
-		}
-
-		return false;
+		return this.intersection(other) != null;
 	}
 
 	/**
@@ -443,12 +429,16 @@ export class Rect2 {
 	 *         overlap exists
 	 */
 	public intersection(other: Rect2): Rect2|null {
-		if (!this.intersects(other)) {
+		const topLeft = this.topLeft.zip(other.topLeft, Math.max);
+		const bottomRight = this.bottomRight.zip(other.bottomRight, Math.min);
+
+		// The intersection can't be outside of this rectangle
+		if (!this.containsPoint(topLeft) || !this.containsPoint(bottomRight)) {
+			return null;
+		} else if (!other.containsPoint(topLeft) || !other.containsPoint(bottomRight)) {
 			return null;
 		}
 
-		const topLeft = this.topLeft.zip(other.topLeft, Math.max);
-		const bottomRight = this.bottomRight.zip(other.bottomRight, Math.min);
 		return Rect2.fromCorners(topLeft, bottomRight);
 	}
 
@@ -1028,28 +1018,41 @@ export abstract class SmoothVectorFunction {
  * See https://en.wikipedia.org/wiki/Bézier_curve
  */
 export class CubicBezierCurve extends SmoothVectorFunction {
-	// Compute xComponent, yComponent, zComponent from at()
-	public xComponent: SmoothFunction = this.derivedXComponent;
-	public yComponent: SmoothFunction = this.derivedYComponent;
-	public zComponent: SmoothFunction = this.derivedZComponent;
+	public readonly xComponent: SmoothFunction;
+	public readonly yComponent: SmoothFunction;
+	public readonly zComponent: SmoothFunction;
 
 	public constructor(
 		public readonly p0: Point2, public readonly p1: Point2,
 		public readonly p2: Point2, public readonly p3: Point2
 	) {
 		super();
-	}
 
-	public at(t: number): Point2 {
-		// TODO: If we switch to MathJS, etc., use a matrix multiplication.
-		//       We can then cache the matrix (because this.p0, this.p1, this.p2, this.p3)
-		//       are constant and take advantage of optimized matrix multiplication.
-		return this.p0.times((1 - t) * (1 - t) * (1 - t)).plus(
-			this.p1.times(3 * t * (1 - t) * (1 - t))
-		).plus(
-			this.p2.times(3 * t * t * (1 - t))
-		).plus(
-			this.p3.times(t * t * t)
+		const computeComponent = (t: number, idx: number): number => {
+			return p0.at(idx) * (1 - t) * (1 - t) * (1 - t)
+				+ 3 * p1.at(idx) * t * (1 - t) * (1 - t)
+				+ 3 * p2.at(idx) * t * t * (1 - t)
+				+ p3.at(idx) * t * t * t;
+		};
+
+		const computeDerivativeComponent = (t: number, idx: number): number => {
+			return -3 * p0.at(idx) * (1 - t) * (1 - t)
+				+ 3 * p1.at(idx) * (1 - 4 * t + 3 * t * t)
+				+ 3 * p2.at(idx) * (2 * t - 3 * t * t)
+				+ 3 * p3.at(idx) * t * t;
+		};
+
+		this.xComponent = SmoothFunction.ofFn(
+			t => computeComponent(t, 0),
+			t => computeDerivativeComponent(t, 0)
+		);
+		this.yComponent = SmoothFunction.ofFn(
+			t => computeComponent(t, 1),
+			t => computeDerivativeComponent(t, 1)
+		);
+		this.zComponent = SmoothFunction.ofFn(
+			t => computeComponent(t, 2),
+			t => computeDerivativeComponent(t, 2)
 		);
 	}
 

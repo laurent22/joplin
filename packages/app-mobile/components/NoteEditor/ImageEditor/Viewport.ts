@@ -20,13 +20,13 @@ export class Viewport {
 		public apply(editor: ImageEditor) {
 			const viewport = editor.viewport;
 			viewport.updateTransform(viewport.transform.rightMul(this.transform));
-			editor.rerender();
+			editor.queueRerender();
 		}
 
 		public unapply(editor: ImageEditor) {
 			const viewport = editor.viewport;
 			viewport.updateTransform(viewport.transform.rightMul(this.inverseTransform));
-			editor.rerender();
+			editor.queueRerender();
 		}
 	};
 

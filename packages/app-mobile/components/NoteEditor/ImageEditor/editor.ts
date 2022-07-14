@@ -6,6 +6,7 @@ import CanvasRenderer from './rendering/CanvasRenderer';
 import Stroke from './Stroke';
 import BaseTool from './tools/BaseTool';
 import PanZoomTool from './tools/PanZoom';
+import Pen from './tools/Pen';
 import { Command, Pointer, PointerDevice } from './types';
 import UndoRedoHistory from './UndoRedoHistory';
 import Viewport from './Viewport';
@@ -18,7 +19,7 @@ export class ImageEditor {
 	private canvasRenderer: CanvasRenderer;
 
 	private history: UndoRedoHistory;
-	private image: EditorImage;
+	public image: EditorImage;
 
 	private tools: BaseTool[];
 	private activeTool: BaseTool;
@@ -43,6 +44,7 @@ export class ImageEditor {
 		this.viewport.updateScreenSize(Vec2.of(this.canvas.width, this.canvas.height));
 
 		this.tools = [
+			new Pen(this),
 			new PanZoomTool(this),
 		];
 
@@ -60,7 +62,7 @@ export class ImageEditor {
 				width: 20 + Math.cos(i / 20 * 2 * 3.14) * 20,
 			});
 		}
-		this.image.addElement(stroke);
+		this.dispatch(new EditorImage.AddElementCommand(stroke));
 
 
 
@@ -139,8 +141,15 @@ export class ImageEditor {
 				delta = delta.times(100);
 			}
 
+			if (evt.ctrlKey) {
+				delta = Vec3.of(0, 0, evt.deltaY);
+			}
+
+			const pos = Vec2.of(evt.clientX, evt.clientY);
+
 			for (const tool of this.tools) {
-				if (tool.isEnabled() && tool.onWheel(delta)) {
+				if (tool.isEnabled() && tool.onWheel(delta, pos)) {
+					evt.preventDefault();
 					break;
 				}
 			}
@@ -162,6 +171,17 @@ export class ImageEditor {
 			this.canvas.width = this.canvas.clientWidth;
 			this.canvas.height = this.canvas.clientHeight;
 			this.viewport.updateScreenSize(Vec2.of(this.canvas.width, this.canvas.height));
+		}
+	}
+
+	private rerenderQueued: boolean = false;
+	public queueRerender() {
+		if (!this.rerenderQueued) {
+			this.rerenderQueued = true;
+			requestAnimationFrame(() => {
+				this.rerender();
+				this.rerenderQueued = false;
+			});
 		}
 	}
 
