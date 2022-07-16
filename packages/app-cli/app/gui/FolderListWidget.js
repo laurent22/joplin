@@ -19,13 +19,20 @@ class FolderListWidget extends ListWidget {
 		this.updateIndexFromSelectedFolderId_ = false;
 		this.updateItems_ = false;
 		this.trimItemTitle = false;
+		this.showIds = false;
 
 		this.itemRenderer = item => {
 			const output = [];
 			if (item === '-') {
 				output.push('-'.repeat(this.innerWidth));
 			} else if (item.type_ === Folder.modelType()) {
-				output.push(' '.repeat(this.folderDepth(this.folders, item.id)) + Folder.displayTitle(item));
+				output.push(' '.repeat(this.folderDepth(this.folders, item.id)));
+
+				if (this.showIds) {
+					output.push(Folder.shortId(item.id));
+				}
+				output.push(Folder.displayTitle(item));
+
 				if (Setting.value('showNoteCounts')) {
 					let noteCount = item.note_count;
 					// Subtract children note_count from parent folder.
@@ -129,6 +136,11 @@ class FolderListWidget extends ListWidget {
 		this.folders_ = v;
 		this.updateItems_ = true;
 		this.updateIndexFromSelectedItemId();
+		this.invalidate();
+	}
+
+	toggleShowIds() {
+		this.showIds = !this.showIds;
 		this.invalidate();
 	}
 
