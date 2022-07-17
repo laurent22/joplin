@@ -1,44 +1,80 @@
 import path = require('path');
-import { localPluginsVersion } from './bundleDefaultPlugins';
-// import fs = require('fs-extra');
+import { downloadPlugins, localPluginsVersion } from './bundleDefaultPlugins';
+import fs = require('fs-extra');
+const fetch = require('node-fetch');
 
-describe('buildServerDocker', function() {
+describe('bundlePlugins', function() {
 
-	const defaultPluginsId = {
-		'plugin.calebjohn.rich-markdown': ['CalebJohn/joplin-rich-markdown', '0.8.3'],
-		'io.github.jackgruber.backup': ['JackGruber/joplin-plugin-backup', '1.0.2'],
+	beforeEach(() => {
+		jest.setTimeout(20000);
+	});
+
+	const testDefaultPluginsIds = {
+		'plugin.calebjohn.rich-markdown': '0.9.0',
+		'io.github.jackgruber.backup': '1.1.0',
 	};
 
 	test('it should get local plugin versions', async () => {
-		const manifestsPath = path.join(__dirname, '..', '..', '..' , 'joplin/packages/app-cli/tests/services/pluginsManifests');
+		const manifestsPath = path.join(__dirname, '..', '..', '..' , 'joplin/packages/app-cli/tests/services/testPlugins');
 
-		const localPluginsVersions = await localPluginsVersion(manifestsPath, Object.keys(defaultPluginsId));
+		const localPluginsVersions = await localPluginsVersion(manifestsPath, testDefaultPluginsIds);
 
-		expect(localPluginsVersions['io.github.jackgruber.backup']).toBe('1.0.5');
+		expect(localPluginsVersions['io.github.jackgruber.backup']).toBe('1.1.0');
 		expect(localPluginsVersions['plugin.calebjohn.rich-markdown']).toBe('0.9.0');
-		console.log('localPluginsVersions', localPluginsVersions);
 	});
 
-	// test('it should download plugins folder from GitHub', async () => {
-	// 	const pinnedVersions:any = {
-	// 		'io.github.jackgruber.backup': '0.0.1',
-	// 		'plugin.calebjohn.rich-markdown': '0.0.1'
-	// 	}
+	test('it should download plugins folder from GitHub with no initial plugins', async () => {
 
-	// 	const tempDir = path.join(__dirname, '/tempDownload')
-	// 	const defaultPluginIds = ['io.github.jackgruber.backup', 'plugin.calebjohn.rich-markdown']
+		let manifests = [];
+		try {
+			const manifestData = await fetch('https://raw.githubusercontent.com/joplin/plugins/master/manifests.json');
+			manifests = JSON.parse(await manifestData.text());
+			if (!manifests) throw new Error('Invalid or missing JSON');
+		} catch (error) {
+			console.log(error);
+		}
 
-	// 	const localPluginsVersions = {'io.github.jackgruber.backup' : '9.9.9', 'plugin.calebjohn.rich-markdown' : '9.9.9'}
-	// 	const latestPluginsVersions = {'io.github.jackgruber.backup' : '0.0.1', 'plugin.calebjohn.rich-markdown' : '0.0.1'}
+		const tempDir = path.join(__dirname, '/tempDownload');
 
-	// 	await fs.mkdirp(`${tempDir}`);
-	// 	await downloadPlugins(tempDir, localPluginsVersions, latestPluginsVersions, defaultPluginIds, pinnedVersions)
+		const localPluginsVersions = { 'io.github.jackgruber.backup': '0.0.0', 'plugin.calebjohn.rich-markdown': '0.0.0' };
 
-	// 	// var files = fs.readdirSync(tempDir)
-	// 	// console.log('files contents>>>>>',files)
-	// 	expect(fs.existsSync(`${tempDir}/io.github.jackgruber.backup`)).toBe(true)
-	// })
+		await fs.mkdirp(`${tempDir}`);
+		await downloadPlugins(tempDir, localPluginsVersions, testDefaultPluginsIds, manifests);
 
-	// different tests with different plugins versions with pinned versions
+		expect(fs.existsSync(`${tempDir}/io.github.jackgruber.backup`)).toBe(true);
+		expect(fs.existsSync(`${tempDir}/plugin.calebjohn.rich-markdown`)).toBe(true);
+
+		const localPluginsVersions2 = await localPluginsVersion(tempDir, testDefaultPluginsIds);
+
+		expect(localPluginsVersions2['plugin.calebjohn.rich-markdown']).toBe('0.9.0');
+		expect(localPluginsVersions2['io.github.jackgruber.backup']).toBe('1.1.0');
+
+		await fs.remove(tempDir);
+	});
+
+	test('it should download plugins folder from GitHub with initial plugins', async () => {
+
+		const tempDir = path.join(__dirname, '/tempDownload');
+		await fs.remove(tempDir);
+
+		let manifests = [];
+		try {
+			const manifestData = await fetch('https://raw.githubusercontent.com/joplin/plugins/master/manifests.json');
+			manifests = JSON.parse(await manifestData.text());
+			if (!manifests) throw new Error('Invalid or missing JSON');
+		} catch (error) {
+			console.log(error);
+		}
+
+		const localPluginsVersions = { 'io.github.jackgruber.backup': '1.1.0', 'plugin.calebjohn.rich-markdown': '0.0.0' };
+
+		await fs.mkdirp(`${tempDir}`);
+		await downloadPlugins(tempDir, localPluginsVersions, testDefaultPluginsIds, manifests);
+
+		expect(fs.existsSync(`${tempDir}/io.github.jackgruber.backup`)).toBe(false);
+		expect(fs.existsSync(`${tempDir}/plugin.calebjohn.rich-markdown`)).toBe(true);
+
+		await fs.remove(tempDir);
+	});
 
 });
