@@ -610,4 +610,26 @@ describe('reducer', function() {
 			expect(state.selectedNoteIds).toBe(expected);
 		}
 	});
+
+	// tests for TAG_UPDATE_ALL about PR #6451
+	it('should not change tags when a new value is deep equal to the old value', async () => {
+		const tags = await createNTestTags(6);
+		const oldTags = tags.slice(0, 5);
+		{
+			// Case 1. The input which is deep equal to the current state.tags doesn't change state.tags.
+			const oldState = initTestState(null, null, null, null, oldTags, [2]);
+			const newTags = oldTags.slice();
+			// test action
+			const newState = reducer(oldState, { type: 'TAG_UPDATE_ALL', items: newTags });
+			expect(newState.tags).toBe(oldState.tags);
+		}
+		{
+			// Case 2. A different input changes state.tags.
+			const oldState = initTestState(null, null, null, null, oldTags, [2]);
+			const newTags = oldTags.slice().splice(3, 1, tags[5]);
+			// test action
+			const newState = reducer(oldState, { type: 'TAG_UPDATE_ALL', items: newTags });
+			expect(newState.tags).not.toBe(oldState.tags);
+		}
+	});
 });

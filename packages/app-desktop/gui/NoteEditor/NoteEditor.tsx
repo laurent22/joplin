@@ -585,7 +585,6 @@ const mapStateToProps = (state: AppState) => {
 	return {
 		noteId: noteId,
 		notes: state.notes,
-		folders: state.folders,
 		selectedNoteIds: state.selectedNoteIds,
 		selectedFolderId: state.selectedFolderId,
 		isProvisional: state.provisionalNoteIds.includes(noteId),

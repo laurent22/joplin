@@ -1,6 +1,18 @@
 # Joplin changelog
 
-## [v2.8.8](https://github.com/laurent22/joplin/releases/tag/v2.8.8) (Pre-release) - 2022-05-17T14:48:06Z
+## [v2.9.1](https://github.com/laurent22/joplin/releases/tag/v2.9.1) (Pre-release) - 2022-07-11T09:59:32Z
+
+- New: Plugins: Added joplin.versionInfo method ([3b35ab6](https://github.com/laurent22/joplin/commit/3b35ab6))
+- Improved: Add support for proxy ([#6537](https://github.com/laurent22/joplin/issues/6537)) ([#164](https://github.com/laurent22/joplin/issues/164) by Jason Williams)
+- Improved: Checkbox don't function while checkbox format button hidden from toolbar ([#6567](https://github.com/laurent22/joplin/issues/6567)) ([#6172](https://github.com/laurent22/joplin/issues/6172) by [@SFulpius](https://github.com/SFulpius))
+- Improved: Update to Electron 18 ([#6496](https://github.com/laurent22/joplin/issues/6496) by [@alexmo1997](https://github.com/alexmo1997))
+- Fixed: Allow styling note list items using custom CSS ([#6542](https://github.com/laurent22/joplin/issues/6542)) ([#5178](https://github.com/laurent22/joplin/issues/5178) by Kenichi Kobayashi)
+- Fixed: App can crash with certain combinations of plugins ([#6506](https://github.com/laurent22/joplin/issues/6506))
+- Fixed: Search field focus is stolen on layout change ([#6514](https://github.com/laurent22/joplin/issues/6514))
+- Fixed: Search field would not clear as expected ([#6557](https://github.com/laurent22/joplin/issues/6557))
+- Security: Fixes XSS in GotoAnything dialog ([e797ebb](https://github.com/laurent22/joplin/commit/e797ebb))
+
+## [v2.8.8](https://github.com/laurent22/joplin/releases/tag/v2.8.8) - 2022-05-17T14:48:06Z
 
 - Improved: Remove plugin backoff handler for now ([7ec3a7b](https://github.com/laurent22/joplin/commit/7ec3a7b))
 - Fixed: Dropbox login button is not visible in dark mode ([#6513](https://github.com/laurent22/joplin/issues/6513)) ([#6503](https://github.com/laurent22/joplin/issues/6503) by [@Retrove](https://github.com/Retrove))
@@ -512,7 +524,7 @@ Attention: The default font size has been changed in the Markdown editor. You ca
 ## [v1.8.5](https://github.com/laurent22/joplin/releases/tag/v1.8.5) - 2021-05-10T11:58:14Z
 
 - Fixed: Fixed pasting of text and images from Word on Windows ([#4916](https://github.com/laurent22/joplin/issues/4916))
-- Security: Filter out NOSCRIPT tags that could be used to cause an XSS (found by [Jubair Rehman Yousafzai](https://twitter.com/jubairfolder)) ([9c20d59](https://github.com/laurent22/joplin/commit/9c20d59))
+- Security: Filter out NOSCRIPT tags that could be used to cause an XSS (CVE-2021-33295) (found by [Jubair Rehman Yousafzai](https://twitter.com/newfolderj)) ([9c20d59](https://github.com/laurent22/joplin/commit/9c20d59))
 
 ## [v1.8.4](https://github.com/laurent22/joplin/releases/tag/v1.8.4) (Pre-release) - 2021-05-09T18:05:05Z
 

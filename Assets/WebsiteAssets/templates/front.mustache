@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
+		{{> gtmHead}}
 		{{> gaOptimize}}
 		<meta
 			charset="utf-8"
@@ -12,6 +13,7 @@
 		<meta name="theme-color" content="#000000" />
 		<link rel="stylesheet" href="{{{assetUrls.css.fontawesome}}}">
 		{{> openGraphTags}}
+		{{> rssFeedLink}}
 		<link
 			rel="stylesheet"
 			href="{{cssBaseUrl}}/bootstrap5.0.2.min.css"
@@ -33,6 +35,8 @@
 		<title>Joplin</title>
 	</head>
 	<body class="front-page website-env-{{env}}">
+		{{> gtmBody}}
+
 		<div class="container-fluid" id="main-container">
 
 			{{#navbar}}
