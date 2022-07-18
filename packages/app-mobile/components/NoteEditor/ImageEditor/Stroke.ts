@@ -46,7 +46,7 @@ class Stroke implements ImageComponent {
 			const sweep = ((fullDisplacement.angle() - prevDisplacement.angle()) % (2 * Math.PI)) * dist;
 
 			// If the angle hasn't changed enough or the stroke isn't long enough, update the current point.
-			if (Math.abs(sweep) < point.width * 2 || dist < point.width * 2) {
+			if (Math.abs(sweep) < point.width || dist < point.width) {
 				this.points[this.points.length - 1] = point;
 				this.curveCache[this.points.length - 2] = null;
 				this.curveCache[this.points.length - 3] = null;

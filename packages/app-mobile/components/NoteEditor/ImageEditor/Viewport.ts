@@ -2,8 +2,8 @@
  * Represents an ImageEditor's viewable region.
  */
 
+import Command from './commands/Command';
 import ImageEditor from './editor';
-import { Command } from './types';
 import { Mat33, Point2, Rect2, Vec2, Vec3 } from './math';
 
 export class Viewport {

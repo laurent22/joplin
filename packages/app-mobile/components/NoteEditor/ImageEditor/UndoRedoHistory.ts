@@ -1,5 +1,5 @@
 import ImageEditor from "./editor";
-import { Command } from "./types";
+import Command from './commands/Command';
 
 
 class UndoRedoHistory {

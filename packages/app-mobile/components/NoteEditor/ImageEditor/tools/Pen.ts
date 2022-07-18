@@ -2,8 +2,9 @@ import Color4 from '../Color4';
 import ImageEditor from '../editor';
 import EditorImage, { AddElementCommand } from '../EditorImage';
 import Stroke from '../Stroke';
-import { Pointer } from '../types';
+import { Pointer, PointerEvt } from '../types';
 import BaseTool from './BaseTool';
+import { ToolType } from './ToolController';
 
 const pressureToWidthMultiplier = 4.0;
 
@@ -11,6 +12,7 @@ export default class Pen extends BaseTool {
 	private strokeAction: AddElementCommand;
 	private stroke: Stroke;
 	private color: Color4 = Color4.ofRGBA(1.0, 0.0, 0.5, 0.3);
+	public readonly type: ToolType = ToolType.Pen;
 
 	public constructor(private editor: ImageEditor) { super(); }
 
@@ -33,7 +35,7 @@ export default class Pen extends BaseTool {
 		this.strokeAction.apply(this.editor);
 	}
 
-	public onPointerDown(current: Pointer, allPointers: Pointer[]): boolean {
+	public onPointerDown({ current, allPointers }: PointerEvt): boolean {
 		if (allPointers.length === 1) {
 			this.stroke = new Stroke({
 				pos: current.canvasPos,
@@ -46,7 +48,7 @@ export default class Pen extends BaseTool {
 		return false;
 	}
 
-	public onPointerMove(current: Pointer, allPointers: Pointer[]): void {
+	public onPointerMove({ current, allPointers }: PointerEvt): void {
 		if (allPointers.length !== 1 || !current.down) {
 			return;
 		}
@@ -54,19 +56,20 @@ export default class Pen extends BaseTool {
 		this.addPointToStroke(current);
 	}
 
-	public onPointerUp(pointer: Pointer, allPointers: Pointer[]): void {
+	public onPointerUp({ current, allPointers }: PointerEvt): void {
 		if (allPointers.length > 1) {
 			return;
 		}
 
-		this.addPointToStroke(pointer);
-		if (this.strokeAction && pointer.isPrimary) {
+		this.addPointToStroke(current);
+		if (this.strokeAction && current.isPrimary) {
 			this.strokeAction.unapply(this.editor);
 			this.editor.dispatch(this.strokeAction);
 			console.log('Added stroke');
 		}
 		this.strokeAction = null;
 	}
+
 	public onGestureCancel(): void {
 		this.strokeAction?.unapply(this.editor);
 		this.strokeAction = null;

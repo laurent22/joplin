@@ -1,20 +1,16 @@
-import { Vec3 } from '../math';
-import { Pointer, PointerEventListener } from '../types';
+import { PointerEvtListener, WheelEvt, PointerEvt } from '../types';
+import { ToolType } from './ToolController';
 
-export enum ToolType {
-	Pen,
-	PanZoom,
-}
-
-export default abstract class BaseTool implements PointerEventListener {
+export default abstract class BaseTool implements PointerEvtListener {
 	protected enabled: boolean = true;
 
-	public abstract onPointerDown(current: Pointer, allPointers: Pointer[]): boolean;
-	public abstract onPointerMove(current: Pointer, allPointers: Pointer[]): void;
-	public abstract onPointerUp(pointer: Pointer, allPointers: Pointer[]): void;
+	public abstract onPointerDown(event: PointerEvt): boolean;
+	public abstract onPointerMove(event: PointerEvt): void;
+	public abstract onPointerUp(event: PointerEvt): void;
 	public abstract onGestureCancel(): void;
+	public readonly kind: ToolType;
 
-	public onWheel(_delta: Vec3, _screenPos: Vec3): boolean {
+	public onWheel(_event: WheelEvt): boolean {
 		return false;
 	}
 
@@ -26,3 +22,4 @@ export default abstract class BaseTool implements PointerEventListener {
 		return this.enabled;
 	}
 }
+

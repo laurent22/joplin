@@ -1,10 +1,10 @@
 
 import { ImageEditor } from '../editor';
 import { Mat33, Point2, Vec3 } from '../math';
-import { Pointer } from '../types';
+import { Pointer, PointerEvt, WheelEvt } from '../types';
 import { Viewport } from '../Viewport';
 import BaseTool from './BaseTool';
-import { ToolType } from './BaseTool';
+import { ToolType } from './ToolController';
 
 interface PinchData {
 	canvasCenter: Point2;
@@ -14,7 +14,7 @@ interface PinchData {
 }
 
 export default class PanZoom extends BaseTool {
-	public readonly type = ToolType.PanZoom;
+	public readonly kind: ToolType.PanZoom = ToolType.PanZoom;
 	private transform: Viewport.ViewportTransform;
 
 	private lastAngle: number;
@@ -36,7 +36,7 @@ export default class PanZoom extends BaseTool {
 		return { canvasCenter, screenCenter, angle, dist };
 	}
 
-	public onPointerDown(_current: Pointer, allPointers: Pointer[]): boolean {
+	public onPointerDown({ allPointers }: PointerEvt): boolean {
 		if (allPointers.length === 2) {
 			this.transform = new Viewport.ViewportTransform(Mat33.identity);
 
@@ -50,8 +50,8 @@ export default class PanZoom extends BaseTool {
 		return false;
 	}
 
-	public onPointerMove(_current: Pointer, allPointers: Pointer[]): void {
-		if (allPointers.length != 2) {
+	public onPointerMove({ allPointers }: PointerEvt): void {
+		if (allPointers.length !== 2) {
 			return;
 		}
 
@@ -76,7 +76,7 @@ export default class PanZoom extends BaseTool {
 		this.transform.apply(this.editor);
 	}
 
-	public onPointerUp(_pointer: Pointer, _allPointers: Pointer[]): void {
+	public onPointerUp(_event: PointerEvt): void {
 		if (this.transform) {
 			this.transform.unapply(this.editor);
 			this.editor.dispatch(this.transform);
@@ -89,7 +89,7 @@ export default class PanZoom extends BaseTool {
 		this.transform = null;
 	}
 
-	public onWheel(delta: Vec3, screenPos: Point2): boolean {
+	public onWheel({ delta, screenPos }: WheelEvt): boolean {
 		if (this.transform == null) {
 			this.transform = new Viewport.ViewportTransform(Mat33.identity);
 		}

@@ -1,13 +1,12 @@
+import ImageEditor from './editor';
+import { Point2, Rect2, Vec2 } from './math';
+import AbstractRenderer from './rendering/AbstractRenderer';
+import Command from "./commands/Command";
+import Viewport from './Viewport';
+
 /**
  * A tree of nodes contained within the editor
  */
-
-import ImageEditor from './editor';
-import { Rect2 } from './math';
-import AbstractRenderer from './rendering/AbstractRenderer';
-import { Command } from './types';
-import Viewport from './Viewport';
-
 class EditorImage {
 	private root: ImageNode<ImageComponent>;
 
@@ -60,11 +59,18 @@ export class ImageNode<T extends ImageComponent> {
 	private children: ImageNode<T>[];
 	private bbox: Rect2;
 
+	// Estimates of this' relative center of mass and total mass.
+	// Used for clustering.
+	private centerOfMass: Point2;
+	private totalMass: number;
+
 	public constructor(
-		private readonly parent?: ImageNode<T>
+		private parent?: ImageNode<T>
 	) {
 		this.children = [];
 		this.bbox = Rect2.empty;
+		this.totalMass = 0;
+		this.centerOfMass = Vec2.zero;
 	}
 
 	private getChildrenInRegion(region: Rect2): ImageNode<T>[] {
@@ -117,6 +123,49 @@ export class ImageNode<T extends ImageComponent> {
 		return this.bbox;
 	}
 
+	private changeParent(newParent: ImageNode<T>) {
+		if (this.parent) {
+			this.parent.children = this.parent.children.filter(child => child !== this);
+			this.parent.recomputeBBox();
+		}
+		this.parent = newParent;
+		newParent.recomputeBBox();
+	}
+
+	/**
+	 * Removes outliers from this' children and adds them to the given target
+	 */
+	private removeOutliers(target: ImageNode<T>) {
+		if (this.content != null) {
+			return;
+		}
+
+		this.children.sort((a, b) => a.bbox.topLeft.x - b.bbox.topLeft.x);
+
+		let leftMax = -Infinity;
+		let rightMin = Infinity;
+		let leftIdx = 0;
+		let rightIdx = this.children.length - 1;
+		while (leftMax < rightMin && leftIdx < rightIdx) {
+			let left = this.children[leftIdx];
+			let right = this.children[rightIdx];
+			leftMax = Math.max(left.bbox.bottomRight.x);
+			rightMin = Math.min(right.bbox.topLeft.x);
+
+			if (leftMax < rightMin) {
+				leftIdx ++;
+			} else {
+				leftIdx = Math.max(0, leftIdx - 1);
+				rightIdx --;
+			}
+		}
+
+		let children = this.children;
+		for (let i = 0; i <= leftIdx; i++) {
+			children[i].changeParent(target);
+		}
+	}
+
 	/** Ensure that this node doesn't have too many or too few children */
 	private rebalance() {
 		if (this.children.length === 0 && this.content == null) {
@@ -137,14 +186,14 @@ export class ImageNode<T extends ImageComponent> {
 		const maxChildFraction = 0.7;
 		if (maxDimen > 0) {
 			for (const child of this.children) {
-				if (child.getBBox().maxDimension / maxDimen > maxChildFraction) {
+				if (child.getBBox().maxDimension / maxDimen > maxChildFraction && child.content == null) {
 					// Can we replace this with the child?
 					if (this.children.length === 1) {
 						this.children = child.children;
 						this.content = child.content;
 					} else {
 						// Find a good split
-						// TODO
+						child.removeOutliers(this);
 					}
 				}
 			}
@@ -153,14 +202,24 @@ export class ImageNode<T extends ImageComponent> {
 		this.recomputeBBox();
 	}
 
+	/** Recomputes this' bounding box and center of mass */
 	private recomputeBBox() {
 		if (this.content != null) {
 			this.bbox = this.content.getBBox();
+			this.centerOfMass = this.bbox.center;
+			this.totalMass = this.bbox.area;
 		} else {
 			this.bbox = Rect2.empty;
+			let centerOfMass = Vec2.of(0, 0);
+			let totalMass = 0;
+
 			for (const child of this.children) {
 				this.bbox = this.bbox.union(child.getBBox());
+				centerOfMass = centerOfMass.plus(child.centerOfMass.times(child.totalMass));
+				totalMass += child.totalMass;
 			}
+			this.centerOfMass = centerOfMass.times(1/totalMass);
+			this.totalMass = totalMass;
 		}
 	}
 

@@ -374,10 +374,14 @@ export class Mat33 {
  * invariant: w > 0, h > 0.
  */
 export class Rect2 {
+	// Derived state:
+	
 	// topLeft assumes up is -y
 	public readonly topLeft: Point2;
 	public readonly size: Vec2;
 	public readonly bottomRight: Point2;
+	public readonly center: Point2;
+	public readonly area: number;
 
 	public constructor(
 		public readonly x: number,
@@ -399,6 +403,8 @@ export class Rect2 {
 		this.topLeft = Vec2.of(this.x, this.y);
 		this.size = Vec2.of(this.w, this.h);
 		this.bottomRight = this.topLeft.plus(this.size);
+		this.center = this.topLeft.plus(this.size.times(0.5));
+		this.area = this.w * this.h;
 	}
 
 	public translatedBy(vec: Vec2): Rect2 {
@@ -1021,6 +1027,7 @@ export class CubicBezierCurve extends SmoothVectorFunction {
 	public readonly xComponent: SmoothFunction;
 	public readonly yComponent: SmoothFunction;
 	public readonly zComponent: SmoothFunction;
+	public readonly meanSquareErrorFn: SmoothFunction;
 
 	public constructor(
 		public readonly p0: Point2, public readonly p1: Point2,
