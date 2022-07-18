@@ -2,7 +2,7 @@ const Logger = require('./Logger').default;
 const shim = require('./shim').default;
 const JoplinError = require('./JoplinError').default;
 const time = require('./time').default;
-const EventDispatcher = require('./EventDispatcher');
+const EventDispatcher = require('./EventDispatcher').default;
 
 class DropboxApi {
 	constructor(options) {
