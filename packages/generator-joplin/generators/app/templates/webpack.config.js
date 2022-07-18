@@ -30,6 +30,8 @@ const userConfig = Object.assign({}, {
 const manifestPath = `${srcDir}/manifest.json`;
 const packageJsonPath = `${rootDir}/package.json`;
 const allPossibleCategories = ['appearance', 'developer tools', 'productivity', 'themes', 'integrations', 'viewer', 'search', 'tags', 'editor', 'files', 'personal knowledge management'];
+const allPossiblePlatform = ['desktop', 'mobile'];
+const allPossibleMediaType = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'video/mp4', 'video/webm', 'video/ogg'];
 const manifest = readManifest(manifestPath);
 const pluginArchiveFilePath = path.resolve(publishDir, `${manifest.id}.jpl`);
 const pluginInfoFilePath = path.resolve(publishDir, `${manifest.id}.json`);
@@ -76,11 +78,22 @@ function validateCategories(categories) {
 	});
 }
 
+function validateMedia(media) {
+	if (!media) return null;
+	media.forEach(mediaItem => {
+		if (!mediaItem.url) throw new Error('You must specify a url for each media item');
+		if (mediaItem.platform && !allPossiblePlatform.includes(mediaItem.platform)) throw new Error(`${mediaItem.platform} is not a valid platform. Please make sure that the platform name is lowercase. Valid Platforms are: \n${allPossiblePlatform}\n`);
+		if (!mediaItem.type) throw new Error('You must specify the type of the media item');
+		if (mediaItem.type && !allPossibleMediaType.includes(mediaItem.type)) throw new Error(`${mediaItem.type} is not a valid media type. Valid media types are: \n${allPossibleMediaType}\n`);
+	});
+}
+
 function readManifest(manifestPath) {
 	const content = fs.readFileSync(manifestPath, 'utf8');
 	const output = JSON.parse(content);
 	if (!output.id) throw new Error(`Manifest plugin ID is not set in ${manifestPath}`);
 	validateCategories(output.categories);
+	validateMedia(output.media);
 	return output;
 }
 
