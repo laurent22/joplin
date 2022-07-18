@@ -1818,6 +1818,9 @@ packages/lib/services/synchronizer/utils/types.js.map
 packages/lib/shim.d.ts
 packages/lib/shim.js
 packages/lib/shim.js.map
+packages/lib/string-utils-common.d.ts
+packages/lib/string-utils-common.js
+packages/lib/string-utils-common.js.map
 packages/lib/testing/syncTargetUtils.d.ts
 packages/lib/testing/syncTargetUtils.js
 packages/lib/testing/syncTargetUtils.js.map

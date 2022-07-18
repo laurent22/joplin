@@ -1,11 +1,24 @@
-function pregQuote(str, delimiter = '') {
+/**
+ * Escapes the given string for use in a regular expression.
+ * @param str String to be escaped
+ * @param delimiter An additional separator character that will also be escaped, if provided.
+ * @returns a version of [str] with all regex control characters escaped.
+ */
+export function pregQuote(str: string, delimiter: string = '') {
 	return (`${str}`).replace(new RegExp(`[.\\\\+*?\\[\\^\\]$(){}=!<>|:\\${delimiter || ''}-]`, 'g'), '\\$&');
 }
 
-function replaceRegexDiacritics(regexString) {
+/**
+ * Causes letters in the given string to match versions with different diacritics.
+ * For example, this makes 'a' match 'à', 'ä', 'ā'...
+ *
+ * @param regexString A regular expression with no character match groups (without [a-zA-Z]-style matchers).
+ * @returns an updated regular expression string.
+ */
+export function replaceRegexDiacritics(regexString: string) {
 	if (!regexString) return '';
 
-	const diacriticReplacements = {
+	const diacriticReplacements: Record<string, string> = {
 		a: '[aàáâãäåāą]',
 		A: '[AÀÁÂÃÄÅĀĄ]',
 		c: '[cçćč]',
@@ -50,6 +63,3 @@ function replaceRegexDiacritics(regexString) {
 	return output;
 }
 
-if (typeof module !== 'undefined') {
-	module.exports = { pregQuote, replaceRegexDiacritics };
-}
