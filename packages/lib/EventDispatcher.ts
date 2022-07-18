@@ -46,9 +46,7 @@ export default class EventDispatcher<EventKeyType extends string|symbol|number, 
 			 */
 			remove: () => {
 				const originalListeners = this.listeners[eventName];
-				this.listeners[eventName] = this.listeners[eventName].filter(
-					listener => listener !== callback
-				);
+				this.off(eventName, callback);
 
 				return originalListeners.length !== this.listeners[eventName].length;
 			},
@@ -63,12 +61,11 @@ export default class EventDispatcher<EventKeyType extends string|symbol|number, 
 	off(eventName: EventKeyType, callback: (data: EventType)=> void) {
 		if (!this.listeners[eventName]) return;
 
-		const ls = this.listeners[eventName];
-		for (let i = 0; i < ls.length; i++) {
-			if (ls[i] === callback) {
-				ls.splice(i, 1);
-				return;
-			}
-		}
+		// Replace the current list of listeners with a new, shortened list.
+		// This allows any iterators over this.listeners to continue iterating
+		// without skipping elements.
+		this.listeners[eventName] = this.listeners[eventName].filter(
+			otherCallback => otherCallback !== callback
+		);
 	}
 }

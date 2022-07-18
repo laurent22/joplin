@@ -117,7 +117,6 @@ describe('Activation of listeners', () => {
 
 it('JavaScript API', () => {
 	const Dispatcher = require('./EventDispatcher').default;
-	console.warn(Dispatcher);
 	const dispatcher = new Dispatcher();
 
 	let pass = false;
