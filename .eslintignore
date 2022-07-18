@@ -1102,6 +1102,12 @@ packages/lib/ClipperServer.js.map
 packages/lib/CssUtils.d.ts
 packages/lib/CssUtils.js
 packages/lib/CssUtils.js.map
+packages/lib/EventDispatcher.d.ts
+packages/lib/EventDispatcher.js
+packages/lib/EventDispatcher.js.map
+packages/lib/EventDispatcher.test.d.ts
+packages/lib/EventDispatcher.test.js
+packages/lib/EventDispatcher.test.js.map
 packages/lib/HtmlToMd.d.ts
 packages/lib/HtmlToMd.js
 packages/lib/HtmlToMd.js.map
@@ -1609,6 +1615,9 @@ packages/lib/services/keychain/KeychainServiceDriver.node.js.map
 packages/lib/services/keychain/KeychainServiceDriverBase.d.ts
 packages/lib/services/keychain/KeychainServiceDriverBase.js
 packages/lib/services/keychain/KeychainServiceDriverBase.js.map
+packages/lib/services/plugins/BasePlatformImplementation.d.ts
+packages/lib/services/plugins/BasePlatformImplementation.js
+packages/lib/services/plugins/BasePlatformImplementation.js.map
 packages/lib/services/plugins/BasePluginRunner.d.ts
 packages/lib/services/plugins/BasePluginRunner.js
 packages/lib/services/plugins/BasePluginRunner.js.map
@@ -2050,6 +2059,9 @@ packages/plugins/ToggleSidebars/api/types.js.map
 packages/plugins/ToggleSidebars/src/index.d.ts
 packages/plugins/ToggleSidebars/src/index.js
 packages/plugins/ToggleSidebars/src/index.js.map
+packages/react-native-saf-x/src/index.d.ts
+packages/react-native-saf-x/src/index.js
+packages/react-native-saf-x/src/index.js.map
 packages/renderer/HtmlToHtml.d.ts
 packages/renderer/HtmlToHtml.js
 packages/renderer/HtmlToHtml.js.map
