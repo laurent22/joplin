@@ -379,6 +379,7 @@ export default function(theme: any, options: Options = null) {
 			max-width: 430px;
 			margin: 0;
 			border: 0;
+			display: block;
 		}
 
 		/* Clear the CODE style if the element is within a joplin-editable block */

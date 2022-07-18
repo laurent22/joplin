@@ -15,10 +15,10 @@
   "author": "Joplin",
   "license": "MIT",
   "devDependencies": {
+    "@types/pdfjs-dist": "^2.10.378",
     "@types/react": "^18.0.14",
     "@types/react-dom": "^16.9.0",
     "css-loader": "^6.7.1",
-    "pdfjs-dist": "^2.14.305",
     "style-loader": "^3.3.1",
     "ts-loader": "^9.3.0",
     "typescript": "^4.0.5",
@@ -26,6 +26,7 @@
     "webpack-cli": "^4.10.0"
   },
   "dependencies": {
+    "pdfjs-dist": "^2.14.305",
     "react": "16.13.1",
     "react-dom": "16.9.0"
   }
