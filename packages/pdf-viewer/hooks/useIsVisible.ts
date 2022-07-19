@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 
-const useIsVisible = (elementRef: any, rootRef: any) => {
+const useIsVisible = (elementRef: React.MutableRefObject<HTMLElement>, rootRef: React.MutableRefObject<HTMLElement>) => {
 	const [isVisible, setIsVisible] = useState(false);
 	useEffect(() => {
 		let observer: IntersectionObserver = null;

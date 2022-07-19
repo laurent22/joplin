@@ -8,10 +8,10 @@ export default function VerticalPages(props: {
 	pdf: PdfData;
 	isDarkTheme: boolean;
 	anchorPage: number;
-	container: any;
+	container: React.MutableRefObject<HTMLElement>;
 }) {
 	const [scaledSize, setScaledSize] = useState<ScaledSize>(null);
-	const innerContainerEl = useRef(null);
+	const innerContainerEl = useRef<HTMLDivElement>(null);
 	const resizeTimer = useRef<number>();
 	useLayoutEffect(() => {
 		const updateSize = async () => {

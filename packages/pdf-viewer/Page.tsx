@@ -4,7 +4,15 @@ import { PdfData, ScaledSize } from './pdfSource';
 
 require('./pages.css');
 
-export default function Page(props: { pdf: PdfData; pageNo: number; focusOnLoad: boolean; isAnchored: boolean; scaledSize: ScaledSize; isDarkTheme: boolean; container: any }) {
+export default function Page(props: {
+	pdf: PdfData;
+	pageNo: number;
+	focusOnLoad: boolean;
+	isAnchored: boolean;
+	scaledSize: ScaledSize;
+	isDarkTheme: boolean;
+	container: React.MutableRefObject<HTMLElement>;
+}) {
 	const [error, setError] = useState(null);
 	const [page, setPage] = useState(null);
 	const [scale, setScale] = useState(null);

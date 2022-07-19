@@ -14,7 +14,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'pdf.worker.js';
 function MiniViewerApp(props: { pdfPath: string; isDarkTheme: boolean; anchorPage: number }) {
 	const [pdf, setPdf] = useState<PdfData>(null);
 	const isFocused = useIsFocused();
-	const containerEl = useRef(null);
+	const containerEl = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
 		const load = async () => {
