@@ -35,7 +35,7 @@ const { _ } = require('@joplin/lib/locale');
 import { reg } from '@joplin/lib/registry';
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 const { BaseScreenComponent } = require('../base-screen.js');
-const { themeStyle, editorFont } = require('../global-style.js');
+import { themeStyle, editorFont } from '../global-style';
 const { dialogs } = require('../../utils/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
 const DocumentPicker = require('react-native-document-picker').default;
