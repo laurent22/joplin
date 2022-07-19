@@ -84,7 +84,7 @@ function addExtraStyles(style: Style) {
 	return style;
 }
 
-function editorFont(fontId?: number) {
+export function editorFont(fontId?: number) {
 	// IMPORTANT: The font mapping must match the one in Setting.js
 	const fonts: Fonts = {
 		[Setting.FONT_DEFAULT]: null,
@@ -100,7 +100,7 @@ function editorFont(fontId?: number) {
 	return fonts[fontId];
 }
 
-function themeStyle(theme?: string) {
+export function themeStyle(theme?: string) {
 	if (!theme) {
 		console.warn('Theme not set! Defaulting to Light theme.');
 		theme = Setting.THEME_LIGHT;
@@ -113,5 +113,3 @@ function themeStyle(theme?: string) {
 	themeCache_[cacheKey] = addExtraStyles(output);
 	return themeCache_[cacheKey];
 }
-
-module.exports = { themeStyle, editorFont };
