@@ -9,13 +9,14 @@ interface PluginAndVersion {
    [pluginId: string]: string;
 }
 
-export const localPluginsVersion = async (defaultPluginDir: string, defaultPluginsId: any): Promise<PluginAndVersion> => {
-	if (!await fs.pathExists(path.join(defaultPluginDir))) await fs.mkdir(defaultPluginDir);
+export const localPluginsVersion = async (defaultPluginDir: string, defaultPluginsId: PluginAndVersion): Promise<PluginAndVersion> => {
+	if (!(await fs.pathExists(path.join(defaultPluginDir)))) await fs.mkdirp(defaultPluginDir);
+
 	const localPluginsVersions: PluginAndVersion = {};
 
 	for (const pluginId of Object.keys(defaultPluginsId)) {
 
-		if (!await fs.pathExists(`${defaultPluginDir}/${pluginId}`)) {
+		if (!(await fs.pathExists(`${defaultPluginDir}/${pluginId}`))) {
 			localPluginsVersions[pluginId] = '0.0.0';
 			continue;
 		}
@@ -32,7 +33,9 @@ const downloadFile = async (url: string, name: string) => {
 	await streamPipeline(response.body, fs.createWriteStream(name));
 };
 
-export const downloadPlugins = async (defaultPluginDir: string, localPluginsVersions: PluginAndVersion, defaultPluginsId: any, manifests: any): Promise<void> => {
+
+export const downloadPlugins = async (defaultPluginDir: string, localPluginsVersions: PluginAndVersion, defaultPluginsId: PluginAndVersion, manifests: any): Promise<void> => {
+
 	for (const pluginId of Object.keys(defaultPluginsId)) {
 		if (localPluginsVersions[pluginId] === defaultPluginsId[pluginId]) continue;
 
@@ -40,12 +43,13 @@ export const downloadPlugins = async (defaultPluginDir: string, localPluginsVers
 
 		if (!(response.ok)) {
 			const responseText = await response.text();
-			throw new Error(`Cannot get plugins' info from npm: ${responseText.substr(0,500)}`);
+			throw new Error(`Cannot get plugins npm info: ${responseText.substr(0,500)}`);
 		}
 		const release = JSON.parse(await response.text());
 		const pluginUrl = release.versions[defaultPluginsId[pluginId]].dist.tarball;
 
 		const pluginName = `${manifests[pluginId]._npm_package_name}-${defaultPluginsId[pluginId]}.tgz`;
+		console.info(`Downloading ${manifests[pluginId]._npm_package_name} from NPM`);
 		await downloadFile(pluginUrl, pluginName);
 
 		if (!(fs.existsSync(pluginName))) throw new Error(`${pluginName} cannot be downloaded`);
@@ -61,7 +65,7 @@ export const downloadPlugins = async (defaultPluginDir: string, localPluginsVers
 async function start(): Promise<void> {
 	const defaultPluginDir = path.join(__dirname, '..', '..', 'packages/app-desktop/build/defaultPlugins');
 
-	const defaultPluginsId = {
+	const defaultPluginsId: PluginAndVersion = {
 		'plugin.calebjohn.rich-markdown': '0.8.3',
 		'io.github.jackgruber.backup': '1.0.2',
 	};

@@ -165,6 +165,9 @@ fi
 # publish to GitHub. It helps finding out any issue in pull requests and dev
 # branch.
 # =============================================================================
+cd "$ROOT_DIR/packages/tools"
+tsc bundleDefaultPlugins.ts
+node bundleDefaultPlugins.js
 
 cd "$ROOT_DIR/packages/app-desktop"
 

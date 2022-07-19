@@ -15,12 +15,20 @@ describe('bundlePlugins', function() {
 	};
 
 	test('it should get local plugin versions', async () => {
+
+		const testDefaultPluginsIds = {
+			'plugin.calebjohn.rich-markdown': '0.9.0',
+			'io.github.jackgruber.backup': '1.1.0',
+			'plugin-that-dont-exist-locally': '9.9.9',
+		};
+
 		const manifestsPath = path.join(__dirname, '..', '..', '..' , 'joplin/packages/app-cli/tests/services/testPlugins');
 
 		const localPluginsVersions = await localPluginsVersion(manifestsPath, testDefaultPluginsIds);
 
 		expect(localPluginsVersions['io.github.jackgruber.backup']).toBe('1.1.0');
 		expect(localPluginsVersions['plugin.calebjohn.rich-markdown']).toBe('0.9.0');
+		expect(localPluginsVersions['plugin-that-dont-exist-locally']).toBe('0.0.0');
 	});
 
 	test('it should download plugins folder from GitHub with no initial plugins', async () => {
@@ -73,6 +81,11 @@ describe('bundlePlugins', function() {
 
 		expect(fs.existsSync(`${tempDir}/io.github.jackgruber.backup`)).toBe(false);
 		expect(fs.existsSync(`${tempDir}/plugin.calebjohn.rich-markdown`)).toBe(true);
+
+		const localPluginsVersions2 = await localPluginsVersion(tempDir, testDefaultPluginsIds);
+
+		expect(localPluginsVersions2['plugin.calebjohn.rich-markdown']).toBe('0.9.0');
+		expect(localPluginsVersions2['io.github.jackgruber.backup']).toBe('0.0.0');
 
 		await fs.remove(tempDir);
 	});
