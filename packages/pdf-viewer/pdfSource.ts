@@ -8,7 +8,7 @@ export interface ScaledSize {
 }
 
 export class PdfData {
-	public url: string;
+	public url: string | Uint8Array;
 	private doc: any = null;
 	public pageCount: number = null;
 	private pages: any = {};
@@ -19,7 +19,7 @@ export class PdfData {
 	public error: any = null;
 	public constructor() {
 	}
-	public loadDoc = async (url: string) => {
+	public loadDoc = async (url: string | Uint8Array) => {
 		this.url = url;
 		const loadingTask = pdfjsLib.getDocument(url);
 		try {
