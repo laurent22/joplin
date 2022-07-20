@@ -23,25 +23,13 @@ describe('services_plugins_RepositoryApi', function() {
 		expect(!!manifests.find(m => m.id === 'org.joplinapp.plugins.ToggleSidebars')).toBe(true);
 	}));
 
-	it('it should load statistics', (async () => {
+	it('it should load statistics in plugins manifest', (async () => {
 		const api = await newRepoApi();
+		await api.initialize();
 		const manifests = await api.manifests();
-		{
-			expect(manifests.find(m => m.id === 'joplin.plugin.ambrt.backlinksToNote')._created_date).toBe('2021-06-01T08:30:48Z');
-		}
 
-		{
-			const statsText = await shim.fetch('https://raw.githubusercontent.com/joplin/plugins/master/stats.json');
-			const stats = JSON.parse(await statsText.text());
-
-			let totalDownloadCount: number = 0;
-
-			const pluginStats = stats['joplin.plugin.ambrt.backlinksToNote'];
-			Object.entries(pluginStats).forEach((stats: any[]) => {
-				totalDownloadCount += stats[1].downloadCount;
-			});
-			expect(totalDownloadCount).toBe(manifests.find(m => m.id === 'joplin.plugin.ambrt.backlinksToNote')._totalDownloads);
-		}
+		expect(manifests.find(m => m.id === 'joplin.plugin.ambrt.backlinksToNote')._created_date).toBe('2021-06-01T08:30:48Z');
+		expect(manifests.find(m => m.id === 'joplin.plugin.ambrt.backlinksToNote')._totalDownloads).toBe(5355);
 	}));
 
 	it('should search and sort', (async () => {
