@@ -23,7 +23,7 @@
     "@types/react-dom": "^16.9.0",
     "babel-jest": "^28.1.3",
     "css-loader": "^6.7.1",
-    "jest": "28.0",
+    "jest": "^28.1.3",
     "jest-environment-jsdom": "^28.1.3",
     "style-loader": "^3.3.1",
     "ts-jest": "^28.0.7",
@@ -36,25 +36,5 @@
     "pdfjs-dist": "^2.14.305",
     "react": "16.13.1",
     "react-dom": "16.9.0"
-  },
-  "jest": {
-    "transform": {
-      "^.+\\.(ts|tsx)?$": "ts-jest",
-      "^.+\\.(js|jsx)$": "babel-jest",
-      "^.+\\.css$": "<rootDir>/config/cssTransform.js"
-    },
-    "testMatch": [
-      "<rootDir>/**/__tests__/**/*.{js,jsx}",
-      "<rootDir>/**/*.{spec,test}.{js,jsx}"
-    ],
-    "testEnvironment": "jest-environment-jsdom",
-    "transformIgnorePatterns": [
-      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|ts|tsx)$",
-      "^.+\\.module\\.(css|sass|scss)$"
-    ],
-    "moduleNameMapper": {
-      "^pdf.worker.js$": "pdfjs-dist/build/pdf.worker.entry",
-      "^welcome.pdf$": "<rootDir>/config/welcome.pdf"
-    }
   }
 }

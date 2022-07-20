@@ -15,6 +15,13 @@ describe('pdfData', () => {
 		expect(pdf.pageCount).toBe(1);
 	});
 
+	test('Should throw error on invalid file', async () => {
+		const pdf = new PdfData();
+		await expect(async () => {
+			await pdf.loadDoc('');
+		}).rejects.toThrowError();
+	});
+
 	test('Should get correct page size', async () => {
 		const pdf = new PdfData();
 		await pdf.loadDoc(file);

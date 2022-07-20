@@ -16,7 +16,6 @@ export class PdfData {
 		height: number;
 		width: number;
 	} = null;
-	public error: any = null;
 	public constructor() {
 	}
 	public loadDoc = async (url: string | Uint8Array) => {
@@ -27,8 +26,7 @@ export class PdfData {
 			this.doc = pdfDocument;
 			this.pageCount = pdfDocument.numPages;
 		} catch (err) {
-			console.error(`Error: ${err}`);
-			this.error = err;
+			throw new Error('Could not load document');
 		}
 	};
 	public getPage = async (pageNo: number) => {
