@@ -69,6 +69,7 @@ packages/tools/node_modules
 packages/tools/PortableAppsLauncher
 packages/turndown-plugin-gfm/
 packages/turndown/
+packages/pdf-viewer/dist
 plugin_types/
 readme/
 
