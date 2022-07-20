@@ -149,6 +149,12 @@ export namespace Vec2 {
 export type Point2 = Vec3;
 export type Vec2 = Vec3; // eslint-disable-line
 
+/** Represents a line segment in ℝ². */
+export interface LineSegment {
+	origin: Point2;
+	size: Vec2;
+}
+
 /**
  * Represents a three dimensional linear transformation or
  * a two-dimensional affine transformation.
@@ -888,7 +894,122 @@ export abstract class SmoothFunction {
 	}
 
 	public static ofConstant(k: number): SmoothFunction {
-		return SmoothFunction.ofFn(_t => k, _t => 0);
+		// Return a Polynomial to allow more efficient polynomial/constant math.
+		return new Polynomial([ k ]);
+	}
+}
+
+export class Polynomial extends SmoothFunction {
+	private readonly derivativeCoefficients: number[];
+
+	// Lazy load derivativeFn to prevent infinite recursion.
+	private derivativeFn: SmoothFunction|null;
+
+	/**
+	 * @param coefficients Terms of the polynomial. The first is a constant, the second
+	 *                     multiplies t, the third, t², ...
+	 */
+	public constructor(private readonly coefficients: number[]) {
+		super();
+		this.derivativeCoefficients = [];
+
+		for (let i = 1; i < coefficients.length; i++) {
+			this.derivativeCoefficients.push(coefficients[i] * i);
+		}
+	}
+
+	public at(t: number): number {
+		let result = 0;
+		let tPower = 1;
+		for (let i = 0; i < this.coefficients.length; i++) {
+			result += this.coefficients[i] * tPower;
+			tPower *= t;
+		}
+
+		return result;
+	}
+
+	public get derivative(): SmoothFunction {
+		if (this.derivativeFn != null) {
+			return this.derivativeFn;
+		} else if (this.derivativeCoefficients.length <= 1) {
+			this.derivativeFn = SmoothFunction.ofConstant(
+				this.derivativeCoefficients.length < 1 ? 0 : this.derivativeCoefficients[0]
+			);
+		} else {
+			this.derivativeFn = new Polynomial(this.derivativeCoefficients);
+		}
+
+		return this.derivativeFn;
+	}
+
+	public derivativeAt(t: number): number {
+		let result = 0;
+		let tPower = 1;
+		for (let i = 0; i < this.derivativeCoefficients.length; i++) {
+			result += this.derivativeCoefficients[i] * tPower;
+			tPower *= t;
+		}
+		return result;
+	}
+
+	public plus(other: SmoothFunction): SmoothFunction {
+		if (other instanceof Polynomial) {
+			const newCoefficients = [];
+			for (let i = 0; i < other.coefficients.length; i++) {
+				newCoefficients.push(this.coefficients[i] + other.coefficients[i]);
+			}
+
+			return new Polynomial(newCoefficients);
+		}
+
+		return super.plus(other);
+	}
+
+	public times(other: SmoothFunction): SmoothFunction {
+		if (!(other instanceof Polynomial)) {
+			return super.times(other);
+		}
+
+		const greatestPowerOfT = this.coefficients.length - 1 + other.coefficients.length - 1;
+		// An array of all zeros.
+		const newCoefficients = new Array<number>(greatestPowerOfT + 1);
+
+		// Fill the array
+		for (let i = 0; i < this.coefficients.length; i++) {
+			// Each term pairs with each other term.
+			for (let j = 0; j < other.coefficients.length; j++) {
+				const leftPower = i;
+				const rightPower = j;
+				newCoefficients[leftPower + rightPower] ??= 0;
+				newCoefficients[leftPower + rightPower] += this.coefficients[i] * other.coefficients[j];
+			}
+		}
+
+		return new Polynomial(newCoefficients);
+	}
+
+	public timesConstant(scalar: number): SmoothFunction {
+		return new Polynomial(this.coefficients.map(coeff => scalar * coeff));
+	}
+
+	public toString(): string {
+		const result = [];
+
+		for (let i = 0; i < this.coefficients.length; i++) {
+			let part = this.coefficients[i].toString();
+
+			if (i > 0) {
+				part += 't';
+			}
+			if (i > 1) {
+				part += `^${i}`;
+			}
+
+			result.push(part);
+		}
+
+		return result.join(' + ');
 	}
 }
 
@@ -953,6 +1074,11 @@ export abstract class SmoothVectorFunction {
 		return this.plus(other.times(-1));
 	}
 
+	/** Gives the distance to the given point as a function of t */
+	public distSquaredFn(toPoint: Point2): SmoothFunction {
+		return this.minus(SmoothVectorFunction.ofConstant(toPoint)).magnitudeSquared;
+	}
+
 	/**
 	 * Approximate the closest point on this to [input]
 	 * @param pointToApprox The point (probably off the curve) to project onto this.
@@ -963,8 +1089,7 @@ export abstract class SmoothVectorFunction {
 	public inputForClosestPoint(
 		pointToApprox: Point2, minT: number, maxT: number, numCandidates: number = 5
 	): number {
-		const distFn = this.minus(SmoothVectorFunction.ofConstant(pointToApprox)).magnitudeSquared;
-		return distFn.minimize(minT, maxT, numCandidates);
+		return this.distSquaredFn(pointToApprox).minimize(minT, maxT, numCandidates);
 	}
 
 	/**
@@ -1027,7 +1152,6 @@ export class CubicBezierCurve extends SmoothVectorFunction {
 	public readonly xComponent: SmoothFunction;
 	public readonly yComponent: SmoothFunction;
 	public readonly zComponent: SmoothFunction;
-	public readonly meanSquareErrorFn: SmoothFunction;
 
 	public constructor(
 		public readonly p0: Point2, public readonly p1: Point2,
@@ -1035,32 +1159,23 @@ export class CubicBezierCurve extends SmoothVectorFunction {
 	) {
 		super();
 
-		const computeComponent = (t: number, idx: number): number => {
-			return p0.at(idx) * (1 - t) * (1 - t) * (1 - t)
-				+ 3 * p1.at(idx) * t * (1 - t) * (1 - t)
-				+ 3 * p2.at(idx) * t * t * (1 - t)
-				+ p3.at(idx) * t * t * t;
-		};
-
-		const computeDerivativeComponent = (t: number, idx: number): number => {
-			return -3 * p0.at(idx) * (1 - t) * (1 - t)
-				+ 3 * p1.at(idx) * (1 - 4 * t + 3 * t * t)
-				+ 3 * p2.at(idx) * (2 * t - 3 * t * t)
-				+ 3 * p3.at(idx) * t * t;
-		};
-
-		this.xComponent = SmoothFunction.ofFn(
-			t => computeComponent(t, 0),
-			t => computeDerivativeComponent(t, 0)
-		);
-		this.yComponent = SmoothFunction.ofFn(
-			t => computeComponent(t, 1),
-			t => computeDerivativeComponent(t, 1)
-		);
-		this.zComponent = SmoothFunction.ofFn(
-			t => computeComponent(t, 2),
-			t => computeDerivativeComponent(t, 2)
-		);
+		// B(t) = P₀(1 - t)³ + 3 P₁ (1 - t) t² + 3 P₂ (1 - t)² t + P₃t³
+		//      = P₀(1 - 3t + 3t² - t³) + 3P₂(1 - 2t + t²)t + 3 P₁(t² - t³) + P₃t³
+		//      = P₀(1 - 3t + 3t² - t³) + 3P₂(t - 2t² + t³) + 3 P₁(t² - t³) + P₃t³
+		//      = P₀ - 3P₀t + 3P₀t² - P₀t³ + 3P₂t - 3P₂2t² + 3P₂t³ + 3 P₁ t² - 3 P₁ t³ + P₃t³
+		//      = P₀ - 3P₀t + 3P₂t - 3P₂2t² + 3P₀t² + 3 P₁ t² + 3P₂t³ - 3 P₁ t³ + P₃t³ - P₀t³
+		//      = P₀ + (-3P₀ + 3P₂)t + (-3P₂2 + 3P₀ + 3 P₁)t² + (3P₂ - 3 P₁ + P₃ - P₀)t³
+		//      = P₀ + (-3P₀ + 3P₂)t + (-6P₂ + 3P₀ + 3 P₁)t² + (3P₂ - 3 P₁ + P₃ - P₀)t³
+		//      = P₀ + 3(-P₀ + P₂)t + 3(-2P₂ + P₀ + P₁)t² + (3P₂ - 3 P₁ + P₃ - P₀)t³
+		const components = [
+			p0,
+			p2.minus(p0).times(3), // t
+			p0.minus(p2.times(2)).plus(p1).times(3), // t²
+			p2.times(3).minus(p1.times(3)).plus(p3).minus(p0), // t³
+		];
+		this.xComponent = new Polynomial(components.map(part => part.x));
+		this.yComponent = new Polynomial(components.map(part => part.y));
+		this.zComponent = new Polynomial(components.map(part => part.z));
 	}
 
 	/**
@@ -1114,9 +1229,8 @@ export class CubicBezierCurve extends SmoothVectorFunction {
 		mseFunction = SmoothFunction.ofFn(
 			t => (
 				mseWithPoints(p0, p1(minimizingT1), p2(t), p3)
-			)
+			),
 		).taylorApproximated(5, 0.5);
-
 
 		const minimizingT2 = mseFunction.minimize(0, 1);
 		const curve = new CubicBezierCurve(p0, p1(minimizingT1), p2(minimizingT2), p3);

@@ -7,7 +7,7 @@ import { Pointer, PointerDevice, InputEvtType, PointerEvt, EditorEventType, Edit
 import Command from "./commands/Command";
 import UndoRedoHistory from './UndoRedoHistory';
 import Viewport from './Viewport';
-import Notifier from '@joplin/lib/Notifier';
+import EventDispatcher from '@joplin/lib/EventDispatcher';
 
 export class ImageEditor {
 	// Wrapper around the viewport and toolbar
@@ -22,14 +22,14 @@ export class ImageEditor {
 	// private toolbar: EditorToolbar;
 	public viewport: Viewport;
 	public toolController: ToolController;
-	public notifier: Notifier<EditorEventType, EditorEventDataType>;
+	public notifier: EventDispatcher<EditorEventType, EditorEventDataType>;
 
 	public constructor(parent: HTMLElement) {
 		this.viewport = new Viewport();
 		this.image = new EditorImage();
 		this.history = new UndoRedoHistory(this);
 		this.toolController = new ToolController(this);
-		this.notifier = new Notifier();
+		this.notifier = new EventDispatcher();
 
 		this.container = document.createElement('div');
 		this.canvas = document.createElement('canvas');

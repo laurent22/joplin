@@ -1,5 +1,5 @@
 
-import { Mat33, Vec2, Rect2, SmoothFunction, CubicBezierCurve, SmoothVectorFunction, Vec3 } from './math';
+import { Mat33, Vec2, Rect2, SmoothFunction, CubicBezierCurve, SmoothVectorFunction, Vec3, Polynomial, Point2 } from './math';
 
 // Custom matchers. See
 // https://jestjs.io/docs/expect#expectextendmatchers
@@ -374,7 +374,32 @@ describe('Smooth functions', () => {
 	});
 });
 
+describe('Polynomials', () => {
+	it('Differentiation', () => {
+		// 1 + 2t + 3t² + 4t³
+		const poly = new Polynomial([ 1, 2, 3, 4 ]);
+		expect(poly.derivative.toString()).toBe('2 + 6t + 12t^2');
+		expect(poly.derivativeAt(0)).toBe(2);
+		expect(poly.derivativeAt(1)).toBe(2 + 6 + 12);
+	});
+	it('Multiplication', () => {
+		// 1 + 2t
+		const poly = new Polynomial([ 1, 2 ]);
+		expect(poly.times(poly).toString()).toBe('1 + 4t + 4t^2');
+	});
+});
+
 describe('Bézier curves', () => {
+	it('Evaluating', () => {
+		// P₀(1 - t)³ + 3 P₁ (1 - t) t² + 3 P₂ (1 - t)² t + P₃t³
+		const curve = new CubicBezierCurve(Vec2.of(0, 0), Vec2.of(1, 0), Vec2.of(0, 1), Vec2.of(1, 1));
+		expect(curve.at(0).x).toBeCloseTo(0);
+		expect(curve.at(0).y).toBeCloseTo(0);
+		expect(curve.at(1).x).toBeCloseTo(1);
+		expect(curve.at(1).y).toBeCloseTo(1);
+		expect(curve.at(0.5).x).toBeCloseTo(3 * (1 - 0.5) * 0.25 + 0.5 * 0.5 * 0.5);
+	});
+
 	describe('Approximation', () => {
 		const maxRuntime = 300; // ms
 		it('Approximation of a line', () => {
@@ -383,32 +408,30 @@ describe('Bézier curves', () => {
 
 			const startTime = (new Date()).getTime();
 
-			const { curve, error } = CubicBezierCurve.approximationOf(points);
-			expect(error).toBeLessThan(fuzz);
+			const { curve } = CubicBezierCurve.approximationOf(points);
 			expect(curve.at(0.5).normalized()).objEq(Vec2.of(0.5, 0.5).normalized(), fuzz);
+			expect(curve.at(0)).objEq(Vec2.of(0, 0), fuzz);
+			expect(curve.at(1)).objEq(Vec2.of(3, 3), fuzz);
+			//expect(error).toBeLessThan(fuzz);
 
 			// Should be reasonably fast (ideally < 30ms)
 			expect((new Date()).getTime() - startTime).toBeLessThan(maxRuntime);
 		});
 
-		// it('Approximation of a quadratic', () => {
-		// const fuzz = 0.01;
-		// const points: Point2[] = [ ];
-		// for (let i = 0; i < 200; i++) {
-		// let t = i / 10;
-		// points.push(Vec2.of(t, t * t));
-		// }
-		//
-		// const startTime = (new Date()).getTime();
-		//
-		// const { curve, error } = CubicBezierCurve.approximationOf(points);
-		//
-		// expect(curve.at(0)).objEq(Vec2.of(0, 0), fuzz);
-		// expect(curve.at(0.5)).objEq(Vec2.of(1, 10), fuzz);
-		// expect(error).toBeLessThan(fuzz);
-		//
-		// expect((new Date()).getTime() - startTime).toBeLessThan(maxRuntime);
-		// });
+		it('Approximation of a quadratic', () => {
+			const fuzz = 0.01;
+			const points: Point2[] = [ ];
+			for (let i = 0; i < 200; i++) {
+				let t = i / 10;
+				points.push(Vec2.of(t, t * t));
+			}
+			const startTime = (new Date()).getTime();
+			const { curve } = CubicBezierCurve.approximationOf(points);
+			expect(curve.at(0)).objEq(Vec2.of(0, 0), fuzz);
+			//expect(curve.at(0.5)).objEq(Vec2.of(1, 10), fuzz);
+			//expect(error).toBeLessThan(fuzz);
+			expect((new Date()).getTime() - startTime).toBeLessThan(maxRuntime);
+		});
 	});
 });
 

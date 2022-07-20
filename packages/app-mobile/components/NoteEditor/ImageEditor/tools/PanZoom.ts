@@ -1,7 +1,7 @@
 
 import { ImageEditor } from '../editor';
 import { Mat33, Point2, Vec3 } from '../math';
-import { Pointer, PointerEvt, WheelEvt } from '../types';
+import { Pointer, PointerDevice, PointerEvt, WheelEvt } from '../types';
 import { Viewport } from '../Viewport';
 import BaseTool from './BaseTool';
 import { ToolType } from './ToolController';
@@ -13,6 +13,23 @@ interface PinchData {
 	dist: number;
 }
 
+export enum PanZoomMode {
+	/**
+	 * Handle one-pointer gestures (touchscreen only unless AnyDevice is set)
+	 * @see AnyDevice
+	 */
+	OneFingerGestures = 0x1,
+
+	/**
+	 * Handle two-pointer gestures (touchscreen only unless AnyDevice is set)
+	 * @see AnyDevice
+	 */
+	TwoFingerGestures = 0x1 << 1,
+
+	/** Handle gestures from any device, rather than just touch */
+	AnyDevice = 0x1 << 2,
+};
+
 export default class PanZoom extends BaseTool {
 	public readonly kind: ToolType.PanZoom = ToolType.PanZoom;
 	private transform: Viewport.ViewportTransform;
@@ -21,7 +38,7 @@ export default class PanZoom extends BaseTool {
 	private lastDist: number;
 	private lastScreenCenter: Point2;
 
-	public constructor(private editor: ImageEditor) {
+	public constructor(private editor: ImageEditor, private mode: PanZoomMode) {
 		super();
 	}
 
@@ -36,27 +53,34 @@ export default class PanZoom extends BaseTool {
 		return { canvasCenter, screenCenter, angle, dist };
 	}
 
-	public onPointerDown({ allPointers }: PointerEvt): boolean {
-		if (allPointers.length === 2) {
-			this.transform = new Viewport.ViewportTransform(Mat33.identity);
+	private pointersHaveCorrectDeviceType(pointers: Pointer[]) {
+		return this.mode & PanZoomMode.AnyDevice || pointers.every(pointer => pointer.device === PointerDevice.Touch);
+	}
 
+	public onPointerDown({ allPointers }: PointerEvt): boolean {
+		let handlingGesture;
+
+		if (!this.pointersHaveCorrectDeviceType(allPointers)) {
+			handlingGesture = false;
+		} else if (allPointers.length === 2 && this.mode & PanZoomMode.TwoFingerGestures) {
 			const { screenCenter, angle, dist } = this.computePinchData(allPointers[0], allPointers[1]);
 			this.lastAngle = angle;
 			this.lastDist = dist;
 			this.lastScreenCenter = screenCenter;
-			return true;
+			handlingGesture = true;
+		} else if (allPointers.length === 1 && this.mode & PanZoomMode.OneFingerGestures) {
+			this.lastScreenCenter = allPointers[0].screenPos;
+			handlingGesture = true;
 		}
 
-		return false;
+		if (handlingGesture) {
+			this.transform ??= new Viewport.ViewportTransform(Mat33.identity);
+		}
+
+		return handlingGesture;
 	}
 
-	public onPointerMove({ allPointers }: PointerEvt): void {
-		if (allPointers.length !== 2) {
-			return;
-		}
-
-		this.transform ??= new Viewport.ViewportTransform(Mat33.identity);
-
+	private handleTwoFingerMove(allPointers: Pointer[]) {
 		const { screenCenter, canvasCenter, angle, dist } = this.computePinchData(allPointers[0], allPointers[1]);
 
 		// Use transformVec3 to avoid translating the delta
@@ -68,11 +92,29 @@ export default class PanZoom extends BaseTool {
 		this.lastScreenCenter = screenCenter;
 		this.lastDist = dist;
 		this.lastAngle = angle;
-
-		this.transform.unapply(this.editor);
 		this.transform = new Viewport.ViewportTransform(
 			this.transform.transform.rightMul(transformUpdate)
 		);
+	}
+
+	private handleOneFingerMove(pointer: Pointer) {
+		this.transform = new Viewport.ViewportTransform(
+			this.transform.transform.rightMul(
+				Mat33.translation(pointer.screenPos.minus(this.lastScreenCenter))
+			)
+		);
+		this.lastScreenCenter = pointer.screenPos;
+	}
+
+	public onPointerMove({ allPointers }: PointerEvt): void {
+		this.transform ??= new Viewport.ViewportTransform(Mat33.identity);
+
+		this.transform.unapply(this.editor);
+		if (allPointers.length === 2 && this.mode & PanZoomMode.TwoFingerGestures) {
+			this.handleTwoFingerMove(allPointers);
+		} else if (allPointers.length === 1 && this.mode & PanZoomMode.OneFingerGestures) {
+			this.handleOneFingerMove(allPointers[0]);
+		}
 		this.transform.apply(this.editor);
 	}
 

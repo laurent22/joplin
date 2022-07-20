@@ -1,8 +1,10 @@
 import { PointerEvtListener, WheelEvt, PointerEvt } from '../types';
 import { ToolType } from './ToolController';
+import ToolEnabledGroup from './ToolEnabledGroup';
 
 export default abstract class BaseTool implements PointerEvtListener {
-	protected enabled: boolean = true;
+	private enabled: boolean = true;
+	private group: ToolEnabledGroup|null = null;
 
 	public abstract onPointerDown(event: PointerEvt): boolean;
 	public abstract onPointerMove(event: PointerEvt): void;
@@ -16,10 +18,27 @@ export default abstract class BaseTool implements PointerEvtListener {
 
 	public setEnabled(enabled: boolean) {
 		this.enabled = enabled;
+
+		// Ensure that at most one tool in the group is enabled.
+		if (enabled) {
+			this.group.notifyEnabled(this);
+		}
 	}
 
 	public isEnabled(): boolean {
 		return this.enabled;
+	}
+
+	/**
+	 * Connect this tool to a set of other tools, ensuring that at most one
+	 * of the tools in the group is enabled.
+	 */
+	public setToolGroup(group: ToolEnabledGroup) {
+		if (this.isEnabled()) {
+			group.notifyEnabled(this);
+		}
+
+		this.group = group;
 	}
 }
 

@@ -2,13 +2,17 @@ import Command from "../commands/Command";
 import { InputEvtType, InputEvt, } from "../types";
 import ImageEditor from "../editor";
 import BaseTool from "./BaseTool";
-import PanZoom from "./PanZoom";
+import PanZoom, { PanZoomMode } from "./PanZoom";
 import Pen from "./Pen";
+import ToolEnabledGroup from "./ToolEnabledGroup";
 
 
 
 export enum ToolType {
+	TouchPanZoom,
 	Pen,
+	Selection,
+	Eraser,
 	PanZoom,
 }
 
@@ -21,10 +25,20 @@ export default class ToolController {
 	private activeTool: BaseTool|null;
 
 	public constructor(editor: ImageEditor) {
-		this.tools = [
+		const primaryToolEnabledGroup = new ToolEnabledGroup();
+		const touchPanZoom = new PanZoom(editor, PanZoomMode.OneFingerGestures);
+		const primaryTools = [
+			new SelectionTool(editor),
+			new Eraser(editor),
 			new Pen(editor),
-			new PanZoom(editor),
 		];
+		this.tools = [
+			touchPanZoom,
+			...primaryTools,
+			new PanZoom(editor, PanZoomMode.TwoFingerGestures | PanZoomMode.AnyDevice),
+		];
+		primaryTools.forEach(tool => tool.setToolGroup(primaryToolEnabledGroup));
+		touchPanZoom.setEnabled(false);
 		this.activeTool = null;
 	}
 

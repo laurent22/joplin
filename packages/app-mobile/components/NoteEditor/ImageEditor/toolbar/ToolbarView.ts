@@ -4,6 +4,8 @@ import { ToolbarButton, ToolbarButtonId, ToolbarButtonSpec, ToolbarButtonType, T
 
 /**
  * An HTML implementation of the toolbar's main display.
+ * 
+ * TODO: Remove this file — it has been replaced by HTMLToolbar
  */
 export default class ToolbarView {
 	private container: HTMLElement;
