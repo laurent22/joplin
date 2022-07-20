@@ -161,8 +161,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		this.onJoplinLinkClick_ = async (msg: string) => {
 			try {
-				if (msg.indexOf('joplin://') === 0) {
-					const resourceUrlInfo = urlUtils.parseResourceUrl(msg);
+				const resourceUrlInfo = urlUtils.parseResourceUrl(msg);
+				if (resourceUrlInfo) {
 					const itemId = resourceUrlInfo.itemId;
 					const item = await BaseItem.loadItemById(itemId);
 					if (!item) throw new Error(_('No item with ID %s', itemId));

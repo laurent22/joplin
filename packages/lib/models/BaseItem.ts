@@ -418,7 +418,7 @@ export default class BaseItem extends BaseModel {
 		const share = item.share_id ? await this.shareService().shareById(item.share_id) : null;
 		const serialized = await ItemClass.serialize(item, shownKeys);
 
-		if (!getEncryptionEnabled() || !ItemClass.encryptionSupported() || !itemCanBeEncrypted(item)) {
+		if (!getEncryptionEnabled() || !ItemClass.encryptionSupported() || !itemCanBeEncrypted(item, share)) {
 			// Normally not possible since itemsThatNeedSync should only return decrypted items
 			if (item.encryption_applied) throw new JoplinError('Item is encrypted but encryption is currently disabled', 'cannotSyncEncrypted');
 			return serialized;
