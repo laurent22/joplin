@@ -1,18 +1,20 @@
 import { PointerEvt } from "../types";
 import BaseTool from "./BaseTool";
-
+import ImageEditor from '../editor';
 
 export default class Eraser extends BaseTool {
-    public constructor() {
+    public constructor(private editor: ImageEditor) {
         super();
     }
 
 
     public onPointerDown(event: PointerEvt): boolean {
-        throw new Error("Method not implemented.");
+		// TODO:
     }
     public onPointerMove(event: PointerEvt): void {
-        throw new Error("Method not implemented.");
+        // TODO: Draw line from current to last point.
+		//       Did it intersect anything?
+		//       Remove things it crossed.
     }
     public onPointerUp(event: PointerEvt): void {
         throw new Error("Method not implemented.");

@@ -903,6 +903,9 @@ packages/app-mobile/components/NoteEditor/ImageEditor/Viewport.js.map
 packages/app-mobile/components/NoteEditor/ImageEditor/commands/Command.d.ts
 packages/app-mobile/components/NoteEditor/ImageEditor/commands/Command.js
 packages/app-mobile/components/NoteEditor/ImageEditor/commands/Command.js.map
+packages/app-mobile/components/NoteEditor/ImageEditor/commands/Erase.d.ts
+packages/app-mobile/components/NoteEditor/ImageEditor/commands/Erase.js
+packages/app-mobile/components/NoteEditor/ImageEditor/commands/Erase.js.map
 packages/app-mobile/components/NoteEditor/ImageEditor/editor.d.ts
 packages/app-mobile/components/NoteEditor/ImageEditor/editor.js
 packages/app-mobile/components/NoteEditor/ImageEditor/editor.js.map
@@ -918,6 +921,9 @@ packages/app-mobile/components/NoteEditor/ImageEditor/rendering/AbstractRenderer
 packages/app-mobile/components/NoteEditor/ImageEditor/rendering/CanvasRenderer.d.ts
 packages/app-mobile/components/NoteEditor/ImageEditor/rendering/CanvasRenderer.js
 packages/app-mobile/components/NoteEditor/ImageEditor/rendering/CanvasRenderer.js.map
+packages/app-mobile/components/NoteEditor/ImageEditor/toolbar/HTMLToolbar.d.ts
+packages/app-mobile/components/NoteEditor/ImageEditor/toolbar/HTMLToolbar.js
+packages/app-mobile/components/NoteEditor/ImageEditor/toolbar/HTMLToolbar.js.map
 packages/app-mobile/components/NoteEditor/ImageEditor/toolbar/Toolbar.d.ts
 packages/app-mobile/components/NoteEditor/ImageEditor/toolbar/Toolbar.js
 packages/app-mobile/components/NoteEditor/ImageEditor/toolbar/Toolbar.js.map
@@ -930,6 +936,9 @@ packages/app-mobile/components/NoteEditor/ImageEditor/toolbar/types.js.map
 packages/app-mobile/components/NoteEditor/ImageEditor/tools/BaseTool.d.ts
 packages/app-mobile/components/NoteEditor/ImageEditor/tools/BaseTool.js
 packages/app-mobile/components/NoteEditor/ImageEditor/tools/BaseTool.js.map
+packages/app-mobile/components/NoteEditor/ImageEditor/tools/Eraser.d.ts
+packages/app-mobile/components/NoteEditor/ImageEditor/tools/Eraser.js
+packages/app-mobile/components/NoteEditor/ImageEditor/tools/Eraser.js.map
 packages/app-mobile/components/NoteEditor/ImageEditor/tools/PanZoom.d.ts
 packages/app-mobile/components/NoteEditor/ImageEditor/tools/PanZoom.js
 packages/app-mobile/components/NoteEditor/ImageEditor/tools/PanZoom.js.map
@@ -939,6 +948,9 @@ packages/app-mobile/components/NoteEditor/ImageEditor/tools/Pen.js.map
 packages/app-mobile/components/NoteEditor/ImageEditor/tools/ToolController.d.ts
 packages/app-mobile/components/NoteEditor/ImageEditor/tools/ToolController.js
 packages/app-mobile/components/NoteEditor/ImageEditor/tools/ToolController.js.map
+packages/app-mobile/components/NoteEditor/ImageEditor/tools/ToolEnabledGroup.d.ts
+packages/app-mobile/components/NoteEditor/ImageEditor/tools/ToolEnabledGroup.js
+packages/app-mobile/components/NoteEditor/ImageEditor/tools/ToolEnabledGroup.js.map
 packages/app-mobile/components/NoteEditor/ImageEditor/types.d.ts
 packages/app-mobile/components/NoteEditor/ImageEditor/types.js
 packages/app-mobile/components/NoteEditor/ImageEditor/types.js.map
@@ -1119,12 +1131,6 @@ packages/lib/JoplinServerApi.js.map
 packages/lib/Logger.d.ts
 packages/lib/Logger.js
 packages/lib/Logger.js.map
-packages/lib/Notifier.d.ts
-packages/lib/Notifier.js
-packages/lib/Notifier.js.map
-packages/lib/Notifier.test.d.ts
-packages/lib/Notifier.test.js
-packages/lib/Notifier.test.js.map
 packages/lib/ObjectUtils.d.ts
 packages/lib/ObjectUtils.js
 packages/lib/ObjectUtils.js.map

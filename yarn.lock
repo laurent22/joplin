@@ -3830,12 +3830,14 @@ __metadata:
     "@types/react-native": ^0.64.4
     assert-browserify: ^2.0.0
     babel-plugin-module-resolver: ^4.1.0
+    bezier-js: ^6.1.0
     buffer: ^5.0.8
     constants-browserify: ^1.0.0
     crypto-browserify: ^3.12.0
     events: ^3.2.0
     execa: ^4.0.0
     fs-extra: ^8.1.0
+    gl-matrix: ^3.4.3
     gulp: ^4.0.2
     jest: ^28.1.1
     jest-environment-jsdom: ^28.1.1
@@ -9057,6 +9059,13 @@ __metadata:
   version: 2.2.2
   resolution: "before-after-hook@npm:2.2.2"
   checksum: dc2e1ffe389e5afbef2a46790b1b5a50247ed57aba67649cfa9ec2552d248cc9278f222e72fb5a8ff59bbb39d78fbaa97e7234ead0c6b5e8418b67a8644ce207
+  languageName: node
+  linkType: hard
+
+"bezier-js@npm:^6.1.0":
+  version: 6.1.0
+  resolution: "bezier-js@npm:6.1.0"
+  checksum: 46b4133c821df152cf12f392313a94cd4a1a4649277367990970a2aefb8275999a594d35cff3bada92947f5e6fee423a54ba89857a3954fdcd8f04f0d475e488
   languageName: node
   linkType: hard
 
@@ -16648,6 +16657,13 @@ __metadata:
   dependencies:
     gh-got: ^6.0.0
   checksum: ff3e50c63d85cef0f24cac2aa25be99b91505e1f719911b9794007689672ba73eb73fd1020e1540ccce2d770e0b03543f4904841a2720d955ec8ef1c6ca4bb2d
+  languageName: node
+  linkType: hard
+
+"gl-matrix@npm:^3.4.3":
+  version: 3.4.3
+  resolution: "gl-matrix@npm:3.4.3"
+  checksum: c47830ba727f3d0fab635c48135af96aef66274079a3e0afd6f68b68c98eae9fc1bcfdc7312fe2301e4fd22dd24c5e0f1b5d025960a208e50d07101ed8d940f9
   languageName: node
   linkType: hard
 
