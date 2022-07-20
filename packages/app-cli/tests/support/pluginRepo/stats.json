@@ -1,14 +1,4 @@
 {
-	"plugin-for-testing": {
-		"0.0.1": {
-			"downloadCount": 10,
-			"createdAt": "2021-06-01T08:35:12Z"
-		},
-		"0.0.2": {
-			"downloadCount": 20,
-			"createdAt": "2021-06-01T08:31:08Z"
-		}
-	},
 	"ambrt.backlinksToNote": {
 		"1.0.2": {
 			"downloadCount": 53,

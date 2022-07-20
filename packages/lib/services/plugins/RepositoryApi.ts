@@ -105,8 +105,8 @@ export default class RepositoryApi {
 
 	public async loadStats() {
 		try {
-			const statsText = await fetch(this.repoFileUrl('stats.json'));
-			const stats = JSON.parse(await statsText.text());
+			const statsText = await this.fetchText('stats.json');
+			const stats = JSON.parse(statsText);
 			if (!stats) throw new Error('Invalid or missing JSON');
 			let tempDownloadCount: number = 0;
 			let created_date = '';
