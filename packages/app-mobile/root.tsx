@@ -70,7 +70,7 @@ const { SideMenuContentNote } = require('./components/side-menu-content-note.js'
 const { DatabaseDriverReactNative } = require('./utils/database-driver-react-native');
 import { reg } from '@joplin/lib/registry';
 const { defaultState } = require('@joplin/lib/reducer');
-const { FileApiDriverLocal } = require('@joplin/lib/file-api-driver-local.js');
+const { FileApiDriverLocal } = require('@joplin/lib/file-api-driver-local');
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
 import SearchEngine from '@joplin/lib/services/searchengine/SearchEngine';
 const WelcomeUtils = require('@joplin/lib/WelcomeUtils');
@@ -872,7 +872,8 @@ class AppComponent extends React.Component {
 			Config: { screen: ConfigScreen },
 		};
 
-		const statusBarStyle = theme.appearance === 'light' ? 'dark-content' : 'light-content';
+		// const statusBarStyle = theme.appearance === 'light-content';
+		const statusBarStyle = 'light-content';
 
 		return (
 			<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
@@ -889,7 +890,8 @@ class AppComponent extends React.Component {
 					}}
 				>
 					<StatusBar barStyle={statusBarStyle} />
-					<MenuContext style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
+					<MenuContext style={{ flex: 1 }}>
+						<SafeAreaView style={{ flex: 0, backgroundColor: theme.backgroundColor2 }}/>
 						<SafeAreaView style={{ flex: 1 }}>
 							<View style={{ flex: 1, backgroundColor: theme.backgroundColor }}>
 								<AppNav screens={appNavInit} />

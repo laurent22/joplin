@@ -1,5 +1,17 @@
 # Joplin iOS app changelog
 
+## [ios-v12.8.1](https://github.com/laurent22/joplin/releases/tag/ios-v12.8.1) - 2022-06-06T10:56:27Z
+
+- Improved: Automatically start sync after setting the sync parameters (ff066ba)
+- Improved: Color of Date-Time text changed to match theme (#6279 by Ayush Srivastava)
+- Improved: Make search engine filter keywords case insensitive (#6267) (#6266 by [@JackGruber](https://github.com/JackGruber))
+- Improved: Sort sync target options (814a5a0)
+- Fixed: "Move Note" dropdown menu can be very narrow (#6306) (#3564 by Ayush Srivastava)
+- Fixed: Error when pressing undo or redo button while editor is closed (#6426) (#6328 by Tolulope Malomo)
+- Fixed: IOS and Dropbox synchronisation not working on iOS 15 (#6375)
+- Fixed: Remove white border around Beta Editor (#6326) (#6318 by Henry Heino)
+- Fixed: Support inserting attachments from Beta Editor (#6325) (#6324 by Henry Heino)
+
 ## [ios-v12.7.2](https://github.com/laurent22/joplin/releases/tag/ios-v12.7.2) - 2022-04-15T11:07:27Z
 
 - Improved: Allow filtering tags in tag dialog (#6221 by [@shinglyu](https://github.com/shinglyu))

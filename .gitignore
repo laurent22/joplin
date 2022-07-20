@@ -960,6 +960,9 @@ packages/generator-joplin/generators/app/templates/src/index.js.map
 packages/htmlpack/src/index.d.ts
 packages/htmlpack/src/index.js
 packages/htmlpack/src/index.js.map
+packages/lib/ArrayUtils.d.ts
+packages/lib/ArrayUtils.js
+packages/lib/ArrayUtils.js.map
 packages/lib/AsyncActionQueue.d.ts
 packages/lib/AsyncActionQueue.js
 packages/lib/AsyncActionQueue.js.map
@@ -1479,6 +1482,9 @@ packages/lib/services/keychain/KeychainServiceDriver.node.js.map
 packages/lib/services/keychain/KeychainServiceDriverBase.d.ts
 packages/lib/services/keychain/KeychainServiceDriverBase.js
 packages/lib/services/keychain/KeychainServiceDriverBase.js.map
+packages/lib/services/plugins/BasePlatformImplementation.d.ts
+packages/lib/services/plugins/BasePlatformImplementation.js
+packages/lib/services/plugins/BasePlatformImplementation.js.map
 packages/lib/services/plugins/BasePluginRunner.d.ts
 packages/lib/services/plugins/BasePluginRunner.js
 packages/lib/services/plugins/BasePluginRunner.js.map
@@ -1923,6 +1929,9 @@ packages/plugins/ToggleSidebars/api/types.js.map
 packages/plugins/ToggleSidebars/src/index.d.ts
 packages/plugins/ToggleSidebars/src/index.js
 packages/plugins/ToggleSidebars/src/index.js.map
+packages/react-native-saf-x/src/index.d.ts
+packages/react-native-saf-x/src/index.js
+packages/react-native-saf-x/src/index.js.map
 packages/renderer/HtmlToHtml.d.ts
 packages/renderer/HtmlToHtml.js
 packages/renderer/HtmlToHtml.js.map
@@ -1992,6 +2001,9 @@ packages/renderer/MdToHtml/validateLinks.js.map
 packages/renderer/headerAnchor.d.ts
 packages/renderer/headerAnchor.js
 packages/renderer/headerAnchor.js.map
+packages/renderer/highlight.d.ts
+packages/renderer/highlight.js
+packages/renderer/highlight.js.map
 packages/renderer/htmlUtils.d.ts
 packages/renderer/htmlUtils.js
 packages/renderer/htmlUtils.js.map
@@ -2088,6 +2100,9 @@ packages/tools/website/updateNews.js.map
 packages/tools/website/utils/frontMatter.d.ts
 packages/tools/website/utils/frontMatter.js
 packages/tools/website/utils/frontMatter.js.map
+packages/tools/website/utils/news.d.ts
+packages/tools/website/utils/news.js
+packages/tools/website/utils/news.js.map
 packages/tools/website/utils/openGraph.d.ts
 packages/tools/website/utils/openGraph.js
 packages/tools/website/utils/openGraph.js.map

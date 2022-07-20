@@ -167,6 +167,7 @@ function NoteListControls(props: Props) {
 
 const mapStateToProps = (state: AppState) => {
 	return {
+		showNewNoteButtons: state.focusedField !== 'globalSearch',
 		sortOrderButtonsVisible: state.settings['notes.sortOrder.buttonsVisible'],
 		sortOrderField: state.settings['notes.sortOrder.field'],
 		sortOrderReverse: state.settings['notes.sortOrder.reverse'],

@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/explicit-member-accessibility */
 import Slider from '@react-native-community/slider';
 const React = require('react');
-const { Platform, Linking, View, Switch, StyleSheet, ScrollView, Text, Button, TouchableOpacity, TextInput, Alert, PermissionsAndroid } = require('react-native');
+const { Platform, Linking, View, Switch, StyleSheet, ScrollView, Text, Button, TouchableOpacity, TextInput, Alert, PermissionsAndroid, TouchableNativeFeedback } = require('react-native');
 import Setting, { AppType } from '@joplin/lib/models/Setting';
 import NavService from '@joplin/lib/services/NavService';
 import ReportService from '@joplin/lib/services/ReportService';
@@ -20,6 +21,7 @@ const { Dropdown } = require('../Dropdown.js');
 const { themeStyle } = require('../global-style.js');
 const shared = require('@joplin/lib/components/shared/config-shared.js');
 import SyncTargetRegistry from '@joplin/lib/SyncTargetRegistry';
+import { openDocumentTree } from '@joplin/react-native-saf-x';
 const RNFS = require('react-native-fs');
 
 class ConfigScreenComponent extends BaseScreenComponent {
@@ -37,11 +39,26 @@ class ConfigScreenComponent extends BaseScreenComponent {
 			creatingReport: false,
 			profileExportStatus: 'idle',
 			profileExportPath: '',
+			fileSystemSyncPath: Setting.value('sync.2.path'),
 		};
 
 		this.scrollViewRef_ = React.createRef();
 
 		shared.init(this, reg);
+
+		this.selectDirectoryButtonPress = async () => {
+			try {
+				const doc = await openDocumentTree(true);
+				if (doc?.uri) {
+					this.setState({ fileSystemSyncPath: doc.uri });
+					shared.updateSettingValue(this, 'sync.2.path', doc.uri);
+				} else {
+					throw new Error('User cancelled operation');
+				}
+			} catch (e) {
+				reg.logger().info('Didn\'t pick sync dir: ', e);
+			}
+		};
 
 		this.checkSyncConfig_ = async () => {
 			// to ignore TLS erros we need to chage the global state of the app, if the check fails we need to restore the original state
@@ -58,8 +75,15 @@ class ConfigScreenComponent extends BaseScreenComponent {
 		};
 
 		this.saveButton_press = async () => {
-			if (this.state.changedSettingKeys.includes('sync.target') && this.state.settings['sync.target'] === SyncTargetRegistry.nameToId('filesystem') && !(await this.checkFilesystemPermission())) {
-				Alert.alert(_('Warning'), _('In order to use file system synchronisation your permission to write to external storage is required.'));
+			if (this.state.changedSettingKeys.includes('sync.target') && this.state.settings['sync.target'] === SyncTargetRegistry.nameToId('filesystem')) {
+				if (Platform.OS === 'android') {
+					if (Platform.Version < 29) {
+						if (!(await this.checkFilesystemPermission())) {
+							Alert.alert(_('Warning'), _('In order to use file system synchronisation your permission to write to external storage is required.'));
+						}
+					}
+				}
+
 				// Save settings anyway, even if permission has not been granted
 			}
 
@@ -476,6 +500,20 @@ class ConfigScreenComponent extends BaseScreenComponent {
 				</View>
 			);
 		} else if (md.type == Setting.TYPE_STRING) {
+			if (md.key === 'sync.2.path' && Platform.OS === 'android' && Platform.Version > 28) {
+				return (
+					<TouchableNativeFeedback key={key} onPress={this.selectDirectoryButtonPress} style={this.styles().settingContainer}>
+						<View style={this.styles().settingContainer}>
+							<Text key="label" style={this.styles().settingText}>
+								{md.label()}
+							</Text>
+							<Text style={this.styles().settingControl}>
+								{this.state.fileSystemSyncPath}
+							</Text>
+						</View>
+					</TouchableNativeFeedback>
+				);
+			}
 			return (
 				<View key={key} style={this.styles().settingContainer}>
 					<Text key="label" style={this.styles().settingText}>

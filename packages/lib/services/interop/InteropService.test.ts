@@ -9,7 +9,7 @@ import Resource from '../../models/Resource';
 import * as fs from 'fs-extra';
 import { FolderEntity, NoteEntity, ResourceEntity } from '../database/types';
 import { ModelType } from '../../BaseModel';
-const ArrayUtils = require('../../ArrayUtils');
+import * as ArrayUtils from '../../ArrayUtils';
 
 async function recreateExportDir() {
 	const dir = exportDir();
