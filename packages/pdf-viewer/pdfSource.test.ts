@@ -1,7 +1,8 @@
 import { PdfData } from './pdfSource';
+import * as pdfjsLib from 'pdfjs-dist';
+
 const path = require('path');
 const fs = require('fs');
-const pdfjsLib = require('pdfjs-dist');
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = require('pdfjs-dist/legacy/build/pdf.worker.entry');
 

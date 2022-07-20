@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { render } from 'react-dom';
-const pdfjsLib = require('pdfjs-dist');
+import * as pdfjsLib from 'pdfjs-dist';
 import useIsFocused from './hooks/useIsFocused';
 import { PdfData } from './pdfSource';
 import VerticalPages from './VerticalPages';

@@ -1,4 +1,4 @@
-const pdfjsLib = require('pdfjs-dist');
+import * as pdfjsLib from 'pdfjs-dist';
 
 
 export interface ScaledSize {
