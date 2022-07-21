@@ -19,7 +19,7 @@ class Command extends BaseCommand {
 		const destination = args['notebook'];
 		let folder = null;
 
-		if (destination != 'root') {
+		if (destination !== 'root') {
 			folder = await app().loadItem(BaseModel.TYPE_FOLDER, destination);
 			if (!folder) throw new Error(_('Cannot find "%s".', destination));
 		}
@@ -35,14 +35,14 @@ class Command extends BaseCommand {
 			if (srcDups.length > 1) {
 				throw new Error(_('Ambiguous notebook "%s". Please use notebook id instead - look for parent id in metadata or use $b for current', pattern));
 			}
-			if (destination == 'root') {
+			if (destination === 'root') {
 				await Folder.moveToFolder(itemFolder.id, '');
 			} else {
 				await Folder.moveToFolder(itemFolder.id, folder.id);
 			}
 		} else {
 			const notes = await app().loadItems(BaseModel.TYPE_NOTE, pattern);
-			if (!notes.length) throw new Error(_('Cannot find "%s".', pattern));
+			if (notes.length === 0) throw new Error(_('Cannot find "%s".', pattern));
 			for (let i = 0; i < notes.length; i++) {
 				await Note.moveToFolder(notes[i].id, folder.id);
 			}
