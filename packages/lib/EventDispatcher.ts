@@ -1,10 +1,9 @@
 type Listener<Value> = (data: Value)=> void;
+type CallbackHandler<EventType> = (data: EventType)=> void;
 
 /**
- * Sends notifications/allows listening for events.
- *
- * @param EventKeyType Possible identifiers for events.
- * @param EventType Type of data associated with events.
+ * @param EventKeyType Event identifiers (e.g. an enum with ClickEvent)
+ * @param EventType Type of data sent along with the event.
  */
 export default class EventDispatcher<EventKeyType extends string|symbol|number, EventType> {
 	// Partial marks all fields as optional. To initialize with an empty object, this is required.
@@ -14,11 +13,6 @@ export default class EventDispatcher<EventKeyType extends string|symbol|number, 
 		this.listeners = {};
 	}
 
-	/**
-	 * Sends a notification to all listeners subscribed to the given [notificationKind].
-	 * @param eventType Type of the notification.
-	 * @param value Data associated with the notification.
-	 */
 	dispatch(eventName: EventKeyType, event: EventType = null) {
 		if (!this.listeners[eventName]) return;
 
@@ -28,21 +22,13 @@ export default class EventDispatcher<EventKeyType extends string|symbol|number, 
 		}
 	}
 
-	/**
-	 * Listen for a specific type of event.
-	 *
-	 * @param eventType Type of event that causes `callback` to be called.
-	 * @param callback Callback called when an event of `eventType` is fired.
-	 * @returns An object with a `remove` function. Calling `remove` unregisters the listener.
-	 */
-	on(eventName: EventKeyType, callback: (data: EventType)=> void) {
+	on(eventName: EventKeyType, callback: CallbackHandler<EventType>) {
 		if (!this.listeners[eventName]) this.listeners[eventName] = [];
 		this.listeners[eventName].push(callback);
 
 		return {
 			/**
-			 * Stop listening.
-			 * @return false if the listener has already been removed, true otherwise.
+			 * @returns false if the listener has already been removed, true otherwise.
 			 */
 			remove: () => {
 				const originalListeners = this.listeners[eventName];
@@ -53,12 +39,8 @@ export default class EventDispatcher<EventKeyType extends string|symbol|number, 
 		};
 	}
 
-	/**
-	 * Remove a listener. Equivalent to calling `.remove()` on the object returned
-	 * by `on`.
-	 * @see on
-	 */
-	off(eventName: EventKeyType, callback: (data: EventType)=> void) {
+	/** Equivalent to calling `.remove()` on the object returned by `on`. */
+	off(eventName: EventKeyType, callback: CallbackHandler<EventType>) {
 		if (!this.listeners[eventName]) return;
 
 		// Replace the current list of listeners with a new, shortened list.

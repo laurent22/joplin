@@ -6,25 +6,34 @@ enum TestKey {
     BazEvent,
 }
 
-describe('Adding/removing listeners', () => {
-	it('Adding a single listener and removing it', () => {
+describe('EventDispatcher', () => {
+	it('should trigger after adding a listener', () => {
 		const dispatcher = new EventDispatcher<TestKey, void>();
 		let calledCount = 0;
-		const handle = dispatcher.on(TestKey.FooEvent, () => {
+		dispatcher.on(TestKey.FooEvent, () => {
 			calledCount ++;
 		});
 
 		expect(calledCount).toBe(0);
 		dispatcher.dispatch(TestKey.FooEvent);
 		expect(calledCount).toBe(1);
+	});
+
+	it('should not trigger after removing a listener', () => {
+		const dispatcher = new EventDispatcher<TestKey, void>();
+		let calledCount = 0;
+		const handle = dispatcher.on(TestKey.FooEvent, () => {
+			calledCount ++;
+		});
 
 		handle.remove();
 
+		expect(calledCount).toBe(0);
 		dispatcher.dispatch(TestKey.FooEvent);
-		expect(calledCount).toBe(1);
+		expect(calledCount).toBe(0);
 	});
 
-	it('Adding multiple listeners, removing multiple', () => {
+	it('adding and removing listeners should not affect other listeners', () => {
 		const dispatcher = new EventDispatcher<TestKey, void>();
 
 		let fooCount = 0;
@@ -69,7 +78,7 @@ describe('Adding/removing listeners', () => {
 		expect(barListener3.remove()).toBe(true);
 	});
 
-	it('Removing a listener in a listener', () => {
+	it('should fire all un-removed listeners if removing a listener in a listener', () => {
 		const dispatcher = new EventDispatcher<TestKey, void>();
 
 		let count = 0;
@@ -91,10 +100,8 @@ describe('Adding/removing listeners', () => {
 
 		expect(count).toBe(6);
 	});
-});
 
-describe('Activation of listeners', () => {
-	it('Async activation', async () => {
+	it('should send correct data associated with events', () => {
 		const dispatcher = new EventDispatcher<TestKey, string>();
 
 		let lastResult = '';
@@ -113,18 +120,18 @@ describe('Activation of listeners', () => {
 		dispatcher.dispatch(TestKey.BarEvent, 'Testing.');
 		expect(lastResult).toBe('Test.');
 	});
-});
 
-it('JavaScript API', () => {
-	const Dispatcher = require('./EventDispatcher').default;
-	const dispatcher = new Dispatcher();
+	it('should work if imported using require(...).default', () => {
+		const Dispatcher = require('./EventDispatcher').default;
+		const dispatcher = new Dispatcher();
 
-	let pass = false;
-	dispatcher.on('Evnt', () => {
-		pass = true;
+		let pass = false;
+		dispatcher.on('Evnt', () => {
+			pass = true;
+		});
+
+		expect(pass).toBe(false);
+		dispatcher.dispatch('Evnt');
+		expect(pass).toBe(true);
 	});
-
-	expect(pass).toBe(false);
-	dispatcher.dispatch('Evnt');
-	expect(pass).toBe(true);
 });
