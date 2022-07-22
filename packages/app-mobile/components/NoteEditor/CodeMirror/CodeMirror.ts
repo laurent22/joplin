@@ -10,6 +10,7 @@
 // from NoteEditor.tsx.
 
 import createTheme from './theme';
+import decoratorExtension from './decorators';
 
 import { EditorState } from '@codemirror/state';
 import { markdown } from '@codemirror/lang-markdown';
@@ -85,6 +86,7 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 				highlightSelectionMatches(),
 				indentOnInput(),
 
+				decoratorExtension,
 				EditorView.lineWrapping,
 				EditorView.contentAttributes.of({ autocapitalize: 'sentence' }),
 				EditorView.updateListener.of((viewUpdate: ViewUpdate) => {

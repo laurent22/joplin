@@ -856,6 +856,12 @@ packages/app-mobile/components/NoteBodyViewer/hooks/useSource.js.map
 packages/app-mobile/components/NoteEditor/CodeMirror/CodeMirror.d.ts
 packages/app-mobile/components/NoteEditor/CodeMirror/CodeMirror.js
 packages/app-mobile/components/NoteEditor/CodeMirror/CodeMirror.js.map
+packages/app-mobile/components/NoteEditor/CodeMirror/decorators.d.ts
+packages/app-mobile/components/NoteEditor/CodeMirror/decorators.js
+packages/app-mobile/components/NoteEditor/CodeMirror/decorators.js.map
+packages/app-mobile/components/NoteEditor/CodeMirror/languages.d.ts
+packages/app-mobile/components/NoteEditor/CodeMirror/languages.js
+packages/app-mobile/components/NoteEditor/CodeMirror/languages.js.map
 packages/app-mobile/components/NoteEditor/CodeMirror/markdownMathParser.d.ts
 packages/app-mobile/components/NoteEditor/CodeMirror/markdownMathParser.js
 packages/app-mobile/components/NoteEditor/CodeMirror/markdownMathParser.js.map
