@@ -3,32 +3,44 @@ import { Point2, Rect2, Vec2 } from './math';
 import AbstractRenderer from './rendering/AbstractRenderer';
 import Command from "./commands/Command";
 import Viewport from './Viewport';
+import AbstractComponent from './components/AbstractComponent';
 
 /**
  * A tree of nodes contained within the editor
  */
 class EditorImage {
-	private root: ImageNode<ImageComponent>;
+	private root: ImageNode;
 
 	public constructor() {
-		this.root = new ImageNode<ImageComponent>();
+		this.root = new ImageNode();
 	}
 
-	private addElement(elem: ImageComponent): ImageNode<ImageComponent> {
+	private addElement(elem: AbstractComponent): ImageNode {
 		return this.root.addLeaf(elem);
+	}
+
+	/** @returns the parent of the given element, if it exists. */
+	public findParent(elem: AbstractComponent): ImageNode|null {
+		const candidates = this.root.getLeavesInRegion(elem.getBBox());
+		for (const candidate of candidates) {
+			if (candidate.getContent() === elem) {
+				return candidate;
+			}
+		}
+		return null;
 	}
 
 	public render(renderer: AbstractRenderer, viewport: Viewport) {
 		const minFraction = 0.01;
 		const leaves = this.root.getLeavesInRegion(viewport.visibleRect, minFraction);
 		for (const leaf of leaves) {
-			leaf.render(renderer, viewport.visibleRect);
+			leaf.getContent().render(renderer, viewport.visibleRect);
 		}
 	}
 
 	public static AddElementCommand = class implements Command {
-		private elementContainer: ImageNode<ImageComponent>;
-		public constructor(public readonly element: ImageComponent) {
+		private elementContainer: ImageNode;
+		public constructor(private readonly element: AbstractComponent) {
 		}
 
 		public apply(editor: ImageEditor) {
@@ -46,17 +58,10 @@ class EditorImage {
 
 export type AddElementCommand = typeof EditorImage.AddElementCommand.prototype;
 
-/**
- * Any component of the EditorImage (e.g. Text, Stroke, etc.)
- */
-export interface ImageComponent {
-	getBBox(): Rect2;
-	render(canvas: AbstractRenderer, visibleRect: Rect2): void;
-}
 
-export class ImageNode<T extends ImageComponent> {
-	private content?: T;
-	private children: ImageNode<T>[];
+export class ImageNode {
+	private content?: AbstractComponent;
+	private children: ImageNode[];
 	private bbox: Rect2;
 
 	// Estimates of this' relative center of mass and total mass.
@@ -65,7 +70,7 @@ export class ImageNode<T extends ImageComponent> {
 	private totalMass: number;
 
 	public constructor(
-		private parent?: ImageNode<T>
+		private parent?: ImageNode
 	) {
 		this.children = [];
 		this.bbox = Rect2.empty;
@@ -73,14 +78,19 @@ export class ImageNode<T extends ImageComponent> {
 		this.centerOfMass = Vec2.zero;
 	}
 
-	private getChildrenInRegion(region: Rect2): ImageNode<T>[] {
+	public getContent(): AbstractComponent|null {
+		return this.content;
+	}
+
+	private getChildrenInRegion(region: Rect2): ImageNode[] {
 		return this.children.filter(child => {
 			return child.getBBox().intersects(region);
 		});
 	}
 
-	public getLeavesInRegion(region: Rect2, minFractionOfRegion: number = 0): T[] {
-		const result: T[] = [];
+	/** @returns a list of `ImageNode`s with content (and thus no children). */
+	public getLeavesInRegion(region: Rect2, minFractionOfRegion: number = 0): ImageNode[] {
+		const result: ImageNode[] = [];
 
 		// Don't render if too small
 		if (this.bbox.maxDimension / region.maxDimension < minFractionOfRegion) {
@@ -88,28 +98,28 @@ export class ImageNode<T extends ImageComponent> {
 		}
 
 		if (this.content != null && this.getBBox().intersects(region)) {
-			result.push(this.content);
+			result.push(this);
 		}
 
 		const children = this.getChildrenInRegion(region);
 		for (const child of children) {
 			result.push(...child.getLeavesInRegion(region, minFractionOfRegion));
 			if (child.content) {
-				result.push(child.content);
+				result.push(child);
 			}
 		}
 
 		return result;
 	}
 
-	public addLeaf(leaf: T): ImageNode<T> {
+	public addLeaf(leaf: AbstractComponent): ImageNode {
 		if (this.content == null && this.children.length === 0) {
 			this.content = leaf;
 			this.recomputeBBox();
 
 			return this;
 		} else {
-			const newNode = new ImageNode<T>(this);
+			const newNode = new ImageNode(this);
 			newNode.addLeaf(leaf);
 			this.children.push(newNode);
 			this.recomputeBBox();
@@ -123,7 +133,7 @@ export class ImageNode<T extends ImageComponent> {
 		return this.bbox;
 	}
 
-	private changeParent(newParent: ImageNode<T>) {
+	private changeParent(newParent: ImageNode) {
 		if (this.parent) {
 			this.parent.children = this.parent.children.filter(child => child !== this);
 			this.parent.recomputeBBox();
@@ -135,7 +145,7 @@ export class ImageNode<T extends ImageComponent> {
 	/**
 	 * Removes outliers from this' children and adds them to the given target
 	 */
-	private removeOutliers(target: ImageNode<T>) {
+	private removeOutliers(target: ImageNode) {
 		if (this.content != null) {
 			return;
 		}
@@ -175,7 +185,7 @@ export class ImageNode<T extends ImageComponent> {
 
 		// Ensure each node either has content or children (but not both)
 		if (this.content != null && this.children.length > 0) {
-			const newNode = new ImageNode<T>(this);
+			const newNode = new ImageNode(this);
 			newNode.addLeaf(this.content);
 			this.content = null;
 			this.children.push(newNode);

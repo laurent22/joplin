@@ -3837,7 +3837,6 @@ __metadata:
     events: ^3.2.0
     execa: ^4.0.0
     fs-extra: ^8.1.0
-    gl-matrix: ^3.4.3
     gulp: ^4.0.2
     jest: ^28.1.1
     jest-environment-jsdom: ^28.1.1
@@ -6064,6 +6063,13 @@ __metadata:
   dependencies:
     "@babel/types": ^7.3.0
   checksum: a797ea09c72307569e3ee08aa3900ca744ce3091114084f2dc59b67a45ee7d01df7865252790dbfa787a7915ce892cdc820c9b920f3683292765fc656b08dc63
+  languageName: node
+  linkType: hard
+
+"@types/bezier-js@npm:^4.1.0":
+  version: 4.1.0
+  resolution: "@types/bezier-js@npm:4.1.0"
+  checksum: b786ee61e25ddace8cf56b6ebfe2140323a96dd8e166f0cf2204781144b35928306cbc300f72b8e1f15fd7f0d051c50dfa142983fe2ad34723313450e50dba2d
   languageName: node
   linkType: hard
 
@@ -16657,13 +16663,6 @@ __metadata:
   dependencies:
     gh-got: ^6.0.0
   checksum: ff3e50c63d85cef0f24cac2aa25be99b91505e1f719911b9794007689672ba73eb73fd1020e1540ccce2d770e0b03543f4904841a2720d955ec8ef1c6ca4bb2d
-  languageName: node
-  linkType: hard
-
-"gl-matrix@npm:^3.4.3":
-  version: 3.4.3
-  resolution: "gl-matrix@npm:3.4.3"
-  checksum: c47830ba727f3d0fab635c48135af96aef66274079a3e0afd6f68b68c98eae9fc1bcfdc7312fe2301e4fd22dd24c5e0f1b5d025960a208e50d07101ed8d940f9
   languageName: node
   linkType: hard
 
@@ -28386,6 +28385,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "root@workspace:."
   dependencies:
+    "@types/bezier-js": ^4.1.0
     "@typescript-eslint/eslint-plugin": ^4.6.0
     "@typescript-eslint/parser": ^4.6.0
     cspell: ^5.20.0

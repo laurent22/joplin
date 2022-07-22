@@ -1,5 +1,6 @@
 import Color4 from '../Color4';
-import { Point2 } from '../math';
+import { Point2 } from '../geometry/Vec2';
+import Vec3 from '../geometry/Vec3';
 import Viewport from '../Viewport';
 import AbstractRenderer, { FillStyle } from './AbstractRenderer';
 
@@ -12,15 +13,18 @@ export default class CanvasRenderer extends AbstractRenderer {
 		this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
 	}
 
-	public beginPath(): void {
+	protected beginPath(startPoint: Point2): void {
+		startPoint = this.viewport.canvasToScreen(startPoint);
+
 		this.ctx.beginPath();
+		this.ctx.moveTo(startPoint.x, startPoint.y);
 	}
 
-	public endPath(): void {
+	protected endPath(): void {
 		this.ctx.closePath();
 	}
 
-	public fill(style: FillStyle): void {
+	protected fill(style: FillStyle): void {
 		this.ctx.fillStyle = style.color.toHexString();
 		this.ctx.strokeStyle = style.color.toHexString();
 
@@ -31,15 +35,27 @@ export default class CanvasRenderer extends AbstractRenderer {
 		this.ctx.fill();
 	}
 
-	public traceCubicBezierCurve(p0: Point2, p1: Point2, p2: Point2, p3: Point2): void {
-		p0 = this.viewport.canvasToScreen(p0);
+	protected lineTo(point: Vec3): void {
+		point = this.viewport.canvasToScreen(point);
+		this.ctx.lineTo(point.x, point.y);
+	}
+
+	protected traceCubicBezierCurve(p1: Point2, p2: Point2, p3: Point2): void {
 		p1 = this.viewport.canvasToScreen(p1);
 		p2 = this.viewport.canvasToScreen(p2);
 		p3 = this.viewport.canvasToScreen(p3);
 
-		this.ctx.lineTo(p0.x, p0.y);
 		this.ctx.bezierCurveTo(p1.x, p1.y, p2.x, p2.y, p3.x, p3.y);
 	}
+
+	protected traceQuadraticBezierCurve(controlPoint: Vec3, endPoint: Vec3): void {
+		controlPoint = this.viewport.canvasToScreen(controlPoint);
+		endPoint = this.viewport.canvasToScreen(endPoint);
+		this.ctx.quadraticCurveTo(
+			controlPoint.x, controlPoint.y, endPoint.x, endPoint.y
+		);
+	}
+	
 	public drawPoints(...points: Point2[]): void {
 		const pointRadius = 10;
 

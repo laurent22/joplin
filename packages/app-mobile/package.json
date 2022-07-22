@@ -33,7 +33,6 @@
     "constants-browserify": "^1.0.0",
     "crypto-browserify": "^3.12.0",
     "events": "^3.2.0",
-    "gl-matrix": "^3.4.3",
     "joplin-rn-alarm-notification": "^1.0.5",
     "jsc-android": "241213.1.0",
     "md5": "^2.2.1",
