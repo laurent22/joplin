@@ -16,15 +16,15 @@
 import { Dimensions } from 'react-native';
 
 export interface ValueMap {
-	/** Value to use on small-width displays */
+	// Value to use on small-width displays
     sm?: number;
-	/** Value to use on medium-width displays */
+	// Value to use on medium-width displays
     md?: number;
-	/** Value to use on large-width displays */
+	// Value to use on large-width displays
     lg?: number;
-	/** Value to use on extra-large width displays */
+	// Value to use on extra-large width displays
     xl?: number;
-	/** Value to use on extra-extra-large width displays */
+	// Value to use on extra-extra-large width displays
     xxl?: number;
 }
 
