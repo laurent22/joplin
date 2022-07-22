@@ -16,7 +16,7 @@ import syntaxHighlightingLanguages from './languages';
 
 import { EditorState } from '@codemirror/state';
 import { markdown } from '@codemirror/lang-markdown';
-import { GFM } from '@lezer/markdown';
+import { GFM as GitHubFlavoredMarkdownExtension } from '@lezer/markdown';
 import { indentOnInput, indentUnit, syntaxTree } from '@codemirror/language';
 import {
 	openSearchPanel, closeSearchPanel, SearchQuery, setSearchQuery, getSearchQuery,highlightSelectionMatches, search,
@@ -264,7 +264,7 @@ export function initCodeMirror(
 			extensions: [
 				markdown({
 					extensions: [
-						GFM,
+						GitHubFlavoredMarkdownExtension,
 
 						// Don't highlight KaTeX if the user disabled it
 						settings.katexEnabled ? MarkdownMathExtension : [],
@@ -352,71 +352,71 @@ export function initCodeMirror(
 
 	const editorControls = {
 		editor,
-		undo() {
+		undo: () => {
 			undo(editor);
 			schedulePostUndoRedoDepthChange(editor, true);
 		},
-		redo() {
+		redo: () => {
 			redo(editor);
 			schedulePostUndoRedoDepthChange(editor, true);
 		},
-		select(anchor: number, head: number) {
+		select: (anchor: number, head: number) => {
 			editor.dispatch(editor.state.update({
 				selection: { anchor, head },
 				scrollIntoView: true,
 			}));
 		},
-		scrollSelectionIntoView() {
+		scrollSelectionIntoView: () => {
 			editor.dispatch(editor.state.update({
 				scrollIntoView: true,
 			}));
 		},
-		insertText(text: string) {
+		insertText: (text: string) => {
 			editor.dispatch(editor.state.replaceSelection(text));
 		},
-		toggleFindDialog() {
+		toggleFindDialog: () => {
 			const opened = openSearchPanel(editor);
 			if (!opened) {
 				closeSearchPanel(editor);
 			}
 		},
-		setSpellcheckEnabled(enabled: boolean) {
+		setSpellcheckEnabled: (enabled: boolean) => {
 			editor.contentDOM.spellcheck = enabled;
 			notifySelectionFormattingChange();
 		},
 
 		// Formatting
-		toggleBolded() { toggleBolded(editor); },
-		toggleItalicized() { toggleItalicized(editor); },
-		toggleCode() { toggleCode(editor); },
-		toggleMath() { toggleMath(editor); },
-		increaseIndent() { increaseIndent(editor); },
-		decreaseIndent() { decreaseIndent(editor); },
-		toggleList(kind: ListType) { toggleList(kind)(editor); },
-		toggleHeaderLevel(level: number) { toggleHeaderLevel(level)(editor); },
-		updateLink(label: string, url: string) { updateLink(label, url)(editor); },
+		toggleBolded: () => { toggleBolded(editor); },
+		toggleItalicized: () => { toggleItalicized(editor); },
+		toggleCode: () => { toggleCode(editor); },
+		toggleMath: () => { toggleMath(editor); },
+		increaseIndent: () => { increaseIndent(editor); },
+		decreaseIndent: () => { decreaseIndent(editor); },
+		toggleList: (kind: ListType) => { toggleList(kind)(editor); },
+		toggleHeaderLevel: (level: number) => { toggleHeaderLevel(level)(editor); },
+		updateLink: (label: string, url: string) => { updateLink(label, url)(editor); },
 
 		// Search
 		searchControl: {
-			findNext() {
+			findNext: () => {
 				findNext(editor);
 			},
-			findPrevious() {
+			findPrevious: () => {
 				findPrevious(editor);
 			},
-			replaceCurrent() {
+			replaceCurrent: () => {
 				replaceNext(editor);
 			},
-			replaceAll() {
+			replaceAll: () => {
 				replaceAll(editor);
 			},
-			setSearchState(state: SearchState) {
+			setSearchState: (state: SearchState) => {
 				updateSearchQuery(state);
 			},
-			showSearch() {
+			showSearch: () => {
 				showSearchDialog();
 			},
-			hideSearch() {
+			hideSearch: () => {
 				hideSearchDialog();
 			},
 		},

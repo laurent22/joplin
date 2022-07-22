@@ -6,7 +6,7 @@
  */
 
 import { tags, Tag } from '@lezer/highlight';
-import { parseMixed, SyntaxNodeRef, Input, NestedParse } from '@lezer/common';
+import { parseMixed, SyntaxNodeRef, Input, NestedParse, ParseWrapper } from '@lezer/common';
 
 // Extend the existing markdown parser
 import {
@@ -34,11 +34,16 @@ export const inlineMathContentTagName = 'InlineMathContent';
 export const mathTag = Tag.define(tags.monospace);
 export const inlineMathTag = Tag.define(mathTag);
 
-// Wraps a TeX math-mode parser. This removes [nodeTag] from the syntax tree
-// and replaces it with a region handled by the sTeXMath parser.
-const wrappedTeXParser = (nodeTag: string) => parseMixed(
-	(node: SyntaxNodeRef, _input: Input): NestedParse => {
-		if (node.name != nodeTag) {
+/**
+ * Wraps a TeX math-mode parser. This removes [nodeTag] from the syntax tree
+ * and replaces it with a region handled by the sTeXMath parser.
+ *
+ * @param nodeTag Name of the nodes to replace with regions parsed by the sTeX parser.
+ * @returns a wrapped sTeX parser.
+ */
+const wrappedTeXParser = (nodeTag: string): ParseWrapper => {
+	return parseMixed((node: SyntaxNodeRef, _input: Input): NestedParse => {
+		if (node.name !== nodeTag) {
 			return null;
 		}
 
@@ -46,6 +51,7 @@ const wrappedTeXParser = (nodeTag: string) => parseMixed(
 			parser: texLanguage.parser,
 		};
 	});
+};
 
 // Markdown extension for recognizing inline code
 const InlineMathConfig: MarkdownConfig = {
@@ -65,9 +71,9 @@ const InlineMathConfig: MarkdownConfig = {
 		parse(cx: InlineContext, current: number, pos: number): number {
 			const prevCharCode = pos - 1 >= 0 ? cx.char(pos - 1) : -1;
 			const nextCharCode = cx.char(pos + 1);
-			if (current != dollarSignCharcode
-					|| prevCharCode == dollarSignCharcode
-					|| nextCharCode == dollarSignCharcode) {
+			if (current !== dollarSignCharcode
+					|| prevCharCode === dollarSignCharcode
+					|| nextCharCode === dollarSignCharcode) {
 				return -1;
 			}
 
@@ -83,8 +89,8 @@ const InlineMathConfig: MarkdownConfig = {
 			pos ++;
 
 			// Scan ahead for the next '$' symbol
-			for (; pos < end && (escaped || cx.char(pos) != dollarSignCharcode); pos++) {
-				if (!escaped && cx.char(pos) == backslashCharcode) {
+			for (; pos < end && (escaped || cx.char(pos) !== dollarSignCharcode); pos++) {
+				if (!escaped && cx.char(pos) === backslashCharcode) {
 					escaped = true;
 				} else {
 					escaped = false;
@@ -98,7 +104,7 @@ const InlineMathConfig: MarkdownConfig = {
 			}
 
 			// It isn't a math region if there is no ending '$'
-			if (pos == end) {
+			if (pos === end) {
 				return -1;
 			}
 
@@ -157,7 +163,7 @@ const BlockMathConfig: MarkdownConfig = {
 						hadNextLine = cx.nextLine();
 						endMatch = hadNextLine ? mathBlockEndRegex.exec(line.text) : null;
 					}
-					while (hadNextLine && endMatch == null);
+					while (hadNextLine && endMatch === null);
 
 					if (hadNextLine && endMatch) {
 						const lineLength = line.text.length;
@@ -197,7 +203,7 @@ const BlockMathConfig: MarkdownConfig = {
 		// End paragraph-like blocks
 		endLeaf(_cx: BlockContext, line: Line, _leaf: LeafBlock): boolean {
 			// Leaf blocks (e.g. block quotes) end early if math starts.
-			return mathBlockStartRegex.exec(line.text) != null;
+			return mathBlockStartRegex.exec(line.text) !== null;
 		},
 	}],
 	wrap: wrappedTeXParser(blockMathContentTagName),

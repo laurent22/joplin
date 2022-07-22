@@ -30,6 +30,7 @@ const createTheme = (theme: any): Extension[] => {
 	const baseGlobalStyle: Record<string, string> = {
 		color: theme.color,
 		backgroundColor: theme.backgroundColor,
+		fontFamily: theme.fontFamily,
 		fontSize: `${theme.fontSize}px`,
 	};
 	const baseCursorStyle: Record<string, string> = { };
@@ -219,8 +220,6 @@ const createTheme = (theme: any): Extension[] => {
 		syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
 	];
 };
-
-
 
 
 export default createTheme;

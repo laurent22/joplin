@@ -207,7 +207,7 @@ export default class Resource extends BaseItem {
 
 		const share = resource.share_id ? await this.shareService().shareById(resource.share_id) : null;
 
-		if (!getEncryptionEnabled() || !itemCanBeEncrypted(resource as any)) {
+		if (!getEncryptionEnabled() || !itemCanBeEncrypted(resource as any, share)) {
 			// Normally not possible since itemsThatNeedSync should only return decrypted items
 			if (resource.encryption_blob_encrypted) throw new Error('Trying to access encrypted resource but encryption is currently disabled');
 			return { path: plainTextPath, resource: resource };
