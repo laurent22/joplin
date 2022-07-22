@@ -146,7 +146,7 @@ class BundledFile {
 const bundledFiles: BundledFile[] = [
 	new BundledFile(
 		'codeMirrorBundle',
-		`${mobileDir}/components/NoteEditor/CodeMirror.ts`
+		`${mobileDir}/components/NoteEditor/CodeMirror/CodeMirror.ts`
 	),
 ];
 
