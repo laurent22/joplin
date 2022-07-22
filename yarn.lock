@@ -28177,7 +28177,6 @@ __metadata:
     nodemon: ^2.0.9
     typedoc: ^0.17.8
     typescript: 4.0.5
-    yarn.lock: ^0.0.1-security
   languageName: unknown
   linkType: soft
 
@@ -33469,13 +33468,6 @@ __metadata:
     y18n: ^3.2.1
     yargs-parser: ^5.0.1
   checksum: 0c330ce1338cd9f293157bf8955af6833ae59032ab1bc936510ce7a216de9bb65b05b39a82ff0e7359bfb643342cc05de5049ce50ee9404b0818f65911fb59a5
-  languageName: node
-  linkType: hard
-
-"yarn.lock@npm:^0.0.1-security":
-  version: 0.0.1-security
-  resolution: "yarn.lock@npm:0.0.1-security"
-  checksum: 247a60a82cb355617a26b49fe9097154ed3ab325116897a6bc7e6794984e96856d4a612d9e5e1854859b5338e95c0d8f53a87436f3455189e927a3679ff43bbe
   languageName: node
   linkType: hard
 
