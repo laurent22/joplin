@@ -51,6 +51,10 @@ function useCss(themeId: number): string {
 			:root {
 				background-color: ${theme.backgroundColor};
 			}
+
+			body {
+				font-size: 13pt;
+			}
 		`;
 	}, [themeId]);
 }
