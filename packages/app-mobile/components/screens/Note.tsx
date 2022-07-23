@@ -45,6 +45,7 @@ const ImagePicker = require('react-native-image-picker').default;
 import SelectDateTimeDialog from '../SelectDateTimeDialog';
 import ShareExtension from '../../utils/ShareExtension.js';
 import CameraView from '../CameraView';
+import NotesBar from '../NotesBar';
 import { NoteEntity } from '@joplin/lib/services/database/types';
 import Logger from '@joplin/lib/Logger';
 const urlUtils = require('@joplin/lib/urlUtils');
@@ -385,6 +386,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 			fontSize: theme.fontSize,
 			paddingTop: 10, // Added for iOS (Not needed for Android??)
 			paddingBottom: 10, // Added for iOS (Not needed for Android??)
+		};
+
+		styles.noteMainComp = {
+			flex: 1,
+			flexDirection: 'row',
 		};
 
 		if (this.state.HACK_webviewLoadingState === 1) styles.titleTextInput.marginTop = 1;
@@ -1193,6 +1199,15 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		const noteTagDialog = !this.state.noteTagDialogShown ? null : <NoteTagsDialog onCloseRequested={this.noteTagDialog_closeRequested} />;
 
+		const noteMainComp = (
+			<View style={this.styles().noteMainComp}>
+				<NotesBar />
+				<View style={{ flex: 1 }}>
+					{titleComp}
+					{bodyComponent}
+				</View>
+			</View>
+		);
 		return (
 			<View style={this.rootStyle(this.props.themeId).root}>
 				<ScreenHeader
@@ -1209,8 +1224,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 					onUndoButtonPress={this.screenHeader_undoButtonPress}
 					onRedoButtonPress={this.screenHeader_redoButtonPress}
 				/>
-				{titleComp}
-				{bodyComponent}
+				{noteMainComp}
 				{actionButtonComp}
 
 				<SelectDateTimeDialog themeId={this.props.themeId} shown={this.state.alarmDialogShown} date={dueDate} onAccept={this.onAlarmDialogAccept} onReject={this.onAlarmDialogReject} />
