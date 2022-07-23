@@ -137,7 +137,7 @@ export function execCommand(command: string, options: any = null): Promise<strin
 	return new Promise((resolve, reject) => {
 		exec(command, options, (error: any, stdout: any, stderr: any) => {
 			if (error) {
-				if (error.signal == 'SIGTERM') {
+				if (error.signal === 'SIGTERM') {
 					resolve('Process was killed');
 				} else {
 					reject(error);
@@ -301,9 +301,9 @@ export function fileExists(filePath: string) {
 
 	return new Promise((resolve, reject) => {
 		fs.stat(filePath, function(err: any) {
-			if (err == null) {
+			if (!err) {
 				resolve(true);
-			} else if (err.code == 'ENOENT') {
+			} else if (err.code === 'ENOENT') {
 				resolve(false);
 			} else {
 				reject(err);

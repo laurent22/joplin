@@ -3819,8 +3819,6 @@ __metadata:
     "@rollup/plugin-node-resolve": ^13.0.0
     "@rollup/plugin-typescript": ^8.2.1
     "@types/jest": ^28.1.3
-    "@types/node": ^14.14.6
-    "@types/react": ^16.9.55
     "@types/react-native": ^0.64.4
     assert-browserify: ^2.0.0
     babel-plugin-module-resolver: ^4.1.0
@@ -6290,12 +6288,12 @@ __metadata:
   linkType: hard
 
 "@types/jest@npm:^28.1.3":
-  version: 28.1.6
-  resolution: "@types/jest@npm:28.1.6"
+  version: 28.1.5
+  resolution: "@types/jest@npm:28.1.5"
   dependencies:
     jest-matcher-utils: ^28.0.0
     pretty-format: ^28.0.0
-  checksum: f2ba5fbefc8f44d1c16ee19d8d2811bca75754a2846e222287f2788d96062801c568215e6b81eb532a48e8cb2a7282729da1d4f6fb496831da8269c5abaad4c5
+  checksum: 994bfc25a5e767ec1506a2a7d94e60a7a5645b2e4e8444c56ae902f3a3e27ae54e821e41c1b4e7c8d7f5022bf5abfdd0460ead223ba6f2d0a194e5b2bed1ad76
   languageName: node
   linkType: hard
 
