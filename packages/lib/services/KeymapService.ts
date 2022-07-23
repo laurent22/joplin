@@ -341,7 +341,7 @@ export default class KeymapService extends BaseService {
 			if (usedAccelerators.has(itemAccelerator)) {
 				const originalItem = (proposedKeymapItem && proposedKeymapItem.accelerator === itemAccelerator)
 					? proposedKeymapItem
-					: Object.values(this.keymap).find(_item => _item.accelerator == itemAccelerator);
+					: Object.values(this.keymap).find(_item => _item.accelerator === itemAccelerator);
 
 				throw new Error(_(
 					'Accelerator "%s" is used for "%s" and "%s" commands. This may lead to unexpected behaviour.',
