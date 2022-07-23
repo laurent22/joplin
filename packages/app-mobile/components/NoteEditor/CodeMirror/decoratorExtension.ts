@@ -46,12 +46,12 @@ const headerLineDecoration = Decoration.line({
 	attributes: { class: 'cm-headerLine' },
 });
 
-/**
- * @return a set of [Decoration]s, associated with block syntax groups that require
- * full-line styling.
- */
-function computeDecorations(view: EditorView) {
-	const decorations: { pos: number; length?: number; decoration: Decoration }[] = [];
+type DecorationDescription = { pos: number; length?: number; decoration: Decoration };
+
+// Returns a set of [Decoration]s, associated with block syntax groups that require
+// full-line styling.
+const computeDecorations = (view: EditorView) => {
+	const decorations: DecorationDescription[] = [];
 
 	// Add a decoration to all lines between the document position [from] up to
 	// and includeing the position [to].
@@ -149,7 +149,7 @@ function computeDecorations(view: EditorView) {
 		decorationBuilder.add(pos, pos + (length ?? 0), decoration);
 	}
 	return decorationBuilder.finish();
-}
+};
 
 const decoratorExtension = ViewPlugin.fromClass(class {
 	public decorations: DecorationSet;
