@@ -29,6 +29,7 @@ module.exports = {
 
 		// React Native variables
 		'__DEV__': 'readonly',
+		'JSX': 'readonly',
 
 		// Clipper variables
 		'browserSupportsPromises_': true,
