@@ -10,6 +10,10 @@ interface Props {
     themeId: string;
 }
 
+interface NoteListProps {
+    title: string;
+}
+
 function NotesBarComponent(props: Props) {
 
 	function styles() {
@@ -91,6 +95,9 @@ function NotesBarComponent(props: Props) {
 			inputGroup: {
 				justifyContent: 'space-between',
 			},
+			itemText: {
+				fontSize: theme.fontSize,
+			},
 		};
 
 		styles = StyleSheet.create(styles);
@@ -142,18 +149,33 @@ function NotesBarComponent(props: Props) {
 	);
 
 	const inputGroupComp = (
-		<View style={[styles().padding, styles().horizontalFlex, styles().inputGroup]}>
-			{searchInputComp}
-			{addNoteButtonComp}
-			{addTodoButtonComp}
+		<View style={{ width: '100%' }}>
+			<View style={[styles().padding, styles().horizontalFlex, styles().inputGroup]}>
+				{searchInputComp}
+				{addNoteButtonComp}
+				{addTodoButtonComp}
+			</View>
+			{dividerComp}
 		</View>
 	);
 
+
+	const NoteListItem = function(props: NoteListProps) {
+		return (
+			<View>
+				<View style={styles().padding}>
+					<Text style={styles().itemText}>{props.title}</Text>
+				</View>
+				{dividerComp}
+			</View>
+		);
+	};
 
 	return (
 		<View style={styles().container}>
 			{topComp}
 			{inputGroupComp}
+			<NoteListItem title="First Note"/>
 		</View>
 	);
 }
