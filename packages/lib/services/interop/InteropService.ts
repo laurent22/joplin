@@ -432,7 +432,7 @@ export default class InteropService {
 				}
 
 				try {
-					if (itemType == BaseModel.TYPE_RESOURCE) {
+					if (itemType === BaseModel.TYPE_RESOURCE) {
 						const resourcePath = Resource.fullPath(item);
 						context.resourcePaths[item.id] = resourcePath;
 						exporter.updateContext(context);

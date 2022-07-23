@@ -37,7 +37,7 @@ function serializeTranslation(translation) {
 
 		for (const n in translations) {
 			if (!translations.hasOwnProperty(n)) continue;
-			if (n == '') continue;
+			if (n === '') continue;
 			const t = translations[n];
 			let translated = '';
 			if (t.comments && t.comments.flag && t.comments.flag.indexOf('fuzzy') >= 0) {
@@ -453,7 +453,7 @@ async function main() {
 
 		const poFilePäth = `${localesDir}/${locale}.po`;
 		const jsonFilePath = `${jsonLocalesDir}/${locale}.json`;
-		if (locale != defaultLocale) await mergePotToPo(potFilePath, poFilePäth);
+		if (locale !== defaultLocale) await mergePotToPo(potFilePath, poFilePäth);
 		buildLocale(poFilePäth, jsonFilePath);
 
 		const stat = await translationStatus(defaultLocale === locale, poFilePäth);
