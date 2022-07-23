@@ -1,9 +1,9 @@
-/**
- * Exports an editor plugin that creates multi-line decorations based on the
- * editor's syntax tree (assumes markdown).
- *
- * For more about creating decorations, see https://codemirror.net/examples/zebra/
- */
+//
+// Exports an editor plugin that creates multi-line decorations based on the
+// editor's syntax tree (assumes markdown).
+//
+// For more about creating decorations, see https://codemirror.net/examples/zebra/
+//
 
 import { Decoration, EditorView } from '@codemirror/view';
 import { ViewPlugin, DecorationSet, ViewUpdate } from '@codemirror/view';
@@ -151,7 +151,7 @@ function computeDecorations(view: EditorView) {
 	return decorationBuilder.finish();
 }
 
-const decoratorPlugin = ViewPlugin.fromClass(class {
+const decoratorExtension = ViewPlugin.fromClass(class {
 	public decorations: DecorationSet;
 
 	public constructor(view: EditorView) {
@@ -167,4 +167,4 @@ const decoratorPlugin = ViewPlugin.fromClass(class {
 	decorations: pluginVal => pluginVal.decorations,
 });
 
-export default decoratorPlugin;
+export default decoratorExtension;
