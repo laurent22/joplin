@@ -168,7 +168,7 @@ class Logger {
 
 		for (let i = 0; i < this.targets_.length; i++) {
 			const target = this.targets_[i];
-			if (target.type == 'database') {
+			if (target.type === 'database') {
 				let sql = `SELECT * FROM logs WHERE level IN (${options.levels.join(',')}) ORDER BY timestamp DESC`;
 				if (limit !== null) sql += ` LIMIT ${limit}`;
 				return await target.database.selectAll(sql);
@@ -191,11 +191,11 @@ class Logger {
 
 			if (this.targetLevel(target) < level) continue;
 
-			if (target.type == 'console') {
+			if (target.type === 'console') {
 				let fn = 'log';
-				if (level == LogLevel.Error) fn = 'error';
-				if (level == LogLevel.Warn) fn = 'warn';
-				if (level == LogLevel.Info) fn = 'info';
+				if (level === LogLevel.Error) fn = 'error';
+				if (level === LogLevel.Warn) fn = 'warn';
+				if (level === LogLevel.Info) fn = 'info';
 				const consoleObj = target.console ? target.console : console;
 				let items: any[] = [];
 
@@ -217,7 +217,7 @@ class Logger {
 				}
 
 				consoleObj[fn](...items);
-			} else if (target.type == 'file') {
+			} else if (target.type === 'file') {
 				const timestamp = moment().format('YYYY-MM-DD HH:mm:ss');
 				const line = [timestamp];
 				if (targetPrefix) line.push(targetPrefix);
@@ -239,7 +239,7 @@ class Logger {
 				}).finally(() => {
 					if (release) release();
 				});
-			} else if (target.type == 'database') {
+			} else if (target.type === 'database') {
 				const msg = [];
 				if (targetPrefix) msg.push(targetPrefix);
 				msg.push(this.objectsToString(...object));
@@ -280,20 +280,20 @@ class Logger {
 	}
 
 	static levelStringToId(s: string) {
-		if (s == 'none') return LogLevel.None;
-		if (s == 'error') return LogLevel.Error;
-		if (s == 'warn') return LogLevel.Warn;
-		if (s == 'info') return LogLevel.Info;
-		if (s == 'debug') return LogLevel.Debug;
+		if (s === 'none') return LogLevel.None;
+		if (s === 'error') return LogLevel.Error;
+		if (s === 'warn') return LogLevel.Warn;
+		if (s === 'info') return LogLevel.Info;
+		if (s === 'debug') return LogLevel.Debug;
 		throw new Error(`Unknown log level: ${s}`);
 	}
 
 	static levelIdToString(id: LogLevel) {
-		if (id == LogLevel.None) return 'none';
-		if (id == LogLevel.Error) return 'error';
-		if (id == LogLevel.Warn) return 'warn';
-		if (id == LogLevel.Info) return 'info';
-		if (id == LogLevel.Debug) return 'debug';
+		if (id === LogLevel.None) return 'none';
+		if (id === LogLevel.Error) return 'error';
+		if (id === LogLevel.Warn) return 'warn';
+		if (id === LogLevel.Info) return 'info';
+		if (id === LogLevel.Debug) return 'debug';
 		throw new Error(`Unknown level ID: ${id}`);
 	}
 

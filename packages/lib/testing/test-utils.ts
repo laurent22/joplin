@@ -137,7 +137,7 @@ function setSyncTargetName(name: string) {
 	const previousName = syncTargetName_;
 	syncTargetName_ = name;
 	syncTargetId_ = SyncTargetRegistry.nameToId(syncTargetName_);
-	sleepTime = syncTargetId_ == SyncTargetRegistry.nameToId('filesystem') ? 1001 : 100;// 400;
+	sleepTime = syncTargetId_ === SyncTargetRegistry.nameToId('filesystem') ? 1001 : 100;// 400;
 	isNetworkSyncTarget_ = ['nextcloud', 'dropbox', 'onedrive', 'amazon_s3', 'joplinServer'].includes(syncTargetName_);
 	synchronizers_ = [];
 	return previousName;
@@ -563,13 +563,13 @@ async function initFileApi() {
 	if (fileApis_[syncTargetId_]) return;
 
 	let fileApi = null;
-	if (syncTargetId_ == SyncTargetRegistry.nameToId('filesystem')) {
+	if (syncTargetId_ === SyncTargetRegistry.nameToId('filesystem')) {
 		fs.removeSync(syncDir);
 		fs.mkdirpSync(syncDir);
 		fileApi = new FileApi(syncDir, new FileApiDriverLocal());
-	} else if (syncTargetId_ == SyncTargetRegistry.nameToId('memory')) {
+	} else if (syncTargetId_ === SyncTargetRegistry.nameToId('memory')) {
 		fileApi = new FileApi('/root', new FileApiDriverMemory());
-	} else if (syncTargetId_ == SyncTargetRegistry.nameToId('nextcloud')) {
+	} else if (syncTargetId_ === SyncTargetRegistry.nameToId('nextcloud')) {
 		const options = require(`${oldTestDir}/support/nextcloud-auth.json`);
 		const api = new WebDavApi({
 			baseUrl: () => options.baseUrl,
@@ -577,7 +577,7 @@ async function initFileApi() {
 			password: () => options.password,
 		});
 		fileApi = new FileApi('', new FileApiDriverWebDav(api));
-	} else if (syncTargetId_ == SyncTargetRegistry.nameToId('dropbox')) {
+	} else if (syncTargetId_ === SyncTargetRegistry.nameToId('dropbox')) {
 		// To get a token, go to the App Console:
 		// https://www.dropbox.com/developers/apps/
 		// Then select "JoplinTest" and click "Generated access token"
@@ -587,7 +587,7 @@ async function initFileApi() {
 		if (!authToken) throw new Error(`Dropbox auth token missing in ${authTokenPath}`);
 		api.setAuthToken(authToken);
 		fileApi = new FileApi('', new FileApiDriverDropbox(api));
-	} else if (syncTargetId_ == SyncTargetRegistry.nameToId('onedrive')) {
+	} else if (syncTargetId_ === SyncTargetRegistry.nameToId('onedrive')) {
 		// To get a token, open the URL below corresponding to your account type,
 		// then copy the *complete* redirection URL in onedrive-auth.txt. Keep in mind that auth
 		// data only lasts 1h for OneDrive.
@@ -620,7 +620,7 @@ async function initFileApi() {
 
 		const appDir = await api.appDirectory();
 		fileApi = new FileApi(appDir, new FileApiDriverOneDrive(api));
-	} else if (syncTargetId_ == SyncTargetRegistry.nameToId('amazon_s3')) {
+	} else if (syncTargetId_ === SyncTargetRegistry.nameToId('amazon_s3')) {
 
 		// We make sure for S3 tests run in band because tests
 		// share the same directory which will cause locking errors.
@@ -632,7 +632,7 @@ async function initFileApi() {
 		if (!amazonS3Creds || !amazonS3Creds.credentials) throw new Error(`AWS auth JSON missing in ${amazonS3CredsPath} format should be: { "credentials": { "accessKeyId": "", "secretAccessKey": "", } "bucket": "mybucket", region: "", forcePathStyle: ""}`);
 		const api = new S3Client({ region: amazonS3Creds.region, credentials: amazonS3Creds.credentials, s3UseArnRegion: true, forcePathStyle: amazonS3Creds.forcePathStyle, endpoint: amazonS3Creds.endpoint });
 		fileApi = new FileApi('', new FileApiDriverAmazonS3(api, amazonS3Creds.bucket));
-	} else if (syncTargetId_ == SyncTargetRegistry.nameToId('joplinServer')) {
+	} else if (syncTargetId_ === SyncTargetRegistry.nameToId('joplinServer')) {
 		mustRunInBand();
 
 		const joplinServerAuth = JSON.parse(await readCredentialFile('joplin-server-test-units-2.json'));

@@ -139,9 +139,9 @@ class DropboxApi {
 
 				// console.info(method + ' ' + url);
 
-				if (options.source == 'file' && (method == 'POST' || method == 'PUT')) {
+				if (options.source === 'file' && (method === 'POST' || method === 'PUT')) {
 					response = await shim.uploadBlob(url, fetchOptions);
-				} else if (options.target == 'string') {
+				} else if (options.target === 'string') {
 					response = await shim.fetch(url, fetchOptions);
 				} else {
 					// file
