@@ -12,6 +12,7 @@ interface Props {
 
 interface NoteListProps {
     title: string;
+    isTodo: boolean;
 }
 
 function NotesBarComponent(props: Props) {
@@ -97,6 +98,7 @@ function NotesBarComponent(props: Props) {
 			},
 			itemText: {
 				fontSize: theme.fontSize,
+				color: theme.color,
 			},
 		};
 
@@ -161,21 +163,36 @@ function NotesBarComponent(props: Props) {
 
 
 	const NoteListItem = function(props: NoteListProps) {
-		return (
-			<View>
-				<View style={styles().padding}>
-					<Text style={styles().itemText}>{props.title}</Text>
+		let item;
+
+		if (props.isTodo) {
+			item = (
+				<View>
+					<TouchableOpacity style={styles().padding}>
+						<Text style={styles().itemText}>{props.title}</Text>
+					</TouchableOpacity>
+					{dividerComp}
 				</View>
-				{dividerComp}
-			</View>
-		);
+			);
+		} else {
+			item = (
+				<View>
+					<TouchableOpacity style={styles().padding}>
+						<Text style={styles().itemText}>{props.title}</Text>
+					</TouchableOpacity>
+					{dividerComp}
+				</View>
+			);
+		}
+
+		return item;
 	};
 
 	return (
 		<View style={styles().container}>
 			{topComp}
 			{inputGroupComp}
-			<NoteListItem title="First Note"/>
+			<NoteListItem title="First Note" isTodo={false} />
 		</View>
 	);
 }
