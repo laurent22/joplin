@@ -6154,7 +6154,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/fs-extra@npm:^9.0.11, @types/fs-extra@npm:^9.0.6":
+"@types/fs-extra@npm:^9.0.11, @types/fs-extra@npm:^9.0.13, @types/fs-extra@npm:^9.0.6":
   version: 9.0.13
   resolution: "@types/fs-extra@npm:9.0.13"
   dependencies:
@@ -28156,6 +28156,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "root@workspace:."
   dependencies:
+    "@types/fs-extra": ^9.0.13
     "@typescript-eslint/eslint-plugin": ^4.6.0
     "@typescript-eslint/parser": ^4.6.0
     cspell: ^5.20.0
