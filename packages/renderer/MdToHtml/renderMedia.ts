@@ -31,7 +31,7 @@ export default function(link: Link, options: Options) {
 	}
 
 	if (options.audioPlayerEnabled && resource.mime.indexOf('audio/') === 0) {
-		const escapedAudioMime = escapedMime == 'audio/x-flac' ? 'audio/flac' : escapedMime;
+		const escapedAudioMime = escapedMime === 'audio/x-flac' ? 'audio/flac' : escapedMime;
 		return `
 			<audio class="media-player media-audio" controls>
 				<source src="${escapedResourcePath}" type="${escapedAudioMime}">
