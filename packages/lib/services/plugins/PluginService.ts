@@ -77,9 +77,11 @@ export default class PluginService extends BaseService {
 		return this.instance_;
 	}
 
+	public defaultPluginsId: string[] = ['io.github.jackgruber.backup', 'plugin.calebjohn.rich-markdown','joplin.plugin.note.tabs'];
+
 	public initialSettings: InitialSettings = {
 		'io.github.jackgruber.backup': {
-			'path': '/JoplinBackup',
+			'path': Setting.value('profileDir'),
 		},
 	};
 
@@ -455,28 +457,47 @@ export default class PluginService extends BaseService {
 		} else { return null; }
 	}
 
-	public async installDefaultPlugins(pathToPlugins: string, pluginSettings: PluginSettings, service: PluginService): Promise<PluginSettings> {
-		if (!Setting.value('firstStart')) return pluginSettings;
-		const defaultPlugins = await shim.fsDriver().readDirStats(pathToPlugins);
+	public async installDefaultPlugins(pluginsDir: string, pluginSettings: PluginSettings): Promise<PluginSettings> {
+		const defaultPlugins = await shim.fsDriver().readDirStats(pluginsDir);
+		const installedPlugins = Setting.value('installedDefaultPlugins');
 
-		for (const plugin of defaultPlugins) {
-			const defaultPluginPath: string = path.join(`${pathToPlugins}/${plugin.path}`);
-			await service.installPlugin(defaultPluginPath, false);
+		for (let pluginId of defaultPlugins) {
+			pluginId = pluginId.path;
+
+			if (installedPlugins.includes(pluginId) || this.plugins_[pluginId]) continue;
+			const defaultPluginPath: string = path.join(pluginsDir, pluginId, 'plugin.jpl');
+			await this.installPlugin(defaultPluginPath, false);
 
 			pluginSettings = produce(pluginSettings, (draft: PluginSettings) => {
-				draft[filename(plugin.path)] = defaultPluginSetting();
+				draft[pluginId] = defaultPluginSetting();
 			});
 		}
-		Setting.setValue('firstStart', 0);
 		return pluginSettings;
 	}
 
-	public setSettingsForDefaultPlugins(initialSettings: InitialSettings) {
-		Object.keys(initialSettings).forEach(pluginId => {
-			Object.keys(initialSettings[pluginId]).forEach((setting) => {
-				Setting.setValue(`plugin-${pluginId}.${setting}`, initialSettings[pluginId][setting]);
-			});
-		});
+	// this is used for setting initial "installed" state for plugins
+	public setInstalledState(): any {
+		const settings: PluginSettings = {};
+		const previouslyInstalledPlugins = Setting.value('preInstalledDefaultPlugins');
+		for (const pluginId of this.defaultPluginsId) {
+			// here plugin can be pre installed, so we first check if it is present
+
+			if (!Setting.checkAndUpdate('installedDefaultPlugins', pluginId) && !previouslyInstalledPlugins[pluginId]) {
+				settings[pluginId] = defaultPluginSetting();
+			}
+		}
+		return settings;
+	}
+
+	public setSettingsForDefaultPlugins(initialSettings: InitialSettings, pluginSettings: PluginSettings) {
+		for (const pluginId of Object.keys(initialSettings)) {
+			// if previously, installed default plugin is disabled then skip it ========== we need to check every time the plugin
+			// to see if it is started
+			if (!this.pluginEnabled(pluginSettings, pluginId)) continue;
+			for (const settingName of Object.keys(initialSettings[pluginId])) {
+				!Setting.checkAndUpdate('setInitialDefaultPluginsSettings', pluginId) && Setting.setValue(`plugin-${pluginId}.${settingName}`, initialSettings[pluginId][settingName]);
+			}
+		}
 	}
 
 	private async pluginPath(pluginId: string) {

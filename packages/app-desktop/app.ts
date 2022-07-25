@@ -9,7 +9,7 @@ import shim from '@joplin/lib/shim';
 import AlarmService from '@joplin/lib/services/AlarmService';
 import AlarmServiceDriverNode from '@joplin/lib/services/AlarmServiceDriverNode';
 import Logger, { TargetType } from '@joplin/lib/Logger';
-import Setting, { Env } from '@joplin/lib/models/Setting';
+import Setting from '@joplin/lib/models/Setting';
 import actionApi from '@joplin/lib/services/rest/actionApi.desktop';
 import BaseApplication from '@joplin/lib/BaseApplication';
 import DebugService from '@joplin/lib/debug/DebugService';
@@ -271,19 +271,40 @@ class Application extends BaseApplication {
 			// stored in the settings.
 			const newSettings = service.clearUpdateState(await service.uninstallPlugins(pluginSettings));
 			Setting.setValue('plugins.states', newSettings);
+			Setting.setValue('preInstalledDefaultPlugins', newSettings);
 		}
 
 		try {
-			const devEnv = Setting.constants_.env === Env.Dev;
-			let pluginsPath = '';
-			devEnv ? pluginsPath = path.join(__dirname, '..', 'app-desktop/build/defaultPlugins/') : pluginsPath = path.join(process.resourcesPath, 'build/defaultPlugins/');
-
-			pluginSettings = await service.installDefaultPlugins(pluginsPath, pluginSettings, service);
 			if (await shim.fsDriver().exists(Setting.value('pluginDir'))) {
 				await service.loadAndRunPlugins(Setting.value('pluginDir'), pluginSettings);
 			}
 		} catch (error) {
 			this.logger().error(`There was an error loading plugins from ${Setting.value('pluginDir')}:`, error);
+		}
+
+		// we are loading default plugins here so as to not disturb user plugins
+		try {
+			const pluginsDir = path.join(bridge().buildDir(), 'defaultPlugins');
+			pluginSettings = await service.installDefaultPlugins(pluginsDir, pluginSettings);
+
+			const defaultPluginsPath = await shim.fsDriver().readDirStats(pluginsDir);
+			const readyToLoadPluginsPath = [];
+
+			for (const pluginFolder of defaultPluginsPath) {
+				// here pluginFolder will be pluginId
+				// maybe put this.plugins_ in here instead  of service.plugins
+				const newSettings = Setting.value('installedDefaultPlugins');
+
+				if (service.plugins[pluginFolder.path] || newSettings.includes(pluginFolder.path)) continue;
+
+				readyToLoadPluginsPath.push(path.join(pluginsDir, pluginFolder.path, 'plugin.jpl'));
+			}
+
+			if (readyToLoadPluginsPath.length > 0) {
+				await service.loadAndRunPlugins(readyToLoadPluginsPath, pluginSettings);
+			}
+		} catch (error) {
+			this.logger().error(`There was an error loading default plugins from ${Setting.value('pluginDir')}:`, error);
 		}
 
 		try {
@@ -326,7 +347,8 @@ class Application extends BaseApplication {
 					type: 'STARTUP_PLUGINS_LOADED',
 					value: true,
 				});
-				service.setSettingsForDefaultPlugins(service.initialPluginsSettings);
+				service.setSettingsForDefaultPlugins(service.initialPluginsSettings, Setting.value('plugins.states'));
+				// object with plugins id wand if its initilised settings
 			}
 		}, 500);
 	}

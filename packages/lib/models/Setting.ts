@@ -1524,6 +1524,27 @@ class Setting extends BaseModel {
 				public: false,
 			},
 
+			installedDefaultPlugins: {
+				value: [],
+				type: SettingItemType.Array,
+				public: false,
+				storage: SettingStorage.File,
+			},
+
+			setInitialDefaultPluginsSettings: {
+				value: [],
+				type: SettingItemType.Array,
+				public: false,
+				storage: SettingStorage.File,
+			},
+
+			preInstalledDefaultPlugins: {
+				value: '',
+				type: SettingItemType.Object,
+				public: false,
+				storage: SettingStorage.File,
+			},
+
 			// 'featureFlag.syncAccurateTimestamps': {
 			// 	value: false,
 			// 	type: SettingItemType.Bool,
@@ -1890,6 +1911,14 @@ class Setting extends BaseModel {
 
 	static toggle(key: string) {
 		return this.setValue(key, !this.value(key));
+	}
+
+	static checkAndUpdate(settingName: string, value: string): boolean {
+		const settingValue: Array<any> = this.value(settingName);
+		if (settingValue.includes(value)) return true;
+		settingValue.push(value);
+		this.setValue(settingName, settingValue);
+		return false;
 	}
 
 	static objectValue(settingKey: string, objectKey: string, defaultValue: any = null) {
