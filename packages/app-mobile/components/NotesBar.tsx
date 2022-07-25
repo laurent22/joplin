@@ -36,7 +36,9 @@ function NotesBarComponent(props: Props) {
 				fontSize: 16,
 			},
 			closeIcon: {
-				fontSize: 32,
+				fontSize: 30,
+				paddingTop: 8,
+				paddingBottom: 8,
 			},
 			top: {
 				color: theme.color,
@@ -44,7 +46,8 @@ function NotesBarComponent(props: Props) {
 			topContainer: {
 				width: '100%',
 				justifyContent: 'space-between',
-
+				paddingLeft: theme.marginLeft,
+				paddingRight: theme.marginRight,
 			},
 			padding: {
 				paddingLeft: theme.marginLeft,
@@ -135,7 +138,7 @@ function NotesBarComponent(props: Props) {
 
 	const topComp = (
 		<View>
-			<View style={[styles().topContainer, styles().horizontalFlex, styles().padding]}>
+			<View style={[styles().topContainer, styles().horizontalFlex]}>
 				{titleComp}
 				{closeButtonComp}
 			</View>

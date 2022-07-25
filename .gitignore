@@ -906,6 +906,9 @@ packages/app-mobile/components/NoteEditor/SelectionFormatting.js.map
 packages/app-mobile/components/NoteEditor/types.d.ts
 packages/app-mobile/components/NoteEditor/types.js
 packages/app-mobile/components/NoteEditor/types.js.map
+packages/app-mobile/components/NotesBar.d.ts
+packages/app-mobile/components/NotesBar.js
+packages/app-mobile/components/NotesBar.js.map
 packages/app-mobile/components/SelectDateTimeDialog.d.ts
 packages/app-mobile/components/SelectDateTimeDialog.js
 packages/app-mobile/components/SelectDateTimeDialog.js.map
@@ -918,6 +921,9 @@ packages/app-mobile/components/getResponsiveValue.js.map
 packages/app-mobile/components/getResponsiveValue.test.d.ts
 packages/app-mobile/components/getResponsiveValue.test.js
 packages/app-mobile/components/getResponsiveValue.test.js.map
+packages/app-mobile/components/global-style.d.ts
+packages/app-mobile/components/global-style.js
+packages/app-mobile/components/global-style.js.map
 packages/app-mobile/components/screens/ConfigScreen.d.ts
 packages/app-mobile/components/screens/ConfigScreen.js
 packages/app-mobile/components/screens/ConfigScreen.js.map
