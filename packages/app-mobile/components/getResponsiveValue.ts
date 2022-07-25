@@ -38,25 +38,7 @@ export default function getResponsiveValue(valueMap: ValueMap): number {
 	const { sm, md, lg, xl, xxl } = valueMap;
 
 	// This handles cases where certain values are omitted
-	if ((!!xxl) || (xxl === 0)) {
-		value = xxl;
-	}
-
-	if ((!!xl) || (xl === 0)) {
-		value = xl;
-	}
-
-	if ((!!lg) || (lg === 0)) {
-		value = lg;
-	}
-
-	if ((!!md) || (md === 0)) {
-		value = md;
-	}
-
-	if ((!!sm) || (sm === 0)) {
-		value = sm;
-	}
+	value = sm ?? md ?? lg ?? xl ?? xxl;
 
 	if (width >= 481 && ((!!md) || (md === 0))) {
 		value = md;
