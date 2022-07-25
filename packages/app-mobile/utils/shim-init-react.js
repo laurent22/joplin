@@ -22,7 +22,9 @@ function shimInit() {
 	shim.sjclModule = require('@joplin/lib/vendor/sjcl-rn.js');
 
 	shim.fsDriver = () => {
-		if (!shim.fsDriver_) shim.fsDriver_ = new FsDriverRN();
+		if (!shim.fsDriver_) {
+			shim.fsDriver_ = new FsDriverRN();
+		}
 		return shim.fsDriver_;
 	};
 
