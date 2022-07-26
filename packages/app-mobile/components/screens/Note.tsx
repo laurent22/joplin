@@ -30,7 +30,7 @@ const mimeUtils = require('@joplin/lib/mime-utils.js').mime;
 const { ScreenHeader } = require('../screen-header.js');
 const NoteTagsDialog = require('./NoteTagsDialog');
 import time from '@joplin/lib/time';
-const { Checkbox } = require('../checkbox.js');
+const Checkbox = require('../checkbox.js').default;
 const { _ } = require('@joplin/lib/locale');
 import { reg } from '@joplin/lib/registry';
 import ResourceFetcher from '@joplin/lib/services/ResourceFetcher';
