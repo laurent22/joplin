@@ -1,4 +1,4 @@
-const React = require('react');
+import * as React from 'react';
 const Component = React.Component;
 const { View, TouchableHighlight } = require('react-native');
 const Icon = require('react-native-vector-icons/Ionicons').default;
@@ -11,7 +11,11 @@ interface Props {
 	style: Style;
 	checked: boolean;
 	onChange: Function;
-	accessibilityLabel: string;
+	accessibilityLabel?: string;
+}
+
+interface State {
+	checked: boolean;
 }
 
 const styles: Style = {
@@ -23,8 +27,11 @@ const styles: Style = {
 };
 
 class Checkbox extends Component {
-	public constructor() {
-		super();
+	state: State;
+	props: Props;
+
+	public constructor(props: Props) {
+		super(props);
 		this.state = {
 			checked: false,
 		};
