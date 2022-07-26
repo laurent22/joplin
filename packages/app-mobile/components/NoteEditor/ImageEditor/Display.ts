@@ -13,6 +13,7 @@ export default class Display {
 	private dryInkRenderer: AbstractRenderer;
 	private wetInkRenderer: AbstractRenderer;
 	private resizeSurfacesCallback?: ()=>void;
+	private flattenCallback?: ()=>void;
 
 	public constructor(
 		private editor: ImageEditor, mode: RenderingMode, private parent: HTMLElement|null
@@ -78,6 +79,10 @@ export default class Display {
 			}
 		};
 		this.resizeSurfacesCallback();
+
+		this.flattenCallback = () => {
+			dryInkCtx.drawImage(wetInkCanvas, 0, 0);
+		};
 	}
 
 	// Clears the drawing surfaces and otherwise prepares for a rerender.
@@ -95,5 +100,10 @@ export default class Display {
 
 	public getWetInkRenderer(): AbstractRenderer {
 		return this.wetInkRenderer;
+	}
+
+	// Re-renders the contents of the wetInkRenderer onto the dryInkRenderer
+	public flatten() {
+		this.flattenCallback?.();
 	}
 }

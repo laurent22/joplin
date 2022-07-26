@@ -7,6 +7,7 @@ import { PathCommandType } from './geometry/Path';
 import Color4 from './Color4';
 import ImageEditor from './editor';
 import { RenderingMode } from './Display';
+import DummyRenderer from './rendering/DummyRenderer';
 
 describe('EditorImage', () => {
     const testStroke = new Stroke([
@@ -15,7 +16,7 @@ describe('EditorImage', () => {
             commands: [
                 {
                     kind: PathCommandType.MoveTo,
-                    point: Vec2.of(1, 1),
+                    point: Vec2.of(3, 3),
                 }
             ],
             fill: {
@@ -33,5 +34,19 @@ describe('EditorImage', () => {
         expect(image.findParent(testStroke)).toBeNull();
         addCommand.apply(editor);
         expect(image.findParent(testStroke)).not.toBeNull();
+    });
+
+    it('should render an element added to the image', () => {
+        const editor = new ImageEditor(document.body, RenderingMode.DummyRenderer);
+        const renderer =  editor.display.getDryInkRenderer();
+        if (!(renderer instanceof DummyRenderer)) {
+            throw new Error('Wrong display type!')
+        }
+
+        expect(renderer.renderedPathCount).toBe(0);
+        const addCommand = new EditorImage.AddElementCommand(testStroke);
+        editor.dispatch(addCommand);
+        editor.rerender();
+        expect(renderer.renderedPathCount).toBe(1);
     });
 });

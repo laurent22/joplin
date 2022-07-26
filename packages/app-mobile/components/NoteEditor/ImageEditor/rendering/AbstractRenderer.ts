@@ -1,6 +1,7 @@
 import Color4 from '../Color4';
 import Mat33 from '../geometry/Mat33';
 import { PathCommand, PathCommandType } from '../geometry/Path';
+import Rect2 from '../geometry/Rect2';
 import { Point2, Vec2 } from '../geometry/Vec2';
 import Viewport from '../Viewport';
 
@@ -55,6 +56,25 @@ export default abstract class AbstractRenderer {
 		}
 
 		this.endPath(fill);
+	}
+
+	// Debugging method
+	public drawDebugRect(rect: Rect2, color: Color4 = Color4.ofRGBA(1.0, 0.0, 0.0, 0.1)): void {
+		const corners = rect.corners;
+		const commands: PathCommand[] = [];
+
+		for (const corner of corners) {
+			commands.push({
+				kind: PathCommandType.LineTo,
+				point: corner,
+			});
+		}
+
+		this.drawPath({
+			startPoint: corners[0],
+			commands,
+			fill: { color },
+		});
 	}
 
 	/** Debugging method */

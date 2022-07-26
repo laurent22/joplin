@@ -11,6 +11,7 @@ import { Point2, Vec2 } from './geometry/Vec2';
  */
 export default class EditorImage {
 	private root: ImageNode;
+	public id: number = Math.random();
 
 	public constructor() {
 		this.root = new ImageNode();
@@ -32,7 +33,8 @@ export default class EditorImage {
 	}
 
 	public render(renderer: AbstractRenderer, viewport: Viewport) {
-		const minFraction = 0.01;
+		// Don't render components that are < 0.1% of the viewport.
+		const minFraction = 0.001;
 		const leaves = this.root.getLeavesInRegion(viewport.visibleRect, minFraction);
 		for (const leaf of leaves) {
 			leaf.getContent().render(renderer, viewport.visibleRect);
@@ -45,12 +47,24 @@ export default class EditorImage {
 
 	public static AddElementCommand = class implements Command {
 		private elementContainer: ImageNode;
-		public constructor(private readonly element: AbstractComponent) {
+		// If [applyByFlattening], then the rendered content of this element
+		// is present on the display's wet ink canvas. As such, no re-render is necessary
+		// the first time this command is applied (the surfaces are joined instead).
+		public constructor(
+			private readonly element: AbstractComponent,
+			private applyByFlattening: boolean = false,
+		) {
 		}
 
 		public apply(editor: ImageEditor) {
 			this.elementContainer = editor.image.addElement(this.element);
-			editor.queueRerender();
+
+			if (!this.applyByFlattening) {
+				editor.queueRerender();
+			} else {
+				this.applyByFlattening = false;
+				editor.display.flatten();
+			}
 		}
 
 		public unapply(editor: ImageEditor) {
@@ -136,8 +150,7 @@ export class ImageNode {
 		return this.bbox;
 	}
 
-	/*
-	private changeParent(newParent: ImageNode) {
+	/*private changeParent(newParent: ImageNode) {
 		if (this.parent) {
 			this.parent.children = this.parent.children.filter(child => child !== this);
 			this.parent.recomputeBBox();
@@ -146,12 +159,8 @@ export class ImageNode {
 		newParent.recomputeBBox();
 	}
 
-	// Removes outliers from this' children and adds them to the given target
-	private removeOutliers(target: ImageNode) {
-		if (this.content != null) {
-			return;
-		}
-
+	// Returns an index at which this can be broken into two clusters
+	private getClusterBreakIdx(): number {
 		this.children.sort((a, b) => a.bbox.topLeft.x - b.bbox.topLeft.x);
 
 		let leftMax = -Infinity;
@@ -171,10 +180,40 @@ export class ImageNode {
 				rightIdx --;
 			}
 		}
+		return leftIdx;
+	}
+
+	// Removes outliers from this' children and adds them to the given target
+	private removeOutliers(target: ImageNode) {
+		if (this.content !== null) {
+			return;
+		}
+
+		const breakIdx = this.getClusterBreakIdx();
+		let children = this.children;
+		for (let i = 0; i <= breakIdx; i++) {
+			children[i].changeParent(target);
+		}
+
+		this.recomputeBBox();
+	}
+
+	private mergeOverlap() {
+		if (this.content != null) {
+			return;
+		}
+
+		const breakIdx = this.getClusterBreakIdx();
+		if (breakIdx >= this.children.length) {
+			return;
+		}
+
+		const newNode = new ImageNode(this);
+		this.children.push(newNode);
 
 		let children = this.children;
-		for (let i = 0; i <= leftIdx; i++) {
-			children[i].changeParent(target);
+		for (let i = 0; i <= breakIdx; i++) {
+			children[i].changeParent(newNode);
 		}
 	}*/
 
@@ -186,11 +225,16 @@ export class ImageNode {
 		}
 
 		// Ensure each node either has content or children (but not both)
-		if (this.content != null && this.children.length > 0) {
+		if (this.content !== null && this.children.length > 0) {
 			const newNode = new ImageNode(this);
 			newNode.addLeaf(this.content);
 			this.content = null;
 			this.children.push(newNode);
+		}
+
+		// Group children
+		if (this.children.length > 4) {
+			//this.mergeOverlap();
 		}
 
 		// Can we reduce a child's maximum dimension by pulling children out?

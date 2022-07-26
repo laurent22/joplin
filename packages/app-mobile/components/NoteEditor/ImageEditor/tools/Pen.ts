@@ -59,9 +59,9 @@ export default class Pen extends BaseTool {
 		this.addPointToStroke(current);
 		if (this.builder && current.isPrimary) {
 			const stroke = this.builder.build();
-			const action = new EditorImage.AddElementCommand(stroke);
+			const canFlatten = true;
+			const action = new EditorImage.AddElementCommand(stroke, canFlatten);
 			this.editor.dispatch(action);
-			console.log('Added stroke', stroke);
 		}
 		this.builder = null;
 		this.editor.clearWetInk();

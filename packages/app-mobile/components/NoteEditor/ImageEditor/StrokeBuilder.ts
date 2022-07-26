@@ -50,7 +50,7 @@ export default class StrokeBuilder {
 
 
 	public preview(): RenderablePathSpec[] {
-		if (this.currentCurve) {
+		if (this.currentCurve && this.lastPoint) {
 			const currentPath = this.currentSegmentToPath(this.lastPoint);
 			return this.segments.concat(currentPath);
 		}
@@ -99,6 +99,12 @@ export default class StrokeBuilder {
 		startVec = startVec.times(this.curveStartWidth / 2);
 		endVec = endVec.times(this.curveEndWidth / 2);
 
+		if (isNaN(startVec.magnitude())) {
+			console.error('startVec is NaN', startVec, endVec, this.currentCurve);
+			console.error('startWidth:', this.curveStartWidth, 'endW:', this.curveEndWidth);
+			throw new Error('ERR');
+		}
+
 		const halfVec = startVec.lerp(endVec, 0.5);
 		const startPt = Vec2.ofXY(this.currentCurve.get(0));
 		const endPt = Vec2.ofXY(this.currentCurve.get(1));
@@ -142,27 +148,31 @@ export default class StrokeBuilder {
 	}
 
 	public addPoint(newPoint: StrokeDataPoint) {
-		const fuzzEq = 1e-10;
-		const deltaTime = newPoint.time - this.lastPoint.time;
-		if (newPoint.pos.eq(this.lastPoint?.pos, fuzzEq) || deltaTime === 0) {
-			console.warn('Discarding identical point');
-			return;
-		} else if (isNaN(newPoint.pos.magnitude())) {
-			console.warn('Discarding NaN point.', newPoint);
-			return;
+		if (this.lastPoint) {
+			// Ignore points that are identical
+			const fuzzEq = 1e-10;
+			const deltaTime = newPoint.time - this.lastPoint.time;
+			if (newPoint.pos.eq(this.lastPoint.pos, fuzzEq) || deltaTime === 0) {
+				console.warn('Discarding identical point');
+				return;
+			} else if (isNaN(newPoint.pos.magnitude())) {
+				console.warn('Discarding NaN point.', newPoint);
+				return;
+			}
+
+			const velocity = newPoint.pos.minus(this.lastPoint.pos).times(1/(deltaTime) * 1000);
+			this.momentum = this.momentum.lerp(velocity, 0.8);
 		}
 
-		this.buffer.push(newPoint.pos);
-		const velocity = newPoint.pos.minus(this.lastPoint.pos).times(1/(deltaTime) * 1000);
-		this.momentum = this.momentum.lerp(velocity, 0.8);
+		const lastPoint = this.lastPoint ?? newPoint;
+		this.lastPoint = newPoint;
 
+		this.buffer.push(newPoint.pos);
 		const pointRadius = newPoint.width / 2;
 		this.curveEndWidth = pointRadius;
 
 		// recompute bbox
 		this.bbox = this.bbox.grownToPoint(newPoint.pos, pointRadius);
-		const lastPoint = this.lastPoint;
-		this.lastPoint = newPoint;
 
 		if (this.currentCurve === null) {
 			const p1 = lastPoint.pos;
@@ -184,7 +194,7 @@ export default class StrokeBuilder {
 					Vec2.ofXY(curve.project(point.xy));
 				const dist = proj.minus(point).magnitude();
 
-				if (dist > Math.max(this.curveStartWidth, this.curveEndWidth) * 4) {
+				if (dist > Math.max(this.curveStartWidth, this.curveEndWidth) * 2) {
 					return false;
 				}
 			}
@@ -206,15 +216,21 @@ export default class StrokeBuilder {
 		let enteringVec = this.lastExitingVec;
 		let exitingVec = this.computeExitingVec();
 
-		enteringVec = enteringVec.normalized();
-		exitingVec = exitingVec.normalized();
-
 		// Find the intersection between the entering vector and the exiting vector
 		const maxRelativeLength = 1;
 		const segmentStart = this.buffer[0];
 		const segmentEnd = newPoint.pos;
 		const startEndDist = segmentEnd.minus(segmentStart).magnitude();
 		const maxControlPointDist = maxRelativeLength * startEndDist;
+
+		// Exit in cases where we would divide by zero
+		if (maxControlPointDist === 0 || exitingVec.magnitude() === 0) {
+			return;
+		}
+
+		enteringVec = enteringVec.normalized();
+		exitingVec = exitingVec.normalized();
+
 		const lineFromStart = new LineSegment2(
 			segmentStart,
 			segmentStart.minus(enteringVec.times(maxControlPointDist)),
@@ -232,6 +248,10 @@ export default class StrokeBuilder {
 		} else {
 			// Position the control point in between
 			controlPoint = segmentStart.plus(enteringVec.times(startEndDist / 2));
+		}
+
+		if (isNaN(controlPoint.magnitude())) {
+			console.error('controlPoint is NaN', intersection, 'Start:', segmentStart, 'End:', segmentEnd, 'in:', enteringVec, 'out:', exitingVec);
 		}
 
 		this.currentCurve = new Bezier(segmentStart.xy, controlPoint.xy, segmentEnd.xy);

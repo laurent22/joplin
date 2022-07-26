@@ -18,7 +18,7 @@ export class ImageEditor {
 	private renderingRegion: HTMLElement;
 
 	public history: UndoRedoHistory;
-	private display: Display;
+	public display: Display;
 	public image: EditorImage;
 
 	public viewport: Viewport;
@@ -29,6 +29,10 @@ export class ImageEditor {
 		this.container = document.createElement('div');
 		this.renderingRegion = document.createElement('div');
 		this.container.appendChild(this.renderingRegion);
+		this.container.className = 'imageEditorContainer';
+
+		this.renderingRegion.style.touchAction = 'none';
+		this.renderingRegion.className = 'imageEditorRenderArea';
 
 		this.notifier = new EventDispatcher();
 		this.viewport = new Viewport(this.notifier);

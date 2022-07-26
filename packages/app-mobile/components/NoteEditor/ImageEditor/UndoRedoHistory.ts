@@ -14,8 +14,10 @@ class UndoRedoHistory {
 	/**
 	 * Adds the given command to this and applies it to the editor.
 	 */
-	public push(command: Command) {
-		command.apply(this.editor);
+	public push(command: Command, apply: boolean = true) {
+		if (apply) {
+			command.apply(this.editor);
+		}
 		this.undoStack.push(command);
 		this.redoStack = [];
 	}
