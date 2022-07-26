@@ -1,3 +1,4 @@
+import LineSegment2 from "./LineSegment2";
 import Mat33 from "./Mat33";
 import { Point2, Vec2 } from "./Vec2";
 
@@ -116,6 +117,16 @@ import { Point2, Vec2 } from "./Vec2";
 
 	public get maxDimension(): number {
 		return Math.max(this.w, this.h);
+	}
+
+	public getEdges(): LineSegment2[] {
+		const corners = this.corners;
+		return [
+			new LineSegment2(corners[0], corners[1]),
+			new LineSegment2(corners[1], corners[2]),
+			new LineSegment2(corners[2], corners[3]),
+			new LineSegment2(corners[3], corners[0]),
+		];
 	}
 
 	/**

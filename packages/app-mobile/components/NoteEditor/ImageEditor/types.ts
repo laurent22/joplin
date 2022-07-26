@@ -2,8 +2,11 @@
  * Types relevant to the image editor
  */
 
+import EventDispatcher from '@joplin/lib/EventDispatcher';
 import { ImageComponent } from 'react-native';
-import { Point2, Vec3 } from './math';
+import Mat33 from './geometry/Mat33';
+import { Point2, Vec2 } from './geometry/Vec2';
+import Vec3 from './geometry/Vec3';
 import { ToolType } from './tools/ToolController';
 
 /**
@@ -123,11 +126,14 @@ export interface PointerUpEvt extends PointerEvtBase {
 export type PointerEvt = PointerDownEvt | PointerMoveEvt | PointerUpEvt;
 export type InputEvt = WheelEvt | GestureCancelEvt | PointerEvt;
 
+export type EditorNotifier = EventDispatcher<EditorEventType, EditorEventDataType>;
 
 export enum EditorEventType {
 	ToolEnabled,
 	ToolDisabled,
 	ObjectAdded,
+	ViewportChanged,
+	DisplayResized,
 };
 
 export interface EditorToolEventType {
@@ -140,4 +146,16 @@ export interface EditorObjectEventType {
 	readonly object: ImageComponent;
 }
 
-export type EditorEventDataType = EditorToolEventType | EditorObjectEventType;
+export interface EditorViewportChangedEvent {
+	readonly kind: EditorEventType.ViewportChanged;
+
+	// Canvas -> screen transform
+	readonly newTransform: Mat33;
+}
+
+export interface DisplayResizedEvent {
+	readonly kind: EditorEventType.DisplayResized;
+	readonly newSize: Vec2;
+}
+
+export type EditorEventDataType = EditorToolEventType | EditorObjectEventType | EditorViewportChangedEvent | DisplayResizedEvent;

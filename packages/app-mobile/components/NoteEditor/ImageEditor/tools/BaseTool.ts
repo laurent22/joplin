@@ -1,4 +1,4 @@
-import { PointerEvtListener, WheelEvt, PointerEvt } from '../types';
+import { PointerEvtListener, WheelEvt, PointerEvt, EditorNotifier, EditorEventType } from '../types';
 import { ToolType } from './ToolController';
 import ToolEnabledGroup from './ToolEnabledGroup';
 
@@ -10,7 +10,10 @@ export default abstract class BaseTool implements PointerEvtListener {
 	public abstract onPointerMove(event: PointerEvt): void;
 	public abstract onPointerUp(event: PointerEvt): void;
 	public abstract onGestureCancel(): void;
-	public readonly kind: ToolType;
+	public abstract readonly kind: ToolType;
+
+	protected constructor(private notifier: EditorNotifier) {
+	}
 
 	public onWheel(_event: WheelEvt): boolean {
 		return false;
@@ -18,10 +21,20 @@ export default abstract class BaseTool implements PointerEvtListener {
 
 	public setEnabled(enabled: boolean) {
 		this.enabled = enabled;
+		console.log('Setting ', this.kind, 'to ', enabled)
 
 		// Ensure that at most one tool in the group is enabled.
 		if (enabled) {
 			this.group.notifyEnabled(this);
+			this.notifier.dispatch(EditorEventType.ToolEnabled, {
+				kind: EditorEventType.ToolEnabled,
+				toolType: this.kind,
+			});
+		} else {
+			this.notifier.dispatch(EditorEventType.ToolDisabled, {
+				kind: EditorEventType.ToolDisabled,
+				toolType: this.kind,
+			});
 		}
 	}
 

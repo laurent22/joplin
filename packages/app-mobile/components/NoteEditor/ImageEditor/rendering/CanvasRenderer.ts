@@ -1,5 +1,5 @@
 import Color4 from '../Color4';
-import { Point2 } from '../geometry/Vec2';
+import { Point2, Vec2 } from '../geometry/Vec2';
 import Vec3 from '../geometry/Vec3';
 import Viewport from '../Viewport';
 import AbstractRenderer, { FillStyle } from './AbstractRenderer';
@@ -7,6 +7,13 @@ import AbstractRenderer, { FillStyle } from './AbstractRenderer';
 export default class CanvasRenderer extends AbstractRenderer {
 	public constructor(private ctx: CanvasRenderingContext2D, viewport: Viewport) {
 		super(viewport);
+	}
+
+	public displaySize(): Vec2 {
+		return Vec2.of(
+			this.ctx.canvas.clientWidth,
+			this.ctx.canvas.clientHeight,
+		);
 	}
 
 	public clear(): void {
@@ -20,7 +27,8 @@ export default class CanvasRenderer extends AbstractRenderer {
 		this.ctx.moveTo(startPoint.x, startPoint.y);
 	}
 
-	protected endPath(): void {
+	protected endPath(fill: FillStyle): void {
+		this.fill(fill);
 		this.ctx.closePath();
 	}
 

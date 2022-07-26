@@ -1,7 +1,9 @@
 import Command from "../commands/Command";
 import ImageEditor from "../editor";
 import EditorImage from "../EditorImage";
-import { Mat33, Point2, Rect2, Vec2 } from "../math";
+import LineSegment2 from "../geometry/LineSegment2";
+import Mat33 from "../geometry/Mat33";
+import Rect2 from "../geometry/Rect2";
 import AbstractRenderer from "../rendering/AbstractRenderer";
 
 export default abstract class AbstractComponent {
@@ -10,20 +12,21 @@ export default abstract class AbstractComponent {
 	 * (i.e. applying the transformation rotates/scales, etc this
 	 * for rendering.)
 	 */
-	private transform: Mat33;
+	protected transform: Mat33;
 
 	protected lastChangedTime: number;
 	protected abstract contentBBox: Rect2;
 
 	protected constructor() {
 		this.lastChangedTime = (new Date()).getTime();
+		this.transform = Mat33.identity;
 	}
 
 	public getBBox(): Rect2 {
 		return this.contentBBox.transformedBoundingBox(this.transform);
 	}
 	public abstract render(canvas: AbstractRenderer, visibleRect: Rect2): void;
-	public abstract intersects(start: Point2, displacement: Vec2): boolean;
+	public abstract intersects(lineSegment: LineSegment2): boolean;
 
 	/**
 	 * Replaces the content of this with that of the given element.

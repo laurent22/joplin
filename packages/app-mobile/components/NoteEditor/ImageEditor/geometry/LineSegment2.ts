@@ -1,3 +1,4 @@
+import Rect2 from "./Rect2";
 import { Vec2, Point2 } from "./Vec2";
 
 interface IntersectionResult {
@@ -8,16 +9,21 @@ interface IntersectionResult {
 export default class LineSegment2 {
 	private readonly direction: Vec2;
 	private readonly length: number;
+	public readonly bbox;
 
 	public constructor(
 		private readonly point1: Point2,
 		private readonly point2: Point2,
 	) {
+		this.bbox = Rect2.bboxOf([ point1, point2 ]);
+		
 		this.direction = point2.minus(point1);
 		this.length = this.direction.magnitude();
 
 		// Normalize
-		this.direction = this.direction.times(1/this.length);
+		if (this.length > 0) {
+			this.direction = this.direction.times(1/this.length);
+		}
 	}
 
 	// Accessors to make LineSegment2 compatible with bezier-js's

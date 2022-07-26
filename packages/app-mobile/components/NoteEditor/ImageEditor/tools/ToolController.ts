@@ -5,6 +5,8 @@ import BaseTool from "./BaseTool";
 import PanZoom, { PanZoomMode } from "./PanZoom";
 import Pen from "./Pen";
 import ToolEnabledGroup from "./ToolEnabledGroup";
+import Eraser from "./Eraser";
+import SelectionTool from "./SelectionTool";
 
 
 
@@ -27,10 +29,11 @@ export default class ToolController {
 	public constructor(editor: ImageEditor) {
 		const primaryToolEnabledGroup = new ToolEnabledGroup();
 		const touchPanZoom = new PanZoom(editor, PanZoomMode.OneFingerGestures);
+		const penTool = new Pen(editor);
 		const primaryTools = [
 			new SelectionTool(editor),
 			new Eraser(editor),
-			new Pen(editor),
+			penTool,
 		];
 		this.tools = [
 			touchPanZoom,
@@ -39,6 +42,8 @@ export default class ToolController {
 		];
 		primaryTools.forEach(tool => tool.setToolGroup(primaryToolEnabledGroup));
 		touchPanZoom.setEnabled(false);
+		penTool.setEnabled(true);
+
 		this.activeTool = null;
 	}
 
@@ -74,7 +79,7 @@ export default class ToolController {
 					break;
 				}
 			}
-		} else if (this.activeTool != null) {
+		} else if (this.activeTool !== null) {
 			switch (event.kind) {
 			case InputEvtType.PointerMoveEvt:
 				this.activeTool.onPointerMove(event);
@@ -99,6 +104,7 @@ export default class ToolController {
 		const matchingTools = this.tools.filter(tool => tool.kind === kind);
 		for (const tool of matchingTools) {
 			tool.setEnabled(enabled);
+			console.log('Set', tool, '', enabled);
 		}
 	}
 

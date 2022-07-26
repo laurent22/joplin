@@ -1,56 +1,57 @@
-import { Bezier } from "bezier-js";
-import { Rect2, Vec3 } from "../math";
-import AbstractRenderer, { getPathBBox, PathSpec } from "../rendering/AbstractRenderer";
+import LineSegment2 from "../geometry/LineSegment2";
+import Path from "../geometry/Path";
+import Rect2 from "../geometry/Rect2";
+import { Vec2 } from "../geometry/Vec2";
+import AbstractRenderer, { RenderablePathSpec } from "../rendering/AbstractRenderer";
 import AbstractComponent from "./AbstractComponent";
 
 interface StrokePart {
-	path: PathSpec;
+	path: RenderablePathSpec;
 	bbox: Rect2;
 }
 
 export default class Stroke extends AbstractComponent {
+	private readonly geometry: Path;
 	private readonly parts: StrokePart[];
 	protected readonly contentBBox: Rect2;
 
-	public constructor(parts: PathSpec[]) {
+	public constructor(parts: RenderablePathSpec[]) {
 		super();
+
+		// TODO: This can be optimized (Path.fromRenderable does extra work (e.g.
+		// computing Bezier curves, etc.)).
 		this.parts = parts.map(section => {
 			return {
 				path: section,
-				bbox: getPathBBox(section),
+				bbox: Path.fromRenderable(section).bbox,
 			};
 		});
 
-		this.contentBBox = this.parts.reduce((accumulator: Rect2, current: StrokePart) => {
-			return accumulator.union(current.bbox);
-		}, Rect2.empty);
+		this.geometry = this.parts.reduce((accumulator: Path, current: StrokePart) => {
+			return Path.fromRenderable(current.path).union(accumulator);
+		}, null)
+		// If no parts, fall back to a sensible default
+			?? new Path(Vec2.of(0, 0), []);
+		this.contentBBox = this.geometry?.bbox ?? Rect2.empty;
 	}
 
-	private bezierCurves: Bezier[]|null = null;
-	public intersects(start: Vec3, displacement: Vec3): boolean {
-		// Lazy-load curves
-		if (!this.bezierCurves) {
-			this.bezierCurves = [];
-			for (const part of this.parts) {
-				for (const command of part.path.commands) {
-					this.bezierCurves.push(new Bezier());
-				}
-			}
-		}
+	public intersects(line: LineSegment2): boolean {
+		return this.geometry.transformedBy(this.transform).intersection(line).length > 0;
 	}
 
 	public render(canvas: AbstractRenderer, visibleRect: Rect2): void {
 		for (const part of this.parts) {
-			if (part.bbox.intersects(visibleRect)) {
-				canvas.drawPath(part.path);
+			const bbox = part.bbox.transformedBoundingBox(this.transform);
+			if (bbox.intersects(visibleRect)) {
+				canvas.drawPath(part.path, this.transform);
 			}
 		}
 	}
 
 	public fromSVG(elem: SVGGraphicsElement): boolean {
 		if (elem.tagName === 'PATH') {
-			const pathData = elem.getAttribute('d');
-			const parts = pathData.split(/\s+/g);
+			//const pathData = elem.getAttribute('d');
+			//const parts = pathData.split(/\s+/g);
 			// TODO
 		}
 		throw new Error("Method not implemented.");

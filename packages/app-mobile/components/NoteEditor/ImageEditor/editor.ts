@@ -1,46 +1,48 @@
 
 import EditorImage from './EditorImage';
-import { Vec2, Vec3 } from './math';
-import CanvasRenderer from './rendering/CanvasRenderer';
 import ToolController from './tools/ToolController';
-import { Pointer, PointerDevice, InputEvtType, PointerEvt, EditorEventType, EditorEventDataType } from './types';
+import { Pointer, PointerDevice, InputEvtType, PointerEvt, EditorNotifier, EditorEventType } from './types';
 import Command from "./commands/Command";
 import UndoRedoHistory from './UndoRedoHistory';
 import Viewport from './Viewport';
 import EventDispatcher from '@joplin/lib/EventDispatcher';
+import { Vec2 } from './geometry/Vec2';
+import Vec3 from './geometry/Vec3';
+import HTMLToolbar from './toolbar/HTMLToolbar';
+import { RenderablePathSpec } from './rendering/AbstractRenderer';
+import Display, { RenderingMode } from './Display';
 
 export class ImageEditor {
 	// Wrapper around the viewport and toolbar
 	private container: HTMLElement;
-	private canvas: HTMLCanvasElement;
-	private ctx: CanvasRenderingContext2D;
-	private canvasRenderer: CanvasRenderer;
+	private renderingRegion: HTMLElement;
 
-	private history: UndoRedoHistory;
+	public history: UndoRedoHistory;
+	private display: Display;
 	public image: EditorImage;
 
-	// private toolbar: EditorToolbar;
 	public viewport: Viewport;
 	public toolController: ToolController;
-	public notifier: EventDispatcher<EditorEventType, EditorEventDataType>;
+	public notifier: EditorNotifier;
 
-	public constructor(parent: HTMLElement) {
-		this.viewport = new Viewport();
+	public constructor(parent: HTMLElement, renderingMode: RenderingMode = RenderingMode.CanvasRenderer) {
+		this.container = document.createElement('div');
+		this.renderingRegion = document.createElement('div');
+		this.container.appendChild(this.renderingRegion);
+
+		this.notifier = new EventDispatcher();
+		this.viewport = new Viewport(this.notifier);
+		this.display = new Display(this, renderingMode, this.renderingRegion);
 		this.image = new EditorImage();
 		this.history = new UndoRedoHistory(this);
 		this.toolController = new ToolController(this);
-		this.notifier = new EventDispatcher();
 
-		this.container = document.createElement('div');
-		this.canvas = document.createElement('canvas');
-		this.ctx = this.canvas.getContext('2d');
-		this.canvasRenderer = new CanvasRenderer(this.ctx, this.viewport);
-
-		this.canvas.className = 'ink';
-
-		this.container.replaceChildren(this.canvas);
+		new HTMLToolbar(this, this.container);
 		parent.appendChild(this.container);
-		this.viewport.updateScreenSize(Vec2.of(this.canvas.width, this.canvas.height));
+
+		this.viewport.updateScreenSize(
+			Vec2.of(this.display.width, this.display.height)
+		);
 
 		this.registerListeners();
 		this.rerender();
@@ -62,6 +64,7 @@ export class ImageEditor {
 				isPrimary: evt.isPrimary,
 				down: isDown,
 				id: evt.pointerId,
+				pressure: evt.pressure,
 				screenPos,
 				device,
 				canvasPos: this.viewport.screenToCanvas(screenPos),
@@ -79,24 +82,24 @@ export class ImageEditor {
 			return res;
 		};
 
-		this.container.addEventListener('pointerdown', evt => {
+		this.renderingRegion.addEventListener('pointerdown', evt => {
 			const pointer = pointerFor(evt, true);
 			pointers[pointer.id] = pointer;
 
-			this.container.setPointerCapture(pointer.id);
+			this.renderingRegion.setPointerCapture(pointer.id);
 			const event: PointerEvt = {
 				kind: InputEvtType.PointerDownEvt,
 				current: pointer,
 				allPointers: getPointerList(),
 			};
 			if (this.toolController.dispatchEvent(event)) {
-				//evt.preventDefault();
+				evt.preventDefault();
 			}
 
 			return true;
 		});
 
-		this.container.addEventListener('pointermove', evt => {
+		this.renderingRegion.addEventListener('pointermove', evt => {
 			const pointer = pointerFor(evt, pointers[evt.pointerId]?.down ?? false);
 			if (pointer.down) {
 				pointers[pointer.id] = pointer;
@@ -111,14 +114,14 @@ export class ImageEditor {
 			}
 		});
 
-		this.container.addEventListener('pointerup', evt => {
+		const pointerEnd = (evt: PointerEvent) => {
 			const pointer = pointerFor(evt, false);
 			if (!pointers[pointer.id]) {
 				return;
 			}
 
 			pointers[pointer.id] = pointer;
-			this.container.releasePointerCapture(pointer.id);
+			this.renderingRegion.releasePointerCapture(pointer.id);
 			if (this.toolController.dispatchEvent({
 				kind: InputEvtType.PointerUpEvt,
 				current: pointer,
@@ -127,6 +130,14 @@ export class ImageEditor {
 				evt.preventDefault();
 			}
 			delete pointers[pointer.id];
+		};
+
+		this.renderingRegion.addEventListener('pointerup', evt => {
+			pointerEnd(evt);
+		});
+
+		this.renderingRegion.addEventListener('pointercancel', evt => {
+			pointerEnd(evt);
 		});
 
 		this.container.addEventListener('wheel', evt => {
@@ -153,7 +164,17 @@ export class ImageEditor {
 		});
 
 		window.addEventListener('resize', () => {
-			this.rerender();
+			this.notifier.dispatch(EditorEventType.DisplayResized, {
+				kind: EditorEventType.DisplayResized,
+				newSize: Vec2.of(
+					this.display.width,
+					this.display.height,
+				),
+			});
+			this.viewport.updateScreenSize(
+				Vec2.of(this.display.width, this.display.height)
+			);
+			this.queueRerender();
 		});
 	}
 
@@ -162,109 +183,56 @@ export class ImageEditor {
 		this.history.push(command);
 	}
 
-	private resizeDrawingSurfaces() {
-		if (this.canvas.clientWidth != this.canvas.width
-				|| this.canvas.clientHeight != this.canvas.height) {
-			this.canvas.width = this.canvas.clientWidth;
-			this.canvas.height = this.canvas.clientHeight;
-			this.viewport.updateScreenSize(Vec2.of(this.canvas.width, this.canvas.height));
-		}
-	}
-
 	private rerenderQueued: boolean = false;
 	public queueRerender() {
 		if (!this.rerenderQueued) {
 			this.rerenderQueued = true;
 			requestAnimationFrame(() => {
-				this.rerenderQueued = false;
 				this.rerender();
+				this.rerenderQueued = false;
 			});
 		}
 	}
 
 	public rerender() {
-		this.resizeDrawingSurfaces();
-		this.canvasRenderer.clear();
-		this.image.render(this.canvasRenderer, this.viewport);
+		this.display.startRerender();
+		this.image.render(
+			this.display.getDryInkRenderer(), this.viewport
+		);
+	}
+
+	public drawWetInk(...path: RenderablePathSpec[]) {
+		for (const part of path) {
+			this.display.getWetInkRenderer().drawPath(part);
+		}
+	}
+
+	public clearWetInk() {
+		this.display.getWetInkRenderer().clear();
+	}
+
+	public createHTMLOverlay(overlay: HTMLElement) {
+		overlay.classList.add('overlay');
+		this.container.appendChild(overlay);
+
+		return {
+			remove: () => overlay.remove(),
+		};
+	}
+
+	public addStyleSheet(content: string): HTMLStyleElement {
+		const styleSheet = document.createElement('style');
+		styleSheet.innerText = content;
+		this.container.appendChild(styleSheet);
+
+		return styleSheet;
 	}
 
 	public toSVG(): SVGElement {
+		// TODO
+		throw new Error('TODO: Implement');
 		return null;
 	}
 }
 
 export default ImageEditor;
-
-//
-//
-//
-// class EditorToolbar {
-// // Class name used for styling the toolbar container with CSS.
-// private static containerClass = 'EditorToolbar';
-//
-// private buttons: Record<ToolID, HTMLButtonElement>;
-// public constructor(readonly parent: HTMLElement,
-// 					   readonly translationTable: Record<string, string>) {
-// this.container = document.createElement('div');
-// this.container.classList.add(EditorToolbar.containerClass);
-// parent.appendChild(this.container);
-// }
-//
-// public registerTool(tool: Tool) {
-// // getButtonData() → ButtonDescription
-// }
-// }
-//
-// enum ToolID {
-// Pen,
-// Eraser,
-// Zoom,
-// }
-//
-// interface ButtonDescription {
-// icon: string|Image|HTMLElement;
-// longDescription: string;
-// shortDescription: string;
-// }
-//
-// abstract class Tool {
-// public constructor(public readonly id: ToolID) {
-// }
-//
-// /**
-// 	 * Register [listener], which is called whenever the tool can/can no longer
-// 	 * be enabled.
-// 	 * /
-// public setOnDisabledChangedListener(listener: (disabled: boolean)=>void) { }
-//
-// /**
-// 	 * @return how this tool's toolbar button should look/behave.
-// 	 * /
-// public abstract getButtonData(): ButtonDescription;
-//
-// /**
-// 	 * Called when the user activates this tool (e.g. clicks on
-// 	 * its icon in the toolbar.
-//
-// 	 * @return true iff the activation/deactivation should proceed.
-// 	 * /
-// public abstract onActivate(): boolean;
-// public abstract onDeactivate(): boolean;
-//
-// public onPointerDown(): boolean;
-// public onPointerMove(): boolean;
-// public onPointerUp(): boolean;
-// }
-//
-// class Pen extends Tool {
-// public onActivate();
-// public onDeactivate();
-// public onActionDown(): boolean;
-// public onActionMove(): boolean;
-// public onActionUp(): boolean;
-// }
-//
-// class Zoom extends Tool {
-// ;
-// }
-//

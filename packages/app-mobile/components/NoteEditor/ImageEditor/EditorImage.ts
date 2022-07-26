@@ -1,14 +1,15 @@
 import ImageEditor from './editor';
-import { Point2, Rect2, Vec2 } from './math';
 import AbstractRenderer from './rendering/AbstractRenderer';
 import Command from "./commands/Command";
 import Viewport from './Viewport';
 import AbstractComponent from './components/AbstractComponent';
+import Rect2 from './geometry/Rect2';
+import { Point2, Vec2 } from './geometry/Vec2';
 
 /**
  * A tree of nodes contained within the editor
  */
-class EditorImage {
+export default class EditorImage {
 	private root: ImageNode;
 
 	public constructor() {
@@ -19,7 +20,7 @@ class EditorImage {
 		return this.root.addLeaf(elem);
 	}
 
-	/** @returns the parent of the given element, if it exists. */
+	// Returns the parent of the given element, if it exists.
 	public findParent(elem: AbstractComponent): ImageNode|null {
 		const candidates = this.root.getLeavesInRegion(elem.getBBox());
 		for (const candidate of candidates) {
@@ -36,6 +37,10 @@ class EditorImage {
 		for (const leaf of leaves) {
 			leaf.getContent().render(renderer, viewport.visibleRect);
 		}
+	}
+
+	public getElementsIntersectingRegion(region: Rect2): AbstractComponent[] {
+		return this.root.getLeavesInRegion(region).map(leaf => leaf.getContent());
 	}
 
 	public static AddElementCommand = class implements Command {
@@ -60,7 +65,7 @@ export type AddElementCommand = typeof EditorImage.AddElementCommand.prototype;
 
 
 export class ImageNode {
-	private content?: AbstractComponent;
+	private content: AbstractComponent|null;
 	private children: ImageNode[];
 	private bbox: Rect2;
 
@@ -75,6 +80,7 @@ export class ImageNode {
 		this.children = [];
 		this.bbox = Rect2.empty;
 		this.totalMass = 0;
+		this.content = null;
 		this.centerOfMass = Vec2.zero;
 	}
 
@@ -93,27 +99,24 @@ export class ImageNode {
 		const result: ImageNode[] = [];
 
 		// Don't render if too small
-		if (this.bbox.maxDimension / region.maxDimension < minFractionOfRegion) {
+		if (this.bbox.maxDimension / region.maxDimension <= minFractionOfRegion) {
 			return [];
 		}
 
-		if (this.content != null && this.getBBox().intersects(region)) {
+		if (this.content !== null && this.getBBox().intersects(region)) {
 			result.push(this);
 		}
 
 		const children = this.getChildrenInRegion(region);
 		for (const child of children) {
 			result.push(...child.getLeavesInRegion(region, minFractionOfRegion));
-			if (child.content) {
-				result.push(child);
-			}
 		}
 
 		return result;
 	}
 
 	public addLeaf(leaf: AbstractComponent): ImageNode {
-		if (this.content == null && this.children.length === 0) {
+		if (this.content === null && this.children.length === 0) {
 			this.content = leaf;
 			this.recomputeBBox();
 
@@ -133,6 +136,7 @@ export class ImageNode {
 		return this.bbox;
 	}
 
+	/*
 	private changeParent(newParent: ImageNode) {
 		if (this.parent) {
 			this.parent.children = this.parent.children.filter(child => child !== this);
@@ -142,9 +146,7 @@ export class ImageNode {
 		newParent.recomputeBBox();
 	}
 
-	/**
-	 * Removes outliers from this' children and adds them to the given target
-	 */
+	// Removes outliers from this' children and adds them to the given target
 	private removeOutliers(target: ImageNode) {
 		if (this.content != null) {
 			return;
@@ -174,7 +176,7 @@ export class ImageNode {
 		for (let i = 0; i <= leftIdx; i++) {
 			children[i].changeParent(target);
 		}
-	}
+	}*/
 
 	/** Ensure that this node doesn't have too many or too few children */
 	private rebalance() {
@@ -203,7 +205,7 @@ export class ImageNode {
 						this.content = child.content;
 					} else {
 						// Find a good split
-						child.removeOutliers(this);
+						//child.removeOutliers(this);
 					}
 				}
 			}
@@ -251,5 +253,3 @@ export class ImageNode {
 		this.content = null;
 	}
 }
-
-export default EditorImage;

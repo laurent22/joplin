@@ -12,10 +12,12 @@ interface HTMLToolButton {
  * debugging purposes — when the editor is running directly in a browser.
  */
 export default class HTMLToolbar {
-	private toolButtons: Record<ToolType, HTMLToolButton[]>;
+	private toolButtons: Partial<Record<ToolType, HTMLToolButton[]>>;
 	private container: HTMLElement;
 
     public constructor(private editor: ImageEditor, parent: HTMLElement) {
+		this.toolButtons = {};
+
         editor.notifier.on(EditorEventType.ToolEnabled, (tool) => this.onToolEnabled(tool));
         editor.notifier.on(EditorEventType.ToolDisabled, (tool) => this.onToolDisabled(tool));
 
@@ -54,6 +56,7 @@ export default class HTMLToolbar {
 			const isEnabled = toolController.isToolEnabled(toolType);
 			const cmd = ToolController.setToolEnabled(toolType, !isEnabled);
 			cmd.apply(this.editor);
+			console.log('Set tool', toolName, '.isEnabled to', !isEnabled);
 		};
 
 		const onToolEnabled = () => {
@@ -78,9 +81,24 @@ export default class HTMLToolbar {
 		this.container.appendChild(button);
 	}
 
+	private addActionButton(text: string, command: ()=>void) {
+		const button = document.createElement('button');
+		button.innerText = text;
+		button.classList.add('toolButton');
+		button.onclick = command;
+		this.container.appendChild(button);
+	}
+
 	private addElements() {
 		this.addToolButton(ToolType.TouchPanZoom, 'Touch Panning');
 		this.addToolButton(ToolType.Eraser, 'Eraser');
 		this.addToolButton(ToolType.Selection, 'Select Tool');
+		this.addToolButton(ToolType.Pen, 'Pen');
+		this.addActionButton('Undo', () => {
+			this.editor.history.undo();
+		});
+		this.addActionButton('Redo', () => {
+			this.editor.history.redo();
+		});
 	}
 }

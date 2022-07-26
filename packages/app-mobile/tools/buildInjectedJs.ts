@@ -101,11 +101,25 @@ class BundledFile {
 
 			if (data.warnings && data.warningsCount) {
 				console.warn('Warnings: ', data.warningsCount);
-				console.warn(data.warnings);
+				for (const warning of data.warnings) {
+					// Stack contains the message
+					if (warning.stack) {
+						console.warn(warning.stack);
+					} else {
+						console.warn(warning.message);
+					}
+				}
 			}
 			if (data.errors && data.errorsCount) {
 				console.error('Errors: ', data.errorsCount);
-				console.error(data.errors);
+				for (const error of data.errors) {
+					if (error.stack) {
+						console.error(error.stack);
+					} else {
+						console.error(error.message);
+					}
+					console.error();
+				}
 
 				failed = true;
 			}

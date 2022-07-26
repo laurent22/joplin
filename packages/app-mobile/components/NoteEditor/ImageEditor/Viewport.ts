@@ -4,7 +4,11 @@
 
 import Command from './commands/Command';
 import ImageEditor from './editor';
-import { Mat33, Point2, Rect2, Vec2, Vec3 } from './math';
+import Mat33 from './geometry/Mat33';
+import Rect2 from './geometry/Rect2';
+import { Point2, Vec2 } from './geometry/Vec2';
+import Vec3 from './geometry/Vec3';
+import { EditorEventType, EditorNotifier } from './types';
 
 export class Viewport {
 	/**
@@ -34,7 +38,7 @@ export class Viewport {
 	private inverseTransform: Mat33;
 	private screenRect: Rect2;
 
-	public constructor() {
+	public constructor(private notifier: EditorNotifier) {
 		this.updateTransform(Mat33.identity);
 		this.screenRect = Rect2.empty;
 	}
@@ -60,6 +64,10 @@ export class Viewport {
 	private updateTransform(newTransform: Mat33) {
 		this.transform = newTransform;
 		this.inverseTransform = newTransform.inverse();
+		this.notifier.dispatch(EditorEventType.ViewportChanged, {
+			kind: EditorEventType.ViewportChanged,
+			newTransform,
+		});
 	}
 
 	public get screenToCanvasTransform(): Mat33 {

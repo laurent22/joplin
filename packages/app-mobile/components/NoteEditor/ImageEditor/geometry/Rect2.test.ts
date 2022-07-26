@@ -49,16 +49,18 @@ describe('Rect2 tests', () => {
 		expect(Rect2.empty.union(Rect2.empty)).objEq(Rect2.empty);
 	});
 
-	it('Contains', () => {
+	it('contains', () => {
 		expect(new Rect2(-1, -1, 2, 2).containsPoint(Vec2.zero)).toBe(true);
 		expect(new Rect2(-1, -1, 0, 0).containsPoint(Vec2.zero)).toBe(false);
 		expect(new Rect2(1, 2, 3, 4).containsRect(Rect2.empty)).toBe(false);
 		expect(new Rect2(1, 2, 3, 4).containsRect(new Rect2(1, 2, 1, 2))).toBe(true);
 		expect(new Rect2(-2, -2, 4, 4).containsRect(new Rect2(-1, 0, 1, 1))).toBe(true);
-		expect(new Rect2(-2, -2, 4, 4).containsRect(
-			new Rect2(-1, 0, 10, 1)
-		)).toBe(false);
+		expect(new Rect2(-2, -2, 4, 4).containsRect(new Rect2(-1, 0, 10, 1))).toBe(false);
 	});
+
+	it('empty rect should not contain a larger rect', () => {
+		expect(Rect2.empty.containsRect(new Rect2(-1, -1, 3, 3))).toBe(false);
+	})
 
 	it('Intersection testing', () => {
 		expect(new Rect2(-1, -1, 2, 2).intersects(Rect2.empty)).toBe(true);

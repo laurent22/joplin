@@ -1,78 +1,74 @@
 import Color4 from '../Color4';
 import ImageEditor from '../editor';
-import EditorImage, { AddElementCommand } from '../EditorImage';
-import Stroke from '../Stroke';
-import { Pointer, PointerEvt } from '../types';
+import EditorImage from '../EditorImage';
+import StrokeBuilder from '../StrokeBuilder';
+import { Pointer, PointerDevice, PointerEvt } from '../types';
 import BaseTool from './BaseTool';
 import { ToolType } from './ToolController';
 
 const pressureToWidthMultiplier = 4.0;
 
 export default class Pen extends BaseTool {
-	private strokeAction: AddElementCommand;
-	private stroke: Stroke;
+	private builder: StrokeBuilder;
 	private color: Color4 = Color4.ofRGBA(1.0, 0.0, 0.5, 0.3);
-	public readonly type: ToolType = ToolType.Pen;
+	public readonly kind: ToolType = ToolType.Pen;
 
-	public constructor(private editor: ImageEditor) { super(); }
+	public constructor(private editor: ImageEditor) {
+		super(editor.notifier);
+	}
 
 	private getPressureMultiplier() {
 		return 1 / this.editor.viewport.getScaleFactor() * pressureToWidthMultiplier;
 	}
 
-	private addPointToStroke(pointer: Pointer) {
-		if (this.strokeAction == null) {
-			this.strokeAction = new EditorImage.AddElementCommand(this.stroke);
-		}
-
-		this.strokeAction.unapply(this.editor);
-		this.stroke.addPoint({
+	private getStrokePoint(pointer: Pointer) {
+		const pressure = pointer.pressure ?? 1.0;
+		return {
 			pos: pointer.canvasPos,
-			width: (pointer.pressure ?? 1.0) * this.getPressureMultiplier(),
+			width: pressure * this.getPressureMultiplier(),
 			color: this.color,
-		});
-		this.strokeAction = new EditorImage.AddElementCommand(this.stroke);
-		this.strokeAction.apply(this.editor);
+			time: pointer.timeStamp,
+		};
+	}
+
+	private addPointToStroke(pointer: Pointer) {
+		this.editor.clearWetInk();
+		this.editor.drawWetInk(...this.builder.preview());
+
+		this.builder.addPoint(this.getStrokePoint(pointer));
 	}
 
 	public onPointerDown({ current, allPointers }: PointerEvt): boolean {
-		if (allPointers.length === 1) {
-			this.stroke = new Stroke({
-				pos: current.canvasPos,
-				width: (current.pressure ?? 1.0) * this.getPressureMultiplier(),
-				color: this.color,
-			});
+		if (allPointers.length === 1 || current.device === PointerDevice.Pen) {
+			this.builder = new StrokeBuilder(this.getStrokePoint(current));
 			return true;
 		}
 
 		return false;
 	}
 
-	public onPointerMove({ current, allPointers }: PointerEvt): void {
-		if (allPointers.length !== 1 || !current.down) {
-			return;
-		}
-
+	public onPointerMove({ current }: PointerEvt): void {
 		this.addPointToStroke(current);
 	}
 
-	public onPointerUp({ current, allPointers }: PointerEvt): void {
-		if (allPointers.length > 1) {
+	public onPointerUp({ current }: PointerEvt): void {
+		if (!this.builder) {
 			return;
 		}
 
 		this.addPointToStroke(current);
-		if (this.strokeAction && current.isPrimary) {
-			this.strokeAction.unapply(this.editor);
-			this.editor.dispatch(this.strokeAction);
-			console.log('Added stroke');
+		if (this.builder && current.isPrimary) {
+			const stroke = this.builder.build();
+			const action = new EditorImage.AddElementCommand(stroke);
+			this.editor.dispatch(action);
+			console.log('Added stroke', stroke);
 		}
-		this.strokeAction = null;
+		this.builder = null;
+		this.editor.clearWetInk();
 	}
 
 	public onGestureCancel(): void {
-		this.strokeAction?.unapply(this.editor);
-		this.strokeAction = null;
+		this.editor.clearWetInk();
 	}
 
 }

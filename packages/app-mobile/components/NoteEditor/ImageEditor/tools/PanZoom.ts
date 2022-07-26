@@ -1,6 +1,8 @@
 
 import { ImageEditor } from '../editor';
-import { Mat33, Point2, Vec3 } from '../math';
+import Mat33 from '../geometry/Mat33';
+import { Point2, Vec2 } from '../geometry/Vec2';
+import Vec3 from '../geometry/Vec3';
 import { Pointer, PointerDevice, PointerEvt, WheelEvt } from '../types';
 import { Viewport } from '../Viewport';
 import BaseTool from './BaseTool';
@@ -31,7 +33,7 @@ export enum PanZoomMode {
 };
 
 export default class PanZoom extends BaseTool {
-	public readonly kind: ToolType.PanZoom = ToolType.PanZoom;
+	public readonly kind: ToolType.PanZoom|ToolType.TouchPanZoom = ToolType.PanZoom;
 	private transform: Viewport.ViewportTransform;
 
 	private lastAngle: number;
@@ -39,7 +41,11 @@ export default class PanZoom extends BaseTool {
 	private lastScreenCenter: Point2;
 
 	public constructor(private editor: ImageEditor, private mode: PanZoomMode) {
-		super();
+		super(editor.notifier);
+
+		if (mode === PanZoomMode.OneFingerGestures) {
+			this.kind = ToolType.TouchPanZoom;
+		}
 	}
 
 	/** @return information about the pointers in a gesture */
@@ -80,11 +86,18 @@ export default class PanZoom extends BaseTool {
 		return handlingGesture;
 	}
 
+	// Returns the change in position of the center of the given group of pointers.
+	// Assumes this.lastScreenCenter has been set appropriately.
+	private getCenterDelta(screenCenter: Point2): Vec2 {
+		// Use transformVec3 to avoid translating the delta
+		const delta = this.editor.viewport.screenToCanvasTransform.transformVec3(screenCenter.minus(this.lastScreenCenter));
+		return delta;
+	}
+
 	private handleTwoFingerMove(allPointers: Pointer[]) {
 		const { screenCenter, canvasCenter, angle, dist } = this.computePinchData(allPointers[0], allPointers[1]);
 
-		// Use transformVec3 to avoid translating the delta
-		const delta = this.editor.viewport.screenToCanvasTransform.transformVec3(screenCenter.minus(this.lastScreenCenter));
+		const delta = this.getCenterDelta(screenCenter);
 
 		const transformUpdate = Mat33.translation(delta)
 			.rightMul(Mat33.scaling2D(dist / this.lastDist, canvasCenter))
@@ -98,9 +111,10 @@ export default class PanZoom extends BaseTool {
 	}
 
 	private handleOneFingerMove(pointer: Pointer) {
+		const delta = this.getCenterDelta(pointer.screenPos);
 		this.transform = new Viewport.ViewportTransform(
 			this.transform.transform.rightMul(
-				Mat33.translation(pointer.screenPos.minus(this.lastScreenCenter))
+				Mat33.translation(delta)
 			)
 		);
 		this.lastScreenCenter = pointer.screenPos;
@@ -109,12 +123,13 @@ export default class PanZoom extends BaseTool {
 	public onPointerMove({ allPointers }: PointerEvt): void {
 		this.transform ??= new Viewport.ViewportTransform(Mat33.identity);
 
-		this.transform.unapply(this.editor);
+		const lastTransform = this.transform;
 		if (allPointers.length === 2 && this.mode & PanZoomMode.TwoFingerGestures) {
 			this.handleTwoFingerMove(allPointers);
 		} else if (allPointers.length === 1 && this.mode & PanZoomMode.OneFingerGestures) {
 			this.handleOneFingerMove(allPointers[0]);
 		}
+		lastTransform.unapply(this.editor);
 		this.transform.apply(this.editor);
 	}
 

@@ -898,9 +898,6 @@ packages/app-mobile/components/NoteEditor/ImageEditor/EditorImage.js.map
 packages/app-mobile/components/NoteEditor/ImageEditor/EditorImage.test.d.ts
 packages/app-mobile/components/NoteEditor/ImageEditor/EditorImage.test.js
 packages/app-mobile/components/NoteEditor/ImageEditor/EditorImage.test.js.map
-packages/app-mobile/components/NoteEditor/ImageEditor/Stroke.d.ts
-packages/app-mobile/components/NoteEditor/ImageEditor/Stroke.js
-packages/app-mobile/components/NoteEditor/ImageEditor/Stroke.js.map
 packages/app-mobile/components/NoteEditor/ImageEditor/StrokeBuilder.d.ts
 packages/app-mobile/components/NoteEditor/ImageEditor/StrokeBuilder.js
 packages/app-mobile/components/NoteEditor/ImageEditor/StrokeBuilder.js.map
@@ -973,9 +970,6 @@ packages/app-mobile/components/NoteEditor/ImageEditor/rendering/CanvasRenderer.j
 packages/app-mobile/components/NoteEditor/ImageEditor/toolbar/HTMLToolbar.d.ts
 packages/app-mobile/components/NoteEditor/ImageEditor/toolbar/HTMLToolbar.js
 packages/app-mobile/components/NoteEditor/ImageEditor/toolbar/HTMLToolbar.js.map
-packages/app-mobile/components/NoteEditor/ImageEditor/toolbar/Toolbar.d.ts
-packages/app-mobile/components/NoteEditor/ImageEditor/toolbar/Toolbar.js
-packages/app-mobile/components/NoteEditor/ImageEditor/toolbar/Toolbar.js.map
 packages/app-mobile/components/NoteEditor/ImageEditor/toolbar/ToolbarView.d.ts
 packages/app-mobile/components/NoteEditor/ImageEditor/toolbar/ToolbarView.js
 packages/app-mobile/components/NoteEditor/ImageEditor/toolbar/ToolbarView.js.map
@@ -994,6 +988,9 @@ packages/app-mobile/components/NoteEditor/ImageEditor/tools/PanZoom.js.map
 packages/app-mobile/components/NoteEditor/ImageEditor/tools/Pen.d.ts
 packages/app-mobile/components/NoteEditor/ImageEditor/tools/Pen.js
 packages/app-mobile/components/NoteEditor/ImageEditor/tools/Pen.js.map
+packages/app-mobile/components/NoteEditor/ImageEditor/tools/SelectionTool.d.ts
+packages/app-mobile/components/NoteEditor/ImageEditor/tools/SelectionTool.js
+packages/app-mobile/components/NoteEditor/ImageEditor/tools/SelectionTool.js.map
 packages/app-mobile/components/NoteEditor/ImageEditor/tools/ToolController.d.ts
 packages/app-mobile/components/NoteEditor/ImageEditor/tools/ToolController.js
 packages/app-mobile/components/NoteEditor/ImageEditor/tools/ToolController.js.map

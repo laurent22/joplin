@@ -1,49 +1,26 @@
 import Color4 from '../Color4';
-import { Point2, Rect2 } from '../math';
+import Mat33 from '../geometry/Mat33';
+import { PathCommand, PathCommandType } from '../geometry/Path';
+import { Point2, Vec2 } from '../geometry/Vec2';
 import Viewport from '../Viewport';
 
 export interface FillStyle {
 	color: Color4;
 }
 
-
-export const getPathSegmentBBox = (startPoint: Point2, part: PathCommand): Rect2 => {
-	const points = [ startPoint ];
-	switch (part.kind) {
-	case PathCommandType.LineTo:
-		points.push(part.point);
-		break;
-	case PathCommandType.CubicBezierTo:
-		points.push(part.controlPoint1, part.controlPoint2, part.endPoint);
-		break;
-	case PathCommandType.QuadraticBezierTo:
-		points.push(part.controlPoint, part.endPoint);
-		break;
-	default:
-		const exhaustivenessCheck: never = part;
-		return exhaustivenessCheck;
-	}
-
-	return Rect2.bboxOf(points);
-};
-
-export interface PathSpec {
+export interface RenderablePathSpec {
 	startPoint: Point2;
 	commands: PathCommand[];
 	fill: FillStyle;
 }
 
-export const getPathBBox = (path: PathSpec): Rect2 => {
-	const startPoint = path.startPoint;
-	return path.commands.reduce((previous: Rect2, current: PathCommand): Rect2 => {
-		// We're just computing the bounding box, so don't need to update
-		// startPoint.
-		return previous.union(getPathSegmentBBox(startPoint, current));
-	}, Rect2.empty);
-};
-
 export default abstract class AbstractRenderer {
 	protected constructor(protected viewport: Viewport) { }
+
+	// Returns the size of the rendered region of this on
+	// the display (in pixels).
+	public abstract displaySize(): Vec2;
+
 	public abstract clear(): void;
 	protected abstract beginPath(startPoint: Point2): void;
 	protected abstract endPath(style: FillStyle): void;
@@ -55,22 +32,24 @@ export default abstract class AbstractRenderer {
 		controlPoint: Point2, endPoint: Point2,
 	): void;
 
-	public drawPath({ startPoint, commands, fill }: PathSpec) {
-		this.beginPath(startPoint);
+	public drawPath(
+		{ startPoint, commands, fill }: RenderablePathSpec, transform: Mat33 = Mat33.identity
+	) {
+		this.beginPath(transform.transformVec2(startPoint));
 
 		for (const command of commands) {
 			if (command.kind === PathCommandType.LineTo) {
-				this.lineTo(command.point);
+				this.lineTo(transform.transformVec2(command.point));
 			} else if (command.kind === PathCommandType.CubicBezierTo) {
 				this.traceCubicBezierCurve(
-					command.controlPoint1,
-					command.controlPoint2,
-					command.endPoint,
+					transform.transformVec2(command.controlPoint1),
+					transform.transformVec2(command.controlPoint2),
+					transform.transformVec2(command.endPoint),
 				);
 			} else if (command.kind === PathCommandType.QuadraticBezierTo) {
 				this.traceQuadraticBezierCurve(
-					command.controlPoint,
-					command.endPoint,
+					transform.transformVec2(command.controlPoint),
+					transform.transformVec2(command.endPoint),
 				);
 			}
 		}
