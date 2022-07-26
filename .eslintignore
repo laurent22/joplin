@@ -932,6 +932,9 @@ packages/app-mobile/components/getResponsiveValue.js.map
 packages/app-mobile/components/getResponsiveValue.test.d.ts
 packages/app-mobile/components/getResponsiveValue.test.js
 packages/app-mobile/components/getResponsiveValue.test.js.map
+packages/app-mobile/components/checkbox.d.ts
+packages/app-mobile/components/checkbox.js
+packages/app-mobile/components/checkbox.js.map
 packages/app-mobile/components/global-style.d.ts
 packages/app-mobile/components/global-style.js
 packages/app-mobile/components/global-style.js.map

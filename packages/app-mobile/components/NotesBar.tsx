@@ -1,18 +1,20 @@
-const React = require('react');
+import * as React from 'react';
 const { View, Text, StyleSheet, TextInput, TouchableOpacity } = require('react-native');
 import { State } from '@joplin/lib/reducer';
 import { themeStyle } from './global-style';
 const { connect } = require('react-redux');
 const Icon = require('react-native-vector-icons/Ionicons').default;
 const { _ } = require('@joplin/lib/locale');
+import Checkbox from './checkbox';
+import Note from '@joplin/lib/models/Note';
 
 interface Props {
     themeId: string;
+	notes: any[];
 }
 
 interface NoteListProps {
-    title: string;
-    isTodo: boolean;
+	note: any;
 }
 
 function NotesBarComponent(props: Props) {
@@ -166,13 +168,18 @@ function NotesBarComponent(props: Props) {
 
 
 	const NoteListItem = function(props: NoteListProps) {
+		// const [ isChecked, setIsChecked ] = React.useState(false);
+		const note = props.note ? props.note : {};
+		const isTodo = !!Number(note.is_todo);
+
 		let item;
 
-		if (props.isTodo) {
+		if (isTodo) {
 			item = (
 				<View>
 					<TouchableOpacity style={styles().padding}>
-						<Text style={styles().itemText}>{props.title}</Text>
+						<Checkbox style={this.styles().checkbox} checked={!!Number(note.todo_completed)} onChange={this.todoCheckbox_change} />
+						<Text style={styles().itemText}>{Note.displayTitle(note)}</Text>
 					</TouchableOpacity>
 					{dividerComp}
 				</View>
@@ -181,7 +188,7 @@ function NotesBarComponent(props: Props) {
 			item = (
 				<View>
 					<TouchableOpacity style={styles().padding}>
-						<Text style={styles().itemText}>{props.title}</Text>
+						<Text style={styles().itemText}>{Note.displayTitle(note)}</Text>
 					</TouchableOpacity>
 					{dividerComp}
 				</View>
@@ -195,7 +202,7 @@ function NotesBarComponent(props: Props) {
 		<View style={styles().container}>
 			{topComp}
 			{inputGroupComp}
-			<NoteListItem title="First Note" isTodo={false} />
+			<NoteListItem note={props.notes[0]} />
 		</View>
 	);
 }
@@ -203,6 +210,7 @@ function NotesBarComponent(props: Props) {
 const NotesBar = connect((state: State) => {
 	return {
 		themeId: state.settings.theme,
+		notes: state.notes,
 	};
 })(NotesBarComponent);
 
