@@ -128,11 +128,11 @@ const computeDecorations = (view: EditorView) => {
 				// Only block decorations will have differing first and last lines
 				if (blockDecorated) {
 					// Allow different styles for the first, last lines in a block.
-					if (viewFrom == node.from) {
+					if (viewFrom === node.from) {
 						addDecorationToLines(viewFrom, viewFrom, regionStartDecoration);
 					}
 
-					if (viewTo == node.to) {
+					if (viewTo === node.to) {
 						addDecorationToLines(viewTo, viewTo, regionStopDecoration);
 					}
 				}
