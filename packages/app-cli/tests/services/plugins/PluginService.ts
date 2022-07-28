@@ -1,5 +1,5 @@
 import PluginRunner from '../../../app/services/plugins/PluginRunner';
-import PluginService, { InitialSettings } from '@joplin/lib/services/plugins/PluginService';
+import PluginService, { defaultPluginSetting, InitialSettings, PluginSettings } from '@joplin/lib/services/plugins/PluginService';
 import { ContentScriptType } from '@joplin/lib/services/plugins/api/types';
 import MdToHtml from '@joplin/renderer/MdToHtml';
 import shim from '@joplin/lib/shim';
@@ -272,15 +272,108 @@ describe('services_PluginService', function() {
 		expect(await fs.pathExists(installedPluginPath)).toBe(true);
 	}));
 
-	it('should install default plugins', (async () => {
+	it('should install default plugins with no previous default plugins installed', (async () => {
+		Setting.setValue('installedDefaultPlugins', []);
+
 		const service = newPluginService();
+
+		service.defaultPluginsId = ['io.github.jackgruber.backup', 'plugin.calebjohn.rich-markdown'];
 		const pluginsPath = path.join(__dirname, '..', '/defaultPlugins/');
 		const pluginSettings = service.unserializePluginSettings(Setting.value('plugins.states'));
-		await service.installDefaultPlugins(pluginsPath, pluginSettings, service);
+
+		const newPluginsSettings = await service.installDefaultPlugins(pluginsPath, pluginSettings);
+
+		// here we are checking and updating 'installedDefaultPlugins' array
+		service.getDefaultPluginsInstallState();
+
 		const installedPluginPath1 = `${Setting.value('pluginDir')}/io.github.jackgruber.backup.jpl`;
 		const installedPluginPath2 = `${Setting.value('pluginDir')}/plugin.calebjohn.rich-markdown.jpl`;
+
 		expect(await fs.pathExists(installedPluginPath1)).toBe(true);
 		expect(await fs.pathExists(installedPluginPath2)).toBe(true);
+
+		expect(newPluginsSettings['io.github.jackgruber.backup']).toMatchObject(defaultPluginSetting());
+		expect(newPluginsSettings['plugin.calebjohn.rich-markdown']).toMatchObject(defaultPluginSetting());
+
+		const installedDefaultPlugins = Setting.value('installedDefaultPlugins');
+
+		expect(installedDefaultPlugins.includes('io.github.jackgruber.backup')).toBe(true);
+		expect(installedDefaultPlugins.includes('plugin.calebjohn.rich-markdown')).toBe(true);
+	}));
+
+	it('should install default plugins with previous default plugins installed', (async () => {
+
+		Setting.setValue('installedDefaultPlugins', ['plugin.calebjohn.rich-markdown']);
+		const service = newPluginService();
+		service.defaultPluginsId = ['io.github.jackgruber.backup', 'plugin.calebjohn.rich-markdown'];
+		const pluginsPath = path.join(__dirname, '..', '/defaultPlugins/');
+		const pluginSettings = service.unserializePluginSettings(Setting.value('plugins.states'));
+
+		const newPluginsSettings = await service.installDefaultPlugins(pluginsPath, pluginSettings);
+
+		const installedPluginPath1 = `${Setting.value('pluginDir')}/io.github.jackgruber.backup.jpl`;
+		const installedPluginPath2 = `${Setting.value('pluginDir')}/plugin.calebjohn.rich-markdown.jpl`;
+
+		// here we are checking and updating 'installedDefaultPlugins' array
+		service.getDefaultPluginsInstallState();
+
+		const installedDefaultPlugins = Setting.value('installedDefaultPlugins');
+
+		expect(newPluginsSettings['io.github.jackgruber.backup']).toMatchObject(defaultPluginSetting());
+		expect(newPluginsSettings['plugin.calebjohn.rich-markdown']).toBeUndefined();
+
+		expect(await fs.pathExists(installedPluginPath1)).toBe(true);
+		expect(await fs.pathExists(installedPluginPath2)).toBe(false);
+
+
+		expect(installedDefaultPlugins.includes('io.github.jackgruber.backup')).toBe(true);
+		expect(installedDefaultPlugins.includes('plugin.calebjohn.rich-markdown')).toBe(true);
+	}));
+
+	it('should get default plugins install state', (async () => {
+		// with no previous default plugin in array
+		Setting.setValue('installedDefaultPlugins', ['']);
+		const service = newPluginService();
+		service.defaultPluginsId = ['io.github.jackgruber.backup', 'plugin.calebjohn.rich-markdown'];
+
+		const defaultInstallStates: PluginSettings = service.getDefaultPluginsInstallState();
+
+		expect(defaultInstallStates['io.github.jackgruber.backup']).toMatchObject(defaultPluginSetting());
+		expect(defaultInstallStates['plugin.calebjohn.rich-markdown']).toMatchObject(defaultPluginSetting());
+
+		// with previous default plugin in array
+		Setting.setValue('installedDefaultPlugins', ['plugin.calebjohn.rich-markdown']);
+
+		const defaultInstallStates2: PluginSettings = service.getDefaultPluginsInstallState();
+
+		expect(defaultInstallStates2['io.github.jackgruber.backup']).toMatchObject(defaultPluginSetting());
+		expect(defaultInstallStates2['plugin.calebjohn.rich-markdown']).toBeUndefined();
+	}));
+
+	it('should check pre-installed default plugins', (async () => {
+		// with previous pre-installed default plugins
+		Setting.setValue('installedDefaultPlugins', ['']);
+		const service = newPluginService();
+		let pluginSettings, installedDefaultPlugins;
+		service.defaultPluginsId = ['io.github.jackgruber.backup', 'plugin.calebjohn.rich-markdown'];
+
+		pluginSettings = { 'plugin.calebjohn.rich-markdown': defaultPluginSetting() };
+		service.checkPreInstalledDefaultPlugins(pluginSettings);
+
+		installedDefaultPlugins = Setting.value('installedDefaultPlugins');
+		expect(installedDefaultPlugins.includes('io.github.jackgruber.backup')).toBe(false);
+		expect(installedDefaultPlugins.includes('plugin.calebjohn.rich-markdown')).toBe(true);
+
+
+		// with no previous pre-installed default plugins
+		Setting.setValue('installedDefaultPlugins', ['not-a-default-plugin']);
+		pluginSettings = {};
+		service.checkPreInstalledDefaultPlugins(pluginSettings);
+
+		installedDefaultPlugins = Setting.value('installedDefaultPlugins');
+		expect(installedDefaultPlugins.includes('io.github.jackgruber.backup')).toBe(false);
+		expect(installedDefaultPlugins.includes('plugin.calebjohn.rich-markdown')).toBe(false);
+
 	}));
 
 	it('should rename the plugin archive to the right name', (async () => {
@@ -349,12 +442,12 @@ describe('services_PluginService', function() {
 
 		const initialSettings: InitialSettings = {
 			'io.github.jackgruber.backup': {
-				'path': '/JoplinBackupTest',
+				'path': `${Setting.value('profileDir')}/testBackup`,
 			},
 		};
 
 		service.setSettingsForDefaultPlugins(initialSettings);
-		expect(Setting.value('plugin-io.github.jackgruber.backup.path')).toBe('/JoplinBackupTest');
+		expect(Setting.value('plugin-io.github.jackgruber.backup.path')).toBe(`${Setting.value('profileDir')}/testBackup`);
 		await service.destroy();
 	});
 

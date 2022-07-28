@@ -263,7 +263,6 @@ class Application extends BaseApplication {
 		service.isSafeMode = Setting.value('isSafeMode');
 
 		let pluginSettings = service.unserializePluginSettings(Setting.value('plugins.states'));
-
 		{
 			// Users can add and remove plugins from the config screen at any
 			// time, however we only effectively uninstall the plugin the next
@@ -271,40 +270,18 @@ class Application extends BaseApplication {
 			// stored in the settings.
 			const newSettings = service.clearUpdateState(await service.uninstallPlugins(pluginSettings));
 			Setting.setValue('plugins.states', newSettings);
-			Setting.setValue('preInstalledDefaultPlugins', newSettings);
 		}
 
+		service.checkPreInstalledDefaultPlugins(pluginSettings);
+
 		try {
+			const pluginsDir = path.join(bridge().buildDir(), 'defaultPlugins');
+			pluginSettings = await service.installDefaultPlugins(pluginsDir, pluginSettings);
 			if (await shim.fsDriver().exists(Setting.value('pluginDir'))) {
 				await service.loadAndRunPlugins(Setting.value('pluginDir'), pluginSettings);
 			}
 		} catch (error) {
 			this.logger().error(`There was an error loading plugins from ${Setting.value('pluginDir')}:`, error);
-		}
-
-		// we are loading default plugins here so as to not disturb user plugins
-		try {
-			const pluginsDir = path.join(bridge().buildDir(), 'defaultPlugins');
-			pluginSettings = await service.installDefaultPlugins(pluginsDir, pluginSettings);
-
-			const defaultPluginsPath = await shim.fsDriver().readDirStats(pluginsDir);
-			const readyToLoadPluginsPath = [];
-
-			for (const pluginFolder of defaultPluginsPath) {
-				// here pluginFolder will be pluginId
-				// maybe put this.plugins_ in here instead  of service.plugins
-				const newSettings = Setting.value('installedDefaultPlugins');
-
-				if (service.plugins[pluginFolder.path] || newSettings.includes(pluginFolder.path)) continue;
-
-				readyToLoadPluginsPath.push(path.join(pluginsDir, pluginFolder.path, 'plugin.jpl'));
-			}
-
-			if (readyToLoadPluginsPath.length > 0) {
-				await service.loadAndRunPlugins(readyToLoadPluginsPath, pluginSettings);
-			}
-		} catch (error) {
-			this.logger().error(`There was an error loading default plugins from ${Setting.value('pluginDir')}:`, error);
 		}
 
 		try {
@@ -347,8 +324,7 @@ class Application extends BaseApplication {
 					type: 'STARTUP_PLUGINS_LOADED',
 					value: true,
 				});
-				service.setSettingsForDefaultPlugins(service.initialPluginsSettings, Setting.value('plugins.states'));
-				// object with plugins id wand if its initilised settings
+				service.setSettingsForDefaultPlugins(service.initialPluginsSettings);
 			}
 		}, 500);
 	}

@@ -1534,14 +1534,6 @@ class Setting extends BaseModel {
 				storage: SettingStorage.Database,
 			},
 
-			updatedDefaultPluginsInstallStates: {
-				value: false,
-				type: SettingItemType.Bool,
-				public: false,
-				appTypes: [AppType.Desktop],
-				storage: SettingStorage.File,
-			},
-
 			lastSettingDefaultMigration: {
 				value: -1,
 				type: SettingItemType.Int,
@@ -1557,20 +1549,6 @@ class Setting extends BaseModel {
 			installedDefaultPlugins: {
 				value: [],
 				type: SettingItemType.Array,
-				public: false,
-				storage: SettingStorage.File,
-			},
-
-			setInitialDefaultPluginsSettings: {
-				value: [],
-				type: SettingItemType.Array,
-				public: false,
-				storage: SettingStorage.File,
-			},
-
-			preInstalledDefaultPlugins: {
-				value: '',
-				type: SettingItemType.Object,
 				public: false,
 				storage: SettingStorage.File,
 			},
@@ -1943,7 +1921,7 @@ class Setting extends BaseModel {
 		return this.setValue(key, !this.value(key));
 	}
 
-	static checkAndUpdate(settingName: string, value: string): boolean {
+	static checkArrayAndUpdate(settingName: string, value: string): boolean {
 		const settingValue: Array<any> = this.value(settingName);
 		if (settingValue.includes(value)) return true;
 		settingValue.push(value);

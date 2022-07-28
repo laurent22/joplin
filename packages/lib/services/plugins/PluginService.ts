@@ -77,11 +77,11 @@ export default class PluginService extends BaseService {
 		return this.instance_;
 	}
 
-	public defaultPluginsId: string[] = ['io.github.jackgruber.backup', 'plugin.calebjohn.rich-markdown','joplin.plugin.note.tabs'];
+	public defaultPluginsId: string[] = ['io.github.jackgruber.backup', 'plugin.calebjohn.rich-markdown'];
 
 	public initialSettings: InitialSettings = {
 		'io.github.jackgruber.backup': {
-			'path': Setting.value('profileDir'),
+			'path': `${Setting.value('profileDir')}`,
 		},
 	};
 
@@ -457,14 +457,25 @@ export default class PluginService extends BaseService {
 		} else { return null; }
 	}
 
-	public async installDefaultPlugins(pluginsDir: string, pluginSettings: PluginSettings): Promise<PluginSettings> {
-		const defaultPlugins = await shim.fsDriver().readDirStats(pluginsDir);
-		const installedPlugins = Setting.value('installedDefaultPlugins');
+	public checkPreInstalledDefaultPlugins(pluginSettings: PluginSettings) {
+		const installedDefaultPlugins: Array<string> = Setting.value('installedDefaultPlugins');
+		for (const pluginId of this.defaultPluginsId) {
+			// if pluginId is present in pluginSettings and not in installedDefaultPlugins array,
+			// then its either pre-installed by user or just uninstalled
+			if (pluginSettings[pluginId] && !installedDefaultPlugins.includes(pluginId)) Setting.checkArrayAndUpdate('installedDefaultPlugins', pluginId);
+		}
+	}
 
-		for (let pluginId of defaultPlugins) {
+	public async installDefaultPlugins(pluginsDir: string, pluginSettings: PluginSettings): Promise<PluginSettings> {
+		const defaultPluginsPaths = await shim.fsDriver().readDirStats(pluginsDir);
+		const installedPlugins = Setting.value('installedDefaultPlugins');
+		console.log('print>>', defaultPluginsPaths, installedPlugins);
+
+		for (let pluginId of defaultPluginsPaths) {
 			pluginId = pluginId.path;
 
-			if (installedPlugins.includes(pluginId) || this.plugins_[pluginId]) continue;
+			// if pluginId is present in 'installedDefaultPlugins' array, we won't install it again as default plugin
+			if (installedPlugins.includes(pluginId)) continue;
 			const defaultPluginPath: string = path.join(pluginsDir, pluginId, 'plugin.jpl');
 			await this.installPlugin(defaultPluginPath, false);
 
@@ -475,27 +486,26 @@ export default class PluginService extends BaseService {
 		return pluginSettings;
 	}
 
-	// this is used for setting initial "installed" state for plugins
-	public setInstalledState(): any {
+	public getDefaultPluginsInstallState(): PluginSettings {
 		const settings: PluginSettings = {};
-		const previouslyInstalledPlugins = Setting.value('preInstalledDefaultPlugins');
 		for (const pluginId of this.defaultPluginsId) {
-			// here plugin can be pre installed, so we first check if it is present
-
-			if (!Setting.checkAndUpdate('installedDefaultPlugins', pluginId) && !previouslyInstalledPlugins[pluginId]) {
+			if (!this.pluginIds.includes(pluginId)) continue;
+			if (!Setting.checkArrayAndUpdate('installedDefaultPlugins', pluginId)) {
 				settings[pluginId] = defaultPluginSetting();
 			}
 		}
 		return settings;
 	}
 
-	public setSettingsForDefaultPlugins(initialSettings: InitialSettings, pluginSettings: PluginSettings) {
+	public setSettingsForDefaultPlugins(initialSettings: InitialSettings) {
+		const installedDefaultPlugins = Setting.value('installedDefaultPlugins');
+
+		// only set initial settings if the plugin is not present in installedDefaultPlugins array
 		for (const pluginId of Object.keys(initialSettings)) {
-			// if previously, installed default plugin is disabled then skip it ========== we need to check every time the plugin
-			// to see if it is started
-			if (!this.pluginEnabled(pluginSettings, pluginId)) continue;
 			for (const settingName of Object.keys(initialSettings[pluginId])) {
-				!Setting.checkAndUpdate('setInitialDefaultPluginsSettings', pluginId) && Setting.setValue(`plugin-${pluginId}.${settingName}`, initialSettings[pluginId][settingName]);
+				if (!installedDefaultPlugins.includes(pluginId)) {
+					Setting.setValue(`plugin-${pluginId}.${settingName}`, initialSettings[pluginId][settingName]);
+				}
 			}
 		}
 	}
