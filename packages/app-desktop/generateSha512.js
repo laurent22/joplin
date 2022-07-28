@@ -4,7 +4,7 @@ const os = require('os');
 const sha512 = require('js-sha512');
 
 const generateChecksumFile = () => {
-	if (os.platform() != 'linux') {
+	if (os.platform() !== 'linux') {
 		return []; // SHA-512 is only for AppImage
 	}
 	const distDirName = 'dist';
@@ -18,7 +18,7 @@ const generateChecksumFile = () => {
 			break;
 		}
 	}
-	if (appImageName == '') {
+	if (appImageName === '') {
 		throw 'AppImage not found!';
 	}
 	const appImagePath = path.join(distPath, appImageName);
