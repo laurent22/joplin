@@ -37,7 +37,7 @@ export default function useEditorSearch(CodeMirror: any) {
 		return { token: function(stream: any) {
 			query.lastIndex = stream.pos;
 			const match = query.exec(stream.string);
-			if (match && match.index == stream.pos) {
+			if (match && match.index === stream.pos) {
 				stream.pos += match[0].length || 1;
 				return 'search-marker';
 			} else if (match) {
@@ -126,7 +126,7 @@ export default function useEditorSearch(CodeMirror: any) {
 
 		// SEARCHOVERLAY
 		// We only want to highlight all matches when there is only 1 search term
-		if (keywords.length !== 1 || keywords[0].value == '') {
+		if (keywords.length !== 1 || keywords[0].value === '') {
 			clearOverlay(this);
 			const prev = keywords.length > 1 ? keywords[0].value : '';
 			setPreviousKeywordValue(prev);

@@ -19,7 +19,7 @@ class GeolocationReact {
 	}
 
 	static currentPosition(options = null) {
-		if (Setting.value('env') == 'dev') return this.currentPosition_testResponse();
+		if (Setting.value('env') === 'dev') return this.currentPosition_testResponse();
 
 		if (!options) options = {};
 		if (!('enableHighAccuracy' in options)) options.enableHighAccuracy = true;
