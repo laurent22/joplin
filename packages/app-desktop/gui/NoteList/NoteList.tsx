@@ -342,7 +342,7 @@ const NoteListComponent = (props: Props) => {
 		const keyCode = event.keyCode;
 		const noteIds = props.selectedNoteIds;
 
-		if (noteIds.length > 0 && (keyCode === 40 || keyCode === 38 || keyCode === 33 || keyCode === 34 || keyCode === 35 || keyCode == 36)) {
+		if (noteIds.length > 0 && (keyCode === 40 || keyCode === 38 || keyCode === 33 || keyCode === 34 || keyCode === 35 || keyCode === 36)) {
 			// DOWN / UP / PAGEDOWN / PAGEUP / END / HOME
 			const noteId = noteIds[0];
 			let noteIndex = BaseModel.modelIndexById(props.notes, noteId);

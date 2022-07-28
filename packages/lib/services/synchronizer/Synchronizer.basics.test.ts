@@ -277,7 +277,7 @@ describe('Synchronizer.basics', function() {
 
 		const localF2 = await Folder.load(remoteF2.id);
 
-		expect(localF2.title == remoteF2.title).toBe(true);
+		expect(localF2.title === remoteF2.title).toBe(true);
 
 		// Then that folder that has been renamed locally should be set in such a way
 		// that synchronizing it applies the title change remotely, and that new title
@@ -292,7 +292,7 @@ describe('Synchronizer.basics', function() {
 
 		remoteF2 = await Folder.load(remoteF2.id);
 
-		expect(remoteF2.title == localF2.title).toBe(true);
+		expect(remoteF2.title === localF2.title).toBe(true);
 	}));
 
 	it('should create remote items with UTF-8 content', (async () => {

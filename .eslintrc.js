@@ -76,6 +76,7 @@ module.exports = {
 
 		'no-array-constructor': ['error'],
 		'radix': ['error'],
+		'eqeqeq': ['error', 'always'],
 
 		// Warn only for now because fixing everything would take too much
 		// refactoring, but new code should try to stick to it.
