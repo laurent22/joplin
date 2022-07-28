@@ -30,11 +30,20 @@ const createTheme = (theme: any): Extension[] => {
 	const baseGlobalStyle: Record<string, string> = {
 		color: theme.color,
 		backgroundColor: theme.backgroundColor,
-		fontFamily: theme.fontFamily,
-		fontSize: `${theme.fontSize}px`,
+
+		// On iOS, apply system font scaling (e.g. font scaling
+		// set in accessibility settings).
+		font: '-apple-system-body',
 	};
 	const baseCursorStyle: Record<string, string> = { };
-	const baseContentStyle: Record<string, string> = { };
+	const baseContentStyle: Record<string, string> = {
+		fontFamily: theme.fontFamily,
+
+		// To allow accessibility font scaling, we also need to set the
+		// fontSize to a value in `em`s (relative scaling relative to
+		// parent font size).
+		fontSize: `${theme.fontSize}em`,
+	};
 	const baseSelectionStyle: Record<string, string> = { };
 	const blurredSelectionStyle: Record<string, string> = { };
 
