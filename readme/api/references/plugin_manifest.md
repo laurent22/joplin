@@ -14,7 +14,7 @@ Name | Type | Required? | Description
 `homepage_url` | string | No | Homepage URL of the plugin. It can also be, for example, a link to a GitHub repository.
 `repository_url` | string | No | Repository URL where the plugin source code is hosted.
 `categories` | string[] | No | [Categories](#categories) that describes the functionality of the plugin. 
-`media` | string[] | No  | Media urls related to the plguin. It is used for listing on Joplin Plugin website.
+`screenshots` | string[] | No  | Screenshots used for listing on Joplin Plugin website. It should be a relative path to src dir.
 
 ## Categories
 
@@ -32,17 +32,6 @@ Name | Type | Required? | Description
 | themes |  changing theme of the app. |
 | viewer | enhancing the rendering of a note. |
 
-## Media
-
-You can store media such as images and videos in this field for listing on Joplin Plugin website.
-| Field | Description |
-| --- | --- |
-| url | a remote url to your media |
-| type |  MIME type of your media, it can be `image/jpeg`, `image/png`, `image/gif`, `image/webp`, `video/mp4`, `video/webm`, and `video/ogg` |
-| platform | a string that can define the distribution platform for which the specific media should apply to, it can be `destktop` or `mobile` |
-| label | a string that serves as an accessible name for the media |
-
-
 ## Manifest example
 
 ```json
@@ -54,11 +43,9 @@ You can store media such as images and videos in this field for listing on Jopli
     "author": "John Smith",
     "app_min_version": "1.4",
     "homepage_url": "https://joplinapp.org",
-    "media": [{
-        "url": "https://raw.githubusercontent.com/laurent22/joplin/dev/Assets/ImageSources/RoundedCorners_64x64.png",
-        "type": "image/png",
-        "platform": "desktop",
-        "label": "Description"
+    "screenshots": [{
+        "src": "path/to/image.png",
+        "label": "image description"
     }]
 }
 ```

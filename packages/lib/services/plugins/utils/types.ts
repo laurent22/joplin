@@ -14,7 +14,7 @@ export interface PluginManifest {
 	repository_url?: string;
 	keywords?: string[];
 	categories?: string[];
-	media?: string[];
+	screenshots?: string[];
 	permissions?: PluginPermission[];
 
 	// Private keys
