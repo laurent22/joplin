@@ -20,8 +20,8 @@ import { markdown } from '@codemirror/lang-markdown';
 import { GFM as GitHubFlavoredMarkdownExtension } from '@lezer/markdown';
 import { indentOnInput, indentUnit, syntaxTree } from '@codemirror/language';
 import {
-	openSearchPanel, closeSearchPanel, SearchQuery, setSearchQuery, getSearchQuery,highlightSelectionMatches, search,
-	findNext, findPrevious, replaceAll, replaceNext,
+	openSearchPanel, closeSearchPanel, SearchQuery, setSearchQuery, getSearchQuery,
+	highlightSelectionMatches, search, findNext, findPrevious, replaceAll, replaceNext,
 } from '@codemirror/search';
 
 import {
