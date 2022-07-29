@@ -68,11 +68,11 @@ class MenuRowModel {
 		currentlyOpenMenu: MenuRowType, parent?: MenuRowModel
 	) {
 		this.title = title;
-		this.open = currentlyOpenMenu == menuId;
+		this.open = currentlyOpenMenu === menuId;
 		this.id = menuId;
 		this.parent = parent;
 
-		const isToplevel = parent == null;
+		const isToplevel = (parent ?? null) === null;
 		if (!isToplevel) {
 			this.addCloseButton();
 		}
@@ -138,7 +138,7 @@ const ToolbarButton = ({ styles, spec, onClick }:
 
 	let content;
 
-	if (typeof spec.icon == 'string') {
+	if (typeof spec.icon === 'string') {
 		content = (
 			<Text style={{ ...styleSheet.text, ...activatedTextStyle, ...disabledTextStyle }}>
 				{spec.icon}
@@ -282,7 +282,7 @@ const MarkdownToolbar = (props: ToolbarProps) => {
 
 	// Header menu
 	for (let level = 1; level <= 5; level++) {
-		const active = selState.headerLevel == level;
+		const active = selState.headerLevel === level;
 		let label;
 		if (!active) {
 			label = _('Create header level %d', level);

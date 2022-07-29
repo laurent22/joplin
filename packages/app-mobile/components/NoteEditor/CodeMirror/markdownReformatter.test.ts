@@ -4,7 +4,7 @@ import {
 import { Text as DocumentText, EditorSelection, EditorState } from '@codemirror/state';
 import { indentUnit } from '@codemirror/language';
 
-describe('Matching', () => {
+describe('markdownReformatter', () => {
 	describe('should match start and end of bolded regions', () => {
 		const spec: RegionSpec = RegionSpec.of({
 			template: '**',
@@ -88,63 +88,63 @@ describe('Matching', () => {
 			expect(findInlineMatch(doc, spec, sel, MatchSide.End)).toBe(0);
 		});
 	});
-});
 
-describe('Text manipulation', () => {
-	const initialText = `Internal text manipulation
-		This is a test...
-		of block and inline region toggling.`;
-	const codeFenceRegex = /^``````\w*\s*$/;
-	const inlineCodeRegionSpec = RegionSpec.of({
-		template: '`',
-		nodeName: 'InlineCode',
-	});
-	const blockCodeRegionSpec: RegionSpec = {
-		template: { start: '``````', end: '``````' },
-		matcher: { start: codeFenceRegex, end: codeFenceRegex },
-	};
+	describe('should toggle inline and block regions correctly', () => {
+		const initialText = `Internal text manipulation
+			This is a test...
+			of block and inline region toggling.`;
+		const codeFenceRegex = /^``````\w*\s*$/;
+		const inlineCodeRegionSpec = RegionSpec.of({
+			template: '`',
+			nodeName: 'InlineCode',
+		});
+		const blockCodeRegionSpec: RegionSpec = {
+			template: { start: '``````', end: '``````' },
+			matcher: { start: codeFenceRegex, end: codeFenceRegex },
+		};
 
-	it('should create an empty region around the cursor', () => {
-		const initialState: EditorState = EditorState.create({
-			doc: initialText,
-			selection: EditorSelection.cursor(0),
+		it('should create an empty region around the cursor', () => {
+			const initialState: EditorState = EditorState.create({
+				doc: initialText,
+				selection: EditorSelection.cursor(0),
+			});
+
+			const changes = toggleRegionFormatGlobally(
+				initialState, inlineCodeRegionSpec, blockCodeRegionSpec
+			);
+
+			const newState = initialState.update(changes).state;
+			expect(newState.doc.toString()).toEqual(`\`\`${initialText}`);
 		});
 
-		const changes = toggleRegionFormatGlobally(
-			initialState, inlineCodeRegionSpec, blockCodeRegionSpec
-		);
+		it('should wrap multiple selected lines in block formatting', () => {
+			const initialState: EditorState = EditorState.create({
+				doc: initialText,
+				selection: EditorSelection.range(0, initialText.length),
+			});
 
-		const newState = initialState.update(changes).state;
-		expect(newState.doc.toString()).toEqual(`\`\`${initialText}`);
-	});
+			const changes = toggleRegionFormatGlobally(
+				initialState, inlineCodeRegionSpec, blockCodeRegionSpec
+			);
 
-	it('should wrap multiple selected lines in block formatting', () => {
-		const initialState: EditorState = EditorState.create({
-			doc: initialText,
-			selection: EditorSelection.range(0, initialText.length),
+			const newState = initialState.update(changes).state;
+			const editorText = newState.doc.toString();
+			expect(editorText).toBe(`\`\`\`\`\`\`\n${initialText}\n\`\`\`\`\`\``);
+			expect(newState.selection.main.from).toBe(0);
+			expect(newState.selection.main.to).toBe(editorText.length);
 		});
 
-		const changes = toggleRegionFormatGlobally(
-			initialState, inlineCodeRegionSpec, blockCodeRegionSpec
-		);
-
-		const newState = initialState.update(changes).state;
-		const editorText = newState.doc.toString();
-		expect(editorText).toBe(`\`\`\`\`\`\`\n${initialText}\n\`\`\`\`\`\``);
-		expect(newState.selection.main.from).toBe(0);
-		expect(newState.selection.main.to).toBe(editorText.length);
-	});
-
-	it('should convert tabs to spaces based on indentUnit', () => {
-		const state: EditorState = EditorState.create({
-			doc: initialText,
-			selection: EditorSelection.cursor(0),
-			extensions: [
-				indentUnit.of('    '),
-			],
+		it('should convert tabs to spaces based on indentUnit', () => {
+			const state: EditorState = EditorState.create({
+				doc: initialText,
+				selection: EditorSelection.cursor(0),
+				extensions: [
+					indentUnit.of('    '),
+				],
+			});
+			expect(tabsToSpaces(state, '\t')).toBe('    ');
+			expect(tabsToSpaces(state, '\t  ')).toBe('      ');
+			expect(tabsToSpaces(state, '  \t  ')).toBe('      ');
 		});
-		expect(tabsToSpaces(state, '\t')).toBe('    ');
-		expect(tabsToSpaces(state, '\t  ')).toBe('      ');
-		expect(tabsToSpaces(state, '  \t  ')).toBe('      ');
 	});
 });
