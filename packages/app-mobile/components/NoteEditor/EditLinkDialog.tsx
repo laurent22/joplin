@@ -1,6 +1,4 @@
-/**
- * Pop-up dialog for editing the content of a link.
- */
+// Dialog allowing the user to update/create links
 
 const React = require('react');
 const { useState, useEffect, useMemo, useRef } = require('react');

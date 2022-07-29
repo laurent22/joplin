@@ -12,14 +12,10 @@ import {
 	toggleInlineFormatGlobally, toggleRegionFormatGlobally, toggleSelectedLinesStartWith,
 	isIndentationEquivalent, stripBlockquote, tabsToSpaces,
 } from './markdownReformatter';
-import { logMessage } from './webviewLogger';
-
 
 const startingSpaceRegex = /^(\s*)/;
 
 export const toggleBolded: Command = (view: EditorView): boolean => {
-	logMessage('Toggling bolded!');
-
 	const spec = RegionSpec.of({ template: '**', nodeName: 'StrongEmphasis' });
 	const changes = toggleInlineFormatGlobally(view.state, spec);
 
@@ -28,8 +24,6 @@ export const toggleBolded: Command = (view: EditorView): boolean => {
 };
 
 export const toggleItalicized: Command = (view: EditorView): boolean => {
-	logMessage('Toggling italicized!');
-
 	const changes = toggleInlineFormatGlobally(view.state, {
 		nodeName: 'Emphasis',
 
@@ -44,8 +38,6 @@ export const toggleItalicized: Command = (view: EditorView): boolean => {
 // If the selected region is an empty inline code block, it will be converted to
 // a block (fenced) code block.
 export const toggleCode: Command = (view: EditorView): boolean => {
-	logMessage('Toggling code!');
-
 	const codeFenceRegex = /^```\w*\s*$/;
 	const inlineRegionSpec = RegionSpec.of({ template: '`', nodeName: 'InlineCode' });
 	const blockRegionSpec: RegionSpec = {
@@ -61,8 +53,6 @@ export const toggleCode: Command = (view: EditorView): boolean => {
 };
 
 export const toggleMath: Command = (view: EditorView): boolean => {
-	logMessage('Toggling math!');
-
 	const blockStartRegex = /^\$\$/;
 	const blockEndRegex = /\$\$\s*$/;
 	const inlineRegionSpec = RegionSpec.of({ nodeName: 'InlineMath', template: '$' });
@@ -83,8 +73,6 @@ export const toggleMath: Command = (view: EditorView): boolean => {
 
 export const toggleList = (listType: ListType): Command => {
 	return (view: EditorView): boolean => {
-		logMessage('Toggling list!');
-
 		let state = view.state;
 		let doc = state.doc;
 
@@ -141,7 +129,7 @@ export const toggleList = (listType: ListType): Command => {
 				toLine = doc.lineAt(sel.to);
 				fromLineContent = stripBlockquote(fromLine);
 				firstLineIndentation = fromLineContent.match(startingSpaceRegex)[0];
-				firstLineInBlockQuote = (fromLineContent != fromLine.text);
+				firstLineInBlockQuote = (fromLineContent !== fromLine.text);
 
 				containerType = getContainerType(fromLine);
 			};
@@ -185,8 +173,8 @@ export const toggleList = (listType: ListType): Command => {
 					firstLineIndentation = expandedRegionIndentation;
 				}
 			} else if (
-				(origContainerType != containerType && origContainerType != null)
-					|| containerType != getContainerType(toLine)
+				(origContainerType !== containerType && (origContainerType ?? null) !== null)
+					|| containerType !== getContainerType(toLine)
 			) {
 				// If the container type changed, this could be an artifact of checklists/bulleted
 				// lists sharing the same node type.
@@ -196,20 +184,20 @@ export const toggleList = (listType: ListType): Command => {
 				let lastFromLineNo;
 				let lastToLineNo;
 
-				while (newFromLineNo != lastFromLineNo || newToLineNo != lastToLineNo) {
+				while (newFromLineNo !== lastFromLineNo || newToLineNo !== lastToLineNo) {
 					lastFromLineNo = newFromLineNo;
 					lastToLineNo = newToLineNo;
 
 					if (lastFromLineNo - 1 >= 1) {
 						const testFromLine = doc.line(lastFromLineNo - 1);
-						if (getContainerType(testFromLine) == origContainerType) {
+						if (getContainerType(testFromLine) === origContainerType) {
 							newFromLineNo --;
 						}
 					}
 
 					if (lastToLineNo + 1 <= doc.lines) {
 						const testToLine = doc.line(lastToLineNo + 1);
-						if (getContainerType(testToLine) == origContainerType) {
+						if (getContainerType(testToLine) === origContainerType) {
 							newToLineNo ++;
 						}
 					}
@@ -223,7 +211,7 @@ export const toggleList = (listType: ListType): Command => {
 			}
 
 			// Determine whether the expanded selection should be empty
-			if (originalSel.empty && fromLine.number == toLine.number) {
+			if (originalSel.empty && fromLine.number === toLine.number) {
 				sel = EditorSelection.cursor(toLine.to);
 			}
 
@@ -238,20 +226,20 @@ export const toggleList = (listType: ListType): Command => {
 				const line = doc.line(lineNum);
 				const lineContent = stripBlockquote(line);
 				const lineContentFrom = line.to - lineContent.length;
-				const inBlockQuote = (lineContent != line.text);
+				const inBlockQuote = (lineContent !== line.text);
 				const indentation = lineContent.match(startingSpaceRegex)[0];
 
 				const wrongIndentaton = !isIndentationEquivalent(state, indentation, firstLineIndentation);
 
 				// If not the right list level,
-				if (inBlockQuote != firstLineInBlockQuote || wrongIndentaton) {
+				if (inBlockQuote !== firstLineInBlockQuote || wrongIndentaton) {
 					// We'll be starting a new list
 					listItemCounter = 1;
 					continue;
 				}
 
 				// Don't add list numbers to otherwise empty lines (unless it's the first line)
-				if (lineNum != fromLine.number && line.text.trim().length == 0) {
+				if (lineNum !== fromLine.number && line.text.trim().length === 0) {
 					// Do not reset the counter -- the markdown renderer doesn't!
 					continue;
 				}
@@ -261,7 +249,7 @@ export const toggleList = (listType: ListType): Command => {
 
 				// If we need to remove an existing list,
 				const currentContainer = getContainerType(line);
-				if (currentContainer != null) {
+				if (currentContainer !== null) {
 					const containerRegex = listRegexes[currentContainer];
 					const containerMatch = lineContent.match(containerRegex);
 					if (!containerMatch) {
@@ -275,12 +263,12 @@ export const toggleList = (listType: ListType): Command => {
 
 				let replacementString;
 
-				if (listType == containerType) {
+				if (listType === containerType) {
 					// Delete the existing list if it's the same type as the current
 					replacementString = '';
-				} else if (listType == ListType.OrderedList) {
+				} else if (listType === ListType.OrderedList) {
 					replacementString = `${firstLineIndentation}${listItemCounter}. `;
-				} else if (listType == ListType.CheckList) {
+				} else if (listType === ListType.CheckList) {
 					replacementString = `${firstLineIndentation}- [ ] `;
 				} else {
 					replacementString = `${firstLineIndentation}- `;
@@ -327,8 +315,6 @@ export const toggleList = (listType: ListType): Command => {
 
 export const toggleHeaderLevel = (level: number): Command => {
 	return (view: EditorView): boolean => {
-		logMessage(`Setting heading level to ${level}`);
-
 		let headerStr = '';
 		for (let i = 0; i < level; i++) {
 			headerStr += '#';
@@ -367,7 +353,6 @@ export const toggleHeaderLevel = (level: number): Command => {
 // Prepends the given editor's indentUnit to all lines of the current selection
 // and re-numbers modified ordered lists (if any).
 export const increaseIndent: Command = (view: EditorView): boolean => {
-	logMessage('Increasing indentation.');
 	const matchEmpty = true;
 	const matchNothing = /$ ^/;
 	const indentUnit = indentString(view.state, getIndentUnit(view.state));
@@ -391,7 +376,6 @@ export const increaseIndent: Command = (view: EditorView): boolean => {
 };
 
 export const decreaseIndent: Command = (view: EditorView): boolean => {
-	logMessage('Decreasing indentation.');
 	const matchEmpty = true;
 	const changes = toggleSelectedLinesStartWith(
 		view.state,
@@ -415,7 +399,7 @@ export const decreaseIndent: Command = (view: EditorView): boolean => {
 
 export const updateLink = (label: string, url: string): Command => {
 	// Empty label? Just include the URL.
-	const linkText = label == '' ? url : `[${label}](${url})`;
+	const linkText = label === '' ? url : `[${label}](${url})`;
 
 	return (editor: EditorView): boolean => {
 		const transaction = editor.state.changeByRange((sel: SelectionRange) => {
@@ -427,19 +411,17 @@ export const updateLink = (label: string, url: string): Command => {
 			syntaxTree(editor.state).iterate({
 				from: sel.from, to: sel.to,
 				enter: node => {
-					const haveFoundLink = (linkFrom != null && linkTo != null);
+					const haveFoundLink = (linkFrom !== null && linkTo !== null);
 
-					if (node.name == 'Link' || (node.name == 'URL' && !haveFoundLink)) {
+					if (node.name === 'Link' || (node.name === 'URL' && !haveFoundLink)) {
 						linkFrom = node.from;
 						linkTo = node.to;
 					}
 				},
 			});
 
-			if (linkFrom == null || linkTo == null) {
-				linkFrom = sel.from;
-				linkTo = sel.to;
-			}
+			linkFrom ??= sel.from;
+			linkTo ??= sel.to;
 
 			changes.push({
 				from: linkFrom, to: linkTo,

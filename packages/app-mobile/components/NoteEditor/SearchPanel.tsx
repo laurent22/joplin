@@ -1,6 +1,4 @@
-/**
- * Displays a find/replace dialog
- */
+// Displays a find/replace dialog
 
 const React = require('react');
 const { StyleSheet } = require('react-native');

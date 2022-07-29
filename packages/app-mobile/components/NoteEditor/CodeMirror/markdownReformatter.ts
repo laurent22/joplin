@@ -17,26 +17,15 @@ interface RegionMatchSpec {
 	end: RegExp;
 }
 
-/**
- * Describes a region's formatting
- */
+// Describes a region's formatting
 export interface RegionSpec {
-	/** The name of the node corresponding to the region in the syntax tree */
+	// The name of the node corresponding to the region in the syntax tree
 	nodeName?: string;
 
-	/**
-	 * Text to be inserted before and after the region when toggling.
-	 *
-	 * For example, if template is { start: '(', end: ')' }, a selection
-	 * would be surrounded with parentheses.
-	 */
+	// Text to be inserted before and after the region when toggling.
 	template: { start: string; end: string };
 
-	/**
-	 * How to identify the region. If not given, [template] is used.
-	 *
-	 * @see template
-	 */
+	// How to identify the region
 	matcher: RegionMatchSpec;
 }
 
@@ -402,7 +391,7 @@ export const toggleRegionFormatGlobally = (
 			// Determine the text that starts the new block (e.g. \n$$\n for
 			// a math block).
 			let blockStart = `${blockSpec.template.start}${lineStartStr}`;
-			if (fromLine.from != inlineStart) {
+			if (fromLine.from !== inlineStart) {
 				// Add a line before to put the start of the block
 				// on its own line.
 				blockStart = lineStartStr + blockStart;
@@ -581,7 +570,7 @@ export const toggleSelectedLinesStartWith = (
 			const contentFrom = getLineContentStart(line);
 
 			// Only process if the line is non-empty.
-			if (!matchEmpty && text.trim().length == 0
+			if (!matchEmpty && text.trim().length === 0
 				// Treat the first line differently
 				&& fromLine.number < line.number) {
 				continue;
@@ -668,7 +657,7 @@ export const renumberList = (state: EditorState, sel: SelectionRange): Selection
 				nextListNumber = listNumberStack.pop() ?? parseInt(match[2], 10);
 			}
 
-			if (targetIndentLen != indentationLen) {
+			if (targetIndentLen !== indentationLen) {
 				currentGroupIndentation = indentation;
 			}
 
