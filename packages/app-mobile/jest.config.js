@@ -1,7 +1,13 @@
 module.exports = {
 	preset: 'react-native',
 
-	testMatch: ['**/*.test.js'],
+	'moduleFileExtensions': [
+		'ts',
+		'tsx',
+		'js',
+	],
+
+	testMatch: ['**/*.test.(ts|tsx|js)'],
 
 	testPathIgnorePatterns: ['<rootDir>/node_modules/'],
 
