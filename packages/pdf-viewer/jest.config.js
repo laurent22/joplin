@@ -26,6 +26,8 @@ module.exports = {
 	// Indicates which provider should be used to instrument code for coverage
 	coverageProvider: 'v8',
 
+	preset: 'ts-jest',
+
 	// A list of reporter names that Jest uses when writing coverage reports
 	// coverageReporters: [
 	//   "json",
@@ -135,7 +137,7 @@ module.exports = {
 
 	// The glob patterns Jest uses to detect test files
 	testMatch: [
-		'**/*.test.js',
+		'**/*.test.ts',
 	],
 
 	// The regexp pattern or array of patterns that Jest uses to detect test files

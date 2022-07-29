@@ -5,7 +5,7 @@ import { resolve } from 'path';
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = require('pdfjs-dist/legacy/build/pdf.worker.entry');
 
-const pdfFilePath = resolve('config/welcome.pdf');
+const pdfFilePath1 = resolve('config/welcome.pdf');
 
 
 function loadFile(filePath: string) {
@@ -20,11 +20,10 @@ function loadFile(filePath: string) {
 	});
 }
 
-describe('pdfData', async () => {
-
-	const file = await loadFile(pdfFilePath);
+describe('pdfData', () => {
 
 	test('Should have correct page count', async () => {
+		const file = await loadFile(pdfFilePath1);
 		const pdf = new PdfData();
 		await pdf.loadDoc(file);
 		expect(pdf.pageCount).toBe(1);
@@ -38,6 +37,7 @@ describe('pdfData', async () => {
 	});
 
 	test('Should get correct page size', async () => {
+		const file = await loadFile(pdfFilePath1);
 		const pdf = new PdfData();
 		await pdf.loadDoc(file);
 		const size = await pdf.getPageSize();
@@ -46,6 +46,7 @@ describe('pdfData', async () => {
 	});
 
 	test('Should calculate scaled size', async () => {
+		const file = await loadFile(pdfFilePath1);
 		const pdf = new PdfData();
 		await pdf.loadDoc(file);
 		const scaledSize = await pdf.getScaledSize(null, 200);
