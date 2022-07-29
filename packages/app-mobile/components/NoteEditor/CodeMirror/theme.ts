@@ -1,6 +1,4 @@
-/**
- * Create a set of Extensions that provide syntax highlighting.
- */
+// Provides a set of Extensions for syntax highlighting.
 
 
 import { defaultHighlightStyle, syntaxHighlighting, HighlightStyle } from '@codemirror/language';

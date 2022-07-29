@@ -59,13 +59,10 @@ class MenuRowModel {
 	private readonly parent?: MenuRowModel;
 	private openMenuChangeListener: OpenMenuChangeListener;
 
-	/**
-	 * Creates a MenuRowModel within a [parent]. If the menu is toplevel,
-	 * then [parent] should be `undefined` or `null`.
-	 *
-	 * [title] is used for accessibility and should be a concise description of
-	 * the menu. For example, a LaTeX menu might have "LaTeX menu" as its title.
-	 */
+	// Creates a MenuRowModel within a [parent]. If the menu is toplevel,
+	// then [parent] should be `undefined` or `null`.
+	// [title] is used for accessibility and should be a concise description of
+	// the menu.
 	public constructor(
 		title: string, menuId: MenuRowType,
 		currentlyOpenMenu: MenuRowType, parent?: MenuRowModel
@@ -83,11 +80,7 @@ class MenuRowModel {
 		this.setOpenMenuChangeListener(() => {});
 	}
 
-	/**
-	 * Set the listener to be called when this menu is opened/closed.
-	 * If this menu is not a toplevel menu, its onMenuChangeListener calls its
-	 * parent's onMenuChangeListener.
-	 */
+	// Set the listener to be called when this menu (or a child menu) is opened/closed.
 	public setOpenMenuChangeListener(listener: OpenMenuChangeListener) {
 		this.openMenuChangeListener = (openMenu: MenuRowType) => {
 			this.parent?.openMenuChangeListener(openMenu);
@@ -95,11 +88,6 @@ class MenuRowModel {
 		};
 	}
 
-	/**
-	 * Add an action button to the menu.
-	 * [spec] specifies the button's content/properties.
-	 * [onClick] is called when the button is pressed.
-	 */
 	public addAction(spec: ButtonSpec, onClick: ClickListener) {
 		this.items.push({
 			buttonSpec: spec,
@@ -107,9 +95,7 @@ class MenuRowModel {
 		});
 	}
 
-	/**
-	 * Adds a category button to the menu. Clicking this button toggles a submenu.
-	 */
+	// Adds a category button to the menu. Clicking this button toggles a submenu.
 	public addCategory(spec: ButtonSpec, childMenu: MenuRowModel) {
 		this.submenus.push(childMenu);
 		this.items.push({
@@ -123,9 +109,6 @@ class MenuRowModel {
 		});
 	}
 
-	/**
-	 * Adds a button that closes this menu and opens the parent.
-	 */
 	private addCloseButton() {
 		const buttonSpec: ButtonSpec = {
 			icon: '⨉',
@@ -178,9 +161,6 @@ const ToolbarButton = ({ styles, spec, onClick }:
 	);
 };
 
-/**
- * A single row in the markdown toolbar, possibly with submenus and subrows.
- */
 const ToolbarMenu = ({ styles, model }: { styles: ToolbarStyleData; model: MenuRowModel }) => {
 	const buttons: any[] = [];
 	const submenus: any[] = [];
@@ -501,14 +481,6 @@ const MarkdownToolbar = (props: ToolbarProps) => {
 	);
 };
 
-/**
- * Creates a StyleSheet based on the application's theme.
- *
- * [styleProps] are user-supplied style properties, which apply to the root toolbar element.
- *
- * This uses react hooks, so should be called in the same places, the same number of times,
- * regardless of state.
- */
 const useStyles = (styleProps: any, theme: any) => {
 	return useMemo(() => {
 		const buttonSize = 56;

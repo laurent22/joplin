@@ -1,6 +1,4 @@
-/**
- * CodeMirror 6 commands that modify markdown formatting (e.g. toggleBold).
- */
+// CodeMirror 6 commands that modify markdown formatting (e.g. toggleBold).
 
 import { EditorView, Command } from '@codemirror/view';
 
@@ -19,7 +17,6 @@ import { logMessage } from './webviewLogger';
 
 const startingSpaceRegex = /^(\s*)/;
 
-/** Bolds/unbolds the current selection. */
 export const toggleBolded: Command = (view: EditorView): boolean => {
 	logMessage('Toggling bolded!');
 
@@ -30,7 +27,6 @@ export const toggleBolded: Command = (view: EditorView): boolean => {
 	return true;
 };
 
-/** Italicizes/deitalicizes the current selection. */
 export const toggleItalicized: Command = (view: EditorView): boolean => {
 	logMessage('Toggling italicized!');
 
@@ -45,11 +41,8 @@ export const toggleItalicized: Command = (view: EditorView): boolean => {
 	return true;
 };
 
-/**
- * Toggles whether the currently selected region is within inline/block code.
- * If the current region is an empty inline code block, it will be converted to
- * a block (fenced) code block.
- */
+// If the selected region is an empty inline code block, it will be converted to
+// a block (fenced) code block.
 export const toggleCode: Command = (view: EditorView): boolean => {
 	logMessage('Toggling code!');
 
@@ -371,10 +364,8 @@ export const toggleHeaderLevel = (level: number): Command => {
 	};
 };
 
-/**
- * Prepends the given editor's indentUnit to all lines of the current selection
- * and re-numbers modified ordered lists (if any).
- */
+// Prepends the given editor's indentUnit to all lines of the current selection
+// and re-numbers modified ordered lists (if any).
 export const increaseIndent: Command = (view: EditorView): boolean => {
 	logMessage('Increasing indentation.');
 	const matchEmpty = true;
@@ -422,10 +413,6 @@ export const decreaseIndent: Command = (view: EditorView): boolean => {
 	return true;
 };
 
-/**
- * Create a new link with [label] and [url], or, if a link is either partially
- * or fully selected, update the label and URL of that link.
- */
 export const updateLink = (label: string, url: string): Command => {
 	// Empty label? Just include the URL.
 	const linkText = label == '' ? url : `[${label}](${url})`;

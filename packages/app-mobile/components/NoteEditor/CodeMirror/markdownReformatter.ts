@@ -11,13 +11,10 @@ const blockQuoteRegex = /^>\s/;
 // Specifies the update of a single selection region and its contents
 type SelectionUpdate = { range: SelectionRange; changes?: ChangeSpec };
 
-/**
- * Specifies how a to find the start/stop of a region
- */
+// Specifies how a to find the start/stop of a type of formatting
 interface RegionMatchSpec {
 	start: RegExp;
 	end: RegExp;
-	bufferSize?: number;
 }
 
 /**
@@ -50,14 +47,11 @@ export namespace RegionSpec { // eslint-disable-line no-redeclare
 		matcher?: RegionMatchSpec;
 	}
 
-	/**
-	 * @return a new RegionSpec, given a simplified set of options.
-	 *
-	 * If [config.template] is a string, it is used as both the starting and ending
-	 * templates.
-	 * Similarly, if [config.matcher] is not given, a matcher is created based on
-	 * [config.template].
-	 */
+	// Creates a new RegionSpec, given a simplified set of options.
+	// If [config.template] is a string, it is used as both the starting and ending
+	// templates.
+	// Similarly, if [config.matcher] is not given, a matcher is created based on
+	// [config.template].
 	export const of = (config: RegionSpecConfig): RegionSpec => {
 		let templateStart: string, templateEnd: string;
 		if (typeof config.template === 'string') {
@@ -90,21 +84,18 @@ export namespace RegionSpec { // eslint-disable-line no-redeclare
 	};
 }
 
-/** Whether a match is at the start or end of a selection */
 export enum MatchSide {
 	Start,
 	End,
 }
 
-/** Replace all non-alphanumeric characters with escaped versions */
+// Replace all non-alphanumeric characters with escaped versions
 const regexEscape = (text: string) => {
 	return text.replace(/[^a-zA-Z0-9]/g, '\\$&');
 };
 
-/**
- * @returns the length of a match for this in the given selection.
- *          Returns -1 if no match is found.
- */
+// Returns the length of a match for this in the given selection,
+// -1 if no match is found.
 export const findInlineMatch = (
 	doc: DocumentText, spec: RegionSpec, sel: SelectionRange, side: MatchSide
 ): number => {
@@ -120,7 +111,7 @@ export const findInlineMatch = (
 			return [sel.from, sel.to];
 		}
 
-		const bufferSize = spec.matcher.bufferSize ?? template.length;
+		const bufferSize = template.length;
 		if (side === MatchSide.Start) {
 			return [sel.from - bufferSize, sel.to];
 		} else {
@@ -170,7 +161,6 @@ export const findInlineMatch = (
 	return -1;
 };
 
-/** @return the text of [line], ignoring starting blockquote characters. */
 export const stripBlockquote = (line: Line): string => {
 	const match = line.text.match(blockQuoteRegex);
 
@@ -181,7 +171,6 @@ export const stripBlockquote = (line: Line): string => {
 	return line.text;
 };
 
-/** @return a version of [text] with all tabs converted to spaces */
 export const tabsToSpaces = (state: EditorState, text: string): string => {
 	const chunks = text.split('\t');
 	const spaceLen = getIndentUnit(state);
@@ -197,38 +186,28 @@ export const tabsToSpaces = (state: EditorState, text: string): string => {
 	return result;
 };
 
-/**
- * @param a An indentation string
- * @param b A string of tabs and spaces to be compared with [a]
- * @return true iff [a] (an indentation string) is roughly equivalent to [b].
- */
+// Returns true iff [a] (an indentation string) is roughly equivalent to [b].
 export const isIndentationEquivalent = (state: EditorState, a: string, b: string): boolean => {
 	// Consider sublists to be the same as their parent list if they have the same
 	// label plus or minus 1 space.
 	return Math.abs(tabsToSpaces(state, a).length - tabsToSpaces(state, b).length) <= 1;
 };
 
-/**
- * Expands [sel] to the smallest container node with name in [nodeNames].
- * @param nodeNames Either a string containing the name of the node to expand to
- * 					in the syntax tree or a list of node names. If null, this does nothing.
- * @return the expanded selection.
- * @see https://github.com/lezer-parser/markdown/blob/3c5f5dc3b5be08e19c32f0f7fac6f3619a58c911/src/markdown.ts#L41
- */
+// Expands and returns a copy of [sel] to the smallest container node with name in [nodeNames].
 export const growSelectionToNode = (
 	state: EditorState, sel: SelectionRange, nodeNames: string|string[]|null
 ): SelectionRange => {
-	if (nodeNames == null) {
+	if (!nodeNames) {
 		return sel;
 	}
 
 	const isAcceptableNode = (name: string): boolean => {
-		if (typeof nodeNames == 'string') {
-			return name == nodeNames;
+		if (typeof nodeNames === 'string') {
+			return name === nodeNames;
 		}
 
 		for (const otherName of nodeNames) {
-			if (otherName == name) {
+			if (otherName === name) {
 				return true;
 			}
 		}
@@ -255,27 +234,19 @@ export const growSelectionToNode = (
 	});
 
 	// If it's in such a node,
-	if (newFrom != null && newTo != null) {
+	if (newFrom !== null && newTo !== null) {
 		return EditorSelection.range(newFrom, newTo);
 	} else {
 		return sel;
 	}
 };
 
-/**
- * Toggles whether the given selection matches the inline region specified by [spec].
- *
- * @param sel The region to add/remove formatting from.
- * @param spec Specifies how the target region starts/stops. To add formatting,
- * `spec.templateStart` is added before `sel` and `spec.templateStop` is added after.
- *
- * For example, something similar to surroundSelecton('**', '**') would surround
- * every selection range with asterisks (including the caret).
- * If the selection is already surrounded by these characters, they are
- * removed.
- *
- * @return A list of changes and an updated selection.
- */
+// Toggles whether the given selection matches the inline region specified by [spec].
+//
+// For example, something similar to toggleSurrounded('**', '**') would surround
+// every selection range with asterisks (including the caret).
+// If the selection is already surrounded by these characters, they are
+// removed.
 const toggleInlineRegionSurrounded = (
 	doc: DocumentText, sel: SelectionRange, spec: RegionSpec
 ): SelectionUpdate => {
@@ -330,12 +301,8 @@ const toggleInlineRegionSurrounded = (
 	};
 };
 
-/**
- * For all selections in the given `EditorState`, toggles whether each
- * is contained in a region of type [spec].
- * @param spec Describes the formatting of the **inline** region to toggle.
- * @returns an update to the selection and formatted text
- */
+// Returns updated selections: For all selections in the given `EditorState`, toggles
+// whether each is contained in an inline region of type [spec].
 export const toggleInlineSelectionFormat = (
 	state: EditorState, spec: RegionSpec, sel: SelectionRange
 ): SelectionUpdate => {
@@ -359,13 +326,7 @@ export const toggleInlineSelectionFormat = (
 	return toggleInlineRegionSurrounded(state.doc, newRange, spec);
 };
 
-/**
- * For all selections in the given `EditorState`, toggles whether each
- * is contained in a region of type [spec].
- * @param spec Describes the formatting to toggle.
- * @return A TransactionSpec that toggles each selected region's formatting.
- * @see toggleSelectionFormat
- */
+// Like toggleInlineSelectionFormat, but for all selections in [state].
 export const toggleInlineFormatGlobally = (
 	state: EditorState, spec: RegionSpec
 ): TransactionSpec => {
@@ -375,31 +336,16 @@ export const toggleInlineFormatGlobally = (
 	return changes;
 };
 
-/**
- * Toggle formatting in a region, applying a block version of the formatting
- * if multiple lines are selected. Applies to all selections.
- *
- * @param inlineSpec Describes the inline version of the formatting (if any)
- * @param blockSpec Describes the block version of the formatting (if any)
- * @param preserveBlockQuotes `true` iff block quote formatting (`> `...) should be ignored
- * 	when identifying region formatting.
- */
+// Toggle formatting in a region, applying block formatting
 export const toggleRegionFormatGlobally = (
 	state: EditorState,
 
 	inlineSpec: RegionSpec,
-	blockSpec: RegionSpec,
-
-	// If false, don't ensure that block formatting preserves block quotes
-	preserveBlockQuotes: boolean = true
+	blockSpec: RegionSpec
 ): TransactionSpec => {
 	const doc = state.doc;
-	const blockTemplate = blockSpec.template;
+	const preserveBlockQuotes = true;
 
-	/**
-	 * @return the start and stop indicies for a RegExp match
-	 * on the given line's text.
-	 */
 	const getMatchEndPoints = (
 		match: RegExpMatchArray, line: Line, inBlockQuote: boolean
 	): [startIdx: number, stopIdx: number] => {
@@ -413,7 +359,7 @@ export const toggleRegionFormatGlobally = (
 		}
 
 		// If it matches the entire line, remove the newline character.
-		if (match[0].length == contentLength) {
+		if (match[0].length === contentLength) {
 			stopIdx = line.to + 1;
 		} else {
 			stopIdx = startIdx + match[0].length;
@@ -428,12 +374,10 @@ export const toggleRegionFormatGlobally = (
 		return [startIdx, stopIdx];
 	};
 
-	/**
-	 * @returns a change spec that converts an inline region to a block region
-	 * only if the user's cursor is in an **empty inline region.**
-	 * For example,
-	 *    $|$ -> $$\n|\n$$ where | represents the cursor.
-	 */
+	// Returns a change spec that converts an inline region to a block region
+	// only if the user's cursor is in an empty inline region.
+	// For example,
+	//    $|$ -> $$\n|\n$$ where | represents the cursor.
 	const handleInlineToBlockConversion = (sel: SelectionRange) => {
 		if (!sel.empty) {
 			return null;
@@ -443,9 +387,6 @@ export const toggleRegionFormatGlobally = (
 		const stopMatchLen = findInlineMatch(doc, inlineSpec, sel, MatchSide.End);
 
 		if (startMatchLen >= 0 && stopMatchLen >= 0) {
-			const inlineStart = sel.from - startMatchLen;
-			const inlineStop = sel.from + stopMatchLen;
-
 			const fromLine = doc.lineAt(sel.from);
 			const inBlockQuote = fromLine.text.match(blockQuoteRegex);
 
@@ -454,9 +395,13 @@ export const toggleRegionFormatGlobally = (
 				lineStartStr = '\n> ';
 			}
 
+
+			const inlineStart = sel.from - startMatchLen;
+			const inlineStop = sel.from + stopMatchLen;
+
 			// Determine the text that starts the new block (e.g. \n$$\n for
 			// a math block).
-			let blockStart = `${blockTemplate.start}${lineStartStr}`;
+			let blockStart = `${blockSpec.template.start}${lineStartStr}`;
 			if (fromLine.from != inlineStart) {
 				// Add a line before to put the start of the block
 				// on its own line.
@@ -468,7 +413,7 @@ export const toggleRegionFormatGlobally = (
 					{
 						from: inlineStart,
 						to: inlineStop,
-						insert: `${blockStart}${lineStartStr}${blockTemplate.end}`,
+						insert: `${blockStart}${lineStartStr}${blockSpec.template.end}`,
 					},
 				],
 
@@ -497,7 +442,7 @@ export const toggleRegionFormatGlobally = (
 		const changes = [];
 
 		// Single line: Inline toggle.
-		if (fromLine.number == toLine.number) {
+		if (fromLine.number === toLine.number) {
 			return toggleInlineSelectionFormat(state, inlineSpec, sel);
 		}
 
@@ -543,11 +488,11 @@ export const toggleRegionFormatGlobally = (
 			let insertBefore, insertAfter;
 
 			if (inBlockQuote && preserveBlockQuotes) {
-				insertBefore = `> ${blockTemplate.start}\n`;
-				insertAfter = `\n> ${blockTemplate.end}`;
+				insertBefore = `> ${blockSpec.template.start}\n`;
+				insertAfter = `\n> ${blockSpec.template.end}`;
 			} else {
-				insertBefore = `${blockTemplate.start}\n`;
-				insertAfter = `\n${blockTemplate.end}`;
+				insertBefore = `${blockSpec.template.start}\n`;
+				insertAfter = `\n${blockSpec.template.end}`;
 			}
 
 			changes.push({
@@ -575,22 +520,17 @@ export const toggleRegionFormatGlobally = (
 	return changes;
 };
 
-/**
- * Toggles whether all lines in the user's selection start with [regex].
- * @param template is that match of [regex] that is used when adding a match.
- * @param matchEmpty if true, all lines **after the first** that have no non-space
- * content are ignored.
- * @param nodeName if given, is the name of the node to expand the selection
- * to, (e.g. TaskList to expand selections to containing TaskLists if possible).
- * Note that selection is only expanded if the existing selection is empty
- * (just a caret).
- */
+// Toggles whether all lines in the user's selection start with [regex].
 export const toggleSelectedLinesStartWith = (
 	state: EditorState,
 	regex: RegExp,
 	template: string,
-	matchEmpty: boolean, nodeName?: string, ignoreBlockQuotes: boolean = true
+	matchEmpty: boolean,
+
+	// Name associated with what [regex] matches (e.g. FencedCode)
+	nodeName?: string
 ): TransactionSpec => {
+	const ignoreBlockQuotes = true;
 	const getLineContentStart = (line: Line): number => {
 		if (!ignoreBlockQuotes) {
 			return line.from;
@@ -629,7 +569,7 @@ export const toggleSelectedLinesStartWith = (
 			const text = getLineContent(line);
 
 			// If already matching [regex],
-			if (text.search(regex) == 0) {
+			if (text.search(regex) === 0) {
 				hasProp = true;
 			}
 
@@ -673,7 +613,7 @@ export const toggleSelectedLinesStartWith = (
 		// (user might be adding a list/header, in which case, selecting the just
 		// added text isn't helpful)
 		let newSel;
-		if (sel.empty && fromLine.number == toLine.number) {
+		if (sel.empty && fromLine.number === toLine.number) {
 			const regionEnd = toLine.to + charsAdded;
 			newSel = EditorSelection.cursor(regionEnd);
 		} else {
@@ -691,10 +631,7 @@ export const toggleSelectedLinesStartWith = (
 	return changes;
 };
 
-/**
- * Ensures that ordered lists within [sel] are numbered in ascending order.
- * @return a list of changes and an updated selection after adjusting such lists.
- */
+// Ensures that ordered lists within [sel] are numbered in ascending order.
 export const renumberList = (state: EditorState, sel: SelectionRange): SelectionUpdate => {
 	const doc = state.doc;
 
@@ -713,7 +650,7 @@ export const renumberList = (state: EditorState, sel: SelectionRange): Selection
 
 		for (const line of linesToHandle) {
 			// Don't re-handle lines.
-			if (line.number == prevLineNumber) {
+			if (line.number === prevLineNumber) {
 				continue;
 			}
 			prevLineNumber = line.number;
@@ -755,7 +692,7 @@ export const renumberList = (state: EditorState, sel: SelectionRange): Selection
 		from: sel.from,
 		to: sel.to,
 		enter: (nodeRef: SyntaxNodeRef) => {
-			if (nodeRef.name == 'ListItem') {
+			if (nodeRef.name === 'ListItem') {
 				for (const node of nodeRef.node.parent.getChildren('ListItem')) {
 					const line = doc.lineAt(node.from);
 					const filteredText = stripBlockquote(line);

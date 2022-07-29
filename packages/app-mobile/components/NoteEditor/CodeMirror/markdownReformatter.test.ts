@@ -5,12 +5,12 @@ import { Text as DocumentText, EditorSelection, EditorState } from '@codemirror/
 import { indentUnit } from '@codemirror/language';
 
 describe('Matching', () => {
-	describe('Matching start/end of bolded regions', () => {
+	describe('should match start and end of bolded regions', () => {
 		const spec: RegionSpec = RegionSpec.of({
 			template: '**',
 		});
 
-		it('Match start of bolded', () => {
+		it('should return the length of the match', () => {
 			const doc = DocumentText.of(['**test**']);
 			const sel = EditorSelection.range(0, 5);
 
@@ -18,53 +18,47 @@ describe('Matching', () => {
 			expect(findInlineMatch(doc, spec, sel, MatchSide.Start)).toBe(2);
 		});
 
-		it('Match end of bolded region (empty selection)', () => {
+		it('should match the end of a region, if next to the cursor', () => {
 			const doc = DocumentText.of(['**...** test.']);
 			const sel = EditorSelection.range(5, 5);
 			expect(findInlineMatch(doc, spec, sel, MatchSide.End)).toBe(2);
 		});
 
-		it('Region without a match', () => {
+		it('should return -1 if no match is found', () => {
 			const doc = DocumentText.of(['**...** test.']);
 			const sel = EditorSelection.range(3, 3);
 			expect(findInlineMatch(doc, spec, sel, MatchSide.Start)).toBe(-1);
 		});
 	});
 
-	describe('Matching start/end of italicized regions', () => {
+	describe('should match a custom specification of italicized regions', () => {
 		const spec: RegionSpec = {
 			template: { start: '*', end: '*' },
 			matcher: { start: /[*_]/g, end: /[*_]/g },
 		};
+		const testString = 'This is a _test_';
+		const testDoc = DocumentText.of([testString]);
+		const fullSel = EditorSelection.range('This is a '.length, testString.length);
 
-		describe('Matching the start/end of a specific test string', () => {
-			const testString = 'This is a _test_';
-			const testDoc = DocumentText.of([testString]);
-			const fullSel = EditorSelection.range('This is a '.length, testString.length);
+		it('should match the start of the region', () => {
+			expect(findInlineMatch(testDoc, spec, fullSel, MatchSide.Start)).toBe(1);
+		});
 
-			it('match start (full selection)', () => {
-				expect(findInlineMatch(testDoc, spec, fullSel, MatchSide.Start)).toBe(1);
-			});
-
-			it('match end (full selection)', () => {
-				expect(findInlineMatch(testDoc, spec, fullSel, MatchSide.End)).toBe(1);
-			});
+		it('should match the end of the region', () => {
+			expect(findInlineMatch(testDoc, spec, fullSel, MatchSide.End)).toBe(1);
 		});
 	});
 
-	describe('List matching start/stop', () => {
+	describe('should match a list item from a custom RegionSpec', () => {
 		const spec: RegionSpec = {
 			template: { start: ' - ', end: '' },
 			matcher: {
 				start: /^\s*[-*]\s/g,
 				end: /$/g,
-
-				// Ensure there's enough space to do the match
-				bufferSize: 4
 			},
 		};
 
-		it('Don\'t match start of list (not fully selected)', () => {
+		it('should not match a list if not within the selection', () => {
 			const doc = DocumentText.of(['- Test...']);
 			const sel = EditorSelection.range(1, 6);
 
@@ -72,21 +66,21 @@ describe('Matching', () => {
 			expect(findInlineMatch(doc, spec, sel, MatchSide.Start)).toBe(-1);
 		});
 
-		it('Match start of list', () => {
+		it('should match start of selected, unindented list', () => {
 			const doc = DocumentText.of(['- Test...']);
 			const sel = EditorSelection.range(0, 6);
 
 			expect(findInlineMatch(doc, spec, sel, MatchSide.Start)).toBe(2);
 		});
 
-		it('Match start of indented list', () => {
+		it('should match start of indented list', () => {
 			const doc = DocumentText.of(['   - Test...']);
 			const sel = EditorSelection.range(0, 6);
 
 			expect(findInlineMatch(doc, spec, sel, MatchSide.Start)).toBe(5);
 		});
 
-		it('Match end of indented list', () => {
+		it('should match the end of an item in an indented list', () => {
 			const doc = DocumentText.of(['   - Test...']);
 			const sel = EditorSelection.range(0, 6);
 
@@ -102,36 +96,36 @@ describe('Text manipulation', () => {
 		of block and inline region toggling.`;
 	const codeFenceRegex = /^``````\w*\s*$/;
 	const inlineCodeRegionSpec = RegionSpec.of({
-		template: '`', 
-		nodeName: 'InlineCode'
+		template: '`',
+		nodeName: 'InlineCode',
 	});
 	const blockCodeRegionSpec: RegionSpec = {
 		template: { start: '``````', end: '``````' },
-		matcher: { start: codeFenceRegex, end: codeFenceRegex, },
+		matcher: { start: codeFenceRegex, end: codeFenceRegex },
 	};
 
-	it('Toggle inline region format', () => {
+	it('should create an empty region around the cursor', () => {
 		const initialState: EditorState = EditorState.create({
 			doc: initialText,
 			selection: EditorSelection.cursor(0),
 		});
 
 		const changes = toggleRegionFormatGlobally(
-			initialState, inlineCodeRegionSpec, blockCodeRegionSpec,
+			initialState, inlineCodeRegionSpec, blockCodeRegionSpec
 		);
 
 		const newState = initialState.update(changes).state;
 		expect(newState.doc.toString()).toEqual(`\`\`${initialText}`);
 	});
 
-	it('Toggle block region format', () => {
+	it('should wrap multiple selected lines in block formatting', () => {
 		const initialState: EditorState = EditorState.create({
 			doc: initialText,
 			selection: EditorSelection.range(0, initialText.length),
 		});
 
 		const changes = toggleRegionFormatGlobally(
-			initialState, inlineCodeRegionSpec, blockCodeRegionSpec,
+			initialState, inlineCodeRegionSpec, blockCodeRegionSpec
 		);
 
 		const newState = initialState.update(changes).state;
@@ -141,7 +135,7 @@ describe('Text manipulation', () => {
 		expect(newState.selection.main.to).toBe(editorText.length);
 	});
 
-	it('Tabs to spaces', () => {
+	it('should convert tabs to spaces based on indentUnit', () => {
 		const state: EditorState = EditorState.create({
 			doc: initialText,
 			selection: EditorSelection.cursor(0),
