@@ -2,31 +2,12 @@
  * @jest-environment jsdom
  */
 
-import { EditorSelection, EditorState, SelectionRange } from '@codemirror/state';
-import { EditorView } from '@codemirror/view';
+import { EditorSelection, EditorState } from '@codemirror/state';
 import {
 	increaseIndent, toggleList,
 } from './markdownCommands';
-import { GFM as GithubFlavoredMarkdownExt } from '@lezer/markdown';
-import { markdown } from '@codemirror/lang-markdown';
-import { MarkdownMathExtension } from './markdownMathParser';
 import { ListType } from '../types';
-import { indentUnit } from '@codemirror/language';
-
-// Creates and returns a minimal editor with markdown extensions
-const createEditor = (initialText: string, initialSelection: SelectionRange): EditorView => {
-	return new EditorView({
-		doc: initialText,
-		selection: EditorSelection.create([initialSelection]),
-		extensions: [
-			markdown({
-				extensions: [MarkdownMathExtension, GithubFlavoredMarkdownExt],
-			}),
-			indentUnit.of('\t'),
-			EditorState.tabSize.of(4),
-		],
-	});
-};
+import createEditor from './createEditor';
 
 describe('markdownCommands, toggling lists', () => {
 	it('should remove the same type of list', () => {
@@ -204,46 +185,5 @@ describe('markdownCommands, toggling lists', () => {
 			'> # List test\n> * This\n> * is\n> \t1. a\n> \t2. test\n> * of list toggling'
 		);
 		expect(editor.state.selection.main.from).toBe(preSubListText.length);
-	});
-
-	it('should distinguish between checklists and unordered lists', () => {
-		const bulletedListPart = '- Test\n- This is a test.\n- 3\n- 4\n- 5';
-		const checklistPart = '- [ ] This is a checklist\n- [ ] with multiple items.\n- [ ] ☑';
-		const initialDocText = `${bulletedListPart}\n\n${checklistPart}`;
-
-		const editor = createEditor(
-			initialDocText, EditorSelection.cursor(bulletedListPart.length + 5)
-		);
-
-		// Should toggle the second part
-		toggleList(ListType.CheckList)(editor);
-		expect(editor.state.doc.toString()).toBe(
-			`${bulletedListPart}\n\nThis is a checklist\nwith multiple items.\n☑`
-		);
-
-		// Reset the document
-		editor.setState(EditorState.create({
-			doc: initialDocText,
-			selection: EditorSelection.cursor(bulletedListPart.length - 5),
-		}));
-
-		// Should just toggle the first part (and expand the selection)
-		toggleList(ListType.UnorderedList)(editor);
-		expect(editor.state.doc.toString()).toBe(
-			`Test\nThis is a test.\n3\n4\n5\n\n${checklistPart}`
-		);
-
-
-		editor.setState(EditorState.create({
-			doc: initialDocText,
-			selection: EditorSelection.range(0, initialDocText.length),
-		}));
-
-		// If everything is selected, everything should be in a correctly-numbered list.
-		toggleList(ListType.OrderedList)(editor);
-		expect(editor.state.doc.toString()).toBe(
-			'1. Test\n2. This is a test.\n3. 3\n4. 4\n5. 5'
-			+ '\n\n6. This is a checklist\n7. with multiple items.\n8. ☑'
-		);
 	});
 });
