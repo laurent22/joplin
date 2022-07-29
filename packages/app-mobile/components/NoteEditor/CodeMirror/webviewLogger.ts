@@ -1,6 +1,4 @@
-/**
- * Handle logging strings when running in a WebView.
- */
+// Handle logging strings when running in a WebView.
 
 // Because this will be running both in a WebView and in nodeJS, we need to use
 // globalThis in place of window. We need to tell ESLint that we're doing this:
