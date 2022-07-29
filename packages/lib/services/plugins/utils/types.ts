@@ -2,6 +2,11 @@ export enum PluginPermission {
 	Model = 'model',
 }
 
+export class Screenshot {
+	public src: string;
+	public label: string;
+}
+
 export interface PluginManifest {
 	manifest_version: number;
 	id: string;
@@ -14,7 +19,7 @@ export interface PluginManifest {
 	repository_url?: string;
 	keywords?: string[];
 	categories?: string[];
-	screenshots?: string[];
+	screenshots?: Screenshot[];
 	permissions?: PluginPermission[];
 
 	// Private keys

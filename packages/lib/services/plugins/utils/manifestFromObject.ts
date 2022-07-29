@@ -1,4 +1,4 @@
-import { PluginManifest, PluginPermission } from './types';
+import { PluginManifest, PluginPermission, Screenshot } from './types';
 import validatePluginId from './validatePluginId';
 
 export default function manifestFromObject(o: any): PluginManifest {
@@ -31,6 +31,17 @@ export default function manifestFromObject(o: any): PluginManifest {
 		return o[name];
 	};
 
+	const getScreenshots = (defaultValue: Screenshot[] = []): Screenshot[] => {
+		if (!o.screenshots) {
+			return defaultValue;
+		} else {
+			for (let i = 0; i < o.screenshots.length; i++) {
+				if (typeof o.screenshots[i] !== typeof Screenshot) throw new Error('Field must be a screenshot object');
+			}
+		}
+		return o.screenshots;
+	};
+
 	const permissions: PluginPermission[] = [];
 
 	const manifest: PluginManifest = {
@@ -46,7 +57,7 @@ export default function manifestFromObject(o: any): PluginManifest {
 		repository_url: getString('repository_url', false),
 		keywords: getStrings('keywords', false),
 		categories: getStrings('categories', false),
-		screenshots: getStrings('screenshots', false),
+		screenshots: getScreenshots(),
 		permissions: permissions,
 
 		_recommended: getBoolean('_recommended', false, false),
