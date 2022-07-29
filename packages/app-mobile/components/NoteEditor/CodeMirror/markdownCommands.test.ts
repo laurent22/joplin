@@ -28,8 +28,8 @@ const createEditor = (initialText: string, initialSelection: SelectionRange): Ed
 	});
 };
 
-describe('Formatting commands', () => {
-	it('Bolding/italicizing (everything selected)', () => {
+describe('markdownCommands', () => {
+	it('should bold/italicize everything selected', () => {
 		const initialDocText = 'Testing...';
 		const editor = createEditor(
 			initialDocText, EditorSelection.range(0, initialDocText.length)
@@ -56,7 +56,7 @@ describe('Formatting commands', () => {
 		expect(editor.state.doc.toString()).toBe('Testing...');
 	});
 
-	it('Creating/exiting a math region', () => {
+	it('toggling math should both create and navigate out of math regions', () => {
 		const initialDocText = 'Testing... ';
 		const editor = createEditor(initialDocText, EditorSelection.cursor(initialDocText.length));
 
@@ -72,8 +72,8 @@ describe('Formatting commands', () => {
 		expect(editor.state.doc.toString()).toBe('Testing... $3 + 3 \\neq 5$...');
 	});
 
-	describe('Creating block regions by toggling twice', () => {
-		it('Block math, line with text', () => {
+	describe('toggling twice (empty selection) should create block regions', () => {
+		it('toggling math twice, starting on a line with content, should a math block', () => {
 			const initialDocText = 'Testing... ';
 			const editor = createEditor(initialDocText, EditorSelection.cursor(initialDocText.length));
 
@@ -83,7 +83,7 @@ describe('Formatting commands', () => {
 			expect(editor.state.doc.toString()).toBe('Testing... \n$$\nf(x) = ...\n$$');
 		});
 
-		it('Block math, empty line', () => {
+		it('toggling math twice on an empty line should create an empty math block', () => {
 			const initialDocText = 'Testing...\n\n';
 			const editor = createEditor(initialDocText, EditorSelection.cursor(initialDocText.length));
 
@@ -93,7 +93,7 @@ describe('Formatting commands', () => {
 			expect(editor.state.doc.toString()).toBe('Testing...\n\n$$\nf(x) = ...\n$$');
 		});
 
-		it('Block code, empty line', () => {
+		it('toggling code twice on an empty line should create an empty code block', () => {
 			const initialDocText = 'Testing...\n\n';
 			const editor = createEditor(initialDocText, EditorSelection.cursor(initialDocText.length));
 
@@ -107,7 +107,7 @@ describe('Formatting commands', () => {
 			expect(editor.state.doc.toString()).toBe('Testing...\n\nf(x) = ...\n');
 		});
 
-		it('Block math, inside block quote', () => {
+		it('toggling math twice inside a block quote should produce an empty math block', () => {
 			const initialDocText = '> Testing...> \n> ';
 			const editor = createEditor(initialDocText, EditorSelection.cursor(initialDocText.length));
 
@@ -127,7 +127,7 @@ describe('Formatting commands', () => {
 		});
 	});
 
-	it('Inline code, empty line', () => {
+	it('toggling inline code should both create and navigate out of an inline code region', () => {
 		const initialDocText = 'Testing...\n\n';
 		const editor = createEditor(initialDocText, EditorSelection.cursor(initialDocText.length));
 
@@ -139,7 +139,7 @@ describe('Formatting commands', () => {
 		expect(editor.state.doc.toString()).toBe('Testing...\n\n`f(x) = ...` is a function.');
 	});
 
-	it('Toggling header', () => {
+	it('should set headers to the proper levels (when toggling)', () => {
 		const initialDocText = 'Testing...\nThis is a test.';
 		const editor = createEditor(initialDocText, EditorSelection.cursor(3));
 
@@ -165,7 +165,7 @@ describe('Formatting commands', () => {
 		expect(mainSel.from).toBe('Testing...'.length);
 	});
 
-	it('Toggling header (in block quote)', () => {
+	it('headers should toggle properly within block quotes', () => {
 		const initialDocText = 'Testing...\n\n> This is a test.\n> ...a test';
 		const editor = createEditor(
 			initialDocText,
@@ -188,7 +188,7 @@ describe('Formatting commands', () => {
 		);
 	});
 
-	it('Toggling math (in block quote)', () => {
+	it('block math should properly toggle within block quotes', () => {
 		const initialDocText = 'Testing...\n\n> This is a test.\n> y = mx + b\n> ...a test';
 		const editor = createEditor(
 			initialDocText,
@@ -221,8 +221,8 @@ describe('Formatting commands', () => {
 		expect(mainSel.to).toBe('Testing...\n\n> This is a test.\n> y = mx + b'.length);
 	});
 
-	describe('Changing list type', () => {
-		it('Removing a bulleted list', () => {
+	describe('toggleList', () => {
+		it('should remove the same type of list', () => {
 			const initialDocText = '- testing\n- this is a test';
 
 			const editor = createEditor(
@@ -236,10 +236,10 @@ describe('Formatting commands', () => {
 			);
 		});
 
-		describe('Adding a numbered list', () => {
+		describe('should insert a numbered list with correct numbering', () => {
 			const initialDocText = 'Testing...\nThis is a test\nof list toggling...';
 
-			it('Single line', () => {
+			it('should toggle only a single line if the selection is empty', () => {
 				const editor = createEditor(
 					initialDocText,
 					EditorSelection.cursor('Testing...\nThis is a'.length)
@@ -251,7 +251,7 @@ describe('Formatting commands', () => {
 				);
 			});
 
-			it('Multi-line', () => {
+			it('should toggle multiple lines if the selection is non-empty', () => {
 				const editor = createEditor(
 					initialDocText,
 					EditorSelection.range(4, initialDocText.length)
@@ -264,7 +264,7 @@ describe('Formatting commands', () => {
 			});
 		});
 
-		describe('Replacing an unordered list', () => {
+		describe('should correctly replace an unordered list', () => {
 			const initialDocText = '- 1\n- 2\n- 3\n- 4\n- 5\n- 6\n- 7';
 
 			it('with a numbered list', () => {
@@ -293,7 +293,7 @@ describe('Formatting commands', () => {
 			});
 		});
 
-		it('With a bulleted list containing another list', () => {
+		it('should properly toggle a sublist of a bulleted list', () => {
 			const preSubListText = '# List test\n * This\n * is\n';
 			const initialDocText = `${preSubListText}\t* a\n\t* test\n * of list toggling`;
 
@@ -356,7 +356,7 @@ describe('Formatting commands', () => {
 			);
 		});
 
-		it('Numbered list with bulleted sublist (toggling container)', () => {
+		it('should toggle a numbered list without changing its sublists', () => {
 			const initialDocText = '1. Foo\n2. Bar\n3. Baz\n\t- Test\n\t- of\n\t- sublists\n4. Foo';
 
 			const editor = createEditor(
@@ -370,7 +370,7 @@ describe('Formatting commands', () => {
 			);
 		});
 
-		it('Toggling a sublist', () => {
+		it('should toggle a sublist without changing the parent list', () => {
 			const initialDocText = '1. This\n2. is\n3. ';
 
 			const editor = createEditor(
@@ -392,7 +392,7 @@ describe('Formatting commands', () => {
 			);
 		});
 
-		it('In a block quote', () => {
+		it('should toggle lists properly within block quotes', () => {
 			const preSubListText = '> # List test\n> * This\n> * is\n';
 			const initialDocText = `${preSubListText}> \t* a\n> \t* test\n> * of list toggling`;
 			const editor = createEditor(
@@ -406,12 +406,12 @@ describe('Formatting commands', () => {
 			expect(editor.state.selection.main.from).toBe(preSubListText.length);
 		});
 
-		describe('Checklist list following an unordered list', () => {
+		describe('should distinguish between checklists and unordered lists', () => {
 			const bulletedListPart = '- Test\n- This is a test.\n- 3\n- 4\n- 5';
 			const checklistPart = '- [ ] This is a checklist\n- [ ] with multiple items.\n- [ ] ☑';
 			const initialDocText = `${bulletedListPart}\n\n${checklistPart}`;
 
-			it('Removing the checklist', () => {
+			it('should remove a checklist following a bulleted list without modifying the bulleted list', () => {
 				const editor = createEditor(
 					initialDocText, EditorSelection.cursor(bulletedListPart.length + 5)
 				);
@@ -422,7 +422,7 @@ describe('Formatting commands', () => {
 				);
 			});
 
-			it('Removing the unordered list', () => {
+			it('should remove an unordered list following a checklist without modifying the checklist', () => {
 				const editor = createEditor(
 					initialDocText, EditorSelection.cursor(bulletedListPart.length - 5)
 				);
@@ -433,7 +433,7 @@ describe('Formatting commands', () => {
 				);
 			});
 
-			it('Converting all to a numbered list', () => {
+			it('should replace a selection of unordered and task lists with a correctly-numbered list', () => {
 				const editor = createEditor(
 					initialDocText, EditorSelection.range(0, initialDocText.length)
 				);
@@ -447,7 +447,7 @@ describe('Formatting commands', () => {
 		});
 	});
 
-	it('Updating a link', () => {
+	it('updateLink should replace link titles and isolate URLs if no title is given', () => {
 		const initialDocText = '[foo](http://example.com/)';
 		const editor = createEditor(initialDocText, EditorSelection.cursor('[f'.length));
 
