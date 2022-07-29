@@ -412,7 +412,7 @@ class AppGui {
 		const widget = this.widget('mainWindow').focusedWidget;
 		if (!widget) return null;
 
-		if (widget.name == 'noteList' || widget.name == 'folderList') {
+		if (widget.name === 'noteList' || widget.name === 'folderList') {
 			return widget.currentItem;
 		}
 
@@ -521,11 +521,11 @@ class AppGui {
 			const args = splitCommandString(cmd);
 
 			for (let i = 0; i < args.length; i++) {
-				if (args[i] == '$n') {
+				if (args[i] === '$n') {
 					args[i] = note ? note.id : '';
-				} else if (args[i] == '$b') {
+				} else if (args[i] === '$b') {
 					args[i] = folder ? folder.id : '';
-				} else if (args[i] == '$c') {
+				} else if (args[i] === '$c') {
 					const item = this.activeListItem();
 					args[i] = item ? item.id : '';
 				}

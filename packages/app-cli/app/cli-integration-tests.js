@@ -222,7 +222,7 @@ async function main() {
 
 	for (const n in testUnits) {
 		if (!testUnits.hasOwnProperty(n)) continue;
-		if (onlyThisTest && n != onlyThisTest) continue;
+		if (onlyThisTest && n !== onlyThisTest) continue;
 
 		await clearDatabase();
 		const testName = n.substr(4).toLowerCase();

@@ -1,6 +1,4 @@
-/**
- * Stores information about the formatting of the region contained within the current selection.
- */
+// Stores information about the current content of the user's selection
 
 export default class SelectionFormatting {
 	public bolded: boolean = false;

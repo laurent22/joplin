@@ -83,8 +83,8 @@ class LogScreenComponent extends BaseScreenComponent {
 	render() {
 		const renderRow = ({ item }) => {
 			let textStyle = this.styles().rowText;
-			if (item.level == Logger.LEVEL_WARN) textStyle = this.styles().rowTextWarn;
-			if (item.level == Logger.LEVEL_ERROR) textStyle = this.styles().rowTextError;
+			if (item.level === Logger.LEVEL_WARN) textStyle = this.styles().rowTextWarn;
+			if (item.level === Logger.LEVEL_ERROR) textStyle = this.styles().rowTextError;
 
 			return (
 				<View style={this.styles().row}>

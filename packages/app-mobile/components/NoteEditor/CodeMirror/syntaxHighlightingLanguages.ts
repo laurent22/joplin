@@ -1,6 +1,6 @@
-/**
- * Exports a list of languages that can be used in fenced code blocks.
- */
+//
+// Exports a list of languages that can be used in fenced code blocks.
+//
 
 import { LanguageDescription, LanguageSupport, StreamParser } from '@codemirror/language';
 import { StreamLanguage } from '@codemirror/language';

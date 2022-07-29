@@ -23,11 +23,11 @@ const mime = {
 		mimeType = mimeType.toLowerCase();
 		for (let i = 0; i < mimeTypes.length; i++) {
 			const t = mimeTypes[i];
-			if (mimeType == t.t) {
+			if (mimeType === t.t) {
 				// Return the first file extension that is 3 characters long
 				// If none exist return the first one in the list.
 				for (let j = 0; j < t.e.length; j++) {
-					if (t.e[j].length == 3) return t.e[j];
+					if (t.e[j].length === 3) return t.e[j];
 				}
 				return t.e[0];
 			}
