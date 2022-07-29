@@ -41,7 +41,7 @@ export default function Page(props: PageProps) {
 				// Used so that the page rendering is throttled to some extent.
 				// https://stackoverflow.com/questions/18069448/halting-pdf-js-page-rendering
 				continueCallback: function(cont: any) {
-					if (timestamp != pageTimestamp) {
+					if (timestamp !== pageTimestamp) {
 						return;
 					}
 					cont();

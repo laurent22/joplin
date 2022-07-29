@@ -50,8 +50,8 @@ export default function VerticalPages(props: VerticalPagesProps) {
 	return (<div className='pages-holder' ref={innerContainerEl} >
 		{Array.from(Array(props.pdf.pageCount).keys()).map((i: number) => {
 			// setting focusOnLoad only after scaledSize is set so that the container height is set correctly
-			return <Page pdf={props.pdf} pageNo={i + 1} focusOnLoad={scaledSize && props.anchorPage && props.anchorPage == i + 1}
-				isAnchored={props.anchorPage && props.anchorPage == i + 1}
+			return <Page pdf={props.pdf} pageNo={i + 1} focusOnLoad={scaledSize && props.anchorPage && props.anchorPage === i + 1}
+				isAnchored={props.anchorPage && props.anchorPage === i + 1}
 				isDarkTheme={props.isDarkTheme} scaledSize={scaledSize} container={props.container} key={i} />;
 		}
 		)}

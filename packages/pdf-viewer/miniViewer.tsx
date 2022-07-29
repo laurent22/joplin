@@ -55,6 +55,6 @@ const anchorPage = window.frameElement.getAttribute('anchorPage');
 document.documentElement.setAttribute('data-theme', appearance);
 
 render(
-	<MiniViewerApp pdfPath={url} isDarkTheme={appearance == 'dark'} anchorPage={anchorPage ? Number(anchorPage) : null} />,
+	<MiniViewerApp pdfPath={url} isDarkTheme={appearance === 'dark'} anchorPage={anchorPage ? Number(anchorPage) : null} />,
 	document.getElementById('pdf-root')
 );

@@ -300,7 +300,7 @@ export default class Note extends BaseItem {
 					if (aProp < bProp) r = +1;
 					if (aProp > bProp) r = -1;
 				}
-				if (order.dir == 'ASC') r = -r;
+				if (order.dir === 'ASC') r = -r;
 				if (r !== 0) return r;
 			}
 
@@ -365,7 +365,7 @@ export default class Note extends BaseItem {
 		// it's confusing to have conflicts but with an empty conflict folder.
 		if (parentId === Folder.conflictFolderId()) options.showCompletedTodos = true;
 
-		if (parentId == Folder.conflictFolderId()) {
+		if (parentId === Folder.conflictFolderId()) {
 			options.conditions.push('is_conflict = 1');
 		} else {
 			options.conditions.push('is_conflict = 0');
@@ -527,7 +527,7 @@ export default class Note extends BaseItem {
 	}
 
 	static async copyToFolder(noteId: string, folderId: string) {
-		if (folderId == this.getClass('Folder').conflictFolderId()) throw new Error(_('Cannot copy note to "%s" notebook', this.getClass('Folder').conflictFolderTitle()));
+		if (folderId === this.getClass('Folder').conflictFolderId()) throw new Error(_('Cannot copy note to "%s" notebook', this.getClass('Folder').conflictFolderTitle()));
 
 		return Note.duplicate(noteId, {
 			changes: {
@@ -539,7 +539,7 @@ export default class Note extends BaseItem {
 	}
 
 	static async moveToFolder(noteId: string, folderId: string) {
-		if (folderId == this.getClass('Folder').conflictFolderId()) throw new Error(_('Cannot move note to "%s" notebook', this.getClass('Folder').conflictFolderTitle()));
+		if (folderId === this.getClass('Folder').conflictFolderId()) throw new Error(_('Cannot move note to "%s" notebook', this.getClass('Folder').conflictFolderTitle()));
 
 		// When moving a note to a different folder, the user timestamp is not updated.
 		// However updated_time is updated so that the note can be synced later on.

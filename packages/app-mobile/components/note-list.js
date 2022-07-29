@@ -57,7 +57,7 @@ class NoteListComponent extends Component {
 
 	filterNotes(notes) {
 		const todoFilter = 'all'; // Setting.value('todoFilter');
-		if (todoFilter == 'all') return notes;
+		if (todoFilter === 'all') return notes;
 
 		const now = time.unixMs();
 		const maxInterval = 1000 * 60 * 60 * 24;
@@ -67,8 +67,8 @@ class NoteListComponent extends Component {
 		for (let i = 0; i < notes.length; i++) {
 			const note = notes[i];
 			if (note.is_todo) {
-				if (todoFilter == 'recent' && note.user_updated_time < notRecentTime && !!note.todo_completed) continue;
-				if (todoFilter == 'nonCompleted' && !!note.todo_completed) continue;
+				if (todoFilter === 'recent' && note.user_updated_time < notRecentTime && !!note.todo_completed) continue;
+				if (todoFilter === 'nonCompleted' && !!note.todo_completed) continue;
 			}
 			output.push(note);
 		}
@@ -77,7 +77,7 @@ class NoteListComponent extends Component {
 
 	UNSAFE_componentWillReceiveProps(newProps) {
 		// Make sure scroll position is reset when switching from one folder to another or to a tag list.
-		if (this.rootRef_ && newProps.notesSource != this.props.notesSource) {
+		if (this.rootRef_ && newProps.notesSource !== this.props.notesSource) {
 			this.rootRef_.scrollToOffset({ offset: 0, animated: false });
 		}
 	}
