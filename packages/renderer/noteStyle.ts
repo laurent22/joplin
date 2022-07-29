@@ -376,7 +376,8 @@ export default function(theme: any, options: Options = null) {
 
 		.media-player.media-pdf {
 			min-height: 35rem;
-			max-width: 430px;
+			width: 100%;
+			max-width: 1000px;
 			margin: 0;
 			border: 0;
 			display: block;

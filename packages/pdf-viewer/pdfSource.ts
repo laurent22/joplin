@@ -16,8 +16,10 @@ export class PdfData {
 		height: number;
 		width: number;
 	} = null;
+
 	public constructor() {
 	}
+
 	public loadDoc = async (url: string | Uint8Array) => {
 		this.url = url;
 		const loadingTask = pdfjsLib.getDocument(url);
@@ -25,10 +27,12 @@ export class PdfData {
 			const pdfDocument: any = await loadingTask.promise;
 			this.doc = pdfDocument;
 			this.pageCount = pdfDocument.numPages;
-		} catch (err) {
-			throw new Error('Could not load document');
+		} catch (error) {
+			error.message = `Could not load document: ${error.message}`;
+			throw error;
 		}
 	};
+
 	public getPage = async (pageNo: number) => {
 		if (!this.doc) {
 			throw new Error('Document not loaded');
@@ -38,6 +42,7 @@ export class PdfData {
 		}
 		return this.pages[pageNo];
 	};
+
 	public getPageSize = async () => {
 		if (!this.pageSize) {
 			const page = await this.getPage(1);
@@ -49,6 +54,7 @@ export class PdfData {
 		}
 		return this.pageSize;
 	};
+
 	public getScaledSize = async (height: number = null, width: number = null): Promise<ScaledSize> => {
 		const actualSize = await this.getPageSize();
 		let scale = 1.0;

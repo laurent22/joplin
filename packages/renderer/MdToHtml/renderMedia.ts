@@ -41,12 +41,12 @@ export default function(link: Link, options: Options) {
 	}
 
 	if (options.pdfViewerEnabled && resource.mime === 'application/pdf') {
-		let anchorPageNo = null;
-		if (link.href.indexOf('#') > 0) {
-			anchorPageNo = Number(link.href.split('#').pop());
-			if (anchorPageNo < 1) anchorPageNo = null;
-		}
 		if (options.useCustomPdfViewer) {
+			let anchorPageNo = null;
+			if (link.href.indexOf('#') > 0) {
+				anchorPageNo = Number(link.href.split('#').pop());
+				if (anchorPageNo < 1) anchorPageNo = null;
+			}
 			return `<iframe src="../../vendor/lib/@joplin/pdf-viewer/index.html" url="${escapedResourcePath}" 
 			appearance="${options.theme.appearance}" ${anchorPageNo ? `anchorPage="${anchorPageNo}"` : ''}
 		 class="media-player media-pdf"></iframe>`;

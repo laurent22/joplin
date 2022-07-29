@@ -592,7 +592,7 @@ export default class MdToHtml {
 			output.cssStrings = cssStrings;
 		} else {
 			const styleHtml = `<style>${cssStrings.join('\n')}</style>`;
-			output.html = `${styleHtml}<div id="rendered-md">${renderedBody}</div>`; //
+			output.html = `${styleHtml}<div id="rendered-md">${renderedBody}</div>`;
 
 			if (options.splitted) {
 				output.cssStrings = cssStrings;

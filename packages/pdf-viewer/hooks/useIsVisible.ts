@@ -7,14 +7,14 @@ const useIsVisible = (elementRef: React.MutableRefObject<HTMLElement>, rootRef: 
 		let observer: IntersectionObserver = null;
 		if (elementRef.current) {
 			observer = new IntersectionObserver((entries, _observer) => {
-				let visable = false;
+				let visible = false;
 				entries.forEach((entry) => {
 					if (entry.isIntersecting) {
-						visable = true;
+						visible = true;
 						setIsVisible(true);
 					}
 				});
-				if (!visable) {
+				if (!visible) {
 					setIsVisible(false);
 				}
 			}, {
@@ -29,7 +29,7 @@ const useIsVisible = (elementRef: React.MutableRefObject<HTMLElement>, rootRef: 
 				observer.disconnect();
 			}
 		};
-	}, [elementRef]);
+	}, []);
 
 	return isVisible;
 };

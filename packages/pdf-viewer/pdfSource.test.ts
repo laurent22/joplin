@@ -1,15 +1,29 @@
 import { PdfData } from './pdfSource';
 import * as pdfjsLib from 'pdfjs-dist';
-
-const path = require('path');
-const fs = require('fs');
+import { readFile } from 'fs';
+import { resolve } from 'path';
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = require('pdfjs-dist/legacy/build/pdf.worker.entry');
 
-const pdfFilePath = path.resolve('config/welcome.pdf');
+const pdfFilePath = resolve('config/welcome.pdf');
 
-describe('pdfData', () => {
-	const file = new Uint8Array(fs.readFileSync(pdfFilePath));
+
+function loadFile(filePath: string) {
+	return new Promise<Uint8Array>((resolve, reject) => {
+		readFile(filePath, (err, data) => {
+			if (err) {
+				reject(err);
+			} else {
+				resolve(new Uint8Array((data)));
+			}
+		});
+	});
+}
+
+describe('pdfData', async () => {
+
+	const file = await loadFile(pdfFilePath);
+
 	test('Should have correct page count', async () => {
 		const pdf = new PdfData();
 		await pdf.loadDoc(file);

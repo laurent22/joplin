@@ -1,11 +1,12 @@
 {
   "name": "@joplin/pdf-viewer",
-  "version": "1.0.0",
+  "version": "2.9.0",
   "description": "Provides embedded PDF viewers for Joplin",
   "main": "dist/main.js",
   "types": "src/main.ts",
+  "private": true,
   "publishConfig": {
-    "access": "public"
+    "access": "restricted"
   },
   "scripts": {
     "tsc": "tsc --project tsconfig.json",
@@ -33,6 +34,7 @@
     "webpack-cli": "^4.10.0"
   },
   "dependencies": {
+    "@joplin/lib": "workspace:^",
     "pdfjs-dist": "^2.14.305",
     "react": "16.13.1",
     "react-dom": "16.9.0"

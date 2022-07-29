@@ -4,43 +4,53 @@ import Page from './Page';
 
 require('./pages.css');
 
-export default function VerticalPages(props: {
+
+export interface VerticalPagesProps {
 	pdf: PdfData;
 	isDarkTheme: boolean;
 	anchorPage: number;
 	container: React.MutableRefObject<HTMLElement>;
-}) {
+}
+
+
+export default function VerticalPages(props: VerticalPagesProps) {
 	const [scaledSize, setScaledSize] = useState<ScaledSize>(null);
 	const innerContainerEl = useRef<HTMLDivElement>(null);
-	const resizeTimer = useRef<number>();
 	useLayoutEffect(() => {
+		let resizeTimer: number = null;
+		let cancelled = false;
 		const updateSize = async () => {
-			if (innerContainerEl.current && props.pdf) {
+			if (props.pdf) {
 				const innerWidth = innerContainerEl.current.clientWidth;
 				const scaledSize = await props.pdf.getScaledSize(null, innerWidth - 10);
+				if (cancelled) return;
 				setScaledSize(scaledSize);
 			}
 		};
 		const onResize = () => {
-			if (resizeTimer.current) {
-				clearTimeout(resizeTimer.current);
+			if (resizeTimer) {
+				clearTimeout(resizeTimer);
+				resizeTimer = null;
 			}
-			resizeTimer.current = window.setTimeout(updateSize, 100);
+			resizeTimer = window.setTimeout(updateSize, 200);
 		};
 		window.addEventListener('resize', onResize);
 		updateSize()
 			.catch(console.error);
 		return () => {
+			cancelled = true;
 			window.removeEventListener('resize', onResize);
-			if (resizeTimer.current) {
-				clearTimeout(resizeTimer.current);
+			if (resizeTimer) {
+				clearTimeout(resizeTimer);
+				resizeTimer = null;
 			}
 		};
-	}, [innerContainerEl.current, props.pdf]);
+	}, [props.pdf]);
 
 	return (<div className='pages-holder' ref={innerContainerEl} >
 		{Array.from(Array(props.pdf.pageCount).keys()).map((i: number) => {
-			return <Page pdf={props.pdf} pageNo={i + 1} focusOnLoad={props.anchorPage && props.anchorPage == i + 1}
+			// setting focusOnLoad only after scaledSize is set so that the container height is set correctly
+			return <Page pdf={props.pdf} pageNo={i + 1} focusOnLoad={scaledSize && props.anchorPage && props.anchorPage == i + 1}
 				isAnchored={props.anchorPage && props.anchorPage == i + 1}
 				isDarkTheme={props.isDarkTheme} scaledSize={scaledSize} container={props.container} key={i} />;
 		}

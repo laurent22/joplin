@@ -13,36 +13,38 @@ function fileIsNewerThan(path1, path2) {
 	return stat1.mtime > stat2.mtime;
 }
 
-function convertJsx(path) {
+function convertJsx(paths) {
 	chdir(`${__dirname}/..`);
 
-	fs.readdirSync(path).forEach((filename) => {
-		const jsxPath = `${path}/${filename}`;
-		const p = jsxPath.split('.');
-		if (p.length <= 1) return;
-		const ext = p[p.length - 1];
-		if (ext !== 'jsx') return;
-		p.pop();
+	paths.forEach(path => {
+		fs.readdirSync(path).forEach((filename) => {
+			const jsxPath = `${path}/${filename}`;
+			const p = jsxPath.split('.');
+			if (p.length <= 1) return;
+			const ext = p[p.length - 1];
+			if (ext !== 'jsx') return;
+			p.pop();
 
-		const basePath = p.join('.');
+			const basePath = p.join('.');
 
-		const jsPath = `${basePath}.min.js`;
+			const jsPath = `${basePath}.min.js`;
 
-		if (fileIsNewerThan(jsxPath, jsPath)) {
-			console.info(`Compiling ${jsxPath}...`);
+			if (fileIsNewerThan(jsxPath, jsPath)) {
+				console.info(`Compiling ${jsxPath}...`);
 
-			// { shell: true } is needed to get it working on Windows:
-			// https://discourse.joplinapp.org/t/attempting-to-build-on-windows/22559/12
-			const result = spawnSync('yarn', ['run', 'babel', '--presets', 'react', '--out-file', jsPath, jsxPath], { shell: true });
-			if (result.status !== 0) {
-				const msg = [];
-				if (result.stdout) msg.push(result.stdout.toString());
-				if (result.stderr) msg.push(result.stderr.toString());
-				console.error(msg.join('\n'));
-				if (result.error) console.error(result.error);
-				process.exit(result.status);
+				// { shell: true } is needed to get it working on Windows:
+				// https://discourse.joplinapp.org/t/attempting-to-build-on-windows/22559/12
+				const result = spawnSync('yarn', ['run', 'babel', '--presets', 'react', '--out-file', jsPath, jsxPath], { shell: true });
+				if (result.status !== 0) {
+					const msg = [];
+					if (result.stdout) msg.push(result.stdout.toString());
+					if (result.stderr) msg.push(result.stderr.toString());
+					console.error(msg.join('\n'));
+					if (result.error) console.error(result.error);
+					process.exit(result.status);
+				}
 			}
-		}
+		});
 	});
 }
 
@@ -61,10 +63,12 @@ function build(path) {
 }
 
 module.exports = function() {
-	convertJsx(`${__dirname}/../gui`);
-	convertJsx(`${__dirname}/../gui/MainScreen`);
-	convertJsx(`${__dirname}/../gui/NoteList`);
-	convertJsx(`${__dirname}/../plugins`);
+	convertJsx([
+		`${__dirname}/../gui`,
+		`${__dirname}/../gui/MainScreen`,
+		`${__dirname}/../gui/NoteList`,
+		`${__dirname}/../plugins`,
+	]);
 
 	build(`${__dirname}/../../pdf-viewer`);
 
