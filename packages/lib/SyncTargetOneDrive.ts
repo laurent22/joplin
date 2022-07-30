@@ -67,7 +67,7 @@ export default class SyncTargetOneDrive extends BaseSyncTarget {
 
 		if (this.api_) return this.api_;
 
-		const isPublic = Setting.value('appType') != 'cli' && Setting.value('appType') != 'desktop';
+		const isPublic = Setting.value('appType') !== 'cli' && Setting.value('appType') !== 'desktop';
 
 		this.api_ = new OneDriveApi(this.oneDriveParameters().id, this.oneDriveParameters().secret, isPublic);
 

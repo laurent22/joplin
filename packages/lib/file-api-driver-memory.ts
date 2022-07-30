@@ -34,7 +34,7 @@ export default class FileApiDriverMemory {
 
 	itemIndexByPath(path: string) {
 		for (let i = 0; i < this.items_.length; i++) {
-			if (this.items_[i].path == path) return i;
+			if (this.items_[i].path === path) return i;
 		}
 		return -1;
 	}
@@ -71,7 +71,7 @@ export default class FileApiDriverMemory {
 
 		for (let i = 0; i < this.items_.length; i++) {
 			const item = this.items_[i];
-			if (item.path == path) continue;
+			if (item.path === path) continue;
 			if (item.path.indexOf(`${path}/`) === 0) {
 				const s = item.path.substr(path.length + 1);
 				if (s.split('/').length === 1) {
