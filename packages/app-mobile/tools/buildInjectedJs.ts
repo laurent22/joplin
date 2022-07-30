@@ -7,21 +7,15 @@ import { mkdirp, readFile, writeFile } from 'fs-extra';
 import { dirname, extname, basename } from 'path';
 const execa = require('execa');
 
-import { OutputOptions, rollup, RollupOptions, watch as rollupWatch } from 'rollup';
-import typescript from '@rollup/plugin-typescript';
-import { nodeResolve } from '@rollup/plugin-node-resolve';
+import webpack from 'webpack';
 
 const rootDir = dirname(dirname(dirname(__dirname)));
 const mobileDir = `${rootDir}/packages/app-mobile`;
 const outputDir = `${mobileDir}/lib/rnInjectedJs`;
 
-/**
- * Stores the contents of the file at [filePath] as an importable string.
- *
- * @param name the name (excluding the .js extension) of the output file that will contain
- *             the JSON-ified file content
- * @param filePath Path to the file to JSON-ify.
- */
+// Stores the contents of the file at [filePath] as an importable string.
+// [name] should be the name (excluding the .js extension) of the output file that will contain
+// the JSON-ified file content.
 async function copyJs(name: string, filePath: string) {
 	const outputPath = `${outputDir}/${name}.js`;
 	console.info(`Creating: ${outputPath}`);
@@ -47,28 +41,43 @@ class BundledFile {
 		this.bundleMinifiedPath = `${this.rootFileDirectory}/${this.bundleBaseName}.bundle.min.js`;
 	}
 
-	private getRollupOptions(): [RollupOptions, OutputOptions] {
-		const rollupInputOptions: RollupOptions = {
-			input: this.sourceFilePath,
-			plugins: [
-				typescript({
-					// Exclude all .js files. Rollup will attempt to import a .js
-					// file if both a .ts and .js file are present, conflicting
-					// with our build setup. See
-					// https://discourse.joplinapp.org/t/importing-a-ts-file-from-a-rollup-bundled-ts-file/
-					exclude: `${this.rootFileDirectory}/**/*.js`,
-				}),
-				nodeResolve(),
-			],
+	private getWebpackOptions(mode: 'production' | 'development'): webpack.Configuration {
+		const config: webpack.Configuration = {
+			mode,
+			entry: this.sourceFilePath,
+			output: {
+				path: this.rootFileDirectory,
+				filename: `${this.bundleBaseName}.bundle.js`,
+
+				library: {
+					type: 'window',
+					name: this.bundleName,
+				},
+			},
+			// See https://webpack.js.org/guides/typescript/
+			module: {
+				rules: [
+					{
+						// Include .tsx to include react components
+						test: /\.tsx?$/,
+						use: 'ts-loader',
+						exclude: /node_modules/,
+					},
+				],
+			},
+			// Increase the minimum size required
+			// to trigger warnings.
+			// See https://stackoverflow.com/a/53517149/17055750
+			performance: {
+				maxAssetSize: 2_000_000, // 2-ish MiB
+				maxEntrypointSize: 2_000_000,
+			},
+			resolve: {
+				extensions: ['.tsx', '.ts', '.js'],
+			},
 		};
 
-		const rollupOutputOptions: OutputOptions = {
-			format: 'iife',
-			name: this.bundleName,
-			file: this.bundleOutputPath,
-		};
-
-		return [rollupInputOptions, rollupOutputOptions];
+		return config;
 	}
 
 	private async uglify() {
@@ -81,62 +90,89 @@ class BundledFile {
 		]);
 	}
 
-	/**
-	 * Create a minified JS file in the same directory as `this.sourceFilePath` with
-	 * the same name.
-	 */
-	public async build() {
-		const [rollupInputOptions, rollupOutputOptions] = this.getRollupOptions();
+	private handleErrors(err: Error | undefined | null, stats: webpack.Stats | undefined): boolean {
+		let failed = false;
 
-		console.info(`Building bundle: ${this.bundleName}...`);
-		const bundle = await rollup(rollupInputOptions);
-		await bundle.write(rollupOutputOptions);
+		if (err) {
+			console.error(`Error: ${err.name}`, err.message, err.stack);
+			failed = true;
+		} else if (stats?.hasErrors() || stats?.hasWarnings()) {
+			const data = stats.toJson();
 
-		await this.uglify();
+			if (data.warnings && data.warningsCount) {
+				console.warn('Warnings: ', data.warningsCount);
+				for (const warning of data.warnings) {
+					// Stack contains the message
+					if (warning.stack) {
+						console.warn(warning.stack);
+					} else {
+						console.warn(warning.message);
+					}
+				}
+			}
+			if (data.errors && data.errorsCount) {
+				console.error('Errors: ', data.errorsCount);
+				for (const error of data.errors) {
+					if (error.stack) {
+						console.error(error.stack);
+					} else {
+						console.error(error.message);
+					}
+					console.error();
+				}
+
+				failed = true;
+			}
+		}
+
+		return failed;
 	}
 
-	public async startWatching() {
-		const [rollupInputOptions, rollupOutputOptions] = this.getRollupOptions();
-		const watcher = rollupWatch({
-			...rollupInputOptions,
-			output: [rollupOutputOptions],
-			watch: {
-				exclude: [
-					`${mobileDir}/node_modules/`,
-				],
-			},
-		});
+	// Create a minified JS file in the same directory as `this.sourceFilePath` with
+	// the same name.
+	public build() {
+		const compiler = webpack(this.getWebpackOptions('production'));
+		return new Promise<void>((resolve, reject) => {
+			console.info(`Building bundle: ${this.bundleName}...`);
 
-		watcher.on('event', async event => {
-			if (event.code === 'BUNDLE_END') {
+			compiler.run((err, stats) => {
+				let failed = this.handleErrors(err, stats);
+
+				// Clean up.
+				compiler.close(async (error) => {
+					if (error) {
+						console.error('Error cleaning up:', error);
+						failed = true;
+					}
+					if (!failed) {
+						await this.uglify();
+						resolve();
+					} else {
+						reject();
+					}
+				});
+			});
+		});
+	}
+
+	public startWatching() {
+		const compiler = webpack(this.getWebpackOptions('development'));
+		const watchOptions = {
+			ignored: '**/node_modules',
+		};
+
+		console.info('Watching bundle: ', this.bundleName);
+		compiler.watch(watchOptions, async (err, stats) => {
+			const failed = this.handleErrors(err, stats);
+			if (!failed) {
 				await this.uglify();
 				await this.copyToImportableFile();
-				console.info(`☑ Bundled ${this.bundleName}!`);
-
-				// Let plugins clean up
-				await event.result.close();
-			} else if (event.code === 'ERROR') {
-				console.error(event.error);
-
-				// Clean up any bundle-related resources
-				if (event.result) {
-					await event.result?.close();
-				}
-			} else if (event.code === 'END') {
-				console.info('Done bundling.');
-			} else if (event.code === 'START') {
-				console.info('Starting bundler...');
 			}
 		});
-
-		// We're done configuring the watcher
-		watcher.close();
 	}
 
-	/**
-	 * Creates a file that can be imported by React native. This file contains the
-	 * bundled JS as a string.
-	 */
+	// Creates a file that can be imported by React native. This file contains the
+	// bundled JS as a string.
 	public async copyToImportableFile() {
 		await copyJs(`${this.bundleBaseName}.bundle`, this.bundleMinifiedPath);
 	}
@@ -166,7 +202,8 @@ export async function buildInjectedJS() {
 export async function watchInjectedJS() {
 	// Watch for changes
 	for (const file of bundledFiles) {
-		void(file.startWatching());
+		file.startWatching();
 	}
 }
+
 
