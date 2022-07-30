@@ -1201,7 +1201,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		const noteMainComp = (
 			<View style={this.styles().noteMainComp}>
-				<NotesBar saveOneProperty={this.saveOneProperty}/>
+				<NotesBar todoCheckbox_change={this.todoCheckbox_change} />
 				<View style={{ flex: 1 }}>
 					{titleComp}
 					{bodyComponent}

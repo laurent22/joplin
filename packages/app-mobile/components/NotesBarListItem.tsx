@@ -1,7 +1,6 @@
 import * as React from 'react';
 import Checkbox from './checkbox';
 import Note from '@joplin/lib/models/Note';
-import time from '@joplin/lib/time';
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { Style } from './global-style';
 import { State } from '@joplin/lib/reducer';
@@ -12,6 +11,7 @@ const { _ } = require('@joplin/lib/locale');
 interface NoteListProps {
 	note: any;
     themeId: string;
+	todoCheckbox_change: (checked: boolean)=> void;
 }
 
 const NotesBarListItemComponent = function(props: NoteListProps) {
@@ -66,13 +66,7 @@ const NotesBarListItemComponent = function(props: NoteListProps) {
 	);
 
 	async function onTodoCheckboxChange(checked: boolean) {
-		console.log(checked);
-		const newNote = {
-			id: note.id,
-			todo_completed: checked ? time.unixMs() : 0,
-		};
-
-		await Note.save(newNote);
+		await props.todoCheckbox_change(checked);
 	}
 
 	const noteTitle = Note.displayTitle(note);

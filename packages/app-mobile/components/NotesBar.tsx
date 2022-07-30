@@ -11,7 +11,7 @@ import NotesBarListItem from './NotesBarListItem';
 interface Props {
     themeId: string;
 	items: any[];
-	saveOneProperty: (name: string, value: any)=> void;
+	todoCheckbox_change: (checked: boolean)=> void;
 }
 
 function NotesBarComponent(props: Props) {
@@ -162,7 +162,13 @@ function NotesBarComponent(props: Props) {
 	const NotesBarListComp = (
 		<FlatList
 			data={props.items}
-			renderItem={({ item }: { item: any }) => <NotesBarListItem note={item} styles={styles().listItem} />}
+			renderItem={({ item }: { item: any }) => {
+				if (item.is_todo) {
+					return <NotesBarListItem note={item} styles={styles().listItem} todoCheckbox_change={props.todoCheckbox_change} />;
+				} else {
+					return <NotesBarListItem note={item} styles={styles().listItem} />;
+				}
+			}}
 			keyExtractor={(item: any) => item.id}
 		/>
 	);
