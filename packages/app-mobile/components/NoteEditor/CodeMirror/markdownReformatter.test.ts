@@ -89,10 +89,11 @@ describe('markdownReformatter', () => {
 		});
 	});
 
+	const multiLineTestText = `Internal text manipulation
+		This is a test...
+		of block and inline region toggling.`;
+
 	describe('should toggle inline and block regions correctly', () => {
-		const initialText = `Internal text manipulation
-			This is a test...
-			of block and inline region toggling.`;
 		const codeFenceRegex = /^``````\w*\s*$/;
 		const inlineCodeRegionSpec = RegionSpec.of({
 			template: '`',
@@ -105,7 +106,7 @@ describe('markdownReformatter', () => {
 
 		it('should create an empty region around the cursor', () => {
 			const initialState: EditorState = EditorState.create({
-				doc: initialText,
+				doc: multiLineTestText,
 				selection: EditorSelection.cursor(0),
 			});
 
@@ -114,13 +115,13 @@ describe('markdownReformatter', () => {
 			);
 
 			const newState = initialState.update(changes).state;
-			expect(newState.doc.toString()).toEqual(`\`\`${initialText}`);
+			expect(newState.doc.toString()).toEqual(`\`\`${multiLineTestText}`);
 		});
 
 		it('should wrap multiple selected lines in block formatting', () => {
 			const initialState: EditorState = EditorState.create({
-				doc: initialText,
-				selection: EditorSelection.range(0, initialText.length),
+				doc: multiLineTestText,
+				selection: EditorSelection.range(0, multiLineTestText.length),
 			});
 
 			const changes = toggleRegionFormatGlobally(
@@ -129,22 +130,22 @@ describe('markdownReformatter', () => {
 
 			const newState = initialState.update(changes).state;
 			const editorText = newState.doc.toString();
-			expect(editorText).toBe(`\`\`\`\`\`\`\n${initialText}\n\`\`\`\`\`\``);
+			expect(editorText).toBe(`\`\`\`\`\`\`\n${multiLineTestText}\n\`\`\`\`\`\``);
 			expect(newState.selection.main.from).toBe(0);
 			expect(newState.selection.main.to).toBe(editorText.length);
 		});
+	});
 
-		it('should convert tabs to spaces based on indentUnit', () => {
-			const state: EditorState = EditorState.create({
-				doc: initialText,
-				selection: EditorSelection.cursor(0),
-				extensions: [
-					indentUnit.of('    '),
-				],
-			});
-			expect(tabsToSpaces(state, '\t')).toBe('    ');
-			expect(tabsToSpaces(state, '\t  ')).toBe('      ');
-			expect(tabsToSpaces(state, '  \t  ')).toBe('      ');
+	it('should convert tabs to spaces based on indentUnit', () => {
+		const state: EditorState = EditorState.create({
+			doc: multiLineTestText,
+			selection: EditorSelection.cursor(0),
+			extensions: [
+				indentUnit.of('    '),
+			],
 		});
+		expect(tabsToSpaces(state, '\t')).toBe('    ');
+		expect(tabsToSpaces(state, '\t  ')).toBe('      ');
+		expect(tabsToSpaces(state, '  \t  ')).toBe('      ');
 	});
 });
