@@ -31,9 +31,12 @@ export default function(link: Link, options: Options) {
 	}
 
 	if (options.audioPlayerEnabled && resource.mime.indexOf('audio/') === 0) {
+		// We want to support both audio/x-flac and audio/flac MIME types, but chromium only supports audio/flac
+		// https://github.com/laurent22/joplin/issues/6434
+		const escapedAudioMime = escapedMime === 'audio/x-flac' ? 'audio/flac' : escapedMime;
 		return `
 			<audio class="media-player media-audio" controls>
-				<source src="${escapedResourcePath}" type="${escapedMime}">
+				<source src="${escapedResourcePath}" type="${escapedAudioMime}">
 			</audio>
 		`;
 	}
