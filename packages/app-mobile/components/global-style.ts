@@ -2,7 +2,7 @@ const Setting = require('@joplin/lib/models/Setting').default;
 const { Platform } = require('react-native');
 import { themeById } from '@joplin/lib/theme';
 
-interface Style {
+export interface Style {
 	[key: string]: any;
 }
 

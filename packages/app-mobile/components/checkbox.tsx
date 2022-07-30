@@ -10,7 +10,7 @@ interface Style {
 interface Props {
 	style: Style;
 	checked: boolean;
-	onChange: Function;
+	onChange: (checked: boolean)=> void;
 	accessibilityLabel?: string;
 }
 

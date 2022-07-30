@@ -1,20 +1,17 @@
 import * as React from 'react';
-const { View, Text, StyleSheet, TextInput, TouchableOpacity } = require('react-native');
+const { View, Text, StyleSheet, TextInput, TouchableOpacity, FlatList } = require('react-native');
 import { State } from '@joplin/lib/reducer';
 import { themeStyle } from './global-style';
 const { connect } = require('react-redux');
 const Icon = require('react-native-vector-icons/Ionicons').default;
 const { _ } = require('@joplin/lib/locale');
-import Checkbox from './checkbox';
-import Note from '@joplin/lib/models/Note';
+import { Style } from './global-style';
+import NotesBarListItem from './NotesBarListItem';
 
 interface Props {
     themeId: string;
-	notes: any[];
-}
-
-interface NoteListProps {
-	note: any;
+	items: any[];
+	saveOneProperty: (name: string, value: any)=> void;
 }
 
 function NotesBarComponent(props: Props) {
@@ -23,7 +20,7 @@ function NotesBarComponent(props: Props) {
 		const themeId = props.themeId;
 		const theme = themeStyle(themeId);
 
-		let styles = {
+		let styles: Style = {
 			container: {
 				width: 250,
 				backgroundColor: theme.tableBackgroundColor,
@@ -101,10 +98,6 @@ function NotesBarComponent(props: Props) {
 			inputGroup: {
 				justifyContent: 'space-between',
 			},
-			itemText: {
-				fontSize: theme.fontSize,
-				color: theme.color,
-			},
 		};
 
 		styles = StyleSheet.create(styles);
@@ -166,43 +159,19 @@ function NotesBarComponent(props: Props) {
 		</View>
 	);
 
-
-	const NoteListItem = function(props: NoteListProps) {
-		// const [ isChecked, setIsChecked ] = React.useState(false);
-		const note = props.note ? props.note : {};
-		const isTodo = !!Number(note.is_todo);
-
-		let item;
-
-		if (isTodo) {
-			item = (
-				<View>
-					<TouchableOpacity style={styles().padding}>
-						<Checkbox style={this.styles().checkbox} checked={!!Number(note.todo_completed)} onChange={this.todoCheckbox_change} />
-						<Text style={styles().itemText}>{Note.displayTitle(note)}</Text>
-					</TouchableOpacity>
-					{dividerComp}
-				</View>
-			);
-		} else {
-			item = (
-				<View>
-					<TouchableOpacity style={styles().padding}>
-						<Text style={styles().itemText}>{Note.displayTitle(note)}</Text>
-					</TouchableOpacity>
-					{dividerComp}
-				</View>
-			);
-		}
-
-		return item;
-	};
+	const NotesBarListComp = (
+		<FlatList
+			data={props.items}
+			renderItem={({ item }: { item: any }) => <NotesBarListItem note={item} styles={styles().listItem} />}
+			keyExtractor={(item: any) => item.id}
+		/>
+	);
 
 	return (
 		<View style={styles().container}>
 			{topComp}
 			{inputGroupComp}
-			<NoteListItem note={props.notes[0]} />
+			{ NotesBarListComp }
 		</View>
 	);
 }
@@ -210,7 +179,7 @@ function NotesBarComponent(props: Props) {
 const NotesBar = connect((state: State) => {
 	return {
 		themeId: state.settings.theme,
-		notes: state.notes,
+		items: state.notes,
 	};
 })(NotesBarComponent);
 

@@ -1201,7 +1201,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 		const noteMainComp = (
 			<View style={this.styles().noteMainComp}>
-				<NotesBar />
+				<NotesBar saveOneProperty={this.saveOneProperty}/>
 				<View style={{ flex: 1 }}>
 					{titleComp}
 					{bodyComponent}
