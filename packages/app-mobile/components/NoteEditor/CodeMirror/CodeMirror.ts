@@ -10,6 +10,7 @@
 // from NoteEditor.tsx.
 
 import createTheme from './theme';
+import decoratorExtension from './decoratorExtension';
 
 import { EditorState } from '@codemirror/state';
 import { markdown } from '@codemirror/lang-markdown';
@@ -23,6 +24,7 @@ import { searchKeymap } from '@codemirror/search';
 import { historyKeymap, defaultKeymap } from '@codemirror/commands';
 import { MarkdownMathExtension } from './markdownMathParser';
 import { GFM as GitHubFlavoredMarkdownExtension } from '@lezer/markdown';
+import syntaxHighlightingLanguages from './syntaxHighlightingLanguages';
 
 interface CodeMirrorResult {
 	editor: EditorView;
@@ -76,6 +78,7 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 						MarkdownMathExtension,
 						GitHubFlavoredMarkdownExtension,
 					],
+					codeLanguages: syntaxHighlightingLanguages,
 				}),
 				...createTheme(theme),
 				history(),
@@ -85,6 +88,7 @@ export function initCodeMirror(parentElement: any, initialText: string, theme: a
 				highlightSelectionMatches(),
 				indentOnInput(),
 
+				decoratorExtension,
 				EditorView.lineWrapping,
 				EditorView.contentAttributes.of({ autocapitalize: 'sentence' }),
 				EditorView.updateListener.of((viewUpdate: ViewUpdate) => {

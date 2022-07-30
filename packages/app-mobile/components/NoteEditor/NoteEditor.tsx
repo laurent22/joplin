@@ -51,6 +51,10 @@ function useCss(themeId: number): string {
 			:root {
 				background-color: ${theme.backgroundColor};
 			}
+
+			body {
+				font-size: 13pt;
+			}
 		`;
 	}, [themeId]);
 }
@@ -88,7 +92,7 @@ function useHtml(css: string): string {
 function editorTheme(themeId: number) {
 	return {
 		...themeStyle(themeId),
-		fontSize: 15,
+		fontSize: 0.85, // em
 		fontFamily: fontFamilyFromSettings(),
 	};
 }
@@ -222,9 +226,12 @@ function NoteEditor(props: Props, ref: any) {
 
 	// - `setSupportMultipleWindows` must be `true` for security reasons:
 	//   https://github.com/react-native-webview/react-native-webview/releases/tag/v11.0.0
+	// - `scrollEnabled` prevents iOS from scrolling the document (has no effect on Android)
+	//    when the editor is focused.
 	return <WebView
 		style={props.style}
 		ref={webviewRef}
+		scrollEnabled={false}
 		useWebKit={true}
 		source={source}
 		setSupportMultipleWindows={true}

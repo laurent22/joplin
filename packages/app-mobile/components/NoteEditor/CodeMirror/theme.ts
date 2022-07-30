@@ -1,12 +1,14 @@
-/**
- * Create a set of Extensions that provide syntax highlighting.
- */
+//
+// Create a set of Extensions that provide syntax highlighting.
+//
 
 
 import { defaultHighlightStyle, syntaxHighlighting, HighlightStyle } from '@codemirror/language';
 import { tags } from '@lezer/highlight';
 import { EditorView } from '@codemirror/view';
 import { Extension } from '@codemirror/state';
+
+import { inlineMathTag, mathTag } from './markdownMathParser';
 
 // For an example on how to customize the theme, see:
 //
@@ -20,18 +22,30 @@ import { Extension } from '@codemirror/state';
 // the app is running. It seems that what appears as ".ͼ1" in the CSS is the
 // equivalent of "&" in the theme object. So to target ".ͼ1.cm-focused", you'd
 // use '&.cm-focused' in the theme.
+//
+// [theme] should be a joplin theme (see @joplin/lib/theme)
 const createTheme = (theme: any): Extension[] => {
 	const isDarkTheme = theme.appearance === 'dark';
 
 	const baseGlobalStyle: Record<string, string> = {
 		color: theme.color,
 		backgroundColor: theme.backgroundColor,
-		fontFamily: theme.fontFamily,
-		fontSize: `${theme.fontSize}px`,
+
+		// On iOS, apply system font scaling (e.g. font scaling
+		// set in accessibility settings).
+		font: '-apple-system-body',
 	};
 	const baseCursorStyle: Record<string, string> = { };
-	const baseContentStyle: Record<string, string> = { };
+	const baseContentStyle: Record<string, string> = {
+		fontFamily: theme.fontFamily,
+
+		// To allow accessibility font scaling, we also need to set the
+		// fontSize to a value in `em`s (relative scaling relative to
+		// parent font size).
+		fontSize: `${theme.fontSize}em`,
+	};
 	const baseSelectionStyle: Record<string, string> = { };
+	const blurredSelectionStyle: Record<string, string> = { };
 
 	// If we're in dark mode, the caret and selection are difficult to see.
 	// Adjust them appropriately
@@ -43,18 +57,76 @@ const createTheme = (theme: any): Extension[] => {
 		baseCursorStyle.borderLeftColor = 'white';
 
 		baseSelectionStyle.backgroundColor = '#6b6b6b';
+		blurredSelectionStyle.backgroundColor = '#444';
 	}
 
 	const baseTheme = EditorView.baseTheme({
 		'&': baseGlobalStyle,
 
 		// These must be !important or more specific than CodeMirror's built-ins
-		'.cm-content': baseContentStyle,
+		'.cm-content': {
+			fontFamily: theme.fontFamily,
+			...baseContentStyle,
+		},
 		'&.cm-focused .cm-cursor': baseCursorStyle,
 		'&.cm-focused .cm-selectionBackground, ::selection': baseSelectionStyle,
+		'.cm-selectionBackground': blurredSelectionStyle,
 
 		'&.cm-focused': {
 			outline: 'none',
+		},
+
+		'& .cm-blockQuote': {
+			borderLeft: `4px solid ${theme.colorFaded}`,
+			opacity: theme.blockQuoteOpacity,
+			paddingLeft: '4px',
+		},
+
+		'& .cm-codeBlock': {
+			'&.cm-regionFirstLine, &.cm-regionLastLine': {
+				borderRadius: '3px',
+			},
+			'&:not(.cm-regionFirstLine)': {
+				borderTop: 'none',
+				borderTopLeftRadius: 0,
+				borderTopRightRadius: 0,
+			},
+			'&:not(.cm-regionLastLine)': {
+				borderBottom: 'none',
+				borderBottomLeftRadius: 0,
+				borderBottomRightRadius: 0,
+			},
+
+			borderWidth: '1px',
+			borderStyle: 'solid',
+			borderColor: theme.colorFaded,
+			backgroundColor: 'rgba(155, 155, 155, 0.1)',
+		},
+
+		// CodeMirror wraps the existing inline span in an additional element.
+		// Due to a Chrome rendering bug, because the .cm-inlineCode wraps a
+		// span with a larger font-size, the .cm-inlineCode's bounding box won't
+		// be big enough for its content.
+		// As such, we need to style whichever element directly wraps its content.
+		'& .cm-headerLine > .cm-inlineCode > *, & :not(.cm-headerLine) > .cm-inlineCode': {
+			borderWidth: '1px',
+			borderStyle: 'solid',
+			borderColor: isDarkTheme ? 'rgba(200, 200, 200, 0.5)' : 'rgba(100, 100, 100, 0.5)',
+			borderRadius: '4px',
+		},
+
+		'& .cm-mathBlock, & .cm-inlineMath': {
+			color: isDarkTheme ? '#9fa' : '#276',
+		},
+
+
+		// Style the search widget. Use ':root' to increase the selector's precedence
+		// (override the existing preset styles).
+		':root & .cm-panel.cm-search': {
+			'& label, & button, & input': {
+				fontSize: '1em',
+				color: isDarkTheme ? 'white' : 'black',
+			},
 		},
 	});
 
@@ -108,6 +180,42 @@ const createTheme = (theme: any): Extension[] => {
 		{
 			tag: tags.list,
 			fontFamily: theme.fontFamily,
+		},
+		{
+			tag: tags.comment,
+			opacity: 0.9,
+			fontStyle: 'italic',
+		},
+		{
+			tag: tags.link,
+			color: theme.urlColor,
+			textDecoration: 'underline',
+		},
+		{
+			tag: [mathTag, inlineMathTag],
+			fontStyle: 'italic',
+		},
+
+		// Content of code blocks
+		{
+			tag: tags.keyword,
+			color: isDarkTheme ? '#ff7' : '#740',
+		},
+		{
+			tag: tags.operator,
+			color: isDarkTheme ? '#f7f' : '#805',
+		},
+		{
+			tag: tags.literal,
+			color: isDarkTheme ? '#aaf' : '#037',
+		},
+		{
+			tag: tags.operator,
+			color: isDarkTheme ? '#fa9' : '#490',
+		},
+		{
+			tag: tags.typeName,
+			color: isDarkTheme ? '#7ff' : '#a00',
 		},
 	]);
 

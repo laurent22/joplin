@@ -546,7 +546,7 @@ export default class SearchEngine {
 			console.warn(error);
 		}
 
-		const textQuery = allTerms.filter(x => x.name === 'text' || x.name == 'title' || x.name == 'body').map(x => x.value).join(' ');
+		const textQuery = allTerms.filter(x => x.name === 'text' || x.name === 'title' || x.name === 'body').map(x => x.value).join(' ');
 		const st = scriptType(textQuery);
 
 		if (!Setting.value('db.ftsEnabled')) {
