@@ -7,11 +7,13 @@ import { State } from '@joplin/lib/reducer';
 const { connect } = require('react-redux');
 import { themeStyle } from './global-style';
 const { _ } = require('@joplin/lib/locale');
+import shim from '@joplin/lib/shim';
 
 interface NoteListProps {
 	note: any;
     themeId: string;
 	todoCheckbox_change: (checked: boolean)=> void;
+	dispatch: Function;
 }
 
 const NotesBarListItemComponent = function(props: NoteListProps) {
@@ -50,9 +52,14 @@ const NotesBarListItemComponent = function(props: NoteListProps) {
 			itemText: {
 				fontSize: theme.fontSize,
 				color: theme.color,
+				paddingTop: 12,
+				paddingBottom: 12,
 			},
 			checkbox: {
 				paddingRight: 10,
+				paddingLeft: theme.marginLeft,
+				paddingTop: 12,
+				paddingBottom: 12,
 			},
 		};
 
@@ -65,9 +72,26 @@ const NotesBarListItemComponent = function(props: NoteListProps) {
 		<View style={styles().divider}></View>
 	);
 
-	async function onTodoCheckboxChange(checked: boolean) {
+	const onTodoCheckboxChange = async (checked: boolean) => {
 		await props.todoCheckbox_change(checked);
-	}
+	};
+
+	const onPress = async () => {
+		if (!note) return;
+		if (note.encryption_applied) return;
+
+		props.dispatch({
+			type: 'NAV_BACK',
+		});
+
+		shim.setTimeout(() => {
+			props.dispatch({
+				type: 'NAV_GO',
+				routeName: 'Note',
+				noteId: note.id,
+			});
+		}, 5);
+	};
 
 	const noteTitle = Note.displayTitle(note);
 	let item;
@@ -75,7 +99,7 @@ const NotesBarListItemComponent = function(props: NoteListProps) {
 	if (isTodo) {
 		item = (
 			<View>
-				<TouchableOpacity style={[styles().padding, styles().horizontalFlex]}>
+				<TouchableOpacity style={styles().horizontalFlex} onPress={onPress}>
 					<Checkbox
 						style={styles().checkbox}
 						checked={!!Number(note.todo_completed)}
@@ -90,8 +114,8 @@ const NotesBarListItemComponent = function(props: NoteListProps) {
 	} else {
 		item = (
 			<View>
-				<TouchableOpacity style={styles().padding}>
-					<Text style={styles().itemText}>{noteTitle}</Text>
+				<TouchableOpacity onPress={onPress}>
+					<Text style={[styles().itemText, styles().padding]}>{noteTitle}</Text>
 				</TouchableOpacity>
 				{dividerComp}
 			</View>

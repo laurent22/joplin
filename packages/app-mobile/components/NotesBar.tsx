@@ -38,6 +38,8 @@ function NotesBarComponent(props: Props) {
 				fontSize: 30,
 				paddingTop: 8,
 				paddingBottom: 8,
+				paddingRight: theme.marginRight,
+				paddingLeft: theme.marginLeft,
 			},
 			top: {
 				color: theme.color,
@@ -46,7 +48,6 @@ function NotesBarComponent(props: Props) {
 				width: '100%',
 				justifyContent: 'space-between',
 				paddingLeft: theme.marginLeft,
-				paddingRight: theme.marginRight,
 			},
 			padding: {
 				paddingLeft: theme.marginLeft,
@@ -164,9 +165,9 @@ function NotesBarComponent(props: Props) {
 			data={props.items}
 			renderItem={({ item }: { item: any }) => {
 				if (item.is_todo) {
-					return <NotesBarListItem note={item} styles={styles().listItem} todoCheckbox_change={props.todoCheckbox_change} />;
+					return <NotesBarListItem note={item} todoCheckbox_change={props.todoCheckbox_change} />;
 				} else {
-					return <NotesBarListItem note={item} styles={styles().listItem} />;
+					return <NotesBarListItem note={item} />;
 				}
 			}}
 			keyExtractor={(item: any) => item.id}
