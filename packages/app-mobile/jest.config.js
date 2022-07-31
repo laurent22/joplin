@@ -7,7 +7,7 @@ module.exports = {
 		'js',
 	],
 
-	testMatch: ['**/*.test.(ts|tsx|js)'],
+	testMatch: ['**/*.test.(ts|tsx)'],
 
 	testPathIgnorePatterns: ['<rootDir>/node_modules/'],
 
