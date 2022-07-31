@@ -6,8 +6,11 @@ export const defaultPlugins = {
 	'plugin.calebjohn.rich-markdown': '0.8.3',
 };
 
-export const initialSettings: InitialSettings = {
-	'io.github.jackgruber.backup': {
-		'path': `${Setting.value('profileDir')}`,
-	},
-};
+export function getInitialSettings(): InitialSettings {
+	const initialSettings: InitialSettings = {
+		'io.github.jackgruber.backup': {
+			'path': `${Setting.value('profileDir')}`,
+		},
+	};
+	return initialSettings;
+}
