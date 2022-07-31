@@ -304,4 +304,5 @@ describe('services_PluginService', function() {
 		const folders = await Folder.all();
 		expect(JSON.parse(folders[0].title)).toBe(expectedPath);
 	}));
+
 });

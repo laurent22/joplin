@@ -34,7 +34,6 @@ describe('defaultPluginsUtils', function() {
 		done();
 	});
 
-	// if not possible, then separate installing and loading plugins
 	it('should install default plugins with no previous default plugins installed', (async () => {
 		const testPluginDir = `${supportDir}/pluginRepo/plugins`;
 		Setting.setValue('installedDefaultPlugins', []);
@@ -78,7 +77,6 @@ describe('defaultPluginsUtils', function() {
 	}));
 
 	it('should get default plugins install state', (async () => {
-		// setting plugin have index.ts not index.js
 		const testCases = [
 			{
 				'installedDefaultPlugins': [''],
