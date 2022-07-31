@@ -27,7 +27,7 @@ export const toggleItalicized: Command = (view: EditorView): boolean => {
 	const changes = toggleInlineFormatGlobally(view.state, {
 		nodeName: 'Emphasis',
 
-		template: { start: '_', end: '_' },
+		template: { start: '*', end: '*' },
 		matcher: { start: /[_*]/g, end: /[_*]/g },
 	});
 	view.dispatch(changes);

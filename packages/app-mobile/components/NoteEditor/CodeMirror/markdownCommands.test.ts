@@ -49,7 +49,7 @@ describe('markdownCommands', () => {
 		expect(mainSel.to).toBe(initialDocText.length);
 
 		toggleItalicized(editor);
-		expect(editor.state.doc.toString()).toBe('_Testing..._');
+		expect(editor.state.doc.toString()).toBe('*Testing...*');
 
 		toggleItalicized(editor);
 		expect(editor.state.doc.toString()).toBe('Testing...');
