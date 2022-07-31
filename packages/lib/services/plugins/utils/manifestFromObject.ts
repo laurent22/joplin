@@ -32,13 +32,7 @@ export default function manifestFromObject(o: any): PluginManifest {
 	};
 
 	const getScreenshots = (defaultValue: Screenshot[] = []): Screenshot[] => {
-		if (!o.screenshots) {
-			return defaultValue;
-		} else {
-			for (let i = 0; i < o.screenshots.length; i++) {
-				if (typeof o.screenshots[i] !== typeof Screenshot) throw new Error('Field must be a screenshot object');
-			}
-		}
+		if (!o.screenshots) return defaultValue;
 		return o.screenshots;
 	};
 

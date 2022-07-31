@@ -2,9 +2,9 @@ export enum PluginPermission {
 	Model = 'model',
 }
 
-export class Screenshot {
-	public src: string;
-	public label: string;
+export interface Screenshot {
+	src: string;
+	label: string;
 }
 
 export interface PluginManifest {
