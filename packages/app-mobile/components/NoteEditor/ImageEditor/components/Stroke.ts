@@ -11,9 +11,9 @@ interface StrokePart {
 }
 
 export default class Stroke extends AbstractComponent {
-	private readonly geometry: Path;
-	private readonly parts: StrokePart[];
-	protected readonly contentBBox: Rect2;
+	private geometry: Path;
+	private parts: StrokePart[];
+	protected contentBBox: Rect2;
 
 	public constructor(parts: RenderablePathSpec[]) {
 		super();
@@ -50,10 +50,18 @@ export default class Stroke extends AbstractComponent {
 
 	public fromSVG(elem: SVGGraphicsElement): boolean {
 		if (elem.tagName === 'PATH') {
-			//const pathData = elem.getAttribute('d');
-			//const parts = pathData.split(/\s+/g);
-			// TODO
+			return this.fromPathString(elem.getAttribute('d') ?? '');
 		}
-		throw new Error("Method not implemented.");
+
+		return false;
+	}
+
+	public fromPathString(pathString: string): boolean {
+		this.geometry = Path.fromString(pathString);
+		this.parts = [];
+		
+		this.parts = path.parts;
+
+		return true;
 	}
 }

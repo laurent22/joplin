@@ -5,7 +5,6 @@ import Mat33 from "./Mat33";
 import Rect2 from "./Rect2";
 import { Point2, Vec2 } from "./Vec2";
 
-
 export enum PathCommandType {
 	LineTo,
 	MoveTo,
@@ -199,5 +198,125 @@ export default class Path {
 
 	public static fromRenderable(renderable: RenderablePathSpec): Path {
 		return new Path(renderable.startPoint, renderable.commands);
+	}
+
+	// Create a Path from a SVG path specification.
+	// TODO: Support a larger subset of SVG paths.
+	// TODO: Support h,v,s,t shorthands.
+	public static fromString(pathString: string): Path {
+		// See the MDN reference:
+		// https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/d
+		// and
+		// https://www.w3.org/TR/SVG2/paths.html
+
+		// Remove linebreaks
+		pathString = pathString.split('\n').join(' ');
+
+		// TODO: Check default initializer
+		let lastPos: Point2 = Vec2.zero;
+		let firstPos: Point2|null = null;
+		const commands: PathCommand[] = [];
+
+
+		const moveTo = (point: Point2) => {
+			commands.push({
+				kind: PathCommandType.MoveTo,
+				point,
+			});
+		};
+		const lineTo = (point: Point2) => {
+			commands.push({
+				kind: PathCommandType.LineTo,
+				point,
+			});
+		};
+		const cubicBezierTo = (cp1: Point2, cp2: Point2, end: Point2) => {
+			commands.push({
+				kind: PathCommandType.CubicBezierTo,
+				controlPoint1: cp1,
+				controlPoint2: cp2,
+				endPoint: end,
+			});
+		};
+		const quadraticBeierTo = (controlPoint: Point2, endPoint: Point2) => {
+			commands.push({
+				kind: PathCommandType.QuadraticBezierTo,
+				controlPoint,
+				endPoint,
+			});
+		}
+
+		// Each command: Command character followed by anything that isn't a command character
+		const commandExp = /([MmZzLlHhVvCcSsQqTtAa])\s*([^a-zA-Z]*)/g;
+		let current;
+		while ((current = commandExp.exec(pathString)) !== null) {
+			const commandChar = current[1];
+			const argParts = current[2].trim().split(/[^0-9\.\-]/);
+
+			// Convert arguments to points
+			const args = argParts.filter(
+				part => part.length > 0
+			).reduce((accumulator: Point2[], current, index, parts): Point2[] => {
+				if (index % 2 !== 0) {
+					const currentAsFloat = parseFloat(current);
+					const prevAsFloat = parseFloat(parts[index - 1]);
+					return accumulator.concat(Vec2.of(prevAsFloat, currentAsFloat));
+				} else {
+					return accumulator;
+				}
+			}, []).map((coordinate: Vec2): Point2 => {
+				const uppercaseCommand = commandChar !== commandChar.toLowerCase();
+
+				// Lowercase commands are relative, uppercase commands use absolute
+				// positioning
+				if (uppercaseCommand) {
+					lastPos = coordinate;
+					return coordinate;
+				} else {
+					lastPos = lastPos.plus(coordinate);
+					return lastPos;
+				}
+			});
+
+			let expectedArgsCount;
+
+			switch (commandChar.toLowerCase()) {
+				case 'm':
+					expectedArgsCount = 1;
+					moveTo(args[0]);
+					break;
+				case 'l':
+					expectedArgsCount = 1;
+					lineTo(args[0]);
+					break;
+				case 'z':
+					expectedArgsCount = 0;
+					lineTo(firstPos);
+					// TODO: Consider case where firstPos is null
+					break;
+				case 'c':
+					expectedArgsCount = 3;
+					cubicBezierTo(args[0], args[1], args[2]);
+					break;
+				case 'q':
+					expectedArgsCount = 2;
+					quadraticBeierTo(args[0], args[1]);
+					break;
+				default:
+					throw new Error('Unknown path command ' + commandChar);
+			}
+
+			if (args.length !== expectedArgsCount) {
+				throw new Error(`
+					Incorrect number of arguments: got ${JSON.stringify(args)} with a length of ${args.length} ≠ ${expectedArgsCount}.
+				`.trim());
+			}
+
+			if (args.length > 0) {
+				firstPos ??= args[0];
+			}
+		}
+
+		return new Path(firstPos ?? Vec2.zero, commands);
 	}
 }

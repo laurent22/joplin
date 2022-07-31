@@ -882,6 +882,9 @@ packages/app-mobile/components/NoteEditor/EditLinkDialog.js.map
 packages/app-mobile/components/NoteEditor/ImageEditor/Color4.d.ts
 packages/app-mobile/components/NoteEditor/ImageEditor/Color4.js
 packages/app-mobile/components/NoteEditor/ImageEditor/Color4.js.map
+packages/app-mobile/components/NoteEditor/ImageEditor/Display.d.ts
+packages/app-mobile/components/NoteEditor/ImageEditor/Display.js
+packages/app-mobile/components/NoteEditor/ImageEditor/Display.js.map
 packages/app-mobile/components/NoteEditor/ImageEditor/EditorImage.d.ts
 packages/app-mobile/components/NoteEditor/ImageEditor/EditorImage.js
 packages/app-mobile/components/NoteEditor/ImageEditor/EditorImage.js.map
@@ -909,6 +912,9 @@ packages/app-mobile/components/NoteEditor/ImageEditor/components/AbstractCompone
 packages/app-mobile/components/NoteEditor/ImageEditor/components/Stroke.d.ts
 packages/app-mobile/components/NoteEditor/ImageEditor/components/Stroke.js
 packages/app-mobile/components/NoteEditor/ImageEditor/components/Stroke.js.map
+packages/app-mobile/components/NoteEditor/ImageEditor/components/Stroke.test.d.ts
+packages/app-mobile/components/NoteEditor/ImageEditor/components/Stroke.test.js
+packages/app-mobile/components/NoteEditor/ImageEditor/components/Stroke.test.js.map
 packages/app-mobile/components/NoteEditor/ImageEditor/components/Text.d.ts
 packages/app-mobile/components/NoteEditor/ImageEditor/components/Text.js
 packages/app-mobile/components/NoteEditor/ImageEditor/components/Text.js.map
@@ -928,6 +934,9 @@ packages/app-mobile/components/NoteEditor/ImageEditor/geometry/Mat33.test.d.ts
 packages/app-mobile/components/NoteEditor/ImageEditor/geometry/Mat33.test.js
 packages/app-mobile/components/NoteEditor/ImageEditor/geometry/Mat33.test.js.map
 packages/app-mobile/components/NoteEditor/ImageEditor/geometry/Path.d.ts
+packages/app-mobile/components/NoteEditor/ImageEditor/geometry/Path.fromString.test.d.ts
+packages/app-mobile/components/NoteEditor/ImageEditor/geometry/Path.fromString.test.js
+packages/app-mobile/components/NoteEditor/ImageEditor/geometry/Path.fromString.test.js.map
 packages/app-mobile/components/NoteEditor/ImageEditor/geometry/Path.js
 packages/app-mobile/components/NoteEditor/ImageEditor/geometry/Path.js.map
 packages/app-mobile/components/NoteEditor/ImageEditor/geometry/Path.test.d.ts
@@ -957,6 +966,9 @@ packages/app-mobile/components/NoteEditor/ImageEditor/rendering/AbstractRenderer
 packages/app-mobile/components/NoteEditor/ImageEditor/rendering/CanvasRenderer.d.ts
 packages/app-mobile/components/NoteEditor/ImageEditor/rendering/CanvasRenderer.js
 packages/app-mobile/components/NoteEditor/ImageEditor/rendering/CanvasRenderer.js.map
+packages/app-mobile/components/NoteEditor/ImageEditor/rendering/DummyRenderer.d.ts
+packages/app-mobile/components/NoteEditor/ImageEditor/rendering/DummyRenderer.js
+packages/app-mobile/components/NoteEditor/ImageEditor/rendering/DummyRenderer.js.map
 packages/app-mobile/components/NoteEditor/ImageEditor/toolbar/HTMLToolbar.d.ts
 packages/app-mobile/components/NoteEditor/ImageEditor/toolbar/HTMLToolbar.js
 packages/app-mobile/components/NoteEditor/ImageEditor/toolbar/HTMLToolbar.js.map
